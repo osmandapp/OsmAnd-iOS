@@ -361,7 +361,7 @@
 				cell.titleView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
                 UIImage *img = profile.getIcon;
                 cell.secondaryImageView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                cell.secondaryImageView.tintColor = UIColorFromRGB(profile.getIconColor);
+                cell.secondaryImageView.tintColor = profile.getProfileColor;
             }
 			cell.iconView.hidden = indexPath.row == 0;
 			cell.iconView.image = selected ? [UIImage templateImageNamed:@"ic_checkmark_default"] : nil;

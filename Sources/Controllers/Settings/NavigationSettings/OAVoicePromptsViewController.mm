@@ -329,7 +329,7 @@
             if (isVoicePrompts)
             {
                 cell.leftIconView.image = [UIImage templateImageNamed:_voiceOn ? @"ic_custom_sound" : @"ic_custom_sound_off"];
-                cell.leftIconView.tintColor = _voiceOn ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
+                cell.leftIconView.tintColor = _voiceOn ? self.appMode.getProfileColor : UIColorFromRGB(color_icon_inactive);
             }
             else
             {
@@ -374,7 +374,7 @@
             if (hasIcon)
             {
                 cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
-                cell.leftIconView.tintColor = UIColorFromRGB([self.appMode getIconColor]);
+                cell.leftIconView.tintColor = [self.appMode getProfileColor];
             }
             else
             {

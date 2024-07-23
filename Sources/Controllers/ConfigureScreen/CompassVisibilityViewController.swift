@@ -55,7 +55,7 @@ class CompassVisibilityViewController: OABaseNavbarViewController {
             cell.descriptionVisibility(!compassMode.desc.isEmpty)
             cell.titleLabel.text = compassMode.title
             cell.leftIconView.image = UIImage.templateImageNamed(compassMode.iconName)
-            cell.leftIconView.tintColor = isSelected ? UIColor(rgb: OAAppSettings.sharedManager().applicationMode.get().getIconColor()) : .iconColorDisabled
+            cell.leftIconView.tintColor = isSelected ? OAAppSettings.sharedManager().applicationMode.get().getProfileColor() : .iconColorDisabled
             cell.accessoryType = isSelected ? .checkmark : .none
             cell.accessibilityLabel = cell.titleLabel.text
             cell.accessibilityValue = localizedString(isSelected ? "shared_string_selected" : "shared_string_not_selected")

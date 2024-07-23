@@ -35,6 +35,7 @@
 {
     NSString *_description;
     NSString *_imageURL;
+    NSMutableArray<NSDictionary *> *_nameTags;
 }
 
 @dynamic tableData, isGeneratedData;
@@ -182,9 +183,9 @@
         return;
     
     OAGPXTableSectionData *infoSectionData = [OAGPXTableSectionData withData:@{
-            kTableKey: @"route_info",
-            kSectionHeader: OALocalizedString(@"route_info"),
-            kSectionHeaderHeight: @56.
+        kTableKey: @"route_info",
+        kSectionHeader: OALocalizedString(@"route_info"),
+        kSectionHeaderHeight: @56.
     }];
     [data.subjects addObject:infoSectionData];
 
@@ -199,6 +200,8 @@
 
     NSMutableArray<OAGPXTableCellData *> *subjects = [NSMutableArray array];
     QMap<QString, QString> tagsToGpx = routeKey.routeKey.tagsToGpx();
+    _nameTags = [[NSMutableArray alloc] init];
+    BOOL hasName = NO;
     for (auto i = tagsToGpx.cbegin(), end = tagsToGpx.cend(); i != end; ++i)
     {
         NSString *routeTagKey = i.key().toNSString();
@@ -224,6 +227,20 @@
         else if ([routeTagKey isEqualToString:@"wikipedia"])
             routeTagValue = [OAWikiAlgorithms getWikiUrlWithText:routeTagValue];
 
+        if (!hasName && [[OAPOIHelper sharedInstance] isNameTag:routeTagKey])
+        {
+            OAGPXTableCellData *routeNameCellData = [OAGPXTableCellData withData:@{
+                kTableKey: @"name",
+                kCellType: [OAValueTableViewCell getCellIdentifier],
+                kCellTitle: OALocalizedString(@"shared_string_name"),
+                kCellDesc: [self.trackMenuDelegate getGpxName],
+                kTableValues: @{ @"order": routeTagOrder },
+                kCellToggle: @YES
+            }];
+            [subjects addObject:routeNameCellData];
+            hasName = YES;
+        }
+
         if ([routeTagKey isEqualToString:@"colour"])
         {
             routeTagTitle = OALocalizedString(@"shared_string_color");
@@ -240,13 +257,22 @@
         {
             routeTagTitle = OALocalizedString(@"osm_id");
         }
-
+        else if ([[OAPOIHelper sharedInstance] isNameTag:routeTagKey])
+        {
+            [_nameTags addObject:@{
+                @"key": routeTagKey,
+                @"value": routeTagValue,
+                @"localizedTitle": routeTagTitle
+            }];
+            continue;
+        }
+        
         OAGPXTableCellData *routeCellData = [OAGPXTableCellData withData:@{
-                kTableKey: routeTagKey,
-                kCellType: [OAValueTableViewCell getCellIdentifier],
-                kCellTitle: routeTagTitle,
-                kCellDesc: routeTagValue,
-                kTableValues: @{ @"order": routeTagOrder }
+            kTableKey: routeTagKey,
+            kCellType: [OAValueTableViewCell getCellIdentifier],
+            kCellTitle: routeTagTitle,
+            kCellDesc: routeTagValue,
+            kTableValues: @{ @"order": routeTagOrder }
         }];
         if ([routeTagKey hasPrefix:@"description"])
             [routeCellData setData:@{ kCellToggle: @YES }];
@@ -261,7 +287,6 @@
 
     [infoSectionData.subjects addObjectsFromArray:subjects];
 }
-
 
 - (NSString *) findFirstImageURL:(NSString *)htmlText
 {
@@ -720,6 +745,10 @@
             else if ([cellData.key hasPrefix:@"description"])
             {
                 [self.trackMenuDelegate openDescriptionReadOnly:cellData.desc];
+            }
+            else if ([cellData.key isEqualToString:@"name"])
+            {
+                [self.trackMenuDelegate openNameTagsScreenWith:_nameTags];
             }
         }
     }

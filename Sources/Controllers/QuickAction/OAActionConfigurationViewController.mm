@@ -512,7 +512,7 @@
             if (item[@"iconColor"])
             {
                 cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
-                cell.iconView.tintColor = UIColorFromRGB([item[@"iconColor"] intValue]);
+                cell.iconView.tintColor = item[@"iconColor"];
             }
             else
                 [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];

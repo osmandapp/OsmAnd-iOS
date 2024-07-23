@@ -15,6 +15,7 @@
 		05898FAF2B4DACD900E64B58 /* map-shaders-svg in Resources */ = {isa = PBXBuildFile; fileRef = 05898FAE2B4DACD900E64B58 /* map-shaders-svg */; };
 		05898FB22B511E0500E64B58 /* OASvgHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 05898FB12B511E0500E64B58 /* OASvgHelper.mm */; };
 		0590D19C2BF88AF400C62AF5 /* ConcurrentDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0590D19B2BF88AF400C62AF5 /* ConcurrentDictionary.swift */; };
+		05A0FCFC2C42D4A200F7ED66 /* models in Resources */ = {isa = PBXBuildFile; fileRef = 05A0FCFB2C42D4A200F7ED66 /* models */; };
 		05CC79562BB98B0B00BAC638 /* OAOnlinePlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = 05CC79552BB98B0B00BAC638 /* OAOnlinePlugin.mm */; };
 		05CC79592BB99EC700BAC638 /* OAPluginsHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 05CC79582BB99EC700BAC638 /* OAPluginsHelper.mm */; };
 		05CC795B2BB9A1C400BAC638 /* PluginsHelper+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CC795A2BB9A1C400BAC638 /* PluginsHelper+Extension.swift */; };
@@ -435,6 +436,8 @@
 		329989B0298A90E1003D7A0E /* OAOsmUploadGPXVisibilityViewConroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 329989AF298A90E1003D7A0E /* OAOsmUploadGPXVisibilityViewConroller.m */; };
 		32A001A026131FEA00ABE0D2 /* ic_custom_clipboard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A0019E26131FEA00ABE0D2 /* ic_custom_clipboard@2x.png */; };
 		32A001A126131FEA00ABE0D2 /* ic_custom_clipboard@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A0019F26131FEA00ABE0D2 /* ic_custom_clipboard@3x.png */; };
+		32A0CDF12C29AE6E00FDD8E0 /* Model3dHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32A0CDF02C29AE6E00FDD8E0 /* Model3dHelper.swift */; };
+		32A0CDF42C29B01D00FDD8E0 /* OAModel3dHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32A0CDF32C29B01D00FDD8E0 /* OAModel3dHelper.mm */; };
 		32A0D6B32A4F1CF50016241D /* Map3dModeButtonVisibilityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32A0D6B22A4F1CF50016241D /* Map3dModeButtonVisibilityViewController.swift */; };
 		32A21B5C2A98BCA500A2762A /* TravelGuidesContentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32A21B5B2A98BCA500A2762A /* TravelGuidesContentsViewController.swift */; };
 		32A365B22B07B4F500485401 /* ic_custom_help_outlined@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A365AE2B07B4F500485401 /* ic_custom_help_outlined@2x.png */; };
@@ -1360,6 +1363,7 @@
 		BBA3AF87197FC4BB0039D991 /* Shipped in Resources */ = {isa = PBXBuildFile; fileRef = BB451D8A18D70B4B005FBE09 /* Shipped */; };
 		BBA3AF97197FC4BB0039D991 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BB451DF318D8F7D7005FBE09 /* Localizable.strings */; };
 		BBA3AFC4197FC4BB0039D991 /* Resources.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB451F1018EB34A5005FBE09 /* Resources.storyboard */; };
+		C51967AD2C247E9000476E4B /* NameTagsDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51967AC2C247E9000476E4B /* NameTagsDetailsViewController.swift */; };
 		C51BE6FD2BBC3E7C00B63A1A /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = C51BE6FC2BBC3E7C00B63A1A /* PrivacyInfo.xcprivacy */; };
 		C52E750F2C2BECAC00C45ED0 /* OsmAndFormatterParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52E750E2C2BECAC00C45ED0 /* OsmAndFormatterParams.swift */; };
 		C53920C2291E4E770076D5BB /* ic_custom_van@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C53920C0291E4E770076D5BB /* ic_custom_van@2x.png */; };
@@ -2130,7 +2134,6 @@
 		DA5A81EB26C563A700F274C7 /* OAHistoryDB.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7ACA26C563A100F274C7 /* OAHistoryDB.mm */; };
 		DA5A81EC26C563A700F274C7 /* OARendererRegistry.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7ACF26C563A100F274C7 /* OARendererRegistry.mm */; };
 		DA5A81ED26C563A700F274C7 /* OAProfileIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AD326C563A100F274C7 /* OAProfileIcon.m */; };
-		DA5A81EE26C563A700F274C7 /* OANavigationIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AD526C563A100F274C7 /* OANavigationIcon.m */; };
 		DA5A81EF26C563A700F274C7 /* OAProfileDataUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AD626C563A100F274C7 /* OAProfileDataUtils.m */; };
 		DA5A81F026C563A700F274C7 /* OALocationIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AD726C563A100F274C7 /* OALocationIcon.m */; };
 		DA5A81F126C563A700F274C7 /* OAProfileIconColor.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AD826C563A100F274C7 /* OAProfileIconColor.m */; };
@@ -3386,6 +3389,7 @@
 		05898FB02B511E0500E64B58 /* OASvgHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASvgHelper.h; sourceTree = "<group>"; };
 		05898FB12B511E0500E64B58 /* OASvgHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASvgHelper.mm; sourceTree = "<group>"; };
 		0590D19B2BF88AF400C62AF5 /* ConcurrentDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcurrentDictionary.swift; sourceTree = "<group>"; };
+		05A0FCFB2C42D4A200F7ED66 /* models */ = {isa = PBXFileReference; lastKnownFileType = folder; name = models; path = ../resources/models; sourceTree = "<group>"; };
 		05CC79542BB98B0B00BAC638 /* OAOnlinePlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOnlinePlugin.h; sourceTree = "<group>"; };
 		05CC79552BB98B0B00BAC638 /* OAOnlinePlugin.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOnlinePlugin.mm; sourceTree = "<group>"; };
 		05CC79572BB99EC700BAC638 /* OAPluginsHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAPluginsHelper.h; sourceTree = "<group>"; };
@@ -3802,6 +3806,7 @@
 		32464B802A7012D700DA6980 /* OAResourcesUISwiftHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAResourcesUISwiftHelper.mm; sourceTree = "<group>"; };
 		32473DD52A9D06A7008C8041 /* TravelGuidesNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelGuidesNavigationViewController.swift; sourceTree = "<group>"; };
 		3249BFBE285CC2D200FFEF42 /* ckb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ckb; path = ckb.lproj/Localizable.strings; sourceTree = "<group>"; };
+		324F04932C2C56A300D612D4 /* OAModel3dHelper+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OAModel3dHelper+cpp.h"; sourceTree = "<group>"; };
 		325B69FB26D828DC00D8B67C /* OAQuickSearchCoordinatesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAQuickSearchCoordinatesViewController.h; sourceTree = "<group>"; };
 		325B69FC26D828EB00D8B67C /* OAQuickSearchCoordinatesViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAQuickSearchCoordinatesViewController.mm; sourceTree = "<group>"; };
 		325B6A0326D9239800D8B67C /* OAQuickSearchCoordinateFormatsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAQuickSearchCoordinateFormatsViewController.h; sourceTree = "<group>"; };
@@ -3895,6 +3900,9 @@
 		329989AF298A90E1003D7A0E /* OAOsmUploadGPXVisibilityViewConroller.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOsmUploadGPXVisibilityViewConroller.m; sourceTree = "<group>"; };
 		32A0019E26131FEA00ABE0D2 /* ic_custom_clipboard@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_clipboard@2x.png"; path = "Resources/Icons/ic_custom_clipboard@2x.png"; sourceTree = "<group>"; };
 		32A0019F26131FEA00ABE0D2 /* ic_custom_clipboard@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_clipboard@3x.png"; path = "Resources/Icons/ic_custom_clipboard@3x.png"; sourceTree = "<group>"; };
+		32A0CDF02C29AE6E00FDD8E0 /* Model3dHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model3dHelper.swift; sourceTree = "<group>"; };
+		32A0CDF22C29AF8500FDD8E0 /* OAModel3dHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAModel3dHelper.h; sourceTree = "<group>"; };
+		32A0CDF32C29B01D00FDD8E0 /* OAModel3dHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAModel3dHelper.mm; sourceTree = "<group>"; };
 		32A0D6B22A4F1CF50016241D /* Map3dModeButtonVisibilityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Map3dModeButtonVisibilityViewController.swift; sourceTree = "<group>"; };
 		32A21B5B2A98BCA500A2762A /* TravelGuidesContentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelGuidesContentsViewController.swift; sourceTree = "<group>"; };
 		32A365AE2B07B4F500485401 /* ic_custom_help_outlined@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_help_outlined@2x.png"; path = "Resources/Icons/ic_custom_help_outlined@2x.png"; sourceTree = SOURCE_ROOT; };
@@ -4960,6 +4968,7 @@
 		BBB34EE6179BF2A7004C5567 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
 		BBB3F6AA18A4DEF0001C3175 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		BBBDADB818BCF53500E4A359 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		C51967AC2C247E9000476E4B /* NameTagsDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameTagsDetailsViewController.swift; sourceTree = "<group>"; };
 		C51BE6FC2BBC3E7C00B63A1A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = Resources/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		C52E750E2C2BECAC00C45ED0 /* OsmAndFormatterParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsmAndFormatterParams.swift; sourceTree = "<group>"; };
 		C53920C0291E4E770076D5BB /* ic_custom_van@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_van@2x.png"; path = "Resources/Icons/ic_custom_van@2x.png"; sourceTree = "<group>"; };
@@ -6135,13 +6144,11 @@
 		DA5A7AD226C563A100F274C7 /* OALocationIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OALocationIcon.h; sourceTree = "<group>"; };
 		DA5A7AD326C563A100F274C7 /* OAProfileIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAProfileIcon.m; sourceTree = "<group>"; };
 		DA5A7AD426C563A100F274C7 /* OAProfileIconColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAProfileIconColor.h; sourceTree = "<group>"; };
-		DA5A7AD526C563A100F274C7 /* OANavigationIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OANavigationIcon.m; sourceTree = "<group>"; };
 		DA5A7AD626C563A100F274C7 /* OAProfileDataUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAProfileDataUtils.m; sourceTree = "<group>"; };
 		DA5A7AD726C563A100F274C7 /* OALocationIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OALocationIcon.m; sourceTree = "<group>"; };
 		DA5A7AD826C563A100F274C7 /* OAProfileIconColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAProfileIconColor.m; sourceTree = "<group>"; };
 		DA5A7AD926C563A100F274C7 /* OAProfileIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAProfileIcon.h; sourceTree = "<group>"; };
 		DA5A7ADA26C563A100F274C7 /* OAProfileDataUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAProfileDataUtils.h; sourceTree = "<group>"; };
-		DA5A7ADB26C563A100F274C7 /* OANavigationIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OANavigationIcon.h; sourceTree = "<group>"; };
 		DA5A7ADC26C563A100F274C7 /* OAWorldRegion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWorldRegion.h; sourceTree = "<group>"; };
 		DA5A7ADD26C563A100F274C7 /* OAApplicationMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAApplicationMode.h; sourceTree = "<group>"; };
 		DA5A7AE026C563A100F274C7 /* OALaunchScreenViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OALaunchScreenViewController.h; sourceTree = "<group>"; };
@@ -8119,6 +8126,17 @@
 				32672A092AAF3D0100D46608 /* GpxTravelCell.swift */,
 			);
 			path = cells;
+			sourceTree = "<group>";
+		};
+		32A0CDF52C29B07B00FDD8E0 /* Model3dHelper */ = {
+			isa = PBXGroup;
+			children = (
+				32A0CDF02C29AE6E00FDD8E0 /* Model3dHelper.swift */,
+				32A0CDF22C29AF8500FDD8E0 /* OAModel3dHelper.h */,
+				324F04932C2C56A300D612D4 /* OAModel3dHelper+cpp.h */,
+				32A0CDF32C29B01D00FDD8E0 /* OAModel3dHelper.mm */,
+			);
+			path = Model3dHelper;
 			sourceTree = "<group>";
 		};
 		32AD5D582A2F10EA00A51B60 /* OAuthHelper */ = {
@@ -10120,6 +10138,7 @@
 		BB451D8918D70AE4005FBE09 /* Embedded */ = {
 			isa = PBXGroup;
 			children = (
+				05A0FCFB2C42D4A200F7ED66 /* models */,
 				46AD05292C29E2060032C3B7 /* color-palette */,
 				DA5CA677211ECCB500E2B79B /* style */,
 				DA5A857E26C5692100F274C7 /* article_style.css */,
@@ -11414,8 +11433,6 @@
 				46D38A9529C394C4000AAE0C /* Data */,
 				DA5A7AD226C563A100F274C7 /* OALocationIcon.h */,
 				DA5A7AD726C563A100F274C7 /* OALocationIcon.m */,
-				DA5A7ADB26C563A100F274C7 /* OANavigationIcon.h */,
-				DA5A7AD526C563A100F274C7 /* OANavigationIcon.m */,
 				DA5A7AD926C563A100F274C7 /* OAProfileIcon.h */,
 				DA5A7AD326C563A100F274C7 /* OAProfileIcon.m */,
 				DA5A7AD426C563A100F274C7 /* OAProfileIconColor.h */,
@@ -12277,6 +12294,7 @@
 				DA5A7E1D26C563A400F274C7 /* Wiki */,
 				DA3DBC2C2976E631003803D8 /* OATransportStopsBaseController.h */,
 				DA3DBC2D2976E631003803D8 /* OATransportStopsBaseController.mm */,
+				C51967AC2C247E9000476E4B /* NameTagsDetailsViewController.swift */,
 			);
 			path = TargetMenu;
 			sourceTree = "<group>";
@@ -13409,6 +13427,7 @@
 				32FE7AA62B65138800F82728 /* OAGPXImportUIHelper.mm */,
 				4663EC792BA1FEEF006B0EBB /* MigrationManager.swift */,
 				0590D19B2BF88AF400C62AF5 /* ConcurrentDictionary.swift */,
+				32A0CDF52C29B07B00FDD8E0 /* Model3dHelper */,
 				4665DB6D2C20BBFD00F897EC /* ColorsPaletteUtils.swift */,
 			);
 			path = Helpers;
@@ -15972,6 +15991,7 @@
 				8476E2BC1F6C1EEC00EC274F /* map_pedestrian_bearing_night@2x.png in Resources */,
 				DAE08358253F19C2009B5A11 /* ic_custom_routes@3x.png in Resources */,
 				DA5A844426C563A900F274C7 /* OATargetMenuViewController.xib in Resources */,
+				05A0FCFC2C42D4A200F7ED66 /* models in Resources */,
 				DA5A82AF26C563A700F274C7 /* OAEmptySearchCell.xib in Resources */,
 				DA68B3AE233B81DB00F5ACCC /* ic_custom_fuel@3x.png in Resources */,
 				323BD8EC2628850400D255ED /* ic_bg_point_square_center_small@2x.png in Resources */,
@@ -17080,6 +17100,7 @@
 				DA5A84BE26C563A900F274C7 /* OASegmentOptionsBottomSheetViewController.mm in Sources */,
 				46C841352C32F33D00E284B0 /* OANavAddDestinationAction.m in Sources */,
 				DA5A853326C563A900F274C7 /* OADiscountHelper.mm in Sources */,
+				C51967AD2C247E9000476E4B /* NameTagsDetailsViewController.swift in Sources */,
 				DA5A856826C563A900F274C7 /* OATransportRoutingHelper.mm in Sources */,
 				DA4ABEE82876DA5D00B996EF /* OAQuickActionsSettingsItemReader.m in Sources */,
 				DA5A81ED26C563A700F274C7 /* OAProfileIcon.m in Sources */,
@@ -17216,7 +17237,6 @@
 				C573544F2AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.mm in Sources */,
 				DA5A84FB26C563A900F274C7 /* OADownloadProgressView.m in Sources */,
 				3216E9532BA097BD0087D0EF /* StringExtensions.swift in Sources */,
-				DA5A81EE26C563A700F274C7 /* OANavigationIcon.m in Sources */,
 				DA5A823426C563A700F274C7 /* OAImportCompleteViewController.mm in Sources */,
 				327DF98A2C2494C800B5069C /* RouteParameterHazmatUsa.swift in Sources */,
 				FA4D7F572B03D366003208D7 /* BLEWheelSettingsViewController.swift in Sources */,
@@ -17464,6 +17484,7 @@
 				DA5A849E26C563A900F274C7 /* OAReversePointsCommand.mm in Sources */,
 				DA5A84DC26C563A900F274C7 /* OAMapSettingsPOIScreen.mm in Sources */,
 				DA5A84B326C563A900F274C7 /* OAFirstMapillaryBottomSheetViewController.mm in Sources */,
+				32A0CDF12C29AE6E00FDD8E0 /* Model3dHelper.swift in Sources */,
 				32464B812A7012D700DA6980 /* OAResourcesUISwiftHelper.mm in Sources */,
 				DA5A837726C563A800F274C7 /* OARouteInfoView.mm in Sources */,
 				DA5A84DF26C563A900F274C7 /* OAMapSettingsTerrainScreen.mm in Sources */,
@@ -17701,6 +17722,7 @@
 				CA4ED15F50530CD41EB6F164 /* OAPlanTypeCardRow.mm in Sources */,
 				CA4ED29358E483696800D91A /* OASubscriptionCardView.mm in Sources */,
 				CA4ED5E21D6762F76CAF347A /* OACardButtonCell.mm in Sources */,
+				32A0CDF42C29B01D00FDD8E0 /* OAModel3dHelper.mm in Sources */,
 				CA4ED3D37A857AA9DE517533 /* OAPurchaseDetailsViewController.m in Sources */,
 				CA4EDD68D7B26540651A56EB /* OATitleDescriptionBigIconCell.mm in Sources */,
 				328EECD629DC5FA7002922AA /* OATripRecordingElevationWidget.mm in Sources */,

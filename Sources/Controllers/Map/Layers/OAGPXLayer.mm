@@ -33,6 +33,7 @@
 #import "OAGpxTrackAnalysis.h"
 #import "OAOsmAndFormatter.h"
 #import "OAAtomicInteger.h"
+#import "OACompoundIconUtils.h"
 #import "OAObservable.h"
 #import "OAColoringType.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -1249,21 +1250,19 @@ colorizationScheme:(int)colorizationScheme
             [self.mapView removeTiledSymbolsProvider:_startFinishProvider];
             _startFinishProvider = nullptr;
         }
-        sk_sp<SkImage> startIcon = [OANativeUtilities skImageFromPngResource:@"map_track_point_start"];
-        sk_sp<SkImage> finishIcon = [OANativeUtilities skImageFromPngResource:@"map_track_point_finish"];
-        sk_sp<SkImage> startFinishIcon = [OANativeUtilities skImageFromPngResource:@"map_track_point_start_finish"];
+        
+        sk_sp<SkImage> startIcon = [OACompoundIconUtils getScaledIcon:@"map_track_point_start" scale:_textScaleFactor];
+        sk_sp<SkImage> finishIcon = [OACompoundIconUtils getScaledIcon:@"map_track_point_finish" scale:_textScaleFactor];
+        sk_sp<SkImage> startFinishIcon = [OACompoundIconUtils getScaledIcon:@"map_track_point_start_finish" scale:_textScaleFactor];
         if (startIcon && finishIcon  && startFinishIcon)
         {
             _startFinishProvider.reset(new OsmAnd::GpxAdditionalIconsProvider(self.pointsOrder - 20000,
                                                                               UIScreen.mainScreen.scale,
                                                                               _startFinishPoints,
                                                                               _splitLabels,
-                                                                              OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:startIcon
-                                                                                                                            scaleFactor:_textScaleFactor]),
-                                                                              OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:finishIcon
-                                                                                                                            scaleFactor:_textScaleFactor]),
-                                                                              OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:startFinishIcon
-                                                                                                                            scaleFactor:_textScaleFactor]),
+                                                                              OsmAnd::SingleSkImage(startIcon),
+                                                                              OsmAnd::SingleSkImage(finishIcon),
+                                                                              OsmAnd::SingleSkImage(startFinishIcon),
                                                                               _startFinishPointsElevations,
                                                                               _elevationScaleFactor
                                                                               ));

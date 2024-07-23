@@ -574,7 +574,7 @@
     else if (!exists)
     {
         NSString *directory = [destFilePath stringByDeletingLastPathComponent];
-        [fileManager createDirectoryAtPath:directory withIntermediateDirectories:NO attributes:nil error:nil];
+        [fileManager createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:nil];
     }
     
     BOOL res = NO;

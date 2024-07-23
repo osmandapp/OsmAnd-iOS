@@ -148,7 +148,7 @@
             [cell valueVisibility:value || value.length > 0];
             [cell.valueLabel setText:value];
             cell.leftIconView.image = [param isKindOfClass:OAHazmatRoutingParameter.class] ? [param getIcon] : [[param getIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.leftIconView.tintColor = UIColorFromRGB([appMode getIconColor]);
+            cell.leftIconView.tintColor = [appMode getProfileColor];
         }
         return cell;
     }
@@ -170,7 +170,7 @@
 
             cell.titleLabel.text = text;
             cell.leftIconView.image = [param.getIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.leftIconView.tintColor = [param isChecked] ? UIColorFromRGB([appMode getIconColor]) : [UIColor colorNamed:ACColorNameIconColorDisabled];
+            cell.leftIconView.tintColor = [param isChecked] ? [appMode getProfileColor] : [UIColor colorNamed:ACColorNameIconColorDisabled];
 
             BOOL showDivider = [param hasOptions];
             [cell dividerVisibility:showDivider];

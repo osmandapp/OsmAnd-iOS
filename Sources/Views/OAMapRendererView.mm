@@ -350,6 +350,16 @@ forcedUpdate:(BOOL)forcedUpdate
     _renderer->setMyLocationRadiusInMeters(radiusInMeters);
 }
 
+- (void)setMyLocationSectorDirection:(float)directionAngle
+{
+    _renderer->setMyDirection(directionAngle);
+}
+
+- (void)setMyLocationSectorRadius:(float)radius
+{
+    _renderer->setMyDirectionRadius(radius);
+}
+
 - (OsmAnd::PointI)target31
 {
     auto fixedPixel = _renderer->getState().fixedPixel;

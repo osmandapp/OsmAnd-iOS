@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import <UIKit/UIKit.h>
 
 //RGB color macro
 #define UIColorFromRGB(rgbValue) [UIColor \
@@ -283,6 +284,7 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 + (void) layoutComplexButton:(UIButton*)button;
 
 + (UIImage *) imageWithColor:(UIColor *)color;
++ (UIImage *) imageWithTintColor:(UIColor *)color image:(UIImage *)image;
 
 + (void) setMaskTo:(UIView*)view byRoundingCorners:(UIRectCorner)corners;
 + (void) setMaskTo:(UIView*)view byRoundingCorners:(UIRectCorner)corners radius:(CGFloat)radius;

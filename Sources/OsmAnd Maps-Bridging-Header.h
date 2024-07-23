@@ -7,6 +7,7 @@
 #import "OAAppSettings.h"
 #import "OAColors.h"
 #import "OARouteStatistics.h"
+#import "OAUtilities.h"
 #import "Localization.h"
 #import "OALinks.h"
 #import "OAIAPHelper.h"
@@ -19,7 +20,6 @@
 #import "OADestinationItem.h"
 #import "OAMapViewHelper.h"
 #import "OAMapViewTrackingUtilities.h"
-#import "OAUtilities.h"
 #import "OAMapButtonsHelper.h"
 #import "OAWikiArticleHelper.h"
 #import "OAGPXDatabase.h"
@@ -33,6 +33,7 @@
 #import "OAMapUtils.h"
 #import "OADestination.h"
 #import "OACollatorStringMatcher.h"
+#import "OAModel3dHelper.h"
 #import "OsmAndApp.h"
 #import "OAObservable.h"
 #import "OAAutoObserverProxy.h"
@@ -47,9 +48,9 @@
 #import "OAPOI.h"
 #import "OAPOICategory.h"
 #import "OARouteColorize.h"
+#import "OAMapStyleSettings.h"
 #import "OAApplicationMode.h"
 #import "OASavingTrackHelper.h"
-#import "OAMapStyleSettings.h"
 #import "OAWeatherBand.h"
 #import "OADayNightHelper.h"
 #import "OALocationServices.h"
@@ -59,12 +60,12 @@
 #import "OADownloadTask.h"
 #import "OACommonTypes.h"
 #import "OABaseCollectionHandler.h"
-
-// Adapters
 #import "OAResourcesUISwiftHelper.h"
 #import "OATravelGuidesHelper.h"
 #import "OAGPXDocumentAdapter.h"
 #import "OATravelLocalDataDbHelper.h"
+#import "SceneDelegate.h"
+#import "OALocationIcon.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"
@@ -180,9 +181,8 @@
 #import <SafariServices/SafariServices.h>
 #import <CoreBluetooth/CoreBluetooth.h>
 
-// Other
+// Pods
 #import <AFNetworking/AFNetworkReachabilityManager.h>
-#import "SceneDelegate.h"
 #import "FFCircularProgressView.h"
 #import "FFCircularProgressView+isSpinning.h"
 

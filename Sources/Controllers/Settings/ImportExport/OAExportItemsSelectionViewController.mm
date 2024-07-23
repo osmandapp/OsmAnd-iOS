@@ -192,7 +192,7 @@
         if (profileIcon)
             item[@"icon"] = profileIcon;
         
-        item[@"color"] = UIColorFromRGB(modeBean.iconColor);
+        item[@"color"] = [modeBean getProfileColor];
     }
     else if ([object isKindOfClass:OAQuickAction.class])
     {

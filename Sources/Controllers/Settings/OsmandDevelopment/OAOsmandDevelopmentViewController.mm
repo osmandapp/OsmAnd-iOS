@@ -25,6 +25,8 @@
 #import "OARootViewController.h"
 #import "OAIndexConstants.h"
 #import "OAPluginsHelper.h"
+#import "OASwitchTableViewCell.h"
+#import "OAObservable.h"
 
 @interface OAOsmandDevelopmentViewController () <OAOsmandDevelopmentSimulateLocationDelegate>
 
@@ -37,6 +39,8 @@
     OAOsmandDevelopmentPlugin *_plugin;
 }
 
+NSString *const kCellSwitchIsOnKey = @"kCellSwitchIsOnKey";
+NSString *const kUse3dIconsKey = @"kUse3dIconsKey";
 NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
 
 #pragma mark - Initialization
@@ -86,6 +90,16 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
         @"actionBlock" : (^void(){ [weakSelf openSimulateLocationSettings]; })
     }];
     [_data addSection:simulationSection];
+    
+    OATableSectionData *renderingSection = [OATableSectionData sectionData];
+    renderingSection.headerText = OALocalizedString(@"shared_string_appearance");
+    [renderingSection addRowFromDictionary:@{
+        kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
+        kCellKeyKey : kUse3dIconsKey,
+        kCellTitleKey : OALocalizedString(@"osmand_depelopment_use_3d_icons"),
+        @"isOn" : @([[OAAppSettings sharedManager].use3dIconsByDefault get])
+    }];
+    [_data addSection:renderingSection];
 }
 
 - (NSInteger)sectionsCount
@@ -126,7 +140,40 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
         }
         return cell;
     }
+    else if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
+    {
+        OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        if (!cell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+        }
+        if (cell)
+        {
+            cell.titleLabel.text = item.title;
+            cell.switchView.on = [item boolForKey:@"isOn"];
+            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
+            [cell.switchView addTarget:self action:@selector(onSwitchPressed:) forControlEvents:UIControlEventValueChanged];
+        }
+        return cell;
+    }
     return nil;
+}
+
+- (void)onSwitchPressed:(UISwitch *)sender
+{
+    UISwitch *switchView = (UISwitch *) sender;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:switchView.tag & 0x3FF inSection:switchView.tag >> 10];
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
+    
+    if ([item.key isEqualToString:kUse3dIconsKey])
+    {
+        [[OAAppSettings sharedManager].use3dIconsByDefault set:sender.isOn];
+        [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
+    }
 }
 
 - (void)onRowSelected:(NSIndexPath *)indexPath

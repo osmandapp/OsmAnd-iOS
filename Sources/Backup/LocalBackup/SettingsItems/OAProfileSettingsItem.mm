@@ -258,6 +258,7 @@
             [builder setRoutingProfile:_modeBean.routingProfile];
             [builder setRouteService:_modeBean.routeService];
             [builder setIconColor:_modeBean.iconColor];
+            [builder setCustomIconColor:_modeBean.customIconColor];
             [builder setLocationIcon:_modeBean.locIcon];
             [builder setNavigationIcon:_modeBean.navIcon];
             //        app.getSettings().copyPreferencesFromProfile(parent, builder.getApplicationMode());

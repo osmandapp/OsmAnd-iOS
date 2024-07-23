@@ -77,7 +77,7 @@
             @"title" : [mode toHumanString],
             @"param" : stringKeys[i],
             @"img" : [mode getIconName],
-            @"iconColor" : @([mode getIconColor])
+            @"iconColor" : [mode getProfileColor]
         }];
     }
     _data = [NSArray arrayWithArray:arr];
@@ -135,11 +135,11 @@
         if (cell)
         {
             NSString *imgName = item[@"img"];
-            NSString *imgColor = item[@"iconColor"];
+            UIColor *imgColor = item[@"iconColor"];
             if (imgName && imgColor)
             {
                 cell.leftIconView.image = [UIImage templateImageNamed:imgName];
-                cell.leftIconView.tintColor = UIColorFromRGB([item[@"iconColor"] intValue]);
+                cell.leftIconView.tintColor = imgColor;
             }
             else if (imgName)
             {

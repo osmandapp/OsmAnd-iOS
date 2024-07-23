@@ -9,6 +9,10 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include <objc/objc.h>
 
+#include <OsmAndCore/QtExtensions.h>
+#include <OsmAndCore/ignore_warnings_on_external_includes.h>
+#include <QReadWriteLock>
+#include <OsmAndCore/restore_internal_warnings.h>
 #include <OsmAndCore.h>
 #include <OsmAndCore/Common.h>
 #include <OsmAndCore/Map/IAmenityIconProvider.h>
@@ -18,6 +22,7 @@ class OACoreResourcesAmenityIconProvider : public OsmAnd::IAmenityIconProvider
 private:
     OsmAnd::TextRasterizer::Style textStyle;
     
+    mutable QReadWriteLock _iconsCacheLock;
     QHash<QString, sk_sp<SkImage>> _iconsCache;
 protected:
 public:

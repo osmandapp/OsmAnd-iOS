@@ -40,14 +40,16 @@
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 #include <OsmAndCore/SingleSkImage.h>
+#include <QReadWriteLock>
 
 @implementation OAOsmEditsLayer
 {
     std::shared_ptr<OsmAnd::MapMarkersCollection> _osmEditsCollection;
     OAOsmEditingPlugin *_plugin;
     
+    QReadWriteLock _iconsCacheLock;
     QHash<QString, sk_sp<SkImage>> _iconsCache;
-    
+
     OAAutoObserverProxy *_editsChangedObserver;
     
     BOOL _showCaptionsCache;
@@ -108,7 +110,10 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             [self hide];
             if (textSizeChanged)
+            {
+                QWriteLocker scopedLocker(&_iconsCacheLock);
                 _iconsCache.clear();
+            }
             [self refreshOsmEditsCollection];
             [self show];
         });
@@ -161,8 +166,17 @@
             if (type)
             {
                 auto iconId = QString::fromNSString(type.name);
-                const auto bitmapIt = _iconsCache.find(iconId);
-                if (bitmapIt == _iconsCache.end())
+                bool isNew = false;
+                {
+                    QReadLocker scopedLocker(&_iconsCacheLock);
+                    const auto bitmapIt = _iconsCache.find(iconId);
+                    isNew = bitmapIt == _iconsCache.end();
+                    if (!isNew)
+                    {
+                        bitmap = bitmapIt.value();
+                    }
+                }
+                if (isNew)
                 {
                     bitmap = [OACompoundIconUtils createCompositeIconWithcolor:UIColorFromARGB(color_osm_edit)
                                                                      shapeName:@"circle"
@@ -170,11 +184,9 @@
                                                                     isFullSize:YES
                                                                           icon:type.icon
                                                                          scale:_textSize];
+
+                    QWriteLocker scopedLocker(&_iconsCacheLock);
                     _iconsCache[iconId] = bitmap;
-                }
-                else
-                {
-                    bitmap = bitmapIt.value();
                 }
             }
         }
@@ -191,15 +203,21 @@
     else
     {
         auto iconId = QStringLiteral("osm_note");
-        const auto bitmapIt = _iconsCache.find(iconId);
-        if (bitmapIt == _iconsCache.end())
+        bool isNew = false;
+        {
+            QReadLocker scopedLocker(&_iconsCacheLock);
+            const auto bitmapIt = _iconsCache.find(iconId);
+            isNew = bitmapIt == _iconsCache.end();
+            if (!isNew)
+            {
+                bitmap = bitmapIt.value();
+            }
+        }
+        if (isNew)
         {
             [self getOsmNoteBitmap:bitmap];
+            QWriteLocker scopedLocker(&_iconsCacheLock);
             _iconsCache[iconId] = bitmap;
-        }
-        else
-        {
-            bitmap = bitmapIt.value();
         }
     }
 

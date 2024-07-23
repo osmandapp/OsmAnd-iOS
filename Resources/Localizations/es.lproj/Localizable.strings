@@ -3471,3 +3471,6 @@
 "osm_login_needs_ios_16_4" = "Para iniciar sesión en OpenStreetMap se necesita iOS 16.4+";
 "shared_string_update_required" = "Actualización requerida";
 "osmand_depelopment_use_3d_icons" = "Utiliza iconos con la posición de la ubicación 3D";
+"user_palette" = "Paleta del usuario";
+"height_legend_description" = "Los mapas de colores de altitud se utilizan para visualizar el relieve.";
+"shared_string_colors" = "Colores";

@@ -3108,3 +3108,4 @@
 "res_name_warning" = "Filnavnet kan ikke være tomt";
 "invalid_format" = "Ugyldig format";
 "toggle_public_transport" = "Vis/skjul kollektivtransport";
+"weather_source_ecmwf_description" = "Europeisk senter for middels lange værvarsler (ECMWF)";

@@ -333,6 +333,13 @@
                 @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
+                @"name" : @"DR_INDIA",
+                @"title" : [OADrivingRegion getName:DR_INDIA],
+                @"description" : [OADrivingRegion getDescription:DR_INDIA],
+                @"selected" : @(drivingRegion == DR_INDIA),
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
+            }];
+            [dataArr addObject:@{
                 @"name" : @"DR_AUSTRALIA",
                 @"title" : [OADrivingRegion getName:DR_AUSTRALIA],
                 @"description" : [OADrivingRegion getDescription:DR_AUSTRALIA],
@@ -664,6 +671,8 @@
             drivingRegion = DR_UK_AND_OTHERS;
         else if ([name isEqualToString:@"DR_JAPAN"])
             drivingRegion = DR_JAPAN;
+        else if ([name isEqualToString:@"DR_INDIA"])
+            drivingRegion = DR_INDIA;
         else if ([name isEqualToString:@"DR_AUSTRALIA"])
             drivingRegion = DR_AUSTRALIA;
         else

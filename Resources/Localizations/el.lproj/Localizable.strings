@@ -1406,7 +1406,6 @@
 "osm_live_payment_header" = "Διάρκεια πληρωμής:";
 "type_city_town" = "Πληκτρολόγησε πόλη/κωμόπολη/περιοχή";
 "default_price_currency_format" = "%.2f %@";
-"driving_region_uk" = "ΗΒ, Ινδία και παρόμοια";
 "select_wikipedia_article_langs" = "Επιλέξτε τις γλώσσες για τα άρθρα Wikipedia στον χάρτη. Αλλάξτε σε οποιαδήποτε διαθέσιμη γλώσσα κατά την ανάγνωση του άρθρου.";
 "route_via" = "Μέσω:";
 "simulate_your_location_gpx_descr" = "Προσομοίωση της θέσης σας χρησιμοποιώντας καταγεγραμμένη διαδρομή GPX.";

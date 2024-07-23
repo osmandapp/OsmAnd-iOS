@@ -755,7 +755,6 @@
 "route_roundabout_short" = "Tome %d sair e ir";
 "tunnel_warning" = "Túnel à frente";
 "driving_region_europe_asia" = "Europa,Ásia, América Latina e similares";
-"driving_region_uk" = "Reino Unido,Índia e similares";
 "left_side_navigation" = "Condução pela esquerda";
 "si_nm_h" = "Milhas náuticas por hora (nós)";
 "units_nm_h" = "mn/h";

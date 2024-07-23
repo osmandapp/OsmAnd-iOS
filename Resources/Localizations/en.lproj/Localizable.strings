@@ -674,7 +674,8 @@
 "driving_region_us" = "United States";
 "driving_region_canada" = "Canada";
 "driving_region_europe_asia" = "Europe, Asia, Latin America, and similar";
-"driving_region_uk" = "UK, India, and similar";
+"driving_region_uk" = "UK & similar";
+"driving_region_india" = "India";
 "driving_region_australia" = "Australia";
 
 "left_side_navigation" = "Left-hand traffic";

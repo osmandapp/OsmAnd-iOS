@@ -3462,7 +3462,7 @@
 "transport_hazmat_title" = "Transporte de materiales peligrosos";
 "data_source" = "Fuente de datos";
 "weather_data_sources_prompt" = "OsmAnd proporciona datos meteorológicos de dos fuentes:";
-"weather_source_ecmwf_description" = "Centro Europeo de Previsiones Meteorológicas a Medio Plazo";
+"weather_source_ecmwf_description" = "Centro Europeo de Previsiones Meteorológicas a Plazo Medio";
 "weather_source_GFS_title" = "GFS";
 "map_settings_weather_wind_animation" = "Animación del viento";
 "weather_source_GFS_description" = "Sistema de pronóstico global de los centros nacionales de predicción ambiental";

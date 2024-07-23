@@ -8,16 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import <JASidePanelController.h>
-#import "OAMapPanelViewController.h"
 
-#define kLeftPannelGestureRecognizer @"kLeftPannelGestureRecognizer"
+static NSString * kLeftPannelGestureRecognizer = @"kLeftPannelGestureRecognizer";
+static NSString * kCommandSearchScreenOpen = @"keyCommandSearchScreenOpen";
+static NSString * kCommandSearchScreenClose = @"keyCommandSearchScreenClose";
+static NSString * kCommandNavigationScreenOpen = @"keyCommandNavigationScreenOpen";
+static NSString * kCommandNavigationScreenClose = @"keyCommandNavigationScreenClose";
 
-#define kCommandSearchScreenOpen @"keyCommandSearchScreenOpen"
-#define kCommandSearchScreenClose @"keyCommandSearchScreenClose"
-#define kCommandNavigationScreenOpen @"keyCommandNavigationScreenOpen"
-#define kCommandNavigationScreenClose @"keyCommandNavigationScreenClose"
-
-@class OAProduct;
+@class OAProduct, OAMapPanelViewController, OAAutoObserverProxy;
 
 @interface OARootViewController : JASidePanelController
 

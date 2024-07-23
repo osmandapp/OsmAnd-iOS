@@ -14,14 +14,17 @@
 #import "OARightIconTableViewCell.h"
 #import "OAValueTableViewCell.h"
 #import "OALargeImageTitleDescrTableViewCell.h"
+#import "OADownloadsManager.h"
 #import "OsmAndApp.h"
+#import "OAWorldRegion.h"
 #import "OAWeatherHelper.h"
-#import "OsmAnd_Maps-Swift.h"
+#import "OADownloadTask.h"
 #import "Localization.h"
 #import "OAResourcesUIHelper.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OAManageResourcesViewController.h"
 #import "GeneratedAssetSymbols.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OAWeatherForecastViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, OATableViewCellDelegate, OAWeatherCacheSettingsDelegate, OAWeatherForecastDetails, DownloadingCellResourceHelperDelegate>
 

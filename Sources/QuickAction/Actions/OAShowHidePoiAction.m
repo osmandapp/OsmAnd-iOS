@@ -17,6 +17,9 @@
 #import "OAButtonTableViewCell.h"
 #import "OASimpleTableViewCell.h"
 #import "OASvgHelper.h"
+#import "OrderedDictionary.h"
+#import "OAObservable.h"
+#import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 
 static QuickActionType *TYPE;

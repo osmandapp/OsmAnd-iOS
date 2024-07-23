@@ -9,7 +9,8 @@
 #import "OARouteBaseViewController.h"
 #import "Localization.h"
 #import "OARootViewController.h"
-#import "OsmAnd_Maps-Swift.h"
+#import "OAMapViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OARoutingHelper.h"
 #import "OAGPXTrackAnalysis.h"
 #import "OANativeUtilities.h"
@@ -23,8 +24,8 @@
 #import "OAOsmAndFormatter.h"
 #import "OAGPXDatabase.h"
 #import "GeneratedAssetSymbols.h"
-#import "OsmAnd_Maps-Swift.h"
 #import <Charts/Charts-Swift.h>
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OARouteLineChartHelper
 {

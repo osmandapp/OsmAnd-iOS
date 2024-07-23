@@ -12,8 +12,9 @@
 #import "OARootViewController.h"
 #import "OAOsmLiveFeaturesCardView.h"
 #import "OAIAPHelper.h"
-
-#include "Localization.h"
+#import "OAProducts.h"
+#import "OAAppSettings.h"
+#import "Localization.h"
 
 #define kMarginH 16.0
 #define kMarginDescH 54.0

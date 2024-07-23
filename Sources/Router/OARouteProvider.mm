@@ -16,6 +16,7 @@
 #import "OARouteCalculationResult.h"
 #import "OARouteCalculationParams.h"
 #import "QuadRect.h"
+#import "OALocationServices.h"
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OAMapUtils.h"
@@ -25,6 +26,8 @@
 #import "OATargetPointsHelper.h"
 #import "OAIndexConstants.h"
 #import "MissingMapsCalculator.h"
+#import "OARTargetPoint.h"
+#import "CLLocation+Extension.h"
 
 #include <precalculatedRouteDirection.h>
 #include <routePlannerFrontEnd.h>

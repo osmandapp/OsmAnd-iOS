@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "OARootViewController.h"
 
 typedef NS_ENUM(NSInteger, AppLaunchEvent) {
     AppLaunchEventNone,
@@ -18,6 +17,8 @@ typedef NS_ENUM(NSInteger, AppLaunchEvent) {
 };
 
 FOUNDATION_EXPORT NSNotificationName _Nonnull const OALaunchUpdateStateNotification;
+
+@class OARootViewController;
 
 @interface OAAppDelegate : UIResponder <UIApplicationDelegate>
 @property (strong, nonatomic, nullable) OARootViewController *rootViewController;

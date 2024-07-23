@@ -6,6 +6,8 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
+
 @interface OADownloadProgressBarCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UIProgressView *progressBarView;

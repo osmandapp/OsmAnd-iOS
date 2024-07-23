@@ -18,6 +18,7 @@
 #import "OATableSectionData.h"
 #import "OATableRowData.h"
 #import "OAAppSettings.h"
+#import "OAApplicationMode.h"
 #import "OATargetPointsHelper.h"
 #import "OAHistoryHelper.h"
 #import "OAExportSettingsType.h"

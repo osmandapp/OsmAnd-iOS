@@ -8,6 +8,7 @@
 
 #import "OAOsmandDevelopmentViewController.h"
 #import "OsmAndApp.h"
+#import "OALocationServices.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OALocationSimulation.h"
@@ -25,6 +26,7 @@
 #import "OAIndexConstants.h"
 #import "OAPluginsHelper.h"
 #import "OASwitchTableViewCell.h"
+#import "OAObservable.h"
 
 @interface OAOsmandDevelopmentViewController () <OAOsmandDevelopmentSimulateLocationDelegate>
 

@@ -7,20 +7,17 @@
 //
 
 #import "OAMapViewController.h"
-
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
-
 #import <UIViewController+JASidePanel.h>
 #import <MBProgressHUD.h>
-
 #import "OAAppData.h"
 #import "OAMapRendererView.h"
-
 #import "OAIndexConstants.h"
 #import "OAAutoObserverProxy.h"
 #import "OANavigationController.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapHudViewController.h"
 #import "OAFloatingButtonsHudViewController.h"
 #import "OAResourcesBaseViewController.h"
@@ -36,6 +33,7 @@
 #import "OADestination.h"
 #import "OAPluginPopupViewController.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OAMapCreatorHelper.h"
 #import "OAPOI.h"
 #import "OAMapSettingsPOIScreen.h"
@@ -61,7 +59,7 @@
 #import "OAFavoritesHelper.h"
 #import "OAFavoriteItem.h"
 #import "OAZoom.h"
-
+#import "OAMapSource.h"
 #import "OARoutingHelper.h"
 #import "OATransportRoutingHelper.h"
 #import "OAPointDescription.h"
@@ -69,24 +67,25 @@
 #import "OATargetPointsHelper.h"
 #import "OAAvoidSpecificRoads.h"
 #import "OAPluginsHelper.h"
-
 #import "OASubscriptionCancelViewController.h"
 #import "OAWhatsNewBottomSheetViewController.h"
+#import "OAApplicationMode.h"
 #import "OAAppVersion.h"
+#import "OALocationServices.h"
 #import "OsmAnd_Maps-Swift.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
+#import "OANativeUtilities.h"
+#import "OALog.h"
+#import "OAObservable.h"
+#import "Localization.h"
 
+//#include "OAMapMarkersCollection.h"
 #include "OASQLiteTileSourceMapLayerProvider.h"
 #include "OAWebClient.h"
 #include <OsmAndCore/IWebClient.h>
-
-//#include "OAMapMarkersCollection.h"
-
 #include <OpenGLES/ES2/gl.h>
-
 #include <QtMath>
 #include <QStandardPaths>
-
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/IMapStylesCollection.h>
@@ -112,18 +111,12 @@
 #include <OsmAndCore/Map/SqliteHeightmapTileProvider.h>
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 #include <OsmAndCore/Map/MapRendererTypes.h>
-
 #include <OsmAndCore/IObfsCollection.h>
 #include <OsmAndCore/ObfDataInterface.h>
 #include <OsmAndCore/Data/Amenity.h>
 #include <OsmAndCore/Data/ObfMapObject.h>
 #include <OsmAndCore/Data/ObfPoiSectionInfo.h>
-
 #include <OsmAndCore/QKeyValueIterator.h>
-
-#import "OANativeUtilities.h"
-#import "OALog.h"
-#include "Localization.h"
 
 #define _(name) OAMapRendererViewController__##name
 #define commonInit _(commonInit)
@@ -1873,7 +1866,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         int angle = 90 - (baseZoom - 2) * 5;
         if (angle >= kMinAllowedElevationAngle && angle < kDefaultElevationAngle)
         {
-            [[OAMapViewTrackingUtilities instance] startTilting:angle];
+            [[OAMapViewTrackingUtilities instance] startTilting:angle timePeriod:kQuickAnimationTime];
         }
     }
 }
@@ -2034,7 +2027,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) onAppModeChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.mapRendererView.elevationAngle = _app.data.mapLastViewedState.elevationAngle;
+        if (self.mapRendererView)
+            self.mapRendererView.elevationAngle = _app.data.mapLastViewedState.elevationAngle;
     });
 }
 
@@ -2542,7 +2536,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) recreateHeightmapProvider
 {
     OASRTMPlugin *plugin = (OASRTMPlugin *) [OAPluginsHelper getEnabledPlugin:OASRTMPlugin.class];
-    if (!plugin || ![plugin is3DMapsEnabled] || _app.data.terrainType == EOATerrainTypeDisabled)
+    if (!plugin || ![plugin is3DMapsEnabled] || ![plugin isTerrainLayerEnabled])
     {
         _mapView.heightmapSupported = NO;
         [_mapView resetElevationDataProvider:YES];
@@ -2556,7 +2550,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) updateElevationConfiguration
 {
     OASRTMPlugin *plugin = (OASRTMPlugin *) [OAPluginsHelper getEnabledPlugin:OASRTMPlugin.class];
-    BOOL disableVertexHillshade = !plugin || ![plugin is3DMapsEnabled] || _app.data.terrainType == EOATerrainTypeDisabled;
+    BOOL disableVertexHillshade = !plugin || ![plugin is3DMapsEnabled] || ![plugin isTerrainLayerEnabled];
     OsmAnd::ElevationConfiguration elevationConfiguration;
     if (disableVertexHillshade)
     {
@@ -2900,7 +2894,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
                 QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> > gpxDocs;
                 gpxDocs[QString::fromNSString(kCurrentTrack)] = doc;
-                [_mapLayers.gpxRecMapLayer refreshGpxTracks:gpxDocs reset:NO];
+                [_mapLayers.gpxRecMapLayer refreshGpxTracks:gpxDocs reset:NO refreshColors:NO];
             }
         }];
     }
@@ -3682,7 +3676,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         if (_gpxDocFileTemp && !_gpxDocsTemp.isEmpty())
             docs[QString::fromNSString(_gpxDocFileTemp)] = _gpxDocsTemp.first();
     }
-    [_mapLayers.gpxMapLayer refreshGpxTracks:docs];
+    [_mapLayers.gpxMapLayer refreshGpxTracks:docs reset:YES refreshColors:YES];
 }
 
 - (void) refreshGpxTracks

@@ -8,6 +8,7 @@
 
 #import "OAWikiArticleHelper.h"
 #import "OAWikiArticleHelper+cpp.h"
+#import "OADownloadsManager.h"
 #import "OAWorldRegion.h"
 #import "OsmAndApp.h"
 #import "OAManageResourcesViewController.h"
@@ -15,6 +16,7 @@
 #import "OAPOI.h"
 #import "OAWikiWebViewController.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OAWikiLanguagesWebViewContoller.h"

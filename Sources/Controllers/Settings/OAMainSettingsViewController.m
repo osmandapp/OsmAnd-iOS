@@ -13,6 +13,8 @@
 #import "OARightIconTableViewCell.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
+#import "OAAppData.h"
+#import "OAObservable.h"
 #import "OAUtilities.h"
 #import "OAApplicationMode.h"
 #import "OsmAndApp.h"

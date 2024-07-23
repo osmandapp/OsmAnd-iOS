@@ -9,8 +9,11 @@
 #import "OAQuickSearchHelper.h"
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
+#import "OAWorldRegion.h"
 #import "OASearchUICore.h"
+#import "OALocationServices.h"
 #import "OASearchPhrase.h"
+#import "OAObservable.h"
 #import "OASearchSettings.h"
 #import "OASearchResultMatcher.h"
 #import "OAHistoryItem.h"
@@ -19,6 +22,8 @@
 #import "OAPOIUIFilter.h"
 #import "OACustomSearchPoiFilter.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OASearchWord.h"
 #import "Localization.h"
 #import "OAAutoObserverProxy.h"
@@ -27,6 +32,8 @@
 #import "OAPOIHelper.h"
 #import "OAFavoritesHelper.h"
 #import "OAFavoriteItem.h"
+#import "OAPOIType.h"
+#import "OAResultMatcher.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>

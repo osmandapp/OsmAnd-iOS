@@ -7,7 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "OAGPXDatabase.h"
+
+@class OAGPX;
 
 @interface OAGpxInfo : NSObject
 

@@ -9,6 +9,7 @@
 #import "OACameraDistanceWidget.h"
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapRendererView.h"
 #import "OAOsmAndFormatter.h"
 #import "OAAppSettings.h"

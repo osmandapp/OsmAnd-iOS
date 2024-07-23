@@ -16,6 +16,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OAWeatherPlugin.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapHudViewController.h"
 #import "OAMapInfoController.h"
 #import "OrderedDictionary.h"

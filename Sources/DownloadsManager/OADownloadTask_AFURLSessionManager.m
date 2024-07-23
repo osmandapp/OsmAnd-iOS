@@ -7,9 +7,10 @@
 //
 
 #import "OADownloadTask_AFURLSessionManager.h"
-
+#import "OADownloadTask.h"
 #import "OADownloadsManager.h"
 #import "OADownloadsManager_Private.h"
+#import "OAObservable.h"
 #import "OALog.h"
 
 @implementation OADownloadTask_AFURLSessionManager

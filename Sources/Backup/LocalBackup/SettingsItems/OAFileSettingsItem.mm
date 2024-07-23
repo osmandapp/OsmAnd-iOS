@@ -48,6 +48,8 @@
             return @"voice";
         case EOASettingsItemFileSubtypeTravel:
             return @"travel";
+        case EOASettingsItemFileSubtypeColorPalette:
+            return @"colors_palette";
         default:
             return @"";
     }
@@ -67,15 +69,17 @@
         case EOASettingsItemFileSubtypeTilesMap:
             return [documentsPath stringByAppendingPathComponent:RESOURCES_DIR];
         case EOASettingsItemFileSubtypeRenderingStyle:
-            return [documentsPath stringByAppendingPathComponent:@"rendering"];
+            return [documentsPath stringByAppendingPathComponent:RENDERERS_DIR];
         case EOASettingsItemFileSubtypeRoutingConfig:
-            return [documentsPath stringByAppendingPathComponent:@"routing"];
+            return [documentsPath stringByAppendingPathComponent:ROUTING_PROFILES_DIR];
         case EOASettingsItemFileSubtypeGpx:
             return OsmAndApp.instance.gpxPath;
             // unsupported
 //        case EOASettingsItemFileSubtypeTravel:
 //        case EOASettingsItemFileSubtypeVoice:
 //            return [documentsPath stringByAppendingPathComponent:@"Voice"];
+        case EOASettingsItemFileSubtypeColorPalette:
+            return [documentsPath stringByAppendingPathComponent:COLOR_PALETTE_DIR];
         default:
             return @"";
     }
@@ -95,6 +99,8 @@
 //        case EOASettingsItemFileSubtypeTravel:
 //        case EOASettingsItemFileSubtypeVoice:
 //            return [documentsPath stringByAppendingPathComponent:@"Voice"];
+        case EOASettingsItemFileSubtypeColorPalette:
+            return COLOR_PALETTE_DIR;
         default:
             return @"";
     }
@@ -190,6 +196,12 @@
                     return subtype;
                 break;
             }
+            case EOASettingsItemFileSubtypeColorPalette:
+            {
+                if ([name hasSuffix:TXT_EXT])
+                    return subtype;
+                break;
+            }
             default:
             {
                 NSString *subtypeFolder = [self.class getSubtypeFolder:subtype];
@@ -230,6 +242,8 @@
             return @"ic_custom_route";
         case EOASettingsItemFileSubtypeRenderingStyle:
             return @"ic_custom_map_style";
+        case EOASettingsItemFileSubtypeColorPalette:
+            return @"ic_custom_file_color_palette";
             
         default:
             return @"ic_custom_save_as_new_file";
@@ -344,6 +358,7 @@
         case EOASettingsItemFileSubtypeWikiMap:
         case EOASettingsItemFileSubtypeSrtmMap:
         case EOASettingsItemFileSubtypeTilesMap:
+        case EOASettingsItemFileSubtypeColorPalette:
         {
             OsmAndApp.instance.resourcesManager->rescanUnmanagedStoragePaths(true);
             break;

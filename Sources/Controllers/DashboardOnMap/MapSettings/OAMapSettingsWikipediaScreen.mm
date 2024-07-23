@@ -19,11 +19,14 @@
 #import "OAWikiArticleHelper.h"
 #import "OAIAPHelper.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OAAutoObserverProxy.h"
 #import "OAPluginPopupViewController.h"
 #import "OAManageResourcesViewController.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
+#import "OAAppData.h"
 
 #define kCellTypeMap @"MapCell"
 

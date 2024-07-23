@@ -16,13 +16,13 @@
 #import "OAMapUtils.h"
 #import "OAAppVersion.h"
 #import "OAGPXAppearanceCollection.h"
+#import "OAAppData.h"
 #import "OANativeUtilities.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/QKeyValueIterator.h>
 #include <qmap.h>
 
-static const NSInteger kElevationDefMeters = 1000;
 static const NSInteger kElevationMaxMeters = 2000;
 static const CGFloat kVerticalExaggerationScaleDef = 0.25;
 static const CGFloat kVerticalExaggerationScaleMax = 4.0;

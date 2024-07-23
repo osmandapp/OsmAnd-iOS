@@ -183,7 +183,7 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController 
         if speedometerView == nil {
             let view = SpeedometerView.initView
             view?.isPreview = true
-            view?.delegate = OARootViewController.instance().mapPanel.hudViewController.mapInfoController
+            view?.delegate = OARootViewController.instance().mapPanel.hudViewController?.mapInfoController
             view?.translatesAutoresizingMaskIntoConstraints = false
             speedometerView = view
         }

@@ -15,6 +15,7 @@
 #import "OsmAndApp.h"
 #import "OAPOIType.h"
 #import "OAPOI.h"
+#import "OAObservable.h"
 #import "OAPOIHelper.h"
 #import "OAEditPOIData.h"
 #import "OATargetPoint.h"

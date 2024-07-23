@@ -34,9 +34,13 @@ final class GlideTargetWidget: GlideBaseWidget {
             forceUpdate = true
             self.widgetState?.changeToNextState()
             updateInfo()
-            setContentTitle(getWidgetName())
+            if let contentTitle = getWidgetName() {
+                setContentTitle(contentTitle)
+            }
         }
-        setContentTitle(getWidgetName())
+        if let contentTitle = getWidgetName() {
+            setContentTitle(contentTitle)
+        }
         setIcon("widget_glide_ratio_to_target")
     }
 

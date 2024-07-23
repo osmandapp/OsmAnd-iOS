@@ -2904,7 +2904,7 @@
 "track_vertical_exaggeration_description" = "A skála értékének változtatásával módosíthatja a 3D nyomvonal magasságát.";
 "track_3d_empty_view_description" = "Fedezze fel a nyomvonalat interaktív 3D-ben! Lássa közvetlenül a térképen a magasságot, sebességet és egyebeket.";
 
-"rendering_value_pale_name" = "Halvány";;
+"rendering_value_pale_name" = "Halvány";
 "weather_source_GFS_description" = "Az amerikai Nemzeti Környezeti Előrejelző Központok adatait felhasználó Globális Előrejelzési Rendszer";
 "weather_data_sources_prompt" = "Az OsmAnd időjárási adatai két forrásból származnak:";
 "weather_source_ecmwf_description" = "Középtávú Időjárás-előrejelzések Európai Központja";

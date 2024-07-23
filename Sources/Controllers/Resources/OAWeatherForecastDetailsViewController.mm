@@ -13,14 +13,16 @@
 #import "OARightIconTableViewCell.h"
 #import "OAValueTableViewCell.h"
 #import "MBProgressHUD.h"
+#import "OADownloadsManager.h"
 #import "OATableViewCustomHeaderView.h"
 #import "OAResourcesUIHelper.h"
 #import "OAWeatherHelper.h"
 #import "OASizes.h"
-#import "OsmAnd_Maps-Swift.h"
-#import "Localization.h"
+#import "OADownloadTask.h"
 #import "OAWeatherAutoUpdateSettingsViewController.h"
+#import "Localization.h"
 #import "GeneratedAssetSymbols.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OAWeatherForecastDetailsViewController  () <OAWeatherCacheSettingsDelegate, OAWeatherFrequencySettingsDelegate, OAWeatherAutoUpdateSettingsViewControllerDelegate, DownloadingCellResourceHelperDelegate>
 

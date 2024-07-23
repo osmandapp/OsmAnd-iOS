@@ -10,7 +10,9 @@
 #import "OABaseTrackMenuHudViewController.h"
 #import "OAPluginPopupViewController.h"
 #import "OARootViewController.h"
+#import "OAMapViewController.h"
 #import "OAMapHudViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMainSettingsViewController.h"
 #import "OAConfigureProfileViewController.h"
 #import "OAProfileNavigationSettingsViewController.h"
@@ -40,8 +42,10 @@
 #import "OARouteStatisticsHelper.h"
 #import "OAProducts.h"
 #import "OASizes.h"
-#import "OsmAnd_Maps-Swift.h"
+#import "OAColoringType.h"
+#import "OAApplicationMode.h"
 #import "GeneratedAssetSymbols.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kColorDayMode OALocalizedString(@"day")
 #define kColorNightMode OALocalizedString(@"daynight_mode_night")
@@ -737,14 +741,16 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     OAColoringType *coloringType = [_settings.routeColoringType get:_appMode];
     NSString *routeInfoAttribute = [_settings.routeInfoAttribute get:_appMode];
     NSString *widthKey = [_settings.routeLineWidth get:_appMode];
+    NSString *gradientPaletteName = [_settings.routeGradientPalette get:_appMode];
     BOOL showTurnArrows = [_settings.routeShowTurnArrows get:_appMode];
 
     OAPreviewRouteLineInfo *previewRouteLineInfo = [[OAPreviewRouteLineInfo alloc] initWithCustomColorDay:colorDay
-                                                                                 customColorNight:colorNight
-                                                                                     coloringType:coloringType
-                                                                               routeInfoAttribute:routeInfoAttribute
-                                                                                            width:widthKey
-                                                                                   showTurnArrows:showTurnArrows];
+                                                                                         customColorNight:colorNight
+                                                                                             coloringType:coloringType
+                                                                                       routeInfoAttribute:routeInfoAttribute
+                                                                                                    width:widthKey
+                                                                                          gradientPalette:gradientPaletteName
+                                                                                           showTurnArrows:showTurnArrows];
     return previewRouteLineInfo;
 }
 
@@ -1263,6 +1269,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         [_settings.routeColoringType set:_previewRouteLineInfo.coloringType mode:_appMode];
         [_settings.routeInfoAttribute set:_previewRouteLineInfo.routeInfoAttribute mode:_appMode];
         [_settings.routeLineWidth set:_previewRouteLineInfo.width mode:_appMode];
+        [_settings.routeGradientPalette set:_previewRouteLineInfo.gradientPalette mode:_appMode];
         [_settings.routeShowTurnArrows set:_previewRouteLineInfo.showTurnArrows mode:_appMode];
         
         [_mapSourceUpdatedObserver detach];

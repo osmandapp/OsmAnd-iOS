@@ -8,6 +8,7 @@
 
 #import "OAMapViewHelper.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapRendererView.h"
 #import "OAMapViewController.h"
 #import "OANativeUtilities.h"

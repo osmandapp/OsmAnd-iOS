@@ -32,6 +32,8 @@
 #import "OAAutoObserverProxy.h"
 #import "OALinks.h"
 #import "OASizes.h"
+#import "OAAppData.h"
+#import "OAObservable.h"
 #import <SafariServices/SafariServices.h>
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
@@ -46,6 +48,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 @interface OAMapSettingsTerrainScreen() <SFSafariViewControllerDelegate, UITextViewDelegate, OATerrainParametersDelegate, DownloadingCellResourceHelperDelegate>
 
+@property (nonatomic) OASRTMPlugin *plugin;
+
 @end
 
 @implementation OAMapSettingsTerrainScreen
@@ -53,7 +57,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     OsmAndAppInstance _app;
     DownloadingCellResourceHelper *_downloadingCellResourceHelper;
     OAIAPHelper *_iapHelper;
-    OASRTMPlugin *_plugin;
     OATableDataModel *_data;
     NSInteger _availableMapsSection;
     NSInteger _minZoom;
@@ -92,28 +95,26 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     _data = [OATableDataModel model];
 
-    EOATerrainType type = _app.data.terrainType;
-
-    double alphaValue = type == EOATerrainTypeSlope ? _app.data.slopeAlpha : _app.data.hillshadeAlpha;
-    NSString *alphaValueString = [NSString stringWithFormat:@"%.0f%@", alphaValue * 100, @"%"];
-
-    _minZoom = type == EOATerrainTypeHillshade ? _app.data.hillshadeMinZoom : _app.data.slopeMinZoom;
-    _maxZoom = type == EOATerrainTypeHillshade ? _app.data.hillshadeMaxZoom : _app.data.slopeMaxZoom;
-    NSString *zoomRangeString = [NSString stringWithFormat:@"%ld-%ld", (long)_minZoom, (long)_maxZoom];
+    TerrainMode *terrainMode = [_plugin getTerrainMode];
+    _minZoom = [_plugin getTerrainMinZoom];
+    _maxZoom = [_plugin getTerrainMaxZoom];
 
     BOOL isRelief3D = [OAIAPHelper isOsmAndProAvailable];
+    BOOL isTerrainEbabled = [_plugin isTerrainLayerEnabled];
+    BOOL isHillshade = [terrainMode isHillshade];
+    BOOL isSlope = [terrainMode isSlope];
 
     OATableSectionData *switchSection = [_data createNewSection];
     [switchSection addRowFromDictionary:@{
         kCellKeyKey : @"terrainStatus",
         kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
-        kCellTitleKey : type != EOATerrainTypeDisabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name"),
-        kCellIconNameKey : type != EOATerrainTypeDisabled ? @"ic_custom_show.png" : @"ic_custom_hide.png",
-        kCellIconTintColor : type != EOATerrainTypeDisabled ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled],
-        @"value" : @(type != EOATerrainTypeDisabled)
+        kCellTitleKey : OALocalizedString(isTerrainEbabled ? @"shared_string_enabled" : @"rendering_value_disabled_name"),
+        kCellIconNameKey : isTerrainEbabled ? @"ic_custom_show.png" : @"ic_custom_hide.png",
+        kCellIconTintColor : [UIColor colorNamed:isTerrainEbabled ? ACColorNameIconColorSelected : ACColorNameIconColorDisabled],
+        @"value" : @(isTerrainEbabled)
     }];
 
-    if (type == EOATerrainTypeDisabled)
+    if (!isTerrainEbabled)
     {
         OATableSectionData *disabledSection = [_data createNewSection];
         [disabledSection addRowFromDictionary:@{
@@ -141,10 +142,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         [titleSection addRowFromDictionary:@{
             kCellKeyKey : @"terrainTypeDesc",
             kCellTypeKey : [OATextLineViewCell getCellIdentifier],
-            kCellDescrKey : type == EOATerrainTypeHillshade ? OALocalizedString(@"map_settings_hillshade_description") : OALocalizedString(@"map_settings_slopes_description"),
+            kCellDescrKey : OALocalizedString(isHillshade ? @"map_settings_hillshade_description"
+                : isSlope ? @"map_settings_slopes_description" : @"height_legend_description"),
 
         }];
-        if (_app.data.terrainType == EOATerrainTypeSlope)
+        if (isSlope)
         {
             [titleSection addRowFromDictionary:@{
                 kCellTypeKey : [OAImageTextViewCell getCellIdentifier],
@@ -159,7 +161,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             kCellTitleKey : OALocalizedString(@"visibility"),
             kCellIconNameKey : @"ic_custom_visibility",
             kCellIconTintColor : [UIColor colorNamed:ACColorNameIconColorDefault],
-            @"value" : alphaValueString
+            @"value" : [NSString stringWithFormat:@"%ld%%", [terrainMode getTransparency]]
         }];
         [titleSection addRowFromDictionary:@{
             kCellKeyKey : @"zoomLevels",
@@ -167,7 +169,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             kCellTitleKey : OALocalizedString(@"shared_string_zoom_levels"),
             kCellIconNameKey : @"ic_custom_overlay_map",
             kCellIconTintColor : [UIColor colorNamed:ACColorNameIconColorDefault],
-            @"value" : zoomRangeString
+            @"value" : [NSString stringWithFormat:@"%ld-%ld", _minZoom, _maxZoom]
         }];
         OATableSectionData *relief3DSection = [_data createNewSection];
         [relief3DSection addRowFromDictionary:@{
@@ -175,11 +177,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             kCellTypeKey : isRelief3D ? [OASwitchTableViewCell getCellIdentifier] : [OAButtonTableViewCell getCellIdentifier],
             kCellTitleKey : OALocalizedString(@"shared_string_relief_3d"),
             kCellIconNameKey : @"ic_custom_3d_relief",
-            kCellIconTintColor : ![_plugin.enable3DMaps get] || !isRelief3D ? [UIColor colorNamed:ACColorNameIconColorDisabled] : [UIColor colorNamed:ACColorNameIconColorSelected],
+            kCellIconTintColor : ![_plugin.enable3dMapsPref get] || !isRelief3D ? [UIColor colorNamed:ACColorNameIconColorDisabled] : [UIColor colorNamed:ACColorNameIconColorSelected],
             kCellSecondaryIconName : @"ic_payment_label_pro",
-            @"value" : @([_plugin.enable3DMaps get]),
+            @"value" : @([_plugin.enable3dMapsPref get]),
         }];
-        if (isRelief3D && [_plugin.enable3DMaps get])
+        if (isRelief3D && [_plugin.enable3dMapsPref get])
         {
             double scaleValue = _app.data.verticalExaggerationScale;
             NSString *alphaValueString = scaleValue <= kExaggerationDefScale ? OALocalizedString(@"shared_string_none") : (scaleValue < 1.0 ? [NSString stringWithFormat:@"x%.2f", scaleValue] : [NSString stringWithFormat:@"x%.1f", scaleValue]);
@@ -201,7 +203,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             OATableSectionData *availableMapsSection = [_data createNewSection];
             _availableMapsSection = [_data sectionCount] - 1;
             availableMapsSection.headerText = OALocalizedString(@"available_maps");
-            availableMapsSection.footerText = type == EOATerrainTypeHillshade ? OALocalizedString(@"map_settings_add_maps_hillshade") : OALocalizedString(@"map_settings_add_maps_slopes");
+            availableMapsSection.footerText = OALocalizedString(isHillshade ? @"map_settings_add_maps_hillshade" : @"map_settings_add_maps_slopes");
             for (NSInteger i = 0; i < _mapItems.count; i++)
             {
                 [availableMapsSection addRowFromDictionary:@{
@@ -258,44 +260,44 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (UIMenu *)createTerrainTypeMenuForCellButton:(UIButton *)button
 {
     NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
+    NSMutableAttributedString *attributedString;
 
-    UIAction *hillshade = [UIAction actionWithTitle:OALocalizedString(@"shared_string_hillshade")
-                                             image:nil
-                                        identifier:nil
-                                           handler:^(__kindof UIAction * _Nonnull action) {
-        [_app.data setTerrainType: EOATerrainTypeHillshade];
-        [self terrainTypeChanged];
-    }];
-    [menuElements addObject:hillshade];
+    __weak __typeof(self) weakSelf = self;
+    for (NSInteger i = 0; i < TerrainMode.values.count; i++)
+    {
+        TerrainMode *mode = TerrainMode.values[i];
+        if (![mode isDefaultMode])
+            continue;
 
-    UIAction *slope = [UIAction actionWithTitle:OALocalizedString(@"shared_string_slope")
-                                          image:nil
-                                     identifier:nil
-                                        handler:^(__kindof UIAction * _Nonnull action) {
-        [_app.data setTerrainType: EOATerrainTypeSlope];
-        [self terrainTypeChanged];
-    }];
-    [menuElements addObject:slope];
+        UIAction *action = [UIAction actionWithTitle:[mode getDescription]
+                                               image:nil
+                                          identifier:nil
+                                             handler:^(__kindof UIAction * _Nonnull action) {
+            [weakSelf.plugin setTerrainMode:mode];
+            [weakSelf terrainTypeChanged];
+        }];
 
-    NSInteger selectedIndex = _app.data.terrainType == EOATerrainTypeHillshade ? 0 : 1;
-    if (selectedIndex >= 0 && selectedIndex < menuElements.count)
-        ((UIAction *)menuElements[selectedIndex]).state = UIMenuElementStateOn;
-    
-    NSString *title = [menuElements[selectedIndex] title];
-    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:title];
-    
-    NSTextAttachment *attachment = [[NSTextAttachment alloc] init];
-    UIImageSymbolConfiguration *config = [UIImageSymbolConfiguration configurationWithPointSize:16 weight:UIImageSymbolWeightBold];
-    UIImage *image = [UIImage systemImageNamed:@"chevron.up.chevron.down" withConfiguration:config];
-    image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    attachment.image = image;
-    
-    NSAttributedString *attachmentString = [NSAttributedString attributedStringWithAttachment:attachment];
-    [attributedString appendAttributedString:[[NSAttributedString alloc] initWithString:@" "]];
-    [attributedString appendAttributedString:attachmentString];
-    
-    [button setAttributedTitle:attributedString forState:UIControlStateNormal];
-    
+        if ([mode getKeyName] == [_plugin.terrainModeTypePref get])
+        {
+            action.state = UIMenuElementStateOn;
+
+            attributedString = [[NSMutableAttributedString alloc] initWithString:action.title];
+            NSTextAttachment *attachment = [[NSTextAttachment alloc] init];
+            UIImageSymbolConfiguration *config = [UIImageSymbolConfiguration configurationWithPointSize:16 weight:UIImageSymbolWeightBold];
+            UIImage *image = [UIImage systemImageNamed:@"chevron.up.chevron.down" withConfiguration:config];
+            image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            attachment.image = image;
+            
+            NSAttributedString *attachmentString = [NSAttributedString attributedStringWithAttachment:attachment];
+            [attributedString appendAttributedString:[[NSAttributedString alloc] initWithString:@" "]];
+            [attributedString appendAttributedString:attachmentString];
+        }
+
+        [menuElements addObject:action];
+    }
+
+    if (attributedString)
+        [button setAttributedTitle:attributedString forState:UIControlStateNormal];
     return [UIMenu menuWithChildren:menuElements];
 }
 
@@ -386,7 +388,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     else if ([item.cellType isEqualToString:[OATextLineViewCell getCellIdentifier]])
     {
         OATextLineViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextLineViewCell getCellIdentifier]];
-        BOOL isTerrainTypeSlope = _app.data.terrainType == EOATerrainTypeSlope;
         
         if (cell == nil)
         {
@@ -399,7 +400,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         if (cell)
         {
-            cell.separatorInset = isTerrainTypeSlope ? UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.) : UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0., 0.);;
+            cell.separatorInset = ![[_plugin getTerrainMode] isHillshade] ? UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.) : UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0., 0.);;
             cell.textView.text = item.descr;
             cell.textView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             cell.textView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
@@ -600,21 +601,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
     if ([item.key isEqualToString:@"terrainStatus"])
     {
-        if (isOn)
-        {
-            EOATerrainType prevType = _app.data.lastTerrainType;
-            [_app.data setTerrainType:prevType != EOATerrainTypeDisabled ? prevType : EOATerrainTypeHillshade];
-        }
-        else
-        {
+        [_plugin setTerrainLayerEnabled:isOn];
+        if (!isOn)
             _availableMapsSection = -1;
-            _app.data.lastTerrainType = _app.data.terrainType;
-            [_app.data setTerrainType:EOATerrainTypeDisabled];
-        }
     }
     else if ([item.key isEqualToString:@"relief3D"])
     {
-        [_plugin.enable3DMaps set:isOn];
+        [_plugin.enable3dMapsPref set:isOn];
     }
 
     [self updateAvailableMaps];

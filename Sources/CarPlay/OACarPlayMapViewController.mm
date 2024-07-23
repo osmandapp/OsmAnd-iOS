@@ -10,6 +10,7 @@
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OANativeUtilities.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OACarPlayDashboardInterfaceController.h"

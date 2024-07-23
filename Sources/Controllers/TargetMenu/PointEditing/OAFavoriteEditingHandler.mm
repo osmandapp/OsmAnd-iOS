@@ -10,6 +10,7 @@
 #import "OAFavoriteItem.h"
 #import "OADefaultFavorite.h"
 #import "OAFavoritesHelper.h"
+#import "OAPOI.h"
 #import "OsmAndApp.h"
 
 #include <OsmAndCore.h>

@@ -9,6 +9,7 @@
 #import "OACustomPlugin.h"
 #import "OAWorldRegion.h"
 #import "OAJsonHelper.h"
+#import "OAAppData.h"
 #import "OASettingsHelper.h"
 #import "Localization.h"
 #import "OsmAndApp.h"
@@ -31,6 +32,8 @@
 #import "OAPOIFiltersHelper.h"
 #import "OAQuickSearchHelper.h"
 #import "OASuggestedDownloadsItem.h"
+#import "OAApplicationMode.h"
+#import "OAMapSource.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/ResourcesManager.h>

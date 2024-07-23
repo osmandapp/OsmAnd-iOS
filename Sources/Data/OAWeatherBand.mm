@@ -8,7 +8,10 @@
 
 #import "OAWeatherBand.h"
 #import "OsmAndApp.h"
+#import "OAAppData.h"
 #import "OAMapPresentationEnvironment.h"
+#import "OAAutoObserverProxy.h"
+#import "OAObservable.h"
 #import "Localization.h"
 
 #include <OsmAndCore/Map/WeatherDataConverter.h>
@@ -442,17 +445,17 @@ static NSString *kPrecipContourStyleName;
     switch (self.bandIndex)
     {
         case WEATHER_BAND_CLOUD:
-            return [[NSBundle mainBundle] pathForResource:@"weather_cloud" ofType:@"txt"];
+            return [_app.colorsPalettePath stringByAppendingPathComponent:@"weather_cloud.txt"];
         case WEATHER_BAND_TEMPERATURE:
-            return [[NSBundle mainBundle] pathForResource:@"weather_temperature" ofType:@"txt"];
+            return [_app.colorsPalettePath stringByAppendingPathComponent:@"weather_temperature.txt"];
         case WEATHER_BAND_PRESSURE:
-            return [[NSBundle mainBundle] pathForResource:@"weather_pressure" ofType:@"txt"];
+            return [_app.colorsPalettePath stringByAppendingPathComponent:@"weather_pressure.txt"];
         case WEATHER_BAND_WIND_SPEED:
-            return [[NSBundle mainBundle] pathForResource:@"weather_wind" ofType:@"txt"];
+            return [_app.colorsPalettePath stringByAppendingPathComponent:@"weather_wind.txt"];
         case WEATHER_BAND_PRECIPITATION:
-            return [[NSBundle mainBundle] pathForResource:@"weather_precip" ofType:@"txt"];
+            return [_app.colorsPalettePath stringByAppendingPathComponent:@"weather_precip.txt"];
         case WEATHER_BAND_WIND_ANIMATION:
-            return [[NSBundle mainBundle] pathForResource:@"weather_wind_animation" ofType:@"txt"];
+            return [_app.colorsPalettePath stringByAppendingPathComponent:@"weather_wind_animation.txt"];
         case WEATHER_BAND_NOTHING:
             return nil;
     }

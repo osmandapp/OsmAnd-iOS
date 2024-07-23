@@ -19,7 +19,7 @@
 #define OALocalizedStringUp(defaultValue, ...) \
     _OALocalizedString(true, defaultValue, ##__VA_ARGS__)
 
-static NSBundle *enBundle = nil;
+static NSBundle * _Nullable enBundle = nil;
 
 static inline NSString* _OALocalizedString(BOOL upperCase, NSString* defaultValue, ...)
 {

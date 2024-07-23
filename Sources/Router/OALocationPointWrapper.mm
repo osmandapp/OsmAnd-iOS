@@ -12,6 +12,7 @@
 #import "OAWaypointHelper.h"
 #import "OAAmenityLocationPoint.h"
 #import "OAPOI.h"
+#import "OAPOIType.h"
 #import "OAFavoriteItem.h"
 #import "OAGpxWptItem.h"
 #import "OAGPXDocumentPrimitives.h"

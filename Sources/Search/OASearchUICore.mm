@@ -22,6 +22,7 @@
 #import "OACustomSearchPoiFilter.h"
 #import "OAPOIBaseType.h"
 #import "OAStreet.h"
+#import "OAResultMatcher.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>

@@ -7,9 +7,7 @@
 //
 
 #import "OsmAndAppImpl.h"
-
 #import <UIKit/UIKit.h>
-
 #import "OsmAndApp.h"
 #import "OAResourcesInstaller.h"
 #import "OADaytimeAppearance.h"
@@ -23,6 +21,7 @@
 #import "OAPOIHelper.h"
 #import "OAIAPHelper.h"
 #import "Localization.h"
+#import "OAApplicationMode.h"
 #import "OASavingTrackHelper.h"
 #import "OAMapStyleSettings.h"
 #import "OATerrainLayer.h"
@@ -44,20 +43,20 @@
 #import "OAGPXDatabase.h"
 #import "OAExternalTimeFormatter.h"
 #import "OAFavoritesHelper.h"
-#import "OsmAnd_Maps-Swift.h"
 #import "OAAppSettings.h"
 #import "OAPluginsHelper.h"
+#import "OAMapSource.h"
+#import "OAObservable.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <algorithm>
 #include <QList>
 #include <QHash>
-
 #include <OsmAndCore.h>
 #include <OsmAndCore/IWebClient.h>
 #include "OAWebClient.h"
 #include "OAWeatherWebClient.h"
 #include "CoreResourcesFromBundleProvider.h"
-
 #include <CommonCollections.h>
 #include <binaryRead.h>
 #include <routingContext.h>
@@ -70,7 +69,6 @@
 #include <OsmAndCore/Map/ResolvedMapStyle.h>
 #include <OsmAndCore/Map/MapPresentationEnvironment.h>
 #include <OsmAndCore/Map/GeoCommonTypes.h>
-
 #include <openingHoursParser.h>
 
 #define k3MonthInSeconds 60 * 60 * 24 * 90
@@ -125,6 +123,7 @@
 @synthesize hiddenMapsPath = _hiddenMapsPath;
 @synthesize routingMapsCachePath = _routingMapsCachePath;
 @synthesize models3dPath = _models3dPath;
+@synthesize colorsPalettePath = _colorsPalettePath;
 
 @synthesize initialURLMapState = _initialURLMapState;
 
@@ -180,6 +179,7 @@
         _gpxTravelPath = [_gpxPath stringByAppendingPathComponent:WIKIVOYAGE_INDEX_DIR];
         _hiddenMapsPath = [_dataPath stringByAppendingPathComponent:HIDDEN_DIR];
         _routingMapsCachePath = [_cachePath stringByAppendingPathComponent:@"ind_routing.cache"];
+        _colorsPalettePath = [_documentsPath stringByAppendingPathComponent:COLOR_PALETTE_DIR];
 
         _favoritesFilePrefix = @"favorites";
         _favoritesGroupNameSeparator = @"-";
@@ -294,15 +294,23 @@
 
 - (void) migrateResourcesToDocumentsIfNeeded
 {
-    BOOL movedRes = [self moveOrCopyContentsOfDirectory:[_dataPath stringByAppendingPathComponent:RESOURCES_DIR] toDest:[_documentsPath stringByAppendingPathComponent:RESOURCES_DIR] move:YES];
-    BOOL movedSqlite = [self moveOrCopyContentsOfDirectory:[_dataPath stringByAppendingPathComponent:MAP_CREATOR_DIR] toDest:[_documentsPath stringByAppendingPathComponent:MAP_CREATOR_DIR] move:YES];
+    BOOL movedRes = [self moveContentsOfDirectory:[_dataPath stringByAppendingPathComponent:RESOURCES_DIR]
+                                           toDest:[_documentsPath stringByAppendingPathComponent:RESOURCES_DIR]
+                               removeOriginalFile:YES];
+    BOOL movedSqlite = [self moveContentsOfDirectory:[_dataPath stringByAppendingPathComponent:MAP_CREATOR_DIR] 
+                                              toDest:[_documentsPath stringByAppendingPathComponent:MAP_CREATOR_DIR]
+                                  removeOriginalFile:YES];
     if (movedRes)
         [self migrateMapNames:[_documentsPath stringByAppendingPathComponent:RESOURCES_DIR]];
     if (movedRes || movedSqlite)
         _resourcesManager->rescanUnmanagedStoragePaths(true);
 
-    NSString *modelsBundlePath = [NSBundle.mainBundle.resourcePath stringByAppendingPathComponent:MODEL_3D_DIR];
-    [self moveOrCopyContentsOfDirectory:modelsBundlePath toDest:[_documentsPath stringByAppendingPathComponent:MODEL_3D_DIR] move:NO];
+    [self moveContentsOfDirectory:[[NSBundle mainBundle] pathForResource:CLR_PALETTE_DIR ofType:nil]
+                           toDest:_colorsPalettePath
+               removeOriginalFile:NO];
+    [self moveContentsOfDirectory:[[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:MODEL_3D_DIR]
+                           toDest:[_documentsPath stringByAppendingPathComponent:MODEL_3D_DIR]
+               removeOriginalFile:NO];
 }
 
 - (BOOL) initializeCore
@@ -733,7 +741,9 @@
     return YES;
 }
 
-- (BOOL) moveOrCopyContentsOfDirectory:(NSString *)src toDest:(NSString *)dest move:(BOOL)move
+- (BOOL) moveContentsOfDirectory:(NSString *)src
+                          toDest:(NSString *)dest
+              removeOriginalFile:(BOOL)remove
 {
     NSFileManager *fm = [NSFileManager defaultManager];
     if (![fm fileExistsAtPath:src])
@@ -748,19 +758,22 @@
         if ([fm fileExistsAtPath:[dest stringByAppendingPathComponent:file]])
             continue;
         NSError *err = nil;
-        if (move)
+        if (remove)
+        {
             [fm moveItemAtPath:[src stringByAppendingPathComponent:file]
-            	        toPath:[dest stringByAppendingPathComponent:file]
-                	     error:&err];
+                        toPath:[dest stringByAppendingPathComponent:file]
+                         error:&err];
+        }
         else
+        {
             [fm copyItemAtPath:[src stringByAppendingPathComponent:file]
                         toPath:[dest stringByAppendingPathComponent:file]
                          error:&err];
-
+        }
         if (err)
             tryAgain = YES;
     }
-    if (!tryAgain)
+    if (remove && !tryAgain)
         [fm removeItemAtPath:src error:nil];
     return YES;
 }

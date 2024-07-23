@@ -7,12 +7,11 @@
 //
 
 #import "OABaseTrackMenuHudViewController.h"
-#import "OAStatisticsSelectionBottomSheetViewController.h"
-#import "OAMapPanelViewController.h"
+#import "OABaseScrollableHudViewController.h"
+#import "OATargetMenuViewController.h"
 #import "OATrackMenuHudViewControllerConstants.h"
 
-@class LineChartView;
-@class OATrack, OATrkSegment, OARouteLineChartHelper, OARouteKey, OAAuthor, OACopyright, OALink, OATravelArticleIdentifier;
+@class LineChartView, OATrack, OATrkSegment, OARouteLineChartHelper, OARouteKey, OAAuthor, OACopyright, OALink, OAMetadata, OATravelArticleIdentifier, OAGpxWptItem, OAGPXTrackAnalysis, OAGPXTableData, OAGPX;
 
 @protocol OATrackMenuViewControllerDelegate <NSObject>
 
@@ -116,7 +115,7 @@
 
 
 // Uses for reopening previous screens (with all NavController history) after opening track on map from MyPlaces
-@property (nonatomic, nullable) NSArray<UIViewController *> *navControllerHistory;
+@property (nonatomic) NSArray<UIViewController *> *navControllerHistory;
 
 @end
 

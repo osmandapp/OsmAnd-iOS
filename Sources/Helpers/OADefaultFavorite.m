@@ -9,7 +9,7 @@
 #import "OADefaultFavorite.h"
 #import "OAUtilities.h"
 #import <UIKit/UIKit.h>
-#include "Localization.h"
+#import "Localization.h"
 
 @implementation OAFavoriteColor
 

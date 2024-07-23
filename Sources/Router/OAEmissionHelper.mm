@@ -28,6 +28,7 @@ Only fossil fuel are counted for hybrid cars since their consumption is given in
 #import "OARoutingHelperUtils.h"
 #import "OARoutePreferencesParameters.h"
 #import "OAApplicationMode.h"
+#import "OAWorldRegion.h"
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 #import "Localization.h"

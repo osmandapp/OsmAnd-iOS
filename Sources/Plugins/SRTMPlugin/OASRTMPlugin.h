@@ -8,14 +8,26 @@
 
 #import "OAPlugin.h"
 
-@class OACommonBoolean;
+static NSInteger const terrainMinSupportedZoom = 4;
+static NSInteger const terrainMaxSupportedZoom = 19;
+
+@class OACommonBoolean, TerrainMode;
 
 @interface OASRTMPlugin : OAPlugin
 
-@property (nonatomic) OACommonBoolean *enable3DMaps;
+@property (nonatomic) OACommonBoolean *enable3dMapsPref;
+@property (nonatomic) OACommonBoolean *terrainEnabledPref;
+@property (nonatomic) OACommonString *terrainModeTypePref;
 
-- (BOOL) isHeightmapEnabled;
-- (BOOL) isHeightmapAllowed;
-- (BOOL) is3DMapsEnabled;
+- (TerrainMode *)getTerrainMode;
+- (void)setTerrainMode:(TerrainMode *)mode;
+- (BOOL)isTerrainLayerEnabled;
+- (void)setTerrainLayerEnabled:(BOOL)enabled;
+- (NSInteger)getTerrainMinZoom;
+- (NSInteger)getTerrainMaxZoom;
+
+- (BOOL)isHeightmapEnabled;
+- (BOOL)isHeightmapAllowed;
+- (BOOL)is3DMapsEnabled;
 
 @end

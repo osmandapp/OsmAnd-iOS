@@ -8,19 +8,25 @@
 
 #import "OAWeatherHelper.h"
 #import "OsmAndApp.h"
+#import "OADownloadsManager.h"
 #import "OAResourcesUIHelper.h"
 #import "Localization.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OAManageResourcesViewController.h"
 #import "OAMapLayers.h"
 #import "OALog.h"
+#import "OADownloadTask.h"
+#import "OAWorldRegion.h"
 #import "OANativeUtilities.h"
 #import "OAIAPHelper.h"
 #import "OAWeatherPlugin.h"
+#import "OAAutoObserverProxy.h"
 #import "OAColors.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
-#import "OsmAnd_Maps-Swift.h"
 #import "OAPluginsHelper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Map/WeatherTileResourceProvider.h>
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>

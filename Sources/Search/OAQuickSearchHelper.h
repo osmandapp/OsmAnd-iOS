@@ -12,7 +12,7 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/GpxDocument.h>
 
-@class OASearchUICore, OASearchResultCollection, OASearchResult, CLLocation, QuadRect;
+@class OASearchUICore, OASearchResultCollection, OASearchResult, QuadRect;
 
 @interface OASearchFavoritesAPI : OASearchBaseAPI
 

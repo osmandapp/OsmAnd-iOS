@@ -9,9 +9,6 @@
 #import "OASymbolMapLayer.h"
 #import "OAContextMenuProvider.h"
 
-#include <OsmAndCore.h>
-#include <OsmAndCore/Map/MapMarkersCollection.h>
-
 @interface OAFavoritesLayer : OASymbolMapLayer<OAContextMenuProvider, OAMoveObjectProvider>
 
 + (UIImage *) getImageWithColor:(UIColor *)color background:(NSString *)background icon:(NSString *)icon;

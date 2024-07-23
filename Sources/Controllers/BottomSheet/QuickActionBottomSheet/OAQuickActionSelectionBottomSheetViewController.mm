@@ -11,11 +11,13 @@
 #import "Localization.h"
 #import "OABottomSheetHeaderCell.h"
 #import "OAColors.h"
+#import "OAAppData.h"
 #import "OARootViewController.h"
 #import "OASwitchableAction.h"
 #import "OASimpleTableViewCell.h"
 #import "OAMapStyleAction.h"
 #import "OAIndexConstants.h"
+#import "OAMapSource.h"
 
 #define kButtonsDividerTag 150
 #define kMessageFieldIndex 1

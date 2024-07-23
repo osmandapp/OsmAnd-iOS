@@ -7,8 +7,8 @@
 //
 
 #import "OAChangePositionViewController.h"
-#import "Localization.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OASizes.h"
 #import "OAColors.h"
 #import "OANativeUtilities.h"

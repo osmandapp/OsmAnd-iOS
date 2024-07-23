@@ -13,6 +13,7 @@
 #import "OAValueTableViewCell.h"
 #import "OsmAndApp.h"
 #import "OAWeatherHelper.h"
+#import "OAWorldRegion.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"

@@ -9,9 +9,6 @@
 #import "OASymbolMapLayer.h"
 #import "OAContextMenuProvider.h"
 
-#include <OsmAndCore.h>
-#include <OsmAndCore/Map/MapMarkersCollection.h>
-
 @interface OAOsmBugsLayer : OASymbolMapLayer<OAContextMenuProvider>
 
 @end

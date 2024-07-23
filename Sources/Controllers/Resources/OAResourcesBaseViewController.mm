@@ -9,11 +9,16 @@
 #import "OAResourcesBaseViewController.h"
 #import <MBProgressHUD.h>
 #import "OAAutoObserverProxy.h"
+#import "OAWorldRegion.h"
+#import "OADownloadsManager.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OAPluginPopupViewController.h"
 #import "OAMapCreatorHelper.h"
 #import "OACustomSourceDetailsViewController.h"
 #import "OAPlugin.h"
+#import "OAAppData.h"
+#import "OAObservable.h"
 #import "OANauticalMapsPlugin.h"
 #import "Localization.h"
 #import "OASearchResult.h"
@@ -22,6 +27,8 @@
 #import "OAChoosePlanHelper.h"
 #import "OAIndexConstants.h"
 #import "OAPluginsHelper.h"
+#import "OADownloadTask.h"
+#import "OsmAndApp.h"
 
 #include <OsmAndCore/WorldRegions.h>
 

@@ -16,9 +16,11 @@
 #import "OARoutingHelper.h"
 #import "OARoutingHelperUtils.h"
 #import "OAUtilities.h"
+#import "OAApplicationMode.h"
 #import "QuadRect.h"
 #import "OAExitInfo.h"
 #import "OAMapUtils.h"
+#import "CLLocation+Extension.h"
 
 #include <routeSegmentResult.h>
 

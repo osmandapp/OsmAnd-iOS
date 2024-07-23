@@ -8,6 +8,7 @@
 
 #import "OACarPlayTrackResultListController.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OARoutingHelper.h"
 #import "OASelectedGPXHelper.h"
 #import "OATargetPointsHelper.h"
@@ -16,6 +17,7 @@
 #import "OAMapActions.h"
 #import "OAGpxInfo.h"
 #import "OAGPXDocumentPrimitives.h"
+#import "OAGPXDatabase.h"
 #import "Localization.h"
 #import <CarPlay/CarPlay.h>
 

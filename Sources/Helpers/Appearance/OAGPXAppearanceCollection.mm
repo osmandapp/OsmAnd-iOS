@@ -9,7 +9,6 @@
 #import "OAGPXAppearanceCollection.h"
 #import "OARootViewController.h"
 #import "OAEditPointViewController.h"
-#import "Localization.h"
 #import "OAMapStyleSettings.h"
 #import "OAOsmAndFormatter.h"
 #import "OAFavoritesHelper.h"

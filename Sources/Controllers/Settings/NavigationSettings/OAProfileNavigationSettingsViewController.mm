@@ -23,6 +23,7 @@
 #import "OARoutingProfilesHolder.h"
 #import "OsmAndApp.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OARouteLineAppearanceHudViewController.h"
 #import "OAMainSettingsViewController.h"
 #import "OAConfigureProfileViewController.h"

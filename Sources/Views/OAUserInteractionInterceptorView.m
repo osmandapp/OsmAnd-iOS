@@ -7,6 +7,7 @@
 //
 
 #import "OAUserInteractionInterceptorView.h"
+#import "OAUserInteractionInterceptorProtocol.h"
 
 @implementation OAUserInteractionInterceptorView
 

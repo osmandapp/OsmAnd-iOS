@@ -15,12 +15,13 @@
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OAQuickActionsSheetView.h"
+#import "OAObservable.h"
 #import "OAColors.h"
+#import "OAAppData.h"
 #import "OAHudButton.h"
 #import "Localization.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OAAutoObserverProxy.h"
-#import "OAMap3DModeVisibilityType.h"
 #import <AudioToolbox/AudioServices.h>
 #import "OsmAnd_Maps-Swift.h"
 

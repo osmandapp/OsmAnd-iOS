@@ -33,23 +33,23 @@ class MapWidgetsFactory: NSObject {
             return OANextTurnWidget(horisontalMini: true, nextNext: true, customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .coordinatesCurrentLocation:
             let widget = CoordinatesCurrentLocationWidget()
-            widget.delegate = OARootViewController.instance().mapPanel.hudViewController.mapInfoController
+            widget.delegate = OARootViewController.instance().mapPanel.hudViewController?.mapInfoController
             return widget
         case .coordinatesMapCenter:
             let widget = CoordinatesMapCenterWidget()
-            widget.delegate = OARootViewController.instance().mapPanel.hudViewController.mapInfoController
+            widget.delegate = OARootViewController.instance().mapPanel.hudViewController?.mapInfoController
             return widget
         case .streetName:
             let widget = OATopTextView()
-            widget.delegate = OARootViewController.instance().mapPanel.hudViewController.mapInfoController
+            widget.delegate = OARootViewController.instance().mapPanel.hudViewController?.mapInfoController
             return widget
         case .markersTopBar:
             let widget = OADestinationBarWidget()
-            widget.delegate = OARootViewController.instance().mapPanel.hudViewController.mapInfoController
+            widget.delegate = OARootViewController.instance().mapPanel.hudViewController?.mapInfoController
             return widget
         case .lanes:
             let widget = OALanesControl()
-            widget.delegate = OARootViewController.instance().mapPanel.hudViewController.mapInfoController
+            widget.delegate = OARootViewController.instance().mapPanel.hudViewController?.mapInfoController
             return widget
         case .distanceToDestination:
             return DistanceToDestinationWidget(customId: customId, appMode: appMode, widgetParams: widgetParams)

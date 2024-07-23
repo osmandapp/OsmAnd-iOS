@@ -6,9 +6,9 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import "OABaseBottomSheetViewController.h"
-#import "OAApplicationMode.h"
+
+@class OAApplicationMode;
 
 @protocol OACopyProfileBottomSheetDelegate <NSObject>
 

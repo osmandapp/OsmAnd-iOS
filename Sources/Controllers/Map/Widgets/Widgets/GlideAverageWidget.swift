@@ -32,11 +32,19 @@ final class GlideAverageWidget: GlideBaseWidget {
             forceUpdate = true
             self.widgetState?.changeToNextState()
             updateInfo()
-            setContentTitle(getWidgetName())
-            setIcon(getWidgetIcon())
+            if let contentTitle = getWidgetName() {
+                setContentTitle(contentTitle)
+            }
+            if let icon = getWidgetIcon() {
+                setContentTitle(icon)
+            }
         }
-        setContentTitle(getWidgetName())
-        setIcon(getWidgetIcon())
+        if let contentTitle = getWidgetName() {
+            setContentTitle(contentTitle)
+        }
+        if let icon = getWidgetIcon() {
+            setContentTitle(icon)
+        }
     }
 
     override init(frame: CGRect) {

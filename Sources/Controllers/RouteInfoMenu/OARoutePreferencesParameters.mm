@@ -8,6 +8,7 @@
 
 #import "OARoutePreferencesParameters.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "Localization.h"
 #import "OARoutingHelper.h"
 #import "OAVoiceRouter.h"
@@ -21,6 +22,7 @@
 #import "OsmAndApp.h"
 #import "OAValueTableViewCell.h"
 #import "OASwitchTableViewCell.h"
+#import "OAApplicationMode.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 

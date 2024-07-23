@@ -8,9 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "OALocationIcon.h"
-
-@class OAApplicationModeBuilder;
+@class OAApplicationModeBuilder, OALocationIcon;
 
 @interface OAApplicationModeBean : NSObject
 

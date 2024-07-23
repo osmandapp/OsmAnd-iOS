@@ -8,6 +8,7 @@
 
 #import "OAShowHideOSMBugAction.h"
 #import "OAAppSettings.h"
+#import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 
 static QuickActionType *TYPE;

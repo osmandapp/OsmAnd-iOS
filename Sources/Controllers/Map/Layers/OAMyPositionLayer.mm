@@ -17,6 +17,9 @@
 #import "OALocationIcon.h"
 #import "OAAutoObserverProxy.h"
 #import "OAColors.h"
+#import "OAObservable.h"
+#import "OAAppSettings.h"
+#import "OAApplicationMode.h"
 #import "OAModel3dHelper+cpp.h"
 #import "OsmAnd_Maps-Swift.h"
 

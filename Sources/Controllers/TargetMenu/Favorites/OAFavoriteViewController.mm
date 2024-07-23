@@ -28,7 +28,7 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/Utilities.h>
-#include "Localization.h"
+#import "Localization.h"
 
 @implementation OAFavoriteViewController
 {

@@ -12,6 +12,7 @@
 #import "OAGPXDocument.h"
 #import "OAPOIHelper.h"
 #import "OsmAndApp.h"
+#import "OAAppData.h"
 #import "OAPOI.h"
 #import "OAUtilities.h"
 #import "OAQuickSearchHelper.h"
@@ -25,6 +26,9 @@
 #import "OAGPXDatabase.h"
 #import "OAMapAlgorithms.h"
 #import "OAMapLayers.h"
+#import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Utilities.h>

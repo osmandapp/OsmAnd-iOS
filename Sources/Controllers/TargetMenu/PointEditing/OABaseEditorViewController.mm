@@ -14,6 +14,7 @@
 #import "OAShapesTableViewCell.h"
 #import "OAColorCollectionHandler.h"
 #import "OAGPXDocumentPrimitives.h"
+#import "MaterialTextFields.h"
 #import "OAGPXAppearanceCollection.h"
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"

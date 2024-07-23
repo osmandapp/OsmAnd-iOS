@@ -9,6 +9,7 @@
 #import "OANauticalMapsPlugin.h"
 #import "OAApplicationMode.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "Localization.h"
 #import "OALinks.h"
 

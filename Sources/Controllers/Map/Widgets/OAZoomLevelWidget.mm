@@ -8,6 +8,7 @@
 
 #import "OAZoomLevelWidget.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "Localization.h"

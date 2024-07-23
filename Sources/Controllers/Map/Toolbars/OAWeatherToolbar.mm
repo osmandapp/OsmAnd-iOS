@@ -8,7 +8,9 @@
 
 #import "OAWeatherToolbar.h"
 #import "OARootViewController.h"
+#import "OAMapViewController.h"
 #import "OAMapHudViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapInfoController.h"
 #import "OAMapRendererView.h"
 #import "OAWeatherLayerSettingsViewController.h"
@@ -20,9 +22,12 @@
 #import "OAWeatherToolbarHandlers.h"
 #import "OAWeatherHelper.h"
 #import "OAWeatherPlugin.h"
-#import "OsmAnd_Maps-Swift.h"
 #import "OAPluginsHelper.h"
 #import "OAWeatherWidget.h"
+#import "OAAutoObserverProxy.h"
+#import "OAAppData.h"
+#import "OAObservable.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kDefaultZoom 10
 

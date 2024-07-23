@@ -7,10 +7,9 @@
 //
 
 #import "OAObservable.h"
+#import "OAObserverProtocol.h"
 
 #include <dispatch/dispatch.h>
-
-#import "OAObserverProtocol.h"
 
 #define _(name) OAObservable__##name
 #define commonInit _(commonInit)

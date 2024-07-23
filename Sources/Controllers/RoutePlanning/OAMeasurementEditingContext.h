@@ -11,7 +11,6 @@
 
 #import <Foundation/Foundation.h>
 
-#include <OsmAndCore/GpxDocument.h>
 #include <OsmAndCore/Color.h>
 
 typedef NS_ENUM(NSInteger, EOACalculationMode)

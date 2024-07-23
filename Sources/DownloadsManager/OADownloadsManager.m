@@ -7,16 +7,13 @@
 //
 
 #import "OADownloadsManager.h"
-
 #import <CocoaSecurity.h>
-
 #import <AFURLSessionManager.h>
 #import "OADownloadTask_AFURLSessionManager.h"
-
 #import "OADownloadTask.h"
 #import "OAUtilities.h"
 #import "OALog.h"
-
+#import "OAObservable.h"
 #import "OAAnalyticsHelper.h"
 
 #define _(name) OADownloadsManager__##name

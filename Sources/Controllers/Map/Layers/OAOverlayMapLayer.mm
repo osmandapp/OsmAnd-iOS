@@ -12,6 +12,10 @@
 #import "OAMapRendererView.h"
 #import "OAAutoObserverProxy.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapSource.h"
+#import "OAAppData.h"
+#import "OAObservable.h"
 
 #include "OASQLiteTileSourceMapLayerProvider.h"
 #include "OAWebClient.h"

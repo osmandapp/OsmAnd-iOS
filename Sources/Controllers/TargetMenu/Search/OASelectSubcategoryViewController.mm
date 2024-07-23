@@ -15,6 +15,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OAPOIUIFilter.h"
 #import "OASearchResult.h"
+#import "OAResultMatcher.h"
 #import "OASearchUICore.h"
 #import "OASearchSettings.h"
 #import "OAQuickSearchHelper.h"

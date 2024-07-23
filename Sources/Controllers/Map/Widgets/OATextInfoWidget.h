@@ -6,25 +6,25 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import <Foundation/Foundation.h>
 #import "OABaseWidgetView.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 #define kTextInfoWidgetWidth 94
 #define kTextInfoWidgetHeight 34
 
 #define UPDATE_INTERVAL_MILLIS 1000
 
-@class OAWidgetType, OutlineLabel, OACommonWidgetSizeStyle;
+@class OAWidgetType, OutlineLabel, OACommonWidgetSizeStyle, OAWidgetsPanel, OATextState;
 
 @interface OATextInfoWidget : OABaseWidgetView
 
 @property (nonatomic, readonly) UIFont *primaryFont;
 @property (nonatomic, readonly) UIColor *primaryColor;
-@property (nonatomic, readonly) UIColor *primaryOutlineColor;
+@property (nonatomic, readonly, nullable) UIColor *primaryOutlineColor;
 @property (nonatomic, readonly) UIFont *unitsFont;
 @property (nonatomic, readonly) UIColor *unitsColor;
-@property (nonatomic, readonly) UIColor *unitsShadowColor;
+@property (nonatomic, readonly, nullable) UIColor *unitsShadowColor;
 @property (nonatomic, readonly) float textOutlineWidth;
 
 @property (nonatomic) OutlineLabel *textView;
@@ -42,26 +42,26 @@
 @property (nonatomic, strong, nullable) UILabel *unitOrEmptyLabel;
 @property (nonatomic, strong, nullable) UILabel *valueLabel;
 @property (nonatomic, strong, nullable) UIView *iconWidgetView;
-@property (nonatomic) OACommonWidgetSizeStyle *widgetSizePref;
+@property (nonatomic, nullable) OACommonWidgetSizeStyle *widgetSizePref;
 
 @property (strong) BOOL(^updateInfoFunction)();
 @property (strong) void(^onClickFunction)(id sender);
 
-- (void) setImage:(UIImage *)image;
-- (void) setImage:(UIImage *)image withColor:(UIColor *)color;
-- (void)setImage:(UIImage *_Nonnull)image withColor:(UIColor *_Nonnull)color iconName:(NSString *_Nonnull)iconName;
+- (void) setImage:(nullable UIImage *)image;
+- (void) setImage:(nullable UIImage *)image withColor:(UIColor *)color;
+- (void)setImage:(UIImage *)image withColor:(UIColor *)color iconName:(NSString *)iconName;
 
 - (void) setImageHidden:(BOOL)visible;
 - (void) setTimeText:(NSTimeInterval)time;
 - (BOOL) isNight;
-- (BOOL) setIconForWidgetType:(OAWidgetType *)widgetType;
+- (BOOL) setIconForWidgetType:(nullable OAWidgetType *)widgetType;
 - (BOOL) setIcon:(NSString *)widgetIcon;
-- (NSString *) getIconName;
+- (nullable NSString *) getIconName;
 
 - (void) setContentDescription:(NSString *)text;
 - (void) setContentTitle:(NSString *)text;
-- (void) setText:(NSString *)text subtext:(NSString *)subtext;
-- (void) setTextNoUpdateVisibility:(NSString *)text subtext:(NSString *)subtext;
+- (void) setText:(nullable NSString *)text subtext:(nullable NSString *)subtext;
+- (void) setTextNoUpdateVisibility:(nullable NSString *)text subtext:(nullable NSString *)subtext;
 
 - (BOOL) updateVisibility:(BOOL)visible;
 - (BOOL) isVisible;
@@ -77,15 +77,17 @@
 - (void)updateIcon;
 - (void)setNightMode:(BOOL)night;
 
-- (void)updateTextWitState:(OATextState *_Nonnull)state;
+- (void)updateTextWitState:(OATextState *)state;
 
 - (CGFloat) getWidgetHeight;
 - (void) adjustViewSize;
 
-- (void)configurePrefsWithId:(NSString * _Nullable)id appMode:(OAApplicationMode *_Nonnull)appMode widgetParams:(NSDictionary * _Nullable)widgetParams;
+- (void)configurePrefsWithId:(nullable NSString *)id appMode:(OAApplicationMode *)appMode widgetParams:(nullable NSDictionary *)widgetParams;
 - (void)configureSimpleLayout;
 - (void)refreshLayout;
-- (OAApplicationMode *_Nonnull)getAppMode;
-- (OAWidgetsPanel *_Nonnull)getWidgetPanel;
+- (nullable OAApplicationMode *)getAppMode;
+- (nullable OAWidgetsPanel *)getWidgetPanel;
 
 @end
+
+NS_ASSUME_NONNULL_END

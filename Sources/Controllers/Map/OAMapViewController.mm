@@ -7,20 +7,17 @@
 //
 
 #import "OAMapViewController.h"
-
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
-
 #import <UIViewController+JASidePanel.h>
 #import <MBProgressHUD.h>
-
 #import "OAAppData.h"
 #import "OAMapRendererView.h"
-
 #import "OAIndexConstants.h"
 #import "OAAutoObserverProxy.h"
 #import "OANavigationController.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapHudViewController.h"
 #import "OAFloatingButtonsHudViewController.h"
 #import "OAResourcesBaseViewController.h"
@@ -36,6 +33,7 @@
 #import "OADestination.h"
 #import "OAPluginPopupViewController.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OAMapCreatorHelper.h"
 #import "OAPOI.h"
 #import "OAMapSettingsPOIScreen.h"
@@ -61,7 +59,7 @@
 #import "OAFavoritesHelper.h"
 #import "OAFavoriteItem.h"
 #import "OAZoom.h"
-
+#import "OAMapSource.h"
 #import "OARoutingHelper.h"
 #import "OATransportRoutingHelper.h"
 #import "OAPointDescription.h"
@@ -69,24 +67,25 @@
 #import "OATargetPointsHelper.h"
 #import "OAAvoidSpecificRoads.h"
 #import "OAPluginsHelper.h"
-
 #import "OASubscriptionCancelViewController.h"
 #import "OAWhatsNewBottomSheetViewController.h"
+#import "OAApplicationMode.h"
 #import "OAAppVersion.h"
+#import "OALocationServices.h"
 #import "OsmAnd_Maps-Swift.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
+#import "OANativeUtilities.h"
+#import "OALog.h"
+#import "OAObservable.h"
+#import "Localization.h"
 
+//#include "OAMapMarkersCollection.h"
 #include "OASQLiteTileSourceMapLayerProvider.h"
 #include "OAWebClient.h"
 #include <OsmAndCore/IWebClient.h>
-
-//#include "OAMapMarkersCollection.h"
-
 #include <OpenGLES/ES2/gl.h>
-
 #include <QtMath>
 #include <QStandardPaths>
-
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/IMapStylesCollection.h>
@@ -112,18 +111,12 @@
 #include <OsmAndCore/Map/SqliteHeightmapTileProvider.h>
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 #include <OsmAndCore/Map/MapRendererTypes.h>
-
 #include <OsmAndCore/IObfsCollection.h>
 #include <OsmAndCore/ObfDataInterface.h>
 #include <OsmAndCore/Data/Amenity.h>
 #include <OsmAndCore/Data/ObfMapObject.h>
 #include <OsmAndCore/Data/ObfPoiSectionInfo.h>
-
 #include <OsmAndCore/QKeyValueIterator.h>
-
-#import "OANativeUtilities.h"
-#import "OALog.h"
-#include "Localization.h"
 
 #define _(name) OAMapRendererViewController__##name
 #define commonInit _(commonInit)
@@ -2034,7 +2027,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) onAppModeChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.mapRendererView.elevationAngle = _app.data.mapLastViewedState.elevationAngle;
+        if (self.mapRendererView)
+            self.mapRendererView.elevationAngle = _app.data.mapLastViewedState.elevationAngle;
     });
 }
 

@@ -11,6 +11,7 @@
 #import "OAApplicationMode.h"
 #import "OALocationPointWrapper.h"
 #import "OALocationPoint.h"
+#import "OALocationServices.h"
 #import "OAAmenityLocationPoint.h"
 #import "OATargetPointsHelper.h"
 #import "OARTargetPoint.h"

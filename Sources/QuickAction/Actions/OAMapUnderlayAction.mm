@@ -8,6 +8,7 @@
 
 #import "OAMapUnderlayAction.h"
 #import "OAAppSettings.h"
+#import "OAAppData.h"
 #import "OsmAndApp.h"
 #import "OAMapSource.h"
 #import "Localization.h"
@@ -17,6 +18,7 @@
 #import "OAButtonTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OATitleDescrDraggableCell.h"
+#import "OrderedDictionary.h"
 #import "OsmAnd_Maps-Swift.h"
 
 static NSString * const kUnderlays = @"underlays";

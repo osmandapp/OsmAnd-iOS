@@ -7,7 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "OAGpxInfo.h"
+
+@class OAGpxInfo;
 
 @interface OALoadGpxTask : NSObject
 

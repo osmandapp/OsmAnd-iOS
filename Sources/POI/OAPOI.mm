@@ -7,6 +7,8 @@
 //
 
 #import "OAPOI.h"
+#import "OAPOIType.h"
+#import "OAPOICategory.h"
 #import "OAAppSettings.h"
 #import "OAPOIHelper.h"
 #import "OAGPXDocumentPrimitives.h"

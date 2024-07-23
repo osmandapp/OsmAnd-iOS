@@ -9,7 +9,10 @@
 #import "OAMapInfoController.h"
 #import "OAMapHudViewController.h"
 #import "OsmAndApp.h"
+#import "OALocationServices.h"
 #import "OARootViewController.h"
+#import "OAMapViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OARoutingHelper.h"
 #import "Localization.h"
 #import "OAAutoObserverProxy.h"
@@ -28,7 +31,6 @@
 #import "OATimeWidgetState.h"
 #import "OABearingWidgetState.h"
 #import "OACompassRulerWidgetState.h"
-#import "OAUserInteractionPassThroughView.h"
 #import "OAToolbarViewController.h"
 #import "OADownloadMapWidget.h"
 #import "OAWeatherToolbar.h"
@@ -41,11 +43,13 @@
 #import "OASunriseSunsetWidgetState.h"
 #import "OAAltitudeWidget.h"
 #import "OAMapRendererView.h"
-
+#import "OAApplicationMode.h"
+#import "OAAppSettings.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAWeatherHelper.h"
 #import "OAMapStyleSettings.h"
+#import "OAObservable.h"
 
 #define kWidgetsTopPadding 10.0
 

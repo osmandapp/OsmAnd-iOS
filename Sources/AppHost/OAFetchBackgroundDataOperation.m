@@ -10,7 +10,8 @@
 #import "OsmAndApp.h"
 #import "OADownloadsManager.h"
 #import "OAAutoObserverProxy.h"
-
+#import "OAObservable.h"
+#import "OADownloadTask.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
 @implementation OAFetchBackgroundDataOperation

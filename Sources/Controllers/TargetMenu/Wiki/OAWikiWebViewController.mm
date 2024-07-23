@@ -14,6 +14,7 @@
 #import "OATableRowData.h"
 #import "OAAppSettings.h"
 #import "OADownloadMode.h"
+#import "OAAppData.h"
 #import "OAPlugin.h"
 #import "OAPOI.h"
 #import "OsmAndApp.h"

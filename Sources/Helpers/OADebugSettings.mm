@@ -10,6 +10,7 @@
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 
 #include <OsmAndCore.h>
 

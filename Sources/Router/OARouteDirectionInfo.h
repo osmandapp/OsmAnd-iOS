@@ -10,6 +10,7 @@
 
 #import <Foundation/Foundation.h>
 #import "OAExitInfo.h"
+
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
 #include <turnType.h>

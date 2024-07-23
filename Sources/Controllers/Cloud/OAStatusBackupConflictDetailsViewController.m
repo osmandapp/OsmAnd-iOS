@@ -11,6 +11,7 @@
 #import "OARightIconTableViewCell.h"
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
+#import "OAApplicationMode.h"
 #import "OAStatusBackupTableViewController.h"
 #import "OATableRowData.h"
 #import "OABackupHelper.h"

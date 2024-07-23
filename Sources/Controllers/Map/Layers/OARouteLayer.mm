@@ -8,6 +8,7 @@
 
 #import "OARouteLayer.h"
 #import "OARootViewController.h"
+#import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OARoutingHelper.h"
 #import "OARouteCalculationResult.h"
@@ -26,6 +27,9 @@
 #import "OAGPXDocument.h"
 #import "OAMapLayers.h"
 #import "OAMapUtils.h"
+#import "OAApplicationMode.h"
+#import "OAColoringType.h"
+#import "OAObservable.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Map/VectorLineBuilder.h>

@@ -21,9 +21,7 @@
 #include <OsmAndCore/Data/Street.h>
 #include <OsmAndCore/Data/StreetGroup.h>
 #include <OsmAndCore/Data/Road.h>
-
 #include <OsmAndCore/Search/AddressesByNameSearch.h>
-
 
 @implementation OAReverseGeocoder
 

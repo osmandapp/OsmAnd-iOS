@@ -8,10 +8,11 @@
 
 #import "OAWeatherLayerSettingsViewController.h"
 #import "Localization.h"
-#import "OsmAnd_Maps-Swift.h"
 #import "OsmAndApp.h"
+#import "OAObservable.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OAMapHudViewController.h"
 #import "OAMapStyleSettings.h"
 #import "OAWeatherHelper.h"
@@ -19,7 +20,10 @@
 #import "OAWeatherToolbar.h"
 #import "OAWeatherBandSettingsViewController.h"
 #import "OAMapLayers.h"
+#import "OAAppData.h"
+#import "OAAutoObserverProxy.h"
 #import "GeneratedAssetSymbols.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #import "OASwitchTableViewCell.h"
 #import "OATextLineViewCell.h"

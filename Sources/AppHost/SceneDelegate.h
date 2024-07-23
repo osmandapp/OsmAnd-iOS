@@ -1,5 +1,5 @@
 //
-//  OAAppDelegate.h
+//  SceneDelegate.h
 //  OsmAnd
 //
 //  Created by Alexey Pelykh on 7/15/13.
@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "OARootViewController.h"
-#import <CarPlay/CarPlay.h>
+
+@class OARootViewController;
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -7,6 +7,7 @@
 //
 
 #import "OAAddress.h"
+
 #include <OsmAndCore/Data/StreetIntersection.h>
 
 @class OAStreet;

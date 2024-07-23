@@ -9,9 +9,9 @@
 #import "OABaseCarPlayInterfaceController.h"
 #import "OACarPlayMapViewController.h"
 #import <Foundation/Foundation.h>
-#import <CoreLocation/CoreLocation.h>
-
 #import <CarPlay/CarPlay.h>
+
+@protocol OACarPlayMapViewDelegate;
 
 @protocol OACarPlayDashboardDelegate <NSObject>
 

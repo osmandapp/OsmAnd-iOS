@@ -6,7 +6,6 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import "OABaseNavbarViewController.h"
 
 typedef NS_ENUM(NSInteger, EOABaseBottomColorScheme)

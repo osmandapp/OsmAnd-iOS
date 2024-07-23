@@ -7,7 +7,6 @@
 //
 #include <CoreFoundation/CoreFoundation.h>
 #include <objc/objc.h>
-#include <OsmAndCore/Map/ImageMapLayerProvider.h>
 #include <OsmAndCore/IWebClient.h>
 #include <OsmAndCore/Map/ImageMapLayerProvider.h>
 #include <OsmAndCore/TileSqliteDatabase.h>
@@ -22,7 +21,6 @@
 #include <array>
 #include <functional>
 #include <QSet>
-
 
 class OASQLiteTileSourceMapLayerProvider : public OsmAnd::ImageMapLayerProvider
 {

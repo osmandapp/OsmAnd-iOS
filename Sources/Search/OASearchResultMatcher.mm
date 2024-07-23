@@ -12,6 +12,7 @@
 #import "OASearchPhrase.h"
 #import "OASearchCoreAPI.h"
 #import "OAPOI.h"
+#import "OAResultMatcher.h"
 
 @implementation OASearchResultMatcher
 {

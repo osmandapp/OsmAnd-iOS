@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-#import "OAUserInteractionInterceptorProtocol.h"
+@protocol OAUserInteractionInterceptorProtocol;
 
 @interface OAUserInteractionInterceptorView : UIView
 

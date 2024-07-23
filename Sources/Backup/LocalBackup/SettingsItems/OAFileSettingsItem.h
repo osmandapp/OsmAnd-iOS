@@ -51,7 +51,7 @@ typedef NS_ENUM(NSInteger, EOASettingsItemFileSubtype) {
 @property (nonatomic, assign) long size;
 @property (nonatomic) NSString *md5Digest;
 
-- (instancetype _Nullable) initWithFilePath:(NSString *)filePath error:(NSError * _Nullable *)error;
+- (nullable instancetype) initWithFilePath:(NSString *)filePath error:(NSError * _Nullable *)error;
 - (BOOL) exists;
 - (NSString *) renameFile:(NSString *)file;
 - (NSString *) getPluginPath;

@@ -21,6 +21,7 @@
 #import "OASearchPoiTypeFilter.h"
 #import "OACollatorStringMatcher.h"
 #import "OAMapUtils.h"
+#import "OAResultMatcher.h"
 
 #include <OsmAndCore/CommonTypes.h>
 #include <OsmAndCore/Data/DataCommonTypes.h>

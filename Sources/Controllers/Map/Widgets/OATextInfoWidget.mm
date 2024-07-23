@@ -7,6 +7,8 @@
 //
 
 #import "OATextInfoWidget.h"
+#import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
 #import "OAAppSettings.h"
@@ -967,7 +969,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     return [[OAAppSettings sharedManager] registerBooleanPreference:prefId defValue:YES];
 }
 
-- (OAApplicationMode *_Nonnull)getAppMode
+- (OAApplicationMode *)getAppMode
 {
     return _appMode;
 }

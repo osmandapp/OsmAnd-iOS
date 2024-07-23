@@ -11,12 +11,16 @@
 #import "OAAppSettings.h"
 #import "OAApplicationMode.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OAResourcesUIHelper.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OAContourLinesAction.h"
 #import "OATerrainAction.h"
 #import "Localization.h"
 #import "OALinks.h"
+#import "OAObservable.h"
 #import "OsmAnd_Maps-Swift.h"
 
 static NSString * const PLUGIN_ID = kInAppId_Addon_Srtm;
@@ -135,7 +139,7 @@ static NSString * const kTerrainEnabledPrefName = @"terrain_layer";
     }
 }
 
-- (NSArray *)getQuickActionTypes
+- (NSArray<QuickActionType *> *)getQuickActionTypes
 {
     return @[OAContourLinesAction.TYPE, OATerrainAction.TYPE];
 }

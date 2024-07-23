@@ -1125,7 +1125,7 @@
 "quick_action_add_poi" = "Lisää KP";
 "quick_action_map_style" = "Karttatyyli";
 "quick_action_map_source" = "Muuta kartan lähdettä";
-"quick_action_map_overlay" = "Change map overlay";
+"quick_action_map_overlay" = "Peite";
 "quick_action_map_underlay" = "Change map underlay";
 "quick_action_replace_destination" = "Korvaa määränpää";
 "add_destination" = "Add destination";
@@ -1212,7 +1212,7 @@
 "quick_action_showhide_mapillary_descr" = "Tapping this action button shows or hides the Mapillary layer on the map.";
 "quick_action_mapillary_hide" = "Piilota Mapillary";
 "quick_action_mapillary_show" = "Näytä Mapillary";
-"quick_action_remove_next_destination" = "Poista lähin määränpääpiste";
+"quick_action_remove_next_destination" = "Seuraava määränpää";
 "quick_action_remove_next_destination_descr" = "Poistaa seuraavan määränpään reitiltäsi. Jos se on viimeinen määränpää niin navigointi loppuu.";
 "change_application_profile" = "Vaihda sovelluksen profiilia";
 "select_application_profile" = "Valitse sovelluksen profiili";
@@ -2853,3 +2853,9 @@
 "shared_string_app_profile" = "Sovellusprofiili";
 "show_icon" = "Näytä kuvake";
 "terrain_3D_maps" = "Maastokartat";
+"weather_source_ecmwf_title" = "ECMWF";
+"weather_source_GFS_title" = "GFS";
+"data_source" = "Tietolähde";
+"weather_data_sources_prompt" = "OsmAnd tarjoaa säätietoa kahdesta lähteestä:";
+"weather_source_GFS_description" = "Yhdysvaltain ympäristöennustekeskusten maailmanlaajuinen ennustejärjestelmä";
+"weather_source_ecmwf_description" = "Euroopan keskipitkien sääennusteiden keskus (ECMWF)";

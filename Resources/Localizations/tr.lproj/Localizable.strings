@@ -3339,3 +3339,4 @@
 "weather_data_sources_prompt" = "OsmAnd hava verisini iki kaynaktan sağlar:";
 "missing_maps_ignore" = "Var olan haaritaları kullan";
 "map_settings_weather_wind_animation" = "Rüzgar animasyonu";
+"weather_source_ecmwf_description" = "Avrupa Orta Vadeli Hava Tahminleri Merkezi (ECMWF)";

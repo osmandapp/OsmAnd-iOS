@@ -13,16 +13,16 @@
 #include <QReadWriteLock>
 
 const static float kDefaultIconSize = 24.0f;
+static NSString * const kMapIconsSvgFolderName = @"map-icons-svg";
 
-static NSMutableDictionary<NSString *, NSString *> *resourcesExistCache = [NSMutableDictionary dictionary];
-static NSMutableArray<NSString *> *resourcesNotExistCache = [NSMutableArray array];
-static QReadWriteLock iconsCacheLock;
+static NSMutableDictionary<NSString *, NSString *> *resourcesPaths = [NSMutableDictionary dictionary];
+static QReadWriteLock resourcesPathsLock;
 
 @implementation OASvgHelper
 
-+ (BOOL)hasMXSvgMapImageBy:(NSString *)name
++ (BOOL)hasMxMapImageNamed:(NSString *)name
 {
-    return name && ([self mapImagePathFromSvgResource:[name hasPrefix:@"mx_"] ? name : [@"mx_" stringByAppendingString:name]]) != nil;
+    return name && ([self mapImageResourcePathNamed:[name hasPrefix:@"mx_"] ? name : [@"mx_" stringByAppendingString:name] resourceDir:kMapIconsSvgFolderName]) != nil;
 }
 
 + (nullable UIImage *) mapImageNamed:(NSString *)name
@@ -41,62 +41,40 @@ static QReadWriteLock iconsCacheLock;
 
 + (nullable UIImage *)imageNamed:(NSString *)path
 {
-    NSString *resourceName = [path lastPathComponent];
-    NSString *resourcePath;
-    {
-        QReadLocker scopedLocker(&iconsCacheLock);
-        if ([resourcesNotExistCache containsObject:resourceName])
-            return nil;
-        resourcePath = resourcesExistCache[resourceName];
-    }
+    NSString *resourcePath = [self mapImageResourcePathNamed:[path lastPathComponent] resourceDir:[path stringByDeletingLastPathComponent]];
     if (!resourcePath)
-    {
-        resourcePath = [[NSBundle mainBundle] pathForResource:resourceName
-                                                       ofType:@"svg"
-                                                  inDirectory:[path stringByDeletingLastPathComponent]];
-        {
-            QWriteLocker scopedLocker(&iconsCacheLock);
-            if (!resourcePath)
-            {
-                [resourcesNotExistCache addObject:resourceName];
-                return nil;
-            }
-            resourcesExistCache[resourceName] = resourcePath;
-        }
-    }
+        return nil;
+
     float scaledSize = kDefaultIconSize * UIScreen.mainScreen.scale;
     return [OANativeUtilities skImageToUIImage:[OANativeUtilities skImageFromSvgResourcePath:resourcePath width:scaledSize height:scaledSize]];
 }
 
-+ (nullable NSString *)mapImagePathFromSvgResource:(NSString *)resourceName
++ (nullable NSString *)mapImageResourcePathNamed:(NSString *)resourceName resourceDir:(NSString *)resourceDir
 {
     NSString *path;
     {
-        QReadLocker scopedLocker(&iconsCacheLock);
-        path = resourcesExistCache[resourceName];
+        QReadLocker scopedLocker(&resourcesPathsLock);
+
+        path = resourcesPaths[resourceName];
         if (path)
-            return path;
-        else if ([resourcesNotExistCache containsObject:resourceName])
-            return nil;
+            return path.length > 0 ? path : nil;
     }
 
     path = [[NSBundle mainBundle] pathForResource:resourceName
                                            ofType:@"svg"
-                                      inDirectory:@"map-icons-svg"];
+                                      inDirectory:resourceDir];
     {
-        QWriteLocker scopedLocker(&iconsCacheLock);
-        if (path)
-            resourcesExistCache[resourceName] = path;
-        else
-            [resourcesNotExistCache addObject:resourceName];
+        QWriteLocker scopedLocker(&resourcesPathsLock);
+
+        resourcesPaths[resourceName] = path ? path : @"";
     }
     return path;
 }
 
 + (nullable UIImage *)mapImageFromSvgResource:(NSString *)resourceName width:(float)width height:(float)height
 {
-    NSString *resourcePath = [self mapImagePathFromSvgResource:resourceName];
-    if (resourcePath == nil)
+    NSString *resourcePath = [self mapImageResourcePathNamed:resourceName resourceDir:kMapIconsSvgFolderName];
+    if (!resourcePath)
         return nil;
 
     return [OANativeUtilities skImageToUIImage:[OANativeUtilities skImageFromSvgResourcePath:resourcePath width:width height:height]];
@@ -104,8 +82,8 @@ static QReadWriteLock iconsCacheLock;
 
 + (nullable UIImage *)mapImageFromSvgResource:(NSString *)resourceName scale:(float)scale
 {
-    NSString *resourcePath = [self mapImagePathFromSvgResource:resourceName];
-    if (resourcePath == nil)
+    NSString *resourcePath = [self mapImageResourcePathNamed:resourceName resourceDir:kMapIconsSvgFolderName];
+    if (!resourcePath)
         return nil;
 
     return [OANativeUtilities skImageToUIImage:[OANativeUtilities skImageFromSvgResourcePath:resourcePath scale:scale]];

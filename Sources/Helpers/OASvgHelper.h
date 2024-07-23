@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OASvgHelper : NSObject
 
-+ (BOOL)hasMXSvgMapImageBy:(NSString *)name;
++ (BOOL)hasMxMapImageNamed:(NSString *)name;
 + (nullable UIImage *) mapImageNamed:(NSString *)name;
 + (nullable UIImage *) mapImageNamed:(NSString *)name scale:(float)scale;
 + (nullable UIImage *) imageNamed:(NSString *)path;

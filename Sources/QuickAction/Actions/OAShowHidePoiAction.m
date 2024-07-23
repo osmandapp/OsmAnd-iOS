@@ -89,7 +89,7 @@ static QuickActionType *TYPE;
         return [super getIconResName];
     
     id iconRes = [filter getIconResource];
-    if ([iconRes isKindOfClass:NSString.class] && [OASvgHelper hasMXSvgMapImageBy:(NSString *) iconRes])
+    if ([iconRes isKindOfClass:NSString.class] && [OASvgHelper hasMxMapImageNamed:(NSString *) iconRes])
         return (NSString *) iconRes;
     else
         return [super getIconResName];

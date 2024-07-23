@@ -3472,3 +3472,6 @@
 "shared_string_update_required" = "Потребно ажурирање";
 "osm_login_needs_ios_16_4" = "ОпенСтритМап логин треба ајОС 16.4+";
 "osmand_depelopment_use_3d_icons" = "Користи 3Д иконе позиције локације";
+"user_palette" = "Корисничка палета";
+"shared_string_colors" = "Боје";
+"height_legend_description" = "За визуелизацију рељефа користе се висинске мапе у боји.";

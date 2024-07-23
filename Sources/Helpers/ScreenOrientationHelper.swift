@@ -20,6 +20,8 @@ class ScreenOrientationHelper : NSObject {
     private static var sharedHelperInstance: ScreenOrientationHelper?
     static let screenOrientationChangedKey: String = "screenOrientationChangedKey"
 
+    private var applicationModeChangedObserver: OAAutoObserverProxy?
+
     //MARK: Initialization
 
     static var sharedInstance: ScreenOrientationHelper {
@@ -43,9 +45,14 @@ class ScreenOrientationHelper : NSObject {
                                                selector: #selector(onDeviceOrientationDidChange),
                                                name: UIDevice.orientationDidChangeNotification,
                                                object: nil)
+
+        let app: OsmAndAppProtocol = OsmAndApp.swiftInstance()
+        let applicationModeChangedSelector = #selector(onApplicationModeChanged as () -> Void)
+        applicationModeChangedObserver = OAAutoObserverProxy(self, withHandler: applicationModeChangedSelector, andObserve: app.data.applicationModeChangedObservable)
     }
     
     deinit {
+        applicationModeChangedObserver?.detach()
         NotificationCenter.default.removeObserver(self)
     }
 
@@ -113,6 +120,13 @@ class ScreenOrientationHelper : NSObject {
     }
     
     //MARK: Selectors
+
+    @objc private func onApplicationModeChanged() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.updateSettings()
+        }
+    }
 
     @objc private func onProfileSettingDidChange(notification: Notification) {
         if let obj = notification.object as? OACommonPreference, obj == settings?.mapScreenOrientation {

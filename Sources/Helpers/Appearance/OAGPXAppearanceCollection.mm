@@ -397,7 +397,7 @@
         [colorItem generateId];
     }
 
-    BOOL result;
+    BOOL result = NO;
     if (![customTrackColors containsObject:hexColor])
     {
         [customTrackColors addObject:hexColor];

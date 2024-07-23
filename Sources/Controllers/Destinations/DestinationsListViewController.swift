@@ -282,9 +282,10 @@ class DestinationsListViewController: OABaseButtonsViewController {
 
     private func refreshVisibleRows() {
         DispatchQueue.main.async { [weak self] in
-            if let visibleIndexPaths = self?.tableView.indexPathsForVisibleRows {
-                OADistanceAndDirectionsUpdater.updateDistanceAndDirections(self?.tableData, indexPaths: visibleIndexPaths, itemKey: self?.kDestinationItemKey)
-                self?.tableView.reloadRows(at: visibleIndexPaths, with: .none)
+            guard let self else { return }
+            if let visibleIndexPaths = self.tableView.indexPathsForVisibleRows {
+                OADistanceAndDirectionsUpdater.updateDistanceAndDirections(self.tableData, indexPaths: visibleIndexPaths, itemKey: self.kDestinationItemKey)
+                self.tableView.reloadRows(at: visibleIndexPaths, with: .none)
             }
         }
     }

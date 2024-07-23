@@ -3462,7 +3462,7 @@
 "missing_maps_ignore_details" = "Dækker downloadede kort din rute? Naviger med dem, hvis du er fortrolig med området.";
 "ios_release_4_8" = "• Nyt \"Speedometer\"-modul, der er kompatibelt med CarPlay\n• Tilføjet sving for sving-instruktioner til ruteoplysninger\n• Tilpas kortskærmen ved at tilføje flere \"Hurtig handling\"-knapper\n• Forbedringer af 3D-spor: nye visualiserings- og farvelægningsmuligheder\n• Brugerdefinerede farvepaletter til terræn, spor og ruter\n• Tilføjet forbedret flervalgstilstand for spor\n• 3D-variant for ikoner for placeringsposition\n• Udvidet udvalg af turistruter på kortet\n• Vejret: Brugerflade-opdatering, tilføjet vindanimation\n• Tilføj bløde overgange, når du zoomer i 3D-tilstand\n• \"Placering på skærmen\" er nu i Konfigurer skærm\n• Skift \"Hjulomkreds\" i BLE-sensorindstillingerne\n• Tilføjet separat navigationsadvarsel om \"Hastighedsgrænse\"\n• Rettet navne for pejling-moduler\n• Rettet synlighed af \"Radiuslineal\" i alle modulpaneler\n";
 "transport_hazmat_title" = "Transport af farlige materialer";
-"weather_source_ecmwf_description" = "Det Europæiske Center for mellemlange vejrprognoser";
+"weather_source_ecmwf_description" = "Det Europæiske Center for mellemfristede vejrprognoser";
 "weather_source_ecmwf_title" = "ECMWF";
 "weather_source_GFS_title" = "GFS";
 "map_settings_weather_wind_animation" = "Animation af vind";

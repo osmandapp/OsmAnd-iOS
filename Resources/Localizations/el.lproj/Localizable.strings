@@ -2073,3 +2073,4 @@
 "cloud_create_account" = "Δημιουργία λογαριασμού";
 "recalculate_wrong_dir" = "Επαναυπολογισμός διαδρομής σε περίπτωση αντιστροφής κατεύθυνσης";
 "in_case_of_reverse_direction" = "Σε περίπτωση αντιστροφής κατεύθυνσης";
+"weather_source_ecmwf_description" = "Ευρωπαϊκό Κέντρο Μεσοπρόθεσμων Μετεωρολογικών Προγνώσεων (ECMWF)";

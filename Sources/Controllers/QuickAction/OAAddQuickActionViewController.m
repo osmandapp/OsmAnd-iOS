@@ -17,7 +17,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
-@interface OAAddQuickActionViewController () <UISearchBarDelegate>
+@interface OAAddQuickActionViewController () <UISearchBarDelegate, UISearchResultsUpdating>
 
 @end
 
@@ -30,6 +30,7 @@
     NSMutableArray<QuickActionType *> *_filteredData;
     
     UISearchController *_searchController;
+    BOOL _isSearchActive;
     BOOL _isFiltered;
     NSString *_query;
 
@@ -85,9 +86,12 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
     {
         _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
         _searchController.searchBar.delegate = self;
+        _searchController.searchResultsUpdater = self;
         _searchController.obscuresBackgroundDuringPresentation = NO;
+        _searchController.dimsBackgroundDuringPresentation = NO;
         self.navigationItem.searchController = _searchController;
-        [self setupSearchControllerWithFilter:_isFiltered];
+        self.navigationItem.hidesSearchBarWhenScrolling = NO;
+        [self setupSearchController];
         if (_query)
             _searchController.searchBar.searchTextField.text = _query;
     }
@@ -111,26 +115,21 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
         return _isFiltered ? OALocalizedString(@"search_results") : OALocalizedString(@"quick_action_new_action");
 }
 
+- (EOABaseNavbarStyle) getNavbarStyle
+{
+    return _selectedGroup ? EOABaseNavbarStyleLargeTitle : EOABaseNavbarStyleSimple;
+}
+
 - (EOABaseNavbarColorScheme)getNavbarColorScheme
 {
     return EOABaseNavbarColorSchemeGray;
 }
 
-- (void)setupSearchControllerWithFilter:(BOOL)isFiltered
+- (void) setupSearchController
 {
-    if (isFiltered)
-    {
-        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_search") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
-        _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
-        _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorNamed:ACColorNameTextColorTertiary];
-    }
-    else
-    {
-        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_search") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
-        _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
-        _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
-        _searchController.searchBar.searchTextField.tintColor = [UIColor colorNamed:ACColorNameTextColorTertiary];
-    }
+    _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_search") attributes:@{NSForegroundColorAttributeName:[UIColor colorNamed:ACColorNameIconColorTertiary]}];
+    _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
+    _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorNamed:ACColorNameTextColorTertiary];
 }
 
 #pragma mark - Table data
@@ -371,21 +370,20 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
     } completion:nil];
 }
 
-#pragma mark - UISearchBarDelegate
+#pragma mark - UISearchResultsUpdating
 
-- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
+- (void)updateSearchResultsForSearchController:(UISearchController *)searchController
 {
-    [searchBar resignFirstResponder];
-    _isFiltered = NO;
-    [self setupSearchControllerWithFilter:NO];
-    [self.tableView reloadData];
-}
-
-- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
-{
-    if (searchText.length > 0)
+    NSString *searchText = searchController.searchBar.searchTextField.text;
+    if (searchController.isActive && searchController.searchBar.searchTextField.text.length == 0)
     {
-        [self setupSearchControllerWithFilter:YES];
+        _isSearchActive = YES;
+        _isFiltered = NO;
+        _query = nil;
+    }
+    else if (searchController.isActive && searchController.searchBar.searchTextField.text.length > 0)
+    {
+        _isSearchActive = YES;
         _isFiltered = YES;
         _query = searchText;
         _filteredData = [NSMutableArray new];
@@ -401,12 +399,27 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
     }
     else
     {
+        _isSearchActive = NO;
         _isFiltered = NO;
         _query = nil;
-        [self setupSearchControllerWithFilter:NO];
     }
+    
     self.title = [self getTitle];
+    [self setupSearchController];
     [self generateData];
+    [self.tableView reloadData];
+}
+
+
+#pragma mark - UISearchBarDelegate
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
+{
+    [searchBar resignFirstResponder];
+    _isFiltered = NO;
+    _isSearchActive = NO;
+    _query = nil;
+    [self setupSearchController];
     [self.tableView reloadData];
 }
 

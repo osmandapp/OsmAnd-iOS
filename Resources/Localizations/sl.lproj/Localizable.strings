@@ -2481,3 +2481,4 @@
 "edit_tilesource_maxzoom" = "Največje približanje";
 "shared_string_bottom" = "Dno";
 "transport_hazmat_title" = "Prevoz nevarnih snovi";
+"weather_source_ecmwf_description" = "Evropski center za srednjeročne vremenske napovedi (ECMWF)";

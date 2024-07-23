@@ -10,8 +10,11 @@
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
 #import "OAMapHudViewController.h"
+#import "OAObservable.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapRendererView.h"
 #import "OAUtilities.h"
+#import "OAWorldRegion.h"
 #import "OANativeUtilities.h"
 #import "OAColors.h"
 #import "OAPointIContainer.h"
@@ -20,6 +23,7 @@
 #import "OADownloadsManager.h"
 #import "OAManageResourcesViewController.h"
 #import "OAWeatherToolbar.h"
+#import "OAAppSettings.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>

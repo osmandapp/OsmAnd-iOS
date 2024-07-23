@@ -174,7 +174,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
     func getWidgetsCount(panel: WidgetsPanel) -> Int {
         let filter = Int(kWidgetModeEnabled | KWidgetModeAvailable | kWidgetModeMatchingPanels)
         let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
-        return widgetRegistry?.getWidgetsForPanel(appMode, filterModes: filter, panels: [panel]).count ?? 0
+        return widgetRegistry.getWidgetsForPanel(appMode, filterModes: filter, panels: [panel]).count
     }
     
     // MARK: AppModeSelectionDelegate
@@ -282,7 +282,7 @@ extension ConfigureScreenViewController {
         
         if data.key == "map_widget_transparent" {
             settings.transparentMapTheme.set(sw.isOn)
-            OARootViewController.instance().mapPanel.hudViewController.mapInfoController.updateLayout()
+            OARootViewController.instance().mapPanel.hudViewController?.mapInfoController.updateLayout()
         } else if data.key == "map_widget_distance_by_tap" {
             settings.showDistanceRuler.set(sw.isOn)
             OARootViewController.instance().mapPanel.mapViewController.updateTapRulerLayer()
@@ -312,9 +312,10 @@ extension ConfigureScreenViewController {
             vc.delegate = self
             show(vc)
         } else if data.key == "position_on_map" {
-            let vc = OAProfileGeneralSettingsParametersViewController(type: EOAProfileGeneralSettingsDisplayPosition, applicationMode: appMode)
-            vc?.delegate = self
-            showMediumSheetViewController(vc, isLargeAvailable: false)
+            if let vc = OAProfileGeneralSettingsParametersViewController(type: EOAProfileGeneralSettingsDisplayPosition, applicationMode: appMode) {
+                vc.delegate = self
+                showMediumSheetViewController(vc, isLargeAvailable: false)
+            }
         } else {
             let panel = data.obj(forKey: "panel") as? WidgetsPanel
             if let panel {

@@ -16,6 +16,10 @@
 #import "OsmAndApp.h"
 #import "OAButtonTableViewCell.h"
 #import "OASimpleTableViewCell.h"
+#import "OASvgHelper.h"
+#import "OrderedDictionary.h"
+#import "OAObservable.h"
+#import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 
 static QuickActionType *TYPE;
@@ -85,8 +89,8 @@ static QuickActionType *TYPE;
         return [super getIconResName];
     
     id iconRes = [filter getIconResource];
-    if ([iconRes isKindOfClass:NSString.class])
-        return [NSString stringWithFormat:@"mx_%@", (NSString *)iconRes];
+    if ([iconRes isKindOfClass:NSString.class] && [OASvgHelper hasMxMapImageNamed:(NSString *) iconRes])
+        return (NSString *) iconRes;
     else
         return [super getIconResName];
 }
@@ -94,7 +98,7 @@ static QuickActionType *TYPE;
 - (UIImage *)getActionIcon
 {
     NSString *actionIconName = [self getIconResName];
-    return [actionIconName isEqualToString:self.actionType.iconName] ? [UIImage templateImageNamed:actionIconName] : [UIImage mapSvgImageNamed:actionIconName];
+    return [actionIconName isEqualToString:self.actionType.iconName] ? [UIImage templateImageNamed:actionIconName] : [[OAUtilities getMxIcon:actionIconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 }
 
 - (BOOL)isActionWithSlash

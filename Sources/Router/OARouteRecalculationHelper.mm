@@ -9,6 +9,7 @@
 #import "OARouteRecalculationHelper.h"
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
+#import "OAApplicationMode.h"
 #import "OARoutingHelper.h"
 #import "OAVoiceRouter.h"
 #import "OAWaypointHelper.h"

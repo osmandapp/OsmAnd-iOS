@@ -24,6 +24,7 @@
 #import "Localization.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OATextInfoWidget.h"
 #import "OAWaypointUIHelper.h"
 #import "OAPointDescription.h"
@@ -41,7 +42,6 @@
 #include <OsmAndCore/Map/MapStyleEvaluationResult.h>
 #include <OsmAndCore/Map/MapStyleBuiltinValueDefinitions.h>
 #include <OsmAndCore/TextRasterizer.h>
-
 #include <binaryRead.h>
 
 @interface OATopTextView ()

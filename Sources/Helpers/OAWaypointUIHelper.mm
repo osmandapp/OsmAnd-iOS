@@ -8,11 +8,13 @@
 
 #import "OAWaypointUIHelper.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "Localization.h"
 #import "OAMapLayers.h"
 #import "OAPOILayer.h"
+#import "OALocationServices.h"
 #import "OALocationPointWrapper.h"
 #import "OALocationPoint.h"
 #import "OATargetPointsHelper.h"

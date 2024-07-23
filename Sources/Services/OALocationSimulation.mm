@@ -10,6 +10,7 @@
 
 #import "OALocationSimulation.h"
 #import "OsmAndApp.h"
+#import "OAObservable.h"
 #import "OALocationServices.h"
 #import "OARoutingHelper.h"
 #import "Localization.h"
@@ -17,6 +18,7 @@
 #import "OAMapUtils.h"
 #import "OAAppSettings.h"
 #import "OARouteCalculationResult.h"
+#import "CLLocation+Extension.h"
 
 #define PRECISION_1_M 0.00001f
 #define DEVIATION_M 6

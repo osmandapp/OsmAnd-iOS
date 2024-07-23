@@ -12,7 +12,10 @@
 #import "OAMapHudViewController.h"
 #import "OAMapInfoWidgetsFactory.h"
 #import "OAMapWidgetRegInfo.h"
+#import "OAAppData.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
+#import "OAWeatherWidget.h"
 #import "OsmAndApp.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -149,7 +152,7 @@
     return [NSString stringWithFormat:NSLocalizedString(@"weather_plugin_description", nil), k_weather_global_forecast_system];
 }
 
-- (NSArray *)getQuickActionTypes
+- (NSArray<QuickActionType *> *)getQuickActionTypes
 {
     return @[OAShowHideTemperatureAction.TYPE, OAShowHideWindAction.TYPE, OAShowHideAirPressureAction.TYPE, OAShowHidePrecipitationAction.TYPE, OAShowHideCloudAction.TYPE];
 }

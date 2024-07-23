@@ -7,8 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "OABackupListeners.h"
-#import "OAPrepareBackupTask.h"
 
 #define BACKUP_DEBUG_LOGS YES
 
@@ -32,13 +30,18 @@
 #define SERVER_ERROR_CODE_SUBSCRIPTION_WAS_EXPIRED_OR_NOT_PRESENT 110
 #define SERVER_ERROR_CODE_USER_IS_ALREADY_REGISTERED 111
 
-
 static inline BOOL backupDebugLogs()
 {
     return BACKUP_DEBUG_LOGS;
 }
 
-@class OAExportSettingsType, OACommonBoolean, OAPrepareBackupResult, OABackupListeners, OASettingsItem, OAFileSettingsItem;
+@class OAExportSettingsType, OACommonBoolean, OAPrepareBackupResult, OABackupListeners, OASettingsItem, OAFileSettingsItem, OALocalFile, OARemoteFile, OABackupInfo;
+
+@protocol OAOnPrepareBackupListener;
+@protocol OAOnDeleteFilesListener;
+@protocol OAOnCollectLocalFilesListener;
+@protocol OAOnUploadFileListener;
+@protocol OAOnDownloadFileListener;
 
 @interface OABackupHelper : NSObject
 

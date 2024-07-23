@@ -6,10 +6,9 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-#import "OAPOI.h"
+#import <Foundation/Foundation.h>
 
 @class OATravelSearchResult, OAPOI, OATravelArticle, OAGPXDocumentAdapter, OAWptPt, OAGPX, OATravelGpx;
-
 
 @interface OAFoundAmenity : NSObject
 

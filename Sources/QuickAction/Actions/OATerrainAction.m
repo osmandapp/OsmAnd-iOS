@@ -8,16 +8,24 @@
 
 #import "OATerrainAction.h"
 #import "OsmAndApp.h"
-#import "OAAppData.h"
+#import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 
 static QuickActionType *TYPE;
 
 @implementation OATerrainAction
+{
+    OASRTMPlugin *_plugin;
+}
 
 - (instancetype)init
 {
     return [super initWithActionType:self.class.TYPE];
+}
+
+- (void)commonInit
+{
+    _plugin = (OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class];
 }
 
 + (void)initialize
@@ -33,17 +41,7 @@ static QuickActionType *TYPE;
 
 - (void)execute
 {
-    OAAppData *data = [OsmAndApp instance].data;
-    BOOL isOn = [data terrainType] != EOATerrainTypeDisabled;
-    if (isOn)
-    {
-        [data setLastTerrainType:data.terrainType];
-        [data setTerrainType:EOATerrainTypeDisabled];
-    }
-    else
-    {
-        [data setTerrainType:data.lastTerrainType];
-    }
+    [_plugin setTerrainLayerEnabled:![_plugin isTerrainLayerEnabled]];
 }
 
 - (NSString *)getIconResName
@@ -58,12 +56,12 @@ static QuickActionType *TYPE;
 
 - (BOOL)isActionWithSlash
 {
-    return [[OsmAndApp instance].data terrainType] != EOATerrainTypeDisabled;
+    return [_plugin isTerrainLayerEnabled];
 }
 
 - (NSString *)getActionStateName
 {
-    return [[OsmAndApp instance].data terrainType] != EOATerrainTypeDisabled ? OALocalizedString(@"hide_terrain") : OALocalizedString(@"show_terrain");
+    return [_plugin isTerrainLayerEnabled] ? OALocalizedString(@"hide_terrain") : OALocalizedString(@"show_terrain");
 }
 
 + (QuickActionType *) TYPE

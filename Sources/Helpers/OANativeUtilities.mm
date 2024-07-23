@@ -7,16 +7,16 @@
 //
 
 #import "OANativeUtilities.h"
-
 #import <UIKit/UIKit.h>
 #import "OAColors.h"
 #import "OAUtilities.h"
 #import "OARootViewController.h"
+#import "OAMapViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapRendererView.h"
 #import "OAMapUtils.h"
 
 #include <QString>
-
 #include <SkCGUtils.h>
 #include <SkCanvas.h>
 #include <OsmAndCore/SkiaUtilities.h>

@@ -11,6 +11,7 @@
 #import "OAMapSettingsViewController.h"
 #import "OAMapViewController.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAValueTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAMapStyleSettings.h"

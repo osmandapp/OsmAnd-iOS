@@ -11,7 +11,7 @@ extension OATextInfoWidget {
         guard widgetSizePref != nil else {
             return .medium
         }
-        return widgetSizePref.get(OAAppSettings.sharedManager().applicationMode.get()!)
+        return widgetSizePref?.get(OAAppSettings.sharedManager().applicationMode.get()!) ?? .medium
     }
     
     func updateWith(style: EOAWidgetSizeStyle, appMode: OAApplicationMode) {
@@ -19,7 +19,7 @@ extension OATextInfoWidget {
         guard widgetSizeStyle != style else {
             return
         }
-        widgetSizePref.set(style, mode: appMode)
+        widgetSizePref?.set(style, mode: appMode)
     }
 }
 

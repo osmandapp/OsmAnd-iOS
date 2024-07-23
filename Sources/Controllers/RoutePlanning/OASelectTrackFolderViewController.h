@@ -7,7 +7,8 @@
 //
 
 #import "OABaseNavbarViewController.h"
-#import "OAGPXDatabase.h"
+
+@class OAGPX;
 
 @protocol OASelectTrackFolderDelegate <NSObject>
 

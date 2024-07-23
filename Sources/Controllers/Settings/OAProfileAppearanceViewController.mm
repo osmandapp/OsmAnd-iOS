@@ -15,6 +15,7 @@
 #import "OAConfigureProfileViewController.h"
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
+#import "OAObservable.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAInputTableViewCell.h"
 #import "OAColorsTableViewCell.h"

@@ -10,7 +10,10 @@
 #import "OASQLiteTileSource.h"
 #import "OAResourcesUIHelper.h"
 #import "OARootViewController.h"
+#import "OAMapViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapRendererView.h"
+#import "OsmAndApp.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/OnlineRasterMapLayerProvider.h>

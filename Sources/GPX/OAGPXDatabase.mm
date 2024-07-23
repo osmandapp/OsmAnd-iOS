@@ -18,6 +18,7 @@
 #import "OAGPXAppearanceCollection.h"
 #import "OAGPXUIHelper.h"
 #import "OAPOI.h"
+#import "OAAppData.h"
 
 #define kDbName @"gpx.db"
 #define GPX_EXT @"gpx"

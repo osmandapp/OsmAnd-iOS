@@ -14,6 +14,8 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OASizes.h"
+#import "OAObservable.h"
+#import "OAAppData.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 

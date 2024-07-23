@@ -663,20 +663,22 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
         article.gpxFile = gpxFile
         let filename = TravelObfHelper.shared.createGpxFile(article: article)
         OATravelGuidesHelper.createGpxFile(article, fileName: filename)
-        let gpx = OATravelGuidesHelper.buildGpx(filename, title: article.title, document: gpxFile)
-        
         view.removeSpinner()
-        if isPointsReadingMode && (gpx == nil || gpx?.wptPoints == 0) {
-            OAUtilities.showToast(nil, details: localizedString("article_has_no_points"), duration: 4, in: self.view)
-            return
+        var hasPoints = false
+        if let gpx = OATravelGuidesHelper.buildGpx(filename, title: article.title, document: gpxFile) {
+            hasPoints = isPointsReadingMode && gpx.wptPoints > 0
+            if hasPoints {
+                OAAppSettings.sharedManager().showGpx([filename], update: true)
+                if let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
+                    OARootViewController.instance().mapPanel.openTargetViewWithGPX(fromTracksList: gpx,
+                                                                                   navControllerHistory: newCurrentHistory,
+                                                                                   fromTrackMenu: false,
+                                                                                   selectedTab: .pointsTab)
+                }
+            }
         }
-
-        OAAppSettings.sharedManager().showGpx([filename], update: true)
-        if let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
-            OARootViewController.instance().mapPanel.openTargetViewWithGPX(fromTracksList: gpx,
-                                                                           navControllerHistory: newCurrentHistory,
-                                                                           fromTrackMenu: false,
-                                                                           selectedTab: .pointsTab)
+        if !hasPoints {
+            OAUtilities.showToast(nil, details: localizedString("article_has_no_points"), duration: 4, in: self.view)
         }
     }
     

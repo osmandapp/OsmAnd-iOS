@@ -7,10 +7,11 @@
 //
 
 #import "OACompoundViewController.h"
-#import "OAOpenStreetMapUtilsProtocol.h"
+#import "OAOsmPoint.h"
 
-@class OAEntity;
-@class OAEditPOIData;
+@class OAEntity, OAEntityInfo, OAEditPOIData;
+
+@protocol OAOpenStreetMapUtilsProtocol;
 
 @protocol OAOsmEditingDataProtocol <NSObject>
 

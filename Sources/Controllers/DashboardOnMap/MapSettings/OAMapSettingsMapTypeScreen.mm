@@ -10,10 +10,14 @@
 #import "OAMapSettingsViewController.h"
 #import "OARendererRegistry.h"
 #import "Localization.h"
+#import "OAApplicationMode.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OAResourcesUIHelper.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
+#import "OAAppData.h"
 #import "OAIndexConstants.h"
+#import "OAMapSource.h"
 
 #include <OsmAndCore/Map/IMapStylesCollection.h>
 #include <OsmAndCore/Map/UnresolvedMapStyle.h>

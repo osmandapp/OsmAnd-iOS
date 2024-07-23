@@ -15,7 +15,7 @@ class WidgetGroupItemsViewController: OABaseNavbarViewController {
     var widgetGroup: WidgetGroup!
     var widgetPanel: WidgetsPanel!
     
-    lazy private var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry!
+    lazy private var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
     
     override func generateData() {
         let section = tableData.createNewSection()

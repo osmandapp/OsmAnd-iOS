@@ -6,8 +6,6 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import <CoreLocation/CoreLocation.h>
 #import "OABaseScrollableHudViewController.h"
 
 @class OAMeasurementEditingContext, OATargetMenuViewControllerState;

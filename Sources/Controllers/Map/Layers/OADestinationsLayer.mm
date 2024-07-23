@@ -9,6 +9,8 @@
 #import "OADestinationsLayer.h"
 #import "OANativeUtilities.h"
 #import "OAMapViewController.h"
+#import "OALocationServices.h"
+#import "OAObservable.h"
 #import "OAMapRendererView.h"
 #import "OADestination.h"
 #import "OAAutoObserverProxy.h"
@@ -21,6 +23,9 @@
 #import "OAPointDescription.h"
 #import "OAMapLayers.h"
 #import "OACompoundIconUtils.h"
+#import "OARTargetPoint.h"
+#import "OAAppSettings.h"
+#import "OAAppData.h"
 
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/VectorLineBuilder.h>

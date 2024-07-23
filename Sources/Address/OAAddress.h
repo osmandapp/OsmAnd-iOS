@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+
 #include <OsmAndCore/Data/Address.h>
 
 typedef NS_ENUM(NSInteger, EOAAddressType)

@@ -10,11 +10,15 @@
 #import "OADestination.h"
 #import "OsmAndApp.h"
 #import "OAAutoObserverProxy.h"
+#import "OALocationServices.h"
 #import "OAMultiDestinationCell.h"
+#import "OAObservable.h"
 #import "OAAppSettings.h"
 #import "OALog.h"
 #import "OAUtilities.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OADestinationsHelper.h"
 #import "OAHistoryHelper.h"
 #import "OAHistoryItem.h"
@@ -25,6 +29,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OASizes.h"
+#import "OAAppData.h"
 #import "OsmAnd_Maps-Swift.h"
 
 @interface OADestinationBarWidget ()

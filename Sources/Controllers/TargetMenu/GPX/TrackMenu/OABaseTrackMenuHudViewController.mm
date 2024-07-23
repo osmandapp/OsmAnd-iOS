@@ -8,6 +8,7 @@
 
 #import "OABaseTrackMenuHudViewController.h"
 #import "OARootViewController.h"
+#import "OAMapViewController.h"
 #import "OAMapHudViewController.h"
 #import "OAMapRendererView.h"
 #import "Localization.h"

@@ -10,6 +10,7 @@
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OAColors.h"
+#import "OAAppSettings.h"
 
 #import <OsmAndCore/TextRasterizer.h>
 

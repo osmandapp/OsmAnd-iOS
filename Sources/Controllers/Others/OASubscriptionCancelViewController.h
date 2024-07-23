@@ -6,7 +6,6 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import "OASuperViewController.h"
 
 @interface OASubscriptionCancelViewController : OASuperViewController

@@ -5,6 +5,7 @@
 
 #import "OACarPlayMapDashboardViewController.h"
 #import "OAMapViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapRendererView.h"
 #import "OARootViewController.h"
 

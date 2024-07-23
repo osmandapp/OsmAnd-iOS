@@ -876,6 +876,7 @@
 "shared_string_is_deleted" = "%@ is deleted.";
 "shared_string_deleting" = "Deleting";
 "shared_string_deleting_complete" = "Deleting complete";
+"shared_string_colors" = "Colors";
 
 "restart" = "Restart";
 
@@ -3830,3 +3831,6 @@
 
 "shared_string_update_required" = "Update Required";
 "osm_login_needs_ios_16_4" = "OpenStreetMap login needs iOS 16.4+";
+
+"user_palette" = "User palette";
+"height_legend_description" = "Altitude color maps are used to visualize relief.";

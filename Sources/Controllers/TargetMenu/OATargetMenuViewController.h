@@ -7,9 +7,7 @@
 //
 
 #import "OACompoundViewController.h"
-#import <CoreLocation/CoreLocation.h>
 #import "OATargetPoint.h"
-#import "OAHudButton.h"
 
 typedef NS_ENUM(NSInteger, ETopToolbarType)
 {
@@ -70,7 +68,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 @end
 
-@class OATargetPoint, OATransportStopRoute, OARepositoryResourceItem;
+@class OATargetPoint, OATransportStopRoute, OARepositoryResourceItem, OAHudButton;
 
 @interface OATargetMenuViewController : OACompoundViewController
 

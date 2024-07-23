@@ -10,10 +10,11 @@
 #import "OAMapSettingsViewController.h"
 #import "OAValueTableViewCell.h"
 #import "OASwitchTableViewCell.h"
-#include "Localization.h"
-#import "OsmAnd_Maps-Swift.h"
+#import "Localization.h"
+#import "OAObservable.h"
+#import "OsmAndApp.h"
 #import "GeneratedAssetSymbols.h"
-
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OAMapSettingsLanguageScreen
 {

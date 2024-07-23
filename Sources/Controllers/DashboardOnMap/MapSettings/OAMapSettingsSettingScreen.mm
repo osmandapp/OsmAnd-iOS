@@ -12,6 +12,8 @@
 #import "OAValueTableViewCell.h"
 #import "Localization.h"
 #import "OADayNightHelper.h"
+#import "OAObservable.h"
+#import "OsmAndApp.h"
 
 @implementation OAMapSettingsSettingScreen
 {

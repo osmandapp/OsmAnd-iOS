@@ -18,7 +18,6 @@
 #import "OsmAndApp.h"
 #import "OARoutingHelper.h"
 #import "OAGPXDocument.h"
-#import "OARoutingHelper.h"
 #import "OARoutePreferencesParameters.h"
 #import "OARouteProvider.h"
 #import "OAGPXMutableDocument.h"

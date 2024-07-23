@@ -16,6 +16,7 @@
                           coloringType:(OAColoringType *)coloringType
                     routeInfoAttribute:(NSString *)routeInfoAttribute
                                  width:(NSString *)width
+                       gradientPalette:(NSString *)gradientPalette
                         showTurnArrows:(BOOL)showTurnArrows
 {
     self = [super init];
@@ -26,6 +27,7 @@
         _coloringType = coloringType;
         _routeInfoAttribute = routeInfoAttribute;
         _width = width;
+        _gradientPalette = gradientPalette;
         _showTurnArrows = showTurnArrows;
     }
     return self;

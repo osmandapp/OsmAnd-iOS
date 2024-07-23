@@ -42,6 +42,7 @@
 #import "OAFileNameTranslationHelper.h"
 #import "OsmAndApp.h"
 #import "OACustomPlugin.h"
+#import "OAApplicationMode.h"
 
 #import "OAOsmNotesSettingsItem.h"
 #import "OAOsmEditsSettingsItem.h"
@@ -302,7 +303,31 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     NSArray<OAAvoidRoadInfo *> *impassableRoads = OAAvoidSpecificRoads.instance.getImpassableRoads;
     if (impassableRoads.count > 0)
         settingsItems[OAExportSettingsType.AVOID_ROADS] = impassableRoads;
-    
+
+    NSFileManager *fileManager = NSFileManager.defaultManager;
+    BOOL isDir = NO;
+    NSString *colorPaletteFolder = [OsmAndApp instance].colorsPalettePath;
+    BOOL exists = [fileManager fileExistsAtPath:colorPaletteFolder isDirectory:&isDir];
+    if (exists && isDir)
+    {
+        NSArray<NSString *> *files = [fileManager contentsOfDirectoryAtPath:colorPaletteFolder error:nil];
+        NSMutableArray<NSString *> *items = [NSMutableArray array];
+        for (NSString *file in files)
+        {
+            if ([file.pathExtension isEqualToString:@"txt"])
+                [items addObject:[colorPaletteFolder stringByAppendingPathComponent:file]];
+        }
+        
+        if (items.count > 0)
+        {
+            [items sortUsingComparator:^NSComparisonResult(NSString * _Nonnull item1, NSString * _Nonnull item2) {
+                NSComparisonResult r = [[ColorsPaletteUtils getPaletteTypeName:item1] compare:[ColorsPaletteUtils getPaletteTypeName:item2]];
+                return r == NSOrderedSame ? [[ColorsPaletteUtils getPaletteName:item1] compare:[ColorsPaletteUtils getPaletteName:item2]] : r;
+            }];
+            settingsItems[OAExportSettingsType.COLOR_DATA] = items;
+        }
+    }
+
     return settingsItems;
 }
 
@@ -741,6 +766,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     NSMutableArray<OATileSource *> *tileSourceTemplates = [NSMutableArray array];
     NSMutableArray<NSString *> *routingFilesList = [NSMutableArray array];
     NSMutableArray<NSString *> *renderFilesList = [NSMutableArray array];
+    NSMutableArray<NSString *> *colorPaletteFilesList = [NSMutableArray array];
     NSMutableArray<OAFileSettingsItem *> *tracksFilesList = [NSMutableArray array];
     NSMutableArray<OAFileSettingsItem *> *mapFilesList = [NSMutableArray array];
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
@@ -768,6 +794,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
                     [renderFilesList addObject:fileItem.filePath];
                 else if (fileItem.subtype == EOASettingsItemFileSubtypeRoutingConfig)
                     [routingFilesList addObject:fileItem.filePath];
+                else if (fileItem.subtype == EOASettingsItemFileSubtypeColorPalette)
+                    [colorPaletteFilesList addObject:fileItem.filePath];
                 else if ([OAFileSettingsItemFileSubtype isMap:fileItem.subtype])
                     [mapFilesList addObject:fileItem];
                 break;
@@ -885,6 +913,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         settingsToOperate[OAExportSettingsType.CUSTOM_RENDER_STYLE] = renderFilesList;
     if (routingFilesList.count > 0 || addEmptyItems)
         settingsToOperate[OAExportSettingsType.CUSTOM_ROUTING] = routingFilesList;
+    if (colorPaletteFilesList.count > 0 || addEmptyItems)
+        settingsToOperate[OAExportSettingsType.COLOR_DATA] = colorPaletteFilesList;
     if (tracksFilesList.count > 0 || addEmptyItems)
         settingsToOperate[OAExportSettingsType.TRACKS] = tracksFilesList;
     if (mapFilesList.count > 0 || addEmptyItems)

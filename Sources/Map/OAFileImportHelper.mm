@@ -9,6 +9,7 @@
 #import "OAFileImportHelper.h"
 #import "OALog.h"
 #import "OsmAndApp.h"
+#import "OAObservable.h"
 
 @implementation OAFileImportHelper
 {

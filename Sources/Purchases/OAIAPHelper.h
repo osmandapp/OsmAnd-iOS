@@ -7,9 +7,10 @@
 //
 
 #import <StoreKit/StoreKit.h>
-#import "OAProducts.h"
 
 #define kFreeMapsAvailableTotal 7
+
+@class OAProduct, OASubscription, OASubscriptionList, OAFunctionalAddon;
 
 UIKIT_EXTERN NSString *const OAIAPProductsRequestSucceedNotification;
 UIKIT_EXTERN NSString *const OAIAPProductsRequestFailedNotification;

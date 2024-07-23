@@ -34,9 +34,10 @@ final class DownloadingCellCloudHelper: DownloadingCellBaseHelper  {
         guard let type = notification.userInfo?["type"] as? String, 
               let name = notification.userInfo?["name"] as? String else { return }
         let resourceId = getResourceId(typeName: type, filename: name)
-        if helperHasItemFor(resourceId) {
-            DispatchQueue.main.async { [weak self] in
-                self?.setCellProgress(resourceId: resourceId, progress: 0, status: .started)
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            if self.helperHasItemFor(resourceId) {
+                self.setCellProgress(resourceId: resourceId, progress: 0, status: .started)
             }
         }
     }
@@ -47,9 +48,10 @@ final class DownloadingCellCloudHelper: DownloadingCellBaseHelper  {
               let value = notification.userInfo?["value"] as? Float else { return }
         let resourceId = getResourceId(typeName: type, filename: name)
         let progress = value / 100
-        if helperHasItemFor(resourceId) {
-            DispatchQueue.main.async { [weak self] in
-                self?.setCellProgress(resourceId: resourceId, progress: progress, status: .inProgress)
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            if self.helperHasItemFor(resourceId) {
+                self.setCellProgress(resourceId: resourceId, progress: progress, status: .inProgress)
             }
         }
     }
@@ -58,11 +60,11 @@ final class DownloadingCellCloudHelper: DownloadingCellBaseHelper  {
         guard let type = notification.userInfo?["type"] as? String,
               let name = notification.userInfo?["name"] as? String else { return }
         let resourceId = getResourceId(typeName: type, filename: name)
-        if helperHasItemFor(resourceId) {
-            DispatchQueue.main.async { [weak self] in
-                self?.setCellProgress(resourceId: resourceId, progress: 1, status: .finished)
-                
-                let cell = self?.getOrCreateCell(resourceId)
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            if self.helperHasItemFor(resourceId) {
+                self.setCellProgress(resourceId: resourceId, progress: 1, status: .finished)
+                let cell = self.getOrCreateCell(resourceId)
                 cell?.leftIconView.tintColor = .iconColorActive
             }
         }

@@ -10,6 +10,7 @@
 #import "OAAppSettings.h"
 #import "OARoutingHelper.h"
 #import "OAVoiceRouter.h"
+#import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 
 static QuickActionType *TYPE;

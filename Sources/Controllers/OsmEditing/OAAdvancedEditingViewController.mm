@@ -19,6 +19,7 @@
 #import "OAEditPOIData.h"
 #import "OAPOIType.h"
 #import "OAPOICategory.h"
+#import "MaterialTextFields.h"
 #import "OAKeyboardHintBar.h"
 #import "GeneratedAssetSymbols.h"
 

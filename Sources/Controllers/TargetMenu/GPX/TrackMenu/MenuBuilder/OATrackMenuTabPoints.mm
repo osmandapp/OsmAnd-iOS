@@ -12,6 +12,8 @@
 #import "OAValueTableViewCell.h"
 #import "Localization.h"
 #import "OAColors.h"
+#import "OALocationServices.h"
+#import "OAWorldRegion.h"
 #import "OAOsmAndFormatter.h"
 #import "OADefaultFavorite.h"
 #import "OAGPXDocumentPrimitives.h"

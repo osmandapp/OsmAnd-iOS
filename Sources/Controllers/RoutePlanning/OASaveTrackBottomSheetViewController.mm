@@ -8,6 +8,8 @@
 
 #import "OASaveTrackBottomSheetViewController.h"
 #import "OARootViewController.h"
+#import "OAMapViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OARoutePlanningHudViewController.h"
 #import "OAMapRendererView.h"
 #import "Localization.h"

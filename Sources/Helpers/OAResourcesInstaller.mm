@@ -7,22 +7,25 @@
 //
 
 #import "OAResourcesInstaller.h"
-
 #import "OsmAndApp.h"
+#import "OAAppData.h"
 #import "OADownloadsManager.h"
 #import "OAAutoObserverProxy.h"
 #import "OALog.h"
+#import "OAObservable.h"
 #import <MBProgressHUD.h>
 #import "Localization.h"
 #import "OAPluginPopupViewController.h"
 #import "OAAppSettings.h"
 #import "OAResourcesUIHelper.h"
 #import "OAMapCreatorHelper.h"
+#import "OADownloadTask.h"
 #import "OAIAPHelper.h"
 #import "OAGPXDocument.h"
 #import "OAGPXDatabase.h"
-#import "OsmAnd_Maps-Swift.h"
 #import "OAWeatherHelper.h"
+#import "OAWorldRegion.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 

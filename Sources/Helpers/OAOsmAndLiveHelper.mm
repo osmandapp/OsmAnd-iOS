@@ -10,7 +10,9 @@
 #import "OAResourcesUIHelper.h"
 #import "OAAppSettings.h"
 #import "OAIAPHelper.h"
-#include "Localization.h"
+#import "Localization.h"
+#import "OAObservable.h"
+#import "OsmAndApp.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
 #define kLiveUpdatesOnPrefix @"live_updates_on_"

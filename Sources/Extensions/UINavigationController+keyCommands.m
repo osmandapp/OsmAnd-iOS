@@ -9,6 +9,7 @@
 #import "UINavigationController+keyCommands.h"
 #import "OARootViewController.h"
 #import "OAMapHudViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapInfoController.h"
 #import "OASuperViewController.h"
 #import "OABaseBottomSheetViewController.h"

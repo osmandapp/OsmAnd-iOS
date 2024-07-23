@@ -15,6 +15,9 @@
 #import "OAMapWidgetRegistry.h"
 #import "OARootViewController.h"
 #import "OsmAndApp.h"
+#import "OAObservable.h"
+#import "OAAppData.h"
+#import "OAApplicationMode.h"
 #import "Localization.h"
 #import "OAColors.h"
 #import "OARendererRegistry.h"
@@ -110,7 +113,7 @@
 
 - (void) copyRegisteredPreferences
 {
-    for (NSString *key in [_settings getPreferences:NO].keyEnumerator)
+    for (NSString *key in [_settings getRegisteredPreferences].keyEnumerator)
     {
         OACommonPreference *setting = [_settings getPreferenceByKey:key];
         if (setting)

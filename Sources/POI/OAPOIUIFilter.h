@@ -9,7 +9,7 @@
 
 #import <Foundation/Foundation.h>
 #import "OACustomSearchPoiFilter.h"
-#import <CoreLocation/CoreLocation.h>
+#import "OAResultMatcher.h"
 
 #define INVALID_ORDER -1
 

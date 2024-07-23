@@ -15,12 +15,13 @@
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OAQuickActionsSheetView.h"
+#import "OAObservable.h"
 #import "OAColors.h"
+#import "OAAppData.h"
 #import "OAHudButton.h"
 #import "Localization.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OAAutoObserverProxy.h"
-#import "OAMap3DModeVisibilityType.h"
 #import <AudioToolbox/AudioServices.h>
 #import "OsmAnd_Maps-Swift.h"
 
@@ -456,8 +457,6 @@ static NSInteger const kQuickActionSecondaryBackgroundTag = -2;
     quickActionButton.alpha = [quickActionButtonState isEnabled] ? 1 : 0;
     quickActionButton.userInteractionEnabled = [quickActionButtonState isEnabled];
     quickActionButton.accessibilityLabel = OALocalizedString(@"configure_screen_quick_action");
-    quickActionButton.tintColorDay = UIColorFromRGB(color_primary_purple);
-    quickActionButton.tintColorNight = UIColorFromRGB(color_primary_light_blue);
     [quickActionButton updateColorsForPressedState:NO];
     [quickActionButton addTarget:self action:@selector(quickActionButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
 

@@ -19,8 +19,10 @@
 #import "OAIndexConstants.h"
 #import "OARoutePreferencesParameters.h"
 #import "OAMapWidgetRegistry.h"
-#import "OsmAnd_Maps-Swift.h"
 #import "OAPluginsHelper.h"
+#import "OAMapSource.h"
+#import "OAAppData.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OAProfileSettingsItem
 {
@@ -206,18 +208,6 @@
                     if (enabledWidgets.count > 0)
                         [OAPluginsHelper enablePluginsByMapWidgets:enabledWidgets];
                 }
-            }
-        }
-        else if ([key isEqualToString:@"terrain_layer"])
-        {
-            if ([value isEqualToString:@"true"])
-            {
-                [app.data setTerrainType:[app.data getLastTerrainType:_appMode] mode:_appMode];
-            }
-            else
-            {
-                [app.data setLastTerrainType:[app.data getTerrainType:_appMode] mode:_appMode];
-                [app.data setLastTerrainType:EOATerrainTypeDisabled mode:_appMode];
             }
         }
         else

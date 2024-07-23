@@ -20,6 +20,8 @@
 #import "OATargetInfoViewController.h"
 #import "OAParkingPositionPlugin.h"
 #import "OAPlugin.h"
+#import "OAAppSettings.h"
+#import "OAAppData.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>

@@ -10,6 +10,7 @@
 #import "OAAppSettings.h"
 #import "OARightIconTableViewCell.h"
 #import "OARoutingHelper.h"
+#import "OAApplicationMode.h"
 #import "OARoutePreferencesParameters.h"
 #import "OATableViewCustomHeaderView.h"
 #import "OATableViewCustomFooterView.h"

@@ -17,20 +17,18 @@
 #import "OAOsmAndFormatter.h"
 #import "OAColors.h"
 #import "OASvgHelper.h"
-
 #import <UIKit/UIDevice.h>
 #import "OAIndexConstants.h"
 #import <MBProgressHUD.h>
 #import "OALinks.h"
-#import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 #import <mach/mach.h>
 #import <mach/mach_host.h>
-#include <CommonCrypto/CommonDigest.h>
 #import <CocoaSecurity.h>
 #import <sys/utsname.h>
-
 #import "OsmAnd_Maps-Swift.h"
+
+#include <CommonCrypto/CommonDigest.h>
 
 static NSInteger const kBlurViewTag = -999;
 static NSInteger const kSpinnerViewTag = -998;

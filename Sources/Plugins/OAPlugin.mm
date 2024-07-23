@@ -10,8 +10,12 @@
 #import "OsmAndApp.h"
 #import "Localization.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OAMapHudViewController.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
+#import "OAObservable.h"
 #import "OAAutoObserverProxy.h"
 #import "OAMapButtonsHelper.h"
 #import "OACustomPlugin.h"
@@ -258,6 +262,13 @@ static NSMutableArray<OAPlugin *> *allPlugins;
 - (NSArray<OACommonPreference*> *)getPreferences
 {
     return _pluginPreferences;
+}
+
+- (OACommonBoolean *)registerBooleanPreference:(NSString *)prefId defValue:(BOOL)defValue
+{
+    OACommonBoolean *preference = [[OAAppSettings sharedManager] registerBooleanPreference:prefId defValue:defValue];
+    [_pluginPreferences addObject:preference];
+    return preference;
 }
 
 - (OACommonString *)registerStringPreference:(NSString *)prefId defValue:(NSString *)defValue

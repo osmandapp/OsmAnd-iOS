@@ -13,6 +13,7 @@
 #import "OAOsmNotePoint.h"
 #import "OAEntity.h"
 #import "OANode.h"
+#import "OAObservable.h"
 #import "OAWay.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OsmAndApp.h"

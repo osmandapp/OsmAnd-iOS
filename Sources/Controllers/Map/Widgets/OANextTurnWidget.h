@@ -8,14 +8,18 @@
 
 #import "OATextInfoWidget.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 #define kNextTurnInfoWidgetHeight 112
 
 @interface OANextTurnWidget : OATextInfoWidget
 
-- (instancetype _Nonnull)initWithHorisontalMini:(BOOL)horisontalMini
-                                       nextNext:(BOOL)nextNext
-                    customId:(NSString *_Nullable)customId
-                     appMode:(OAApplicationMode * _Nonnull)appMode
-                widgetParams:(NSDictionary * _Nullable)widgetParams;
+- (instancetype)initWithHorisontalMini:(BOOL)horisontalMini
+                              nextNext:(BOOL)nextNext
+                              customId:(nullable NSString *)customId
+                               appMode:(OAApplicationMode *)appMode
+                          widgetParams:(nullable NSDictionary *)widgetParams;
 
 @end
+
+NS_ASSUME_NONNULL_END

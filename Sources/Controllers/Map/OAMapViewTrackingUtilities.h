@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <CoreLocation/CoreLocation.h>
 
 @class OAMapViewController;
 
@@ -45,6 +44,6 @@
 - (CGPoint) projectRatioToVisibleMapRect:(CGPoint)ratio;
 - (void) setZoomTime:(NSTimeInterval)time;
 
-- (void)startTilting:(float)elevationAngle;
+- (void)startTilting:(float)elevationAngle timePeriod:(float)timePeriod;
 
 @end

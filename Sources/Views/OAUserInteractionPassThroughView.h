@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "OAObservable.h"
+
+@class OAObservable;
 
 @interface OAUserInteractionPassThroughView : UIView
 

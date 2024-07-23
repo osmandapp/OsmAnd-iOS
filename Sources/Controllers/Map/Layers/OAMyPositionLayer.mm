@@ -17,6 +17,9 @@
 #import "OALocationIcon.h"
 #import "OAAutoObserverProxy.h"
 #import "OAColors.h"
+#import "OAObservable.h"
+#import "OAAppSettings.h"
+#import "OAApplicationMode.h"
 #import "OAModel3dHelper+cpp.h"
 #import "OsmAnd_Maps-Swift.h"
 
@@ -28,7 +31,7 @@
 #include <OsmAndCore/SingleSkImage.h>
 
 static float kRotateAnimationTime = 1.0f;
-static int MODEL_3D_MAX_SIZE_DP = 24;
+static int MODEL_3D_MAX_SIZE_DP = 6;
 
 typedef enum {
     

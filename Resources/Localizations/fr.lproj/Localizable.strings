@@ -3471,3 +3471,6 @@
 "shared_string_update_required" = "Mise à jour nécessaire";
 "osm_login_needs_ios_16_4" = "La connexion à OpenStreetMap nécessite iOS 16.4 ou ultérieur";
 "osmand_depelopment_use_3d_icons" = "Utiliser les icônes de position 3D";
+"shared_string_colors" = "Couleurs";
+"user_palette" = "Palette de l'utilisateur";
+"height_legend_description" = "Les cartes d'altitude colorées sont utilisées pour visualiser le relief.";

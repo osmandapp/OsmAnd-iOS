@@ -176,7 +176,8 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
             || [convertedKey isEqualToString:MAPILLARY_TAG]
             || [convertedKey isEqualToString:@"subway_region"]
             || ([convertedKey isEqualToString:@"note"] && !osmEditingEnabled)
-            || [convertedKey hasPrefix:@"lang_yes"])
+            || [convertedKey hasPrefix:@"lang_yes"]
+            || [convertedKey hasPrefix:@"top_index_"])
             continue;
 
         NSString *textPrefix = @"";
@@ -199,7 +200,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         if (!pt && vl && vl.length > 0 && vl.length < 50)
             pt = [_poiHelper getAnyPoiAdditionalTypeByKey:[NSString stringWithFormat:@"%@_%@", convertedKey, vl]];
         
-        if (poiType == nil && pt == nil && [key isEqualToString:vl])
+        if (poiType == nil && pt == nil)
         {
             poiType = [_poiHelper getPoiTypeByKey:key];
         }

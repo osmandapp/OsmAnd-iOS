@@ -3480,3 +3480,6 @@
 "shared_string_update_required" = "Se debe actualizar";
 "osm_login_needs_ios_16_4" = "El inicio de sesión en OpenStreetMap, necesita una versión superior a «iOS 16.4»";
 "osmand_depelopment_use_3d_icons" = "Usar los iconos 3D de la ubicación";
+"shared_string_colors" = "Colores";
+"user_palette" = "Paleta del usuario";
+"height_legend_description" = "Los mapas de altitud coloreados, se usan para visualizar el relieve.";

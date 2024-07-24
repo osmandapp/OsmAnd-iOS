@@ -756,7 +756,9 @@
                 }
                 metadata.time = time == 0 ? (long) [[NSDate date] timeIntervalSince1970] : time;
             }
-            metadata.name = newFileName;
+
+            if (doc.creator && [doc.creator containsString:@"OsmAnd"])
+                metadata.name = newName;
 
             if ([NSFileManager.defaultManager fileExistsAtPath:oldPath])
                 [NSFileManager.defaultManager removeItemAtPath:oldPath error:nil];

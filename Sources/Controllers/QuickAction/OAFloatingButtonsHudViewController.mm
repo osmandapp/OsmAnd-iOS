@@ -129,7 +129,7 @@ static NSInteger const kQuickActionSecondaryBackgroundTag = -2;
                                                     andObserve:[OARootViewController instance].mapPanel.mapViewController.elevationAngleObservable];
     _applicationModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                          withHandler:@selector(onApplicationModeChanged)
-                                                          andObserve:[OsmAndApp instance].data.applicationModeChangedObservable];
+                                                          andObserve:[OsmAndApp instance].applicationModeChangedObservable];
     _actionsChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                         withHandler:@selector(onQuickActionButtonChanged:withKey:)
                                                          andObserve:[OAMapButtonsHelper sharedInstance].quickActionsChangedObservable];

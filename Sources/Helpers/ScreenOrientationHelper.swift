@@ -48,7 +48,7 @@ class ScreenOrientationHelper : NSObject {
 
         let app: OsmAndAppProtocol = OsmAndApp.swiftInstance()
         let applicationModeChangedSelector = #selector(onApplicationModeChanged as () -> Void)
-        applicationModeChangedObserver = OAAutoObserverProxy(self, withHandler: applicationModeChangedSelector, andObserve: app.data.applicationModeChangedObservable)
+        applicationModeChangedObserver = OAAutoObserverProxy(self, withHandler: applicationModeChangedSelector, andObserve: app.applicationModeChangedObservable)
     }
     
     deinit {

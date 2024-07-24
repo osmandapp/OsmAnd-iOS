@@ -50,7 +50,7 @@
 
     _applicationModeChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                            withHandler:@selector(onAppModeChanged)
-                                                            andObserve:[OsmAndApp instance].data.applicationModeChangedObservable];
+                                                            andObserve:OsmAndApp.instance.applicationModeChangedObservable];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(onProfileSettingSet:)

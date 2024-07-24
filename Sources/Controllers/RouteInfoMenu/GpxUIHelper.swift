@@ -664,19 +664,23 @@ import Charts
             l -= 1
         }
         
-        var calculatedDist: Array<Double> = Array(repeating: 0, count: Int(totalDistance / step) + 1)
-        var calculatedH: Array<Double> = Array(repeating: 0, count: Int(totalDistance / step) + 1)
+        var calculatedDist: [Double] = Array(repeating: 0, count: Int(totalDistance / step) + 1)
+        var calculatedH: [Double] = Array(repeating: 0, count: Int(totalDistance / step) + 1)
         var nextW: Int = 0
         for k in 0..<calculatedDist.count {
-            if (k > 0) {
+            if k > 0 {
                 calculatedDist[k] = calculatedDist[k - 1] + step
             }
-            while (nextW < lastIndex && calculatedDist[k] > values[nextW].x) {
+            while nextW < lastIndex && calculatedDist[k] > values[nextW].x {
                 nextW += 1
             }
             let pd: Double = nextW == 0 ? 0 : values[nextW - 1].x
             let ph: Double = nextW == 0 ? values[0].y : values[nextW - 1].y
-            calculatedH[k] = ph + (values[nextW].y - ph) / (values[nextW].x - pd) * (calculatedDist[k] - pd)
+            if values[nextW].x - pd < 1 {
+                calculatedH[k] = ph
+            } else {
+                calculatedH[k] = ph + (values[nextW].y - ph) / (values[nextW].x - pd) * (calculatedDist[k] - pd)
+            }
         }
         
         let slopeProximity: Double = max(100, step * 2)

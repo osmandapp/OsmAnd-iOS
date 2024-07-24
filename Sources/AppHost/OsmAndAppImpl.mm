@@ -200,6 +200,8 @@
         [defaults registerDefaults:defResetSettings];
         NSDictionary *defResetRouting = [NSDictionary dictionaryWithObject:@"NO" forKey:@"reset_routing"];
         [defaults registerDefaults:defResetRouting];
+
+        _applicationModeChangedObservable = [[OAObservable alloc] init];
     }
     return self;
 }
@@ -426,6 +428,7 @@
 
     // Unpack app data
     _data = [NSKeyedUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:kAppData]];
+    [_data postInit];
 
     settings.simulateNavigation = NO;
     settings.simulateNavigationMode = [OASimulationMode toKey:EOASimulationModePreview];
@@ -1197,6 +1200,7 @@
 }
 
 @synthesize mapModeObservable = _mapModeObservable;
+@synthesize applicationModeChangedObservable = _applicationModeChangedObservable;
 
 @synthesize gpxCollectionChangedObservable = _gpxCollectionChangedObservable;
 @synthesize gpxChangedObservable = _gpxChangedObservable;

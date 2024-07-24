@@ -119,7 +119,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRestored:) name:OAIAPProductsRestoredNotification object:nil];
     _applicationModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                          withHandler:@selector(onApplicationModeChanged)
-                                                          andObserve:_app.data.applicationModeChangedObservable];
+                                                          andObserve:_app.applicationModeChangedObservable];
 }
 
 - (void)deinitView

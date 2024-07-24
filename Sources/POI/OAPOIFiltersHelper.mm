@@ -434,7 +434,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
         
         _applicationModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                              withHandler:@selector(onApplicationModeChanged)
-                                                              andObserve:OsmAndApp.instance.data.applicationModeChangedObservable];
+                                                              andObserve:OsmAndApp.instance.applicationModeChangedObservable];
     }
     return self;
 }

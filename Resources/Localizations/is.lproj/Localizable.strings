@@ -1161,7 +1161,7 @@
 "hide_edits" = "Fela staðværar breytingar";
 "quick_action_edit_list" = "Breyta aðgerðalista";
 "time_of_day" = "Tími dagsins";
-"shared_string_slope" = "Halli";
+"shared_string_slope" = "Brekka";
 "simulate_navigation" = "Herma eftir leiðsögn";
 "select_avoid_descr" = "Veldu þá vegi sem þú vilt forðast á meðan leiðsögn stendur. Þú getur annað hvort valið veg á landakortinu eða valið gerð vegar úr listanum hér fyrir neðan.";
 "route_parameters" = "Breytur varðandi leiðarval";
@@ -3420,3 +3420,8 @@
 "weather_source_GFS_title" = "GFS";
 "wall_height" = "Hæð veggs";
 "weather_source_ecmwf_description" = "Evrópumiðstöð fyrir meðallangar veðurspár";
+"rendering_attr_padusHideBoundaries_name" = "Fela afmarkanir á opinberu landi";
+"rendering_attr_padusHideBoundaries_description" = "Fela afmarkanir á opinberu landi en skilja eftir svæði";
+"rendering_value_pale_name" = "Fölt";
+"height_legend_description" = "Lituð hæðakort eru notuð til að myndgera upphleypt yfirborð.";
+"map_settings_weather_wind_animation" = "Vindhreyfing";

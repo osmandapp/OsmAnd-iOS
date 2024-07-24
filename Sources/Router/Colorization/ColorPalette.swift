@@ -97,6 +97,8 @@ final class ColorPalette: NSObject {
     override var description: String {
         writeColorPalette()
     }
+
+    var lastModified: Date?
     
     private override init() {}
     
@@ -139,6 +141,10 @@ final class ColorPalette: NSObject {
 
     static func parseColorPalette(from filePath: String, shouldSort: Bool) throws -> ColorPalette {
         let palette = ColorPalette()
+        do {
+            let attributes = try FileManager.default.attributesOfItem(atPath: filePath)
+            palette.lastModified = attributes[.modificationDate] as? Date
+        }
         let content = try String(contentsOfFile: filePath, encoding: .utf8)
         let lines = content.components(separatedBy: .newlines)
 

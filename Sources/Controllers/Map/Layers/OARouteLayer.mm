@@ -140,7 +140,7 @@
                                                  withHandler:@selector(onMapZoomChanged:withKey:andValue:)
                                                   andObserve:self.mapViewController.zoomObservable];
     _updateGpxTracksOnMapObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                              withHandler:@selector(onUpdateGpxTracksOnMapObservable)
+                                                              withHandler:@selector(refreshRoute)
                                                                andObserve:[OsmAndApp instance].updateGpxTracksOnMapObservable];
 }
 
@@ -761,17 +761,12 @@
     return p;
 }
 
-- (void)onUpdateGpxTracksOnMapObservable
-{
-    [self refreshRouteWithSync:YES refreshColors:YES];
-}
-
 - (void) refreshRoute
 {
-    [self refreshRouteWithSync:YES refreshColors:NO];
+    [self refreshRouteWithSync:YES];
 }
 
-- (void) refreshRouteWithSync:(BOOL)sync refreshColors:(BOOL)refreshColors
+- (void) refreshRouteWithSync:(BOOL)sync
 {
     if (!_routeAttributes)
         _routeAttributes = [self.mapViewController getLineRenderingAttributes:@"route"];
@@ -827,38 +822,51 @@
         _prevRouteInfoAttribute = _routeInfoAttribute;
         [self updateRouteColoringType];
         [self updateRouteColors:isNight];
-
+        
         int currentRoute = route.currentRoute;
         if (currentRoute < 0)
             currentRoute = 0;
-
+        
         OAColoringType *routeColoringType = _routeColoringType;
         if (![self isColoringAvailable:route routeColoringType:routeColoringType attributeName:_routeInfoAttribute])
             routeColoringType = OAColoringType.DEFAULT;
-
+        
         NSArray<CLLocation *> *locations = [route getImmutableAllLocations];
         BOOL routeUpdated = NO;
         if ([routeColoringType isGradient]
-                && (_route != route
-                    || _prevRouteColoringType != routeColoringType
-                    || _colorizationScheme != COLORIZATION_GRADIENT
-                    || refreshColors))
+            && (_route != route
+                || _prevRouteColoringType != routeColoringType
+                || _colorizationScheme != COLORIZATION_GRADIENT
+                || [[ColorPaletteHelper shared] isColorPaletteUpdated:[ColorPaletteHelper getRoutePaletteFileName:(ColorizationType) [routeColoringType toColorizationType]
+                                                                                              gradientPaletteName:_routeGradientPalette]
+                                                                error:nil]))
         {
             OAGPXDocument *gpx = [OAGPXUIHelper makeGpxFromRoute:route];
-            ColorPalette *colorPalette = [[ColorPaletteHelper shared] getGradientColorPaletteSync:(ColorizationType) [routeColoringType toColorizationType] gradientPaletteName:_routeGradientPalette refresh:refreshColors];
-            OARouteColorize *colorizationHelper =
+            NSError *error = nil;
+            ColorPalette *colorPalette = [[ColorPaletteHelper shared] getGradientColorPaletteSync:(ColorizationType) [routeColoringType toColorizationType]
+                                                                              gradientPaletteName:_routeGradientPalette
+                                                                                            error:&error];
+            if (error)
+            {
+                NSLog(@"Error reading color palette file: %@", error.description);
+                return;
+            }
+            else
+            {
+                OARouteColorize *colorizationHelper =
                     [[OARouteColorize alloc] initWithGpxFile:gpx
-                                                              analysis:[gpx getAnalysis:0]
-                                                                  type:[routeColoringType toColorizationType]
-                                                               palette:colorPalette
-                                                       maxProfileSpeed:0
-                    ];
-            _colorizationScheme = COLORIZATION_GRADIENT;
-            _colors.clear();
-            if (colorizationHelper)
-                _colors.append([colorizationHelper getResultQList]);
-            _route = route;
-            routeUpdated = YES;
+                                                    analysis:[gpx getAnalysis:0]
+                                                        type:[routeColoringType toColorizationType]
+                                                     palette:colorPalette
+                                             maxProfileSpeed:0
+                ];
+                _colorizationScheme = COLORIZATION_GRADIENT;
+                _colors.clear();
+                if (colorizationHelper)
+                    _colors.append([colorizationHelper getResultQList]);
+                _route = route;
+                routeUpdated = YES;
+            }
         }
         else if ([routeColoringType isRouteInfoAttribute]
                 && (_route != route || ![_prevRouteInfoAttribute isEqualToString:_routeInfoAttribute] || _colorizationScheme != COLORIZATION_SOLID))
@@ -1000,7 +1008,7 @@
 - (void) onMapFrameAnimatorsUpdated
 {
     if (_routingHelper && ![_routingHelper isPublicTransportMode])
-        [self refreshRouteWithSync:NO refreshColors:NO];
+        [self refreshRouteWithSync:NO];
 }
 
 @end

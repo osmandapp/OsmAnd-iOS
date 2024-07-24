@@ -597,7 +597,15 @@
     if (gradientScaleType)
     {
         ColorizationType colorizationType = (ColorizationType) [gradientScaleType toColorizationType];
-        previewPalette = [[ColorPaletteHelper shared] requireGradientColorPaletteSync:colorizationType gradientPaletteName:_routeGradientPalette];
+        NSError *error = nil;
+        previewPalette = [[ColorPaletteHelper shared] requireGradientColorPaletteSync:colorizationType
+                                                                  gradientPaletteName:_routeGradientPalette
+                                                                                error:&error];
+        if (error)
+        {
+            NSLog(@"Error reading color palette file: %@", error.description);
+            return;
+        }
     }
     NSMutableArray<NSNumber *> *palette = [NSMutableArray array];
     for (ColorValue *colorValue in [previewPalette colorValues])

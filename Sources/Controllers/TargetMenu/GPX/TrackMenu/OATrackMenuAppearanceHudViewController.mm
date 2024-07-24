@@ -126,6 +126,7 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
 
     NSMutableArray<PaletteColor *> *_sortedPaletteColorItems;
     PaletteColor *_selectedPaletteColorItem;
+    NSIndexPath *_paletteNameIndexPath;
 
     OAGPXTrackWidth *_selectedWidth;
     NSArray<NSString *> *_customWidthValues;
@@ -471,8 +472,6 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
 {
     if ([self isSelectedTypeAttribute])
         return [self generateDescriptionCellData:@"color_attribute_description" description:OALocalizedString(@"white_color_undefined")];
-    else if ([self isSelectedTypeGradient])
-        return [self generateDescriptionCellData:@"color_elevation_description" description:OALocalizedString(@"route_line_color_elevation_description")];
     return nil;
 }
 
@@ -483,6 +482,16 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
         kCellType: [OASimpleTableViewCell getCellIdentifier],
         kCellTitle: OALocalizedString(@"shared_string_all_colors"),
         kCellTintColor: [UIColor colorNamed:ACColorNameIconColorActive]
+    }];
+}
+
+- (OAGPXTableCellData *)generatePaletteNameCellData
+{
+    return [OAGPXTableCellData withData:@{
+        kTableKey: @"paletteName",
+        kCellType: [OASimpleTableViewCell getCellIdentifier],
+        kCellTitle: [_selectedPaletteColorItem toHumanString],
+        kCellTintColor: UIColorFromRGB(color_extra_text_gray)
     }];
 }
 
@@ -849,11 +858,12 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
         if ([self isSelectedTypeGradient])
         {
             [colorsCells addObject:[self generateDataForColorElevationGradientCellData]];
-            if ([self isSelectedTypeSpeed] || [self isSelectedTypeAltitude])
-                [colorsCells addObject:[self generateDescriptionCellData:@"color_extra_description" description:OALocalizedString(@"grey_color_undefined")]];
+            [colorsCells addObject:[self generatePaletteNameCellData]];
+            _paletteNameIndexPath = [NSIndexPath indexPathForRow:colorsCells.count - 1 inSection:kColorsSection];
         }
         [colorsCells addObject:[self generateGridCellData]];
-        [colorsCells addObject:[self generateAllColorsCellData]];
+        if ([self isSelectedTypeSolid])
+            [colorsCells addObject:[self generateAllColorsCellData]];
     }
 }
 
@@ -1095,8 +1105,6 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
         return [OAOsmAndFormatter getFormattedSpeed:0.0];
     else if ([self isSelectedTypeAltitude])
         return [OAOsmAndFormatter getFormattedAlt:self.analysis.minElevation];
-    else if ([self isSelectedTypeSlope])
-        return OALocalizedString(@"grey_color_undefined");
     return @"";
 }
 
@@ -1422,13 +1430,16 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
         }
         if (cell)
         {
+            NSString *desc = cellData.desc;
+            [cell showDesc:desc && desc.length > 0];
+
             NSString *extraDesc = cellData.values[@"extra_desc"];
             [cell showExtraDesc:extraDesc && extraDesc.length > 0];
 
             UIImage *image = [UIImage imageNamed:cellData.rightIconName];
             cell.iconView.image = [cell isDirectionRTL] ? image.imageFlippedForRightToLeftLayoutDirection : image;
 
-            cell.descView.text = cellData.desc;
+            cell.descView.text = desc;
             cell.descView.font = [UIFont scaledSystemFontOfSize:[cellData.values[@"desc_font_size"] intValue]];
             cell.descView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
 
@@ -1450,6 +1461,7 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACollectionSingleLineTableViewCell getCellIdentifier]
                                                          owner:self options:nil];
             cell = nib[0];
+            cell.separatorInset = UIEdgeInsetsZero;
             if ([self isSelectedTypeSolid])
             {
                 OAColorCollectionHandler *colorHandler = [[OAColorCollectionHandler alloc] initWithData:@[_sortedColorItems] collectionView:cell.collectionView];
@@ -1459,8 +1471,6 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
                     selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:[_appearanceCollection getDefaultLineColorItem]] inSection:0];
                 [colorHandler setSelectedIndexPath:selectedIndexPath];
                 [cell setCollectionHandler:colorHandler];
-                cell.separatorInset = UIEdgeInsetsZero;
-                cell.rightActionButton.accessibilityLabel = OALocalizedString(@"shared_string_add_color");
                 cell.delegate = self;
             }
             else if ([self isSelectedTypeGradient])
@@ -1472,17 +1482,19 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
                     selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObject:[_gradientColorsCollection getDefaultGradientPalette]] inSection:0];
                 [paletteHandler setSelectedIndexPath:selectedIndexPath];
                 [cell setCollectionHandler:paletteHandler];
-                cell.separatorInset = UIEdgeInsetsZero;
-                cell.rightActionButton.accessibilityLabel = OALocalizedString(@"shared_string_add_color");
-//                cell.delegate = self;
             }
         }
         if (cell)
         {
-            [cell.rightActionButton setImage:[UIImage templateImageNamed:@"ic_custom_add"] forState:UIControlStateNormal];
-            cell.rightActionButton.tag = indexPath.section << 10 | indexPath.row;
+            BOOL isRightActionButtonVisible = [self isSelectedTypeSolid];
+            [cell rightActionButtonVisibility:isRightActionButtonVisible];
+            [cell.rightActionButton setImage:isRightActionButtonVisible ? [UIImage templateImageNamed:@"ic_custom_add"] : nil
+                                    forState:UIControlStateNormal];
+            cell.rightActionButton.tag = isRightActionButtonVisible ? (indexPath.section << 10 | indexPath.row) : 0;
+            cell.rightActionButton.accessibilityLabel = isRightActionButtonVisible ? OALocalizedString(@"shared_string_add_color") : nil;
             [cell.rightActionButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
-            [cell.rightActionButton addTarget:self action:@selector(onCellButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+            if (isRightActionButtonVisible)
+                [cell.rightActionButton addTarget:self action:@selector(onCellButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
             [cell.collectionView reloadData];
             [cell layoutIfNeeded];
         }
@@ -1632,8 +1644,11 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
         }
         if (cell)
         {
+            BOOL isPaletteName = [cellData.key isEqualToString:@"paletteName"];
+            cell.separatorInset = UIEdgeInsetsMake(0., isPaletteName ? 0. : self.tableView.frame.size.width, 0., 0.);
             cell.titleLabel.text = cellData.title;
             cell.titleLabel.textColor = cellData.tintColor ?: [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.titleLabel.font = [UIFont preferredFontForTextStyle:isPaletteName ? UIFontTextStyleFootnote : UIFontTextStyleBody];
         }
         return cell;
     }
@@ -1986,6 +2001,12 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
                 @"has_top_labels": @YES,
                 @"has_bottom_labels": @YES
             }
+        }];
+    }
+    else if ([tableData.key isEqualToString:@"paletteName"])
+    {
+        [tableData setData:@{
+            kCellTitle: [_selectedPaletteColorItem toHumanString]
         }];
     }
 }
@@ -2421,6 +2442,11 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
                     track.gradientPaletteName = paletteColor.paletteName;
                 }
             }
+            if (_paletteNameIndexPath)
+            {
+                [self updateData:_tableData[_paletteNameIndexPath.section].subjects[_paletteNameIndexPath.row]];
+                [self.tableView reloadRowsAtIndexPaths:@[_paletteNameIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+            }
         }
     }
     
@@ -2430,11 +2456,11 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
             [self.doc setColor:self.gpx.color];
         else if ([self isSelectedTypeGradient])
             [self.doc setGradientColorPalette:self.gpx.gradientPaletteName];
-        [[_app updateRecTrackOnMapObservable] notifyEvent];
+        [_app.updateRecTrackOnMapObservable notifyEvent];
     }
     else
     {
-        [[_app updateGpxTracksOnMapObservable] notifyEvent];
+        [_app.updateGpxTracksOnMapObservable notifyEvent];
     }
 }
 

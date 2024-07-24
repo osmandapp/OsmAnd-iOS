@@ -22,6 +22,8 @@
 
 - (NSString *)getCellIdentifier;
 - (CGSize)getItemSize;
+- (CGFloat)getSelectionRadius;
+- (CGFloat)getImageRadius;
 - (UICollectionView *)getCollectionView;
 - (UICollectionViewScrollDirection)getScrollDirection;
 - (void)setScrollDirection:(UICollectionViewScrollDirection)scrollDirection;

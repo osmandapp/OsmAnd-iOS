@@ -8,10 +8,6 @@
 
 import Foundation
 
-protocol PaletteColorsCollectionCellDelegate: OACollectionCellDelegate {
-    
-}
-
 final class PaletteCollectionHandler: OABaseCollectionHandler {
 
     private var selectedIndexPath: IndexPath?
@@ -19,6 +15,14 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
 
     override func getCellIdentifier() -> String {
         OAColorsCollectionViewCell.getIdentifier()
+    }
+
+    override func getSelectionRadius() -> CGFloat {
+        9
+    }
+
+    override func getImageRadius() -> CGFloat {
+        3
     }
 
     override func getSelectedIndexPath() -> IndexPath? {
@@ -56,18 +60,21 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
     }
 
     override func getCollectionViewCell(_ indexPath: IndexPath) -> UICollectionViewCell {
-        let colorValue = data[indexPath.section][indexPath.row].color
         let cell: OAColorsCollectionViewCell = getCollectionView().dequeueReusableCell(withReuseIdentifier: OAColorsCollectionViewCell.reuseIdentifier, for: indexPath) as! OAColorsCollectionViewCell
-        
-        cell.colorView.layer.borderWidth = 0
-        let color = colorFromARGB(colorValue)
-        cell.colorView.backgroundColor = color
-        cell.chessboardView.image = UIImage.templateImageNamed("bg_color_chessboard_pattern")
-        cell.chessboardView.tintColor = colorFromRGB(colorValue)
+        if let colorView = cell.colorView {
+            colorView.removeFromSuperview()
+        }
+
+        cell.backView.layer.cornerRadius = getSelectionRadius()
+        cell.chessboardView.tintColor = nil
+        cell.chessboardView.layer.cornerRadius = getImageRadius()
+        cell.chessboardView.image = createRoundedSquareImage(size: cell.chessboardView.frame.size,
+                                                             cornerRadius: cell.chessboardView.layer.cornerRadius)
+        cell.chessboardView.gradated(gradientPoints: createGradientPoints(data[indexPath.section][indexPath.row]))
         
         if indexPath == selectedIndexPath {
             cell.backView.layer.borderWidth = 2
-            cell.backView.layer.borderColor = UIColor.iconColorActive.cgColor
+            cell.backView.layer.borderColor = UIColor.buttonBgColorPrimary.cgColor
         } else {
             cell.backView.layer.borderWidth = 0
             cell.backView.layer.borderColor = UIColor.clear.cgColor
@@ -77,5 +84,30 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
 
     override func sectionsCount() -> Int {
         data.count
+    }
+
+    private func createGradientPoints(_ palette: PaletteColor) -> [GradientPoint] {
+        var gradientPoints = [GradientPoint]()
+        if let gradientPalette = palette as? PaletteGradientColor {
+            let colorValues = gradientPalette.colorPalette.colorValues
+            let step = 1.0 / CGFloat(colorValues.count - 1)
+            for i in 0...colorValues.count - 1 {
+                let colorValue = colorValues[i]
+                gradientPoints.append(GradientPoint(location: CGFloat(i) * step,
+                                                    color: UIColor(argb: colorValue.clr)))
+            }
+        }
+        return gradientPoints
+    }
+
+    private func createRoundedSquareImage(size: CGSize, cornerRadius: CGFloat) -> UIImage? {
+        let renderer = UIGraphicsImageRenderer(size: size)
+        let image = renderer.image { _ in
+            let rect = CGRect(origin: .zero, size: size)
+            let path = UIBezierPath(roundedRect: rect, cornerRadius: cornerRadius)
+            UIColor.clear.setFill()
+            path.fill()
+        }
+        return image
     }
 }

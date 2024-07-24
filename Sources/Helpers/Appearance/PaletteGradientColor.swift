@@ -34,4 +34,8 @@ final class PaletteGradientColor: PaletteColor {
     override func setIndex(_ index: Int) {
         self.index = index
     }
+
+    override func toHumanString() -> String {
+        OAUtilities.capitalizeFirstLetter(paletteName)
+    }
 }

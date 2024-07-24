@@ -302,17 +302,16 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
             OAGPXDocument *doc = cachedTrack[@"doc"];
             if (!gpx || !doc)
                 continue;
-            
+
             OAColoringType *type = gpx.coloringType.length > 0
-            ? [OAColoringType getNonNullTrackColoringTypeByName:gpx.coloringType]
-            : OAColoringType.TRACK_SOLID;
-            
+                ? [OAColoringType getNonNullTrackColoringTypeByName:gpx.coloringType]
+                : OAColoringType.TRACK_SOLID;
+
             BOOL isAvailable = [type isAvailableInSubscription];
             if (!isAvailable)
                 type = OAColoringType.DEFAULT;
-            
-            OAGPXTrackAnalysis *analysis;
 
+            OAGPXTrackAnalysis *analysis;
             if ([type isGradient]
                 && (![cachedTrack[@"prev_coloring_type"] isEqualToString:gpx.coloringType]
                     || ![cachedTrack[@"prev_color_palette"] isEqualToString:gpx.gradientPaletteName]

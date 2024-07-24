@@ -13,7 +13,7 @@ struct GradientPoint {
 }
 
 extension UIImageView {
-    func gradated(gradientPoints: [GradientPoint]) {
+    func gradated(_ gradientPoints: [GradientPoint]) {
         if let gradientLayer = layer.sublayers?.first as? CAGradientLayer {
             gradientLayer.removeFromSuperlayer()
         }

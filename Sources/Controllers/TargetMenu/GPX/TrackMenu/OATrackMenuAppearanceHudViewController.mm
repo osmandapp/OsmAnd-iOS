@@ -387,7 +387,7 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
 {
     [super viewWillAppear:animated];
 
-    if ([_selectedItem.coloringType isTrackSolid]/* || [_selectedItem.coloringType isGradient]*/)
+    if ([self isSelectedTypeSolid])
     {
         if (_tableData.count > kColorsSection)
         {

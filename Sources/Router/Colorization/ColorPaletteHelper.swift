@@ -12,6 +12,7 @@ import Foundation
 final class ColorPaletteHelper: NSObject {
 
     static let shared = ColorPaletteHelper()
+    static let routePrefix = "route_"
     static let gradientIdSplitter = "_"
 
     private var app: OsmAndAppProtocol
@@ -22,7 +23,7 @@ final class ColorPaletteHelper: NSObject {
     }
 
     static func getRoutePaletteFileName(_ colorizationType: ColorizationType, gradientPaletteName: String) -> String {
-        "route_\(colorizationType.name)_\(gradientPaletteName)\(TXT_EXT)"
+        "\(routePrefix)\(colorizationType.name)\(gradientIdSplitter)\(gradientPaletteName)\(TXT_EXT)"
     }
 
     func getPalletsForType(_ gradientType: Any) -> [String: [Any]] {
@@ -86,7 +87,7 @@ final class ColorPaletteHelper: NSObject {
 
     private func getColorizationTypePallets(_ type: ColorizationType) -> [String: [Any]] {
         var colorPalettes: [String: [Any]] = [:]
-        let colorTypePrefix = "route_\(type.name)_"
+        let colorTypePrefix = "\(Self.routePrefix)\(type.name)\(Self.gradientIdSplitter)"
         do {
             let colorFiles = try FileManager.default.contentsOfDirectory(atPath: getColorPaletteDir())
             for fileName in colorFiles where fileName.hasPrefix(colorTypePrefix) && fileName.hasSuffix(TXT_EXT) {

@@ -14,8 +14,8 @@
 {
     [super awakeFromNib];
 
-    self.backView.layer.cornerRadius = self.backView.frame.size.height/2;
-    self.chessboardView.layer.cornerRadius = self.chessboardView.frame.size.height/2;
+    self.selectionView.layer.cornerRadius = self.selectionView.frame.size.height/2;
+    self.backgroundImageView.layer.cornerRadius = self.backgroundImageView.frame.size.height/2;
     self.colorView.layer.cornerRadius = self.colorView.frame.size.height/2;
 }
 

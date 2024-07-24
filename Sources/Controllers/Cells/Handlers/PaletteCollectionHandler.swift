@@ -12,6 +12,7 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
 
     private var selectedIndexPath: IndexPath?
     private var data = [[PaletteColor]]()
+    private var roundedSquareImage: UIImage?
 
     override func getCellIdentifier() -> String {
         OAColorsCollectionViewCell.getIdentifier()
@@ -65,19 +66,27 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
             colorView.removeFromSuperview()
         }
 
-        cell.backView.layer.cornerRadius = getSelectionRadius()
-        cell.chessboardView.tintColor = nil
-        cell.chessboardView.layer.cornerRadius = getImageRadius()
-        cell.chessboardView.image = createRoundedSquareImage(size: cell.chessboardView.frame.size,
-                                                             cornerRadius: cell.chessboardView.layer.cornerRadius)
-        cell.chessboardView.gradated(gradientPoints: createGradientPoints(data[indexPath.section][indexPath.row]))
+        cell.selectionView.layer.cornerRadius = getSelectionRadius()
+        cell.backgroundImageView.tintColor = nil
+        cell.backgroundImageView.layer.cornerRadius = getImageRadius()
+
+        if roundedSquareImage == nil {
+            roundedSquareImage = createRoundedSquareImage(size: cell.backgroundImageView.frame.size,
+                                                          cornerRadius: cell.backgroundImageView.layer.cornerRadius)
+        }
+        cell.backgroundImageView.image = roundedSquareImage
+        let paletteColor = data[indexPath.section][indexPath.row]
+        if cell.backgroundImageView.tag != Int(paletteColor.id) {
+            cell.backgroundImageView.gradated(createGradientPoints(paletteColor))
+            cell.backgroundImageView.tag = Int(paletteColor.id)
+        }
         
         if indexPath == selectedIndexPath {
-            cell.backView.layer.borderWidth = 2
-            cell.backView.layer.borderColor = UIColor.buttonBgColorPrimary.cgColor
+            cell.selectionView.layer.borderWidth = 2
+            cell.selectionView.layer.borderColor = UIColor.buttonBgColorPrimary.cgColor
         } else {
-            cell.backView.layer.borderWidth = 0
-            cell.backView.layer.borderColor = UIColor.clear.cgColor
+            cell.selectionView.layer.borderWidth = 0
+            cell.selectionView.layer.borderColor = UIColor.clear.cgColor
         }
         return cell
     }

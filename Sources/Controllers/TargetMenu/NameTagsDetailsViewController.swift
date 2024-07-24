@@ -68,13 +68,35 @@ final class NameTagsDetailsViewController: OABaseNavbarViewController {
     }
     
     private func extractDescription(from title: String) -> String {
-        guard let start = title.firstIndex(of: "("),
-              let end = title.firstIndex(of: ")"),
-              start < end else {
+        guard let (start, end) = findEnclosingBrackets(in: title) else {
             return ""
         }
         
-        return String(title[title.index(after: start)..<end]).capitalized
+        return String(title[start..<end]).capitalized(with: Locale.current)
+    }
+    
+    private func findEnclosingBrackets(in text: String) -> (start: String.Index, end: String.Index)? {
+        var depth = 0
+        var startIndex: String.Index?
+        var endIndex: String.Index?
+        for index in text.indices {
+            switch text[index] {
+            case "(":
+                if depth == 0 { startIndex = text.index(after: index) }
+                depth += 1
+            case ")":
+                depth -= 1
+                if depth == 0 { endIndex = index; break }
+            default:
+                continue
+            }
+        }
+        
+        if let start = startIndex, let end = endIndex, start <= end {
+            return (start, end)
+        }
+        
+        return nil
     }
     
     private func configureRow(_ row: OATableRowData, with tag: (key: String, value: String, descr: String)) {

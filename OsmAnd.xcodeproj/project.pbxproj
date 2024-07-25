@@ -544,6 +544,7 @@
 		4603FD222AD4B97600525A93 /* OABaseNavbarSubviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4603FD212AD4B97600525A93 /* OABaseNavbarSubviewViewController.m */; };
 		460679FB27708A980076740B /* OARouteLineAppearanceHudViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 460679FA27708A980076740B /* OARouteLineAppearanceHudViewController.xib */; };
 		460767122A49F86400AF63F2 /* WikiAlgorithms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460767112A49F86400AF63F2 /* WikiAlgorithms.swift */; };
+		4609FAA22C5158F100B57F06 /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4609FAA12C5158F100B57F06 /* UIImageView+Extension.swift */; };
 		460C1E702BFC9B490090D67B /* QuickActionIds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460C1E6F2BFC9B490090D67B /* QuickActionIds.swift */; };
 		460E9AC12B71111000411854 /* CloudTrashItemMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460E9AC02B71111000411854 /* CloudTrashItemMenuViewController.swift */; };
 		4611DF3A28569C5000885FD1 /* OASubscriptionBannerCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4611DF3928569C5000885FD1 /* OASubscriptionBannerCardView.xib */; };
@@ -662,9 +663,15 @@
 		464C9B4428E49793006F57B7 /* ic_custom_globe_upload@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 464C9B4028E49792006F57B7 /* ic_custom_globe_upload@3x.png */; };
 		464C9B4528E49793006F57B7 /* ic_custom_device_download@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 464C9B4128E49792006F57B7 /* ic_custom_device_download@2x.png */; };
 		464CE4272B56C8E7001F4DAE /* OASimpleWidget.m in Sources */ = {isa = PBXBuildFile; fileRef = 464CE4262B56C8E7001F4DAE /* OASimpleWidget.m */; };
+		464EA9BD2C4948A30034D8C9 /* PaletteGradientColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464EA9BC2C4948A30034D8C9 /* PaletteGradientColor.swift */; };
 		464FF36B2B309488001D855E /* SensorAttributesUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FF36A2B309488001D855E /* SensorAttributesUtils.swift */; };
 		46548DAA2BF7794F00B0D3C0 /* DefaultMapButtonsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46548DA92BF7794F00B0D3C0 /* DefaultMapButtonsViewController.swift */; };
 		4655EB3328E30AD200FA2E25 /* OAStatusBackupConflictDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4655EB3228E30AD200FA2E25 /* OAStatusBackupConflictDetailsViewController.m */; };
+		4656BD2E2C482D0500B69928 /* PaletteCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4656BD2D2C482D0500B69928 /* PaletteCollectionHandler.swift */; };
+		4656BD302C4834EA00B69928 /* PaletteColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4656BD2F2C4834EA00B69928 /* PaletteColor.swift */; };
+		4656BD322C48468200B69928 /* ColorsCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4656BD312C48468200B69928 /* ColorsCollection.swift */; };
+		4656BD342C484FA000B69928 /* GradientColorsCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4656BD332C484FA000B69928 /* GradientColorsCollection.swift */; };
+		4656BD362C4855D200B69928 /* ColorizationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4656BD352C4855D200B69928 /* ColorizationType.swift */; };
 		4657490E2B6803710006046B /* TrashItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4657490D2B6803710006046B /* TrashItem.swift */; };
 		465749102B68129B0006046B /* BackupUiUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4657490F2B68129B0006046B /* BackupUiUtils.swift */; };
 		465749122B681E620006046B /* TrashGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 465749112B681E620006046B /* TrashGroup.swift */; };
@@ -4020,6 +4027,7 @@
 		4603FD212AD4B97600525A93 /* OABaseNavbarSubviewViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OABaseNavbarSubviewViewController.m; sourceTree = "<group>"; };
 		460679FA27708A980076740B /* OARouteLineAppearanceHudViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OARouteLineAppearanceHudViewController.xib; sourceTree = "<group>"; };
 		460767112A49F86400AF63F2 /* WikiAlgorithms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikiAlgorithms.swift; sourceTree = "<group>"; };
+		4609FAA12C5158F100B57F06 /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
 		460C1E6F2BFC9B490090D67B /* QuickActionIds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickActionIds.swift; sourceTree = "<group>"; };
 		460E9AC02B71111000411854 /* CloudTrashItemMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudTrashItemMenuViewController.swift; sourceTree = "<group>"; };
 		4611DF3928569C5000885FD1 /* OASubscriptionBannerCardView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OASubscriptionBannerCardView.xib; sourceTree = "<group>"; };
@@ -4150,10 +4158,16 @@
 		464C9B4128E49792006F57B7 /* ic_custom_device_download@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_device_download@2x.png"; path = "Resources/Icons/ic_custom_device_download@2x.png"; sourceTree = "<group>"; };
 		464CE4252B56C8D9001F4DAE /* OASimpleWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASimpleWidget.h; sourceTree = "<group>"; };
 		464CE4262B56C8E7001F4DAE /* OASimpleWidget.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OASimpleWidget.m; sourceTree = "<group>"; };
+		464EA9BC2C4948A30034D8C9 /* PaletteGradientColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteGradientColor.swift; sourceTree = "<group>"; };
 		464FF36A2B309488001D855E /* SensorAttributesUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorAttributesUtils.swift; sourceTree = "<group>"; };
 		46548DA92BF7794F00B0D3C0 /* DefaultMapButtonsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultMapButtonsViewController.swift; sourceTree = "<group>"; };
 		4655EB3128E30A9700FA2E25 /* OAStatusBackupConflictDetailsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAStatusBackupConflictDetailsViewController.h; sourceTree = "<group>"; };
 		4655EB3228E30AD200FA2E25 /* OAStatusBackupConflictDetailsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAStatusBackupConflictDetailsViewController.m; sourceTree = "<group>"; };
+		4656BD2D2C482D0500B69928 /* PaletteCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteCollectionHandler.swift; sourceTree = "<group>"; };
+		4656BD2F2C4834EA00B69928 /* PaletteColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteColor.swift; sourceTree = "<group>"; };
+		4656BD312C48468200B69928 /* ColorsCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsCollection.swift; sourceTree = "<group>"; };
+		4656BD332C484FA000B69928 /* GradientColorsCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientColorsCollection.swift; sourceTree = "<group>"; };
+		4656BD352C4855D200B69928 /* ColorizationType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorizationType.swift; sourceTree = "<group>"; };
 		4657490D2B6803710006046B /* TrashItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashItem.swift; sourceTree = "<group>"; };
 		4657490F2B68129B0006046B /* BackupUiUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupUiUtils.swift; sourceTree = "<group>"; };
 		465749112B681E620006046B /* TrashGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashGroup.swift; sourceTree = "<group>"; };
@@ -5733,7 +5747,6 @@
 		DA54AA8124EFEFBE001E6560 /* ic_custom_elevation@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_elevation@3x.png"; path = "Resources/Icons/ic_custom_elevation@3x.png"; sourceTree = "<group>"; };
 		DA54AA8224EFEFBE001E6560 /* ic_custom_elevation@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_elevation@2x.png"; path = "Resources/Icons/ic_custom_elevation@2x.png"; sourceTree = "<group>"; };
 		DA578C4B266263D2007A086E /* libqtpcre2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libqtpcre2.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang/lib/libqtpcre2.a"; sourceTree = "<group>"; };
-		DA58337426FF436800BB42FF /* OAColorizationType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAColorizationType.h; sourceTree = "<group>"; };
 		DA591EA728D9EAF20068CAC7 /* OATableDataModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATableDataModel.h; sourceTree = "<group>"; };
 		DA591EA828D9EAF20068CAC7 /* OATableDataModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OATableDataModel.m; sourceTree = "<group>"; };
 		DA591EAA28D9EB1B0068CAC7 /* OATableSectionData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATableSectionData.h; sourceTree = "<group>"; };
@@ -9654,10 +9667,11 @@
 		468CE3ED29F82D8200F3C3E5 /* Handlers */ = {
 			isa = PBXGroup;
 			children = (
-				461A3F0829F6E560008EE079 /* OAColorCollectionHandler.h */,
-				461A3F0929F6E68F008EE079 /* OAColorCollectionHandler.m */,
 				461A3F0B29F6E826008EE079 /* OABaseCollectionHandler.h */,
 				461A3F0C29F6E859008EE079 /* OABaseCollectionHandler.m */,
+				461A3F0829F6E560008EE079 /* OAColorCollectionHandler.h */,
+				461A3F0929F6E68F008EE079 /* OAColorCollectionHandler.m */,
+				4656BD2D2C482D0500B69928 /* PaletteCollectionHandler.swift */,
 			);
 			path = Handlers;
 			sourceTree = "<group>";
@@ -9715,8 +9729,12 @@
 			isa = PBXGroup;
 			children = (
 				4635DDE72A02A7DE00D36203 /* ColorItem.swift */,
+				4656BD312C48468200B69928 /* ColorsCollection.swift */,
+				4656BD332C484FA000B69928 /* GradientColorsCollection.swift */,
 				DA5A80DE26C563A600F274C7 /* OAGPXAppearanceCollection.h */,
 				DA5A80E426C563A600F274C7 /* OAGPXAppearanceCollection.mm */,
+				4656BD2F2C4834EA00B69928 /* PaletteColor.swift */,
+				464EA9BC2C4948A30034D8C9 /* PaletteGradientColor.swift */,
 			);
 			path = Appearance;
 			sourceTree = "<group>";
@@ -13599,11 +13617,11 @@
 		DA9A2C3426FF0F0E00BEC681 /* Colorization */ = {
 			isa = PBXGroup;
 			children = (
+				4656BD352C4855D200B69928 /* ColorizationType.swift */,
 				463EFDD92C2C92A300549EF7 /* ColorPalette.swift */,
 				46964F752C345448007F3938 /* ColorPaletteHelper.swift */,
 				DA9A2C3526FF0F4D00BEC681 /* OAColoringType.h */,
 				DA9A2C3626FF0F4D00BEC681 /* OAColoringType.mm */,
-				DA58337426FF436800BB42FF /* OAColorizationType.h */,
 				DA9A2C2E26FDB72800BEC681 /* OARouteColorize.h */,
 				DA9A2C2F26FDB72800BEC681 /* OARouteColorize.mm */,
 				464105612C3D50AC001A46AD /* OARouteColorize+cpp.h */,
@@ -13675,6 +13693,7 @@
 				FAF7920E2A780F2500CE5F79 /* UIViewController+Extension.swift */,
 				FA86F4142AE7C56E00DC3B2B /* UserDefaults+Extension.swift */,
 				FA069C6A2B9F65750007E4DE /* UILabel+Extension.swift */,
+				4609FAA12C5158F100B57F06 /* UIImageView+Extension.swift */,
 			);
 			path = SwiftExtensions;
 			sourceTree = "<group>";
@@ -16604,6 +16623,7 @@
 				DA5A831226C563A800F274C7 /* OAFolderCardsCell.m in Sources */,
 				DA4ABF1C2876DA6800B996EF /* OAMapSourcesSettingsItem.mm in Sources */,
 				DA5A84CE26C563A900F274C7 /* OAQuickActionSelectionBottomSheetViewController.mm in Sources */,
+				4656BD362C4855D200B69928 /* ColorizationType.swift in Sources */,
 				DA5A816026C563A700F274C7 /* OAParkingPositionPlugin.mm in Sources */,
 				DA5A816826C563A700F274C7 /* OAWikiImageCard.mm in Sources */,
 				DA5A843226C563A800F274C7 /* OATransportDetailsTableViewController.mm in Sources */,
@@ -16826,6 +16846,7 @@
 				DA5A839C26C563A800F274C7 /* OADirectionAppearanceViewController.m in Sources */,
 				DA5A844626C563A900F274C7 /* OABaseScrollableHudViewController.mm in Sources */,
 				DA5A841826C563A800F274C7 /* OAGPXEditWptListViewController.mm in Sources */,
+				4609FAA22C5158F100B57F06 /* UIImageView+Extension.swift in Sources */,
 				DA5A852E26C563A900F274C7 /* OrderedDictionary.m in Sources */,
 				DA5A833A26C563A800F274C7 /* OAHomeWorkCell.mm in Sources */,
 				DA5A813226C563A700F274C7 /* OACoreResourcesTransportRouteIconProvider.mm in Sources */,
@@ -16847,8 +16868,10 @@
 				DA5A856B26C563A900F274C7 /* OATspAnt.m in Sources */,
 				DA5A83B826C563A800F274C7 /* OAQuickActionsSheetView.m in Sources */,
 				DA5A837526C563A800F274C7 /* OARoutePreferencesParameters.mm in Sources */,
+				4656BD342C484FA000B69928 /* GradientColorsCollection.swift in Sources */,
 				320427D62BF4D5250085DCA1 /* SpeedometerWidgetSettingsViewController.swift in Sources */,
 				DA5A833126C563A800F274C7 /* OASegmentSliderTableViewCell.m in Sources */,
+				4656BD322C48468200B69928 /* ColorsCollection.swift in Sources */,
 				DA5A818A26C563A700F274C7 /* OAMapUnderlayAction.mm in Sources */,
 				DA5A81BB26C563A700F274C7 /* OAPOIFilter.m in Sources */,
 				DA9F841C29CC96EF00127DAE /* OAShapeLayer.m in Sources */,
@@ -17320,6 +17343,7 @@
 				FA359EE52ADF026D0001C11D /* DeviceType.swift in Sources */,
 				DA5A813A26C563A700F274C7 /* OAEntityInfo.m in Sources */,
 				DA5A846A26C563A900F274C7 /* OADestination.mm in Sources */,
+				464EA9BD2C4948A30034D8C9 /* PaletteGradientColor.swift in Sources */,
 				46220B792AD70AF9006C3248 /* OAGroupEditorViewController.mm in Sources */,
 				DA5A816326C563A700F274C7 /* OADaytimeAppearance.m in Sources */,
 				DA5A846026C563A900F274C7 /* OARasterMapLayer.mm in Sources */,
@@ -17423,6 +17447,7 @@
 				DA4ABF262876DA6800B996EF /* OADataSettingsItem.mm in Sources */,
 				DAA9F45127ECA5F6002BB1A8 /* OABackupError.m in Sources */,
 				DA5A824626C563A700F274C7 /* OAProfileNavigationSettingsViewController.mm in Sources */,
+				4656BD2E2C482D0500B69928 /* PaletteCollectionHandler.swift in Sources */,
 				467DFD80297F172C008A9830 /* OACardTableViewCell.m in Sources */,
 				DA5A823126C563A700F274C7 /* OAImportSettingsViewController.mm in Sources */,
 				FAA650522ADD42C50020DCEA /* BLEBatterySensor.swift in Sources */,
@@ -17625,6 +17650,7 @@
 				DA5A823626C563A700F274C7 /* OAExportItemsViewController.mm in Sources */,
 				FAA650552ADD42C50020DCEA /* BLEManager.swift in Sources */,
 				DA5A84E726C563A900F274C7 /* OAWaypointsPOIScreen.mm in Sources */,
+				4656BD302C4834EA00B69928 /* PaletteColor.swift in Sources */,
 				DA1A886427FC66DA00A82DF6 /* OABackupDbHelper.m in Sources */,
 				DA5A824E26C563A700F274C7 /* OAMapBehaviorViewController.m in Sources */,
 				32DA38A82BA9C4D500A3AC3C /* CLLocation+Extension.m in Sources */,

@@ -352,6 +352,9 @@
     
     if (gpxItem.coloringType && gpxItem.coloringType.length > 0)
         [gpxFile setColoringType:gpxItem.coloringType];
+
+    if (gpxItem.gradientPaletteName && gpxItem.gradientPaletteName.length > 0)
+        [gpxFile setGradientColorPalette:gpxItem.gradientPaletteName];
 }
 
 + (CLLocationCoordinate2D)getSegmentPointByTime:(OATrkSegment *)segment
@@ -753,7 +756,9 @@
                 }
                 metadata.time = time == 0 ? (long) [[NSDate date] timeIntervalSince1970] : time;
             }
-            metadata.name = newFileName;
+
+            if (doc.creator && [doc.creator containsString:@"OsmAnd"])
+                metadata.name = newName;
 
             if ([NSFileManager.defaultManager fileExistsAtPath:oldPath])
                 [NSFileManager.defaultManager removeItemAtPath:oldPath error:nil];

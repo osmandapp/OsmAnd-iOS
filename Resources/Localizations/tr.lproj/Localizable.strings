@@ -971,7 +971,6 @@
 "download_wiki_region_placeholder" = "bu bölge";
 "nothing_found_descr" = "Arama sorgusunu değiştir veya yarıçapını arttır.";
 "driving_region_europe_asia" = "Avrupa, Asya, Latin Amerika ve benzeri";
-"driving_region_uk" = "Birleşik Krallık (İngiltere), Hindistan ve benzeri";
 "route_roundabout" = "Döner kavşak: %d çıkışa girin ve devam edin";
 "lat" = "Enlem";
 "lon" = "Boylam";

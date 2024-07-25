@@ -76,6 +76,10 @@ static OALocationIcon *_MOVEMENT_CAR;
 
 + (OALocationIcon *) locationIconWithName:(NSString *)name
 {
+    // Temporary fix to prevent possible crash due to old numeric setting
+    if ([name isKindOfClass:NSNumber.class]) {
+        return _DEFAULT;
+    }
     for (OALocationIcon *icon in [self defaultIcons])
     {
         if ([name isEqualToString:icon.name] ||

@@ -159,7 +159,7 @@ static const float kDistanceMeters = 100.0;
 
     _applicaionModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                         withHandler:@selector(onApplicationModeChanged:)
-                                                         andObserve:[OsmAndApp instance].data.applicationModeChangedObservable];
+                                                         andObserve:[OsmAndApp instance].applicationModeChangedObservable];
 
     _weatherSettingsChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                         withHandler:@selector(onWeatherSettingsChange:withKey:andValue:)

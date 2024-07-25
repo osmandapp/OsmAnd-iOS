@@ -596,8 +596,16 @@
     OAGradientScaleType *gradientScaleType = [_routeColoringType toGradientScaleType];
     if (gradientScaleType)
     {
-        EOAColorizationType colorizationType = [gradientScaleType toColorizationType];
-        previewPalette = [[ColorPaletteHelper shared] requireGradientColorPaletteSync:colorizationType gradientPaletteName:_routeGradientPalette];
+        ColorizationType colorizationType = (ColorizationType) [gradientScaleType toColorizationType];
+        NSError *error = nil;
+        previewPalette = [[ColorPaletteHelper shared] requireGradientColorPaletteSync:colorizationType
+                                                                  gradientPaletteName:_routeGradientPalette
+                                                                                error:&error];
+        if (error)
+        {
+            NSLog(@"Error reading color palette file: %@", error.description);
+            return;
+        }
     }
     NSMutableArray<NSNumber *> *palette = [NSMutableArray array];
     for (ColorValue *colorValue in [previewPalette colorValues])

@@ -49,12 +49,12 @@ static CGFloat const minDifferenceSlope = 0.05; //5%
     double _maxValue;
     ColorPalette *_palette;
     NSMutableArray<OARouteColorizationPoint *> *_dataList;
-    EOAColorizationType _colorizationType;
+    ColorizationType _colorizationType;
 }
 
 - (instancetype) initWithGpxFile:(OAGPXDocument *)gpxFile
                         analysis:(OAGPXTrackAnalysis *)analysis
-                            type:(EOAColorizationType)type
+                            type:(NSInteger)colorizaionType
                          palette:(ColorPalette *)palette
                  maxProfileSpeed:(float)maxProfileSpeed
 {
@@ -66,7 +66,7 @@ static CGFloat const minDifferenceSlope = 0.05; //5%
     self = [super init];
     if (self)
     {
-        _colorizationType = type;
+        _colorizationType = (ColorizationType) colorizaionType;
 
         NSMutableArray<NSNumber *> *latList = [NSMutableArray array];
         NSMutableArray<NSNumber *> *lonList = [NSMutableArray array];
@@ -87,7 +87,7 @@ static CGFloat const minDifferenceSlope = 0.05; //5%
                 {
                     [latList addObject:@(pt.getLatitude)];
                     [lonList addObject:@(pt.getLongitude)];
-                    if (type == EOAColorizationTypeSpeed)
+                    if (colorizaionType == ColorizationTypeSpeed)
                         [values addObject:@(analysis.speedData[wptIdx].speed)];
                     else
                         [values addObject:@(analysis.elevationData[wptIdx].elevation)];
@@ -101,13 +101,13 @@ static CGFloat const minDifferenceSlope = 0.05; //5%
         _latitudes = latList;
         _longitudes = lonList;
 
-        if (type == EOAColorizationTypeSlope)
+        if (colorizaionType == ColorizationTypeSlope)
             _values = [self calculateSlopesByElevations:values];
         else
             _values = values;
 
         [self calculateMinMaxValue:analysis maxProfileSpeed:maxProfileSpeed];
-        if (type == EOAColorizationTypeSlope)
+        if (colorizaionType == ColorizationTypeSlope)
             _palette = [self isValidPalette:palette] ? palette : ColorPalette.slopePalette;
         else
             _palette = [[ColorPalette alloc] init:[self isValidPalette:palette] ? palette : ColorPalette.minMaxPalette minVal:_minValue
@@ -336,30 +336,30 @@ static CGFloat const minDifferenceSlope = 0.05; //5%
     return result;
 }
 
-+ (double)getMinValue:(EOAColorizationType)type analysis:(OAGPXTrackAnalysis *)analysis
++ (double)getMinValue:(ColorizationType)type analysis:(OAGPXTrackAnalysis *)analysis
 {
     switch (type)
     {
-        case EOAColorizationTypeSpeed:
+        case ColorizationTypeSpeed:
             return .0;
-        case EOAColorizationTypeElevation:
+        case ColorizationTypeElevation:
             return analysis.minElevation;
-        case EOAColorizationTypeSlope:
+        case ColorizationTypeSlope:
             return ColorPalette.slopeMinValue;
         default:
             return -1;
     }
 }
 
-+ (double)getMaxValue:(EOAColorizationType)type analysis:(OAGPXTrackAnalysis *)analysis minValue:(double)minValue maxProfileSpeed:(double)maxProfileSpeed
++ (double)getMaxValue:(ColorizationType)type analysis:(OAGPXTrackAnalysis *)analysis minValue:(double)minValue maxProfileSpeed:(double)maxProfileSpeed
 {
     switch (type)
     {
-        case EOAColorizationTypeSpeed:
+        case ColorizationTypeSpeed:
             return fmax(analysis.maxSpeed, maxProfileSpeed);
-        case EOAColorizationTypeElevation:
+        case ColorizationTypeElevation:
             return fmax(analysis.maxElevation, minValue + 50);
-        case EOAColorizationTypeSlope:
+        case ColorizationTypeSlope:
             return ColorPalette.slopeMaxValue;
         default:
             return -1;
@@ -390,14 +390,14 @@ static CGFloat const minDifferenceSlope = 0.05; //5%
     _maxValue = [self.class getMaxValue:_colorizationType analysis:analysis minValue:_minValue maxProfileSpeed:maxProfileSpeed];
 }
 
-+ (ColorPalette *)getDefaultPalette:(EOAColorizationType)colorizationType
++ (ColorPalette *)getDefaultPalette:(NSInteger)colorizationType
 {
-    return colorizationType == EOAColorizationTypeSlope ? ColorPalette.slopePalette : ColorPalette.minMaxPalette;
+    return colorizationType == ColorizationTypeSlope ? ColorPalette.slopePalette : ColorPalette.minMaxPalette;
 }
 
 - (ColorPalette *)getDefaultPalette
 {
-    if (_colorizationType == EOAColorizationTypeSlope)
+    if (_colorizationType == ColorizationTypeSlope)
         return ColorPalette.slopePalette;
     else
         return ColorPalette.minMaxPalette;

@@ -141,7 +141,6 @@
 "simulate_your_location" = "모의 주행";
 "simulate_navigation" = "내비게이션 시뮬레이션";
 "no_active_route" = "활성 경로 없음";
-"driving_region_uk" = "영국, 인도, 호주 및 기타";
 "driving_region_australia" = "호주";
 "osmand_live_support_reg_descr" = "기부금의 일부는 해당 지역의 지도에 대한 변경 사항을 제출하는 OSM 사용자에게 보내질 것이다.";
 "select_avoid_descr" = "탐색 중에 피하려는 도로를 선택하십시오. 지도에서 도로를 선택하거나 아래 목록에서 유형을 선택할 수 있다.";

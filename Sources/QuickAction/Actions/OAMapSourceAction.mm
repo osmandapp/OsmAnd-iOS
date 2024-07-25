@@ -42,11 +42,13 @@ static QuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsMapSourceActionId
+    TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsMapSourceActionId
                                            stringId:@"mapsource.change"
                                                  cl:self.class]
-              name:OALocalizedString(@"quick_action_map_source")]
+              name:OALocalizedString(@"map_source")]
+             nameAction:OALocalizedString(@"shared_string_change")]
              iconName:@"ic_custom_show_on_map"]
+             secondaryIconName:@"ic_custom_compound_action_change"]
             category:QuickActionTypeCategoryConfigureMap];
 }
 

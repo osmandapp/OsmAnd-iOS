@@ -25,10 +25,11 @@ static QuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsNewActionId
+    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsNewActionId
                                            stringId:@"new"
                                                  cl:self.class]
-              name:OALocalizedString(@"quick_action_new_action")]
+              name:OALocalizedString(@"shared_string_action")]
+             nameAction:OALocalizedString(@"shared_string_add")]
              iconName:@"ic_custom_add"]
             nonEditable];
 }

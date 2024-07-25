@@ -350,7 +350,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     
     _applicationModeChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                            withHandler:@selector(onAppModeChanged)
-                                                            andObserve:[OsmAndApp instance].data.applicationModeChangedObservable];
+                                                            andObserve:[OsmAndApp instance].applicationModeChangedObservable];
 
     _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapZoomChanged:withKey:andValue:)
@@ -2894,7 +2894,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
                 QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> > gpxDocs;
                 gpxDocs[QString::fromNSString(kCurrentTrack)] = doc;
-                [_mapLayers.gpxRecMapLayer refreshGpxTracks:gpxDocs reset:NO refreshColors:NO];
+                [_mapLayers.gpxRecMapLayer refreshGpxTracks:gpxDocs reset:NO];
             }
         }];
     }
@@ -3676,7 +3676,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         if (_gpxDocFileTemp && !_gpxDocsTemp.isEmpty())
             docs[QString::fromNSString(_gpxDocFileTemp)] = _gpxDocsTemp.first();
     }
-    [_mapLayers.gpxMapLayer refreshGpxTracks:docs reset:YES refreshColors:YES];
+    [_mapLayers.gpxMapLayer refreshGpxTracks:docs reset:YES];
 }
 
 - (void) refreshGpxTracks

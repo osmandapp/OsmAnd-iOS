@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "OAColorizationType.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -29,11 +28,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithGpxFile:(OAGPXDocument *)gpxFile
                        analysis:(OAGPXTrackAnalysis *)analysis
-                           type:(EOAColorizationType)type
+                           type:(NSInteger)colorizationType
                         palette:(ColorPalette *)palette
                 maxProfileSpeed:(float)maxProfileSpeed;
 
-+ (ColorPalette *)getDefaultPalette:(EOAColorizationType)colorizationType;
++ (ColorPalette *)getDefaultPalette:(NSInteger)colorizationType;
 - (NSArray<OARouteColorizationPoint *> *)getResult;
 
 @end

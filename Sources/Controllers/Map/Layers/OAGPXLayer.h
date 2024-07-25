@@ -20,7 +20,7 @@
 @property (nonatomic) QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> > gpxDocs;
 @property (nonatomic) std::shared_ptr<OsmAnd::VectorLinesCollection> linesCollection;
 
-- (void) refreshGpxTracks:(QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> >)gpxDocs reset:(BOOL)reset refreshColors:(BOOL)refreshColors;
+- (void) refreshGpxTracks:(QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> >)gpxDocs reset:(BOOL)reset;
 - (void) refreshGpxWaypoints;
 
 - (CGFloat) getLineWidth:(NSString *)gpxWidth;

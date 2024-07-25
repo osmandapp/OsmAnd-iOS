@@ -25,10 +25,11 @@ static QuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsShowHideMapillaryActionId
+    TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsShowHideMapillaryActionId
                                             stringId:@"mapillary.showhide"
                                                   cl:self.class]
-               name:OALocalizedString(@"quick_action_showhide_mapillary_title")]
+               name:OALocalizedString(@"mapillary")]
+              nameAction:OALocalizedString(@"quick_action_verb_show_hide")]
               iconName:@"ic_custom_mapillary_symbol"]
              category:QuickActionTypeCategoryConfigureMap]
             nonEditable];

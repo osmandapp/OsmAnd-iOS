@@ -157,16 +157,19 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     OARowInfo *nameRow;
     //NSMutableArray<OAPOIType *> *collectedPoiTypes = [NSMutableArray array];
     NSMutableDictionary<NSString *, NSMutableArray<OAPOIType *> *> *collectedPoiTypes = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary<NSString *, NSString *> *additionalInfo = [[self.poi getAdditionalInfo] mutableCopy];
 
     BOOL osmEditingEnabled = [OAPluginsHelper isEnabled:OAOsmEditingPlugin.class];
     CGSize iconSize = {20, 20}; // TODO: Hardcoded size
+    if (self.poi.localizedNames.count > 0)
+        [self addLocalizedNamesTagsToInfo:additionalInfo];
 
-    for (NSString *key in [self.poi getAdditionalInfo].allKeys)
+    for (NSString *key in additionalInfo.allKeys)
     {
         NSString *iconId;
         UIImage *icon;
         UIColor *textColor;
-        NSString *vl = [self.poi getAdditionalInfo][key];
+        NSString *vl = additionalInfo[key];
         NSString *convertedKey = [key stringByReplacingOccurrencesOfString:@"_-_" withString:@":"];
         if (!hasName && [_poiHelper isNameTag:convertedKey])
         {
@@ -179,7 +182,8 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
             || [convertedKey isEqualToString:MAPILLARY_TAG]
             || [convertedKey isEqualToString:@"subway_region"]
             || ([convertedKey isEqualToString:@"note"] && !osmEditingEnabled)
-            || [convertedKey hasPrefix:@"lang_yes"])
+            || [convertedKey hasPrefix:@"lang_yes"]
+            || [convertedKey hasPrefix:@"top_index_"])
             continue;
 
         NSString *textPrefix = @"";
@@ -202,7 +206,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         if (!pt && vl && vl.length > 0 && vl.length < 50)
             pt = [_poiHelper getAnyPoiAdditionalTypeByKey:[NSString stringWithFormat:@"%@_%@", convertedKey, vl]];
         
-        if (poiType == nil && pt == nil && [key isEqualToString:vl])
+        if (poiType == nil && pt == nil)
         {
             poiType = [_poiHelper getPoiTypeByKey:key];
         }
@@ -275,7 +279,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
             [nameTags addObject:@{
                 @"key": convertedKey,
                 @"value": vl,
-                @"localizedTitle": pt.nameLocalized
+                @"localizedTitle": pt ? pt.nameLocalized : @""
             }];
             [nameRow setDetailsArray:nameTags];
             continue;
@@ -291,10 +295,10 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
             collapsableView = [[OACollapsableLabelView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
             collapsableView.collapsed = YES;
             ((OACollapsableLabelView *) collapsableView).label.text =
-                    [[[self.poi getAdditionalInfo][key] stringByReplacingOccurrencesOfString:@"; " withString:@"\n"]
+                    [[additionalInfo[key] stringByReplacingOccurrencesOfString:@"; " withString:@"\n"]
                                                         stringByReplacingOccurrencesOfString:@"," withString:@", "];
             collapsable = YES;
-            auto rs = OpeningHoursParser::parseOpenedHours([[self.poi getAdditionalInfo][key] UTF8String]);
+            auto rs = OpeningHoursParser::parseOpenedHours([additionalInfo[key] UTF8String]);
             if (rs != nullptr)
             {
                 vl = [NSString stringWithUTF8String:rs->toLocalString().c_str()];
@@ -683,6 +687,15 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     row.collapsed = YES;
     row.collapsableView = nil;
     return row;
+}
+
+- (void) addLocalizedNamesTagsToInfo:(NSMutableDictionary<NSString *, NSString *> *)additionalInfo
+{
+    [self.poi.localizedNames enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *name, BOOL *stop) {
+        NSString *nameKey = [NSString stringWithFormat:@"name:%@", key];
+        if (key.length > 0 && ![key isEqualToString:[OAAppSettings sharedManager].settingPrefMapLanguage.get] && !additionalInfo[nameKey])
+            additionalInfo[nameKey] = name;
+    }];
 }
 
 - (void) addRowIfNotExsists:(OARowInfo *)newRow toDestinationRows:(NSMutableArray<OARowInfo *> *)rows

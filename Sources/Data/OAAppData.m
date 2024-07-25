@@ -176,7 +176,7 @@
     OACommonBoolean *_weatherWindAnimationUnitAutoProfile;
 }
 
-@synthesize applicationModeChangedObservable = _applicationModeChangedObservable, mapLayersConfiguration = _mapLayersConfiguration, weatherSettingsChangeObservable = _weatherSettingsChangeObservable;
+@synthesize mapLayersConfiguration = _mapLayersConfiguration, weatherSettingsChangeObservable = _weatherSettingsChangeObservable;
 
 - (instancetype) init
 {
@@ -265,10 +265,6 @@
 
     _wikipediaChangeObservable = [[OAObservable alloc] init];
 
-    _applicationModeChangedObservable = [[OAObservable alloc] init];
-    _applicationModeChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                           withHandler:@selector(onAppModeChanged)
-                                                            andObserve:_applicationModeChangedObservable];
     _mapLayersConfiguration = [[OAMapLayersConfiguration alloc] init];
     // Profile settings
     _lastMapSourceProfile = [OACommonMapSource withKey:kLastMapSourceKey defValue:[[OAMapSource alloc] initWithResource:@"default.render.xml"
@@ -442,6 +438,16 @@
     {
         [_weatherSettingsChangeObserver detach];
         _weatherSettingsChangeObserver = nil;
+    }
+}
+
+- (void) postInit
+{
+    if (!_applicationModeChangedObserver)
+    {
+        _applicationModeChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                    withHandler:@selector(onAppModeChanged)
+                                                                     andObserve:OsmAndApp.instance.applicationModeChangedObservable];
     }
 }
 

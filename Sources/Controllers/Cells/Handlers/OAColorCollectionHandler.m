@@ -253,18 +253,18 @@
 
         UIColor *color = UIColorFromARGB(colorValue);
         cell.colorView.backgroundColor = color;
-        cell.chessboardView.image = [UIImage templateImageNamed:@"bg_color_chessboard_pattern"];
-        cell.chessboardView.tintColor = UIColorFromRGB(colorValue);
+        cell.backgroundImageView.image = [UIImage templateImageNamed:@"bg_color_chessboard_pattern"];
+        cell.backgroundImageView.tintColor = UIColorFromRGB(colorValue);
 
         if (indexPath == _selectedIndexPath)
         {
-            cell.backView.layer.borderWidth = 2;
-            cell.backView.layer.borderColor = [UIColor colorNamed:ACColorNameIconColorActive].CGColor;
+            cell.selectionView.layer.borderWidth = 2;
+            cell.selectionView.layer.borderColor = [UIColor colorNamed:ACColorNameIconColorActive].CGColor;
         }
         else
         {
-            cell.backView.layer.borderWidth = 0;
-            cell.backView.layer.borderColor = UIColor.clearColor.CGColor;
+            cell.selectionView.layer.borderWidth = 0;
+            cell.selectionView.layer.borderColor = UIColor.clearColor.CGColor;
         }
     }
     return cell;

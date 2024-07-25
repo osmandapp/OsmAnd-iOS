@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "OAColorizationType.h"
 
 @class OAApplicationMode, OAColoringType, OADownloadMode, OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState;
 
@@ -180,6 +179,7 @@ typedef NS_ENUM(NSInteger, EOADrivingRegion)
     DR_CANADA,
     DR_UK_AND_OTHERS,
     DR_JAPAN,
+    DR_INDIA,
     DR_AUSTRALIA
 };
 
@@ -261,7 +261,7 @@ typedef NS_ENUM(NSInteger, EOAGradientScaleType)
 + (NSString *) toTypeName:(EOAGradientScaleType)gst;
 + (NSString *) toColorTypeName:(EOAGradientScaleType)gst;
 
-- (EOAColorizationType) toColorizationType;
+- (NSInteger)toColorizationType;
 
 @end
 
@@ -1146,6 +1146,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonStringList *customTrackColors;
 @property (nonatomic) OACommonStringList *customTrackColorsLastUsed;
 @property (nonatomic) OACommonStringList *lastUsedFavIcons;
+@property (nonatomic) OACommonString *gradientPalettes;
 
 @property (nonatomic) OACommonString *gpsStatusApp;
 

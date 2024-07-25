@@ -691,12 +691,13 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
               [OADrivingRegion withRegion:DR_CANADA],
               [OADrivingRegion withRegion:DR_UK_AND_OTHERS],
               [OADrivingRegion withRegion:DR_JAPAN],
+              [OADrivingRegion withRegion:DR_INDIA],
               [OADrivingRegion withRegion:DR_AUSTRALIA] ];
 }
 
 + (BOOL) isLeftHandDriving:(EOADrivingRegion)region
 {
-    return region == DR_UK_AND_OTHERS || region == DR_JAPAN || region == DR_AUSTRALIA;
+    return region == DR_UK_AND_OTHERS || region == DR_JAPAN || region == DR_INDIA || region == DR_AUSTRALIA;
 }
 
 + (BOOL) isAmericanSigns:(EOADrivingRegion)region
@@ -717,6 +718,8 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
         case DR_UK_AND_OTHERS:
             return MILES_AND_METERS;
         case DR_JAPAN:
+            return KILOMETERS_AND_METERS;
+        case DR_INDIA:
             return KILOMETERS_AND_METERS;
         case DR_AUSTRALIA:
             return KILOMETERS_AND_METERS;
@@ -739,6 +742,8 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
             return OALocalizedString(@"driving_region_uk");
         case DR_JAPAN:
             return OALocalizedString(@"driving_region_japan");
+        case DR_INDIA:
+            return OALocalizedString(@"driving_region_india");
         case DR_AUSTRALIA:
             return OALocalizedString(@"driving_region_australia");
 
@@ -768,6 +773,8 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
         return DR_CANADA;
     } else if ([countryCode isEqualToString:@"jp"]) {
         return DR_JAPAN;
+    } else if ([countryCode isEqualToString:@"in"]) {
+        return DR_INDIA;
     } else if ([countryCode isEqualToString:@"au"]) {
         return DR_AUSTRALIA;
     } else if (!isMetricSystem) {
@@ -2678,6 +2685,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         return [self set:DR_UK_AND_OTHERS mode:mode];
     else if ([strValue isEqualToString:@"JAPAN"])
         return [self set:DR_JAPAN mode:mode];
+    else if ([strValue isEqualToString:@"INDIA"])
+        return [self set:DR_INDIA mode:mode];
     else if ([strValue isEqualToString:@"AUSTRALIA"])
         return [self set:DR_AUSTRALIA mode:mode];
 }
@@ -2696,6 +2705,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
             return @"UK_AND_OTHERS";
         case DR_JAPAN:
             return @"JAPAN";
+        case DR_INDIA:
+            return @"INDIA";
         case DR_AUSTRALIA:
             return @"AUSTRALIA";
         default:

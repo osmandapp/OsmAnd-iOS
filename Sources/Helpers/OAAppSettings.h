@@ -180,6 +180,7 @@ typedef NS_ENUM(NSInteger, EOADrivingRegion)
     DR_CANADA,
     DR_UK_AND_OTHERS,
     DR_JAPAN,
+    DR_INDIA,
     DR_AUSTRALIA
 };
 

@@ -3470,5 +3470,4 @@
 "weather_data_sources_prompt" = "OsmAndнадає погодні дані з двох джерел:";
 "data_source" = "Джерело даних";
 "weather_source_ecmwf_description" = "Європейський центр середньострокових прогнозів погоди";
-
 "rendering_value_pale_name" = "Блідий";

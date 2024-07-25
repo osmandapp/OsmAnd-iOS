@@ -122,24 +122,35 @@ static const CGFloat kVerticalExaggerationScaleMax = 4.0;
 - (NSString *) getColoringType
 {
     OAGpxExtension *e = [self getExtensionByKey:@"coloring_type"];
-    if (e) {
+    if (e)
         return e.value;
-    }
     return nil;
 }
 
 - (NSString *) getGradientScaleType
 {
     OAGpxExtension *e = [self getExtensionByKey:@"gradient_scale_type"];
-    if (e) {
+    if (e)
         return e.value;
-    }
+    return nil;
+}
+
+- (NSString *)getGradientColorPalette
+{
+    OAGpxExtension *e = [self getExtensionByKey:@"color_palette"];
+    if (e)
+        return e.value;
     return nil;
 }
 
 - (void) setColoringType:(NSString *)coloringType
 {
     [self setExtension:@"coloring_type" value:coloringType];
+}
+
+- (void)setGradientColorPalette:(NSString *)gradientColorPaletteName
+{
+    [self setExtension:@"color_palette" value:gradientColorPaletteName];
 }
 
 - (void) removeGradientScaleType

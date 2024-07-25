@@ -59,6 +59,7 @@
 #import "OADownloadsManager.h"
 #import "OADownloadTask.h"
 #import "OACommonTypes.h"
+#import "OABaseCollectionHandler.h"
 #import "OAResourcesUISwiftHelper.h"
 #import "OATravelGuidesHelper.h"
 #import "OAGPXDocumentAdapter.h"
@@ -169,6 +170,7 @@
 #import "OATextMultilineTableViewCell.h"
 #import "OATextInputFloatingCell.h"
 #import "OAInputTableViewCell.h"
+#import "OAColorsCollectionViewCell.h"
 
 // Views
 #import "OASegmentedSlider.h"

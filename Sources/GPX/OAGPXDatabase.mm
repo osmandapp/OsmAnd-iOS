@@ -86,6 +86,11 @@
     return _coloringType ? _coloringType : @"";
 }
 
+- (NSString *)gradientPaletteName
+{
+    return _gradientPaletteName ? _gradientPaletteName : @"";
+}
+
 - (EOAGpxSplitType)splitType
 {
     return _splitType == 0 ? EOAGpxSplitTypeNone : _splitType;
@@ -102,6 +107,7 @@
         _splitInterval = [document getSplitInterval];
         _color = [document getColor:0];
         _coloringType = [document getColoringType];
+        _gradientPaletteName = [document getGradientColorPalette];
         _width = [document getWidth:nil];
         _showArrows = [document isShowArrows];
         _showStartFinish = [document isShowStartFinish];
@@ -248,6 +254,7 @@
     gpx.splitInterval = [document getSplitInterval];
     gpx.color = [document getColor:0];
     gpx.coloringType = [document getColoringType];
+    gpx.gradientPaletteName = [document getGradientColorPalette];
     gpx.width = [document getWidth:nil];
     gpx.showArrows = [document isShowArrows];
     gpx.showStartFinish = [document isShowStartFinish];
@@ -669,6 +676,7 @@
     [d setObject:@(gpx.showArrows) forKey:@"showArrows"];
     [d setObject:gpx.width forKey:@"width"];
     [d setObject:gpx.coloringType forKey:@"coloringType"];
+    [d setObject:gpx.gradientPaletteName forKey:@"gradientPaletteName"];
     
     [d setObject:@(gpx.splitType) forKey:@"splitType"];
     [d setObject:@(gpx.splitInterval) forKey:@"splitInterval"];
@@ -841,6 +849,10 @@
         else if ([key isEqualToString:@"coloringType"])
         {
             gpx.coloringType = value;
+        }
+        else if ([key isEqualToString:@"gradientPaletteName"])
+        {
+            gpx.gradientPaletteName = value;
         }
         else if ([key isEqualToString:@"hiddenGroups"])
         {

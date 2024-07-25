@@ -12,6 +12,8 @@ import Foundation
 final class ColorPaletteHelper: NSObject {
 
     static let shared = ColorPaletteHelper()
+    static let routePrefix = "route_"
+    static let gradientIdSplitter = "_"
 
     private var app: OsmAndAppProtocol
     private var cachedColorPalette = [String: ColorPalette]()
@@ -20,41 +22,56 @@ final class ColorPaletteHelper: NSObject {
         app = OsmAndApp.swiftInstance()
     }
 
-    func getPalletsForType(_ gradientType: Int, isTerrainType: Bool) -> [String: [Any]] {
-        if !isTerrainType {
-            return getColorizationTypePallets(EOAColorizationType(rawValue: gradientType)!)
-        } else {
-            return getTerrainModePallets(TerrainMode.TerrainType(rawValue: Int32(gradientType))!)
-        }
+    static func getRoutePaletteFileName(_ colorizationType: ColorizationType, gradientPaletteName: String) -> String {
+        "\(routePrefix)\(colorizationType.name)\(gradientIdSplitter)\(gradientPaletteName)\(TXT_EXT)"
     }
 
-    func requireGradientColorPaletteSync(_ colorizationType: EOAColorizationType, gradientPaletteName: String) -> ColorPalette {
-        guard let colorPalette = getGradientColorPaletteSync(colorizationType, gradientPaletteName: gradientPaletteName), isValidPalette(colorPalette) else {
-            return OARouteColorize.getDefaultPalette(colorizationType)
+    func getPalletsForType(_ gradientType: Any) -> [String: [Any]] {
+        var colorPalettes = [String: [Any]]()
+        if let gradientType = gradientType as? ColorizationType {
+            colorPalettes = getColorizationTypePallets(gradientType)
+        } else if let gradientType = gradientType as? TerrainType {
+            colorPalettes = getTerrainModePallets(gradientType)
+        }
+        return colorPalettes
+    }
+
+    func requireGradientColorPaletteSync(_ colorizationType: ColorizationType, gradientPaletteName: String, error: NSErrorPointer) -> ColorPalette {
+        guard let colorPalette = getGradientColorPaletteSync(colorizationType, gradientPaletteName: gradientPaletteName, error: error), isValidPalette(colorPalette) else {
+            return OARouteColorize.getDefaultPalette(colorizationType.rawValue)
         }
         return colorPalette
     }
 
-    func getGradientColorPaletteSync(_ colorizationType: EOAColorizationType, gradientPaletteName: String) -> ColorPalette? {
-        getGradientColorPaletteSync(colorizationType, gradientPaletteName: gradientPaletteName, refresh: false)
+    func getGradientColorPaletteSync(_ colorizationType: ColorizationType, gradientPaletteName: String, error: NSErrorPointer) -> ColorPalette? {
+        getGradientColorPalette(Self.getRoutePaletteFileName(colorizationType, gradientPaletteName: gradientPaletteName), error: error)
     }
 
-    func getGradientColorPaletteSync(_ colorizationType: EOAColorizationType, gradientPaletteName: String, refresh: Bool) -> ColorPalette? {
-        getGradientColorPalette("route_\(getColorizationTypeName(colorizationType))_\(gradientPaletteName)\(TXT_EXT)", refresh: refresh)
+    func getGradientColorPaletteSyncWithModeKey(_ modeKey: String, error: NSErrorPointer) -> ColorPalette? {
+        getGradientColorPalette(modeKey, error: error)
     }
 
-    func getGradientColorPaletteSyncWithModeKey(_ modeKey: String) -> ColorPalette? {
-        getGradientColorPalette(modeKey)
-    }
-
-    func getGradientColorPalette(_ colorPaletteFileName: String) -> ColorPalette? {
-        getGradientColorPalette(colorPaletteFileName, refresh: false)
-    }
-
-    func getGradientColorPalette(_ colorPaletteFileName: String, refresh: Bool) -> ColorPalette? {
-        if let cachedPalette = cachedColorPalette[colorPaletteFileName], !refresh {
-            return cachedPalette
+    func getGradientColorPalette(_ colorPaletteFileName: String, error: NSErrorPointer) -> ColorPalette? {
+        if isColorPaletteUpdated(colorPaletteFileName, error: error) {
+            return parseGradientColorPalette(colorPaletteFileName)
         }
+        return cachedColorPalette[colorPaletteFileName]
+    }
+
+    func isColorPaletteUpdated(_ colorPaletteFileName: String, error: NSErrorPointer) -> Bool {
+        guard let cachedPalette = cachedColorPalette[colorPaletteFileName] else {
+            return true
+        }
+        do {
+            let attributes = try FileManager.default.attributesOfItem(atPath: getColorPaletteDir().appendingPathComponent(colorPaletteFileName))
+            return attributes[.modificationDate] as? Date != cachedPalette.lastModified
+        } catch let err as NSError {
+            error?.pointee = err
+            return false
+        }
+    }
+
+    private func parseGradientColorPalette(_ colorPaletteFileName: String) -> ColorPalette? {
         let filePath = getColorPaletteDir().appendingPathComponent(colorPaletteFileName)
         if FileManager.default.fileExists(atPath: filePath) {
             do {
@@ -68,36 +85,40 @@ final class ColorPaletteHelper: NSObject {
         return nil
     }
 
-    private func getColorizationTypePallets(_ type: EOAColorizationType) -> [String: [Any]] {
+    private func getColorizationTypePallets(_ type: ColorizationType) -> [String: [Any]] {
         var colorPalettes: [String: [Any]] = [:]
-        let colorTypePrefix = "route_\(getColorizationTypeName(type))_"
-        
+        let colorTypePrefix = "\(Self.routePrefix)\(type.name)\(Self.gradientIdSplitter)"
         do {
             let colorFiles = try FileManager.default.contentsOfDirectory(atPath: getColorPaletteDir())
             for fileName in colorFiles where fileName.hasPrefix(colorTypePrefix) && fileName.hasSuffix(TXT_EXT) {
                 let colorPalleteName = fileName.replacingOccurrences(of: colorTypePrefix, with: "").replacingOccurrences(of: TXT_EXT, with: "")
-                if let colorPalette = getGradientColorPalette(fileName) {
-                    let fileAttributes = try FileManager.default.attributesOfItem(atPath: fileName)
+                var error: NSError?
+                if let colorPalette = getGradientColorPalette(fileName, error: &error) {
+                    let fileAttributes = try FileManager.default.attributesOfItem(atPath: getColorPaletteDir().appendingPathComponent(fileName))
                     let modificationDate = fileAttributes[.modificationDate] as! Date
-                    colorPalettes[colorPalleteName] = [colorPalette, modificationDate.timeIntervalSince1970]
+                    colorPalettes[colorPalleteName] = [colorPalette, Int64(modificationDate.timeIntervalSince1970)]
+                } else if let error {
+                    debugPrint("Error reading color palette file: \(error.description)")
                 }
             }
         } catch {
             debugPrint("Error reading color palette directory: \(error)")
         }
-        
         return colorPalettes
     }
 
-    private func getTerrainModePallets(_ type: TerrainMode.TerrainType) -> [String: [Any]] {
+    private func getTerrainModePallets(_ type: TerrainType) -> [String: [Any]] {
         var colorPalettes: [String: [Any]] = [:]
         for mode in TerrainMode.values where mode.type == type {
             let fileName = mode.getMainFile()
             let filePath = getColorPaletteDir().appendingPathComponent(fileName)
-            if let colorPalette = getGradientColorPalette(fileName), FileManager.default.fileExists(atPath: filePath) {
+            var error: NSError?
+            if let colorPalette = getGradientColorPalette(fileName, error: &error), FileManager.default.fileExists(atPath: filePath) {
                 let fileAttributes = try? FileManager.default.attributesOfItem(atPath: filePath)
                 let modificationDate = fileAttributes?[.modificationDate] as? Date
-                colorPalettes[mode.getKeyName()] = [colorPalette, modificationDate?.timeIntervalSince1970 ?? 0]
+                colorPalettes[mode.getKeyName()] = [colorPalette, Int64(modificationDate?.timeIntervalSince1970 ?? 0)]
+            } else if let error {
+                debugPrint("Error reading color palette file: \(error.description)")
             }
         }
         return colorPalettes
@@ -112,18 +133,5 @@ final class ColorPaletteHelper: NSObject {
 
     private func getColorPaletteDir() -> String {
         app.colorsPalettePath
-    }
-
-    private func getColorizationTypeName(_ type: EOAColorizationType) -> String {
-        switch type {
-        case .slope:
-            return "slope"
-        case .speed:
-            return "speed"
-        case .elevation:
-            return "elevation"
-        default:
-            return "none"
-        }
     }
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -21,8 +21,8 @@
                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Pde-Gp-UrD" userLabel="Content Outside Stack View">
                         <rect key="frame" x="0.0" y="0.0" width="373" height="60"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="AxO-VI-ivf" userLabel="Top Margin Stack View">
-                                <rect key="frame" x="0.0" y="0.0" width="373" height="3"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="AxO-VI-ivf" userLabel="Top Margin Stack View">
+                                <rect key="frame" x="0.0" y="0.0" width="373" height="6"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wTP-2O-fC4">
                                         <rect key="frame" x="0.0" y="0.0" width="373" height="0.0"/>
@@ -32,7 +32,7 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cb8-0r-VeY">
-                                        <rect key="frame" x="0.0" y="3" width="373" height="0.0"/>
+                                        <rect key="frame" x="0.0" y="6" width="373" height="0.0"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" id="bEJ-bz-fGM"/>
@@ -41,10 +41,10 @@
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="14" translatesAutoresizingMaskIntoConstraints="NO" id="NS9-5f-FoA" userLabel="Collection Stack View">
-                                <rect key="frame" x="0.0" y="3" width="373" height="48"/>
+                                <rect key="frame" x="0.0" y="6" width="373" height="45"/>
                                 <subviews>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="DOd-wT-r3R">
-                                        <rect key="frame" x="0.0" y="0.0" width="323" height="48"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="323" height="45"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" priority="750" constant="48" id="Ft8-45-Pf1"/>
@@ -57,7 +57,7 @@
                                         </collectionViewFlowLayout>
                                     </collectionView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W16-m3-jDw" userLabel="Right Action Button">
-                                        <rect key="frame" x="337" y="6" width="36" height="36"/>
+                                        <rect key="frame" x="337" y="4.6666666666666643" width="36" height="36"/>
                                         <color key="backgroundColor" name="buttonBgColorTertiary"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="36" id="Okc-Mp-aLZ"/>

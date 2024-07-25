@@ -3490,3 +3490,6 @@
 "shared_string_colors" = "Farben";
 "user_palette" = "Benutzerpalette";
 "height_legend_description" = "Höhenfarbkarten werden verwendet, um Relief darzustellen.";
+"driving_region_uk" = "UK & andere";
+"driving_region_india" = "Indien";
+"shared_string_replace" = "Ersetzen";

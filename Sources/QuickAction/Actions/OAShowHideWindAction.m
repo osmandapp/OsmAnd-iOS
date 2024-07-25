@@ -23,10 +23,11 @@ static QuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsShowHideWindLayerActionId
+    TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsShowHideWindLayerActionId
                                             stringId:@"wind.layer.showhide"
                                                   cl:self.class]
-               name:OALocalizedString(@"toggle_wind")]
+               name:OALocalizedString(@"wind_layer")]
+              nameAction:OALocalizedString(@"quick_action_verb_show_hide")]
               iconName:@"ic_custom_wind"]
              category:QuickActionTypeCategoryConfigureMap]
             nonEditable];

@@ -27,10 +27,11 @@ static QuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsNavVoiceActionId
+    TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsNavVoiceActionId
                                             stringId:@"nav.voice"
                                                   cl:self.class]
-               name:OALocalizedString(@"quick_action_navigation_voice")]
+               name:OALocalizedString(@"voices")]
+               nameAction:OALocalizedString(@"quick_action_verb_turn_on_off")]
               iconName:@"ic_custom_sound"]
              category:QuickActionTypeCategoryNavigation]
             nonEditable];

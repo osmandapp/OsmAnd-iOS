@@ -24,7 +24,7 @@ static NSInteger SEQ = 0;
 
 - (instancetype)init
 {
-    return [self initWithActionType:OAMapButtonsHelper.TYPE_ADD_ITEMS];
+    return [self initWithActionType:OAMapButtonsHelper.TYPE_CREATE_CATEGORY];
 }
 
 - (instancetype)initWithActionType:(QuickActionType *)type
@@ -103,12 +103,24 @@ static NSInteger SEQ = 0;
     return _actionType ? _actionType.name : @"";
 }
 
+
+-(NSString *) getActionName
+{
+    return _actionType ? _actionType.nameAction : @"";
+}
+
 - (NSString *)getName
 {
+    NSString *name;
     if (_name.length == 0 || !self.isActionEditable)
-        return [self getDefaultName];
+        name = [self getDefaultName];
     else
-        return _name;
+        name = _name;
+    
+    NSString *actionName = [self getActionName];
+    if (actionName)
+        return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_dash"), actionName, name];
+    return name;
 }
 
 - (BOOL) hasCustomName

@@ -30,10 +30,11 @@ static QuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsTerrainActionId
+    TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsTerrainActionId
                                             stringId:@"terrain.showhide"
                                                   cl:self.class]
-               name:OALocalizedString(@"toggle_hillshade")]
+               name:OALocalizedString(@"shared_string_terrain")]
+              nameAction:OALocalizedString(@"quick_action_verb_show_hide")]
               iconName:@"ic_custom_hillshade"]
              category:QuickActionTypeCategoryConfigureMap]
             nonEditable];

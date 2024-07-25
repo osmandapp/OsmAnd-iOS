@@ -155,8 +155,6 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
             //[_app initialize];
             [[OAScreenOrientationHelper sharedInstance] updateSettings];
             
-            [OALocationIcon initialize];
-
             // Configure ThemeManager
             OAAppSettings *appSettings = [OAAppSettings sharedManager];
             OAApplicationMode *initialAppMode = [appSettings.useLastApplicationModeByDefault get] ?

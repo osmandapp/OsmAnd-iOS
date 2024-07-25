@@ -2086,3 +2086,8 @@
 "available_groups" = "Διαθέσιμες ομάδες";
 "shared_string_update_required" = "Χρειάζεται ενημέρωση";
 "osm_login_needs_ios_16_4" = "Για να συνδεθείτε στο OpenStreetMap χρειάζεται να έχετε έκδοση iOS 16.4 ή μεταγενέστερη";
+"show_borders_of_downloaded_maps" = "Εμφάνιση συνόρων από τους κατεβασμένους χάρτες";
+"mapil_filter_date" = "Φιλτράρισμα φωτογραφιών ανά ημερομηνία";
+"mapil_reload_cache" = "Επαναφόρτωση των πλακιδίων για την προβολή των πιο πρόσφατων δεδομένων";
+"osm_edits_offline_layer" = "Επεξεργασίες/Σημειώσεις από το OSM (εκτός σύνδεσης)";
+"osm_notes_online_layer" = "Σημειώσεις από το OSM (με σύνδεση στο διαδίκτυο)";

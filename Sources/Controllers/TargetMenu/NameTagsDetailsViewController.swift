@@ -43,7 +43,7 @@ final class NameTagsDetailsViewController: OABaseNavbarViewController {
                   let value = tagDict["value"] as? String else { continue }
             
             let baseKey = String(tagKey.split(separator: ":").first ?? "")
-            let description = extractDescription(from: localizedTitle)
+            let description = extractDescription(from: localizedTitle, withKey: tagKey)
             let header = extractHeader(from: localizedTitle, withKey: tagKey)
             sections[baseKey, default: []].append((tag: (key: tagKey, value: value, descr: description), header: header))
         }
@@ -67,36 +67,25 @@ final class NameTagsDetailsViewController: OABaseNavbarViewController {
         }
     }
     
-    private func extractDescription(from title: String) -> String {
-        guard let (start, end) = findEnclosingBrackets(in: title) else {
-            return ""
-        }
-        
-        return String(title[start..<end]).capitalized(with: Locale.current)
-    }
-    
-    private func findEnclosingBrackets(in text: String) -> (start: String.Index, end: String.Index)? {
-        var depth = 0
-        var startIndex: String.Index?
-        var endIndex: String.Index?
-        for index in text.indices {
-            switch text[index] {
-            case "(":
-                if depth == 0 { startIndex = text.index(after: index) }
-                depth += 1
-            case ")":
-                depth -= 1
-                if depth == 0 { endIndex = index; break }
-            default:
-                continue
+    private func extractDescription(from title: String, withKey key: String) -> String {
+        if key.hasPrefix("name:") {
+            let components = key.components(separatedBy: ":")
+            if components.count > 1 {
+                let languageCode = components[1]
+                if let localizedLanguageName = Locale.current.localizedString(forLanguageCode: languageCode) {
+                    return localizedLanguageName.capitalized
+                }
+                return languageCode
             }
         }
         
-        if let start = startIndex, let end = endIndex, start <= end {
-            return (start, end)
+        guard let start = title.firstIndex(of: "("),
+              let end = title.firstIndex(of: ")"),
+              start < end else {
+            return ""
         }
         
-        return nil
+        return String(title[title.index(after: start)..<end]).capitalized
     }
     
     private func configureRow(_ row: OATableRowData, with tag: (key: String, value: String, descr: String)) {

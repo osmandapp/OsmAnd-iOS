@@ -158,10 +158,11 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     //NSMutableArray<OAPOIType *> *collectedPoiTypes = [NSMutableArray array];
     NSMutableDictionary<NSString *, NSMutableArray<OAPOIType *> *> *collectedPoiTypes = [[NSMutableDictionary alloc] init];
     NSMutableDictionary<NSString *, NSString *> *additionalInfo = [[self.poi getAdditionalInfo] mutableCopy];
-    [self addLocalizedNamesTagsToInfo:additionalInfo];
 
     BOOL osmEditingEnabled = [OAPluginsHelper isEnabled:OAOsmEditingPlugin.class];
     CGSize iconSize = {20, 20}; // TODO: Hardcoded size
+    if (self.poi.localizedNames.count > 0)
+        [self addLocalizedNamesTagsToInfo:additionalInfo];
 
     for (NSString *key in additionalInfo.allKeys)
     {
@@ -689,14 +690,11 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 
 - (void) addLocalizedNamesTagsToInfo:(NSMutableDictionary<NSString *, NSString *> *)additionalInfo
 {
-    if (self.poi.localizedNames.count > 0)
-    {
-        [self.poi.localizedNames enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *name, BOOL *stop) {
-            NSString *nameKey = [NSString stringWithFormat:@"name:%@", key];
-            if (key.length > 0 && ![key isEqualToString:[OAAppSettings sharedManager].settingPrefMapLanguage.get] && !additionalInfo[nameKey])
-                additionalInfo[nameKey] = name;
-        }];
-    }
+    [self.poi.localizedNames enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *name, BOOL *stop) {
+        NSString *nameKey = [NSString stringWithFormat:@"name:%@", key];
+        if (key.length > 0 && ![key isEqualToString:[OAAppSettings sharedManager].settingPrefMapLanguage.get] && !additionalInfo[nameKey])
+            additionalInfo[nameKey] = name;
+    }];
 }
 
 - (void) addRowIfNotExsists:(OARowInfo *)newRow toDestinationRows:(NSMutableArray<OARowInfo *> *)rows

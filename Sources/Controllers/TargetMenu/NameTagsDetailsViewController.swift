@@ -43,7 +43,7 @@ final class NameTagsDetailsViewController: OABaseNavbarViewController {
                   let value = tagDict["value"] as? String else { continue }
             
             let baseKey = String(tagKey.split(separator: ":").first ?? "")
-            let description = extractDescription(from: localizedTitle)
+            let description = extractDescription(from: localizedTitle, withKey: tagKey)
             let header = extractHeader(from: localizedTitle, withKey: tagKey)
             sections[baseKey, default: []].append((tag: (key: tagKey, value: value, descr: description), header: header))
         }
@@ -67,7 +67,18 @@ final class NameTagsDetailsViewController: OABaseNavbarViewController {
         }
     }
     
-    private func extractDescription(from title: String) -> String {
+    private func extractDescription(from title: String, withKey key: String) -> String {
+        if key.hasPrefix("name:") {
+            let components = key.components(separatedBy: ":")
+            if components.count > 1 {
+                let languageCode = components[1]
+                if let localizedLanguageName = Locale.current.localizedString(forLanguageCode: languageCode) {
+                    return localizedLanguageName.capitalized
+                }
+                return languageCode
+            }
+        }
+        
         guard let start = title.firstIndex(of: "("),
               let end = title.firstIndex(of: ")"),
               start < end else {

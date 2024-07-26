@@ -3417,3 +3417,16 @@
 "weather_source_ecmwf_description" = "Evropské centrum pro střednědobé předpovědi počasí";
 "weather_source_GFS_description" = "Globální předpovědní systém od Národních center pro environmentální předpovědi";
 "data_source" = "Zdroj dat";
+"map_source" = "Zdroj map";
+"shared_string_favorite" = "Oblíbené";
+"shared_string_change" = "Změnit";
+"voices" = "Hlasové pokyny";
+"temperature_layer" = "Teplotní vrstva";
+"key_event_category_map_interactions" = "Interakce s mapou";
+"shared_string_action" = "Akce";
+"wind_layer" = "Větrná vrstva";
+"pressure_layer" = "Tlaková vrstva";
+"cloud_layer" = "Vrstva mraků";
+"shared_string_favorites" = "Oblíbené";
+"download_srtm_maps" = "Vrstevnice";
+"precipitation_layer" = "Vrstva srážek";

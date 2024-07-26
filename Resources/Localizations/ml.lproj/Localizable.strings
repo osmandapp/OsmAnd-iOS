@@ -2333,3 +2333,9 @@
 "avoid_pt_types_descr" = "നാവിഗേഷനിൽ ഒഴിവാക്കേണ്ട പൊതു ഗതാഗത തരങ്ങൾ തിരഞ്ഞെടുക്കൂ:";
 "avoid_pt_types" = "ഒഴിവാക്കണ്ട ട്രാൻസ്പോർട്ട് തരങ്ങൾ ...";
 "edit_tilesource_maxzoom" = "ഏറ്റവും കൂടിയ സൂം";
+"voices" = "വോയിസ് സൂചനകള്‍";
+"shared_string_favorite" = "താല്‍പര്യമുള്ളവ";
+"map_source" = "ഭൂപടഉറവിടം";
+"download_srtm_maps" = "കോണ്ടൂര്‍ ലൈനുക";
+"shared_string_change" = "\"മാറ്റുക \"";
+"shared_string_favorites" = "ഇഷ്ടമുളളവ";

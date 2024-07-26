@@ -2316,3 +2316,6 @@
 "images" = "Slike";
 "shared_string_bottom" = "Na dnu";
 "weather_source_ecmwf_description" = "Europski centar za srednjoročne prognoze vremena (ECMWF)";
+"shared_string_favorites" = "Favoriti";
+"map_source" = "Izvor karte";
+"download_srtm_maps" = "Obrisi linija";

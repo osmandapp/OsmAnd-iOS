@@ -2790,7 +2790,7 @@
 "arrival_time_widget_desc" = "Amser cyrraedd pen y daith.";
 "max_speed_widget_desc" = "Mae\'n dangos cyfyngiad cyflymder y ffordd bresennol.";
 "shared_string_format" = "Fformat";
-"map_settings_topography" = "Cyfuchliniau";
+"map_settings_topography" = "Cyfuchlinellau";
 "map_orientation_default" = "Fel gosodiad y ddyfais";
 "lanes_widgets_desc" = "Dangosa\'r ategyn lonydd y drefn lonydd cyfredol a pha lonydd i gadw ynddynt.";
 "shared_string_weather" = "Tywydd";
@@ -2808,3 +2808,9 @@
 "calculate_online" = "Cyfrifo ar-lein";
 "shared_string_development" = "Datblygiad";
 "transport_hazmat_title" = "Cludo sylweddau peryglus";
+"map_source" = "Ffynhonnell map";
+"download_srtm_maps" = "Cyfuchliniau";
+"voices" = "Cyfarwyddiadau llais";
+"shared_string_favorite" = "Ffefryn";
+"shared_string_change" = "Newid";
+"shared_string_favorites" = "Ffefrynnau";

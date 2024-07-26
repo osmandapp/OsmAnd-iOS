@@ -2684,3 +2684,13 @@
 "missing_maps_ignore" = "Kasuta olemasolevaid kaarte";
 "delete_history_items" = "Kas kustutame %@ ajalookirjet?";
 "weather_source_ecmwf_description" = "Euroopa Keskpika Ilmaennustuse Keskus (ECMWF)";
+"height_legend_description" = "Värvilised kõrgusjoonte kaardid aitavad paremini reljeefi kuvada.";
+"voices" = "Hääljuhised";
+"map_source" = "Kaardiallikas";
+"shared_string_action" = "Tegevus";
+"download_srtm_maps" = "Kõrgusjooned";
+"shared_string_colors" = "Värvid";
+"shared_string_favorites" = "Lemmikud";
+"shared_string_favorite" = "Lemmik";
+"user_palette" = "Kasutaja palett";
+"shared_string_change" = "Muuda";

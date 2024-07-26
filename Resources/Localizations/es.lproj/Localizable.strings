@@ -2234,7 +2234,7 @@
 "backup_and_restore" = "Copia de seguridad y restauración";
 "approximate_file_size" = "Tamaño aproximado del archivo";
 "mgrs_format_descr" = "OsmAnd usa MGRS, similar al formato UTM de la OTAN.";
-"ltr_or_rtl_combine_via_dash" = "%@ — %@";
+"ltr_or_rtl_combine_via_dash" = "%@– %@";
 "invalid_format" = "Formato inválido";
 "folder_already_exsists" = "Una carpeta con este nombre ya existe";
 "select_folder_descr" = "Elegir carpeta o añadir una nueva";
@@ -3474,8 +3474,8 @@
 "user_palette" = "Paleta del usuario";
 "height_legend_description" = "Los mapas de colores de altitud se utilizan para visualizar el relieve.";
 "shared_string_colors" = "Colores";
-"driving_region_uk" = "Reino Unido y otros";
-"shared_string_replace" = "Reemplazar";
+"driving_region_uk" = "Reino Unido y similares";
+"shared_string_replace" = "Remplazar";
 "quick_action_track_waypoint" = "Seguir punto de referencia";
 "map_source" = "Repositorio del mapa";
 "download_srtm_maps" = "Curvas de nivel";
@@ -3489,7 +3489,7 @@
 "key_event_category_map_interactions" = "Interacciones del mapa";
 "quick_action_directions_from" = "Punto de partida";
 "quick_action_destination" = "Destino";
-"quick_action_first_intermediate" = "Primer destino intermedio";
+"quick_action_first_intermediate" = "Primera parada";
 "quick_action_parking_place" = "Lugar de estacionamiento";
 "quick_action_verb_show_hide" = "Mostrar / Ocultar";
 "quick_action_verb_pause_resume" = "Pausar / Resumen";

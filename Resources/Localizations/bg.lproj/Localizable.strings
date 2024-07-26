@@ -1174,7 +1174,7 @@
 "osm_failed_uploads" = "Failed";
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
 "osn_bug_name" = "Бележка на OSM";
-"osm_created" = "Created";
+"osm_created" = "Дата на създаване";
 "poi_remove_success" = "Премахнато";
 "shared_string_modified" = "Промяна";
 "osm_edit_reopened_note" = "Отворена отново бележка на OSM";
@@ -1578,7 +1578,7 @@
 "product_desc_asia_short" = "Asia region maps";
 "download_wikipedia_maps" = "Wikipedia";
 "product_desc_wiki" = "Wikipedia data";
-"purchases_feature_desc_wikipedia" = "Осигурява без мрежа всички статии в Уикипедия, свързани с места, като ви помага да научите повече за местата, които посещавате по време на пътуването си, само с едно докосване на картата. Не забравяйте да изтеглите файловете с карти на Уикипедия за съответните райони.";
+"purchases_feature_desc_wikipedia" = "Осигурява без мрежа всички статии в Уикипедия, свързани с места, като ви помага да научите повече за местата, които посещавате по време на пътуването си, само с еднодокосване на картата. Не забравяйте да изтеглите файловете с карти на Уикипедия за съответните райони.";
 "shared_string_all_languages" = "Всички езици";
 "select_wikipedia_article_langs" = "Изберете езиците на които Уикипедия публикациите ще се появяват на картата. Можете да превключвате между наличните езици докато четете публикацията.";
 "wiki_menu_download_descr" = "Необходими са допълнителни карти, за да видите обектите на Уикипедия на картата.";
@@ -2811,7 +2811,7 @@
 "average_speed_time_interval_desc" = "Задайте интервала от време, за който да бъде усреднена скоростта.";
 "map_widget_trip_recording_duration" = "Продължителност";
 "short_min" = "м";
-"speed_cameras_legal_descr" = "В някои страни или региони използването на приложения за предупреждение за камери за контрол на скоростта е незаконно. \n \nТрябва да направите избор в зависимост отзакона на вашата държава. \n \nИзберете %@ и ще получавате сигнали и предупреждения за камери за контрол на скоростта. \n \nИзберете %@. Всички данни, свързани с камериза скорост: предупреждения, известия, POI, ще бъдат премахнати до преинсталиране на OsmAnd.";
+"speed_cameras_legal_descr" = "В някои страни или области използването на приложения за предупреждение за камери за контрол на скоростта е незаконно. \n \nТрябва да направите избор в зависимост отзакона на вашата държава. \n \nИзберете %@ и ще получавате сигнали и предупреждения за камери за контрол на скоростта. \n \nИзберете %@. Всички данни, свързани с камериза скорост: предупреждения, известия, POI, ще бъдат премахнати до преинсталиране на OsmAnd.";
 "shared_string_hand" = "Ръка";
 "duration_moment_ago" = "току-що";
 "map_widget_ant_heart_rate_desc" = "Показва честотата на съкращаване на сърдечния мускул на потребителя по време на дадена дейност в реално време";
@@ -2910,7 +2910,7 @@
 "shared_string_class" = "Клас";
 "shared_string_bottom" = "Долу";
 "transport_hazmat_title" = "Превоз на опасни товари";
-"weather_data_sources_prompt" = "OsmAnd черпи прогноза за времето от два изтичника:";
+"weather_data_sources_prompt" = "OsmAndчерпи прогноза за времето от два изтичника:";
 "weather_source_ecmwf_description" = "Европейски център за средносрочни прогнози на времето";
 "shared_string_cache" = "Временни файлове";
 "shared_string_markers" = "Маркери";
@@ -2920,3 +2920,15 @@
 "map_settings_weather_wind_animation" = "Анимиран вятър";
 "help_article_navigation_setup_markers_navigation_name" = "Маршрут по маркери";
 "help_article_widgets_markers_name" = "Приспособления за маркери";
+"cloud_layer" = "Слой с облачност";
+"download_srtm_maps" = "Контурни линии";
+"pressure_layer" = "Слой с налягане";
+"temperature_layer" = "Слой с температура";
+"terrain_3D_maps" = "Релефни карти";
+"shared_string_favorite" = "Любими";
+"wind_layer" = "Слой с вятър";
+"shared_string_favorites" = "Предпочитани";
+"shared_string_change" = "Промяна";
+"map_source" = "Източник на карти";
+"precipitation_layer" = "Слой с валежи";
+"voices" = "Гласови напътствия";

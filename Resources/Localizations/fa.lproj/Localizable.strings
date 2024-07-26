@@ -2248,3 +2248,11 @@
 "avoid_pt_types_descr" = "انواع روش‌های حمل‌ونقل که می‌خواهید در مسیریابی نباشند را انتخاب کنید:";
 "custom_buttons" = "دکمه های شخصی";
 "transport_hazmat_title" = "حمل و نقل مواد خطرناک";
+"voices" = "پیام‌های گفتاری";
+"key_event_category_map_interactions" = "تعامل نقشه";
+"shared_string_favorite" = "علاقه‌مندی";
+"shared_string_change" = "تغییر";
+"map_source" = "منبع نقشه";
+"shared_string_favorites" = "علاقه‌مندی‌ها";
+"download_srtm_maps" = "منحنی‌های میزان";
+"shared_string_action" = "کنش";

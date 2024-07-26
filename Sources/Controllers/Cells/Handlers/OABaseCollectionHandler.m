@@ -77,6 +77,11 @@
     return nil;
 }
 
+- (NSIndexPath *)getDefaultIndexPath
+{
+    return nil;
+}
+
 - (void)setSelectedIndexPath:(NSIndexPath *)selectedIndexPath
 {
 }

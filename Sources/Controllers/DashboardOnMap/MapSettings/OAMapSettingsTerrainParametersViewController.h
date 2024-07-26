@@ -6,14 +6,16 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import "OABaseScrollableHudViewController.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSInteger, EOATerrainSettingsType)
 {
     EOATerrainSettingsTypeVisibility,
     EOATerrainSettingsTypeZoomLevels,
     EOATerrainSettingsTypeVerticalExaggeration,
+    EOATerrainSettingsTypePalette,
     EOAGPXSettingsTypeVerticalExaggeration,
     EOAGPXSettingsTypeWallHeight
 };
@@ -39,6 +41,8 @@ typedef void(^OAControllerHideCallback)();
 - (void)configureGPXVerticalExaggerationScale:(CGFloat)scale;
 - (void)configureGPXElevationMeters:(NSInteger)meters;
 
-@property (nonatomic, weak) id<OATerrainParametersDelegate> delegate;
+@property (nonatomic, weak, nullable) id<OATerrainParametersDelegate> delegate;
 
 @end
+
+NS_ASSUME_NONNULL_END

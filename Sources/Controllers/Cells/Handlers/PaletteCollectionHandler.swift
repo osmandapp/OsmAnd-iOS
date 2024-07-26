@@ -11,6 +11,7 @@ import Foundation
 final class PaletteCollectionHandler: OABaseCollectionHandler {
 
     private var selectedIndexPath: IndexPath?
+    private var defaultIndexPath: IndexPath?
     private var data = [[PaletteColor]]()
     private var roundedSquareImage: UIImage?
 
@@ -30,15 +31,39 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
         selectedIndexPath
     }
 
+    override func getDefaultIndexPath() -> IndexPath? {
+        defaultIndexPath
+    }
+
     override func setSelectedIndexPath(_ selectedIndexPath: IndexPath) {
         self.selectedIndexPath = selectedIndexPath
     }
 
     override func generateData(_ data: [[Any]]) {
         var newData = [[PaletteColor]]()
-        for items in data {
+        for i in 0...data.count - 1 {
+            let items = data[i]
             if let palettes = items as? [PaletteColor] {
                 newData.append(palettes)
+
+                if let gradients = palettes as? [PaletteGradientColor] {
+                    var defaultGradient = gradients.first(where: {
+                        $0.paletteName == TerrainMode.defaultKey
+                    })
+                    if defaultGradient == nil {
+                        defaultGradient = gradients.first(where: {
+                            $0.typeName == TerrainType.height.name && $0.paletteName == TerrainMode.altitudeDefaultKey
+                        })
+                    }
+                    if defaultGradient == nil {
+                        defaultGradient = gradients.first(where: {
+                            $0.typeName == $0.paletteName
+                        })
+                    }
+                    if let defaultGradient, let index = gradients.firstIndex(of: defaultGradient) {
+                        defaultIndexPath = IndexPath(row: index, section: i)
+                    }
+                }
             }
         }
         self.data = newData

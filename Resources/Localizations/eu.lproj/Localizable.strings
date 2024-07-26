@@ -382,7 +382,6 @@
 "driving_region_us" = "EEBB";
 "driving_region_canada" = "Kanada";
 "driving_region_europe_asia" = "Europa, Asia, Hego Amerika eta antzekoak";
-"driving_region_uk" = "Erresuma Batua, India eta antzekoak";
 "driving_region_australia" = "Australia";
 "left_side_navigation" = "Ezkerretik gidatzea";
 "right_side_navigation" = "Eskumatik gidatzea";
@@ -3152,7 +3151,6 @@
 "tomorrow" = "Bihar";
 "rendering_value_dark_orange_name" = "Laranja iluna";
 "wall_height" = "Hormaren altuera";
-
 "rendering_value_pale_name" = "Zurbila";
 "osmand_depelopment_simulate_location_section" = "Simulatu";
 "missing_maps_ignore" = "Erabili deskargatutako mapak";
@@ -3166,3 +3164,31 @@
 "data_source" = "Datu-iturria";
 "shared_string_app_profile" = "Aplikazioaren profila";
 "map_settings_weather_wind_animation" = "Haizearen animazioa";
+"quick_action_directions_from" = "Abiapuntua";
+"shared_string_action" = "Ekintza";
+"quick_action_verb_turn_on_off" = "Piztu / Itzali";
+"pressure_layer" = "Presioaren geruza";
+"key_event_category_map_interactions" = "Maparen elkarrekintzak";
+"shared_string_favorites" = "Gogokoak";
+"temperature_layer" = "Tenperaturaren geruza";
+"quick_action_parking_place" = "Aparkalekua";
+"map_source" = "Maparen iturburua";
+"shared_string_replace" = "Ordeztu";
+"quick_action_destination" = "Helmuga";
+"voices" = "Ahots iragarpenak";
+"download_srtm_maps" = "Sestra-kurbak";
+"shared_string_change" = "Aldatu";
+"quick_action_verb_pause_resume" = "Pausatu / Berrekin";
+"height_legend_description" = "Altitude kolore-mapak erabiltzen dira erliebea ikusteko.";
+"quick_action_track_waypoint" = "Jarraitu bide-puntua";
+"precipitation_layer" = "Prezipitazioen geruza";
+"shared_string_colors" = "Koloreak";
+"quick_action_first_intermediate" = "Lehenengo geldiunea";
+"user_palette" = "Erabiltzailearen paleta";
+"shared_string_set" = "Ezarri";
+"quick_action_verb_start_stop" = "Hasi / Gelditu";
+"cloud_layer" = "Hodeien geruza";
+"shared_string_favorite" = "Gogokoa";
+"quick_action_verb_show_hide" = "Erakutsi / Ezkutatu";
+"app_profile" = "Aplikazioaren profila";
+"wind_layer" = "Haizearen geruza";

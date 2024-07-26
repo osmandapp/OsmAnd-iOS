@@ -382,7 +382,6 @@
 "driving_region_us" = "United States";
 "driving_region_canada" = "Canada";
 "driving_region_europe_asia" = "Europe, Asia, Latin America & similar";
-"driving_region_uk" = "UK, India & similar";
 "driving_region_australia" = "Australia";
 "left_side_navigation" = "डाव्या बाजूने रहदारी";
 "right_side_navigation" = "Right-hand driving";
@@ -2256,3 +2255,6 @@
 "map_orientation_portrait" = "उभा";
 "map_widget_gps_info" = "जिपिएस माहिती";
 "shared_string_bottom" = "खाली";
+"map_source" = "नकाशाचा स्त्रोत";
+"shared_string_favorites" = "आवडती ठिकाणे";
+"shared_string_change" = "बदला";

@@ -27,13 +27,14 @@ static QuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsParkingActionId
+    TYPE = [[[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsParkingActionId
                                              stringId:@"parking.add"
                                                    cl:self.class]
-                name:OALocalizedString(@"quick_action_add_parking")]
+                name:OALocalizedString(@"quick_action_parking_place")]
+               nameAction:OALocalizedString(@"shared_string_add")]
                iconName:@"ic_custom_parking"]
               secondaryIconName:@"ic_custom_compound_action_add"]
-             category:QuickActionTypeCategoryCreateCategory]
+             category:QuickActionTypeCategoryMyPlaces]
             nonEditable];
 }
 

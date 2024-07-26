@@ -299,7 +299,6 @@
 "driving_region_us" = "Estats Units";
 "driving_region_canada" = "Canada";
 "driving_region_europe_asia" = "Euròpa, Asia, America latina e semblants";
-"driving_region_uk" = "Reiaume Unit,Índia e semblant";
 "driving_region_australia" = "Australia";
 "left_side_navigation" = "Circulacion a senèstra";
 "right_side_navigation" = "Circulacion a drecha";
@@ -2860,3 +2859,5 @@
 "avoid_pt_types" = "Lo Transpòrt public es pas pres en còmpte…";
 "avoid_pt_types_descr" = "Seleccionatz quin transpòrt public se deu evitar per la navigacion:";
 "step_by_step" = "Pas a pas";
+"shared_string_favorites" = "Preferéncias";
+"download_srtm_maps" = "Corbas de nivèu";

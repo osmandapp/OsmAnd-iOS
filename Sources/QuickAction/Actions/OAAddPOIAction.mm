@@ -40,12 +40,14 @@ static QuickActionType *ACTION_TYPE;
 
 + (void)initialize
 {
-    ACTION_TYPE = [[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsAddPoiActionId
+    ACTION_TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsAddPoiActionId
                                                   stringId:@"osmpoi.add"
                                                         cl:self.class]
-                     name:OALocalizedString(@"quick_action_add_poi")]
+                     name:OALocalizedString(@"poi")]
+                     nameAction:OALocalizedString(@"shared_string_add")]
                     iconName:@"ic_action_create_poi"]
-                   category:QuickActionTypeCategoryCreateCategory];
+                   secondaryIconName:@"ic_custom_compound_action_add"]
+                   category:QuickActionTypeCategoryMyPlaces];
 }
 
 - (void) execute

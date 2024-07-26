@@ -250,7 +250,6 @@
 "driving_region_us" = "Estados Unidos";
 "driving_region_canada" = "Canadá";
 "driving_region_europe_asia" = "Europa, Asia, Lationoamérica e semellantes";
-"driving_region_uk" = "Reino Unido, India e semellantes";
 "driving_region_australia" = "Australia";
 "left_side_navigation" = "Condución pola esquerda";
 "right_side_navigation" = "Condución pola dereita";
@@ -2011,3 +2010,14 @@
 "edit_tilesource_maxzoom" = "Achegamento máximo";
 "shared_string_bottom" = "Abaixo";
 "shared_string_development" = "Desenvolvemento";
+"shared_string_favorite" = "Favorito";
+"cloud_layer" = "Capa das nubes";
+"pressure_layer" = "Capa das presións";
+"precipitation_layer" = "Capa das precipitacións";
+"shared_string_change" = "Mudar";
+"map_source" = "Fonte do mapa";
+"wind_layer" = "Capa dos ventos";
+"temperature_layer" = "Capa das temperaturas";
+"voices" = "Indicacións por voz";
+"shared_string_favorites" = "Favoritos";
+"download_srtm_maps" = "Curvas de nivel";

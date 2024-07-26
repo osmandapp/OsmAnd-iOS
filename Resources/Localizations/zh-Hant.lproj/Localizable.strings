@@ -490,7 +490,6 @@
 "driving_region_japan" = "日本";
 "driving_region_us" = "美國";
 "driving_region_canada" = "加拿大";
-"driving_region_uk" = "英國、印度與類似地區";
 "driving_region_australia" = "澳洲";
 "left_side_navigation" = "靠左行駛";
 "si_mi_feet" = "英哩/英呎";
@@ -2580,7 +2579,7 @@
 "quick_action_get_info" = "取得資訊";
 "quick_action_dialog" = "對話框";
 "units_of_speed" = "速度單位";
-"settings_app_theme" = "應用程式佈景主題";
+"settings_app_theme" = "應用程式主題";
 "map_settings_available_srtm_maps_descr" = "需要額外的地圖才能在地圖上檢視地形陰影";
 "res_url_warning" = "URL 不能為空";
 "toggle_day_night" = "切換日/夜模式";
@@ -3273,7 +3272,7 @@
 "restore_from_trash" = "從回收桶還原";
 "external_device_blood_pressure" = "血壓";
 "osmand_cloud_deletion_account_warning" = "您的帳號與所有帳號詳細資訊都將會 %@";
-"external_device_status_connect" = "連結";
+"external_device_status_connect" = "連接";
 "shared_string_wrist" = "手腕";
 "external_device_characteristic_speed" = "速度";
 "longest_duration_first" = "最長時間優先";
@@ -3358,7 +3357,6 @@
 "default_buttons" = "預設按鈕";
 "display_position_automatic_descr" = "取決於地圖方向：底部為移動方向，中心為其他所有方向。";
 "wall_height" = "牆的高度";
-
 "rendering_value_pale_name" = "灰白";
 "missing_maps_ignore_details" = "已下載的地圖涵蓋了您的路線嗎？若您熟悉該區域，請使用它們來導航。";
 "transport_hazmat_title" = "危險物品運輸";
@@ -3370,3 +3368,33 @@
 "weather_source_GFS_description" = "國家環境預報中心的全球預報系統";
 "weather_data_sources_prompt" = "OsmAnd提供來自兩個來源的天氣資料：";
 "missing_maps_ignore" = "使用已下載的地圖";
+"quick_action_verb_pause_resume" = "暫停/復原";
+"temperature_layer" = "溫度圖層";
+"voices" = "語音導航";
+"shared_string_action" = "動作";
+"precipitation_layer" = "降水圖層";
+"quick_action_verb_turn_on_off" = "開啟/關閉";
+"quick_action_parking_place" = "停車位";
+"pressure_layer" = "壓力圖層";
+"driving_region_india" = "印度";
+"key_event_category_map_interactions" = "地圖互動";
+"shared_string_colors" = "顏色";
+"user_palette" = "使用者調色板";
+"shared_string_set" = "設定";
+"quick_action_directions_from" = "起始點";
+"shared_string_replace" = "取代";
+"quick_action_verb_show_hide" = "顯示/隱藏";
+"shared_string_favorite" = "我的收藏";
+"height_legend_description" = "海拔顏色圖用於視覺化地形。";
+"app_profile" = "應用程式設定檔";
+"cloud_layer" = "雲層圖層";
+"quick_action_track_waypoint" = "軌跡航點";
+"quick_action_first_intermediate" = "第一中繼";
+"quick_action_destination" = "目的地";
+"quick_action_verb_start_stop" = "開始/停止";
+"shared_string_favorites" = "我的收藏";
+"download_srtm_maps" = "等高線";
+"shared_string_change" = "更換";
+"driving_region_uk" = "英國及類似國家";
+"wind_layer" = "風力圖層";
+"map_source" = "地圖來源";

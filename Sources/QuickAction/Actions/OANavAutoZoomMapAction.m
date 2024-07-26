@@ -25,10 +25,11 @@ static QuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsNavAutoZoomMapActionId
+    TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsNavAutoZoomMapActionId
                                             stringId:@"nav.autozoom"
                                                   cl:self.class]
                name:OALocalizedString(@"quick_action_auto_zoom")]
+              nameAction:OALocalizedString(@"quick_action_verb_turn_on_off")]
               iconName:@"ic_navbar_search"]
              category:QuickActionTypeCategoryNavigation]
             nonEditable];

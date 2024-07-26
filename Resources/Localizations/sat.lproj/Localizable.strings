@@ -412,7 +412,6 @@
 "driving_region_us" = "United States";
 "driving_region_canada" = "ᱠᱟᱱᱟᱰᱟ";
 "driving_region_europe_asia" = "Europe, Asia, Latin America & similar";
-"driving_region_uk" = "UK, India & similar";
 "driving_region_australia" = "Australia";
 "left_side_navigation" = "Left-hand driving";
 "right_side_navigation" = "Right-hand driving";
@@ -2773,3 +2772,4 @@
 "shared_string_item" = "ᱡᱤᱱᱤᱥ";
 "shared_string_bottom" = "ᱞᱟᱛᱟᱨ";
 "shared_string_development" = "ᱵᱤᱠᱟᱥ";
+"shared_string_favorites" = "ᱠᱩᱥᱤᱭᱟᱜ";

@@ -674,7 +674,8 @@
 "driving_region_us" = "United States";
 "driving_region_canada" = "Canada";
 "driving_region_europe_asia" = "Europe, Asia, Latin America, and similar";
-"driving_region_uk" = "UK, India, and similar";
+"driving_region_uk" = "UK and similar";
+"driving_region_india" = "India";
 "driving_region_australia" = "Australia";
 
 "left_side_navigation" = "Left-hand traffic";
@@ -756,6 +757,8 @@
 "shared_string_move" = "Move";
 "shared_string_dismiss" = "Dismiss";
 "shared_string_add" = "Add";
+"shared_string_set" = "Set";
+"shared_string_replace" = "Replace";
 "buy" = "Buy";
 "shared_string_buy_for" = "for";
 "shared_string_or" = "or";
@@ -845,6 +848,9 @@
 "shared_string_contributions" = "Contributions";
 "shared_string_refresh" = "Refresh";
 "shared_string_changed" = "Changed";
+"shared_string_change" = "Change";
+"shared_string_favorite" = "Favorite";
+"shared_string_favorites" = "Favorites";
 "shared_string_profile" = "Profile";
 "shared_string_download_update" = "Download update";
 "shared_string_angle" = "Angle";
@@ -1823,6 +1829,7 @@
 "quick_action_new_action" = "Add action";
 "unsupported_items" = "Unsupported items";
 "quick_action_add_create_items" = "Create items";
+"key_event_category_map_interactions" = "Map interactions";
 "configure_map" = "Configure map";
 "map_look_descr" = "Map appearance";
 "quick_action_add_marker" = "Add map marker";
@@ -1930,6 +1937,24 @@
 "quick_action_toggle_edits_descr" = "Tap this action button to show or hide offline OSM edits.";
 "quick_action_edit_list" = "Edit actions list";
 "quick_action_hillshade_descr" = "A button to show or hide hillshade on the map.";
+"quick_action_first_intermediate" = "First intermediate";
+"quick_action_track_waypoint" = "Track waypoint";
+"quick_action_directions_from" = "Start point";
+"quick_action_destination" = "Destination";
+"quick_action_parking_place" = "Parking place";
+"quick_action_verb_show_hide" = "Show / Hide";
+"quick_action_verb_turn_on_off" = "Turn On / Off";
+"quick_action_verb_pause_resume" = "Pause / Resume";
+"quick_action_verb_start_stop" = "Start / Stop";
+"map_source" = "Map source";
+"download_srtm_maps" = "Contour lines";
+"voices" = "Voice prompts";
+"temperature_layer" = "Temperature layer";
+"pressure_layer" = "Pressure layer";
+"wind_layer" = "Wind layer";
+"cloud_layer" = "Cloud layer";
+"precipitation_layer" = "Precipitation layer";
+"app_profile" = "App profile";
 "show_terrain" = "Show Terrain";
 "hide_terrain" = "Hide Terrain";
 "toggle_contour_lines" = "Show/Hide contour lines";
@@ -1983,6 +2008,7 @@
 "osb_comment_dialog_message" = "Message";
 "osn_add_dialog_title" = "Create note";
 "modify_poi" = "Modify the POI information";
+"shared_string_action" = "Action";
 "shared_string_actions" = "Actions";
 "time_limited" = "Time limited";
 "pickup_car" = "Pickup the car";

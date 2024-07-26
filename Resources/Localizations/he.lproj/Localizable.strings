@@ -382,7 +382,6 @@
 "driving_region_us" = "ארצות הברית";
 "driving_region_canada" = "קנדה";
 "driving_region_europe_asia" = "ישראל, אירופה, אסיה, דרום אמריקה ודומיהן";
-"driving_region_uk" = "אנגליה, הודו ודומיהן";
 "driving_region_australia" = "אוסטרליה";
 "left_side_navigation" = "כיוון תנועה שמאלי";
 "right_side_navigation" = "מושב הנהג מימין";
@@ -2924,3 +2923,14 @@
 "missing_maps_ignore_details" = "המפות שהורדו מכסות את הנתיב שלך? אפשר לנווט באמצעות אם האזור הזה לא מוכר לך.";
 "missing_maps_ignore" = "להשתמש במפות שהורדו";
 "transport_hazmat_title" = "העברת חומרים מסוכנים";
+"pressure_layer" = "שכבת לחצים";
+"wind_layer" = "שכבת רוחות";
+"precipitation_layer" = "שכבת משקעים";
+"map_source" = "מקור המפה";
+"cloud_layer" = "שכבת עננים";
+"shared_string_favorites" = "מועדפים";
+"download_srtm_maps" = "מפות SRTM";
+"shared_string_favorite" = "מועדף";
+"shared_string_change" = "שינוי";
+"temperature_layer" = "שכבת טמפרטורות";
+"voices" = "הנחיות קוליות";

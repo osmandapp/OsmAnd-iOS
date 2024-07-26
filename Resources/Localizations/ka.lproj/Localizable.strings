@@ -382,7 +382,6 @@
 "driving_region_us" = "აშშ";
 "driving_region_canada" = "კანადა";
 "driving_region_europe_asia" = "ევროპა&აზია და სხვა";
-"driving_region_uk" = "UK,ინდოეთია, ავსტრალია&სხვანი";
 "driving_region_australia" = "ავსტრალია";
 "left_side_navigation" = "მარცხენა ხელით ტარება";
 "right_side_navigation" = "მარჯვენასაჭიანი მოძრაობა";
@@ -2581,3 +2580,10 @@
 "horseback_riding" = "ცხენის ჭენება";
 "shared_string_millimeters_short" = "მმ";
 "edit_tilesource_minzoom" = "მინ. გადიდება";
+"shared_string_change" = "შეცვლა";
+"shared_string_favorite" = "რჩეული";
+"download_srtm_maps" = "კოტურული ხაზების მონაცემები";
+"voices" = "ხმოვანი მოთხოვნები";
+"shared_string_favorites" = "რჩეულები";
+"shared_string_action" = "ქმედება";
+"map_source" = "რუკის წყარო";

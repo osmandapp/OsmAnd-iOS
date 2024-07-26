@@ -186,7 +186,7 @@
                 [setting setValueFromString:[value stringByReplacingOccurrencesOfString:@"-tts" withString:@""] appMode:_appMode];
                 [[OsmAndApp instance] initVoiceCommandPlayer:_appMode warningNoneProvider:NO showDialog:NO force:NO];
             }
-            else
+            else if (!setting.global)
             {
                 [setting setValueFromString:value appMode:_appMode];
                 if ([key isEqualToString:@"voice_mute"])
@@ -359,7 +359,7 @@
             continue;
 
         OACommonPreference *setting = [prefs objectForKey:key];
-        if (setting)
+        if (setting && !setting.global)
         {
             NSString *stringValue = [setting toStringValue:self.appMode];
             if (stringValue)

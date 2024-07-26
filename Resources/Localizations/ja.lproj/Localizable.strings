@@ -299,7 +299,6 @@
 "driving_region_us" = "アメリカ";
 "driving_region_canada" = "カナダ";
 "driving_region_europe_asia" = "ヨーロッパ、アジア、ラテンアメリカなど";
-"driving_region_uk" = "イギリス、インドなど";
 "driving_region_australia" = "オーストラリア";
 "left_side_navigation" = "左側通行に設定";
 "right_side_navigation" = "右側通行";
@@ -2976,3 +2975,16 @@
 "step_by_step" = "ターンバイターン";
 "shared_string_millimeters" = "ミリメートル";
 "transport_hazmat_title" = "危険物の輸送";
+"voices" = "音声指示";
+"precipitation_layer" = "降水量関連レイヤー";
+"wind_layer" = "風関連レイヤー";
+"shared_string_change" = "変更";
+"cloud_layer" = "雲関連レイヤー";
+"shared_string_action" = "アクション";
+"shared_string_favorites" = "お気に入り";
+"shared_string_favorite" = "お気に入り";
+"map_source" = "マップソース";
+"key_event_category_map_interactions" = "マップ操作";
+"download_srtm_maps" = "等高線";
+"temperature_layer" = "温度関連レイヤー";
+"pressure_layer" = "気圧関連レイヤー";

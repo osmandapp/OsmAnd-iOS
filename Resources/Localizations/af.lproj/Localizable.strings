@@ -412,7 +412,6 @@
 "driving_region_us" = "Verenigde State van Amerika";
 "driving_region_canada" = "Kanada";
 "driving_region_europe_asia" = "Europa&Asië";
-"driving_region_uk" = "VK, Indië, Australië&Ander";
 "driving_region_australia" = "Australia";
 "left_side_navigation" = "Linkerhand bestuur";
 "right_side_navigation" = "Right-hand driving";
@@ -2709,7 +2708,7 @@
 "map_orientation_portrait" = "Portret";
 "network" = "Netwerk";
 "map_orientation_default" = "Dieselfde as toestel";
-"map_settings_topography" = "Kontoer lyne inligting";
+"map_settings_topography" = "Kontoerlyne";
 "map_orientation_landscape" = "Landskap";
 "general_settings" = "Algemene instellings";
 "short_min" = "m";
@@ -2722,3 +2721,7 @@
 "edit_tilesource_maxzoom" = "Maks vergroting";
 "shared_string_bottom" = "Onder";
 "edit_tilesource_minzoom" = "Min vergroting";
+"map_source" = "Kaartbron";
+"shared_string_favorite" = "Gunsteling…";
+"shared_string_favorites" = "Gunstelinge";
+"download_srtm_maps" = "Kontoerlyne";

@@ -478,7 +478,6 @@
 "driving_region_us" = "Estats Units";
 "driving_region_canada" = "Canadà";
 "driving_region_europe_asia" = "Europa,Àsia, Amèrica llatina i similars";
-"driving_region_uk" = "Regne Unit,Índia i semblants";
 "driving_region_australia" = "Austràlia";
 "left_side_navigation" = "Conducció per l\'esquerra";
 "right_side_navigation" = "Trànsit per la dreta";
@@ -2609,3 +2608,15 @@
 "shared_string_millimeters_short" = "mm";
 "shared_string_millimeters" = "Mil·limetres";
 "transport_hazmat_title" = "Transport de materials perillosos";
+"cloud_layer" = "Capa de núvols";
+"shared_string_change" = "Modifica";
+"voices" = "Indicacions per veu";
+"download_srtm_maps" = "Dades de corbes de nivell";
+"map_source" = "Font del mapa";
+"pressure_layer" = "Capa de pressió atmosfèrica";
+"temperature_layer" = "Capa de temperatura";
+"shared_string_favorites" = "Preferits";
+"wind_layer" = "Capa de vents";
+"precipitation_layer" = "Capa de precipitacions";
+"shared_string_action" = "Acció";
+"shared_string_favorite" = "Preferida";

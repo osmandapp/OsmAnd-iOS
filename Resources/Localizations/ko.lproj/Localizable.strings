@@ -141,7 +141,6 @@
 "simulate_your_location" = "모의 주행";
 "simulate_navigation" = "내비게이션 시뮬레이션";
 "no_active_route" = "활성 경로 없음";
-"driving_region_uk" = "영국, 인도, 호주 및 기타";
 "driving_region_australia" = "호주";
 "osmand_live_support_reg_descr" = "기부금의 일부는 해당 지역의 지도에 대한 변경 사항을 제출하는 OSM 사용자에게 보내질 것이다.";
 "select_avoid_descr" = "탐색 중에 피하려는 도로를 선택하십시오. 지도에서 도로를 선택하거나 아래 목록에서 유형을 선택할 수 있다.";
@@ -2589,7 +2588,7 @@
 "auto_zoom_smooth" = "매끄러운";
 "shared_string_class" = "등급";
 "shared_string_always" = "항상 사용";
-"shared_string_bottom" = "맨 아래";
+"shared_string_bottom" = "아래";
 "shared_string_limit" = "한계";
 "when_exceeded" = "초과 시";
 "custom_buttons" = "사용자지정 버튼";
@@ -2617,3 +2616,16 @@
 "speed_limit_warning" = "속도 제한 경고";
 "missing_or_outdated_maps_title" = "미스 또는 아웃 맵";
 "transport_hazmat_title" = "유해 물질 운송";
+"wind_layer" = "바람 층";
+"key_event_category_map_interactions" = "매핑 상호 작용";
+"download_srtm_maps" = "등고선";
+"precipitation_layer" = "강수량층";
+"shared_string_action" = "액션";
+"shared_string_change" = "변경";
+"temperature_layer" = "온도층";
+"shared_string_favorite" = "즐겨찾기";
+"cloud_layer" = "구름 층";
+"pressure_layer" = "압력 층";
+"shared_string_favorites" = "즐겨찾기";
+"voices" = "음성 안내";
+"map_source" = "지도 소스";

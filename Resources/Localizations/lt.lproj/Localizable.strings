@@ -382,7 +382,6 @@
 "driving_region_us" = "JAV";
 "driving_region_canada" = "Kanada";
 "driving_region_europe_asia" = "Europa, Azija, Lotynų Amerika ir panašiai";
-"driving_region_uk" = "JK, Indija ir kitos";
 "driving_region_australia" = "Australija";
 "left_side_navigation" = "Važiavimas kairiąja kelio puse";
 "right_side_navigation" = "Vairavimas dešinėje";
@@ -2490,7 +2489,7 @@
 "shared_string_read" = "Skaityti";
 "shared_string_any" = "Bet kurią";
 "map_marker_1st" = "Pirmojižymė";
-"weather_update_disabled" = "Išjungtas";
+"weather_update_disabled" = "Išjungta";
 "shared_string_move" = "Perkelti";
 "global_settings" = "Globalūs nustatymai";
 "visibility" = "Matomumas";
@@ -2685,3 +2684,11 @@
 "not_enough_contributions_descr" = "Reikia mažiausiai %@ pakeitimų per paskutinius du mėnesius %@, kad gautumėte prieigą prie neriboto valandinio žemėlapio atnaujinimo.";
 "bearing_secondary_desc" = "Galite pakeisti naudojamą duomenų formatą: %@ – %@ – %@.";
 "visualization_3d_track_line" = "Trasos linija";
+"shared_string_action" = "Veiksmas";
+"height_legend_description" = "Reljefui vizualizuoti naudojami spalvų aukščio žemėlapiai.";
+"map_source" = "Žemėlapio šaltinis";
+"shared_string_favorites" = "Įsimintos vietos";
+"voices" = "Balso pranešimai";
+"download_srtm_maps" = "SRTMžemėlapiai";
+"shared_string_change" = "Pakeisti";
+"shared_string_favorite" = "Įsiminta vieta";

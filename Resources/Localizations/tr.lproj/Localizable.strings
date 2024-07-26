@@ -971,7 +971,6 @@
 "download_wiki_region_placeholder" = "bu bölge";
 "nothing_found_descr" = "Arama sorgusunu değiştir veya yarıçapını arttır.";
 "driving_region_europe_asia" = "Avrupa, Asya, Latin Amerika ve benzeri";
-"driving_region_uk" = "Birleşik Krallık (İngiltere), Hindistan ve benzeri";
 "route_roundabout" = "Döner kavşak: %d çıkışa girin ve devam edin";
 "lat" = "Enlem";
 "lon" = "Boylam";
@@ -1704,7 +1703,7 @@
 "allow_3D_view" = "2.5B görünüm";
 "do_not_rotate" = "Döndürme";
 "light_theme" = "Açık";
-"settings_app_theme" = "Uygulama teması";
+"settings_app_theme" = "Uygulama gövdesi";
 "shared_string_meters" = "metre";
 "shared_string_tones" = "ton";
 "accessibility_announce" = "Duyuru";
@@ -3339,3 +3338,20 @@
 "weather_data_sources_prompt" = "OsmAnd hava verisini iki kaynaktan sağlar:";
 "missing_maps_ignore" = "Var olan haaritaları kullan";
 "map_settings_weather_wind_animation" = "Rüzgar animasyonu";
+"weather_source_ecmwf_description" = "Avrupa Orta Vadeli Hava Tahminleri Merkezi (ECMWF)";
+"user_palette" = "Kullanıcı paleti";
+"pressure_layer" = "Basınç katmanı";
+"wind_layer" = "Rüzgar katmanı";
+"precipitation_layer" = "Yağış katmanı";
+"shared_string_change" = "Değiştir";
+"map_source" = "Harita kaynağı";
+"height_legend_description" = "Yükseklik renk haritaları rölyefi görselleştirmek için kullanılır.";
+"download_srtm_maps" = "Eş yükselti eğrileri";
+"shared_string_favorites" = "Favoriler";
+"shared_string_favorite" = "Favori";
+"key_event_category_map_interactions" = "Harita etkileşimleri";
+"temperature_layer" = "Sıcaklık katmanı";
+"cloud_layer" = "Bulut katmanı";
+"shared_string_action" = "Eylem";
+"voices" = "Sesli uyarılar";
+"shared_string_colors" = "Renkler";

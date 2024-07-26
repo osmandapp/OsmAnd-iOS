@@ -43,12 +43,13 @@ static NSString * const kParams = @"params";
 static NSString * const kId = @"id";
 static NSString * const kActionType = @"actionType";
 
-static QuickActionType *TYPE_ADD_ITEMS;
+static QuickActionType *TYPE_CREATE_CATEGORY;
 static QuickActionType *TYPE_CONFIGURE_MAP;
 static QuickActionType *TYPE_NAVIGATION;
 static QuickActionType *TYPE_CONFIGURE_SCREEN;
 static QuickActionType *TYPE_SETTINGS;
-static QuickActionType *TYPE_OPEN;
+static QuickActionType *TYPE_MAP_INTERACTIONS;
+static QuickActionType *TYPE_MY_PLACES;
 
 @implementation OAMapButtonsHelper
 {
@@ -66,7 +67,7 @@ static QuickActionType *TYPE_OPEN;
 
 + (void)initialize
 {
-    TYPE_ADD_ITEMS = [[[[QuickActionType alloc] initWithId:0 stringId:@""]
+    TYPE_CREATE_CATEGORY = [[[[QuickActionType alloc] initWithId:0 stringId:@""]
                        name:OALocalizedString(@"quick_action_add_create_items")]
                       category:QuickActionTypeCategoryCreateCategory];
 
@@ -75,7 +76,7 @@ static QuickActionType *TYPE_OPEN;
                           category:QuickActionTypeCategoryConfigureMap];
 
     TYPE_NAVIGATION = [[[[QuickActionType alloc] initWithId:0 stringId:@""]
-                        name:OALocalizedString(@"routing_settings")]
+                        name:OALocalizedString(@"shared_string_navigation")]
                        category:QuickActionTypeCategoryNavigation];
 
     TYPE_CONFIGURE_SCREEN = [[[[QuickActionType alloc] initWithId:0 stringId:@""]
@@ -86,9 +87,13 @@ static QuickActionType *TYPE_OPEN;
                       name:OALocalizedString(@"shared_string_settings")]
                      category:QuickActionTypeCategorySettings];
 
-    TYPE_OPEN = [[[[QuickActionType alloc] initWithId:0 stringId:@""]
-                  name:OALocalizedString(@"shared_string_open")]
-                 category:QuickActionTypeCategoryOpen];
+    TYPE_MAP_INTERACTIONS = [[[[QuickActionType alloc] initWithId:0 stringId:@""]
+                  name:OALocalizedString(@"key_event_category_map_interactions")]
+                 category:QuickActionTypeCategoryMapInteractions];
+    
+    TYPE_MY_PLACES = [[[[QuickActionType alloc] initWithId:0 stringId:@""]
+                  name:OALocalizedString(@"shared_string_my_places")]
+                 category:QuickActionTypeCategoryMyPlaces];
 }
 
 + (OAMapButtonsHelper *)sharedInstance
@@ -101,9 +106,9 @@ static QuickActionType *TYPE_OPEN;
     return _sharedInstance;
 }
 
-+ (QuickActionType *) TYPE_ADD_ITEMS
++ (QuickActionType *) TYPE_CREATE_CATEGORY
 {
-    return TYPE_ADD_ITEMS;
+    return TYPE_CREATE_CATEGORY;
 }
 
 + (QuickActionType *) TYPE_CONFIGURE_MAP
@@ -126,9 +131,14 @@ static QuickActionType *TYPE_OPEN;
     return TYPE_SETTINGS;
 }
 
-+ (QuickActionType *) TYPE_OPEN
++ (QuickActionType *) TYPE_MAP_INTERACTIONS
 {
-    return TYPE_OPEN;
+    return TYPE_MAP_INTERACTIONS;
+}
+
++ (QuickActionType *) TYPE_MY_PLACES
+{
+    return TYPE_MY_PLACES;
 }
 
 - (instancetype)init
@@ -352,12 +362,13 @@ static QuickActionType *TYPE_OPEN;
 - (NSArray<QuickActionType *> *)produceTypeActionsListWithHeaders:(QuickActionButtonState *)buttonState
 {
     NSMutableArray<QuickActionType *> *actionTypes = [NSMutableArray new];
-    [self filterQuickActions:buttonState filter:TYPE_ADD_ITEMS actionTypes:actionTypes];
+    [self filterQuickActions:buttonState filter:TYPE_CREATE_CATEGORY actionTypes:actionTypes];
     [self filterQuickActions:buttonState filter:TYPE_CONFIGURE_MAP actionTypes:actionTypes];
+    [self filterQuickActions:buttonState filter:TYPE_MAP_INTERACTIONS actionTypes:actionTypes];
+    [self filterQuickActions:buttonState filter:TYPE_MY_PLACES actionTypes:actionTypes];
     [self filterQuickActions:buttonState filter:TYPE_NAVIGATION actionTypes:actionTypes];
-//    [self filterQuickActions:buttonState filter:TYPE_CONFIGURE_SCREEN actionTypes:actionTypes];
+    [self filterQuickActions:buttonState filter:TYPE_CONFIGURE_SCREEN actionTypes:actionTypes];
     [self filterQuickActions:buttonState filter:TYPE_SETTINGS actionTypes:actionTypes];
-    [self filterQuickActions:buttonState filter:TYPE_OPEN actionTypes:actionTypes];
 
     return actionTypes;
 }

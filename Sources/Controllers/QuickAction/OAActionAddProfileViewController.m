@@ -124,7 +124,7 @@
     for (NSIndexPath *path in selectedItems)
     {
         OAProfileDataObject *profile = _data[path.row];
-        [arr addObject:@{@"name" : profile.name, @"stringKey" : profile.stringKey, @"img" : profile.iconName, @"iconColor" : [NSNumber numberWithInt:profile.iconColor]}];
+        [arr addObject:@{@"name" : profile.name, @"stringKey" : profile.stringKey, @"img" : profile.iconName, @"iconColor" : UIColorFromRGB(profile.iconColor) }];
     }
     if (self.delegate)
         [self.delegate onProfileSelected:[NSArray arrayWithArray:arr]];

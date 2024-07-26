@@ -471,7 +471,6 @@
 "driving_region_us" = "Istados Unidos";
 "driving_region_canada" = "Cànada";
 "driving_region_europe_asia" = "Europa,Àsia, Amèrica latina e simigiantes";
-"driving_region_uk" = "UK,Ìndia, e simigiantes";
 "driving_region_australia" = "Austràlia";
 "left_side_navigation" = "Tzirculatzione a manca";
 "right_side_navigation" = "Tzirculatzione a destra";
@@ -954,7 +953,7 @@
 "access_intermediate_arrival_time" = "Ora de arrivu a sa tapa";
 "map_widget_intermediate_time" = "Tempus de arrivu a sa tapa";
 "shared_string_time" = "Tempus";
-"shared_string_distance" = "Distàntzia";
+"shared_string_distance" = "Distantzia";
 "shared_string_milliradians" = "Millèsimos angulares (radiantes)";
 "angular_units" = "Unidades de medida angulare";
 "angular_units_descr" = "Càmbia sas unidades de medida de s'àzimut.";
@@ -3072,3 +3071,14 @@
 "shared_string_always" = "Semper";
 "avoid_pt_types" = "Istransi castas de trasportu…";
 "transport_hazmat_title" = "Trasportu de materiales perigulosos";
+"pressure_layer" = "Istratu de sa pressione atmosfèrica";
+"download_srtm_maps" = "Curvas de livellu";
+"wind_layer" = "Istratu de su bentu";
+"precipitation_layer" = "Istratu de sas pretzipitatziones";
+"map_source" = "Mitza mapa";
+"shared_string_change" = "Càmbia";
+"shared_string_favorites" = "Preferidos";
+"voices" = "Indicatziones vocales";
+"temperature_layer" = "Istratu de sa temperadura";
+"shared_string_favorite" = "Preferidu";
+"cloud_layer" = "Istratu de sas nues";

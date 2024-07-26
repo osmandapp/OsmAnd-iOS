@@ -201,7 +201,6 @@
 "driving_region_us" = "ایالات متحدهٔ آمریکا";
 "driving_region_canada" = "کانادا";
 "driving_region_europe_asia" = "اروپا، آسیا، آمریکای لاتین و مناطق مشابه";
-"driving_region_uk" = "انگلستان، هند و مناطق مشابه";
 "driving_region_australia" = "استرالیا";
 "left_side_navigation" = "رانندگی از چپ";
 "right_side_navigation" = "رانندگی از راست";
@@ -2249,3 +2248,11 @@
 "avoid_pt_types_descr" = "انواع روش‌های حمل‌ونقل که می‌خواهید در مسیریابی نباشند را انتخاب کنید:";
 "custom_buttons" = "دکمه های شخصی";
 "transport_hazmat_title" = "حمل و نقل مواد خطرناک";
+"voices" = "پیام‌های گفتاری";
+"key_event_category_map_interactions" = "تعامل نقشه";
+"shared_string_favorite" = "علاقه‌مندی";
+"shared_string_change" = "تغییر";
+"map_source" = "منبع نقشه";
+"shared_string_favorites" = "علاقه‌مندی‌ها";
+"download_srtm_maps" = "منحنی‌های میزان";
+"shared_string_action" = "کنش";

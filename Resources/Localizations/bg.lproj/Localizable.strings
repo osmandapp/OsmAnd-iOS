@@ -44,7 +44,7 @@
 "shared_string_control_stop" = "Стоп";
 "cancel_navigation" = "Спиране на навигацията";
 "start_navigation" = "Start navigation";
-"intermediate_items_sort_by_distance" = "Сортиране врата-до-врата";
+"intermediate_items_sort_by_distance" = "Сортиране в оптимален ред";
 "switch_start_finish" = "Разменяне на изходната точка и местоназначението";
 "clear_all_intermediates" = "Clear all intermediate points";
 "shared_string_options" = "Настройки";
@@ -75,19 +75,19 @@
 "will_open_tomorrow_at" = "Отваря утре в";
 "error_avoid_specific_road" = "Няма намерен заобиколен път";
 "road_blocked" = "Блокиран път";
-"starting_point" = "Начална точка";
+"starting_point" = "Отправна точка";
 "shared_string_select_avoid_road_on_map" = "Select a road to be avoided during the routing";
 "shared_string_road" = "Road";
 "avoid_roads_msg" = "Можете да зададете алтернативен маршрут, като изберете кои пътища да бъдат избегнати";
 "shared_string_go" = "Старт";
-"info_button" = "Инфо";
+"info_button" = "Информация";
 "simulate_your_location" = "Симулира вашата позиция";
 "simulate_navigation" = "Simulate navigation";
 "simulate_routing_descr" = "Simulate your position using a calculated route";
 "select_avoid_descr" = "Select roads you want to avoid during navigation. You can either select a road on the map or choose a type from the list below.";
 "no_active_route" = "No active route";
 "day_night_info_description" = "Изгрев: %@ \nЗалез: %@";
-"day_night_info" = "Информация за изгрев и залез";
+"day_night_info" = "Изгрев и залез";
 "daynight_mode_auto" = "Изгрев/залез";
 "route_simulation" = "Route simulation";
 "auto_follow_location_enabled" = "Автоматичното центриране е включено.";
@@ -137,7 +137,7 @@
 "auto_split_recording_title" = "Auto-split recordings after gap";
 "auto_split_gap_descr" = "Start a new segment after 6 min gap, new track after 2 h gap, or new file after a longer gap";
 "trip_rec_actions_descr" = "You can find all your recorded tracks in %@";
-"reset_plugin_to_default" = "Възстановяване на настройките на добавката към фабричните";
+"reset_plugin_to_default" = "Нулиране на настройките на добавката";
 "map_widget_magnetic_bearing" = "Направление по магнитния компас";
 "map_widget_bearing" = "Относително направление";
 "map_widget_transparent" = "Прозрачни приспособления";
@@ -318,7 +318,7 @@
 "sort_by_name" = "Сортиране по име";
 "by_name" = "By name";
 "by_dist" = "By distance";
-"sort_by" = "Sort";
+"sort_by" = "Сортиране";
 "map_markers_other" = "Други маркери";
 "directions_other" = "Other directions";
 "shared_string_turn" = "Turn";
@@ -383,7 +383,7 @@
 "driving_region_canada" = "Канада";
 "driving_region_europe_asia" = "Европа, Азия, Латинска Америка и подобни";
 "driving_region_uk" = "Великобритания, Индия, Австралия и подобни";
-"driving_region_australia" = "Australia";
+"driving_region_australia" = "Австралия";
 "left_side_navigation" = "Обратно движение";
 "right_side_navigation" = "Right-hand driving";
 "si_mi_feet" = "Мили/фута";
@@ -480,8 +480,8 @@
 "shared_string_max" = "Max.";
 "shared_string_wifi_only" = "Only on Wi-Fi";
 "shared_string_turn_off" = "Изключване";
-"shared_strings_all_regions" = "All regions";
-"regions" = "Региони";
+"shared_strings_all_regions" = "Всички области";
+"regions" = "Области";
 "shared_string_width" = "Width";
 "shared_string_interval" = "Интервал";
 "shared_string_none" = "Няма";
@@ -964,7 +964,7 @@
 "profile_sett_descr" = "Affect selected application profile";
 "import_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";
 "export_profile_descr" = "You can export all profile settings, copy all settings from another profile or reset all profile settings to default state.";
-"new_plugin_added" = "New plugin added";
+"new_plugin_added" = "Инсталирана е добавка";
 "reset_to_default" = "Нулиране";
 "reset_profile_action_descr" = "Reset all profile settings to installation defaults. Tapping Reset will discard all your changes, this action can't be undone.";
 "checking_for_duplicates" = "Checking for duplicates...";
@@ -1039,7 +1039,7 @@
 "plan_route_split_after" = "Split after";
 "follow_track" = "Следване на трасе";
 "shared_string_gpx_track" = "Следа";
-"select_another_track" = "Select another track";
+"select_another_track" = "Изберете друго трасе";
 "select_track_to_follow" = "Select track to follow";
 "attach_to_the_roads" = "Прикрепяне към пътищата";
 "point_to_navigate" = "Navigate to";
@@ -1058,7 +1058,7 @@
 
 // Resources
 "shared_string_resources" = "Ресурси";
-"res_mapsres" = "Maps & Resources";
+"res_mapsres" = "Карти и ресурси";
 "download_tab_local" = "Изтеглени";
 "osmand_live" = "OsmAnd Live";
 "live_updates" = "Обновяване на живо";
@@ -1079,7 +1079,7 @@
 "osmand_live_donation_switch_descr" = "Part of your donation is distributed among the OSM users who submit changes to OpenStreetMap. The cost of the subscription remains the same";
 "osmand_live_donations_enter_email" = "Enter your email address";
 "osmand_live_donations_email_descr" = "Please provide your e-mail address to get the donation reports";
-"osm_live_support_region" = "Поддръжка регион";
+"osm_live_support_region" = "Поддръжана област";
 "osmand_live_support_reg_descr" = "Part of your donation will be sent to OSM users who submit changes to the map in that region";
 "osmand_live_public_name" = "Enter your public name";
 "osmand_live_subscription_canceled" = "You have cancelled OsmAnd Live Subscription";
@@ -1174,7 +1174,7 @@
 "osm_failed_uploads" = "Failed";
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
 "osn_bug_name" = "Бележка на OSM";
-"osm_created" = "Created";
+"osm_created" = "Дата на създаване";
 "poi_remove_success" = "Премахнато";
 "shared_string_modified" = "Промяна";
 "osm_edit_reopened_note" = "Отворена отново бележка на OSM";
@@ -1578,7 +1578,7 @@
 "product_desc_asia_short" = "Asia region maps";
 "download_wikipedia_maps" = "Wikipedia";
 "product_desc_wiki" = "Wikipedia data";
-"purchases_feature_desc_wikipedia" = "Осигурява без мрежа всички статии в Уикипедия, свързани с места, като ви помага да научите повече за местата, които посещавате по време на пътуването си, само с еднодокосване на картата. Не забравяйте да изтеглите файловете с карти на Уикипедия за съответните региони.";
+"purchases_feature_desc_wikipedia" = "Осигурява без мрежа всички статии в Уикипедия, свързани с места, като ви помага да научите повече за местата, които посещавате по време на пътуването си, само с еднодокосване на картата. Не забравяйте да изтеглите файловете с карти на Уикипедия за съответните райони.";
 "shared_string_all_languages" = "Всички езици";
 "select_wikipedia_article_langs" = "Изберете езиците на които Уикипедия публикациите ще се появяват на картата. Можете да превключвате между наличните езици докато четете публикацията.";
 "wiki_menu_download_descr" = "Необходими са допълнителни карти, за да видите обектите на Уикипедия на картата.";
@@ -1741,7 +1741,7 @@
 "free" = "Свободни %@";
 "first_usage_greeting" = "Получете упътвания и открийте нови места без да ползвате връзка към Интернет";
 "get_started" = "Първи стъпки";
-"first_usage_wizard_desc" = "Нека OsmAnd определи Вашето местоположение и да Ви предложи карти за изтегляне.";
+"first_usage_wizard_desc" = "Нека OsmAnd определи вашето местоположение и да ви предложи карти за изтегляне.";
 "suggested_maps" = "Предложени карти";
 "suggested_maps_descr" = "These maps are required for the plugin";
 "added_profiles" = "Добавени профили";
@@ -1754,7 +1754,7 @@
 "searching" = "Търсене…";
 "search_location" = "Определяне местоположение…";
 "search_map" = "Търсене на карти …";
-"search_another_country" = "Изберете друг регион";
+"search_another_country" = "Изберете друга област";
 "skip_map_downloading" = "Пропускане на картите";
 "skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";
 "wiki_around" = "Nearby Wikipedia articles";
@@ -1832,7 +1832,7 @@
 "key_hint_recenter_map" = "Recenter Map";
 "wiki_buy_description" = "To read full articles - buy Wikipedia plugin and download Wikipedia data of %@";
 "wiki_download_description" = "To read full articles - download Wikipedia data of %@";
-"download_wiki_region_placeholder" = "this region";
+"download_wiki_region_placeholder" = "тази област";
 "osm_live_plan_pricing" = "Plans & Pricing";
 "osm_live_payment_monthly_title" = "Pay monthly";
 "osm_live_payment_3_months_title" = "Pay once in 3 months";
@@ -2273,7 +2273,7 @@
 "share_geo" = "гео:";
 "unlimited_map_downloads" = "Неограничено изтегляне на карти";
 "osmand_development_plugin_description" = "Осигурява възможност за изпитване и отстраняване на грешки в OsmAnd: симулиране на навигационни маршрути, наблюдение на изчертаването на екрана, проверка на производителността и други. Добавката не е необходима за нормалната работа на приложението.";
-"purchases_feature_desc_unlimited_map_download" = "Получете неограничени изтегляния на офлайн карти на всички континенти и региони.";
+"purchases_feature_desc_unlimited_map_download" = "Получете неограничени изтегляния на офлайн карти на всички континенти и области.";
 "purchases_feature_desc_hourly_map_updates" = "Достъп до по-често обновяване на картите. Почасови, ежедневни или ежеседмични обновявания. Изтеглят поетапно, само за променената област.";
 "shared_string_includes" = "Включва";
 "routing_attr_allow_private_for_truck_description" = "Разрешава достъпа на камиони до частни територии.";
@@ -2295,7 +2295,7 @@
 "purchases_feature_desc_terrain" = "Контурни линии на терена, пълна карта със засенчване на релефа с нюанси на сивото и карти на склоновете с оцветяване на върховете и низините.";
 "purchases_feature_desc_pro_widgets" = "Получете достъп до възможностите на OsmAnd Pro: оцветяване на маршрути и др.";
 "private_access_routing_req" = "Местоназначението се намира в частна собственост. Разрешавате ли използване на частни пътища за пътуването\?";
-"purchases_feature_desc_wikivoyage" = "Разгледайте Wikivoyage офлайн. Статиите са разделени по държави и региони и са достъпни на всички езици.";
+"purchases_feature_desc_wikivoyage" = "Разгледайте Wikivoyage извън мрежа. Статиите са разделени по държави и области и са достъпни на всички езици.";
 "redeem_promo_code" = "Използване на промоционален код";
 "cloud_conflicts" = "Конфликти";
 "data_settings" = "Данни";
@@ -2433,7 +2433,7 @@
 "weather_wind_knots" = "Възли";
 "weather_temperature_fahrenheit" = "Градуси по Фаренхайт";
 "routing_attr_goods_restrictions_name" = "Доставка на стоки";
-"shared_string_weather" = "Време";
+"shared_string_weather" = "Времето";
 "map_settings_weather_wind" = "Вятър";
 "map_settings_weather_cloud" = "Облачност";
 "weather_forecast_is_outdated" = "Прогнозата е стара.";
@@ -2534,7 +2534,7 @@
 "rendering_attr_showTrainRoutes_name" = "Железопътни маршрути";
 "rendering_attr_horse_scale_dangerous_name" = "Опасна";
 "grey_color_undefined" = "Частите без данни са сиви.";
-"terrain_maps" = "Карти на терена";
+"terrain_maps" = "Релефни карти";
 "start_point" = "Начало";
 "generate_slope_from_3d_maps" = "Създаване на растерни карти на склоновете от триизмерни карти";
 "routeInfo_surface_description" = "Предоставя информация за физическата повърхност на пътя/пешеходната алея.";
@@ -2650,7 +2650,7 @@
 "time_to_navigation_point_widget_settings_desc" = "Превключва режима при докосване на приспособлението.";
 "go_to_marker_location" = "Към до местоположението на маркера";
 "map_widget_group_glide_ratio" = "Коефициент на планиране";
-"weather_widgets_secondary_desc" = "Мерните единици могат да бъдат променени в настройките на добавката „Време“.";
+"weather_widgets_secondary_desc" = "Мерните единици могат да бъдат променени в настройките на добавката „Времето“.";
 "telegram_chats" = "Разговор в Телеграм";
 "setup" = "Настройки";
 "context_menu_read_article" = "Прочетете статията";
@@ -2811,7 +2811,7 @@
 "average_speed_time_interval_desc" = "Задайте интервала от време, за който да бъде усреднена скоростта.";
 "map_widget_trip_recording_duration" = "Продължителност";
 "short_min" = "м";
-"speed_cameras_legal_descr" = "В някои страни или региони използването на приложения за предупреждение за камери за контрол на скоростта е незаконно. \n \nТрябва да направите избор в зависимост отзакона на вашата държава. \n \nИзберете %@ и ще получавате сигнали и предупреждения за камери за контрол на скоростта. \n \nИзберете %@. Всички данни, свързани с камериза скорост: предупреждения, известия, POI, ще бъдат премахнати до преинсталиране на OsmAnd.";
+"speed_cameras_legal_descr" = "В някои страни или области използването на приложения за предупреждение за камери за контрол на скоростта е незаконно. \n \nТрябва да направите избор в зависимост отзакона на вашата държава. \n \nИзберете %@ и ще получавате сигнали и предупреждения за камери за контрол на скоростта. \n \nИзберете %@. Всички данни, свързани с камериза скорост: предупреждения, известия, POI, ще бъдат премахнати до преинсталиране на OsmAnd.";
 "shared_string_hand" = "Ръка";
 "duration_moment_ago" = "току-що";
 "map_widget_ant_heart_rate_desc" = "Показва честотата на съкращаване на сърдечния мускул на потребителя по време на дадена дейност в реално време";
@@ -2910,3 +2910,25 @@
 "shared_string_class" = "Клас";
 "shared_string_bottom" = "Долу";
 "transport_hazmat_title" = "Превоз на опасни товари";
+"weather_data_sources_prompt" = "OsmAndчерпи прогноза за времето от два изтичника:";
+"weather_source_ecmwf_description" = "Европейски център за средносрочни прогнози на времето";
+"shared_string_cache" = "Временни файлове";
+"shared_string_markers" = "Маркери";
+"weather_source_GFS_description" = "Глобална система за прогнози от национални центрове за предсказване на околната среда";
+"weather_source_ecmwf_title" = "ECMWF";
+"weather_source_GFS_title" = "GFS";
+"map_settings_weather_wind_animation" = "Анимиран вятър";
+"help_article_navigation_setup_markers_navigation_name" = "Маршрут по маркери";
+"help_article_widgets_markers_name" = "Приспособления за маркери";
+"cloud_layer" = "Слой с облачност";
+"download_srtm_maps" = "Контурни линии";
+"pressure_layer" = "Слой с налягане";
+"temperature_layer" = "Слой с температура";
+"terrain_3D_maps" = "Релефни карти";
+"shared_string_favorite" = "Любими";
+"wind_layer" = "Слой с вятър";
+"shared_string_favorites" = "Предпочитани";
+"shared_string_change" = "Промяна";
+"map_source" = "Източник на карти";
+"precipitation_layer" = "Слой с валежи";
+"voices" = "Гласови напътствия";

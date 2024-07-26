@@ -16,7 +16,7 @@ final class ColorPaletteHelper: NSObject {
     static let gradientIdSplitter = "_"
 
     private var app: OsmAndAppProtocol
-    private var cachedColorPalette = [String: ColorPalette]()
+    private var cachedColorPalette = ConcurrentDictionary<String, ColorPalette>()
 
     private override init() {
         app = OsmAndApp.swiftInstance()
@@ -55,11 +55,11 @@ final class ColorPaletteHelper: NSObject {
         if isColorPaletteUpdated(colorPaletteFileName, error: error) {
             return parseGradientColorPalette(colorPaletteFileName)
         }
-        return cachedColorPalette[colorPaletteFileName]
+        return cachedColorPalette.getValue(forKey: colorPaletteFileName)
     }
 
     func isColorPaletteUpdated(_ colorPaletteFileName: String, error: NSErrorPointer) -> Bool {
-        guard let cachedPalette = cachedColorPalette[colorPaletteFileName] else {
+        guard let cachedPalette = cachedColorPalette.getValue(forKey: colorPaletteFileName) else {
             return true
         }
         do {
@@ -76,7 +76,7 @@ final class ColorPaletteHelper: NSObject {
         if FileManager.default.fileExists(atPath: filePath) {
             do {
                 let colorPalette = try ColorPalette.parseColorPalette(from: filePath)
-                cachedColorPalette[colorPaletteFileName] = colorPalette
+                cachedColorPalette.setValue(colorPalette, forKey: colorPaletteFileName)
                 return colorPalette
             } catch {
                 debugPrint("Error reading color file: \(error)")

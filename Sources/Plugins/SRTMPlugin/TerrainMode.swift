@@ -11,7 +11,7 @@ import Foundation
 @objcMembers
 final class TerrainMode: NSObject {
 
-    @objc enum TerrainType: Int32, Comparable {
+    @objc enum TerrainType: Int32, Comparable, CaseIterable {
         case hillshade
         case slope
         case height
@@ -29,11 +29,16 @@ final class TerrainMode: NSObject {
         }
     }
 
+    @objc 
     @objcMembers
     final class TerrainTypeWrapper: NSObject {
 
         static func getNameFor(type: TerrainType) -> String {
             type.name
+        }
+    
+        static func valueOf(typeName: String) -> TerrainType {
+            TerrainType.allCases.first { $0.name == typeName } ?? .hillshade
         }
     }
 
@@ -69,9 +74,9 @@ final class TerrainMode: NSObject {
         self.translateName = translateName
 
         let settings = OAAppSettings.sharedManager()!
-        minZoomPref = settings.registerIntPreference(key + "_min_zoom", defValue: 3).makeProfile()
-        maxZoomPref = settings.registerIntPreference(key + "_max_zoom", defValue: 17).makeProfile()
-        transparencyPref = settings.registerIntPreference(key + "_transparency", defValue: type == .hillshade ? 100 : 80).makeProfile()
+        minZoomPref = settings.registerIntPreference(key + "_min_zoom", defValue: Int32(terrainMinSupportedZoom)).makeProfile()
+        maxZoomPref = settings.registerIntPreference(key + "_max_zoom", defValue: Int32(terrainMaxSupportedZoom)).makeProfile()
+        transparencyPref = settings.registerIntPreference(key + "_transparency", defValue: Int32(type == .hillshade ? hillshadeDefaultTrasparency : defaultTrasparency)).makeProfile()
     }
 
     static func getMode(_ type: TerrainType, keyName: String) -> TerrainMode? {
@@ -185,6 +190,7 @@ final class TerrainMode: NSObject {
     func setZoomValues(minZoom: Int32, maxZoom: Int32, mode: OAApplicationMode) {
         self.minZoomPref.set(minZoom, mode: mode)
         self.maxZoomPref.set(maxZoom, mode: mode)
+        self.minZoomPref.getProfileDefaultValue(mode)
     }
 
     func setTransparency(_ transparency: Int32) {

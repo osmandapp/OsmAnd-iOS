@@ -3452,8 +3452,8 @@
 "osm_login_needs_ios_16_4" = "Conectarea la OpenStreetMap necesită iOS 16.4+";
 "shared_string_update_required" = "Actualizare necesară";
 "driving_region_uk" = "UK & similare";
-"shared_string_set" = "Setați";
-"shared_string_replace" = "Înlocuiți";
+"shared_string_set" = "Setează";
+"shared_string_replace" = "Înlocuiește";
 "shared_string_change" = "Schimbă";
 "shared_string_favorite" = "Favorit";
 "shared_string_favorites" = "Favorite";

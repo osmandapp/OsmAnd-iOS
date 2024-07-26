@@ -36,6 +36,7 @@
 @property (weak, nonatomic) IBOutlet OAFoldersCollectionView *dateCollectionView;
 @property (weak, nonatomic) IBOutlet OASegmentedSlider *timeSliderView;
 @property (weak, nonatomic) IBOutlet UIStackView *weatherStackView;
+@property (weak, nonatomic) IBOutlet UIButton *playButton;
 
 @end
 
@@ -54,6 +55,9 @@
     float _prevZoom;
     OsmAnd::PointI _prevTarget31;
     NSArray<OAWeatherWidget *> *_weatherWidgetControlsArray;
+    
+    BOOL _isAnimationRunning;
+    NSInteger _lastUpdatedIndex;
 }
 
 - (instancetype)init
@@ -99,7 +103,7 @@
     self.timeSliderView.stepsAmountWithoutDrawMark = 145.0;
     [self.timeSliderView clearTouchEventsUpInsideUpOutside];
     [self.timeSliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
-    [self.timeSliderView addTarget:self action:@selector(timeChanged:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
+    [self.timeSliderView addTarget:self action:@selector(timeChanged:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside | UIControlEventValueChanged];
 
     _layerChangeObservers = [NSMutableArray array];
     for (OAWeatherBand *band in [OAWeatherHelper sharedInstance].bands)
@@ -419,10 +423,61 @@
     }
 }
 
+#pragma mark - Start/stop button
+
+- (IBAction)onPlayButtonClicked:(id)sender
+{
+    if (_isAnimationRunning)
+        [self stopSliderAnimation];
+    else
+        [self startSliderAnimation];
+}
+
+- (void) setupPlayPauseButton
+{
+    if (_isAnimationRunning)
+        [_playButton setImage:[UIImage templateImageNamed:@"ic_custom_pause"] forState:UIControlStateNormal];
+    else
+        [_playButton setImage:[UIImage templateImageNamed:@"ic_custom_play"] forState:UIControlStateNormal];
+}
+
+- (void) startSliderAnimation
+{
+    _isAnimationRunning = YES;
+    [self setupPlayPauseButton];
+    float startSliderValue = self.timeSliderView.value;
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        while (_isAnimationRunning)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                float currentSliderValue = self.timeSliderView.value;
+                currentSliderValue += 0.01;
+                if (currentSliderValue < 1)
+                    [self.timeSliderView setValue:currentSliderValue animated:YES];
+                else
+                    [self.timeSliderView setValue:startSliderValue animated:0];
+                
+                [self timeChanged:nil];
+            });
+            [NSThread sleepForTimeInterval:0.1];
+        }
+    });
+}
+
+- (void) stopSliderAnimation
+{
+    _isAnimationRunning = NO;
+    [self setupPlayPauseButton];
+}
+
 #pragma mark - UISlider
 
 - (void)timeChanged:(UISlider *)sender
 {
+    if (sender)
+        [self stopSliderAnimation];
+        
     NSInteger index = [self.timeSliderView getIndexForOptionStepsAmountWithoutDrawMark];
     NSDate *selectedDate = _timeValues[index];
     [[OARootViewController instance].mapPanel.mapViewController.mapLayers updateWeatherDate:selectedDate];

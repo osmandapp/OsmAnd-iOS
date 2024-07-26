@@ -2231,7 +2231,7 @@
 "routeInfo_smoothness_description" = "Clasificarea manevrabilității pe drumurile/căile pietonale pentru vehiculele pe roți, în special în ceea ce privește regularitatea/planeitatea suprafeței.";
 "routeInfo_tracktype_description" = "Colorează ruta sau linia traseului după compoziția suprafeței sale. Se aplică de obicei atunci când rețeaua de drumuri este în mare parte neasfaltată.";
 "shared_string_open_street_map" = "OpenStreetMap";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "routing_attr_allow_gate_name" = "Permite folosirea porții";
 "routing_attr_allow_gate_description" = "Permite folosirea porților";
 "routing_attr_only_permitted_streets_name" = "Străzi permise în mod expres";
@@ -3451,3 +3451,14 @@
 "rendering_value_pale_name" = "Palid";
 "osm_login_needs_ios_16_4" = "Conectarea la OpenStreetMap necesită iOS 16.4+";
 "shared_string_update_required" = "Actualizare necesară";
+"driving_region_uk" = "UK & similare";
+"shared_string_set" = "Setați";
+"shared_string_replace" = "Înlocuiți";
+"shared_string_change" = "Schimbă";
+"shared_string_favorite" = "Favorit";
+"shared_string_favorites" = "Favorite";
+"shared_string_colors" = "Culori";
+"osmand_depelopment_use_3d_icons" = "Utilizați pictogramele de poziționare a locației 3D";
+"quick_action_first_intermediate" = "Primul intermediar";
+"driving_region_india" = "India";
+"key_event_category_map_interactions" = "Interacțiuni pe hartă";

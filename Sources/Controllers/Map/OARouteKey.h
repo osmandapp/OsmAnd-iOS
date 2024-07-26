@@ -15,6 +15,7 @@
 
 + (OARouteKey *) fromGpx:(NSDictionary<NSString *, NSString *> *)gpx;
 - (NSString *) getActivityTypeTitle;
+- (NSString *) getLocalizedTitle;
 
 - (instancetype) initWithKey:(const OsmAnd::NetworkRouteKey &)key;
 

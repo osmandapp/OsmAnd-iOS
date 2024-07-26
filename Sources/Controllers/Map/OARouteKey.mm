@@ -8,6 +8,7 @@
 
 #import "OARouteKey.h"
 #import "Localization.h"
+#import "OAAppSettings.h"
 
 @implementation OARouteKey
 
@@ -62,6 +63,14 @@
     NSString *resourceId = [NSString stringWithFormat:@"%@%@%@", @"activity_type_", tag, @"_name"];
     NSString *res = OALocalizedString(resourceId);
     return [res isEqualToString:resourceId] ? [OAUtilities capitalizeFirstLetter:tag] : res;
+}
+
+- (NSString *)getLocalizedTitle
+{
+    QMap<QString, QString> tagsToGpx = _routeKey.tagsToGpx();
+    NSString *key = [NSString stringWithFormat:@"name:%@", [OAAppSettings sharedManager].settingPrefMapLanguage.get];
+    NSString *result = tagsToGpx.value(QString::fromNSString(key)).toNSString();
+    return result;
 }
 
 @end

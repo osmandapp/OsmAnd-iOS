@@ -82,6 +82,12 @@
                     t = _targetPoint.title;
             }
         }
+        else if (_targetPoint.type == OATargetNetworkGPX)
+        {
+            OARouteKey *routeKey = (OARouteKey *)_targetPoint.targetObj;
+            NSString *localizedTitle = routeKey ? [routeKey getLocalizedTitle] : @"";
+            t = localizedTitle.length > 0 ? localizedTitle : _targetPoint.title;
+        }
         else
         {
             t = _targetPoint.title;
@@ -121,4 +127,5 @@
     [_descriptionView setText:descriptionStr];
     [_descriptionView setTextColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
 }
+
 @end

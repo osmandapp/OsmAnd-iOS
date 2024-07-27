@@ -896,7 +896,7 @@
 "gpx_descent" = "Klesání";
 "select_map_marker" = "Vyberte mapovou značku";
 "website" = "Webová stránka";
-"quick_action_map_underlay" = "Změna mapy podkladu";
+"quick_action_map_underlay" = "Podklad";
 "no_underlay" = "Bez podkladové vrstvy";
 "poi_context_menu_modify_osm_change" = "Upravit změnu OSM";
 "working_days" = "Pracovní dny";
@@ -914,7 +914,7 @@
 "poi_dialog_poi_type" = "Typ POI";
 "upload_anonymously" = "Nahrát anonymně";
 "quick_action_add_category" = "Přidat kategorii";
-"quick_action_map_overlay" = "Změnit překryvnou mapu";
+"quick_action_map_overlay" = "Překryv";
 "quick_action_map_overlay_action" = "Přidat překrytí";
 "tab_title_advanced" = "Rozšířené";
 "average_altitude" = "Průměrná výška";
@@ -993,7 +993,7 @@
 "quick_action_add_poi" = "Přidat POI";
 "shared_string_distance" = "Vzdálenost";
 "quick_action_navigation_voice" = "Hlas zapnout/vypnout";
-"quick_action_map_style" = "Změnit styl mapy";
+"quick_action_map_style" = "Styl mapy";
 "quick_action_poi_list" = "Seznam POI";
 "poi_dialog_comment" = "Komentář";
 "tab_title_basic" = "Základní";
@@ -1391,7 +1391,7 @@
 "copy_from_other_profile" = "Kopírovat z jiného profilu";
 "select_navigation_icon" = "Ikona polohy při pohybu";
 "clear_tiles_warning" = "Použitím těchto změn se vymažou uložené dlaždice pro tento zdroj";
-"quick_action_remove_next_destination" = "Smazat následující cílový bod";
+"quick_action_remove_next_destination" = "Další cílový bod";
 "reset_to_default" = "Obnovit do základního nastavení";
 "shared_string_two" = "Dvě";
 "subscription_osmandlive_item" = "Předplatné - OsmAnd Live";
@@ -2251,7 +2251,7 @@
 "route_preferred_terrain_hilly" = "Trasy s kopcovitým profilem.";
 "any_poi" = "Jakýkoli";
 "navigate_point_mgrs" = "MGRS";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "routeInfo_tracktype_description" = "Obarvitčáru trasy nebo stopy podle složení jejího povrchu. Obvykle se používá, pokud je silniční síť převážně nezpevněná.";
 "routing_attr_only_permitted_ways_description" = "Použít pouze výslovně povolené cesty (polní cesty, stezky, atd.)";
 "routeInfo_winter_ice_road_description" = "Obarvitčáru trasy nebo stopy podle její zimní klasifikace.";
@@ -3412,8 +3412,12 @@
 "weather_data_sources_prompt" = "OsmAnd poskytuje data o počasí ze dvou zdrojů:";
 "transport_hazmat_title" = "Přeprava nebezpečných materiálů";
 "weather_source_ecmwf_title" = "ECMWF";
-"missing_maps_ignore" = "Použít existující mapy";
+"missing_maps_ignore" = "Použít stažené mapy";
 "weather_source_GFS_title" = "GFS";
 "weather_source_ecmwf_description" = "Evropské centrum pro střednědobé předpovědi počasí";
 "weather_source_GFS_description" = "Globální předpovědní systém od Národních center pro environmentální předpovědi";
 "data_source" = "Zdroj dat";
+"quick_action_directions_from" = "Výchozí bod";
+"quick_action_destination" = "Cílový bod";
+"driving_region_india" = "Indie";
+"rendering_value_pale_name" = "Světlá";

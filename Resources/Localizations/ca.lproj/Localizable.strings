@@ -1082,7 +1082,7 @@
 "toggle_online_notes" = "Commuta les notes OSM";
 "toggle_local_edits" = "Commuta edició local OSM";
 "quick_action_add_poi" = "Afegeix PDI";
-"quick_action_map_style" = "canvia l'estil del mapa";
+"quick_action_map_style" = "Estil del mapa";
 "quick_action_map_source" = "Canvia l\'origen del mapa";
 "quick_action_map_overlay" = "Modifica la superposició del mapa";
 "quick_action_map_underlay" = "Modifica el fons del mapa";
@@ -2608,3 +2608,18 @@
 "shared_string_millimeters_short" = "mm";
 "shared_string_millimeters" = "Mil·limetres";
 "transport_hazmat_title" = "Transport de materials perillosos";
+"driving_region_india" = "Índia";
+"shared_string_replace" = "Reemplaça";
+"quick_action_destination" = "Destí";
+"quick_action_parking_place" = "Lloc d'aparcament";
+"weather_source_ecmwf_title" = "CEPMMT";
+"quick_action_verb_show_hide" = "Mostra / Amaga";
+"quick_action_verb_pause_resume" = "Pausa / Reprèn";
+"quick_action_verb_turn_on_off" = "Activar / Desactivar";
+"quick_action_verb_start_stop" = "Inici / Stop";
+"weather_source_GFS_title" = "GFS";
+"weather_source_ecmwf_description" = "Centre Europeu de Prediccions Meteorològiques a Mitjà Termini";
+"data_source" = "Font de dades";
+"weather_data_sources_prompt" = "OsmAnd proporciona dades meteorològiques de dues fonts:";
+"weather_source_GFS_description" = "Sistema de Predicció Global dels Centres Nacionals de Predicció Ambiental";
+"rendering_value_pale_name" = "Pàl·lid";

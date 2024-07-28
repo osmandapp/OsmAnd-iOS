@@ -559,9 +559,9 @@
 {
     if ([self shouldShowTurnArrows])
     {
+        const auto zoom = self.mapView.zoomLevel;
         @synchronized (self) 
         {
-            const auto zoom = self.mapView.zoomLevel;
             if (zoom <= OsmAnd::ZoomLevel14 || _collection->isEmpty()) {
                 if (!_actionLinesCollection->isEmpty())
                 {
@@ -836,10 +836,7 @@
         if ([routeColoringType isGradient]
             && (_route != route
                 || _prevRouteColoringType != routeColoringType
-                || _colorizationScheme != COLORIZATION_GRADIENT
-                || [[ColorPaletteHelper shared] isColorPaletteUpdated:[ColorPaletteHelper getRoutePaletteFileName:(ColorizationType) [routeColoringType toColorizationType]
-                                                                                              gradientPaletteName:_routeGradientPalette]
-                                                                error:nil]))
+                || _colorizationScheme != COLORIZATION_GRADIENT))
         {
             OAGPXDocument *gpx = [OAGPXUIHelper makeGpxFromRoute:route];
             NSError *error = nil;

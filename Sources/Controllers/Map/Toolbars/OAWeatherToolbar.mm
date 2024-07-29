@@ -43,6 +43,7 @@
 @implementation OAWeatherToolbar
 {
     OsmAndAppInstance _app;
+    OAWeatherPlugin *_plugin;
     NSMutableArray<OAAutoObserverProxy *> *_layerChangeObservers;
     OAAutoObserverProxy *_contourNameChangeObserver;
     OAAutoObserverProxy *_mapSourceUpdatedObserver;
@@ -58,6 +59,8 @@
     
     BOOL _isAnimationRunning;
     NSInteger _lastUpdatedIndex;
+    NSDate *_currentDate;
+    NSDate *_selectedDate;
 }
 
 - (instancetype)init
@@ -90,6 +93,7 @@
 {
     self.hidden = YES;
     _app = [OsmAndApp instance];
+    _plugin = (OAWeatherPlugin *) [OAPluginsHelper getPlugin:OAWeatherPlugin.class];
     _currentTimezoneCalendar = NSCalendar.autoupdatingCurrentCalendar;
     _currentTimezoneCalendar.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
     _previousSelectedDayIndex = 0;
@@ -102,6 +106,10 @@
     
     self.timeSliderView.stepsAmountWithoutDrawMark = 145.0;
     [self.timeSliderView clearTouchEventsUpInsideUpOutside];
+    
+    _currentDate = [NSDate now];
+    _selectedDate = [NSDate now];
+    
     [self.timeSliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
     [self.timeSliderView addTarget:self action:@selector(timeChanged:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside | UIControlEventValueChanged];
 
@@ -139,7 +147,7 @@
 
 - (void)configureWidgetControlsStackView
 {
-    _weatherWidgetControlsArray = [[(OAWeatherPlugin *)[OAPluginsHelper getPlugin:OAWeatherPlugin.class] createWidgetsControls] copy];
+    _weatherWidgetControlsArray = [[_plugin createWidgetsControls] copy];
     
     if (_weatherWidgetControlsArray && _weatherWidgetControlsArray.count > 0) {
         [_weatherStackView removeAllArrangedSubviews];
@@ -475,17 +483,43 @@
 
 - (void)timeChanged:(UISlider *)sender
 {
-    if (sender)
+    BOOL fromUser = sender != nil;
+    if (fromUser)
         [self stopSliderAnimation];
         
     NSInteger index = [self.timeSliderView getIndexForOptionStepsAmountWithoutDrawMark];
-    NSDate *selectedDate = _timeValues[index];
-    [[OARootViewController instance].mapPanel.mapViewController.mapLayers updateWeatherDate:selectedDate];
+    _selectedDate = _timeValues[index];
+    [self updateSelectedDate:_selectedDate forAnimation:!fromUser resetPeriod:NO];
+}
 
-    if ([_layersHandler isAllLayersDisabled])
+- (void) updateSelectedDate:(NSDate *)date forAnimation:(BOOL)forAnimation resetPeriod:(BOOL)resetPeriod
+{
+    [_plugin setForecastDate:date forAnimation:forAnimation resetPeriod:resetPeriod];
+    if (date)
+        date = [OAWeatherHelper roundForecastTimeToHour:date];
+    
+    [self checkDateOffset:date];
+    [_plugin updateWidgetsInfo];
+    [self updateWidgetsInfo];
+    [[OARootViewController instance].mapPanel refreshMap];
+    [[OARootViewController instance].mapPanel.mapViewController.mapLayers updateWeatherLayers];
+}
+
+- (void) checkDateOffset:(NSDate *)date
+{
+    NSInteger MIN_UTC_HOURS_OFFSET = 24 * 60 * 60;
+    if (date && (([date timeIntervalSince1970] - [_currentDate timeIntervalSince1970])  >= MIN_UTC_HOURS_OFFSET))
     {
-        [(OAWeatherPlugin *) [OAPluginsHelper getPlugin:OAWeatherPlugin.class] updateWidgetsInfo];
-        [self updateWidgetsInfo];
+        NSCalendar *utcCalendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
+        utcCalendar.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
+        NSDateComponents *dateComponents = [utcCalendar components:NSCalendarUnitHour fromDate:date];
+        NSInteger hours = dateComponents.hour;
+        NSInteger offset = hours % 3;
+        if (offset == 2)
+            [dateComponents setHour:hours + 1];
+        else if (offset == 1)
+            [dateComponents setHour:hours - 1];
+        date = [utcCalendar dateFromComponents:dateComponents];
     }
 }
 

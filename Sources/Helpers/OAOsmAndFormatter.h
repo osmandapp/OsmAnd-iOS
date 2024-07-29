@@ -64,5 +64,7 @@
 + (NSString *)getFormattedOsmTagValue:(NSString *)tagValue;
 + (NSString *)getFormattedDurationShort:(NSTimeInterval)seconds fullForm:(BOOL)fullForm;
 + (NSString *)getFormattedDuration:(NSTimeInterval)seconds;
++ (NSTimeInterval)getStartOfDayForTime:(NSTimeInterval)timestamp;
++ (NSTimeInterval)getStartOfToday;
 
 @end

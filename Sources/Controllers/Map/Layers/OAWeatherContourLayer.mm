@@ -267,6 +267,11 @@
     });
 }
 
+- (void) setDateTime:(NSTimeInterval)dateTime
+{
+    _date = [NSDate dateWithTimeIntervalSince1970:dateTime / 1000];
+}
+
 - (void) onWeatherLayerChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{

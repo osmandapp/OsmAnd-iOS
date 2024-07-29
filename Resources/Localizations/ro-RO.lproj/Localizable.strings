@@ -3462,3 +3462,7 @@
 "quick_action_first_intermediate" = "Primul intermediar";
 "driving_region_india" = "India";
 "key_event_category_map_interactions" = "Interacțiuni pe hartă";
+"quick_action_track_waypoint" = "Urmărește punctul de cale";
+"quick_action_destination" = "Destinație";
+"quick_action_parking_place" = "Loc de parcare";
+"quick_action_directions_from" = "Punctul de plecare";

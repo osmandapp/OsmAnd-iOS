@@ -14,12 +14,40 @@ final class ColorPaletteHelper: NSObject {
     static let shared = ColorPaletteHelper()
     static let routePrefix = "route_"
     static let gradientIdSplitter = "_"
+    static let colorPalettesUpdatedNotification = NSNotification.Name("ColorPaletteDicrectoryUpdated")
 
     private var app: OsmAndAppProtocol
+    private var directoryObserver: DirectoryObserver
     private var cachedColorPalette = ConcurrentDictionary<String, ColorPalette>()
 
     private override init() {
         app = OsmAndApp.swiftInstance()
+        directoryObserver = DirectoryObserver(DirectoryObserverType.colorPalette)
+        directoryObserver.startObserving()
+
+        super.init()
+
+        NotificationCenter.default.addObserver(self, selector: #selector(onColorPaletteDirectoryChanged(_ :)), name: DirectoryObserverType.colorPalette.notificationName, object: nil)
+    }
+
+    @objc private func onColorPaletteDirectoryChanged(_ notification: Notification) throws {
+        if let path = notification.object as? String {
+            var gradientPalettesUpdated = [String]()
+            let files = try FileManager.default.contentsOfDirectory(atPath: path)
+            for file in files {
+                let colorPaletteFileName = file.lastPathComponent()
+                var cachedPalette = cachedColorPalette.getValue(forKey: colorPaletteFileName)
+                if let cachedPalette {
+                    let attributes = try FileManager.default.attributesOfItem(atPath: getColorPaletteDir().appendingPathComponent(colorPaletteFileName))
+                    if attributes[.modificationDate] as? Date != cachedPalette.lastModified {
+                        if let colorPalette = parseGradientColorPalette(colorPaletteFileName) {
+                            gradientPalettesUpdated.append(colorPaletteFileName)
+                        }
+                    }
+                }
+            }
+            NotificationCenter.default.post(name: Self.colorPalettesUpdatedNotification, object: gradientPalettesUpdated)
+        }
     }
 
     static func getRoutePaletteFileName(_ colorizationType: ColorizationType, gradientPaletteName: String) -> String {

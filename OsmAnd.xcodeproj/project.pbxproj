@@ -715,6 +715,7 @@
 		46964F762C345448007F3938 /* ColorPaletteHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46964F752C345448007F3938 /* ColorPaletteHelper.swift */; };
 		46993C0A2986BCB70047F2F5 /* img_help_announcement_time_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46993C092986BCB60047F2F5 /* img_help_announcement_time_day@3x.png */; };
 		46A27270281DD05E00FF591D /* osm-carto.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 46A2726F281DD05D00FF591D /* osm-carto.render.xml */; };
+		46A35EF52C53F9510089B21C /* DirectoryObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A35EF42C53F9510089B21C /* DirectoryObserver.swift */; };
 		46A8FD33297D985700AF9C0C /* OAUninstallSpeedCamerasViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 46A8FD32297D985700AF9C0C /* OAUninstallSpeedCamerasViewController.mm */; };
 		46AB58A729C4C979003B2FB9 /* OAWikipediaImagesSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46AB58A629C4C979003B2FB9 /* OAWikipediaImagesSettingsViewController.m */; };
 		46AD052A2C29E2060032C3B7 /* color-palette in Resources */ = {isa = PBXBuildFile; fileRef = 46AD05292C29E2060032C3B7 /* color-palette */; };
@@ -4221,6 +4222,7 @@
 		46964F752C345448007F3938 /* ColorPaletteHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteHelper.swift; sourceTree = "<group>"; };
 		46993C092986BCB60047F2F5 /* img_help_announcement_time_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_help_announcement_time_day@3x.png"; path = "Resources/Icons/img_help_announcement_time_day@3x.png"; sourceTree = "<group>"; };
 		46A2726F281DD05D00FF591D /* osm-carto.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "osm-carto.render.xml"; path = "../resources/rendering_styles/osm-carto.render.xml"; sourceTree = "<group>"; };
+		46A35EF42C53F9510089B21C /* DirectoryObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectoryObserver.swift; sourceTree = "<group>"; };
 		46A8FD31297D982200AF9C0C /* OAUninstallSpeedCamerasViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAUninstallSpeedCamerasViewController.h; sourceTree = "<group>"; };
 		46A8FD32297D985700AF9C0C /* OAUninstallSpeedCamerasViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAUninstallSpeedCamerasViewController.mm; sourceTree = "<group>"; };
 		46AB58A529C4C967003B2FB9 /* OAWikipediaImagesSettingsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAWikipediaImagesSettingsViewController.h; sourceTree = "<group>"; };
@@ -13431,6 +13433,7 @@
 				0590D19B2BF88AF400C62AF5 /* ConcurrentDictionary.swift */,
 				32A0CDF52C29B07B00FDD8E0 /* Model3dHelper */,
 				4665DB6D2C20BBFD00F897EC /* ColorsPaletteUtils.swift */,
+				46A35EF42C53F9510089B21C /* DirectoryObserver.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -17216,6 +17219,7 @@
 				DA5A836B26C563A800F274C7 /* OADestinationItemsListViewController.mm in Sources */,
 				DA5A81B026C563A700F274C7 /* OADownloadsManager.m in Sources */,
 				DA5A84D326C563A900F274C7 /* OAMapSettingsOverlayUnderlayScreen.mm in Sources */,
+				46A35EF52C53F9510089B21C /* DirectoryObserver.swift in Sources */,
 				DA5A813126C563A700F274C7 /* OAWebClient.mm in Sources */,
 				DA5A833926C563A800F274C7 /* OAFoldersCell.m in Sources */,
 				3234101A28889D1B00E90FBA /* OARowInfo.m in Sources */,

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="pFL-rP-JjP">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="pFL-rP-JjP">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -116,7 +116,7 @@
                             <constraint firstAttribute="bottom" secondItem="zzn-bN-eNS" secondAttribute="bottom" id="wuc-uF-Aa9"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="OSM Edits" image="ic_tabbar_osm_edits.png" id="7TW-Hc-6pc"/>
+                    <tabBarItem key="tabBarItem" title="OSM Edits" image="ic_tabbar_osm_edits" id="7TW-Hc-6pc"/>
                     <connections>
                         <outlet property="segmentContainerView" destination="7Bf-uz-mXb" id="QHd-js-DIo"/>
                         <outlet property="segmentControl" destination="erl-gB-7ba" id="FO5-Kz-Eaw"/>
@@ -150,7 +150,7 @@
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="tintColor" name="iconColorActive"/>
                                         <inset key="titleEdgeInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="-6"/>
-                                        <state key="normal" image="export_items.png"/>
+                                        <state key="normal" image="ic_export_items"/>
                                         <connections>
                                             <action selector="shareButtonClicked:" destination="o7u-wO-gzA" eventType="touchUpInside" id="Aen-OJ-Y93"/>
                                         </connections>
@@ -159,7 +159,7 @@
                                         <rect key="frame" x="211" y="0.0" width="90" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="tintColor" name="iconColorActive"/>
-                                        <state key="normal" image="change_item_color.png"/>
+                                        <state key="normal" image="ic_change_item_color"/>
                                         <connections>
                                             <action selector="favoriteChangeColorClicked:" destination="o7u-wO-gzA" eventType="touchUpInside" id="Sax-Ds-m7Z"/>
                                         </connections>
@@ -168,7 +168,7 @@
                                         <rect key="frame" x="320" y="0.0" width="94" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                         <color key="tintColor" name="iconColorActive"/>
-                                        <state key="normal" image="delete_items.png"/>
+                                        <state key="normal" image="ic_delete_items"/>
                                         <connections>
                                             <action selector="deletePressed:" destination="o7u-wO-gzA" eventType="touchUpInside" id="LR0-Za-Mg0"/>
                                         </connections>
@@ -177,7 +177,7 @@
                                         <rect key="frame" x="107" y="0.0" width="90" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="tintColor" name="iconColorActive"/>
-                                        <state key="normal" image="move_items.png"/>
+                                        <state key="normal" image="ic_move_items"/>
                                         <connections>
                                             <action selector="favoriteChangeGroupClicked:" destination="o7u-wO-gzA" eventType="touchUpInside" id="ULy-Y3-Hxm"/>
                                         </connections>
@@ -195,7 +195,7 @@
                             <constraint firstItem="eQR-uw-c2g" firstAttribute="leading" secondItem="OPG-OS-sNg" secondAttribute="leading" id="spP-sO-uqg"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="My Favorites" image="ic_tabbar_favorites.png" id="Hya-az-9dq"/>
+                    <tabBarItem key="tabBarItem" title="My Favorites" image="ic_tabbar_favorites" id="Hya-az-9dq"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="colorButton" destination="1NW-Oo-sgx" id="z31-Ul-0If"/>
@@ -238,7 +238,7 @@
                             <constraint firstAttribute="trailing" secondItem="npH-mS-lH3" secondAttribute="trailing" id="xBy-Nf-hUz"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Travel guides" image="ic_tabbar_trips.png" id="3Z5-lB-D9o"/>
+                    <tabBarItem key="tabBarItem" title="Travel guides" image="ic_tabbar_trips" id="3Z5-lB-D9o"/>
                     <connections>
                         <outlet property="tableView" destination="npH-mS-lH3" id="0dn-Dh-NsZ"/>
                     </connections>
@@ -249,14 +249,14 @@
         </scene>
     </scenes>
     <resources>
-        <image name="change_item_color.png" width="25" height="25"/>
-        <image name="delete_items.png" width="25" height="25"/>
-        <image name="export_items.png" width="25" height="25"/>
-        <image name="ic_tabbar_favorites.png" width="31" height="28"/>
-        <image name="ic_tabbar_osm_edits.png" width="31" height="28"/>
+        <image name="ic_change_item_color" width="25" height="25"/>
+        <image name="ic_delete_items" width="25" height="25"/>
+        <image name="ic_export_items" width="25" height="25"/>
+        <image name="ic_move_items" width="25" height="25"/>
+        <image name="ic_tabbar_favorites" width="31" height="28"/>
+        <image name="ic_tabbar_osm_edits" width="31" height="28"/>
         <image name="ic_tabbar_travel" width="31" height="28"/>
-        <image name="ic_tabbar_trips.png" width="31" height="28"/>
-        <image name="move_items.png" width="25" height="25"/>
+        <image name="ic_tabbar_trips" width="31" height="28"/>
         <namedColor name="customSeparator">
             <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

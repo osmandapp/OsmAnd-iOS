@@ -3465,7 +3465,7 @@
 "quick_action_track_waypoint" = "Urmărește punctul de cale";
 "quick_action_destination" = "Destinație";
 "quick_action_parking_place" = "Loc de parcare";
-"quick_action_directions_from" = "Punctul de plecare";
+"quick_action_directions_from" = "Punct de plecare";
 "map_source" = "Sursa hărții";
 "download_srtm_maps" = "Izolinii";
 "voices" = "Instrucțiuni vocale";

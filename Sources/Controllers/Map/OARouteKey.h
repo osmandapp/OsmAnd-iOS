@@ -12,10 +12,10 @@
 @interface OARouteKey : NSObject
 
 @property (nonatomic, readonly) OsmAnd::NetworkRouteKey routeKey;
+@property (nonatomic, readonly) NSString *localizedTitle;
 
 + (OARouteKey *) fromGpx:(NSDictionary<NSString *, NSString *> *)gpx;
 - (NSString *) getActivityTypeTitle;
-- (NSString *) getLocalizedTitle;
 
 - (instancetype) initWithKey:(const OsmAnd::NetworkRouteKey &)key;
 

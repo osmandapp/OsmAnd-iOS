@@ -517,7 +517,7 @@
     }
 
     BOOL isRoute = _routeKey != nil;
-    NSString *localizedTitle = isRoute ? [_routeKey getLocalizedTitle] : @"";
+    NSString *localizedTitle = isRoute ? _routeKey.localizedTitle : @"";
     [_headerView updateHeader:self.isCurrentTrack
                    shownTrack:self.isShown
                isNetworkRoute:_isNewRoute
@@ -1216,7 +1216,7 @@
 
 - (NSString *)getGpxName
 {
-    NSString *localizedTitle = _routeKey ? [_routeKey getLocalizedTitle] : @"";
+    NSString *localizedTitle = _routeKey ? _routeKey.localizedTitle : @"";
     return localizedTitle.length > 0 ? localizedTitle : [self.gpx getNiceTitle];
 }
 

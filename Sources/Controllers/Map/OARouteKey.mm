@@ -17,6 +17,7 @@
     self = [super init];
     if (self) {
         _routeKey = key;
+        _localizedTitle = [self getLocalizedTitle];
     }
     return self;
 }

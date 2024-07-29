@@ -85,7 +85,7 @@
         else if (_targetPoint.type == OATargetNetworkGPX)
         {
             OARouteKey *routeKey = (OARouteKey *)_targetPoint.targetObj;
-            NSString *localizedTitle = routeKey ? [routeKey getLocalizedTitle] : @"";
+            NSString *localizedTitle = routeKey ? routeKey.localizedTitle : @"";
             t = localizedTitle.length > 0 ? localizedTitle : _targetPoint.title;
         }
         else

@@ -3467,6 +3467,6 @@
 "quick_action_parking_place" = "Loc de parcare";
 "quick_action_directions_from" = "Punct de plecare";
 "map_source" = "Sursa hărții";
-"download_srtm_maps" = "Izolinii";
+"download_srtm_maps" = "Linii de contur";
 "voices" = "Instrucțiuni vocale";
 "cloud_layer" = "Strat de nor";

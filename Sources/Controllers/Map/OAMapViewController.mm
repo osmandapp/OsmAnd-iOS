@@ -3822,19 +3822,13 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         }
     }
     
-    @synchronized(_rendererSync)
-    {
+    dispatch_async(dispatch_get_main_queue(), ^{
         [_mapLayers.routeMapLayer refreshRoute];
-    }
-    if (newRoute && [helper isRoutePlanningMode] && routeBBox.left != DBL_MAX)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (![self isDisplayedInCarPlay])
-            {
-                [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left) bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right) animated:NO];
-            }
-        });
-    }
+        if (newRoute && [helper isRoutePlanningMode] && routeBBox.left != DBL_MAX && ![self isDisplayedInCarPlay])
+            [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left) 
+                                                                      bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right)
+                                                                         animated:NO];
+    });
 }
 
 - (void) routeWasUpdated

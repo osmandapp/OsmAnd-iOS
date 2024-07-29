@@ -316,9 +316,6 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                 && (![cachedTrack[@"prev_coloring_type"] isEqualToString:gpx.coloringType]
                     || ![cachedTrack[@"prev_color_palette"] isEqualToString:gpx.gradientPaletteName]
                     || [cachedTrack[@"colorization_scheme"] intValue] != COLORIZATION_GRADIENT
-                    || [[ColorPaletteHelper shared] isColorPaletteUpdated:[ColorPaletteHelper getRoutePaletteFileName:(ColorizationType) [type toColorizationType]
-                                                                                                  gradientPaletteName:gpx.gradientPaletteName]
-                                                                    error:nil]
                     || _cachedColors[key].isEmpty()))
             {
                 cachedTrack[@"colorization_scheme"] = @(COLORIZATION_GRADIENT);

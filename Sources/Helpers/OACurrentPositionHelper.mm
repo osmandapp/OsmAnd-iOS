@@ -67,6 +67,7 @@
     std::shared_ptr<RoutingContext> _ctx;
     std::shared_ptr<RouteDataObject> _road;
     NSObject *_roadLocatorSync;
+    NSObject *_roadSync;
     NSTimeInterval _lastUpdateTime;
 }
 
@@ -92,6 +93,7 @@
         _settings = [OAAppSettings sharedManager];
         
         _roadLocatorSync = [[NSObject alloc] init];
+        _roadSync = [[NSObject alloc] init];
         _road.reset();
         
         _app.resourcesManager->localResourcesChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
@@ -163,7 +165,7 @@
 {
     CLLocation *last = _lastQueriedLocation;
     std::shared_ptr<RouteDataObject> r;
-    @synchronized(_roadLocatorSync)
+    @synchronized(_roadSync)
     {
         r = _road;
     }
@@ -209,7 +211,10 @@
                 [_provider runSyncWithNativeRouting:^{
                     [self checkInitialized:loc];
                     auto segment = findRouteSegment(position31.x, position31.y, _ctx.get());
-                    _road = segment ? segment->road : nullptr;
+                    @synchronized(_roadSync)
+                    {
+                        _road = segment ? segment->road : nullptr;
+                    }
                 }];
             }
         }
@@ -218,7 +223,7 @@
 
 - (void) onLocalResourcesChanged
 {
-    @synchronized(_roadLocatorSync)
+    @synchronized(_roadSync)
     {
         _road.reset();
     }
@@ -239,11 +244,13 @@
             }
             if (_ctx)
             {
-                [self checkInitialized:loc];
-                auto segment = findRouteSegment(position31.x, position31.y, _ctx.get());
-                auto road = segment ? segment->road : nullptr;
-                if (matcher && ![matcher isCancelled])
-                    [matcher publish:road];
+                [_provider runSyncWithNativeRouting:^{
+                    [self checkInitialized:loc];
+                    auto segment = findRouteSegment(position31.x, position31.y, _ctx.get());
+                    auto road = segment ? segment->road : nullptr;
+                    if (matcher && ![matcher isCancelled])
+                        [matcher publish:road];
+                }];
             }
         }
     });

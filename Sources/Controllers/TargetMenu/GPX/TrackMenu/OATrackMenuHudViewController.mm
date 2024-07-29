@@ -517,11 +517,12 @@
     }
 
     BOOL isRoute = _routeKey != nil;
+    NSString *localizedTitle = isRoute ? _routeKey.localizedTitle : @"";
     [_headerView updateHeader:self.isCurrentTrack
                    shownTrack:self.isShown
                isNetworkRoute:_isNewRoute
             routeIcon:isRoute ? _reopeningState.trackIcon : [UIImage templateImageNamed:@"ic_custom_trip"]
-                        title:[self.gpx getNiceTitle]
+                        title:localizedTitle.length > 0 ? localizedTitle : [self.gpx getNiceTitle]
                   nearestCity:self.gpx.nearestCity];
 
     [self.scrollableView addSubview:_headerView];
@@ -1215,7 +1216,8 @@
 
 - (NSString *)getGpxName
 {
-    return [self.gpx getNiceTitle];
+    NSString *localizedTitle = _routeKey ? _routeKey.localizedTitle : @"";
+    return localizedTitle.length > 0 ? localizedTitle : [self.gpx getNiceTitle];
 }
 
 - (NSString *)checkGroupName:(NSString *)groupName

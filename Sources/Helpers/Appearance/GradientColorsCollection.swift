@@ -48,6 +48,10 @@ final class GradientColorsCollection: ColorsCollection {
         self.init(colorizationType)
     }
 
+    convenience init(terrainType: TerrainType) {
+        self.init(terrainType)
+    }
+
     func getPaletteColors() -> [PaletteColor] {
         getColors(.lastUsedTime)
     }

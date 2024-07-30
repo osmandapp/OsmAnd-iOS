@@ -2975,3 +2975,9 @@
 "shared_string_item" = "Predmet";
 "route_recalculation_dist_title" = "Minimalno rastojanie do povtorno presmetuvanje na maršrutata";
 "transport_hazmat_title" = "Transportiranje na opasni materijali";
+"download_srtm_maps" = "Konturni linii";
+"voices" = "Glasovna poraka";
+"map_source" = "Izvor na kartata";
+"shared_string_change" = "Zameni";
+"shared_string_favorite" = "Omilen";
+"shared_string_favorites" = "Omileni";

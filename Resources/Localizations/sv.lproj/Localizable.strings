@@ -2910,7 +2910,7 @@
 "make_backup_descr" = "Detär många ändringar på den här enheten. Gör gärna en säkerhetskopia av dessa data för att inte förlora det.";
 "backup_delete_types_descr" = "Radera alla data för föråldrade datatyper från OsmAnd Cloud\?";
 "rendering_value_caiScale_description" = "Italienska alpinistföreningen (Club Alpino Italiano)";
-"map_settings_topography" = "Höjdkurvsdata";
+"map_settings_topography" = "Höjdkurvor";
 "upload_poi" = "Ladda upp POI";
 "rendering_value_sacScale_description" = "Schweiziska alpinistföreningen (Swiss Alpine Club)";
 "backup_error_token_is_not_valid" = "Någonting är fel med angivet enhets-id eller token";
@@ -3424,3 +3424,16 @@
 "avoid_pt_types" = "Undvik transporttyper…";
 "transport_hazmat_title" = "Transport av farligt gods";
 "weather_source_ecmwf_description" = "Europeiskt center för medellånga väderprognoser (ECMWF)";
+"download_srtm_maps" = "Höjdkurvsdata";
+"shared_string_change" = "Ändra";
+"shared_string_favorites" = "Favoriter";
+"cloud_layer" = "Molnlager";
+"precipitation_layer" = "Nederbördslager";
+"temperature_layer" = "Temperaturlager";
+"shared_string_favorite" = "Favorit";
+"map_source" = "Kartkälla";
+"key_event_category_map_interactions" = "Kartinteraktioner";
+"pressure_layer" = "Lufttryckslager";
+"voices" = "Röstmeddelanden";
+"wind_layer" = "Vindlager";
+"shared_string_action" = "Åtgärd";

@@ -28,6 +28,11 @@ static NSString * const kEnable3dMapsPrefName = @"enable_3d_maps";
 static NSString * const kTerrainModePrefName = @"terrain_mode";
 static NSString * const kTerrainEnabledPrefName = @"terrain_layer";
 
+NSInteger const terrainMinSupportedZoom = 4;
+NSInteger const terrainMaxSupportedZoom = 19;
+NSInteger const hillshadeDefaultTrasparency = 100;
+NSInteger const defaultTrasparency = 80;
+
 @implementation OASRTMPlugin
 
 - (instancetype)init
@@ -107,7 +112,6 @@ static NSString * const kTerrainEnabledPrefName = @"terrain_layer";
 {
     return MAX(terrainMinSupportedZoom, [[self getTerrainMode] getMinZoom]);
 }
-
 
 - (NSInteger)getTerrainMaxZoom
 {

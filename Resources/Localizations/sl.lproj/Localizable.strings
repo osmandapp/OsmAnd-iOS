@@ -2482,3 +2482,14 @@
 "shared_string_bottom" = "Dno";
 "transport_hazmat_title" = "Prevoz nevarnih snovi";
 "weather_source_ecmwf_description" = "Evropski center za srednjeročne vremenske napovedi (ECMWF)";
+"precipitation_layer" = "Sloj padavin";
+"shared_string_favorite" = "Priljubljene";
+"cloud_layer" = "Sloj oblačnosti";
+"pressure_layer" = "Sloj zračnega tlaka";
+"download_srtm_maps" = "Podatki izohips";
+"shared_string_change" = "Spremeni";
+"voices" = "Glasovna navodila";
+"shared_string_favorites" = "Pokaži priljubljene točke";
+"map_source" = "Vir zemljevida";
+"wind_layer" = "Sloj vetrov";
+"temperature_layer" = "Sloj temperatur";

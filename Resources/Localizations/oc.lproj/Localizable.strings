@@ -2859,3 +2859,5 @@
 "avoid_pt_types" = "Lo Transpòrt public es pas pres en còmpte…";
 "avoid_pt_types_descr" = "Seleccionatz quin transpòrt public se deu evitar per la navigacion:";
 "step_by_step" = "Pas a pas";
+"shared_string_favorites" = "Preferéncias";
+"download_srtm_maps" = "Corbas de nivèu";

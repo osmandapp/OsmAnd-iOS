@@ -8,8 +8,10 @@
 
 #import "OAPlugin.h"
 
-static NSInteger const terrainMinSupportedZoom = 4;
-static NSInteger const terrainMaxSupportedZoom = 19;
+extern NSInteger const terrainMinSupportedZoom;
+extern NSInteger const terrainMaxSupportedZoom;
+extern NSInteger const hillshadeDefaultTrasparency;
+extern NSInteger const defaultTrasparency;
 
 @class OACommonBoolean, TerrainMode;
 

@@ -674,7 +674,7 @@
 "driving_region_us" = "United States";
 "driving_region_canada" = "Canada";
 "driving_region_europe_asia" = "Europe, Asia, Latin America, and similar";
-"driving_region_uk" = "UK & similar";
+"driving_region_uk" = "UK and similar";
 "driving_region_india" = "India";
 "driving_region_australia" = "Australia";
 
@@ -1385,7 +1385,7 @@
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
 "ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
-"ltr_or_rtl_combine_via_dash" = "%@ — %@";
+"ltr_or_rtl_combine_via_dash" = "%@— %@";
 "ltr_or_rtl_combine_via_or" = "%@ or %@";
 "ltr_or_rtl_combine_via_slash" = "%@/%@";
 "ltr_or_rtl_combine_via_comma" = "%@, %@";

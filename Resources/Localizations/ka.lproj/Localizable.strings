@@ -2580,3 +2580,10 @@
 "horseback_riding" = "ცხენის ჭენება";
 "shared_string_millimeters_short" = "მმ";
 "edit_tilesource_minzoom" = "მინ. გადიდება";
+"shared_string_change" = "შეცვლა";
+"shared_string_favorite" = "რჩეული";
+"download_srtm_maps" = "კოტურული ხაზების მონაცემები";
+"voices" = "ხმოვანი მოთხოვნები";
+"shared_string_favorites" = "რჩეულები";
+"shared_string_action" = "ქმედება";
+"map_source" = "რუკის წყარო";

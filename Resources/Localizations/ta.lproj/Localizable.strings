@@ -2331,3 +2331,7 @@
 "avoid_pt_types" = "போக்குவரத்து வகையை தவிர்க்க…";
 "edit_tilesource_maxzoom" = "அதிகபட்ச ஜூம்";
 "avoid_pt_types_descr" = "வழிசெலுத்தலைத் தவிர்ப்பதற்கு பொதுப் போக்குவரத்து வகைகளைத் தேர்ந்தெடுக்கவும்:";
+"shared_string_favorites" = "பிடித்தவைகள்";
+"download_srtm_maps" = "சமநிலைக்கோடுகள்";
+"shared_string_change" = "மாற்றம்";
+"shared_string_favorite" = "பிடித்தவை";

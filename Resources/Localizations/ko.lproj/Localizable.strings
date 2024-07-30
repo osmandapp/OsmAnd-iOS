@@ -2588,7 +2588,7 @@
 "auto_zoom_smooth" = "매끄러운";
 "shared_string_class" = "등급";
 "shared_string_always" = "항상 사용";
-"shared_string_bottom" = "맨 아래";
+"shared_string_bottom" = "아래";
 "shared_string_limit" = "한계";
 "when_exceeded" = "초과 시";
 "custom_buttons" = "사용자지정 버튼";
@@ -2616,3 +2616,16 @@
 "speed_limit_warning" = "속도 제한 경고";
 "missing_or_outdated_maps_title" = "미스 또는 아웃 맵";
 "transport_hazmat_title" = "유해 물질 운송";
+"wind_layer" = "바람 층";
+"key_event_category_map_interactions" = "매핑 상호 작용";
+"download_srtm_maps" = "등고선";
+"precipitation_layer" = "강수량층";
+"shared_string_action" = "액션";
+"shared_string_change" = "변경";
+"temperature_layer" = "온도층";
+"shared_string_favorite" = "즐겨찾기";
+"cloud_layer" = "구름 층";
+"pressure_layer" = "압력 층";
+"shared_string_favorites" = "즐겨찾기";
+"voices" = "음성 안내";
+"map_source" = "지도 소스";

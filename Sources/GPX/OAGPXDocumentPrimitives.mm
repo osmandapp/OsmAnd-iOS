@@ -239,7 +239,7 @@
     {
         std::shared_ptr<OsmAnd::GpxExtensions::GpxExtension> extension(new OsmAnd::GpxExtensions::GpxExtension());
         [self fillExtension:extension ext:e];
-        extensions->extensions.push_back(extension);
+        extensions->addExtension(extension);
         extension.reset();
     }
 }

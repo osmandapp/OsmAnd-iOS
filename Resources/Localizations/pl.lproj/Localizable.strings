@@ -3057,7 +3057,7 @@
 "coordinates_widget_secondary_desc" = "Format współrzędnych można zmienić w %@ - %@ - %@.";
 "trip_recording_duration_widget_desc" = "Pokazuje aktualnie zarejestrowany czas podróży.";
 "help_article_map_track_context_menu_name" = "Menu kontekstoweścieżek";
-"weather_update_disabled" = "Wyłączenie";
+"weather_update_disabled" = "Wyłączone";
 "external_sensors_plugin_description" = "Uzyskuje dostęp do zewnętrznych czujników, aby odczytać np. tętno, prędkość roweru, moc jazdy na rowerze lub kadencję. Wymaga podłączenia urządzenia do odpowiednich czujników za pośrednictwem protokołu bezprzewodowej sieci osobistej ANT+.";
 "external_device_characteristic_speed" = "Prędkość";
 "help_article_map_legend_nautical_map_name" = "Styl mapy morskiej";
@@ -3283,3 +3283,18 @@
 "weather_source_ecmwf_description" = "Europejskie Centrum PrognozŚrednioterminowych";
 "weather_source_GFS_title" = "GFS";
 "data_source" = "Źródło danych";
+"shared_string_change" = "Zmień";
+"shared_string_colors" = "Kolory";
+"pressure_layer" = "Warstwa ciśnieniowa";
+"map_source" = "Zasób mapy";
+"voices" = "Komunikaty głosowe";
+"precipitation_layer" = "Warstwa opadów";
+"shared_string_favorites" = "Ulubione";
+"cloud_layer" = "Warstwa chmurowa";
+"temperature_layer" = "Warstwa temperatury";
+"shared_string_favorite" = "Ulubione";
+"height_legend_description" = "Kolorowe mapy wysokości służą do wizualizacji rzeźby terenu.";
+"user_palette" = "Paleta użytkownika";
+"shared_string_action" = "Akcja";
+"download_srtm_maps" = "Poziomice";
+"wind_layer" = "Warstwa wiatrowa";

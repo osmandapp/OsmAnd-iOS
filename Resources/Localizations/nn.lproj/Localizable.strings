@@ -2867,3 +2867,5 @@
 "shared_string_bottom" = "Nedst";
 "edit_tilesource_minzoom" = "Minste forstørring";
 "edit_tilesource_maxzoom" = "Maksforstørring";
+"shared_string_favorite" = "Favoritt…";
+"download_srtm_maps" = "Høgdekurver";

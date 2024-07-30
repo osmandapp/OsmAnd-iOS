@@ -14,7 +14,7 @@ on:
       releaseversion:
         description: 'Release Version'
         required: true
-        default: '4.7.0'
+        default: '4.9.0'
 jobs:
   build:
     runs-on: self-hosted

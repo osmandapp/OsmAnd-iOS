@@ -121,11 +121,67 @@ static const NSInteger kElevationMaxMeters = 2000;
         if (!_basePaletteColorItem)
             _basePaletteColorItem = [_gradientColorsCollection getGradientPaletteBy:[[TerrainMode getDefaultMode:_terrainMode.type] getKeyName]];
         _currentPaletteColorItem = _basePaletteColorItem;
+
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(onColorPalettesFilesUpdated:)
+                                                     name:ColorPaletteHelper.colorPalettesUpdatedNotification
+                                                   object:nil];
     }
 
     _minZoom = _baseMinZoom;
     _maxZoom = _baseMaxZoom;
     _currentAlpha = _baseAlpha;
+}
+
+- (void)onColorPalettesFilesUpdated:(NSNotification *)notification
+{
+    if (_terrainType == EOATerrainSettingsTypePalette && notification.object && [notification.object isKindOfClass:NSDictionary.class])
+    {
+        NSString *currentPaletteFile = [_terrainMode getMainFile];
+        NSDictionary<NSString *, NSString *> *colorPaletteFiles = (NSDictionary *) notification.object;
+        BOOL reloadData = NO;
+        BOOL deleted = NO;
+        for (NSString *colorPaletteFile in colorPaletteFiles.allKeys)
+        {
+            if ([_gradientColorsCollection hasTerrainGradientPaletteBy:colorPaletteFile]
+                || [colorPaletteFiles[colorPaletteFile] isEqualToString:DirectoryObserver.createdKey])
+            {
+                reloadData = YES;
+                if ([currentPaletteFile isEqualToString:colorPaletteFile]
+                    && [colorPaletteFiles[colorPaletteFile] isEqualToString:DirectoryObserver.deletedKey])
+                {
+                    deleted = YES;
+                    break;
+                }
+            }
+        }
+        if (reloadData)
+        {
+            _gradientColorsCollection = [[GradientColorsCollection alloc] initWithTerrainType:_terrainMode.type];
+            _sortedPaletteColorItems = [NSMutableArray arrayWithArray:[_gradientColorsCollection getPaletteColors]];
+            if (deleted)
+            {
+                _basePaletteColorItem = [_gradientColorsCollection getDefaultGradientPalette];
+            }
+            else
+            {
+                _basePaletteColorItem = [_gradientColorsCollection getGradientPaletteBy:[_terrainMode getKeyName]];
+            }
+            _currentPaletteColorItem = _basePaletteColorItem;
+
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self generateData];
+                [UIView transitionWithView:self.tableView
+                                  duration:0.35f
+                                   options:UIViewAnimationOptionTransitionCrossDissolve
+                                animations:^(void)
+                 {
+                    [self.tableView reloadData];
+                }
+                                completion:nil];
+            });
+        }
+    }
 }
 
 - (void)configureGPXVerticalExaggerationScale:(CGFloat)scale
@@ -223,7 +279,7 @@ static const NSInteger kElevationMaxMeters = 2000;
             result = OALocalizedString(@"visibility");
             break;
         case EOATerrainSettingsTypePalette:
-            result = _terrainMode.translateName;
+            result = [_terrainMode getDescription];
             break;
         case EOATerrainSettingsTypeZoomLevels:
             result = OALocalizedString(@"shared_string_zoom_levels");
@@ -789,6 +845,7 @@ static const NSInteger kElevationMaxMeters = 2000;
         OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         [cell leftIconVisibility:NO];
         [cell descriptionVisibility:NO];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.titleLabel.text = [_currentPaletteColorItem toHumanString];
         cell.titleLabel.textColor = UIColorFromRGB(color_extra_text_gray);
         cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
@@ -808,7 +865,12 @@ static const NSInteger kElevationMaxMeters = 2000;
         [cell setCollectionHandler:paletteHandler];
 
         [cell rightActionButtonVisibility:NO];
-        [cell.collectionView reloadData];
+        [cell.collectionView performBatchUpdates:^{
+            for (NSInteger i = 0; i < cell.collectionView.numberOfSections; i ++)
+            {
+                [cell.collectionView reloadSections:[NSIndexSet indexSetWithIndex:i]];
+            }
+        } completion:nil];
         [cell layoutIfNeeded];
         return cell;
     }

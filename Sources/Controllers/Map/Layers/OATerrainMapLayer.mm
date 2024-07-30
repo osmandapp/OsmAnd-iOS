@@ -56,6 +56,11 @@
                                              selector:@selector(onProfileSettingSet:)
                                                  name:kNotificationSetProfileSetting
                                                object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(onColorPalettesFilesUpdated:)
+                                                 name:ColorPaletteHelper.colorPalettesUpdatedNotification
+                                               object:nil];
 }
 
 - (void) deinitLayer
@@ -122,25 +127,43 @@
 
 - (void)onProfileSettingSet:(NSNotification *)notification
 {
-    if (notification.object == _plugin.terrainEnabledPref || notification.object == _plugin.terrainModeTypePref)
-    {
-        [self updateTerrainLayer];
-    }
-    else if ([notification.object isKindOfClass:OACommonInteger.class])
-    {
-        if ([_terrainMode isTransparencySetting:notification.object])
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (notification.object == _plugin.terrainEnabledPref || notification.object == _plugin.terrainModeTypePref)
         {
-            dispatch_async(dispatch_get_main_queue(), ^{
+            [self updateTerrainLayer];
+        }
+        else if ([notification.object isKindOfClass:OACommonInteger.class])
+        {
+            if ([_terrainMode isTransparencySetting:notification.object])
+            {
                 [self.mapViewController runWithRenderSync:^{
                     OsmAnd::MapLayerConfiguration config;
                     config.setOpacityFactor([_terrainMode getTransparency] * 0.01);
                     [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
                 }];
-            });
+            }
+            else if ([_terrainMode isZoomSetting:notification.object])
+            {
+                [self updateTerrainLayer];
+            }
         }
-        else if ([_terrainMode isZoomSetting:notification.object])
+    });
+}
+
+- (void)onColorPalettesFilesUpdated:(NSNotification *)notification
+{
+    if (notification.object && [notification.object isKindOfClass:NSDictionary.class])
+    {
+        NSDictionary<NSString *, NSString *> *colorPaletteFiles = (NSDictionary *) notification.object;
+        for (NSString *colorPaletteFile in colorPaletteFiles)
         {
-            [self updateTerrainLayer];
+            if ([[_terrainMode getMainFile] isEqualToString:colorPaletteFile])
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self updateTerrainLayer];
+                });
+                return;
+            }
         }
     }
 }

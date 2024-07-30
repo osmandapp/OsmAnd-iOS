@@ -13,8 +13,11 @@ final class ColorPaletteHelper: NSObject {
 
     static let shared = ColorPaletteHelper()
     static let routePrefix = "route_"
+    static let weatherPrefix = "weather_"
     static let gradientIdSplitter = "_"
-    static let colorPalettesUpdatedNotification = NSNotification.Name("ColorPaletteDicrectoryUpdated")
+    static let colorPalettesUpdatedNotification = NSNotification.Name("ColorPalettesUpdated")
+
+    private let directoryObserverType = DirectoryObserverType.colorPalette
 
     private var app: OsmAndAppProtocol
     private var directoryObserver: DirectoryObserver
@@ -22,31 +25,47 @@ final class ColorPaletteHelper: NSObject {
 
     private override init() {
         app = OsmAndApp.swiftInstance()
-        directoryObserver = DirectoryObserver(DirectoryObserverType.colorPalette)
+        directoryObserver = DirectoryObserver(directoryObserverType)
         directoryObserver.startObserving()
 
         super.init()
 
-        NotificationCenter.default.addObserver(self, selector: #selector(onColorPaletteDirectoryChanged(_ :)), name: DirectoryObserverType.colorPalette.notificationName, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onColorPaletteDirectoryUpdated(_ :)), name: directoryObserverType.notificationName, object: nil)
     }
 
-    @objc private func onColorPaletteDirectoryChanged(_ notification: Notification) throws {
+    @objc private func onColorPaletteDirectoryUpdated(_ notification: Notification) {
         if let path = notification.object as? String {
-            var gradientPalettesUpdated = [String]()
-            let files = try FileManager.default.contentsOfDirectory(atPath: path)
-            for file in files {
-                let colorPaletteFileName = file.lastPathComponent()
-                var cachedPalette = cachedColorPalette.getValue(forKey: colorPaletteFileName)
-                if let cachedPalette {
-                    let attributes = try FileManager.default.attributesOfItem(atPath: getColorPaletteDir().appendingPathComponent(colorPaletteFileName))
-                    if attributes[.modificationDate] as? Date != cachedPalette.lastModified {
-                        if let colorPalette = parseGradientColorPalette(colorPaletteFileName) {
-                            gradientPalettesUpdated.append(colorPaletteFileName)
+            do {
+                var colorPaletteFilesUpdated = [String: String]()
+                let files = try FileManager.default.contentsOfDirectory(atPath: path)
+                let deletedPalettes = cachedColorPalette.getAllKeys().filter { !files.contains($0) }
+                for deletedPalette in deletedPalettes {
+                    colorPaletteFilesUpdated[deletedPalette] = DirectoryObserver.deletedKey
+                    cachedColorPalette.removeValue(forKey: deletedPalette)
+                }
+                for file in files {
+                    let colorPaletteFileName = file.lastPathComponent()
+                    let cachedPalette = cachedColorPalette.getValue(forKey: colorPaletteFileName)
+                    if let cachedPalette {
+                        let attributes = try FileManager.default.attributesOfItem(atPath: getColorPaletteDir().appendingPathComponent(colorPaletteFileName))
+                        if attributes[.modificationDate] as? Date != cachedPalette.lastModified {
+                            if parseGradientColorPalette(colorPaletteFileName) != nil {
+                                colorPaletteFilesUpdated[colorPaletteFileName] = DirectoryObserver.updatedKey
+                            }
+                        }
+                    } else {
+                        if parseGradientColorPalette(colorPaletteFileName) != nil {
+                            colorPaletteFilesUpdated[colorPaletteFileName] = DirectoryObserver.createdKey
                         }
                     }
                 }
+                if colorPaletteFilesUpdated.keys.contains(where: { !$0.hasPrefix(Self.routePrefix) && !$0.hasPrefix(Self.weatherPrefix) && colorPaletteFilesUpdated[$0] != DirectoryObserver.updatedKey }) {
+                    TerrainMode.reloadTerrainModes()
+                }
+                NotificationCenter.default.post(name: Self.colorPalettesUpdatedNotification, object: colorPaletteFilesUpdated)
+            } catch {
+                debugPrint("Error updated color palette contents of: \(path)")
             }
-            NotificationCenter.default.post(name: Self.colorPalettesUpdatedNotification, object: gradientPalettesUpdated)
         }
     }
 
@@ -64,50 +83,39 @@ final class ColorPaletteHelper: NSObject {
         return colorPalettes
     }
 
-    func requireGradientColorPaletteSync(_ colorizationType: ColorizationType, gradientPaletteName: String, error: NSErrorPointer) -> ColorPalette {
-        guard let colorPalette = getGradientColorPaletteSync(colorizationType, gradientPaletteName: gradientPaletteName, error: error), isValidPalette(colorPalette) else {
+    func requireGradientColorPaletteSync(_ colorizationType: ColorizationType, gradientPaletteName: String) -> ColorPalette {
+        guard let colorPalette = getGradientColorPaletteSync(colorizationType, gradientPaletteName: gradientPaletteName), isValidPalette(colorPalette) else {
             return OARouteColorize.getDefaultPalette(colorizationType.rawValue)
         }
         return colorPalette
     }
 
-    func getGradientColorPaletteSync(_ colorizationType: ColorizationType, gradientPaletteName: String, error: NSErrorPointer) -> ColorPalette? {
-        getGradientColorPalette(Self.getRoutePaletteFileName(colorizationType, gradientPaletteName: gradientPaletteName), error: error)
+    func getGradientColorPaletteSync(_ colorizationType: ColorizationType, gradientPaletteName: String) -> ColorPalette? {
+        getGradientColorPalette(Self.getRoutePaletteFileName(colorizationType, gradientPaletteName: gradientPaletteName))
     }
 
-    func getGradientColorPaletteSyncWithModeKey(_ modeKey: String, error: NSErrorPointer) -> ColorPalette? {
-        getGradientColorPalette(modeKey, error: error)
+    func getGradientColorPaletteSyncWithModeKey(_ modeKey: String) -> ColorPalette? {
+        getGradientColorPalette(modeKey)
     }
 
-    func getGradientColorPalette(_ colorPaletteFileName: String, error: NSErrorPointer) -> ColorPalette? {
-        if isColorPaletteUpdated(colorPaletteFileName, error: error) {
+    func getGradientColorPalette(_ colorPaletteFileName: String) -> ColorPalette? {
+        guard let cachedPalette = cachedColorPalette.getValue(forKey: colorPaletteFileName) else {
             return parseGradientColorPalette(colorPaletteFileName)
         }
-        return cachedColorPalette.getValue(forKey: colorPaletteFileName)
-    }
-
-    func isColorPaletteUpdated(_ colorPaletteFileName: String, error: NSErrorPointer) -> Bool {
-        guard let cachedPalette = cachedColorPalette.getValue(forKey: colorPaletteFileName) else {
-            return true
-        }
-        do {
-            let attributes = try FileManager.default.attributesOfItem(atPath: getColorPaletteDir().appendingPathComponent(colorPaletteFileName))
-            return attributes[.modificationDate] as? Date != cachedPalette.lastModified
-        } catch let err as NSError {
-            error?.pointee = err
-            return false
-        }
+        return cachedPalette
     }
 
     private func parseGradientColorPalette(_ colorPaletteFileName: String) -> ColorPalette? {
-        let filePath = getColorPaletteDir().appendingPathComponent(colorPaletteFileName)
-        if FileManager.default.fileExists(atPath: filePath) {
-            do {
-                let colorPalette = try ColorPalette.parseColorPalette(from: filePath)
-                cachedColorPalette.setValue(colorPalette, forKey: colorPaletteFileName)
-                return colorPalette
-            } catch {
-                debugPrint("Error reading color file: \(error)")
+        if colorPaletteFileName.hasSuffix(TXT_EXT) {
+            let filePath = getColorPaletteDir().appendingPathComponent(colorPaletteFileName)
+            if FileManager.default.fileExists(atPath: filePath) {
+                do {
+                    let colorPalette = try ColorPalette.parseColorPalette(from: filePath)
+                    cachedColorPalette.setValue(colorPalette, forKey: colorPaletteFileName)
+                    return colorPalette
+                } catch {
+                    debugPrint("Error reading color file: \(error)")
+                }
             }
         }
         return nil
@@ -120,13 +128,10 @@ final class ColorPaletteHelper: NSObject {
             let colorFiles = try FileManager.default.contentsOfDirectory(atPath: getColorPaletteDir())
             for fileName in colorFiles where fileName.hasPrefix(colorTypePrefix) && fileName.hasSuffix(TXT_EXT) {
                 let colorPalleteName = fileName.replacingOccurrences(of: colorTypePrefix, with: "").replacingOccurrences(of: TXT_EXT, with: "")
-                var error: NSError?
-                if let colorPalette = getGradientColorPalette(fileName, error: &error) {
+                if let colorPalette = getGradientColorPalette(fileName) {
                     let fileAttributes = try FileManager.default.attributesOfItem(atPath: getColorPaletteDir().appendingPathComponent(fileName))
                     let modificationDate = fileAttributes[.modificationDate] as! Date
                     colorPalettes[colorPalleteName] = [colorPalette, Int64(modificationDate.timeIntervalSince1970)]
-                } else if let error {
-                    debugPrint("Error reading color palette file: \(error.description)")
                 }
             }
         } catch {
@@ -140,13 +145,11 @@ final class ColorPaletteHelper: NSObject {
         for mode in TerrainMode.values where mode.type == type {
             let fileName = mode.getMainFile()
             let filePath = getColorPaletteDir().appendingPathComponent(fileName)
-            var error: NSError?
-            if let colorPalette = getGradientColorPalette(fileName, error: &error), FileManager.default.fileExists(atPath: filePath) {
+            if let colorPalette = getGradientColorPalette(fileName),
+               FileManager.default.fileExists(atPath: filePath) {
                 let fileAttributes = try? FileManager.default.attributesOfItem(atPath: filePath)
                 let modificationDate = fileAttributes?[.modificationDate] as? Date
                 colorPalettes[mode.getKeyName()] = [colorPalette, Int64(modificationDate?.timeIntervalSince1970 ?? 0)]
-            } else if let error {
-                debugPrint("Error reading color palette file: \(error.description)")
             }
         }
         return colorPalettes

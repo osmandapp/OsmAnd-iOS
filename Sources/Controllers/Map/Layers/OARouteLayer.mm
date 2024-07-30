@@ -79,6 +79,7 @@
     OAColoringType *_prevRouteColoringType;
     NSString *_prevRouteInfoAttribute;
     NSCache<NSString *, NSNumber *> *_cachedRouteLineWidth;
+    NSMutableDictionary<NSString *, NSString *> *_cachedColorPaletteFiles;
     int _currentAnimatedRoute;
     CLLocation *_lastProj;
 
@@ -108,7 +109,7 @@
 {
     [super initLayer];
 
-    _routeGradientPalette = @"default";
+    _routeGradientPalette = PaletteGradientColor.defaultName;
     _routingHelper = [OARoutingHelper sharedInstance];
     _transportHelper = [OATransportRoutingHelper sharedInstance];
     
@@ -135,6 +136,7 @@
     _routeColoringType = OAColoringType.DEFAULT;
     _colorizationScheme = COLORIZATION_NONE;
     _cachedRouteLineWidth = [[NSCache alloc] init];
+    _cachedColorPaletteFiles = [NSMutableDictionary dictionary];
 
     _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapZoomChanged:withKey:andValue:)
@@ -142,6 +144,11 @@
     _updateGpxTracksOnMapObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                               withHandler:@selector(refreshRoute)
                                                                andObserve:[OsmAndApp instance].updateGpxTracksOnMapObservable];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(onColorPalettesFilesUpdated:)
+                                                 name:ColorPaletteHelper.colorPalettesUpdatedNotification
+                                               object:nil];
 }
 
 - (void) resetLayer
@@ -174,6 +181,29 @@
 
     [self refreshRoute];
     return YES;
+}
+
+- (void)onColorPalettesFilesUpdated:(NSNotification *)notification
+{
+    BOOL needToRefresh = NO;
+    if (notification.object && [notification.object isKindOfClass:NSDictionary.class])
+    {
+        NSDictionary<NSString *, NSString *> *colorPaletteFiles = (NSDictionary *) notification.object;
+        for (NSString *colorPaletteFile in colorPaletteFiles)
+        {
+            if ([colorPaletteFile hasPrefix:ColorPaletteHelper.routePrefix])
+            {
+                _cachedColorPaletteFiles[colorPaletteFile] = colorPaletteFiles[colorPaletteFile];
+                needToRefresh = YES;
+            }
+        }
+    }
+    if (needToRefresh)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self refreshRoute];
+        });
+    }
 }
 
 - (NSInteger)getCustomRouteWidthMin
@@ -833,22 +863,28 @@
         
         NSArray<CLLocation *> *locations = [route getImmutableAllLocations];
         BOOL routeUpdated = NO;
+        NSString *cachedColorPaletteFile = @"";
+        if ([routeColoringType isGradient])
+        {
+            cachedColorPaletteFile =
+                [ColorPaletteHelper getRoutePaletteFileName:(ColorizationType) [routeColoringType toColorizationType]
+                                        gradientPaletteName:_routeGradientPalette];
+        }
         if ([routeColoringType isGradient]
             && (_route != route
                 || _prevRouteColoringType != routeColoringType
-                || _colorizationScheme != COLORIZATION_GRADIENT))
+                || _colorizationScheme != COLORIZATION_GRADIENT
+                || [_cachedColorPaletteFiles.allKeys containsObject:cachedColorPaletteFile]))
         {
+            NSString *cachedColorPaletteValue = _cachedColorPaletteFiles[cachedColorPaletteFile];
+            if ([cachedColorPaletteValue isEqualToString:DirectoryObserver.deletedKey])
+                _routeGradientPalette = @"defaul";
+            [_cachedColorPaletteFiles removeObjectForKey:cachedColorPaletteFile];
+
             OAGPXDocument *gpx = [OAGPXUIHelper makeGpxFromRoute:route];
-            NSError *error = nil;
             ColorPalette *colorPalette = [[ColorPaletteHelper shared] getGradientColorPaletteSync:(ColorizationType) [routeColoringType toColorizationType]
-                                                                              gradientPaletteName:_routeGradientPalette
-                                                                                            error:&error];
-            if (error)
-            {
-                NSLog(@"Error reading color palette file: %@", error.description);
-                return;
-            }
-            else
+                                                                              gradientPaletteName:_routeGradientPalette];
+            if (colorPalette)
             {
                 OARouteColorize *colorizationHelper =
                     [[OARouteColorize alloc] initWithGpxFile:gpx

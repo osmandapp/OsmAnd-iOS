@@ -181,10 +181,75 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
     _app = [OsmAndApp instance];
     _settings = [OAAppSettings sharedManager];
     _appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-    _gradientColorsCollection = [[GradientColorsCollection alloc] initWithColorizationType:(ColorizationType) [_selectedItem.coloringType toColorizationType]];
+
+    OAColoringType *type = self.gpx.coloringType.length > 0
+        ? [OAColoringType getNonNullTrackColoringTypeByName:self.gpx.coloringType]
+        : OAColoringType.TRACK_SOLID;
+    _gradientColorsCollection = [[GradientColorsCollection alloc] initWithColorizationType:(ColorizationType) [type toColorizationType]];
 
     [self setOldValues];
     [self updateAllValues];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(onColorPalettesFilesUpdated:)
+                                                 name:ColorPaletteHelper.colorPalettesUpdatedNotification
+                                               object:nil];
+}
+
+- (void)onColorPalettesFilesUpdated:(NSNotification *)notification
+{
+    if ([self isSelectedTypeGradient] && notification.object && [notification.object isKindOfClass:NSDictionary.class])
+    {
+        OAColoringType *currentType = [OAColoringType getNonNullTrackColoringTypeByName:self.gpx.coloringType];
+        NSString *currentPaletteFile = [ColorPaletteHelper getRoutePaletteFileName:(ColorizationType) [currentType toColorizationType] gradientPaletteName:self.gpx.gradientPaletteName];
+        NSDictionary<NSString *, NSString *> *colorPaletteFiles = (NSDictionary *) notification.object;
+        BOOL reloadData = NO;
+        BOOL deleted = NO;
+        for (NSString *colorPaletteFile in colorPaletteFiles.allKeys)
+        {
+            if ([_gradientColorsCollection hasRouteGradientPaletteBy:colorPaletteFile]
+                || [colorPaletteFiles[colorPaletteFile] isEqualToString:DirectoryObserver.createdKey])
+            {
+                reloadData = YES;
+                if ([currentPaletteFile isEqualToString:colorPaletteFile]
+                    && [colorPaletteFiles[colorPaletteFile] isEqualToString:DirectoryObserver.deletedKey])
+                {
+                    deleted = YES;
+                    break;
+                }
+            }
+        }
+        if (reloadData)
+        {
+            _gradientColorsCollection = [[GradientColorsCollection alloc] initWithColorizationType:(ColorizationType) [_selectedItem.coloringType toColorizationType]];
+            _sortedPaletteColorItems = [NSMutableArray arrayWithArray:[_gradientColorsCollection getPaletteColors]];
+            if (deleted)
+            {
+                self.gpx.gradientPaletteName = PaletteGradientColor.defaultName;
+                _backupGpxItem.gradientPaletteName = self.gpx.gradientPaletteName;
+                if (self.isCurrentTrack)
+                    [self.doc setGradientColorPalette:self.gpx.gradientPaletteName];
+                _selectedPaletteColorItem = [_gradientColorsCollection getDefaultGradientPalette];
+            }
+            else
+            {
+                _selectedPaletteColorItem = [_gradientColorsCollection getGradientPaletteBy:self.gpx.gradientPaletteName];
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                OAGPXTableSectionData *section = _tableData[kColorsSection];
+                [self updateData:section];
+                
+                [UIView transitionWithView:self.tableView
+                                  duration:0.35f
+                                   options:UIViewAnimationOptionTransitionCrossDissolve
+                                animations:^(void)
+                 {
+                    [self.tableView reloadData];
+                }
+                                completion:nil];
+            });
+        }
+    }
 }
 
 - (void)setOldValues
@@ -1645,6 +1710,7 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
         if (cell)
         {
             BOOL isPaletteName = [cellData.key isEqualToString:@"paletteName"];
+            cell.selectionStyle = isPaletteName ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleDefault;
             cell.separatorInset = UIEdgeInsetsMake(0., isPaletteName ? 0. : self.tableView.frame.size.width, 0., 0.);
             cell.titleLabel.text = cellData.title;
             cell.titleLabel.textColor = cellData.tintColor ?: [UIColor colorNamed:ACColorNameTextColorPrimary];
@@ -2283,7 +2349,7 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
         _gradientColorsCollection = [[GradientColorsCollection alloc] initWithColorizationType:(ColorizationType) [_selectedItem.coloringType toColorizationType]];
         _sortedPaletteColorItems = [NSMutableArray arrayWithArray:[_gradientColorsCollection getPaletteColors]];
         _selectedPaletteColorItem = [_gradientColorsCollection getDefaultGradientPalette];
-        self.gpx.gradientPaletteName = @"default";
+        self.gpx.gradientPaletteName = PaletteGradientColor.defaultName;
     }
 
     NSString *coloringType = [self isSelectedTypeAttribute] ? _selectedItem.attrName : _selectedItem.coloringType.name;

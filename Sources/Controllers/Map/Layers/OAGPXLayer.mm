@@ -66,6 +66,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     QHash< QString, QList<OsmAnd::FColorARGB> > _cachedColors;
     QHash< QString, QList<OsmAnd::FColorARGB> > _cachedWallColors;
     NSMutableDictionary<NSString *, NSNumber *> *_cachedTrackWidth;
+    NSMutableDictionary<NSString *, NSString *> *_cachedColorPaletteFiles;
     
     NSOperationQueue *_splitLabelsQueue;
     NSObject* _splitLock;
@@ -98,8 +99,14 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
 
     _cachedTracks = [NSMutableDictionary dictionary];
     _cachedTrackWidth = [NSMutableDictionary dictionary];
+    _cachedColorPaletteFiles = [NSMutableDictionary dictionary];
     
     _plugin = (OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(onColorPalettesFilesUpdated:)
+                                                 name:ColorPaletteHelper.colorPalettesUpdatedNotification
+                                               object:nil];
 }
 
 - (void) resetLayer
@@ -135,6 +142,31 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     });
 
     return YES;
+}
+
+- (void)onColorPalettesFilesUpdated:(NSNotification *)notification
+{
+    BOOL needToRefresh = NO;
+    if (notification.object && [notification.object isKindOfClass:NSDictionary.class])
+    {
+        NSDictionary<NSString *, NSString *> *colorPaletteFiles = (NSDictionary *) notification.object;
+        for (NSString *colorPaletteFile in colorPaletteFiles)
+        {
+            if ([colorPaletteFile hasPrefix:ColorPaletteHelper.routePrefix])
+            {
+                _cachedColorPaletteFiles[colorPaletteFile] = colorPaletteFiles[colorPaletteFile];
+                needToRefresh = YES;
+            }
+        }
+    }
+    if (needToRefresh)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.mapViewController runWithRenderSync:^{
+                [self refreshGpxTracks:_gpxDocs reset:YES];
+            }];
+        });
+    }
 }
 
 - (void) refreshGpxTracks:(QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> >)gpxDocs reset:(BOOL)reset
@@ -222,7 +254,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
         cachedTrack[@"doc"] = doc;
         cachedTrack[@"colorization_scheme"] = @(COLORIZATION_NONE);
         cachedTrack[@"prev_coloring_type"] = gpx.coloringType;
-        cachedTrack[@"prev_color_palette"] = gpx.gradientPaletteName.length > 0 ? gpx.gradientPaletteName : @"default";
+        cachedTrack[@"prev_color_palette"] = gpx.gradientPaletteName.length > 0 ? gpx.gradientPaletteName : PaletteGradientColor.defaultName;
         cachedTrack[@"prev_wall_coloring_type"] = @(gpx.visualization3dWallColorType);
         _cachedTracks[filePath] = cachedTrack;
         _cachedColors[key] = QList<OsmAnd::FColorARGB>();
@@ -244,17 +276,10 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     }
     else
     {
-        NSError *error = nil;
         ColorPalette *palette =
             [[ColorPaletteHelper shared] getGradientColorPaletteSync:(ColorizationType) [type toColorizationType]
-                                                 gradientPaletteName:gradientPalette
-                                                               error:&error];
-        if (error)
-        {
-            NSLog(@"Error reading color palette file: %@", error.description);
-            return;
-        }
-        else
+                                                 gradientPaletteName:gradientPalette];
+        if (palette)
         {
             OARouteColorize *routeColorize =
                 [[OARouteColorize alloc] initWithGpxFile:doc
@@ -312,15 +337,27 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                 type = OAColoringType.DEFAULT;
 
             OAGPXTrackAnalysis *analysis;
+            NSString *cachedColorPaletteFile = @"";
+            if ([type isGradient])
+            {
+                cachedColorPaletteFile =
+                    [ColorPaletteHelper getRoutePaletteFileName:(ColorizationType) [type toColorizationType]
+                                            gradientPaletteName:cachedTrack[@"prev_color_palette"]];
+            }
             if ([type isGradient]
                 && (![cachedTrack[@"prev_coloring_type"] isEqualToString:gpx.coloringType]
                     || ![cachedTrack[@"prev_color_palette"] isEqualToString:gpx.gradientPaletteName]
                     || [cachedTrack[@"colorization_scheme"] intValue] != COLORIZATION_GRADIENT
+                    || [_cachedColorPaletteFiles.allKeys containsObject:cachedColorPaletteFile]
                     || _cachedColors[key].isEmpty()))
             {
+                NSString *cachedColorPaletteValue = _cachedColorPaletteFiles[cachedColorPaletteFile];
+                BOOL isColorPaletteDeleted = [cachedColorPaletteValue isEqualToString:DirectoryObserver.deletedKey];
+                [_cachedColorPaletteFiles removeObjectForKey:cachedColorPaletteFile];
+
                 cachedTrack[@"colorization_scheme"] = @(COLORIZATION_GRADIENT);
                 cachedTrack[@"prev_coloring_type"] = gpx.coloringType;
-                cachedTrack[@"prev_color_palette"] = gpx.gradientPaletteName.length > 0 ? gpx.gradientPaletteName : @"default";
+                cachedTrack[@"prev_color_palette"] = gpx.gradientPaletteName.length == 0 || isColorPaletteDeleted ? PaletteGradientColor.defaultName : gpx.gradientPaletteName;
                 BOOL shouldCalculateColorCache = YES;
                 // check if we already have a cached array of wall color points that can be reused for route line color, provided that the coloring type matches
                 switch (gpx.visualization3dWallColorType)
@@ -344,21 +381,15 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                     NSError *error = nil;
                     ColorPalette *palette =
                         [[ColorPaletteHelper shared] getGradientColorPaletteSync:(ColorizationType) [type toColorizationType]
-                                                             gradientPaletteName:cachedTrack[@"prev_color_palette"]
-                                                                           error:&error];
-                    if (error)
-                    {
-                        NSLog(@"Error reading color palette file: %@", error.description);
-                        return;
-                    }
-                    else
+                                                             gradientPaletteName:cachedTrack[@"prev_color_palette"]];
+                    if (palette)
                     {
                         OARouteColorize *routeColorize =
-                        [[OARouteColorize alloc] initWithGpxFile:doc
-                                                        analysis:analysis
-                                                            type:[type toColorizationType]
-                                                         palette:palette
-                                                 maxProfileSpeed:0];
+                            [[OARouteColorize alloc] initWithGpxFile:doc
+                                                            analysis:analysis
+                                                                type:[type toColorizationType]
+                                                             palette:palette
+                                                     maxProfileSpeed:0];
                         _cachedColors[key].clear();
                         if (routeColorize)
                             _cachedColors[key].append([routeColorize getResultQList]);
@@ -388,7 +419,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                 }
                 cachedTrack[@"colorization_scheme"] = @(COLORIZATION_SOLID);
                 cachedTrack[@"prev_coloring_type"] = gpx.coloringType;
-                cachedTrack[@"prev_color_palette"] = gpx.gradientPaletteName.length > 0 ? gpx.gradientPaletteName : @"default";
+                cachedTrack[@"prev_color_palette"] = gpx.gradientPaletteName.length > 0 ? gpx.gradientPaletteName : PaletteGradientColor.defaultName;
                 _cachedColors[key].clear();
                 [self calculateSegmentsColor:_cachedColors[key]
                                     attrName:gpx.coloringType
@@ -402,7 +433,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
             {
                 cachedTrack[@"colorization_scheme"] = @(COLORIZATION_NONE);
                 cachedTrack[@"prev_coloring_type"] = gpx.coloringType;
-                cachedTrack[@"prev_color_palette"] = gpx.gradientPaletteName.length > 0 ? gpx.gradientPaletteName : @"default";
+                cachedTrack[@"prev_color_palette"] = gpx.gradientPaletteName.length > 0 ? gpx.gradientPaletteName : PaletteGradientColor.defaultName;
                 _cachedColors[key].clear();
             }
             

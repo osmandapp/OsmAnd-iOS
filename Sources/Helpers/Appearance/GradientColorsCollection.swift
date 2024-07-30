@@ -52,6 +52,30 @@ final class GradientColorsCollection: ColorsCollection {
         self.init(terrainType)
     }
 
+    func hasRouteGradientPalette(by fileName: String) -> Bool {
+        for paletteColor in getPaletteColors() {
+            if let gradientColor = paletteColor as? PaletteGradientColor,
+               fileName == ColorPaletteHelper.routePrefix.appending( gradientColor.stringId).appending(TXT_EXT) {
+                return true
+            }
+        }
+        return false
+    }
+
+    func hasTerrainGradientPalette(by fileName: String) -> Bool {
+        if gradientType is TerrainType {
+            let prefixes = [TerrainMode.hillshadePrefix, TerrainMode.colorSlopePrefix, TerrainMode.heightPrefix]
+            for paletteColor in getPaletteColors() {
+                if let gradientColor = paletteColor as? PaletteGradientColor,
+                   let key = TerrainMode.getKeyByPaletteName(gradientColor.paletteName),
+                   prefixes.contains(where: { "\($0)\(key)\(TXT_EXT)" == fileName }) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
     func getPaletteColors() -> [PaletteColor] {
         getColors(.lastUsedTime)
     }

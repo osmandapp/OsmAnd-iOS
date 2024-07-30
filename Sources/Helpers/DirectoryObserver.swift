@@ -27,18 +27,16 @@ import Foundation
 }
 
 @objcMembers
-final class DirectoryObserverTypeWrapper: NSObject {
+class DirectoryObserver: NSObject {
 
-    static func getNotificationName(type: DirectoryObserverType) -> NSNotification.Name {
-        type.notificationName
-    }
-}
+    static let updatedKey = "updated"
+    static let deletedKey = "deleted"
+    static let createdKey = "created"
 
-class DirectoryObserver {
+    private let type: DirectoryObserverType
 
     private var directoryFileDescriptor: CInt = -1
     private var dispatchSource: DispatchSourceFileSystemObject?
-    private let type: DirectoryObserverType
 
     init(_ type: DirectoryObserverType) {
         self.type = type
@@ -62,15 +60,15 @@ class DirectoryObserver {
 
         // Set the event handler
         dispatchSource?.setEventHandler { [weak self] in
-            guard let self = self else { return }
+            guard let self else { return }
 
-            debugPrint("Directory contents changed: \(type.path)")
-            NotificationCenter.default.post(name: type.notificationName, object: type.path)
+            debugPrint("Directory contents changed: \(self.type.path)")
+            NotificationCenter.default.post(name: self.type.notificationName, object: self.type.path)
         }
 
         // Set the cancel handler
         dispatchSource?.setCancelHandler { [weak self] in
-            guard let self = self else { return }
+            guard let self else { return }
 
             close(self.directoryFileDescriptor)
             self.directoryFileDescriptor = -1

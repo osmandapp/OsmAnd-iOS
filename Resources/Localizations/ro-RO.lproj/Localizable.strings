@@ -3470,3 +3470,7 @@
 "download_srtm_maps" = "Linii de contur";
 "voices" = "Instrucțiuni vocale";
 "cloud_layer" = "Strat de nor";
+"quick_action_verb_show_hide" = "Afișează / Ascunde";
+"quick_action_verb_turn_on_off" = "Porniți / Opriți";
+"quick_action_verb_pause_resume" = "Pauză / Reluare";
+"precipitation_layer" = "Stratul de precipitații";

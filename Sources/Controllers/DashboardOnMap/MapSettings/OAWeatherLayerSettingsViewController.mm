@@ -475,7 +475,7 @@
 {
     [self hide:YES duration:.2 onComplete:^{
         if (self.delegate)
-            [self.delegate onDoneWeatherLayerSettings:NO];
+            [self.delegate onDoneWeatherLayerSettings:YES];
     }];
 }
 

@@ -38,6 +38,7 @@ static const NSInteger kElevationMaxMeters = 2000;
 @property (weak, nonatomic) IBOutlet UIView *doneButtonContainerView;
 @property (weak, nonatomic) IBOutlet UIButton *resetButton;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *backButtonLeadingConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *resetButtonTrailingConstraint;
 
 @end
 
@@ -396,9 +397,11 @@ static const NSInteger kElevationMaxMeters = 2000;
 - (void)doAdditionalLayout
 {
     BOOL isRTL = [self.backButtonContainerView isDirectionRTL];
-    self.backButtonLeadingConstraint.constant = [self isLandscape]
-        ? (isRTL ? 0. : [self getLandscapeViewWidth] - [OAUtilities getLeftMargin] + 10.)
-        : [OAUtilities getLeftMargin] + 10.;
+    CGFloat landscapeWidthAdjusted = [self getLandscapeViewWidth] - [OAUtilities getLeftMargin] + 10.;
+    CGFloat commonMargin = [OAUtilities getLeftMargin] + 10.;
+    CGFloat defaultPadding = 13.;
+    self.backButtonLeadingConstraint.constant = [self isLandscape] ? (isRTL ? defaultPadding : landscapeWidthAdjusted) : commonMargin;
+    self.resetButtonTrailingConstraint.constant = [self isLandscape] ? (isRTL ? landscapeWidthAdjusted : defaultPadding) : commonMargin;
 }
 
 - (void)hide

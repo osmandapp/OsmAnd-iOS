@@ -79,7 +79,7 @@
     OAColoringType *_prevRouteColoringType;
     NSString *_prevRouteInfoAttribute;
     NSCache<NSString *, NSNumber *> *_cachedRouteLineWidth;
-    NSMutableDictionary<NSString *, NSString *> *_cachedColorPaletteFiles;
+    NSMutableDictionary<NSString *, NSString *> *_updatedColorPaletteFiles;
     int _currentAnimatedRoute;
     CLLocation *_lastProj;
 
@@ -136,7 +136,7 @@
     _routeColoringType = OAColoringType.DEFAULT;
     _colorizationScheme = COLORIZATION_NONE;
     _cachedRouteLineWidth = [[NSCache alloc] init];
-    _cachedColorPaletteFiles = [NSMutableDictionary dictionary];
+    _updatedColorPaletteFiles = [NSMutableDictionary dictionary];
 
     _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapZoomChanged:withKey:andValue:)
@@ -185,7 +185,7 @@
 
 - (void)onColorPalettesFilesUpdated:(NSNotification *)notification
 {
-    BOOL needToRefresh = NO;
+    BOOL refresh = NO;
     if (notification.object && [notification.object isKindOfClass:NSDictionary.class])
     {
         NSDictionary<NSString *, NSString *> *colorPaletteFiles = (NSDictionary *) notification.object;
@@ -193,12 +193,12 @@
         {
             if ([colorPaletteFile hasPrefix:ColorPaletteHelper.routePrefix])
             {
-                _cachedColorPaletteFiles[colorPaletteFile] = colorPaletteFiles[colorPaletteFile];
-                needToRefresh = YES;
+                _updatedColorPaletteFiles[colorPaletteFile] = colorPaletteFiles[colorPaletteFile];
+                refresh = YES;
             }
         }
     }
-    if (needToRefresh)
+    if (refresh)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self refreshRoute];
@@ -863,10 +863,10 @@
         
         NSArray<CLLocation *> *locations = [route getImmutableAllLocations];
         BOOL routeUpdated = NO;
-        NSString *cachedColorPaletteFile = @"";
+        NSString *colorPaletteFile = @"";
         if ([routeColoringType isGradient])
         {
-            cachedColorPaletteFile =
+            colorPaletteFile =
                 [ColorPaletteHelper getRoutePaletteFileName:(ColorizationType) [routeColoringType toColorizationType]
                                         gradientPaletteName:_routeGradientPalette];
         }
@@ -874,32 +874,31 @@
             && (_route != route
                 || _prevRouteColoringType != routeColoringType
                 || _colorizationScheme != COLORIZATION_GRADIENT
-                || [_cachedColorPaletteFiles.allKeys containsObject:cachedColorPaletteFile]))
+                || [_updatedColorPaletteFiles.allKeys containsObject:colorPaletteFile]))
         {
-            NSString *cachedColorPaletteValue = _cachedColorPaletteFiles[cachedColorPaletteFile];
-            if ([cachedColorPaletteValue isEqualToString:DirectoryObserver.deletedKey])
-                _routeGradientPalette = @"defaul";
-            [_cachedColorPaletteFiles removeObjectForKey:cachedColorPaletteFile];
-
+            NSString *updatedColorPaletteValue = _updatedColorPaletteFiles[colorPaletteFile];
+            if ([updatedColorPaletteValue isEqualToString:DirectoryObserver.deletedKey])
+                _routeGradientPalette = PaletteGradientColor.defaultName;
+            [_updatedColorPaletteFiles removeObjectForKey:colorPaletteFile];
+            
             OAGPXDocument *gpx = [OAGPXUIHelper makeGpxFromRoute:route];
             ColorPalette *colorPalette = [[ColorPaletteHelper shared] getGradientColorPaletteSync:(ColorizationType) [routeColoringType toColorizationType]
                                                                               gradientPaletteName:_routeGradientPalette];
-            if (colorPalette)
-            {
-                OARouteColorize *colorizationHelper =
-                    [[OARouteColorize alloc] initWithGpxFile:gpx
-                                                    analysis:[gpx getAnalysis:0]
-                                                        type:[routeColoringType toColorizationType]
-                                                     palette:colorPalette
-                                             maxProfileSpeed:0
-                ];
-                _colorizationScheme = COLORIZATION_GRADIENT;
-                _colors.clear();
-                if (colorizationHelper)
-                    _colors.append([colorizationHelper getResultQList]);
-                _route = route;
-                routeUpdated = YES;
-            }
+            if (!colorPalette)
+                return;
+            OARouteColorize *colorizationHelper =
+                [[OARouteColorize alloc] initWithGpxFile:gpx
+                                                analysis:[gpx getAnalysis:0]
+                                                    type:[routeColoringType toColorizationType]
+                                                 palette:colorPalette
+                                         maxProfileSpeed:0
+            ];
+            _colorizationScheme = COLORIZATION_GRADIENT;
+            _colors.clear();
+            if (colorizationHelper)
+                _colors.append([colorizationHelper getResultQList]);
+            _route = route;
+            routeUpdated = YES;
         }
         else if ([routeColoringType isRouteInfoAttribute]
                 && (_route != route || ![_prevRouteInfoAttribute isEqualToString:_routeInfoAttribute] || _colorizationScheme != COLORIZATION_SOLID))

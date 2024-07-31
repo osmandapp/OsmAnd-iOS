@@ -18,9 +18,7 @@ final class RouteInfoDestinationSector: NSObject {
     
     private var distance: Double = 0
     
-    private var isMoreThanMinDistance: Bool {
-        distance > 5
-    }
+    private var isMoreThanMinDistance: Bool { distance > 5 }
     
     // MARK: - Init
     

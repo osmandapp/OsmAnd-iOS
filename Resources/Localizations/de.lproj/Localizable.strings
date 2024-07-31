@@ -2257,7 +2257,7 @@
 "shared_string_weather" = "Wetter";
 "map_settings_weather_temp" = "Temperatur";
 "navigate_point_mgrs" = "MGRS";
-"ltr_or_rtl_combine_via_dash" = "%@ — %@";
+"ltr_or_rtl_combine_via_dash" = "%@— %@";
 "routeInfo_surface_description" = "Informationen zur physischen Oberfläche von Straßen und Fußwegen angeben.";
 "routeInfo_smoothness_description" = "Klassifizierungsschema für die physische Nutzbarkeit eines Weges für Radfahrzeuge, insbesondere hinsichtlich der Regelmäßigkeit/Ebenheit der Oberfläche.";
 "routeInfo_winter_ice_road_description" = "Färbt die Route oder den Track entsprechend der Winterstraßenklassifizierung.";
@@ -3494,7 +3494,7 @@
 "cloud_layer" = "Wolkenebene";
 "download_srtm_maps" = "Konturlinie";
 "driving_region_india" = "Indien";
-"driving_region_uk" = "UK & andere";
+"driving_region_uk" = "UK und andere";
 "key_event_category_map_interactions" = "Karten-Interaktionen";
 "map_source" = "Kartenquelle";
 "precipitation_layer" = "Niederschlagsebene";

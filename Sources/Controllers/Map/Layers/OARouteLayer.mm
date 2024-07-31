@@ -185,17 +185,19 @@
 
 - (void)onColorPalettesFilesUpdated:(NSNotification *)notification
 {
+    if (![notification.object isKindOfClass:NSDictionary.class])
+        return;
+
+    NSDictionary<NSString *, NSString *> *colorPaletteFiles = (NSDictionary *) notification.object;
+    if (!colorPaletteFiles)
+        return;
     BOOL refresh = NO;
-    if (notification.object && [notification.object isKindOfClass:NSDictionary.class])
+    for (NSString *colorPaletteFile in colorPaletteFiles)
     {
-        NSDictionary<NSString *, NSString *> *colorPaletteFiles = (NSDictionary *) notification.object;
-        for (NSString *colorPaletteFile in colorPaletteFiles)
+        if ([colorPaletteFile hasPrefix:ColorPaletteHelper.routePrefix])
         {
-            if ([colorPaletteFile hasPrefix:ColorPaletteHelper.routePrefix])
-            {
-                _updatedColorPaletteFiles[colorPaletteFile] = colorPaletteFiles[colorPaletteFile];
-                refresh = YES;
-            }
+            _updatedColorPaletteFiles[colorPaletteFile] = colorPaletteFiles[colorPaletteFile];
+            refresh = YES;
         }
     }
     if (refresh)

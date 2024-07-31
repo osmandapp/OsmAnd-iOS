@@ -37,6 +37,7 @@ class DirectoryObserver: NSObject {
 
     private var directoryFileDescriptor: CInt = -1
     private var dispatchSource: DispatchSourceFileSystemObject?
+    private let queue = DispatchQueue(label: "DirectoryObserverQueue", attributes: .concurrent)
 
     init(_ type: DirectoryObserverType) {
         self.type = type
@@ -55,10 +56,9 @@ class DirectoryObserver: NSObject {
         dispatchSource = DispatchSource.makeFileSystemObjectSource(
             fileDescriptor: directoryFileDescriptor,
             eventMask: .all,
-            queue: DispatchQueue.global()
+            queue: queue
         )
 
-        // Set the event handler
         dispatchSource?.setEventHandler { [weak self] in
             guard let self else { return }
 
@@ -66,12 +66,12 @@ class DirectoryObserver: NSObject {
             NotificationCenter.default.post(name: self.type.notificationName, object: self.type.path)
         }
 
-        // Set the cancel handler
         dispatchSource?.setCancelHandler { [weak self] in
             guard let self else { return }
 
             close(self.directoryFileDescriptor)
             self.directoryFileDescriptor = -1
+            dispatchSource = nil
         }
 
         // Start monitoring

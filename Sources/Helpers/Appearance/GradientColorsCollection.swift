@@ -53,27 +53,21 @@ final class GradientColorsCollection: ColorsCollection {
     }
 
     func hasRouteGradientPalette(by fileName: String) -> Bool {
-        for paletteColor in getPaletteColors() {
-            if let gradientColor = paletteColor as? PaletteGradientColor,
-               fileName == ColorPaletteHelper.routePrefix.appending( gradientColor.stringId).appending(TXT_EXT) {
-                return true
-            }
+        return getPaletteColors().contains { paletteColor in
+            guard let gradientColor = paletteColor as? PaletteGradientColor else { return false }
+            let expectedFileName = ColorPaletteHelper.routePrefix + gradientColor.stringId + TXT_EXT
+            return fileName == expectedFileName
         }
-        return false
     }
 
     func hasTerrainGradientPalette(by fileName: String) -> Bool {
-        if gradientType is TerrainType {
-            let prefixes = [TerrainMode.hillshadePrefix, TerrainMode.colorSlopePrefix, TerrainMode.heightPrefix]
-            for paletteColor in getPaletteColors() {
-                if let gradientColor = paletteColor as? PaletteGradientColor,
-                   let key = TerrainMode.getKeyByPaletteName(gradientColor.paletteName),
-                   prefixes.contains(where: { "\($0)\(key)\(TXT_EXT)" == fileName }) {
-                    return true
-                }
-            }
+        guard gradientType is TerrainType else { return false }
+        let prefixes = [TerrainMode.hillshadePrefix, TerrainMode.colorSlopePrefix, TerrainMode.heightPrefix]
+        return getPaletteColors().contains { paletteColor in
+            guard let gradientColor = paletteColor as? PaletteGradientColor else { return false }
+            guard let key = TerrainMode.getKeyByPaletteName(gradientColor.paletteName) else { return false }
+            return prefixes.contains(where: { $0 + key + TXT_EXT == fileName })
         }
-        return false
     }
 
     func getPaletteColors() -> [PaletteColor] {

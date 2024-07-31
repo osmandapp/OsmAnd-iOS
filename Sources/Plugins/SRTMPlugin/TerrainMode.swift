@@ -49,7 +49,7 @@ final class TerrainMode: NSObject {
     static let colorSlopePrefix = "slope_"
     static let heightPrefix = "height_"
 
-    private static let queue = DispatchQueue(label: "TerrainModeValues")
+    private static let queue = DispatchQueue(label: "TerrainModeValuesQueue")
 
     static var values: [TerrainMode] {
         guard let terrainModes else {
@@ -166,10 +166,6 @@ final class TerrainMode: NSObject {
 
     func isSlope() -> Bool {
         type == .slope
-    }
-
-    func isHeight() -> Bool {
-        type == .height
     }
 
     func getMainFile() -> String {

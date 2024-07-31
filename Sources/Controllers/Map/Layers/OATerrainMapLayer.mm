@@ -152,18 +152,20 @@
 
 - (void)onColorPalettesFilesUpdated:(NSNotification *)notification
 {
-    if (notification.object && [notification.object isKindOfClass:NSDictionary.class])
+    if (![notification.object isKindOfClass:NSDictionary.class])
+        return;
+
+    NSDictionary<NSString *, NSString *> *colorPaletteFiles = (NSDictionary *) notification.object;
+    if (!colorPaletteFiles)
+        return;
+    for (NSString *colorPaletteFile in colorPaletteFiles)
     {
-        NSDictionary<NSString *, NSString *> *colorPaletteFiles = (NSDictionary *) notification.object;
-        for (NSString *colorPaletteFile in colorPaletteFiles)
+        if ([[_terrainMode getMainFile] isEqualToString:colorPaletteFile])
         {
-            if ([[_terrainMode getMainFile] isEqualToString:colorPaletteFile])
-            {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self updateTerrainLayer];
-                });
-                return;
-            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self updateTerrainLayer];
+            });
+            return;
         }
     }
 }

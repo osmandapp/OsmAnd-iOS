@@ -198,57 +198,59 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
 
 - (void)onColorPalettesFilesUpdated:(NSNotification *)notification
 {
-    if ([self isSelectedTypeGradient] && notification.object && [notification.object isKindOfClass:NSDictionary.class])
+    if (![notification.object isKindOfClass:NSDictionary.class] || ![self isSelectedTypeGradient])
+        return;
+
+    NSDictionary<NSString *, NSString *> *colorPaletteFiles = (NSDictionary *) notification.object;
+    if (!colorPaletteFiles)
+        return;
+    OAColoringType *currentType = [OAColoringType getNonNullTrackColoringTypeByName:self.gpx.coloringType];
+    NSString *currentPaletteFile = [ColorPaletteHelper getRoutePaletteFileName:(ColorizationType) [currentType toColorizationType] gradientPaletteName:self.gpx.gradientPaletteName];
+    BOOL reloadData = NO;
+    BOOL deleted = NO;
+    for (NSString *colorPaletteFile in colorPaletteFiles.allKeys)
     {
-        OAColoringType *currentType = [OAColoringType getNonNullTrackColoringTypeByName:self.gpx.coloringType];
-        NSString *currentPaletteFile = [ColorPaletteHelper getRoutePaletteFileName:(ColorizationType) [currentType toColorizationType] gradientPaletteName:self.gpx.gradientPaletteName];
-        NSDictionary<NSString *, NSString *> *colorPaletteFiles = (NSDictionary *) notification.object;
-        BOOL reloadData = NO;
-        BOOL deleted = NO;
-        for (NSString *colorPaletteFile in colorPaletteFiles.allKeys)
+        if ([_gradientColorsCollection hasRouteGradientPaletteBy:colorPaletteFile]
+            || [colorPaletteFiles[colorPaletteFile] isEqualToString:DirectoryObserver.createdKey])
         {
-            if ([_gradientColorsCollection hasRouteGradientPaletteBy:colorPaletteFile]
-                || [colorPaletteFiles[colorPaletteFile] isEqualToString:DirectoryObserver.createdKey])
+            reloadData = YES;
+            if ([currentPaletteFile isEqualToString:colorPaletteFile]
+                && [colorPaletteFiles[colorPaletteFile] isEqualToString:DirectoryObserver.deletedKey])
             {
-                reloadData = YES;
-                if ([currentPaletteFile isEqualToString:colorPaletteFile]
-                    && [colorPaletteFiles[colorPaletteFile] isEqualToString:DirectoryObserver.deletedKey])
-                {
-                    deleted = YES;
-                    break;
-                }
+                deleted = YES;
+                break;
             }
         }
-        if (reloadData)
+    }
+    if (reloadData)
+    {
+        _gradientColorsCollection = [[GradientColorsCollection alloc] initWithColorizationType:(ColorizationType) [_selectedItem.coloringType toColorizationType]];
+        _sortedPaletteColorItems = [NSMutableArray arrayWithArray:[_gradientColorsCollection getPaletteColors]];
+        if (deleted)
         {
-            _gradientColorsCollection = [[GradientColorsCollection alloc] initWithColorizationType:(ColorizationType) [_selectedItem.coloringType toColorizationType]];
-            _sortedPaletteColorItems = [NSMutableArray arrayWithArray:[_gradientColorsCollection getPaletteColors]];
-            if (deleted)
-            {
-                self.gpx.gradientPaletteName = PaletteGradientColor.defaultName;
-                _backupGpxItem.gradientPaletteName = self.gpx.gradientPaletteName;
-                if (self.isCurrentTrack)
-                    [self.doc setGradientColorPalette:self.gpx.gradientPaletteName];
-                _selectedPaletteColorItem = [_gradientColorsCollection getDefaultGradientPalette];
-            }
-            else
-            {
-                _selectedPaletteColorItem = [_gradientColorsCollection getGradientPaletteBy:self.gpx.gradientPaletteName];
-            }
-            dispatch_async(dispatch_get_main_queue(), ^{
-                OAGPXTableSectionData *section = _tableData[kColorsSection];
-                [self updateData:section];
-                
-                [UIView transitionWithView:self.tableView
-                                  duration:0.35f
-                                   options:UIViewAnimationOptionTransitionCrossDissolve
-                                animations:^(void)
-                 {
-                    [self.tableView reloadData];
-                }
-                                completion:nil];
-            });
+            self.gpx.gradientPaletteName = PaletteGradientColor.defaultName;
+            _backupGpxItem.gradientPaletteName = self.gpx.gradientPaletteName;
+            if (self.isCurrentTrack)
+                [self.doc setGradientColorPalette:self.gpx.gradientPaletteName];
+            _selectedPaletteColorItem = [_gradientColorsCollection getDefaultGradientPalette];
         }
+        else
+        {
+            _selectedPaletteColorItem = [_gradientColorsCollection getGradientPaletteBy:self.gpx.gradientPaletteName];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            OAGPXTableSectionData *section = _tableData[kColorsSection];
+            [self updateData:section];
+            
+            [UIView transitionWithView:self.tableView
+                              duration:0.35f
+                               options:UIViewAnimationOptionTransitionCrossDissolve
+                            animations:^(void)
+             {
+                [self.tableView reloadData];
+            }
+                            completion:nil];
+        });
     }
 }
 
@@ -2481,9 +2483,9 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
 
 - (void)onCollectionItemSelected:(NSIndexPath *)indexPath
 {
-    _isNewColorSelected = YES;
     if ([self isSelectedTypeSolid])
     {
+        _isNewColorSelected = YES;
         _selectedColorItem = _sortedColorItems[indexPath.row];
         self.gpx.color = _selectedColorItem.value;
         if (_wholeFolderTracks)

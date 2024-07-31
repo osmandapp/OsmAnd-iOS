@@ -27,7 +27,7 @@ import Foundation
 }
 
 @objcMembers
-class DirectoryObserver: NSObject {
+final class DirectoryObserver: NSObject {
 
     static let updatedKey = "updated"
     static let deletedKey = "deleted"

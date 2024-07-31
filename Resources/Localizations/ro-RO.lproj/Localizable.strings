@@ -3489,3 +3489,6 @@
 "quick_action_verb_turn_on_off" = "Pornește / Oprește";
 "quick_action_verb_pause_resume" = "Pauză / Reluare";
 "precipitation_layer" = "Stratul de precipitații";
+"driving_region_uk" = "Regatul Unit și similare";
+"osmand_depelopment_use_3d_icons" = "Utilizați pictogramele de poziționare a locației 3D";
+"driving_region_india" = "India";

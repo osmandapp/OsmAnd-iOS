@@ -3479,3 +3479,13 @@
 "voices" = "Indicații vocale";
 "pressure_layer" = "Strat presiuni";
 "quick_action_directions_from" = "Punct de plecare";
+"quick_action_parking_place" = "Loc de parcare";
+"quick_action_directions_from" = "Punct de plecare";
+"map_source" = "Sursa hărții";
+"download_srtm_maps" = "Linii de contur";
+"voices" = "Instrucțiuni vocale";
+"cloud_layer" = "Strat de nori";
+"quick_action_verb_show_hide" = "Afișează / Ascunde";
+"quick_action_verb_turn_on_off" = "Pornește / Oprește";
+"quick_action_verb_pause_resume" = "Pauză / Reluare";
+"precipitation_layer" = "Stratul de precipitații";

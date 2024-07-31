@@ -77,12 +77,4 @@ final class DirectoryObserver: NSObject {
         // Start monitoring
         dispatchSource?.resume()
     }
-
-    func stopObserving() {
-        dispatchSource?.cancel()
-    }
-
-    deinit {
-        stopObserving()
-    }
 }

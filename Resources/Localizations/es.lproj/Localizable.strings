@@ -2234,7 +2234,7 @@
 "backup_and_restore" = "Copia de seguridad y restauración";
 "approximate_file_size" = "Tamaño aproximado del archivo";
 "mgrs_format_descr" = "OsmAnd usa MGRS, similar al formato UTM de la OTAN.";
-"ltr_or_rtl_combine_via_dash" = "%@ — %@";
+"ltr_or_rtl_combine_via_dash" = "%@— %@";
 "invalid_format" = "Formato inválido";
 "folder_already_exsists" = "Una carpeta con este nombre ya existe";
 "select_folder_descr" = "Elegir carpeta o añadir una nueva";

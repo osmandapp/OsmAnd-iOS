@@ -802,12 +802,11 @@
 - (void)doAdditionalLayout
 {
     BOOL isRTL = [self.backButtonContainerView isDirectionRTL];
-    self.backButtonLeadingConstraint.constant = [self isLandscape]
-    ? (isRTL ? 13. : [self getLandscapeViewWidth] - [OAUtilities getLeftMargin] + 10.)
-    : [OAUtilities getLeftMargin] + 10.;
-    self.doneButtonTrailingConstraint.constant = [self isLandscape]
-    ? (isRTL ? [self getLandscapeViewWidth] - [OAUtilities getLeftMargin] + 10. : 13.)
-    : [OAUtilities getLeftMargin] + 10.;
+    CGFloat landscapeWidthAdjusted = [self getLandscapeViewWidth] - [OAUtilities getLeftMargin] + 10.;
+    CGFloat commonMargin = [OAUtilities getLeftMargin] + 10.;
+    CGFloat defaultPadding = 13.;
+    self.backButtonLeadingConstraint.constant = [self isLandscape] ? (isRTL ? defaultPadding : landscapeWidthAdjusted) : commonMargin;
+    self.doneButtonTrailingConstraint.constant = [self isLandscape] ? (isRTL ? landscapeWidthAdjusted : defaultPadding) : commonMargin;
 }
 
 @end

@@ -40,6 +40,7 @@
 #import "OATurnDrawable+cpp.h"
 #import <Charts/Charts-Swift.h>
 #import "GeneratedAssetSymbols.h"
+#import "CLLocation+Extension.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #define kStatsSection 0
@@ -209,15 +210,50 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
         if (!segmentDescription || segmentDescription.length == 0)
         {
             BOOL isLastCell = directionInfoIndex == (directionsInfo.count - 1);
-            segmentDescription = OALocalizedString(isLastCell ? @"arrived_at_destination" : @"arrived_at_intermediate_point");
-            [cell setTopLeftLabelWithText:segmentDescription];
+            if (isLastCell)
+            {
+                RouteInfoSector routeInfoSector = RouteInfoSectorStraight;
+                RouteInfoDestinationSector *routeInfoDestinationSector = [[RouteInfoDestinationSector alloc] initWithSector:routeInfoSector distance:model.distance];
+                if (directionsInfo.count > 1)
+                {
+                    OARouteDirectionInfo *prevDirectionInfo = directionsInfo[directionsInfo.count - 2];
+                    
+                    CLLocation *prevLocation = [[CLLocation alloc] initWithLatitude:prevDirectionInfo.coordinate.latitude longitude:prevDirectionInfo.coordinate.longitude];
+                    CLLocation *currentLocation = [[CLLocation alloc] initWithLatitude:model.coordinate.latitude longitude:model.coordinate.longitude];
+                    
+                    double bearing = [currentLocation bearingTo:prevLocation];
+                    routeInfoSector = [self determineSectorForBearing:bearing];
+
+                    routeInfoDestinationSector.sector = routeInfoSector;
+                }
+                [cell setLeftImageViewWithImage:routeInfoDestinationSector.getImage];
+                [cell setTopLeftLabelWithText:routeInfoDestinationSector.getTitle];
+                [cell setBottomLabelWithText:routeInfoDestinationSector.getDescriptionRoute];
+                [cell setBottomLanesImageWithImage:nil];
+                [cell setLeftTurnIconDrawable:nil];
+            }
+            else
+            {
+                [cell setTopLeftLabelWithText:OALocalizedString(@"arrived_at_intermediate_point")];
+            }
             [cell setTopLeftLabelWithFont:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]];
             [cell setTopRightLabelWithText:@""];
+        } else {
+            [cell setBottomLabelWithText:@""];
         }
-        [cell setBottomLabelWithText:@""];
     }
     
     return cell;
+}
+
+- (RouteInfoSector)determineSectorForBearing:(double)bearing {
+    if (bearing >= -180 && bearing < -60) {
+        return RouteInfoSectorLeft;
+    } else if (bearing >= 60 && bearing <= 180) {
+        return RouteInfoSectorRight;
+    }
+    // bearing >= -60 && bearing < 60 is Straight
+    return RouteInfoSectorStraight;
 }
 
 - (void) populateAnalysisTabCells:(NSInteger &)section

@@ -3190,7 +3190,7 @@
 "shared_string_markers" = "Kortamerki";
 "shared_string_setup_route" = "Útbúa leið";
 "audionotes_plugin_name" = "Hljóð/myndskeiðs-minnispunktar";
-"tracker_item" = "OsmAnd rekjari";
+"tracker_item" = "OsmAnd-rekjari";
 "import_create_track_files" = "Þú getur flutt inn ferilskrár, útbúið eða skráð niður ferla með því að nota OsmAnd.";
 "longest_duration_first" = "Lengsta tímalengd fyrst";
 "recently_visible" = "Nýlega sýnilegt %@";

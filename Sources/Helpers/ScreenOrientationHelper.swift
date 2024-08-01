@@ -10,28 +10,16 @@ import Foundation
 
 @objc(OAScreenOrientationHelper)
 @objcMembers
-class ScreenOrientationHelper : NSObject {
+class ScreenOrientationHelper: NSObject {
+    static let sharedInstance: ScreenOrientationHelper = ScreenOrientationHelper()
+    static let screenOrientationChangedKey: String = "screenOrientationChangedKey"
+    private static var sharedHelperInstance: ScreenOrientationHelper?
     
     private let settings = OAAppSettings.sharedManager()
     
     private var cachedUserInterfaceOrientationMask: UIInterfaceOrientationMask = .all
     private var cachedCurrentInterfaceOrientation: UIInterfaceOrientation = .portrait
-    
-    private static var sharedHelperInstance: ScreenOrientationHelper?
-    static let screenOrientationChangedKey: String = "screenOrientationChangedKey"
-
     private var applicationModeChangedObserver: OAAutoObserverProxy?
-
-    //MARK: Initialization
-
-    static var sharedInstance: ScreenOrientationHelper {
-        get {
-            if sharedHelperInstance == nil {
-                sharedHelperInstance = ScreenOrientationHelper()
-            }
-            return sharedHelperInstance!
-        }
-    }
     
     override init() {
         super.init()
@@ -56,7 +44,7 @@ class ScreenOrientationHelper : NSObject {
         NotificationCenter.default.removeObserver(self)
     }
 
-    //MARK: Settings
+    // MARK: Settings
 
     func isPortrait() -> Bool {
         cachedCurrentInterfaceOrientation.isPortrait
@@ -74,7 +62,7 @@ class ScreenOrientationHelper : NSObject {
         cachedCurrentInterfaceOrientation
     }
 
-    //MARK: Updates
+    // MARK: Updates
 
     func updateSettings() {
         updateCachedUserInterfaceOrientationMask()
@@ -96,30 +84,35 @@ class ScreenOrientationHelper : NSObject {
     
     private func updateCachedCurrentInterfaceOrientation() {
         let userOrientation: UIInterfaceOrientationMask = getUserInterfaceOrientationMask()
-        let systemiOrientation: UIInterfaceOrientation = (UIApplication.shared.delegate as? OAAppDelegate)?.interfaceOrientation ?? .unknown
+        let systemOrientation: UIInterfaceOrientation = (UIApplication.shared.delegate as? OAAppDelegate)?.interfaceOrientation ?? .unknown
         if userOrientation != .all {
             if userOrientation == .landscape {
-                cachedCurrentInterfaceOrientation = systemiOrientation.isLandscape ? systemiOrientation : .landscapeLeft
+                cachedCurrentInterfaceOrientation = systemOrientation.isLandscape ? systemOrientation : .landscapeLeft
                 return
             } else if userOrientation == .portrait {
-                cachedCurrentInterfaceOrientation = systemiOrientation.isPortrait ? systemiOrientation : .portrait
+                cachedCurrentInterfaceOrientation = systemOrientation.isPortrait ? systemOrientation : .portrait
                 return
             }
         }
         
-        let deviceOrietation: UIDeviceOrientation = UIDevice.current.orientation
-        if deviceOrietation == .portraitUpsideDown {
+        let deviceOrientation: UIDeviceOrientation = UIDevice.current.orientation
+        switch deviceOrientation {
+        case .portraitUpsideDown:
             cachedCurrentInterfaceOrientation = .portraitUpsideDown
-        } else if deviceOrietation == .landscapeLeft {
+        case .landscapeLeft:
             cachedCurrentInterfaceOrientation = .landscapeLeft
-        } else if deviceOrietation == .landscapeRight {
+        case .landscapeRight:
             cachedCurrentInterfaceOrientation = .landscapeRight
-        } else {
+        case .portrait:
             cachedCurrentInterfaceOrientation = .portrait
+        case .faceUp, .faceDown:
+            return
+        default:
+            break
         }
     }
     
-    //MARK: Selectors
+    // MARK: Selectors
 
     @objc private func onApplicationModeChanged() {
         DispatchQueue.main.async { [weak self] in
@@ -139,10 +132,6 @@ class ScreenOrientationHelper : NSObject {
     }
 
     @objc private func onDeviceOrientationDidChange() {
-        DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-            self.updateDeviceOrientation()
-        }
+        updateDeviceOrientation()
     }
-
 }

@@ -72,11 +72,11 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
     OsmAnd::PointI _prevTarget31;
     NSArray<OAWeatherWidget *> *_weatherWidgetControlsArray;
     
-    BOOL _isAnimationRunning;
     NSInteger _lastUpdatedIndex;
     NSDate *_currentDate;
     NSDate *_selectedDate;
     
+    dispatch_queue_t _animationQueue;
     EOAWeatherToolbarAnimationState _animationState;
     NSInteger _animationStartStep;
     NSInteger _currentStep;
@@ -132,6 +132,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
     _currentDate = [NSDate now];
     _selectedDate = _currentDate;
     _animationState = EOAWeatherToolbarAnimationStateIdle;
+    _animationQueue =  dispatch_queue_create("weather_animation_queue", DISPATCH_QUEUE_SERIAL);
     
     [self.timeSliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
     [self.timeSliderView addTarget:self action:@selector(timeChanged:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside | UIControlEventValueChanged];
@@ -494,7 +495,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
 
 - (void) scheduleAnimationStart
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    dispatch_async(_animationQueue, ^{
         
         [NSThread sleepForTimeInterval:kAnimationStartDelaySec];
         

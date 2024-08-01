@@ -773,6 +773,9 @@ static BOOL _isDeviatedFromRoute = false;
         }
         _lastFixedLocation = currentLocation;
         _lastProjection = locationProjection;
+        if (![_route isEmpty]) {
+            _lastGoodRouteLocation = currentLocation;
+        }
     }
     
     if (calculateRoute)
@@ -897,6 +900,7 @@ static BOOL _isDeviatedFromRoute = false;
             }
         });
         _finalLocation = newFinalLocation;
+        _lastGoodRouteLocation = nil;
         _intermediatePoints = newIntermediatePoints ? [NSMutableArray arrayWithArray:newIntermediatePoints] : nil;
 
         [_recalcHelper stopCalculation];

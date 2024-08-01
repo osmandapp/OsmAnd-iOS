@@ -39,14 +39,12 @@ static NSTimeInterval kAnimationStartDelaySec = 0.1;
 static NSTimeInterval kAnimationFrameDelaySec = 0.083;
 static NSTimeInterval kDownloadingCompleteDelaySec = 0.25;
 
-typedef enum {
-    
+typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
     EOAWeatherToolbarAnimationStateIdle = 0,
     EOAWeatherToolbarAnimationStateStarted,
     EOAWeatherToolbarAnimationStateInProgress,
     EOAWeatherToolbarAnimationStateSuspended,
-    
-} EOAWeatherToolbarAnimationState;
+};
 
 @interface OAWeatherToolbar () <OAWeatherToolbarDelegate>
 
@@ -132,7 +130,7 @@ typedef enum {
     [self.timeSliderView clearTouchEventsUpInsideUpOutside];
     
     _currentDate = [NSDate now];
-    _selectedDate = [NSDate now];
+    _selectedDate = _currentDate;
     _animationState = EOAWeatherToolbarAnimationStateIdle;
     
     [self.timeSliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
@@ -473,10 +471,8 @@ typedef enum {
         _animationStartStep = _currentStep;
         _selectedDate = _timeValues[_currentStep];
         
-        _animateStepCount = kForecastMaxStepsCount;
         NSInteger remainingStepsForMidnight = _timeValues.count - _currentStep - 1;
-        if (_animateStepCount > remainingStepsForMidnight)
-            _animateStepCount = remainingStepsForMidnight;
+        _animateStepCount = MIN(kForecastMaxStepsCount, remainingStepsForMidnight);
         _animationStartStepCount = _animateStepCount;
         
         [_plugin prepareForDayAnimation:_selectedDate];
@@ -585,10 +581,7 @@ typedef enum {
     if (requestsCount)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (requestsCount.intValue <= 0)
-                _isDownloading = NO;
-            else
-                _isDownloading = YES;
+            _isDownloading = requestsCount.intValue > 0;
             [self updateProgressBar];
         });
     }

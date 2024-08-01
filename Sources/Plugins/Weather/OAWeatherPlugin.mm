@@ -199,22 +199,23 @@
 
 - (void) updateLayersDate:(BOOL)forAnimation resetPeriod:(BOOL)resetPeriod
 {
-    NSDate *time = _forecastDate ? _forecastDate : [NSDate now];
+    NSDate *time = _forecastDate ?: [NSDate now];
+    NSTimeInterval timestamp = [time timeIntervalSince1970] * 1000;
     OAMapViewController *mapViewController = [OARootViewController instance].mapPanel.mapViewController;
     
     if (mapViewController.mapLayers.weatherLayerLow)
-        [mapViewController.mapLayers.weatherLayerLow setDateTime:([time timeIntervalSince1970] * 1000) goForward:forAnimation resetPeriod:resetPeriod];
+        [mapViewController.mapLayers.weatherLayerLow setDateTime:timestamp goForward:forAnimation resetPeriod:resetPeriod];
 
     if (mapViewController.mapLayers.weatherLayerHigh)
-        [mapViewController.mapLayers.weatherLayerHigh setDateTime:([time timeIntervalSince1970] * 1000) goForward:forAnimation resetPeriod:resetPeriod];
+        [mapViewController.mapLayers.weatherLayerHigh setDateTime:timestamp goForward:forAnimation resetPeriod:resetPeriod];
     
     if (mapViewController.mapLayers.weatherContourLayer)
-        [mapViewController.mapLayers.weatherContourLayer setDateTime:([time timeIntervalSince1970] * 1000)];
+        [mapViewController.mapLayers.weatherContourLayer setDateTime:timestamp];
 }
 
 - (void) prepareForDayAnimation:(NSDate *)date
 {
-    NSInteger timestamp = [date timeIntervalSince1970] * 1000;
+    NSTimeInterval timestamp = [date timeIntervalSince1970] * 1000;
     
     OAMapViewController *mapViewController = [OARootViewController instance].mapPanel.mapViewController;
     if (mapViewController.mapLayers.weatherLayerLow)

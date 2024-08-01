@@ -12,17 +12,17 @@
 #import "Localization.h"
 #import "GeneratedAssetSymbols.h"
 
-#define kMarkTag 1000
-#define kAdditionalMarkTag 2000
-#define kTitleLabelTag 3000
+static NSInteger kMarkTag = 1000;
+static NSInteger kAdditionalMarkTag = 2000;
+static NSInteger kTitleLabelTag = 3000;
 
-#define kMarkHeight 16.
-#define kCustomMarkHeight 14.
-#define kAdditionalMarkHeight 8.
-#define kCurrentMarkHeight 30.
-#define kRoundThumbSize 24.
+static CGFloat kMarkHeight = 16;
+static CGFloat kCustomMarkHeight = 14;
+static CGFloat kAdditionalMarkHeight = 8;
+static CGFloat kCurrentMarkHeight = 30;
+static CGFloat kRoundThumbSize = 24;
 
-#define kMarkWidth 2.
+static CGFloat kMarkWidth = 2;
 
 @implementation OASegmentedSlider
 {

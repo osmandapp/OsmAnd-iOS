@@ -12,7 +12,7 @@
 
 #include <OsmAndCore/IWebClient.h>
 
-#define kOAWeatherWebClientNotificationKey @"kOAWeatherWebClientNotificationKey"
+static NSString *kOAWeatherWebClientNotificationKey = @"kOAWeatherWebClientNotificationKey";
 
 class OAWeatherRequestResult : public OsmAnd::IWebClient::IRequestResult
 {

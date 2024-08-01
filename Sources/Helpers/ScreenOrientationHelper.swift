@@ -21,6 +21,8 @@ class ScreenOrientationHelper: NSObject {
     private var cachedCurrentInterfaceOrientation: UIInterfaceOrientation = .portrait
     private var applicationModeChangedObserver: OAAutoObserverProxy?
     
+    // MARK: Initialization
+    
     override init() {
         super.init()
         updateCachedUserInterfaceOrientationMask()

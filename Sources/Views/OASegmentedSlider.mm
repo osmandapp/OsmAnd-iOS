@@ -334,12 +334,19 @@ static CGFloat kMarkWidth = 2;
             CGSize textSize = [OAUtilities calculateTextBounds:titleLabel.text font:titleLabel.font];
 
             CGFloat tx;
-            if (i == 0)
-                tx = mark.frame.origin.x;
-            else if (i == marksCount - 1)
-                tx = trackWidth - textSize.width;
+            if (!_useExtraThumbOffset)
+            {
+                if (i == 0)
+                    tx = mark.frame.origin.x;
+                else if (i == marksCount - 1)
+                    tx = trackWidth - textSize.width;
+                else
+                    tx = mark.frame.origin.x + mark.frame.size.width / 2 - textSize.width / 2;
+            }
             else
+            {
                 tx = mark.frame.origin.x + mark.frame.size.width / 2 - textSize.width / 2;
+            }
 
             titleLabel.frame = CGRectMake(tx, mark.frame.origin.y + mark.frame.size.height, textSize.width, textSize.height);
         }

@@ -598,11 +598,11 @@ typedef enum {
 {
     if (_isDownloading || (_animationState != EOAWeatherToolbarAnimationStateIdle && [OAWeatherHelper.sharedInstance isProcessingTiles]))
     {
-        [self addSpinnerInCenterOfCurrentView:YES];
+        [[OARootViewController instance].view addSpinnerInCenterOfCurrentView:YES];
     }
     else
     {
-        [self removeSpinner];
+        [[OARootViewController instance].view removeSpinner];
     }
 }
 

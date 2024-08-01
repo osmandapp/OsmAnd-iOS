@@ -8,9 +8,11 @@
 
 #include <CoreFoundation/CoreFoundation.h>
 #include <objc/objc.h>
+#import "OAAtomicInteger.h"
 
 #include <OsmAndCore/IWebClient.h>
 
+#define kOAWeatherWebClientNotificationKey @"kOAWeatherWebClientNotificationKey"
 
 class OAWeatherRequestResult : public OsmAnd::IWebClient::IRequestResult
 {
@@ -42,6 +44,7 @@ class OAWeatherWebClient : public OsmAnd::IWebClient
 {
 private:
     NSURLSession *_urlSession;
+    OAAtomicInteger *_activeRequestsCounter;
 protected:
 public:
     OAWeatherWebClient();

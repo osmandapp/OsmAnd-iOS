@@ -212,4 +212,16 @@
         [mapViewController.mapLayers.weatherContourLayer setDateTime:([time timeIntervalSince1970] * 1000)];
 }
 
+- (void) prepareForDayAnimation:(NSDate *)date
+{
+    NSInteger timestamp = [date timeIntervalSince1970] * 1000;
+    
+    OAMapViewController *mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+    if (mapViewController.mapLayers.weatherLayerLow)
+        [mapViewController.mapLayers.weatherLayerLow setDateTime:timestamp goForward:YES resetPeriod:NO];
+
+    if (mapViewController.mapLayers.weatherLayerHigh)
+        [mapViewController.mapLayers.weatherLayerHigh setDateTime:timestamp goForward:YES resetPeriod:NO];
+}
+
 @end

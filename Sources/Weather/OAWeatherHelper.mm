@@ -26,6 +26,7 @@
 #import "OAColors.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OAPluginsHelper.h"
+#import "OAWeatherWebClient.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Map/WeatherTileResourceProvider.h>
@@ -855,6 +856,11 @@
 {
     QList<OsmAnd::BandIndex> bands = [self getVisibleBands];
     return bands.isEmpty();
+}
+
+- (BOOL)isProcessingTiles
+{
+    return _weatherResourcesManager != nil && _weatherResourcesManager->isProcessingTiles();
 }
 
 @end

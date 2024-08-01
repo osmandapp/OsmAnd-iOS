@@ -23,5 +23,6 @@ static NSString * const kWeatherPrecip = @"weather_precip";
 - (NSArray<OAWeatherWidget *> *)createWidgetsControls;
 
 - (void) setForecastDate:(NSDate *)date forAnimation:(BOOL)forAnimation resetPeriod:(BOOL)resetPeriod;
+- (void) prepareForDayAnimation:(NSDate *)date;
 
 @end

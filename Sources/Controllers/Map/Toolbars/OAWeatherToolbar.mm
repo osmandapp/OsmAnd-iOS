@@ -27,9 +27,26 @@
 #import "OAAutoObserverProxy.h"
 #import "OAAppData.h"
 #import "OAObservable.h"
+#import "OAWeatherWebClient.h"
 #import "OsmAnd_Maps-Swift.h"
 
-#define kDefaultZoom 10
+static int kDefaultZoom = 10;
+
+static int kForecastStepsPerHour = 6; // 10 minutes step
+static NSInteger kForecastMaxStepsCount = FORECAST_ANIMATION_DURATION_HOURS * kForecastStepsPerHour;
+
+static NSTimeInterval kAnimationStartDelaySec = 0.1;
+static NSTimeInterval kAnimationFrameDelaySec = 0.083;
+static NSTimeInterval kDownloadingCompleteDelaySec = 0.25;
+
+typedef enum {
+    
+    EOAWeatherToolbarAnimationStateIdle = 0,
+    EOAWeatherToolbarAnimationStateStarted,
+    EOAWeatherToolbarAnimationStateInProgress,
+    EOAWeatherToolbarAnimationStateSuspended,
+    
+} EOAWeatherToolbarAnimationState;
 
 @interface OAWeatherToolbar () <OAWeatherToolbarDelegate>
 
@@ -61,6 +78,13 @@
     NSInteger _lastUpdatedIndex;
     NSDate *_currentDate;
     NSDate *_selectedDate;
+    
+    EOAWeatherToolbarAnimationState _animationState;
+    NSInteger _animationStartStep;
+    NSInteger _currentStep;
+    NSInteger _animateStepCount;
+    NSInteger _animationStartStepCount;
+    BOOL _isDownloading;
 }
 
 - (instancetype)init
@@ -109,6 +133,7 @@
     
     _currentDate = [NSDate now];
     _selectedDate = [NSDate now];
+    _animationState = EOAWeatherToolbarAnimationStateIdle;
     
     [self.timeSliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
     [self.timeSliderView addTarget:self action:@selector(timeChanged:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside | UIControlEventValueChanged];
@@ -124,6 +149,11 @@
     _mapSourceUpdatedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(updateLayersHandlerData)
                                                   andObserve:[OARootViewController instance].mapPanel.mapViewController.mapSourceUpdatedObservable];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(onDownloadStateChanged:)
+                                                     name:kOAWeatherWebClientNotificationKey object:nil];
+    
     [self updateInfo];
 }
 
@@ -433,50 +463,147 @@
 
 #pragma mark - Start/stop button
 
-- (IBAction)onPlayButtonClicked:(id)sender
+- (IBAction)onPlayForecastClicked:(id)sender
 {
-    if (_isAnimationRunning)
-        [self stopSliderAnimation];
+    EOAWeatherToolbarAnimationState animationState = _animationState == EOAWeatherToolbarAnimationStateIdle ? EOAWeatherToolbarAnimationStateStarted : EOAWeatherToolbarAnimationStateIdle;
+    _animationState = animationState;
+    if (animationState == EOAWeatherToolbarAnimationStateStarted)
+    {
+        _currentStep = [self.timeSliderView getIndexForOptionStepsAmountWithoutDrawMark];
+        _animationStartStep = _currentStep;
+        _selectedDate = _timeValues[_currentStep];
+        
+        _animateStepCount = kForecastMaxStepsCount;
+        NSInteger remainingStepsForMidnight = _timeValues.count - _currentStep - 1;
+        if (_animateStepCount > remainingStepsForMidnight)
+            _animateStepCount = remainingStepsForMidnight;
+        _animationStartStepCount = _animateStepCount;
+        
+        [_plugin prepareForDayAnimation:_selectedDate];
+        [self updateSelectedDate:_selectedDate forAnimation:YES resetPeriod:YES];
+        [self scheduleAnimationStart];
+    }
     else
-        [self startSliderAnimation];
+    {
+        [self stopAnimation];
+    }
+    [self updatePlayForecastButton];
 }
 
-- (void) setupPlayPauseButton
+- (void) updatePlayForecastButton
 {
-    if (_isAnimationRunning)
-        [_playButton setImage:[UIImage templateImageNamed:@"ic_custom_pause"] forState:UIControlStateNormal];
-    else
-        [_playButton setImage:[UIImage templateImageNamed:@"ic_custom_play"] forState:UIControlStateNormal];
+    NSString *iconName = _animationState == EOAWeatherToolbarAnimationStateIdle ? @"ic_custom_play" : @"ic_custom_pause";
+    [_playButton setImage:[UIImage templateImageNamed:iconName] forState:UIControlStateNormal];
 }
 
-- (void) startSliderAnimation
+- (void) scheduleAnimationStart
 {
-    _isAnimationRunning = YES;
-    [self setupPlayPauseButton];
-    float startSliderValue = self.timeSliderView.value;
-    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        while (_isAnimationRunning)
+        
+        [NSThread sleepForTimeInterval:kAnimationStartDelaySec];
+        
+        BOOL wasDownloading = NO;
+        
+        while (_animationState != EOAWeatherToolbarAnimationStateIdle)
         {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                float currentSliderValue = self.timeSliderView.value;
-                currentSliderValue += 0.01;
-                if (currentSliderValue < 1)
-                    [self.timeSliderView setValue:currentSliderValue animated:YES];
+            if (!_isDownloading)
+            {
+                if (!wasDownloading)
+                {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self moveToNextForecastFrame];
+                    });
+                }
                 else
-                    [self.timeSliderView setValue:startSliderValue animated:0];
-                
-                [self timeChanged:nil];
-            });
-            [NSThread sleepForTimeInterval:0.1];
+                {
+                    wasDownloading = NO;
+                    [NSThread sleepForTimeInterval:kDownloadingCompleteDelaySec];
+                }
+            }
+            else
+            {
+                wasDownloading = YES;
+            }
+            [NSThread sleepForTimeInterval:kAnimationFrameDelaySec];
         }
     });
 }
 
-- (void) stopSliderAnimation
+- (void) stopAnimation
 {
-    _isAnimationRunning = NO;
-    [self setupPlayPauseButton];
+    _animationState = EOAWeatherToolbarAnimationStateIdle;
+    [self updateProgressBar];
+    [self updatePlayForecastButton];
+}
+
+- (void) moveToNextForecastFrame
+{
+    if (_animationState == EOAWeatherToolbarAnimationStateIdle)
+        return;
+    
+    if (_isDownloading)
+    {
+        _animationState = EOAWeatherToolbarAnimationStateSuspended;
+        return;
+    }
+    
+    if ([OAWeatherHelper.sharedInstance isProcessingTiles])
+    {
+        _animationState = EOAWeatherToolbarAnimationStateSuspended;
+        [self updateProgressBar];
+        return;
+    }
+    
+    if (_currentStep + 1 > _timeValues.count || _animateStepCount == 0)
+    {
+        _currentStep = _animationStartStep;
+        _animateStepCount = _animationStartStepCount;
+    }
+    else
+    {
+        _currentStep++;
+        _animateStepCount--;
+    }
+    
+    [self updateProgressBar];
+    [self updateSliderValue];
+    [self updateSelectedDate:_timeValues[_currentStep] forAnimation:YES resetPeriod:NO];
+    
+    if (_animationState == EOAWeatherToolbarAnimationStateStarted || _animationState == EOAWeatherToolbarAnimationStateSuspended)
+    {
+        _animationState = EOAWeatherToolbarAnimationStateInProgress;
+        [self updateProgressBar];
+    }
+}
+
+#pragma mark - Downloading methods
+
+- (void) onDownloadStateChanged:(NSNotification *)notification
+{
+    NSNumber *requestsCount = notification.object;
+
+    if (requestsCount)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (requestsCount.intValue <= 0)
+                _isDownloading = NO;
+            else
+                _isDownloading = YES;
+            [self updateProgressBar];
+        });
+    }
+}
+
+- (void) updateProgressBar
+{
+    if (_isDownloading || (_animationState != EOAWeatherToolbarAnimationStateIdle && [OAWeatherHelper.sharedInstance isProcessingTiles]))
+    {
+        [self addSpinnerInCenterOfCurrentView:YES];
+    }
+    else
+    {
+        [self removeSpinner];
+    }
 }
 
 #pragma mark - UISlider
@@ -485,11 +612,17 @@
 {
     BOOL fromUser = sender != nil;
     if (fromUser)
-        [self stopSliderAnimation];
+        [self stopAnimation];
         
     NSInteger index = [self.timeSliderView getIndexForOptionStepsAmountWithoutDrawMark];
     _selectedDate = _timeValues[index];
     [self updateSelectedDate:_selectedDate forAnimation:!fromUser resetPeriod:NO];
+}
+
+- (void) updateSliderValue
+{
+    float value = ((float)_currentStep) / ((float)_timeValues.count);
+    [self.timeSliderView setValue:value animated:YES];
 }
 
 - (void) updateSelectedDate:(NSDate *)date forAnimation:(BOOL)forAnimation resetPeriod:(BOOL)resetPeriod
@@ -499,6 +632,8 @@
         date = [OAWeatherHelper roundForecastTimeToHour:date];
     
     [self checkDateOffset:date];
+    // TODO: widgetsPanel.setSelectedDate(date);
+    
     [_plugin updateWidgetsInfo];
     [self updateWidgetsInfo];
     [[OARootViewController instance].mapPanel refreshMap];

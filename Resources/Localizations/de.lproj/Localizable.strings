@@ -3498,13 +3498,13 @@
 "key_event_category_map_interactions" = "Karten-Interaktionen";
 "map_source" = "Kartenquelle";
 "precipitation_layer" = "Niederschlagsebene";
-"pressure_layer" = "Druckebene";
+"pressure_layer" = "Luftdruckebene";
 "quick_action_destination" = "Zielort";
 "quick_action_directions_from" = "Startpunkt";
 "quick_action_first_intermediate" = "Erster Zwischenpunkt";
 "quick_action_parking_place" = "Parkplatz";
 "quick_action_track_waypoint" = "Wegpunkt";
-"quick_action_verb_pause_resume" = "Einschalten / Ausschalten";
+"quick_action_verb_pause_resume" = "Pause / Fortsetzen";
 "quick_action_verb_show_hide" = "Einblenden / Ausblenden";
 "quick_action_verb_start_stop" = "Start / Stopp";
 "quick_action_verb_turn_on_off" = "Einschalten / Ausschalten";

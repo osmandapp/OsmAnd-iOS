@@ -23,5 +23,6 @@
   additionalMarksBetween:(NSInteger)additionalMarksBetween;
 
 - (void)makeCustom;
+- (void)setUsingExtraThumbInset:(BOOL)isUsing;
 
 @end

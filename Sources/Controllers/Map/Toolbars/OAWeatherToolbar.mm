@@ -36,7 +36,7 @@ static int kForecastStepsPerHour = 6; // 10 minutes step
 static NSInteger kForecastMaxStepsCount = FORECAST_ANIMATION_DURATION_HOURS * kForecastStepsPerHour;
 
 static NSTimeInterval kAnimationStartDelaySec = 0.1;
-static NSTimeInterval kAnimationFrameDelaySec = 0.083;
+static NSTimeInterval kAnimationFrameDelaySec = 0.083 * 2;
 static NSTimeInterval kDownloadingCompleteDelaySec = 0.25;
 
 typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
@@ -128,6 +128,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
     
     self.timeSliderView.stepsAmountWithoutDrawMark = 145.0;
     [self.timeSliderView clearTouchEventsUpInsideUpOutside];
+    [self.timeSliderView setUsingExtraThumbInset:YES];
     
     _currentDate = [NSDate now];
     _selectedDate = _currentDate;

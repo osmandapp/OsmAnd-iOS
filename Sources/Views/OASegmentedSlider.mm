@@ -20,6 +20,7 @@
 #define kCustomMarkHeight 14.
 #define kAdditionalMarkHeight 8.
 #define kCurrentMarkHeight 30.
+#define kRoundThumbSize 24.
 
 #define kMarkWidth 2.
 
@@ -32,6 +33,7 @@
     NSInteger _selectingMark;
     NSInteger _additionalMarksBetween;
     BOOL _isCustomSlider;
+    BOOL _useExtraThumbOffset;
 
     UIView *_selectingMarkTitleBackground;
     UILabel *_selectingMarkTitle;
@@ -299,14 +301,14 @@
         return;
 
     CGFloat segments = [self getMarksCount] - 1;
-    CGFloat sliderViewWidth = self.frame.size.width;
+    CGFloat sliderViewWidth = self.frame.size.width - [self getExtraThumbInset] * 2;
     CGFloat sliderViewHeight = self.frame.size.height;
     CGRect sliderViewBounds = CGRectMake(0., 0., sliderViewWidth, sliderViewHeight);
     CGRect trackRect = [self trackRectForBounds:sliderViewBounds];
     CGFloat trackWidth = trackRect.size.width;
     CGFloat trackHeight = trackRect.size.height;
 
-    CGFloat inset = (sliderViewWidth - trackRect.size.width) / 2;
+    CGFloat inset = (sliderViewWidth - trackRect.size.width) / 2 + [self getExtraThumbInset];
 
     CGFloat markHeight = _isCustomSlider ? kCustomMarkHeight + 1. : kMarkHeight;
     CGFloat x = inset;
@@ -349,9 +351,9 @@
 {
     CGRect sliderViewBounds = CGRectMake(0., 0., self.frame.size.width, self.frame.size.height);
     CGRect trackRect = [self trackRectForBounds:sliderViewBounds];
-    CGFloat trackWidth = trackRect.size.width;
+    CGFloat trackWidth = trackRect.size.width - [self getExtraThumbInset] * 2;
     CGFloat trackHeight = trackRect.size.height;
-    CGFloat inset = (self.frame.size.width - trackRect.size.width) / 2;
+    CGFloat inset = (self.frame.size.width - trackRect.size.width) / 2 + [self getExtraThumbInset];
 
     if (_currentMarkX != -1)
     {
@@ -613,6 +615,16 @@
 
         [self layoutSelectingTitle];
     }
+}
+
+- (void) setUsingExtraThumbInset:(BOOL)isUsing
+{
+    _useExtraThumbOffset = isUsing;
+}
+
+- (CGFloat) getExtraThumbInset
+{
+    return _useExtraThumbOffset ? kRoundThumbSize / 2 : 0;
 }
 
 @end

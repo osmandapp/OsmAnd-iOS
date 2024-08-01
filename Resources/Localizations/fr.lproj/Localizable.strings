@@ -116,7 +116,7 @@
 "shared_string_download" = "Télécharger";
 "shared_string_no_thanks" = "Pas nécessaire";
 "download_now" = "Télécharger la carte maintenant";
-"download_tab_local" = "Taille";
+"download_tab_local" = "Mémoire";
 "res_search_world" = "Rechercher dans le monde entier";
 "res_world_map" = "Carte du monde";
 "download_tab_updates" = "Misesà jour";

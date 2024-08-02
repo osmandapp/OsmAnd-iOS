@@ -174,7 +174,7 @@
         if ([currentColorPaletteFile isEqualToString:colorPaletteFile])
         {
             refresh = YES;
-            if ([colorPaletteFiles[colorPaletteFile] isEqualToString:DirectoryObserver.deletedKey])
+            if ([colorPaletteFiles[colorPaletteFile] isEqualToString:ColorPaletteHelper.deletedFileKey])
                 _previewRouteLineInfo.gradientPalette = _routeGradientPalette;
             break;
         }

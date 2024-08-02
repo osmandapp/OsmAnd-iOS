@@ -312,11 +312,11 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     for (NSString *colorPaletteFile in colorPaletteFiles.allKeys)
     {
         if ([_gradientColorsCollection hasRouteGradientPaletteBy:colorPaletteFile]
-            || [colorPaletteFiles[colorPaletteFile] isEqualToString:DirectoryObserver.createdKey])
+            || [colorPaletteFiles[colorPaletteFile] isEqualToString:ColorPaletteHelper.createdFileKey])
         {
             reloadData = YES;
             if ([currentPaletteFile isEqualToString:colorPaletteFile]
-                && [colorPaletteFiles[colorPaletteFile] isEqualToString:DirectoryObserver.deletedKey])
+                && [colorPaletteFiles[colorPaletteFile] isEqualToString:ColorPaletteHelper.deletedFileKey])
             {
                 deleted = YES;
                 break;

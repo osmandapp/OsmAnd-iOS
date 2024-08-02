@@ -217,9 +217,10 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
                 if (directionsInfo.count > 1)
                 {
                     OARouteDirectionInfo *prevDirectionInfo = directionsInfo[directionsInfo.count - 2];
+                    OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
                     
-                    CLLocation *prevLocation = [[CLLocation alloc] initWithLatitude:prevDirectionInfo.coordinate.latitude longitude:prevDirectionInfo.coordinate.longitude];
-                    CLLocation *currentLocation = [[CLLocation alloc] initWithLatitude:model.coordinate.latitude longitude:model.coordinate.longitude];
+                    CLLocation *prevLocation = [routingHelper getLocationFromRouteDirection:prevDirectionInfo];
+                    CLLocation *currentLocation = [routingHelper getLocationFromRouteDirection:model];
                     
                     double bearing = [currentLocation bearingTo:prevLocation];
                     routeInfoSector = [self determineSectorForBearing:bearing];

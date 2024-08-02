@@ -383,7 +383,6 @@
                     p.routeDataObject = i.routeDataObject;
                     p.ref = i.ref;
                     p.streetName = i.streetName;
-                    p.coordinate = i.coordinate;
                     [p setDescriptionRoute:[i getDescriptionRoutePart]];
                     [_cacheAgreggatedDirections addObject:p];
                 }
@@ -1424,9 +1423,6 @@
         if (turn)
         {
             OARouteDirectionInfo *info = [[OARouteDirectionInfo alloc] initWithAverageSpeed:s->segmentSpeed turnType:turn];
-            auto lat = get31LatitudeY(s->object->pointsY[i]);
-            auto lon = get31LongitudeX(s->object->pointsX[i]);
-            info.coordinate = CLLocationCoordinate2DMake(lat, lon);
             if (routeInd < list.size())
             {
                 int lind = routeInd;
@@ -1611,13 +1607,7 @@
         _appMode = mode;
         
         _directions = computeDirections;
-        if (_directions.count > 0)
-        {
-            // The last element does not have coordinates; we need to replace them with the coordinates of the endpoint.
-            // This will allow us to calculate the azimuth between the last and the second-to-last points in the future.
-            OARouteDirectionInfo *lastDirection = [_directions lastObject];
-            lastDirection.coordinate = end.coordinate;
-        }
+
         [self.class updateDirectionsTime:_directions listDistance:_listDistance];
         _alarmInfo = alarms;
         _routeProvider = (EOARouteService) [OAAppSettings.sharedManager.routerService get:_appMode];

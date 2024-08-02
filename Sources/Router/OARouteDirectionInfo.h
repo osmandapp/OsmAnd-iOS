@@ -33,7 +33,6 @@
 @property (nonatomic) long afterLeftTime;
 // distance after action (for i.e. after turn to next turn)
 @property (nonatomic) int distance;
-@property (nonatomic) CLLocationCoordinate2D coordinate;
 
 @property (nonatomic) NSString* ref;
 @property (nonatomic) NSString* streetName;

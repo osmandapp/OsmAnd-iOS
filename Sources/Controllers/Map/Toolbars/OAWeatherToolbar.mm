@@ -76,13 +76,17 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
     NSDate *_currentDate;
     NSDate *_selectedDate;
     
-    dispatch_queue_t _animationQueue;
     EOAWeatherToolbarAnimationState _animationState;
     NSInteger _animationStartStep;
     NSInteger _currentStep;
     NSInteger _animateStepCount;
     NSInteger _animationStartStepCount;
     BOOL _isDownloading;
+    BOOL _wasDownloading;
+    
+    CADisplayLink * _displayLink;
+    CFTimeInterval _currentLoopStart;
+    CFTimeInterval _currentLoopDuration;
 }
 
 - (instancetype)init
@@ -133,7 +137,6 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
     _currentDate = [NSDate now];
     _selectedDate = _currentDate;
     _animationState = EOAWeatherToolbarAnimationStateIdle;
-    _animationQueue =  dispatch_queue_create("weather_animation_queue", DISPATCH_QUEUE_SERIAL);
     
     [self.timeSliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
     [self.timeSliderView addTarget:self action:@selector(timeChanged:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside | UIControlEventValueChanged];
@@ -496,35 +499,49 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
 
 - (void) scheduleAnimationStart
 {
-    dispatch_async(_animationQueue, ^{
+    _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(onAnimationTick:)];
+    _currentLoopStart = CACurrentMediaTime();
+    _currentLoopDuration = kAnimationFrameDelaySec;
+    [_displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
+}
+
+- (void) onAnimationTick:(CADisplayLink *)timer
+{
+    if (_animationState != EOAWeatherToolbarAnimationStateIdle)
+    {
+        CFTimeInterval nextLoopStart = _currentLoopStart + _currentLoopDuration;
         
-        [NSThread sleepForTimeInterval:kAnimationStartDelaySec];
-        
-        BOOL wasDownloading = NO;
-        
-        while (_animationState != EOAWeatherToolbarAnimationStateIdle)
+        if (timer.timestamp >= nextLoopStart)
         {
+            _currentLoopStart = nextLoopStart;
+            
             if (!_isDownloading)
             {
-                if (!wasDownloading)
+                if (!_wasDownloading)
                 {
+                    _currentLoopDuration = kAnimationFrameDelaySec;
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [self moveToNextForecastFrame];
                     });
                 }
                 else
                 {
-                    wasDownloading = NO;
-                    [NSThread sleepForTimeInterval:kDownloadingCompleteDelaySec];
+                    _wasDownloading = NO;
+                    _currentLoopDuration = kDownloadingCompleteDelaySec;
                 }
             }
             else
             {
-                wasDownloading = YES;
+                _wasDownloading = YES;
             }
-            [NSThread sleepForTimeInterval:kAnimationFrameDelaySec];
         }
-    });
+    }
+    else
+    {
+        // stop animation loop
+        [timer invalidate];
+        _displayLink = nil;
+    }
 }
 
 - (void) stopAnimation
@@ -627,11 +644,12 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
         date = [OAWeatherHelper roundForecastTimeToHour:date];
     
     [self checkDateOffset:date];
-    // TODO: widgetsPanel.setSelectedDate(date);
     
+    // TODO: replace to widgetsPanel.setSelectedDate(date);
     [_plugin updateWidgetsInfo];
     [self updateWidgetsInfo];
-    [[OARootViewController instance].mapPanel refreshMap];
+    
+    // TODO: replace to [[OARootViewController instance].mapPanel refreshMap];
     [[OARootViewController instance].mapPanel.mapViewController.mapLayers updateWeatherLayers];
 }
 

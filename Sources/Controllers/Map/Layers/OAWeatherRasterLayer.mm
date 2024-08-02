@@ -38,6 +38,8 @@
     OAAutoObserverProxy* _weatherUseOfflineDataChangeObserver;
     NSMutableArray<OAAutoObserverProxy *> *_layerChangeObservers;
     NSMutableArray<OAAutoObserverProxy *> *_alphaChangeObservers;
+    
+    QList<OsmAnd::BandIndex> _cachedBandIndexes;
 
     CGSize _cachedViewFrame;
     OsmAnd::PointI _cachedCenterPixel;
@@ -136,6 +138,9 @@
         QList<OsmAnd::BandIndex> bands = [_weatherHelper getVisibleBands];
         if ((!self.app.data.weather && !_needsSettingsForToolbar) || bands.empty())
             return NO;
+        
+        BOOL wasBandsChanged = bands != _cachedBandIndexes;
+        _cachedBandIndexes = bands;
 
         //[self showProgressHUD];
 
@@ -151,7 +156,7 @@
                 layer = OsmAnd::WeatherLayer::Low;
                 break;
         }
-        if (!_provider)
+        if (!_provider || wasBandsChanged)
         {
             _requireTimePeriodChange = NO;
             _provider = std::make_shared<OsmAnd::WeatherRasterLayerProvider>(_resourcesManager, layer, _timePeriodStart, _timePeriodEnd, _timePeriodStep, bands, self.app.data.weatherUseOfflineData);

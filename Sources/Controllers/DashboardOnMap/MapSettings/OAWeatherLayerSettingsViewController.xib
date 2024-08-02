@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -17,6 +17,7 @@
                 <outlet property="contentContainer" destination="MS4-i5-G2V" id="6ik-la-bwc"/>
                 <outlet property="doneButton" destination="NCn-9w-B8g" id="OTu-qR-gea"/>
                 <outlet property="doneButtonContainerView" destination="LXh-cR-gHh" id="dCs-zX-Mxw"/>
+                <outlet property="doneButtonTrailingConstraint" destination="fWS-5P-3dV" id="9uc-QC-TvI"/>
                 <outlet property="scrollableView" destination="sDq-bx-xFM" id="JSx-ht-26v"/>
                 <outlet property="sliderView" destination="eP3-dk-RgC" id="gID-dF-2Fa"/>
                 <outlet property="statusBarBackgroundView" destination="fZR-k6-6OL" id="Q96-rh-KsK"/>

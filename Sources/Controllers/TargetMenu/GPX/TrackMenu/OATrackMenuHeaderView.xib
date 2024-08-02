@@ -208,7 +208,7 @@
                             <color key="tintColor" name="iconColorActive"/>
                             <inset key="titleEdgeInsets" minX="-30" minY="28" maxX="0.0" maxY="0.0"/>
                             <inset key="imageEdgeInsets" minX="30" minY="-18" maxX="0.0" maxY="0.0"/>
-                            <state key="normal" title="Export" image="ic_custom_export.png">
+                            <state key="normal" title="Export" image="ic_custom_export">
                                 <color key="titleColor" name="textColorActive"/>
                             </state>
                             <userDefinedRuntimeAttributes>
@@ -302,7 +302,7 @@
     </objects>
     <resources>
         <image name="ic_custom_appearance.png" width="30" height="30"/>
-        <image name="ic_custom_export.png" width="30" height="30"/>
+        <image name="ic_custom_export" width="30" height="30"/>
         <image name="ic_custom_hide.png" width="30" height="30"/>
         <image name="ic_custom_navigation.png" width="30" height="30"/>
         <image name="ic_custom_trip.png" width="30" height="30"/>

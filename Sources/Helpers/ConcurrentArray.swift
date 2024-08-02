@@ -38,6 +38,13 @@ class ConcurrentArray<Value> {
         array.removeAll()
     }
 
+    func replaceAll(with newValues: [Value]) {
+        pthread_rwlock_wrlock(&rwlock)
+        defer { pthread_rwlock_unlock(&rwlock) }
+        array.removeAll()
+        array.append(contentsOf: newValues)
+    }
+
     func get(at index: Int) -> Value? {
         pthread_rwlock_rdlock(&rwlock)
         defer { pthread_rwlock_unlock(&rwlock) }

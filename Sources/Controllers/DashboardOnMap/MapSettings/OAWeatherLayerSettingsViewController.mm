@@ -66,7 +66,7 @@
 @property (weak, nonatomic) IBOutlet UIView *sliderView;
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *backButtonLeadingConstraint;
-
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *doneButtonTrailingConstraint;
 @end
 
 @implementation OAWeatherLayerSettingsViewController
@@ -475,7 +475,7 @@
 {
     [self hide:YES duration:.2 onComplete:^{
         if (self.delegate)
-            [self.delegate onDoneWeatherLayerSettings:NO];
+            [self.delegate onDoneWeatherLayerSettings:YES];
     }];
 }
 
@@ -802,9 +802,11 @@
 - (void)doAdditionalLayout
 {
     BOOL isRTL = [self.backButtonContainerView isDirectionRTL];
-    self.backButtonLeadingConstraint.constant = [self isLandscape]
-            ? (isRTL ? 0. : [self getLandscapeViewWidth] - [OAUtilities getLeftMargin] + 10.)
-            : [OAUtilities getLeftMargin] + 10.;
+    CGFloat landscapeWidthAdjusted = [self getLandscapeViewWidth] - [OAUtilities getLeftMargin] + 10.;
+    CGFloat commonMargin = [OAUtilities getLeftMargin] + 10.;
+    CGFloat defaultPadding = 13.;
+    self.backButtonLeadingConstraint.constant = [self isLandscape] ? (isRTL ? defaultPadding : landscapeWidthAdjusted) : commonMargin;
+    self.doneButtonTrailingConstraint.constant = [self isLandscape] ? (isRTL ? landscapeWidthAdjusted : defaultPadding) : commonMargin;
 }
 
 @end

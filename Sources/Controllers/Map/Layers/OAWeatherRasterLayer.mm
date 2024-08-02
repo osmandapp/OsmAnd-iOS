@@ -130,6 +130,9 @@
 {
     if (![super updateLayer])
         return NO;
+    
+    if (_dateTime == 0)
+        [self setDateTime:[[NSDate now] timeIntervalSince1970] * 1000 goForward:YES resetPeriod:NO];
 
     if ([[OAPluginsHelper getPlugin:OAWeatherPlugin.class] isEnabled])
     {

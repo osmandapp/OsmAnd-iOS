@@ -110,7 +110,7 @@ class ScreenOrientationHelper: NSObject {
         case .faceUp, .faceDown:
             return
         default:
-            break
+            cachedCurrentInterfaceOrientation = .portrait
         }
     }
     

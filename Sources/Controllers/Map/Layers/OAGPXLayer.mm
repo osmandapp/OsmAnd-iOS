@@ -679,13 +679,13 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
             if ([subextension.name isEqualToString:OAPointAttributes.sensorTagTemperatureW])
             {
                 waterTempValue = [numberFormatter numberFromString:subextension.value];
-                float processedWaterTemp = waterTempValue ? [waterTempValue floatValue] : NAN;
+                float processedWaterTemp = waterTempValue ? [waterTempValue floatValue] + kTemperatureToHeightOffset : NAN;
                 return [self is3DMapsEnabled] && waterTempValue ? processedWaterTemp + elevationValue : processedWaterTemp;
             }
             else if ([subextension.name isEqualToString:OAPointAttributes.sensorTagTemperatureA])
             {
                 airTempValue = [numberFormatter numberFromString:subextension.value];
-                float processedAirTemp = airTempValue ? [airTempValue floatValue] : NAN;
+                float processedAirTemp = airTempValue ? [airTempValue floatValue] + kTemperatureToHeightOffset : NAN;
                 return [self is3DMapsEnabled] && airTempValue ? processedAirTemp + elevationValue : processedAirTemp;
             }
         }

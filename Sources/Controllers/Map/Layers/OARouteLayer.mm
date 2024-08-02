@@ -30,6 +30,7 @@
 #import "OAApplicationMode.h"
 #import "OAColoringType.h"
 #import "OAObservable.h"
+#import "OAConcurrentCollections.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Map/VectorLineBuilder.h>
@@ -79,7 +80,7 @@
     OAColoringType *_prevRouteColoringType;
     NSString *_prevRouteInfoAttribute;
     NSCache<NSString *, NSNumber *> *_cachedRouteLineWidth;
-    NSMutableDictionary<NSString *, NSString *> *_updatedColorPaletteFiles;
+    OAConcurrentDictionary<NSString *, NSString *> *_updatedColorPaletteFiles;
     int _currentAnimatedRoute;
     CLLocation *_lastProj;
 
@@ -136,7 +137,7 @@
     _routeColoringType = OAColoringType.DEFAULT;
     _colorizationScheme = COLORIZATION_NONE;
     _cachedRouteLineWidth = [[NSCache alloc] init];
-    _updatedColorPaletteFiles = [NSMutableDictionary dictionary];
+    _updatedColorPaletteFiles = [[OAConcurrentDictionary alloc] init];
 
     _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapZoomChanged:withKey:andValue:)
@@ -196,7 +197,7 @@
     {
         if ([colorPaletteFile hasPrefix:ColorPaletteHelper.routePrefix])
         {
-            _updatedColorPaletteFiles[colorPaletteFile] = colorPaletteFiles[colorPaletteFile];
+            [_updatedColorPaletteFiles setObjectSync:colorPaletteFiles[colorPaletteFile] forKey:colorPaletteFile];
             refresh = YES;
         }
     }
@@ -876,12 +877,12 @@
             && (_route != route
                 || _prevRouteColoringType != routeColoringType
                 || _colorizationScheme != COLORIZATION_GRADIENT
-                || [_updatedColorPaletteFiles.allKeys containsObject:colorPaletteFile]))
+                || [_updatedColorPaletteFiles objectForKeySync:colorPaletteFile]))
         {
-            NSString *updatedColorPaletteValue = _updatedColorPaletteFiles[colorPaletteFile];
-            if ([updatedColorPaletteValue isEqualToString:DirectoryObserver.deletedKey])
+            NSString *updatedColorPaletteValue = [_updatedColorPaletteFiles objectForKeySync:colorPaletteFile];
+            if ([updatedColorPaletteValue isEqualToString:ColorPaletteHelper.deletedFileKey])
                 _routeGradientPalette = PaletteGradientColor.defaultName;
-            [_updatedColorPaletteFiles removeObjectForKey:colorPaletteFile];
+            [_updatedColorPaletteFiles removeObjectForKeySync:colorPaletteFile];
             
             OAGPXDocument *gpx = [OAGPXUIHelper makeGpxFromRoute:route];
             ColorPalette *colorPalette = [[ColorPaletteHelper shared] getGradientColorPaletteSync:(ColorizationType) [routeColoringType toColorizationType]

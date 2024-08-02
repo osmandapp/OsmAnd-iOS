@@ -8,47 +8,27 @@
 
 import Foundation
 
-@objc enum DirectoryObserverType: Int {
-    case colorPalette
-
-    var path: String {
-        switch self {
-        case .colorPalette:
-            return OsmAndApp.swiftInstance().colorsPalettePath
-        }
-    }
-
-    var notificationName: NSNotification.Name {
-        switch self {
-        case .colorPalette:
-            return NSNotification.Name("ColorPaletteDicrectoryUpdated")
-        }
-    }
-}
-
 @objcMembers
 final class DirectoryObserver: NSObject {
 
-    static let updatedKey = "updated"
-    static let deletedKey = "deleted"
-    static let createdKey = "created"
-
-    private let type: DirectoryObserverType
+    private let path: String
+    private let notificationName: NSNotification.Name
 
     private var directoryFileDescriptor: CInt = -1
     private var dispatchSource: DispatchSourceFileSystemObject?
     private let queue = DispatchQueue(label: "DirectoryObserverQueue", attributes: .concurrent)
 
-    init(_ type: DirectoryObserverType) {
-        self.type = type
+    init(_ path: String, notificationName: NSNotification.Name) {
+        self.path = path
+        self.notificationName = notificationName
     }
 
     func startObserving() {
         // Open the directory
-        directoryFileDescriptor = open(type.path, O_EVTONLY)
+        directoryFileDescriptor = open(path, O_EVTONLY)
 
         guard directoryFileDescriptor != -1 else {
-            debugPrint("Unable to open directory: \(type.path)")
+            debugPrint("Unable to open directory: \(path)")
             return
         }
 
@@ -62,8 +42,8 @@ final class DirectoryObserver: NSObject {
         dispatchSource?.setEventHandler { [weak self] in
             guard let self else { return }
 
-            debugPrint("Directory contents changed: \(self.type.path)")
-            NotificationCenter.default.post(name: self.type.notificationName, object: self.type.path)
+            debugPrint("Directory contents changed: \(self.path)")
+            NotificationCenter.default.post(name: self.notificationName, object: self.path)
         }
 
         dispatchSource?.setCancelHandler { [weak self] in
@@ -76,5 +56,13 @@ final class DirectoryObserver: NSObject {
 
         // Start monitoring
         dispatchSource?.resume()
+    }
+
+    func stopObserving() {
+        dispatchSource?.cancel()
+    }
+
+    deinit {
+        stopObserving()
     }
 }

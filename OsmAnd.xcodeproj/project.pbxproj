@@ -808,6 +808,7 @@
 		46D38AA229C39D7C000AAE0C /* OARoutingFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 46D38AA129C39D42000AAE0C /* OARoutingFile.m */; };
 		46D439142AA89C1F001D85FF /* DestinationsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46D439132AA89C1F001D85FF /* DestinationsListViewController.swift */; };
 		46D6CF4C28452F5D007A43F9 /* OATitleDescriptionBigIconCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46D6CF4B28452F5D007A43F9 /* OATitleDescriptionBigIconCell.xib */; };
+		46DB0A632C5CEA8F001356D5 /* ConcurrentArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46DB0A622C5CEA8F001356D5 /* ConcurrentArray.swift */; };
 		46DC808629B8898700C477C3 /* OADownloadMode.mm in Sources */ = {isa = PBXBuildFile; fileRef = 46DC808529B8889200C477C3 /* OADownloadMode.mm */; };
 		46DF1D7F28C21B4300135D94 /* ic_custom_openstreetmap_logo_colored_day_big@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46DF1D7B28C21B4100135D94 /* ic_custom_openstreetmap_logo_colored_day_big@2x.png */; };
 		46DF1D8028C21B4300135D94 /* ic_custom_openstreetmap_logo_colored_day_big@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46DF1D7C28C21B4200135D94 /* ic_custom_openstreetmap_logo_colored_day_big@3x.png */; };
@@ -4328,6 +4329,7 @@
 		46D38AA129C39D42000AAE0C /* OARoutingFile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OARoutingFile.m; sourceTree = "<group>"; };
 		46D439132AA89C1F001D85FF /* DestinationsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationsListViewController.swift; sourceTree = "<group>"; };
 		46D6CF4B28452F5D007A43F9 /* OATitleDescriptionBigIconCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OATitleDescriptionBigIconCell.xib; sourceTree = "<group>"; };
+		46DB0A622C5CEA8F001356D5 /* ConcurrentArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcurrentArray.swift; sourceTree = "<group>"; };
 		46DC808429B8887600C477C3 /* OADownloadMode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OADownloadMode.h; sourceTree = "<group>"; };
 		46DC808529B8889200C477C3 /* OADownloadMode.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OADownloadMode.mm; sourceTree = "<group>"; };
 		46DF1D7B28C21B4100135D94 /* ic_custom_openstreetmap_logo_colored_day_big@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_openstreetmap_logo_colored_day_big@2x.png"; path = "Resources/Icons/ic_custom_openstreetmap_logo_colored_day_big@2x.png"; sourceTree = "<group>"; };
@@ -13434,6 +13436,7 @@
 				32A0CDF52C29B07B00FDD8E0 /* Model3dHelper */,
 				4665DB6D2C20BBFD00F897EC /* ColorsPaletteUtils.swift */,
 				46A35EF42C53F9510089B21C /* DirectoryObserver.swift */,
+				46DB0A622C5CEA8F001356D5 /* ConcurrentArray.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -16598,6 +16601,7 @@
 				323BFE6B2C0B6F6F00A4E7B1 /* DownloadingCell.swift in Sources */,
 				DA5A853226C563A900F274C7 /* OAResourcesUIHelper.mm in Sources */,
 				32EB3DF12AC325780018D9B8 /* OATravelLocalDataDbHelper.mm in Sources */,
+				46DB0A632C5CEA8F001356D5 /* ConcurrentArray.swift in Sources */,
 				FA44BF692A72F810000D2F5F /* SceneDelegate.mm in Sources */,
 				DA5A84EF26C563A900F274C7 /* OAHelpViewController.mm in Sources */,
 				DA5A812926C563A700F274C7 /* OAMapillaryTilesProvider.mm in Sources */,

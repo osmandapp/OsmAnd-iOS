@@ -24,6 +24,7 @@
 #import "OASegmentedControlCell.h"
 #import "OADividerCell.h"
 #import "OAImageTextViewCell.h"
+#import "OALineChartCell.h"
 #import "Localization.h"
 #import "OAColors.h"
 #import "OAOsmAndFormatter.h"
@@ -211,11 +212,11 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
     for (NSString *colorPaletteFile in colorPaletteFiles.allKeys)
     {
         if ([_gradientColorsCollection hasRouteGradientPaletteBy:colorPaletteFile]
-            || [colorPaletteFiles[colorPaletteFile] isEqualToString:DirectoryObserver.createdKey])
+            || [colorPaletteFiles[colorPaletteFile] isEqualToString:ColorPaletteHelper.createdFileKey])
         {
             reloadData = YES;
             if ([currentPaletteFile isEqualToString:colorPaletteFile]
-                && [colorPaletteFiles[colorPaletteFile] isEqualToString:DirectoryObserver.deletedKey])
+                && [colorPaletteFiles[colorPaletteFile] isEqualToString:ColorPaletteHelper.deletedFileKey])
             {
                 deleted = YES;
                 break;

@@ -49,17 +49,15 @@ final class TerrainMode: NSObject {
     static let colorSlopePrefix = "slope_"
     static let heightPrefix = "height_"
 
-    private static let queue = DispatchQueue(label: "TerrainModeValuesQueue")
-
     static var values: [TerrainMode] {
-        guard let terrainModes else {
+        guard let terrains = terrainModes?.asArray() as? [TerrainMode] else {
             Self.reloadTerrainModes()
-            return terrainModes ?? []
+            return terrainModes?.asArray() as? [TerrainMode] ?? []
         }
-        return terrainModes
+        return terrains
     }
 
-    private static var terrainModes: [TerrainMode]?
+    private static var terrainModes: ConcurrentArray<TerrainMode>?
 
     let type: TerrainType
 
@@ -82,70 +80,74 @@ final class TerrainMode: NSObject {
     }
 
     static func getMode(_ type: TerrainType, keyName: String) -> TerrainMode? {
-        queue.sync {
-            guard let terrainModes else {
-                return nil
-            }
-            for mode in terrainModes where mode.type == type && mode.getKeyName() == keyName {
-                return mode
-            }
+        guard let terrainModes else {
             return nil
         }
+
+        var terrainMode: TerrainMode?
+        terrainModes.forEach { mode in
+            if mode.type == type && mode.getKeyName() == keyName {
+                terrainMode = mode
+                return
+            }
+        }
+
+        return terrainMode
     }
 
     static func getDefaultMode(_ type: TerrainType) -> TerrainMode? {
-        queue.sync {
-            guard let terrainModes else {
-                return nil
-            }
-            for mode in terrainModes where mode.type == type && mode.isDefaultMode() {
-                return mode
-            }
+        guard let terrainModes else {
             return nil
         }
+
+        var terrainMode: TerrainMode?
+        terrainModes.forEach { mode in
+            if mode.type == type && mode.isDefaultMode() {
+                terrainMode = mode
+                return
+            }
+        }
+
+        return terrainMode
     }
 
     static func getByKey(_ key: String) -> TerrainMode? {
-        queue.sync {
-            return terrainModes?.first { $0.getKeyName() == key }
+        return terrainModes?.first { $0.getKeyName() == key }
             ?? terrainModes?.first { $0.type == .hillshade }
-        }
     }
 
     static func getKeyByPaletteName(_ name: String) -> String? {
-        queue.sync {
-            terrainModes?.first(where: { $0.getKeyName() == name })?.key
-        }
+        terrainModes?.first(where: { $0.getKeyName() == name })?.key
     }
 
     static func isModeExist(_ key: String) -> Bool {
-        queue.sync {
-            terrainModes?.contains { $0.getKeyName() == key } ?? false
-        }
+        terrainModes?.contains { $0.getKeyName() == key } ?? false
     }
 
     static func reloadTerrainModes() {
-        queue.sync {
-            var modes = [TerrainMode]()
-            modes.append(TerrainMode(defaultKey, type: .hillshade, translateName: localizedString("shared_string_hillshade")))
-            modes.append(TerrainMode(defaultKey, type: .slope, translateName: localizedString("shared_string_slope")))
-            
-            let prefixes = [
-                Pair(hillshadePrefix, TerrainType.hillshade),
-                Pair(colorSlopePrefix, TerrainType.slope),
-                Pair(heightPrefix, TerrainType.height)
-            ]
-            if let dir = OsmAndApp.swiftInstance().colorsPalettePath,
-               let files = try? FileManager.default.contentsOfDirectory(atPath: dir) {
-                for file in files where file.hasSuffix(TXT_EXT) {
-                    for prefix in prefixes {
-                        if let terrainMode = getTerrainMode(by: file, prefix: prefix) {
-                            modes.append(terrainMode)
-                        }
+        if terrainModes == nil {
+            terrainModes = ConcurrentArray()
+        }
+        guard let terrainModes else { return }
+
+        terrainModes.removeAll()
+        terrainModes.append(TerrainMode(defaultKey, type: .hillshade, translateName: localizedString("shared_string_hillshade")))
+        terrainModes.append(TerrainMode(defaultKey, type: .slope, translateName: localizedString("shared_string_slope")))
+
+        let prefixes = [
+            Pair(hillshadePrefix, TerrainType.hillshade),
+            Pair(colorSlopePrefix, TerrainType.slope),
+            Pair(heightPrefix, TerrainType.height)
+        ]
+        if let dir = OsmAndApp.swiftInstance().colorsPalettePath,
+           let files = try? FileManager.default.contentsOfDirectory(atPath: dir) {
+            for file in files where file.hasSuffix(TXT_EXT) {
+                for prefix in prefixes {
+                    if let terrainMode = getTerrainMode(by: file, prefix: prefix) {
+                        terrainModes.append(terrainMode)
                     }
                 }
             }
-            terrainModes = modes
         }
     }
 

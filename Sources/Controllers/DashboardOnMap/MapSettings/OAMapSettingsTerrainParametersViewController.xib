@@ -17,6 +17,7 @@
                 <outlet property="contentContainer" destination="zNY-GS-def" id="Ms7-aR-wff"/>
                 <outlet property="doneButtonContainerView" destination="m3g-Rr-VVl" id="C0q-US-O8i"/>
                 <outlet property="resetButton" destination="saE-hb-AlN" id="AFc-ld-JEu"/>
+                <outlet property="resetButtonTrailingConstraint" destination="mO8-uv-SjE" id="A3f-cN-5Z6"/>
                 <outlet property="scrollableView" destination="i07-sF-Si1" id="XT6-Fa-xRF"/>
                 <outlet property="statusBarBackgroundView" destination="ylX-HG-9YA" id="IJP-4R-4QL"/>
                 <outlet property="tableView" destination="cz0-vR-itK" id="90m-BO-Imn"/>

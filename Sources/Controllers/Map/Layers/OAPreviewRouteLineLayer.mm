@@ -77,7 +77,7 @@
 {
     [super initLayer];
 
-    _routeGradientPalette = @"default";
+    _routeGradientPalette = PaletteGradientColor.defaultName;
     _routingHelper = OARoutingHelper.sharedInstance;
     
     _collection = std::make_shared<OsmAnd::VectorLinesCollection>();
@@ -597,15 +597,8 @@
     if (gradientScaleType)
     {
         ColorizationType colorizationType = (ColorizationType) [gradientScaleType toColorizationType];
-        NSError *error = nil;
         previewPalette = [[ColorPaletteHelper shared] requireGradientColorPaletteSync:colorizationType
-                                                                  gradientPaletteName:_routeGradientPalette
-                                                                                error:&error];
-        if (error)
-        {
-            NSLog(@"Error reading color palette file: %@", error.description);
-            return;
-        }
+                                                                  gradientPaletteName:_routeGradientPalette];
     }
     NSMutableArray<NSNumber *> *palette = [NSMutableArray array];
     for (ColorValue *colorValue in [previewPalette colorValues])

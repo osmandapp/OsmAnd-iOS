@@ -80,7 +80,8 @@
             [OAWeatherBand withWeatherBand:WEATHER_BAND_PRESSURE],
             [OAWeatherBand withWeatherBand:WEATHER_BAND_WIND_SPEED],
             [OAWeatherBand withWeatherBand:WEATHER_BAND_CLOUD],
-            [OAWeatherBand withWeatherBand:WEATHER_BAND_PRECIPITATION]
+            [OAWeatherBand withWeatherBand:WEATHER_BAND_PRECIPITATION],
+            [OAWeatherBand withWeatherBand:WEATHER_BAND_WIND_ANIMATION]
         ];
 
         _weatherSizeCalculatedObserver = [[OAObservable alloc] init];

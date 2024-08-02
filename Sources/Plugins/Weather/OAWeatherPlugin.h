@@ -13,6 +13,7 @@ static NSString * const kWeatherPressure = @"weather_pressure";
 static NSString * const kWeatherWind = @"weather_wind";
 static NSString * const kWeatherCloud = @"weather_cloud";
 static NSString * const kWeatherPrecip = @"weather_precip";
+static NSString * const kWeatherWindAnimation = @"weather_wind_animation";
 
 @class OAWeatherWidget;
 

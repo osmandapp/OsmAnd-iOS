@@ -14,9 +14,9 @@ typedef NS_ENUM(NSInteger, EOAWeatherLayer)
     WEATHER_LAYER_HIGH = 1
 };
 
-static long FORECAST_ANIMATION_DURATION_HOURS = 6;
-static long HOUR_IN_MILLISECONDS = 60 * 60 * 1000;
-static long DAY_IN_MILLISECONDS = 24 * HOUR_IN_MILLISECONDS;
+static int64_t FORECAST_ANIMATION_DURATION_HOURS = 6;
+static int64_t HOUR_IN_MILLISECONDS = 60 * 60 * 1000;
+static int64_t DAY_IN_MILLISECONDS = 24 * HOUR_IN_MILLISECONDS;
 
 @interface OAWeatherRasterLayer : OARasterMapLayer
 
@@ -29,6 +29,6 @@ static long DAY_IN_MILLISECONDS = 24 * HOUR_IN_MILLISECONDS;
 - (void) updateWeatherLayer;
 - (void) updateWeatherLayerAlpha;
 
-- (void) setDateTime:(NSTimeInterval)dateTime goForward:(BOOL)goForward resetPeriod:(BOOL)resetPeriod;
+- (void) setDateTime:(int64_t)dateTime goForward:(BOOL)goForward resetPeriod:(BOOL)resetPeriod;
 
 @end

@@ -269,7 +269,7 @@
 
 - (void) setDateTime:(NSTimeInterval)dateTime
 {
-    _date = [NSDate dateWithTimeIntervalSince1970:dateTime / 1000];
+    _date = [NSDate dateWithTimeIntervalSince1970:dateTime];
 }
 
 - (void) onWeatherLayerChanged

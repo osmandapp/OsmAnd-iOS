@@ -44,11 +44,11 @@
     BOOL _cachedAnyWidgetVisible;
     NSTimeInterval _lastUpdateTime;
     
-    NSTimeInterval _timePeriodStart;
-    NSTimeInterval _timePeriodEnd;
-    NSTimeInterval _timePeriodStep;
+    int64_t _timePeriodStart;
+    int64_t _timePeriodEnd;
+    int64_t _timePeriodStep;
     BOOL _requireTimePeriodChange;
-    NSTimeInterval _dateTime;
+    int64_t _dateTime;
 }
 
 - (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController layerIndex:(int)layerIndex weatherLayer:(EOAWeatherLayer)weatherLayer date:(NSDate *)date
@@ -175,24 +175,24 @@
     return NO;
 }
 
-- (void) setDateTime:(NSTimeInterval)dateTime goForward:(BOOL)goForward resetPeriod:(BOOL)resetPeriod
+- (void) setDateTime:(int64_t)dateTime goForward:(BOOL)goForward resetPeriod:(BOOL)resetPeriod
 {
     if (_timePeriodStart == 0)
         _timePeriodStart = [[NSDate now] timeIntervalSince1970] * 1000;
     
-    NSTimeInterval dayStart = [OAOsmAndFormatter getStartOfDayForTime:_timePeriodStart / 1000] * 1000;
-    NSTimeInterval dayEnd = dayStart + DAY_IN_MILLISECONDS;
+    int64_t dayStart = [OAOsmAndFormatter getStartOfDayForTime:_timePeriodStart / 1000] * 1000;
+    int64_t dayEnd = dayStart + DAY_IN_MILLISECONDS;
     if (dateTime < dayStart || dayStart > dayEnd)
     {
         dayStart = [OAOsmAndFormatter getStartOfDayForTime:dayStart];
         dayEnd = dayStart + DAY_IN_MILLISECONDS;
     }
     
-    long todayStep = HOUR_IN_MILLISECONDS;
-    long nextStep = todayStep * 3;
-    long startOfToday = [OAOsmAndFormatter getStartOfToday] * 1000;
-    long step = dayStart == startOfToday ? todayStep : nextStep;
-    long switchStepTime = ((long)([[NSDate now] timeIntervalSince1970] * 1000 + DAY_IN_MILLISECONDS)) / nextStep * nextStep;
+    int64_t todayStep = HOUR_IN_MILLISECONDS;
+    int64_t nextStep = todayStep * 3;
+    int64_t startOfToday = [OAOsmAndFormatter getStartOfToday] * 1000;
+    int64_t step = dayStart == startOfToday ? todayStep : nextStep;
+    int64_t switchStepTime = ((int64_t)([[NSDate now] timeIntervalSince1970] * 1000 + DAY_IN_MILLISECONDS)) / nextStep * nextStep;
     if (switchStepTime > startOfToday && switchStepTime >= dayStart + todayStep && switchStepTime <= dayEnd - nextStep)
     {
         if (dateTime < switchStepTime) 
@@ -206,8 +206,8 @@
         }
     }
     
-    long prevTime = (dateTime - dayStart) / step * step + dayStart;
-    long nextTime = prevTime + step;
+    int64_t prevTime = (dateTime - dayStart) / step * step + dayStart;
+    int64_t nextTime = prevTime + step;
     if (goForward)
     {
         if (resetPeriod || _timePeriodStep != step
@@ -222,7 +222,7 @@
     }
     else
     {
-        long nearestTime = dateTime - prevTime < nextTime - dateTime ? prevTime : nextTime;
+        int64_t nearestTime = dateTime - prevTime < nextTime - dateTime ? prevTime : nextTime;
         if (resetPeriod || _timePeriodStep != step
             || (_timePeriodStart > dayStart && nearestTime <= _timePeriodStart)
             || (_timePeriodEnd < dayEnd && nearestTime >= _timePeriodEnd))
@@ -242,7 +242,7 @@
         BOOL needsSettingsForToolbar = [[OARootViewController instance].mapPanel.hudViewController needsSettingsForWeatherToolbar];
         if (_needsSettingsForToolbar != needsSettingsForToolbar)
         {
-            _date = self.mapViewController.mapLayers.weatherDate; // ?
+            _date = self.mapViewController.mapLayers.weatherDate;
             _needsSettingsForToolbar = needsSettingsForToolbar;
             [self updateWeatherLayerAlpha];
         }

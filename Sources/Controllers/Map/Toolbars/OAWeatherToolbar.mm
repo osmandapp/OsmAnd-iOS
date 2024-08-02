@@ -499,6 +499,11 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
 
 - (void) scheduleAnimationStart
 {
+    if (_displayLink) 
+    {
+        [_displayLink invalidate];
+        _displayLink = nil;
+    }
     _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(onAnimationTick:)];
     _currentLoopStart = CACurrentMediaTime();
     _currentLoopDuration = kAnimationFrameDelaySec;

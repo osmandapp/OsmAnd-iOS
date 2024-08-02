@@ -466,7 +466,8 @@ static const CGFloat kVerticalExaggerationScaleMax = 4.0;
     NSMutableDictionary<NSString *, NSString *> *routeKeyTags = [NSMutableDictionary dictionary];
     for (auto it = gpxDocument->networkRouteKeyTags.begin(); it != gpxDocument->networkRouteKeyTags.end(); ++it)
     {
-        routeKeyTags[it.key().toNSString()] = it.value().toNSString();
+        if (!it.key().isNull())
+            routeKeyTags[it.key().toNSString()] = it.value().toNSString();
     }
     _networkRouteKeyTags = routeKeyTags;
 

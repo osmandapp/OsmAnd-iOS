@@ -13,7 +13,6 @@ import Foundation
 class ScreenOrientationHelper: NSObject {
     static let sharedInstance: ScreenOrientationHelper = ScreenOrientationHelper()
     static let screenOrientationChangedKey: String = "screenOrientationChangedKey"
-    private static var sharedHelperInstance: ScreenOrientationHelper?
     
     private let settings = OAAppSettings.sharedManager()
     

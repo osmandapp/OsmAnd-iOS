@@ -130,10 +130,10 @@ final class TerrainMode: NSObject {
         }
         guard let terrainModes else { return }
 
-        terrainModes.removeAll()
-        terrainModes.append(TerrainMode(defaultKey, type: .hillshade, translateName: localizedString("shared_string_hillshade")))
-        terrainModes.append(TerrainMode(defaultKey, type: .slope, translateName: localizedString("shared_string_slope")))
-
+        var newTerrainModes = [
+            TerrainMode(defaultKey, type: .hillshade, translateName: localizedString("shared_string_hillshade")),
+            TerrainMode(defaultKey, type: .slope, translateName: localizedString("shared_string_slope"))
+        ]
         let prefixes = [
             Pair(hillshadePrefix, TerrainType.hillshade),
             Pair(colorSlopePrefix, TerrainType.slope),
@@ -144,11 +144,12 @@ final class TerrainMode: NSObject {
             for file in files where file.hasSuffix(TXT_EXT) {
                 for prefix in prefixes {
                     if let terrainMode = getTerrainMode(by: file, prefix: prefix) {
-                        terrainModes.append(terrainMode)
+                        newTerrainModes.append(terrainMode)
                     }
                 }
             }
         }
+        terrainModes.replaceAll(with: newTerrainModes)
     }
 
     private static func getTerrainMode(by file: String, prefix: Pair<String, TerrainType>) -> TerrainMode? {

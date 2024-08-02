@@ -584,7 +584,81 @@ import Charts
 
         return dataSet
     }
-    
+
+    @objc static func setupGradientChart(chart: LineChartView,
+                                         topOffset: CGFloat,
+                                         bottomOffset: CGFloat,
+                                         useGesturesAndScale: Bool,
+                                         xAxisGridColor: UIColor,
+                                         labelsColor: UIColor) {
+        chart.extraRightOffset = 16.0
+        chart.extraLeftOffset = 16.0
+        chart.extraTopOffset = topOffset
+        chart.extraBottomOffset = bottomOffset
+
+        chart.isUserInteractionEnabled = useGesturesAndScale
+        chart.dragEnabled = useGesturesAndScale
+        chart.setScaleEnabled(useGesturesAndScale)
+        chart.pinchZoomEnabled = useGesturesAndScale
+        chart.scaleYEnabled = false
+        chart.autoScaleMinMaxEnabled = true
+        chart.drawBordersEnabled = false
+        chart.chartDescription?.enabled = false
+        chart.maxVisibleCount = 10
+        chart.minOffset = 0.0
+        chart.dragDecelerationEnabled = false
+
+        let xAxis = chart.xAxis
+        xAxis.drawAxisLineEnabled = true
+        xAxis.axisLineWidth = 1.0
+        xAxis.axisLineColor = xAxisGridColor
+        xAxis.drawGridLinesEnabled = true
+        xAxis.gridLineWidth = 1.0
+        xAxis.gridColor = xAxisGridColor
+        xAxis.gridLineDashLengths = [8.0]
+        xAxis.gridLineDashPhase = 0.0
+        xAxis.labelPosition = .bottom
+        xAxis.labelTextColor = labelsColor
+        xAxis.avoidFirstLastClippingEnabled = true
+        xAxis.enabled = true
+
+        let leftYAxis = chart.leftAxis
+        leftYAxis.enabled = false
+
+        let rightYAxis = chart.rightAxis
+        rightYAxis.enabled = false
+
+        let legend = chart.legend
+        legend.enabled = false
+    }
+
+    @objc static func buildGradientChart(chart: LineChartView,
+                                         colorPalette: ColorPalette,
+                                         valueFormatter: IAxisValueFormatter) -> LineChartData {
+
+        let xAxis = chart.xAxis
+        xAxis.enabled = false
+
+        let colorValues = colorPalette.colorValues
+        var colors = [UIColor]()
+        var entries = [ChartDataEntry]()
+
+        for i in 0..<colorValues.count {
+            let clr = colorValues[i].clr
+            colors.append(UIColor(argb: clr))
+            entries.append(ChartDataEntry(x: colorValues[i].val, y: 0))
+        }
+
+        let barDataSet = LineChartDataSet(entries: entries, label: "")
+        barDataSet.colors = colors
+        barDataSet.highlightColor = .textColorSecondary
+        let dataSet = LineChartData(dataSet: barDataSet)
+        dataSet.setDrawValues(false)
+        chart.xAxis.valueFormatter = valueFormatter
+
+        return dataSet
+    }
+
     private static func createGPXElevationDataSet(chartView: LineChartView,
                                                   analysis: OAGPXTrackAnalysis,
                                                   graphType: GPXDataSetType,

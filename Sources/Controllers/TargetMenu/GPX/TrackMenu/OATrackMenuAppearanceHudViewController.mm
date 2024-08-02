@@ -26,6 +26,7 @@
 #import "OAImageTextViewCell.h"
 #import "OALineChartCell.h"
 #import "Localization.h"
+#import "OALineChartCell.h"
 #import "OAColors.h"
 #import "OAOsmAndFormatter.h"
 #import "OAGPXDatabase.h"
@@ -46,6 +47,7 @@
 #import "OAMapSettingsTerrainParametersViewController.h"
 #import "OAColoringType.h"
 #import "OsmAnd_Maps-Swift.h"
+#import <Charts/Charts-Swift.h>
 
 static const NSInteger kColorsSection = 1;
 static const NSInteger kColorGridOrDescriptionCell = 1;
@@ -128,6 +130,8 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
     NSMutableArray<PaletteColor *> *_sortedPaletteColorItems;
     PaletteColor *_selectedPaletteColorItem;
     NSIndexPath *_paletteNameIndexPath;
+    NSIndexPath *_paletteGradientIndexPath;
+    OALineChartCell *_gradientLegendCell;
 
     OAGPXTrackWidth *_selectedWidth;
     NSArray<NSString *> *_customWidthValues;
@@ -901,6 +905,7 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
 
 - (void)generateColorsSection:(OAGPXTableSectionData *)section
 {
+    _gradientLegendCell = nil;
     NSMutableArray<OAGPXTableCellData *> *colorsCells = section.subjects;
 
     if (colorsCells.count == 0 || ![colorsCells.firstObject.key isEqualToString:@"color_title"])
@@ -925,7 +930,9 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
     {
         if ([self isSelectedTypeGradient])
         {
-            [colorsCells addObject:[self generateDataForColorElevationGradientCellData]];
+            _gradientLegendCell = [self generateLegendCell];
+            [colorsCells addObject:[self generateGradientLegendCellData]];
+            _paletteGradientIndexPath = [NSIndexPath indexPathForRow:colorsCells.count - 1 inSection:kColorsSection];
             [colorsCells addObject:[self generatePaletteNameCellData]];
             _paletteNameIndexPath = [NSIndexPath indexPathForRow:colorsCells.count - 1 inSection:kColorsSection];
         }
@@ -1153,18 +1160,43 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
             || [view isKindOfClass:[UICollectionView class]];
 }
 
-- (OAGPXTableCellData *)generateDataForColorElevationGradientCellData
+- (OAGPXTableCellData *)generateGradientLegendCellData
 {
     return [OAGPXTableCellData withData:@{
-        kTableKey: @"color_elevation_gradient",
-        kCellType: [OAImageTextViewCell getCellIdentifier],
-        kTableValues: @{
-            @"extra_desc": [self generateExtraDescription],
-            @"desc_font_size": @([self isSelectedTypeSlope] ? 15 : 17)
-        },
-        kCellDesc: [self generateDescription],
-        kCellRightIconName: [self isSelectedTypeSlope] ? @"img_track_gradient_slope" : @"img_track_gradient_speed"
+        kTableKey: @"gradientLegend",
+        kCellType: [OALineChartCell getCellIdentifier],
     }];
+}
+
+- (OALineChartCell *)generateLegendCell
+{
+    ColorPalette *colorPalette;
+    if ([_selectedPaletteColorItem isKindOfClass:PaletteGradientColor.class])
+    {
+        PaletteGradientColor *paletteColor = (PaletteGradientColor *) _selectedPaletteColorItem;
+        colorPalette = paletteColor.colorPalette;
+    }
+    if (!colorPalette)
+        return nil;
+
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OALineChartCell getCellIdentifier] owner:self options:nil];
+    OALineChartCell *cell = (OALineChartCell *) nib[0];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.separatorInset = UIEdgeInsetsMake(0, CGFLOAT_MAX, 0, 0);
+
+    [GpxUIHelper setupGradientChartWithChart:cell.lineChartView
+                                   topOffset:9
+                                bottomOffset:24
+                         useGesturesAndScale:NO
+                              xAxisGridColor:[UIColor colorNamed:ACColorNameTextColorSecondary]
+                                 labelsColor:[UIColor colorNamed:ACColorNameChartAxisGridLine]];
+
+    [cell.lineChartView setData:[GpxUIHelper buildGradientChartWithChart:cell.lineChartView
+                                                            colorPalette:colorPalette
+                                                          valueFormatter:[GradientUiHelper getGradientTypeFormatter:_gradientColorsCollection.gradientType
+                                                                                                           analysis:self.analysis]]];
+    [cell.lineChartView notifyDataSetChanged];
+    return cell;
 }
 
 - (NSString *) generateDescription
@@ -1776,7 +1808,10 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
             
         }
         return [UITableViewCell new];
-        
+    }
+    else if ([cellData.type isEqualToString:[OALineChartCell getCellIdentifier]])
+    {
+        return _gradientLegendCell;
     }
 
     if ([outCell needsUpdateConstraints])
@@ -2077,6 +2112,10 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
         [tableData setData:@{
             kCellTitle: [_selectedPaletteColorItem toHumanString]
         }];
+    }
+    else if ([tableData.key isEqualToString:@"gradientLegend"])
+    {
+        _gradientLegendCell = [self generateLegendCell];
     }
 }
 
@@ -2511,11 +2550,19 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
                     track.gradientPaletteName = paletteColor.paletteName;
                 }
             }
+            NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray array];
             if (_paletteNameIndexPath)
             {
                 [self updateData:_tableData[_paletteNameIndexPath.section].subjects[_paletteNameIndexPath.row]];
-                [self.tableView reloadRowsAtIndexPaths:@[_paletteNameIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+                [indexPaths addObject:_paletteNameIndexPath];
             }
+            if (_paletteGradientIndexPath)
+            {
+                [self updateData:_tableData[_paletteGradientIndexPath.section].subjects[_paletteGradientIndexPath.row]];
+                [indexPaths addObject:_paletteGradientIndexPath];
+            }
+            if (indexPaths.count > 0)
+                [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
         }
     }
     

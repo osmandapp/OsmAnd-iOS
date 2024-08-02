@@ -3683,6 +3683,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 {
     @synchronized(_rendererSync)
     {
+        [_mapLayers.gpxMapLayer resetLayer];
         if (![_selectedGpxHelper buildGpxList])
             [self initRendererWithGpxTracks];
     }

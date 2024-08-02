@@ -36,6 +36,7 @@
 #import "OACompoundIconUtils.h"
 #import "OAObservable.h"
 #import "OAColoringType.h"
+#import "OAConcurrentCollections.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/LatLon.h>
@@ -66,7 +67,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     QHash< QString, QList<OsmAnd::FColorARGB> > _cachedColors;
     QHash< QString, QList<OsmAnd::FColorARGB> > _cachedWallColors;
     NSMutableDictionary<NSString *, NSNumber *> *_cachedTrackWidth;
-    NSMutableDictionary<NSString *, NSString *> *_updatedColorPaletteFiles;
+    OAConcurrentDictionary<NSString *, NSString *> *_updatedColorPaletteFiles;
     
     NSOperationQueue *_splitLabelsQueue;
     NSObject* _splitLock;
@@ -99,7 +100,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
 
     _cachedTracks = [NSMutableDictionary dictionary];
     _cachedTrackWidth = [NSMutableDictionary dictionary];
-    _updatedColorPaletteFiles = [NSMutableDictionary dictionary];
+    _updatedColorPaletteFiles = [[OAConcurrentDictionary alloc] init];
     
     _plugin = (OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class];
 
@@ -157,7 +158,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     {
         if ([colorPaletteFile hasPrefix:ColorPaletteHelper.routePrefix])
         {
-            _updatedColorPaletteFiles[colorPaletteFile] = colorPaletteFiles[colorPaletteFile];
+            [_updatedColorPaletteFiles setObjectSync:colorPaletteFiles[colorPaletteFile] forKey:colorPaletteFile];
             refresh = YES;
         }
     }
@@ -349,12 +350,12 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                 && (![cachedTrack[@"prev_coloring_type"] isEqualToString:gpx.coloringType]
                     || ![cachedTrack[@"prev_color_palette"] isEqualToString:gpx.gradientPaletteName]
                     || [cachedTrack[@"colorization_scheme"] intValue] != COLORIZATION_GRADIENT
-                    || [_updatedColorPaletteFiles.allKeys containsObject:colorPaletteFile]
+                    || [_updatedColorPaletteFiles objectForKeySync:colorPaletteFile]
                     || _cachedColors[key].isEmpty()))
             {
-                NSString *updatedColorPaletteValue = _updatedColorPaletteFiles[colorPaletteFile];
-                BOOL isColorPaletteDeleted = [updatedColorPaletteValue isEqualToString:DirectoryObserver.deletedKey];
-                [_updatedColorPaletteFiles removeObjectForKey:colorPaletteFile];
+                NSString *updatedColorPaletteValue = [_updatedColorPaletteFiles objectForKeySync:colorPaletteFile];
+                BOOL isColorPaletteDeleted = [updatedColorPaletteValue isEqualToString:ColorPaletteHelper.deletedFileKey];
+                [_updatedColorPaletteFiles removeObjectForKeySync:colorPaletteFile];
 
                 cachedTrack[@"colorization_scheme"] = @(COLORIZATION_GRADIENT);
                 cachedTrack[@"prev_coloring_type"] = gpx.coloringType;

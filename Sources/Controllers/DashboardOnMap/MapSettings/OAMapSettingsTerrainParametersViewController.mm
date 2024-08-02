@@ -147,11 +147,11 @@ static const NSInteger kElevationMaxMeters = 2000;
     for (NSString *colorPaletteFile in colorPaletteFiles.allKeys)
     {
         if ([_gradientColorsCollection hasTerrainGradientPaletteBy:colorPaletteFile]
-            || [colorPaletteFiles[colorPaletteFile] isEqualToString:DirectoryObserver.createdKey])
+            || [colorPaletteFiles[colorPaletteFile] isEqualToString:ColorPaletteHelper.createdFileKey])
         {
             reloadData = YES;
             if ([currentPaletteFile isEqualToString:colorPaletteFile]
-                && [colorPaletteFiles[colorPaletteFile] isEqualToString:DirectoryObserver.deletedKey])
+                && [colorPaletteFiles[colorPaletteFile] isEqualToString:ColorPaletteHelper.deletedFileKey])
             {
                 deleted = YES;
                 break;

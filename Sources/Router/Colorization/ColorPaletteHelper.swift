@@ -17,7 +17,9 @@ final class ColorPaletteHelper: NSObject {
     static let gradientIdSplitter = "_"
     static let colorPalettesUpdatedNotification = NSNotification.Name("ColorPalettesUpdated")
 
-    private let directoryObserverType = DirectoryObserverType.colorPalette
+    static let updatedFileKey = "updatedFile"
+    static let deletedFileKey = "deletedFile"
+    static let createdFileKey = "createdFile"
 
     private var app: OsmAndAppProtocol
     private var directoryObserver: DirectoryObserver
@@ -25,12 +27,14 @@ final class ColorPaletteHelper: NSObject {
 
     private override init() {
         app = OsmAndApp.swiftInstance()
-        directoryObserver = DirectoryObserver(directoryObserverType)
+
+        let notificationName = NSNotification.Name("ColorPaletteDicrectoryUpdated")
+        directoryObserver = DirectoryObserver(app.colorsPalettePath, notificationName: notificationName)
         directoryObserver.startObserving()
 
         super.init()
 
-        NotificationCenter.default.addObserver(self, selector: #selector(onColorPaletteDirectoryUpdated(_ :)), name: directoryObserverType.notificationName, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onColorPaletteDirectoryUpdated(_ :)), name: notificationName, object: nil)
     }
 
     @objc private func onColorPaletteDirectoryUpdated(_ notification: Notification) {
@@ -40,7 +44,7 @@ final class ColorPaletteHelper: NSObject {
                 let files = try FileManager.default.contentsOfDirectory(atPath: path)
                 let deletedPalettes = cachedColorPalette.getAllKeys().filter { !files.contains($0) }
                 for deletedPalette in deletedPalettes {
-                    colorPaletteFilesUpdated[deletedPalette] = DirectoryObserver.deletedKey
+                    colorPaletteFilesUpdated[deletedPalette] = Self.deletedFileKey
                     cachedColorPalette.removeValue(forKey: deletedPalette)
                 }
                 for file in files {
@@ -50,16 +54,16 @@ final class ColorPaletteHelper: NSObject {
                         let attributes = try FileManager.default.attributesOfItem(atPath: getColorPaletteDir().appendingPathComponent(colorPaletteFileName))
                         if attributes[.modificationDate] as? Date != cachedPalette.lastModified {
                             if parseGradientColorPalette(colorPaletteFileName) != nil {
-                                colorPaletteFilesUpdated[colorPaletteFileName] = DirectoryObserver.updatedKey
+                                colorPaletteFilesUpdated[colorPaletteFileName] = Self.updatedFileKey
                             }
                         }
                     } else {
                         if parseGradientColorPalette(colorPaletteFileName) != nil {
-                            colorPaletteFilesUpdated[colorPaletteFileName] = DirectoryObserver.createdKey
+                            colorPaletteFilesUpdated[colorPaletteFileName] = Self.createdFileKey
                         }
                     }
                 }
-                if colorPaletteFilesUpdated.keys.contains(where: { !$0.hasPrefix(Self.routePrefix) && !$0.hasPrefix(Self.weatherPrefix) && colorPaletteFilesUpdated[$0] != DirectoryObserver.updatedKey }) {
+                if colorPaletteFilesUpdated.keys.contains(where: { !$0.hasPrefix(Self.routePrefix) && !$0.hasPrefix(Self.weatherPrefix) && colorPaletteFilesUpdated[$0] != Self.updatedFileKey }) {
                     TerrainMode.reloadTerrainModes()
                 }
                 NotificationCenter.default.post(name: Self.colorPalettesUpdatedNotification, object: colorPaletteFilesUpdated)

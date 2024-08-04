@@ -3499,3 +3499,5 @@
 "quick_action_track_waypoint" = "Відстежити маршрутну точку";
 "quick_action_parking_place" = "Місце паркування";
 "map_source" = "Джерело мапи";
+"driving_region_india" = "Індія";
+"driving_region_uk" = "Велика Британія та подібні";

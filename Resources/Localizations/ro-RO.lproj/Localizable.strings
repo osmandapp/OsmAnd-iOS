@@ -534,7 +534,7 @@
 "rendering_attr_piste_difficulty_extreme_name" = "Extrem";
 "routing_attr_avoid_ferries_description" = "Evită feriboturi";
 "routing_attr_avoid_toll_description" = "Evită drumuri cu taxă";
-"routing_attr_driving_style_prefer_unpaved_name" = "Prefer drumurile nepavate";
+"routing_attr_driving_style_prefer_unpaved_name" = "Preferă drumuri nepavate";
 "routeInfo_road_types_name" = "Tipuri drum";
 "rendering_attr_surface_sand_name" = "Nisip";
 "rendering_attr_showSurfaces_name" = "Arată suprafața drumului";
@@ -684,7 +684,7 @@
 "routing_attr_max_num_changes_name" = "Număr de modificări";
 "rendering_attr_highway_class_path_name" = "Cale";
 "rendering_attr_highway_class_track_grade1_name" = "Grad 1";
-"routing_attr_driving_style_prefer_unpaved_description" = "Preferați drumurile neasfaltate în locul celor asfaltate pentru traseu.";
+"routing_attr_driving_style_prefer_unpaved_description" = "Preferă drumuri neasfaltate în locul celor asfaltate pentru rutare.";
 "rendering_attr_smoothness_impassable_name" = "De netrecut";
 "rendering_attr_surface_dirt_name" = "Pământ";
 "rendering_attr_piste_difficulty_easy_name" = "Uşor";

@@ -3517,6 +3517,6 @@
 "temperature_layer" = "Temperaturebene";
 "voices" = "Sprachansagen";
 "wind_layer" = "Windebene";
-"route_your_destination_is_on_right" = "Ihr Ziel befindet sich zu ihrer linken";
+"route_your_destination_is_on_right" = "Das Ziel befindet sich auf der rechten Seite";
 "route_your_destination_is_on_ahead" = "Ihr Ziel befindet sich vor ihnen";
-"route_your_destination_is_on_left" = "Ihr Ziel befindet sich zu ihrer linken";
+"route_your_destination_is_on_left" = "Das Ziel befindet sich auf der rechten Seite";

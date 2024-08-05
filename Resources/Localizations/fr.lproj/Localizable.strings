@@ -116,7 +116,7 @@
 "shared_string_download" = "Télécharger";
 "shared_string_no_thanks" = "Pas nécessaire";
 "download_now" = "Télécharger la carte maintenant";
-"download_tab_local" = "Mémoire";
+"download_tab_local" = "Stockage";
 "res_search_world" = "Rechercher dans le monde entier";
 "res_world_map" = "Carte du monde";
 "download_tab_updates" = "Misesà jour";
@@ -314,7 +314,7 @@
 "res_updates_exp" = "Veuillez acheter le(s) continent(s) pour mettre à jour les cartes";
 "menu_my_directions" = "Mes itinéraires";
 // Menu
-"shared_string_my_places" = "Lieux favoris";
+"shared_string_my_places" = "Favoris";
 "add_parking" = "Ajouter comme position de stationnement";
 "add_waypoint" = "Ajouter un point de passage";
 "add_waypoint_short" = "Ajouter un point de passage";

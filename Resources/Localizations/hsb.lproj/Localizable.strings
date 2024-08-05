@@ -703,7 +703,7 @@
 "mapillary_descr" = "Online street photos for everyone. Discover places, collaborate, capture the world";
 "mapillary_turn_on_widget" = "Turn on Mapillary widget";
 "mapillary_turn_on_widget_descr" = "This allows you to quickly contribute to Mapillary";
-"mapillary_menu_title_tile_cache" = "Tile cache";
+"mapillary_menu_title_tile_cache" = "Mjezyskład kachličkow";
 "tile_data" = "Tile data";
 "shared_string_reload" = "wobnowić";
 "show_more" = "Show more";
@@ -1708,3 +1708,7 @@
 "download_srtm_maps" = "Wysokostne linije";
 "shared_string_change" = "Změnić";
 "voices" = "Připowědźe";
+"shared_string_cache" = "Mjezyskład";
+"weather_online_cache" = "Mjezyskład online";
+"select_another_track" = "Wubjer hinašu čaru";
+"cache_size" = "Wulkosć mjezyskłada";

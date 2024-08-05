@@ -50,14 +50,14 @@ final class TerrainMode: NSObject {
     static let heightPrefix = "height_"
 
     static var values: [TerrainMode] {
-        guard let terrainModes else {
+        guard let terrains = terrainModes?.asArray() as? [TerrainMode] else {
             Self.reloadTerrainModes()
-            return terrainModes ?? []
+            return terrainModes?.asArray() as? [TerrainMode] ?? []
         }
-        return terrainModes
+        return terrains
     }
 
-    private static var terrainModes: [TerrainMode]?
+    private static var terrainModes: ConcurrentArray<TerrainMode>?
 
     let type: TerrainType
 
@@ -83,20 +83,32 @@ final class TerrainMode: NSObject {
         guard let terrainModes else {
             return nil
         }
-        for mode in terrainModes where mode.type == type && mode.getKeyName() == keyName {
-            return mode
+
+        var terrainMode: TerrainMode?
+        terrainModes.forEach { mode in
+            if mode.type == type && mode.getKeyName() == keyName {
+                terrainMode = mode
+                return
+            }
         }
-        return nil
+
+        return terrainMode
     }
 
     static func getDefaultMode(_ type: TerrainType) -> TerrainMode? {
         guard let terrainModes else {
             return nil
         }
-        for mode in terrainModes where mode.type == type && mode.isDefaultMode() {
-            return mode
+
+        var terrainMode: TerrainMode?
+        terrainModes.forEach { mode in
+            if mode.type == type && mode.isDefaultMode() {
+                terrainMode = mode
+                return
+            }
         }
-        return nil
+
+        return terrainMode
     }
 
     static func getByKey(_ key: String) -> TerrainMode? {
@@ -104,15 +116,24 @@ final class TerrainMode: NSObject {
             ?? terrainModes?.first { $0.type == .hillshade }
     }
 
+    static func getKeyByPaletteName(_ name: String) -> String? {
+        terrainModes?.first(where: { $0.getKeyName() == name })?.key
+    }
+
     static func isModeExist(_ key: String) -> Bool {
         terrainModes?.contains { $0.getKeyName() == key } ?? false
     }
 
-    private static func reloadTerrainModes() {
-        var modes = [TerrainMode]()
-        modes.append(TerrainMode(defaultKey, type: .hillshade, translateName: localizedString("shared_string_hillshade")))
-        modes.append(TerrainMode(defaultKey, type: .slope, translateName: localizedString("shared_string_slope")))
+    static func reloadTerrainModes() {
+        if terrainModes == nil {
+            terrainModes = ConcurrentArray()
+        }
+        guard let terrainModes else { return }
 
+        var newTerrainModes = [
+            TerrainMode(defaultKey, type: .hillshade, translateName: localizedString("shared_string_hillshade")),
+            TerrainMode(defaultKey, type: .slope, translateName: localizedString("shared_string_slope"))
+        ]
         let prefixes = [
             Pair(hillshadePrefix, TerrainType.hillshade),
             Pair(colorSlopePrefix, TerrainType.slope),
@@ -123,12 +144,12 @@ final class TerrainMode: NSObject {
             for file in files where file.hasSuffix(TXT_EXT) {
                 for prefix in prefixes {
                     if let terrainMode = getTerrainMode(by: file, prefix: prefix) {
-                        modes.append(terrainMode)
+                        newTerrainModes.append(terrainMode)
                     }
                 }
             }
         }
-        terrainModes = modes
+        terrainModes.replaceAll(with: newTerrainModes)
     }
 
     private static func getTerrainMode(by file: String, prefix: Pair<String, TerrainType>) -> TerrainMode? {

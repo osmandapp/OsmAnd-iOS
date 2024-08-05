@@ -36,6 +36,7 @@
 #import "OACompoundIconUtils.h"
 #import "OAObservable.h"
 #import "OAColoringType.h"
+#import "OAConcurrentCollections.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/LatLon.h>
@@ -66,6 +67,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     QHash< QString, QList<OsmAnd::FColorARGB> > _cachedColors;
     QHash< QString, QList<OsmAnd::FColorARGB> > _cachedWallColors;
     NSMutableDictionary<NSString *, NSNumber *> *_cachedTrackWidth;
+    OAConcurrentDictionary<NSString *, NSString *> *_updatedColorPaletteFiles;
     
     NSOperationQueue *_splitLabelsQueue;
     NSObject* _splitLock;
@@ -98,8 +100,14 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
 
     _cachedTracks = [NSMutableDictionary dictionary];
     _cachedTrackWidth = [NSMutableDictionary dictionary];
+    _updatedColorPaletteFiles = [[OAConcurrentDictionary alloc] init];
     
     _plugin = (OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(onColorPalettesFilesUpdated:)
+                                                 name:ColorPaletteHelper.colorPalettesUpdatedNotification
+                                               object:nil];
 }
 
 - (void) resetLayer
@@ -135,6 +143,33 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     });
 
     return YES;
+}
+
+- (void)onColorPalettesFilesUpdated:(NSNotification *)notification
+{
+    if (![notification.object isKindOfClass:NSDictionary.class])
+        return;
+
+    NSDictionary<NSString *, NSString *> *colorPaletteFiles = (NSDictionary *) notification.object;
+    if (!colorPaletteFiles)
+        return;
+    BOOL refresh = NO;
+    for (NSString *colorPaletteFile in colorPaletteFiles)
+    {
+        if ([colorPaletteFile hasPrefix:ColorPaletteHelper.routePrefix])
+        {
+            [_updatedColorPaletteFiles setObjectSync:colorPaletteFiles[colorPaletteFile] forKey:colorPaletteFile];
+            refresh = YES;
+        }
+    }
+    if (refresh)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.mapViewController runWithRenderSync:^{
+                [self refreshGpxTracks:_gpxDocs reset:YES];
+            }];
+        });
+    }
 }
 
 - (void) refreshGpxTracks:(QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> >)gpxDocs reset:(BOOL)reset
@@ -222,7 +257,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
         cachedTrack[@"doc"] = doc;
         cachedTrack[@"colorization_scheme"] = @(COLORIZATION_NONE);
         cachedTrack[@"prev_coloring_type"] = gpx.coloringType;
-        cachedTrack[@"prev_color_palette"] = gpx.gradientPaletteName.length > 0 ? gpx.gradientPaletteName : @"default";
+        cachedTrack[@"prev_color_palette"] = gpx.gradientPaletteName.length > 0 ? gpx.gradientPaletteName : PaletteGradientColor.defaultName;
         cachedTrack[@"prev_wall_coloring_type"] = @(gpx.visualization3dWallColorType);
         _cachedTracks[filePath] = cachedTrack;
         _cachedColors[key] = QList<OsmAnd::FColorARGB>();
@@ -244,28 +279,20 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     }
     else
     {
-        NSError *error = nil;
         ColorPalette *palette =
             [[ColorPaletteHelper shared] getGradientColorPaletteSync:(ColorizationType) [type toColorizationType]
-                                                 gradientPaletteName:gradientPalette
-                                                               error:&error];
-        if (error)
-        {
-            NSLog(@"Error reading color palette file: %@", error.description);
+                                                 gradientPaletteName:gradientPalette];
+        if (!palette)
             return;
-        }
-        else
-        {
-            OARouteColorize *routeColorize =
-                [[OARouteColorize alloc] initWithGpxFile:doc
-                                                analysis:analysis ?: [doc getAnalysis:0]
-                                                    type:[type toColorizationType]
-                                                 palette:palette
-                                         maxProfileSpeed:0];
-            _cachedWallColors[key].clear();
-            if (routeColorize)
-                _cachedWallColors[key].append([routeColorize getResultQList]);
-        }
+        OARouteColorize *routeColorize =
+            [[OARouteColorize alloc] initWithGpxFile:doc
+                                            analysis:analysis ?: [doc getAnalysis:0]
+                                                type:[type toColorizationType]
+                                             palette:palette
+                                     maxProfileSpeed:0];
+        _cachedWallColors[key].clear();
+        if (routeColorize)
+            _cachedWallColors[key].append([routeColorize getResultQList]);
     }
 }
 
@@ -312,15 +339,27 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                 type = OAColoringType.DEFAULT;
 
             OAGPXTrackAnalysis *analysis;
+            NSString *colorPaletteFile = @"";
+            if ([type isGradient])
+            {
+                colorPaletteFile =
+                    [ColorPaletteHelper getRoutePaletteFileName:(ColorizationType) [type toColorizationType]
+                                            gradientPaletteName:cachedTrack[@"prev_color_palette"]];
+            }
             if ([type isGradient]
                 && (![cachedTrack[@"prev_coloring_type"] isEqualToString:gpx.coloringType]
                     || ![cachedTrack[@"prev_color_palette"] isEqualToString:gpx.gradientPaletteName]
                     || [cachedTrack[@"colorization_scheme"] intValue] != COLORIZATION_GRADIENT
+                    || [_updatedColorPaletteFiles objectForKeySync:colorPaletteFile]
                     || _cachedColors[key].isEmpty()))
             {
+                NSString *updatedColorPaletteValue = [_updatedColorPaletteFiles objectForKeySync:colorPaletteFile];
+                BOOL isColorPaletteDeleted = [updatedColorPaletteValue isEqualToString:ColorPaletteHelper.deletedFileKey];
+                [_updatedColorPaletteFiles removeObjectForKeySync:colorPaletteFile];
+
                 cachedTrack[@"colorization_scheme"] = @(COLORIZATION_GRADIENT);
                 cachedTrack[@"prev_coloring_type"] = gpx.coloringType;
-                cachedTrack[@"prev_color_palette"] = gpx.gradientPaletteName.length > 0 ? gpx.gradientPaletteName : @"default";
+                cachedTrack[@"prev_color_palette"] = gpx.gradientPaletteName.length == 0 || isColorPaletteDeleted ? PaletteGradientColor.defaultName : gpx.gradientPaletteName;
                 BOOL shouldCalculateColorCache = YES;
                 // check if we already have a cached array of wall color points that can be reused for route line color, provided that the coloring type matches
                 switch (gpx.visualization3dWallColorType)
@@ -341,28 +380,20 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                 if (shouldCalculateColorCache)
                 {
                     analysis = [doc getAnalysis:0];
-                    NSError *error = nil;
                     ColorPalette *palette =
                         [[ColorPaletteHelper shared] getGradientColorPaletteSync:(ColorizationType) [type toColorizationType]
-                                                             gradientPaletteName:cachedTrack[@"prev_color_palette"]
-                                                                           error:&error];
-                    if (error)
-                    {
-                        NSLog(@"Error reading color palette file: %@", error.description);
+                                                             gradientPaletteName:cachedTrack[@"prev_color_palette"]];
+                    if (!palette)
                         return;
-                    }
-                    else
-                    {
-                        OARouteColorize *routeColorize =
+                    OARouteColorize *routeColorize =
                         [[OARouteColorize alloc] initWithGpxFile:doc
                                                         analysis:analysis
                                                             type:[type toColorizationType]
                                                          palette:palette
                                                  maxProfileSpeed:0];
-                        _cachedColors[key].clear();
-                        if (routeColorize)
-                            _cachedColors[key].append([routeColorize getResultQList]);
-                    }
+                    _cachedColors[key].clear();
+                    if (routeColorize)
+                        _cachedColors[key].append([routeColorize getResultQList]);
                 }
                 else
                 {
@@ -388,7 +419,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                 }
                 cachedTrack[@"colorization_scheme"] = @(COLORIZATION_SOLID);
                 cachedTrack[@"prev_coloring_type"] = gpx.coloringType;
-                cachedTrack[@"prev_color_palette"] = gpx.gradientPaletteName.length > 0 ? gpx.gradientPaletteName : @"default";
+                cachedTrack[@"prev_color_palette"] = gpx.gradientPaletteName.length > 0 ? gpx.gradientPaletteName : PaletteGradientColor.defaultName;
                 _cachedColors[key].clear();
                 [self calculateSegmentsColor:_cachedColors[key]
                                     attrName:gpx.coloringType
@@ -402,7 +433,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
             {
                 cachedTrack[@"colorization_scheme"] = @(COLORIZATION_NONE);
                 cachedTrack[@"prev_coloring_type"] = gpx.coloringType;
-                cachedTrack[@"prev_color_palette"] = gpx.gradientPaletteName.length > 0 ? gpx.gradientPaletteName : @"default";
+                cachedTrack[@"prev_color_palette"] = gpx.gradientPaletteName.length > 0 ? gpx.gradientPaletteName : PaletteGradientColor.defaultName;
                 _cachedColors[key].clear();
             }
             

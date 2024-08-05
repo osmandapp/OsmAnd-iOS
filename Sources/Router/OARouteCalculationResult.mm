@@ -1607,6 +1607,7 @@
         _appMode = mode;
         
         _directions = computeDirections;
+
         [self.class updateDirectionsTime:_directions listDistance:_listDistance];
         _alarmInfo = alarms;
         _routeProvider = (EOARouteService) [OAAppSettings.sharedManager.routerService get:_appMode];

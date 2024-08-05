@@ -1401,6 +1401,8 @@
 		C588D1EF298D1ECE001FEDBD /* OASearchHistoryTableGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = C588D1EE298D1ECE001FEDBD /* OASearchHistoryTableGroup.m */; };
 		C588D1F22992A448001FEDBD /* ic_custom_history_disabled_48@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C588D1F02992A447001FEDBD /* ic_custom_history_disabled_48@2x.png */; };
 		C588D1F32992A448001FEDBD /* ic_custom_history_disabled_48@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C588D1F12992A447001FEDBD /* ic_custom_history_disabled_48@3x.png */; };
+		C589BC9F2C610560002769F6 /* OATwoIconsButtonTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C589BC9E2C610560002769F6 /* OATwoIconsButtonTableViewCell.swift */; };
+		C589BCA12C6105F7002769F6 /* OATwoIconsButtonTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C589BCA02C6105F7002769F6 /* OATwoIconsButtonTableViewCell.xib */; };
 		C5ACFCD52AD59F2200EA92F6 /* list_warnings_tunnel@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5ACFCD42AD59F2200EA92F6 /* list_warnings_tunnel@3x.png */; };
 		C5ACFCD72AD59F6E00EA92F6 /* list_warnings_tunnel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5ACFCD62AD59F6E00EA92F6 /* list_warnings_tunnel@2x.png */; };
 		C5AF90792A25E8A100989A86 /* OAKeyboardHintBar.m in Sources */ = {isa = PBXBuildFile; fileRef = C5AF90782A25E8A100989A86 /* OAKeyboardHintBar.m */; };
@@ -5082,6 +5084,8 @@
 		C588D1EE298D1ECE001FEDBD /* OASearchHistoryTableGroup.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OASearchHistoryTableGroup.m; sourceTree = "<group>"; };
 		C588D1F02992A447001FEDBD /* ic_custom_history_disabled_48@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_history_disabled_48@2x.png"; path = "Resources/Icons/ic_custom_history_disabled_48@2x.png"; sourceTree = "<group>"; };
 		C588D1F12992A447001FEDBD /* ic_custom_history_disabled_48@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_history_disabled_48@3x.png"; path = "Resources/Icons/ic_custom_history_disabled_48@3x.png"; sourceTree = "<group>"; };
+		C589BC9E2C610560002769F6 /* OATwoIconsButtonTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OATwoIconsButtonTableViewCell.swift; sourceTree = "<group>"; };
+		C589BCA02C6105F7002769F6 /* OATwoIconsButtonTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OATwoIconsButtonTableViewCell.xib; sourceTree = "<group>"; };
 		C5ACFCD42AD59F2200EA92F6 /* list_warnings_tunnel@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "list_warnings_tunnel@3x.png"; path = "Resources/Icons/list_warnings_tunnel@3x.png"; sourceTree = "<group>"; };
 		C5ACFCD62AD59F6E00EA92F6 /* list_warnings_tunnel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "list_warnings_tunnel@2x.png"; path = "Resources/Icons/list_warnings_tunnel@2x.png"; sourceTree = "<group>"; };
 		C5AF90772A25E8A100989A86 /* OAKeyboardHintBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAKeyboardHintBar.h; sourceTree = "<group>"; };
@@ -11832,6 +11836,7 @@
 				46E9AD9F28DC9F8300CC55F9 /* OAButtonTableViewCell.h */,
 				46E9ADA028DC9FD000CC55F9 /* OAButtonTableViewCell.m */,
 				32DE2BE32B6D13730025F2B9 /* OATwoButtonsTableViewCell.swift */,
+				C589BC9E2C610560002769F6 /* OATwoIconsButtonTableViewCell.swift */,
 				4663AB3D2951C92C00D9781E /* OAInputTableViewCell.h */,
 				4663AB3E2951C94700D9781E /* OAInputTableViewCell.m */,
 				465D7E1E295493DF0099B206 /* OATextMultilineTableViewCell.h */,
@@ -11958,6 +11963,7 @@
 				46E9AD9828DC8E8C00CC55F9 /* OAValueTableViewCell.xib */,
 				46E9AD9D28DC9EDF00CC55F9 /* OAButtonTableViewCell.xib */,
 				3241BC852B611D0500101894 /* OATwoButtonsTableViewCell.xib */,
+				C589BCA02C6105F7002769F6 /* OATwoIconsButtonTableViewCell.xib */,
 				4663AB3F2951C95A00D9781E /* OAInputTableViewCell.xib */,
 				465D7E20295494000099B206 /* OATextMultilineTableViewCell.xib */,
 				467DFD7C297EFDBB008A9830 /* OACardTableViewCell.xib */,
@@ -15611,6 +15617,7 @@
 				841AD02E1F54048B00E3191E /* ic_prev@3x.png in Resources */,
 				DA1340C6243DC5A70039D214 /* map_action_sail_boat_dark@3x.png in Resources */,
 				DA2EC62B29FBBE0200ECEB37 /* ic_action_intermediate@3x.png in Resources */,
+				C589BCA12C6105F7002769F6 /* OATwoIconsButtonTableViewCell.xib in Resources */,
 				844D203C1E364F7600AC5626 /* icudt52l.dat in Resources */,
 				840C9FB81CF353C800F2F991 /* ic_coordinates_location@3x.png in Resources */,
 				DAF345A922F4482C009E2EB6 /* ic_custom_arrow_forward@2x.png in Resources */,
@@ -16808,6 +16815,7 @@
 				DA5A84A926C563A900F274C7 /* OAAddTrackFolderViewController.m in Sources */,
 				DA5A846426C563A900F274C7 /* OATerrainMapLayer.mm in Sources */,
 				DA5A830D26C563A800F274C7 /* OATargetInfoCollapsableViewCell.m in Sources */,
+				C589BC9F2C610560002769F6 /* OATwoIconsButtonTableViewCell.swift in Sources */,
 				32E6C7C82AB9BE1A00821F1E /* TravelSearchHelper.swift in Sources */,
 				DA5A840E26C563A800F274C7 /* OAGpxWptEditingHandler.mm in Sources */,
 				DA5A84A126C563A900F274C7 /* OAApplyGpxApproximationCommand.mm in Sources */,

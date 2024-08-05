@@ -8,6 +8,8 @@
 
 #import "OASlider.h"
 
+static const NSInteger kDayFiveMinutesMarksCount = 289;
+
 @interface OASegmentedSlider : OASlider
 
 @property (nonatomic) NSInteger selectedMark;

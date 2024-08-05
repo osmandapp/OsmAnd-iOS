@@ -32,7 +32,7 @@
 
 static int kDefaultZoom = 10;
 
-static int kForecastStepsPerHour = 6; // 10 minutes step
+static int kForecastStepsPerHour = 12; // 5 minutes step
 static NSInteger kForecastMaxStepsCount = FORECAST_ANIMATION_DURATION_HOURS * kForecastStepsPerHour;
 
 static NSTimeInterval kAnimationStartDelaySec = 0.1;
@@ -130,7 +130,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
 
     self.dateCollectionView.foldersDelegate = _datesHandler;
     
-    self.timeSliderView.stepsAmountWithoutDrawMark = 145.0;
+    self.timeSliderView.stepsAmountWithoutDrawMark = kDayFiveMinutesMarksCount;
     [self.timeSliderView clearTouchEventsUpInsideUpOutside];
     [self.timeSliderView setUsingExtraThumbInset:YES];
     
@@ -336,7 +336,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
         [timeValues addObject:nextHourDate];
     }
     
-    NSInteger minuteSteps = 5;
+    NSInteger minuteSteps = 11;
     NSMutableArray<NSDate *> *timeValuesTotal = [NSMutableArray array];
     
     for (NSInteger index = 0; index <= timeValues.count - 1; index++)
@@ -347,17 +347,17 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
         {
             for (NSInteger min = 1; min <= minuteSteps; min++)
             {
-                NSDate *next10MinDate = [calendar dateByAddingUnit:NSCalendarUnitMinute
-                                                             value:min * 10
+                NSDate *next5MinDate = [calendar dateByAddingUnit:NSCalendarUnitMinute
+                                                             value:min * 5
                                                             toDate:data
                                                            options:0];
                 
-                [timeValuesTotal addObject:next10MinDate];
+                [timeValuesTotal addObject:next5MinDate];
             }
         }
         
     }
-    // [21:00:00, 21:10:00...21:50:00, 22:00:00, 22:10:00...21:00:00]
+    // [21:00:00, 21:05:00, 21:10:00 ... 21:55:00, 22:00:00]
     _timeValues = timeValuesTotal;
 }
 

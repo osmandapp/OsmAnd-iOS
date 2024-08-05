@@ -3501,3 +3501,6 @@
 "pressure_layer" = "Capa de presión atmosférica";
 "wind_layer" = "Capa de vientos";
 "cloud_layer" = "Capa de nubes";
+"route_your_destination_is_on_left" = "Tu destino está a la izquierda";
+"route_your_destination_is_on_right" = "Tu destino está a la derecha";
+"route_your_destination_is_on_ahead" = "Tu destino está enfrente";

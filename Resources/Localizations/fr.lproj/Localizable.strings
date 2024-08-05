@@ -1734,7 +1734,7 @@
 "route_between_points" = "Itinéraire entre points";
 "save_as_new_track" = "Enregistrer comme nouvelle trace";
 "quick_action_showhide_mapillary_title" = "Afficher/masquer Mapillary";
-"arrived_at_destination" = "Vousêtes arrivé.";
+"arrived_at_destination" = "Vous êtes arrivé.";
 "add_to_a_track" = "Ajouterà une trace";
 "public_transport_menu" = "Transport";
 "shared_string_add_profile" = "Ajouter un profil";
@@ -3500,3 +3500,6 @@
 "key_event_category_map_interactions" = "Interactions avec la carte";
 "quick_action_verb_start_stop" = "Démarrer / Arrêter";
 "voices" = "Guidage vocal";
+"route_your_destination_is_on_left" = "Votre destination se situe à gauche";
+"route_your_destination_is_on_right" = "Votre destination se situe à droite";
+"route_your_destination_is_on_ahead" = "Votre destination se situe tout droit";

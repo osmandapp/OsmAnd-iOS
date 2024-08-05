@@ -53,7 +53,7 @@
 "add_as_first_destination_point" = "Jako prěni mjezycil postajić";
 "first_intermediate_dest_description" = "Adds the first stop on the route";
 "add_as_last_destination_point" = "Jako posledni mjezycil postajić";
-"last_intermediate_dest_description" = "Adds the last stop along the route";
+"last_intermediate_dest_description" = "Mjezystop přidać";
 "show_poi_over_map" = "Pokazaj runinu z dypkami";
 "shared_string_search" = "Pytać";
 "search_radius" = "Search radius";
@@ -253,7 +253,7 @@
 "shared_string_select_on_map" = "Na karće wubrać";
 "selected_roads" = "Selected roads";
 "shared_string_my_location" = "Moje stejišćo";
-"route_descr_select_destination" = "Cil wubrać";
+"route_descr_select_destination" = "Cil postajić";
 "swap_points" = "Swap start and destination";
 "route_to" = "do:";
 "route_via" = "přez:";
@@ -265,7 +265,7 @@
 "empty_route_calculated" = "Wobličena čara je prózdna";
 "destination_point" = "Cil %@";
 "intermediate_point" = "Mjezycil %@";
-"arrived_at_intermediate_point" = "Mjezycil docpěty";
+"arrived_at_intermediate_point" = "Sy mjezycil docpěł/a";
 "starting_point_too_far" = "Wuchadźišćo je předaloko preč wot najblišeho puća.";
 "ending_point_too_far" = "Cil je předaloko preč wot najblišeho puća.";
 "intermediate_point_too_far" = "Mjezycil %@ je předaloko preč wot najblišeho puća.";
@@ -602,7 +602,7 @@
 "res_cancel_inst_q" = "You're going to cancel %@ installation.";
 "res_uninst_managed_q" = "You're going to uninstall %@. You can reinstall it later from catalog.";
 "res_uninst_unmanaged_q" = "You're going to delete %@. It's not from catalog, so please be sure you have a backup if needed.";
-"shared_string_details" = "Detaile";
+"shared_string_details" = "Podrobnosće";
 "shared_string_type" = "Družina";
 "res_unknown" = "Unknown";
 "shared_string_size" = "Size";
@@ -751,7 +751,7 @@
 "quick_action_replace_destination" = "Cil zarunać";
 "add_destination" = "Add destination";
 "route_add_start_point" = "Add starting point";
-"add_intermediate" = "Add intermediate point";
+"add_intermediate" = "Mjezycil přidać";
 "add_home" = "Doma dodać";
 "add_work" = "Dźěło dodać";
 "favorite_home_category" = "Doma";
@@ -959,7 +959,7 @@
 "srtm_plugin_name" = "Wysokostne linije";
 "product_desc_srtm" = "Display of contour lines";
 "srtm_plugin_description" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
-"wikivoyage_travel_guide" = "Travel Guides";
+"wikivoyage_travel_guide" = "Pućowanske přewodniki";
 "start_editing_card_image_text" = "Swobodny pućowanski přewodnik, kotryž móže kóždy wobdźěłać.";
 "wikivoyage_travel_guide_descr" = "Guides to the most interesting places on the planet, inside OsmAnd, without a connection to the Internet.";
 "product_desc_sea_depth_contours" = "Sea depth contour lines and seamarks";
@@ -1066,7 +1066,7 @@
 "hist_remove_q" = "Do you want to remove history items?";
 "gpx_edit_mode" = "Edit mode";
 "go_to_map" = "Kartu pokazać";
-"device_memory" = "Skład nastroje";
+"device_memory" = "Skład nastroja";
 "free" = "Swobodne %@";
 "first_usage_greeting" = "Get directions and discover new places without Internet connection";
 "get_started" = "Get started";
@@ -1315,7 +1315,7 @@
 "osmand_parking_warning" = "Warnowanje";
 "srtm_color_scheme" = "Barbnyšema";
 "base_profile_descr_pedestrian" = "Běžeć, pućować, běhać";
-"arrived_at_destination" = "Cil docpěty";
+"arrived_at_destination" = "Sy dojěł/a.";
 "shared_string_copy" = "Kopěrować";
 "search_activity" = "Pytanje";
 "base_profile_descr_car" = "Awto, nakładne, motorske";
@@ -1439,7 +1439,7 @@
 "lang_ar" = "arabšćina";
 "lang_lb" = "luxemburgšćina";
 "lang_sl" = "słowjenšćina";
-"regions" = "Regiony";
+"regions" = "Kónčiny";
 "lang_ja" = "japanšćina";
 "lang_als" = "albansce (toskisce)";
 "lang_sc" = "sardinšćina";
@@ -1618,7 +1618,7 @@
 "rendering_attr_surface_metal_name" = "metal";
 "app_mode_skiing" = "Sněhakowanje";
 "app_mode_helicopter" = "Helikopter";
-"purchases_feature_desc_unlimited_map_download" = "Dóstanješ njewobmjezowane sćehnjenja kartow za wšě kontinenty a regiony.";
+"purchases_feature_desc_unlimited_map_download" = "Dóstanješ njewobmjezowane sćehnjenja kartow za wšě kontinenty a kónčiny.";
 "purchases_feature_desc_combined_wiki" = "Móžeš sej po puću zapiski z Wikipedije přečitać, bjez internetoweho zwiska. Daty su rozdźělene po krajach a přistupne we wjele rěčach.";
 "no_purchases" = "Nimaš žane nakupy";
 "checking_progress" = "Pruwuju…";
@@ -1712,3 +1712,21 @@
 "weather_online_cache" = "Mjezyskład online";
 "select_another_track" = "Wubjer hinašu čaru";
 "cache_size" = "Wulkosć mjezyskłada";
+"rearrange_categories" = "Kategorije zrjadować";
+"weather_offline_forecast" = "Připowědź offline";
+"routeInfo_steepness_name" = "Nahłosć";
+"weather_forecast_is_outdated" = "Připowědź je zestarjena.";
+"weather_source_ecmwf_title" = "ECMWF";
+"shared_string_travel_guides" = "Pućowanske přewodniki";
+"weather_precip_milimeters" = "milimetrach";
+"announcement_time_arrive" = "Přichad na cilu";
+"weather_forecast" = "Připowědź wjedra";
+"weather_source_GFS_title" = "GFS";
+"map_settings_weather_wind_animation" = "Animacija wětřika";
+"weather_precip_inches" = "inch";
+"routeInfo_roadClass_name" = "Typ dróhi";
+"help_article_navigation_setup_route_details_name" = "Podrobnosće čary";
+"step_by_step" = "Přikazy";
+"weather_data_sources_prompt" = "OsmAnd poskići wjedrowe daty z dweju žórłow:";
+"external_device_details_battery" = "Baterija";
+"shared_string_colors" = "Barby";

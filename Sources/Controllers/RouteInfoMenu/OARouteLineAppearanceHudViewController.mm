@@ -24,13 +24,13 @@
 #import "OADividerCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAColorsTableViewCell.h"
-#import "OAImageTextViewCell.h"
 #import "OAFoldersCell.h"
 #import "OASegmentedControlCell.h"
 #import "OASegmentSliderTableViewCell.h"
 #import "OATextLineViewCell.h"
 #import "OARightIconTableViewCell.h"
 #import "OACollectionSingleLineTableViewCell.h"
+#import "OALineChartCell.h"
 #import "OAAutoObserverProxy.h"
 #import "OAColors.h"
 #import "Localization.h"
@@ -47,6 +47,7 @@
 #import "OAApplicationMode.h"
 #import "GeneratedAssetSymbols.h"
 #import "OsmAnd_Maps-Swift.h"
+#import <Charts/Charts-Swift.h>
 
 #define kColorDayMode OALocalizedString(@"day")
 #define kColorNightMode OALocalizedString(@"daynight_mode_night")
@@ -246,8 +247,9 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     NSInteger _oldDayNightMode;
 
     NSInteger _sectionColors;
-    NSInteger _cellColorGrid;
-    NSInteger _cellPaletteName;
+    NSInteger _cellPaletteLegendIndex;
+    NSInteger _cellPaletteNameIndex;
+    NSInteger _cellColorGridIndex;
 
     OAAutoObserverProxy *_mapSourceUpdatedObserver;
     EOARouteLineAppearancePrevScreen _prevScreen;
@@ -311,12 +313,12 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     BOOL deleted = NO;
     for (NSString *colorPaletteFile in colorPaletteFiles.allKeys)
     {
-        if ([_gradientColorsCollection hasRouteGradientPaletteBy:colorPaletteFile]
+        if ([currentPaletteFile isEqualToString:colorPaletteFile]
+            || [_gradientColorsCollection hasRouteGradientPaletteBy:colorPaletteFile]
             || [colorPaletteFiles[colorPaletteFile] isEqualToString:ColorPaletteHelper.createdFileKey])
         {
             reloadData = YES;
-            if ([currentPaletteFile isEqualToString:colorPaletteFile]
-                && [colorPaletteFiles[colorPaletteFile] isEqualToString:ColorPaletteHelper.deletedFileKey])
+            if ([colorPaletteFiles[colorPaletteFile] isEqualToString:ColorPaletteHelper.deletedFileKey])
             {
                 deleted = YES;
                 break;
@@ -462,6 +464,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     self.tableView.dataSource = self;
     [self.tableView registerClass:OATableViewCustomFooterView.class
         forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:OALineChartCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:OALineChartCell.reuseIdentifier];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -920,6 +923,14 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     }];
 }
 
+- (OAGPXTableCellData *)generatePaletteLegendCellData
+{
+    return [OAGPXTableCellData withData:@{
+        kTableKey: @"gradientLegend",
+        kCellType: [OALineChartCell getCellIdentifier]
+    }];
+}
+
 - (OAGPXTableCellData *)generatePaletteNameCellData
 {
     return [OAGPXTableCellData withData:@{
@@ -968,8 +979,8 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         [self removeCellFromSection:sectionData cellKey:@"color_day_night_value"];
         [self removeCellFromSection:sectionData cellKey:@"color_grid"];
         [self removeCellFromSection:sectionData cellKey:@"top_description"];
-        [self removeCellFromSection:sectionData cellKey:@"color_elevation_gradient"];
         [self removeCellFromSection:sectionData cellKey:@"bottom_description"];
+        [self removeCellFromSection:sectionData cellKey:@"gradientLegend"];
         [self removeCellFromSection:sectionData cellKey:@"paletteName"];
     }
 }
@@ -992,8 +1003,9 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
 - (void)setColorCells
 {
-    _cellColorGrid = -1;
-    _cellPaletteName = -1;
+    _cellPaletteLegendIndex = -1;
+    _cellPaletteNameIndex = -1;
+    _cellColorGridIndex = -1;
     OAGPXTableSectionData *sectionData = [_tableData getSubject:@"section_color"];
     if (sectionData)
     {
@@ -1051,20 +1063,12 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             }
             else if ([_selectedType.coloringType isGradient])
             {
-                [sectionData.subjects addObject:[OAGPXTableCellData withData:@{
-                        kTableKey: @"color_elevation_gradient",
-                        kCellType: [OAImageTextViewCell getCellIdentifier],
-                        kCellDesc: OALocalizedString([self isSelectedTypeAltitude] ? @"shared_string_min_height" : @""),
-                        kCellRightIconName: [self isSelectedTypeSlope] ? @"img_track_gradient_slope" : @"img_track_gradient_speed",
-                        kTableValues: @{
-                                @"extra_desc": OALocalizedString([self isSelectedTypeAltitude] ? @"shared_string_max_height" : @""),
-                                @"desc_font_size": @([self isSelectedTypeSlope] ? 15 : 17)
-                        }
-                }]];
+                [sectionData.subjects addObject:[self generatePaletteLegendCellData]];
+                _cellPaletteLegendIndex = sectionData.subjects.count - 1;
                 [sectionData.subjects addObject:[self generatePaletteNameCellData]];
-                _cellPaletteName = sectionData.subjects.count - 1;
+                _cellPaletteNameIndex = sectionData.subjects.count - 1;
                 [sectionData.subjects addObject:[self generateGridCellData]];
-                _cellColorGrid = sectionData.subjects.count - 1;
+                _cellColorGridIndex = sectionData.subjects.count - 1;
             }
             else if ([_selectedType.coloringType isRouteInfoAttribute])
             {
@@ -1078,7 +1082,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         }
         OAGPXTableCellData *colorGridCellData = [sectionData getSubject:@"color_grid"];
         if (colorGridCellData)
-            _cellColorGrid = [sectionData.subjects indexOfObject:colorGridCellData];
+            _cellColorGridIndex = [sectionData.subjects indexOfObject:colorGridCellData];
     }
 }
 
@@ -1235,15 +1239,6 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     else if ([tableData.key isEqualToString:@"bottom_description"])
     {
         [tableData setData:@{ kCellTitle: _selectedType.bottomDescription }];
-    }
-    else if ([tableData.key isEqualToString:@"color_elevation_gradient"])
-    {
-        tableData.values[@"extra_desc"] = OALocalizedString([self isSelectedTypeAltitude] ? @"shared_string_max_height" : @"");
-        tableData.values[@"desc_font_size"] = @([self isSelectedTypeSlope] ? 15 : 17);
-        [tableData setData:@{
-                kCellDesc: OALocalizedString([self isSelectedTypeAltitude] ? @"shared_string_min_height" : @""),
-                kCellRightIconName: [self isSelectedTypeSlope] ? @"img_track_gradient_slope" : @"img_track_gradient_speed"
-        }];
     }
     else if ([tableData.key isEqualToString:@"width_slider_empty_space"])
     {
@@ -1508,40 +1503,6 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         }
         outCell = _colorValuesCell;
     }
-    else if ([cellData.type isEqualToString:[OAImageTextViewCell getCellIdentifier]])
-    {
-        OAImageTextViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAImageTextViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAImageTextViewCell getCellIdentifier]
-                                                         owner:self options:nil];
-            cell = (OAImageTextViewCell *) nib[0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.separatorInset = UIEdgeInsetsMake(0., DeviceScreenWidth, 0., 0.);
-            cell.descView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
-            cell.extraDescView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
-        }
-        if (cell)
-        {
-            UIImage *image = [UIImage imageNamed:cellData.rightIconName];
-            cell.iconView.image = [cell isDirectionRTL] ? image.imageFlippedForRightToLeftLayoutDirection : image;
-
-            NSString *desc = cellData.desc;
-            [cell showDesc:desc && desc.length > 0];
-            cell.descView.text = desc;
-            cell.descView.font = [UIFont scaledSystemFontOfSize:[cellData.values[@"desc_font_size"] intValue]];
-
-            NSString *extraDesc = cellData.values[@"extra_desc"];
-            [cell showExtraDesc:extraDesc && extraDesc.length > 0];
-            cell.extraDescView.text = extraDesc;
-            cell.extraDescView.font = [UIFont scaledSystemFontOfSize:[cellData.values[@"desc_font_size"] intValue]];
-        }
-
-        if ([cell needsUpdateConstraints])
-            [cell setNeedsUpdateConstraints];
-
-        return cell;
-    }
     else if ([cellData.type isEqualToString:[OATextLineViewCell getCellIdentifier]])
     {
         OATextLineViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextLineViewCell getCellIdentifier]];
@@ -1729,6 +1690,35 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         }
         return cell;
     }
+    else if ([cellData.type isEqualToString:OALineChartCell.reuseIdentifier])
+    {
+        OALineChartCell *cell = (OALineChartCell *) [tableView dequeueReusableCellWithIdentifier:OALineChartCell.reuseIdentifier
+                                                                                         forIndexPath:indexPath];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.separatorInset = UIEdgeInsetsMake(0, CGFLOAT_MAX, 0, 0);
+
+        [GpxUIHelper setupGradientChartWithChart:cell.lineChartView
+                             useGesturesAndScale:NO
+                                  xAxisGridColor:[UIColor colorNamed:ACColorNameChartAxisGridLine]
+                                     labelsColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
+
+        ColorPalette *colorPalette;
+        if ([_selectedPaletteColorItem isKindOfClass:PaletteGradientColor.class])
+        {
+            PaletteGradientColor *paletteColor = (PaletteGradientColor *) _selectedPaletteColorItem;
+            colorPalette = paletteColor.colorPalette;
+        }
+        if (!colorPalette)
+            return cell;
+
+        cell.lineChartView.data =
+            [GpxUIHelper buildGradientChartWithChart:cell.lineChartView
+                                        colorPalette:colorPalette
+                                      valueFormatter:[GradientUiHelper getGradientTypeFormatter:_gradientColorsCollection.gradientType
+                                                                                       analysis:nil]];
+        [cell.lineChartView notifyDataSetChanged];
+        return cell;
+    }
 
     if ([outCell needsUpdateConstraints])
         [outCell updateConstraints];
@@ -1911,16 +1901,16 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     [_previewRouteLineInfo setCustomColor:_availableColors[tag].intValue nightMode:_nightMode];
     [self updateRouteLayer:_previewRouteLineInfo];
 
-    if (_cellColorGrid > -1 && _tableData.subjects.count >= 1)
+    if (_cellColorGridIndex > -1 && _tableData.subjects.count >= 1)
     {
         OAGPXTableSectionData *sectionData = _tableData.subjects[_sectionColors];
-        if (sectionData.subjects.count - 1 >= _cellColorGrid)
+        if (sectionData.subjects.count - 1 >= _cellColorGridIndex)
         {
-            OAGPXTableCellData *cellData = sectionData.subjects[_cellColorGrid];
+            OAGPXTableCellData *cellData = sectionData.subjects[_cellColorGridIndex];
             [self updateData:cellData];
 
             [UIView setAnimationsEnabled:NO];
-            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_cellColorGrid
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_cellColorGridIndex
                                                                         inSection:_sectionColors]]
                                   withRowAnimation:UITableViewRowAnimationNone];
             [UIView setAnimationsEnabled:YES];
@@ -1946,18 +1936,27 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         _previewRouteLineInfo.gradientPalette = paletteColor.paletteName;
         [self updateRouteLayer:_previewRouteLineInfo];
 
-        if (_cellPaletteName > -1 && _tableData.subjects.count >= 1)
+        if (_cellPaletteNameIndex > -1 && _tableData.subjects.count >= 1)
         {
             OAGPXTableSectionData *sectionData = _tableData.subjects[_sectionColors];
-            if (sectionData.subjects.count - 1 >= _cellPaletteName)
+            if (sectionData.subjects.count - 1 >= _cellPaletteNameIndex)
             {
-                [self updateData:sectionData.subjects[_cellPaletteName]];
-                
-                [UIView setAnimationsEnabled:NO];
-                [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_cellPaletteName
-                                                                            inSection:_sectionColors]]
-                                      withRowAnimation:UITableViewRowAnimationNone];
-                [UIView setAnimationsEnabled:YES];
+                NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray array];
+                if (_cellPaletteNameIndex > -1)
+                {
+                    [self updateData:sectionData.subjects[_cellPaletteNameIndex]];
+                    [indexPaths addObject:[NSIndexPath indexPathForRow:_cellPaletteNameIndex inSection:_sectionColors]];
+                }
+                if (_cellPaletteLegendIndex > -1)
+                    [indexPaths addObject:[NSIndexPath indexPathForRow:_cellPaletteLegendIndex inSection:_sectionColors]];
+
+                if (indexPaths.count > 0)
+                {
+                    [UIView setAnimationsEnabled:NO];
+                    [self.tableView reloadRowsAtIndexPaths:indexPaths
+                                          withRowAnimation:UITableViewRowAnimationNone];
+                    [UIView setAnimationsEnabled:YES];
+                }
             }
         }
     }

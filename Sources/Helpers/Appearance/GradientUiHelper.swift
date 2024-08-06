@@ -38,6 +38,10 @@ final class GradientUiHelper: NSObject {
         return formattedValue
     }
 
+    static func getGradientTypeFormatterFor(terrainType: TerrainType, analysis: OAGPXTrackAnalysis?) -> IAxisValueFormatter {
+        Self.getGradientTypeFormatter(terrainType, analysis: analysis)
+    }
+
     static func getGradientTypeFormatter(_ gradientType: Any, analysis: OAGPXTrackAnalysis?) -> IAxisValueFormatter {
         if let terrainType = gradientType as? TerrainType {
             return getTerrainTypeFormatter(terrainType)

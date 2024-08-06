@@ -23,10 +23,8 @@
 #import "OASegmentSliderTableViewCell.h"
 #import "OASegmentedControlCell.h"
 #import "OADividerCell.h"
-#import "OAImageTextViewCell.h"
 #import "OALineChartCell.h"
 #import "Localization.h"
-#import "OALineChartCell.h"
 #import "OAColors.h"
 #import "OAOsmAndFormatter.h"
 #import "OAGPXDatabase.h"
@@ -129,9 +127,8 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
 
     NSMutableArray<PaletteColor *> *_sortedPaletteColorItems;
     PaletteColor *_selectedPaletteColorItem;
+    NSIndexPath *_paletteLegendIndexPath;
     NSIndexPath *_paletteNameIndexPath;
-    NSIndexPath *_paletteGradientIndexPath;
-    OALineChartCell *_gradientLegendCell;
 
     OAGPXTrackWidth *_selectedWidth;
     NSArray<NSString *> *_customWidthValues;
@@ -215,12 +212,12 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
     BOOL deleted = NO;
     for (NSString *colorPaletteFile in colorPaletteFiles.allKeys)
     {
-        if ([_gradientColorsCollection hasRouteGradientPaletteBy:colorPaletteFile]
+        if ([currentPaletteFile isEqualToString:colorPaletteFile]
+            || [_gradientColorsCollection hasRouteGradientPaletteBy:colorPaletteFile]
             || [colorPaletteFiles[colorPaletteFile] isEqualToString:ColorPaletteHelper.createdFileKey])
         {
             reloadData = YES;
-            if ([currentPaletteFile isEqualToString:colorPaletteFile]
-                && [colorPaletteFiles[colorPaletteFile] isEqualToString:ColorPaletteHelper.deletedFileKey])
+            if ([colorPaletteFiles[colorPaletteFile] isEqualToString:ColorPaletteHelper.deletedFileKey])
             {
                 deleted = YES;
                 break;
@@ -452,6 +449,7 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
     [self.tableView registerClass:OATableViewCustomFooterView.class
         forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[OAButtonTableViewCell getCellIdentifier] bundle:nil] forCellReuseIdentifier:[OAButtonTableViewCell getCellIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:OALineChartCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:OALineChartCell.reuseIdentifier];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:[UITableViewCell getCellIdentifier]];
 }
 
@@ -905,7 +903,8 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
 
 - (void)generateColorsSection:(OAGPXTableSectionData *)section
 {
-    _gradientLegendCell = nil;
+    _paletteLegendIndexPath = nil;
+    _paletteNameIndexPath = nil;
     NSMutableArray<OAGPXTableCellData *> *colorsCells = section.subjects;
 
     if (colorsCells.count == 0 || ![colorsCells.firstObject.key isEqualToString:@"color_title"])
@@ -930,9 +929,8 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
     {
         if ([self isSelectedTypeGradient])
         {
-            _gradientLegendCell = [self generateLegendCell];
             [colorsCells addObject:[self generateGradientLegendCellData]];
-            _paletteGradientIndexPath = [NSIndexPath indexPathForRow:colorsCells.count - 1 inSection:kColorsSection];
+            _paletteLegendIndexPath = [NSIndexPath indexPathForRow:colorsCells.count - 1 inSection:kColorsSection];
             [colorsCells addObject:[self generatePaletteNameCellData]];
             _paletteNameIndexPath = [NSIndexPath indexPathForRow:colorsCells.count - 1 inSection:kColorsSection];
         }
@@ -1166,37 +1164,6 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
         kTableKey: @"gradientLegend",
         kCellType: [OALineChartCell getCellIdentifier],
     }];
-}
-
-- (OALineChartCell *)generateLegendCell
-{
-    ColorPalette *colorPalette;
-    if ([_selectedPaletteColorItem isKindOfClass:PaletteGradientColor.class])
-    {
-        PaletteGradientColor *paletteColor = (PaletteGradientColor *) _selectedPaletteColorItem;
-        colorPalette = paletteColor.colorPalette;
-    }
-    if (!colorPalette)
-        return nil;
-
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OALineChartCell getCellIdentifier] owner:self options:nil];
-    OALineChartCell *cell = (OALineChartCell *) nib[0];
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.separatorInset = UIEdgeInsetsMake(0, CGFLOAT_MAX, 0, 0);
-
-    [GpxUIHelper setupGradientChartWithChart:cell.lineChartView
-                                   topOffset:9
-                                bottomOffset:24
-                         useGesturesAndScale:NO
-                              xAxisGridColor:[UIColor colorNamed:ACColorNameTextColorSecondary]
-                                 labelsColor:[UIColor colorNamed:ACColorNameChartAxisGridLine]];
-
-    [cell.lineChartView setData:[GpxUIHelper buildGradientChartWithChart:cell.lineChartView
-                                                            colorPalette:colorPalette
-                                                          valueFormatter:[GradientUiHelper getGradientTypeFormatter:_gradientColorsCollection.gradientType
-                                                                                                           analysis:self.analysis]]];
-    [cell.lineChartView notifyDataSetChanged];
-    return cell;
 }
 
 - (NSString *) generateDescription
@@ -1515,42 +1482,6 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(onSwitchPressed:) forControlEvents:UIControlEventValueChanged];
         }
-        outCell = cell;
-    }
-    else if ([cellData.type isEqualToString:[OAImageTextViewCell getCellIdentifier]])
-    {
-        OAImageTextViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAImageTextViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAImageTextViewCell getCellIdentifier]
-                                                         owner:self options:nil];
-            cell = (OAImageTextViewCell *) nib[0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.separatorInset = UIEdgeInsetsMake(0., DeviceScreenWidth, 0., 0.);
-        }
-        if (cell)
-        {
-            NSString *desc = cellData.desc;
-            [cell showDesc:desc && desc.length > 0];
-
-            NSString *extraDesc = cellData.values[@"extra_desc"];
-            [cell showExtraDesc:extraDesc && extraDesc.length > 0];
-
-            UIImage *image = [UIImage imageNamed:cellData.rightIconName];
-            cell.iconView.image = [cell isDirectionRTL] ? image.imageFlippedForRightToLeftLayoutDirection : image;
-
-            cell.descView.text = desc;
-            cell.descView.font = [UIFont scaledSystemFontOfSize:[cellData.values[@"desc_font_size"] intValue]];
-            cell.descView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
-
-            cell.extraDescView.text = extraDesc;
-            cell.extraDescView.font = [UIFont scaledSystemFontOfSize:[cellData.values[@"desc_font_size"] intValue]];
-            cell.extraDescView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
-        }
-
-        if ([cell needsUpdateConstraints])
-            [cell setNeedsUpdateConstraints];
-
         return cell;
     }
     else if ([cellData.type isEqualToString:[OACollectionSingleLineTableViewCell getCellIdentifier]])
@@ -1809,9 +1740,34 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
         }
         return [UITableViewCell new];
     }
-    else if ([cellData.type isEqualToString:[OALineChartCell getCellIdentifier]])
+    else if ([cellData.type isEqualToString:OALineChartCell.reuseIdentifier])
     {
-        return _gradientLegendCell;
+        OALineChartCell *cell = (OALineChartCell *) [tableView dequeueReusableCellWithIdentifier:OALineChartCell.reuseIdentifier
+                                                                                         forIndexPath:indexPath];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.separatorInset = UIEdgeInsetsMake(0, CGFLOAT_MAX, 0, 0);
+
+        [GpxUIHelper setupGradientChartWithChart:cell.lineChartView
+                             useGesturesAndScale:NO
+                                  xAxisGridColor:[UIColor colorNamed:ACColorNameChartAxisGridLine]
+                                     labelsColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
+
+        ColorPalette *colorPalette;
+        if ([_selectedPaletteColorItem isKindOfClass:PaletteGradientColor.class])
+        {
+            PaletteGradientColor *paletteColor = (PaletteGradientColor *) _selectedPaletteColorItem;
+            colorPalette = paletteColor.colorPalette;
+        }
+        if (!colorPalette)
+            return cell;
+
+        cell.lineChartView.data =
+            [GpxUIHelper buildGradientChartWithChart:cell.lineChartView
+                                        colorPalette:colorPalette
+                                      valueFormatter:[GradientUiHelper getGradientTypeFormatter:_gradientColorsCollection.gradientType
+                                                                                       analysis:self.analysis]];
+        [cell.lineChartView notifyDataSetChanged];
+        return cell;
     }
 
     if ([outCell needsUpdateConstraints])
@@ -2112,10 +2068,6 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
         [tableData setData:@{
             kCellTitle: [_selectedPaletteColorItem toHumanString]
         }];
-    }
-    else if ([tableData.key isEqualToString:@"gradientLegend"])
-    {
-        _gradientLegendCell = [self generateLegendCell];
     }
 }
 
@@ -2556,11 +2508,8 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
                 [self updateData:_tableData[_paletteNameIndexPath.section].subjects[_paletteNameIndexPath.row]];
                 [indexPaths addObject:_paletteNameIndexPath];
             }
-            if (_paletteGradientIndexPath)
-            {
-                [self updateData:_tableData[_paletteGradientIndexPath.section].subjects[_paletteGradientIndexPath.row]];
-                [indexPaths addObject:_paletteGradientIndexPath];
-            }
+            if (_paletteLegendIndexPath)
+                [indexPaths addObject:_paletteLegendIndexPath];
             if (indexPaths.count > 0)
                 [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
         }

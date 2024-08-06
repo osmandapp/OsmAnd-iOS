@@ -19,7 +19,8 @@
 #import "OAValueTableViewCell.h"
 #import "OATextLineViewCell.h"
 #import "OAButtonTableViewCell.h"
-#import "OAImageTextViewCell.h"
+#import "OAImageDescTableViewCell.h"
+#import "OALineChartCell.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
@@ -38,6 +39,7 @@
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
 #import "OsmAnd_Maps-Swift.h"
+#import <Charts/Charts-Swift.h>
 
 static NSString *kCellTypeMap = @"MapCell";
 static NSString *kCellItemKey = @"kCellItemKey";
@@ -46,7 +48,7 @@ static const CGFloat kRelief3DCellRowHeight = 48.3;
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
-@interface OAMapSettingsTerrainScreen() <SFSafariViewControllerDelegate, UITextViewDelegate, OATerrainParametersDelegate, DownloadingCellResourceHelperDelegate>
+@interface OAMapSettingsTerrainScreen() <SFSafariViewControllerDelegate, OATerrainParametersDelegate, DownloadingCellResourceHelperDelegate>
 
 @property (nonatomic) OASRTMPlugin *plugin;
 
@@ -58,9 +60,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     DownloadingCellResourceHelper *_downloadingCellResourceHelper;
     OAIAPHelper *_iapHelper;
     OATableDataModel *_data;
-    NSInteger _availableMapsSection;
+
+    TerrainMode *_terrainMode;
     NSInteger _minZoom;
     NSInteger _maxZoom;
+
+    NSInteger _availableMapsSection;
+    NSIndexPath *_paletteLegendIndexPath;
 
     NSObject *_dataLock;
     NSArray<OAResourceItem *> *_mapItems;
@@ -94,16 +100,17 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) initData
 {
+    _paletteLegendIndexPath = nil;
     [_data clearAllData];
 
-    TerrainMode *terrainMode = [_plugin getTerrainMode];
+    _terrainMode = [_plugin getTerrainMode];
     _minZoom = [_plugin getTerrainMinZoom];
     _maxZoom = [_plugin getTerrainMaxZoom];
 
     BOOL isRelief3D = [OAIAPHelper isOsmAndProAvailable];
     BOOL isTerrainEbabled = [_plugin isTerrainLayerEnabled];
-    BOOL isHillshade = [terrainMode isHillshade];
-    BOOL isSlope = [terrainMode isSlope];
+    BOOL isHillshade = [_terrainMode isHillshade];
+    BOOL isSlope = [_terrainMode isSlope];
 
     OATableSectionData *switchSection = [_data createNewSection];
     [switchSection addRowFromDictionary:@{
@@ -120,7 +127,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         OATableSectionData *disabledSection = [_data createNewSection];
         [disabledSection addRowFromDictionary:@{
             kCellKeyKey : @"disabledImage",
-            kCellTypeKey : [OAImageTextViewCell getCellIdentifier],
+            kCellTypeKey : [OAImageDescTableViewCell getCellIdentifier],
             kCellDescrKey : OALocalizedString(@"enable_hillshade"),
             kCellIconNameKey : @"img_empty_state_terrain"
         }];
@@ -140,22 +147,20 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             kCellTypeKey : [OAButtonTableViewCell getCellIdentifier],
             kCellTitleKey : OALocalizedString(@"srtm_color_scheme")
         }];
+
         [titleSection addRowFromDictionary:@{
             kCellKeyKey : @"terrainTypeDesc",
             kCellTypeKey : [OATextLineViewCell getCellIdentifier],
             kCellDescrKey : OALocalizedString(isHillshade ? @"map_settings_hillshade_description"
                 : isSlope ? @"map_settings_slopes_description" : @"height_legend_description"),
-
         }];
-        if (isSlope)
-        {
-            [titleSection addRowFromDictionary:@{
-                kCellTypeKey : [OAImageTextViewCell getCellIdentifier],
-                kCellDescrKey : OALocalizedString(@"map_settings_slopes_legend"),
-                kCellIconNameKey : @"img_legend_slope",
-                @"link" : kUrlWikipediaSlope
-            }];
-        }
+
+        [titleSection addRowFromDictionary:@{
+            kCellKeyKey: @"gradientLegend",
+            kCellTypeKey : [OALineChartCell getCellIdentifier]
+        }];
+        _paletteLegendIndexPath = [NSIndexPath indexPathForRow:[titleSection rowCount] - 1 inSection:[_data sectionCount] - 1];
+
         [titleSection addRowFromDictionary:@{
             kCellKeyKey : @"modifyPalette",
             kCellTypeKey : [OAButtonTableViewCell getCellIdentifier],
@@ -173,7 +178,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             kCellTitleKey : OALocalizedString(@"visibility"),
             kCellIconNameKey : @"ic_custom_visibility",
             kCellIconTintColor : [UIColor colorNamed:ACColorNameIconColorDefault],
-            @"value" : [NSString stringWithFormat:@"%d%%", [terrainMode getTransparency]]
+            @"value" : [NSString stringWithFormat:@"%d%%", [_terrainMode getTransparency]]
         }];
         [appearanceSection addRowFromDictionary:@{
             kCellKeyKey : @"zoomLevels",
@@ -259,12 +264,47 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void) setupView
 {
     title = OALocalizedString(@"shared_string_terrain");
-    
+
+    [tblView registerNib:[UINib nibWithNibName:OALineChartCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:OALineChartCell.reuseIdentifier];
+    [tblView registerNib:[UINib nibWithNibName:OAImageDescTableViewCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:OAImageDescTableViewCell.reuseIdentifier];
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRestored:) name:OAIAPProductsRestoredNotification object:nil];
     [self updateAvailableMaps];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onColorPalettesFilesUpdated:) name:ColorPaletteHelper.colorPalettesUpdatedNotification object:nil];
 }
 
+- (void)onColorPalettesFilesUpdated:(NSNotification *)notification
+{
+    if (![notification.object isKindOfClass:NSDictionary.class] || ![_plugin isTerrainLayerEnabled])
+        return;
+
+    NSDictionary<NSString *, NSString *> *colorPaletteFiles = (NSDictionary *) notification.object;
+    if (!colorPaletteFiles)
+        return;
+
+    NSString *currentPaletteFile = [_terrainMode getMainFile];
+    if ([colorPaletteFiles.allKeys containsObject:currentPaletteFile])
+    {
+        if ([colorPaletteFiles[currentPaletteFile] isEqualToString:ColorPaletteHelper.deletedFileKey])
+        {
+            TerrainMode *defaultTerrainMode = [TerrainMode getDefaultMode:_terrainMode.type];
+            if (defaultTerrainMode)
+                _terrainMode = defaultTerrainMode;
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self initData];
+            [UIView transitionWithView:tblView
+                              duration:0.35f
+                               options:UIViewAnimationOptionTransitionCrossDissolve
+                            animations:^(void)
+             {
+                [tblView reloadData];
+            }
+                            completion:nil];
+        });
+    }
+}
 - (void)onRotation
 {
     tblView.separatorInset = UIEdgeInsetsMake(0, [OAUtilities getLeftMargin] + 16, 0, 0);
@@ -287,11 +327,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                                                image:nil
                                           identifier:nil
                                              handler:^(__kindof UIAction * _Nonnull action) {
+            _terrainMode = mode;
             [weakSelf.plugin setTerrainMode:mode];
             [weakSelf terrainTypeChanged];
         }];
 
-        if ([mode getKeyName] == [_plugin.terrainModeTypePref get])
+        if (_terrainMode == mode)
         {
             action.state = UIMenuElementStateOn;
 
@@ -414,7 +455,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         if (cell)
         {
-            cell.separatorInset = [[_plugin getTerrainMode] isSlope] ? UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.) : UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0., 0.);
+            cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
             cell.textView.text = item.descr;
             cell.textView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             cell.textView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
@@ -511,53 +552,38 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         return cell;
     }
-    else if ([item.cellType isEqualToString:[OAImageTextViewCell getCellIdentifier]])
+    else if ([item.cellType isEqualToString:[OAImageDescTableViewCell getCellIdentifier]])
     {
-        OAImageTextViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAImageTextViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAImageTextViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OAImageTextViewCell *) nib[0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            [cell showExtraDesc:NO];
-            cell.descView.delegate = self;
-        }
-        if (cell)
-        {
-            cell.separatorInset = UIEdgeInsetsMake(0, [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0, 0);
-            cell.iconView.image = [UIImage rtlImageNamed:item.iconName];
+        OAImageDescTableViewCell *cell = (OAImageDescTableViewCell *) [tableView dequeueReusableCellWithIdentifier:OAImageDescTableViewCell.reuseIdentifier
+                                                                                             forIndexPath:indexPath];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.separatorInset = UIEdgeInsetsMake(0, [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0, 0);
+        cell.iconView.image = [UIImage rtlImageNamed:item.iconName];
+        cell.descView.text = item.descr;
+        return cell;
+    }
+    else if ([item.cellType isEqualToString:OALineChartCell.reuseIdentifier])
+    {
+        OALineChartCell *cell = (OALineChartCell *) [tableView dequeueReusableCellWithIdentifier:OALineChartCell.reuseIdentifier
+                                                                                         forIndexPath:indexPath];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
-            BOOL isDisabled = [item.key isEqualToString:@"disabledImage"];
-            NSString *descr = item.descr;
-            if (isDisabled)
-            {
-                cell.descView.attributedText = nil;
-                cell.descView.text = descr;
-            }
-            else if (descr && descr.length > 0)
-            {
-                NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:descr attributes:@{
-                    NSFontAttributeName: [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline],
-                    NSForegroundColorAttributeName: [UIColor colorNamed:ACColorNameTextColorPrimary]
-                }];
-                NSRange range = [descr rangeOfString:@" " options:NSBackwardsSearch];
-                if (range.location != NSNotFound)
-                {
-                    NSDictionary *linkAttributes = @{ NSLinkAttributeName : [item stringForKey:@"link"] };
-                    [str setAttributes:linkAttributes range:NSMakeRange(range.location + 1, descr.length - range.location - 1)];
-                }
-                cell.descView.text = nil;
-                cell.descView.attributedText = str;
-            }
-            else
-            {
-                cell.descView.text = nil;
-                cell.descView.attributedText = nil;
-            }
+        [GpxUIHelper setupGradientChartWithChart:cell.lineChartView
+                             useGesturesAndScale:NO
+                                  xAxisGridColor:[UIColor colorNamed:ACColorNameTextColorSecondary]
+                                     labelsColor:[UIColor colorNamed:ACColorNameChartAxisGridLine]];
 
-            if ([cell needsUpdateConstraints])
-                [cell setNeedsUpdateConstraints];
-        }
+        ColorPalette *colorPalette = [[ColorPaletteHelper shared] getGradientColorPaletteSyncWith:[_terrainMode getMainFile]];
+        if (!colorPalette)
+            return cell;
+
+        cell.lineChartView.data =
+            [GpxUIHelper buildGradientChartWithChart:cell.lineChartView
+                                        colorPalette:colorPalette
+                                      valueFormatter:[GradientUiHelper getGradientTypeFormatterForTerrainType:_terrainMode.type
+                                                                                                     analysis:nil]];
+
+        [cell.lineChartView notifyDataSetChanged];
         return cell;
     }
     return nil;
@@ -596,15 +622,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         OAResourceItem *mapItem = _mapItems[indexPath.row];
         [_downloadingCellResourceHelper onCellClicked:mapItem.resourceId.toNSString()];
     }
-}
-
-#pragma mark - UITextViewDelegate
-
-- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange interaction:(UITextItemInteraction)interaction
-{
-    SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:URL];
-    [self.vwController presentViewController:safariViewController animated:YES completion:nil];
-    return NO;
 }
 
 #pragma mark - SFSafariViewControllerDelegate

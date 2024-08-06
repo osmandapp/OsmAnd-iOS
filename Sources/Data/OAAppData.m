@@ -875,7 +875,7 @@
     }
 }
 
-- (NSUnitLength *)weatherWindAnimationUnit
+- (NSUnitSpeed *)weatherWindAnimationUnit
 {
     @synchronized(_lock)
     {
@@ -893,7 +893,7 @@
     }
 }
 
-- (void)setWeatherWindAnimationUnit:(NSUnitLength *)weatherWindAnimationUnit
+- (void)setWeatherWindAnimationUnit:(NSUnitSpeed *)weatherWindAnimationUnit
 {
     @synchronized(_lock)
     {

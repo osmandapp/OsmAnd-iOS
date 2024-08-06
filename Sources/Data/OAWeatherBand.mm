@@ -235,7 +235,7 @@ static NSString *kPrecipContourStyleName;
             _app.data.weatherPrecipUnit = (NSUnitLength *) unit;
             break;
         case WEATHER_BAND_WIND_ANIMATION:
-            _app.data.weatherWindAnimationUnit = (NSUnitLength *) unit;
+            _app.data.weatherWindAnimationUnit = (NSUnitSpeed *) unit;
             break;
         case WEATHER_BAND_NOTHING:
             break;

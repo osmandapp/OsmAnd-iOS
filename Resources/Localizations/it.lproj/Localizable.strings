@@ -3482,3 +3482,6 @@
 "driving_region_uk" = "UK e simili";
 "quick_action_first_intermediate" = "Primo intermedio";
 "user_palette" = "Tavolozza utente";
+"route_your_destination_is_on_right" = "La tua destinazione è sulla destra";
+"route_your_destination_is_on_left" = "La tua destinazione è sulla sinistra";
+"route_your_destination_is_on_ahead" = "La tua destinazione è dritta davanti a te";

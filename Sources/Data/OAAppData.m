@@ -52,6 +52,7 @@
 #define kWeatherKey @"weather"
 #define kWeatherUseOfflineDataKey @"weatherUseOfflineData"
 #define kWeatherTempKey @"weatherTemp"
+#define kWeatherTempToolbarKey @"weatherTempToolbar"
 #define kWeatherTempUnitKey @"weatherTempUnit"
 #define kWeatherTempUnitAutoKey @"weatherTempUnitAuto"
 #define kWeatherTempAlphaKey @"weatherTempAlpha"
@@ -90,6 +91,7 @@
 #define kWeatherPrecipToolbarAlphaKey @"weatherPrecipToolbarAlpha"
 #define kWeatherSourceKey @"weatherSource"
 #define kWeatherWindAnimationKey @"weatherWindAnimation"
+#define kWeatherWindToolbarAnimationKey @"weatherWindToolbarAnimation"
 #define kWeatherWindAnimationWindUnitKey @"weatherWindAnimationUnit"
 #define kWeatherWindAnimationToolbarAlphaKey @"weatherWindAnimationToolbarAlpha"
 #define kWeatherWindAnimationUnitAutoKey @"weatherWindAnimationUnitAuto"
@@ -123,6 +125,7 @@
     OACommonBoolean *_weatherProfile;
     OACommonBoolean *_weatherUseOfflineDataProfile;
     OACommonBoolean *_weatherTempProfile;
+    OACommonBoolean *_weatherTempToolbarProfile;
     OACommonUnit *_weatherTempUnitProfile;
     OACommonBoolean *_weatherTempUnitAutoProfile;
     OACommonDouble *_weatherTempAlphaProfile;
@@ -171,6 +174,7 @@
     
     OACommonString *_weatherSourceProfile;
     OACommonBoolean *_weatherWindAnimationProfile;
+    OACommonBoolean *_weatherWindAnimationToolbarProfile;
     OACommonUnit *_weatherWindAnimationUnitProfile;
     OACommonDouble *_weatherWindAnimationAlphaProfile;
     OACommonBoolean *_weatherWindAnimationUnitAutoProfile;
@@ -297,6 +301,7 @@
     _weatherProfile = [OACommonBoolean withKey:kWeatherKey defValue:NO];
     _weatherUseOfflineDataProfile = [OACommonBoolean withKey:kWeatherUseOfflineDataKey defValue:NO];
     _weatherTempProfile = [OACommonBoolean withKey:kWeatherTempKey defValue:NO];
+    _weatherTempToolbarProfile = [OACommonBoolean withKey:kWeatherTempToolbarKey defValue:NO];
     _weatherTempUnitProfile = [OACommonUnit withKey:kWeatherTempUnitKey defValue:[OAWeatherBand getDefaultBandUnit:WEATHER_BAND_TEMPERATURE]];
     _weatherTempUnitAutoProfile = [OACommonBoolean withKey:kWeatherTempUnitAutoKey defValue:YES];
     _weatherTempAlphaProfile = [OACommonDouble withKey:kWeatherTempAlphaKey defValue:0.5];
@@ -327,6 +332,7 @@
     
     _weatherSourceProfile = [OACommonString withKey:kWeatherSourceKey defValue:[WeatherSourceObjWrapper getSettingValueForType:getDefaultSource]];
     _weatherWindAnimationProfile = [OACommonBoolean withKey:kWeatherWindAnimationKey defValue:NO];
+    _weatherWindAnimationToolbarProfile = [OACommonBoolean withKey:kWeatherWindToolbarAnimationKey defValue:NO];
     _weatherWindAnimationUnitProfile = [OACommonUnit withKey:kWeatherWindAnimationWindUnitKey defValue:[OAWeatherBand getDefaultBandUnit:WEATHER_BAND_WIND_ANIMATION]];
     _weatherWindAnimationAlphaProfile = [OACommonDouble withKey:kWeatherWindAnimationToolbarAlphaKey defValue:0.6];
     
@@ -383,6 +389,7 @@
     [_registeredPreferences setObject:_weatherProfile forKey:@"show_weather"];
     [_registeredPreferences setObject:_weatherUseOfflineDataProfile forKey:@"show_weather_offline_data"];
     [_registeredPreferences setObject:_weatherTempProfile forKey:@"show_weather_temp"];
+    [_registeredPreferences setObject:_weatherTempToolbarProfile forKey:@"show_weather_temp_toolbar"];
     [_registeredPreferences setObject:_weatherTempUnitProfile forKey:@"show_weather_temp_unit"];
     [_registeredPreferences setObject:_weatherTempUnitAutoProfile forKey:@"show_weather_temp_unit_auto"];
     [_registeredPreferences setObject:_weatherTempAlphaProfile forKey:@"weather_temp_transparency"];
@@ -422,6 +429,7 @@
 
     [_registeredPreferences setObject:_weatherSourceProfile forKey:@"weather_source"];
     [_registeredPreferences setObject:_weatherWindAnimationProfile forKey:@"weather_wind_animation"];
+    [_registeredPreferences setObject:_weatherWindAnimationToolbarProfile forKey:@"weather_wind_animation_toolbar"];
     [_registeredPreferences setObject:_weatherWindAnimationUnitProfile forKey:@"show_weather_wind_animation_unit"];
     [_registeredPreferences setObject:_weatherWindAnimationAlphaProfile forKey:@"weather_wind_animation_alpha"];
     [_registeredPreferences setObject:_weatherWindAnimationUnitAutoProfile forKey:@"weather_wind_animation_unit_auto"];
@@ -661,7 +669,7 @@
 {
     @synchronized(_lock)
     {
-        return [_weatherTempProfile get];
+        return _weatherToolbarActive ? [_weatherTempToolbarProfile get] : [_weatherTempProfile get];
     }
 }
 
@@ -669,8 +677,8 @@
 {
     @synchronized(_lock)
     {
-        [_weatherTempProfile set:weatherTemp];
-        [_weatherTempChangeObservable notifyEventWithKey:@(WEATHER_BAND_TEMPERATURE) andValue:@(self.weatherTemp)];
+        _weatherToolbarActive ? [_weatherTempToolbarProfile set:weatherTemp] : [_weatherTempProfile set:weatherTemp];
+        [_weatherPrecipChangeObservable notifyEventWithKey:@(WEATHER_BAND_TEMPERATURE) andValue:@(self.weatherTemp)];
     }
 }
 
@@ -1033,20 +1041,20 @@
     }
 }
 
-- (BOOL)weatherWindAnimation
+- (BOOL) weatherWindAnimation
 {
     @synchronized(_lock)
     {
-        return [_weatherWindAnimationProfile get];
+        return _weatherToolbarActive ? [_weatherWindAnimationToolbarProfile get] : [_weatherWindAnimationProfile get];
     }
 }
 
-- (void)setWeatherWindAnimation:(BOOL)weatherWindAnimation
+- (void) setWeatherWindAnimation:(BOOL)weatherWindAnimation
 {
     @synchronized(_lock)
     {
-        [_weatherWindAnimationProfile set:weatherWindAnimation];
-        [_weatherWindAnimationChangeObservable notifyEventWithKey:@(WEATHER_BAND_WIND_ANIMATION) andValue:@(self.weatherWindAnimation)];
+        _weatherToolbarActive ? [_weatherWindAnimationToolbarProfile set:weatherWindAnimation] : [_weatherWindAnimationProfile set:weatherWindAnimation];
+        [_weatherPrecipChangeObservable notifyEventWithKey:@(WEATHER_BAND_WIND_ANIMATION) andValue:@(self.weatherWindAnimation)];
     }
 }
 
@@ -1174,6 +1182,7 @@
         [_weatherUseOfflineDataProfile resetToDefault];
         
         [_weatherTempProfile resetToDefault];
+        [_weatherTempToolbarProfile resetToDefault];
         [_weatherTempUnitProfile resetToDefault];
         [_weatherTempUnitAutoProfile resetToDefault];
         [_weatherTempAlphaProfile resetToDefault];
@@ -1208,6 +1217,7 @@
         
         [_weatherSourceProfile resetToDefault];
         [_weatherWindAnimationProfile resetToDefault];
+        [_weatherWindAnimationToolbarProfile resetToDefault];
         [_weatherWindAnimationUnitProfile resetToDefault];
         [_weatherWindAnimationAlphaProfile resetToDefault];
         [_weatherWindAnimationUnitAutoProfile resetToDefault];
@@ -1804,6 +1814,7 @@
     [_weatherProfile set:[_weatherProfile get:sourceMode] mode:targetMode];
     [_weatherUseOfflineDataProfile set:[_weatherUseOfflineDataProfile get:sourceMode] mode:targetMode];
     [_weatherTempProfile set:[_weatherTempProfile get:sourceMode] mode:targetMode];
+    [_weatherTempToolbarProfile set:[_weatherTempToolbarProfile get:sourceMode] mode:targetMode];
     [_weatherTempUnitProfile set:[_weatherTempUnitProfile get:sourceMode] mode:targetMode];
     [_weatherTempUnitAutoProfile set:[_weatherTempUnitAutoProfile get:sourceMode] mode:targetMode];
     [_weatherTempAlphaProfile set:[_weatherTempAlphaProfile get:sourceMode] mode:targetMode];
@@ -1843,6 +1854,7 @@
     
     [_weatherSourceProfile set:[_weatherSourceProfile get:sourceMode] mode:targetMode];
     [_weatherWindAnimationProfile set:[_weatherWindAnimationProfile get:sourceMode] mode:targetMode];
+    [_weatherWindAnimationToolbarProfile set:[_weatherWindAnimationToolbarProfile get:sourceMode] mode:targetMode];
     [_weatherWindAnimationUnitProfile set:[_weatherWindAnimationUnitProfile get:sourceMode] mode:targetMode];
     [_weatherWindAnimationAlphaProfile set:[_weatherWindAnimationAlphaProfile get:sourceMode] mode:targetMode];
     [_weatherWindAnimationUnitAutoProfile set:[_weatherWindAnimationUnitAutoProfile get:sourceMode] mode:targetMode];

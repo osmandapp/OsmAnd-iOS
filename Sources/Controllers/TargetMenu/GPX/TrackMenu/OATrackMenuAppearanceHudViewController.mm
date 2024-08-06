@@ -930,7 +930,7 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
             _paletteNameIndexPath = [NSIndexPath indexPathForRow:colorsCells.count - 1 inSection:kColorsSection];
         }
         [colorsCells addObject:[self generateGridCellData]];
-        if ([self isSelectedTypeSolid])
+        if ([self isSelectedTypeSolid] || [self isSelectedTypeGradient])
             [colorsCells addObject:[self generateAllColorsCellData]];
     }
 }
@@ -2241,11 +2241,21 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
     }
     else if ([tableData.key isEqualToString:@"all_colors"])
     {
-        OAColorCollectionViewController *colorCollectionViewController =
-            [[OAColorCollectionViewController alloc] initWithColorItems:[_appearanceCollection getAvailableColorsSortingByKey]
-                                                      selectedColorItem:_selectedColorItem];
-        colorCollectionViewController.delegate = self;
-        [self.navigationController pushViewController:colorCollectionViewController animated:YES];
+        OAColorCollectionViewController *colorCollectionViewController = nil;
+        if ([self isSelectedTypeSolid])
+        {
+            colorCollectionViewController = [[OAColorCollectionViewController alloc] initWithCollectionType:EOAColorCollectionTypeColorItems items:[_appearanceCollection getAvailableColorsSortingByKey] selectedItem:_selectedColorItem];
+        }
+        else if ([self isSelectedTypeGradient])
+        {
+            colorCollectionViewController = [[OAColorCollectionViewController alloc] initWithCollectionType:EOAColorCollectionTypePaletteItems items:_sortedPaletteColorItems selectedItem:_selectedPaletteColorItem];
+        }
+        
+        if (colorCollectionViewController)
+        {
+            colorCollectionViewController.delegate = self;
+            [self.navigationController pushViewController:colorCollectionViewController animated:YES];
+        }
     }
     else if ([tableData.key isEqualToString:@"vertical_exaggeration"])
     {
@@ -2413,6 +2423,11 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
 - (void)selectColorItem:(OAColorItem *)colorItem
 {
     [self onCollectionItemSelected:[NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:colorItem] inSection:0]];
+}
+
+- (void)selectPaletteItem:(PaletteColor *)paletteItem
+{
+    [self onCollectionItemSelected:[NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObject:paletteItem] inSection:0]];
 }
 
 - (OAColorItem *)addAndGetNewColorItem:(UIColor *)color

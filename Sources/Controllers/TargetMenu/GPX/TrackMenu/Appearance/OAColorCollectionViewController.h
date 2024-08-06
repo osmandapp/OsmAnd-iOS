@@ -8,11 +8,19 @@
 
 #import "OABaseNavbarViewController.h"
 
+typedef enum
+{
+    EOAColorCollectionTypeColorItems,
+    EOAColorCollectionTypePaletteItems
+} EOAColorCollectionType;
+
 @class OAColorItem;
+@class PaletteColor;
 
 @protocol OAColorCollectionDelegate
 
 - (void)selectColorItem:(OAColorItem *)colorItem;
+- (void)selectPaletteItem:(PaletteColor *)paletteItem;
 - (OAColorItem *)addAndGetNewColorItem:(UIColor *)color;
 - (void)changeColorItem:(OAColorItem *)colorItem withColor:(UIColor *)color;
 - (OAColorItem *)duplicateColorItem:(OAColorItem *)colorItem;
@@ -22,8 +30,9 @@
 
 @interface OAColorCollectionViewController : OABaseNavbarViewController
 
-- (instancetype)initWithColorItems:(NSArray<OAColorItem *> *)colorItems selectedColorItem:(OAColorItem *)selectedColorItem;
-
 @property(nonatomic, weak) id<OAColorCollectionDelegate>delegate;
+@property (nonatomic, readonly) EOAColorCollectionType collectionType;
+
+- (instancetype)initWithCollectionType:(EOAColorCollectionType)type items:(NSArray *)items selectedItem:(id)selectedItem;
 
 @end

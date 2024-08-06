@@ -119,6 +119,30 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
     override func sectionsCount() -> Int {
         data.count
     }
+    
+    @objc func applyGradient(to imageView: UIImageView, with palette: PaletteColor) {
+        let gradientPoints = createGradientPoints(palette)
+        imageView.gradated(gradientPoints)
+    }
+    
+    @objc func createDescriptionForPalette(palette: PaletteColor) -> String {
+        guard let gradientPalette = palette as? PaletteGradientColor else {
+            return "Invalid palette type"
+        }
+        
+        let colorValues = gradientPalette.colorPalette.colorValues
+        var descriptionBuilder = ""
+        for (index, colorValue) in colorValues.enumerated() {
+            if index != 0 {
+                descriptionBuilder += " • "
+            }
+            
+            var formattedValue = "\(colorValue.val)"
+            descriptionBuilder += formattedValue
+        }
+        
+        return descriptionBuilder
+    }
 
     private func createGradientPoints(_ palette: PaletteColor) -> [GradientPoint] {
         var gradientPoints = [GradientPoint]()

@@ -30,19 +30,31 @@
     OATableDataModel *_data;
     NSIndexPath *_colorCollectionIndexPath;
     NSMutableArray<OAColorItem *> *_colorItems;
+    NSMutableArray<PaletteColor *> *_paletteItems;
     OAColorItem *_selectedColorItem;
+    PaletteColor *_selectedPaletteItem;
     NSIndexPath *_editColorIndexPath;
 }
 
 #pragma mark - Initialization
 
-- (instancetype)initWithColorItems:(NSArray<OAColorItem *> *)colorItems selectedColorItem:(OAColorItem *)selectedColorItem
+- (instancetype)initWithCollectionType:(EOAColorCollectionType)type items:(NSArray *)items selectedItem:(id)selectedItem
 {
     self = [super init];
     if (self)
     {
-        _colorItems = [NSMutableArray arrayWithArray:colorItems];
-        _selectedColorItem = selectedColorItem;
+        _collectionType = type;
+        switch (type)
+        {
+            case EOAColorCollectionTypeColorItems:
+                _colorItems = [NSMutableArray arrayWithArray:items];
+                _selectedColorItem = selectedItem;
+                break;
+            case EOAColorCollectionTypePaletteItems:
+                _paletteItems = [NSMutableArray arrayWithArray:items];
+                _selectedPaletteItem = selectedItem;
+                break;
+        }
     }
     return self;
 }
@@ -52,14 +64,20 @@
     _settings = [OAAppSettings sharedManager];
 }
 
+- (void)registerCells
+{
+    [self.tableView registerNib:[UINib nibWithNibName:[OACollectionSingleLineTableViewCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OACollectionSingleLineTableViewCell reuseIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:[OATwoIconsButtonTableViewCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OATwoIconsButtonTableViewCell reuseIdentifier]];
+}
+
 #pragma mark - UIViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+    self.tableView.separatorStyle = _collectionType == EOAColorCollectionTypePaletteItems ? UITableViewCellSeparatorStyleSingleLine : UITableViewCellSeparatorStyleNone;
+    self.tableView.backgroundColor = [UIColor colorNamed:_collectionType == EOAColorCollectionTypeColorItems ? ACColorNameGroupBg : ACColorNameViewBg];
 }
 
 #pragma mark - Base UI
@@ -76,14 +94,24 @@
 
 - (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
 {
-    UIBarButtonItem *addButton = [self createRightNavbarButton:nil iconName:@"ic_custom_add" action:@selector(onRightNavbarButtonPressed) menu:nil];
-    addButton.accessibilityLabel = OALocalizedString(@"shared_string_add_color");
-    return @[addButton];
+    if (_collectionType == EOAColorCollectionTypeColorItems)
+    {
+        UIBarButtonItem *addButton = [self createRightNavbarButton:nil iconName:@"ic_custom_add" action:@selector(onRightNavbarButtonPressed) menu:nil];
+        addButton.accessibilityLabel = OALocalizedString(@"shared_string_add_color");
+        return @[addButton];
+    }
+    
+    return  nil;
 }
 
 - (EOABaseNavbarColorScheme)getNavbarColorScheme
 {
-    return EOABaseNavbarColorSchemeWhite;
+    return _collectionType == EOAColorCollectionTypeColorItems ? EOABaseNavbarColorSchemeWhite : EOABaseNavbarColorSchemeGray;
+}
+
+- (BOOL)hideFirstHeader
+{
+    return  _collectionType == EOAColorCollectionTypeColorItems ? YES : NO;
 }
 
 #pragma mark - Table data
@@ -91,16 +119,32 @@
 - (void)generateData
 {
     _data = [OATableDataModel model];
-    OATableSectionData *colorsSection = [_data createNewSection];
-    [colorsSection addRowFromDictionary:@{
-        kCellTypeKey: [OACollectionSingleLineTableViewCell getCellIdentifier]
-    }];
-    _colorCollectionIndexPath = [NSIndexPath indexPathForRow:[colorsSection rowCount] - 1 inSection:[_data sectionCount] - 1];
+    if (_collectionType == EOAColorCollectionTypeColorItems)
+    {
+        OATableSectionData *colorsSection = [_data createNewSection];
+        [colorsSection addRowFromDictionary:@{
+            kCellTypeKey: [OACollectionSingleLineTableViewCell getCellIdentifier]
+        }];
+        _colorCollectionIndexPath = [NSIndexPath indexPathForRow:[colorsSection rowCount] - 1 inSection:[_data sectionCount] - 1];
+    }
+    else
+    {
+        OATableSectionData *palettesSection = [_data createNewSection];
+        for (PaletteColor *palette in _paletteItems)
+        {
+            OATableRowData *paletteColor = [palettesSection createNewRow];
+            [paletteColor setCellType:[OATwoIconsButtonTableViewCell reuseIdentifier]];
+            [paletteColor setKey:@"paletteColor"];
+            [paletteColor setTitle:palette.toHumanString];
+            [paletteColor setIconName:palette == _selectedPaletteItem ? @"ic_checkmark_default" : nil];
+            [paletteColor setObj:palette forKey:@"palette"];
+        }
+    }
 }
 
-- (BOOL)hideFirstHeader
+- (NSInteger)sectionsCount
 {
-    return YES;
+    return [_data sectionCount];
 }
 
 - (NSInteger)rowsCount:(NSInteger)section
@@ -113,34 +157,49 @@
     OATableRowData *item = [_data itemForIndexPath:indexPath];
     if ([item.cellType isEqualToString:[OACollectionSingleLineTableViewCell getCellIdentifier]])
     {
-        OACollectionSingleLineTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OACollectionSingleLineTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACollectionSingleLineTableViewCell getCellIdentifier]
-                                                         owner:self options:nil];
-            cell = nib[0];
-            OAColorCollectionHandler *colorHandler = [[OAColorCollectionHandler alloc] initWithData:@[_colorItems] collectionView:cell.collectionView];
-            colorHandler.delegate = self;
-            [colorHandler setScrollDirection:UICollectionViewScrollDirectionVertical];
-            [colorHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:[_colorItems indexOfObject:_selectedColorItem] inSection:0]];
-            [cell setCollectionHandler:colorHandler];
-            [cell rightActionButtonVisibility:NO];
-            [cell anchorContent:EOATableViewCellContentCenterStyle];
-            cell.collectionView.scrollEnabled = NO;
-        }
-        if (cell)
-        {
-            [cell.collectionView reloadData];
-            [cell layoutIfNeeded];
-        }
+        OACollectionSingleLineTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OACollectionSingleLineTableViewCell reuseIdentifier]];
+        OAColorCollectionHandler *colorHandler = [[OAColorCollectionHandler alloc] initWithData:@[_colorItems] collectionView:cell.collectionView];
+        colorHandler.delegate = self;
+        [colorHandler setScrollDirection:UICollectionViewScrollDirectionVertical];
+        [colorHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:[_colorItems indexOfObject:_selectedColorItem] inSection:0]];
+        [cell setCollectionHandler:colorHandler];
+        [cell rightActionButtonVisibility:NO];
+        [cell anchorContent:EOATableViewCellContentCenterStyle];
+        cell.collectionView.scrollEnabled = NO;
+        [cell.collectionView reloadData];
+        [cell layoutIfNeeded];
+        return cell;
+    }
+    else if ([item.cellType isEqualToString:[OATwoIconsButtonTableViewCell reuseIdentifier]])
+    {
+        OATwoIconsButtonTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OATwoIconsButtonTableViewCell reuseIdentifier]];
+        PaletteCollectionHandler *paletteHandler = [[PaletteCollectionHandler alloc] init];
+        PaletteColor *palette = [item objForKey:@"palette"];
+        cell.titleLabel.text = item.title;
+        cell.descriptionLabel.text = [paletteHandler createDescriptionForPaletteWithPalette:palette];
+        cell.leftIconView.image = [UIImage imageNamed:item.iconName];
+        [paletteHandler applyGradientTo:cell.secondLeftIconView with:palette];
+        cell.secondLeftIconView.layer.cornerRadius = 3;
+        [cell.button setTitle:nil forState:UIControlStateNormal];
+        [cell.button setImage:[UIImage templateImageNamed:@"ic_navbar_overflow_menu_outlined"] forState:UIControlStateNormal];
+        cell.button.menu = [self createPaletteMenuForCellButton:indexPath];
+        cell.button.showsMenuAsPrimaryAction = YES;
         return cell;
     }
     return nil;
 }
 
-- (NSInteger)sectionsCount
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
-    return [_data sectionCount];
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
+    if ([item.key isEqualToString:@"paletteColor"])
+    {
+        _selectedPaletteItem = [item objForKey:@"palette"];
+        if (self.delegate)
+            [self.delegate selectPaletteItem:_selectedPaletteItem];
+        
+        [self dismissViewController];
+    }
 }
 
 #pragma mark - Additions
@@ -153,11 +212,34 @@
     [self.navigationController presentViewController:colorViewController animated:YES completion:nil];
 }
 
+- (UIMenu *)createPaletteMenuForCellButton:(NSIndexPath *)indexPath
+{
+    UIAction *duplicateAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_duplicate") image:[UIImage systemImageNamed:@"doc.on.doc"] identifier:nil handler:^(UIAction* action) {
+        [self duplicatePaletteAtIndexPath:indexPath];
+    }];
+    
+    UIAction *deleteAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_delete") image:[UIImage systemImageNamed:@"trash"] identifier:nil handler:^(UIAction* action) {
+        [self deletePaletteAtIndexPath:indexPath];
+    }];
+    
+    UIMenu *duplicateMenu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[duplicateAction]];
+    UIMenu *deleteMenu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[deleteAction]];
+    return [UIMenu menuWithChildren:@[duplicateMenu, deleteMenu]];
+}
+
 #pragma mark - Selectors
 
 - (void)onRightNavbarButtonPressed
 {
     [self openColorPickerWithColor:_selectedColorItem];
+}
+
+- (void)duplicatePaletteAtIndexPath:(NSIndexPath *)indexPath
+{
+}
+
+- (void)deletePaletteAtIndexPath:(NSIndexPath *)indexPath
+{
 }
 
 #pragma mark - OACollectionCellDelegate

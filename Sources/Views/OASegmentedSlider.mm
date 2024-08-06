@@ -12,16 +12,17 @@
 #import "Localization.h"
 #import "GeneratedAssetSymbols.h"
 
-#define kMarkTag 1000
-#define kAdditionalMarkTag 2000
-#define kTitleLabelTag 3000
+static NSInteger kMarkTag = 1000;
+static NSInteger kAdditionalMarkTag = 2000;
+static NSInteger kTitleLabelTag = 3000;
 
-#define kMarkHeight 16.
-#define kCustomMarkHeight 14.
-#define kAdditionalMarkHeight 8.
-#define kCurrentMarkHeight 30.
+static CGFloat kMarkHeight = 16;
+static CGFloat kCustomMarkHeight = 14;
+static CGFloat kAdditionalMarkHeight = 8;
+static CGFloat kCurrentMarkHeight = 30;
+static CGFloat kRoundThumbSize = 24;
 
-#define kMarkWidth 2.
+static CGFloat kMarkWidth = 2;
 
 @implementation OASegmentedSlider
 {
@@ -32,6 +33,7 @@
     NSInteger _selectingMark;
     NSInteger _additionalMarksBetween;
     BOOL _isCustomSlider;
+    BOOL _useExtraThumbOffset;
 
     UIView *_selectingMarkTitleBackground;
     UILabel *_selectingMarkTitle;
@@ -299,14 +301,14 @@
         return;
 
     CGFloat segments = [self getMarksCount] - 1;
-    CGFloat sliderViewWidth = self.frame.size.width;
+    CGFloat sliderViewWidth = self.frame.size.width - [self getExtraThumbInset] * 2;
     CGFloat sliderViewHeight = self.frame.size.height;
     CGRect sliderViewBounds = CGRectMake(0., 0., sliderViewWidth, sliderViewHeight);
     CGRect trackRect = [self trackRectForBounds:sliderViewBounds];
     CGFloat trackWidth = trackRect.size.width;
     CGFloat trackHeight = trackRect.size.height;
 
-    CGFloat inset = (sliderViewWidth - trackRect.size.width) / 2;
+    CGFloat inset = (sliderViewWidth - trackRect.size.width) / 2 + [self getExtraThumbInset];
 
     CGFloat markHeight = _isCustomSlider ? kCustomMarkHeight + 1. : kMarkHeight;
     CGFloat x = inset;
@@ -332,12 +334,19 @@
             CGSize textSize = [OAUtilities calculateTextBounds:titleLabel.text font:titleLabel.font];
 
             CGFloat tx;
-            if (i == 0)
-                tx = mark.frame.origin.x;
-            else if (i == marksCount - 1)
-                tx = trackWidth - textSize.width;
+            if (!_useExtraThumbOffset)
+            {
+                if (i == 0)
+                    tx = mark.frame.origin.x;
+                else if (i == marksCount - 1)
+                    tx = trackWidth - textSize.width;
+                else
+                    tx = mark.frame.origin.x + mark.frame.size.width / 2 - textSize.width / 2;
+            }
             else
+            {
                 tx = mark.frame.origin.x + mark.frame.size.width / 2 - textSize.width / 2;
+            }
 
             titleLabel.frame = CGRectMake(tx, mark.frame.origin.y + mark.frame.size.height, textSize.width, textSize.height);
         }
@@ -349,9 +358,9 @@
 {
     CGRect sliderViewBounds = CGRectMake(0., 0., self.frame.size.width, self.frame.size.height);
     CGRect trackRect = [self trackRectForBounds:sliderViewBounds];
-    CGFloat trackWidth = trackRect.size.width;
+    CGFloat trackWidth = trackRect.size.width - [self getExtraThumbInset] * 2;
     CGFloat trackHeight = trackRect.size.height;
-    CGFloat inset = (self.frame.size.width - trackRect.size.width) / 2;
+    CGFloat inset = (self.frame.size.width - trackRect.size.width) / 2 + [self getExtraThumbInset];
 
     if (_currentMarkX != -1)
     {
@@ -403,12 +412,12 @@
 
 - (NSString *)getTimeStringAtIndex:(int)index
 {
-    if (index < 0 || index >= 144)
+    if (index < 0 || index >= kDayFiveMinutesMarksCount - 1)
     {
         return @"00:00";
     }
-    int hours = index / 6;
-    int minutes = (index % 6) * 10;
+    int hours = index / 12;
+    int minutes = (index % 12) * 5;
     
     NSString *hourString = [NSString stringWithFormat:@"%02d", hours];
     NSString *minuteString = [NSString stringWithFormat:@"%02d", minutes];
@@ -613,6 +622,16 @@
 
         [self layoutSelectingTitle];
     }
+}
+
+- (void) setUsingExtraThumbInset:(BOOL)isUsing
+{
+    _useExtraThumbOffset = isUsing;
+}
+
+- (CGFloat) getExtraThumbInset
+{
+    return _useExtraThumbOffset ? kRoundThumbSize / 2 : 0;
 }
 
 @end

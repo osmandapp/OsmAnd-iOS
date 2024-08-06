@@ -107,6 +107,7 @@ struct CLLocationCoordinate2D;
 - (BOOL) suspendGpuWorker;
 - (BOOL) resumeGpuWorker;
 - (void) invalidateFrame;
+- (void) changeTimePeriod;
 - (void) setSymbolsOpacity:(float)opacityFactor;
 - (void) setDateTime:(int64_t)dateTime;
 - (void) setSymbolSubsectionConfiguration:(int)subsectionIndex configuration:(const OsmAnd::SymbolSubsectionConfiguration &)configuration;

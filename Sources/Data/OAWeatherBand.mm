@@ -623,6 +623,9 @@ static NSString *kPrecipContourStyleName;
                                              withHandler:handler
                                               andObserve:_app.data.weatherPrecipChangeObservable];
         case WEATHER_BAND_WIND_ANIMATION:
+            return [[OAAutoObserverProxy alloc] initWith:owner
+                                             withHandler:handler
+                                              andObserve:_app.data.weatherWindAnimationChangeObservable];
         case WEATHER_BAND_NOTHING:
             return nil;
     }
@@ -653,6 +656,9 @@ static NSString *kPrecipContourStyleName;
                                              withHandler:handler
                                               andObserve:_app.data.weatherPrecipAlphaChangeObservable];
         case WEATHER_BAND_WIND_ANIMATION:
+            return [[OAAutoObserverProxy alloc] initWith:owner
+                                             withHandler:handler
+                                              andObserve:_app.data.weatherWindAnimationAlphaChangeObservable];
         case WEATHER_BAND_NOTHING:
             return nil;
     }

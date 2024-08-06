@@ -829,4 +829,21 @@ static NSArray<NSNumber *> *roundingBounds = nil;
     return num;
 }
 
++ (NSTimeInterval) getStartOfDayForTime:(NSTimeInterval)timestamp
+{
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *components = [calendar components:(NSCalendarUnitEra | NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:[NSDate dateWithTimeIntervalSince1970:timestamp]];
+    [components setHour:0];
+    [components setMinute:0];
+    [components setSecond:0];
+    [components setNanosecond:0];
+    NSDate *formattedDate = [calendar dateFromComponents:components];
+    return [formattedDate timeIntervalSince1970];
+}
+
++ (NSTimeInterval) getStartOfToday
+{
+    return [self.class getStartOfDayForTime:[[NSDate now] timeIntervalSince1970]];
+}
+
 @end

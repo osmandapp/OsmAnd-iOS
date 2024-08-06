@@ -105,6 +105,8 @@ typedef NS_ENUM(NSInteger, EOAWeatherAutoUpdate)
 + (NSDate *) roundForecastTimeToHour:(NSDate *)date;
 - (BOOL)allLayersAreDisabled;
 
+- (BOOL)isProcessingTiles;
+
 @end
 
 //NS_ASSUME_NONNULL_END

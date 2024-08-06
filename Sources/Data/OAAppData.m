@@ -682,23 +682,6 @@
     }
 }
 
-//- (BOOL) weatherTemp
-//{
-//    @synchronized(_lock)
-//    {
-//        return [_weatherTempProfile get];
-//    }
-//}
-//
-//- (void) setWeatherTemp:(BOOL)weatherTemp
-//{
-//    @synchronized(_lock)
-//    {
-//        [_weatherTempProfile set:weatherTemp];
-//        [_weatherTempChangeObservable notifyEventWithKey:@(WEATHER_BAND_TEMPERATURE) andValue:@(self.weatherTemp)];
-//    }
-//}
-
 - (NSUnitTemperature *) weatherTempUnit
 {
     @synchronized(_lock)

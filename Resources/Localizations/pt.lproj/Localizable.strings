@@ -3500,3 +3500,8 @@
 "quick_action_verb_show_hide" = "Mostrar / ocultar";
 "quick_action_first_intermediate" = "Primeiro intermédio";
 "pressure_layer" = "Camada de pressão";
+"driving_region_uk" = "Reino Unido e similares";
+"driving_region_india" = "Índia";
+"route_your_destination_is_on_left" = "O seu destino está à esquerda";
+"route_your_destination_is_on_right" = "O seu destino está à direita";
+"route_your_destination_is_on_ahead" = "O seu destino está mesmo em frente";

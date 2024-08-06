@@ -3502,3 +3502,6 @@
 "quick_action_destination" = "Destination";
 "pressure_layer" = "Tryklag";
 "shared_string_replace" = "Erstat";
+"route_your_destination_is_on_right" = "Din destination er til højre";
+"route_your_destination_is_on_ahead" = "Din destination er lige fremme";
+"route_your_destination_is_on_left" = "Din destination er til venstre";

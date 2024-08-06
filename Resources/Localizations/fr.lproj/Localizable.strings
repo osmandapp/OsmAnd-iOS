@@ -724,7 +724,7 @@
 "save_track_interval" = "Intervalle d\'enregistrement pendant le guidage";
 "logging_min_speed_descr" = "Filtre : pas d'enregistrement en dessous de la vitesse choisie";
 "route_stops_before" = "%@ arrêts avant";
-"shared_string_control_stop" = "Arrêter";
+"shared_string_control_stop" = "Terminer";
 "facebook" = "Facebook";
 "twitter" = "Twitter";
 "logging_interval_navigation_descr" = "Choisissez l'intervalle d'enregistrement de votre trace durant la navigation";

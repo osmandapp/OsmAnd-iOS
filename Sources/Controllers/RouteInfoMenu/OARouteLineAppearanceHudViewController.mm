@@ -462,6 +462,9 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     self.tableView.dataSource = self;
     [self.tableView registerClass:OATableViewCustomFooterView.class
         forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:[OACollectionSingleLineTableViewCell getCellIdentifier] bundle:nil]
+         forCellReuseIdentifier:[OACollectionSingleLineTableViewCell getCellIdentifier]];
+
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -1684,28 +1687,19 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     }
     else if ([cellData.type isEqualToString:[OACollectionSingleLineTableViewCell getCellIdentifier]])
     {
-        OACollectionSingleLineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACollectionSingleLineTableViewCell getCellIdentifier]];
-        if (!cell)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACollectionSingleLineTableViewCell getCellIdentifier]
-                                                         owner:self options:nil];
-            cell = nib[0];
-            cell.separatorInset = UIEdgeInsetsZero;
+        OACollectionSingleLineTableViewCell *cell =
+            [tableView dequeueReusableCellWithIdentifier:[OACollectionSingleLineTableViewCell getCellIdentifier]];
+        cell.separatorInset = UIEdgeInsetsZero;
+        [cell rightActionButtonVisibility:NO];
+        [cell.collectionView registerNib:[UINib nibWithNibName:PaletteCollectionViewCell.reuseIdentifier bundle:nil] forCellWithReuseIdentifier:PaletteCollectionViewCell.reuseIdentifier];
 
-            PaletteCollectionHandler *paletteHandler = [[PaletteCollectionHandler alloc] initWithData:@[_sortedPaletteColorItems] collectionView:cell.collectionView];
-            paletteHandler.delegate = self;
-            NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObject:_selectedPaletteColorItem] inSection:0];
-            if (selectedIndexPath.row == NSNotFound)
-                selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObject:[_gradientColorsCollection getDefaultGradientPalette]] inSection:0];
-            [paletteHandler setSelectedIndexPath:selectedIndexPath];
-            [cell setCollectionHandler:paletteHandler];
-        }
-        if (cell)
-        {
-            [cell rightActionButtonVisibility:NO];
-            [cell.collectionView reloadData];
-            [cell layoutIfNeeded];
-        }
+        PaletteCollectionHandler *paletteHandler = [[PaletteCollectionHandler alloc] initWithData:@[_sortedPaletteColorItems] collectionView:cell.collectionView];
+        paletteHandler.delegate = self;
+        NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObject:_selectedPaletteColorItem] inSection:0];
+        if (selectedIndexPath.row == NSNotFound)
+            selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObject:[_gradientColorsCollection getDefaultGradientPalette]] inSection:0];
+        [paletteHandler setSelectedIndexPath:selectedIndexPath];
+        [cell setCollectionHandler:paletteHandler];
         return cell;
     }
     else if ([cellData.type isEqualToString:[OASimpleTableViewCell getCellIdentifier]])

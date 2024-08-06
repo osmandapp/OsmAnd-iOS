@@ -854,8 +854,10 @@ static const NSInteger kElevationMaxMeters = 2000;
     }
     else if ([item.cellType isEqualToString:[OACollectionSingleLineTableViewCell reuseIdentifier]])
     {
-        OACollectionSingleLineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACollectionSingleLineTableViewCell reuseIdentifier]];
-            cell.separatorInset = UIEdgeInsetsZero;
+        OACollectionSingleLineTableViewCell *cell =
+            [tableView dequeueReusableCellWithIdentifier:[OACollectionSingleLineTableViewCell getCellIdentifier]];
+        [cell rightActionButtonVisibility:NO];
+        [cell.collectionView registerNib:[UINib nibWithNibName:PaletteCollectionViewCell.reuseIdentifier bundle:nil] forCellWithReuseIdentifier:PaletteCollectionViewCell.reuseIdentifier];
 
         PaletteCollectionHandler *paletteHandler = [[PaletteCollectionHandler alloc] initWithData:@[_sortedPaletteColorItems] collectionView:cell.collectionView];
         paletteHandler.delegate = self;
@@ -864,15 +866,6 @@ static const NSInteger kElevationMaxMeters = 2000;
             selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObject:[_gradientColorsCollection getGradientPaletteBy:[_terrainMode getKeyName]]] inSection:0];
         [paletteHandler setSelectedIndexPath:selectedIndexPath];
         [cell setCollectionHandler:paletteHandler];
-
-        [cell rightActionButtonVisibility:NO];
-        [cell.collectionView performBatchUpdates:^{
-            for (NSInteger i = 0; i < cell.collectionView.numberOfSections; i ++)
-            {
-                [cell.collectionView reloadSections:[NSIndexSet indexSetWithIndex:i]];
-            }
-        } completion:nil];
-        [cell layoutIfNeeded];
         return cell;
     }
     return nil;

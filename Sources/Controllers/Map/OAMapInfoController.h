@@ -63,4 +63,6 @@
 - (void)viewWillTransition:(CGSize)size;
 - (void)updateSpeedometer;
 
+- (void)onFrameAnimatorsUpdated;
+
 @end

@@ -84,7 +84,6 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
     BOOL _isDownloading;
     BOOL _wasDownloading;
     
-    CADisplayLink * _displayLink;
     CFTimeInterval _currentLoopStart;
     CFTimeInterval _currentLoopDuration;
 }
@@ -499,24 +498,17 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
 
 - (void) scheduleAnimationStart
 {
-    if (_displayLink) 
-    {
-        [_displayLink invalidate];
-        _displayLink = nil;
-    }
-    _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(onAnimationTick:)];
     _currentLoopStart = CACurrentMediaTime();
     _currentLoopDuration = kAnimationFrameDelaySec;
-    [_displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
 }
 
-- (void) onAnimationTick:(CADisplayLink *)timer
+- (void)onFrameAnimatorsUpdated
 {
-    if (_animationState != EOAWeatherToolbarAnimationStateIdle)
+    if (_animationState != EOAWeatherToolbarAnimationStateIdle && _currentLoopStart > 0)
     {
+        CFTimeInterval currentTime = CACurrentMediaTime();
         CFTimeInterval nextLoopStart = _currentLoopStart + _currentLoopDuration;
-        
-        if (timer.timestamp >= nextLoopStart)
+        if (currentTime >= nextLoopStart)
         {
             _currentLoopStart = nextLoopStart;
             
@@ -543,15 +535,14 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
     }
     else
     {
-        // stop animation loop
-        [timer invalidate];
-        _displayLink = nil;
+        _currentLoopStart = 0;
     }
 }
 
 - (void) stopAnimation
 {
     _animationState = EOAWeatherToolbarAnimationStateIdle;
+    _currentLoopStart = 0;
     [self updateProgressBar];
     [self updatePlayForecastButton];
 }

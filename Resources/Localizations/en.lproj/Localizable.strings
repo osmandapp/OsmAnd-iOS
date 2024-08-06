@@ -1139,6 +1139,7 @@
 "weather_cloud_enable_descr" = "Enable to view cloud layer on the map.";
 "weather_precip_enable_descr" = "Enable to view precipitation layer on the map.";
 "weather_contours_enable_descr" = "Enable to view isolines layer on the map.";
+"weather_wind_animation_enable_descr" = "Enable to view wind animation layer on the map.";
 
 "screen_settings_weather_toolbar" = "Weather toolbar";
 

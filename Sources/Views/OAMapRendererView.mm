@@ -1152,6 +1152,11 @@ forcedUpdate:(BOOL)forcedUpdate
     _renderer->setDateTime(dateTime);
 }
 
+- (void) changeTimePeriod
+{
+    _renderer->changeTimePeriod();
+}
+
 - (void)setSymbolSubsectionConfiguration:(int)subsectionIndex configuration:(const OsmAnd::SymbolSubsectionConfiguration &)configuration
 {
     _renderer->setSymbolSubsectionConfiguration(subsectionIndex, configuration);

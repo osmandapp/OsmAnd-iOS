@@ -49,7 +49,7 @@
                     </constraints>
                 </view>
                 <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="H2C-uP-knh" customClass="OASegmentedSlider">
-                    <rect key="frame" x="18" y="175" width="369" height="73"/>
+                    <rect key="frame" x="82" y="175" width="305" height="73"/>
                     <color key="tintColor" name="iconColorActive"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="72" id="Anv-8i-EZX"/>
@@ -60,11 +60,31 @@
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                 </slider>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" springLoaded="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TBr-ZQ-5ff">
+                    <rect key="frame" x="20" y="189" width="54" height="44"/>
+                    <color key="backgroundColor" name="buttonBgColorTertiary"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="LeA-Tg-0fc"/>
+                        <constraint firstAttribute="width" constant="54" id="iSx-0m-5uu"/>
+                    </constraints>
+                    <color key="tintColor" name="buttonBgColorPrimary"/>
+                    <state key="normal" title="Button"/>
+                    <buttonConfiguration key="configuration" style="plain" image="ic_custom_play"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <real key="value" value="9"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="onPlayForecastClicked:" destination="jQ7-Py-E2J" eventType="touchUpInside" id="7hh-H1-oKv"/>
+                    </connections>
+                </button>
             </subviews>
             <viewLayoutGuide key="safeArea" id="aBx-xP-AGq"/>
             <color key="backgroundColor" name="viewBg"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="IOB-SJ-nfi" secondAttribute="trailing" id="15M-gt-URh"/>
+                <constraint firstItem="H2C-uP-knh" firstAttribute="leading" secondItem="TBr-ZQ-5ff" secondAttribute="trailing" constant="10" id="2bR-ZJ-OuT"/>
                 <constraint firstItem="aBx-xP-AGq" firstAttribute="trailing" secondItem="F33-ES-4SU" secondAttribute="trailing" id="5r0-dR-3ye"/>
                 <constraint firstItem="cAi-yw-VnC" firstAttribute="leading" secondItem="jQ7-Py-E2J" secondAttribute="leading" id="68L-uU-qBD"/>
                 <constraint firstItem="IOB-SJ-nfi" firstAttribute="leading" secondItem="jQ7-Py-E2J" secondAttribute="leading" id="8gK-gw-UQl"/>
@@ -72,18 +92,20 @@
                 <constraint firstItem="F33-ES-4SU" firstAttribute="leading" secondItem="aBx-xP-AGq" secondAttribute="leading" id="9yN-sU-fvc"/>
                 <constraint firstItem="H2C-uP-knh" firstAttribute="top" secondItem="iIX-79-Rqj" secondAttribute="bottom" constant="6" id="INP-Ym-kfx"/>
                 <constraint firstItem="cAi-yw-VnC" firstAttribute="top" secondItem="IOB-SJ-nfi" secondAttribute="bottom" constant="12" id="Ita-8w-MRE"/>
+                <constraint firstItem="TBr-ZQ-5ff" firstAttribute="leading" secondItem="aBx-xP-AGq" secondAttribute="leading" constant="20" id="JFS-tr-pUq"/>
                 <constraint firstItem="IOB-SJ-nfi" firstAttribute="top" secondItem="jQ7-Py-E2J" secondAttribute="top" constant="12" id="Q4O-RA-aPV"/>
                 <constraint firstItem="F33-ES-4SU" firstAttribute="top" secondItem="cAi-yw-VnC" secondAttribute="bottom" id="dz4-qE-mhY"/>
                 <constraint firstItem="iIX-79-Rqj" firstAttribute="top" secondItem="F33-ES-4SU" secondAttribute="bottom" id="gF4-vo-Pyr"/>
                 <constraint firstItem="iIX-79-Rqj" firstAttribute="leading" secondItem="jQ7-Py-E2J" secondAttribute="leading" id="iN5-nY-ze7"/>
+                <constraint firstItem="TBr-ZQ-5ff" firstAttribute="centerY" secondItem="H2C-uP-knh" secondAttribute="centerY" id="mWN-Ak-jqt"/>
                 <constraint firstAttribute="trailing" secondItem="cAi-yw-VnC" secondAttribute="trailing" id="ptP-sB-KZE"/>
-                <constraint firstItem="H2C-uP-knh" firstAttribute="leading" secondItem="aBx-xP-AGq" secondAttribute="leading" constant="20" id="wqW-eI-JWp"/>
                 <constraint firstItem="aBx-xP-AGq" firstAttribute="trailing" secondItem="H2C-uP-knh" secondAttribute="trailing" constant="20" id="xtQ-9l-dxX"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="dateCollectionView" destination="IOB-SJ-nfi" id="Z4t-hq-2UG"/>
+                <outlet property="playButton" destination="TBr-ZQ-5ff" id="gvz-6Q-KfN"/>
                 <outlet property="timeSliderView" destination="H2C-uP-knh" id="fZf-5P-ZH3"/>
                 <outlet property="weatherStackView" destination="F33-ES-4SU" id="5lS-ws-Kcc"/>
             </connections>
@@ -91,6 +113,13 @@
         </view>
     </objects>
     <resources>
+        <image name="ic_custom_play" width="30" height="30"/>
+        <namedColor name="buttonBgColorPrimary">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="buttonBgColorTertiary">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="0.15000000596046448" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="customSeparator">
             <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

@@ -123,6 +123,13 @@
             @"title" : OALocalizedString(@"map_settings_weather_precip"),
             @"value" : @(_app.data.weatherPrecip),
             @"image" : @"ic_custom_precipitation"
+        },
+        @{
+            @"type"  : [OAValueTableViewCell getCellIdentifier],
+            @"name"  : kWeatherWindAnimation,
+            @"title" : OALocalizedString(@"map_settings_weather_wind_animation"),
+            @"value" : @(_app.data.weatherWindAnimation),
+            @"image" : @"ic_custom_wind"
         }];
 
     NSString *selectedContourLinesName = OALocalizedString(@"shared_string_none");
@@ -304,6 +311,8 @@
         return EOAWeatherLayerTypeCloud;
     else if ([type isEqualToString:kWeatherPrecip])
         return EOAWeatherLayerTypePrecipitation;
+    else if ([type isEqualToString:kWeatherWindAnimation])
+        return EOAWeatherLayerTypeWindAnimation;
     else
         return EOAWeatherLayerTypeContours;
 }

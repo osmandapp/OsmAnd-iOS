@@ -27,21 +27,38 @@
 #import "OAAutoObserverProxy.h"
 #import "OAAppData.h"
 #import "OAObservable.h"
+#import "OAWeatherWebClient.h"
 #import "OsmAnd_Maps-Swift.h"
 
-#define kDefaultZoom 10
+static int kDefaultZoom = 10;
+
+static int kForecastStepsPerHour = 12; // 5 minutes step
+static NSInteger kForecastMaxStepsCount = FORECAST_ANIMATION_DURATION_HOURS * kForecastStepsPerHour;
+
+static NSTimeInterval kAnimationStartDelaySec = 0.1;
+static NSTimeInterval kAnimationFrameDelaySec = 0.083 * 2;
+static NSTimeInterval kDownloadingCompleteDelaySec = 0.25;
+
+typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
+    EOAWeatherToolbarAnimationStateIdle = 0,
+    EOAWeatherToolbarAnimationStateStarted,
+    EOAWeatherToolbarAnimationStateInProgress,
+    EOAWeatherToolbarAnimationStateSuspended,
+};
 
 @interface OAWeatherToolbar () <OAWeatherToolbarDelegate>
 
 @property (weak, nonatomic) IBOutlet OAFoldersCollectionView *dateCollectionView;
 @property (weak, nonatomic) IBOutlet OASegmentedSlider *timeSliderView;
 @property (weak, nonatomic) IBOutlet UIStackView *weatherStackView;
+@property (weak, nonatomic) IBOutlet UIButton *playButton;
 
 @end
 
 @implementation OAWeatherToolbar
 {
     OsmAndAppInstance _app;
+    OAWeatherPlugin *_plugin;
     NSMutableArray<OAAutoObserverProxy *> *_layerChangeObservers;
     OAAutoObserverProxy *_contourNameChangeObserver;
     OAAutoObserverProxy *_mapSourceUpdatedObserver;
@@ -54,6 +71,21 @@
     float _prevZoom;
     OsmAnd::PointI _prevTarget31;
     NSArray<OAWeatherWidget *> *_weatherWidgetControlsArray;
+    
+    NSInteger _lastUpdatedIndex;
+    NSDate *_currentDate;
+    NSDate *_selectedDate;
+    
+    EOAWeatherToolbarAnimationState _animationState;
+    NSInteger _animationStartStep;
+    NSInteger _currentStep;
+    NSInteger _animateStepCount;
+    NSInteger _animationStartStepCount;
+    BOOL _isDownloading;
+    BOOL _wasDownloading;
+    
+    CFTimeInterval _currentLoopStart;
+    CFTimeInterval _currentLoopDuration;
 }
 
 - (instancetype)init
@@ -86,6 +118,7 @@
 {
     self.hidden = YES;
     _app = [OsmAndApp instance];
+    _plugin = (OAWeatherPlugin *) [OAPluginsHelper getPlugin:OAWeatherPlugin.class];
     _currentTimezoneCalendar = NSCalendar.autoupdatingCurrentCalendar;
     _currentTimezoneCalendar.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
     _previousSelectedDayIndex = 0;
@@ -96,10 +129,16 @@
 
     self.dateCollectionView.foldersDelegate = _datesHandler;
     
-    self.timeSliderView.stepsAmountWithoutDrawMark = 145.0;
+    self.timeSliderView.stepsAmountWithoutDrawMark = kDayFiveMinutesMarksCount;
     [self.timeSliderView clearTouchEventsUpInsideUpOutside];
+    [self.timeSliderView setUsingExtraThumbInset:YES];
+    
+    _currentDate = [NSDate now];
+    _selectedDate = _currentDate;
+    _animationState = EOAWeatherToolbarAnimationStateIdle;
+    
     [self.timeSliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
-    [self.timeSliderView addTarget:self action:@selector(timeChanged:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
+    [self.timeSliderView addTarget:self action:@selector(timeChanged:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside | UIControlEventValueChanged];
 
     _layerChangeObservers = [NSMutableArray array];
     for (OAWeatherBand *band in [OAWeatherHelper sharedInstance].bands)
@@ -112,6 +151,11 @@
     _mapSourceUpdatedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(updateLayersHandlerData)
                                                   andObserve:[OARootViewController instance].mapPanel.mapViewController.mapSourceUpdatedObservable];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(onDownloadStateChanged:)
+                                                     name:kOAWeatherWebClientNotificationKey object:nil];
+    
     [self updateInfo];
 }
 
@@ -135,7 +179,7 @@
 
 - (void)configureWidgetControlsStackView
 {
-    _weatherWidgetControlsArray = [[(OAWeatherPlugin *)[OAPluginsHelper getPlugin:OAWeatherPlugin.class] createWidgetsControls] copy];
+    _weatherWidgetControlsArray = [[_plugin createWidgetsControls] copy];
     
     if (_weatherWidgetControlsArray && _weatherWidgetControlsArray.count > 0) {
         [_weatherStackView removeAllArrangedSubviews];
@@ -291,7 +335,7 @@
         [timeValues addObject:nextHourDate];
     }
     
-    NSInteger minuteSteps = 5;
+    NSInteger minuteSteps = 11;
     NSMutableArray<NSDate *> *timeValuesTotal = [NSMutableArray array];
     
     for (NSInteger index = 0; index <= timeValues.count - 1; index++)
@@ -302,17 +346,17 @@
         {
             for (NSInteger min = 1; min <= minuteSteps; min++)
             {
-                NSDate *next10MinDate = [calendar dateByAddingUnit:NSCalendarUnitMinute
-                                                             value:min * 10
+                NSDate *next5MinDate = [calendar dateByAddingUnit:NSCalendarUnitMinute
+                                                             value:min * 5
                                                             toDate:data
                                                            options:0];
                 
-                [timeValuesTotal addObject:next10MinDate];
+                [timeValuesTotal addObject:next5MinDate];
             }
         }
         
     }
-    // [21:00:00, 21:10:00...21:50:00, 22:00:00, 22:10:00...21:00:00]
+    // [21:00:00, 21:05:00, 21:10:00 ... 21:55:00, 22:00:00]
     _timeValues = timeValuesTotal;
 }
 
@@ -419,18 +463,207 @@
     }
 }
 
+#pragma mark - Start/stop button
+
+- (IBAction)onPlayForecastClicked:(id)sender
+{
+    EOAWeatherToolbarAnimationState animationState = _animationState == EOAWeatherToolbarAnimationStateIdle ? EOAWeatherToolbarAnimationStateStarted : EOAWeatherToolbarAnimationStateIdle;
+    _animationState = animationState;
+    if (animationState == EOAWeatherToolbarAnimationStateStarted)
+    {
+        _currentStep = [self.timeSliderView getIndexForOptionStepsAmountWithoutDrawMark];
+        _animationStartStep = _currentStep;
+        _selectedDate = _timeValues[_currentStep];
+        
+        NSInteger remainingStepsForMidnight = _timeValues.count - _currentStep - 1;
+        _animateStepCount = MIN(kForecastMaxStepsCount, remainingStepsForMidnight);
+        _animationStartStepCount = _animateStepCount;
+        
+        [_plugin prepareForDayAnimation:_selectedDate];
+        [self updateSelectedDate:_selectedDate forAnimation:YES resetPeriod:YES];
+        [self scheduleAnimationStart];
+    }
+    else
+    {
+        [self stopAnimation];
+    }
+    [self updatePlayForecastButton];
+}
+
+- (void) updatePlayForecastButton
+{
+    NSString *iconName = _animationState == EOAWeatherToolbarAnimationStateIdle ? @"ic_custom_play" : @"ic_custom_pause";
+    [_playButton setImage:[UIImage templateImageNamed:iconName] forState:UIControlStateNormal];
+}
+
+- (void) scheduleAnimationStart
+{
+    _currentLoopStart = CACurrentMediaTime();
+    _currentLoopDuration = kAnimationFrameDelaySec;
+}
+
+- (void)onFrameAnimatorsUpdated
+{
+    if (_animationState != EOAWeatherToolbarAnimationStateIdle && _currentLoopStart > 0)
+    {
+        CFTimeInterval currentTime = CACurrentMediaTime();
+        CFTimeInterval nextLoopStart = _currentLoopStart + _currentLoopDuration;
+        if (currentTime >= nextLoopStart)
+        {
+            _currentLoopStart = nextLoopStart;
+            
+            if (!_isDownloading)
+            {
+                if (!_wasDownloading)
+                {
+                    _currentLoopDuration = kAnimationFrameDelaySec;
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self moveToNextForecastFrame];
+                    });
+                }
+                else
+                {
+                    _wasDownloading = NO;
+                    _currentLoopDuration = kDownloadingCompleteDelaySec;
+                }
+            }
+            else
+            {
+                _wasDownloading = YES;
+            }
+        }
+    }
+    else
+    {
+        _currentLoopStart = 0;
+    }
+}
+
+- (void) stopAnimation
+{
+    _animationState = EOAWeatherToolbarAnimationStateIdle;
+    _currentLoopStart = 0;
+    [self updateProgressBar];
+    [self updatePlayForecastButton];
+}
+
+- (void) moveToNextForecastFrame
+{
+    if (_animationState == EOAWeatherToolbarAnimationStateIdle)
+        return;
+    
+    if (_isDownloading)
+    {
+        _animationState = EOAWeatherToolbarAnimationStateSuspended;
+        return;
+    }
+    
+    if ([OAWeatherHelper.sharedInstance isProcessingTiles])
+    {
+        _animationState = EOAWeatherToolbarAnimationStateSuspended;
+        [self updateProgressBar];
+        return;
+    }
+    
+    if (_currentStep + 1 > _timeValues.count || _animateStepCount == 0)
+    {
+        _currentStep = _animationStartStep;
+        _animateStepCount = _animationStartStepCount;
+    }
+    else
+    {
+        _currentStep++;
+        _animateStepCount--;
+    }
+    
+    [self updateProgressBar];
+    [self updateSliderValue];
+    [self updateSelectedDate:_timeValues[_currentStep] forAnimation:YES resetPeriod:NO];
+    
+    if (_animationState == EOAWeatherToolbarAnimationStateStarted || _animationState == EOAWeatherToolbarAnimationStateSuspended)
+    {
+        _animationState = EOAWeatherToolbarAnimationStateInProgress;
+        [self updateProgressBar];
+    }
+}
+
+#pragma mark - Downloading methods
+
+- (void) onDownloadStateChanged:(NSNotification *)notification
+{
+    NSNumber *requestsCount = notification.object;
+
+    if (requestsCount)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            _isDownloading = requestsCount.intValue > 0;
+            [self updateProgressBar];
+        });
+    }
+}
+
+- (void) updateProgressBar
+{
+    if (_isDownloading || (_animationState != EOAWeatherToolbarAnimationStateIdle && [OAWeatherHelper.sharedInstance isProcessingTiles]))
+    {
+        [[OARootViewController instance].view addSpinnerInCenterOfCurrentView:YES];
+    }
+    else
+    {
+        [[OARootViewController instance].view removeSpinner];
+    }
+}
+
 #pragma mark - UISlider
 
 - (void)timeChanged:(UISlider *)sender
 {
+    BOOL fromUser = sender != nil;
+    if (fromUser)
+        [self stopAnimation];
+        
     NSInteger index = [self.timeSliderView getIndexForOptionStepsAmountWithoutDrawMark];
-    NSDate *selectedDate = _timeValues[index];
-    [[OARootViewController instance].mapPanel.mapViewController.mapLayers updateWeatherDate:selectedDate];
+    _selectedDate = _timeValues[index];
+    [self updateSelectedDate:_selectedDate forAnimation:!fromUser resetPeriod:NO];
+}
 
-    if ([_layersHandler isAllLayersDisabled])
+- (void) updateSliderValue
+{
+    float value = ((float)_currentStep) / ((float)_timeValues.count);
+    [self.timeSliderView setValue:value animated:YES];
+}
+
+- (void) updateSelectedDate:(NSDate *)date forAnimation:(BOOL)forAnimation resetPeriod:(BOOL)resetPeriod
+{
+    [_plugin setForecastDate:date forAnimation:forAnimation resetPeriod:resetPeriod];
+    if (date)
+        date = [OAWeatherHelper roundForecastTimeToHour:date];
+    
+    [self checkDateOffset:date];
+    
+    // TODO: replace to widgetsPanel.setSelectedDate(date);
+    [_plugin updateWidgetsInfo];
+    [self updateWidgetsInfo];
+    
+    // TODO: replace to [[OARootViewController instance].mapPanel refreshMap];
+    [[OARootViewController instance].mapPanel.mapViewController.mapLayers updateWeatherLayers];
+}
+
+- (void) checkDateOffset:(NSDate *)date
+{
+    NSInteger MIN_UTC_HOURS_OFFSET = 24 * 60 * 60;
+    if (date && (([date timeIntervalSince1970] - [_currentDate timeIntervalSince1970])  >= MIN_UTC_HOURS_OFFSET))
     {
-        [(OAWeatherPlugin *) [OAPluginsHelper getPlugin:OAWeatherPlugin.class] updateWidgetsInfo];
-        [self updateWidgetsInfo];
+        NSCalendar *utcCalendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
+        utcCalendar.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
+        NSDateComponents *dateComponents = [utcCalendar components:NSCalendarUnitHour fromDate:date];
+        NSInteger hours = dateComponents.hour;
+        NSInteger offset = hours % 3;
+        if (offset == 2)
+            [dateComponents setHour:hours + 1];
+        else if (offset == 1)
+            [dateComponents setHour:hours - 1];
+        date = [utcCalendar dateFromComponents:dateComponents];
     }
 }
 

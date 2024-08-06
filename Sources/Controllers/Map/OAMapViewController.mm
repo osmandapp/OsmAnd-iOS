@@ -496,6 +496,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 {
     if (_mapLayers)
         [_mapLayers onMapFrameAnimatorsUpdated];
+
+    [[OARootViewController instance].mapPanel.hudViewController.mapInfoController onFrameAnimatorsUpdated];
 }
 
 - (void) frameUpdated

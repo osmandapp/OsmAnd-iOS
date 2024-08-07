@@ -16,7 +16,7 @@ class PaletteCollectionViewCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
 
-        self.selectionView.layer.cornerRadius = 9
-        self.backgroundImageView.layer.cornerRadius = 3;
+        selectionView.layer.cornerRadius = 9
+        backgroundImageView.layer.cornerRadius = 3
     }
 }

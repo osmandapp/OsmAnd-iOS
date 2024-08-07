@@ -15,7 +15,7 @@ struct GradientPoint {
 extension UIImageView {
 
     func gradated(_ gradientPoints: [GradientPoint]) {
-        removeGradation()
+        removeGradientLayers()
 
         let gradientMaskLayer = CAGradientLayer()
         gradientMaskLayer.frame = CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height)
@@ -26,11 +26,9 @@ extension UIImageView {
         layer.insertSublayer(gradientMaskLayer, at: 0)
     }
 
-    @objc func removeGradation() {
-        if let sublayers = layer.sublayers {
-            for subLayer in sublayers where subLayer is CAGradientLayer {
-                subLayer.removeFromSuperlayer()
-            }
-        }
+    @objc func removeGradientLayers() {
+        layer.sublayers?
+            .compactMap { $0 as? CAGradientLayer }
+            .forEach { $0.removeFromSuperlayer() }
     }
 }

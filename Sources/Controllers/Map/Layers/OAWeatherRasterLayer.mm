@@ -162,7 +162,7 @@
                 break;
         }
         
-        // TODO: delete when android team fix alpha changing bug
+        // TODO: delete when android team fix alpha changing bug https://github.com/osmandapp/OsmAnd/issues/20533
         if (_wasAlphaChanged)
         {
             _timePeriodEnd = _timePeriodStart;

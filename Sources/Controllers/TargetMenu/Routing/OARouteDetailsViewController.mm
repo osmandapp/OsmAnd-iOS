@@ -214,31 +214,30 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
             {
                 RouteInfoSector routeInfoSector = RouteInfoSectorStraight;
                 RouteInfoDestinationSector *routeInfoDestinationSector = [[RouteInfoDestinationSector alloc] initWithSector:routeInfoSector distance:model.distance];
-                if (directionsInfo.count >= 2)
+                
+                NSArray<CLLocation *> *locationPoints = [OARoutingHelper sharedInstance].getRoute.getRouteLocations;
+                if (locationPoints.count > 1)
                 {
-                    OARouteDirectionInfo *prevPrevDirectionInfo = directionsInfo[directionsInfo.count - 2];
-                    OARouteDirectionInfo *prevDirectionInfo = directionsInfo[directionsInfo.count - 1];
-                    OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
-                    
-                    CLLocation *prevPrevLocation = [routingHelper getLocationFromRouteDirection:prevPrevDirectionInfo];
-                    CLLocation *prevLocation = [routingHelper getLocationFromRouteDirection:prevDirectionInfo];
-                    CLLocation *destinationLocation = [OATargetPointsHelper.sharedInstance getPointToNavigate].point;
+                    CLLocation *prevPrevLocation = locationPoints[locationPoints.count - 2];
+                    CLLocation *prevLocation = locationPoints[locationPoints.count - 1];
+                    CLLocation *destinationLocation = [[OARoutingHelper sharedInstance] getFinalLocation];
                     
                     double distanceToDestination = [prevLocation distanceFromLocation:destinationLocation];
                     routeInfoDestinationSector.distance = distanceToDestination;
                     if (distanceToDestination > 3.0)
                     {
                         double routeBearing = [prevPrevLocation bearingTo:prevLocation];
+                        NSLog(@">>>> routeBearing=%f", routeBearing);
                         double bearing = [prevLocation bearingTo:destinationLocation];
+                        NSLog(@">>>> bearing=%f", bearing);
                         double diff = -degreesDiff(routeBearing, bearing);
-                        
+                        NSLog(@">>>> diff=%f", diff);
                         routeInfoSector = [self determineSectorForBearing:diff];
                     }
                     else
                     {
                         routeInfoSector = [self determineSectorForBearing:0];
                     }
-                    
                     routeInfoDestinationSector.sector = routeInfoSector;
                 }
                 [cell setLeftImageViewWithImage:routeInfoDestinationSector.getImage];

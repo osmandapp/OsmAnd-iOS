@@ -214,17 +214,31 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
             {
                 RouteInfoSector routeInfoSector = RouteInfoSectorStraight;
                 RouteInfoDestinationSector *routeInfoDestinationSector = [[RouteInfoDestinationSector alloc] initWithSector:routeInfoSector distance:model.distance];
-                if (directionsInfo.count > 1)
+                if (directionsInfo.count >= 2)
                 {
-                    OARouteDirectionInfo *prevDirectionInfo = directionsInfo[directionsInfo.count - 2];
+                    OARouteDirectionInfo *prevPrevDirectionInfo = directionsInfo[directionsInfo.count - 2];
+                    OARouteDirectionInfo *prevDirectionInfo = directionsInfo[directionsInfo.count - 1];
                     OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
                     
+                    CLLocation *prevPrevLocation = [routingHelper getLocationFromRouteDirection:prevPrevDirectionInfo];
                     CLLocation *prevLocation = [routingHelper getLocationFromRouteDirection:prevDirectionInfo];
-                    CLLocation *currentLocation = [routingHelper getLocationFromRouteDirection:model];
+                    CLLocation *destinationLocation = [OATargetPointsHelper.sharedInstance getPointToNavigate].point;
                     
-                    double bearing = [currentLocation bearingTo:prevLocation];
-                    routeInfoSector = [self determineSectorForBearing:bearing];
-
+                    double distanceToDestination = [prevLocation distanceFromLocation:destinationLocation];
+                    routeInfoDestinationSector.distance = distanceToDestination;
+                    if (distanceToDestination > 3.0)
+                    {
+                        double routeBearing = [prevPrevLocation bearingTo:prevLocation];
+                        double bearing = [prevLocation bearingTo:destinationLocation];
+                        double diff = -degreesDiff(routeBearing, bearing);
+                        
+                        routeInfoSector = [self determineSectorForBearing:diff];
+                    }
+                    else
+                    {
+                        routeInfoSector = [self determineSectorForBearing:0];
+                    }
+                    
                     routeInfoDestinationSector.sector = routeInfoSector;
                 }
                 [cell setLeftImageViewWithImage:routeInfoDestinationSector.getImage];
@@ -247,10 +261,14 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     return cell;
 }
 
-- (RouteInfoSector)determineSectorForBearing:(double)bearing {
-    if (bearing >= -180 && bearing < -60) {
+- (RouteInfoSector)determineSectorForBearing:(double)bearing
+{
+    if (bearing >= -180 && bearing < -60)
+    {
         return RouteInfoSectorLeft;
-    } else if (bearing >= 60 && bearing <= 180) {
+    }
+    else if (bearing >= 60 && bearing <= 180)
+    {
         return RouteInfoSectorRight;
     }
     // bearing >= -60 && bearing < 60 is Straight

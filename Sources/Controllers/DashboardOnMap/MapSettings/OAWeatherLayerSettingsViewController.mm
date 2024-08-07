@@ -706,7 +706,10 @@
             cell.titleLabel.text = item[@"title"];
             cell.valueLabel.text = [NSString stringWithFormat:@"%.0f%%", [item[@"value"] doubleValue] * 100];
             [cell.sliderView setValue:[item[@"value"] floatValue]];
-            [cell.sliderView addTarget:self action:@selector(onSliderValueChanged:) forControlEvents:UIControlEventValueChanged];
+            
+            // TODO: delete when android team fix alpha changing bug
+            //[cell.sliderView addTarget:self action:@selector(onSliderValueChanged:) forControlEvents:UIControlEventValueChanged];
+            [cell.sliderView addTarget:self action:@selector(onSliderValueChanged:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
         }
         return cell;
     }

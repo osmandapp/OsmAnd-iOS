@@ -707,7 +707,7 @@
             cell.valueLabel.text = [NSString stringWithFormat:@"%.0f%%", [item[@"value"] doubleValue] * 100];
             [cell.sliderView setValue:[item[@"value"] floatValue]];
             
-            // TODO: delete when android team fix alpha changing bug
+            // TODO: delete when android team fix alpha changing bug https://github.com/osmandapp/OsmAnd/issues/20533
             //[cell.sliderView addTarget:self action:@selector(onSliderValueChanged:) forControlEvents:UIControlEventValueChanged];
             [cell.sliderView addTarget:self action:@selector(onSliderValueChanged:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
         }

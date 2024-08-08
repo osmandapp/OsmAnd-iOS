@@ -8,8 +8,13 @@
 
 import UIKit
 
+@objc protocol ArticleRepresentable {
+    var title: String { get }
+    var url: String { get }
+}
+
 @objcMembers
-final class PopularArticle: NSObject {
+final class PopularArticle: NSObject, ArticleRepresentable {
     let title: String
     let url: String
     
@@ -31,7 +36,7 @@ final class TelegramChat: NSObject {
 }
 
 @objcMembers
-final class ArticleNode: NSObject {
+final class ArticleNode: NSObject, ArticleRepresentable {
     var title: String
     var url: String
     var level: Int
@@ -175,14 +180,14 @@ final class MenuHelpDataService: NSObject, XMLParserDelegate {
         }
     }
     
-    func getArticleName(from url: String) -> String {
-        let articleId = getArticlePropertyName(from: url)
+    func getArticleName(from article: ArticleRepresentable) -> String {
+        let articleId = getArticlePropertyName(from: article.url)
         if let specialName = getSpecialArticleName(for: articleId) {
             return specialName
         } else {
             let articleNameKey = "help_article_\(articleId)_name"
             let localized = localizedString(articleNameKey)
-            return localized.isEmpty ? articleId.replacingOccurrences(of: "_", with: " ").capitalized : localized
+            return localized == articleNameKey ? article.title : localized
         }
     }
     

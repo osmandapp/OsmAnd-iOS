@@ -93,7 +93,7 @@ static NSString * const kLinkExternalType = @"ext_link";
     
     for (PopularArticle *article in _mostViewedArticles)
     {
-        NSString *title = [_helpDataManager getArticleNameFrom:article.url];
+        NSString *title = [_helpDataManager getArticleNameFrom:article];
         NSString *url = article.url;
         OATableRowData *articleRow = [popularArticlesSection createNewRow];
         [articleRow setCellType:[OASimpleTableViewCell getCellIdentifier]];
@@ -109,7 +109,7 @@ static NSString * const kLinkExternalType = @"ext_link";
     
     for (ArticleNode *articleNode in _parsedArticles)
     {
-        NSString *title = [_helpDataManager getArticleNameFrom:articleNode.url];
+        NSString *title = [_helpDataManager getArticleNameFrom:articleNode];
         if ([title isEqualToString:OALocalizedString(@"troubleshooting")])
         {
             _troubleshootingChildArticles = articleNode.childArticles;
@@ -138,7 +138,7 @@ static NSString * const kLinkExternalType = @"ext_link";
         if ([childArticle.url isEqualToString:@"https://osmand.net/docs/user/troubleshooting/android_auto"])
             continue;
         
-        NSString *title = [_helpDataManager getArticleNameFrom:childArticle.url];
+        NSString *title = [_helpDataManager getArticleNameFrom:childArticle];
         OATableRowData *row = [troubleshootingSection createNewRow];
         [row setCellType:[OASimpleTableViewCell getCellIdentifier]];
         [row setKey:@"troubleshooting"];

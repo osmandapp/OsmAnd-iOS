@@ -158,20 +158,6 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
     if (currSectionName && actionsInSection && actionsInSection.count > 0)
         [mapping setObject:[NSArray arrayWithArray:actionsInSection] forKey:currSectionName];
     
-    
-    for (NSString *key in mapping.allKeys)
-    {
-        NSArray<QuickActionType *> *actions = mapping[key];
-        actions = [actions sortedArrayUsingComparator:^NSComparisonResult(QuickActionType *obj1, QuickActionType *obj2) {
-            NSComparisonResult comparationResult = [obj1.name compare:obj2.name];
-            if (comparationResult != NSOrderedSame)
-                return comparationResult;
-            else
-                return [obj1.nameAction compare:obj2.nameAction];
-        }];
-        mapping[key] = actions;
-    }
-    
     _actions = [OrderedDictionary dictionaryWithDictionary:mapping];
 }
 

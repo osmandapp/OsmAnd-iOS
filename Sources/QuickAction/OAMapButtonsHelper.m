@@ -261,22 +261,28 @@ static QuickActionType *TYPE_MY_PLACES;
 - (void)updateActionTypes
 {
     NSMutableArray<QuickActionType *> *allTypes = [NSMutableArray new];
-//    [allTypes addObject:OANewAction.TYPE];
-    [allTypes addObject:OAFavoriteAction.TYPE];
-    [allTypes addObject:OAGPXAction.TYPE];
-    [allTypes addObject:OAMarkerAction.TYPE];
+    // [allTypes addObject:OANewAction.TYPE];
+   
     // configure map
     [allTypes addObject:OAShowHideFavoritesAction.TYPE];
     [allTypes addObject:OAShowHideGPXTracksAction.TYPE];
     [allTypes addObject:OAShowHidePoiAction.TYPE];
-    [allTypes addObject:OAMapStyleAction.TYPE];
     [allTypes addObject:OADayNightModeAction.TYPE];
+    [allTypes addObject:OAMapStyleAction.TYPE];
+    [allTypes addObject:OAMapSourceAction.TYPE];
+    [allTypes addObject:OAMapOverlayAction.TYPE];
+    [allTypes addObject:OAMapUnderlayAction.TYPE];
     [allTypes addObject:OAShowHideTransportLinesAction.TYPE];
     [allTypes addObject:OAShowHideMapillaryAction.TYPE];
     [allTypes addObject:[ShowHideCycleRoutesAction getQuickActionType]];
     [allTypes addObject:[ShowHideMtbRoutesAction getQuickActionType]];
     [allTypes addObject:[ShowHideHikingRoutesAction getQuickActionType]];
     [allTypes addObject:[ShowHideDifficultyClassificationAction getQuickActionType]];
+    
+    // my places
+    [allTypes addObject:OAFavoriteAction.TYPE];
+    [allTypes addObject:OAGPXAction.TYPE];
+    [allTypes addObject:OAMarkerAction.TYPE];
 
     // navigation
     [allTypes addObject:OANavVoiceAction.TYPE];
@@ -287,13 +293,10 @@ static QuickActionType *TYPE_MY_PLACES;
     [allTypes addObject:OANavAutoZoomMapAction.TYPE];
     [allTypes addObject:OANavStartStopAction.TYPE];
     [allTypes addObject:OANavResumePauseAction.TYPE];
-    [allTypes addObject:OASwitchProfileAction.TYPE];
     [allTypes addObject:OANavRemoveNextDestination.TYPE];
-
-    // OsmandRasterMapsPlugin
-    [allTypes addObject:OAMapSourceAction.TYPE];
-    [allTypes addObject:OAMapOverlayAction.TYPE];
-    [allTypes addObject:OAMapUnderlayAction.TYPE];
+    
+    // settings
+    [allTypes addObject:OASwitchProfileAction.TYPE];
 
     NSMutableArray<QuickActionType *> *enabledTypes = [NSMutableArray arrayWithArray:allTypes];
     [OAPluginsHelper registerQuickActionTypesPlugins:allTypes enabledTypes:enabledTypes];

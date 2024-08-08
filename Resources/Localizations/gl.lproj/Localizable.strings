@@ -197,7 +197,7 @@
 "map_markers_other" = "Outras marcaxes";
 "directions_other" = "Other directions";
 "shared_string_turn" = "Xiro";
-"stop_routing_confirm" = "Tes a certeza de querer deter a navegación\?";
+"stop_routing_confirm" = "Tes a certeza de querer finalizar a navegación?";
 "cancel_route" = "Rexeitar rota\?";
 "route_is_too_long_v2" = "Para longas distancias: Engade destinos intermedios se non se atopan camiños dentro dos 10 minutos.";
 "navigation_over_track" = "Comezar a navegación ó longo da pista\?";

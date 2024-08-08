@@ -366,6 +366,7 @@
 		323F04BA2C6500E80058DD78 /* ShowHideCycleRoutesAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 323F04B92C6500E80058DD78 /* ShowHideCycleRoutesAction.swift */; };
 		323F04BC2C652B470058DD78 /* ShowHideMtbRoutesAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 323F04BB2C652B470058DD78 /* ShowHideMtbRoutesAction.swift */; };
 		323F04BE2C6532EF0058DD78 /* BaseRouteQuickAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 323F04BD2C6532EF0058DD78 /* BaseRouteQuickAction.swift */; };
+		323F04C02C6556D30058DD78 /* ShowHideHikingRoutesAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 323F04BF2C6556D30058DD78 /* ShowHideHikingRoutesAction.swift */; };
 		3240977A27BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3240977827BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@2x.png */; };
 		3240977B27BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3240977927BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@3x.png */; };
 		3240977F27BBF995006522E3 /* OAGPXListDeletingBottomSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 3240977E27BBF995006522E3 /* OAGPXListDeletingBottomSheet.m */; };
@@ -3779,6 +3780,7 @@
 		323F04B92C6500E80058DD78 /* ShowHideCycleRoutesAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideCycleRoutesAction.swift; sourceTree = "<group>"; };
 		323F04BB2C652B470058DD78 /* ShowHideMtbRoutesAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideMtbRoutesAction.swift; sourceTree = "<group>"; };
 		323F04BD2C6532EF0058DD78 /* BaseRouteQuickAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseRouteQuickAction.swift; sourceTree = "<group>"; };
+		323F04BF2C6556D30058DD78 /* ShowHideHikingRoutesAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideHikingRoutesAction.swift; sourceTree = "<group>"; };
 		3240977827BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_overflow_menu_stroke@2x.png"; path = "Resources/Icons/ic_navbar_overflow_menu_stroke@2x.png"; sourceTree = "<group>"; };
 		3240977927BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_overflow_menu_stroke@3x.png"; path = "Resources/Icons/ic_navbar_overflow_menu_stroke@3x.png"; sourceTree = "<group>"; };
 		3240977D27BBF983006522E3 /* OAGPXListDeletingBottomSheet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGPXListDeletingBottomSheet.h; sourceTree = "<group>"; };
@@ -11117,6 +11119,7 @@
 				323F04B92C6500E80058DD78 /* ShowHideCycleRoutesAction.swift */,
 				323F04BB2C652B470058DD78 /* ShowHideMtbRoutesAction.swift */,
 				323F04BD2C6532EF0058DD78 /* BaseRouteQuickAction.swift */,
+				323F04BF2C6556D30058DD78 /* ShowHideHikingRoutesAction.swift */,
 			);
 			path = Actions;
 			sourceTree = "<group>";
@@ -16596,6 +16599,7 @@
 				FA5A21A22A9C7DE100319695 /* CALayer+Extension.swift in Sources */,
 				FAC166222B21BEF900D63755 /* PeripheralProxy.swift in Sources */,
 				DA5A825826C563A700F274C7 /* OASpeedLimitToleranceViewController.m in Sources */,
+				323F04C02C6556D30058DD78 /* ShowHideHikingRoutesAction.swift in Sources */,
 				DA5A84AE26C563A900F274C7 /* OAHistoryViewController.mm in Sources */,
 				4643322A291D5FE7005AEF12 /* OAMapSettingsNauticalDepthScreen.m in Sources */,
 				DA5A84E826C563A900F274C7 /* OAWaypointsViewController.mm in Sources */,

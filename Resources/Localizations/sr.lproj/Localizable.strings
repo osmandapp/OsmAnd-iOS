@@ -3502,3 +3502,6 @@
 "shared_string_favorites" = "Омиљено";
 "voices" = "Гласовна навођења";
 "quick_action_first_intermediate" = "Прво између";
+"route_your_destination_is_on_ahead" = "Ваше одредиште је право испред";
+"route_your_destination_is_on_left" = "Ваше одредиште је на лево";
+"route_your_destination_is_on_right" = "Ваше одредиште је на десно";

@@ -597,7 +597,7 @@
 "gpx_export_failed" = "Nije moguće sačuvati kreiranu rutu";
 "gpx_remove" = "Ukloniti putanju?";
 "shared_string_statistics" = "Statistika";
-"layer_route" = "Rute";
+"layer_route" = "Ruta";
 "gpx_analyze" = "Analiziraj";
 "gpx_route_time" = "Vreme rute";
 "gpx_uphldownhl" = "Uzbrdo/nizbrdo";

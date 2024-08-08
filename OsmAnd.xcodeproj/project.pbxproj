@@ -11050,6 +11050,7 @@
 		DA5A79D726C563A000F274C7 /* Actions */ = {
 			isa = PBXGroup;
 			children = (
+				323F04BD2C6532EF0058DD78 /* BaseRouteQuickAction.swift */,
 				DA5A79FF26C563A000F274C7 /* OAAddOSMBugAction.h */,
 				46C841482C32F44A00E284B0 /* OAAddOSMBugAction.m */,
 				DA5A79EF26C563A000F274C7 /* OAAddPOIAction.h */,
@@ -11129,15 +11130,14 @@
 				DA5A7A0126C563A000F274C7 /* OAUnsupportedAction.h */,
 				DA5A79DD26C563A000F274C7 /* OAUnsupportedAction.m */,
 				323F04B92C6500E80058DD78 /* ShowHideCycleRoutesAction.swift */,
-				323F04BB2C652B470058DD78 /* ShowHideMtbRoutesAction.swift */,
-				323F04BD2C6532EF0058DD78 /* BaseRouteQuickAction.swift */,
-				323F04BF2C6556D30058DD78 /* ShowHideHikingRoutesAction.swift */,
 				323F04C12C65639B0058DD78 /* ShowHideDifficultyClassificationAction.swift */,
-				323F04C32C656B970058DD78 /* ShowHideSkiSlopesAction.swift */,
-				323F04C52C6575070058DD78 /* ShowHideHorseRoutesAction.swift */,
-				323F04C72C6577340058DD78 /* ShowHideWhitewaterSportsAction.swift */,
 				323F04C92C6579280058DD78 /* ShowHideFitnessTrailsAction.swift */,
+				323F04BF2C6556D30058DD78 /* ShowHideHikingRoutesAction.swift */,
+				323F04C52C6575070058DD78 /* ShowHideHorseRoutesAction.swift */,
+				323F04BB2C652B470058DD78 /* ShowHideMtbRoutesAction.swift */,
 				323F04CB2C6579C30058DD78 /* ShowHideRunningRoutesAction.swift */,
+				323F04C32C656B970058DD78 /* ShowHideSkiSlopesAction.swift */,
+				323F04C72C6577340058DD78 /* ShowHideWhitewaterSportsAction.swift */,
 			);
 			path = Actions;
 			sourceTree = "<group>";

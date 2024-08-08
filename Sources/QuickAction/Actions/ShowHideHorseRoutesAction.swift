@@ -16,7 +16,7 @@ class ShowHideHorseRoutesAction: BaseRouteQuickAction {
     override static func getQuickActionType() -> QuickActionType {
         if type == nil {
             type = QuickActionType(id: QuickActionIds.showHideHorseRoutesActionId.rawValue,
-                                   stringId: "alpine_hiking.routes.showhide",
+                                   stringId: "horse.routes.showhide",
                                    cl: ShowHideHorseRoutesAction.self)
             .name(Self.getName())
                 .nameAction(localizedString("quick_action_verb_show_hide"))

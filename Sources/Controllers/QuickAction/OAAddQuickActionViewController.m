@@ -157,6 +157,7 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
     }
     if (currSectionName && actionsInSection && actionsInSection.count > 0)
         [mapping setObject:[NSArray arrayWithArray:actionsInSection] forKey:currSectionName];
+
     
     _actions = [OrderedDictionary dictionaryWithDictionary:mapping];
 }
@@ -267,7 +268,10 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
             cell.titleLabel.text = item.title;
             if (item.iconName)
             {
-                cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
+                if ([item.iconName hasPrefix:@"mx_"])
+                    cell.leftIconView.image = [[OAUtilities getMxIcon:item.iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                else
+                    cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
                 cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
                 
                 BOOL leftIconVisible = YES;
@@ -297,7 +301,10 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
             cell.descriptionLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.descriptionLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
             
-            cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
+            if ([item.iconName hasPrefix:@"mx_"])
+                cell.leftIconView.image = [[OAUtilities getMxIcon:item.iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            else
+                cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
             cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             if (cell.leftIconView.subviews.count > 0)
                 [[cell.leftIconView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];

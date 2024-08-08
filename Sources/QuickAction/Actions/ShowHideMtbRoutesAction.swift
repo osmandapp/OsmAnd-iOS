@@ -34,7 +34,7 @@ class ShowHideMtbRoutesAction: BaseRouteQuickAction {
     override func isEnabled() -> Bool {
         let styleSettings = OAMapStyleSettings.sharedInstance()
         if let routesParameter = styleSettings?.getParameter(SHOW_MTB_ROUTES) {
-            return routesParameter.storedValue.isEmpty && routesParameter.storedValue == "true"
+            return !routesParameter.storedValue.isEmpty && routesParameter.storedValue == "true"
         }
         return false
     }

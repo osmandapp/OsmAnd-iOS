@@ -1,5 +1,5 @@
 //
-//  ShowHideSkiSlopesAction.swift
+//  ShowHideWhitewaterSportsAction.swift
 //  OsmAnd Maps
 //
 //  Created by Max Kojin on 09/08/24.
@@ -9,18 +9,18 @@
 import Foundation
 
 @objcMembers
-class ShowHideSkiSlopesAction: BaseRouteQuickAction {
+class ShowHideWhitewaterSportsAction: BaseRouteQuickAction {
     
     static var type: QuickActionType?
     
     override static func getQuickActionType() -> QuickActionType {
         if type == nil {
-            type = QuickActionType(id: QuickActionIds.showHideSkiSlopesRoutesActionId.rawValue,
-                                   stringId: "ski_slopes.routes.showhide",
-                                   cl: ShowHideSkiSlopesAction.self)
+            type = QuickActionType(id: QuickActionIds.showHideWhitewaterSportsRoutesActionId.rawValue,
+                                   stringId: "whitewater_sports.routes.showhide",
+                                   cl: ShowHideWhitewaterSportsAction.self)
             .name(Self.getName())
                 .nameAction(localizedString("quick_action_verb_show_hide"))
-                .iconName("ic_action_skiing")
+                .iconName("ic_action_kayak")
                 .category(QuickActionTypeCategory.configureMap.rawValue)
                 .nonEditable()
         }
@@ -28,19 +28,19 @@ class ShowHideSkiSlopesAction: BaseRouteQuickAction {
     }
     
     override static func getName() -> String {
-        localizedString("rendering_attr_pisteRoutes_name")
+        localizedString("rendering_attr_whiteWaterSports_name")
     }
     
     override func isEnabled() -> Bool {
         let styleSettings = OAMapStyleSettings.sharedInstance()
-        return styleSettings?.getParameter(PISTE_ROUTES_ATTR).value == "true"
+        return styleSettings?.getParameter(WHITE_WATER_SPORTS_ATTR).value == "true"
     }
     
     override func execute() {
         let newValue = isEnabled() ? "false" : "true"
         let styleSettings = OAMapStyleSettings.sharedInstance()
 
-        let nodeParameter = styleSettings?.getParameter(PISTE_ROUTES_ATTR)
+        let nodeParameter = styleSettings?.getParameter(WHITE_WATER_SPORTS_ATTR)
         if let nodeParameter {
             nodeParameter.value = newValue
             styleSettings?.save(nodeParameter)

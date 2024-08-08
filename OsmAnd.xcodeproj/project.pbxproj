@@ -370,6 +370,9 @@
 		323F04C22C65639B0058DD78 /* ShowHideDifficultyClassificationAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 323F04C12C65639B0058DD78 /* ShowHideDifficultyClassificationAction.swift */; };
 		323F04C42C656B970058DD78 /* ShowHideSkiSlopesAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 323F04C32C656B970058DD78 /* ShowHideSkiSlopesAction.swift */; };
 		323F04C62C6575070058DD78 /* ShowHideHorseRoutesAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 323F04C52C6575070058DD78 /* ShowHideHorseRoutesAction.swift */; };
+		323F04C82C6577340058DD78 /* ShowHideWhitewaterSportsAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 323F04C72C6577340058DD78 /* ShowHideWhitewaterSportsAction.swift */; };
+		323F04CA2C6579280058DD78 /* ShowHideFitnessTrailsAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 323F04C92C6579280058DD78 /* ShowHideFitnessTrailsAction.swift */; };
+		323F04CC2C6579C30058DD78 /* ShowHideRunningRoutesAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 323F04CB2C6579C30058DD78 /* ShowHideRunningRoutesAction.swift */; };
 		3240977A27BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3240977827BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@2x.png */; };
 		3240977B27BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3240977927BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@3x.png */; };
 		3240977F27BBF995006522E3 /* OAGPXListDeletingBottomSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 3240977E27BBF995006522E3 /* OAGPXListDeletingBottomSheet.m */; };
@@ -3787,6 +3790,9 @@
 		323F04C12C65639B0058DD78 /* ShowHideDifficultyClassificationAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideDifficultyClassificationAction.swift; sourceTree = "<group>"; };
 		323F04C32C656B970058DD78 /* ShowHideSkiSlopesAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideSkiSlopesAction.swift; sourceTree = "<group>"; };
 		323F04C52C6575070058DD78 /* ShowHideHorseRoutesAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideHorseRoutesAction.swift; sourceTree = "<group>"; };
+		323F04C72C6577340058DD78 /* ShowHideWhitewaterSportsAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideWhitewaterSportsAction.swift; sourceTree = "<group>"; };
+		323F04C92C6579280058DD78 /* ShowHideFitnessTrailsAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideFitnessTrailsAction.swift; sourceTree = "<group>"; };
+		323F04CB2C6579C30058DD78 /* ShowHideRunningRoutesAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideRunningRoutesAction.swift; sourceTree = "<group>"; };
 		3240977827BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_overflow_menu_stroke@2x.png"; path = "Resources/Icons/ic_navbar_overflow_menu_stroke@2x.png"; sourceTree = "<group>"; };
 		3240977927BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_overflow_menu_stroke@3x.png"; path = "Resources/Icons/ic_navbar_overflow_menu_stroke@3x.png"; sourceTree = "<group>"; };
 		3240977D27BBF983006522E3 /* OAGPXListDeletingBottomSheet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGPXListDeletingBottomSheet.h; sourceTree = "<group>"; };
@@ -11129,6 +11135,9 @@
 				323F04C12C65639B0058DD78 /* ShowHideDifficultyClassificationAction.swift */,
 				323F04C32C656B970058DD78 /* ShowHideSkiSlopesAction.swift */,
 				323F04C52C6575070058DD78 /* ShowHideHorseRoutesAction.swift */,
+				323F04C72C6577340058DD78 /* ShowHideWhitewaterSportsAction.swift */,
+				323F04C92C6579280058DD78 /* ShowHideFitnessTrailsAction.swift */,
+				323F04CB2C6579C30058DD78 /* ShowHideRunningRoutesAction.swift */,
 			);
 			path = Actions;
 			sourceTree = "<group>";
@@ -16772,6 +16781,7 @@
 				051177FF2B25A51A006B4774 /* OARouteRecalculationHelper.mm in Sources */,
 				DA5A857026C563A900F274C7 /* OARouteCalculationParams.mm in Sources */,
 				DA5A816D26C563A700F274C7 /* OsmAndAppImpl.mm in Sources */,
+				323F04CA2C6579280058DD78 /* ShowHideFitnessTrailsAction.swift in Sources */,
 				DA5A856F26C563A900F274C7 /* OAAlarmInfo.mm in Sources */,
 				32D253B327F336C200324717 /* OACloudAccountLoginViewController.m in Sources */,
 				DA5A83CD26C563A800F274C7 /* OATransportRouteController.mm in Sources */,
@@ -16878,6 +16888,7 @@
 				DA5A855D26C563A900F274C7 /* OARouteDirectionInfo.mm in Sources */,
 				DA842ECD2A0B998E0030866E /* WidgetInfoCreator.swift in Sources */,
 				460E9AC12B71111000411854 /* CloudTrashItemMenuViewController.swift in Sources */,
+				323F04C82C6577340058DD78 /* ShowHideWhitewaterSportsAction.swift in Sources */,
 				32388EE226E6AF770021F829 /* OAQuickSearchResultTableViewCell.m in Sources */,
 				DA5F77B628742E85000A2BFF /* OABackupStatus.m in Sources */,
 				DAABE4EE2A1657AF00569F71 /* Color+INT.swift in Sources */,
@@ -17031,6 +17042,7 @@
 				461A3F0A29F6E68F008EE079 /* OAColorCollectionHandler.m in Sources */,
 				DA5A84F226C563A900F274C7 /* OALocationConvert.mm in Sources */,
 				DA5A81DA26C563A700F274C7 /* OAFirstUsageWizardController.mm in Sources */,
+				323F04CC2C6579C30058DD78 /* ShowHideRunningRoutesAction.swift in Sources */,
 				465749122B681E620006046B /* TrashGroup.swift in Sources */,
 				DA5A83F326C563A800F274C7 /* OARearrangeCustomFiltersViewController.mm in Sources */,
 				DA5A820426C563A700F274C7 /* OABaseFeatureCardView.m in Sources */,

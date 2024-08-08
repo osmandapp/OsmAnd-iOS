@@ -976,6 +976,7 @@
 "poi_max_radius_reached" = "Maximum search radius reached";
 "poi_search_near_center" = "Search is performed near the center of the map";
 "shared_string_hide" = "Hide";
+"shared_string_show" = "Show";
 
 // My Places
 "favorites_item" = "Favorites";

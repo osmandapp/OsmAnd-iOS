@@ -550,7 +550,7 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
 - (OAGPXTableCellData *) generateAllColorsCellData
 {
     return [OAGPXTableCellData withData:@{
-        kTableKey: @"all_colors",
+        kTableKey: @"allColors",
         kCellType: [OASimpleTableViewCell getCellIdentifier],
         kCellTitle: OALocalizedString(@"shared_string_all_colors"),
         kCellTintColor: [UIColor colorNamed:ACColorNameIconColorActive]
@@ -2231,18 +2231,24 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
         }
         [self.navigationController presentViewController:navigationController animated:YES completion:nil];
     }
-    else if ([tableData.key isEqualToString:@"all_colors"])
+    else if ([tableData.key isEqualToString:@"allColors"])
     {
         OAColorCollectionViewController *colorCollectionViewController = nil;
         if ([self isSelectedTypeSolid])
         {
-            colorCollectionViewController = [[OAColorCollectionViewController alloc] initWithCollectionType:EOAColorCollectionTypeColorItems items:[_appearanceCollection getAvailableColorsSortingByKey] selectedItem:_selectedColorItem];
+            colorCollectionViewController =
+                [[OAColorCollectionViewController alloc] initWithCollectionType:EOAColorCollectionTypeColorItems
+                                                                          items:[_appearanceCollection getAvailableColorsSortingByKey]
+                                                                   selectedItem:_selectedColorItem];
         }
         else if ([self isSelectedTypeGradient])
         {
-            colorCollectionViewController = [[OAColorCollectionViewController alloc] initWithCollectionType:EOAColorCollectionTypePaletteItems items:_sortedPaletteColorItems selectedItem:_selectedPaletteColorItem];
+            colorCollectionViewController =
+                [[OAColorCollectionViewController alloc] initWithCollectionType:EOAColorCollectionTypePaletteItems
+                                                                          items:[_gradientColorsCollection getColors:PaletteSortingModeOriginal]
+                                                                   selectedItem:_selectedPaletteColorItem];
         }
-        
+
         if (colorCollectionViewController)
         {
             colorCollectionViewController.delegate = self;

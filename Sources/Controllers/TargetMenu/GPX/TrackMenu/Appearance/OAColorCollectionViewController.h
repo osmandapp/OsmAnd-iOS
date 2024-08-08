@@ -8,14 +8,15 @@
 
 #import "OABaseNavbarViewController.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef enum
 {
     EOAColorCollectionTypeColorItems,
     EOAColorCollectionTypePaletteItems
 } EOAColorCollectionType;
 
-@class OAColorItem;
-@class PaletteColor;
+@class OAColorItem, PaletteColor;
 
 @protocol OAColorCollectionDelegate
 
@@ -30,9 +31,11 @@ typedef enum
 
 @interface OAColorCollectionViewController : OABaseNavbarViewController
 
-@property(nonatomic, weak) id<OAColorCollectionDelegate>delegate;
-@property (nonatomic, readonly) EOAColorCollectionType collectionType;
+@property(nonatomic, weak, nullable) id<OAColorCollectionDelegate>delegate;
+@property(nonatomic, readonly) EOAColorCollectionType collectionType;
 
 - (instancetype)initWithCollectionType:(EOAColorCollectionType)type items:(NSArray *)items selectedItem:(id)selectedItem;
 
 @end
+
+NS_ASSUME_NONNULL_END

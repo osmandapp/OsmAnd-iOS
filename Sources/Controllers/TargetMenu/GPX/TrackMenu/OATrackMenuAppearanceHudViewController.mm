@@ -23,7 +23,6 @@
 #import "OASegmentSliderTableViewCell.h"
 #import "OASegmentedControlCell.h"
 #import "OADividerCell.h"
-#import "OAImageTextViewCell.h"
 #import "OALineChartCell.h"
 #import "Localization.h"
 #import "OAColors.h"
@@ -46,6 +45,7 @@
 #import "OAMapSettingsTerrainParametersViewController.h"
 #import "OAColoringType.h"
 #import "OsmAnd_Maps-Swift.h"
+#import <Charts/Charts-Swift.h>
 
 static const NSInteger kColorsSection = 1;
 static const NSInteger kColorGridOrDescriptionCell = 1;
@@ -127,6 +127,7 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
 
     NSMutableArray<PaletteColor *> *_sortedPaletteColorItems;
     PaletteColor *_selectedPaletteColorItem;
+    NSIndexPath *_paletteLegendIndexPath;
     NSIndexPath *_paletteNameIndexPath;
 
     OAGPXTrackWidth *_selectedWidth;
@@ -211,12 +212,12 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
     BOOL deleted = NO;
     for (NSString *colorPaletteFile in colorPaletteFiles.allKeys)
     {
-        if ([_gradientColorsCollection hasRouteGradientPaletteBy:colorPaletteFile]
+        if ([currentPaletteFile isEqualToString:colorPaletteFile]
+            || [_gradientColorsCollection hasRouteGradientPaletteBy:colorPaletteFile]
             || [colorPaletteFiles[colorPaletteFile] isEqualToString:ColorPaletteHelper.createdFileKey])
         {
             reloadData = YES;
-            if ([currentPaletteFile isEqualToString:colorPaletteFile]
-                && [colorPaletteFiles[colorPaletteFile] isEqualToString:ColorPaletteHelper.deletedFileKey])
+            if ([colorPaletteFiles[colorPaletteFile] isEqualToString:ColorPaletteHelper.deletedFileKey])
             {
                 deleted = YES;
                 break;
@@ -448,6 +449,9 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
     [self.tableView registerClass:OATableViewCustomFooterView.class
         forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[OAButtonTableViewCell getCellIdentifier] bundle:nil] forCellReuseIdentifier:[OAButtonTableViewCell getCellIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:[OACollectionSingleLineTableViewCell getCellIdentifier] bundle:nil]
+         forCellReuseIdentifier:[OACollectionSingleLineTableViewCell getCellIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:OALineChartCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:OALineChartCell.reuseIdentifier];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:[UITableViewCell getCellIdentifier]];
 }
 
@@ -901,6 +905,8 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
 
 - (void)generateColorsSection:(OAGPXTableSectionData *)section
 {
+    _paletteLegendIndexPath = nil;
+    _paletteNameIndexPath = nil;
     NSMutableArray<OAGPXTableCellData *> *colorsCells = section.subjects;
 
     if (colorsCells.count == 0 || ![colorsCells.firstObject.key isEqualToString:@"color_title"])
@@ -925,7 +931,8 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
     {
         if ([self isSelectedTypeGradient])
         {
-            [colorsCells addObject:[self generateDataForColorElevationGradientCellData]];
+            [colorsCells addObject:[self generateGradientLegendCellData]];
+            _paletteLegendIndexPath = [NSIndexPath indexPathForRow:colorsCells.count - 1 inSection:kColorsSection];
             [colorsCells addObject:[self generatePaletteNameCellData]];
             _paletteNameIndexPath = [NSIndexPath indexPathForRow:colorsCells.count - 1 inSection:kColorsSection];
         }
@@ -1153,17 +1160,11 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
             || [view isKindOfClass:[UICollectionView class]];
 }
 
-- (OAGPXTableCellData *)generateDataForColorElevationGradientCellData
+- (OAGPXTableCellData *)generateGradientLegendCellData
 {
     return [OAGPXTableCellData withData:@{
-        kTableKey: @"color_elevation_gradient",
-        kCellType: [OAImageTextViewCell getCellIdentifier],
-        kTableValues: @{
-            @"extra_desc": [self generateExtraDescription],
-            @"desc_font_size": @([self isSelectedTypeSlope] ? 15 : 17)
-        },
-        kCellDesc: [self generateDescription],
-        kCellRightIconName: [self isSelectedTypeSlope] ? @"img_track_gradient_slope" : @"img_track_gradient_speed"
+        kTableKey: @"gradientLegend",
+        kCellType: [OALineChartCell getCellIdentifier],
     }];
 }
 
@@ -1483,88 +1484,51 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(onSwitchPressed:) forControlEvents:UIControlEventValueChanged];
         }
-        outCell = cell;
-    }
-    else if ([cellData.type isEqualToString:[OAImageTextViewCell getCellIdentifier]])
-    {
-        OAImageTextViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAImageTextViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAImageTextViewCell getCellIdentifier]
-                                                         owner:self options:nil];
-            cell = (OAImageTextViewCell *) nib[0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.separatorInset = UIEdgeInsetsMake(0., DeviceScreenWidth, 0., 0.);
-        }
-        if (cell)
-        {
-            NSString *desc = cellData.desc;
-            [cell showDesc:desc && desc.length > 0];
-
-            NSString *extraDesc = cellData.values[@"extra_desc"];
-            [cell showExtraDesc:extraDesc && extraDesc.length > 0];
-
-            UIImage *image = [UIImage imageNamed:cellData.rightIconName];
-            cell.iconView.image = [cell isDirectionRTL] ? image.imageFlippedForRightToLeftLayoutDirection : image;
-
-            cell.descView.text = desc;
-            cell.descView.font = [UIFont scaledSystemFontOfSize:[cellData.values[@"desc_font_size"] intValue]];
-            cell.descView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
-
-            cell.extraDescView.text = extraDesc;
-            cell.extraDescView.font = [UIFont scaledSystemFontOfSize:[cellData.values[@"desc_font_size"] intValue]];
-            cell.extraDescView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
-        }
-
-        if ([cell needsUpdateConstraints])
-            [cell setNeedsUpdateConstraints];
-
         return cell;
     }
     else if ([cellData.type isEqualToString:[OACollectionSingleLineTableViewCell getCellIdentifier]])
     {
-        OACollectionSingleLineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACollectionSingleLineTableViewCell getCellIdentifier]];
-        if (cell == nil)
+        OACollectionSingleLineTableViewCell *cell =
+            [tableView dequeueReusableCellWithIdentifier:[OACollectionSingleLineTableViewCell getCellIdentifier]];
+        cell.separatorInset = UIEdgeInsetsZero;
+        BOOL isRightActionButtonVisible = [self isSelectedTypeSolid];
+        [cell rightActionButtonVisibility:isRightActionButtonVisible];
+        [cell.rightActionButton setImage:isRightActionButtonVisible ? [UIImage templateImageNamed:@"ic_custom_add"] : nil
+                                forState:UIControlStateNormal];
+        cell.rightActionButton.tag = isRightActionButtonVisible ? (indexPath.section << 10 | indexPath.row) : 0;
+        cell.rightActionButton.accessibilityLabel = isRightActionButtonVisible ? OALocalizedString(@"shared_string_add_color") : nil;
+        [cell.rightActionButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
+        if (isRightActionButtonVisible)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACollectionSingleLineTableViewCell getCellIdentifier]
-                                                         owner:self options:nil];
-            cell = nib[0];
-            cell.separatorInset = UIEdgeInsetsZero;
-            if ([self isSelectedTypeSolid])
-            {
-                OAColorCollectionHandler *colorHandler = [[OAColorCollectionHandler alloc] initWithData:@[_sortedColorItems] collectionView:cell.collectionView];
-                colorHandler.delegate = self;
-                NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:_selectedColorItem] inSection:0];
-                if (selectedIndexPath.row == NSNotFound)
-                    selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:[_appearanceCollection getDefaultLineColorItem]] inSection:0];
-                [colorHandler setSelectedIndexPath:selectedIndexPath];
-                [cell setCollectionHandler:colorHandler];
-                cell.delegate = self;
-            }
-            else if ([self isSelectedTypeGradient])
-            {
-                PaletteCollectionHandler *paletteHandler = [[PaletteCollectionHandler alloc] initWithData:@[_sortedPaletteColorItems] collectionView:cell.collectionView];
-                paletteHandler.delegate = self;
-                NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObject:_selectedPaletteColorItem] inSection:0];
-                if (selectedIndexPath.row == NSNotFound)
-                    selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObject:[_gradientColorsCollection getDefaultGradientPalette]] inSection:0];
-                [paletteHandler setSelectedIndexPath:selectedIndexPath];
-                [cell setCollectionHandler:paletteHandler];
-            }
+            [cell.rightActionButton addTarget:self
+                                       action:@selector(onCellButtonPressed:)
+                             forControlEvents:UIControlEventTouchUpInside];
         }
-        if (cell)
+
+        if ([self isSelectedTypeSolid])
         {
-            BOOL isRightActionButtonVisible = [self isSelectedTypeSolid];
-            [cell rightActionButtonVisibility:isRightActionButtonVisible];
-            [cell.rightActionButton setImage:isRightActionButtonVisible ? [UIImage templateImageNamed:@"ic_custom_add"] : nil
-                                    forState:UIControlStateNormal];
-            cell.rightActionButton.tag = isRightActionButtonVisible ? (indexPath.section << 10 | indexPath.row) : 0;
-            cell.rightActionButton.accessibilityLabel = isRightActionButtonVisible ? OALocalizedString(@"shared_string_add_color") : nil;
-            [cell.rightActionButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
-            if (isRightActionButtonVisible)
-                [cell.rightActionButton addTarget:self action:@selector(onCellButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-            [cell.collectionView reloadData];
-            [cell layoutIfNeeded];
+            [cell.collectionView registerNib:[UINib nibWithNibName:OAColorsCollectionViewCell.reuseIdentifier bundle:nil] forCellWithReuseIdentifier:OAColorsCollectionViewCell.reuseIdentifier];
+
+            OAColorCollectionHandler *colorHandler = [[OAColorCollectionHandler alloc] initWithData:@[_sortedColorItems] collectionView:cell.collectionView];
+            colorHandler.delegate = self;
+            NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:_selectedColorItem] inSection:0];
+            if (selectedIndexPath.row == NSNotFound)
+                selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:[_appearanceCollection getDefaultLineColorItem]] inSection:0];
+            [colorHandler setSelectedIndexPath:selectedIndexPath];
+            [cell setCollectionHandler:colorHandler];
+            cell.delegate = self;
+        }
+        else if ([self isSelectedTypeGradient])
+        {
+            [cell.collectionView registerNib:[UINib nibWithNibName:PaletteCollectionViewCell.reuseIdentifier bundle:nil] forCellWithReuseIdentifier:PaletteCollectionViewCell.reuseIdentifier];
+
+            PaletteCollectionHandler *paletteHandler = [[PaletteCollectionHandler alloc] initWithData:@[_sortedPaletteColorItems] collectionView:cell.collectionView];
+            paletteHandler.delegate = self;
+            NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObject:_selectedPaletteColorItem] inSection:0];
+            if (selectedIndexPath.row == NSNotFound)
+                selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObject:[_gradientColorsCollection getDefaultGradientPalette]] inSection:0];
+            [paletteHandler setSelectedIndexPath:selectedIndexPath];
+            [cell setCollectionHandler:paletteHandler];
         }
         return cell;
     }
@@ -1776,7 +1740,35 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
             
         }
         return [UITableViewCell new];
-        
+    }
+    else if ([cellData.type isEqualToString:OALineChartCell.reuseIdentifier])
+    {
+        OALineChartCell *cell = (OALineChartCell *) [tableView dequeueReusableCellWithIdentifier:OALineChartCell.reuseIdentifier
+                                                                                         forIndexPath:indexPath];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.separatorInset = UIEdgeInsetsMake(0, CGFLOAT_MAX, 0, 0);
+
+        [GpxUIHelper setupGradientChartWithChart:cell.lineChartView
+                             useGesturesAndScale:NO
+                                  xAxisGridColor:[UIColor colorNamed:ACColorNameChartAxisGridLine]
+                                     labelsColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
+
+        ColorPalette *colorPalette;
+        if ([_selectedPaletteColorItem isKindOfClass:PaletteGradientColor.class])
+        {
+            PaletteGradientColor *paletteColor = (PaletteGradientColor *) _selectedPaletteColorItem;
+            colorPalette = paletteColor.colorPalette;
+        }
+        if (!colorPalette)
+            return cell;
+
+        cell.lineChartView.data =
+            [GpxUIHelper buildGradientChartWithChart:cell.lineChartView
+                                        colorPalette:colorPalette
+                                      valueFormatter:[GradientUiHelper getGradientTypeFormatter:_gradientColorsCollection.gradientType
+                                                                                       analysis:self.analysis]];
+        [cell.lineChartView notifyDataSetChanged];
+        return cell;
     }
 
     if ([outCell needsUpdateConstraints])
@@ -2526,11 +2518,16 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
                     track.gradientPaletteName = paletteColor.paletteName;
                 }
             }
+            NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray array];
             if (_paletteNameIndexPath)
             {
                 [self updateData:_tableData[_paletteNameIndexPath.section].subjects[_paletteNameIndexPath.row]];
-                [self.tableView reloadRowsAtIndexPaths:@[_paletteNameIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+                [indexPaths addObject:_paletteNameIndexPath];
             }
+            if (_paletteLegendIndexPath)
+                [indexPaths addObject:_paletteLegendIndexPath];
+            if (indexPaths.count > 0)
+                [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
         }
     }
     

@@ -98,7 +98,7 @@ final class ColorPaletteHelper: NSObject {
         getGradientColorPalette(Self.getRoutePaletteFileName(colorizationType, gradientPaletteName: gradientPaletteName))
     }
 
-    func getGradientColorPaletteSyncWithModeKey(_ modeKey: String) -> ColorPalette? {
+    func getGradientColorPaletteSync(with modeKey: String) -> ColorPalette? {
         getGradientColorPalette(modeKey)
     }
 

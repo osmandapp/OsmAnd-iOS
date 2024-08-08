@@ -35,6 +35,7 @@
 #import "OANavRemoveNextDestination.h"
 #import "OAShowHideMapillaryAction.h"
 #import "OAPluginsHelper.h"
+#import "OAShowHideCycleRoutesAction.h"
 #import "OsmAnd_Maps-Swift.h"
 
 static NSString * const kType = @"type";
@@ -273,6 +274,7 @@ static QuickActionType *TYPE_MY_PLACES;
     [allTypes addObject:OADayNightModeAction.TYPE];
     [allTypes addObject:OAShowHideTransportLinesAction.TYPE];
     [allTypes addObject:OAShowHideMapillaryAction.TYPE];
+    [allTypes addObject:OAShowHideCycleRoutesAction.TYPE];
 
     // navigation
     [allTypes addObject:OANavVoiceAction.TYPE];

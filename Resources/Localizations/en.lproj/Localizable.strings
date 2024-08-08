@@ -1390,7 +1390,7 @@
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
 "ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "ltr_or_rtl_combine_via_or" = "%@ or %@";
 "ltr_or_rtl_combine_via_slash" = "%@/%@";
 "ltr_or_rtl_combine_via_comma" = "%@, %@";

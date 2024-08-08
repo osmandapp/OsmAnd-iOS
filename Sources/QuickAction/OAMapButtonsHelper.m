@@ -279,6 +279,7 @@ static QuickActionType *TYPE_MY_PLACES;
     [allTypes addObject:[ShowHideHikingRoutesAction getQuickActionType]];
     [allTypes addObject:[ShowHideDifficultyClassificationAction getQuickActionType]];
     [allTypes addObject:[ShowHideSkiSlopesAction getQuickActionType]];
+    [allTypes addObject:[ShowHideHorseRoutesAction getQuickActionType]];
     
     // my places
     [allTypes addObject:OAFavoriteAction.TYPE];

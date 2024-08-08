@@ -272,12 +272,13 @@ static QuickActionType *TYPE_MY_PLACES;
     [allTypes addObject:OAMapSourceAction.TYPE];
     [allTypes addObject:OAMapOverlayAction.TYPE];
     [allTypes addObject:OAMapUnderlayAction.TYPE];
-    [allTypes addObject:OAShowHideTransportLinesAction.TYPE];
     [allTypes addObject:OAShowHideMapillaryAction.TYPE];
+    [allTypes addObject:OAShowHideTransportLinesAction.TYPE];
     [allTypes addObject:[ShowHideCycleRoutesAction getQuickActionType]];
     [allTypes addObject:[ShowHideMtbRoutesAction getQuickActionType]];
     [allTypes addObject:[ShowHideHikingRoutesAction getQuickActionType]];
     [allTypes addObject:[ShowHideDifficultyClassificationAction getQuickActionType]];
+    [allTypes addObject:[ShowHideSkiSlopesAction getQuickActionType]];
     
     // my places
     [allTypes addObject:OAFavoriteAction.TYPE];
@@ -285,15 +286,15 @@ static QuickActionType *TYPE_MY_PLACES;
     [allTypes addObject:OAMarkerAction.TYPE];
 
     // navigation
-    [allTypes addObject:OANavVoiceAction.TYPE];
-    [allTypes addObject:OANavDirectionsFromAction.TYPE];
-    [allTypes addObject:OANavAddDestinationAction.TYPE];
-    [allTypes addObject:OANavAddFirstIntermediateAction.TYPE];
-    [allTypes addObject:OANavReplaceDestinationAction.TYPE];
-    [allTypes addObject:OANavAutoZoomMapAction.TYPE];
     [allTypes addObject:OANavStartStopAction.TYPE];
     [allTypes addObject:OANavResumePauseAction.TYPE];
+    [allTypes addObject:OANavDirectionsFromAction.TYPE];
+    [allTypes addObject:OANavAddFirstIntermediateAction.TYPE];
+    [allTypes addObject:OANavAddDestinationAction.TYPE];
+    [allTypes addObject:OANavReplaceDestinationAction.TYPE];
     [allTypes addObject:OANavRemoveNextDestination.TYPE];
+    [allTypes addObject:OANavAutoZoomMapAction.TYPE];
+    [allTypes addObject:OANavVoiceAction.TYPE];
     
     // settings
     [allTypes addObject:OASwitchProfileAction.TYPE];

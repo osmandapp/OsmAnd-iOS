@@ -274,6 +274,7 @@ static QuickActionType *TYPE_MY_PLACES;
     [allTypes addObject:OAShowHideTransportLinesAction.TYPE];
     [allTypes addObject:OAShowHideMapillaryAction.TYPE];
     [allTypes addObject:[ShowHideCycleRoutesAction getQuickActionType]];
+    [allTypes addObject:[ShowHideMtbRoutesAction getQuickActionType]];
 
     // navigation
     [allTypes addObject:OANavVoiceAction.TYPE];

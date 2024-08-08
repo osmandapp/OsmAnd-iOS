@@ -53,4 +53,5 @@ enum QuickActionIds: Int {
     case openWeatherActionId
     case locationSimulationActionId
     case showHideCycleRoutesActionId
+    case showHideMtbRoutesActionId
 }

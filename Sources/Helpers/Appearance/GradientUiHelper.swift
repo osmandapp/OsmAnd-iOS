@@ -79,7 +79,6 @@ final class GradientUiHelper: NSObject {
                     if analysis.maxSpeed != 0 {
                         type = OASpeedConstant.toShortString(OAAppSettings.sharedManager().speedSystem.get())
                         stringValue = Self.formatValue(value, multiplier: analysis.maxSpeed)
-                        shouldShowUnit = false
                     }
                 case .elevation:
                     let minElevation = analysis.minElevation

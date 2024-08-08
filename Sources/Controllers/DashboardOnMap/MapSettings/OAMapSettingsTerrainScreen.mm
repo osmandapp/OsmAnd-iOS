@@ -572,6 +572,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                              useGesturesAndScale:NO
                                   xAxisGridColor:[UIColor colorNamed:ACColorNameTextColorSecondary]
                                      labelsColor:[UIColor colorNamed:ACColorNameChartAxisGridLine]];
+        cell.lineChartView.extraBottomOffset = 13;
 
         ColorPalette *colorPalette = [[ColorPaletteHelper shared] getGradientColorPaletteSyncWith:[_terrainMode getMainFile]];
         if (!colorPalette)

@@ -355,6 +355,8 @@
             return [OAWeatherBand withWeatherBand:WEATHER_BAND_CLOUD];
         case EOAWeatherLayerTypePrecipitation:
             return [OAWeatherBand withWeatherBand:WEATHER_BAND_PRECIPITATION];
+        case EOAWeatherLayerTypeWindAnimation:
+            return [OAWeatherBand withWeatherBand:WEATHER_BAND_WIND_ANIMATION];
         default:
             return nil;
     }
@@ -445,6 +447,8 @@
             return @"weather_precip";
         case EOAWeatherLayerTypeContours:
             return @"weather_contours";
+        case EOAWeatherLayerTypeWindAnimation:
+            return @"weather_wind_animation";
     }
 }
 
@@ -505,6 +509,8 @@
         _app.data.weatherCloud = _layerEnabled;
     else if (_layerType == EOAWeatherLayerTypePrecipitation)
         _app.data.weatherPrecip = _layerEnabled;
+    else if (_layerType == EOAWeatherLayerTypeWindAnimation)
+        _app.data.weatherWindAnimation = _layerEnabled;
     else if (_layerType == EOAWeatherLayerTypeContours)
     {
         NSString *lastUsedParameterName;
@@ -560,6 +566,8 @@
         _app.data.weatherCloudAlpha = sender.value;
     else if (_layerType == EOAWeatherLayerTypePrecipitation)
         _app.data.weatherPrecipAlpha = sender.value;
+    else if (_layerType == EOAWeatherLayerTypeWindAnimation)
+        _app.data.weatherWindAnimationAlpha = sender.value;
     else if (_layerType == EOAWeatherLayerTypeContours)
         _app.data.contoursAlpha = sender.value;
 }

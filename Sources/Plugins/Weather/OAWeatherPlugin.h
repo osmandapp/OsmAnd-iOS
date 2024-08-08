@@ -13,6 +13,7 @@ static NSString * const kWeatherPressure = @"weather_pressure";
 static NSString * const kWeatherWind = @"weather_wind";
 static NSString * const kWeatherCloud = @"weather_cloud";
 static NSString * const kWeatherPrecip = @"weather_precip";
+static NSString * const kWeatherWindAnimation = @"weather_wind_animation";
 
 @class OAWeatherWidget;
 
@@ -21,5 +22,8 @@ static NSString * const kWeatherPrecip = @"weather_precip";
 - (void)weatherChanged:(BOOL)isOn;
 - (void)updateWidgetsInfo;
 - (NSArray<OAWeatherWidget *> *)createWidgetsControls;
+
+- (void) setForecastDate:(NSDate *)date forAnimation:(BOOL)forAnimation resetPeriod:(BOOL)resetPeriod;
+- (void) prepareForDayAnimation:(NSDate *)date;
 
 @end

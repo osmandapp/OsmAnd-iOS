@@ -25,4 +25,6 @@
 + (CGFloat)calculateYOutScreen;
 - (void)updateWidgetsInfo;
 
+- (void)onFrameAnimatorsUpdated;
+
 @end

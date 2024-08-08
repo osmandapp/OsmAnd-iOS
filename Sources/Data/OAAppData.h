@@ -69,7 +69,7 @@ static const NSInteger kSlopeDefMaxZoom = 16;
 
 @property (nonatomic) NSString *weatherSource;
 @property (nonatomic) BOOL weatherWindAnimation;
-@property (nonatomic) NSUnitLength *weatherWindAnimationUnit;
+@property (nonatomic) NSUnitSpeed *weatherWindAnimationUnit;
 @property (nonatomic) double weatherWindAnimationAlpha;
 @property (nonatomic) BOOL weatherWindAnimationUnitAuto;
 

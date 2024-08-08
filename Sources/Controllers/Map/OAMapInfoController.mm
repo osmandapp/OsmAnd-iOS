@@ -889,6 +889,12 @@
     [self updateRuler];
 }
 
+- (void)onFrameAnimatorsUpdated
+{
+    if (_weatherToolbar && !_weatherToolbar.hidden)
+        [_weatherToolbar onFrameAnimatorsUpdated];
+}
+
 #pragma mark - OAWidgetListener
 
 - (void) widgetChanged:(OABaseWidgetView *)widget

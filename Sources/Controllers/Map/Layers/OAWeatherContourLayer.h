@@ -17,4 +17,6 @@
 - (void) updateDate:(NSDate *)date;
 - (void) updateWeatherLayer;
 
+- (void) setDateTime:(NSTimeInterval)dateTime;
+
 @end

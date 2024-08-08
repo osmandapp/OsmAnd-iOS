@@ -636,6 +636,10 @@
 "ending_point_too_far" = "Ending point too far from nearest road.";
 "intermediate_point_too_far" = "Intermediate destination %@ is too far from the nearest road.";
 "arrived_at_destination" = "You have arrived.";
+"route_your_destination_is_on_left" = "Your destination is on the left";
+"route_your_destination_is_on_right" = "Your destination is on the right";
+"route_your_destination_is_on_ahead" = "Your destination is straight ahead";
+
 "route_preferred_terrain_any" = "The terrain profile is not taken into account when choosing a route.";
 "route_preferred_terrain_flat" = "Routes with a flat relief profile. The length may increase.";
 "route_preferred_terrain_less_hilly" = "Shorter, less hilly routes.";
@@ -1135,6 +1139,7 @@
 "weather_cloud_enable_descr" = "Enable to view cloud layer on the map.";
 "weather_precip_enable_descr" = "Enable to view precipitation layer on the map.";
 "weather_contours_enable_descr" = "Enable to view isolines layer on the map.";
+"weather_wind_animation_enable_descr" = "Enable to view wind animation layer on the map.";
 
 "screen_settings_weather_toolbar" = "Weather toolbar";
 

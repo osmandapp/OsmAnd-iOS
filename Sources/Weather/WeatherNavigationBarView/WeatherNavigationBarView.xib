@@ -3,7 +3,7 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -41,7 +41,7 @@
                     </connections>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="250" text="Weather" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="shB-5G-YQw">
-                    <rect key="frame" x="80" y="14.5" width="335" height="20.5"/>
+                    <rect key="frame" x="80" y="14.5" width="300" height="20.5"/>
                     <accessibility key="accessibilityConfiguration" identifier="topBarNavigation_titleLbl"/>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                     <nil key="highlightedColor"/>
@@ -68,7 +68,8 @@
                 <constraint firstItem="QFB-fL-7aq" firstAttribute="centerY" secondItem="unR-Ml-tWu" secondAttribute="centerY" id="Dwp-OG-3fz"/>
                 <constraint firstItem="unR-Ml-tWu" firstAttribute="leading" secondItem="wpF-P1-aoN" secondAttribute="leading" id="REc-ve-M2e"/>
                 <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="shB-5G-YQw" secondAttribute="bottom" constant="12" id="arD-aA-pBI"/>
-                <constraint firstItem="QFB-fL-7aq" firstAttribute="leading" secondItem="shB-5G-YQw" secondAttribute="trailing" id="lFy-o1-QWI"/>
+                <constraint firstItem="shB-5G-YQw" firstAttribute="centerX" secondItem="wpF-P1-aoN" secondAttribute="centerX" id="emu-UJ-ZgU"/>
+                <constraint firstItem="QFB-fL-7aq" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="shB-5G-YQw" secondAttribute="trailing" id="lFy-o1-QWI"/>
                 <constraint firstItem="shB-5G-YQw" firstAttribute="centerY" secondItem="unR-Ml-tWu" secondAttribute="centerY" id="mfh-XL-Eqj"/>
                 <constraint firstAttribute="bottom" secondItem="QFB-fL-7aq" secondAttribute="bottom" id="ufS-cY-Sgd"/>
                 <constraint firstAttribute="bottom" secondItem="unR-Ml-tWu" secondAttribute="bottom" id="ytC-12-mRu"/>
@@ -94,7 +95,7 @@
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemGray6Color">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

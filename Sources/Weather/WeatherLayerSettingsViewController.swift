@@ -51,8 +51,7 @@ final class WeatherLayerSettingsViewController: OABaseNavbarViewController {
     override func generateData() {
         tableData.clearAllData()
         generateWeatherSectionData()
-#warning("Waiting for tasks on adding wind animation")
-        // generateWindAnimationSectionData()
+        generateWindAnimationSectionData()
     }
     
     override func getRow(_ indexPath: IndexPath) -> UITableViewCell! {

@@ -26,6 +26,7 @@
 #import "OAColors.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OAPluginsHelper.h"
+#import "OAWeatherWebClient.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Map/WeatherTileResourceProvider.h>
@@ -79,7 +80,8 @@
             [OAWeatherBand withWeatherBand:WEATHER_BAND_PRESSURE],
             [OAWeatherBand withWeatherBand:WEATHER_BAND_WIND_SPEED],
             [OAWeatherBand withWeatherBand:WEATHER_BAND_CLOUD],
-            [OAWeatherBand withWeatherBand:WEATHER_BAND_PRECIPITATION]
+            [OAWeatherBand withWeatherBand:WEATHER_BAND_PRECIPITATION],
+            [OAWeatherBand withWeatherBand:WEATHER_BAND_WIND_ANIMATION]
         ];
 
         _weatherSizeCalculatedObserver = [[OAObservable alloc] init];
@@ -855,6 +857,11 @@
 {
     QList<OsmAnd::BandIndex> bands = [self getVisibleBands];
     return bands.isEmpty();
+}
+
+- (BOOL)isProcessingTiles
+{
+    return _weatherResourcesManager != nil && _weatherResourcesManager->isProcessingTiles();
 }
 
 @end

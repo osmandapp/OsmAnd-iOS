@@ -40,16 +40,6 @@
     return CGSizeMake(48., 48.);
 }
 
-- (CGFloat)getSelectionRadius
-{
-    return 0;
-}
-
-- (CGFloat)getImageRadius
-{
-    return 0;
-}
-
 - (UICollectionView *)getCollectionView
 {
     return _collectionView;

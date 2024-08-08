@@ -597,9 +597,18 @@ static NSArray<NSNumber *> *roundingBounds = nil;
     }
     else if (outputFormat == FORMAT_DEGREES || outputFormat == FORMAT_MINUTES || outputFormat == FORMAT_SECONDS)
     {
-        BOOL isLeftToRight = UIApplication.sharedApplication.userInterfaceLayoutDirection == UIUserInterfaceLayoutDirectionLeftToRight;
-        NSString *rtlCoordinates = isLeftToRight ? @"" : @"\u200f";
-        NSString *rtlCoordinatesPunctuation = isLeftToRight ? @", " : @" ,";
+        NSString *rtlCoordinates = @"";
+        NSString *rtlCoordinatesPunctuation = @", ";
+//        if (outputFormat == FORMAT_MINUTES || outputFormat == FORMAT_SECONDS)
+//        {
+//            BOOL isRTL = UIApplication.sharedApplication.userInterfaceLayoutDirection == UIUserInterfaceLayoutDirectionRightToLeft;
+//            if (isRTL)
+//            {
+//                rtlCoordinates = @"\u200f";
+//                rtlCoordinatesPunctuation = @" ,";
+//            }
+//        }
+        
         [result appendString:rtlCoordinates];
         [result appendString:[self formatCoordinate:lat outputType:outputFormat]];
         [result appendString:rtlCoordinates];

@@ -29,7 +29,7 @@
 
 - (NSString *)getCellIdentifier
 {
-    return [OAColorsCollectionViewCell getCellIdentifier];
+    return OAColorsCollectionViewCell.reuseIdentifier;
 }
 
 - (UIMenu *)getMenuForItem:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
@@ -229,43 +229,32 @@
 
 - (UICollectionViewCell *)getCollectionViewCell:(NSIndexPath *)indexPath
 {
+    OAColorsCollectionViewCell *cell = [[self getCollectionView] dequeueReusableCellWithReuseIdentifier:[self getCellIdentifier] forIndexPath:indexPath];
     NSInteger colorValue = _data[indexPath.section][indexPath.row].value;
-    OAColorsCollectionViewCell *cell = [[self getCollectionView] dequeueReusableCellWithReuseIdentifier:[OAColorsCollectionViewCell getCellIdentifier]
-                                                                                           forIndexPath:indexPath];
-    if (!cell)
+    if (colorValue == kWhiteColor)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAColorsCollectionViewCell getCellIdentifier]
-                                                     owner:self
-                                                   options:nil];
-        cell = nib[0];
+        cell.colorView.layer.borderWidth = 1;
+        cell.colorView.layer.borderColor = UIColorFromRGB(color_tint_gray).CGColor;
     }
-    if (cell)
+    else
     {
-        if (colorValue == kWhiteColor)
-        {
-            cell.colorView.layer.borderWidth = 1;
-            cell.colorView.layer.borderColor = UIColorFromRGB(color_tint_gray).CGColor;
-        }
-        else
-        {
-            cell.colorView.layer.borderWidth = 0;
-        }
+        cell.colorView.layer.borderWidth = 0;
+    }
 
-        UIColor *color = UIColorFromARGB(colorValue);
-        cell.colorView.backgroundColor = color;
-        cell.backgroundImageView.image = [UIImage templateImageNamed:@"bg_color_chessboard_pattern"];
-        cell.backgroundImageView.tintColor = UIColorFromRGB(colorValue);
+    UIColor *color = UIColorFromARGB(colorValue);
+    cell.colorView.backgroundColor = color;
+    cell.backgroundImageView.image = [UIImage templateImageNamed:@"bg_color_chessboard_pattern"];
+    cell.backgroundImageView.tintColor = UIColorFromRGB(colorValue);
 
-        if (indexPath == _selectedIndexPath)
-        {
-            cell.selectionView.layer.borderWidth = 2;
-            cell.selectionView.layer.borderColor = [UIColor colorNamed:ACColorNameIconColorActive].CGColor;
-        }
-        else
-        {
-            cell.selectionView.layer.borderWidth = 0;
-            cell.selectionView.layer.borderColor = UIColor.clearColor.CGColor;
-        }
+    if (indexPath == _selectedIndexPath)
+    {
+        cell.selectionView.layer.borderWidth = 2;
+        cell.selectionView.layer.borderColor = [UIColor colorNamed:ACColorNameIconColorActive].CGColor;
+    }
+    else
+    {
+        cell.selectionView.layer.borderWidth = 0;
+        cell.selectionView.layer.borderColor = UIColor.clearColor.CGColor;
     }
     return cell;
 }

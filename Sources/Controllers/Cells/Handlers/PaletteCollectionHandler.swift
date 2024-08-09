@@ -16,15 +16,7 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
     private var roundedSquareImage: UIImage?
 
     override func getCellIdentifier() -> String {
-        OAColorsCollectionViewCell.getIdentifier()
-    }
-
-    override func getSelectionRadius() -> CGFloat {
-        9
-    }
-
-    override func getImageRadius() -> CGFloat {
-        3
+        PaletteCollectionViewCell.reuseIdentifier
     }
 
     override func getSelectedIndexPath() -> IndexPath? {
@@ -86,14 +78,7 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
     }
 
     override func getCollectionViewCell(_ indexPath: IndexPath) -> UICollectionViewCell {
-        let cell: OAColorsCollectionViewCell = getCollectionView().dequeueReusableCell(withReuseIdentifier: OAColorsCollectionViewCell.reuseIdentifier, for: indexPath) as! OAColorsCollectionViewCell
-        if let colorView = cell.colorView {
-            colorView.removeFromSuperview()
-        }
-
-        cell.selectionView.layer.cornerRadius = getSelectionRadius()
-        cell.backgroundImageView.tintColor = nil
-        cell.backgroundImageView.layer.cornerRadius = getImageRadius()
+        let cell: PaletteCollectionViewCell = getCollectionView().dequeueReusableCell(withReuseIdentifier: getCellIdentifier(), for: indexPath) as! PaletteCollectionViewCell
 
         if roundedSquareImage == nil {
             roundedSquareImage = createRoundedSquareImage(size: cell.backgroundImageView.frame.size,
@@ -105,7 +90,7 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
             cell.backgroundImageView.gradated(createGradientPoints(paletteColor))
             cell.backgroundImageView.tag = Int(paletteColor.id)
         }
-        
+
         if indexPath == selectedIndexPath {
             cell.selectionView.layer.borderWidth = 2
             cell.selectionView.layer.borderColor = UIColor.buttonBgColorPrimary.cgColor
@@ -118,6 +103,30 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
 
     override func sectionsCount() -> Int {
         data.count
+    }
+    
+    @objc func applyGradient(to imageView: UIImageView, with palette: PaletteColor) {
+        let gradientPoints = createGradientPoints(palette)
+        imageView.gradated(gradientPoints)
+    }
+    
+    @objc func createDescriptionForPalette(palette: PaletteColor) -> String {
+        guard let gradientPalette = palette as? PaletteGradientColor else {
+            return "Invalid palette type"
+        }
+        
+        let colorValues = gradientPalette.colorPalette.colorValues
+        var descriptionBuilder = ""
+        for (index, colorValue) in colorValues.enumerated() {
+            if index != 0 {
+                descriptionBuilder += " • "
+            }
+            
+            var formattedValue = "\(colorValue.val)"
+            descriptionBuilder += formattedValue
+        }
+        
+        return descriptionBuilder
     }
 
     private func createGradientPoints(_ palette: PaletteColor) -> [GradientPoint] {

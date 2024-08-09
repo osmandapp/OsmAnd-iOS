@@ -15,6 +15,7 @@
 		05898FAF2B4DACD900E64B58 /* map-shaders-svg in Resources */ = {isa = PBXBuildFile; fileRef = 05898FAE2B4DACD900E64B58 /* map-shaders-svg */; };
 		05898FB22B511E0500E64B58 /* OASvgHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 05898FB12B511E0500E64B58 /* OASvgHelper.mm */; };
 		0590D19C2BF88AF400C62AF5 /* ConcurrentDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0590D19B2BF88AF400C62AF5 /* ConcurrentDictionary.swift */; };
+		059D31412C66857F00F8B6EF /* GPXInterpolator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059D31402C66857F00F8B6EF /* GPXInterpolator.swift */; };
 		05A0FCFC2C42D4A200F7ED66 /* models in Resources */ = {isa = PBXBuildFile; fileRef = 05A0FCFB2C42D4A200F7ED66 /* models */; };
 		05CC79562BB98B0B00BAC638 /* OAOnlinePlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = 05CC79552BB98B0B00BAC638 /* OAOnlinePlugin.mm */; };
 		05CC79592BB99EC700BAC638 /* OAPluginsHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 05CC79582BB99EC700BAC638 /* OAPluginsHelper.mm */; };
@@ -3385,6 +3386,7 @@
 		05898FB02B511E0500E64B58 /* OASvgHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASvgHelper.h; sourceTree = "<group>"; };
 		05898FB12B511E0500E64B58 /* OASvgHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASvgHelper.mm; sourceTree = "<group>"; };
 		0590D19B2BF88AF400C62AF5 /* ConcurrentDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcurrentDictionary.swift; sourceTree = "<group>"; };
+		059D31402C66857F00F8B6EF /* GPXInterpolator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GPXInterpolator.swift; sourceTree = "<group>"; };
 		05A0FCFB2C42D4A200F7ED66 /* models */ = {isa = PBXFileReference; lastKnownFileType = folder; name = models; path = ../resources/models; sourceTree = "<group>"; };
 		05CC79542BB98B0B00BAC638 /* OAOnlinePlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOnlinePlugin.h; sourceTree = "<group>"; };
 		05CC79552BB98B0B00BAC638 /* OAOnlinePlugin.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOnlinePlugin.mm; sourceTree = "<group>"; };
@@ -11375,6 +11377,7 @@
 				DA35963329B1EDEA009DF4D6 /* OANetworkRouteSelectionTask.h */,
 				DA35963429B1EDEA009DF4D6 /* OANetworkRouteSelectionTask.mm */,
 				464BAAA12B0E360600CC06E6 /* PointAttributes.swift */,
+				059D31402C66857F00F8B6EF /* GPXInterpolator.swift */,
 			);
 			path = GPX;
 			sourceTree = "<group>";
@@ -17483,6 +17486,7 @@
 				DA5A83B726C563A800F274C7 /* OAFloatingButtonsHudViewController.mm in Sources */,
 				DA5A81D626C563A700F274C7 /* OACommandBuilder.mm in Sources */,
 				FA44BF5B2A72A91C000D2F5F /* CarPlaySceneDelegates.swift in Sources */,
+				059D31412C66857F00F8B6EF /* GPXInterpolator.swift in Sources */,
 				32ABB64E2AEBC02D00491E99 /* OAWebImagesCacheHelper.mm in Sources */,
 				DA5A843526C563A800F274C7 /* OARouteDetailsViewController.mm in Sources */,
 				FAC166272B21BEF900D63755 /* CBUUIDConvertible.swift in Sources */,

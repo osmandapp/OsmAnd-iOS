@@ -168,19 +168,11 @@
     NSDictionary<NSString *, NSString *> *colorPaletteFiles = (NSDictionary *) notification.object;
     if (!colorPaletteFiles)
         return;
-    BOOL refresh = NO;
-    for (NSString *colorPaletteFile in colorPaletteFiles)
+
+    if ([colorPaletteFiles.allKeys containsObject:currentColorPaletteFile])
     {
-        if ([currentColorPaletteFile isEqualToString:colorPaletteFile])
-        {
-            refresh = YES;
-            if ([colorPaletteFiles[colorPaletteFile] isEqualToString:ColorPaletteHelper.deletedFileKey])
-                _previewRouteLineInfo.gradientPalette = _routeGradientPalette;
-            break;
-        }
-    }
-    if (refresh)
-    {
+        if ([colorPaletteFiles[currentColorPaletteFile] isEqualToString:ColorPaletteHelper.deletedFileKey])
+            _previewRouteLineInfo.gradientPalette = _routeGradientPalette;
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.mapViewController runWithRenderSync:^{
                 [self resetLayer];
@@ -189,6 +181,7 @@
         });
     }
 }
+
 - (NSInteger)getCustomRouteWidthMin
 {
     return 1;

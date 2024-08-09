@@ -158,15 +158,22 @@
     NSDictionary<NSString *, NSString *> *colorPaletteFiles = (NSDictionary *) notification.object;
     if (!colorPaletteFiles)
         return;
-    for (NSString *colorPaletteFile in colorPaletteFiles)
+
+    NSString *currentPaletteFile = [_terrainMode getMainFile];
+    if ([colorPaletteFiles.allKeys containsObject:currentPaletteFile])
     {
-        if ([[_terrainMode getMainFile] isEqualToString:colorPaletteFile])
+        if ([colorPaletteFiles[currentPaletteFile] isEqualToString:ColorPaletteHelper.deletedFileKey])
         {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self updateTerrainLayer];
-            });
-            return;
+            TerrainMode *defaultTerrainMode = [TerrainMode getDefaultMode:_terrainMode.type];
+            if (defaultTerrainMode)
+            {
+                _terrainMode = defaultTerrainMode;
+                [_plugin setTerrainMode:defaultTerrainMode];
+            }
         }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self updateTerrainLayer];
+        });
     }
 }
 

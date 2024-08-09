@@ -28,6 +28,7 @@
 #import "OAUtilities.h"
 #import "OAPointDescription.h"
 #import "OATransportStopsBaseController.h"
+#import "OAMapRendererEnvironment.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
@@ -378,6 +379,10 @@
     OsmAnd::AreaI area(OsmAnd::PointI(touchPoint.x - delta, touchPoint.y - delta), OsmAnd::PointI(touchPoint.x + delta, touchPoint.y + delta));
 
     const auto& symbolInfos = [mapView getSymbolsIn:area strict:NO];
+    OAMapRendererEnvironment * menv = [mapViewController mapRendererEnv];
+    OsmAnd::PointI p(OsmAnd::Utilities::get31TileNumberX(lon), OsmAnd::Utilities::get31TileNumberY(lat));
+    menv.mapPrimitivesProvider->retreivePolygons(p, mapView.zoomLevel);
+       
     NSString *roadTitle = [[OAReverseGeocoder instance] lookupAddressAtLat:lat lon:lon];
 
     if (!_pointLayers)

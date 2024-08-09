@@ -9,11 +9,11 @@
 import Foundation
 
 @objcMembers
-class ShowHideRunningRoutesAction: BaseRouteQuickAction {
+final class ShowHideRunningRoutesAction: BaseRouteQuickAction {
     
     static var type: QuickActionType?
     
-    override static func getQuickActionType() -> QuickActionType {
+    override class func getQuickActionType() -> QuickActionType {
         if type == nil {
             type = QuickActionType(id: QuickActionIds.showHideRunningRoutesActionId.rawValue,
                                    stringId: "running.routes.showhide",
@@ -27,7 +27,7 @@ class ShowHideRunningRoutesAction: BaseRouteQuickAction {
         return type ?? super.type()
     }
     
-    override static func getName() -> String {
+    override class func getName() -> String {
         localizedString("rendering_attr_showRunningRoutes_name")
     }
     

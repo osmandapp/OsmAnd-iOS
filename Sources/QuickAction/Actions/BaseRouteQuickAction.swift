@@ -32,7 +32,7 @@ class BaseRouteQuickAction: OAQuickAction {
     }
     
     func isEnabled() -> Bool {
-        return false
+        false
     }
     
     override func isActionWithSlash() -> Bool {

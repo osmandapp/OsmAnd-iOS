@@ -261,7 +261,6 @@ static QuickActionType *TYPE_MY_PLACES;
 - (void)updateActionTypes
 {
     NSMutableArray<QuickActionType *> *allTypes = [NSMutableArray new];
-    // [allTypes addObject:OANewAction.TYPE];
    
     // configure map
     [allTypes addObject:OAShowHideFavoritesAction.TYPE];

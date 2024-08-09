@@ -1329,8 +1329,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 {
     if (editingStyle == UITableViewCellEditingStyleDelete)
     {
-        [_editingContext.commandManager execute:[[OARemovePointCommand alloc] initWithLayer:_layer position:indexPath.row]];
         [tableView beginUpdates];
+        [_editingContext.commandManager execute:[[OARemovePointCommand alloc] initWithLayer:_layer position:indexPath.row]];
         [tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
         [tableView endUpdates];
         [self updateDistancePointsText];
@@ -1472,8 +1472,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void) onDeletePoint
 {
-    [_editingContext.commandManager execute:[[OARemovePointCommand alloc] initWithLayer:_layer position:_editingContext.selectedPointPosition]];
     [self.tableView beginUpdates];
+    [_editingContext.commandManager execute:[[OARemovePointCommand alloc] initWithLayer:_layer position:_editingContext.selectedPointPosition]];
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
     [self.tableView endUpdates];
     [self updateDistancePointsText];

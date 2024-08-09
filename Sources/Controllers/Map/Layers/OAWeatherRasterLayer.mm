@@ -133,7 +133,6 @@
     
     if (_dateTime == 0)
         [self setDateTime:[[NSDate now] timeIntervalSince1970] * 1000 goForward:YES resetPeriod:NO];
-//        [self setDateTime:[[NSDate now] timeIntervalSince1970] * 1000 goForward:NO resetPeriod:NO];
 
     if ([[OAPluginsHelper getPlugin:OAWeatherPlugin.class] isEnabled])
     {

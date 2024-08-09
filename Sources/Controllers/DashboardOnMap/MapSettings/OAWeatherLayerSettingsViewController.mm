@@ -709,6 +709,7 @@
             
             // TODO: delete when android team fix alpha changing bug https://github.com/osmandapp/OsmAnd/issues/20533
             //[cell.sliderView addTarget:self action:@selector(onSliderValueChanged:) forControlEvents:UIControlEventValueChanged];
+            [cell.sliderView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.sliderView addTarget:self action:@selector(onSliderValueChanged:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
         }
         return cell;

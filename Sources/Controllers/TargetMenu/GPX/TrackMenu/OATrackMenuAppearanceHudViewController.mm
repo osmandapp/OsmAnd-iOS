@@ -448,6 +448,8 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
     [self.tableView registerClass:OATableViewCustomFooterView.class
         forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[OAButtonTableViewCell getCellIdentifier] bundle:nil] forCellReuseIdentifier:[OAButtonTableViewCell getCellIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:[OACollectionSingleLineTableViewCell getCellIdentifier] bundle:nil]
+         forCellReuseIdentifier:[OACollectionSingleLineTableViewCell getCellIdentifier]];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:[UITableViewCell getCellIdentifier]];
 }
 
@@ -1523,48 +1525,47 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
     }
     else if ([cellData.type isEqualToString:[OACollectionSingleLineTableViewCell getCellIdentifier]])
     {
-        OACollectionSingleLineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACollectionSingleLineTableViewCell getCellIdentifier]];
-        if (cell == nil)
+        OACollectionSingleLineTableViewCell *cell =
+            [tableView dequeueReusableCellWithIdentifier:[OACollectionSingleLineTableViewCell getCellIdentifier]];
+        cell.separatorInset = UIEdgeInsetsZero;
+        BOOL isRightActionButtonVisible = [self isSelectedTypeSolid];
+        [cell rightActionButtonVisibility:isRightActionButtonVisible];
+        [cell.rightActionButton setImage:isRightActionButtonVisible ? [UIImage templateImageNamed:@"ic_custom_add"] : nil
+                                forState:UIControlStateNormal];
+        cell.rightActionButton.tag = isRightActionButtonVisible ? (indexPath.section << 10 | indexPath.row) : 0;
+        cell.rightActionButton.accessibilityLabel = isRightActionButtonVisible ? OALocalizedString(@"shared_string_add_color") : nil;
+        [cell.rightActionButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
+        if (isRightActionButtonVisible)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACollectionSingleLineTableViewCell getCellIdentifier]
-                                                         owner:self options:nil];
-            cell = nib[0];
-            cell.separatorInset = UIEdgeInsetsZero;
-            if ([self isSelectedTypeSolid])
-            {
-                OAColorCollectionHandler *colorHandler = [[OAColorCollectionHandler alloc] initWithData:@[_sortedColorItems] collectionView:cell.collectionView];
-                colorHandler.delegate = self;
-                NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:_selectedColorItem] inSection:0];
-                if (selectedIndexPath.row == NSNotFound)
-                    selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:[_appearanceCollection getDefaultLineColorItem]] inSection:0];
-                [colorHandler setSelectedIndexPath:selectedIndexPath];
-                [cell setCollectionHandler:colorHandler];
-                cell.delegate = self;
-            }
-            else if ([self isSelectedTypeGradient])
-            {
-                PaletteCollectionHandler *paletteHandler = [[PaletteCollectionHandler alloc] initWithData:@[_sortedPaletteColorItems] collectionView:cell.collectionView];
-                paletteHandler.delegate = self;
-                NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObject:_selectedPaletteColorItem] inSection:0];
-                if (selectedIndexPath.row == NSNotFound)
-                    selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObject:[_gradientColorsCollection getDefaultGradientPalette]] inSection:0];
-                [paletteHandler setSelectedIndexPath:selectedIndexPath];
-                [cell setCollectionHandler:paletteHandler];
-            }
+            [cell.rightActionButton addTarget:self
+                                       action:@selector(onCellButtonPressed:)
+                             forControlEvents:UIControlEventTouchUpInside];
         }
-        if (cell)
+
+        if ([self isSelectedTypeSolid])
         {
-            BOOL isRightActionButtonVisible = [self isSelectedTypeSolid];
-            [cell rightActionButtonVisibility:isRightActionButtonVisible];
-            [cell.rightActionButton setImage:isRightActionButtonVisible ? [UIImage templateImageNamed:@"ic_custom_add"] : nil
-                                    forState:UIControlStateNormal];
-            cell.rightActionButton.tag = isRightActionButtonVisible ? (indexPath.section << 10 | indexPath.row) : 0;
-            cell.rightActionButton.accessibilityLabel = isRightActionButtonVisible ? OALocalizedString(@"shared_string_add_color") : nil;
-            [cell.rightActionButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
-            if (isRightActionButtonVisible)
-                [cell.rightActionButton addTarget:self action:@selector(onCellButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-            [cell.collectionView reloadData];
-            [cell layoutIfNeeded];
+            [cell.collectionView registerNib:[UINib nibWithNibName:OAColorsCollectionViewCell.reuseIdentifier bundle:nil] forCellWithReuseIdentifier:OAColorsCollectionViewCell.reuseIdentifier];
+
+            OAColorCollectionHandler *colorHandler = [[OAColorCollectionHandler alloc] initWithData:@[_sortedColorItems] collectionView:cell.collectionView];
+            colorHandler.delegate = self;
+            NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:_selectedColorItem] inSection:0];
+            if (selectedIndexPath.row == NSNotFound)
+                selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:[_appearanceCollection getDefaultLineColorItem]] inSection:0];
+            [colorHandler setSelectedIndexPath:selectedIndexPath];
+            [cell setCollectionHandler:colorHandler];
+            cell.delegate = self;
+        }
+        else if ([self isSelectedTypeGradient])
+        {
+            [cell.collectionView registerNib:[UINib nibWithNibName:PaletteCollectionViewCell.reuseIdentifier bundle:nil] forCellWithReuseIdentifier:PaletteCollectionViewCell.reuseIdentifier];
+
+            PaletteCollectionHandler *paletteHandler = [[PaletteCollectionHandler alloc] initWithData:@[_sortedPaletteColorItems] collectionView:cell.collectionView];
+            paletteHandler.delegate = self;
+            NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObject:_selectedPaletteColorItem] inSection:0];
+            if (selectedIndexPath.row == NSNotFound)
+                selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObject:[_gradientColorsCollection getDefaultGradientPalette]] inSection:0];
+            [paletteHandler setSelectedIndexPath:selectedIndexPath];
+            [cell setCollectionHandler:paletteHandler];
         }
         return cell;
     }

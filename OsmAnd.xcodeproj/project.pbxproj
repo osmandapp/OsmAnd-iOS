@@ -712,6 +712,8 @@
 		46903D6E29B664B2004459F1 /* OAWikiLanguagesWebViewContoller.m in Sources */ = {isa = PBXBuildFile; fileRef = 46903D6D29B664B2004459F1 /* OAWikiLanguagesWebViewContoller.m */; };
 		46964F762C345448007F3938 /* ColorPaletteHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46964F752C345448007F3938 /* ColorPaletteHelper.swift */; };
 		46993C0A2986BCB70047F2F5 /* img_help_announcement_time_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46993C092986BCB60047F2F5 /* img_help_announcement_time_day@3x.png */; };
+		469F0C222C627E2A00874CC6 /* PaletteCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 469F0C212C627E2A00874CC6 /* PaletteCollectionViewCell.swift */; };
+		469F0C242C627F9000874CC6 /* PaletteCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 469F0C232C627F9000874CC6 /* PaletteCollectionViewCell.xib */; };
 		46A27270281DD05E00FF591D /* osm-carto.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 46A2726F281DD05D00FF591D /* osm-carto.render.xml */; };
 		46A35EF52C53F9510089B21C /* DirectoryObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A35EF42C53F9510089B21C /* DirectoryObserver.swift */; };
 		46A8FD33297D985700AF9C0C /* OAUninstallSpeedCamerasViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 46A8FD32297D985700AF9C0C /* OAUninstallSpeedCamerasViewController.mm */; };
@@ -4200,6 +4202,8 @@
 		46903D6D29B664B2004459F1 /* OAWikiLanguagesWebViewContoller.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAWikiLanguagesWebViewContoller.m; sourceTree = "<group>"; };
 		46964F752C345448007F3938 /* ColorPaletteHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteHelper.swift; sourceTree = "<group>"; };
 		46993C092986BCB60047F2F5 /* img_help_announcement_time_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_help_announcement_time_day@3x.png"; path = "Resources/Icons/img_help_announcement_time_day@3x.png"; sourceTree = "<group>"; };
+		469F0C212C627E2A00874CC6 /* PaletteCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteCollectionViewCell.swift; sourceTree = "<group>"; };
+		469F0C232C627F9000874CC6 /* PaletteCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PaletteCollectionViewCell.xib; sourceTree = "<group>"; };
 		46A2726F281DD05D00FF591D /* osm-carto.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "osm-carto.render.xml"; path = "../resources/rendering_styles/osm-carto.render.xml"; sourceTree = "<group>"; };
 		46A35EF42C53F9510089B21C /* DirectoryObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectoryObserver.swift; sourceTree = "<group>"; };
 		46A8FD31297D982200AF9C0C /* OAUninstallSpeedCamerasViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAUninstallSpeedCamerasViewController.h; sourceTree = "<group>"; };
@@ -11842,6 +11846,7 @@
 				461A3F0629F6E2BA008EE079 /* OACollectionSingleLineTableViewCell.m */,
 				FA00B8852B5928F900582CD1 /* SegmentImagesWithRightLabelTableViewCell.swift */,
 				32BBDC9A2C0497CF0090D37E /* RouteInfoListItemCell.swift */,
+				469F0C212C627E2A00874CC6 /* PaletteCollectionViewCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -11964,6 +11969,7 @@
 				461A3F0329F6E1E8008EE079 /* OACollectionSingleLineTableViewCell.xib */,
 				FA00B8892B592CF000582CD1 /* SegmentImagesWithRightLabelTableViewCell.xib */,
 				32BBDC962C0493190090D37E /* RouteInfoListItemCell.xib */,
+				469F0C232C627F9000874CC6 /* PaletteCollectionViewCell.xib */,
 			);
 			path = Xibs;
 			sourceTree = "<group>";
@@ -16007,6 +16013,7 @@
 				DA0D1613281BEEF500CEEF58 /* map_turn_uturn_left@2x.png in Resources */,
 				157F3CD224A1F36D000A66F0 /* ic_custom_import@3x.png in Resources */,
 				84E297561E2FD80B006EA6B1 /* topo.render.xml in Resources */,
+				469F0C242C627F9000874CC6 /* PaletteCollectionViewCell.xib in Resources */,
 				DA5A5DE3276B445900ABC19D /* snowmobile.render.xml in Resources */,
 				32309A732698D22F005751F5 /* ic_custom_direction_compass_night@2x.png in Resources */,
 				DA0D1620281BEEF500CEEF58 /* map_turn_sharp_left_dark@2x.png in Resources */,
@@ -16867,6 +16874,7 @@
 				DA5A812826C563A700F274C7 /* OAFavoritesMapLayerProvider.mm in Sources */,
 				FA9628E62AFD2F2E004B7DEF /* BLETemperatureSensor.swift in Sources */,
 				DA591EA928D9EAF20068CAC7 /* OATableDataModel.m in Sources */,
+				469F0C222C627E2A00874CC6 /* PaletteCollectionViewCell.swift in Sources */,
 				C56FAB5B29B227130096192F /* OATargetDistanceWidget.mm in Sources */,
 				DA5A82ED26C563A800F274C7 /* OAPointTableViewCell.m in Sources */,
 				DA5A84B626C563A900F274C7 /* OAStatisticsSelectionBottomSheetViewController.mm in Sources */,

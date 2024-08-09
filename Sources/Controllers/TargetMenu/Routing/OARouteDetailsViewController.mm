@@ -227,11 +227,8 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
                     if (distanceToDestination > 3.0)
                     {
                         double routeBearing = [prevPrevLocation bearingTo:prevLocation];
-                        NSLog(@">>>> routeBearing=%f", routeBearing);
                         double bearing = [prevLocation bearingTo:destinationLocation];
-                        NSLog(@">>>> bearing=%f", bearing);
                         double diff = -degreesDiff(routeBearing, bearing);
-                        NSLog(@">>>> diff=%f", diff);
                         routeInfoSector = [self determineSectorForBearing:diff];
                     }
                     else

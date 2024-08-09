@@ -44,6 +44,7 @@
     CGSize _cachedViewFrame;
     OsmAnd::PointI _cachedCenterPixel;
     BOOL _cachedAnyWidgetVisible;
+    BOOL _wasAlphaChanged;
     NSTimeInterval _lastUpdateTime;
     
     int64_t _timePeriodStart;
@@ -89,7 +90,7 @@
     for (OAWeatherBand *band in [[OAWeatherHelper sharedInstance] bands])
     {
         [_layerChangeObservers addObject:[band createSwitchObserver:self handler:@selector(onWeatherLayerChanged)]];
-        [_alphaChangeObservers addObject:[band createAlphaObserver:self handler:@selector(onWeatherLayerAlphaChanged:withKey:andValue:)]];
+        [_alphaChangeObservers addObject:[band createAlphaObserver:self handler:@selector(onWeatherLayerAlphaChanged)]];
     }
 }
 
@@ -159,9 +160,18 @@
                 layer = OsmAnd::WeatherLayer::Low;
                 break;
         }
-        if (!_provider || wasBandsChanged)
+        
+        // TODO: delete when android team fix alpha changing bug https://github.com/osmandapp/OsmAnd/issues/20533
+        if (_wasAlphaChanged)
+        {
+            _timePeriodEnd = _timePeriodStart;
+        }
+        
+        if (!_provider || wasBandsChanged || _wasAlphaChanged)
         {
             _requireTimePeriodChange = NO;
+            _wasAlphaChanged = NO;
+            
             _provider = std::make_shared<OsmAnd::WeatherRasterLayerProvider>(_resourcesManager, layer, _timePeriodStart, _timePeriodEnd, _timePeriodStep, bands, self.app.data.weatherUseOfflineData);
             [self.mapView setProvider:_provider forLayer:self.layerIndex];
 
@@ -282,8 +292,11 @@
     });
 }
 
-- (void) onWeatherLayerAlphaChanged:(id)observer withKey:(id)key andValue:(id)value
+- (void) onWeatherLayerAlphaChanged
 {
+    _wasAlphaChanged = YES;
+    [self updateWeatherLayerAlpha];
+/*
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.mapViewController runWithRenderSync:^{
             OsmAnd::MapLayerConfiguration config;
@@ -291,7 +304,7 @@
             [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
         }];
     });
-    [self updateWeatherLayerAlpha];
+ */
 }
 
 - (void) updateWeatherLayer

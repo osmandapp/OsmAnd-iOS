@@ -65,7 +65,14 @@ static NSInteger SEQ = 0;
 - (UIImage *)getActionIcon
 {
     NSString *iconResName = [self getIconResName];
-    return iconResName ? [UIImage templateImageNamed:iconResName] : nil;
+    if (iconResName)
+    {
+        if ([iconResName hasPrefix:@"mx_"])
+            return [[OAUtilities getMxIcon:iconResName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        else
+            return [UIImage templateImageNamed:iconResName];
+    }
+    return nil;
 }
 
 - (NSString *)getSecondaryIconName

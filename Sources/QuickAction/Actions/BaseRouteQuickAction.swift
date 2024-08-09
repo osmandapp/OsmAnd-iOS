@@ -16,7 +16,7 @@ class BaseRouteQuickAction: OAQuickAction {
     }
     
     class func getQuickActionType() -> QuickActionType {
-        super.type()
+        fatalError()
     }
     
     override init() {

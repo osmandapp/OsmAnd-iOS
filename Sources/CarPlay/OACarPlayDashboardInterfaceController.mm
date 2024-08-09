@@ -576,7 +576,11 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     maneuver.userInfo = @{ @"imminent" : @(directionInfo.imminent) };
     NSString *streetName = directionInfo.directionInfo.streetName;
     if (streetName)
-        maneuver.instructionVariants = @[streetName];
+    {
+        NSString *distanceString = [OAOsmAndFormatter getFormattedDistance:directionInfo.distanceTo withParams:[OsmAndFormatterParams useLowerBounds]];
+        NSString *instruction = [NSString stringWithFormat:@"%@, %@", distanceString, streetName];
+        maneuver.instructionVariants = @[instruction];
+    }
     
     return maneuver;
 }
@@ -589,7 +593,6 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     {
         int turnImminent = 0;
         int nextTurnDistance = 0;
-        int secondaryTurnDistance = 0;
         OANextDirectionInfo *nextTurn = [_routingHelper getNextRouteDirectionInfo:[[OANextDirectionInfo alloc] init] toSpeak:YES];
         if (nextTurn && nextTurn.distanceTo > 0 && nextTurn.directionInfo)
         {
@@ -605,7 +608,6 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                 secondaryInfo = [_routingHelper getNextRouteDirectionInfoAfter:nextTurn to:[[OANextDirectionInfo alloc] init] toSpeak:YES];
                 if (secondaryInfo && secondaryInfo.directionInfo)
                 {
-                    secondaryTurnDistance = secondaryInfo.distanceTo;
                     _secondaryStyle = CPManeuverDisplayStyleDefault;
                     secondaryVisible = true;
                 }

@@ -9,9 +9,6 @@
 @objc(OACoordinatesBaseWidget)
 @objcMembers
 class CoordinatesBaseWidget: OABaseWidgetView {
-
-    private static let widgetHeight: CGFloat = 44
-
     @IBOutlet private var divider: UIView!
     @IBOutlet private var secondContainer: UIStackView!
     @IBOutlet private var firstCoordinate: UILabel! {
@@ -26,16 +23,19 @@ class CoordinatesBaseWidget: OABaseWidgetView {
     }
 
     @IBOutlet private var firstIcon: UIImageView!
+    
+    private static let widgetHeight: CGFloat = 44
 
     var lastLocation: CLLocation?
     var coloredUnit = false
+    
+    // MARK: Init
 
     override init(type: WidgetType) {
         super.init(frame: .zero)
         self.widgetType = type
         commonInit()
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(copyCoordinates)))
-
         updateVisibility(visible: false)
     }
     
@@ -48,41 +48,64 @@ class CoordinatesBaseWidget: OABaseWidgetView {
         super.init(coder: aDecoder)
         commonInit()
     }
-
+    
     private func commonInit() {
-        let widgetview = Bundle.main.loadNibNamed("OACoordinatesBaseWidget", owner: self, options: nil)![0] as! UIView
-        widgetview.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(widgetview)
+        // swiftlint:disable force_unwrapping
+        let widgetView = Bundle.main.loadNibNamed("OACoordinatesBaseWidget", owner: self, options: nil)![0] as! UIView
+        // swiftlint:enable force_unwrapping
+
+        widgetView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(widgetView)
        
         NSLayoutConstraint.activate([
-            widgetview.leadingAnchor.constraint(equalTo: leadingAnchor),
-            widgetview.trailingAnchor.constraint(equalTo: trailingAnchor),
-            widgetview.topAnchor.constraint(equalTo: topAnchor),
-            widgetview.bottomAnchor.constraint(equalTo: bottomAnchor)
+            widgetView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            widgetView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            widgetView.topAnchor.constraint(equalTo: topAnchor),
+            widgetView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
+        configureRTLState()
+    }
+    
+    private func configureRTLState() {
+        if isDirectionRTL() {
+            secondContainer.addArrangedSubview(firstIcon)
+        }
+    }
+    
+    // MARK: Base override
+    
+    override func updateColors(_ textState: OATextState) {
+        super.updateColors(textState)
+
+        backgroundColor = isNightMode() ? .widgetBg.dark : .widgetBg.light
+
+        divider.backgroundColor = isNightMode() ? .widgetSeparator.dark : .widgetSeparator.light
+
+        let textColor: UIColor = isNightMode() ? .white : .black
+        firstCoordinate.textColor = textColor
+        secondCoordinate.textColor = textColor
+
+        let typefaceStyle: UIFont.Weight = textState.textBold ? .bold : .semibold
+        firstCoordinate.font = UIFont.scaledSystemFont(ofSize: firstCoordinate.font.pointSize, weight: typefaceStyle)
+        secondCoordinate.font = UIFont.scaledSystemFont(ofSize: secondCoordinate.font.pointSize, weight: typefaceStyle)
+
+        let lastLocation = lastLocation
+        if let lastLocation, coloredUnit {
+            showFormattedCoordinates(lat: lastLocation.coordinate.latitude, lon: lastLocation.coordinate.longitude)
+        }
     }
 
-    func copyCoordinates() {
-        guard lastLocation != nil else {
-            return
-        }
-
-        let firstCoordText = firstCoordinate.text ?? ""
-        let secondCoordText = secondCoordinate.text ?? ""
-        var coordinates = ""
-
-        if isDirectionRTL() {
-            coordinates = "\(secondCoordText), \(firstCoordText)"
-        } else {
-            coordinates = "\(firstCoordText), \(secondCoordText)"
-        }
-
-        let pasteboard: UIPasteboard = UIPasteboard.general
-        pasteboard.string = coordinates
-
-        let toastMessage = isDirectionRTL() ? "\(coordinates) :\(localizedString("copied_to_clipboard"))" : String(format: localizedString("ltr_or_rtl_combine_via_colon"), localizedString("copied_to_clipboard"), coordinates)
-
-        OAUtilities.showToast(toastMessage, details: nil, duration: 4, in: OARootViewController.instance().view)
+    override func adjustSize() {
+        var selfFrame: CGRect = frame
+        selfFrame.size.width = OAUtilities.calculateScreenWidth()
+        selfFrame.size.height = Self.widgetHeight
+        frame = selfFrame
+    }
+    
+    // MARK: Public func's
+    
+    func getCoordinateIcon() -> UIImage? {
+        nil // override it
     }
 
     func showFormattedCoordinates(lat: Double, lon: Double) {
@@ -96,14 +119,19 @@ class CoordinatesBaseWidget: OABaseWidgetView {
             showMgrsCoordinates(lat: lat, lon: lon)
         case MAP_GEO_OLC_FORMAT:
             showOlcCoordinates(lat: lat, lon: lon)
-//        case SWISS_GRID_FORMAT:
-//            showSwissGrid(lat: lat, lon: lon, swissGridPlus: false)
-//        case SWISS_GRID_PLUS_FORMAT:
-//            showSwissGrid(lat: lat, lon: lon, swissGridPlus: true)
         default:
             showStandardCoordinates(lat: lat, lon: lon, format: Int(format))
         }
     }
+    
+    func updateVisibility(visible: Bool) {
+        if visible == isHidden {
+            isHidden = !visible
+            delegate?.widgetVisibilityChanged(self, visible: visible)
+        }
+    }
+    
+    // MARK: Private func's
 
     private func showUtmCoordinates(lat: Double, lon: Double) {
         setupForNonStandardFormat()
@@ -122,29 +150,6 @@ class CoordinatesBaseWidget: OABaseWidgetView {
         let olcCoordinates = OALocationConvert.getLocationOlcName(lat, lon: lon)
         firstCoordinate.text = olcCoordinates
     }
-
-//    private func showSwissGrid(lat: Double, lon: Double, swissGridPlus: Bool) {
-//        let latLon = LatLon(lat: lat, lon: lon)
-//        let swissGrid = swissGridPlus
-//            ? SwissGridApproximation.convertWGS84ToLV95(latLon)
-//            : SwissGridApproximation.convertWGS84ToLV03(latLon)
-//        let swissGridFormat = getSwissGridFormat()
-//
-//        firstIcon.image = getLatitudeIcon(lat: lat)
-//        secondIcon.image = getLongitudeIcon(lon: lon)
-//
-//        firstCoordinate.text = swissGridFormat.string(from: NSNumber(value: swissGrid[0])) ?? ""
-//        secondCoordinate.text = swissGridFormat.string(from: NSNumber(value: swissGrid[1])) ?? ""
-//    }
-//
-//    private func getSwissGridFormat() -> NumberFormatter {
-//        let swissGridFormat = NumberFormatter()
-//        swissGridFormat.locale = Locale(identifier: "en_US")
-//        swissGridFormat.numberStyle = .decimal
-//        swissGridFormat.groupingSeparator = " "
-//        swissGridFormat.maximumFractionDigits = 2
-//        return swissGridFormat
-//    }
 
     private func setupForNonStandardFormat() {
         firstIcon.isHidden = false
@@ -174,63 +179,40 @@ class CoordinatesBaseWidget: OABaseWidgetView {
 
         let coordColor: UIColor = isNightMode() ? .white : .black
         let unitColor = UIColor(rgb: 0x7D738C)
-
-            let attributedLat = NSMutableAttributedString(string: latitude!)
-        if latitude!.length > 2 {
-            attributedLat.addAttribute(.foregroundColor, value: coordColor, range: NSRange(location: 0, length: latitude!.length - 2))
-            attributedLat.addAttribute(.foregroundColor, value: unitColor, range: NSRange(location: latitude!.length - 1, length: 1))
-        }
-
-        let attributedLon = NSMutableAttributedString(string: longitude!)
-        if longitude!.length > 2 {
-            attributedLon.addAttribute(.foregroundColor, value: coordColor, range: NSRange(location: 0, length: longitude!.length - 2))
-            attributedLon.addAttribute(.foregroundColor, value: unitColor, range: NSRange(location: longitude!.length - 1, length: 1))
-        }
-
-        firstCoordinate.attributedText = attributedLat
-        secondCoordinate.attributedText = attributedLon
-    }
-
-    func getCoordinateIcon() -> UIImage? {
-        return nil // override it
-    }
-
-    func updateVisibility(visible: Bool) -> Bool {
-        if visible == isHidden {
-            isHidden = !visible
-            if delegate != nil {
-                delegate!.widgetVisibilityChanged(self, visible: visible)
+        
+        if let latitude {
+            let attributedLat = NSMutableAttributedString(string: latitude)
+            if latitude.length > 2 {
+                attributedLat.addAttribute(.foregroundColor, value: coordColor, range: NSRange(location: 0, length: latitude.length - 2))
+                attributedLat.addAttribute(.foregroundColor, value: unitColor, range: NSRange(location: latitude.length - 1, length: 1))
             }
-            return true
+            firstCoordinate.attributedText = attributedLat
         }
-        return false
-    }
-
-    override func updateColors(_ textState: OATextState) {
-        super.updateColors(textState)
-
-        backgroundColor = isNightMode() ? .widgetBg.dark : .widgetBg.light
-
-        divider.backgroundColor = isNightMode() ? .widgetSeparator.dark : .widgetSeparator.light
-
-        let textColor: UIColor = isNightMode() ? .white : .black
-        firstCoordinate.textColor = textColor
-        secondCoordinate.textColor = textColor
-
-        let typefaceStyle: UIFont.Weight = textState.textBold ? .bold : .semibold
-        firstCoordinate.font = UIFont.scaledSystemFont(ofSize: firstCoordinate.font.pointSize, weight: typefaceStyle)
-        secondCoordinate.font = UIFont.scaledSystemFont(ofSize: secondCoordinate.font.pointSize, weight: typefaceStyle)
-
-        let lastLocation = lastLocation
-        if coloredUnit && lastLocation != nil {
-            showFormattedCoordinates(lat: lastLocation!.coordinate.latitude, lon: lastLocation!.coordinate.longitude)
+        
+        if let longitude {
+            let attributedLon = NSMutableAttributedString(string: longitude)
+            if longitude.length > 2 {
+                attributedLon.addAttribute(.foregroundColor, value: coordColor, range: NSRange(location: 0, length: longitude.length - 2))
+                attributedLon.addAttribute(.foregroundColor, value: unitColor, range: NSRange(location: longitude.length - 1, length: 1))
+            }
+            secondCoordinate.attributedText = attributedLon
         }
     }
+    
+    @objc private func copyCoordinates() {
+        guard lastLocation != nil else {
+            return
+        }
 
-    override func adjustSize() {
-        var selfFrame: CGRect = frame
-        selfFrame.size.width = OAUtilities.calculateScreenWidth()
-        selfFrame.size.height = Self.widgetHeight
-        frame = selfFrame
+        let firstCoordText = firstCoordinate.text ?? ""
+        let secondCoordText = secondCoordinate.text ?? ""
+        let coordinates = "\(firstCoordText), \(secondCoordText)"
+
+        let pasteboard = UIPasteboard.general
+        pasteboard.string = coordinates
+
+        let toastMessage = isDirectionRTL() ? "\(coordinates) :\(localizedString("copied_to_clipboard"))" : String(format: localizedString("ltr_or_rtl_combine_via_colon"), localizedString("copied_to_clipboard"), coordinates)
+
+        OAUtilities.showToast(toastMessage, details: nil, duration: 4, in: OARootViewController.instance().view)
     }
 }

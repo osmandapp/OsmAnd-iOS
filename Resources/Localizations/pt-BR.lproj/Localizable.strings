@@ -2470,7 +2470,7 @@
 "select_tracks" = "Selecionar trilhos";
 "shared_string_restoring" = "Restaurando";
 "restoring_from" = "Restaurando dados selecionados da nuvem";
-"ltr_or_rtl_combine_via_dash" = "%@ — %@";
+"ltr_or_rtl_combine_via_dash" = "%@— %@";
 "toggle_wind" = "Mostrar/ocultar - camada de vento";
 "cloud_show" = "Mostrar nuvens";
 "wind_hide" = "Ocultar vento";
@@ -3501,3 +3501,6 @@
 "user_palette" = "Paleta do usuário";
 "height_legend_description" = "Os mapas de cores de altitude são usados para visualizar relevo.";
 "shared_string_colors" = "Cores";
+"route_your_destination_is_on_left" = "Seu destino fica à esquerda";
+"route_your_destination_is_on_right" = "Seu destino fica à direita";
+"route_your_destination_is_on_ahead" = "Seu destino está logo à frente";

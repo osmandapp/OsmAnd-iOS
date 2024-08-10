@@ -594,7 +594,7 @@
 "map_widget_compass" = "指南针";
 "map_widget_next_turn" = "下一个转弯";
 "map_widget_next_turn_small" = "下一个转弯(小)";
-"map_widget_next_next_turn" = "再下一个转弯";
+"map_widget_next_next_turn" = "第二个转弯";
 "map_widget_bearing" = "相对方位";
 "map_widget_transparent" = "透明皮肤";
 "settings_preset" = "用户配置文件";
@@ -623,7 +623,7 @@
 "route_tu" = "掉头后直行";
 "route_head" = "直行";
 "looking_up_address" = "查询地址";
-"no_address_found" = "没有确定地址";
+"no_address_found" = "无法确定地址";
 "traffic_warning_speed_limit" = "速度限制";
 "traffic_warning_border_control" = "边境管制";
 "traffic_warning_payment" = "收费站";
@@ -1286,7 +1286,7 @@
 "coord_input_add_point" = "添加点";
 "personal_category_name" = "个人";
 "default_speed_dialog_msg" = "估计未知道路类型的到达时间，并限制所有道路的速度（可能会影响路线）";
-"quick_action_remove_next_destination_descr" = "删除路线上的下一个目的地。如果该目的地是最终目的地，导航将停止。";
+"quick_action_remove_next_destination_descr" = "删除路线上的下一目的地。如果该目的地是最终目的地，导航将停止。";
 "configure_screen_quick_action" = "快捷操作";
 "select_icon_profile_dialog_title" = "选择图标";
 "shared_string_one" = "一";
@@ -1426,7 +1426,7 @@
 "coordinates_widget_current_location" = "坐标：当前位置";
 "shared_string_square" = "方形";
 "rearrange_categories" = "重新排列类别";
-"select_distance_route_will_recalc" = "选择重新计算路线的距离。";
+"select_distance_route_will_recalc" = "选择要重新计算距离的路线。";
 "shared_string_gpx_points" = "点";
 "icon_group_amenity" = "便利设施";
 "start_editing_card_image_text" = "任何人都可以编辑的自由的全球旅游指南。";
@@ -2164,7 +2164,7 @@
 "rendering_attr_showMtbScale_description" = "根据山地自行车等级显示路径。";
 "map_widget_group_sunrise_sunset_desc" = "这些小部件会显示有关下一次日出和日落的信息。";
 "map_widget_group_sunrise_sunset" = "日出、日落";
-"navigation_points_desc" = "导航小工具将在导航期间启用，以显示距离、到达或剩余时间、下一个转弯、方位、当前 / 下一街道名称、车道信息、最大速度、接近警示、兴趣点、路径点等信息。";
+"navigation_points_desc" = "导航小工具将在导航期间启用，以显示距离、到达或剩余时间、下个转弯、方位、当前 / 下一街道名称、车道信息、最大速度、接近警示、兴趣点、路径点等信息。";
 "get_osmand_cloud" = "获取 OsmAnd Cloud";
 "rendering_value_caiScale_description" = "意大利高山俱乐部";
 "generate_slope_from_3d_maps" = "从3D地图生成坡度栅格地图";
@@ -2245,7 +2245,7 @@
 "purchases_feature_desc_external_sensors" = "显示和记录来自外部传感器的数据：自行车速度、自行车功率、踏频和心率。";
 "announcement_time_intervals" = "时间和距离间隔";
 "announce_when_exceeded" = "超出时播报";
-"next_turn_widget_desc" = "该小部件通过移动路线图和距离数显示有关您的下一个转弯的信息。";
+"next_turn_widget_desc" = "小部件会向您展示有关下个转弯的行进方向图示和距离信息。";
 "external_device_forget_sensor" = "遗忘传感器";
 "help_article_navigation_guidance_name" = "指引";
 "shared_string_switch_mode" = "切换模式";
@@ -2335,7 +2335,7 @@
 "shared_string_mode" = "模式";
 "last_seven_days" = "最近 7 天";
 "help_article_start_with_first_steps_name" = "第一步";
-"route_maneuvers_desc" = "导航小工具将在导航期间启用，以显示距离、到达或离开时间、下一个转弯、方位、当前街道名称、车道信息、最大速度、接近警报、兴趣点、路径点等信息。";
+"route_maneuvers_desc" = "导航小工具将在导航期间启用，以显示距离、到达或剩余时间、下个转弯、方位、当前街道名称、车道信息、最高速度、接近警报、兴趣点、路径点等信息。";
 "shared_string_foot" = "脚";
 "side_marker_eta" = "预计的到达时间";
 "radius_rules_widget_desc" = "半径量尺工具显示地图上所选点周围的距离圆。";
@@ -2714,3 +2714,5 @@
 "precipitation_layer" = "降水图层";
 "user_palette" = "用户调色板";
 "shared_string_favorite" = "我的收藏";
+"quick_action_directions_from" = "起始点";
+"rendering_value_pale_name" = "灰暗";

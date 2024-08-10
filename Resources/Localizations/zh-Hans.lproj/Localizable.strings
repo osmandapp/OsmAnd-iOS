@@ -861,7 +861,7 @@
 "techical_articles_item" = "技术文章";
 "quick_action_map_source" = "改变地图来源";
 "add_gpx_waypoint" = "添加 GPX 地标";
-"quick_action_map_style" = "更改地图样式";
+"quick_action_map_style" = "地图样式";
 "poi_dialog_comment" = "评论";
 "help_faq_descr" = "常见问题";
 "nautical_maps" = "航海地图";
@@ -1294,7 +1294,7 @@
 "osm_notes" = "OSM注记";
 "select_color" = "选择颜色";
 "public_transport_try_change_settings" = "尝试更改设置。";
-"quick_action_remove_next_destination" = "删除下个目的地点";
+"quick_action_remove_next_destination" = "下一个目的地点";
 "shared_string_settings" = "设置";
 "vessel_width_limit_description" = "设置船只宽度以避免狭窄的桥梁";
 "none_point_error" = "请添加至少一个点。";
@@ -2716,3 +2716,12 @@
 "shared_string_favorite" = "我的收藏";
 "quick_action_directions_from" = "起始点";
 "rendering_value_pale_name" = "灰暗";
+"shared_string_set" = "设置";
+"shared_string_replace" = "替换";
+"quick_action_destination" = "目的地";
+"quick_action_track_waypoint" = "轨迹路点";
+"quick_action_verb_pause_resume" = "暂停 / 恢复";
+"quick_action_verb_turn_on_off" = "打开 / 关闭";
+"quick_action_verb_start_stop" = "开始 / 停止";
+"quick_action_parking_place" = "停车位";
+"quick_action_verb_show_hide" = "显示 / 隐藏";

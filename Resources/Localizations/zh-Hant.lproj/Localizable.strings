@@ -726,7 +726,7 @@
 "transport_nearby_routes_within" = "在附近的路線";
 "shared_string_control_stop" = "停止";
 "transport_nearby_routes" = "範圍內";
-"route_stops_before" = "%@之前停止";
+"route_stops_before" = "此前%@站";
 "shared_string_previous" = "上一站";
 "poi_overlay" = "POI 在上層";
 "shared_string_clear" = "清除";

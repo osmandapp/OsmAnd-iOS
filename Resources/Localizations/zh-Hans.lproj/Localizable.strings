@@ -693,7 +693,7 @@
 "save_global_track_interval_descr" = "指定一般轨迹记录的记录间隔（通过地图上的“行程记录”小组件开启）。";
 "keep_and_add_destination_point" = "请添加作为随后的目的地";
 "intermediate_items_sort_by_distance" = "排序 门到门";
-"route_stops_before" = "%@之前停止";
+"route_stops_before" = "此前%@站";
 "shared_string_previous" = "上一个";
 "shared_string_clear" = "清除";
 "confirm_every_run" = "总是询问";

@@ -608,7 +608,7 @@
 "shared_string_target_points" = "目的地";
 "search_radius_proximity" = "之间";
 "add_as_first_destination_point" = "添加为第一个中转点";
-"auto_split_recording_title" = "自动拆分录音后的间隙";
+"auto_split_recording_title" = "自动拆分录制之后的间隔";
 "map_widget_ruler_control" = "半径量尺";
 "show_tunnels" = "隧道";
 "towards" = "朝向";
@@ -902,7 +902,7 @@
 "edit_tilesource_elliptic_tile" = "椭圆墨卡托投影";
 "hide_notes" = "隐藏 OSM 笔记";
 "show_notes" = "显示 OSM 笔记";
-"rendering_attr_hideUnderground_name" = "隐藏地下物体";
+"rendering_attr_hideUnderground_name" = "地下物体";
 "rendering_value_low_name" = "低";
 "routing_attr_avoid_unpaved_name" = "避开未铺设道路";
 "rendering_attr_hideWaterPolygons_description" = "水系";
@@ -962,7 +962,7 @@
 "rendering_attr_contourColorScheme_description" = "等高线的色彩调配";
 "routing_attr_driving_style_safety_name" = "偏好背街小路";
 "rendering_value_translucent_blue_name" = "半透明蓝色";
-"rendering_attr_noAdminboundaries_name" = "隐藏边界";
+"rendering_attr_noAdminboundaries_name" = "边界线";
 "rendering_value_orange_name" = "橙色";
 "rendering_attr_hmRendered_name" = "显示更多地图细节";
 "routing_attr_relief_smoothness_factor_plains_name" = "少丘陵";
@@ -1870,7 +1870,7 @@
 "listed_exist" = "列出的%@，已存在于OsmAnd中。";
 "animate_my_location" = "动画处理我的位置";
 "weather_precip_inches" = "英寸";
-"quick_action_transport_descr" = "在地图上显示或隐藏公共交通的按钮。";
+"quick_action_transport_descr" = "用以在地图上显示或隐藏公共交通的按钮。";
 "map_updates_are_unavailable_yet" = "地图尚无更新可用。 :-(";
 "are_you_sure" = "你确定吗？";
 "osm_live_payment_monthly_title" = "月度";
@@ -1992,9 +1992,9 @@
 "not_available_with" = "不适用于 %@";
 "login_open_street_map_org" = "登录 OpenStreetMap.org";
 "interrupt_music_descr" = "语音提示暂停音乐播放。";
-"quick_action_contour_lines_descr" = "显示或隐藏地图上等高线的按钮。";
+"quick_action_contour_lines_descr" = "用以显示或隐藏地图等高线的按钮。";
 "tracks_on_map" = "已显示轨迹";
-"quick_action_showhide_mapillary_descr" = "在地图上显示或隐藏Mapillary图层的开关。";
+"quick_action_showhide_mapillary_descr" = "用以在地图上显示或隐藏 Mapillary 图层的开关。";
 "shared_string_layers" = "图层";
 "logout_from_osmand_cloud_decsr" = "退出登录？ \n您需要再次登录才能备份或恢复数据。";
 "routing_attr_motor_type_hybrid_name" = "混动";
@@ -2051,7 +2051,7 @@
 "routing_attr_avoid_4wd_only_name" = "避开四轮驱动道路";
 "routing_attr_avoid_footways_name" = "避开人行道";
 "routing_attr_allow_intermittent_name" = "允许间歇性水路";
-"rendering_attr_showWaterwayTunnels_description" = "不要隐藏水路隧道";
+"rendering_attr_showWaterwayTunnels_description" = "提高水路隧道的能见度";
 "routing_attr_allow_intermittent_description" = "允许间歇性水路";
 "routing_attr_allow_streams_description" = "允许溪流和水渠";
 "rendering_attr_OSMMapperAssistantNote_name" = "注记标签";
@@ -2098,7 +2098,7 @@
 "rendering_attr_hideMilitaryAreas_name" = "隐藏军事区域";
 "move_marker_bottom_sheet_title" = "移动地图以更改标记位置";
 "quick_action_navigation_voice_on" = "语音静音";
-"quick_action_auto_zoom" = "地图自动缩放开关";
+"quick_action_auto_zoom" = "自动缩放地图";
 "quick_action_add_osm_bug" = "添加 OSM 注记";
 "quick_action_add_marker_descr" = "按钮会在屏幕的中心位置添加一个地图标记。";
 "quick_action_navigation_voice_off" = "取消静音";

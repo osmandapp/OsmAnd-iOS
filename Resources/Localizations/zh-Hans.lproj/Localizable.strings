@@ -429,7 +429,7 @@
 "search_another_country" = "选择另一区域";
 "skip_map_downloading" = "跳过下载地图";
 "skip_map_downloading_desc_ios" = "";
-"wiki_around" = "附近的维基百科文章";
+"wiki_around" = "附近的维基百科条目";
 "search_categories" = "分类";
 "items_selected" = "%d 已选中";
 "custom_search" = "自定义搜索";
@@ -603,7 +603,7 @@
 "save_global_track_interval" = "通用记录间隔";
 "info_button" = "信息";
 "shared_string_go" = "开始";
-"error_avoid_specific_road" = "没有找到支线";
+"error_avoid_specific_road" = "没有发现支路";
 "will_open_at" = "开始营业于";
 "shared_string_target_points" = "目的地";
 "search_radius_proximity" = "之间";
@@ -1718,7 +1718,7 @@
 "monthly_map_updates" = "每月更新地图";
 "osmand_maps_plus_tagline" = "获得扩展的功能";
 "purchases_feature_desc_hourly_map_updates" = "获得更频繁的地图更新。每小时、每天或每周更新。更新是增量下载的，只针对更改的区域。";
-"explore_osmnad_plans_to_find_suitable" = "探索 OsmAnd 套餐以找到适合您的产品。";
+"explore_osmnad_plans_to_find_suitable" = "探索 OsmAnd 方案以找到适合您的产品。";
 "osmand_pro_tagline" = "获得最多功能";
 "simulation_preview_mode_desc" = "模拟的速度在直线路段将达到最大，只有在交叉路口才会减速。";
 "purchases_feature_desc_pro_widgets" = "获得 OsmAnd Pro 功能：路线着色等。";
@@ -2500,7 +2500,7 @@
 "map_widget_sunrise" = "日出";
 "shared_string_symbol" = "符号";
 "shared_string_wikivoyage" = "维基导游";
-"saved_articles" = "已存书签文章";
+"saved_articles" = "已存书签的文章";
 "map_widget_zoom_level_desc" = "显示当前的地图缩放级别。";
 "search_favorites" = "在我的收藏中搜索";
 "average_speed_skip_stops" = "考虑到停止";
@@ -2725,3 +2725,5 @@
 "quick_action_verb_start_stop" = "开始 / 停止";
 "quick_action_parking_place" = "停车位";
 "quick_action_verb_show_hide" = "显示 / 隐藏";
+"reddit" = "Reddit";
+"facebook" = "Facebook";

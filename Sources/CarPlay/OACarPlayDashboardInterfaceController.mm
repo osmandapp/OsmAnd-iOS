@@ -33,6 +33,7 @@
 #import "OATurnDrawable.h"
 #import "OATurnDrawable+cpp.h"
 #import "OAMapButtonsHelper.h"
+#import "OACurrentStreetName.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #define unitsKm OALocalizedString(@"km")
@@ -574,7 +575,8 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     maneuver.symbolImage = [turnDrawable toUIImage];
     maneuver.initialTravelEstimates = estimates;
     maneuver.userInfo = @{ @"imminent" : @(directionInfo.imminent) };
-    NSString *streetName = directionInfo.directionInfo.streetName;
+    NSString *streetName = [self defineStreetName:directionInfo];
+    
     if (streetName)
     {
         if (estimates) {
@@ -589,6 +591,25 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     }
     
     return maneuver;
+}
+
+- (nullable NSString *)defineStreetName:(nullable OANextDirectionInfo *)nextDirInfo {
+    if (nextDirInfo)
+    {
+        OACurrentStreetName *currentStreetName = [_routingHelper getCurrentName:nextDirInfo];
+        NSString *streetName = currentStreetName.text;
+
+        if (streetName.length > 0)
+        {
+            NSString *exitRef = currentStreetName.exitRef;
+            if (exitRef.length == 0) {
+                return streetName;
+            } else {
+                return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_comma"), exitRef, streetName];
+            }
+        }
+    }
+    return nil;
 }
 
 // MARK: Location updates

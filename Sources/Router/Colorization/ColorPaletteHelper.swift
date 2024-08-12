@@ -25,7 +25,7 @@ final class ColorPaletteHelper: NSObject {
     private var app: OsmAndAppProtocol
     private var directoryObserver: DirectoryObserver
     private var cachedColorPalette = ConcurrentDictionary<String, ColorPalette>()
-    private var cachedDupicateColorPalette = ConcurrentArray<String>()
+    private var cachedDuplicateColorPalette = ConcurrentArray<String>()
     private var filesUpdatedObserver: NSObjectProtocol?
 
     private override init() {
@@ -76,9 +76,9 @@ final class ColorPaletteHelper: NSObject {
                     }
                 } else {
                     if parseGradientColorPalette(colorPaletteFileName) != nil {
-                        if cachedDupicateColorPalette.contains(where: { $0 == colorPaletteFileName }) {
+                        if cachedDuplicateColorPalette.contains(where: { $0 == colorPaletteFileName }) {
                             colorPaletteFilesUpdated[colorPaletteFileName] = Self.duplicatedFileKey
-                            cachedDupicateColorPalette.removeAll { $0 == colorPaletteFileName }
+                            cachedDuplicateColorPalette.removeAll { $0 == colorPaletteFileName }
                         } else {
                             colorPaletteFilesUpdated[colorPaletteFileName] = Self.createdFileKey
                         }
@@ -196,12 +196,12 @@ final class ColorPaletteHelper: NSObject {
         repeat {
             newFilename = OAUtilities.createNewFileName(newFilename)
         } while FileManager.default.fileExists(atPath: getColorPaletteDir().appendingPathComponent(newFilename))
-        cachedDupicateColorPalette.append(newFilename)
+        cachedDuplicateColorPalette.append(newFilename)
         do {
             try FileManager.default.copyItem(atPath: originalFilePath,
                                              toPath: getColorPaletteDir().appendingPathComponent(newFilename))
         } catch {
-            cachedDupicateColorPalette.removeAll { $0 == newFilename }
+            cachedDuplicateColorPalette.removeAll { $0 == newFilename }
         }
     }
 

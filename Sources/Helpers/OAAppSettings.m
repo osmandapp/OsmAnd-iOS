@@ -114,7 +114,6 @@ static NSString * const customAppModesKey = @"customAppModes";
 
 static NSString * const mapInfoControlsKey = @"mapInfoControls";
 static NSString * const transparentMapThemeKey = @"transparentMapTheme";
-static NSString * const showStreetNameKey = @"showStreetName";
 static NSString * const positionPlacementOnMapKey = @"positionPlacementOnMap";
 static NSString * const rotateMapKey = @"rotateMap";
 static NSString * const firstMapIsDownloadedKey = @"firstMapIsDownloaded";
@@ -180,7 +179,6 @@ static NSString * const showPedestrianKey = @"showPedestrian";
 static NSString * const showSpeedLimitWarningsKey = @"showSpeedLimitWarnings";
 static NSString * const showCamerasKey = @"showCameras";
 static NSString * const showTunnelsKey = @"showTunnels";
-static NSString * const showLanesKey = @"showLanes";
 static NSString * const showGpxWptKey = @"showGpxWpt";
 static NSString * const showNearbyFavoritesKey = @"showNearbyFavorites";
 static NSString * const showNearbyPoiKey = @"showNearbyPoi";
@@ -3984,13 +3982,6 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         _transparentMapTheme = [OACommonBoolean withKey:transparentMapThemeKey defValue:NO];
         [_profilePreferences setObject:_transparentMapTheme forKey:@"transparent_map_theme"];
 
-        _showStreetName = [OACommonBoolean withKey:showStreetNameKey defValue:NO];
-        [_showStreetName setModeDefaultValue:@NO mode:[OAApplicationMode DEFAULT]];
-        [_showStreetName setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
-        [_showStreetName setModeDefaultValue:@NO mode:[OAApplicationMode BICYCLE]];
-        [_showStreetName setModeDefaultValue:@NO mode:[OAApplicationMode PEDESTRIAN]];
-        [_profilePreferences setObject:_showStreetName forKey:@"show_street_name"];
-
         _showDistanceRuler = [OACommonBoolean withKey:showDistanceRulerKey defValue:NO];
         [_profilePreferences setObject:_showDistanceRuler forKey:@"show_distance_ruler"];
         
@@ -4177,11 +4168,6 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         _showTunnels = [OACommonBoolean withKey:showTunnelsKey defValue:NO];
         [_showTunnels setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
         [_profilePreferences setObject:_showTunnels forKey:@"show_tunnels"];
-
-        _showLanes = [OACommonBoolean withKey:showLanesKey defValue:NO];
-        [_showLanes setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
-        [_showLanes setModeDefaultValue:@YES mode:[OAApplicationMode BICYCLE]];
-        [_profilePreferences setObject:_showLanes forKey:@"show_lanes"];
 
         _speakStreetNames = [OACommonBoolean withKey:speakStreetNamesKey defValue:YES];
         _speakTrafficWarnings = [OACommonBoolean withKey:speakTrafficWarningsKey defValue:YES];

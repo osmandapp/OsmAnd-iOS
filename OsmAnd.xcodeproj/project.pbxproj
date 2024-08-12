@@ -15,6 +15,7 @@
 		05898FAF2B4DACD900E64B58 /* map-shaders-svg in Resources */ = {isa = PBXBuildFile; fileRef = 05898FAE2B4DACD900E64B58 /* map-shaders-svg */; };
 		05898FB22B511E0500E64B58 /* OASvgHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 05898FB12B511E0500E64B58 /* OASvgHelper.mm */; };
 		0590D19C2BF88AF400C62AF5 /* ConcurrentDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0590D19B2BF88AF400C62AF5 /* ConcurrentDictionary.swift */; };
+		059D31412C66857F00F8B6EF /* GPXInterpolator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059D31402C66857F00F8B6EF /* GPXInterpolator.swift */; };
 		05A0FCFC2C42D4A200F7ED66 /* models in Resources */ = {isa = PBXBuildFile; fileRef = 05A0FCFB2C42D4A200F7ED66 /* models */; };
 		05CC79562BB98B0B00BAC638 /* OAOnlinePlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = 05CC79552BB98B0B00BAC638 /* OAOnlinePlugin.mm */; };
 		05CC79592BB99EC700BAC638 /* OAPluginsHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 05CC79582BB99EC700BAC638 /* OAPluginsHelper.mm */; };
@@ -363,6 +364,16 @@
 		323BD9122628850400D255ED /* ic_bg_point_octagon_bottom@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 323BD8E22628850300D255ED /* ic_bg_point_octagon_bottom@3x.png */; };
 		323BFE6B2C0B6F6F00A4E7B1 /* DownloadingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 323BFE6A2C0B6F6F00A4E7B1 /* DownloadingCell.swift */; };
 		323BFE6E2C0B6FF900A4E7B1 /* DownloadingCellBaseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 323BFE6D2C0B6FF900A4E7B1 /* DownloadingCellBaseHelper.swift */; };
+		323F04BA2C6500E80058DD78 /* ShowHideCycleRoutesAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 323F04B92C6500E80058DD78 /* ShowHideCycleRoutesAction.swift */; };
+		323F04BC2C652B470058DD78 /* ShowHideMtbRoutesAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 323F04BB2C652B470058DD78 /* ShowHideMtbRoutesAction.swift */; };
+		323F04BE2C6532EF0058DD78 /* BaseRouteQuickAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 323F04BD2C6532EF0058DD78 /* BaseRouteQuickAction.swift */; };
+		323F04C02C6556D30058DD78 /* ShowHideHikingRoutesAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 323F04BF2C6556D30058DD78 /* ShowHideHikingRoutesAction.swift */; };
+		323F04C22C65639B0058DD78 /* ShowHideDifficultyClassificationAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 323F04C12C65639B0058DD78 /* ShowHideDifficultyClassificationAction.swift */; };
+		323F04C42C656B970058DD78 /* ShowHideSkiSlopesAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 323F04C32C656B970058DD78 /* ShowHideSkiSlopesAction.swift */; };
+		323F04C62C6575070058DD78 /* ShowHideHorseRoutesAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 323F04C52C6575070058DD78 /* ShowHideHorseRoutesAction.swift */; };
+		323F04C82C6577340058DD78 /* ShowHideWhitewaterSportsAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 323F04C72C6577340058DD78 /* ShowHideWhitewaterSportsAction.swift */; };
+		323F04CA2C6579280058DD78 /* ShowHideFitnessTrailsAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 323F04C92C6579280058DD78 /* ShowHideFitnessTrailsAction.swift */; };
+		323F04CC2C6579C30058DD78 /* ShowHideRunningRoutesAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 323F04CB2C6579C30058DD78 /* ShowHideRunningRoutesAction.swift */; };
 		3240977A27BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3240977827BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@2x.png */; };
 		3240977B27BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3240977927BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@3x.png */; };
 		3240977F27BBF995006522E3 /* OAGPXListDeletingBottomSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 3240977E27BBF995006522E3 /* OAGPXListDeletingBottomSheet.m */; };
@@ -3375,6 +3386,7 @@
 		05898FB02B511E0500E64B58 /* OASvgHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASvgHelper.h; sourceTree = "<group>"; };
 		05898FB12B511E0500E64B58 /* OASvgHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASvgHelper.mm; sourceTree = "<group>"; };
 		0590D19B2BF88AF400C62AF5 /* ConcurrentDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcurrentDictionary.swift; sourceTree = "<group>"; };
+		059D31402C66857F00F8B6EF /* GPXInterpolator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GPXInterpolator.swift; sourceTree = "<group>"; };
 		05A0FCFB2C42D4A200F7ED66 /* models */ = {isa = PBXFileReference; lastKnownFileType = folder; name = models; path = ../resources/models; sourceTree = "<group>"; };
 		05CC79542BB98B0B00BAC638 /* OAOnlinePlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOnlinePlugin.h; sourceTree = "<group>"; };
 		05CC79552BB98B0B00BAC638 /* OAOnlinePlugin.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOnlinePlugin.mm; sourceTree = "<group>"; };
@@ -3776,6 +3788,16 @@
 		323BFE6A2C0B6F6F00A4E7B1 /* DownloadingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadingCell.swift; sourceTree = "<group>"; };
 		323BFE6C2C0B6FA400A4E7B1 /* DownloadingCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DownloadingCell.xib; sourceTree = "<group>"; };
 		323BFE6D2C0B6FF900A4E7B1 /* DownloadingCellBaseHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadingCellBaseHelper.swift; sourceTree = "<group>"; };
+		323F04B92C6500E80058DD78 /* ShowHideCycleRoutesAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideCycleRoutesAction.swift; sourceTree = "<group>"; };
+		323F04BB2C652B470058DD78 /* ShowHideMtbRoutesAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideMtbRoutesAction.swift; sourceTree = "<group>"; };
+		323F04BD2C6532EF0058DD78 /* BaseRouteQuickAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseRouteQuickAction.swift; sourceTree = "<group>"; };
+		323F04BF2C6556D30058DD78 /* ShowHideHikingRoutesAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideHikingRoutesAction.swift; sourceTree = "<group>"; };
+		323F04C12C65639B0058DD78 /* ShowHideDifficultyClassificationAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideDifficultyClassificationAction.swift; sourceTree = "<group>"; };
+		323F04C32C656B970058DD78 /* ShowHideSkiSlopesAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideSkiSlopesAction.swift; sourceTree = "<group>"; };
+		323F04C52C6575070058DD78 /* ShowHideHorseRoutesAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideHorseRoutesAction.swift; sourceTree = "<group>"; };
+		323F04C72C6577340058DD78 /* ShowHideWhitewaterSportsAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideWhitewaterSportsAction.swift; sourceTree = "<group>"; };
+		323F04C92C6579280058DD78 /* ShowHideFitnessTrailsAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideFitnessTrailsAction.swift; sourceTree = "<group>"; };
+		323F04CB2C6579C30058DD78 /* ShowHideRunningRoutesAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideRunningRoutesAction.swift; sourceTree = "<group>"; };
 		3240977827BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_overflow_menu_stroke@2x.png"; path = "Resources/Icons/ic_navbar_overflow_menu_stroke@2x.png"; sourceTree = "<group>"; };
 		3240977927BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_overflow_menu_stroke@3x.png"; path = "Resources/Icons/ic_navbar_overflow_menu_stroke@3x.png"; sourceTree = "<group>"; };
 		3240977D27BBF983006522E3 /* OAGPXListDeletingBottomSheet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGPXListDeletingBottomSheet.h; sourceTree = "<group>"; };
@@ -11036,6 +11058,7 @@
 		DA5A79D726C563A000F274C7 /* Actions */ = {
 			isa = PBXGroup;
 			children = (
+				323F04BD2C6532EF0058DD78 /* BaseRouteQuickAction.swift */,
 				DA5A79FF26C563A000F274C7 /* OAAddOSMBugAction.h */,
 				46C841482C32F44A00E284B0 /* OAAddOSMBugAction.m */,
 				DA5A79EF26C563A000F274C7 /* OAAddPOIAction.h */,
@@ -11114,6 +11137,15 @@
 				DA5A79E226C563A000F274C7 /* OATerrainAction.m */,
 				DA5A7A0126C563A000F274C7 /* OAUnsupportedAction.h */,
 				DA5A79DD26C563A000F274C7 /* OAUnsupportedAction.m */,
+				323F04B92C6500E80058DD78 /* ShowHideCycleRoutesAction.swift */,
+				323F04C12C65639B0058DD78 /* ShowHideDifficultyClassificationAction.swift */,
+				323F04C92C6579280058DD78 /* ShowHideFitnessTrailsAction.swift */,
+				323F04BF2C6556D30058DD78 /* ShowHideHikingRoutesAction.swift */,
+				323F04C52C6575070058DD78 /* ShowHideHorseRoutesAction.swift */,
+				323F04BB2C652B470058DD78 /* ShowHideMtbRoutesAction.swift */,
+				323F04CB2C6579C30058DD78 /* ShowHideRunningRoutesAction.swift */,
+				323F04C32C656B970058DD78 /* ShowHideSkiSlopesAction.swift */,
+				323F04C72C6577340058DD78 /* ShowHideWhitewaterSportsAction.swift */,
 			);
 			path = Actions;
 			sourceTree = "<group>";
@@ -11345,6 +11377,7 @@
 				DA35963329B1EDEA009DF4D6 /* OANetworkRouteSelectionTask.h */,
 				DA35963429B1EDEA009DF4D6 /* OANetworkRouteSelectionTask.mm */,
 				464BAAA12B0E360600CC06E6 /* PointAttributes.swift */,
+				059D31402C66857F00F8B6EF /* GPXInterpolator.swift */,
 			);
 			path = GPX;
 			sourceTree = "<group>";
@@ -16595,6 +16628,7 @@
 				FA5A21A22A9C7DE100319695 /* CALayer+Extension.swift in Sources */,
 				FAC166222B21BEF900D63755 /* PeripheralProxy.swift in Sources */,
 				DA5A825826C563A700F274C7 /* OASpeedLimitToleranceViewController.m in Sources */,
+				323F04C02C6556D30058DD78 /* ShowHideHikingRoutesAction.swift in Sources */,
 				DA5A84AE26C563A900F274C7 /* OAHistoryViewController.mm in Sources */,
 				4643322A291D5FE7005AEF12 /* OAMapSettingsNauticalDepthScreen.m in Sources */,
 				DA5A84E826C563A900F274C7 /* OAWaypointsViewController.mm in Sources */,
@@ -16758,6 +16792,7 @@
 				051177FF2B25A51A006B4774 /* OARouteRecalculationHelper.mm in Sources */,
 				DA5A857026C563A900F274C7 /* OARouteCalculationParams.mm in Sources */,
 				DA5A816D26C563A700F274C7 /* OsmAndAppImpl.mm in Sources */,
+				323F04CA2C6579280058DD78 /* ShowHideFitnessTrailsAction.swift in Sources */,
 				DA5A856F26C563A900F274C7 /* OAAlarmInfo.mm in Sources */,
 				32D253B327F336C200324717 /* OACloudAccountLoginViewController.m in Sources */,
 				DA5A83CD26C563A800F274C7 /* OATransportRouteController.mm in Sources */,
@@ -16773,6 +16808,7 @@
 				DA5A850626C563A900F274C7 /* OAMultiselectableHeaderView.m in Sources */,
 				DA5A830E26C563A800F274C7 /* OATitleIconRoundCell.m in Sources */,
 				DA5A855A26C563A900F274C7 /* OAMapillaryContributeCard.m in Sources */,
+				323F04BE2C6532EF0058DD78 /* BaseRouteQuickAction.swift in Sources */,
 				DA5A824A26C563A700F274C7 /* OADefaultSpeedViewController.mm in Sources */,
 				DA5A846126C563A900F274C7 /* OAContextMenuLayer.mm in Sources */,
 				DA5A813E26C563A700F274C7 /* OANode.m in Sources */,
@@ -16819,6 +16855,7 @@
 				C589BC9F2C610560002769F6 /* OATwoIconsButtonTableViewCell.swift in Sources */,
 				32E6C7C82AB9BE1A00821F1E /* TravelSearchHelper.swift in Sources */,
 				DA5A840E26C563A800F274C7 /* OAGpxWptEditingHandler.mm in Sources */,
+				323F04C22C65639B0058DD78 /* ShowHideDifficultyClassificationAction.swift in Sources */,
 				DA5A84A126C563A900F274C7 /* OAApplyGpxApproximationCommand.mm in Sources */,
 				DA5A841626C563A800F274C7 /* OAGPXWptViewController.mm in Sources */,
 				C546C00A2AC2446E00377EDE /* OAUploadOsmPOINoteViewProgressController.m in Sources */,
@@ -16863,6 +16900,7 @@
 				DA5A855D26C563A900F274C7 /* OARouteDirectionInfo.mm in Sources */,
 				DA842ECD2A0B998E0030866E /* WidgetInfoCreator.swift in Sources */,
 				460E9AC12B71111000411854 /* CloudTrashItemMenuViewController.swift in Sources */,
+				323F04C82C6577340058DD78 /* ShowHideWhitewaterSportsAction.swift in Sources */,
 				32388EE226E6AF770021F829 /* OAQuickSearchResultTableViewCell.m in Sources */,
 				DA5F77B628742E85000A2BFF /* OABackupStatus.m in Sources */,
 				DAABE4EE2A1657AF00569F71 /* Color+INT.swift in Sources */,
@@ -17017,6 +17055,7 @@
 				461A3F0A29F6E68F008EE079 /* OAColorCollectionHandler.m in Sources */,
 				DA5A84F226C563A900F274C7 /* OALocationConvert.mm in Sources */,
 				DA5A81DA26C563A700F274C7 /* OAFirstUsageWizardController.mm in Sources */,
+				323F04CC2C6579C30058DD78 /* ShowHideRunningRoutesAction.swift in Sources */,
 				465749122B681E620006046B /* TrashGroup.swift in Sources */,
 				DA5A83F326C563A800F274C7 /* OARearrangeCustomFiltersViewController.mm in Sources */,
 				DA5A820426C563A700F274C7 /* OABaseFeatureCardView.m in Sources */,
@@ -17132,6 +17171,7 @@
 				FACE409F2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm in Sources */,
 				DA5A816526C563A700F274C7 /* OAApplicationMode.m in Sources */,
 				FA6439EB2B051A5300331006 /* MeasurementFormatter+Extension.swift in Sources */,
+				323F04C42C656B970058DD78 /* ShowHideSkiSlopesAction.swift in Sources */,
 				DA5A84AA26C563A900F274C7 /* OASaveTrackBottomSheetViewController.mm in Sources */,
 				DA5A853126C563A900F274C7 /* OASettingsImporter.mm in Sources */,
 				DA5A854E26C563A900F274C7 /* OAGPXUIHelper.mm in Sources */,
@@ -17318,6 +17358,7 @@
 				DA5A84E226C563A900F274C7 /* OAMapSettingsCategoryScreen.mm in Sources */,
 				FAA1CEAF2B174F9F00760545 /* OptionDeviceTableViewCell.swift in Sources */,
 				FA12A6C72A73EED600FCB656 /* UIApplication+Extension.swift in Sources */,
+				323F04BC2C652B470058DD78 /* ShowHideMtbRoutesAction.swift in Sources */,
 				DA5A81C726C563A700F274C7 /* OAObservable.m in Sources */,
 				DA4ABF152876DA6800B996EF /* OAOsmEditsSettingsItem.mm in Sources */,
 				DA4ABF242876DA6800B996EF /* OAOsmNotesSettingsItem.mm in Sources */,
@@ -17445,6 +17486,7 @@
 				DA5A83B726C563A800F274C7 /* OAFloatingButtonsHudViewController.mm in Sources */,
 				DA5A81D626C563A700F274C7 /* OACommandBuilder.mm in Sources */,
 				FA44BF5B2A72A91C000D2F5F /* CarPlaySceneDelegates.swift in Sources */,
+				059D31412C66857F00F8B6EF /* GPXInterpolator.swift in Sources */,
 				32ABB64E2AEBC02D00491E99 /* OAWebImagesCacheHelper.mm in Sources */,
 				DA5A843526C563A800F274C7 /* OARouteDetailsViewController.mm in Sources */,
 				FAC166272B21BEF900D63755 /* CBUUIDConvertible.swift in Sources */,
@@ -17485,6 +17527,7 @@
 				320F712E2A862BC90071C0E7 /* TravelHelper.swift in Sources */,
 				DA5A82F126C563A800F274C7 /* OALocationIconsTableViewCell.m in Sources */,
 				DA5A844026C563A900F274C7 /* OAUsernameFilterViewController.mm in Sources */,
+				323F04BA2C6500E80058DD78 /* ShowHideCycleRoutesAction.swift in Sources */,
 				DA5A84BC26C563A900F274C7 /* OABaseBottomSheetViewController.m in Sources */,
 				DA5A844C26C563A900F274C7 /* OADestinationCell.mm in Sources */,
 				DA5A856626C563A900F274C7 /* OALocationsHolder.mm in Sources */,
@@ -17525,6 +17568,7 @@
 				46C841312C32F27500E284B0 /* OAShowHideWindAction.m in Sources */,
 				DA5A81B126C563A700F274C7 /* OADownloadTask_AFURLSessionManager.m in Sources */,
 				DA5A837626C563A800F274C7 /* OARouteAvoidSettingsViewController.mm in Sources */,
+				323F04C62C6575070058DD78 /* ShowHideHorseRoutesAction.swift in Sources */,
 				DA5A854126C563A900F274C7 /* OAWikiImageHelper.mm in Sources */,
 				DA5A82EE26C563A800F274C7 /* OACustomPickerTableViewCell.m in Sources */,
 				DA5A855326C563A900F274C7 /* OAKml2Gpx.m in Sources */,

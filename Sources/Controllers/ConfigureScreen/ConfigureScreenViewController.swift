@@ -109,18 +109,6 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         let buttonsSection = tableData.createNewSection()
         buttonsSection.headerText = localizedString("shared_string_buttons")
 
-        let defaultButtons = [mapButtonsHelper.getCompassButtonState(), mapButtonsHelper.getMap3DButtonState()]
-        let defaultButtonsEnabledCount = defaultButtons.filter { $0.isEnabled() }.count
-        let defaultButtonsRow = buttonsSection.createNewRow()
-        defaultButtonsRow.key = "defaultButtons"
-        defaultButtonsRow.title = localizedString("default_buttons")
-        defaultButtonsRow.descr = String(format: localizedString("ltr_or_rtl_combine_via_slash"), "\(defaultButtonsEnabledCount)", "\(defaultButtons.count)")
-        defaultButtonsRow.iconTintColor = defaultButtonsEnabledCount > 0 ? appMode.getProfileColor() : .iconColorDefault
-        defaultButtonsRow.iconName = "ic_custom_button_default"
-        defaultButtonsRow.cellType = OAValueTableViewCell.reuseIdentifier
-        defaultButtonsRow.accessibilityLabel = defaultButtonsRow.title
-        defaultButtonsRow.accessibilityValue = defaultButtonsRow.descr
-
         let customButtons = mapButtonsHelper.getButtonsStates()
         let enabledCustomButtons = mapButtonsHelper.getEnabledButtonsStates()
         let customButtonsRow = buttonsSection.createNewRow()
@@ -132,6 +120,18 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         customButtonsRow.cellType = OAValueTableViewCell.reuseIdentifier
         customButtonsRow.accessibilityLabel = customButtonsRow.title
         customButtonsRow.accessibilityValue = customButtonsRow.descr
+        
+        let defaultButtons = [mapButtonsHelper.getCompassButtonState(), mapButtonsHelper.getMap3DButtonState()]
+        let defaultButtonsEnabledCount = defaultButtons.filter { $0.isEnabled() }.count
+        let defaultButtonsRow = buttonsSection.createNewRow()
+        defaultButtonsRow.key = "defaultButtons"
+        defaultButtonsRow.title = localizedString("default_buttons")
+        defaultButtonsRow.descr = String(format: localizedString("ltr_or_rtl_combine_via_slash"), "\(defaultButtonsEnabledCount)", "\(defaultButtons.count)")
+        defaultButtonsRow.iconTintColor = defaultButtonsEnabledCount > 0 ? appMode.getProfileColor() : .iconColorDefault
+        defaultButtonsRow.iconName = "ic_custom_button_default"
+        defaultButtonsRow.cellType = OAValueTableViewCell.reuseIdentifier
+        defaultButtonsRow.accessibilityLabel = defaultButtonsRow.title
+        defaultButtonsRow.accessibilityValue = defaultButtonsRow.descr
         
         let otherSection = tableData.createNewSection()
         otherSection.headerText = localizedString("other_location")

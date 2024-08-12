@@ -570,6 +570,9 @@
         _app.data.weatherWindAnimationAlpha = sender.value;
     else if (_layerType == EOAWeatherLayerTypeContours)
         _app.data.contoursAlpha = sender.value;
+    
+    [self generateData];
+    [self.tableView reloadData];
 }
 
 // MARK: UITableViewDataSource
@@ -706,7 +709,11 @@
             cell.titleLabel.text = item[@"title"];
             cell.valueLabel.text = [NSString stringWithFormat:@"%.0f%%", [item[@"value"] doubleValue] * 100];
             [cell.sliderView setValue:[item[@"value"] floatValue]];
-            [cell.sliderView addTarget:self action:@selector(onSliderValueChanged:) forControlEvents:UIControlEventValueChanged];
+            
+            // TODO: delete when android team fix alpha changing bug https://github.com/osmandapp/OsmAnd/issues/20533
+            //[cell.sliderView addTarget:self action:@selector(onSliderValueChanged:) forControlEvents:UIControlEventValueChanged];
+            [cell.sliderView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.sliderView addTarget:self action:@selector(onSliderValueChanged:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
         }
         return cell;
     }

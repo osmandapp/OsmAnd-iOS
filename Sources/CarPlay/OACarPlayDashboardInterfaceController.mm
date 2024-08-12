@@ -577,9 +577,15 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     NSString *streetName = directionInfo.directionInfo.streetName;
     if (streetName)
     {
-        NSString *distanceString = [OAOsmAndFormatter getFormattedDistance:directionInfo.distanceTo withParams:[OsmAndFormatterParams useLowerBounds]];
-        NSString *instruction = [NSString stringWithFormat:@"%@, %@", distanceString, streetName];
-        maneuver.instructionVariants = @[instruction];
+        if (estimates) {
+            maneuver.instructionVariants = @[streetName];
+        }
+        else
+        {
+            NSString *distanceString = [OAOsmAndFormatter getFormattedDistance:directionInfo.distanceTo withParams:[OsmAndFormatterParams useLowerBounds]];
+            NSString *instruction = [NSString stringWithFormat:@"%@, %@", distanceString, streetName];
+            maneuver.instructionVariants = @[instruction];
+        }
     }
     
     return maneuver;

@@ -308,11 +308,6 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
                                                object:nil];
 }
 
-- (void)dealloc
-{
-    [NSNotificationCenter.defaultCenter removeObserver:self];
-}
-
 - (void)setOldValues
 {
     _oldPreviewRouteLineInfo = [_mapPanelViewController.mapViewController.mapLayers.routeMapLayer getPreviewRouteLineInfo] ?: _previewRouteLineInfo;
@@ -956,15 +951,21 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             [self removeCellFromSection:sectionData cellKey:@"color_types_empty_space"];
             [self removeCellFromSection:sectionData cellKey:@"color_types"];
         }
-
-        [self removeCellFromSection:sectionData cellKey:@"color_day_night_empty_space"];
-        [self removeCellFromSection:sectionData cellKey:@"color_day_night_value"];
-        [self removeCellFromSection:sectionData cellKey:@"color_grid"];
-        [self removeCellFromSection:sectionData cellKey:@"top_description"];
-        [self removeCellFromSection:sectionData cellKey:@"bottom_description"];
-        [self removeCellFromSection:sectionData cellKey:@"gradientLegend"];
-        [self removeCellFromSection:sectionData cellKey:@"paletteName"];
-        [self removeCellFromSection:sectionData cellKey:@"allColors"];
+        
+        NSArray *cellKeys = @[
+            @"color_day_night_empty_space",
+            @"color_day_night_value",
+            @"color_grid",
+            @"top_description",
+            @"bottom_description",
+            @"gradientLegend",
+            @"paletteName",
+            @"allColors"
+        ];
+        
+        for (NSString *key in cellKeys) {
+            [self removeCellFromSection:sectionData cellKey:key];
+        }
     }
 }
 
@@ -1332,12 +1333,11 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         [self updateAllValues];
         [self updateRouteLayer:_oldPreviewRouteLineInfo];
         [self generateData];
-        __weak __typeof(self) weakSelf = self;
         [UIView transitionWithView:self.tableView
                           duration:0.35f
                            options:UIViewAnimationOptionTransitionCrossDissolve
                         animations:^(void) {
-                            [weakSelf.tableView reloadData];
+                            [self.tableView reloadData];
                         }
                         completion:nil];
     }
@@ -2024,13 +2024,12 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     OAGPXTableSectionData *sectionData = _tableData.subjects[_sectionColors];
     [self updateData:sectionData];
 
-    __weak __typeof(self) weakSelf = self;
     [UIView transitionWithView:self.tableView
                       duration:0.35f
                        options:UIViewAnimationOptionTransitionCrossDissolve
                     animations:^(void)
                     {
-                        [weakSelf.tableView reloadData];
+                        [self.tableView reloadData];
                     }
                     completion:nil];
 

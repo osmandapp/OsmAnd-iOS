@@ -82,7 +82,7 @@ final class GradientColorsCollection: ColorsCollection {
         default:
             return nil
         }
-        colorizationStringId = colorizationStringId.removeSufix(TXT_EXT)
+        colorizationStringId = colorizationStringId.removeSuffix(TXT_EXT)
 
         guard !colorizationStringId.isEmpty, let typeName = getTypeName(colorizationStringId) else { return nil }
         if new {
@@ -102,20 +102,13 @@ final class GradientColorsCollection: ColorsCollection {
     func isTerrainType() -> Bool {
         gradientType is TerrainType
     }
-
+    
     func getFileNamePrefix() -> String? {
-        if gradientType is ColorizationType {
-            return ColorPaletteHelper.routePrefix
-        } else if let terrainType = gradientType as? TerrainType {
-            if terrainType == TerrainType.hillshade {
-                return TerrainMode.hillshadePrefix
-            } else if terrainType == TerrainType.height {
-                return TerrainMode.heightPrefix
-            } else {
-                return TerrainMode.colorSlopePrefix
-            }
+        switch gradientType {
+        case is ColorizationType: ColorPaletteHelper.routePrefix
+        case let terrainType as TerrainType: getTerrainPrefix(for: terrainType)
+        default: nil
         }
-        return nil
     }
 
     func getPaletteColor(byName name: String) -> PaletteGradientColor? {
@@ -165,6 +158,14 @@ final class GradientColorsCollection: ColorsCollection {
                     addedPaletteIds.insert(id)
                 }
             }
+        }
+    }
+    
+    private func getTerrainPrefix(for terrainType: TerrainType) -> String {
+        switch terrainType {
+        case TerrainType.hillshade: TerrainMode.hillshadePrefix
+        case TerrainType.height: TerrainMode.heightPrefix
+        default: TerrainMode.colorSlopePrefix
         }
     }
 

@@ -75,11 +75,9 @@ class ColorsCollection: NSObject {
 
     func onColorFilesDeleted(_ colorPaletteFiles: [String]) -> [PaletteColor] {
         var paletteColors = [PaletteColor]()
-        colorPaletteFiles.forEach { [weak self] in
-            guard let self else { return }
-
-            if let paletteColor = self.getPaletteColor(byFileName: $0) {
-                if self.askRemoveColor(paletteColor, save: false) {
+        colorPaletteFiles.forEach {
+            if let paletteColor = getPaletteColor(byFileName: $0) {
+                if askRemoveColor(paletteColor, save: false) {
                     paletteColors.append(paletteColor)
                 } else {
                     debugPrint("Color palette isn't removed from collection: \(colorPaletteFiles)")
@@ -93,12 +91,10 @@ class ColorsCollection: NSObject {
 
     func onColorFilesCreated(_ colorPaletteFiles: [String]) -> [PaletteColor] {
         var paletteColors = [PaletteColor]()
-        colorPaletteFiles.forEach { [weak self] in
-            guard let self else { return }
-
-            if let paletteColor = self.getPaletteColor(byFileName: $0, new: true),
-               let newPaletteCollor = self.addNewColor(paletteColor, updateLastUsedOrder: false, save: false) {
-                paletteColors.append(newPaletteCollor)
+        colorPaletteFiles.forEach {
+            if let paletteColor = getPaletteColor(byFileName: $0, new: true),
+               let newPaletteColor = addNewColor(paletteColor, updateLastUsedOrder: false, save: false) {
+                paletteColors.append(newPaletteColor)
             }
         }
         return paletteColors
@@ -106,11 +102,9 @@ class ColorsCollection: NSObject {
 
     func onColorFilesUpdated(_ colorPaletteFiles: [String]) -> [PaletteColor] {
         var paletteColors = [PaletteColor]()
-        colorPaletteFiles.forEach { [weak self] in
-            guard let self else { return }
-
-            if let paletteColor = self.getPaletteColor(byFileName: $0),
-               let newPaletteColor = self.updateColor(paletteColor, newValue: nil, save: false) {
+        colorPaletteFiles.forEach {
+            if let paletteColor = getPaletteColor(byFileName: $0),
+               let newPaletteColor = updateColor(paletteColor, newValue: nil, save: false) {
                 paletteColors.append(newPaletteColor)
             }
         }
@@ -119,13 +113,11 @@ class ColorsCollection: NSObject {
 
     func onColorFilesDuplicated(_ colorPaletteFiles: [String]) -> [PaletteColor] {
         var paletteColors = [PaletteColor]()
-        colorPaletteFiles.forEach { [weak self] in
-            guard let self else { return }
-
+        colorPaletteFiles.forEach {
             if let spaceIndex = $0.lastIndex(of: " ") {
                 let suffix = String($0.suffix(from: spaceIndex))
-                if let paletteColor = self.getPaletteColor(byFileName: $0.removeSufix(suffix)) {
-                    paletteColors.append(self.duplicateColor(paletteColor, save: false, suffix: String(suffix.dropLast(TXT_EXT.count))))
+                if let paletteColor = getPaletteColor(byFileName: $0.removeSuffix(suffix)) {
+                    paletteColors.append(duplicateColor(paletteColor, save: false, suffix: String(suffix.dropLast(TXT_EXT.count))))
                 } else {
                     debugPrint("Original color palette is not in collection: \(colorPaletteFiles)")
                 }

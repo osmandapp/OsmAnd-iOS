@@ -62,7 +62,7 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
     }
 
     override func insertItem(_ newItem: Any, at indexPath: IndexPath) {
-        if let newItem = newItem as? PaletteColor, data.count > indexPath.section && (indexPath.row == 0 || data[indexPath.section].count > indexPath.row - 1) {
+        if let newItem = newItem as? PaletteColor, data.count > indexPath.section, (indexPath.row == 0 || data[indexPath.section].count > indexPath.row - 1) {
             data[indexPath.section].insert(newItem, at: indexPath.row)
         }
         if let collectionView = getCollectionView() {
@@ -75,7 +75,7 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
     }
 
     override func replaceItem(_ newItem: Any, at indexPath: IndexPath) {     
-        if let newItem = newItem as? PaletteColor, data.count > indexPath.section && data[indexPath.section].count > indexPath.row {
+        if let newItem = newItem as? PaletteColor, data.count > indexPath.section, data[indexPath.section].count > indexPath.row {
             data[indexPath.section][indexPath.row] = newItem
         }
         if let collectionView = getCollectionView() {
@@ -86,7 +86,7 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
 
     override func removeItem(_ indexPath: IndexPath) {
         var deleteCurrent = false
-        if data.count > indexPath.section && data[indexPath.section].count > indexPath.row {
+        if data.count > indexPath.section, data[indexPath.section].count > indexPath.row {
             data[indexPath.section].remove(at: indexPath.row)
             if let selectedIndexPath {
                 if let defaultIndexPath, defaultIndexPath.row > indexPath.row {
@@ -105,8 +105,8 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
                     guard let self else { return }
 
                     collectionView.reloadData()
-                    if deleteCurrent, let defaultIndexPath = self.defaultIndexPath {
-                        let indexPathsToUpdate = [self.selectedIndexPath!, defaultIndexPath]
+                    if deleteCurrent, let defaultIndexPath = self.defaultIndexPath, let selectedIdxPath = self.selectedIndexPath {
+                        let indexPathsToUpdate = [selectedIdxPath, defaultIndexPath]
                         self.selectedIndexPath = defaultIndexPath
                         collectionView.reloadItems(at: indexPathsToUpdate)
                     }
@@ -118,9 +118,7 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
     override func removeItems(_ indexPaths: [IndexPath]) {
         var deletedIndexPaths = [IndexPath]()
         var deleteCurrent = false
-        indexPaths.forEach { [weak self] in
-            guard let self else { return }
-
+        indexPaths.forEach {
             if data.count > $0.section && data[$0.section].count > $0.row {
                 data[$0.section].remove(at: $0.row)
                 deletedIndexPaths.append($0)

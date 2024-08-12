@@ -436,12 +436,11 @@
 
         if (indexPathsToInsert.count > 0)
         {
-            __weak __typeof(self) weakSelf = self;
             [self.tableView performBatchUpdates:^{
-                [weakSelf.tableView insertRowsAtIndexPaths:indexPathsToInsert
+                [self.tableView insertRowsAtIndexPaths:indexPathsToInsert
                                           withRowAnimation:UITableViewRowAnimationAutomatic];
             } completion:^(BOOL finished) {
-                [weakSelf.tableView reloadData];
+                [self.tableView reloadData];
             }];
         }
     }

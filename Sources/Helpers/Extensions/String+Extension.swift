@@ -19,8 +19,8 @@ extension String {
         return String(dropFirst(prefix.count))
     }
 
-    func removeSufix(_ sufix: String) -> String {
-        guard hasSuffix(sufix) else { return self }
-        return String(dropLast(sufix.count))
+    func removeSuffix(_ suffix: String) -> String {
+        guard hasSuffix(suffix) else { return self }
+        return String(dropLast(suffix.count))
     }
 }

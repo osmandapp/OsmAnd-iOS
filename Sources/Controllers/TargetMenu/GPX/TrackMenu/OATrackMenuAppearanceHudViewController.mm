@@ -651,12 +651,11 @@ static const NSInteger kColorsSection = 1;
 - (void)reloadTableWithAnimation
 {
     [self generateData];
-    __weak __typeof(self) weakSelf = self;
     [UIView transitionWithView:self.tableView
                       duration:0.35f
                        options:UIViewAnimationOptionTransitionCrossDissolve
                     animations:^(void) {
-        [weakSelf.tableView reloadData];
+        [self.tableView reloadData];
     } completion:nil];
 }
 
@@ -2298,12 +2297,11 @@ static const NSInteger kColorsSection = 1;
             [[_app updateGpxTracksOnMapObservable] notifyEvent];
         
         [self generateData];
-        __weak __typeof(self) weakSelf = self;
         [UIView transitionWithView:self.tableView
                           duration:0.35f
                            options:UIViewAnimationOptionTransitionCrossDissolve
                         animations:^(void) {
-            [weakSelf.tableView reloadData];
+            [self.tableView reloadData];
         } completion:nil];
     }
 }
@@ -2343,18 +2341,16 @@ static const NSInteger kColorsSection = 1;
 
     OAGPXTableSectionData *section = _tableData[kColorsSection];
     [self updateData:section];
-
-    __weak __typeof(self) weakSelf = self;
+    
     [UIView transitionWithView:self.tableView
                       duration:0.35f
                        options:UIViewAnimationOptionTransitionCrossDissolve
-                    animations:^(void)
-                    {
-                        [weakSelf.tableView reloadData];
-                        weakSelf.doneButton.userInteractionEnabled = YES;
-                        [weakSelf.doneButton setTitleColor:[UIColor colorNamed:ACColorNameIconColorActive]
-                                              forState:UIControlStateNormal];
-                    }
+                    animations:^(void) {
+        [self.tableView reloadData];
+        self.doneButton.userInteractionEnabled = YES;
+        [self.doneButton setTitleColor:[UIColor colorNamed:ACColorNameIconColorActive]
+                              forState:UIControlStateNormal];
+    }
                     completion:nil];
 }
 

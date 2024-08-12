@@ -606,9 +606,8 @@
                             : contentFrame.size.height - tableViewY
             );
 
-            __weak __typeof(self) weakSelf = self;
             [UIView animateWithDuration:0.2 animations:^{
-                [weakSelf onViewHeightChanged:DeviceScreenHeight - weakSelf.scrollableView.frame.origin.y];
+                [self onViewHeightChanged:DeviceScreenHeight - self.scrollableView.frame.origin.y];
             } completion:nil];
             [self applyCornerRadius:newY > 0];
             return;
@@ -661,12 +660,11 @@
                 else
                     _currentState = [self hasInitialState] ? EOADraggableMenuStateInitial : EOADraggableMenuStateExpanded;
             }
-            __weak __typeof(self) weakSelf = self;
             [UIView animateWithDuration:0.2 animations:^{
-                [weakSelf layoutSubviews];
+                [self layoutSubviews];
             } completion:^(BOOL) {
-                weakSelf.isDraggingOnTable = NO;
-                weakSelf.firstStateChanged = YES;
+                self.isDraggingOnTable = NO;
+                self.firstStateChanged = YES;
             }];
         }
         default:
@@ -680,10 +678,9 @@
 {
     if (animated)
     {
-        __weak __typeof(self) weakSelf = self;
         [UIView animateWithDuration:0.2 animations:^{
-            [weakSelf.tableView reloadData];
-            [weakSelf layoutSubviews];
+            [self.tableView reloadData];
+            [self layoutSubviews];
         } completion:nil];
     }
     else

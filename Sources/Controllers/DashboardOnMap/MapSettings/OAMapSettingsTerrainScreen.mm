@@ -251,13 +251,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
     [self initData];
     [_downloadingCellResourceHelper cleanCellCache];
-    __weak __typeof(self) weakSelf = self;
     [UIView transitionWithView:tblView
                       duration:.35
                        options:UIViewAnimationOptionTransitionCrossDissolve
                     animations:^(void)
      {
-        [weakSelf.tblView reloadData];
+        [self.tblView reloadData];
      }
                     completion:nil];
 }
@@ -298,15 +297,14 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             if (defaultTerrainMode)
                 _terrainMode = defaultTerrainMode;
         }
-        __weak __typeof(self) weakSelf = self;
         dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf initData];
-            [UIView transitionWithView:weakSelf.tblView
+            [self initData];
+            [UIView transitionWithView:self.tblView
                               duration:0.35f
                                options:UIViewAnimationOptionTransitionCrossDissolve
                             animations:^(void)
              {
-                [weakSelf.tblView reloadData];
+                [self.tblView reloadData];
             }
                             completion:nil];
         });

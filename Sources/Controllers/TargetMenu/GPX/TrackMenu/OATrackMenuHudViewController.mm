@@ -937,14 +937,13 @@
         [_uiBuilder resetDataInTab:_selectedTab];
         [self generateData];
 
-        __weak __typeof(self) weakSelf = self;
         [UIView transitionWithView: self.tableView
                           duration: 0.35f
                            options: UIViewAnimationOptionTransitionCrossDissolve
                         animations: ^(void) {
-            [weakSelf.tableView reloadData];
+            [self.tableView reloadData];
         } completion:^(BOOL finished) {
-            [weakSelf.mapViewController.mapLayers.gpxMapLayer hideCurrentStatisticsLocation];
+            [self.mapViewController.mapLayers.gpxMapLayer hideCurrentStatisticsLocation];
         }];
 
         if (_headerView)
@@ -1954,18 +1953,17 @@
             [self updateView:animated];
         }
 
-        __weak __typeof(self) weakSelf = self;
         [UIView transitionWithView:self.tableView
                           duration:0.35f
                            options:UIViewAnimationOptionTransitionCrossDissolve
                         animations:^(void) {
-                            [weakSelf.tableView reloadData];
-                            [weakSelf.tableView setContentOffset:CGPointZero];
+                            [self.tableView reloadData];
+                            [self.tableView setContentOffset:CGPointZero];
                         }
                         completion: ^(BOOL finished) {
-                            weakSelf.isTabSelecting = NO;
-                            if (weakSelf.selectedTab == EOATrackMenuHudOverviewTab || (weakSelf.selectedTab == EOATrackMenuHudPointsTab && weakSelf.waypointGroups.count > 0))
-                                [weakSelf startLocationServices];
+                            self.isTabSelecting = NO;
+                            if (self.selectedTab == EOATrackMenuHudOverviewTab || (self.selectedTab == EOATrackMenuHudPointsTab && self.waypointGroups.count > 0))
+                                [self startLocationServices];
                         }];
     }
 }

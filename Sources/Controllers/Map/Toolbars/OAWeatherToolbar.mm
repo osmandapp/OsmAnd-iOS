@@ -32,11 +32,11 @@
 
 static int kDefaultZoom = 10;
 
-static int kForecastStepsPerHour = 12; // 5 minutes step
+static int kForecastStepsPerHour = 60; // 1 minutes step
 static NSInteger kForecastMaxStepsCount = FORECAST_ANIMATION_DURATION_HOURS * kForecastStepsPerHour;
 
 static NSTimeInterval kAnimationStartDelaySec = 0.1;
-static NSTimeInterval kAnimationFrameDelaySec = 0.083 * 2;
+static NSTimeInterval kAnimationFrameDelaySec = 0.083;
 static NSTimeInterval kDownloadingCompleteDelaySec = 0.25;
 
 typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
@@ -85,7 +85,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
     BOOL _wasDownloading;
     
     CFTimeInterval _currentLoopStart;
-    CFTimeInterval _currentLoopDuration;
+    CFTimeInterval _nextLoopStart;
 }
 
 - (instancetype)init
@@ -129,7 +129,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
 
     self.dateCollectionView.foldersDelegate = _datesHandler;
     
-    self.timeSliderView.stepsAmountWithoutDrawMark = kDayFiveMinutesMarksCount;
+    self.timeSliderView.stepsAmountWithoutDrawMark = kDayMinuteMarksCount;
     [self.timeSliderView clearTouchEventsUpInsideUpOutside];
     [self.timeSliderView setUsingExtraThumbInset:YES];
     
@@ -335,7 +335,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
         [timeValues addObject:nextHourDate];
     }
     
-    NSInteger minuteSteps = 11;
+    NSInteger minuteSteps = 59;
     NSMutableArray<NSDate *> *timeValuesTotal = [NSMutableArray array];
     
     for (NSInteger index = 0; index <= timeValues.count - 1; index++)
@@ -347,7 +347,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
             for (NSInteger min = 1; min <= minuteSteps; min++)
             {
                 NSDate *next5MinDate = [calendar dateByAddingUnit:NSCalendarUnitMinute
-                                                             value:min * 5
+                                                             value:min
                                                             toDate:data
                                                            options:0];
                 
@@ -356,7 +356,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
         }
         
     }
-    // [21:00:00, 21:05:00, 21:10:00 ... 21:55:00, 22:00:00]
+    // [21:00:00, 21:01:00, 21:02:00 ... 20:59:00, 21:00:00]
     _timeValues = timeValuesTotal;
 }
 
@@ -499,7 +499,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
 - (void) scheduleAnimationStart
 {
     _currentLoopStart = CACurrentMediaTime();
-    _currentLoopDuration = kAnimationFrameDelaySec;
+    _nextLoopStart = _currentLoopStart + kAnimationFrameDelaySec;
 }
 
 - (void)onFrameAnimatorsUpdated
@@ -507,16 +507,14 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
     if (_animationState != EOAWeatherToolbarAnimationStateIdle && _currentLoopStart > 0)
     {
         CFTimeInterval currentTime = CACurrentMediaTime();
-        CFTimeInterval nextLoopStart = _currentLoopStart + _currentLoopDuration;
-        if (currentTime >= nextLoopStart)
+        if (currentTime >= _nextLoopStart)
         {
-            _currentLoopStart = nextLoopStart;
-            
+            CFTimeInterval newCurrentLoopStart = _nextLoopStart;
             if (!_isDownloading)
             {
                 if (!_wasDownloading)
                 {
-                    _currentLoopDuration = kAnimationFrameDelaySec;
+                    _nextLoopStart = _currentLoopStart + kAnimationFrameDelaySec;
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [self moveToNextForecastFrame];
                     });
@@ -524,13 +522,14 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
                 else
                 {
                     _wasDownloading = NO;
-                    _currentLoopDuration = kDownloadingCompleteDelaySec;
+                    _nextLoopStart = _currentLoopStart + kDownloadingCompleteDelaySec;
                 }
             }
             else
             {
                 _wasDownloading = YES;
             }
+            _currentLoopStart = newCurrentLoopStart;
         }
     }
     else

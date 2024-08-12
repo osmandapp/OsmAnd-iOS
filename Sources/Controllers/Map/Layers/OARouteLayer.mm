@@ -44,6 +44,14 @@
 #define kTurnArrowsColoringByAttr 0xffffffff
 #define kOutlineId 1001
 
+@interface OARouteLayer()
+
+@property (nonatomic) CLLocation *lastProj;
+@property (nonatomic) double lastCourse;
+
+
+@end
+
 @implementation OARouteLayer
 {
     OARoutingHelper *_routingHelper;
@@ -82,7 +90,6 @@
     NSCache<NSString *, NSNumber *> *_cachedRouteLineWidth;
     OAConcurrentDictionary<NSString *, NSString *> *_updatedColorPaletteFiles;
     int _currentAnimatedRoute;
-    CLLocation *_lastProj;
 
     int64_t _linesPriority;
 }
@@ -957,6 +964,7 @@
         _lastProj = lastProj;
         if (lastProj)
         {
+            _lastCourse = lastProj.course;
             points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lastProj.coordinate.latitude, lastProj.coordinate.longitude)));
             if (_colorizationScheme != COLORIZATION_NONE && !_colors.isEmpty())
                 _colors.push_front(_colors.front());

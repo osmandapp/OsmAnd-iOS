@@ -12,6 +12,8 @@
 #import "OAMapRendererView.h"
 #import "OAMapStyleSettings.h"
 #import "OAMapViewTrackingUtilities.h"
+#import "OAMapLayers.h"
+#import "OARouteLayer.h"
 #import "OATargetPoint.h"
 #import "Localization.h"
 #import "OALocationIcon.h"
@@ -32,6 +34,7 @@
 
 static float kRotateAnimationTime = 1.0f;
 static int MODEL_3D_MAX_SIZE_DP = 6;
+static double BEARING_SPEED_THRESHOLD = 0.1;
 
 typedef enum {
     
@@ -332,26 +335,31 @@ typedef enum {
         if (animationDuration > 0)
         {
             _mapView.mapMarkersAnimator->animatePositionTo(marker, target31, animationDuration,  OsmAnd::Animator::TimingFunction::Linear);
-            if (iconKey)
-                _mapView.mapMarkersAnimator->animateDirectionTo(marker, iconKey, OsmAnd::Utilities::normalizedAngleDegrees(heading), kRotateAnimationTime,  OsmAnd::Animator::TimingFunction::Linear);
-            
             if (marker->model3D != nullptr)
             {
                 _mapView.mapMarkersAnimator->animateModel3DDirectionTo(marker, OsmAnd::Utilities::normalizedAngleDegrees(heading), kRotateAnimationTime, OsmAnd::Animator::TimingFunction::Linear);
                 [_mapView setMyLocationSectorDirection:(OsmAnd::Utilities::normalizedAngleDegrees(heading))];
+            }
+            else
+            {
+                if (iconKey)
+                    _mapView.mapMarkersAnimator->animateDirectionTo(marker, iconKey, OsmAnd::Utilities::normalizedAngleDegrees(heading), kRotateAnimationTime,  OsmAnd::Animator::TimingFunction::Linear);
             }
         }
         else
         {
             marker->setPosition(target31);
             [_mapView setMyLocationCirclePosition:(target31)];
-            if (iconKey)
-                marker->setOnMapSurfaceIconDirection(iconKey, OsmAnd::Utilities::normalizedAngleDegrees(heading));
-            
+
             if (marker->model3D != nullptr)
             {
                 marker->setModel3DDirection(OsmAnd::Utilities::normalizedAngleDegrees(heading));
                 [_mapView setMyLocationSectorDirection:(OsmAnd::Utilities::normalizedAngleDegrees(heading))];
+            }
+            else
+            {
+                if (iconKey)
+                    marker->setOnMapSurfaceIconDirection(iconKey, OsmAnd::Utilities::normalizedAngleDegrees(heading));
             }
         }
 
@@ -369,12 +377,17 @@ typedef enum {
         _courseMarkerDay->setPosition(target31);
         if (_courseMainIconKeyDay)
             _courseMarkerDay->setOnMapSurfaceIconDirection(_courseMainIconKeyDay, OsmAnd::Utilities::normalizedAngleDegrees(heading));
+        if (_courseMarkerDay->model3D != nullptr)
+            _courseMarkerDay->setModel3DDirection(OsmAnd::Utilities::normalizedAngleDegrees(heading));
+
     }
     if (marker != _courseMarkerNight)
     {
         _courseMarkerNight->setPosition(target31);
         if (_courseMainIconKeyNight)
             _courseMarkerNight->setOnMapSurfaceIconDirection(_courseMainIconKeyNight, OsmAnd::Utilities::normalizedAngleDegrees(heading));
+        if (_courseMarkerNight->model3D != nullptr)
+            _courseMarkerNight->setModel3DDirection(OsmAnd::Utilities::normalizedAngleDegrees(heading));
     }
 
     if (marker != _locationMarkerLostDay)
@@ -387,23 +400,22 @@ typedef enum {
         _locationMarkerDay->setPosition(target31);
         if (_locationHeadingIconKeyDay)
             _locationMarkerDay->setOnMapSurfaceIconDirection(_locationHeadingIconKeyDay, OsmAnd::Utilities::normalizedAngleDegrees(heading));
+        if (_locationMarkerDay->model3D != nullptr)
+            _locationMarkerDay->setModel3DDirection(OsmAnd::Utilities::normalizedAngleDegrees(heading));
     }
     if (marker != _locationMarkerNight)
     {
         _locationMarkerNight->setPosition(target31);
         if (_locationHeadingIconKeyNight)
             _locationMarkerNight->setOnMapSurfaceIconDirection(_locationHeadingIconKeyNight, OsmAnd::Utilities::normalizedAngleDegrees(heading));
+        if (_locationMarkerNight->model3D != nullptr)
+            _locationMarkerNight->setModel3DDirection(OsmAnd::Utilities::normalizedAngleDegrees(heading));
     }
 
     if (marker != _straightLocationMarkerDay)
         _straightLocationMarkerDay->setPosition(target31);
     if (marker != _straightLocationMarkerNight)
         _straightLocationMarkerNight->setPosition(target31);
-    
-    if (marker->model3D != nullptr)
-    {
-        marker->setModel3DDirection(OsmAnd::Utilities::normalizedAngleDegrees(heading));
-    }
 }
 
 - (std::shared_ptr<OsmAnd::MapMarker>) getActiveMarker
@@ -507,6 +519,7 @@ typedef enum {
     NSMapTable<OAApplicationMode *, OAMarkerCollection *> *_modeMarkers;
     CLLocation *_lastLocation;
     CLLocationDirection _lastHeading;
+    CLLocationDirection _lastCourse;
     CLLocation *_prevLocation;
     float _textScaleFactor;
 
@@ -730,6 +743,8 @@ typedef enum {
 
 - (void) initLayer
 {
+    _lastCourse = -1.0;
+
     _mapViewTrackingUtilities = [OAMapViewTrackingUtilities instance];
     
     _appModeChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
@@ -886,15 +901,17 @@ typedef enum {
 
 - (void) updateCollectionLocation:(OAMarkerCollection *)c newLocation:(CLLocation *)newLocation newTarget31:(OsmAnd::PointI)newTarget31 newHeading:(CLLocationDirection)newHeading animationDuration:(float)animationDuration visible:(BOOL)visible
 {
-    if (newLocation.course >= 0)
+    double course = [self getCourseToShow:newLocation];
+    if (course >= 0)
     {
+        course = [self getPointCourse];
         c.state = OAMarkerColletionStateMove;
-        [c updateLocation:newTarget31 animationDuration:animationDuration horizontalAccuracy:newLocation.horizontalAccuracy heading:newLocation.course - 90 visible:visible];
-        [c updateOtherLocations:newTarget31 horizontalAccuracy:newLocation.horizontalAccuracy heading:newLocation.course - 90];
+        [c updateLocation:newTarget31 animationDuration:animationDuration horizontalAccuracy:newLocation.horizontalAccuracy heading:course - 90 visible:visible];
+        [c updateOtherLocations:newTarget31 horizontalAccuracy:newLocation.horizontalAccuracy heading:course - 90];
     }
     else
     {
-        c.state = _mapViewTrackingUtilities.showViewAngle ? OAMarkerColletionStateStay : OAMarkerColletionStateStayStraight;
+        c.state = _mapViewTrackingUtilities.showViewAngle && !self.isLocationSnappedToRoad ? OAMarkerColletionStateStay : OAMarkerColletionStateStayStraight;
         [c updateLocation:newTarget31 animationDuration:animationDuration horizontalAccuracy:newLocation.horizontalAccuracy heading:newHeading visible:visible];
         [c updateOtherLocations:newTarget31 horizontalAccuracy:newLocation.horizontalAccuracy heading:newHeading];
     }
@@ -905,7 +922,8 @@ typedef enum {
     _prevLocation = _lastLocation;
     _lastLocation = newLocation;
     _lastHeading = newHeading;
-    
+    _lastCourse = newLocation.course;
+
     if (!_initDone)
         return;
     
@@ -923,6 +941,61 @@ typedef enum {
 
     auto latLon = OsmAnd::Utilities::convert31ToLatLon(position31);
     return CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
+}
+
+- (BOOL) isLocationSnappedToRoad
+{
+    CLLocation *projection = self.mapViewController.mapLayers.routeMapLayer.lastProj;
+    return OAAppSettings.sharedManager.snapToRoad.get && [projection isEqual:[self getPointLocation]];
+}
+
+- (CLLocation *) getPointLocation
+{
+    CLLocation *location = nil;
+    if (OARoutingHelper.sharedInstance.isFollowingMode && OAAppSettings.sharedManager.snapToRoad.get)
+        location = self.mapViewController.mapLayers.routeMapLayer.lastProj;
+
+    return location ? location : self.app.locationServices.lastKnownLocation;
+}
+
+- (double) getCourseToShow:(CLLocation *)location
+{
+    if (location)
+    {
+        BOOL hasCourse = location.course > 0.0;
+        BOOL courseValid = hasCourse || (self.isUseRouting && _lastCourse != -1.0);
+        BOOL speedValid = location.speed > BEARING_SPEED_THRESHOLD;
+        if (courseValid && (speedValid || self.isLocationSnappedToRoad))
+            return hasCourse ? location.course : _lastCourse;
+    }
+    return -1.0;
+}
+
+- (BOOL) isUseRouting
+{
+    OARoutingHelper *routingHelper = OARoutingHelper.sharedInstance;
+    return routingHelper.isFollowingMode || routingHelper.isRoutePlanningMode
+    	|| routingHelper.isRouteBeingCalculated || routingHelper.isRouteCalculated;
+}
+
+- (double) getPointCourse
+{
+    double result = 0.0;
+    CLLocation *location = nil;
+    if (OARoutingHelper.sharedInstance.isFollowingMode && OAAppSettings.sharedManager.snapToRoad.get)
+    {
+        OARouteLayer *routeLayer = self.mapViewController.mapLayers.routeMapLayer;
+        location = routeLayer.lastProj;
+        if (location)
+            result = routeLayer.lastCourse;
+    }
+    if (!location)
+    {
+        location = self.app.locationServices.lastKnownLocation;
+        if (location && location.course >= 0)
+            result = location.course;
+    }
+    return result;
 }
 
 #pragma mark - OAContextMenuProvider

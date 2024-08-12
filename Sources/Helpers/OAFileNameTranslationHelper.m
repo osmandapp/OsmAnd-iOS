@@ -11,6 +11,7 @@
 #import "Localization.h"
 #import "OAWorldRegion.h"
 #import "OsmAndApp.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define WIKI_NAME @"_wiki"
 #define HILL_SHADE @"Hillshade"

@@ -8,7 +8,7 @@
 
 import Foundation
 
-@objc enum ColorizationType: Int {
+@objc enum ColorizationType: Int, CaseIterable {
     case elevation
     case speed
     case slope

@@ -11,11 +11,12 @@ import Foundation
 final class PaletteGradientColor: PaletteColor {
 
     static let defaultName = "default"
-    
+
+    var colorPalette: ColorPalette
+
     private(set) var stringId: String
     private(set) var typeName: String
     private(set) var paletteName: String
-    private(set) var colorPalette: ColorPalette
     private var index: Int
 
     init(typeName: String, paletteName: String, colorPalette: ColorPalette, initialIndex: Int) {
@@ -33,6 +34,21 @@ final class PaletteGradientColor: PaletteColor {
 
     override func setIndex(_ index: Int) {
         self.index = index
+    }
+
+    override func duplicate(_ suffix: String? = nil) -> PaletteColor {
+        let colorPalette = self.colorPalette
+        colorPalette.lastModified = Date()
+        var paletteName = self.paletteName
+        if paletteName == typeName {
+            paletteName = typeName == TerrainType.height.name
+                ? TerrainMode.altitudeDefaultKey
+                : TerrainMode.defaultKey
+        }
+        return PaletteGradientColor(typeName: typeName,
+                                    paletteName: "\(paletteName)\(suffix ?? "")",
+                                    colorPalette: colorPalette,
+                                    initialIndex: index + 1)
     }
 
     override func toHumanString() -> String {

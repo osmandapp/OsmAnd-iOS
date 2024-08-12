@@ -512,25 +512,6 @@ static NSInteger const kMap3DModeButtonTag = -990;
     }
 }
 
-- (int) lastIndexOf:(NSString *)text
-{
-    int i = 0;
-    int res = -1;
-    for (;;)
-    {
-        int a = [self indexOf:text start:i];
-        if (a != -1)
-        {
-            res = a;
-            i = a + 1;
-        }
-
-        if (a == -1 || a >= text.length - 1)
-            break;
-    }
-    return res;
-}
-
 - (NSString *) add:(NSString *)str
 {
     return [self stringByAppendingString:str];

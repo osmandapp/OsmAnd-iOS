@@ -11,6 +11,7 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGpxWptItem.h"
 #import "OAObservable.h"
+#import "OAAutoObserverProxy.h"
 #import "OAUtilities.h"
 #import "OALocationServices.h"
 #import "OARootViewController.h"

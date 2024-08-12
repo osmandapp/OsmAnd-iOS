@@ -38,6 +38,12 @@ class ConcurrentArray<Value> {
         array.removeAll()
     }
 
+    func removeAll(where predicate: (Value) throws -> Bool) rethrows {
+        pthread_rwlock_wrlock(&rwlock)
+        defer { pthread_rwlock_unlock(&rwlock) }
+        try array.removeAll(where: predicate)
+    }
+
     func replaceAll(with newValues: [Value]) {
         pthread_rwlock_wrlock(&rwlock)
         defer { pthread_rwlock_unlock(&rwlock) }

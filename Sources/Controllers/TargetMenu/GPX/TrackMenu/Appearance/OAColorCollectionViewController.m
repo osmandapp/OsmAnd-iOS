@@ -34,7 +34,6 @@
 {
     OAAppSettings *_settings;
     OATableDataModel *_data;
-    NSObject *_dataLock;
 
     NSIndexPath *_colorCollectionIndexPath;
     NSMutableArray<OAColorItem *> *_colorItems;
@@ -70,7 +69,6 @@
 - (void)commonInit
 {
     _settings = [OAAppSettings sharedManager];
-    _dataLock = [[NSObject alloc] init];
 }
 
 - (void)registerNotifications
@@ -346,8 +344,6 @@
 
 - (void)onCollectionDeleted:(NSNotification *)notification
 {
-    @synchronized(_dataLock)
-    {
         if (![notification.object isKindOfClass:NSArray.class])
             return;
 
@@ -404,80 +400,73 @@
                 [weakSelf.tableView reloadData];
             }];
         }
-    }
 }
 
 - (void)onCollectionCreated:(NSNotification *)notification
 {
-    @synchronized(_dataLock)
+    if (![notification.object isKindOfClass:NSArray.class])
+        return;
+    
+    NSArray<PaletteGradientColor *> *gradientPaletteColor = (NSArray<PaletteGradientColor *> *) notification.object;
+    NSMutableArray<NSIndexPath *> *indexPathsToInsert = [NSMutableArray array];
+    for (PaletteGradientColor *paletteColor in gradientPaletteColor)
     {
-        if (![notification.object isKindOfClass:NSArray.class])
-            return;
-
-        NSArray<PaletteGradientColor *> *gradientPaletteColor = (NSArray<PaletteGradientColor *> *) notification.object;
-        NSMutableArray<NSIndexPath *> *indexPathsToInsert = [NSMutableArray array];
-        for (PaletteGradientColor *paletteColor in gradientPaletteColor)
+        NSInteger index = [paletteColor getIndex] - 1;
+        NSIndexPath *indexPath;
+        if (index < [_paletteItems countSync])
         {
-            NSInteger index = [paletteColor getIndex] - 1;
-            NSIndexPath *indexPath;
-            if (index < [_paletteItems countSync])
-            {
-                indexPath = [NSIndexPath indexPathForRow:index inSection:0];
-                [_paletteItems insertObjectSync:paletteColor atIndex:index];
-            }
-            else
-            {
-                indexPath = [NSIndexPath indexPathForRow:[_paletteItems countSync] inSection:0];
-                [_paletteItems addObjectSync:paletteColor];
-            }
-            [indexPathsToInsert addObject:indexPath];
-            [_data addRowAtIndexPath:indexPath row:[self generateRowDataForPaletteColor:paletteColor]];
+            indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+            [_paletteItems insertObjectSync:paletteColor atIndex:index];
         }
-
-        if (indexPathsToInsert.count > 0)
+        else
         {
-            [self.tableView performBatchUpdates:^{
-                [self.tableView insertRowsAtIndexPaths:indexPathsToInsert
-                                          withRowAnimation:UITableViewRowAnimationAutomatic];
-            } completion:^(BOOL finished) {
-                [self.tableView reloadData];
-            }];
+            indexPath = [NSIndexPath indexPathForRow:[_paletteItems countSync] inSection:0];
+            [_paletteItems addObjectSync:paletteColor];
         }
+        [indexPathsToInsert addObject:indexPath];
+        [_data addRowAtIndexPath:indexPath row:[self generateRowDataForPaletteColor:paletteColor]];
+    }
+    
+    if (indexPathsToInsert.count > 0)
+    {
+        [self.tableView performBatchUpdates:^{
+            [self.tableView insertRowsAtIndexPaths:indexPathsToInsert
+                                  withRowAnimation:UITableViewRowAnimationAutomatic];
+        } completion:^(BOOL finished) {
+            [self.tableView reloadData];
+        }];
     }
 }
 
 - (void)onCollectionUpdated:(NSNotification *)notification
 {
-    @synchronized(_dataLock)
+    if (![notification.object isKindOfClass:NSArray.class])
+        return;
+    
+    NSArray<PaletteGradientColor *> *gradientPaletteColor = (NSArray<PaletteGradientColor *> *) notification.object;
+    NSMutableArray<NSIndexPath *> *indexPathsToUpdate = [NSMutableArray array];
+    for (PaletteGradientColor *paletteColor in gradientPaletteColor)
     {
-        if (![notification.object isKindOfClass:NSArray.class])
-            return;
-
-        NSArray<PaletteGradientColor *> *gradientPaletteColor = (NSArray<PaletteGradientColor *> *) notification.object;
-        NSMutableArray<NSIndexPath *> *indexPathsToUpdate = [NSMutableArray array];
-        for (PaletteGradientColor *paletteColor in gradientPaletteColor)
+        NSInteger index = [paletteColor getIndex] - 1;
+        if (index < [_paletteItems countSync])
         {
-            NSInteger index = [paletteColor getIndex] - 1;
-            if (index < [_paletteItems countSync])
-            {
-                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
-                [_paletteItems replaceObjectAtIndexSync:index withObject:paletteColor];
-                [indexPathsToUpdate addObject:indexPath];
-                [_data removeRowAt:indexPath];
-                [_data addRowAtIndexPath:indexPath row:[self generateRowDataForPaletteColor:paletteColor]];
-            }
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+            [_paletteItems replaceObjectAtIndexSync:index withObject:paletteColor];
+            [indexPathsToUpdate addObject:indexPath];
+            [_data removeRowAt:indexPath];
+            [_data addRowAtIndexPath:indexPath row:[self generateRowDataForPaletteColor:paletteColor]];
         }
-
-        if (indexPathsToUpdate.count > 0)
-        {
-            __weak __typeof(self) weakSelf = self;
-            [self.tableView performBatchUpdates:^{
-                [weakSelf.tableView reloadRowsAtIndexPaths:indexPathsToUpdate
-                                          withRowAnimation:UITableViewRowAnimationAutomatic];
-            } completion:^(BOOL finished) {
-                [weakSelf.tableView reloadData];
-            }];
-        }
+    }
+    
+    if (indexPathsToUpdate.count > 0)
+    {
+        __weak __typeof(self) weakSelf = self;
+        [self.tableView performBatchUpdates:^{
+            [weakSelf.tableView reloadRowsAtIndexPaths:indexPathsToUpdate
+                                      withRowAnimation:UITableViewRowAnimationAutomatic];
+        } completion:^(BOOL finished) {
+            [weakSelf.tableView reloadData];
+        }];
     }
 }
 

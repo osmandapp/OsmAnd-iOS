@@ -42,7 +42,6 @@
 #import "OARadiusCellEx.h"
 #import "Localization.h"
 #import "OAColors.h"
-#import "OAObservable.h"
 #import "OARoutingHelper.h"
 #import "OATargetPointsHelper.h"
 #import "OASavingTrackHelper.h"
@@ -110,46 +109,45 @@
 @property (nonatomic) OAGPX *gpx;
 @property (nonatomic) OAGPXTrackAnalysis *analysis;
 @property (nonatomic) BOOL isShown;
+@property (nonatomic) OARouteLineChartHelper *routeLineChartHelper;
+@property (nonatomic) OATrackMenuHeaderView *headerView;
+@property (nonatomic) OAGPXTableData *tableData;
+@property (nonatomic) EOATrackMenuHudTab selectedTab;
+@property (nonatomic) OARouteKey *routeKey;
+@property (nonatomic) UIImage *cachedImage;
+@property (nonatomic) BOOL isImageDownloadFinished;
+@property (nonatomic) BOOL isImageDownloadSucceed;
+@property (nonatomic) NSString *cachedImageURL;
+@property (nonatomic) BOOL isViewVisible;
+@property (nonatomic) OATrackMenuUIBuilder *uiBuilder;
+@property (nonatomic) OAGPXUIHelper *gpxUIHelper;
+@property (nonatomic) NSMutableDictionary<NSString *, NSMutableArray<OAGpxWptItem *> *> *waypointGroups;
+@property (nonatomic) BOOL isTabSelecting;
 
 @end
 
 @implementation OATrackMenuHudViewController
 {
     OsmAndAppInstance _app;
-    OARouteLineChartHelper *_routeLineChartHelper;
-    OATrackMenuUIBuilder *_uiBuilder;
-    OAGPXUIHelper *_gpxUIHelper;
     OATravelGuidesImageCacheHelper *_imagesCacheHelper;
 
     OAAutoObserverProxy *_locationUpdateObserver;
     OAAutoObserverProxy *_headingUpdateObserver;
     NSTimeInterval _lastUpdate;
 
-    OATrackMenuHeaderView *_headerView;
-    OAGPXTableData *_tableData;
 
     NSString *_exportFileName;
     NSString *_exportFilePath;
 
-    EOATrackMenuHudTab _selectedTab;
     OATrackMenuViewControllerState *_reopeningState;
     BOOL _forceHiding;
     BOOL _pushedNewScreen;
 
-    NSMutableDictionary<NSString *, NSMutableArray<OAGpxWptItem *> *> *_waypointGroups;
     NSArray<NSString *> *_waypointSortedGroupNames;
 
     BOOL _isHeaderBlurred;
-    BOOL _isTabSelecting;
     BOOL _wasFirstOpening;
-    
-    BOOL _isImageDownloadFinished;
-    BOOL _isImageDownloadSucceed;
-    UIImage *_cachedImage;
-    NSString *_cachedImageURL;
-    BOOL _isViewVisible;
-    
-    OARouteKey *_routeKey;
+
     BOOL _isNewRoute;
     
     NSArray<UIViewController *> *_navControllerHistory;
@@ -306,41 +304,42 @@
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    __weak __typeof(self) weakSelf = self;
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        if (_headerView)
+        if (weakSelf.headerView)
         {
-            _headerView.sliderView.hidden = [self isLandscape];
-            [_headerView updateFrame:[self isLandscape] ? [self getLandscapeViewWidth] : DeviceScreenWidth];
+            weakSelf.headerView.sliderView.hidden = [weakSelf isLandscape];
+            [weakSelf.headerView updateFrame:[weakSelf isLandscape] ? [weakSelf getLandscapeViewWidth] : DeviceScreenWidth];
         }
 
-        if (_selectedTab == EOATrackMenuHudOverviewTab && _headerView)
+        if (weakSelf.selectedTab == EOATrackMenuHudOverviewTab && weakSelf.headerView)
         {
-            _headerView.statisticsCollectionView.contentInset = UIEdgeInsetsMake(0., 20. , 0., 20.);
-            NSArray<NSIndexPath *> *visibleItems = _headerView.statisticsCollectionView.indexPathsForVisibleItems;
+            weakSelf.headerView.statisticsCollectionView.contentInset = UIEdgeInsetsMake(0., 20. , 0., 20.);
+            NSArray<NSIndexPath *> *visibleItems = weakSelf.headerView.statisticsCollectionView.indexPathsForVisibleItems;
             if (visibleItems && visibleItems.count > 0 && visibleItems.firstObject.row == 0)
             {
-                [_headerView.statisticsCollectionView scrollToItemAtIndexPath:visibleItems.firstObject
-                                                             atScrollPosition:UICollectionViewScrollPositionLeft
-                                                                     animated:NO];
+                [weakSelf.headerView.statisticsCollectionView scrollToItemAtIndexPath:visibleItems.firstObject
+                                                                     atScrollPosition:UICollectionViewScrollPositionLeft
+                                                                             animated:NO];
             }
         }
-        if (_selectedTab == EOATrackMenuHudPointsTab && _headerView)
+        if (weakSelf.selectedTab == EOATrackMenuHudPointsTab && weakSelf.headerView)
         {
-            _headerView.groupsCollectionView.contentInset = UIEdgeInsetsMake(0., 16 , 0., 16);
-            NSArray<NSIndexPath *> *visibleItems = _headerView.groupsCollectionView.indexPathsForVisibleItems;
+            weakSelf.headerView.groupsCollectionView.contentInset = UIEdgeInsetsMake(0., 16 , 0., 16);
+            NSArray<NSIndexPath *> *visibleItems = weakSelf.headerView.groupsCollectionView.indexPathsForVisibleItems;
             if (visibleItems && visibleItems.count > 0 && visibleItems.firstObject.row == 0)
             {
-                [_headerView.groupsCollectionView scrollToItemAtIndexPath:visibleItems.firstObject
-                                                         atScrollPosition:UICollectionViewScrollPositionLeft
-                                                                 animated:NO];
+                [weakSelf.headerView.groupsCollectionView scrollToItemAtIndexPath:visibleItems.firstObject
+                                                                 atScrollPosition:UICollectionViewScrollPositionLeft
+                                                                         animated:NO];
             }
         }
-        else if (_selectedTab == EOATrackMenuHudSegmentsTab && _tableData.subjects.count > 0)
+        else if (weakSelf.selectedTab == EOATrackMenuHudSegmentsTab && weakSelf.tableData.subjects.count > 0)
         {
             NSMutableArray *indexPaths = [NSMutableArray array];
-            for (NSInteger i = 0; i < _tableData.subjects.count; i++)
+            for (NSInteger i = 0; i < weakSelf.tableData.subjects.count; i++)
             {
-                OAGPXTableSectionData *sectionData = _tableData.subjects[i];
+                OAGPXTableSectionData *sectionData = weakSelf.tableData.subjects[i];
                 for (NSInteger j = 0; j < sectionData.subjects.count; j++)
                 {
                     OAGPXTableCellData *cellData = sectionData.subjects[j];
@@ -349,15 +348,15 @@
                 }
             }
             if (indexPaths.count > 0)
-                [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+                [weakSelf.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
         }
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        _routeLineChartHelper.isLandscape = [self isLandscape];
-        _routeLineChartHelper.screenBBox = CGRectMake(
-                [self isLandscape] ? [self getLandscapeViewWidth] : 0.,
+        weakSelf.routeLineChartHelper.isLandscape = [weakSelf isLandscape];
+        weakSelf.routeLineChartHelper.screenBBox = CGRectMake(
+                [weakSelf isLandscape] ? [weakSelf getLandscapeViewWidth] : 0.,
                 0.,
-                [self isLandscape] ? DeviceScreenWidth - [self getLandscapeViewWidth] : DeviceScreenWidth,
-                [self isLandscape] ? DeviceScreenHeight : DeviceScreenHeight - [self getViewHeight]);
+                [weakSelf isLandscape] ? DeviceScreenWidth - [weakSelf getLandscapeViewWidth] : DeviceScreenWidth,
+                [weakSelf isLandscape] ? DeviceScreenHeight : DeviceScreenHeight - [weakSelf getViewHeight]);
     }];
 }
 
@@ -385,8 +384,9 @@
 
 - (void)hide
 {
+    __weak __typeof(self) weakSelf = self;
     [self hide:YES duration:.2 onComplete:^{
-        [self.mapViewController hideContextPinMarker];
+        [weakSelf.mapViewController hideContextPinMarker];
     }];
 }
 
@@ -398,14 +398,15 @@
 
 - (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
+    __weak __typeof(self) weakSelf = self;
     [super hide:YES duration:duration onComplete:^{
-        if (_routeKey)
-            [self.mapViewController hideTempGpxTrack];
-        [self stopLocationServices];
-        [self.mapViewController.mapLayers.gpxMapLayer hideCurrentStatisticsLocation];
+        if (weakSelf.routeKey)
+            [weakSelf.mapViewController hideTempGpxTrack];
+        [weakSelf stopLocationServices];
+        [weakSelf.mapViewController.mapLayers.gpxMapLayer hideCurrentStatisticsLocation];
         if (onComplete)
             onComplete();
-        [_headerView removeFromSuperview];
+        [weakSelf.headerView removeFromSuperview];
     }];
 }
 
@@ -557,20 +558,21 @@
                 _cachedImage = nil;
                 _cachedImageURL = url;
 
+                __weak __typeof(self) weakSelf = self;
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
                     NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString: url]];
                     UIImage *image = [UIImage imageWithData:data];
-                    _isImageDownloadFinished = YES;
-                    _isImageDownloadSucceed = image != nil;
+                    weakSelf.isImageDownloadFinished = YES;
+                    weakSelf.isImageDownloadSucceed = image != nil;
 
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        if (!_isViewVisible)
+                        if (!weakSelf.isViewVisible)
                         {
-                            _cachedImage = image;
+                            weakSelf.cachedImage = image;
                             NSIndexPath *imageCellIndex = [NSIndexPath indexPathForRow:[sectionData.subjects indexOfObject:cellData]
-                                                                             inSection:[_tableData.subjects indexOfObject:sectionData]];
-                            [self.tableView reloadRowsAtIndexPaths:@[imageCellIndex]
-                                                  withRowAnimation:UITableViewRowAnimationAutomatic];
+                                                                             inSection:[weakSelf.tableData.subjects indexOfObject:sectionData]];
+                            [weakSelf.tableView reloadRowsAtIndexPaths:@[imageCellIndex]
+                                                      withRowAnimation:UITableViewRowAnimationAutomatic];
                         }
                     });
                 });
@@ -732,8 +734,9 @@
 
 - (void)updateDistanceAndDirection
 {
+    __weak __typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateDistanceAndDirection:NO];
+        [weakSelf updateDistanceAndDirection:NO];
     });
 }
 
@@ -779,14 +782,15 @@
     }
     else if (_selectedTab == EOATrackMenuHudPointsTab)
     {
+        __weak __typeof(self) weakSelf = self;
         dispatch_async(dispatch_get_main_queue(), ^{
-            NSArray<NSIndexPath *> *visibleRows = [self.tableView indexPathsForVisibleRows];
+            NSArray<NSIndexPath *> *visibleRows = [weakSelf.tableView indexPathsForVisibleRows];
             for (NSIndexPath *visibleRow in visibleRows)
             {
-                OAGPXTableCellData *cellData = _tableData.subjects[visibleRow.section].subjects[visibleRow.row];
-                [_uiBuilder updateProperty:@"update_distance_and_direction" tableData:cellData];
+                OAGPXTableCellData *cellData = weakSelf.tableData.subjects[visibleRow.section].subjects[visibleRow.row];
+                [weakSelf.uiBuilder updateProperty:@"update_distance_and_direction" tableData:cellData];
             }
-            [self.tableView reloadRowsAtIndexPaths:visibleRows
+            [weakSelf.tableView reloadRowsAtIndexPaths:visibleRows
                                   withRowAnimation:UITableViewRowAnimationNone];
         });
     }
@@ -861,13 +865,14 @@
            withTypes:(NSArray<NSNumber *> *)types
 {
     _pushedNewScreen = YES;
+    __weak __typeof(self) weakSelf = self;
     [self hide:YES duration:.2 onComplete:^{
-        OATrackMenuViewControllerState *state = [self getCurrentStateForAnalyze:types];
+        OATrackMenuViewControllerState *state = [weakSelf getCurrentStateForAnalyze:types];
         state.openedFromTrackMenu = YES;
-        [self.mapPanelViewController openTargetViewWithRouteDetailsGraph:self.doc
-                                                                analysis:analysis
-                                                        menuControlState:state
-                                                                 isRoute:NO];
+        [weakSelf.mapPanelViewController openTargetViewWithRouteDetailsGraph:weakSelf.doc
+                                                                    analysis:analysis
+                                                            menuControlState:state
+                                                                     isRoute:NO];
     }];
 }
 
@@ -900,11 +905,12 @@
 - (void)editSegment
 {
     _pushedNewScreen = YES;
+    __weak __typeof(self) weakSelf = self;
     [self hide:YES duration:.2 onComplete:^{
-        OATrackMenuViewControllerState *state = [self getCurrentState];
+        OATrackMenuViewControllerState *state = [weakSelf getCurrentState];
         state.openedFromTrackMenu = YES;
-        [self.mapPanelViewController showScrollableHudViewController:[
-            [OARoutePlanningHudViewController alloc] initWithFileName:self.gpx.gpxFilePath
+        [weakSelf.mapPanelViewController showScrollableHudViewController:[
+            [OARoutePlanningHudViewController alloc] initWithFileName:weakSelf.gpx.gpxFilePath
                                                       targetMenuState:state
                                                     adjustMapPosition:NO]];
     }];
@@ -930,14 +936,15 @@
         
         [_uiBuilder resetDataInTab:_selectedTab];
         [self generateData];
-        
+
+        __weak __typeof(self) weakSelf = self;
         [UIView transitionWithView: self.tableView
                           duration: 0.35f
                            options: UIViewAnimationOptionTransitionCrossDissolve
                         animations: ^(void) {
-            [self.tableView reloadData];
+            [weakSelf.tableView reloadData];
         } completion:^(BOOL finished) {
-            [self.mapViewController.mapLayers.gpxMapLayer hideCurrentStatisticsLocation];
+            [weakSelf.mapViewController.mapLayers.gpxMapLayer hideCurrentStatisticsLocation];
         }];
 
         if (_headerView)
@@ -1026,15 +1033,16 @@
 
     [self updateGroupsButton];
 
+    __weak __typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (self.isCurrentTrack)
+        if (weakSelf.isCurrentTrack)
         {
-            [self.mapViewController.mapLayers.gpxRecMapLayer refreshGpxWaypoints];
+            [weakSelf.mapViewController.mapLayers.gpxRecMapLayer refreshGpxWaypoints];
         }
         else
         {
-            [self.mapViewController.mapLayers.gpxMapLayer updateCachedGpxItem:self.doc.path];
-            [self.mapViewController.mapLayers.gpxMapLayer refreshGpxWaypoints];
+            [weakSelf.mapViewController.mapLayers.gpxMapLayer updateCachedGpxItem:weakSelf.doc.path];
+            [weakSelf.mapViewController.mapLayers.gpxMapLayer refreshGpxWaypoints];
         }
     });
 }
@@ -1155,8 +1163,9 @@
     }
     else if (newGroupColor)
     {
+        __weak __typeof(self) weakSelf = self;
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.mapViewController.mapLayers.gpxRecMapLayer refreshGpxWaypoints];
+            [weakSelf.mapViewController.mapLayers.gpxRecMapLayer refreshGpxWaypoints];
         });
     }
 
@@ -1206,11 +1215,12 @@
 - (void)openNewWaypointScreen
 {
     _pushedNewScreen = YES;
+    __weak __typeof(self) weakSelf = self;
     [self hide:YES duration:.2 onComplete:^{
-        OATrackMenuViewControllerState *state = [self getCurrentState];
+        OATrackMenuViewControllerState *state = [weakSelf getCurrentState];
         state.openedFromTrackMenu = YES;
-        [self.mapPanelViewController openTargetViewWithNewGpxWptMovableTarget:self.gpx
-                                                             menuControlState:state];
+        [weakSelf.mapPanelViewController openTargetViewWithNewGpxWptMovableTarget:weakSelf.gpx
+                                                                 menuControlState:state];
     }];
 }
 
@@ -1474,10 +1484,11 @@
 - (void)openAppearance
 {
     _pushedNewScreen = YES;
+    __weak __typeof(self) weakSelf = self;
     [self hide:YES duration:.2 onComplete:^{
-        OATrackMenuViewControllerState *state = [self getCurrentState];
+        OATrackMenuViewControllerState *state = [weakSelf getCurrentState];
         state.openedFromTrackMenu = YES;
-        [self.mapPanelViewController openTargetViewWithGPX:self.gpx
+        [weakSelf.mapPanelViewController openTargetViewWithGPX:weakSelf.gpx
                                               trackHudMode:EOATrackAppearanceHudMode
                                                      state:state];
     }];
@@ -1634,8 +1645,9 @@
 - (void)openWptOnMap:(OAGpxWptItem *)gpxWptItem
 {
     _forceHiding = YES;
+    __weak __typeof(self) weakSelf = self;
     [self hide:YES duration:.2 onComplete:^{
-        [self.mapPanelViewController openTargetViewWithWpt:gpxWptItem pushed:NO];
+        [weakSelf.mapPanelViewController openTargetViewWithWpt:gpxWptItem pushed:NO];
     }];
 }
 
@@ -1647,17 +1659,18 @@
     }
     else if ([url containsString:OAWikiAlgorithms.wikipediaDomain])
     {
+        __weak __typeof(self) weakSelf = self;
         dispatch_async(dispatch_get_main_queue(), ^{
-            MBProgressHUD *progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
+            MBProgressHUD *progressHUD = [[MBProgressHUD alloc] initWithView:weakSelf.view];
             progressHUD.removeFromSuperViewOnHide = YES;
             progressHUD.labelText = OALocalizedString(@"wiki_article_search_text");
-            [self.view addSubview:progressHUD];
-            [self.view bringSubviewToFront:progressHUD];
+            [weakSelf.view addSubview:progressHUD];
+            [weakSelf.view bringSubviewToFront:progressHUD];
 
             OAIAPHelper *helper = [OAIAPHelper sharedInstance];
             if ([helper.wiki isPurchased])
             {
-                [OAWikiArticleHelper showWikiArticle:[self collectTrackPoints] url:url onStart:^{
+                [OAWikiArticleHelper showWikiArticle:[weakSelf collectTrackPoints] url:url onStart:^{
                     [progressHUD show:YES];
                 } sourceView:sourceView onComplete:^{
                     [progressHUD hide:YES];
@@ -1703,24 +1716,25 @@
 
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_no") style:UIAlertActionStyleDefault handler:nil]];
 
+    __weak __typeof(self) weakSelf = self;
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_yes") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        if (self.isCurrentTrack)
+        if (weakSelf.isCurrentTrack)
         {
-            self.settings.mapSettingTrackRecording = NO;
-            [self.savingHelper clearData];
+            weakSelf.settings.mapSettingTrackRecording = NO;
+            [weakSelf.savingHelper clearData];
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self.mapViewController hideRecGpxTrack];
+                [weakSelf.mapViewController hideRecGpxTrack];
             });
         }
         else
         {
-            if (self.isShown)
-                [self.settings hideGpx:@[self.gpx.gpxFilePath] update:YES];
+            if (weakSelf.isShown)
+                [weakSelf.settings hideGpx:@[weakSelf.gpx.gpxFilePath] update:YES];
 
-            [[OAGPXDatabase sharedDb] removeGpxItem:self.gpx.gpxFilePath];
+            [[OAGPXDatabase sharedDb] removeGpxItem:weakSelf.gpx.gpxFilePath];
         }
 
-        [self hide];
+        [weakSelf hide];
     }]];
 
     [self presentViewController:alert animated:YES completion:nil];
@@ -1741,8 +1755,11 @@
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok")
                                               style:UIAlertActionStyleDefault
                                             handler:^(UIAlertAction *_Nonnull action) {
-        [_gpxUIHelper renameTrack:weakSelf.gpx doc:weakSelf.doc newName:alert.textFields[0].text hostVC:weakSelf];
-                                            }]];
+        [weakSelf.gpxUIHelper renameTrack:weakSelf.gpx
+                                      doc:weakSelf.doc
+                                  newName:alert.textFields[0].text
+                                   hostVC:weakSelf];
+    }]];
 
     [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
         textField.text = weakSelf.gpx.gpxTitle.lastPathComponent.stringByDeletingPathExtension;
@@ -1937,18 +1954,18 @@
             [self updateView:animated];
         }
 
+        __weak __typeof(self) weakSelf = self;
         [UIView transitionWithView:self.tableView
                           duration:0.35f
                            options:UIViewAnimationOptionTransitionCrossDissolve
                         animations:^(void) {
-                            [self.tableView reloadData];
-                            [self.tableView setContentOffset:CGPointZero];
+                            [weakSelf.tableView reloadData];
+                            [weakSelf.tableView setContentOffset:CGPointZero];
                         }
                         completion: ^(BOOL finished) {
-                            _isTabSelecting = NO;
-
-                            if (_selectedTab == EOATrackMenuHudOverviewTab || (_selectedTab == EOATrackMenuHudPointsTab && _waypointGroups.count > 0))
-                                [self startLocationServices];
+                            weakSelf.isTabSelecting = NO;
+                            if (weakSelf.selectedTab == EOATrackMenuHudOverviewTab || (weakSelf.selectedTab == EOATrackMenuHudPointsTab && weakSelf.waypointGroups.count > 0))
+                                [weakSelf startLocationServices];
                         }];
     }
 }
@@ -2559,12 +2576,12 @@
     if (_selectedTab == EOATrackMenuHudOverviewTab && [cellData.type isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
         NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
-        
+        __weak __typeof(self) weakSelf = self;
         UIAction *copyAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_copy")
                                                    image:[UIImage systemImageNamed:@"copy"]
                                               identifier:nil
                                                  handler:^(__kindof UIAction * _Nonnull action) {
-            OAGPXTableCellData *cellData = [self getCellData:indexPath];
+            OAGPXTableCellData *cellData = [weakSelf getCellData:indexPath];
             NSString *textToCopy = [cellData.values.allKeys containsObject:@"url"] ? cellData.values[@"url"] : cellData.desc;
             [[UIPasteboard generalPasteboard] setString:textToCopy];
         }];

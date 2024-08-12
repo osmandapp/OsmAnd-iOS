@@ -20,6 +20,9 @@
 @property (weak, nonatomic) IBOutlet UIView *contentContainer;
 @property (weak, nonatomic) IBOutlet UIView *sliderView;
 
+@property (nonatomic) BOOL isDraggingOnTable;
+@property (nonatomic) BOOL firstStateChanged;
+
 @end
 
 @implementation OABaseScrollableHudViewController
@@ -32,8 +35,6 @@
     BOOL _isHiding;
     CGFloat _initialTouchPoint;
     CGFloat _tableViewContentOffsetY;
-    BOOL _isDraggingOnTable;
-    BOOL _firstStateChanged;
 }
 
 - (BOOL)hasCustomStatusBar
@@ -90,8 +91,9 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    __weak __typeof(self) weakSelf = self;
     [self show:YES state:_currentState onComplete:^{
-        [self layoutSubviews];
+        [weakSelf layoutSubviews];
     }];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
@@ -137,8 +139,9 @@
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    __weak __typeof(self) weakSelf = self;
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        [self layoutSubviews];
+        [weakSelf layoutSubviews];
     } completion:nil];
 }
 
@@ -424,11 +427,10 @@
             frame.origin.y = DeviceScreenHeight - _scrollableView.bounds.size.height;
         }
 
+        __weak __typeof(self) weakSelf = self;
         [UIView animateWithDuration:0.3 animations:^{
-            _scrollableView.frame = frame;
-        } completion:^(BOOL finished) {
-
-        }];
+            weakSelf.scrollableView.frame = frame;
+        } completion:nil];
 
         if (onComplete)
             onComplete();
@@ -604,8 +606,9 @@
                             : contentFrame.size.height - tableViewY
             );
 
+            __weak __typeof(self) weakSelf = self;
             [UIView animateWithDuration:0.2 animations:^{
-                [self onViewHeightChanged:DeviceScreenHeight - _scrollableView.frame.origin.y];
+                [weakSelf onViewHeightChanged:DeviceScreenHeight - weakSelf.scrollableView.frame.origin.y];
             } completion:nil];
             [self applyCornerRadius:newY > 0];
             return;
@@ -658,11 +661,12 @@
                 else
                     _currentState = [self hasInitialState] ? EOADraggableMenuStateInitial : EOADraggableMenuStateExpanded;
             }
+            __weak __typeof(self) weakSelf = self;
             [UIView animateWithDuration:0.2 animations:^{
-                [self layoutSubviews];
+                [weakSelf layoutSubviews];
             } completion:^(BOOL) {
-                _isDraggingOnTable = NO;
-                _firstStateChanged = YES;
+                weakSelf.isDraggingOnTable = NO;
+                weakSelf.firstStateChanged = YES;
             }];
         }
         default:
@@ -676,9 +680,10 @@
 {
     if (animated)
     {
+        __weak __typeof(self) weakSelf = self;
         [UIView animateWithDuration:0.2 animations:^{
-            [self.tableView reloadData];
-            [self layoutSubviews];
+            [weakSelf.tableView reloadData];
+            [weakSelf layoutSubviews];
         } completion:nil];
     }
     else

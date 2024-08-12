@@ -34,7 +34,7 @@ typedef enum
 @property(nonatomic, weak, nullable) id<OAColorCollectionDelegate>delegate;
 @property(nonatomic, readonly) EOAColorCollectionType collectionType;
 
-- (instancetype)initWithCollectionType:(EOAColorCollectionType)type items:(NSArray *)items selectedItem:(id)selectedItem;
+- (instancetype)initWithCollectionType:(EOAColorCollectionType)type items:(id)items selectedItem:(id)selectedItem;
 
 @end
 

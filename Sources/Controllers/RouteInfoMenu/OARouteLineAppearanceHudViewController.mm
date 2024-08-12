@@ -16,6 +16,7 @@
 #import "OAMainSettingsViewController.h"
 #import "OAConfigureProfileViewController.h"
 #import "OAProfileNavigationSettingsViewController.h"
+#import "OAColorCollectionViewController.h"
 #import "OAPreviewRouteLineLayer.h"
 #import "OATableViewCustomFooterView.h"
 #import "OAFoldersCollectionView.h"
@@ -42,6 +43,7 @@
 #import "OADefaultFavorite.h"
 #import "OARouteStatisticsHelper.h"
 #import "OAProducts.h"
+#import "OAConcurrentCollections.h"
 #import "OASizes.h"
 #import "OAColoringType.h"
 #import "OAApplicationMode.h"
@@ -194,7 +196,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
 @end
 
-@interface OARouteLineAppearanceHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, OAFoldersCellDelegate, OAColorsTableViewCellDelegate, OACollectionCellDelegate>
+@interface OARouteLineAppearanceHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, OAFoldersCellDelegate, OAColorsTableViewCellDelegate, OACollectionCellDelegate, OAColorCollectionDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *statusBarBackgroundView;
 
@@ -215,19 +217,33 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *backButtonLeadingConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *applyButtonTrailingConstraint;
 
+@property (nonatomic) OAGPXTableData *tableData;
+@property (nonatomic) NSInteger sectionColors;
+@property (nonatomic) OAAppSettings *settings;
+@property (nonatomic) OAApplicationMode *appMode;
+@property (nonatomic) NSInteger oldDayNightMode;
+@property (nonatomic) OAPreviewRouteLineInfo *oldPreviewRouteLineInfo;
+@property (nonatomic) OAAutoObserverProxy *mapSourceUpdatedObserver;
+@property (nonatomic) OAMapPanelViewController *mapPanelViewController;
+@property (nonatomic) EOARouteLineAppearancePrevScreen prevScreen;
+@property (nonatomic) OAPreviewRouteLineInfo *previewRouteLineInfo;
+@property (nonatomic) OAConcurrentArray<PaletteColor *> *sortedPaletteColorItems;
+@property (nonatomic) BOOL isDefaultColorRestored;
+@property (nonatomic) GradientColorsCollection *gradientColorsCollection;
+@property (nonatomic) PaletteColor *selectedPaletteColorItem;
+@property (nonatomic) NSInteger cellPaletteLegendIndex;
+@property (nonatomic) NSInteger cellPaletteNameIndex;
+@property (nonatomic) NSInteger cellColorGridIndex;
+
 @end
 
 @implementation OARouteLineAppearanceHudViewController
 {
     OsmAndAppInstance _app;
-    OAAppSettings *_settings;
     OARoutingHelper *_routingHelper;
-    OAApplicationMode *_appMode;
-    OAMapPanelViewController *_mapPanelViewController;
+    NSObject *_dataLock;
 
     CGFloat _originalStatusBarHeight;
-    OAPreviewRouteLineInfo *_previewRouteLineInfo;
-    OAGPXTableData *_tableData;
     BOOL _nightMode;
     NSString *_selectedDayNightMode;
 
@@ -237,22 +253,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     OARouteAppearanceType *_selectedType;
     NSArray<NSNumber *> *_availableColors;
 
-    GradientColorsCollection *_gradientColorsCollection;
-    NSMutableArray<PaletteColor *> *_sortedPaletteColorItems;
-    PaletteColor *_selectedPaletteColorItem;
-
     OARouteWidthMode *_selectedWidthMode;
-
-    OAPreviewRouteLineInfo *_oldPreviewRouteLineInfo;
-    NSInteger _oldDayNightMode;
-
-    NSInteger _sectionColors;
-    NSInteger _cellPaletteLegendIndex;
-    NSInteger _cellPaletteNameIndex;
-    NSInteger _cellColorGridIndex;
-
-    OAAutoObserverProxy *_mapSourceUpdatedObserver;
-    EOARouteLineAppearancePrevScreen _prevScreen;
 }
 
 @dynamic statusBarBackgroundView, contentContainer;
@@ -273,6 +274,8 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 - (void)commonInit
 {
     _app = [OsmAndApp instance];
+    _dataLock = [[NSObject alloc] init];
+    _sortedPaletteColorItems = [[OAConcurrentArray alloc] init];
     _mapPanelViewController = [OARootViewController instance].mapPanel;
     [_mapPanelViewController.mapViewController.mapView setAzimuth:0.0];
     [_mapPanelViewController.mapViewController.mapView cancelAllAnimations];
@@ -292,68 +295,22 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     [self setOldValues];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(onColorPalettesFilesUpdated:)
-                                                 name:ColorPaletteHelper.colorPalettesUpdatedNotification
+                                             selector:@selector(onCollectionDeleted:)
+                                                 name:ColorsCollection.collectionDeletedNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(onCollectionCreated:)
+                                                 name:ColorsCollection.collectionCreatedNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(onCollectionUpdated:)
+                                                 name:ColorsCollection.collectionUpdatedNotification
                                                object:nil];
 }
 
-- (void)onColorPalettesFilesUpdated:(NSNotification *)notification
+- (void)dealloc
 {
-    if (![notification.object isKindOfClass:NSDictionary.class] || ![_selectedType.coloringType isGradient])
-        return;
-
-    NSDictionary<NSString *, NSString *> *colorPaletteFiles = (NSDictionary *) notification.object;
-    if (!colorPaletteFiles)
-        return;
-    OAColoringType *currentType = _selectedType.coloringType;
-    NSString *currentPaletteFile =
-    [ColorPaletteHelper getRoutePaletteFileName:(ColorizationType) [currentType toColorizationType]
-                            gradientPaletteName:_previewRouteLineInfo.gradientPalette];
-    BOOL reloadData = NO;
-    BOOL deleted = NO;
-    for (NSString *colorPaletteFile in colorPaletteFiles.allKeys)
-    {
-        if ([currentPaletteFile isEqualToString:colorPaletteFile]
-            || [_gradientColorsCollection hasRouteGradientPaletteBy:colorPaletteFile]
-            || [colorPaletteFiles[colorPaletteFile] isEqualToString:ColorPaletteHelper.createdFileKey])
-        {
-            reloadData = YES;
-            if ([colorPaletteFiles[colorPaletteFile] isEqualToString:ColorPaletteHelper.deletedFileKey])
-            {
-                deleted = YES;
-                break;
-            }
-        }
-    }
-    if (reloadData)
-    {
-        _gradientColorsCollection = [[GradientColorsCollection alloc] initWithColorizationType:(ColorizationType) [_selectedType.coloringType toColorizationType]];
-        _sortedPaletteColorItems = [NSMutableArray arrayWithArray:[_gradientColorsCollection getPaletteColors]];
-        if (deleted)
-        {
-            _previewRouteLineInfo.gradientPalette = PaletteGradientColor.defaultName;
-            _oldPreviewRouteLineInfo.gradientPalette = _previewRouteLineInfo.gradientPalette;
-            _selectedPaletteColorItem = [_gradientColorsCollection getDefaultGradientPalette];
-            [self refreshPreviewLayer];
-        }
-        else
-        {
-            _selectedPaletteColorItem = [_gradientColorsCollection getGradientPaletteBy:_previewRouteLineInfo.gradientPalette];
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            OAGPXTableSectionData *sectionData = _tableData.subjects[_sectionColors];
-            [self updateData:sectionData];
-            
-            [UIView transitionWithView:self.tableView
-                              duration:0.35f
-                               options:UIViewAnimationOptionTransitionCrossDissolve
-                            animations:^(void)
-             {
-                [self.tableView reloadData];
-            }
-                            completion:nil];
-        });
-    }
+    [NSNotificationCenter.defaultCenter removeObserver:self];
 }
 
 - (void)setOldValues
@@ -366,8 +323,8 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 {
     _previewRouteLineInfo = [self createPreviewRouteLineInfo];
 
-    _sortedPaletteColorItems = [NSMutableArray arrayWithArray:[_gradientColorsCollection getPaletteColors]];
-    _selectedPaletteColorItem = [_gradientColorsCollection getGradientPaletteBy:_previewRouteLineInfo.gradientPalette];
+    [_sortedPaletteColorItems replaceAllWithObjectsSync:[_gradientColorsCollection getPaletteColors]];
+    _selectedPaletteColorItem = [_gradientColorsCollection getPaletteColorByName:_previewRouteLineInfo.gradientPalette];
     if (!_selectedPaletteColorItem)
         _selectedPaletteColorItem = [_gradientColorsCollection getDefaultGradientPalette];
 
@@ -475,8 +432,9 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     [super viewDidAppear:animated];
     [_mapPanelViewController.hudViewController updateControlsLayout:YES];
     [_mapPanelViewController.hudViewController updateMapRulerDataWithDelay];
+    __weak __typeof(self) weakSelf = self;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t) (.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self refreshPreviewLayer];
+        [weakSelf refreshPreviewLayer];
     });
     
     [self checkColoringAvailability];
@@ -492,17 +450,18 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    __weak __typeof(self) weakSelf = self;
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        BOOL landscape = [self isLandscape];
+        BOOL landscape = [weakSelf isLandscape];
         if (!landscape)
-            [self goExpanded];
-        self.backButtonContainerView.hidden = !landscape;
-        self.applyButtonContainerView.hidden = !landscape;
+            [weakSelf goExpanded];
+        weakSelf.backButtonContainerView.hidden = !landscape;
+        weakSelf.applyButtonContainerView.hidden = !landscape;
 
         NSMutableArray *indexPaths = [NSMutableArray array];
-        for (NSInteger i = 0; i < _tableData.subjects.count; i++)
+        for (NSInteger i = 0; i < weakSelf.tableData.subjects.count; i++)
         {
-            OAGPXTableSectionData *sectionData = _tableData.subjects[i];
+            OAGPXTableSectionData *sectionData = weakSelf.tableData.subjects[i];
             for (NSInteger j = 0; j < sectionData.subjects.count; j++)
             {
                 OAGPXTableCellData *cellData = sectionData.subjects[j];
@@ -511,9 +470,9 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             }
         }
         if (indexPaths.count > 0)
-            [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+            [weakSelf.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        [self refreshPreviewLayer];
+        [weakSelf refreshPreviewLayer];
     }];
 }
 
@@ -532,40 +491,49 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
 - (void)hide
 {
+    __weak __typeof(self) weakSelf = self;
     [self hide:YES duration:.2 onComplete:^{
-        [_mapSourceUpdatedObserver detach];
-        [_settings.appearanceMode set:_oldDayNightMode mode:_appMode];
+        if (weakSelf.isDefaultColorRestored)
+            [weakSelf.settings.routeGradientPalette set:weakSelf.previewRouteLineInfo.gradientPalette mode:weakSelf.appMode];
+
+        if (weakSelf.mapSourceUpdatedObserver)
+        {
+            [weakSelf.mapSourceUpdatedObserver detach];
+            weakSelf.mapSourceUpdatedObserver = nil;
+        }
+        [weakSelf.settings.appearanceMode set:weakSelf.oldDayNightMode mode:weakSelf.appMode];
         [[OADayNightHelper instance] forceUpdate];
 
-        [self updateRouteLayer:_oldPreviewRouteLineInfo];
-        [_mapPanelViewController.mapViewController.mapLayers.routePreviewLayer resetLayer];
+        [weakSelf updateRouteLayer:weakSelf.oldPreviewRouteLineInfo];
+        [weakSelf.mapPanelViewController.mapViewController.mapLayers.routePreviewLayer resetLayer];
 
-        if (self.delegate)
-            [self.delegate onCloseAppearance];
+        if (weakSelf.delegate)
+            [weakSelf.delegate onCloseAppearance];
     }];
 }
 
 - (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
+    __weak __typeof(self) weakSelf = self;
     [super hide:YES duration:duration onComplete:^{
-        [_mapPanelViewController.hudViewController resetToDefaultRulerLayout];
-        [_mapPanelViewController hideScrollableHudViewController];
+        [weakSelf.mapPanelViewController.hudViewController resetToDefaultRulerLayout];
+        [weakSelf.mapPanelViewController hideScrollableHudViewController];
         if (onComplete)
             onComplete();
 
-        [_mapPanelViewController.mapViewController.mapLayers.routeMapLayer setPreviewRouteLineInfo:nil];
+        [weakSelf.mapPanelViewController.mapViewController.mapLayers.routeMapLayer setPreviewRouteLineInfo:nil];
 
-        if (_prevScreen == EOARouteLineAppearancePrevScreenSettings)
+        if (weakSelf.prevScreen == EOARouteLineAppearancePrevScreenSettings)
         {
             UINavigationController *navigationController = [OARootViewController instance].navigationController;
             [navigationController pushViewController:[[OAMainSettingsViewController alloc] init] animated:NO];
-            [navigationController pushViewController:[[OAConfigureProfileViewController alloc] initWithAppMode:_appMode targetScreenKey:nil] animated:NO];
-            [navigationController pushViewController:[[OAProfileNavigationSettingsViewController alloc] initWithAppMode:_appMode] animated:YES];
+            [navigationController pushViewController:[[OAConfigureProfileViewController alloc] initWithAppMode:weakSelf.appMode targetScreenKey:nil] animated:NO];
+            [navigationController pushViewController:[[OAProfileNavigationSettingsViewController alloc] initWithAppMode:weakSelf.appMode] animated:YES];
         }
-        else if (_prevScreen == EOARouteLineAppearancePrevScreenNavigation)
+        else if (weakSelf.prevScreen == EOARouteLineAppearancePrevScreenNavigation)
         {
-            [[OARootViewController instance].mapPanel showRouteInfo];
-            [[OARootViewController instance].mapPanel showRoutePreferences];
+            [weakSelf.mapPanelViewController showRouteInfo];
+            [weakSelf.mapPanelViewController showRoutePreferences];
         }
     }];
 }
@@ -886,12 +854,13 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     OARouteLayer *routeLayer = _mapPanelViewController.mapViewController.mapLayers.routeMapLayer;
     [routeLayer setPreviewRouteLineInfo:previewInfo];
     [previewLayer setPreviewRouteLineInfo:previewInfo];
+    __weak __typeof(self) weakSelf = self;
     [_mapPanelViewController.mapViewController runWithRenderSync:^{
         [routeLayer resetLayer];
         [previewLayer resetLayer];
         
         [routeLayer refreshRoute];
-        [self refreshPreviewLayer];
+        [weakSelf refreshPreviewLayer];
     }];
 }
 
@@ -952,6 +921,16 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     }];
 }
 
+- (OAGPXTableCellData *) generateAllColorsCellData
+{
+    return [OAGPXTableCellData withData:@{
+        kTableKey: @"allColors",
+        kCellType: [OASimpleTableViewCell getCellIdentifier],
+        kCellTitle: OALocalizedString(@"shared_string_all_colors"),
+        kCellTintColor: [UIColor colorNamed:ACColorNameIconColorActive]
+    }];
+}
+
 - (void)removeCellsFromSection:(OAGPXTableSectionData *)sectionData cellKeys:(NSArray<NSString *> *)cellKeys
 {
     [sectionData.subjects.copy enumerateObjectsUsingBlock:^(OAGPXTableCellData * _Nonnull cellData, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -985,6 +964,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         [self removeCellFromSection:sectionData cellKey:@"bottom_description"];
         [self removeCellFromSection:sectionData cellKey:@"gradientLegend"];
         [self removeCellFromSection:sectionData cellKey:@"paletteName"];
+        [self removeCellFromSection:sectionData cellKey:@"allColors"];
     }
 }
 
@@ -1072,6 +1052,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
                 _cellPaletteNameIndex = sectionData.subjects.count - 1;
                 [sectionData.subjects addObject:[self generateGridCellData]];
                 _cellColorGridIndex = sectionData.subjects.count - 1;
+                [sectionData.subjects addObject:[self generateAllColorsCellData]];
             }
             else if ([_selectedType.coloringType isRouteInfoAttribute])
             {
@@ -1230,7 +1211,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     {
         [[OADayNightHelper instance] forceUpdate];
     }
-    else if ([tableData.key isEqualToString:@"color_grid"])
+    else if ([tableData.key isEqualToString:@"color_grid"] && [_selectedType.coloringType isGradient])
     {
         tableData.values[@"array_value"] = _availableColors;
         tableData.values[@"int_value"] = @([_previewRouteLineInfo getCustomColor:_nightMode]);
@@ -1351,13 +1332,22 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         [self updateAllValues];
         [self updateRouteLayer:_oldPreviewRouteLineInfo];
         [self generateData];
+        __weak __typeof(self) weakSelf = self;
         [UIView transitionWithView:self.tableView
                           duration:0.35f
                            options:UIViewAnimationOptionTransitionCrossDissolve
                         animations:^(void) {
-                            [self.tableView reloadData];
+                            [weakSelf.tableView reloadData];
                         }
                         completion:nil];
+    }
+    else if ([tableData.key isEqualToString:@"allColors"])
+    {
+        OAColorCollectionViewController *colorCollectionViewController = [[OAColorCollectionViewController alloc] initWithCollectionType:EOAColorCollectionTypePaletteItems
+                                                                                                                                   items:_gradientColorsCollection
+                                                                                                                            selectedItem:_selectedPaletteColorItem];
+        colorCollectionViewController.delegate = self;
+        [self.navigationController pushViewController:colorCollectionViewController animated:YES];
     }
 }
 
@@ -1368,24 +1358,29 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
 - (IBAction)onApplyButtonPressed:(id)sender
 {
+    __weak __typeof(self) weakSelf = self;
     [self hide:YES duration:.2 onComplete:^{
-        [_settings.customRouteColorDay set:[_previewRouteLineInfo getCustomColor:NO] mode:_appMode];
-        [_settings.customRouteColorNight set:[_previewRouteLineInfo getCustomColor:YES] mode:_appMode];
-        [_settings.routeColoringType set:_previewRouteLineInfo.coloringType mode:_appMode];
-        [_settings.routeInfoAttribute set:_previewRouteLineInfo.routeInfoAttribute mode:_appMode];
-        [_settings.routeLineWidth set:_previewRouteLineInfo.width mode:_appMode];
-        [_settings.routeGradientPalette set:_previewRouteLineInfo.gradientPalette mode:_appMode];
-        [_settings.routeShowTurnArrows set:_previewRouteLineInfo.showTurnArrows mode:_appMode];
-        
-        [_mapSourceUpdatedObserver detach];
-        [_settings.appearanceMode set:_oldDayNightMode mode:_appMode];
+        [weakSelf.settings.customRouteColorDay set:[weakSelf.previewRouteLineInfo getCustomColor:NO] mode:weakSelf.appMode];
+        [weakSelf.settings.customRouteColorNight set:[weakSelf.previewRouteLineInfo getCustomColor:YES] mode:weakSelf.appMode];
+        [weakSelf.settings.routeColoringType set:weakSelf.previewRouteLineInfo.coloringType mode:weakSelf.appMode];
+        [weakSelf.settings.routeInfoAttribute set:weakSelf.previewRouteLineInfo.routeInfoAttribute mode:weakSelf.appMode];
+        [weakSelf.settings.routeLineWidth set:weakSelf.previewRouteLineInfo.width mode:weakSelf.appMode];
+        [weakSelf.settings.routeGradientPalette set:weakSelf.previewRouteLineInfo.gradientPalette mode:weakSelf.appMode];
+        [weakSelf.settings.routeShowTurnArrows set:weakSelf.previewRouteLineInfo.showTurnArrows mode:weakSelf.appMode];
+
+        if (weakSelf.mapSourceUpdatedObserver)
+        {
+            [weakSelf.mapSourceUpdatedObserver detach];
+            weakSelf.mapSourceUpdatedObserver = nil;
+        }
+        [weakSelf.settings.appearanceMode set:weakSelf.oldDayNightMode mode:weakSelf.appMode];
         [[OADayNightHelper instance] forceUpdate];
 
-        [self updateRouteLayer:_previewRouteLineInfo];
-        [_mapPanelViewController.mapViewController.mapLayers.routePreviewLayer resetLayer];
+        [weakSelf updateRouteLayer:weakSelf.previewRouteLineInfo];
+        [weakSelf.mapPanelViewController.mapViewController.mapLayers.routePreviewLayer resetLayer];
 
-        if (self.delegate)
-            [self.delegate onCloseAppearance];
+        if (weakSelf.delegate)
+            [weakSelf.delegate onCloseAppearance];
     }];
 }
 
@@ -1652,13 +1647,12 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             [tableView dequeueReusableCellWithIdentifier:[OACollectionSingleLineTableViewCell getCellIdentifier]];
         cell.separatorInset = UIEdgeInsetsZero;
         [cell rightActionButtonVisibility:NO];
-        [cell.collectionView registerNib:[UINib nibWithNibName:PaletteCollectionViewCell.reuseIdentifier bundle:nil] forCellWithReuseIdentifier:PaletteCollectionViewCell.reuseIdentifier];
 
-        PaletteCollectionHandler *paletteHandler = [[PaletteCollectionHandler alloc] initWithData:@[_sortedPaletteColorItems] collectionView:cell.collectionView];
+        PaletteCollectionHandler *paletteHandler = [[PaletteCollectionHandler alloc] initWithData:@[[_sortedPaletteColorItems asArray]] collectionView:cell.collectionView];
         paletteHandler.delegate = self;
-        NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObject:_selectedPaletteColorItem] inSection:0];
+        NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:_selectedPaletteColorItem] inSection:0];
         if (selectedIndexPath.row == NSNotFound)
-            selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObject:[_gradientColorsCollection getDefaultGradientPalette]] inSection:0];
+            selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:[_gradientColorsCollection getDefaultGradientPalette]] inSection:0];
         [paletteHandler setSelectedIndexPath:selectedIndexPath];
         [cell setCollectionHandler:paletteHandler];
         return cell;
@@ -1834,6 +1828,160 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     }
 }
 
+- (void)onCollectionDeleted:(NSNotification *)notification
+{
+    @synchronized(_dataLock)
+    {
+        if (![notification.object isKindOfClass:NSArray.class])
+            return;
+
+        NSArray<PaletteGradientColor *> *gradientPaletteColor = (NSArray<PaletteGradientColor *> *) notification.object;
+        PaletteGradientColor *currentGradientPaletteColor;
+        if ([_selectedPaletteColorItem isKindOfClass:PaletteGradientColor.class])
+            currentGradientPaletteColor = (PaletteGradientColor *) _selectedPaletteColorItem;
+        else
+            return;
+
+        NSInteger currentIndex = [_sortedPaletteColorItems indexOfObjectSync:currentGradientPaletteColor];
+        NSMutableArray<NSIndexPath *> *indexPathsToDelete = [NSMutableArray array];
+        for (PaletteGradientColor *paletteColor in gradientPaletteColor)
+        {
+            NSInteger index = [_sortedPaletteColorItems indexOfObjectSync:paletteColor];
+            if (index != NSNotFound)
+            {
+                [_sortedPaletteColorItems removeObjectSync:paletteColor];
+                [indexPathsToDelete addObject:[NSIndexPath indexPathForRow:index inSection:0]];
+                if (index == currentIndex)
+                    _isDefaultColorRestored = YES;
+            }
+        }
+
+        if (indexPathsToDelete.count > 0 && [_selectedType.coloringType isGradient] && _cellColorGridIndex != -1)
+        {
+            __weak __typeof(self) weakSelf = self;
+            [self.tableView performBatchUpdates:^{
+                NSIndexPath *colorsCollectionIndexPath = [NSIndexPath indexPathForRow:weakSelf.cellColorGridIndex
+                                                                            inSection:weakSelf.sectionColors];
+                OACollectionSingleLineTableViewCell *colorCell = [weakSelf.tableView cellForRowAtIndexPath:colorsCollectionIndexPath];
+                OABaseCollectionHandler *handler = [colorCell getCollectionHandler];
+                [handler removeItems:indexPathsToDelete];
+            } completion:^(BOOL finished) {
+                if (weakSelf.isDefaultColorRestored)
+                {
+                    weakSelf.previewRouteLineInfo.gradientPalette = PaletteGradientColor.defaultName;
+                    weakSelf.oldPreviewRouteLineInfo.gradientPalette = weakSelf.previewRouteLineInfo.gradientPalette;
+                    weakSelf.selectedPaletteColorItem = [weakSelf.gradientColorsCollection getDefaultGradientPalette];
+                    [weakSelf refreshPreviewLayer];
+
+                    NSMutableArray *indexPaths = [NSMutableArray array];
+                    if (weakSelf.cellPaletteNameIndex != -1)
+                        [indexPaths addObject:[NSIndexPath indexPathForRow:weakSelf.cellPaletteNameIndex inSection:weakSelf.sectionColors]];
+                    if (weakSelf.cellPaletteLegendIndex != -1)
+                    {
+                        [weakSelf updateData:weakSelf.tableData.subjects[weakSelf.sectionColors].subjects[weakSelf.cellPaletteLegendIndex]];
+                        [indexPaths addObject:[NSIndexPath indexPathForRow:weakSelf.cellPaletteLegendIndex inSection:weakSelf.sectionColors]];
+                    }
+                    if (indexPaths.count > 0)
+                    {
+                        [weakSelf.tableView reloadRowsAtIndexPaths:indexPaths
+                                                  withRowAnimation:UITableViewRowAnimationAutomatic];
+                    }
+                }
+            }];
+        }
+    }
+}
+
+- (void)onCollectionCreated:(NSNotification *)notification
+{
+    @synchronized(_dataLock)
+    {
+        if (![notification.object isKindOfClass:NSArray.class])
+            return;
+
+        NSArray<PaletteGradientColor *> *gradientPaletteColor = (NSArray<PaletteGradientColor *> *) notification.object;
+        NSMutableArray<NSIndexPath *> *indexPathsToInsert = [NSMutableArray array];
+        for (PaletteGradientColor *paletteColor in gradientPaletteColor)
+        {
+            NSInteger index = [paletteColor getIndex] - 1;
+            NSIndexPath *indexPath;
+            if (index < [_sortedPaletteColorItems countSync])
+            {
+                indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+                [_sortedPaletteColorItems insertObjectSync:paletteColor atIndex:index];
+            }
+            else
+            {
+                indexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems countSync] inSection:0];
+                [_sortedPaletteColorItems addObjectSync:paletteColor];
+            }
+            [indexPathsToInsert addObject:indexPath];
+        }
+
+        if (indexPathsToInsert.count > 0 && [_selectedType.coloringType isGradient] && _cellColorGridIndex != -1)
+        {
+            __weak __typeof(self) weakSelf = self;
+            [self.tableView performBatchUpdates:^{
+                NSIndexPath *colorsCollectionIndexPath = [NSIndexPath indexPathForRow:weakSelf.cellColorGridIndex
+                                                                            inSection:weakSelf.sectionColors];
+                OACollectionSingleLineTableViewCell *colorCell = [weakSelf.tableView cellForRowAtIndexPath:colorsCollectionIndexPath];
+                OABaseCollectionHandler *handler = [colorCell getCollectionHandler];
+                for (NSIndexPath *indexPath in indexPathsToInsert)
+                {
+                    [handler insertItem:[weakSelf.sortedPaletteColorItems objectAtIndexSync:indexPath.row]
+                            atIndexPath:indexPath];
+                }
+            } completion:nil];
+        }
+    }
+}
+
+- (void)onCollectionUpdated:(NSNotification *)notification
+{
+    @synchronized(_dataLock)
+    {
+        if (![notification.object isKindOfClass:NSArray.class])
+            return;
+
+        NSArray<PaletteGradientColor *> *gradientPaletteColor = (NSArray<PaletteGradientColor *> *) notification.object;
+        NSMutableArray<NSIndexPath *> *indexPathsToUpdate = [NSMutableArray array];
+        BOOL currentPaletteColor;
+        for (PaletteGradientColor *paletteColor in gradientPaletteColor)
+        {
+            if ([_sortedPaletteColorItems containsObjectSync:paletteColor])
+            {
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:paletteColor] inSection:0];
+                [indexPathsToUpdate addObject:indexPath];
+                if (paletteColor == _selectedPaletteColorItem)
+                    currentPaletteColor = YES;
+            }
+        }
+
+        if (indexPathsToUpdate.count > 0 && [_selectedType.coloringType isGradient] && _cellColorGridIndex != -1)
+        {
+            __weak __typeof(self) weakSelf = self;
+            [self.tableView performBatchUpdates:^{
+                NSIndexPath *colorsCollectionIndexPath = [NSIndexPath indexPathForRow:weakSelf.cellColorGridIndex
+                                                                            inSection:weakSelf.sectionColors];
+                OACollectionSingleLineTableViewCell *colorCell = [weakSelf.tableView cellForRowAtIndexPath:colorsCollectionIndexPath];
+                OABaseCollectionHandler *handler = [colorCell getCollectionHandler];
+                for (NSIndexPath *indexPath in indexPathsToUpdate)
+                {
+                    [handler replaceItem:[weakSelf.sortedPaletteColorItems objectAtIndexSync:indexPath.row]
+                            atIndexPath:indexPath];
+                    if (currentPaletteColor && weakSelf.cellPaletteLegendIndex != -1)
+                    {
+                        [weakSelf updateData:weakSelf.tableData.subjects[weakSelf.sectionColors].subjects[weakSelf.cellPaletteLegendIndex]];
+                        [weakSelf.tableView reloadRowsAtIndexPaths:@[
+                            [NSIndexPath indexPathForRow:weakSelf.cellPaletteLegendIndex inSection:weakSelf.sectionColors]]
+                                                  withRowAnimation:UITableViewRowAnimationAutomatic];
+                    }
+                }
+            } completion:nil];
+        }
+    }
+}
+
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -1862,7 +2010,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     if ([_selectedType.coloringType isGradient])
     {
         _gradientColorsCollection = [[GradientColorsCollection alloc] initWithColorizationType:(ColorizationType) [_selectedType.coloringType toColorizationType]];
-        _sortedPaletteColorItems = [NSMutableArray arrayWithArray:[_gradientColorsCollection getPaletteColors]];
+        [_sortedPaletteColorItems replaceAllWithObjectsSync:[_gradientColorsCollection getPaletteColors]];
         _selectedPaletteColorItem = [_gradientColorsCollection getDefaultGradientPalette];
         _previewRouteLineInfo.gradientPalette = PaletteGradientColor.defaultName;
     }
@@ -1876,12 +2024,13 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     OAGPXTableSectionData *sectionData = _tableData.subjects[_sectionColors];
     [self updateData:sectionData];
 
+    __weak __typeof(self) weakSelf = self;
     [UIView transitionWithView:self.tableView
                       duration:0.35f
                        options:UIViewAnimationOptionTransitionCrossDissolve
                     animations:^(void)
                     {
-                        [self.tableView reloadData];
+                        [weakSelf.tableView reloadData];
                     }
                     completion:nil];
 
@@ -1914,8 +2063,9 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
 - (void) onMapSourceUpdated
 {
+    __weak __typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateRouteLayer:_previewRouteLineInfo];
+        [weakSelf updateRouteLayer:weakSelf.previewRouteLineInfo];
     });
 }
 
@@ -1923,7 +2073,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
 - (void)onCollectionItemSelected:(NSIndexPath *)indexPath
 {
-    _selectedPaletteColorItem = _sortedPaletteColorItems[indexPath.row];
+    _selectedPaletteColorItem = [_sortedPaletteColorItems objectAtIndexSync:indexPath.row];
     if ([_selectedPaletteColorItem isKindOfClass:PaletteGradientColor.class])
     {
         PaletteGradientColor *paletteColor = (PaletteGradientColor *) _selectedPaletteColorItem;
@@ -1958,6 +2108,13 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
 - (void)reloadCollectionData
 {
+}
+
+#pragma mark - OAColorCollectionDelegate
+
+- (void)selectPaletteItem:(PaletteColor *)paletteItem
+{
+    [self onCollectionItemSelected:[NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:paletteItem] inSection:0]];
 }
 
 @end

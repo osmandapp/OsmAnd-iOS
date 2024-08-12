@@ -16,8 +16,123 @@ import Foundation
 @objcMembers
 class ColorsCollection: NSObject {
 
+    static let collectionDeletedNotification = NSNotification.Name("CollectionDeletedPalettes")
+    static let collectionCreatedNotification = NSNotification.Name("CollectionCreatedPalettes")
+    static let collectionUpdatedNotification = NSNotification.Name("CollectionUpdatedPalettes")
+
+    private var filesUpdatedObserver: NSObjectProtocol?
     private(set) var originalOrder: [PaletteColor] = []
     fileprivate(set) var lastUsedOrder: [PaletteColor] = []
+
+    override init() {
+        super.init()
+        
+        filesUpdatedObserver =
+            NotificationCenter.default.addObserver(forName: ColorPaletteHelper.colorPalettesUpdatedNotification,
+                                                   object: nil,
+                                                   queue: .main) { [weak self] in
+                guard let self else { return }
+                self.onColorPalettesFilesUpdated($0)
+        }
+    }
+
+    deinit {
+        if let filesUpdatedObserver {
+            NotificationCenter.default.removeObserver(filesUpdatedObserver)
+        }
+    }
+
+    private func onColorPalettesFilesUpdated(_ notification: Notification) {
+        guard let colorPaletteFiles = notification.object as? Dictionary<String, String> else { return }
+
+        let deletedPalettes = onColorFilesDeleted(Array(colorPaletteFiles.filter {
+            $0.value == ColorPaletteHelper.deletedFileKey
+        }.keys))
+
+        var createdPalettes = onColorFilesCreated(Array(colorPaletteFiles.filter {
+            $0.value == ColorPaletteHelper.createdFileKey
+        }.keys))
+        createdPalettes.append(contentsOf: onColorFilesDuplicated(Array(colorPaletteFiles.filter {
+            $0.value == ColorPaletteHelper.duplicatedFileKey
+        }.keys)))
+
+        let updatedPalettes = onColorFilesUpdated(Array(colorPaletteFiles.filter {
+            $0.value == ColorPaletteHelper.updatedFileKey
+        }.keys))
+
+        saveColors()
+
+        if !deletedPalettes.isEmpty {
+            NotificationCenter.default.post(name: Self.collectionDeletedNotification, object: deletedPalettes)
+        }
+        if !createdPalettes.isEmpty {
+            NotificationCenter.default.post(name: Self.collectionCreatedNotification, object: createdPalettes)
+        }
+        if !updatedPalettes.isEmpty {
+            NotificationCenter.default.post(name: Self.collectionUpdatedNotification, object: updatedPalettes)
+        }
+    }
+
+    func onColorFilesDeleted(_ colorPaletteFiles: [String]) -> [PaletteColor] {
+        var paletteColors = [PaletteColor]()
+        colorPaletteFiles.forEach { [weak self] in
+            guard let self else { return }
+
+            if let paletteColor = self.getPaletteColor(byFileName: $0) {
+                if self.askRemoveColor(paletteColor, save: false) {
+                    paletteColors.append(paletteColor)
+                } else {
+                    debugPrint("Color palette isn't removed from collection: \(colorPaletteFiles)")
+                }
+            } else {
+                debugPrint("Сolor palette is not in collection: \(colorPaletteFiles)")
+            }
+        }
+        return paletteColors
+    }
+
+    func onColorFilesCreated(_ colorPaletteFiles: [String]) -> [PaletteColor] {
+        var paletteColors = [PaletteColor]()
+        colorPaletteFiles.forEach { [weak self] in
+            guard let self else { return }
+
+            if let paletteColor = self.getPaletteColor(byFileName: $0, new: true),
+               let newPaletteCollor = self.addNewColor(paletteColor, updateLastUsedOrder: false, save: false) {
+                paletteColors.append(newPaletteCollor)
+            }
+        }
+        return paletteColors
+    }
+
+    func onColorFilesUpdated(_ colorPaletteFiles: [String]) -> [PaletteColor] {
+        var paletteColors = [PaletteColor]()
+        colorPaletteFiles.forEach { [weak self] in
+            guard let self else { return }
+
+            if let paletteColor = self.getPaletteColor(byFileName: $0),
+               let newPaletteColor = self.updateColor(paletteColor, newValue: nil, save: false) {
+                paletteColors.append(newPaletteColor)
+            }
+        }
+        return paletteColors
+    }
+
+    func onColorFilesDuplicated(_ colorPaletteFiles: [String]) -> [PaletteColor] {
+        var paletteColors = [PaletteColor]()
+        colorPaletteFiles.forEach { [weak self] in
+            guard let self else { return }
+
+            if let spaceIndex = $0.lastIndex(of: " ") {
+                let suffix = String($0.suffix(from: spaceIndex))
+                if let paletteColor = self.getPaletteColor(byFileName: $0.removeSufix(suffix)) {
+                    paletteColors.append(self.duplicateColor(paletteColor, save: false, suffix: String(suffix.dropLast(TXT_EXT.count))))
+                } else {
+                    debugPrint("Original color palette is not in collection: \(colorPaletteFiles)")
+                }
+            }
+        }
+        return paletteColors
+    }
 
     func findPaletteColor(_ colorInt: Int) -> PaletteColor? {
         findPaletteColor(colorInt, registerIfNotFound: false)
@@ -27,7 +142,7 @@ class ColorsCollection: NSObject {
         for paletteColor in originalOrder where paletteColor.color == colorInt {
             return paletteColor
         }
-        return registerIfNotFound ? addNewColor(colorInt, updateLastUsedOrder: false) : nil
+        return registerIfNotFound ? addNewColor(colorInt, updateLastUsedOrder: false, save: true) : nil
     }
 
     func getColors(_ sortingMode: PaletteSortingMode) -> [PaletteColor] {
@@ -42,26 +157,32 @@ class ColorsCollection: NSObject {
         saveColors()
     }
 
-    func duplicateColor(_ paletteColor: PaletteColor) -> PaletteColor {
-        let duplicate = paletteColor.duplicate()
+    func duplicateColor(_ paletteColor: PaletteColor, save: Bool, suffix: String? = nil) -> PaletteColor {
+        let duplicate = paletteColor.duplicate(suffix)
         addColorDuplicate(&originalOrder, original: paletteColor, duplicate: duplicate)
         addColorDuplicate(&lastUsedOrder, original: paletteColor, duplicate: duplicate)
-        saveColors()
+        if save {
+            saveColors()
+        }
         return duplicate
     }
 
-    func askRemoveColor(_ paletteColor: PaletteColor) -> Bool {
+    func askRemoveColor(_ paletteColor: PaletteColor, save: Bool) -> Bool {
         if let index = originalOrder.firstIndex(where: { $0.id == paletteColor.id }) {
             originalOrder.remove(at: index)
             lastUsedOrder.removeAll { $0.id == paletteColor.id }
-            saveColors()
+            if save {
+                saveColors()
+            }
             return true
         }
         return false
     }
 
-    func addOrUpdateColor(_ oldColor: PaletteColor?, newColor: Int) -> PaletteColor? {
-        oldColor == nil ? addNewColor(newColor, updateLastUsedOrder: true) : updateColor(oldColor, newColor: newColor)
+    func addOrUpdateColor(_ oldColor: PaletteColor?, newValue: Any?, save: Bool) -> PaletteColor? {
+        oldColor == nil
+            ? addNewColor(newValue, updateLastUsedOrder: true, save: save)
+            : updateColor(oldColor, newValue: newValue, save: save)
     }
 
     func addAllUniqueColors(_ colorInts: [Int]) {
@@ -105,33 +226,44 @@ class ColorsCollection: NSObject {
         }
     }
 
-    private func addNewColor(_ newColor: Int, updateLastUsedOrder: Bool) -> PaletteColor {
-        let paletteColor = PaletteColor(color: newColor)
+    private func addNewColor(_ newValue: Any?, updateLastUsedOrder: Bool, save: Bool) -> PaletteColor? {
+        var paletteColor: PaletteColor?
+        if let newColor = newValue as? Int {
+            paletteColor = PaletteColor(color: newColor)
+        } else if let newPaletteColor = newValue as? PaletteColor {
+            paletteColor = newPaletteColor
+        }
+        guard let paletteColor else { return nil }
+
         originalOrder.append(paletteColor)
         if updateLastUsedOrder {
             lastUsedOrder.insert(paletteColor, at: 0)
         } else {
             lastUsedOrder.append(paletteColor)
         }
-        saveColors()
-        return paletteColor
-    }
-
-    private func updateColor(_ paletteColor: PaletteColor?, newColor: Int) -> PaletteColor? {
-        if let paletteColor {
-            paletteColor.color = newColor
+        if save {
             saveColors()
         }
         return paletteColor
     }
 
-    func loadColorsInLastUsedOrder() throws {
-        // override
+    internal func updateColor(_ paletteColor: PaletteColor?, newValue: Any?, save: Bool) -> PaletteColor? {
+        if let paletteColor, let newColor = newValue as? Int {
+            paletteColor.color = newColor
+            if save {
+                saveColors()
+            }
+        }
+        return paletteColor
     }
 
-    func saveColors() {
-        // override
+    func getPaletteColor(byFileName fileName: String, new: Bool = false) -> PaletteColor? {
+        nil
     }
+
+    func loadColorsInLastUsedOrder() throws { }
+
+    func saveColors() { }
 }
 
 extension GradientColorsCollection {

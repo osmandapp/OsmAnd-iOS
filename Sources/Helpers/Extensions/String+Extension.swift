@@ -9,7 +9,18 @@
 import Foundation
 
 extension String {
+
     func trimWhitespaces() -> String {
         trimmingCharacters(in: .whitespaces)
+    }
+
+    func removePrefix(_ prefix: String) -> String {
+        guard hasPrefix(prefix) else { return self }
+        return String(dropFirst(prefix.count))
+    }
+
+    func removeSufix(_ sufix: String) -> String {
+        guard hasSuffix(sufix) else { return self }
+        return String(dropLast(sufix.count))
     }
 }

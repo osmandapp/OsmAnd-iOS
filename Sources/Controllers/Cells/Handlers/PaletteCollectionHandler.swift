@@ -61,15 +61,94 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
         self.data = newData
     }
 
-    override func addItem(_ indexPath: IndexPath, newItem: Any) {
+    override func insertItem(_ newItem: Any, at indexPath: IndexPath) {
         if let newItem = newItem as? PaletteColor, data.count > indexPath.section && (indexPath.row == 0 || data[indexPath.section].count > indexPath.row - 1) {
             data[indexPath.section].insert(newItem, at: indexPath.row)
+        }
+        if let collectionView = getCollectionView() {
+            collectionView.performBatchUpdates {
+                collectionView.insertItems(at: [indexPath])
+            } completion: { _ in
+                collectionView.reloadData()
+            }
+        }
+    }
+
+    override func replaceItem(_ newItem: Any, at indexPath: IndexPath) {     
+        if let newItem = newItem as? PaletteColor, data.count > indexPath.section && data[indexPath.section].count > indexPath.row {
+            data[indexPath.section][indexPath.row] = newItem
+        }
+        if let collectionView = getCollectionView() {
+            collectionView.reloadItems(at: [indexPath])
+            collectionView.reloadData()
         }
     }
 
     override func removeItem(_ indexPath: IndexPath) {
+        var deleteCurrent = false
         if data.count > indexPath.section && data[indexPath.section].count > indexPath.row {
             data[indexPath.section].remove(at: indexPath.row)
+            if let selectedIndexPath {
+                if let defaultIndexPath, defaultIndexPath.row > indexPath.row {
+                    self.defaultIndexPath = IndexPath(row: defaultIndexPath.row - 1, section: defaultIndexPath.section)
+                }
+                if selectedIndexPath.row > indexPath.row {
+                    self.selectedIndexPath = IndexPath(row: selectedIndexPath.row - 1, section: selectedIndexPath.section)
+                } else if indexPath == selectedIndexPath {
+                    deleteCurrent = true
+                }
+            }
+            if let collectionView = getCollectionView() {
+                collectionView.performBatchUpdates {
+                    collectionView.deleteItems(at: [indexPath])
+                } completion: { [weak self] _ in
+                    guard let self else { return }
+
+                    collectionView.reloadData()
+                    if deleteCurrent, let defaultIndexPath = self.defaultIndexPath {
+                        let indexPathsToUpdate = [self.selectedIndexPath!, defaultIndexPath]
+                        self.selectedIndexPath = defaultIndexPath
+                        collectionView.reloadItems(at: indexPathsToUpdate)
+                    }
+                }
+            }
+        }
+    }
+
+    override func removeItems(_ indexPaths: [IndexPath]) {
+        var deletedIndexPaths = [IndexPath]()
+        var deleteCurrent = false
+        indexPaths.forEach { [weak self] in
+            guard let self else { return }
+
+            if data.count > $0.section && data[$0.section].count > $0.row {
+                data[$0.section].remove(at: $0.row)
+                deletedIndexPaths.append($0)
+                if let defaultIndexPath, defaultIndexPath.row > $0.row {
+                    self.defaultIndexPath = IndexPath(row: defaultIndexPath.row - 1, section: defaultIndexPath.section)
+                }
+                if let selectedIndexPath {
+                    if selectedIndexPath.row > $0.row {
+                        self.selectedIndexPath = IndexPath(row: selectedIndexPath.row - 1, section: selectedIndexPath.section)
+                    } else if $0 == selectedIndexPath {
+                        deleteCurrent = true
+                    }
+                }
+            }
+        }
+        if !deletedIndexPaths.isEmpty, let collectionView = getCollectionView() {
+            collectionView.performBatchUpdates {
+            collectionView.deleteItems(at: deletedIndexPaths)
+            } completion: { [weak self] _ in
+                guard let self else { return }
+
+                collectionView.reloadData()
+                if deleteCurrent, let defaultIndexPath {
+                    let indexPathsToUpdate = [self.selectedIndexPath!, defaultIndexPath]
+                    self.selectedIndexPath = defaultIndexPath
+                    collectionView.reloadItems(at: indexPathsToUpdate)
+                }
+            }
         }
     }
 
@@ -87,7 +166,7 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
         cell.backgroundImageView.image = roundedSquareImage
         let paletteColor = data[indexPath.section][indexPath.row]
         if cell.backgroundImageView.tag != Int(paletteColor.id) {
-            cell.backgroundImageView.gradated(createGradientPoints(paletteColor))
+            cell.backgroundImageView.gradated(Self.createGradientPoints(paletteColor))
             cell.backgroundImageView.tag = Int(paletteColor.id)
         }
 
@@ -105,31 +184,19 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
         data.count
     }
     
-    @objc func applyGradient(to imageView: UIImageView, with palette: PaletteColor) {
-        let gradientPoints = createGradientPoints(palette)
+    @objc static func applyGradient(to imageView: UIImageView, with palette: PaletteColor) {
+        let gradientPoints = Self.createGradientPoints(palette)
         imageView.gradated(gradientPoints)
     }
-    
-    @objc func createDescriptionForPalette(palette: PaletteColor) -> String {
+
+    @objc static func createDescriptionForPalette(palette: PaletteColor) -> String {
         guard let gradientPalette = palette as? PaletteGradientColor else {
             return "Invalid palette type"
         }
-        
-        let colorValues = gradientPalette.colorPalette.colorValues
-        var descriptionBuilder = ""
-        for (index, colorValue) in colorValues.enumerated() {
-            if index != 0 {
-                descriptionBuilder += " • "
-            }
-            
-            var formattedValue = "\(colorValue.val)"
-            descriptionBuilder += formattedValue
-        }
-        
-        return descriptionBuilder
+        return gradientPalette.colorPalette.colorValues.compactMap { "\($0.val)" }.joined(separator: " • ")
     }
 
-    private func createGradientPoints(_ palette: PaletteColor) -> [GradientPoint] {
+    private static func createGradientPoints(_ palette: PaletteColor) -> [GradientPoint] {
         var gradientPoints = [GradientPoint]()
         if let gradientPalette = palette as? PaletteGradientColor {
             let colorValues = gradientPalette.colorPalette.colorValues

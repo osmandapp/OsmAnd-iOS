@@ -93,6 +93,11 @@ static CGFloat kMarkWidth = 2;
     [self removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpOutside | UIControlEventTouchUpInside];
 }
 
+- (void)setNumberOfMarks:(NSInteger)numberOfMarks
+{
+    [self setNumberOfMarks:numberOfMarks additionalMarksBetween:0];
+}
+
 - (void)setNumberOfMarks:(NSInteger)numberOfMarks additionalMarksBetween:(NSInteger)additionalMarksBetween
 {
     _numberOfMarks = numberOfMarks;
@@ -410,36 +415,19 @@ static CGFloat kMarkWidth = 2;
         return nextMark - 1;
 }
 
-- (NSString *)getTimeStringAtIndex:(int)index
+- (NSString *) getSelectingMarkTitleTextAtIndex:(NSInteger)index
 {
-    if (index < 0 || index >= kForecastWholeDayMarksCount - 1)
-    {
-        return @"00:00";
-    }
-    int hours = index / kForecastStepsPerHour;
-    int minutes = round((index % kForecastStepsPerHour) * kForecastStepDuration); // 0, 3, 5, 8, 10, 13, 15 ...
-    
-    NSString *hourString = [NSString stringWithFormat:@"%02d", hours];
-    NSString *minuteString = [NSString stringWithFormat:@"%02d", minutes];
-    
-    return [NSString stringWithFormat:@"%@:%@", hourString, minuteString];
+    NSInteger markValue = _additionalMarksBetween > 0 ? index : index * 3;
+    return !self.userInteractionEnabled ? OALocalizedString(@"rendering_value_disabled_name")
+            : [markValue < 10 || index == [self getMarksCount] - 1 ? @"0" : @""
+                    stringByAppendingString:[NSString stringWithFormat:@"%li:00", index == [self getMarksCount] - 1 ? 0 : markValue]];
 }
 
 - (void)layoutSelectingTitle
 {
     _selectingMarkTitle.textColor = self.userInteractionEnabled ? [UIColor colorNamed:ACColorNameTextColorPrimary] : [UIColor colorNamed:ACColorNameTextColorSecondary];
     NSInteger index = self.stepsAmountWithoutDrawMark > 0 ? [self getIndexForOptionStepsAmountWithoutDrawMark] : [self getIndex];
-    if (self.stepsAmountWithoutDrawMark > 0)
-    {
-        _selectingMarkTitle.text = [self getTimeStringAtIndex:index];
-    }
-    else
-    {
-        NSInteger markValue = _additionalMarksBetween > 0 ? index : index * 3;
-        _selectingMarkTitle.text = !self.userInteractionEnabled ? OALocalizedString(@"rendering_value_disabled_name")
-                : [markValue < 10 || index == [self getMarksCount] - 1 ? @"0" : @""
-                        stringByAppendingString:[NSString stringWithFormat:@"%li:00", index == [self getMarksCount] - 1 ? 0 : markValue]];
-    }
+    _selectingMarkTitle.text = [self getSelectingMarkTitleTextAtIndex:index];
 
     CGSize textSize = [OAUtilities calculateTextBounds:_selectingMarkTitle.text font:_selectingMarkTitle.font];
     _selectingMarkTitle.frame = CGRectMake(6., 2., textSize.width, textSize.height);

@@ -37,7 +37,6 @@
 #import "OAIAPHelper.h"
 #import "OAProducts.h"
 #import "OAPluginPopupViewController.h"
-#import "OASegmentedSlider.h"
 #import "OARouteStatisticsHelper.h"
 #import "OASizes.h"
 #import "OAObservable.h"
@@ -1653,7 +1652,7 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
             cell.topRightLabel.font = [UIFont scaledSystemFontOfSize:17 weight:UIFontWeightMedium];
             cell.bottomLeftLabel.text = arrayValue.firstObject;
             cell.bottomRightLabel.text = arrayValue.lastObject;
-            [cell.sliderView setNumberOfMarks:arrayValue.count additionalMarksBetween:0];
+            [cell.sliderView setNumberOfMarks:arrayValue.count];
             cell.sliderView.selectedMark = [arrayValue indexOfObject:cellData.values[@"custom_string_value"]];
 
             cell.sliderView.tag = indexPath.section << 10 | indexPath.row;

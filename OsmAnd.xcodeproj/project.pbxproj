@@ -453,6 +453,7 @@
 		32A365B32B07B4F500485401 /* ic_custom_extension_outlined@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A365AF2B07B4F500485401 /* ic_custom_extension_outlined@2x.png */; };
 		32A365B42B07B4F500485401 /* ic_custom_extension_outlined@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A365B02B07B4F500485401 /* ic_custom_extension_outlined@3x.png */; };
 		32A365B52B07B4F500485401 /* ic_custom_help_outlined@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A365B12B07B4F500485401 /* ic_custom_help_outlined@3x.png */; };
+		32A46BC02C6BA430000FC20B /* OAWeatherTimeSegmentedSlider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32A46BBF2C6BA430000FC20B /* OAWeatherTimeSegmentedSlider.mm */; };
 		32A7EE0F261BBF5D00F7A697 /* bg_point_circle_contour@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A7EE0D261BBF5C00F7A697 /* bg_point_circle_contour@2x.png */; };
 		32A7EE10261BBF5D00F7A697 /* bg_point_circle_contour@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A7EE0E261BBF5D00F7A697 /* bg_point_circle_contour@3x.png */; };
 		32A7EE15261BBF6C00F7A697 /* bg_point_octagon_contour@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A7EE13261BBF6B00F7A697 /* bg_point_octagon_contour@3x.png */; };
@@ -3915,6 +3916,8 @@
 		32A365AF2B07B4F500485401 /* ic_custom_extension_outlined@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_extension_outlined@2x.png"; path = "Resources/Icons/ic_custom_extension_outlined@2x.png"; sourceTree = SOURCE_ROOT; };
 		32A365B02B07B4F500485401 /* ic_custom_extension_outlined@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_extension_outlined@3x.png"; path = "Resources/Icons/ic_custom_extension_outlined@3x.png"; sourceTree = SOURCE_ROOT; };
 		32A365B12B07B4F500485401 /* ic_custom_help_outlined@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_help_outlined@3x.png"; path = "Resources/Icons/ic_custom_help_outlined@3x.png"; sourceTree = SOURCE_ROOT; };
+		32A46BBE2C6BA422000FC20B /* OAWeatherTimeSegmentedSlider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAWeatherTimeSegmentedSlider.h; sourceTree = "<group>"; };
+		32A46BBF2C6BA430000FC20B /* OAWeatherTimeSegmentedSlider.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWeatherTimeSegmentedSlider.mm; sourceTree = "<group>"; };
 		32A7863D27452C4E00FE7881 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		32A7EE0D261BBF5C00F7A697 /* bg_point_circle_contour@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_point_circle_contour@2x.png"; path = "Resources/Icons/bg_point_circle_contour@2x.png"; sourceTree = "<group>"; };
 		32A7EE0E261BBF5D00F7A697 /* bg_point_circle_contour@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_point_circle_contour@3x.png"; path = "Resources/Icons/bg_point_circle_contour@3x.png"; sourceTree = "<group>"; };
@@ -13188,22 +13191,30 @@
 		DA5A804326C563A500F274C7 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				FA83EAA32BF6538B00DBF321 /* SpeedometerView */,
-				FA4195572AAB55D4007CBBAB /* ShadowTransporentView */,
 				FA4768B02A66E6DB00D533E8 /* Banners */,
 				DA5A804526C563A500F274C7 /* OAButton.h */,
 				DA5A806626C563A500F274C7 /* OAButton.m */,
+				B247453627E35E9B00C18C3F /* OACloudIntroductionHeaderView.h */,
+				B247453727E35E9B00C18C3F /* OACloudIntroductionHeaderView.m */,
+				CA4ED8CABB8E66D48FDF5F2B /* OACollectionViewFlowLayout.h */,
+				CA4ED6B983C859FE4CF11CA1 /* OACollectionViewFlowLayout.m */,
 				DA5A806326C563A500F274C7 /* OADownloadProgressView.h */,
 				DA5A804726C563A500F274C7 /* OADownloadProgressView.m */,
+				B0D61CD2F84591156B0F5F6D /* OAFoldersCollectionView.h */,
+				B0D61E710CB296B034792F68 /* OAFoldersCollectionView.mm */,
 				DA5A805B26C563A500F274C7 /* OAFreeMemoryView.h */,
 				DA5A808A26C563A500F274C7 /* OAFreeMemoryView.m */,
+				B0D61F5A5B3B39B9CD1CF5CB /* OAGpxStatBlockCollectionViewCell.h */,
+				B0D6165A09DCB273BE944F49 /* OAGpxStatBlockCollectionViewCell.mm */,
+				C5AF90772A25E8A100989A86 /* OAKeyboardHintBar.h */,
+				C5AF90782A25E8A100989A86 /* OAKeyboardHintBar.m */,
+				CA4ED472FAEB73ACA09D6EE4 /* OALabel.h */,
+				CA4ED8845704B34273CBE2B9 /* OALabel.m */,
 				DA5A806B26C563A500F274C7 /* OAMapRendererView.h */,
 				DA5A805426C563A500F274C7 /* OAMapRendererView.mm */,
 				DA5A805D26C563A500F274C7 /* OAMapRendererViewProtocol.h */,
 				DA5A804D26C563A500F274C7 /* OAMapRulerView.h */,
 				DA5A805F26C563A500F274C7 /* OAMapRulerView.m */,
-				C5AF90772A25E8A100989A86 /* OAKeyboardHintBar.h */,
-				C5AF90782A25E8A100989A86 /* OAKeyboardHintBar.m */,
 				DA5A804C26C563A500F274C7 /* OAMultiselectableHeaderView.h */,
 				DA5A806026C563A500F274C7 /* OAMultiselectableHeaderView.m */,
 				DA5A805926C563A500F274C7 /* OAOverlayUnderlayView.h */,
@@ -13217,8 +13228,18 @@
 				DA5A806526C563A500F274C7 /* OARoutingProgressView.m */,
 				DA5A805226C563A500F274C7 /* OAScrollView.h */,
 				DA5A806A26C563A500F274C7 /* OAScrollView.m */,
+				CA4EDD14CA25B1A6AEB53FE3 /* OASegmentedSlider.h */,
+				CA4EDBF84C09652F36648561 /* OASegmentedSlider.mm */,
+				DA9F841A29CC96EF00127DAE /* OAShapeLayer.h */,
+				DA9F841B29CC96EF00127DAE /* OAShapeLayer.m */,
+				CA4ED5B77046F2C3F6FB7181 /* OASlider.h */,
+				CA4ED20CACFB86C3CEE9C486 /* OASlider.mm */,
 				DA5A804626C563A500F274C7 /* OASubscribeEmailView.h */,
 				DA5A806726C563A500F274C7 /* OASubscribeEmailView.m */,
+				CA4ED7ECFD074988CD7DE369 /* OASubscriptionBannerCardView.h */,
+				CA4EDB568946B3B7E439A94E /* OASubscriptionBannerCardView.mm */,
+				B0D61B47A8DC2B61A93099E6 /* OATabBar.h */,
+				B0D61B0861142A49F45480E4 /* OATabBar.mm */,
 				DA5A806826C563A500F274C7 /* OATableView.h */,
 				DA5A805326C563A500F274C7 /* OATableView.m */,
 				DA5A806C26C563A500F274C7 /* OATableViewCell.h */,
@@ -13238,29 +13259,13 @@
 				DA5A806F26C563A500F274C7 /* OAUserInteractionInterceptorView.m */,
 				DA5A804F26C563A500F274C7 /* OAUserInteractionPassThroughView.h */,
 				DA5A806E26C563A500F274C7 /* OAUserInteractionPassThroughView.m */,
+				32A46BBE2C6BA422000FC20B /* OAWeatherTimeSegmentedSlider.h */,
+				32A46BBF2C6BA430000FC20B /* OAWeatherTimeSegmentedSlider.mm */,
+				FA4195572AAB55D4007CBBAB /* ShadowTransporentView */,
+				FA83EAA32BF6538B00DBF321 /* SpeedometerView */,
 				DA5A804826C563A500F274C7 /* UITableViewCell+getTableView.h */,
 				DA5A806426C563A500F274C7 /* UITableViewCell+getTableView.m */,
 				DA5A807326C563A500F274C7 /* XibViews */,
-				B0D61B0861142A49F45480E4 /* OATabBar.mm */,
-				B0D61B47A8DC2B61A93099E6 /* OATabBar.h */,
-				B0D6165A09DCB273BE944F49 /* OAGpxStatBlockCollectionViewCell.mm */,
-				B0D61F5A5B3B39B9CD1CF5CB /* OAGpxStatBlockCollectionViewCell.h */,
-				B0D61E710CB296B034792F68 /* OAFoldersCollectionView.mm */,
-				B0D61CD2F84591156B0F5F6D /* OAFoldersCollectionView.h */,
-				CA4ED20CACFB86C3CEE9C486 /* OASlider.mm */,
-				CA4ED5B77046F2C3F6FB7181 /* OASlider.h */,
-				CA4ED6B983C859FE4CF11CA1 /* OACollectionViewFlowLayout.m */,
-				CA4ED8CABB8E66D48FDF5F2B /* OACollectionViewFlowLayout.h */,
-				B247453627E35E9B00C18C3F /* OACloudIntroductionHeaderView.h */,
-				B247453727E35E9B00C18C3F /* OACloudIntroductionHeaderView.m */,
-				CA4ED8845704B34273CBE2B9 /* OALabel.m */,
-				CA4ED472FAEB73ACA09D6EE4 /* OALabel.h */,
-				CA4EDBF84C09652F36648561 /* OASegmentedSlider.mm */,
-				CA4EDD14CA25B1A6AEB53FE3 /* OASegmentedSlider.h */,
-				CA4EDB568946B3B7E439A94E /* OASubscriptionBannerCardView.mm */,
-				CA4ED7ECFD074988CD7DE369 /* OASubscriptionBannerCardView.h */,
-				DA9F841A29CC96EF00127DAE /* OAShapeLayer.h */,
-				DA9F841B29CC96EF00127DAE /* OAShapeLayer.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -17204,6 +17209,7 @@
 				32672A0A2AAF3D0200D46608 /* GpxTravelCell.swift in Sources */,
 				DA5A83F526C563A800F274C7 /* OADeleteCustomFiltersViewController.mm in Sources */,
 				DA5A818126C563A700F274C7 /* OATerrainAction.m in Sources */,
+				32A46BC02C6BA430000FC20B /* OAWeatherTimeSegmentedSlider.mm in Sources */,
 				DA5A842326C563A800F274C7 /* OAGPXWptListViewController.mm in Sources */,
 				DA5A817F26C563A700F274C7 /* OAUnsupportedAction.m in Sources */,
 				0513AA382A9B530A00CFA2A0 /* OADestinationBarWidget.mm in Sources */,

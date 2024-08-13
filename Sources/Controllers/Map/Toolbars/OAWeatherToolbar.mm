@@ -517,7 +517,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
             {
                 if (!_wasDownloading)
                 {
-                    _nextLoopStart = _currentLoopStart + kAnimationFrameDelaySec;
+                    _nextLoopStart = currentTime + kAnimationFrameDelaySec;
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [self moveToNextForecastFrame];
                     });
@@ -525,7 +525,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
                 else
                 {
                     _wasDownloading = NO;
-                    _nextLoopStart = _currentLoopStart + kDownloadingCompleteDelaySec;
+                    _nextLoopStart = currentTime + kDownloadingCompleteDelaySec;
                 }
             }
             else

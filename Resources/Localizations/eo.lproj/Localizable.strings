@@ -912,7 +912,7 @@
 "configure_screen_quick_action" = "Rapida ago";
 "search_activity" = "Serĉi";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
-"ltr_or_rtl_combine_via_colon" = "%@: %@";
+"ltr_or_rtl_combine_via_colon" = "%@ : %@";
 "listed_exist" = "Listigitaj %@ jam ekzistas en OsmAnd.";
 "shared_string_import_complete" = "Enportado finita";
 "import_complete_description" = "Ĉiuj datumoj el %@ estas enportitaj. Uzu la butonojn sube por malfermi iun parton de la aplikaĵo por administri ilin.";
@@ -2492,7 +2492,7 @@
 "routing_attr_motor_type_diesel_name" = "Dizeloleo";
 "login_open_street_map_org" = "Ensaluti al OpenStreetMap.org";
 "checking_progress" = "Kontrolado…";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "shared_string_selected" = "Elektitaj";
 "backup_delete_types_descr" = "Ĉu vi volas forigi el OsmAnd-Nubo datumojn de neaktualaj elementoj\?";
 "weather_precip_inches" = "Coloj";
@@ -2507,7 +2507,7 @@
 "routing_attr_motor_type_gas_name" = "CNG";
 "tts_title" = "Parolsintezita";
 "routing_attr_avoid_tunnels_name" = "Sen tuneloj";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "weather_temperature_fahrenheit" = "Farenhejta";
 "not_enough_contributions_descr" = "Almenaŭ %@ kontribuoj al OpenStreetMap dum la antaŭaj du monatoj (%@) estas necesaj por akiri senlimajn ĉiuhorajn map-ĝisdatigojn.";
 "backup_data" = "Sekurkopii datumojn";

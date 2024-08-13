@@ -1017,10 +1017,10 @@
 "configure_screen_quick_action" = "إجراءات سريعة";
 "search_activity" = "بحث";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
-"ltr_or_rtl_combine_via_colon" = "%@: %@";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
-"ltr_or_rtl_combine_via_or" = "%@من %@";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
+"ltr_or_rtl_combine_via_or" = "%@ من %@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "listed_exist" = "المدرج %@, موجودة بالفعل في أوسماند.";
 "shared_string_import_complete" = "تم الاستيراد";
 "import_complete_description" = "تم استيراد جميع البيانات من %@، استخدام الأزرار أدناه لفتح أي جزء من التطبيق لإدارته.";

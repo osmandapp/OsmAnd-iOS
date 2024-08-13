@@ -1796,7 +1796,7 @@
 "layer_amenity_label" = "Назвы кропак (POI, Улюбёныя)";
 "coord_input_add_point" = "Дадаць пункт";
 "quick_action_showhide_mapillary_title" = "Паказаць/схаваць Mapillary";
-"ltr_or_rtl_combine_via_colon" = "%@: %@";
+"ltr_or_rtl_combine_via_colon" = "%@ : %@";
 "profile_alert_need_save_title" = "Захаваць змены";
 "quick_action_remove_next_destination_descr" = "Бягучы пункт прызначэння маршруту будзе выдалены. Калі гэта канцавы пункт прызначэння, то навігацыя спыніцца.";
 "configure_screen_quick_action" = "Хуткае дзеянне";
@@ -2183,7 +2183,7 @@
 "expired" = "Пратэрмінавана";
 "explore_osmnad_plans_to_find_suitable" = "Вывучыце тарыфныя планы OsmAnd, каб знайсці адпаведны вашым патрэбам.";
 "restore_purchases" = "Аднаўленне пакупак";
-"ltr_or_rtl_combine_via_or" = "%@або %@";
+"ltr_or_rtl_combine_via_or" = "%@ або %@";
 "nautical_depth" = "Марскія глыбіні";
 "cubic_m" = "м³";
 "shared_string_purchased" = "Набыта";
@@ -2327,7 +2327,7 @@
 "reading_file" = "Чытанне файла";
 "screen_settings_weather_toolbar" = "Панэль інструментаў надвор'я";
 "lang_ckb" = "Курдская (цэнтральная)";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "checking_for_duplicate_description" = "OsmAndправярае %@ на дублікаты існых элементаў праграмы. \n \nГэта можа заняць пэўны час.";
 "preparing_file" = "Падрыхтоўка файла";
 "custom_plugins" = "Карыстальніцкія ўбудовы";
@@ -2383,7 +2383,7 @@
 "co2_mission" = "Выкіды CO2";
 "download_all" = "Спампаваць усё";
 "login_open_street_map_org" = "Увайсці ў OpenStreetMap.org";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "routing_attr_avoid_tunnels_description" = "Пазбягаць тунэляў";
 "shared_string_added" = "Дададзена";
 "shared_string_not_included" = "Не ўключае";

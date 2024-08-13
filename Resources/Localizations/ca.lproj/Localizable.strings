@@ -1820,7 +1820,7 @@
 "added_items" = "Elements afegits: %@";
 "import_complete_description" = "S\'han importat totes les dades de %@ , podeu utilitzar els botons de sota per gestionar l\'aplicació obrint la part que calgui.";
 "listed_exist" = "Els llistats %@ ja existeixen a OsmAnd.";
-"ltr_or_rtl_combine_via_colon" = "%@: %@";
+"ltr_or_rtl_combine_via_colon" = "%@ : %@";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "importing_from" = "S\'estan important dades de %@";
 "shared_string_rendering_style" = "Estil de representació";
@@ -2164,11 +2164,11 @@
 "weather_online_cache" = "Memòria cau en línia";
 "deleted_file" = "Fitxer suprimit";
 "animate_my_location" = "Anima la pròpia posició";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "cloud_all_changes_downloaded" = "S\'han baixat tots els canvis";
 "enough_contributions_descr" = "Enhorabona, heu fet prou contribucions a OpenStreetMap per a gaudir d\'actualitzacions de mapes il·limitades!";
 "shared_string_weather" = "Oratge";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "nautical_depth_points" = "Punts de profunditat nàutica";
 "approximate_file_size" = "Mida aproximada del fitxer";
 "show_borders_of_downloaded_maps" = "Mostra les vores dels mapes baixats";

@@ -1641,7 +1641,7 @@
 "width_limit_description" = "Angi kjøretøybredde, noen rutebegrensninger for brede kjøretøy kan tilkomme.";
 "shared_string_max" = "Maks.";
 "shared_string_deselect_all" = "Fravelg alle";
-"ltr_or_rtl_combine_via_colon" = "%@: %@";
+"ltr_or_rtl_combine_via_colon" = "%@ : %@";
 "profile_type_custom_string" = "Egendefinert profil";
 "shared_string_add_profile" = "Legg til profil";
 "reorder_profiles" = "Rediger profilliste";
@@ -2335,7 +2335,7 @@
 "weather_precip_inches" = "Tommer";
 "promo_subscription" = "Promo-abonnement";
 "co2_mission" = "CO2-utslipp";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "select_wikipedia_article_langs" = "Velg språkene for Wikipedia-artikler på kartet. Bytt til hvilket som helst tilgjengelig språk mens du leser artikkelen.";
 "backup_delete_old_data_warning" = "Du er i ferd medå slette endringshistorikken for tidligere nedlastet data. \n \nDen nåværende versjonen av dataen vil bli endret på tjeneren, men du vil ikke kunne gå tilbake til de tidligere utførte endringene.";
 "fav_point_dublicate_message" = "Favorittnavn endret til \"%@\" forå unngå duplisering.";
@@ -2356,7 +2356,7 @@
 "backup_deleting_all_data" = "Sletter alle data…";
 "weather_temperature_fahrenheit" = "Grad fahrenheit";
 "map_updates_are_unavailable_yet" = "Kartoppdateringer er ikke tilgjengelig enda :(";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "contact_support" = "Kontakt brukerstøtte";
 "shared_string_progress" = "Framdrift";
 "service_is_not_available_please_try_later" = "Tjenesten er ikke tilgjengelig. Prøv igjen senere.";

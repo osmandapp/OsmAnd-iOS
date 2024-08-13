@@ -1806,7 +1806,7 @@
 "import_complete_description" = "Alle Daten aus dem %@ importiert. Verwenden Sie die Schaltflächen unten, um einen beliebigen Teil der App zu öffnen und zu verwalten.";
 "shared_string_import_complete" = "Import abgeschlossen";
 "listed_exist" = "Die aufgelisteten %@ sind in OsmAnd bereits vorhanden.";
-"ltr_or_rtl_combine_via_colon" = "%@: %@";
+"ltr_or_rtl_combine_via_colon" = "%@ : %@";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "search_activity" = "Suchen";
 "configure_screen_quick_action" = "Schnellaktion";
@@ -2257,7 +2257,7 @@
 "shared_string_weather" = "Wetter";
 "map_settings_weather_temp" = "Temperatur";
 "navigate_point_mgrs" = "MGRS";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "routeInfo_surface_description" = "Informationen zur physischen Oberfläche von Straßen und Fußwegen angeben.";
 "routeInfo_smoothness_description" = "Klassifizierungsschema für die physische Nutzbarkeit eines Weges für Radfahrzeuge, insbesondere hinsichtlich der Regelmäßigkeit/Ebenheit der Oberfläche.";
 "routeInfo_winter_ice_road_description" = "Färbt die Route oder den Track entsprechend der Winterstraßenklassifizierung.";
@@ -2645,7 +2645,7 @@
 "backup_error_failed_to_fetch_remote_items" = "Fehler beim Abrufen der Dateiliste vom Server.";
 "error_contact_support" = "Wenn das Problem weiterhin besteht, wenden Sie sich bitte an unser Support-Team.";
 "select_another_colorization" = "Bitte wählen Sie eine andere Art der Einfärbung.";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "mtb_imba_full" = "International Mountain Bicycling Association";
 "activity_type_mountainbike_name" = "Mountainbike";
 "rendering_attr_showMtbScaleIMBATrails_name" = "MTB-IMBA-Strecken anzeigen";

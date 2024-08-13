@@ -1807,7 +1807,7 @@
 "import_complete_description" = "Datos dae su %@ importados. Podes impreare sos butones in suta pro abèrrere cale si siat parte de s\'aplicatzione pro l\'amministrare.";
 "shared_string_import_complete" = "Importatzione acabada";
 "listed_exist" = "Sos %@ allistados esistint giai in OsmAnd.";
-"ltr_or_rtl_combine_via_colon" = "%@: %@";
+"ltr_or_rtl_combine_via_colon" = "%@ : %@";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "search_activity" = "Chirca";
 "configure_screen_quick_action" = "Atzione lestra";
@@ -2297,7 +2297,7 @@
 "shared_string_max_height" = "Artària màss.";
 "routing_attr_prefer_horse_routes_description" = "Preferi sasàndalas pro andare a caddu";
 "any_poi" = "Totus";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "routing_attr_only_permitted_ways_name" = "Caminos autorizados a manera espressa";
 "routing_attr_prefer_horse_routes_name" = "Preferi sasàndalas a caddu";
 "horseback_riding" = "Ecuitatzione";
@@ -2671,7 +2671,7 @@
 "local_changes" = "Modìficas locales";
 "rendering_attr_depthContourWidth_name" = "Grussesa de sa lìnia";
 "last_sync" = "Ùrtima sincronizatzione";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "routing_attr_goods_restrictions_yes_desc" = "S'ant a evitare sos caminos chi sunt serrados pro su trasportu de mercantzias.";
 "routing_attr_goods_restrictions_name" = "Intrega de mertzes";
 "routing_attr_goods_restrictions_header_name" = "Sos veìculos chi trasportant mercantzias podent tènnere limitatziones in unos cantos caminos.";

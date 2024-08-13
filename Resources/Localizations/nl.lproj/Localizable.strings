@@ -1414,7 +1414,7 @@
 "shared_string_max" = "Max";
 "route_between_points" = "Route tussen punten";
 "quick_action_switch_profile_descr" = "De sneltoets wisselt tussen de geselecteerde profielen.";
-"ltr_or_rtl_combine_via_colon" = "%@: %@";
+"ltr_or_rtl_combine_via_colon" = "%@ : %@";
 "routing_profile_straightline" = "Rechte lijn";
 "update_tile" = "Kaart bijwerken";
 "shared_string_add_profile" = "Profiel toevoegen";
@@ -1999,7 +1999,7 @@
 "osm_live_payment_month_cost_descr_ex" = "%.2f %@ / maand";
 "backup_restore_data" = "Herstel gegevens";
 "routeInfo_horse_scale_name" = "Begaanbaarheid van ruiterpaden";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "backup_pause_all" = "Alles pauzeren";
 "dialogs_and_notifications_descr" = "Bepaal popups, dialogen en meldingen.";
 "shared_string_rendering_style" = "Weergavestijl";
@@ -2113,7 +2113,7 @@
 "routing_attr_motor_type_hybrid_name" = "Hybride";
 "mtb_imba_full" = "Internationale Mountain Bicycling Association";
 "backup_version_history" = "Versiegeschiedenis";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "contributions_may_calculate_with_delay" = "Het berekenen van bijdragen kan enkele uren duren.";
 "simulation_preview_mode_desc" = "De snelheid van de simulatie is het maximum op rechte wegen, en vertraagt alleen bij kruisingen.";
 "route_between_points_add_track_desc" = "Selecteer een track waaraan je een nieuw segment wil toevoegen.";

@@ -1425,7 +1425,7 @@
 "reset_plugin_to_default" = "Resetovat modul do základního nastavení";
 "profile_type_user_string" = "Uživatelský profil";
 "keep_both_desc" = "Importované položky budou přidány s prefixem";
-"ltr_or_rtl_combine_via_colon" = "%@: %@";
+"ltr_or_rtl_combine_via_colon" = "%@ : %@";
 "shared_string_finish" = "Dokončit";
 "osmand_purchases_item" = "Nákupy v OsmAnd";
 "metric_ton" = "t";
@@ -2251,7 +2251,7 @@
 "route_preferred_terrain_hilly" = "Trasy s kopcovitým profilem.";
 "any_poi" = "Jakýkoli";
 "navigate_point_mgrs" = "MGRS";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "routeInfo_tracktype_description" = "Obarvitčáru trasy nebo stopy podle složení jejího povrchu. Obvykle se používá, pokud je silniční síť převážně nezpevněná.";
 "routing_attr_only_permitted_ways_description" = "Použít pouze výslovně povolené cesty (polní cesty, stezky, atd.)";
 "routeInfo_winter_ice_road_description" = "Obarvitčáru trasy nebo stopy podle její zimní klasifikace.";
@@ -2479,7 +2479,7 @@
 "shared_string_profile" = "Profil";
 "shared_string_angle" = "Úhel";
 "shared_string_angle_param" = "Úhel: %@°";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "measurement_units" = "Měrné jednotky";
 "weather_pressure_hectopascals" = "Hektopascaly";
 "weather_pressure_millimeters_of_mercury" = "Milimetrů rtuťového sloupce";

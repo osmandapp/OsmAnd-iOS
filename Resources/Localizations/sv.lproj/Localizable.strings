@@ -913,7 +913,7 @@
 "configure_screen_quick_action" = "Snabbåtgärd";
 "search_activity" = "Sök";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
-"ltr_or_rtl_combine_via_colon" = "%@: %@";
+"ltr_or_rtl_combine_via_colon" = "%@ : %@";
 "listed_exist" = "Angivna %@, finns redan i OsmAnd.";
 "shared_string_import_complete" = "Importen slutförd";
 "import_complete_description" = "Importerade alla data från %@. Använd knapparna nedan för att öppna någon del av appen för att hantera den.";
@@ -2481,7 +2481,7 @@
 "benefits_for_contributors_primary_descr" = "Engagerade karterare som aktivt bidrar till OpenStreetMap kan vara berättigade till obegränsade kartuppdateringar varje timme.";
 "rendering_attr_depthContourWidth_name" = "Linjebredd";
 "show_map_symbols" = "Visa kartsymboler";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "no_purchases" = "Du har inga inköp";
 "local_backup" = "Lokal säkerhetskopia";
 "shared_string_added" = "Tillagd";

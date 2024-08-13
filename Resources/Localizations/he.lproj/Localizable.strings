@@ -913,7 +913,7 @@
 "configure_screen_quick_action" = "פעולה מהירה";
 "search_activity" = "חיפוש";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
-"ltr_or_rtl_combine_via_colon" = "%@: %@";
+"ltr_or_rtl_combine_via_colon" = "%@ : %@";
 "listed_exist" = "%@מוצג, כבר קיים ב־OsmAnd.";
 "shared_string_import_complete" = "הייבוא הושלם";
 "import_complete_description" = "כל הנתונים מתוך %@ כבר ייובאו. ניתן להשתמש בכפתורים שלהלן כדי לפתוח כל חלק שהוא ביישומון כדי לנהל אותם.";
@@ -2332,7 +2332,7 @@
 "explore_osmnad_plans_to_find_suitable" = "ניתן לחקור את התכניות של OsmAnd ולמצוא אחת שמתאימה לך.";
 "expired" = "פג";
 "restore_purchases" = "שחזור רכישות";
-"ltr_or_rtl_combine_via_or" = "%@או %@";
+"ltr_or_rtl_combine_via_or" = "%@ או %@";
 "nautical_depth" = "עומק ימי";
 "transport_hazmat_no_desc" = "בחלק מהכבישים והמנהרות אסור להוביל חומרים מסוכנים.";
 "shared_string_purchased" = "נרכש";
@@ -2399,7 +2399,7 @@
 "shared_string_refresh" = "רענון";
 "track_has_no_needed_data" = "למסלול חסרים הנתונים הדרושים.";
 "co2_mission" = "פליטת פחמן דו חמצני";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "upload_local_version" = "להעלות את הגרסה המקומית";
 "choose_what_to_restore" = "נא לבחור מה לשחזר.";
 "shared_string_contributions" = "תרומות";
@@ -2471,7 +2471,7 @@
 "contact_support_description" = "אם יש לך שאלות, נא ליצור אתנו קשר דרך %@.";
 "shared_string_selected" = "נבחר";
 "promo_subscription" = "מינוי פרומו";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "osmand_cloud_create_account_descr" = "נא למלא את כתובת הדוא״ל שלך, אליה ישלח קוד האימות, \nוכל הנתונים שלך יקושרו אליה.";
 "backup_complete" = "הגיבוי הושלם";
 "routing_attr_avoid_fords_name" = "המנעות מגשרים איריים";

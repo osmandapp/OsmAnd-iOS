@@ -1771,7 +1771,7 @@
 "profile_prefs_reset_successful" = "تمت استعادة جميع إعدادات الوضع إلى الحالة الافتراضية.";
 "gpx_parse_error" = "تم العثور على مشاكل مع ملف GPX. \n \nيمكنك الاتصال بالدعم والتحقق من الملف.";
 "shared_string_next" = "التالي";
-"ltr_or_rtl_combine_via_colon" = "%@: %@";
+"ltr_or_rtl_combine_via_colon" = "%@ : %@";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "shared_string_rendering_style" = "نمط التقديم";
 "add_one_more_pnt" = "إضافة نقطة أخرى";
@@ -2250,7 +2250,7 @@
 "routeInfo_surface_description" = "توفير معلومات السطح المادي للطريق/ممر المشاة.";
 "shared_string_open_street_map" = "خريطة الشارع المفتوح";
 "map_settings_weather_temp" = "درجة الحرارة";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "any_poi" = "أي";
 "shared_string_weather" = "الطقس";
 "context_menu_edit_descr" = "تعديل الوصف";
@@ -2418,7 +2418,7 @@
 "shared_string_learn_more" = "التعرف على المزيد";
 "shared_string_includes" = "يتضمن";
 "shared_string_purchased" = "تم شراؤه";
-"ltr_or_rtl_combine_via_or" = "%@من %@";
+"ltr_or_rtl_combine_via_or" = "%@ من %@";
 "osmand_depelopment_simulate_location_section" = "محاكاة";
 "simulate_in_progress" = "قيد التقدم";
 "simulate_your_location_gpx_descr" = "محاكاة موقعك باستخدام مسار GPX مسجل.";
@@ -2639,7 +2639,7 @@
 "activity_type_mountainbike_name" = "دراجة جبلية";
 "rendering_attr_showMtbScaleIMBATrails_name" = "عرض مسارات الدراجات الجبلية";
 "mtb_imba_full" = "الرابطة الدولية لركوب الدراجات الجبلية";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "show_map_symbols" = "إظهار رموز الخريطة";
 "depth_contour_lines" = "خطوط كنتورالعمق";
 "syncing_progress" = "مزامنة ...";

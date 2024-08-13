@@ -913,7 +913,7 @@
 "configure_screen_quick_action" = "Sürətli fəaliyyət";
 "search_activity" = "Axtar";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
-"ltr_or_rtl_combine_via_colon" = "%@: %@";
+"ltr_or_rtl_combine_via_colon" = "%@ : %@";
 "listed_exist" = "Siyahıyadakı %@ artıq OsmAnd-da mövcuddur.";
 "shared_string_import_complete" = "İdxal tamamlandı";
 "import_complete_description" = "Bütün məlumatlar %@-dan idxal edildi. Aşağıdakı düymələrdən istifadə etməklə proqramın istənilən hissəsini idarə etmək üçün aça bilərsiniz.";
@@ -2350,7 +2350,7 @@
 "not_enough_contributions_descr" = "Limitsiz saatlıq xəritə yeniləmələrinə giriş əldə etmək üçün son iki ay ərzində %@ minimum %@ dəyişiklik tələb olunur.";
 "backup_pause_all" = "Hamısına fasilə ver";
 "shared_string_contributions" = "Töhfələr";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "shared_string_logout" = "Çıx";
 "shared_string_angle_param" = "Bucaq: %@°";
 "shared_string_added" = "Əlavə edildi";
@@ -2370,7 +2370,7 @@
 "empty_purchases_description" = "Alışlarınız burada görünmürsə, “%@”ə toxunun və ya dəstək komandamızla əlaqə saxlayın.";
 "backup_delete_all_data" = "Bütün məlumatlarımı sil";
 "mtb_imba_full" = "Beynəlxalq Dağ Velosipedi Assosiasiyası";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "download_all" = "Hamısını endir";
 "backup_and_restore" = "Nüsxələ&Bərpa et";
 "duration_ago" = "%@əvvəl";

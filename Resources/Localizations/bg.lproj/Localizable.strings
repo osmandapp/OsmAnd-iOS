@@ -914,7 +914,7 @@
 "configure_screen_quick_action" = "Бързо действие";
 "search_activity" = "Търсене";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
-"ltr_or_rtl_combine_via_colon" = "%@: %@";
+"ltr_or_rtl_combine_via_colon" = "%@ : %@";
 "listed_exist" = "Изброените %@, вече съществуват в OsmAnd.";
 "shared_string_import_complete" = "Внасянето е завършено";
 "import_complete_description" = "Внесена е цялата информация от %@. Използвайте бутоните по-долу, за да отворите която и да било част от приложението и да я управлявате.";
@@ -2288,7 +2288,7 @@
 "shared_string_purchased" = "Закупен";
 "nautical_depth" = "Морска дълбочина";
 "make_backup" = "Създаване на резервно копие";
-"ltr_or_rtl_combine_via_or" = "%@или %@";
+"ltr_or_rtl_combine_via_or" = "%@ или %@";
 "complete_purchase" = "Завършване на покупката";
 "explore_osmnad_plans_to_find_suitable" = "Разгледайте плановете на OsmAnd, за да намерите подходящия за вас.";
 "shared_string_learn_more" = "Научете повече";
@@ -2325,7 +2325,7 @@
 "shared_string_contributions" = "Принос";
 "benefits_for_contributors_secondary_descr" = "Влезте в OpenStreetMap и проверете дали имате право да получавате неограничени месечни и почасови обновявания на картата.";
 "routing_attr_motor_type_gas_name" = "Газ под налягане";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "position_on_map_bottom" = "Долу";
 "login_open_street_map_org" = "Вход в OpenStreetMap.org";
 "recalc_angle_dialog_descr" = "Допълнителна права между моето местоположение и изчертаният маршрут ще се появи докато маршрутът се преизчислява";
@@ -2356,7 +2356,7 @@
 "routing_attr_avoid_tunnels_description" = "Избягване на тунели";
 "promo_subscription" = "Промоционален абонамент";
 "enough_contributions_descr" = "Поздравления, имате необходимия принос към OpenStreetMap и можете да се наслаждавате на неограничено обновяване на картата!";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "logout_from_osmand_cloud_decsr" = "Изход от системата\? \nЩе трябва да влезете отново, за да направите резервно копие или да възстановите данните.";
 "activity_type_mountainbike_name" = "Планинско колоездене";
 "shared_string_progress" = "Напредък";

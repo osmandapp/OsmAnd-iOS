@@ -2661,7 +2661,7 @@
 "backup_delete_from_cloud" = "Supprimer du cloud";
 "cloud_all_changes_uploaded_descr" = "Toutes les modifications effectuées sur cet appareil sont synchronisées avec OsmAnd Cloud.";
 "upload_local_version" = "Envoyer la version locale";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "routing_attr_goods_restrictions_name" = "Livraison de marchandises";
 "routing_attr_goods_restrictions_header_name" = "Les véhicules transportant des marchandises peuvent être soumises à des restrictions.";
 "routing_attr_goods_restrictions_footer_desc" = "S'applique aux véhicules transportant des marchandises ayant au moins 4 roues et pesant moins de 3.5 tonnes.\n\nSi votre véhicule pèse plus de 3.5 tonnes, vous devez utiliser le profil \"Camion\".";

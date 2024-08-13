@@ -853,7 +853,7 @@
 "shared_string_settings" = "Setări";
 "keep_both" = "Păstrare ambele";
 "shared_string_poi_types" = "Tipuri POI";
-"ltr_or_rtl_combine_via_colon" = "%@: %@";
+"ltr_or_rtl_combine_via_colon" = "%@ : %@";
 "import_duplicates_title" = "Unele elemente există deja";
 "pseudo_mercator_projection" = "Proiecție pseudo-Mercator";
 "reorder_profiles" = "Editează lista de profiluri";
@@ -2231,7 +2231,7 @@
 "routeInfo_smoothness_description" = "Clasificarea manevrabilității pe drumurile/căile pietonale pentru vehiculele pe roți, în special în ceea ce privește regularitatea/planeitatea suprafeței.";
 "routeInfo_tracktype_description" = "Colorează ruta sau linia traseului după compoziția suprafeței sale. Se aplică de obicei atunci când rețeaua de drumuri este în mare parte neasfaltată.";
 "shared_string_open_street_map" = "OpenStreetMap";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "routing_attr_allow_gate_name" = "Permite folosirea porții";
 "routing_attr_allow_gate_description" = "Permite folosirea porților";
 "routing_attr_only_permitted_streets_name" = "Străzi permise în mod expres";
@@ -2601,7 +2601,7 @@
 "use_login_and_password" = "Folosește numele de utilizator și parola";
 "use_login_and_password_description" = "Utilizați e-mailul/loginul și parola dumneavoastră pentru a vă conecta la OpenStreetMap.org.";
 "tts_title" = "TTS";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "backup_error_failed_to_fetch_remote_items" = "Nu s-a putut obține lista de fișiere de pe server.";
 "error_contact_support" = "Dacă problema persistă, vă rugăm să contactați echipa noastră de asistență.";
 "backup_data" = "Fă backup datelor";

@@ -99,7 +99,7 @@ jobs:
     - name: Build QtCore & prepare build
       env:
         LANG: "en_US.UTF-8"
-      run: exec ios/prepare.sh #--sync_translations
+      run: exec ios/prepare.sh --sync_translations
     - name: Configure iOS OsmAndCore
       env:
         LANG: "en_US.UTF-8"

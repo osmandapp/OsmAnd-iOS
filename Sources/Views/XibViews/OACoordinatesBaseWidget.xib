@@ -11,6 +11,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OACoordinatesBaseWidget">
             <connections>
                 <outlet property="divider" destination="23q-Pe-aeA" id="kWO-ze-bib"/>
+                <outlet property="firstContainer" destination="5xi-bM-D4g" id="SBw-mR-RjS"/>
                 <outlet property="firstCoordinate" destination="63Z-z7-sCH" id="P9A-Hi-DmO"/>
                 <outlet property="firstIcon" destination="b9H-Om-Xsm" id="bMt-pT-Tu8"/>
                 <outlet property="secondContainer" destination="faZ-Rl-1GW" id="q6G-Y0-1He"/>
@@ -39,7 +40,7 @@
                                     </constraints>
                                 </imageView>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="50.43612° N" textAlignment="justified" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="63Z-z7-sCH">
-                                    <rect key="frame" x="38" y="10" width="140" height="24"/>
+                                    <rect key="frame" x="38" y="10" width="153" height="24"/>
                                     <constraints>
                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="22" id="YwH-mO-QhQ"/>
                                     </constraints>
@@ -47,13 +48,6 @@
                                     <color key="textColor" name="widgetValueColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ttm-01-0ZV">
-                                    <rect key="frame" x="186" y="0.0" width="5" height="44"/>
-                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <constraints>
-                                        <constraint firstAttribute="width" constant="5" id="aF6-Z3-KKt"/>
-                                    </constraints>
-                                </view>
                             </subviews>
                         </stackView>
                         <stackView opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceLeftToRight" alignment="center" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="faZ-Rl-1GW" userLabel="Second Stack View">

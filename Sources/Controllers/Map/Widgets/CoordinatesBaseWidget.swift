@@ -66,12 +66,6 @@ class CoordinatesBaseWidget: OABaseWidgetView {
         ])
     }
     
-//    private func configureRTLState() {
-//        if isDirectionRTL() {
-//            secondContainer.addArrangedSubview(firstIcon)
-//        }
-//    }
-    
     // MARK: Base override
     
     override func updateColors(_ textState: OATextState) {
@@ -158,7 +152,7 @@ class CoordinatesBaseWidget: OABaseWidgetView {
         firstIcon.image = getCoordinateIcon()
         coloredUnit = false
         
-       // firstContainer
+        firstContainer.semanticContentAttribute = isDirectionRTL() ? .forceRightToLeft : .forceLeftToRight
     }
 
     private func showStandardCoordinates(lat: Double, lon: Double, format: Int) {

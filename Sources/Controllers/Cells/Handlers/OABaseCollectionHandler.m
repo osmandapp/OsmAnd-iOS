@@ -80,11 +80,19 @@
 {
 }
 
-- (void)addItem:(NSIndexPath *)indexPath newItem:(id)newItem
+- (void)insertItem:(id)newItem atIndexPath:(NSIndexPath *)indexPath
+{
+}
+
+- (void)replaceItem:(id)newItem atIndexPath:(NSIndexPath *)indexPath
 {
 }
 
 - (void)removeItem:(NSIndexPath *)indexPath
+{
+}
+
+- (void)removeItems:(NSArray<NSIndexPath *> *)indexPaths
 {
 }
 

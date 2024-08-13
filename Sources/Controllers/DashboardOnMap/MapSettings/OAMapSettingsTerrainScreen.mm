@@ -51,17 +51,17 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 @interface OAMapSettingsTerrainScreen() <SFSafariViewControllerDelegate, OATerrainParametersDelegate, DownloadingCellResourceHelperDelegate>
 
 @property (nonatomic) OASRTMPlugin *plugin;
+@property (nonatomic) TerrainMode *terrainMode;
+@property (nonatomic) DownloadingCellResourceHelper *downloadingCellResourceHelper;
 
 @end
 
 @implementation OAMapSettingsTerrainScreen
 {
     OsmAndAppInstance _app;
-    DownloadingCellResourceHelper *_downloadingCellResourceHelper;
     OAIAPHelper *_iapHelper;
     OATableDataModel *_data;
 
-    TerrainMode *_terrainMode;
     NSInteger _minZoom;
     NSInteger _maxZoom;
 
@@ -274,6 +274,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onColorPalettesFilesUpdated:) name:ColorPaletteHelper.colorPalettesUpdatedNotification object:nil];
 }
 
+- (void)deinitView
+{
+    [NSNotificationCenter.defaultCenter removeObserver:self];
+}
+
 - (void)onColorPalettesFilesUpdated:(NSNotification *)notification
 {
     if (![notification.object isKindOfClass:NSDictionary.class] || ![_plugin isTerrainLayerEnabled])
@@ -294,12 +299,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         dispatch_async(dispatch_get_main_queue(), ^{
             [self initData];
-            [UIView transitionWithView:tblView
+            [UIView transitionWithView:self.tblView
                               duration:0.35f
                                options:UIViewAnimationOptionTransitionCrossDissolve
                             animations:^(void)
              {
-                [tblView reloadData];
+                [self.tblView reloadData];
             }
                             completion:nil];
         });
@@ -327,7 +332,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                                                image:nil
                                           identifier:nil
                                              handler:^(__kindof UIAction * _Nonnull action) {
-            _terrainMode = mode;
+            weakSelf.terrainMode = mode;
             [weakSelf.plugin setTerrainMode:mode];
             [weakSelf terrainTypeChanged];
         }];
@@ -574,7 +579,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                                      labelsColor:[UIColor colorNamed:ACColorNameChartAxisGridLine]];
         cell.lineChartView.extraBottomOffset = 13;
 
-        ColorPalette *colorPalette = [[ColorPaletteHelper shared] getGradientColorPaletteSyncWith:[_terrainMode getMainFile]];
+        ColorPalette *colorPalette = [[ColorPaletteHelper shared] getGradientColorPalette:[_terrainMode getMainFile]];
         if (!colorPalette)
             return cell;
 
@@ -677,8 +682,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)onDownldedResourceInstalled
 {
+    __weak __typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateAvailableMaps];
+        [weakSelf updateAvailableMaps];
     });
 }
 
@@ -686,18 +692,20 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)productPurchased:(NSNotification *)notification
 {
+    __weak __typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self initData];
-        [_downloadingCellResourceHelper cleanCellCache];
-        [self.tblView reloadData];
+        [weakSelf initData];
+        [weakSelf.downloadingCellResourceHelper cleanCellCache];
+        [weakSelf.tblView reloadData];
     });
 }
 
 - (void)productsRestored:(NSNotification *)notification
 {
+    __weak __typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self initData];
-        [self.tblView reloadData];
+        [weakSelf initData];
+        [weakSelf.tblView reloadData];
     });
 }
 

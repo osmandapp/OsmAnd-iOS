@@ -15,6 +15,7 @@
 #import "OACollapsableCardsView.h"
 #import "OAPOI.h"
 #import "OAAbstractCard.h"
+#import "OsmAnd_Maps-Swift.h"
 
 typedef NS_ENUM(NSInteger, EOAWikiImageType) {
     EOAWikiImageTypeWikimedia = 0,

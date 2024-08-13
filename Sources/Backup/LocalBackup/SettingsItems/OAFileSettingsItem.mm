@@ -19,6 +19,7 @@
 #import "OARendererRegistry.h"
 #import "OASelectedGPXHelper.h"
 #import "OAFileNameTranslationHelper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OAFileSettingsItemFileSubtype
 

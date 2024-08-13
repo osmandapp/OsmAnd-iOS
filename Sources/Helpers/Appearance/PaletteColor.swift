@@ -55,7 +55,7 @@ class PaletteColor: NSObject {
         colorValue.setValue(Double(index))
     }
 
-    func duplicate() -> PaletteColor {
+    func duplicate(_ suffix: String? = nil) -> PaletteColor {
         PaletteColor(colorValue)
     }
 

@@ -63,7 +63,6 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 
 - (int) indexOf:(NSString *)text;
 - (int) indexOf:(NSString *)text start:(NSInteger)start;
-- (int) lastIndexOf:(NSString *)text;
 - (NSString *) add:(NSString *)str;
 - (NSString *) trim;
 - (NSString *) lowerCase;

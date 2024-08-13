@@ -1018,7 +1018,6 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 - (void) hideRemovedGpx;
 
 - (NSString *) getFormattedTrackInterval:(int)value;
-- (NSString *) getDefaultVoiceProvider;
 
 - (NSSet<NSString *> *) getEnabledPlugins;
 - (NSSet<NSString *> *) getPlugins;

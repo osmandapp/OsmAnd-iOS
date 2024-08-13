@@ -4210,7 +4210,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [_profilePreferences setObject:_announceNearbyFavorites forKey:@"announce_nearby_favorites"];
         [_profilePreferences setObject:_announceNearbyPoi forKey:@"announce_nearby_poi"];
 
-        _voiceProvider = [OACommonString withKey:voiceProviderKey defValue:@""];
+        _voiceProvider = [OACommonString withKey:voiceProviderKey defValue:[self getDefaultVoiceProvider]];
         _announceWpt = [OACommonBoolean withKey:announceWptKey defValue:YES];
         _showScreenAlerts = [OACommonBoolean withKey:showScreenAlertsKey defValue:YES];
 

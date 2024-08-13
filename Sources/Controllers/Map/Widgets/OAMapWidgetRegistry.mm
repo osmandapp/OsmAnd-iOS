@@ -379,7 +379,6 @@
 - (void) resetDefaultAppearance:(OAApplicationMode *)appMode
 {
     [_settings.transparentMapTheme resetToDefault];
-    [_settings.showStreetName resetToDefault];
     [_settings.positionPlacementOnMap resetToDefault];
 }
 

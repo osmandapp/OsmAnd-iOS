@@ -205,7 +205,7 @@
     vector<int> loclanes;
     int dist = 0;
     // TurnType primary = null;
-    if ((![_rh isFollowingMode] || [OARoutingHelper isDeviatedFromRoute] || [_rh getCurrentGPXRoute]) && [_trackingUtilities isMapLinkedToLocation] && [_settings.showLanes get])
+    if ((![_rh isFollowingMode] || [OARoutingHelper isDeviatedFromRoute] || [_rh getCurrentGPXRoute]) && [_trackingUtilities isMapLinkedToLocation])
     {
         CLLocation *lp = _locationProvider.lastKnownLocation;
         std::shared_ptr<RouteDataObject> ro = nullptr;
@@ -223,7 +223,7 @@
     }
     else if ([_rh isRouteCalculated])
     {
-        if ([_rh isFollowingMode] && [_settings.showLanes get])
+        if ([_rh isFollowingMode])
         {
             OANextDirectionInfo *r = [_rh getNextRouteDirectionInfo:[[OANextDirectionInfo alloc] init] toSpeak:false];
             if (r && r.directionInfo && r.directionInfo.turnType)

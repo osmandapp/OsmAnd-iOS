@@ -898,7 +898,6 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *showSpeedLimitWarnings;
 @property (nonatomic) OACommonBoolean *showCameras;
 @property (nonatomic) OACommonBoolean *showTunnels;
-@property (nonatomic) OACommonBoolean *showLanes;
 @property (nonatomic) OACommonBoolean *showArrivalTime;
 @property (nonatomic) OACommonBoolean *showIntermediateArrivalTime;
 @property (nonatomic) OACommonBoolean *showRelativeBearing;
@@ -924,7 +923,6 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *showNearbyPoi;
 
 @property (nonatomic) OACommonBoolean *transparentMapTheme;
-@property (nonatomic) OACommonBoolean *showStreetName;
 @property (nonatomic) OACommonInteger *positionPlacementOnMap;
 @property (nonatomic) OACommonBoolean *showDistanceRuler;
 @property (nonatomic) OACommonBoolean *showElevationProfileWidget;

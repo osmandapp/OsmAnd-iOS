@@ -495,12 +495,9 @@
     {
         if ([_routingHelper isFollowingMode])
         {
-            if ([_settings.showStreetName get])
-            {
-                OANextDirectionInfo *nextDirInfo = [_routingHelper getNextRouteDirectionInfo:_calc1 toSpeak:YES];
-                streetName = [_routingHelper getCurrentName:nextDirInfo];
-                _turnDrawable.clr = [UIColor colorNamed:ACColorNameNavArrowColor].currentMapThemeColor;
-            }
+            OANextDirectionInfo *nextDirInfo = [_routingHelper getNextRouteDirectionInfo:_calc1 toSpeak:YES];
+            streetName = [_routingHelper getCurrentName:nextDirInfo];
+            _turnDrawable.clr = [UIColor colorNamed:ACColorNameNavArrowColor].currentMapThemeColor;
         }
         else
         {
@@ -513,7 +510,7 @@
             }
         }
     }
-    else if ([_trackingUtilities isMapLinkedToLocation] && [_settings.showStreetName get])
+    else if ([_trackingUtilities isMapLinkedToLocation])
     {
         streetName = [[OACurrentStreetName alloc] init];
         CLLocation *lastKnownLocation = _locationProvider.lastKnownLocation;

@@ -10,6 +10,7 @@
 @objcMembers
 class CoordinatesBaseWidget: OABaseWidgetView {
     @IBOutlet private var divider: UIView!
+    @IBOutlet private var firstContainer: UIStackView!
     @IBOutlet private var secondContainer: UIStackView!
     @IBOutlet private var firstCoordinate: UILabel! {
         didSet {
@@ -63,13 +64,6 @@ class CoordinatesBaseWidget: OABaseWidgetView {
             widgetView.topAnchor.constraint(equalTo: topAnchor),
             widgetView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
-        configureRTLState()
-    }
-    
-    private func configureRTLState() {
-        if isDirectionRTL() {
-            secondContainer.addArrangedSubview(firstIcon)
-        }
     }
     
     // MARK: Base override
@@ -157,6 +151,8 @@ class CoordinatesBaseWidget: OABaseWidgetView {
         secondContainer.isHidden = true
         firstIcon.image = getCoordinateIcon()
         coloredUnit = false
+        
+        firstContainer.semanticContentAttribute = isDirectionRTL() ? .forceRightToLeft : .forceLeftToRight
     }
 
     private func showStandardCoordinates(lat: Double, lon: Double, format: Int) {
@@ -166,6 +162,10 @@ class CoordinatesBaseWidget: OABaseWidgetView {
         coloredUnit = true
 
         firstIcon.image = getCoordinateIcon()
+        
+        if isDirectionRTL() {
+            secondContainer.addArrangedSubview(firstIcon)
+        }
 
         var latitude = OALocationConvert.convertLatitude(lat, outputType: format, addCardinalDirection: true)
         var longitude = OALocationConvert.convertLongitude(lon, outputType: format, addCardinalDirection: true)

@@ -2588,7 +2588,7 @@
 "map_settings_weather_temp" = "Toplota";
 "shared_string_layers" = "Slojevi";
 "generate_hillshade_from_3d_maps" = "Kreiranje rasterskog osenčavanja reljefa iz 3D mapa";
-"offline_wikivoyage" = "Offline Wikivoyage";
+"offline_wikivoyage" = "Oflajn Vikivojaž";
 "shared_string_explore" = "Istraži";
 "rendering_attr_depthContourColorScheme_description" = "Shema boja konturnih linija dubine";
 "map_widget_ant_bicycle_power" = "Snaga bicikla";
@@ -3500,3 +3500,6 @@
 "shared_string_action" = "Akcija";
 "shared_string_replace" = "Zameniti";
 "quick_action_directions_from" = "Polazna tačka";
+"route_your_destination_is_on_left" = "Vaše odredište je levo";
+"route_your_destination_is_on_right" = "Vaše odredište je desno";
+"route_your_destination_is_on_ahead" = "Vaše odredište je pravo ispred";

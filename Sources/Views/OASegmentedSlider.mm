@@ -412,12 +412,12 @@ static CGFloat kMarkWidth = 2;
 
 - (NSString *)getTimeStringAtIndex:(int)index
 {
-    if (index < 0 || index >= kDayMinuteMarksCount - 1)
+    if (index < 0 || index >= kForecastWholeDayMarksCount - 1)
     {
         return @"00:00";
     }
-    int hours = index / 60;
-    int minutes = (index % 60);
+    int hours = index / kForecastStepsPerHour;
+    int minutes = round((index % kForecastStepsPerHour) * kForecastStepDuration); // 0, 3, 5, 8, 10, 13, 15 ...
     
     NSString *hourString = [NSString stringWithFormat:@"%02d", hours];
     NSString *minuteString = [NSString stringWithFormat:@"%02d", minutes];

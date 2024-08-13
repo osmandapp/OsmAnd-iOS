@@ -32,7 +32,6 @@
 
 static int kDefaultZoom = 10;
 
-static int kForecastStepsPerHour = 60; // 1 minutes step
 static NSInteger kForecastMaxStepsCount = FORECAST_ANIMATION_DURATION_HOURS * kForecastStepsPerHour;
 
 static NSTimeInterval kAnimationStartDelaySec = 0.1;
@@ -129,7 +128,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
 
     self.dateCollectionView.foldersDelegate = _datesHandler;
     
-    self.timeSliderView.stepsAmountWithoutDrawMark = kDayMinuteMarksCount;
+    self.timeSliderView.stepsAmountWithoutDrawMark = kForecastWholeDayMarksCount;
     [self.timeSliderView clearTouchEventsUpInsideUpOutside];
     [self.timeSliderView setUsingExtraThumbInset:YES];
     
@@ -335,7 +334,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
         [timeValues addObject:nextHourDate];
     }
     
-    NSInteger minuteSteps = 59;
+    NSInteger inHourStepsCount = kForecastStepsPerHour;
     NSMutableArray<NSDate *> *timeValuesTotal = [NSMutableArray array];
     
     for (NSInteger index = 0; index <= timeValues.count - 1; index++)
@@ -344,19 +343,23 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
         [timeValuesTotal addObject:data];
         if (index <= timeValues.count - 2)
         {
-            for (NSInteger min = 1; min <= minuteSteps; min++)
+            for (NSInteger step = 1; step < inHourStepsCount; step++)
             {
-                NSDate *next5MinDate = [calendar dateByAddingUnit:NSCalendarUnitMinute
-                                                             value:min
-                                                            toDate:data
-                                                           options:0];
+                // 0.0  2.5  5.0  7.5  10.0  12.5  15.0 - clear minutes from slider
+                // 0.0  3.0  5.0  8.0  10.0  13.0  15.0 - rounded minutes
+                NSInteger minutes = round(step * kForecastStepDuration);
+            
+                NSDate *nextStepDate = [calendar dateByAddingUnit:NSCalendarUnitMinute
+                                                            value:minutes
+                                                           toDate:data
+                                                          options:0];
                 
-                [timeValuesTotal addObject:next5MinDate];
+                [timeValuesTotal addObject:nextStepDate];
             }
         }
         
     }
-    // [21:00:00, 21:01:00, 21:02:00 ... 20:59:00, 21:00:00]
+    // [21:00, 21:03, 21:05, 21:08, 21:10, 21:13  ...  23:58, 00:00 ...  20:58, 21:00]
     _timeValues = timeValuesTotal;
 }
 

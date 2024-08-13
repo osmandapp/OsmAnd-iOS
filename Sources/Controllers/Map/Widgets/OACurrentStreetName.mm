@@ -38,7 +38,6 @@
 + (OACurrentStreetName *) getCurrentName:(OANextDirectionInfo *)n
 {
     OARoutingHelper *routingHelper = OARoutingHelper.sharedInstance;
-    OAVoiceRouter *voiceRouter = routingHelper.getVoiceRouter;
     OACurrentStreetName *streetName = [[OACurrentStreetName alloc] init];
     CLLocation *l = routingHelper.getLastFixedLocation;
     OAAnnounceTimeDistances *adt = [[routingHelper getVoiceRouter] getAnnounceTimeDistances];
@@ -47,7 +46,7 @@
     if (l && l.speed >=0)
         speed = l.speed;
     // 1. turn is imminent
-    if (n.distanceTo > 0  && n.directionInfo && !n.directionInfo.turnType->isSkipToSpeak() &&
+    if (n.distanceTo > 0 && n.directionInfo && !n.directionInfo.turnType->isSkipToSpeak() &&
         [adt isTurnStateActive:[adt getSpeed:l] dist:n.distanceTo * 1.3 turnType:kStatePrepareTurn])
     {
         NSString *nm = n.directionInfo.streetName;

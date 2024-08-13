@@ -469,8 +469,9 @@ static CGFloat kMarkWidth = 2;
                 : (value > (isRTL ? 1 - step : step)) || (value == (isRTL ? 1 - step : step));
 
         _markViews[i].backgroundColor = _isCustomSlider
-                ? filled ? UIColorFromRGB(color_slider_minimum) : UIColorFromRGB(color_tint_gray)
-                : UIColorFromRGB(filled ? color_menu_button : color_slider_gray);
+                ? filled ? [UIColor colorNamed:ACColorNameSliderMinimum] : [UIColor colorNamed:ACColorNameTintGray]
+                : filled ? [UIColor colorNamed:ACColorNameMenuButton] : [UIColor colorNamed:ACColorNameSliderGray];
+
         [self sendSubviewToBack:_markViews[i]];
     }
     for (UILabel *titleLabel in _titleViews)

@@ -2258,7 +2258,7 @@
 "turn_arrows" = "Svingpile";
 "turn_arrows_descr" = "Vælg om svingpile skal vises på rutelinjen.";
 "routeInfo_roadClass_description" = "Farvelæg ruten eller sporlinjen i henhold til vejklassificering.";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "routing_attr_allow_gate_name" = "Tillad brug af porte";
 "routing_attr_allow_gate_description" = "Tillad brug af porte";
 "routing_attr_only_permitted_streets_description" = "Brug kun gader, som er udtrykkeligt tilladte";
@@ -3505,3 +3505,5 @@
 "route_your_destination_is_on_right" = "Din destination er til højre";
 "route_your_destination_is_on_ahead" = "Din destination er lige fremme";
 "route_your_destination_is_on_left" = "Din destination er til venstre";
+"shared_string_show" = "Vis";
+"weather_wind_animation_enable_descr" = "Aktivér for at se laget med vindanimation på kortet.";

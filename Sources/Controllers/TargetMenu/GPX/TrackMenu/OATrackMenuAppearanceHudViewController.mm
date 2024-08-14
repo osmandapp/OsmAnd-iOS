@@ -1702,6 +1702,7 @@ static const NSInteger kColorsSection = 1;
                                                                                          forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.separatorInset = UIEdgeInsetsMake(0, CGFLOAT_MAX, 0, 0);
+        cell.heightConstraint.constant = 96;
 
         [GpxUIHelper setupGradientChartWithChart:cell.lineChartView
                              useGesturesAndScale:NO

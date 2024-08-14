@@ -496,6 +496,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 {
     if (_mapLayers)
         [_mapLayers onMapFrameAnimatorsUpdated];
+
+    [[OARootViewController instance].mapPanel.hudViewController.mapInfoController onFrameAnimatorsUpdated];
 }
 
 - (void) frameUpdated
@@ -574,7 +576,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
 - (void) showWhatsNewDialogIfNeeded
 {
-    if ([OAAppSettings sharedManager].shouldShowWhatsNewScreen)
+    if ([OAAppSettings sharedManager].shouldShowWhatsNewScreen && !_isCarPlayActive && !_isCarPlayDashboardActive)
     {
         OAWhatsNewBottomSheetViewController *bottomSheet = [[OAWhatsNewBottomSheetViewController alloc] init];
         [bottomSheet presentInViewController:self];

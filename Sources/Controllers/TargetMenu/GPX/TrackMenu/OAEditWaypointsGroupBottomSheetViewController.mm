@@ -28,6 +28,9 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
 
 @interface OAEditWaypointsGroupBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, OAEditWaypointsGroupOptionsDelegate>
 
+@property(nonatomic) NSString *groupName;
+@property(nonatomic) OATrkSegment *segment;
+
 @end
 
 @implementation OAEditWaypointsGroupBottomSheetViewController
@@ -38,11 +41,9 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
     EOAEditTrackScreenMode _mode;
 
     BOOL _isShown;
-    NSString *_groupName;
     UIColor *_groupColor;
 
     OAGPXTrackAnalysis *_analysis;
-    OATrkSegment *_segment;
 }
 
 - (instancetype)initWithWaypointsGroupName:(NSString *)groupName
@@ -348,9 +349,12 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
     }
     else if ([tableData.key isEqualToString:@"delete"] && self.trackMenuDelegate)
     {
+        __weak __typeof(self) weakSelf = self;
         if (_mode == EOAEditTrackScreenWaypointsMode)
         {
-            [self hide:YES completion:^{ [self.trackMenuDelegate openConfirmDeleteWaypointsScreen:_groupName]; }];
+            [self hide:YES completion:^{
+                [weakSelf.trackMenuDelegate openConfirmDeleteWaypointsScreen:weakSelf.groupName];
+            }];
         }
         else
         {
@@ -366,10 +370,11 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
             UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_yes")
                                                                        style:UIAlertActionStyleDefault
                                                                      handler:^(UIAlertAction * _Nonnull action)
-                                                                     {
-                                                                         [self hide:YES completion:^{ [self.trackMenuDelegate deleteAndSaveSegment:_segment]; }];
-                                                                     }
-            ];
+                                           {
+                [weakSelf hide:YES completion:^{
+                    [weakSelf.trackMenuDelegate deleteAndSaveSegment:weakSelf.segment];
+                }];
+            }];
 
             [alert addAction:cancelAction];
             [alert addAction:deleteAction];

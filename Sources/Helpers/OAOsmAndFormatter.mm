@@ -31,6 +31,8 @@ static NSString * const _unitsmps = OALocalizedString(@"m_s");
 static NSString * const _unitsfts = OALocalizedString(@"ft_s");
 static NSArray<NSNumber *> *roundingBounds = nil;
 
+static NSString *kLTRMark = @"\u200e";  // left-to-right mark
+
 + (NSString*) getFormattedTimeHM:(NSTimeInterval)timeInterval
 {
     int hours, minutes, seconds;
@@ -597,23 +599,15 @@ static NSArray<NSNumber *> *roundingBounds = nil;
     }
     else if (outputFormat == FORMAT_DEGREES || outputFormat == FORMAT_MINUTES || outputFormat == FORMAT_SECONDS)
     {
-        BOOL isLeftToRight = UIApplication.sharedApplication.userInterfaceLayoutDirection == UIUserInterfaceLayoutDirectionLeftToRight;
-        NSString *rtlCoordinates = isLeftToRight ? @"" : @"\u200f";
-        NSString *rtlCoordinatesPunctuation = isLeftToRight ? @", " : @" ,";
-        [result appendString:rtlCoordinates];
+        [result appendString:kLTRMark];
         [result appendString:[self formatCoordinate:lat outputType:outputFormat]];
-        [result appendString:rtlCoordinates];
         [result appendString:@" "];
-        [result appendString:rtlCoordinates];
         [result appendString:lat > 0 ? NORTH : SOUTH];
-        [result appendString:rtlCoordinates];
-        [result appendString:rtlCoordinatesPunctuation];
-        [result appendString:rtlCoordinates];
+        [result appendString:@", "];
         [result appendString:[self formatCoordinate:lon outputType:outputFormat]];
-        [result appendString:rtlCoordinates];
         [result appendString:@" "];
-        [result appendString:rtlCoordinates];
         [result appendString:lon > 0 ? EAST : WEST];
+        [result appendString:kLTRMark];
     }
     else if (outputFormat == FORMAT_UTM)
     {
@@ -827,6 +821,23 @@ static NSArray<NSNumber *> *roundingBounds = nil;
         return (num / [roundRange[k - 1] intValue]) * [roundRange[k - 1] intValue];
     
     return num;
+}
+
++ (NSTimeInterval) getStartOfDayForTime:(NSTimeInterval)timestamp
+{
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *components = [calendar components:(NSCalendarUnitEra | NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:[NSDate dateWithTimeIntervalSince1970:timestamp]];
+    [components setHour:0];
+    [components setMinute:0];
+    [components setSecond:0];
+    [components setNanosecond:0];
+    NSDate *formattedDate = [calendar dateFromComponents:components];
+    return [formattedDate timeIntervalSince1970];
+}
+
++ (NSTimeInterval) getStartOfToday
+{
+    return [self.class getStartOfDayForTime:[[NSDate now] timeIntervalSince1970]];
 }
 
 @end

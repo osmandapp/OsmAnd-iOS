@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -11,6 +11,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OACoordinatesBaseWidget">
             <connections>
                 <outlet property="divider" destination="23q-Pe-aeA" id="kWO-ze-bib"/>
+                <outlet property="firstContainer" destination="5xi-bM-D4g" id="SBw-mR-RjS"/>
                 <outlet property="firstCoordinate" destination="63Z-z7-sCH" id="P9A-Hi-DmO"/>
                 <outlet property="firstIcon" destination="b9H-Om-Xsm" id="bMt-pT-Tu8"/>
                 <outlet property="secondContainer" destination="faZ-Rl-1GW" id="q6G-Y0-1He"/>
@@ -25,10 +26,10 @@
                 <userLayoutGuide location="16" affinity="minX"/>
             </userGuides>
             <subviews>
-                <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="cqd-gT-Q5M" userLabel="Content Stack View">
+                <stackView opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceLeftToRight" distribution="equalCentering" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="cqd-gT-Q5M" userLabel="Content Stack View">
                     <rect key="frame" x="16" y="0.0" width="382" height="44"/>
                     <subviews>
-                        <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="5xi-bM-D4g" userLabel="First Stack View">
+                        <stackView opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceLeftToRight" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="5xi-bM-D4g" userLabel="First Stack View">
                             <rect key="frame" x="0.0" y="0.0" width="191" height="44"/>
                             <subviews>
                                 <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="widget_coordinates_latitude_north_day.png" translatesAutoresizingMaskIntoConstraints="NO" id="b9H-Om-Xsm">
@@ -49,7 +50,7 @@
                                 </label>
                             </subviews>
                         </stackView>
-                        <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="faZ-Rl-1GW" userLabel="Second Stack View">
+                        <stackView opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceLeftToRight" alignment="center" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="faZ-Rl-1GW" userLabel="Second Stack View">
                             <rect key="frame" x="191" y="0.0" width="191" height="44"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="23q-Pe-aeA">

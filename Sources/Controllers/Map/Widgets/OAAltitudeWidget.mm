@@ -15,7 +15,6 @@
 #import "OsmAndApp.h"
 #import "OAOsmAndFormatter.h"
 #import "OANativeUtilities.h"
-
 #import "OsmAnd_Maps-Swift.h"
 
 @implementation OAAltitudeWidget
@@ -64,7 +63,7 @@
         {
             _cachedAltitude = newAltitude;
             NSString *formattedAltitude = [OAOsmAndFormatter getFormattedAlt:_cachedAltitude];
-            int index = [formattedAltitude lastIndexOf:@" "];
+            NSInteger index = [formattedAltitude lastIndexOf:@" "];
             if (index == -1)
                 [self setText:formattedAltitude subtext:nil];
             else

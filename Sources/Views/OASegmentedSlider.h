@@ -19,9 +19,13 @@
 - (NSInteger)getIndexForOptionStepsAmountWithoutDrawMark;
 - (void)clearTouchEventsUpInsideUpOutside;
 
+- (void)setNumberOfMarks:(NSInteger)numberOfMarks;
 - (void)setNumberOfMarks:(NSInteger)numberOfMarks
   additionalMarksBetween:(NSInteger)additionalMarksBetween;
 
 - (void)makeCustom;
+- (void)setUsingExtraThumbInset:(BOOL)isUsing;
+
+- (NSString *)getSelectingMarkTitleTextAtIndex:(NSInteger)index;
 
 @end

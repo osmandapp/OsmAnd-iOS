@@ -93,7 +93,7 @@ class WidgetParameterViewController: OABaseNavbarViewController {
                     cell.topRightLabel.text = sortedValues.first { $0.key == Int(long) }?.value
                     cell.bottomLeftLabel.text = sortedValues.first?.value
                     cell.bottomRightLabel.text = sortedValues.last?.value
-                    cell.sliderView.setNumberOfMarks(sortedValues.count, additionalMarksBetween: 0)
+                    cell.sliderView.setNumberOfMarks(sortedValues.count)
                     cell.sliderView.selectedMark = sortedValues.firstIndex(where: { $0.key == long }) ?? 0
                     cell.sliderView.tag = indexPath.section << 10 | indexPath.row;
                     cell.sliderView.removeTarget(self, action: nil, for: [.touchUpInside , .touchUpOutside])

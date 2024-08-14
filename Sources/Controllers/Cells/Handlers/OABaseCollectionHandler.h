@@ -22,8 +22,6 @@
 
 - (NSString *)getCellIdentifier;
 - (CGSize)getItemSize;
-- (CGFloat)getSelectionRadius;
-- (CGFloat)getImageRadius;
 - (UICollectionView *)getCollectionView;
 - (UICollectionViewScrollDirection)getScrollDirection;
 - (void)setScrollDirection:(UICollectionViewScrollDirection)scrollDirection;
@@ -33,8 +31,10 @@
 - (NSIndexPath *)getDefaultIndexPath;
 - (void)setSelectedIndexPath:(NSIndexPath *)selectedIndexPath;
 - (void)generateData:(NSArray<NSArray *> *)data;
-- (void)addItem:(NSIndexPath *)indexPath newItem:(id)newItem;
+- (void)insertItem:(id)newItem atIndexPath:(NSIndexPath *)indexPath;
+- (void)replaceItem:(id)newItem atIndexPath:(NSIndexPath *)indexPath;
 - (void)removeItem:(NSIndexPath *)indexPath;
+- (void)removeItems:(NSArray<NSIndexPath *> *)indexPaths;
 - (NSInteger)itemsCount:(NSInteger)section;
 - (UICollectionViewCell *)getCollectionViewCell:(NSIndexPath *)indexPath;
 - (NSInteger)sectionsCount;

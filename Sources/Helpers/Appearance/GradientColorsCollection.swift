@@ -29,7 +29,7 @@ final class GradientColorsCollection: ColorsCollection {
     private var preference: OACommonString
     private var type: String = ""
 
-    init(_ gradientType: Any) {
+    init(gradientType: Any) {
         self.gradientType = gradientType
         preference = OAAppSettings.sharedManager().gradientPalettes
         gradientPalettes = ColorPaletteHelper.shared.getPalletsForType(gradientType)
@@ -45,47 +45,92 @@ final class GradientColorsCollection: ColorsCollection {
     }
 
     convenience init(colorizationType: ColorizationType) {
-        self.init(colorizationType)
+        self.init(gradientType: colorizationType)
     }
 
     convenience init(terrainType: TerrainType) {
-        self.init(terrainType)
+        self.init(gradientType: terrainType)
+    }
+    
+    override func updateColor(_ paletteColor: PaletteColor?, newValue: Any?, save: Bool) -> PaletteColor? {
+        if let paletteGradientColor = paletteColor as? PaletteGradientColor {
+            if let gradientType = gradientType as? ColorizationType {
+                if let newColorPalette = ColorPaletteHelper.shared.getGradientColorPaletteSync(gradientType, gradientPaletteName: paletteGradientColor.paletteName) {
+                    paletteGradientColor.colorPalette = newColorPalette
+                }
+            } else if gradientType is TerrainType,
+                      let terrainType = TerrainType.allCases.first(where: { $0.name == paletteGradientColor.typeName }),
+                      let terrainMode = TerrainMode.getMode(terrainType, keyName: paletteGradientColor.paletteName),
+                      let newColorPalette = ColorPaletteHelper.shared.getGradientColorPalette(terrainMode.getMainFile()) {
+                paletteGradientColor.colorPalette = newColorPalette
+            }
+        }
+        if save && paletteColor != nil {
+            saveColors()
+        }
+        return paletteColor
+    }
+    
+    override func getPaletteColor(byFileName fileName: String, new: Bool = false) -> PaletteColor? {
+        var colorizationStringId = ""
+
+        switch gradientType {
+        case is ColorizationType:
+            colorizationStringId = fileName.removePrefix(ColorPaletteHelper.routePrefix)
+        case is TerrainType:
+            colorizationStringId = fileName
+        default:
+            return nil
+        }
+        colorizationStringId = colorizationStringId.removeSuffix(TXT_EXT)
+
+        guard !colorizationStringId.isEmpty, let typeName = getTypeName(colorizationStringId) else { return nil }
+        if new {
+            if let colorPalette = ColorPaletteHelper.shared.getGradientColorPalette(fileName),
+               let lastModified = colorPalette.lastModified {
+                return PaletteGradientColor(typeName: typeName.0,
+                                            paletteName: typeName.1,
+                                            colorPalette: colorPalette,
+                                            initialIndex: Int(lastModified.timeIntervalSince1970))
+            }
+        } else {
+            return getPaletteColor(byType: typeName.0, name: typeName.1)
+        }
+        return nil
     }
 
-    func hasRouteGradientPalette(by fileName: String) -> Bool {
-        return getPaletteColors().contains { paletteColor in
-            guard let gradientColor = paletteColor as? PaletteGradientColor else { return false }
-            let expectedFileName = ColorPaletteHelper.routePrefix + gradientColor.stringId + TXT_EXT
-            return fileName == expectedFileName
+    func isTerrainType() -> Bool {
+        gradientType is TerrainType
+    }
+    
+    func getFileNamePrefix() -> String? {
+        switch gradientType {
+        case is ColorizationType: ColorPaletteHelper.routePrefix
+        case let terrainType as TerrainType: getTerrainPrefix(for: terrainType)
+        default: nil
         }
     }
 
-    func hasTerrainGradientPalette(by fileName: String) -> Bool {
-        guard gradientType is TerrainType else { return false }
-        let prefixes = [TerrainMode.hillshadePrefix, TerrainMode.colorSlopePrefix, TerrainMode.heightPrefix]
-        return getPaletteColors().contains { paletteColor in
-            guard let gradientColor = paletteColor as? PaletteGradientColor else { return false }
-            guard let key = TerrainMode.getKeyByPaletteName(gradientColor.paletteName) else { return false }
-            return prefixes.contains(where: { $0 + key + TXT_EXT == fileName })
-        }
+    func getPaletteColor(byName name: String) -> PaletteGradientColor? {
+        return getPaletteColors().first {
+            guard let gradientPaletteColor = $0 as? PaletteGradientColor else { return false }
+            return gradientPaletteColor.paletteName == name
+        } as? PaletteGradientColor
+    }
+
+    func getPaletteColor(byType type: String, name: String) -> PaletteGradientColor? {
+        return getPaletteColors().first {
+            guard let gradientPaletteColor = $0 as? PaletteGradientColor else { return false }
+            return gradientPaletteColor.typeName == type && gradientPaletteColor.paletteName == name
+        } as? PaletteGradientColor
+    }
+
+    func getDefaultGradientPalette() -> PaletteGradientColor? {
+        getPaletteColor(byName: PaletteGradientColor.defaultName)
     }
 
     func getPaletteColors() -> [PaletteColor] {
         getColors(.lastUsedTime)
-    }
-
-    func getDefaultGradientPalette() -> PaletteGradientColor? {
-        return getGradientPalette(by: PaletteGradientColor.defaultName)
-    }
-
-    func getGradientPalette(by name: String) -> PaletteGradientColor? {
-        for paletteColor in getPaletteColors() {
-            if let gradientColor = paletteColor as? PaletteGradientColor,
-               gradientColor.paletteName == name {
-                return gradientColor
-            }
-        }
-        return nil
     }
 
     override func loadColorsInLastUsedOrder() throws {
@@ -115,9 +160,34 @@ final class GradientColorsCollection: ColorsCollection {
             }
         }
     }
+    
+    private func getTerrainPrefix(for terrainType: TerrainType) -> String {
+        switch terrainType {
+        case TerrainType.hillshade: TerrainMode.hillshadePrefix
+        case TerrainType.height: TerrainMode.heightPrefix
+        default: TerrainMode.colorSlopePrefix
+        }
+    }
+
+    private func getTypeName(_ stringId: String) -> (String, String)? {
+        var prefix = ""
+        if gradientType is TerrainType, let terrainPrefix = getFileNamePrefix() {
+            prefix = terrainPrefix
+        } else {
+            prefix += "\(type)\(ColorPaletteHelper.gradientIdSplitter)"
+        }
+        guard stringId.hasPrefix(prefix) else { return nil }
+        var name = stringId.removePrefix(prefix)
+        if gradientType is TerrainType,
+           (name == TerrainMode.altitudeDefaultKey || name == TerrainMode.defaultKey) {
+                name = type
+        }
+        return (type, name)
+    }
 
     private func readPaletteColorsPreference() -> [GradientData] {
         let jsonAsString = preference.get()
+        preference.resetToDefault()
         var res = [GradientData]()
 
         if let jsonAsString, !jsonAsString.isEmpty {

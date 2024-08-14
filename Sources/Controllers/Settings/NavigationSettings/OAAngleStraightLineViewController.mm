@@ -9,7 +9,6 @@
 #import "OAAngleStraightLineViewController.h"
 #import "OAValueTableViewCell.h"
 #import "OASegmentSliderTableViewCell.h"
-#import "OASegmentedSlider.h"
 #import "OAAppSettings.h"
 #import "OARoutingHelper.h"
 #import "OATableDataModel.h"
@@ -118,7 +117,7 @@
             cell.bottomLeftLabel.text = [item stringForKey:@"minValue"];
             cell.bottomRightLabel.text = [item stringForKey:@"maxValue"];
 
-            [cell.sliderView setNumberOfMarks:[item integerForKey:@"marksCount"] additionalMarksBetween:0];
+            [cell.sliderView setNumberOfMarks:[item integerForKey:@"marksCount"]];
             cell.sliderView.selectedMark = [item integerForKey:@"selectedMark"];
             cell.sliderView.tag = indexPath.section << 10 | indexPath.row;
             [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];

@@ -584,7 +584,88 @@ import Charts
 
         return dataSet
     }
-    
+
+    @objc static func setupGradientChart(chart: LineChartView,
+                                         useGesturesAndScale: Bool,
+                                         xAxisGridColor: UIColor,
+                                         labelsColor: UIColor) {
+        chart.extraRightOffset = 20.0
+        chart.extraLeftOffset = 20.0
+
+        chart.isUserInteractionEnabled = useGesturesAndScale
+        chart.dragEnabled = useGesturesAndScale
+        chart.setScaleEnabled(useGesturesAndScale)
+        chart.pinchZoomEnabled = useGesturesAndScale
+        chart.scaleYEnabled = false
+        chart.autoScaleMinMaxEnabled = true
+        chart.drawBordersEnabled = false
+        chart.chartDescription?.enabled = false
+        chart.maxVisibleCount = 10
+        chart.minOffset = 0.0
+        chart.dragDecelerationEnabled = false
+        chart.drawGridBackgroundEnabled = false
+
+        let xAxis = chart.xAxis
+        xAxis.drawAxisLineEnabled = true
+        xAxis.axisLineWidth = 1.0
+        xAxis.axisLineDashLengths = [8.0, CGFLOAT_MAX]
+        xAxis.axisLineDashPhase = 0.0
+        xAxis.axisLineColor = xAxisGridColor
+        xAxis.drawGridLinesEnabled = false
+        xAxis.gridLineWidth = 1.0
+        xAxis.gridColor = xAxisGridColor
+        xAxis.gridLineDashLengths = [8.0, CGFLOAT_MAX]
+        xAxis.gridLineDashPhase = 0.0
+        xAxis.labelPosition = .bottom
+        xAxis.labelTextColor = labelsColor
+        xAxis.avoidFirstLastClippingEnabled = true
+        xAxis.enabled = true
+
+        let leftYAxis = chart.leftAxis
+        leftYAxis.enabled = false
+
+        let rightYAxis = chart.rightAxis
+        rightYAxis.enabled = false
+
+        let legend = chart.legend
+        legend.enabled = false
+    }
+
+    @objc static func buildGradientChart(chart: LineChartView,
+                                         colorPalette: ColorPalette,
+                                         valueFormatter: IAxisValueFormatter) -> LineChartData {
+        chart.xAxis.valueFormatter = valueFormatter
+
+        let colorValues = colorPalette.colorValues
+        var cgColors = [CGColor]()
+        var entries = [ChartDataEntry]()
+
+        for i in 0..<colorValues.count {
+            let clr = colorValues[i].clr
+            cgColors.append(UIColor(argb: clr).cgColor)
+            entries.append(ChartDataEntry(x: colorValues[i].val, y: 0))
+        }
+
+        let barDataSet = LineChartDataSet(entries: entries, label: "")
+        barDataSet.highlightColor = .textColorSecondary
+
+        let step = 1.0 / CGFloat(colorValues.count - 1)
+        var colorLocations = [CGFloat]()
+        for i in 0...colorValues.count - 1 {
+            colorLocations.append(CGFloat(i) * step)
+        }
+        if let gradient = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(), colors: cgColors as CFArray, locations: colorLocations) {
+            barDataSet.fill = Fill.fillWithLinearGradient(gradient, angle: 0.0)
+            barDataSet.fillAlpha = 1.0
+            barDataSet.drawFilledEnabled = true
+        }
+
+        let dataSet = LineChartData(dataSet: barDataSet)
+        dataSet.setDrawValues(false)
+
+        return dataSet
+    }
+
     private static func createGPXElevationDataSet(chartView: LineChartView,
                                                   analysis: OAGPXTrackAnalysis,
                                                   graphType: GPXDataSetType,
@@ -601,7 +682,7 @@ import Charts
         yAxis.granularity = 1
         yAxis.resetCustomAxisMax()
         yAxis.valueFormatter = ValueFormatter(formatX: nil, unitsX: mainUnitY)
-        let values: Array<ChartDataEntry> = calculateElevationArray(analysis: analysis,axisType: axisType, divX: divX, convEle: convEle, useGeneralTrackPoints: true)
+        let values: [ChartDataEntry] = calculateElevationArray(analysis: analysis,axisType: axisType, divX: divX, convEle: convEle, useGeneralTrackPoints: true, calcWithoutGaps: calcWithoutGaps)
         let dataSet: OrderedLineDataSet = OrderedLineDataSet(entries: values, label: "", dataSetType: GPXDataSetType.altitude, dataSetAxisType: axisType)
         dataSet.priority = Float((analysis.avgElevation - analysis.minElevation) * convEle)
         dataSet.divX = divX
@@ -616,20 +697,22 @@ import Charts
     }
     
     private static func createGPXSlopeDataSet(chartView: LineChartView, analysis: OAGPXTrackAnalysis,
-                                      graphType: GPXDataSetType,
-                                      axisType: GPXDataSetAxisType,
-                                      eleValues: Array<ChartDataEntry>,
-                                      useRightAxis: Bool,
-                                      drawFilled: Bool,
-                                      calcWithoutGaps: Bool) -> OrderedLineDataSet? {
-        if (axisType == GPXDataSetAxisType.time || axisType == GPXDataSetAxisType.timeOfDay) {
-            return nil;
+                                              graphType: GPXDataSetType,
+                                              axisType: GPXDataSetAxisType,
+                                              eleValues: [ChartDataEntry],
+                                              useRightAxis: Bool,
+                                              drawFilled: Bool,
+                                              calcWithoutGaps: Bool) -> OrderedLineDataSet? {
+        if axisType == GPXDataSetAxisType.time || axisType == GPXDataSetAxisType.timeOfDay {
+            return nil
         }
         let mc: EOAMetricsConstant = OAAppSettings.sharedManager().metricSystem.get()
         let useFeet: Bool = (mc == EOAMetricsConstant.MILES_AND_FEET) || (mc == EOAMetricsConstant.MILES_AND_YARDS) || (mc == EOAMetricsConstant.NAUTICAL_MILES_AND_FEET)
         let convEle: Double = useFeet ? 3.28084 : 1.0
-        let totalDistance: Double = Double(analysis.totalDistance)
-        
+        let totalDistance: Double = calcWithoutGaps
+        	? Double(analysis.totalDistanceWithoutGaps)
+        	: Double(analysis.totalDistance)
+
         let divX: Double = getDivX(lineChart: chartView, analysis: analysis, axisType: axisType, calcWithoutGaps: calcWithoutGaps)
 
         let mainUnitY: String = graphType.getMainUnitY()
@@ -639,17 +722,17 @@ import Charts
         yAxis.resetCustomAxisMin()
         yAxis.valueFormatter = ValueFormatter(formatX: nil, unitsX: mainUnitY)
         
-        var values: Array<ChartDataEntry> = Array()
-        if (eleValues.count == 0) {
-            values = calculateElevationArray(analysis: analysis, axisType: .distance, divX: 1.0, convEle: 1.0, useGeneralTrackPoints: false)
+        var values: [ChartDataEntry] = []
+        if eleValues.count == 0 {
+            values = calculateElevationArray(analysis: analysis, axisType: .distance, divX: 1.0, convEle: 1.0, useGeneralTrackPoints: false, calcWithoutGaps: calcWithoutGaps)
         } else {
             for e in eleValues {
                 values.append(ChartDataEntry(x: e.x * divX, y: e.y / convEle))
             }
         }
         
-        if (values.count == 0) {
-            if (useRightAxis) {
+        if values.count == 0 {
+            if useRightAxis {
                 yAxis.enabled = false
             }
             return nil
@@ -659,51 +742,55 @@ import Charts
         
         var step: Double = 5
         var l: Int = 10
-        while (l > 0 && totalDistance / step > GpxUIHelper.MAX_CHART_DATA_ITEMS) {
+        while l > 0 && totalDistance / step > GpxUIHelper.MAX_CHART_DATA_ITEMS {
             step = max(step, totalDistance / Double(values.count * l))
             l -= 1
         }
         
-        var calculatedDist: [Double] = Array(repeating: 0, count: Int(totalDistance / step) + 1)
-        var calculatedH: [Double] = Array(repeating: 0, count: Int(totalDistance / step) + 1)
-        var nextW: Int = 0
-        for k in 0..<calculatedDist.count {
-            if k > 0 {
-                calculatedDist[k] = calculatedDist[k - 1] + step
-            }
-            while nextW < lastIndex && calculatedDist[k] > values[nextW].x {
-                nextW += 1
-            }
-            let pd: Double = nextW == 0 ? 0 : values[nextW - 1].x
-            let ph: Double = nextW == 0 ? values[0].y : values[nextW - 1].y
-            if values[nextW].x - pd < 1 {
-                calculatedH[k] = ph
-            } else {
-                calculatedH[k] = ph + (values[nextW].y - ph) / (values[nextW].x - pd) * (calculatedDist[k] - pd)
-            }
+        let interpolator = GPXInterpolator(pointsCount: values.count, totalLength: totalDistance, step: step,
+                                           getX: { index in return values[index].x },
+                                           getY: { index in return values[index].y })
+
+        interpolator.interpolate()
+
+        let calculatedDist = interpolator.getCalculatedX()
+        let calculatedH = interpolator.getCalculatedY()
+        if calculatedDist.isEmpty || calculatedH.isEmpty {
+            return nil
         }
-        
-        let slopeProximity: Double = max(100, step * 2)
-        
-        if (totalDistance - slopeProximity < 0) {
-            if (useRightAxis) {
+
+        let slopeProximity: Double = max(20, step * 2)
+
+        if totalDistance - slopeProximity < 0 {
+            if useRightAxis {
                 yAxis.enabled = false
             }
-            return nil;
+            return nil
         }
         
-        var calculatedSlopeDist: Array<Double> = Array(repeating: 0, count: Int(((totalDistance - slopeProximity) / step)) + 1)
-        var calculatedSlope: Array<Double> = Array(repeating: 0, count: Int(((totalDistance - slopeProximity) / step)) + 1)
-        let index: Int = Int((slopeProximity / step) / 2.0)
+        var calculatedSlopeDist: [Double] = Array(repeating: 0, count: Int((totalDistance / step)) + 1)
+        var calculatedSlope: [Double] = Array(repeating: 0, count: Int((totalDistance / step)) + 1)
+
+        let threshold = max(2, Int((slopeProximity / step) / 2))
+        if calculatedSlopeDist.count <= 4 {
+            return nil
+        }
         for k in 0..<calculatedSlopeDist.count {
-            calculatedSlopeDist[k] = calculatedDist[index + k]
-            // Sometimes calculatedH.count - calculatedSlope.count < 2 which causes a rare crash
-            calculatedSlope[k] = (2 * index + k) < calculatedH.count ? (calculatedH[2 * index + k] - calculatedH[k]) * 100 / slopeProximity : 0
-            if (calculatedSlope[k].isNaN) {
+            calculatedSlopeDist[k] = calculatedDist[k]
+
+            if k < threshold {
+                calculatedSlope[k] = (-1.5 * calculatedH[k] + 2.0 * calculatedH[k + 1] - 0.5 * calculatedH[k + 2]) * 100 / step
+            } else if k >= calculatedSlopeDist.count - threshold {
+                calculatedSlope[k] = (0.5 * calculatedH[k - 2] - 2.0 * calculatedH[k - 1] + 1.5 * calculatedH[k]) * 100 / step
+            } else {
+                calculatedSlope[k] = (calculatedH[threshold + k] - calculatedH[k - threshold]) * 100 / slopeProximity
+            }
+
+            if calculatedSlope[k].isNaN {//}|| abs(calculatedSlope[k]) > 1000 {
                 calculatedSlope[k] = 0
             }
         }
-        
+
         var slopeValues = [ChartDataEntry]()
         var prevSlope: Double = -80000
         var slope: Double
@@ -715,18 +802,18 @@ import Charts
         for i in 0..<calculatedSlopeDist.count {
             x = calculatedSlopeDist[i] / divX
             slope = calculatedSlope[i]
-            if (prevSlope != -80000) {
-                if (prevSlope == slope && i < lastIndex) {
-                    hasSameY = true;
-                    lastXSameY = x;
-                    continue;
+            if prevSlope != -80000 {
+                if prevSlope == slope && i < lastIndex {
+                    hasSameY = true
+                    lastXSameY = x
+                    continue
                 }
-                if (hasSameY && lastEntry != nil) {
+                if hasSameY && lastEntry != nil {
                     slopeValues.append(ChartDataEntry(x: lastXSameY, y: lastEntry!.y))
                 }
                 hasSameY = false
             }
-            prevSlope = slope;
+            prevSlope = slope
             lastEntry = ChartDataEntry(x: x, y: slope)
             slopeValues.append(lastEntry!)
         }
@@ -737,7 +824,7 @@ import Charts
 
         let color: UIColor = graphType.getFillColor()
         GpxUIHelper.setupDataSet(dataSet: dataSet, color: color, fillColor: color, drawFilled: drawFilled, drawCircles: false, useRightAxis: useRightAxis)
-        return dataSet;
+        return dataSet
     }
     
     private static func setupAxisDistance(axisBase: AxisBase, meters: Double) -> Double {
@@ -801,15 +888,20 @@ import Charts
         axisBase.granularity = granularity
         axisBase.valueFormatter = ValueFormatter(formatX: formatX, unitsX: mainUnitStr)
         
-        return divX;
+        return divX
     }
     
-    private static func calculateElevationArray(analysis: OAGPXTrackAnalysis, axisType: GPXDataSetAxisType, divX: Double, convEle: Double, useGeneralTrackPoints: Bool) -> Array<ChartDataEntry> {
-        var values: Array<ChartDataEntry> = []
-        if (analysis.elevationData == nil) {
+    private static func calculateElevationArray(analysis: OAGPXTrackAnalysis, 
+                                                axisType: GPXDataSetAxisType,
+                                                divX: Double,
+                                                convEle: Double,
+                                                useGeneralTrackPoints: Bool,
+                                                calcWithoutGaps: Bool) -> [ChartDataEntry] {
+        var values: [ChartDataEntry] = []
+        if analysis.elevationData == nil {
             return values
         }
-        let elevationData: Array<OAElevation> = analysis.elevationData
+        let elevationData: [OAElevation] = analysis.elevationData
         var nextX: Double = 0
         var nextY: Double
         var elev: Double
@@ -822,47 +914,48 @@ import Charts
         var hasSameY: Bool = false
         var x: Double
         for e in elevationData {
-            i += 1;
-            if (axisType == .time || axisType == .timeOfDay) {
-                x = Double(e.time);
+            i += 1
+            if axisType == .time || axisType == .timeOfDay {
+                x = Double(e.time)
             } else {
-                x = e.distance;
+                x = e.distance
             }
-            if (x >= 0)
-            {
-                nextX += x / divX
-                if (!e.elevation.isNaN) {
-                    elev = e.elevation;
-                    if (prevElevOrig != -80000) {
-                        if (elev > prevElevOrig) {
-                            elev -= 1;
-                        } else if (prevElevOrig == elev && i < lastIndex) {
-                            hasSameY = true;
-                            lastXSameY = nextX;
-                            continue;
+            if x >= 0 {
+                if !(calcWithoutGaps && e.firstPoint && lastEntry != nil) {
+                    nextX += x / divX
+                }
+                if !e.elevation.isNaN {
+                    elev = e.elevation
+                    if prevElevOrig != -80000 {
+                        if elev > prevElevOrig {
+                            //elev -= 1
+                        } else if prevElevOrig == elev && i < lastIndex {
+                            hasSameY = true
+                            lastXSameY = nextX
+                            continue
                         }
-                        if (prevElev == elev && i < lastIndex) {
-                            hasSameY = true;
-                            lastXSameY = nextX;
-                            continue;
+                        if prevElev == elev && i < lastIndex {
+                            hasSameY = true
+                            lastXSameY = nextX
+                            continue
                         }
-                        if (hasSameY && lastEntry != nil) {
+                        if hasSameY && lastEntry != nil {
                             values.append(ChartDataEntry(x: lastXSameY, y: lastEntry!.y))
                         }
-                        hasSameY = false;
+                        hasSameY = false
                     }
-                    if (useGeneralTrackPoints && e.firstPoint && lastEntry != nil) {
-                        values.append(ChartDataEntry(x: nextX, y:lastEntry!.y));
+                    if useGeneralTrackPoints && e.firstPoint && lastEntry != nil {
+                        values.append(ChartDataEntry(x: nextX, y:lastEntry!.y))
                     }
-                    prevElevOrig = e.elevation;
-                    prevElev = elev;
-                    nextY = elev * convEle;
-                    lastEntry = ChartDataEntry(x: nextX, y: nextY);
-                    values.append(lastEntry!);
+                    prevElevOrig = e.elevation
+                    prevElev = elev
+                    nextY = elev * convEle
+                    lastEntry = ChartDataEntry(x: nextX, y: nextY)
+                    values.append(lastEntry!)
                 }
             }
         }
-        return values;
+        return values
     }
 
     private static func createGPXSpeedDataSet(chartView: LineChartView,

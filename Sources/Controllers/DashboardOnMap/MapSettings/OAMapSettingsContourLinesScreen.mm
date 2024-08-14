@@ -30,7 +30,6 @@
 #import "OAIAPHelper.h"
 #import "OAPluginPopupViewController.h"
 #import "OAManageResourcesViewController.h"
-#import "OASegmentedSlider.h"
 #import "OALinks.h"
 #import "GeneratedAssetSymbols.h"
 
@@ -558,7 +557,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             {
                 NSString *v = p.value.length == 0 ? kDefaultDensity : p.value;
                 cell.topRightLabel.text = [self getLocalizedParamValue:v];
-                [cell.sliderView setNumberOfMarks:_visibleDensityValues.count additionalMarksBetween:0];
+                [cell.sliderView setNumberOfMarks:_visibleDensityValues.count];
                 cell.sliderView.selectedMark = [_visibleDensityValues indexOfObject:v];
                 [cell.sliderView addTarget:self action:@selector(densityChanged:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
             }
@@ -566,7 +565,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             {
                 NSString *v = p.value.length == 0 ? kDefaultWidth : p.value;
                 cell.topRightLabel.text = [self getLocalizedParamValue:v];
-                [cell.sliderView setNumberOfMarks:_visibleWidthValues.count additionalMarksBetween:0];
+                [cell.sliderView setNumberOfMarks:_visibleWidthValues.count];
                 cell.sliderView.selectedMark = [_visibleWidthValues indexOfObject:v];
                 [cell.sliderView addTarget:self action:@selector(widthChanged:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
             }

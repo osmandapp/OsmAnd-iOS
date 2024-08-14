@@ -157,6 +157,7 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
     }
     if (currSectionName && actionsInSection && actionsInSection.count > 0)
         [mapping setObject:[NSArray arrayWithArray:actionsInSection] forKey:currSectionName];
+
     
     _actions = [OrderedDictionary dictionaryWithDictionary:mapping];
 }
@@ -215,7 +216,7 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
                 row.cellType = [OAButtonTableViewCell getCellIdentifier];
                 row.title = action.nameAction;
                 row.descr = action.name;
-                row.iconName = action.iconName;
+                row.icon = [self getQuickActionIcon:action.iconName];
                 row.secondaryIconName = action.secondaryIconName;
                 [row setObj:action forKey:_kActionObjectKey];
             }
@@ -230,11 +231,19 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
             row.cellType = [OAButtonTableViewCell getCellIdentifier];
             row.title = action.nameAction;
             row.descr = action.name;
-            row.iconName = action.iconName;
+            row.icon = [self getQuickActionIcon:action.iconName];
             row.secondaryIconName = action.secondaryIconName;
             [row setObj:action forKey:_kActionObjectKey];
         }
     }
+}
+
+- (UIImage *)getQuickActionIcon:(NSString *)iconName
+{
+    if (iconName && [iconName hasPrefix:@"mx_"])
+        return [[OAUtilities getMxIcon:iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    else
+        return [UIImage templateImageNamed:iconName];
 }
 
 - (NSInteger)sectionsCount
@@ -297,7 +306,10 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
             cell.descriptionLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.descriptionLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
             
-            cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
+            if (item.icon)
+                cell.leftIconView.image = item.icon;
+            else
+                cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
             cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             if (cell.leftIconView.subviews.count > 0)
                 [[cell.leftIconView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];

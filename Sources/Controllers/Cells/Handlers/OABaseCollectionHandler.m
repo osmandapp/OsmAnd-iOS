@@ -40,16 +40,6 @@
     return CGSizeMake(48., 48.);
 }
 
-- (CGFloat)getSelectionRadius
-{
-    return 0;
-}
-
-- (CGFloat)getImageRadius
-{
-    return 0;
-}
-
 - (UICollectionView *)getCollectionView
 {
     return _collectionView;
@@ -90,11 +80,19 @@
 {
 }
 
-- (void)addItem:(NSIndexPath *)indexPath newItem:(id)newItem
+- (void)insertItem:(id)newItem atIndexPath:(NSIndexPath *)indexPath
+{
+}
+
+- (void)replaceItem:(id)newItem atIndexPath:(NSIndexPath *)indexPath
 {
 }
 
 - (void)removeItem:(NSIndexPath *)indexPath
+{
+}
+
+- (void)removeItems:(NSArray<NSIndexPath *> *)indexPaths
 {
 }
 

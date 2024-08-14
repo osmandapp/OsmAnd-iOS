@@ -375,8 +375,7 @@
     if ([item.key isEqualToString:@"allColors"])
     {
         OAColorCollectionViewController *colorCollectionViewController =
-            [[OAColorCollectionViewController alloc] initWithColorItems:[_appearanceCollection getAvailableColorsSortingByKey]
-                                                      selectedColorItem:_selectedColorItem];
+        [[OAColorCollectionViewController alloc] initWithCollectionType:EOAColorCollectionTypeColorItems items:[_appearanceCollection getAvailableColorsSortingByKey] selectedItem:_selectedColorItem];
         colorCollectionViewController.delegate = self;
         [self showViewController:colorCollectionViewController];
     }

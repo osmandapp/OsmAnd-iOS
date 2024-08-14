@@ -64,6 +64,9 @@
     [layersData addObject:[NSMutableDictionary dictionaryWithDictionary:@{
         @"selected": @(_app.data.weatherPrecip)
     }]];
+    [layersData addObject:[NSMutableDictionary dictionaryWithDictionary:@{
+        @"selected": @(_app.data.weatherWindAnimation)
+    }]];
     
     _data = layersData;
 }

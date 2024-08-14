@@ -4140,7 +4140,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         _routeColoringType = [OACommonColoringType withKey:routeColoringTypeKey defValue:OAColoringType.DEFAULT values:[OAColoringType getRouteColoringTypes]];
         [_profilePreferences setObject:_routeColoringType forKey:@"route_line_coloring_type"];
 
-        _routeGradientPalette = [OACommonString withKey:routeGradientPaletteKey defValue:@"default"];
+        _routeGradientPalette = [OACommonString withKey:routeGradientPaletteKey defValue:PaletteGradientColor.defaultName];
         [_profilePreferences setObject:_routeGradientPalette forKey:routeGradientPaletteKey];
 
         _routeInfoAttribute = [OACommonString withKey:routeInfoAttributeKey defValue:nil];

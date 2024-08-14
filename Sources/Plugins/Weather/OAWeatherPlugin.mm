@@ -12,6 +12,7 @@
 #import "OAMapHudViewController.h"
 #import "OAMapInfoWidgetsFactory.h"
 #import "OAMapWidgetRegInfo.h"
+#import "OAMapLayers.h"
 #import "OAAppData.h"
 #import "OAIAPHelper.h"
 #import "OAProducts.h"
@@ -32,6 +33,8 @@
     OAWeatherWidget *_weatherWindSpeedControl;
     OAWeatherWidget *_weatherCloudControl;
     OAWeatherWidget *_weatherPrecipControl;
+    
+    NSDate *_forecastDate;
 }
 
 - (instancetype)init
@@ -186,6 +189,41 @@
                                       appMode:appMode
                                  widgetParams:nil]
     ];
+}
+
+- (void) setForecastDate:(NSDate *)date forAnimation:(BOOL)forAnimation resetPeriod:(BOOL)resetPeriod
+{
+    _forecastDate = date;
+    [self updateLayersDate:forAnimation resetPeriod:resetPeriod];
+}
+
+- (void) updateLayersDate:(BOOL)forAnimation resetPeriod:(BOOL)resetPeriod
+{
+    NSDate *time = _forecastDate ?: [NSDate now];
+    NSTimeInterval timestampSec = [time timeIntervalSince1970];
+    int64_t timestamp = timestampSec * 1000;
+    OAMapViewController *mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+    
+    if (mapViewController.mapLayers.weatherLayerLow)
+        [mapViewController.mapLayers.weatherLayerLow setDateTime:timestamp goForward:forAnimation resetPeriod:resetPeriod];
+
+    if (mapViewController.mapLayers.weatherLayerHigh)
+        [mapViewController.mapLayers.weatherLayerHigh setDateTime:timestamp goForward:forAnimation resetPeriod:resetPeriod];
+    
+    if (mapViewController.mapLayers.weatherContourLayer)
+        [mapViewController.mapLayers.weatherContourLayer setDateTime:timestampSec];
+}
+
+- (void) prepareForDayAnimation:(NSDate *)date
+{
+    int64_t timestamp = [date timeIntervalSince1970] * 1000;
+    
+    OAMapViewController *mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+    if (mapViewController.mapLayers.weatherLayerLow)
+        [mapViewController.mapLayers.weatherLayerLow setDateTime:timestamp goForward:YES resetPeriod:NO];
+
+    if (mapViewController.mapLayers.weatherLayerHigh)
+        [mapViewController.mapLayers.weatherLayerHigh setDateTime:timestamp goForward:YES resetPeriod:NO];
 }
 
 @end

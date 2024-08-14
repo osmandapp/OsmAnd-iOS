@@ -33,6 +33,7 @@
 #import "OATurnDrawable.h"
 #import "OATurnDrawable+cpp.h"
 #import "OAMapButtonsHelper.h"
+#import "OACurrentStreetName.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #define unitsKm OALocalizedString(@"km")
@@ -574,11 +575,41 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     maneuver.symbolImage = [turnDrawable toUIImage];
     maneuver.initialTravelEstimates = estimates;
     maneuver.userInfo = @{ @"imminent" : @(directionInfo.imminent) };
-    NSString *streetName = directionInfo.directionInfo.streetName;
+    NSString *streetName = [self defineStreetName:directionInfo];
+    
     if (streetName)
-        maneuver.instructionVariants = @[streetName];
+    {
+        if (estimates) {
+            maneuver.instructionVariants = @[streetName];
+        }
+        else
+        {
+            NSString *distanceString = [OAOsmAndFormatter getFormattedDistance:directionInfo.distanceTo withParams:[OsmAndFormatterParams useLowerBounds]];
+            NSString *instruction = [NSString stringWithFormat:@"%@, %@", distanceString, streetName];
+            maneuver.instructionVariants = @[instruction];
+        }
+    }
     
     return maneuver;
+}
+
+- (nullable NSString *)defineStreetName:(nullable OANextDirectionInfo *)nextDirInfo {
+    if (nextDirInfo)
+    {
+        OACurrentStreetName *currentStreetName = [_routingHelper getCurrentName:nextDirInfo];
+        NSString *streetName = currentStreetName.text;
+
+        if (streetName.length > 0)
+        {
+            NSString *exitRef = currentStreetName.exitRef;
+            if (exitRef.length == 0) {
+                return streetName;
+            } else {
+                return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_comma"), exitRef, streetName];
+            }
+        }
+    }
+    return nil;
 }
 
 // MARK: Location updates
@@ -589,7 +620,6 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     {
         int turnImminent = 0;
         int nextTurnDistance = 0;
-        int secondaryTurnDistance = 0;
         OANextDirectionInfo *nextTurn = [_routingHelper getNextRouteDirectionInfo:[[OANextDirectionInfo alloc] init] toSpeak:YES];
         if (nextTurn && nextTurn.distanceTo > 0 && nextTurn.directionInfo)
         {
@@ -605,7 +635,6 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                 secondaryInfo = [_routingHelper getNextRouteDirectionInfoAfter:nextTurn to:[[OANextDirectionInfo alloc] init] toSpeak:YES];
                 if (secondaryInfo && secondaryInfo.directionInfo)
                 {
-                    secondaryTurnDistance = secondaryInfo.distanceTo;
                     _secondaryStyle = CPManeuverDisplayStyleDefault;
                     secondaryVisible = true;
                 }

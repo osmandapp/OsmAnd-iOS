@@ -2129,3 +2129,6 @@
 "pressure_layer" = "Επίπεδο πίεσης";
 "shared_string_favorites" = "Αγαπημένα";
 "map_source" = "Πηγή χάρτη";
+"quick_action_parking_place" = "Θέση στάθμευσης";
+"quick_action_verb_show_hide" = "Εμφάνιση / Απόκρυψη";
+"quick_action_verb_pause_resume" = "Παύση / Επαναφορά";

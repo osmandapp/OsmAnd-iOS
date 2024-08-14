@@ -988,6 +988,9 @@ static const NSInteger kElevationMaxMeters = 2000;
             selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:[_gradientColorsCollection getPaletteColorByName:[_terrainMode getKeyName]]] inSection:0];
         [paletteHandler setSelectedIndexPath:selectedIndexPath];
         [cell setCollectionHandler:paletteHandler];
+        cell.collectionView.contentInset = UIEdgeInsetsMake(0, 10, 0, 0);
+        [cell configureTopOffset:12];
+        [cell configureBottomOffset:12];
         return cell;
     }
     else if ([item.cellType isEqualToString:OALineChartCell.reuseIdentifier])

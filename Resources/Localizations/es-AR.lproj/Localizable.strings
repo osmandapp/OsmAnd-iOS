@@ -3513,3 +3513,5 @@
 "route_your_destination_is_on_ahead" = "Tu destino está justo delante";
 "route_your_destination_is_on_left" = "Tu destino está a la izquierda";
 "route_your_destination_is_on_right" = "Tu destino está a la derecha";
+"shared_string_show" = "Mostrar";
+"weather_wind_animation_enable_descr" = "Permite ver la animación del viento en el mapa.";

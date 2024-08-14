@@ -163,7 +163,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
         [titleSection addRowFromDictionary:@{
             kCellKeyKey : @"modifyPalette",
-            kCellTypeKey : [OAButtonTableViewCell getCellIdentifier],
+            kCellTypeKey : isRelief3D ? [OAValueTableViewCell getCellIdentifier] : [OAButtonTableViewCell getCellIdentifier],
             kCellTitleKey : OALocalizedString(@"shared_string_modify"),
             kCellSecondaryIconName : @"ic_payment_label_pro",
             @"purchased" : @(isRelief3D)
@@ -396,7 +396,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OATableRowData *item =  [_data itemForIndexPath:indexPath];
-    if ([item.key isEqualToString:@"relief3D"])
+    if ([item.key isEqualToString:@"relief3D"] || [item.key isEqualToString:@"modifyPalette"])
         return kRelief3DCellRowHeight;
     return UITableViewAutomaticDimension;
 }
@@ -471,22 +471,19 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         OAButtonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
         BOOL isTerrainTypeCell = [item.key isEqualToString:@"terrainType"];
-        BOOL isModifyTypeCell = [item.key isEqualToString:@"modifyPalette"];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAButtonTableViewCell *) nib[0];
             [cell descriptionVisibility:NO];
-            [cell.button setTitle:nil forState:UIControlStateNormal];
-            [cell.button setTitleColor:[UIColor colorNamed:ACColorNameTextColorActive] forState:UIControlStateHighlighted];
-            cell.button.tintColor = [UIColor colorNamed:ACColorNameTextColorActive];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.button.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
         }
         if (cell)
         {
-            cell.selectionStyle = isModifyTypeCell ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
             [cell setCustomLeftSeparatorInset:isTerrainTypeCell];
             cell.titleLabel.text = item.title;
+            [cell.button setTitle:nil forState:UIControlStateNormal];
             [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
 
             if (isTerrainTypeCell)
@@ -495,8 +492,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 [cell leftIconVisibility:NO];
                 cell.leftIconView.image = nil;
                 cell.leftIconView.tintColor = nil;
-                [cell buttonVisibility:YES];
                 cell.button.configuration = nil;
+                [cell.button setTitleColor:[UIColor colorNamed:ACColorNameTextColorActive] forState:UIControlStateHighlighted];
+                cell.button.tintColor = [UIColor colorNamed:ACColorNameTextColorActive];
                 cell.button.menu = [self createTerrainTypeMenuForCellButton:cell.button];
                 cell.button.showsMenuAsPrimaryAction = YES;
                 cell.button.changesSelectionAsPrimaryAction = YES;
@@ -507,24 +505,16 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 [cell leftIconVisibility:item.iconName && item.iconName.length > 0];
                 cell.leftIconView.image = cell.leftIconView.hidden ? nil : [UIImage templateImageNamed:item.iconName];
                 cell.leftIconView.tintColor = item.iconTintColor;
+                UIButtonConfiguration *conf = [UIButtonConfiguration plainButtonConfiguration];
+                conf.image = [UIImage imageNamed:item.secondaryIconName];
+                cell.button.configuration = conf;
+                [cell.button setTitleColor:nil forState:UIControlStateHighlighted];
+                cell.button.tintColor = nil;
+                cell.button.menu = nil;
                 cell.button.showsMenuAsPrimaryAction = NO;
                 cell.button.changesSelectionAsPrimaryAction = NO;
-
-                BOOL isPurchased = [item boolForKey:@"purchased"];
-                [cell buttonVisibility:!isPurchased];
-                if (!isPurchased)
-                {
-                    UIButtonConfiguration *conf = [UIButtonConfiguration plainButtonConfiguration];
-                    conf.image = [UIImage imageNamed:item.secondaryIconName];
-                    cell.button.configuration = conf;
-                }
-                else
-                {
-                    cell.button.configuration = nil;
-                }
-                cell.button.menu = nil;
-                if (!isPurchased)
-                    [cell.button addTarget:self action:@selector(showChoosePlanScreen) forControlEvents:UIControlEventTouchUpInside];
+                [cell.button setAttributedTitle:nil forState:UIControlStateNormal];
+                [cell.button addTarget:self action:@selector(showChoosePlanScreen) forControlEvents:UIControlEventTouchUpInside];
             }
         }
         return cell;
@@ -575,8 +565,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         cell.heightConstraint.constant = 96;
         [GpxUIHelper setupGradientChartWithChart:cell.lineChartView
                              useGesturesAndScale:NO
-                                  xAxisGridColor:[UIColor colorNamed:ACColorNameTextColorSecondary]
-                                     labelsColor:[UIColor colorNamed:ACColorNameChartAxisGridLine]];
+                                  xAxisGridColor:[UIColor colorNamed:ACColorNameChartAxisGridLine]
+                                     labelsColor:[UIColor colorNamed:ACColorNameChartTextColorAxisX]];
         cell.lineChartView.extraBottomOffset = 13;
 
         ColorPalette *colorPalette = [[ColorPaletteHelper shared] getGradientColorPalette:[_terrainMode getMainFile]];
@@ -610,7 +600,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         terrainParametersScreen = [[OAMapSettingsTerrainParametersViewController alloc] initWithSettingsType:EOATerrainSettingsTypeZoomLevels];
     else if ([item.key isEqualToString:@"vertical_exaggeration"])
         terrainParametersScreen = [[OAMapSettingsTerrainParametersViewController alloc] initWithSettingsType:EOATerrainSettingsTypeVerticalExaggeration];
-    else if ([item.key isEqualToString:@"modifyPalette"])
+    else if ([item.key isEqualToString:@"modifyPalette"] && [item boolForKey:@"purchased"])
         terrainParametersScreen = [[OAMapSettingsTerrainParametersViewController alloc] initWithSettingsType:EOATerrainSettingsTypePalette];
     if (terrainParametersScreen)
     {

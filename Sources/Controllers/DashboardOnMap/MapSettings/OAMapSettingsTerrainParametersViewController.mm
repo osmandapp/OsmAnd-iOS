@@ -999,11 +999,12 @@ static const NSInteger kElevationMaxMeters = 2000;
                                                                                          forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.separatorInset = UIEdgeInsetsMake(0, CGFLOAT_MAX, 0, 0);
+        cell.heightConstraint.constant = 96;
 
         [GpxUIHelper setupGradientChartWithChart:cell.lineChartView
                              useGesturesAndScale:NO
-                                  xAxisGridColor:[UIColor colorNamed:ACColorNameTextColorSecondary]
-                                     labelsColor:[UIColor colorNamed:ACColorNameChartAxisGridLine]];
+                                  xAxisGridColor:[UIColor colorNamed:ACColorNameChartAxisGridLine]
+                                     labelsColor:[UIColor colorNamed:ACColorNameChartTextColorAxisX]];
 
         ColorPalette *colorPalette;
         if ([_currentPaletteColorItem isKindOfClass:PaletteGradientColor.class])

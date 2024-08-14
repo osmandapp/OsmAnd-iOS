@@ -1350,7 +1350,7 @@
 "route_between_points" = "مسیر بین نقطه‌ها";
 "routing_profile_ski" = "اسکی";
 "save_track_logging_accuracy" = "صحت ردنگاری";
-"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_colon" = "%@:‪%@‬";
 "routing_profile_straightline" = "خط مستقیم";
 "osm_edit_close_note" = "بستن یادداشت OSM";
 "user_password" = "گذرواژه";

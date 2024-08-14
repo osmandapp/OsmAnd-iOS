@@ -1059,7 +1059,7 @@
 "shared_string_transparency" = "Διαφάνεια";
 "save_as_new_track" = "Αποθήκευση ως νέο ίχνος";
 "poi_filter_public_transport" = "Δημόσια Μ.Μ.Μ";
-"ltr_or_rtl_combine_via_colon" = "%@ — %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "reorder_profiles" = "Επεξεργασία καταλόγου κατατομών (προφίλ)";
 "quick_action_mapillary_hide" = "Απόκρυψη Mapillary";
 "add_online_source" = "Προσθήκη διαδικτυακής πηγής";

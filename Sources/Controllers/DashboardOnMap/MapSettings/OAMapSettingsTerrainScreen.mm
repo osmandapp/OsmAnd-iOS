@@ -572,7 +572,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         OALineChartCell *cell = (OALineChartCell *) [tableView dequeueReusableCellWithIdentifier:OALineChartCell.reuseIdentifier
                                                                                          forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-
+        cell.heightConstraint.constant = 96;
         [GpxUIHelper setupGradientChartWithChart:cell.lineChartView
                              useGesturesAndScale:NO
                                   xAxisGridColor:[UIColor colorNamed:ACColorNameTextColorSecondary]

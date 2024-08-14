@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface OALineChartCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet LineChartView *lineChartView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *heightConstraint;
 
 @end
 

@@ -1425,7 +1425,7 @@
 "reset_plugin_to_default" = "Resetovat modul do základního nastavení";
 "profile_type_user_string" = "Uživatelský profil";
 "keep_both_desc" = "Importované položky budou přidány s prefixem";
-"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "shared_string_finish" = "Dokončit";
 "osmand_purchases_item" = "Nákupy v OsmAnd";
 "metric_ton" = "t";

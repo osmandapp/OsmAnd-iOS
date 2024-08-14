@@ -1745,7 +1745,7 @@
 "coord_input_add_point" = "座標の追加";
 "quick_action_showhide_mapillary_title" = "Mapillaryの表示切替";
 "profile_prefs_reset_successful" = "すべてのプロファイル設定を初期状態に戻しました。";
-"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "configure_screen_quick_action" = "クイックアクション";
 "quick_action_remove_next_destination_descr" = "ルート上の次の目的地を削除します。それが最終目的地の場合は、ナビゲーションが停止します。";
 "profile_alert_need_save_title" = "変更の保存";

@@ -1801,7 +1801,7 @@
 "import_complete_description" = "Усі дані з %@ імпортовано. Скористайтеся іншими кнопками, щоб відкрити будь-яку частину застосунку для керування нею.";
 "shared_string_import_complete" = "Імпорт завершено";
 "listed_exist" = "Перелічені %@ вже існують в OsmAnd.";
-"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "search_activity" = "Пошук";
 "configure_screen_quick_action" = "Швидка дія";

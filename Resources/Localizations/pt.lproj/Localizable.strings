@@ -1601,7 +1601,7 @@
 "sqlite_db_file" = "Ficheiro SQLiteDB";
 "shared_string_min" = "Mínimo";
 "shared_string_meters" = "metros";
-"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "edit_profile_screen_options_subtitle" = "Selecionar opções de ecrã para o perfil";
 "quick_action_showhide_mapillary_title" = "Mostrar/ocultar Mapillary";
 "select_distance_route_will_recalc" = "Selecione a distância após a qual o percurso será recalculado.";

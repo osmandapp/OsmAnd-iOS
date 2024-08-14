@@ -1541,7 +1541,7 @@
 "save_track_logging_accuracy" = "Presnosť záznamu";
 "routing_profile_geocoding" = "Georeferencovanie";
 "next_segment" = "Ďalší úsek";
-"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "shared_string_tones" = "tony";
 "profile_alert_need_save_title" = "Uložiť zmeny";
 "select_base_profile_dialog_message" = "Vlastný profil aplikácie založíte na niektorom základnom profile, čo určí predvolené nastavenia ako stav nástrojov, jednotky rýchlosti a vzdialenosti. Toto sú základné profily aplikácie, spolu s príkladmi vlastných profilov na ktoré môžu byť rozšírené:";

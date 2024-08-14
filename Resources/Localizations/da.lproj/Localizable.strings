@@ -1762,7 +1762,7 @@
 "shared_string_finish" = "Afslut";
 "shared_string_import_complete" = "Importen er fuldført";
 "listed_exist" = "Det angivne %@ findes allerede.";
-"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "search_activity" = "Søg";
 "configure_screen_quick_action" = "Genvej";

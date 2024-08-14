@@ -1765,7 +1765,7 @@
 "checking_for_duplicates" = "Otsin topeltkirjeid...";
 "added_items" = "Lisatud kirjed: %@";
 "listed_exist" = "Loetletud %@ on juba OsmAndis olemas.";
-"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "importing_from" = "Andmete import failist %@";
 "shared_string_rendering_style" = "Esitusviisi stiil";

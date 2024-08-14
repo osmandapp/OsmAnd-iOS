@@ -1392,7 +1392,7 @@
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "public_transport_try_change_settings" = "Próbálja meg módosítani a beállításokat.";
 "quick_action_remove_next_destination" = "Következő célpont";
-"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "show_direction" = "Távolság jelzése";
 "save_track_logging_accuracy" = "Naplózás pontossága";
 "map_widget_distance_by_tap" = "Távolságmérés koppintással";

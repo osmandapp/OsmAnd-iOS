@@ -1795,7 +1795,7 @@
 "added_items" = "Eklenen ögeler: %@";
 "import_complete_description" = "%@\'deki tüm veriler içe aktarıldı. Yönetmek üzere uygulamanın gerekli bölümünü açmak için aşağıdaki düğmeleri kullanabilirsiniz.";
 "listed_exist" = "Listelenen %@, OsmAnd\'da zaten var.";
-"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "importing_from" = "Veriler %@\'den içe aktarılıyor";
 "shared_string_rendering_style" = "Görselleştirme tarzı";

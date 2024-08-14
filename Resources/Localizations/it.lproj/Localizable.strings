@@ -1565,7 +1565,7 @@
 "default_profile_descr" = "Seleziona un profilo che verrà utilizzato all'avvio dell'applicazione.";
 "allow_3d_descr" = "Abilita questa opzione per poter visualizzare la mappa nella prospettiva a 2.5D";
 "allow_3d" = "Consenti la visualizzazione a 2.5D";
-"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "importing_from" = "Importazione dei dati da %@";
 "shared_string_rendering_style" = "Stile di rappresentazione";

@@ -1774,7 +1774,7 @@
 "shared_string_next" = "Næsta";
 "move_point" = "Færa punkt";
 "coord_input_add_point" = "Bæta við punkti";
-"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "added_items" = "Bætti við atriðum: %@";
 "nav_type_hint" = "Gerð leiðsagnar";
 "delete_point" = "Eyða punkti";

@@ -1641,7 +1641,7 @@
 "width_limit_description" = "Angi kjøretøybredde, noen rutebegrensninger for brede kjøretøy kan tilkomme.";
 "shared_string_max" = "Maks.";
 "shared_string_deselect_all" = "Fravelg alle";
-"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "profile_type_custom_string" = "Egendefinert profil";
 "shared_string_add_profile" = "Legg til profil";
 "reorder_profiles" = "Rediger profilliste";

@@ -1771,7 +1771,7 @@
 "profile_prefs_reset_successful" = "تمت استعادة جميع إعدادات الوضع إلى الحالة الافتراضية.";
 "gpx_parse_error" = "تم العثور على مشاكل مع ملف GPX. \n \nيمكنك الاتصال بالدعم والتحقق من الملف.";
 "shared_string_next" = "التالي";
-"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "shared_string_rendering_style" = "نمط التقديم";
 "add_one_more_pnt" = "إضافة نقطة أخرى";

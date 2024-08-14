@@ -913,7 +913,7 @@
 "configure_screen_quick_action" = "Acción rápida";
 "search_activity" = "Buscar";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
-"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "listed_exist" = "El listado«%@», ya existe en OsmAnd.";
 "shared_string_import_complete" = "Importación completa";
 "import_complete_description" = "Se importaron todos los datos de«%@». Usa los botones inferiores para abrir cualquier sección de la aplicación y gestionarla.";

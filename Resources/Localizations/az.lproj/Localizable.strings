@@ -913,7 +913,7 @@
 "configure_screen_quick_action" = "Sürətli fəaliyyət";
 "search_activity" = "Axtar";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
-"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "listed_exist" = "Siyahıyadakı %@ artıq OsmAnd-da mövcuddur.";
 "shared_string_import_complete" = "İdxal tamamlandı";
 "import_complete_description" = "Bütün məlumatlar %@-dan idxal edildi. Aşağıdakı düymələrdən istifadə etməklə proqramın istənilən hissəsini idarə etmək üçün aça bilərsiniz.";

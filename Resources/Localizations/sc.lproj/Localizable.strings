@@ -1807,7 +1807,7 @@
 "import_complete_description" = "Datos dae su %@ importados. Podes impreare sos butones in suta pro abèrrere cale si siat parte de s\'aplicatzione pro l\'amministrare.";
 "shared_string_import_complete" = "Importatzione acabada";
 "listed_exist" = "Sos %@ allistados esistint giai in OsmAnd.";
-"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "search_activity" = "Chirca";
 "configure_screen_quick_action" = "Atzione lestra";

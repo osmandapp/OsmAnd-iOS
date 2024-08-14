@@ -913,7 +913,7 @@
 "configure_screen_quick_action" = "Брзе радње";
 "search_activity" = "Тражи";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
-"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "listed_exist" = "Излистан %@, већ постоји у ОсмАнд-у.";
 "shared_string_import_complete" = "Увоз је завршен";
 "import_complete_description" = "Сви подаци из %@ су увезени. Користите дугмад испод ради отварања било којег дела програма за управљања њиме.";

@@ -912,7 +912,7 @@
 "configure_screen_quick_action" = "Rapida ago";
 "search_activity" = "Serĉi";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
-"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "listed_exist" = "Listigitaj %@ jam ekzistas en OsmAnd.";
 "shared_string_import_complete" = "Enportado finita";
 "import_complete_description" = "Ĉiuj datumoj el %@ estas enportitaj. Uzu la butonojn sube por malfermi iun parton de la aplikaĵo por administri ilin.";

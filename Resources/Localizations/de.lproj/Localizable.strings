@@ -1806,7 +1806,7 @@
 "import_complete_description" = "Alle Daten aus dem %@ importiert. Verwenden Sie die Schaltflächen unten, um einen beliebigen Teil der App zu öffnen und zu verwalten.";
 "shared_string_import_complete" = "Import abgeschlossen";
 "listed_exist" = "Die aufgelisteten %@ sind in OsmAnd bereits vorhanden.";
-"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "search_activity" = "Suchen";
 "configure_screen_quick_action" = "Schnellaktion";

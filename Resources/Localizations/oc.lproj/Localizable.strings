@@ -1880,7 +1880,7 @@
 "lang_zh" = "Chinés";
 "lang_zh_tw" = "Chinés (tradicionau)";
 "shared_string_profiles" = "Perfius";
-"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "import_complete_description" = "Totei lei donadas dau %@ son estadas importadas, podètz emplegar lei botons çai-sota per dobrir la partida de l'aplicacion per o administrar";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "rearrange_profiles" = "Reorganizar lei perfius";

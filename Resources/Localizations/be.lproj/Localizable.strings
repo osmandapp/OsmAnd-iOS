@@ -1796,7 +1796,7 @@
 "layer_amenity_label" = "Назвы кропак (POI, Улюбёныя)";
 "coord_input_add_point" = "Дадаць пункт";
 "quick_action_showhide_mapillary_title" = "Паказаць/схаваць Mapillary";
-"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "profile_alert_need_save_title" = "Захаваць змены";
 "quick_action_remove_next_destination_descr" = "Бягучы пункт прызначэння маршруту будзе выдалены. Калі гэта канцавы пункт прызначэння, то навігацыя спыніцца.";
 "configure_screen_quick_action" = "Хуткае дзеянне";

@@ -1714,7 +1714,7 @@
 "settings_app_theme" = "Motyw aplikacji";
 "shared_string_legend" = "Legenda";
 "gpx_parse_error" = "Problemy znalezione w pliku GPX. \n \nMożesz skontaktować się z obsługą OsmAnd w celu zbadania sprawy.";
-"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "search_activity" = "Wyszukaj";
 "configure_screen_quick_action" = "Szybka czynność";

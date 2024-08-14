@@ -1427,7 +1427,7 @@
 "export_profile" = "Exportar o perfil";
 "ui_customization_short_descr" = "Elementos da gabeta, menú contextual";
 "shared_string_poi_types" = "Tipos de PDI";
-"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "user_password" = "Contrasinal";
 "routing_profile_geocoding" = "Xeocodificación";
 "clear_tiles_warning" = "Aplicando estas modificacións eliminarás os datos almacenados na caché para esta fonte de teselas";

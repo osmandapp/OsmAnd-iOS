@@ -1815,7 +1815,7 @@
 "added_items" = "Добавленные элементы: %@";
 "shared_string_finish" = "Финиш";
 "shared_string_import_complete" = "Импорт завершен";
-"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "search_activity" = "Поиск";
 "configure_screen_quick_action" = "Быстрое действие";

@@ -914,7 +914,7 @@
 "configure_screen_quick_action" = "Бързо действие";
 "search_activity" = "Търсене";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
-"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "listed_exist" = "Изброените %@, вече съществуват в OsmAnd.";
 "shared_string_import_complete" = "Внасянето е завършено";
 "import_complete_description" = "Внесена е цялата информация от %@. Използвайте бутоните по-долу, за да отворите която и да било част от приложението и да я управлявате.";

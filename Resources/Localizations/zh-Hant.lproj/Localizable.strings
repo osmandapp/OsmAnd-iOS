@@ -1461,7 +1461,7 @@
 "clear_tiles_warning" = "套用這些變更將會清除這個圖磚來源的快取資料";
 "show_direction" = "距離指示";
 "shared_string_menu" = "選單";
-"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "vessel_width_limit_description" = "設定船艦寬度以避免窄橋";
 "arrived_at_destination" = "您已抵達。";
 "quick_action_mapillary_show" = "顯示 Mapillary";

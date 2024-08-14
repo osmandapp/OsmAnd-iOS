@@ -913,7 +913,7 @@
 "configure_screen_quick_action" = "სწრაფი მოქმედება";
 "search_activity" = "ძებნა";
 "ltr_or_rtl_combine_via_space" = "%@-%@";
-"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "listed_exist" = "Listed %@ already exist in OsmAnd.";
 "shared_string_import_complete" = "შემოტანა დასრულებულია";
 "import_complete_description" = "";

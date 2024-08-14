@@ -1575,7 +1575,7 @@
 "profile_alert_need_profile_name_title" = "Ingresa el nombre del perfil";
 "reorder_profiles" = "Editar la lista de perfiles";
 "ui_customization_short_descr" = "Elementos del menú lateral y menú contextual";
-"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "importing_from" = "Importando datos de«%@»";
 "shared_string_rendering_style" = "Estilo de renderizado";

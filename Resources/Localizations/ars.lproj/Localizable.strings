@@ -1017,7 +1017,7 @@
 "configure_screen_quick_action" = "إجراءات سريعة";
 "search_activity" = "بحث";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
-"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "ltr_or_rtl_combine_via_or" = "%@ من %@";
 "ltr_or_rtl_combine_via_slash" = "%@ / %@";

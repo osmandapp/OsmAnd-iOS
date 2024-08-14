@@ -1741,7 +1741,7 @@
 "shared_string_circle" = "Krog";
 "manage_subscription" = "Upravljanje naročnine";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
-"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "purchases_feature_desc_hourly_map_updates" = "Dostopaj do pogostejših posodobitev zemljevidov. Urne, dnevne ali tedenske posodobitve. Posodobitve se prenašajo postopno, samo za spremenjeno območje.";
 "cubic_m" = "m³";
 "accessibility_announce" = "Napovej";

@@ -1820,7 +1820,7 @@
 "added_items" = "Elements afegits: %@";
 "import_complete_description" = "S\'han importat totes les dades de %@ , podeu utilitzar els botons de sota per gestionar l\'aplicació obrint la part que calgui.";
 "listed_exist" = "Els llistats %@ ja existeixen a OsmAnd.";
-"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "importing_from" = "S\'estan important dades de %@";
 "shared_string_rendering_style" = "Estil de representació";

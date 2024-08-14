@@ -913,7 +913,7 @@
 "configure_screen_quick_action" = "פעולה מהירה";
 "search_activity" = "חיפוש";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
-"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "listed_exist" = "%@מוצג, כבר קיים ב־OsmAnd.";
 "shared_string_import_complete" = "הייבוא הושלם";
 "import_complete_description" = "כל הנתונים מתוך %@ כבר ייובאו. ניתן להשתמש בכפתורים שלהלן כדי לפתוח כל חלק שהוא ביישומון כדי לנהל אותם.";

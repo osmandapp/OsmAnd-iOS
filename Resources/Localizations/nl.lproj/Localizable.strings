@@ -1414,7 +1414,7 @@
 "shared_string_max" = "Max";
 "route_between_points" = "Route tussen punten";
 "quick_action_switch_profile_descr" = "De sneltoets wisselt tussen de geselecteerde profielen.";
-"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "routing_profile_straightline" = "Rechte lijn";
 "update_tile" = "Kaart bijwerken";
 "shared_string_add_profile" = "Profiel toevoegen";

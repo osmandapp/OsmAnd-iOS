@@ -913,7 +913,7 @@
 "configure_screen_quick_action" = "Tindakan cepat";
 "search_activity" = "Cari";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
-"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "listed_exist" = "Terdaftar %@, sudah ada di OsmAnd.";
 "shared_string_import_complete" = "Impor selesai";
 "import_complete_description" = "Telah mengimpor semua data dari %@. Gunakan tombol di bawah untuk membuka bagian aplikasi apa pun untuk mengelolanya.";

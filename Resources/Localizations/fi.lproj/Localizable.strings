@@ -746,7 +746,7 @@
 "configure_screen_quick_action" = "Pikatoiminto";
 "search_activity" = "Etsi";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
-"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "listed_exist" = "Lueteltu %@ on jo olemassa OsmAndissa.";
 "shared_string_import_complete" = "Tuonti valmis";
 "import_complete_description" = "All data from the %@ is imported, you can use buttons below to open needed part of the app to manage it";

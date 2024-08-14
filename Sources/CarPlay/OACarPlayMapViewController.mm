@@ -218,14 +218,13 @@
         [_mapVc removeFromParentViewController];
         [_mapVc.view removeFromSuperview];
         
+        _mapVc.isCarPlayActive = YES;
         [self addChildViewController:_mapVc];
         [self.view addSubview:_mapVc.view];
         _mapVc.view.frame = self.view.frame;
         _mapVc.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
         [_mapVc.mapView resumeRendering];
-
-        _mapVc.isCarPlayActive = YES;
     }
 }
 

@@ -14,10 +14,19 @@
 #import "OAMapLayers.h"
 #import "OAWeatherToolbarHandlers.h"
 
+static const double kForecastStepDuration = 2.5; // 2.5 minutes step
+static const int kForecastStepsPerHour = 60.0 / kForecastStepDuration; // 24 steps in hour
+static const int kForecastWholeDayMarksCount = 24 * kForecastStepsPerHour + 1; // 577 steps in slider
+
 @implementation OAWeatherTimeSegmentedSlider
 {
     NSCalendar *_currentTimezoneCalendar;
     NSArray<NSDate *> *_timeValues;
+}
+
++ (int) getForecastStepsPerHour
+{
+    return kForecastStepsPerHour;
 }
 
 - (void) commonInit
@@ -80,7 +89,6 @@
 }
 
 
-
 - (NSArray<NSDate *> *) getTimeValues
 {
     return _timeValues;
@@ -95,7 +103,6 @@
 {
     return _timeValues[[self getIndexForOptionStepsAmountWithoutDrawMark]];
 }
-
 
 - (NSInteger) getSelectedTimeIndex:(NSDate *)date
 {
@@ -133,7 +140,6 @@
     date = [_currentTimezoneCalendar dateByAddingUnit:NSCalendarUnitDay value:1 toDate:date options:0];
     self.maximumForCurrentMark = [_currentTimezoneCalendar startOfDayForDate:date].timeIntervalSince1970 - minimumForCurrentMark;
 }
-
 
 - (NSString *) getSelectingMarkTitleTextAtIndex:(NSInteger)index
 {

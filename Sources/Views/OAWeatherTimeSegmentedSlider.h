@@ -8,16 +8,14 @@
 
 #import "OASegmentedSlider.h"
 
-static const double kForecastStepDuration = 2.5; // 2.5 minutes step
-static const int kForecastStepsPerHour = 60.0 / kForecastStepDuration; // 24 steps in hour
-static const int kForecastWholeDayMarksCount = 24 * kForecastStepsPerHour + 1; // 577 steps in slider
-
 @class OAWeatherToolbarDatesHandler;
 
 
 @interface OAWeatherTimeSegmentedSlider : OASegmentedSlider
 
 @property (nonatomic) OAWeatherToolbarDatesHandler *datesHandler;
+
++ (int) getForecastStepsPerHour;
 
 - (void) commonInit;
 

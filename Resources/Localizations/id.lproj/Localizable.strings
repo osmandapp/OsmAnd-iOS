@@ -1393,7 +1393,7 @@
 "quick_action_showhide_mapillary_descr" = "Sebuah alihan untuk menampilkan atau menyembunyikan layer Mapillary pada peta.";
 "quick_action_mapillary_hide" = "Hide Mapillary";
 "quick_action_mapillary_show" = "Show Mapillary";
-"quick_action_remove_next_destination" = "Hapus titik tujuan berikutnya";
+"quick_action_remove_next_destination" = "Titik-tujuan selanjutnya";
 "quick_action_remove_next_destination_descr" = "Menghapus tujuan berikutnya pada rute Anda. Jika itu adalah tujuan akhir, navigasi akan berhenti.";
 "change_application_profile" = "Ubah profil aplikasi";
 "select_application_profile" = "Select application profile";
@@ -3177,3 +3177,16 @@
 "pressure_layer" = "Lapisan tekanan";
 "voices" = "Panduan suara";
 "cloud_layer" = "Lapisan awan";
+"missing_maps_ignore" = "Gunakan peta yang sudah diunduh";
+"data_source" = "Sumber data";
+"driving_region_india" = "India";
+"quick_action_directions_from" = "Titik awal";
+"quick_action_parking_place" = "Tempat pemarkiran";
+"quick_action_verb_show_hide" = "Tampilkan / Sembunyikan";
+"quick_action_verb_turn_on_off" = "Matikan / Nyalakan";
+"rendering_value_pale_name" = "Pucat";
+"weather_data_sources_prompt" = "OsmAnd menyadur data cuaca dari dua sumber berikut:";
+"missing_maps_ignore_details" = "Apakah peta yang Anda unduh meliputi rute yang Anda maksud? Navigasikan rute yang Anda maksud jika Anda mengenali area tersebut.";
+"map_settings_weather_wind_animation" = "Animasi angin";
+"quick_action_verb_pause_resume" = "Jeda / Lanjutkan";
+"quick_action_verb_start_stop" = "Mulai / Berhenti";

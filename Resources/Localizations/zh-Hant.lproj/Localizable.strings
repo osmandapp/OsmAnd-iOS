@@ -2033,7 +2033,7 @@
 "fav_point_emoticons_message" = "我的最愛被重新命名為「%@」以將包含表情符號的字串儲存到檔案中。";
 "turn_arrows_descr" = "選取是否要在路線上指示轉彎箭頭。";
 "local_backup_descr" = "從本機檔案備份或還原資料。";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "gpx_upload_public_visibility_descr" = "「公開」代表軌跡將會公開顯示在您的 GPS 軌跡與公開的 GPS 軌跡清單中，且在公開軌跡清單中會以帶有原始形式的時間戳顯示。透過 API 取得的資料不會引用您的軌跡頁面。軌跡點的時間戳不會透過公開的 GPS API 提供，也不會按時間排序。";
 "backup_delete_old_data" = "移除舊版本";
 "offline_edition_descr" = "如果啟用離線編輯，則更動將會先儲存在本機，然後按請求上傳，否則更動會立刻上傳。";
@@ -2059,7 +2059,7 @@
 "backup_data" = "備份資料";
 "backup_delete_all_data" = "刪除我所有的資料";
 "recalculate_route" = "重新計算路線";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "renew_subscription" = "續訂";
 "tracks_on_map" = "顯示軌跡";
 "map_widget_parking" = "停車場";

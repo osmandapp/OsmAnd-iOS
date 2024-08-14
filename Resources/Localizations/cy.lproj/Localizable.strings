@@ -2401,7 +2401,7 @@
 "select_backup_data_descr" = "Dewiswch ddata a ffolderi i\'w cadw wrth gefn.";
 "position_on_map_bottom" = "Botwm";
 "promo_subscription" = "Tanysgrifiad hyrwyddol";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "download_all" = "Lawrlwytho\'r y cyfan";
 "verification_code_missing_description" = "Gall gymryd hyd at 10 munud. Ddefnyddiwch y botwm isod os nad yw yn eich ffolder sbam.";
 "simulate_your_location_gpx_descr" = "Efelychu eich lleoliad gan ddefnyddio trac GPX wedi\'i recordio.";
@@ -2448,7 +2448,7 @@
 "tts_title" = "TTS";
 "not_enough_contributions_descr" = "Rhaid gwneud o leiaf %@ newid dros gyfnod y ddeufis diwethaf %@ er mwyn cael mynediad at ddiweddariadau mapiau hyd at bob awr heb derfyn.";
 "backup_delete_all_data" = "Dileu fy nata";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "routing_attr_freeride_policy_only_if_necessary_name" = "Dim ond os oes angen";
 "routing_attr_freeride_policy_allow_name" = "Caniatáu";
 "routing_attr_avoid_highway_name" = "Osgoi priffyrdd";

@@ -2470,7 +2470,7 @@
 "select_tracks" = "Selecionar trilhos";
 "shared_string_restoring" = "Restaurando";
 "restoring_from" = "Restaurando dados selecionados da nuvem";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "toggle_wind" = "Mostrar/ocultar - camada de vento";
 "cloud_show" = "Mostrar nuvens";
 "wind_hide" = "Ocultar vento";
@@ -2632,7 +2632,7 @@
 "shared_string_download_update" = "Baixar atualização";
 "backup_error_failed_to_fetch_remote_items" = "Falha ao buscar a lista de arquivos do servidor.";
 "error_contact_support" = "Se o problema persistir, entre em contato com nossa equipe de suporte.";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "track_has_no_needed_data" = "A trilha não contém os respectivos dados.";
 "select_another_colorization" = "Selecione outro tipo de cor.";
 "map_download_privacy_descr" = "Ao baixar os mapas concorda com os <a href='https://osmand.net/docs/legal/terms-of-use'>Termos de uso</a> e a <a href='https://osmand.net/docs/legal/privacy-policy'>Política de privacidade</a>.";

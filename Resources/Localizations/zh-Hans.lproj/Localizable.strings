@@ -1959,7 +1959,7 @@
 "get_discount_title" = "以 %@ 折扣优惠获取 %d %@。";
 "get_discount_first_part" = "以 %@ 的第一次 %@";
 "nautical_depth_points" = "航海深度点";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "show_gpx" = "轨迹";
 "calculate_osmand_route_without_internet" = "离线计算 OsmAnd 路线区段";
 "compass_always_hidden" = "始终隐藏";
@@ -2026,7 +2026,7 @@
 "duration_ago" = "%@前";
 "show_map_symbols" = "显示地图符号";
 "routing_attr_motor_type_petrol_name" = "汽油";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "osm_live_payment_month_cost_descr_ex" = "%.2f %@ /每月";
 "rendering_attr_showCycleNodeNetworkRoutes_name" = "显示节点网络自行车路线";
 "transfers" = "转移";

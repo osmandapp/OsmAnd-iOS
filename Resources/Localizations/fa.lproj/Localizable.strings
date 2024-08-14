@@ -1966,7 +1966,7 @@
 "map_widget_parking" = "پارکینگ";
 "routing_attr_motor_type_name" = "نوع موتور";
 "copy_poi_name" = "کپی نام نقطهٔ توجه";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "osm_live_payment_contribute_descr" = "حمایت‌های مالی به سرمایه‌گذاری برای نقشه‌نگاری اوپن‌استریت‌مپ کمک می‌کند.";
 "nav_type_hint" = "نوع ناوبری";
 "shared_string_angle_param" = "زاویه: %@°";

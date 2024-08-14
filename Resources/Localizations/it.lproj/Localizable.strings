@@ -2116,7 +2116,7 @@
 "route_calc_progress" = "Calcolo: %d%%";
 "map_settings_weather_wind" = "Vento";
 "available_groups" = "Gruppi disponibili";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "will_be_show_while_moving" = "Verrà mostrato in movimento";
 "carplay_profile" = "Profilo CarPlay";
 "map_settings_weather_pressure" = "Pressione";
@@ -2333,7 +2333,7 @@
 "weather_contours_enable_descr" = "Abilita per visualizzare il livello delle isolinee sulla mappa.";
 "map_settings_clear_raster_cache" = "Pulisci tile raster";
 "approximate_file_size" = "Dimesione approssimativa del file";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "rearrange_profile_descr" = "I profili OsmAnd predefiniti non possono essere eliminati, ma puoi disabilitarli nella schermata precedente o trascinarli in fondo all'elenco.";
 "add_point_before" = "Aggiungi un punto prima";
 "add_point_after" = "Aggiungi un punto dopo";

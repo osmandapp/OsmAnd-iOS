@@ -14,7 +14,7 @@
 #import "OAMapInfoController.h"
 #import "OAMapRendererView.h"
 #import "OAWeatherLayerSettingsViewController.h"
-#import "OASegmentedSlider.h"
+#import "OAWeatherTimeSegmentedSlider.h"
 #import "OASizes.h"
 #import "OAMapLayers.h"
 #import "OAMapWidgetRegistry.h"
@@ -32,11 +32,10 @@
 
 static int kDefaultZoom = 10;
 
-static int kForecastStepsPerHour = 12; // 5 minutes step
-static NSInteger kForecastMaxStepsCount = FORECAST_ANIMATION_DURATION_HOURS * kForecastStepsPerHour;
+static NSInteger kForecastMaxStepsCount = FORECAST_ANIMATION_DURATION_HOURS * [OAWeatherTimeSegmentedSlider getForecastStepsPerHour];
 
 static NSTimeInterval kAnimationStartDelaySec = 0.1;
-static NSTimeInterval kAnimationFrameDelaySec = 0.083 * 2;
+static NSTimeInterval kAnimationFrameDelaySec = 0.083;
 static NSTimeInterval kDownloadingCompleteDelaySec = 0.25;
 
 typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
@@ -49,7 +48,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
 @interface OAWeatherToolbar () <OAWeatherToolbarDelegate>
 
 @property (weak, nonatomic) IBOutlet OAFoldersCollectionView *dateCollectionView;
-@property (weak, nonatomic) IBOutlet OASegmentedSlider *timeSliderView;
+@property (weak, nonatomic) IBOutlet OAWeatherTimeSegmentedSlider *timeSliderView;
 @property (weak, nonatomic) IBOutlet UIStackView *weatherStackView;
 @property (weak, nonatomic) IBOutlet UIButton *playButton;
 
@@ -63,10 +62,8 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
     OAAutoObserverProxy *_contourNameChangeObserver;
     OAAutoObserverProxy *_mapSourceUpdatedObserver;
 
-    NSCalendar *_currentTimezoneCalendar;
     OAWeatherToolbarLayersHandler *_layersHandler;
     OAWeatherToolbarDatesHandler *_datesHandler;
-    NSArray<NSDate *> *_timeValues;
     NSInteger _previousSelectedDayIndex;
     float _prevZoom;
     OsmAnd::PointI _prevTarget31;
@@ -85,7 +82,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
     BOOL _wasDownloading;
     
     CFTimeInterval _currentLoopStart;
-    CFTimeInterval _currentLoopDuration;
+    CFTimeInterval _nextLoopStart;
 }
 
 - (instancetype)init
@@ -119,8 +116,6 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
     self.hidden = YES;
     _app = [OsmAndApp instance];
     _plugin = (OAWeatherPlugin *) [OAPluginsHelper getPlugin:OAWeatherPlugin.class];
-    _currentTimezoneCalendar = NSCalendar.autoupdatingCurrentCalendar;
-    _currentTimezoneCalendar.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
     _previousSelectedDayIndex = 0;
 
     _layersHandler = [[OAWeatherToolbarLayersHandler alloc] init];
@@ -129,14 +124,12 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
 
     self.dateCollectionView.foldersDelegate = _datesHandler;
     
-    self.timeSliderView.stepsAmountWithoutDrawMark = kDayFiveMinutesMarksCount;
-    [self.timeSliderView clearTouchEventsUpInsideUpOutside];
-    [self.timeSliderView setUsingExtraThumbInset:YES];
-    
     _currentDate = [NSDate now];
     _selectedDate = _currentDate;
     _animationState = EOAWeatherToolbarAnimationStateIdle;
     
+    [self.timeSliderView commonInit];
+    self.timeSliderView.datesHandler = _datesHandler;
     [self.timeSliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
     [self.timeSliderView addTarget:self action:@selector(timeChanged:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside | UIControlEventValueChanged];
 
@@ -204,7 +197,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
         [self.dateCollectionView setSelectedIndex:0];
         [_layersHandler updateData];
         [_datesHandler updateData];
-        NSInteger selectedTimeIndex = [self getSelectedTimeIndex:[OAUtilities getCurrentTimezoneDate:[NSDate date]]];
+        NSInteger selectedTimeIndex = [self.timeSliderView getSelectedTimeIndex:[OAUtilities getCurrentTimezoneDate:[NSDate date]]];
         self.timeSliderView.selectedMark = selectedTimeIndex;
         [self updateData:[_datesHandler getData] index:0];
         [self.dateCollectionView reloadData];
@@ -277,87 +270,6 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
         return YES;
     }
     return NO;
-}
-
-- (NSInteger)getSelectedTimeIndex:(NSDate *)date
-{
-    NSDate *roundedDate = [OAWeatherHelper roundForecastTimeToHour:date];
-    return [_currentTimezoneCalendar components:NSCalendarUnitHour fromDate:roundedDate].hour;
-}
-
-- (NSDate *)getSelectedGMTDate
-{
-    return [OARootViewController instance].mapPanel.mapViewController.mapLayers.weatherDate;
-}
-
-- (NSInteger)getSelectedDateIndex
-{
-    NSInteger day = [_currentTimezoneCalendar components:NSCalendarUnitDay fromDate:[self getSelectedGMTDate]].day;
-    NSArray<NSDictionary *> *datesData = [_datesHandler getData];
-    for (NSInteger i = 0; i < datesData.count; i++)
-    {
-        NSDate *itemDate = datesData[i][@"value"];
-        NSInteger itemDay = [_currentTimezoneCalendar components:NSCalendarUnitDay fromDate:itemDate].day;
-        if (day == itemDay)
-            return i;
-    }
-
-    return 0;
-}
-
-- (void)setCurrentMark:(NSInteger)index
-{
-    NSDate *date = [OAUtilities getCurrentTimezoneDate:[NSDate date]];
-    NSInteger minimumForCurrentMark = [_currentTimezoneCalendar startOfDayForDate:date].timeIntervalSince1970;
-    NSInteger currentValue = date.timeIntervalSince1970;
-    self.timeSliderView.currentMarkX = index == 0 ? (currentValue - minimumForCurrentMark) : -1;
-    date = [_currentTimezoneCalendar startOfDayForDate:date];
-    date = [_currentTimezoneCalendar dateByAddingUnit:NSCalendarUnitDay value:1 toDate:date options:0];
-    self.timeSliderView.maximumForCurrentMark = [_currentTimezoneCalendar startOfDayForDate:date].timeIntervalSince1970 - minimumForCurrentMark;
-}
-
-- (void)updateTimeValues:(NSDate *)date {
-    NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
-    NSDate *startOfDay = [calendar startOfDayForDate:date];
-    
-    NSMutableArray<NSDate *> *timeValues = [NSMutableArray array];
-    
-    [timeValues addObject:startOfDay];
-    
-    NSInteger hourSteps = 9 + (9 - 1) * 2;
-    
-    for (NSInteger hour = 1; hour < hourSteps; hour++)
-    {
-        NSDate *nextHourDate = [calendar dateByAddingUnit:NSCalendarUnitHour
-                                                    value:hour
-                                                   toDate:startOfDay
-                                                  options:0];
-        [timeValues addObject:nextHourDate];
-    }
-    
-    NSInteger minuteSteps = 11;
-    NSMutableArray<NSDate *> *timeValuesTotal = [NSMutableArray array];
-    
-    for (NSInteger index = 0; index <= timeValues.count - 1; index++)
-    {
-        NSDate *data = timeValues[index];
-        [timeValuesTotal addObject:data];
-        if (index <= timeValues.count - 2)
-        {
-            for (NSInteger min = 1; min <= minuteSteps; min++)
-            {
-                NSDate *next5MinDate = [calendar dateByAddingUnit:NSCalendarUnitMinute
-                                                             value:min * 5
-                                                            toDate:data
-                                                           options:0];
-                
-                [timeValuesTotal addObject:next5MinDate];
-            }
-        }
-        
-    }
-    // [21:00:00, 21:05:00, 21:10:00 ... 21:55:00, 22:00:00]
-    _timeValues = timeValuesTotal;
 }
 
 + (CGFloat)bottomOffset
@@ -473,9 +385,9 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
     {
         _currentStep = [self.timeSliderView getIndexForOptionStepsAmountWithoutDrawMark];
         _animationStartStep = _currentStep;
-        _selectedDate = _timeValues[_currentStep];
+        _selectedDate = [self.timeSliderView getSelectedDate];
         
-        NSInteger remainingStepsForMidnight = _timeValues.count - _currentStep - 1;
+        NSInteger remainingStepsForMidnight = [self.timeSliderView getTimeValuesCount] - _currentStep - 1;
         _animateStepCount = MIN(kForecastMaxStepsCount, remainingStepsForMidnight);
         _animationStartStepCount = _animateStepCount;
         
@@ -499,7 +411,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
 - (void) scheduleAnimationStart
 {
     _currentLoopStart = CACurrentMediaTime();
-    _currentLoopDuration = kAnimationFrameDelaySec;
+    _nextLoopStart = _currentLoopStart + kAnimationFrameDelaySec;
 }
 
 - (void)onFrameAnimatorsUpdated
@@ -507,16 +419,14 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
     if (_animationState != EOAWeatherToolbarAnimationStateIdle && _currentLoopStart > 0)
     {
         CFTimeInterval currentTime = CACurrentMediaTime();
-        CFTimeInterval nextLoopStart = _currentLoopStart + _currentLoopDuration;
-        if (currentTime >= nextLoopStart)
+        if (currentTime >= _nextLoopStart)
         {
-            _currentLoopStart = nextLoopStart;
-            
+            CFTimeInterval newCurrentLoopStart = _nextLoopStart;
             if (!_isDownloading)
             {
                 if (!_wasDownloading)
                 {
-                    _currentLoopDuration = kAnimationFrameDelaySec;
+                    _nextLoopStart = currentTime + kAnimationFrameDelaySec;
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [self moveToNextForecastFrame];
                     });
@@ -524,13 +434,14 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
                 else
                 {
                     _wasDownloading = NO;
-                    _currentLoopDuration = kDownloadingCompleteDelaySec;
+                    _nextLoopStart = currentTime + kDownloadingCompleteDelaySec;
                 }
             }
             else
             {
                 _wasDownloading = YES;
             }
+            _currentLoopStart = newCurrentLoopStart;
         }
     }
     else
@@ -565,7 +476,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
         return;
     }
     
-    if (_currentStep + 1 > _timeValues.count || _animateStepCount == 0)
+    if (_currentStep + 1 > [self.timeSliderView getTimeValuesCount] || _animateStepCount == 0)
     {
         _currentStep = _animationStartStep;
         _animateStepCount = _animationStartStepCount;
@@ -578,7 +489,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
     
     [self updateProgressBar];
     [self updateSliderValue];
-    [self updateSelectedDate:_timeValues[_currentStep] forAnimation:YES resetPeriod:NO];
+    [self updateSelectedDate:[self.timeSliderView getTimeValues][_currentStep] forAnimation:YES resetPeriod:NO];
     
     if (_animationState == EOAWeatherToolbarAnimationStateStarted || _animationState == EOAWeatherToolbarAnimationStateSuspended)
     {
@@ -622,14 +533,13 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
     if (fromUser)
         [self stopAnimation];
         
-    NSInteger index = [self.timeSliderView getIndexForOptionStepsAmountWithoutDrawMark];
-    _selectedDate = _timeValues[index];
+    _selectedDate = [self.timeSliderView getSelectedDate];
     [self updateSelectedDate:_selectedDate forAnimation:!fromUser resetPeriod:NO];
 }
 
 - (void) updateSliderValue
 {
-    float value = ((float)_currentStep) / ((float)_timeValues.count);
+    float value = ((float)_currentStep) / ((float)[self.timeSliderView getTimeValuesCount]);
     [self.timeSliderView setValue:value animated:YES];
 }
 
@@ -671,8 +581,8 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
 
 - (void)updateData:(NSArray *)data index:(NSInteger)index
 {
-    [self updateTimeValues:data[index][@"value"]];
-    [self setCurrentMark:index];
+    [self.timeSliderView updateTimeValues:data[index][@"value"]];
+    [self.timeSliderView setCurrentMark:index];
     [self.timeSliderView setNumberOfMarks:9 additionalMarksBetween:index > 0 ? 0 : 2];
     
     NSInteger selectedTimeIndex = self.timeSliderView.selectedMark;

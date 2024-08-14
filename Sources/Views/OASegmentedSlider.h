@@ -8,8 +8,6 @@
 
 #import "OASlider.h"
 
-static const NSInteger kDayFiveMinutesMarksCount = 289;
-
 @interface OASegmentedSlider : OASlider
 
 @property (nonatomic) NSInteger selectedMark;
@@ -21,10 +19,13 @@ static const NSInteger kDayFiveMinutesMarksCount = 289;
 - (NSInteger)getIndexForOptionStepsAmountWithoutDrawMark;
 - (void)clearTouchEventsUpInsideUpOutside;
 
+- (void)setNumberOfMarks:(NSInteger)numberOfMarks;
 - (void)setNumberOfMarks:(NSInteger)numberOfMarks
   additionalMarksBetween:(NSInteger)additionalMarksBetween;
 
 - (void)makeCustom;
 - (void)setUsingExtraThumbInset:(BOOL)isUsing;
+
+- (NSString *)getSelectingMarkTitleTextAtIndex:(NSInteger)index;
 
 @end

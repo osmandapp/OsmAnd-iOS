@@ -36,7 +36,6 @@
 #import "OAColors.h"
 #import "Localization.h"
 #import "OARoutingHelper.h"
-#import "OASegmentedSlider.h"
 #import "OADayNightHelper.h"
 #import "OAMapLayers.h"
 #import "OAPreviewRouteLineInfo.h"
@@ -1610,7 +1609,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             [cell showLabels:NO topRight:NO bottomLeft:YES bottomRight:YES];
             cell.bottomLeftLabel.text = arrayValue.firstObject;
             cell.bottomRightLabel.text = arrayValue.lastObject;
-            [cell.sliderView setNumberOfMarks:arrayValue.count additionalMarksBetween:0];
+            [cell.sliderView setNumberOfMarks:arrayValue.count];
             cell.sliderView.selectedMark = [arrayValue indexOfObject:cellData.values[@"custom_string_value"]];
 
             cell.sliderView.tag = indexPath.section << 10 | indexPath.row;

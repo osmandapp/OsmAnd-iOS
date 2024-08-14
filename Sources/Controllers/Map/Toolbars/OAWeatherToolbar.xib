@@ -48,7 +48,7 @@
                         <constraint firstAttribute="height" constant="1" id="mGv-tS-wsP"/>
                     </constraints>
                 </view>
-                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="H2C-uP-knh" customClass="OASegmentedSlider">
+                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="H2C-uP-knh" customClass="OAWeatherTimeSegmentedSlider">
                     <rect key="frame" x="82" y="175" width="305" height="73"/>
                     <color key="tintColor" name="iconColorActive"/>
                     <constraints>

@@ -3735,6 +3735,7 @@
 "manage_subscriptions" = "Manage subscriptions.";
 "deleting_complete" = "Deletion complete";
 "osmand_cloud_delete_account_descr" = "Are you sure you want to delete OsmAnd Cloud account?";
+"osmand_cloud_delete_account_descr_with_email" = "Are you sure you want to delete OsmAnd Cloud account: %@?";
 "osmand_cloud_delete_account_confirmation" = "Delete account?";
 "osmand_cloud_deletion_all_data_warning" = "All data from OsmAnd Cloud will be %@. Data on the device remains untouched.";
 "osmand_cloud_deletion_account_warning" = "Your account and all account details will be %@";

@@ -133,7 +133,12 @@ final class DeleteAccountViewController: OABaseButtonsViewController, OAOnDelete
         if status == .notStarted {
             let deleteConfirmRow = infoSection.createNewRow()
             deleteConfirmRow.cellType = OASimpleTableViewCell.reuseIdentifier
-            deleteConfirmRow.title = localizedString("osmand_cloud_delete_account_descr")
+            let email = OAAppSettings.sharedManager().backupUserEmail.get() ?? ""
+            let deleteConfirmTitle = NSMutableAttributedString(string: String(format: localizedString("osmand_cloud_delete_account_descr_with_email"), email),
+                                                                attributes: [.font: UIFont.preferredFont(forTextStyle: .body)])
+            deleteConfirmTitle.addAttribute(.font, value: UIFont.preferredFont(forTextStyle: .headline),
+                                             range: deleteConfirmTitle.mutableString.range(of: email))
+            deleteConfirmRow.setObj(deleteConfirmTitle, forKey: "attributedTitle")
             
             let allDataDeletedRow = infoSection.createNewRow()
             allDataDeletedRow.cellType = OASimpleTableViewCell.reuseIdentifier

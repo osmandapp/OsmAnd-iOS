@@ -25,6 +25,7 @@
 @implementation OACloudAccountLoginViewController
 {
     EOACloudAccountScreenType _screenType;
+    NSString *_email;
 
     NSArray<NSArray<NSDictionary *> *> *_data;
     
@@ -51,6 +52,7 @@
     if (self)
     {
         _screenType = type;
+        _email = [[OAAppSettings sharedManager].backupUserEmail get];
     }
     return self;
 }
@@ -197,6 +199,25 @@
     [_backupHelper registerUser:[OAAppSettings.sharedManager.backupUserEmail get] promoCode:@"" login:YES];
 }
 
+- (BOOL) isUserDeletingWrongAccount:(NSString *)email
+{
+    return _screenType == EOACloudAccountDeletionScreenType && ![email isEqualToString:_email] && email.length > 0;
+}
+
+- (void) checkEmailValidity
+{
+    [super checkEmailValidity];
+    if (self.errorMessage.length == 0 && [self isUserDeletingWrongAccount:self.getTextFieldValue])
+    {
+        [self showErrorMessage:OALocalizedString(@"verify_account_deletion_descr")];
+    }
+}
+
+- (BOOL) isValidInputValue:(NSString *)value
+{
+    return [super isValidInputValue:value] && ![self isUserDeletingWrongAccount:value];
+}
+
 // MARK: - Actions
 
 - (void) continueButtonPressed
@@ -204,7 +225,7 @@
     if (!_continuePressed)
     {
         NSString *email = self.getTextFieldValue;
-        if ([email isValidEmail])
+        if ([email isValidEmail] && ![self isUserDeletingWrongAccount:email])
         {
             if (_screenType == EOACloudAccountLoginScreenType)
             {

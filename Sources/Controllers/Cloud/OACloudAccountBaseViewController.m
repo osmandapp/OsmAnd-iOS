@@ -431,16 +431,26 @@
     if (self.errorMessage.length > 0)
         return;
     
-    BOOL isInvalidEmail = ![_inputText isValidEmail] && _inputText.length > 0;
+    BOOL isInvalidEmail = [self isInvalidEmail:_inputText];
     if (isInvalidEmail)
     {
-        self.errorMessage = OALocalizedString(@"osm_live_enter_email");
-        [self generateData];
-        [self.tableView performBatchUpdates:^{
-            [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationAutomatic];
-            [self updateAllSections];
-        } completion:nil];
+        [self showErrorMessage:OALocalizedString(@"osm_live_enter_email")];
     }
+}
+
+- (void) showErrorMessage:(NSString *)message
+{
+    self.errorMessage = message;
+    [self generateData];
+    [self.tableView performBatchUpdates:^{
+        [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self updateAllSections];
+    } completion:nil];
+}
+
+- (BOOL) isInvalidEmail:(NSString *)email
+{
+    return ![email isValidEmail] && email.length > 0;
 }
 
 - (BOOL) textFieldShouldClear:(UITextField *)textField

@@ -3475,7 +3475,7 @@
 "app_profile" = "Profil aplikace";
 "quick_action_first_intermediate" = "První mezicíl";
 "visualization_3d_track_line" = "Linie trasy";
-"track_3d" = "3D trasa";
+"track_3d" = "3D stopa";
 "fixed_height" = "Pevná výška";
 "upward_gradient" = "Sklon vzhůru";
 "shared_string_top" = "Nahoru";
@@ -3488,9 +3488,9 @@
 "missing_maps_ignore_details" = "Pokrývají stažené mapy vaši trasu? Navigujte podle nich, pokud oblast dobře znáte.";
 "track_vertical_exaggeration_description" = "Změnou hodnoty měřítka můžete měnit výšku 3D trasy.";
 "visualization_3d_visualized_by" = "Vizualizováno";
-"track_3d_empty_view_title" = "3D zobrazení trasy";
+"track_3d_empty_view_title" = "3D zobrazení stopy";
 "shared_string_top_bottom" = "Nahoře a dole";
 "shared_string_instructions" = "Instrukce";
-"shared_string_analysis" = "Analytika";
+"shared_string_analysis" = "Analýza";
 "visualization_3d_wall_color" = "Barva zdi";
 "downward_gradient" = "Spád dolů";

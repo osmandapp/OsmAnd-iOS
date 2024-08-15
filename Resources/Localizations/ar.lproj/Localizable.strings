@@ -43,7 +43,7 @@
 "info_button" = "معلومات";
 "simulate_your_location" = "محاكاة تخيلية";
 "simulate_routing_descr" = "محاكاة موقفك باستخدام مسار محسوب";
-"day_night_info_description" = "الشروق: %@  \nالغروب: %@";
+"day_night_info_description" = "الشروق: %@ \nالغروب: %@";
 "day_night_info" = "مواقيت الشروق والغروب";
 "daynight_mode_auto" = "تلقائي";
 "route_simulation" = "محاكاة الطريق";
@@ -1816,7 +1816,7 @@
 "replace_all" = "استبدل الكل";
 "keep_both_desc" = "سيتم إضافة العناصر المستوردة مع زيادة قبل اسمها";
 "keep_both" = "احتفظ بكليهما";
-"import_duplicates_description" = "OsmAndيحتوي بالفعل على عناصر بنفس الأسماء مثل التي استوردتها.  \n  \nحدد إجراء.";
+"import_duplicates_description" = "أوسماند يحتوي بالفعل على عناصر تحمل نفس أسماء العناصر المستوردة. \n \nحدد إجراء.";
 "import_duplicates_title" = "بعض العناصر موجودة بالفعل";
 "shared_string_nothing_selected" = "لا شيء محدد";
 "nav_type_hint" = "نوع الملاحة";
@@ -3498,3 +3498,13 @@
 "quick_action_directions_from" = "نقطة البداية";
 "download_srtm_maps" = "خرائط الخطوط الكنتورية";
 "wind_layer" = "طبقة الرياح";
+"weather_wind_animation_enable_descr" = "تمكين عرض طبقة الرسوم المتحركة للرياح على الخريطة.";
+"shared_string_show" = "إظهار";
+"osmand_depelopment_use_3d_icons" = "استخدم أيقونات الموقع ثلاثية الأبعاد";
+"driving_region_uk" = "المملكة المتحدة وحلفائها";
+"driving_region_india" = "الهند";
+"route_your_destination_is_on_left" = "وجهتك على اليسار";
+"route_your_destination_is_on_right" = "وجهتك على اليمين";
+"route_your_destination_is_on_ahead" = "وجهتك إلى الأمام مباشرة";
+"shared_string_update_required" = "تحتاج إلى تحديث";
+"osm_login_needs_ios_16_4" = "يتطلب تسجيل الدخول إلى خريطة الشارع المفتوح نظام التشغيل iOS 16.4+";

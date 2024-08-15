@@ -23,6 +23,7 @@
 - (BOOL) isValidInputValue:(NSString *)value;
 - (void) checkEmailValidity;
 - (void) showErrorMessage:(NSString *)message;
+- (BOOL) needFullReload:(NSString *)text;
 
 - (void) updateScreen;
 

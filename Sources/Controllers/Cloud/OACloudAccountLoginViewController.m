@@ -218,6 +218,11 @@
     return [super isValidInputValue:value] && ![self isUserDeletingWrongAccount:value];
 }
 
+- (BOOL) needFullReload:(NSString *)text
+{
+    return [super needFullReload:text] || [text isEqualToString:_email];
+}
+
 // MARK: - Actions
 
 - (void) continueButtonPressed

@@ -398,7 +398,7 @@
 
 - (void) textViewDidChange:(UITextField *)textField
 {
-    BOOL needFullReload = (_inputText.length == 0 && textField.text.length > 0) || (_inputText.length > 0 && textField.text.length == 0);
+    BOOL needFullReload = [self needFullReload:textField.text];
     _inputText = textField.text;
     BOOL hadError = _errorMessage.length > 0;
     self.errorMessage = @"";
@@ -419,6 +419,11 @@
     {
         [self updateAllSections];
     }
+}
+
+- (BOOL) needFullReload:(NSString *)text
+{
+    return (_inputText.length == 0 && text.length > 0) || (_inputText.length > 0 && text.length == 0);
 }
 
 - (BOOL) needEmailValidation

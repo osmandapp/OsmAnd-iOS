@@ -1702,7 +1702,7 @@ static const NSInteger kColorsSection = 1;
                                                                                          forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.separatorInset = UIEdgeInsetsMake(0, CGFLOAT_MAX, 0, 0);
-        cell.heightConstraint.constant = 96;
+        cell.heightConstraint.constant = 55;
 
         [GpxUIHelper setupGradientChartWithChart:cell.lineChartView
                              useGesturesAndScale:NO
@@ -1723,6 +1723,7 @@ static const NSInteger kColorsSection = 1;
                                         colorPalette:colorPalette
                                       valueFormatter:[GradientUiHelper getGradientTypeFormatter:_gradientColorsCollection.gradientType
                                                                                        analysis:self.analysis]];
+        [cell.lineChartView setVisibleYRangeWithMinYRange:0 maxYRange: 1 axis:AxisDependencyLeft];
         [cell.lineChartView notifyDataSetChanged];
         return cell;
     }

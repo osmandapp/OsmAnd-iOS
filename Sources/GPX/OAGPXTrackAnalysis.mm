@@ -636,8 +636,7 @@ static const double SLOPE_THRESHOLD = 70.0;
 
     NSMutableArray<NSNumber *> *survived = [NSMutableArray arrayWithObject:@NO count:pointsCount];
     int lastSurvived = 0;
-    survived[0] = @YES;
-    int survidedCount = 1;
+    int survidedCount = 0;
     for (int i = 1; i < pointsCount - 1; i++)
     {
         double prevEle = [splitSegment get:lastSurvived].elevation;
@@ -650,14 +649,12 @@ static const double SLOPE_THRESHOLD = 70.0;
             survidedCount++;
         }
     }
-    survived[pointsCount - 1] = @YES;
-    survidedCount++;
-    if (survidedCount < 4)
+    if (survidedCount < 2)
         return nil;
 
     lastSurvived = 0;
-    survidedCount = 1;
-    for (int i = 1; i < pointsCount; i++)
+    survidedCount = 0;
+    for (int i = 1; i < pointsCount - 1; i++)
     {
         if (![survived[i] boolValue])
             continue;
@@ -676,21 +673,25 @@ static const double SLOPE_THRESHOLD = 70.0;
         lastSurvived = i;
         survidedCount++;
     }
-    if (survidedCount < 4)
+    if (survidedCount < 2)
         return nil;
 
+    survived[0] = @YES;
+    survived[pointsCount - 1] = @YES;
     NSMutableArray<OAApproxResult *> *res = [NSMutableArray array];
     int k = 0;
     lastSurvived = 0;
     for (int i = 0; i < pointsCount; i++)
     {
-        if (![survived[i] boolValue] || k == survidedCount)
+        if (![survived[i] boolValue])
             continue;
 
         OAWptPt *point = [splitSegment get:i];
         OAWptPt *lastPoint = [splitSegment get:lastSurvived];
 
-        [res addObject:[[OAApproxResult alloc] initWithDist:lastSurvived == i ? 0 : [OAMapUtils getDistance:point.position second:lastPoint.position] ele:point.elevation]];
+        [res addObject:[[OAApproxResult alloc] initWithDist:lastSurvived == 0 
+                        ? 0 : [OAMapUtils getDistance:point.position second:lastPoint.position]
+                                                        ele:point.elevation]];
 
         k++;
         lastSurvived = i;

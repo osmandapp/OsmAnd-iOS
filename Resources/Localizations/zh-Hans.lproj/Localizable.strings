@@ -2066,7 +2066,7 @@
 "routing_attr_difficulty_preference_beginner_name" = "初学者";
 "rendering_attr_OSMMapperAssistantFixme_description" = "显示 fixme 标签";
 "rendering_attr_showTrainRoutes_name" = "火车线路";
-"rendering_attr_showShareTaxiRoutes_name" = "班车路线";
+"rendering_attr_showShareTaxiRoutes_name" = "穿梭客车路线";
 "rendering_attr_weatherTempContours_name" = "等温线";
 "rendering_value_omit_name" = "省略";
 "rendering_attr_depthContourWidth_description" = "等深线宽度";

@@ -875,7 +875,7 @@
 "opening_hours" = "Horas de apertura";
 "quick_action_pause_nav_descr" = "Preme neste botón para deter ou voltar á navegación.";
 "shared_string_deselect" = "Desbotar a selección";
-"quick_action_resume_pause_navigation" = "Deter/Voltará navegación";
+"quick_action_resume_pause_navigation" = "Deter/retomar navegación";
 "poi_remove_title" = "Eliminar PDI";
 "wikivoyage_offline" = "Wikiviaxes sen conexión";
 "filter_current_poiButton" = "Filtro";
@@ -1399,7 +1399,7 @@
 "shared_string_preparing" = "Estase a preparar";
 "base_profile_descr_public_transport" = "Tipos de transporte público";
 "replace_all_desc" = "Os elementos actuais serán substituídos polos elementos do ficheiro";
-"quick_action_remove_next_destination" = "Eliminar punto de destino máis preto";
+"quick_action_remove_next_destination" = "Seguinte punto de destino";
 "routing_profile_ski" = "Esquí";
 "shared_string_two" = "Dous";
 "shared_string_nothing_selected" = "Ren selecionado";
@@ -1719,7 +1719,7 @@
 "daily_map_updates" = "Actualizacións do mapa: cada hora";
 "on_hold" = "En espera";
 "data_settings" = "Data";
-"shared_string_paused" = "Detido";
+"shared_string_paused" = "En pausa";
 "shared_string_delete_all" = "Eliminar todo";
 "in_grace_period" = "En período experimental";
 "shared_string_undefined" = "Sen definir";
@@ -2021,3 +2021,11 @@
 "voices" = "Indicacións por voz";
 "shared_string_favorites" = "Favoritos";
 "download_srtm_maps" = "Curvas de nivel";
+"pause_nav" = "Pausar navegación";
+"driving_region_uk" = "Reino Unido e semellantes";
+"rendering_value_pale_name" = "Pálido";
+"quick_action_verb_pause_resume" = "Pausar / Retomar";
+"quick_action_destination" = "Destino";
+"quick_action_directions_from" = "Punto inicial";
+"backup_pause_all" = "Pausar todo";
+"driving_region_india" = "India";

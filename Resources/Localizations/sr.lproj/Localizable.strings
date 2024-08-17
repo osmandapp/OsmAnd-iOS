@@ -2264,7 +2264,7 @@
 "turn_arrows" = "Стрелице скретања";
 "shared_string_min_height" = "Мин. висина";
 "shared_string_max_height" = "Макс. висина";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "routing_attr_allow_gate_name" = "Дозволи коришћење капије";
 "routing_attr_only_permitted_streets_description" = "Користи само улице које су изричито дозвољене";
 "routing_attr_only_permitted_ways_name" = "Изричито дозвољени путеви";
@@ -3505,3 +3505,5 @@
 "route_your_destination_is_on_ahead" = "Ваше одредиште је право испред";
 "route_your_destination_is_on_left" = "Ваше одредиште је на лево";
 "route_your_destination_is_on_right" = "Ваше одредиште је на десно";
+"shared_string_show" = "Прикажи";
+"weather_wind_animation_enable_descr" = "Омогућава да видите анимациони слој на мапи.";

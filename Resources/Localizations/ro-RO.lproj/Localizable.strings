@@ -823,7 +823,7 @@
 "avoid_road" = "Evitare drum";
 "shared_string_import_complete" = "Importarea s-a finalizat";
 "arrived_at_destination" = "Ați ajuns.";
-"reset_to_default" = "Resetează la valorile implicite";
+"reset_to_default" = "Resetează la valori implicite";
 "default_speed_setting_title" = "Viteză implicită";
 "coord_input_add_point" = "Adaugă punct";
 "shared_string_copy" = "Copiază";
@@ -871,7 +871,7 @@
 "download_tab_local" = "Local";
 "favorite_friends_category" = "Prieteni";
 "shared_string_import" = "Importă";
-"coordinates_widget_current_location" = "Coordonate: locația actuală";
+"coordinates_widget_current_location" = "Coordonate: locație curentă";
 "map_during_navigation" = "Hartaîn timpul navigației";
 "join_segments" = "Alăturare segmente";
 "shared_string_gpx_tracks" = "Trasee";
@@ -2823,7 +2823,7 @@
 "map_widget_next_sunset" = "Următorul apus";
 "top_widgets_panel" = "Panou superior";
 "with_permission_my_position_value" = "Poziționați harta la locația curentă";
-"coordinates_widget_map_center" = "Coordonate: centrul hărții";
+"coordinates_widget_map_center" = "Coordonate: centru hartă";
 "show_map_center" = "Afișați coordonate: centrul hărții";
 "hide_map_center" = "Ascundeți coordonate: centrul hărții";
 "map_widget_sunrise" = "Răsărit";
@@ -2866,10 +2866,10 @@
 "test_heightmap" = "Harta înălțimii de testare";
 "disable_vertex_hillshade_3d" = "Dezactivare vertexuri relief umbritîn 3D";
 "generate_hillshade_from_3d_maps" = "Generare de hărți raster cu relief umbrit, din hărți 3D";
-"map_widget_altitude_current_location" = "Altitudine: locația curentă";
+"map_widget_altitude_current_location" = "Altitudine: locație curentă";
 "map_widget_altitude_map_center" = "Elevație: centrul hărții";
 "activity_type_racing_name" = "Cursă";
-"map_widget_altitude_map_center_desc" = "Arată altitudinea deasupra nivelului mării a centrului actual al hărții.";
+"map_widget_altitude_map_center_desc" = "Arată altitudinea deasupra nivelului mării a centrului curent al hărții.";
 "generate_slope_from_3d_maps" = "Generarea de hărți raster de pantă din hărți 3D";
 "shared_string_app_profile" = "Profil aplicație";
 "activity_type_walking_name" = "Mers pe jos";
@@ -2920,7 +2920,7 @@
 "precipitation_widget_desc" = "Arată precipitațiile pentru centrul curent al hărții.";
 "temperature_widget_desc" = "Arată temperatura pentru centrul curent al hărții.";
 "bearing_desc" = "Arată direcția absolută sau relativă față de o țintă, în unități unghiulare (în modul 180 de grade, 360 de grade sau miliradiani).";
-"map_widget_altitude_desc" = "Arată altitudinea geolocației curente sau altitudinea centrului actual al hărții";
+"map_widget_altitude_desc" = "Arată altitudinea geolocației curente sau altitudinea centrului curent al hărții";
 "weather_widget_group_desc" = "Un set de widgeturi ce arată diverse informații despre vreme.";
 "map_widget_group_sunrise_sunset_desc" = "Aceste widgeturi arată informații despre următorul răsărit și apus.";
 "map_widget_group_sunrise_sunset" = "Răsărit, apus";
@@ -2980,7 +2980,7 @@
 "rendering_value_caiScale_description" = "Club Alpino Italiano (Clubul Alpin Italian)";
 "rendering_attr_alpineHikingScaleScheme_description" = "Tipuri de clasificare a dificultății pentru trasee.";
 "rendering_value_sacScale_description" = "Clubul Alpin Elvețian";
-"no_widgets_here_yet" = "Niciun widget aici";
+"no_widgets_here_yet" = "Nu aveți niciun widget încă";
 "no_widgets_descr" = "Adăugați unul sau mai multe widgeturi din lista de widgeturi disponibile.";
 "reset_all_settings_desc" = "Resetați toate setările la valorile implicite\?";
 "add_row" = "Adaugă rând";
@@ -2997,7 +2997,7 @@
 "map_widget_camera_distance_desc" = "Arată altitudinea camerei deasupra nivelului suprafeței.";
 
 // Widget descriptions
-"coordinates_widget_map_center_desc" = "Arată coordonatele geografice ale centrului actual al hărții";
+"coordinates_widget_map_center_desc" = "Arată coordonatele geografice ale centrului curent al hărții";
 "map_widget_rendering_fps_desc" = "Arată cât de repede sunt afișate și reîmprospătate harta și elementele hărții, exprimat în cadre pe secundă (FPS).";
 "shared_string_cache" = "Cache";
 "average_speed_skip_stops" = "Iaîn considerare opririle";

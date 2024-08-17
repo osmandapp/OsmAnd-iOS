@@ -2188,7 +2188,7 @@
 "routing_attr_freeride_policy_do_not_go_offpiste_name" = "不要離開越野滑雪道";
 "routing_attr_length_description" = "指定路線上允許的車輛長度。";
 "rendering_attr_showTrolleybusRoutes_name" = "無軌電車路線";
-"rendering_attr_showShareTaxiRoutes_name" = "快速公車路線";
+"rendering_attr_showShareTaxiRoutes_name" = "穿梭公車路線";
 "rendering_attr_OSMMapperAssistantNote_description" = "顯示註記標籤";
 "rendering_attr_weatherPressureContours_name" = "等壓線";
 "routing_attr_hazmat_category_description" = "危險物質分類 / 考慮危險物品進入權限";

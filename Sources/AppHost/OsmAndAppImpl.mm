@@ -45,6 +45,7 @@
 #import "OAFavoritesHelper.h"
 #import "OAAppSettings.h"
 #import "OAPluginsHelper.h"
+#import "OASharedUtil.h"
 #import "OAMapSource.h"
 #import "OAObservable.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -200,6 +201,8 @@
         [defaults registerDefaults:defResetSettings];
         NSDictionary *defResetRouting = [NSDictionary dictionaryWithObject:@"NO" forKey:@"reset_routing"];
         [defaults registerDefaults:defResetRouting];
+
+        [OASharedUtil initSharedLib:_documentsPath gpxPath:_gpxPath];
 
         _applicationModeChangedObservable = [[OAObservable alloc] init];
     }

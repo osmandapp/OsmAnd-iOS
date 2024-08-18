@@ -1,5 +1,5 @@
 //
-//  OAPOI.m
+//  OAPOIType.m
 //  OsmAnd
 //
 //  Created by Alexey Kulish on 18/03/15.
@@ -7,6 +7,8 @@
 //
 
 #import "OAPOIType.h"
+#import "OAPOICategory.h"
+#import "OAPOIFilter.h"
 #import "OAUtilities.h"
 
 @implementation OAPOIType

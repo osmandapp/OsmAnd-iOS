@@ -9,6 +9,7 @@
 #import "OAPluginDetailsViewController.h"
 #import "OAUtilities.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "Localization.h"
 #import "OAPluginPopupViewController.h"
 #import "OAPurchasesViewController.h"

@@ -13,8 +13,11 @@
 #import "OAMapillaryImageViewController.h"
 #import "OARouteDetailsGraphViewController.h"
 #import "OAAutoObserverProxy.h"
+#import "OAAppData.h"
+#import "OALocationServices.h"
 #import "OALog.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OAGPXDatabase.h"
 #import <UIViewController+JASidePanel.h>
 #import "OAPluginPopupViewController.h"
@@ -53,6 +56,7 @@
 #import "OADestination.h"
 #import "OAMapSettingsViewController.h"
 #import "OAQuickSearchViewController.h"
+#import "OAPOI.h"
 #import "OAPOIType.h"
 #import "OADefaultFavorite.h"
 #import "Localization.h"
@@ -96,17 +100,17 @@
 #import "OASearchToolbarViewController.h"
 #import "OAWeatherLayerSettingsViewController.h"
 #import "OAMapInfoController.h"
-#import "OsmAnd_Maps-Swift.h"
+#import "OAMapViewController.h"
 #import "OAGPXAppearanceCollection.h"
 #import "OAMapSettingsTerrainParametersViewController.h"
 #import "OADiscountToolbarViewController.h"
 #import "OAGPXMutableDocument.h"
 #import "OAPluginsHelper.h"
-
+#import "OAApplicationMode.h"
 #import "OARouteKey.h"
+#import "OAObservable.h"
 #import "OANetworkRouteSelectionTask.h"
 #import <MBProgressHUD.h>
-
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/NetworkRouteContext.h>
@@ -464,6 +468,10 @@ typedef enum
 
     if (_customStatusBarStyleNeeded)
         return _customStatusBarStyle;
+    
+    if (self.hudViewController.mapInfoController.weatherToolbarVisible) {
+        return [[ThemeManager shared] isLightTheme] ? UIStatusBarStyleDarkContent : UIStatusBarStyleLightContent;
+    }
 
     UIStatusBarStyle style = self.hudViewController ? self.hudViewController.preferredStatusBarStyle : UIStatusBarStyleDefault;
     return [self.targetMenuView getStatusBarStyle:[self contextMenuMode] defaultStyle:style];
@@ -1840,7 +1848,7 @@ typedef enum
      if (_searchViewController)
          [_searchViewController dismissViewControllerAnimated:YES completion:nil];
      if (_hudViewController)
-         [_hudViewController.floatingButtonsController hideActionsSheetAnimated];
+         [_hudViewController.floatingButtonsController hideActionsSheetAnimated:nil];
  }
 
 - (void) updateTargetPointPosition:(CGFloat)height animated:(BOOL)animated
@@ -2595,6 +2603,11 @@ typedef enum
 - (void)openTargetViewWithFavorite:(OAFavoriteItem *)item pushed:(BOOL)pushed
 {
     return [self openTargetViewWithFavorite:item pushed:pushed saveState:YES preferredZoom:PREFERRED_FAVORITE_ZOOM];
+}
+
+- (void)openTargetViewWithFavorite:(OAFavoriteItem *)item pushed:(BOOL)pushed saveState:(BOOL)saveState
+{
+    return [self openTargetViewWithFavorite:item pushed:pushed saveState:saveState preferredZoom:PREFERRED_FAVORITE_ZOOM];
 }
 
 - (void)openTargetViewWithAddress:(OAAddress *)address name:(NSString *)name typeName:(NSString *)typeName pushed:(BOOL)pushed preferredZoom:(float)preferredZoom

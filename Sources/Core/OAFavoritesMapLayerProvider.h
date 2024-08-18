@@ -13,6 +13,7 @@
 
 #include <OsmAndCore/QtExtensions.h>
 #include <OsmAndCore/ignore_warnings_on_external_includes.h>
+#include <QReadWriteLock>
 #include <QHash>
 #include <QList>
 #include <OsmAndCore/restore_internal_warnings.h>
@@ -28,6 +29,7 @@ class OAFavoritesMapLayerProvider
 public:
 private:
     QList<std::shared_ptr<OsmAnd::IFavoriteLocation>> _favorites;
+    mutable QReadWriteLock _iconsCacheLock;
     QHash<QString, sk_sp<SkImage>> _iconsCache;
     float _symbolsScaleFactor;
     

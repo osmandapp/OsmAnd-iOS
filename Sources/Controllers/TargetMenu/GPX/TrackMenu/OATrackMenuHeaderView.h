@@ -7,10 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "OATrackMenuHudViewController.h"
+#import "OATrackMenuHudViewControllerConstants.h"
 
-@class OAGPX, OAGPXDocument, OAGPXTrackAnalysis;
-@class OAButton, OAFoldersCollectionView;
+@class OAGPXTrackAnalysis, OAButton, OAFoldersCollectionView, OAGPXTableCellData;
 
 @protocol OATrackMenuViewControllerDelegate;
 

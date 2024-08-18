@@ -78,8 +78,14 @@
 
 - (BOOL) updateLayer
 {
+    if (OsmAndApp.instance.isInBackground)
+    {
+        self.invalidated = YES;
+        return NO;
+    }
     _nightMode = OAAppSettings.sharedManager.nightMode;
-    return NO;
+    self.invalidated = NO;
+    return YES;
 }
 
 - (void) show
@@ -119,6 +125,7 @@
         UIView *topView = [UIApplication sharedApplication].mainWindow;
         _progressHUD = [[MBProgressHUD alloc] initWithView:topView];
         _progressHUD.minShowTime = .5f;
+        _progressHUD.removeFromSuperViewOnHide = YES;
         [topView addSubview:_progressHUD];
         
         [_progressHUD show:!wasVisible];

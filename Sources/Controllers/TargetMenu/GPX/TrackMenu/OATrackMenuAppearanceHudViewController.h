@@ -8,7 +8,7 @@
 
 #import "OABaseTrackMenuHudViewController.h"
 
-@class OATrackMenuViewControllerState, OAColoringType;
+@class OATrackMenuViewControllerState, OAColoringType, OAGPX;
 
 @interface OATrackAppearanceItem : NSObject
 

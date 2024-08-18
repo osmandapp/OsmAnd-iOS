@@ -23,6 +23,8 @@
 #import "OASaveTrackViewController.h"
 #import "OASelectedGPXHelper.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OASavingTrackHelper.h"
 #import "OAGPXMutableDocument.h"
 
@@ -71,32 +73,15 @@
     NSMutableArray<OAWptPt *> *pts = [NSMutableArray new];
     if (locations)
     {
-        double lastHeight = RouteDataObject::HEIGHT_UNDEFINED;
-        double lastValidHeight = NAN;
         for (CLLocation *l in locations)
         {
             OAWptPt *point = [[OAWptPt alloc] init];
             [point setPosition:l.coordinate];
-            if (l.altitude != 0)
+            if (!isnan(l.altitude) && l.altitude != 0)
             {
                 if (gpx)
                     gpx.hasAltitude = YES;
-                CLLocationDistance h = l.altitude;
-                point.elevation = h;
-                lastValidHeight = h;
-                if (lastHeight == RouteDataObject::HEIGHT_UNDEFINED && pts.count > 0)
-                {
-                    for (OAWptPt *pt in pts)
-                    {
-                        if (pt.elevation == NAN)
-                            pt.elevation = h;
-                    }
-                }
-                lastHeight = h;
-            }
-            else
-            {
-                lastHeight = RouteDataObject::HEIGHT_UNDEFINED;
+                point.elevation = l.altitude;
             }
             if (pts.count == 0)
             {
@@ -119,21 +104,93 @@
             }
             [pts addObject:point];
         }
-        if (!isnan(lastValidHeight) && lastHeight == RouteDataObject::HEIGHT_UNDEFINED)
-        {
-            for (OAWptPt *point in [pts reverseObjectEnumerator])
-            {
-                if (!isnan(point.elevation))
-                    break;
-
-                point.elevation = lastValidHeight;
-            }
-        }
     }
+    [OAGPXUIHelper interpolateEmptyElevationWpts:pts];
     seg.points = pts;
     track.segments = @[seg];
     gpx.tracks = @[track];
     return gpx;
+}
+
++ (void)interpolateEmptyElevationWpts:(NSMutableArray<OAWptPt *> *)pts
+{
+    for (int i = 0; i < pts.count; )
+    {
+        int processedPoints = 0;
+        OAWptPt *currentPt = pts[i];
+        if (isnan(currentPt.elevation))
+        {
+            int startIndex = i, prevValidIndex = -1, nextValidIndex = -1;
+            double prevValidElevation = NAN, nextValidElevation = NAN;
+
+            for (int j = startIndex - 1; j >= 0; j--)
+            {
+                OAWptPt *prevPt = pts[j];
+                if (!isnan(prevPt.elevation))
+                {
+                    prevValidElevation = prevPt.elevation;
+                    prevValidIndex = j;
+                    break;
+                }
+            }
+
+            for (int j = startIndex + 1; j < pts.count; j++)
+            {
+                OAWptPt *nextPt = pts[j];
+                if (!isnan(nextPt.elevation))
+                {
+                    nextValidElevation = nextPt.elevation;
+                    nextValidIndex = j;
+                    break;
+                }
+            }
+
+            if (prevValidIndex == -1 && nextValidIndex == -1)
+            {
+                return; // no elevation at all
+            }
+
+            if (prevValidIndex == -1 || nextValidIndex == -1)
+            {
+                // outermost section without interpolation
+                for (int j = startIndex; j < pts.count; j++)
+                {
+                    OAWptPt *pt = pts[j];
+                    if (isnan(pt.elevation))
+                    {
+                        pt.elevation = startIndex == 0 ? nextValidElevation : prevValidElevation;
+                        processedPoints++;
+                    } else
+                    {
+                        break;
+                    }
+                }
+            } else
+            {
+                // inner section
+                double totalDistance = 0;
+                NSMutableArray<NSNumber *> *distanceArray = [NSMutableArray arrayWithCapacity:(nextValidIndex - prevValidIndex)];
+                for (int j = prevValidIndex; j < nextValidIndex; j++)
+                {
+                    OAWptPt *thisPt = pts[j];
+                    OAWptPt *nextPt = pts[j + 1];
+                    double distance = getDistance(thisPt.position.latitude, thisPt.position.longitude,
+                                                  nextPt.position.latitude, nextPt.position.longitude);
+                    [distanceArray addObject:@(distance)];
+                    totalDistance += distance;
+                }
+                double deltaElevation = pts[nextValidIndex].elevation - pts[prevValidIndex].elevation;
+                for (int j = startIndex; totalDistance > 0 && j < nextValidIndex; j++)
+                {
+                    double currentDistance = [distanceArray[j - startIndex] doubleValue];
+                    double increaseElevation = deltaElevation * (currentDistance / totalDistance);
+                    pts[j].elevation = pts[j - 1].elevation + increaseElevation;
+                    processedPoints++;
+                }
+            }
+        }
+        i += processedPoints > 0 ? processedPoints : 1;
+    }
 }
 
 + (NSString *) getDescription:(OAGPX *)gpx
@@ -276,10 +333,14 @@
 {
     [gpxFile setShowArrows:gpxItem.showArrows];
     [gpxFile setShowStartFinish:gpxItem.showStartFinish];
-    [gpxFile setVerticalExaggerationScale:gpxItem.verticalExaggerationScale];
-    [gpxFile setVisualization3dByType:gpxItem.visualization3dByType];
-    [gpxFile setVisualization3dWallColorType:gpxItem.visualization3dWallColorType];
-    [gpxFile setVisualization3dPositionType:gpxItem.visualization3dPositionType];
+    if (gpxItem.visualization3dByType != EOAGPX3DLineVisualizationByTypeNone)
+    {
+        [gpxFile setVerticalExaggerationScale:gpxItem.verticalExaggerationScale];
+        [gpxFile setElevationMeters:gpxItem.elevationMeters];
+        [gpxFile setVisualization3dByType:gpxItem.visualization3dByType];
+        [gpxFile setVisualization3dWallColorType:gpxItem.visualization3dWallColorType];
+        [gpxFile setVisualization3dPositionType:gpxItem.visualization3dPositionType];
+    }
     
     [gpxFile setSplitInterval:gpxItem.splitInterval];
     [gpxFile setSplitType:[OAGPXDatabase splitTypeNameByValue:gpxItem.splitType]];
@@ -291,6 +352,9 @@
     
     if (gpxItem.coloringType && gpxItem.coloringType.length > 0)
         [gpxFile setColoringType:gpxItem.coloringType];
+
+    if (gpxItem.gradientPaletteName && gpxItem.gradientPaletteName.length > 0)
+        [gpxFile setGradientColorPalette:gpxItem.gradientPaletteName];
 }
 
 + (CLLocationCoordinate2D)getSegmentPointByTime:(OATrkSegment *)segment
@@ -692,7 +756,9 @@
                 }
                 metadata.time = time == 0 ? (long) [[NSDate date] timeIntervalSince1970] : time;
             }
-            metadata.name = newFileName;
+
+            if (doc.creator && [doc.creator containsString:@"OsmAnd"])
+                metadata.name = newName;
 
             if ([NSFileManager.defaultManager fileExistsAtPath:oldPath])
                 [NSFileManager.defaultManager removeItemAtPath:oldPath error:nil];

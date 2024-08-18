@@ -110,7 +110,9 @@
                             segment:(OATrkSegment *)segment;
 - (NSString *) getColoringType;
 - (NSString *) getGradientScaleType;
+- (NSString *)getGradientColorPalette;
 - (void) setColoringType:(NSString *)coloringType;
+- (void)setGradientColorPalette:(NSString *)gradientColorPaletteName;
 - (void) removeGradientScaleType;
 - (NSString *) getSplitType;
 - (void) setSplitType:(NSString *)gpxSplitType;
@@ -124,7 +126,9 @@
 - (void) setShowStartFinish:(BOOL)showStartFinish;
 
 - (CGFloat)getVerticalExaggerationScale;
+- (NSInteger)getElevationMeters;
 - (void)setVerticalExaggerationScale:(CGFloat)scale;
+- (void)setElevationMeters:(NSInteger)meters;
 
 - (NSString *)getVisualization3dByTypeValue;
 - (void)setVisualization3dByType:(EOAGPX3DLineVisualizationByType)type;

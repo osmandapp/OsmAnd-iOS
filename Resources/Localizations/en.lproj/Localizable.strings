@@ -499,6 +499,7 @@
 "fast_route_mode_descr" = "Enable to calculate fastest route or disable for fuel-saving route.";
 "avoid_in_routing_title" = "Avoid…";
 "avoid_in_routing_descr_" = "Avoid certain routes and road types";
+"avoid_pt_types_descr" = "Select public transport types to avoid for navigation:";
 "prefer_in_routing_title" = "Prefer…";
 "prefer_in_routing_descr" = "Prefer motorways.";
 "relief_smoothness_factor_descr" = "Preferred terrain: flat or hilly.";
@@ -535,6 +536,8 @@
 "special_routing_type" = "Special routing";
 "import_routing_file_descr" = "You can import routing file from any cloud storage app by opening it in OsmAnd.";
 "recalculate_route" = "Recalculate route";
+"route_recalculation_dist_title" = "Minimal distance to recalculate route";
+"in_case_of_reverse_direction" = "In case of reverse direction";
 "recalculate_wrong_dir" = "Recalculate route in case of reverse direction";
 "recalculate_route_distance_promo" = "The route will be recalculated if the distance from the route to the current location is more than selected value.";
 "select_distance_route_will_recalc" = "Select the distance after which the route will be recalculated.";
@@ -567,6 +570,7 @@
 "turn_arrows" = "Turn Arrows";
 "turn_arrows_descr" = "Select whether turn arrows are indicated on the route line.";
 "impassable_road" = "Avoid roads…";
+"avoid_pt_types" = "Avoid transport types…";
 "road_speeds" = "Road speeds";
 "avoid_transport_type" = "Avoid transport types";
 "temporary_conditional_routing" = "Consider temporary limitations";
@@ -632,6 +636,10 @@
 "ending_point_too_far" = "Ending point too far from nearest road.";
 "intermediate_point_too_far" = "Intermediate destination %@ is too far from the nearest road.";
 "arrived_at_destination" = "You have arrived.";
+"route_your_destination_is_on_left" = "Your destination is on the left";
+"route_your_destination_is_on_right" = "Your destination is on the right";
+"route_your_destination_is_on_ahead" = "Your destination is straight ahead";
+
 "route_preferred_terrain_any" = "The terrain profile is not taken into account when choosing a route.";
 "route_preferred_terrain_flat" = "Routes with a flat relief profile. The length may increase.";
 "route_preferred_terrain_less_hilly" = "Shorter, less hilly routes.";
@@ -670,7 +678,8 @@
 "driving_region_us" = "United States";
 "driving_region_canada" = "Canada";
 "driving_region_europe_asia" = "Europe, Asia, Latin America, and similar";
-"driving_region_uk" = "UK, India, and similar";
+"driving_region_uk" = "UK and similar";
+"driving_region_india" = "India";
 "driving_region_australia" = "Australia";
 
 "left_side_navigation" = "Left-hand traffic";
@@ -752,6 +761,8 @@
 "shared_string_move" = "Move";
 "shared_string_dismiss" = "Dismiss";
 "shared_string_add" = "Add";
+"shared_string_set" = "Set";
+"shared_string_replace" = "Replace";
 "buy" = "Buy";
 "shared_string_buy_for" = "for";
 "shared_string_or" = "or";
@@ -841,6 +852,9 @@
 "shared_string_contributions" = "Contributions";
 "shared_string_refresh" = "Refresh";
 "shared_string_changed" = "Changed";
+"shared_string_change" = "Change";
+"shared_string_favorite" = "Favorite";
+"shared_string_favorites" = "Favorites";
 "shared_string_profile" = "Profile";
 "shared_string_download_update" = "Download update";
 "shared_string_angle" = "Angle";
@@ -872,6 +886,7 @@
 "shared_string_is_deleted" = "%@ is deleted.";
 "shared_string_deleting" = "Deleting";
 "shared_string_deleting_complete" = "Deleting complete";
+"shared_string_colors" = "Colors";
 
 "restart" = "Restart";
 
@@ -937,6 +952,8 @@
 "add_favorite" = "Add favorite";
 "name_and_descr" = "Name & description";
 "select_group" = "Select group";
+"select_items" = "Select items";
+"shared_string_item" = "Item";
 "shared_string_icon" = "Icon";
 "shared_string_shape" = "Shape";
 "fav_point_dublicate" = "Duplicate Favorite name specified";
@@ -959,6 +976,7 @@
 "poi_max_radius_reached" = "Maximum search radius reached";
 "poi_search_near_center" = "Search is performed near the center of the map";
 "shared_string_hide" = "Hide";
+"shared_string_show" = "Show";
 
 // My Places
 "favorites_item" = "Favorites";
@@ -1122,6 +1140,7 @@
 "weather_cloud_enable_descr" = "Enable to view cloud layer on the map.";
 "weather_precip_enable_descr" = "Enable to view precipitation layer on the map.";
 "weather_contours_enable_descr" = "Enable to view isolines layer on the map.";
+"weather_wind_animation_enable_descr" = "Enable to view wind animation layer on the map.";
 
 "screen_settings_weather_toolbar" = "Weather toolbar";
 
@@ -1372,11 +1391,13 @@
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
 "ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "ltr_or_rtl_combine_via_or" = "%@ or %@";
 "ltr_or_rtl_combine_via_slash" = "%@/%@";
 "ltr_or_rtl_combine_via_comma" = "%@, %@";
 "ltr_or_rtl_combine_via_of" = "%ld of %ld";
+
+"shared_string_class" = "Class";
 
 "listed_exist" = "Listed %@, already exist in OsmAnd.";
 
@@ -1665,7 +1686,7 @@
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
 
 "routing_algorithm" = "Routing algorithm";
-"auto_zoom" = "Auto-zoom";
+"auto_zoom" = "Autozoom";
 "shared_string_development" = "Development";
 "routing_algorithm_highway_hierarchies" = "Highway hierarchies";
 "routing_algorithm_a" = "A*";
@@ -1674,6 +1695,7 @@
 "osmand_depelopment_simulate_location_section" = "Simulate";
 "osmand_depelopment_use_old_routing" = "Use old routing (A*)";
 "osmand_depelopment_use_discrete_autozoom" = "Discrete autozoom (old version)";
+"osmand_depelopment_use_3d_icons" = "Use 3D location position icons";
 
 "simulate_in_progress" = "In progress";
 "simulate_your_location_gpx_descr" = "Simulate your position using a recorded GPX track.";
@@ -1813,6 +1835,7 @@
 "quick_action_new_action" = "Add action";
 "unsupported_items" = "Unsupported items";
 "quick_action_add_create_items" = "Create items";
+"key_event_category_map_interactions" = "Map interactions";
 "configure_map" = "Configure map";
 "map_look_descr" = "Map appearance";
 "quick_action_add_marker" = "Add map marker";
@@ -1846,10 +1869,10 @@
 "toggle_online_notes" = "Toggle OSM notes";
 "toggle_local_edits" = "Toggle local OSM edits";
 "quick_action_add_poi" = "Add POI";
-"quick_action_map_style" = "Change map style";
+"quick_action_map_style" = "Map style";
 "quick_action_map_source" = "Change map source";
-"quick_action_map_overlay" = "Change map overlay";
-"quick_action_map_underlay" = "Change map underlay";
+"quick_action_map_overlay" = "Overlay";
+"quick_action_map_underlay" = "Underlay";
 "quick_action_replace_destination" = "Replace destination";
 "add_destination" = "Add destination";
 "route_add_start_point" = "Add point of departure";
@@ -1920,6 +1943,24 @@
 "quick_action_toggle_edits_descr" = "Tap this action button to show or hide offline OSM edits.";
 "quick_action_edit_list" = "Edit actions list";
 "quick_action_hillshade_descr" = "A button to show or hide hillshade on the map.";
+"quick_action_first_intermediate" = "First intermediate";
+"quick_action_track_waypoint" = "Track waypoint";
+"quick_action_directions_from" = "Start point";
+"quick_action_destination" = "Destination";
+"quick_action_parking_place" = "Parking place";
+"quick_action_verb_show_hide" = "Show / Hide";
+"quick_action_verb_turn_on_off" = "Turn On / Off";
+"quick_action_verb_pause_resume" = "Pause / Resume";
+"quick_action_verb_start_stop" = "Start / Stop";
+"map_source" = "Map source";
+"download_srtm_maps" = "Contour lines";
+"voices" = "Voice prompts";
+"temperature_layer" = "Temperature layer";
+"pressure_layer" = "Pressure layer";
+"wind_layer" = "Wind layer";
+"cloud_layer" = "Cloud layer";
+"precipitation_layer" = "Precipitation layer";
+"app_profile" = "App profile";
 "show_terrain" = "Show Terrain";
 "hide_terrain" = "Hide Terrain";
 "toggle_contour_lines" = "Show/Hide contour lines";
@@ -1939,7 +1980,7 @@
 "quick_action_showhide_mapillary_descr" = "A toggle to show or hide the Mapillary layer on the map.";
 "quick_action_mapillary_hide" = "Hide Mapillary";
 "quick_action_mapillary_show" = "Show Mapillary";
-"quick_action_remove_next_destination" = "Delete next destination point";
+"quick_action_remove_next_destination" = "Next destination point";
 "quick_action_remove_next_destination_descr" = "Deletes the next destination on your route. If that is the final destination, the navigation will stop.";
 "change_application_profile" = "Change app profile";
 "select_application_profile" = "Select application profile";
@@ -1973,6 +2014,7 @@
 "osb_comment_dialog_message" = "Message";
 "osn_add_dialog_title" = "Create note";
 "modify_poi" = "Modify the POI information";
+"shared_string_action" = "Action";
 "shared_string_actions" = "Actions";
 "time_limited" = "Time limited";
 "pickup_car" = "Pickup the car";
@@ -2788,7 +2830,7 @@
 "rendering_value_bicycle_name" = "Bicycle";
 "rendering_value_translucent_lightgreen_name" = "Translucent light green";
 "rendering_attr_contourLines_name" = "Show contour lines";
-"rendering_attr_showAccess_name" = "Show access restrictions";
+"rendering_attr_showAccess_name" = "Show access and toll restrictions";
 "rendering_attr_surface_dirt_name" = "Dirt";
 "routing_attr_piste_type_skitour_name" = "Ski touring";
 "routing_attr_driving_style_prefer_unpaved_name" = "Prefer unpaved roads";
@@ -2946,6 +2988,7 @@
 "vessel_height_limit_description" = "Set vessel height to avoid low bridges. Keep in mind, if the bridge is movable, we will use its height in the open state.";
 "vessel_width_limit_description" = "Set vessel width to avoid narrow bridges";
 "default_speed_dialog_msg" = "Estimates arrival time for unknown road types, and limits speed for all roads (may affect routing)";
+"transport_hazmat_title" = "Transporting of hazardous materials";
 "routing_attr_hazmat_category_name" = "Hazmat category";
 "routing_attr_hazmat_category_no_restrictions_name" = "A (No restrictions)";
 "transport_hazmat_yes_desc" = "Select the applicable category.";
@@ -2984,7 +3027,7 @@
 "app_mode_horse" = "Horse";
 "app_mode_helicopter" = "Helicopter";
 "app_mode_skiing" = "Skiing";
-"horseback_riding" = "Riding";
+"horseback_riding" = "Horseback riding";
 "app_mode_personal_transporter" = "Personal transporter";
 "app_mode_monowheel" = "Monowheel";
 "app_mode_scooter" = "Scooter";
@@ -3435,9 +3478,24 @@
 • Fixed status bar color for older iOS versions\n
 • Fixed rotate and pinch to zoom map gestures for the app running on macOS\n";
 
+"ios_release_4_8" = "• New \"Speedometer\" widget compatible with CarPlay\n
+• Added Turn-by-turn instructions to route details\n
+• Customize the map screen by adding multiple \"Quick Action\" buttons\n
+• 3D Track Improvements: new visualization and colorization options\n
+• Custom color palettes for terrain, tracks, and routes\n
+• Added improved multi-selection mode for Tracks\n
+• 3D variant for location position icons\n
+• Expanded selection of tourist routes on the map\n
+• Weather: UI refresh, added wind animation\n
+• Add smooth transitions while zooming in 3D mode\n
+• \"Location position on screen\" is now in Configure Screen\n
+• Change \"Wheel circumference\" in BLE sensor settings\n
+• Added separate \"Speed limit\" navigation alert\n
+• Fixed names for bearing widgets\n
+• Fixed \"Radius ruler\" visibility in all widget panels\n";
 
 "rendering_attr_showTrainRoutes_name" = "Train routes";
-"rendering_attr_showWaterwayTunnels_description" = "Don\'t hide waterway tunnels";
+"rendering_attr_showWaterwayTunnels_description" = "Increase visibility for waterway tunnels";
 "rendering_attr_natureReserves_description" = "Show nature reserve, protected areas, and national parks.";
 "routing_attr_avoid_highway_description" = "Avoid highways";
 "routing_attr_prefer_hiking_routes_description" = "Prefer hiking routes";
@@ -3486,7 +3544,7 @@
 "rendering_attr_weatherTempContours_name" = "Temperature isolines";
 "rendering_attr_showTramRoutes_name" = "Tram routes";
 "routing_attr_hazmat_category_description" = "Hazardous materials category / Consider hazmat access permissions";
-"rendering_attr_showWaterwayTunnels_name" = "Waterway tunnels";
+"rendering_attr_showWaterwayTunnels_name" = "Increase visibility for waterway tunnels";
 "rendering_attr_seabedDetail_name" = "Seabed detail";
 "routing_attr_driving_style_description" = "Select driving purpose to get shorter, faster or safer route";
 "rendering_attr_weatherPrecipitationContours_name" = "Precipitation isolines";
@@ -3505,7 +3563,9 @@
 "routing_attr_avoid_4wd_only_description" = "Avoid roads only suitable for 4WD vehicles";
 "rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Schematic display of icons at low zooms";
 "routing_attr_difficulty_preference_beginner_name" = "Beginner";
-
+"dangerous_goods" = "Dangerous goods";
+"dangerous_goods_description" = "On some roads and tunnels transporting of hazardous materials is forbidden.";
+    
 "exit_number" = "Exit number";
 "announce_when_exceeded" = "Announce when exceeded";
 "speak_gps_signal_status" = "Announce GPS signal loss and recovery";
@@ -3734,23 +3794,27 @@
 "routing_attr_hazmat_category_usa_9_name" = "Miscellaneous";
 "rendering_value_sector2_name" = "Sector 2";
 "vertical_exaggeration" = "Vertical exaggeration";
+"wall_height" = "Wall height";
 "vertical_exaggeration_description" = "By changing the scale value, you can emphasise the 3D relief.";
 "shared_string_scale" = "Scale";
+"wall_height_description" = "By changing the height value, you can lift the track top line above the ground level.";
 
 "missing_or_outdated_maps_title" = "Missing or outdated maps";
 "missing_or_outdated_maps_description" = "Some offline maps required for this route are missing or not up to date. Please download or update these maps.";
 "required_maps" = "Required Maps";
 "calculate_online" = "Calculate online";
-"calculate_online_title" = "The list of required maps is based on the straight line route. To get an accurate list of maps, OsmAnd can pre-calculate your route online";
+"calculate_online_title" = "The list of missing maps is based on the straight line route. To get an accurate list of maps, OsmAnd can pre-calculate your route online";
 "required_maps_list" = "Maps that will also be used: %@";
 "getting_list_required_maps" = "Getting a list of required maps...";
-"track_vertical_exaggeration_description" = "By changing the scale value, you can change 3D track height";
+"missing_maps_ignore" = "Use downloaded maps";
+"missing_maps_ignore_details" = "Downloaded maps cover your route? Navigate with them if you\'re familiar with the area.";
 
+"track_vertical_exaggeration_description" = "By changing the scale value, you can change 3D track height.";
 "visualization_3d_visualized_by" = "Visualized by";
 "visualization_3d_wall_color" = "Wall color";
 "visualization_3d_track_line" = "Track line";
 "track_3d" = "3d track";
-"fixed_height" = "Fixed Height";
+"fixed_height" = "Fixed height";
 "downward_gradient" = "Downward gradient";
 "upward_gradient" = "Upward gradient";
 "shared_string_top" = "Top";
@@ -3777,3 +3841,28 @@
 "step_by_step" = "Turn-by-turn";
 
 "shared_string_limit" = "Limit";
+
+"custom_buttons" = "Custom buttons";
+"default_buttons" = "Default buttons";
+"add_button" = "Add button";
+"empty_name" = "Empty name";
+"custom_map_button_name_present" = "Such button already present";
+
+"data_source" = "Data Source";
+"weather_data_sources_prompt" = "OsmAnd provides weather data from two sources:";
+"weather_source_ecmwf_description" = "European Centre for Medium-Range Weather Forecasts";
+"weather_source_GFS_description" = "Global Forecast System from National Centers for Environmental Prediction";
+"weather_source_ecmwf_title" = "ECMWF";
+"weather_source_GFS_title" = "GFS";
+"map_settings_weather_wind_animation" = "Wind animation";
+
+"routing_attr_avoid_cobblestone_description" = "Avoid cobblestone";
+"routing_attr_avoid_cobblestone_name" = "Avoid cobblestone";
+"rendering_value_dark_orange_name" = "Dark orange";
+"rendering_value_pale_name" = "Pale";
+
+"shared_string_update_required" = "Update Required";
+"osm_login_needs_ios_16_4" = "OpenStreetMap login needs iOS 16.4+";
+
+"user_palette" = "User palette";
+"height_legend_description" = "Altitude color maps are used to visualize relief.";

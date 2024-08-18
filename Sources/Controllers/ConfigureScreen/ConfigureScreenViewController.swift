@@ -14,30 +14,74 @@ protocol WidgetStateDelegate: AnyObject {
     func onWidgetStateChanged()
 }
 
+protocol MapButtonsDelegate: AnyObject {
+    func onButtonsChanged()
+}
+
 @objc(OAConfigureScreenViewController)
 @objcMembers
-class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectionDelegate, WidgetStateDelegate {
+class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectionDelegate, WidgetStateDelegate, MapButtonsDelegate {
 
     private static let selectedKey = "selected"
-    
-    private var widgetRegistry: OAMapWidgetRegistry?
-    private var appMode: OAApplicationMode! {
-        didSet {
-            setupNavbarButtons()
-        }
+
+    private var settings: OAAppSettings!
+    private var appMode: OAApplicationMode!
+    private var mapButtonsHelper: OAMapButtonsHelper!
+
+    // MARK: Initialization
+
+    override func commonInit() {
+        settings = OAAppSettings.sharedManager()
+        appMode = settings.applicationMode.get()
+        mapButtonsHelper = OAMapButtonsHelper.sharedInstance()
     }
-    
+
     override func registerObservers() {
         addNotification(NSNotification.Name(kWidgetVisibilityChangedMotification), selector: #selector(onWidgetStateChanged))
     }
+
+    // MARK: Base UI
+
+    override func getTitle() -> String {
+        localizedString("layer_map_appearance")
+    }
     
+    override func getRightNavbarButtons() -> [UIBarButtonItem] {
+        var buttons = [UIBarButtonItem]()
+        if let button = createRightNavbarButton(nil, iconName: appMode.getIconName(), action: #selector(onRightNavbarButtonPressed), menu: nil) {
+            button.customView?.tintColor = appMode.getProfileColor()
+            button.accessibilityLabel = localizedString("selected_profile")
+            button.accessibilityValue = appMode.toHumanString()
+            buttons.append(button)
+        }
+        return buttons
+    }
+    
+    override func onRightNavbarButtonPressed() {
+        let modeSelectionVc = AppModeSelectionViewController()
+        modeSelectionVc.delegate = self
+        let navigationController = UINavigationController()
+        navigationController.setViewControllers([modeSelectionVc], animated: true)
+        
+        navigationController.modalPresentationStyle = .pageSheet
+        let sheet = navigationController.sheetPresentationController
+        if let sheet {
+            sheet.detents = [.medium(), .large()]
+            sheet.preferredCornerRadius = 20
+        }
+        self.navigationController?.present(navigationController, animated: true)
+    }
+    
+    override func isNavbarSeparatorVisible() -> Bool {
+        false
+    }
+
+    // MARK: Table data
+
     override func generateData() {
         tableData.clearAllData()
-        widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
-        let settings = OAAppSettings.sharedManager()!
-        appMode = settings.applicationMode.get()
         
-        let widgetsSection = tableData!.createNewSection()
+        let widgetsSection = tableData.createNewSection()
         widgetsSection.headerText = localizedString("shared_string_widgets")
         widgetsSection.footerText = localizedString("widget_panels_descr")
         for panel in WidgetsPanel.values {
@@ -47,7 +91,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
             row.title = panel.title
             row.iconName = panel.iconName
             row.setObj(panel, forKey: "panel")
-            row.iconTintColor = (widgetsCount == 0) ? .iconColorDefault : UIColor(rgb: Int(appMode!.getIconColor()));
+            row.iconTintColor = (widgetsCount == 0) ? .iconColorDefault : appMode!.getProfileColor();
             row.descr = String(widgetsCount)
             row.accessibilityLabel = panel.title
             row.accessibilityValue = String(format: localizedString("ltr_or_rtl_combine_via_colon"), localizedString("shared_string_widgets"), String(widgetsCount))
@@ -62,43 +106,39 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         transparencyRow.setObj(NSNumber(value: settings.transparentMapTheme.get()), forKey: Self.selectedKey)
         transparencyRow.cellType = OASwitchTableViewCell.reuseIdentifier
         
-        let buttonsSection = tableData!.createNewSection()
+        let buttonsSection = tableData.createNewSection()
         buttonsSection.headerText = localizedString("shared_string_buttons")
-        populateCompassRow(buttonsSection.createNewRow())
+
+        let customButtons = mapButtonsHelper.getButtonsStates()
+        let enabledCustomButtons = mapButtonsHelper.getEnabledButtonsStates()
+        let customButtonsRow = buttonsSection.createNewRow()
+        customButtonsRow.key = "customButtons"
+        customButtonsRow.title = localizedString("custom_buttons")
+        customButtonsRow.descr = String(format: localizedString("ltr_or_rtl_combine_via_slash"), "\(enabledCustomButtons.count)", "\(customButtons.count)")
+        customButtonsRow.iconTintColor = !enabledCustomButtons.isEmpty ? appMode.getProfileColor() : .iconColorDefault
+        customButtonsRow.iconName = "ic_custom_quick_action"
+        customButtonsRow.cellType = OAValueTableViewCell.reuseIdentifier
+        customButtonsRow.accessibilityLabel = customButtonsRow.title
+        customButtonsRow.accessibilityValue = customButtonsRow.descr
         
-        let quickActionsCount = OAQuickActionRegistry.sharedInstance().getQuickActionsCount()
-        let quickActionsEnabled = settings.quickActionIsOn.get()
-        let actionsString = quickActionsEnabled ? String(quickActionsCount) : localizedString("shared_string_off")
-        let quickActionRow = buttonsSection.createNewRow()
-        quickActionRow.title = localizedString("configure_screen_quick_action")
-        quickActionRow.descr = quickActionsEnabled ? String(format: localizedString("ltr_or_rtl_combine_via_colon"),
-                                                            localizedString("shared_string_actions"),
-                                                            actionsString) : actionsString
-        quickActionRow.iconTintColor = quickActionsEnabled ? UIColor(rgb: Int(appMode!.getIconColor())) : .iconColorDefault
-        quickActionRow.key = "quick_action"
-        quickActionRow.iconName = "ic_custom_quick_action"
-        quickActionRow.cellType = OAValueTableViewCell.reuseIdentifier
-        quickActionRow.accessibilityLabel = quickActionRow.title
-        quickActionRow.accessibilityValue = quickActionRow.descr
-        
-        let map3dModeRow = buttonsSection.createNewRow()
-        let selected3dMode = OAAppSettings.sharedManager()!.map3dMode.get()
-        let isMap3DVisible = settings.map3dMode.get() == .visible || settings.map3dMode.get() == .visibleIn3DMode
-        map3dModeRow.key = "map_3d_mode"
-        map3dModeRow.title = localizedString("map_3d_mode_action")
-        map3dModeRow.descr = OAMap3DModeVisibility.getTitle(selected3dMode) ?? ""
-        map3dModeRow.iconTintColor = isMap3DVisible ? UIColor(rgb: Int(appMode!.getIconColor())) : .iconColorDefault
-        map3dModeRow.iconName = OAMap3DModeVisibility.getIconName(selected3dMode)
-        map3dModeRow.cellType = OAValueTableViewCell.reuseIdentifier
-        map3dModeRow.accessibilityLabel = map3dModeRow.title
-        map3dModeRow.accessibilityValue = map3dModeRow.descr
+        let defaultButtons = [mapButtonsHelper.getCompassButtonState(), mapButtonsHelper.getMap3DButtonState()]
+        let defaultButtonsEnabledCount = defaultButtons.filter { $0.isEnabled() }.count
+        let defaultButtonsRow = buttonsSection.createNewRow()
+        defaultButtonsRow.key = "defaultButtons"
+        defaultButtonsRow.title = localizedString("default_buttons")
+        defaultButtonsRow.descr = String(format: localizedString("ltr_or_rtl_combine_via_slash"), "\(defaultButtonsEnabledCount)", "\(defaultButtons.count)")
+        defaultButtonsRow.iconTintColor = defaultButtonsEnabledCount > 0 ? appMode.getProfileColor() : .iconColorDefault
+        defaultButtonsRow.iconName = "ic_custom_button_default"
+        defaultButtonsRow.cellType = OAValueTableViewCell.reuseIdentifier
+        defaultButtonsRow.accessibilityLabel = defaultButtonsRow.title
+        defaultButtonsRow.accessibilityValue = defaultButtonsRow.descr
         
         let otherSection = tableData.createNewSection()
         otherSection.headerText = localizedString("other_location")
         let positionMapRow = otherSection.createNewRow()
         positionMapRow.title = localizedString("position_on_map")
         positionMapRow.iconName = getLocationPositionIcon()
-        positionMapRow.iconTintColor = UIColor(rgb: Int(appMode.getIconColor()))
+        positionMapRow.iconTintColor = appMode.getProfileColor()
         positionMapRow.key = "position_on_map"
         positionMapRow.descr = getLocationPositionValue()
         positionMapRow.cellType = OAValueTableViewCell.reuseIdentifier
@@ -108,7 +148,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         let distByTapRow = otherSection.createNewRow()
         distByTapRow.title = localizedString("map_widget_distance_by_tap")
         distByTapRow.iconName = "ic_action_ruler_line"
-        distByTapRow.iconTint = Int(appMode.getIconColor())
+        distByTapRow.iconTintColor = appMode.getProfileColor()
         distByTapRow.key = "map_widget_distance_by_tap"
         distByTapRow.setObj(NSNumber(value: settings.showDistanceRuler.get()), forKey: Self.selectedKey)
         distByTapRow.cellType = OASwitchTableViewCell.reuseIdentifier
@@ -130,68 +170,18 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
             speedomenterRow.iconTintColor = .iconColorDefault
         }
     }
-    
-    func populateCompassRow(_ row: OATableRowData) {
-        let compassMode = EOACompassMode(rawValue: Int(OAAppSettings.sharedManager()!.compassMode.get()))!
-        let descr = OACompassMode.getTitle(compassMode) ?? ""
-        let title = localizedString("map_widget_compass")
-        
-        row.title = title
-        row.descr = descr
-        row.accessibilityLabel = title
-        row.accessibilityValue = descr
-        row.key = "compass"
-        row.iconTintColor = appMode != nil ? UIColor(rgb: Int(appMode!.getIconColor())) : .iconColorDefault
-        row.iconName = OACompassMode.getIconName(compassMode)
-        row.cellType = OAValueTableViewCell.reuseIdentifier
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-    
-    override func getTitle() -> String! {
-        localizedString("layer_map_appearance")
-    }
-    
-    override func getRightNavbarButtons() -> [UIBarButtonItem]! {
-        let button = createRightNavbarButton(nil, iconName: appMode?.getIconName(), action: #selector(onRightNavbarButtonPressed), menu: nil)
-        button?.customView?.tintColor = UIColor(rgb: Int(appMode!.getIconColor()))
-        button?.accessibilityLabel = localizedString("selected_profile")
-        button?.accessibilityValue = appMode?.toHumanString()
-        return [button!]
-    }
-    
-    override func onRightNavbarButtonPressed() {
-        let modeSelectionVc = AppModeSelectionViewController()
-        modeSelectionVc.delegate = self
-        let navigationController = UINavigationController()
-        navigationController.setViewControllers([modeSelectionVc], animated: true)
-        
-        navigationController.modalPresentationStyle = .pageSheet
-        let sheet = navigationController.sheetPresentationController
-        if let sheet
-        {
-            sheet.detents = [.medium(), .large()]
-            sheet.preferredCornerRadius = 20
-        }
-        self.navigationController?.present(navigationController, animated: true)
-    }
-    
-    override func isNavbarSeparatorVisible() -> Bool {
-        false
-    }
-    
+
     func getWidgetsCount(panel: WidgetsPanel) -> Int {
         let filter = Int(kWidgetModeEnabled | KWidgetModeAvailable | kWidgetModeMatchingPanels)
-        return widgetRegistry!.getWidgetsForPanel(appMode, filterModes: filter, panels: [panel]).count
+        let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
+        return widgetRegistry.getWidgetsForPanel(appMode, filterModes: filter, panels: [panel]).count
     }
     
     // MARK: AppModeSelectionDelegate
     func onAppModeSelected(_ appMode: OAApplicationMode) {
-        OAAppSettings.sharedManager()!.setApplicationModePref(appMode)
+        settings.setApplicationModePref(appMode)
         self.appMode = appMode
-        onWidgetStateChanged()
+        updateUIAnimated(nil)
     }
     
     func onNewProfilePressed() {
@@ -242,8 +232,8 @@ extension ConfigureScreenViewController {
         cell.accessibilityValue = item.accessibilityValue
     }
     
-    override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
-        let item = tableData!.item(for: indexPath)
+    override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
+        let item = tableData.item(for: indexPath)
         if item.cellType == OAValueTableViewCell.reuseIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.reuseIdentifier, for: indexPath) as! OAValueTableViewCell
             cell.accessoryType = .disclosureIndicator
@@ -270,7 +260,7 @@ extension ConfigureScreenViewController {
             }
 
             let selected = item.bool(forKey: Self.selectedKey)
-            cell.leftIconView.tintColor = selected ? UIColor(rgb: item.iconTint) : .iconColorDefault
+            cell.leftIconView.tintColor = selected ?item.iconTintColor : .iconColorDefault
             cell.titleLabel.text = item.title
             cell.switchView.removeTarget(nil, action: nil, for: .allEvents)
             cell.switchView.isOn = selected
@@ -288,12 +278,11 @@ extension ConfigureScreenViewController {
         }
         
         let indexPath = IndexPath(row: sw.tag & 0x3FF, section: sw.tag >> 10)
-        let data = tableData!.item(for: indexPath)
+        let data = tableData.item(for: indexPath)
         
-        let settings = OAAppSettings.sharedManager()!
         if data.key == "map_widget_transparent" {
             settings.transparentMapTheme.set(sw.isOn)
-            OARootViewController.instance().mapPanel.hudViewController.mapInfoController.updateLayout()
+            OARootViewController.instance().mapPanel.hudViewController?.mapInfoController.updateLayout()
         } else if data.key == "map_widget_distance_by_tap" {
             settings.showDistanceRuler.set(sw.isOn)
             OARootViewController.instance().mapPanel.mapViewController.updateTapRulerLayer()
@@ -301,38 +290,32 @@ extension ConfigureScreenViewController {
         
         if let cell = self.tableView.cellForRow(at: indexPath) as? OASwitchTableViewCell, !cell.leftIconView.isHidden {
             UIView.animate(withDuration: 0.2) {
-                cell.leftIconView.tintColor = sw.isOn ? UIColor(rgb: Int(settings.applicationMode.get().getIconColor())) : .iconColorDefault
+                cell.leftIconView.tintColor = sw.isOn ? self.settings.applicationMode.get().getProfileColor() : .iconColorDefault
             }
         }
         
         return false
     }
 
-    override func onRowSelected(_ indexPath: IndexPath!) {
-        let data = tableData!.item(for: indexPath)
-        if data.key == "quick_action" {
-            let vc = OAQuickActionListViewController()!
+    override func onRowSelected(_ indexPath: IndexPath) {
+        let data = tableData.item(for: indexPath)
+        if data.key == "defaultButtons" {
+            let vc = DefaultMapButtonsViewController()
             vc.delegate = self
-            vc.quickActionUpdateCallback = { [weak self] in
-                self?.updateQuickActionData()
-            }
-            self.navigationController?.pushViewController(vc, animated: true)
-        } else if data.key == "compass" {
-            let vc = CompassVisibilityViewController()
+            show(vc)
+        } else if data.key == "customButtons" {
+            let vc = CustomMapButtonsViewController()
             vc.delegate = self
-            showMediumSheetViewController(vc, isLargeAvailable: false)
-        } else if data.key == "map_3d_mode" {
-            let vc = Map3dModeButtonVisibilityViewController()
-            vc.delegate = self
-            showMediumSheetViewController(vc, isLargeAvailable: false)
+            show(vc)
         } else if data.key == "shared_string_speedometer" {
             let vc = SpeedometerWidgetSettingsViewController()
             vc.delegate = self
             show(vc)
         } else if data.key == "position_on_map" {
-            let vc = OAProfileGeneralSettingsParametersViewController(type: EOAProfileGeneralSettingsDisplayPosition, applicationMode: appMode)
-            vc?.delegate = self
-            showMediumSheetViewController(vc, isLargeAvailable: false)
+            if let vc = OAProfileGeneralSettingsParametersViewController(type: EOAProfileGeneralSettingsDisplayPosition, applicationMode: appMode) {
+                vc.delegate = self
+                showMediumSheetViewController(vc, isLargeAvailable: false)
+            }
         } else {
             let panel = data.obj(forKey: "panel") as? WidgetsPanel
             if let panel {
@@ -343,21 +326,20 @@ extension ConfigureScreenViewController {
     }
     
     // MARK: WidgetStateDelegate
+
     @objc func onWidgetStateChanged() {
-        generateData()
-        tableView.reloadData()
+        reloadDataWith(animated: true, completion: nil)
     }
-    
-    private func updateQuickActionData() {
-        generateData()
-        tableView.reloadData()
+
+    // MARK: WidgetStateDelegate
+    func onButtonsChanged() {
+        reloadDataWith(animated: true, completion: nil)
     }
 }
 
 extension ConfigureScreenViewController: OASettingsDataDelegate {
     func onSettingsChanged() {
-        generateData()
-        tableView.reloadData()
+        reloadDataWith(animated: true, completion: nil)
     }
     
     func closeSettingsScreenWithRouteInfo() {

@@ -15,6 +15,9 @@
 #import "OAMapWidgetRegistry.h"
 #import "OARootViewController.h"
 #import "OsmAndApp.h"
+#import "OAObservable.h"
+#import "OAAppData.h"
+#import "OAApplicationMode.h"
 #import "Localization.h"
 #import "OAColors.h"
 #import "OARendererRegistry.h"
@@ -110,7 +113,7 @@
 
 - (void) copyRegisteredPreferences
 {
-    for (NSString *key in [_settings getPreferences:NO].keyEnumerator)
+    for (NSString *key in [_settings getRegisteredPreferences].keyEnumerator)
     {
         OACommonPreference *setting = [_settings getPreferenceByKey:key];
         if (setting)
@@ -192,8 +195,9 @@
     [_targetAppMode setRoutingProfile:_sourceAppMode.getRoutingProfile];
     [_targetAppMode setRouterService:_sourceAppMode.getRouterService];
     [_targetAppMode setIconColor:_sourceAppMode.getIconColor];
-    [_targetAppMode setLocationIcon:_sourceAppMode.getLocationIcon];
-    [_targetAppMode setNavigationIcon:_sourceAppMode.getNavigationIcon];
+    [_targetAppMode setCustomIconColor:_sourceAppMode.getCustomIconColor];
+    [_targetAppMode setLocationIconName:[_sourceAppMode.getLocationIcon name]];
+    [_targetAppMode setNavigationIconName:[_sourceAppMode.getNavigationIcon name]];
     
     [app.data.mapLayerChangeObservable notifyEvent];
 }
@@ -234,7 +238,7 @@
             cell.titleView.text = am.toHumanString;
             UIImage *img = am.getIcon;
             cell.iconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.iconView.tintColor = UIColorFromRGB(am.getIconColor);
+            cell.iconView.tintColor = am.getProfileColor;
             cell.secondaryImageView.hidden = ![item[@"selected"] boolValue];
             [cell roundCorners:(indexPath.row == 0) bottomCorners:(indexPath.row == OAApplicationMode.allPossibleValues.count - 2)];
             cell.separatorView.hidden = indexPath.row == OAApplicationMode.allPossibleValues.count - 2;

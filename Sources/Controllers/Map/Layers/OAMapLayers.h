@@ -77,6 +77,7 @@
 - (void) updateLayers;
 
 - (void) updateWeatherDate:(NSDate *)date;
+- (void) updateWeatherLayers;
 
 - (void) showLayer:(NSString *)layerId;
 - (void) hideLayer:(NSString *)layerId;

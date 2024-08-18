@@ -6,9 +6,20 @@
 //  Copyright (c) 2014 OsmAnd. All rights reserved.
 //
 
-#define kWorld @"world"
-
 #import "OAWorldRegion.h"
+#import "OADownloadsManager.h"
+#import "Localization.h"
+#import "OALog.h"
+#import "OAIAPHelper.h"
+#import "OAProducts.h"
+#import "OAUtilities.h"
+#import "OAPointIContainer.h"
+#import "OAIndexConstants.h"
+#import "OAWorldRegion+Protected.h"
+#import "OAResourcesUIHelper.h"
+#import "QuadRect.h"
+#import "Weather/OAWeatherHelper.h"
+#import "OsmAndApp.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/WorldRegion.h>
@@ -19,17 +30,7 @@
 #include <OsmAndCore/Data/ObfMapSectionInfo.h>
 #include <OsmAndCore/KeyedEntriesCollection.h>
 
-#import "Localization.h"
-#import "OALog.h"
-#import "OAIAPHelper.h"
-#import "OAUtilities.h"
-#import "OAPointIContainer.h"
-#import "OAIndexConstants.h"
-
-#import "OAWorldRegion+Protected.h"
-#import "OAResourcesUIHelper.h"
-#import "QuadRect.h"
-#import "Weather/OAWeatherHelper.h"
+#define kWorld @"world"
 
 @implementation OAWorldRegion
 {
@@ -71,9 +72,11 @@
         _regionRoadSigns = _worldRegion->regionRoadSigns.toNSString();
         _wikiLink = _worldRegion->wikiLink.toNSString();
         _population = _worldRegion->population.toNSString();
+        _regionMap = _worldRegion->regionMap;
+        _regionRoads = _worldRegion->regionRoads;
         _regionJoinMap = _worldRegion->regionJoinMap;
         _regionJoinRoads = _worldRegion->regionJoinRoads;
-        
+
         OsmAnd::LatLon latLonTopLeft = OsmAnd::Utilities::convert31ToLatLon(region->mapObject->bbox31.topLeft);
         OsmAnd::LatLon latLonBottomRight = OsmAnd::Utilities::convert31ToLatLon(region->mapObject->bbox31.bottomRight);
         _bboxTopLeft = CLLocationCoordinate2DMake(latLonTopLeft.latitude, latLonTopLeft.longitude);

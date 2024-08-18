@@ -9,6 +9,7 @@
 #import "OACustomPlugin.h"
 #import "OAWorldRegion.h"
 #import "OAJsonHelper.h"
+#import "OAAppData.h"
 #import "OASettingsHelper.h"
 #import "Localization.h"
 #import "OsmAndApp.h"
@@ -19,7 +20,7 @@
 #import "OASettingsItem.h"
 #import "OAPluginSettingsItem.h"
 #import "OAQuickActionsSettingsItem.h"
-#import "OAQuickActionRegistry.h"
+#import "OAMapButtonsHelper.h"
 #import "OAMapSourcesSettingsItem.h"
 #import "OATileSource.h"
 #import "OAMapCreatorHelper.h"
@@ -31,6 +32,9 @@
 #import "OAPOIFiltersHelper.h"
 #import "OAQuickSearchHelper.h"
 #import "OASuggestedDownloadsItem.h"
+#import "OAApplicationMode.h"
+#import "OAMapSource.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/ResourcesManager.h>
 
@@ -236,19 +240,23 @@
     [OASettingsHelper.sharedInstance collectSettings:file latestChanges:@"" version:kVersion onComplete:^(BOOL succeed, NSArray<OASettingsItem *> *items) {
             if (succeed && items.count > 0)
             {
+                OAMapButtonsHelper *mapButtonsHelper = [OAMapButtonsHelper sharedInstance];
                 for (OASettingsItem *item in items)
                 {
                     if ([item isKindOfClass:OAQuickActionsSettingsItem.class])
                     {
                         OAQuickActionsSettingsItem *quickActionsSettingsItem = (OAQuickActionsSettingsItem *) item;
-                        NSArray<OAQuickAction *> *quickActions = quickActionsSettingsItem.items;
-                        OAQuickActionRegistry *actionRegistry = OAQuickActionRegistry.sharedInstance;
-                        for (OAQuickAction *action in quickActions)
+
+                        QuickActionButtonState *buttonState = [quickActionsSettingsItem getButtonState];
+                        QuickActionButtonState *state = [mapButtonsHelper getButtonStateById:buttonState.id];
+                        if (state)
                         {
-                            OAQuickAction *savedAction = [actionRegistry getQuickAction:action.getType name:action.getName params:action.getParams];
-                            if (savedAction)
-                                [actionRegistry deleteQuickAction:savedAction];
-                            [actionRegistry.quickActionListChangedObservable notifyEvent];
+                            for (OAQuickAction *action in buttonState.quickActions)
+                            {
+                                OAQuickAction *savedAction = [state getQuickAction:[action getType] name:[action getName] params:[action getParams]];
+                                if (savedAction)
+                                    [mapButtonsHelper deleteQuickAction:state action:savedAction];
+                            }
                         }
                     }
                     else if ([item isKindOfClass:OAMapSourcesSettingsItem.class])

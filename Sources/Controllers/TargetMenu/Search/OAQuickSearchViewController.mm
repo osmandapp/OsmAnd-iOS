@@ -11,7 +11,10 @@
 #import "OsmAndApp.h"
 #import "OAMapLayers.h"
 #import "OAPOILayer.h"
+#import "OAResultMatcher.h"
 #import "OAPOI.h"
+#import "OALocationServices.h"
+#import "OAObservable.h"
 #import "OAPOIType.h"
 #import "OAPOICategory.h"
 #import "OAPOIFilter.h"
@@ -37,7 +40,6 @@
 #import "OAPointDescription.h"
 #import "OATargetPointsHelper.h"
 #import "OAOsmAndFormatter.h"
-
 #import "OASearchUICore.h"
 #import "OASearchCoreFactory.h"
 #import "OAQuickSearchHelper.h"
@@ -50,8 +52,8 @@
 #import "OADeleteCustomFiltersViewController.h"
 #import "OARearrangeCustomFiltersViewController.h"
 #import "QuadRect.h"
-
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OADefaultFavorite.h"
@@ -1765,7 +1767,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     {
         double rd = [OAOsmAndFormatter calculateRoundedDist:minimalSearchRadius];
         item.title = [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"nothing_found"),
-                [OAOsmAndFormatter getFormattedDistance:rd forceTrailingZeroes:NO]];
+                      [OAOsmAndFormatter getFormattedDistance:rd withParams:[OsmAndFormatterParams noTrailingZeros]]];
     }
 
     if (!_paused && !_cancelPrev)

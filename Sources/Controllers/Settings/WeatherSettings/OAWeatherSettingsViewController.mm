@@ -15,6 +15,7 @@
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OASizes.h"
+#import "OAAppData.h"
 #import "OAWeatherBand.h"
 #import "OAWeatherHelper.h"
 #import "GeneratedAssetSymbols.h"

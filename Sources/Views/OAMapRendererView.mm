@@ -9,6 +9,8 @@
 #import "OAMapRendererView.h"
 #import "OAMapUtils.h"
 #import "OANativeUtilities.h"
+#import "OAObservable.h"
+#import "OALog.h"
 
 #import <Foundation/Foundation.h>
 #import <QuartzCore/QuartzCore.h>
@@ -25,8 +27,6 @@
 #include <OsmAndCore/Map/IAtlasMapRenderer.h>
 #include <OsmAndCore/Map/AtlasMapRendererConfiguration.h>
 #include <OsmAndCore/Map/AtlasMapRenderer_Metrics.h>
-
-#import "OALog.h"
 
 #if defined(DEBUG)
 #   define validateGL() [self validateOpenGLES]
@@ -348,6 +348,16 @@ forcedUpdate:(BOOL)forcedUpdate
 - (void)setMyLocationCircleRadius:(float)radiusInMeters
 {
     _renderer->setMyLocationRadiusInMeters(radiusInMeters);
+}
+
+- (void)setMyLocationSectorDirection:(float)directionAngle
+{
+    _renderer->setMyDirection(directionAngle);
+}
+
+- (void)setMyLocationSectorRadius:(float)radius
+{
+    _renderer->setMyDirectionRadius(radius);
 }
 
 - (OsmAnd::PointI)target31
@@ -1140,6 +1150,11 @@ forcedUpdate:(BOOL)forcedUpdate
 - (void)setDateTime:(int64_t)dateTime
 {
     _renderer->setDateTime(dateTime);
+}
+
+- (void) changeTimePeriod
+{
+    _renderer->changeTimePeriod();
 }
 
 - (void)setSymbolSubsectionConfiguration:(int)subsectionIndex configuration:(const OsmAnd::SymbolSubsectionConfiguration &)configuration

@@ -8,15 +8,22 @@
 
 #import "OAPlugin.h"
 
-#define kWeatherTemp @"weather_temp"
-#define kWeatherPressure @"weather_pressure"
-#define kWeatherWind @"weather_wind"
-#define kWeatherCloud @"weather_cloud"
-#define kWeatherPrecip @"weather_precip"
+static NSString * const kWeatherTemp = @"weather_temp";
+static NSString * const kWeatherPressure = @"weather_pressure";
+static NSString * const kWeatherWind = @"weather_wind";
+static NSString * const kWeatherCloud = @"weather_cloud";
+static NSString * const kWeatherPrecip = @"weather_precip";
+static NSString * const kWeatherWindAnimation = @"weather_wind_animation";
+
+@class OAWeatherWidget;
 
 @interface OAWeatherPlugin : OAPlugin
 
 - (void)weatherChanged:(BOOL)isOn;
 - (void)updateWidgetsInfo;
+- (NSArray<OAWeatherWidget *> *)createWidgetsControls;
+
+- (void) setForecastDate:(NSDate *)date forAnimation:(BOOL)forAnimation resetPeriod:(BOOL)resetPeriod;
+- (void) prepareForDayAnimation:(NSDate *)date;
 
 @end

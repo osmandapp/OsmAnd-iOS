@@ -10,6 +10,7 @@
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OANativeUtilities.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OACarPlayDashboardInterfaceController.h"
@@ -114,9 +115,13 @@
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
 {
     [super traitCollectionDidChange:previousTraitCollection];
-    if (_speedometerView && [self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
     {
-        [self updateSpeedometerViewStyleTheme];
+        if (_speedometerView)
+            [self updateSpeedometerViewStyleTheme];
+       
+        if (self.delegate)
+            [self.delegate onUpdateMapTemplateStyle];
     }
 }
 
@@ -213,14 +218,13 @@
         [_mapVc removeFromParentViewController];
         [_mapVc.view removeFromSuperview];
         
+        _mapVc.isCarPlayActive = YES;
         [self addChildViewController:_mapVc];
         [self.view addSubview:_mapVc.view];
         _mapVc.view.frame = self.view.frame;
         _mapVc.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
         [_mapVc.mapView resumeRendering];
-
-        _mapVc.isCarPlayActive = YES;
     }
 }
 

@@ -18,9 +18,9 @@
 #import "OAGPXAppearanceCollection.h"
 #import "OAGPXUIHelper.h"
 #import "OAPOI.h"
+#import "OAAppData.h"
 
 #define kDbName @"gpx.db"
-
 #define GPX_EXT @"gpx"
 #define KML_EXT @"kml"
 #define KMZ_EXT @"kmz"
@@ -40,6 +40,10 @@
 
 - (void)setVerticalExaggerationScale:(CGFloat)verticalExaggerationScale {
     _verticalExaggerationScale = verticalExaggerationScale;
+}
+
+- (void)setElevationMeters:(NSInteger)elevationMeters {
+    _elevationMeters = elevationMeters;
 }
 
 - (BOOL)isTempTrack
@@ -82,6 +86,11 @@
     return _coloringType ? _coloringType : @"";
 }
 
+- (NSString *)gradientPaletteName
+{
+    return _gradientPaletteName ? _gradientPaletteName : @"";
+}
+
 - (EOAGpxSplitType)splitType
 {
     return _splitType == 0 ? EOAGpxSplitTypeNone : _splitType;
@@ -98,10 +107,12 @@
         _splitInterval = [document getSplitInterval];
         _color = [document getColor:0];
         _coloringType = [document getColoringType];
+        _gradientPaletteName = [document getGradientColorPalette];
         _width = [document getWidth:nil];
         _showArrows = [document isShowArrows];
         _showStartFinish = [document isShowStartFinish];
         _verticalExaggerationScale = [document getVerticalExaggerationScale];
+        _elevationMeters = [document getElevationMeters];
         _visualization3dByType = [OAGPXDatabase lineVisualizationByTypeForName:[document getVisualization3dByTypeValue]];
         _visualization3dWallColorType = [OAGPXDatabase lineVisualizationWallColorTypeForName:[document getVisualization3dWallColorTypeValue]];
         _visualization3dPositionType = [OAGPXDatabase lineVisualizationPositionTypeForName:[document getVisualization3dPositionTypeValue]];
@@ -243,10 +254,12 @@
     gpx.splitInterval = [document getSplitInterval];
     gpx.color = [document getColor:0];
     gpx.coloringType = [document getColoringType];
+    gpx.gradientPaletteName = [document getGradientColorPalette];
     gpx.width = [document getWidth:nil];
     gpx.showArrows = [document isShowArrows];
     gpx.showStartFinish = [document isShowStartFinish];
     gpx.verticalExaggerationScale = [document getVerticalExaggerationScale];
+    gpx.elevationMeters = [document getElevationMeters];
     gpx.visualization3dByType = [self.class lineVisualizationByTypeForName:document.getVisualization3dByTypeValue];
     gpx.visualization3dWallColorType = [self.class lineVisualizationWallColorTypeForName:document.getVisualization3dWallColorTypeValue];
     gpx.visualization3dPositionType = [self.class lineVisualizationPositionTypeForName:document.getVisualization3dPositionTypeValue];
@@ -286,6 +299,18 @@
     {
         case EOAGPX3DLineVisualizationByTypeAltitude:
             return @"altitude";
+        case EOAGPX3DLineVisualizationByTypeSpeed:
+            return @"speed";
+        case EOAGPX3DLineVisualizationByTypeHeartRate:
+            return @"hr";
+        case EOAGPX3DLineVisualizationByTypeBicycleCadence:
+            return @"cad";
+        case EOAGPX3DLineVisualizationByTypeBicyclePower:
+            return @"power";
+        case EOAGPX3DLineVisualizationByTypeTemperature:
+            return @"temp_sensor";
+        case EOAGPX3DLineVisualizationByTypeSpeedSensor:
+            return @"speed_sensor";
         case EOAGPX3DLineVisualizationByTypeFixedHeight:
             return @"fixed_heigh";
         default:
@@ -297,6 +322,18 @@
 {
     if ([name isEqualToString:@"altitude"])
         return EOAGPX3DLineVisualizationByTypeAltitude;
+    else if ([name isEqualToString:@"speed"])
+        return EOAGPX3DLineVisualizationByTypeSpeed;
+    else if ([name isEqualToString:@"hr"])
+        return EOAGPX3DLineVisualizationByTypeHeartRate;
+    else if ([name isEqualToString:@"cad"])
+        return EOAGPX3DLineVisualizationByTypeBicycleCadence;
+    else if ([name isEqualToString:@"power"])
+        return EOAGPX3DLineVisualizationByTypeBicyclePower;
+    else if ([name isEqualToString:@"temp_sensor"])
+        return EOAGPX3DLineVisualizationByTypeTemperature;
+    else if ([name isEqualToString:@"speed_sensor"])
+        return EOAGPX3DLineVisualizationByTypeSpeedSensor;
     else if ([name isEqualToString:@"fixed_heigh"])
         return EOAGPX3DLineVisualizationByTypeFixedHeight;
     return EOAGPX3DLineVisualizationByTypeNone;
@@ -314,6 +351,15 @@
         case EOAGPX3DLineVisualizationWallColorTypeUpwardGradient:
             return @"upward_gradient";
             break;
+        case EOAGPX3DLineVisualizationWallColorTypeAltitude:
+            return @"altitude";
+            break;
+        case EOAGPX3DLineVisualizationWallColorTypeSlope:
+            return @"slope";
+            break;
+        case EOAGPX3DLineVisualizationWallColorTypeSpeed:
+            return @"speed";
+            break;
         default:
             return @"none";
     }
@@ -322,13 +368,19 @@
 + (EOAGPX3DLineVisualizationWallColorType)lineVisualizationWallColorTypeForName:(NSString *)name
 {
     if ([name isEqualToString:@"none"])
-       return EOAGPX3DLineVisualizationWallColorTypeNone;
-     if ([name isEqualToString:@"solid"])
+        return EOAGPX3DLineVisualizationWallColorTypeNone;
+    if ([name isEqualToString:@"solid"])
         return EOAGPX3DLineVisualizationWallColorTypeSolid;
     else if ([name isEqualToString:@"downward_gradient"])
         return EOAGPX3DLineVisualizationWallColorTypeDownwardGradient;
     else if ([name isEqualToString:@"upward_gradient"])
         return EOAGPX3DLineVisualizationWallColorTypeUpwardGradient;
+    else if ([name isEqualToString:@"altitude"])
+        return EOAGPX3DLineVisualizationWallColorTypeAltitude;
+    else if ([name isEqualToString:@"slope"])
+        return EOAGPX3DLineVisualizationWallColorTypeSlope;
+    else if ([name isEqualToString:@"speed"])
+        return EOAGPX3DLineVisualizationWallColorTypeSpeed;
     return EOAGPX3DLineVisualizationWallColorTypeUpwardGradient;
 }
 
@@ -614,6 +666,7 @@
 
     [d setObject:@(gpx.showStartFinish) forKey:@"showStartFinish"];
     [d setObject:@(gpx.verticalExaggerationScale) forKey:@"verticalExaggerationScale"];
+    [d setObject:@(gpx.elevationMeters) forKey:@"elevationMeters"];
     [d setObject:@(gpx.visualization3dByType) forKey:@"line3dVisualizationByType"];
     [d setObject:@(gpx.visualization3dWallColorType) forKey:@"line3dVisualizationWallColorType"];
     [d setObject:@(gpx.visualization3dPositionType) forKey:@"line3dVisualizationPositionType"];
@@ -623,6 +676,7 @@
     [d setObject:@(gpx.showArrows) forKey:@"showArrows"];
     [d setObject:gpx.width forKey:@"width"];
     [d setObject:gpx.coloringType forKey:@"coloringType"];
+    [d setObject:gpx.gradientPaletteName forKey:@"gradientPaletteName"];
     
     [d setObject:@(gpx.splitType) forKey:@"splitType"];
     [d setObject:@(gpx.splitInterval) forKey:@"splitInterval"];
@@ -672,7 +726,8 @@
     bounds.bottomRight = CLLocationCoordinate2DMake([gpxData[@"bottom_right_lat"] doubleValue], [gpxData[@"bottom_right_lon"] doubleValue]);
     gpx.bounds = bounds;
     gpx.visualization3dWallColorType = EOAGPX3DLineVisualizationWallColorTypeUpwardGradient;
-    gpx.verticalExaggerationScale = 1.0;
+    gpx.verticalExaggerationScale = kExaggerationDefScale;
+    gpx.elevationMeters = kElevationDefMeters;
 
     for (NSString *key in gpxData)
     {
@@ -763,6 +818,10 @@
         {
             gpx.verticalExaggerationScale = [value floatValue];
         }
+        else if ([key isEqualToString:@"elevationMeters"])
+        {
+            gpx.elevationMeters = [value integerValue];
+        }
         else if ([key isEqualToString:@"line3dVisualizationByType"])
         {
             gpx.visualization3dByType = (EOAGPX3DLineVisualizationByType)[value integerValue];
@@ -790,6 +849,10 @@
         else if ([key isEqualToString:@"coloringType"])
         {
             gpx.coloringType = value;
+        }
+        else if ([key isEqualToString:@"gradientPaletteName"])
+        {
+            gpx.gradientPaletteName = value;
         }
         else if ([key isEqualToString:@"hiddenGroups"])
         {

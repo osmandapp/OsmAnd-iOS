@@ -7,33 +7,42 @@
 //
 
 #import "OATerrainAction.h"
-#import "OAAppSettings.h"
 #import "OsmAndApp.h"
-#import "OAAppData.h"
-#import "OAQuickActionType.h"
+#import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OATerrainAction
+{
+    OASRTMPlugin *_plugin;
+}
 
 - (instancetype)init
 {
     return [super initWithActionType:self.class.TYPE];
 }
 
+- (void)commonInit
+{
+    _plugin = (OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class];
+}
+
++ (void)initialize
+{
+    TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsTerrainActionId
+                                            stringId:@"terrain.showhide"
+                                                  cl:self.class]
+               name:OALocalizedString(@"shared_string_terrain")]
+              nameAction:OALocalizedString(@"quick_action_verb_show_hide")]
+              iconName:@"ic_custom_hillshade"]
+             category:QuickActionTypeCategoryConfigureMap]
+            nonEditable];
+}
+
 - (void)execute
 {
-    OAAppData *data = [OsmAndApp instance].data;
-    BOOL isOn = [data terrainType] != EOATerrainTypeDisabled;
-    if (isOn)
-    {
-        [data setLastTerrainType:data.terrainType];
-        [data setTerrainType:EOATerrainTypeDisabled];
-    }
-    else
-    {
-        [data setTerrainType:data.lastTerrainType];
-    }
+    [_plugin setTerrainLayerEnabled:![_plugin isTerrainLayerEnabled]];
 }
 
 - (NSString *)getIconResName
@@ -48,19 +57,16 @@ static OAQuickActionType *TYPE;
 
 - (BOOL)isActionWithSlash
 {
-    return [[OsmAndApp instance].data terrainType] != EOATerrainTypeDisabled;
+    return [_plugin isTerrainLayerEnabled];
 }
 
 - (NSString *)getActionStateName
 {
-    return [[OsmAndApp instance].data terrainType] != EOATerrainTypeDisabled ? OALocalizedString(@"hide_terrain") : OALocalizedString(@"show_terrain");
+    return [_plugin isTerrainLayerEnabled] ? OALocalizedString(@"hide_terrain") : OALocalizedString(@"show_terrain");
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:30 stringId:@"terrain.showhide" class:self.class name:OALocalizedString(@"toggle_hillshade") category:CONFIGURE_MAP iconName:@"ic_custom_hillshade" secondaryIconName:nil editable:NO];
-       
     return TYPE;
 }
 

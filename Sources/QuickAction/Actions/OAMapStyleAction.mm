@@ -8,32 +8,45 @@
 
 #import "OAMapStyleAction.h"
 #import "OAAppSettings.h"
+#import "OAAppData.h"
 #import "OsmAndApp.h"
 #import "OAIAPHelper.h"
+#import "OAApplicationMode.h"
+#import "OAProducts.h"
 #import "OAQuickActionSelectionBottomSheetViewController.h"
 #import "OARendererRegistry.h"
-#import "OAQuickActionType.h"
 #import "OAButtonTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OATitleDescrDraggableCell.h"
 #import "OAIndexConstants.h"
+#import "OAMapSource.h"
+#import "OrderedDictionary.h"
+#import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Map/UnresolvedMapStyle.h>
 
-#define KEY_STYLES @"styles"
+static NSString * const kStyles = @"styles";
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OAMapStyleAction
 
 - (instancetype) init
 {
-    self = [super initWithActionType:self.class.TYPE];
-    if (self)
-    {
-        [self commonInit];
-    }
-    return self;
+    return [super initWithActionType:self.class.TYPE];
+}
+
++ (void)initialize
+{
+    TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsMapStyleActionId
+                                           stringId:@"mapstyle.change"
+                                                 cl:self.class]
+              name:OALocalizedString(@"quick_action_map_style")]
+              nameAction:OALocalizedString(@"shared_string_change")]
+             iconName:@"ic_custom_map_style"]
+             secondaryIconName:@"ic_custom_compound_action_change"]
+            category:QuickActionTypeCategoryConfigureMap];
 }
 
 - (void)commonInit
@@ -45,11 +58,13 @@ static OAQuickActionType *TYPE;
     OAApplicationMode *mode = [OAAppSettings sharedManager].applicationMode.get;
     QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > mapStyles;
     const auto localResources = app.resourcesManager->getLocalResources();
-    for(const auto& localResource : localResources)
+    for (const auto& localResource : localResources)
+    {
         if (localResource->type == OsmAnd::ResourcesManager::ResourceType::MapStyle)
             mapStyles.push_back(localResource);
+    }
     
-    for(const auto& resource : mapStyles)
+    for (const auto& resource : mapStyles)
     {
         const auto& mapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(resource->metadata)->mapStyle;
 
@@ -83,7 +98,7 @@ static OAQuickActionType *TYPE;
     NSArray<NSString *> *mapStyles = [self getFilteredStyles];
     if (mapStyles.count > 0)
     {
-        BOOL showBottomSheetStyles = [self.getParams[KEY_DIALOG] boolValue];
+        BOOL showBottomSheetStyles = [self.getParams[kDialog] boolValue];
         if (showBottomSheetStyles)
         {
             OAQuickActionSelectionBottomSheetViewController *bottomSheet = [[OAQuickActionSelectionBottomSheetViewController alloc] initWithAction:self type:EOAMapSourceTypeStyle];
@@ -166,7 +181,7 @@ static OAQuickActionType *TYPE;
 
 - (NSString *)getListKey
 {
-    return KEY_STYLES;
+    return kStyles;
 }
 
 - (OrderedDictionary *)getUIModel
@@ -174,9 +189,9 @@ static OAQuickActionType *TYPE;
     MutableOrderedDictionary *data = [[MutableOrderedDictionary alloc] init];
     [data setObject:@[@{
                           @"type" : [OASwitchTableViewCell getCellIdentifier],
-                          @"key" : KEY_DIALOG,
+                          @"key" : kDialog,
                           @"title" : OALocalizedString(@"quick_action_interim_dialog"),
-                          @"value" : @([self.getParams[KEY_DIALOG] boolValue]),
+                          @"value" : @([self.getParams[kDialog] boolValue]),
                           },
                       @{
                           @"footer" : OALocalizedString(@"quick_action_dialog_descr")
@@ -212,13 +227,13 @@ static OAQuickActionType *TYPE;
     {
         for (NSDictionary *item in arr)
         {
-            if ([item[@"key"] isEqualToString:KEY_DIALOG])
-                [params setValue:item[@"value"] forKey:KEY_DIALOG];
+            if ([item[@"key"] isEqualToString:kDialog])
+                [params setValue:item[@"value"] forKey:kDialog];
             else if ([item[@"type"] isEqualToString:[OATitleDescrDraggableCell getCellIdentifier]])
                      [sources addObject:item[@"title"]];
         }
     }
-    [params setObject:sources forKey:KEY_STYLES];
+    [params setObject:sources forKey:kStyles];
     [self setParams:[NSDictionary dictionaryWithDictionary:params]];
     return sources.count > 0;
 }
@@ -228,17 +243,14 @@ static OAQuickActionType *TYPE;
     return OALocalizedString(@"quick_action_list_descr");
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:14 stringId:@"mapstyle.change" class:self.class name:OALocalizedString(@"quick_action_map_style") category:CONFIGURE_MAP iconName:@"ic_custom_map_style" secondaryIconName:nil];
-       
     return TYPE;
 }
 
 - (NSArray *)loadListFromParams
 {
-    return [self getParams][self.getListKey];
+    return [self getParams][[self getListKey]];
 }
 
 @end

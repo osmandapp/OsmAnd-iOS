@@ -8,11 +8,14 @@
 
 #import "OAMeasurementToolLayer.h"
 #import "OARootViewController.h"
+#import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OARoutingHelper.h"
 #import "OANativeUtilities.h"
 #import "OAGPXDocument.h"
 #import "OAMeasurementEditingContext.h"
+#import "OAAppSettings.h"
+#import "CLLocation+Extension.h"
 
 #include <OsmAndCore/Map/VectorLine.h>
 #include <OsmAndCore/Map/VectorLineBuilder.h>
@@ -202,8 +205,9 @@
 
 - (BOOL) updateLayer
 {
-    [super updateLayer];
-    
+    if (![super updateLayer])
+        return NO;
+
     if (self.isVisible)
     {
         [self.mapView addKeyedSymbolsProvider:_collection];

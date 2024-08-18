@@ -8,21 +8,25 @@
 
 #import "OAPluginsViewController.h"
 #import "OAIAPHelper.h"
-#import "OAInAppCell.h"
+#import "OAIAPHelper.h"
+#import "OAProducts.h"
+#import "OAObservable.h"
 #import "OAResourcesBaseViewController.h"
-#include "Localization.h"
+#import "Localization.h"
 #import "OAPluginDetailsViewController.h"
 #import "OAPluginPopupViewController.h"
 #import "OASubscriptionBannerCardView.h"
 #import "OAChoosePlanHelper.h"
 #import "OARootViewController.h"
-#import "OAQuickActionRegistry.h"
+#import "OAMapButtonsHelper.h"
 #import "OAPlugin.h"
 #import "OACustomPlugin.h"
 #import "OAColors.h"
 #import "OAAutoObserverProxy.h"
 #import "OAPluginsHelper.h"
 #import "OAOnlinePlugin.h"
+#import "OAInAppCell.h"
+#import "OsmAndApp.h"
 
 @interface OAPluginsViewController () <OASubscriptionBannerCardViewDelegate, OAPluginDetailsDelegate, OAOnlinePluginsCallback, OAPluginInstallListener>
 
@@ -276,11 +280,12 @@
     });
 }
 
-- (void)refreshProduct:(NSIndexPath *)indexPath {
+- (void)refreshProduct:(NSIndexPath *)indexPath
+{
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-        [OAQuickActionRegistry.sharedInstance updateActionTypes];
-        [OAQuickActionRegistry.sharedInstance.quickActionListChangedObservable notifyEvent];
+        [OAMapButtonsHelper.sharedInstance updateActionTypes];
+        [OAMapButtonsHelper.sharedInstance.quickActionButtonsChangedObservable notifyEventWithKey:nil andValue:nil];
     });
 }
 

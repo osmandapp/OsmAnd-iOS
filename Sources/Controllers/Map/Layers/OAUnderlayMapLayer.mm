@@ -9,9 +9,13 @@
 #import "OAUnderlayMapLayer.h"
 #import "OAMapCreatorHelper.h"
 #import "OAMapViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAObservable.h"
 #import "OAMapRendererView.h"
 #import "OAAutoObserverProxy.h"
 #import "OARootViewController.h"
+#import "OAMapSource.h"
+#import "OAAppData.h"
 
 #include "OASQLiteTileSourceMapLayerProvider.h"
 #include "OAWebClient.h"
@@ -68,7 +72,8 @@
 
 - (BOOL) updateLayer
 {
-    [super updateLayer];
+    if (![super updateLayer])
+        return NO;
 
     [self updateOpacitySliderVisibility];
     

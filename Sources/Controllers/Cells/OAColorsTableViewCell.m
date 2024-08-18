@@ -81,18 +81,18 @@
 
         UIColor *aColor = UIColorFromRGB(color);
         cell.colorView.backgroundColor = aColor;
-        cell.chessboardView.image = [UIImage templateImageNamed:@"bg_color_chessboard_pattern"];
-        cell.chessboardView.tintColor = UIColorFromRGB(color);
+        cell.backgroundImageView.image = [UIImage templateImageNamed:@"bg_color_chessboard_pattern"];
+        cell.backgroundImageView.tintColor = UIColorFromRGB(color);
 
         if (indexPath.row == _currentColor)
         {
-            cell.backView.layer.borderWidth = 2;
-            cell.backView.layer.borderColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary].CGColor;
+            cell.selectionView.layer.borderWidth = 2;
+            cell.selectionView.layer.borderColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary].CGColor;
         }
         else
         {
-            cell.backView.layer.borderWidth = 0;
-            cell.backView.layer.borderColor = [UIColor clearColor].CGColor;
+            cell.selectionView.layer.borderWidth = 0;
+            cell.selectionView.layer.borderColor = [UIColor clearColor].CGColor;
         }
     }
     

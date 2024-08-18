@@ -20,6 +20,8 @@
 #import "OAOsmNotesMapLayerProvider.h"
 #import "OAOnlineOsmNoteWrapper.h"
 #import "OAPluginsHelper.h"
+#import "OAAppSettings.h"
+#import "OAAppData.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -75,7 +77,8 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
 
 - (BOOL) updateLayer
 {
-    [super updateLayer];
+    if (![super updateLayer])
+        return NO;
 
     CGFloat textSize = [[OAAppSettings sharedManager].textSize get];
     if (_textSize != textSize)

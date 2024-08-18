@@ -1,5 +1,5 @@
 //
-//  OADebugSettings.m
+//  OAAppSettings.m
 //  OsmAnd
 //
 //  Created by AntonRogachevskiy on 10/16/14.
@@ -8,12 +8,20 @@
 
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
+#import "OAAppData.h"
 #import "Localization.h"
 #import "OADayNightHelper.h"
 #import "OAColors.h"
 #import "OAAvoidRoadInfo.h"
 #import "OAGPXDatabase.h"
 #import "OAIAPHelper.h"
+#import "OADownloadMode.h"
+#import "OAColoringType.h"
+#import "OAMapWidgetRegistry.h"
+#import "OAObservable.h"
+#import "OAMapSource.h"
+#import "OAApplicationMode.h"
+#import "OAMapLayersConfiguration.h"
 #import "OsmAnd_Maps-Swift.h"
 
 static NSString * const settingShowMapRuletKey = @"settingShowMapRuletKey";
@@ -106,10 +114,8 @@ static NSString * const customAppModesKey = @"customAppModes";
 
 static NSString * const mapInfoControlsKey = @"mapInfoControls";
 static NSString * const transparentMapThemeKey = @"transparentMapTheme";
-static NSString * const showStreetNameKey = @"showStreetName";
 static NSString * const positionPlacementOnMapKey = @"positionPlacementOnMap";
 static NSString * const rotateMapKey = @"rotateMap";
-static NSString * const compassModeKey = @"compassMode";
 static NSString * const firstMapIsDownloadedKey = @"firstMapIsDownloaded";
 
 // App profiles
@@ -118,11 +124,13 @@ static NSString * const routingProfileKey = @"routingProfile";
 static NSString * const derivedProfileKey = @"derivedProfile";
 static NSString * const profileIconNameKey = @"profileIconName";
 static NSString * const profileIconColorKey = @"profileIconColor";
+static NSString * const profileCustomIconColorKey = @"profileCustomIconColor";
 static NSString * const userProfileNameKey = @"userProfileName";
 static NSString * const parentAppModeKey = @"parentAppMode";
 static NSString * const routeServiceKey = @"routeService";
 static NSString * const navigationIconKey = @"navigationIcon";
 static NSString * const locationIconKey = @"locationIcon";
+static NSString * const use3dIconsByDefaultKey = @"use3dIconsByDefault";
 static NSString * const appModeOrderKey = @"appModeOrder";
 static NSString * const defaultSpeedKey = @"defaultSpeed";
 static NSString * const minSpeedKey = @"minSpeed";
@@ -161,6 +169,7 @@ static NSString * const routeRecalculationDistanceKey = @"routeRecalculationDist
 static NSString * const customRouteColorDayKey = @"customRouteColorDay";
 static NSString * const customRouteColorNightKey = @"customRouteColorNight";
 static NSString * const routeColoringTypeKey = @"routeColoringType";
+static NSString * const routeGradientPaletteKey = @"route_gradient_palette";
 static NSString * const routeInfoAttributeKey = @"routeInfoAttribute";
 static NSString * const routeLineWidthKey = @"routeLineWidth";
 static NSString * const routeShowTurnArrowsKey = @"routeShowTurnArrows";
@@ -170,7 +179,6 @@ static NSString * const showPedestrianKey = @"showPedestrian";
 static NSString * const showSpeedLimitWarningsKey = @"showSpeedLimitWarnings";
 static NSString * const showCamerasKey = @"showCameras";
 static NSString * const showTunnelsKey = @"showTunnels";
-static NSString * const showLanesKey = @"showLanes";
 static NSString * const showGpxWptKey = @"showGpxWpt";
 static NSString * const showNearbyFavoritesKey = @"showNearbyFavorites";
 static NSString * const showNearbyPoiKey = @"showNearbyPoi";
@@ -217,9 +225,6 @@ static NSString * const showSpeedometerKey = @"show_speedometer";
 static NSString * const speedometerSizeKey = @"speedometer_size";
 static NSString * const showSpeedLimitWarningKey = @"show_speed_limit_warning";
 
-static NSString * const osmUserNameKey = @"osm_user_name";
-static NSString * const userOsmBugNameKey = @"userOsmBugName";
-static NSString * const osmPasswordKey = @"osm_pass";
 static NSString * const osmUserAccessTokenKey = @"osm_user_access_token";
 static NSString * const osmUserAccessTokenSecretKey = @"osm_user_access_token_secret";
 static NSString * const oprAccessTokenKey = @"opr_access_token";
@@ -240,20 +245,8 @@ static NSString * const mapillaryFilterStartDateKey = @"mapillaryFilterStartDate
 static NSString * const mapillaryFilterEndDateKey = @"mapillaryFilterEndDate";
 static NSString * const mapillaryFilterPanoKey = @"mapillaryFilterPano";
 
-static NSString * const quickActionIsOnKey = @"qiuckActionIsOn";
-static NSString * const quickActionsListKey = @"quickActionsList";
 static NSString * const isQuickActionTutorialShownKey = @"isQuickActionTutorialShown";
-
-static NSString * const quickActionLandscapeXKey = @"quickActionLandscapeX";
-static NSString * const quickActionLandscapeYKey = @"quickActionLandscapeY";
-static NSString * const quickActionPortraitXKey = @"quickActionPortraitX";
-static NSString * const quickActionPortraitYKey = @"quickActionPortraitY";
-
-static NSString * const map3dModeLandscapeXKey = @"map3dModeLandscapeX";
-static NSString * const map3dModeLandscapeYKey = @"map3dModeLandscapeY";
-static NSString * const map3dModePortraitXKey = @"map3dModePortraitX";
-static NSString * const map3dModePortraitYKey = @"map3dModePortraitY";
-static NSString * const map3dModeVisibilityKey = @"map_3d_mode_visibility";
+static NSString * const quickActionButtonsKey = @"quick_action_buttons";
 
 static NSString * const contourLinesZoomKey = @"contourLinesZoom";
 static NSString * const hikingRoutesParameterKey = @"hikingRoutesParameter";
@@ -360,6 +353,7 @@ static NSString * const currentTrackWidthKey = @"currentTrackWidth";
 static NSString * const currentTrackShowArrowsKey = @"currentTrackShowArrows";
 static NSString * const currentTrackShowStartFinishKey = @"currentTrackShowStartFinish";
 static NSString * const currentTrackVerticalExaggerationScaleKey = @"currentTrackVerticalExaggerationScale";
+static NSString * const currentTrackElevationMetersKey = @"currentTrackElevationMeters";
 static NSString * const currentTrackVisualization3dByTypeKey = @"currentTrackVisualization3dByType";
 static NSString * const currentTrackVisualization3dWallColorTypeKey = @"currentTrackVisualization3dWallColorType";
 static NSString * const currentTrackVisualization3dPositionTypeKey = @"currentTrackVisualization3dPositionType";
@@ -367,6 +361,7 @@ static NSString * const currentTrackVisualization3dPositionTypeKey = @"currentTr
 static NSString * const customTrackColorsKey = @"customTrackColors";
 static NSString * const customTrackColorsLastUsedKey = @"customTrackColorsLastUsed";
 static NSString * const lastUsedFavIconsKey = @"lastUsedFavIcons";
+static NSString * const gradientPalettesKey = @"gradient_color_palettes";
 
 static NSString * const gpsStatusAppKey = @"gpsStatusApp";
 
@@ -441,83 +436,6 @@ static NSString * const topWidgetPanelOrderOldKey = @"top_widget_panel_order";
 static NSString * const bottomWidgetPanelOrderKeyOld = @"bottom_widget_panel_order";
 
 static NSString * const useOldRoutingKey = @"useOldRoutingKey";
-
-@implementation OACompassMode
-
-+ (NSString *) getTitle:(EOACompassMode)cm
-{
-    switch (cm)
-    {
-        case EOACompassVisible:
-            return OALocalizedString(@"compass_always_visible");
-        case EOACompassHidden:
-            return OALocalizedString(@"compass_always_hidden");
-        default:
-            return OALocalizedString(@"compass_visible_if_map_rotated");
-    }
-}
-
-+ (NSString *) getDescription:(EOACompassMode)cm
-{
-    switch (cm)
-    {
-        case EOACompassRotated:
-            return OALocalizedString(@"compass_visible_in_rotated_mode_descr");
-        default:
-            return @"";
-    }
-}
-
-+ (NSString *) getIconName:(EOACompassMode)cm
-{
-    switch (cm)
-    {
-        case EOACompassVisible:
-            return @"ic_custom_compass_north";
-        case EOACompassHidden:
-            return @"ic_custom_compass_hidden";
-        default:
-            return @"ic_custom_compass_rotated";
-    }
-}
-
-@end
-
-@implementation OAMap3DModeVisibility
-
-+ (instancetype) withModeConstant:(EOAMap3DModeVisibility)mode;
-{
-    OAMap3DModeVisibility *obj = [[OAMap3DModeVisibility alloc] init];
-    if (obj)
-        obj.mode = mode;
-    return obj;
-}
-
-+ (NSString *) getTitle:(EOAMap3DModeVisibility)mode
-{
-    switch (mode)
-    {
-        case EOAMap3DModeVisibilityHidden:
-            return OALocalizedString(@"shared_string_hidden");
-        case EOAMap3DModeVisibilityVisible:
-            return OALocalizedString(@"shared_string_visible");
-        default:
-            return OALocalizedString(@"visible_in_3d_mode");
-    }
-}
-
-+ (NSString *) getIconName:(EOAMap3DModeVisibility)mode
-{
-    switch (mode)
-    {
-        case EOAMap3DModeVisibilityHidden:
-            return @"ic_custom_button_3d_off";
-        default:
-            return @"ic_custom_button_3d";
-    }
-}
-
-@end
 
 @interface OAMetricsConstant()
 
@@ -772,12 +690,13 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
               [OADrivingRegion withRegion:DR_CANADA],
               [OADrivingRegion withRegion:DR_UK_AND_OTHERS],
               [OADrivingRegion withRegion:DR_JAPAN],
+              [OADrivingRegion withRegion:DR_INDIA],
               [OADrivingRegion withRegion:DR_AUSTRALIA] ];
 }
 
 + (BOOL) isLeftHandDriving:(EOADrivingRegion)region
 {
-    return region == DR_UK_AND_OTHERS || region == DR_JAPAN || region == DR_AUSTRALIA;
+    return region == DR_UK_AND_OTHERS || region == DR_JAPAN || region == DR_INDIA || region == DR_AUSTRALIA;
 }
 
 + (BOOL) isAmericanSigns:(EOADrivingRegion)region
@@ -798,6 +717,8 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
         case DR_UK_AND_OTHERS:
             return MILES_AND_METERS;
         case DR_JAPAN:
+            return KILOMETERS_AND_METERS;
+        case DR_INDIA:
             return KILOMETERS_AND_METERS;
         case DR_AUSTRALIA:
             return KILOMETERS_AND_METERS;
@@ -820,6 +741,8 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
             return OALocalizedString(@"driving_region_uk");
         case DR_JAPAN:
             return OALocalizedString(@"driving_region_japan");
+        case DR_INDIA:
+            return OALocalizedString(@"driving_region_india");
         case DR_AUSTRALIA:
             return OALocalizedString(@"driving_region_australia");
 
@@ -849,6 +772,8 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
         return DR_CANADA;
     } else if ([countryCode isEqualToString:@"jp"]) {
         return DR_JAPAN;
+    } else if ([countryCode isEqualToString:@"in"]) {
+        return DR_INDIA;
     } else if ([countryCode isEqualToString:@"au"]) {
         return DR_AUSTRALIA;
     } else if (!isMetricSystem) {
@@ -1052,16 +977,16 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
     }
 }
 
-- (EOAColorizationType) toColorizationType
+- (NSInteger)toColorizationType
 {
     if (self.gst == EOAGradientScaleTypeSpeed)
-        return EOAColorizationTypeSpeed;
+        return ColorizationTypeSpeed;
     else if (self.gst == EOAGradientScaleTypeAltitude)
-        return EOAColorizationTypeElevation;
+        return ColorizationTypeElevation;
     else if (self.gst == EOAGradientScaleTypeSlope)
-        return EOAColorizationTypeSlope;
+        return ColorizationTypeSlope;
     else
-        return EOAColorizationTypeNone;
+        return ColorizationTypeNone;
 }
 
 @end
@@ -1397,21 +1322,27 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
     return obj;
 }
 
-- (id)makeGlobal
+- (instancetype)makeGlobal
 {
     _global = YES;
     return self;
 }
 
-- (id)makeProfile
+- (instancetype)makeProfile
 {
     _global = NO;
     return self;
 }
 
-- (id)makeShared
+- (instancetype)makeShared
 {
     _shared = YES;
+    return self;
+}
+
+- (instancetype)storeLastModifiedTime
+{
+    _lastModifiedTimeStored = YES;
     return self;
 }
 
@@ -2288,74 +2219,6 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 @end
 
-@implementation OACommonTerrain
-
-@dynamic defValue;
-
-+ (instancetype) withKey:(NSString *)key defValue:(EOATerrainType)defValue
-{
-    OACommonTerrain *obj = [[OACommonTerrain alloc] init];
-    if (obj)
-    {
-        obj.key = key;
-        obj.defValue = defValue;
-    }
-    return obj;
-}
-
-- (EOATerrainType) get
-{
-    return [super get];
-}
-
-- (EOATerrainType) get:(OAApplicationMode *)mode
-{
-    return [super get:mode];
-}
-
-- (void) set:(EOATerrainType)terrainType
-{
-    [super set:(int)terrainType];
-}
-
-- (void) set:(EOATerrainType)terrainType mode:(OAApplicationMode *)mode
-{
-    [super set:(int)terrainType mode:mode];
-}
-
-- (void) resetToDefault
-{
-    EOATerrainType defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
-    if (pDefault)
-        defaultValue = (EOATerrainType)((NSNumber *)pDefault).intValue;
-
-    [self set:defaultValue];
-}
-
-- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
-{
-    if ([strValue isEqualToString:@"HILLSHADE"])
-        return [self set:EOATerrainTypeHillshade mode:mode];
-    else if ([strValue isEqualToString:@"SLOPE"])
-        return [self set:EOATerrainTypeSlope mode:mode];
-}
-
-- (NSString *)toStringValue:(OAApplicationMode *)mode
-{
-    switch ([self get:mode])
-    {
-        case EOATerrainTypeHillshade:
-            return @"HILLSHADE";
-        case EOATerrainTypeSlope:
-            return @"SLOPE";
-        default:
-            return @"HILLSHADE";
-    }
-}
-
-@end
-
 @implementation OACommonSpeedLimitWarningState
 
 @dynamic defValue;
@@ -2821,6 +2684,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         return [self set:DR_UK_AND_OTHERS mode:mode];
     else if ([strValue isEqualToString:@"JAPAN"])
         return [self set:DR_JAPAN mode:mode];
+    else if ([strValue isEqualToString:@"INDIA"])
+        return [self set:DR_INDIA mode:mode];
     else if ([strValue isEqualToString:@"AUSTRALIA"])
         return [self set:DR_AUSTRALIA mode:mode];
 }
@@ -2839,6 +2704,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
             return @"UK_AND_OTHERS";
         case DR_JAPAN:
             return @"JAPAN";
+        case DR_INDIA:
+            return @"INDIA";
         case DR_AUSTRALIA:
             return @"AUSTRALIA";
         default:
@@ -3012,82 +2879,6 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
     NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = (EOARulerWidgetMode)((NSNumber *)pDefault).intValue;
-
-    [self set:defaultValue];
-}
-
-@end
-
-@implementation OACommonMap3dMode
-
-@dynamic defValue;
-
-+ (instancetype) withKey:(NSString *)key defValue:(EOAMap3DModeVisibility)defValue
-{
-    OACommonRulerWidgetMode *obj = [[OACommonRulerWidgetMode alloc] init];
-    if (obj)
-    {
-        obj.key = key;
-        obj.defValue = defValue;
-    }
-    return obj;
-}
-
-- (EOAMap3DModeVisibility) get
-{
-    return [super get];
-}
-
-- (void) set:(EOAMap3DModeVisibility)map3dMode
-{
-    [super set:map3dMode];
-}
-
-- (EOAMap3DModeVisibility) get:(OAApplicationMode *)mode
-{
-    return [super get:mode];
-}
-
-- (void) set:(EOAMap3DModeVisibility)map3dMode mode:(OAApplicationMode *)mode
-{
-    [super set:map3dMode mode:mode];
-}
-
-- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
-{
-    if ([strValue isEqualToString:@"Hidden"])
-        return [self set:EOAMap3DModeVisibilityHidden mode:mode];
-    else if ([strValue isEqualToString:@"Visible"])
-        return [self set:EOAMap3DModeVisibilityVisible mode:mode];
-    else if ([strValue isEqualToString:@"VisibleIn3DMode"])
-        return [self set:EOAMap3DModeVisibilityVisibleIn3DMode mode:mode];
-}
-
-+ (NSString *) rulerWidgetModeToString:(EOAMap3DModeVisibility)map3dMode
-{
-    switch (map3dMode) {
-        case EOAMap3DModeVisibilityHidden:
-            return @"Hidden";
-        case EOAMap3DModeVisibilityVisible:
-            return @"Visible";
-        case EOAMap3DModeVisibilityVisibleIn3DMode:
-            return @"VisibleIn3DMode";
-        default:
-            return @"VisibleIn3DMode";
-    }
-}
-
-- (NSString *)toStringValue:(OAApplicationMode *)mode
-{
-    return [self.class rulerWidgetModeToString:[self get:mode]];
-}
-
-- (void) resetToDefault
-{
-    EOAMap3DModeVisibility defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
-    if (pDefault)
-        defaultValue = (EOAMap3DModeVisibility)((NSNumber *)pDefault).intValue;
 
     [self set:defaultValue];
 }
@@ -4079,6 +3870,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         _appModeBeanPrefsIds = [[NSUserDefaults standardUserDefaults] objectForKey:appModeBeanPrefsIdsKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:appModeBeanPrefsIdsKey] :
         @[
             @"app_mode_icon_color",
+            @"custom_icon_color",
             @"user_profile_name",
             @"parent_app_mode",
             @"routing_profile",
@@ -4141,6 +3933,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [_profileIconName setModeDefaultValue:@"ic_action_horse" mode:OAApplicationMode.HORSE];
         
         _profileIconColor = [OACommonInteger withKey:profileIconColorKey defValue:profile_icon_color_blue_dark_default];
+        _profileCustomIconColor = [OACommonInteger withKey:profileCustomIconColorKey defValue:-1];
         _userProfileName = [OACommonString withKey:userProfileNameKey defValue:@""];
         _parentAppMode = [OACommonString withKey:parentAppModeKey defValue:nil];
 
@@ -4152,17 +3945,17 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [_routerService set:2 mode:OAApplicationMode.DEFAULT];
 
         [_profilePreferences setObject:_routerService forKey:@"route_service"];
-        _navigationIcon = [OACommonInteger withKey:navigationIconKey defValue:NAVIGATION_ICON_DEFAULT];
-        [_navigationIcon setModeDefaultValue:@(NAVIGATION_ICON_NAUTICAL) mode:OAApplicationMode.BOAT];
+        _navigationIcon = [OACommonString withKey:navigationIconKey defValue:[[OALocationIcon MOVEMENT_DEFAULT] name]];
+        [_navigationIcon setModeDefaultValue:[[OALocationIcon MOVEMENT_NAUTICAL] name] mode:OAApplicationMode.BOAT];
         [_profilePreferences setObject:_navigationIcon forKey:@"navigation_icon"];
 
-        _locationIcon = [OACommonInteger withKey:locationIconKey defValue:LOCATION_ICON_DEFAULT];
-        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_CAR) mode:OAApplicationMode.CAR];
-        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_BICYCLE) mode:OAApplicationMode.BICYCLE];
-        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_DEFAULT) mode:OAApplicationMode.BOAT];
-        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_CAR) mode:OAApplicationMode.AIRCRAFT];
-        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_BICYCLE) mode:OAApplicationMode.SKI];
-        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_BICYCLE) mode:OAApplicationMode.HORSE];
+        _locationIcon = [OACommonString withKey:locationIconKey defValue:[[OALocationIcon DEFAULT] name]];
+        [_locationIcon setModeDefaultValue:[[OALocationIcon CAR] name] mode:OAApplicationMode.CAR];
+        [_locationIcon setModeDefaultValue:[[OALocationIcon BICYCLE] name] mode:OAApplicationMode.BICYCLE];
+        [_locationIcon setModeDefaultValue:[[OALocationIcon DEFAULT] name] mode:OAApplicationMode.BOAT];
+        [_locationIcon setModeDefaultValue:[[OALocationIcon CAR] name] mode:OAApplicationMode.AIRCRAFT];
+        [_locationIcon setModeDefaultValue:[[OALocationIcon BICYCLE] name] mode:OAApplicationMode.SKI];
+        [_locationIcon setModeDefaultValue:[[OALocationIcon BICYCLE] name] mode:OAApplicationMode.HORSE];
         [_profilePreferences setObject:_locationIcon forKey:@"location_icon"];
 
         _appModeOrder = [OACommonInteger withKey:appModeOrderKey defValue:0];
@@ -4188,13 +3981,6 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
         _transparentMapTheme = [OACommonBoolean withKey:transparentMapThemeKey defValue:NO];
         [_profilePreferences setObject:_transparentMapTheme forKey:@"transparent_map_theme"];
-
-        _showStreetName = [OACommonBoolean withKey:showStreetNameKey defValue:NO];
-        [_showStreetName setModeDefaultValue:@NO mode:[OAApplicationMode DEFAULT]];
-        [_showStreetName setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
-        [_showStreetName setModeDefaultValue:@NO mode:[OAApplicationMode BICYCLE]];
-        [_showStreetName setModeDefaultValue:@NO mode:[OAApplicationMode PEDESTRIAN]];
-        [_profilePreferences setObject:_showStreetName forKey:@"show_street_name"];
 
         _showDistanceRuler = [OACommonBoolean withKey:showDistanceRulerKey defValue:NO];
         [_profilePreferences setObject:_showDistanceRuler forKey:@"show_distance_ruler"];
@@ -4225,9 +4011,6 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [_rotateMap setModeDefaultValue:@(ROTATE_MAP_BEARING) mode:[OAApplicationMode BICYCLE]];
         [_rotateMap setModeDefaultValue:@(ROTATE_MAP_BEARING) mode:[OAApplicationMode PEDESTRIAN]];
         [_profilePreferences setObject:_rotateMap forKey:@"rotate_map"];
-
-        _compassMode = [OACommonInteger withKey:compassModeKey defValue:EOACompassRotated];
-        [_profilePreferences setObject:_compassMode forKey:@"compass_mode"];
 
         _mapDensity = [OACommonDouble withKey:mapDensityKey defValue:MAGNIFIER_DEFAULT_VALUE];
         [_mapDensity setModeDefaultValue:@(MAGNIFIER_DEFAULT_CAR) mode:[OAApplicationMode CAR]];
@@ -4357,6 +4140,9 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         _routeColoringType = [OACommonColoringType withKey:routeColoringTypeKey defValue:OAColoringType.DEFAULT values:[OAColoringType getRouteColoringTypes]];
         [_profilePreferences setObject:_routeColoringType forKey:@"route_line_coloring_type"];
 
+        _routeGradientPalette = [OACommonString withKey:routeGradientPaletteKey defValue:PaletteGradientColor.defaultName];
+        [_profilePreferences setObject:_routeGradientPalette forKey:routeGradientPaletteKey];
+
         _routeInfoAttribute = [OACommonString withKey:routeInfoAttributeKey defValue:nil];
         [_profilePreferences setObject:_routeInfoAttribute forKey:@"route_info_attribute"];
 
@@ -4382,11 +4168,6 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         _showTunnels = [OACommonBoolean withKey:showTunnelsKey defValue:NO];
         [_showTunnels setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
         [_profilePreferences setObject:_showTunnels forKey:@"show_tunnels"];
-
-        _showLanes = [OACommonBoolean withKey:showLanesKey defValue:NO];
-        [_showLanes setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
-        [_showLanes setModeDefaultValue:@YES mode:[OAApplicationMode BICYCLE]];
-        [_profilePreferences setObject:_showLanes forKey:@"show_lanes"];
 
         _speakStreetNames = [OACommonBoolean withKey:speakStreetNamesKey defValue:YES];
         _speakTrafficWarnings = [OACommonBoolean withKey:speakTrafficWarningsKey defValue:YES];
@@ -4415,7 +4196,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [_profilePreferences setObject:_announceNearbyFavorites forKey:@"announce_nearby_favorites"];
         [_profilePreferences setObject:_announceNearbyPoi forKey:@"announce_nearby_poi"];
 
-        _voiceProvider = [OACommonString withKey:voiceProviderKey defValue:@""];
+        _voiceProvider = [OACommonString withKey:voiceProviderKey defValue:[self getDefaultVoiceProvider]];
         _announceWpt = [OACommonBoolean withKey:announceWptKey defValue:YES];
         _showScreenAlerts = [OACommonBoolean withKey:showScreenAlertsKey defValue:YES];
 
@@ -4463,11 +4244,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         _rulerMode = [[[OACommonRulerWidgetMode withKey:rulerModeKey defValue:RULER_MODE_DARK] makeGlobal] makeShared];
         [_globalPreferences setObject:_rulerMode forKey:@"ruler_mode"];
 
-        _osmUserName = [[[OACommonString withKey:osmUserNameKey defValue:@""] makeGlobal] makeShared];
         _osmUserDisplayName = [[[OACommonString withKey:osmUserDisplayNameKey defValue:@""] makeGlobal] makeShared];
         _osmUploadVisibility = [[[OACommonUploadVisibility withKey:osmUploadVisibilityKey defValue:EOAUploadVisibilityPublic] makeGlobal] makeShared];
-        _userOsmBugName = [[[OACommonString withKey:userOsmBugNameKey defValue:@"NoName/OsmAnd"] makeGlobal] makeShared];
-        _osmUserPassword = [[[OACommonString withKey:osmPasswordKey defValue:@""] makeGlobal] makeShared];
         _osmUserAccessToken = [[OACommonString withKey:osmUserAccessTokenKey defValue:@""] makeGlobal];
         _osmUserAccessTokenSecret = [[OACommonString withKey:osmUserAccessTokenSecretKey defValue:@""] makeGlobal];
         _oprAccessToken = [[OACommonString withKey:oprAccessTokenKey defValue:@""] makeGlobal];
@@ -4477,11 +4255,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         _offlineEditing = [[[OACommonBoolean withKey:offlineEditingKey defValue:YES] makeGlobal] makeShared];
         _osmUseDevUrl = [[[OACommonBoolean withKey:osmUseDevUrlKey defValue:NO] makeGlobal] makeShared];
 
-        [_globalPreferences setObject:_osmUserName forKey:@"user_name"];
         [_globalPreferences setObject:_osmUserDisplayName forKey:@"user_display_name"];
         [_globalPreferences setObject:_osmUploadVisibility forKey:@"upload_visibility"];
-        [_globalPreferences setObject:_userOsmBugName forKey:@"user_osm_bug_name"];
-        [_globalPreferences setObject:_osmUserPassword forKey:@"user_password"];
         [_globalPreferences setObject:_osmUserAccessToken forKey:@"user_access_token"];
         [_globalPreferences setObject:_osmUserAccessTokenSecret forKey:@"user_access_token_secret"];
         [_globalPreferences setObject:_oprAccessToken forKey:@"opr_user_access_token_secret"];
@@ -4511,22 +4286,11 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [_globalPreferences setObject:_mapillaryFilterEndDate forKey:@"mapillary_filter_to_date"];
         [_globalPreferences setObject:_mapillaryFilterPano forKey:@"mapillary_filter_pano"];
 
-        _quickActionIsOn = [OACommonBoolean withKey:quickActionIsOnKey defValue:NO];
-        _quickActionsList = [[[OACommonString withKey:quickActionsListKey defValue:@""] makeGlobal] makeShared];
         _isQuickActionTutorialShown = [[[OACommonBoolean withKey:isQuickActionTutorialShownKey defValue:NO] makeGlobal] makeShared];
+        _quickActionButtons = [[[[OACommonStringList withKey:quickActionButtonsKey defValue:@[QuickActionButtonState.defaultButtonId]] makeGlobal] makeShared] storeLastModifiedTime];
 
-        [_profilePreferences setObject:_quickActionIsOn forKey:@"quick_action_state"];
-        [_globalPreferences setObject:_quickActionsList forKey:@"quick_action_list"];
         [_globalPreferences setObject:_isQuickActionTutorialShown forKey:@"quick_action_tutorial"];
-
-        _quickActionPortraitX = [OACommonDouble withKey:quickActionPortraitXKey defValue:0];
-        _quickActionPortraitY = [OACommonDouble withKey:quickActionPortraitYKey defValue:0];
-        _quickActionLandscapeX = [OACommonDouble withKey:quickActionLandscapeXKey defValue:0];
-        _quickActionLandscapeY = [OACommonDouble withKey:quickActionLandscapeYKey defValue:0];
-        [_profilePreferences setObject:_quickActionPortraitX forKey:@"quick_fab_margin_x_portrait_margin"];
-        [_profilePreferences setObject:_quickActionPortraitY forKey:@"quick_fab_margin_y_portrait_margin"];
-        [_profilePreferences setObject:_quickActionLandscapeX forKey:@"quick_fab_margin_x_landscape_margin"];
-        [_profilePreferences setObject:_quickActionLandscapeY forKey:@"quick_fab_margin_y_landscape_margin"];
+        [_globalPreferences setObject:_quickActionButtons forKey:quickActionButtonsKey];
         
         _showSpeedometer = [OACommonBoolean withKey:showSpeedometerKey defValue:NO];
         [_showSpeedometer setModeDefaultValue:@YES mode:OAApplicationMode.CAR];
@@ -4536,22 +4300,11 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [_profilePreferences setObject:_showSpeedometer forKey:@"show_speedometer"];
         
         _speedometerSize = [OACommonWidgetSizeStyle withKey:speedometerSizeKey defValue:EOAWidgetSizeStyleMedium];
-        [_speedometerSize setModeDefaultValue:EOAWidgetSizeStyleSmall mode:OAApplicationMode.CAR];
+        [_speedometerSize setModeDefaultValue:@(EOAWidgetSizeStyleSmall) mode:OAApplicationMode.CAR];
         [self registerPreference:_speedometerSize forKey:speedometerSizeKey];
         
         _showSpeedLimitWarning = [OACommonSpeedLimitWarningState withKey:showSpeedLimitWarningKey defValue:EOASpeedLimitWarningStateWhenExceeded];
         [self registerPreference:_showSpeedLimitWarning forKey:showSpeedLimitWarningKey];
-        
-        _map3dMode = [[OACommonMap3dMode withKey:map3dModeVisibilityKey defValue:EOAMap3DModeVisibilityVisible] makeShared];
-        _map3dModePortraitX = [OACommonDouble withKey:map3dModePortraitXKey defValue:0];
-        _map3dModePortraitY = [OACommonDouble withKey:map3dModePortraitYKey defValue:0];
-        _map3dModeLandscapeX = [OACommonDouble withKey:map3dModeLandscapeXKey defValue:0];
-        _map3dModeLandscapeY = [OACommonDouble withKey:map3dModeLandscapeYKey defValue:0];
-        [_profilePreferences setObject:_map3dMode forKey:map3dModeVisibilityKey];
-        [_profilePreferences setObject:_map3dModePortraitX forKey:@"3dmode_fab_margin_x_portrait_margin"];
-        [_profilePreferences setObject:_map3dModePortraitY forKey:@"3dmode_fab_margin_y_portrait_margin"];
-        [_profilePreferences setObject:_map3dModeLandscapeX forKey:@"3dmode_fab_margin_x_landscape_margin"];
-        [_profilePreferences setObject:_map3dModeLandscapeY forKey:@"3dmode_fab_margin_y_landscape_margin"];
         
         _contourLinesZoom = [OACommonString withKey:contourLinesZoomKey defValue:@""];
         [_profilePreferences setObject:_contourLinesZoom forKey:@"contour_lines_zoom"];
@@ -4732,7 +4485,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         
         _currentTrackShowStartFinish = [[[OACommonBoolean withKey:currentTrackShowStartFinishKey defValue:YES] makeGlobal] makeShared];
         
-        _currentTrackVerticalExaggerationScale = [[[OACommonDouble withKey:currentTrackVerticalExaggerationScaleKey defValue:1.0] makeGlobal] makeShared];
+        _currentTrackVerticalExaggerationScale = [[[OACommonDouble withKey:currentTrackVerticalExaggerationScaleKey defValue:0.25] makeGlobal] makeShared];
+        _currentTrackElevationMeters = [[[OACommonInteger withKey:currentTrackElevationMetersKey defValue:kElevationDefMeters] makeGlobal] makeShared];
         _currentTrackVisualization3dByType = [[[OACommonInteger withKey:currentTrackVisualization3dByTypeKey defValue:EOAGPX3DLineVisualizationByTypeNone] makeGlobal] makeShared];
         
         _currentTrackVisualization3dWallColorType = [[[OACommonInteger withKey:currentTrackVisualization3dWallColorTypeKey defValue:EOAGPX3DLineVisualizationWallColorTypeUpwardGradient] makeGlobal] makeShared];
@@ -4741,6 +4495,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         _customTrackColors = [[[OACommonStringList withKey:customTrackColorsKey defValue:@[]] makeGlobal] makeShared];
         _customTrackColorsLastUsed = [[[OACommonStringList withKey:customTrackColorsLastUsedKey defValue:@[]] makeGlobal] makeShared];
         _lastUsedFavIcons = [[[OACommonStringList withKey:lastUsedFavIconsKey defValue:@[]] makeGlobal] makeShared];
+        _gradientPalettes = [[[OACommonString withKey:gradientPalettesKey defValue:nil] makeGlobal] makeShared];
 
         [_globalPreferences setObject:_currentTrackColor forKey:@"current_track_color"];
         [_globalPreferences setObject:_currentTrackColoringType forKey:@"current_track_coloring_type"];
@@ -4752,6 +4507,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [_globalPreferences setObject:_currentTrackShowStartFinish forKey:@"current_track_show_start_finish"];
         
         [_globalPreferences setObject:_currentTrackVerticalExaggerationScale forKey:@"current_track_vertical_exaggeration_scale"];
+        [_globalPreferences setObject:_currentTrackElevationMeters forKey:@"current_track_elevation_meters"];
         [_globalPreferences setObject:_currentTrackVisualization3dByType forKey:@"current_track_visualization_3d_by_type"];
         [_globalPreferences setObject:_currentTrackVisualization3dWallColorType forKey:@"current_track_visualization_3d_wall_color_type"];
         [_globalPreferences setObject:_currentTrackVisualization3dPositionType forKey:@"current_track_visualization_3d_position_type"];
@@ -4759,6 +4515,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [_globalPreferences setObject:_customTrackColors forKey:@"custom_track_colors"];
         [_globalPreferences setObject:_customTrackColorsLastUsed forKey:@"custom_track_colors_last_used"];
         [_globalPreferences setObject:_lastUsedFavIcons forKey:@"last_used_favorite_icons"];
+        [_globalPreferences setObject:_gradientPalettes forKey:gradientPalettesKey];
 
         _gpsStatusApp = [[[OACommonString withKey:gpsStatusAppKey defValue:@""] makeGlobal] makeShared];
         [_globalPreferences setObject:_gpsStatusApp forKey:@"gps_status_app"];
@@ -4766,6 +4523,9 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         _debugRenderingInfo = [[[OACommonBoolean withKey:debugRenderingInfoKey defValue:NO] makeGlobal] makeShared];
         [_globalPreferences setObject:_debugRenderingInfo forKey:@"debug_rendering"];
 
+        _use3dIconsByDefault = [[[OACommonBoolean withKey:use3dIconsByDefaultKey defValue:YES] makeGlobal] makeShared];
+        [_globalPreferences setObject:_use3dIconsByDefault forKey:@"_use3dIconsByDefault"];
+        
         _levelToSwitchVectorRaster = [[OACommonInteger withKey:debugRenderingInfoKey defValue:1] makeGlobal];
         [_globalPreferences setObject:_levelToSwitchVectorRaster forKey:@"level_to_switch_vector_raster"];
 
@@ -5256,8 +5016,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         if (markAsLastUsed)
             [_lastUsedApplicationMode set:applicationMode.stringKey];
         [[ThemeManager shared] configureWithAppMode: applicationMode];
-        [[[OsmAndApp instance].data applicationModeChangedObservable] notifyEventWithKey:prevAppMode];
-        [[OAScreenOrientationHelper sharedInstance] updateSettings];
+        [OsmAndApp.instance.applicationModeChangedObservable notifyEventWithKey:prevAppMode];
     }
 }
 
@@ -5439,18 +5198,6 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 {
     _customPluginsJson = customPluginsJson;
     [[NSUserDefaults standardUserDefaults] setObject:_customPluginsJson forKey:customPluginsJsonKey];
-}
-
-- (void) setQuickActionCoordinatesPortrait:(float)x y:(float)y
-{
-    [_quickActionPortraitX set:x];
-    [_quickActionPortraitY set:y];
-}
-
-- (void) setQuickActionCoordinatesLandscape:(float)x y:(float)y
-{
-    [_quickActionLandscapeX set:x];
-    [_quickActionLandscapeY set:y];
 }
 
 - (NSString *) getDefaultVoiceProvider

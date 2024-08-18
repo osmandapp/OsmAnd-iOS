@@ -412,7 +412,6 @@
 "driving_region_us" = "USA";
 "driving_region_canada" = "Canada";
 "driving_region_europe_asia" = "Europa og Asia";
-"driving_region_uk" = "UK, India & similar";
 "driving_region_australia" = "Australia";
 "left_side_navigation" = "Left-hand driving";
 "right_side_navigation" = "Right-hand driving";
@@ -2865,3 +2864,8 @@
 "lang_zh-Hans" = "Kinesisk– forenkla";
 "map_settings_topography" = "Høgdekurver";
 "m" = "m";
+"shared_string_bottom" = "Nedst";
+"edit_tilesource_minzoom" = "Minste forstørring";
+"edit_tilesource_maxzoom" = "Maksforstørring";
+"shared_string_favorite" = "Favoritt…";
+"download_srtm_maps" = "Høgdekurver";

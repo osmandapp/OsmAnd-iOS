@@ -8,11 +8,13 @@
 
 #import "OACompassModeWidgetState.h"
 #import "OARootViewController.h"
+#import "OAMapButtonsHelper.h"
 #import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OACompassModeWidgetState
 {
-    OACommonInteger *_compassMode;
+    CompassButtonState *_compassState;
 }
 
 - (instancetype)init
@@ -20,7 +22,7 @@
     self = [super init];
     if (self)
     {
-        _compassMode = [OAAppSettings sharedManager].compassMode;
+        _compassState = [[OAMapButtonsHelper sharedInstance] getCompassButtonState];
     }
     return self;
 }
@@ -37,53 +39,41 @@
 
 - (NSString *)getMenuIconId
 {
-    return [OACompassMode getIconName:(EOACompassMode) [_compassMode get]];
+    return [CompassVisibilityWrapper getIconNameForType:[_compassState getVisibility]];
 }
 
 - (NSString *)getMenuItemId
 {
-    return @((EOACompassMode) [_compassMode get]).stringValue;
+    return @([_compassState getVisibility]).stringValue;
 }
 
 - (NSArray<NSString *> *)getMenuTitles
 {
-    return @[
-            [OACompassMode getTitle:EOACompassVisible],
-            [OACompassMode getTitle:EOACompassHidden],
-            [OACompassMode getTitle:EOACompassRotated]
-    ];
+    return [CompassVisibilityWrapper getTitles];
 }
 
 - (NSArray<NSString *> *) getMenuDescriptions
 {
-    return @[
-            [OACompassMode getDescription:EOACompassVisible],
-            [OACompassMode getDescription:EOACompassHidden],
-            [OACompassMode getDescription:EOACompassRotated]
-    ];
+    return [CompassVisibilityWrapper getDescs];
 }
 
 - (NSArray<NSString *> *)getMenuIconIds
 {
-    return @[
-            [OACompassMode getIconName:EOACompassVisible],
-            [OACompassMode getIconName:EOACompassHidden],
-            [OACompassMode getIconName:EOACompassRotated]
-    ];
+    return [CompassVisibilityWrapper getIconNames];
 }
 
 - (NSArray<NSString *> *)getMenuItemIds
 {
     return @[
-            @(EOACompassVisible).stringValue,
-            @(EOACompassHidden).stringValue,
-            @(EOACompassRotated).stringValue
+            @(CompassVisibilityAlwaysVisible).stringValue,
+            @(CompassVisibilityAlwaysHidden).stringValue,
+            @(CompassVisibilityVisibleIfMapRotated).stringValue
     ];
 }
 
 - (void)changeState:(NSString *)stateId
 {
-    [_compassMode set:stateId.intValue];
+    [_compassState.visibilityPref set:stateId.intValue];
 }
 
 @end

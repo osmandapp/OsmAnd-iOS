@@ -8,10 +8,11 @@
 
 #import "OAWeatherLayerSettingsViewController.h"
 #import "Localization.h"
-#import "OsmAnd_Maps-Swift.h"
 #import "OsmAndApp.h"
+#import "OAObservable.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OAMapHudViewController.h"
 #import "OAMapStyleSettings.h"
 #import "OAWeatherHelper.h"
@@ -19,7 +20,10 @@
 #import "OAWeatherToolbar.h"
 #import "OAWeatherBandSettingsViewController.h"
 #import "OAMapLayers.h"
+#import "OAAppData.h"
+#import "OAAutoObserverProxy.h"
 #import "GeneratedAssetSymbols.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #import "OASwitchTableViewCell.h"
 #import "OATextLineViewCell.h"
@@ -62,7 +66,7 @@
 @property (weak, nonatomic) IBOutlet UIView *sliderView;
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *backButtonLeadingConstraint;
-
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *doneButtonTrailingConstraint;
 @end
 
 @implementation OAWeatherLayerSettingsViewController
@@ -252,7 +256,9 @@
                     case WEATHER_BAND_PRECIPITATION:
                         contoursType = WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR;
                         break;
-                    case WEATHER_BAND_UNDEFINED:
+                    case WEATHER_BAND_NOTHING:
+                        break;
+                    case WEATHER_BAND_WIND_ANIMATION:
                         break;
                 }
                 [contoursTypesRows addObject:@{
@@ -349,6 +355,8 @@
             return [OAWeatherBand withWeatherBand:WEATHER_BAND_CLOUD];
         case EOAWeatherLayerTypePrecipitation:
             return [OAWeatherBand withWeatherBand:WEATHER_BAND_PRECIPITATION];
+        case EOAWeatherLayerTypeWindAnimation:
+            return [OAWeatherBand withWeatherBand:WEATHER_BAND_WIND_ANIMATION];
         default:
             return nil;
     }
@@ -439,6 +447,8 @@
             return @"weather_precip";
         case EOAWeatherLayerTypeContours:
             return @"weather_contours";
+        case EOAWeatherLayerTypeWindAnimation:
+            return @"weather_wind_animation";
     }
 }
 
@@ -469,7 +479,7 @@
 {
     [self hide:YES duration:.2 onComplete:^{
         if (self.delegate)
-            [self.delegate onDoneWeatherLayerSettings:NO];
+            [self.delegate onDoneWeatherLayerSettings:YES];
     }];
 }
 
@@ -499,6 +509,8 @@
         _app.data.weatherCloud = _layerEnabled;
     else if (_layerType == EOAWeatherLayerTypePrecipitation)
         _app.data.weatherPrecip = _layerEnabled;
+    else if (_layerType == EOAWeatherLayerTypeWindAnimation)
+        _app.data.weatherWindAnimation = _layerEnabled;
     else if (_layerType == EOAWeatherLayerTypeContours)
     {
         NSString *lastUsedParameterName;
@@ -554,8 +566,13 @@
         _app.data.weatherCloudAlpha = sender.value;
     else if (_layerType == EOAWeatherLayerTypePrecipitation)
         _app.data.weatherPrecipAlpha = sender.value;
+    else if (_layerType == EOAWeatherLayerTypeWindAnimation)
+        _app.data.weatherWindAnimationAlpha = sender.value;
     else if (_layerType == EOAWeatherLayerTypeContours)
         _app.data.contoursAlpha = sender.value;
+    
+    [self generateData];
+    [self.tableView reloadData];
 }
 
 // MARK: UITableViewDataSource
@@ -692,7 +709,11 @@
             cell.titleLabel.text = item[@"title"];
             cell.valueLabel.text = [NSString stringWithFormat:@"%.0f%%", [item[@"value"] doubleValue] * 100];
             [cell.sliderView setValue:[item[@"value"] floatValue]];
-            [cell.sliderView addTarget:self action:@selector(onSliderValueChanged:) forControlEvents:UIControlEventValueChanged];
+            
+            // TODO: delete when android team fix alpha changing bug https://github.com/osmandapp/OsmAnd/issues/20533
+            //[cell.sliderView addTarget:self action:@selector(onSliderValueChanged:) forControlEvents:UIControlEventValueChanged];
+            [cell.sliderView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.sliderView addTarget:self action:@selector(onSliderValueChanged:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
         }
         return cell;
     }
@@ -796,9 +817,11 @@
 - (void)doAdditionalLayout
 {
     BOOL isRTL = [self.backButtonContainerView isDirectionRTL];
-    self.backButtonLeadingConstraint.constant = [self isLandscape]
-            ? (isRTL ? 0. : [self getLandscapeViewWidth] - [OAUtilities getLeftMargin] + 10.)
-            : [OAUtilities getLeftMargin] + 10.;
+    CGFloat landscapeWidthAdjusted = [self getLandscapeViewWidth] - [OAUtilities getLeftMargin] + 10.;
+    CGFloat commonMargin = [OAUtilities getLeftMargin] + 10.;
+    CGFloat defaultPadding = 13.;
+    self.backButtonLeadingConstraint.constant = [self isLandscape] ? (isRTL ? defaultPadding : landscapeWidthAdjusted) : commonMargin;
+    self.doneButtonTrailingConstraint.constant = [self isLandscape] ? (isRTL ? landscapeWidthAdjusted : defaultPadding) : commonMargin;
 }
 
 @end

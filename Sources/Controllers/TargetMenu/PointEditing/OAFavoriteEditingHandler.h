@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OAFavoriteItem;
+@class OAFavoriteItem, OAPOI;
 
 struct CLLocationCoordinate2D;
 

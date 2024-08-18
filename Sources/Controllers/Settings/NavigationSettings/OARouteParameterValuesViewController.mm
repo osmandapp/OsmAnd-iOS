@@ -10,6 +10,7 @@
 #import "OAAppSettings.h"
 #import "OARightIconTableViewCell.h"
 #import "OARoutingHelper.h"
+#import "OAApplicationMode.h"
 #import "OARoutePreferencesParameters.h"
 #import "OATableViewCustomHeaderView.h"
 #import "OATableViewCustomFooterView.h"
@@ -306,7 +307,7 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
     {
         OALocalRoutingParameter *useElevation = nil;
         if (_group.getRoutingParameters.count > 0
-                && ([[NSString stringWithUTF8String:_group.getRoutingParameters.firstObject.routingParameter.id.c_str()] isEqualToString:kRouteParamIdHeightObstacles]))
+                && ([[NSString stringWithUTF8String:_group.getRoutingParameters.firstObject.routingParameter.id.c_str()] isEqualToString:kRouteParamHeightObstacles]))
             useElevation = _group.getRoutingParameters.firstObject;
         BOOL anySelected = NO;
 

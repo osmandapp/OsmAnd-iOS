@@ -382,7 +382,6 @@
 "driving_region_us" = "SAD";
 "driving_region_canada" = "Kanada";
 "driving_region_europe_asia" = "Europa i Azija";
-"driving_region_uk" = "Velika Britanija, Indija, Australija i ostalo";
 "driving_region_australia" = "Australia";
 "left_side_navigation" = "Vožnja lijevom stranom";
 "right_side_navigation" = "Right-hand driving";
@@ -2315,3 +2314,8 @@
 "activity_type_winter_name" = "Zima";
 "weather_update_disabled" = "Onemogućeno";
 "images" = "Slike";
+"shared_string_bottom" = "Na dnu";
+"weather_source_ecmwf_description" = "Europski centar za srednjoročne prognoze vremena (ECMWF)";
+"shared_string_favorites" = "Favoriti";
+"map_source" = "Izvor karte";
+"download_srtm_maps" = "Obrisi linija";

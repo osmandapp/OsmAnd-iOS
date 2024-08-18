@@ -9,6 +9,7 @@
 #import "OATargetDistanceWidget.h"
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapRendererView.h"
 #import "OAOsmAndFormatter.h"
 #import "Localization.h"
@@ -62,7 +63,7 @@
 
 - (NSString *) formatDistance: (float) distanceInMeters
 {
-    return [OAOsmAndFormatter getFormattedDistance:distanceInMeters forceTrailingZeroes:NO];
+    return [OAOsmAndFormatter getFormattedDistance:distanceInMeters];
 }
 
 - (void) setImage:(UIImage *)image

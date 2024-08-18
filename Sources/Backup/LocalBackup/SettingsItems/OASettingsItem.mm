@@ -9,6 +9,7 @@
 #import "OASettingsItem.h"
 #import "OAGPXDocument.h"
 #import "OrderedDictionary.h"
+#import "OASettingsHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 
 NSString *const kSettingsItemErrorDomain = @"SettingsItem";
@@ -317,7 +318,7 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
 
     NSDictionary<NSString *, NSString *> *settings;
     if ([[OASettingsHelper sharedInstance] getCurrentBackupVersion] == OAMigrationManager.importExportVersionMigration1)
-        settings = [[OAMigrationManager shared] changeJsonMigration:json];
+        settings = [[OAMigrationManager shared] changeJsonMigrationToV2:json];
     else
         settings = json;
 

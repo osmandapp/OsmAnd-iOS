@@ -7,16 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
-
 #import "OACommonTypes.h"
-#import "OAObservable.h"
-#import "OAAppData.h"
-#import "OAMapViewState.h"
-#import "OALocationServices.h"
-#import "OAWorldRegion.h"
-#import "OADownloadsManager.h"
-#import "OAAppearanceProtocol.h"
-#import "OAApplicationMode.h"
+
+@class OAApplicationMode, OADownloadsManager, OAWorldRegion, OALocationServices, OAMapViewState, OAAppData, OAObservable;
+
+@protocol OAAppearanceProtocol;
 
 @protocol OsmAndAppProtocol <NSObject>
 @required
@@ -36,7 +31,8 @@
 @property(nonatomic, readonly) NSString *gpxTravelPath;
 @property(nonatomic, readonly) NSString *hiddenMapsPath;
 @property(nonatomic, readonly) NSString *routingMapsCachePath;
-
+@property(nonatomic, readonly) NSString *models3dPath;
+@property(nonatomic, readonly) NSString *colorsPalettePath;
 
 @property(readonly) BOOL initialized;
 
@@ -54,10 +50,14 @@
 @property(nonatomic) OAMapMode mapMode;
 @property(nonatomic) OAMapMode prevMapMode;
 @property(readonly) OAObservable* mapModeObservable;
+@property(readonly) OAObservable* applicationModeChangedObservable;
 
 @property(nonatomic) OAMapViewState* initialURLMapState;
 
 @property (nonatomic) BOOL carPlayActive;
+@property (nonatomic) BOOL isInBackground; // YES if is in background on device and carplay inactive
+@property (nonatomic) BOOL isInBackgroundOnDevice; // YES if is in background on device (carplay may be active)
+@property(readonly) OAObservable* backgroundStateObservable;
 
 - (void) loadWorldRegions;
 
@@ -72,11 +72,9 @@
 @property(readonly) OAObservable* gpxCollectionChangedObservable;
 @property(readonly) OAObservable* gpxChangedObservable;
 
-- (void)updateScreenTurnOffSetting;
+- (void)allowScreenTurnOff:(BOOL)allow;
 
 @property(readonly) unsigned long long freeSpaceAvailableOnDevice;
-
-@property(readonly) BOOL allowScreenTurnOff;
 
 @property(readonly) id<OAAppearanceProtocol> appearance;
 @property(readonly) OAObservable* appearanceChangeObservable;
@@ -107,7 +105,7 @@
 - (void) showToastMessage:(NSString *)message;
 - (void) showShortToastMessage:(NSString *)message;
 
-- (void) checkAndDownloadOsmAndLiveUpdates;
+- (void) checkAndDownloadOsmAndLiveUpdates:(BOOL)checkUpdatesAsync;
 - (void) checkAndDownloadWeatherForecastsUpdates;
 
 - (void) loadRoutingFiles;

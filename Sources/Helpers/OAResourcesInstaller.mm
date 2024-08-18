@@ -7,22 +7,25 @@
 //
 
 #import "OAResourcesInstaller.h"
-
 #import "OsmAndApp.h"
+#import "OAAppData.h"
 #import "OADownloadsManager.h"
 #import "OAAutoObserverProxy.h"
 #import "OALog.h"
+#import "OAObservable.h"
 #import <MBProgressHUD.h>
 #import "Localization.h"
 #import "OAPluginPopupViewController.h"
 #import "OAAppSettings.h"
 #import "OAResourcesUIHelper.h"
 #import "OAMapCreatorHelper.h"
+#import "OADownloadTask.h"
 #import "OAIAPHelper.h"
 #import "OAGPXDocument.h"
 #import "OAGPXDatabase.h"
-#import "OsmAnd_Maps-Swift.h"
 #import "OAWeatherHelper.h"
+#import "OAWorldRegion.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 
@@ -35,10 +38,13 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
     OsmAndAppInstance _app;
 
     OAAutoObserverProxy* _downloadTaskCompletedObserver;
+    OAAutoObserverProxy *_backgroundStateObserver;
 
     MBProgressHUD* _progressHUD;
     
     NSObject *_sync;
+    
+    OAWorldRegion *_lastDownloadedRegionInBackground;
 }
 
 - (instancetype) init
@@ -50,9 +56,39 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
         
         _app = [OsmAndApp instance];
 
-        _downloadTaskCompletedObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onDownloadTaskFinished:withKey:andValue:) andObserve:_app.downloadsManager.completedObservable];
+        _downloadTaskCompletedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                   withHandler:@selector(onDownloadTaskFinished:withKey:andValue:)
+                                                                    andObserve:_app.downloadsManager.completedObservable];
+        _backgroundStateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                             withHandler:@selector(onBackgroundStateChanged)
+                                                              andObserve:_app.backgroundStateObservable];
     }
     return self;
+}
+
+- (void)dealloc
+{
+    if (_backgroundStateObserver)
+    {
+        [_backgroundStateObserver detach];
+        _backgroundStateObserver = nil;
+    }
+    if (_downloadTaskCompletedObserver)
+    {
+        [_downloadTaskCompletedObserver detach];
+        _downloadTaskCompletedObserver = nil;
+    }
+}
+
+- (void) onBackgroundStateChanged
+{
+    if (!_app.isInBackgroundOnDevice && _lastDownloadedRegionInBackground)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [OAPluginPopupViewController showRegionOnMap:_lastDownloadedRegionInBackground];
+            _lastDownloadedRegionInBackground = nil;
+        });
+    }
 }
 
 - (void) onDownloadTaskFinished:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
@@ -65,12 +101,7 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
     
     // Skip other states except Finished (and completed)
     if (task.state != OADownloadTaskStateFinished || task.error)
-    {
-        if (task.state == OADownloadTaskStateFinished)
-            [_app updateScreenTurnOffSetting];
-
         return;
-    }
 
     task.installResourceRetry = 0;
 
@@ -230,7 +261,7 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
         const auto filePath = QString::fromNSString(localPath);
         bool success = false;
         bool showProgressHud = !resourceId.endsWith(QStringLiteral(".live.obf"));
-        
+
         OALog(@"Going to install/update of %@", nsResourceId);
         // Try to install only in case of successful download
         if (task.error == nil)
@@ -238,7 +269,7 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
             if (showProgressHud)
             {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    
+
                     if (!_progressHUD)
                     {
                         UIView *topView = [UIApplication sharedApplication].mainWindow;
@@ -246,12 +277,12 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                         _progressHUD.removeFromSuperViewOnHide = YES;
                         _progressHUD.labelText = OALocalizedString(@"res_installing");
                         [topView addSubview:_progressHUD];
-                        
+
                         [_progressHUD show:YES];
                     }
                 });
             }
-            
+
             // Install or update given resource
             success = _app.resourcesManager->updateFromFile(resourceId, filePath);
             if (!success)
@@ -275,9 +306,9 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                         OAWorldRegion* match = [OAResourcesUIHelper findRegionOrAnySubregionOf:_app.worldRegion thatContainsResource:QString([nsResourceId UTF8String])];
                         [[OAWeatherHelper sharedInstance] setupDownloadStateFinished:match regionId:match.regionId];
                     }
-                    
+
                     [[NSNotificationCenter defaultCenter] postNotificationName:OAResourceInstalledNotification object:nsResourceId userInfo:nil];
-                    
+
                     // Set NSURLIsExcludedFromBackupKey for installed resource
                     if (const auto resource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::LocalResource>(_app.resourcesManager->getResource(resourceId)))
                     {
@@ -316,18 +347,21 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                                         break;
                                     }
                                 }
-                                
+
                                 //NSLog(@"found name=%@ bbox=(%f,%f)(%f,%f)", foundRegion.name, foundRegion.bboxTopLeft.latitude, foundRegion.bboxTopLeft.longitude, foundRegion.bboxBottomRight.latitude, foundRegion.bboxBottomRight.longitude);
-                                
+
                                 if (foundRegion && foundRegion.superregion && resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
                                 {
                                     [self initSettingsFirstMap:foundRegion];
                                 }
-                                
+
                                 if (foundRegion && foundRegion.superregion && !task.silentInstall)
                                 {
                                     dispatch_async(dispatch_get_main_queue(), ^{
-                                        [OAPluginPopupViewController showRegionOnMap:foundRegion];
+                                        if (_app.isInBackgroundOnDevice)
+                                            _lastDownloadedRegionInBackground = foundRegion;
+                                        else
+                                            [OAPluginPopupViewController showRegionOnMap:foundRegion];
                                     });
                                 }
                             }
@@ -359,11 +393,11 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                     }
                 }
             }
-            
+
             if (showProgressHud)
             {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    
+
                     if (_progressHUD)
                     {
                         [_progressHUD hide:YES];
@@ -371,27 +405,28 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                     }
                 });
             }
-            
+
         }
-        
+
         // Remove downloaded file anyways
         [[NSFileManager defaultManager] removeItemAtPath:task.targetPath
                                                    error:nil];
-        
+
         OALog(@"Install/update of %@ %@", nsResourceId, success ? @"successful" : @"failed");
-        
+
         if (!success)
             [[NSNotificationCenter defaultCenter] postNotificationName:OAResourceInstallationFailedNotification object:nsResourceId userInfo:nil];
-        
+
         // Start next resource download task if such exists
-        if ([_app.downloadsManager.keysOfDownloadTasks count] > 0)
+        if ([_app.downloadsManager.keysOfDownloadTasks count] > 0 && (!_app.isInBackgroundOnDevice || _app.downloadsManager.backgroundDownloadTaskActive))
         {
-            id<OADownloadTask> nextTask =  [_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks objectAtIndex:0]];
+            id<OADownloadTask> nextTask = [_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks objectAtIndex:0]];
+            if (_app.isInBackgroundOnDevice)
+                OALog(@"Resume background download of %@", nextTask.key);
+            else
+                OALog(@"Resume download of %@", nextTask.key);
+
             [nextTask resume];
-        }
-        else
-        {
-            [_app updateScreenTurnOffSetting];
         }
     }
 }

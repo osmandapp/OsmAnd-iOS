@@ -8,6 +8,7 @@
 
 #import "OABaseTrackMenuHudViewController.h"
 #import "OARootViewController.h"
+#import "OAMapViewController.h"
 #import "OAMapHudViewController.h"
 #import "OAMapRendererView.h"
 #import "Localization.h"
@@ -362,9 +363,10 @@
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    __weak __typeof(self) weakSelf = self;
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        if (![self isLandscape])
-            [self goExpanded];
+        if (![weakSelf isLandscape])
+            [weakSelf goExpanded];
     } completion:nil];
 }
 
@@ -385,9 +387,10 @@
 {
     [self restoreMapViewPort];
     [_mapViewController hideContextPinMarker];
+    __weak __typeof(self) weakSelf = self;
     [super hide:YES duration:duration onComplete:^{
-        [_mapPanelViewController.hudViewController resetToDefaultRulerLayout];
-        [_mapPanelViewController hideScrollableHudViewController];
+        [weakSelf.mapPanelViewController.hudViewController resetToDefaultRulerLayout];
+        [weakSelf.mapPanelViewController hideScrollableHudViewController];
         if (onComplete)
             onComplete();
     }];

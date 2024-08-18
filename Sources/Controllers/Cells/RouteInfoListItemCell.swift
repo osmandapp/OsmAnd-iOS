@@ -9,6 +9,61 @@
 import UIKit
 
 @objcMembers
+final class RouteInfoDestinationSector: NSObject {
+    @objc enum RouteInfoSector: Int {
+        case straight, left, right
+    }
+    
+    var sector: RouteInfoSector = .straight
+    var distance: Double = 0
+    
+    private var isMoreThanMinDistance: Bool { distance > 5 }
+    
+    // MARK: - Init
+    
+    init(sector: RouteInfoDestinationSector.RouteInfoSector, distance: Double) {
+        self.sector = sector
+        self.distance = distance
+    }
+    
+    // MARK: - Public func
+    
+    func getImage() -> UIImage {
+        switch sector {
+        case .straight:
+            UIImage.icCustomRoadSideFront
+        case .left:
+            UIImage.icCustomRoadSideLeft
+        case .right:
+            UIImage.icCustomRoadSideRight
+        }
+    }
+    
+    func getTitle() -> String {
+        isMoreThanMinDistance
+        ? String(OAOsmAndFormatter.getFormattedDistance(Float(distance), with: OsmAndFormatterParams.useLowerBounds))
+        : localizedString("arrived_at_destination")
+    }
+    
+    func getDescriptionRoute() -> String {
+        switch sector {
+        case .straight:
+            return localizedResult(string: "route_your_destination_is_on_ahead")
+        case .left:
+            return localizedResult(string: "route_your_destination_is_on_left")
+        case .right:
+            return localizedResult(string: "route_your_destination_is_on_right")
+        }
+        
+        func localizedResult(string: String) -> String {
+            isMoreThanMinDistance
+            ? localizedString("arrived_at_destination") + ", " + localizedString(string).lowercased()
+            : localizedString(string)
+        }
+    }
+}
+
+@objcMembers
 final class RouteInfoListItemCell: UITableViewCell {
     
     @IBOutlet private weak var leftImageView: UIImageView!
@@ -27,6 +82,7 @@ final class RouteInfoListItemCell: UITableViewCell {
     
     func setLeftImageView(image: UIImage?) {
         leftImageView.image = image
+        leftImageView.tintColor = .textColorPrimary
     }
     
     func setLeftTurnIconDrawable(drawable: OATurnDrawable) {

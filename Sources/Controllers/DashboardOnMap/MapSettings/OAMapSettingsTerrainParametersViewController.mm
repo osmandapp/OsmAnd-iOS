@@ -15,25 +15,44 @@
 #import "OATitleSliderTableViewCell.h"
 #import "OACustomPickerTableViewCell.h"
 #import "OAValueTableViewCell.h"
+#import "OACollectionSingleLineTableViewCell.h"
+#import "OASimpleTableViewCell.h"
+#import "OALineChartCell.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAColorCollectionViewController.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAMapLayers.h"
+#import "OAAppData.h"
 #import "OATerrainMapLayer.h"
+#import "OAConcurrentCollections.h"
 #import "GeneratedAssetSymbols.h"
+#import <Charts/Charts-Swift.h>
 
-static const NSInteger kMinAllowedZoom = 1;
-static const NSInteger kMaxAllowedZoom = 22;
 static const NSInteger kMaxMissingDataZoomShift = 5;
 static const NSInteger kMinZoomPickerRow = 1;
 static const NSInteger kMaxZoomPickerRow = 2;
+static const NSInteger kElevationMinMeters = 0;
+static const NSInteger kElevationMaxMeters = 2000;
 
-@interface OAMapSettingsTerrainParametersViewController () <UITableViewDelegate, UITableViewDataSource, OACustomPickerTableViewCellDelegate>
+@interface OAMapSettingsTerrainParametersViewController () <UITableViewDelegate, UITableViewDataSource, OACustomPickerTableViewCellDelegate, OACollectionCellDelegate, OAColorCollectionDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *backButtonContainerView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UIView *doneButtonContainerView;
 @property (weak, nonatomic) IBOutlet UIButton *resetButton;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *backButtonLeadingConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *resetButtonTrailingConstraint;
+
+@property (nonatomic) OAMapPanelViewController *mapPanel;
+@property (nonatomic) OAConcurrentArray<PaletteColor *> *sortedPaletteColorItems;
+@property (nonatomic) GradientColorsCollection *gradientColorsCollection;
+@property (nonatomic) NSIndexPath *paletteGridIndexPath;
+@property (nonatomic) NSIndexPath *paletteNameIndexPath;
+@property (nonatomic) NSIndexPath *paletteLegendIndexPath;
+@property (nonatomic) PaletteColor *basePaletteColorItem;
+@property (nonatomic) PaletteColor *currentPaletteColorItem;
+@property (nonatomic) BOOL isDefaultColorRestored;
 
 @end
 
@@ -41,9 +60,9 @@ static const NSInteger kMaxZoomPickerRow = 2;
 {
     OsmAndAppInstance _app;
     OATableDataModel *_data;
-    EOATerrainType _type;
-    OAMapPanelViewController *_mapPanel;
-    
+    TerrainMode *_terrainMode;
+    OASRTMPlugin *_plugin;
+
     NSArray<NSString *> *_possibleZoomValues;
     
     NSInteger _minZoom;
@@ -58,6 +77,9 @@ static const NSInteger kMaxZoomPickerRow = 2;
     
     double _baseGPXVerticalExaggerationScale;
     double _currentGPXVerticalExaggerationScale;
+    
+    NSInteger _baseGPXElevationMeters;
+    NSInteger _currentGPXElevationMeters;
     
     NSIndexPath *_minValueIndexPath;
     NSIndexPath *_maxValueIndexPath;
@@ -83,21 +105,53 @@ static const NSInteger kMaxZoomPickerRow = 2;
 
 - (void)commonInit
 {
+    _data = [OATableDataModel model];
     _app = OsmAndApp.instance;
-    _type = _app.data.terrainType;
+    _plugin = (OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class];
+    _terrainMode = [_plugin getTerrainMode];
     _mapPanel = OARootViewController.instance.mapPanel;
-    
-    _baseMinZoom = _type == EOATerrainTypeHillshade ? _app.data.hillshadeMinZoom : _app.data.slopeMinZoom;
-    _baseMaxZoom = _type == EOATerrainTypeHillshade ? _app.data.hillshadeMaxZoom : _app.data.slopeMaxZoom;
-    _baseAlpha = _type == EOATerrainTypeHillshade ? _app.data.hillshadeAlpha : _app.data.slopeAlpha;
+
+    _baseMinZoom = [_plugin getTerrainMinZoom];
+    _baseMaxZoom = [_plugin getTerrainMaxZoom];
+    _baseAlpha = [_terrainMode getTransparency] * 0.01;
+
     if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration)
     {
         _baseVerticalExaggerationScale = _app.data.verticalExaggerationScale;
         _currentVerticalExaggerationScale = _baseVerticalExaggerationScale;
     }
-    
+    else if (_terrainType == EOATerrainSettingsTypePalette)
+    {
+        _gradientColorsCollection = [[GradientColorsCollection alloc] initWithTerrainType:_terrainMode.type];
+        _sortedPaletteColorItems = [[OAConcurrentArray alloc] init];
+        [_sortedPaletteColorItems addObjectsSync:[_gradientColorsCollection getPaletteColors]];
+        _basePaletteColorItem = [_gradientColorsCollection getPaletteColorByName:[_terrainMode getKeyName]];
+        if (!_basePaletteColorItem)
+            _basePaletteColorItem = [_gradientColorsCollection getPaletteColorByName:[[TerrainMode getDefaultMode:_terrainMode.type] getKeyName]];
+        _currentPaletteColorItem = _basePaletteColorItem;
+
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(onCollectionDeleted:)
+                                                     name:ColorsCollection.collectionDeletedNotification
+                                                   object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(onCollectionCreated:)
+                                                     name:ColorsCollection.collectionCreatedNotification
+                                                   object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(onCollectionUpdated:)
+                                                     name:ColorsCollection.collectionUpdatedNotification
+                                                   object:nil];
+    }
+
     _minZoom = _baseMinZoom;
     _maxZoom = _baseMaxZoom;
+    _currentAlpha = _baseAlpha;
+}
+
+- (void)dealloc
+{
+    [NSNotificationCenter.defaultCenter removeObserver:self];
 }
 
 - (void)configureGPXVerticalExaggerationScale:(CGFloat)scale
@@ -106,6 +160,15 @@ static const NSInteger kMaxZoomPickerRow = 2;
     {
         _baseGPXVerticalExaggerationScale = scale;
         _currentGPXVerticalExaggerationScale = _baseGPXVerticalExaggerationScale;
+    }
+}
+
+- (void)configureGPXElevationMeters:(NSInteger)meters
+{
+    if (_terrainType == EOAGPXSettingsTypeWallHeight)
+    {
+        _baseGPXElevationMeters = meters;
+        _currentGPXElevationMeters = _baseGPXElevationMeters;
     }
 }
 
@@ -118,6 +181,7 @@ static const NSInteger kMaxZoomPickerRow = 2;
     [self applyLocalization];
     
     _possibleZoomValues = [self getPossibleZoomValues];
+    [self registerCells];
     [self generateData];
     
     [self.resetButton setImage:[UIImage templateImageNamed:@"ic_navbar_reset"] forState:UIControlStateNormal];
@@ -141,10 +205,10 @@ static const NSInteger kMaxZoomPickerRow = 2;
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    
+    __weak __typeof(self) weakSelf = self;
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        if (![self isLandscape])
-            [self goMinimized:NO];
+        if (![weakSelf isLandscape])
+            [weakSelf goMinimized:NO];
     } completion:nil];
 }
 
@@ -157,6 +221,17 @@ static const NSInteger kMaxZoomPickerRow = 2;
         [self.backButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0];
         [self.resetButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0];
     }
+}
+
+- (void)registerCells
+{
+    [self.tableView registerNib:[UINib nibWithNibName:[OATitleSliderTableViewCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OATitleSliderTableViewCell reuseIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:[OAValueTableViewCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OAValueTableViewCell reuseIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:[RouteInfoListItemCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[RouteInfoListItemCell reuseIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:[OACustomPickerTableViewCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OACustomPickerTableViewCell reuseIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:[OASimpleTableViewCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OASimpleTableViewCell reuseIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:[OACollectionSingleLineTableViewCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OACollectionSingleLineTableViewCell reuseIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:OALineChartCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:OALineChartCell.reuseIdentifier];
 }
 
 #pragma mark - Base setup UI
@@ -174,12 +249,18 @@ static const NSInteger kMaxZoomPickerRow = 2;
         case EOATerrainSettingsTypeVisibility:
             result = OALocalizedString(@"visibility");
             break;
+        case EOATerrainSettingsTypePalette:
+            result = [_terrainMode getDescription];
+            break;
         case EOATerrainSettingsTypeZoomLevels:
             result = OALocalizedString(@"shared_string_zoom_levels");
             break;
         case EOATerrainSettingsTypeVerticalExaggeration:
         case EOAGPXSettingsTypeVerticalExaggeration:
             result = OALocalizedString(@"vertical_exaggeration");
+            break;
+        case EOAGPXSettingsTypeWallHeight:
+            result = OALocalizedString(@"wall_height");
             break;
     }
     return result;
@@ -191,6 +272,7 @@ static const NSInteger kMaxZoomPickerRow = 2;
     switch (_terrainType)
     {
         case EOATerrainSettingsTypeVisibility:
+        case EOATerrainSettingsTypePalette:
             break;
         case EOATerrainSettingsTypeZoomLevels:
             result = OALocalizedString(@"map_settings_zoom_level_description");
@@ -201,13 +283,16 @@ static const NSInteger kMaxZoomPickerRow = 2;
         case EOATerrainSettingsTypeVerticalExaggeration:
             result = OALocalizedString(@"vertical_exaggeration_description");
             break;
+        case EOAGPXSettingsTypeWallHeight:
+            result = OALocalizedString(@"wall_height_description");
+            break;
     }
     return result;
 }
 
 - (void)generateData
 {
-    _data = [OATableDataModel model];
+    [_data clearAllData];
     
     OATableSectionData *topSection = [_data createNewSection];
     topSection.headerText = [self getHeaderText];
@@ -216,37 +301,69 @@ static const NSInteger kMaxZoomPickerRow = 2;
     {
         [topSection addRowFromDictionary:@{
             kCellKeyKey : @"verticalExaggerationSlider",
-            kCellTypeKey : [OATitleSliderTableViewCell getCellIdentifier],
+            kCellTypeKey : [OATitleSliderTableViewCell reuseIdentifier],
             kCellTitleKey : OALocalizedString(@"shared_string_scale")
+        }];
+    }
+    else if (_terrainType == EOAGPXSettingsTypeWallHeight)
+    {
+        [topSection addRowFromDictionary:@{
+            kCellKeyKey : @"wallHeightSlider",
+            kCellTypeKey : [OATitleSliderTableViewCell reuseIdentifier],
+            kCellTitleKey : OALocalizedString(@"shared_string_height")
         }];
     }
     else if (_terrainType == EOATerrainSettingsTypeVisibility)
     {
         [topSection addRowFromDictionary:@{
             kCellKeyKey : @"visibilitySlider",
-            kCellTypeKey : [OATitleSliderTableViewCell getCellIdentifier],
+            kCellTypeKey : [OATitleSliderTableViewCell reuseIdentifier],
             kCellTitleKey : OALocalizedString(@"visibility")
         }];
     }
     else if (_terrainType == EOATerrainSettingsTypeZoomLevels)
     {
         [topSection addRowFromDictionary:@{
-            kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
+            kCellTypeKey : [OAValueTableViewCell reuseIdentifier],
             kCellTitleKey: OALocalizedString(@"rec_interval_minimum"),
             @"value" : @(_minZoom)
         }];
         _minValueIndexPath = [NSIndexPath indexPathForRow:[_data rowCount:[_data sectionCount] - 1] - 1 inSection:[_data sectionCount] - 1];
         if (_openedPickerIndexPath && _openedPickerIndexPath.row == _minValueIndexPath.row + 1)
-            [topSection addRowFromDictionary:@{ kCellTypeKey : [OACustomPickerTableViewCell getCellIdentifier] }];
+            [topSection addRowFromDictionary:@{ kCellTypeKey : [OACustomPickerTableViewCell reuseIdentifier] }];
         
         [topSection addRowFromDictionary:@{
-            kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
+            kCellTypeKey : [OAValueTableViewCell reuseIdentifier],
             kCellTitleKey : OALocalizedString(@"shared_string_maximum"),
             @"value" : @(_maxZoom)
         }];
         _maxValueIndexPath = [NSIndexPath indexPathForRow:[_data rowCount:[_data sectionCount] - 1] - 1 inSection:[_data sectionCount] - 1];
         if (_openedPickerIndexPath && _openedPickerIndexPath.row == _maxValueIndexPath.row + 1)
-            [topSection addRowFromDictionary:@{ kCellTypeKey : [OACustomPickerTableViewCell getCellIdentifier] }];
+            [topSection addRowFromDictionary:@{ kCellTypeKey : [OACustomPickerTableViewCell reuseIdentifier] }];
+    }
+    else if (_terrainType == EOATerrainSettingsTypePalette)
+    {
+        [topSection addRowFromDictionary:@{
+            kCellKeyKey: @"gradientLegend",
+            kCellTypeKey: [OALineChartCell getCellIdentifier],
+        }];
+        _paletteLegendIndexPath = [NSIndexPath indexPathForRow:[topSection rowCount] - 1 inSection:[_data sectionCount] - 1];
+        [topSection addRowFromDictionary:@{
+            kCellKeyKey: @"paletteName",
+            kCellTypeKey: [OASimpleTableViewCell getCellIdentifier],
+        }];
+        _paletteNameIndexPath = [NSIndexPath indexPathForRow:[topSection rowCount] - 1 inSection:[_data sectionCount] - 1];
+        [topSection addRowFromDictionary:@{
+            kCellKeyKey: @"colorGrid",
+            kCellTypeKey: [OACollectionSingleLineTableViewCell getCellIdentifier]
+        }];
+        _paletteGridIndexPath = [NSIndexPath indexPathForRow:[topSection rowCount] - 1 inSection:[_data sectionCount] - 1];
+        [topSection addRowFromDictionary:@{
+            kCellKeyKey: @"allColors",
+            kCellTypeKey: [OASimpleTableViewCell getCellIdentifier],
+            kCellTitleKey: OALocalizedString(@"shared_string_all_colors"),
+            @"tintTitle": [UIColor colorNamed:ACColorNameIconColorActive]
+        }];
     }
 }
 
@@ -288,7 +405,7 @@ static const NSInteger kMaxZoomPickerRow = 2;
 - (CGFloat)initialMenuHeight
 {
     CGFloat divider = 2.0;
-    if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration || _terrainType == EOAGPXSettingsTypeVerticalExaggeration)
+    if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration || _terrainType == EOAGPXSettingsTypeVerticalExaggeration || _terrainType == EOAGPXSettingsTypeWallHeight)
     {
         divider = 2.5;
     }
@@ -317,73 +434,121 @@ static const NSInteger kMaxZoomPickerRow = 2;
 - (void)doAdditionalLayout
 {
     BOOL isRTL = [self.backButtonContainerView isDirectionRTL];
-    self.backButtonLeadingConstraint.constant = [self isLandscape]
-    ? (isRTL ? 0. : [self getLandscapeViewWidth] - [OAUtilities getLeftMargin] + 10.)
-    : [OAUtilities getLeftMargin] + 10.;
+    CGFloat landscapeWidthAdjusted = [self getLandscapeViewWidth] - [OAUtilities getLeftMargin] + 10.;
+    CGFloat commonMargin = [OAUtilities getLeftMargin] + 10.;
+    CGFloat defaultPadding = 13.;
+    self.backButtonLeadingConstraint.constant = [self isLandscape] ? (isRTL ? defaultPadding : landscapeWidthAdjusted) : commonMargin;
+    self.resetButtonTrailingConstraint.constant = [self isLandscape] ? (isRTL ? landscapeWidthAdjusted : defaultPadding) : commonMargin;
+}
+
+- (void)hide
+{
+    if (_terrainType == EOATerrainSettingsTypeVisibility && _baseAlpha != _currentAlpha)
+        [_terrainMode setTransparency:_baseAlpha / 0.01];
+    else if (_terrainType == EOATerrainSettingsTypeZoomLevels && (_baseMinZoom != _minZoom || _baseMaxZoom != _maxZoom))
+        [_terrainMode setZoomValuesWithMinZoom:_baseMinZoom maxZoom:_baseMaxZoom];
+    else if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration && _baseVerticalExaggerationScale != _currentVerticalExaggerationScale)
+        _app.data.verticalExaggerationScale = _baseVerticalExaggerationScale;
+    else if (_terrainType == EOATerrainSettingsTypePalette && (_basePaletteColorItem != _currentPaletteColorItem || _isDefaultColorRestored))
+        [self setPaletteColorItem:_basePaletteColorItem];
+    else if (_terrainType == EOAGPXSettingsTypeVerticalExaggeration && _baseGPXVerticalExaggerationScale != _currentGPXVerticalExaggerationScale)
+        [self applyGPXVerticalExaggerationForScale:_baseGPXVerticalExaggerationScale];
+    else if (_terrainType == EOAGPXSettingsTypeWallHeight && _baseGPXElevationMeters != _currentGPXElevationMeters)
+        [self applyGPXElevationMeters:_baseGPXElevationMeters];
+
+    __weak __typeof(self) weakSelf = self;
+    [self hide:YES duration:.2 onComplete:^{
+        if (weakSelf.delegate)
+            [weakSelf.delegate onBackTerrainParameters];
+        if (weakSelf.hideCallback)
+            weakSelf.hideCallback();
+    }];
+}
+
+- (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
+{
+    __weak __typeof(self) weakSelf = self;
+    [super hide:YES duration:duration onComplete:^{
+        [weakSelf.mapPanel hideScrollableHudViewController];
+        if (onComplete)
+            onComplete();
+    }];
 }
 
 #pragma mark - Additions
 
-- (void)resetVisibilityValues
+- (BOOL)resetVisibilityValues
 {
-    double alpha;
-    if (_type == EOATerrainTypeHillshade)
+    CGFloat defaultAlpha = ([_terrainMode isHillshade] ? hillshadeDefaultTrasparency : defaultTrasparency) * 0.01;
+    if (_currentAlpha != defaultAlpha)
     {
-        [_app.data resetHillshadeAlpha];
-        alpha = _app.data.hillshadeAlpha;
-    }
-    else
-    {
-        [_app.data resetSlopeAlpha];
-        alpha = _app.data.slopeAlpha;
-    }
-
-    if (_currentAlpha != alpha)
-    {
-        _currentAlpha = alpha;
-        _isValueChange = YES;
+        _currentAlpha = defaultAlpha;
+        [_terrainMode setTransparency:defaultAlpha / 0.01];
+        _isValueChange = _baseAlpha != _currentAlpha;
         [self updateApplyButton];
+        return YES;
     }
+    return NO;
 }
 
-- (void)resetZoomLevels
+- (BOOL)resetZoomLevels
 {
-    NSInteger minZoom;
-    NSInteger maxZoom;
-    if (_type == EOATerrainTypeHillshade)
+    if (_minZoom != terrainMinSupportedZoom || _maxZoom != terrainMaxSupportedZoom)
     {
-        [_app.data resetHillshadeMinZoom];
-        [_app.data resetHillshadeMaxZoom];
-        minZoom = _app.data.hillshadeMinZoom;
-        maxZoom = _app.data.hillshadeMaxZoom;
-    }
-    else
-    {
-        [_app.data resetSlopeMinZoom];
-        [_app.data resetSlopeMaxZoom];
-        minZoom = _app.data.slopeMinZoom;
-        maxZoom = _app.data.slopeMaxZoom;
-    }
-
-    if (_minZoom != minZoom || _maxZoom != maxZoom)
-    {
-        _minZoom = minZoom;
-        _maxZoom = maxZoom;
-        _isValueChange = YES;
+        _minZoom = terrainMinSupportedZoom;
+        _maxZoom = terrainMaxSupportedZoom;
+        [_terrainMode setZoomValuesWithMinZoom:_minZoom maxZoom:_maxZoom];
+        _isValueChange = _baseMinZoom != _minZoom || _baseMaxZoom != _maxZoom;
         [self updateApplyButton];
+        return YES;
     }
+    return NO;
 }
 
-- (void)resetGPXVerticalExaggerationValues
+- (BOOL)resetPalette
 {
-    double scale = 1.0;
+    if (_paletteGridIndexPath)
+    {
+        OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_paletteGridIndexPath];
+        if (colorCell)
+        {
+            NSIndexPath *defaultIndexPath = [[colorCell getCollectionHandler] getDefaultIndexPath];
+            if (defaultIndexPath != [[colorCell getCollectionHandler] getSelectedIndexPath])
+            {
+                [[colorCell getCollectionHandler] onItemSelected:defaultIndexPath
+                                                  collectionView:colorCell.collectionView];
+                return YES;
+            }
+        }
+    }
+    return NO;
+}
+
+- (BOOL)resetGPXVerticalExaggerationValues
+{
+    double scale = 0.25;
     if (_currentGPXVerticalExaggerationScale != scale)
     {
         _currentGPXVerticalExaggerationScale = scale;
-        _isValueChange = YES;
+        _isValueChange = _baseGPXVerticalExaggerationScale != _currentGPXVerticalExaggerationScale;
         [self applyGPXVerticalExaggerationForScale:_currentGPXVerticalExaggerationScale];
         [self updateApplyButton];
+        return YES;
     }
+    return NO;
+}
+
+- (BOOL)resetGPXElevationMetersValues
+{
+    if (_currentGPXElevationMeters != kElevationDefMeters)
+    {
+        _currentGPXElevationMeters = kElevationDefMeters;
+        _isValueChange = _baseGPXElevationMeters != _currentGPXElevationMeters;
+        [self applyGPXElevationMeters:_currentGPXElevationMeters];
+        [self updateApplyButton];
+        return YES;
+    }
+    return NO;
 }
 
 - (void)applyGPXVerticalExaggerationForScale:(CGFloat)scale
@@ -392,38 +557,33 @@ static const NSInteger kMaxZoomPickerRow = 2;
         self.applyCallback(scale);
 }
 
-- (void)resetVerticalExaggerationValues
+- (void)applyGPXElevationMeters:(NSInteger)meters
 {
-    [_app.data resetVerticalExaggerationScale];
-    double scale = _app.data.verticalExaggerationScale;
-    if (_currentVerticalExaggerationScale != scale)
+    if (self.applyWallHeightCallback)
+        self.applyWallHeightCallback(meters);
+}
+
+- (BOOL)resetVerticalExaggerationValues
+{
+    if (_currentVerticalExaggerationScale != kExaggerationDefScale)
     {
-        _currentVerticalExaggerationScale = scale;
-        _isValueChange = YES;
+        _currentVerticalExaggerationScale = kExaggerationDefScale;
+        _isValueChange = _baseVerticalExaggerationScale != _currentVerticalExaggerationScale;
+        [self applyVerticalExaggerationScale];
         [self updateApplyButton];
+        return YES;
     }
+    return NO;
 }
 
 - (void)applyCurrentVisibility
 {
-    if (_type == EOATerrainTypeHillshade)
-        _app.data.hillshadeAlpha = _currentAlpha;
-    else
-        _app.data.slopeAlpha = _currentAlpha;
+    [_terrainMode setTransparency:_currentAlpha / 0.01];
 }
 
 - (void)applyCurrentZoomLevels
 {
-    if (_type == EOATerrainTypeHillshade)
-    {
-        _app.data.hillshadeMinZoom = _minZoom;
-        _app.data.hillshadeMaxZoom = _maxZoom;
-    }
-    else
-    {
-        _app.data.slopeMinZoom = _minZoom;
-        _app.data.slopeMaxZoom = _maxZoom;
-    }
+    [_terrainMode setZoomValuesWithMinZoom:_minZoom maxZoom:_maxZoom];
 }
 
 - (void)applyVerticalExaggerationScale
@@ -431,17 +591,38 @@ static const NSInteger kMaxZoomPickerRow = 2;
     _app.data.verticalExaggerationScale = _currentVerticalExaggerationScale;
 }
 
+- (void)applyPalette
+{
+    [self setPaletteColorItem:_currentPaletteColorItem];
+}
+
 - (NSArray<NSString *> *)getPossibleZoomValues
 {
     NSMutableArray *res = [NSMutableArray new];
-    for (int i = 1; i <= kMaxAllowedZoom; i++)
+    for (NSInteger i = terrainMinSupportedZoom; i <= terrainMaxSupportedZoom; i++)
     {
-        [res addObject:[NSString stringWithFormat:@"%d", i]];
+        [res addObject:[NSString stringWithFormat:@"%ld", i]];
     }
     return res;
 }
 
-#pragma mark - Actions
+- (void)setPaletteColorItem:(PaletteColor *)paletteColor
+{
+    if ([paletteColor isKindOfClass:PaletteGradientColor.class])
+    {
+        PaletteGradientColor *paletteGradientColor = (PaletteGradientColor *) paletteColor;
+        TerrainType terrainType = [TerrainTypeWrapper valueOfTypeName: paletteGradientColor.typeName];
+        NSString *key = paletteGradientColor.paletteName;
+        TerrainMode *mode = [TerrainMode getMode:terrainType keyName:key];
+        if (mode)
+        {
+            [_plugin setTerrainMode:mode];
+            [self updateApplyButton];
+        }
+    }
+}
+
+#pragma mark - Selectors
 
 - (IBAction)backButtonPressed:(UIButton *)sender
 {
@@ -450,82 +631,48 @@ static const NSInteger kMaxZoomPickerRow = 2;
 
 - (IBAction)resetButtonPressed:(UIButton *)sender
 {
+    BOOL wasReset = NO;
     if (_terrainType == EOATerrainSettingsTypeVisibility)
-        [self resetVisibilityValues];
+        wasReset = [self resetVisibilityValues];
     else if (_terrainType == EOATerrainSettingsTypeZoomLevels)
-        [self resetZoomLevels];
+        wasReset = [self resetZoomLevels];
     else if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration)
-        [self resetVerticalExaggerationValues];
+        wasReset = [self resetVerticalExaggerationValues];
+    else if (_terrainType == EOATerrainSettingsTypePalette)
+        wasReset = [self resetPalette];
     else if (_terrainType == EOAGPXSettingsTypeVerticalExaggeration)
-        [self resetGPXVerticalExaggerationValues];
-    
-    [self generateData];
-    [self.tableView reloadData];
+        wasReset = [self resetGPXVerticalExaggerationValues];
+    else if (_terrainType == EOAGPXSettingsTypeWallHeight)
+        wasReset = [self resetGPXElevationMetersValues];
+
+    if (wasReset)
+    {
+        [self generateData];
+        [self.tableView reloadData];
+    }
 }
 
 - (void)onApplyButtonPressed
 {
-    if (_terrainType == EOATerrainSettingsTypeVisibility)
+    if (_terrainType == EOATerrainSettingsTypeVisibility && _currentAlpha != [_terrainMode getTransparency] * 0.01)
         [self applyCurrentVisibility];
-    else if (_terrainType == EOATerrainSettingsTypeZoomLevels)
+    else if (_terrainType == EOATerrainSettingsTypeZoomLevels && (_minZoom != [_terrainMode getMinZoom] || _maxZoom != [_terrainMode getMaxZoom]))
         [self applyCurrentZoomLevels];
-    else if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration)
+    else if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration && _currentVerticalExaggerationScale != _app.data.verticalExaggerationScale)
         [self applyVerticalExaggerationScale];
-    else if (_terrainType == EOAGPXSettingsTypeVerticalExaggeration)
+    else if (_terrainType == EOATerrainSettingsTypePalette && ![((PaletteGradientColor *) _currentPaletteColorItem).paletteName isEqualToString:[[_plugin getTerrainMode] getKeyName]])
+        [self applyPalette];
+    else if (_terrainType == EOAGPXSettingsTypeVerticalExaggeration && _baseGPXVerticalExaggerationScale != _currentGPXVerticalExaggerationScale)
         [self applyGPXVerticalExaggerationForScale:_currentGPXVerticalExaggerationScale];
-    
-    [self hide:YES duration:.2 onComplete:^{
-        if (self.delegate)
-            [self.delegate onBackTerrainParameters];
-        if (self.hideCallback)
-            self.hideCallback();
-    }];
-}
+    else if (_terrainType == EOAGPXSettingsTypeWallHeight && _baseGPXElevationMeters != _currentGPXElevationMeters)
+        [self applyGPXElevationMeters:_currentGPXElevationMeters];
 
-- (void)hide
-{
-    if (_terrainType == EOATerrainSettingsTypeVisibility)
-    {
-        if (_type == EOATerrainTypeHillshade)
-            _app.data.hillshadeAlpha = _baseAlpha;
-        else
-            _app.data.slopeAlpha = _baseAlpha;
-    }
-    else if (_terrainType == EOATerrainSettingsTypeZoomLevels)
-    {
-        if (_type == EOATerrainTypeHillshade)
-        {
-            _app.data.hillshadeMinZoom = _baseMinZoom;
-            _app.data.hillshadeMaxZoom = _baseMaxZoom;
-        }
-        else
-        {
-            _app.data.slopeMinZoom = _baseMinZoom;
-            _app.data.slopeMaxZoom = _baseMaxZoom;
-        }
-    }
-    else if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration)
-    {
-        _app.data.verticalExaggerationScale = _baseVerticalExaggerationScale;
-    }
-    else if (_terrainType == EOAGPXSettingsTypeVerticalExaggeration)
-    {
-        [self applyGPXVerticalExaggerationForScale:_baseGPXVerticalExaggerationScale];
-    }
+    __weak __typeof(self) weakSelf = self;
     [self hide:YES duration:.2 onComplete:^{
-        if (self.delegate)
-            [self.delegate onBackTerrainParameters];
-        if (self.hideCallback)
-            self.hideCallback();
-    }];
-}
-
-- (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
-{
-    [super hide:YES duration:duration onComplete:^{
-        [_mapPanel hideScrollableHudViewController];
-        if (onComplete)
-            onComplete();
+        if (weakSelf.delegate)
+            [weakSelf.delegate onBackTerrainParameters];
+        if (weakSelf.hideCallback)
+            weakSelf.hideCallback();
     }];
 }
 
@@ -535,42 +682,192 @@ static const NSInteger kMaxZoomPickerRow = 2;
     {
         _currentVerticalExaggerationScale = slider.value;
         _app.data.verticalExaggerationScale = _currentVerticalExaggerationScale;
-        _isValueChange = YES;
+        _isValueChange = _baseVerticalExaggerationScale != _currentVerticalExaggerationScale;
         [self updateApplyButton];
         return;
     }
     if (_terrainType == EOAGPXSettingsTypeVerticalExaggeration)
     {
         CGFloat step = 0.1;
-        CGFloat roundedValue = round(slider.value / step) * step;
+        CGFloat roundedValue = slider.value >= 1.0 ? round(slider.value / step) * step : slider.value;
         if (_currentGPXVerticalExaggerationScale != roundedValue)
         {
             _currentGPXVerticalExaggerationScale = roundedValue;
-            _isValueChange = YES;
+            _isValueChange = _baseGPXVerticalExaggerationScale != _currentGPXVerticalExaggerationScale;
             [self applyGPXVerticalExaggerationForScale:_currentGPXVerticalExaggerationScale];
             [self updateApplyButton];
         }
         return;
     }
-    
-    if (_type == EOATerrainTypeHillshade)
+    if (_terrainType == EOAGPXSettingsTypeWallHeight)
     {
-        _currentAlpha = slider.value;
-        _app.data.hillshadeAlpha = _currentAlpha;
+        NSInteger value = (NSInteger)slider.value;
+        if (_currentGPXElevationMeters != value)
+        {
+            _currentGPXElevationMeters = value;
+            _isValueChange = _baseGPXElevationMeters != _currentGPXElevationMeters;
+            [self applyGPXElevationMeters:_currentGPXElevationMeters];
+            [self updateApplyButton];
+        }
+        return;
     }
-    else
-    {
-        _currentAlpha = slider.value;
-        _app.data.slopeAlpha = _currentAlpha;
-    }
+
+    _currentAlpha = slider.value;
+    [_terrainMode setTransparency:_currentAlpha / 0.01];
     
-    _isValueChange = YES;
+    _isValueChange = _baseAlpha != _currentAlpha;
     [self updateApplyButton];
 }
 
 - (NSString *)sliderValueString:(float)value
 {
-    return value <= 1 ? OALocalizedString(@"shared_string_none") : [NSString stringWithFormat:@"x%.1f", value];
+    if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration)
+    {
+        return value <= 1 ? OALocalizedString(@"shared_string_none") : [NSString stringWithFormat:@"x%.1f", value];
+    }
+    else if (_terrainType == EOAGPXSettingsTypeVerticalExaggeration)
+    {
+        return value <= 0.25 ? OALocalizedString(@"shared_string_none") : (value < 1.0 ? [NSString stringWithFormat:@"x%.2f", value] : [NSString stringWithFormat:@"x%.1f", value]);
+    }
+    else
+    {
+        return [NSString stringWithFormat:@"%ld %@", (NSInteger)value, OALocalizedString(@"m")];
+    }
+}
+
+- (void)onCollectionDeleted:(NSNotification *)notification
+{
+    if (![notification.object isKindOfClass:NSArray.class])
+        return;
+    
+    NSArray<PaletteGradientColor *> *gradientPaletteColor = (NSArray<PaletteGradientColor *> *) notification.object;
+    PaletteGradientColor *currentGradientPaletteColor;
+    if ([_currentPaletteColorItem isKindOfClass:PaletteGradientColor.class])
+        currentGradientPaletteColor = (PaletteGradientColor *) _currentPaletteColorItem;
+    else
+        return;
+    
+    auto currentIndex = [_sortedPaletteColorItems indexOfObjectSync:currentGradientPaletteColor];
+    NSMutableArray<NSIndexPath *> *indexPathsToDelete = [NSMutableArray array];
+    for (PaletteGradientColor *paletteColor in gradientPaletteColor)
+    {
+        NSInteger index = [_sortedPaletteColorItems indexOfObjectSync:paletteColor];
+        if (index != NSNotFound)
+        {
+            [_sortedPaletteColorItems removeObjectSync:paletteColor];
+            [indexPathsToDelete addObject:[NSIndexPath indexPathForRow:index inSection:0]];
+            if (index == currentIndex)
+                _isDefaultColorRestored = YES;
+        }
+    }
+    
+    if (indexPathsToDelete.count > 0 && _paletteGridIndexPath)
+    {
+        __weak __typeof(self) weakSelf = self;
+        [self.tableView performBatchUpdates:^{
+            OACollectionSingleLineTableViewCell *colorCell = [weakSelf.tableView cellForRowAtIndexPath:weakSelf.paletteGridIndexPath];
+            OABaseCollectionHandler *handler = [colorCell getCollectionHandler];
+            [handler removeItems:indexPathsToDelete];
+        } completion:^(BOOL finished) {
+            if (weakSelf.isDefaultColorRestored)
+            {
+                _basePaletteColorItem = [_gradientColorsCollection getPaletteColorByName:[[TerrainMode getDefaultMode:_terrainMode.type] getKeyName]];
+                _currentPaletteColorItem = _basePaletteColorItem;
+                _isValueChange = NO;
+                [self updateApplyButton];
+                
+                NSMutableArray *indexPaths = [NSMutableArray array];
+                if (weakSelf.paletteLegendIndexPath)
+                    [indexPaths addObject:weakSelf.paletteLegendIndexPath];
+                if (weakSelf.paletteNameIndexPath)
+                    [indexPaths addObject:weakSelf.paletteNameIndexPath];
+                if (indexPaths.count > 0)
+                {
+                    [weakSelf.tableView reloadRowsAtIndexPaths:indexPaths
+                                              withRowAnimation:UITableViewRowAnimationAutomatic];
+                }
+            }
+        }];
+    }
+}
+
+- (void)onCollectionCreated:(NSNotification *)notification
+{
+    if (![notification.object isKindOfClass:NSArray.class])
+        return;
+    
+    NSArray<PaletteGradientColor *> *gradientPaletteColor = (NSArray<PaletteGradientColor *> *) notification.object;
+    NSMutableArray<NSIndexPath *> *indexPathsToInsert = [NSMutableArray array];
+    for (PaletteGradientColor *paletteColor in gradientPaletteColor)
+    {
+        NSInteger index = [paletteColor getIndex] - 1;
+        NSIndexPath *indexPath;
+        if (index < [_sortedPaletteColorItems countSync])
+        {
+            indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+            [_sortedPaletteColorItems insertObjectSync:paletteColor atIndex:index];
+        }
+        else
+        {
+            indexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems countSync] inSection:0];
+            [_sortedPaletteColorItems addObjectSync:paletteColor];
+        }
+        [indexPathsToInsert addObject:indexPath];
+    }
+    
+    if (indexPathsToInsert.count > 0 && _paletteGridIndexPath)
+    {
+        __weak __typeof(self) weakSelf = self;
+        [self.tableView performBatchUpdates:^{
+            OACollectionSingleLineTableViewCell *colorCell = [weakSelf.tableView cellForRowAtIndexPath:weakSelf.paletteGridIndexPath];
+            OABaseCollectionHandler *handler = [colorCell getCollectionHandler];
+            [handler removeItems:indexPathsToInsert];
+            for (NSIndexPath *indexPath in indexPathsToInsert)
+            {
+                [handler insertItem:[weakSelf.sortedPaletteColorItems objectAtIndexSync:indexPath.row]
+                        atIndexPath:indexPath];
+            }
+        } completion:nil];
+    }
+}
+
+- (void)onCollectionUpdated:(NSNotification *)notification
+{
+    if (![notification.object isKindOfClass:NSArray.class])
+        return;
+    
+    NSArray<PaletteGradientColor *> *gradientPaletteColor = (NSArray<PaletteGradientColor *> *) notification.object;
+    NSMutableArray<NSIndexPath *> *indexPathsToUpdate = [NSMutableArray array];
+    BOOL currentPaletteColor;
+    for (PaletteGradientColor *paletteColor in gradientPaletteColor)
+    {
+        if ([_sortedPaletteColorItems containsObjectSync:paletteColor])
+        {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:paletteColor] inSection:0];
+            [indexPathsToUpdate addObject:indexPath];
+            if (paletteColor == _currentPaletteColorItem)
+                currentPaletteColor = YES;
+        }
+    }
+    
+    if (indexPathsToUpdate.count > 0 && _paletteGridIndexPath)
+    {
+        __weak __typeof(self) weakSelf = self;
+        [self.tableView performBatchUpdates:^{
+            OACollectionSingleLineTableViewCell *colorCell = [weakSelf.tableView cellForRowAtIndexPath:weakSelf.paletteGridIndexPath];
+            OABaseCollectionHandler *handler = [colorCell getCollectionHandler];
+            for (NSIndexPath *indexPath in indexPathsToUpdate)
+            {
+                [handler replaceItem:[weakSelf.sortedPaletteColorItems objectAtIndexSync:indexPath.row]
+                         atIndexPath:indexPath];
+                if (currentPaletteColor && _paletteLegendIndexPath)
+                {
+                    [weakSelf.tableView reloadRowsAtIndexPaths:@[_paletteLegendIndexPath]
+                                              withRowAnimation:UITableViewRowAnimationAutomatic];
+                }
+            }
+        } completion:nil];
+    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -598,84 +895,129 @@ static const NSInteger kMaxZoomPickerRow = 2;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OATableRowData *item = [_data itemForIndexPath:indexPath];
-    
-    if ([item.cellType isEqualToString:[OATitleSliderTableViewCell getCellIdentifier]])
+    if ([item.cellType isEqualToString:[OATitleSliderTableViewCell reuseIdentifier]])
     {
-        OATitleSliderTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OATitleSliderTableViewCell getCellIdentifier]];
-        if (cell == nil)
+        OATitleSliderTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OATitleSliderTableViewCell reuseIdentifier]];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.sliderView.minimumTrackTintColor = [UIColor colorNamed:ACColorNameIconColorActive];
+        cell.titleLabel.text = item.title;
+        if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration || _terrainType == EOAGPXSettingsTypeVerticalExaggeration)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleSliderTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OATitleSliderTableViewCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.sliderView.minimumTrackTintColor = [UIColor colorNamed:ACColorNameIconColorActive];
-        }
-        if (cell)
-        {
-            cell.titleLabel.text = item.title;
-            if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration || _terrainType == EOAGPXSettingsTypeVerticalExaggeration)
-            {
-                __weak OATitleSliderTableViewCell *weakCell = cell;
-                __weak __typeof(self) weakSelf = self;
-                cell.updateValueCallback = ^(float value) {
-                    weakCell.valueLabel.text = [weakSelf sliderValueString:value];
-                };
-                cell.sliderView.minimumValue = 1;
-                cell.sliderView.maximumValue = 3;
-                cell.sliderView.value = _terrainType == EOATerrainSettingsTypeVerticalExaggeration
-                ? _app.data.verticalExaggerationScale
-                : _currentGPXVerticalExaggerationScale;
-              
-                cell.valueLabel.text = [self sliderValueString:cell.sliderView.value];
-            }
-            else
-            {
-                cell.updateValueCallback = nil;
-                cell.sliderView.value = _app.data.terrainType == EOATerrainTypeSlope ? _app.data.slopeAlpha : _app.data.hillshadeAlpha;
-                cell.valueLabel.text = [NSString stringWithFormat:@"%.0f%@", cell.sliderView.value * 100, @"%"];
-            }
-           
-            [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventAllEvents];
-            [cell.sliderView addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
+            __weak OATitleSliderTableViewCell *weakCell = cell;
+            __weak __typeof(self) weakSelf = self;
+            cell.updateValueCallback = ^(float value) {
+                weakCell.valueLabel.text = [weakSelf sliderValueString:value];
+            };
+            cell.sliderView.minimumValue = _terrainType == EOATerrainSettingsTypeVerticalExaggeration ? 1 : 0.25;
+            cell.sliderView.maximumValue = _terrainType == EOATerrainSettingsTypeVerticalExaggeration ? 3 : 4;
+            cell.sliderView.value = _terrainType == EOATerrainSettingsTypeVerticalExaggeration
+            ? _app.data.verticalExaggerationScale
+            : _currentGPXVerticalExaggerationScale;
             
+            cell.valueLabel.text = [self sliderValueString:cell.sliderView.value];
         }
+        else if (_terrainType == EOAGPXSettingsTypeWallHeight)
+        {
+            __weak OATitleSliderTableViewCell *weakCell = cell;
+            __weak __typeof(self) weakSelf = self;
+            cell.updateValueCallback = ^(float value) {
+                weakCell.valueLabel.text = [weakSelf sliderValueString:value];
+            };
+            cell.sliderView.minimumValue = kElevationMinMeters;
+            cell.sliderView.maximumValue = kElevationMaxMeters;
+            cell.sliderView.value = _currentGPXElevationMeters;
+            cell.valueLabel.text = [self sliderValueString:cell.sliderView.value];
+        }
+        else
+        {
+            cell.updateValueCallback = nil;
+            NSInteger transparency = [[((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) getTerrainMode] getTransparency];
+            cell.sliderView.value = transparency * 0.01;
+            cell.valueLabel.text = [NSString stringWithFormat:@"%ld%%", transparency];
+        }
+        
+        [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventAllEvents];
+        [cell.sliderView addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
         return cell;
     }
-    else if ([item.cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
+    else if ([item.cellType isEqualToString:[OAValueTableViewCell reuseIdentifier]])
     {
-        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OAValueTableViewCell *) nib[0];
-            [cell leftIconVisibility:NO];
-            [cell descriptionVisibility:NO];
-            cell.valueLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        }
-        if (cell)
-        {
-            cell.titleLabel.text = item.title;
-            cell.valueLabel.text = [item stringForKey:@"value"];
-        }
+        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell reuseIdentifier]];
+        [cell leftIconVisibility:NO];
+        [cell descriptionVisibility:NO];
+        cell.valueLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.titleLabel.text = item.title;
+        cell.valueLabel.text = [item stringForKey:@"value"];
         return cell;
     }
-    else if ([item.cellType isEqualToString:[OACustomPickerTableViewCell getCellIdentifier]])
+    else if ([item.cellType isEqualToString:[OACustomPickerTableViewCell reuseIdentifier]])
     {
-        OACustomPickerTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACustomPickerTableViewCell getCellIdentifier]];
-        if (cell == nil)
+        OACustomPickerTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACustomPickerTableViewCell reuseIdentifier]];
+        cell.dataArray = _possibleZoomValues;
+        NSInteger minZoom = _minZoom >= terrainMinSupportedZoom && _minZoom <= terrainMaxSupportedZoom ? (_minZoom - terrainMinSupportedZoom) : 1;
+        NSInteger maxZoom = _maxZoom >= terrainMinSupportedZoom && _maxZoom <= terrainMaxSupportedZoom ? (_maxZoom - terrainMinSupportedZoom) : 1;
+        [cell.picker selectRow:indexPath.row == 1 ? minZoom : maxZoom inComponent:0 animated:NO];
+        cell.picker.tag = indexPath.row;
+        cell.delegate = self;
+        return cell;
+    }
+    else if ([item.cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
+    {
+        OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+        [cell leftIconVisibility:NO];
+        [cell descriptionVisibility:NO];
+        BOOL isPaletteName = [item.key isEqualToString:@"paletteName"];
+        cell.selectionStyle = isPaletteName ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleDefault;
+        cell.titleLabel.text = isPaletteName ? [_currentPaletteColorItem toHumanString] : item.title;
+        cell.titleLabel.textColor = [item objForKey:@"tintTitle"] ?: UIColorFromRGB(color_extra_text_gray);
+        cell.titleLabel.font = [UIFont preferredFontForTextStyle:isPaletteName ? UIFontTextStyleFootnote : UIFontTextStyleBody];
+        return cell;
+    }
+    else if ([item.cellType isEqualToString:[OACollectionSingleLineTableViewCell reuseIdentifier]])
+    {
+        OACollectionSingleLineTableViewCell *cell =
+            [tableView dequeueReusableCellWithIdentifier:[OACollectionSingleLineTableViewCell getCellIdentifier]];
+        [cell rightActionButtonVisibility:NO];
+        [cell.collectionView registerNib:[UINib nibWithNibName:PaletteCollectionViewCell.reuseIdentifier bundle:nil] forCellWithReuseIdentifier:PaletteCollectionViewCell.reuseIdentifier];
+
+        PaletteCollectionHandler *paletteHandler = [[PaletteCollectionHandler alloc] initWithData:@[[_sortedPaletteColorItems asArray]] collectionView:cell.collectionView];
+        paletteHandler.delegate = self;
+        NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:_currentPaletteColorItem] inSection:0];
+        if (selectedIndexPath.row == NSNotFound)
+            selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:[_gradientColorsCollection getPaletteColorByName:[_terrainMode getKeyName]]] inSection:0];
+        [paletteHandler setSelectedIndexPath:selectedIndexPath];
+        [cell setCollectionHandler:paletteHandler];
+        return cell;
+    }
+    else if ([item.cellType isEqualToString:OALineChartCell.reuseIdentifier])
+    {
+        OALineChartCell *cell = (OALineChartCell *) [tableView dequeueReusableCellWithIdentifier:OALineChartCell.reuseIdentifier
+                                                                                         forIndexPath:indexPath];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.separatorInset = UIEdgeInsetsMake(0, CGFLOAT_MAX, 0, 0);
+
+        [GpxUIHelper setupGradientChartWithChart:cell.lineChartView
+                             useGesturesAndScale:NO
+                                  xAxisGridColor:[UIColor colorNamed:ACColorNameTextColorSecondary]
+                                     labelsColor:[UIColor colorNamed:ACColorNameChartAxisGridLine]];
+
+        ColorPalette *colorPalette;
+        if ([_currentPaletteColorItem isKindOfClass:PaletteGradientColor.class])
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACustomPickerTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OACustomPickerTableViewCell *)[nib objectAtIndex:0];
+            PaletteGradientColor *paletteColor = (PaletteGradientColor *) _currentPaletteColorItem;
+            colorPalette = paletteColor.colorPalette;
         }
-        if (cell)
-        {
-            cell.dataArray = _possibleZoomValues;
-            NSInteger minZoom = _minZoom >= kMinAllowedZoom && _minZoom <= kMaxAllowedZoom ? _minZoom : 1;
-            NSInteger maxZoom = _maxZoom >= kMinAllowedZoom && _maxZoom <= kMaxAllowedZoom ? _maxZoom : 1;
-            [cell.picker selectRow:indexPath.row == 1 ? minZoom - 1 : maxZoom - 1 inComponent:0 animated:NO];
-            cell.picker.tag = indexPath.row;
-            cell.delegate = self;
-        }
+        if (!colorPalette)
+            return cell;
+
+        cell.lineChartView.data =
+            [GpxUIHelper buildGradientChartWithChart:cell.lineChartView
+                                        colorPalette:colorPalette
+                                      valueFormatter:[GradientUiHelper getGradientTypeFormatter:_gradientColorsCollection.gradientType
+                                                                                       analysis:nil]];
+
+        [cell.lineChartView notifyDataSetChanged];
         return cell;
     }
     return nil;
@@ -686,7 +1028,8 @@ static const NSInteger kMaxZoomPickerRow = 2;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
+
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
     if (indexPath == _minValueIndexPath || indexPath == _maxValueIndexPath)
     {
         [self.tableView beginUpdates];
@@ -718,6 +1061,14 @@ static const NSInteger kMaxZoomPickerRow = 2;
         [self.tableView endUpdates];
         [self.tableView scrollToRowAtIndexPath:_minValueIndexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
     }
+    else if ([item.key isEqualToString:@"allColors"])
+    {
+        OAColorCollectionViewController *colorCollectionViewController = [[OAColorCollectionViewController alloc] initWithCollectionType:EOAColorCollectionTypePaletteItems
+                                                                                                                                   items:_gradientColorsCollection
+                                                                                                                            selectedItem:_currentPaletteColorItem];
+        colorCollectionViewController.delegate = self;
+        [self.navigationController pushViewController:colorCollectionViewController animated:YES];
+    }
 }
 
 #pragma mark - OACustomPickerTableViewCellDelegate
@@ -745,10 +1096,7 @@ static const NSInteger kMaxZoomPickerRow = 2;
         if (intValue <= _maxZoom)
         {
             _minZoom = intValue;
-            if (_type == EOATerrainTypeHillshade)
-                _app.data.hillshadeMinZoom = _minZoom;
-            else if (_type == EOATerrainTypeSlope)
-                _app.data.slopeMinZoom = _minZoom;
+            [_terrainMode setZoomValuesWithMinZoom:_minZoom maxZoom:_maxZoom];
         }
         else
         {
@@ -762,10 +1110,7 @@ static const NSInteger kMaxZoomPickerRow = 2;
         if (intValue >= _minZoom)
         {
             _maxZoom = intValue;
-            if (_type == EOATerrainTypeHillshade)
-                _app.data.hillshadeMaxZoom = _maxZoom;
-            else if (_type == EOATerrainTypeSlope)
-                _app.data.slopeMaxZoom = _maxZoom;
+            [_terrainMode setZoomValuesWithMinZoom:_minZoom maxZoom:_maxZoom];
         }
         else
         {
@@ -778,9 +1123,32 @@ static const NSInteger kMaxZoomPickerRow = 2;
     {
         [self generateValueForIndexPath:zoomValueIndexPath];
         [self.tableView reloadRowsAtIndexPaths:@[zoomValueIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-        _isValueChange = YES;
+        _isValueChange = _baseMinZoom != _minZoom || _baseMaxZoom != _maxZoom;
         [self updateApplyButton];
     }
+}
+
+#pragma mark - OACollectionCellDelegate
+
+- (void)onCollectionItemSelected:(NSIndexPath *)indexPath
+{
+    _currentPaletteColorItem = [_sortedPaletteColorItems objectAtIndexSync:indexPath.row];;
+    _isValueChange = _basePaletteColorItem != _currentPaletteColorItem;
+    [self setPaletteColorItem:_currentPaletteColorItem];
+    NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray array];
+    if (_paletteNameIndexPath)
+        [indexPaths addObject:_paletteNameIndexPath];
+    if (_paletteLegendIndexPath)
+        [indexPaths addObject:_paletteLegendIndexPath];
+    if (indexPaths.count > 0)
+        [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+}
+
+#pragma mark - OAColorCollectionDelegate
+
+- (void)selectPaletteItem:(PaletteColor *)paletteItem
+{
+    [self onCollectionItemSelected:[NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:paletteItem] inSection:0]];
 }
 
 @end

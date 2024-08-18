@@ -21,20 +21,24 @@
 #import "OAChoosePlanHelper.h"
 #import "OAMapStyleSettings.h"
 #import "OAGPXDatabase.h"
+#import "OAObservable.h"
 #import "Localization.h"
 #import "OASavingTrackHelper.h"
 #import "OAIAPHelper.h"
+#import "OAAppData.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAPOIHelper.h"
+#import "OAProducts.h"
 #import "OASizes.h"
 #import "OAColors.h"
 #import "OAWikipediaPlugin.h"
 #import "OAWeatherPlugin.h"
 #import "OAAutoObserverProxy.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
-#import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
+#import "OAMapSource.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kContourLinesDensity @"contourDensity"
 #define kContourLinesWidth @"contourWidth"
@@ -115,7 +119,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRestored:) name:OAIAPProductsRestoredNotification object:nil];
     _applicationModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                          withHandler:@selector(onApplicationModeChanged)
-                                                          andObserve:_app.data.applicationModeChangedObservable];
+                                                          andObserve:_app.applicationModeChangedObservable];
 }
 
 - (void)deinitView
@@ -741,7 +745,7 @@
     else if ([key isEqualToString:@"contour_lines_layer"])
         return ![[_styleSettings getParameter:CONTOUR_LINES].value isEqualToString:@"disabled"];
     else if ([key isEqualToString:@"terrain_layer"])
-        return _app.data.terrainType != EOATerrainTypeDisabled;
+        return [((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) isTerrainLayerEnabled];
     else if ([key isEqualToString:@"overlay_layer"])
         return _app.data.overlayMapSource != nil;
     else if ([key isEqualToString:@"underlay_layer"])
@@ -1331,16 +1335,7 @@
 
 - (void)terrainChanged:(BOOL)isOn
 {
-    if (isOn)
-    {
-        EOATerrainType lastType = _app.data.lastTerrainType;
-        _app.data.terrainType = lastType != EOATerrainTypeDisabled ? lastType : EOATerrainTypeHillshade;
-    }
-    else
-    {
-        _app.data.lastTerrainType = _app.data.terrainType;
-        _app.data.terrainType = EOATerrainTypeDisabled;
-    }
+    [((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) setTerrainLayerEnabled:isOn];
 }
 
 - (void)nauticalDepthChanged:(BOOL)isOn

@@ -11,7 +11,6 @@
 #import "OAMapSettingsViewController.h"
 #import "OAMapStyleSettings.h"
 #import "Localization.h"
-#import "OsmAnd_Maps-Swift.h"
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
 #import "OATableRowData.h"
@@ -20,7 +19,8 @@
 #import "OAValueTableViewCell.h"
 #import "OATextLineViewCell.h"
 #import "OAButtonTableViewCell.h"
-#import "OAImageTextViewCell.h"
+#import "OAImageDescTableViewCell.h"
+#import "OALineChartCell.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
@@ -33,15 +33,26 @@
 #import "OAAutoObserverProxy.h"
 #import "OALinks.h"
 #import "OASizes.h"
+#import "OAAppData.h"
+#import "OAObservable.h"
 #import <SafariServices/SafariServices.h>
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
+#import "OsmAnd_Maps-Swift.h"
+#import <Charts/Charts-Swift.h>
 
-#define kRelief3DCellRowHeight 48.3
+static NSString *kCellTypeMap = @"MapCell";
+static NSString *kCellItemKey = @"kCellItemKey";
+
+static const CGFloat kRelief3DCellRowHeight = 48.3;
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
-@interface OAMapSettingsTerrainScreen() <SFSafariViewControllerDelegate, UITextViewDelegate, OATerrainParametersDelegate>
+@interface OAMapSettingsTerrainScreen() <SFSafariViewControllerDelegate, OATerrainParametersDelegate, DownloadingCellResourceHelperDelegate>
+
+@property (nonatomic) OASRTMPlugin *plugin;
+@property (nonatomic) TerrainMode *terrainMode;
+@property (nonatomic) DownloadingCellResourceHelper *downloadingCellResourceHelper;
 
 @end
 
@@ -49,18 +60,16 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     OsmAndAppInstance _app;
     OAIAPHelper *_iapHelper;
-    OASRTMPlugin *_plugin;
     OATableDataModel *_data;
-    NSInteger _availableMapsSection;
+
     NSInteger _minZoom;
     NSInteger _maxZoom;
 
+    NSInteger _availableMapsSection;
+    NSIndexPath *_paletteLegendIndexPath;
+
     NSObject *_dataLock;
     NSArray<OAResourceItem *> *_mapItems;
-
-    OAAutoObserverProxy* _downloadTaskProgressObserver;
-    OAAutoObserverProxy* _downloadTaskCompletedObserver;
-    OAAutoObserverProxy* _localResourcesChangedObserver;
 }
 
 @synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource;
@@ -70,6 +79,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     self = [super init];
     if (self)
     {
+        _data = [OATableDataModel model];
         _app = [OsmAndApp instance];
         _iapHelper = [OAIAPHelper sharedInstance];
         _plugin = (OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class];
@@ -82,63 +92,42 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         _dataLock = [[NSObject alloc] init];
 
         [self setupView];
+        [self setupDownloadingCellHelper];
         [self initData];
     }
     return self;
 }
 
-- (void) dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
-    if (_downloadTaskProgressObserver)
-    {
-        [_downloadTaskProgressObserver detach];
-        _downloadTaskProgressObserver = nil;
-    }
-    if (_downloadTaskCompletedObserver)
-    {
-        [_downloadTaskCompletedObserver detach];
-        _downloadTaskCompletedObserver = nil;
-    }
-    if (_localResourcesChangedObserver)
-    {
-        [_localResourcesChangedObserver detach];
-        _localResourcesChangedObserver = nil;
-    }
-}
-
 - (void) initData
 {
-    _data = [OATableDataModel model];
+    _paletteLegendIndexPath = nil;
+    [_data clearAllData];
 
-    EOATerrainType type = _app.data.terrainType;
-
-    double alphaValue = type == EOATerrainTypeSlope ? _app.data.slopeAlpha : _app.data.hillshadeAlpha;
-    NSString *alphaValueString = [NSString stringWithFormat:@"%.0f%@", alphaValue * 100, @"%"];
-
-    _minZoom = type == EOATerrainTypeHillshade ? _app.data.hillshadeMinZoom : _app.data.slopeMinZoom;
-    _maxZoom = type == EOATerrainTypeHillshade ? _app.data.hillshadeMaxZoom : _app.data.slopeMaxZoom;
-    NSString *zoomRangeString = [NSString stringWithFormat:@"%ld-%ld", (long)_minZoom, (long)_maxZoom];
+    _terrainMode = [_plugin getTerrainMode];
+    _minZoom = [_plugin getTerrainMinZoom];
+    _maxZoom = [_plugin getTerrainMaxZoom];
 
     BOOL isRelief3D = [OAIAPHelper isOsmAndProAvailable];
+    BOOL isTerrainEbabled = [_plugin isTerrainLayerEnabled];
+    BOOL isHillshade = [_terrainMode isHillshade];
+    BOOL isSlope = [_terrainMode isSlope];
 
     OATableSectionData *switchSection = [_data createNewSection];
     [switchSection addRowFromDictionary:@{
         kCellKeyKey : @"terrainStatus",
         kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
-        kCellTitleKey : type != EOATerrainTypeDisabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name"),
-        kCellIconNameKey : type != EOATerrainTypeDisabled ? @"ic_custom_show.png" : @"ic_custom_hide.png",
-        kCellIconTintColor : type != EOATerrainTypeDisabled ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled],
-        @"value" : @(type != EOATerrainTypeDisabled)
+        kCellTitleKey : OALocalizedString(isTerrainEbabled ? @"shared_string_enabled" : @"rendering_value_disabled_name"),
+        kCellIconNameKey : isTerrainEbabled ? @"ic_custom_show.png" : @"ic_custom_hide.png",
+        kCellIconTintColor : [UIColor colorNamed:isTerrainEbabled ? ACColorNameIconColorSelected : ACColorNameIconColorDisabled],
+        @"value" : @(isTerrainEbabled)
     }];
 
-    if (type == EOATerrainTypeDisabled)
+    if (!isTerrainEbabled)
     {
         OATableSectionData *disabledSection = [_data createNewSection];
         [disabledSection addRowFromDictionary:@{
             kCellKeyKey : @"disabledImage",
-            kCellTypeKey : [OAImageTextViewCell getCellIdentifier],
+            kCellTypeKey : [OAImageDescTableViewCell getCellIdentifier],
             kCellDescrKey : OALocalizedString(@"enable_hillshade"),
             kCellIconNameKey : @"img_empty_state_terrain"
         }];
@@ -158,51 +147,63 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             kCellTypeKey : [OAButtonTableViewCell getCellIdentifier],
             kCellTitleKey : OALocalizedString(@"srtm_color_scheme")
         }];
+
         [titleSection addRowFromDictionary:@{
             kCellKeyKey : @"terrainTypeDesc",
             kCellTypeKey : [OATextLineViewCell getCellIdentifier],
-            kCellDescrKey : type == EOATerrainTypeHillshade ? OALocalizedString(@"map_settings_hillshade_description") : OALocalizedString(@"map_settings_slopes_description"),
-
+            kCellDescrKey : OALocalizedString(isHillshade ? @"map_settings_hillshade_description"
+                : isSlope ? @"map_settings_slopes_description" : @"height_legend_description"),
         }];
-        if (_app.data.terrainType == EOATerrainTypeSlope)
-        {
-            [titleSection addRowFromDictionary:@{
-                kCellTypeKey : [OAImageTextViewCell getCellIdentifier],
-                kCellDescrKey : OALocalizedString(@"map_settings_slopes_legend"),
-                kCellIconNameKey : @"img_legend_slope",
-                @"link" : kUrlWikipediaSlope
-            }];
-        }
+
         [titleSection addRowFromDictionary:@{
+            kCellKeyKey: @"gradientLegend",
+            kCellTypeKey : [OALineChartCell getCellIdentifier]
+        }];
+        _paletteLegendIndexPath = [NSIndexPath indexPathForRow:[titleSection rowCount] - 1 inSection:[_data sectionCount] - 1];
+
+        [titleSection addRowFromDictionary:@{
+            kCellKeyKey : @"modifyPalette",
+            kCellTypeKey : [OAButtonTableViewCell getCellIdentifier],
+            kCellTitleKey : OALocalizedString(@"shared_string_modify"),
+            kCellSecondaryIconName : @"ic_payment_label_pro",
+            @"purchased" : @(isRelief3D)
+        }];
+
+        OATableSectionData *appearanceSection = [_data createNewSection];
+        appearanceSection.headerText = OALocalizedString(@"shared_string_appearance");
+
+        [appearanceSection addRowFromDictionary:@{
             kCellKeyKey : @"visibility",
             kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
             kCellTitleKey : OALocalizedString(@"visibility"),
             kCellIconNameKey : @"ic_custom_visibility",
             kCellIconTintColor : [UIColor colorNamed:ACColorNameIconColorDefault],
-            @"value" : alphaValueString
+            @"value" : [NSString stringWithFormat:@"%d%%", [_terrainMode getTransparency]]
         }];
-        [titleSection addRowFromDictionary:@{
+        [appearanceSection addRowFromDictionary:@{
             kCellKeyKey : @"zoomLevels",
             kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
             kCellTitleKey : OALocalizedString(@"shared_string_zoom_levels"),
             kCellIconNameKey : @"ic_custom_overlay_map",
             kCellIconTintColor : [UIColor colorNamed:ACColorNameIconColorDefault],
-            @"value" : zoomRangeString
+            @"value" : [NSString stringWithFormat:@"%ld-%ld", _minZoom, _maxZoom]
         }];
+
         OATableSectionData *relief3DSection = [_data createNewSection];
         [relief3DSection addRowFromDictionary:@{
             kCellKeyKey : @"relief3D",
             kCellTypeKey : isRelief3D ? [OASwitchTableViewCell getCellIdentifier] : [OAButtonTableViewCell getCellIdentifier],
             kCellTitleKey : OALocalizedString(@"shared_string_relief_3d"),
             kCellIconNameKey : @"ic_custom_3d_relief",
-            kCellIconTintColor : ![_plugin.enable3DMaps get] || !isRelief3D ? [UIColor colorNamed:ACColorNameIconColorDisabled] : [UIColor colorNamed:ACColorNameIconColorSelected],
+            kCellIconTintColor : ![_plugin.enable3dMapsPref get] || !isRelief3D ? [UIColor colorNamed:ACColorNameIconColorDisabled] : [UIColor colorNamed:ACColorNameIconColorSelected],
             kCellSecondaryIconName : @"ic_payment_label_pro",
-            @"value" : @([_plugin.enable3DMaps get]),
+            @"value" : @([_plugin.enable3dMapsPref get]),
+            @"purchased" : @(isRelief3D)
         }];
-        if (isRelief3D && [_plugin.enable3DMaps get])
+        if (isRelief3D && [_plugin.enable3dMapsPref get])
         {
-            NSString *alphaValueString = OALocalizedString(@"shared_string_none");
             double scaleValue = _app.data.verticalExaggerationScale;
+            NSString *alphaValueString = scaleValue <= kExaggerationDefScale ? OALocalizedString(@"shared_string_none") : (scaleValue < 1.0 ? [NSString stringWithFormat:@"x%.2f", scaleValue] : [NSString stringWithFormat:@"x%.1f", scaleValue]);
             if (scaleValue > 1)
             {
                 alphaValueString = [NSString stringWithFormat:@"x%.1f", scaleValue];
@@ -221,12 +222,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             OATableSectionData *availableMapsSection = [_data createNewSection];
             _availableMapsSection = [_data sectionCount] - 1;
             availableMapsSection.headerText = OALocalizedString(@"available_maps");
-            availableMapsSection.footerText = type == EOATerrainTypeHillshade ? OALocalizedString(@"map_settings_add_maps_hillshade") : OALocalizedString(@"map_settings_add_maps_slopes");
+            availableMapsSection.footerText = OALocalizedString(isHillshade ? @"map_settings_add_maps_hillshade" : @"map_settings_add_maps_slopes");
             for (NSInteger i = 0; i < _mapItems.count; i++)
             {
                 [availableMapsSection addRowFromDictionary:@{
                     kCellKeyKey : @"mapItem",
-                    kCellTypeKey : [OARightIconTableViewCell getCellIdentifier]
+                    kCellTypeKey : @"mapItem",
+                    kCellItemKey : _mapItems[i]
                 }];
             }
         }
@@ -248,6 +250,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                                   skipIfOneDownloaded:YES];
 
     [self initData];
+    [_downloadingCellResourceHelper cleanCellCache];
     [UIView transitionWithView:tblView
                       duration:.35
                        options:UIViewAnimationOptionTransitionCrossDissolve
@@ -261,21 +264,52 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void) setupView
 {
     title = OALocalizedString(@"shared_string_terrain");
-    
+
+    [tblView registerNib:[UINib nibWithNibName:OALineChartCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:OALineChartCell.reuseIdentifier];
+    [tblView registerNib:[UINib nibWithNibName:OAImageDescTableViewCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:OAImageDescTableViewCell.reuseIdentifier];
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRestored:) name:OAIAPProductsRestoredNotification object:nil];
-    _downloadTaskProgressObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                              withHandler:@selector(onDownloadTaskProgressChanged:withKey:andValue:)
-                                                               andObserve:_app.downloadsManager.progressCompletedObservable];
-    _downloadTaskCompletedObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                               withHandler:@selector(onDownloadTaskFinished:withKey:andValue:)
-                                                                andObserve:_app.downloadsManager.completedObservable];
-    _localResourcesChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                               withHandler:@selector(onLocalResourcesChanged:withKey:)
-                                                                andObserve:_app.localResourcesChangedObservable];
     [self updateAvailableMaps];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onColorPalettesFilesUpdated:) name:ColorPaletteHelper.colorPalettesUpdatedNotification object:nil];
 }
 
+- (void)deinitView
+{
+    [NSNotificationCenter.defaultCenter removeObserver:self];
+}
+
+- (void)onColorPalettesFilesUpdated:(NSNotification *)notification
+{
+    if (![notification.object isKindOfClass:NSDictionary.class] || ![_plugin isTerrainLayerEnabled])
+        return;
+
+    NSDictionary<NSString *, NSString *> *colorPaletteFiles = (NSDictionary *) notification.object;
+    if (!colorPaletteFiles)
+        return;
+
+    NSString *currentPaletteFile = [_terrainMode getMainFile];
+    if ([colorPaletteFiles.allKeys containsObject:currentPaletteFile])
+    {
+        if ([colorPaletteFiles[currentPaletteFile] isEqualToString:ColorPaletteHelper.deletedFileKey])
+        {
+            TerrainMode *defaultTerrainMode = [TerrainMode getDefaultMode:_terrainMode.type];
+            if (defaultTerrainMode)
+                _terrainMode = defaultTerrainMode;
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self initData];
+            [UIView transitionWithView:self.tblView
+                              duration:0.35f
+                               options:UIViewAnimationOptionTransitionCrossDissolve
+                            animations:^(void)
+             {
+                [self.tblView reloadData];
+            }
+                            completion:nil];
+        });
+    }
+}
 - (void)onRotation
 {
     tblView.separatorInset = UIEdgeInsetsMake(0, [OAUtilities getLeftMargin] + 16, 0, 0);
@@ -285,45 +319,56 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (UIMenu *)createTerrainTypeMenuForCellButton:(UIButton *)button
 {
     NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
+    NSMutableAttributedString *attributedString;
 
-    UIAction *hillshade = [UIAction actionWithTitle:OALocalizedString(@"shared_string_hillshade")
-                                             image:nil
-                                        identifier:nil
-                                           handler:^(__kindof UIAction * _Nonnull action) {
-        [_app.data setTerrainType: EOATerrainTypeHillshade];
-        [self terrainTypeChanged];
-    }];
-    [menuElements addObject:hillshade];
+    __weak __typeof(self) weakSelf = self;
+    for (NSInteger i = 0; i < TerrainMode.values.count; i++)
+    {
+        TerrainMode *mode = TerrainMode.values[i];
+        if (![mode isDefaultMode])
+            continue;
 
-    UIAction *slope = [UIAction actionWithTitle:OALocalizedString(@"shared_string_slope")
-                                          image:nil
-                                     identifier:nil
-                                        handler:^(__kindof UIAction * _Nonnull action) {
-        [_app.data setTerrainType: EOATerrainTypeSlope];
-        [self terrainTypeChanged];
-    }];
-    [menuElements addObject:slope];
+        UIAction *action = [UIAction actionWithTitle:[mode getDescription]
+                                               image:nil
+                                          identifier:nil
+                                             handler:^(__kindof UIAction * _Nonnull action) {
+            weakSelf.terrainMode = mode;
+            [weakSelf.plugin setTerrainMode:mode];
+            [weakSelf terrainTypeChanged];
+        }];
 
-    NSInteger selectedIndex = _app.data.terrainType == EOATerrainTypeHillshade ? 0 : 1;
-    if (selectedIndex >= 0 && selectedIndex < menuElements.count)
-        ((UIAction *)menuElements[selectedIndex]).state = UIMenuElementStateOn;
-    
-    NSString *title = [menuElements[selectedIndex] title];
-    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:title];
-    
-    NSTextAttachment *attachment = [[NSTextAttachment alloc] init];
-    UIImageSymbolConfiguration *config = [UIImageSymbolConfiguration configurationWithPointSize:16 weight:UIImageSymbolWeightBold];
-    UIImage *image = [UIImage systemImageNamed:@"chevron.up.chevron.down" withConfiguration:config];
-    image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    attachment.image = image;
-    
-    NSAttributedString *attachmentString = [NSAttributedString attributedStringWithAttachment:attachment];
-    [attributedString appendAttributedString:[[NSAttributedString alloc] initWithString:@" "]];
-    [attributedString appendAttributedString:attachmentString];
-    
-    [button setAttributedTitle:attributedString forState:UIControlStateNormal];
-    
+        if (_terrainMode == mode)
+        {
+            action.state = UIMenuElementStateOn;
+
+            attributedString = [[NSMutableAttributedString alloc] initWithString:action.title];
+            NSTextAttachment *attachment = [[NSTextAttachment alloc] init];
+            UIImageSymbolConfiguration *config = [UIImageSymbolConfiguration configurationWithPointSize:16 weight:UIImageSymbolWeightBold];
+            UIImage *image = [UIImage systemImageNamed:@"chevron.up.chevron.down" withConfiguration:config];
+            image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            attachment.image = image;
+            
+            NSAttributedString *attachmentString = [NSAttributedString attributedStringWithAttachment:attachment];
+            [attributedString appendAttributedString:[[NSAttributedString alloc] initWithString:@" "]];
+            [attributedString appendAttributedString:attachmentString];
+        }
+
+        [menuElements addObject:action];
+    }
+
+    if (attributedString)
+        [button setAttributedTitle:attributedString forState:UIControlStateNormal];
     return [UIMenu menuWithChildren:menuElements];
+}
+
+- (void)setupDownloadingCellHelper
+{
+    __weak OAMapSettingsTerrainScreen *weakSelf = self;
+    _downloadingCellResourceHelper = [DownloadingCellResourceHelper new];
+    _downloadingCellResourceHelper.hostViewController = weakSelf.vwController;
+    [_downloadingCellResourceHelper setHostTableView:weakSelf.tblView];
+    _downloadingCellResourceHelper.delegate = weakSelf;
+    _downloadingCellResourceHelper.rightIconStyle = DownloadingCellRightIconTypeHideIconAfterDownloading;
 }
 
 #pragma mark - UITableViewDataSource
@@ -403,7 +448,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     else if ([item.cellType isEqualToString:[OATextLineViewCell getCellIdentifier]])
     {
         OATextLineViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextLineViewCell getCellIdentifier]];
-        BOOL isTerrainTypeSlope = _app.data.terrainType == EOATerrainTypeSlope;
         
         if (cell == nil)
         {
@@ -416,7 +460,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         if (cell)
         {
-            cell.separatorInset = isTerrainTypeSlope ? UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.) : UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0., 0.);;
+            cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
             cell.textView.text = item.descr;
             cell.textView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             cell.textView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
@@ -427,28 +471,32 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         OAButtonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
         BOOL isTerrainTypeCell = [item.key isEqualToString:@"terrainType"];
-
+        BOOL isModifyTypeCell = [item.key isEqualToString:@"modifyPalette"];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAButtonTableViewCell *) nib[0];
             [cell descriptionVisibility:NO];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [cell.button setTitle:nil forState:UIControlStateNormal];
+            [cell.button setTitleColor:[UIColor colorNamed:ACColorNameTextColorActive] forState:UIControlStateHighlighted];
+            cell.button.tintColor = [UIColor colorNamed:ACColorNameTextColorActive];
+            cell.button.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
         }
         if (cell)
         {
+            cell.selectionStyle = isModifyTypeCell ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
             [cell setCustomLeftSeparatorInset:isTerrainTypeCell];
             cell.titleLabel.text = item.title;
+            [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
 
             if (isTerrainTypeCell)
             {
                 cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
                 [cell leftIconVisibility:NO];
                 cell.leftIconView.image = nil;
-                [cell.button setTitleColor:[UIColor colorNamed:ACColorNameTextColorActive] forState:UIControlStateHighlighted];
-                cell.button.tintColor = [UIColor colorNamed:ACColorNameTextColorActive];
-                cell.button.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-                
+                cell.leftIconView.tintColor = nil;
+                [cell buttonVisibility:YES];
+                cell.button.configuration = nil;
                 cell.button.menu = [self createTerrainTypeMenuForCellButton:cell.button];
                 cell.button.showsMenuAsPrimaryAction = YES;
                 cell.button.changesSelectionAsPrimaryAction = YES;
@@ -456,20 +504,35 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             else
             {
                 cell.separatorInset = UIEdgeInsetsZero;
-                [cell leftIconVisibility:YES];
-                cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
+                [cell leftIconVisibility:item.iconName && item.iconName.length > 0];
+                cell.leftIconView.image = cell.leftIconView.hidden ? nil : [UIImage templateImageNamed:item.iconName];
                 cell.leftIconView.tintColor = item.iconTintColor;
-                [cell.button setTitle:nil forState:UIControlStateNormal];
+                cell.button.showsMenuAsPrimaryAction = NO;
+                cell.button.changesSelectionAsPrimaryAction = NO;
 
-                UIButtonConfiguration *conf = [UIButtonConfiguration plainButtonConfiguration];
-                conf.image = [UIImage imageNamed:item.secondaryIconName];
-                cell.button.configuration = conf;
+                BOOL isPurchased = [item boolForKey:@"purchased"];
+                [cell buttonVisibility:!isPurchased];
+                if (!isPurchased)
+                {
+                    UIButtonConfiguration *conf = [UIButtonConfiguration plainButtonConfiguration];
+                    conf.image = [UIImage imageNamed:item.secondaryIconName];
+                    cell.button.configuration = conf;
+                }
+                else
+                {
+                    cell.button.configuration = nil;
+                }
                 cell.button.menu = nil;
-                [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
-                [cell.button addTarget:self action:@selector(showChoosePlanScreen) forControlEvents:UIControlEventTouchUpInside];
+                if (!isPurchased)
+                    [cell.button addTarget:self action:@selector(showChoosePlanScreen) forControlEvents:UIControlEventTouchUpInside];
             }
         }
         return cell;
+    }
+    else if ([item.cellType isEqualToString:@"mapItem"])
+    {
+        OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:[item objForKey:kCellItemKey]];
+        return [_downloadingCellResourceHelper getOrCreateCell:mapItem.resourceId swiftResourceItem:mapItem];
     }
     else if ([item.cellType isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
     {
@@ -483,102 +546,50 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         if (cell)
         {
-            if ([item.key isEqualToString:@"mapItem"])
-            {
-                [cell leftIconVisibility:YES];
-                [cell descriptionVisibility:YES];
-
-                OAResourceItem *mapItem = _mapItems[indexPath.row];
-                cell.leftIconView.image = [UIImage templateImageNamed:@"ic_custom_terrain"];
-                cell.titleLabel.text = mapItem.title;
-                cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-                cell.descriptionLabel.text = [NSString stringWithFormat:@"%@  •  %@", [OAResourceType resourceTypeLocalized:mapItem.resourceType],
-                                              [NSByteCountFormatter stringFromByteCount:mapItem.sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
-
-                if (![_iapHelper.srtm isActive] && (mapItem.resourceType == OsmAndResourceType::HillshadeRegion || mapItem.resourceType == OsmAndResourceType::SlopeRegion))
-                    mapItem.disabled = YES;
-
-                if (!mapItem.downloadTask)
-                {
-                    cell.accessoryView = nil;
-                    cell.titleLabel.textColor = !mapItem.disabled ? [UIColor colorNamed:ACColorNameTextColorPrimary] : [UIColor colorNamed:ACColorNameTextColorSecondary];
-                    cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_download"];
-                }
-                else
-                {
-                    cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
-                    cell.rightIconView.image = nil;
-                    if (!cell.accessoryView)
-                    {
-                        FFCircularProgressView *progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0., 0., 25., 25.)];
-                        progressView.iconView = [[UIView alloc] init];
-                        progressView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
-                        cell.accessoryView = progressView;
-                    }
-                    [self updateDownloadingCell:cell indexPath:indexPath];
-                }
-            }
-            else
-            {
-                cell.accessoryView = nil;
-                BOOL isReadMore = [item.key isEqualToString:@"readMore"];
-                [cell leftIconVisibility:!isReadMore];
-                [cell descriptionVisibility:!isReadMore];
-                cell.titleLabel.textColor = isReadMore ? [UIColor colorNamed:ACColorNameTextColorActive] : [UIColor colorNamed:ACColorNameTextColorPrimary];
-                cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:isReadMore ? UIFontWeightSemibold : UIFontWeightRegular];
-                cell.rightIconView.image = [UIImage templateImageNamed:item.iconName];
-                cell.titleLabel.text = item.title;
-            }
+            cell.accessoryView = nil;
+            BOOL isReadMore = [item.key isEqualToString:@"readMore"];
+            [cell leftIconVisibility:!isReadMore];
+            [cell descriptionVisibility:!isReadMore];
+            cell.titleLabel.textColor = [UIColor colorNamed: isReadMore ? ACColorNameTextColorActive : ACColorNameTextColorPrimary];
+            cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:isReadMore ? UIFontWeightSemibold : UIFontWeightRegular];
+            cell.rightIconView.image = [UIImage templateImageNamed:item.iconName];
+            cell.titleLabel.text = item.title;
         }
         return cell;
     }
-    else if ([item.cellType isEqualToString:[OAImageTextViewCell getCellIdentifier]])
+    else if ([item.cellType isEqualToString:[OAImageDescTableViewCell getCellIdentifier]])
     {
-        OAImageTextViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAImageTextViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAImageTextViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OAImageTextViewCell *) nib[0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            [cell showExtraDesc:NO];
-            cell.descView.delegate = self;
-        }
-        if (cell)
-        {
-            cell.separatorInset = UIEdgeInsetsMake(0, [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0, 0);
-            cell.iconView.image = [UIImage rtlImageNamed:item.iconName];
+        OAImageDescTableViewCell *cell = (OAImageDescTableViewCell *) [tableView dequeueReusableCellWithIdentifier:OAImageDescTableViewCell.reuseIdentifier
+                                                                                             forIndexPath:indexPath];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.separatorInset = UIEdgeInsetsMake(0, [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0, 0);
+        cell.iconView.image = [UIImage rtlImageNamed:item.iconName];
+        cell.descView.text = item.descr;
+        return cell;
+    }
+    else if ([item.cellType isEqualToString:OALineChartCell.reuseIdentifier])
+    {
+        OALineChartCell *cell = (OALineChartCell *) [tableView dequeueReusableCellWithIdentifier:OALineChartCell.reuseIdentifier
+                                                                                         forIndexPath:indexPath];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
-            BOOL isDisabled = [item.key isEqualToString:@"disabledImage"];
-            NSString *descr = item.descr;
-            if (isDisabled)
-            {
-                cell.descView.attributedText = nil;
-                cell.descView.text = descr;
-            }
-            else if (descr && descr.length > 0)
-            {
-                NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:descr attributes:@{
-                    NSFontAttributeName: [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline],
-                    NSForegroundColorAttributeName: [UIColor colorNamed:ACColorNameTextColorPrimary]
-                }];
-                NSRange range = [descr rangeOfString:@" " options:NSBackwardsSearch];
-                if (range.location != NSNotFound)
-                {
-                    NSDictionary *linkAttributes = @{ NSLinkAttributeName : [item stringForKey:@"link"] };
-                    [str setAttributes:linkAttributes range:NSMakeRange(range.location + 1, descr.length - range.location - 1)];
-                }
-                cell.descView.text = nil;
-                cell.descView.attributedText = str;
-            }
-            else
-            {
-                cell.descView.text = nil;
-                cell.descView.attributedText = nil;
-            }
+        [GpxUIHelper setupGradientChartWithChart:cell.lineChartView
+                             useGesturesAndScale:NO
+                                  xAxisGridColor:[UIColor colorNamed:ACColorNameTextColorSecondary]
+                                     labelsColor:[UIColor colorNamed:ACColorNameChartAxisGridLine]];
+        cell.lineChartView.extraBottomOffset = 13;
 
-            if ([cell needsUpdateConstraints])
-                [cell setNeedsUpdateConstraints];
-        }
+        ColorPalette *colorPalette = [[ColorPaletteHelper shared] getGradientColorPalette:[_terrainMode getMainFile]];
+        if (!colorPalette)
+            return cell;
+
+        cell.lineChartView.data =
+            [GpxUIHelper buildGradientChartWithChart:cell.lineChartView
+                                        colorPalette:colorPalette
+                                      valueFormatter:[GradientUiHelper getGradientTypeFormatterForTerrainType:_terrainMode.type
+                                                                                                     analysis:nil]];
+
+        [cell.lineChartView notifyDataSetChanged];
         return cell;
     }
     return nil;
@@ -599,6 +610,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         terrainParametersScreen = [[OAMapSettingsTerrainParametersViewController alloc] initWithSettingsType:EOATerrainSettingsTypeZoomLevels];
     else if ([item.key isEqualToString:@"vertical_exaggeration"])
         terrainParametersScreen = [[OAMapSettingsTerrainParametersViewController alloc] initWithSettingsType:EOATerrainSettingsTypeVerticalExaggeration];
+    else if ([item.key isEqualToString:@"modifyPalette"])
+        terrainParametersScreen = [[OAMapSettingsTerrainParametersViewController alloc] initWithSettingsType:EOATerrainSettingsTypePalette];
     if (terrainParametersScreen)
     {
         [vwController hide:YES animated:YES];
@@ -613,35 +626,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     else if ([item.key isEqualToString:@"mapItem"])
     {
         OAResourceItem *mapItem = _mapItems[indexPath.row];
-        if (mapItem.downloadTask != nil)
-        {
-            [OAResourcesUIHelper offerCancelDownloadOf:mapItem];
-        }
-        else if ([mapItem isKindOfClass:[OARepositoryResourceItem class]])
-        {
-            OARepositoryResourceItem* item = (OARepositoryResourceItem*)mapItem;
-            if ((item.resourceType == OsmAndResourceType::SrtmMapRegion || item.resourceType == OsmAndResourceType::HillshadeRegion
-                 || item.resourceType == OsmAndResourceType::SlopeRegion) && ![_iapHelper.srtm isActive])
-            {
-                [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Srtm];
-            }
-            else
-            {
-                [OAResourcesUIHelper offerDownloadAndInstallOf:item onTaskCreated:^(id<OADownloadTask> task) {
-                    [self updateAvailableMaps];
-                } onTaskResumed:nil];
-            }
-        }
+        [_downloadingCellResourceHelper onCellClicked:mapItem.resourceId.toNSString()];
     }
-}
-
-#pragma mark - UITextViewDelegate
-
-- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange interaction:(UITextItemInteraction)interaction
-{
-    SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:URL];
-    [self.vwController presentViewController:safariViewController animated:YES completion:nil];
-    return NO;
 }
 
 #pragma mark - SFSafariViewControllerDelegate
@@ -668,24 +654,17 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
     if ([item.key isEqualToString:@"terrainStatus"])
     {
-        if (isOn)
-        {
-            EOATerrainType prevType = _app.data.lastTerrainType;
-            [_app.data setTerrainType:prevType != EOATerrainTypeDisabled ? prevType : EOATerrainTypeHillshade];
-        }
-        else
-        {
+        [_plugin setTerrainLayerEnabled:isOn];
+        if (!isOn)
             _availableMapsSection = -1;
-            _app.data.lastTerrainType = _app.data.terrainType;
-            [_app.data setTerrainType:EOATerrainTypeDisabled];
-        }
     }
     else if ([item.key isEqualToString:@"relief3D"])
     {
-        [_plugin.enable3DMaps set:isOn];
+        [_plugin.enable3dMapsPref set:isOn];
     }
 
     [self updateAvailableMaps];
+    [[_app updateGpxTracksOnMapObservable] notifyEvent];
 }
 
 - (void)showChoosePlanScreen
@@ -699,123 +678,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [self updateAvailableMaps];
 }
 
-#pragma mark - Downloading cell progress methods
+#pragma mark - DownloadingCellResourceHelperDelegate
 
-- (void) updateDownloadingCellAtIndexPath:(NSIndexPath *)indexPath
+- (void)onDownldedResourceInstalled
 {
+    __weak __typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        UITableViewCell *cell = [tblView cellForRowAtIndexPath:indexPath];
-        [self updateDownloadingCell:cell indexPath:indexPath];
-    });
-}
-
-- (void) updateDownloadingCell:(UITableViewCell *)cell indexPath:(NSIndexPath *)indexPath
-{
-    if (_mapItems && _mapItems.count > 0)
-    {
-        OAResourceItem *mapItem = _mapItems[indexPath.row];
-        if (mapItem.downloadTask)
-        {
-            if (cell.accessoryView && [cell.accessoryView isKindOfClass:FFCircularProgressView.class])
-            {
-                FFCircularProgressView* progressView = (FFCircularProgressView*)cell.accessoryView;
-
-                float progressCompleted = mapItem.downloadTask.progressCompleted;
-                if (progressCompleted >= 0.001f && mapItem.downloadTask.state == OADownloadTaskStateRunning)
-                {
-                    progressView.iconPath = nil;
-                    if (progressView.isSpinning)
-                        [progressView stopSpinProgressBackgroundLayer];
-                    progressView.progress = progressCompleted - 0.001;
-                }
-                else if (mapItem.downloadTask.state == OADownloadTaskStateFinished)
-                {
-                    progressView.iconPath = [OAResourcesUIHelper tickPath:progressView];
-                    if (!progressView.isSpinning)
-                        [progressView startSpinProgressBackgroundLayer];
-                    progressView.progress = 0.0f;
-                }
-                else
-                {
-                    progressView.iconPath = [UIBezierPath bezierPath];
-                    progressView.progress = 0.0;
-                    if (!progressView.isSpinning)
-                        [progressView startSpinProgressBackgroundLayer];
-                }
-            }
-        }
-    }
-}
-
-- (void) refreshDownloadingContent:(NSString *)downloadTaskKey
-{
-    @synchronized(_dataLock)
-    {
-        if (_availableMapsSection != -1)
-        {
-            for (int i = 0; i < _mapItems.count; i++)
-            {
-                OAResourceItem *item = (OAResourceItem *)_mapItems[i];
-                if (item && [[item.downloadTask key] isEqualToString:downloadTaskKey])
-                    [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:_availableMapsSection]];
-            }
-        }
-    }
-}
-
-- (void) onDownloadTaskProgressChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
-{
-    id<OADownloadTask> task = key;
-
-    // Skip all downloads that are not resources
-    if (![task.key hasPrefix:@"resource:"])
-        return;
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (!vwController.isViewLoaded || vwController.view.window == nil)
-            return;
-
-        [self refreshDownloadingContent:task.key];
-    });
-}
-
-- (void) onDownloadTaskFinished:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
-{
-    id<OADownloadTask> task = key;
-
-    // Skip all downloads that are not resources
-    if (![task.key hasPrefix:@"resource:"])
-        return;
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (!vwController.isViewLoaded || vwController.view.window == nil)
-            return;
-
-        if (task.progressCompleted < 1.0)
-        {
-            if ([_app.downloadsManager.keysOfDownloadTasks count] > 0) {
-                id<OADownloadTask> nextTask =  [_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks objectAtIndex:0]];
-                [nextTask resume];
-            }
-            [self updateAvailableMaps];
-        }
-        else
-        {
-            [self refreshDownloadingContent:task.key];
-        }
-    });
-}
-
-- (void) onLocalResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (!vwController.isViewLoaded || vwController.view.window == nil)
-        {
-            return;
-        }
-
-        [OAManageResourcesViewController prepareData];
-        [self updateAvailableMaps];
+        [weakSelf updateAvailableMaps];
     });
 }
 
@@ -823,17 +692,20 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)productPurchased:(NSNotification *)notification
 {
+    __weak __typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self initData];
-        [self.tblView reloadData];
+        [weakSelf initData];
+        [weakSelf.downloadingCellResourceHelper cleanCellCache];
+        [weakSelf.tblView reloadData];
     });
 }
 
 - (void)productsRestored:(NSNotification *)notification
 {
+    __weak __typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self initData];
-        [self.tblView reloadData];
+        [weakSelf initData];
+        [weakSelf.tblView reloadData];
     });
 }
 

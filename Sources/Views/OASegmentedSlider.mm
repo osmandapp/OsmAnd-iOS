@@ -12,16 +12,17 @@
 #import "Localization.h"
 #import "GeneratedAssetSymbols.h"
 
-#define kMarkTag 1000
-#define kAdditionalMarkTag 2000
-#define kTitleLabelTag 3000
+static NSInteger kMarkTag = 1000;
+static NSInteger kAdditionalMarkTag = 2000;
+static NSInteger kTitleLabelTag = 3000;
 
-#define kMarkHeight 16.
-#define kCustomMarkHeight 14.
-#define kAdditionalMarkHeight 8.
-#define kCurrentMarkHeight 30.
+static CGFloat kMarkHeight = 16;
+static CGFloat kCustomMarkHeight = 14;
+static CGFloat kAdditionalMarkHeight = 8;
+static CGFloat kCurrentMarkHeight = 30;
+static CGFloat kRoundThumbSize = 24;
 
-#define kMarkWidth 2.
+static CGFloat kMarkWidth = 2;
 
 @implementation OASegmentedSlider
 {
@@ -32,6 +33,7 @@
     NSInteger _selectingMark;
     NSInteger _additionalMarksBetween;
     BOOL _isCustomSlider;
+    BOOL _useExtraThumbOffset;
 
     UIView *_selectingMarkTitleBackground;
     UILabel *_selectingMarkTitle;
@@ -70,10 +72,9 @@
 
     [self removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
     [self addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
-    [self removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
-    [self addTarget:self action:@selector(sliderDidEndEditing:) forControlEvents:UIControlEventTouchUpInside];
-    [self removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpOutside];
-    [self addTarget:self action:@selector(sliderDidEndEditing:) forControlEvents:UIControlEventTouchUpOutside];
+    
+    [self clearTouchEventsUpInsideUpOutside];
+    [self addTarget:self action:@selector(sliderDidEndEditing:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
 }
 
 - (void)layoutSubviews
@@ -85,6 +86,16 @@
         [self layoutCurrentMarkLine];
     if (_selectingMarkTitleBackground)
         [self layoutSelectingTitle];
+}
+
+- (void)clearTouchEventsUpInsideUpOutside
+{
+    [self removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpOutside | UIControlEventTouchUpInside];
+}
+
+- (void)setNumberOfMarks:(NSInteger)numberOfMarks
+{
+    [self setNumberOfMarks:numberOfMarks additionalMarksBetween:0];
 }
 
 - (void)setNumberOfMarks:(NSInteger)numberOfMarks additionalMarksBetween:(NSInteger)additionalMarksBetween
@@ -295,14 +306,14 @@
         return;
 
     CGFloat segments = [self getMarksCount] - 1;
-    CGFloat sliderViewWidth = self.frame.size.width;
+    CGFloat sliderViewWidth = self.frame.size.width - [self getExtraThumbInset] * 2;
     CGFloat sliderViewHeight = self.frame.size.height;
     CGRect sliderViewBounds = CGRectMake(0., 0., sliderViewWidth, sliderViewHeight);
     CGRect trackRect = [self trackRectForBounds:sliderViewBounds];
     CGFloat trackWidth = trackRect.size.width;
     CGFloat trackHeight = trackRect.size.height;
 
-    CGFloat inset = (sliderViewWidth - trackRect.size.width) / 2;
+    CGFloat inset = (sliderViewWidth - trackRect.size.width) / 2 + [self getExtraThumbInset];
 
     CGFloat markHeight = _isCustomSlider ? kCustomMarkHeight + 1. : kMarkHeight;
     CGFloat x = inset;
@@ -328,12 +339,19 @@
             CGSize textSize = [OAUtilities calculateTextBounds:titleLabel.text font:titleLabel.font];
 
             CGFloat tx;
-            if (i == 0)
-                tx = mark.frame.origin.x;
-            else if (i == marksCount - 1)
-                tx = trackWidth - textSize.width;
+            if (!_useExtraThumbOffset)
+            {
+                if (i == 0)
+                    tx = mark.frame.origin.x;
+                else if (i == marksCount - 1)
+                    tx = trackWidth - textSize.width;
+                else
+                    tx = mark.frame.origin.x + mark.frame.size.width / 2 - textSize.width / 2;
+            }
             else
+            {
                 tx = mark.frame.origin.x + mark.frame.size.width / 2 - textSize.width / 2;
+            }
 
             titleLabel.frame = CGRectMake(tx, mark.frame.origin.y + mark.frame.size.height, textSize.width, textSize.height);
         }
@@ -345,9 +363,9 @@
 {
     CGRect sliderViewBounds = CGRectMake(0., 0., self.frame.size.width, self.frame.size.height);
     CGRect trackRect = [self trackRectForBounds:sliderViewBounds];
-    CGFloat trackWidth = trackRect.size.width;
+    CGFloat trackWidth = trackRect.size.width - [self getExtraThumbInset] * 2;
     CGFloat trackHeight = trackRect.size.height;
-    CGFloat inset = (self.frame.size.width - trackRect.size.width) / 2;
+    CGFloat inset = (self.frame.size.width - trackRect.size.width) / 2 + [self getExtraThumbInset];
 
     if (_currentMarkX != -1)
     {
@@ -377,14 +395,39 @@
         _currentRightLineView.frame = CGRectMake(inset, trackRect.origin.y, trackWidth, trackHeight);
 }
 
+- (NSInteger)getIndexForOptionStepsAmountWithoutDrawMark
+{
+    CGFloat value = self.value;
+    NSInteger marks = self.stepsAmountWithoutDrawMark;
+    CGFloat step = 1. / (marks - 1);
+    int nextMark = 0;
+    for (int i = 0; i < marks; i++)
+    {
+        if (i * step >= value)
+        {
+            nextMark = i;
+            break;
+        }
+    }
+    if ((nextMark * step - value) < (value - (nextMark - 1) * step))
+        return nextMark;
+    else
+        return nextMark - 1;
+}
+
+- (NSString *) getSelectingMarkTitleTextAtIndex:(NSInteger)index
+{
+    NSInteger markValue = _additionalMarksBetween > 0 ? index : index * 3;
+    return !self.userInteractionEnabled ? OALocalizedString(@"rendering_value_disabled_name")
+            : [markValue < 10 || index == [self getMarksCount] - 1 ? @"0" : @""
+                    stringByAppendingString:[NSString stringWithFormat:@"%li:00", index == [self getMarksCount] - 1 ? 0 : markValue]];
+}
+
 - (void)layoutSelectingTitle
 {
     _selectingMarkTitle.textColor = self.userInteractionEnabled ? [UIColor colorNamed:ACColorNameTextColorPrimary] : [UIColor colorNamed:ACColorNameTextColorSecondary];
-    NSInteger index = [self getIndex];
-    NSInteger markValue = _additionalMarksBetween > 0 ? index : index * 3;
-    _selectingMarkTitle.text = !self.userInteractionEnabled ? OALocalizedString(@"rendering_value_disabled_name")
-            : [markValue < 10 || index == [self getMarksCount] - 1 ? @"0" : @""
-                    stringByAppendingString:[NSString stringWithFormat:@"%li:00", index == [self getMarksCount] - 1 ? 0 : markValue]];
+    NSInteger index = self.stepsAmountWithoutDrawMark > 0 ? [self getIndexForOptionStepsAmountWithoutDrawMark] : [self getIndex];
+    _selectingMarkTitle.text = [self getSelectingMarkTitleTextAtIndex:index];
 
     CGSize textSize = [OAUtilities calculateTextBounds:_selectingMarkTitle.text font:_selectingMarkTitle.font];
     _selectingMarkTitle.frame = CGRectMake(6., 2., textSize.width, textSize.height);
@@ -426,8 +469,9 @@
                 : (value > (isRTL ? 1 - step : step)) || (value == (isRTL ? 1 - step : step));
 
         _markViews[i].backgroundColor = _isCustomSlider
-                ? filled ? UIColorFromRGB(color_slider_minimum) : UIColorFromRGB(color_tint_gray)
-                : UIColorFromRGB(filled ? color_menu_button : color_slider_gray);
+                ? filled ? [UIColor colorNamed:ACColorNameSliderMinimum] : [UIColor colorNamed:ACColorNameTintGray]
+                : filled ? [UIColor colorNamed:ACColorNameMenuButton] : [UIColor colorNamed:ACColorNameSliderGray];
+
         [self sendSubviewToBack:_markViews[i]];
     }
     for (UILabel *titleLabel in _titleViews)
@@ -464,6 +508,13 @@
             _selectingMark += slider.value - selectingMarkValue > 0 ? 1 : -1;
             [self generateFeedback];
         }
+        
+        if (self.stepsAmountWithoutDrawMark > 0)
+        {
+            _selectedMark = [self getIndex];
+            _selectingMark = _selectedMark;
+        }
+        
         [self paintMarks];
 
         if (_selectingMarkTitleBackground)
@@ -560,6 +611,16 @@
 
         [self layoutSelectingTitle];
     }
+}
+
+- (void) setUsingExtraThumbInset:(BOOL)isUsing
+{
+    _useExtraThumbOffset = isUsing;
+}
+
+- (CGFloat) getExtraThumbInset
+{
+    return _useExtraThumbOffset ? kRoundThumbSize / 2 : 0;
 }
 
 @end

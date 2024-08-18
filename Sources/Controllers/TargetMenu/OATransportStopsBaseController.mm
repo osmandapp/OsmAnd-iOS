@@ -13,6 +13,7 @@
 #import "OATransportStopAggregated.h"
 #import "OsmAndApp.h"
 #import "OAPOI.h"
+#import "OAPOIType.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Search/TransportStopsInAreaSearch.h>

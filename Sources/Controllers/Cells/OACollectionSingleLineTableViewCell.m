@@ -59,22 +59,41 @@
 {
     _collectionHandler = collectionHandler;
 
-    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-    layout.scrollDirection = [_collectionHandler getScrollDirection];
-    layout.itemSize = [_collectionHandler getItemSize];
-    [self.collectionView setCollectionViewLayout:layout animated:YES];
-
     NSString *cellIdentifier = [_collectionHandler getCellIdentifier];
-    [self.collectionView registerNib:[UINib nibWithNibName:cellIdentifier bundle:nil] forCellWithReuseIdentifier:cellIdentifier];
-    NSIndexPath *selectedIndexPath = [_collectionHandler getSelectedIndexPath];
-    if (selectedIndexPath.row != NSNotFound)
+    if (cellIdentifier)
     {
-        [self.collectionView scrollToItemAtIndexPath:selectedIndexPath
-                                    atScrollPosition:layout.scrollDirection == UICollectionViewScrollDirectionHorizontal
-                                                        ? UICollectionViewScrollPositionCenteredHorizontally
-                                                        : UICollectionViewScrollPositionCenteredVertically
-                                            animated:YES];
+        [self.collectionView registerNib:[UINib nibWithNibName:cellIdentifier bundle:nil]
+              forCellWithReuseIdentifier:cellIdentifier];
     }
+
+    [self.collectionView performBatchUpdates:^{
+        for (NSInteger i = 0; i < self.collectionView.numberOfSections; i ++)
+        {
+            [self.collectionView reloadSections:[NSIndexSet indexSetWithIndex:i]];
+        }
+    } completion:^(BOOL finished) {
+        UICollectionViewScrollDirection scrollDirection = [_collectionHandler getScrollDirection];
+        BOOL isHorizontal = scrollDirection == UICollectionViewScrollDirectionHorizontal;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+            layout.scrollDirection = scrollDirection;
+            layout.itemSize = [_collectionHandler getItemSize];
+            [self.collectionView setCollectionViewLayout:layout animated:YES];
+
+            NSIndexPath *selectedIndexPath = [_collectionHandler getSelectedIndexPath];
+            if (selectedIndexPath.row != NSNotFound
+                && ![self.collectionView.indexPathsForVisibleItems containsObject:selectedIndexPath]
+                && selectedIndexPath.section < [collectionHandler sectionsCount]
+                && selectedIndexPath.row < [collectionHandler itemsCount:selectedIndexPath.section])
+            {
+                [self.collectionView scrollToItemAtIndexPath:selectedIndexPath
+                                            atScrollPosition:isHorizontal
+                    ? UICollectionViewScrollPositionCenteredHorizontally
+                    : UICollectionViewScrollPositionCenteredVertically
+                                                    animated:YES];
+            }
+        });
+    }];
 }
 
 - (CGFloat)getLeftInsetToView:(UIView *)view

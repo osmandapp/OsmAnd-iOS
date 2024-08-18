@@ -9,9 +9,12 @@
 #import "OANewAction.h"
 #import "OAAddQuickActionViewController.h"
 #import "OARootViewController.h"
-#import "OAQuickActionType.h"
+#import "OAMapPanelViewController.h"
+#import "OAFloatingButtonsHudViewController.h"
+#import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OANewAction
 
@@ -20,17 +23,29 @@ static OAQuickActionType *TYPE;
     return [super initWithActionType:self.class.TYPE];
 }
 
-- (void)execute
++ (void)initialize
 {
-    OAAddQuickActionViewController *addActionController = [[OAAddQuickActionViewController alloc] init];
-    [[OARootViewController instance].navigationController pushViewController:addActionController animated:YES];
+    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsNewActionId
+                                           stringId:@"new"
+                                                 cl:self.class]
+              name:OALocalizedString(@"shared_string_action")]
+             nameAction:OALocalizedString(@"shared_string_add")]
+             iconName:@"ic_custom_add"]
+            nonEditable];
 }
 
-+ (OAQuickActionType *) TYPE
+- (void)execute
 {
-    if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:1 stringId:@"new" class:self.class name:OALocalizedString(@"quick_action_new_action") category:-1 iconName:@"ic_custom_add" secondaryIconName:nil editable:NO];
-       
+    QuickActionButtonState *quickActionButtonState = [[OARootViewController instance].mapPanel.hudViewController.floatingButtonsController getActiveButtonState];
+    if (quickActionButtonState)
+    {
+        OAAddQuickActionViewController *addActionController = [[OAAddQuickActionViewController alloc] initWithButtonState:quickActionButtonState];
+        [[OARootViewController instance].navigationController pushViewController:addActionController animated:YES];
+    }
+}
+
++ (QuickActionType *) TYPE
+{
     return TYPE;
 }
 

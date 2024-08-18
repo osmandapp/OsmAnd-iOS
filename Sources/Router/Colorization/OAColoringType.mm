@@ -17,6 +17,7 @@
 #import "OARouteExporter.h"
 #import "OARouteProvider.h"
 #import "OAIAPHelper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
@@ -156,9 +157,24 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
     return [self isDefault] || [self isCustomColor] || [self isTrackSolid];
 }
 
-- (BOOL) isGradient
+- (BOOL)isGradient
 {
-    return self == self.class.SPEED || self == self.class.ALTITUDE || self == self.class.SLOPE;
+    return [self isSpeed] || [self isAltitude] || [self isSlope];
+}
+
+- (BOOL)isSpeed
+{
+    return self == self.class.SPEED;
+}
+
+- (BOOL)isAltitude
+{
+    return self == self.class.ALTITUDE;
+}
+
+- (BOOL)isSlope
+{
+    return self == self.class.SLOPE;
 }
 
 - (BOOL) isRouteInfoAttribute
@@ -190,7 +206,7 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
 - (BOOL) isAvailableForDrawingTrack:(OAGPXDocument *)selectedGpxFile attributeName:(NSString *)attributeName
 {
     if ([self isGradient])
-        return [[selectedGpxFile getAnalysis:0] isColorizationTypeAvailable:[[self toGradientScaleType] toColorizationType]];
+        return [[selectedGpxFile getAnalysis:0] isColorizationTypeAvailable:[self toColorizationType]];
     
     if ([self isRouteInfoAttribute])
     {
@@ -262,6 +278,18 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
     else if (scaleType == EOAGradientScaleTypeSlope)
         return self.SLOPE;
     return nil;
+}
+
+- (NSInteger)toColorizationType
+{
+    if (self == self.class.SPEED)
+        return ColorizationTypeSpeed;
+    else if (self == self.class.ALTITUDE)
+        return ColorizationTypeElevation;
+    else if (self == self.class.SLOPE)
+        return ColorizationTypeSlope;
+    else
+        return ColorizationTypeNone;
 }
 
 + (NSString *) getRouteInfoAttribute:(NSString *)name

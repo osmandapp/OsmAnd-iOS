@@ -382,7 +382,6 @@
 "driving_region_us" = "United States";
 "driving_region_canada" = "Canada";
 "driving_region_europe_asia" = "Europe, Asia, Latin America & similar";
-"driving_region_uk" = "UK, India & similar";
 "driving_region_australia" = "Australia";
 "left_side_navigation" = "Left-hand driving";
 "right_side_navigation" = "Right-hand driving";
@@ -2248,3 +2247,5 @@
 "audionotes_plugin_name" = "ದೃಶ್ಯ / ಶ್ರಾವ್ಯ ಟಿಪ್ಪಣೆಗಳು";
 "ltr_or_rtl_combine_via_comma" = "%@, %@";
 "map_marker_1st" = "ಮೊದಲ ನಕಾಶೆಯ ಗುರುತು";
+"shared_string_favorite" = "ಇಷ್ಟವಾದ";
+"shared_string_favorites" = "ಇಷ್ಟವಾದವುಗಳು";

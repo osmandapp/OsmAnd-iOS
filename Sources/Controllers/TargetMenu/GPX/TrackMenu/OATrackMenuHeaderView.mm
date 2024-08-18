@@ -12,10 +12,12 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
 #import "OAOsmAndFormatter.h"
+#import "OALocationServices.h"
 #import "OAGPXTrackAnalysis.h"
 #import "OAWikiArticleHelper.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAGPXUIHelper.h"
+#import "OAButton.h"
 
 #define kTitleHeightMax 44.
 #define kTitleHeightMin 30.
@@ -354,16 +356,17 @@
 
 - (void)updateShowHideButton:(BOOL)shownTrack
 {
+    __weak __typeof(self) weakSelf = self;
     [UIView transitionWithView:self.showHideButton
                       duration:0.35f
                        options:UIViewAnimationOptionTransitionCrossDissolve | UIViewAnimationOptionAllowUserInteraction
                     animations:^(void) {
-                        [self.showHideButton setTitle:shownTrack
-                                        ? OALocalizedString(@"shared_string_hide") : OALocalizedString(@"recording_context_menu_show")
-                                             forState:UIControlStateNormal];
-                        [self.showHideButton setImage:[UIImage templateImageNamed:shownTrack
-                                        ? @"ic_custom_hide" : @"ic_custom_show"]
-                                             forState:UIControlStateNormal];
+                        [weakSelf.showHideButton setTitle:shownTrack
+                            ? OALocalizedString(@"shared_string_hide") : OALocalizedString(@"recording_context_menu_show")
+                                                 forState:UIControlStateNormal];
+                        [weakSelf.showHideButton setImage:[UIImage templateImageNamed:shownTrack
+                                                           ? @"ic_custom_hide" : @"ic_custom_show"]
+                                                 forState:UIControlStateNormal];
                     }
                     completion:nil];
 }

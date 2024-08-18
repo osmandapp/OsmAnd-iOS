@@ -8,12 +8,12 @@
 
 #import "OAProfileGeneralSettingsParametersViewController.h"
 #import "OAAppSettings.h"
-#import "OAAppSettings.h"
 #import "OAFileNameTranslationHelper.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
+#import "OAApplicationMode.h"
 #import "OASimpleTableViewCell.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
@@ -333,6 +333,13 @@
                 @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
+                @"name" : @"DR_INDIA",
+                @"title" : [OADrivingRegion getName:DR_INDIA],
+                @"description" : [OADrivingRegion getDescription:DR_INDIA],
+                @"selected" : @(drivingRegion == DR_INDIA),
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
+            }];
+            [dataArr addObject:@{
                 @"name" : @"DR_AUSTRALIA",
                 @"title" : [OADrivingRegion getName:DR_AUSTRALIA],
                 @"description" : [OADrivingRegion getDescription:DR_AUSTRALIA],
@@ -530,7 +537,7 @@
             else if (_settingsType != EOAProfileGeneralSettingsMapOrientation)
             {
                 cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
-                cell.leftIconView.tintColor = [item[@"selected"] boolValue] ? UIColorFromRGB(self.appMode.getIconColor) : [UIColor colorNamed:ACColorNameIconColorDisabled];
+                cell.leftIconView.tintColor = [item[@"selected"] boolValue] ? self.appMode.getProfileColor : [UIColor colorNamed:ACColorNameIconColorDisabled];
             }
             else
             {
@@ -664,6 +671,8 @@
             drivingRegion = DR_UK_AND_OTHERS;
         else if ([name isEqualToString:@"DR_JAPAN"])
             drivingRegion = DR_JAPAN;
+        else if ([name isEqualToString:@"DR_INDIA"])
+            drivingRegion = DR_INDIA;
         else if ([name isEqualToString:@"DR_AUSTRALIA"])
             drivingRegion = DR_AUSTRALIA;
         else

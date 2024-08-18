@@ -12,6 +12,7 @@
 #import "OAPointWithRegionTableViewCell.h"
 #import "OASelectionCollapsableCell.h"
 #import "OAGpxWptItem.h"
+#import "OALocationServices.h"
 #import "Localization.h"
 #import "OAColors.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -19,14 +20,19 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "GeneratedAssetSymbols.h"
 
+@interface OADeleteWaypointsViewController ()
+
+@property(nonnull) NSMutableDictionary<NSString *, NSMutableArray<OAGpxWptItem *> *> *selectedWaypointGroups;
+@property(nonnull) OAGPXTableData *data;
+
+@end
+
 @implementation OADeleteWaypointsViewController
 {
     OsmAndAppInstance _app;
     NSTimeInterval _lastUpdate;
 
-    OAGPXTableData *_tableData;
     NSMutableDictionary<NSString *, NSMutableArray<OAGpxWptItem *> *> *_waypointGroups;
-    NSMutableDictionary<NSString *, NSMutableArray<OAGpxWptItem *> *> *_selectedWaypointGroups;
 }
 
 #pragma mark - Initialization
@@ -36,7 +42,7 @@
     self = [super init];
     if (self)
     {
-        _tableData = tableData;
+        _data = tableData;
         _app = [OsmAndApp instance];
         _selectedWaypointGroups = [NSMutableDictionary dictionary];
     }
@@ -148,20 +154,20 @@
 
 - (OAGPXTableCellData *)getCellData:(NSIndexPath *)indexPath
 {
-    return _tableData.subjects[indexPath.section].subjects[indexPath.row];
+    return _data.subjects[indexPath.section].subjects[indexPath.row];
 }
 
 - (NSInteger)sectionsCount
 {
-    return _tableData.subjects.count;
+    return _data.subjects.count;
 }
 
 - (NSInteger)rowsCount:(NSInteger)section
 {
-    if ([_tableData.subjects[section].key isEqualToString:@"actions_section"] || [_tableData.subjects[section].key isEqualToString: [NSString stringWithFormat:@"section_waypoints_group_%@", OALocalizedString(@"route_points")]])
+    if ([_data.subjects[section].key isEqualToString:@"actions_section"] || [_data.subjects[section].key isEqualToString: [NSString stringWithFormat:@"section_waypoints_group_%@", OALocalizedString(@"route_points")]])
         return 0;
 
-    return _tableData.subjects[section].subjects.firstObject.toggle ? _tableData.subjects[section].subjects.count : 1;
+    return _data.subjects[section].subjects.firstObject.toggle ? _data.subjects[section].subjects.count : 1;
 }
 
 - (UITableViewCell *)getRow:(NSIndexPath *)indexPath
@@ -322,15 +328,16 @@
         if (!newLocation)
             return;
 
+        __weak __typeof(self) weakSelf = self;
         dispatch_async(dispatch_get_main_queue(), ^{
-            NSArray<NSIndexPath *> *visibleRows = [self.tableView indexPathsForVisibleRows];
+            NSArray<NSIndexPath *> *visibleRows = [weakSelf.tableView indexPathsForVisibleRows];
             for (NSIndexPath *visibleRow in visibleRows)
             {
-                OAGPXTableCellData *cellData = _tableData.subjects[visibleRow.section].subjects[visibleRow.row];
-                if (self.trackMenuDelegate)
-                    [self.trackMenuDelegate updateProperty:@"update_distance_and_direction" tableData:cellData];
+                OAGPXTableCellData *cellData = weakSelf.data.subjects[visibleRow.section].subjects[visibleRow.row];
+                if (weakSelf.trackMenuDelegate)
+                    [weakSelf.trackMenuDelegate updateProperty:@"update_distance_and_direction" tableData:cellData];
             }
-            [self.tableView reloadRowsAtIndexPaths:visibleRows
+            [weakSelf.tableView reloadRowsAtIndexPaths:visibleRows
                                   withRowAnimation:UITableViewRowAnimationNone];
         });
     }
@@ -452,16 +459,15 @@
         NSMutableArray *waypoints = [NSMutableArray array];
         [waypoints addObjectsFromArray:[self getGpxWptItems:i]];
         _selectedWaypointGroups[groupName] = waypoints;
-        OAGPXTableCellData *groupCellData = _tableData.subjects[i].subjects.firstObject;
+        OAGPXTableCellData *groupCellData = _data.subjects[i].subjects.firstObject;
         if (self.trackMenuDelegate)
             [self.trackMenuDelegate updateData:groupCellData];
     }
-    
+
     [UIView transitionWithView:self.tableView
                       duration:0.35f
                        options:UIViewAnimationOptionTransitionCrossDissolve
-                    animations:^(void)
-     {
+                    animations:^(void) {
         [self.tableView reloadData];
     }
                     completion: nil];
@@ -484,17 +490,18 @@
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
                                               style:UIAlertActionStyleDefault
                                             handler:nil]];
-    
+
+    __weak __typeof(self) weakSelf = self;
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_delete")
                                               style:UIAlertActionStyleDefault
                                             handler:^(UIAlertAction * _Nonnull action)
         {
-            for (NSString *groupName in _selectedWaypointGroups.keyEnumerator)
-                if (self.trackMenuDelegate)
-                    [self.trackMenuDelegate deleteWaypointsGroup:groupName
-                                               selectedWaypoints:_selectedWaypointGroups[groupName]];
+            for (NSString *groupName in weakSelf.selectedWaypointGroups.keyEnumerator)
+                if (weakSelf.trackMenuDelegate)
+                    [weakSelf.trackMenuDelegate deleteWaypointsGroup:groupName
+                                                   selectedWaypoints:weakSelf.selectedWaypointGroups[groupName]];
 
-            [self dismissViewController];
+            [weakSelf dismissViewController];
         }
     ]];
     

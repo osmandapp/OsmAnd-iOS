@@ -10,10 +10,13 @@
 #import "OARootViewController.h"
 #import "OAMapInfoController.h"
 #import "OAMapHudViewController.h"
-#import "OAWeatherWidget.h"
 #import "OAMapInfoWidgetsFactory.h"
 #import "OAMapWidgetRegInfo.h"
+#import "OAMapLayers.h"
+#import "OAAppData.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
+#import "OAWeatherWidget.h"
 #import "OsmAndApp.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -30,6 +33,8 @@
     OAWeatherWidget *_weatherWindSpeedControl;
     OAWeatherWidget *_weatherCloudControl;
     OAWeatherWidget *_weatherPrecipControl;
+    
+    NSDate *_forecastDate;
 }
 
 - (instancetype)init
@@ -148,6 +153,77 @@
 - (NSString *) getDescription
 {
     return [NSString stringWithFormat:NSLocalizedString(@"weather_plugin_description", nil), k_weather_global_forecast_system];
+}
+
+- (NSArray<QuickActionType *> *)getQuickActionTypes
+{
+    return @[OAShowHideTemperatureAction.TYPE, OAShowHideWindAction.TYPE, OAShowHideAirPressureAction.TYPE, OAShowHidePrecipitationAction.TYPE, OAShowHideCloudAction.TYPE];
+}
+
+- (NSArray<OAWeatherWidget *> *)createWidgetsControls
+{
+    OAApplicationMode *appMode = [OAAppSettings sharedManager].applicationMode.get;
+    return @[
+        [[OAWeatherWidget alloc] initWithType:OAWidgetType.weatherTemperatureWidget
+                                         band:WEATHER_BAND_TEMPERATURE
+                                     customId:nil
+                                      appMode:appMode
+                                 widgetParams:nil],
+        [[OAWeatherWidget alloc] initWithType:OAWidgetType.weatherAirPressureWidget
+                                         band:WEATHER_BAND_PRESSURE
+                                     customId:nil
+                                      appMode:appMode
+                                 widgetParams:nil],
+        [[OAWeatherWidget alloc] initWithType:OAWidgetType.weatherCloudsWidget
+                                         band:WEATHER_BAND_CLOUD
+                                     customId:nil
+                                      appMode:appMode widgetParams:nil],
+        [[OAWeatherWidget alloc] initWithType:OAWidgetType.weatherPrecipitationWidget
+                                         band:WEATHER_BAND_PRECIPITATION
+                                     customId:nil
+                                      appMode:appMode
+                                 widgetParams:nil],
+        [[OAWeatherWidget alloc] initWithType:OAWidgetType.weatherWindWidget
+                                         band:WEATHER_BAND_WIND_SPEED
+                                     customId:nil
+                                      appMode:appMode
+                                 widgetParams:nil]
+    ];
+}
+
+- (void) setForecastDate:(NSDate *)date forAnimation:(BOOL)forAnimation resetPeriod:(BOOL)resetPeriod
+{
+    _forecastDate = date;
+    [self updateLayersDate:forAnimation resetPeriod:resetPeriod];
+}
+
+- (void) updateLayersDate:(BOOL)forAnimation resetPeriod:(BOOL)resetPeriod
+{
+    NSDate *time = _forecastDate ?: [NSDate now];
+    NSTimeInterval timestampSec = [time timeIntervalSince1970];
+    int64_t timestamp = timestampSec * 1000;
+    OAMapViewController *mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+    
+    if (mapViewController.mapLayers.weatherLayerLow)
+        [mapViewController.mapLayers.weatherLayerLow setDateTime:timestamp goForward:forAnimation resetPeriod:resetPeriod];
+
+    if (mapViewController.mapLayers.weatherLayerHigh)
+        [mapViewController.mapLayers.weatherLayerHigh setDateTime:timestamp goForward:forAnimation resetPeriod:resetPeriod];
+    
+    if (mapViewController.mapLayers.weatherContourLayer)
+        [mapViewController.mapLayers.weatherContourLayer setDateTime:timestampSec];
+}
+
+- (void) prepareForDayAnimation:(NSDate *)date
+{
+    int64_t timestamp = [date timeIntervalSince1970] * 1000;
+    
+    OAMapViewController *mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+    if (mapViewController.mapLayers.weatherLayerLow)
+        [mapViewController.mapLayers.weatherLayerLow setDateTime:timestamp goForward:YES resetPeriod:NO];
+
+    if (mapViewController.mapLayers.weatherLayerHigh)
+        [mapViewController.mapLayers.weatherLayerHigh setDateTime:timestamp goForward:YES resetPeriod:NO];
 }
 
 @end

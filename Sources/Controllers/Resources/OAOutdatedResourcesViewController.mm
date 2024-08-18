@@ -8,14 +8,17 @@
 
 #import "OAOutdatedResourcesViewController.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
+#import "OAWorldRegion.h"
 #import "Localization.h"
-#import "OsmAnd_Maps-Swift.h"
 #import "OASubscriptionBannerCardView.h"
 #import "OAChoosePlanHelper.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OAWeatherForecastViewController.h"
 #import "OAPluginPopupViewController.h"
+#import "OASimpleTableViewCell.h"
 #import "GeneratedAssetSymbols.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kRowsInUpdatesSection 2
 
@@ -44,6 +47,7 @@
     OASubscriptionBannerCardView *_subscriptionBannerView;
     
     UIBarButtonItem *_updateAllButton;
+    DownloadingCellResourceHelper * _downloadingCellResourceHelper;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -67,6 +71,7 @@
     _horizontalLine.backgroundColor = [[UIColor colorNamed:ACColorNameCustomSeparator] CGColor];
     
     self.navigationItem.title = OALocalizedString(@"download_tab_updates");
+    [self setupDownloadingCellHelper];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -104,6 +109,9 @@
     [self setupSubscriptionBanner];
     [self updateContent];
     [self prepareContent];
+    [self.tableView reloadData];
+    if (_downloadingCellResourceHelper)
+        [_downloadingCellResourceHelper refreshCellSpinners];
 }
 
 - (void)viewWillLayoutSubviews
@@ -126,6 +134,8 @@
     [super viewWillDisappear:animated];
     
     [self.navigationController setNavigationBarHidden:YES animated:NO];
+    if (_downloadingCellResourceHelper)
+        [_downloadingCellResourceHelper cleanCellCache];
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
@@ -134,6 +144,15 @@
     
     if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
         _horizontalLine.backgroundColor = [[UIColor colorNamed:ACColorNameCustomSeparator] CGColor];
+}
+
+- (void) setupDownloadingCellHelper
+{
+    __weak OAOutdatedResourcesViewController *weakSelf = self;
+    _downloadingCellResourceHelper = [DownloadingCellResourceHelper new];
+    [_downloadingCellResourceHelper setHostTableView:weakSelf.tableView];
+    _downloadingCellResourceHelper.rightIconStyle = DownloadingCellRightIconTypeShowIconAlways;
+    _downloadingCellResourceHelper.isAlwaysClickable = YES;
 }
 
 - (void)prepareContent
@@ -186,6 +205,7 @@
 {
     @synchronized(_dataLock)
     {
+        [_downloadingCellResourceHelper cleanCellCache];
         [self.tableView reloadData];
     }
 }
@@ -394,45 +414,6 @@
     return nil;
 }
 
--(void)updateDownloadingCellAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [_tableView cellForRowAtIndexPath:indexPath];
-    
-    OAResourceItem* item = (OAResourceItem*)[_resourcesItems objectAtIndex:indexPath.row];
-    if (item.downloadTask == nil)
-        return;
-    
-    if (cell.accessoryView && [cell.accessoryView isKindOfClass:FFCircularProgressView.class])
-    {
-        FFCircularProgressView* progressView = (FFCircularProgressView*)cell.accessoryView;
-        
-        float progressCompleted = item.downloadTask.progressCompleted;
-        if (progressCompleted >= 0.001 && item.downloadTask.state == OADownloadTaskStateRunning)
-        {
-            progressView.iconPath = nil;
-            if ([progressView isSpinning])
-                [progressView stopSpinProgressBackgroundLayer];
-            progressView.progress = progressCompleted - 0.001;
-        }
-        else if (item.downloadTask.state == OADownloadTaskStateFinished)
-        {
-            progressView.iconPath = [OAResourcesUIHelper tickPath:progressView];
-            progressView.progress = 0.;
-            if (![progressView isSpinning])
-                [progressView startSpinProgressBackgroundLayer];
-        }
-        else
-        {
-            progressView.iconPath = [UIBezierPath bezierPath];
-            progressView.progress = 0.;
-            if (!progressView.isSpinning)
-                [progressView startSpinProgressBackgroundLayer];
-            [progressView setNeedsDisplay];
-        }
-    }
-}
-
-
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString* const outdatedResourceCell = @"outdatedResourceCell";
@@ -442,6 +423,7 @@
 
     NSString* cellTypeId = nil;
     NSString* title = nil;
+    NSString* description = nil;
     OAResourceItem *item;
 
     if (indexPath.section == _updatesSection)
@@ -478,120 +460,44 @@
         {
             title = item.title;
         }
-    }
-
-    // Obtain reusable cell or create one
-    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellTypeId];
-    if (cell == nil)
-    {
         
-        if (indexPath.section == _updatesSection)
+        if (item && item.sizePkg > 0)
         {
-            if ([cellTypeId isEqualToString:weatherForecastCell])
-            {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
-                                            reuseIdentifier:cellTypeId];
-                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            }
+            NSString *date = [item getDate];
+            NSString *dateDescription = date ? [NSString stringWithFormat:@"  •  %@", date] : @"";
+            description = [NSString stringWithFormat:@"%@  •  %@%@",
+                    [OAResourceType resourceTypeLocalized:item.resourceType],
+                    [NSByteCountFormatter stringFromByteCount:item.sizePkg
+                                                   countStyle:NSByteCountFormatterCountStyleFile],
+                    dateDescription];
         }
-        else if (indexPath.section == _availableMapsSection)
+        else
         {
-            cell.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-            cell.detailTextLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
-
-            if ([cellTypeId isEqualToString:outdatedResourceCell])
-            {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
-                                              reuseIdentifier:cellTypeId];
-                UIImage *iconImage = [UIImage templateImageNamed:@"ic_custom_download"];
-                cell.accessoryView = [[UIImageView alloc] initWithImage:iconImage];
-                [cell.accessoryView setTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
-            }
-            else if ([cellTypeId isEqualToString:downloadingResourceCell])
-            {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
-                                              reuseIdentifier:cellTypeId];
-
-                FFCircularProgressView *progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
-                progressView.iconView = [[UIView alloc] init];
-                progressView.tintColor =[UIColor colorNamed:ACColorNameIconColorActive];
-
-                cell.accessoryView = progressView;
-            }
+            description = [OAResourceType resourceTypeLocalized:item.resourceType];
         }
     }
-
-    // Try to allocate cell from own table, since it may be configured there
-    if (cell == nil)
-        cell = [self.tableView dequeueReusableCellWithIdentifier:cellTypeId];
-
-    if (cell && indexPath.section == _availableMapsSection && item)
+    
+    if (indexPath.section == _updatesSection)
     {
-        cell.imageView.image = [OAResourceType getIcon:item.resourceType templated:YES];
-        cell.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorDisabled];
+        UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellTypeId];
+        if (cell == nil)
+        {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellTypeId];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        }
+        cell.textLabel.text = title;
+        cell.detailTextLabel.text = nil;
+        return cell;
     }
-
-    // Fill cell content
-    cell.textLabel.text = title;
-    if (cell.detailTextLabel)
+    else if (indexPath.section == _availableMapsSection)
     {
-        if (indexPath.section == _updatesSection)
-        {
-            cell.detailTextLabel.text = nil;
-        }
-        else if (item)
-        {
-            if (item.sizePkg > 0)
-            {
-                NSString *date = [item getDate];
-                NSString *dateDescription = date ? [NSString stringWithFormat:@"  •  %@", date] : @"";
-                cell.detailTextLabel.text = [NSString stringWithFormat:@"%@  •  %@%@",
-                        [OAResourceType resourceTypeLocalized:item.resourceType],
-                        [NSByteCountFormatter stringFromByteCount:item.sizePkg
-                                                       countStyle:NSByteCountFormatterCountStyleFile],
-                        dateDescription];
-            }
-            else
-            {
-                cell.detailTextLabel.text = [OAResourceType resourceTypeLocalized:item.resourceType];
-            }
-            cell.detailTextLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
-        }
+        OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:_resourcesItems[indexPath.row]];
+        DownloadingCell *cell = [_downloadingCellResourceHelper getOrCreateCell:mapItem.resourceId swiftResourceItem:mapItem];
+        cell.titleLabel.text = title;
+        cell.descriptionLabel.text = description;
+        return cell;
     }
-
-    if ([cellTypeId isEqualToString:downloadingResourceCell])
-    {
-        if (cell.accessoryView && [cell.accessoryView isKindOfClass:FFCircularProgressView.class])
-        {
-            FFCircularProgressView* progressView = (FFCircularProgressView*)cell.accessoryView;
-            
-            float progressCompleted = item.downloadTask.progressCompleted;
-            if (progressCompleted >= .001 && item.downloadTask.state == OADownloadTaskStateRunning)
-            {
-                progressView.iconPath = nil;
-                if ([progressView isSpinning])
-                    [progressView stopSpinProgressBackgroundLayer];
-                progressView.progress = progressCompleted - .001;
-            }
-            else if (item.downloadTask.state == OADownloadTaskStateFinished)
-            {
-                progressView.iconPath = [OAResourcesUIHelper tickPath:progressView];
-                progressView.progress = 0.;
-                if (![progressView isSpinning])
-                    [progressView startSpinProgressBackgroundLayer];
-            }
-            else
-            {
-                progressView.iconPath = [UIBezierPath bezierPath];
-                progressView.progress = 0.;
-                if (!progressView.isSpinning)
-                    [progressView startSpinProgressBackgroundLayer];
-                [progressView setNeedsDisplay];
-            }
-        }
-    }
-
-    return cell;
+    return nil;
 }
 
 #pragma mark - UITableViewDelegate
@@ -623,6 +529,7 @@
         if (item != nil)
             [self onItemClicked:item];
     }
+    
     else if (indexPath.section == _updatesSection && indexPath.row == _weatherForecastsRow)
     {
         if (![[OAIAPHelper sharedInstance].weather isActive])
@@ -630,30 +537,7 @@
         else
             [self showViewController:[[OAWeatherForecastViewController alloc] init]];
     }
-
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-}
-
-- (void)refreshDownloadingContent:(NSString *)downloadTaskKey
-{
-    @synchronized (_dataLock)
-    {
-        if (_resourcesItems.count > 0)
-        {
-            for (int i = 0; i < _resourcesItems.count; i++)
-            {
-                if ([_resourcesItems[i] isKindOfClass:[OAWorldRegion class]])
-                    continue;
-
-                OAResourceItem *item = _resourcesItems[i];
-                if ([[item.downloadTask key] isEqualToString:downloadTaskKey] && _availableMapsSection > 0)
-                {
-                    [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:_availableMapsSection]];
-                    break;
-                }
-            }
-        }
-    }
 }
 
 - (void) productsRequested:(NSNotification *)notification

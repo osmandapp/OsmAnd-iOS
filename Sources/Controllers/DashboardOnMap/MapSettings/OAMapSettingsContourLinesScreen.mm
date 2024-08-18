@@ -14,13 +14,13 @@
 #import "OACustomPickerTableViewCell.h"
 #import "OAAppSettings.h"
 #import "OASegmentSliderTableViewCell.h"
-#import "OAMapViewController.h"
 #import "OASwitchTableViewCell.h"
 #import "OAColors.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAColorsTableViewCell.h"
 #import "OAResourcesUIHelper.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAUtilities.h"
 #import <MBProgressHUD.h>
 #import "OAAutoObserverProxy.h"
@@ -30,10 +30,7 @@
 #import "OAIAPHelper.h"
 #import "OAPluginPopupViewController.h"
 #import "OAManageResourcesViewController.h"
-#import "OADownloadMultipleResourceViewController.h"
-#import "OASegmentedSlider.h"
 #import "OALinks.h"
-#import "OADownloadingCellHelper.h"
 #import "GeneratedAssetSymbols.h"
 
 #include <OsmAndCore/ResourcesManager.h>
@@ -57,7 +54,7 @@
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
-@interface OAMapSettingsContourLinesScreen() <OACustomPickerTableViewCellDelegate, OAColorsTableViewCellDelegate>
+@interface OAMapSettingsContourLinesScreen() <OACustomPickerTableViewCellDelegate, OAColorsTableViewCellDelegate, DownloadingCellResourceHelperDelegate>
 
 @end
 
@@ -68,7 +65,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     OAIAPHelper *_iapHelper;
     OAMapViewController *_mapViewController;
     OAMapStyleSettings *_styleSettings;
-    OADownloadingCellHelper *_downloadingCellHelper;
+    DownloadingCellMultipleResourceHelper *_downloadingCellResourceHelper;
     NSObject *_dataLock;
 
     NSArray<NSArray *> *_data;
@@ -203,7 +200,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     _currentColor = [_visibleColorValues indexOfObject:colorParameter.value.length == 0 ? _defaultColorScheme : colorParameter.value];
     
-    [_downloadingCellHelper updateAvailableMaps];
+    [self fetchResources];
     [self generateData];
 }
 
@@ -281,6 +278,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             [availableMapsArr addObject:@{
                 @"type" : kCellTypeMap,
                 @"item" : item,
+                @"resourceId" : [item getResourceId]
             }];
         }
 
@@ -344,31 +342,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)setupDownloadingCellHelper
 {
-    __weak OAMapSettingsContourLinesScreen *weakself = self;
-    _downloadingCellHelper = [[OADownloadingCellHelper alloc] init];
-    _downloadingCellHelper.hostViewController = self.vwController;
-    _downloadingCellHelper.hostTableView = self.tblView;
-    _downloadingCellHelper.hostDataLock = _dataLock;
-    
-    _downloadingCellHelper.fetchResourcesBlock = ^(){
-        [weakself fetchResources];
-    };
-    
-    _downloadingCellHelper.getResourceByIndexBlock = ^OAResourceItem *(NSIndexPath *indexPath){
-        
-        NSDictionary *item = [weakself getItem:indexPath];
-        if (item)
-        {
-            OAResourceItem *mapItem = item[@"item"];
-            if (mapItem)
-                return mapItem;
-        }
-        return nil;
-    };
-    
-    _downloadingCellHelper.getTableDataBlock = ^NSArray<NSArray<NSDictionary *> *> *{
-        return [weakself data];
-    };
+    __weak OAMapSettingsContourLinesScreen *weakSelf = self;
+    _downloadingCellResourceHelper = [DownloadingCellMultipleResourceHelper new];
+    _downloadingCellResourceHelper.hostViewController = weakSelf.vwController;
+    [_downloadingCellResourceHelper setHostTableView:weakSelf.tblView];
+    _downloadingCellResourceHelper.delegate = weakSelf;
+    _downloadingCellResourceHelper.rightIconStyle = DownloadingCellRightIconTypeHideIconAfterDownloading;
 }
 
 - (NSArray<NSArray <NSDictionary *> *> *)data
@@ -413,6 +392,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             
             _mapMultipleItems = [NSArray arrayWithArray:_collectedRegionMultipleMapItems];
             [self generateData];
+            [_downloadingCellResourceHelper cleanCellCache];
             [tblView reloadData];
         }
     }];
@@ -577,7 +557,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             {
                 NSString *v = p.value.length == 0 ? kDefaultDensity : p.value;
                 cell.topRightLabel.text = [self getLocalizedParamValue:v];
-                [cell.sliderView setNumberOfMarks:_visibleDensityValues.count additionalMarksBetween:0];
+                [cell.sliderView setNumberOfMarks:_visibleDensityValues.count];
                 cell.sliderView.selectedMark = [_visibleDensityValues indexOfObject:v];
                 [cell.sliderView addTarget:self action:@selector(densityChanged:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
             }
@@ -585,7 +565,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             {
                 NSString *v = p.value.length == 0 ? kDefaultWidth : p.value;
                 cell.topRightLabel.text = [self getLocalizedParamValue:v];
-                [cell.sliderView setNumberOfMarks:_visibleWidthValues.count additionalMarksBetween:0];
+                [cell.sliderView setNumberOfMarks:_visibleWidthValues.count];
                 cell.sliderView.selectedMark = [_visibleWidthValues indexOfObject:v];
                 [cell.sliderView addTarget:self action:@selector(widthChanged:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
             }
@@ -596,8 +576,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     else if ([item[@"type"] isEqualToString:kCellTypeMap])
     {
-        OAResourceItem *mapItem = item[@"item"];
-        return [_downloadingCellHelper setupCell:mapItem indexPath:indexPath];
+        OAMultipleResourceSwiftItem *mapItem = [[OAMultipleResourceSwiftItem alloc] initWithItem:item[@"item"]];
+        NSString *resourceId = item[@"resourceId"];
+        return [_downloadingCellResourceHelper getOrCreateCell:resourceId swiftResourceItem:mapItem];
     }
     else if ([item[@"type"] isEqualToString:kCellTypeInfo])
     {
@@ -713,7 +694,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     else if ([item[@"type"] isEqualToString:kCellTypeMap])
     {
-        [_downloadingCellHelper onItemClicked:indexPath];
+        NSString *resourceId = item[@"resourceId"];
+        [_downloadingCellResourceHelper onCellClicked:resourceId];
     }
     else if ([item[@"type"] isEqualToString:kCellTypeButton])
     {
@@ -775,6 +757,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
        parameter.value = switchView.isOn ? [_settings.contourLinesZoom get] : @"disabled";
        [_styleSettings save:parameter];
        [self generateData];
+        [_downloadingCellResourceHelper cleanCellCache];
        [tblView reloadData];
     }
 }
@@ -810,5 +793,16 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
 }
 
+#pragma mark - DownloadingCellResourceHelperDelegate
+
+- (void)onDownldedResourceInstalled
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self fetchResources];
+        [self generateData];
+        [_downloadingCellResourceHelper cleanCellCache];
+        [self.tblView reloadData];
+    });
+}
 
 @end

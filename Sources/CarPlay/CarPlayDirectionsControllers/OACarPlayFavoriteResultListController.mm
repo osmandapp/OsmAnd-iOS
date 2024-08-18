@@ -10,6 +10,7 @@
 #import "OAOsmAndFormatter.h"
 #import "OAFavoriteItem.h"
 #import "OAPointDescription.h"
+#import "OALocationServices.h"
 #import "OsmAndApp.h"
 #import "Localization.h"
 #import <CarPlay/CarPlay.h>

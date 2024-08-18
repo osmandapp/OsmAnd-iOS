@@ -9,8 +9,11 @@
 #import "OAQuickSearchHelper.h"
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
+#import "OAWorldRegion.h"
 #import "OASearchUICore.h"
+#import "OALocationServices.h"
 #import "OASearchPhrase.h"
+#import "OAObservable.h"
 #import "OASearchSettings.h"
 #import "OASearchResultMatcher.h"
 #import "OAHistoryItem.h"
@@ -19,6 +22,8 @@
 #import "OAPOIUIFilter.h"
 #import "OACustomSearchPoiFilter.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OASearchWord.h"
 #import "Localization.h"
 #import "OAAutoObserverProxy.h"
@@ -27,6 +32,8 @@
 #import "OAPOIHelper.h"
 #import "OAFavoritesHelper.h"
 #import "OAFavoriteItem.h"
+#import "OAPOIType.h"
+#import "OAResultMatcher.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -355,6 +362,9 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
     dispatch_queue_t _searchCitiesSerialQueue;
     dispatch_group_t _searchCitiesGroup;
     NSInteger _searchRequestsCount;
+    
+    BOOL _resourcesInvalidated;
+    OAAutoObserverProxy *_backgroundStateObserver;
 }
 
 + (OAQuickSearchHelper *) instance
@@ -381,11 +391,29 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
         _searchCitiesGroup = dispatch_group_create();
         _searchRequestsCount = 0;
 
+        _backgroundStateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                             withHandler:@selector(onBackgroundStateChanged)
+                                                              andObserve:OsmAndApp.instance.backgroundStateObservable];
+
         _localResourcesChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                    withHandler:@selector(onLocalResourcesChanged:withKey:)
                                                                     andObserve:[OsmAndApp instance].localResourcesChangedObservable];
     }
     return self;
+}
+
+- (void) dealloc
+{
+    if (_localResourcesChangedObserver)
+    {
+        [_localResourcesChangedObserver detach];
+        _localResourcesChangedObserver = nil;
+    }
+    if (_backgroundStateObserver)
+    {
+        [_backgroundStateObserver detach];
+        _backgroundStateObserver = nil;
+    }
 }
 
 - (OASearchUICore *) getCore
@@ -488,8 +516,25 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
     [[_core getSearchSettings] setRegions:app.worldRegion];
 }
 
+- (void) onBackgroundStateChanged
+{
+    if (!OsmAndApp.instance.isInBackground && _resourcesInvalidated)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self setResourcesForSearchUICore];
+            _resourcesInvalidated = NO;
+        });
+    }
+}
+
 - (void) onLocalResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key
 {
+    if (OsmAndApp.instance.isInBackground)
+    {
+        _resourcesInvalidated = YES;
+        return;
+    }
+
     dispatch_async(dispatch_get_main_queue(), ^{
         [self setResourcesForSearchUICore];
     });

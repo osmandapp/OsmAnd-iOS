@@ -9,11 +9,12 @@
 #import "OARoutePlanningHudViewController.h"
 #import "OAAppSettings.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapActions.h"
 #import "OARoutingHelper.h"
-#import "OAMapRendererView.h"
 #import "OAColors.h"
 #import "OANativeUtilities.h"
+#import "OAApplicationMode.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OAMapLayers.h"
@@ -55,6 +56,7 @@
 #import "OAOsmAndFormatter.h"
 #import "OATrackMenuHudViewController.h"
 #import "OAAppVersion.h"
+#import "CLLocation+Extension.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
@@ -520,8 +522,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     if (_editingContext.appMode != OAApplicationMode.DEFAULT)
     {
         img = [_editingContext.appMode.getIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        _modeButton.tintColorDay = UIColorFromRGB(_editingContext.appMode.getIconColor);
-        _modeButton.tintColorNight = UIColorFromRGB(_editingContext.appMode.getIconColor);
+        _modeButton.tintColorDay = _editingContext.appMode.getProfileColor;
+        _modeButton.tintColorNight = _editingContext.appMode.getProfileColor;
     }
     else
     {
@@ -1327,8 +1329,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 {
     if (editingStyle == UITableViewCellEditingStyleDelete)
     {
-        [_editingContext.commandManager execute:[[OARemovePointCommand alloc] initWithLayer:_layer position:indexPath.row]];
         [tableView beginUpdates];
+        [_editingContext.commandManager execute:[[OARemovePointCommand alloc] initWithLayer:_layer position:indexPath.row]];
         [tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
         [tableView endUpdates];
         [self updateDistancePointsText];
@@ -1470,8 +1472,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void) onDeletePoint
 {
-    [_editingContext.commandManager execute:[[OARemovePointCommand alloc] initWithLayer:_layer position:_editingContext.selectedPointPosition]];
     [self.tableView beginUpdates];
+    [_editingContext.commandManager execute:[[OARemovePointCommand alloc] initWithLayer:_layer position:_editingContext.selectedPointPosition]];
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
     [self.tableView endUpdates];
     [self updateDistancePointsText];

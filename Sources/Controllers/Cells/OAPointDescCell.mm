@@ -9,8 +9,8 @@
 #import "OAPointDescCell.h"
 #import "OAUtilities.h"
 #import "Localization.h"
+#import "OANativeUtilities.h"
 
-#include "OANativeUtilities.h"
 #include <openingHoursParser.h>
 
 @implementation OAPointDescCell

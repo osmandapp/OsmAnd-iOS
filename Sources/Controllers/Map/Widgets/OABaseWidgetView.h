@@ -8,14 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class OABaseWidgetView, OAWidgetType, OAWidgetState, OAWidgetsPanel, OAApplicationMode, OACommonBoolean, OACommonPreference, OATableDataModel, OATextState;
 
 @protocol OAWidgetListener <NSObject>
 
 @required
-- (void) widgetChanged:(OABaseWidgetView *_Nullable)widget;
-- (void) widgetVisibilityChanged:(OABaseWidgetView *_Nonnull)widget visible:(BOOL)visible;
-- (void) widgetClicked:(OABaseWidgetView *_Nonnull)widget;
+- (void) widgetChanged:(nullable OABaseWidgetView *)widget;
+- (void) widgetVisibilityChanged:(OABaseWidgetView *)widget visible:(BOOL)visible;
+- (void) widgetClicked:(OABaseWidgetView *)widget;
 
 @end
 
@@ -23,40 +25,43 @@
 
 @interface OABaseWidgetView : UIView
 
-@property (nonatomic) OAWidgetType * _Nullable widgetType;
+@property (nonatomic, nullable) OAWidgetType *widgetType;
 @property (nonatomic, readonly, assign) BOOL nightMode;
 @property (nonatomic, assign) BOOL isSimpleLayout;
+@property (nonatomic, assign) BOOL isVerticalStackImageTitleSubtitleLayout;
 @property (nonatomic, assign) BOOL isFullRow;
 
-@property (nonatomic, weak) id<OAWidgetListener> _Nullable delegate;
+@property (nonatomic, weak, nullable) id<OAWidgetListener> delegate;
 
-- (instancetype _Nonnull )initWithType:(OAWidgetType * _Nonnull)type;
+- (instancetype)initWithType:(OAWidgetType *)type;
 - (void)initSeparatorsView;
 
 - (BOOL)updateInfo;
-- (void)updateColors:(OATextState * _Nonnull)textState;
+- (void)updateColors:(OATextState *)textState;
 - (BOOL)isNightMode;
 - (BOOL)isTopText;
 - (BOOL)isTextInfo;
 - (void)updateSimpleLayout;
-- (void)updatesSeparatorsColor:(UIColor *_Nonnull)color;
+- (void)updateVerticalStackImageTitleSubtitleLayout;
+- (void)updatesSeparatorsColor:(UIColor *)color;
 
 - (void)updateHeightConstraintWithRelation:(NSLayoutRelation)relation constant:(CGFloat)constant priority:(UILayoutPriority)priority;
-- (void)updateHeightConstraint:(NSLayoutConstraint * _Nullable)constraint;
+- (void)updateHeightConstraint:(nullable NSLayoutConstraint *)constraint;
 
-- (OACommonBoolean * _Nullable ) getWidgetVisibilityPref;
-- (OACommonPreference * _Nullable ) getWidgetSettingsPrefToReset:(OAApplicationMode *_Nonnull)appMode;
-- (void) copySettings:(OAApplicationMode *_Nonnull)appMode customId:(NSString *_Nullable)customId;
-- (OAWidgetState *_Nullable) getWidgetState;
+- (nullable OACommonBoolean *) getWidgetVisibilityPref;
+- (nullable OACommonPreference *) getWidgetSettingsPrefToReset:(OAApplicationMode *)appMode;
+- (void) copySettings:(OAApplicationMode *)appMode customId:(nullable NSString *)customId;
+- (nullable OAWidgetState *) getWidgetState;
 - (BOOL)isExternal;
-- (OATableDataModel *_Nullable)getSettingsData:(OAApplicationMode * _Nonnull)appMode;
-- (OATableDataModel *_Nullable)getSettingsDataForSimpleWidget:(OAApplicationMode * _Nonnull)appMode;
+- (nullable OATableDataModel *)getSettingsData:(OAApplicationMode *)appMode;
+- (nullable OATableDataModel *)getSettingsDataForSimpleWidget:(OAApplicationMode *)appMode;
 
 - (void)showBottomSeparator:(BOOL)show;
 - (void)showRightSeparator:(BOOL)show;
 - (void)adjustViewSize;
-- (void)attachView:(UIView *_Nonnull)container specialContainer:(UIView *_Nullable)specialContainer order:(NSInteger)order followingWidgets:(NSArray<OABaseWidgetView *> *_Nullable)followingWidgets;
-- (void)detachView:(OAWidgetsPanel * _Nonnull)widgetsPanel;
+- (void)attachView:(UIView *)container specialContainer:(nullable UIView *)specialContainer order:(NSInteger)order followingWidgets:(nullable NSArray<OABaseWidgetView *> *)followingWidgets;
+- (void)detachView:(OAWidgetsPanel *)widgetsPanel;
 
 @end
 
+NS_ASSUME_NONNULL_END

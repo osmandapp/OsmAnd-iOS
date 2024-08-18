@@ -11,7 +11,10 @@
 #import "OARoutingHelper.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OAObservable.h"
+#import "OAMapViewController.h"
 #import "Localization.h"
+#import "OALocationServices.h"
 #import "OsmAndApp.h"
 #import "OARouteCalculationResult.h"
 #import "OATargetPointsHelper.h"
@@ -29,6 +32,9 @@
 #import "OASRTMPlugin.h"
 #import "OATurnDrawable.h"
 #import "OATurnDrawable+cpp.h"
+#import "OAMapButtonsHelper.h"
+#import "OACurrentStreetName.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define unitsKm OALocalizedString(@"km")
 #define unitsM OALocalizedString(@"m")
@@ -78,6 +84,9 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     
     OALanesDrawable *_lanesDrawable;
     CPManeuverDisplayStyle _secondaryStyle;
+    
+    UIColor *_lightGuidanceBackgroundColor;
+    UIColor *_darkGuidanceBackgroundColor;
 }
 
 - (void) commonInit
@@ -88,6 +97,8 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     [_routingHelper addCalculationProgressCallback:self];
     _lanesDrawable = [[OALanesDrawable alloc] initWithScaleCoefficient:10.];
     _secondaryStyle = CPManeuverDisplayStyleDefault;
+    _lightGuidanceBackgroundColor = [UIColor colorWithRed:0.976 green:0.976 blue:0.984 alpha:1.0];
+    _darkGuidanceBackgroundColor = [UIColor colorWithRed:0.231 green:0.231 blue:0.231 alpha:1.0];
 }
 
 - (void) stopNavigation
@@ -106,6 +117,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     
     _mapTemplate = [[CPMapTemplate alloc] init];
     _mapTemplate.mapDelegate = self;
+    [self onUpdateMapTemplateStyle];
     [self enterBrowsingState];
     
     [self.interfaceController setRootTemplate:_mapTemplate animated:YES completion:nil];
@@ -224,9 +236,9 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             OAMapViewTrackingUtilities *mapViewTrackingUtilities = [OAMapViewTrackingUtilities instance];
-            EOAMap3DModeVisibility map3DMode = [_settings.map3dMode get];
-            BOOL hideButton = map3DMode == EOAMap3DModeVisibilityHidden
-                || (map3DMode == EOAMap3DModeVisibilityVisibleIn3DMode && ![mapViewTrackingUtilities is3DMode]);
+            Map3DModeVisibility map3DMode = [[[OAMapButtonsHelper sharedInstance] getMap3DButtonState] getVisibility];
+            BOOL hideButton = map3DMode == Map3DModeVisibilityHidden
+                || (map3DMode == Map3DModeVisibilityVisibleIn3DMode && ![mapViewTrackingUtilities is3DMode]);
             _3DModeMapButton.hidden = hideButton ? YES : NO;
             if ([mapViewTrackingUtilities is3DMode])
             {
@@ -238,14 +250,14 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                 _3DModeMapButton.image = [UIImage imageNamed:@"btn_map_3d_mode"];
                 _3DModeMapButton.accessibilityLabel = OALocalizedString(@"map_2d_mode_action");
             }
-            _3DModeMapButton.accessibilityValue = [OAMap3DModeVisibility getTitle:map3DMode];
+            _3DModeMapButton.accessibilityValue = [Map3DModeVisibilityWrapper getTitleForType:map3DMode];
         });
     }
 }
 
 - (void)onProfileSettingSet:(NSNotification *)notification
 {
-    if (notification.object == _settings.map3dMode)
+    if (notification.object == [[OAMapButtonsHelper sharedInstance] getMap3DButtonState].visibilityPref)
         [self onMap3dModeUpdated];
 }
 
@@ -514,7 +526,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
 - (NSMeasurement<NSUnitLength *> *) getFormattedDistance:(int)meters
 {
-    NSString *distString = [OAOsmAndFormatter getFormattedDistance:meters roundUp:![[OAAppSettings sharedManager].preciseDistanceNumbers get]];
+    NSString *distString = [OAOsmAndFormatter getFormattedDistance:meters withParams:[OsmAndFormatterParams useLowerBounds]];
     NSArray<NSString *> *components = [distString componentsSeparatedByString:@" "];
     if (components.count == 2)
         return [[NSMeasurement alloc] initWithDoubleValue:components.firstObject.doubleValue unit:[self getUnitByString:components.lastObject]];
@@ -563,9 +575,41 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     maneuver.symbolImage = [turnDrawable toUIImage];
     maneuver.initialTravelEstimates = estimates;
     maneuver.userInfo = @{ @"imminent" : @(directionInfo.imminent) };
-    if (directionInfo.directionInfo.streetName)
-        maneuver.instructionVariants = @[directionInfo.directionInfo.streetName];
+    NSString *streetName = [self defineStreetName:directionInfo];
+    
+    if (streetName)
+    {
+        if (estimates) {
+            maneuver.instructionVariants = @[streetName];
+        }
+        else
+        {
+            NSString *distanceString = [OAOsmAndFormatter getFormattedDistance:directionInfo.distanceTo withParams:[OsmAndFormatterParams useLowerBounds]];
+            NSString *instruction = [NSString stringWithFormat:@"%@, %@", distanceString, streetName];
+            maneuver.instructionVariants = @[instruction];
+        }
+    }
+    
     return maneuver;
+}
+
+- (nullable NSString *)defineStreetName:(nullable OANextDirectionInfo *)nextDirInfo {
+    if (nextDirInfo)
+    {
+        OACurrentStreetName *currentStreetName = [_routingHelper getCurrentName:nextDirInfo];
+        NSString *streetName = currentStreetName.text;
+
+        if (streetName.length > 0)
+        {
+            NSString *exitRef = currentStreetName.exitRef;
+            if (exitRef.length == 0) {
+                return streetName;
+            } else {
+                return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_comma"), exitRef, streetName];
+            }
+        }
+    }
+    return nil;
 }
 
 // MARK: Location updates
@@ -576,7 +620,6 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     {
         int turnImminent = 0;
         int nextTurnDistance = 0;
-        int secondaryTurnDistance = 0;
         OANextDirectionInfo *nextTurn = [_routingHelper getNextRouteDirectionInfo:[[OANextDirectionInfo alloc] init] toSpeak:YES];
         if (nextTurn && nextTurn.distanceTo > 0 && nextTurn.directionInfo)
         {
@@ -592,7 +635,6 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                 secondaryInfo = [_routingHelper getNextRouteDirectionInfoAfter:nextTurn to:[[OANextDirectionInfo alloc] init] toSpeak:YES];
                 if (secondaryInfo && secondaryInfo.directionInfo)
                 {
-                    secondaryTurnDistance = secondaryInfo.distanceTo;
                     _secondaryStyle = CPManeuverDisplayStyleDefault;
                     secondaryVisible = true;
                 }
@@ -677,6 +719,14 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
         if ([_routingHelper isFollowingMode])
             [self onTripStartTriggered];
     }
+}
+
+- (void)onUpdateMapTemplateStyle
+{
+    UIUserInterfaceStyle style = self.interfaceController.carTraitCollection.userInterfaceStyle;
+    BOOL isDarkStyle = style == UIUserInterfaceStyleDark;
+    _mapTemplate.guidanceBackgroundColor = isDarkStyle ? _darkGuidanceBackgroundColor : _lightGuidanceBackgroundColor;
+    _mapTemplate.tripEstimateStyle = isDarkStyle ? CPTripEstimateStyleDark : CPTripEstimateStyleLight;
 }
 
 @end

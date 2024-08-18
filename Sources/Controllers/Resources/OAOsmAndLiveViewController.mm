@@ -10,6 +10,7 @@
 #import "OAResourcesUIHelper.h"
 #import "OAOsmAndLiveSelectionViewController.h"
 #import "OsmAndApp.h"
+#import "OAObservable.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OAPurchasesViewController.h"
@@ -22,6 +23,7 @@
 #import "OASizes.h"
 #import "OAColors.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OASubscriptionBannerCardView.h"
 #import "OAChoosePlanHelper.h"
 #import "OAAutoObserverProxy.h"
@@ -598,7 +600,7 @@ static const NSInteger sectionCount = 2;
     [_settings.settingOsmAndLiveEnabled set:newValue];
     [btn setOn:newValue];
     if (newValue)
-        [_app checkAndDownloadOsmAndLiveUpdates];
+        [_app checkAndDownloadOsmAndLiveUpdates:YES];
 }
 
 #pragma mark - OASubscriptionBannerCardViewDelegate

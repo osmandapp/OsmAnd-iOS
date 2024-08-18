@@ -17,32 +17,33 @@
 #import "OAOsmAndFormatter.h"
 #import "OAColors.h"
 #import "OASvgHelper.h"
-
 #import <UIKit/UIDevice.h>
 #import "OAIndexConstants.h"
 #import <MBProgressHUD.h>
 #import "OALinks.h"
-#import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 #import <mach/mach.h>
 #import <mach/mach_host.h>
-#include <CommonCrypto/CommonDigest.h>
 #import <CocoaSecurity.h>
 #import <sys/utsname.h>
-
 #import "OsmAnd_Maps-Swift.h"
 
-#define kBlurViewTag -999
-#define kSpinnerViewTag -998
+#include <CommonCrypto/CommonDigest.h>
 
-#define kNavItemStackViewWithSubtitleTag -997
-#define kTitleInNavItemStackViewTag -996
-#define kSubtitleInNavItemStackViewTag -995
+static NSInteger const kBlurViewTag = -999;
+static NSInteger const kSpinnerViewTag = -998;
 
-#define kNavItemStackViewWithCenterIconTag -994
-#define kCenterIconInNavItemStackViewTag -993
+static NSInteger const kNavItemStackViewWithSubtitleTag = -997;
+static NSInteger const kTitleInNavItemStackViewTag = -996;
+static NSInteger const kSubtitleInNavItemStackViewTag = -995;
 
-#define kShadowViewTag -992
+static NSInteger const kNavItemStackViewWithCenterIconTag = -994;
+static NSInteger const kCenterIconInNavItemStackViewTag = -993;
+
+static NSInteger const kShadowViewTag = -992;
+
+static NSInteger const kQuickActionButtonTag = -991;
+static NSInteger const kMap3DModeButtonTag = -990;
 
 @implementation UIBezierPath (util)
 
@@ -208,7 +209,7 @@
 {
     UIImage *img = [OASvgHelper mapImageNamed:name];
     if (img)
-        img = [img imageWithTintColor:[UIColor colorNamed:ACColorNameIconColorSelected]];
+        img = [OAUtilities imageWithTintColor:[UIColor colorNamed:ACColorNameIconColorSelected] image:img];
 
     return img;
 }
@@ -217,7 +218,7 @@
 {
     UIImage *img = [OASvgHelper mapImageNamed:name scale:scale];
     if (img)
-        img = [img imageWithTintColor:[UIColor colorNamed:ACColorNameIconColorSelected]];
+        img = [OAUtilities imageWithTintColor:[UIColor colorNamed:ACColorNameIconColorSelected] image:img];
 
     return img;
 }
@@ -227,7 +228,7 @@
     CGFloat scale = [[UIScreen mainScreen] scale];
     UIImage *img = [OASvgHelper mapImageFromSvgResource:name width:width * scale height:height * scale];
     if (img)
-        img = [img imageWithTintColor:[UIColor colorNamed:ACColorNameIconColorSelected]];
+        img = [OAUtilities imageWithTintColor:[UIColor colorNamed:ACColorNameIconColorSelected] image:img];
 
     return img;
 }
@@ -509,25 +510,6 @@
     {
         return -1;
     }
-}
-
-- (int) lastIndexOf:(NSString *)text
-{
-    int i = 0;
-    int res = -1;
-    for (;;)
-    {
-        int a = [self indexOf:text start:i];
-        if (a != -1)
-        {
-            res = a;
-            i = a + 1;
-        }
-
-        if (a == -1 || a >= text.length - 1)
-            break;
-    }
-    return res;
 }
 
 - (NSString *) add:(NSString *)str
@@ -1216,6 +1198,16 @@ static NSUnitCloud * _percent;
 @implementation OAUtilities
 
 static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
+
++ (NSInteger)getQuickActionButtonTag
+{
+    return kQuickActionButtonTag;
+}
+
++ (NSInteger)getMap3DModeButtonTag
+{
+    return kMap3DModeButtonTag;
+}
 
 + (BOOL) getAccessToFile:(NSString *)filePath
 {

@@ -7,20 +7,17 @@
 //
 
 #import "OAMapViewController.h"
-
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
-
 #import <UIViewController+JASidePanel.h>
 #import <MBProgressHUD.h>
-
 #import "OAAppData.h"
 #import "OAMapRendererView.h"
-
 #import "OAIndexConstants.h"
 #import "OAAutoObserverProxy.h"
 #import "OANavigationController.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapHudViewController.h"
 #import "OAFloatingButtonsHudViewController.h"
 #import "OAResourcesBaseViewController.h"
@@ -36,6 +33,7 @@
 #import "OADestination.h"
 #import "OAPluginPopupViewController.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OAMapCreatorHelper.h"
 #import "OAPOI.h"
 #import "OAMapSettingsPOIScreen.h"
@@ -61,7 +59,7 @@
 #import "OAFavoritesHelper.h"
 #import "OAFavoriteItem.h"
 #import "OAZoom.h"
-
+#import "OAMapSource.h"
 #import "OARoutingHelper.h"
 #import "OATransportRoutingHelper.h"
 #import "OAPointDescription.h"
@@ -69,24 +67,25 @@
 #import "OATargetPointsHelper.h"
 #import "OAAvoidSpecificRoads.h"
 #import "OAPluginsHelper.h"
-
 #import "OASubscriptionCancelViewController.h"
 #import "OAWhatsNewBottomSheetViewController.h"
+#import "OAApplicationMode.h"
 #import "OAAppVersion.h"
+#import "OALocationServices.h"
 #import "OsmAnd_Maps-Swift.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
+#import "OANativeUtilities.h"
+#import "OALog.h"
+#import "OAObservable.h"
+#import "Localization.h"
 
+//#include "OAMapMarkersCollection.h"
 #include "OASQLiteTileSourceMapLayerProvider.h"
 #include "OAWebClient.h"
 #include <OsmAndCore/IWebClient.h>
-
-//#include "OAMapMarkersCollection.h"
-
 #include <OpenGLES/ES2/gl.h>
-
 #include <QtMath>
 #include <QStandardPaths>
-
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/IMapStylesCollection.h>
@@ -112,18 +111,12 @@
 #include <OsmAndCore/Map/SqliteHeightmapTileProvider.h>
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 #include <OsmAndCore/Map/MapRendererTypes.h>
-
 #include <OsmAndCore/IObfsCollection.h>
 #include <OsmAndCore/ObfDataInterface.h>
 #include <OsmAndCore/Data/Amenity.h>
 #include <OsmAndCore/Data/ObfMapObject.h>
 #include <OsmAndCore/Data/ObfPoiSectionInfo.h>
-
 #include <OsmAndCore/QKeyValueIterator.h>
-
-#import "OANativeUtilities.h"
-#import "OALog.h"
-#include "Localization.h"
 
 #define _(name) OAMapRendererViewController__##name
 #define commonInit _(commonInit)
@@ -357,7 +350,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     
     _applicationModeChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                            withHandler:@selector(onAppModeChanged)
-                                                            andObserve:[OsmAndApp instance].data.applicationModeChangedObservable];
+                                                            andObserve:[OsmAndApp instance].applicationModeChangedObservable];
 
     _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapZoomChanged:withKey:andValue:)
@@ -503,6 +496,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 {
     if (_mapLayers)
         [_mapLayers onMapFrameAnimatorsUpdated];
+
+    [[OARootViewController instance].mapPanel.hudViewController.mapInfoController onFrameAnimatorsUpdated];
 }
 
 - (void) frameUpdated
@@ -581,7 +576,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
 - (void) showWhatsNewDialogIfNeeded
 {
-    if ([OAAppSettings sharedManager].shouldShowWhatsNewScreen)
+    if ([OAAppSettings sharedManager].shouldShowWhatsNewScreen && !_isCarPlayActive && !_isCarPlayDashboardActive)
     {
         OAWhatsNewBottomSheetViewController *bottomSheet = [[OAWhatsNewBottomSheetViewController alloc] init];
         [bottomSheet presentInViewController:self];
@@ -712,6 +707,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         _progressHUD = [[MBProgressHUD alloc] initWithView:topView];
         _progressHUD.minShowTime = 1.0f;
         _progressHUD.labelText = message;
+        _progressHUD.removeFromSuperViewOnHide = YES;
         [topView addSubview:_progressHUD];
         
         [_progressHUD show:!wasVisible];
@@ -1620,7 +1616,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     {
         OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
         OAFloatingButtonsHudViewController *quickAction = mapPanel.hudViewController.floatingButtonsController;
-        [quickAction hideActionsSheetAnimated];
+        [quickAction hideActionsSheetAnimated:nil];
         [_mapLayers.contextMenuLayer showContextMenu:touchPoint showUnknownLocation:longPress forceHide:[recognizer isKindOfClass:UITapGestureRecognizer.class] && recognizer.numberOfTouches == 1];
         
         // Handle route planning touch events
@@ -1872,7 +1868,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         int angle = 90 - (baseZoom - 2) * 5;
         if (angle >= kMinAllowedElevationAngle && angle < kDefaultElevationAngle)
         {
-            [[OAMapViewTrackingUtilities instance] startTilting:angle];
+            [[OAMapViewTrackingUtilities instance] startTilting:angle timePeriod:kQuickAnimationTime];
         }
     }
 }
@@ -2033,7 +2029,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) onAppModeChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.mapRendererView.elevationAngle = _app.data.mapLastViewedState.elevationAngle;
+        if (self.mapRendererView)
+            self.mapRendererView.elevationAngle = _app.data.mapLastViewedState.elevationAngle;
     });
 }
 
@@ -2103,7 +2100,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) onMapLayerChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded || _app.isInBackground /* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -2541,7 +2538,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) recreateHeightmapProvider
 {
     OASRTMPlugin *plugin = (OASRTMPlugin *) [OAPluginsHelper getEnabledPlugin:OASRTMPlugin.class];
-    if (!plugin || ![plugin is3DMapsEnabled] || _app.data.terrainType == EOATerrainTypeDisabled)
+    if (!plugin || ![plugin is3DMapsEnabled] || ![plugin isTerrainLayerEnabled])
     {
         _mapView.heightmapSupported = NO;
         [_mapView resetElevationDataProvider:YES];
@@ -2555,7 +2552,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) updateElevationConfiguration
 {
     OASRTMPlugin *plugin = (OASRTMPlugin *) [OAPluginsHelper getEnabledPlugin:OASRTMPlugin.class];
-    BOOL disableVertexHillshade = !plugin || ![plugin is3DMapsEnabled] || _app.data.terrainType == EOATerrainTypeDisabled;
+    BOOL disableVertexHillshade = !plugin || ![plugin is3DMapsEnabled] || ![plugin isTerrainLayerEnabled];
     OsmAnd::ElevationConfiguration elevationConfiguration;
     if (disableVertexHillshade)
     {
@@ -3681,7 +3678,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         if (_gpxDocFileTemp && !_gpxDocsTemp.isEmpty())
             docs[QString::fromNSString(_gpxDocFileTemp)] = _gpxDocsTemp.first();
     }
-    [_mapLayers.gpxMapLayer refreshGpxTracks:docs];
+    [_mapLayers.gpxMapLayer refreshGpxTracks:docs reset:YES];
 }
 
 - (void) refreshGpxTracks
@@ -3827,19 +3824,13 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         }
     }
     
-    @synchronized(_rendererSync)
-    {
+    dispatch_async(dispatch_get_main_queue(), ^{
         [_mapLayers.routeMapLayer refreshRoute];
-    }
-    if (newRoute && [helper isRoutePlanningMode] && routeBBox.left != DBL_MAX)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (![self isDisplayedInCarPlay])
-            {
-                [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left) bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right) animated:NO];
-            }
-        });
-    }
+        if (newRoute && [helper isRoutePlanningMode] && routeBBox.left != DBL_MAX && ![self isDisplayedInCarPlay])
+            [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left) 
+                                                                      bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right)
+                                                                         animated:NO];
+    });
 }
 
 - (void) routeWasUpdated

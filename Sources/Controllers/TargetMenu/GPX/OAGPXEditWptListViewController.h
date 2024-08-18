@@ -7,8 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "OAObservable.h"
-#import "OAAutoObserverProxy.h"
 
 @protocol OAGPXEditWptListViewControllerDelegate <NSObject>
 

@@ -9,6 +9,7 @@
 #import "OAChoosePlanHelper.h"
 #import "OAChoosePlanViewController.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "Localization.h"
 
 static OAFeature * OSMAND_CLOUD;

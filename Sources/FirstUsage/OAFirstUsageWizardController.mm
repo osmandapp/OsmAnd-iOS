@@ -9,9 +9,14 @@
 #import "OAFirstUsageWizardController.h"
 #import "OAManageResourcesViewController.h"
 #import "OsmAndApp.h"
+#import "OADownloadsManager.h"
+#import "OAObservable.h"
+#import "OAAppData.h"
+#import "OALocationServices.h"
 #import "OAResourcesUIHelper.h"
 #import "OAAutoObserverProxy.h"
 #import "OAOcbfHelper.h"
+#import "OADownloadTask.h"
 #import "OAWorldRegion.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -200,13 +205,13 @@ typedef enum
     
     [self startWizard];
     [self configureToolbar];
-    [self configureUI];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
+    [self configureUI];
 }
 
 - (void)configureUI
@@ -327,6 +332,7 @@ typedef enum
         ? [OACloudBackupViewController new]
         : [OACloudIntroductionViewController new];
         [weakSelf.navigationController pushViewController:controller animated:YES completion:^{
+            [weakSelf.navigationController setToolbarHidden:YES];
             [weakSelf removeFromParentViewController];
         }];
     }];
@@ -411,8 +417,9 @@ typedef enum
     [self onLocationServicesFirstTimeUpdate];
 }
 
-- (void)closeWizard
+- (IBAction)closeWizard
 {
+    [self.navigationController setToolbarHidden:YES];
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
@@ -812,6 +819,7 @@ typedef enum
 {
     OAManageResourcesViewController* resourcesViewController = [[UIStoryboard storyboardWithName:@"Resources" bundle:nil] instantiateInitialViewController];
     resourcesViewController.openFromSplash = YES;
+    [self.navigationController setToolbarHidden:YES];
     [self.navigationController pushViewController:resourcesViewController animated:YES];
 }
 

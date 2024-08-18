@@ -14,6 +14,7 @@
 #import "OAShapesTableViewCell.h"
 #import "OAColorCollectionHandler.h"
 #import "OAGPXDocumentPrimitives.h"
+#import "MaterialTextFields.h"
 #import "OAGPXAppearanceCollection.h"
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
@@ -374,8 +375,7 @@
     if ([item.key isEqualToString:@"allColors"])
     {
         OAColorCollectionViewController *colorCollectionViewController =
-            [[OAColorCollectionViewController alloc] initWithColorItems:[_appearanceCollection getAvailableColorsSortingByKey]
-                                                      selectedColorItem:_selectedColorItem];
+        [[OAColorCollectionViewController alloc] initWithCollectionType:EOAColorCollectionTypeColorItems items:[_appearanceCollection getAvailableColorsSortingByKey] selectedItem:_selectedColorItem];
         colorCollectionViewController.delegate = self;
         [self showViewController:colorCollectionViewController];
     }

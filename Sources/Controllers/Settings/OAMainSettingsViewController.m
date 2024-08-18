@@ -13,6 +13,8 @@
 #import "OARightIconTableViewCell.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
+#import "OAAppData.h"
+#import "OAObservable.h"
 #import "OAUtilities.h"
 #import "OAApplicationMode.h"
 #import "OsmAndApp.h"
@@ -83,7 +85,7 @@
                                                  andObserve:[OsmAndApp instance].availableAppModesChangedObservable]];
     [self addObserver:[[OAAutoObserverProxy alloc] initWith:self
                                                 withHandler:@selector(onAvailableAppModesChanged)
-                                                 andObserve:OsmAndApp.instance.data.applicationModeChangedObservable]];
+                                                 andObserve:OsmAndApp.instance.applicationModeChangedObservable]];
 }
 
 #pragma mark - UIViewController
@@ -303,7 +305,7 @@
             OAApplicationMode *am = item[@"app_mode"];
             UIImage *img = am.getIcon;
             cell.leftIconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
-            cell.leftIconView.tintColor = UIColorFromRGB(am.getIconColor);
+            cell.leftIconView.tintColor = am.getProfileColor;
             cell.titleLabel.text = am.toHumanString;
             cell.descriptionLabel.text = [self getProfileDescription:am];
             cell.contentView.backgroundColor = UIColor.clearColor;
@@ -328,7 +330,7 @@
         cell.separatorInset = UIEdgeInsetsMake(0.0, indexPath.row < OAApplicationMode.allPossibleValues.count - 1 ? kPaddingToLeftOfContentWithIcon : 0.0, 0.0, 0.0);
         UIImage *img = am.getIcon;
         cell.leftIconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
-        cell.leftIconView.tintColor = isEnabled ? UIColorFromRGB(am.getIconColor) : [UIColor colorNamed:ACColorNameIconColorDisabled];
+        cell.leftIconView.tintColor = isEnabled ? am.getProfileColor : [UIColor colorNamed:ACColorNameIconColorDisabled];
         cell.titleLabel.text = am.toHumanString;
         cell.descriptionLabel.text = [self getProfileDescription:am];
         cell.switchView.tag = indexPath.row;

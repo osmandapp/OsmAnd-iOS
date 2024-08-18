@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <CoreLocation/CoreLocation.h>
 #import "OACommonTypes.h"
 
 static NSInteger const kDefaultTrackColor = 0xFFFF0000;
@@ -22,6 +21,12 @@ typedef NS_ENUM(NSInteger, EOAGpxSplitType) {
 typedef NS_ENUM(NSInteger, EOAGPX3DLineVisualizationByType) {
     EOAGPX3DLineVisualizationByTypeNone = 0,
     EOAGPX3DLineVisualizationByTypeAltitude,
+    EOAGPX3DLineVisualizationByTypeSpeed,
+    EOAGPX3DLineVisualizationByTypeHeartRate,
+    EOAGPX3DLineVisualizationByTypeBicycleCadence,
+    EOAGPX3DLineVisualizationByTypeBicyclePower,
+    EOAGPX3DLineVisualizationByTypeTemperature,
+    EOAGPX3DLineVisualizationByTypeSpeedSensor,
     EOAGPX3DLineVisualizationByTypeFixedHeight
 };
 
@@ -29,7 +34,10 @@ typedef NS_ENUM(NSInteger, EOAGPX3DLineVisualizationWallColorType) {
     EOAGPX3DLineVisualizationWallColorTypeNone = 0,
     EOAGPX3DLineVisualizationWallColorTypeSolid,
     EOAGPX3DLineVisualizationWallColorTypeDownwardGradient,
-    EOAGPX3DLineVisualizationWallColorTypeUpwardGradient
+    EOAGPX3DLineVisualizationWallColorTypeUpwardGradient,
+    EOAGPX3DLineVisualizationWallColorTypeAltitude,
+    EOAGPX3DLineVisualizationWallColorTypeSlope,
+    EOAGPX3DLineVisualizationWallColorTypeSpeed
 };
 
 typedef NS_ENUM(NSInteger, EOAGPX3DLineVisualizationPositionType) {
@@ -67,9 +75,11 @@ typedef NS_ENUM(NSInteger, EOAGPX3DLineVisualizationPositionType) {
 @property (nonatomic) EOAGPX3DLineVisualizationWallColorType visualization3dWallColorType;
 @property (nonatomic) EOAGPX3DLineVisualizationPositionType visualization3dPositionType;
 @property (nonatomic, assign) CGFloat verticalExaggerationScale;
+@property (nonatomic, assign) NSInteger elevationMeters;
 
 @property (nonatomic) NSString *width;
 @property (nonatomic) NSString *coloringType;
+@property (nonatomic) NSString *gradientPaletteName;
 
 @property (nonatomic, assign) EOAGpxSplitType splitType;
 @property (nonatomic, assign) double splitInterval;

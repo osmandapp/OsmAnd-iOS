@@ -11,10 +11,15 @@
 @interface OAConcurrentArray<ObjectType> : NSObject
 
 - (void)addObjectSync:(id)anObject;
+- (void)addObjectsSync:(NSArray *)anArray;
+- (void)insertObjectSync:(id)anObject atIndex:(NSUInteger)index;
+- (void)replaceObjectAtIndexSync:(NSUInteger)index withObject:(id)anObject;
+- (void)replaceAllWithObjectsSync:(NSArray *)anArray;
 - (void)removeObjectSync:(id)anObject;
 - (void)removeObjectAtIndexSync:(NSUInteger)index;
 - (void)removeAllObjectsSync;
 - (id)objectAtIndexSync:(NSUInteger)index;
+- (NSUInteger)indexOfObjectSync:(id)anObject;
 - (NSUInteger)countSync;
 - (id)firstObjectSync;
 - (id)lastObjectSync;

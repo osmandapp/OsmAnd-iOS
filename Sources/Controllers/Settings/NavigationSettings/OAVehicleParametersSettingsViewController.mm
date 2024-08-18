@@ -14,9 +14,10 @@
 #import "OARightIconTableViewCell.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
-#import "OAColors.h"
+#import "GeneratedAssetSymbols.h"
 #import "OASizes.h"
 #import "OAUtilities.h"
+#import "OAApplicationMode.h"
 
 #define kDot @"."
 #define kComma @","
@@ -134,46 +135,46 @@
         if (!image && (!text || text.length == 0))
             return;
         
-        CGFloat textWidth = DeviceScreenWidth - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2;
+        CGFloat textWidth = self.tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2;
         CGFloat textHeight = [OAUtilities heightForHeaderViewText:text width:textWidth font:kHeaderDescriptionFontSmall lineSpacing:6.0];
         
-        UIView *topImageDivider = [[UIView alloc] initWithFrame:CGRectMake(0., 0., DeviceScreenWidth, .5)];
-        topImageDivider.backgroundColor = UIColorFromRGB(color_tint_gray);
+        UIView *topImageDivider = [[UIView alloc] initWithFrame:CGRectMake(0., 0., self.tableView.frame.size.width, .5)];
+        topImageDivider.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
         
         UIImageView *imageView = nil;
         UIView *imageBackgroundView = nil;
         if (image)
         {
-            CGFloat aspectRatio = MIN(DeviceScreenWidth, DeviceScreenHeight) / image.size.width;
-            imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0., 0., DeviceScreenWidth, image.size.height * aspectRatio)];
+            CGFloat aspectRatio = MIN(self.tableView.frame.size.width, self.tableView.frame.size.height) / image.size.width;
+            imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0., 0., self.tableView.frame.size.width, image.size.height * aspectRatio)];
             imageView.image = image;
             imageView.contentMode = UIViewContentModeScaleAspectFit;
             
-            imageBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0., 0.5, DeviceScreenWidth, imageView.frame.size.height)];
+            imageBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0., 0.5, self.tableView.frame.size.width, imageView.frame.size.height)];
             imageBackgroundView.backgroundColor = UIColor.whiteColor;
         }
         else
         {
-            imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0., 0., DeviceScreenWidth, 0)];
-            imageBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0., 0.5, DeviceScreenWidth, 0)];
+            imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0., 0., self.tableView.frame.size.width, 0)];
+            imageBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0., 0.5, self.tableView.frame.size.width, 0)];
         }
         
-        UIView *bottomImageDivider = [[UIView alloc] initWithFrame:CGRectMake(0., imageView.frame.origin.y + imageView.frame.size.height, DeviceScreenWidth, .5)];
-        bottomImageDivider.backgroundColor = UIColorFromRGB(color_tint_gray);
+        UIView *bottomImageDivider = [[UIView alloc] initWithFrame:CGRectMake(0., imageView.frame.origin.y + imageView.frame.size.height, self.tableView.frame.size.width, .5)];
+        bottomImageDivider.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
         
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(kPaddingOnSideOfContent + [OAUtilities getLeftMargin], imageView.frame.size.height + 13., textWidth, textHeight)];
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
         style.minimumLineHeight = 17.;
         label.attributedText = [[NSAttributedString alloc] initWithString:text
                                                                attributes:@{ NSParagraphStyleAttributeName : style,
-                                                                             NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer),
+                                                                             NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorSecondary],
                                                                              NSFontAttributeName : kHeaderDescriptionFontSmall,
                                                                              NSBackgroundColorAttributeName : UIColor.clearColor }];
         label.numberOfLines = 0;
         label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         
         CGFloat headerHeight = label.frame.origin.y + label.frame.size.height + 26.;
-        UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0., 0., DeviceScreenWidth, headerHeight)];
+        UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0., 0., self.tableView.frame.size.width, headerHeight)];
         if (image)
         {
             [tableHeaderView addSubview:imageBackgroundView];
@@ -186,6 +187,7 @@
         self.tableView.tableHeaderView = tableHeaderView;
     }
 }
+
 #pragma mark - UIViewContoller
 
 - (void) viewDidLoad
@@ -262,7 +264,7 @@
             [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
             [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
             cell.inputField.keyboardType = UIKeyboardTypeDecimalPad;
-            cell.inputField.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.inputField.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             cell.inputField.delegate = self;
 //            cell.inputField.userInteractionEnabled = NO;
         }

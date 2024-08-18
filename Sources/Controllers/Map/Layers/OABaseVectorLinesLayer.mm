@@ -29,11 +29,9 @@
 #include <OsmAndCore/Map/MapStylesCollection.h>
 #include <OsmAndCore/Map/ResolvedMapStyle.h>
 #include <OsmAndCore/SingleSkImage.h>
-
 #include <SkCanvas.h>
 
 #define kZoomDelta 0.1
-
 
 @implementation OABaseVectorLinesLayer
 {
@@ -108,8 +106,9 @@
 
 - (BOOL) updateLayer
 {
-    [super updateLayer];
-    
+    if (![super updateLayer])
+        return NO;
+
     return YES;
 }
 

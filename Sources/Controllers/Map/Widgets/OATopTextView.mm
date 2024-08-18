@@ -24,6 +24,7 @@
 #import "Localization.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OATextInfoWidget.h"
 #import "OAWaypointUIHelper.h"
 #import "OAPointDescription.h"
@@ -41,7 +42,6 @@
 #include <OsmAndCore/Map/MapStyleEvaluationResult.h>
 #include <OsmAndCore/Map/MapStyleBuiltinValueDefinitions.h>
 #include <OsmAndCore/TextRasterizer.h>
-
 #include <binaryRead.h>
 
 @interface OATopTextView ()
@@ -495,12 +495,9 @@
     {
         if ([_routingHelper isFollowingMode])
         {
-            if ([_settings.showStreetName get])
-            {
-                OANextDirectionInfo *nextDirInfo = [_routingHelper getNextRouteDirectionInfo:_calc1 toSpeak:YES];
-                streetName = [_routingHelper getCurrentName:nextDirInfo];
-                _turnDrawable.clr = [UIColor colorNamed:ACColorNameNavArrowColor].currentMapThemeColor;
-            }
+            OANextDirectionInfo *nextDirInfo = [_routingHelper getNextRouteDirectionInfo:_calc1 toSpeak:YES];
+            streetName = [_routingHelper getCurrentName:nextDirInfo];
+            _turnDrawable.clr = [UIColor colorNamed:ACColorNameNavArrowColor].currentMapThemeColor;
         }
         else
         {
@@ -513,7 +510,7 @@
             }
         }
     }
-    else if ([_trackingUtilities isMapLinkedToLocation] && [_settings.showStreetName get])
+    else if ([_trackingUtilities isMapLinkedToLocation])
     {
         streetName = [[OACurrentStreetName alloc] init];
         CLLocation *lastKnownLocation = _locationProvider.lastKnownLocation;

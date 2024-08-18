@@ -7,20 +7,20 @@
 //
 
 #import "OAAppDelegate.h"
-
 #import <UIKit/UIKit.h>
 #import <BackgroundTasks/BackgroundTasks.h>
-#import "OsmAnd_Maps-Swift.h"
 #import "SceneDelegate.h"
-
 #import "OsmAndApp.h"
 #import "OsmAndAppPrivateProtocol.h"
 #import "OAUtilities.h"
 #import "OANativeUtilities.h"
 #import "OAMapRendererView.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OAOnlineTilesEditingViewController.h"
 #import "OAMapLayers.h"
 #import "OAPOILayer.h"
+#import "OADownloadTask.h"
 #import "OAMapViewState.h"
 #import "OAIAPHelper.h"
 #import "OAChoosePlanHelper.h"
@@ -31,15 +31,17 @@
 #import "OAMapActions.h"
 #import "OADiscountHelper.h"
 #import "OALinks.h"
+#import "OADownloadsManager.h"
 #import "OABackupHelper.h"
+#import "OAApplicationMode.h"
 #import "OAFetchBackgroundDataOperation.h"
 #import "OACloudAccountVerificationViewController.h"
+#import "OARootViewController.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OsmAnd_Maps-Swift.h"
 
 #include <QDir>
 #include <QFile>
-
 #include <OsmAndCore.h>
 #include <OsmAndCore/IncrementalChangesManager.h>
 #include <OsmAndCore/Logging.h>
@@ -152,12 +154,14 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
             // Initialize application in main thread
             //[_app initialize];
             [[OAScreenOrientationHelper sharedInstance] updateSettings];
-
+            
             // Configure ThemeManager
             OAAppSettings *appSettings = [OAAppSettings sharedManager];
             OAApplicationMode *initialAppMode = [appSettings.useLastApplicationModeByDefault get] ?
             [OAApplicationMode valueOfStringKey:[appSettings.lastUsedApplicationMode get] def:OAApplicationMode.DEFAULT] : appSettings.defaultApplicationMode.get;
             [[ThemeManager shared] configureWithAppMode:initialAppMode];
+            
+            [OAOsmOAuthHelper logOutIfNeeded];
 
             [self askReview];
 
@@ -226,7 +230,7 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 
         if (status == AFNetworkReachabilityStatusReachableViaWWAN || status == AFNetworkReachabilityStatusReachableViaWiFi)
         {
-            [_app checkAndDownloadOsmAndLiveUpdates];
+            [_app checkAndDownloadOsmAndLiveUpdates:YES];
             [_app checkAndDownloadWeatherForecastsUpdates];
         }
     }];
@@ -257,7 +261,7 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 
 - (void)performUpdatesCheck
 {
-    [_app checkAndDownloadOsmAndLiveUpdates];
+    [_app checkAndDownloadOsmAndLiveUpdates:YES];
     [_app checkAndDownloadWeatherForecastsUpdates];
 }
 
@@ -355,7 +359,20 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 {
     NSLog(@"OAAppDelegate applicationWillEnterForeground %d", _appInitDone);
     if (_appInitDone)
+    {
         [_app onApplicationWillEnterForeground];
+
+        // Start suspended resource download task if such exists
+        if (![_app.downloadsManager hasActiveDownloadTasks] && [_app.downloadsManager.keysOfDownloadTasks count] > 0)
+        {
+            id<OADownloadTask> nextTask = [_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks objectAtIndex:0]];
+            if (nextTask)
+            {
+                NSLog(@"Resume suspended download %@", nextTask.key);
+                [nextTask resume];
+            }
+        }
+    }
 }
 
 - (void)applicationDidBecomeActive

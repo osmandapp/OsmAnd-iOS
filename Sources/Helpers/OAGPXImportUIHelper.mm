@@ -10,6 +10,7 @@
 #import "OsmAndApp.h"
 #import "OAGPXDatabase.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAGPXDocument.h"
 #import "OAKml2Gpx.h"
 #import "OAIndexConstants.h"
@@ -139,6 +140,7 @@ static UIViewController *parentController;
         UIView *topView = [UIApplication sharedApplication].mainWindow;
         _progressHUD = [[MBProgressHUD alloc] initWithView:topView];
         _progressHUD.minShowTime = .5f;
+        _progressHUD.removeFromSuperViewOnHide = YES;
         [topView addSubview:_progressHUD];
         
         [_progressHUD show:!wasVisible];

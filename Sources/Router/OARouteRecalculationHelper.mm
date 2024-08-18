@@ -9,6 +9,7 @@
 #import "OARouteRecalculationHelper.h"
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
+#import "OAApplicationMode.h"
 #import "OARoutingHelper.h"
 #import "OAVoiceRouter.h"
 #import "OAWaypointHelper.h"
@@ -19,6 +20,7 @@
 #import "OAUtilities.h"
 #import "OARootViewController.h"
 #import "OAResourcesUIHelper.h"
+#import "OACurrentPositionHelper.h"
 
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
@@ -412,6 +414,7 @@
             _routeCalcErrorShort = OALocalizedString(@"empty_route_calculated");
             [self showMessage:_routeCalcError];
         }
+        _settings.ignoreMissingMaps = NO;
     }
 }
 

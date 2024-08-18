@@ -383,7 +383,6 @@
 "driving_region_us" = "United States";
 "driving_region_canada" = "Canada";
 "driving_region_europe_asia" = "Europe, Asia, Latin America & similar";
-"driving_region_uk" = "UK, India & similar";
 "driving_region_australia" = "Australia";
 "left_side_navigation" = "Left-hand driving";
 "right_side_navigation" = "Right-hand driving";
@@ -2243,3 +2242,5 @@
 "routing_attr_avoid_highway_description" = "Avoid motorways";
 "routing_attr_avoid_highway_name" = "Avoid motorways";
 "search_favorites" = "Search favourites";
+"shared_string_favorites" = "Favourites";
+"shared_string_favorite" = "Favourite";

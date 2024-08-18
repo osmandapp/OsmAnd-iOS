@@ -10,19 +10,21 @@
 #import "OAPointTableViewCell.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGpxWptItem.h"
+#import "OALocationServices.h"
 #import "OAUtilities.h"
+#import "OAObservable.h"
+#import "OAAutoObserverProxy.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OASimpleTableViewCell.h"
 #import "OAMultiselectableHeaderView.h"
 #import "OAColors.h"
 #import "OAOsmAndFormatter.h"
-
 #import "OsmAndApp.h"
+#import "Localization.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
-#include "Localization.h"
-
 
 @interface OAGPXEditWptListViewController ()<OAMultiselectableHeaderDelegate>
 {

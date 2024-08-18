@@ -10,6 +10,7 @@
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
 #import "OAMapHudViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapRendererView.h"
 #import "OAAutoObserverProxy.h"
 #import "OAWeatherHelper.h"
@@ -18,6 +19,9 @@
 #import "OAMapLayers.h"
 #import "OAMapWidgetRegistry.h"
 #import "OAPluginsHelper.h"
+#import "OAAppData.h"
+#import "OAObservable.h"
+#import "OAOsmAndFormatter.h"
 
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 #include <OsmAndCore/Map/WeatherRasterLayerProvider.h>
@@ -34,11 +38,20 @@
     OAAutoObserverProxy* _weatherUseOfflineDataChangeObserver;
     NSMutableArray<OAAutoObserverProxy *> *_layerChangeObservers;
     NSMutableArray<OAAutoObserverProxy *> *_alphaChangeObservers;
+    
+    QList<OsmAnd::BandIndex> _cachedBandIndexes;
 
     CGSize _cachedViewFrame;
     OsmAnd::PointI _cachedCenterPixel;
     BOOL _cachedAnyWidgetVisible;
+    BOOL _wasAlphaChanged;
     NSTimeInterval _lastUpdateTime;
+    
+    int64_t _timePeriodStart;
+    int64_t _timePeriodEnd;
+    int64_t _timePeriodStep;
+    BOOL _requireTimePeriodChange;
+    int64_t _dateTime;
 }
 
 - (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController layerIndex:(int)layerIndex weatherLayer:(EOAWeatherLayer)weatherLayer date:(NSDate *)date
@@ -116,7 +129,11 @@
 
 - (BOOL) updateLayer
 {
-    [super updateLayer];
+    if (![super updateLayer])
+        return NO;
+    
+    if (_dateTime == 0)
+        [self setDateTime:[[NSDate now] timeIntervalSince1970] * 1000 goForward:YES resetPeriod:NO];
 
     if ([[OAPluginsHelper getPlugin:OAWeatherPlugin.class] isEnabled])
     {
@@ -125,11 +142,12 @@
         QList<OsmAnd::BandIndex> bands = [_weatherHelper getVisibleBands];
         if ((!self.app.data.weather && !_needsSettingsForToolbar) || bands.empty())
             return NO;
+        
+        BOOL wasBandsChanged = bands != _cachedBandIndexes;
+        _cachedBandIndexes = bands;
 
         //[self showProgressHUD];
 
-        NSDate *roundedDate = [OAWeatherHelper roundForecastTimeToHour:_date];
-        int64_t dateTime = roundedDate.timeIntervalSince1970 * 1000;
         OsmAnd::WeatherLayer layer;
         switch (_weatherLayer) {
             case WEATHER_LAYER_LOW:
@@ -142,34 +160,98 @@
                 layer = OsmAnd::WeatherLayer::Low;
                 break;
         }
-        int64_t dateTimeStep = 60 * 60 * 1000;
-        if ((dateTime - NSDate.date.timeIntervalSince1970 * 1000) > dateTimeStep * 24)
-            dateTimeStep *= 3;
-        int64_t dateTimeFirst = dateTime;
-        int64_t dateTimeLast = dateTime;
-        [self.mapView setDateTime:dateTime];
-        if (true)//!_provider)
+        
+        // TODO: delete when android team fix alpha changing bug https://github.com/osmandapp/OsmAnd/issues/20533
+        if (_wasAlphaChanged)
         {
-            _provider = std::make_shared<OsmAnd::WeatherRasterLayerProvider>(_resourcesManager, layer, dateTimeFirst, dateTimeLast, dateTimeStep, bands, self.app.data.weatherUseOfflineData);
+            _timePeriodEnd = _timePeriodStart;
+        }
+        
+        if (!_provider || wasBandsChanged || _wasAlphaChanged)
+        {
+            _requireTimePeriodChange = NO;
+            _wasAlphaChanged = NO;
+            
+            _provider = std::make_shared<OsmAnd::WeatherRasterLayerProvider>(_resourcesManager, layer, _timePeriodStart, _timePeriodEnd, _timePeriodStep, bands, self.app.data.weatherUseOfflineData);
             [self.mapView setProvider:_provider forLayer:self.layerIndex];
 
             OsmAnd::MapLayerConfiguration config;
             config.setOpacityFactor(1.0f);
             [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
         }
-        else
+        if (_requireTimePeriodChange)
         {
-            _provider->setDateTime(dateTimeFirst, dateTimeLast, dateTimeStep);
-            _provider->setBands(bands);
-
-            [self.mapView invalidateFrame];
+            _requireTimePeriodChange = NO;
+            _provider->setDateTime(_timePeriodStart, _timePeriodEnd, _timePeriodStep);
+            [self.mapView changeTimePeriod];
         }
-
+        [self.mapView setDateTime:_dateTime];
         //[self hideProgressHUD];
 
         return YES;
     }
     return NO;
+}
+
+- (void) setDateTime:(int64_t)dateTime goForward:(BOOL)goForward resetPeriod:(BOOL)resetPeriod
+{
+    if (_timePeriodStart == 0)
+        _timePeriodStart = [[NSDate now] timeIntervalSince1970] * 1000;
+    
+    int64_t dayStart = [OAOsmAndFormatter getStartOfDayForTime:_timePeriodStart / 1000] * 1000;
+    int64_t dayEnd = dayStart + DAY_IN_MILLISECONDS;
+    if (dateTime < dayStart || dayStart > dayEnd)
+    {
+        dayStart = [OAOsmAndFormatter getStartOfDayForTime:dayStart];
+        dayEnd = dayStart + DAY_IN_MILLISECONDS;
+    }
+    
+    int64_t todayStep = HOUR_IN_MILLISECONDS;
+    int64_t nextStep = todayStep * 3;
+    int64_t startOfToday = [OAOsmAndFormatter getStartOfToday] * 1000;
+    int64_t step = dayStart == startOfToday ? todayStep : nextStep;
+    int64_t switchStepTime = ((int64_t)([[NSDate now] timeIntervalSince1970] * 1000 + DAY_IN_MILLISECONDS)) / nextStep * nextStep;
+    if (switchStepTime > startOfToday && switchStepTime >= dayStart + todayStep && switchStepTime <= dayEnd - nextStep)
+    {
+        if (dateTime < switchStepTime) 
+        {
+            dayEnd = switchStepTime;
+            step = todayStep;
+        } 
+        else
+        {
+            dayStart = switchStepTime;
+        }
+    }
+    
+    int64_t prevTime = (dateTime - dayStart) / step * step + dayStart;
+    int64_t nextTime = prevTime + step;
+    if (goForward)
+    {
+        if (resetPeriod || _timePeriodStep != step
+            || (_timePeriodStart > dayStart && prevTime < _timePeriodStart)
+            || (_timePeriodEnd < dayEnd && nextTime > _timePeriodEnd))
+        {
+            _timePeriodStart = MAX(prevTime, dayStart);
+            _timePeriodEnd = MIN(nextTime + FORECAST_ANIMATION_DURATION_HOURS * HOUR_IN_MILLISECONDS, dayEnd);
+            _timePeriodStep = step;
+            _requireTimePeriodChange = YES;
+        }
+    }
+    else
+    {
+        int64_t nearestTime = dateTime - prevTime < nextTime - dateTime ? prevTime : nextTime;
+        if (resetPeriod || _timePeriodStep != step
+            || (_timePeriodStart > dayStart && nearestTime <= _timePeriodStart)
+            || (_timePeriodEnd < dayEnd && nearestTime >= _timePeriodEnd))
+        {
+            _timePeriodStart = MAX(nearestTime - step, dayStart);
+            _timePeriodEnd = MIN(nearestTime + step, dayEnd);
+            _timePeriodStep = step;
+            _requireTimePeriodChange = YES;
+        }
+    }
+    _dateTime = dateTime;
 }
 
 - (void)onWeatherToolbarStateChanged
@@ -212,6 +294,7 @@
 
 - (void) onWeatherLayerAlphaChanged
 {
+    _wasAlphaChanged = YES;
     [self updateWeatherLayerAlpha];
 /*
     dispatch_async(dispatch_get_main_queue(), ^{

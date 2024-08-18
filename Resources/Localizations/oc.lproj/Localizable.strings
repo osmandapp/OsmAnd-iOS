@@ -299,7 +299,6 @@
 "driving_region_us" = "Estats Units";
 "driving_region_canada" = "Canada";
 "driving_region_europe_asia" = "Euròpa, Asia, America latina e semblants";
-"driving_region_uk" = "Reiaume Unit,Índia e semblant";
 "driving_region_australia" = "Australia";
 "left_side_navigation" = "Circulacion a senèstra";
 "right_side_navigation" = "Circulacion a drecha";
@@ -446,7 +445,7 @@
 "gpx_elev_range" = "Gamma d'elevacion";
 "gpx_updown" = "Amont/Avau";
 "gpx_uphills_total" = "Desnivèu totau";
-"track_recording" = "Enregistrament de la traça";
+"track_recording" = "Enregistrar la traça";
 "shared_string_currently_recording_track" = "Enregistrament de la traça en cors";
 "track_stop_rec" = "Arrestar l'enregistrament";
 "gpx_start_new_segment" = "Començar una estirada novèla";
@@ -1265,7 +1264,7 @@
 "app_mode_monowheel" = "Monocicleta";
 "show_direction" = "Indicacion de la distància";
 "base_profile_descr_pedestrian" = "Passejada, Escorreguda, Corsa";
-"select_base_profile_dialog_message" = "Començatz vòstre perfiu personalizat d'un perfiu predeterminat de l'aplicacion, es eu que predetermina la visibilitat deis clavelets e leis unitats de mesura de la velocitat e distància. Vaicí lei perfius d'aplicacion per defaut, amb d’exemples de personalizacion que se pòdon ajustar :";
+"select_base_profile_dialog_message" = "Començatz vòstre perfiu personalizat d\'un perfiu predeterminat de l\'aplicacion, es eu que predetermina la visibilitat deis clavelets e leis unitats de mesura de la velocitat e distància. Vaicí lei perfius d\'aplicacion per defaut, amb d’exemples de personalizacion que se pòdon ajustar :";
 "routing_profile_geocoding" = "Geocodatge";
 "base_profile_descr_public_transport" = "Mena de transpòrt public";
 "base_profile_descr_boat" = "Barca, Aviron, Vela";
@@ -2313,7 +2312,7 @@
 
 // World Regions
 "index_name_antarctica" = "Antartida";
-"plugin_mapillary_descr" = "Fornís la vista au plan de la carriera. Se mancan d'imatges, lei podètz ajustar vosautres e permetre a d'autres de ne'n beneficiar. Per activar la jaça Mapillary pron d'activar \"Imatges de carrieras\" dins lo menú de Configuracion.";
+"plugin_mapillary_descr" = "Fornís la vista au plan de la carriera. Se mancan d\'imatges, lei podètz ajustar vosautres e permetre a d\'autres de ne\'n beneficiar. Per activar la jaça Mapillary pron d\'activar \"Imatges de carrieras\" dins lo menú de Configuracion.";
 "product_desc_development" = "Per lei desvelopaires e leis utilisaires avançats";
 "some_articles_may_not_available_in_lang" = "Se pòt que d\'articles de la Wikipèdia siegan pas disponibles dins vòstra lenga.";
 "public_transport_ped_route_title" = "La caminada fa dins lei %@ e se podriá faire pus lèu amb lei transpòrts publics";
@@ -2720,7 +2719,7 @@
 "popular_destinations" = "Destinacions popularas";
 "activity_type_water_name" = "Aiga";
 "shared_string_finger" = "Det";
-"ant_plus_searching_text_description" = "Saretz braves d'aprochar l'aparelh e lo captador. Devètz activar lo captador per que OsmAnd o detècte.";
+"ant_plus_searching_text_description" = "Saretz braves d\'aprochar l\'aparelh e lo captador. Devètz activar lo captador per que OsmAnd o detècte.";
 "external_device_forget_sensor" = "Oblidar aqueste captador";
 "shared_string_travel" = "Viatge";
 "external_device_characteristic_total_distance" = "Distància totala";
@@ -2779,7 +2778,7 @@
 "offline_wikivoyage" = "Wikiviatge fòra de linha";
 "shared_string_view" = "Visualizacion";
 "shared_string_wrist" = "Ponhet";
-"no_widgets_descr" = "Ajustar un ò mai clavelet(s) partent de la lista de clavelets disponibles.";
+"no_widgets_descr" = "Ajustar unò mai clavelet(s) partent de la lista de clavelets disponibles.";
 "help_article_navigation_guidance_name" = "Guidatge";
 "help_article_troubleshooting_android_auto_name" = "Android Auto";
 "shared_string_setup_route" = "Definir un percors";
@@ -2789,17 +2788,17 @@
 "copy_build_version" = "Copiar la version dei compilacions";
 "map_widgets" = "Clavelets de la mapa";
 "map_widget_group_sunrise_sunset_desc" = "Aquestei clavelets indican quora lo soleu se lèva e tremonta.";
-"route_maneuvers_desc" = "Lei clavelets de percors son activats dau temps de la navigacion e mòstran leis informacions de distància, l'ora d'arribada ò de partença, lei crosaments, l'orientacion, lo nom de la carriera, leis informaions sus la via, la velocitat maximala, leis avís, lei POI e lei ponchs intermediaris.";
+"route_maneuvers_desc" = "Lei clavelets de percors son activats dau temps de la navigacion e mòstran leis informacions de distància, l\'ora d\'arribada ò de partença, lei crosaments, l\'orientacion, lo nom de la carriera, leis informaions sus la via, la velocitat maximala, leis avís, lei POI e lei ponchs intermediaris.";
 "developer_widgets" = "Clavelets per lei desvelopaires";
-"navigation_points_desc" = "Lei clavelets de percors son activats dau temps de la navigacion e mòstran leis informacions de distància, l'ora d'arribada ò de temps restant, lei crosaments que vènon, l'orientacion, lo nom de la carriera, leis informaions sus la via, la velocitat maximala, leis avís, lei POI e lei ponchs intermediaris.";
+"navigation_points_desc" = "Lei clavelets de percors son activats dau temps de la navigacion e mòstran leis informacions de distància, l\'ora d\'arribada ò de temps restant, lei crosaments que vènon, l\'orientacion, lo nom de la carriera, leis informaions sus la via, la velocitat maximala, leis avís, lei POI e lei ponchs intermediaris.";
 "bottom_widgets_panel" = "Panèu inferior";
 "widget_panels_descr" = "Seleccionar una partida de l'ecran per ajustar ò agençar lei clavelets.";
 "simulation_preview_mode_desc" = "La velocitat de simulation serà maximala dins lei seccions drechas e baissarà ai crosaments.";
 "no_widgets_here_yet" = "Pas encar de clavelets aicí";
 "help_article_navigation_routing_horse_routing_name" = "Percots a cavau";
 "help_article_navigation_routing_osmand_routing_name" = "A prepaus dei guidatges OsmAnd";
-"help_article_navigation_routing_pedestrian_routing_name" = "Percors d'a pès";
-"simulation_real_mode_desc" = "Sus lei seccions drechas dei rotas, la velocitat serà pròcha de la velocitat maximala permesa. \nAi crotz de camins, la simulacion alentirà. \nD'autreis alentiments s'aplicaràn segon lei fuòcs tricolòrs, leis estòps, eca.";
+"help_article_navigation_routing_pedestrian_routing_name" = "Percors d\'a pès";
+"simulation_real_mode_desc" = "Sus lei seccions drechas dei rotas, la velocitat serà pròcha de la velocitat maximala permesa.  \nAi crotz de camins, la simulacion alentirà.  \nD\'autreis alentiments s\'aplicaràn segon lei fuòcs tricolòrs, leis estòps, eca.";
 "help_article_map_raster_maps_name" = "Mapas raster (en linha / fòra de linha)";
 "help_article_map_tracks_on_map_name" = "Traças e percors";
 "help_article_navigation_routing_boat_navigation_name" = "Calcul dau percors amb una barca";
@@ -2809,7 +2808,7 @@
 "map_widget_group_glide_desc" = "Lei clavelets mòstan la deriva a respècte de la destinacon ò la deriva mejana de la corsa correnta.";
 "help_article_map_legend_nautical_map_name" = "Rendut de Mapa nautica";
 "help_article_map_legend_osmand_name" = "Rendut OsmAnd";
-"help_article_map_legend_ski_map_name" = "Rendut de Mapa d'Esquí";
+"help_article_map_legend_ski_map_name" = "Rendut de Mapa d\'Esquí";
 "help_article_map_interact_with_map_name" = "Interagir amb la mapa";
 "help_article_map_map_context_menu_name" = "Menú contextuau de la mapa";
 "help_article_map_point_layers_on_map_name" = "Ponchs sus la mapa";
@@ -2839,7 +2838,7 @@
 "help_article_purchases_ios_name" = "Cròmpas iOS";
 "help_article_search_search_all_name" = "Tot recercar";
 "help_article_search_search_coordinates_name" = "Recercar de coordonadas";
-"help_article_search_search_poi_name" = "Recercar de POI (ponchs d'interès)";
+"help_article_search_search_poi_name" = "Recercar de POI (ponchs d\'interès)";
 "help_article_start_with_name" = "Començar amb OsmAnd";
 "help_article_start_with_first_steps_name" = "Premiers pas";
 "help_article_start_with_main_menu_name" = "Menú principau";
@@ -2848,7 +2847,17 @@
 "help_article_troubleshooting_maps_data_name" = "Mapas&Donadas";
 "help_article_troubleshooting_track_recording_issues_name" = "Enregistrar la traça";
 "help_article_widgets_name" = "Clavelets de la mapa";
-"help_article_widgets_info_widgets_name" = "Clavelets d'informacions";
+"help_article_widgets_info_widgets_name" = "Clavelets d\'informacions";
 "help_article_widgets_map_buttons_name" = "Claveles de la mapa";
 "help_article_widgets_markers_name" = "Clavelets de marcadors";
 "help_article_widgets_nav_widgets_name" = "Clavelets de guidatge";
+"short_min" = "m";
+"carplay" = "Carplay";
+"shared_string_bottom" = "En bas";
+"in_case_of_reverse_direction" = "En cas de direccion envèrsa";
+"shared_string_development" = "Desvelopament";
+"avoid_pt_types" = "Lo Transpòrt public es pas pres en còmpte…";
+"avoid_pt_types_descr" = "Seleccionatz quin transpòrt public se deu evitar per la navigacion:";
+"step_by_step" = "Pas a pas";
+"shared_string_favorites" = "Preferéncias";
+"download_srtm_maps" = "Corbas de nivèu";

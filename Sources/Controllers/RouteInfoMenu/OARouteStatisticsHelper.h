@@ -19,8 +19,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OARouteStatistics, OARouteSegmentAttribute;
-@class OAGPXDocument;
+@class OARouteStatistics, OARouteSegmentAttribute, OAGPXDocument;
 
 @interface OATrackChartPoints : NSObject
 

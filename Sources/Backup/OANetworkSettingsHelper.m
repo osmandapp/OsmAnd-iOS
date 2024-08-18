@@ -20,6 +20,7 @@
 #import "OAPrepareBackupResult.h"
 #import "OARootViewController.h"
 #import "OALog.h"
+#import "Localization.h"
 
 @implementation OANetworkSettingsHelper
 {

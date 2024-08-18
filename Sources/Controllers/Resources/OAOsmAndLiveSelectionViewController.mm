@@ -15,6 +15,8 @@
 #import "OASimpleTableViewCell.h"
 #import "OAIAPHelper.h"
 #import "OAAppSettings.h"
+#import "OAAppData.h"
+#import "OAObservable.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
@@ -120,7 +122,7 @@ static const NSInteger groupCount = 1;
 
 -(void) updateNow
 {
-    [OAOsmAndLiveHelper downloadUpdatesForRegion:_regionName resourcesManager:_app.resourcesManager];
+    [OAOsmAndLiveHelper downloadUpdatesForRegion:_regionName resourcesManager:_app.resourcesManager checkUpdatesAsync:YES];
 }
 
 - (void) didReceiveMemoryWarning
@@ -410,7 +412,7 @@ static const NSInteger groupCount = 1;
     NSString *regionNameStr = _regionName.toNSString();
     if (_isLiveUpdatesEnabled)
     {
-        [OAOsmAndLiveHelper downloadUpdatesForRegion:_regionName resourcesManager:_app.resourcesManager];
+        [OAOsmAndLiveHelper downloadUpdatesForRegion:_regionName resourcesManager:_app.resourcesManager checkUpdatesAsync:YES];
     }
     else
     {

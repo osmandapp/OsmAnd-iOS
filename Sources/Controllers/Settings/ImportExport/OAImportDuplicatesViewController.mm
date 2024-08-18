@@ -10,6 +10,7 @@
 #import "OAImportCompleteViewController.h"
 #import "OAMainSettingsViewController.h"
 #import "Localization.h"
+#import "OAApplicationMode.h"
 #import "OAColors.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAResourcesUIHelper.h"
@@ -27,6 +28,7 @@
 #import "OAFavoritesHelper.h"
 #import "OAFavoritesSettingsItem.h"
 #import "OAOsmNotePoint.h"
+#import "OASettingsHelper.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OADestination.h"
 #import "OATileSource.h"
@@ -239,7 +241,7 @@
                         item[@"description"] = [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"nav_type_hint"), routingProfile];
                     
                     item[@"icon"] = [UIImage imageNamed:modeBean.iconName];
-                    item[@"iconColor"] = UIColorFromRGB(modeBean.iconColor);
+                    item[@"iconColor"] = [modeBean getProfileColor];
                     item[@"cellType"] = [OASimpleTableViewCell getCellIdentifier];
                 }
                 else if ([currentItem isKindOfClass:OAQuickAction.class])

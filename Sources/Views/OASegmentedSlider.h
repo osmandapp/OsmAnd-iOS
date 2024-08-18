@@ -14,9 +14,18 @@
 @property (nonatomic) CGFloat currentMarkX;
 @property (nonatomic) CGFloat maximumForCurrentMark;
 
+@property (nonatomic) NSInteger stepsAmountWithoutDrawMark;
+
+- (NSInteger)getIndexForOptionStepsAmountWithoutDrawMark;
+- (void)clearTouchEventsUpInsideUpOutside;
+
+- (void)setNumberOfMarks:(NSInteger)numberOfMarks;
 - (void)setNumberOfMarks:(NSInteger)numberOfMarks
   additionalMarksBetween:(NSInteger)additionalMarksBetween;
 
 - (void)makeCustom;
+- (void)setUsingExtraThumbInset:(BOOL)isUsing;
+
+- (NSString *)getSelectingMarkTitleTextAtIndex:(NSInteger)index;
 
 @end

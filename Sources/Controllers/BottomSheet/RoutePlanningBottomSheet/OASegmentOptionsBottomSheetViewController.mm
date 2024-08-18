@@ -15,6 +15,7 @@
 #import "OAApplicationMode.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OAMapLayers.h"
 #import "OAMeasurementToolLayer.h"
 #import "OAGPXDocumentPrimitives.h"
@@ -106,7 +107,7 @@
                 @"type" : [OATitleIconRoundCell getCellIdentifier],
                 @"title" : mode.toHumanString,
                 @"img" : mode.getIconName,
-                @"tintColor" : UIColorFromRGB(mode.getIconColor),
+                @"tintColor" : mode.getProfileColor,
                 @"mode" : mode
             }
         ];

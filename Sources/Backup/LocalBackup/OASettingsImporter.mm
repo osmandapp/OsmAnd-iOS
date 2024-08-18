@@ -8,14 +8,18 @@
 
 #import "OASettingsImporter.h"
 #import "OsmAndApp.h"
+#import "OAObservable.h"
 #import "OAAppSettings.h"
 #import "OASettingsHelper.h"
 #import "OAOsmNotesSettingsItem.h"
 #import "OAOsmEditsSettingsItem.h"
 #import "Localization.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OAMapWidgetRegistry.h"
-
+#import "OAMapLayers.h"
+#import "OARouteLayer.h"
 #import "OASettingsItem.h"
 #import "OAAvoidRoadsSettingsItem.h"
 #import "OAMapSourcesSettingsItem.h"
@@ -39,6 +43,7 @@
 #import "OAResourcesSettingsItem.h"
 #import "OASuggestedDownloadsItem.h"
 #import "OAExportAsyncTask.h"
+#import "OAApplicationMode.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -269,9 +274,10 @@
         if (![itemJSON[@"type"] isEqualToString:@"DATA"])
         {
             OASettingsItem *item = [self createItem:itemJSON];
-            if (item)
-                [_items addObject:item];
-            
+            if (!item)
+                continue;
+
+            [_items addObject:item];
             NSString *pluginId = item.pluginId;
             if (pluginId != nil && item.type != EOASettingsItemTypePlugin)
             {
@@ -629,6 +635,10 @@
             if ([item exists])
                 [duplicateItems addObject:item.fileName];
         }
+        else if ([item isKindOfClass:OAQuickActionsSettingsItem.class] && [item exists])
+        {
+            [duplicateItems addObject:[((OAQuickActionsSettingsItem *) item) getButtonState]];
+        }
     }
     return duplicateItems;
 }
@@ -693,6 +703,7 @@
     OsmAndAppInstance app = OsmAndApp.instance;
     BOOL updateRoutingFiles = NO;
     BOOL updateResources = NO;
+    BOOL updateColorPalette = NO;
     for (OASettingsItem *item in _items)
     {
         if ([item isKindOfClass:OAFileSettingsItem.class])
@@ -700,12 +711,17 @@
             OAFileSettingsItem *fileItem = (OAFileSettingsItem *)item;
             updateResources = updateResources || fileItem.subtype != EOASettingsItemFileSubtypeUnknown;
             updateRoutingFiles = updateRoutingFiles || fileItem.subtype == EOASettingsItemFileSubtypeRoutingConfig;
+            updateColorPalette = updateColorPalette || fileItem.subtype == EOASettingsItemFileSubtypeColorPalette;
             
-            if (updateResources && updateRoutingFiles)
+            if (updateResources && updateRoutingFiles && updateColorPalette)
                 break;
         }
     }
-    
+
+    if (updateColorPalette)
+    {
+        [app.updateGpxTracksOnMapObservable notifyEvent];
+    }
     if (updateRoutingFiles)
         [app loadRoutingFiles];
     if (updateResources)

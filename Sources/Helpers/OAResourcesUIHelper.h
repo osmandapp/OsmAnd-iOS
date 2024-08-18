@@ -7,8 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "OsmAndApp.h"
-#import "OAWorldRegion.h"
 #import <FFCircularProgressView.h>
 #import "FFCircularProgressView+isSpinning.h"
 
@@ -17,7 +15,9 @@
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
-@class OADownloadDescriptionInfo;
+@class OADownloadDescriptionInfo, OARouteCalculationResult, OAWorldRegion, OAMapSource;
+
+@protocol OADownloadTask;
 
 @interface OAResourceItem : NSObject
 
@@ -45,6 +45,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (instancetype)initWithType:(OsmAndResourceType)resourceType items:(NSArray<OAResourceItem *> *)items;
 
 - (BOOL) allDownloaded;
+- (OAResourceItem *) getActiveItem:(BOOL)useDefautValue;
+- (NSString *) getResourceId;
 
 @end
 
@@ -54,6 +56,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 + (instancetype)withType:(OsmAndResourceType)type;
 + (NSString *)resourceTypeLocalized:(OsmAndResourceType)type;
++ (NSString *)getIconName:(OsmAndResourceType)type;
 + (UIImage *)getIcon:(OsmAndResourceType)type templated:(BOOL)templated;
 + (NSInteger)getOrderIndex:(NSNumber *)type;
 + (OsmAndResourceType)resourceTypeByScopeId:(NSString *)scopeId;
@@ -188,7 +191,8 @@ typedef void (^LocationArrayCallback)(NSArray<CLLocation *> *locations, NSError 
 + (void)offerDownloadAndInstallOf:(OARepositoryResourceItem *)item
                     onTaskCreated:(OADownloadTaskCallback)onTaskCreated
                     onTaskResumed:(OADownloadTaskCallback)onTaskResumed
-                completionHandler:(void(^)(UIAlertController *))completionHandler;
+                completionHandler:(void(^)(UIAlertController *))completionHandler
+                           silent:(BOOL)silent;
 
 + (void)offerDownloadAndUpdateOf:(OAOutdatedResourceItem *)item
                    onTaskCreated:(OADownloadTaskCallback)onTaskCreated

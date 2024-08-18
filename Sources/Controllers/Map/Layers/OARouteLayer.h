@@ -12,6 +12,9 @@
 
 @interface OARouteLayer : OABaseVectorLinesLayer
 
+@property (nonatomic, readonly) CLLocation *lastProj;
+@property (nonatomic, readonly) double lastCourse;
+
 - (void) refreshRoute;
 
 - (OAPreviewRouteLineInfo *) getPreviewRouteLineInfo;

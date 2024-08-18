@@ -8,19 +8,26 @@
 
 #import "OAWeatherHelper.h"
 #import "OsmAndApp.h"
+#import "OADownloadsManager.h"
 #import "OAResourcesUIHelper.h"
 #import "Localization.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OAManageResourcesViewController.h"
 #import "OAMapLayers.h"
 #import "OALog.h"
+#import "OADownloadTask.h"
+#import "OAWorldRegion.h"
 #import "OANativeUtilities.h"
 #import "OAIAPHelper.h"
 #import "OAWeatherPlugin.h"
+#import "OAAutoObserverProxy.h"
 #import "OAColors.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
-#import "OsmAnd_Maps-Swift.h"
 #import "OAPluginsHelper.h"
+#import "OAWeatherWebClient.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Map/WeatherTileResourceProvider.h>
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
@@ -73,7 +80,8 @@
             [OAWeatherBand withWeatherBand:WEATHER_BAND_PRESSURE],
             [OAWeatherBand withWeatherBand:WEATHER_BAND_WIND_SPEED],
             [OAWeatherBand withWeatherBand:WEATHER_BAND_CLOUD],
-            [OAWeatherBand withWeatherBand:WEATHER_BAND_PRECIPITATION]
+            [OAWeatherBand withWeatherBand:WEATHER_BAND_PRECIPITATION],
+            [OAWeatherBand withWeatherBand:WEATHER_BAND_WIND_ANIMATION]
         ];
 
         _weatherSizeCalculatedObserver = [[OAObservable alloc] init];
@@ -181,7 +189,7 @@
                     : updateFrequency == EOAWeatherForecastUpdatesDaily ? kWeatherForecastFrequencyDay
                             : kWeatherForecastFrequencyWeek;
             if (nowTime >= lastUpdateTime + secondsRequired)
-                [self downloadForecastByRegion:region];
+                [self downloadForecastByRegion:region silent:YES];
         }
 
         if (forecastsDownloading == regionIds.count)
@@ -194,7 +202,7 @@
     return [[_app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resourceId]] firstObject];
 }
 
-- (void)downloadForecastByRegion:(OAWorldRegion *)region
+- (void)downloadForecastByRegion:(OAWorldRegion *)region silent:(BOOL)silent
 {
     if (![[OAPluginsHelper getPlugin:OAWeatherPlugin.class] isEnabled] || ![OAIAPHelper isOsmAndProAvailable])
         return;
@@ -206,6 +214,7 @@
         return;
     else if (!networkManager.isReachableViaWiFi && [OAWeatherHelper getPreferenceWeatherAutoUpdate:regionId] == EOAWeatherAutoUpdateOverWIFIOnly)
         return;
+
     NSString *resourceId = [region.downloadsIdPrefix stringByAppendingString:@"tifsqlite"];
     const auto localResource = _app.resourcesManager->getLocalResource(QString::fromNSString(resourceId));
     OAResourceItem *localResourceItem;
@@ -240,9 +249,8 @@
             localResourceItem = item;
         }
     }
-    if (localResourceItem) {
-        [OAResourcesUIHelper offerDownloadAndInstallOf:(OARepositoryResourceItem *)localResourceItem onTaskCreated:nil onTaskResumed:nil];
-    }
+    if (localResourceItem)
+        [OAResourcesUIHelper offerDownloadAndInstallOf:(OARepositoryResourceItem *)localResourceItem onTaskCreated:nil onTaskResumed:nil completionHandler:nil silent:silent];
 }
 
 - (void)downloadForecastsByRegionIds:(NSArray<NSString *> *)regionIds;
@@ -252,7 +260,7 @@
     {
         if ([regionIds containsObject:[self.class checkAndGetRegionId:region]])
         {
-            [self downloadForecastByRegion:region];
+            [self downloadForecastByRegion:region silent:NO];
             forecastsDownloading++;
         }
 
@@ -843,6 +851,17 @@
 {
     NSTimeInterval hour = 3600.0;
     return [NSDate dateWithTimeIntervalSince1970:round(date.timeIntervalSince1970 / hour) * hour];
+}
+
+- (BOOL)allLayersAreDisabled
+{
+    QList<OsmAnd::BandIndex> bands = [self getVisibleBands];
+    return bands.isEmpty();
+}
+
+- (BOOL)isProcessingTiles
+{
+    return _weatherResourcesManager != nil && _weatherResourcesManager->isProcessingTiles();
 }
 
 @end

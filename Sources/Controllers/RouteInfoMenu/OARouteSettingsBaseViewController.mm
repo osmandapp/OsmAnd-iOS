@@ -17,7 +17,9 @@
 #import "OARoutingHelper.h"
 #import "OARouteProvider.h"
 #import "OAGPXDocument.h"
+#import "OAApplicationMode.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OARouteAvoidSettingsViewController.h"
 #import "OAFollowTrackBottomSheetViewController.h"
 #import "OARouteLineAppearanceHudViewController.h"
@@ -122,12 +124,12 @@
         auto& r = it->second;
         if (r.type == RoutingParameterType::BOOLEAN)
         {
-            if ([[NSString stringWithUTF8String:r.group.c_str()] isEqualToString:kRouteParamGroupReliefSmoothnessFactor])
+            if ([[NSString stringWithUTF8String:r.group.c_str()] isEqualToString:kRouteParamReliefSmoothnessFactor])
             {
                 reliefFactorParameters.push_back(r);
                 continue;
             }
-            else if ([[NSString stringWithUTF8String:r.id.c_str()] isEqualToString:kRouteParamIdHeightObstacles])
+            else if ([[NSString stringWithUTF8String:r.id.c_str()] isEqualToString:kRouteParamHeightObstacles])
             {
                 reliefFactorParameters.insert(reliefFactorParameters.begin(), r);
                 continue;
@@ -151,14 +153,14 @@
             else if (![[NSString stringWithUTF8String:r.id.c_str()] containsString:@"avoid"])
             {
                 OALocalNonAvoidParameter *rp = [[OALocalNonAvoidParameter alloc] initWithAppMode:am];
-                if ([[NSString stringWithUTF8String:r.id.c_str()] isEqualToString:kRouteParamIdGoodsRestrictions])
+                if ([[NSString stringWithUTF8String:r.id.c_str()] isEqualToString:kRouteParamGoodsRestrictions])
                     continue;
                 rp.routingParameter = r;
                 rp.delegate = self;
                 [list addObject:rp];
             }
         }
-        else if ([[NSString stringWithUTF8String:r.id.c_str()] isEqualToString:kRouteParamIdHazmatCategory])
+        else if ([[NSString stringWithUTF8String:r.id.c_str()] isEqualToString:kRouteParamHazmatCategory])
         {
             OAHazmatRoutingParameter *hazmatCategory = [[OAHazmatRoutingParameter alloc] initWithAppMode:[self.routingHelper getAppMode]];
             hazmatCategory.routingParameter = r;
@@ -170,7 +172,7 @@
     if (reliefFactorParameters.size() > 0)
     {
         OALocalRoutingParameterGroup *group = [[OALocalRoutingParameterGroup alloc] initWithAppMode:[self.routingHelper getAppMode]
-                                                                                          groupName:kRouteParamGroupReliefSmoothnessFactor];
+                                                                                          groupName:kRouteParamReliefSmoothnessFactor];
         group.delegate = self;
         for (const auto& p : reliefFactorParameters)
         {
@@ -196,7 +198,7 @@
         auto& r = it->second;
         if (r.type == RoutingParameterType::BOOLEAN)
         {
-            if ([[NSString stringWithUTF8String:r.group.c_str()] isEqualToString:kRouteParamGroupReliefSmoothnessFactor])
+            if ([[NSString stringWithUTF8String:r.group.c_str()] isEqualToString:kRouteParamReliefSmoothnessFactor])
                 continue;
             
             if (r.group.empty() && [[NSString stringWithUTF8String:r.id.c_str()] containsString:@"avoid"])

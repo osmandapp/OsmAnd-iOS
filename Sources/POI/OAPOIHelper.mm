@@ -21,6 +21,7 @@
 #import "OASearchPoiTypeFilter.h"
 #import "OACollatorStringMatcher.h"
 #import "OAMapUtils.h"
+#import "OAResultMatcher.h"
 
 #include <OsmAndCore/CommonTypes.h>
 #include <OsmAndCore/Data/DataCommonTypes.h>
@@ -38,6 +39,8 @@
 #define kSearchLimitRaw 5000
 #define kRadiusKmToMetersKoef 1200.0
 #define kZoomToSearchPOI 16.0
+
+static NSArray<NSString *> *const kNameTagPrefixes = @[@"name:", @"int_name", @"nat_name", @"reg_name", @"loc_name", @"old_name", @"alt_name", @"short_name", @"official_name"];
 
 @implementation OAPOIHelper {
 
@@ -503,13 +506,37 @@
 
 - (NSString *) getPoiStringWithoutType:(OAPOI *)poi
 {
-    OAPOIType *pt = poi.type;
-    NSString *nm;
-    if (pt)
-        nm = pt.nameLocalized;
-
+    OAPOICategory *pc = poi.type.category;
+    //multivalued amenity
+    NSArray<NSString *> * subtypes = [poi.subType componentsSeparatedByString:@";"];
+    NSMutableString *typeName = [NSMutableString string];
+    for (NSString * subType : subtypes)
+    {
+        OAPOIType * pt = [pc getPoiTypeByKeyName:subType];
+        NSString *tmp = [NSString string];
+        if (pt != nil)
+        {
+            tmp = pt.nameLocalized;
+        }
+        else
+        {
+            tmp = [[subType stringByReplacingOccurrencesOfString: @"_" withString:@" "] lowercaseString];
+        }
+        
+        if ([typeName length] > 0)
+        {
+            [typeName appendFormat:@", %@", [tmp lowercaseString]];
+            break;
+        }
+        else
+        {
+            typeName = [NSMutableString stringWithString:tmp];
+        }
+    }
+    
+    
     NSString *n = poi.nameLocalized;
-    if (nm && [n indexOf:nm] != -1)
+    if (typeName && [n indexOf:typeName] != -1)
     {
         // type is contained in name e.g.
         // n = "Bakery the Corner"
@@ -518,9 +545,9 @@
         return n;
     }
     if (n.length == 0)
-        return nm;
+        return typeName;
 
-    return [NSString stringWithFormat:@"%@ %@", nm, n];
+    return [NSString stringWithFormat:@"%@ %@", typeName, n];
 }
 
 - (OAPOIType *) getTextPoiAdditionalByKey:(NSString *)name
@@ -1468,6 +1495,17 @@
 {
     _breakSearch = !_isSearchDone;
     return _breakSearch;
+}
+
+- (BOOL) isNameTag:(NSString *)tag
+{
+    for (NSString *prefix in kNameTagPrefixes)
+    {
+        if ([tag hasPrefix:prefix])
+            return YES;
+    }
+    
+    return NO;
 }
 
 - (void) onPOIFound:(const OsmAnd::ISearch::IResultEntry&)resultEntry

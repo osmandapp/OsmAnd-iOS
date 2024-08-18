@@ -19,7 +19,6 @@
 #import "OATitleIconProgressbarCell.h"
 #import "OAValueTableViewCell.h"
 #import "OARightIconTableViewCell.h"
-#import "FFCircularProgressView+isSpinning.h"
 #import "OAResourcesUIHelper.h"
 #import "OAMainSettingsViewController.h"
 #import "OANetworkSettingsHelper.h"
@@ -54,13 +53,6 @@
 
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
-
-typedef NS_ENUM(NSInteger, EOAItemStatusType)
-{
-    EOAItemStatusStartedType = 0,
-    EOAItemStatusInProgressType,
-    EOAItemStatusFinishedType
-};
 
 @interface OACloudBackupViewController () <UITableViewDelegate, UITableViewDataSource, OAOnPrepareBackupListener, OAOnDeleteAccountListener, OABackupTypesDelegate, MFMailComposeViewControllerDelegate>
 

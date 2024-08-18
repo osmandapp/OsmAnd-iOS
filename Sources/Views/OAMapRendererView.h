@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OAMapRendererViewProtocol.h"
 
 #include <OsmAndCore/QtExtensions.h>
 #include <OsmAndCore/CommonTypes.h>
@@ -21,9 +22,6 @@
 #include <OsmAndCore/Map/MapRendererDebugSettings.h>
 #include <OsmAndCore/Map/IMapRenderer.h>
 #include <OsmAndCore/Map/MapRendererTypes.h>
-
-#import "OAMapRendererViewProtocol.h"
-#import "OAObservable.h"
 
 static const float kViewportScale = 1.0f;
 static const float kViewportBottomScale = 1.5f;
@@ -54,6 +52,8 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
     _DECLARE_ENTRY(Zoom)
 };
 #undef _DECLARE_ENTRY
+
+@class OAObservable;
 
 @protocol OAMapRendererDelegate
 
@@ -86,6 +86,8 @@ struct CLLocationCoordinate2D;
 - (void)setMyLocationCircleColor:(OsmAnd::FColorARGB)color;
 - (void)setMyLocationCirclePosition:(OsmAnd::PointI)location31;
 - (void)setMyLocationCircleRadius:(float)radiusInMeters;
+- (void)setMyLocationSectorDirection:(float)directionAngle;
+- (void)setMyLocationSectorRadius:(float)radius;
 
 - (QList<OsmAnd::IMapRenderer::MapSymbolInformation>)getSymbolsAt:(OsmAnd::PointI)screenPoint;
 - (QList<OsmAnd::IMapRenderer::MapSymbolInformation>)getSymbolsIn:(OsmAnd::AreaI)screenArea strict:(BOOL)strict;
@@ -105,6 +107,7 @@ struct CLLocationCoordinate2D;
 - (BOOL) suspendGpuWorker;
 - (BOOL) resumeGpuWorker;
 - (void) invalidateFrame;
+- (void) changeTimePeriod;
 - (void) setSymbolsOpacity:(float)opacityFactor;
 - (void) setDateTime:(int64_t)dateTime;
 - (void) setSymbolSubsectionConfiguration:(int)subsectionIndex configuration:(const OsmAnd::SymbolSubsectionConfiguration &)configuration;

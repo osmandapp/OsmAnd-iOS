@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OACarPlayDashboardInterfaceController.h"
 
 @protocol OACarPlayDashboardDelegate;
 
@@ -15,6 +16,7 @@
 - (void)onInterfaceControllerAttached;
 - (void)onInterfaceControllerDetached;
 - (void)onMapViewAttached;
+- (void)onUpdateMapTemplateStyle;
 
 @end
 

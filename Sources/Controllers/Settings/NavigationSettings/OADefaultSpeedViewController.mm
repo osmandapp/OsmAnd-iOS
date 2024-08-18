@@ -10,6 +10,7 @@
 #import "OAValueTableViewCell.h"
 #import "OASliderWithValuesCell.h"
 #import "OAAppSettings.h"
+#import "OAApplicationMode.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OsmAndApp.h"

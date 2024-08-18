@@ -16,6 +16,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OsmAndApp.h"
 #import "OAPlugin.h"
+#import "OAAppData.h"
 #import "OAMonitoringPlugin.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAOsmEditingSettingsViewController.h"
@@ -28,6 +29,7 @@
 #import "OAProfileGeneralSettingsViewController.h"
 #import "OAProfileNavigationSettingsViewController.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAProfileAppearanceViewController.h"
 #import "OACopyProfileBottomSheetViewControler.h"
 #import "OADeleteProfileBottomSheetViewController.h"
@@ -46,6 +48,8 @@
 #import "OAChoosePlanHelper.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
+#import "OAMapSource.h"
+#import "OAObservable.h"
 
 #define kSidePadding 16.
 #define BACKUP_INDEX_DIR @"backup"
@@ -148,7 +152,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 
 - (UIColor *)getRightIconTintColorLargeTitle
 {
-    return UIColorFromRGB([_appMode getIconColor]);
+    return [_appMode getProfileColor];
 }
 
 - (EOABaseNavbarStyle)getNavbarStyle
@@ -738,7 +742,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     [[OARootViewController instance].mapPanel recreateAllControls];
     [OAMapStyleSettings.sharedInstance loadParameters];
     [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
-    [[[OsmAndApp instance].data applicationModeChangedObservable] notifyEventWithKey:nil];
+    [OsmAndApp.instance.applicationModeChangedObservable notifyEventWithKey:nil];
     [self updateView];
 }
 

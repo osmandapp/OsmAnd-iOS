@@ -382,7 +382,6 @@
 "driving_region_us" = "യുണൈറ്റഡ് സ്റ്റേറ്റ്സ്";
 "driving_region_canada" = "കാനഡ";
 "driving_region_europe_asia" = "യൂറോപ്പും ഏഷ്യായും, ലാറ്റിനമേരിക്ക തുടങ്ങിയ";
-"driving_region_uk" = "ഇന്ത്യ, യൂകെ, ജപ്പാന്‍";
 "driving_region_australia" = "ഓസ്ട്രേലിയ";
 "left_side_navigation" = "ലെഫ്ട് ഹാന്റ് ഡ്രൈവിങ്ങ്";
 "right_side_navigation" = "\"റൈറ്റ്  ഹാന്റ് ഡ്രൈവിങ്ങ്\"";
@@ -2329,3 +2328,14 @@
 "wikivoyage_download_pics" = "ചിത്രങ്ങൾ ഡൗൺലോഡ് ചെയ്യുക";
 "shared_string_travel_guides" = "\"യാത്റാ സഹായികള്‍  \"";
 "map_screen_orientation" = "സ്ക്രീന്‍ ക്രമീകരണം";
+"shared_string_bottom" = "താഴെ";
+"edit_tilesource_minzoom" = "ഏറ്റവും കുറഞ്ഞ സൂം";
+"avoid_pt_types_descr" = "നാവിഗേഷനിൽ ഒഴിവാക്കേണ്ട പൊതു ഗതാഗത തരങ്ങൾ തിരഞ്ഞെടുക്കൂ:";
+"avoid_pt_types" = "ഒഴിവാക്കണ്ട ട്രാൻസ്പോർട്ട് തരങ്ങൾ ...";
+"edit_tilesource_maxzoom" = "ഏറ്റവും കൂടിയ സൂം";
+"voices" = "വോയിസ് സൂചനകള്‍";
+"shared_string_favorite" = "താല്‍പര്യമുള്ളവ";
+"map_source" = "ഭൂപടഉറവിടം";
+"download_srtm_maps" = "കോണ്ടൂര്‍ ലൈനുക";
+"shared_string_change" = "\"മാറ്റുക \"";
+"shared_string_favorites" = "ഇഷ്ടമുളളവ";

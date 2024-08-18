@@ -8,6 +8,8 @@
 
 #import "OAAddWaypointViewController.h"
 #import "OARootViewController.h"
+#import "OAMapViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OATrackMenuHudViewController.h"
 #import "OAMapRendererView.h"
 #import "OAContextMenuLayer.h"
@@ -34,18 +36,19 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomSeparatorHeight;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomSeparatorTopConstraint;
 
+@property (nonatomic) OAMapPanelViewController *mapPanelViewController;
+@property (nonatomic) OAGPX *gpx;
+@property (nonatomic) OATargetMenuViewControllerState *targetMenuState;
+
 @end
 
 @implementation OAAddWaypointViewController
 {
     OsmAndAppInstance _app;
     OAContextMenuLayer *_contextLayer;
-    OAMapPanelViewController *_mapPanelViewController;
 
-    OAGPX *_gpx;
     BOOL _isCurrentTrack;
     OAGpxWptItem *_movedPoint;
-    OATargetMenuViewControllerState *_targetMenuState;
 }
 
 - (instancetype)initWithGpx:(OAGPX *)gpx
@@ -107,14 +110,15 @@
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    __weak __typeof(self) weakSelf = self;
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        if (self.delegate)
-            [self.delegate contentChanged];
+        if (weakSelf.delegate)
+            [weakSelf.delegate contentChanged];
 
         if (![OAUtilities isLandscapeIpadAware])
-            [OAUtilities setMaskTo:self.contentView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
+            [OAUtilities setMaskTo:weakSelf.contentView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
         else
-            self.contentView.layer.mask = nil;
+            weakSelf.contentView.layer.mask = nil;
     } completion:nil];
 }
 
@@ -212,12 +216,13 @@
 - (IBAction)cancelPressed:(id)sender
 {
     [_contextLayer exitChangePositionMode:_movedPoint applyNewPosition:NO];
+    __weak __typeof(self) weakSelf = self;
     [_mapPanelViewController targetHideMenu:0.3 backButtonClicked:YES onComplete:^{
-        if ([_targetMenuState isKindOfClass:OATrackMenuViewControllerState.class])
+        if ([weakSelf.targetMenuState isKindOfClass:OATrackMenuViewControllerState.class])
         {
-            OATrackMenuViewControllerState *state = (OATrackMenuViewControllerState *) _targetMenuState;
+            OATrackMenuViewControllerState *state = (OATrackMenuViewControllerState *) weakSelf.targetMenuState;
             state.openedFromTrackMenu = NO;
-            [_mapPanelViewController openTargetViewWithGPX:_gpx
+            [weakSelf.mapPanelViewController openTargetViewWithGPX:weakSelf.gpx
                                               trackHudMode:EOATrackMenuHudMode
                                                      state:state];
         }

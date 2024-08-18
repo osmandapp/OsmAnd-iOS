@@ -21,7 +21,7 @@
 #import "OAExportSettingsCategory.h"
 #import "OASettingsCategoryItems.h"
 #import "OrderedDictionary.h"
-#import "OAQuickActionRegistry.h"
+#import "OAMapButtonsHelper.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAAvoidSpecificRoads.h"
 #import "OAFavoritesHelper.h"
@@ -42,6 +42,7 @@
 #import "OAFileNameTranslationHelper.h"
 #import "OsmAndApp.h"
 #import "OACustomPlugin.h"
+#import "OAApplicationMode.h"
 
 #import "OAOsmNotesSettingsItem.h"
 #import "OAOsmEditsSettingsItem.h"
@@ -66,6 +67,7 @@
 #import "OASearchHistorySettingsItem.h"
 #import "OATileSource.h"
 #import "OAPluginsHelper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Map/IOnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
@@ -277,9 +279,20 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         settingsItems[OAExportSettingsType.PROFILE] = appModeBeans;
     }
     settingsItems[OAExportSettingsType.GLOBAL] = @[[[OAGlobalSettingsItem alloc] init]];
-    
-    OAQuickActionRegistry *registry = OAQuickActionRegistry.sharedInstance;
-    NSArray<OAQuickAction *> *actionsList = registry.getQuickActions;
+
+    OAMapButtonsHelper *buttonsHelper = [OAMapButtonsHelper sharedInstance];
+    NSArray<QuickActionButtonState *> *buttonStates = [buttonsHelper getButtonsStates];
+    if (buttonStates.count == 1)
+    {
+        QuickActionButtonState *state = buttonStates.firstObject;
+        if ([state isDefaultButton] && state.quickActions.count == 0)
+            buttonStates = @[];
+    }
+    if (buttonStates.count > 0)
+        settingsItems[OAExportSettingsType.QUICK_ACTIONS] = buttonStates;
+
+    OAMapButtonsHelper *registry = OAMapButtonsHelper.sharedInstance;
+    NSArray<QuickActionButtonState *> *actionsList = [registry getButtonsStates];
     if (actionsList.count > 0)
         settingsItems[OAExportSettingsType.QUICK_ACTIONS] = actionsList;
     
@@ -290,7 +303,31 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     NSArray<OAAvoidRoadInfo *> *impassableRoads = OAAvoidSpecificRoads.instance.getImpassableRoads;
     if (impassableRoads.count > 0)
         settingsItems[OAExportSettingsType.AVOID_ROADS] = impassableRoads;
-    
+
+    NSFileManager *fileManager = NSFileManager.defaultManager;
+    BOOL isDir = NO;
+    NSString *colorPaletteFolder = [OsmAndApp instance].colorsPalettePath;
+    BOOL exists = [fileManager fileExistsAtPath:colorPaletteFolder isDirectory:&isDir];
+    if (exists && isDir)
+    {
+        NSArray<NSString *> *files = [fileManager contentsOfDirectoryAtPath:colorPaletteFolder error:nil];
+        NSMutableArray<NSString *> *items = [NSMutableArray array];
+        for (NSString *file in files)
+        {
+            if ([file.pathExtension isEqualToString:@"txt"])
+                [items addObject:[colorPaletteFolder stringByAppendingPathComponent:file]];
+        }
+        
+        if (items.count > 0)
+        {
+            [items sortUsingComparator:^NSComparisonResult(NSString * _Nonnull item1, NSString * _Nonnull item2) {
+                NSComparisonResult r = [[ColorsPaletteUtils getPaletteTypeName:item1] compare:[ColorsPaletteUtils getPaletteTypeName:item2]];
+                return r == NSOrderedSame ? [[ColorsPaletteUtils getPaletteName:item1] compare:[ColorsPaletteUtils getPaletteName:item2]] : r;
+            }];
+            settingsItems[OAExportSettingsType.COLOR_DATA] = items;
+        }
+    }
+
     return settingsItems;
 }
 
@@ -502,16 +539,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     }
     return nil;
 }
-
-- (OAQuickActionsSettingsItem *) getBaseQuickActionsSettingsItem:(NSArray<OASettingsItem *> *)settingsItems
-{
-    for (OASettingsItem * settingsItem in settingsItems)
-    {
-        if (settingsItem.type == EOASettingsItemTypeQuickActions)
-            return (OAQuickActionsSettingsItem *)settingsItem;
-    }
-    return nil;
-}
  
 - (OAPoiUiFilterSettingsItem *) getBasePoiUiFiltersSettingsItem:(NSArray<OASettingsItem *> *)settingsItems
 {
@@ -553,11 +580,27 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     return nil;
 }
 
+- (OAQuickActionsSettingsItem *)getBaseQuickActionsSettingsItem:(QuickActionButtonState *)buttonState
+                                                  settingsItems:(NSArray<OASettingsItem *> *)settingsItems
+{
+    for (OASettingsItem *settingsItem in settingsItems)
+    {
+        if (settingsItem.type == EOASettingsItemTypeQuickActions)
+        {
+            OAQuickActionsSettingsItem *item = (OAQuickActionsSettingsItem *) settingsItem;
+            QuickActionButtonState *state = [item getButtonState];
+            if ([state.id isEqualToString:buttonState.id] && [[state getName] isEqualToString:[buttonState getName]])
+                return item;
+        }
+    }
+    return nil;
+}
+
 - (NSArray <OASettingsItem *>*) prepareSettingsItems:(NSArray *)data settingsItems:(NSArray<OASettingsItem *> *)settingsItems doExport:(BOOL)doExport
 {
     NSMutableArray<OASettingsItem *> *result = [NSMutableArray array];
     NSMutableArray<OAApplicationModeBean *> *appModeBeans = [NSMutableArray array];
-    NSMutableArray<OAQuickAction *> *quickActions = [NSMutableArray array];
+    NSMutableArray<QuickActionButtonState *> *quickActionButtons = [NSMutableArray array];
     NSMutableArray<OAPOIUIFilter *> *poiUIFilters = [NSMutableArray array];
     NSMutableArray<OATileSource *> *tileSourceTemplates = [NSMutableArray array];
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
@@ -573,8 +616,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     {
         if ([object isKindOfClass:OAApplicationModeBean.class])
             [appModeBeans addObject:object];
-        else if ([object isKindOfClass:OAQuickAction.class])
-            [quickActions addObject:object];
+        else if ([object isKindOfClass:QuickActionButtonState.class])
+            [quickActionButtons addObject:object];
         else if ([object isKindOfClass:OAPOIUIFilter.class])
             [poiUIFilters addObject:object];
         else if ([object isKindOfClass:OATileSource.class])
@@ -618,6 +661,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             [result addObject:object];
     }
     if (appModeBeans.count > 0)
+    {
         for (OAApplicationModeBean *modeBean in appModeBeans)
         {
             if (doExport)
@@ -631,10 +675,14 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
                 [result addObject:[self getBaseProfileSettingsItem:modeBean settingsItems:settingsItems]];
             }
         }
-    if (quickActions.count > 0)
+    }
+    if (quickActionButtons.count > 0)
     {
-        OAQuickActionsSettingsItem *baseItem = [self getBaseItem:EOASettingsItemTypeQuickActions clazz:OAQuickActionsSettingsItem.class settingsItems:settingsItems];
-        [result addObject:[[OAQuickActionsSettingsItem alloc] initWithItems:quickActions baseItem:baseItem]];
+        for (QuickActionButtonState *buttonState in quickActionButtons)
+        {
+            OAQuickActionsSettingsItem *baseItem = [self getBaseQuickActionsSettingsItem:buttonState settingsItems:settingsItems];
+            [result addObject:[[OAQuickActionsSettingsItem alloc] initWithBaseItem:baseItem buttonState:buttonState]];
+        }
     }
     if (tileSourceTemplates.count > 0)
         [result addObject:[[OAMapSourcesSettingsItem alloc] initWithItems:tileSourceTemplates]];
@@ -713,11 +761,12 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 {
     NSMutableDictionary<OAExportSettingsType *, NSArray *> *settingsToOperate = [NSMutableDictionary new];
     NSMutableArray<OAApplicationModeBean *> *profiles = [NSMutableArray array];
-    NSMutableArray<OAQuickAction *> *quickActions = [NSMutableArray array];
+    NSMutableArray<QuickActionButtonState *> *quickActionButtonStates = [NSMutableArray array];
     NSMutableArray<OAPOIUIFilter *> *poiUIFilters = [NSMutableArray array];
     NSMutableArray<OATileSource *> *tileSourceTemplates = [NSMutableArray array];
     NSMutableArray<NSString *> *routingFilesList = [NSMutableArray array];
     NSMutableArray<NSString *> *renderFilesList = [NSMutableArray array];
+    NSMutableArray<NSString *> *colorPaletteFilesList = [NSMutableArray array];
     NSMutableArray<OAFileSettingsItem *> *tracksFilesList = [NSMutableArray array];
     NSMutableArray<OAFileSettingsItem *> *mapFilesList = [NSMutableArray array];
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
@@ -745,6 +794,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
                     [renderFilesList addObject:fileItem.filePath];
                 else if (fileItem.subtype == EOASettingsItemFileSubtypeRoutingConfig)
                     [routingFilesList addObject:fileItem.filePath];
+                else if (fileItem.subtype == EOASettingsItemFileSubtypeColorPalette)
+                    [colorPaletteFilesList addObject:fileItem.filePath];
                 else if ([OAFileSettingsItemFileSubtype isMap:fileItem.subtype])
                     [mapFilesList addObject:fileItem];
                 break;
@@ -756,11 +807,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             }
             case EOASettingsItemTypeQuickActions:
             {
-                OAQuickActionsSettingsItem *quickActionsItem = (OAQuickActionsSettingsItem *) item;
-                if (importComplete)
-                    [quickActions addObjectsFromArray:quickActionsItem.appliedItems];
-                else
-                    [quickActions addObjectsFromArray:quickActionsItem.items];
+                [quickActionButtonStates addObject:[(OAQuickActionsSettingsItem *) item getButtonState]];
                 break;
             }
             case EOASettingsItemTypePoiUIFilters:
@@ -856,8 +903,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     }
     if (profiles.count > 0 || addEmptyItems)
         settingsToOperate[OAExportSettingsType.PROFILE] = profiles;
-    if (quickActions.count > 0 || addEmptyItems)
-        settingsToOperate[OAExportSettingsType.QUICK_ACTIONS] = quickActions;
+    if (quickActionButtonStates.count > 0 || addEmptyItems)
+        settingsToOperate[OAExportSettingsType.QUICK_ACTIONS] = quickActionButtonStates;
     if (poiUIFilters.count > 0 || addEmptyItems)
         settingsToOperate[OAExportSettingsType.POI_TYPES] = poiUIFilters;
     if (tileSourceTemplates.count > 0 || addEmptyItems)
@@ -866,6 +913,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         settingsToOperate[OAExportSettingsType.CUSTOM_RENDER_STYLE] = renderFilesList;
     if (routingFilesList.count > 0 || addEmptyItems)
         settingsToOperate[OAExportSettingsType.CUSTOM_ROUTING] = routingFilesList;
+    if (colorPaletteFilesList.count > 0 || addEmptyItems)
+        settingsToOperate[OAExportSettingsType.COLOR_DATA] = colorPaletteFilesList;
     if (tracksFilesList.count > 0 || addEmptyItems)
         settingsToOperate[OAExportSettingsType.TRACKS] = tracksFilesList;
     if (mapFilesList.count > 0 || addEmptyItems)

@@ -12,9 +12,7 @@ final class WidgetUtils {
                                panel: WidgetsPanel,
                                selectedAppMode: OAApplicationMode,
                                widgetParams: [String: Any]? = nil) {
-        guard let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry else {
-            return
-        }
+        let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
 
         let enabledWidgets: [String] = orderedWidgetPages.flatMap { $0 }
         removeUnusedWidgets(enabledWidgets: enabledWidgets, panel: panel, appMode: selectedAppMode, widgetRegistry: widgetRegistry)

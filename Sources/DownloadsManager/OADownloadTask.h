@@ -8,8 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "OAObservable.h"
-
 typedef NS_ENUM(NSInteger, OADownloadTaskState) {
     OADownloadTaskStateUnknown = -1,
     OADownloadTaskStateRunning = 0,
@@ -17,6 +15,8 @@ typedef NS_ENUM(NSInteger, OADownloadTaskState) {
     OADownloadTaskStateStopping = 2,
     OADownloadTaskStateFinished = 3,
 };
+
+@class OAObservable;
 
 @protocol OADownloadTask <NSObject>
 

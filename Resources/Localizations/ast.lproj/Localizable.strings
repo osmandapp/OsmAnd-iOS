@@ -382,7 +382,6 @@
 "driving_region_us" = "Estaos Xuníos";
 "driving_region_canada" = "Canadá";
 "driving_region_europe_asia" = "Europe, Asia, Latin America, and similar";
-"driving_region_uk" = "UK, India, and similar";
 "driving_region_australia" = "Australia";
 "left_side_navigation" = "Circulación pela esquierda";
 "right_side_navigation" = "Circulación pela derecha";
@@ -2520,7 +2519,7 @@
 "no_travel_guides_data_descr" = "Download Wikivoyage travel guides to view articles about places around the world without a connection to the Internet.";
 "shared_string_dark" = "Escuridá";
 "shared_string_explore" = "Esplorar";
-"weather_update_disabled" = "Disabled";
+"weather_update_disabled" = "Desactivóse";
 "map_marker_1st" = "First map marker";
 "upload_poi" = "Upload POI";
 "visibility" = "Visibilidá";
@@ -2559,3 +2558,19 @@
 "announcement_time_intervals" = "Time and distance intervals";
 "user_points" = "User points";
 "announcement_time_passing" = "Passing";
+"shared_string_always" = "Siempres";
+"route_recalculation_dist_title" = "Minimal distance to recalculate route";
+"avoid_pt_types_descr" = "Select public transport types to avoid for navigation:";
+"shared_string_bottom" = "Bottom";
+"avoid_pt_types" = "Avoid transport types…";
+"in_case_of_reverse_direction" = "In case of reverse direction";
+"shared_string_development" = "Desendolcu";
+"step_by_step" = "Xiru a xiru";
+"edit_tilesource_maxzoom" = "Maximum zoom";
+"edit_tilesource_minzoom" = "Minimum zoom";
+"shared_string_favorite" = "Favorite";
+"download_srtm_maps" = "Contour lines";
+"shared_string_favorites" = "Favoritos";
+"voices" = "Indicaciones per voz";
+"shared_string_change" = "Camudar";
+"map_source" = "Map source";

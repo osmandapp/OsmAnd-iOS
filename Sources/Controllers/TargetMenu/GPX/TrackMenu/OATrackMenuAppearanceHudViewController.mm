@@ -12,6 +12,7 @@
 #import "OATableViewCustomFooterView.h"
 #import "OAFoldersCollectionView.h"
 #import "OASlider.h"
+#import "OAAppData.h"
 #import "OASimpleTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAValueTableViewCell.h"
@@ -22,7 +23,7 @@
 #import "OASegmentSliderTableViewCell.h"
 #import "OASegmentedControlCell.h"
 #import "OADividerCell.h"
-#import "OAImageTextViewCell.h"
+#import "OALineChartCell.h"
 #import "Localization.h"
 #import "OAColors.h"
 #import "OAOsmAndFormatter.h"
@@ -32,28 +33,32 @@
 #import "OAGPXAppearanceCollection.h"
 #import "OsmAndApp.h"
 #import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OAPluginPopupViewController.h"
-#import "OASegmentedSlider.h"
 #import "OARouteStatisticsHelper.h"
+#import "OAConcurrentCollections.h"
 #import "OASizes.h"
-#import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAMapSettingsTerrainParametersViewController.h"
+#import "OAColoringType.h"
+#import "OsmAnd_Maps-Swift.h"
+#import <Charts/Charts-Swift.h>
 
-#define kColorsSection 1
-
-#define kColorGridOrDescriptionCell 1
+static const NSInteger kColorsSection = 1;
 
 @interface OABackupGpx : NSObject
 
 @property (nonatomic) NSInteger color;
 @property (nonatomic) BOOL showStartFinish;
 @property (nonatomic) CGFloat verticalExaggerationScale;
+@property (nonatomic) NSInteger elevationMeters;
 @property (nonatomic) BOOL joinSegments;
 @property (nonatomic) BOOL showArrows;
 @property (nonatomic) NSString *width;
 @property (nonatomic) NSString *coloringType;
+@property (nonatomic) NSString *gradientPaletteName;
 @property (nonatomic) EOAGpxSplitType splitType;
 @property (nonatomic) EOAGPX3DLineVisualizationByType visualization3dByType;
 @property (nonatomic) EOAGPX3DLineVisualizationWallColorType visualization3dWallColorType;
@@ -102,33 +107,39 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomSeparatorHeight;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomSeparatorTopConstraint;
 
+@property (nonatomic) OATrackMenuViewControllerState *reopeningTrackMenuState;
+@property (nonatomic) BOOL forceHiding;
+@property (nonatomic) OsmAndAppInstance app;
+@property (nonatomic) OAGPXAppearanceCollection *appearanceCollection;
+@property (nonatomic) OAColorItem *selectedColorItem;
+@property (nonatomic) BOOL isNewColorSelected;
+@property (nonatomic) BOOL isDefaultColorRestored;
+@property (nonatomic) OABackupGpx *backupGpxItem;
+@property (nonatomic) GradientColorsCollection *gradientColorsCollection;
+@property (nonatomic) PaletteColor *selectedPaletteColorItem;
+@property (nonatomic) NSIndexPath *colorsCollectionIndexPath;
+@property (nonatomic) OAConcurrentArray<PaletteColor *> *sortedPaletteColorItems;
+@property (nonatomic) NSIndexPath *paletteLegendIndexPath;
+@property (nonatomic) NSIndexPath *paletteNameIndexPath;
+@property (nonatomic) NSArray<OAGPXTableSectionData *> *tableData;
+
 @end
 
 @implementation OATrackMenuAppearanceHudViewController
 {
-    OAGPXAppearanceCollection *_appearanceCollection;
-    NSArray<OAGPXTableSectionData *> *_tableData;
-
     OATrackAppearanceItem *_selectedItem;
     NSArray<OATrackAppearanceItem *> *_availableColoringTypes;
 
     NSMutableArray<OAColorItem *> *_sortedColorItems;
-    OAColorItem *_selectedColorItem;
     NSIndexPath *_editColorIndexPath;
-    BOOL _isNewColorSelected;
 
     OAGPXTrackWidth *_selectedWidth;
     NSArray<NSString *> *_customWidthValues;
 
     OAGPXTrackSplitInterval *_selectedSplit;
 
-    OABackupGpx *_backupGpxItem;
     NSMutableArray<OABackupGpx *> *_backupGpxItems;
 
-    OATrackMenuViewControllerState *_reopeningTrackMenuState;
-    BOOL _forceHiding;
-    
-    OsmAndAppInstance _app;
     OAAppSettings *_settings;
     
     NSInteger _widthDataSectionIndex;
@@ -170,9 +181,33 @@
     _app = [OsmAndApp instance];
     _settings = [OAAppSettings sharedManager];
     _appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
+    _sortedPaletteColorItems = [[OAConcurrentArray alloc] init];
+
+    OAColoringType *type = self.gpx.coloringType.length > 0
+        ? [OAColoringType getNonNullTrackColoringTypeByName:self.gpx.coloringType]
+        : OAColoringType.TRACK_SOLID;
+    _gradientColorsCollection = [[GradientColorsCollection alloc] initWithColorizationType:(ColorizationType) [type toColorizationType]];
 
     [self setOldValues];
     [self updateAllValues];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(onCollectionDeleted:)
+                                                 name:ColorsCollection.collectionDeletedNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(onCollectionCreated:)
+                                                 name:ColorsCollection.collectionCreatedNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(onCollectionUpdated:)
+                                                 name:ColorsCollection.collectionUpdatedNotification
+                                               object:nil];
+}
+
+- (void)dealloc
+{
+    [NSNotificationCenter.defaultCenter removeObserver:self];
 }
 
 - (void)setOldValues
@@ -181,10 +216,12 @@
     _backupGpxItem.showArrows = self.gpx.showArrows;
     _backupGpxItem.showStartFinish = self.gpx.showStartFinish;
     _backupGpxItem.verticalExaggerationScale = self.gpx.verticalExaggerationScale;
+    _backupGpxItem.elevationMeters = self.gpx.elevationMeters;
     _backupGpxItem.visualization3dByType = self.gpx.visualization3dByType;
     _backupGpxItem.visualization3dWallColorType = self.gpx.visualization3dWallColorType;
     _backupGpxItem.visualization3dPositionType = self.gpx.visualization3dPositionType;
     _backupGpxItem.coloringType = self.gpx.coloringType;
+    _backupGpxItem.gradientPaletteName = self.gpx.gradientPaletteName;
     _backupGpxItem.color = self.gpx.color;
     _backupGpxItem.width = self.gpx.width;
     _backupGpxItem.splitType = self.gpx.splitType;
@@ -200,10 +237,12 @@
             backupItem.showArrows = track.showArrows;
             backupItem.showStartFinish = track.showStartFinish;
             backupItem.verticalExaggerationScale = track.verticalExaggerationScale;
+            backupItem.elevationMeters = track.elevationMeters;
             backupItem.visualization3dByType = track.visualization3dByType;
             backupItem.visualization3dWallColorType = track.visualization3dWallColorType;
             backupItem.visualization3dPositionType = track.visualization3dPositionType;
             backupItem.coloringType = track.coloringType;
+            backupItem.gradientPaletteName = track.gradientPaletteName;
             backupItem.color = track.color;
             backupItem.width = track.width;
             backupItem.splitType = track.splitType;
@@ -219,11 +258,13 @@
     self.gpx.showArrows = _backupGpxItem.showArrows;
     self.gpx.showStartFinish = _backupGpxItem.showStartFinish;
     self.gpx.verticalExaggerationScale = _backupGpxItem.verticalExaggerationScale;
+    self.gpx.elevationMeters = _backupGpxItem.elevationMeters;
     self.gpx.visualization3dByType = _backupGpxItem.visualization3dByType;
     self.gpx.visualization3dWallColorType = _backupGpxItem.visualization3dWallColorType;
     self.gpx.visualization3dPositionType = _backupGpxItem.visualization3dPositionType;
     
     self.gpx.coloringType = _backupGpxItem.coloringType;
+    self.gpx.gradientPaletteName = _backupGpxItem.gradientPaletteName;
     self.gpx.color = _backupGpxItem.color;
     self.gpx.width = _backupGpxItem.width;
     self.gpx.splitType = _backupGpxItem.splitType;
@@ -236,6 +277,7 @@
         [self.settings.currentTrackShowArrows set:_backupGpxItem.showArrows];
         [self.settings.currentTrackShowStartFinish set:_backupGpxItem.showStartFinish];
         [self.settings.currentTrackVerticalExaggerationScale set:_backupGpxItem.verticalExaggerationScale];
+        [self.settings.currentTrackElevationMeters set:_backupGpxItem.elevationMeters];
         [self.settings.currentTrackVisualization3dByType set:(int)_backupGpxItem.visualization3dByType];
         [self.settings.currentTrackVisualization3dWallColorType set:(int)_backupGpxItem.visualization3dWallColorType];
         [self.settings.currentTrackVisualization3dPositionType set:(int)_backupGpxItem.visualization3dPositionType];
@@ -249,11 +291,13 @@
         [self.doc setShowArrows:_backupGpxItem.showArrows];
         [self.doc setShowStartFinish:_backupGpxItem.showStartFinish];
         [self.doc setVerticalExaggerationScale:_backupGpxItem.verticalExaggerationScale];
+        [self.doc setElevationMeters:_backupGpxItem.elevationMeters];
         [self.doc setVisualization3dByType:_backupGpxItem.visualization3dByType];
         [self.doc setVisualization3dWallColorType:_backupGpxItem.visualization3dWallColorType];
         [self.doc setVisualization3dPositionType:_backupGpxItem.visualization3dPositionType];
         
         [self.doc setColoringType:_backupGpxItem.coloringType];
+        [self.doc setGradientColorPalette:_backupGpxItem.gradientPaletteName];
         [self.doc setColor:_backupGpxItem.color];
     }
     
@@ -266,10 +310,12 @@
             track.showArrows = bakupItem.showArrows;
             track.showStartFinish = bakupItem.showStartFinish;
             track.verticalExaggerationScale = bakupItem.verticalExaggerationScale;
+            track.elevationMeters = bakupItem.elevationMeters;
             track.visualization3dByType = bakupItem.visualization3dByType;
             track.visualization3dWallColorType = bakupItem.visualization3dWallColorType;
             track.visualization3dPositionType = bakupItem.visualization3dPositionType;
             track.coloringType = bakupItem.coloringType;
+            track.gradientPaletteName = bakupItem.gradientPaletteName;
             track.color = bakupItem.color;
             track.width = bakupItem.width;
             track.splitType = bakupItem.splitType;
@@ -285,6 +331,11 @@
     if (!_selectedColorItem)
         _selectedColorItem = [_appearanceCollection getDefaultLineColorItem];
     _sortedColorItems = [NSMutableArray arrayWithArray:[_appearanceCollection getAvailableColorsSortingByLastUsed]];
+
+    [_sortedPaletteColorItems replaceAllWithObjectsSync:[_gradientColorsCollection getPaletteColors]];
+    _selectedPaletteColorItem = [_gradientColorsCollection getPaletteColorByName:self.gpx.gradientPaletteName];
+    if (!_selectedPaletteColorItem)
+        _selectedPaletteColorItem = [_gradientColorsCollection getDefaultGradientPalette];
 
     _selectedWidth = [_appearanceCollection getWidthForValue:self.gpx.width];
     if (!_selectedWidth)
@@ -327,7 +378,7 @@
                                                                                 isEnabled:isEnabled];
         [items addObject:item];
 
-        if (currentType == OAColoringType.ATTRIBUTE && [self.gpx.coloringType isEqualToString:attribute])
+        if ([currentType isRouteInfoAttribute] && [self.gpx.coloringType isEqualToString:attribute])
             _selectedItem = item;
     }
 
@@ -352,6 +403,9 @@
     [self.tableView registerClass:OATableViewCustomFooterView.class
         forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[OAButtonTableViewCell getCellIdentifier] bundle:nil] forCellReuseIdentifier:[OAButtonTableViewCell getCellIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:[OACollectionSingleLineTableViewCell getCellIdentifier] bundle:nil]
+         forCellReuseIdentifier:[OACollectionSingleLineTableViewCell getCellIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:OALineChartCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:OALineChartCell.reuseIdentifier];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:[UITableViewCell getCellIdentifier]];
 }
 
@@ -359,24 +413,19 @@
 {
     [super viewWillAppear:animated];
 
-    if ([_selectedItem.coloringType isTrackSolid])
+    if ([self isSelectedTypeSolid])
     {
-        if (_tableData.count > kColorsSection)
+        if (_colorsCollectionIndexPath)
         {
-            OAGPXTableSectionData *colorSection = _tableData[kColorsSection];
-            if (colorSection.subjects.count - 1 >= kColorGridOrDescriptionCell)
+            [self.tableView reloadRowsAtIndexPaths:@[_colorsCollectionIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+            
+            OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorsCollectionIndexPath];
+            NSIndexPath *selectedIndexPath = [[colorCell getCollectionHandler] getSelectedIndexPath];
+            if (selectedIndexPath.row != NSNotFound && ![colorCell.collectionView.indexPathsForVisibleItems containsObject:selectedIndexPath])
             {
-                NSIndexPath *colorIndexPath = [NSIndexPath indexPathForRow:kColorGridOrDescriptionCell inSection:kColorsSection];
-                [self.tableView reloadRowsAtIndexPaths:@[colorIndexPath] withRowAnimation:UITableViewRowAnimationNone];
-
-                OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:colorIndexPath];
-                NSIndexPath *selectedIndexPath = [[colorCell getCollectionHandler] getSelectedIndexPath];
-                if (selectedIndexPath.row != NSNotFound && ![colorCell.collectionView.indexPathsForVisibleItems containsObject:selectedIndexPath])
-                {
-                    [colorCell.collectionView scrollToItemAtIndexPath:selectedIndexPath
-                                                     atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally
-                                                             animated:YES];
-                }
+                [colorCell.collectionView scrollToItemAtIndexPath:selectedIndexPath
+                                                 atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally
+                                                         animated:YES];
             }
         }
     }
@@ -432,34 +481,38 @@
                                forState:UIControlStateNormal];
 }
 
-- (OAGPXTableCellData *) generateGridOrDescriptionCellData
+- (OAGPXTableCellData *)generateGridCellData
 {
-    OAGPXTableCellData *gridOrDescriptionCellData;
-    if ([_selectedItem.coloringType isTrackSolid])
-    {
-        gridOrDescriptionCellData = [OAGPXTableCellData withData:@{
-            kTableKey: @"color_grid",
-            kCellType: [OACollectionSingleLineTableViewCell getCellIdentifier]
-        }];
-    }
-    else if ([_selectedItem.coloringType isGradient])
-    {
-        gridOrDescriptionCellData = [self generateDescriptionCellData:@"color_elevation_description" description:OALocalizedString(@"route_line_color_elevation_description")];
-    }
-    else if ([_selectedItem.coloringType isRouteInfoAttribute])
-    {
-        gridOrDescriptionCellData = [self generateDescriptionCellData:@"color_attribute_description" description: OALocalizedString(@"white_color_undefined")];
-    }
-    return gridOrDescriptionCellData;
+    return [OAGPXTableCellData withData:@{
+        kTableKey: @"color_grid",
+        kCellType: [OACollectionSingleLineTableViewCell getCellIdentifier]
+    }];
+}
+
+- (OAGPXTableCellData *)generateDescriptionCellData
+{
+    if ([self isSelectedTypeAttribute])
+        return [self generateDescriptionCellData:@"color_attribute_description" description:OALocalizedString(@"white_color_undefined")];
+    return nil;
 }
 
 - (OAGPXTableCellData *) generateAllColorsCellData
 {
     return [OAGPXTableCellData withData:@{
-        kTableKey: @"all_colors",
+        kTableKey: @"allColors",
         kCellType: [OASimpleTableViewCell getCellIdentifier],
         kCellTitle: OALocalizedString(@"shared_string_all_colors"),
         kCellTintColor: [UIColor colorNamed:ACColorNameIconColorActive]
+    }];
+}
+
+- (OAGPXTableCellData *)generatePaletteNameCellData
+{
+    return [OAGPXTableCellData withData:@{
+        kTableKey: @"paletteName",
+        kCellType: [OASimpleTableViewCell getCellIdentifier],
+        kCellTitle: [_selectedPaletteColorItem toHumanString],
+        kCellTintColor: UIColorFromRGB(color_extra_text_gray)
     }];
 }
 
@@ -484,6 +537,10 @@
 - (void) configureVisualization3dByType:(EOAGPX3DLineVisualizationByType)type
 {
     self.gpx.visualization3dByType = type;
+    
+    if (self.gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeFixedHeight)
+        self.gpx.verticalExaggerationScale = kGpxExaggerationDefScale;
+
     if (_wholeFolderTracks)
     {
         for (OAGPX *track in _wholeFolderTracks)
@@ -505,6 +562,7 @@
 - (void)configureVisualization3dWallColorType:(EOAGPX3DLineVisualizationWallColorType)type
 {
     self.gpx.visualization3dWallColorType = type;
+
     if (_wholeFolderTracks)
     {
         for (OAGPX *track in _wholeFolderTracks)
@@ -565,6 +623,27 @@
     [self reloadTableWithAnimation];
 }
 
+- (void)configureElevationMeters:(NSInteger)meters
+{
+    self.gpx.elevationMeters = meters;
+    if (_wholeFolderTracks)
+    {
+        for (OAGPX *track in _wholeFolderTracks)
+            track.elevationMeters = meters;
+    }
+    
+    if (self.isCurrentTrack)
+    {
+        [self.doc setElevationMeters:self.gpx.elevationMeters];
+        [[_app updateRecTrackOnMapObservable] notifyEvent];
+    }
+    else
+    {
+        [[_app updateGpxTracksOnMapObservable] notifyEvent];
+    }
+    [self reloadTableWithAnimation];
+}
+
 - (void)reloadTableWithAnimation
 {
     [self generateData];
@@ -578,84 +657,113 @@
 
 - (UIMenu *)createVisualizedByMenuForCellButton:(UIButton *)button
 {
-    NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
+    NSDictionary<NSNumber *, NSString *> *visualizationTypes = @{
+        @(EOAGPX3DLineVisualizationByTypeNone): @"shared_string_none",
+        @(EOAGPX3DLineVisualizationByTypeAltitude): @"altitude",
+        @(EOAGPX3DLineVisualizationByTypeSpeed): @"shared_string_speed",
+        @(EOAGPX3DLineVisualizationByTypeHeartRate): @"map_widget_ant_heart_rate",
+        @(EOAGPX3DLineVisualizationByTypeBicycleCadence): @"map_widget_ant_bicycle_cadence",
+        @(EOAGPX3DLineVisualizationByTypeBicyclePower): @"map_widget_ant_bicycle_power",
+        @(EOAGPX3DLineVisualizationByTypeTemperature): @"shared_string_temperature",
+        @(EOAGPX3DLineVisualizationByTypeSpeedSensor): @"shared_string_speed",
+        @(EOAGPX3DLineVisualizationByTypeFixedHeight): @"fixed_height"
+    };
+    
+    NSDictionary<NSNumber *, NSString *> *dataKeys = @{
+        @(EOAGPX3DLineVisualizationByTypeHeartRate): OAPointAttributes.sensorTagHeartRate,
+        @(EOAGPX3DLineVisualizationByTypeBicycleCadence): OAPointAttributes.sensorTagCadence,
+        @(EOAGPX3DLineVisualizationByTypeBicyclePower): OAPointAttributes.sensorTagBikePower,
+        @(EOAGPX3DLineVisualizationByTypeTemperature): OAPointAttributes.sensorTagTemperature,
+        @(EOAGPX3DLineVisualizationByTypeSpeedSensor): OAPointAttributes.sensorTagSpeed
+    };
+    
+    NSMutableArray<UIAction *> *sensorActions = [NSMutableArray array];
+    UIAction *noneAction;
+    UIAction *fixedHeightAction;
     __weak __typeof(self) weakSelf = self;
-    UIAction *none = [UIAction actionWithTitle:OALocalizedString(@"shared_string_none")
-                                             image:nil
-                                        identifier:nil
-                                           handler:^(__kindof UIAction * _Nonnull action) {
-        [weakSelf configureVisualization3dByType:EOAGPX3DLineVisualizationByTypeNone];
-    }];
-    [menuElements addObject:none];
-
-    UIAction *altitude = [UIAction actionWithTitle:OALocalizedString(@"altitude")
-                                          image:nil
-                                     identifier:nil
-                                        handler:^(__kindof UIAction * _Nonnull action) {
-        [weakSelf configureVisualization3dByType:EOAGPX3DLineVisualizationByTypeAltitude];
-    }];
-    [menuElements addObject:altitude];
+    for (NSNumber *type in visualizationTypes.allKeys)
+    {
+        int typeValue = type.intValue;
+        NSString *title = OALocalizedString(visualizationTypes[type]);
+        NSString *dataKey = dataKeys[type];
+        if (dataKey && ![self hasValidDataForKey:dataKey])
+            continue;
+        
+        UIAction *action = [UIAction actionWithTitle:title image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+            [weakSelf configureVisualization3dByType:(EOAGPX3DLineVisualizationByType)type.intValue];
+        }];
+        
+        if (self.gpx.visualization3dByType == typeValue)
+            action.state = UIMenuElementStateOn;
+        
+        if (typeValue == EOAGPX3DLineVisualizationByTypeNone)
+            noneAction = action;
+        else if (typeValue == EOAGPX3DLineVisualizationByTypeFixedHeight)
+            fixedHeightAction = action;
+        else
+            [sensorActions addObject:action];
+    }
     
-    UIAction *fixedHeight = [UIAction actionWithTitle:OALocalizedString(@"fixed_height")
-                                          image:nil
-                                     identifier:nil
-                                        handler:^(__kindof UIAction * _Nonnull action) {
-        [weakSelf configureVisualization3dByType:EOAGPX3DLineVisualizationByTypeFixedHeight];
-    }];
-    [menuElements addObject:fixedHeight];
+    UIMenu *noneMenu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[noneAction]];
+    UIMenu *sensorMenu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:sensorActions];
+    UIMenu *fixedHeightMenu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[fixedHeightAction]];
     
-    NSInteger selectedIndex = self.gpx.visualization3dByType;
-    if (selectedIndex >= 0 && selectedIndex < menuElements.count)
-        ((UIAction *)menuElements[selectedIndex]).state = UIMenuElementStateOn;
-    
-    NSString *title = [menuElements[selectedIndex] title];
-    
-    return [self createChevronMenu:title button:button menuElements:[menuElements copy]];
+    NSString *selectedTitle = visualizationTypes[@(weakSelf.gpx.visualization3dByType)];
+    return [self createChevronMenu:OALocalizedString(selectedTitle) button:button menuElements:@[noneMenu, sensorMenu, fixedHeightMenu]];
 }
 
 - (UIMenu *)createWallColorMenuForCellButton:(UIButton *)button
 {
-    NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
+    NSDictionary<NSNumber *, NSString *> *wallColorTypes = @{
+        @(EOAGPX3DLineVisualizationWallColorTypeNone): @"shared_string_none",
+        @(EOAGPX3DLineVisualizationWallColorTypeSolid): @"track_coloring_solid",
+        @(EOAGPX3DLineVisualizationWallColorTypeDownwardGradient): @"downward_gradient",
+        @(EOAGPX3DLineVisualizationWallColorTypeUpwardGradient): @"upward_gradient",
+        @(EOAGPX3DLineVisualizationWallColorTypeAltitude): @"altitude",
+        @(EOAGPX3DLineVisualizationWallColorTypeSlope): @"shared_string_slope",
+        @(EOAGPX3DLineVisualizationWallColorTypeSpeed): @"shared_string_speed"
+    };
+    
+    NSMutableArray<UIAction *> *actions = [NSMutableArray array];
     __weak __typeof(self) weakSelf = self;
-    UIAction *none = [UIAction actionWithTitle:OALocalizedString(@"shared_string_none")
-                                             image:nil
-                                        identifier:nil
-                                           handler:^(__kindof UIAction * _Nonnull action) {
-        [weakSelf configureVisualization3dWallColorType:EOAGPX3DLineVisualizationWallColorTypeNone];
-    }];
-    [menuElements addObject:none];
-
-    UIAction *solid = [UIAction actionWithTitle:OALocalizedString(@"track_coloring_solid")
-                                          image:nil
-                                     identifier:nil
-                                        handler:^(__kindof UIAction * _Nonnull action) {
-        [weakSelf configureVisualization3dWallColorType:EOAGPX3DLineVisualizationWallColorTypeSolid];
-    }];
-    [menuElements addObject:solid];
+    for (NSNumber *type in wallColorTypes.allKeys)
+    {
+        NSString *title = OALocalizedString(wallColorTypes[type]);
+        UIAction *action = [UIAction actionWithTitle:title image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+            [weakSelf configureVisualization3dWallColorType:(EOAGPX3DLineVisualizationWallColorType)type.integerValue];
+        }];
+        
+        if (self.gpx.visualization3dWallColorType == type.integerValue)
+            action.state = UIMenuElementStateOn;
+        
+        [actions addObject:action];
+    }
     
-    UIAction *downwardGradient = [UIAction actionWithTitle:OALocalizedString(@"downward_gradient")
-                                          image:nil
-                                     identifier:nil
-                                        handler:^(__kindof UIAction * _Nonnull action) {
-        [weakSelf configureVisualization3dWallColorType:EOAGPX3DLineVisualizationWallColorTypeDownwardGradient];
-    }];
-    [menuElements addObject:downwardGradient];
+    NSArray<NSNumber *> *noneTypes = @[@(EOAGPX3DLineVisualizationWallColorTypeNone)];
+    NSArray<NSNumber *> *colorTypes = @[@(EOAGPX3DLineVisualizationWallColorTypeSolid), @(EOAGPX3DLineVisualizationWallColorTypeDownwardGradient), @(EOAGPX3DLineVisualizationWallColorTypeUpwardGradient)];
+    NSArray<NSNumber *> *dataTypes = @[@(EOAGPX3DLineVisualizationWallColorTypeAltitude), @(EOAGPX3DLineVisualizationWallColorTypeSlope), @(EOAGPX3DLineVisualizationWallColorTypeSpeed)];
     
-    UIAction *upwardGradient = [UIAction actionWithTitle:OALocalizedString(@"upward_gradient")
-                                          image:nil
-                                     identifier:nil
-                                        handler:^(__kindof UIAction * _Nonnull action) {
-        [weakSelf configureVisualization3dWallColorType:EOAGPX3DLineVisualizationWallColorTypeUpwardGradient];
-    }];
-    [menuElements addObject:upwardGradient];
+    NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
+    [menuElements addObject:[UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[[actions objectAtIndex:[wallColorTypes.allKeys indexOfObject:noneTypes.firstObject]]]]];
     
-    NSInteger selectedIndex = self.gpx.visualization3dWallColorType;
-    if (selectedIndex >= 0 && selectedIndex < menuElements.count)
-        ((UIAction *)menuElements[selectedIndex]).state = UIMenuElementStateOn;
+    NSMutableArray<UIAction *> *colorActions = [NSMutableArray array];
+    for (NSNumber *type in colorTypes)
+    {
+        [colorActions addObject:[actions objectAtIndex:[wallColorTypes.allKeys indexOfObject:type]]];
+    }
     
-    NSString *title = [menuElements[selectedIndex] title];
+    [menuElements addObject:[UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:colorActions]];
     
-    return [self createChevronMenu:title button:button menuElements:[menuElements copy]];
+    NSMutableArray<UIAction *> *dataActions = [NSMutableArray array];
+    for (NSNumber *type in dataTypes)
+    {
+        [dataActions addObject:[actions objectAtIndex:[wallColorTypes.allKeys indexOfObject:type]]];
+    }
+    
+    [menuElements addObject:[UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:dataActions]];
+    
+    NSString *selectedTitle = wallColorTypes[@(weakSelf.gpx.visualization3dWallColorType)];
+    return [self createChevronMenu:OALocalizedString(selectedTitle) button:button menuElements:[menuElements copy]];
 }
 
 - (UIMenu *)createTrackLineMenuForCellButton:(UIButton *)button
@@ -716,6 +824,75 @@
     return [UIMenu menuWithChildren:menuElements];
 }
 
+- (BOOL)hasValidDataForKey:(NSString *)key
+{
+    if ([key isEqualToString:OAPointAttributes.sensorTagTemperature])
+    {
+        for (OAPointAttributes *point in self.analysis.pointAttributes)
+        {
+            if ([point hasValidValueFor:OAPointAttributes.sensorTagTemperatureW])
+                return YES;
+        }
+        
+        for (OAPointAttributes *point in self.analysis.pointAttributes)
+        {
+            if ([point hasValidValueFor:OAPointAttributes.sensorTagTemperatureA])
+                return YES;
+        }
+        
+        return NO;
+    }
+    
+    for (OAPointAttributes *point in self.analysis.pointAttributes)
+    {
+        if ([point hasValidValueFor:key])
+            return YES;
+    }
+    
+    return NO;
+}
+
+- (void)generateColorsSection:(OAGPXTableSectionData *)section
+{
+    _paletteLegendIndexPath = nil;
+    _paletteNameIndexPath = nil;
+    _colorsCollectionIndexPath = nil;
+    NSMutableArray<OAGPXTableCellData *> *colorsCells = section.subjects;
+
+    if (colorsCells.count == 0 || ![colorsCells.firstObject.key isEqualToString:@"color_title"])
+    {
+        [colorsCells addObject:[OAGPXTableCellData withData:@{
+            kTableKey: @"color_title",
+            kCellType: [OAValueTableViewCell getCellIdentifier],
+            kTableValues: @{
+                @"string_value": _selectedItem.title,
+                @"accessibility_label": OALocalizedString(@"shared_string_coloring"),
+                @"accessibility_value": _selectedItem.title,
+                @"accessoryType": @(UITableViewCellAccessoryDisclosureIndicator)
+            },
+            kCellTitle: OALocalizedString(@"shared_string_coloring"),
+        }]];
+    }
+
+    OAGPXTableCellData *descriptionCellData = [self generateDescriptionCellData];
+    if (descriptionCellData)
+        [colorsCells addObject:descriptionCellData];
+    if (![self isSelectedTypeAttribute])
+    {
+        if ([self isSelectedTypeGradient])
+        {
+            [colorsCells addObject:[self generateGradientLegendCellData]];
+            _paletteLegendIndexPath = [NSIndexPath indexPathForRow:colorsCells.count - 1 inSection:kColorsSection];
+            [colorsCells addObject:[self generatePaletteNameCellData]];
+            _paletteNameIndexPath = [NSIndexPath indexPathForRow:colorsCells.count - 1 inSection:kColorsSection];
+        }
+        [colorsCells addObject:[self generateGridCellData]];
+        _colorsCollectionIndexPath = [NSIndexPath indexPathForRow:colorsCells.count - 1 inSection:kColorsSection];
+        if ([self isSelectedTypeSolid] || [self isSelectedTypeGradient])
+            [colorsCells addObject:[self generateAllColorsCellData]];
+    }
+}
+
 - (void)generateData
 {
     NSMutableArray<OAGPXTableSectionData *> *appearanceSections = [NSMutableArray array];
@@ -736,44 +913,12 @@
         kTableSubjects: @[directionCellData, startFinishCellData]
     }]];
 
-    NSMutableArray<OAGPXTableCellData *> *colorsCells = [NSMutableArray array];
-
-    OAGPXTableCellData *colorTitleCellData = [OAGPXTableCellData withData:@{
-            kTableKey: @"color_title",
-            kCellType: [OAValueTableViewCell getCellIdentifier],
-            kTableValues: @{
-                @"string_value": _selectedItem.title,
-                @"accessibility_label": OALocalizedString(@"shared_string_coloring"),
-                @"accessibility_value": _selectedItem.title,
-                @"accessoryType": @(UITableViewCellAccessoryDisclosureIndicator)
-            },
-            kCellTitle: OALocalizedString(@"shared_string_coloring"),
-    }];
-
-    [colorsCells addObject:colorTitleCellData];
-
-    OAGPXTableCellData *gridOrDescriptionCellData = [self generateGridOrDescriptionCellData];
-    [colorsCells addObject:gridOrDescriptionCellData];
-
-    if ([_selectedItem.coloringType isTrackSolid])
-    {
-        [colorsCells addObject:[self generateAllColorsCellData]];
-    }
-    else if ([_selectedItem.coloringType isGradient])
-    {
-        [colorsCells addObject:[self generateDataForColorElevationGradientCellData]];
-
-        if ([self isSelectedTypeSpeed] || [self isSelectedTypeAltitude])
-        {
-            [colorsCells addObject:[self generateDescriptionCellData:@"color_extra_description" description:OALocalizedString(@"grey_color_undefined")]];
-        }
-    }
-
     OAGPXTableSectionData *colorsSectionData = [OAGPXTableSectionData withData:@{
         kTableKey: @"colors_section",
-        kTableSubjects: colorsCells,
+        kTableSubjects: [NSMutableArray array],
         kSectionHeaderHeight: @36.
     }];
+    [self generateColorsSection:colorsSectionData];
 
     [appearanceSections addObject:colorsSectionData];
 
@@ -843,27 +988,44 @@
             }];
                 [track3DSectionItems addObject:trackLineData];
                 
-            NSString *alphaValueString = OALocalizedString(@"shared_string_none");
-            double scaleValue = self.gpx.verticalExaggerationScale;
-            if (scaleValue > 1)
-            {
-                alphaValueString = [NSString stringWithFormat:@"x%.1f", scaleValue];
+                double scaleValue = self.gpx.verticalExaggerationScale;
+                NSString *alphaValueString = scaleValue <= kGpxExaggerationDefScale ? OALocalizedString(@"shared_string_none") : (scaleValue < 1.0 ? [NSString stringWithFormat:@"x%.2f", scaleValue] : [NSString stringWithFormat:@"x%.1f", scaleValue]);
+                NSString *elevationMetersValueString = [NSString stringWithFormat:@"%ld %@", self.gpx.elevationMeters, OALocalizedString(@"m")];
+                if (self.gpx.visualization3dByType != EOAGPX3DLineVisualizationByTypeFixedHeight)
+                {
+                    OAGPXTableCellData *verticalExaggerationData = [OAGPXTableCellData withData:@{
+                        kTableKey:@"vertical_exaggeration",
+                        kCellType:[OAValueTableViewCell getCellIdentifier],
+                        kCellTitle:OALocalizedString(@"vertical_exaggeration"),
+                        kCellIconNameKey:@"ic_custom_terrain_scale",
+                        kCellIconTintColor:[UIColor colorNamed:scaleValue > 1 ? ACColorNameIconColorSelected : ACColorNameIconColorDefault],
+                        kTableValues:@{
+                            @"string_value":alphaValueString,
+                            @"accessibility_label":OALocalizedString(@"vertical_exaggeration"),
+                            @"accessibility_value":alphaValueString,
+                            @"accessoryType":@(UITableViewCellAccessoryDisclosureIndicator)
+                        },
+                    }];
+                    [track3DSectionItems addObject:verticalExaggerationData];
+                }
+                else
+                {
+                    OAGPXTableCellData *wallHeightData = [OAGPXTableCellData withData:@{
+                        kTableKey:@"wall_height",
+                        kCellType:[OAValueTableViewCell getCellIdentifier],
+                        kCellTitle:OALocalizedString(@"wall_height"),
+                        kCellIconNameKey:@"ic_custom_terrain_scale",
+                        kCellIconTintColor:[UIColor colorNamed:scaleValue > 1 ? ACColorNameIconColorSelected : ACColorNameIconColorDefault],
+                        kTableValues:@{
+                            @"string_value":elevationMetersValueString,
+                            @"accessibility_label":OALocalizedString(@"wall_height"),
+                            @"accessibility_value":elevationMetersValueString,
+                            @"accessoryType":@(UITableViewCellAccessoryDisclosureIndicator)
+                        },
+                    }];
+                    [track3DSectionItems addObject:wallHeightData];
+                }
             }
-            OAGPXTableCellData *verticalExaggerationData = [OAGPXTableCellData withData:@{
-                kTableKey:@"vertical_exaggeration",
-                kCellType:[OAValueTableViewCell getCellIdentifier],
-                kCellTitle:OALocalizedString(@"vertical_exaggeration"),
-                kCellIconNameKey:@"ic_custom_terrain_scale",
-                kCellIconTintColor:[UIColor colorNamed:scaleValue > 1 ? ACColorNameIconColorSelected : ACColorNameIconColorDefault],
-                kTableValues:@{
-                    @"string_value":alphaValueString,
-                    @"accessibility_label":OALocalizedString(@"vertical_exaggeration"),
-                    @"accessibility_value":alphaValueString,
-                    @"accessoryType":@(UITableViewCellAccessoryDisclosureIndicator)
-                },
-            }];
-            [track3DSectionItems addObject:verticalExaggerationData];
-        }
     }
 
     [appearanceSections addObject:[OAGPXTableSectionData withData:@{
@@ -949,21 +1111,12 @@
             || [view isKindOfClass:[UICollectionView class]];
 }
 
-- (OAGPXTableCellData *)generateDataForColorElevationGradientCellData
+- (OAGPXTableCellData *)generateGradientLegendCellData
 {
-
-    OAGPXTableCellData *colorGradientCellData = [OAGPXTableCellData withData:@{
-            kTableKey: @"color_elevation_gradient",
-            kCellType: [OAImageTextViewCell getCellIdentifier],
-            kTableValues: @{
-                @"extra_desc": [self generateExtraDescription],
-                @"desc_font_size": @([self isSelectedTypeSlope] ? 15 : 17)
-            },
-            kCellDesc: [self generateDescription],
-            kCellRightIconName: [self isSelectedTypeSlope] ? @"img_track_gradient_slope" : @"img_track_gradient_speed"
+    return [OAGPXTableCellData withData:@{
+        kTableKey: @"gradientLegend",
+        kCellType: [OALineChartCell getCellIdentifier],
     }];
-
-    return colorGradientCellData;
 }
 
 - (NSString *) generateDescription
@@ -972,8 +1125,6 @@
         return [OAOsmAndFormatter getFormattedSpeed:0.0];
     else if ([self isSelectedTypeAltitude])
         return [OAOsmAndFormatter getFormattedAlt:self.analysis.minElevation];
-    else if ([self isSelectedTypeSlope])
-        return OALocalizedString(@"grey_color_undefined");
     return @"";
 }
 
@@ -1053,19 +1204,34 @@
     return self.currentState == EOADraggableMenuStateInitial ? [OAUtilities getBottomMargin] : 0.;
 }
 
+- (BOOL)isSelectedTypeSolid
+{
+    return [_selectedItem.coloringType isSolidSingleColor];
+}
+
 - (BOOL)isSelectedTypeSlope
 {
-    return _selectedItem.coloringType == OAColoringType.SLOPE;
+    return [_selectedItem.coloringType isSlope];
 }
 
 - (BOOL)isSelectedTypeSpeed
 {
-    return _selectedItem.coloringType == OAColoringType.SPEED;
+    return [_selectedItem.coloringType isSpeed];
 }
 
 - (BOOL)isSelectedTypeAltitude
 {
-    return _selectedItem.coloringType == OAColoringType.ALTITUDE;
+    return [_selectedItem.coloringType isAltitude];
+}
+
+- (BOOL)isSelectedTypeGradient
+{
+    return [_selectedItem.coloringType isGradient];
+}
+
+- (BOOL)isSelectedTypeAttribute
+{
+    return [_selectedItem.coloringType isRouteInfoAttribute];
 }
 
 - (void)checkColoringAvailability
@@ -1080,30 +1246,34 @@
 
 - (void)hide
 {
+    __weak __typeof(self) weakSelf = self;
     [self hide:YES duration:.2 onComplete:^{
-        if (_reopeningTrackMenuState)
+        if (weakSelf.isDefaultColorRestored)
+            [[OAGPXDatabase sharedDb] save];
+
+        if (weakSelf.reopeningTrackMenuState)
         {
-            [self restoreOldValues];
-            if (!_forceHiding)
+            [weakSelf restoreOldValues];
+            if (!weakSelf.forceHiding)
             {
-                if (_reopeningTrackMenuState.openedFromTracksList && !_reopeningTrackMenuState.openedFromTrackMenu && _reopeningTrackMenuState.navControllerHistory)
+                if (weakSelf.reopeningTrackMenuState.openedFromTracksList && !weakSelf.reopeningTrackMenuState.openedFromTrackMenu && weakSelf.reopeningTrackMenuState.navControllerHistory)
                 {
-                    [[OARootViewController instance].navigationController setViewControllers:_reopeningTrackMenuState.navControllerHistory animated:YES];
+                    [[OARootViewController instance].navigationController setViewControllers:weakSelf.reopeningTrackMenuState.navControllerHistory animated:YES];
                 }
                 else
                 {
-                    _reopeningTrackMenuState.openedFromTrackMenu = NO;
-                    [self.mapPanelViewController openTargetViewWithGPX:self.gpx
+                    weakSelf.reopeningTrackMenuState.openedFromTrackMenu = NO;
+                    [weakSelf.mapPanelViewController openTargetViewWithGPX:weakSelf.gpx
                                                           trackHudMode:EOATrackMenuHudMode
-                                                                 state:_reopeningTrackMenuState];
+                                                                 state:weakSelf.reopeningTrackMenuState];
                 }
             }
         }
 
-        if (self.isCurrentTrack)
-            [[_app updateRecTrackOnMapObservable] notifyEvent];
+        if (weakSelf.isCurrentTrack)
+            [[weakSelf.app updateRecTrackOnMapObservable] notifyEvent];
         else
-            [[_app updateGpxTracksOnMapObservable] notifyEvent];
+            [[weakSelf.app updateGpxTracksOnMapObservable] notifyEvent];
     }];
 }
 
@@ -1128,48 +1298,51 @@
 
 - (IBAction)onDoneButtonPressed:(id)sender
 {
+    __weak __typeof(self) weakSelf = self;
     [self hide:YES duration:.2 onComplete:^{
-        if (_isNewColorSelected)
-            [_appearanceCollection selectColor:_selectedColorItem];
+        if (weakSelf.isNewColorSelected)
+            [weakSelf.appearanceCollection selectColor:weakSelf.selectedColorItem];
 
         [[OAGPXDatabase sharedDb] save];
-        if (self.isCurrentTrack)
+        if (weakSelf.isCurrentTrack)
         {
-            [self.settings.currentTrackWidth set:self.gpx.width];
-            [self.settings.currentTrackShowArrows set:self.gpx.showArrows];
-            [self.settings.currentTrackShowStartFinish set:self.gpx.showStartFinish];
-            [self.settings.currentTrackVerticalExaggerationScale set:self.gpx.verticalExaggerationScale];
-            [self.settings.currentTrackVisualization3dByType set:(int)self.gpx.visualization3dByType];
-            [self.settings.currentTrackVisualization3dWallColorType set:(int)self.gpx.visualization3dWallColorType];
-            [self.settings.currentTrackVisualization3dPositionType set:(int)self.gpx.visualization3dPositionType];
+            [weakSelf.settings.currentTrackWidth set:weakSelf.gpx.width];
+            [weakSelf.settings.currentTrackShowArrows set:weakSelf.gpx.showArrows];
+            [weakSelf.settings.currentTrackShowStartFinish set:weakSelf.gpx.showStartFinish];
+            [weakSelf.settings.currentTrackVerticalExaggerationScale set:weakSelf.gpx.verticalExaggerationScale];
+            [weakSelf.settings.currentTrackElevationMeters set:weakSelf.gpx.elevationMeters];
+            [weakSelf.settings.currentTrackVisualization3dByType set:(int)weakSelf.gpx.visualization3dByType];
+            [weakSelf.settings.currentTrackVisualization3dWallColorType set:(int)weakSelf.gpx.visualization3dWallColorType];
+            [weakSelf.settings.currentTrackVisualization3dPositionType set:(int)weakSelf.gpx.visualization3dPositionType];
             
-            [self.settings.currentTrackColoringType set:self.gpx.coloringType.length > 0
-                    ? [OAColoringType getNonNullTrackColoringTypeByName:self.gpx.coloringType]
+            [weakSelf.settings.currentTrackColoringType set:weakSelf.gpx.coloringType.length > 0
+                    ? [OAColoringType getNonNullTrackColoringTypeByName:weakSelf.gpx.coloringType]
                     : OAColoringType.TRACK_SOLID];
-            [self.settings.currentTrackColor set:self.gpx.color];
+            [weakSelf.settings.currentTrackColor set:weakSelf.gpx.color];
 
-            [self.doc setWidth:self.gpx.width];
-            [self.doc setShowArrows:self.gpx.showArrows];
-            [self.doc setShowStartFinish:self.gpx.showStartFinish];
-            [self.doc setVerticalExaggerationScale:self.gpx.verticalExaggerationScale];
-            [self.doc setVisualization3dByType:self.gpx.visualization3dByType];
-            [self.doc setVisualization3dWallColorType:self.gpx.visualization3dWallColorType];
-            [self.doc setVisualization3dPositionType:self.gpx.visualization3dPositionType];
-            [self.doc setColoringType:self.gpx.coloringType];
-            [self.doc setColor:self.gpx.color];
+            [weakSelf.doc setWidth:weakSelf.gpx.width];
+            [weakSelf.doc setShowArrows:weakSelf.gpx.showArrows];
+            [weakSelf.doc setShowStartFinish:weakSelf.gpx.showStartFinish];
+            [weakSelf.doc setVerticalExaggerationScale:weakSelf.gpx.verticalExaggerationScale];
+            [weakSelf.doc setElevationMeters:weakSelf.gpx.elevationMeters];
+            [weakSelf.doc setVisualization3dByType:weakSelf.gpx.visualization3dByType];
+            [weakSelf.doc setVisualization3dWallColorType:weakSelf.gpx.visualization3dWallColorType];
+            [weakSelf.doc setVisualization3dPositionType:weakSelf.gpx.visualization3dPositionType];
+            [weakSelf.doc setColoringType:weakSelf.gpx.coloringType];
+            [weakSelf.doc setColor:weakSelf.gpx.color];
         }
-        if (_reopeningTrackMenuState)
+        if (weakSelf.reopeningTrackMenuState)
         {
-            if (_reopeningTrackMenuState.openedFromTracksList && !_reopeningTrackMenuState.openedFromTrackMenu && _reopeningTrackMenuState.navControllerHistory)
+            if (weakSelf.reopeningTrackMenuState.openedFromTracksList && !weakSelf.reopeningTrackMenuState.openedFromTrackMenu && weakSelf.reopeningTrackMenuState.navControllerHistory)
             {
-                [[OARootViewController instance].navigationController setViewControllers:_reopeningTrackMenuState.navControllerHistory animated:YES];
+                [[OARootViewController instance].navigationController setViewControllers:weakSelf.reopeningTrackMenuState.navControllerHistory animated:YES];
             }
             else
             {
-                _reopeningTrackMenuState.openedFromTrackMenu = NO;
-                [self.mapPanelViewController openTargetViewWithGPX:self.gpx
+                weakSelf.reopeningTrackMenuState.openedFromTrackMenu = NO;
+                [weakSelf.mapPanelViewController openTargetViewWithGPX:weakSelf.gpx
                                                       trackHudMode:EOATrackMenuHudMode
-                                                             state:_reopeningTrackMenuState];
+                                                             state:weakSelf.reopeningTrackMenuState];
             }
         }
     }];
@@ -1267,49 +1440,29 @@
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(onSwitchPressed:) forControlEvents:UIControlEventValueChanged];
         }
-        outCell = cell;
-    }
-    else if ([cellData.type isEqualToString:[OAImageTextViewCell getCellIdentifier]])
-    {
-        OAImageTextViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAImageTextViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAImageTextViewCell getCellIdentifier]
-                                                         owner:self options:nil];
-            cell = (OAImageTextViewCell *) nib[0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.separatorInset = UIEdgeInsetsMake(0., DeviceScreenWidth, 0., 0.);
-        }
-        if (cell)
-        {
-            NSString *extraDesc = cellData.values[@"extra_desc"];
-            [cell showExtraDesc:extraDesc && extraDesc.length > 0];
-
-            UIImage *image = [UIImage imageNamed:cellData.rightIconName];
-            cell.iconView.image = [cell isDirectionRTL] ? image.imageFlippedForRightToLeftLayoutDirection : image;
-
-            cell.descView.text = cellData.desc;
-            cell.descView.font = [UIFont scaledSystemFontOfSize:[cellData.values[@"desc_font_size"] intValue]];
-            cell.descView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
-
-            cell.extraDescView.text = extraDesc;
-            cell.extraDescView.font = [UIFont scaledSystemFontOfSize:[cellData.values[@"desc_font_size"] intValue]];
-            cell.extraDescView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
-        }
-
-        if ([cell needsUpdateConstraints])
-            [cell setNeedsUpdateConstraints];
-
         return cell;
     }
     else if ([cellData.type isEqualToString:[OACollectionSingleLineTableViewCell getCellIdentifier]])
     {
-        OACollectionSingleLineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACollectionSingleLineTableViewCell getCellIdentifier]];
-        if (cell == nil)
+        OACollectionSingleLineTableViewCell *cell =
+            [tableView dequeueReusableCellWithIdentifier:[OACollectionSingleLineTableViewCell getCellIdentifier]];
+        cell.separatorInset = UIEdgeInsetsZero;
+        BOOL isRightActionButtonVisible = [self isSelectedTypeSolid];
+        [cell rightActionButtonVisibility:isRightActionButtonVisible];
+        [cell.rightActionButton setImage:isRightActionButtonVisible ? [UIImage templateImageNamed:@"ic_custom_add"] : nil
+                                forState:UIControlStateNormal];
+        cell.rightActionButton.tag = isRightActionButtonVisible ? (indexPath.section << 10 | indexPath.row) : 0;
+        cell.rightActionButton.accessibilityLabel = isRightActionButtonVisible ? OALocalizedString(@"shared_string_add_color") : nil;
+        [cell.rightActionButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
+        if (isRightActionButtonVisible)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACollectionSingleLineTableViewCell getCellIdentifier]
-                                                         owner:self options:nil];
-            cell = nib[0];
+            [cell.rightActionButton addTarget:self
+                                       action:@selector(onCellButtonPressed:)
+                             forControlEvents:UIControlEventTouchUpInside];
+        }
+
+        if ([self isSelectedTypeSolid])
+        {
             OAColorCollectionHandler *colorHandler = [[OAColorCollectionHandler alloc] initWithData:@[_sortedColorItems] collectionView:cell.collectionView];
             colorHandler.delegate = self;
             NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:_selectedColorItem] inSection:0];
@@ -1317,18 +1470,17 @@
                 selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:[_appearanceCollection getDefaultLineColorItem]] inSection:0];
             [colorHandler setSelectedIndexPath:selectedIndexPath];
             [cell setCollectionHandler:colorHandler];
-            cell.separatorInset = UIEdgeInsetsZero;
-            cell.rightActionButton.accessibilityLabel = OALocalizedString(@"shared_string_add_color");
             cell.delegate = self;
         }
-        if (cell)
+        else if ([self isSelectedTypeGradient])
         {
-            [cell.rightActionButton setImage:[UIImage templateImageNamed:@"ic_custom_add"] forState:UIControlStateNormal];
-            cell.rightActionButton.tag = indexPath.section << 10 | indexPath.row;
-            [cell.rightActionButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
-            [cell.rightActionButton addTarget:self action:@selector(onCellButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-            [cell.collectionView reloadData];
-            [cell layoutIfNeeded];
+            PaletteCollectionHandler *paletteHandler = [[PaletteCollectionHandler alloc] initWithData:@[[_sortedPaletteColorItems asArray]] collectionView:cell.collectionView];
+            paletteHandler.delegate = self;
+            NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:_selectedPaletteColorItem] inSection:0];
+            if (selectedIndexPath.row == NSNotFound)
+                selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:[_gradientColorsCollection getDefaultGradientPalette]] inSection:0];
+            [paletteHandler setSelectedIndexPath:selectedIndexPath];
+            [cell setCollectionHandler:paletteHandler];
         }
         return cell;
     }
@@ -1453,7 +1605,7 @@
             cell.topRightLabel.font = [UIFont scaledSystemFontOfSize:17 weight:UIFontWeightMedium];
             cell.bottomLeftLabel.text = arrayValue.firstObject;
             cell.bottomRightLabel.text = arrayValue.lastObject;
-            [cell.sliderView setNumberOfMarks:arrayValue.count additionalMarksBetween:0];
+            [cell.sliderView setNumberOfMarks:arrayValue.count];
             cell.sliderView.selectedMark = [arrayValue indexOfObject:cellData.values[@"custom_string_value"]];
 
             cell.sliderView.tag = indexPath.section << 10 | indexPath.row;
@@ -1476,8 +1628,12 @@
         }
         if (cell)
         {
+            BOOL isPaletteName = [cellData.key isEqualToString:@"paletteName"];
+            cell.selectionStyle = isPaletteName ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleDefault;
+            cell.separatorInset = UIEdgeInsetsMake(0., isPaletteName ? 0. : self.tableView.frame.size.width, 0., 0.);
             cell.titleLabel.text = cellData.title;
             cell.titleLabel.textColor = cellData.tintColor ?: [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.titleLabel.font = [UIFont preferredFontForTextStyle:isPaletteName ? UIFontTextStyleFootnote : UIFontTextStyleBody];
         }
         return cell;
     }
@@ -1524,21 +1680,47 @@
             }
             
             [cell.contentView addSubview:_trackView3DEmptyView];
-            cell.translatesAutoresizingMaskIntoConstraints = NO;
             _trackView3DEmptyView.translatesAutoresizingMaskIntoConstraints = NO;
-            
-            [cell.contentView addSubview:_trackView3DEmptyView];
+
             [NSLayoutConstraint activateConstraints:@[
                 [_trackView3DEmptyView.leadingAnchor constraintEqualToAnchor:cell.contentView.leadingAnchor constant:20],
                 [_trackView3DEmptyView.trailingAnchor constraintEqualToAnchor:cell.contentView.trailingAnchor constant:-20],
                 [_trackView3DEmptyView.topAnchor constraintEqualToAnchor:cell.contentView.topAnchor constant:20],
-                [_trackView3DEmptyView.bottomAnchor constraintEqualToAnchor:cell.contentView.bottomAnchor constant:20],
+                [_trackView3DEmptyView.bottomAnchor constraintEqualToAnchor:cell.contentView.bottomAnchor constant:-20],
             ]];
             return cell;
             
         }
         return [UITableViewCell new];
-        
+    }
+    else if ([cellData.type isEqualToString:OALineChartCell.reuseIdentifier])
+    {
+        OALineChartCell *cell = (OALineChartCell *) [tableView dequeueReusableCellWithIdentifier:OALineChartCell.reuseIdentifier
+                                                                                         forIndexPath:indexPath];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.separatorInset = UIEdgeInsetsMake(0, CGFLOAT_MAX, 0, 0);
+
+        [GpxUIHelper setupGradientChartWithChart:cell.lineChartView
+                             useGesturesAndScale:NO
+                                  xAxisGridColor:[UIColor colorNamed:ACColorNameChartAxisGridLine]
+                                     labelsColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
+
+        ColorPalette *colorPalette;
+        if ([_selectedPaletteColorItem isKindOfClass:PaletteGradientColor.class])
+        {
+            PaletteGradientColor *paletteColor = (PaletteGradientColor *) _selectedPaletteColorItem;
+            colorPalette = paletteColor.colorPalette;
+        }
+        if (!colorPalette)
+            return cell;
+
+        cell.lineChartView.data =
+            [GpxUIHelper buildGradientChartWithChart:cell.lineChartView
+                                        colorPalette:colorPalette
+                                      valueFormatter:[GradientUiHelper getGradientTypeFormatter:_gradientColorsCollection.gradientType
+                                                                                       analysis:self.analysis]];
+        [cell.lineChartView notifyDataSetChanged];
+        return cell;
     }
 
     if ([outCell needsUpdateConstraints])
@@ -1554,10 +1736,6 @@
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
     if ([cellData.type isEqualToString:[OADividerCell getCellIdentifier]])
         return [cellData.values[@"float_value"] floatValue];
-    if ([cellData.type isEqualToString:[UITableViewCell getCellIdentifier]] && [cellData.key isEqualToString:@"track_view_3d_empty_state"])
-    {
-        return [[UIFontMetrics defaultMetrics] scaledValueForValue:82] + 104;
-    }
     
     return UITableViewAutomaticDimension;
 }
@@ -1751,67 +1929,12 @@
             }
         }];
     }
-    else if ([tableData.key isEqualToString:@"color_values"])
-    {
-        NSMutableArray<NSDictionary *> *newTrackColoringTypes = [NSMutableArray array];
-        for (OATrackAppearanceItem *item in _availableColoringTypes)
-        {
-            [newTrackColoringTypes addObject:@{
-                    @"title": item.title,
-                    @"available": @(item.isAvailable && item.isEnabled)
-            }];
-        }
-        [tableData setData:@{
-                kTableValues: @{
-                        @"array_value": newTrackColoringTypes,
-                        @"selected_integer_value": @([_availableColoringTypes indexOfObject:_selectedItem])
-                }
-        }];
-    }
     else if ([tableData.key isEqualToString:@"colors_section"])
     {
-        OAGPXTableSectionData *section = (OAGPXTableSectionData *)tableData;
-        OAGPXTableCellData *gridOrDescriptionCellData = nil;
-        NSInteger index = NSNotFound;
-        for (NSInteger i = 0; i < section.subjects.count; i++)
-        {
-            OAGPXTableCellData *row = section.subjects[i];
-            if ([row.key isEqualToString:@"color_grid"] || [row.key isEqualToString:@"color_elevation_description"] || [row.key isEqualToString:@"color_attribute_description"])
-            {
-                gridOrDescriptionCellData = row;
-                index = i;
-                break;
-            }
-        }
-        if (index != NSNotFound)
-        {
-            gridOrDescriptionCellData = [self generateGridOrDescriptionCellData];
-            section.subjects[index] = gridOrDescriptionCellData;
-
-            OAGPXTableCellData *lastCellData = section.subjects.lastObject;
-            if ([lastCellData.key isEqualToString:@"color_extra_description"] || [lastCellData.key isEqualToString:@"all_colors"])
-                [section.subjects removeObject:lastCellData];
-
-            BOOL hasElevationGradient = [section.subjects.lastObject.key isEqualToString:@"color_elevation_gradient"];
-            if ([_selectedItem.coloringType isGradient] && !hasElevationGradient)
-                [section.subjects addObject:[self generateDataForColorElevationGradientCellData]];
-            else if (![_selectedItem.coloringType isGradient] && hasElevationGradient)
-                [section.subjects removeObject:section.subjects.lastObject];
-
-            if ([self isSelectedTypeSpeed] || [self isSelectedTypeAltitude])
-            {
-                [section.subjects addObject:[self generateDescriptionCellData:@"color_extra_description"
-                        description:OALocalizedString(@"grey_color_undefined")]];
-            }
-            else if ([_selectedItem.coloringType isTrackSolid])
-            {
-                [section.subjects addObject:[self generateAllColorsCellData]];
-            }
-        }
-        for (OAGPXTableCellData *cellData in section.subjects)
-        {
-            [self updateData:cellData];
-        }
+        OAGPXTableSectionData *section = (OAGPXTableSectionData *) tableData;
+        [self updateData:section.subjects.firstObject];
+        [section.subjects removeObjectsInRange:NSMakeRange(1, section.subjects.count - 1)];
+        [self generateColorsSection:section];
     }
     else if ([tableData.key isEqualToString:@"width_title"])
     {
@@ -1871,17 +1994,6 @@
             [self updateData:cellData];
         }
     }
-    else if ([tableData.key isEqualToString:@"color_elevation_gradient"])
-    {
-        [tableData setData:@{
-                kTableValues: @{
-                        @"extra_desc": [self generateExtraDescription],
-                        @"desc_font_size": @([self isSelectedTypeSlope] ? 15 : 17)
-                },
-                kCellDesc: [self generateDescription],
-                kCellRightIconName: [self isSelectedTypeSlope] ? @"img_track_gradient_slope" : @"img_track_gradient_speed"
-        }];
-    }
     else if ([tableData.key isEqualToString:@"width_custom_slider"])
     {
         [tableData setData:@{
@@ -1902,6 +2014,12 @@
                 @"has_top_labels": @YES,
                 @"has_bottom_labels": @YES
             }
+        }];
+    }
+    else if ([tableData.key isEqualToString:@"paletteName"])
+    {
+        [tableData setData:@{
+            kCellTitle: [_selectedPaletteColorItem toHumanString]
         }];
     }
 }
@@ -2065,13 +2183,29 @@
         }
         [self.navigationController presentViewController:navigationController animated:YES completion:nil];
     }
-    else if ([tableData.key isEqualToString:@"all_colors"])
+    else if ([tableData.key isEqualToString:@"allColors"])
     {
-        OAColorCollectionViewController *colorCollectionViewController =
-            [[OAColorCollectionViewController alloc] initWithColorItems:[_appearanceCollection getAvailableColorsSortingByKey]
-                                                      selectedColorItem:_selectedColorItem];
-        colorCollectionViewController.delegate = self;
-        [self.navigationController pushViewController:colorCollectionViewController animated:YES];
+        OAColorCollectionViewController *colorCollectionViewController = nil;
+        if ([self isSelectedTypeSolid])
+        {
+            colorCollectionViewController =
+                [[OAColorCollectionViewController alloc] initWithCollectionType:EOAColorCollectionTypeColorItems
+                                                                          items:[_appearanceCollection getAvailableColorsSortingByKey]
+                                                                   selectedItem:_selectedColorItem];
+        }
+        else if ([self isSelectedTypeGradient])
+        {
+            colorCollectionViewController =
+                [[OAColorCollectionViewController alloc] initWithCollectionType:EOAColorCollectionTypePaletteItems
+                                                                          items:_gradientColorsCollection
+                                                                   selectedItem:_selectedPaletteColorItem];
+        }
+
+        if (colorCollectionViewController)
+        {
+            colorCollectionViewController.delegate = self;
+            [self.navigationController pushViewController:colorCollectionViewController animated:YES];
+        }
     }
     else if ([tableData.key isEqualToString:@"vertical_exaggeration"])
     {
@@ -2084,15 +2218,38 @@
             [weakSelf configureVerticalExaggerationScale:scale];
         };
         controller.hideCallback = ^{
-            OATrackMenuViewControllerState *state = _reopeningTrackMenuState;
-            BOOL openedFromTracksList = state.openedFromTracksList;
-            state.openedFromTracksList = openedFromTracksList;
+            OATrackMenuViewControllerState *state = weakSelf.reopeningTrackMenuState;
+            state.openedFromTracksList = state.openedFromTracksList;
             state.openedFromTrackMenu = YES;
             state.scrollToSectionIndex = 3;
             [weakSelf.mapViewController hideContextPinMarker];
             [weakSelf.mapPanelViewController openTargetViewWithGPX:weakSelf.gpx
                                                   trackHudMode:EOATrackAppearanceHudMode
                                                          state:state];
+        };
+        [self hide:YES duration:.2 onComplete:^{
+            [OARootViewController.instance.mapPanel showScrollableHudViewController:controller];
+        }];
+    }
+    else if ([tableData.key isEqualToString:@"wall_height"])
+    {
+        OAMapSettingsTerrainParametersViewController *controller = [[OAMapSettingsTerrainParametersViewController alloc] initWithSettingsType:EOAGPXSettingsTypeWallHeight];
+        NSInteger savedElevationMeters = self.gpx.elevationMeters;
+        [controller configureGPXElevationMeters:savedElevationMeters];
+        __weak __typeof(self) weakSelf = self;
+        controller.applyWallHeightCallback = ^(NSInteger meters)
+        {
+            [weakSelf configureElevationMeters:meters];
+        };
+        controller.hideCallback = ^{
+            OATrackMenuViewControllerState *state = weakSelf.reopeningTrackMenuState;
+            state.openedFromTracksList = state.openedFromTracksList;
+            state.openedFromTrackMenu = YES;
+            state.scrollToSectionIndex = 3;
+            [weakSelf.mapViewController hideContextPinMarker];
+            [weakSelf.mapPanelViewController openTargetViewWithGPX:weakSelf.gpx
+                                                      trackHudMode:EOATrackAppearanceHudMode
+                                                             state:state];
         };
         [self hide:YES duration:.2 onComplete:^{
             [OARootViewController.instance.mapPanel showScrollableHudViewController:controller];
@@ -2106,6 +2263,7 @@
             [self.settings.currentTrackShowArrows resetToDefault];
             [self.settings.currentTrackShowStartFinish resetToDefault];
             [self.settings.currentTrackVerticalExaggerationScale resetToDefault];
+            [self.settings.currentTrackElevationMeters resetToDefault];
             [self.settings.currentTrackVisualization3dByType resetToDefault];
             [self.settings.currentTrackVisualization3dWallColorType resetToDefault];
             [self.settings.currentTrackVisualization3dPositionType resetToDefault];
@@ -2113,9 +2271,10 @@
             [self.settings.currentTrackColor resetToDefault];
             
             [self.doc setWidth:[self.settings.currentTrackWidth get]];
-            [self.doc setShowArrows:[self.settings.currentTrackShowArrows get]];            
+            [self.doc setShowArrows:[self.settings.currentTrackShowArrows get]];
             [self.doc setShowStartFinish:[self.settings.currentTrackShowStartFinish get]];
             [self.doc setVerticalExaggerationScale:[self.settings.currentTrackVerticalExaggerationScale get]];
+            [self.doc setElevationMeters:[self.settings.currentTrackElevationMeters get]];
             
             [self.doc setVisualization3dByType:(EOAGPX3DLineVisualizationByType)[self.settings.currentTrackVisualization3dByType get]];
             [self.doc setVisualization3dWallColorType:(EOAGPX3DLineVisualizationWallColorType)[self.settings.currentTrackVisualization3dWallColorType get]];
@@ -2148,7 +2307,15 @@
 - (void)onColoringTypeSelected:(OATrackAppearanceItem *)selectedItem
 {
     _selectedItem = selectedItem;
-    NSString *coloringType = _selectedItem.coloringType == OAColoringType.ATTRIBUTE ? _selectedItem.attrName : _selectedItem.coloringType.name;
+    if ([self isSelectedTypeGradient])
+    {
+        _gradientColorsCollection = [[GradientColorsCollection alloc] initWithColorizationType:(ColorizationType) [_selectedItem.coloringType toColorizationType]];
+        [_sortedPaletteColorItems replaceAllWithObjectsSync:[_gradientColorsCollection getPaletteColors]];
+        _selectedPaletteColorItem = [_gradientColorsCollection getDefaultGradientPalette];
+        self.gpx.gradientPaletteName = PaletteGradientColor.defaultName;
+    }
+
+    NSString *coloringType = [self isSelectedTypeAttribute] ? _selectedItem.attrName : _selectedItem.coloringType.name;
     self.gpx.coloringType = coloringType;
     if (_wholeFolderTracks)
     {
@@ -2159,6 +2326,8 @@
     if (self.isCurrentTrack)
     {
         [self.doc setColoringType:self.gpx.coloringType];
+        if ([self isSelectedTypeGradient])
+            [self.doc setGradientColorPalette:self.gpx.gradientPaletteName];
         [[_app updateRecTrackOnMapObservable] notifyEvent];
     }
     else
@@ -2168,17 +2337,16 @@
 
     OAGPXTableSectionData *section = _tableData[kColorsSection];
     [self updateData:section];
-
+    
     [UIView transitionWithView:self.tableView
                       duration:0.35f
                        options:UIViewAnimationOptionTransitionCrossDissolve
-                    animations:^(void)
-                    {
-                        [self.tableView reloadData];
-                        self.doneButton.userInteractionEnabled = YES;
-                        [self.doneButton setTitleColor:[UIColor colorNamed:ACColorNameIconColorActive]
-                                              forState:UIControlStateNormal];
-                    }
+                    animations:^(void) {
+        [self.tableView reloadData];
+        self.doneButton.userInteractionEnabled = YES;
+        [self.doneButton setTitleColor:[UIColor colorNamed:ACColorNameIconColorActive]
+                              forState:UIControlStateNormal];
+    }
                     completion:nil];
 }
 
@@ -2187,6 +2355,144 @@
 - (void)onCellButtonPressed:(UIButton *)sender
 {
     [self onRightActionButtonPressed:sender.tag];
+}
+
+- (void)onCollectionDeleted:(NSNotification *)notification
+{
+    if (![notification.object isKindOfClass:NSArray.class])
+        return;
+    
+    NSArray<PaletteGradientColor *> *gradientPaletteColor = (NSArray<PaletteGradientColor *> *) notification.object;
+    PaletteGradientColor *currentGradientPaletteColor;
+    if ([_selectedPaletteColorItem isKindOfClass:PaletteGradientColor.class])
+        currentGradientPaletteColor = (PaletteGradientColor *) _selectedPaletteColorItem;
+    else
+        return;
+    
+    auto currentIndex = [_sortedPaletteColorItems indexOfObjectSync:currentGradientPaletteColor];
+    NSMutableArray<NSIndexPath *> *indexPathsToDelete = [NSMutableArray array];
+    for (PaletteGradientColor *paletteColor in gradientPaletteColor)
+    {
+        NSInteger index = [_sortedPaletteColorItems indexOfObjectSync:paletteColor];
+        if (index != NSNotFound)
+        {
+            [_sortedPaletteColorItems removeObjectSync:paletteColor];
+            [indexPathsToDelete addObject:[NSIndexPath indexPathForRow:index inSection:0]];
+            if (index == currentIndex)
+                _isDefaultColorRestored = YES;
+        }
+    }
+    
+    if (indexPathsToDelete.count > 0 && [self isSelectedTypeGradient] && _colorsCollectionIndexPath)
+    {
+        __weak __typeof(self) weakSelf = self;
+        [self.tableView performBatchUpdates:^{
+            OACollectionSingleLineTableViewCell *colorCell = [weakSelf.tableView cellForRowAtIndexPath:weakSelf.colorsCollectionIndexPath];
+            OABaseCollectionHandler *handler = [colorCell getCollectionHandler];
+            [handler removeItems:indexPathsToDelete];
+        } completion:^(BOOL finished) {
+            if (weakSelf.isDefaultColorRestored)
+            {
+                weakSelf.gpx.gradientPaletteName = PaletteGradientColor.defaultName;
+                weakSelf.backupGpxItem.gradientPaletteName = weakSelf.gpx.gradientPaletteName;
+                if (weakSelf.isCurrentTrack)
+                    [weakSelf.doc setGradientColorPalette:weakSelf.gpx.gradientPaletteName];
+                weakSelf.selectedPaletteColorItem = [weakSelf.gradientColorsCollection getDefaultGradientPalette];
+                
+                NSMutableArray *indexPaths = [NSMutableArray array];
+                if (weakSelf.paletteLegendIndexPath)
+                    [indexPaths addObject:weakSelf.paletteLegendIndexPath];
+                if (weakSelf.paletteNameIndexPath)
+                {
+                    [weakSelf updateData:weakSelf.tableData[weakSelf.paletteNameIndexPath.section].subjects[weakSelf.paletteNameIndexPath.row]];
+                    [indexPaths addObject:weakSelf.paletteNameIndexPath];
+                }
+                if (indexPaths.count > 0)
+                {
+                    [weakSelf.tableView reloadRowsAtIndexPaths:indexPaths
+                                              withRowAnimation:UITableViewRowAnimationAutomatic];
+                }
+            }
+        }];
+    }
+}
+
+- (void)onCollectionCreated:(NSNotification *)notification
+{
+    if (![notification.object isKindOfClass:NSArray.class])
+        return;
+    
+    NSArray<PaletteGradientColor *> *gradientPaletteColor = (NSArray<PaletteGradientColor *> *) notification.object;
+    NSMutableArray<NSIndexPath *> *indexPathsToInsert = [NSMutableArray array];
+    for (PaletteGradientColor *paletteColor in gradientPaletteColor)
+    {
+        NSInteger index = [paletteColor getIndex] - 1;
+        NSIndexPath *indexPath;
+        if (index < [_sortedPaletteColorItems countSync])
+        {
+            indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+            [_sortedPaletteColorItems insertObjectSync:paletteColor atIndex:index];
+        }
+        else
+        {
+            indexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems countSync] inSection:0];
+            [_sortedPaletteColorItems addObjectSync:paletteColor];
+        }
+        [indexPathsToInsert addObject:indexPath];
+    }
+    
+    if (indexPathsToInsert.count > 0 && [self isSelectedTypeGradient] && _colorsCollectionIndexPath)
+    {
+        __weak __typeof(self) weakSelf = self;
+        [self.tableView performBatchUpdates:^{
+            OACollectionSingleLineTableViewCell *colorCell = [weakSelf.tableView cellForRowAtIndexPath:weakSelf.colorsCollectionIndexPath];
+            OABaseCollectionHandler *handler = [colorCell getCollectionHandler];
+            for (NSIndexPath *indexPath in indexPathsToInsert)
+            {
+                [handler insertItem:[weakSelf.sortedPaletteColorItems objectAtIndexSync:indexPath.row]
+                        atIndexPath:indexPath];
+            }
+        } completion:nil];
+    }
+}
+
+- (void)onCollectionUpdated:(NSNotification *)notification
+{
+    if (![notification.object isKindOfClass:NSArray.class])
+        return;
+    
+    NSArray<PaletteGradientColor *> *gradientPaletteColor = (NSArray<PaletteGradientColor *> *) notification.object;
+    NSMutableArray<NSIndexPath *> *indexPathsToUpdate = [NSMutableArray array];
+    BOOL currentPaletteColor;
+    for (PaletteGradientColor *paletteColor in gradientPaletteColor)
+    {
+        if ([_sortedPaletteColorItems containsObjectSync:paletteColor])
+        {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:paletteColor] inSection:0];
+            [indexPathsToUpdate addObject:indexPath];
+            if (paletteColor == _selectedPaletteColorItem)
+                currentPaletteColor = YES;
+        }
+    }
+    
+    if (indexPathsToUpdate.count > 0 && [self isSelectedTypeGradient] && _colorsCollectionIndexPath)
+    {
+        __weak __typeof(self) weakSelf = self;
+        [self.tableView performBatchUpdates:^{
+            OACollectionSingleLineTableViewCell *colorCell = [weakSelf.tableView cellForRowAtIndexPath:weakSelf.colorsCollectionIndexPath];
+            OABaseCollectionHandler *handler = [colorCell getCollectionHandler];
+            for (NSIndexPath *indexPath in indexPathsToUpdate)
+            {
+                [handler replaceItem:[weakSelf.sortedPaletteColorItems objectAtIndexSync:indexPath.row]
+                         atIndexPath:indexPath];
+                if (currentPaletteColor && _paletteLegendIndexPath)
+                {
+                    [weakSelf.tableView reloadRowsAtIndexPaths:@[_paletteLegendIndexPath]
+                                              withRowAnimation:UITableViewRowAnimationAutomatic];
+                }
+            }
+        } completion:nil];
+    }
 }
 
 #pragma mark - OACollectionTableViewCellDelegate
@@ -2206,14 +2512,17 @@
     [self onCollectionItemSelected:[NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:colorItem] inSection:0]];
 }
 
+- (void)selectPaletteItem:(PaletteColor *)paletteItem
+{
+    [self onCollectionItemSelected:[NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:paletteItem] inSection:0]];
+}
+
 - (OAColorItem *)addAndGetNewColorItem:(UIColor *)color
 {
     OAColorItem *newColorItem = [_appearanceCollection addNewSelectedColor:color];
-    OAGPXTableSectionData *colorSection = _tableData[kColorsSection];
-    if (colorSection.subjects.count - 1 >= kColorGridOrDescriptionCell)
+    if (_colorsCollectionIndexPath)
     {
-        NSIndexPath *colorIndexPath = [NSIndexPath indexPathForRow:kColorGridOrDescriptionCell inSection:kColorsSection];
-        OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:colorIndexPath];
+        OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorsCollectionIndexPath];
         OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
         
         [_sortedColorItems insertObject:newColorItem atIndex:0];
@@ -2224,11 +2533,9 @@
 
 - (void)changeColorItem:(OAColorItem *)colorItem withColor:(UIColor *)color
 {
-    OAGPXTableSectionData *colorSection = _tableData[kColorsSection];
-    if (colorSection.subjects.count - 1 >= kColorGridOrDescriptionCell)
+    if (_colorsCollectionIndexPath)
     {
-        NSIndexPath *colorIndexPath = [NSIndexPath indexPathForRow:kColorGridOrDescriptionCell inSection:kColorsSection];
-        OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:colorIndexPath];
+        OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorsCollectionIndexPath];
         OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
         
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:colorItem] inSection:0];
@@ -2240,14 +2547,12 @@
 - (OAColorItem *)duplicateColorItem:(OAColorItem *)colorItem
 {
     OAColorItem *duplicatedColorItem = [_appearanceCollection duplicateColor:colorItem];
-    OAGPXTableSectionData *colorSection = _tableData[kColorsSection];
-    if (colorSection.subjects.count - 1 >= kColorGridOrDescriptionCell)
+    if (_colorsCollectionIndexPath)
     {
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:colorItem] inSection:0];
         [_sortedColorItems insertObject:duplicatedColorItem atIndex:indexPath.row + 1];
 
-        NSIndexPath *colorIndexPath = [NSIndexPath indexPathForRow:kColorGridOrDescriptionCell inSection:kColorsSection];
-        OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:colorIndexPath];
+        OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorsCollectionIndexPath];
         OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
         NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section];
         [colorHandler addColor:newIndexPath newItem:duplicatedColorItem];
@@ -2257,15 +2562,13 @@
 
 - (void)deleteColorItem:(OAColorItem *)colorItem
 {
-    OAGPXTableSectionData *colorSection = _tableData[kColorsSection];
-    if (colorSection.subjects.count - 1 >= kColorGridOrDescriptionCell)
+    if (_colorsCollectionIndexPath)
     {
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:colorItem] inSection:0];
         [_appearanceCollection deleteColor:colorItem];
         [_sortedColorItems removeObjectAtIndex:indexPath.row];
 
-        NSIndexPath *colorIndexPath = [NSIndexPath indexPathForRow:kColorGridOrDescriptionCell inSection:kColorsSection];
-        OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:colorIndexPath];
+        OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorsCollectionIndexPath];
         OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
         [colorHandler removeColor:indexPath];
     }
@@ -2275,23 +2578,57 @@
 
 - (void)onCollectionItemSelected:(NSIndexPath *)indexPath
 {
-    _isNewColorSelected = YES;
-    _selectedColorItem = _sortedColorItems[indexPath.row];
-    self.gpx.color = _selectedColorItem.value;
-    if (_wholeFolderTracks)
+    if ([self isSelectedTypeSolid])
     {
-        for (OAGPX *track in _wholeFolderTracks)
-            track.color = _selectedColorItem.value;;
+        _isNewColorSelected = YES;
+        _selectedColorItem = _sortedColorItems[indexPath.row];
+        self.gpx.color = _selectedColorItem.value;
+        if (_wholeFolderTracks)
+        {
+            for (OAGPX *track in _wholeFolderTracks)
+            {
+                track.color = _selectedColorItem.value;
+            }
+        }
     }
-
+    else if ([self isSelectedTypeGradient])
+    {
+        _selectedPaletteColorItem = [_sortedPaletteColorItems objectAtIndexSync:indexPath.row];
+        if ([_selectedPaletteColorItem isKindOfClass:PaletteGradientColor.class])
+        {
+            PaletteGradientColor *paletteColor = (PaletteGradientColor *) _selectedPaletteColorItem;
+            self.gpx.gradientPaletteName = paletteColor.paletteName;
+            if (_wholeFolderTracks)
+            {
+                for (OAGPX *track in _wholeFolderTracks)
+                {
+                    track.gradientPaletteName = paletteColor.paletteName;
+                }
+            }
+            NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray array];
+            if (_paletteNameIndexPath)
+            {
+                [self updateData:_tableData[_paletteNameIndexPath.section].subjects[_paletteNameIndexPath.row]];
+                [indexPaths addObject:_paletteNameIndexPath];
+            }
+            if (_paletteLegendIndexPath)
+                [indexPaths addObject:_paletteLegendIndexPath];
+            if (indexPaths.count > 0)
+                [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+        }
+    }
+    
     if (self.isCurrentTrack)
     {
-        [self.doc setColor:self.gpx.color];
-        [[_app updateRecTrackOnMapObservable] notifyEvent];
+        if ([self isSelectedTypeSolid])
+            [self.doc setColor:self.gpx.color];
+        else if ([self isSelectedTypeGradient])
+            [self.doc setGradientColorPalette:self.gpx.gradientPaletteName];
+        [_app.updateRecTrackOnMapObservable notifyEvent];
     }
     else
     {
-        [[_app updateGpxTracksOnMapObservable] notifyEvent];
+        [_app.updateGpxTracksOnMapObservable notifyEvent];
     }
 }
 

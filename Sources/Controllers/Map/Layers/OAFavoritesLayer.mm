@@ -20,6 +20,8 @@
 #import "OATargetInfoViewController.h"
 #import "OAParkingPositionPlugin.h"
 #import "OAPlugin.h"
+#import "OAAppSettings.h"
+#import "OAAppData.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -70,8 +72,9 @@
 
 - (BOOL) updateLayer
 {
-    [super updateLayer];
-    
+    if (![super updateLayer])
+        return NO;
+
     [self.app.data.mapLayersConfiguration setLayer:self.layerId
                                         Visibility:self.isVisible];
 

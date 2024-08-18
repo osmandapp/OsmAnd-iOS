@@ -10,6 +10,7 @@
 #import "OAFoldersCollectionViewCell.h"
 #import "OACollectionViewCellState.h"
 #import "OACollectionViewFlowLayout.h"
+#import "OAAppData.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 

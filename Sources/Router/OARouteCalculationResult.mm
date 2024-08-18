@@ -16,9 +16,11 @@
 #import "OARoutingHelper.h"
 #import "OARoutingHelperUtils.h"
 #import "OAUtilities.h"
+#import "OAApplicationMode.h"
 #import "QuadRect.h"
 #import "OAExitInfo.h"
 #import "OAMapUtils.h"
+#import "CLLocation+Extension.h"
 
 #include <routeSegmentResult.h>
 
@@ -1605,6 +1607,7 @@
         _appMode = mode;
         
         _directions = computeDirections;
+
         [self.class updateDirectionsTime:_directions listDistance:_listDistance];
         _alarmInfo = alarms;
         _routeProvider = (EOARouteService) [OAAppSettings.sharedManager.routerService get:_appMode];

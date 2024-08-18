@@ -14,10 +14,9 @@
 
 #import <Foundation/Foundation.h>
 
-static const NSInteger kVersion = 2;
+static const NSInteger kVersion = 3;
 
-@class OAImportAsyncTask, OAExportAsyncTask;
-@class OASettingsItem;
+@class OAImportAsyncTask, OAExportAsyncTask, OASettingsItem;
 
 @protocol OASettingsImportExportDelegate <NSObject>
 

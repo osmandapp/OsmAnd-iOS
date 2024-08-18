@@ -35,6 +35,7 @@
 - (BOOL) isAvailableInSubscription;
 
 - (OAGradientScaleType *) toGradientScaleType;
+- (NSInteger) toColorizationType;
 
 - (NSString *) getName:(NSString *)routeInfoAttribute;
 - (BOOL) isCustomColor;
@@ -42,6 +43,9 @@
 - (BOOL) isSolidSingleColor;
 - (BOOL) isGradient;
 - (BOOL) isRouteInfoAttribute;
+- (BOOL)isSpeed;
+- (BOOL)isAltitude;
+- (BOOL)isSlope;
 
 @end
 

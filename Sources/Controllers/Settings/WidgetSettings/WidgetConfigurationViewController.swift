@@ -26,7 +26,7 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
     var isFirstGenerateData = true
     var onWidgetStateChangedAction: (() -> Void)?
     
-    lazy private var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry!
+    lazy private var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -116,7 +116,7 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                 cell.switchView.isOn = selected
                 cell.leftIconVisibility(hasIcon)
                 cell.leftIconView.image = UIImage.templateImageNamed(selected ? item.iconName : item.string(forKey: "hide_icon"))
-                cell.leftIconView.tintColor = selected ? UIColor(rgb: Int(selectedAppMode.getIconColor())) : UIColor.iconColorDisabled
+                cell.leftIconView.tintColor = selected ? selectedAppMode.getProfileColor() : UIColor.iconColorDisabled
 
                 cell.switchView.tag = indexPath.section << 10 | indexPath.row
                 cell.switchView.addTarget(self, action: #selector(onSwitchClick(_:)), for: .valueChanged)
@@ -129,7 +129,7 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                 let nib = Bundle.main.loadNibNamed(OAValueTableViewCell.getIdentifier(), owner: self, options: nil)
                 cell = nib?.first as? OAValueTableViewCell
                 cell?.accessoryType = .disclosureIndicator
-                cell?.leftIconView.tintColor = UIColor(rgb: Int(selectedAppMode.getIconColor()))
+                cell?.leftIconView.tintColor = selectedAppMode.getProfileColor()
             }
             if let cell {
                 if item.key == "external_sensor_key" {
@@ -205,6 +205,7 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                     NotificationCenter.default.post(name: .SimpleWidgetStyleUpdated,
                                                     object: widgetInfo,
                                                     userInfo: nil)
+                    OARootViewController.instance().mapPanel.recreateControls()
                 }
             }
             outCell = cell
@@ -240,7 +241,7 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
         if let cell = self.tableView.cellForRow(at: indexPath) as? OASwitchTableViewCell, !cell.leftIconView.isHidden {
             UIView.animate(withDuration: 0.2) {
                 cell.leftIconView.image = UIImage.templateImageNamed(sw.isOn ? data.iconName : data.string(forKey: "hide_icon"))
-                cell.leftIconView.tintColor = sw.isOn ? UIColor(rgb: Int(self.selectedAppMode.getIconColor())) : UIColor.iconColorDisabled
+                cell.leftIconView.tintColor = sw.isOn ? self.selectedAppMode.getProfileColor() : UIColor.iconColorDisabled
             }
         }
         
@@ -330,7 +331,7 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
     }
     
     private func onWidgetDeleted() {
-        let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry!
+        let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
         widgetRegistry.enableDisableWidget(for: selectedAppMode, widgetInfo: widgetInfo, enabled: NSNumber(value: false), recreateControls: true)
     }
     

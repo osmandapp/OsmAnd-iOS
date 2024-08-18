@@ -7,10 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "OABaseWidgetView.h"
 
-@class OAWidgetPanelViewController;
-
-@protocol OAWidgetListener;
+@class OAWidgetPanelViewController, OAMapHudViewController, OATextInfoWidget;
 
 @protocol OAMapInfoControllerProtocol
 
@@ -19,8 +18,6 @@
 - (void) widgetsLayoutDidChange:(BOOL)animated;
 
 @end
-
-@class OAMapHudViewController, OATextInfoWidget, OAWidgetState, OAMapWidgetRegInfo, OARulerWidget;
 
 @interface OATextState : NSObject
 
@@ -63,7 +60,9 @@
 - (void) updateRuler;
 
 - (void)updateLayout;
-- (void)viewWillTransition;
+- (void)viewWillTransition:(CGSize)size;
 - (void)updateSpeedometer;
+
+- (void)onFrameAnimatorsUpdated;
 
 @end

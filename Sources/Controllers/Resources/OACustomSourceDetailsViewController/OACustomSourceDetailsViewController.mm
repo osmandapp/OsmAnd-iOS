@@ -9,6 +9,7 @@
 #import "OACustomSourceDetailsViewController.h"
 #import "OADownloadDescriptionInfo.h"
 #import "OACustomRegion.h"
+#import "OADownloadsManager.h"
 #import "OAResourcesUIHelper.h"
 #import "OATextMultilineTableViewCell.h"
 #import "OASimpleTableViewCell.h"

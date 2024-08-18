@@ -6,7 +6,6 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import "OABaseWidgetView.h"
 
 static const int MAX_SHIELDS_QUANTITY = 3;

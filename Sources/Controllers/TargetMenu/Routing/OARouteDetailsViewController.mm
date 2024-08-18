@@ -9,6 +9,8 @@
 #import "OARouteDetailsViewController.h"
 #import "Localization.h"
 #import "OARootViewController.h"
+#import "OAMapViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OASizes.h"
 #import "OAColors.h"
 #import "OAStateChangedListener.h"
@@ -21,7 +23,6 @@
 #import "OAMapLayers.h"
 #import "OARouteStatisticsHelper.h"
 #import "OARouteCalculationResult.h"
-#import "OsmAnd_Maps-Swift.h"
 #import "OARouteStatistics.h"
 #import "OARouteInfoAltitudeCell.h"
 #import "OAMapRendererView.h"
@@ -39,6 +40,7 @@
 #import "OATurnDrawable+cpp.h"
 #import <Charts/Charts-Swift.h>
 #import "GeneratedAssetSymbols.h"
+#import "CLLocation+Extension.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #define kStatsSection 0
@@ -194,13 +196,12 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     
     if (model.distance > 0)
     {
-        BOOL shouldRoundUp = ![[OAAppSettings sharedManager].preciseDistanceNumbers get];
-        NSString *segmentDistanceLabelText = [OAOsmAndFormatter getFormattedDistance:model.distance roundUp:shouldRoundUp];
+        NSString *segmentDistanceLabelText = [OAOsmAndFormatter getFormattedDistance:model.distance withParams:[OsmAndFormatterParams useLowerBounds]];
         [cell setTopLeftLabelWithText:segmentDistanceLabelText];
         [cell setTopLeftLabelWithFont:[UIFont preferredFontForTextStyle:UIFontTextStyleHeadline]];
         
         OACumulativeInfo *cumulativeInfo = [OACumulativeInfo getRouteDirectionCumulativeInfo:directionInfoIndex + 1 routeDirections:directionsInfo];
-        NSString *distance = [OAOsmAndFormatter getFormattedDistance:cumulativeInfo.distance roundUp:shouldRoundUp];
+        NSString *distance = [OAOsmAndFormatter getFormattedDistance:cumulativeInfo.distance withParams:[OsmAndFormatterParams useLowerBounds]];
         NSString *time = [OAOsmAndFormatter getFormattedTimeInterval:cumulativeInfo.time shortFormat:YES];
         [cell setTopRightLabelWithText:[NSString stringWithFormat:@"%@ • %@", distance, time]];
     }
@@ -209,15 +210,65 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
         if (!segmentDescription || segmentDescription.length == 0)
         {
             BOOL isLastCell = directionInfoIndex == (directionsInfo.count - 1);
-            segmentDescription = OALocalizedString(isLastCell ? @"arrived_at_destination" : @"arrived_at_intermediate_point");
-            [cell setTopLeftLabelWithText:segmentDescription];
+            if (isLastCell)
+            {
+                RouteInfoSector routeInfoSector = RouteInfoSectorStraight;
+                RouteInfoDestinationSector *routeInfoDestinationSector = [[RouteInfoDestinationSector alloc] initWithSector:routeInfoSector distance:model.distance];
+                
+                NSArray<CLLocation *> *locationPoints = [OARoutingHelper sharedInstance].getRoute.getRouteLocations;
+                if (locationPoints.count > 1)
+                {
+                    CLLocation *prevPrevLocation = locationPoints[locationPoints.count - 2];
+                    CLLocation *prevLocation = locationPoints[locationPoints.count - 1];
+                    CLLocation *destinationLocation = [[OARoutingHelper sharedInstance] getFinalLocation];
+                    
+                    double distanceToDestination = [prevLocation distanceFromLocation:destinationLocation];
+                    routeInfoDestinationSector.distance = distanceToDestination;
+                    if (distanceToDestination > 3.0)
+                    {
+                        double routeBearing = [prevPrevLocation bearingTo:prevLocation];
+                        double bearing = [prevLocation bearingTo:destinationLocation];
+                        double diff = -degreesDiff(routeBearing, bearing);
+                        routeInfoSector = [self determineSectorForBearing:diff];
+                    }
+                    else
+                    {
+                        routeInfoSector = [self determineSectorForBearing:0];
+                    }
+                    routeInfoDestinationSector.sector = routeInfoSector;
+                }
+                [cell setLeftImageViewWithImage:routeInfoDestinationSector.getImage];
+                [cell setTopLeftLabelWithText:routeInfoDestinationSector.getTitle];
+                [cell setBottomLabelWithText:routeInfoDestinationSector.getDescriptionRoute];
+                [cell setBottomLanesImageWithImage:nil];
+                [cell setLeftTurnIconDrawable:nil];
+            }
+            else
+            {
+                [cell setTopLeftLabelWithText:OALocalizedString(@"arrived_at_intermediate_point")];
+            }
             [cell setTopLeftLabelWithFont:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]];
             [cell setTopRightLabelWithText:@""];
+        } else {
+            [cell setBottomLabelWithText:@""];
         }
-        [cell setBottomLabelWithText:@""];
     }
     
     return cell;
+}
+
+- (RouteInfoSector)determineSectorForBearing:(double)bearing
+{
+    if (bearing >= -180 && bearing < -60)
+    {
+        return RouteInfoSectorLeft;
+    }
+    else if (bearing >= 60 && bearing <= 180)
+    {
+        return RouteInfoSectorRight;
+    }
+    // bearing >= -60 && bearing < 60 is Straight
+    return RouteInfoSectorStraight;
 }
 
 - (void) populateAnalysisTabCells:(NSInteger &)section

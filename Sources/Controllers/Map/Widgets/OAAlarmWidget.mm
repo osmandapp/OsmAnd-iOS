@@ -12,8 +12,10 @@
 #import "OAMapViewTrackingUtilities.h"
 #import "OAWaypointHelper.h"
 #import "OAAlarmInfo.h"
+#import "OALocationServices.h"
 #import "OACurrentPositionHelper.h"
 #import "OAOsmAndFormatter.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OAAlarmWidget ()
 
@@ -224,7 +226,7 @@
                 else
                     locImgId = @"warnings_tunnel";
 
-                bottomText = [OAOsmAndFormatter getFormattedDistance:alarm.floatValue roundUp:(![[OAAppSettings sharedManager].preciseDistanceNumbers get] && alarm.type == AIT_TUNNEL)];
+                bottomText = [OAOsmAndFormatter getFormattedDistance:alarm.floatValue withParams:alarm.type == AIT_TUNNEL ? [OsmAndFormatterParams useLowerBounds] : nil];
             }
             else
             {

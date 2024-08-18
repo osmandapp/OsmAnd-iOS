@@ -8,9 +8,7 @@
 
 #import "OAOpenAddTrackViewController.h"
 #import "OsmAndApp.h"
-#import "OARootViewController.h"
 #import "Localization.h"
-#import "OsmAnd_Maps-Swift.h"
 #import "OAGPXDatabase.h"
 #import "OAGPXDocument.h"
 #import "OsmAndApp.h"
@@ -23,6 +21,7 @@
 #import "OAUtilities.h"
 #import "OASavingTrackHelper.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OATargetPointsHelper.h"
 #import "OARoutingHelper.h"
 #import "OARouteProvider.h"
@@ -32,8 +31,9 @@
 #import "OACollectionViewCellState.h"
 #import "OAOsmAndFormatter.h"
 #import "OAFoldersCollectionView.h"
-#import "OsmAnd_Maps-Swift.h"
+#import "OAApplicationMode.h"
 #import "GeneratedAssetSymbols.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kAllFoldersIndex 0
 #define kVerticalMargin 16.

@@ -17,6 +17,7 @@
 #import "OAParkingPositionPlugin.h"
 #import "OAIndexConstants.h"
 #import "OAPluginsHelper.h"
+#import "Localization.h"
 
 #define APPROXIMATE_FAVOURITE_SIZE_BYTES 470
 

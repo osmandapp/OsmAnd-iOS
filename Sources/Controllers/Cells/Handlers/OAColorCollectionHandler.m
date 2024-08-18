@@ -17,10 +17,15 @@
 
 #define kWhiteColor 0x44FFFFFF
 
+@interface OAColorCollectionHandler ()
+
+@property(nonatomic) NSIndexPath *selectedIndexPath;
+
+@end
+
 @implementation OAColorCollectionHandler
 {
     NSMutableArray<NSMutableArray<OAColorItem *> *> *_data;
-    NSIndexPath *_selectedIndexPath;
 }
 
 @synthesize delegate;
@@ -29,13 +34,13 @@
 
 - (NSString *)getCellIdentifier
 {
-    return [OAColorsCollectionViewCell getCellIdentifier];
+    return OAColorsCollectionViewCell.reuseIdentifier;
 }
 
 - (UIMenu *)getMenuForItem:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
 {
     NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
-
+    __weak __typeof(self) weakSelf = self;
     BOOL isDefaultColor = _data[indexPath.section][indexPath.row].isDefault;
     if (self.delegate && !isDefaultColor)
     {
@@ -43,7 +48,7 @@
                                                    image:[UIImage systemImageNamed:@"pencil"]
                                               identifier:nil
                                                  handler:^(__kindof UIAction * _Nonnull action) {
-            [self.delegate onContextMenuItemEdit:indexPath];
+            [weakSelf.delegate onContextMenuItemEdit:indexPath];
         }];
         editAction.accessibilityLabel = OALocalizedString(@"shared_string_edit_color");
         [menuElements addObject:editAction];
@@ -53,8 +58,8 @@
                                                     image:[UIImage systemImageNamed:@"doc.on.doc"]
                                                identifier:nil
                                                   handler:^(__kindof UIAction * _Nonnull action) {
-                 if (self.delegate)
-                     [self.delegate duplicateItemFromContextMenu:indexPath];
+        if (weakSelf.delegate)
+            [weakSelf.delegate duplicateItemFromContextMenu:indexPath];
     }];
     duplicateAction.accessibilityLabel = OALocalizedString(@"shared_string_duplicate_color");
     [menuElements addObject:duplicateAction];
@@ -65,7 +70,7 @@
                                                      image:[UIImage systemImageNamed:@"trash"]
                                                 identifier:nil
                                                    handler:^(__kindof UIAction * _Nonnull action) {
-            [self.delegate deleteItemFromContextMenu:indexPath];
+            [weakSelf.delegate deleteItemFromContextMenu:indexPath];
         }];
         deleteAction.accessibilityLabel = OALocalizedString(@"shared_string_delete_color");
         deleteAction.attributes = UIMenuElementAttributesDestructive;
@@ -87,24 +92,25 @@
     if (!collectionView)
         return;
 
+    __weak __typeof(self) weakSelf = self;
     NSIndexPath *prevSelectedIndexPath = indexPath.row <= _selectedIndexPath.row
         ? [NSIndexPath indexPathForRow:_selectedIndexPath.row + 1 inSection:_selectedIndexPath.section]
         : _selectedIndexPath;
     _selectedIndexPath = indexPath;
     [collectionView performBatchUpdates:^{
-        [collectionView insertItemsAtIndexPaths:@[_selectedIndexPath]];
-        [self addItem:indexPath newItem:newItem];
+        [collectionView insertItemsAtIndexPaths:@[weakSelf.selectedIndexPath]];
+        [weakSelf insertItem:newItem atIndexPath:indexPath];
     } completion:^(BOOL finished) {
-        [collectionView reloadItemsAtIndexPaths:@[prevSelectedIndexPath, _selectedIndexPath]];
-        if (self.delegate)
+        [collectionView reloadItemsAtIndexPaths:@[prevSelectedIndexPath, weakSelf.selectedIndexPath]];
+        if (weakSelf.delegate)
         {
-            [self.delegate onCollectionItemSelected:_selectedIndexPath];
-            [self.delegate reloadCollectionData];
+            [weakSelf.delegate onCollectionItemSelected:weakSelf.selectedIndexPath];
+            [weakSelf.delegate reloadCollectionData];
         }
-        if (![collectionView.indexPathsForVisibleItems containsObject:_selectedIndexPath])
+        if (![collectionView.indexPathsForVisibleItems containsObject:weakSelf.selectedIndexPath])
         {
-            [collectionView scrollToItemAtIndexPath:_selectedIndexPath
-                                   atScrollPosition:[self getScrollDirection] == UICollectionViewScrollDirectionHorizontal
+            [collectionView scrollToItemAtIndexPath:weakSelf.selectedIndexPath
+                                   atScrollPosition:[weakSelf getScrollDirection] == UICollectionViewScrollDirectionHorizontal
                                                         ? UICollectionViewScrollPositionCenteredHorizontally
                                                         : UICollectionViewScrollPositionCenteredVertically
                                            animated:YES];
@@ -133,23 +139,24 @@
     if (!collectionView)
         return;
 
+    __weak __typeof(self) weakSelf = self;
     [collectionView performBatchUpdates:^{
         [collectionView insertItemsAtIndexPaths:@[indexPath]];
-        [self addItem:indexPath newItem:newItem];
+        [weakSelf insertItem:newItem atIndexPath:indexPath];
     } completion:^(BOOL finished) {
-        if (indexPath.row <= _selectedIndexPath.row)
+        if (indexPath.row <= weakSelf.selectedIndexPath.row)
         {
-            NSIndexPath *prevSelectedIndexPath = _selectedIndexPath;
-            _selectedIndexPath = [NSIndexPath indexPathForRow:_selectedIndexPath.row + 1 inSection:_selectedIndexPath.section];
-            [collectionView reloadItemsAtIndexPaths:@[prevSelectedIndexPath, _selectedIndexPath]];
+            NSIndexPath *prevSelectedIndexPath = weakSelf.selectedIndexPath;
+            weakSelf.selectedIndexPath = [NSIndexPath indexPathForRow:weakSelf.selectedIndexPath.row + 1 inSection:weakSelf.selectedIndexPath.section];
+            [collectionView reloadItemsAtIndexPaths:@[prevSelectedIndexPath, weakSelf.selectedIndexPath]];
         }
-        if (self.delegate)
-            [self.delegate reloadCollectionData];
+        if (weakSelf.delegate)
+            [weakSelf.delegate reloadCollectionData];
 
         if (![collectionView.indexPathsForVisibleItems containsObject:indexPath])
         {
             [collectionView scrollToItemAtIndexPath:indexPath
-                                   atScrollPosition:[self getScrollDirection] == UICollectionViewScrollDirectionHorizontal
+                                   atScrollPosition:[weakSelf getScrollDirection] == UICollectionViewScrollDirectionHorizontal
                                                         ? UICollectionViewScrollPositionCenteredHorizontally
                                                         : UICollectionViewScrollPositionCenteredVertically
                                            animated:YES];
@@ -163,29 +170,30 @@
     if (!collectionView)
         return;
 
+    __weak __typeof(self) weakSelf = self;
     [collectionView performBatchUpdates:^{
         [collectionView deleteItemsAtIndexPaths:@[indexPath]];
-        [self removeItem:indexPath];
+        [weakSelf removeItem:indexPath];
     } completion:^(BOOL finished) {
-        if (indexPath == _selectedIndexPath)
+        if (indexPath == weakSelf.selectedIndexPath)
         {
-            _selectedIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-            [collectionView reloadItemsAtIndexPaths:@[_selectedIndexPath]];
-            if (self.delegate)
-                [self.delegate onCollectionItemSelected:_selectedIndexPath];
+            weakSelf.selectedIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+            [collectionView reloadItemsAtIndexPaths:@[weakSelf.selectedIndexPath]];
+            if (weakSelf.delegate)
+                [weakSelf.delegate onCollectionItemSelected:weakSelf.selectedIndexPath];
 
-            if (![collectionView.indexPathsForVisibleItems containsObject:_selectedIndexPath])
+            if (![collectionView.indexPathsForVisibleItems containsObject:weakSelf.selectedIndexPath])
             {
-                [collectionView scrollToItemAtIndexPath:_selectedIndexPath
-                                       atScrollPosition:[self getScrollDirection] == UICollectionViewScrollDirectionHorizontal
+                [collectionView scrollToItemAtIndexPath:weakSelf.selectedIndexPath
+                                       atScrollPosition:[weakSelf getScrollDirection] == UICollectionViewScrollDirectionHorizontal
                                                             ? UICollectionViewScrollPositionCenteredHorizontally
                                                             : UICollectionViewScrollPositionCenteredVertically
                                                animated:YES];
             }
         }
-        else if (indexPath.row < _selectedIndexPath.row)
+        else if (indexPath.row < weakSelf.selectedIndexPath.row)
         {
-            _selectedIndexPath = [NSIndexPath indexPathForRow:_selectedIndexPath.row - 1 inSection:_selectedIndexPath.section];
+            weakSelf.selectedIndexPath = [NSIndexPath indexPathForRow:weakSelf.selectedIndexPath.row - 1 inSection:weakSelf.selectedIndexPath.section];
         }
     }];
 }
@@ -229,43 +237,32 @@
 
 - (UICollectionViewCell *)getCollectionViewCell:(NSIndexPath *)indexPath
 {
+    OAColorsCollectionViewCell *cell = [[self getCollectionView] dequeueReusableCellWithReuseIdentifier:[self getCellIdentifier] forIndexPath:indexPath];
     NSInteger colorValue = _data[indexPath.section][indexPath.row].value;
-    OAColorsCollectionViewCell *cell = [[self getCollectionView] dequeueReusableCellWithReuseIdentifier:[OAColorsCollectionViewCell getCellIdentifier]
-                                                                                           forIndexPath:indexPath];
-    if (!cell)
+    if (colorValue == kWhiteColor)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAColorsCollectionViewCell getCellIdentifier]
-                                                     owner:self
-                                                   options:nil];
-        cell = nib[0];
+        cell.colorView.layer.borderWidth = 1;
+        cell.colorView.layer.borderColor = UIColorFromRGB(color_tint_gray).CGColor;
     }
-    if (cell)
+    else
     {
-        if (colorValue == kWhiteColor)
-        {
-            cell.colorView.layer.borderWidth = 1;
-            cell.colorView.layer.borderColor = UIColorFromRGB(color_tint_gray).CGColor;
-        }
-        else
-        {
-            cell.colorView.layer.borderWidth = 0;
-        }
+        cell.colorView.layer.borderWidth = 0;
+    }
 
-        UIColor *color = UIColorFromARGB(colorValue);
-        cell.colorView.backgroundColor = color;
-        cell.chessboardView.image = [UIImage templateImageNamed:@"bg_color_chessboard_pattern"];
-        cell.chessboardView.tintColor = UIColorFromRGB(colorValue);
+    UIColor *color = UIColorFromARGB(colorValue);
+    cell.colorView.backgroundColor = color;
+    cell.backgroundImageView.image = [UIImage templateImageNamed:@"bg_color_chessboard_pattern"];
+    cell.backgroundImageView.tintColor = UIColorFromRGB(colorValue);
 
-        if (indexPath == _selectedIndexPath)
-        {
-            cell.backView.layer.borderWidth = 2;
-            cell.backView.layer.borderColor = [UIColor colorNamed:ACColorNameIconColorActive].CGColor;
-        }
-        else
-        {
-            cell.backView.layer.borderWidth = 0;
-            cell.backView.layer.borderColor = UIColor.clearColor.CGColor;
-        }
+    if (indexPath == _selectedIndexPath)
+    {
+        cell.selectionView.layer.borderWidth = 2;
+        cell.selectionView.layer.borderColor = [UIColor colorNamed:ACColorNameIconColorActive].CGColor;
+    }
+    else
+    {
+        cell.selectionView.layer.borderWidth = 0;
+        cell.selectionView.layer.borderColor = UIColor.clearColor.CGColor;
     }
     return cell;
 }

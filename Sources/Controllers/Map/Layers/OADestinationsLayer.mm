@@ -9,6 +9,8 @@
 #import "OADestinationsLayer.h"
 #import "OANativeUtilities.h"
 #import "OAMapViewController.h"
+#import "OALocationServices.h"
+#import "OAObservable.h"
 #import "OAMapRendererView.h"
 #import "OADestination.h"
 #import "OAAutoObserverProxy.h"
@@ -20,6 +22,10 @@
 #import "OAReverseGeocoder.h"
 #import "OAPointDescription.h"
 #import "OAMapLayers.h"
+#import "OACompoundIconUtils.h"
+#import "OARTargetPoint.h"
+#import "OAAppSettings.h"
+#import "OAAppData.h"
 
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/VectorLineBuilder.h>
@@ -171,7 +177,9 @@
 
 - (BOOL) updateLayer
 {
-    [super updateLayer];
+    if (![super updateLayer])
+        return NO;
+
     BOOL widgetUpdated = [_destinationLayerWidget updateLayer];
     BOOL attributesChanged = [_destinationLayerWidget areAttributesChanged];
     if (widgetUpdated || self.showCaptions != _showCaptionsCache || _textSize != OAAppSettings.sharedManager.textSize.get || attributesChanged)
@@ -211,14 +219,20 @@
     CGFloat r,g,b,a;
     [color getRed:&r green:&g blue:&b alpha:&a];
     OsmAnd::FColorRGB col(r, g, b);
-    
     const OsmAnd::LatLon latLon(latitude, longitude);
-    
+
+    auto markerIcon = [OACompoundIconUtils getScaledIcon:markerResourceName
+                                     defaultResourceName:@"ic_destination_pin_1"
+                                                   scale:_textSize
+                                                   color:nil];
+    if (!markerIcon)
+        return;
+
     OsmAnd::MapMarkerBuilder builder;
     builder.setIsAccuracyCircleSupported(false)
     .setBaseOrder(self.pointsOrder)
     .setIsHidden(false)
-    .setPinIcon(OsmAnd::SingleSkImage([OANativeUtilities skImageFromPngResource:markerResourceName]))
+    .setPinIcon(OsmAnd::SingleSkImage(markerIcon))
     .setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon))
     .setPinIconVerticalAlignment(OsmAnd::MapMarker::Top)
     .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)

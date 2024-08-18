@@ -13,6 +13,7 @@
 #import "OAObservable.h"
 #import "OAAutoObserverProxy.h"
 #import "OARoutingHelper.h"
+#import "OAApplicationMode.h"
 
 @implementation OAAppModeView
 {
@@ -101,7 +102,7 @@
         btn.frame = CGRectMake(x, 0, w, h);
         [btn setImage:mode.getIcon.imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
         btn.contentMode = UIViewContentModeCenter;
-        btn.tintColor = UIColorFromRGB(mode.getIconColor);
+        btn.tintColor = mode.getProfileColor;
         btn.backgroundColor = _selectedMode == mode ? [btn.tintColor colorWithAlphaComponent:0.2] : UIColor.clearColor;
         btn.layer.cornerRadius = 4.;
         btn.tag = i;
@@ -123,7 +124,7 @@
         {
             if (appModes.count > btn.tag)
             {
-                btn.tintColor = UIColorFromRGB([appModes[btn.tag] getIconColor]);
+                btn.tintColor = [appModes[btn.tag] getProfileColor];
                 btn.backgroundColor = modeIndex == btn.tag ? [btn.tintColor colorWithAlphaComponent:0.2] : UIColor.clearColor;
             }
         }

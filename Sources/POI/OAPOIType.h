@@ -1,17 +1,14 @@
 //
-//  OAPOI.h
+//  OAPOIType.h
 //  OsmAnd
 //
 //  Created by Alexey Kulish on 18/03/15.
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "OAPOIBaseType.h"
-#import "OAPOICategory.h"
-#import "OAPOIFilter.h"
 
-@class OAPOI;
+@class OAPOI, OAPOIFilter, OAPOICategory;
 
 @interface OAPOIType : OAPOIBaseType
 

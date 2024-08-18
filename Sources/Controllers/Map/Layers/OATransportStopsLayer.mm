@@ -17,25 +17,23 @@
 #import "OATransportStopRoute.h"
 #import "OATransportStopAggregated.h"
 #import "OAPOI.h"
+#import "OAAppSettings.h"
 
 #include "OACoreResourcesTransportRouteIconProvider.h"
-
 #include <OsmAndCore/Ref.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Data/TransportStop.h>
-#include <OsmAndCore/Map/VectorLine.h>
 #include <OsmAndCore/Map/VectorLine.h>
 #include <OsmAndCore/Map/VectorLineBuilder.h>
 #include <OsmAndCore/Map/MapMarker.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/TransportStopSymbolsProvider.h>
-
+#include <OsmAndCore/Map/VectorLinesCollection.h>
 #include <OsmAndCore/Data/Amenity.h>
 #include <OsmAndCore/Data/ObfPoiSectionInfo.h>
 #include <OsmAndCore/Data/ObfMapObject.h>
 #include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
 #include <OsmAndCore/ObfDataInterface.h>
-
 
 @implementation OATransportStopsLayer
 {
@@ -74,8 +72,9 @@
 
 - (BOOL) updateLayer
 {
-    [super updateLayer];
-    
+    if (![super updateLayer])
+        return NO;
+
     OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
     OAMapStyleParameter *param = [styleSettings getParameter:@"transportStops"];
     _showStopsOnMap = [param.value boolValue];

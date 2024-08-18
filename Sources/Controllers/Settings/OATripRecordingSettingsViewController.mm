@@ -12,6 +12,7 @@
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OsmAndApp.h"
+#import "OAApplicationMode.h"
 #import "OARoutingHelper.h"
 #import "OAFileNameTranslationHelper.h"
 #import "OASavingTrackHelper.h"
@@ -470,7 +471,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
 
             NSString *iconName = item[@"img"];
             [cell leftIconVisibility:iconName && iconName.length > 0];
-            cell.leftIconView.tintColor = cell.switchView.isOn ? UIColorFromRGB(self.appMode.getIconColor) : [UIColor colorNamed:ACColorNameIconColorDisabled];
+            cell.leftIconView.tintColor = cell.switchView.isOn ? self.appMode.getProfileColor : [UIColor colorNamed:ACColorNameIconColorDisabled];
             cell.leftIconView.image = [UIImage templateImageNamed:iconName];
             cell.separatorInset = UIEdgeInsetsMake(0., iconName && iconName.length > 0 ? kPaddingToLeftOfContentWithIcon : kPaddingOnSideOfContent, 0., 0.);
 
@@ -506,7 +507,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                 for (UIView *vw in cell.subviews)
                     vw.alpha = 1;
                 cell.userInteractionEnabled = YES;
-                cell.leftIconView.tintColor = UIColorFromRGB(self.appMode.getIconColor);
+                cell.leftIconView.tintColor = self.appMode.getProfileColor;
             }
             
             NSString *img = item[@"img"];

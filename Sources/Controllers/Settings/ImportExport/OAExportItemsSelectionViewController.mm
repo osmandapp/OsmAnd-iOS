@@ -192,7 +192,7 @@
         if (profileIcon)
             item[@"icon"] = profileIcon;
         
-        item[@"color"] = UIColorFromRGB(modeBean.iconColor);
+        item[@"color"] = [modeBean getProfileColor];
     }
     else if ([object isKindOfClass:OAQuickAction.class])
     {
@@ -269,6 +269,12 @@
         item[@"icon"] = [UIImage templateImageNamed:@"ic_custom_marker"];
         item[@"color"] = marker.color;
     }
+    else if ([object isKindOfClass:QuickActionButtonState.class])
+    {
+        QuickActionButtonState *quickActionButtonState = object;
+        item[@"title"] = [quickActionButtonState getName];
+        item[@"icon"] = [quickActionButtonState getIcon];
+    }
 //        if (ExportSettingsType.ACTIVE_MARKERS.name().equals(markersGroup.getId())) {
 //            item.setTitle(getString(R.string.map_markers));
 //            item.setIcon(uiUtilities.getIcon(R.drawable.ic_action_flag, getItemIconColor(object)));
@@ -318,8 +324,16 @@
 - (void)setupItemFromFile:(NSMutableDictionary *)item filePath:(NSString *)filePath
 {
     EOASettingsItemFileSubtype fileSubtype = [OAFileSettingsItemFileSubtype getSubtypeByFileName:filePath.lastPathComponent];
-    item[@"title"] = [filePath.lastPathComponent stringByDeletingPathExtension];
     item[@"icon"] = [UIImage templateImageNamed:[OAFileSettingsItemFileSubtype getIcon:fileSubtype]];
+    if (fileSubtype == EOASettingsItemFileSubtypeColorPalette)
+    {
+        item[@"title"] = [ColorsPaletteUtils getPaletteName:filePath];
+        item[@"descr"] = [ColorsPaletteUtils getPaletteTypeName:filePath];
+    }
+    else
+    {
+        item[@"title"] = [filePath.lastPathComponent stringByDeletingPathExtension];
+    }
     if ([filePath.lowercaseString hasSuffix:GPX_FILE_EXT])
     {
         [self setupItemFromGpx:item filePath:filePath appearanceInfo:nil];

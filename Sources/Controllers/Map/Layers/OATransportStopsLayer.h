@@ -9,9 +9,6 @@
 #import "OASymbolMapLayer.h"
 #import "OAContextMenuProvider.h"
 
-#include <OsmAndCore/Map/VectorLinesCollection.h>
-#include <OsmAndCore/Map/MapMarkersCollection.h>
-
 #define kDefaultRouteColor 0xFFFF0000
 
 @class OATransportStopRoute;

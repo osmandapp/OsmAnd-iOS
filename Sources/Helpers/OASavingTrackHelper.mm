@@ -22,7 +22,8 @@
 #import "OAGPXAppearanceCollection.h"
 #import "OAPluginsHelper.h"
 #import "OAGPXDatabase.h"
-
+#import "OAColoringType.h"
+#import "OAObservable.h"
 #import <sqlite3.h>
 #import <CoreLocation/CoreLocation.h>
 
@@ -90,6 +91,7 @@
     [currentTrack setShowArrows:[settings.currentTrackShowArrows get]];
     [currentTrack setShowStartFinish:[settings.currentTrackShowStartFinish get]];
     [currentTrack setVerticalExaggerationScale:[settings.currentTrackVerticalExaggerationScale get]];
+    [currentTrack setElevationMeters:[settings.currentTrackElevationMeters get]];
     [currentTrack setVisualization3dByType:(EOAGPX3DLineVisualizationByType)[settings.currentTrackVisualization3dByType get]];
     [currentTrack setVisualization3dWallColorType:(EOAGPX3DLineVisualizationWallColorType)[settings.currentTrackVisualization3dWallColorType get]];
     [currentTrack setVisualization3dPositionType:(EOAGPX3DLineVisualizationPositionType)[settings.currentTrackVisualization3dPositionType get]];
@@ -404,6 +406,7 @@
             [doc setVisualization3dPositionType:(EOAGPX3DLineVisualizationPositionType)[settings.currentTrackVisualization3dPositionType get]];
             
             [doc setVerticalExaggerationScale:[settings.currentTrackVerticalExaggerationScale get]];
+            [doc setElevationMeters:[settings.currentTrackElevationMeters get]];
             [doc setColor:[settings.currentTrackColor get]];
             [doc setColoringType:[settings.currentTrackColoringType get].name];
 

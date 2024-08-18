@@ -8,6 +8,7 @@
 
 #import "OAPreviewRouteLineLayer.h"
 #import "OARootViewController.h"
+#import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OARoutingHelper.h"
 #import "OARouteCalculationResult.h"
@@ -17,8 +18,13 @@
 #import "OAColors.h"
 #import "OAPreviewRouteLineInfo.h"
 #import "OAGPXAppearanceCollection.h"
-#import "OARouteColorizationHelper.h"
+#import "OARouteColorize.h"
 #import "OAMapPresentationEnvironment.h"
+#import "OAColoringType.h"
+#import "OAMapSource.h"
+#import "OAAppData.h"
+#import "OAApplicationMode.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Map/VectorLineBuilder.h>
 #include <OsmAndCore/Map/MapMarker.h>
@@ -34,7 +40,6 @@
 {
     std::shared_ptr<OsmAnd::VectorLinesCollection> _collection;
     
-    
     OARoutingHelper *_routingHelper;
     std::shared_ptr<OsmAnd::VectorLinesCollection> _actionLinesCollection;
     
@@ -48,6 +53,7 @@
     NSInteger _customTurnArrowsColor;
     OAColoringType *_routeColoringType;
     NSString *_routeInfoAttribute;
+    NSString *_routeGradientPalette;
     OAGPXAppearanceCollection *_appearanceCollection;
 
     OARouteCalculationResult *_route;
@@ -55,8 +61,9 @@
     QList<OsmAnd::FColorARGB> _colors;
     OAColoringType *_prevRouteColoringType;
     NSString *_prevRouteInfoAttribute;
+    OsmAnd::AreaI _prevArea;
     NSMutableDictionary<NSString *, NSNumber *> *_cachedRouteLineWidth;
-    
+
     std::shared_ptr<OsmAnd::MapMarkersCollection> _centerMarkerCollection;
     std::shared_ptr<OsmAnd::MapMarker> _locationMarker;
     OsmAnd::MapMarker::OnSurfaceIconKey _locationMainIconKey;
@@ -70,7 +77,8 @@
 - (void) initLayer
 {
     [super initLayer];
-    
+
+    _routeGradientPalette = PaletteGradientColor.defaultName;
     _routingHelper = OARoutingHelper.sharedInstance;
     
     _collection = std::make_shared<OsmAnd::VectorLinesCollection>();
@@ -87,6 +95,11 @@
     _routeColoringType = OAColoringType.DEFAULT;
     _colorizationScheme = COLORIZATION_NONE;
     _cachedRouteLineWidth = [NSMutableDictionary dictionary];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(onColorPalettesFilesUpdated:)
+                                                 name:ColorPaletteHelper.colorPalettesUpdatedNotification
+                                               object:nil];
 }
 
 - (void) resetLayer
@@ -112,8 +125,8 @@
         _centerMarkerCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
         
         OAApplicationMode *appMode = OARoutingHelper.sharedInstance.getAppMode;
-        OANavigationIcon *navIcon = [OANavigationIcon withNavigationIcon:appMode.getNavigationIcon];
-        UIColor *iconColor = UIColorFromRGB(appMode.getIconColor);
+        OALocationIcon *navIcon = appMode.getNavigationIcon ?: [OALocationIcon MOVEMENT_DEFAULT];
+        UIColor *iconColor = [appMode getProfileColor];
         
         OsmAnd::MapMarkerBuilder locationMarkerBuilder;
         locationMarkerBuilder.setIsAccuracyCircleSupported(false);
@@ -121,7 +134,7 @@
         locationMarkerBuilder.setIsHidden(true);
         _locationMainIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
         locationMarkerBuilder.addOnMapSurfaceIcon(_locationMainIconKey,
-                                                  OsmAnd::SingleSkImage([OANativeUtilities skImageFromCGImage:[navIcon iconWithColor:iconColor].CGImage]));
+                                                  OsmAnd::SingleSkImage([OANativeUtilities skImageFromCGImage:[navIcon getMapIcon:iconColor].CGImage]));
         _locationMarker = locationMarkerBuilder.buildAndAddToCollection(_centerMarkerCollection);
         [self.mapView addKeyedSymbolsProvider:_centerMarkerCollection];
     }
@@ -130,12 +143,43 @@
 
 - (BOOL) updateLayer
 {
-    [super updateLayer];
+    if (![super updateLayer])
+        return NO;
 
     dispatch_async(dispatch_get_main_queue(), ^{
         _appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
     });
     return YES;
+}
+
+- (void)onColorPalettesFilesUpdated:(NSNotification *)notification
+{
+    NSString *currentColorPaletteFile = @"";
+    if (_routeColoringType && [_routeColoringType isGradient])
+    {
+        currentColorPaletteFile =
+            [ColorPaletteHelper getRoutePaletteFileName:(ColorizationType) [_routeColoringType toColorizationType]
+                                    gradientPaletteName:_routeGradientPalette];
+    }
+
+    if (currentColorPaletteFile.length == 0 || ![notification.object isKindOfClass:NSDictionary.class])
+        return;
+
+    NSDictionary<NSString *, NSString *> *colorPaletteFiles = (NSDictionary *) notification.object;
+    if (!colorPaletteFiles)
+        return;
+
+    if ([colorPaletteFiles.allKeys containsObject:currentColorPaletteFile])
+    {
+        if ([colorPaletteFiles[currentColorPaletteFile] isEqualToString:ColorPaletteHelper.deletedFileKey])
+            _previewRouteLineInfo.gradientPalette = _routeGradientPalette;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.mapViewController runWithRenderSync:^{
+                [self resetLayer];
+                [self refreshRoute:_prevArea];
+            }];
+        });
+    }
 }
 
 - (NSInteger)getCustomRouteWidthMin
@@ -299,6 +343,7 @@
     {
         _routeColoringType = _previewRouteLineInfo.coloringType;
         _routeInfoAttribute = _previewRouteLineInfo.routeInfoAttribute;
+        _routeGradientPalette = _previewRouteLineInfo.gradientPalette;
     }
     else
     {
@@ -306,6 +351,7 @@
         OAAppSettings *settings = [OAAppSettings sharedManager];
         _routeColoringType = [settings.routeColoringType get:mode];
         _routeInfoAttribute = [settings.routeInfoAttribute get:mode];
+        _routeGradientPalette = [settings.routeGradientPalette get:mode];
     }
 }
 
@@ -489,6 +535,7 @@
     BOOL isNight = [OAAppSettings sharedManager].nightMode;
     _prevRouteColoringType = _routeColoringType;
     _prevRouteInfoAttribute = _routeInfoAttribute;
+    _prevArea = area;
     [self updateRouteColoringType];
     [self updateRouteColors:isNight];
     QVector<OsmAnd::PointI> locs;
@@ -555,7 +602,26 @@
 
 - (void) fillAltitudeGradientArrays:(NSArray<NSNumber *> *)distances colors:(QList<OsmAnd::FColorARGB> &)colors
 {
-    NSArray<NSNumber *> *colorsArr = OARouteColorizationHelper.COLORS;
+    ColorPalette *previewPalette;
+    OAGradientScaleType *gradientScaleType = [_routeColoringType toGradientScaleType];
+    if (gradientScaleType)
+    {
+        ColorizationType colorizationType = (ColorizationType) [gradientScaleType toColorizationType];
+        previewPalette = [[ColorPaletteHelper shared] requireGradientColorPaletteSync:colorizationType
+                                                                  gradientPaletteName:_routeGradientPalette];
+    }
+    NSMutableArray<NSNumber *> *colorsArr = [NSMutableArray array];
+    if (previewPalette)
+    {
+        for (ColorValue *colorValue in [previewPalette colorValues])
+        {
+            [colorsArr addObject:@(colorValue.clr)];
+        }
+    }
+    else
+    {
+        colorsArr = [NSMutableArray arrayWithArray:ColorPalette.colors];
+    }
     for (int i = 1; i < distances.count; i++)
     {
         double prevDist = distances[i - 1].doubleValue;
@@ -572,18 +638,37 @@
     if (index == 0)
         return OsmAnd::ColorARGB(colors[0].intValue);
     else if (index > 0 && index < colors.count)
-        return [OARouteColorizationHelper getIntermediateColor:colors[index - 1].intValue maxPaletteColor:colors[index].intValue percent:coeff];
+        return OsmAnd::ColorARGB([ColorPalette getIntermediateColorWithMin:colors[index - 1].intValue max:colors[index].intValue percent:coeff]);
     else if (index == colors.count)
         return OsmAnd::ColorARGB(colors[index - 1].intValue);
 
     return OsmAnd::ColorARGB(0);
 }
 
-- (void) fillSlopeGradientArrays:(QVector<OsmAnd::PointI> &)points distances:(NSMutableArray<NSNumber *> *)distances
+- (void)fillSlopeGradientArrays:(QVector<OsmAnd::PointI> &)points distances:(NSMutableArray<NSNumber *> *)distances
                           angles:(NSMutableArray<NSNumber *> *)angles colors:(QList<OsmAnd::FColorARGB> &)colors
 {
-    NSArray<NSNumber *> *palette = OARouteColorizationHelper.SLOPE_COLORS;
-    NSArray<NSNumber *> *gradientLengthsRatio = @[@0.145833, @0.130209, @0.291031];
+    ColorPalette *previewPalette = ColorPalette.minMaxPalette;
+    OAGradientScaleType *gradientScaleType = [_routeColoringType toGradientScaleType];
+    if (gradientScaleType)
+    {
+        ColorizationType colorizationType = (ColorizationType) [gradientScaleType toColorizationType];
+        previewPalette = [[ColorPaletteHelper shared] requireGradientColorPaletteSync:colorizationType
+                                                                  gradientPaletteName:_routeGradientPalette];
+    }
+    NSMutableArray<NSNumber *> *palette = [NSMutableArray array];
+    for (ColorValue *colorValue in [previewPalette colorValues])
+    {
+        [palette addObject:@(colorValue.clr)];
+    }
+    
+    NSUInteger ratiosAmount = palette.count - 1;
+    double lengthRatio = 1.0 / palette.count;
+    NSMutableArray<NSNumber *> *gradientLengthsRatio = [NSMutableArray arrayWithCapacity:ratiosAmount];
+    for (NSUInteger i = 0; i < ratiosAmount; i++)
+    {
+        [gradientLengthsRatio addObject:@(lengthRatio)];
+    }
     NSMutableArray<NSNumber *> *cols = [NSMutableArray array];
 
     [self fillMultiColorLineArrays:palette lengthRatios:gradientLengthsRatio points:points distances:distances angles:angles colors:cols];

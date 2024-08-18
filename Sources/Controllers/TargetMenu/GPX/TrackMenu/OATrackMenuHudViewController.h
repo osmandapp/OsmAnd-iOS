@@ -7,12 +7,11 @@
 //
 
 #import "OABaseTrackMenuHudViewController.h"
-#import "OAStatisticsSelectionBottomSheetViewController.h"
-#import "OAMapPanelViewController.h"
+#import "OABaseScrollableHudViewController.h"
+#import "OATargetMenuViewController.h"
 #import "OATrackMenuHudViewControllerConstants.h"
 
-@class LineChartView;
-@class OATrack, OATrkSegment, OARouteLineChartHelper, OARouteKey, OAAuthor, OACopyright, OALink, OATravelArticleIdentifier;
+@class LineChartView, OATrack, OATrkSegment, OARouteLineChartHelper, OARouteKey, OAAuthor, OACopyright, OALink, OAMetadata, OATravelArticleIdentifier, OAGpxWptItem, OAGPXTrackAnalysis, OAGPXTableData, OAGPX;
 
 @protocol OATrackMenuViewControllerDelegate <NSObject>
 
@@ -46,6 +45,7 @@
 - (void)openDeleteWaypointsScreen:(OAGPXTableData *)tableData;
 - (void)openWaypointsGroupOptionsScreen:(NSString *)groupName;
 - (void)openNewWaypointScreen;
+- (NSString *)getGpxName;
 - (NSString *)checkGroupName:(NSString *)groupName;
 - (BOOL)isDefaultGroup:(NSString *)groupName;
 - (BOOL)isRteGroup:(NSString *)groupName;
@@ -78,6 +78,7 @@
 - (void)openDescription;
 - (void)openDescriptionEditor;
 - (void)openDescriptionReadOnly:(NSString *)description;
+- (void)openNameTagsScreenWith:(NSArray<NSDictionary *> *)tagsArray;
 - (void)openDuplicateTrack;
 - (void)openMoveTrack;
 - (void)openWptOnMap:(OAGpxWptItem *)gpxWptItem;
@@ -114,7 +115,7 @@
 
 
 // Uses for reopening previous screens (with all NavController history) after opening track on map from MyPlaces
-@property (nonatomic, nullable) NSArray<UIViewController *> *navControllerHistory;
+@property (nonatomic) NSArray<UIViewController *> *navControllerHistory;
 
 @end
 

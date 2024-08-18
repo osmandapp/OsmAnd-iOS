@@ -9,7 +9,7 @@
 #import "OAOnlineTilesEditingViewController.h"
 #import "Localization.h"
 #import "OASQLiteTileSource.h"
-#import "OsmAnd_Maps-Swift.h"
+#import "OAObservable.h"
 #import "OAValueTableViewCell.h"
 #import "OACustomPickerTableViewCell.h"
 #import "OAInputTableViewCell.h"
@@ -19,6 +19,9 @@
 #import "OAManageResourcesViewController.h"
 #import "OAMapCreatorHelper.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAMapSource.h"
+#import "OAAppData.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Map/IOnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>

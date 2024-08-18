@@ -6,18 +6,18 @@
 //  Copyright (c) 2021 OsmAnd. All rights reserved.
 //
 
-#import <OsmAndCore/ResourcesManager.h>
 #import "OABaseButtonsViewController.h"
-#import "OAResourcesUIHelper.h"
+
+@class OAResourceSwiftItem, OAMultipleResourceSwiftItem;
 
 @protocol OADownloadMultipleResourceDelegate
 
 @required
 
-- (void)downloadResources:(OAMultipleResourceItem *)item selectedItems:(NSArray<OAResourceItem *> *)selectedItems;
-- (void)checkAndDeleteOtherSRTMResources:(NSArray<OAResourceItem *> *)itemsToCheck;
+- (void)downloadResources:(OAMultipleResourceSwiftItem *)item selectedItems:(NSArray<OAResourceSwiftItem *> *)selectedItems;
+- (void)checkAndDeleteOtherSRTMResources:(NSArray<OAResourceSwiftItem *> *)itemsToCheck;
 - (void)clearMultipleResources;
-- (void)onDetailsSelected:(OALocalResourceItem *)item;
+- (void)onDetailsSelected:(OAResourceSwiftItem *)item;
 
 @end
 
@@ -25,6 +25,6 @@
 
 @property(weak, nonatomic) id <OADownloadMultipleResourceDelegate> delegate;
 
-- (instancetype)initWithResource:(OAMultipleResourceItem *)resource;
+- (instancetype)initWithSwiftResource:(OAMultipleResourceSwiftItem *)swiftResource;
 
 @end

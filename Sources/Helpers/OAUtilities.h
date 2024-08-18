@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import <UIKit/UIKit.h>
 
 //RGB color macro
 #define UIColorFromRGB(rgbValue) [UIColor \
@@ -62,7 +63,6 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 
 - (int) indexOf:(NSString *)text;
 - (int) indexOf:(NSString *)text start:(NSInteger)start;
-- (int) lastIndexOf:(NSString *)text;
 - (NSString *) add:(NSString *)str;
 - (NSString *) trim;
 - (NSString *) lowerCase;
@@ -254,6 +254,9 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 
 @interface OAUtilities : NSObject
 
++ (NSInteger)getQuickActionButtonTag;
++ (NSInteger)getMap3DModeButtonTag;
+
 + (BOOL) getAccessToFile:(NSString *)filePath;
 + (void) denyAccessToFile:(NSString *)filePath removeFromInbox:(BOOL)remove;
 
@@ -280,6 +283,7 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 + (void) layoutComplexButton:(UIButton*)button;
 
 + (UIImage *) imageWithColor:(UIColor *)color;
++ (UIImage *) imageWithTintColor:(UIColor *)color image:(UIImage *)image;
 
 + (void) setMaskTo:(UIView*)view byRoundingCorners:(UIRectCorner)corners;
 + (void) setMaskTo:(UIView*)view byRoundingCorners:(UIRectCorner)corners radius:(CGFloat)radius;

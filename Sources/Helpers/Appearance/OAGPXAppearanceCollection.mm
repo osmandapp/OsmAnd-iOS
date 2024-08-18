@@ -9,7 +9,6 @@
 #import "OAGPXAppearanceCollection.h"
 #import "OARootViewController.h"
 #import "OAEditPointViewController.h"
-#import "Localization.h"
 #import "OAMapStyleSettings.h"
 #import "OAOsmAndFormatter.h"
 #import "OAFavoritesHelper.h"
@@ -139,7 +138,7 @@
 
     for (NSNumber *customValue in customValues)
     {
-        [titles addObject:[OAOsmAndFormatter getFormattedDistanceInterval:customValue.intValue]];
+        [titles addObject:[OAOsmAndFormatter getFormattedDistanceInterval:customValue.intValue withParams:[OsmAndFormatterParams noTrailingZeros]]];
         [values addObject:@([OAOsmAndFormatter calculateRoundedDist:customValue.intValue])];
     }
     self.titles = titles;
@@ -397,7 +396,7 @@
         [colorItem generateId];
     }
 
-    BOOL result;
+    BOOL result = NO;
     if (![customTrackColors containsObject:hexColor])
     {
         [customTrackColors addObject:hexColor];

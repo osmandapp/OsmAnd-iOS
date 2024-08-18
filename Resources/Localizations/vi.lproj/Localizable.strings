@@ -382,7 +382,6 @@
 "driving_region_us" = "United States";
 "driving_region_canada" = "Canada";
 "driving_region_europe_asia" = "Europe, Asia, Latin America & similar";
-"driving_region_uk" = "UK, India & similar";
 "driving_region_australia" = "Australia";
 "left_side_navigation" = "Left-hand driving";
 "right_side_navigation" = "Right-hand driving";
@@ -2267,3 +2266,6 @@
 "general_settings" = "Thiết lập chung";
 "select_tracks_to_display" = "Chọn các tuyến đường để hiển thị chúng trên bản đồ.";
 "map_screen_orientation" = "Hướng màn hình bản đồ";
+"shared_string_bottom" = "Dưới";
+"shared_string_favorites" = "Ưa thích";
+"map_source" = "Nguồn bản đồ";

@@ -7,6 +7,7 @@
 //
 
 #import "OAPOIFiltersHelper.h"
+#import "OAAppData.h"
 #import "OAPOIUIFilter.h"
 #import "OASearchByNameFilter.h"
 #import "Localization.h"
@@ -15,6 +16,7 @@
 #import "OAUtilities.h"
 #import "OAPOIBaseType.h"
 #import "OAPOIType.h"
+#import "OAPOICategory.h"
 #import <sqlite3.h>
 #import "OALog.h"
 #import "OAAppSettings.h"
@@ -23,6 +25,7 @@
 #import "OAApplicationMode.h"
 #import "OAWikipediaPlugin.h"
 #import "OAPluginsHelper.h"
+#import "OAObservable.h"
 
 static NSString* const UDF_CAR_AID = @"car_aid";
 static NSString* const UDF_FOR_TOURISTS = @"for_tourists";
@@ -431,7 +434,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
         
         _applicationModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                              withHandler:@selector(onApplicationModeChanged)
-                                                              andObserve:OsmAndApp.instance.data.applicationModeChangedObservable];
+                                                              andObserve:OsmAndApp.instance.applicationModeChangedObservable];
     }
     return self;
 }

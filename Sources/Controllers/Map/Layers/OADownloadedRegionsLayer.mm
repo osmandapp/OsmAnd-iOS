@@ -10,8 +10,11 @@
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
 #import "OAMapHudViewController.h"
+#import "OAObservable.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapRendererView.h"
 #import "OAUtilities.h"
+#import "OAWorldRegion.h"
 #import "OANativeUtilities.h"
 #import "OAColors.h"
 #import "OAPointIContainer.h"
@@ -20,6 +23,7 @@
 #import "OADownloadsManager.h"
 #import "OAManageResourcesViewController.h"
 #import "OAWeatherToolbar.h"
+#import "OAAppSettings.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -105,7 +109,8 @@
 
 - (BOOL) updateLayer
 {
-    [super updateLayer];
+    if (![super updateLayer])
+        return NO;
 
     [self refreshLayer];
     return YES;
@@ -345,11 +350,16 @@
 
 - (void) onLocalResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key
 {
+    if (OsmAndApp.instance.isInBackground)
+    {
+        self.invalidated = YES;
+        return;
+    }
+
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateLayer];
     });
 }
-
 
 - (void)onWeatherToolbarStateChanged
 {

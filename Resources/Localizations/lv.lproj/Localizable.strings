@@ -382,7 +382,6 @@
 "driving_region_us" = "ASV";
 "driving_region_canada" = "Kanāda";
 "driving_region_europe_asia" = "Eiropa,Āzija, Latīņamerika";
-"driving_region_uk" = "Apvienotā Karaliste, Indija un citas";
 "driving_region_australia" = "Austrālija";
 "left_side_navigation" = "Kreisās joslas kustība";
 "right_side_navigation" = "Navigācija ar stūri labajā pusē";
@@ -2390,3 +2389,17 @@
 "global_settings" = "Globālie iestatījumi";
 "shared_string_accessibility" = "Pieejamība";
 "subscribe_email_error" = "Kļūda";
+"avoid_pt_types_descr" = "Izvēlieties publiskā transporta kategorijas, no kā izvairīties navigācijas laikā:";
+"step_by_step" = "Soli pa solim";
+"edit_tilesource_maxzoom" = "Maksimālais mērogs";
+"shared_string_bottom" = "Apakša";
+"edit_tilesource_minzoom" = "Minimālais mērogs";
+"shared_string_development" = "Izstrāde";
+"shared_string_always" = "Vienmēr";
+"avoid_pt_types" = "Nelietot transportu…";
+"shared_string_change" = "Mainīt";
+"shared_string_favorite" = "Izlase";
+"voices" = "Balss vadība";
+"shared_string_favorites" = "Izlase";
+"map_source" = "Kartes Avots";
+"download_srtm_maps" = "Kontūrlīnijas";

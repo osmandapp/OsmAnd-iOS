@@ -12,7 +12,6 @@
 #import "OARootViewController.h"
 #import "OAMapWidgetRegistry.h"
 #import "OAApplicationMode.h"
-#import "OAAppSettings.h"
 #import "OsmAndApp.h"
 #import "OsmAnd_Maps-Swift.h"
 

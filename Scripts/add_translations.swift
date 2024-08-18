@@ -162,13 +162,13 @@ class Main {
         print("RUN: Main.updateGitRepositories() \n")
         
         System.changeDir(osmandRepositoriesFolder.appendingPathComponent("android/").path)
-        System.runShell("git pull origin master")
+        System.runShell("git pull")
 
         System.changeDir(osmandRepositoriesFolder.appendingPathComponent("ios/").path)
-        System.runShell("git pull origin master")
+        System.runShell("git pull")
 
         System.changeDir(osmandRepositoriesFolder.appendingPathComponent("resources/").path)
-        System.runShell("git pull origin master")
+        System.runShell("git pull")
     }
     
     

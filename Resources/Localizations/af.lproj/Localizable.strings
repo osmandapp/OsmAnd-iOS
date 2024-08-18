@@ -412,7 +412,6 @@
 "driving_region_us" = "Verenigde State van Amerika";
 "driving_region_canada" = "Kanada";
 "driving_region_europe_asia" = "Europa&Asië";
-"driving_region_uk" = "VK, Indië, Australië&Ander";
 "driving_region_australia" = "Australia";
 "left_side_navigation" = "Linkerhand bestuur";
 "right_side_navigation" = "Right-hand driving";
@@ -2719,3 +2718,10 @@
 "map_screen_orientation" = "Skerm oriëntasie";
 "shared_string_accessibility" = "Toeganklikheid";
 "map_widget_gps_info" = "GPS inligting";
+"edit_tilesource_maxzoom" = "Maks vergroting";
+"shared_string_bottom" = "Onder";
+"edit_tilesource_minzoom" = "Min vergroting";
+"map_source" = "Kaartbron";
+"shared_string_favorite" = "Gunsteling…";
+"shared_string_favorites" = "Gunstelinge";
+"download_srtm_maps" = "Kontoerlyne";

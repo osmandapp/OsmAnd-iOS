@@ -7,6 +7,7 @@
 //
 
 #import "OAUserInteractionPassThroughView.h"
+#import "OAObservable.h"
 
 @implementation OAUserInteractionPassThroughView
 

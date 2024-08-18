@@ -12,6 +12,7 @@
 #import "OABottomSheetHeaderCell.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
+#import "OAAppData.h"
 #import "OASizes.h"
 #import "OAAppSettings.h"
 #import "OATitleIconRoundCell.h"

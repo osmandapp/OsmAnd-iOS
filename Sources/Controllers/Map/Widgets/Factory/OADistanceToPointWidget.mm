@@ -10,6 +10,7 @@
 #import "OsmAndApp.h"
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAUtilities.h"
 #import "OANativeUtilities.h"
 #import "OAOsmAndFormatter.h"
@@ -86,7 +87,7 @@
         }
         else
         {
-            NSString *ds = [OAOsmAndFormatter getFormattedDistance:_cachedMeters roundUp:![[OAAppSettings sharedManager].preciseDistanceNumbers get]];
+            NSString *ds = [OAOsmAndFormatter getFormattedDistance:_cachedMeters withParams:[OsmAndFormatterParams useLowerBounds]];
             int ls = [ds indexOf:@" "];
             if (ls == -1)
                 [self setText:ds subtext:nil];

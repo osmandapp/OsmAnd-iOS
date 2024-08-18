@@ -10,6 +10,9 @@
 #import "OAPointDescription.h"
 #import "Localization.h"
 #import "OsmAndApp.h"
+#import "OAAppData.h"
+#import "OALocationServices.h"
+#import "OAApplicationMode.h"
 #import "OAAppSettings.h"
 #import "OARoutingHelper.h"
 #import "OARTargetPoint.h"
@@ -684,7 +687,7 @@
     
     CLLocation *current = [_routingHelper getLastProjection];
     double dist = 400000;
-    if ([[OAApplicationMode BICYCLE] isDerivedRoutingFrom:[_routingHelper getAppMode]] && [[_settings getCustomRoutingBooleanProperty:kRouteParamIdHeightObstacles defaultValue:false] get:[_routingHelper getAppMode]])
+    if ([[OAApplicationMode BICYCLE] isDerivedRoutingFrom:[_routingHelper getAppMode]] && [[_settings getCustomRoutingBooleanProperty:kRouteParamHeightObstacles defaultValue:false] get:[_routingHelper getAppMode]])
     {
         dist = 50000;
     }

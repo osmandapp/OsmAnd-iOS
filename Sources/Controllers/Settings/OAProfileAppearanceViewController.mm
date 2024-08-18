@@ -10,17 +10,18 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OAApplicationMode.h"
-#import "OANavigationIcon.h"
 #import "OALocationIcon.h"
 #import "OAMainSettingsViewController.h"
 #import "OAConfigureProfileViewController.h"
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
+#import "OAObservable.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAInputTableViewCell.h"
 #import "OAColorsTableViewCell.h"
 #import "OAIconsTableViewCell.h"
 #import "OALocationIconsTableViewCell.h"
+#import "OAIndexConstants.h"
 #import "GeneratedAssetSymbols.h"
 
 #define kIconsAtRestRow 0
@@ -32,14 +33,17 @@
 @property (nonatomic) OAApplicationMode *parent;
 @property (nonatomic) NSString *name;
 @property (nonatomic) int color;
+@property (nonatomic) int customColor;
 @property (nonatomic) NSString *iconName;
 @property (nonatomic) NSString *routingProfile;
 @property (nonatomic) NSString *derivedProfile;
 @property (nonatomic) EOARouteService routeService;
-@property (nonatomic) EOANavigationIcon navigationIcon;
-@property (nonatomic) EOALocationIcon locationIcon;
+@property (nonatomic) NSString *navigationIcon;
+@property (nonatomic) NSString *locationIcon;
 @property (nonatomic) CGFloat minSpeed;
 @property (nonatomic) CGFloat maxSpeed;
+
+- (int) profileColor;
 
 @end
 
@@ -62,6 +66,8 @@
             return NO;
         if (_color != that.color)
             return NO;
+        if (_customColor != that.customColor)
+            return NO;
         if (_routingProfile != nil ? ![_routingProfile isEqualToString:that.routingProfile] : that.routingProfile != nil)
             return NO;
         if (_routeService != that.routeService)
@@ -76,17 +82,25 @@
     }
 }
 
+- (int) profileColor
+{
+    if (_customColor != -1)
+        return _customColor;
+    return _color;
+}
+
 - (NSUInteger)hash
 {
     NSUInteger result = _stringKey != nil ? _stringKey.hash : 0;
     result = 31 * result + (_parent != nil ? _parent.hash : 0);
     result = 31 * result + (_name != nil ? _name.hash : 0);
     result = 31 * result + @(_color).hash;
+    result = 31 * result + @(_customColor).hash;
     result = 31 * result + (_iconName != nil ? _iconName.hash : 0);
     result = 31 * result + (_routingProfile != nil ? _routingProfile.hash : 0);
     result = 31 * result + @(_routeService).hash;
-    result = 31 * result + @(_navigationIcon).hash;
-    result = 31 * result + @(_locationIcon).hash;
+    result = 31 * result + _navigationIcon.hash;
+    result = 31 * result + _locationIcon.hash;
     return result;
 }
 
@@ -109,6 +123,14 @@
     NSArray<NSNumber *> *_colors;
     NSDictionary<NSNumber *, NSString *> *_colorNames;
     NSArray<NSString *> *_icons;
+    
+    NSArray<NSString *> *_customModelNames;
+    NSArray<OALocationIcon *> *_locationIcons;
+    NSArray<OALocationIcon *> *_navigationIcons;
+    NSArray<NSString *> *_locationIconNames;
+    NSArray<NSString *> *_navigationIconNames;
+    NSArray<UIImage *> *_locationIconImages;
+    NSArray<UIImage *> *_navigationIconImages;
 }
 
 - (instancetype) initWithParentProfile:(OAApplicationMode *)profile
@@ -150,6 +172,7 @@
     _changedProfile.parent = _profile.parent;
     _changedProfile.name = _isNewProfile ? [self createNonDuplicateName:_profile.name] : _profile.name;
     _changedProfile.color = _profile.color;
+    _changedProfile.customColor = _profile.customColor;
     _changedProfile.iconName = _profile.iconName;
     _changedProfile.routeService = _profile.routeService;
     _changedProfile.derivedProfile = _profile.derivedProfile;
@@ -166,12 +189,13 @@
     _profile.parent = baseModeForNewProfile.parent;
     _profile.name = baseModeForNewProfile.toHumanString;
     _profile.color = baseModeForNewProfile.getIconColor;
+    _profile.customColor = baseModeForNewProfile.getCustomIconColor;
     _profile.iconName = baseModeForNewProfile.getIconName;
     _profile.derivedProfile = baseModeForNewProfile.getDerivedProfile;
     _profile.routingProfile = baseModeForNewProfile.getRoutingProfile;
     _profile.routeService = (EOARouteService) baseModeForNewProfile.getRouterService;
-    _profile.locationIcon = baseModeForNewProfile.getLocationIcon;
-    _profile.navigationIcon = baseModeForNewProfile.getNavigationIcon;
+    _profile.locationIcon = [baseModeForNewProfile.getLocationIcon name];
+    _profile.navigationIcon = [baseModeForNewProfile.getNavigationIcon name];
 }
 
 - (void) commonInit
@@ -227,7 +251,7 @@
 - (void) setupNavBar
 {
     _profileIconImageView.image = [UIImage templateImageNamed:_changedProfile.iconName];
-    _profileIconImageView.tintColor = UIColorFromRGB(_changedProfile.color);
+    _profileIconImageView.tintColor = UIColorFromRGB(_changedProfile.profileColor);
     _profileIconView.layer.cornerRadius = _profileIconView.frame.size.height/2;
 }
 
@@ -299,6 +323,14 @@
 
 - (void) generateData
 {
+    _customModelNames = [Model3dHelper getCustomModelNames];
+    _locationIcons = [self getlocationIcons];
+    _locationIconNames = [self getlocationIconNames];
+    _navigationIcons = [self getlocationIcons];
+    _navigationIconNames = [self getlocationIconNames];
+    _locationIconImages = [self getlocationIconImages];
+    _navigationIconImages = [self getlocationIconImages];
+    
     _colors = @[
         @(profile_icon_color_blue_light_default),
         @(profile_icon_color_purple_light),
@@ -357,16 +389,45 @@
                @"ic_action_light_aircraft"];
 }
 
-- (NSArray<UIImage *> *) getIconsAtRest
+- (NSArray<OALocationIcon *> *) getlocationIcons
 {
-    UIColor *currColor = UIColorFromRGB(_changedProfile.color);
-    return @[[OALocationIcon getIcon:LOCATION_ICON_DEFAULT color:currColor], [OALocationIcon getIcon:LOCATION_ICON_CAR color:currColor], [OALocationIcon getIcon:LOCATION_ICON_BICYCLE color:currColor]];
+    NSMutableArray<OALocationIcon *> *icons = [NSMutableArray array];
+    [icons addObjectsFromArray:[OALocationIcon defaultIcons]];
+    
+    NSArray<NSString *> *sortedCustomModelNames = [_customModelNames sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+        return [obj1 compare:obj2];
+    }];
+    for (NSString *modelName in sortedCustomModelNames)
+    {
+        OALocationIcon *icon = [OALocationIcon locationIconWithName:modelName];
+        if (icon)
+            [icons addObject:icon];
+    }
+    return icons;
 }
 
-- (NSArray<UIImage *> *) getNavIcons
+
+- (NSArray<NSString *> *) getlocationIconNames
 {
-    UIColor *currColor = UIColorFromRGB(_changedProfile.color);
-    return @[[OANavigationIcon getIcon:NAVIGATION_ICON_DEFAULT color:currColor], [OANavigationIcon getIcon:NAVIGATION_ICON_NAUTICAL color:currColor], [OANavigationIcon getIcon:NAVIGATION_ICON_CAR color:currColor]];
+    NSMutableArray<NSString *> *iconNames = [NSMutableArray array];
+    for (OALocationIcon *icon in _locationIcons)
+    {
+        [iconNames addObject:[icon name]];
+    }
+    return [iconNames copy];
+}
+
+- (NSArray<UIImage *> *) getlocationIconImages
+{
+    NSMutableArray<UIImage *> *images = [NSMutableArray array];
+    UIColor *currColor = UIColorFromRGB(_changedProfile.profileColor);
+    for (OALocationIcon *icon in _locationIcons)
+    {
+        UIImage *image = [icon getPreviewIconWithColor:currColor];
+        if (image)
+            [images addObject:image];
+    }
+    return images;
 }
 
 - (UIStatusBarStyle) preferredStatusBarStyle
@@ -443,8 +504,9 @@
         [mode setRoutingProfile:_changedProfile.routingProfile];
         [mode setRouterService:_changedProfile.routeService];
         [mode setIconColor:_changedProfile.color];
-        [mode setLocationIcon:_changedProfile.locationIcon];
-        [mode setNavigationIcon:_changedProfile.navigationIcon];
+        [mode setCustomIconColor:_changedProfile.customColor];
+        [mode setLocationIconName:_changedProfile.locationIcon];
+        [mode setNavigationIconName:_changedProfile.navigationIcon];
         
         [[[OsmAndApp instance] availableAppModesChangedObservable] notifyEvent];
     }
@@ -461,6 +523,7 @@
     [builder setDerivedProfile:_changedProfile.derivedProfile];
     [builder setRouteService:_changedProfile.routeService];
     [builder setIconColor:_changedProfile.color];
+    [builder setCustomIconColor:_changedProfile.customColor];
     [builder setLocationIcon:_changedProfile.locationIcon];
     [builder setNavigationIcon:_changedProfile.navigationIcon];
     [builder setOrder:(int) OAApplicationMode.allPossibleValues.count];
@@ -578,7 +641,7 @@
         if (cell)
         {
             cell.titleLabel.text = item[@"title"];
-            cell.currentColor = _changedProfile.color;
+            cell.currentColor = _changedProfile.profileColor;
             cell.currentIcon = [_icons indexOfObject:_changedProfile.iconName];
             [cell.collectionView reloadData];
             [cell layoutIfNeeded];
@@ -601,10 +664,24 @@
         {
             BOOL isAtRestRow = indexPath.row == kIconsAtRestRow;
             cell.locationType = isAtRestRow ? EOALocationTypeRest : EOALocationTypeMoving;
-            cell.dataArray = isAtRestRow ? [self getIconsAtRest] : [self getNavIcons];
-            cell.selectedIndex = isAtRestRow ? _changedProfile.locationIcon : _changedProfile.navigationIcon;
+            cell.dataArray = isAtRestRow ? _locationIconImages : _navigationIconImages;
+            
+            if (isAtRestRow)
+            {
+                cell.selectedIndex = [_locationIconNames indexOfObject:_changedProfile.locationIcon];
+                if (cell.selectedIndex == NSNotFound)
+                    cell.selectedIndex = 0;
+            }
+            else
+            {
+                cell.selectedIndex = [_navigationIconNames indexOfObject:_changedProfile.navigationIcon];
+                if (cell.selectedIndex == NSNotFound)
+                    cell.selectedIndex = 0;
+            }
+
             cell.titleLabel.text = item[@"title"];
-            cell.currentColor = _changedProfile.color;
+            cell.currentColor = _changedProfile.profileColor;
+            
             cell.delegate = self;
             [cell.collectionView reloadData];
             [cell layoutIfNeeded];
@@ -634,9 +711,12 @@
 {
     _hasChangesBeenMade = YES;
     _changedProfile.color = _colors[tag].intValue;
+    _changedProfile.customColor = -1;
     
+    _locationIconImages = [self getlocationIconImages];
+    _navigationIconImages = [self getlocationIconImages];
     [self setupView];
-    _profileIconImageView.tintColor = UIColorFromRGB(_changedProfile.color);
+    _profileIconImageView.tintColor = UIColorFromRGB(_changedProfile.profileColor);
     [_tableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, _tableView.numberOfSections - 1)] withRowAnimation:UITableViewRowAnimationNone];
 }
 
@@ -657,9 +737,9 @@
 {
     _hasChangesBeenMade = YES;
     if (locType == EOALocationTypeRest)
-        _changedProfile.locationIcon = (EOALocationIcon) newValue;
+        _changedProfile.locationIcon = _locationIconNames[newValue];
     else if (locType == EOALocationTypeMoving)
-        _changedProfile.navigationIcon = (EOANavigationIcon) newValue;
+        _changedProfile.navigationIcon = _navigationIconNames[newValue];
     
     [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:locType == EOALocationTypeRest ? 0 : 1 inSection:2]] withRowAnimation:UITableViewRowAnimationNone];
 }

@@ -15,11 +15,13 @@
 #import "OsmAndApp.h"
 #import "Localization.h"
 #import "OAPOIFiltersHelper.h"
+#import "OAPOIFilter.h"
 #import "OAResultMatcher.h"
 #import "OAMapUtils.h"
 #import "OAUtilities.h"
 #import "OANameStringMatcher.h"
 #import "OAOsmAndFormatter.h"
+#import "OASvgHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -510,20 +512,16 @@
 {
     return [[OAAmenityExtendedNameFilter alloc] initWithAcceptAmenityFunc:^BOOL(std::shared_ptr<const OsmAnd::Amenity> amenity, QHash<QString, QString> values, OAPOIType *type) {
         
-        QString openingHours = nullptr;
-        openingHours = values[QString::fromNSString(OPENING_HOURS_TAG)];
-        
+        auto openingHours = values[QString::fromNSString(OPENING_HOURS_TAG)];
         if (allTime)
         {
-            if (openingHours == nullptr  || (openingHours != QString("24/7") && openingHours != QString("Mo-Su 00:00-24:00")) )
-            {
+            if (openingHours.isNull() || (openingHours != QStringLiteral("24/7") && openingHours != QStringLiteral("Mo-Su 00:00-24:00")) )
                 return NO;
-            }
         }
         
         if (open)
         {
-            if (openingHours == nullptr)
+            if (openingHours.isNull())
             {
                 return NO;
             }
@@ -763,7 +761,7 @@
     if (filterValue == nullptr || filterValue.size() == 0)
         return NO;
     
-    QStringList items = filterValue.split( ";" );
+    QStringList items = filterValue.split(";");
     QString val = QString::fromNSString([[filter getOsmValue] trim].lowercaseString);
     for (int i = 0; i < items.length(); i++)
     {
@@ -1071,12 +1069,20 @@
 
 - (NSString *) getIconId
 {
+    NSString *iconName;
     if ([filterId hasPrefix:STD_PREFIX])
-        return standardIconId;
+        iconName = standardIconId;
     else if ([filterId hasPrefix:USER_PREFIX])
-        return [[filterId substringFromIndex:USER_PREFIX.length] lowerCase];
-
-    return filterId;
+        iconName = [[filterId substringFromIndex:USER_PREFIX.length] lowerCase];
+    if ([OASvgHelper hasMxMapImageNamed:iconName])
+    {
+        return iconName;
+    }
+    else
+    {
+        iconName = [self.class getCustomFilterIconName:self];
+        return iconName && [OASvgHelper hasMxMapImageNamed:iconName] ? iconName : filterId;
+    }
 }
 
 - (BOOL) accept:(OAPOICategory *)type subcategory:(NSString *)subcategory
@@ -1131,15 +1137,18 @@
     return nil;
 }
 
-+ (NSString *) getPoiTypeIconName:(OAPOIBaseType *)abstractPoiType
++ (NSString *)getPoiTypeIconName:(OAPOIBaseType *)abstractPoiType
 {
-    if (abstractPoiType != nil && abstractPoiType.iconName) {
+    if (abstractPoiType != nil && [OASvgHelper hasMxMapImageNamed:abstractPoiType.iconName])
+    {
         return abstractPoiType.iconName;
-    } else if ([abstractPoiType isKindOfClass:OAPOIType.class]) {
+    }
+    else if ([abstractPoiType isKindOfClass:OAPOIType.class])
+    {
         OAPOIType *poiType = (OAPOIType *) abstractPoiType;
         NSString *iconId = [NSString stringWithFormat:@"%@_%@", poiType.getOsmTag, poiType.getOsmValue];
-        if (poiType.iconName.length > 0)
-            return poiType.iconName;
+        if ([OASvgHelper hasMxMapImageNamed:iconId])
+            return iconId;
         else if (poiType.parent != nil)
             return [self getPoiTypeIconName:poiType.parent.type];
     }

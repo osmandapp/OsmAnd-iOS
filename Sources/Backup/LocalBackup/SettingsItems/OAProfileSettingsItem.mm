@@ -19,8 +19,10 @@
 #import "OAIndexConstants.h"
 #import "OARoutePreferencesParameters.h"
 #import "OAMapWidgetRegistry.h"
-#import "OsmAnd_Maps-Swift.h"
 #import "OAPluginsHelper.h"
+#import "OAMapSource.h"
+#import "OAAppData.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OAProfileSettingsItem
 {
@@ -184,7 +186,7 @@
                 [setting setValueFromString:[value stringByReplacingOccurrencesOfString:@"-tts" withString:@""] appMode:_appMode];
                 [[OsmAndApp instance] initVoiceCommandPlayer:_appMode warningNoneProvider:NO showDialog:NO force:NO];
             }
-            else
+            else if (!setting.global)
             {
                 [setting setValueFromString:value appMode:_appMode];
                 if ([key isEqualToString:@"voice_mute"])
@@ -206,18 +208,6 @@
                     if (enabledWidgets.count > 0)
                         [OAPluginsHelper enablePluginsByMapWidgets:enabledWidgets];
                 }
-            }
-        }
-        else if ([key isEqualToString:@"terrain_layer"])
-        {
-            if ([value isEqualToString:@"true"])
-            {
-                [app.data setTerrainType:[app.data getLastTerrainType:_appMode] mode:_appMode];
-            }
-            else
-            {
-                [app.data setLastTerrainType:[app.data getTerrainType:_appMode] mode:_appMode];
-                [app.data setLastTerrainType:EOATerrainTypeDisabled mode:_appMode];
             }
         }
         else
@@ -268,6 +258,7 @@
             [builder setRoutingProfile:_modeBean.routingProfile];
             [builder setRouteService:_modeBean.routeService];
             [builder setIconColor:_modeBean.iconColor];
+            [builder setCustomIconColor:_modeBean.customIconColor];
             [builder setLocationIcon:_modeBean.locIcon];
             [builder setNavigationIcon:_modeBean.navIcon];
             //        app.getSettings().copyPreferencesFromProfile(parent, builder.getApplicationMode());
@@ -368,7 +359,7 @@
             continue;
 
         OACommonPreference *setting = [prefs objectForKey:key];
-        if (setting)
+        if (setting && !setting.global)
         {
             NSString *stringValue = [setting toStringValue:self.appMode];
             if (stringValue)

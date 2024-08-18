@@ -82,6 +82,12 @@
                     t = _targetPoint.title;
             }
         }
+        else if (_targetPoint.type == OATargetNetworkGPX)
+        {
+            OARouteKey *routeKey = (OARouteKey *)_targetPoint.targetObj;
+            NSString *localizedTitle = routeKey ? routeKey.localizedTitle : @"";
+            t = localizedTitle.length > 0 ? localizedTitle : _targetPoint.title;
+        }
         else
         {
             t = _targetPoint.title;
@@ -115,24 +121,11 @@
         OARouteKey *key = (OARouteKey *)_targetPoint.targetObj;
         if (key)
         {
-            descriptionStr = [NSString stringWithFormat:@"%@ - %@", OALocalizedString(@"layer_route"), OALocalizedString([self tagToActivity:key.routeKey.getTag().toNSString()])];
+            descriptionStr = [NSString stringWithFormat:@"%@ - %@", OALocalizedString(@"layer_route"), key.getActivityTypeTitle];
         }
     }
     [_descriptionView setText:descriptionStr];
     [_descriptionView setTextColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
-}
-
-- (NSString *)tagToActivity:(NSString *)tag
-{
-    if ([tag isEqualToString:@"bicycle"])
-        return @"activity_type_cycling_name";
-    else if ([tag isEqualToString:@"mtb"])
-        return @"activity_type_mountainbike_name";
-    else if ([tag isEqualToString:@"horse"])
-        return @"app_mode_horse";
-    else if ([tag isEqualToString:@"hiking"])
-        return @"activity_type_hiking_name";
-    return @"";
 }
 
 @end

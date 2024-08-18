@@ -9,6 +9,9 @@
 #import "OAPOIViewController.h"
 #import "OsmAndApp.h"
 #import "OAPOI.h"
+#import "OAPOIType.h"
+#import "OAPOICategory.h"
+#import "OAPOIFilter.h"
 #import "OAPOIHelper.h"
 #import "OAPOILocationType.h"
 #import "OACollapsableLabelView.h"
@@ -102,36 +105,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 
 - (NSString *) getTypeStr
 {
-    OAPOIType *type = self.poi.type;
-    NSMutableString *str = [NSMutableString string];
-    if ([self.poi.nameLocalized isEqualToString:self.poi.type.nameLocalized])
-    {
-        /*
-         if (type.filter && type.filter.nameLocalized)
-         {
-         [str appendString:type.filter.nameLocalized];
-         }
-         else*/ if (type.category && type.category.nameLocalized)
-         {
-             [str appendString:type.category.nameLocalized];
-         }
-    }
-    else if (type.nameLocalized)
-    {
-        [str appendString:type.nameLocalized];
-    }
-    
-    if (str.length == 0)
-    {
-        return [self getCommonTypeStr];
-    }
-    
-    if (self.localMapIndexItem && self.localMapIndexItem.sizePkg && self.localMapIndexItem.sizePkg > 0)
-    {
-        return [NSString stringWithFormat:@"%@ - %@", str, [NSByteCountFormatter stringFromByteCount:self.localMapIndexItem.sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
-    }
-    
-    return str;
+    return [self.poi getSubTypeStr];
 }
 
 - (UIColor *) getAdditionalInfoColor
@@ -172,30 +146,44 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 - (void) buildRows:(NSMutableArray<OARowInfo *> *)rows
 {
     BOOL hasWiki = NO;
+    BOOL hasName = NO;
     NSString *preferredLang = [OAUtilities preferredLang];
     NSMutableArray<OARowInfo *> *infoRows = [NSMutableArray array];
     NSMutableArray<OARowInfo *> *descriptions = [NSMutableArray array];
     NSMutableArray<OARowInfo *> *urlRows = [NSMutableArray array];
-
+    NSMutableArray<NSDictionary *> *nameTags = [[NSMutableArray alloc] init];
     NSMutableDictionary<NSString *, NSMutableArray<OAPOIType *> *> *poiAdditionalCategories = [NSMutableDictionary dictionary];
     OARowInfo *cuisineRow;
-    NSMutableArray<OAPOIType *> *collectedPoiTypes = [NSMutableArray array];
+    OARowInfo *nameRow;
+    //NSMutableArray<OAPOIType *> *collectedPoiTypes = [NSMutableArray array];
+    NSMutableDictionary<NSString *, NSMutableArray<OAPOIType *> *> *collectedPoiTypes = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary<NSString *, NSString *> *additionalInfo = [[self.poi getAdditionalInfo] mutableCopy];
 
     BOOL osmEditingEnabled = [OAPluginsHelper isEnabled:OAOsmEditingPlugin.class];
     CGSize iconSize = {20, 20}; // TODO: Hardcoded size
+    if (self.poi.localizedNames.count > 0)
+        [self addLocalizedNamesTagsToInfo:additionalInfo];
 
-    for (NSString *key in [self.poi getAdditionalInfo].allKeys)
+    for (NSString *key in additionalInfo.allKeys)
     {
         NSString *iconId;
         UIImage *icon;
         UIColor *textColor;
-        NSString *vl = [self.poi getAdditionalInfo][key];
+        NSString *vl = additionalInfo[key];
         NSString *convertedKey = [key stringByReplacingOccurrencesOfString:@"_-_" withString:@":"];
+        if (!hasName && [_poiHelper isNameTag:convertedKey])
+        {
+            nameRow = [self addNameRowWithText:self.poi.name iconSize:iconSize];
+            [infoRows addObject:nameRow];
+            hasName = YES;
+        }
+        
         if ([convertedKey isEqualToString:@"image"]
-                || [convertedKey isEqualToString:MAPILLARY_TAG]
-                || [convertedKey isEqualToString:@"subway_region"]
-                || ([convertedKey isEqualToString:@"note"] && !osmEditingEnabled)
-                || [convertedKey hasPrefix:@"lang_yes"])
+            || [convertedKey isEqualToString:MAPILLARY_TAG]
+            || [convertedKey isEqualToString:@"subway_region"]
+            || ([convertedKey isEqualToString:@"note"] && !osmEditingEnabled)
+            || [convertedKey hasPrefix:@"lang_yes"]
+            || [convertedKey hasPrefix:@"top_index_"])
             continue;
 
         NSString *textPrefix = @"";
@@ -217,6 +205,11 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         OAPOIBaseType *pt = [_poiHelper getAnyPoiAdditionalTypeByKey:convertedKey];
         if (!pt && vl && vl.length > 0 && vl.length < 50)
             pt = [_poiHelper getAnyPoiAdditionalTypeByKey:[NSString stringWithFormat:@"%@_%@", convertedKey, vl]];
+        
+        if (poiType == nil && pt == nil)
+        {
+            poiType = [_poiHelper getPoiTypeByKey:key];
+        }
 
         OAPOIType *pType = nil;
         if (pt)
@@ -281,8 +274,14 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                 continue;
             }
         }
-        else if ([convertedKey hasPrefix:@"name:"])
+        else if ([_poiHelper isNameTag:convertedKey])
         {
+            [nameTags addObject:@{
+                @"key": convertedKey,
+                @"value": vl,
+                @"localizedTitle": pt ? pt.nameLocalized : @""
+            }];
+            [nameRow setDetailsArray:nameTags];
             continue;
         }
         else if ([convertedKey isEqualToString:COLLECTION_TIMES_TAG] || [convertedKey isEqualToString:SERVICE_TIMES_TAG])
@@ -296,10 +295,10 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
             collapsableView = [[OACollapsableLabelView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
             collapsableView.collapsed = YES;
             ((OACollapsableLabelView *) collapsableView).label.text =
-                    [[[self.poi getAdditionalInfo][key] stringByReplacingOccurrencesOfString:@"; " withString:@"\n"]
+                    [[additionalInfo[key] stringByReplacingOccurrencesOfString:@"; " withString:@"\n"]
                                                         stringByReplacingOccurrencesOfString:@"," withString:@", "];
             collapsable = YES;
-            auto rs = OpeningHoursParser::parseOpenedHours([[self.poi getAdditionalInfo][key] UTF8String]);
+            auto rs = OpeningHoursParser::parseOpenedHours([additionalInfo[key] UTF8String]);
             if (rs != nullptr)
             {
                 vl = [NSString stringWithUTF8String:rs->toLocalString().c_str()];
@@ -422,7 +421,14 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
             }
             else if (poiType)
             {
-                [collectedPoiTypes addObject:poiType];
+                NSString * catKey = poiType.category.name;
+                NSMutableArray<OAPOIType *> *list = collectedPoiTypes[catKey];
+                if (!list)
+                {
+                    list = [[NSMutableArray alloc] init];
+                    collectedPoiTypes[catKey] = list;
+                }
+                [list addObject:poiType];
             }
             else
             {
@@ -560,40 +566,48 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         }
     }];
 
-    if (collectedPoiTypes.count > 0)
-    {
-        OACollapsableNearestPoiTypeView *collapsableView = [[OACollapsableNearestPoiTypeView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
-        collapsableView.collapsed = YES;
-        [collapsableView setData:collectedPoiTypes
-                         amenity:self.poi
-                             lat:self.poi.latitude
-                             lon:self.poi.longitude
-                 isPoiAdditional:NO
-                         textRow:nil];
-        OAPOIType *poiCategory = self.poi.type;
-        UIImage *icon = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"mx_%@", poiCategory.name] size:iconSize];
-        NSMutableString *sb = [NSMutableString new];
-        for (OAPOIType *pt in collectedPoiTypes)
-        {
-            if (sb.length > 0)
-                [sb appendString:@" • "];
-            [sb appendString:pt.nameLocalized];
+    if (collectedPoiTypes.count > 0) {
+        for (NSString *key in collectedPoiTypes) {
+            NSMutableArray<OAPOIType *> *poiTypeList = collectedPoiTypes[key];
+            
+            OACollapsableNearestPoiTypeView *collapsableView = [[OACollapsableNearestPoiTypeView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
+            collapsableView.collapsed = YES;
+            [collapsableView setData:poiTypeList
+                             amenity:self.poi
+                                 lat:self.poi.latitude
+                                 lon:self.poi.longitude
+                     isPoiAdditional:NO
+                             textRow:nil];
+            
+            OAPOICategory *poiCategory = self.poi.type.category;
+            NSMutableString *sb = [NSMutableString new];
+            
+            for (OAPOIType *pt in poiTypeList) {
+                if (sb.length > 0) {
+                    [sb appendString:@" • "];
+                }
+                [sb appendString:pt.nameLocalized];
+                poiCategory = pt.category;
+            }
+            
+            UIImage *icon = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"mx_%@", poiCategory.name] size:iconSize];
+            
+            OARowInfo *row = [[OARowInfo alloc] initWithKey:poiCategory.name
+                                                       icon:icon
+                                                 textPrefix:poiCategory.nameLocalized
+                                                       text:sb
+                                                  textColor:nil
+                                                     isText:NO
+                                                  needLinks:NO
+                                                      order:40
+                                                   typeName:poiCategory.name
+                                              isPhoneNumber:NO
+                                                      isUrl:NO];
+            row.collapsed = YES;
+            row.collapsable = YES;
+            row.collapsableView = collapsableView;
+            [infoRows addObject:row];
         }
-        OARowInfo *row = [[OARowInfo alloc] initWithKey:poiCategory.name
-                                                   icon:icon
-                                             textPrefix:poiCategory.nameLocalized
-                                                   text:sb
-                                              textColor:nil
-                                                 isText:NO
-                                              needLinks:NO
-                                                  order:40
-                                               typeName:poiCategory.name
-                                          isPhoneNumber:NO
-                                                  isUrl:NO];
-        row.collapsed = YES;
-        row.collapsable = YES;
-        row.collapsableView = collapsableView;
-        [infoRows addObject:row];
     }
 
     [infoRows addObjectsFromArray:urlRows];
@@ -653,6 +667,35 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                                          isPhoneNumber:NO
                                                  isUrl:YES]];
     }
+}
+
+- (OARowInfo *)addNameRowWithText:(NSString *)textValue iconSize:(CGSize)iconSize
+{
+    OARowInfo *row = [[OARowInfo alloc] initWithKey:@"name"
+                                               icon:[OATargetInfoViewController getIcon:@"ic_navbar_languge" size:iconSize]
+                                         textPrefix:OALocalizedString(@"shared_string_name")
+                                               text:textValue
+                                          textColor:nil
+                                             isText:NO
+                                          needLinks:NO
+                                              order:90
+                                           typeName:@""
+                                      isPhoneNumber:NO
+                                              isUrl:NO];
+    
+    row.collapsable = NO;
+    row.collapsed = YES;
+    row.collapsableView = nil;
+    return row;
+}
+
+- (void) addLocalizedNamesTagsToInfo:(NSMutableDictionary<NSString *, NSString *> *)additionalInfo
+{
+    [self.poi.localizedNames enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *name, BOOL *stop) {
+        NSString *nameKey = [NSString stringWithFormat:@"name:%@", key];
+        if (key.length > 0 && ![key isEqualToString:[OAAppSettings sharedManager].settingPrefMapLanguage.get] && !additionalInfo[nameKey])
+            additionalInfo[nameKey] = name;
+    }];
 }
 
 - (void) addRowIfNotExsists:(OARowInfo *)newRow toDestinationRows:(NSMutableArray<OARowInfo *> *)rows

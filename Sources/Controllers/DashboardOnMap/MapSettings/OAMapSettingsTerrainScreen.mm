@@ -562,12 +562,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         OALineChartCell *cell = (OALineChartCell *) [tableView dequeueReusableCellWithIdentifier:OALineChartCell.reuseIdentifier
                                                                                          forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.heightConstraint.constant = 96;
+        cell.heightConstraint.constant = 68;
+        cell.lineChartView.extraBottomOffset = 13;
+
         [GpxUIHelper setupGradientChartWithChart:cell.lineChartView
                              useGesturesAndScale:NO
                                   xAxisGridColor:[UIColor colorNamed:ACColorNameChartAxisGridLine]
                                      labelsColor:[UIColor colorNamed:ACColorNameChartTextColorAxisX]];
-        cell.lineChartView.extraBottomOffset = 13;
 
         ColorPalette *colorPalette = [[ColorPaletteHelper shared] getGradientColorPalette:[_terrainMode getMainFile]];
         if (!colorPalette)
@@ -579,6 +580,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                                       valueFormatter:[GradientUiHelper getGradientTypeFormatterForTerrainType:_terrainMode.type
                                                                                                      analysis:nil]];
 
+        [cell.lineChartView setVisibleYRangeWithMinYRange:0 maxYRange: 1 axis:AxisDependencyLeft];
         [cell.lineChartView notifyDataSetChanged];
         return cell;
     }

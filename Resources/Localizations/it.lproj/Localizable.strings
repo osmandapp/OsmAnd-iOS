@@ -3485,3 +3485,5 @@
 "route_your_destination_is_on_right" = "La tua destinazione è sulla destra";
 "route_your_destination_is_on_left" = "La tua destinazione è sulla sinistra";
 "route_your_destination_is_on_ahead" = "La tua destinazione è dritta davanti a te";
+"shared_string_show" = "Mostra";
+"weather_wind_animation_enable_descr" = "Abilita la visualizzazione del livello di animazione del vento sulla mappa.";

@@ -232,9 +232,7 @@ final class GradientColorsCollection: ColorsCollection {
     }
 
     override func getSorting() -> ((PaletteColor, PaletteColor) -> Bool) {
-        { [weak self] in
-            guard let self = self else { return false }
-
+        { [self] in
             if let palette1 = $0 as? PaletteGradientColor, let palette2 = $1 as? PaletteGradientColor {
                 let isFirstDefault = isDefaultPaletteColor(palette1)
                 let isSecondDefault = isDefaultPaletteColor(palette2)

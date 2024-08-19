@@ -1156,7 +1156,7 @@
 "add_gpx_waypoint" = "Додати маршрутну точку GPX";
 "toggle_online_notes" = "Показати/сховати нотатки OSM";
 "toggle_local_edits" = "Показати/сховати локальні правки OSM";
-"quick_action_map_overlay" = "Накладання";
+"quick_action_map_overlay" = "Накладка";
 "quick_action_map_underlay" = "Підкладка";
 "shared_string_action_name" = "Назва дії";
 "quick_action_name_alert" = "Назву швидкої дії змінено на %@, щоб уникнути дублювання.";
@@ -2867,7 +2867,7 @@
 "map_widget_trip_recording_duration" = "Тривалість";
 "map_widget_trip_recording_downhill" = "Спуск";
 "map_widget_trip_recording_uphill" = "Підйом";
-"shared_string_app_profile" = "Профіль додатку";
+"shared_string_app_profile" = "Профіль застосунку";
 "map_widget_trip_recording_distance" = "Відстань";
 "map_widget_altitude_map_center" = "Висота над рівнем моря: центр мапи";
 "altitude_widget_desc" = "Показує висоту над рівнем моря поточної геолокації.";
@@ -3439,12 +3439,12 @@
 "shared_string_limit" = "Обмеження";
 "shared_string_instructions" = "Вказівки";
 "shared_string_analysis" = "Аналіз";
-"default_buttons" = "Кнопки за замовчуванням";
-"select_items" = "Обрати елементи";
+"default_buttons" = "Типові кнопки";
+"select_items" = "Вибрати елементи";
 "shared_string_item" = "Пункт";
-"empty_name" = "Пуста назва";
+"empty_name" = "Назви немає";
 "wall_height" = "Висота стіни";
-"wall_height_description" = "Змінюючи значення висоти, ви можете підняти верхню лінію доріжки над рівнем землі.";
+"wall_height_description" = "Змінюючи значення висоти, ви можете підняти верхню лінію треку над рівнем землі.";
 "custom_buttons" = "Користувацькі кнопки";
 "add_button" = "Додати кнопку";
 "custom_map_button_name_present" = "Така кнопка вже присутня";
@@ -3485,7 +3485,7 @@
 "cloud_layer" = "Шар хмарності";
 "shared_string_action" = "Дія";
 "shared_string_colors" = "Кольори";
-"app_profile" = "Профіль додатку";
+"app_profile" = "Профіль застосунку";
 "quick_action_verb_show_hide" = "Показати / Приховати";
 "precipitation_layer" = "Шар опадів";
 "voices" = "Голосові повідомлення";

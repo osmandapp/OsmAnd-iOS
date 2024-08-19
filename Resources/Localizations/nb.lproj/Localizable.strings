@@ -3138,3 +3138,14 @@
 "driving_region_uk" = "Storbritannia og lignende";
 "shared_string_favorites" = "Favoritter";
 "shared_string_change" = "Endre";
+"distance_during_navigation" = "Avstand under navigasjon";
+"rendering_attr_padusDisplayMode_description" = "Etter tilgangstype, eller forvalternavn";
+"custom_map_button_name_present" = "En slik knapp finnes allerede";
+"rendering_value_access_name" = "Etter tilgangstype";
+"downward_gradient" = "Nedadgående gradient";
+"weather_source_ecmwf_title" = "ECMWF";
+"rendering_value_managerName_name" = "Etter forvaltingsnavn";
+"upward_gradient" = "Oppadgående gradient";
+"custom_buttons" = "Egendefinerte knapper";
+"vertical_exaggeration" = "Loddrett overdrivelse";
+"speed_limit_warning" = "Fartsgrenseadvarsel";

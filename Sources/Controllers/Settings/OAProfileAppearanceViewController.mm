@@ -227,7 +227,6 @@ static NSString *kCellHeaderTitle = @"cellHeaderTitle";
     _tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
     [self setupNavBar];
     [self setupView];
-    [_tableView reloadData];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -562,9 +561,9 @@ static NSString *kCellHeaderTitle = @"cellHeaderTitle";
     return [_data rowCount:section];
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 0.01;
+    return [self tableView:tableView titleForHeaderInSection:section].length > 0 ? 34.0 : UITableViewAutomaticDimension;
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -573,7 +572,7 @@ static NSString *kCellHeaderTitle = @"cellHeaderTitle";
     if (item)
     {
         NSString *header = [item stringForKey:kCellHeaderTitle];
-        return header;
+        return header ?: @"";
     }
     return @"";
 }

@@ -1427,6 +1427,8 @@
 "select_icon_profile_dialog_title" = "Select icon";
 "select_map_icon" = "Position icon at rest";
 "select_navigation_icon" = "Position icon while moving";
+"resting_position_icon" = "Navigation position icon";
+"navigation_position_icon" = "Position icon while moving";
 "will_be_show_while_moving" = "It will be show while moving";
 "base_profile_descr_car" = "Car, truck, motorcycle";
 "base_profile_descr_bicycle" = "Mountain bike, moped, horse";

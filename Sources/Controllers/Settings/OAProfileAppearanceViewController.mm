@@ -24,8 +24,11 @@
 #import "OAIndexConstants.h"
 #import "GeneratedAssetSymbols.h"
 
-#define kIconsAtRestRow 0
-#define kIconsWhileMovingRow 1
+static const int kIconsAtRestRow = 0;
+static const int kIconsWhileMovingRow = 1;
+
+static NSString *kCellValue = @"cellValue";
+static NSString *kCellHeaderTitle = @"cellHeaderTitle";
 
 @interface OAApplicationProfileObject : NSObject
 
@@ -118,7 +121,7 @@
     BOOL _isNewProfile;
     BOOL _hasChangesBeenMade;
     
-    NSArray<NSArray *> *_data;
+    OATableDataModel *_data;
     
     NSArray<NSNumber *> *_colors;
     NSDictionary<NSNumber *, NSString *> *_colorNames;
@@ -224,6 +227,7 @@
     _tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
     [self setupNavBar];
     [self setupView];
+    [_tableView reloadData];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -285,40 +289,41 @@
 
 - (void) setupView
 {
-    NSMutableArray *tableData = [NSMutableArray array];
+    _data = [[OATableDataModel alloc] init];
+    OATableSectionData *profileNameSection = [_data createNewSection];
+    [profileNameSection addRowFromDictionary:@{
+        kCellTypeKey : [OAInputTableViewCell getCellIdentifier],
+        kCellTitleKey : _changedProfile.name,
+    }];
     
-    NSMutableArray *profileNameArr = [NSMutableArray array];
-    NSMutableArray *profileAppearanceArr = [NSMutableArray array];
-    NSMutableArray *profileMapAppearanceArr = [NSMutableArray array];
+    OATableSectionData *profileColorSection = [_data createNewSection];
     NSString* profileColor = OALocalizedString(_colorNames[@(_changedProfile.color)]);
-    [profileNameArr addObject:@{
-        @"type" : [OAInputTableViewCell getCellIdentifier],
-        @"title" : _changedProfile.name,
+    [profileColorSection addRowFromDictionary:@{
+        kCellTypeKey : [OAColorsTableViewCell getCellIdentifier],
+        kCellTitleKey : OALocalizedString(@"select_color"),
+        kCellValue : profileColor,
     }];
-    [profileAppearanceArr addObject:@{
-        @"type" : [OAColorsTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"select_color"),
-        @"value" : profileColor,
+    
+    OATableSectionData *profileIconSection = [_data createNewSection];
+    [profileIconSection addRowFromDictionary:@{
+        kCellTypeKey : [OAIconsTableViewCell getCellIdentifier],
+        kCellTitleKey : OALocalizedString(@"select_icon_profile_dialog_title"),
+        kCellValue : @"",
     }];
-    [profileAppearanceArr addObject:@{
-        @"type" : [OAIconsTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"select_icon_profile_dialog_title"),
-        @"value" : @"",
+    
+    OATableSectionData *positionIconsSection = [_data createNewSection];
+    [positionIconsSection addRowFromDictionary:@{
+        kCellHeaderTitle : OALocalizedString(@"resting_position_icon"),
+        kCellTypeKey : [OALocationIconsTableViewCell getCellIdentifier],
+        kCellTitleKey : OALocalizedString(@"select_map_icon"),
     }];
-    [profileMapAppearanceArr addObject:@{
-        @"type" : [OALocationIconsTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"select_map_icon"),
-        @"description" : @"",
+    
+    OATableSectionData *navigationIconsSection = [_data createNewSection];
+    [navigationIconsSection addRowFromDictionary:@{
+        kCellHeaderTitle : OALocalizedString(@"navigation_position_icon"),
+        kCellTypeKey : [OALocationIconsTableViewCell getCellIdentifier],
+        kCellTitleKey : OALocalizedString(@"select_navigation_icon"),
     }];
-    [profileMapAppearanceArr addObject:@{
-        @"type" : [OALocationIconsTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"select_navigation_icon"),
-        @"description" : OALocalizedString(@"will_be_show_while_moving"),
-    }];
-    [tableData addObject:profileNameArr];
-    [tableData addObject:profileAppearanceArr];
-    [tableData addObject:profileMapAppearanceArr];
-    _data = [NSArray arrayWithArray:tableData];
 }
 
 - (void) generateData
@@ -550,11 +555,11 @@
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return _data.count;
+    return [_data sectionCount];
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _data[section].count;
+    return [_data rowCount:section];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
@@ -564,12 +569,12 @@
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if (section == 0)
-        return @"";
-    else if (section == 1)
-        return OALocalizedString(@"shared_string_appearance");
-    else if (section == 2)
-        return OALocalizedString(@"appearance_on_the_map");
+    OATableRowData *item = [_data itemForIndexPath:[NSIndexPath indexPathForRow:0 inSection:section]];
+    if (item)
+    {
+        NSString *header = [item stringForKey:kCellHeaderTitle];
+        return header;
+    }
     return @"";
 }
 
@@ -578,9 +583,10 @@
     return UITableViewAutomaticDimension;
 }
 
-- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath { 
-    NSDictionary *item = _data[indexPath.section][indexPath.row];
-    NSString *cellType = [[NSString alloc] initWithString:item[@"type"]];
+- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
+    
+    NSString *cellType = [[NSString alloc] initWithString:[item cellType]];
     if ([cellType isEqualToString:[OAInputTableViewCell getCellIdentifier]])
     {
         OAInputTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAInputTableViewCell getCellIdentifier]];
@@ -596,7 +602,7 @@
             cell.inputField.autocapitalizationType = UITextAutocapitalizationTypeSentences;
             cell.inputField.textAlignment = NSTextAlignmentNatural;
         }
-        cell.inputField.text = item[@"title"];
+        cell.inputField.text = [item title];
         cell.inputField.delegate = self;
         return cell;
     }
@@ -615,8 +621,8 @@
         }
         if (cell)
         {
-            cell.titleLabel.text = item[@"title"];
-            cell.valueLabel.text = item[@"value"];
+            cell.titleLabel.text = [item title];
+            cell.valueLabel.text = [item stringForKey:kCellValue];
             cell.valueLabel.tintColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
             cell.currentColor = [_colors indexOfObject:@(_changedProfile.color)];
             [cell.collectionView reloadData];
@@ -640,7 +646,7 @@
         }
         if (cell)
         {
-            cell.titleLabel.text = item[@"title"];
+            cell.titleLabel.text = [item title];
             cell.currentColor = _changedProfile.profileColor;
             cell.currentIcon = [_icons indexOfObject:_changedProfile.iconName];
             [cell.collectionView reloadData];
@@ -679,7 +685,7 @@
                     cell.selectedIndex = 0;
             }
 
-            cell.titleLabel.text = item[@"title"];
+            cell.titleLabel.text = [item title];
             cell.currentColor = _changedProfile.profileColor;
             
             cell.delegate = self;

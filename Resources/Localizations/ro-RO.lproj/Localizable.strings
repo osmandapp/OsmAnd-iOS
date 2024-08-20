@@ -3495,3 +3495,5 @@
 "route_your_destination_is_on_left" = "Destinația dumneavoastră este la stânga";
 "route_your_destination_is_on_ahead" = "Destinația ta este drept înainte";
 "route_your_destination_is_on_right" = "Destinația dumneavoastră este pe dreapta";
+"shared_string_show" = "Spectacol";
+"weather_wind_animation_enable_descr" = "Activați pentru a vizualiza stratul de animație a vântului pe hartă.";

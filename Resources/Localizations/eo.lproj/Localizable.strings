@@ -2493,7 +2493,7 @@
 "login_open_street_map_org" = "Ensaluti al OpenStreetMap.org";
 "checking_progress" = "Kontrolado…";
 "ltr_or_rtl_combine_via_dash" = "%@— %@";
-"shared_string_selected" = "Elektitaj";
+"shared_string_selected" = "Elektita(j)";
 "backup_delete_types_descr" = "Ĉu vi volas forigi el OsmAnd-Nubo datumojn de neaktualaj elementoj\?";
 "weather_precip_inches" = "Coloj";
 "backup_delete_all_data" = "Forigiĉiujn datumojn";

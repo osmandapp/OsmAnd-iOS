@@ -222,11 +222,13 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         tableView.register(UINib(nibName: OATwoButtonsTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OATwoButtonsTableViewCell.reuseIdentifier)
         tableView.register(UINib(nibName: OASimpleTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OASimpleTableViewCell.reuseIdentifier)
         tableView.register(UINib(nibName: OALargeImageTitleDescrTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OALargeImageTitleDescrTableViewCell.reuseIdentifier)
+        setupTableFooter()
     }
     
     private func updateData() {
         generateData()
         tableView.reloadData()
+        setupTableFooter()
     }
     
     private func updateAllFoldersVCData() {
@@ -530,6 +532,59 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             navigationController?.navigationBar.topItem?.setRightBarButtonItems([navBarButton], animated: false)
             navigationItem.setRightBarButtonItems([navBarButton], animated: false)
         }
+    }
+    
+    private func setupTableFooter() {
+        if !currentFolder.tracks.isEmpty {
+            if let footer = OAUtilities.setupTableHeaderView(withText: getTotalTracksStatistics(), font: UIFont.preferredFont(forTextStyle: .footnote), textColor: UIColor.textColorSecondary, isBigTitle: false, parentViewWidth: view.frame.width) {
+                footer.backgroundColor = UIColor.groupBg
+                for subview in footer.subviews {
+                    if let label = subview as? UILabel {
+                        label.textAlignment = .center
+                        label.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+                    }
+                }
+                tableView.tableFooterView = footer
+            }
+        } else {
+            tableView.tableFooterView = nil
+        }
+    }
+    
+    private func getTotalTracksStatistics() -> String {
+        let allTracks = currentFolder.getAllTracks()
+        var totalDistance: Float = 0.0
+        var totalUphill: Double = 0.0
+        var totalDownhill: Double = 0.0
+        var totalTime: Int = 0
+        var totalSizeBytes: UInt64 = 0
+        for track in allTracks {
+            totalDistance += track.totalDistance
+            totalUphill += track.diffElevationUp
+            totalDownhill += track.diffElevationDown
+            totalTime += track.timeSpan
+            if let attributes = try? FileManager.default.attributesOfItem(atPath: app.gpxPath.appendingPathComponent(track.gpxFilePath)),
+               let fileSize = attributes[.size] as? UInt64 {
+                totalSizeBytes += fileSize
+            }
+        }
+        
+        var statistics = "\(localizedString("shared_string_gpx_tracks")) – \(currentFolder.tracksCount)"
+        if let distance = OAOsmAndFormatter.getFormattedDistance(totalDistance) {
+            statistics += ", \(localizedString("shared_string_distance").lowercased()) – \(distance)"
+        }
+        if let uphill = OAOsmAndFormatter.getFormattedAlt(totalUphill) {
+            statistics += ", \(localizedString("map_widget_trip_recording_uphill").lowercased()) – \(uphill)"
+        }
+        if let downhill = OAOsmAndFormatter.getFormattedAlt(totalDownhill) {
+            statistics += ", \(localizedString("map_widget_trip_recording_downhill").lowercased()) – \(downhill)"
+        }
+        if let duration = OAOsmAndFormatter.getFormattedTimeInterval(TimeInterval(totalTime), shortFormat: true) {
+            statistics += ", \(localizedString("map_widget_trip_recording_duration").lowercased()) – \(duration)."
+        }
+        let size = ByteCountFormatter.string(fromByteCount: Int64(totalSizeBytes), countStyle: .file)
+        statistics += "\n\n\(localizedString("shared_string_total_size")) – \(size)"
+        return statistics
     }
     
     private func configureToolbar() {

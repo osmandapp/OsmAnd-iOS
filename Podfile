@@ -33,7 +33,6 @@ post_install do |installer|
             configuration.build_settings['ARCHS'] = '$(ARCHS_STANDARD)'
             configuration.build_settings['ONLY_ACTIVE_ARCH'] = 'NO'
             configuration.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
-            #configuration.build_settings['CONFIGURATION_BUILD_DIR'] = '${PROJECT_DIR}/../../binaries/ios.clang${EFFECTIVE_PLATFORM_NAME}/$(CONFIGURATION)'
         end
     end
 end

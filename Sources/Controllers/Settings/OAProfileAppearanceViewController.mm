@@ -21,7 +21,7 @@
 #import "OAIconsTableViewCell.h"
 #import "OALocationIconsTableViewCell.h"
 #import "OAIndexConstants.h"
-#import "OACollectionSingleLineTableViewCell.h"
+#import "OAColorsPaletteCell.h"
 #import "OAColorCollectionHandler.h"
 #import "OAGPXAppearanceCollection.h"
 #import "OAColorCollectionViewController.h"
@@ -319,25 +319,9 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     
     OATableSectionData *profileColorSection = [_data createNewSection];
     [profileColorSection addRowFromDictionary:@{
-        kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
-        kCellKeyKey : kColorsCellTitleKey,
-        kCellTitleKey : OALocalizedString(@"shared_string_color"),
-        kCellTitleColorKey : [UIColor colorNamed:ACColorNameTextColorPrimary],
-        kCellHideSeparatorKey : @(YES),
-        kCellNonInteractive : @(YES)
-    }];
-    [profileColorSection addRowFromDictionary:@{
-        kCellTypeKey : [OACollectionSingleLineTableViewCell getCellIdentifier],
+        kCellTypeKey : [OAColorsPaletteCell getCellIdentifier],
         kCellKeyKey : kColorsCellKey,
         kCellTitleKey : OALocalizedString(@"shared_string_color"),
-    }];
-    [profileColorSection addRowFromDictionary:@{
-        kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
-        kCellKeyKey : kAllColorsButtonKey,
-        kCellTitleKey : OALocalizedString(@"shared_string_all_colors"),
-        kCellTitleColorKey : [UIColor colorNamed:ACColorNameTextColorActive],
-        kCellHideSeparatorKey : @(NO),
-        kCellNonInteractive : @(NO)
     }];
     
     OATableSectionData *profileIconSection = [_data createNewSection];
@@ -698,12 +682,12 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         }
         return cell;
     }
-    else if ([cellType isEqualToString:[OACollectionSingleLineTableViewCell getCellIdentifier]])
+    else if ([cellType isEqualToString:[OAColorsPaletteCell getCellIdentifier]])
     {
-        OACollectionSingleLineTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OACollectionSingleLineTableViewCell getCellIdentifier]];
+        OAColorsPaletteCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAColorsPaletteCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACollectionSingleLineTableViewCell getCellIdentifier]
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAColorsPaletteCell getCellIdentifier]
                                                          owner:self options:nil];
             cell = nib[0];
             OAColorCollectionHandler *colorHandler = [[OAColorCollectionHandler alloc] initWithData:@[_sortedColorItems] collectionView:cell.collectionView];

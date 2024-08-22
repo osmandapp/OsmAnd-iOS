@@ -219,7 +219,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
 
 - (void) commonInit
 {
-    [self generateData];
+    [self prepareData];
 }
 
 - (void) applyLocalization
@@ -242,7 +242,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     _tableView.separatorInset = UIEdgeInsetsMake(0., 16., 0., 0.);
     _tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
     [self setupNavBar];
-    [self setupView];
+    [self generateData];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -302,7 +302,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     return proposedProfileName;
 }
 
-- (void) setupView
+- (void) generateData
 {
     _data = [[OATableDataModel alloc] init];
     OATableSectionData *profileNameSection = [_data createNewSection];
@@ -339,7 +339,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     }];
 }
 
-- (void) generateData
+- (void) prepareData
 {
     _customModelNames = [Model3dHelper getCustomModelNames];
     _locationIcons = [self getlocationIcons];
@@ -350,12 +350,12 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     _navigationIconImages = [self getlocationIconImages];
     
     OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-    UIColor *selectedColor = selectedColor = UIColorFromRGB([_changedProfile profileColor]);
     NSMutableArray<OAColorItem *> *sortedColorItems = [NSMutableArray arrayWithArray:[appearanceCollection getAvailableColorsSortingByLastUsed]];
     _colorCollectionHandler =  [[OAColorCollectionHandler alloc] initWithData:@[sortedColorItems] collectionView:nil];
     _colorCollectionHandler.delegate = self;
     _colorCollectionHandler.hostVC = self;
     
+    UIColor *selectedColor = selectedColor = UIColorFromRGB([_changedProfile profileColor]);
     OAColorItem * selectedColorItem = [appearanceCollection getColorItemWithValue:[selectedColor toARGBNumber]];
     NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:[[_colorCollectionHandler getData][0] indexOfObject:selectedColorItem] inSection:0];
     if (selectedIndexPath.row == NSNotFound)
@@ -424,7 +424,6 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     }
     return icons;
 }
-
 
 - (NSArray<NSString *> *) getlocationIconNames
 {
@@ -838,7 +837,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     _locationIconImages = [self getlocationIconImages];
     _navigationIconImages = [self getlocationIconImages];
     _profileIconImageView.tintColor = UIColorFromRGB(_changedProfile.profileColor);
-    [self setupView];
+    [self generateData];
     [_tableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(kProfileIconSectionIndex, _tableView.numberOfSections - kProfileIconSectionIndex)] withRowAnimation:UITableViewRowAnimationNone];
 }
 

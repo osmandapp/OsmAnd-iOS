@@ -32,8 +32,10 @@
 
 - (void) setupViews
 {
-    self.separatorHeight.constant = 1.0 / [UIScreen mainScreen].scale;
     self.separatorInset = UIEdgeInsetsZero;
+    self.separatorHeight.constant = 1.0 / [UIScreen mainScreen].scale;
+    self.topTitleOffset.constant = 20;
+    self.bottomTitleOffset.constant = 8;
     [self.rightActionButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
     [self.rightActionButton addTarget:self action:@selector(onRightButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.rightActionButton setImage:[UIImage templateImageNamed:@"ic_custom_add"] forState:UIControlStateNormal];

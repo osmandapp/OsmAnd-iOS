@@ -2037,7 +2037,7 @@
 "rendering_attr_horse_scale_impossible_name" = "不可能";
 "rendering_attr_horse_scale_dangerous_name" = "不安全";
 "routing_attr_avoid_highway_description" = "避开高速公路";
-"rendering_attr_showMtbScaleIMBATrails_description" = "显示专用的山地自行车小径。";
+"rendering_attr_showMtbScaleIMBATrails_description" = "显示山地自行车专用路径。";
 "rendering_attr_natureReserves_name" = "自然保护区";
 "routing_attr_driving_style_description" = "选择驾驶目的，以获得更短、更快或更安全的路线";
 "rendering_attr_natureReserves_description" = "展示自然保护区、保护区和国家公园。";
@@ -2160,8 +2160,8 @@
 "mtb_segment_classification" = "细分分类";
 "cloud_changes_will_be_dismissed" = "将取消云端变更";
 "shared_string_modified" = "已修改";
-"rendering_attr_showMtbScale_name" = "显示山地自行车级别";
-"rendering_attr_showMtbScale_description" = "根据山地自行车等级显示路径。";
+"rendering_attr_showMtbScale_name" = "显示山地自行车难度分级";
+"rendering_attr_showMtbScale_description" = "根据山地自行车难度分级显示路径。";
 "map_widget_group_sunrise_sunset_desc" = "这些小部件会显示有关下一次日出和日落的信息。";
 "map_widget_group_sunrise_sunset" = "日出、日落";
 "navigation_points_desc" = "导航小工具将在导航期间启用，以显示距离、到达或剩余时间、下个转弯、方位、当前 / 下一街道名称、车道信息、最大速度、接近警示、兴趣点、路径点等信息。";
@@ -2730,3 +2730,5 @@
 "driving_region_uk" = "英国及类似区域";
 "driving_region_india" = "印度";
 "wall_height" = "墙壁高度";
+"lang_war" = "瓦瑞语";
+"rendering_value_name_only_name" = "仅名称";

@@ -398,7 +398,7 @@
 
 - (void) textViewDidChange:(UITextField *)textField
 {
-    BOOL needFullReload = (_inputText.length == 0 && textField.text.length > 0) || (_inputText.length > 0 && textField.text.length == 0);
+    BOOL needFullReload = [self needFullReload:textField.text];
     _inputText = textField.text;
     BOOL hadError = _errorMessage.length > 0;
     self.errorMessage = @"";
@@ -421,6 +421,11 @@
     }
 }
 
+- (BOOL) needFullReload:(NSString *)text
+{
+    return (_inputText.length == 0 && text.length > 0) || (_inputText.length > 0 && text.length == 0);
+}
+
 - (BOOL) needEmailValidation
 {
     return YES;
@@ -431,16 +436,26 @@
     if (self.errorMessage.length > 0)
         return;
     
-    BOOL isInvalidEmail = ![_inputText isValidEmail] && _inputText.length > 0;
+    BOOL isInvalidEmail = [self isInvalidEmail:_inputText];
     if (isInvalidEmail)
     {
-        self.errorMessage = OALocalizedString(@"osm_live_enter_email");
-        [self generateData];
-        [self.tableView performBatchUpdates:^{
-            [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationAutomatic];
-            [self updateAllSections];
-        } completion:nil];
+        [self showErrorMessage:OALocalizedString(@"osm_live_enter_email")];
     }
+}
+
+- (void) showErrorMessage:(NSString *)message
+{
+    self.errorMessage = message;
+    [self generateData];
+    [self.tableView performBatchUpdates:^{
+        [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self updateAllSections];
+    } completion:nil];
+}
+
+- (BOOL) isInvalidEmail:(NSString *)email
+{
+    return ![email isValidEmail] && email.length > 0;
 }
 
 - (BOOL) textFieldShouldClear:(UITextField *)textField

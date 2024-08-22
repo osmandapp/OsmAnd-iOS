@@ -535,19 +535,21 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     }
     
     private func setupTableFooter() {
-        if !currentFolder.tracks.isEmpty && !isSearchActive && !tableView.isEditing {
-            if let footer = OAUtilities.setupTableHeaderView(withText: getTotalTracksStatistics(), font: UIFont.preferredFont(forTextStyle: .footnote), textColor: UIColor.textColorSecondary, isBigTitle: false, parentViewWidth: view.frame.width) {
-                footer.backgroundColor = UIColor.groupBg
-                for subview in footer.subviews {
-                    if let label = subview as? UILabel {
-                        label.textAlignment = .center
-                        label.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-                    }
-                }
-                tableView.tableFooterView = footer
-            }
-        } else {
+        guard !currentFolder.tracks.isEmpty, !isSearchActive, !tableView.isEditing else {
             tableView.tableFooterView = nil
+            return
+        }
+        
+        if let footer = OAUtilities.setupTableHeaderView(withText: getTotalTracksStatistics(), font: UIFont.preferredFont(forTextStyle: .footnote), textColor: UIColor.textColorSecondary, isBigTitle: false, parentViewWidth: view.frame.width) {
+            footer.backgroundColor = .groupBg
+            for subview in footer.subviews {
+                if let label = subview as? UILabel {
+                    label.textAlignment = .center
+                    label.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+                }
+            }
+
+            tableView.tableFooterView = footer
         }
     }
     

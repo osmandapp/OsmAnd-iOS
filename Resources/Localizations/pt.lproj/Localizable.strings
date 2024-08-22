@@ -2257,7 +2257,7 @@
 "routeInfo_surface_description" = "Fornecer informações sobre a superfície da estrada/caminho.";
 "routeInfo_smoothness_description" = "Classificação de manobrabilidade da estrada/caminho para veículos de rodas, em particular no que diz respeito à regularidade/lisura da superfície.";
 "routeInfo_tracktype_description" = "Colorir a rota ou linha da pista pela sua composição da superfície. Normalmente aplica-se quando a rede de estradas não é predominantemente pavimentada.";
-"ltr_or_rtl_combine_via_dash" = "%@– %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "routing_attr_allow_gate_name" = "Permitir utilização de portões";
 "routing_attr_allow_gate_description" = "Permitir utilização de portões";
 "routing_attr_only_permitted_streets_description" = "Usar apenas ruas com permissão de utilização assinalada";
@@ -3505,3 +3505,5 @@
 "route_your_destination_is_on_left" = "O seu destino está à esquerda";
 "route_your_destination_is_on_right" = "O seu destino está à direita";
 "route_your_destination_is_on_ahead" = "O seu destino está mesmo em frente";
+"weather_wind_animation_enable_descr" = "Ative para ver a camada do vento animado no mapa.";
+"shared_string_show" = "Mostrar";

@@ -2266,7 +2266,7 @@
 "routeInfo_surface_description" = "Надає дані про фізичне покриття дороги/пішохідної доріжки.";
 "route_line_use_map_style_width" = "Використовувати типову ширину лінії зі стилю мапи (%@).";
 "routeInfo_tracktype_description" = "Забарвлення маршруту або треку за складом поверхні. Зазвичай застосовують, коли дорожня мережа в основному без покриття.";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "routing_attr_allow_gate_name" = "Вважати, що ворота відкриті";
 "routing_attr_allow_gate_description" = "Вважати, що ворота відкриті";
 "routing_attr_only_permitted_streets_name" = "Вулиці з явним дозволом для руху";
@@ -3502,3 +3502,10 @@
 "driving_region_india" = "Індія";
 "driving_region_uk" = "Велика Британія та подібні";
 "weather_wind_animation_enable_descr" = "Увімкніть, щоб переглянути шар анімації вітру на мапі.";
+"shared_string_show" = "Показ";
+"osmand_depelopment_use_3d_icons" = "Використовувати піктограми положення 3D-локацій";
+"shared_string_update_required" = "Необхідне оновлення";
+"osm_login_needs_ios_16_4" = "\t";
+"route_your_destination_is_on_left" = "Ваш пункт призначення знаходиться ліворуч";
+"route_your_destination_is_on_right" = "Ваш пункт призначення знаходиться праворуч";
+"route_your_destination_is_on_ahead" = "Ваш пункт призначення прямо перед вами";

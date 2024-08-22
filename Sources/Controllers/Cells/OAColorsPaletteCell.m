@@ -8,16 +8,11 @@
 
 #import "OAColorsPaletteCell.h"
 #import "OASizes.h"
+#import "Localization.h"
 #import "UITableViewCell+getTableView.h"
+#import "OAColorCollectionHandler.h"
 
 @interface OAColorsPaletteCell () <UIGestureRecognizerDelegate>
-
-//@property (weak, nonatomic) IBOutlet UIStackView *contentOutsideStackViewVertical;
-//@property (weak, nonatomic) IBOutlet UIStackView *topMarginStackView;
-//@property (weak, nonatomic) IBOutlet UIStackView *collectionStackView;
-//@property (weak, nonatomic) IBOutlet UIStackView *bottomMarginStackView;
-//
-//@property (strong, nonatomic) IBOutlet NSLayoutConstraint *collectionViewHeight;
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *topTitleOffset;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomTitleOffset;
@@ -26,8 +21,6 @@
 @end
 
 @implementation OAColorsPaletteCell
-{
-}
 
 #pragma mark - Initialization
 
@@ -40,10 +33,18 @@
 - (void) setupViews
 {
     self.separatorHeight.constant = 1.0 / [UIScreen mainScreen].scale;
+    self.separatorInset = UIEdgeInsetsZero;
+    [self.rightActionButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
+    [self.rightActionButton addTarget:self action:@selector(onRightButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [self.rightActionButton setImage:[UIImage templateImageNamed:@"ic_custom_add"] forState:UIControlStateNormal];
+    self.rightActionButton.accessibilityLabel = OALocalizedString(@"shared_string_add_color");
+    self.topLabel.text = OALocalizedString(@"shared_string_color");
+    [self.bottomButton setTitle:OALocalizedString(@"shared_string_all_colors") forState:UIControlStateNormal];
 }
 
-- (IBAction) onBottomButoonPressed:(id)sender
+- (OAColorCollectionHandler *)getColorCollectionHandler
 {
+    return (OAColorCollectionHandler *)[super getCollectionHandler];
 }
 
 
@@ -51,31 +52,20 @@
 
 - (void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-//    if (_collectionHandler)
-//        [_collectionHandler onItemSelected:indexPath collectionView:collectionView];
+    if ([self getColorCollectionHandler])
+        [[self getColorCollectionHandler] onItemSelected:indexPath collectionView:collectionView];
 }
 
 #pragma mark - Selectors
 
-- (void) onRightActionButtonPressed:(UIGestureRecognizer *)recognizer
+- (IBAction) onBottomButoonPressed:(id)sender
 {
-//    if (self.delegate && recognizer.state == UIGestureRecognizerStateEnded)
-//        [self.delegate onRightActionButtonPressed:self.rightActionButton.tag];
+    [[self getColorCollectionHandler] openAllColorsScreen];
 }
 
-//#pragma mark - UIGestureRecognizerDelegate
-//
-//- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
-//{
-//    if (self.rightActionButton.hidden || !self.rightActionButton.enabled)
-//        return NO;
-//
-//    CGFloat leftInset = [self getLeftInsetToView:self.rightActionButton];
-//    CGFloat pressedXLocation = [gestureRecognizer locationInView:self].x;
-//    if ([self isDirectionRTL])
-//        return [self getTableView].frame.size.width - pressedXLocation >= (leftInset - self.collectionStackView.spacing);
-//    else
-//        return pressedXLocation >= (leftInset - self.collectionStackView.spacing);
-//}
+- (void) onRightButtonPressed:(UIButton *)sender
+{
+    [[self getColorCollectionHandler] openColorPickerWithSelectedColor];
+}
 
 @end

@@ -12,12 +12,13 @@
 #import "OAUtilities.h"
 #import "OAColors.h"
 #import "Localization.h"
+#import "OAGPXAppearanceCollection.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
 #define kWhiteColor 0x44FFFFFF
 
-@interface OAColorCollectionHandler ()
+@interface OAColorCollectionHandler () <OACollectionCellDelegate, UIColorPickerViewControllerDelegate>
 
 @property(nonatomic) NSIndexPath *selectedIndexPath;
 
@@ -26,9 +27,15 @@
 @implementation OAColorCollectionHandler
 {
     NSMutableArray<NSMutableArray<OAColorItem *> *> *_data;
+    NSIndexPath *_editColorIndexPath;
 }
 
 @synthesize delegate;
+
+- (NSMutableArray<NSMutableArray<OAColorItem *> *> *) getData
+{
+    return _data;
+}
 
 #pragma mark - Base UI
 
@@ -48,7 +55,7 @@
                                                    image:[UIImage systemImageNamed:@"pencil"]
                                               identifier:nil
                                                  handler:^(__kindof UIAction * _Nonnull action) {
-            [weakSelf.delegate onContextMenuItemEdit:indexPath];
+            [weakSelf onContextMenuItemEdit:indexPath];
         }];
         editAction.accessibilityLabel = OALocalizedString(@"shared_string_edit_color");
         [menuElements addObject:editAction];
@@ -58,19 +65,18 @@
                                                     image:[UIImage systemImageNamed:@"doc.on.doc"]
                                                identifier:nil
                                                   handler:^(__kindof UIAction * _Nonnull action) {
-        if (weakSelf.delegate)
-            [weakSelf.delegate duplicateItemFromContextMenu:indexPath];
+            [weakSelf duplicateItemFromContextMenu:indexPath];
     }];
     duplicateAction.accessibilityLabel = OALocalizedString(@"shared_string_duplicate_color");
     [menuElements addObject:duplicateAction];
 
-    if (self.delegate && !isDefaultColor)
+    if (!isDefaultColor)
     {
         UIAction *deleteAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_delete")
                                                      image:[UIImage systemImageNamed:@"trash"]
                                                 identifier:nil
                                                    handler:^(__kindof UIAction * _Nonnull action) {
-            [weakSelf.delegate deleteItemFromContextMenu:indexPath];
+            [weakSelf deleteItemFromContextMenu:indexPath];
         }];
         deleteAction.accessibilityLabel = OALocalizedString(@"shared_string_delete_color");
         deleteAction.attributes = UIMenuElementAttributesDestructive;
@@ -131,6 +137,11 @@
         else
             [self.delegate reloadCollectionData];
     }
+}
+
+- (void)insertItem:(id)newItem atIndexPath:(NSIndexPath *)indexPath
+{
+    [_data[indexPath.section] insertObject:newItem atIndex:indexPath.row];
 }
 
 - (void)addColor:(NSIndexPath *)indexPath newItem:(OAColorItem *)newItem
@@ -208,6 +219,11 @@
     _selectedIndexPath = selectedIndexPath;
 }
 
+- (OAColorItem *)getSelectedItem
+{
+    return _data[_selectedIndexPath.section][_selectedIndexPath.row];
+}
+
 - (void)generateData:(NSArray<NSArray<OAColorItem *> *> *)data
 {
     NSMutableArray<NSMutableArray<OAColorItem *> *> *newData = [NSMutableArray array];
@@ -270,6 +286,128 @@
 - (NSInteger)sectionsCount
 {
     return _data.count;
+}
+
+- (void)openColorPickerWithSelectedColor
+{
+    [self openColorPickerWithColor:[self getSelectedItem]];
+}
+
+- (void)openColorPickerWithColor:(OAColorItem *)colorItem
+{
+    if (_hostVC)
+    {
+        UIColorPickerViewController *colorViewController = [[UIColorPickerViewController alloc] init];
+        colorViewController.delegate = self;
+        colorViewController.selectedColor = [colorItem getColor];
+        [_hostVC presentViewController:colorViewController animated:YES completion:nil];
+    }
+}
+
+- (void)openAllColorsScreen
+{
+    if (_hostVC)
+    {
+        OAColorCollectionViewController *colorCollectionViewController =
+        [[OAColorCollectionViewController alloc] initWithCollectionType:EOAColorCollectionTypeColorItems items:_data[0] selectedItem:[self getSelectedItem]];
+        colorCollectionViewController.delegate = self;
+        [_hostVC showModalViewController:colorCollectionViewController];
+    }
+}
+
+#pragma mark UIColorPickerViewControllerDelegate
+
+- (void)colorPickerViewControllerDidFinish:(UIColorPickerViewController *)viewController
+{
+    if (_editColorIndexPath)
+    {
+        if (![[_data[0][_editColorIndexPath.row] getHexColor] isEqualToString:[viewController.selectedColor toHexARGBString]])
+        {
+            [self changeColorItem:_data[0][_editColorIndexPath.row] withColor:viewController.selectedColor];
+        }
+        _editColorIndexPath = nil;
+    }
+    else
+    {
+        [self addAndGetNewColorItem:viewController.selectedColor];
+    }
+}
+
+- (void)colorPickerViewController:(UIColorPickerViewController *)viewController didSelectColor:(UIColor *)color continuously:(BOOL)continuously
+{
+    // UIColorPickerViewController has bud on macos - colorPickerViewControllerDidFinish don't called.
+    // Delete this method when it will be fixed.
+    if ([OAUtilities isiOSAppOnMac] && viewController)
+    {
+        [self colorPickerViewControllerDidFinish:viewController];
+        [viewController dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+
+#pragma mark - OAColorCollectionDelegate
+
+- (void)onCollectionItemSelected:(NSIndexPath *)indexPath {
+    if (self.delegate)
+        [self.delegate onCollectionItemSelected:indexPath];
+}
+
+- (void)selectColorItem:(OAColorItem *)colorItem
+{
+    NSIndexPath *selectedIndex = [NSIndexPath indexPathForRow:[_data[0] indexOfObject:colorItem] inSection:0];
+    [self setSelectedIndexPath:selectedIndex];
+    if (self.delegate)
+    {
+        [self.delegate onCollectionItemSelected:selectedIndex];
+        [self.delegate reloadCollectionData];
+    }
+}
+
+- (OAColorItem *)addAndGetNewColorItem:(UIColor *)color
+{
+    OAColorItem *newColorItem = [[OAGPXAppearanceCollection sharedInstance] addNewSelectedColor:color];
+    [self addAndSelectColor:[NSIndexPath indexPathForRow:0 inSection:0] newItem:newColorItem];
+    return newColorItem;
+}
+
+- (void)changeColorItem:(OAColorItem *)colorItem withColor:(UIColor *)color
+{
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_data[0] indexOfObject:colorItem] inSection:0];
+    [[OAGPXAppearanceCollection sharedInstance] changeColor:colorItem newColor:color];
+    [self replaceOldColor:indexPath];
+}
+
+- (OAColorItem *)duplicateColorItem:(OAColorItem *)colorItem
+{
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_data[0] indexOfObject:colorItem] inSection:0];
+    OAColorItem *duplicatedColorItem = [[OAGPXAppearanceCollection sharedInstance] duplicateColor:colorItem];
+    NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section];
+    [self addColor:newIndexPath newItem:duplicatedColorItem];
+    return duplicatedColorItem;
+}
+
+- (void)deleteColorItem:(OAColorItem *)colorItem
+{
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_data[0] indexOfObject:colorItem] inSection:0];
+    [[OAGPXAppearanceCollection sharedInstance] deleteColor:colorItem];
+    [self removeColor:indexPath];
+}
+
+#pragma mark - OAColorsCollectionCellDelegate
+
+- (void)onContextMenuItemEdit:(NSIndexPath *)indexPath
+{
+    _editColorIndexPath = indexPath;
+    [self openColorPickerWithColor:_data[0][indexPath.row]];
+}
+
+- (void)duplicateItemFromContextMenu:(NSIndexPath *)indexPath
+{
+    [self duplicateColorItem:_data[0][indexPath.row]];
+}
+
+- (void)deleteItemFromContextMenu:(NSIndexPath *)indexPath
+{
+    [self deleteColorItem:_data[0][indexPath.row]];
 }
 
 @end

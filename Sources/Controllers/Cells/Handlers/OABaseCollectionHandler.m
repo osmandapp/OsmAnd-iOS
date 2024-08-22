@@ -45,6 +45,11 @@
     return _collectionView;
 }
 
+- (void)setCollectionView:(UICollectionView *)collectionView
+{
+    _collectionView = collectionView;
+}
+
 - (UICollectionViewScrollDirection)getScrollDirection
 {
     return _scrollDirection;

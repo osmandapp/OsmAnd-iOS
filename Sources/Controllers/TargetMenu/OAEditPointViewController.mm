@@ -1473,6 +1473,15 @@
     }
 }
 
+- (void)colorPickerViewController:(UIColorPickerViewController *)viewController didSelectColor:(UIColor *)color continuously:(BOOL)continuously
+{
+    if ([OAUtilities isiOSAppOnMac])
+    {
+        [self colorPickerViewControllerDidFinish:viewController];
+        [viewController dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+
 #pragma mark - Additions
 
 - (void)setupHeaderWithVerticalOffset:(CGFloat)offset

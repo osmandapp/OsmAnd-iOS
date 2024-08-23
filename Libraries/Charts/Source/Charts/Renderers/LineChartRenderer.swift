@@ -34,7 +34,7 @@ open class LineChartRenderer: LineRadarRenderer
         guard let lineData = dataProvider?.lineData else { return }
 
         let sets = lineData.dataSets as? [LineChartDataSet]
-        assert(sets != nil, "Datasets for LineChartRenderer must conform to ILineChartDataSet")
+        assert(sets != nil, "Datasets for LineChartRenderer must conform to LineChartDataSetProtocol")
 
         let drawDataSet = { self.drawDataSet(context: context, dataSet: $0) }
         sets!.lazy

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import Charts
+import DGCharts
 
 @objc public enum GPXDataSetType: Int {
     case altitude, speed, slope, sensorSpeed, sensorHeartRate, sensorBikePower, sensorBikeCadence, sensorTemperature
@@ -73,7 +73,7 @@ import Charts
     
     private static let MAX_CHART_DATA_ITEMS: Double = 10000
     
-    final class ValueFormatter: IAxisValueFormatter
+    final class ValueFormatter: AxisValueFormatter
     {
         private var formatX: String?
         private var unitsX: String
@@ -92,14 +92,14 @@ import Charts
         }
     }
     
-    private class HeightFormatter: IFillFormatter
+    private class HeightFormatter: FillFormatter
     {
-        func getFillLinePosition(dataSet: ILineChartDataSet, dataProvider: LineChartDataProvider) -> CGFloat {
+        func getFillLinePosition(dataSet: LineChartDataSetProtocol, dataProvider: LineChartDataProvider) -> CGFloat {
             return CGFloat(dataProvider.chartYMin)
         }
     }
     
-    private class TimeFormatter: IAxisValueFormatter
+    private class TimeFormatter: AxisValueFormatter
     {
         private var useHours: Bool
         
@@ -127,7 +127,7 @@ import Charts
         }
     }
     
-    private class TimeSpanFormatter : IAxisValueFormatter
+    private class TimeSpanFormatter : AxisValueFormatter
     {
         private var startTime: Int64
         
@@ -157,13 +157,13 @@ import Charts
         var mulY: Double = 1;
         var color: UIColor;
         
-        init(entries: [ChartDataEntry]?, label: String?, dataSetType: GPXDataSetType, dataSetAxisType: GPXDataSetAxisType) {
+        init(entries: [ChartDataEntry], label: String?, dataSetType: GPXDataSetType, dataSetAxisType: GPXDataSetAxisType) {
             self.dataSetType = dataSetType
             self.dataSetAxisType = dataSetAxisType
             self.priority = 0
             self.units = ""
             self.color = dataSetType.getTextColor()
-            super.init(entries: entries, label: label)
+            super.init(entries: entries, label: label ?? "")
             self.mode = LineChartDataSet.Mode.linear
         }
         
@@ -182,8 +182,8 @@ import Charts
         public func getPriority() -> Float {
             return priority;
         }
-        
-        public override func getDivX() -> Double {
+        // TODO:
+        public func getDivX() -> Double {
             return divX;
         }
         
@@ -200,13 +200,13 @@ import Charts
         }
     }
 
-    @objc static public func getDivX(dataSet: IChartDataSet) -> Double
+    @objc static public func getDivX(dataSet: ChartDataSetProtocol) -> Double
     {
         let orderedDataSet: OrderedLineDataSet? = dataSet as? OrderedLineDataSet
         return orderedDataSet?.divX ?? 0
     }
 
-    @objc static public func getDataSetAxisType(dataSet: IChartDataSet) -> GPXDataSetAxisType
+    @objc static public func getDataSetAxisType(dataSet: ChartDataSetProtocol) -> GPXDataSetAxisType
     {
         let orderedDataSet: OrderedLineDataSet? = dataSet as? OrderedLineDataSet
         return orderedDataSet?.getDataSetAxisType() ?? GPXDataSetAxisType.distance
@@ -341,7 +341,7 @@ import Charts
                                               useRightAxis: Bool,
                                               calcWithoutGaps: Bool)
     {
-        var dataSets = [ILineChartDataSet]()
+        var dataSets = [LineChartDataSetProtocol]()
         let firstDataSet: OrderedLineDataSet? = getDataSet(chartView: chartView, analysis: analysis, type: firstType, calcWithoutGaps: calcWithoutGaps, useRightAxis: useRightAxis)
         if (firstDataSet != nil) {
             dataSets.append(firstDataSet!);
@@ -376,7 +376,7 @@ import Charts
                                               secondType: GPXDataSetType,
                                               calcWithoutGaps: Bool)
     {
-        var dataSets = [ILineChartDataSet]()
+        var dataSets = [LineChartDataSetProtocol]()
         let firstDataSet: OrderedLineDataSet? = getDataSet(chartView: chartView, analysis: analysis, type: firstType, calcWithoutGaps: calcWithoutGaps, useRightAxis: false)
         let secondDataSet: OrderedLineDataSet? = getDataSet(chartView: chartView, analysis: analysis, type: secondType, calcWithoutGaps: calcWithoutGaps, useRightAxis: true)
 
@@ -423,7 +423,7 @@ import Charts
         chart.scaleYEnabled = false
         chart.autoScaleMinMaxEnabled = true
         chart.drawBordersEnabled = true
-        chart.chartDescription?.enabled = false
+        chart.chartDescription.enabled = false
         chart.dragDecelerationEnabled = false
         chart.highlightPerTapEnabled = false
         chart.highlightPerDragEnabled = true
@@ -481,7 +481,7 @@ import Charts
         chartView.scaleYEnabled = false
         chartView.autoScaleMinMaxEnabled = true
         chartView.drawBordersEnabled = false
-        chartView.chartDescription?.enabled = false
+        chartView.chartDescription.enabled = false
         chartView.maxVisibleCount = 10
         chartView.minOffset = 0.0
         chartView.rightYAxisRenderer = YAxisCombinedRenderer(viewPortHandler: chartView.viewPortHandler, yAxis: chartView.rightAxis, secondaryYAxis: chartView.leftAxis, transformer: chartView.getTransformer(forAxis: .right), secondaryTransformer:chartView.getTransformer(forAxis: .left))
@@ -599,7 +599,7 @@ import Charts
         chart.scaleYEnabled = false
         chart.autoScaleMinMaxEnabled = true
         chart.drawBordersEnabled = false
-        chart.chartDescription?.enabled = false
+        chart.chartDescription.enabled = false
         chart.maxVisibleCount = 10
         chart.minOffset = 0.0
         chart.dragDecelerationEnabled = false
@@ -633,7 +633,7 @@ import Charts
 
     @objc static func buildGradientChart(chart: LineChartView,
                                          colorPalette: ColorPalette,
-                                         valueFormatter: IAxisValueFormatter) -> LineChartData {
+                                         valueFormatter: AxisValueFormatter) -> LineChartData {
         chart.xAxis.valueFormatter = valueFormatter
 
         let colorValues = colorPalette.colorValues
@@ -655,7 +655,8 @@ import Charts
             colorLocations.append(CGFloat(i) * step)
         }
         if let gradient = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(), colors: cgColors as CFArray, locations: colorLocations) {
-            barDataSet.fill = Fill.fillWithLinearGradient(gradient, angle: 0.0)
+            // TODO:
+          //  barDataSet.fill = Fill.fillWithLinearGradient(gradient, angle: 0.0)
             barDataSet.fillAlpha = 1.0
             barDataSet.drawFilledEnabled = true
         }
@@ -1062,7 +1063,8 @@ import Charts
         let yAxis: YAxis = useRightAxis ? chart.rightAxis : chart.leftAxis
         yAxis.enabled = true
         yAxis.labelTextColor = textColor
-        yAxis.labelBackgroundColor = UIColor.chartAxisValueBg
+        // TODO:
+        // yAxis.labelBackgroundColor = UIColor.chartAxisValueBg
         return yAxis
     }
 

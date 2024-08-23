@@ -34,7 +34,7 @@
 #import "OAGPXDatabase.h"
 #import "GeneratedAssetSymbols.h"
 
-#import <Charts/Charts-Swift.h>
+#import <DGCharts/DGCharts-Swift.h>
 
 #include <OsmAndCore/Utilities.h>
 

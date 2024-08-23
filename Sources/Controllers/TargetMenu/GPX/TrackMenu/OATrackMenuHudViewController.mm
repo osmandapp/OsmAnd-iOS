@@ -70,8 +70,9 @@
 #import "MBProgressHUD.h"
 #import "GeneratedAssetSymbols.h"
 #import <SafariServices/SafariServices.h>
-#import <Charts/Charts-Swift.h>
+//#import <Charts/DGCharts-Swift.h>
 #import "OsmAnd_Maps-Swift.h"
+#import <DGCharts/DGCharts-Swift.h>
 
 #define kGpxDescriptionImageHeight 149
 #define kOverviewTabIndex @0
@@ -1249,7 +1250,7 @@
 {
     CLLocationCoordinate2D pinLocation = [self getPinLocation];
     LineChartData *lineData = chart.lineData;
-    NSArray<id <IChartDataSet>> *ds = lineData != nil ? lineData.dataSets : nil;
+    NSArray<id <ChartDataSetProtocol>> *ds = lineData != nil ? lineData.dataSets : nil;
     if (ds && ds.count > 0 && segment)
     {
         float pos;

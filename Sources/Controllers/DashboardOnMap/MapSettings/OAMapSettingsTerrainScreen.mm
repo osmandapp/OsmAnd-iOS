@@ -39,7 +39,7 @@
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
 #import "OsmAnd_Maps-Swift.h"
-#import <Charts/Charts-Swift.h>
+#import <DGCharts/DGCharts-Swift.h>
 
 static NSString *kCellTypeMap = @"MapCell";
 static NSString *kCellItemKey = @"kCellItemKey";

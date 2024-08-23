@@ -299,7 +299,7 @@
 "plugin_ski_name" = "滑雪地图浏览";
 "product_desc_skimap" = "";
 "plugin_ski_descr" = "专为冬季运动场地导航而设计： 查看滑雪道、滑雪缆车和越野滑雪道，并用彩色线条标示难度等级。使用时，请启用此插件，并进入 \"配置地图\"，选择 \"冬季和滑雪 \"地图样式。";
-"record_plugin_name" = "旅行记录";
+"record_plugin_name" = "行程录制";
 "product_desc_track_recording" = "";
 "record_plugin_description" = "记录您的旅行或训练，并分析速度、累计上升和下降、海拔剖面等数据。已记录的轨迹可以归档、与朋友分享、编辑和后期处理。 \n \n详情可见 %@。";
 "product_title_trip_planning" = "";
@@ -2732,3 +2732,5 @@
 "wall_height" = "墙壁高度";
 "lang_war" = "瓦瑞语";
 "rendering_value_name_only_name" = "仅名称";
+"weather_data_sources_prompt" = "OsmAnd 从两个来源提供天气数据：";
+"weather_source_ecmwf_description" = "欧洲中期天气预报中心";

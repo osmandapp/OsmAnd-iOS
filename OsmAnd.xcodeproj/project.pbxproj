@@ -2934,8 +2934,6 @@
 		DA7B18E02A1227A30029967F /* CurrentTimeWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7B18DF2A1227A30029967F /* CurrentTimeWidget.swift */; };
 		DA7B18E32A12392E0029967F /* OAMaxSpeedWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA7B18E22A12392E0029967F /* OAMaxSpeedWidget.mm */; };
 		DA7B18E52A1259160029967F /* BatteryWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7B18E42A1259160029967F /* BatteryWidget.swift */; };
-		DA7F2592231A697200E54F77 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA7F258F231A68CD00E54F77 /* Charts.framework */; platformFilter = ios; };
-		DA7F2593231A697200E54F77 /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DA7F258F231A68CD00E54F77 /* Charts.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DA7FA55E2695DCFB0044F05A /* fi_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA7FA55D2695DCFB0044F05A /* fi_tts.js */; };
 		DA8093AF2260899600A1479F /* ic_custom_osm_note_unresolved@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8093A82260899500A1479F /* ic_custom_osm_note_unresolved@2x.png */; };
 		DA8093B12260899600A1479F /* ic_custom_osm_note_resolved@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8093A92260899500A1479F /* ic_custom_osm_note_resolved@3x.png */; };
@@ -3350,19 +3348,12 @@
 			remoteGlobalIDString = BBA3AF30197FC4BB0039D991;
 			remoteInfo = "OsmAnd Maps";
 		};
-		DA7F258E231A68CD00E54F77 /* PBXContainerItemProxy */ = {
+		FA6116172C787B7C005C3ABD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = DA7F2589231A68CD00E54F77 /* Charts.xcodeproj */;
+			containerPortal = FA6116102C787B7C005C3ABD /* Charts.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 65AD9E95D9ED4DC0BD73A743;
-			remoteInfo = Charts;
-		};
-		DA7F2594231A697200E54F77 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DA7F2589231A68CD00E54F77 /* Charts.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = A58A4ED274A941CA248EA921;
-			remoteInfo = Charts;
+			remoteInfo = DGCharts;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -3373,7 +3364,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				DA7F2593231A697200E54F77 /* Charts.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -7479,7 +7469,6 @@
 		DA7B18E12A12392E0029967F /* OAMaxSpeedWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMaxSpeedWidget.h; sourceTree = "<group>"; };
 		DA7B18E22A12392E0029967F /* OAMaxSpeedWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMaxSpeedWidget.mm; sourceTree = "<group>"; };
 		DA7B18E42A1259160029967F /* BatteryWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryWidget.swift; sourceTree = "<group>"; };
-		DA7F2589231A68CD00E54F77 /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Charts.xcodeproj; sourceTree = "<group>"; };
 		DA7FA55D2695DCFB0044F05A /* fi_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = fi_tts.js; path = ../resources/voice/fi/fi_tts.js; sourceTree = "<group>"; };
 		DA8093A82260899500A1479F /* ic_custom_osm_note_unresolved@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_osm_note_unresolved@2x.png"; path = "Resources/Icons/ic_custom_osm_note_unresolved@2x.png"; sourceTree = "<group>"; };
 		DA8093A92260899500A1479F /* ic_custom_osm_note_resolved@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_osm_note_resolved@3x.png"; path = "Resources/Icons/ic_custom_osm_note_resolved@3x.png"; sourceTree = "<group>"; };
@@ -7846,6 +7835,7 @@
 		FA4D7F562B03D366003208D7 /* BLEWheelSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEWheelSettingsViewController.swift; sourceTree = "<group>"; };
 		FA5A21A12A9C7DE100319695 /* CALayer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+Extension.swift"; sourceTree = "<group>"; };
 		FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIPageViewController+Extension.swift"; sourceTree = "<group>"; };
+		FA6116102C787B7C005C3ABD /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Charts.xcodeproj; sourceTree = "<group>"; };
 		FA63F24B2AF3DAA00040A0CE /* SensorDataField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorDataField.swift; sourceTree = "<group>"; };
 		FA63F24D2AF3DC550040A0CE /* SensorWidgetDataField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorWidgetDataField.swift; sourceTree = "<group>"; };
 		FA63F24F2AF3DFF60040A0CE /* SensorTextWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorTextWidget.swift; sourceTree = "<group>"; };
@@ -7950,7 +7940,6 @@
 				84C41E7B1AB9EEA20089EABB /* libxml2.dylib in Frameworks */,
 				84185A821AA9A00D00F70328 /* StoreKit.framework in Frameworks */,
 				BBA3AF73197FC4BB0039D991 /* Security.framework in Frameworks */,
-				DA7F2592231A697200E54F77 /* Charts.framework in Frameworks */,
 				8AAFE753278DE23700F6504E /* libsqlite_static.a in Frameworks */,
 				BBA3AF74197FC4BB0039D991 /* CoreText.framework in Frameworks */,
 				BBA3AF75197FC4BB0039D991 /* QuartzCore.framework in Frameworks */,
@@ -13572,26 +13561,10 @@
 		DA7F2587231A68CD00E54F77 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				FA6116122C787B7C005C3ABD /* Charts */,
 				FAC166152B21BECE00D63755 /* SwiftyBluetooth */,
-				DA7F2588231A68CD00E54F77 /* Charts */,
 			);
 			path = Libraries;
-			sourceTree = "<group>";
-		};
-		DA7F2588231A68CD00E54F77 /* Charts */ = {
-			isa = PBXGroup;
-			children = (
-				DA7F2589231A68CD00E54F77 /* Charts.xcodeproj */,
-			);
-			path = Charts;
-			sourceTree = "<group>";
-		};
-		DA7F258A231A68CD00E54F77 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				DA7F258F231A68CD00E54F77 /* Charts.framework */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		DA80DAA8251E0C0C008E6267 /* Router */ = {
@@ -13919,6 +13892,22 @@
 			path = BLEWheelSettings;
 			sourceTree = "<group>";
 		};
+		FA6116122C787B7C005C3ABD /* Charts */ = {
+			isa = PBXGroup;
+			children = (
+				FA6116102C787B7C005C3ABD /* Charts.xcodeproj */,
+			);
+			path = Charts;
+			sourceTree = "<group>";
+		};
+		FA6116132C787B7C005C3ABD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FA6116182C787B7C005C3ABD /* DGCharts.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		FA6439E52B04D6EE00331006 /* Characteristics */ = {
 			isa = PBXGroup;
 			children = (
@@ -14211,7 +14200,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				DA7F2595231A697200E54F77 /* PBXTargetDependency */,
 			);
 			name = "OsmAnd Maps";
 			productName = OsmAnd;
@@ -14357,8 +14345,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = DA7F258A231A68CD00E54F77 /* Products */;
-					ProjectRef = DA7F2589231A68CD00E54F77 /* Charts.xcodeproj */;
+					ProductGroup = FA6116132C787B7C005C3ABD /* Products */;
+					ProjectRef = FA6116102C787B7C005C3ABD /* Charts.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -14370,11 +14358,11 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		DA7F258F231A68CD00E54F77 /* Charts.framework */ = {
+		FA6116182C787B7C005C3ABD /* DGCharts.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = Charts.framework;
-			remoteRef = DA7F258E231A68CD00E54F77 /* PBXContainerItemProxy */;
+			path = DGCharts.framework;
+			remoteRef = FA6116172C787B7C005C3ABD /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -17804,12 +17792,6 @@
 			target = BBA3AF30197FC4BB0039D991 /* OsmAnd Maps */;
 			targetProxy = DA72AB8E2508F41000851313 /* PBXContainerItemProxy */;
 		};
-		DA7F2595231A697200E54F77 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = Charts;
-			platformFilter = ios;
-			targetProxy = DA7F2594231A697200E54F77 /* PBXContainerItemProxy */;
-		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
@@ -18188,6 +18170,8 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)",
+					"$(PROJECT_DIR)/Libraries/Charts/build/Debug-iphonesimulator",
+					"$(PROJECT_DIR)/Libraries/Charts/build/EagerLinkingTBDs/Debug-iphonesimulator",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Support Files/OA-Prefix.pch";
@@ -18250,6 +18234,8 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)",
+					"$(PROJECT_DIR)/Libraries/Charts/build/Debug-iphonesimulator",
+					"$(PROJECT_DIR)/Libraries/Charts/build/EagerLinkingTBDs/Debug-iphonesimulator",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Support Files/OA-Prefix.pch";

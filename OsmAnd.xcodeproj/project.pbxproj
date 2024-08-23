@@ -18004,7 +18004,6 @@
 					"$(inherited)",
 					"\"${PODS_ROOT}/Headers/Public\"",
 					"\"$(SDKROOT)/usr/include/libxml2\"",
-					"\"$(SDKROOT)/usr/include/libxml2\"",
 					"\"${PODS_ROOT}/Headers/Private/BRCybertron/BRCybertron/libxslt\"",
 					"\"${PODS_ROOT}/Headers/Private/BRCybertron/libxslt\"",
 				);
@@ -18073,7 +18072,6 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/Headers/Public\"",
-					"\"$(SDKROOT)/usr/include/libxml2\"",
 					"\"$(SDKROOT)/usr/include/libxml2\"",
 					"\"${PODS_ROOT}/Headers/Private/BRCybertron/BRCybertron/libxslt\"",
 					"\"${PODS_ROOT}/Headers/Private/BRCybertron/libxslt\"",

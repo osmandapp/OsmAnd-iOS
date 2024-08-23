@@ -531,7 +531,7 @@
 "transport_Routes" = "路线";
 "switch_start_finish" = "交换起始点和目的地";
 "replace_destination_point" = "替换目的地";
-"traffic_warning_stop" = "停止标志";
+"traffic_warning_stop" = "停车标志";
 "traffic_warning_pedestrian" = "人行横道";
 "driving_region_japan" = "日本";
 "driving_region_us" = "美国";
@@ -842,7 +842,7 @@
 "average_altitude" = "平均海拔";
 "work_button" = "工作地点";
 "quick_action_switch_day_mode" = "日间模式";
-"poi_dialog_reopen" = "重新开放";
+"poi_dialog_reopen" = "重新打开";
 "quick_action_add_parking" = "添加停车地点";
 "quick_action_map_overlay_title" = "地图覆盖";
 "filter_current_poiButton" = "筛选器";
@@ -998,7 +998,7 @@
 "rendering_attr_surface_salt_name" = "盐地";
 "rendering_attr_highway_class_track_name" = "轨迹";
 "rendering_value_germanRoadAtlas_name" = "德国道路地图";
-"rendering_attr_alpineHiking_description" = "路线的难度分类类型。";
+"rendering_attr_alpineHiking_description" = "路线的难度分级类别。";
 "routing_attr_avoid_ferry_description" = "避开轮渡";
 "rendering_value_green_name" = "绿色";
 "routing_attr_no_new_routing_description" = "请不要使用 v1.9 的路径规划规则。";
@@ -1658,7 +1658,7 @@
 "lang_af" = "南非荷兰语";
 "routeInfo_surface_description" = "提供道路/人行道物理表面信息。";
 "shared_string_min_height" = "最低高度";
-"routeInfo_smoothness_description" = "轮式车辆的道路/人行道机动性分类，特别是关于路面规则性/平整度的分类。";
+"routeInfo_smoothness_description" = "轮式车辆的道路 / 人行道机动性分级，特别是关于路面一致性 / 平整度的分级。";
 "route_line_use_map_style_width" = "使用地图样式 (%@) 默认宽度。";
 "set_up_backup" = "设置备份";
 "make_backup_descr" = "这台设备上有很多更改，请将这些数据备份以免丢失。";
@@ -1771,7 +1771,7 @@
 "osmand_development_plugin_description" = "提供测试和调试 OsmAnd 的功能：模拟导航路线、监控屏幕渲染、检查性能等。正常使用应用程序时不需要此插件。";
 "manage_subscription" = "管理订阅";
 "copy_to_map_favorites" = "复制到收藏";
-"suggested_maps_descr" = "插件需要这些地图。";
+"suggested_maps_descr" = "这些地图是该插件所必需的。";
 "simulation_real_mode_title" = "真实模拟";
 "private_access_routing_req" = "你的目的地位于一个有私人通道的区域。允许使用私人道路进行此次旅行吗？";
 "expired" = "已过期";
@@ -2503,7 +2503,7 @@
 "saved_articles" = "已存书签的文章";
 "map_widget_zoom_level_desc" = "显示当前的地图缩放级别。";
 "search_favorites" = "在我的收藏中搜索";
-"average_speed_skip_stops" = "考虑到停止";
+"average_speed_skip_stops" = "考虑停留时间";
 "map_widget_next_sunrise" = "下次日出";
 "map_widget_rendering_fps_desc" = "显示地图和地图元素的显示和刷新速度，以每秒帧数 （FPS） 表示。";
 "widget_secondary_desc_part_of" = "%@插件的一部分。";

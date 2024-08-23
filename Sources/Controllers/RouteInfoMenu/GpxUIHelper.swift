@@ -182,7 +182,7 @@ import DGCharts
         public func getPriority() -> Float {
             return priority;
         }
-        // TODO:
+        // FIXME:
         public func getDivX() -> Double {
             return divX;
         }
@@ -427,7 +427,6 @@ import DGCharts
         chart.dragDecelerationEnabled = false
         chart.highlightPerTapEnabled = false
         chart.highlightPerDragEnabled = true
-        
         chart.renderer = CustomBarChartRenderer(dataProvider: chart, animator: chart.chartAnimator, viewPortHandler: chart.viewPortHandler)
 
         chart.extraTopOffset = topOffset
@@ -655,8 +654,7 @@ import DGCharts
             colorLocations.append(CGFloat(i) * step)
         }
         if let gradient = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(), colors: cgColors as CFArray, locations: colorLocations) {
-            // TODO:
-          //  barDataSet.fill = Fill.fillWithLinearGradient(gradient, angle: 0.0)
+            barDataSet.fill = LinearGradientFill(gradient: gradient)
             barDataSet.fillAlpha = 1.0
             barDataSet.drawFilledEnabled = true
         }
@@ -1063,7 +1061,7 @@ import DGCharts
         let yAxis: YAxis = useRightAxis ? chart.rightAxis : chart.leftAxis
         yAxis.enabled = true
         yAxis.labelTextColor = textColor
-        // TODO:
+        // FIXME:
         // yAxis.labelBackgroundColor = UIColor.chartAxisValueBg
         return yAxis
     }

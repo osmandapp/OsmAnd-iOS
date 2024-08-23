@@ -49,7 +49,7 @@
                analysis:(OAGPXTrackAnalysis *)analysis
                modeCell:(OARouteStatisticsModeCell *)statsModeCell
 {
-    ChartYAxisCombinedRenderer *renderer = (ChartYAxisCombinedRenderer *) chart.rightYAxisRenderer;
+    YAxisCombinedRenderer *renderer = (YAxisCombinedRenderer *) chart.rightYAxisRenderer;
     
     OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:_gpxDoc.path]];
     BOOL calcWithoutGaps = !gpx.joinSegments && (_gpxDoc.tracks.count > 0 && _gpxDoc.tracks.firstObject.generalTrack);
@@ -276,7 +276,8 @@
         }
         else
         {
-            double distance = [dataSet getDivX] * position;
+            // FIXME:
+            double distance = /*[dataSet getDivX]*/ 1 * position;
             return [OAGPXUIHelper getSegmentPointByDistance:segment
                                                     gpxFile:_gpxDoc
                                             distanceToPoint:distance
@@ -359,8 +360,11 @@
         }
         else
         {
-            double startDistance = startPos * [dataSet getDivX];
-            double endDistance = endPos * [dataSet getDivX];
+            // FIXME:
+//            double startDistance = startPos * [dataSet getDivX];
+//            double endDistance = endPos * [dataSet getDivX];
+            double startDistance = startPos * 1;
+            double endDistance = endPos * 1;
             double previousSplitDistance = 0;
             for (NSInteger i = 0; i < segment.points.count; i++)
             {

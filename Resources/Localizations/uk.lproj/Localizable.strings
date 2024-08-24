@@ -3505,7 +3505,7 @@
 "shared_string_show" = "Показ";
 "osmand_depelopment_use_3d_icons" = "Використовувати піктограми положення 3D-локацій";
 "shared_string_update_required" = "Необхідне оновлення";
-"osm_login_needs_ios_16_4" = "\t";
+"osm_login_needs_ios_16_4" = "Для входу в OpenStreetMap потрібна iOS 16.4+";
 "route_your_destination_is_on_left" = "Ваш пункт призначення знаходиться ліворуч";
 "route_your_destination_is_on_right" = "Ваш пункт призначення знаходиться праворуч";
 "route_your_destination_is_on_ahead" = "Ваш пункт призначення прямо перед вами";

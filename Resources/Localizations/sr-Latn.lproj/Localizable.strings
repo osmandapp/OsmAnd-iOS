@@ -124,7 +124,7 @@
 
 // Track recording settings
 "save_global_track_interval" = "Međuvreme opšteg beleženja";
-"save_global_track_interval_descr" = "Navedi interval zavođenja opšteg snimanja trasa (uključeno pomoću widžeta „snimanje putovanja“ na mapi).";
+"save_global_track_interval_descr" = "Navedi interval zapisivanja za opšte snimanje trasa (uključeno pomoću widžeta „snimanje putovanja“ na mapi).";
 "save_track_interval" = "Učastalost beleženja za vreme navođenja";
 "logging_interval_navigation_descr" = "Navedite interval logovanja snimanja putanje prilikom navođenja";
 "monitoring_min_distance" = "Najmanji pomeraj";
@@ -285,7 +285,7 @@
 "routing_preferences_descr" = "Podešavanje rutiranja";
 "recording_preferences_descr" = "Postavke snimanja putanja";
 "routing_settings" = "Navigacija";
-"shared_string_navigation" = "Navigacija";
+"shared_string_navigation" = "Navigacija 1";
 "get_directions" = "Navigacija";
 "app_mode_bus" = "Autobus";
 "app_mode_train" = "Voz";
@@ -515,7 +515,7 @@
 "poi_overlay" = "TOI nadpodloga";
 "poi_dialog_poi_type" = "Vrsta TOI";
 "my_favorites" = "Moji omiljeni";
-"shared_string_my_places" = "Moja mesta i trase";
+"shared_string_my_places" = "Moja mesta i rute";
 "fav_no_group" = "Nema grupe";
 "fav_add_new_group" = "Dodaj novu grupu";
 "select_group_descr" = "Izaberite grupu ili dodajte novu";
@@ -2289,7 +2289,7 @@
 "manage_subscription" = "Upravljaj pretpatom";
 "routing_attr_only_permitted_ways_name" = "Izričito dozvoljeni putevi";
 "routing_attr_prefer_horse_routes_description" = "Preferiraj konjske staze";
-"routing_attr_only_permitted_ways_description" = "Koristi samo puteve (trasa, staza, itd.) koji su izričito dozvoljeni";
+"routing_attr_only_permitted_ways_description" = "Koristi samo puteve (trase, staze, itd.) koji su izričito dozvoljeni";
 "route_line_use_map_style_width" = "Koristite zadanuširinu stila mape (%@).";
 "continue_with" = "Nastavi sa %@";
 "purchases_feature_desc_monthly_map_updates" = "Obezbedi pristup redovnim mesečnim ispravkama za oflajn mape.";
@@ -2380,7 +2380,7 @@
 "backup_danger_zone" = "Opasna zona";
 "empty_purchases_description" = "Ako se kupovina ne pojavi ovde, klikni na„%@” ili se obrati našoj podršci.";
 "benefits_for_contributors_primary_descr" = "Trenutni doprinosioci OpenStreetMap.org mogu imati pravo na neograničena ažuriranje mape svakih sat vremena.";
-"track_has_no_needed_data" = "Trasa ne sadrži potrebne podatke.";
+"track_has_no_needed_data" = "Snimljena trasa ne sadrži potrebne podatke.";
 "shared_string_selected" = "Izabrano";
 "routing_attr_motor_type_name" = "Gorivo koje koristi motor";
 "position_on_map_center" = "Centar";
@@ -2540,7 +2540,7 @@
 "shared_string_keep_active" = "Zadrži aktivnim";
 "icon_group_service" = "Servisi";
 "shared_string_cloud" = "Oblak";
-"help_article_navigation_setup_gpx_navigation_name" = "Navigacija pomoću trasa";
+"help_article_navigation_setup_gpx_navigation_name" = "Navigacija po ruti";
 "help_article_widgets_nav_widgets_name" = "Widgeti za navođenje";
 "help_article_widgets_markers_name" = "Markeri widgeta";
 "copy_build_version" = "Kopiraj verziju izdanja";

@@ -284,9 +284,9 @@
 "guidance_preferences_descr" = "Podešavanje navigacije";
 "routing_preferences_descr" = "Podešavanje rutiranja";
 "recording_preferences_descr" = "Postavke snimanja putanja";
-"routing_settings" = "Navigacija";
+"routing_settings" = "Navigacija 3";
 "shared_string_navigation" = "Navigacija 1";
-"get_directions" = "Navigacija";
+"get_directions" = "Navigacija 4";
 "app_mode_bus" = "Autobus";
 "app_mode_train" = "Voz";
 "app_mode_truck" = "Kamion";
@@ -1036,7 +1036,7 @@
 "folder_already_exsists" = "Folder sa ovim imenom već postoji";
 "plan_route_split_before" = "Razdvoj pre";
 "plan_route_split_after" = "Razdvoj posle";
-"follow_track" = "Navigacija snimljenom trasom";
+"follow_track" = "Prati trasu";
 "shared_string_gpx_track" = "Putanja";
 "select_another_track" = "Izaberi drugu trasu";
 "select_track_to_follow" = "Odaberite putanju za praćenje";
@@ -2540,7 +2540,7 @@
 "shared_string_keep_active" = "Zadrži aktivnim";
 "icon_group_service" = "Servisi";
 "shared_string_cloud" = "Oblak";
-"help_article_navigation_setup_gpx_navigation_name" = "Navigacija po ruti";
+"help_article_navigation_setup_gpx_navigation_name" = "Navigacija snimljenom rutom";
 "help_article_widgets_nav_widgets_name" = "Widgeti za navođenje";
 "help_article_widgets_markers_name" = "Markeri widgeta";
 "copy_build_version" = "Kopiraj verziju izdanja";

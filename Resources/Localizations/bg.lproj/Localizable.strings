@@ -511,7 +511,7 @@
 "fav_colors" = "Colors";
 "shared_string_name" = "Име";
 "fav_group" = "Group";
-"shared_string_groups" = "Groups";
+"shared_string_groups" = "Групи";
 "favorite" = "Любими";
 "poi_overlay" = "POI Overlay";
 "poi_dialog_poi_type" = "Вид POI";
@@ -1729,7 +1729,7 @@
 "calculating_progress" = "Calculating...";
 "local_map_names" = "Местни имена";
 "shared_string_history" = "История";
-"today" = "Today";
+"today" = "Днес";
 "yesterday" = "Yesterday";
 "hist_select_remove" = "Please select history items to remove";
 "hist_remove_q" = "Do you want to remove history items?";
@@ -1961,7 +1961,7 @@
 "routing_attr_avoid_subway_name" = "No subways";
 "rendering_attr_showLez_description" = "Show Low Emission Zones on the map. Does not affect routing.";
 "rendering_attr_surfaceIntegrity_name" = "Road surface integrity";
-"routing_attr_allow_intermediate_description" = "More difficult routes with steeper sections. Generally some obstacles that should be avoided.";
+"routing_attr_allow_intermediate_description" = "По-сложен маршрут със стръмни участъци. Наличие на препятствия, които да бъдат избегнати.";
 "rendering_attr_coloredBuildings_name" = "Оцветяване на сградите в зависимост от типа им";
 "rendering_attr_piste_difficulty_advanced_name" = "Advanced";
 "routeInfo_road_types_name" = "Road types";
@@ -2932,3 +2932,4 @@
 "map_source" = "Източник на карти";
 "precipitation_layer" = "Слой с валежи";
 "voices" = "Гласови напътствия";
+"tomorrow" = "Утре";

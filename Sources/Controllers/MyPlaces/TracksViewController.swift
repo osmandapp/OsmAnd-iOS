@@ -102,12 +102,66 @@ private class TrackFolder {
 }
 
 private enum SortingOptions {
-    case name
-    case lastModified
     case nearest
+    case lastModified
+    case nameAZ
+    case nameZA
     case newestDateFirst
+    case oldestDateFirst
     case longestDistanceFirst
+    case shortestDistanceFirst
     case longestDurationFirst
+    case shorterDurationFirst
+    
+    var title: String {
+        switch self {
+        case .nearest:
+            return localizedString("shared_string_nearest")
+        case .lastModified:
+            return localizedString("sort_last_modified")
+        case .nameAZ:
+            return localizedString("track_sort_az")
+        case .nameZA:
+            return localizedString("track_sort_za")
+        case .newestDateFirst:
+            return localizedString("newest_date_first")
+        case .oldestDateFirst:
+            return localizedString("oldest_date_first")
+        case .longestDistanceFirst:
+            return localizedString("longest_distance_first")
+        case .shortestDistanceFirst:
+            return localizedString("shortest_distance_first")
+        case .longestDurationFirst:
+            return localizedString("longest_duration_first")
+        case .shorterDurationFirst:
+            return localizedString("shorter_duration_first")
+        }
+    }
+    
+    var image: UIImage? {
+        switch self {
+        case .nearest:
+            return .icCustomNearby
+        case .lastModified:
+            return .icCustomLastModified
+        case .nameAZ:
+            return .icCustomSortNameAscending
+        case .nameZA:
+            return .icCustomSortNameDescending
+        case .newestDateFirst:
+            return .icCustomSortDateNewest
+        case .oldestDateFirst:
+            return .icCustomSortDateOldest
+        case .longestDistanceFirst:
+            return .icCustomSortLongToShort
+        case .shortestDistanceFirst:
+            return .icCustomSortShortToLong
+        case .longestDurationFirst:
+            return .icCustomSortDurationLongToShort
+        case .shorterDurationFirst:
+            return .icCustomSortDurationShortToLong
+        }
+    }
 }
 
 private enum ButtonActionNumberTag: Int {
@@ -150,6 +204,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     private var isSearchActive = false
     private var isFiltered = false
     private var searchText = ""
+    private var currentSortOption: SortingOptions = .nameAZ
     
     private var selectedTrack: OAGPX?
     private var selectedFolderPath: String?
@@ -335,7 +390,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 }
                 
                 var foldersNames = Array(currentTrackFolder.subfolders.keys)
-                foldersNames = sortWithOptions(foldersNames, options: .name)
+                foldersNames = sortWithOptions(foldersNames, options: currentSortOption)
                 for folderName in foldersNames {
                     if let folder = currentTrackFolder.subfolders[folderName] {
                         createRowFor(folder: folder, section: section)
@@ -343,7 +398,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 }
                 
                 var fileNames = Array(currentTrackFolder.tracks.keys)
-                fileNames = sortWithOptions(fileNames, options: .name)
+                fileNames = sortWithOptions(fileNames, options: currentSortOption)
                 for fileName in fileNames {
                     if let track = currentTrackFolder.tracks[fileName] {
                         createRowFor(track: track, section: section)
@@ -501,11 +556,13 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             let importAction = UIAction(title: localizedString("shared_string_import"), image: UIImage.icCustomImportOutlined) { [weak self] _ in
                 self?.onNavbarImportButtonClicked()
             }
+            let sortSubfoldersActions = createSortSubfoldersMenu()
             
             let selectActionWithDivider = UIMenu(title: "", options: .displayInline, children: [selectAction])
             let addFolderActionWithDivider = UIMenu(title: "", options: .displayInline, children: [addFolderAction])
             let importActionWithDivider = UIMenu(title: "", options: .displayInline, children: [importAction])
-            menuActions.append(contentsOf: [selectActionWithDivider, addFolderActionWithDivider, importActionWithDivider])
+            let sortSubfoldersActionWithDivider = UIMenu(title: "", options: .displayInline, children: [sortSubfoldersActions])
+            menuActions.append(contentsOf: [selectActionWithDivider, addFolderActionWithDivider, importActionWithDivider, sortSubfoldersActionWithDivider])
         } else {
             let showOnMapAction = UIAction(title: localizedString("shared_string_show_on_map"), image: UIImage.icCustomMapPinOutlined) { [weak self] _ in
                 self?.onNavbarShowOnMapButtonClicked()
@@ -532,6 +589,29 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         }
     }
     
+    private func createSortSubfoldersMenu() -> UIMenu {
+        let sortingOptions = UIMenu(options: .displayInline, children: [createAction(for: .nearest), createAction(for: .lastModified)])
+        let alphabeticalOptions = UIMenu(options: .displayInline, children: [createAction(for: .nameAZ), createAction(for: .nameZA)])
+        let dateOptions = UIMenu(options: .displayInline, children: [createAction(for: .newestDateFirst), createAction(for: .oldestDateFirst)])
+        let distanceOptions = UIMenu(options: .displayInline, children: [createAction(for: .longestDistanceFirst), createAction(for: .shortestDistanceFirst)])
+        let durationOptions = UIMenu(options: .displayInline, children: [createAction(for: .longestDurationFirst), createAction(for: .shorterDurationFirst)])
+        return UIMenu(title: localizedString("sort_subfolders_tracks"), image: UIImage.icCustomSortSubfolder, children: [sortingOptions, alphabeticalOptions, dateOptions, distanceOptions, durationOptions])
+    }
+    
+    private func createAction(for option: SortingOptions) -> UIAction {
+        let actionState: UIMenuElement.State = (currentSortOption == option) ? .on : .off
+        return UIAction(title: localizedString(option.title), image: option.image, state: actionState) { [weak self] _ in
+            guard let self else { return }
+            self.currentSortOption = option
+            self.setupNavBarMenuButton()
+            self.updateData()
+            let sortingFolderName = self.isRootFolder ? localizedString("menu_my_trips") : (self.currentFolder.path.lastPathComponent())
+            let sortingOrderName = localizedString(option.title)
+            let message = "\(localizedString("shared_string_subfolders_in")) “\(sortingFolderName)” \(localizedString("shared_string_sorted_by")) “\(sortingOrderName)”"
+            OAUtilities.showToast("", details: message, duration: 4, in: self.tableView)
+        }
+    }
+    
     private func configureToolbar() {
         let buttonTitle = localizedString(areAllItemsSelected() ? "shared_string_deselect_all" : "shared_string_select_all")
         let selectDeselectButton = UIBarButtonItem(title: buttonTitle, style: .plain, target: self, action: #selector(onSelectDeselectAllButtonClicked))
@@ -541,9 +621,29 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         toolbarItems = [selectDeselectButton]
     }
     
-    // #warning("implement sorting in next task")  // See: https://github.com/osmandapp/OsmAnd-Issues/issues/2348
     private func sortWithOptions(_ list: [String], options: SortingOptions) -> [String] {
-        list.sorted { $0 < $1 }
+        switch options {
+        case .nearest:
+            list
+        case .lastModified:
+            list
+        case .nameAZ:
+            list.sorted { $0.localizedCaseInsensitiveCompare($1) == .orderedAscending }
+        case .nameZA:
+            list.sorted { $0.localizedCaseInsensitiveCompare($1) == .orderedDescending }
+        case .newestDateFirst:
+            list
+        case .oldestDateFirst:
+            list
+        case .longestDistanceFirst:
+            list
+        case .shortestDistanceFirst:
+            list
+        case .longestDurationFirst:
+            list
+        case .shorterDurationFirst:
+            list
+        }
     }
     
     private func showErrorAlert(_ text: String) {

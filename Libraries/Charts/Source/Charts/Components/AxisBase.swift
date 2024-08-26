@@ -45,6 +45,7 @@ open class AxisBase: ComponentBase
     @objc open var gridLineDashPhase = CGFloat(0.0)
     @objc open var gridLineDashLengths: [CGFloat]!
     @objc open var gridLineCap = CGLineCap.butt
+    @objc open var labelBackgroundColor = NSUIColor.clear
     
     @objc open var drawGridLinesEnabled = true
     @objc open var drawAxisLineEnabled = true

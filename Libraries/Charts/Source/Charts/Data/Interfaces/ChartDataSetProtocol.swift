@@ -42,6 +42,8 @@ public protocol ChartDataSetProtocol
     /// The number of y-values this DataSet represents
     var entryCount: Int { get }
     
+    func getDivX() -> Double
+    
     /// - Throws: out of bounds
     /// if `i` is out of bounds, it may throw an out-of-bounds exception
     /// - Returns: The entry object found at the given index (not x-value!)

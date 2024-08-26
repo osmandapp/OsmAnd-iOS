@@ -39,14 +39,13 @@ open class YAxisCombinedRenderer: YAxisRenderer {
         guard
             let yAxis = self.axis as? YAxis
             else { return }
-        // UIColor.chartAxisValueBg =  UIColor.white.withAlphaComponent(0.6)
-        // TODO: dark mode
+        
         let primaryAttributes: [NSAttributedString.Key : Any] = [.font: yAxis.labelFont,
                                                                  .foregroundColor: yAxis.labelTextColor,
-                                                                 .backgroundColor:   UIColor.white.withAlphaComponent(0.6)]
+                                                                 .backgroundColor: yAxis.labelBackgroundColor]
         let secondaryAttributes: [NSAttributedString.Key : Any] = [.font: secondaryYAxis?.labelFont ?? UIFont.systemFont(ofSize: 15),
                                                                    .foregroundColor: secondaryYAxis?.labelTextColor ?? .white,
-                                                                   .backgroundColor:   UIColor.white.withAlphaComponent(0.6)]
+                                                                   .backgroundColor: secondaryYAxis?.labelBackgroundColor ?? .white]
 
         let from = yAxis.isDrawBottomYLabelEntryEnabled ? 0 : 1
         let to = yAxis.isDrawTopYLabelEntryEnabled ? yAxis.entryCount : (yAxis.entryCount - 1)

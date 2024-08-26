@@ -73,6 +73,10 @@ open class ChartBaseDataSet: NSObject, ChartDataSetProtocol, NSCopying
         fatalError("xMax is not implemented in ChartBaseDataSet")
     }
     
+    open func getDivX() -> Double {
+        fatalError("clear is not implemented in ChartBaseDataSet")
+    }
+    
     open var entryCount: Int
     {
         fatalError("entryCount is not implemented in ChartBaseDataSet")

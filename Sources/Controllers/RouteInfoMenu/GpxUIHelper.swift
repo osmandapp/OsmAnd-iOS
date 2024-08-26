@@ -182,10 +182,6 @@ import DGCharts
         public func getPriority() -> Float {
             return priority;
         }
-        // FIXME:
-        public func getDivX() -> Double {
-            return divX;
-        }
         
         public func getDivY() -> Double {
             return divY;
@@ -647,6 +643,11 @@ import DGCharts
 
         let barDataSet = LineChartDataSet(entries: entries, label: "")
         barDataSet.highlightColor = .textColorSecondary
+        // [START] Disable circles and lines
+        barDataSet.drawCirclesEnabled = false
+        barDataSet.drawCircleHoleEnabled = false
+        barDataSet.setColor(.clear)
+        // [END] Disable circles and lines
 
         let step = 1.0 / CGFloat(colorValues.count - 1)
         var colorLocations = [CGFloat]()
@@ -661,7 +662,7 @@ import DGCharts
 
         let dataSet = LineChartData(dataSet: barDataSet)
         dataSet.setDrawValues(false)
-
+        
         return dataSet
     }
 
@@ -1061,8 +1062,7 @@ import DGCharts
         let yAxis: YAxis = useRightAxis ? chart.rightAxis : chart.leftAxis
         yAxis.enabled = true
         yAxis.labelTextColor = textColor
-        // FIXME:
-        // yAxis.labelBackgroundColor = UIColor.chartAxisValueBg
+        yAxis.labelBackgroundColor = UIColor.chartAxisValueBg
         return yAxis
     }
 

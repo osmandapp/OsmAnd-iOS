@@ -276,8 +276,7 @@
         }
         else
         {
-            // FIXME:
-            double distance = /*[dataSet getDivX]*/ 1 * position;
+            double distance = [dataSet getDivX] * position;
             return [OAGPXUIHelper getSegmentPointByDistance:segment
                                                     gpxFile:_gpxDoc
                                             distanceToPoint:distance
@@ -360,11 +359,9 @@
         }
         else
         {
-            // FIXME:
-//            double startDistance = startPos * [dataSet getDivX];
-//            double endDistance = endPos * [dataSet getDivX];
-            double startDistance = startPos * 1;
-            double endDistance = endPos * 1;
+            double startDistance = startPos * [dataSet getDivX];
+            double endDistance = endPos * [dataSet getDivX];
+
             double previousSplitDistance = 0;
             for (NSInteger i = 0; i < segment.points.count; i++)
             {

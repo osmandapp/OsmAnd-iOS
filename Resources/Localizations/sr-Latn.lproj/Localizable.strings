@@ -140,7 +140,7 @@
 "reset_plugin_to_default" = "Vraćanje podešavanja dodataka na fabričke vrednosti";
 "map_widget_magnetic_bearing" = "Magnetni kompas";
 "map_widget_bearing" = "Relativno usmeravanje";
-"map_widget_transparent" = "Prozirnost vidžeta";
+"map_widget_transparent" = "Prozirni vidžeti";
 "shared_string_near" = "Blizu";
 "map_widget_next_turn" = "Sledeće skretanje";
 "map_widget_next_turn_small" = "Sledeće skretanje (malo)";

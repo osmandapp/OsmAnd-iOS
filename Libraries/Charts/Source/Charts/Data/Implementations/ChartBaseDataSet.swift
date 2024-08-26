@@ -74,7 +74,7 @@ open class ChartBaseDataSet: NSObject, ChartDataSetProtocol, NSCopying
     }
     
     open func getDivX() -> Double {
-        fatalError("clear is not implemented in ChartBaseDataSet")
+        return 1
     }
     
     open var entryCount: Int

@@ -49,7 +49,7 @@
                analysis:(OAGPXTrackAnalysis *)analysis
                modeCell:(OARouteStatisticsModeCell *)statsModeCell
 {
-    YAxisCombinedRenderer *renderer = (YAxisCombinedRenderer *) chart.rightYAxisRenderer;
+    ChartYAxisCombinedRenderer *renderer = (ChartYAxisCombinedRenderer *) chart.rightYAxisRenderer;
     
     OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:_gpxDoc.path]];
     BOOL calcWithoutGaps = !gpx.joinSegments && (_gpxDoc.tracks.count > 0 && _gpxDoc.tracks.firstObject.generalTrack);

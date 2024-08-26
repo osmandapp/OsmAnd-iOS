@@ -3507,3 +3507,4 @@
 "route_your_destination_is_on_right" = "Ваше одредиште је на десно";
 "shared_string_show" = "Прикажи";
 "weather_wind_animation_enable_descr" = "Омогућава да видите анимациони слој на мапи.";
+"osmand_cloud_delete_account_descr_with_email" = "Да ли сте сигурни да желите да избришете ОсмАнд Клоуд налог: %@?";

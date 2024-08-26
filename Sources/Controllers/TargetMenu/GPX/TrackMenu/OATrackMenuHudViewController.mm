@@ -70,7 +70,6 @@
 #import "MBProgressHUD.h"
 #import "GeneratedAssetSymbols.h"
 #import <SafariServices/SafariServices.h>
-//#import <Charts/DGCharts-Swift.h>
 #import "OsmAnd_Maps-Swift.h"
 #import <DGCharts/DGCharts-Swift.h>
 

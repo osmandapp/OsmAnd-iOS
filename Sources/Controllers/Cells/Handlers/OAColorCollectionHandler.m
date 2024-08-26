@@ -110,7 +110,7 @@
         [collectionView reloadItemsAtIndexPaths:@[prevSelectedIndexPath, weakSelf.selectedIndexPath]];
         if (weakSelf.delegate)
         {
-            [weakSelf.delegate onCollectionItemSelected:weakSelf.selectedIndexPath];
+            [weakSelf.delegate onCollectionItemSelected:weakSelf.selectedIndexPath collectionView:collectionView];
             [weakSelf.delegate reloadCollectionData];
         }
         if (![collectionView.indexPathsForVisibleItems containsObject:weakSelf.selectedIndexPath])
@@ -133,7 +133,7 @@
     if (self.delegate)
     {
         if (indexPath == _selectedIndexPath)
-            [self.delegate onCollectionItemSelected:indexPath];
+            [self.delegate onCollectionItemSelected:indexPath collectionView:collectionView];
         else
             [self.delegate reloadCollectionData];
     }
@@ -191,7 +191,7 @@
             weakSelf.selectedIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
             [collectionView reloadItemsAtIndexPaths:@[weakSelf.selectedIndexPath]];
             if (weakSelf.delegate)
-                [weakSelf.delegate onCollectionItemSelected:weakSelf.selectedIndexPath];
+                [weakSelf.delegate onCollectionItemSelected:weakSelf.selectedIndexPath collectionView:collectionView];
 
             if (![collectionView.indexPathsForVisibleItems containsObject:weakSelf.selectedIndexPath])
             {
@@ -297,6 +297,8 @@
 {
     if (_hostVC)
     {
+        //TODO: test - create navigation controller. listen to navbar Cancel button
+        
         UIColorPickerViewController *colorViewController = [[UIColorPickerViewController alloc] init];
         colorViewController.delegate = self;
         colorViewController.selectedColor = [colorItem getColor];
@@ -348,7 +350,7 @@
 
 - (void)onCollectionItemSelected:(NSIndexPath *)indexPath {
     if (self.delegate)
-        [self.delegate onCollectionItemSelected:indexPath];
+        [self.delegate onCollectionItemSelected:indexPath collectionView:[self getCollectionView]];
 }
 
 - (void)selectColorItem:(OAColorItem *)colorItem
@@ -357,7 +359,7 @@
     [self setSelectedIndexPath:selectedIndex];
     if (self.delegate)
     {
-        [self.delegate onCollectionItemSelected:selectedIndex];
+        [self.delegate onCollectionItemSelected:selectedIndex collectionView:[self getCollectionView]];
         [self.delegate reloadCollectionData];
     }
 }

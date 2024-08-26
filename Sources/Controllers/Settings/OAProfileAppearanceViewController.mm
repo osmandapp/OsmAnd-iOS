@@ -25,6 +25,7 @@
 #import "OAColorCollectionHandler.h"
 #import "OAGPXAppearanceCollection.h"
 #import "OAColorCollectionViewController.h"
+#import "OAIconsPaletteCell.h"
 #import "GeneratedAssetSymbols.h"
 
 static const int kIconsAtRestRow = 0;
@@ -42,7 +43,6 @@ static NSString *kCellHideSeparatorKey = @"kCellHideSeparatorKey";
 static NSString *kCellNonInteractive = @"kCellNonInteractive";
 
 static NSString *kColorsCellTitleKey =  @"kColorsCellTitleKey";
-static NSString *kColorsCellKey =  @"kColorsCellKey";
 static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
 
 @interface OAApplicationProfileObject : NSObject
@@ -124,7 +124,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
 
 @end
 
-@interface OAProfileAppearanceViewController() <UITableViewDelegate, UITableViewDataSource,  OAIconsTableViewCellDelegate, OALocationIconsTableViewCellDelegate, OAColorsCollectionCellDelegate, OAColorCollectionDelegate, UITextFieldDelegate>
+@interface OAProfileAppearanceViewController() <UITableViewDelegate, UITableViewDataSource, OALocationIconsTableViewCellDelegate, OAColorsCollectionCellDelegate, OAColorCollectionDelegate, UITextFieldDelegate>
 
 @end
 
@@ -142,6 +142,8 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     
     OAColorCollectionHandler *_colorCollectionHandler;
     BOOL _needToScrollToSelectedColor;
+    
+    IconCollectionHandler *_iconCollectionHandler;
     
     NSArray<NSString *> *_customModelNames;
     NSArray<OALocationIcon *> *_locationIcons;
@@ -314,14 +316,15 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     OATableSectionData *profileColorSection = [_data createNewSection];
     [profileColorSection addRowFromDictionary:@{
         kCellTypeKey : [OAColorsPaletteCell getCellIdentifier],
-        kCellKeyKey : kColorsCellKey,
         kCellTitleKey : OALocalizedString(@"shared_string_color"),
+        kCellDescrKey : OALocalizedString(@"shared_string_all_colors"),
     }];
     
     OATableSectionData *profileIconSection = [_data createNewSection];
     [profileIconSection addRowFromDictionary:@{
-        kCellTypeKey : [OAIconsTableViewCell getCellIdentifier],
-        kCellTitleKey : OALocalizedString(@"select_icon_profile_dialog_title"),
+        kCellTypeKey : [OAIconsPaletteCell getCellIdentifier],
+        kCellTitleKey : OALocalizedString(@"profile_icon"),
+        kCellDescrKey : OALocalizedString(@"shared_string_all_icons"),
     }];
     
     OATableSectionData *positionIconsSection = [_data createNewSection];
@@ -406,6 +409,16 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
                @"ic_action_kayak",
                @"ic_action_motorboat",
                @"ic_action_light_aircraft"];
+    
+
+    _iconCollectionHandler =  [[IconCollectionHandler alloc] initWithData:@[_icons] collectionView:nil];
+    _iconCollectionHandler.delegate = self;
+    _iconCollectionHandler.hostVC = self;
+    _iconCollectionHandler.regularIconColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+    _iconCollectionHandler.selectedIconColor = UIColorFromRGB(_changedProfile.profileColor);
+    [_iconCollectionHandler setItemSizeWithSize:48];
+    NSInteger selectedIconIndex = [_icons indexOfObject:_changedProfile.iconName];
+    [_iconCollectionHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:selectedIconIndex inSection:0]];
 }
 
 - (NSArray<OALocationIcon *> *) getlocationIcons
@@ -619,30 +632,6 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         cell.inputField.delegate = self;
         return cell;
     }
-    else if ([cellType isEqualToString:[OAIconsTableViewCell getCellIdentifier]])
-    {
-        OAIconsTableViewCell *cell = nil;
-        cell = (OAIconsTableViewCell*)[tableView dequeueReusableCellWithIdentifier:[OAIconsTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconsTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconsTableViewCell *)[nib objectAtIndex:0];
-            cell.dataArray = _icons;
-            cell.delegate = self;
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.separatorInset = UIEdgeInsetsZero;
-            cell.valueLabel.hidden = YES;
-        }
-        if (cell)
-        {
-            cell.titleLabel.text = [item title];
-            cell.currentColor = _changedProfile.profileColor;
-            cell.currentIcon = [_icons indexOfObject:_changedProfile.iconName];
-            [cell.collectionView reloadData];
-            [cell layoutIfNeeded];
-        }
-        return cell;
-    }
     else if ([cellType isEqualToString:[OALocationIconsTableViewCell getCellIdentifier]])
     {
         static NSString* const identifierCell = [OALocationIconsTableViewCell getCellIdentifier];
@@ -689,12 +678,15 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAColorsPaletteCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
+            cell.disableAnimationsOnStart = YES;
             [_colorCollectionHandler setCollectionView:cell.collectionView];
             [cell setCollectionHandler:_colorCollectionHandler];
             cell.hostVC = self;
         }
         if (cell)
         {
+            cell.topLabel.text = item.title;
+            [cell.bottomButton setTitle:item.descr forState:UIControlStateNormal];
             [cell.rightActionButton setImage:[UIImage templateImageNamed:@"ic_custom_add"] forState:UIControlStateNormal];
             cell.rightActionButton.tag = indexPath.section << 10 | indexPath.row;
             [cell.collectionView reloadData];
@@ -711,6 +703,29 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
                 }
                 _needToScrollToSelectedColor = NO;
             }
+        }
+        return cell;
+    }
+    else if ([cellType isEqualToString:[OAIconsPaletteCell getCellIdentifier]])
+    {
+        OAIconsPaletteCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconsPaletteCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconsPaletteCell getCellIdentifier] owner:self options:nil];
+            cell = nib[0];
+            cell.disableAnimationsOnStart = YES;
+            [_iconCollectionHandler setCollectionView:cell.collectionView];
+            [cell setCollectionHandler:_iconCollectionHandler];
+            cell.hostVC = self;
+        }
+        if (cell)
+        {
+            cell.topLabel.text = item.title;
+            [cell.bottomButton setTitle:item.descr forState:UIControlStateNormal];
+            [cell.rightActionButton setImage:[UIImage templateImageNamed:@"ic_custom_add"] forState:UIControlStateNormal];
+            cell.rightActionButton.tag = indexPath.section << 10 | indexPath.row;
+            [cell.collectionView reloadData];
+            [cell layoutIfNeeded];
         }
         return cell;
     }
@@ -755,17 +770,6 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-}
-
-#pragma mark - OAIconsTableViewCellDelegate
-
-- (void)iconChanged:(NSInteger)tag
-{
-    _hasChangesBeenMade = YES;
-    _changedProfile.iconName = _icons[tag];
-    
-    _profileIconImageView.image = [UIImage templateImageNamed:_changedProfile.iconName];
-    [_tableView reloadSections:[NSIndexSet indexSetWithIndex:kProfileIconSectionIndex] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 #pragma mark - OASeveralViewsTableViewCellDelegate
@@ -827,18 +831,31 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
 
 #pragma mark - OACollectionCellDelegate
 
-- (void)onCollectionItemSelected:(NSIndexPath *)indexPath
+- (void)onCollectionItemSelected:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
 {
-    _hasChangesBeenMade = YES;
-    _needToScrollToSelectedColor = YES;
-    _changedProfile.color = -1;
-    _changedProfile.customColor = (int)[_colorCollectionHandler getData][0][indexPath.row].value;
-    
-    _locationIconImages = [self getlocationIconImages];
-    _navigationIconImages = [self getlocationIconImages];
-    _profileIconImageView.tintColor = UIColorFromRGB(_changedProfile.profileColor);
-    [self generateData];
-    [_tableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(kProfileIconSectionIndex, _tableView.numberOfSections - kProfileIconSectionIndex)] withRowAnimation:UITableViewRowAnimationNone];
+    if (collectionView == [_colorCollectionHandler getCollectionView])
+    {
+        _hasChangesBeenMade = YES;
+        _needToScrollToSelectedColor = YES;
+        _changedProfile.color = -1;
+        _changedProfile.customColor = (int)[_colorCollectionHandler getData][0][indexPath.row].value;
+        
+        _locationIconImages = [self getlocationIconImages];
+        _navigationIconImages = [self getlocationIconImages];
+        _profileIconImageView.tintColor = UIColorFromRGB(_changedProfile.profileColor);
+        
+        _iconCollectionHandler.selectedIconColor = UIColorFromRGB(_changedProfile.profileColor);
+        
+        [self generateData];
+        [_tableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(kProfileIconSectionIndex, _tableView.numberOfSections - kProfileIconSectionIndex)] withRowAnimation:UITableViewRowAnimationNone];
+    }
+    else if (collectionView == [_iconCollectionHandler getCollectionView])
+    {
+        _hasChangesBeenMade = YES;
+        _changedProfile.iconName = _icons[indexPath.row];
+        _profileIconImageView.image = [UIImage templateImageNamed:_changedProfile.iconName];
+        [_tableView reloadSections:[NSIndexSet indexSetWithIndex:kProfileIconSectionIndex] withRowAnimation:UITableViewRowAnimationNone];
+    }
 }
 
 - (void)reloadCollectionData

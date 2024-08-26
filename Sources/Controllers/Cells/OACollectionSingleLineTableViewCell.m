@@ -78,7 +78,7 @@
             UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
             layout.scrollDirection = scrollDirection;
             layout.itemSize = [_collectionHandler getItemSize];
-            [self.collectionView setCollectionViewLayout:layout animated:YES];
+            [self.collectionView setCollectionViewLayout:layout animated:!_disableAnimationsOnStart];
 
             NSIndexPath *selectedIndexPath = [_collectionHandler getSelectedIndexPath];
             if (selectedIndexPath.row != NSNotFound
@@ -90,7 +90,7 @@
                                             atScrollPosition:isHorizontal
                     ? UICollectionViewScrollPositionCenteredHorizontally
                     : UICollectionViewScrollPositionCenteredVertically
-                                                    animated:YES];
+                                                    animated:!_disableAnimationsOnStart];
             }
         });
     }];

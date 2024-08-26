@@ -171,6 +171,7 @@
 #import "OATextInputFloatingCell.h"
 #import "OAInputTableViewCell.h"
 #import "OAColorsCollectionViewCell.h"
+#import "OAIconsCollectionViewCell.h"
 
 // Views
 #import "OASegmentedSlider.h"

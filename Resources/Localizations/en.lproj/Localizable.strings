@@ -867,6 +867,7 @@
 "shared_string_external" = "External";
 "shared_string_coloring" = "Coloring";
 "shared_string_all_colors" = "All colors";
+"shared_string_all_icons" = "All icons";
 "shared_string_add_color" = "Add color";
 "shared_string_edit_color" = "Edit color";
 "shared_string_duplicate_color" = "Duplicate color";
@@ -888,6 +889,7 @@
 "shared_string_deleting_complete" = "Deleting complete";
 "shared_string_colors" = "Colors";
 
+"profile_icon" = "Profile icon";
 "restart" = "Restart";
 
 "offline_maps" = "Offline Maps";

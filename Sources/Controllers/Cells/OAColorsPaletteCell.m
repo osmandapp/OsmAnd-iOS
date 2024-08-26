@@ -55,7 +55,7 @@
 - (void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([self getColorCollectionHandler])
-        [[self getColorCollectionHandler] onItemSelected:indexPath collectionView:collectionView];
+        [[self getColorCollectionHandler] onItemSelected:indexPath collectionView:[[self getColorCollectionHandler] getCollectionView]];
 }
 
 #pragma mark - Selectors

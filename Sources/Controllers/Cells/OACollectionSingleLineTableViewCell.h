@@ -22,6 +22,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *rightActionButton;
 
 @property (weak, nonatomic) id<OACollectionTableViewCellDelegate> delegate;
+@property (nonatomic) BOOL disableAnimationsOnStart;
 
 - (void)setCollectionHandler:(OABaseCollectionHandler *)collectionHandler;
 - (OABaseCollectionHandler *)getCollectionHandler;

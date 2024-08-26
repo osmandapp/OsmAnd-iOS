@@ -701,7 +701,7 @@
 - (void)selectColorItem:(OAColorItem *)colorItem
 {
     _needToScrollToSelectedColor = YES;
-    [self onCollectionItemSelected:[NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:colorItem] inSection:0]];
+    [self onCollectionItemSelected:[NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:colorItem] inSection:0] collectionView:nil];
     [self.tableView reloadRowsAtIndexPaths:@[_colorGridIndexPath, _shapeIndexPath]
                           withRowAnimation:UITableViewRowAnimationNone];
 }
@@ -755,7 +755,7 @@
 
 #pragma mark - OACollectionCellDelegate
 
-- (void)onCollectionItemSelected:(NSIndexPath *)indexPath
+- (void)onCollectionItemSelected:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
 {
     _selectedColorItem = _sortedColorItems[indexPath.row];
     self.editColor = [_selectedColorItem getColor];

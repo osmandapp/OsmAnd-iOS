@@ -11,7 +11,7 @@
 
 @protocol OACollectionCellDelegate <NSObject>
 
-- (void)onCollectionItemSelected:(NSIndexPath *)indexPath;
+- (void)onCollectionItemSelected:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView;
 - (void)reloadCollectionData;
 
 @end

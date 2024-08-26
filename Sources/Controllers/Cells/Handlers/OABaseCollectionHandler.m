@@ -122,7 +122,7 @@
     [self setSelectedIndexPath:indexPath];
     [collectionView reloadItemsAtIndexPaths:prevSelectedColorIndex ? @[prevSelectedColorIndex, indexPath] : @[indexPath]];
     if (self.delegate)
-        [self.delegate onCollectionItemSelected:indexPath];
+        [self.delegate onCollectionItemSelected:indexPath collectionView:collectionView];
 }
 
 @end

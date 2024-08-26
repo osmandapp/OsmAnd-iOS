@@ -593,6 +593,7 @@
 		462545AB28D3688900637964 /* ic_custom_cross_buy_colored_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 462545A728D3688800637964 /* ic_custom_cross_buy_colored_day@3x.png */; };
 		4625AF902C2335870099EB89 /* TerrainMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4625AF8F2C2335870099EB89 /* TerrainMode.swift */; };
 		4627664D283D766E00F412F6 /* OASubscriptionCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4627664C283D766E00F412F6 /* OASubscriptionCardView.xib */; };
+		462A7FB72C78E474000D9451 /* ElevationChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462A7FB62C78E474000D9451 /* ElevationChart.swift */; };
 		462BF6DC2B7E8347003ECA2C /* DeleteAccountCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462BF6DB2B7E8347003ECA2C /* DeleteAccountCommand.swift */; };
 		462E13E82BFA36D40038BCCB /* CustomMapButtonsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462E13E72BFA36D40038BCCB /* CustomMapButtonsViewController.swift */; };
 		462F13EB283FD0D400B73795 /* OAOsmLiveFeaturesCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 462F13E9283FD0D300B73795 /* OAOsmLiveFeaturesCardView.xib */; };
@@ -786,6 +787,7 @@
 		46BCD1922C2DCA0F008749EC /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 463EFDD92C2C92A300549EF7 /* ColorPalette.swift */; };
 		46BD939B2B763CC8004BC4F5 /* FFCircularProgressView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46BD939A2B763CC8004BC4F5 /* FFCircularProgressView+Extension.swift */; };
 		46BE1FFE2AF0317D005F952E /* ScreenOrientationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46BE1FFD2AF0317D005F952E /* ScreenOrientationHelper.swift */; };
+		46BE5F082C7B41B400126CFF /* ElevationXAxisRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46BE5F072C7B41B400126CFF /* ElevationXAxisRenderer.swift */; };
 		46C2FD8328B38EF600771E6E /* ic_custom_user_profile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46C2FD7D28B38EF400771E6E /* ic_custom_user_profile@2x.png */; };
 		46C2FD8428B38EF600771E6E /* ic_custom_user_profile@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46C2FD7E28B38EF500771E6E /* ic_custom_user_profile@3x.png */; };
 		46C2FD8528B38EF600771E6E /* ic_custom_storage@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46C2FD7F28B38EF500771E6E /* ic_custom_storage@3x.png */; };
@@ -4090,6 +4092,7 @@
 		462545A728D3688800637964 /* ic_custom_cross_buy_colored_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_cross_buy_colored_day@3x.png"; path = "Resources/Icons/ic_custom_cross_buy_colored_day@3x.png"; sourceTree = "<group>"; };
 		4625AF8F2C2335870099EB89 /* TerrainMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerrainMode.swift; sourceTree = "<group>"; };
 		4627664C283D766E00F412F6 /* OASubscriptionCardView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OASubscriptionCardView.xib; sourceTree = "<group>"; };
+		462A7FB62C78E474000D9451 /* ElevationChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElevationChart.swift; sourceTree = "<group>"; };
 		462BF6DB2B7E8347003ECA2C /* DeleteAccountCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAccountCommand.swift; sourceTree = "<group>"; };
 		462E13E72BFA36D40038BCCB /* CustomMapButtonsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMapButtonsViewController.swift; sourceTree = "<group>"; };
 		462F13E9283FD0D300B73795 /* OAOsmLiveFeaturesCardView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAOsmLiveFeaturesCardView.xib; sourceTree = "<group>"; };
@@ -4305,6 +4308,7 @@
 		46BB3678294BE77200155EC8 /* OAEmissionHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAEmissionHelper.mm; sourceTree = "<group>"; };
 		46BD939A2B763CC8004BC4F5 /* FFCircularProgressView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FFCircularProgressView+Extension.swift"; sourceTree = "<group>"; };
 		46BE1FFD2AF0317D005F952E /* ScreenOrientationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenOrientationHelper.swift; sourceTree = "<group>"; };
+		46BE5F072C7B41B400126CFF /* ElevationXAxisRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElevationXAxisRenderer.swift; sourceTree = "<group>"; };
 		46C2FD7D28B38EF400771E6E /* ic_custom_user_profile@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_user_profile@2x.png"; path = "Resources/Icons/ic_custom_user_profile@2x.png"; sourceTree = "<group>"; };
 		46C2FD7E28B38EF500771E6E /* ic_custom_user_profile@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_user_profile@3x.png"; path = "Resources/Icons/ic_custom_user_profile@3x.png"; sourceTree = "<group>"; };
 		46C2FD7F28B38EF500771E6E /* ic_custom_storage@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_storage@3x.png"; path = "Resources/Icons/ic_custom_storage@3x.png"; sourceTree = "<group>"; };
@@ -12082,6 +12086,8 @@
 				DA5A7D4026C563A300F274C7 /* OARoutingTargetCell.h */,
 				DA5A7D4A26C563A300F274C7 /* OARoutingTargetCell.m */,
 				DA5A7D4826C563A300F274C7 /* OARoutingTargetCell.xib */,
+				462A7FB62C78E474000D9451 /* ElevationChart.swift */,
+				46BE5F072C7B41B400126CFF /* ElevationXAxisRenderer.swift */,
 			);
 			path = RouteInfoMenu;
 			sourceTree = "<group>";
@@ -16552,6 +16558,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				46BE5F082C7B41B400126CFF /* ElevationXAxisRenderer.swift in Sources */,
 				46E9AD9228DC894600CC55F9 /* OASimpleTableViewCell.m in Sources */,
 				DA5A830926C563A800F274C7 /* OAIconBackgroundCollectionViewCell.m in Sources */,
 				DA5A831D26C563A800F274C7 /* OACollectionViewCell.mm in Sources */,
@@ -16649,6 +16656,7 @@
 				FAA6505C2ADD42C50020DCEA /* BLEExternalSensorsViewController.swift in Sources */,
 				FA7DCF552AF10ABF0045D136 /* BluetoothDisableView.swift in Sources */,
 				DA5A83D626C563A800F274C7 /* OAReplaceFavoriteViewController.mm in Sources */,
+				462A7FB72C78E474000D9451 /* ElevationChart.swift in Sources */,
 				DA5A815D26C563A700F274C7 /* OASRTMPlugin.mm in Sources */,
 				C5AF90792A25E8A100989A86 /* OAKeyboardHintBar.m in Sources */,
 				DA5A819A26C563A700F274C7 /* OAMapOverlayAction.mm in Sources */,

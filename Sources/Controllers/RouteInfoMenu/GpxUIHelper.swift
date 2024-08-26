@@ -77,7 +77,7 @@ class GpxUIHelper: NSObject {
         }
 
         func stringForValue(_ value: Double, axis: AxisBase?) -> String {
-            if let formatX, formatX.length ?? 0 > 0 {
+            if let formatX, formatX.length > 0 {
                 return String(format: formatX, value) + " " + unitsX
             } else {
                 return String(format: "%.0f", value) + " " + unitsX
@@ -139,6 +139,8 @@ class GpxUIHelper: NSObject {
 
     final class OrderedLineDataSet: LineChartDataSet {
 
+        private let leftAxis: Bool
+
         var priority: Float
         var units: String
         var divX: Double = 1
@@ -152,7 +154,8 @@ class GpxUIHelper: NSObject {
         init(entries: [ChartDataEntry]?,
              label: String?,
              dataSetType: GPXDataSetType,
-             dataSetAxisType: GPXDataSetAxisType) {
+             dataSetAxisType: GPXDataSetAxisType,
+             leftAxis: Bool) {
             self.dataSetType = dataSetType
             self.dataSetAxisType = dataSetAxisType
             self.priority = 0
@@ -160,6 +163,7 @@ class GpxUIHelper: NSObject {
             self.color = dataSetType.getTextColor()
             super.init(entries: entries, label: label)
             self.mode = LineChartDataSet.Mode.linear
+            self.leftAxis = leftAxis
         }
 
         required init() {
@@ -192,6 +196,10 @@ class GpxUIHelper: NSObject {
 
         func getUnits() -> String {
             units
+        }
+
+        func isLeftAxis() -> Bool {
+            leftAxis
         }
     }
 
@@ -876,7 +884,8 @@ class GpxUIHelper: NSObject {
         let dataSet = OrderedLineDataSet(entries: values,
                                          label: "",
                                          dataSetType: GPXDataSetType.altitude,
-                                         dataSetAxisType: axisType)
+                                         dataSetAxisType: axisType,
+                                         leftAxis: !useRightAxis)
         dataSet.priority = Float((analysis.avgElevation - analysis.minElevation) * convEle)
         dataSet.divX = divX
         dataSet.mulY = convEle
@@ -1021,7 +1030,8 @@ class GpxUIHelper: NSObject {
         let dataSet = OrderedLineDataSet(entries: slopeValues,
                                          label: "",
                                          dataSetType: GPXDataSetType.slope,
-                                         dataSetAxisType: axisType)
+                                         dataSetAxisType: axisType,
+                                         leftAxis: !useRightAxis)
         dataSet.divX = divX
         dataSet.units = mainUnitY
 
@@ -1197,7 +1207,11 @@ class GpxUIHelper: NSObject {
                                              divY: divSpeed,
                                              calcWithoutGaps: calcWithoutGaps)
 
-        let dataSet = OrderedLineDataSet(entries: values, label: "", dataSetType: GPXDataSetType.speed, dataSetAxisType: axisType)
+        let dataSet = OrderedLineDataSet(entries: values,
+                                         label: "",
+                                         dataSetType: GPXDataSetType.speed,
+                                         dataSetAxisType: axisType, leftAxis:
+                                            !useRightAxis)
         yAxis.valueFormatter = ValueFormatter(formatX: dataSet.yMax < 3 ? "%.0f" : nil, unitsX: mainUnitY)
 
         if divSpeed.isNaN {

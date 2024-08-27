@@ -848,13 +848,14 @@
 
 @implementation OATopIndexMatch
 
-- (instancetype)initWithSubType:(NSString *)value translatedValue:(NSString *)translatedValue
+- (instancetype)initWithSubType:(NSString *)value translatedValue:(NSString *)translatedValue key:(NSString *)key
 {
     self = [super init];
     if (self)
     {
         _value = value;
         _translatedValue = translatedValue;
+        _key = key;
     }
     return self;
 }
@@ -1219,65 +1220,58 @@
         
         dataInterface->loadAmenityTopIndexSubtypes(poiSubTypes, &bbox31);
         NSString *lang = [OAUtilities currentLang];
-        NSMutableArray<OATopIndexMatch *> *matches = [[NSMutableArray alloc] init];
-        for (const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(poiSubTypes)))
+        OATopIndexMatch *match = [self matchTopIndex:poiSubTypes phrase:phrase lang:lang];
+        if (match != nil)
         {
-            NSMutableArray<NSString *> *values = [[NSMutableArray alloc] init];
-            for (const QString &qString : entry.value())
-            {
-                [values addObject:qString.toNSString()];
-            }
-            if ([nm matchesMap:values])
-            {
-                OATopIndexMatch *match = [self matchTopIndex:values phrase:phrase];
-                if (lang.length > 0 && [entry.key().toNSString() containsString:[NSString stringWithFormat:@":%@", lang]])
-                {
-                    [matches addObject:match];
-                }
-                for (OATopIndexMatch *m in matches)
-                {
-                    if (![m.value containsString:@":"])
-                    {
-//                        return?
-                    }
-                    if ([matches count] > 0) {
-//                        return [matches objectAtIndex:0];
-                    }
-                }
-                if (match != nil)
-                {
-                    OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
-                    res.localeName = match.translatedValue;
-                    OsmAnd::LogPrintf(OsmAnd::LogSeverityLevel::Debug, "Top index found: %s %s", entry.key().toStdString().c_str(), QString::fromNSString(match.value).toStdString().c_str());
-                    res.object = [[OATopIndexFilter alloc] initWithPoiSubType:entry.key().toNSString() value:match.value];
-                    [self addPoiTypeResult:phrase resultMatcher:resultMatcher topFiltersOnly:NO stdFilterId:nil searchResult:res];
-                }
-            }
+            OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
+            res.localeName = match.translatedValue;
+            OsmAnd::LogPrintf(OsmAnd::LogSeverityLevel::Debug, "Top index found: %s %s", QString::fromNSString(match.key).toStdString().c_str(), QString::fromNSString(match.value).toStdString().c_str());
+            res.object = [[OATopIndexFilter alloc] initWithPoiSubType:match.key value:match.value];
+            [self addPoiTypeResult:phrase resultMatcher:resultMatcher topFiltersOnly:NO stdFilterId:nil searchResult:res];
         }
     }
 }
 
-- (OATopIndexMatch *)matchTopIndex:(NSArray<NSString *> *)values phrase:(OASearchPhrase *)phrase
+- (OATopIndexMatch *)matchTopIndex:(QHash<QString, QStringList>)poiSubtypes phrase:(OASearchPhrase *)phrase lang:(NSString *)lang
 {
     NSString *search = [phrase getText:YES];
     OANameStringMatcher *nm = [[OANameStringMatcher alloc] initWithNamePart:search mode:CHECK_ONLY_STARTS_WITH];
-    NSString * topIndexValue = nil;
-    NSString * translate = nil;
+    NSMutableArray<OATopIndexMatch *> *matches = [[NSMutableArray alloc] init];
     
-    for (NSString * s in values)
+    for (const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(poiSubtypes)))
     {
-        translate = [self getTopIndexTranslation:s];
-        if ([nm matches:s] || [nm matches:translate])
+        const QStringList & values = entry.value();
+        NSString * translate = nil;
+        NSString * topIndexValue = nil;
+        for (const QString & s : values)
         {
-            topIndexValue = s;
-            break;
+            translate = [self getTopIndexTranslation:s.toNSString()];
+            if ([nm matches:s.toNSString()] || [nm matches:translate])
+            {
+                topIndexValue = s.toNSString();
+                break;
+            }
+        }
+        if (topIndexValue != nil)
+        {
+            OATopIndexMatch *topIndexMatch = [[OATopIndexMatch alloc] initWithSubType:topIndexValue translatedValue:translate key:entry.key().toNSString()];
+            if (lang.length > 0 && [topIndexMatch.key containsString:[NSString stringWithFormat:@":%@", lang]])
+            {
+                return topIndexMatch;
+            }
+            [matches addObject:topIndexMatch];
         }
     }
-    
-    if (topIndexValue != nil)
+    for (OATopIndexMatch *m in matches)
     {
-        OATopIndexMatch *topIndexMatch = [[OATopIndexMatch alloc] initWithSubType:topIndexValue translatedValue:translate];
-        return topIndexMatch;
+        if (![m.key containsString:@":"])
+        {
+            return m;
+        }
+    }
+    if (matches.count > 0)
+    {
+        return [matches objectAtIndex:0];
     }
     return nil;
 }

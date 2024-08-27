@@ -132,9 +132,10 @@ static const int PREFERRED_DEFAULT_ZOOM = 15;
 
 @interface OATopIndexMatch : NSObject
 
+@property (nonatomic, strong) NSString *key;
 @property (nonatomic, strong) NSString *value;
 @property (nonatomic, strong) NSString *translatedValue;
 
-- (instancetype) initWithSubType:(NSString *)value translatedValue:(NSString *)translatedValue;
+- (instancetype) initWithSubType:(NSString *)value translatedValue:(NSString *)translatedValue key:(NSString *)key;
 
 @end

@@ -504,13 +504,13 @@
 "towards" = "smerom k";
 "route_roundabout" = "Kruhový objazd: Choďte cez %d. výjazd a pokračujte";
 "route_roundabout_short" = "Použite výjazd %d a pokračujte";
-"route_kl" = "Držte sa vľavo";
-"route_kr" = "Držte sa vpravo";
+"route_kl" = "Držte sa vľavo a pokračujte";
+"route_kr" = "Držte sa vpravo a pokračujte";
 "route_tr" = "Odbočte doprava a pokračujte";
-"route_tshr" = "Odbočte ostro doprava a pokračujte";
+"route_tshr" = "Odbočte prudko doprava a pokračujte";
 "route_tslr" = "Odbočte mierne doprava a pokračujte";
 "route_tl" = "Odbočte doľava a pokračujte";
-"route_tshl" = "Odbočte ostro doľava a pokračujte";
+"route_tshl" = "Odbočte prudko doľava a pokračujte";
 "route_tsll" = "Odbočte mierne doľava a pokračujte";
 "route_tu" = "Otočte sa a pokračujte";
 "route_head" = "Pokračujte rovno";
@@ -2922,3 +2922,5 @@
 "download_srtm_maps" = "Údaje vrstevníc";
 "temperature_layer" = "Vrstva teploty";
 "driving_region_uk" = "Veľká Británia a podobné krajiny";
+"rendering_value_pale_name" = "Bledá";
+"driving_region_india" = "India";

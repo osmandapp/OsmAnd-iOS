@@ -1792,7 +1792,7 @@
 "user_password" = "Парола";
 "shared_string_filters" = "Filters";
 "edit_filter" = "Edit categories";
-"edit_filter_save_as_menu_item" = "Запиши като";
+"edit_filter_save_as_menu_item" = "Запазване като";
 "delete_filter" = "Delete filter";
 "save_filter" = "Save filter";
 "edit_filter_delete_dialog_title" = "Изтриване на избрания филтър?";
@@ -2933,3 +2933,4 @@
 "precipitation_layer" = "Слой с валежи";
 "voices" = "Гласови напътствия";
 "tomorrow" = "Утре";
+"help_article_plan_route_coordinate_input_name" = "Въвеждане на координати";

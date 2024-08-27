@@ -2465,7 +2465,7 @@
 "free_favorites_backup_description" = "Registreer voor OsmAnd Cloud om een gratis back-up te maken van favorieten en instellingen.";
 "announcement_time_descr" = "De aankondigingstijd van verschillende aankondigen hangt af van type en huidige snelheid.";
 "shared_string_mode" = "Modus";
-"activity_type_motorbike_name" = "Bromfiets";
+"activity_type_motorbike_name" = "Motorfiets";
 "shared_string_open_track" = "Track openen";
 "global_settings" = "Algemene instellingen";
 "activity_type_car_name" = "Auto\'s";
@@ -2812,3 +2812,4 @@
 "shared_string_trash" = "Prullenbak";
 "key_event_category_map_interactions" = "Kaart-interacties";
 "shared_string_action" = "Actie";
+"app_mode_moped" = "Bromfiets";

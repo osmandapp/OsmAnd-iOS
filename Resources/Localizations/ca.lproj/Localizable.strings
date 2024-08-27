@@ -2164,11 +2164,11 @@
 "weather_online_cache" = "Memòria cau en línia";
 "deleted_file" = "Fitxer suprimit";
 "animate_my_location" = "Anima la pròpia posició";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "cloud_all_changes_downloaded" = "S\'han baixat tots els canvis";
 "enough_contributions_descr" = "Enhorabona, heu fet prou contribucions a OpenStreetMap per a gaudir d\'actualitzacions de mapes il·limitades!";
 "shared_string_weather" = "Oratge";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "nautical_depth_points" = "Punts de profunditat nàutica";
 "approximate_file_size" = "Mida aproximada del fitxer";
 "show_borders_of_downloaded_maps" = "Mostra les vores dels mapes baixats";

@@ -988,6 +988,9 @@ static const NSInteger kElevationMaxMeters = 2000;
             selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:[_gradientColorsCollection getPaletteColorByName:[_terrainMode getKeyName]]] inSection:0];
         [paletteHandler setSelectedIndexPath:selectedIndexPath];
         [cell setCollectionHandler:paletteHandler];
+        cell.collectionView.contentInset = UIEdgeInsetsMake(0, 10, 0, 0);
+        [cell configureTopOffset:12];
+        [cell configureBottomOffset:12];
         return cell;
     }
     else if ([item.cellType isEqualToString:OALineChartCell.reuseIdentifier])
@@ -996,11 +999,13 @@ static const NSInteger kElevationMaxMeters = 2000;
                                                                                          forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.separatorInset = UIEdgeInsetsMake(0, CGFLOAT_MAX, 0, 0);
+        cell.heightConstraint.constant = 75;
+        cell.lineChartView.extraTopOffset = 20;
 
         [GpxUIHelper setupGradientChartWithChart:cell.lineChartView
                              useGesturesAndScale:NO
-                                  xAxisGridColor:[UIColor colorNamed:ACColorNameTextColorSecondary]
-                                     labelsColor:[UIColor colorNamed:ACColorNameChartAxisGridLine]];
+                                  xAxisGridColor:[UIColor colorNamed:ACColorNameChartAxisGridLine]
+                                     labelsColor:[UIColor colorNamed:ACColorNameChartTextColorAxisX]];
 
         ColorPalette *colorPalette;
         if ([_currentPaletteColorItem isKindOfClass:PaletteGradientColor.class])
@@ -1017,6 +1022,7 @@ static const NSInteger kElevationMaxMeters = 2000;
                                       valueFormatter:[GradientUiHelper getGradientTypeFormatter:_gradientColorsCollection.gradientType
                                                                                        analysis:nil]];
 
+        [cell.lineChartView setVisibleYRangeWithMinYRange:0 maxYRange: 1 axis:AxisDependencyLeft];
         [cell.lineChartView notifyDataSetChanged];
         return cell;
     }

@@ -4004,6 +4004,7 @@ typedef enum
         return;
     _carPlayActiveController = [[OACarPlayActiveViewController alloc] init];
     _carPlayActiveController.messageText = OALocalizedString(@"carplay_active_message");
+    _carPlayActiveController.view.frame = self.view.frame;
     [self addChildViewController:_carPlayActiveController];
     [self.view insertSubview:_carPlayActiveController.view atIndex:0];
 }

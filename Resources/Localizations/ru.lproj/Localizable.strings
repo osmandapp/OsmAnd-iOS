@@ -2411,7 +2411,7 @@
 "continue_with" = "Продолжить с %@";
 "purchases_feature_desc_monthly_map_updates" = "Доступ к регулярным ежемесячным обновлениям для локальных карт.";
 "restore_purchases" = "Восстановить покупки";
-"ltr_or_rtl_combine_via_or" = "%@или %@";
+"ltr_or_rtl_combine_via_or" = "%@ или %@";
 "nautical_depth" = "Морские глубины";
 "simulation_preview_mode_title" = "Быстрый просмотр";
 "purchases_feature_desc_unlimited_map_download" = "Неограниченные загрузки локальных карт всех континентов и регионов.";
@@ -2517,7 +2517,7 @@
 "turn_arrows_descr" = "Отображение стрелок поворотов на линии маршрута.";
 "select_backup_data_descr" = "Выберите данные и папки для резервного копирования.";
 "no_purchases" = "У вас нет покупок";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "shared_string_progress" = "Прогресс";
 "are_you_sure" = "Вы уверены?";
 "renew_subscription" = "Продление подписки";
@@ -2557,7 +2557,7 @@
 "shared_string_not_included" = "Не включает";
 "duration_ago" = "%@назад";
 "rendering_attr_showMtbScaleIMBATrails_name" = "Показать маршруты MTB IMBA";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "backup_delete_all_data" = "Удалить все мои данные";
 "benefits_for_contributors_primary_descr" = "Являясь активным участником OpenStreetMap.org, вы можете получать ежечасные обновления карт без ограничений.";
 "map_updates_are_unavailable_yet" = "Обновления карт пока недоступны :-(";

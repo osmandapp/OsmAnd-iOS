@@ -364,6 +364,13 @@ static const float kDistanceMeters = 100.0;
     }];
 }
 
+- (void)viewSafeAreaInsetsDidChange
+{
+    [super viewSafeAreaInsetsDidChange];
+    self.statusBarViewHeightConstraint.constant = [OAUtilities isIPad] || ![OAUtilities isLandscape] ? [OAUtilities getStatusBarHeight] : 0.;
+    self.bottomBarViewHeightConstraint.constant = [OAUtilities getBottomMargin];
+}
+
 -(void) addAccessibilityLabels
 {
     self.mapSettingsButton.accessibilityLabel = OALocalizedString(@"configure_map");

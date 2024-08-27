@@ -2631,7 +2631,7 @@
 "error_contact_support" = "Se o problema persistir, contacte o nosso apoio ao cliente.";
 "track_has_no_needed_data" = "O trilho não contém os respetivos dados.";
 "select_another_colorization" = "Selecione outro tipo de colorização.";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "activity_type_mountainbike_name" = "BTT";
 "rendering_attr_showMtbScaleIMBATrails_name" = "Mostrar trilhos BTT";
 "mtb_imba_full" = "International Mountain Bicycling Association";

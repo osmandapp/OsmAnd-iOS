@@ -2629,7 +2629,7 @@
 "error_contact_support" = "Si el problema persiste, contacta con nuestro equipo de asistencia.";
 "select_another_colorization" = "Elige otro tipo de color.";
 "activity_type_mountainbike_name" = "Bicicleta de montaña";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "rendering_attr_showMtbScaleIMBATrails_name" = "Mostrar senderos de montaña IMBA";
 "mtb_imba_full" = "Asociación Internacional de Ciclismo de Montaña";
 "show_map_symbols" = "Mostrar símbolos del mapa";

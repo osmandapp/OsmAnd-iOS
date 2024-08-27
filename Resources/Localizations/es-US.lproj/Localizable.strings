@@ -2262,7 +2262,7 @@
 "map_settings_weather_precip" = "Precipitación";
 "map_settings_clear_geo_cache" = "Vaciar teselas geográficas";
 "map_settings_clear_raster_cache" = "Vaciar teselas ráster";
-"ltr_or_rtl_combine_via_dash" = "%@– %@";
+"ltr_or_rtl_combine_via_dash" = "%@ – %@";
 "routeInfo_smoothness_description" = "Clasificación con respecto a la usabilidad física de un camino para vehículos con ruedas, particularmente con respecto a la regularidad y planitud de la superficie.";
 "routing_attr_avoid_low_emission_zone_name" = "Evitar zonas de baja emisión";
 "routing_attr_avoid_low_emission_zone_description" = "Evita las zonas de baja emisión o zonas urbanas de atmósfera protegida";
@@ -2643,7 +2643,7 @@
 "activity_type_mountainbike_name" = "Bicicleta de montaña";
 "rendering_attr_showMtbScaleIMBATrails_name" = "Mostrar senderos de montaña IMBA";
 "mtb_imba_full" = "Asociación Internacional del Ciclismo de Montaña";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "show_map_symbols" = "Mostrar símbolos del mapa";
 "syncing_progress" = "Sincronizando...";
 "rendering_attr_depthContourColorScheme_name" = "Esquema de color de la línea";

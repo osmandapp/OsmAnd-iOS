@@ -2392,7 +2392,7 @@
 "map_updates_are_unavailable_yet" = "Mapen eguneraketak oraindik ez daude erabilgarri :-(";
 "no_purchases" = "Ez duzu erosketarik";
 "position_on_map_center" = "Zentroa";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "weather_online_cache" = "Lineako cachea";
 "empty_purchases_description" = "Zure erosketak hemen agertzen ez badira, sakatu“%@” edo jarri harremanetan gure laguntza-taldearekin.";
 "tts_title" = "TTS";
@@ -2431,7 +2431,7 @@
 "backup_delete_types_descr" = "Zaharkitutako datu-moten datu guztiak ezabatu nahi dituzu OsmAnd Cloud-etik\?";
 "are_you_sure" = "Ziur zaude?";
 "offline_edition_descr" = "Lineaz kanpoko edizioa aktibatuta badago, aldaketak lokalean gordeko dira eta eskatutakoan igoko dira, bestela aldaketak berehala igoko dira.";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "weather_precip_milimeters" = "Milimetroak";
 "sign_in_with_open_street_map" = "Hasi saioa OpenStreetMap-ekin";
 "simulate_your_location_gpx_descr" = "Simulatu zure posizioa grabatutako GPX arrasto bat erabiliz.";

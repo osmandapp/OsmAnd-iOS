@@ -48,7 +48,7 @@
 #import "OAApplicationMode.h"
 #import "GeneratedAssetSymbols.h"
 #import "OsmAnd_Maps-Swift.h"
-#import <Charts/Charts-Swift.h>
+#import <DGCharts/DGCharts-Swift.h>
 
 #define kColorDayMode OALocalizedString(@"day")
 #define kColorNightMode OALocalizedString(@"daynight_mode_night")

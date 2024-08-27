@@ -22,7 +22,7 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXTrackAnalysis.h"
 
-#import <Charts/Charts-Swift.h>
+#import <DGCharts/DGCharts-Swift.h>
 #import "OsmAnd_Maps-Swift.h"
 #import "OARouteStatisticsHelper.h"
 

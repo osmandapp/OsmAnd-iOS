@@ -702,7 +702,7 @@
 "save_poi_too_many_uppercase" = "Il nome contiene troppe maiuscole. Continuare\?";
 "osm_live_payment_header" = "Frequenza di pagamento:";
 "contour_lines_hillshade_maps" = "Linee isoipse e ombreggiamento dei rilievi";
-"index_item_depth_contours_osmand_ext" = "Isoipse nautiche";
+"index_item_depth_contours_osmand_ext" = "Isobate nautiche";
 "shared_string_unexpected_error" = "Errore imprevisto";
 "osm_live_payment_desc" = "La sottoscrizione viene addebitata ogni mese. Puoi annullarla su Google Play in ogni momento.";
 "osm_live_enter_user_name" = "Per favore inserisci un nome pubblico";
@@ -774,7 +774,7 @@
 "gpx_ascent" = "Salita";
 "working_days" = "Giorni lavorativi";
 "shared_string_slope" = "Pendenza";
-"download_depth_countours" = "Linee isoipse marine";
+"download_depth_countours" = "Isobate marine";
 "show_something_on_map" = "Mostra %@ sulla mappa";
 "daily" = "Giornaliero";
 "quick_action_start_stop_nav_descr" = "Premi questo pulsante per avviare o fermare la navigazione.";
@@ -1037,7 +1037,7 @@
 "rendering_attr_smoothness_impassable_name" = "Impassibile";
 "routing_attr_weight_description" = "Specifica il peso del veicolo consentito nei percorsi.";
 "routing_attr_driving_style_safety_name" = "Preferisci strade secondarie";
-"rendering_attr_depthContours_name" = "Isoipse nautiche";
+"rendering_attr_depthContours_name" = "Isobate nautiche";
 "rendering_attr_surface_compacted_name" = "Compattato";
 "rendering_attr_surface_salt_name" = "Sale";
 "routeInfo_roadClass_name" = "Tipo strada";
@@ -1204,7 +1204,7 @@
 "rendering_attr_surface_gravel_name" = "Pietrisco";
 "routing_attr_avoid_train_name" = "No treni";
 "rendering_value_translucent_pink_name" = "Rosa traslucido";
-"rendering_attr_depthContours_description" = "Mostra contorni e punti in profondità.";
+"rendering_attr_depthContours_description" = "Mostra isobate e punti in profondità.";
 "routing_attr_avoid_share_taxi_name" = "No taxi condivisi";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Rete di appartenenza";
 "rendering_attr_pisteGrooming_name" = "Piste per sci da fondo";
@@ -2455,7 +2455,7 @@
 "last_two_month_total" = "Ultimi due mesi in totale";
 "product_desc_africa_short" = "Mappe della regione africana";
 "select_wikipedia_article_langs" = "Seleziona i linguaggi in cui gli articoli di Wikipedia appariranno sulla mappa. Puoi cambiare fra tutte le lingue disponibili mentre leggi l\'articolo.";
-"depth_contours" = "Isabate";
+"depth_contours" = "Isobate";
 "gpx_join_gaps_descr" = "Gli spazi tra i segmenti saranno collegati.";
 "slope_grey_color_descr" = "Il colore grigio viene utilizzato quando la pendenza non è definita.";
 "white_color_undefined" = "Le parti senza dati sono bianche.";
@@ -2711,14 +2711,14 @@
 "rendering_attr_showMtbScale_description" = "Mostra i percorsi nella scala di difficoltà MTB.";
 "routing_attr_carriage_restrictions_description" = "Considera l\'accesso consentito ai veicoli a trazione animale";
 "routing_attr_allow_streams_name" = "Permetti ruscelli e scoli";
-"rendering_attr_showWaterwayTunnels_description" = "Aumenta la visibilità per i tunnel dei corsi d\'acqua";
+"rendering_attr_showWaterwayTunnels_description" = "Aumenta la visibilità dei tunnel dei corsi d'acqua";
 "rendering_attr_showBusRoutes_name" = "Linee dell\'autobus";
 "rendering_attr_OSMMapperAssistantIconsLowZooms_name" = "Icone a zoom bassi";
 "routing_attr_prefer_hiking_routes_description" = "Preferisci i percorsi escursionistici";
 "rendering_attr_OSMMapperAssistantFixme_description" = "Mostra etichette Fixme";
 "routing_attr_hazmat_category_description" = "Categoria materiali pericolosi / Considera i permessi di accesso per i materiali pericolosi";
 "routing_attr_difficulty_preference_beginner_name" = "Principiante";
-"rendering_attr_showWaterwayTunnels_name" = "Aumenta visibilità tunnel corsi d\'acqua";
+"rendering_attr_showWaterwayTunnels_name" = "Aumenta la visibilità dei tunnel dei corsi d'acqua";
 "routing_attr_difficulty_preference_no_preference_name" = "Nessuna preferenza";
 "routing_attr_avoid_fords_name" = "Evita i guadi";
 "routing_attr_freeride_policy_allow_name" = "Permetti";
@@ -2738,13 +2738,13 @@
 "rendering_attr_showTramRoutes_name" = "Percorsi dei tram";
 "rendering_value_omit_name" = "Ometti";
 "rendering_attr_OSMMapperAssistantNote_description" = "Mostra etichette Note";
-"rendering_attr_depthContourWidth_description" = "Spessore linee di profondità";
+"rendering_attr_depthContourWidth_description" = "Spessore isobate";
 "rendering_attr_natureReserves_name" = "Riserva naturale";
 "rendering_attr_weatherCloudContours_name" = "Isolinee delle nuvole";
 "routing_attr_prefer_tactile_paving_name" = "Preferisci pavimentazione tattile";
 "routing_attr_avoid_highway_description" = "Evita autostrade";
 "rendering_attr_horse_scale_impossible_name" = "Impossibile";
-"rendering_attr_depthContourColorScheme_description" = "Schema dei colori dei contorni delle linee di profondità";
+"rendering_attr_depthContourColorScheme_description" = "Schema dei colori dei contorni delle isobate";
 "rendering_value_all_name" = "Tutto";
 "routing_attr_freeride_policy_only_if_necessary_name" = "Solo se necessario";
 "routing_attr_length_description" = "Specifica la lunghezza del veicolo permessa nei percorsi.";
@@ -3446,7 +3446,7 @@
 "data_source" = "Fonte dati";
 "weather_data_sources_prompt" = "OsmAnd fornisce dati meteorologici da due fonti:";
 "weather_source_ecmwf_description" = "Centro europeo per le previsioni meteorologiche a medio termine (ECMWF)";
-"weather_source_GFS_description" = "Global Forecast System from National Centers for Environmental Prediction";
+"weather_source_GFS_description" = "Sistema di previsione globale dei Centri nazionali per la previsione ambientale";
 "weather_source_ecmwf_title" = "ECMWF";
 "map_settings_weather_wind_animation" = "Animazione del vento";
 "weather_source_GFS_title" = "GFS";

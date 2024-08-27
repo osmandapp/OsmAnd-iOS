@@ -24,7 +24,7 @@
 #import "OAOsmAndFormatter.h"
 #import "OAGPXDatabase.h"
 #import "GeneratedAssetSymbols.h"
-#import <Charts/Charts-Swift.h>
+#import <DGCharts/DGCharts-Swift.h>
 #import "OsmAnd_Maps-Swift.h"
 
 @implementation OARouteLineChartHelper
@@ -245,7 +245,7 @@
 {
     OATrkSegment *segment;
     LineChartData *lineData = chart.lineData;
-    NSArray<id <IChartDataSet>> *ds = lineData ? lineData.dataSets : [NSArray array];
+    NSArray<id <ChartDataSetProtocol>> *ds = lineData ? lineData.dataSets : [NSArray array];
 
     if (ds && ds.count > 0)
         segment = [self.class getSegmentForAnalysis:_gpxDoc analysis:analysis];
@@ -258,13 +258,13 @@
                                    segment:(OATrkSegment *)segment
 {
     LineChartData *data = lineChartView.lineData;
-    NSArray<id<IChartDataSet>> *dataSets = data ? data.dataSets : nil;
+    NSArray<id<ChartDataSetProtocol>> *dataSets = data ? data.dataSets : nil;
 
     if (dataSets && dataSets.count > 0 && segment && _gpxDoc)
     {
         OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:_gpxDoc.path]];
         BOOL joinSegments = gpx.joinSegments;
-        id<IChartDataSet> dataSet = dataSets.firstObject;
+        id<ChartDataSetProtocol> dataSet = dataSets.firstObject;
         if ([GpxUIHelper getDataSetAxisTypeWithDataSet:dataSet] == GPXDataSetAxisTypeTime)
         {
             double time = position * 1000;
@@ -325,10 +325,10 @@
     double left = 0, right = 0;
     double top = 0, bottom = 0;
     LineChartData *data = lineChartView.lineData;
-    NSArray<id<IChartDataSet>> *dataSets = data ? data.dataSets : [NSArray new];
+    NSArray<id<ChartDataSetProtocol>> *dataSets = data ? data.dataSets : [NSArray new];
     if (dataSets.count > 0 && segment && _gpxDoc)
     {
-        id <IChartDataSet> dataSet = dataSets.firstObject;
+        id <ChartDataSetProtocol> dataSet = dataSets.firstObject;
 
         GPXDataSetAxisType axisType = [GpxUIHelper getDataSetAxisTypeWithDataSet:dataSet];
         if (axisType == GPXDataSetAxisTypeTime || axisType == GPXDataSetAxisTypeTimeOfDay)
@@ -361,6 +361,7 @@
         {
             double startDistance = startPos * [dataSet getDivX];
             double endDistance = endPos * [dataSet getDivX];
+
             double previousSplitDistance = 0;
             for (NSInteger i = 0; i < segment.points.count; i++)
             {

@@ -38,7 +38,7 @@
 #import "OALanesDrawable.h"
 #import "OATurnDrawable.h"
 #import "OATurnDrawable+cpp.h"
-#import <Charts/Charts-Swift.h>
+#import <DGCharts/DGCharts-Swift.h>
 #import "GeneratedAssetSymbols.h"
 #import "CLLocation+Extension.h"
 #import "OsmAnd_Maps-Swift.h"

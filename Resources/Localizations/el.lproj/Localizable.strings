@@ -221,7 +221,7 @@
 "traffic_warning_railways" = "Διασταύρωση σιδηροτροχιάς";
 "save_filter" = "Αποθήκευση φίλτρου";
 "shared_string_restore" = "Επαναφορά";
-"unsaved_changes_will_be_lost" = "Οι μη αποθηκευμένες αλλαγές θα χαθούν. Θέλετε να συνεχίσετε.";
+"unsaved_changes_will_be_lost" = "Οι μη αποθηκευμένες αλλαγές θα χαθούν. Θέλετε να συνεχίσετε;";
 "keep_and_add_destination_point" = "Προσθήκη ως μεταγενέστερος προορισμός";
 "map_widget_next_turn" = "Επόμενη στροφή";
 "purchase_dialog_title" = "Επιλογή σχεδίου";
@@ -859,7 +859,7 @@
 "app_mode_pedestrian" = "Περίπατος";
 "app_mode_default" = "Επισκόπηση χάρτη";
 "map_transparency" = "Διαφάνεια βασικού χάρτη";
-"how_to_open_wiki_title" = "Πώς να ανοίξετε τα άρθρα της βικιπαίδειας.";
+"how_to_open_wiki_title" = "Πώς να ανοίξετε τα άρθρα της Βικιπαίδειας;";
 "open_in_browser_wiki" = "Άνοιγμα άρθρου στο διαδίκτυο";
 "app_mode_camper" = "Τροχόσπιτο";
 "app_mode_ufo" = "ΑΤΙΑ";
@@ -1154,7 +1154,7 @@
 "suggested_maps_descr" = "Αυτοί οι χάρτες απαιτούνται για το πρόσθετο.";
 "added_profiles_descr" = "Οι κατατομές (προφίλ) που προστέθηκαν από το πρόσθετο";
 "plugin_mapillary_descr" = "Φωτογραφίες δρόμου για όλους. Ανακαλύψτε θέσεις, συνεργαστείτε, αποτυπώστε τον κόσμο.";
-"route_between_points_warning_desc" = "Για να χρησιμοποιήσετε αυτήν την επιλογή το OsmAnd χρειάζεται να προσκολλήσει το ίχνος σας στους δρόμους του χάρτη.\n\nΣτο επόμενο βήμα θα χρειαστείτε να επιλέξετε κατατομή (προφίλ) πλοήγησης για να εντοπίσετε τους επιτρεπόμενους δρόμους και την απόσταση κατωφλίου για να προσεγγίσετε το ίχνος σας με τους δρόμους.";
+"route_between_points_warning_desc" = "Στη συνέχεια, μεταφέρετε το ίχνος σας στον πλησιέστερο επιτρεπόμενο δρόμο με ένα από τα προφίλ πλοήγησής σας για να χρησιμοποιήσετε αυτήν την επιλογή.";
 "gpxup_private" = "Ιδιωτικό";
 "context_menu_item_edit_waypoint" = "Επεξεργασία σημείου διαδρομής GPX";
 "threshold_distance" = "Απόσταση κατωφλίου";
@@ -1281,7 +1281,7 @@
 "lang_lb" = "Λουξεμβουργιανά";
 "lang_als" = "Αλβανικά (Τοσκ)";
 "lang_en" = "Αγγλικά";
-"points_delete_multiple" = "Διαγραφή %d σημείων.";
+"points_delete_multiple" = "Διαγραφή %d σημείων;";
 "shared_string_time_span" = "Χρονική διάρκεια";
 "lang_ku" = "Κουρδικά";
 "lang_fr" = "Γαλλικά";
@@ -1401,7 +1401,7 @@
 "recording_delete_confirm" = "Να διαγραφεί αυτό το στοιχείο;";
 "speak_favorites" = "Κοντινά αγαπημένα";
 "shared_string_selected" = "Επιλεγμένο";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "select_postcode" = "Αναζήτησε ταχυδρομικό κώδικα";
 "osm_live_payment_header" = "Διάρκεια πληρωμής:";
 "type_city_town" = "Πληκτρολόγησε πόλη/κωμόπολη/περιοχή";
@@ -2171,3 +2171,5 @@
 "shared_string_uploaded" = "Ανεβασμένο";
 "shared_string_license" = "Άδεια";
 "shared_string_colors" = "Χρώματα";
+"weather_source_ecmwf_title" = "ECMWF";
+"data_source" = "Πηγή Δεδομένων";

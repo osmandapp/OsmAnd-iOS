@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import Charts
+import DGCharts
 
 @objc enum GPXDataSetType: Int {
     case altitude, speed, slope, sensorSpeed, sensorHeartRate, sensorBikePower, sensorBikeCadence, sensorTemperature
@@ -119,8 +119,7 @@ class GpxUIHelper: NSObject {
         }
     }
 
-    private class TimeSpanFormatter: IAxisValueFormatter {
-
+    private class TimeSpanFormatter : AxisValueFormatter {
         private var startTime: Int64
 
         init(startTime: Int64) {
@@ -326,7 +325,7 @@ class GpxUIHelper: NSObject {
                                  firstType: GPXDataSetType,
                                  useRightAxis: Bool,
                                  calcWithoutGaps: Bool) {
-        var dataSets = [ILineChartDataSet]()
+        var dataSets = [LineChartDataSetProtocol]()
         let firstDataSet = getDataSet(chartView: chartView,
                                       analysis: analysis,
                                       type: firstType,
@@ -369,7 +368,7 @@ class GpxUIHelper: NSObject {
                                  firstType: GPXDataSetType,
                                  secondType: GPXDataSetType,
                                  calcWithoutGaps: Bool) {
-        var dataSets = [ILineChartDataSet]()
+        var dataSets = [LineChartDataSetProtocol]()
         let firstDataSet: OrderedLineDataSet? = getDataSet(chartView: chartView,
                                                            analysis: analysis,
                                                            type: firstType,
@@ -442,7 +441,7 @@ class GpxUIHelper: NSObject {
         chart.scaleYEnabled = false
         chart.autoScaleMinMaxEnabled = true
         chart.drawBordersEnabled = true
-        chart.chartDescription?.enabled = false
+        chart.chartDescription.enabled = false
         chart.dragDecelerationEnabled = false
         chart.highlightPerTapEnabled = false
         chart.highlightPerDragEnabled = true
@@ -500,7 +499,7 @@ class GpxUIHelper: NSObject {
         chartView.scaleYEnabled = false
         chartView.autoScaleMinMaxEnabled = true
         chartView.drawBordersEnabled = false
-        chartView.chartDescription?.enabled = false
+        chartView.chartDescription.enabled = false
         chartView.maxVisibleCount = 10
         chartView.minOffset = 0.0
         chartView.rightYAxisRenderer = YAxisCombinedRenderer(viewPortHandler: chartView.viewPortHandler,
@@ -574,7 +573,7 @@ class GpxUIHelper: NSObject {
         chart.scaleYEnabled = false
         chart.autoScaleMinMaxEnabled = true
         chart.drawBordersEnabled = false
-        chart.chartDescription?.enabled = false
+        chart.chartDescription.enabled = false
         chart.maxVisibleCount = 10
         chart.minOffset = 0.0
         chart.dragDecelerationEnabled = false
@@ -608,7 +607,7 @@ class GpxUIHelper: NSObject {
 
     static func buildGradientChart(chart: LineChartView,
                                    colorPalette: ColorPalette,
-                                   valueFormatter: IAxisValueFormatter) -> LineChartData {
+                                   valueFormatter: AxisValueFormatter) -> LineChartData {
         chart.xAxis.valueFormatter = valueFormatter
 
         let colorValues = colorPalette.colorValues
@@ -623,6 +622,11 @@ class GpxUIHelper: NSObject {
 
         let barDataSet = LineChartDataSet(entries: entries, label: "")
         barDataSet.highlightColor = .textColorSecondary
+        // [START] Disable circles and lines
+        barDataSet.drawCirclesEnabled = false
+        barDataSet.drawCircleHoleEnabled = false
+        barDataSet.setColor(.clear)
+        // [END] Disable circles and lines
 
         let step = 1.0 / CGFloat(colorValues.count - 1)
         var colorLocations = [CGFloat]()
@@ -632,7 +636,7 @@ class GpxUIHelper: NSObject {
         if let gradient = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(),
                                      colors: cgColors as CFArray,
                                      locations: colorLocations) {
-            barDataSet.fill = Fill.fillWithLinearGradient(gradient, angle: 0.0)
+            barDataSet.fill = LinearGradientFill(gradient: gradient)
             barDataSet.fillAlpha = 1.0
             barDataSet.drawFilledEnabled = true
         }

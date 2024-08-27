@@ -299,7 +299,7 @@
 "plugin_ski_name" = "滑雪地图浏览";
 "product_desc_skimap" = "";
 "plugin_ski_descr" = "专为冬季运动场地导航而设计： 查看滑雪道、滑雪缆车和越野滑雪道，并用彩色线条标示难度等级。使用时，请启用此插件，并进入 \"配置地图\"，选择 \"冬季和滑雪 \"地图样式。";
-"record_plugin_name" = "旅行记录";
+"record_plugin_name" = "行程录制";
 "product_desc_track_recording" = "";
 "record_plugin_description" = "记录您的旅行或训练，并分析速度、累计上升和下降、海拔剖面等数据。已记录的轨迹可以归档、与朋友分享、编辑和后期处理。 \n \n详情可见 %@。";
 "product_title_trip_planning" = "";
@@ -531,7 +531,7 @@
 "transport_Routes" = "路线";
 "switch_start_finish" = "交换起始点和目的地";
 "replace_destination_point" = "替换目的地";
-"traffic_warning_stop" = "停止标志";
+"traffic_warning_stop" = "停车标志";
 "traffic_warning_pedestrian" = "人行横道";
 "driving_region_japan" = "日本";
 "driving_region_us" = "美国";
@@ -842,7 +842,7 @@
 "average_altitude" = "平均海拔";
 "work_button" = "工作地点";
 "quick_action_switch_day_mode" = "日间模式";
-"poi_dialog_reopen" = "重新开放";
+"poi_dialog_reopen" = "重新打开";
 "quick_action_add_parking" = "添加停车地点";
 "quick_action_map_overlay_title" = "地图覆盖";
 "filter_current_poiButton" = "筛选器";
@@ -998,7 +998,7 @@
 "rendering_attr_surface_salt_name" = "盐地";
 "rendering_attr_highway_class_track_name" = "轨迹";
 "rendering_value_germanRoadAtlas_name" = "德国道路地图";
-"rendering_attr_alpineHiking_description" = "路线的难度分类类型。";
+"rendering_attr_alpineHiking_description" = "路线的难度分级类别。";
 "routing_attr_avoid_ferry_description" = "避开轮渡";
 "rendering_value_green_name" = "绿色";
 "routing_attr_no_new_routing_description" = "请不要使用 v1.9 的路径规划规则。";
@@ -1658,7 +1658,7 @@
 "lang_af" = "南非荷兰语";
 "routeInfo_surface_description" = "提供道路/人行道物理表面信息。";
 "shared_string_min_height" = "最低高度";
-"routeInfo_smoothness_description" = "轮式车辆的道路/人行道机动性分类，特别是关于路面规则性/平整度的分类。";
+"routeInfo_smoothness_description" = "轮式车辆的道路 / 人行道机动性分级，特别是关于路面一致性 / 平整度的分级。";
 "route_line_use_map_style_width" = "使用地图样式 (%@) 默认宽度。";
 "set_up_backup" = "设置备份";
 "make_backup_descr" = "这台设备上有很多更改，请将这些数据备份以免丢失。";
@@ -1771,7 +1771,7 @@
 "osmand_development_plugin_description" = "提供测试和调试 OsmAnd 的功能：模拟导航路线、监控屏幕渲染、检查性能等。正常使用应用程序时不需要此插件。";
 "manage_subscription" = "管理订阅";
 "copy_to_map_favorites" = "复制到收藏";
-"suggested_maps_descr" = "插件需要这些地图。";
+"suggested_maps_descr" = "这些地图是该插件所必需的。";
 "simulation_real_mode_title" = "真实模拟";
 "private_access_routing_req" = "你的目的地位于一个有私人通道的区域。允许使用私人道路进行此次旅行吗？";
 "expired" = "已过期";
@@ -2037,7 +2037,7 @@
 "rendering_attr_horse_scale_impossible_name" = "不可能";
 "rendering_attr_horse_scale_dangerous_name" = "不安全";
 "routing_attr_avoid_highway_description" = "避开高速公路";
-"rendering_attr_showMtbScaleIMBATrails_description" = "显示专用的山地自行车小径。";
+"rendering_attr_showMtbScaleIMBATrails_description" = "显示山地自行车专用路径。";
 "rendering_attr_natureReserves_name" = "自然保护区";
 "routing_attr_driving_style_description" = "选择驾驶目的，以获得更短、更快或更安全的路线";
 "rendering_attr_natureReserves_description" = "展示自然保护区、保护区和国家公园。";
@@ -2160,8 +2160,8 @@
 "mtb_segment_classification" = "细分分类";
 "cloud_changes_will_be_dismissed" = "将取消云端变更";
 "shared_string_modified" = "已修改";
-"rendering_attr_showMtbScale_name" = "显示山地自行车级别";
-"rendering_attr_showMtbScale_description" = "根据山地自行车等级显示路径。";
+"rendering_attr_showMtbScale_name" = "显示山地自行车难度分级";
+"rendering_attr_showMtbScale_description" = "根据山地自行车难度分级显示路径。";
 "map_widget_group_sunrise_sunset_desc" = "这些小部件会显示有关下一次日出和日落的信息。";
 "map_widget_group_sunrise_sunset" = "日出、日落";
 "navigation_points_desc" = "导航小工具将在导航期间启用，以显示距离、到达或剩余时间、下个转弯、方位、当前 / 下一街道名称、车道信息、最大速度、接近警示、兴趣点、路径点等信息。";
@@ -2503,7 +2503,7 @@
 "saved_articles" = "已存书签的文章";
 "map_widget_zoom_level_desc" = "显示当前的地图缩放级别。";
 "search_favorites" = "在我的收藏中搜索";
-"average_speed_skip_stops" = "考虑到停止";
+"average_speed_skip_stops" = "考虑停留时间";
 "map_widget_next_sunrise" = "下次日出";
 "map_widget_rendering_fps_desc" = "显示地图和地图元素的显示和刷新速度，以每秒帧数 （FPS） 表示。";
 "widget_secondary_desc_part_of" = "%@插件的一部分。";
@@ -2730,3 +2730,7 @@
 "driving_region_uk" = "英国及类似区域";
 "driving_region_india" = "印度";
 "wall_height" = "墙壁高度";
+"lang_war" = "瓦瑞语";
+"rendering_value_name_only_name" = "仅名称";
+"weather_data_sources_prompt" = "OsmAnd 从两个来源提供天气数据：";
+"weather_source_ecmwf_description" = "欧洲中期天气预报中心";

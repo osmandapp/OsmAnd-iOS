@@ -382,7 +382,7 @@
 "driving_region_us" = "САЩ";
 "driving_region_canada" = "Канада";
 "driving_region_europe_asia" = "Европа, Азия, Латинска Америка и подобни";
-"driving_region_uk" = "Великобритания, Индия, Австралия и подобни";
+"driving_region_uk" = "Великобритания и подобни";
 "driving_region_australia" = "Австралия";
 "left_side_navigation" = "Обратно движение";
 "right_side_navigation" = "Right-hand driving";
@@ -1303,7 +1303,7 @@
 "toggle_online_notes" = "Toggle OSM notes";
 "toggle_local_edits" = "Toggle local OSM edits";
 "quick_action_add_poi" = "Add POI";
-"quick_action_map_style" = "Промяна на стила на картата";
+"quick_action_map_style" = "Стил на картата";
 "quick_action_map_source" = "Change map source";
 "quick_action_map_overlay" = "Променяне на насложената карта";
 "quick_action_map_underlay" = "Change map underlay";
@@ -1394,7 +1394,7 @@
 "quick_action_showhide_mapillary_descr" = "Tapping this action button shows or hides the Mapillary layer on the map.";
 "quick_action_mapillary_hide" = "Hide Mapillary";
 "quick_action_mapillary_show" = "Show Mapillary";
-"quick_action_remove_next_destination" = "Премахване на следващото местоназначение";
+"quick_action_remove_next_destination" = "Следващо местоназначение";
 "quick_action_remove_next_destination_descr" = "Следващата междинна точка ще бъде премахната. Ако това е местоназначението, маршрутизирането ще спре.";
 "change_application_profile" = "Change application profile";
 "select_application_profile" = "Select application profile";
@@ -1888,7 +1888,7 @@
 "inapp_not_found" = "The %@ is not found in the OsmAnd. Probably it has been canceled.";
 "rendering_value_high_name" = "Висока";
 "routing_attr_difficulty_preference_description" = "Prefer routes of this difficulty, although routing over harder or easier pistes is still possible if shorter.";
-"routing_attr_height_description" = "Въведете височина на МПС (за камиони и извън-габаритни товари)";
+"routing_attr_height_description" = "Въведете разрешената височина на МПС по пътя.";
 "touting_specified_vehicle_parameters_descr" = "Specified vehicle parameters may affect routing.";
 "routing_attr_height_obstacles_name" = "Използване на данни за височината";
 "routing_attr_avoid_toll_name" = "Без пътища с такса";
@@ -2972,3 +2972,11 @@
 "shared_string_height" = "Височина";
 "shared_string_legal" = "Правни";
 "shared_string_bookmark" = "Отметка";
+"rendering_value_managerName_name" = "По име на отговорника";
+"rendering_value_access_name" = "По вид на достъпа";
+"rendering_attr_padusHideBoundaries_name" = "Скриване на границите на обществените земни";
+"auto_zoom_smooth" = "Плавно";
+"auto_zoom_discrete" = "Дискретно";
+"rendering_attr_padusDisplayMode_description" = "По вид на достъпа или име на отговорника";
+"rendering_attr_padusDisplayMode_name" = "Режим на показване на обществени земи";
+"auto_zoom" = "Автоматично мащабиране";

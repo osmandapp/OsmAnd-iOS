@@ -128,5 +128,13 @@ static const int PREFERRED_DEFAULT_ZOOM = 15;
 + (BOOL) DISPLAY_DEFAULT_POI_TYPES;
 + (void) setDisplayDefaultPoiTypes:(BOOL)value;
 
+@end
+
+@interface OATopIndexMatch : NSObject
+
+@property (nonatomic, strong) NSString *value;
+@property (nonatomic, strong) NSString *translatedValue;
+
+- (instancetype) initWithSubType:(NSString *)value translatedValue:(NSString *)translatedValue;
 
 @end

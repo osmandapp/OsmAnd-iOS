@@ -27,6 +27,17 @@
     return NO;
 }
 
++ (instancetype)acceptAllPoiTypeFilter 
+{
+    return [[self alloc] initWithAcceptFunc:^BOOL(OAPOICategory *type, NSString *subcategory) {
+        return YES;
+    } emptyFunction:^BOOL() {
+        return NO;
+    } getTypesFunction:^NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> * {
+        return nil;
+    }];
+}
+
 - (instancetype)initWithAcceptFunc:(OASearchPoiTypeFilterAccept)aFunction emptyFunction:(OASearchPoiTypeFilterIsEmpty)eFunction getTypesFunction:(OASearchPoiTypeFilterGetTypes)tFunction;
 {
     self = [super init];

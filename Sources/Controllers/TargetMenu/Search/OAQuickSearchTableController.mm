@@ -52,6 +52,7 @@
 #import "OAEmptySearchCell.h"
 #import "OARightIconTableViewCell.h"
 #import "GeneratedAssetSymbols.h"
+#import "OATopIndexFilter.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -688,6 +689,14 @@
                     NSString *typeName = [OAQuickSearchTableController applySynonyms:res];
                     UIImage *icon = [((OAPOIBaseType *)res.object) icon];
                     
+                    OASimpleTableViewCell *cell = [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tableView typeName:typeName icon:icon];
+                    return cell;
+                }
+                else if ([res.object isKindOfClass:[OATopIndexFilter class]])
+                {
+                    NSString *name = [item getName];
+                    NSString *typeName = ((OATopIndexFilter *)res.object).poiSubType;
+                    UIImage *icon = [UIImage imageNamed:@"ic_custom_search"];
                     OASimpleTableViewCell *cell = [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tableView typeName:typeName icon:icon];
                     return cell;
                 }

@@ -2470,7 +2470,7 @@
 "select_tracks" = "Selecionar trilhos";
 "shared_string_restoring" = "Restaurando";
 "restoring_from" = "Restaurando dados selecionados da nuvem";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "toggle_wind" = "Mostrar/ocultar - camada de vento";
 "cloud_show" = "Mostrar nuvens";
 "wind_hide" = "Ocultar vento";

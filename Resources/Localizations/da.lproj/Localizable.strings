@@ -3507,3 +3507,4 @@
 "route_your_destination_is_on_left" = "Din destination er til venstre";
 "shared_string_show" = "Vis";
 "weather_wind_animation_enable_descr" = "Aktivér for at se laget med vindanimation på kortet.";
+"osmand_cloud_delete_account_descr_with_email" = "Er du sikker på, at du vil slette OsmAnd Cloud-kontoen: %@?";

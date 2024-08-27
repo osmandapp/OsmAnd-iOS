@@ -1252,7 +1252,7 @@
 "rendering_attr_hideWoodScrubs_name" = "Mets ja põõsastik";
 "routing_attr_avoid_stairs_name" = "Väldi treppe";
 "rendering_attr_horseRoutes_name" = "Ratsutamisteed";
-"routing_attr_avoid_sett_description" = "Väldib munakivi ja tänavakivi";
+"routing_attr_avoid_sett_description" = "Väldi klombitud tänavakive";
 "routing_attr_freeride_policy_name" = "Hooldamata nõlv";
 "rendering_value_disabled_name" = "Keelatud";
 "routing_attr_avoid_tram_description" = "Väldib tramme";
@@ -1302,7 +1302,7 @@
 "rendering_value_black_name" = "Must";
 "rendering_attr_noAdminboundaries_name" = "Piirid";
 "routing_attr_allow_intermediate_description" = "Raskemad marsruudid järsemate lõikudega. Üldiselt mõned takistused, mida tuleks vältida.";
-"routing_attr_piste_type_downhill_description" = "Nõlvad alpisuusatamisks või laskumiseks ja ligipääs suusatõstukitele.";
+"routing_attr_piste_type_downhill_description" = "Nõlvad alpisuusatamiseks või laskumiseks ja ligipääs suusatõstukitele.";
 "rendering_value_bold_name" = "Rasvane";
 "routing_attr_allow_private_name" = "Luba eramaad";
 "rendering_attr_highway_class_cycleway_name" = "Jalgrattatee";
@@ -1339,13 +1339,13 @@
 "rendering_value_translucent_pink_name" = "Läbikumav roosa";
 "rendering_attr_highway_class_service_name" = "Teenindus";
 "rendering_attr_roadStyle_description" = "Tee stiil";
-"routing_attr_piste_type_nordic_description" = "Murdmaa või põhjamaa suusatamise rajad.";
+"routing_attr_piste_type_nordic_description" = "Murdmaa- või põhja suusaalade rajad.";
 "routing_attr_max_num_changes_description" = "Määra muudatuste ülemine piir";
 "rendering_attr_busRoutes_name" = "Bussiliinid";
 "routing_attr_allow_expert_name" = "Luba ekspertmarsruudid";
 "rendering_attr_coloredBuildings_name" = "Värvierista hooned liikide järgi";
 "routing_attr_avoid_toll_name" = "Väldi tasulisi teid";
-"rendering_attr_piste_difficulty_aerialway_name" = "Lennutee";
+"rendering_attr_piste_difficulty_aerialway_name" = "Köisraudtee";
 "rendering_value_blue_name" = "Sinine";
 "rendering_attr_piste_type_downhill_name" = "Allamäge";
 "routing_attr_piste_type_skitour_name" = "Suusamatkad";
@@ -1489,7 +1489,7 @@
 "routing_attr_avoid_unpaved_name" = "Väldi sillutamata teid";
 "rendering_attr_smoothness_good_name" = "Hea";
 "rendering_value_translucent_red_name" = "Läbikumav punane";
-"routing_attr_avoid_sett_name" = "Ei ole munakivi ega tänavakivi";
+"routing_attr_avoid_sett_name" = "Pole klombitud tänavakive";
 "rendering_value_boldOutline_name" = "Paks kontuurjoon";
 "rendering_attr_currentTrackWidth_description" = "GPX laius";
 "rendering_attr_buildings15zoom_name" = "Hooned suurendustasemel 15";
@@ -2272,7 +2272,7 @@
 "gpx_import_already_exists_short" = "Määratud raja fail on juba nimekirjas olemas.";
 "map_settings_weather_temp" = "Temperatuur";
 "map_settings_weather_pressure" = "Rõhk";
-"map_settings_weather_cloud" = "Pilv";
+"map_settings_weather_cloud" = "Pilved";
 "map_settings_weather_isolines" = "Isojooned";
 "points_delete_multiple" = "Kustutada %d punkt(i)\?";
 "resend_verification_code" = "Saada uuesti";
@@ -2681,7 +2681,7 @@
 "required_maps_list" = "Lisaks kasutatame kaarte: %@";
 "speedometer_description" = "Näitab sinu praegust kiirust, nii nagu seda GPS\'i andmete alusel saab arvutada";
 "rendering_attr_alpineHiking_name" = "Raskusastme klassifikatsioon";
-"missing_maps_ignore" = "Kasuta olemasolevaid kaarte";
+"missing_maps_ignore" = "Kasuta allalaaditud kaarte";
 "delete_history_items" = "Kas kustutame %@ ajalookirjet?";
 "weather_source_ecmwf_description" = "Euroopa Keskpika Ilmaennustuse Keskus (ECMWF)";
 "height_legend_description" = "Värvilised kõrgusjoonte kaardid aitavad paremini reljeefi kuvada.";
@@ -2772,3 +2772,14 @@
 "data_source" = "Andmeallikas";
 "weather_data_sources_prompt" = "OsmAnd jagab ilmaennustust kahe andmeallika alusel:";
 "rendering_value_pale_name" = "Kahvatu";
+"routing_attr_freeride_policy_prefer_offpiste_name" = "Eelista suusatamist väljaspool ettevalmistatud radu";
+"map_widget_time_to_destination" = "Aeg sihtpunkti";
+"map_widget_time_to_intermediate" = "Aeg teekonna vahepunkti";
+"map_widget_distance_to_intermediate" = "Vahemaa teekonna vahepunkti";
+"routing_attr_freeride_policy_do_not_go_offpiste_name" = "Ära luba suusatamist väljaspool ettevalmistatud radu";
+"add_page" = "Lisa leht";
+"shared_string_symbol" = "Sümbol";
+"average_speed_widget_desc" = "Vidin näitab antud teekonna keskmist kiirust.";
+"map_widget_current_speed" = "Praegune kiirus";
+"map_settings_weather_wind_animation" = "Tuule animatsioon";
+"map_widget_distance_to_destination" = "Vahemaa sihtkohta";

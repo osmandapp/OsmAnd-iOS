@@ -77,7 +77,7 @@
 "road_blocked" = "Блокиран път";
 "starting_point" = "Отправна точка";
 "shared_string_select_avoid_road_on_map" = "Select a road to be avoided during the routing";
-"shared_string_road" = "Road";
+"shared_string_road" = "Път";
 "avoid_roads_msg" = "Можете да зададете алтернативен маршрут, като изберете кои пътища да бъдат избегнати";
 "shared_string_go" = "Старт";
 "info_button" = "Информация";
@@ -425,7 +425,7 @@
 "shared_string_disable" = "Изключване";
 "shared_string_apply" = "Прилагане";
 "shared_string_select" = "Избиране";
-"shared_string_back" = "Back";
+"shared_string_back" = "Назад";
 "shared_string_ok" = "OK";
 "shared_string_cancel" = "Отказ";
 "shared_string_exit" = "Изход";
@@ -448,7 +448,7 @@
 "shared_string_or" = "или";
 "shared_string_and" = "и";
 "shared_string_edit" = "Редактиране";
-"shared_string_modify" = "Modify";
+"shared_string_modify" = "Променяне";
 "first_time_continue" = "По-късно";
 "shared_string_of" = "of";
 "shared_string_all" = "Всички";
@@ -654,7 +654,7 @@
 "poi_filter_public_transport" = "Обществен транспорт";
 "shared_string_map" = "Карта";
 "layer_amenity_label" = "Етикети на точките";
-"shared_string_show_on_map" = "Показване на картата";
+"shared_string_show_on_map" = "Видимо на картата";
 "map_settings_type" = "Map type";
 "map_mode" = "Map mode";
 "map_magnifier" = "Лупа за картата";
@@ -987,7 +987,7 @@
 
 // Route planning
 "plan_route" = "Планиране на маршрут";
-"coord_input_add_point" = "Add point";
+"coord_input_add_point" = "Добавяне на точка";
 "point_num" = "Point %d";
 "points_count" = "Points:";
 "route_between_points" = "Route between points";
@@ -996,8 +996,8 @@
 "add_to_a_track" = "Add to a track";
 "move_point" = "Move point";
 "move_point_descr" = "Move map to change the position of this point.";
-"add_point_before" = "Add points before";
-"add_point_after" = "Add points after";
+"add_point_before" = "Добавяне на точка пред";
+"add_point_after" = "Добавяне на точка след";
 "trim_before" = "Trim before this point";
 "trim_after" = "Trim after this point";
 "change_route_type_before" = "Change route type before this point";
@@ -1163,7 +1163,7 @@
 "closing_changeset" = "Затваряне на списъка с промени…";
 "commiting_node" = "Изпращане на точка…";
 "loading_poi_obj" = "Зареждане на POI…";
-"shared_string_loading" = "Loading…";
+"shared_string_loading" = "Зареждане";
 "osm_upload_failed_title" = "Upload failed";
 "osm_upload_failed_descr" = "Please check your login details and Internet connection and try again.";
 "exit_without_saving" = "Излизане без запазване\?";
@@ -1734,7 +1734,7 @@
 "hist_select_remove" = "Please select history items to remove";
 "hist_remove_q" = "Do you want to remove history items?";
 "gpx_edit_mode" = "Edit mode";
-"go_to_map" = "Покажи картата";
+"go_to_map" = "Показване на картата";
 "import_raster_map_success" = "Raster map has been imported. Open Map Settings and activate it via Overlay/Underlay";
 "import_raster_map_failed" = "Raster map import failed";
 "device_memory" = "Памет на устройството";
@@ -2162,7 +2162,7 @@
 "rendering_attr_subwayMode_name" = "Подземен транспорт";
 "rendering_attr_highway_class_motorway_name" = "Автомагистрала";
 "rendering_value_brown_name" = "Кафява";
-"rendering_attr_hideIcons_name" = "POIзнаци";
+"rendering_attr_hideIcons_name" = "Пиктограми за POI";
 "rendering_attr_roadColors_description" = "Избор на цветова схема на пътищата:";
 "rendering_value_browse_map_name" = "Карта";
 "rendering_attr_surface_asphalt_name" = "Асфалт";
@@ -2934,3 +2934,19 @@
 "voices" = "Гласови напътствия";
 "tomorrow" = "Утре";
 "help_article_plan_route_coordinate_input_name" = "Въвеждане на координати";
+"shared_string_view" = "Преглед";
+"shared_string_scale" = "Мащаб";
+"shared_string_next_event" = "Следващо събитие";
+"shared_string_author" = "Автор";
+"shared_string_external" = "Външни";
+"shared_string_action" = "Действие";
+"enter_new_name" = "Въведете ново име";
+"shared_string_deleting" = "Премахване";
+"shared_string_delete_immediately" = "Премахване веднага";
+"shared_string_delete_item" = "Премахване обекта";
+"shared_string_trash" = "Кошче";
+"shared_string_license" = "Лиценз";
+"shared_string_set" = "Задаване";
+"shared_string_replace" = "Заменяне";
+"shared_string_colors" = "Цветове";
+"shared_string_link" = "Препратка";

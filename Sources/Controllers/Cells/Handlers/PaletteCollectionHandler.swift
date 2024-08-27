@@ -191,7 +191,16 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
         guard let gradientPalette = palette as? PaletteGradientColor else {
             return "Invalid palette type"
         }
-        return gradientPalette.colorPalette.colorValues.compactMap { "\($0.val)" }.joined(separator: " • ")
+
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 0
+        formatter.maximumFractionDigits = 3
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        return gradientPalette.colorPalette.colorValues.compactMap { colorValue -> String? in
+            let number = NSNumber(value: colorValue.val)
+            return formatter.string(from: number)
+        }.joined(separator: " • ")
     }
 
     private static func createGradientPoints(_ palette: PaletteColor) -> [GradientPoint] {

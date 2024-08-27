@@ -2199,7 +2199,7 @@
 "shared_string_angle" = "Uhol";
 "depth_contours" = "Hĺbkové vrstevnice";
 "empty_filename" = "Prázdny názov súboru";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "no_purchases" = "Nemáte žiadne nákupy";
 "position_on_map_bottom" = "Spodok";
 "service_is_not_available_please_try_later" = "Služba nie je dostupná. Prosím skúste neskôr.";
@@ -2220,7 +2220,7 @@
 "show_borders_of_downloaded_maps" = "Zobraziť hranice stiahnutých máp";
 "depth_contour_lines" = "Hĺbkové vrstevnice";
 "routing_attr_avoid_low_emission_zone_description" = "Vyhnúť sa zónam nízkych emisií";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "position_on_map_center" = "Stred";
 "select_backup_data_descr" = "Zvoľte údaje a priečinky na zálohovanie.";
 "turn_arrows_descr" = "Zvoľte či budú šípky odbočenia zobrazené na línii trasy.";

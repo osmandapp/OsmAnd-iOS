@@ -32,6 +32,7 @@
                 </constraints>
             </tableViewCellContentView>
             <connections>
+                <outlet property="heightConstraint" destination="81i-jz-cQ2" id="S6J-Xr-ieo"/>
                 <outlet property="lineChartView" destination="gJp-wm-0Lx" id="nGG-xm-pYX"/>
             </connections>
             <point key="canvasLocation" x="112" y="-54"/>

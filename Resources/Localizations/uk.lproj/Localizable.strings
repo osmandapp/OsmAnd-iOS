@@ -2419,7 +2419,7 @@
 "routing_attr_allow_private_for_truck_description" = "Дозволити доступ вантажних автомобілів на приватну територію.";
 "routing_attr_allow_private_for_truck_name" = "Доступ до приватних територій (вантажівка)";
 "shared_string_learn_more" = "Докладніше";
-"ltr_or_rtl_combine_via_or" = "%@або %@";
+"ltr_or_rtl_combine_via_or" = "%@ або %@";
 "osmand_depelopment_simulate_location_section" = "Імітувати";
 "simulate_your_location_gpx_descr" = "Симуляція положення за допомогою записаного треку GPX.";
 "simulate_location_movement_speed" = "Швидкість руху";
@@ -2641,7 +2641,7 @@
 "error_contact_support" = "Якщо проблема не зникне, зверніться до нашої служби підтримки.";
 "select_another_colorization" = "Виберіть інший тип забарвлення.";
 "track_has_no_needed_data" = "Трек не містить потрібних даних.";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "rendering_attr_showMtbScaleIMBATrails_name" = "Показувати маршрути для MTB IMBA";
 "mtb_imba_full" = "Міжнародна асоціація гірського велоспорту";
 "activity_type_mountainbike_name" = "Гірський велосипед";

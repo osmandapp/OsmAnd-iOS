@@ -2479,7 +2479,7 @@
 "shared_string_profile" = "Profil";
 "shared_string_angle" = "Úhel";
 "shared_string_angle_param" = "Úhel: %@°";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "measurement_units" = "Měrné jednotky";
 "weather_pressure_hectopascals" = "Hektopascaly";
 "weather_pressure_millimeters_of_mercury" = "Milimetrů rtuťového sloupce";

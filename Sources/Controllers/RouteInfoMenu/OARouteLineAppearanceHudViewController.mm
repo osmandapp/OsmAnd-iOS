@@ -1654,6 +1654,9 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:[_gradientColorsCollection getDefaultGradientPalette]] inSection:0];
         [paletteHandler setSelectedIndexPath:selectedIndexPath];
         [cell setCollectionHandler:paletteHandler];
+        cell.collectionView.contentInset = UIEdgeInsetsMake(0, 10, 0, 0);
+        [cell configureTopOffset:12];
+        [cell configureBottomOffset:12];
         return cell;
     }
     else if ([cellData.type isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
@@ -1683,6 +1686,8 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
                                                                                          forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.separatorInset = UIEdgeInsetsMake(0, CGFLOAT_MAX, 0, 0);
+        cell.heightConstraint.constant = 70;
+        cell.lineChartView.extraTopOffset = 15;
 
         [GpxUIHelper setupGradientChartWithChart:cell.lineChartView
                              useGesturesAndScale:NO
@@ -1703,6 +1708,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
                                         colorPalette:colorPalette
                                       valueFormatter:[GradientUiHelper getGradientTypeFormatter:_gradientColorsCollection.gradientType
                                                                                        analysis:nil]];
+        [cell.lineChartView setVisibleYRangeWithMinYRange:0 maxYRange: 1 axis:AxisDependencyLeft];
         [cell.lineChartView notifyDataSetChanged];
         return cell;
     }

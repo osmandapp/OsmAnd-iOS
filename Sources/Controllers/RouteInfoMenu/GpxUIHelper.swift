@@ -581,14 +581,9 @@ class GpxUIHelper: NSObject {
         let xAxis = chart.xAxis
         xAxis.drawAxisLineEnabled = true
         xAxis.axisLineWidth = 1.0
-        xAxis.axisLineDashLengths = [8.0, CGFLOAT_MAX]
         xAxis.axisLineDashPhase = 0.0
         xAxis.axisLineColor = xAxisGridColor
         xAxis.drawGridLinesEnabled = false
-        xAxis.gridLineWidth = 1.0
-        xAxis.gridColor = xAxisGridColor
-        xAxis.gridLineDashLengths = [8.0, CGFLOAT_MAX]
-        xAxis.gridLineDashPhase = 0.0
         xAxis.labelPosition = .bottom
         xAxis.labelTextColor = labelsColor
         xAxis.avoidFirstLastClippingEnabled = true

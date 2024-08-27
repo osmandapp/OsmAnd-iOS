@@ -2137,12 +2137,12 @@
 "save_poi_without_poi_type_message" = "Típus nélkül menti a POI-t\?";
 "download_heightmap_maps" = "Magassági térkép";
 "backup_deleting_all_data" = "Összes adat törlése…";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "rendering_attr_showMtbScaleIMBATrails_name" = "Az IMBA MTB-útvonalainak megjelenítése";
 "si_nm_mt" = "Tengeri mérföld/méter";
 "depth_contour_lines" = "Mélységvonalak";
 "show_borders_of_downloaded_maps" = "Letöltött térképpel rendelkező területek eltérő színnel";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "shared_string_recorded" = "Előre felvett";
 "navigate_point_format_DM" = "FFF PP.PPP";
 "routing_attr_avoid_low_emission_zone_description" = "Alacsony kibocsátású zónák elkerülése";

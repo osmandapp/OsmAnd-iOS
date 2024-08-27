@@ -140,7 +140,7 @@
 "reset_plugin_to_default" = "Vraćanje podešavanja dodataka na fabričke vrednosti";
 "map_widget_magnetic_bearing" = "Magnetni kompas";
 "map_widget_bearing" = "Relativno usmeravanje";
-"map_widget_transparent" = "Prozirnost vidžeta";
+"map_widget_transparent" = "Prozirni vidžeti";
 "shared_string_near" = "Blizu";
 "map_widget_next_turn" = "Sledeće skretanje";
 "map_widget_next_turn_small" = "Sledeće skretanje (malo)";
@@ -2411,8 +2411,8 @@
 "shared_string_angle" = "Ugao";
 "routing_attr_motor_type_gas_name" = "Metan (CNG)";
 "routing_attr_motor_type_diesel_name" = "Dizel";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
 "contact_support" = "Obrati se podršci";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "backup_restore_data" = "Vrati podatke";
 "routing_attr_avoid_low_emission_zone_description" = "Zone niskih emisija";
 "verification_code_missing_description" = "Može trajati 10 minuta. Koristite dugme ispod ako nije završio u neželjenoj pošti.";

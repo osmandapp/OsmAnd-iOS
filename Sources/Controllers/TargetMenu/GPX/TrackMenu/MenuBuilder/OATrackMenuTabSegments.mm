@@ -21,7 +21,6 @@
 #import "OAOsmAndFormatter.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXTrackAnalysis.h"
-
 #import <DGCharts/DGCharts-Swift.h>
 #import "OsmAnd_Maps-Swift.h"
 #import "OARouteStatisticsHelper.h"

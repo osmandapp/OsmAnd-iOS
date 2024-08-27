@@ -66,7 +66,7 @@ import DGCharts
 @objcMembers
 class GpxUIHelper: NSObject {
 
-    final class ValueFormatter: IAxisValueFormatter {
+    final class ValueFormatterLocal: AxisValueFormatter {
 
         private var formatX: String?
         private var unitsX: String
@@ -85,13 +85,14 @@ class GpxUIHelper: NSObject {
         }
     }
 
-    private class HeightFormatter: IFillFormatter {
-        func getFillLinePosition(dataSet: ILineChartDataSet, dataProvider: LineChartDataProvider) -> CGFloat {
+    private class HeightFormatter: FillFormatter {
+        func getFillLinePosition(dataSet: LineChartDataSetProtocol,
+                                 dataProvider: LineChartDataProvider) -> CGFloat {
             CGFloat(dataProvider.chartYMin)
         }
     }
 
-    private class TimeFormatter: IAxisValueFormatter {
+    private class TimeFormatter: AxisValueFormatter {
 
         private var useHours: Bool
 
@@ -119,7 +120,7 @@ class GpxUIHelper: NSObject {
         }
     }
 
-    private class TimeSpanFormatter : AxisValueFormatter {
+    private class TimeSpanFormatter: AxisValueFormatter {
         private var startTime: Int64
 
         init(startTime: Int64) {
@@ -137,21 +138,21 @@ class GpxUIHelper: NSObject {
     }
 
     final class OrderedLineDataSet: LineChartDataSet {
-
+        
         private let leftAxis: Bool
-
-        var priority: Float
+        
         var units: String
+        var priority: Float
         var divX: Double = 1
         var divY: Double = 1
         var mulY: Double = 1
         var color: UIColor
-
+        
         private var dataSetType: GPXDataSetType
         private var dataSetAxisType: GPXDataSetAxisType
-
-        init(entries: [ChartDataEntry]?,
-             label: String?,
+        
+        init(entries: [ChartDataEntry],
+             label: String,
              dataSetType: GPXDataSetType,
              dataSetAxisType: GPXDataSetAxisType,
              leftAxis: Bool) {
@@ -160,43 +161,43 @@ class GpxUIHelper: NSObject {
             self.priority = 0
             self.units = ""
             self.color = dataSetType.getTextColor()
+            self.leftAxis = leftAxis
             super.init(entries: entries, label: label)
             self.mode = LineChartDataSet.Mode.linear
-            self.leftAxis = leftAxis
         }
-
+        
         required init() {
             fatalError("init() has not been implemented")
         }
-
+        
         override func getDivX() -> Double {
             divX
         }
-
+        
         func getDataSetType() -> GPXDataSetType {
             dataSetType
         }
-
+        
         func getDataSetAxisType() -> GPXDataSetAxisType {
             dataSetAxisType
         }
-
+        
         func getPriority() -> Float {
             priority
         }
-
+        
         func getDivY() -> Double {
             divY
         }
-
+        
         func getMulY() -> Double {
             mulY
         }
-
+        
         func getUnits() -> String {
             units
         }
-
+        
         func isLeftAxis() -> Bool {
             leftAxis
         }
@@ -227,13 +228,11 @@ class GpxUIHelper: NSObject {
 
                 if useFirst {
                     let entry1 = dataSet1.entryForXValue(entry.x, closestToY: Double.nan, rounding: .up)
-                    
                     res.append(NSAttributedString(string: "\(lround(entry1?.y ?? 0)) " + dataSet1.units,
                                                   attributes: [NSAttributedString.Key.foregroundColor: dataSet1.color]))
                 }
                 if useSecond {
                     let entry2 = dataSet2.entryForXValue(entry.x, closestToY: Double.nan, rounding: .up)
-                    
                     if useFirst {
                         res.append(NSAttributedString(string: ", \(lround(entry2?.y ?? 0)) " + dataSet2.units,
                                                       attributes: [NSAttributedString.Key.foregroundColor: dataSet2.color]))
@@ -311,11 +310,11 @@ class GpxUIHelper: NSObject {
 
     private static let maxChartDataItems = 10000.0
 
-    static func getDivX(dataSet: IChartDataSet) -> Double {
+    static func getDivX(dataSet: ChartDataSetProtocol) -> Double {
         (dataSet as? OrderedLineDataSet)?.divX ?? 0
     }
 
-    static func getDataSetAxisType(dataSet: IChartDataSet) -> GPXDataSetAxisType {
+    static func getDataSetAxisType(dataSet: ChartDataSetProtocol) -> GPXDataSetAxisType {
         (dataSet as? OrderedLineDataSet)?.getDataSetAxisType() ?? GPXDataSetAxisType.distance
     }
 
@@ -445,9 +444,9 @@ class GpxUIHelper: NSObject {
         chart.dragDecelerationEnabled = false
         chart.highlightPerTapEnabled = false
         chart.highlightPerDragEnabled = true
-        chart.renderer = CustomBarChartRenderer(dataProvider: chart,
-                                                animator: chart.chartAnimator,
-                                                viewPortHandler: chart.viewPortHandler)
+        chart.renderer = HorizontalBarChartRenderer(dataProvider: chart,
+                                                    animator: chart.chartAnimator,
+                                                    viewPortHandler: chart.viewPortHandler)
         chart.extraTopOffset = topOffset
         chart.extraBottomOffset = bottomOffset
 
@@ -873,12 +872,12 @@ class GpxUIHelper: NSObject {
                                    axisType: axisType,
                                    calcWithoutGaps: calcWithoutGaps)
         let mainUnitY: String = graphType.getMainUnitY()
-        let yAxis: YAxis  = getYAxis(chart: chartView,
-                                     textColor: UIColor.chartTextColorElevation,
-                                     useRightAxis: useRightAxis)
+        let yAxis = getYAxis(chart: chartView,
+                             textColor: UIColor.chartTextColorElevation,
+                             useRightAxis: useRightAxis)
         yAxis.granularity = 1
         yAxis.resetCustomAxisMax()
-        yAxis.valueFormatter = ValueFormatter(formatX: nil, unitsX: mainUnitY)
+        yAxis.valueFormatter = ValueFormatterLocal(formatX: nil, unitsX: mainUnitY)
         let values = calculateElevationArray(analysis: analysis,
                                              axisType: axisType,
                                              divX: divX,
@@ -929,7 +928,7 @@ class GpxUIHelper: NSObject {
         let yAxis: YAxis = getYAxis(chart: chartView, textColor: UIColor.chartTextColorSlope, useRightAxis: useRightAxis)
         yAxis.granularity = 1.0
         yAxis.resetCustomAxisMin()
-        yAxis.valueFormatter = ValueFormatter(formatX: nil, unitsX: mainUnitY)
+        yAxis.valueFormatter = ValueFormatterLocal(formatX: nil, unitsX: mainUnitY)
 
         var values = [ChartDataEntry]()
         if eleValues.count == 0 {
@@ -1108,7 +1107,7 @@ class GpxUIHelper: NSObject {
 
         let formatX: String? = fmt
         axisBase.granularity = granularity
-        axisBase.valueFormatter = ValueFormatter(formatX: formatX, unitsX: mainUnitStr)
+        axisBase.valueFormatter = ValueFormatterLocal(formatX: formatX, unitsX: mainUnitStr)
 
         return divX
     }
@@ -1214,9 +1213,9 @@ class GpxUIHelper: NSObject {
         let dataSet = OrderedLineDataSet(entries: values,
                                          label: "",
                                          dataSetType: GPXDataSetType.speed,
-                                         dataSetAxisType: axisType, leftAxis:
-                                            !useRightAxis)
-        yAxis.valueFormatter = ValueFormatter(formatX: dataSet.yMax < 3 ? "%.0f" : nil, unitsX: mainUnitY)
+                                         dataSetAxisType: axisType,
+                                         leftAxis: !useRightAxis)
+        yAxis.valueFormatter = ValueFormatterLocal(formatX: dataSet.yMax < 3 ? "%.0f" : nil, unitsX: mainUnitY)
 
         if divSpeed.isNaN {
             dataSet.priority = analysis.avgSpeed * Float(mulSpeed)

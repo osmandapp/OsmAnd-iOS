@@ -1249,7 +1249,7 @@
 {
     CLLocationCoordinate2D pinLocation = [self getPinLocation];
     LineChartData *lineData = chart.lineData;
-    NSArray<id <ChartDataSetProtocol>> *ds = lineData != nil ? lineData.dataSets : nil;
+    NSArray<id<ChartDataSetProtocol>> *ds = lineData != nil ? lineData.dataSets : nil;
     if (ds && ds.count > 0 && segment)
     {
         float pos;

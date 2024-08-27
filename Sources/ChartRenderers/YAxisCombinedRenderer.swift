@@ -34,26 +34,21 @@ open class YAxisCombinedRenderer: YAxisRenderer {
         fixedPosition: CGFloat,
         positions: [CGPoint],
         offset: CGFloat,
-        textAlign: NSTextAlignment)
-    {
-        guard
-            let yAxis = self.axis as? YAxis
-            else { return }
-        
-        let primaryAttributes: [NSAttributedString.Key : Any] = [.font: yAxis.labelFont,
-                                                                 .foregroundColor: yAxis.labelTextColor,
-                                                                 .backgroundColor: yAxis.labelBackgroundColor]
-        let secondaryAttributes: [NSAttributedString.Key : Any] = [.font: secondaryYAxis?.labelFont ?? UIFont.systemFont(ofSize: 15),
-                                                                   .foregroundColor: secondaryYAxis?.labelTextColor ?? .white,
-                                                                   .backgroundColor: secondaryYAxis?.labelBackgroundColor ?? .white]
+        textAlign: NSTextAlignment) {
+        let primaryAttributes: [NSAttributedString.Key: Any] = [.font: axis.labelFont,
+                                                                .foregroundColor: axis.labelTextColor,
+                                                                .backgroundColor: axis.labelBackgroundColor]
+        let secondaryAttributes: [NSAttributedString.Key: Any] = [.font: secondaryYAxis?.labelFont ?? UIFont.systemFont(ofSize: 15),
+                                                                  .foregroundColor: secondaryYAxis?.labelTextColor ?? .white,
+                                                                  .backgroundColor: secondaryYAxis?.labelBackgroundColor ?? .white]
 
-        let from = yAxis.isDrawBottomYLabelEntryEnabled ? 0 : 1
-        let to = yAxis.isDrawTopYLabelEntryEnabled ? yAxis.entryCount : (yAxis.entryCount - 1)
+        let from = axis.isDrawBottomYLabelEntryEnabled ? 0 : 1
+        let to = axis.isDrawTopYLabelEntryEnabled ? axis.entryCount : (axis.entryCount - 1)
 
         for i in stride(from: from, to: to, by: 1) {
             let height: CGPoint? = secondaryTransformer?.valueForTouchPoint(CGPoint(x: fixedPosition, y: positions[i].y + offset))
             let secondaryText: String = secondaryYAxis?.valueFormatter?.stringForValue(Double(height?.y ?? 0), axis: secondaryYAxis) ?? ""
-            let text = yAxis.getFormattedLabel(i)
+            let text = axis.getFormattedLabel(i)
 
             let needsSeparator = self.renderingMode == .bothValues
             let separator = needsSeparator ? ", " : ""
@@ -67,27 +62,24 @@ open class YAxisCombinedRenderer: YAxisRenderer {
                                  align: textAlign,
                                  attributes: primaryAttributes)
 
-                if (!secondaryText.isEmpty) {
+                if !secondaryText.isEmpty {
                     context.drawText(separator + secondaryText,
                                      at: CGPoint(x: fixedPosition, y: positions[i].y + offset),
                                      align: textAlign,
                                      attributes: secondaryAttributes)
                 }
-                break
             case .primaryValueOnly:
                 context.drawText(text,
                                  at: CGPoint(x: fixedPosition, y: positions[i].y + offset),
                                  align: textAlign,
                                  attributes: primaryAttributes)
-                break
             case .secondaryValueOnly:
-                if (!secondaryText.isEmpty) {
+                if !secondaryText.isEmpty {
                     context.drawText(separator + secondaryText,
                                      at: CGPoint(x: fixedPosition, y: positions[i].y + offset),
                                      align: textAlign,
                                      attributes: secondaryAttributes)
                 }
-                break
             default:
                 break
             }

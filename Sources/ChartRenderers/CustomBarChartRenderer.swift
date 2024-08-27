@@ -8,8 +8,8 @@
 import UIKit
 
 open class CustomBarChartRenderer: HorizontalBarChartRenderer {
-    
-    public override init(dataProvider: BarChartDataProvider, animator: Animator, viewPortHandler: ViewPortHandler) {
+
+    override init(dataProvider: BarChartDataProvider, animator: Animator, viewPortHandler: ViewPortHandler) {
         super.init(dataProvider: dataProvider, animator: animator, viewPortHandler: viewPortHandler)
     }
 

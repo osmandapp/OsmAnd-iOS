@@ -1481,6 +1481,9 @@ static const NSInteger kColorsSection = 1;
                 selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:[_gradientColorsCollection getDefaultGradientPalette]] inSection:0];
             [paletteHandler setSelectedIndexPath:selectedIndexPath];
             [cell setCollectionHandler:paletteHandler];
+            cell.collectionView.contentInset = UIEdgeInsetsMake(0, 10, 0, 0);
+            [cell configureTopOffset:12];
+            [cell configureBottomOffset:12];
         }
         return cell;
     }
@@ -1699,6 +1702,7 @@ static const NSInteger kColorsSection = 1;
                                                                                          forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.separatorInset = UIEdgeInsetsMake(0, CGFLOAT_MAX, 0, 0);
+        cell.heightConstraint.constant = 55;
 
         [GpxUIHelper setupGradientChartWithChart:cell.lineChartView
                              useGesturesAndScale:NO
@@ -1719,6 +1723,7 @@ static const NSInteger kColorsSection = 1;
                                         colorPalette:colorPalette
                                       valueFormatter:[GradientUiHelper getGradientTypeFormatter:_gradientColorsCollection.gradientType
                                                                                        analysis:self.analysis]];
+        [cell.lineChartView setVisibleYRangeWithMinYRange:0 maxYRange: 1 axis:AxisDependencyLeft];
         [cell.lineChartView notifyDataSetChanged];
         return cell;
     }

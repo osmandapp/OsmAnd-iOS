@@ -2404,7 +2404,7 @@
 "backup_delete_all_data" = "Delete all my data";
 "copy_poi_name" = "Copiar el nome del PdI";
 "backup_delete_old_data" = "Remove old versions";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "verification_code_missing_description" = "Can take 10 minutes. Use the button below if it isn\'t in your spam folder.";
 "animate_my_location" = "Animar la mio posición";
 "routing_attr_avoid_tunnels_description" = "Avoid tunnels";
@@ -2414,7 +2414,7 @@
 "duration_ago" = "%@ ago";
 "recording_delete_confirm" = "¿Quies desaniciar esti elementu\?";
 "shared_string_selected" = "Na esbilla";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "offline_edition_descr" = "If offline editing is enabled, then changes will be saved locally first and uploaded by request, otherwise changes will be uploaded immediately.";
 "benefits_for_contributors_secondary_descr" = "Sign in to OpenStreetMap to check if you are eligible for unlimited monthly&hourly map updates.";
 "backup_pause_all" = "Posar too";

@@ -2265,6 +2265,7 @@
 "routeInfo_smoothness_description" = "Clasificación con respecto a la usabilidad física de un camino para vehículos con ruedas, particularmente con respecto a la regularidad y planitud de la superficie.";
 "routeInfo_tracktype_description" = "Colorea la ruta o el trazado de la vía por su composición superficial. Suele aplicarse cuando la red de caminos está en gran parte sin pavimentar.";
 "ltr_or_rtl_combine_via_dash" = "%@ - %@";
+
 "shared_string_open_street_map" = "OpenStreetMap";
 "routing_attr_allow_gate_name" = "Permitir usar puertas";
 "routing_attr_only_permitted_streets_name" = "Calles expresamente autorizadas";
@@ -2642,7 +2643,7 @@
 "activity_type_mountainbike_name" = "Bicicleta de montaña";
 "rendering_attr_showMtbScaleIMBATrails_name" = "Mostrar senderos de montaña IMBA";
 "mtb_imba_full" = "Asociación Internacional del Ciclismo de Montaña";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "show_map_symbols" = "Mostrar símbolos del mapa";
 "depth_contour_lines" = "Curvas de nivel de profundidad";
 "syncing_progress" = "Sincronizando...";

@@ -30,4 +30,7 @@
 
 - (void)anchorContent:(EOATableViewCellContentStyle)style;
 
+- (void)configureTopOffset:(CGFloat)top;
+- (void)configureBottomOffset:(CGFloat)bottom;
+
 @end

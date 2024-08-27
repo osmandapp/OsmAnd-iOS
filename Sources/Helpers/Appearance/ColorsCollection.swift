@@ -196,13 +196,29 @@ class ColorsCollection: NSObject {
         }
     }
 
+    func getSorting() -> ((PaletteColor, PaletteColor) -> Bool) {
+        {
+            return $0.getIndex() < $1.getIndex()
+        }
+    }
+
+    func sortColors() {
+        originalOrder.sort(by: getSorting())
+
+        for paletteColor in originalOrder {
+            if let index = originalOrder.firstIndex(where: { $0.id == paletteColor.id }) {
+                paletteColor.setIndex(index + 1)
+            }
+        }
+    }
+
     func loadColors() {
         do {
             originalOrder.removeAll()
             lastUsedOrder.removeAll()
             try loadColorsInLastUsedOrder()
             originalOrder.append(contentsOf: lastUsedOrder)
-            originalOrder.sort { $0.getIndex() < $1.getIndex() }
+            sortColors()
         } catch {
             debugPrint("Error when trying to read file: \(error.localizedDescription)")
         }

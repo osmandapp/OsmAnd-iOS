@@ -2411,8 +2411,8 @@
 "shared_string_angle" = "Ugao";
 "routing_attr_motor_type_gas_name" = "Metan (CNG)";
 "routing_attr_motor_type_diesel_name" = "Dizel";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
 "contact_support" = "Obrati se podršci";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "backup_restore_data" = "Vrati podatke";
 "routing_attr_avoid_low_emission_zone_description" = "Zone niskih emisija";
 "verification_code_missing_description" = "Može trajati 10 minuta. Koristite dugme ispod ako nije završio u neželjenoj pošti.";

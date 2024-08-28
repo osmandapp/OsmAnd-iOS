@@ -1380,7 +1380,7 @@
 "toggle_contour_lines" = "Show/Hide contour lines";
 "toggle_hillshade" = "Show/Hide terrain";
 "show_from_zoom_level" = "Видими при увеличение";
-"quick_action_contour_lines_descr" = "Бутон за превключване на контурните линии на картата.";
+"quick_action_contour_lines_descr" = "Бутон, превключващ контурните линии на картата.";
 "hide_contour_lines" = "Hide contour lines";
 "enable_contour_lines" = "Enable to view contour lines on the map";
 "enable_hillshade" = "Enable to view terrain data";

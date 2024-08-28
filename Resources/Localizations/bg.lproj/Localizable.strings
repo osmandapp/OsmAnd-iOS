@@ -1386,7 +1386,7 @@
 "enable_hillshade" = "Enable to view terrain data";
 "contour_lines_hillshades_slope" = "Контурни линии, засенчване на релефа, склонове";
 "quick_action_dir_from_descr" = "Tap this action to navigate from the current screen center point.";
-"quick_action_transport_descr" = "Превключва видимостта на обществения транспорт на картата.";
+"quick_action_transport_descr" = "Бутон, превключващ обществения транспорт на картата.";
 "toggle_public_transport" = "Show/hide public transport";
 "public_transport_show" = "Show public transport";
 "public_transport_hide" = "Hide public transport";
@@ -1421,7 +1421,7 @@
 "poi_context_menu_modify_osm_change" = "Промяна на OSM редакцията";
 "context_menu_item_open_note" = "Отваряне на бележка на OSM";
 "edit_osm_note" = "Edit OSM Note";
-"shared_string_commit" = "Изпращане на данни до OSM";
+"shared_string_commit" = "Изпращане";
 "osb_comment_dialog_message" = "Съобщение";
 "osn_add_dialog_title" = "Създайте Бележка";
 "modify_poi" = "Modify the POI information";
@@ -1813,8 +1813,8 @@
 "city_type_district" = "Окръг";
 "city_type_neighbourhood" = "Квартал";
 "postcode" = "Пощенски код";
-"show_something_on_map" = "Show %@ on the map";
-"search_POI_level_btn" = "Търси още";
+"show_something_on_map" = "Показване на %@ на картата";
+"search_POI_level_btn" = "Търсене на повече";
 "search_address_street" = "Улица";
 "search_address_building_option" = "Номер";
 "shared_string_street_intersection" = "Street intersection";
@@ -2980,3 +2980,4 @@
 "rendering_attr_padusDisplayMode_description" = "По вид на достъпа или име на отговорника";
 "rendering_attr_padusDisplayMode_name" = "Режим на показване на обществени земи";
 "auto_zoom" = "Автоматично мащабиране";
+"help_article_map_point_layers_on_map_name" = "Точки на картата";

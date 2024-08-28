@@ -1391,7 +1391,7 @@
 "public_transport_show" = "Show public transport";
 "public_transport_hide" = "Hide public transport";
 "quick_action_showhide_mapillary_title" = "Show/hide Mapillary";
-"quick_action_showhide_mapillary_descr" = "Tapping this action button shows or hides the Mapillary layer on the map.";
+"quick_action_showhide_mapillary_descr" = "Бутон, превключващ слоя на Mapillary на картата.";
 "quick_action_mapillary_hide" = "Hide Mapillary";
 "quick_action_mapillary_show" = "Show Mapillary";
 "quick_action_remove_next_destination" = "Следващо местоназначение";
@@ -1585,7 +1585,7 @@
 "some_articles_may_not_available_in_lang" = "Някои статии в Уикипедия може да не са достъпни на вашия език.";
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
-"srtm_plugin_name" = "Контурни линии";
+"srtm_plugin_name" = "Релеф";
 "product_desc_srtm" = "Display of contour lines";
 "srtm_plugin_description" = "Информацията за терена, като контурни линии, хълмове и склонове, помага визуално да оцените разположението на земята и релефа, възможностите за навигация и др. Топографската информация може да бъде представена на картата чрез контурни линии, засенчване на релефа и/или оцветяване на стръмнините. \n \nДанните, върху които лежи тази функционалност, произхождат от SRTM и ASTER. \n \nОще информация на %@.";
 "wikivoyage_travel_guide" = "Пътеводител";
@@ -1846,7 +1846,7 @@
 "osm_live_payment_renews_annually" = "Renews annually";
 "default_price_currency_format" = "%.2f %@";
 "osm_live_payment_header" = "Select the payment period convenient for you:";
-"osm_live_payment_contribute_descr" = "Part of income goes to OpenStreetMap contributors.";
+"osm_live_payment_contribute_descr" = "Даренията помагат за финансиране на картографията на OSM.";
 "purchase_dialog_title" = "Choose plan";
 "purchase_dialog_travel_description" = "Purchase one of the following to receive the offline travel guide functionality:";
 "free_version_message" = "%@карти за изтегляне или обновяване.";
@@ -1959,7 +1959,7 @@
 "rendering_attr_surface_paved_name" = "Paved";
 "routing_attr_difficulty_preference_name" = "Предпочитана трудност";
 "routing_attr_avoid_subway_name" = "No subways";
-"rendering_attr_showLez_description" = "Show Low Emission Zones on the map. Does not affect routing.";
+"rendering_attr_showLez_description" = "Показване на зоните за ниски емисии на картата. Не влияе на маршрутизирането.";
 "rendering_attr_surfaceIntegrity_name" = "Road surface integrity";
 "routing_attr_allow_intermediate_description" = "По-сложен маршрут със стръмни участъци. Наличие на препятствия, които да бъдат избегнати.";
 "rendering_attr_coloredBuildings_name" = "Оцветяване на сградите в зависимост от типа им";
@@ -2981,3 +2981,4 @@
 "rendering_attr_padusDisplayMode_name" = "Режим на показване на обществени земи";
 "auto_zoom" = "Автоматично мащабиране";
 "help_article_map_point_layers_on_map_name" = "Точки на картата";
+"quick_action_coordinates_widget_descr" = "Бутон, превключващ приспособлението за координати на картата.";

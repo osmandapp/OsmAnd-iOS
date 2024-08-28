@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "OATopIndexFilter.h"
+#import "OAPOIBaseType.h"
+#import "OAPOIHelper.h"
 
 @implementation OATopIndexFilter
 
@@ -31,7 +33,15 @@
 }
 
 - (NSString *)getName {
-    return self.tag;
+    OAPOIBaseType *pt = [[OAPOIHelper sharedInstance] getAnyPoiAdditionalTypeByKey:_tag];
+    if (pt)
+        return pt.nameLocalized;
+
+    return [[OAPOIHelper sharedInstance] getPhraseByName:_tag];
+}
+
+- (NSString *)getValue {
+    return self.value;
 }
 
 - (NSString *)getIconResource {

@@ -1297,7 +1297,7 @@
 		97F6410A29C475E7008F527B /* ic_action_hill_climbing@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 97F6410629C475E6008F527B /* ic_action_hill_climbing@3x.png */; };
 		97F6410B29C475E7008F527B /* ic_action_hill_climbing@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 97F6410729C475E6008F527B /* ic_action_hill_climbing@2x.png */; };
 		97F6410C29C475E7008F527B /* map_action_hill_climbing@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 97F6410829C475E7008F527B /* map_action_hill_climbing@2x.png */; };
-		9A3A2ACC2C2C44B500B28C43 /* OATopIndexFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A3A2ACB2C2C44B500B28C43 /* OATopIndexFilter.m */; };
+		9A3A2ACC2C2C44B500B28C43 /* OATopIndexFilter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9A3A2ACB2C2C44B500B28C43 /* OATopIndexFilter.mm */; };
 		A166C762BD53085527F42840 /* libPods-OsmAnd Maps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4812C702BBB164A7AE849D7E /* libPods-OsmAnd Maps.a */; };
 		B0D6100B2E010FD6F3088B80 /* OATrackMenuHeaderView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D61823DCC461FF03FE8103 /* OATrackMenuHeaderView.mm */; };
 		B0D610BD70EF0179933FD55C /* OAAddWaypointViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D618034074DE575CDAACDD /* OAAddWaypointViewController.mm */; };
@@ -4874,7 +4874,7 @@
 		97F6410729C475E6008F527B /* ic_action_hill_climbing@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_action_hill_climbing@2x.png"; sourceTree = "<group>"; };
 		97F6410829C475E7008F527B /* map_action_hill_climbing@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_action_hill_climbing@2x.png"; sourceTree = "<group>"; };
 		9A3A2ACA2C2C448300B28C43 /* OATopIndexFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATopIndexFilter.h; sourceTree = "<group>"; };
-		9A3A2ACB2C2C44B500B28C43 /* OATopIndexFilter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OATopIndexFilter.m; sourceTree = "<group>"; };
+		9A3A2ACB2C2C44B500B28C43 /* OATopIndexFilter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATopIndexFilter.mm; sourceTree = "<group>"; };
 		B0D610268394E6C3CF0F3C8C /* OAEditWaypointsGroupBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAEditWaypointsGroupBottomSheetViewController.mm; sourceTree = "<group>"; };
 		B0D61037ED3E628F3BB6C1AA /* OASelectionCollapsableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASelectionCollapsableCell.h; sourceTree = "<group>"; };
 		B0D6104FF6489E0A62C61D9A /* OAQuadItemsWithTitleDescIconCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAQuadItemsWithTitleDescIconCell.mm; sourceTree = "<group>"; };
@@ -11281,7 +11281,7 @@
 				320EADAA29A77A96002F9883 /* OAAmenityExtendedNameFilter.h */,
 				320EADAB29A77AAB002F9883 /* OAAmenityExtendedNameFilter.mm */,
 				9A3A2ACA2C2C448300B28C43 /* OATopIndexFilter.h */,
-				9A3A2ACB2C2C44B500B28C43 /* OATopIndexFilter.m */,
+				9A3A2ACB2C2C44B500B28C43 /* OATopIndexFilter.mm */,
 			);
 			path = POI;
 			sourceTree = "<group>";
@@ -17713,7 +17713,7 @@
 				FAA650562ADD42C50020DCEA /* UIView+Extension.swift in Sources */,
 				B0D61A9D5A74989254593C0B /* OAEditWaypointsGroupOptionsViewController.mm in Sources */,
 				B0D61C5D43831388AD948812 /* OAQuadItemsWithTitleDescIconCell.mm in Sources */,
-				9A3A2ACC2C2C44B500B28C43 /* OATopIndexFilter.m in Sources */,
+				9A3A2ACC2C2C44B500B28C43 /* OATopIndexFilter.mm in Sources */,
 				B0D617256EE335C6089A92B5 /* OATrackMenuUIBuilder.mm in Sources */,
 				B0D61A6BBC8BCC545C4A904E /* OABaseTrackMenuTabItem.mm in Sources */,
 				320F71322A862DE90071C0E7 /* TravelSearchResult.swift in Sources */,

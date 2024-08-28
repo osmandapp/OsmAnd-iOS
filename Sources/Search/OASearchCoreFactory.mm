@@ -1206,9 +1206,8 @@
     OsmAnd::AreaI bbox31 = OsmAnd::AreaI(bbox.top, bbox.left, bbox.bottom, bbox.right);
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
-    OANameStringMatcher *nm = [phrase getMainUnknownNameStringMatcher];
-    
     NSArray *offlineIndexes = [phrase getOfflineIndexes];
+    QHash<QString, QSet<QString>> matchedValues;
     for (NSString *resId in offlineIndexes)
     {
         const auto& r = app.resourcesManager->getLocalResource(QString::fromNSString(resId));
@@ -1223,6 +1222,16 @@
         OATopIndexMatch *match = [self matchTopIndex:poiSubTypes phrase:phrase lang:lang];
         if (match != nil)
         {
+            QString key = QString::fromNSString(match.key);
+            QString value = QString::fromNSString(match.value);
+            if (matchedValues.contains(key) && matchedValues.value(key).contains(value))
+                continue;
+            
+            if (!matchedValues.contains(key))
+                matchedValues.insert(key, QSet<QString>());
+            
+            matchedValues[key].insert(value);
+
             OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
             res.localeName = match.translatedValue;
             OsmAnd::LogPrintf(OsmAnd::LogSeverityLevel::Debug, "Top index found: %s %s", QString::fromNSString(match.key).toStdString().c_str(), QString::fromNSString(match.value).toStdString().c_str());
@@ -1240,15 +1249,21 @@
     
     for (const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(poiSubtypes)))
     {
-        const QStringList & values = entry.value();
+        QStringList values = entry.value();
+        values.sort();
+        NSMutableArray *sortedValues = [NSMutableArray arrayWithCapacity:values.size()];
+        for (const QString &s : values)
+        {
+            [sortedValues addObject:s.toNSString()];
+        }
         NSString * translate = nil;
         NSString * topIndexValue = nil;
-        for (const QString & s : values)
+        for (NSString *s in sortedValues)
         {
-            translate = [self getTopIndexTranslation:s.toNSString()];
-            if ([nm matches:s.toNSString()] || [nm matches:translate])
+            translate = [self getTopIndexTranslation:s];
+            if ([nm matches:s] || [nm matches:translate])
             {
-                topIndexValue = s.toNSString();
+                topIndexValue = s;
                 break;
             }
         }

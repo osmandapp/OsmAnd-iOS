@@ -1701,7 +1701,7 @@
 "road_max_speed_descr" = "Définit la vitesse maximale pour toutes les routes sur le trajet. Cela diminuera la priorité des routes dont la vitesse autorisée est supérieure à ce maximum.";
 "road_min_speed_descr" = "Définit la vitesse minimale pour toutes les routes sur le trajet. Augmentera la priorité des routes dont la vitesse recommandée est inférieure à ce minimum.";
 "road_speeds_descr" = "Ces paramètres peuvent modifer le calcul d'itinéraire.";
-"ltr_or_rtl_combine_via_colon" = "%@: %@";
+"ltr_or_rtl_combine_via_colon" = "%@ : %@";
 "road_speeds" = "Vitesses routières";
 "layer_amenity_label" = "Libellés des Points d\'Intérêt et Favoris";
 "osm_notes" = "Notes OSM";

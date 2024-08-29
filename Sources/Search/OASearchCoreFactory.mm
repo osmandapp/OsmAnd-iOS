@@ -1291,16 +1291,15 @@
     return nil;
 }
 
-- (NSString *)getTopIndexTranslation:(NSString *)value {
-    return value;
-    //NSString *key = [TopIndexFilter getValueKey:value];
-    //NSString *translate = [types getPoiTranslation:key];
+- (NSString *)getTopIndexTranslation:(NSString *)value
+{
+    NSString *key = [OATopIndexFilter getValueKey:value];
+    NSString *translate = [[OAPOIHelper sharedInstance] getPhraseByName:key];
     
-    //if ([[translate lowercaseString] isEqualToString:key]) {
-    //    translate = value;
-    //}
+    if ([[translate lowercaseString] isEqualToString:key])
+        translate = value;
     
-    //return translate;
+    return translate;
 }
 
 @end

@@ -177,6 +177,33 @@
     return self;
 }
 
+- (instancetype)initWithTopIndexFilter:(OATopIndexFilter *)filter acceptedTypes:(NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *)accTypes
+{
+    self = [self init];
+    if (self)
+    {
+        isStandardFilter = YES;
+        standardIconId = [filter getIconResource];
+        filterId = [filter getFilterId];
+        name = [filter getName];
+        if (!accTypes)
+        {
+            [self initSearchAll];
+        }
+        else
+        {
+            NSEnumerator<OAPOICategory *> *e = accTypes.keyEnumerator;
+            for (OAPOICategory *c in e)
+            {
+                [acceptedTypes setObject:[accTypes objectForKey:c] forKey:c];
+            }
+        }
+        [self updatePoiAdditionals];
+        [self updateAcceptedTypeOrigins];
+    }
+    return self;
+}
+
 + (NSComparator) getComparator
 {
     static dispatch_once_t once;

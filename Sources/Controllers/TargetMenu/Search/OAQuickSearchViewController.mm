@@ -82,6 +82,13 @@ typedef NS_ENUM(NSInteger, QuickSearchTab)
     ADDRESS,
 };
 
+typedef NS_ENUM(NSInteger, ProcessTopIndex)
+{
+    ProcessTopIndexFilter,
+    ProcessTopIndexMap,
+    ProcessTopIndexNo
+};
+
 typedef void(^OASearchStartedCallback)(OASearchPhrase *phrase);
 typedef void(^OAPublishCallback)(OASearchResultCollection *res, BOOL append);
 typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
@@ -154,6 +161,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     OASearchToolbarViewController *_searchToolbarViewController;
 
     BarActionType _barActionType;
+    ProcessTopIndex _processTopIndexAfterLoad;
     BOOL _historyEditing;
 
     BOOL _bottomViewVisible;
@@ -579,6 +587,15 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                     if ([searchPhrase getFirstUnknownSearchWord].length > 0)
                         [filter setFilterByName:[searchPhrase getFirstUnknownSearchWord]];
                 }
+                else if ([[searchPhrase getLastSelectedWord].result.object isKindOfClass:[OATopIndexFilter class]])
+                {
+                    OATopIndexFilter *topIndexFilter = (OATopIndexFilter *) [searchPhrase getLastSelectedWord].result.object;
+                    filter = [self createPoiUIFilterWithTopIndexFilter:topIndexFilter processAfter:ProcessTopIndexMap];
+                    if (filter)
+                        [filter setFilterByName:[topIndexFilter getValue]];
+                    else
+                        return;
+                }
                 else
                 {
                     filter = (OAPOIUIFilter *) [searchPhrase getLastSelectedWord].result.object;
@@ -653,6 +670,17 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                         [custom updateTypesToAccept:abstractPoiType];
 
                         OAPOIFilterViewController *filterViewController = [[OAPOIFilterViewController alloc] initWithFilter:custom filterByName:filterByName];
+                        filterViewController.delegate = self;
+                        [self.navigationController pushViewController:filterViewController animated:YES];
+                    }
+                }
+                else if ([object isKindOfClass:[OATopIndexFilter class]])
+                {
+                    OATopIndexFilter *topIndexFilter = (OATopIndexFilter *)object;
+                    OAPOIUIFilter *custom = [self createPoiUIFilterWithTopIndexFilter:topIndexFilter processAfter:ProcessTopIndexFilter];
+                    if (custom)
+                    {
+                        OAPOIFilterViewController *filterViewController = [[OAPOIFilterViewController alloc] initWithFilter:custom filterByName:[topIndexFilter getValue]];
                         filterViewController.delegate = self;
                         [self.navigationController pushViewController:filterViewController animated:YES];
                     }
@@ -1437,6 +1465,43 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 	    [self.view setNeedsLayout];
 }
 
+- (OAPOIUIFilter *) createPoiUIFilterWithTopIndexFilter:(OATopIndexFilter *)topIndexFilter processAfter:(ProcessTopIndex)processAfter
+{
+    OAPOIUIFilter *filter = [[OAPOIFiltersHelper sharedInstance] getFilterById:[topIndexFilter getFilterId]];
+    if (filter)
+    {
+        _processTopIndexAfterLoad = ProcessTopIndexNo;
+        return filter;
+    }
+    else if (self.searchHelper && [self.searchHelper getResultCollection])
+    {
+        NSArray<OASearchResult *> *searchResults = [[self.searchHelper getResultCollection] getCurrentSearchResults];
+        NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *acceptedTypes = [NSMapTable strongToStrongObjectsMapTable];
+        for (OASearchResult *res in searchResults)
+        {
+            if ([res.object isKindOfClass:[OAPOI class]])
+            {
+                OAPOI *poi = (OAPOI *) res.object;
+                OAPOICategory *poiCategory = poi.type.category;
+                NSMutableSet<NSString *> *subtypes = [acceptedTypes objectForKey:poiCategory];
+                if (!subtypes)
+                {
+                    subtypes = [NSMutableSet set];
+                    [acceptedTypes setObject:subtypes forKey:poiCategory];
+                }
+                [subtypes addObject:poi.subType];
+            }
+        }
+        
+        filter = [[OAPOIFiltersHelper sharedInstance] getFilter:topIndexFilter acceptedTypes:acceptedTypes];
+        _processTopIndexAfterLoad = ProcessTopIndexNo;
+        return filter;
+    }
+    
+    _processTopIndexAfterLoad = processAfter;
+    return nil;
+}
+
 - (void) goToPoint:(double)latitude longitude:(double)longitude
 {
     OAPOI *poi = [[OAPOI alloc] init];
@@ -1574,6 +1639,17 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                 regionResultCollection = nil;
                 results = [NSMutableArray array];
                 [self showApiResults:apiResults phrase:phrase hasRegionCollection:hasRegionCollection onPublish:onPublish];
+                // TODO: Perhaps an Android implementation is needed
+                switch (_processTopIndexAfterLoad)
+                {
+                    case ProcessTopIndexFilter:
+                        break;
+                    case ProcessTopIndexMap:
+                        break;
+                    default:
+                        break;
+                }
+                _processTopIndexAfterLoad = ProcessTopIndexNo;
                 break;
             }
             case SEARCH_API_REGION_FINISHED:

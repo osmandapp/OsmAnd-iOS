@@ -32,6 +32,10 @@
     return self.tag;
 }
 
+- (NSString *)getFilterId {
+    return [NSString stringWithFormat:@"%@%@_%@", @"top_index_", self.tag, [OATopIndexFilter getValueKey:self.value]];
+}
+
 - (NSString *)getName {
     OAPOIBaseType *pt = [[OAPOIHelper sharedInstance] getAnyPoiAdditionalTypeByKey:_tag];
     if (pt)

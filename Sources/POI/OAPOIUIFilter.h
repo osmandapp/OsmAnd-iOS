@@ -10,6 +10,7 @@
 #import <Foundation/Foundation.h>
 #import "OACustomSearchPoiFilter.h"
 #import "OAResultMatcher.h"
+#import "OATopIndexFilter.h"
 
 #define INVALID_ORDER -1
 
@@ -54,6 +55,7 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 - (instancetype) initWithName:(NSString *)nm filterId:(NSString *)fId acceptedTypes:(NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *)accTypes;
 - (instancetype) initWithFiltersToMerge:(NSSet<OAPOIUIFilter *> *)filtersToMerge;
 - (instancetype) initWithFilter:(OAPOIUIFilter *)filter name:(NSString *)nm filterId:(NSString *)fId;
+- (instancetype) initWithTopIndexFilter:(OATopIndexFilter *)filter acceptedTypes:(NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *)accTypes;
 
 - (BOOL) isAutomaticallyIncreaseSearch;
 - (NSArray<OAPOI *> *) searchAmenitiesInternal:(double)lat lon:(double)lon topLatitude:(double)topLatitude bottomLatitude:(double)bottomLatitude leftLongitude:(double)leftLongitude rightLongitude:(double)rightLongitude zoom:(int)zoom matcher:(OAResultMatcher<OAPOI *> *)matcher;

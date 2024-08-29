@@ -21,5 +21,7 @@
 - (NSString *)getName;
 - (NSString *)getIconResource;
 + (NSString *)getValueKey:(NSString *)value;
+- (NSString *)getFilterId;
+- (NSString *)getValue;
 
 @end

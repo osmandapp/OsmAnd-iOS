@@ -696,6 +696,7 @@
                 {
                     NSString *name = [item getName];
                     NSString *typeName = [((OATopIndexFilter *)res.object) getName];
+                    // TODO: Perhaps an Android implementation is needed for icon
                     UIImage *icon = [UIImage imageNamed:@"ic_custom_search"];
                     OASimpleTableViewCell *cell = [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tableView typeName:typeName icon:icon];
                     return cell;

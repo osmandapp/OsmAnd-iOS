@@ -14,7 +14,6 @@
 #import "OALocationServices.h"
 #import "OAAppData.h"
 #import "OARoutingTargetCell.h"
-#import "OALineChartCell.h"
 #import "OARTargetPoint.h"
 #import "OAPointDescription.h"
 #import "Localization.h"
@@ -123,7 +122,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     
     int _historyItemsLimit;
     
-    OALineChartCell *_routeStatsCell;
+    ElevationChartCell *_routeStatsCell;
     UIProgressView *_progressBarView;
     
     OAGPXTrackAnalysis *_trackAnalysis;
@@ -202,15 +201,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     [_tableView setShowsHorizontalScrollIndicator:NO];
     _tableView.estimatedRowHeight = kEstimatedRowHeight;
     
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OALineChartCell getCellIdentifier] owner:self options:nil];
-    _routeStatsCell = (OALineChartCell *)[nib objectAtIndex:0];
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[ElevationChartCell getCellIdentifier] owner:self options:nil];
+    _routeStatsCell = (ElevationChartCell *)[nib objectAtIndex:0];
 
-    [GpxUIHelper setupGPXChartWithChartView:_routeStatsCell.lineChartView
-                               yLabelsCount:4
-                                  topOffset:20
-                               bottomOffset:4
-                        useGesturesAndScale:NO
-    ];
+    [GpxUIHelper setupElevationChartWithChartView:_routeStatsCell.chartView
+                                        topOffset:20
+                                     bottomOffset:4
+                              useGesturesAndScale:NO];
 
     self.sliderView.layer.cornerRadius = 2.;
     
@@ -667,7 +664,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             {
                 OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:_gpx.path]];
                 BOOL calcWithoutGaps = !gpx.joinSegments && (_gpx.tracks.count > 0 && _gpx.tracks.firstObject.generalTrack);
-                [GpxUIHelper refreshLineChartWithChartView:_routeStatsCell.lineChartView
+                [GpxUIHelper refreshLineChartWithChartView:(LineChartView *) _routeStatsCell.chartView
                                                   analysis:trackAnalysis
                                        useGesturesAndScale:NO
                                                  firstType:GPXDataSetTypeAltitude

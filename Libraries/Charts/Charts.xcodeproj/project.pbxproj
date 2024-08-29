@@ -52,6 +52,10 @@
 		4272DA5D44AF7DA05A5A8287 /* BubbleChartDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDEAF554FD0D68EA4C0E7E49 /* BubbleChartDataProvider.swift */; };
 		4390D74986A92DEF4F4F2BF0 /* ChartLimitLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6DEBFAB1D73E944ED430B4F /* ChartLimitLine.swift */; };
 		45C459FA25DFCBE62FA6A06C /* BarChartDataEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3F8BFF1CBC58D5B9DBFFB9B /* BarChartDataEntry.swift */; };
+		468CD3882C80B79800CC3436 /* ElevationChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468CD3872C80B79800CC3436 /* ElevationChart.swift */; };
+		468CD38B2C80B84000CC3436 /* ElevationYAxisRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468CD3892C80B84000CC3436 /* ElevationYAxisRenderer.swift */; };
+		468CD38C2C80B84000CC3436 /* ElevationXAxisRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468CD38A2C80B84000CC3436 /* ElevationXAxisRenderer.swift */; };
+		468CD38E2C80B89F00CC3436 /* IOrderedLineDataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468CD38D2C80B89F00CC3436 /* IOrderedLineDataSet.swift */; };
 		48E875BBD6540BDE1C1B7D3D /* AxisBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7AEFBF4D85B9D2EAAB3071 /* AxisBase.swift */; };
 		4E98788ABEF6496C23F3E6C6 /* HorizontalBarHighlighter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BE9A97FFA41D3D85CAFFC7 /* HorizontalBarHighlighter.swift */; };
 		4FACC6FD308AFB231EB4A93D /* XAxisRendererRadarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC19DC2434D65FFB446A61B7 /* XAxisRendererRadarChart.swift */; };
@@ -200,6 +204,10 @@
 		429E88F2729735DC092EE556 /* LineChartDataSetProtocol.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LineChartDataSetProtocol.swift; path = Source/Charts/Data/Interfaces/LineChartDataSetProtocol.swift; sourceTree = "<group>"; };
 		45C6D3723C4E001B119CA0C8 /* BarLineChartViewBase.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BarLineChartViewBase.swift; path = Source/Charts/Charts/BarLineChartViewBase.swift; sourceTree = "<group>"; };
 		45E31A4356CC6F283C29954B /* LineRadarChartDataSet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LineRadarChartDataSet.swift; path = Source/Charts/Data/Implementations/Standard/LineRadarChartDataSet.swift; sourceTree = "<group>"; };
+		468CD3872C80B79800CC3436 /* ElevationChart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ElevationChart.swift; path = Source/Charts/Charts/ElevationChart.swift; sourceTree = "<group>"; };
+		468CD3892C80B84000CC3436 /* ElevationYAxisRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ElevationYAxisRenderer.swift; path = Source/Charts/Renderers/ElevationYAxisRenderer.swift; sourceTree = "<group>"; };
+		468CD38A2C80B84000CC3436 /* ElevationXAxisRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ElevationXAxisRenderer.swift; path = Source/Charts/Renderers/ElevationXAxisRenderer.swift; sourceTree = "<group>"; };
+		468CD38D2C80B89F00CC3436 /* IOrderedLineDataSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IOrderedLineDataSet.swift; path = Source/Charts/Data/Implementations/Standard/IOrderedLineDataSet.swift; sourceTree = "<group>"; };
 		46D8013D44629521B1746364 /* PieChartRenderer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PieChartRenderer.swift; path = Source/Charts/Renderers/PieChartRenderer.swift; sourceTree = "<group>"; };
 		48164CCD83C51B496533CB77 /* MarkerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MarkerView.swift; path = Source/Charts/Components/MarkerView.swift; sourceTree = "<group>"; };
 		4A6C9631C69B2D772BBD9232 /* PieRadarChartViewBase.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PieRadarChartViewBase.swift; path = Source/Charts/Charts/PieRadarChartViewBase.swift; sourceTree = "<group>"; };
@@ -364,6 +372,8 @@
 			isa = PBXGroup;
 			children = (
 				C75935E899183DDFA181E2CC /* AxisRenderer.swift */,
+				468CD38A2C80B84000CC3436 /* ElevationXAxisRenderer.swift */,
+				468CD3892C80B84000CC3436 /* ElevationYAxisRenderer.swift */,
 				1C02C3AF5C92FCFC18224C35 /* XAxisRenderer.swift */,
 				1F3D55A7E6176D52DC957D27 /* XAxisRendererHorizontalBarChart.swift */,
 				BC19DC2434D65FFB446A61B7 /* XAxisRendererRadarChart.swift */,
@@ -452,6 +462,7 @@
 				B44829AF0ADA583F1F0279B7 /* BubbleChartDataSet.swift */,
 				274116834B1B0345D622E027 /* CandleChartDataSet.swift */,
 				6CEC0C69C89CE9B99F3B4409 /* ChartDataSet.swift */,
+				468CD38D2C80B89F00CC3436 /* IOrderedLineDataSet.swift */,
 				A5A75AA73C5AA381DA517959 /* LineChartDataSet.swift */,
 				45E31A4356CC6F283C29954B /* LineRadarChartDataSet.swift */,
 				C58BD7B14BEA440783ED8D2B /* LineScatterCandleRadarChartDataSet.swift */,
@@ -529,6 +540,7 @@
 				BA1A58428DC4780BAB4EAADC /* CandleStickChartView.swift */,
 				30EFAD7920F76360ADB3B5F5 /* ChartViewBase.swift */,
 				11EF1FE22549E885C8F40738 /* CombinedChartView.swift */,
+				468CD3872C80B79800CC3436 /* ElevationChart.swift */,
 				6021C9E424C36116AEA78CC9 /* HorizontalBarChartView.swift */,
 				0619A877C69A95ECCC440A44 /* LineChartView.swift */,
 				9DCD13D558BA177D5952AD66 /* PieChartView.swift */,
@@ -759,6 +771,7 @@
 				A692D8BDE42717F69DB790BE /* HorizontalBarChartView.swift in Sources */,
 				7E7561DE19DC7CABBE0B2D3A /* LineChartView.swift in Sources */,
 				2876E17AEB1D92D7BBC4C38A /* PieChartView.swift in Sources */,
+				468CD38B2C80B84000CC3436 /* ElevationYAxisRenderer.swift in Sources */,
 				0A772AEC08246FEC480673E5 /* PieRadarChartViewBase.swift in Sources */,
 				6303DBDEE4FAB8E40D023BCE /* RadarChartView.swift in Sources */,
 				5C457D9A50DA20869AD1739D /* ScatterChartView.swift in Sources */,
@@ -772,6 +785,7 @@
 				067934572A324A9D004BFBA9 /* Partition.swift in Sources */,
 				C9F3DC272355F791000C3215 /* Platform+Gestures.swift in Sources */,
 				C20A62D8CB9120523D5FB650 /* LegendEntry.swift in Sources */,
+				468CD3882C80B79800CC3436 /* ElevationChart.swift in Sources */,
 				369DEB23452CB436A3A1A644 /* MarkerImage.swift in Sources */,
 				9360348A04723E653FBC8B18 /* MarkerView.swift in Sources */,
 				78084A4F1D850D5775BC139E /* XAxis.swift in Sources */,
@@ -816,6 +830,7 @@
 				E8F0F4F47CD7D72B4EE5A794 /* ChartDataSetProtocol.swift in Sources */,
 				F941C88BF814DF51C465CB95 /* LineChartDataSetProtocol.swift in Sources */,
 				1311BEC21E9CC264E971EFAF /* LineRadarChartDataSetProtocol.swift in Sources */,
+				468CD38C2C80B84000CC3436 /* ElevationXAxisRenderer.swift in Sources */,
 				146EE16342C2BADC92E45BF2 /* LineScatterCandleRadarChartDataSetProtocol.swift in Sources */,
 				FAAD9FF6565DED2652188584 /* PieChartDataSetProtocol.swift in Sources */,
 				83BBAF3EDC31FD452F8BF1DB /* RadarChartDataSetProtocol.swift in Sources */,
@@ -839,6 +854,7 @@
 				3097296AC7FFA994FE4AD312 /* PieRadarHighlighter.swift in Sources */,
 				C33E1AF5471A60BA42DAF52E /* RadarHighlighter.swift in Sources */,
 				9C91C151608E2D6E19B1EAD1 /* Range.swift in Sources */,
+				468CD38E2C80B89F00CC3436 /* IOrderedLineDataSet.swift in Sources */,
 				00BC23EF0E04E17188344403 /* BarChartDataProvider.swift in Sources */,
 				28FEE609C5B22FD64C7E5D10 /* BarLineScatterCandleBubbleChartDataProvider.swift in Sources */,
 				4272DA5D44AF7DA05A5A8287 /* BubbleChartDataProvider.swift in Sources */,

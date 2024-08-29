@@ -68,91 +68,109 @@ open class XAxisRenderer: NSObject, AxisRenderer
             return
         }
 
+        var interval = calculateInterval(range: range, labelCount: labelCount)
+        var calculatedLabelsCount = axis.centerAxisLabelsEnabled ? 1 : 0
+        let result = calculateLabelsCountAndInterval(newLabelsCount: &calculatedLabelsCount,
+                                                     interval: interval,
+                                                     yMin: yMin,
+                                                     yMax: yMax,
+                                                     range: range,
+                                                     labelCount: labelCount)
+        interval = result.0
+        calculatedLabelsCount = result.1
+
+        // set decimals
+        if interval < 1 {
+            axis.decimals = Int(ceil(-log10(interval)))
+        } else {
+            axis.decimals = 0
+        }
+
+        if axis.centerAxisLabelsEnabled {
+            let offset: Double = interval / 2.0
+            axis.centeredEntries = axis.entries[..<calculatedLabelsCount]
+                .map { $0 + offset }
+        }
+        
+        computeSize()
+    }
+
+    open func calculateInterval(range: Double, labelCount: Int) -> Double {
         // Find out how much spacing (in y value space) between axis values
         let rawInterval = range / Double(labelCount)
         var interval = rawInterval.roundedToNextSignificant()
 
         // If granularity is enabled, then do not allow the interval to go below specified granularity.
         // This is used to avoid repeated values when rounding values for display.
-        if axis.granularityEnabled
-        {
+        if axis.granularityEnabled {
             interval = Swift.max(interval, axis.granularity)
         }
 
         // Normalize interval
         let intervalMagnitude = pow(10.0, Double(Int(log10(interval)))).roundedToNextSignificant()
         let intervalSigDigit = Int(interval / intervalMagnitude)
-        if intervalSigDigit > 5
-        {
+        if intervalSigDigit > 5 {
             // Use one order of magnitude higher, to avoid intervals like 0.9 or 90
             interval = floor(10.0 * Double(intervalMagnitude))
         }
-
-        var n = axis.centerAxisLabelsEnabled ? 1 : 0
-
-        // force label count
-        if axis.isForceLabelsEnabled
-        {
-            interval = range / Double(labelCount - 1)
-
-            // Ensure stops contains at least n elements.
-            axis.entries.removeAll(keepingCapacity: true)
-            axis.entries.reserveCapacity(labelCount)
-
-            let values = stride(from: yMin, to: Double(labelCount) * interval + yMin, by: interval)
-            axis.entries.append(contentsOf: values)
-
-            n = labelCount
-        }
-        else
-        {
-            // no forced count
-
-            var first = interval == 0.0 ? 0.0 : ceil(yMin / interval) * interval
-
-            if axis.centerAxisLabelsEnabled
-            {
-                first -= interval
-            }
-
-            let last = interval == 0.0 ? 0.0 : (floor(yMax / interval) * interval).nextUp
-
-            if interval != 0.0, last != first
-            {
-                stride(from: first, through: last, by: interval).forEach { _ in n += 1 }
-            }
-
-            // Ensure stops contains at least n elements.
-            axis.entries.removeAll(keepingCapacity: true)
-            axis.entries.reserveCapacity(labelCount)
-
-            let start = first, end = first + Double(n) * interval
-
-            // Fix for IEEE negative zero case (Where value == -0.0, and 0.0 == -0.0)
-            let values = stride(from: start, to: end, by: interval).map { $0 == 0.0 ? 0.0 : $0 }
-            axis.entries.append(contentsOf: values)
-        }
-
-        // set decimals
-        if interval < 1
-        {
-            axis.decimals = Int(ceil(-log10(interval)))
-        }
-        else
-        {
-            axis.decimals = 0
-        }
-
-        if axis.centerAxisLabelsEnabled
-        {
-            let offset: Double = interval / 2.0
-            axis.centeredEntries = axis.entries[..<n]
-                .map { $0 + offset }
-        }
-        
-        computeSize()
+        return interval
     }
-    
+
+    open func calculateLabelsCountAndInterval(newLabelsCount: inout Int,
+                                              interval: Double,
+                                              yMin: Double,
+                                              yMax: Double,
+                                              range: Double,
+                                              labelCount: Int) -> (Double, Int) {
+        if axis.isForceLabelsEnabled {
+            // force label count
+            return calculateForcedLabelCount(range: range, labelCount: labelCount, min: yMin)
+        } else {
+            // no forced count
+            return calculateNoForcedLabelCount(interval: interval, n: &newLabelsCount, yMin: yMin, yMax: yMax)
+        }
+    }
+
+    open func calculateForcedLabelCount(range: Double,
+                                        labelCount: Int,
+                                        min: Double) -> (Double, Int) {
+        let interval = range / Double(labelCount - 1)
+
+        // Ensure stops contains at least n elements.
+        axis.entries.removeAll(keepingCapacity: true)
+        axis.entries.reserveCapacity(labelCount)
+
+        let values = stride(from: min, to: Double(labelCount) * interval + min, by: interval)
+        axis.entries.append(contentsOf: values)
+        return (interval, labelCount)
+    }
+
+    open func calculateNoForcedLabelCount(interval: Double,
+                                          n: inout Int,
+                                          yMin: Double,
+                                          yMax: Double) -> (Double, Int) {
+        var first = interval == 0.0 ? 0.0 : ceil(yMin / interval) * interval
+        if axis.centerAxisLabelsEnabled {
+            first -= interval
+        }
+
+        let last = interval == 0.0 ? 0.0 : (floor(yMax / interval) * interval).nextUp
+        if interval != 0.0, last != first {
+            stride(from: first, through: last, by: interval).forEach { _ in n += 1 }
+        }
+
+        // Ensure stops contains at least n elements.
+        axis.entries.removeAll(keepingCapacity: true)
+        axis.entries.reserveCapacity(n)
+
+        let start = first, end = first + Double(n) * interval
+
+        // Fix for IEEE negative zero case (Where value == -0.0, and 0.0 == -0.0)
+        let values = stride(from: start, to: end, by: interval).map { $0 == 0.0 ? 0.0 : $0 }
+        axis.entries.append(contentsOf: values)
+        return (interval, n)
+    }
+
     @objc open func computeSize()
     {
         let longest = axis.getLongestLabel()
@@ -198,7 +216,7 @@ open class XAxisRenderer: NSObject, AxisRenderer
         }
     }
     
-    private var axisLineSegmentsBuffer = [CGPoint](repeating: .zero, count: 2)
+    internal var axisLineSegmentsBuffer = [CGPoint](repeating: .zero, count: 2)
     
     open func renderAxisLine(context: CGContext)
     {

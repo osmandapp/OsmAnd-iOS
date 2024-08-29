@@ -459,4 +459,20 @@ open class YAxisRenderer: NSObject, AxisRenderer
             axis.centeredEntries.append(contentsOf: axis.entries.map { $0 + offset })
         }
     }
+
+    public func calculateInterval(range: Double, labelCount: Int) -> Double {
+        0
+    }
+    
+    public func calculateLabelsCountAndInterval(newLabelsCount: inout Int, interval: Double, yMin: Double, yMax: Double, range: Double, labelCount: Int) -> (Double, Int) {
+        (0, 0)
+    }
+    
+    public func calculateForcedLabelCount(range: Double, labelCount: Int, min: Double) -> (Double, Int) {
+        (0, 0)
+    }
+    
+    public func calculateNoForcedLabelCount(interval: Double, n: inout Int, yMin: Double, yMax: Double) -> (Double, Int) {
+        (0, 0)
+    }
 }

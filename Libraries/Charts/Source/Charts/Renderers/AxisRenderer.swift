@@ -12,7 +12,6 @@
 import Foundation
 import CoreGraphics
 
-
 public protocol AxisRenderer: Renderer {
 
     associatedtype Axis: AxisBase
@@ -42,4 +41,22 @@ public protocol AxisRenderer: Renderer {
 
     /// Sets up the axis values. Computes the desired number of labels between the two given extremes.
     func computeAxisValues(min: Double, max: Double)
+
+    func calculateInterval(range: Double, labelCount: Int) -> Double
+
+    func calculateLabelsCountAndInterval(newLabelsCount: inout Int,
+                                         interval: Double,
+                                         yMin: Double,
+                                         yMax: Double,
+                                         range: Double,
+                                         labelCount: Int) -> (Double, Int)
+
+    func calculateForcedLabelCount(range: Double,
+                                   labelCount: Int,
+                                   min: Double) -> (Double, Int)
+
+    func calculateNoForcedLabelCount(interval: Double,
+                                     n: inout Int,
+                                     yMin: Double,
+                                     yMax: Double) -> (Double, Int)
 }

@@ -1,5 +1,5 @@
 //
-//  OARouteStatisticsViewController.swift
+//  GpxUIHelper.swift
 //  OsmAnd
 //
 //  Created by Paul on 9/3/19.
@@ -137,7 +137,7 @@ class GpxUIHelper: NSObject {
         }
     }
 
-    final class OrderedLineDataSet: LineChartDataSet {
+    final class OrderedLineDataSet: LineChartDataSet, IOrderedLineDataSet {
         
         private let leftAxis: Bool
         
@@ -482,80 +482,50 @@ class GpxUIHelper: NSObject {
         chart.legend.enabled = false
     }
 
-    static func setupGPXChart(chartView: LineChartView,
-                              yLabelsCount: Int,
-                              topOffset: CGFloat,
-                              bottomOffset: CGFloat,
-                              useGesturesAndScale: Bool) {
-        chartView.clear()
-        chartView.fitScreen()
-        chartView.layer.drawsAsynchronously = true
+    static func setupElevationChart(chartView: ElevationChart) {
+        setupElevationChart(chartView: chartView,
+                            markerView: GpxMarkerView(),
+                            topOffset: 24,
+                            bottomOffset: 16,
+                            useGesturesAndScale: true)
+    }
 
-        chartView.isUserInteractionEnabled = useGesturesAndScale
-        chartView.dragEnabled = useGesturesAndScale
-        chartView.setScaleEnabled(useGesturesAndScale)
-        chartView.pinchZoomEnabled = useGesturesAndScale
-        chartView.scaleYEnabled = false
-        chartView.autoScaleMinMaxEnabled = true
-        chartView.drawBordersEnabled = false
-        chartView.chartDescription.enabled = false
-        chartView.maxVisibleCount = 10
-        chartView.minOffset = 0.0
-        chartView.rightYAxisRenderer = YAxisCombinedRenderer(viewPortHandler: chartView.viewPortHandler,
-                                                             yAxis: chartView.rightAxis,
-                                                             secondaryYAxis: chartView.leftAxis,
-                                                             transformer: chartView.getTransformer(forAxis: .right),
-                                                             secondaryTransformer: chartView.getTransformer(forAxis: .left))
-        chartView.extraLeftOffset = 16
-        chartView.extraRightOffset = 16
-        chartView.dragDecelerationEnabled = false
+    static func setupElevationChart(chartView: ElevationChart,
+                                    topOffset: CGFloat,
+                                    bottomOffset: CGFloat,
+                                    useGesturesAndScale: Bool) {
+        setupElevationChart(chartView: chartView,
+                            markerView: GpxMarkerView(),
+                            topOffset: topOffset,
+                            bottomOffset: bottomOffset,
+                            useGesturesAndScale: useGesturesAndScale)
+    }
 
-        chartView.extraTopOffset = topOffset
-        chartView.extraBottomOffset = bottomOffset
+    static func setupElevationChart(chartView: ElevationChart,
+                                    topOffset: CGFloat,
+                                    bottomOffset: CGFloat,
+                                    useGesturesAndScale: Bool,
+                                    markerIconName: String) {
+        setupElevationChart(chartView: chartView,
+                            markerView: GpxMarkerView(),
+                            topOffset: topOffset,
+                            bottomOffset: bottomOffset,
+                            useGesturesAndScale: useGesturesAndScale)
+    }
 
-        let marker = GPXChartMarker()
-        marker.chartView = chartView
-        chartView.marker = marker
-        chartView.drawMarkers = true
-
-        let labelsColor = UIColor.chartTextColorAxisX
-        let xAxis: XAxis = chartView.xAxis
-        xAxis.drawAxisLineEnabled = false
-        xAxis.drawGridLinesEnabled = false
-        xAxis.gridLineWidth = 1.5
-        xAxis.gridColor = UIColor.chartAxisGridLine
-        xAxis.gridLineDashLengths = [10]
-        xAxis.labelPosition = .bottom
-        xAxis.labelTextColor = labelsColor
-        xAxis.resetCustomAxisMin()
-        let yColor = UIColor.chartAxisGridLine
-        var yAxis: YAxis = chartView.leftAxis
-        yAxis.gridLineDashLengths = [4.0, 4.0]
-        yAxis.gridColor = yColor
-        yAxis.drawAxisLineEnabled = false
-        yAxis.drawGridLinesEnabled = true
-        yAxis.labelPosition = .insideChart
-        yAxis.xOffset = 16.0
-        yAxis.yOffset = -6.0
-        yAxis.labelCount = yLabelsCount
-        yAxis.labelTextColor = UIColor.chartTextColorAxisX
-        yAxis.labelFont = UIFont.systemFont(ofSize: 11)
-
-        yAxis = chartView.rightAxis
-        yAxis.gridLineDashLengths = [4.0, 4.0]
-        yAxis.gridColor = yColor
-        yAxis.drawAxisLineEnabled = false
-        yAxis.drawGridLinesEnabled = true
-        yAxis.labelPosition = .insideChart
-        yAxis.xOffset = 16.0
-        yAxis.yOffset = -6.0
-        yAxis.labelCount = yLabelsCount
-        xAxis.labelTextColor = labelsColor
-        yAxis.enabled = false
-        yAxis.labelFont = UIFont.systemFont(ofSize: 11)
-
-        let legend = chartView.legend
-        legend.enabled = false
+    static func setupElevationChart(chartView: ElevationChart,
+                                    markerView: GpxMarkerView,
+                                    topOffset: CGFloat,
+                                    bottomOffset: CGFloat,
+                                    useGesturesAndScale: Bool) {
+        let axisGridColor = UIColor.chartAxisGridLine
+        chartView.setupGPXChart(markerView: markerView,
+                                topOffset: topOffset,
+                                bottomOffset: bottomOffset,
+                                xAxisGridColor: axisGridColor,
+                                labelsColor: UIColor.textColorSecondary,
+                                yAxisGridColor: axisGridColor,
+                                useGesturesAndScale: useGesturesAndScale)
     }
     
     static func setupGradientChart(chart: LineChartView,

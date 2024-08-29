@@ -22,11 +22,11 @@
 #define SEPARATOR @";"
 
 static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
-    COLOR_NAME_EXTENSION,
-    ICON_NAME_EXTENSION,
-    BACKGROUND_TYPE_EXTENSION,
-    PROFILE_TYPE_EXTENSION,
-    ADDRESS_EXTENSION,
+    COLOR_NAME_EXTENSION_KEY,
+    ICON_NAME_EXTENSION_KEY,
+    BACKGROUND_TYPE_EXTENSION_KEY,
+    PROFILE_TYPE_EXTENSION_KEY,
+    ADDRESS_EXTENSION_KEY,
     [NSString stringWithFormat:@"%@%@", PRIVATE_PREFIX, AMENITY_NAME],
     [NSString stringWithFormat:@"%@%@", PRIVATE_PREFIX, TYPE],
     [NSString stringWithFormat:@"%@%@", PRIVATE_PREFIX, SUBTYPE]
@@ -445,7 +445,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
                 return;
             
 //            if (!HIDING_EXTENSIONS_AMENITY_TAGS.contains(key)) {
-//                key = OSM_PREFIX + key;
+//                key = OSM_PREFIX_KEY + key;
 //            }
             NSString *savingKey = [NSString stringWithFormat:@"%@%@", osmPrefix, key];
             result[savingKey] = value;

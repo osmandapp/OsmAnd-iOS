@@ -166,7 +166,7 @@
         self.name = gpxWpt.point.name;
         _waypoint = gpxWpt;
         self.desc = gpxWpt.point.desc;
-        self.address = [gpxWpt.point getExtensionByKey:ADDRESS_EXTENSION].value;
+        self.address = [gpxWpt.point getExtensionByKey:ADDRESS_EXTENSION_KEY].value;
         self.groupTitle = [self getGroupTitle]/*gpxWpt.point.type*/;
         [self postInit];
     }
@@ -207,7 +207,7 @@
         self.groupTitle = [self getGroupTitle];
 
         _selectedIconCategoryName = @"special";
-        _selectedIconName = DEFAULT_ICON_NAME;
+        _selectedIconName = DEFAULT_ICON_NAME_KEY;
         _selectedBackgroundIndex = 0;
 
         [self postInit];
@@ -439,7 +439,7 @@
     if (_isNewItemAdding && selectedGroup)
         _selectedIconName = selectedGroup.iconName;
     else if (!_selectedIconName || _selectedIconName.length == 0)
-        _selectedIconName = DEFAULT_ICON_NAME;
+        _selectedIconName = DEFAULT_ICON_NAME_KEY;
 
     if (_isNewItemAdding && selectedGroup)
         _selectedIconCategoryName = [self getInitCategory:_selectedIconName];
@@ -1556,7 +1556,7 @@
         return preselectedIconName;
     else if (_lastUsedIcons && _lastUsedIcons.count > 0)
         return _lastUsedIcons[0];
-    return DEFAULT_ICON_NAME;
+    return DEFAULT_ICON_NAME_KEY;
 }
 
 - (void)addLastUsedIcon:(NSString *)iconName

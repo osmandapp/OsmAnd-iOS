@@ -69,7 +69,7 @@
 
         [p setIcon:_iconName];
         [p setBackgroundIcon:@"circle"];
-        [p setExtension:ADDRESS_EXTENSION value:address];
+        [p setExtension:ADDRESS_EXTENSION_KEY value:address];
         [p setAmenity:poi];
         [p setAmenityOriginName:poi.toStringEn];
 
@@ -226,7 +226,7 @@
     [self setGroup:data.category color:data.color save:NO];
     [_gpxWpt.point setIcon:data.icon];
     [_gpxWpt.point setBackgroundIcon:data.backgroundIcon];
-    [_gpxWpt.point setExtension:ADDRESS_EXTENSION value:data.address];
+    [_gpxWpt.point setExtension:ADDRESS_EXTENSION_KEY value:data.address];
     _gpxWpt.docPath = _gpxFileName;
 
     if (newPoint)

@@ -343,13 +343,13 @@
 
 - (NSString *)getIcon
 {
-    NSString *value = [self getExtensionByKey:ICON_NAME_EXTENSION].value;
-    return value ? value : DEFAULT_ICON_NAME;
+    NSString *value = [self getExtensionByKey:ICON_NAME_EXTENSION_KEY].value;
+    return value ? value : DEFAULT_ICON_NAME_KEY;
 }
 
 - (void)setIcon:(NSString *)iconName
 {
-    [self setExtension:ICON_NAME_EXTENSION value:iconName];
+    [self setExtension:ICON_NAME_EXTENSION_KEY value:iconName];
 }
 
 - (OAPOI *) getAmenity
@@ -361,7 +361,7 @@
         for (OAGpxExtension *extension in extensionsToRead)
             extensions[extension.name] = extension.value;
 
-        return [OAPOI fromTagValue:extensions privatePrefix:PRIVATE_PREFIX osmPrefix:OSM_PREFIX];
+        return [OAPOI fromTagValue:extensions privatePrefix:PRIVATE_PREFIX osmPrefix:OSM_PREFIX_KEY];
     }
     return nil;
 }
@@ -370,7 +370,7 @@
 {
     if (amenity)
     {
-        NSDictionary<NSString *, NSString *> *extensions = [amenity toTagValue:PRIVATE_PREFIX osmPrefix:OSM_PREFIX];
+        NSDictionary<NSString *, NSString *> *extensions = [amenity toTagValue:PRIVATE_PREFIX osmPrefix:OSM_PREFIX_KEY];
         if (extensions && extensions.count > 0)
         {
             [extensions enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull value, BOOL * _Nonnull stop) {
@@ -382,35 +382,35 @@
 
 - (NSString *) getAmenityOriginName
 {
-    NSString *value = [self getExtensionByKey:AMENITY_ORIGIN_EXTENSION].value;
+    NSString *value = [self getExtensionByKey:AMENITY_ORIGIN_EXTENSION_KEY].value;
     return value;
 }
 
 - (void) setAmenityOriginName:(NSString *)originName
 {
-    [self setExtension:AMENITY_ORIGIN_EXTENSION value:originName];
+    [self setExtension:AMENITY_ORIGIN_EXTENSION_KEY value:originName];
 }
 
 - (NSString *)getBackgroundIcon
 {
-    NSString *value = [self getExtensionByKey:BACKGROUND_TYPE_EXTENSION].value;
+    NSString *value = [self getExtensionByKey:BACKGROUND_TYPE_EXTENSION_KEY].value;
     return value ? value : @"circle";
 }
 
 - (void)setBackgroundIcon:(NSString *)backgroundIconName
 {
-    [self setExtension:BACKGROUND_TYPE_EXTENSION value:backgroundIconName];
+    [self setExtension:BACKGROUND_TYPE_EXTENSION_KEY value:backgroundIconName];
 }
 
 - (NSString *)getAddress
 {
-    NSString *value = [self getExtensionByKey:ADDRESS_EXTENSION].value;
+    NSString *value = [self getExtensionByKey:ADDRESS_EXTENSION_KEY].value;
     return value ? value : @"";
 }
 
 - (NSString *) getProfileType
 {
-    OAGpxExtension *e = [self getExtensionByKey:PROFILE_TYPE_EXTENSION];
+    OAGpxExtension *e = [self getExtensionByKey:PROFILE_TYPE_EXTENSION_KEY];
     if (e)
         return e.value;
     return nil;
@@ -418,12 +418,12 @@
 
 - (void) setProfileType:(NSString *)profileType
 {
-    [self setExtension:PROFILE_TYPE_EXTENSION value:profileType];
+    [self setExtension:PROFILE_TYPE_EXTENSION_KEY value:profileType];
 }
 
 - (void) removeProfileType
 {
-    OAGpxExtension *e = [self getExtensionByKey:PROFILE_TYPE_EXTENSION];
+    OAGpxExtension *e = [self getExtensionByKey:PROFILE_TYPE_EXTENSION_KEY];
     if (e)
     {
         NSMutableArray *extensions = [self.extensions mutableCopy];
@@ -436,30 +436,30 @@
 - (BOOL) hasProfile
 {
     NSString *profileType = self.getProfileType;
-    return profileType != nil && ![GAP_PROFILE_TYPE isEqualToString:profileType];
+    return profileType != nil && ![kGapProfileTypeKey isEqualToString:profileType];
 }
 
 - (NSInteger) getTrkPtIndex
 {
-    OAGpxExtension *e = [self getExtensionByKey:TRKPT_INDEX_EXTENSION];
+    OAGpxExtension *e = [self getExtensionByKey:kTrkptIndexExtension];
     return e ? e.value.integerValue : -1;
 }
 
 - (void) setTrkPtIndex:(NSInteger)index
 {
     NSString *stringValue = [NSString stringWithFormat:@"%ld", index];
-    [self setExtension:TRKPT_INDEX_EXTENSION value:stringValue];
+    [self setExtension:kTrkptIndexExtension value:stringValue];
 }
 
 - (BOOL) isGap
 {
     NSString *profileType = [self getProfileType];
-    return [GAP_PROFILE_TYPE isEqualToString:profileType];
+    return [kGapProfileTypeKey isEqualToString:profileType];
 }
 
 - (void)setGap
 {
-    [self setProfileType:GAP_PROFILE_TYPE];
+    [self setProfileType:kGapProfileTypeKey];
 }
 
 - (double) getLatitude

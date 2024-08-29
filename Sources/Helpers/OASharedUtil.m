@@ -66,4 +66,10 @@
     NSLog(@"GPX DB TEST - DONE");
 }
 
+//+ (OASGpxFile *)loadGpx:(NSString *)fileName
+//{
+//    OASGpxFile *gpxFileKotlin = [KSharedUtil loadGpx:fileName];
+//    return gpxFileKotlin;
+//}
+
 @end

@@ -13,22 +13,24 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/GpxDocument.h>
 
-#define ICON_NAME_EXTENSION @"icon"
-#define BACKGROUND_TYPE_EXTENSION @"background"
-#define COLOR_NAME_EXTENSION @"color"
-#define ADDRESS_EXTENSION @"address"
+#define ICON_NAME_EXTENSION_KEY @"icon"
+#define BACKGROUND_TYPE_EXTENSION_KEY @"background"
+#define COLOR_NAME_EXTENSION_KEY @"color"
+#define ADDRESS_EXTENSION_KEY @"address"
 #define CALENDAR_EXTENSION @"calendar_event"
 #define PICKUP_DATE @"pickup_date"
 #define VISITED_TIME_EXTENSION @"visited_date"
 #define CREATION_TIME_EXTENSION @"creation_date"
 #define PICKUP_DATE_EXTENSION @"pickup_date"
-#define DEFAULT_ICON_NAME @"special_star"
-#define PROFILE_TYPE_EXTENSION @"profile"
-#define GAP_PROFILE_TYPE @"gap"
-#define TRKPT_INDEX_EXTENSION @"trkpt_idx"
+#define DEFAULT_ICON_NAME_KEY @"special_star"
+#define PROFILE_TYPE_EXTENSION_KEY @"profile"
+
 #define PRIVATE_PREFIX @"amenity_"
-#define AMENITY_ORIGIN_EXTENSION @"amenity_origin"
-#define OSM_PREFIX @"osm_tag_"
+#define AMENITY_ORIGIN_EXTENSION_KEY @"amenity_origin"
+#define OSM_PREFIX_KEY @"osm_tag_"
+
+static NSString * const kGapProfileTypeKey = @"gap";
+static NSString * const kTrkptIndexExtension = @"trkpt_idx";
 
 typedef NS_ENUM(NSInteger, EOAGPXColor)
 {

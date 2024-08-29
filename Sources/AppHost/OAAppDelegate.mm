@@ -38,6 +38,7 @@
 #import "OACloudAccountVerificationViewController.h"
 #import "OARootViewController.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
+#import <OsmAndShared/OsmAndShared.h>
 #import "OsmAnd_Maps-Swift.h"
 
 #include <QDir>
@@ -442,6 +443,10 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 
 - (BOOL)openURL:(NSURL *)url
 {
+//    OASGpxFile *gpxFileKotlin = [KSharedUtil loadGpx:@""];
+//    NSLog(@"$@", gpxFileKotlin.author);
+    
+    
     UIScene *scene = UIApplication.sharedApplication.mainScene;
     SceneDelegate *sd = (SceneDelegate *)scene.delegate;
     return [sd openURL:url];

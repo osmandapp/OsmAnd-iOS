@@ -503,7 +503,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
         for (const auto& extension : OsmAnd::rangeOf(extensionsToRead))
             extensions[extension.key().toNSString()] = extension.value().toNSString();
 
-        _amenity = [OAPOI fromTagValue:extensions privatePrefix:PRIVATE_PREFIX osmPrefix:OSM_PREFIX];
+        _amenity = [OAPOI fromTagValue:extensions privatePrefix:PRIVATE_PREFIX osmPrefix:OSM_PREFIX_KEY];
         return _amenity;
     }
     return nil;
@@ -513,7 +513,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 {
     if (amenity)
     {
-        NSDictionary<NSString *, NSString *> *extensions = [amenity toTagValue:PRIVATE_PREFIX osmPrefix:OSM_PREFIX];
+        NSDictionary<NSString *, NSString *> *extensions = [amenity toTagValue:PRIVATE_PREFIX osmPrefix:OSM_PREFIX_KEY];
         [extensions enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull value, BOOL * _Nonnull stop) {
             self.favorite->setExtension(QString::fromNSString(key), QString::fromNSString(value));
         }];
@@ -681,7 +681,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     if (self.isAddressSpecified)
     {
         OAGpxExtension *e = [[OAGpxExtension alloc] init];
-        e.name = ADDRESS_EXTENSION;
+        e.name = ADDRESS_EXTENSION_KEY;
         e.value = self.getAddress;
         [exts addObject:e];
     }
@@ -695,14 +695,14 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     if (self.getIcon)
     {
         OAGpxExtension *e = [[OAGpxExtension alloc] init];
-        e.name = ICON_NAME_EXTENSION;
+        e.name = ICON_NAME_EXTENSION_KEY;
         e.value = self.getIcon;
         [exts addObject:e];
     }
     if (self.getBackgroundIcon)
     {
         OAGpxExtension *e = [[OAGpxExtension alloc] init];
-        e.name = BACKGROUND_TYPE_EXTENSION;
+        e.name = BACKGROUND_TYPE_EXTENSION_KEY;
         e.value = self.getBackgroundIcon;
         [exts addObject:e];
     }

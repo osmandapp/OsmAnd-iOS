@@ -2185,3 +2185,11 @@
 "quick_action_directions_from" = "Αφετηρία";
 "app_profile" = "Προφίλ εφαρμογής";
 "rendering_value_sacScale_description" = "Swiss Alpine Club (Ελβετική Αλπική Λέσχη)";
+"animate_my_location_descr" = "Ομαλή μετάβαση τοποθεσίας στο χάρτη κατά την πλοήγηση";
+"backup_welcome_back" = "Καλώς ήρθατε πίσω!";
+"use_login_and_password" = "Χρήση ονόματος χρήστη και κωδικού";
+"backup_deleting_all_data" = "Διαγραφή όλων των δεδομένων…";
+"driving_region_india" = "Ινδία";
+"auto_zoom_discrete" = "Διακριτό";
+"auto_zoom_smooth" = "Ομαλό";
+"shared_string_keywords" = "Λέξεις κλειδιά";

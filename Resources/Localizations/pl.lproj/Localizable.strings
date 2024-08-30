@@ -3237,7 +3237,7 @@
 "visualization_3d_visualized_by" = "Wizualizowane przez";
 "shared_string_always" = "Zawsze";
 "shared_string_item" = "Pozycja";
-"shared_string_bottom" = "Dół";
+"shared_string_bottom" = "Na dole";
 "speedometer_description" = "Pokazuje bieżącą prędkość zgłoszoną przez GPS";
 "default_buttons" = "Przyciski domyślne";
 "track_3d_empty_view_description" = "Przeglądaj tor w interaktywnym 3D! Wizualizuj wysokość, prędkość i inne parametry bezpośrednio na mapie.";
@@ -3298,3 +3298,4 @@
 "shared_string_action" = "Akcja";
 "download_srtm_maps" = "Poziomice";
 "wind_layer" = "Warstwa wiatrowa";
+"shared_string_show" = "Wyświetl";

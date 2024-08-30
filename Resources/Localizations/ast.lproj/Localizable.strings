@@ -2519,7 +2519,7 @@
 "no_travel_guides_data_descr" = "Download Wikivoyage travel guides to view articles about places around the world without a connection to the Internet.";
 "shared_string_dark" = "Escuridá";
 "shared_string_explore" = "Esplorar";
-"weather_update_disabled" = "Desactivóse";
+"weather_update_disabled" = "Disabled";
 "map_marker_1st" = "First map marker";
 "upload_poi" = "Upload POI";
 "visibility" = "Visibilidá";
@@ -2574,3 +2574,4 @@
 "voices" = "Indicaciones per voz";
 "shared_string_change" = "Camudar";
 "map_source" = "Map source";
+"shared_string_show" = "Amosar";

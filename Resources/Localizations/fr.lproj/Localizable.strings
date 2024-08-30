@@ -1169,7 +1169,7 @@
 "rendering_attr_surface_mud_name" = "Boue";
 "routing_attr_avoid_ice_roads_fords_name" = "Éviter les routes sur glace, les fjords";
 "rendering_value_walkingRoutesOSMC_name" = "OSMC";
-"rendering_attr_alpineHiking_name" = "Classification des difficultés";
+"rendering_attr_alpineHiking_name" = "Classification des sentiers de randonnée selon leur difficulté";
 "rendering_attr_hideOverground_name" = "Objets au sol";
 "rendering_attr_hmRendered_description" = "Augmenter le niveau de détail affiché.";
 "routing_attr_height_obstacles_name" = "Utiliser les données d\'altitude";
@@ -1657,7 +1657,7 @@
 "profile_appearance" = "Apparence du profil";
 "profile_settings" = "Paramètres pour le profil";
 "configure_profile" = "Configurer le profil";
-"profile_alert_delete_msg" = "Supprimer le profil « %@ »";
+"profile_alert_delete_msg" = "Supprimer le profil« %@ » \?";
 "copy_from_other_profile_descr" = "Vous pouvez copier tous les paramètres de n'importe quel profil vers le profil sélectionné : ";
 "shared_string_next" = "Suivant";
 "nav_type_hint" = "Type de navigation";
@@ -1701,7 +1701,7 @@
 "road_max_speed_descr" = "Définit la vitesse maximale pour toutes les routes sur le trajet. Cela diminuera la priorité des routes dont la vitesse autorisée est supérieure à ce maximum.";
 "road_min_speed_descr" = "Définit la vitesse minimale pour toutes les routes sur le trajet. Augmentera la priorité des routes dont la vitesse recommandée est inférieure à ce minimum.";
 "road_speeds_descr" = "Ces paramètres peuvent modifer le calcul d'itinéraire.";
-"ltr_or_rtl_combine_via_colon" = "%@ : %@";
+"ltr_or_rtl_combine_via_colon" = "%@ : %@";
 "road_speeds" = "Vitesses routières";
 "layer_amenity_label" = "Libellés des Points d\'Intérêt et Favoris";
 "osm_notes" = "Notes OSM";
@@ -1734,7 +1734,7 @@
 "route_between_points" = "Itinéraire entre points";
 "save_as_new_track" = "Enregistrer comme nouvelle trace";
 "quick_action_showhide_mapillary_title" = "Afficher/masquer Mapillary";
-"arrived_at_destination" = "Vous êtes arrivé.";
+"arrived_at_destination" = "Vousêtes arrivé.";
 "add_to_a_track" = "Ajouterà une trace";
 "public_transport_menu" = "Transport";
 "shared_string_add_profile" = "Ajouter un profil";
@@ -2260,7 +2260,7 @@
 "routeInfo_surface_description" = "Fournit des informations sur la surface des routes / chemins.";
 "routeInfo_smoothness_description" = "Classification des caractéristiques physiques des voies pour les véhicules à roues, notamment la nature et la régularité de leurs surfaces.";
 "route_line_use_map_style_width" = "Utiliser la largeur par défaut du style de carte (%@).";
-"ltr_or_rtl_combine_via_dash" = "%@ — %@";
+"ltr_or_rtl_combine_via_dash" = "%@ - %@";
 "routing_attr_allow_gate_name" = "Autoriser l\'utilisation des portes";
 "routing_attr_allow_gate_description" = "Autoriser l\'utilisation des portes";
 "routing_attr_only_permitted_streets_description" = "N\'utiliser que les rues expressément autorisées";
@@ -2381,7 +2381,7 @@
 "plugin_popup_weather_title" = "Activer la météo";
 "plugin_popup_weather_ask" = "Veuillez activer le greffon Météo";
 "product_desc_weather" = "Prévisions horaires 24h/24 et sur 7 jours sur la carte";
-"weather_plugin_description" = "Fournit :\n- Les prévisions météorologiques pour les 24 prochaines heures et les 7 prochains jours, avec 5 sur-couches \n- Des widgets basés sur la position \n- Les cartes d'isobares et d'isothermes \n\nLes données météorologiques sont fournies par le modèle GFS (Global Forecast System, %@).";
+"weather_plugin_description" = "Fournit: \n- Les prévisions météorologiques pour les 24 prochaines heures et les 7 prochains jours, avec 5 sur-couches \n- Des widgets basés sur la position \n- Les cartes d\'isobares et d\'isothermes \n \nLes données météorologiques sont fournies par le modèle GFS (Global Forecast System, %@).";
 "measurement_units" = "Unités de mesure";
 "weather_pressure_hectopascals" = "Hectopascals";
 "weather_pressure_millimeters_of_mercury" = "Millimètres de mercure";
@@ -3411,7 +3411,7 @@
 "fixed_height" = "Hauteur fixe";
 "shared_string_top" = "En haut";
 "track_3d_empty_view_title" = "Vue des traces en 3D";
-"track_3d_empty_view_description" = "Explorez la trace en 3D interactif ! Visualisez directement sur la carte : hauteur, vitesse et bien plus.";
+"track_3d_empty_view_description" = "Explorez la trace en 3D interactif! Visualisez directement sur la carte : hauteur, vitesse et bien plus.";
 "osm_id" = "ID OSM";
 "shared_string_millimeters" = "Millimètres";
 "shared_string_speedometer" = "Compteur de vitesse";

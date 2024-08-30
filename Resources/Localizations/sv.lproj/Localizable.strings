@@ -2910,7 +2910,7 @@
 "make_backup_descr" = "Detär många ändringar på den här enheten. Gör gärna en säkerhetskopia av dessa data för att inte förlora det.";
 "backup_delete_types_descr" = "Radera alla data för föråldrade datatyper från OsmAnd Cloud\?";
 "rendering_value_caiScale_description" = "Italienska alpinistföreningen (Club Alpino Italiano)";
-"map_settings_topography" = "Höjdkurvor";
+"map_settings_topography" = "Höjdkurvsdata";
 "upload_poi" = "Ladda upp POI";
 "rendering_value_sacScale_description" = "Schweiziska alpinistföreningen (Swiss Alpine Club)";
 "backup_error_token_is_not_valid" = "Någonting är fel med angivet enhets-id eller token";
@@ -3407,7 +3407,7 @@
 "in_case_of_reverse_direction" = "Vid omvänd riktning";
 "empty_name" = "Tomt namn";
 "dangerous_goods" = "Farligt gods";
-"shared_string_bottom" = "Längst ned";
+"shared_string_bottom" = "Nedtill";
 "shared_string_item" = "Objekt";
 "visualization_3d_track_line" = "Spårlinje";
 "short_min" = "m";
@@ -3437,3 +3437,4 @@
 "voices" = "Röstmeddelanden";
 "wind_layer" = "Vindlager";
 "shared_string_action" = "Åtgärd";
+"shared_string_show" = "Visa";

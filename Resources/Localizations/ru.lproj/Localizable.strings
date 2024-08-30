@@ -1525,7 +1525,7 @@
 "rendering_value_white_name" = "Белый";
 "rendering_value_black_name" = "Чёрный";
 "routing_attr_piste_type_sled_description" = "Склоны для катания на санях.";
-"rendering_attr_alpineHiking_name" = "Классификация сложности";
+"rendering_attr_alpineHiking_name" = "Уровень сложности пешеходных маршрутов";
 "rendering_value_pedestrian_name" = "Пешком";
 "routing_attr_prefer_unpaved_description" = "Предпочитать грунтовые дороги и тропы.";
 "rendering_value_darkyellow_name" = "Тёмно-жёлтый";
@@ -3257,3 +3257,4 @@
 "shared_string_change" = "Изменить";
 "height_legend_description" = "Для визуализации рельефа используются цветовые карты высот.";
 "quick_action_verb_start_stop" = "Старт/стоп";
+"shared_string_show" = "Показать";

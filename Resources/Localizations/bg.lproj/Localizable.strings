@@ -508,7 +508,7 @@
 
 // Favorites
 "shared_string_color" = "Цвят";
-"fav_colors" = "Colors";
+"fav_colors" = "Цветове";
 "shared_string_name" = "Име";
 "fav_group" = "Group";
 "shared_string_groups" = "Групи";
@@ -909,7 +909,7 @@
 "shared_string_rendering_style" = "Стил на рендиране";
 "avoid_road" = "Избягване на пътища";
 "shared_string_importing" = "Внасяне";
-"importing_from" = "Импортиране на данни от %@";
+"importing_from" = "Внасяне на данни от %@";
 "shared_string_settings" = "Настройки";
 "configure_screen_quick_action" = "Бързо действие";
 "search_activity" = "Търсене";
@@ -924,7 +924,7 @@
 "copy_from_other_profile" = "Копиране от друг профил";
 "copy_from_other_profile_descr" = "You can copy all settings from any profile to the selected profile: ";
 "profile_alert_delete_title" = "Премахване на профила";
-"profile_alert_delete_msg" = "Are you sure you want to completly delete \"%@\" profile?";
+"profile_alert_delete_msg" = "Премахване на профила „%@“?";
 "select_base_profile_dialog_message" = "Base your custom profile on one of the default app profiles, this defines the basic setup like default visibility of widgets and units of speed and distance. These are the default app profiles, together with examples of custom profiles they may be extended to:";
 "profile_type_custom_string" = "Потребителски профил";
 "new_profile" = "Нов профил";
@@ -1472,7 +1472,7 @@
 "instalation_troubleshooting_item" = "Инсталиране и отстраняване на неизправности";
 "techical_articles_item" = "Технически статии";
 "versions_item" = "Версии";
-"help_contact_us" = "Contact us";
+"help_contact_us" = "Свържете се с нас";
 "shared_string_about" = "Относно";
 "follow_us" = "Следвайте ни";
 "facebook" = "Facebook";
@@ -1671,7 +1671,7 @@
 "map_coords" = "Map: Lat %.5f Lon %.5f";
 "shared_string_gpx_points" = "Точки";
 "shared_string_overview" = "Преглед";
-"activity" = "Активност";
+"activity" = "Дейност";
 "gpx_cancel_route_q" = "Do you want to cancel this route?";
 "local_indexes_cat_backup" = "Изключено";
 "gpx_trip_groups" = "Track groups";
@@ -2574,7 +2574,7 @@
 "rendering_value_caiScale_description" = "Италиански алпийски клуб (CAI)";
 "activity_type_hiking_name" = "Пешеходен туризъм";
 "free_favorites_backup" = "Резервно копие на избраните точки";
-"rendering_attr_alpineHiking_name" = "Класификация на сложност";
+"rendering_attr_alpineHiking_name" = "Скала на трудност на пешеходни маршрути";
 "rendering_value_sacScale_description" = "Швейцарски алпийски клуб (SAC)";
 "free_account" = "Безплатен профил";
 "save_heading_descr" = "Запазва посоката към всяка записана точка от трасето.";
@@ -2661,7 +2661,7 @@
 "external_device_forget_sensor" = "Забравяне на сензора";
 "shared_string_any" = "Всички";
 "import_create_track_files" = "Можете да внасяте, създавате или записвате трасета с помощта на OsmAnd.";
-"longest_duration_first" = "Първо по-продължителните";
+"longest_duration_first" = "Първо продължителните";
 "ant_plus_pair_bluetooth_prompt" = "Сдвоявайте с OsmAnd сензори с Bluetooth LE и ANT+.";
 "map_widget_time_to_intermediate" = "Междинно време";
 "map_widget_sunset_desc" = "Показва времето на следващия залез или времето, оставащо до залеза на слънцето.";
@@ -2701,10 +2701,10 @@
 "parking_widget_desc" = "Показва разстоянието от центъра на екрана до мястото на паркиране.";
 "shared_string_nearest" = "По-близки";
 "map_widget_sunrise_desc" = "Показва времето на следващия изгрев или времето, оставащо до изгрева на слънцето.";
-"newest_date_first" = "Първо по-пресните";
+"newest_date_first" = "Първо новите";
 "average_speed_widget_desc" = "Показва средната скорост на текущото пътуване.";
 "temperature_widget_desc" = "Показва температурата в текущия център на картата.";
-"oldest_date_first" = "Първо по-старите";
+"oldest_date_first" = "Първо старите";
 "route_line_use_map_style_width" = "Използване на подразбираната ширина на стила на картата (%@).";
 "map_widget_distance_to_destination" = "Разстояние до местоназначение";
 "map_widget_sunrise_sunset_time_left" = "Оставащо време";
@@ -2716,7 +2716,7 @@
 "shared_string_mode" = "Режим";
 "shared_string_travel_guides" = "Пътеводител";
 "map_widget_ant_bicycle_power" = "Мощност на велосипеда";
-"longest_distance_first" = "Първо по-дългите";
+"longest_distance_first" = "Първо дългите";
 "cache_size" = "Размер на временната памет";
 "time_to_go_desc" = "Времето в минути или часове, необходимо за достигане до местоназначението.";
 "my_places_no_tracks_title" = "Празна папка";
@@ -2773,7 +2773,7 @@
 "altitude_widget_desc" = "Показва надморската височина на текущото местоположение.";
 "wheel_circumference" = "Окръжност на колелото";
 "shared_string_hidden" = "Скрити";
-"shortest_distance_first" = "Първо по-кратките";
+"shortest_distance_first" = "Първо кратките";
 "bearing_secondary_desc" = "Формата на използваните данни можете да промените от: %@ – %@ – %@.";
 "default_appearance_desc" = "Цветът, пиктограмата и формата по подразбиране ще се прилагат към добавените точки в групата.";
 "show_all_tracks" = "Показване на всички трасета";
@@ -2804,7 +2804,7 @@
 "ant_plus_bluetooth_off_description" = "Включване на Bluetooth, търсене и сдвояване със сензори.";
 "external_sensors_source_of_data" = "Източник на данни";
 "map_widget_ant_bicycle_cadence" = "Каданс на велосипеда";
-"weather_update_disabled" = "Изключено";
+"weather_update_disabled" = "Спрян";
 "map_widget_zoom_level_desc" = "Показва текущото увеличение на картата.";
 "help_article_navigation_routing_brouter_name" = "BRouter";
 "radius_rules_widget_desc" = "Инструментът „Линия за радиуси“ показва окръжности с разстояния около избрана точка от картата.";
@@ -2965,7 +2965,7 @@
 "backup_delete_old_data" = "Премахване на стари версии";
 "backup_delete_all_data" = "Премахване на всички мои данни";
 "shared_string_explore" = "Изследване";
-"backup_delete_all_data_warning" = "На път сте да премахнете всички налични данни в OsmAnd Cloud, включително историята на версиите.\n\nПремахнатите данни няма да могат да бъдат възстановени.";
+"backup_delete_all_data_warning" = "На път сте да премахнете всички налични данни в OsmAnd Cloud, включително историята на версиите. \n \nПремахнатите данни няма да могат да бъдат възстановени.";
 "shared_string_recorded" = "Записано";
 "shared_string_capacity" = "Вместимост";
 "shared_string_move" = "Преместване";
@@ -3002,3 +3002,10 @@
 "user_palette" = "Палитра на потребителя";
 "travel_card_download_descr" = "Изтеглете пътеводители от Wikivoyage и четете за различни места по света без да имате връзка с интернет.";
 "announcement_time_prepare_long" = "Подготвяне отдалеч";
+"show_icon" = "Показване пиктограма";
+"osmand_depelopment_simulate_location_section" = "Симулиране";
+"no_travel_guides_data_descr" = "Изтеглете пътеводители от Wikivoyage и четете за различни места по света без да имате връзка с интернет.";
+"shared_string_all_colors" = "Всички цветове";
+"shared_string_show" = "Показване";
+"shared_string_is_deleted" = "%@премахнато.";
+"osm_id" = "OSM ID";

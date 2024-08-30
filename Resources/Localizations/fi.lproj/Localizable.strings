@@ -660,7 +660,7 @@
 "shared_string_appearance" = "Ulkoasu";
 "map_settings_line_density_slowdown_warning" = "High line density may slowdown map rendering";
 "map_settings_available_srtm_maps_descr" = "Additional maps are needed to view Hillshade on the map";
-"settings_app_theme" = "Sovelluksen teema";
+"settings_app_theme" = "Sovellusteema";
 "light_theme" = "Vaalea";
 "do_not_rotate" = "Älä kierrä";
 "allow_3D_view" = "2.5D-näkymä";
@@ -2885,6 +2885,4 @@
 "quick_action_verb_pause_resume" = "Keskeytä / Jatka";
 "driving_region_uk" = "Yhdistynyt kuningaskunta ja vastaavat";
 "map_source" = "Kartan lähde";
-
-
-
+"shared_string_show" = "Näytä";

@@ -1345,7 +1345,7 @@
 "rendering_attr_highway_class_state_road_name" = "Staatsstraße";
 "routing_attr_avoid_tram_name" = "Keine Straßenbahnen";
 "rendering_attr_hideProposed_name" = "Geplante Objekte";
-"rendering_attr_alpineHiking_name" = "Schwierigkeitsgrad";
+"rendering_attr_alpineHiking_name" = "Schwierigkeitsgrad der Wanderwege";
 "routing_attr_driving_style_safety_name" = "Nebenstraßen bevorzugen";
 "rendering_attr_piste_difficulty_easy_name" = "Einfach";
 "routing_attr_allow_motorway_name" = "Autobahnen benutzen";

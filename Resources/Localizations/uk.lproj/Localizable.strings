@@ -148,7 +148,7 @@
 "new_filter_desc" = "Введіть назву для нового фільтра. Ви зможете його знайти у списку категорій.";
 "skip_map_downloading" = "Пропустити завантаження мап";
 "search_another_country" = "Виберіть інший регіон";
-"first_usage_wizard_desc" = "OsmAnd визначить ваше місцеперебування і запропонує завантажити мапи для цього регіону.";
+"first_usage_wizard_desc" = "OsmAndвизначить ваше місцеперебування і запропонує завантажити мапи для цього регіону.";
 "location_not_found" = "Розташування не визначене";
 "no_inet_connection" = "Зʼєднання з Інтернетом відсутнє";
 "no_inet_connection_desc_map" = "Необхідно завантажити мапи.";
@@ -185,7 +185,7 @@
 "map_mode" = "Режим мапи";
 "map_widget_renderer" = "Стиль мапи";
 "map_settings_overunder" = "Накладка та підкладка";
-"map_settings_over" = "Накладання";
+"map_settings_over" = "Накладка";
 "map_settings_under" = "Підкладка";
 "shared_string_none" = "Нічого";
 "map_settings_offline" = "Стилі офлайн мап";
@@ -1253,7 +1253,7 @@
 "rendering_value_thin_name" = "Тонко";
 "rendering_attr_hideHouseNumbers_name" = "Номери будинків";
 "rendering_attr_depthContours_description" = "Показувати ізолінії та точки глибин.";
-"rendering_attr_alpineHiking_name" = "Класифікація складності";
+"rendering_attr_alpineHiking_name" = "Рівень складності пішохідних маршрутів";
 "rendering_attr_piste_type_sleigh_name" = "Запряжені сани, санчата";
 "rendering_attr_hideText_name" = "Текст";
 "rendering_attr_piste_difficulty_undefined_name" = "Не визначено";
@@ -3145,7 +3145,7 @@
 "map_orientation_landscape" = "Горизонтально";
 "map_widget_ant_heart_rate_desc" = "Показує пульс користувача під час певної активності в режимі реального часу";
 "gitHub_discussion" = "Обговорення GitHub";
-"external_device_status_connect" = "З’єднатись";
+"external_device_status_connect" = "Підʼєднати";
 "default_appearance_desc" = "Типовий колір, піктограма та форма застосовуватимуться до доданих точок у групі закладок.";
 "shared_string_result" = "Результат";
 "no_travel_guides_data_descr" = "Завантажте путівники Вікімандрів, щоб переглянути статті про місця в усьому світі без підключення до Інтернету.";
@@ -3407,7 +3407,7 @@
 "recorded_track" = "Записаний трек";
 "permanent_delete_warning" = "%@ буде видалено назавжди. Ви впевнені?";
 "average_glide_ratio_time_interval_desc" = "Показує середній коефіцієнт ковзання або вертикальну швидкість для заданого інтервалу.";
-"missing_or_outdated_maps_title" = "Зниклі або неактуальні мапи";
+"missing_or_outdated_maps_title" = "Відсутні або неактуальні мапи";
 "getting_list_required_maps" = "Отримання списку необхідних мап...";
 "action_cant_be_undone" = "Ця дія незворотна.";
 "osmand_cloud_delete_account_descr" = "Ви впевнені, що бажаєте видалити обліковий запис OsmAnd Cloud?";
@@ -3415,7 +3415,7 @@
 "calculate_online" = "Обчислити онлайн";
 "required_maps_list" = "Мапи, які також будуть використані: %@";
 "track_vertical_exaggeration_description" = "Змінюючи масштаб, ви можете змінювати висоту 3D-трека.";
-"visualization_3d_visualized_by" = "Візуаліовано";
+"visualization_3d_visualized_by" = "Візуалізовано";
 "visualization_3d_wall_color" = "Колір стіни";
 "visualization_3d_track_line" = "Лінія треку";
 "track_3d" = "3D-трек";

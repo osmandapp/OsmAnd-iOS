@@ -1198,12 +1198,12 @@
 "poi_remove_title" = "POI-ს წაშლა";
 "osm_edit_modified_poi" = "OSM POI-ს შეცვლა";
 "osm_edit_deleted_poi" = "OSM POIწაშლილია";
-"osm_edit_created_poi" = "OSM POI შეიქმნა";
-"osm_edit_created_note" = "OSM შენიშვნა შეიქმნა";
+"osm_edit_created_poi" = "OSM POIშეიქმნა";
+"osm_edit_created_note" = "OSMშენიშვნა შეიქმნა";
 "osm_note_create" = "OSM შენიშვნის დამატება";
 "upload_osm_note" = "Upload OSM Note";
 "osm_edit_close_note" = "OSMსანიშნის დახურვა";
-"osm_edit_comment_note" = "OSM შენიშვნის კომენტარი";
+"osm_edit_comment_note" = "OSMშენიშვნის კომენტარი";
 "osm_note_reopen_title" = "OSM შენიშვნის თავიდან გახსნა";
 "osm_confirm_bulk_delete" = "წავშალო %d ჩასწორება?";
 "osm_confirm_delete" = "წავშალო POI?";
@@ -1417,7 +1417,7 @@
 "no_waypoints_found" = "გზის წერტილები აღმოჩენილი არაა";
 "poi_context_menu_modify" = "POI-ის ჩასწორება";
 "context_menu_item_create_poi" = "POI-ის შექმნა";
-"poi_context_menu_modify_osm_change" = "OSM ცვლილების ჩასწორება";
+"poi_context_menu_modify_osm_change" = "OSMცვლილების ჩასწორება";
 "context_menu_item_open_note" = "Open OSM Note";
 "edit_osm_note" = "OSM შენიშვნის ჩასწორება";
 "shared_string_commit" = "აღსრულება";
@@ -1973,7 +1973,7 @@
 "rendering_attr_highway_class_road_name" = "გზა";
 "rendering_value_translucent_green_name" = "გამჭირვალე მწვანე";
 "rendering_value_translucent_yellow_name" = "გამჭირვალე ყვითელი";
-"rendering_attr_OSMMapperAssistant_name" = "OSM კარტოგრაფის დამხმარე";
+"rendering_attr_OSMMapperAssistant_name" = "OSMკარტოგრაფის დამხმარე";
 "routing_attr_avoid_borders_name" = "საზღვრის გადაკვეთის გარეშე";
 "rendering_value_walkingRoutesScopeOSMC_name" = "ქსელი";
 "rendering_attr_smoothness_excellent_name" = "შესანიშნავი";
@@ -2378,7 +2378,7 @@
 "lang_sat" = "სანტალი";
 "map_widget_trip_recording_duration" = "ხანგრძლივობა";
 "on_hold" = "შეჩერებულია";
-"rendering_attr_alpineHiking_name" = "სიძნელის კლასიფიკაცია";
+"rendering_attr_alpineHiking_name" = "საცალფეხო ბილიკების სირთულის დონე";
 "renew_subscription" = "გამოწერის განახლება";
 "kg" = "კგ";
 "weather_pressure_hectopascals" = "ჰექტოპასკალი";
@@ -2587,4 +2587,5 @@
 "shared_string_favorites" = "რჩეულები";
 "shared_string_action" = "ქმედება";
 "map_source" = "რუკის წყარო";
-"driving_region_uk" = "UK და მსგავსები";
+"driving_region_uk" = "UKდა მსგავსები";
+"shared_string_show" = "ჩვენება";

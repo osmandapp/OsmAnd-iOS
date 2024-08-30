@@ -2528,7 +2528,7 @@
 "specify_number_of_dir_indicators_desc" = "Indiqueu el nombre d\'indicadors de direcció.";
 "shared_string_light" = "Lluminós";
 "external_sensors_source_of_data" = "Procedència de les dades";
-"map_settings_topography" = "Dades de corbes de nivell";
+"map_settings_topography" = "Corbes de nivell";
 "map_screen_orientation" = "Orientació de pantalla";
 "shared_string_hand" = "Mà";
 "default_appearance_desc" = "El color, l’icona i la forma predeterminada s’aplicaran als punts preferits agregats al grup.";
@@ -2567,7 +2567,7 @@
 "help_article_navigation_car_play_name" = "CarPlay";
 "lang_zh-Hans" = "Xinès (simplificat)";
 "shared_string_mode" = "Mode";
-"external_device_status_connect" = "Connecta";
+"external_device_status_connect" = "Connecta\'t";
 "global_settings" = "Paràmetres globals";
 "map_widget_ant_bicycle_cadence" = "Cadència de la bicicleta";
 "map_widget_trip_recording_duration" = "Durada";
@@ -2611,7 +2611,7 @@
 "driving_region_india" = "Índia";
 "shared_string_replace" = "Reemplaça";
 "quick_action_destination" = "Destí";
-"quick_action_parking_place" = "Lloc d'aparcament";
+"quick_action_parking_place" = "Lloc d\'aparcament";
 "weather_source_ecmwf_title" = "CEPMMT";
 "quick_action_verb_show_hide" = "Mostra / Amaga";
 "quick_action_verb_pause_resume" = "Pausa / Reprèn";
@@ -2635,3 +2635,6 @@
 "precipitation_layer" = "Capa de precipitacions";
 "shared_string_action" = "Acció";
 "shared_string_favorite" = "Preferida";
+"osmand_depelopment_simulate_location_section" = "Simular";
+"shared_string_show" = "Mostra";
+"driving_region_uk" = "Regne Unit i semblants";

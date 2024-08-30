@@ -2518,7 +2518,7 @@
 "map_orientation_default" = "Kaip irįrenginys";
 "route_info" = "Maršruto informacija";
 "shared_string_dark" = "Tamsi";
-"map_settings_topography" = "Kontūrinės linijos";
+"map_settings_topography" = "SRTMžemėlapiai";
 "activity_type_offroad_name" = "Bekelė";
 "shared_string_explore" = "Tyrinėti";
 "short_min" = "m";
@@ -2693,3 +2693,4 @@
 "shared_string_change" = "Pakeisti";
 "shared_string_favorite" = "Įsiminta vieta";
 "driving_region_india" = "Indija";
+"shared_string_show" = "Rodyti";

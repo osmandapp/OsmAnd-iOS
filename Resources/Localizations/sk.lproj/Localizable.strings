@@ -2411,7 +2411,7 @@
 "shared_string_bearing" = "Azimut";
 "navigation_points_desc" = "Navigačné nástroje sa zapnú počas navigácie pre zobrazenie informácií ako vzdialenosť, čas príjazdu alebo zostávajúci čas, nasledujúce odbočenia, smerovanie (azimut), názov súčasnej alebo nasledujúcej ulice, jazdné pruhy, maximálna rýchlosť, blížiace sa varovania, body záujmu, body trasy.";
 "route_maneuvers_desc" = "Navigačné nástroje sa zapnú počas navigácie pre zobrazenie informácií ako vzdialenosť, čas príjazdu, nasledujúce odbočenia, smerovanie (azimut), názov ulice, jazdné pruhy, maximálna rýchlosť, blížiace sa varovania, body záujmu, body trasy.";
-"rendering_attr_alpineHiking_name" = "Klasifikácia obtiažnosti";
+"rendering_attr_alpineHiking_name" = "Stupeň náročnosti turistických trás";
 "bearing_desc" = "Zobrazuje absolútne (azimut) alebo relatívne smerovanie k cieľu v uhlových jednotkách (v režime 180 stupňov, 360 stupňov, alebo miliradiánov).";
 "external_device_blood_pressure" = "Krvný tlak";
 "write_data_from_sensor_to_track" = "Zapísať údaje z externých snímačov do GPX počas záznamu výletu.";
@@ -2499,7 +2499,7 @@
 "shared_string_trash" = "Kôš";
 "shortest_distance_first" = "Najkratšia vzdialenosť nahor";
 "external_device_status_connect" = "Pripojiť";
-"map_settings_topography" = "Údaje vrstevníc";
+"map_settings_topography" = "Vrstevnice";
 "precipitation_widget_desc" = "Zobrazí zrážky pre súčasný stred mapy.";
 "nav_type_brouter" = "BRouter";
 "map_widget_sunset_desc" = "Zobrazuječas najbližšieho západu slnka alebo zostávajúci čas do západu slnka.";
@@ -2672,7 +2672,7 @@
 "map_markers_bar" = "Panel mapových značiek";
 "map_widget_trip_recording_downhill" = "Z kopca";
 "shared_string_loading" = "Načítanie";
-"weather_update_disabled" = "Vypnuté";
+"weather_update_disabled" = "Zakázané";
 "average_speed_time_interval_desc" = "Zadajtečasový interval pre priemerovanie rýchlosti.";
 "map_widget_sun_position_desc" = "Zobrazuječas do východu alebo západu slnka.";
 "temperature_widget_desc" = "Zobrazí teplotu pre súčasný stred mapy.";
@@ -2857,7 +2857,7 @@
 "shared_string_always" = "Vždy";
 "shared_string_class" = "Trieda";
 "shared_string_top_bottom" = "Hore a dole";
-"shared_string_bottom" = "Dole";
+"shared_string_bottom" = "Spodok";
 "route_recalculation_dist_title" = "Minimálna vzdialenosť pre prepočítanie trasy";
 "shared_string_millimeters_short" = "mm";
 "osm_id" = "OSM ID";
@@ -2924,3 +2924,4 @@
 "driving_region_uk" = "Veľká Británia a podobné krajiny";
 "rendering_value_pale_name" = "Bledá";
 "driving_region_india" = "India";
+"shared_string_show" = "Zobraziť";

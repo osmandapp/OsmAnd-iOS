@@ -292,7 +292,7 @@
 //inapps
 "plugin_nautical_name" = "航海地图视图";
 "product_desc_nautical" = "";
-"plugin_nautical_descr" = "打开以丰富您的地图，其中包含有关航行路线、导航灯、危险区域、允许或禁止航行或停靠的区域等信息。如要使用，下载航海地图并在配置地图中启用“航海地图”类型。 \n \n详情可见 %@。";
+"plugin_nautical_descr" = "通过航行路线、导航灯、航海危险区、限制航行或停靠区等信息丰富地图内容。在使用前，请下载相应的航海地图，并在 “配置地图 ”下启用 “航海地图 ”样式。 \n \n了解更多 %@。";
 "osmand_parking_plugin_name" = "停车位置";
 "product_desc_parking" = "";
 "osmand_parking_plugin_description" = "标记您汽车的停放位置，并在停车计时将要到期时通知您的日历。为放置标记，请在地图上选择一个地点，进入 \"操作\"，然后点击 \"添加停车位置\"。";
@@ -1335,7 +1335,7 @@
 "subsequent_dest_description" = "向上移动目的地，并创建它";
 "transport_nearby_routes_within" = "附近的路线";
 "access_intermediate_arrival_time" = "中转点到达时间";
-"get_discount_second_part" = "然后 %@";
+"get_discount_second_part" = "接着 %@";
 "months_3" = "三个月";
 "plugin_popup_osm_editing_title" = "开启 OpenStreetMap 编辑";
 "map_update_warning" = "是否要重新加载来自互联网的瓦片数据？";
@@ -1735,7 +1735,7 @@
 "cubic_m" = "立方米";
 "purchases_feature_desc_monthly_map_updates" = "获得离线地图的定期月度更新。";
 "restore_purchases" = "恢复购买内容";
-"ltr_or_rtl_combine_via_or" = "%@或 %@";
+"ltr_or_rtl_combine_via_or" = "%@ 或 %@";
 "nautical_depth" = "航海深度";
 "follow_track" = "跟随轨迹";
 "simulation_preview_mode_title" = "快速预览模式";
@@ -2363,7 +2363,7 @@
 "help_article_navigation_routing_online_routing_name" = "线上路线规划";
 "shared_string_loading" = "正在加载";
 "shared_string_buttons" = "按钮";
-"map_settings_topography" = "等高线数据";
+"map_settings_topography" = "等高线";
 "apply_to_existing_favorites_descr" = "将更改应用于组中现有的收藏点，还是仅应用于新收藏点？";
 "top_widgets_panel" = "顶部面板";
 "ant_plus_open_settings" = "打开设置";
@@ -2732,5 +2732,9 @@
 "wall_height" = "墙壁高度";
 "lang_war" = "瓦瑞语";
 "rendering_value_name_only_name" = "仅名称";
-"weather_data_sources_prompt" = "OsmAnd 从两个来源提供天气数据：";
+"weather_data_sources_prompt" = "OsmAnd从两个来源提供天气数据：";
 "weather_source_ecmwf_description" = "欧洲中期天气预报中心";
+"shared_string_show" = "显示";
+"osmand_depelopment_simulate_location_section" = "模拟";
+"shared_string_millimeters_short" = "毫米";
+"visualization_3d_wall_color" = "墙壁颜色";

@@ -663,7 +663,7 @@
 "route_tl" = "Beygðu til vinstri og haltu áfram";
 "route_tshl" = "Beygðu skarpt til vinstri og haltu áfram";
 "route_tsll" = "Beygðu örlítið til vinstri og haltu áfram";
-"route_tu" = "Taktu U-beygju og haltu áfram";
+"route_tu" = "Taktu U-beygju og haltuáfram";
 "route_head" = "Beint";
 "looking_up_address" = "Fletti upp heimilisfangi";
 "no_address_found" = "Ekkert heimilisfang erákvarðað";
@@ -3452,3 +3452,4 @@
 "shared_string_action" = "Aðgerð";
 "voices" = "Talskilaboð";
 "quick_action_verb_show_hide" = "Birta / Fela";
+"shared_string_show" = "Sýna";

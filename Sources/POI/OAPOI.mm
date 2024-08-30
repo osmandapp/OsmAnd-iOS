@@ -329,7 +329,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     return res;
 }
 
-- (NSString *) getAdditionalInfo:(NSString *)key
+- (NSString *)getAdditionalInfo:(NSString *)key
 {
     if (!_values)
         return nil;

@@ -544,7 +544,6 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 - (IBAction)barActionTextButtonPress:(id)sender
 {
-    // show on map
     switch (_barActionType)
     {
         case BarActionSelectTarget:
@@ -1643,7 +1642,6 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                 regionResultCollection = nil;
                 results = [NSMutableArray array];
                 [self showApiResults:apiResults phrase:phrase hasRegionCollection:hasRegionCollection onPublish:onPublish];
-                // TODO: Perhaps an Android implementation is needed
                 switch (_processTopIndexAfterLoad)
                 {
                     case ProcessTopIndexFilter:

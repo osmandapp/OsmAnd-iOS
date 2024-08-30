@@ -3509,3 +3509,4 @@
 "route_your_destination_is_on_left" = "Ваш пункт призначення знаходиться ліворуч";
 "route_your_destination_is_on_right" = "Ваш пункт призначення знаходиться праворуч";
 "route_your_destination_is_on_ahead" = "Ваш пункт призначення прямо перед вами";
+"osmand_cloud_delete_account_descr_with_email" = "Ви впевнені, що хочете видалити обліковий запис OsmAnd Cloud: %@?";

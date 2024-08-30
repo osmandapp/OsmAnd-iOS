@@ -544,6 +544,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 - (IBAction)barActionTextButtonPress:(id)sender
 {
+    // show on map
     switch (_barActionType)
     {
         case BarActionSelectTarget:
@@ -592,7 +593,10 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                     OATopIndexFilter *topIndexFilter = (OATopIndexFilter *) [searchPhrase getLastSelectedWord].result.object;
                     filter = [self createPoiUIFilterWithTopIndexFilter:topIndexFilter processAfter:ProcessTopIndexMap];
                     if (filter)
+                    {
                         [filter setFilterByName:[topIndexFilter getValue]];
+                        [filter setFilterByKey:[topIndexFilter getTag]];
+                    }
                     else
                         return;
                 }
@@ -1643,8 +1647,12 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                 switch (_processTopIndexAfterLoad)
                 {
                     case ProcessTopIndexFilter:
+                        _barActionType = BarActionShowOnMap;
+                        [self barActionImgButtonPress:nil];
                         break;
                     case ProcessTopIndexMap:
+                        _barActionType = BarActionShowOnMap;
+                        [self barActionTextButtonPress:nil];
                         break;
                     default:
                         break;

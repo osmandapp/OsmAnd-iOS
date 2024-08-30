@@ -46,6 +46,7 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 @property (nonatomic) BOOL isDeleted;
 
 @property (nonatomic) NSString *filterByName;
+@property (nonatomic) NSString *filterByKey;
 @property (nonatomic) NSString *savedFilterByName;
 @property (nonatomic, readonly) NSArray<OAPOI *> *currentSearchResult;
 @property (nonatomic, readonly) OAPOIBaseType *baseType;
@@ -108,4 +109,5 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 - (BOOL) isWikiFilter;
 - (BOOL) isTopWikiFilter;
 - (void) updateAcceptedTypeOrigins;
+- (void) setFilterByKey:(NSString *)key;
 @end

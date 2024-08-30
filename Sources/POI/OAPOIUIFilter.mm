@@ -417,6 +417,13 @@
             return YES;
         }];
     }
+    if (_filterByKey != nil && _filterByKey.length > 0)
+    {
+        return [[OAAmenityNameFilter alloc] initWithAcceptFunc:^BOOL(OAPOI *poi) {
+            NSString * val = [poi getAdditionalInfo:_filterByKey];
+            return val != nil && [val isEqualToString:_filterByName];
+        }];
+    }
     NSMutableArray<NSString *> *unknownFilters = [NSMutableArray array];
     NSArray<NSString *> *items = [filter componentsSeparatedByString:@" "];
     BOOL allTime = NO;
@@ -1229,6 +1236,11 @@
         }
     }
     acceptedTypesOrigin = newAcceptedTypesOrigin;
+}
+
+- (void) setFilterByKey:(NSString *)key
+{
+    _filterByKey = key;
 }
 
 @end

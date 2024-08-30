@@ -967,7 +967,7 @@
 "reset_to_default" = "Vrati na fabrička podešavanja";
 "reset_profile_action_descr" = "Resetujte sva podešavanja profila na podrazumevane vrednosti instalacije. Dodirom na Resetuj će se odbaciti sve vaše promene, ova radnja se ne može opozvati.";
 "checking_for_duplicates" = "Provera duplikata...";
-"checking_for_duplicate_description" = "OsmAnd proverava %@ postojanje umnožaka sa postojećim jedinicama u programu.  \n  \nTo može da potraje neko vreme.";
+"checking_for_duplicate_description" = "OsmAnd proverava %@ postojanje umnožaka sa postojećim jedinicama u programu. \n \nTo može da potraje neko vreme.";
 
 // Purchases
 "prch_addons" = "Dodaci";

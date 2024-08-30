@@ -1853,7 +1853,7 @@
 "get_osmand_live" = "Абонирайте се за OsmAnd Live и отключете всички възможности: всекидневни обновявания с неограничени изтегляния, всички платени и неплатени добавки, Уикиредия, Wikivoyage и много други.";
 "osm_live_subscription" = "Абонамент за OsmAnd Live";
 "cancel_subscription" = "Cancel subscription";
-"wikivoyage_offline" = "Wikivoyageбез мрежа";
+"wikivoyage_offline" = "Wikivoyage без мрежа";
 "unlimited_downloads" = "Unlimited downloads";
 "wikipedia_offline" = "Wikipedia offline";
 "contour_lines_hillshade_maps" = "Contour lines & Hillshade maps";
@@ -2743,7 +2743,7 @@
 "quick_action_map_center_widget_descr" = "Бутон, превключващ приспособлението за центъра на картата.";
 "skip_download" = "Без изтегляне";
 "route_info" = "Информация за маршрут";
-"offline_wikivoyage" = "Wikivoyageбез мрежа";
+"offline_wikivoyage" = "Wikivoyage без мрежа";
 "open_issue_on_gitHub" = "Съобщете дефект в Гитхъб";
 "delete_folder" = "Премахване на папка";
 "change_appearance" = "Промяна на външен вид";
@@ -2910,7 +2910,7 @@
 "shared_string_class" = "Клас";
 "shared_string_bottom" = "Долу";
 "transport_hazmat_title" = "Превоз на опасни товари";
-"weather_data_sources_prompt" = "OsmAndчерпи прогноза за времето от два изтичника:";
+"weather_data_sources_prompt" = "OsmAnd черпи прогноза за времето от два изтичника:";
 "weather_source_ecmwf_description" = "Европейски център за средносрочни прогнози на времето";
 "shared_string_cache" = "Временни файлове";
 "shared_string_markers" = "Маркери";

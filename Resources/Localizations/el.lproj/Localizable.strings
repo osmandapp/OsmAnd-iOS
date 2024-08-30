@@ -911,7 +911,7 @@
 "make_as_start_point" = "Κάντε αυτό ως το σημείο εκκίνησης";
 "new_destination_point_dialog" = "Έχετε ήδη ορίσει έναν προορισμό:";
 "start_navigation" = "Έναρξη πλοήγησης";
-"route_stops_before" = "%@στάσεις πριν";
+"route_stops_before" = "%@ στάσεις πριν";
 "allow_3d_descr" = "Ενεργοποιήστε αυτήν την επιλογή για να μπορείτε να βλέπετε τον χάρτη στην 2.5-διάστατη προοπτική";
 "allow_3d" = "Επιτρέψτε 2.5-διάστατη απεικόνιση";
 "angular_units" = "Μονάδες μέτρησης γωνιών";
@@ -1059,7 +1059,7 @@
 "shared_string_transparency" = "Διαφάνεια";
 "save_as_new_track" = "Αποθήκευση ως νέο ίχνος";
 "poi_filter_public_transport" = "Δημόσια Μ.Μ.Μ";
-"ltr_or_rtl_combine_via_colon" = "%@— %@";
+"ltr_or_rtl_combine_via_colon" = "%@ — %@";
 "reorder_profiles" = "Επεξεργασία καταλόγου κατατομών (προφίλ)";
 "quick_action_mapillary_hide" = "Απόκρυψη Mapillary";
 "add_online_source" = "Προσθήκη διαδικτυακής πηγής";

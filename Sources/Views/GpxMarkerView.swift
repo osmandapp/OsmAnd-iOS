@@ -9,6 +9,6 @@
 import Foundation
 import DGCharts
 
-final class GpxMarkerView: MarkerView {
+final class GpxMarkerView: UIView {
     
 }

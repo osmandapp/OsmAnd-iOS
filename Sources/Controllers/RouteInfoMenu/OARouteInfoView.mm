@@ -201,7 +201,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     [_tableView setShowsHorizontalScrollIndicator:NO];
     _tableView.estimatedRowHeight = kEstimatedRowHeight;
     
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[ElevationChartCell getCellIdentifier] owner:self options:nil];
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:ElevationChartCell.reuseIdentifier owner:self options:nil];
     _routeStatsCell = (ElevationChartCell *)[nib objectAtIndex:0];
 
     [GpxUIHelper setupElevationChartWithChartView:_routeStatsCell.chartView
@@ -664,7 +664,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             {
                 OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:_gpx.path]];
                 BOOL calcWithoutGaps = !gpx.joinSegments && (_gpx.tracks.count > 0 && _gpx.tracks.firstObject.generalTrack);
-                [GpxUIHelper refreshLineChartWithChartView:(LineChartView *) _routeStatsCell.chartView
+                [GpxUIHelper refreshLineChartWithChartView:_routeStatsCell.chartView
                                                   analysis:trackAnalysis
                                        useGesturesAndScale:NO
                                                  firstType:GPXDataSetTypeAltitude

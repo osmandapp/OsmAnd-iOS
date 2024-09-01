@@ -74,7 +74,7 @@
 
 - (NSArray *) getMainGraphSectionData
 {
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[ElevationChartCell getCellIdentifier] owner:self options:nil];
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:ElevationChartCell.reuseIdentifier owner:self options:nil];
     ElevationChartCell *routeStatsCell = (ElevationChartCell *)[nib objectAtIndex:0];
     routeStatsCell.selectionStyle = UITableViewCellSelectionStyleNone;
     routeStatsCell.chartView.delegate = self;
@@ -206,7 +206,7 @@
                                                                            analysis:self.analysis];
     }
     [self.routeLineChartHelper refreshHighlightOnMap:NO
-                                       lineChartView:self.statisticsChart
+                                           chartView:self.statisticsChart
                                     trackChartPoints:self.trackChartPoints
                                             analysis:self.analysis];
     [self updateRouteStatisticsGraph];
@@ -356,7 +356,7 @@
                                                                                analysis:self.analysis];
         }
         [self.routeLineChartHelper refreshHighlightOnMap:YES
-                                           lineChartView:self.statisticsChart
+                                               chartView:self.statisticsChart
                                         trackChartPoints:self.trackChartPoints
                                                 analysis:self.analysis];
     }
@@ -483,7 +483,7 @@
         self.trackChartPoints = [self.routeLineChartHelper generateTrackChartPoints:self.statisticsChart
                                                                            analysis:self.analysis];
     [self.routeLineChartHelper refreshHighlightOnMap:NO
-                                       lineChartView:self.statisticsChart
+                                           chartView:self.statisticsChart
                                     trackChartPoints:self.trackChartPoints
                                             analysis:self.analysis];
 }

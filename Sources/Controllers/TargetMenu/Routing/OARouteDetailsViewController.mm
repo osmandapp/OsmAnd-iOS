@@ -280,7 +280,8 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 
 - (void)populateMainGraphSection:(NSMutableDictionary *)dataArr section:(NSInteger &)section 
 {
-    ElevationChartCell *routeStatsCell = [self.tableView dequeueReusableCellWithIdentifier:[ElevationChartCell reuseIdentifier]];
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:ElevationChartCell.reuseIdentifier owner:self options:nil];
+    ElevationChartCell *routeStatsCell = (ElevationChartCell *)[nib objectAtIndex:0];
     routeStatsCell.selectionStyle = UITableViewCellSelectionStyleNone;
     routeStatsCell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
     routeStatsCell.chartView.delegate = self;
@@ -779,7 +780,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
                                                                                analysis:self.analysis];
         }
         [self.routeLineChartHelper refreshHighlightOnMap:YES
-                                           lineChartView:self.statisticsChart
+                                               chartView:self.statisticsChart
                                         trackChartPoints:self.trackChartPoints
                                                 analysis:self.analysis];
     }
@@ -943,7 +944,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
                                                                            analysis:self.analysis];
     }
     [self.routeLineChartHelper refreshHighlightOnMap:NO
-                                       lineChartView:self.statisticsChart
+                                           chartView:self.statisticsChart
                                     trackChartPoints:self.trackChartPoints
                                             analysis:self.analysis];
 }

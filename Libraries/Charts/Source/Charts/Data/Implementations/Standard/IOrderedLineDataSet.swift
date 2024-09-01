@@ -7,6 +7,6 @@
 
 import Foundation
 
-@objc protocol IOrderedLineDataSet {
+@objc public protocol IOrderedLineDataSet {
     func isLeftAxis() -> Bool
 }

@@ -318,7 +318,7 @@ class GpxUIHelper: NSObject {
         (dataSet as? OrderedLineDataSet)?.getDataSetAxisType() ?? GPXDataSetAxisType.distance
     }
 
-    static func refreshLineChart(chartView: LineChartView,
+    static func refreshLineChart(chartView: ElevationChart,
                                  analysis: OAGPXTrackAnalysis,
                                  useGesturesAndScale: Bool,
                                  firstType: GPXDataSetType,
@@ -361,7 +361,7 @@ class GpxUIHelper: NSObject {
         chartView.highlightValues(highlightValues)
     }
 
-    static func refreshLineChart(chartView: LineChartView,
+    static func refreshLineChart(chartView: ElevationChart,
                                  analysis: OAGPXTrackAnalysis,
                                  useGesturesAndScale: Bool,
                                  firstType: GPXDataSetType,
@@ -484,22 +484,22 @@ class GpxUIHelper: NSObject {
 
     static func setupElevationChart(chartView: ElevationChart) {
         setupElevationChart(chartView: chartView,
-                            markerView: GpxMarkerView(),
+//                            markerView: GpxMarkerView(),
                             topOffset: 24,
                             bottomOffset: 16,
                             useGesturesAndScale: true)
     }
 
-    static func setupElevationChart(chartView: ElevationChart,
-                                    topOffset: CGFloat,
-                                    bottomOffset: CGFloat,
-                                    useGesturesAndScale: Bool) {
-        setupElevationChart(chartView: chartView,
-                            markerView: GpxMarkerView(),
-                            topOffset: topOffset,
-                            bottomOffset: bottomOffset,
-                            useGesturesAndScale: useGesturesAndScale)
-    }
+//    static func setupElevationChart(chartView: ElevationChart,
+//                                    topOffset: CGFloat,
+//                                    bottomOffset: CGFloat,
+//                                    useGesturesAndScale: Bool) {
+//        setupElevationChart(chartView: chartView,
+//                            markerView: GpxMarkerView(),
+//                            topOffset: topOffset,
+//                            bottomOffset: bottomOffset,
+//                            useGesturesAndScale: useGesturesAndScale)
+//    }
 
     static func setupElevationChart(chartView: ElevationChart,
                                     topOffset: CGFloat,
@@ -507,20 +507,20 @@ class GpxUIHelper: NSObject {
                                     useGesturesAndScale: Bool,
                                     markerIconName: String) {
         setupElevationChart(chartView: chartView,
-                            markerView: GpxMarkerView(),
+//                            markerView: GpxMarkerView(),
                             topOffset: topOffset,
                             bottomOffset: bottomOffset,
                             useGesturesAndScale: useGesturesAndScale)
     }
 
     static func setupElevationChart(chartView: ElevationChart,
-                                    markerView: GpxMarkerView,
+//                                    markerView: GpxMarkerView,
                                     topOffset: CGFloat,
                                     bottomOffset: CGFloat,
                                     useGesturesAndScale: Bool) {
         let axisGridColor = UIColor.chartAxisGridLine
-        chartView.setupGPXChart(markerView: markerView,
-                                topOffset: topOffset,
+        chartView.setupGPXChart(/*markerView: markerView,
+                                */topOffset: topOffset,
                                 bottomOffset: bottomOffset,
                                 xAxisGridColor: axisGridColor,
                                 labelsColor: UIColor.textColorSecondary,

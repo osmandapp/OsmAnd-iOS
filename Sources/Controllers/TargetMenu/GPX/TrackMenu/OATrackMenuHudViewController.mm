@@ -36,7 +36,6 @@
 #import "OATitleSwitchRoundCell.h"
 #import "OAPointWithRegionTableViewCell.h"
 #import "OASelectionCollapsableCell.h"
-#import "OALineChartCell.h"
 #import "OASegmentTableViewCell.h"
 #import "OAQuadItemsWithTitleDescIconCell.h"
 #import "OARadiusCellEx.h"
@@ -593,7 +592,7 @@
 
 - (BOOL)stopChangingHeight:(UIView *)view
 {
-    return [view isKindOfClass:[LineChartView class]] || [view isKindOfClass:[UICollectionView class]];
+    return [view isKindOfClass:[ElevationChart class]] || [view isKindOfClass:[UICollectionView class]];
 }
 
 - (void)doAdditionalLayout
@@ -1244,7 +1243,7 @@
     return [groupName isEqualToString:OALocalizedString(@"route_points")];
 }
 
-- (void)updateChartHighlightValue:(LineChartView *)chart
+- (void)updateChartHighlightValue:(ElevationChart *)chart
                           segment:(OATrkSegment *)segment
 {
     CLLocationCoordinate2D pinLocation = [self getPinLocation];
@@ -2335,7 +2334,7 @@
         }
         return cell;
     }
-    else if ([cellData.type isEqualToString:[OALineChartCell getCellIdentifier]])
+    else if ([cellData.type isEqualToString:ElevationChartCell.reuseIdentifier])
     {
         OAGPXTableSectionData *sectionData = _tableData.subjects[indexPath.section];
         return sectionData.values[@"cell_value"];

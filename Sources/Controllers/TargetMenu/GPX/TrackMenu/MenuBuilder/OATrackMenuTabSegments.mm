@@ -102,7 +102,7 @@
     if (!segment)
         return;
 
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[ElevationChartCell getCellIdentifier] owner:self options:nil];
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:ElevationChartCell.reuseIdentifier owner:self options:nil];
     ElevationChartCell *cell = (ElevationChartCell *) nib[0];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.chartView.delegate = self;
@@ -183,7 +183,7 @@
 
         chartCellData = [OAGPXTableCellData withData:@{
                 kTableKey: [NSString stringWithFormat:@"chart_%p", (__bridge void *) segment],
-                kCellType: [ElevationChartCell getCellIdentifier]
+                kCellType: ElevationChartCell.reuseIdentifier
         }];
     }
     else
@@ -239,7 +239,7 @@
             if (_routeLineChartHelper)
             {
                 [_routeLineChartHelper refreshHighlightOnMap:NO
-                                               lineChartView:cell.chartView
+                                                   chartView:cell.chartView
                                             trackChartPoints:sectionData.values[@"points_value"]
                                                      segment:sectionData.values[@"segment_value"]];
             }
@@ -393,7 +393,7 @@
     if (_routeLineChartHelper)
     {
         [_routeLineChartHelper refreshHighlightOnMap:NO
-                                       lineChartView:(LineChartView *) chartView
+                                           chartView:(LineChartView *) chartView
                                     trackChartPoints:sectionData.values[@"points_value"]
                                              segment:sectionData.values[@"segment_value"]];
     }
@@ -479,9 +479,9 @@
             if (_routeLineChartHelper)
             {
                 [_routeLineChartHelper refreshHighlightOnMap:YES
-                                               lineChartView:lineChartView
+                                                   chartView:lineChartView
                                             trackChartPoints:sectionData.values[@"points_value"]
-                                                    segment:sectionData.values[@"segment_value"]];
+                                                     segment:sectionData.values[@"segment_value"]];
             }
         }
     }

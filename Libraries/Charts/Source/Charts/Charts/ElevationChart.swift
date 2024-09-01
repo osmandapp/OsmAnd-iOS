@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class ElevationChart: LineChartView {
+final public class ElevationChart: LineChartView {
 
     private var showLastSet = true
 
@@ -15,16 +15,16 @@ final class ElevationChart: LineChartView {
         super.initialize()
 
         xAxisRenderer = ElevationXAxisRenderer(self, viewPortHandler: viewPortHandler, xAxis: xAxis, trans: getTransformer(forAxis: .right))
-        rightYAxisRenderer = ElevationYAxisRenderer(self, viewPortHandler: viewPortHandler, yAxis: rightAxis, trans: _rightAxisTransformer);
+        rightYAxisRenderer = ElevationYAxisRenderer(self, viewPortHandler: viewPortHandler, yAxis: rightAxis, trans: _rightAxisTransformer)
     }
 
-    override func layoutSubviews() {
+    public override func layoutSubviews() {
         super.layoutSubviews()
 
         updateDimens(width: Int(bounds.width), height: Int(bounds.height))
     }
 
-    override func notifyDataSetChanged() {
+    public override func notifyDataSetChanged() {
         super.notifyDataSetChanged()
 
         updateDimens()
@@ -42,7 +42,7 @@ final class ElevationChart: LineChartView {
         calculateOffsets()
     }
 
-    override func draw(_ layer: CALayer, in ctx: CGContext) {
+    public override func draw(_ layer: CALayer, in ctx: CGContext) {
         guard let data else { return }
 
         if autoScaleMinMaxEnabled {
@@ -52,7 +52,7 @@ final class ElevationChart: LineChartView {
 
         if rightAxis.isEnabled {
             rightYAxisRenderer.computeAxis(min: rightAxis.axisMinimum,
-                                           max:rightAxis.axisMaximum,
+                                           max: rightAxis.axisMaximum,
                                            inverted: rightAxis.isInverted)
         }
 
@@ -70,7 +70,7 @@ final class ElevationChart: LineChartView {
 
         renderer?.drawData(context: ctx)
         if valuesToHighlight() {
-            renderer?.drawHighlighted(context: ctx, indices: highlighted);
+            renderer?.drawHighlighted(context: ctx, indices: highlighted)
         }
 
         ctx.restoreGState()
@@ -160,14 +160,14 @@ final class ElevationChart: LineChartView {
     internal func renderYAxisLabels(_ ctx: CGContext) {
         rightYAxisRenderer.renderAxisLabels(context: ctx)
     }
-    
-    func setupGPXChart(markerView: MarkerView,
-                       topOffset: CGFloat,
-                       bottomOffset: CGFloat,
-                       xAxisGridColor: UIColor,
-                       labelsColor: UIColor,
-                       yAxisGridColor: UIColor,
-                       useGesturesAndScale: Bool) {
+
+    public func setupGPXChart(/*markerView: MarkerView,
+                              */topOffset: CGFloat,
+                              bottomOffset: CGFloat,
+                              xAxisGridColor: UIColor,
+                              labelsColor: UIColor,
+                              yAxisGridColor: UIColor,
+                              useGesturesAndScale: Bool) {
         clear()
         fitScreen()
         layer.drawsAsynchronously = true
@@ -178,7 +178,7 @@ final class ElevationChart: LineChartView {
         extraTopOffset = topOffset
         extraBottomOffset = bottomOffset
         dragEnabled = useGesturesAndScale
-        setScaleEnabled(useGesturesAndScale);
+        setScaleEnabled(useGesturesAndScale)
         pinchZoomEnabled = useGesturesAndScale
         scaleYEnabled = false
         autoScaleMinMaxEnabled = true
@@ -187,8 +187,8 @@ final class ElevationChart: LineChartView {
         maxVisibleCount = 10
         minOffset = 0.0
         dragDecelerationEnabled = false
-        markerView.chartView = self
-        marker = markerView
+//        markerView.chartView = self
+//        marker = markerView
         drawMarkers = true
 
         xAxis.yOffset = 5.0

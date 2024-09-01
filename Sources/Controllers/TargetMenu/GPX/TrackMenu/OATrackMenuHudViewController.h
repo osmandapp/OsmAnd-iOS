@@ -11,7 +11,7 @@
 #import "OATargetMenuViewController.h"
 #import "OATrackMenuHudViewControllerConstants.h"
 
-@class LineChartView, OATrack, OATrkSegment, OARouteLineChartHelper, OARouteKey, OAAuthor, OACopyright, OALink, OAMetadata, OATravelArticleIdentifier, OAGpxWptItem, OAGPXTrackAnalysis, OAGPXTableData, OAGPX;
+@class ElevationChart, OATrack, OATrkSegment, OARouteLineChartHelper, OARouteKey, OAAuthor, OACopyright, OALink, OAMetadata, OATravelArticleIdentifier, OAGpxWptItem, OAGPXTrackAnalysis, OAGPXTableData, OAGPX;
 
 @protocol OATrackMenuViewControllerDelegate <NSObject>
 
@@ -50,7 +50,7 @@
 - (BOOL)isDefaultGroup:(NSString *)groupName;
 - (BOOL)isRteGroup:(NSString *)groupName;
 
-- (void)updateChartHighlightValue:(LineChartView *)chart
+- (void)updateChartHighlightValue:(ElevationChart *)chart
                           segment:(OATrkSegment *)segment;
 - (OARouteLineChartHelper *)getLineChartHelper;
 - (OATrack *)getTrack:(OATrkSegment *)segment;

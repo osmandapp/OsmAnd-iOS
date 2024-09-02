@@ -663,7 +663,7 @@
 "route_tl" = "Beygðu til vinstri og haltu áfram";
 "route_tshl" = "Beygðu skarpt til vinstri og haltu áfram";
 "route_tsll" = "Beygðu örlítið til vinstri og haltu áfram";
-"route_tu" = "Taktu U-beygju og haltu áfram";
+"route_tu" = "Taktu U-beygju og haltuáfram";
 "route_head" = "Beint";
 "looking_up_address" = "Fletti upp heimilisfangi";
 "no_address_found" = "Ekkert heimilisfang erákvarðað";
@@ -2594,7 +2594,7 @@
 "upload_local_version" = "Sækja útgáfu á tækinu";
 "shared_string_cloud" = "Ský";
 "sync_now" = "Samstilla núna";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "activity_type_mountainbike_name" = "Fjallahjól";
 "rendering_attr_showMtbScale_name" = "Birta fjallahjólreiðakvarða";
 "shared_string_angle_param" = "Horn: %@°";
@@ -3452,3 +3452,4 @@
 "shared_string_action" = "Aðgerð";
 "voices" = "Talskilaboð";
 "quick_action_verb_show_hide" = "Birta / Fela";
+"shared_string_show" = "Sýna";

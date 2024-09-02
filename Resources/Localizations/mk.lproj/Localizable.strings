@@ -1017,9 +1017,9 @@
 "search_activity" = "Prebarajte";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "ltr_or_rtl_combine_via_or" = "%@ ili %@";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "listed_exist" = "Navedeniot %@, veḱe postoi vo OsmAnd.";
 "shared_string_import_complete" = "Uvezi celosno";
 "import_complete_description" = "Uvezeni se site podatoci od %@. Koristete gi kopčinjata podolu za da otvorite koj bilo del od aplikacijata za da upravuvate so nea.";
@@ -2857,7 +2857,7 @@
 "activity_type_water_name" = "Voda";
 "navigation_points_desc" = "Navigaciskite vidžeti se ovozmoženi za vreme na navigacijata za prikažuvanje informacii kako rastojanie, vreme na pristignuvanje ili levo, slednite krivini, ležište, tekovno ime na ulica, informacii za lenti, maksimalna brzina, predupreduvanja za približuvanje, POI, točki na dviženje.";
 "popular_destinations" = "Popularni destinacii";
-"weather_update_disabled" = "Onevozmoženo";
+"weather_update_disabled" = "Onevozmozeno";
 "av_notes_video_widget_desc" = "Dopiranjeto na vidzetot ovozmozuva zapocnuvanje na snimanje video.";
 "last_seven_days" = "Poslednite sedum dena";
 "add_page" = "Dodadete stranica";
@@ -2981,3 +2981,4 @@
 "shared_string_change" = "Zameni";
 "shared_string_favorite" = "Omilen";
 "shared_string_favorites" = "Omileni";
+"shared_string_show" = "Prikazi";

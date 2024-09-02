@@ -386,8 +386,8 @@
 "daynight_mode_night" = "Noc";
 "map_widget_renderer" = "Styl mapy";
 "map_settings_overunder" = "Překryvná / podkladová";
-"map_settings_over" = "Překryvná";
-"map_settings_under" = "Podkladová";
+"map_settings_over" = "Překryv";
+"map_settings_under" = "Podklad";
 "shared_string_none" = "Žádná";
 "map_settings_offline" = "Styly pro offline mapy";
 "shared_string_online_maps" = "On-line mapy";
@@ -1555,7 +1555,7 @@
 "units_of_speed" = "Jednotky rychlosti";
 "allow_3D_view" = "2.5D zobrazení";
 "do_not_rotate" = "Neotáčet";
-"settings_app_theme" = "Vzhled aplikace";
+"settings_app_theme" = "Motiv aplikace";
 "map_settings_available_srtm_maps_descr" = "Pro zobrazení stínování kopců jsou potřeba další mapy";
 "map_settings_line_density_slowdown_warning" = "Vysoká hustota čar může zpomalit vykreslování mapy";
 "map_settings_contour_zoom_level_descr" = "Zvolte úroveň přiblížení, od které budou zobrazeny vrstevnice";
@@ -2479,7 +2479,7 @@
 "shared_string_profile" = "Profil";
 "shared_string_angle" = "Úhel";
 "shared_string_angle_param" = "Úhel: %@°";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "measurement_units" = "Měrné jednotky";
 "weather_pressure_hectopascals" = "Hektopascaly";
 "weather_pressure_millimeters_of_mercury" = "Milimetrů rtuťového sloupce";
@@ -3478,7 +3478,7 @@
 "track_3d" = "3D stopa";
 "fixed_height" = "Pevná výška";
 "upward_gradient" = "Sklon vzhůru";
-"shared_string_top" = "Nahoru";
+"shared_string_top" = "Nahoře";
 "user_palette" = "Uživatelská paleta";
 "shared_string_show" = "Zobrazit";
 "weather_wind_animation_enable_descr" = "Povolit zobrazení vrstvy animace větru na mapě.";

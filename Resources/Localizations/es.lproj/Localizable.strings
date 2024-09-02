@@ -1439,7 +1439,7 @@
 "routing_attr_avoid_motorway_name" = "Sin autopistas";
 "routing_attr_avoid_ice_roads_fords_description" = "Evitar caminos con hielo y vados.";
 "routeInfo_tracktype_name" = "Firmeza de la superficie";
-"rendering_attr_alpineHiking_name" = "Clasificación de la dificultad";
+"rendering_attr_alpineHiking_name" = "Grado de dificultad de las rutas de senderismo";
 "routing_attr_avoid_bus_description" = "Evitar autobuses y trolebuses";
 "rendering_attr_surface_snow_name" = "Nieve";
 "rendering_attr_surface_sett_name" = "Adoquín";
@@ -1729,7 +1729,7 @@
 "shared_string_account_add" = "Añadir cuenta";
 "shared_a_z" = "A - Z";
 "settings_item_read_error" = "No se pudo leer desde«%@».";
-"settings_app_theme" = "Tema";
+"settings_app_theme" = "Tema de la aplicación";
 "send_anonymous_data" = "Enviar datos anónimos";
 "only_selected_segment_recalc" = "Sólo el segmento marcado será recalculado usando el perfil elegido.";
 "select_application_profile" = "Elegir perfil de la aplicación";
@@ -2234,7 +2234,7 @@
 "backup_and_restore" = "Copia de seguridad y restauración";
 "approximate_file_size" = "Tamaño aproximado del archivo";
 "mgrs_format_descr" = "OsmAnd usa MGRS, similar al formato UTM de la OTAN.";
-"ltr_or_rtl_combine_via_dash" = "%@ — %@";
+"ltr_or_rtl_combine_via_dash" = "%@ – %@";
 "invalid_format" = "Formato inválido";
 "folder_already_exsists" = "Una carpeta con este nombre ya existe";
 "select_folder_descr" = "Elegir carpeta o añadir una nueva";
@@ -2629,7 +2629,7 @@
 "error_contact_support" = "Si el problema persiste, contacta con nuestro equipo de asistencia.";
 "select_another_colorization" = "Elige otro tipo de color.";
 "activity_type_mountainbike_name" = "Bicicleta de montaña";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "rendering_attr_showMtbScaleIMBATrails_name" = "Mostrar senderos de montaña IMBA";
 "mtb_imba_full" = "Asociación Internacional de Ciclismo de Montaña";
 "show_map_symbols" = "Mostrar símbolos del mapa";
@@ -3475,7 +3475,7 @@
 "height_legend_description" = "Los mapas de colores de altitud se utilizan para visualizar el relieve.";
 "shared_string_colors" = "Colores";
 "driving_region_uk" = "Reino Unido y similares";
-"shared_string_replace" = "Remplazar";
+"shared_string_replace" = "Reemplazar";
 "quick_action_track_waypoint" = "Seguir punto de referencia";
 "map_source" = "Repositorio del mapa";
 "download_srtm_maps" = "Curvas de nivel";
@@ -3489,7 +3489,7 @@
 "key_event_category_map_interactions" = "Interacciones del mapa";
 "quick_action_directions_from" = "Punto de partida";
 "quick_action_destination" = "Destino";
-"quick_action_first_intermediate" = "Primera parada";
+"quick_action_first_intermediate" = "Primer destino intermedio";
 "quick_action_parking_place" = "Lugar de estacionamiento";
 "quick_action_verb_show_hide" = "Mostrar / Ocultar";
 "quick_action_verb_pause_resume" = "Pausar / Resumen";
@@ -3506,3 +3506,4 @@
 "route_your_destination_is_on_ahead" = "Tu destino está enfrente";
 "shared_string_show" = "Mostrar";
 "weather_wind_animation_enable_descr" = "Habilite la visualización de la capa de animación del viento en el mapa.";
+"osmand_cloud_delete_account_descr_with_email" = "¿Estás seguro de que quieres borrar la cuenta de OsmAnd Cloud: %@?";

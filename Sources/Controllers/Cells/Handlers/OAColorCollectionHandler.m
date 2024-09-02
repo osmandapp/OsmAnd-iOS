@@ -218,7 +218,7 @@
     _data = newData;
 }
 
-- (void)addItem:(NSIndexPath *)indexPath newItem:(id)newItem
+- (void)insertItem:(id)newItem atIndexPath:(NSIndexPath *)indexPath
 {
     if (_data.count > indexPath.section && (indexPath.row == 0 || _data[indexPath.section].count > indexPath.row - 1))
         [_data[indexPath.section] insertObject:newItem atIndex:indexPath.row];

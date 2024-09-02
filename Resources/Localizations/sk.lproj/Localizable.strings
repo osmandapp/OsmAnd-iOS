@@ -504,13 +504,13 @@
 "towards" = "smerom k";
 "route_roundabout" = "Kruhový objazd: Choďte cez %d. výjazd a pokračujte";
 "route_roundabout_short" = "Použite výjazd %d a pokračujte";
-"route_kl" = "Držte sa vľavo";
-"route_kr" = "Držte sa vpravo";
+"route_kl" = "Držte sa vľavo a pokračujte";
+"route_kr" = "Držte sa vpravo a pokračujte";
 "route_tr" = "Odbočte doprava a pokračujte";
-"route_tshr" = "Odbočte ostro doprava a pokračujte";
+"route_tshr" = "Odbočte prudko doprava a pokračujte";
 "route_tslr" = "Odbočte mierne doprava a pokračujte";
 "route_tl" = "Odbočte doľava a pokračujte";
-"route_tshl" = "Odbočte ostro doľava a pokračujte";
+"route_tshl" = "Odbočte prudko doľava a pokračujte";
 "route_tsll" = "Odbočte mierne doľava a pokračujte";
 "route_tu" = "Otočte sa a pokračujte";
 "route_head" = "Pokračujte rovno";
@@ -2199,7 +2199,7 @@
 "shared_string_angle" = "Uhol";
 "depth_contours" = "Hĺbkové vrstevnice";
 "empty_filename" = "Prázdny názov súboru";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "no_purchases" = "Nemáte žiadne nákupy";
 "position_on_map_bottom" = "Spodok";
 "service_is_not_available_please_try_later" = "Služba nie je dostupná. Prosím skúste neskôr.";
@@ -2220,7 +2220,7 @@
 "show_borders_of_downloaded_maps" = "Zobraziť hranice stiahnutých máp";
 "depth_contour_lines" = "Hĺbkové vrstevnice";
 "routing_attr_avoid_low_emission_zone_description" = "Vyhnúť sa zónam nízkych emisií";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "position_on_map_center" = "Stred";
 "select_backup_data_descr" = "Zvoľte údaje a priečinky na zálohovanie.";
 "turn_arrows_descr" = "Zvoľte či budú šípky odbočenia zobrazené na línii trasy.";
@@ -2411,7 +2411,7 @@
 "shared_string_bearing" = "Azimut";
 "navigation_points_desc" = "Navigačné nástroje sa zapnú počas navigácie pre zobrazenie informácií ako vzdialenosť, čas príjazdu alebo zostávajúci čas, nasledujúce odbočenia, smerovanie (azimut), názov súčasnej alebo nasledujúcej ulice, jazdné pruhy, maximálna rýchlosť, blížiace sa varovania, body záujmu, body trasy.";
 "route_maneuvers_desc" = "Navigačné nástroje sa zapnú počas navigácie pre zobrazenie informácií ako vzdialenosť, čas príjazdu, nasledujúce odbočenia, smerovanie (azimut), názov ulice, jazdné pruhy, maximálna rýchlosť, blížiace sa varovania, body záujmu, body trasy.";
-"rendering_attr_alpineHiking_name" = "Klasifikácia obtiažnosti";
+"rendering_attr_alpineHiking_name" = "Stupeň náročnosti turistických trás";
 "bearing_desc" = "Zobrazuje absolútne (azimut) alebo relatívne smerovanie k cieľu v uhlových jednotkách (v režime 180 stupňov, 360 stupňov, alebo miliradiánov).";
 "external_device_blood_pressure" = "Krvný tlak";
 "write_data_from_sensor_to_track" = "Zapísať údaje z externých snímačov do GPX počas záznamu výletu.";
@@ -2499,7 +2499,7 @@
 "shared_string_trash" = "Kôš";
 "shortest_distance_first" = "Najkratšia vzdialenosť nahor";
 "external_device_status_connect" = "Pripojiť";
-"map_settings_topography" = "Údaje vrstevníc";
+"map_settings_topography" = "Vrstevnice";
 "precipitation_widget_desc" = "Zobrazí zrážky pre súčasný stred mapy.";
 "nav_type_brouter" = "BRouter";
 "map_widget_sunset_desc" = "Zobrazuječas najbližšieho západu slnka alebo zostávajúci čas do západu slnka.";
@@ -2672,7 +2672,7 @@
 "map_markers_bar" = "Panel mapových značiek";
 "map_widget_trip_recording_downhill" = "Z kopca";
 "shared_string_loading" = "Načítanie";
-"weather_update_disabled" = "Vypnuté";
+"weather_update_disabled" = "Zakázané";
 "average_speed_time_interval_desc" = "Zadajtečasový interval pre priemerovanie rýchlosti.";
 "map_widget_sun_position_desc" = "Zobrazuječas do východu alebo západu slnka.";
 "temperature_widget_desc" = "Zobrazí teplotu pre súčasný stred mapy.";
@@ -2857,7 +2857,7 @@
 "shared_string_always" = "Vždy";
 "shared_string_class" = "Trieda";
 "shared_string_top_bottom" = "Hore a dole";
-"shared_string_bottom" = "Dole";
+"shared_string_bottom" = "Spodok";
 "route_recalculation_dist_title" = "Minimálna vzdialenosť pre prepočítanie trasy";
 "shared_string_millimeters_short" = "mm";
 "osm_id" = "OSM ID";
@@ -2921,3 +2921,7 @@
 "shared_string_favorites" = "Obľúbené";
 "download_srtm_maps" = "Údaje vrstevníc";
 "temperature_layer" = "Vrstva teploty";
+"driving_region_uk" = "Veľká Británia a podobné krajiny";
+"rendering_value_pale_name" = "Bledá";
+"driving_region_india" = "India";
+"shared_string_show" = "Zobraziť";

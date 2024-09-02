@@ -2404,7 +2404,7 @@
 "backup_delete_all_data" = "Delete all my data";
 "copy_poi_name" = "Copiar el nome del PdI";
 "backup_delete_old_data" = "Remove old versions";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "verification_code_missing_description" = "Can take 10 minutes. Use the button below if it isn\'t in your spam folder.";
 "animate_my_location" = "Animar la mio posición";
 "routing_attr_avoid_tunnels_description" = "Avoid tunnels";
@@ -2414,7 +2414,7 @@
 "duration_ago" = "%@ ago";
 "recording_delete_confirm" = "¿Quies desaniciar esti elementu\?";
 "shared_string_selected" = "Na esbilla";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "offline_edition_descr" = "If offline editing is enabled, then changes will be saved locally first and uploaded by request, otherwise changes will be uploaded immediately.";
 "benefits_for_contributors_secondary_descr" = "Sign in to OpenStreetMap to check if you are eligible for unlimited monthly&hourly map updates.";
 "backup_pause_all" = "Posar too";
@@ -2519,7 +2519,7 @@
 "no_travel_guides_data_descr" = "Download Wikivoyage travel guides to view articles about places around the world without a connection to the Internet.";
 "shared_string_dark" = "Escuridá";
 "shared_string_explore" = "Esplorar";
-"weather_update_disabled" = "Desactivóse";
+"weather_update_disabled" = "Disabled";
 "map_marker_1st" = "First map marker";
 "upload_poi" = "Upload POI";
 "visibility" = "Visibilidá";
@@ -2574,3 +2574,4 @@
 "voices" = "Indicaciones per voz";
 "shared_string_change" = "Camudar";
 "map_source" = "Map source";
+"shared_string_show" = "Amosar";

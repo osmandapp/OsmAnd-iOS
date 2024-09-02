@@ -55,6 +55,7 @@ final class DeleteAccountViewController: OABaseButtonsViewController, OAOnDelete
 
     override func commonInit() {
         backupHelper = OABackupHelper.sharedInstance()
+        progress = 0.0
     }
 
     override func registerCells() {
@@ -133,7 +134,14 @@ final class DeleteAccountViewController: OABaseButtonsViewController, OAOnDelete
         if status == .notStarted {
             let deleteConfirmRow = infoSection.createNewRow()
             deleteConfirmRow.cellType = OASimpleTableViewCell.reuseIdentifier
-            deleteConfirmRow.title = localizedString("osmand_cloud_delete_account_descr")
+            let email = OAAppSettings.sharedManager().backupUserEmail.get() ?? ""
+            let deleteConfirmFormattedString = String(format: localizedString("osmand_cloud_delete_account_descr_with_email"), email)
+            let deleteConfirmTitle = NSMutableAttributedString(string: deleteConfirmFormattedString, attributes: [.font: UIFont.preferredFont(forTextStyle: .body)])
+            if let emailRange = deleteConfirmFormattedString.range(of: email) {
+                let range = NSRange(emailRange, in: deleteConfirmFormattedString)
+                deleteConfirmTitle.addAttribute(.font, value: UIFont.preferredFont(forTextStyle: .headline), range: range)
+            }
+            deleteConfirmRow.setObj(deleteConfirmTitle, forKey: "attributedTitle")
             
             let allDataDeletedRow = infoSection.createNewRow()
             allDataDeletedRow.cellType = OASimpleTableViewCell.reuseIdentifier
@@ -227,8 +235,9 @@ final class DeleteAccountViewController: OABaseButtonsViewController, OAOnDelete
             let cell = tableView.dequeueReusableCell(withIdentifier: OADownloadProgressBarCell.reuseIdentifier, for: indexPath) as! OADownloadProgressBarCell
             cell.showLabels(false)
             cell.backgroundColor = .clear
-            cell.progressBarView.setProgress(progress, animated: true)
             cell.updateConstraintsIfNeeded()
+            cell.progressBarView.layoutIfNeeded()
+            cell.progressBarView.setProgress(progress, animated: progress > 0)
             return cell
         }
         return nil
@@ -271,8 +280,11 @@ final class DeleteAccountViewController: OABaseButtonsViewController, OAOnDelete
             guard let self else { return }
             status = .running
             updateUIAnimated { _ in
-                self.updateProgress(0.33)
+                self.updateProgress(0)
                 self.backupHelper?.deleteAccount(OAAppSettings.sharedManager().backupUserEmail.get(), token: self.token)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    self.updateProgress(0.3)
+                }
             }
         }
         alert.addAction(deleteAction)
@@ -286,8 +298,10 @@ final class DeleteAccountViewController: OABaseButtonsViewController, OAOnDelete
     // MARK: - Additions
 
     private func updateProgress(_ progress: Float) {
-        self.progress = progress
-        tableView.reloadRows(at: [progressIndexPath], with: .none)
+        if progress > self.progress {
+            self.progress = progress
+            tableView.reloadRows(at: [progressIndexPath], with: .none)
+        }
     }
 
     // MARK: - OAOnDeleteAccountListener
@@ -296,7 +310,6 @@ final class DeleteAccountViewController: OABaseButtonsViewController, OAOnDelete
         self.status = .finished
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
-            self.updateProgress(0.75)
             updateUIAnimated(nil)
             if error == nil {
                 backupHelper?.logout()

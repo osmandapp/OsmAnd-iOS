@@ -72,7 +72,7 @@
 "starting_point" = "Startowy dypk";
 "shared_string_select_avoid_road_on_map" = "Select a road to be avoided during the routing";
 "shared_string_road" = "Dróha";
-"avoid_roads_msg" = "Wutwor alternatiwnu čaru přez wuběranje dróhow, kiž wobeńdźeš";
+"avoid_roads_msg" = "Wutwor alternatiwnučaru přez wuběranje dróhow, kiž wobeńdźeš";
 "shared_string_go" = "Go";
 "info_button" = "Info";
 "simulate_your_location" = "Simulate your position";
@@ -270,8 +270,8 @@
 "ending_point_too_far" = "Cil je předaloko preč wot najblišeho puća.";
 "intermediate_point_too_far" = "Mjezycil %@ je předaloko preč wot najblišeho puća.";
 "towards" = "směr";
-"route_roundabout" = "Roundabout: take %d exit and go";
-"route_roundabout_short" = "Take %d exit and go";
+"route_roundabout" = "kružny wobchad: wzmi %d wujězd a jědź dale";
+"route_roundabout_short" = "wzmi %d. wujězd a jědź dale";
 "route_kl" = "nalěwo wostać, potom";
 "route_kr" = "naprawo wostać, potom";
 "route_tr" = "naprawo, potom";
@@ -380,7 +380,7 @@
 "hud_no_movement" = "No movement";
 // Favorites
 "shared_string_color" = "Barba";
-"fav_colors" = "Colors";
+"fav_colors" = "Barby";
 "shared_string_name" = "Mjeno";
 "fav_group" = "Group";
 "shared_string_groups" = "Skupiny";
@@ -862,7 +862,7 @@
 "help_search" = "Map search";
 "planning_trip_item" = "Jězbu planować";
 "map_legend" = "Legenda karty";
-"other_location" = "Druhe";
+"other_location" = "Dalše";
 "instalation_troubleshooting_item" = "Instalacija a rozrisowanje problemow";
 "techical_articles_item" = "Technical articles";
 "versions_item" = "Wersije";
@@ -912,7 +912,7 @@
 "rendering_category_routes" = "Routes";
 "rendering_category_details" = "Detaile";
 "rendering_category_transport" = "Transport";
-"rendering_category_others" = "Other map attributes";
+"rendering_category_others" = "Dalše atributy karty";
 // Rendering attributes
 "cannot_access_calendar" = "Cannot access Calendar";
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
@@ -1078,7 +1078,7 @@
 "try_again" = "Znowa spytać";
 "search_location" = "Pytam za stejišćom…";
 "search_map" = "Pytam karty…";
-"search_another_country" = "Druhi region wubrać";
+"search_another_country" = "Druhu kónčinu wubrać";
 "skip_map_downloading" = "Skip downloading maps";
 "skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";
 "wiki_around" = "zapiski Wikipedije w bliskosći";
@@ -1746,15 +1746,15 @@
 "transport_hazmat_title" = "Transport strašnych maćiznow";
 "rendering_attr_depthContourWidth_description" = "Šěrokosć konturoweje smužki hłubokosće";
 "rendering_attr_smoothness_good_name" = "dobra";
-"vessel_width_limit_description" = "Postaj šěrokosć čołma zo bychu so wuske mosty wobešli";
-"width_limit_description" = "Zapodaj šěrokosć swojeho jězdźidła, přetož su móžne wobmjezowanja za šěrše jězdźidła.";
+"vessel_width_limit_description" = "Postajšěrokosć čołma zo bychu so wuske mosty wobešli";
+"width_limit_description" = "Zapodajšěrokosć swojeho jězdźidła, přetož su móžne wobmjezowanja za šěrše jězdźidła.";
 "cloud_all_changes_downloaded" = "Wšě změny su so sćahnyli";
 "dangerous_goods_description" = "Na někotrych dróhach a w tunlach je transport strašnych maćiznow zakazany.";
 "mapillary_widget_descr" = "Dowoli spěšne přinoški za Mapillary.";
 "turn_arrows" = "Kłoki za směry";
 "rendering_attr_smoothness_excellent_name" = "wuběrna";
 "routing_attr_allow_gate_name" = "wužiwanje wrotow dowolić";
-"rendering_attr_smoothness_very_bad_name" = "jara špatna";
+"rendering_attr_smoothness_very_bad_name" = "jarašpatna";
 "routeInfo_tracktype_name" = "Krutosć powjercha";
 "rendering_value_medium_name" = "srjedźna";
 "routing_attr_freeride_policy_allow_name" = "Dowolić";
@@ -1773,3 +1773,19 @@
 "open_in_browser_wiki" = "Zapisk online wočinić";
 "shared_strings_all_regions" = "Wšě kónčiny";
 "customize_route_line" = "Smužku čary přiměrić";
+"download_select_map_types" = "Dalše karty";
+"route_line_use_map_style_width" = "Wužiwaj standardnu šěrokosć kartoweho stila (%@).";
+"missing_or_outdated_maps_description" = "Někotre za tutu čaru trěbne offline-karty pobrachuja abo su zestarjene. Prošu sćehń sej tute karty.";
+"longest_duration_first" = "najdlěši čas horjeka";
+"shared_string_millimeters" = "milimetrach";
+"image_cache" = "Mjezyskład wobrazow";
+"longest_distance_first" = "najdlěša čara horjeka";
+"route_line_use_map_style_color" = "Wužiwaj standardnu barbu kartoweho stila (%@).";
+"missing_or_outdated_maps_title" = "Falowace abo zestarjene karty";
+"oldest_date_first" = "najstarši datum horjeka";
+"newest_date_first" = "najnowši datum horjeka";
+"shared_string_millimeters_short" = "mm";
+"shared_string_all_colors" = "Wšě barby";
+"shortest_distance_first" = "najkrótša čara horjeka";
+"shared_string_show" = "Pokazać";
+"download_wikipedia_data" = "Daty z Wikipedije sćahnyć";

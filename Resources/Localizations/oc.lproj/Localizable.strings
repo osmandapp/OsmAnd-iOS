@@ -2111,7 +2111,7 @@
 "routing_attr_only_permitted_streets_description" = "Utilizar ren que lei carrieras expressament autorizadas";
 "routing_attr_prefer_horse_routes_name" = "Preferéncia per lei percors cavalins";
 "monthly_subscription" = "Abonament mesadier";
-"ltr_or_rtl_combine_via_or" = "%@ò %@";
+"ltr_or_rtl_combine_via_or" = "%@ ò %@";
 "copy_to_map_favorites" = "Còpia vèrs lei preferits";
 "purchases_feature_desc_monthly_map_updates" = "Obtenètz l\'accès a una actualizacion mesadiera regulara dei mapas fòra de linha.";
 "shared_string_capacity" = "Capacitat";
@@ -2198,7 +2198,7 @@
 
 // Shared Strings
 "shared_string_cancelled" = "Abandonat";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "shared_string_layers" = "Jaças";
 "shared_string_restoring" = "Es a restaurar";
 "toggle_precipitation" = "Mostrar & Amagar la jaça de nívol";
@@ -2253,7 +2253,7 @@
 "weather_wind_enable_descr" = "D'activar per mostrar leis indicacions de vent sus la mapa.";
 "weather_cloud_enable_descr" = "D'activar per mostrar leis indicacions de nivolada sus la mapa.";
 "weather_precip_enable_descr" = "D'activar per mostrar leis indicacions de plueia sus la mapa.";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "simulate_location_track_select_descr" = "Chausissètz la traça que servirà de fònt per lo desplaçament de la posicion.";
 "simulate_location_movement_speed_x4" = "x4";
 "simulate_your_location_gpx_descr" = "Podètz simular lo desplaçament de la posicion en emplegant la traça GPX.";

@@ -2470,7 +2470,7 @@
 "select_tracks" = "Selecionar trilhos";
 "shared_string_restoring" = "Restaurando";
 "restoring_from" = "Restaurando dados selecionados da nuvem";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "toggle_wind" = "Mostrar/ocultar - camada de vento";
 "cloud_show" = "Mostrar nuvens";
 "wind_hide" = "Ocultar vento";
@@ -2632,7 +2632,7 @@
 "shared_string_download_update" = "Baixar atualização";
 "backup_error_failed_to_fetch_remote_items" = "Falha ao buscar a lista de arquivos do servidor.";
 "error_contact_support" = "Se o problema persistir, entre em contato com nossa equipe de suporte.";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "track_has_no_needed_data" = "A trilha não contém os respectivos dados.";
 "select_another_colorization" = "Selecione outro tipo de cor.";
 "map_download_privacy_descr" = "Ao baixar os mapas concorda com os <a href='https://osmand.net/docs/legal/terms-of-use'>Termos de uso</a> e a <a href='https://osmand.net/docs/legal/privacy-policy'>Política de privacidade</a>.";
@@ -2896,7 +2896,7 @@
 "user_name" = "Seu nome de usuário OSM";
 "perform_oauth_authorization" = "Entrar via OAuth";
 "rendering_value_sacScale_description" = "Clube Alpino Suíço";
-"rendering_attr_alpineHiking_name" = "Classificação de dificuldade";
+"rendering_attr_alpineHiking_name" = "Grau de dificuldade das trilhas de caminhada";
 "rendering_value_caiScale_description" = "Clube Alpino Italiano";
 "first_marker_widget_desc" = "Você pode configurar o widget para mostrar a distância ou o tempo estimado de chegada até o primeiro marcador do mapa.";
 "time_to_intermediate_widget_desc" = "O widget mostra \"Hora de chegada\" ou \"Hora de ir\" para o primeiro ponto intermediário. O tempo é atualizado constantemente durante a navegação, uma vez que os pontos intermediários são passados, o tempo será atualizado para o próximo ponto intermediário.";
@@ -3420,7 +3420,7 @@
 "visualization_3d_track_line" = "Linha da trilha";
 "fixed_height" = "Altura fixa";
 "shared_string_top" = "Topo";
-"shared_string_bottom" = "Em baixo";
+"shared_string_bottom" = "Base";
 "shared_string_top_bottom" = "Topo e base";
 "track_3d_empty_view_title" = "Visualização da trilha 3D";
 "display_position_automatic_descr" = "Depende da orientação do mapa: a parte inferior para orientação do movimento, o centro para todo o resto.";
@@ -3504,3 +3504,6 @@
 "route_your_destination_is_on_left" = "Seu destino fica à esquerda";
 "route_your_destination_is_on_right" = "Seu destino fica à direita";
 "route_your_destination_is_on_ahead" = "Seu destino está logo à frente";
+"shared_string_show" = "Mostrar";
+"weather_wind_animation_enable_descr" = "Ative a visualização da camada de animação do vento no mapa.";
+"osmand_cloud_delete_account_descr_with_email" = "Tem certeza de que deseja excluir a conta do OsmAnd Cloud: %@?";

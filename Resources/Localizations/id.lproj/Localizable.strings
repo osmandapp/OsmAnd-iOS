@@ -2463,7 +2463,7 @@
 "purchases_feature_desc_cross_buy" = "Gunakan fitur langganan Anda di platform yang berbeda (Android/iOS/web) tanpa biaya tambahan.";
 "backup_delete_old_data_warning" = "Anda akan menghapus riwayat perubahan untuk data yang dimuat sebelumnya. \n \nVersi data saat ini akan disimpan pada server, tetapi Anda tidak akan dapat mengembalikan ke perubahan yang dibuat sebelumnya.";
 "shared_string_angle_param" = "Sudut: %@°";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "contact_support" = "Hubungi dukungan";
 "backup_deleting_all_data" = "Menghapus semua data…";
 "contributions_may_calculate_with_delay" = "Menghitung kontribusi mungkin membutuhkan beberapa jam.";
@@ -2518,7 +2518,7 @@
 "shared_string_angle" = "Sudut";
 "delete_all_confirmation" = "Ya, hapus semua";
 "simulate_your_location_gpx_descr" = "Simulasikan posisi Anda menggunakan trek GPX yang sudah direkam.";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "shared_string_selected" = "Dipilih";
 "enough_contributions_descr" = "Selamat, Anda telah menyediakan kontribusi OpenStreetMap yang cukup dan dapat menikmati pembaruan peta OsmAnd tak terbatas!";
 "weather_temperature_celsius" = "Celsius";
@@ -3190,3 +3190,4 @@
 "map_settings_weather_wind_animation" = "Animasi angin";
 "quick_action_verb_pause_resume" = "Jeda / Lanjutkan";
 "quick_action_verb_start_stop" = "Mulai / Berhenti";
+"shared_string_show" = "Tampilkan";

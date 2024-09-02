@@ -2392,7 +2392,7 @@
 "shared_string_weather" = "Orai";
 "shared_string_layers" = "Sluoksniai";
 "backup_and_restore" = "Atsarginė kopija ir atkūrimas";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "simulate_location_movement_speed_x2" = "x2";
 "simulate_location_movement_speed_x3" = "x3";
 "simulate_in_progress" = "Vykdoma";
@@ -2450,7 +2450,7 @@
 "restore_purchase" = "Atkurti pirkinį";
 "activity_type_mountainbike_name" = "Kalnų dviratis";
 "rendering_attr_depthContourWidth_name" = "Linijų plotis";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "weather_pressure_millimeters_of_mercury" = "Gyvsidabrio milimetrai";
 "osm_live_payment_year_cost_descr" = "%@ per metus";
 "backup_into_file" = "Atsarginė kopija į failą";
@@ -2518,7 +2518,7 @@
 "map_orientation_default" = "Kaip irįrenginys";
 "route_info" = "Maršruto informacija";
 "shared_string_dark" = "Tamsi";
-"map_settings_topography" = "Kontūrinės linijos";
+"map_settings_topography" = "SRTM žemėlapiai";
 "activity_type_offroad_name" = "Bekelė";
 "shared_string_explore" = "Tyrinėti";
 "short_min" = "m";
@@ -2689,7 +2689,8 @@
 "map_source" = "Žemėlapio šaltinis";
 "shared_string_favorites" = "Įsimintos vietos";
 "voices" = "Balso pranešimai";
-"download_srtm_maps" = "SRTMžemėlapiai";
+"download_srtm_maps" = "SRTM žemėlapiai";
 "shared_string_change" = "Pakeisti";
 "shared_string_favorite" = "Įsiminta vieta";
 "driving_region_india" = "Indija";
+"shared_string_show" = "Rodyti";

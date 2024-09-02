@@ -3487,3 +3487,4 @@
 "route_your_destination_is_on_right" = "Destinația dumneavoastră este pe dreapta";
 "shared_string_show" = "Spectacol";
 "weather_wind_animation_enable_descr" = "Activați pentru a vizualiza stratul de animație a vântului pe hartă.";
+"osmand_cloud_delete_account_descr_with_email" = "Sunteți sigur că doriți să ștergeți contul OsmAnd Cloud: %@?";

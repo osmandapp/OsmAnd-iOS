@@ -895,7 +895,6 @@
     NSMutableDictionary<NSString *, NSNumber *> *_activePoiFilters;
     NSDictionary<NSString *, OAPOIType *> *_translatedNames;
     OAPOIHelper *_types;
-    NSMutableDictionary<NSString *, NSMutableSet<NSString *> *> *_poiAdditionalTopIndexCache;
     int BBOX_RADIUS;
 }
 
@@ -910,7 +909,6 @@
         _topVisibleFilters = [_types getTopVisibleFilters];
         _categories = _types.poiCategoriesNoOther;
         _translatedNames = [NSDictionary new];
-        _poiAdditionalTopIndexCache = [[NSMutableDictionary alloc] init];
         BBOX_RADIUS = 10000;
     }
     return self;

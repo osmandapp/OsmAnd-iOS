@@ -590,14 +590,16 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                 else if ([[searchPhrase getLastSelectedWord].result.object isKindOfClass:[OATopIndexFilter class]])
                 {
                     OATopIndexFilter *topIndexFilter = (OATopIndexFilter *) [searchPhrase getLastSelectedWord].result.object;
-                    filter = [self createPoiUIFilterWithTopIndexFilter:topIndexFilter processAfter:ProcessTopIndexMap];
+                    filter = [self createPOIUIFilterWithTopIndexFilter:topIndexFilter processAfter:ProcessTopIndexMap];
                     if (filter)
                     {
                         [filter setFilterByName:[topIndexFilter getValue]];
                         [filter setFilterByKey:[topIndexFilter getTag]];
                     }
                     else
+                    {
                         return;
+                    }
                 }
                 else
                 {
@@ -680,7 +682,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                 else if ([object isKindOfClass:[OATopIndexFilter class]])
                 {
                     OATopIndexFilter *topIndexFilter = (OATopIndexFilter *)object;
-                    OAPOIUIFilter *custom = [self createPoiUIFilterWithTopIndexFilter:topIndexFilter processAfter:ProcessTopIndexFilter];
+                    OAPOIUIFilter *custom = [self createPOIUIFilterWithTopIndexFilter:topIndexFilter processAfter:ProcessTopIndexFilter];
                     if (custom)
                     {
                         OAPOIFilterViewController *filterViewController = [[OAPOIFilterViewController alloc] initWithFilter:custom filterByName:[topIndexFilter getValue]];
@@ -1468,7 +1470,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 	    [self.view setNeedsLayout];
 }
 
-- (OAPOIUIFilter *) createPoiUIFilterWithTopIndexFilter:(OATopIndexFilter *)topIndexFilter processAfter:(ProcessTopIndex)processAfter
+- (OAPOIUIFilter *) createPOIUIFilterWithTopIndexFilter:(OATopIndexFilter *)topIndexFilter processAfter:(ProcessTopIndex)processAfter
 {
     OAPOIUIFilter *filter = [[OAPOIFiltersHelper sharedInstance] getFilterById:[topIndexFilter getFilterId]];
     if (filter)
@@ -1476,7 +1478,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         _processTopIndexAfterLoad = ProcessTopIndexNo;
         return filter;
     }
-    else if (self.searchHelper && [self.searchHelper getResultCollection])
+    else if ([self.searchHelper getResultCollection])
     {
         NSArray<OASearchResult *> *searchResults = [[self.searchHelper getResultCollection] getCurrentSearchResults];
         NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *acceptedTypes = [NSMapTable strongToStrongObjectsMapTable];
@@ -1645,9 +1647,6 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                 switch (_processTopIndexAfterLoad)
                 {
                     case ProcessTopIndexFilter:
-                        _barActionType = BarActionShowOnMap;
-                        [self barActionImgButtonPress:nil];
-                        break;
                     case ProcessTopIndexMap:
                         _barActionType = BarActionShowOnMap;
                         [self barActionTextButtonPress:nil];

@@ -10,7 +10,7 @@
 
 @interface OATopIndexFilter : NSObject
 
-@property (nonatomic, strong) NSString *poiSubType;
+@property (nonatomic, copy) NSString *poiSubType;
 @property (nonatomic, copy) NSString *valueKey;
 @property (nonatomic, copy) NSString *tag;
 @property (nonatomic, copy) NSString *value;

@@ -417,7 +417,7 @@
             return YES;
         }];
     }
-    if (_filterByKey != nil && _filterByKey.length > 0)
+    if (_filterByKey.length > 0)
     {
         return [[OAAmenityNameFilter alloc] initWithAcceptFunc:^BOOL(OAPOI *poi) {
             NSString * val = [poi getAdditionalInfo:_filterByKey];

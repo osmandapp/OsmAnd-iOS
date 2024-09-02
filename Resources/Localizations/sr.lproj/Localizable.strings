@@ -2881,7 +2881,7 @@
 "bottom_widgets_panel" = "Доњи панел";
 "specify_number_of_dir_indicators_desc" = "Одаберите број показивача правца.";
 "network" = "Мрежа";
-"shared_string_symbol" = "Симбол";
+"shared_string_symbol" = "Знак";
 "general_settings" = "Генерално";
 "no_track_files" = "Немате фајлове трагова";
 "import_create_track_files" = "Можете увозити, стварати или снимати датотеке трагова коришћењем Османда.";
@@ -3244,9 +3244,9 @@
 "announce_when_exceeded" = "Објави када се премаши";
 "dont_download" = "Не преузимај";
 "weather_update_parameters_any_network" = "Временска прогноза биће ажурирана преко било које мреже. Мобилни подаци могу бити употребљени.";
-"no_widgets_here_yet" = "Овде још нема виџета";
-"no_widgets_descr" = "Додајте један или више виџета са листе доступних виџета.";
-"click_on_widget" = "Кликни на виџет";
+"no_widgets_here_yet" = "Овде још нема справица";
+"no_widgets_descr" = "Додајте једну или више справица са списка доступних справица.";
+"click_on_widget" = "Кликните на справицу";
 "map_widget_ant_heart_rate" = "Брзина откуцаја срца";
 "map_widget_ant_bicycle_power_desc" = "Приказује излазну снагу бициклисте, која се користи да погони бицикл";
 "sensor_temperature_desc" = "Приказује температуру измерену пријемником";

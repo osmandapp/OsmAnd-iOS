@@ -23,6 +23,7 @@
         _value = value;
         _tag = [poiSubType stringByReplacingOccurrencesOfString:@"top_index_" withString:@""];
     }
+
     return self;
 }
 

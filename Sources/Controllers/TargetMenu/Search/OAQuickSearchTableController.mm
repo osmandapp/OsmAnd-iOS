@@ -696,7 +696,7 @@
                 {
                     NSString *name = [item getName];
                     NSString *typeName = [((OATopIndexFilter *)res.object) getName];
-                    UIImage *icon = [UIImage imageNamed:@"ic_custom_search"];
+                    UIImage *icon = [UIImage imageNamed:[((OATopIndexFilter *)res.object) getIconResource]];
                     OASimpleTableViewCell *cell = [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tableView typeName:typeName icon:icon];
                     return cell;
                 }

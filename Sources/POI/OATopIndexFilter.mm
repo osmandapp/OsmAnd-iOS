@@ -41,32 +41,13 @@
     return [NSString stringWithFormat:@"%@%@_%@", @"top_index_", self.tag, [OATopIndexFilter getValueKey:self.value]];
 }
 
-- (NSString *)getName 
+- (NSString *)getName
 {
     OAPOIBaseType *pt = [[OAPOIHelper sharedInstance] getAnyPoiAdditionalTypeByKey:_tag];
-    if (pt) 
-    {
-        if ([pt.nameLocalized containsString:@":"])
-            return [self formattedLocalizedNameForString:pt.nameLocalized];
-        
+    if (pt)
         return pt.nameLocalized;
-    }
     
     return [[OAPOIHelper sharedInstance] getPhraseByName:_tag];
-}
-
-- (NSString *)formattedLocalizedNameForString:(NSString *)nameLocalized 
-{
-    NSArray *components = [nameLocalized componentsSeparatedByString:@":"];
-    if (components.count == 2) 
-    {
-        NSString *baseName = components[0];
-        NSString *langCode = components[1];
-        NSString *localizedLanguageName = [[NSLocale currentLocale] displayNameForKey:NSLocaleLanguageCode value:langCode.lowercaseString].lowercaseString;
-        return [NSString stringWithFormat:@"%@ (%@)", baseName, localizedLanguageName ?: langCode];
-    }
-    
-    return nameLocalized;
 }
 
 - (NSString *)getValue 
@@ -76,7 +57,7 @@
 
 - (NSString *)getIconResource 
 {
-    return self.valueKey;
+    return @"ic_custom_search";
 }
 
 + (NSString *)getValueKey:(NSString *)value 

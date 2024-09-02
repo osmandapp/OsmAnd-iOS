@@ -1,5 +1,5 @@
 //
-//  NameTagsDetailsViewController.swift
+//  POITagsDetailsViewController.swift
 //  OsmAnd Maps
 //
 //  Created by Dmitry Svetlichny on 20.06.2024.
@@ -9,7 +9,7 @@
 import UIKit
 
 @objcMembers
-final class NameTagsDetailsViewController: OABaseNavbarViewController {
+final class POITagsDetailsViewController: OABaseNavbarViewController {
     private var tags: [NSDictionary]
     
     init(tags: [NSDictionary]) {
@@ -27,7 +27,8 @@ final class NameTagsDetailsViewController: OABaseNavbarViewController {
     }
     
     override func getTitle() -> String? {
-        localizedString("shared_string_name")
+        getLocalizedTitle()
+      //  localizedString("shared_string_name")
     }
     
     override func getLeftNavbarButtonTitle() -> String? {
@@ -56,6 +57,16 @@ final class NameTagsDetailsViewController: OABaseNavbarViewController {
                 configureRow(row, with: tagWithHeader.tag)
             }
         }
+    }
+    
+    private func getLocalizedTitle() -> String {
+//        if key.hasPrefix("name:") {
+//            return localizedString("shared_string_name")
+//        } else {
+//            let endIndex = title.firstIndex(of: "(") ?? title.endIndex
+//            return String(title[..<endIndex]).trimmingCharacters(in: .whitespaces)
+//        }
+        return localizedString("shared_string_brand")
     }
     
     private func extractHeader(from title: String, withKey key: String) -> String {

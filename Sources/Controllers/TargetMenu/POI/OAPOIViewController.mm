@@ -151,10 +151,12 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     NSMutableArray<OARowInfo *> *infoRows = [NSMutableArray array];
     NSMutableArray<OARowInfo *> *descriptions = [NSMutableArray array];
     NSMutableArray<OARowInfo *> *urlRows = [NSMutableArray array];
-    NSMutableArray<NSDictionary *> *nameTags = [[NSMutableArray alloc] init];
+    NSMutableArray<NSDictionary *> *nameTags = [NSMutableArray array];
+    NSMutableArray<NSDictionary *> *brandTags = [NSMutableArray array];
     NSMutableDictionary<NSString *, NSMutableArray<OAPOIType *> *> *poiAdditionalCategories = [NSMutableDictionary dictionary];
     OARowInfo *cuisineRow;
     OARowInfo *nameRow;
+    OARowInfo *brandRow;
     //NSMutableArray<OAPOIType *> *collectedPoiTypes = [NSMutableArray array];
     NSMutableDictionary<NSString *, NSMutableArray<OAPOIType *> *> *collectedPoiTypes = [[NSMutableDictionary alloc] init];
     NSMutableDictionary<NSString *, NSString *> *additionalInfo = [[self.poi getAdditionalInfo] mutableCopy];
@@ -171,11 +173,17 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         UIColor *textColor;
         NSString *vl = additionalInfo[key];
         NSString *convertedKey = [key stringByReplacingOccurrencesOfString:@"_-_" withString:@":"];
-        if (!hasName && [_poiHelper isNameTag:convertedKey])
+        if (!hasName && [_poiHelper isNameTag:convertedKey] && ![convertedKey isEqualToString:@"name:brand"])
         {
             nameRow = [self addNameRowWithText:self.poi.name iconSize:iconSize];
             [infoRows addObject:nameRow];
             hasName = YES;
+        }
+        
+        if ([convertedKey isEqualToString:@"brand"])
+        {
+            brandRow = [self addBrandRowWithText:self.poi.name iconSize:iconSize];
+            [infoRows addObject:brandRow];
         }
         
         if ([convertedKey isEqualToString:@"image"]
@@ -183,7 +191,8 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
             || [convertedKey isEqualToString:@"subway_region"]
             || ([convertedKey isEqualToString:@"note"] && !osmEditingEnabled)
             || [convertedKey hasPrefix:@"lang_yes"]
-            || [convertedKey hasPrefix:@"top_index_"])
+            || [convertedKey hasPrefix:@"top_index_"]
+            || [convertedKey hasPrefix:@"name:brand"])
             continue;
 
         NSString *textPrefix = @"";
@@ -274,7 +283,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                 continue;
             }
         }
-        else if ([_poiHelper isNameTag:convertedKey])
+        else if ([_poiHelper isNameTag:convertedKey] && ![convertedKey hasPrefix:@"brand"])
         {
             [nameTags addObject:@{
                 @"key": convertedKey,
@@ -282,6 +291,22 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                 @"localizedTitle": pt ? pt.nameLocalized : @""
             }];
             [nameRow setDetailsArray:nameTags];
+            continue;
+        }
+        else if ([convertedKey hasPrefix:@"brand"])
+        {
+            NSString *key = @"brand";
+            NSString *newKey = @"name";
+            NSString *formattedKey = [pt.name stringByReplacingOccurrencesOfString:key withString:newKey];
+            if (![formattedKey isEqualToString:newKey])
+            {
+                [brandTags addObject:@{
+                    @"key": formattedKey,
+                    @"value": vl,
+                    @"localizedTitle": pt ? pt.nameLocalized : @""
+                }];
+                [brandRow setDetailsArray:brandTags];
+            }
             continue;
         }
         else if ([convertedKey isEqualToString:COLLECTION_TIMES_TAG] || [convertedKey isEqualToString:SERVICE_TIMES_TAG])
@@ -679,6 +704,26 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                                              isText:NO
                                           needLinks:NO
                                               order:90
+                                           typeName:@""
+                                      isPhoneNumber:NO
+                                              isUrl:NO];
+    
+    row.collapsable = NO;
+    row.collapsed = YES;
+    row.collapsableView = nil;
+    return row;
+}
+
+- (OARowInfo *)addBrandRowWithText:(NSString *)textValue iconSize:(CGSize)iconSize
+{
+    OARowInfo *row = [[OARowInfo alloc] initWithKey:@"brand"
+                                               icon:[OATargetInfoViewController getIcon:@"ic_custom_poi_brand" size:iconSize]
+                                         textPrefix:OALocalizedString(@"shared_string_brand")
+                                               text:textValue
+                                          textColor:nil
+                                             isText:NO
+                                          needLinks:NO
+                                              order:91
                                            typeName:@""
                                       isPhoneNumber:NO
                                               isUrl:NO];

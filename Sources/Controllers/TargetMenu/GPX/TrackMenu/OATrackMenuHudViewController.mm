@@ -1613,8 +1613,10 @@
 
 - (void)openNameTagsScreenWith:(NSArray<NSDictionary *> *)tagsArray 
 {
+    // FIXME:
     _pushedNewScreen = YES;
     POITagsDetailsViewController *tagsDetailsController = [[POITagsDetailsViewController alloc] initWithTags:tagsArray];
+   // tagsDetailsController.tagTitle = info.textPrefix
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:tagsDetailsController];
     [self.navigationController presentViewController:navigationController animated:YES completion:nil];
 }

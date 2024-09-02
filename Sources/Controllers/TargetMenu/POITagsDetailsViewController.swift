@@ -10,6 +10,9 @@ import UIKit
 
 @objcMembers
 final class POITagsDetailsViewController: OABaseNavbarViewController {
+    
+    var tagTitle: String?
+    
     private var tags: [NSDictionary]
     
     init(tags: [NSDictionary]) {
@@ -27,8 +30,7 @@ final class POITagsDetailsViewController: OABaseNavbarViewController {
     }
     
     override func getTitle() -> String? {
-        getLocalizedTitle()
-      //  localizedString("shared_string_name")
+        tagTitle ?? localizedString("shared_string_name")
     }
     
     override func getLeftNavbarButtonTitle() -> String? {
@@ -70,12 +72,13 @@ final class POITagsDetailsViewController: OABaseNavbarViewController {
     }
     
     private func extractHeader(from title: String, withKey key: String) -> String {
-        if key.hasPrefix("name:") {
-            return localizedString("shared_string_name")
-        } else {
-            let endIndex = title.firstIndex(of: "(") ?? title.endIndex
-            return String(title[..<endIndex]).trimmingCharacters(in: .whitespaces)
-        }
+        getTitle() ?? localizedString("shared_string_name")
+//        if key.hasPrefix("name:") {
+//            return localizedString("shared_string_name")
+//        } else {
+//            let endIndex = title.firstIndex(of: "(") ?? title.endIndex
+//            return String(title[..<endIndex]).trimmingCharacters(in: .whitespaces)
+//        }
     }
     
     private func extractDescription(from title: String, withKey key: String) -> String {

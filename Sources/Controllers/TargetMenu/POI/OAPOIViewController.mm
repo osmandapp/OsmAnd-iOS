@@ -215,23 +215,16 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 {
     OAPOIBaseType *poiType = [_poiHelper getAnyPoiAdditionalTypeByKey:convertedKey];
     
-    if (poiType.lang)
+    if (poiType.lang && [key containsString:@":"])
     {
-        if ([key containsString:@":"])
+        NSArray *components = [key componentsSeparatedByString:@":"];
+        if (components.count == 2)
         {
-            NSArray *components = [key componentsSeparatedByString:@":"];
-            if (components.count == 2)
-            {
-                NSString *baseKey = components[0];
-                NSString *localeKey = [NSString stringWithFormat:@"%@:%@", baseKey, components[1]];
-                
-                NSMutableDictionary *baseDict = [self dictionaryForKey:baseKey inDict:localizationsDict];
-                [baseDict setObject:originalDict[key] forKey:localeKey];
-            }
-        }
-        else
-        {
-            [resultDict setObject:originalDict[key] forKey:key];
+            NSString *baseKey = components[0];
+            NSString *localeKey = [NSString stringWithFormat:@"%@:%@", baseKey, components[1]];
+            
+            NSMutableDictionary *baseDict = [self dictionaryForKey:baseKey inDict:localizationsDict];
+            [baseDict setObject:originalDict[key] forKey:localeKey];
         }
     }
     else
@@ -345,9 +338,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 
         OAPOIType *poiType = [self.poi.type.category getPoiTypeByKeyName:convertedKey];
         OAPOIBaseType *pt = [_poiHelper getAnyPoiAdditionalTypeByKey:convertedKey];
-        if (pt.lang) {
-            NSLog(@"");
-        }
+
         if (!pt && vl && vl.length > 0 && vl.length < 50)
             pt = [_poiHelper getAnyPoiAdditionalTypeByKey:[NSString stringWithFormat:@"%@_%@", convertedKey, vl]];
         
@@ -838,7 +829,8 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     }];
 }
 
-- (NSDictionary *)filteredLocalizedNames {
+- (NSDictionary *)filteredLocalizedNames
+{
     NSMutableDictionary *filteredDict = [self.poi.localizedNames mutableCopy];
     [filteredDict removeObjectForKey:@"brand"];
     return [filteredDict copy];

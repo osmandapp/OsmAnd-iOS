@@ -240,7 +240,6 @@
             [subjects addObject:routeNameCellData];
             hasName = YES;
         }
-        // TODO: brand
 
         if ([routeTagKey isEqualToString:@"colour"])
         {
@@ -267,7 +266,6 @@
             }];
             continue;
         }
-        // TODO: brand
         
         OAGPXTableCellData *routeCellData = [OAGPXTableCellData withData:@{
             kTableKey: routeTagKey,

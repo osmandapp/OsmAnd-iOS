@@ -29,7 +29,7 @@ final class POITagsDetailsViewController: OABaseNavbarViewController {
         addCell(OASimpleTableViewCell.reuseIdentifier)
     }
     
-    override func getTitle() -> String? {
+    override func getTitle() -> String {
         tagTitle ?? localizedString("shared_string_name")
     }
     
@@ -63,7 +63,7 @@ final class POITagsDetailsViewController: OABaseNavbarViewController {
     
     private func extractHeader(from title: String, withKey key: String) -> String {
         if key.hasPrefix("name:") {
-            return tagTitle ?? localizedString("shared_string_name")
+            return getTitle()
         } else {
             let endIndex = title.firstIndex(of: "(") ?? title.endIndex
             return String(title[..<endIndex]).trimmingCharacters(in: .whitespaces)

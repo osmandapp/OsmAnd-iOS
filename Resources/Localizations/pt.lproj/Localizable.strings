@@ -3507,3 +3507,4 @@
 "route_your_destination_is_on_ahead" = "O seu destino está mesmo em frente";
 "weather_wind_animation_enable_descr" = "Ative para ver a camada do vento animado no mapa.";
 "shared_string_show" = "Mostrar";
+"osmand_cloud_delete_account_descr_with_email" = "Quer mesmo eliminar a conta do OsmAnd Cloud: %@?";

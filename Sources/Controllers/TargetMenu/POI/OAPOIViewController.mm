@@ -592,14 +592,13 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                 {
                     for (NSString *key in val.allKeys)
                     {
-                       // NSString *localizedTitle = pt ? pt.nameLocalized : @"";
-                       // row.textPrefix = localizedTitle;
+                        OAPOIBaseType *poi = [_poiHelper getAnyPoiAdditionalTypeByKey:key];
                         NSString *formattedKey = [key stringByReplacingOccurrencesOfString:convertedKey withString:@"name"];
 
                         [array addObject:@{
                             @"key": formattedKey,
                             @"value": val[key],
-                            @"localizedTitle": pt ? pt.nameLocalized : @""
+                            @"localizedTitle": poi ? poi.nameLocalized : @""
                         }];
                     }
                     [row setDetailsArray:array];

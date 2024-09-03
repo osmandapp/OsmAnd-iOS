@@ -149,19 +149,45 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     NSMutableDictionary *localizationsDict = [NSMutableDictionary dictionary];
     
     for (NSString *key in originalDict) {
-        if ([key containsString:@":"]) {
-            NSArray *components = [key componentsSeparatedByString:@":"];
-            if (components.count == 2) {
-                NSString *baseKey = components[0];
-                NSString *localeKey = [NSString stringWithFormat:@"%@:%@", baseKey, components[1]];
-                
-                if (!localizationsDict[baseKey]) {
-                    localizationsDict[baseKey] = [NSMutableDictionary dictionary];
+        NSString *convertedKey = [key stringByReplacingOccurrencesOfString:@"_-_" withString:@":"];
+        if ([convertedKey hasPrefix:@"alt_name"]){
+            NSLog(@"");
+        }
+        if ([_poiHelper isNameTag:convertedKey]) {
+            if ([key containsString:@":"]) {
+                NSArray *components = [convertedKey componentsSeparatedByString:@":"];
+                if (components.count == 2) {
+                    NSString *baseKey = components[0];
+                    NSString *localeKey = [NSString stringWithFormat:@"%@:%@", baseKey, components[1]];
+                    
+                    if (!localizationsDict[@"name"]) {
+                        localizationsDict[@"name"] = [NSMutableDictionary dictionary];
+                    }
+                    [localizationsDict[@"name"] setObject:originalDict[convertedKey] forKey:localeKey];
                 }
-                [localizationsDict[baseKey] setObject:originalDict[key] forKey:localeKey];
+            } else {
+                [localizationsDict[@"name"] setObject:originalDict[key] forKey:convertedKey];
             }
         } else {
-            [resultDict setObject:originalDict[key] forKey:key];
+            OAPOIBaseType *pt = [_poiHelper getAnyPoiAdditionalTypeByKey:convertedKey];
+            if (pt.lang) {
+                if ([key containsString:@":"]) {
+                    NSArray *components = [key componentsSeparatedByString:@":"];
+                    if (components.count == 2) {
+                        NSString *baseKey = components[0];
+                        NSString *localeKey = [NSString stringWithFormat:@"%@:%@", baseKey, components[1]];
+                        
+                        if (!localizationsDict[baseKey]) {
+                            localizationsDict[baseKey] = [NSMutableDictionary dictionary];
+                        }
+                        [localizationsDict[baseKey] setObject:originalDict[key] forKey:localeKey];
+                    }
+                } else {
+                    [resultDict setObject:originalDict[key] forKey:key];
+                }
+            } else {
+                [resultDict setObject:originalDict[key] forKey:key];
+            }
         }
     }
     
@@ -232,18 +258,18 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         }
         
         NSString *convertedKey = [key stringByReplacingOccurrencesOfString:@"_-_" withString:@":"];
-        if (!hasName && [_poiHelper isNameTag:convertedKey])
-        {
-//            nameRow = [self addNameRowWithText:self.poi.name iconSize:iconSize];
-//            [infoRows addObject:nameRow];
-            hasName = YES;
-        }
-        
-        if ([convertedKey isEqualToString:@"brand"])
-        {
-            NSLog(@"");
-
-        }
+//        if (!hasName && [_poiHelper isNameTag:convertedKey])
+//        {
+////            nameRow = [self addNameRowWithText:self.poi.name iconSize:iconSize];
+////            [infoRows addObject:nameRow];
+//            hasName = YES;
+//        }
+//        
+//        if ([convertedKey isEqualToString:@"brand"])
+//        {
+//            NSLog(@"");
+//
+//        }
         
         if ([convertedKey isEqualToString:@"image"]
             || [convertedKey isEqualToString:MAPILLARY_TAG]
@@ -559,6 +585,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                 NSDictionary *val = dic[convertedKey][@"localization"];
                 if ([_poiHelper isNameTag:convertedKey])
                 {
+                    row.text = self.poi.name;
                     row.textPrefix = OALocalizedString(@"shared_string_name");
                 }
                 if (val.allKeys.count > 0)

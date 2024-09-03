@@ -61,24 +61,13 @@ final class POITagsDetailsViewController: OABaseNavbarViewController {
         }
     }
     
-    private func getLocalizedTitle() -> String {
-//        if key.hasPrefix("name:") {
-//            return localizedString("shared_string_name")
-//        } else {
-//            let endIndex = title.firstIndex(of: "(") ?? title.endIndex
-//            return String(title[..<endIndex]).trimmingCharacters(in: .whitespaces)
-//        }
-        return localizedString("shared_string_brand")
-    }
-    
     private func extractHeader(from title: String, withKey key: String) -> String {
-        getTitle() ?? localizedString("shared_string_name")
-//        if key.hasPrefix("name:") {
-//            return localizedString("shared_string_name")
-//        } else {
-//            let endIndex = title.firstIndex(of: "(") ?? title.endIndex
-//            return String(title[..<endIndex]).trimmingCharacters(in: .whitespaces)
-//        }
+        if key.hasPrefix("name:") {
+            return tagTitle ?? localizedString("shared_string_name")
+        } else {
+            let endIndex = title.firstIndex(of: "(") ?? title.endIndex
+            return String(title[..<endIndex]).trimmingCharacters(in: .whitespaces)
+        }
     }
     
     private func extractDescription(from title: String, withKey key: String) -> String {

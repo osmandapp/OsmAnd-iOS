@@ -1534,7 +1534,7 @@
 "global_settings_descr" = "Mõjutavad kogu rakendust.";
 "osmand_settings" = "OsmAndi seadistused";
 "device_settings" = "Seadme sätted";
-"units_and_formats" = "Ühikud ja vormingud";
+"units_and_formats" = "Ühikud ja formaadid";
 "product_desc_antarctica" = "Piiramatud Antarktise kaartide allalaadimised";
 "allow_3d" = "Luba pseudo 3D-vaade (2.5D)";
 "only_manually" = "Ainult käsitsi";
@@ -2680,7 +2680,7 @@
 "avoid_pt_types" = "Väldi transpordiliike…";
 "required_maps_list" = "Lisaks kasutatame kaarte: %@";
 "speedometer_description" = "Näitab sinu praegust kiirust, nii nagu seda GPS\'i andmete alusel saab arvutada";
-"rendering_attr_alpineHiking_name" = "Raskusastme klassifikatsioon";
+"rendering_attr_alpineHiking_name" = "Matkaradade raskusastme klassifikatsioon";
 "missing_maps_ignore" = "Kasuta allalaaditud kaarte";
 "delete_history_items" = "Kas kustutame %@ ajalookirjet?";
 "weather_source_ecmwf_description" = "Euroopa Keskpika Ilmaennustuse Keskus (ECMWF)";
@@ -2711,7 +2711,7 @@
 "user_guide" = "Kasutusjuhend";
 "map_widgets" = "Kaardividinad";
 "my_data" = "Minu andmed";
-"setup" = "Seadistus";
+"setup" = "Seadista";
 "open_issue_on_gitHub" = "Koosta veateade GitHubis";
 "osmAnd_team" = "OsmAndi meeskond";
 "testFlight" = "TestFlight";
@@ -2747,7 +2747,7 @@
 "quick_action_verb_turn_on_off" = "Lülita sisse / välja";
 "quick_action_verb_start_stop" = "Alusta / lõpeta";
 "app_profile" = "Rakenduse profiil";
-"weather_source_GFS_description" = "Ameerika Ühendriikide Keskonnaennsutuse Keskuste ülemaailmne ennustus (Global Forecast System from National Centers for Environmental Prediction)";
+"weather_source_GFS_description" = "AmeerikaÜhendriikide Keskonnaennsutuse Keskuste ülemaailmne ennustus (Global Forecast System from National Centers for Environmental Prediction)";
 "weather_source_ecmwf_title" = "ECMWF";
 "weather_source_GFS_title" = "GFS";
 "rendering_value_omit_name" = "Jäta vahele";
@@ -2783,3 +2783,18 @@
 "map_widget_current_speed" = "Praegune kiirus";
 "map_settings_weather_wind_animation" = "Tuule animatsioon";
 "map_widget_distance_to_destination" = "Vahemaa sihtkohta";
+"simulate_in_progress" = "Töös";
+"osm_id" = "OSM ID";
+"map_widget_next_sunrise" = "Järgmine päikesetõus";
+"map_widget_sunrise" = "Päikesetõus";
+"shared_string_app_profile" = "Rakenduse profiil";
+"simulate_location_movement_speed_original" = "Algne";
+"shared_string_clear_online_cache" = "Eemalda vahemälust võrgust laaditud andmed";
+"shared_string_show" = "Näita";
+"new_track" = "Uus rada";
+"carplay" = "CarPlay";
+"map_widget_next_sunset" = "Järgmine päikeseloojang";
+"osmand_depelopment_simulate_location_section" = "Simuleeri";
+"map_widget_sunrise_sunset_time_left" = "Aega jäänud";
+"help_article_troubleshooting_android_auto_name" = "Android Auto";
+"map_widget_sunset" = "Päikeseloojang";

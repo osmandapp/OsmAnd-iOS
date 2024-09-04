@@ -1491,7 +1491,7 @@
 "rendering_attr_highway_class_track_grade2_name" = "Grad 2";
 "routeInfo_roadClass_name" = "Vejtype";
 "rendering_value_pink_name" = "Lyserød";
-"rendering_attr_alpineHiking_name" = "Sværhedsklassificering";
+"rendering_attr_alpineHiking_name" = "Vandrestiers sværhedsgrad";
 "rendering_value_translucent_blue_name" = "Gennemsigtig blå";
 "rendering_value_thick_name" = "Tyk";
 "routing_attr_avoid_shuttle_train_name" = "Ingen shuttle-tog";
@@ -3118,7 +3118,7 @@
 "no_travel_guides_data_title" = "Du har ikke rejsedata";
 "map_orientation_landscape" = "Landskab";
 "map_widget_ant_heart_rate_desc" = "Viser brugerens puls under en given aktivitet i realtid";
-"external_device_status_connect" = "Tilslut";
+"external_device_status_connect" = "Forbind";
 "default_appearance_desc" = "Standard farve, ikon og form vil gælde for de tilføjede favoritpunkter i gruppen.";
 "shared_string_result" = "Resultat";
 "no_travel_guides_data_descr" = "Download Wikivoyage-rejseguider for at se artikler om steder rundt om i verden uden forbindelse til internettet.";
@@ -3475,12 +3475,12 @@
 "shared_string_colors" = "Farver";
 "height_legend_description" = "Højdefarvekort bruges til at visualisere relief.";
 "user_palette" = "Brugerpalet";
-"quick_action_verb_show_hide" = "Vis / Skjul";
+"quick_action_verb_show_hide" = "Vis / skjul";
 "shared_string_favorite" = "Favorit";
-"quick_action_verb_start_stop" = "Start / Stop";
+"quick_action_verb_start_stop" = "Start / stop";
 "shared_string_set" = "Indstil";
 "download_srtm_maps" = "Højdekurver";
-"quick_action_verb_pause_resume" = "Pause / Genoptag";
+"quick_action_verb_pause_resume" = "Pause / genoptag";
 "quick_action_parking_place" = "Parkeringssted";
 "quick_action_first_intermediate" = "Første mellemliggende";
 "shared_string_action" = "Handling";
@@ -3497,7 +3497,7 @@
 "temperature_layer" = "Temperaturlag";
 "quick_action_directions_from" = "Startpunkt";
 "shared_string_favorites" = "Favoritter";
-"voices" = "Talevejledning";
+"voices" = "Stemmemeddelelser";
 "shared_string_change" = "Skift";
 "quick_action_destination" = "Destination";
 "pressure_layer" = "Tryklag";

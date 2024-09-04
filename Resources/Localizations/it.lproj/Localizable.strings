@@ -1054,7 +1054,7 @@
 "rendering_attr_lessDetailed_name" = "Meno dettagli";
 "rendering_attr_smoothness_intermediate_name" = "Intermedio";
 "rendering_attr_contourDensity_name" = "Densità linee isoipse";
-"rendering_attr_alpineHiking_name" = "Classificazione della difficoltà";
+"rendering_attr_alpineHiking_name" = "Grado di difficoltà dei sentieri escursionistici";
 "rendering_attr_smoothness_bad_name" = "Cattiva";
 "routing_attr_avoid_bus_description" = "Evita gli autobus e i filobus";
 "routing_attr_avoid_unpaved_description" = "Evita le strade non pavimentate";
@@ -1583,7 +1583,7 @@
 "allow_3D_view" = "Vista 2.5D";
 "do_not_rotate" = "Non ruotare";
 "light_theme" = "Chiaro";
-"settings_app_theme" = "Tema dell\'applicazione";
+"settings_app_theme" = "Tema dell\'app";
 "map_settings_available_srtm_maps_descr" = "Sono necessarie mappe aggiuntive per visualizzare Hillshade sulla mappa";
 "map_settings_line_density_slowdown_warning" = "Un'elevata densità di linea può rallentare il rendering della mappa";
 "map_settings_contour_zoom_level_descr" = "Selezionare il livello di zoom, da cui verranno visualizzate le curve di livello";
@@ -2711,14 +2711,14 @@
 "rendering_attr_showMtbScale_description" = "Mostra i percorsi nella scala di difficoltà MTB.";
 "routing_attr_carriage_restrictions_description" = "Considera l\'accesso consentito ai veicoli a trazione animale";
 "routing_attr_allow_streams_name" = "Permetti ruscelli e scoli";
-"rendering_attr_showWaterwayTunnels_description" = "Aumenta la visibilità dei tunnel dei corsi d'acqua";
+"rendering_attr_showWaterwayTunnels_description" = "Aumenta la visibilità dei tunnel dei corsi d\'acqua";
 "rendering_attr_showBusRoutes_name" = "Linee dell\'autobus";
 "rendering_attr_OSMMapperAssistantIconsLowZooms_name" = "Icone a zoom bassi";
 "routing_attr_prefer_hiking_routes_description" = "Preferisci i percorsi escursionistici";
 "rendering_attr_OSMMapperAssistantFixme_description" = "Mostra etichette Fixme";
 "routing_attr_hazmat_category_description" = "Categoria materiali pericolosi / Considera i permessi di accesso per i materiali pericolosi";
 "routing_attr_difficulty_preference_beginner_name" = "Principiante";
-"rendering_attr_showWaterwayTunnels_name" = "Aumenta la visibilità dei tunnel dei corsi d'acqua";
+"rendering_attr_showWaterwayTunnels_name" = "Aumenta la visibilità dei tunnel dei corsi d\'acqua";
 "routing_attr_difficulty_preference_no_preference_name" = "Nessuna preferenza";
 "routing_attr_avoid_fords_name" = "Evita i guadi";
 "routing_attr_freeride_policy_allow_name" = "Permetti";
@@ -3050,7 +3050,7 @@
 "article_added_to_bookmark" = " aggiunto ai segnalibri.";
 "map_orientation_landscape" = "Orizzontale";
 "weather_update_over_any_network" = "Con qualsiasi rete";
-"external_device_status_connect" = "Connetti";
+"external_device_status_connect" = "Collegare";
 "shared_string_result" = "Risultato";
 "no_travel_guides_data_descr" = "Scarica le guide di viaggio Wikivoyage per visualizzare articoli su luoghi di tutto il mondo senza una connessione a Internet.";
 "shared_string_travel" = "Viaggio";
@@ -3437,7 +3437,7 @@
 "select_items" = "Seleziona elementi";
 "routing_algorithm_highway_hierarchies" = "Gerarchie autostradali";
 "ios_release_4_8" = "• Nuovo widget \"Tachimetro\" compatibile con CarPlay\n• Aggiunte istruzioni passo-passo ai dettagli del percorso\n• Personalizza la schermata della mappa aggiungendo più pulsanti \"Azione rapida\"\n• Miglioramenti al tracciato 3D: nuove opzioni di visualizzazione e colorazione\n• Tavolozze di colori personalizzate per terreno, piste e percorsi\n• Aggiunta una modalità di selezione multipla migliorata per le tracce\n• Variante 3D per le icone della ubicazione della posizione\n• Selezione ampliata di percorsi turistici sulla mappa\n• Meteo: aggiornamento dell'interfaccia utente, aggiunta animazione del vento\n• Aggiungi transizioni fluide durante lo zoom in modalità 3D\n• \"Ubicazione della posizione sullo schermo\" è ora in Configura schermata\n• Modifica la \"Circonferenza della ruota\" nelle impostazioni del sensore BLE\n• Aggiunto avviso di navigazione separato \"Limite di velocità\"\n• Nomi corretti per i widget di rilevamento\n• Corretta la visibilità del \"righello del raggio\" in tutti i pannelli widget\n";
-"wall_height_description" = "Modificando il valore dell'altezza, è possibile alzare la linea superiore della traccia sopra il livello del suolo.";
+"wall_height_description" = "Modificando il valore dell'altezza, è possibile alzare la linea della traccia sopra il livello del suolo.";
 "missing_maps_ignore_details" = "Le mappe scaricate coprono il tuo percorso? Naviga con quelle se hai familiarità con la zona.";
 "missing_maps_ignore" = "Usa le mappe già scaricate";
 "online_plugins" = "Componenti aggiuntivi online";
@@ -3487,3 +3487,5 @@
 "route_your_destination_is_on_ahead" = "La tua destinazione è dritta davanti a te";
 "shared_string_show" = "Mostra";
 "weather_wind_animation_enable_descr" = "Abilita la visualizzazione del livello di animazione del vento sulla mappa.";
+"osmand_depelopment_use_3d_icons" = "Utilizza le icone di posizione 3D";
+"osmand_cloud_delete_account_descr_with_email" = "Sei sicuro di voler eliminare l'account OsmAnd Cloud: %@?";

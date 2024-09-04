@@ -2896,7 +2896,7 @@
 "user_name" = "Seu nome de usuário OSM";
 "perform_oauth_authorization" = "Entrar via OAuth";
 "rendering_value_sacScale_description" = "Clube Alpino Suíço";
-"rendering_attr_alpineHiking_name" = "Classificação de dificuldade";
+"rendering_attr_alpineHiking_name" = "Grau de dificuldade das trilhas de caminhada";
 "rendering_value_caiScale_description" = "Clube Alpino Italiano";
 "first_marker_widget_desc" = "Você pode configurar o widget para mostrar a distância ou o tempo estimado de chegada até o primeiro marcador do mapa.";
 "time_to_intermediate_widget_desc" = "O widget mostra \"Hora de chegada\" ou \"Hora de ir\" para o primeiro ponto intermediário. O tempo é atualizado constantemente durante a navegação, uma vez que os pontos intermediários são passados, o tempo será atualizado para o próximo ponto intermediário.";
@@ -3420,7 +3420,7 @@
 "visualization_3d_track_line" = "Linha da trilha";
 "fixed_height" = "Altura fixa";
 "shared_string_top" = "Topo";
-"shared_string_bottom" = "Em baixo";
+"shared_string_bottom" = "Base";
 "shared_string_top_bottom" = "Topo e base";
 "track_3d_empty_view_title" = "Visualização da trilha 3D";
 "display_position_automatic_descr" = "Depende da orientação do mapa: a parte inferior para orientação do movimento, o centro para todo o resto.";
@@ -3506,3 +3506,4 @@
 "route_your_destination_is_on_ahead" = "Seu destino está logo à frente";
 "shared_string_show" = "Mostrar";
 "weather_wind_animation_enable_descr" = "Ative a visualização da camada de animação do vento no mapa.";
+"osmand_cloud_delete_account_descr_with_email" = "Tem certeza de que deseja excluir a conta do OsmAnd Cloud: %@?";

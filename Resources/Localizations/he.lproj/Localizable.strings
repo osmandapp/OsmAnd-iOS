@@ -2786,7 +2786,7 @@
 "my_data" = "הנתונים שלי";
 "route_maneuvers" = "מעקפים";
 "map_widget_trip_recording_downhill" = "במורד ההר";
-"map_settings_topography" = "קווי מתאר";
+"map_settings_topography" = "מפות SRTM";
 "activity_type_walking_name" = "הליכה";
 "map_markers_bar_widget_desc" = "בווידג׳ט הסרגל העליון אפשר לראות את המרחק ואת הכיוון לסמן מהמיקום הנוכחי. אפשר להגדיר כדי לראות סמן או שניים מובילים בווידג׳ט.";
 "download_file" = "הורדת קובץ";
@@ -2934,3 +2934,4 @@
 "shared_string_change" = "שינוי";
 "temperature_layer" = "שכבת טמפרטורות";
 "voices" = "הנחיות קוליות";
+"shared_string_show" = "הצגה";

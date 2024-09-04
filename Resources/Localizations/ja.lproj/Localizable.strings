@@ -2988,3 +2988,4 @@
 "download_srtm_maps" = "等高線";
 "temperature_layer" = "温度関連レイヤー";
 "pressure_layer" = "気圧関連レイヤー";
+"shared_string_show" = "表示";

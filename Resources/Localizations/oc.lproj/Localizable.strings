@@ -2111,7 +2111,7 @@
 "routing_attr_only_permitted_streets_description" = "Utilizar ren que lei carrieras expressament autorizadas";
 "routing_attr_prefer_horse_routes_name" = "Preferéncia per lei percors cavalins";
 "monthly_subscription" = "Abonament mesadier";
-"ltr_or_rtl_combine_via_or" = "%@ò %@";
+"ltr_or_rtl_combine_via_or" = "%@ ò %@";
 "copy_to_map_favorites" = "Còpia vèrs lei preferits";
 "purchases_feature_desc_monthly_map_updates" = "Obtenètz l\'accès a una actualizacion mesadiera regulara dei mapas fòra de linha.";
 "shared_string_capacity" = "Capacitat";

@@ -69,6 +69,10 @@
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
                                                   style:UIAlertActionStyleCancel
                                                 handler:nil]];
+        
+        UIPopoverPresentationController *popover = alert.popoverPresentationController;
+        popover.barButtonItem = self.navigationItem.rightBarButtonItem;
+        popover.permittedArrowDirections = UIPopoverArrowDirectionAny;
 
         [self presentViewController:alert animated:YES completion:nil];
     }

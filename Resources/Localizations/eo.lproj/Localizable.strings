@@ -691,7 +691,7 @@
 "shared_string_appearance" = "Aspekto";
 "map_settings_line_density_slowdown_warning" = "High line density may slowdown map rendering";
 "map_settings_available_srtm_maps_descr" = "Additional maps are needed to view Hillshade on the map";
-"settings_app_theme" = "Etoso";
+"settings_app_theme" = "Etoso de aplikaĵo";
 "light_theme" = "Hela";
 "do_not_rotate" = "Do not rotate";
 "allow_3D_view" = "2.5D view";
@@ -2034,7 +2034,7 @@
 "rendering_value_disabled_name" = "Malaktiva";
 "rendering_attr_contourColorScheme_name" = "Kolor-skemo de nivelkurboj";
 "routing_attr_short_way_name" = "Brulaĵ-ŝparema kurso";
-"rendering_attr_alpineHiking_name" = "Klasifiko de facileco";
+"rendering_attr_alpineHiking_name" = "Malfacileco de turismaj kursoj";
 "rendering_attr_showLez_name" = "Zonoj de restrikta emisio (LEZ)";
 "rendering_value_green_name" = "Verda";
 "routing_attr_piste_type_nordic_description" = "Skivojoj por skiado nordia (skikurada).";
@@ -3196,3 +3196,5 @@
 "quick_action_track_waypoint" = "Navigadpunkto al spuro";
 "quick_action_parking_place" = "Parkumeja pozicio";
 "map_source" = "Map-fonto";
+"driving_region_uk" = "Britujo kaj similaj";
+"shared_string_show" = "Montri";

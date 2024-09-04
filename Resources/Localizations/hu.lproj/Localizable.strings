@@ -1086,7 +1086,7 @@
 "rendering_attr_highway_class_street_name" = "Utca";
 "rendering_value_lightgreen_name" = "Világoszöld";
 "rendering_attr_pisteGrooming_name" = "Sípálya kezeltség";
-"rendering_attr_alpineHiking_name" = "Nehézségi besorolás";
+"rendering_attr_alpineHiking_name" = "Túraútvonalak nehézségi foka";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Hálózathoz felvétel";
 "routing_attr_avoid_ferries_description" = "Elkerüli a kompokat";
 "rendering_value_disabled_name" = "Letiltva";
@@ -2778,7 +2778,7 @@
 "activity" = "tevékenység";
 "shared_string_travel_guides" = "Útikalauzok";
 "mapillary_widget_desc" = "Gyors hozzáférést biztosít a Mapillary alkalmazáshoz utcaszintű képek hozzáadásához.";
-"settings_app_theme" = "Téma";
+"settings_app_theme" = "Alkalmazás témája";
 "route_maneuvers_desc" = "A navigációs widgetek a navigáció során vannak engedélyezve, és olyan információkat jelenítenek meg, mint a távolság, az érkezési vagy hátralévő idő, a következő kanyarok, az irány, az aktuális utcanév, a sávokra vonatkozó információk, a sebességkorlátozás, a közeledő figyelmeztetések, az érdekes pontok (POI-k) vagy az útpontok.";
 "saved_articles" = "Könyvjelzőzött szócikkek";
 "osmand_cloud_deletion_all_data_warning" = "Minden adat %@ lesz az OsmAnd Cloud-ból. Az eszközön lévő adatok érintetlenek maradnak.";
@@ -2944,3 +2944,4 @@
 "driving_region_uk" = "Angolés hasonló";
 "shared_string_favorites" = "Kedvencek";
 "shared_string_change" = "Módosítás";
+"shared_string_show" = "Megjelenítés";

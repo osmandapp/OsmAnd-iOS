@@ -2544,7 +2544,7 @@
 "app_mode_moped" = "Ziklomotorra";
 "weather_forecast" = "Eguraldi iragarpena";
 "weather_forecast_is_outdated" = "Iragarpena zaharkituta dago.";
-"rendering_attr_alpineHiking_name" = "Zailtasunen sailkapena";
+"rendering_attr_alpineHiking_name" = "Mendi-ibilbideen zailtasun maila";
 "rendering_value_sacScale_description" = "Suitzako Alpino Kluba";
 "rendering_value_caiScale_description" = "Italiako Alpino Kluba";
 "search_favorites" = "Bilatu gogokoetan";
@@ -3194,3 +3194,4 @@
 "wind_layer" = "Haizearen geruza";
 "driving_region_india" = "India";
 "driving_region_uk" = "Erresuma Batua eta antzekoak";
+"shared_string_show" = "Erakutsi";

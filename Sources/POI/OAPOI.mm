@@ -333,6 +333,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
 {
     if (!_values)
         return nil;
+    
     return [_values objectForKey:key];
 }
 

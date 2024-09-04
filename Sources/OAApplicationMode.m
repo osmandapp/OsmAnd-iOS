@@ -923,8 +923,6 @@ static int PROFILE_TRUCK = 1000;
 
 + (NSString *)parseProfileIcon:(NSString *)iconName
 {
-    if ([iconName isEqualToString:@"ic_action_truck_dark"])
-        return @"ic_action_truck";
     return iconName;
 }
 

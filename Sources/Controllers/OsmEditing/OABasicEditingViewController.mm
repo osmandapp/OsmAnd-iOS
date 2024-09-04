@@ -264,7 +264,7 @@ static const NSInteger _contactInfoSectionCount = 5;
         switch (indexPath.row)
         {
             case 1:
-                cell.inputField.textView.keyboardType = UIKeyboardTypeNumberPad;
+                cell.inputField.textView.keyboardType = UIKeyboardTypeDefault;
                 break;
             case 2:
                 cell.inputField.textView.keyboardType = UIKeyboardTypePhonePad;

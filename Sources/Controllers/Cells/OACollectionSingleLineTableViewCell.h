@@ -23,6 +23,7 @@
 
 @property (weak, nonatomic) id<OACollectionTableViewCellDelegate> delegate;
 @property (nonatomic) BOOL disableAnimationsOnStart;
+@property (nonatomic) BOOL useMultyLines;
 
 - (void)setCollectionHandler:(OABaseCollectionHandler *)collectionHandler;
 - (OABaseCollectionHandler *)getCollectionHandler;

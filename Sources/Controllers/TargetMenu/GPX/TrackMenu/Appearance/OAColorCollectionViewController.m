@@ -250,6 +250,7 @@
         [cell rightActionButtonVisibility:NO];
         [cell anchorContent:EOATableViewCellContentCenterStyle];
         cell.collectionView.scrollEnabled = NO;
+        cell.useMultyLines = YES;
         [cell.collectionView reloadData];
         [cell layoutIfNeeded];
         return cell;

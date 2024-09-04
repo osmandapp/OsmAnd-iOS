@@ -149,6 +149,15 @@
         CGSize itemSize = [_collectionHandler getItemSize];
         if (height < itemSize.height)
             height = itemSize.height;
+        
+        if (_useMultyLines)
+        {
+            CGFloat width = self.collectionView.frame.size.width;
+            int rowsPerLine = width / (itemSize.width + self.collectionStackView.spacing);
+            int rowsCount = ceil((double)[_collectionHandler itemsCount:0] / (double)rowsPerLine);
+            if (rowsCount > 1)
+                height = rowsCount * (height + self.collectionStackView.spacing);
+        }
     }
     self.collectionViewHeight.constant = height;
     return [self.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];

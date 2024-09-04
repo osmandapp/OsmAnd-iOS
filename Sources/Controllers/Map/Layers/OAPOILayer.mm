@@ -289,6 +289,7 @@
     
     poi.obfId = amenity->id;
     poi.name = amenity->nativeName.toNSString();
+    poi.subType = amenity->subType.toNSString();
 
     NSMutableDictionary *names = [NSMutableDictionary dictionary];
     NSString *nameLocalized = [OAPOIHelper processLocalizedNames:amenity->localizedNames nativeName:amenity->nativeName names:names];

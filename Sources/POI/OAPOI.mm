@@ -333,13 +333,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
 {
     if (!_values)
         return nil;
-
-    for (NSString *k in _values)
-    {
-        if (![k isEqualToString:key])
-            return _values[k];
-    }
-    return nil;
+    return [_values objectForKey:key];
 }
 
 - (NSString *)getSite

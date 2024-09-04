@@ -352,7 +352,7 @@ static NSString *kLocationRadiusButtonKey =  @"kLocationRadiusButtonKey";
         kCellTitleKey : OALocalizedString(@"view_angle"),
         kCellDescrKey : [[MarkerDisplayOption valueByIndex:[OAAppSettings.sharedManager.viewAngleVisibility get:_profile.parent]] name],
         kCellIconNameKey : @"ic_custom_location_view_angle",
-        kCellIconTint : UIColorFromRGB(_changedProfile.profileColor),
+        kCellIconTintColor : UIColorFromRGB(_changedProfile.profileColor),
         kCellKeyKey : kViewAngleButtonKey,
     }];
     [optionsSection addRowFromDictionary:@{
@@ -360,7 +360,7 @@ static NSString *kLocationRadiusButtonKey =  @"kLocationRadiusButtonKey";
         kCellTitleKey : OALocalizedString(@"location_radius"),
         kCellDescrKey : [[MarkerDisplayOption valueByIndex:[OAAppSettings.sharedManager.locationRadiusVisibility get:_profile.parent]] name],
         kCellIconNameKey : @"ic_custom_location_radius",
-        kCellIconTint : UIColorFromRGB(_changedProfile.profileColor),
+        kCellIconTintColor : UIColorFromRGB(_changedProfile.profileColor),
         kCellKeyKey : kLocationRadiusButtonKey,
     }];
 }

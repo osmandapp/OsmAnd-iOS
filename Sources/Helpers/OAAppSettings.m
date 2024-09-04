@@ -132,6 +132,8 @@ static NSString * const navigationIconKey = @"navigationIcon";
 static NSString * const locationIconKey = @"locationIcon";
 static NSString * const use3dIconsByDefaultKey = @"use3dIconsByDefault";
 static NSString * const appModeOrderKey = @"appModeOrder";
+static NSString * const viewAngleVisibilityKey = @"viewAngleVisibility";
+static NSString * const locationRadiusVisibilityKey = @"locationRadiusVisibility";
 static NSString * const defaultSpeedKey = @"defaultSpeed";
 static NSString * const minSpeedKey = @"minSpeed";
 static NSString * const maxSpeedKey = @"maxSpeed";
@@ -3960,6 +3962,11 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
         _appModeOrder = [OACommonInteger withKey:appModeOrderKey defValue:0];
         [_profilePreferences setObject:_appModeOrder forKey:@"app_mode_order"];
+        
+        _viewAngleVisibility = [[[OACommonInteger withKey:viewAngleVisibilityKey defValue:[[MarkerDisplayOption resting] rawValue]] makeProfile] makeShared];
+        _locationRadiusVisibility = [[[OACommonInteger withKey:locationRadiusVisibilityKey defValue:[[MarkerDisplayOption restingNavigation] rawValue]] makeProfile] makeShared];
+        [_profilePreferences setObject:_viewAngleVisibility forKey:@"view_angle_visibility"];
+        [_profilePreferences setObject:_locationRadiusVisibility forKey:@"location_radius_visibility"];
 
         _defaultSpeed = [OACommonDouble withKey:defaultSpeedKey defValue:10.];
         [_defaultSpeed setModeDefaultValue:@1.5 mode:OAApplicationMode.DEFAULT];

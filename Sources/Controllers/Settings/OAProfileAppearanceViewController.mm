@@ -45,6 +45,9 @@ static NSString *kCellNonInteractive = @"kCellNonInteractive";
 static NSString *kColorsCellTitleKey =  @"kColorsCellTitleKey";
 static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
 
+static NSString *kViewAngleButtonKey =  @"kViewAngleButtonKey";
+static NSString *kLocationRadiusButtonKey =  @"kLocationRadiusButtonKey";
+
 @interface OAApplicationProfileObject : NSObject
 
 @property (nonatomic) NSString *stringKey;
@@ -124,7 +127,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
 
 @end
 
-@interface OAProfileAppearanceViewController() <UITableViewDelegate, UITableViewDataSource, OALocationIconsTableViewCellDelegate, OAColorsCollectionCellDelegate, OAColorCollectionDelegate, UITextFieldDelegate>
+@interface OAProfileAppearanceViewController() <UITableViewDelegate, UITableViewDataSource, OALocationIconsTableViewCellDelegate, OAColorsCollectionCellDelegate, OAColorCollectionDelegate, Updatable, UITextFieldDelegate>
 
 @end
 
@@ -339,6 +342,26 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         kCellHeaderTitleKey : OALocalizedString(@"navigation_position_icon"),
         kCellTypeKey : [OALocationIconsTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"select_navigation_icon"),
+    }];
+    
+    OATableSectionData *optionsSection = [_data createNewSection];
+    [OAAppSettings.sharedManager.viewAngleVisibility get:_profile.parent];
+    [optionsSection addRowFromDictionary:@{
+        kCellHeaderTitleKey : OALocalizedString(@"shared_string_options"),
+        kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
+        kCellTitleKey : OALocalizedString(@"view_angle"),
+        kCellDescrKey : [[MarkerDisplayOption valueByIndex:[OAAppSettings.sharedManager.viewAngleVisibility get:_profile.parent]] name],
+        kCellIconNameKey : @"ic_custom_location_view_angle",
+        kCellIconTint : UIColorFromRGB(_changedProfile.profileColor),
+        kCellKeyKey : kViewAngleButtonKey,
+    }];
+    [optionsSection addRowFromDictionary:@{
+        kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
+        kCellTitleKey : OALocalizedString(@"location_radius"),
+        kCellDescrKey : [[MarkerDisplayOption valueByIndex:[OAAppSettings.sharedManager.locationRadiusVisibility get:_profile.parent]] name],
+        kCellIconNameKey : @"ic_custom_location_radius",
+        kCellIconTint : UIColorFromRGB(_changedProfile.profileColor),
+        kCellKeyKey : kLocationRadiusButtonKey,
     }];
 }
 
@@ -750,6 +773,25 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         }
         return cell;
     }
+    else if ([cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
+    {
+        OAValueTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
+        if (!cell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        }
+        if (cell)
+        {
+            cell.titleLabel.text = item.title;
+            cell.valueLabel.text = item.descr;
+            cell.leftIconView.tintColor = item.iconTintColor;
+            cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
+            return cell;
+        }
+    }
     return nil;
 }
 
@@ -770,6 +812,19 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
+    if ([item.key isEqualToString:kViewAngleButtonKey])
+    {
+        OAProfileAppearanceViewAngleViewController *vc = [[OAProfileAppearanceViewAngleViewController alloc] initWithAppMode:_profile.parent];
+        vc.delegate = self;
+        [self showModalViewController:vc];
+    }
+    else if ([item.key isEqualToString:kLocationRadiusButtonKey])
+    {
+        OAProfileAppearanceLocationRadiusViewController *vc = [[OAProfileAppearanceLocationRadiusViewController alloc] initWithAppMode:_profile.parent];
+        vc.delegate = self;
+        [self showModalViewController:vc];
+    }
 }
 
 #pragma mark - OASeveralViewsTableViewCellDelegate
@@ -861,6 +916,14 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
 - (void)reloadCollectionData
 {
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:kColorRowIndex inSection:kColorSectionIndex]] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+#pragma mark - Updatable
+
+- (void)update
+{
+    [self generateData];
+    [self.tableView reloadData];
 }
 
 @end

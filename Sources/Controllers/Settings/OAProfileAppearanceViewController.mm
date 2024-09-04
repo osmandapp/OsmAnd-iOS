@@ -632,7 +632,8 @@ static NSString *kLocationRadiusButtonKey =  @"kLocationRadiusButtonKey";
     return UITableViewAutomaticDimension;
 }
 
-- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath 
+{
     OATableRowData *item = [_data itemForIndexPath:indexPath];
     
     NSString *cellType = [[NSString alloc] initWithString:[item cellType]];

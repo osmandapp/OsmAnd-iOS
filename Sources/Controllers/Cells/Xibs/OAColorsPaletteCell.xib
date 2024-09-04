@@ -187,7 +187,7 @@
                 </subviews>
                 <constraints>
                     <constraint firstItem="Pde-Gp-UrD" firstAttribute="top" secondItem="Mm8-Rd-v2K" secondAttribute="top" id="8Bg-s9-TzB"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="NS9-5f-FoA" secondAttribute="trailing" constant="-20" id="A2I-fH-mJ5"/>
+                    <constraint firstAttribute="trailing" secondItem="NS9-5f-FoA" secondAttribute="trailing" id="A2I-fH-mJ5"/>
                     <constraint firstItem="Pde-Gp-UrD" firstAttribute="leading" secondItem="Mm8-Rd-v2K" secondAttribute="leading" id="DAS-LY-bpg"/>
                     <constraint firstAttribute="trailing" secondItem="Pde-Gp-UrD" secondAttribute="trailing" id="MLv-KW-x2y"/>
                     <constraint firstAttribute="bottom" secondItem="Pde-Gp-UrD" secondAttribute="bottom" id="lli-Jz-ss7"/>

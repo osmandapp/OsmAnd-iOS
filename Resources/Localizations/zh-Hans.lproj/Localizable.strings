@@ -8,7 +8,7 @@
 "select_postcode" = "邮政编码搜索";
 "type_postcode" = "输入邮政编码";
 "coords_search" = "坐标搜索";
-"nearest_cities" = "最近的城市";
+"nearest_cities" = "距离最近的城市";
 "type_address" = "输入地址";
 "search_poi_category_hint" = "键入以搜索全部";
 // Shared Strings
@@ -434,7 +434,7 @@
 "items_selected" = "%d 已选中";
 "custom_search" = "自定义搜索";
 "poi_filter_custom_filter" = "自定义过滤器";
-"poi_filter_closest_poi" = "最近的兴趣点";
+"poi_filter_closest_poi" = "距离最近的兴趣点";
 "shared_string_is_open_24_7" = "24小时开放";
 "shared_string_is_open" = "打开";
 "poi_filter_by_name" = "按名称搜索";
@@ -739,7 +739,7 @@
 "route_roundabout" = "环岛：在第 %d 出口驶离";
 "route_roundabout_short" = "在 %d 出口驶离并继续";
 "starting_point_too_far" = "出发点离最近的道路太远。";
-"ending_point_too_far" = "结束点距离最近的道路太远。";
+"ending_point_too_far" = "终点距离最近的道路过远。";
 "intermediate_point_too_far" = "中转点 %@ 离最近的路太远。";
 "destination_point" = "目的地 %@";
 "stop_routing_confirm" = "停止导航？";
@@ -1055,7 +1055,7 @@
 "rendering_value_default13_name" = "默认 (13)";
 "rendering_attr_hideNonVehicleHighways_name" = "非车辆公路";
 "rendering_attr_smoothness_good_name" = "优良";
-"routing_attr_height_description" = "指定路线上允许的车辆高度。";
+"routing_attr_height_description" = "规定路线上允许的车辆高度。";
 "rendering_value_walkingRoutesScopeOSMC_name" = "网络从属";
 "routing_attr_avoid_tram_description" = "避免电车";
 "rendering_attr_currentTrackWidth_description" = "GPX宽度";
@@ -1350,7 +1350,7 @@
 "osmand_settings" = "OsmAnd设置";
 "empty_filename" = "空的文件名";
 "select_another_track" = "选择另一轨迹";
-"nearest_point" = "最近的点";
+"nearest_point" = "距离最近的点";
 "attach_to_the_roads" = "依附于道路";
 "simplified_track" = "简化轨迹";
 "map_widget_distance_by_tap" = "点击测距";
@@ -1657,7 +1657,7 @@
 "routing_attr_only_permitted_ways_description" = "仅使用明确允许的道路（轨迹、路径等）";
 "lang_af" = "南非荷兰语";
 "routeInfo_surface_description" = "提供道路/人行道物理表面信息。";
-"shared_string_min_height" = "最低高度";
+"shared_string_min_height" = "最小高度";
 "routeInfo_smoothness_description" = "轮式车辆的道路 / 人行道机动性分级，特别是关于路面一致性 / 平整度的分级。";
 "route_line_use_map_style_width" = "使用地图样式 (%@) 默认宽度。";
 "set_up_backup" = "设置备份";
@@ -2514,7 +2514,7 @@
 "start_recording" = "开始录制";
 "trip_recording_downhill_widget_desc" = "显示当前记录的行程中所有下降高度的总和。";
 "shared_string_format" = "格式";
-"shared_string_nearest" = "最近";
+"shared_string_nearest" = "距离最近";
 "verify_account_deletion_descr" = "删除之前，我们需要验证您的帐户。 \n \n请输入您注册时使用的电子邮件地址。我们将向其发送下一步操作的一次性密码。";
 "map_widget_trip_recording_duration" = "持续时间";
 "av_notes_video_widget_desc" = "点击小部件可以让你录制一个视频。";
@@ -2738,3 +2738,6 @@
 "osmand_depelopment_simulate_location_section" = "模拟";
 "shared_string_millimeters_short" = "毫米";
 "visualization_3d_wall_color" = "墙壁颜色";
+"track_vertical_exaggeration_description" = "通过更改比例值，可以改变 3D 轨迹的高度。";
+"fixed_height" = "固定高度";
+"height_legend_description" = "海拔彩色地图用于直观显示地形。";

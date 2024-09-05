@@ -329,6 +329,14 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     return res;
 }
 
+- (NSString *)getAdditionalInfo:(NSString *)key
+{
+    if (!_values)
+        return nil;
+    
+    return [_values objectForKey:key];
+}
+
 - (NSString *)getSite
 {
     return [self getAdditionalInfo][@"website"];

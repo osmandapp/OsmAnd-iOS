@@ -24,6 +24,7 @@
 - (OAPOIUIFilter *) getShowAllPOIFilter;
 - (OAPOIUIFilter *) getFilterById:(NSString *)filterId;
 - (OAPOIUIFilter *) getFilterById:(NSString *)filterId includeDeleted:(BOOL)includeDeleted;
+- (OAPOIUIFilter *) getFilter:(OATopIndexFilter *)topIndexFilter acceptedTypes:(NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *)acceptedTypes;
 - (void) reloadAllPoiFilters;
 - (NSArray<OAPOIUIFilter *> *) getUserDefinedPoiFilters:(BOOL)includeDeleted;
 - (NSArray<OAPOIUIFilter *> *) getSearchPoiFilters;

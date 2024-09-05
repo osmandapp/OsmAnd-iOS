@@ -58,8 +58,7 @@
 
 - (IBAction) onBottomButoonPressed:(id)sender
 {
-    // TODO: Implement
-//    [[self getIconsCollectionHandler] openAllColorsScreen];
+    [[self getIconsCollectionHandler] openAllIconsScreen];
 }
 
 @end

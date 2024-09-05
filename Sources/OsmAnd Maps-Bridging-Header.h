@@ -150,6 +150,7 @@
 #import "OABenefitsOsmContributorsViewController.h"
 #import "OAOsmEditingSettingsViewController.h"
 #import "OAHistoryViewController.h"
+#import "OAColorCollectionViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"

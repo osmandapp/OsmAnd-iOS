@@ -39,6 +39,9 @@
     NSMutableArray<OAColorItem *> *_colorItems;
     OAColorItem *_selectedColorItem;
     NSIndexPath *_editColorIndexPath;
+    
+    NSMutableArray<NSString *> *_iconItems;
+    NSString *_selectedIconItem;
 }
 
 #pragma mark - Initialization
@@ -60,6 +63,10 @@
                 _paletteItems = [[OAConcurrentArray alloc] init];
                 [_paletteItems addObjectsSync:[_colorsCollection getColors:PaletteSortingModeOriginal]];
                 _selectedPaletteItem = selectedItem;
+                break;
+            case EOAColorCollectionTypeIconItems:
+                _iconItems = items;
+                _selectedIconItem = selectedItem;
                 break;
         }
     }
@@ -97,6 +104,11 @@
         {
             [self.tableView registerNib:[UINib nibWithNibName:[OATwoIconsButtonTableViewCell reuseIdentifier] bundle:nil]
                  forCellReuseIdentifier:[OATwoIconsButtonTableViewCell reuseIdentifier]];
+        }
+        case EOAColorCollectionTypeIconItems:
+        {
+            [self.tableView registerNib:[UINib nibWithNibName:[OACollectionSingleLineTableViewCell reuseIdentifier] bundle:nil]
+                 forCellReuseIdentifier:[OACollectionSingleLineTableViewCell reuseIdentifier]];
         }
     }
 }
@@ -166,7 +178,7 @@
 - (void)generateData
 {
     _data = [OATableDataModel model];
-    if (_collectionType == EOAColorCollectionTypeColorItems)
+    if (_collectionType == EOAColorCollectionTypeColorItems || _collectionType == EOAColorCollectionTypeIconItems)
     {
         OATableSectionData *colorsSection = [_data createNewSection];
         [colorsSection addRowFromDictionary:@{
@@ -242,11 +254,25 @@
     if ([item.cellType isEqualToString:[OACollectionSingleLineTableViewCell getCellIdentifier]])
     {
         OACollectionSingleLineTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OACollectionSingleLineTableViewCell reuseIdentifier]];
-        OAColorCollectionHandler *colorHandler = [[OAColorCollectionHandler alloc] initWithData:@[_colorItems] collectionView:cell.collectionView];
-        colorHandler.delegate = self;
-        [colorHandler setScrollDirection:UICollectionViewScrollDirectionVertical];
-        [colorHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:[_colorItems indexOfObject:_selectedColorItem] inSection:0]];
-        [cell setCollectionHandler:colorHandler];
+        
+        if (_collectionType == EOAColorCollectionTypeColorItems)
+        {
+            OAColorCollectionHandler *colorHandler = [[OAColorCollectionHandler alloc] initWithData:@[_colorItems] collectionView:cell.collectionView];
+            colorHandler.delegate = self;
+            [colorHandler setScrollDirection:UICollectionViewScrollDirectionVertical];
+            [colorHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:[_colorItems indexOfObject:_selectedColorItem] inSection:0]];
+            [cell setCollectionHandler:colorHandler];
+        }
+        else if (_collectionType == EOAColorCollectionTypeIconItems)
+        {
+            IconCollectionHandler *colorHandler = [[IconCollectionHandler alloc] initWithData:@[_iconItems] collectionView:cell.collectionView];
+            colorHandler.delegate = self;
+            colorHandler.selectedIconColor = _selectedIconColor;
+            colorHandler.regularIconColor = _regularIconColor;
+            [colorHandler setScrollDirection:UICollectionViewScrollDirectionVertical];
+            [colorHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:[_iconItems indexOfObject:_selectedIconItem] inSection:0]];
+            [cell setCollectionHandler:colorHandler];
+        }
         [cell rightActionButtonVisibility:NO];
         [cell anchorContent:EOATableViewCellContentCenterStyle];
         cell.collectionView.scrollEnabled = NO;
@@ -475,10 +501,20 @@
 
 - (void)onCollectionItemSelected:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
 {
-    _selectedColorItem = _colorItems[indexPath.row];
+    if (_collectionType == EOAColorCollectionTypeIconItems)
+    {
+        _selectedIconItem = _iconItems[indexPath.row];
 
-    if (self.delegate)
-        [self.delegate selectColorItem:_selectedColorItem];
+        if (self.iconsDelegate)
+            [self.iconsDelegate selectIconItem:_selectedIconItem];
+    }
+    else 
+    {
+        _selectedColorItem = _colorItems[indexPath.row];
+
+        if (self.delegate)
+            [self.delegate selectColorItem:_selectedColorItem];
+    }
 
     [self dismissViewController];
 }

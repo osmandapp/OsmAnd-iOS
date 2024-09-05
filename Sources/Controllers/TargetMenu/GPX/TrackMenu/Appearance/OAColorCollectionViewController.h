@@ -13,7 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 typedef enum
 {
     EOAColorCollectionTypeColorItems,
-    EOAColorCollectionTypePaletteItems
+    EOAColorCollectionTypePaletteItems,
+    EOAColorCollectionTypeIconItems, 
 } EOAColorCollectionType;
 
 @class OAColorItem, PaletteColor;
@@ -27,13 +28,24 @@ typedef enum
 - (OAColorItem *)duplicateColorItem:(OAColorItem *)colorItem;
 - (void)deleteColorItem:(OAColorItem *)colorItem;
 
+
+@end
+
+@protocol OAIconCollectionDelegate
+
+- (void)selectIconItem:(NSString *)iconItem;
+
 @end
 
 @interface OAColorCollectionViewController : OABaseNavbarViewController
 
 
 @property(nonatomic, weak, nullable) id<OAColorCollectionDelegate>delegate;
+@property(nonatomic, weak, nullable) id<OAIconCollectionDelegate>iconsDelegate;
 @property(nonatomic, readonly) EOAColorCollectionType collectionType;
+
+@property(nonatomic) UIColor *selectedIconColor;
+@property(nonatomic) UIColor *regularIconColor;
 
 - (instancetype)initWithCollectionType:(EOAColorCollectionType)type items:(id)items selectedItem:(id)selectedItem;
 

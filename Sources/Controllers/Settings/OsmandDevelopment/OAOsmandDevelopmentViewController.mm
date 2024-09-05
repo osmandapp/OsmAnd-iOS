@@ -23,6 +23,9 @@
 #import "OAIAPHelper.h"
 #import "OAProducts.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
+#import "OAMapRendererView.h"
 #import "OAIndexConstants.h"
 #import "OAPluginsHelper.h"
 #import "OASwitchTableViewCell.h"
@@ -41,6 +44,7 @@
 
 NSString *const kCellSwitchIsOnKey = @"kCellSwitchIsOnKey";
 NSString *const kUse3dIconsKey = @"kUse3dIconsKey";
+NSString *const kBatterySavingModeKey = @"kBatterySavingModeKey";
 NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
 
 #pragma mark - Initialization
@@ -98,6 +102,12 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
         kCellKeyKey : kUse3dIconsKey,
         kCellTitleKey : OALocalizedString(@"osmand_depelopment_use_3d_icons"),
         @"isOn" : @([[OAAppSettings sharedManager].use3dIconsByDefault get])
+    }];
+    [renderingSection addRowFromDictionary:@{
+        kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
+        kCellKeyKey : kBatterySavingModeKey,
+        kCellTitleKey : OALocalizedString(@"battery_saving_mode"),
+        @"isOn" : @([[OAAppSettings sharedManager].batterySavingMode get])
     }];
     [_data addSection:renderingSection];
 }
@@ -173,6 +183,14 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
     {
         [[OAAppSettings sharedManager].use3dIconsByDefault set:sender.isOn];
         [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
+    }
+    if ([item.key isEqualToString:kBatterySavingModeKey])
+    {
+        [[OAAppSettings sharedManager].batterySavingMode set:sender.isOn];
+        if (sender.isOn)
+        	[OARootViewController.instance.mapPanel.mapViewController.mapView limitFrameRefreshRate];
+        else
+        	[OARootViewController.instance.mapPanel.mapViewController.mapView restoreFrameRefreshRate];
     }
 }
 

@@ -108,10 +108,7 @@
     cell.chartView.delegate = self;
     cell.separatorInset = UIEdgeInsetsMake(0, CGFLOAT_MAX, 0, 0);
 
-    [GpxUIHelper setupElevationChartWithChartView:cell.chartView
-                                        topOffset:20
-                                     bottomOffset:4
-                              useGesturesAndScale:YES];
+    [GpxUIHelper setupElevationChartWithChartView:cell.chartView];
 
     if (_routeLineChartHelper)
     {
@@ -393,7 +390,7 @@
     if (_routeLineChartHelper)
     {
         [_routeLineChartHelper refreshHighlightOnMap:NO
-                                           chartView:(LineChartView *) chartView
+                                           chartView:(ElevationChart *) chartView
                                     trackChartPoints:sectionData.values[@"points_value"]
                                              segment:sectionData.values[@"segment_value"]];
     }
@@ -458,7 +455,7 @@
 {
     if (recognizer.view && [recognizer.view isKindOfClass:LineChartView.class])
     {
-        LineChartView *lineChartView = (LineChartView *) recognizer.view;
+        ElevationChart *lineChartView = (ElevationChart *) recognizer.view;
         if (recognizer.state == UIGestureRecognizerStateBegan)
         {
             _hasTranslated = NO;

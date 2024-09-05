@@ -39,7 +39,7 @@ final class ElevationXAxisRenderer: XAxisRenderer {
 
         axisLineSegmentsBuffer[0].x = chartView.extraLeftOffset
         axisLineSegmentsBuffer[0].y = viewPortHandler.contentBottom
-        axisLineSegmentsBuffer[1].x = CGFloat(context.width) - chartView.extraRightOffset
+        axisLineSegmentsBuffer[1].x = chartView.frame.width - chartView.extraRightOffset
         axisLineSegmentsBuffer[1].y = viewPortHandler.contentBottom
         context.strokeLineSegments(between: axisLineSegmentsBuffer)
     }
@@ -59,7 +59,7 @@ final class ElevationXAxisRenderer: XAxisRenderer {
         let paraStyle = ParagraphStyle.default.mutableCopy() as! MutableParagraphStyle
         paraStyle.alignment = .center
 
-        let labelAttrs: [NSAttributedString.Key : Any] = [.font: axis.labelFont,
+        let labelAttrs: [NSAttributedString.Key: Any] = [.font: axis.labelFont,
                                                          .foregroundColor: axis.labelTextColor,
                                                          .paragraphStyle: paraStyle]
 
@@ -96,8 +96,7 @@ final class ElevationXAxisRenderer: XAxisRenderer {
                     if !viewPortHandler.isInBoundsX(position.x + width / 2.0) {
                         position.x = viewPortHandler.contentRight - width / 2.0
                     }
-                }
-                else if i == 0 { // avoid clipping of the first
+                } else if i == 0 { // avoid clipping of the first
                     let width = labelns.boundingRect(with: labelMaxSize,
                                                      options: .usesLineFragmentOrigin,
                                                      attributes: labelAttrs,

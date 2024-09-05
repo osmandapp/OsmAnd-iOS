@@ -48,7 +48,7 @@ final class ElevationYAxisRenderer: YAxisRenderer {
                 xPos = viewPortHandler.contentRight + axis.xOffset
             } else {
                 textAlign = .right
-                xPos = CGFloat(context.width) - chartView.extraRightOffset - axis.xOffset
+                xPos = chartView.frame.width - chartView.extraRightOffset - axis.xOffset
             }
         }
 
@@ -73,8 +73,8 @@ final class ElevationYAxisRenderer: YAxisRenderer {
 
         guard let chartData = chartView.lineData else { return }
         var dataSetCount = chartData.dataSetCount
-        var lastDataSet = dataSetCount > 0 ? chartData.dataSet(at: dataSetCount - 1) : nil
-        if let lastDataSet, !chartView.shouldShowLastSet() {
+        let lastDataSet = dataSetCount > 0 ? chartData.dataSet(at: dataSetCount - 1) : nil
+        if lastDataSet != nil, !chartView.shouldShowLastSet() {
             dataSetCount -= 1
         }
 
@@ -94,45 +94,45 @@ final class ElevationYAxisRenderer: YAxisRenderer {
                                      at: CGPoint(x: fixedPosition + xOffset, y: positions[i].y + offset),
                                      align: textAlign,
                                      attributes: [.font: labelFont, .foregroundColor: color])
-                } else {
-                    leftText = chartView.leftAxis.getFormattedLabel(i) + ", "
-                    let rightText = chartView.rightAxis.getFormattedLabel(i)
-                    let startDataSet = getDataSet(chartData, firstSet: true)
-                    let endDataSet = getDataSet(chartData, firstSet: false)
-                    let rightTextWidth = rightText.size(withAttributes: [.font: labelFont]).width
-                    if let startDataSet, let endDataSet {
-                        var leftTextColor = startDataSet.color(atIndex: 0)
-                        var rightTextColor = endDataSet.color(atIndex: 0)
-                        if let dataSetStart = startDataSet as? IOrderedLineDataSet {
-                            if dataSetStart.isLeftAxis() {
-                                leftTextColor = startDataSet.color(atIndex: 0)
-                                rightTextColor = endDataSet.color(atIndex: 0)
-                            } else {
-                                leftTextColor = endDataSet.color(atIndex: 0)
-                                rightTextColor = startDataSet.color(atIndex: 0)
-                            }
+                }
+            } else {
+                leftText = chartView.leftAxis.getFormattedLabel(i) + ", "
+                let rightText = chartView.rightAxis.getFormattedLabel(i)
+                let startDataSet = getDataSet(chartData, firstSet: true)
+                let endDataSet = getDataSet(chartData, firstSet: false)
+                let rightTextWidth = rightText.size(withAttributes: [.font: labelFont]).width
+                if let startDataSet, let endDataSet {
+                    var leftTextColor = startDataSet.color(atIndex: 0)
+                    var rightTextColor = endDataSet.color(atIndex: 0)
+                    if let dataSetStart = startDataSet as? IOrderedLineDataSet {
+                        if dataSetStart.isLeftAxis() {
+                            leftTextColor = startDataSet.color(atIndex: 0)
+                            rightTextColor = endDataSet.color(atIndex: 0)
+                        } else {
+                            leftTextColor = endDataSet.color(atIndex: 0)
+                            rightTextColor = startDataSet.color(atIndex: 0)
                         }
-
-                        context.drawText(rightText,
-                                         at: CGPoint(x: fixedPosition + xOffset, y: positions[i].y + offset),
-                                         align: textAlign,
-                                         attributes: [.font: labelFont, .foregroundColor: rightTextColor])
-
-                        context.drawText(leftText,
-                                         at: CGPoint(x: fixedPosition + xOffset - rightTextWidth, y: positions[i].y + offset),
-                                         align: textAlign,
-                                         attributes: [.font: labelFont, .foregroundColor: leftTextColor])
-                    } else {
-                        context.drawText(rightText,
-                                         at: CGPoint(x: fixedPosition + xOffset, y: positions[i].y + offset),
-                                         align: textAlign,
-                                         attributes: [.font: labelFont, .foregroundColor: labelTextColor])
-
-                        context.drawText(leftText,
-                                         at: CGPoint(x: fixedPosition + xOffset - rightTextWidth, y: positions[i].y + offset),
-                                         align: textAlign,
-                                         attributes: [.font: labelFont, .foregroundColor: labelTextColor])
                     }
+
+                    context.drawText(rightText,
+                                     at: CGPoint(x: fixedPosition + xOffset, y: positions[i].y + offset),
+                                     align: textAlign,
+                                     attributes: [.font: labelFont, .foregroundColor: rightTextColor])
+
+                    context.drawText(leftText,
+                                     at: CGPoint(x: fixedPosition + xOffset - rightTextWidth, y: positions[i].y + offset),
+                                     align: textAlign,
+                                     attributes: [.font: labelFont, .foregroundColor: leftTextColor])
+                } else {
+                    context.drawText(rightText,
+                                     at: CGPoint(x: fixedPosition + xOffset, y: positions[i].y + offset),
+                                     align: textAlign,
+                                     attributes: [.font: labelFont, .foregroundColor: labelTextColor])
+
+                    context.drawText(leftText,
+                                     at: CGPoint(x: fixedPosition + xOffset - rightTextWidth, y: positions[i].y + offset),
+                                     align: textAlign,
+                                     attributes: [.font: labelFont, .foregroundColor: labelTextColor])
                 }
             }
         }

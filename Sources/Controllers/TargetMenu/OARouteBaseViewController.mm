@@ -49,10 +49,9 @@
                analysis:(OAGPXTrackAnalysis *)analysis
                modeCell:(OARouteStatisticsModeCell *)statsModeCell
 {
-//    ChartYAxisCombinedRenderer *renderer = (ChartYAxisCombinedRenderer *) chart.rightYAxisRenderer;
-    
     OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:_gpxDoc.path]];
     BOOL calcWithoutGaps = !gpx.joinSegments && (_gpxDoc.tracks.count > 0 && _gpxDoc.tracks.firstObject.generalTrack);
+    GPXDataSetType secondType = GPXDataSetTypeNone;
     if (types.count == 2)
     {
         if (types.lastObject.integerValue == GPXDataSetTypeSpeed && ![analysis isSpeedSpecified])
@@ -71,13 +70,7 @@
                                                     [OAGPXDataSetType getTitle:types.lastObject.integerValue]]
                                           forState:UIControlStateNormal];
             }
-            [GpxUIHelper refreshLineChartWithChartView:chart
-                                              analysis:analysis
-                                   useGesturesAndScale:YES
-                                             firstType:(GPXDataSetType) types.firstObject.integerValue
-                                            secondType:(GPXDataSetType) types.lastObject.integerValue
-                                       calcWithoutGaps:calcWithoutGaps];
-//            renderer.renderingMode = YAxisCombinedRenderingModeBothValues;
+            secondType = (GPXDataSetType) types.lastObject.integerValue;
         }
     }
     else
@@ -87,17 +80,13 @@
             [statsModeCell.modeButton setTitle:[OAGPXDataSetType getTitle:types.firstObject.integerValue]
                                       forState:UIControlStateNormal];
         }
-        [GpxUIHelper refreshLineChartWithChartView:chart
-                                          analysis:analysis
-                               useGesturesAndScale:YES
-                                         firstType:(GPXDataSetType) types.firstObject.integerValue
-                                      useRightAxis:YES
-                                   calcWithoutGaps:calcWithoutGaps];
-//        renderer.renderingMode = types.lastObject.integerValue == GPXDataSetTypeAltitude
-//            ? YAxisCombinedRenderingModeSecondaryValueOnly
-//            : YAxisCombinedRenderingModePrimaryValueOnly;
     }
-    [chart notifyDataSetChanged];
+    [GpxUIHelper refreshLineChartWithChartView:chart
+                                      analysis:analysis
+                                     firstType:(GPXDataSetType) types.firstObject.integerValue
+                                    secondType:secondType
+                                      axisType:GPXDataSetAxisTypeDistance
+                               calcWithoutGaps:calcWithoutGaps];
 }
 
 - (void)refreshHighlightOnMap:(BOOL)forceFit

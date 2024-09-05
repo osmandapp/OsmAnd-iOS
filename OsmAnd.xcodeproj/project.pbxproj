@@ -682,7 +682,6 @@
 		468AADE528C77A6200BEC402 /* ic_custom_download_map_unavailable@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 468AADE128C77A6200BEC402 /* ic_custom_download_map_unavailable@2x.png */; };
 		468AADE628C77A6200BEC402 /* ic_custom_download_map_unavailable@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 468AADE228C77A6200BEC402 /* ic_custom_download_map_unavailable@3x.png */; };
 		468C798D2B7F76A000DA64D0 /* SendCodeCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468C798C2B7F76A000DA64D0 /* SendCodeCommand.swift */; };
-		468CD3812C80942100CC3436 /* GpxMarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468CD3802C80942100CC3436 /* GpxMarkerView.swift */; };
 		468CD3832C809E3400CC3436 /* ElevationChartCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468CD3822C809E3400CC3436 /* ElevationChartCell.swift */; };
 		468CD3852C80A06500CC3436 /* ElevationChartCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 468CD3842C80A06500CC3436 /* ElevationChartCell.xib */; };
 		468CE3F129F82EA700F3C3E5 /* OAColorCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 468CE3F029F82E9400F3C3E5 /* OAColorCollectionViewController.m */; };
@@ -4135,7 +4134,6 @@
 		468AADE128C77A6200BEC402 /* ic_custom_download_map_unavailable@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_download_map_unavailable@2x.png"; path = "Resources/Icons/ic_custom_download_map_unavailable@2x.png"; sourceTree = "<group>"; };
 		468AADE228C77A6200BEC402 /* ic_custom_download_map_unavailable@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_download_map_unavailable@3x.png"; path = "Resources/Icons/ic_custom_download_map_unavailable@3x.png"; sourceTree = "<group>"; };
 		468C798C2B7F76A000DA64D0 /* SendCodeCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendCodeCommand.swift; sourceTree = "<group>"; };
-		468CD3802C80942100CC3436 /* GpxMarkerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GpxMarkerView.swift; sourceTree = "<group>"; };
 		468CD3822C809E3400CC3436 /* ElevationChartCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElevationChartCell.swift; sourceTree = "<group>"; };
 		468CD3842C80A06500CC3436 /* ElevationChartCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ElevationChartCell.xib; sourceTree = "<group>"; };
 		468CE3EF29F82E6300F3C3E5 /* OAColorCollectionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAColorCollectionViewController.h; sourceTree = "<group>"; };
@@ -13194,7 +13192,6 @@
 				DA5A804826C563A500F274C7 /* UITableViewCell+getTableView.h */,
 				DA5A806426C563A500F274C7 /* UITableViewCell+getTableView.m */,
 				DA5A807326C563A500F274C7 /* XibViews */,
-				468CD3802C80942100CC3436 /* GpxMarkerView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -16758,7 +16755,6 @@
 				326B770A29D9CA6400FB23DF /* OATripRecordingTimeWidget.mm in Sources */,
 				DAAC0EBD2801807200867D35 /* OAImportBackupTask.m in Sources */,
 				DA5A830226C563A800F274C7 /* OADeviceScreenTableViewCell.m in Sources */,
-				468CD3812C80942100CC3436 /* GpxMarkerView.swift in Sources */,
 				468D9C6E2C01030400ED368A /* QuickActionButtonState.swift in Sources */,
 				DA5A830326C563A800F274C7 /* OAQuickActionCell.mm in Sources */,
 				DA5A812826C563A700F274C7 /* OAFavoritesMapLayerProvider.mm in Sources */,

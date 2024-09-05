@@ -83,18 +83,16 @@
                                         topOffset:20
                                      bottomOffset:4
                               useGesturesAndScale:YES];
-
     
     OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.gpx.path]];
     BOOL calcWithoutGaps = !gpx.joinSegments && (self.gpx.tracks.count > 0 && self.gpx.tracks.firstObject.generalTrack);
     [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.chartView
                                       analysis:self.analysis
-                           useGesturesAndScale:YES
                                      firstType:GPXDataSetTypeAltitude
                                     secondType:GPXDataSetTypeSlope
+                                      axisType:GPXDataSetAxisTypeDistance
                                calcWithoutGaps:calcWithoutGaps];
 
-    
     self.statisticsChart = routeStatsCell.chartView;
     for (UIGestureRecognizer *recognizer in self.statisticsChart.gestureRecognizers)
     {

@@ -10,7 +10,7 @@ import UIKit
 import DGCharts
 
 @objc enum GPXDataSetType: Int {
-    case altitude, speed, slope, sensorSpeed, sensorHeartRate, sensorBikePower, sensorBikeCadence, sensorTemperature
+    case none, altitude, speed, slope, sensorSpeed, sensorHeartRate, sensorBikePower, sensorBikeCadence, sensorTemperature
 
     func getTitle() -> String {
         OAGPXDataSetType.getTitle(rawValue)
@@ -138,19 +138,16 @@ class GpxUIHelper: NSObject {
     }
 
     final class OrderedLineDataSet: LineChartDataSet, IOrderedLineDataSet {
-        
+
         private let leftAxis: Bool
-        
+
         var units: String
         var priority: Float
         var divX: Double = 1
-        var divY: Double = 1
-        var mulY: Double = 1
-        var color: UIColor
-        
+
         private var dataSetType: GPXDataSetType
         private var dataSetAxisType: GPXDataSetAxisType
-        
+
         init(entries: [ChartDataEntry],
              label: String,
              dataSetType: GPXDataSetType,
@@ -160,50 +157,29 @@ class GpxUIHelper: NSObject {
             self.dataSetAxisType = dataSetAxisType
             self.priority = 0
             self.units = ""
-            self.color = dataSetType.getTextColor()
             self.leftAxis = leftAxis
             super.init(entries: entries, label: label)
             self.mode = LineChartDataSet.Mode.linear
         }
-        
+
         required init() {
             fatalError("init() has not been implemented")
         }
-        
-        override func getDivX() -> Double {
-            divX
-        }
-        
+
         func getDataSetType() -> GPXDataSetType {
             dataSetType
         }
-        
+
         func getDataSetAxisType() -> GPXDataSetAxisType {
             dataSetAxisType
         }
-        
-        func getPriority() -> Float {
-            priority
-        }
-        
-        func getDivY() -> Double {
-            divY
-        }
-        
-        func getMulY() -> Double {
-            mulY
-        }
-        
-        func getUnits() -> String {
-            units
-        }
-        
+
         func isLeftAxis() -> Bool {
             leftAxis
         }
     }
 
-    private class GPXChartMarker: MarkerView {
+    public class GPXChartMarker: MarkerView {
 
         private let widthOffset: CGFloat = 3.0
         private let heightOffset: CGFloat = 2.0
@@ -271,22 +247,22 @@ class GpxUIHelper: NSObject {
         }
 
         override func offsetForDrawing(atPoint point: CGPoint) -> CGPoint {
-            guard let chart = chartView else { return offset }
+            guard let chartView else { return offset }
 
             var offset = offset
             let width = bounds.size.width
             let height = bounds.size.height
 
-            if point.x + offset.x < chart.extraLeftOffset {
-                offset.x = -point.x + chart.extraLeftOffset + widthOffset * 2
-            } else if point.x + width + offset.x > chart.bounds.size.width - chart.extraRightOffset {
-                offset.x = chart.bounds.size.width - point.x - width - chart.extraRightOffset
+            if point.x + offset.x < chartView.extraLeftOffset {
+                offset.x = -point.x + chartView.extraLeftOffset + widthOffset * 2
+            } else if point.x + width + offset.x > chartView.bounds.size.width - chartView.extraRightOffset {
+                offset.x = chartView.bounds.size.width - point.x - width - chartView.extraRightOffset
             }
 
             if point.y + offset.y < 0 {
                 offset.y = -point.y
-            } else if point.y + height + offset.y > chart.bounds.size.height {
-                offset.y = chart.bounds.size.height - point.y - height
+            } else if point.y + height + offset.y > chartView.bounds.size.height {
+                offset.y = chartView.bounds.size.height - point.y - height
             }
 
             return offset
@@ -320,93 +296,31 @@ class GpxUIHelper: NSObject {
 
     static func refreshLineChart(chartView: ElevationChart,
                                  analysis: OAGPXTrackAnalysis,
-                                 useGesturesAndScale: Bool,
-                                 firstType: GPXDataSetType,
-                                 useRightAxis: Bool,
-                                 calcWithoutGaps: Bool) {
-        var dataSets = [LineChartDataSetProtocol]()
-        let firstDataSet = getDataSet(chartView: chartView,
-                                      analysis: analysis,
-                                      type: firstType,
-                                      calcWithoutGaps: calcWithoutGaps,
-                                      useRightAxis: useRightAxis)
-        if let firstDataSet {
-            dataSets.append(firstDataSet)
-        }
-        if useRightAxis {
-            chartView.leftAxis.enabled = false
-            chartView.leftAxis.drawLabelsEnabled = false
-            chartView.leftAxis.drawGridLinesEnabled = false
-            chartView.rightAxis.enabled = true
-        } else {
-            chartView.rightAxis.enabled = false
-            chartView.leftAxis.enabled = true
-        }
-
-        var highlightValues = [Highlight]()
-        for i in 0..<chartView.highlighted.count {
-            var h: Highlight = chartView.highlighted[i]
-            h = Highlight(x: h.x,
-                          y: h.y,
-                          xPx: h.xPx,
-                          yPx: h.yPx,
-                          dataIndex: h.dataIndex,
-                          dataSetIndex: dataSets.count - 1,
-                          stackIndex: h.stackIndex,
-                          axis: h.axis)
-            highlightValues.append(h)
-        }
-        chartView.clear()
-        chartView.data = LineChartData(dataSets: dataSets)
-        chartView.highlightValues(highlightValues)
-    }
-
-    static func refreshLineChart(chartView: ElevationChart,
-                                 analysis: OAGPXTrackAnalysis,
-                                 useGesturesAndScale: Bool,
                                  firstType: GPXDataSetType,
                                  secondType: GPXDataSetType,
+                                 axisType: GPXDataSetAxisType,
                                  calcWithoutGaps: Bool) {
-        var dataSets = [LineChartDataSetProtocol]()
-        let firstDataSet: OrderedLineDataSet? = getDataSet(chartView: chartView,
-                                                           analysis: analysis,
-                                                           type: firstType,
-                                                           calcWithoutGaps: calcWithoutGaps,
-                                                           useRightAxis: false)
-        let secondDataSet: OrderedLineDataSet? = getDataSet(chartView: chartView,
-                                                            analysis: analysis,
-                                                            type: secondType,
-                                                            calcWithoutGaps: calcWithoutGaps,
-                                                            useRightAxis: true)
-
-        if let firstDataSet {
-            dataSets.append(firstDataSet)
-        }
-
-        if let secondDataSet {
-            dataSets.append(secondDataSet)
-            chartView.leftAxis.drawLabelsEnabled = false
-            chartView.leftAxis.drawGridLinesEnabled = false
-        } else {
-            chartView.rightAxis.enabled = false
-            chartView.leftAxis.enabled = true
-        }
-        var highlightValues = [Highlight]()
-        for i in 0..<chartView.highlighted.count {
-            var h: Highlight = chartView.highlighted[i]
-            h = Highlight(x: h.x,
-                          y: h.y,
-                          xPx: h.xPx,
-                          yPx: h.yPx,
-                          dataIndex: h.dataIndex,
-                          dataSetIndex: dataSets.count - 1,
-                          stackIndex: h.stackIndex,
-                          axis: h.axis)
-            highlightValues.append(h)
-        }
         chartView.clear()
-        chartView.data = LineChartData(dataSets: dataSets)
+        chartView.data = LineChartData(dataSets:
+                                        Self.getDataSets(chartView: chartView,
+                                                         analysis: analysis,
+                                                         firstType: firstType,
+                                                         secondType: secondType,
+                                                         gpxDataSetAxisType: axisType,
+                                                         calcWithoutGaps: calcWithoutGaps))
+        var highlightValues = [Highlight]()
+        for h in chartView.highlighted {
+            highlightValues.append(Highlight(x: h.x,
+                                             y: h.y,
+                                             xPx: h.xPx,
+                                             yPx: h.yPx,
+                                             dataIndex: h.dataIndex,
+                                             dataSetIndex: chartView.data?.dataSetCount ?? 1 - 1,
+                                             stackIndex: h.stackIndex,
+                                             axis: h.axis))
+        }
         chartView.highlightValues(highlightValues)
+        chartView.notifyDataSetChanged()
     }
 
     static func refreshBarChart(chartView: HorizontalBarChartView,
@@ -484,43 +398,32 @@ class GpxUIHelper: NSObject {
 
     static func setupElevationChart(chartView: ElevationChart) {
         setupElevationChart(chartView: chartView,
-//                            markerView: GpxMarkerView(),
+                            markerView: GPXChartMarker(),
                             topOffset: 24,
                             bottomOffset: 16,
                             useGesturesAndScale: true)
     }
 
-//    static func setupElevationChart(chartView: ElevationChart,
-//                                    topOffset: CGFloat,
-//                                    bottomOffset: CGFloat,
-//                                    useGesturesAndScale: Bool) {
-//        setupElevationChart(chartView: chartView,
-//                            markerView: GpxMarkerView(),
-//                            topOffset: topOffset,
-//                            bottomOffset: bottomOffset,
-//                            useGesturesAndScale: useGesturesAndScale)
-//    }
-
     static func setupElevationChart(chartView: ElevationChart,
                                     topOffset: CGFloat,
                                     bottomOffset: CGFloat,
-                                    useGesturesAndScale: Bool,
-                                    markerIconName: String) {
+                                    useGesturesAndScale: Bool) {
         setupElevationChart(chartView: chartView,
-//                            markerView: GpxMarkerView(),
+                            markerView: GPXChartMarker(),
                             topOffset: topOffset,
                             bottomOffset: bottomOffset,
                             useGesturesAndScale: useGesturesAndScale)
     }
 
+
     static func setupElevationChart(chartView: ElevationChart,
-//                                    markerView: GpxMarkerView,
+                                    markerView: GPXChartMarker,
                                     topOffset: CGFloat,
                                     bottomOffset: CGFloat,
                                     useGesturesAndScale: Bool) {
         let axisGridColor = UIColor.chartAxisGridLine
-        chartView.setupGPXChart(/*markerView: markerView,
-                                */topOffset: topOffset,
+        chartView.setupGPXChart(markerView: markerView,
+                                topOffset: topOffset,
                                 bottomOffset: bottomOffset,
                                 xAxisGridColor: axisGridColor,
                                 labelsColor: UIColor.textColorSecondary,
@@ -707,11 +610,11 @@ class GpxUIHelper: NSObject {
             dataSet.circleHoleRadius = 2
             dataSet.drawCircleHoleEnabled = false
             dataSet.drawCirclesEnabled = true
-            dataSet.color = UIColor.black
+            dataSet.setColor(UIColor.black)
         } else {
             dataSet.drawCirclesEnabled = false
             dataSet.drawCircleHoleEnabled = false
-            dataSet.color = color
+            dataSet.setColor(color)
         }
         dataSet.lineWidth = 1
         if drawFilled && !drawCircles {
@@ -731,16 +634,84 @@ class GpxUIHelper: NSObject {
             dataSet.highlightEnabled = true
             dataSet.drawVerticalHighlightIndicatorEnabled = true
             dataSet.drawHorizontalHighlightIndicatorEnabled = false
-            dataSet.highlightColor = UIColor.chartSliderLine
+            dataSet.highlightColor = .chartSliderLine
         }
         if useRightAxis {
             dataSet.axisDependency = YAxis.AxisDependency.right
         }
     }
 
+    static func getDataSets(chartView: LineChartView?,
+                            analysis: OAGPXTrackAnalysis?,
+                            firstType: GPXDataSetType,
+                            secondType: GPXDataSetType,
+                            gpxDataSetAxisType: GPXDataSetAxisType,
+                            calcWithoutGaps: Bool) -> [LineChartDataSet] {
+        guard let chartView, let analysis else {
+            return [LineChartDataSet]()
+        }
+        var result = [LineChartDataSet]()
+        if secondType == .none {
+            if let dataSet = getDataSet(chartView: chartView,
+                                        analysis: analysis,
+                                        type: firstType,
+                                        otherType: nil,
+                                        gpxDataSetAxisType: gpxDataSetAxisType,
+                                        calcWithoutGaps: calcWithoutGaps,
+                                        useRightAxis: false) {
+                result.append(dataSet)
+            }
+        } else {
+            let dataSet1 = getDataSet(chartView: chartView,
+                                      analysis: analysis,
+                                      type: firstType,
+                                      otherType: secondType,
+                                      gpxDataSetAxisType: gpxDataSetAxisType,
+                                      calcWithoutGaps: calcWithoutGaps,
+                                      useRightAxis: false)
+            let dataSet2 = getDataSet(chartView: chartView,
+                                      analysis: analysis,
+                                      type: secondType,
+                                      otherType: firstType,
+                                      gpxDataSetAxisType: gpxDataSetAxisType,
+                                      calcWithoutGaps: calcWithoutGaps,
+                                      useRightAxis: true)
+            guard let dataSet1 else {
+                if let dataSet2 {
+                    result.append(dataSet2)
+                }
+                return result
+            }
+            guard let dataSet2 else {
+                result.append(dataSet1)
+                return result
+            }
+
+            if dataSet1.priority < dataSet2.priority {
+                result.append(dataSet2)
+                result.append(dataSet1)
+            } else {
+                result.append(dataSet1)
+                result.append(dataSet2)
+            }
+        }
+        /* Do not show extremums because of too heavy approximation
+         if ((firstType == GPXDataSetType.ALTITUDE || secondType == GPXDataSetType.ALTITUDE)
+         && PluginsHelper.isActive(OsmandDevelopmentPlugin.class)) {
+         OrderedLineDataSet dataSet = getDataSet(app, chart, analysis, GPXDataSetType.ALTITUDE_EXTRM, calcWithoutGaps, false);
+         if (dataSet != null) {
+         result.add(dataSet);
+         }
+         }
+         */
+        return result
+    }
+    
     private static func getDataSet(chartView: LineChartView,
                                    analysis: OAGPXTrackAnalysis,
                                    type: GPXDataSetType,
+                                   otherType: GPXDataSetType?,
+                                   gpxDataSetAxisType: GPXDataSetAxisType,
                                    calcWithoutGaps: Bool,
                                    useRightAxis: Bool) -> OrderedLineDataSet? {
         switch type {
@@ -748,7 +719,7 @@ class GpxUIHelper: NSObject {
             return createGPXElevationDataSet(chartView: chartView,
                                              analysis: analysis,
                                              graphType: type,
-                                             axisType: GPXDataSetAxisType.distance,
+                                             axisType: gpxDataSetAxisType,
                                              useRightAxis: useRightAxis,
                                              drawFilled: true,
                                              calcWithoutGaps: calcWithoutGaps)
@@ -756,8 +727,8 @@ class GpxUIHelper: NSObject {
             return createGPXSlopeDataSet(chartView: chartView,
                                          analysis: analysis,
                                          graphType: type,
-                                         axisType: GPXDataSetAxisType.distance,
-                                         eleValues: Array(),
+                                         axisType: gpxDataSetAxisType,
+                                         eleValues: nil,
                                          useRightAxis: useRightAxis,
                                          drawFilled: true,
                                          calcWithoutGaps: calcWithoutGaps)
@@ -765,15 +736,16 @@ class GpxUIHelper: NSObject {
             return createGPXSpeedDataSet(chartView: chartView,
                                          analysis: analysis,
                                          graphType: type,
-                                         axisType: GPXDataSetAxisType.distance,
+                                         axisType: gpxDataSetAxisType,
                                          useRightAxis: useRightAxis,
+                                         setYAxisMinimum: true,
                                          drawFilled: true,
                                          calcWithoutGaps: calcWithoutGaps)
         default:
             return OAPluginsHelper.getOrderedLineDataSet(chart: chartView,
                                                          analysis: analysis,
                                                          graphType: type,
-                                                         axisType: GPXDataSetAxisType.distance,
+                                                         axisType: gpxDataSetAxisType,
                                                          calcWithoutGaps: calcWithoutGaps,
                                                          useRightAxis: useRightAxis)
         }
@@ -838,7 +810,7 @@ class GpxUIHelper: NSObject {
                                    calcWithoutGaps: calcWithoutGaps)
         let mainUnitY: String = graphType.getMainUnitY()
         let yAxis = getYAxis(chart: chartView,
-                             textColor: UIColor.chartTextColorElevation,
+                             textColor: .chartTextColorElevation,
                              useRightAxis: useRightAxis)
         yAxis.granularity = 1
         yAxis.resetCustomAxisMax()
@@ -851,16 +823,14 @@ class GpxUIHelper: NSObject {
                                              calcWithoutGaps: calcWithoutGaps)
         let dataSet = OrderedLineDataSet(entries: values,
                                          label: "",
-                                         dataSetType: GPXDataSetType.altitude,
+                                         dataSetType: graphType,
                                          dataSetAxisType: axisType,
                                          leftAxis: !useRightAxis)
         dataSet.priority = Float((analysis.avgElevation - analysis.minElevation) * convEle)
         dataSet.divX = divX
-        dataSet.mulY = convEle
-        dataSet.divY = Double.nan
         dataSet.units = mainUnitY
 
-        let color: UIColor = graphType.getFillColor()
+        let color = graphType.getFillColor()
         setupDataSet(dataSet: dataSet,
                      color: color,
                      fillColor: color,
@@ -875,7 +845,7 @@ class GpxUIHelper: NSObject {
                                               analysis: OAGPXTrackAnalysis,
                                               graphType: GPXDataSetType,
                                               axisType: GPXDataSetAxisType,
-                                              eleValues: [ChartDataEntry],
+                                              eleValues: [ChartDataEntry]?,
                                               useRightAxis: Bool,
                                               drawFilled: Bool,
                                               calcWithoutGaps: Bool) -> OrderedLineDataSet? {
@@ -888,28 +858,33 @@ class GpxUIHelper: NSObject {
         let totalDistance: Double = calcWithoutGaps
         	? Double(analysis.totalDistanceWithoutGaps)
         	: Double(analysis.totalDistance)
-        let divX: Double = getDivX(lineChart: chartView, analysis: analysis, axisType: axisType, calcWithoutGaps: calcWithoutGaps)
+        let divX: Double = getDivX(lineChart: chartView,
+                                   analysis: analysis,
+                                   axisType: axisType,
+                                   calcWithoutGaps: calcWithoutGaps)
         let mainUnitY: String = graphType.getMainUnitY()
-        let yAxis: YAxis = getYAxis(chart: chartView, textColor: UIColor.chartTextColorSlope, useRightAxis: useRightAxis)
+        let yAxis: YAxis = getYAxis(chart: chartView,
+                                    textColor: UIColor.chartTextColorSlope,
+                                    useRightAxis: useRightAxis)
         yAxis.granularity = 1.0
         yAxis.resetCustomAxisMin()
         yAxis.valueFormatter = ValueFormatterLocal(formatX: nil, unitsX: mainUnitY)
 
         var values = [ChartDataEntry]()
-        if eleValues.count == 0 {
+        if let eleValues {
+            for e in eleValues {
+                values.append(ChartDataEntry(x: e.x * divX, y: e.y / convEle))
+            }
+        } else {
             values = calculateElevationArray(analysis: analysis,
                                              axisType: .distance,
                                              divX: 1.0,
                                              convEle: 1.0,
                                              useGeneralTrackPoints: false,
                                              calcWithoutGaps: calcWithoutGaps)
-        } else {
-            for e in eleValues {
-                values.append(ChartDataEntry(x: e.x * divX, y: e.y / convEle))
-            }
         }
 
-        if values.count == 0 {
+        if values.isEmpty {
             if useRightAxis {
                 yAxis.enabled = false
             }
@@ -920,7 +895,7 @@ class GpxUIHelper: NSObject {
         var step: Double = 5
         var l: Int = 10
 
-        while l > 0 && totalDistance / step > GpxUIHelper.maxChartDataItems {
+        while l > 0 && totalDistance / step > Self.maxChartDataItems {
             step = max(step, totalDistance / Double(values.count * l))
             l -= 1
         }
@@ -974,8 +949,13 @@ class GpxUIHelper: NSObject {
         var hasSameY = false
         var lastEntry: ChartDataEntry?
         lastIndex = calculatedSlopeDist.count - 1
+        let timeSpanInSeconds = Double(analysis.timeSpan) / 1000.0
         for i in 0..<calculatedSlopeDist.count {
-            x = calculatedSlopeDist[i] / divX
+            if (axisType == .timeOfDay || axisType == .time), analysis.isTimeSpecified() {
+                x = (timeSpanInSeconds * Double(i)) / Double(calculatedSlopeDist.count)
+            } else {
+                x = calculatedSlopeDist[i] / divX
+            }
             slope = calculatedSlope[i]
             if prevSlope != -80000 {
                 if prevSlope == slope && i < lastIndex {
@@ -997,13 +977,13 @@ class GpxUIHelper: NSObject {
 
         let dataSet = OrderedLineDataSet(entries: slopeValues,
                                          label: "",
-                                         dataSetType: GPXDataSetType.slope,
+                                         dataSetType: .slope,
                                          dataSetAxisType: axisType,
                                          leftAxis: !useRightAxis)
         dataSet.divX = divX
         dataSet.units = mainUnitY
 
-        let color: UIColor = graphType.getFillColor()
+        let color = graphType.getFillColor()
         GpxUIHelper.setupDataSet(dataSet: dataSet,
                                  color: color,
                                  fillColor: color,
@@ -1151,6 +1131,7 @@ class GpxUIHelper: NSObject {
                                               graphType: GPXDataSetType,
                                               axisType: GPXDataSetAxisType,
                                               useRightAxis: Bool,
+                                              setYAxisMinimum: Bool,
                                               drawFilled: Bool,
                                               calcWithoutGaps: Bool) -> OrderedLineDataSet {
         let divX: Double = getDivX(lineChart: chartView,
@@ -1161,11 +1142,15 @@ class GpxUIHelper: NSObject {
         let pair: Pair<Double, Double>? = getScalingY(graphType)
         let mulSpeed: Double = pair?.first ?? Double.nan
         let divSpeed: Double = pair?.second ?? Double.nan
-        let mainUnitY: String = graphType.getMainUnitY()
         let yAxis = getYAxis(chart: chartView,
-                             textColor: UIColor.chartTextColorSpeed,
+                             textColor: .chartTextColorSpeed,
                              useRightAxis: useRightAxis)
-        yAxis.axisMinimum = 0.0
+
+        if setYAxisMinimum {
+            yAxis.axisMinimum = 0.0
+        } else {
+            yAxis.resetCustomAxisMin()
+        }
 
         let values = getPointAttributeValues(key: graphType.getDatakey(),
                                              pointAttributes: analysis.pointAttributes as! [PointAttributes],
@@ -1177,9 +1162,11 @@ class GpxUIHelper: NSObject {
 
         let dataSet = OrderedLineDataSet(entries: values,
                                          label: "",
-                                         dataSetType: GPXDataSetType.speed,
+                                         dataSetType: graphType,
                                          dataSetAxisType: axisType,
                                          leftAxis: !useRightAxis)
+        let mainUnitY: String = graphType.getMainUnitY()
+
         yAxis.valueFormatter = ValueFormatterLocal(formatX: dataSet.yMax < 3 ? "%.0f" : nil, unitsX: mainUnitY)
 
         if divSpeed.isNaN {
@@ -1188,16 +1175,9 @@ class GpxUIHelper: NSObject {
             dataSet.priority = Float(divSpeed) / analysis.avgSpeed
         }
         dataSet.divX = divX
-        if divSpeed.isNaN {
-            dataSet.mulY = mulSpeed
-            dataSet.divY = Double.nan
-        } else {
-            dataSet.divY = divSpeed
-            dataSet.mulY = Double.nan
-        }
         dataSet.units = mainUnitY
 
-        let color: UIColor = graphType.getFillColor()
+        let color = graphType.getFillColor()
         GpxUIHelper.setupDataSet(dataSet: dataSet,
                                  color: color,
                                  fillColor: color,

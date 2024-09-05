@@ -666,9 +666,9 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                 BOOL calcWithoutGaps = !gpx.joinSegments && (_gpx.tracks.count > 0 && _gpx.tracks.firstObject.generalTrack);
                 [GpxUIHelper refreshLineChartWithChartView:_routeStatsCell.chartView
                                                   analysis:trackAnalysis
-                                       useGesturesAndScale:NO
                                                  firstType:GPXDataSetTypeAltitude
                                                 secondType:GPXDataSetTypeSlope
+                                                  axisType:GPXDataSetAxisTypeDistance
                                            calcWithoutGaps:calcWithoutGaps];
                 _needChartUpdate = NO;
             }

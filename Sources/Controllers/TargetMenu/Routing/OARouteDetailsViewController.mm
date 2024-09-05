@@ -295,9 +295,9 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     BOOL calcWithoutGaps = !gpx.joinSegments && (self.gpx.tracks.count > 0 && self.gpx.tracks.firstObject.generalTrack);
     [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.chartView
                                       analysis:self.analysis
-                           useGesturesAndScale:YES
                                      firstType:GPXDataSetTypeAltitude
                                     secondType:GPXDataSetTypeSlope
+                                      axisType:GPXDataSetAxisTypeDistance
                                calcWithoutGaps:calcWithoutGaps];
     
     BOOL hasSlope = routeStatsCell.chartView.lineData.dataSetCount > 1;

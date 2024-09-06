@@ -30,11 +30,13 @@
 static const int kIconsAtRestRow = 0;
 static const int kIconsWhileMovingRow = 1;
 
+static const int kNameSectionIndex = 0;
 static const int kColorSectionIndex = 1;
 static const int kColorRowIndex = 0;
 static const int kProfileIconSectionIndex = 2;
 static const int kLocationIconSectionIndex = 3;
 static const int kNavigationIconSectionIndex = 4;
+static const int kOptionsSectionIndex = 5;
 
 static NSString *kColorsCellKey =  @"kColorsCellKey";
 static NSString *kProfileIconCellKey =  @"kProfileIconCellKey";
@@ -926,6 +928,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         [[_profileIconCollectionHandler getCollectionView] reloadData];
         [[_positionIconCollectionHandler getCollectionView] reloadData];
         [[_locationIconCollectionHandler getCollectionView] reloadData];
+        [_tableView reloadSections:[NSIndexSet indexSetWithIndex:kOptionsSectionIndex] withRowAnimation:UITableViewRowAnimationNone];
     }
     else if (collectionView == [_profileIconCollectionHandler getCollectionView])
     {

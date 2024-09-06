@@ -15,6 +15,7 @@ typedef enum
     EOAColorCollectionTypeColorItems,
     EOAColorCollectionTypePaletteItems,
     EOAColorCollectionTypeIconItems, 
+    EOAColorCollectionTypeBigIconItems, 
 } EOAColorCollectionType;
 
 @class OAColorItem, PaletteColor;
@@ -48,6 +49,8 @@ typedef enum
 @property(nonatomic) UIColor *regularIconColor;
 
 - (instancetype)initWithCollectionType:(EOAColorCollectionType)type items:(id)items selectedItem:(id)selectedItem;
+
+- (void) setImages:(NSArray<UIImage *> *)images;
 
 @end
 

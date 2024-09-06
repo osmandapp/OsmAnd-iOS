@@ -41,6 +41,7 @@
     NSIndexPath *_editColorIndexPath;
     
     NSMutableArray<NSString *> *_iconItems;
+    NSArray<UIImage *> *_iconImages;
     NSString *_selectedIconItem;
 }
 
@@ -65,6 +66,7 @@
                 _selectedPaletteItem = selectedItem;
                 break;
             case EOAColorCollectionTypeIconItems:
+            case EOAColorCollectionTypeBigIconItems:
                 _iconItems = items;
                 _selectedIconItem = selectedItem;
                 break;
@@ -106,6 +108,7 @@
                  forCellReuseIdentifier:[OATwoIconsButtonTableViewCell reuseIdentifier]];
         }
         case EOAColorCollectionTypeIconItems:
+        case EOAColorCollectionTypeBigIconItems:
         {
             [self.tableView registerNib:[UINib nibWithNibName:[OACollectionSingleLineTableViewCell reuseIdentifier] bundle:nil]
                  forCellReuseIdentifier:[OACollectionSingleLineTableViewCell reuseIdentifier]];
@@ -173,12 +176,17 @@
     return  _collectionType == EOAColorCollectionTypeColorItems ? YES : NO;
 }
 
+- (void) setImages:(NSArray<UIImage *> *)images
+{
+    _iconImages = images;
+}
+
 #pragma mark - Table data
 
 - (void)generateData
 {
     _data = [OATableDataModel model];
-    if (_collectionType == EOAColorCollectionTypeColorItems || _collectionType == EOAColorCollectionTypeIconItems)
+    if (_collectionType == EOAColorCollectionTypeColorItems || _collectionType == EOAColorCollectionTypeIconItems || _collectionType == EOAColorCollectionTypeBigIconItems)
     {
         OATableSectionData *colorsSection = [_data createNewSection];
         [colorsSection addRowFromDictionary:@{
@@ -263,7 +271,7 @@
             [colorHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:[_colorItems indexOfObject:_selectedColorItem] inSection:0]];
             [cell setCollectionHandler:colorHandler];
         }
-        else if (_collectionType == EOAColorCollectionTypeIconItems)
+        else if (_collectionType == EOAColorCollectionTypeIconItems || _collectionType == EOAColorCollectionTypeBigIconItems)
         {
             IconCollectionHandler *colorHandler = [[IconCollectionHandler alloc] initWithData:@[_iconItems] collectionView:cell.collectionView];
             colorHandler.delegate = self;
@@ -271,6 +279,23 @@
             colorHandler.regularIconColor = _regularIconColor;
             [colorHandler setScrollDirection:UICollectionViewScrollDirectionVertical];
             [colorHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:[_iconItems indexOfObject:_selectedIconItem] inSection:0]];
+            
+            if (_collectionType == EOAColorCollectionTypeIconItems)
+            {
+                [colorHandler setItemSizeWithSize:48];
+                [colorHandler setIconSizeWithSize:30];
+                colorHandler.roundedSquareCells = NO;
+                colorHandler.cornerRadius = -1;
+            }
+            else if (_collectionType == EOAColorCollectionTypeBigIconItems)
+            {
+                [colorHandler setItemSizeWithSize:152];
+                [colorHandler setIconSizeWithSize:52];
+                colorHandler.roundedSquareCells = YES;
+                colorHandler.cornerRadius = 6;
+                colorHandler.iconImagesData = @[_iconImages];
+            }
+            
             [cell setCollectionHandler:colorHandler];
         }
         [cell rightActionButtonVisibility:NO];
@@ -501,7 +526,7 @@
 
 - (void)onCollectionItemSelected:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
 {
-    if (_collectionType == EOAColorCollectionTypeIconItems)
+    if (_collectionType == EOAColorCollectionTypeIconItems || _collectionType == EOAColorCollectionTypeBigIconItems)
     {
         _selectedIconItem = _iconItems[indexPath.row];
 

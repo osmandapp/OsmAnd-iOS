@@ -47,6 +47,7 @@ typedef enum
 
 @property(nonatomic) UIColor *selectedIconColor;
 @property(nonatomic) UIColor *regularIconColor;
+@property(nonatomic) NSString *customTitle;
 
 - (instancetype)initWithCollectionType:(EOAColorCollectionType)type items:(id)items selectedItem:(id)selectedItem;
 

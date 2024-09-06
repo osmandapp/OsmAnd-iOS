@@ -16,7 +16,7 @@ final class IconCollectionHandler: OABaseCollectionHandler, OAIconCollectionDele
     private var iconNamesData = [[String]]()
     var iconImagesData = [[UIImage]]()
     var roundedSquareCells = false
-    private var roundedSquareImage: UIImage?
+    var customTitle = ""
     
     weak var hostVC: OASuperViewController?
     
@@ -123,6 +123,7 @@ final class IconCollectionHandler: OABaseCollectionHandler, OAIconCollectionDele
             } else {
                 vc = OAColorCollectionViewController(collectionType: EOAColorCollectionTypeIconItems, items: iconNamesData[0], selectedItem: getSelectedItem())
             }
+            vc?.customTitle = customTitle
             
             if let vc {
                 vc.iconsDelegate = self

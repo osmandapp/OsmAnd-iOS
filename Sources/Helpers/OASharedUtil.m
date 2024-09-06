@@ -39,31 +39,55 @@
     NSLog(@"GPX TEST - DONE");
 }
 
-+ (void) testGpxDatabase:(NSString *)gpxFileName
++ (void)fooGPXDatabase:(NSString *)gpxFileName
 {
     NSLog(@"GPX DB TEST - BEGIN");
+    
+//    OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFileName];
+//    OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
+//    OASGpxTrackAnalysis *trackAnalysis = [gpxFile getAnalysisFileTimestamp:gpxFile.pointsModifiedTime];
 
-    OASGpxDatabase *db = [[OASGpxDatabase alloc] init];
+   
+//    OASGpxDatabase *db = [[OASGpxDatabase alloc] init];
+//    
+   // NSArray<OASGpxDataItem *> *items = [db getGpxDataItems];
+    NSLog(@"");
+    
+    //auto items = [db ]
+//    OASGpxDataItem *item = [[OASGpxDataItem alloc] initWithFile:file];
+//    [item setAnalysisAnalysis:trackAnalysis];
+//    [item readGpxParamsGpxFile:gpxFile];
+//    NSLog(@"GPX DB TEST - ADD");
+//    BOOL res = [db addItem:item];
 
-    OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFileName];
-    OASGpxDataItem *item = [[OASGpxDataItem alloc] initWithFile:file];
-
-    NSLog(@"GPX DB TEST - ADD");
-    BOOL res = [db addItem:item];
-
-    NSLog(@"GPX DB TEST - GET");
-    OASGpxDataItem *read = [db getGpxDataItemFile:file];
+//    OASGpxDatabase *db = [[OASGpxDatabase alloc] init];
+//
+//    OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFileName];
+//    OASGpxDataItem *item = [[OASGpxDataItem alloc] initWithFile:file];
+    
+//    OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
+//
+//    NSLog(@"GPX DB TEST - ADD");
+//    BOOL res = [db addItem:item];
+//
+//    NSLog(@"GPX DB TEST - GET");
+//    OASGpxDataItem *read = [db getGpxDataItemFile:file];
+//    OASGpxTrackAnalysis *analysis = [read getAnalysis];
+//    // (float) _totalDistance = 295919.656
+//    int totalDistance = analysis.totalDistance;
+//    //(long) _startTime = 1691937496 
+//    int startTime = analysis.startTime;
 
     NSLog(@"GPX DB TEST - UPDATE");
-    res = [db updateDataItemItem:item];
-
-    NSLog(@"GPX DB TEST - REMOVE");
-    res = [db removeFile:file];
-
-    NSLog(@"GPX DB TEST - GET");
-    read = [db getGpxDataItemFile:file];
-
-    NSLog(@"GPX DB TEST - DONE");
+//    res = [db updateDataItemItem:item];
+//
+//    NSLog(@"GPX DB TEST - REMOVE");
+//    res = [db removeFile:file];
+//
+//    NSLog(@"GPX DB TEST - GET");
+//    read = [db getGpxDataItemFile:file];
+//
+//    NSLog(@"GPX DB TEST - DONE");
 }
 
 //+ (OASGpxFile *)loadGpx:(NSString *)fileName

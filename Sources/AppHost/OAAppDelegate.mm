@@ -38,7 +38,7 @@
 #import "OACloudAccountVerificationViewController.h"
 #import "OARootViewController.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
-#import <OsmAndShared/OsmAndShared.h>
+//#import "OsmAndSharedWrapper.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <QDir>
@@ -278,6 +278,12 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     _didFinishLaunching = YES;
+    
+//    OASGpxFile *gpxFileKotlin = [KSharedUtil loadGpx:@""];
+//    if (!gpxFileKotlin.error) {
+//        NSLog(@"$@", gpxFileKotlin.author);
+//    }
+   
     if (!_dataFetchQueue)
     {
         // Set the background fetch
@@ -443,10 +449,6 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 
 - (BOOL)openURL:(NSURL *)url
 {
-//    OASGpxFile *gpxFileKotlin = [KSharedUtil loadGpx:@""];
-//    NSLog(@"$@", gpxFileKotlin.author);
-    
-    
     UIScene *scene = UIApplication.sharedApplication.mainScene;
     SceneDelegate *sd = (SceneDelegate *)scene.delegate;
     return [sd openURL:url];

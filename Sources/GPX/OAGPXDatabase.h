@@ -125,6 +125,7 @@ typedef NS_ENUM(NSInteger, EOAGPX3DLineVisualizationPositionType) {
 @interface OAGPXDatabase : NSObject
 
 @property (nonatomic, readonly) NSArray *gpxList;
+@property (nonatomic, readonly) NSArray *gpxListTest;
 
 + (OAGPXDatabase *)sharedDb;
 

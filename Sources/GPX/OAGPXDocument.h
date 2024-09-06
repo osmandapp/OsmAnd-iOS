@@ -22,6 +22,27 @@
 @class OAGPXTrackAnalysis;
 @class OASplitMetric, QuadRect, OAApplicationMode, OAGPXDatabase;
 
+
+//class GpxFile : GpxExtensions {
+//    var author: String? = null 
+//    var metadata = Metadata()
+//    var tracks: MutableList<Track> = mutableListOf()
+//    var routes: MutableList<Route> = mutableListOf()
+//    private var points: MutableList<WptPt> = mutableListOf()
+//    var pointsGroups: MutableMap<String, PointsGroup> = LinkedHashMap()
+//    val networkRouteKeyTags: MutableMap<String, String> = LinkedHashMap()
+//    
+//    var error: KException? = null
+//    var path: String = ""
+//    var showCurrentTrack: Boolean = false
+//    var hasAltitude: Boolean = false
+//    var modifiedTime: Long = 0
+//    var pointsModifiedTime: Long = 0
+//    
+//    private var generalTrack: Track? = null
+//    private var generalSegment: TrkSegment? = null
+//}
+
 @interface OAGPXDocument : OAGpxExtensions
 
 @property (nonatomic) OAMetadata* metadata;

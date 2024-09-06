@@ -390,6 +390,8 @@ static UIViewController *parentController;
     {
         NSString *name = [self getCorrectedFilename:[_importUrl.path lastPathComponent]];
         NSString *storingPathInFolder = [_importGpxRelativePath stringByAppendingPathComponent:name];
+        // _doc.metadata.name - 2023-10-22_11-34_Sun
+        // _doc.metadata.desc = <object returned empty description>
         item = [[OAGPXDatabase sharedDb] addGpxItem:storingPathInFolder title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds document:_doc];
     }
     [[OAGPXDatabase sharedDb] save];

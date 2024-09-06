@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface OASharedUtil : NSObject
 
 + (void)initSharedLib:(NSString *)documentsPath gpxPath:(NSString *)gpxPath;
++ (void)fooGPXDatabase:(NSString *)gpxFileName;
 //+ (OASGpxFile *)loadGpx:(NSString *)fileName;
 
 @end

@@ -506,7 +506,7 @@
         _selectedIconItem = _iconItems[indexPath.row];
 
         if (self.iconsDelegate)
-            [self.iconsDelegate selectIconItem:_selectedIconItem];
+            [self.iconsDelegate selectIconName:_selectedIconItem];
     }
     else 
     {

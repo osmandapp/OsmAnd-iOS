@@ -19,7 +19,6 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OAInputTableViewCell.h"
 #import "OAIconsTableViewCell.h"
-#import "OALocationIconsTableViewCell.h"
 #import "OAIndexConstants.h"
 #import "OAColorsPaletteCell.h"
 #import "OAColorCollectionHandler.h"
@@ -35,7 +34,14 @@ static const int kColorSectionIndex = 1;
 static const int kColorRowIndex = 0;
 static const int kProfileIconSectionIndex = 2;
 static const int kLocationIconSectionIndex = 3;
-static const int kNavigationIconSectionIndex = 3;
+static const int kNavigationIconSectionIndex = 4;
+
+static NSString *kColorsCellKey =  @"kColorsCellKey";
+static NSString *kProfileIconCellKey =  @"kProfileIconCellKey";
+static NSString *kPositionIconCellKey =  @"kPositionIconCellKey";
+static NSString *kLocationIconCellKey =  @"kLocationIconCellKey";
+static NSString *kViewAngleCellKey =  @"kViewAngleButtonKey";
+static NSString *kLocationRadiusCellKey =  @"kLocationRadiusButtonKey";
 
 static NSString *kCellHeaderTitleKey = @"kCellHeaderTitleKey";
 static NSString *kCellTitleColorKey = @"kCellTitleColorKey";
@@ -44,9 +50,6 @@ static NSString *kCellNonInteractive = @"kCellNonInteractive";
 
 static NSString *kColorsCellTitleKey =  @"kColorsCellTitleKey";
 static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
-
-static NSString *kViewAngleButtonKey =  @"kViewAngleButtonKey";
-static NSString *kLocationRadiusButtonKey =  @"kLocationRadiusButtonKey";
 
 @interface OAApplicationProfileObject : NSObject
 
@@ -127,7 +130,7 @@ static NSString *kLocationRadiusButtonKey =  @"kLocationRadiusButtonKey";
 
 @end
 
-@interface OAProfileAppearanceViewController() <UITableViewDelegate, UITableViewDataSource, OALocationIconsTableViewCellDelegate, OAColorsCollectionCellDelegate, OAColorCollectionDelegate, Updatable, UITextFieldDelegate>
+@interface OAProfileAppearanceViewController() <UITableViewDelegate, UITableViewDataSource, OAColorsCollectionCellDelegate, OAColorCollectionDelegate, Updatable, UITextFieldDelegate>
 
 @end
 
@@ -146,7 +149,9 @@ static NSString *kLocationRadiusButtonKey =  @"kLocationRadiusButtonKey";
     OAColorCollectionHandler *_colorCollectionHandler;
     BOOL _needToScrollToSelectedColor;
     
-    IconCollectionHandler *_iconCollectionHandler;
+    IconCollectionHandler *_profileIconCollectionHandler;
+    IconCollectionHandler *_positionIconCollectionHandler;
+    IconCollectionHandler *_locationIconCollectionHandler;
     
     NSArray<NSString *> *_customModelNames;
     NSArray<OALocationIcon *> *_locationIcons;
@@ -321,6 +326,7 @@ static NSString *kLocationRadiusButtonKey =  @"kLocationRadiusButtonKey";
         kCellTypeKey : [OAColorsPaletteCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"shared_string_color"),
         kCellDescrKey : OALocalizedString(@"shared_string_all_colors"),
+        kCellKeyKey : kColorsCellKey,
     }];
     
     OATableSectionData *profileIconSection = [_data createNewSection];
@@ -328,22 +334,27 @@ static NSString *kLocationRadiusButtonKey =  @"kLocationRadiusButtonKey";
         kCellTypeKey : [OAIconsPaletteCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"profile_icon"),
         kCellDescrKey : OALocalizedString(@"shared_string_all_icons"),
+        kCellKeyKey : kProfileIconCellKey,
     }];
     
     OATableSectionData *positionIconsSection = [_data createNewSection];
     [positionIconsSection addRowFromDictionary:@{
         kCellHeaderTitleKey : OALocalizedString(@"resting_position_icon"),
-        kCellTypeKey : [OALocationIconsTableViewCell getCellIdentifier],
-        kCellTitleKey : OALocalizedString(@"select_map_icon"),
+        kCellTypeKey : [OAIconsPaletteCell getCellIdentifier],
+        kCellTitleKey : OALocalizedString(@"resting_position_icon_summary"),
+        kCellDescrKey : OALocalizedString(@"shared_string_all_icons"),
+        kCellKeyKey : kPositionIconCellKey,
     }];
     
     OATableSectionData *navigationIconsSection = [_data createNewSection];
     [navigationIconsSection addRowFromDictionary:@{
         kCellHeaderTitleKey : OALocalizedString(@"navigation_position_icon"),
-        kCellTypeKey : [OALocationIconsTableViewCell getCellIdentifier],
-        kCellTitleKey : OALocalizedString(@"select_navigation_icon"),
+        kCellTypeKey : [OAIconsPaletteCell getCellIdentifier],
+        kCellTitleKey : OALocalizedString(@"navigation_position_icon_summary"),
+        kCellDescrKey : OALocalizedString(@"shared_string_all_icons"),
+        kCellKeyKey : kLocationIconCellKey,
     }];
-    
+
     OATableSectionData *optionsSection = [_data createNewSection];
     [OAAppSettings.sharedManager.viewAngleVisibility get:_profile.parent];
     [optionsSection addRowFromDictionary:@{
@@ -353,7 +364,7 @@ static NSString *kLocationRadiusButtonKey =  @"kLocationRadiusButtonKey";
         kCellDescrKey : [[MarkerDisplayOption valueByIndex:[OAAppSettings.sharedManager.viewAngleVisibility get:_profile.parent]] name],
         kCellIconNameKey : @"ic_custom_location_view_angle",
         kCellIconTintColor : UIColorFromRGB(_changedProfile.profileColor),
-        kCellKeyKey : kViewAngleButtonKey,
+        kCellKeyKey : kViewAngleCellKey,
     }];
     [optionsSection addRowFromDictionary:@{
         kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
@@ -361,20 +372,12 @@ static NSString *kLocationRadiusButtonKey =  @"kLocationRadiusButtonKey";
         kCellDescrKey : [[MarkerDisplayOption valueByIndex:[OAAppSettings.sharedManager.locationRadiusVisibility get:_profile.parent]] name],
         kCellIconNameKey : @"ic_custom_location_radius",
         kCellIconTintColor : UIColorFromRGB(_changedProfile.profileColor),
-        kCellKeyKey : kLocationRadiusButtonKey,
+        kCellKeyKey : kLocationRadiusCellKey,
     }];
 }
 
 - (void) prepareData
 {
-    _customModelNames = [Model3dHelper getCustomModelNames];
-    _locationIcons = [self getlocationIcons];
-    _locationIconNames = [self getlocationIconNames];
-    _navigationIcons = [self getlocationIcons];
-    _navigationIconNames = [self getlocationIconNames];
-    _locationIconImages = [self getlocationIconImages];
-    _navigationIconImages = [self getlocationIconImages];
-    
     OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
     NSMutableArray<OAColorItem *> *sortedColorItems = [NSMutableArray arrayWithArray:[appearanceCollection getAvailableColorsSortingByLastUsed]];
     _colorCollectionHandler =  [[OAColorCollectionHandler alloc] initWithData:@[sortedColorItems] collectionView:nil];
@@ -433,15 +436,48 @@ static NSString *kLocationRadiusButtonKey =  @"kLocationRadiusButtonKey";
                @"ic_action_motorboat",
                @"ic_action_light_aircraft"];
     
-
-    _iconCollectionHandler =  [[IconCollectionHandler alloc] initWithData:@[_icons] collectionView:nil];
-    _iconCollectionHandler.delegate = self;
-    _iconCollectionHandler.hostVC = self;
-    _iconCollectionHandler.regularIconColor = [UIColor colorNamed:ACColorNameIconColorDefault];
-    _iconCollectionHandler.selectedIconColor = UIColorFromRGB(_changedProfile.profileColor);
-    [_iconCollectionHandler setItemSizeWithSize:48];
+    _profileIconCollectionHandler =  [[IconCollectionHandler alloc] initWithData:@[_icons] collectionView:nil];
+    _profileIconCollectionHandler.delegate = self;
+    _profileIconCollectionHandler.hostVC = self;
+    _profileIconCollectionHandler.regularIconColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+    _profileIconCollectionHandler.selectedIconColor = UIColorFromRGB(_changedProfile.profileColor);
+    [_profileIconCollectionHandler setItemSizeWithSize:48];
+    [_profileIconCollectionHandler setIconSizeWithSize:30];
     NSInteger selectedIconIndex = [_icons indexOfObject:_changedProfile.iconName];
-    [_iconCollectionHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:selectedIconIndex inSection:0]];
+    [_profileIconCollectionHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:selectedIconIndex inSection:0]];
+    
+    _customModelNames = [Model3dHelper getCustomModelNames];
+    _locationIcons = [self getlocationIcons];
+    _locationIconNames = [self getlocationIconNames];
+    _locationIconImages = [self getlocationIconImages];
+    _positionIconCollectionHandler = [[IconCollectionHandler alloc] initWithData:@[_locationIconNames] collectionView:nil];
+    _positionIconCollectionHandler.iconImagesData = @[_locationIconImages];
+    _positionIconCollectionHandler.roundedSquareCells = true;
+    _positionIconCollectionHandler.cornerRadius = 6;
+    _positionIconCollectionHandler.delegate = self;
+    _positionIconCollectionHandler.hostVC = self;
+    _positionIconCollectionHandler.regularIconColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+    _positionIconCollectionHandler.selectedIconColor = UIColorFromRGB(_changedProfile.profileColor);
+    [_positionIconCollectionHandler setItemSizeWithSize:156];
+    [_positionIconCollectionHandler setIconSizeWithSize:52];
+    selectedIconIndex = [_locationIconNames indexOfObject:_changedProfile.locationIcon];
+    [_positionIconCollectionHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:selectedIconIndex inSection:0]];
+    
+    _navigationIcons = [self getlocationIcons];
+    _navigationIconNames = [self getlocationIconNames];
+    _navigationIconImages = [self getlocationIconImages];
+    _locationIconCollectionHandler = [[IconCollectionHandler alloc] initWithData:@[_navigationIconNames] collectionView:nil];
+    _locationIconCollectionHandler.iconImagesData = @[_navigationIconImages];
+    _locationIconCollectionHandler.roundedSquareCells = true;
+    _locationIconCollectionHandler.cornerRadius = 6;
+    _locationIconCollectionHandler.delegate = self;
+    _locationIconCollectionHandler.hostVC = self;
+    _locationIconCollectionHandler.regularIconColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+    _locationIconCollectionHandler.selectedIconColor = UIColorFromRGB(_changedProfile.profileColor);
+    [_locationIconCollectionHandler setItemSizeWithSize:156];
+    [_locationIconCollectionHandler setIconSizeWithSize:52];
+    selectedIconIndex = [_navigationIconNames indexOfObject:_changedProfile.navigationIcon];
+    [_locationIconCollectionHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:selectedIconIndex inSection:0]];
 }
 
 - (NSArray<OALocationIcon *> *) getlocationIcons
@@ -656,45 +692,6 @@ static NSString *kLocationRadiusButtonKey =  @"kLocationRadiusButtonKey";
         cell.inputField.delegate = self;
         return cell;
     }
-    else if ([cellType isEqualToString:[OALocationIconsTableViewCell getCellIdentifier]])
-    {
-        static NSString* const identifierCell = [OALocationIconsTableViewCell getCellIdentifier];
-        OALocationIconsTableViewCell *cell = nil;
-        cell = (OALocationIconsTableViewCell*)[tableView dequeueReusableCellWithIdentifier:identifierCell];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OALocationIconsTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OALocationIconsTableViewCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.separatorInset = UIEdgeInsetsZero;
-        }
-        if (cell)
-        {
-            BOOL isAtRestRow = indexPath.row == kIconsAtRestRow;
-            cell.locationType = isAtRestRow ? EOALocationTypeRest : EOALocationTypeMoving;
-            cell.dataArray = isAtRestRow ? _locationIconImages : _navigationIconImages;
-            
-            if (isAtRestRow)
-            {
-                cell.selectedIndex = [_locationIconNames indexOfObject:_changedProfile.locationIcon];
-                if (cell.selectedIndex == NSNotFound)
-                    cell.selectedIndex = 0;
-            }
-            else
-            {
-                cell.selectedIndex = [_navigationIconNames indexOfObject:_changedProfile.navigationIcon];
-                if (cell.selectedIndex == NSNotFound)
-                    cell.selectedIndex = 0;
-            }
-            cell.titleLabel.text = [item title];
-            cell.currentColor = _changedProfile.profileColor;
-            
-            cell.delegate = self;
-            [cell.collectionView reloadData];
-            [cell layoutIfNeeded];
-        }
-        return cell;
-    }
     else if ([cellType isEqualToString:[OAColorsPaletteCell getCellIdentifier]])
     {
         OAColorsPaletteCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAColorsPaletteCell getCellIdentifier]];
@@ -738,12 +735,41 @@ static NSString *kLocationRadiusButtonKey =  @"kLocationRadiusButtonKey";
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconsPaletteCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
             cell.disableAnimationsOnStart = YES;
-            [_iconCollectionHandler setCollectionView:cell.collectionView];
-            [cell setCollectionHandler:_iconCollectionHandler];
             cell.hostVC = self;
         }
         if (cell)
         {
+            if ([item.key isEqualToString:kProfileIconCellKey])
+            {
+                [_profileIconCollectionHandler setCollectionView:cell.collectionView];
+                [cell setCollectionHandler:_profileIconCollectionHandler];
+                cell.topLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+                cell.topLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            }
+            else if ([item.key isEqualToString:kPositionIconCellKey])
+            {
+                [_positionIconCollectionHandler setCollectionView:cell.collectionView];
+                [cell setCollectionHandler:_positionIconCollectionHandler];
+                NSInteger selectedIndex = [_locationIconNames indexOfObject:_changedProfile.locationIcon];
+                if (selectedIndex == NSNotFound)
+                    selectedIndex = 0;
+                NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:selectedIndex inSection:0];
+                [_positionIconCollectionHandler setSelectedIndexPath:selectedIndexPath];
+                cell.topLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
+                cell.topLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            }
+            else if ([item.key isEqualToString:kLocationIconCellKey])
+            {
+                [_locationIconCollectionHandler setCollectionView:cell.collectionView];
+                [cell setCollectionHandler:_locationIconCollectionHandler];
+                NSInteger selectedIndex = [_navigationIconNames indexOfObject:_changedProfile.navigationIcon];
+                if (selectedIndex == NSNotFound)
+                    selectedIndex = 0;
+                NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:selectedIndex inSection:0];
+                [_locationIconCollectionHandler setSelectedIndexPath:selectedIndexPath];
+                cell.topLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
+                cell.topLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            }
             cell.topLabel.text = item.title;
             [cell.bottomButton setTitle:item.descr forState:UIControlStateNormal];
             [cell.rightActionButton setImage:[UIImage templateImageNamed:@"ic_custom_add"] forState:UIControlStateNormal];
@@ -800,7 +826,7 @@ static NSString *kLocationRadiusButtonKey =  @"kLocationRadiusButtonKey";
 {
     if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
         UITableViewHeaderFooterView * headerView = (UITableViewHeaderFooterView *) view;
-        headerView.textLabel.textColor  = [UIColor colorNamed:ACColorNameTextColorSecondary];
+        headerView.textLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
     }
 }
 
@@ -814,31 +840,18 @@ static NSString *kLocationRadiusButtonKey =  @"kLocationRadiusButtonKey";
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     OATableRowData *item = [_data itemForIndexPath:indexPath];
-    if ([item.key isEqualToString:kViewAngleButtonKey])
+    if ([item.key isEqualToString:kViewAngleCellKey])
     {
         OAProfileAppearanceViewAngleViewController *vc = [[OAProfileAppearanceViewAngleViewController alloc] initWithAppMode:_profile.parent];
         vc.delegate = self;
         [self showModalViewController:vc];
     }
-    else if ([item.key isEqualToString:kLocationRadiusButtonKey])
+    else if ([item.key isEqualToString:kLocationRadiusCellKey])
     {
         OAProfileAppearanceLocationRadiusViewController *vc = [[OAProfileAppearanceLocationRadiusViewController alloc] initWithAppMode:_profile.parent];
         vc.delegate = self;
         [self showModalViewController:vc];
     }
-}
-
-#pragma mark - OASeveralViewsTableViewCellDelegate
-
-- (void)mapIconChanged:(NSInteger)newValue type:(EOALocationType)locType
-{
-    _hasChangesBeenMade = YES;
-    if (locType == EOALocationTypeRest)
-        _changedProfile.locationIcon = _locationIconNames[newValue];
-    else if (locType == EOALocationTypeMoving)
-        _changedProfile.navigationIcon = _navigationIconNames[newValue];
-    
-    [_tableView reloadSections:[NSIndexSet indexSetWithIndex:locType == EOALocationTypeRest ? kLocationIconSectionIndex : kNavigationIconSectionIndex] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 #pragma mark - UITextFieldDelegate
@@ -900,17 +913,31 @@ static NSString *kLocationRadiusButtonKey =  @"kLocationRadiusButtonKey";
         _navigationIconImages = [self getlocationIconImages];
         _profileIconImageView.tintColor = UIColorFromRGB(_changedProfile.profileColor);
         
-        _iconCollectionHandler.selectedIconColor = UIColorFromRGB(_changedProfile.profileColor);
+        _profileIconCollectionHandler.selectedIconColor = UIColorFromRGB(_changedProfile.profileColor);
         
         [self generateData];
         [_tableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(kProfileIconSectionIndex, _tableView.numberOfSections - kProfileIconSectionIndex)] withRowAnimation:UITableViewRowAnimationNone];
     }
-    else if (collectionView == [_iconCollectionHandler getCollectionView])
+    else if (collectionView == [_profileIconCollectionHandler getCollectionView])
     {
         _hasChangesBeenMade = YES;
         _changedProfile.iconName = _icons[indexPath.row];
         _profileIconImageView.image = [UIImage templateImageNamed:_changedProfile.iconName];
         [_tableView reloadSections:[NSIndexSet indexSetWithIndex:kProfileIconSectionIndex] withRowAnimation:UITableViewRowAnimationNone];
+    }
+    else if (collectionView == [_positionIconCollectionHandler getCollectionView])
+    {
+        _hasChangesBeenMade = YES;
+        _changedProfile.locationIcon = _locationIconNames[indexPath.row];
+        [self generateData];
+        [_tableView reloadSections:[NSIndexSet indexSetWithIndex:kLocationIconSectionIndex] withRowAnimation:UITableViewRowAnimationNone];
+    }
+    else if (collectionView == [_locationIconCollectionHandler getCollectionView])
+    {
+        _hasChangesBeenMade = YES;
+        _changedProfile.navigationIcon = _navigationIconNames[indexPath.row];
+        [self generateData];
+        [_tableView reloadSections:[NSIndexSet indexSetWithIndex:kNavigationIconSectionIndex] withRowAnimation:UITableViewRowAnimationNone];
     }
 }
 

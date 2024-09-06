@@ -33,7 +33,7 @@ typedef enum
 
 @protocol OAIconCollectionDelegate
 
-- (void)selectIconItem:(NSString *)iconItem;
+- (void)selectIconName:(NSString *)iconName;
 
 @end
 

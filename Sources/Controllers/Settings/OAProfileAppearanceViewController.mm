@@ -911,33 +911,36 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         
         _locationIconImages = [self getlocationIconImages];
         _navigationIconImages = [self getlocationIconImages];
-        _profileIconImageView.tintColor = UIColorFromRGB(_changedProfile.profileColor);
-        
-        _profileIconCollectionHandler.selectedIconColor = UIColorFromRGB(_changedProfile.profileColor);
-        
+        UIColor *newSelectedColor = UIColorFromRGB(_changedProfile.profileColor);;
+        _profileIconImageView.tintColor = newSelectedColor;
         [self generateData];
-        [_tableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(kProfileIconSectionIndex, _tableView.numberOfSections - kProfileIconSectionIndex)] withRowAnimation:UITableViewRowAnimationNone];
+
+        _profileIconCollectionHandler.selectedIconColor = newSelectedColor;
+        _positionIconCollectionHandler.selectedIconColor = newSelectedColor;
+        _locationIconCollectionHandler.selectedIconColor = newSelectedColor;
+        _positionIconCollectionHandler.iconImagesData = @[_locationIconImages];
+        _locationIconCollectionHandler.iconImagesData = @[_navigationIconImages];
+        [[_profileIconCollectionHandler getCollectionView] reloadData];
+        [[_positionIconCollectionHandler getCollectionView] reloadData];
+        [[_locationIconCollectionHandler getCollectionView] reloadData];
     }
     else if (collectionView == [_profileIconCollectionHandler getCollectionView])
     {
         _hasChangesBeenMade = YES;
         _changedProfile.iconName = _icons[indexPath.row];
         _profileIconImageView.image = [UIImage templateImageNamed:_changedProfile.iconName];
-        [_tableView reloadSections:[NSIndexSet indexSetWithIndex:kProfileIconSectionIndex] withRowAnimation:UITableViewRowAnimationNone];
     }
     else if (collectionView == [_positionIconCollectionHandler getCollectionView])
     {
         _hasChangesBeenMade = YES;
         _changedProfile.locationIcon = _locationIconNames[indexPath.row];
         [self generateData];
-        [_tableView reloadSections:[NSIndexSet indexSetWithIndex:kLocationIconSectionIndex] withRowAnimation:UITableViewRowAnimationNone];
     }
     else if (collectionView == [_locationIconCollectionHandler getCollectionView])
     {
         _hasChangesBeenMade = YES;
         _changedProfile.navigationIcon = _navigationIconNames[indexPath.row];
         [self generateData];
-        [_tableView reloadSections:[NSIndexSet indexSetWithIndex:kNavigationIconSectionIndex] withRowAnimation:UITableViewRowAnimationNone];
     }
 }
 

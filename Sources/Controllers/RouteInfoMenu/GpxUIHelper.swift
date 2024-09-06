@@ -180,11 +180,37 @@ class GpxUIHelper: NSObject {
     }
 
     public class GPXChartMarker: MarkerView {
-
+        
         private let widthOffset: CGFloat = 3.0
         private let heightOffset: CGFloat = 2.0
+        private let textLayer = CATextLayer()
+        private let outlineLayer = CALayer()
 
         private var text: NSAttributedString = NSAttributedString(string: "")
+
+        override init(frame: CGRect) {
+            super.init(frame: frame)
+
+            setupLayers()
+        }
+
+        required init?(coder: NSCoder) {
+            super.init(coder: coder)
+
+            setupLayers()
+        }
+
+        private func setupLayers() {
+            outlineLayer.borderColor = UIColor.chartSliderLabelStroke.cgColor
+            outlineLayer.backgroundColor = UIColor.chartSliderLabelBg.cgColor
+            outlineLayer.borderWidth = 1.0
+            outlineLayer.cornerRadius = 2.0
+
+            textLayer.alignmentMode = .center
+            textLayer.contentsScale = UIScreen.main.scale
+
+            outlineLayer.addSublayer(textLayer)
+        }
 
         override func refreshContent(entry: ChartDataEntry, highlight: Highlight) {
             super.refreshContent(entry: entry, highlight: highlight)
@@ -195,7 +221,7 @@ class GpxUIHelper: NSObject {
             if chartData?.dataSetCount ?? 0 == 1 {
                 let dataSet = chartData?.dataSets[0] as! OrderedLineDataSet
                 res.append(NSAttributedString(string: "\(lround(entry.y)) " + dataSet.units,
-                                              attributes: [NSAttributedString.Key.foregroundColor: dataSet.color]))
+                                              attributes: [.foregroundColor: dataSet.color(atIndex: 0)]))
             } else if chartData?.dataSetCount ?? 0 == 2 {
                 let dataSet1 = chartData?.dataSets[0] as! OrderedLineDataSet
                 let dataSet2 = chartData?.dataSets[1] as! OrderedLineDataSet
@@ -205,24 +231,28 @@ class GpxUIHelper: NSObject {
                 if useFirst {
                     let entry1 = dataSet1.entryForXValue(entry.x, closestToY: Double.nan, rounding: .up)
                     res.append(NSAttributedString(string: "\(lround(entry1?.y ?? 0)) " + dataSet1.units,
-                                                  attributes: [NSAttributedString.Key.foregroundColor: dataSet1.color]))
+                                                  attributes: [.foregroundColor: dataSet1.color(atIndex: 0)]))
                 }
                 if useSecond {
                     let entry2 = dataSet2.entryForXValue(entry.x, closestToY: Double.nan, rounding: .up)
                     if useFirst {
                         res.append(NSAttributedString(string: ", \(lround(entry2?.y ?? 0)) " + dataSet2.units,
-                                                      attributes: [NSAttributedString.Key.foregroundColor: dataSet2.color]))
+                                                      attributes: [.foregroundColor: dataSet2.color(atIndex: 0)]))
                     } else {
                         res.append(NSAttributedString(string: "\(lround(entry2?.y ?? 0)) " + dataSet2.units,
-                                                      attributes: [NSAttributedString.Key.foregroundColor: dataSet2.color]))
+                                                      attributes: [.foregroundColor: dataSet2.color(atIndex: 0)]))
                     }
                 }
             }
             text = res
+            textLayer.string = res
         }
 
         override func draw(context: CGContext, point: CGPoint) {
             super.draw(context: context, point: point)
+
+            context.saveGState()
+            context.setLineDash(phase: 0, lengths: [])
 
             bounds.size = text.size()
             offset = CGPoint(x: 0.0, y: 0.0)
@@ -231,19 +261,14 @@ class GpxUIHelper: NSObject {
                                                            y: point.y))
             let labelRect = CGRect(origin: CGPoint(x: point.x - text.size().width / 2 + offset.x, y: heightOffset),
                                    size: bounds.size)
-            let outline = CALayer()
 
-            outline.borderColor = UIColor.chartSliderLabelStroke.cgColor
-            outline.backgroundColor = UIColor.chartSliderLabelBg.cgColor
-            outline.borderWidth = 1.0
-            outline.cornerRadius = 2.0
-            outline.bounds = CGRect(origin: CGPoint(x: labelRect.origin.x - widthOffset,
-                                                    y: labelRect.origin.y),
+            outlineLayer.bounds = CGRect(origin: CGPoint(x: labelRect.origin.x - widthOffset,
+                                                         y: labelRect.origin.y),
                                     size: CGSize(width: labelRect.size.width + widthOffset * 2,
                                                  height: labelRect.size.height + heightOffset * 2))
-            outline.render(in: context)
-
-            drawText(text: text, rect: labelRect)
+            textLayer.frame = labelRect
+            outlineLayer.render(in: context)
+            context.restoreGState()
         }
 
         override func offsetForDrawing(atPoint point: CGPoint) -> CGPoint {
@@ -266,15 +291,6 @@ class GpxUIHelper: NSObject {
             }
 
             return offset
-        }
-
-        private func drawText(text: NSAttributedString, rect: CGRect) {
-            let size = text.size()
-            let centeredRect = CGRect(x: rect.origin.x,
-                                      y: rect.origin.y + (rect.size.height + heightOffset - size.height) / 2.0,
-                                      width: size.width,
-                                      height: size.height)
-            text.draw(in: centeredRect)
         }
     }
 
@@ -308,19 +324,6 @@ class GpxUIHelper: NSObject {
                                                          secondType: secondType,
                                                          gpxDataSetAxisType: axisType,
                                                          calcWithoutGaps: calcWithoutGaps))
-        var highlightValues = [Highlight]()
-        for h in chartView.highlighted {
-            highlightValues.append(Highlight(x: h.x,
-                                             y: h.y,
-                                             xPx: h.xPx,
-                                             yPx: h.yPx,
-                                             dataIndex: h.dataIndex,
-                                             dataSetIndex: chartView.data?.dataSetCount ?? 1 - 1,
-                                             stackIndex: h.stackIndex,
-                                             axis: h.axis))
-        }
-        chartView.highlightValues(highlightValues)
-        chartView.notifyDataSetChanged()
     }
 
     static func refreshBarChart(chartView: HorizontalBarChartView,
@@ -397,8 +400,9 @@ class GpxUIHelper: NSObject {
     }
 
     static func setupElevationChart(chartView: ElevationChart) {
+        let marker = GPXChartMarker(frame: CGRect(x: 0, y: 0, width: 80, height: 40))
         setupElevationChart(chartView: chartView,
-                            markerView: GPXChartMarker(),
+                            markerView: marker,
                             topOffset: 24,
                             bottomOffset: 16,
                             useGesturesAndScale: true)
@@ -408,13 +412,13 @@ class GpxUIHelper: NSObject {
                                     topOffset: CGFloat,
                                     bottomOffset: CGFloat,
                                     useGesturesAndScale: Bool) {
+        let marker = GPXChartMarker(frame: CGRect(x: 0, y: 0, width: 80, height: 40))
         setupElevationChart(chartView: chartView,
-                            markerView: GPXChartMarker(),
+                            markerView: marker,
                             topOffset: topOffset,
                             bottomOffset: bottomOffset,
                             useGesturesAndScale: useGesturesAndScale)
     }
-
 
     static func setupElevationChart(chartView: ElevationChart,
                                     markerView: GPXChartMarker,
@@ -813,7 +817,7 @@ class GpxUIHelper: NSObject {
                              textColor: .chartTextColorElevation,
                              useRightAxis: useRightAxis)
         yAxis.granularity = 1
-        yAxis.resetCustomAxisMax()
+        yAxis.resetCustomAxisMin()
         yAxis.valueFormatter = ValueFormatterLocal(formatX: nil, unitsX: mainUnitY)
         let values = calculateElevationArray(analysis: analysis,
                                              axisType: axisType,

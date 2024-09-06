@@ -55,16 +55,16 @@ final public class ElevationChart: LineChartView {
         }
 
         if rightAxis.isEnabled {
-            rightYAxisRenderer.computeAxis(min: rightAxis.axisMinimum,
-                                           max: rightAxis.axisMaximum,
+            rightYAxisRenderer.computeAxis(min: rightAxis._axisMinimum,
+                                           max: rightAxis._axisMaximum,
                                            inverted: rightAxis.isInverted)
         }
 
-        leftYAxisRenderer.computeAxis(min: leftAxis.axisMinimum,
-                                      max: leftAxis.axisMaximum,
+        leftYAxisRenderer.computeAxis(min: leftAxis._axisMinimum,
+                                      max: leftAxis._axisMaximum,
                                       inverted: leftAxis.isInverted)
         if xAxis.isEnabled {
-            xAxisRenderer.computeAxis(min: xAxis.axisMinimum, max: xAxis.axisMaximum, inverted: false)
+            xAxisRenderer.computeAxis(min: xAxis._axisMinimum, max: xAxis._axisMaximum, inverted: false)
         }
 
         ctx.saveGState()
@@ -114,7 +114,7 @@ final public class ElevationChart: LineChartView {
         guard data != nil else { return }
 
         let measureText = getMeasuredMaxLabel()
-        let adjustedWidth = width - CGFloat(measureText) - CGFloat(6.0 * UIScreen.main.scale)
+        let adjustedWidth = width - CGFloat(measureText) - CGFloat(6.0)
         viewPortHandler.setChartDimens(width: adjustedWidth, height: height)
 
         for job in _viewportJobs {
@@ -213,7 +213,6 @@ final public class ElevationChart: LineChartView {
         rightAxis.gridLineDashPhase = 0.0
         rightAxis.gridColor = yAxisGridColor
         rightAxis.gridLineWidth = 1.0
-        rightAxis.drawBottomYLabelEntryEnabled = false
         rightAxis.drawAxisLineEnabled = false
         rightAxis.labelPosition = .insideChart
         rightAxis.xOffset = -1.0

@@ -2448,14 +2448,14 @@
 "private_access_routing_req" = "Пункт назначения расположен на частной территории. Разрешить использование частных дорог на маршруте\?";
 "expired" = "Срок истёк";
 "share_geo" = "гео:";
-"compass_always_hidden" = "Всегда скрыт";
+"compass_always_hidden" = "Скрыт";
 "restore_from_osmand_cloud" = "Восстановить из OsmAnd Cloud";
 "lang_ckb" = "Центральный курдский";
 "routing_attr_hazmat_category_no_restrictions_name" = "A (Без ограничений)";
 "shared_string_delete_all" = "Удалить все";
 "in_grace_period" = "В льготный период";
 "on_hold" = "Приостановлено";
-"compass_always_visible" = "Всегда виден";
+"compass_always_visible" = "Виден";
 "shared_string_paused" = "Приостановлено";
 "compass_visible_if_map_rotated" = "Виден, если карта повернута";
 "data_settings" = "Данные";

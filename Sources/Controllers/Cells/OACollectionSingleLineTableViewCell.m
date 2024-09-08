@@ -147,8 +147,7 @@
     if (_collectionHandler)
     {
         CGSize itemSize = [_collectionHandler getItemSize];
-        if (height < itemSize.height)
-            height = itemSize.height;
+        height = itemSize.height;
         
         if (_useMultyLines)
         {

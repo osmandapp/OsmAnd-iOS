@@ -3494,7 +3494,7 @@
 "quick_action_destination" = "Odredište";
 "precipitation_layer" = "Nivo padavina";
 "key_event_category_map_interactions" = "Interakcije mape";
-"quick_action_track_waypoint" = "Putna tačka";
+"quick_action_track_waypoint" = "Međuodredište putanje";
 "map_source" = "Izvor mape";
 "driving_region_india" = "Indija";
 "shared_string_action" = "Akcija";

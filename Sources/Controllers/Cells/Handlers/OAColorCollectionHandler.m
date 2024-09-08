@@ -139,11 +139,6 @@
     }
 }
 
-- (void)insertItem:(id)newItem atIndexPath:(NSIndexPath *)indexPath
-{
-    [_data[indexPath.section] insertObject:newItem atIndex:indexPath.row];
-}
-
 - (void)addColor:(NSIndexPath *)indexPath newItem:(OAColorItem *)newItem
 {
     UICollectionView *collectionView = [self getCollectionView];

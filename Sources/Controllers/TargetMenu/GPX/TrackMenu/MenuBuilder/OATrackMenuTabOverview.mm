@@ -150,13 +150,16 @@
     if (createdOnCellData.desc && createdOnCellData.desc.length > 0)
         [generalSectionData.subjects addObject:createdOnCellData];
 
-    OAGPXTableCellData *sizeCellData = [OAGPXTableCellData withData:@{
+    if (self.trackMenuDelegate && ![self.trackMenuDelegate currentTrack])
+    {
+        OAGPXTableCellData *sizeCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"size",
             kCellType: [OAValueTableViewCell getCellIdentifier],
             kCellTitle: OALocalizedString(@"shared_string_size"),
             kCellDesc: self.trackMenuDelegate ? [self.trackMenuDelegate getGpxFileSize] : @""
-    }];
-    [generalSectionData.subjects addObject:sizeCellData];
+        }];
+        [generalSectionData.subjects addObject:sizeCellData];
+    }
 
     OAGPXTableCellData *locationCellData = [self generateLocationCellData];
     if (self.trackMenuDelegate && ![self.trackMenuDelegate currentTrack])

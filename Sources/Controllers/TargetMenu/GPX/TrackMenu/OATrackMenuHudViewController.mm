@@ -1337,8 +1337,7 @@
 
 - (NSString *)getGpxFileSize
 {
-    NSDictionary *fileAttributes = [NSFileManager.defaultManager attributesOfItemAtPath:self.isCurrentTrack
-            ? self.gpx.gpxFilePath : self.doc.path error:nil];
+    NSDictionary *fileAttributes = [NSFileManager.defaultManager attributesOfItemAtPath:self.gpx.absolutePath error:nil];
     return [NSByteCountFormatter stringFromByteCount:fileAttributes.fileSize
                                           countStyle:NSByteCountFormatterCountStyleFile];
 }
@@ -1614,7 +1613,8 @@
 - (void)openNameTagsScreenWith:(NSArray<NSDictionary *> *)tagsArray 
 {
     _pushedNewScreen = YES;
-    NameTagsDetailsViewController *tagsDetailsController = [[NameTagsDetailsViewController alloc] initWithTags:tagsArray];
+    POITagsDetailsViewController *tagsDetailsController = [[POITagsDetailsViewController alloc] initWithTags:tagsArray];
+    tagsDetailsController.tagTitle = OALocalizedString(@"shared_string_name");
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:tagsDetailsController];
     [self.navigationController presentViewController:navigationController animated:YES completion:nil];
 }

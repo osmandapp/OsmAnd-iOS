@@ -2327,7 +2327,7 @@
 "shared_string_travel_guides" = "Ճանապարհորդական ուղեցույց";
 "switch_profile" = "Փոխարկել պրոֆիլը";
 "external_device_status_connect" = "Միացում";
-"map_settings_topography" = "Քարտեզ SRTM (բարձունքների գծեր)";
+"map_settings_topography" = "Կոնտուրային գծերի/եզրագծերի տվյալներ";
 "travel_card_download_descr" = "Ներբեռնեք Wikivoyage-ի ուղևորության ուղեցույցները` աշխարհի նշանավոր տեղերի մասին հոդվածներ դիտելու համար առանց ինտերնետի:";
 "saved_articles" = "Էջանշված հոդվածներ";
 "shared_string_move" = "Տեղափոխել";
@@ -2344,3 +2344,4 @@
 "shared_string_change" = "Փոխել";
 "shared_string_favorite" = "Սիրված";
 "shared_string_favorites" = "Սիրված";
+"shared_string_show" = "Ցույց տալ";

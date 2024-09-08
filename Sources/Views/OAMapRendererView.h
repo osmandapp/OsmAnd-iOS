@@ -182,4 +182,7 @@ struct CLLocationCoordinate2D;
 - (BOOL)getLocationFromElevatedPoint:(OsmAnd::PointI)screenPoint location31:(OsmAnd::PointI*)location31;
 - (float)getLocationHeightInMeters:(OsmAnd::PointI)location31;
 
+- (void)limitFrameRefreshRate;
+- (void)restoreFrameRefreshRate;
+
 @end

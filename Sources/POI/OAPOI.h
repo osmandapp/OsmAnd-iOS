@@ -93,6 +93,7 @@
 - (NSDictionary<NSString *, NSString *> *)getNamesMap:(BOOL)includeEn;
 
 - (NSDictionary<NSString *, NSString *> *) getAdditionalInfo;
+- (NSString *) getAdditionalInfo:(NSString *)key;
 
 - (NSString *)getContentLanguage:(NSString *)tag lang:(NSString *)lang defLang:(NSString *)defLang;
 - (NSString *)getStrictTagContent:(NSString *)tag lang:(NSString *)lang;

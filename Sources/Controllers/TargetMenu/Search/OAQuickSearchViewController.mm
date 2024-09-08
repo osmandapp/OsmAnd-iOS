@@ -154,6 +154,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     OASearchToolbarViewController *_searchToolbarViewController;
 
     BarActionType _barActionType;
+
     BOOL _historyEditing;
 
     BOOL _bottomViewVisible;
@@ -579,6 +580,20 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                     if ([searchPhrase getFirstUnknownSearchWord].length > 0)
                         [filter setFilterByName:[searchPhrase getFirstUnknownSearchWord]];
                 }
+                else if ([[searchPhrase getLastSelectedWord].result.object isKindOfClass:[OATopIndexFilter class]])
+                {
+                    OATopIndexFilter *topIndexFilter = (OATopIndexFilter *) [searchPhrase getLastSelectedWord].result.object;
+                    filter = [self createPOIUIFilterWithTopIndexFilter:topIndexFilter];
+                    if (filter)
+                    {
+                        [filter setFilterByName:[topIndexFilter getValue]];
+                        [filter setFilterByKey:[topIndexFilter getTag]];
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
                 else
                 {
                     filter = (OAPOIUIFilter *) [searchPhrase getLastSelectedWord].result.object;
@@ -653,6 +668,17 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                         [custom updateTypesToAccept:abstractPoiType];
 
                         OAPOIFilterViewController *filterViewController = [[OAPOIFilterViewController alloc] initWithFilter:custom filterByName:filterByName];
+                        filterViewController.delegate = self;
+                        [self.navigationController pushViewController:filterViewController animated:YES];
+                    }
+                }
+                else if ([object isKindOfClass:[OATopIndexFilter class]])
+                {
+                    OATopIndexFilter *topIndexFilter = (OATopIndexFilter *)object;
+                    OAPOIUIFilter *custom = [self createPOIUIFilterWithTopIndexFilter:topIndexFilter];
+                    if (custom)
+                    {
+                        OAPOIFilterViewController *filterViewController = [[OAPOIFilterViewController alloc] initWithFilter:custom filterByName:[topIndexFilter getValue]];
                         filterViewController.delegate = self;
                         [self.navigationController pushViewController:filterViewController animated:YES];
                     }
@@ -1435,6 +1461,40 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
     if (self.isViewLoaded)
 	    [self.view setNeedsLayout];
+}
+
+- (OAPOIUIFilter *) createPOIUIFilterWithTopIndexFilter:(OATopIndexFilter *)topIndexFilter
+{
+    OAPOIUIFilter *filter = [[OAPOIFiltersHelper sharedInstance] getFilterById:[topIndexFilter getFilterId]];
+    if (filter)
+    {
+        return filter;
+    }
+    else if ([self.searchHelper getResultCollection])
+    {
+        NSArray<OASearchResult *> *searchResults = [[self.searchHelper getResultCollection] getCurrentSearchResults];
+        NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *acceptedTypes = [NSMapTable strongToStrongObjectsMapTable];
+        for (OASearchResult *res in searchResults)
+        {
+            if ([res.object isKindOfClass:[OAPOI class]])
+            {
+                OAPOI *poi = (OAPOI *) res.object;
+                OAPOICategory *poiCategory = poi.type.category;
+                NSMutableSet<NSString *> *subtypes = [acceptedTypes objectForKey:poiCategory];
+                if (!subtypes)
+                {
+                    subtypes = [NSMutableSet set];
+                    [acceptedTypes setObject:subtypes forKey:poiCategory];
+                }
+                [subtypes addObject:poi.subType];
+            }
+        }
+        
+        filter = [[OAPOIFiltersHelper sharedInstance] getFilter:topIndexFilter acceptedTypes:acceptedTypes];
+        return filter;
+    }
+
+    return nil;
 }
 
 - (void) goToPoint:(double)latitude longitude:(double)longitude

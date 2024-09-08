@@ -8,7 +8,7 @@
 "select_postcode" = "邮政编码搜索";
 "type_postcode" = "输入邮政编码";
 "coords_search" = "坐标搜索";
-"nearest_cities" = "最近的城市";
+"nearest_cities" = "距离最近的城市";
 "type_address" = "输入地址";
 "search_poi_category_hint" = "键入以搜索全部";
 // Shared Strings
@@ -292,14 +292,14 @@
 //inapps
 "plugin_nautical_name" = "航海地图视图";
 "product_desc_nautical" = "";
-"plugin_nautical_descr" = "打开以丰富您的地图，其中包含有关航行路线、导航灯、危险区域、允许或禁止航行或停靠的区域等信息。如要使用，下载航海地图并在配置地图中启用“航海地图”类型。 \n \n详情可见 %@。";
+"plugin_nautical_descr" = "通过航行路线、导航灯、航海危险区、限制航行或停靠区等信息丰富地图内容。在使用前，请下载相应的航海地图，并在 “配置地图 ”下启用 “航海地图 ”样式。 \n \n了解更多 %@。";
 "osmand_parking_plugin_name" = "停车位置";
 "product_desc_parking" = "";
 "osmand_parking_plugin_description" = "标记您汽车的停放位置，并在停车计时将要到期时通知您的日历。为放置标记，请在地图上选择一个地点，进入 \"操作\"，然后点击 \"添加停车位置\"。";
 "plugin_ski_name" = "滑雪地图浏览";
 "product_desc_skimap" = "";
 "plugin_ski_descr" = "专为冬季运动场地导航而设计： 查看滑雪道、滑雪缆车和越野滑雪道，并用彩色线条标示难度等级。使用时，请启用此插件，并进入 \"配置地图\"，选择 \"冬季和滑雪 \"地图样式。";
-"record_plugin_name" = "旅行记录";
+"record_plugin_name" = "行程录制";
 "product_desc_track_recording" = "";
 "record_plugin_description" = "记录您的旅行或训练，并分析速度、累计上升和下降、海拔剖面等数据。已记录的轨迹可以归档、与朋友分享、编辑和后期处理。 \n \n详情可见 %@。";
 "product_title_trip_planning" = "";
@@ -434,7 +434,7 @@
 "items_selected" = "%d 已选中";
 "custom_search" = "自定义搜索";
 "poi_filter_custom_filter" = "自定义过滤器";
-"poi_filter_closest_poi" = "最近的兴趣点";
+"poi_filter_closest_poi" = "距离最近的兴趣点";
 "shared_string_is_open_24_7" = "24小时开放";
 "shared_string_is_open" = "打开";
 "poi_filter_by_name" = "按名称搜索";
@@ -531,7 +531,7 @@
 "transport_Routes" = "路线";
 "switch_start_finish" = "交换起始点和目的地";
 "replace_destination_point" = "替换目的地";
-"traffic_warning_stop" = "停止标志";
+"traffic_warning_stop" = "停车标志";
 "traffic_warning_pedestrian" = "人行横道";
 "driving_region_japan" = "日本";
 "driving_region_us" = "美国";
@@ -739,7 +739,7 @@
 "route_roundabout" = "环岛：在第 %d 出口驶离";
 "route_roundabout_short" = "在 %d 出口驶离并继续";
 "starting_point_too_far" = "出发点离最近的道路太远。";
-"ending_point_too_far" = "结束点距离最近的道路太远。";
+"ending_point_too_far" = "终点距离最近的道路过远。";
 "intermediate_point_too_far" = "中转点 %@ 离最近的路太远。";
 "destination_point" = "目的地 %@";
 "stop_routing_confirm" = "停止导航？";
@@ -842,7 +842,7 @@
 "average_altitude" = "平均海拔";
 "work_button" = "工作地点";
 "quick_action_switch_day_mode" = "日间模式";
-"poi_dialog_reopen" = "重新开放";
+"poi_dialog_reopen" = "重新打开";
 "quick_action_add_parking" = "添加停车地点";
 "quick_action_map_overlay_title" = "地图覆盖";
 "filter_current_poiButton" = "筛选器";
@@ -998,7 +998,7 @@
 "rendering_attr_surface_salt_name" = "盐地";
 "rendering_attr_highway_class_track_name" = "轨迹";
 "rendering_value_germanRoadAtlas_name" = "德国道路地图";
-"rendering_attr_alpineHiking_description" = "路线的难度分类类型。";
+"rendering_attr_alpineHiking_description" = "路线的难度分级类别。";
 "routing_attr_avoid_ferry_description" = "避开轮渡";
 "rendering_value_green_name" = "绿色";
 "routing_attr_no_new_routing_description" = "请不要使用 v1.9 的路径规划规则。";
@@ -1055,7 +1055,7 @@
 "rendering_value_default13_name" = "默认 (13)";
 "rendering_attr_hideNonVehicleHighways_name" = "非车辆公路";
 "rendering_attr_smoothness_good_name" = "优良";
-"routing_attr_height_description" = "指定路线上允许的车辆高度。";
+"routing_attr_height_description" = "规定路线上允许的车辆高度。";
 "rendering_value_walkingRoutesScopeOSMC_name" = "网络从属";
 "routing_attr_avoid_tram_description" = "避免电车";
 "rendering_attr_currentTrackWidth_description" = "GPX宽度";
@@ -1335,7 +1335,7 @@
 "subsequent_dest_description" = "向上移动目的地，并创建它";
 "transport_nearby_routes_within" = "附近的路线";
 "access_intermediate_arrival_time" = "中转点到达时间";
-"get_discount_second_part" = "然后 %@";
+"get_discount_second_part" = "接着 %@";
 "months_3" = "三个月";
 "plugin_popup_osm_editing_title" = "开启 OpenStreetMap 编辑";
 "map_update_warning" = "是否要重新加载来自互联网的瓦片数据？";
@@ -1350,7 +1350,7 @@
 "osmand_settings" = "OsmAnd设置";
 "empty_filename" = "空的文件名";
 "select_another_track" = "选择另一轨迹";
-"nearest_point" = "最近的点";
+"nearest_point" = "距离最近的点";
 "attach_to_the_roads" = "依附于道路";
 "simplified_track" = "简化轨迹";
 "map_widget_distance_by_tap" = "点击测距";
@@ -1657,8 +1657,8 @@
 "routing_attr_only_permitted_ways_description" = "仅使用明确允许的道路（轨迹、路径等）";
 "lang_af" = "南非荷兰语";
 "routeInfo_surface_description" = "提供道路/人行道物理表面信息。";
-"shared_string_min_height" = "最低高度";
-"routeInfo_smoothness_description" = "轮式车辆的道路/人行道机动性分类，特别是关于路面规则性/平整度的分类。";
+"shared_string_min_height" = "最小高度";
+"routeInfo_smoothness_description" = "轮式车辆的道路 / 人行道机动性分级，特别是关于路面一致性 / 平整度的分级。";
 "route_line_use_map_style_width" = "使用地图样式 (%@) 默认宽度。";
 "set_up_backup" = "设置备份";
 "make_backup_descr" = "这台设备上有很多更改，请将这些数据备份以免丢失。";
@@ -1735,7 +1735,7 @@
 "cubic_m" = "立方米";
 "purchases_feature_desc_monthly_map_updates" = "获得离线地图的定期月度更新。";
 "restore_purchases" = "恢复购买内容";
-"ltr_or_rtl_combine_via_or" = "%@或 %@";
+"ltr_or_rtl_combine_via_or" = "%@ 或 %@";
 "nautical_depth" = "航海深度";
 "follow_track" = "跟随轨迹";
 "simulation_preview_mode_title" = "快速预览模式";
@@ -1771,7 +1771,7 @@
 "osmand_development_plugin_description" = "提供测试和调试 OsmAnd 的功能：模拟导航路线、监控屏幕渲染、检查性能等。正常使用应用程序时不需要此插件。";
 "manage_subscription" = "管理订阅";
 "copy_to_map_favorites" = "复制到收藏";
-"suggested_maps_descr" = "插件需要这些地图。";
+"suggested_maps_descr" = "这些地图是该插件所必需的。";
 "simulation_real_mode_title" = "真实模拟";
 "private_access_routing_req" = "你的目的地位于一个有私人通道的区域。允许使用私人道路进行此次旅行吗？";
 "expired" = "已过期";
@@ -1959,7 +1959,7 @@
 "get_discount_title" = "以 %@ 折扣优惠获取 %d %@。";
 "get_discount_first_part" = "以 %@ 的第一次 %@";
 "nautical_depth_points" = "航海深度点";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "show_gpx" = "轨迹";
 "calculate_osmand_route_without_internet" = "离线计算 OsmAnd 路线区段";
 "compass_always_hidden" = "始终隐藏";
@@ -2026,7 +2026,7 @@
 "duration_ago" = "%@前";
 "show_map_symbols" = "显示地图符号";
 "routing_attr_motor_type_petrol_name" = "汽油";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "osm_live_payment_month_cost_descr_ex" = "%.2f %@ /每月";
 "rendering_attr_showCycleNodeNetworkRoutes_name" = "显示节点网络自行车路线";
 "transfers" = "转移";
@@ -2037,7 +2037,7 @@
 "rendering_attr_horse_scale_impossible_name" = "不可能";
 "rendering_attr_horse_scale_dangerous_name" = "不安全";
 "routing_attr_avoid_highway_description" = "避开高速公路";
-"rendering_attr_showMtbScaleIMBATrails_description" = "显示专用的山地自行车小径。";
+"rendering_attr_showMtbScaleIMBATrails_description" = "显示山地自行车专用路径。";
 "rendering_attr_natureReserves_name" = "自然保护区";
 "routing_attr_driving_style_description" = "选择驾驶目的，以获得更短、更快或更安全的路线";
 "rendering_attr_natureReserves_description" = "展示自然保护区、保护区和国家公园。";
@@ -2160,8 +2160,8 @@
 "mtb_segment_classification" = "细分分类";
 "cloud_changes_will_be_dismissed" = "将取消云端变更";
 "shared_string_modified" = "已修改";
-"rendering_attr_showMtbScale_name" = "显示山地自行车级别";
-"rendering_attr_showMtbScale_description" = "根据山地自行车等级显示路径。";
+"rendering_attr_showMtbScale_name" = "显示山地自行车难度分级";
+"rendering_attr_showMtbScale_description" = "根据山地自行车难度分级显示路径。";
 "map_widget_group_sunrise_sunset_desc" = "这些小部件会显示有关下一次日出和日落的信息。";
 "map_widget_group_sunrise_sunset" = "日出、日落";
 "navigation_points_desc" = "导航小工具将在导航期间启用，以显示距离、到达或剩余时间、下个转弯、方位、当前 / 下一街道名称、车道信息、最大速度、接近警示、兴趣点、路径点等信息。";
@@ -2363,7 +2363,7 @@
 "help_article_navigation_routing_online_routing_name" = "线上路线规划";
 "shared_string_loading" = "正在加载";
 "shared_string_buttons" = "按钮";
-"map_settings_topography" = "等高线数据";
+"map_settings_topography" = "等高线";
 "apply_to_existing_favorites_descr" = "将更改应用于组中现有的收藏点，还是仅应用于新收藏点？";
 "top_widgets_panel" = "顶部面板";
 "ant_plus_open_settings" = "打开设置";
@@ -2503,7 +2503,7 @@
 "saved_articles" = "已存书签的文章";
 "map_widget_zoom_level_desc" = "显示当前的地图缩放级别。";
 "search_favorites" = "在我的收藏中搜索";
-"average_speed_skip_stops" = "考虑到停止";
+"average_speed_skip_stops" = "考虑停留时间";
 "map_widget_next_sunrise" = "下次日出";
 "map_widget_rendering_fps_desc" = "显示地图和地图元素的显示和刷新速度，以每秒帧数 （FPS） 表示。";
 "widget_secondary_desc_part_of" = "%@插件的一部分。";
@@ -2514,7 +2514,7 @@
 "start_recording" = "开始录制";
 "trip_recording_downhill_widget_desc" = "显示当前记录的行程中所有下降高度的总和。";
 "shared_string_format" = "格式";
-"shared_string_nearest" = "最近";
+"shared_string_nearest" = "距离最近";
 "verify_account_deletion_descr" = "删除之前，我们需要验证您的帐户。 \n \n请输入您注册时使用的电子邮件地址。我们将向其发送下一步操作的一次性密码。";
 "map_widget_trip_recording_duration" = "持续时间";
 "av_notes_video_widget_desc" = "点击小部件可以让你录制一个视频。";
@@ -2730,3 +2730,14 @@
 "driving_region_uk" = "英国及类似区域";
 "driving_region_india" = "印度";
 "wall_height" = "墙壁高度";
+"lang_war" = "瓦瑞语";
+"rendering_value_name_only_name" = "仅名称";
+"weather_data_sources_prompt" = "OsmAnd从两个来源提供天气数据：";
+"weather_source_ecmwf_description" = "欧洲中期天气预报中心";
+"shared_string_show" = "显示";
+"osmand_depelopment_simulate_location_section" = "模拟";
+"shared_string_millimeters_short" = "毫米";
+"visualization_3d_wall_color" = "墙壁颜色";
+"track_vertical_exaggeration_description" = "通过更改比例值，可以改变 3D 轨迹的高度。";
+"fixed_height" = "固定高度";
+"height_legend_description" = "海拔彩色地图用于直观显示地形。";

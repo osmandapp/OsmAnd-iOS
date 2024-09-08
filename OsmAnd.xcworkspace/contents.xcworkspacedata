@@ -104,6 +104,36 @@
                      <Group
                         location = "group:gpx"
                         name = "gpx">
+                        <FileRef
+                           location = "group:GpxTrackAnalysis.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:SplitSegment.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:ElevationDiffsCalculator.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:PointAttributes.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:GradientScaleType.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:ColoringPurpose.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:GpxDbUtils.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:GpxDirItem.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:GpxDataItem.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:ElevationApproximator.kt">
+                        </FileRef>
                         <Group
                            location = "group:primitives"
                            name = "primitives">
@@ -135,36 +165,6 @@
                               location = "group:Route.kt">
                            </FileRef>
                         </Group>
-                        <FileRef
-                           location = "group:GpxTrackAnalysis.kt">
-                        </FileRef>
-                        <FileRef
-                           location = "group:SplitSegment.kt">
-                        </FileRef>
-                        <FileRef
-                           location = "group:ElevationDiffsCalculator.kt">
-                        </FileRef>
-                        <FileRef
-                           location = "group:PointAttributes.kt">
-                        </FileRef>
-                        <FileRef
-                           location = "group:GradientScaleType.kt">
-                        </FileRef>
-                        <FileRef
-                           location = "group:ColoringPurpose.kt">
-                        </FileRef>
-                        <FileRef
-                           location = "group:GpxDbUtils.kt">
-                        </FileRef>
-                        <FileRef
-                           location = "group:GpxDirItem.kt">
-                        </FileRef>
-                        <FileRef
-                           location = "group:GpxDataItem.kt">
-                        </FileRef>
-                        <FileRef
-                           location = "group:ElevationApproximator.kt">
-                        </FileRef>
                         <FileRef
                            location = "group:GpxUtilities.kt">
                         </FileRef>
@@ -205,6 +205,9 @@
                         </FileRef>
                         <FileRef
                            location = "group:RouteColorize.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:Gpx3DWallColorType.kt">
                         </FileRef>
                      </Group>
                      <Group
@@ -254,6 +257,9 @@
                         location = "group:xml"
                         name = "xml">
                         <FileRef
+                           location = "group:SinkOutputStream.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:XmlPullParser.kt">
                         </FileRef>
                         <FileRef
@@ -266,10 +272,25 @@
                         <FileRef
                            location = "group:StringExtensions.kt">
                         </FileRef>
+                        <FileRef
+                           location = "group:ByteArrayExtensions.kt">
+                        </FileRef>
                      </Group>
                      <Group
                         location = "group:api"
                         name = "api">
+                        <FileRef
+                           location = "group:XmlFactoryAPI.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:XmlSerializerAPI.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:XmlPullParserAPI.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:OutputStreamAPI.kt">
+                        </FileRef>
                         <FileRef
                            location = "group:SQLiteAPIImpl.kt">
                         </FileRef>

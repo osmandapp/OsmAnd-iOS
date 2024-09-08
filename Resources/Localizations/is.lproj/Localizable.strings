@@ -1520,7 +1520,7 @@
 "rendering_attr_piste_difficulty_intermediate_name" = "Miðlungs";
 "rendering_attr_piste_difficulty_advanced_name" = "Vanir";
 "routing_attr_max_num_changes_name" = "Fjöldi breytinga";
-"rendering_attr_alpineHiking_name" = "Flokkuní erfiðleikastig";
+"rendering_attr_alpineHiking_name" = "Flokkun stíga í erfiðleikastig";
 "routing_attr_avoid_subway_name" = "Forðast neðanjarðarlestir";
 "rendering_attr_highway_class_cycleway_name" = "Hjólastígur";
 "routeInfo_piste_difficulty_name" = "Erfiðleikastig brautar";
@@ -2594,7 +2594,7 @@
 "upload_local_version" = "Sækja útgáfu á tækinu";
 "shared_string_cloud" = "Ský";
 "sync_now" = "Samstilla núna";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "activity_type_mountainbike_name" = "Fjallahjól";
 "rendering_attr_showMtbScale_name" = "Birta fjallahjólreiðakvarða";
 "shared_string_angle_param" = "Horn: %@°";
@@ -3452,3 +3452,4 @@
 "shared_string_action" = "Aðgerð";
 "voices" = "Talskilaboð";
 "quick_action_verb_show_hide" = "Birta / Fela";
+"shared_string_show" = "Sýna";

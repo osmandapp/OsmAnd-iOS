@@ -203,6 +203,18 @@ final class GradientColorsCollection: ColorsCollection {
         return res
     }
 
+    private func isDefaultPaletteColor(_ paletteColor: PaletteGradientColor) -> Bool {
+        var defaultName = PaletteGradientColor.defaultName
+        if let terrainType = gradientType as? TerrainType {
+            if paletteColor.typeName == paletteColor.paletteName {
+                return true
+            } else if terrainType == TerrainType.height && paletteColor.paletteName.hasPrefix(TerrainMode.altitudeDefaultKey) {
+                return true
+            }
+        }
+        return paletteColor.paletteName.hasPrefix(defaultName)
+    }
+
     private static func readFromJson(_ json: [String: Any], type: String) -> [GradientData] {
         guard let typeGradients = json[type] as? [[String: Any]] else {
             return []
@@ -219,12 +231,41 @@ final class GradientColorsCollection: ColorsCollection {
         return res
     }
 
-    override func saveColors() {
-        for paletteColor in originalOrder {
-            if let index = originalOrder.firstIndex(where: { $0.id == paletteColor.id }) {
-                paletteColor.setIndex(index + 1)
+    override func getSorting() -> ((PaletteColor, PaletteColor) -> Bool) {
+        { [self] in
+            if let palette1 = $0 as? PaletteGradientColor, let palette2 = $1 as? PaletteGradientColor {
+                let isFirstDefault = isDefaultPaletteColor(palette1)
+                let isSecondDefault = isDefaultPaletteColor(palette2)
+                if isFirstDefault && isSecondDefault {
+                    if gradientType is TerrainType {
+                        if palette1.paletteName == palette1.typeName {
+                            return true
+                        } else if palette2.paletteName == palette2.typeName {
+                            return false
+                        }
+                    } else if gradientType is ColorizationType {
+                        if palette1.paletteName == PaletteGradientColor.defaultName {
+                            return true
+                        } else if palette2.paletteName == PaletteGradientColor.defaultName {
+                            return false
+                        }
+                    }
+                    return palette1.paletteName < palette2.paletteName
+                } else if isFirstDefault {
+                    return true
+                } else if isSecondDefault {
+                    return false
+                } else {
+                    return palette1.paletteName < palette2.paletteName
+                }
+            } else {
+                return $0.getIndex() < $1.getIndex()
             }
         }
+    }
+
+    override func saveColors() {
+        sortColors()
 
         let savedGradientPreferences = preference.get()
         do {

@@ -953,7 +953,7 @@
 "access_intermediate_arrival_time" = "Ora de arrivu a sa tapa";
 "map_widget_intermediate_time" = "Tempus de arrivu a sa tapa";
 "shared_string_time" = "Tempus";
-"shared_string_distance" = "Distantzia";
+"shared_string_distance" = "Distàntzia";
 "shared_string_milliradians" = "Millèsimos angulares (radiantes)";
 "angular_units" = "Unidades de medida angulare";
 "angular_units_descr" = "Càmbia sas unidades de medida de s'àzimut.";
@@ -2297,7 +2297,7 @@
 "shared_string_max_height" = "Artària màss.";
 "routing_attr_prefer_horse_routes_description" = "Preferi sasàndalas pro andare a caddu";
 "any_poi" = "Totus";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "routing_attr_only_permitted_ways_name" = "Caminos autorizados a manera espressa";
 "routing_attr_prefer_horse_routes_name" = "Preferi sasàndalas a caddu";
 "horseback_riding" = "Ecuitatzione";
@@ -2671,7 +2671,7 @@
 "local_changes" = "Modìficas locales";
 "rendering_attr_depthContourWidth_name" = "Grussesa de sa lìnia";
 "last_sync" = "Ùrtima sincronizatzione";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "routing_attr_goods_restrictions_yes_desc" = "S'ant a evitare sos caminos chi sunt serrados pro su trasportu de mercantzias.";
 "routing_attr_goods_restrictions_name" = "Intrega de mertzes";
 "routing_attr_goods_restrictions_header_name" = "Sos veìculos chi trasportant mercantzias podent tènnere limitatziones in unos cantos caminos.";
@@ -3082,3 +3082,4 @@
 "temperature_layer" = "Istratu de sa temperadura";
 "shared_string_favorite" = "Preferidu";
 "cloud_layer" = "Istratu de sas nues";
+"shared_string_show" = "Ammustra";

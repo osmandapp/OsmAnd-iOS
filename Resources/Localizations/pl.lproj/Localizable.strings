@@ -2305,7 +2305,7 @@
 "shared_string_contours" = "Kontury";
 "shared_string_layers" = "Warstwy";
 "backup_and_restore" = "Utwórz kopię zapasową i przywróć";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "srtm_download_single_help_message" = "Proszę wybrać wariant. Aby zmienić format, należy ponownie pobrać plik.";
 "delete_tracks_bottom_sheet_description_regular_part" = "Czy na pewno chcesz usunąć ";
 "population_num" = "Ludność";
@@ -2495,7 +2495,7 @@
 "you_can_get_feature_as_part_of_pattern" = "Otrzymaj \"%@\" jako część planu %@. Porównanie:";
 "routing_attr_motor_type_hybrid_name" = "Hybryda";
 "not_enough_contributions_descr" = "Aby uzyskać dostęp do nieograniczonych godzinowych aktualizacji map wymagane jest wprowadzenie co najmniej %@ zmian z okresu ostatnich dwóch miesięcy %@.";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "recalc_angle_dialog_title" = "Minimalny kąt między moją lokalizacją a trasą";
 "promo_subscription" = "Subskrypcja promocyjna";
 "weather_precip_milimeters" = "Milimetry";
@@ -3237,7 +3237,7 @@
 "visualization_3d_visualized_by" = "Wizualizowane przez";
 "shared_string_always" = "Zawsze";
 "shared_string_item" = "Pozycja";
-"shared_string_bottom" = "Dół";
+"shared_string_bottom" = "Na dole";
 "speedometer_description" = "Pokazuje bieżącą prędkość zgłoszoną przez GPS";
 "default_buttons" = "Przyciski domyślne";
 "track_3d_empty_view_description" = "Przeglądaj tor w interaktywnym 3D! Wizualizuj wysokość, prędkość i inne parametry bezpośrednio na mapie.";
@@ -3298,3 +3298,4 @@
 "shared_string_action" = "Akcja";
 "download_srtm_maps" = "Poziomice";
 "wind_layer" = "Warstwa wiatrowa";
+"shared_string_show" = "Wyświetl";

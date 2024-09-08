@@ -131,6 +131,7 @@ static NSString * const routeServiceKey = @"routeService";
 static NSString * const navigationIconKey = @"navigationIcon";
 static NSString * const locationIconKey = @"locationIcon";
 static NSString * const use3dIconsByDefaultKey = @"use3dIconsByDefault";
+static NSString * const batterySavingModeKey = @"batterySavingMode";
 static NSString * const appModeOrderKey = @"appModeOrder";
 static NSString * const viewAngleVisibilityKey = @"viewAngleVisibility";
 static NSString * const locationRadiusVisibilityKey = @"locationRadiusVisibility";
@@ -4020,7 +4021,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [_profilePreferences setObject:_rotateMap forKey:@"rotate_map"];
 
         _mapDensity = [OACommonDouble withKey:mapDensityKey defValue:MAGNIFIER_DEFAULT_VALUE];
-        [_mapDensity setModeDefaultValue:@(MAGNIFIER_DEFAULT_CAR) mode:[OAApplicationMode CAR]];
+        [_mapDensity setModeDefaultValue:@(MAGNIFIER_DEFAULT_VALUE) mode:[OAApplicationMode CAR]];
         [_mapDensity setModeDefaultValue:@(MAGNIFIER_DEFAULT_VALUE) mode:[OAApplicationMode BICYCLE]];
         [_mapDensity setModeDefaultValue:@(MAGNIFIER_DEFAULT_VALUE) mode:[OAApplicationMode PEDESTRIAN]];
         [_profilePreferences setObject:_mapDensity forKey:@"map_density_n"];
@@ -4532,7 +4533,10 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
         _use3dIconsByDefault = [[[OACommonBoolean withKey:use3dIconsByDefaultKey defValue:YES] makeGlobal] makeShared];
         [_globalPreferences setObject:_use3dIconsByDefault forKey:@"_use3dIconsByDefault"];
-        
+
+        _batterySavingMode = [[[OACommonBoolean withKey:batterySavingModeKey defValue:NO] makeGlobal] makeShared];
+        [_globalPreferences setObject:_batterySavingMode forKey:@"battery_saving"];
+
         _levelToSwitchVectorRaster = [[OACommonInteger withKey:debugRenderingInfoKey defValue:1] makeGlobal];
         [_globalPreferences setObject:_levelToSwitchVectorRaster forKey:@"level_to_switch_vector_raster"];
 

@@ -48,6 +48,7 @@
     GLuint _colorRenderBuffer;
     GLuint _framebuffer;
     CADisplayLink* _displayLink;
+    BOOL _limitFrameRate;
 
     OsmAnd::PointI _viewSize;
     CGFloat _topOffset;
@@ -1077,6 +1078,8 @@ forcedUpdate:(BOOL)forcedUpdate
     [_displayLink addToRunLoop:[NSRunLoop currentRunLoop]
                        forMode:NSRunLoopCommonModes];
 
+    [self updateFrameRefreshRate];
+
     // Resume GPU worker
     _renderer->resumeGpuWorker();
 
@@ -1170,6 +1173,26 @@ forcedUpdate:(BOOL)forcedUpdate
 - (float)getLocationHeightInMeters:(OsmAnd::PointI)location31
 {
     return _renderer->getLocationHeightInMeters(location31);
+}
+
+- (void)limitFrameRefreshRate
+{
+    _limitFrameRate = YES;
+    [self updateFrameRefreshRate];
+}
+
+- (void)restoreFrameRefreshRate
+{
+    _limitFrameRate = NO;
+    [self updateFrameRefreshRate];
+}
+
+- (void)updateFrameRefreshRate
+{
+    if (_limitFrameRate)
+    	_displayLink.preferredFrameRateRange = CAFrameRateRangeMake(20.0f, 20.0f, 20.0f);
+    else
+        _displayLink.preferredFrameRateRange = CAFrameRateRangeDefault;
 }
 
 @end

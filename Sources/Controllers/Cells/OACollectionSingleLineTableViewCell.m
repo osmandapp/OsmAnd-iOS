@@ -135,6 +135,16 @@
     }
 }
 
+- (void)configureTopOffset:(CGFloat)top
+{
+    self.topMarginStackView.spacing = top;
+}
+
+- (void)configureBottomOffset:(CGFloat)bottom
+{
+    self.bottomMarginStackView.spacing = bottom;
+}
+
 #pragma mark - UIView
 
 - (CGSize)systemLayoutSizeFittingSize:(CGSize)targetSize

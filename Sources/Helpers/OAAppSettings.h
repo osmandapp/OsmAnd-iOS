@@ -57,7 +57,6 @@ static const NSInteger GENERIC_EXTERNAL_DEVICE = 1;
 static const NSInteger WUNDERLINQ_EXTERNAL_DEVICE = 2;
 
 static const double MAGNIFIER_DEFAULT_VALUE = 1.0;
-static const double MAGNIFIER_DEFAULT_CAR = 1.5;
 static const double MAGNIFIER_DEFAULT_CAR_TEXT = 1.25;
 
 static const NSInteger LAYER_TRANSPARENCY_SEEKBAR_MODE_OVERLAY = 0;
@@ -831,6 +830,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonString *navigationIcon;
 @property (nonatomic) OACommonString *locationIcon;
 @property (nonatomic) OACommonBoolean *use3dIconsByDefault;
+@property (nonatomic) OACommonBoolean *batterySavingMode;
 @property (nonatomic) OACommonInteger *appModeOrder;
 @property (nonatomic) OACommonInteger *viewAngleVisibility;
 @property (nonatomic) OACommonInteger *locationRadiusVisibility;

@@ -2,7 +2,7 @@ source "https://github.com/CocoaPods/Specs.git"
 
 platform :ios, '15.0'
 
-xcodeproj 'OsmAnd'
+project 'OsmAnd'
 workspace 'OsmAnd'
 
 def defaultPods
@@ -27,48 +27,13 @@ target 'OsmAnd Maps' do
     defaultPods
 end
 
-
-# Make changes to Pods.xcconfig: 
-#  - HEADER_SEARCH_PATHS need to inherit project settings
-#  - 'libPods.a' needs $(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)
-#  - Force architectures to '$(ARCHS_STANDARD)'
-#  - Build all architectures for Pods
 post_install do |installer|
-    workDir = Dir.pwd
-
-    # CocoaPods pre-0.34
-    if File.exist?("#{workDir}/Pods/Pods.xcconfig")
-        adjustConfigFile("#{workDir}/Pods/Pods.xcconfig")
-    end
-    if File.exist?("#{workDir}/Pods/Pods-dev.xcconfig")
-        adjustConfigFile("#{workDir}/Pods/Pods-dev.xcconfig")
-    end
-
-    # CocoaPods pre-0.34+
-    if File.exist?("#{workDir}/Pods/Target Support Files/Pods")
-        adjustConfigFile("#{workDir}/Pods/Target Support Files/Pods/Pods.debug.xcconfig")
-        adjustConfigFile("#{workDir}/Pods/Target Support Files/Pods/Pods.release.xcconfig")
-    end
-    if File.exist?("#{workDir}/Pods/Target Support Files/Pods-dev")
-        adjustConfigFile("#{workDir}/Pods/Target Support Files/Pods-dev/Pods-dev.debug.xcconfig")
-        adjustConfigFile("#{workDir}/Pods/Target Support Files/Pods-dev/Pods-dev.release.xcconfig")
-    end
-
-    #installer.project.targets.each do |target|
     installer.pods_project.targets.each do |target|
         target.build_configurations.each do |configuration|
             configuration.build_settings['ARCHS'] = '$(ARCHS_STANDARD)'
             configuration.build_settings['ONLY_ACTIVE_ARCH'] = 'NO'
-            configuration.build_settings['CONFIGURATION_BUILD_DIR'] = '${PROJECT_DIR}/../../binaries/ios.clang${EFFECTIVE_PLATFORM_NAME}/$(CONFIGURATION)'
+            configuration.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
         end
     end
 end
-def adjustConfigFile(xcconfigFilename)
-    xcconfig = File.read(xcconfigFilename)
-    xcconfig = xcconfig.gsub(/HEADER_SEARCH_PATHS = "/, "HEADER_SEARCH_PATHS = $(inherited) \"")
-    xcconfig = xcconfig.gsub(/LIBRARY_SEARCH_PATHS = "/, "LIBRARY_SEARCH_PATHS = $(inherited) \"")
-    xcconfig = xcconfig.gsub(/FRAMEWORK_SEARCH_PATHS = "/, "FRAMEWORK_SEARCH_PATHS = $(inherited) \"")
-    xcconfig = xcconfig.gsub(/OTHER_CFLAGS = "/, "OTHER_CFLAGS = $(inherited) \"")
-    xcconfig = xcconfig.gsub(/OTHER_LDFLAGS = "/, "OTHER_LDFLAGS = $(inherited) \"")
-    File.open(xcconfigFilename, "w") { |file| file << xcconfig }
-end
+

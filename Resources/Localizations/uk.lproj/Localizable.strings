@@ -185,7 +185,7 @@
 "map_mode" = "Режим мапи";
 "map_widget_renderer" = "Стиль мапи";
 "map_settings_overunder" = "Накладка та підкладка";
-"map_settings_over" = "Накладання";
+"map_settings_over" = "Накладка";
 "map_settings_under" = "Підкладка";
 "shared_string_none" = "Нічого";
 "map_settings_offline" = "Стилі офлайн мап";
@@ -370,7 +370,7 @@
 "srtm_plugin_disabled" = "Топографію вимкнено";
 "prch_wiki_info" = "Плагін Вікіпедія надає відомості з Вікіпедії для мап, на які ви маєте права, які були придбані або завантажені в межах вільного ліміту.";
 "prch_srtm_info" = "Плагін Топографія додає ізолінії на мапах, на які ви маєте права, які були придбані або завантажені в межах вільного ліміту.";
-"shared_string_open" = "Відкритий";
+"shared_string_open" = "Відчинено";
 "time_closed" = "Зачинено";
 "will_close_at" = "Закриється о";
 "time_will_open" = "Відкриється через";
@@ -1253,7 +1253,7 @@
 "rendering_value_thin_name" = "Тонко";
 "rendering_attr_hideHouseNumbers_name" = "Номери будинків";
 "rendering_attr_depthContours_description" = "Показувати ізолінії та точки глибин.";
-"rendering_attr_alpineHiking_name" = "Класифікація складності";
+"rendering_attr_alpineHiking_name" = "Рівень складності пішохідних маршрутів";
 "rendering_attr_piste_type_sleigh_name" = "Запряжені сани, санчата";
 "rendering_attr_hideText_name" = "Текст";
 "rendering_attr_piste_difficulty_undefined_name" = "Не визначено";
@@ -1717,7 +1717,7 @@
 "allow_3D_view" = "2.5D вигляд";
 "do_not_rotate" = "Не обертати";
 "light_theme" = "Світла";
-"settings_app_theme" = "Тема додатку";
+"settings_app_theme" = "Тема застосунку";
 "shared_string_meters" = "метри";
 "shared_string_tones" = "тонни";
 "accessibility_announce" = "Оголошення";
@@ -2266,7 +2266,7 @@
 "routeInfo_surface_description" = "Надає дані про фізичне покриття дороги/пішохідної доріжки.";
 "route_line_use_map_style_width" = "Використовувати типову ширину лінії зі стилю мапи (%@).";
 "routeInfo_tracktype_description" = "Забарвлення маршруту або треку за складом поверхні. Зазвичай застосовують, коли дорожня мережа в основному без покриття.";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "routing_attr_allow_gate_name" = "Вважати, що ворота відкриті";
 "routing_attr_allow_gate_description" = "Вважати, що ворота відкриті";
 "routing_attr_only_permitted_streets_name" = "Вулиці з явним дозволом для руху";
@@ -2419,7 +2419,7 @@
 "routing_attr_allow_private_for_truck_description" = "Дозволити доступ вантажних автомобілів на приватну територію.";
 "routing_attr_allow_private_for_truck_name" = "Доступ до приватних територій (вантажівка)";
 "shared_string_learn_more" = "Докладніше";
-"ltr_or_rtl_combine_via_or" = "%@або %@";
+"ltr_or_rtl_combine_via_or" = "%@ або %@";
 "osmand_depelopment_simulate_location_section" = "Імітувати";
 "simulate_your_location_gpx_descr" = "Симуляція положення за допомогою записаного треку GPX.";
 "simulate_location_movement_speed" = "Швидкість руху";
@@ -2641,7 +2641,7 @@
 "error_contact_support" = "Якщо проблема не зникне, зверніться до нашої служби підтримки.";
 "select_another_colorization" = "Виберіть інший тип забарвлення.";
 "track_has_no_needed_data" = "Трек не містить потрібних даних.";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "rendering_attr_showMtbScaleIMBATrails_name" = "Показувати маршрути для MTB IMBA";
 "mtb_imba_full" = "Міжнародна асоціація гірського велоспорту";
 "activity_type_mountainbike_name" = "Гірський велосипед";
@@ -3145,7 +3145,7 @@
 "map_orientation_landscape" = "Горизонтально";
 "map_widget_ant_heart_rate_desc" = "Показує пульс користувача під час певної активності в режимі реального часу";
 "gitHub_discussion" = "Обговорення GitHub";
-"external_device_status_connect" = "З’єднатись";
+"external_device_status_connect" = "Підʼєднати";
 "default_appearance_desc" = "Типовий колір, піктограма та форма застосовуватимуться до доданих точок у групі закладок.";
 "shared_string_result" = "Результат";
 "no_travel_guides_data_descr" = "Завантажте путівники Вікімандрів, щоб переглянути статті про місця в усьому світі без підключення до Інтернету.";
@@ -3407,7 +3407,7 @@
 "recorded_track" = "Записаний трек";
 "permanent_delete_warning" = "%@ буде видалено назавжди. Ви впевнені?";
 "average_glide_ratio_time_interval_desc" = "Показує середній коефіцієнт ковзання або вертикальну швидкість для заданого інтервалу.";
-"missing_or_outdated_maps_title" = "Зниклі або неактуальні мапи";
+"missing_or_outdated_maps_title" = "Відсутні або неактуальні мапи";
 "getting_list_required_maps" = "Отримання списку необхідних мап...";
 "action_cant_be_undone" = "Ця дія незворотна.";
 "osmand_cloud_delete_account_descr" = "Ви впевнені, що бажаєте видалити обліковий запис OsmAnd Cloud?";
@@ -3415,7 +3415,7 @@
 "calculate_online" = "Обчислити онлайн";
 "required_maps_list" = "Мапи, які також будуть використані: %@";
 "track_vertical_exaggeration_description" = "Змінюючи масштаб, ви можете змінювати висоту 3D-трека.";
-"visualization_3d_visualized_by" = "Візуаліовано";
+"visualization_3d_visualized_by" = "Візуалізовано";
 "visualization_3d_wall_color" = "Колір стіни";
 "visualization_3d_track_line" = "Лінія треку";
 "track_3d" = "3D-трек";
@@ -3460,7 +3460,7 @@
 "dangerous_goods" = "Небезпечні вантажі";
 "shared_string_class" = "Клас";
 "missing_maps_ignore" = "Використати завантажені мапи";
-"missing_maps_ignore_details" = "Завантажені карти покривають ваш маршрут? Орієнтуйтеся за ними, якщо ви знайомі з місцевістю.";
+"missing_maps_ignore_details" = "Завантажені мапи покривають ваш маршрут? Орієнтуйтеся за ними, якщо ви знайомі з місцевістю.";
 "ios_release_4_8" = "• Новий віджет \"Спідометр\" сумісний з CarPlay\n• Додано покрокові інструкції до деталей маршруту\n• Налаштуйте екран мапи, додавши кілька кнопок \"Швидких дій\"\n• Покращення 3D-треків: нові опції візуалізації та розфарбовування\n• Кастомні палітри кольорів для місцевості, треків та маршрутів\n• Додано покращений режим багаторазового вибору для треків\n• 3D-варіант для значків положення локації\n• Розширено вибір туристичних маршрутів на мапі\n• Погода: Оновлення інтерфейсу, додано анімацію вітру\n• Додано плавні переходи під час масштабування у 3D-режимі\n• \"Позиція місцезнаходження на екрані\" тепер у \"Екрані налаштувань\n• Змінено \"Окружність колеса\" у налаштуваннях датчика BLE\n• Додано окреме навігаційне сповіщення \"Обмеження швидкості\"\n• Виправлено назви віджетів пеленгаторів\n• Виправлено видимість \"Радіусна лінійка\" на всіх панелях віджетів\n";
 "transport_hazmat_title" = "Перевезення небезпечних матеріалів";
 "weather_source_GFS_description" = "Глобальна система прогнозування від національних центрів екологічного прогнозування";
@@ -3475,7 +3475,7 @@
 "download_srtm_maps" = "Ізолінії";
 "quick_action_verb_pause_resume" = "Пауза / Відновити";
 "wind_layer" = "Шар вітру";
-"shared_string_set" = "Набір";
+"shared_string_set" = "Налаштувати";
 "temperature_layer" = "Температурний шар";
 "shared_string_replace" = "Замінити";
 "quick_action_verb_turn_on_off" = "Увімкнути / Вимкнути";
@@ -3486,7 +3486,7 @@
 "shared_string_action" = "Дія";
 "shared_string_colors" = "Кольори";
 "app_profile" = "Профіль застосунку";
-"quick_action_verb_show_hide" = "Показати / Приховати";
+"quick_action_verb_show_hide" = "Показати / Сховати";
 "precipitation_layer" = "Шар опадів";
 "voices" = "Голосові повідомлення";
 "user_palette" = "Палітра користувача";
@@ -3496,8 +3496,17 @@
 "shared_string_favorite" = "Закладки";
 "height_legend_description" = "Для візуалізації рельєфу використовуються кольорові мапи висот.";
 "shared_string_favorites" = "Закладки";
-"quick_action_track_waypoint" = "Відстежити маршрутну точку";
+"quick_action_track_waypoint" = "Маршрутна точка";
 "quick_action_parking_place" = "Місце паркування";
 "map_source" = "Джерело мапи";
 "driving_region_india" = "Індія";
 "driving_region_uk" = "Велика Британія та подібні";
+"weather_wind_animation_enable_descr" = "Увімкніть, щоб переглянути шар анімації вітру на мапі.";
+"shared_string_show" = "Показ";
+"osmand_depelopment_use_3d_icons" = "Використовувати піктограми положення 3D-локацій";
+"shared_string_update_required" = "Необхідне оновлення";
+"osm_login_needs_ios_16_4" = "Для входу в OpenStreetMap потрібна iOS 16.4+";
+"route_your_destination_is_on_left" = "Ваш пункт призначення знаходиться ліворуч";
+"route_your_destination_is_on_right" = "Ваш пункт призначення знаходиться праворуч";
+"route_your_destination_is_on_ahead" = "Ваш пункт призначення прямо перед вами";
+"osmand_cloud_delete_account_descr_with_email" = "Ви впевнені, що хочете видалити обліковий запис OsmAnd Cloud: %@?";

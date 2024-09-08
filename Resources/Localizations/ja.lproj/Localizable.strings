@@ -2418,7 +2418,7 @@
 "shared_string_recorded" = "録音音声";
 "contact_support_description" = "ご不明な点がございましたら、%@までお問い合わせください。";
 "srtm_download_single_help_message" = "必要なSRTMバリアントを選択してください。フォーマットを変更するには、ファイルを再ダウンロードする必要があります。";
-"ltr_or_rtl_combine_via_dash" = "%@— %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "select_wikipedia_article_langs" = "マップに表示されるWikipedia記事の言語を選択します。記事を読んでいる最中も言語を切り替えることができます。";
 "checking_progress" = "チェック中…";
 "simulate_your_location_gpx_descr" = "記録されたGPX経路を利用して位置をシミュレートします。";
@@ -2426,7 +2426,7 @@
 "search_poi_types_descr" = "異なるカテゴリのPOIタイプを組み合わせます。スイッチをタップしてすべてを選択し、左側をタップしてカテゴリを選択します。";
 "empty_purchases_description" = "購入したはずのアイテムがここに表示されない場合は、\"%@\"をタップするか、サポートチームにお問い合わせください。";
 "position_on_map_bottom" = "下";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "routing_attr_avoid_low_emission_zone_name" = "低排出ゾーンを避ける";
 "delete_all_confirmation" = "はい、すべて削除します";
 "promo_subscription" = "プロモーションサブスクリプション";
@@ -2988,3 +2988,4 @@
 "download_srtm_maps" = "等高線";
 "temperature_layer" = "温度関連レイヤー";
 "pressure_layer" = "気圧関連レイヤー";
+"shared_string_show" = "表示";

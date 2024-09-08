@@ -409,6 +409,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
                @"ic_action_car_dark",
                @"ic_action_taxi",
                @"ic_action_truck_dark",
+               @"ic_action_suv",
                @"ic_action_shuttle_bus",
                @"ic_action_bus_dark",
                @"ic_action_subway",

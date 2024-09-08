@@ -755,8 +755,10 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconsPaletteCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
-            cell.disableAnimationsOnStart = YES;
             cell.hostVC = self;
+            cell.useMultyLines = NO;
+            cell.forceScrollOnStart = YES;
+            cell.disableAnimationsOnStart = YES;
         }
         if (cell)
         {

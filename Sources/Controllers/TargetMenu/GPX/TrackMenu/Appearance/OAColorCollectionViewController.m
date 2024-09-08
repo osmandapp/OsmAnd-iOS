@@ -279,6 +279,7 @@
             colorHandler.regularIconColor = _regularIconColor;
             [colorHandler setScrollDirection:UICollectionViewScrollDirectionVertical];
             [colorHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:[_iconItems indexOfObject:_selectedIconItem] inSection:0]];
+            cell.disableAnimationsOnStart = YES;
             
             if (_collectionType == EOAColorCollectionTypeIconItems)
             {

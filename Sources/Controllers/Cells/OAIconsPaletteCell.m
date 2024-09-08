@@ -37,7 +37,6 @@
     self.separatorHeight.constant = 1.0 / [UIScreen mainScreen].scale;
     self.topTitleOffset.constant = 20;
     self.bottomTitleOffset.constant = 8;
-    [self rightActionButtonVisibility:NO];
 }
 
 - (IconCollectionHandler *)getIconsCollectionHandler

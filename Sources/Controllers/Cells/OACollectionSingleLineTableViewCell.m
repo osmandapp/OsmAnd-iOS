@@ -82,7 +82,7 @@
 
             NSIndexPath *selectedIndexPath = [_collectionHandler getSelectedIndexPath];
             if (selectedIndexPath.row != NSNotFound
-                && ![self.collectionView.indexPathsForVisibleItems containsObject:selectedIndexPath]
+                && (_forceScrollOnStart || ![self.collectionView.indexPathsForVisibleItems containsObject:selectedIndexPath])
                 && selectedIndexPath.section < [collectionHandler sectionsCount]
                 && selectedIndexPath.row < [collectionHandler itemsCount:selectedIndexPath.section])
             {

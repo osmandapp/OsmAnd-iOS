@@ -8,24 +8,17 @@
 
 import UIKit
 
-@objc
-enum MarkerState: Int32, CaseIterable {
-    case STAY
-    case MOVE
-    case NONE
-}
-
 @objcMembers
 final class MarkerDisplayOption: NSObject {
     
-    static var off = MarkerDisplayOption(rawValue: 0, nameId: "shared_string_off", markerStates: [.NONE])
-    static var resting = MarkerDisplayOption(rawValue: 1, nameId: "resting_position", markerStates: [.STAY])
-    static var navigation = MarkerDisplayOption(rawValue: 2, nameId: "navigation_position", markerStates: [.MOVE])
-    static var restingNavigation = MarkerDisplayOption(rawValue: 3, nameId: "resting_navigation_position", markerStates: [.MOVE, .STAY])
+    static var off = MarkerDisplayOption(rawValue: 0, nameId: "shared_string_off", markerStates: [OAMarkerStateNone])
+    static var resting = MarkerDisplayOption(rawValue: 1, nameId: "resting_position", markerStates: [OAMarkerStateStay])
+    static var navigation = MarkerDisplayOption(rawValue: 2, nameId: "navigation_position", markerStates: [OAMarkerStateMove])
+    static var restingNavigation = MarkerDisplayOption(rawValue: 3, nameId: "resting_navigation_position", markerStates: [OAMarkerStateMove, OAMarkerStateStay])
     
     let rawValue: Int32
     let nameId: String
-    private let markerStates: [MarkerState]
+    private let markerStates: [EOAMarkerState]
     
     static func allValues() -> [MarkerDisplayOption] {
         [off, resting, navigation, restingNavigation]
@@ -44,7 +37,7 @@ final class MarkerDisplayOption: NSObject {
         return off
     }
     
-    init(rawValue: Int32, nameId: String, markerStates: [MarkerState]) {
+    init(rawValue: Int32, nameId: String, markerStates: [EOAMarkerState]) {
         self.rawValue = rawValue
         self.nameId = nameId
         self.markerStates = markerStates
@@ -53,5 +46,9 @@ final class MarkerDisplayOption: NSObject {
     
     func name() -> String {
         localizedString(nameId)
+    }
+    
+    func isVisible(markerState: EOAMarkerState) -> Bool {
+        self != Self.off && markerStates.contains(markerState)
     }
 }

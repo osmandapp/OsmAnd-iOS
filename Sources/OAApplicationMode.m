@@ -512,6 +512,26 @@ static int PROFILE_TRUCK = 1000;
     [OAAppSettings.sharedManager.locationIcon set:locIcon mode:self];
 }
 
+- (NSInteger) getViewAngleVisibility
+{
+    return [OAAppSettings.sharedManager.viewAngleVisibility get:self];
+}
+
+- (void) setViewAngleVisibility:(NSInteger) viewAngle
+{
+    [OAAppSettings.sharedManager.viewAngleVisibility set:viewAngle mode:self];
+}
+
+- (NSInteger) getLocationRadiusVisibility
+{
+    return [OAAppSettings.sharedManager.locationRadiusVisibility get:self];
+}
+
+- (void) setLocationRadiusVisibility:(NSInteger) locationRadius
+{
+    [OAAppSettings.sharedManager.locationRadiusVisibility set:locationRadius mode:self];
+}
+
 - (NSString *) getIconColorName
 {
     switch (self.getIconColor)
@@ -708,6 +728,8 @@ static int PROFILE_TRUCK = 1000;
         [mode setCustomIconColor:(int)builder.customIconColor];
         [mode setLocationIconName:builder.locationIcon];
         [mode setNavigationIconName:builder.navigationIcon];
+        [mode setViewAngleVisibility:builder.viewAngleVisibility];
+        [mode setLocationRadiusVisibility:builder.locationRadiusVisibility];
         [mode setOrder:(int)builder.order];
     }
     else if (![_values containsObject:mode])
@@ -994,6 +1016,8 @@ static int PROFILE_TRUCK = 1000;
     [_am setCustomIconColor:(int)_customIconColor];
     [_am setLocationIconName:_locationIcon];
     [_am setNavigationIconName:_navigationIcon];
+    [_am setViewAngleVisibility:_viewAngleVisibility];
+    [_am setLocationRadiusVisibility:_locationRadiusVisibility];
     [_am setOrder:_order ? (int)_order : (int)OAApplicationMode.values.count];
     
     return _am;

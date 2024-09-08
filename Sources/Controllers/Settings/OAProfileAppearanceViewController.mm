@@ -66,6 +66,8 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
 @property (nonatomic) EOARouteService routeService;
 @property (nonatomic) NSString *navigationIcon;
 @property (nonatomic) NSString *locationIcon;
+@property (nonatomic) int viewAngleVisibility;
+@property (nonatomic) int locationRadiusVisibility;
 @property (nonatomic) CGFloat minSpeed;
 @property (nonatomic) CGFloat maxSpeed;
 
@@ -100,6 +102,10 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
             return NO;
         if (_navigationIcon != that.navigationIcon)
             return NO;
+        if (_locationRadiusVisibility != that.locationRadiusVisibility)
+            return NO;
+        if (_viewAngleVisibility != that.viewAngleVisibility)
+            return NO;
         if (_minSpeed != that.minSpeed)
             return NO;
         if (_maxSpeed != that.maxSpeed)
@@ -127,12 +133,14 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     result = 31 * result + @(_routeService).hash;
     result = 31 * result + _navigationIcon.hash;
     result = 31 * result + _locationIcon.hash;
+    result = 31 * result + @(_viewAngleVisibility).hash;
+    result = 31 * result + @(_locationRadiusVisibility).hash;
     return result;
 }
 
 @end
 
-@interface OAProfileAppearanceViewController() <UITableViewDelegate, UITableViewDataSource, OAColorsCollectionCellDelegate, OAColorCollectionDelegate, Updatable, UITextFieldDelegate>
+@interface OAProfileAppearanceViewController() <UITableViewDelegate, UITableViewDataSource, OAColorsCollectionCellDelegate, OAColorCollectionDelegate, OAProfileAppearanceViewAngleUpdatable, OAProfileAppearanceLocationRadiusUpdatable, UITextFieldDelegate>
 
 @end
 
@@ -209,6 +217,8 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     _changedProfile.derivedProfile = _profile.derivedProfile;
     _changedProfile.routingProfile = _profile.routingProfile;
     _changedProfile.navigationIcon = _profile.navigationIcon;
+    _changedProfile.viewAngleVisibility = _profile.viewAngleVisibility;
+    _changedProfile.locationRadiusVisibility = _profile.locationRadiusVisibility;
     _changedProfile.locationIcon = _profile.locationIcon;
     _changedProfile.minSpeed = _profile.minSpeed;
     _changedProfile.maxSpeed = _profile.maxSpeed;
@@ -227,6 +237,8 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     _profile.routeService = (EOARouteService) baseModeForNewProfile.getRouterService;
     _profile.locationIcon = [baseModeForNewProfile.getLocationIcon name];
     _profile.navigationIcon = [baseModeForNewProfile.getNavigationIcon name];
+    _profile.viewAngleVisibility = [baseModeForNewProfile getViewAngleVisibility];
+    _profile.locationRadiusVisibility = [baseModeForNewProfile getLocationRadiusVisibility];
 }
 
 - (void) commonInit
@@ -363,7 +375,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         kCellHeaderTitleKey : OALocalizedString(@"shared_string_options"),
         kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"view_angle"),
-        kCellDescrKey : [[MarkerDisplayOption valueByIndex:[OAAppSettings.sharedManager.viewAngleVisibility get:_profile.parent]] name],
+        kCellDescrKey : [[MarkerDisplayOption valueByIndex:_changedProfile.viewAngleVisibility] name],
         kCellIconNameKey : @"ic_custom_location_view_angle",
         kCellIconTintColor : UIColorFromRGB(_changedProfile.profileColor),
         kCellKeyKey : kViewAngleCellKey,
@@ -371,7 +383,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     [optionsSection addRowFromDictionary:@{
         kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"location_radius"),
-        kCellDescrKey : [[MarkerDisplayOption valueByIndex:[OAAppSettings.sharedManager.locationRadiusVisibility get:_profile.parent]] name],
+        kCellDescrKey : [[MarkerDisplayOption valueByIndex:_changedProfile.locationRadiusVisibility] name],
         kCellIconNameKey : @"ic_custom_location_radius",
         kCellIconTintColor : UIColorFromRGB(_changedProfile.profileColor),
         kCellKeyKey : kLocationRadiusCellKey,
@@ -602,6 +614,8 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         [mode setCustomIconColor:_changedProfile.customColor];
         [mode setLocationIconName:_changedProfile.locationIcon];
         [mode setNavigationIconName:_changedProfile.navigationIcon];
+        [mode setViewAngleVisibility:_changedProfile.viewAngleVisibility];
+        [mode setLocationRadiusVisibility:_changedProfile.locationRadiusVisibility];
         
         [[[OsmAndApp instance] availableAppModesChangedObservable] notifyEvent];
     }
@@ -621,6 +635,8 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     [builder setCustomIconColor:_changedProfile.customColor];
     [builder setLocationIcon:_changedProfile.locationIcon];
     [builder setNavigationIcon:_changedProfile.navigationIcon];
+    [builder setViewAngleVisibility:_changedProfile.viewAngleVisibility];
+    [builder setLocationRadiusVisibility:_changedProfile.locationRadiusVisibility];
     [builder setOrder:(int) OAApplicationMode.allPossibleValues.count];
     
     OAApplicationMode *mode = [OAApplicationMode saveProfile:builder];
@@ -847,14 +863,16 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     OATableRowData *item = [_data itemForIndexPath:indexPath];
     if ([item.key isEqualToString:kViewAngleCellKey])
     {
-        OAProfileAppearanceViewAngleViewController *vc = [[OAProfileAppearanceViewAngleViewController alloc] initWithAppMode:_profile.parent];
+        OAProfileAppearanceViewAngleViewController *vc = [[OAProfileAppearanceViewAngleViewController alloc] init];
         vc.delegate = self;
+        vc.selectedIndex = _changedProfile.viewAngleVisibility;
         [self showModalViewController:vc];
     }
     else if ([item.key isEqualToString:kLocationRadiusCellKey])
     {
-        OAProfileAppearanceLocationRadiusViewController *vc = [[OAProfileAppearanceLocationRadiusViewController alloc] initWithAppMode:_profile.parent];
+        OAProfileAppearanceLocationRadiusViewController *vc = [[OAProfileAppearanceLocationRadiusViewController alloc] init];
         vc.delegate = self;
+        vc.selectedIndex = _changedProfile.locationRadiusVisibility;
         [self showModalViewController:vc];
     }
 }
@@ -955,12 +973,22 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:kColorRowIndex inSection:kColorSectionIndex]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
-#pragma mark - Updatable
+#pragma mark - OAProfileAppearanceViewAngleUpdatable
 
-- (void)update
+- (void) onViewAngleUpdatedWithNewValue:(NSInteger)newValue
 {
+    _changedProfile.viewAngleVisibility = newValue;
     [self generateData];
-    [self.tableView reloadData];
+    [_tableView reloadSections:[NSIndexSet indexSetWithIndex:kOptionsSectionIndex] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+#pragma mark - OAProfileAppearanceLocationRadiusUpdatable
+
+- (void) onLocationRadiusUpdatedWithNewValue:(NSInteger)newValue
+{
+    _changedProfile.locationRadiusVisibility = newValue;
+    [self generateData];
+    [_tableView reloadSections:[NSIndexSet indexSetWithIndex:kOptionsSectionIndex] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 @end

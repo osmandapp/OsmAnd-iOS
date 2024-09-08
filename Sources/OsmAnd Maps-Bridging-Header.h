@@ -191,6 +191,7 @@
 // Enums
 #import "OAGPXDataSetType.h"
 #import "OADownloadMode.h"
+#import "OAMyPositionLayerState.h"
 
 // Backup
 #import "OABackupHelper.h"

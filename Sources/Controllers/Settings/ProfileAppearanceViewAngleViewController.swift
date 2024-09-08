@@ -8,6 +8,11 @@
 
 import UIKit
 
+@objc(OAProfileAppearanceViewAngleUpdatable)
+protocol ProfileAppearanceViewAngleUpdatable: AnyObject {
+    func onViewAngleUpdated(newValue: Int)
+}
+
 @objc(OAProfileAppearanceViewAngleViewController)
 @objcMembers
 final class ProfileAppearanceViewAngleViewController: OABaseNavbarViewController {
@@ -15,17 +20,8 @@ final class ProfileAppearanceViewAngleViewController: OABaseNavbarViewController
     private static let isSelectedKey = "isSelectedKey"
     private static let rawValueKey = "rawValueKey"
     
-    private let mode: OAApplicationMode
-    weak var delegate: Updatable?
-    
-    init(appMode: OAApplicationMode) {
-        self.mode = appMode
-        super.init()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    var selectedIndex = 0
+    weak var delegate: ProfileAppearanceViewAngleUpdatable?
     
     override func getTitle() -> String {
         localizedString("view_angle")
@@ -42,11 +38,11 @@ final class ProfileAppearanceViewAngleViewController: OABaseNavbarViewController
     override func generateData() {
         let section = tableData.createNewSection()
         
-        let selectedIndex = OAAppSettings.sharedManager().viewAngleVisibility.get(mode)
         let values = MarkerDisplayOption.allValues()
         
-        for value in MarkerDisplayOption.allValues() {
-            let isSelected = selectedIndex == value.rawValue
+        for i in 0 ..< values.count {
+            let value = values[i]
+            let isSelected = i == selectedIndex
             let row = section.createNewRow()
             row.cellType = OASimpleTableViewCell.reuseIdentifier
             row.key = value.nameId
@@ -78,9 +74,8 @@ final class ProfileAppearanceViewAngleViewController: OABaseNavbarViewController
     override func onRowSelected(_ indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
         let selectedRawValue = item.integer(forKey: Self.rawValueKey)
-        OAAppSettings.sharedManager().viewAngleVisibility.set(Int32(selectedRawValue), mode: mode)
         if let delegate {
-            delegate.update()
+            delegate.onViewAngleUpdated(newValue: selectedRawValue)
         }
         dismiss()
     }

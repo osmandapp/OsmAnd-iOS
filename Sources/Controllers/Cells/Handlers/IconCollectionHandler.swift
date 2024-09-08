@@ -153,6 +153,7 @@ final class IconCollectionHandler: OABaseCollectionHandler, OAIconCollectionDele
             setSelectedIndexPath(selectedIndexPath)
             getCollectionView()?.reloadData()
             getCollectionView().scrollToItem(at: selectedIndexPath, at: .centeredHorizontally, animated: false)
+            onItemSelected(selectedIndexPath, collectionView: getCollectionView())
         }
     }
 }

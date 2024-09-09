@@ -1454,8 +1454,11 @@
             continue;
         searchCriteria->localResources = {r};
         
-        searchCriteria->poiAdditionalFilter = QPair<QString, QString>((QString::fromNSString(poiAdditionalFilter.poiSubType)), (QString::fromNSString(poiAdditionalFilter.value)));
-        searchCriteria->categoriesFilter = QHash<QString, QStringList>();
+        if (poiAdditionalFilter != nil)
+        {
+            searchCriteria->poiAdditionalFilter = QPair<QString, QString>((QString::fromNSString(poiAdditionalFilter.poiSubType)), (QString::fromNSString(poiAdditionalFilter.value)));
+            searchCriteria->categoriesFilter = QHash<QString, QStringList>();
+        }
         search->performSearch(*searchCriteria,
                               [self, &rm]
                               (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)

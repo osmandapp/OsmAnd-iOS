@@ -102,15 +102,15 @@ final public class ElevationChart: LineChartView {
         drawMarkers(context: ctx)
     }
 
-    func shouldShowLastSet() -> Bool {
+    internal func shouldShowLastSet() -> Bool {
         showLastSet
     }
 
-    func updateDimens() {
+    private func updateDimens() {
         updateDimens(width: frame.width, height: frame.height)
     }
 
-    func updateDimens(width: CGFloat, height: CGFloat) {
+    private func updateDimens(width: CGFloat, height: CGFloat) {
         guard data != nil else { return }
 
         let measureText = getMeasuredMaxLabel()

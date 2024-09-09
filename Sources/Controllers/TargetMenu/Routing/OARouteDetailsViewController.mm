@@ -16,7 +16,6 @@
 #import "OAStateChangedListener.h"
 #import "OARoutingHelper.h"
 #import "OAGPXTrackAnalysis.h"
-#import "OALineChartCell.h"
 #import "OARouteInfoCell.h"
 #import "OAGPXDocument.h"
 #import "OAGPXUIHelper.h"
@@ -38,7 +37,7 @@
 #import "OALanesDrawable.h"
 #import "OATurnDrawable.h"
 #import "OATurnDrawable+cpp.h"
-#import <Charts/Charts-Swift.h>
+#import <DGCharts/DGCharts-Swift.h>
 #import "GeneratedAssetSymbols.h"
 #import "CLLocation+Extension.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -111,7 +110,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     [self.tableView registerNib:[UINib nibWithNibName:@"SegmentTableHeaderView" bundle:nil] forHeaderFooterViewReuseIdentifier:@"SegmentTableHeaderView"];
     [self.tableView registerNib:[UINib nibWithNibName:[OAFilledButtonCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OAFilledButtonCell reuseIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[RouteInfoListItemCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[RouteInfoListItemCell reuseIdentifier]];
-    [self.tableView registerNib:[UINib nibWithNibName:[OALineChartCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OALineChartCell reuseIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:[ElevationChartCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[ElevationChartCell reuseIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[OARouteStatisticsModeCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OARouteStatisticsModeCell reuseIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[OARouteInfoAltitudeCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OARouteInfoAltitudeCell reuseIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[OARouteInfoCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OARouteInfoCell reuseIdentifier]];
@@ -281,30 +280,29 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 
 - (void)populateMainGraphSection:(NSMutableDictionary *)dataArr section:(NSInteger &)section 
 {
-    OALineChartCell *routeStatsCell = [self.tableView dequeueReusableCellWithIdentifier:[OALineChartCell reuseIdentifier]];
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:ElevationChartCell.reuseIdentifier owner:self options:nil];
+    ElevationChartCell *routeStatsCell = (ElevationChartCell *)[nib objectAtIndex:0];
     routeStatsCell.selectionStyle = UITableViewCellSelectionStyleNone;
     routeStatsCell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
-    routeStatsCell.lineChartView.delegate = self;
+    routeStatsCell.chartView.delegate = self;
 
-    [GpxUIHelper setupGPXChartWithChartView:routeStatsCell.lineChartView
-                               yLabelsCount:4
-                                  topOffset:20
-                               bottomOffset:4
-                        useGesturesAndScale:YES
-    ];
+    [GpxUIHelper setupElevationChartWithChartView:routeStatsCell.chartView
+                                        topOffset:20
+                                     bottomOffset:4
+                              useGesturesAndScale:YES];
 
     OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.gpx.path]];
     BOOL calcWithoutGaps = !gpx.joinSegments && (self.gpx.tracks.count > 0 && self.gpx.tracks.firstObject.generalTrack);
-    [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.lineChartView
+    [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.chartView
                                       analysis:self.analysis
-                           useGesturesAndScale:YES
                                      firstType:GPXDataSetTypeAltitude
                                     secondType:GPXDataSetTypeSlope
+                                      axisType:GPXDataSetAxisTypeDistance
                                calcWithoutGaps:calcWithoutGaps];
     
-    BOOL hasSlope = routeStatsCell.lineChartView.lineData.dataSetCount > 1;
+    BOOL hasSlope = routeStatsCell.chartView.lineData.dataSetCount > 1;
     
-    self.statisticsChart = routeStatsCell.lineChartView;
+    self.statisticsChart = routeStatsCell.chartView;
     UITableViewCell *analyzeBtnCell = [self getAnalyzeButtonCell];
     for (UIGestureRecognizer *recognizer in self.statisticsChart.gestureRecognizers)
     {
@@ -782,7 +780,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
                                                                                analysis:self.analysis];
         }
         [self.routeLineChartHelper refreshHighlightOnMap:YES
-                                           lineChartView:self.statisticsChart
+                                               chartView:self.statisticsChart
                                         trackChartPoints:self.trackChartPoints
                                                 analysis:self.analysis];
     }
@@ -946,7 +944,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
                                                                            analysis:self.analysis];
     }
     [self.routeLineChartHelper refreshHighlightOnMap:NO
-                                       lineChartView:self.statisticsChart
+                                           chartView:self.statisticsChart
                                     trackChartPoints:self.trackChartPoints
                                             analysis:self.analysis];
 }
@@ -979,11 +977,10 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
                 OARouteInfoCell *routeCell = (OARouteInfoCell *) cell;
                 [routeCell.barChartView.viewPortHandler refreshWithNewMatrix:chartView.viewPortHandler.touchMatrix chart:routeCell.barChartView invalidate:YES];
             }
-            else if ([cell isKindOfClass:OALineChartCell.class])
+            else if ([cell isKindOfClass:ElevationChartCell.class])
             {
-                OALineChartCell *chartCell = (OALineChartCell *) cell;
-
-                [chartCell.lineChartView.viewPortHandler refreshWithNewMatrix:chartView.viewPortHandler.touchMatrix chart:chartCell.lineChartView invalidate:YES];
+                ElevationChartCell *chartCell = (ElevationChartCell *) cell;
+                [chartCell.chartView.viewPortHandler refreshWithNewMatrix:chartView.viewPortHandler.touchMatrix chart:chartCell.chartView invalidate:YES];
             }
         }
     }
@@ -1003,10 +1000,9 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     if (statsSection.count > 1)
     {
         OARouteStatisticsModeCell *statsModeCell = statsSection[0];
-        OALineChartCell *graphCell = statsSection[1];
-
+        ElevationChartCell *graphCell = statsSection[1];
         [self.routeLineChartHelper changeChartTypes:_types
-                                              chart:graphCell.lineChartView
+                                              chart:graphCell.chartView
                                            analysis:self.analysis
                                            modeCell:statsModeCell];
     }

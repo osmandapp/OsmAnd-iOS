@@ -8,7 +8,7 @@
 
 #import "OARouteInfoCell.h"
 #import "OsmAnd_Maps-Swift.h"
-#import <Charts/Charts-Swift.h>
+#import <DGCharts/DGCharts-Swift.h>
 #import "GeneratedAssetSymbols.h"
 
 @implementation OARouteInfoCell

@@ -3507,3 +3507,4 @@
 "shared_string_show" = "Mostrar";
 "weather_wind_animation_enable_descr" = "Ative a visualização da camada de animação do vento no mapa.";
 "osmand_cloud_delete_account_descr_with_email" = "Tem certeza de que deseja excluir a conta do OsmAnd Cloud: %@?";
+"battery_saving_mode" = "Modo de economia de bateria";

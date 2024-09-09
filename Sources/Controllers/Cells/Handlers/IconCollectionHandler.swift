@@ -63,13 +63,7 @@ final class IconCollectionHandler: OABaseCollectionHandler, OAIconCollectionDele
     }
     
     override func generateData(_ data: [[Any]]) {
-        var newData = [[String]]()
-        for i in 0...data.count - 1 {
-            if let icons = data[i] as? [String] {
-                newData.append(icons)
-            }
-        }
-        self.iconNamesData = newData
+       iconNamesData = data.compactMap { $0 as? [String] }
     }
     
     override func itemsCount(_ section: Int) -> Int {
@@ -79,14 +73,16 @@ final class IconCollectionHandler: OABaseCollectionHandler, OAIconCollectionDele
     override func getCollectionViewCell(_ indexPath: IndexPath) -> UICollectionViewCell {
         let cell: OAIconsCollectionViewCell = getCollectionView().dequeueReusableCell(withReuseIdentifier: getCellIdentifier(), for: indexPath) as! OAIconsCollectionViewCell
         
-        cell.iconWidthConstraint.constant = getItemSize().width
-        cell.iconHeightConstraint.constant = getItemSize().height
-        cell.iconWidthConstraint.constant = getIconSize()
-        cell.iconHeightConstraint.constant = getIconSize()
+        let itemSize = getItemSize()
+        let iconSize = getIconSize()
+        cell.iconWidthConstraint.constant = itemSize.width
+        cell.iconHeightConstraint.constant = itemSize.height
+        cell.iconWidthConstraint.constant = iconSize
+        cell.iconHeightConstraint.constant = iconSize
         
-        if iconImagesData.count > 0 {
+        if !iconImagesData.isEmpty && !iconImagesData[indexPath.section].isEmpty {
             cell.iconImageView.image = iconImagesData[indexPath.section][indexPath.row]
-        } else {
+        } else if !iconNamesData.isEmpty && !iconNamesData[indexPath.section].isEmpty {
             let iconName = iconNamesData[indexPath.section][indexPath.row]
             cell.iconImageView.image = UIImage.templateImageNamed(iconName)
         }
@@ -114,32 +110,30 @@ final class IconCollectionHandler: OABaseCollectionHandler, OAIconCollectionDele
     }
     
     func openAllIconsScreen() {
-        if let hostVC {
-            
-            var vc: OAColorCollectionViewController?
-            if !iconImagesData.isEmpty {
-                vc = OAColorCollectionViewController(collectionType: EOAColorCollectionTypeBigIconItems, items: iconNamesData[0], selectedItem: getSelectedItem())
-                vc?.setImages(iconImagesData[0])
-            } else {
-                vc = OAColorCollectionViewController(collectionType: EOAColorCollectionTypeIconItems, items: iconNamesData[0], selectedItem: getSelectedItem())
+        guard let hostVC else { return }
+        var vc: OAColorCollectionViewController?
+        if !iconImagesData.isEmpty {
+            vc = OAColorCollectionViewController(collectionType: EOAColorCollectionTypeBigIconItems, items: iconNamesData[0], selectedItem: getSelectedItem())
+            vc?.setImages(iconImagesData[0])
+        } else {
+            vc = OAColorCollectionViewController(collectionType: EOAColorCollectionTypeIconItems, items: iconNamesData[0], selectedItem: getSelectedItem())
+        }
+        vc?.customTitle = customTitle
+        
+        if let vc {
+            vc.iconsDelegate = self
+            if let selectedIconColor {
+                vc.selectedIconColor = selectedIconColor
             }
-            vc?.customTitle = customTitle
-            
-            if let vc {
-                vc.iconsDelegate = self
-                if let selectedIconColor {
-                    vc.selectedIconColor = selectedIconColor
-                }
-                if let regularIconColor {
-                    vc.regularIconColor = regularIconColor
-                }
-                hostVC.showModalViewController(vc)
+            if let regularIconColor {
+                vc.regularIconColor = regularIconColor
             }
+            hostVC.showModalViewController(vc)
         }
     }
     
     func getSelectedItem() -> Any {
-        if let selectedIndexPath {
+        if let selectedIndexPath, !iconNamesData.isEmpty, !iconNamesData[selectedIndexPath.section].isEmpty {
             return iconNamesData[selectedIndexPath.section][selectedIndexPath.row]
         }
         return iconNamesData[0][0]
@@ -148,12 +142,11 @@ final class IconCollectionHandler: OABaseCollectionHandler, OAIconCollectionDele
     // MARK: - OAIconCollectionDelegate
     
     func selectIconName(_ iconName: String) {
-        if let selectedIndex = iconNamesData[0].index(of: iconName) {
-            let selectedIndexPath = IndexPath(row: selectedIndex, section: 0)
-            setSelectedIndexPath(selectedIndexPath)
-            getCollectionView()?.reloadData()
-            getCollectionView().scrollToItem(at: selectedIndexPath, at: .centeredHorizontally, animated: false)
-            onItemSelected(selectedIndexPath, collectionView: getCollectionView())
-        }
+        guard let selectedIndex = iconNamesData[0].index(of: iconName) else { return }
+        let selectedIndexPath = IndexPath(row: selectedIndex, section: 0)
+        setSelectedIndexPath(selectedIndexPath)
+        getCollectionView()?.reloadData()
+        getCollectionView().scrollToItem(at: selectedIndexPath, at: .centeredHorizontally, animated: false)
+        onItemSelected(selectedIndexPath, collectionView: getCollectionView())
     }
 }

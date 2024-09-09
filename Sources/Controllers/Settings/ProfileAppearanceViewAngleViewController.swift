@@ -8,12 +8,12 @@
 
 import UIKit
 
-@objc(OAProfileAppearanceViewAngleUpdatable)
+@objc
 protocol ProfileAppearanceViewAngleUpdatable: AnyObject {
     func onViewAngleUpdated(newValue: Int)
 }
 
-@objc(OAProfileAppearanceViewAngleViewController)
+@objc
 @objcMembers
 final class ProfileAppearanceViewAngleViewController: OABaseNavbarViewController {
    
@@ -74,9 +74,7 @@ final class ProfileAppearanceViewAngleViewController: OABaseNavbarViewController
     override func onRowSelected(_ indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
         let selectedRawValue = item.integer(forKey: Self.rawValueKey)
-        if let delegate {
-            delegate.onViewAngleUpdated(newValue: selectedRawValue)
-        }
+        delegate?.onViewAngleUpdated(newValue: selectedRawValue)
         dismiss()
     }
 }

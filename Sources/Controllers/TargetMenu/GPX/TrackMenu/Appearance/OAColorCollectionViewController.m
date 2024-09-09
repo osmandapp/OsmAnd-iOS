@@ -146,7 +146,7 @@
 
 - (NSString *)getTitle
 {
-    return (_customTitle && _customTitle.length > 0) ? _customTitle : OALocalizedString(@"shared_string_all_colors");
+    return _customTitle.length > 0 ? _customTitle : OALocalizedString(@"shared_string_all_colors");
 }
 
 - (NSString *)getLeftNavbarButtonTitle

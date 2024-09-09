@@ -292,8 +292,6 @@
 {
     if (_hostVC)
     {
-        //TODO: test - create navigation controller. listen to navbar Cancel button
-        
         UIColorPickerViewController *colorViewController = [[UIColorPickerViewController alloc] init];
         colorViewController.delegate = self;
         colorViewController.selectedColor = [colorItem getColor];
@@ -368,14 +366,14 @@
 
 - (void)changeColorItem:(OAColorItem *)colorItem withColor:(UIColor *)color
 {
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_data[0] indexOfObject:colorItem] inSection:0];
+    NSIndexPath *indexPath = [self indexForColorItem:colorItem];
     [[OAGPXAppearanceCollection sharedInstance] changeColor:colorItem newColor:color];
     [self replaceOldColor:indexPath];
 }
 
 - (OAColorItem *)duplicateColorItem:(OAColorItem *)colorItem
 {
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_data[0] indexOfObject:colorItem] inSection:0];
+    NSIndexPath *indexPath = [self indexForColorItem:colorItem];
     OAColorItem *duplicatedColorItem = [[OAGPXAppearanceCollection sharedInstance] duplicateColor:colorItem];
     NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section];
     [self addColor:newIndexPath newItem:duplicatedColorItem];
@@ -384,9 +382,14 @@
 
 - (void)deleteColorItem:(OAColorItem *)colorItem
 {
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_data[0] indexOfObject:colorItem] inSection:0];
+    NSIndexPath *indexPath = [self indexForColorItem:colorItem];
     [[OAGPXAppearanceCollection sharedInstance] deleteColor:colorItem];
     [self removeColor:indexPath];
+}
+
+- (NSIndexPath *)indexForColorItem:(OAColorItem *)colorItem
+{
+    return [NSIndexPath indexPathForRow:[_data[0] indexOfObject:colorItem] inSection:0];
 }
 
 #pragma mark - OAColorsCollectionCellDelegate

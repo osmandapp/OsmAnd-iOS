@@ -6,10 +6,10 @@
 //  Copyright © 2024 OsmAnd. All rights reserved.
 //
 
-typedef enum {
+typedef NS_ENUM(NSInteger, EOAMarkerState) {
     
-    OAMarkerStateStay = 0,
-    OAMarkerStateMove,
-    OAMarkerStateNone,
+    EOAMarkerStateStay = 0,
+    EOAMarkerStateMove,
+    EOAMarkerStateNone,
     
-} EOAMarkerState;
+};

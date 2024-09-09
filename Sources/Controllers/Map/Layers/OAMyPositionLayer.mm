@@ -86,7 +86,7 @@ typedef enum {
     if (self)
     {
         _mapView = mapView;
-        _currentMarkerState = OAMarkerStateNone;
+        _currentMarkerState = EOAMarkerStateNone;
     }
     return self;
 }
@@ -139,7 +139,7 @@ typedef enum {
     
     switch (_currentMarkerState)
     {
-        case OAMarkerStateMove:
+        case EOAMarkerStateMove:
         {
             _locationMarkerDay->setIsHidden(true);
             _locationMarkerNight->setIsHidden(true);
@@ -165,7 +165,7 @@ typedef enum {
                 sectorRadius = [self getSizeOfMarker:_courseMarkerNight icon:_locationHeadingIconKeyNight];
             break;
         }
-        case OAMarkerStateStay:
+        case EOAMarkerStateStay:
         {
             _courseMarkerDay->setIsHidden(true);
             _courseMarkerNight->setIsHidden(true);
@@ -315,7 +315,7 @@ typedef enum {
 {
     switch (_currentMarkerState)
     {
-        case OAMarkerStateMove:
+        case EOAMarkerStateMove:
         {
             switch (_mode)
             {
@@ -345,7 +345,7 @@ typedef enum {
 {
     switch (_currentMarkerState)
     {
-        case OAMarkerStateMove:
+        case EOAMarkerStateMove:
         {
             switch (_mode)
             {
@@ -578,7 +578,7 @@ typedef enum {
         }]
     ];
     
-    _currentMarkerState = OAMarkerStateStay;
+    _currentMarkerState = EOAMarkerStateStay;
 
     [self generateMarkersCollection];
     
@@ -649,26 +649,24 @@ typedef enum {
     [self.mapViewController runWithRenderSync:^{
     
         OAApplicationMode *currentMode = [OAAppSettings sharedManager].applicationMode.get;
-        
-        for (OAApplicationMode *mode in _modeMarkers.keyEnumerator)
-        {
-            OAMarkerCollection *c = [_modeMarkers objectForKey:mode];
-            if (mode != currentMode)
-            {
-                [c hideMarkers];
-                [self.mapView removeKeyedSymbolsProvider:c.markerCollection];
-            }
-        }
+        OAMarkerCollection *currentMarkerCollection;
         
         for (OAApplicationMode *mode in _modeMarkers.keyEnumerator)
         {
             OAMarkerCollection *c = [_modeMarkers objectForKey:mode];
             if (mode == currentMode)
             {
-                [self updateLocation:mode];
-                [self.mapView addKeyedSymbolsProvider:c.markerCollection];
+                currentMarkerCollection = c;
+            }
+            else
+            {
+                [c hideMarkers];
+                [self.mapView removeKeyedSymbolsProvider:c.markerCollection];
             }
         }
+        
+        [self updateLocation:currentMode];
+        [self.mapView addKeyedSymbolsProvider:currentMarkerCollection.markerCollection];
     }];
 }
 
@@ -732,7 +730,7 @@ typedef enum {
     else
         bearing = newHeading;
     
-    [c setCurrentMarkerState:showBearing ? OAMarkerStateMove : OAMarkerStateStay showHeading:showHeading];
+    [c setCurrentMarkerState:showBearing ? EOAMarkerStateMove : EOAMarkerStateStay showHeading:showHeading];
     [c updateLocation:newTarget31 animationDuration:animationDuration horizontalAccuracy:newLocation.horizontalAccuracy bearing:bearing heading:newHeading visible:visible];
     [c updateOtherLocations:newTarget31 horizontalAccuracy:newLocation.horizontalAccuracy bearing:bearing heading:newHeading];
 }

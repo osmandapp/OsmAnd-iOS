@@ -7,8 +7,9 @@
 //
 
 #import "OACollectionSingleLineTableViewCell.h"
-#import "OASuperViewController.h"
 #import "OAColorCollectionViewController.h"
+
+@class OASuperViewController;
 
 @interface OAIconsPaletteCell : OACollectionSingleLineTableViewCell <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 

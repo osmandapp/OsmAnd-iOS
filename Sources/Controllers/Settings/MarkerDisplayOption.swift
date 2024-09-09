@@ -11,10 +11,10 @@ import UIKit
 @objcMembers
 final class MarkerDisplayOption: NSObject {
     
-    static var off = MarkerDisplayOption(rawValue: 0, nameId: "shared_string_off", markerStates: [OAMarkerStateNone])
-    static var resting = MarkerDisplayOption(rawValue: 1, nameId: "resting_position", markerStates: [OAMarkerStateStay])
-    static var navigation = MarkerDisplayOption(rawValue: 2, nameId: "navigation_position", markerStates: [OAMarkerStateMove])
-    static var restingNavigation = MarkerDisplayOption(rawValue: 3, nameId: "resting_navigation_position", markerStates: [OAMarkerStateMove, OAMarkerStateStay])
+    static var off = MarkerDisplayOption(rawValue: 0, nameId: "shared_string_off", markerStates: [.none])
+    static var resting = MarkerDisplayOption(rawValue: 1, nameId: "resting_position", markerStates: [.stay])
+    static var navigation = MarkerDisplayOption(rawValue: 2, nameId: "navigation_position", markerStates: [.move])
+    static var restingNavigation = MarkerDisplayOption(rawValue: 3, nameId: "resting_navigation_position", markerStates: [.move, .stay])
     
     let rawValue: Int32
     let nameId: String

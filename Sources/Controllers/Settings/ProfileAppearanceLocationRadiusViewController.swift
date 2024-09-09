@@ -8,12 +8,12 @@
 
 import UIKit
 
-@objc(OAProfileAppearanceLocationRadiusUpdatable)
+@objc
 protocol ProfileAppearanceLocationRadiusUpdatable: AnyObject {
     func onLocationRadiusUpdated(newValue: Int)
 }
 
-@objc(OAProfileAppearanceLocationRadiusViewController)
+@objc
 @objcMembers
 final class ProfileAppearanceLocationRadiusViewController: OABaseNavbarViewController {
    
@@ -74,9 +74,7 @@ final class ProfileAppearanceLocationRadiusViewController: OABaseNavbarViewContr
     override func onRowSelected(_ indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
         let selectedRawValue = item.integer(forKey: Self.rawValueKey)
-        if let delegate {
-            delegate.onLocationRadiusUpdated(newValue: selectedRawValue)
-        }
+        delegate?.onLocationRadiusUpdated(newValue: selectedRawValue)
         dismiss()
     }
 }

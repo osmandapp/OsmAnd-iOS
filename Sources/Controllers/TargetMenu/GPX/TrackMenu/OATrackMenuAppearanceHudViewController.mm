@@ -44,7 +44,7 @@
 #import "OAMapSettingsTerrainParametersViewController.h"
 #import "OAColoringType.h"
 #import "OsmAnd_Maps-Swift.h"
-#import <Charts/Charts-Swift.h>
+#import <DGCharts/DGCharts-Swift.h>
 
 static const NSInteger kColorsSection = 1;
 

@@ -7,12 +7,12 @@
 //
 
 import Foundation
-import Charts
+import DGCharts
 
 @objcMembers
 final class GradientUiHelper: NSObject {
 
-    final class AxisValueFormatter: IAxisValueFormatter {
+    final class AxisValueFormatterLocal: AxisValueFormatter {
 
         private let formatClosure: (Double, AxisBase?) -> String
         
@@ -38,19 +38,19 @@ final class GradientUiHelper: NSObject {
         return formattedValue
     }
 
-    static func getGradientTypeFormatterFor(terrainType: TerrainType, analysis: OAGPXTrackAnalysis?) -> IAxisValueFormatter {
+    static func getGradientTypeFormatterFor(terrainType: TerrainType, analysis: OAGPXTrackAnalysis?) -> AxisValueFormatter {
         Self.getGradientTypeFormatter(terrainType, analysis: analysis)
     }
 
-    static func getGradientTypeFormatter(_ gradientType: Any, analysis: OAGPXTrackAnalysis?) -> IAxisValueFormatter {
+    static func getGradientTypeFormatter(_ gradientType: Any, analysis: OAGPXTrackAnalysis?) -> AxisValueFormatter {
         if let terrainType = gradientType as? TerrainType {
             return getTerrainTypeFormatter(terrainType)
         }
         return getColorizationTypeFormatter(gradientType as! ColorizationType, analysis: analysis)
     }
 
-    private static func getTerrainTypeFormatter(_ terrainType: TerrainType) -> IAxisValueFormatter {
-        return AxisValueFormatter { (value, axis) in
+    private static func getTerrainTypeFormatter(_ terrainType: TerrainType) -> AxisValueFormatter {
+        return AxisValueFormatterLocal { (value, axis) in
             var shouldShowUnit = axis?.entries.contains(value) ?? false
             var stringValue = Self.formatTerrainTypeValues(value)
             var typeValue = ""
@@ -68,8 +68,8 @@ final class GradientUiHelper: NSObject {
         }
     }
 
-    private static func getColorizationTypeFormatter(_ colorizationType: ColorizationType, analysis: OAGPXTrackAnalysis?) -> IAxisValueFormatter {
-        return AxisValueFormatter { (value, axis) in
+    private static func getColorizationTypeFormatter(_ colorizationType: ColorizationType, analysis: OAGPXTrackAnalysis?) -> AxisValueFormatter {
+        return AxisValueFormatterLocal { (value, axis) in
             var shouldShowUnit = axis?.entries.contains(value) ?? false
             var stringValue = Self.formatValue(value, multiplier: 100)
             var type = "%"

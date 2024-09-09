@@ -12,14 +12,7 @@
 
 #define kMapMargin 20.0
 
-@class OARoutingHelper;
-@class LineChartView;
-@class OAGPXDocument;
-@class OATrackChartPoints;
-@class OAGPXTrackAnalysis;
-@class OARouteStatisticsModeCell;
-@class OATrkSegment;
-@class OABaseVectorLinesLayer;
+@class OARoutingHelper, OAGPXDocument, OATrackChartPoints, OAGPXTrackAnalysis, OARouteStatisticsModeCell, OATrkSegment, OABaseVectorLinesLayer, ElevationChart;
 
 @protocol OARouteLineChartHelperDelegate
 
@@ -38,24 +31,24 @@
 @property (nonatomic, weak) id<OARouteLineChartHelperDelegate> delegate;
 
 - (void)changeChartTypes:(NSArray<NSNumber *> *)types
-                  chart:(LineChartView *)chart
+                  chart:(ElevationChart *)chart
                analysis:(OAGPXTrackAnalysis *)analysis
                modeCell:(OARouteStatisticsModeCell *)statsModeCell;
 
 - (void)refreshHighlightOnMap:(BOOL)forceFit
-                lineChartView:(LineChartView *)lineChartView
+                    chartView:(ElevationChart *)chartView
              trackChartPoints:(OATrackChartPoints *)trackChartPoints
                      analysis:(OAGPXTrackAnalysis *)analysis;
 
 - (void)refreshHighlightOnMap:(BOOL)forceFit
-                lineChartView:(LineChartView *)lineChartView
+                    chartView:(ElevationChart *)chartView
              trackChartPoints:(OATrackChartPoints *)trackChartPoints
-                     segment:(OATrkSegment *)segment;
+                      segment:(OATrkSegment *)segment;
 
-- (OATrackChartPoints *)generateTrackChartPoints:(LineChartView *)lineChartView
+- (OATrackChartPoints *)generateTrackChartPoints:(ElevationChart *)chartView
                                         analysis:(OAGPXTrackAnalysis *)analysis;
 
-- (OATrackChartPoints *)generateTrackChartPoints:(LineChartView *)lineChartView
+- (OATrackChartPoints *)generateTrackChartPoints:(ElevationChart *)chartView
                                       startPoint:(CLLocationCoordinate2D)startPoint
                                         segment:(OATrkSegment *)segment;
 
@@ -67,7 +60,7 @@
 @property (nonatomic, readonly) OARouteLineChartHelper *routeLineChartHelper;
 
 @property (nonatomic) OAGPXDocument *gpx;
-@property (nonatomic) LineChartView *statisticsChart;
+@property (nonatomic) ElevationChart *statisticsChart;
 @property (nonatomic) OATrackChartPoints *trackChartPoints;
 @property (nonatomic) OAGPXTrackAnalysis *analysis;
 

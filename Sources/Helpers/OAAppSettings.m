@@ -4794,6 +4794,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [self.userProfileName resetModeToDefault:mode];
         [self.profileIconName resetModeToDefault:mode];
         [self.profileIconColor resetModeToDefault:mode];
+        [self.profileCustomIconColor resetModeToDefault:mode];
     }
 
     [OAAppData.defaults resetProfileSettingsForMode:mode];

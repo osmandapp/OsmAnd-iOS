@@ -369,7 +369,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
             if (socialMediaUrl)
             {
                 isUrl = YES;
-                textColor =[UIColor colorNamed:ACColorNameTextColorActive];
+                textColor = [UIColor colorNamed:ACColorNameTextColorActive];
             }
         }
 
@@ -597,6 +597,32 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                                         typeName:@""
                                    isPhoneNumber:NO
                                            isUrl:NO];
+            
+            if ([value isKindOfClass:[NSDictionary class]])
+            {
+                NSMutableArray *array = [NSMutableArray array];
+                NSDictionary *val = dic[convertedKey][@"localization"];
+                if ([_poiHelper isNameTag:convertedKey])
+                {
+                    row.text = self.poi.name;
+                    row.textPrefix = OALocalizedString(@"shared_string_name");
+                }
+                if (val.allKeys.count > 0)
+                {
+                    for (NSString *key in val.allKeys)
+                    {
+                        OAPOIBaseType *poi = [_poiHelper getAnyPoiAdditionalTypeByKey:key];
+                        NSString *formattedKey = [key stringByReplacingOccurrencesOfString:convertedKey withString:@"name"];
+
+                        [array addObject:@{
+                            @"key": formattedKey,
+                            @"value": val[key],
+                            @"localizedTitle": poi ? poi.nameLocalized : @""
+                        }];
+                    }
+                    [row setDetailsArray:array];
+                }
+            }
         }
         else
         {

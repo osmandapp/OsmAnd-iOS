@@ -10,7 +10,7 @@ import UIKit
 import Charts
 
 @objc public enum GPXDataSetType: Int {
-    case altitude, speed, slope, sensorSpeed, sensorHeartRate, sensorBikePower, sensorBikeCadence, sensorTemperature
+    case altitude, speed, slope, sensorSpeed, sensorHeartRate, sensorBikePower, sensorBikeCadence, sensorTemperatureA, sensorTemperatureW
 
     public func getTitle() -> String {
         OAGPXDataSetType.getTitle(self.rawValue)

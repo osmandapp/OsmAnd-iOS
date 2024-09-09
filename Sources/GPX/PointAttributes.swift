@@ -16,7 +16,6 @@ final class PointAttributes : NSObject {
     static let sensorTagSpeed = "speed_sensor"
     static let sensorTagCadence = "cad"
     static let sensorTagBikePower = "power"
-    static let sensorTagTemperature = "temp_sensor"
     static let sensorTagTemperatureW = "wtemp"
     static let sensorTagTemperatureA = "atemp"
     static let sensorTagDistance = "bike_distance_sensor"
@@ -56,8 +55,6 @@ final class PointAttributes : NSObject {
             return bikeCadence
         case Self.sensorTagBikePower:
             return bikePower
-        case Self.sensorTagTemperature:
-            return Float.maximum(temperatureW, temperatureA)
         case Self.sensorTagTemperatureW:
             return temperatureW
         case Self.sensorTagTemperatureA:

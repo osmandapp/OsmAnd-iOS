@@ -33,8 +33,12 @@ final class SensorAttributesUtils: NSObject {
         analysis.hasData(PointAttributes.sensorTagBikePower)
     }
 
-    static func hasTemperatureData(_ analysis: OAGPXTrackAnalysis) -> Bool {
-        analysis.hasData(PointAttributes.sensorTagTemperatureW) || analysis.hasData(PointAttributes.sensorTagTemperatureA)
+    static func hasTemperatureAData(_ analysis: OAGPXTrackAnalysis) -> Bool {
+        analysis.hasData(PointAttributes.sensorTagTemperatureA)
+    }
+
+    static func hasTemperatureWData(_ analysis: OAGPXTrackAnalysis) -> Bool {
+        analysis.hasData(PointAttributes.sensorTagTemperatureW)
     }
 
     @objc static func getAvailableGPXDataSetTypes(analysis: OAGPXTrackAnalysis, availableTypes: NSMutableArray) {
@@ -50,8 +54,8 @@ final class SensorAttributesUtils: NSObject {
         if Self.hasBikeCadenceData(analysis) {
             availableTypes.add([NSNumber(value: GPXDataSetType.sensorBikeCadence.rawValue)])
         }
-        if Self.hasTemperatureData(analysis) {
-            availableTypes.add([NSNumber(value: GPXDataSetType.sensorTemperature.rawValue)])
+        if Self.hasTemperatureAData(analysis) {
+            availableTypes.add([NSNumber(value: GPXDataSetType.sensorTemperatureA.rawValue)])
         }
     }
 
@@ -70,7 +74,7 @@ final class SensorAttributesUtils: NSObject {
             return createSensorDataSet(chart: chart, analysis: analysis, graphType: graphType, axisType: axisType, useRightAxis: useRightAxis, drawFilled: true, calcWithoutGaps: calcWithoutGaps)
         case .sensorBikeCadence where hasBikeCadenceData(analysis):
             return createSensorDataSet(chart: chart, analysis: analysis, graphType: graphType, axisType: axisType, useRightAxis: useRightAxis, drawFilled: true, calcWithoutGaps: calcWithoutGaps)
-        case .sensorTemperature where hasTemperatureData(analysis):
+        case .sensorTemperatureA where hasTemperatureAData(analysis):
             return createSensorDataSet(chart: chart, analysis: analysis, graphType: graphType, axisType: axisType, useRightAxis: useRightAxis, drawFilled: true, calcWithoutGaps: calcWithoutGaps)
         default:
             return nil

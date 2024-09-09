@@ -30,7 +30,7 @@
             return OALocalizedString(@"map_widget_ant_bicycle_power");
         case GPXDataSetTypeSensorBikeCadence:
             return OALocalizedString(@"map_widget_ant_bicycle_cadence");
-        case GPXDataSetTypeSensorTemperature:
+        case GPXDataSetTypeSensorTemperatureA:
             return OALocalizedString(@"map_settings_weather_temp");
         default:
             return @"";
@@ -55,7 +55,7 @@
             return @"ic_custom_sensor_bicycle_power_outlined";
         case GPXDataSetTypeSensorBikeCadence:
             return @"ic_custom_sensor_cadence_outlined";
-        case GPXDataSetTypeSensorTemperature:
+        case GPXDataSetTypeSensorTemperatureA:
             return @"ic_custom_sensor_thermometer";
         default:
             return @"";
@@ -80,8 +80,10 @@
             return OAPointAttributes.sensorTagBikePower;
         case GPXDataSetTypeSensorBikeCadence:
             return OAPointAttributes.sensorTagCadence;
-        case GPXDataSetTypeSensorTemperature:
-            return OAPointAttributes.sensorTagTemperature;
+        case GPXDataSetTypeSensorTemperatureA:
+            return OAPointAttributes.sensorTagTemperatureA;
+        case GPXDataSetTypeSensorTemperatureW:
+            return OAPointAttributes.sensorTagTemperatureW;
         default:
             return @"";
     }
@@ -105,7 +107,7 @@
             return [UIColor colorNamed:ACColorNameChartTextColorBicyclePower];
         case GPXDataSetTypeSensorBikeCadence:
             return [UIColor colorNamed:ACColorNameChartTextColorBicycleCadence];
-        case GPXDataSetTypeSensorTemperature:
+        case GPXDataSetTypeSensorTemperatureA:
             return [UIColor colorNamed:ACColorNameChartTextColorTemperature];
         default:
             return nil;
@@ -130,7 +132,7 @@
             return [UIColor colorNamed:ACColorNameChartLineColorBicyclePower];
         case GPXDataSetTypeSensorBikeCadence:
             return [UIColor colorNamed:ACColorNameChartLineColorBicycleCadence];
-        case GPXDataSetTypeSensorTemperature:
+        case GPXDataSetTypeSensorTemperatureA:
             return [UIColor colorNamed:ACColorNameChartLineColorTemperature];
         default:
             return nil;
@@ -157,7 +159,7 @@
             return OALocalizedString(@"power_watts_unit");
         case GPXDataSetTypeSensorBikeCadence:
             return OALocalizedString(@"revolutions_per_minute_unit");
-        case GPXDataSetTypeSensorTemperature:
+        case GPXDataSetTypeSensorTemperatureA:
             return @"";
         default:
             return @"";

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="OALineChartCell" id="Eyp-ak-xIh" customClass="ElevationChartCell" customModule="OsmAnd_Maps" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="140"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Eyp-ak-xIh" id="ef1-9S-goQ">
+                <rect key="frame" x="0.0" y="0.0" width="414" height="140"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cvw-JD-m6k" customClass="ElevationChart" customModule="DGCharts">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="140"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="height" priority="999" constant="140" id="s6t-AX-ty6"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="Cvw-JD-m6k" firstAttribute="top" secondItem="ef1-9S-goQ" secondAttribute="top" id="6jn-ii-kZx"/>
+                    <constraint firstItem="Cvw-JD-m6k" firstAttribute="centerX" secondItem="ef1-9S-goQ" secondAttribute="centerX" id="Yab-Pq-VAO"/>
+                    <constraint firstAttribute="bottom" secondItem="Cvw-JD-m6k" secondAttribute="bottom" id="hk6-E2-vjF"/>
+                    <constraint firstItem="Cvw-JD-m6k" firstAttribute="leading" secondItem="ef1-9S-goQ" secondAttribute="leading" id="qhk-GX-KEc"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="chartView" destination="Cvw-JD-m6k" id="oKY-vg-xB7"/>
+                <outlet property="heightConstraint" destination="s6t-AX-ty6" id="JAy-8W-4Od"/>
+            </connections>
+            <point key="canvasLocation" x="112" y="-54"/>
+        </tableViewCell>
+    </objects>
+</document>

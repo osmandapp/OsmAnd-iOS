@@ -15,7 +15,6 @@
 #import "OARoutingHelper.h"
 #import "OAGPXTrackAnalysis.h"
 #import "OANativeUtilities.h"
-#import "OALineChartCell.h"
 #import "OsmAndApp.h"
 #import "OAGPXDocument.h"
 #import "OAGPXUIHelper.h"
@@ -33,8 +32,7 @@
 #import "OAStatisticsSelectionBottomSheetViewController.h"
 #import "OAGPXDatabase.h"
 #import "GeneratedAssetSymbols.h"
-
-#import <Charts/Charts-Swift.h>
+#import <DGCharts/DGCharts-Swift.h>
 
 #include <OsmAndCore/Utilities.h>
 
@@ -76,31 +74,26 @@
 
 - (NSArray *) getMainGraphSectionData
 {
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OALineChartCell getCellIdentifier] owner:self options:nil];
-    OALineChartCell *routeStatsCell = (OALineChartCell *)[nib objectAtIndex:0];
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:ElevationChartCell.reuseIdentifier owner:self options:nil];
+    ElevationChartCell *routeStatsCell = (ElevationChartCell *)[nib objectAtIndex:0];
     routeStatsCell.selectionStyle = UITableViewCellSelectionStyleNone;
-    routeStatsCell.lineChartView.delegate = self;
+    routeStatsCell.chartView.delegate = self;
 
-    [GpxUIHelper setupGPXChartWithChartView:routeStatsCell.lineChartView
-                               yLabelsCount:4
-                                  topOffset:20
-                               bottomOffset:4
-                        useGesturesAndScale:YES
-    ];
-
+    [GpxUIHelper setupElevationChartWithChartView:routeStatsCell.chartView
+                                        topOffset:20
+                                     bottomOffset:4
+                              useGesturesAndScale:YES];
     
     OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.gpx.path]];
     BOOL calcWithoutGaps = !gpx.joinSegments && (self.gpx.tracks.count > 0 && self.gpx.tracks.firstObject.generalTrack);
-    [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.lineChartView
+    [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.chartView
                                       analysis:self.analysis
-                           useGesturesAndScale:YES
                                      firstType:GPXDataSetTypeAltitude
                                     secondType:GPXDataSetTypeSlope
+                                      axisType:GPXDataSetAxisTypeDistance
                                calcWithoutGaps:calcWithoutGaps];
 
-    BOOL hasSlope = routeStatsCell.lineChartView.lineData.dataSetCount > 1;
-    
-    self.statisticsChart = routeStatsCell.lineChartView;
+    self.statisticsChart = routeStatsCell.chartView;
     for (UIGestureRecognizer *recognizer in self.statisticsChart.gestureRecognizers)
     {
         if ([recognizer isKindOfClass:UIPanGestureRecognizer.class])
@@ -109,7 +102,8 @@
         }
         [recognizer addTarget:self action:@selector(onChartGesture:)];
     }
-    
+
+    BOOL hasSlope = routeStatsCell.chartView.lineData.dataSetCount > 1;
     if (hasSlope)
     {
         nib = [[NSBundle mainBundle] loadNibNamed:[OARouteStatisticsModeCell getCellIdentifier] owner:self options:nil];
@@ -210,7 +204,7 @@
                                                                            analysis:self.analysis];
     }
     [self.routeLineChartHelper refreshHighlightOnMap:NO
-                                       lineChartView:self.statisticsChart
+                                           chartView:self.statisticsChart
                                     trackChartPoints:self.trackChartPoints
                                             analysis:self.analysis];
     [self updateRouteStatisticsGraph];
@@ -360,7 +354,7 @@
                                                                                analysis:self.analysis];
         }
         [self.routeLineChartHelper refreshHighlightOnMap:YES
-                                           lineChartView:self.statisticsChart
+                                               chartView:self.statisticsChart
                                         trackChartPoints:self.trackChartPoints
                                                 analysis:self.analysis];
     }
@@ -487,7 +481,7 @@
         self.trackChartPoints = [self.routeLineChartHelper generateTrackChartPoints:self.statisticsChart
                                                                            analysis:self.analysis];
     [self.routeLineChartHelper refreshHighlightOnMap:NO
-                                       lineChartView:self.statisticsChart
+                                           chartView:self.statisticsChart
                                     trackChartPoints:self.trackChartPoints
                                             analysis:self.analysis];
 }
@@ -506,10 +500,10 @@
     if (_data.count > 1)
     {
         OARouteStatisticsModeCell *statsModeCell = _data[0];
-        OALineChartCell *graphCell = _data[1];
+        ElevationChartCell *graphCell = _data[1];
 
         [self.routeLineChartHelper changeChartTypes:_types
-                                              chart:graphCell.lineChartView
+                                              chart:graphCell.chartView
                                            analysis:self.analysis
                                            modeCell:statsModeCell];
     }

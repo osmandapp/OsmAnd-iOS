@@ -672,6 +672,8 @@
 		468AADE528C77A6200BEC402 /* ic_custom_download_map_unavailable@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 468AADE128C77A6200BEC402 /* ic_custom_download_map_unavailable@2x.png */; };
 		468AADE628C77A6200BEC402 /* ic_custom_download_map_unavailable@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 468AADE228C77A6200BEC402 /* ic_custom_download_map_unavailable@3x.png */; };
 		468C798D2B7F76A000DA64D0 /* SendCodeCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468C798C2B7F76A000DA64D0 /* SendCodeCommand.swift */; };
+		468CD3832C809E3400CC3436 /* ElevationChartCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468CD3822C809E3400CC3436 /* ElevationChartCell.swift */; };
+		468CD3852C80A06500CC3436 /* ElevationChartCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 468CD3842C80A06500CC3436 /* ElevationChartCell.xib */; };
 		468CE3F129F82EA700F3C3E5 /* OAColorCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 468CE3F029F82E9400F3C3E5 /* OAColorCollectionViewController.m */; };
 		468D9C6C2C00FE0600ED368A /* MapButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468D9C6B2C00FE0600ED368A /* MapButtonState.swift */; };
 		468D9C6E2C01030400ED368A /* QuickActionButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468D9C6D2C01030400ED368A /* QuickActionButtonState.swift */; };
@@ -2769,8 +2771,6 @@
 		DA7B18E02A1227A30029967F /* CurrentTimeWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7B18DF2A1227A30029967F /* CurrentTimeWidget.swift */; };
 		DA7B18E32A12392E0029967F /* OAMaxSpeedWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA7B18E22A12392E0029967F /* OAMaxSpeedWidget.mm */; };
 		DA7B18E52A1259160029967F /* BatteryWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7B18E42A1259160029967F /* BatteryWidget.swift */; };
-		DA7F2592231A697200E54F77 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA7F258F231A68CD00E54F77 /* Charts.framework */; platformFilter = ios; };
-		DA7F2593231A697200E54F77 /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DA7F258F231A68CD00E54F77 /* Charts.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DA7FA55E2695DCFB0044F05A /* fi_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA7FA55D2695DCFB0044F05A /* fi_tts.js */; };
 		DA8093B72260899600A1479F /* ic_custom_osm_note_unresolved@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8093AC2260899600A1479F /* ic_custom_osm_note_unresolved@3x.png */; };
 		DA80D9A22716CC1800445DAF /* map_track_point_start_finish@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA80D99C2716CC1600445DAF /* map_track_point_start_finish@2x.png */; };
@@ -3139,6 +3139,7 @@
 		FAA6505F2ADD42C50020DCEA /* DescriptionDeviceHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA6504C2ADD42C50020DCEA /* DescriptionDeviceHeader.swift */; };
 		FAA650602ADD42C50020DCEA /* DescriptionDeviceHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = FAA6504D2ADD42C50020DCEA /* DescriptionDeviceHeader.xib */; };
 		FAA650682ADD8D0D0020DCEA /* BLEInitHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA650672ADD8D0D0020DCEA /* BLEInitHeader.swift */; };
+		FAB2B14B2C787E3900B59B7A /* DGCharts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FA6116182C787B7C005C3ABD /* DGCharts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FAB6E7E42AC5A9FD00A82987 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB6E7E32AC5A9FD00A82987 /* UIButton+Extension.swift */; };
 		FAC166212B21BEF900D63755 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC166162B21BEF700D63755 /* Util.swift */; };
 		FAC166222B21BEF900D63755 /* PeripheralProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC166172B21BEF800D63755 /* PeripheralProxy.swift */; };
@@ -3173,19 +3174,19 @@
 			remoteGlobalIDString = BBA3AF30197FC4BB0039D991;
 			remoteInfo = "OsmAnd Maps";
 		};
-		DA7F258E231A68CD00E54F77 /* PBXContainerItemProxy */ = {
+		FA6116172C787B7C005C3ABD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = DA7F2589231A68CD00E54F77 /* Charts.xcodeproj */;
+			containerPortal = FA6116102C787B7C005C3ABD /* Charts.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 65AD9E95D9ED4DC0BD73A743;
-			remoteInfo = Charts;
+			remoteInfo = DGCharts;
 		};
-		DA7F2594231A697200E54F77 /* PBXContainerItemProxy */ = {
+		FAB2B14C2C787E4400B59B7A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = DA7F2589231A68CD00E54F77 /* Charts.xcodeproj */;
+			containerPortal = FA6116102C787B7C005C3ABD /* Charts.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = A58A4ED274A941CA248EA921;
-			remoteInfo = Charts;
+			remoteInfo = DGCharts;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -3196,7 +3197,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				DA7F2593231A697200E54F77 /* Charts.framework in Embed Frameworks */,
+				FAB2B14B2C787E3900B59B7A /* DGCharts.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4047,6 +4048,8 @@
 		468AADE128C77A6200BEC402 /* ic_custom_download_map_unavailable@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_download_map_unavailable@2x.png"; path = "Resources/Icons/ic_custom_download_map_unavailable@2x.png"; sourceTree = "<group>"; };
 		468AADE228C77A6200BEC402 /* ic_custom_download_map_unavailable@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_download_map_unavailable@3x.png"; path = "Resources/Icons/ic_custom_download_map_unavailable@3x.png"; sourceTree = "<group>"; };
 		468C798C2B7F76A000DA64D0 /* SendCodeCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendCodeCommand.swift; sourceTree = "<group>"; };
+		468CD3822C809E3400CC3436 /* ElevationChartCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElevationChartCell.swift; sourceTree = "<group>"; };
+		468CD3842C80A06500CC3436 /* ElevationChartCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ElevationChartCell.xib; sourceTree = "<group>"; };
 		468CE3EF29F82E6300F3C3E5 /* OAColorCollectionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAColorCollectionViewController.h; sourceTree = "<group>"; };
 		468CE3F029F82E9400F3C3E5 /* OAColorCollectionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAColorCollectionViewController.m; sourceTree = "<group>"; };
 		468D9C6B2C00FE0600ED368A /* MapButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapButtonState.swift; sourceTree = "<group>"; };
@@ -7228,7 +7231,6 @@
 		DA7B18E12A12392E0029967F /* OAMaxSpeedWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMaxSpeedWidget.h; sourceTree = "<group>"; };
 		DA7B18E22A12392E0029967F /* OAMaxSpeedWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMaxSpeedWidget.mm; sourceTree = "<group>"; };
 		DA7B18E42A1259160029967F /* BatteryWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryWidget.swift; sourceTree = "<group>"; };
-		DA7F2589231A68CD00E54F77 /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Charts.xcodeproj; sourceTree = "<group>"; };
 		DA7FA55D2695DCFB0044F05A /* fi_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = fi_tts.js; path = ../resources/voice/fi/fi_tts.js; sourceTree = "<group>"; };
 		DA8093A82260899500A1479F /* ic_custom_osm_note_unresolved@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_osm_note_unresolved@2x.png"; path = "Resources/Icons/ic_custom_osm_note_unresolved@2x.png"; sourceTree = "<group>"; };
 		DA8093A92260899500A1479F /* ic_custom_osm_note_resolved@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_osm_note_resolved@3x.png"; path = "Resources/Icons/ic_custom_osm_note_resolved@3x.png"; sourceTree = "<group>"; };
@@ -7594,6 +7596,7 @@
 		FA4D7F562B03D366003208D7 /* BLEWheelSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEWheelSettingsViewController.swift; sourceTree = "<group>"; };
 		FA5A21A12A9C7DE100319695 /* CALayer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+Extension.swift"; sourceTree = "<group>"; };
 		FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIPageViewController+Extension.swift"; sourceTree = "<group>"; };
+		FA6116102C787B7C005C3ABD /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Charts.xcodeproj; sourceTree = "<group>"; };
 		FA63F24B2AF3DAA00040A0CE /* SensorDataField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorDataField.swift; sourceTree = "<group>"; };
 		FA63F24D2AF3DC550040A0CE /* SensorWidgetDataField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorWidgetDataField.swift; sourceTree = "<group>"; };
 		FA63F24F2AF3DFF60040A0CE /* SensorTextWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorTextWidget.swift; sourceTree = "<group>"; };
@@ -7698,7 +7701,6 @@
 				84C41E7B1AB9EEA20089EABB /* libxml2.dylib in Frameworks */,
 				84185A821AA9A00D00F70328 /* StoreKit.framework in Frameworks */,
 				BBA3AF73197FC4BB0039D991 /* Security.framework in Frameworks */,
-				DA7F2592231A697200E54F77 /* Charts.framework in Frameworks */,
 				8AAFE753278DE23700F6504E /* libsqlite_static.a in Frameworks */,
 				BBA3AF74197FC4BB0039D991 /* CoreText.framework in Frameworks */,
 				BBA3AF75197FC4BB0039D991 /* QuartzCore.framework in Frameworks */,
@@ -11574,6 +11576,7 @@
 				FA00B8852B5928F900582CD1 /* SegmentImagesWithRightLabelTableViewCell.swift */,
 				32FF4C2A2C18425900246B36 /* SegmentTableHeaderView.swift */,
 				DA5A7BB626C563A100F274C7 /* Xibs */,
+				468CD3822C809E3400CC3436 /* ElevationChartCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -11699,6 +11702,7 @@
 				32BBDC962C0493190090D37E /* RouteInfoListItemCell.xib */,
 				FA00B8892B592CF000582CD1 /* SegmentImagesWithRightLabelTableViewCell.xib */,
 				32FF4C252C183A6400246B36 /* SegmentTableHeaderView.xib */,
+				468CD3842C80A06500CC3436 /* ElevationChartCell.xib */,
 			);
 			path = Xibs;
 			sourceTree = "<group>";
@@ -13245,26 +13249,10 @@
 		DA7F2587231A68CD00E54F77 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				FA6116122C787B7C005C3ABD /* Charts */,
 				FAC166152B21BECE00D63755 /* SwiftyBluetooth */,
-				DA7F2588231A68CD00E54F77 /* Charts */,
 			);
 			path = Libraries;
-			sourceTree = "<group>";
-		};
-		DA7F2588231A68CD00E54F77 /* Charts */ = {
-			isa = PBXGroup;
-			children = (
-				DA7F2589231A68CD00E54F77 /* Charts.xcodeproj */,
-			);
-			path = Charts;
-			sourceTree = "<group>";
-		};
-		DA7F258A231A68CD00E54F77 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				DA7F258F231A68CD00E54F77 /* Charts.framework */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		DA80DAA8251E0C0C008E6267 /* Router */ = {
@@ -13592,6 +13580,22 @@
 			path = BLEWheelSettings;
 			sourceTree = "<group>";
 		};
+		FA6116122C787B7C005C3ABD /* Charts */ = {
+			isa = PBXGroup;
+			children = (
+				FA6116102C787B7C005C3ABD /* Charts.xcodeproj */,
+			);
+			path = Charts;
+			sourceTree = "<group>";
+		};
+		FA6116132C787B7C005C3ABD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FA6116182C787B7C005C3ABD /* DGCharts.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		FA6439E52B04D6EE00331006 /* Characteristics */ = {
 			isa = PBXGroup;
 			children = (
@@ -13884,7 +13888,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				DA7F2595231A697200E54F77 /* PBXTargetDependency */,
+				FAB2B14D2C787E4400B59B7A /* PBXTargetDependency */,
 			);
 			name = "OsmAnd Maps";
 			productName = OsmAnd;
@@ -14030,8 +14034,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = DA7F258A231A68CD00E54F77 /* Products */;
-					ProjectRef = DA7F2589231A68CD00E54F77 /* Charts.xcodeproj */;
+					ProductGroup = FA6116132C787B7C005C3ABD /* Products */;
+					ProjectRef = FA6116102C787B7C005C3ABD /* Charts.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -14043,11 +14047,11 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		DA7F258F231A68CD00E54F77 /* Charts.framework */ = {
+		FA6116182C787B7C005C3ABD /* DGCharts.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = Charts.framework;
-			remoteRef = DA7F258E231A68CD00E54F77 /* PBXContainerItemProxy */;
+			path = DGCharts.framework;
+			remoteRef = FA6116172C787B7C005C3ABD /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -14795,6 +14799,7 @@
 				46DF1D7F28C21B4300135D94 /* ic_custom_openstreetmap_logo_colored_day_big@2x.png in Resources */,
 				DA45DA5A230EE0590083DFA2 /* img_mapstyle_nautical@3x.png in Resources */,
 				97BCFBEE287D97C3003AFFB2 /* ic_navbar_reset@2x.png in Resources */,
+				468CD3852C80A06500CC3436 /* ElevationChartCell.xib in Resources */,
 				333168BE2507804400266047 /* ic_custom_logo_wikimedia@3x.png in Resources */,
 				8A6CBCC021CE25F0004033C7 /* img_logo_38dp_osmand@2x.png in Resources */,
 				3296B47F27F8790800108AF7 /* ic_custom_thermometer@2x.png in Resources */,
@@ -16366,6 +16371,7 @@
 				DA2EC7B529FBCD1700ECEB37 /* WidgetsPanel.swift in Sources */,
 				DA5A856B26C563A900F274C7 /* OATspAnt.m in Sources */,
 				DA5A83B826C563A800F274C7 /* OAQuickActionsSheetView.m in Sources */,
+				468CD3832C809E3400CC3436 /* ElevationChartCell.swift in Sources */,
 				DA5A837526C563A800F274C7 /* OARoutePreferencesParameters.mm in Sources */,
 				4656BD342C484FA000B69928 /* GradientColorsCollection.swift in Sources */,
 				320427D62BF4D5250085DCA1 /* SpeedometerWidgetSettingsViewController.swift in Sources */,
@@ -17305,11 +17311,10 @@
 			target = BBA3AF30197FC4BB0039D991 /* OsmAnd Maps */;
 			targetProxy = DA72AB8E2508F41000851313 /* PBXContainerItemProxy */;
 		};
-		DA7F2595231A697200E54F77 /* PBXTargetDependency */ = {
+		FAB2B14D2C787E4400B59B7A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = Charts;
-			platformFilter = ios;
-			targetProxy = DA7F2594231A697200E54F77 /* PBXContainerItemProxy */;
+			name = DGCharts;
+			targetProxy = FAB2B14C2C787E4400B59B7A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -17689,6 +17694,8 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)",
+					"$(PROJECT_DIR)/Libraries/Charts/build/Debug-iphonesimulator",
+					"$(PROJECT_DIR)/Libraries/Charts/build/EagerLinkingTBDs/Debug-iphonesimulator",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Support Files/OA-Prefix.pch";
@@ -17758,6 +17765,8 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)",
+					"$(PROJECT_DIR)/Libraries/Charts/build/Debug-iphonesimulator",
+					"$(PROJECT_DIR)/Libraries/Charts/build/EagerLinkingTBDs/Debug-iphonesimulator",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Support Files/OA-Prefix.pch";

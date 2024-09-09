@@ -128,9 +128,6 @@
 		0CBDD0B1245038ED00C94BC2 /* map_marker_direction_arrow_p2_color_pin_4@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CBDD08A245038E700C94BC2 /* map_marker_direction_arrow_p2_color_pin_4@3x.png */; };
 		0CBDD0B3245038ED00C94BC2 /* map_marker_direction_arrow_p2_color_pin_3@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CBDD08B245038E800C94BC2 /* map_marker_direction_arrow_p2_color_pin_3@3x.png */; };
 		0CBDD0B5245038ED00C94BC2 /* map_marker_direction_arrow_p1_light@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CBDD08C245038EA00C94BC2 /* map_marker_direction_arrow_p1_light@3x.png */; };
-		0CEF2C1624B717CC00BAAC4B /* (null) in Resources */ = {isa = PBXBuildFile; };
-		0CEF2C2024B717CC00BAAC4B /* (null) in Resources */ = {isa = PBXBuildFile; };
-		0CEF2C3724B7237800BAAC4B /* (null) in Resources */ = {isa = PBXBuildFile; };
 		0CF585872440745F0081238D /* ic_custom_direction_topbar_one@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CF58575244074560081238D /* ic_custom_direction_topbar_one@2x.png */; };
 		0CF5858B2440745F0081238D /* ic_custom_direction_widget_one@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CF58577244074580081238D /* ic_custom_direction_widget_one@2x.png */; };
 		0CF585912440745F0081238D /* ic_custom_direction_topbar_two@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CF5857A2440745A0081238D /* ic_custom_direction_topbar_two@3x.png */; };
@@ -15345,7 +15342,6 @@
 				DA5A82C326C563A800F274C7 /* OARangeSliderCell.xib in Resources */,
 				DA1BC12C233F9B01004DAF78 /* ic_custom_sort_door_to_door@3x.png in Resources */,
 				8412222A1B395D2C00F80F9E /* ic_travel_time@2x.png in Resources */,
-				0CEF2C1624B717CC00BAAC4B /* (null) in Resources */,
 				84669646207CD7DF00BA971B /* ic_action_sort_door_to_door@3x.png in Resources */,
 				32309A3F26989114005751F5 /* ic_custom_map_zoom_out@2x.png in Resources */,
 				15CD7EA625B1C1A700BCB36A /* ic_small_time_start@3x.png in Resources */,
@@ -15695,7 +15691,6 @@
 				DA9A2C2926FB587400BEC681 /* map_direction_arrow@2x.png in Resources */,
 				DA6D078E255173C5004FE017 /* ic_custom_trim_after@2x.png in Resources */,
 				DA32846626CBF76B0036BA73 /* img_plugin_contourlines.jpg in Resources */,
-				0CEF2C3724B7237800BAAC4B /* (null) in Resources */,
 				DA2EC78429FBBE0400ECEB37 /* warnings_speed_limit_ca@3x.png in Resources */,
 				DA0D162D281BEEF500CEEF58 /* map_turn_continue@2x.png in Resources */,
 				DA134114243DC5A80039D214 /* map_action_motorcycle@3x.png in Resources */,
@@ -15871,7 +15866,6 @@
 				848A14D91B223A4C00A31AE7 /* bg_title@3x.png in Resources */,
 				DA5A851B26C563A900F274C7 /* OATargetPointView.xib in Resources */,
 				0A7DAF96270C404B0059238B /* ic_custom_upload_to_openstreetmap@2x.png in Resources */,
-				0CEF2C2024B717CC00BAAC4B /* (null) in Resources */,
 				84C41E4F1AB8600D0089EABB /* position_track_map_mode_button@2x.png in Resources */,
 				DAE79D38260E1B4800E2EE11 /* ic_system_checkbox_indeterminate@2x.png in Resources */,
 				8AB2BBC523ACBAEB00D2AD03 /* desert.render.xml in Resources */,

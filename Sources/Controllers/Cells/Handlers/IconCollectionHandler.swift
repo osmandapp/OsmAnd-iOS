@@ -11,18 +11,18 @@ import Foundation
 @objcMembers
 final class IconCollectionHandler: OABaseCollectionHandler, OAIconCollectionDelegate {
     
-    private var selectedIndexPath: IndexPath?
-    private var defaultIndexPath: IndexPath?
-    private var iconNamesData = [[String]]()
     var iconImagesData = [[UIImage]]()
     var roundedSquareCells = false
     var customTitle = ""
-    
-    weak var hostVC: OASuperViewController?
-    
     var selectedIconColor: UIColor?
     var regularIconColor: UIColor?
     var cornerRadius: Double = -1
+    
+    weak var hostVC: OASuperViewController?
+    
+    private var selectedIndexPath: IndexPath?
+    private var defaultIndexPath: IndexPath?
+    private var iconNamesData = [[String]]()
     private var cellSize: Double?
     private var iconSize: Double?
     

@@ -986,9 +986,12 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
     }
     else if (info.isText && info.moreText)
     {
-        if (info.detailsArray.count > 0) {
+        if (info.detailsArray.count > 0)
+        {
             [self showPOITagsDetails:info];
-        } else {
+        }
+        else
+        {
             OAEditDescriptionViewController *_editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:info.text isNew:NO isEditing:NO readOnly:YES];
             [self.navController pushViewController:_editDescController animated:YES];
         }

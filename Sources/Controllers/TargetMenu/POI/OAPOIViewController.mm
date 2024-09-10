@@ -844,7 +844,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     return [filteredDict copy];
 }
 
-- (void) addRowIfNotExsists:(OARowInfo *)newRow toDestinationRows:(NSMutableArray<OARowInfo *> *)rows
+- (void)addRowIfNotExists:(OARowInfo *)newRow toDestinationRows:(NSMutableArray<OARowInfo *> *)rows
 {
     if (![rows containsObject:newRow])
         [rows addObject:newRow];

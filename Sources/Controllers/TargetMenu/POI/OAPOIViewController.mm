@@ -597,32 +597,6 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                                         typeName:@""
                                    isPhoneNumber:NO
                                            isUrl:NO];
-            
-            if ([value isKindOfClass:[NSDictionary class]])
-            {
-                NSMutableArray *array = [NSMutableArray array];
-                NSDictionary *val = dic[convertedKey][@"localization"];
-                if ([_poiHelper isNameTag:convertedKey])
-                {
-                    row.text = self.poi.name;
-                    row.textPrefix = OALocalizedString(@"shared_string_name");
-                }
-                if (val.allKeys.count > 0)
-                {
-                    for (NSString *key in val.allKeys)
-                    {
-                        OAPOIBaseType *poi = [_poiHelper getAnyPoiAdditionalTypeByKey:key];
-                        NSString *formattedKey = [key stringByReplacingOccurrencesOfString:convertedKey withString:@"name"];
-
-                        [array addObject:@{
-                            @"key": formattedKey,
-                            @"value": val[key],
-                            @"localizedTitle": poi ? poi.nameLocalized : @""
-                        }];
-                    }
-                    [row setDetailsArray:array];
-                }
-            }
         }
         else
         {
@@ -645,32 +619,8 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                                         typeName:poiTypeKeyName
                                    isPhoneNumber:isPhoneNumber
                                            isUrl:isUrl];
-            if ([value isKindOfClass:[NSDictionary class]])
-            {
-                NSMutableArray *array = [NSMutableArray array];
-                NSDictionary *val = dic[convertedKey][@"localization"];
-                if ([_poiHelper isNameTag:convertedKey])
-                {
-                    row.text = self.poi.name;
-                    row.textPrefix = OALocalizedString(@"shared_string_name");
-                }
-                if (val.allKeys.count > 0)
-                {
-                    for (NSString *key in val.allKeys)
-                    {
-                        OAPOIBaseType *poi = [_poiHelper getAnyPoiAdditionalTypeByKey:key];
-                        NSString *formattedKey = [key stringByReplacingOccurrencesOfString:convertedKey withString:@"name"];
-
-                        [array addObject:@{
-                            @"key": formattedKey,
-                            @"value": val[key],
-                            @"localizedTitle": poi ? poi.nameLocalized : @""
-                        }];
-                    }
-                    [row setDetailsArray:array];
-                }
-            }
         }
+        [self configureRowValue:value dic:dic convertedKey:convertedKey row:row];
         row.collapsable = collapsable;
         row.collapsed = YES;
         row.collapsableView = collapsableView;
@@ -680,7 +630,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         else if (isCuisine)
             cuisineRow = row;
         else if (isUrl)
-            [self addRowIfNotExsists:row toDestinationRows:urlRows];
+            [self addRowIfNotExists:row toDestinationRows:urlRows];
         else if (!poiType)
             [infoRows addObject:row];
     }
@@ -843,6 +793,38 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                                               typeName:nil
                                          isPhoneNumber:NO
                                                  isUrl:YES]];
+    }
+}
+
+- (void)configureRowValue:(id)value
+                      dic:(NSDictionary *)dic
+             convertedKey:(NSString *)convertedKey
+                      row:(OARowInfo *)row
+{
+    if ([value isKindOfClass:[NSDictionary class]])
+    {
+        NSMutableArray *array = [NSMutableArray array];
+        NSDictionary *val = dic[convertedKey][@"localization"];
+        if ([_poiHelper isNameTag:convertedKey])
+        {
+            row.text = self.poi.name;
+            row.textPrefix = OALocalizedString(@"shared_string_name");
+        }
+        if (val.allKeys.count > 0)
+        {
+            for (NSString *key in val.allKeys)
+            {
+                OAPOIBaseType *poi = [_poiHelper getAnyPoiAdditionalTypeByKey:key];
+                NSString *formattedKey = [key stringByReplacingOccurrencesOfString:convertedKey withString:@"name"];
+
+                [array addObject:@{
+                    @"key": formattedKey,
+                    @"value": val[key],
+                    @"localizedTitle": poi ? poi.nameLocalized : @""
+                }];
+            }
+            [row setDetailsArray:array];
+        }
     }
 }
 

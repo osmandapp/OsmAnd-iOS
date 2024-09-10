@@ -9,46 +9,84 @@
 import UIKit
 
 @objcMembers
-final class MarkerDisplayOption: NSObject {
-    
-    static var off = MarkerDisplayOption(rawValue: 0, nameId: "shared_string_off", markerStates: [.none])
-    static var resting = MarkerDisplayOption(rawValue: 1, nameId: "resting_position", markerStates: [.stay])
-    static var navigation = MarkerDisplayOption(rawValue: 2, nameId: "navigation_position", markerStates: [.move])
-    static var restingNavigation = MarkerDisplayOption(rawValue: 3, nameId: "resting_navigation_position", markerStates: [.move, .stay])
-    
-    let rawValue: Int32
-    let nameId: String
-    private let markerStates: [EOAMarkerState]
+final class MarkerDisplayOptionWrapper: NSObject {
     
     static func allValues() -> [MarkerDisplayOption] {
-        [off, resting, navigation, restingNavigation]
+        return [.off, .resting, .navigation, .restingNavigation]
     }
     
-    static func valueBy(index: Int32) -> MarkerDisplayOption {
-        if index == off.rawValue {
-            return off
-        } else if index == resting.rawValue {
-            return resting
-        } else if index == navigation.rawValue {
-            return navigation
-        } else if index == restingNavigation.rawValue {
-            return restingNavigation
+    static func off() -> MarkerDisplayOption {
+        .off
+    }
+    
+    static func resting() -> MarkerDisplayOption {
+        .resting
+    }
+    
+    static func navigation() -> MarkerDisplayOption {
+        .navigation
+    }
+    
+    static func restingNavigation() -> MarkerDisplayOption {
+        .restingNavigation
+    }
+    
+    static func value(by index: Int32) -> MarkerDisplayOption {
+        MarkerDisplayOption.value(by: index)
+    }
+    
+    static func getNameFor(type: MarkerDisplayOption) -> String {
+        type.nameId
+    }
+    
+    static func isVisible(type: MarkerDisplayOption, state: EOAMarkerState) -> Bool {
+        type.isVisible(markerState: state)
+    }
+}
+
+@objc
+enum MarkerDisplayOption: Int32, CaseIterable {
+    case off, resting, navigation, restingNavigation
+
+    // MARK: - Properties
+
+    var nameId: String {
+        switch self {
+        case .off:
+            return "shared_string_off"
+        case .resting:
+            return "resting_position"
+        case .navigation:
+            return "navigation_position"
+        case .restingNavigation:
+            return "resting_navigation_position"
         }
-        return off
     }
-    
-    init(rawValue: Int32, nameId: String, markerStates: [EOAMarkerState]) {
-        self.rawValue = rawValue
-        self.nameId = nameId
-        self.markerStates = markerStates
-        super.init()
+
+    var markerStates: [EOAMarkerState] {
+        switch self {
+        case .off:
+            return [.none]
+        case .resting:
+            return [.stay]
+        case .navigation:
+            return [.move]
+        case .restingNavigation:
+            return [.move, .stay]
+        }
     }
-    
+
+    // MARK: - Methods
+
+    static func value(by index: Int32) -> MarkerDisplayOption {
+        MarkerDisplayOption(rawValue: index) ?? .off
+    }
+
     func name() -> String {
         localizedString(nameId)
     }
-    
+
     func isVisible(markerState: EOAMarkerState) -> Bool {
-        self != Self.off && markerStates.contains(markerState)
+        self != .off && markerStates.contains(markerState)
     }
 }

@@ -371,11 +371,16 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
 
     OATableSectionData *optionsSection = [_data createNewSection];
     [OAAppSettings.sharedManager.viewAngleVisibility get:_profile.parent];
+    
+    MarkerDisplayOption viewAngleVisibility = [MarkerDisplayOptionWrapper valueBy:_changedProfile.viewAngleVisibility];
+    MarkerDisplayOption locationRadiusVisibility = [MarkerDisplayOptionWrapper valueBy:_changedProfile.locationRadiusVisibility];
+    NSString *viewAngleVisibilityName = [MarkerDisplayOptionWrapper getNameForType:viewAngleVisibility];
+    NSString *locationRadiusVisibilityName = [MarkerDisplayOptionWrapper getNameForType:locationRadiusVisibility];
     [optionsSection addRowFromDictionary:@{
         kCellHeaderTitleKey : OALocalizedString(@"shared_string_options"),
         kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"view_angle"),
-        kCellDescrKey : [[MarkerDisplayOption valueByIndex:_changedProfile.viewAngleVisibility] name],
+        kCellDescrKey : OALocalizedString(viewAngleVisibilityName),
         kCellIconNameKey : @"ic_custom_location_view_angle",
         kCellIconTintColor : UIColorFromRGB(_changedProfile.profileColor),
         kCellKeyKey : kViewAngleCellKey,
@@ -383,7 +388,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     [optionsSection addRowFromDictionary:@{
         kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"location_radius"),
-        kCellDescrKey : [[MarkerDisplayOption valueByIndex:_changedProfile.locationRadiusVisibility] name],
+        kCellDescrKey : OALocalizedString(locationRadiusVisibilityName),
         kCellIconNameKey : @"ic_custom_location_radius",
         kCellIconTintColor : UIColorFromRGB(_changedProfile.profileColor),
         kCellKeyKey : kLocationRadiusCellKey,

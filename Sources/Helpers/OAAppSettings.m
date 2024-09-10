@@ -3964,8 +3964,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         _appModeOrder = [OACommonInteger withKey:appModeOrderKey defValue:0];
         [_profilePreferences setObject:_appModeOrder forKey:@"app_mode_order"];
         
-        _viewAngleVisibility = [[[OACommonInteger withKey:viewAngleVisibilityKey defValue:[[MarkerDisplayOption resting] rawValue]] makeProfile] makeShared];
-        _locationRadiusVisibility = [[[OACommonInteger withKey:locationRadiusVisibilityKey defValue:[[MarkerDisplayOption restingNavigation] rawValue]] makeProfile] makeShared];
+        _viewAngleVisibility = [[[OACommonInteger withKey:viewAngleVisibilityKey defValue:[MarkerDisplayOptionWrapper resting]] makeProfile] makeShared];
+        _locationRadiusVisibility = [[[OACommonInteger withKey:locationRadiusVisibilityKey defValue:[MarkerDisplayOptionWrapper restingNavigation]] makeProfile] makeShared];
         [_profilePreferences setObject:_viewAngleVisibility forKey:@"view_angle_visibility"];
         [_profilePreferences setObject:_locationRadiusVisibility forKey:@"location_radius_visibility"];
 

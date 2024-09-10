@@ -776,16 +776,16 @@ typedef enum {
 - (BOOL) shouldShowHeading
 {
     int rawVisibilitySetting = OAAppSettings.sharedManager.viewAngleVisibility.get;
-    MarkerDisplayOption *visibility = [MarkerDisplayOption valueByIndex:rawVisibilitySetting];
-    BOOL isVisible = [visibility isVisibleWithMarkerState:_currentMarkerState];
+    MarkerDisplayOption displayOption = [MarkerDisplayOptionWrapper valueBy:rawVisibilitySetting];
+    BOOL isVisible = [MarkerDisplayOptionWrapper isVisibleWithType:displayOption state:_currentMarkerState];
     return _mapViewTrackingUtilities.showViewAngle && !self.isLocationSnappedToRoad && isVisible;
 }
 
 - (BOOL) shouldShowLocationRadius
 {
     int rawVisibilitySetting = OAAppSettings.sharedManager.locationRadiusVisibility.get;
-    MarkerDisplayOption *visibility = [MarkerDisplayOption valueByIndex:rawVisibilitySetting];
-    BOOL isVisible = [visibility isVisibleWithMarkerState:_currentMarkerState];
+    MarkerDisplayOption displayOption = [MarkerDisplayOptionWrapper valueBy:rawVisibilitySetting];
+    BOOL isVisible = [MarkerDisplayOptionWrapper isVisibleWithType:displayOption state:_currentMarkerState];
     return !self.isLocationSnappedToRoad && isVisible;
 }
 

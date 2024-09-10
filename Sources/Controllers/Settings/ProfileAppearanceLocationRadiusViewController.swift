@@ -38,7 +38,7 @@ final class ProfileAppearanceLocationRadiusViewController: OABaseNavbarViewContr
     override func generateData() {
         let section = tableData.createNewSection()
         
-        let values = MarkerDisplayOption.allValues()
+        let values = MarkerDisplayOptionWrapper.allValues()
         
         for i in 0 ..< values.count {
             let value = values[i]

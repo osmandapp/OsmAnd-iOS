@@ -524,6 +524,7 @@
 		460C1E702BFC9B490090D67B /* QuickActionIds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460C1E6F2BFC9B490090D67B /* QuickActionIds.swift */; };
 		460E9AC12B71111000411854 /* CloudTrashItemMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460E9AC02B71111000411854 /* CloudTrashItemMenuViewController.swift */; };
 		4611DF3A28569C5000885FD1 /* OASubscriptionBannerCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4611DF3928569C5000885FD1 /* OASubscriptionBannerCardView.xib */; };
+		46132FB02C904D1A00C9F364 /* DisplayPositionAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46132FAF2C904D1A00C9F364 /* DisplayPositionAction.swift */; };
 		4613BFA62A93DECC004385FB /* ic_custom_screen_side_right_48@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4613BF9E2A93DECA004385FB /* ic_custom_screen_side_right_48@2x.png */; };
 		4613BFA72A93DECC004385FB /* ic_custom_screen_side_bottom_48@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4613BF9F2A93DECA004385FB /* ic_custom_screen_side_bottom_48@2x.png */; };
 		4613BFA82A93DECC004385FB /* ic_custom_screen_side_right_48@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4613BFA02A93DECA004385FB /* ic_custom_screen_side_right_48@3x.png */; };
@@ -3957,6 +3958,7 @@
 		460C1E6F2BFC9B490090D67B /* QuickActionIds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickActionIds.swift; sourceTree = "<group>"; };
 		460E9AC02B71111000411854 /* CloudTrashItemMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudTrashItemMenuViewController.swift; sourceTree = "<group>"; };
 		4611DF3928569C5000885FD1 /* OASubscriptionBannerCardView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OASubscriptionBannerCardView.xib; sourceTree = "<group>"; };
+		46132FAF2C904D1A00C9F364 /* DisplayPositionAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayPositionAction.swift; sourceTree = "<group>"; };
 		4613BF9E2A93DECA004385FB /* ic_custom_screen_side_right_48@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_screen_side_right_48@2x.png"; path = "Resources/Icons/ic_custom_screen_side_right_48@2x.png"; sourceTree = "<group>"; };
 		4613BF9F2A93DECA004385FB /* ic_custom_screen_side_bottom_48@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_screen_side_bottom_48@2x.png"; path = "Resources/Icons/ic_custom_screen_side_bottom_48@2x.png"; sourceTree = "<group>"; };
 		4613BFA02A93DECA004385FB /* ic_custom_screen_side_right_48@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_screen_side_right_48@3x.png"; path = "Resources/Icons/ic_custom_screen_side_right_48@3x.png"; sourceTree = "<group>"; };
@@ -11070,6 +11072,7 @@
 				323F04CB2C6579C30058DD78 /* ShowHideRunningRoutesAction.swift */,
 				323F04C32C656B970058DD78 /* ShowHideSkiSlopesAction.swift */,
 				323F04C72C6577340058DD78 /* ShowHideWhitewaterSportsAction.swift */,
+				46132FAF2C904D1A00C9F364 /* DisplayPositionAction.swift */,
 			);
 			path = Actions;
 			sourceTree = "<group>";
@@ -16362,7 +16365,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "count=0\nfor file_path in $(git ls-files -om --exclude-from=.gitignore | grep \".swift$\"); do\n  # Set environment variables with file names in order to feed SwiftLint, as documented at the following link\n  # 👉 https://github.com/realm/SwiftLint#command-line\n    export SCRIPT_INPUT_FILE_$count=$file_path\n    # Count the number of modified Swift files in the index and the working tree, excluding those ignored by git\n    count=$((count + 1))\ndone\nfor file_path in $(git diff --cached --name-only | grep \".swift$\"); do\n    export SCRIPT_INPUT_FILE_$count=$file_path\n    count=$((count + 1))\ndone\n    export SCRIPT_INPUT_FILE_COUNT=$count\n    # Run SwiftLint only over the files mentioned above, if any\nif [ $SCRIPT_INPUT_FILE_COUNT -ne 0 ]; then\n  \"${PODS_ROOT}/SwiftLint/swiftlint\" lint --use-script-input-files\nfi\n";
+			shellScript = "  # count=0\n  # for file_path in $(git ls-files -om --exclude-from=.gitignore | grep \".swift$\"); do\n  # Set environment variables with file names in order to feed SwiftLint, as documented at the following link\n  # 👉 https://github.com/realm/SwiftLint#command-line\n      # export SCRIPT_INPUT_FILE_$count=$file_path\n    # Count the number of modified Swift files in the index and the working tree, excluding those ignored by git\n      # count=$((count + 1))\n  # done\n  # for file_path in $(git diff --cached --name-only | grep \".swift$\"); do\n      # export SCRIPT_INPUT_FILE_$count=$file_path\n      # count=$((count + 1))\n  # done\n      # export SCRIPT_INPUT_FILE_COUNT=$count\n    # Run SwiftLint only over the files mentioned above, if any\n  # if [ $SCRIPT_INPUT_FILE_COUNT -ne 0 ]; then\n    # \"${PODS_ROOT}/SwiftLint/swiftlint\" lint --use-script-input-files\n  # fi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -16706,6 +16709,7 @@
 				C589BC9F2C610560002769F6 /* OATwoIconsButtonTableViewCell.swift in Sources */,
 				32E6C7C82AB9BE1A00821F1E /* TravelSearchHelper.swift in Sources */,
 				DA5A840E26C563A800F274C7 /* OAGpxWptEditingHandler.mm in Sources */,
+				46132FB02C904D1A00C9F364 /* DisplayPositionAction.swift in Sources */,
 				323F04C22C65639B0058DD78 /* ShowHideDifficultyClassificationAction.swift in Sources */,
 				DA5A84A126C563A900F274C7 /* OAApplyGpxApproximationCommand.mm in Sources */,
 				DA5A841626C563A800F274C7 /* OAGPXWptViewController.mm in Sources */,

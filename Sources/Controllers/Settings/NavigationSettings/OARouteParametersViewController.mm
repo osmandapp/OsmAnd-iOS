@@ -172,16 +172,14 @@ static NSString *foregroundImageKey = @"foregroundImage";
     NSMutableArray *tableData = [NSMutableArray array];
     
     NSMutableArray<NSDictionary *> *headerImageSection = [NSMutableArray array];
-    [tableData addObject:headerImageSection];
     [headerImageSection addObject:@{
         typeKey : [OADeviceScreenTableViewCell getCellIdentifier],
         foregroundImageKey : @"img_settings_sreen_route_parameters@3x.png",
         backgroundImageKey : @"img_settings_device_bottom_light@3x.png",
     }];
+    [tableData addObject:headerImageSection];
     
     NSMutableArray<NSDictionary *> *parametersSection = [NSMutableArray array];
-    [tableData addObject:parametersSection];
-    
     if ([self.appMode getRouterService] == EOARouteService::OSMAND)
     {
         [self setupOsmAndRouteServicePrefs:parametersSection];
@@ -196,11 +194,13 @@ static NSString *foregroundImageKey = @"foregroundImage";
             valueKey : [NSString stringWithFormat:OALocalizedString(@"shared_string_angle_param"), @((int) [_settings.routeStraightAngle get:self.appMode]).stringValue]
         }];
     }
+    if (parametersSection.count > 0)
+        [tableData addObject:parametersSection];
     
     NSMutableArray<NSDictionary *> *recalcSection = [NSMutableArray array];
-    [tableData addObject:recalcSection];
     [self setupSelectRouteRecalcDistance:recalcSection];
     [self setupReverseDirectionRecalculation:recalcSection];
+    [tableData addObject:recalcSection];
     
     if ([OAPluginsHelper getPlugin:OAOsmandDevelopmentPlugin.class].isEnabled)
     {

@@ -729,6 +729,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
             cell.disableAnimationsOnStart = YES;
             [_colorCollectionHandler setCollectionView:cell.collectionView];
             [cell setCollectionHandler:_colorCollectionHandler];
+            _colorCollectionHandler.hostVCOpenColorPickerButton = cell.rightActionButton;
             cell.hostVC = self;
         }
         if (cell)

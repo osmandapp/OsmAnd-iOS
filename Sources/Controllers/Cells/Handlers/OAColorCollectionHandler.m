@@ -18,7 +18,7 @@
 
 #define kWhiteColor 0x44FFFFFF
 
-@interface OAColorCollectionHandler () <OACollectionCellDelegate, UIColorPickerViewControllerDelegate>
+@interface OAColorCollectionHandler () <OACollectionCellDelegate, OAColorPickerViewControllerDelegate, UIColorPickerViewControllerDelegate>
 
 @property(nonatomic) NSIndexPath *selectedIndexPath;
 
@@ -28,6 +28,7 @@
 {
     NSMutableArray<NSMutableArray<OAColorItem *> *> *_data;
     NSIndexPath *_editColorIndexPath;
+    BOOL _isStartedNewColorAdding;
 }
 
 @synthesize delegate;
@@ -285,16 +286,29 @@
 
 - (void)openColorPickerWithSelectedColor
 {
-    [self openColorPickerWithColor:[self getSelectedItem]];
+    _isStartedNewColorAdding = YES;
+    UICollectionViewCell *selectedCell = [[self getCollectionView] cellForItemAtIndexPath:_selectedIndexPath];
+    [self openColorPickerWithColor:[self getSelectedItem] sourceView:selectedCell];
 }
 
-- (void)openColorPickerWithColor:(OAColorItem *)colorItem
+- (void)openColorPickerWithColor:(OAColorItem *)colorItem sourceView:(UIView *)sourceView
 {
     if (_hostVC)
     {
-        UIColorPickerViewController *colorViewController = [[UIColorPickerViewController alloc] init];
+        OAColorPickerViewController *colorViewController = [[OAColorPickerViewController alloc] init];
         colorViewController.delegate = self;
+        colorViewController.closingDelegete = self;
         colorViewController.selectedColor = [colorItem getColor];
+        if (sourceView)
+        {
+            colorViewController.modalPresentationStyle = UIModalPresentationPopover;
+            colorViewController.popoverPresentationController.sourceView = sourceView;
+        }
+        else if (_hostVCOpenColorPickerButton)
+        {
+            colorViewController.modalPresentationStyle = UIModalPresentationPopover;
+            colorViewController.popoverPresentationController.sourceView = _hostVCOpenColorPickerButton;
+        }
         [_hostVC presentViewController:colorViewController animated:YES completion:nil];
     }
 }
@@ -312,31 +326,32 @@
 
 #pragma mark UIColorPickerViewControllerDelegate
 
-- (void)colorPickerViewControllerDidFinish:(UIColorPickerViewController *)viewController
+- (void)colorPickerViewController:(UIColorPickerViewController *)viewController didSelectColor:(UIColor *)color continuously:(BOOL)continuously
 {
-    if (_editColorIndexPath)
+    if (_isStartedNewColorAdding)
     {
-        if (![[_data[0][_editColorIndexPath.row] getHexColor] isEqualToString:[viewController.selectedColor toHexARGBString]])
-        {
-            [self changeColorItem:_data[0][_editColorIndexPath.row] withColor:viewController.selectedColor];
-        }
-        _editColorIndexPath = nil;
+        _isStartedNewColorAdding = NO;
+        [self addAndGetNewColorItem:viewController.selectedColor];
     }
     else
     {
-        [self addAndGetNewColorItem:viewController.selectedColor];
+        OAColorItem *editingColor = _data[0][0];
+        if (_editColorIndexPath)
+            editingColor = _data[0][_editColorIndexPath.row];
+        
+        if (![[editingColor getHexColor] isEqualToString:[viewController.selectedColor toHexARGBString]])
+        {
+            [self changeColorItem:editingColor withColor:viewController.selectedColor];
+        }
     }
 }
 
-- (void)colorPickerViewController:(UIColorPickerViewController *)viewController didSelectColor:(UIColor *)color continuously:(BOOL)continuously
+#pragma mark - OAColorPickerViewControllerDelegate
+
+- (void)onColorPickerDisappear:(OAColorPickerViewController *)colorPicker
 {
-    // UIColorPickerViewController has bud on macos - colorPickerViewControllerDidFinish don't called.
-    // Delete this method when it will be fixed.
-    if ([OAUtilities isiOSAppOnMac] && viewController)
-    {
-        [self colorPickerViewControllerDidFinish:viewController];
-        [viewController dismissViewControllerAnimated:YES completion:nil];
-    }
+    _isStartedNewColorAdding = NO;
+    _editColorIndexPath = nil;
 }
 
 #pragma mark - OAColorCollectionDelegate
@@ -397,7 +412,8 @@
 - (void)onContextMenuItemEdit:(NSIndexPath *)indexPath
 {
     _editColorIndexPath = indexPath;
-    [self openColorPickerWithColor:_data[0][indexPath.row]];
+    UICollectionViewCell *editingCell = [[self getCollectionView] cellForItemAtIndexPath:indexPath];
+    [self openColorPickerWithColor:_data[0][indexPath.row] sourceView:editingCell];
 }
 
 - (void)duplicateItemFromContextMenu:(NSIndexPath *)indexPath

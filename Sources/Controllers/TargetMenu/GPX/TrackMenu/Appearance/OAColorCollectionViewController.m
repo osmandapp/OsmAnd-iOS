@@ -22,7 +22,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
-@interface OAColorCollectionViewController () <UIColorPickerViewControllerDelegate, OAColorsCollectionCellDelegate>
+@interface OAColorCollectionViewController () <UIColorPickerViewControllerDelegate, OAColorPickerViewControllerDelegate, OAColorsCollectionCellDelegate>
 
 @property(nonatomic) GradientColorsCollection *colorsCollection;
 @property(nonatomic) PaletteColor *selectedPaletteItem;
@@ -39,6 +39,7 @@
     NSMutableArray<OAColorItem *> *_colorItems;
     OAColorItem *_selectedColorItem;
     NSIndexPath *_editColorIndexPath;
+    BOOL _isStartedNewColorAdding;
     
     NSMutableArray<NSString *> *_iconItems;
     NSArray<UIImage *> *_iconImages;
@@ -267,6 +268,8 @@
         {
             OAColorCollectionHandler *colorHandler = [[OAColorCollectionHandler alloc] initWithData:@[_colorItems] collectionView:cell.collectionView];
             colorHandler.delegate = self;
+            colorHandler.hostVC = self;
+            colorHandler.hostVCOpenColorPickerButton = self.navigationItem.rightBarButtonItem.customView;
             [colorHandler setScrollDirection:UICollectionViewScrollDirectionVertical];
             [colorHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:[_colorItems indexOfObject:_selectedColorItem] inSection:0]];
             [cell setCollectionHandler:colorHandler];
@@ -275,6 +278,7 @@
         {
             IconCollectionHandler *colorHandler = [[IconCollectionHandler alloc] initWithData:@[_iconItems] collectionView:cell.collectionView];
             colorHandler.delegate = self;
+            colorHandler.hostVC = self;
             colorHandler.selectedIconColor = _selectedIconColor;
             colorHandler.regularIconColor = _regularIconColor;
             [colorHandler setScrollDirection:UICollectionViewScrollDirectionVertical];
@@ -344,9 +348,12 @@
 
 - (void)openColorPickerWithColor:(OAColorItem *)colorItem
 {
-    UIColorPickerViewController *colorViewController = [[UIColorPickerViewController alloc] init];
+    OAColorPickerViewController *colorViewController = [[OAColorPickerViewController alloc] init];
     colorViewController.delegate = self;
+    colorViewController.closingDelegete = self;
     colorViewController.selectedColor = [colorItem getColor];
+    colorViewController.modalPresentationStyle = UIModalPresentationPopover;
+    colorViewController.popoverPresentationController.sourceView = self.navigationItem.rightBarButtonItem.customView;
     [self.navigationController presentViewController:colorViewController animated:YES completion:nil];
 }
 
@@ -392,6 +399,7 @@
 
 - (void)onRightNavbarButtonPressed
 {
+    _isStartedNewColorAdding = YES;
     [self openColorPickerWithColor:_selectedColorItem];
 }
 
@@ -633,29 +641,41 @@
 
 #pragma mark - UIColorPickerViewControllerDelegate
 
-- (void)colorPickerViewControllerDidFinish:(UIColorPickerViewController *)viewController
+- (void)colorPickerViewController:(UIColorPickerViewController *)viewController didSelectColor:(UIColor *)color continuously:(BOOL)continuously
 {
     if (self.delegate && _colorCollectionIndexPath)
     {
         OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorCollectionIndexPath];
         OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
-        if (_editColorIndexPath)
+        
+        if (_isStartedNewColorAdding)
         {
-            if (![[_colorItems[_editColorIndexPath.row] getHexColor] isEqualToString:[viewController.selectedColor toHexARGBString]])
-            {
-                [self.delegate changeColorItem:_colorItems[_editColorIndexPath.row]
-                                     withColor:viewController.selectedColor];
-                [colorHandler replaceOldColor:_editColorIndexPath];
-            }
-            _editColorIndexPath = nil;
-        }
-        else
-        {
+            _isStartedNewColorAdding = NO;
             OAColorItem *newColorItem = [self.delegate addAndGetNewColorItem:viewController.selectedColor];
             [_colorItems addObject:newColorItem];
             [colorHandler addAndSelectColor:[NSIndexPath indexPathForRow:_colorItems.count - 1 inSection:0] newItem:newColorItem];
         }
+        else
+        {
+            OAColorItem *editingColor = _colorItems[0];
+            if (_editColorIndexPath)
+                editingColor = _colorItems[_editColorIndexPath.row];
+            
+            if (![[editingColor getHexColor] isEqualToString:[viewController.selectedColor toHexARGBString]])
+            {
+                [self.delegate changeColorItem:editingColor withColor:viewController.selectedColor];
+                [colorHandler replaceOldColor:_editColorIndexPath];
+            }
+        }
     }
+}
+
+#pragma mark - OAColorPickerViewControllerDelegate
+
+- (void)onColorPickerDisappear:(OAColorPickerViewController *)colorPicker
+{
+    _isStartedNewColorAdding = NO;
+    _editColorIndexPath = nil;
 }
 
 @end

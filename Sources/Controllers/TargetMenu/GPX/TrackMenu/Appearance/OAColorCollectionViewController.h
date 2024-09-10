@@ -38,7 +38,7 @@ typedef enum
 
 @end
 
-@interface OAColorCollectionViewController : OABaseNavbarViewController
+@interface OAColorCollectionViewController : OABaseNavbarViewController <OAColorCollectionDelegate>
 
 
 @property(nonatomic, weak, nullable) id<OAColorCollectionDelegate>delegate;

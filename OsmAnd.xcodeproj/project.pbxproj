@@ -267,6 +267,7 @@
 		322AF8FC2A0CDA7D00D2FF37 /* OAPluginDetailsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 322AF8FB2A0CD68500D2FF37 /* OAPluginDetailsViewController.xib */; };
 		322B53922C78DBF8006B48B0 /* IconCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 322B53912C78DBF8006B48B0 /* IconCollectionHandler.swift */; };
 		322B53952C78DD14006B48B0 /* OAIconsPaletteCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 322B53942C78DD14006B48B0 /* OAIconsPaletteCell.m */; };
+		322C59792C90836C0087AB2F /* OAColorPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 322C59782C90836C0087AB2F /* OAColorPickerViewController.swift */; };
 		323084D926E933FE00D6FC67 /* OAOsmAndFormatter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 323084D826E933FE00D6FC67 /* OAOsmAndFormatter.mm */; };
 		32309A3F26989114005751F5 /* ic_custom_map_zoom_out@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32309A3D26989113005751F5 /* ic_custom_map_zoom_out@2x.png */; };
 		32309A4026989114005751F5 /* ic_custom_map_zoom_out@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32309A3E26989113005751F5 /* ic_custom_map_zoom_out@3x.png */; };
@@ -3541,6 +3542,7 @@
 		322B53932C78DD11006B48B0 /* OAIconsPaletteCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAIconsPaletteCell.h; sourceTree = "<group>"; };
 		322B53942C78DD14006B48B0 /* OAIconsPaletteCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAIconsPaletteCell.m; sourceTree = "<group>"; };
 		322B53962C78DD5A006B48B0 /* OAIconsPaletteCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAIconsPaletteCell.xib; sourceTree = "<group>"; };
+		322C59782C90836C0087AB2F /* OAColorPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAColorPickerViewController.swift; sourceTree = "<group>"; };
 		322DACE52750CD7700765BB7 /* hy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hy; path = hy.lproj/Localizable.strings; sourceTree = "<group>"; };
 		323084D726E933EE00D6FC67 /* OAOsmAndFormatter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmAndFormatter.h; sourceTree = "<group>"; };
 		323084D826E933FE00D6FC67 /* OAOsmAndFormatter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOsmAndFormatter.mm; sourceTree = "<group>"; };
@@ -13122,6 +13124,7 @@
 				4665DB6D2C20BBFD00F897EC /* ColorsPaletteUtils.swift */,
 				46A35EF42C53F9510089B21C /* DirectoryObserver.swift */,
 				46DB0A622C5CEA8F001356D5 /* ConcurrentArray.swift */,
+				322C59782C90836C0087AB2F /* OAColorPickerViewController.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -16023,7 +16026,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Download the new version each build (does not fail the buld if there's no Internet)\ncurl -o ${SRCROOT}/Resources/Shipped/regions.ocbf https://creator.osmand.net/basemap/regions.ocbf ||:\n";
+			shellScript = "# Download the new version each build (does not fail the buld if there's no Internet)\n# curl -o ${SRCROOT}/Resources/Shipped/regions.ocbf https://creator.osmand.net/basemap/regions.ocbf ||:\n";
 		};
 		FA45668A2AFB839000B07165 /* Run Script: SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -16688,6 +16691,7 @@
 				32FF4C312C19D59A00246B36 /* DownloadingCellResourceHelper.swift in Sources */,
 				DA5A850F26C563A900F274C7 /* OAUserInteractionInterceptorView.m in Sources */,
 				8A2DF237287EFD9E003642B7 /* OAMapCreatorDbHelper.mm in Sources */,
+				322C59792C90836C0087AB2F /* OAColorPickerViewController.swift in Sources */,
 				46C841332C32F31B00E284B0 /* OAContourLinesAction.m in Sources */,
 				FA359EE02ADEA22F0001C11D /* BLEChangeDeviceNameViewController.swift in Sources */,
 				46BD939B2B763CC8004BC4F5 /* FFCircularProgressView+Extension.swift in Sources */,

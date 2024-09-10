@@ -24,6 +24,7 @@
 
 @property (nonatomic, weak) id<OAColorsCollectionCellDelegate> delegate;
 @property (weak, nonatomic) OASuperViewController<OAColorCollectionDelegate> *hostVC;
+@property (weak, nonatomic) UIView *hostVCOpenColorPickerButton;
 
 - (void)addColor:(NSIndexPath *)indexPath newItem:(OAColorItem *)newItem;
 - (void)addAndSelectColor:(NSIndexPath *)indexPath newItem:(OAColorItem *)newItem;
@@ -34,7 +35,7 @@
 - (OAColorItem *)getSelectedItem;
 
 - (void)openColorPickerWithSelectedColor;
-- (void)openColorPickerWithColor:(OAColorItem *)colorItem;
+- (void)openColorPickerWithColor:(OAColorItem *)colorItem sourceView:(UIView *)sourceView;
 - (void)openAllColorsScreen;
 
 @end

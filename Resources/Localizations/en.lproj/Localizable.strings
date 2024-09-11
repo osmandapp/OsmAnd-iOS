@@ -1696,6 +1696,7 @@
 "osmand_depelopment_use_old_routing" = "Use old routing (A*)";
 "osmand_depelopment_use_discrete_autozoom" = "Discrete autozoom (old version)";
 "osmand_depelopment_use_3d_icons" = "Use 3D location position icons";
+"battery_saving_mode" = "Battery saving mode";
 
 "simulate_in_progress" = "In progress";
 "simulate_your_location_gpx_descr" = "Simulate your position using a recorded GPX track.";

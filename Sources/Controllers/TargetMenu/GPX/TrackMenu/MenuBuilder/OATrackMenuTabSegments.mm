@@ -12,7 +12,6 @@
 #import "OAMapViewController.h"
 #import "OARouteBaseViewController.h"
 #import "OAValueTableViewCell.h"
-#import "OALineChartCell.h"
 #import "OAQuadItemsWithTitleDescIconCell.h"
 #import "OASegmentTableViewCell.h"
 #import "OARadiusCellEx.h"
@@ -21,8 +20,7 @@
 #import "OAOsmAndFormatter.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXTrackAnalysis.h"
-
-#import <Charts/Charts-Swift.h>
+#import <DGCharts/DGCharts-Swift.h>
 #import "OsmAnd_Maps-Swift.h"
 #import "OARouteStatisticsHelper.h"
 
@@ -104,23 +102,18 @@
     if (!segment)
         return;
 
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OALineChartCell getCellIdentifier] owner:self options:nil];
-    OALineChartCell *cell = (OALineChartCell *) nib[0];
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:ElevationChartCell.reuseIdentifier owner:self options:nil];
+    ElevationChartCell *cell = (ElevationChartCell *) nib[0];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.lineChartView.delegate = self;
+    cell.chartView.delegate = self;
     cell.separatorInset = UIEdgeInsetsMake(0, CGFLOAT_MAX, 0, 0);
 
-    [GpxUIHelper setupGPXChartWithChartView:cell.lineChartView
-                               yLabelsCount:4
-                                  topOffset:20
-                               bottomOffset:4
-                        useGesturesAndScale:YES
-    ];
+    [GpxUIHelper setupElevationChartWithChartView:cell.chartView];
 
     if (_routeLineChartHelper)
     {
         [_routeLineChartHelper changeChartTypes:@[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)]
-                                         chart:cell.lineChartView
+                                         chart:cell.chartView
                                       analysis:analysis
                                       modeCell:nil];
     }
@@ -135,7 +128,7 @@
                     @"analysis_value": analysis,
                     @"mode_value": @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)],
                     @"points_value": _routeLineChartHelper
-                            ? [_routeLineChartHelper generateTrackChartPoints:cell.lineChartView
+                            ? [_routeLineChartHelper generateTrackChartPoints:cell.chartView
                                                                    startPoint:startChartPoint
                                                                       segment:segment]
                             : [[OATrackChartPoints alloc] init]
@@ -168,13 +161,13 @@
     }];
     [segmentSectionData.subjects addObject:tabsCellData];
 
-    LineChartData *lineData = cell.lineChartView.lineData;
+    LineChartData *lineData = cell.chartView.lineData;
     NSInteger entryCount = lineData ? lineData.entryCount : 0;
 
     OAGPXTableCellData *chartCellData;
     if (entryCount > 0)
     {
-        for (UIGestureRecognizer *recognizer in cell.lineChartView.gestureRecognizers)
+        for (UIGestureRecognizer *recognizer in cell.chartView.gestureRecognizers)
         {
             if ([recognizer isKindOfClass:UIPanGestureRecognizer.class])
             {
@@ -187,7 +180,7 @@
 
         chartCellData = [OAGPXTableCellData withData:@{
                 kTableKey: [NSString stringWithFormat:@"chart_%p", (__bridge void *) segment],
-                kCellType: [OALineChartCell getCellIdentifier]
+                kCellType: ElevationChartCell.reuseIdentifier
         }];
     }
     else
@@ -229,7 +222,7 @@
     [tabsCellData setData:@{ kTableValues: values }];
 
     if (cell && chartCellData)
-        cell.lineChartView.tag = [self.tableData.subjects indexOfObject:segmentSectionData] << 10 | [segmentSectionData.subjects indexOfObject:chartCellData];
+        cell.chartView.tag = [self.tableData.subjects indexOfObject:segmentSectionData] << 10 | [segmentSectionData.subjects indexOfObject:chartCellData];
 }
 
 - (void)runAdditionalActions
@@ -237,19 +230,19 @@
     if (self.tableData.subjects.count > 0)
     {
         OAGPXTableSectionData *sectionData = self.tableData.subjects.firstObject;
-        OALineChartCell *cell = ((OALineChartCell *) sectionData.values[@"cell_value"]);
+        ElevationChartCell *cell = ((ElevationChartCell *) sectionData.values[@"cell_value"]);
         if (cell)
         {
             if (_routeLineChartHelper)
             {
                 [_routeLineChartHelper refreshHighlightOnMap:NO
-                                               lineChartView:cell.lineChartView
+                                                   chartView:cell.chartView
                                             trackChartPoints:sectionData.values[@"points_value"]
                                                      segment:sectionData.values[@"segment_value"]];
             }
             if (self.trackMenuDelegate)
             {
-                [self.trackMenuDelegate updateChartHighlightValue:cell.lineChartView
+                [self.trackMenuDelegate updateChartHighlightValue:cell.chartView
                                                           segment:sectionData.values[@"segment_value"]];
             }
         }
@@ -355,12 +348,12 @@
 {
     for (OAGPXTableSectionData *sectionData in self.tableData.subjects)
     {
-        OALineChartCell *cell = sectionData.values[@"cell_value"];
+        ElevationChartCell *cell = sectionData.values[@"cell_value"];
         if (cell)
         {
-            [cell.lineChartView.viewPortHandler refreshWithNewMatrix:chartView.viewPortHandler.touchMatrix
-                                                               chart:cell.lineChartView
-                                                          invalidate:YES];
+            [cell.chartView.viewPortHandler refreshWithNewMatrix:chartView.viewPortHandler.touchMatrix
+                                                           chart:cell.chartView
+                                                      invalidate:YES];
         }
     }
 }
@@ -397,7 +390,7 @@
     if (_routeLineChartHelper)
     {
         [_routeLineChartHelper refreshHighlightOnMap:NO
-                                       lineChartView:(LineChartView *) chartView
+                                           chartView:(ElevationChart *) chartView
                                     trackChartPoints:sectionData.values[@"points_value"]
                                              segment:sectionData.values[@"segment_value"]];
     }
@@ -462,7 +455,7 @@
 {
     if (recognizer.view && [recognizer.view isKindOfClass:LineChartView.class])
     {
-        LineChartView *lineChartView = (LineChartView *) recognizer.view;
+        ElevationChart *lineChartView = (ElevationChart *) recognizer.view;
         if (recognizer.state == UIGestureRecognizerStateBegan)
         {
             _hasTranslated = NO;
@@ -483,9 +476,9 @@
             if (_routeLineChartHelper)
             {
                 [_routeLineChartHelper refreshHighlightOnMap:YES
-                                               lineChartView:lineChartView
+                                                   chartView:lineChartView
                                             trackChartPoints:sectionData.values[@"points_value"]
-                                                    segment:sectionData.values[@"segment_value"]];
+                                                     segment:sectionData.values[@"segment_value"]];
             }
         }
     }
@@ -510,11 +503,11 @@
         OAGPXTableSectionData *sectionData = [self.tableData getSubject:[@"section_" stringByAppendingString:segmentKey]];
         if (sectionData && _routeLineChartHelper)
         {
-            OALineChartCell *cell = ((OALineChartCell *) sectionData.values[@"cell_value"]);
+            ElevationChartCell *cell = ((ElevationChartCell *) sectionData.values[@"cell_value"]);
             if (cell)
             {
                 [_routeLineChartHelper changeChartTypes:sectionData.values[@"mode_value"]
-                                                 chart:cell.lineChartView
+                                                 chart:cell.chartView
                                               analysis:sectionData.values[@"analysis_value"]
                                               modeCell:nil];
             }

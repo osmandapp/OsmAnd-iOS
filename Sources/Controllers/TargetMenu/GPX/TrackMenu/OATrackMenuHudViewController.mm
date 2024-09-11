@@ -36,7 +36,6 @@
 #import "OATitleSwitchRoundCell.h"
 #import "OAPointWithRegionTableViewCell.h"
 #import "OASelectionCollapsableCell.h"
-#import "OALineChartCell.h"
 #import "OASegmentTableViewCell.h"
 #import "OAQuadItemsWithTitleDescIconCell.h"
 #import "OARadiusCellEx.h"
@@ -70,8 +69,8 @@
 #import "MBProgressHUD.h"
 #import "GeneratedAssetSymbols.h"
 #import <SafariServices/SafariServices.h>
-#import <Charts/Charts-Swift.h>
 #import "OsmAnd_Maps-Swift.h"
+#import <DGCharts/DGCharts-Swift.h>
 
 #define kGpxDescriptionImageHeight 149
 #define kOverviewTabIndex @0
@@ -593,7 +592,7 @@
 
 - (BOOL)stopChangingHeight:(UIView *)view
 {
-    return [view isKindOfClass:[LineChartView class]] || [view isKindOfClass:[UICollectionView class]];
+    return [view isKindOfClass:[ElevationChart class]] || [view isKindOfClass:[UICollectionView class]];
 }
 
 - (void)doAdditionalLayout
@@ -1244,12 +1243,12 @@
     return [groupName isEqualToString:OALocalizedString(@"route_points")];
 }
 
-- (void)updateChartHighlightValue:(LineChartView *)chart
+- (void)updateChartHighlightValue:(ElevationChart *)chart
                           segment:(OATrkSegment *)segment
 {
     CLLocationCoordinate2D pinLocation = [self getPinLocation];
     LineChartData *lineData = chart.lineData;
-    NSArray<id <IChartDataSet>> *ds = lineData != nil ? lineData.dataSets : nil;
+    NSArray<id<ChartDataSetProtocol>> *ds = lineData != nil ? lineData.dataSets : nil;
     if (ds && ds.count > 0 && segment)
     {
         float pos;
@@ -1613,7 +1612,8 @@
 - (void)openNameTagsScreenWith:(NSArray<NSDictionary *> *)tagsArray 
 {
     _pushedNewScreen = YES;
-    NameTagsDetailsViewController *tagsDetailsController = [[NameTagsDetailsViewController alloc] initWithTags:tagsArray];
+    POITagsDetailsViewController *tagsDetailsController = [[POITagsDetailsViewController alloc] initWithTags:tagsArray];
+    tagsDetailsController.tagTitle = OALocalizedString(@"shared_string_name");
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:tagsDetailsController];
     [self.navigationController presentViewController:navigationController animated:YES completion:nil];
 }
@@ -2334,7 +2334,7 @@
         }
         return cell;
     }
-    else if ([cellData.type isEqualToString:[OALineChartCell getCellIdentifier]])
+    else if ([cellData.type isEqualToString:ElevationChartCell.reuseIdentifier])
     {
         OAGPXTableSectionData *sectionData = _tableData.subjects[indexPath.section];
         return sectionData.values[@"cell_value"];

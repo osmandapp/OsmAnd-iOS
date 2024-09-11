@@ -323,7 +323,9 @@
         drawTransportSegmentBlock();
 }
 
-- (void) drawRouteSegment:(const QVector<OsmAnd::PointI> &)points addToExisting:(BOOL)addToExisting sync:(BOOL)sync
+- (void) drawRouteSegment:(const QVector<OsmAnd::PointI> &)points 
+            addToExisting:(BOOL)addToExisting
+                     sync:(BOOL)sync
 {
     [self drawRouteSegment:points
              addToExisting:addToExisting
@@ -333,7 +335,11 @@
     ];
 }
 
-- (void) drawRouteSegment:(const QVector<OsmAnd::PointI> &)points addToExisting:(BOOL)addToExisting colors:(const QList<OsmAnd::FColorARGB> &)colors colorizationScheme:(int)colorizationScheme sync:(BOOL)sync
+- (void) drawRouteSegment:(const QVector<OsmAnd::PointI> &)points 
+            addToExisting:(BOOL)addToExisting
+                   colors:(const QList<OsmAnd::FColorARGB> &)colors
+       colorizationScheme:(int)colorizationScheme
+                     sync:(BOOL)sync
 {
     void (^drawRouteSegment)(void) = ^{
         _lineWidth = [self getLineWidth];
@@ -400,9 +406,18 @@
         {
             for (auto &line : lines)
             {
-                line->setPoints(points);
-                if (!colors.empty())
-                    line->setColorizationMapping(colors);
+                const auto &linePoints = line->getPoints();
+                double passedDist = 0.0f;
+                int k = 0;
+                for (int i = points.count(); i < linePoints.count(); i++)
+                {
+                    if (k < linePoints.count() - 1)
+                    	passedDist += OsmAnd::Utilities::measuredDist31(linePoints[k].x, linePoints[k].y, linePoints[k + 1].x, linePoints[k + 1].y);
+                    k++;
+                }
+                if (k < linePoints.count())
+	                passedDist += OsmAnd::Utilities::measuredDist31(linePoints[k].x, linePoints[k].y, points[0].x, points[0].y);
+                line->setStartingDistance((float) passedDist);
             }
         }
         [self buildActionArrows];

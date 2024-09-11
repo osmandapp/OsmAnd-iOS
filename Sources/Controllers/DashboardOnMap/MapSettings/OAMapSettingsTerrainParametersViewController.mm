@@ -27,7 +27,7 @@
 #import "OATerrainMapLayer.h"
 #import "OAConcurrentCollections.h"
 #import "GeneratedAssetSymbols.h"
-#import <Charts/Charts-Swift.h>
+#import <DGCharts/DGCharts-Swift.h>
 
 static const NSInteger kMaxMissingDataZoomShift = 5;
 static const NSInteger kMinZoomPickerRow = 1;

@@ -35,6 +35,7 @@
 #import "OrderedDictionary.h"
 #import "OAMapUtils.h"
 #import "OAResultMatcher.h"
+#import "OATopIndexFilter.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IObfsCollection.h>
@@ -845,6 +846,22 @@
 
 @end
 
+@implementation OATopIndexMatch
+
+- (instancetype)initWithSubType:(NSString *)value translatedValue:(NSString *)translatedValue key:(NSString *)key
+{
+    self = [super init];
+    if (self)
+    {
+        _value = value;
+        _translatedValue = translatedValue;
+        _key = key;
+    }
+    return self;
+}
+
+@end
+
 @interface OAPoiTypeResult : NSObject
 
 @property (nonatomic) OAPOIBaseType *pt;
@@ -878,6 +895,7 @@
     NSMutableDictionary<NSString *, NSNumber *> *_activePoiFilters;
     NSDictionary<NSString *, OAPOIType *> *_translatedNames;
     OAPOIHelper *_types;
+    int BBOX_RADIUS;
 }
 
 - (instancetype) init
@@ -891,6 +909,7 @@
         _topVisibleFilters = [_types getTopVisibleFilters];
         _categories = _types.poiCategoriesNoOther;
         _translatedNames = [NSDictionary new];
+        BBOX_RADIUS = 10000;
     }
     return self;
 }
@@ -1117,6 +1136,7 @@
             [self addPoiTypeResult:phrase resultMatcher:resultMatcher topFiltersOnly:showTopFiltersOnly stdFilterId:csf.getFilterId searchResult:res];
         }
     }
+    [self searchTopIndexPoiAdditional:phrase resultMatcher:resultMatcher];
     return YES;
 }
 
@@ -1173,6 +1193,111 @@
         return -1;
     
     return SEARCH_AMENITY_TYPE_API_PRIORITY;
+}
+
+- (void) searchTopIndexPoiAdditional:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
+{
+    if ([phrase isEmpty])
+        return;
+
+    QuadRect *bbox = [phrase getRadiusBBox31ToSearch:BBOX_RADIUS];
+    OsmAnd::AreaI bbox31 = OsmAnd::AreaI(bbox.top, bbox.left, bbox.bottom, bbox.right);
+    OsmAndAppInstance app = [OsmAndApp instance];
+    const auto& obfsCollection = app.resourcesManager->obfsCollection;
+    NSArray *offlineIndexes = [phrase getOfflineIndexes];
+    QHash<QString, QSet<QString>> matchedValues;
+    for (NSString *resId in offlineIndexes)
+    {
+        const auto& r = app.resourcesManager->getLocalResource(QString::fromNSString(resId));
+        if (!r)
+            continue;
+        
+        const auto dataInterface = obfsCollection->obtainDataInterface({r});
+        QHash<QString, QStringList> poiSubTypes;
+        
+        dataInterface->loadAmenityTopIndexSubtypes(poiSubTypes, &bbox31);
+        NSString *lang = [OAUtilities currentLang];
+        OATopIndexMatch *match = [self matchTopIndex:poiSubTypes phrase:phrase lang:lang];
+        if (match != nil)
+        {
+            QString key = QString::fromNSString(match.key);
+            QString value = QString::fromNSString(match.value);
+            if (matchedValues.contains(key) && matchedValues.value(key).contains(value))
+                continue;
+            
+            if (!matchedValues.contains(key))
+                matchedValues.insert(key, QSet<QString>());
+            
+            matchedValues[key].insert(value);
+
+            OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
+            res.localeName = match.translatedValue;
+            OsmAnd::LogPrintf(OsmAnd::LogSeverityLevel::Debug, "Top index found: %s %s", QString::fromNSString(match.key).toStdString().c_str(), QString::fromNSString(match.value).toStdString().c_str());
+            res.object = [[OATopIndexFilter alloc] initWithPoiSubType:match.key value:match.value];
+            [self addPoiTypeResult:phrase resultMatcher:resultMatcher topFiltersOnly:NO stdFilterId:nil searchResult:res];
+        }
+    }
+}
+
+- (OATopIndexMatch *)matchTopIndex:(QHash<QString, QStringList>)poiSubtypes phrase:(OASearchPhrase *)phrase lang:(NSString *)lang
+{
+    NSString *search = [phrase getText:YES];
+    OANameStringMatcher *nm = [[OANameStringMatcher alloc] initWithNamePart:search mode:CHECK_ONLY_STARTS_WITH];
+    NSMutableArray<OATopIndexMatch *> *matches = [[NSMutableArray alloc] init];
+    
+    for (const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(poiSubtypes)))
+    {
+        QStringList values = entry.value();
+        values.sort();
+        NSMutableArray *sortedValues = [NSMutableArray arrayWithCapacity:values.size()];
+        for (const QString &s : values)
+        {
+            [sortedValues addObject:s.toNSString()];
+        }
+        NSString * translate = nil;
+        NSString * topIndexValue = nil;
+        for (NSString *s in sortedValues)
+        {
+            translate = [self getTopIndexTranslation:s];
+            if ([nm matches:s] || [nm matches:translate])
+            {
+                topIndexValue = s;
+                break;
+            }
+        }
+        if (topIndexValue != nil)
+        {
+            OATopIndexMatch *topIndexMatch = [[OATopIndexMatch alloc] initWithSubType:topIndexValue translatedValue:translate key:entry.key().toNSString()];
+            if (lang.length > 0 && [topIndexMatch.key containsString:[NSString stringWithFormat:@":%@", lang]])
+            {
+                return topIndexMatch;
+            }
+            [matches addObject:topIndexMatch];
+        }
+    }
+    for (OATopIndexMatch *m in matches)
+    {
+        if (![m.key containsString:@":"])
+        {
+            return m;
+        }
+    }
+    if (matches.count > 0)
+    {
+        return [matches objectAtIndex:0];
+    }
+    return nil;
+}
+
+- (NSString *)getTopIndexTranslation:(NSString *)value
+{
+    NSString *key = [OATopIndexFilter getValueKey:value];
+    NSString *translate = [[OAPOIHelper sharedInstance] getPhraseByName:key];
+    
+    if ([[translate lowercaseString] isEqualToString:key])
+        translate = value;
+    
+    return translate;
 }
 
 @end
@@ -1255,7 +1380,7 @@
     return _nameFilter;
 }
 
-- (void)searchPoi:(int)countExtraWords nameFilter:(NSString *)nameFilter phrase:(OASearchPhrase *)phrase poiAdditionals:(NSMutableOrderedSet<NSString *> *)poiAdditionals poiTypeFilter:(OASearchPoiTypeFilter *)poiTypeFilter resultMatcher:(OASearchResultMatcher *)resultMatcher
+- (void)searchPoi:(int)countExtraWords nameFilter:(NSString *)nameFilter phrase:(OASearchPhrase *)phrase poiAdditionals:(NSMutableOrderedSet<NSString *> *)poiAdditionals poiTypeFilter:(OASearchPoiTypeFilter *)poiTypeFilter poiAdditionalFilter:(OATopIndexFilter *)poiAdditionalFilter resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
     NSMutableSet<NSString *> *searchedPois = [NSMutableSet new];
     OsmAndAppInstance app = [OsmAndApp instance];
@@ -1329,6 +1454,11 @@
             continue;
         searchCriteria->localResources = {r};
         
+        if (poiAdditionalFilter != nil)
+        {
+            searchCriteria->poiAdditionalFilter = QPair<QString, QString>((QString::fromNSString(poiAdditionalFilter.poiSubType)), (QString::fromNSString(poiAdditionalFilter.value)));
+            searchCriteria->categoriesFilter = QHash<QString, QStringList>();
+        }
         search->performSearch(*searchCriteria,
                               [self, &rm]
                               (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
@@ -1353,6 +1483,7 @@
 {
     _unselectedPoiType = nil;
     OASearchPoiTypeFilter *poiTypeFilter = nil;
+    OATopIndexFilter *poiAdditionalFilter = nil;
     NSString *nameFilter = nil;
     int countExtraWords = 0;
     NSMutableOrderedSet<NSString *> *poiAdditionals = [NSMutableOrderedSet new];
@@ -1360,11 +1491,22 @@
     {
         NSObject *obj = phrase.getLastSelectedWord.result.object;
         if ([obj isKindOfClass:OAPOIBaseType.class])
+        {
             poiTypeFilter = [self getPoiTypeFilter:(OAPOIBaseType *)obj poiAdditionals:poiAdditionals];
+        }
         else if ([obj isKindOfClass:OASearchPoiTypeFilter.class])
+        {
             poiTypeFilter = (OASearchPoiTypeFilter *) obj;
+        }
+        else if([obj isKindOfClass:OATopIndexFilter.class])
+        {
+            poiTypeFilter = [OASearchPoiTypeFilter acceptAllPoiTypeFilter];
+            poiAdditionalFilter = (OATopIndexFilter *) obj;
+        }
         else
+        {
             @throw [NSException exceptionWithName:@"UnsupportedOperationException" reason:@"Incorrect last result" userInfo:nil];
+        }
         
         nameFilter = phrase.getUnknownSearchPhrase;
     }
@@ -1415,7 +1557,7 @@
     _nameFilter = nameFilter;
     if (poiTypeFilter != nil)
     {
-        [self searchPoi:countExtraWords nameFilter:nameFilter phrase:phrase poiAdditionals:poiAdditionals poiTypeFilter:poiTypeFilter resultMatcher:resultMatcher];
+        [self searchPoi:countExtraWords nameFilter:nameFilter phrase:phrase poiAdditionals:poiAdditionals poiTypeFilter:poiTypeFilter poiAdditionalFilter:poiAdditionalFilter resultMatcher:resultMatcher];
     }
     return YES;
 }

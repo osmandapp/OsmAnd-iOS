@@ -3489,3 +3489,4 @@
 "weather_wind_animation_enable_descr" = "Abilita la visualizzazione del livello di animazione del vento sulla mappa.";
 "osmand_depelopment_use_3d_icons" = "Utilizza le icone di posizione 3D";
 "osmand_cloud_delete_account_descr_with_email" = "Sei sicuro di voler eliminare l'account OsmAnd Cloud: %@?";
+"battery_saving_mode" = "Modalità di risparmio batteria";

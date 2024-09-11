@@ -993,7 +993,7 @@
 "routing_attr_driving_style_safety_name" = "Preferă drumurile secundare";
 "index_item_depth_contours_osmand_ext" = "Curbe de adâncime nautică";
 "replace_all_desc" = "Elementele curente vor fiînlocuite cu elemente din fișierul";
-"transport_nearby_routes" = "În raza de";
+"transport_nearby_routes" = "În raza a";
 "transport_nearby_routes_within" = "Rutele apropiate din cadrul";
 "rendering_attr_whiteWaterSports_name" = "Sporturi Whitewater";
 "online_webpage_warning" = "Pagina este disponibilă doar online. Deschideți în browserul web\?";

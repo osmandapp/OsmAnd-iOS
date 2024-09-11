@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Charts
+import DGCharts
 
 @objc(OASensorAttributesUtils)
 @objcMembers
@@ -33,11 +33,15 @@ final class SensorAttributesUtils: NSObject {
         analysis.hasData(PointAttributes.sensorTagBikePower)
     }
 
-    static func hasTemperatureData(_ analysis: OAGPXTrackAnalysis) -> Bool {
-        analysis.hasData(PointAttributes.sensorTagTemperatureW) || analysis.hasData(PointAttributes.sensorTagTemperatureA)
+    static func hasTemperatureAData(_ analysis: OAGPXTrackAnalysis) -> Bool {
+        analysis.hasData(PointAttributes.sensorTagTemperatureA)
     }
 
-    @objc static func getAvailableGPXDataSetTypes(analysis: OAGPXTrackAnalysis, availableTypes: NSMutableArray) {
+    static func hasTemperatureWData(_ analysis: OAGPXTrackAnalysis) -> Bool {
+        analysis.hasData(PointAttributes.sensorTagTemperatureW)
+    }
+
+    static func getAvailableGPXDataSetTypes(analysis: OAGPXTrackAnalysis, availableTypes: NSMutableArray) {
         if Self.hasSensorSpeedData(analysis) {
             availableTypes.add([NSNumber(value: GPXDataSetType.sensorSpeed.rawValue)])
         }
@@ -50,17 +54,17 @@ final class SensorAttributesUtils: NSObject {
         if Self.hasBikeCadenceData(analysis) {
             availableTypes.add([NSNumber(value: GPXDataSetType.sensorBikeCadence.rawValue)])
         }
-        if Self.hasTemperatureData(analysis) {
-            availableTypes.add([NSNumber(value: GPXDataSetType.sensorTemperature.rawValue)])
+        if Self.hasTemperatureAData(analysis) {
+            availableTypes.add([NSNumber(value: GPXDataSetType.sensorTemperatureA.rawValue)])
         }
     }
 
-    @objc static func getOrderedLineDataSet(chart: LineChartView,
-                                                   analysis: OAGPXTrackAnalysis,
-                                                   graphType: GPXDataSetType,
-                                                   axisType: GPXDataSetAxisType,
-                                                   calcWithoutGaps: Bool,
-                                                   useRightAxis: Bool) -> GpxUIHelper.OrderedLineDataSet? {
+    static func getOrderedLineDataSet(chart: LineChartView,
+                                      analysis: OAGPXTrackAnalysis,
+                                      graphType: GPXDataSetType,
+                                      axisType: GPXDataSetAxisType,
+                                      calcWithoutGaps: Bool,
+                                      useRightAxis: Bool) -> GpxUIHelper.OrderedLineDataSet? {
         switch graphType {
         case .sensorSpeed where hasSensorSpeedData(analysis):
             return createSensorDataSet(chart: chart, analysis: analysis, graphType: graphType, axisType: axisType, useRightAxis: useRightAxis, drawFilled: true, calcWithoutGaps: calcWithoutGaps)
@@ -70,7 +74,7 @@ final class SensorAttributesUtils: NSObject {
             return createSensorDataSet(chart: chart, analysis: analysis, graphType: graphType, axisType: axisType, useRightAxis: useRightAxis, drawFilled: true, calcWithoutGaps: calcWithoutGaps)
         case .sensorBikeCadence where hasBikeCadenceData(analysis):
             return createSensorDataSet(chart: chart, analysis: analysis, graphType: graphType, axisType: axisType, useRightAxis: useRightAxis, drawFilled: true, calcWithoutGaps: calcWithoutGaps)
-        case .sensorTemperature where hasTemperatureData(analysis):
+        case .sensorTemperatureA where hasTemperatureAData(analysis):
             return createSensorDataSet(chart: chart, analysis: analysis, graphType: graphType, axisType: axisType, useRightAxis: useRightAxis, drawFilled: true, calcWithoutGaps: calcWithoutGaps)
         default:
             return nil
@@ -78,38 +82,41 @@ final class SensorAttributesUtils: NSObject {
     }
 
     static func createSensorDataSet(chart: LineChartView,
-                                          analysis: OAGPXTrackAnalysis,
-                                          graphType: GPXDataSetType,
-                                          axisType: GPXDataSetAxisType,
-                                          useRightAxis: Bool,
-                                          drawFilled: Bool,
-                                          calcWithoutGaps:Bool) -> GpxUIHelper.OrderedLineDataSet {
+                                    analysis: OAGPXTrackAnalysis,
+                                    graphType: GPXDataSetType,
+                                    axisType: GPXDataSetAxisType,
+                                    useRightAxis: Bool,
+                                    drawFilled: Bool,
+                                    calcWithoutGaps: Bool) -> GpxUIHelper.OrderedLineDataSet {
         let divX: Double = GpxUIHelper.getDivX(lineChart: chart, analysis: analysis, axisType: axisType, calcWithoutGaps: calcWithoutGaps)
-
         let pair: Pair<Double, Double>? = GpxUIHelper.getScalingY(graphType)
         let mulY: Double = pair?.first ?? 1
         let divY: Double = pair?.second ?? Double.nan
 
-        let yAxis: YAxis = GpxUIHelper.getYAxis(chart: chart, textColor: graphType.getTextColor(), useRightAxis: useRightAxis)
+        let yAxis = GpxUIHelper.getYAxis(chart: chart, textColor: graphType.getTextColor(), useRightAxis: useRightAxis)
         yAxis.axisMinimum = 0
 
-        let values: [ChartDataEntry] = GpxUIHelper.getPointAttributeValues(key: graphType.getDatakey(),
-                                                                           pointAttributes: analysis.pointAttributes as! [PointAttributes],
-                                                                           axisType: axisType,
-                                                                           divX: divX,
-                                                                           mulY: mulY,
-                                                                           divY: divY,
-                                                                           calcWithoutGaps: calcWithoutGaps)
-        let dataSet: GpxUIHelper.OrderedLineDataSet = GpxUIHelper.OrderedLineDataSet.init(entries: values, label: "", dataSetType: graphType, dataSetAxisType: axisType)
+        let values = GpxUIHelper.getPointAttributeValues(key: graphType.getDatakey(),
+                                                         pointAttributes: analysis.pointAttributes as! [PointAttributes],
+                                                         axisType: axisType,
+                                                         divX: divX,
+                                                         mulY: mulY,
+                                                         divY: divY,
+                                                         calcWithoutGaps: calcWithoutGaps)
+        let dataSet = GpxUIHelper.OrderedLineDataSet(entries: values,
+                                                     label: "",
+                                                     dataSetType: graphType,
+                                                     dataSetAxisType: axisType,
+                                                     leftAxis: !useRightAxis)
         let mainUnitY: String = graphType.getMainUnitY()
-        yAxis.valueFormatter = GpxUIHelper.ValueFormatter(formatX: dataSet.yMax < 3 ? "%.0f" : nil, unitsX: mainUnitY)
-        
+        yAxis.valueFormatter = GpxUIHelper.ValueFormatterLocal(formatX: dataSet.yMax < 3 ? "%.0f" : nil, unitsX: mainUnitY)
+
         dataSet.divX = divX
         dataSet.units = mainUnitY
-        
+
         let color: UIColor = graphType.getFillColor()
         GpxUIHelper.setupDataSet(dataSet: dataSet, color: color, fillColor: color, drawFilled: drawFilled, drawCircles: false, useRightAxis: useRightAxis)
-        
+
         return dataSet
     }
 }

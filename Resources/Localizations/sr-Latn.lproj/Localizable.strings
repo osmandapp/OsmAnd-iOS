@@ -51,12 +51,12 @@
 "new_destination_point_dialog" = "Već ste postavili odredišnu tačku:";
 "replace_destination_point" = "Zameni odredište";
 "shared_string_current" = "Trenutno";
-"make_as_start_point" = "Označi kao tačku polaska";
+"make_as_start_point" = "Zameni početnu tačku";
 "keep_and_add_destination_point" = "Dodaj kao sledeće odredište";
-"subsequent_dest_description" = "Pomeri odredište naviše i napravi ga";
-"add_as_first_destination_point" = "Dodaj kao početno prolazno odredište";
+"subsequent_dest_description" = "Dodaj kao krajnje odredište";
+"add_as_first_destination_point" = "Dodaj kao međuodredište";
 "first_intermediate_dest_description" = "Dodaj prvo stajanje";
-"add_as_last_destination_point" = "Dodaj kao završno prolazno odredište";
+"add_as_last_destination_point" = "Dodaj kao zadnje međuodredište";
 "last_intermediate_dest_description" = "Dodaje prolazno stajanje";
 "show_poi_over_map" = "TOI vidljivi na mapi";
 "shared_string_search" = "Traži";
@@ -895,7 +895,7 @@
 "custom_plugins" = "Prilagođeni dodaci";
 "extra_maps_menu_group" = "Dodatne mape";
 "import_duplicates_title" = "Neke stavke već postoje";
-"import_duplicates_description" = "OsmAnd već ima jedinice sa istim imenom kao oni koji se uvoze.  \n  \nOdaberi radnju.";
+"import_duplicates_description" = "OsmAnd već ima jedinice sa istim imenom kao oni koji se uvoze.\n\nOdaberi radnju.";
 "keep_both" = "Zadrži obe";
 "keep_both_desc" = "Uvežene stavke će biti dodate sa predlozima";
 "replace_all" = "Zameni sve";
@@ -2421,10 +2421,10 @@
 "contributions_may_calculate_with_delay" = "Obračun dopronosa može potrajati nekoliko časova.";
 "shared_string_progress" = "Napredak";
 "simulate_your_location_gpx_descr" = "Simuliraj svoj lokaciju koristeću snimljenu GPX trase.";
-"osmand_cloud_create_account_descr" = "Unesi svoju adresu e-pošte, tamo će vam biti poslan verifikacioni kôd,  \ni svi vaši podaci će biti povezani sa njim.";
+"osmand_cloud_create_account_descr" = "Unesi svoju adresu e-pošte, tamo će vam biti poslan verifikacioni kôd,\ni svi vaši podaci će biti povezani sa njim.";
 "routing_attr_motor_type_hybrid_name" = "Hibrid";
 "shared_string_added" = "Dodato";
-"backup_delete_old_data_warning" = "Izbrisaćete istoriju promena prethodno učitanih podataka.  \n  \nTrenutna verzija podataka biće sačuvana na serveru, ali nećete moći da se vratite na prethodno izvršene promene.";
+"backup_delete_old_data_warning" = "Izbrisaćete istoriju promena prethodno učitanih podataka.\n\nTrenutna verzija podataka biće sačuvana na serveru, ali nećete moći da se vratite na prethodno izvršene promene.";
 "map_updates_for_mappers" = "Ažuriranje mapa za kartografe";
 "local_backup" = "Lokalna rezervna kopija";
 "backup_delete_old_data" = "Ukloni stare verzije";
@@ -2673,7 +2673,7 @@
 "ant_plus_bluetooth_off" = "Bluetooth je isključen";
 "ant_plus_searching_text" = "Pretraga senzora";
 "ant_plus_open_settings" = "Otvori podešavanja";
-"ant_plus_nothing_found_description" = "Proveri da li je: \n- Blutut uključen  \n- Prijemnik uključen  \n- Ovaj uređaj smešten blizu senzora";
+"ant_plus_nothing_found_description" = "Proveri da li je:\n- Blutut uključen\n- Prijemnik uključen\n- Ovaj uređaj smešten blizu senzora";
 "external_device_details_information" = "Informacija";
 "external_device_forget_sensor" = "Zaboravi senzor";
 "external_device_details_battery" = "Baterija";
@@ -3494,7 +3494,7 @@
 "quick_action_destination" = "Odredište";
 "precipitation_layer" = "Nivo padavina";
 "key_event_category_map_interactions" = "Interakcije mape";
-"quick_action_track_waypoint" = "Putna tačka";
+"quick_action_track_waypoint" = "Međuodredište putanje";
 "map_source" = "Izvor mape";
 "driving_region_india" = "Indija";
 "shared_string_action" = "Akcija";
@@ -3506,3 +3506,4 @@
 "shared_string_show" = "Prikaži";
 "weather_wind_animation_enable_descr" = "Omogućite da bi videli animacioni sloj na mapi.";
 "osmand_cloud_delete_account_descr_with_email" = "Da li ste sigurni da želite da izbrišete OsmAnd Cloud nalog: %@?";
+"battery_saving_mode" = "Režim uštede baterije";

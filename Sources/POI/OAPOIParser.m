@@ -643,7 +643,6 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
             tag = [[NSString alloc] initWithBytes:attributes[i].value
                                                      length:length
                                                    encoding:NSUTF8StringEncoding];
-            
         }
         else if (0 == strncmp((const char*)attributes[i].localname, kValueAttributeName,
                               kValueAttributeNameLength))

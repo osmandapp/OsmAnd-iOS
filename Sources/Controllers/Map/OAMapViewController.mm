@@ -2250,6 +2250,11 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         const unsigned int rasterTileSizeOrig = (unsigned int)(256 * self.displayDensityFactor * mapDensity);
         OALog(@"Screen tile size %fpx, raster tile size %dpx", screenTileSize, rasterTileSize);
 
+		if ([settings.batterySavingMode get])
+            [_mapView limitFrameRefreshRate];
+        else
+            [_mapView restoreFrameRefreshRate];
+
         // Set reference tile size on the screen
         _mapView.referenceTileSizeOnScreenInPixels = screenTileSize;
         self.referenceTileSizeRasterOrigInPixels = rasterTileSizeOrig;

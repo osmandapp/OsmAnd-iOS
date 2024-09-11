@@ -9,15 +9,15 @@
 #import "OASharedUtil.h"
 #import "OsmAndApp.h"
 #import "OAXmlFactory.h"
+#import "OAOsmAndContextImpl.h"
 #import <OsmAndShared/OsmAndShared.h>
 
 @implementation OASharedUtil
 
 + (void)initSharedLib:(NSString *)documentsPath gpxPath:(NSString *)gpxPath
 {
-    [OASPlatformUtil.shared initializeAppDir:documentsPath
-                                      gpxDir:gpxPath
-                               xmlFactoryApi:[[OAXmlFactory alloc] init]];
+    [OASPlatformUtil.shared initializeOsmAndContext:[[OAOsmAndContextImpl alloc] init]
+                                      xmlFactoryApi:[[OAXmlFactory alloc] init]];
 
     //[self.class testGpxReadWrite:@"" outputFile:@""];
     //[self.class testGpxDatabase:@""];

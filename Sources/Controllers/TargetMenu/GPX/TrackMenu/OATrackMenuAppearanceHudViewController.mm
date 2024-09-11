@@ -44,7 +44,7 @@
 #import "OAMapSettingsTerrainParametersViewController.h"
 #import "OAColoringType.h"
 #import "OsmAnd_Maps-Swift.h"
-#import <Charts/Charts-Swift.h>
+#import <DGCharts/DGCharts-Swift.h>
 
 static const NSInteger kColorsSection = 1;
 
@@ -673,7 +673,7 @@ static const NSInteger kColorsSection = 1;
         @(EOAGPX3DLineVisualizationByTypeHeartRate): OAPointAttributes.sensorTagHeartRate,
         @(EOAGPX3DLineVisualizationByTypeBicycleCadence): OAPointAttributes.sensorTagCadence,
         @(EOAGPX3DLineVisualizationByTypeBicyclePower): OAPointAttributes.sensorTagBikePower,
-        @(EOAGPX3DLineVisualizationByTypeTemperature): OAPointAttributes.sensorTagTemperature,
+        @(EOAGPX3DLineVisualizationByTypeTemperature): OAPointAttributes.sensorTagTemperatureA,
         @(EOAGPX3DLineVisualizationByTypeSpeedSensor): OAPointAttributes.sensorTagSpeed
     };
     
@@ -826,23 +826,6 @@ static const NSInteger kColorsSection = 1;
 
 - (BOOL)hasValidDataForKey:(NSString *)key
 {
-    if ([key isEqualToString:OAPointAttributes.sensorTagTemperature])
-    {
-        for (OAPointAttributes *point in self.analysis.pointAttributes)
-        {
-            if ([point hasValidValueFor:OAPointAttributes.sensorTagTemperatureW])
-                return YES;
-        }
-        
-        for (OAPointAttributes *point in self.analysis.pointAttributes)
-        {
-            if ([point hasValidValueFor:OAPointAttributes.sensorTagTemperatureA])
-                return YES;
-        }
-        
-        return NO;
-    }
-    
     for (OAPointAttributes *point in self.analysis.pointAttributes)
     {
         if ([point hasValidValueFor:key])

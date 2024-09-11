@@ -675,6 +675,15 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
     _nearbyImagesRowInfo = nearbyImagesRowInfo;
 }
 
+- (void)showPOITagsDetails:(OARowInfo *)info
+{
+    POITagsDetailsViewController *tagsDetailsController = [[POITagsDetailsViewController alloc] initWithTags:info.detailsArray];
+    tagsDetailsController.tagTitle = info.textPrefix;
+
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:tagsDetailsController];
+    [self.navController presentViewController:navigationController animated:YES completion:nil];
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -836,7 +845,7 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
             cell.textView.textColor = info.textColor;
             cell.textView.font = [info getFont];
             cell.textView.numberOfLines = info.height > 50.0 ? 20 : 1;
-            cell.accessoryType = [info.key isEqualToString:@"name"] ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
+            cell.accessoryType = info.detailsArray.count > 0 ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
 
             return cell;
         }
@@ -977,8 +986,15 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
     }
     else if (info.isText && info.moreText)
     {
-        OAEditDescriptionViewController *_editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:info.text isNew:NO isEditing:NO readOnly:YES];
-        [self.navController pushViewController:_editDescController animated:YES];
+        if (info.detailsArray.count > 0)
+        {
+            [self showPOITagsDetails:info];
+        }
+        else
+        {
+            OAEditDescriptionViewController *_editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:info.text isNew:NO isEditing:NO readOnly:YES];
+            [self.navController pushViewController:_editDescController animated:YES];
+        }
     }
     else if ([info.typeName isEqualToString:kCollapseDetailsRowType])
     {
@@ -995,11 +1011,9 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
         editDescController.delegate = self;
         [self.navController pushViewController:editDescController animated:YES];
     }
-    else if ([info.key isEqualToString:@"name"])
+    else if (info.detailsArray.count > 0)
     {
-        NameTagsDetailsViewController *tagsDetailsController = [[NameTagsDetailsViewController alloc] initWithTags:info.detailsArray];
-        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:tagsDetailsController];
-        [self.navController presentViewController:navigationController animated:YES completion:nil];
+        [self showPOITagsDetails:info];
     }
 }
 

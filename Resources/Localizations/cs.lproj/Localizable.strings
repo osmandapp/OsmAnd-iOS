@@ -1185,7 +1185,7 @@
 "rendering_attr_piste_difficulty_intermediate_name" = "Středně pokročilý";
 "rendering_attr_coloredBuildings_name" = "Barvy budov podle typu";
 "routing_attr_driving_style_name" = "Styl jízdy";
-"rendering_attr_alpineHiking_name" = "Klasifikace podle obížnosti";
+"rendering_attr_alpineHiking_name" = "Stupeň obtížnosti turistických tras";
 "routing_attr_piste_type_nordic_name" = "Běžecké a klasické lyžování";
 "rendering_value_black_name" = "Černá";
 "rendering_attr_tracktype_grade1_name" = "Pevný (zpevněný)";
@@ -3494,3 +3494,5 @@
 "shared_string_analysis" = "Analýza";
 "visualization_3d_wall_color" = "Barva zdi";
 "downward_gradient" = "Spád dolů";
+"battery_saving_mode" = "Režim úspory baterie";
+"osmand_cloud_delete_account_descr_with_email" = "Opravdu chcete smazat účet %@ na OsmAnd Cloud?";

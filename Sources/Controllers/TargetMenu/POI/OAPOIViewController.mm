@@ -143,40 +143,175 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     return YES;
 }
 
+- (NSDictionary *)groupAdditionalInfo:(NSDictionary *)originalDict
+              withCurrentLocalization:(NSString *)currentLocalization
+{
+    NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
+    NSMutableDictionary *localizationsDict = [NSMutableDictionary dictionary];
+    
+    for (NSString *key in originalDict)
+    {
+        NSString *convertedKey = [self convertKey:key];
+        
+        if ([_poiHelper isNameTag:convertedKey])
+        {
+            [self processNameTagWithKey:key
+                              convertedKey:convertedKey
+                          originalDict:originalDict
+                      localizationsDict:localizationsDict];
+        }
+        else
+        {
+            [self processAdditionalTypeWithKey:key
+                                    convertedKey:convertedKey
+                                originalDict:originalDict
+                            localizationsDict:localizationsDict
+                                  resultDict:resultDict];
+        }
+    }
+    
+    NSMutableDictionary *finalDict = [self finalizeLocalizationDict:localizationsDict
+                                            withCurrentLocalization:currentLocalization];
+    
+    [self addRemainingEntriesFrom:resultDict to:finalDict];
+    
+    return [finalDict copy];
+}
+
+- (NSString *)convertKey:(NSString *)key
+{
+    return [key stringByReplacingOccurrencesOfString:@"_-_" withString:@":"];
+}
+
+- (void)processNameTagWithKey:(NSString *)key
+                  convertedKey:(NSString *)convertedKey
+                  originalDict:(NSDictionary *)originalDict
+              localizationsDict:(NSMutableDictionary *)localizationsDict
+{
+    if ([key containsString:@":"])
+    {
+        NSArray *components = [convertedKey componentsSeparatedByString:@":"];
+        if (components.count == 2)
+        {
+            NSString *baseKey = components[0];
+            NSString *localeKey = [NSString stringWithFormat:@"%@:%@", baseKey, components[1]];
+            
+            NSMutableDictionary *nameDict = [self dictionaryForKey:@"name" inDict:localizationsDict];
+            [nameDict setObject:originalDict[convertedKey] forKey:localeKey];
+        }
+    }
+    else
+    {
+        NSMutableDictionary *nameDict = [self dictionaryForKey:@"name" inDict:localizationsDict];
+        [nameDict setObject:originalDict[key] forKey:convertedKey];
+    }
+}
+
+- (void)processAdditionalTypeWithKey:(NSString *)key
+                          convertedKey:(NSString *)convertedKey
+                          originalDict:(NSDictionary *)originalDict
+                      localizationsDict:(NSMutableDictionary *)localizationsDict
+                            resultDict:(NSMutableDictionary *)resultDict
+{
+    OAPOIBaseType *poiType = [_poiHelper getAnyPoiAdditionalTypeByKey:convertedKey];
+    
+    if (poiType.lang && [key containsString:@":"])
+    {
+        NSArray *components = [key componentsSeparatedByString:@":"];
+        if (components.count == 2)
+        {
+            NSString *baseKey = components[0];
+            NSString *localeKey = [NSString stringWithFormat:@"%@:%@", baseKey, components[1]];
+            
+            NSMutableDictionary *baseDict = [self dictionaryForKey:baseKey inDict:localizationsDict];
+            [baseDict setObject:originalDict[key] forKey:localeKey];
+        }
+    }
+    else
+    {
+        [resultDict setObject:originalDict[key] forKey:key];
+    }
+}
+
+- (NSMutableDictionary *)dictionaryForKey:(NSString *)key inDict:(NSMutableDictionary *)dict
+{
+    NSMutableDictionary *subDict = dict[key];
+    if (!subDict)
+    {
+        subDict = [NSMutableDictionary dictionary];
+        dict[key] = subDict;
+    }
+    return subDict;
+}
+
+- (NSMutableDictionary *)finalizeLocalizationDict:(NSDictionary *)localizationsDict
+                      withCurrentLocalization:(NSString *)currentLocalization
+{
+    NSMutableDictionary *finalDict = [NSMutableDictionary dictionary];
+    
+    for (NSString *baseKey in localizationsDict)
+    {
+        NSMutableDictionary *entryDict = [NSMutableDictionary dictionary];
+        NSDictionary *localizations = localizationsDict[baseKey];
+        
+        NSString *nameKey = [NSString stringWithFormat:@"%@:%@", baseKey, currentLocalization];
+        NSString *nameValue = localizations[nameKey] ?: [localizations allValues].firstObject;
+        
+        entryDict[@"name"] = nameValue;
+        entryDict[@"localization"] = localizations;
+        [finalDict setObject:[entryDict copy] forKey:baseKey];
+    }
+    
+    return finalDict;
+}
+
+- (void)addRemainingEntriesFrom:(NSDictionary *)resultDict to:(NSMutableDictionary *)finalDict {
+    for (NSString *key in resultDict)
+    {
+        if (![finalDict objectForKey:key])
+        {
+            [finalDict setObject:resultDict[key] forKey:key];
+        }
+    }
+}
+
 - (void) buildRows:(NSMutableArray<OARowInfo *> *)rows
 {
     BOOL hasWiki = NO;
-    BOOL hasName = NO;
     NSString *preferredLang = [OAUtilities preferredLang];
     NSMutableArray<OARowInfo *> *infoRows = [NSMutableArray array];
     NSMutableArray<OARowInfo *> *descriptions = [NSMutableArray array];
     NSMutableArray<OARowInfo *> *urlRows = [NSMutableArray array];
-    NSMutableArray<NSDictionary *> *nameTags = [[NSMutableArray alloc] init];
+    
     NSMutableDictionary<NSString *, NSMutableArray<OAPOIType *> *> *poiAdditionalCategories = [NSMutableDictionary dictionary];
     OARowInfo *cuisineRow;
-    OARowInfo *nameRow;
-    //NSMutableArray<OAPOIType *> *collectedPoiTypes = [NSMutableArray array];
-    NSMutableDictionary<NSString *, NSMutableArray<OAPOIType *> *> *collectedPoiTypes = [[NSMutableDictionary alloc] init];
+    
+    NSMutableDictionary<NSString *, NSMutableArray<OAPOIType *> *> *collectedPoiTypes = [NSMutableDictionary dictionary];
     NSMutableDictionary<NSString *, NSString *> *additionalInfo = [[self.poi getAdditionalInfo] mutableCopy];
 
     BOOL osmEditingEnabled = [OAPluginsHelper isEnabled:OAOsmEditingPlugin.class];
-    CGSize iconSize = {20, 20}; // TODO: Hardcoded size
+    CGSize iconSize = {20, 20};
     if (self.poi.localizedNames.count > 0)
         [self addLocalizedNamesTagsToInfo:additionalInfo];
+    NSString *languageCode = NSLocale.currentLocale.languageCode;
+    
+    NSDictionary *dic = [self groupAdditionalInfo:additionalInfo withCurrentLocalization:languageCode];
 
-    for (NSString *key in additionalInfo.allKeys)
+    for (NSString *key in dic.allKeys)
     {
         NSString *iconId;
         UIImage *icon;
-        UIColor *textColor;
-        NSString *vl = additionalInfo[key];
-        NSString *convertedKey = [key stringByReplacingOccurrencesOfString:@"_-_" withString:@":"];
-        if (!hasName && [_poiHelper isNameTag:convertedKey])
-        {
-            nameRow = [self addNameRowWithText:self.poi.name iconSize:iconSize];
-            [infoRows addObject:nameRow];
-            hasName = YES;
+        UIColor *textColor; 
+        NSString *vl = @"";
+    
+        id value = dic[key];
+        if ([value isKindOfClass:[NSDictionary class]]) {
+            vl = value[@"name"] ?: @"";
+        } else {
+            vl = value;
         }
+        
+        NSString *convertedKey = [self convertKey:key];
         
         if ([convertedKey isEqualToString:@"image"]
             || [convertedKey isEqualToString:MAPILLARY_TAG]
@@ -203,6 +338,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 
         OAPOIType *poiType = [self.poi.type.category getPoiTypeByKeyName:convertedKey];
         OAPOIBaseType *pt = [_poiHelper getAnyPoiAdditionalTypeByKey:convertedKey];
+
         if (!pt && vl && vl.length > 0 && vl.length < 50)
             pt = [_poiHelper getAnyPoiAdditionalTypeByKey:[NSString stringWithFormat:@"%@_%@", convertedKey, vl]];
         
@@ -233,7 +369,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
             if (socialMediaUrl)
             {
                 isUrl = YES;
-                textColor =[UIColor colorNamed:ACColorNameTextColorActive];
+                textColor = [UIColor colorNamed:ACColorNameTextColorActive];
             }
         }
 
@@ -273,16 +409,6 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
             {
                 continue;
             }
-        }
-        else if ([_poiHelper isNameTag:convertedKey])
-        {
-            [nameTags addObject:@{
-                @"key": convertedKey,
-                @"value": vl,
-                @"localizedTitle": pt ? pt.nameLocalized : @""
-            }];
-            [nameRow setDetailsArray:nameTags];
-            continue;
         }
         else if ([convertedKey isEqualToString:COLLECTION_TIMES_TAG] || [convertedKey isEqualToString:SERVICE_TIMES_TAG])
         {
@@ -494,6 +620,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                                    isPhoneNumber:isPhoneNumber
                                            isUrl:isUrl];
         }
+        [self configureRowValue:value dic:dic convertedKey:convertedKey row:row];
         row.collapsable = collapsable;
         row.collapsed = YES;
         row.collapsableView = collapsableView;
@@ -503,7 +630,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         else if (isCuisine)
             cuisineRow = row;
         else if (isUrl)
-            [self addRowIfNotExsists:row toDestinationRows:urlRows];
+            [self addRowIfNotExists:row toDestinationRows:urlRows];
         else if (!poiType)
             [infoRows addObject:row];
     }
@@ -669,36 +796,55 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     }
 }
 
-- (OARowInfo *)addNameRowWithText:(NSString *)textValue iconSize:(CGSize)iconSize
+- (void)configureRowValue:(id)value
+                      dic:(NSDictionary *)dic
+             convertedKey:(NSString *)convertedKey
+                      row:(OARowInfo *)row
 {
-    OARowInfo *row = [[OARowInfo alloc] initWithKey:@"name"
-                                               icon:[OATargetInfoViewController getIcon:@"ic_navbar_languge" size:iconSize]
-                                         textPrefix:OALocalizedString(@"shared_string_name")
-                                               text:textValue
-                                          textColor:nil
-                                             isText:NO
-                                          needLinks:NO
-                                              order:90
-                                           typeName:@""
-                                      isPhoneNumber:NO
-                                              isUrl:NO];
-    
-    row.collapsable = NO;
-    row.collapsed = YES;
-    row.collapsableView = nil;
-    return row;
+    if ([value isKindOfClass:[NSDictionary class]])
+    {
+        NSMutableArray *array = [NSMutableArray array];
+        NSDictionary *val = dic[convertedKey][@"localization"];
+        if ([_poiHelper isNameTag:convertedKey])
+        {
+            row.text = self.poi.name;
+            row.textPrefix = OALocalizedString(@"shared_string_name");
+        }
+        if (val.allKeys.count > 0)
+        {
+            for (NSString *key in val.allKeys)
+            {
+                OAPOIBaseType *poi = [_poiHelper getAnyPoiAdditionalTypeByKey:key];
+                NSString *formattedKey = [key stringByReplacingOccurrencesOfString:convertedKey withString:@"name"];
+
+                [array addObject:@{
+                    @"key": formattedKey,
+                    @"value": val[key],
+                    @"localizedTitle": poi ? poi.nameLocalized : @""
+                }];
+            }
+            [row setDetailsArray:array];
+        }
+    }
 }
 
 - (void) addLocalizedNamesTagsToInfo:(NSMutableDictionary<NSString *, NSString *> *)additionalInfo
 {
-    [self.poi.localizedNames enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *name, BOOL *stop) {
+    [[self filteredLocalizedNames] enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *name, BOOL *stop) {
         NSString *nameKey = [NSString stringWithFormat:@"name:%@", key];
         if (key.length > 0 && ![key isEqualToString:[OAAppSettings sharedManager].settingPrefMapLanguage.get] && !additionalInfo[nameKey])
             additionalInfo[nameKey] = name;
     }];
 }
 
-- (void) addRowIfNotExsists:(OARowInfo *)newRow toDestinationRows:(NSMutableArray<OARowInfo *> *)rows
+- (NSDictionary *)filteredLocalizedNames
+{
+    NSMutableDictionary *filteredDict = [self.poi.localizedNames mutableCopy];
+    [filteredDict removeObjectForKey:@"brand"];
+    return [filteredDict copy];
+}
+
+- (void)addRowIfNotExists:(OARowInfo *)newRow toDestinationRows:(NSMutableArray<OARowInfo *> *)rows
 {
     if (![rows containsObject:newRow])
         [rows addObject:newRow];

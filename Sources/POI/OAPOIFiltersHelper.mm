@@ -583,6 +583,11 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
     return nil;
 }
 
+- (OAPOIUIFilter *)getFilter:(OATopIndexFilter *)topIndexFilter acceptedTypes:(NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *)acceptedTypes
+{
+    return [[OAPOIUIFilter alloc] initWithTopIndexFilter:topIndexFilter acceptedTypes:acceptedTypes];
+}
+
 - (void) reloadAllPoiFilters
 {
     _showAllPOIFilter = nil;

@@ -203,9 +203,10 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:ElevationChartCell.reuseIdentifier owner:self options:nil];
     _routeStatsCell = (ElevationChartCell *)[nib objectAtIndex:0];
+    _routeStatsCell.heightConstraint.constant = 90;
 
     [GpxUIHelper setupElevationChartWithChartView:_routeStatsCell.chartView
-                                        topOffset:20
+                                        topOffset:10
                                      bottomOffset:4
                               useGesturesAndScale:NO];
 

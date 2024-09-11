@@ -22,7 +22,7 @@
 
 @interface OAColorCollectionHandler : OABaseCollectionHandler <OAColorCollectionDelegate, OAColorsCollectionCellDelegate>
 
-@property (nonatomic, weak) id<OAColorsCollectionCellDelegate> delegate;
+@property (nonatomic, weak) id<OACollectionCellDelegate> delegate;
 @property (weak, nonatomic) OASuperViewController *hostVC;
 @property (weak, nonatomic) UIView *hostVCOpenColorPickerButton;
 

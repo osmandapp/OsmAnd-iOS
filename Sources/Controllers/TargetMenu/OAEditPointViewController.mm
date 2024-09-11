@@ -65,7 +65,7 @@
 
 #define kSubviewVerticalOffset 8.
 
-@interface OAEditPointViewController() <UITextFieldDelegate, UITextViewDelegate, OAPoiTableViewCellDelegate, OAShapesTableViewCellDelegate, MDCMultilineTextInputLayoutDelegate, OAReplacePointDelegate, OAFolderCardsCellDelegate, OASelectFavoriteGroupDelegate, UIAdaptivePresentationControllerDelegate, OAColorsCollectionCellDelegate, OAEditorDelegate>
+@interface OAEditPointViewController() <UITextFieldDelegate, UITextViewDelegate, OAPoiTableViewCellDelegate, OAShapesTableViewCellDelegate, MDCMultilineTextInputLayoutDelegate, OAReplacePointDelegate, OAFolderCardsCellDelegate, OASelectFavoriteGroupDelegate, UIAdaptivePresentationControllerDelegate, OACollectionCellDelegate, OAEditorDelegate>
 
 @end
 
@@ -1312,13 +1312,15 @@
     _wasChanged = YES;
     [self applyLocalization];
     [self generateData];
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_poiIconRowIndex inSection:_appearenceSectionIndex],
-                                             [NSIndexPath indexPathForRow:_shapeRowIndex inSection:_appearenceSectionIndex]]
+    [self.tableView reloadRowsAtIndexPaths:@[
+        [NSIndexPath indexPathForRow:_poiIconRowIndex inSection:_appearenceSectionIndex],
+        [NSIndexPath indexPathForRow:_shapeRowIndex inSection:_appearenceSectionIndex]]
                           withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void)reloadCollectionData
 {
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_allColorsRowIndex inSection:_appearenceSectionIndex]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 #pragma mark - Additions

@@ -112,7 +112,6 @@
         if (weakSelf.delegate)
         {
             [weakSelf.delegate onCollectionItemSelected:weakSelf.selectedIndexPath collectionView:collectionView];
-            [weakSelf.delegate reloadCollectionData];
         }
         if (![collectionView.indexPathsForVisibleItems containsObject:weakSelf.selectedIndexPath])
         {

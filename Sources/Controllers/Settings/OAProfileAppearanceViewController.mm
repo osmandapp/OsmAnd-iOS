@@ -140,7 +140,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
 
 @end
 
-@interface OAProfileAppearanceViewController() <UITableViewDelegate, UITableViewDataSource, OAColorsCollectionCellDelegate, ProfileAppearanceViewAngleUpdatable, ProfileAppearanceLocationRadiusUpdatable, UITextFieldDelegate>
+@interface OAProfileAppearanceViewController() <UITableViewDelegate, UITableViewDataSource, OACollectionCellDelegate, ProfileAppearanceViewAngleUpdatable, ProfileAppearanceLocationRadiusUpdatable, UITextFieldDelegate>
 
 @end
 

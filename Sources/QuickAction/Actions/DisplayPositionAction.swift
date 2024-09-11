@@ -40,9 +40,9 @@ final class DisplayPositionAction: OAQuickAction {
     }
 
     override func getIconResName() -> String {
-        switch settings.positionPlacementOnMap.get() {
-        case 0: "ic_custom_display_position_center"
-        case 1: "ic_custom_display_position_bottom"
+        switch EOAPositionPlacement(rawValue: Int(settings.positionPlacementOnMap.get())) {
+        case .auto: "ic_custom_display_position_center"
+        case .center: "ic_custom_display_position_bottom"
         default: "ic_custom_display_position_automatic"
         }
     }
@@ -56,7 +56,12 @@ final class DisplayPositionAction: OAQuickAction {
     }
 
     override func execute() {
-        let currentState = settings.positionPlacementOnMap.get()
-        settings.positionPlacementOnMap.set((currentState == 2) ? 0 : currentState + 1)
+        var newState: Int32
+        switch EOAPositionPlacement(rawValue: Int(settings.positionPlacementOnMap.get())) {
+        case .auto: newState = Int32(EOAPositionPlacement.center.rawValue)
+        case .center: newState = Int32(EOAPositionPlacement.bottom.rawValue)
+        default: newState = Int32(EOAPositionPlacement.auto.rawValue)
+        }
+        settings.positionPlacementOnMap.set(newState)
     }
 }

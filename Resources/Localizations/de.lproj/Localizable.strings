@@ -1199,7 +1199,7 @@
 "sett_deg360" = "360 Grad";
 "online_map" = "Online-Karte";
 "map_settings_install_maps" = "Wählen Sie die zu installierenden oder zu aktualisierenden Karten";
-"quick_action_hillshade_descr" = "Schaltfläche zum Ein- oder Ausblenden des Reliefs.";
+"quick_action_hillshade_descr" = "Eine Schaltfläche zum Ein- oder Ausblenden des Reliefs.";
 "show_hillshade" = "Schummerung anzeigen";
 "hide_hillshade" = "Schummerung ausblenden";
 "toggle_contour_lines" = "Ein-/Ausblenden von Höhenlinien";
@@ -1887,7 +1887,7 @@
 "shared_a_z" = "A - Z";
 "select_application_profile" = "App-Profil auswählen";
 "change_application_profile" = "App-Profiländern";
-"quick_action_showhide_mapillary_descr" = "Eine Schaltfläche zum Ein- oder Ausblenden des Mapillary-Layers auf der Karte.";
+"quick_action_showhide_mapillary_descr" = "Ein Schalter zum Ein- oder Ausblenden des Mapillary-Layers auf der Karte.";
 "nearest_point" = "Nächstgelegener Punkt";
 "start_of_the_track" = "Startpunkt des Tracks";
 "point_to_navigate" = "Navigation";
@@ -3523,4 +3523,4 @@
 "shared_string_show" = "Anzeigen";
 "weather_wind_animation_enable_descr" = "Aktiviere diese Option, um die Windanimationsebene auf der Karte anzuzeigen.";
 "osmand_cloud_delete_account_descr_with_email" = "Bist du sicher, dass du das OsmAnd-Cloud-Konto %@ löschen möchtest?";
-"battery_saving_mode" = "Batteriesparmodus";
+"battery_saving_mode" = "Akkusparmodus";

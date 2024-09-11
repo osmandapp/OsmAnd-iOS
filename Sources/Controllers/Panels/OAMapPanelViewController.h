@@ -12,6 +12,7 @@
 #import "OACommonTypes.h"
 #import "OABaseTrackMenuHudViewController.h"
 #import "OATrackMenuHudViewControllerConstants.h"
+#import "OsmAndSharedWrapper.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -255,6 +256,12 @@ NS_ASSUME_NONNULL_BEGIN
 // CarPlay
 - (void) setMapViewController:(nullable OAMapViewController *)mapViewController;
 - (void)detachFromCarPlayWindow;
+
+
+- (void)openTargetViewWithNewGPXFromTracksList:(OASGpxDataItem *)item
+                       navControllerHistory:(NSArray<UIViewController *> *)navControllerHistory
+                              fromTrackMenu:(BOOL)fromTrackMenu
+                                   selectedTab:(EOATrackMenuHudTab)selectedTab;
 
 @end
  

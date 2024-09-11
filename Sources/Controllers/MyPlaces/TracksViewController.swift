@@ -8,40 +8,278 @@
 
 import OsmAndShared
 
+private var gpxTitleKey: UInt8 = 0
+private var newGpxKey: UInt8 = 0
+private var gradientPaletteNameKey: UInt8 = 0
+
+@objc(OASGpxDataItem)
 extension GpxDataItem {
-    
+    func getNiceTitle() -> String {
+        if newGpx {
+            return NSLocalizedString("create_new_trip", comment: "")
+        }
+        
+        if let gpxTitle {
+            return (self.gpxFileName as NSString).lastPathComponent.deletingPathExtension()
+        }
+        
+        return self.gpxTitle ?? ""
+    }
+}
+
+@objc(OASGpxDataItem)
+extension GpxDataItem {
+        
     var gpxFileName: String {
-        getParameter(parameter: GpxParameter.fileName) as? String ?? ""
+        get {
+            getParameter(parameter: .fileName) as? String ?? ""
+        }
+        set {
+           setParameter(parameter: .fileName, value: self)
+        }
     }
     
     var gpxFilePath: String {
-        let fileName = getParameter(parameter: GpxParameter.fileName) as? String ?? ""
-        // FIXME: import
-        return "import/" + fileName
+        get {
+            let fileName = getParameter(parameter: .fileName) as? String ?? ""
+            let dir = getParameter(parameter: .fileDir) as? String ?? ""
+            print("dir: " + dir)
+            // TODO: check dir (import)
+            return dir + fileName
+        }
+        set {
+            setParameter(parameter: .fileDir, value: self)
+        }
     }
     
     var totalDistance: Float {
-        getParameter(parameter: .totalDistance) as? Float ?? 0.0
+        get {
+            getParameter(parameter: .totalDistance) as? Float ?? 0.0
+        }
+        set {
+            setParameter(parameter: .totalDistance, value: self)
+        }
     }
     
     var totalTracks: Int {
-        getParameter(parameter: .totalTracks) as? Int ?? 0
+        get {
+            getParameter(parameter: .totalTracks) as? Int ?? 0
+        }
+        set {
+            setParameter(parameter: .totalTracks, value: self)
+        }
     }
-    
+
     var timeSpan: Int {
-        getParameter(parameter: .timeSpan) as? Int ?? 0
+        get {
+            getParameter(parameter: .timeSpan) as? Int ?? 0
+        }
+        set {
+            setParameter(parameter: .timeSpan, value: self)
+        }
     }
     
     var wptPoints: Int32 {
-        getParameter(parameter: .wptPoints) as? Int32 ?? 0
+        get {
+            getParameter(parameter: .wptPoints) as? Int32 ?? 0
+        }
+        set {
+            setParameter(parameter: .wptPoints, value: self)
+        }
     }
     
     var diffElevationUp: Double {
-        getParameter(parameter: .diffElevationUp) as? Double ?? 0.0
+        get {
+            getParameter(parameter: .diffElevationUp) as? Double ?? 0.0
+        }
+        set {
+            setParameter(parameter: .diffElevationUp, value: self)
+        }
     }
     
     var diffElevationDown: Double {
-        getParameter(parameter: .diffElevationDown) as? Double ?? 0.0
+        get {
+            getParameter(parameter: .diffElevationDown) as? Double ?? 0.0
+        }
+        set {
+            setParameter(parameter: .diffElevationDown, value: self)
+        }
+    }
+    
+    var startLat: Double {
+        get {
+            getParameter(parameter: .startLat) as? Double ?? 0.0
+        }
+        set {
+            setParameter(parameter: .startLat, value: self)
+        }
+    }
+    
+    var startLon: Double {
+        get {
+            getParameter(parameter: .startLon) as? Double ?? 0.0
+        }
+        set {
+            setParameter(parameter: .startLon, value: self)
+        }
+    }
+    
+    var showArrows: Bool {
+        get {
+            getParameter(parameter: .showArrows) as? Bool ?? false
+        }
+        set {
+            setParameter(parameter: .showArrows, value: self)
+        }
+    }
+    
+    var showStartFinish: Bool {
+        get {
+            getParameter(parameter: .showStartFinish) as? Bool ?? false
+        }
+        set {
+            setParameter(parameter: .showStartFinish, value: self)
+        }
+    }
+    
+    var elevationMeters: Bool {
+        get {
+            getParameter(parameter: .elevationMeters) as? Bool ?? false
+        }
+        set {
+            setParameter(parameter: .elevationMeters, value: self)
+        }
+    }
+    
+    var verticalExaggerationScale: Double {
+        get {
+            getParameter(parameter: .additionalExaggeration) as? Double ?? 0.0
+        }
+        set {
+            setParameter(parameter: .additionalExaggeration, value: self)
+        }
+    }
+    
+    // FIXME: convert from value "TEXT" to EOAGPX3DLineVisualizationByType
+    var visualization3dByType: EOAGPX3DLineVisualizationByType {
+        get {
+            let value = getParameter(parameter: .trackVisualizationType) as? String
+            return .none
+        }
+        set {
+            // Convert self to string value
+            let value = ""
+            setParameter(parameter: .trackVisualizationType, value: value)
+        }
+    }
+    
+    // FIXME: convert from value "TEXT" to EOAGPX3DLineVisualizationWallColorType
+    var visualization3dWallColorType: EOAGPX3DLineVisualizationWallColorType {
+        get {
+            let value = getParameter(parameter: .track3dWallColoringType) as? String
+            return .none
+        }
+        set {
+            // Convert self to string value
+            let value = ""
+            setParameter(parameter: .track3dWallColoringType, value: value)
+        }
+    }
+    
+    // FIXME: convert from value "TEXT" to EOAGPX3DLineVisualizationPositionType
+    var visualization3dPositionType: EOAGPX3DLineVisualizationPositionType {
+        get {
+            let value = getParameter(parameter: .track3dLinePositionType) as? String
+            return .top
+        }
+        set {
+            // Convert self to string value
+            let value = ""
+            setParameter(parameter: .track3dWallColoringType, value: value)
+        }
+    }
+    
+    var coloringType: String {
+        get {
+            getParameter(parameter: .coloringType) as? String ?? ""
+        }
+        set {
+            setParameter(parameter: .coloringType, value: self)
+        }
+    }
+    
+    var width: String {
+        get {
+            getParameter(parameter: .width) as? String ?? ""
+        }
+        set {
+            setParameter(parameter: .width, value: self)
+        }
+    }
+    
+    var color: Int {
+        get {
+            getParameter(parameter: .color) as? Int ?? 0
+        }
+        set {
+            setParameter(parameter: .color, value: self)
+        }
+    }
+    
+    var splitType: EOAGpxSplitType {
+        get {
+            let value = getParameter(parameter: .splitType) as? Int ?? 0
+            return EOAGpxSplitType(rawValue: value) ?? .none
+        }
+        set {
+            setParameter(parameter: .splitType, value: self)
+        }
+
+    }
+    
+    var splitInterval: Double {
+        get {
+            getParameter(parameter: .splitInterval) as? Double ?? 0.0
+        }
+        set {
+            setParameter(parameter: .splitInterval, value: self)
+        }
+    }
+    
+    var joinSegments: Bool {
+        get {
+            getParameter(parameter: .joinSegments) as? Bool ?? false
+        }
+        set {
+            setParameter(parameter: .joinSegments, value: self)
+        }
+    }
+
+    var gpxTitle: String? {
+        get {
+            return objc_getAssociatedObject(self, &gpxTitleKey) as? String
+        }
+        set {
+            objc_setAssociatedObject(self, &gpxTitleKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+    
+    var newGpx: Bool {
+        get {
+            return objc_getAssociatedObject(self, &newGpxKey) as? Bool ?? false
+        }
+        set {
+            objc_setAssociatedObject(self, &newGpxKey, newValue, .OBJC_ASSOCIATION_ASSIGN)
+        }
+    }
+    
+    var gradientPaletteName: String? {
+        get {
+            return objc_getAssociatedObject(self, &gpxTitleKey) as? String
+        }
+        set {
+            objc_setAssociatedObject(self, &gpxTitleKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
     }
 }
 
@@ -418,7 +656,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     
     fileprivate func createRowFor(track: GpxDataItem, section: OATableSectionData) {
         let trackRow = section.createNewRow()
-        let fileName = track.gpxFileName ?? ""
+        let fileName = track.gpxFileName
         trackRow.cellType = OASimpleTableViewCell.reuseIdentifier
         trackRow.key = trackKey
         trackRow.title = fileName.lastPathComponent().deletingPathExtension()
@@ -531,13 +769,13 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     private func setupNavBarMenuButton() {
         var menuActions: [UIMenuElement] = []
         if !tableView.isEditing {
-            let selectAction = UIAction(title: localizedString("shared_string_select"), image: UIImage.icCustomSelectOutlined) { [weak self] _ in
+            let selectAction = UIAction(title: localizedString("shared_string_select"), image: .icCustomSelectOutlined) { [weak self] _ in
                 self?.onNavbarSelectButtonClicked()
             }
-            let addFolderAction = UIAction(title: localizedString("add_folder"), image: UIImage.icCustomFolderAddOutlined) { [weak self] _ in
+            let addFolderAction = UIAction(title: localizedString("add_folder"), image: .icCustomFolderAddOutlined) { [weak self] _ in
                 self?.onNavbarAddFolderButtonClicked()
             }
-            let importAction = UIAction(title: localizedString("shared_string_import"), image: UIImage.icCustomImportOutlined) { [weak self] _ in
+            let importAction = UIAction(title: localizedString("shared_string_import"), image: .icCustomImportOutlined) { [weak self] _ in
                 self?.onNavbarImportButtonClicked()
             }
             
@@ -602,11 +840,10 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             totalUphill += track.diffElevationUp
             totalDownhill += track.diffElevationDown
             totalTime += track.timeSpan
-            // FIXME:
-//            if let attributes = try? FileManager.default.attributesOfItem(atPath: track.absolutePath),
-//               let fileSize = attributes[.size] as? UInt64 {
-//                totalSizeBytes += fileSize
-//            }
+            if let attributes = try? FileManager.default.attributesOfItem(atPath: track.file.absolutePath()),
+               let fileSize = attributes[.size] as? UInt64 {
+                totalSizeBytes += fileSize
+            }
         }
         
         var statistics = "\(localizedString("shared_string_gpx_tracks")) – \(currentFolder.tracksCount)"
@@ -693,16 +930,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         guard let allTracksTest = gpxDB.gpxListTest as? [GpxDataItem], !allTracksTest.isEmpty else { return }
         //  settings.mapSettingVisibleGpx.get() = import/2023-10-22_11-34_Sun.gpx
         guard let visibleTrackPaths = settings.mapSettingVisibleGpx.get() else { return }
-        
-//        let fileName = allTracksTest[0].getParameter(parameter: GpxParameter.fileName)
-//        let file = allTracksTest[0].file
-//
-//        let gpxFile = GpxUtilities.shared.loadGpxFile(file: file)
-//        if gpxFile.error == nil {
-//          print("")
-//        }
-        
-       // OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
+
         rootFolder = TrackFolder()
         visibleTracksFolder = TrackFolder()
 
@@ -719,7 +947,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 visibleTracksFolder.insertTrack(fileName: fileName, track: track)
             }
             // TODO: loast "import" string
-            let relativeFolderPath = "import"// track.gpxFilePath.deletingLastPathComponent()
+            let relativeFolderPath = track.gpxFilePath.deletingLastPathComponent()
             // 2023-10-22_11-34_Sun.gpx
             //let fileName = track.gpxFilePath.lastPathComponent()
             if let fillingFolder = getTrackFolderByPath(relativeFolderPath) {
@@ -729,49 +957,6 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         
         currentFolder = getTrackFolderByPath(currentFolderPath) ?? rootFolder
     }
-    
-//    private func buildFoldersTree() {
-//      //  guard let allTracks = gpxDB.gpxList as? [OAGPX] else { return }
-//        // let file = allTracksTest[0].file ->  /Documents/GPX/2023-10-22_11-34_Sun.gpx
-//        // original = Documents/GPX/import/2023-10-22_11-34_Sun.gpx
-//        guard let allTracksTest = gpxDB.gpxListTest as? [GpxDataItem], !allTracksTest.isEmpty else { return }
-//        //  settings.mapSettingVisibleGpx.get() = import/2023-10-22_11-34_Sun.gpx
-//        guard let visibleTrackPaths = settings.mapSettingVisibleGpx.get() else { return }
-//        
-////        let fileName = allTracksTest[0].getParameter(parameter: GpxParameter.fileName)
-////        let file = allTracksTest[0].file
-////        
-////        let gpxFile = GpxUtilities.shared.loadGpxFile(file: file)
-////        if gpxFile.error == nil {
-////          print("")
-////        }
-//        
-//       // OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
-//        rootFolder = TrackFolder()
-//        visibleTracksFolder = TrackFolder()
-//
-//        // create all needed folders
-//        if let rootTrackFolderUrl = URL(string: app.gpxPath) {
-//            rootFolder.collectFolderInfo(rootTrackFolderUrl)
-//        }
-//        
-//        // add tracks to existing folders
-//        for track in allTracksTest {
-//            if visibleTrackPaths.contains(track.gpxFilePath) {
-//                // track.gpxFilePath.lastPathComponent() - 2023-10-22_11-34_Sun.gpx
-//                visibleTracksFolder.insertTrack(fileName: track.gpxFilePath.lastPathComponent(), track: track)
-//            }
-//            // TODO: loast "import" string
-//            let relativeFolderPath = "import"// track.gpxFilePath.deletingLastPathComponent()
-//            // 2023-10-22_11-34_Sun.gpx
-//            let fileName = track.gpxFilePath.lastPathComponent()
-//            if let fillingFolder = getTrackFolderByPath(relativeFolderPath) {
-//                fillingFolder.insertTrack(fileName: fileName, track: track)
-//            }
-//        }
-//        
-//        currentFolder = getTrackFolderByPath(currentFolderPath) ?? rootFolder
-//    }
     
     private func getTrackFolderByPath(_ path: String) -> TrackFolder? {
         return rootFolder.getFolderByPath(path)
@@ -974,20 +1159,20 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         present(alert, animated: true)
     }
     
-    private func onFolderAppearenceButtonClicked(_ selectedFolderName: String) {
-        guard let selectedFolder = currentFolder.subfolders[selectedFolderName] else { return }
-        let subfolderTracks = Array(selectedFolder.getAllTracks())
-        if !subfolderTracks.isEmpty {
-            let firstTrack = subfolderTracks[0]
-            let state = OATrackMenuViewControllerState()
-            state.openedFromTracksList = true
-            // FIXME:
-//            rootVC.mapPanel.openTargetView(with: firstTrack, items: subfolderTracks, trackHudMode: .appearanceHudMode, state: state)
-            navigationController?.popToRootViewController(animated: true)
-        } else {
-            OAUtilities.showToast(localizedString("shared_string_error"), details: localizedString("my_places_no_tracks_title"), duration: 4, in: self.view)
-        }
-    }
+//    private func onFolderAppearenceButtonClicked(_ selectedFolderName: String) {
+//        guard let selectedFolder = currentFolder.subfolders[selectedFolderName] else { return }
+//        let subfolderTracks = Array(selectedFolder.getAllTracks())
+//        if !subfolderTracks.isEmpty {
+//            let firstTrack = subfolderTracks[0]
+//            let state = OATrackMenuViewControllerState()
+//            state.openedFromTracksList = true
+//            // FIXME:
+////            rootVC.mapPanel.openTargetView(with: firstTrack, items: subfolderTracks, trackHudMode: .appearanceHudMode, state: state)
+//            navigationController?.popToRootViewController(animated: true)
+//        } else {
+//            OAUtilities.showToast(localizedString("shared_string_error"), details: localizedString("my_places_no_tracks_title"), duration: 4, in: self.view)
+//        }
+//    }
     
     private func onFolderExportButtonClicked(_ selectedFolderName: String) {
         guard let selectedFolder = currentFolder.subfolders[selectedFolderName] else { return }
@@ -1386,7 +1571,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     
     fileprivate func changeGpxDBSubfolderTags(folderContent: TrackFolder, srcPath: String, destPath: String) {
         for gpxFile in folderContent.tracks.values {
-            var path = gpxFile.gpxFilePath ?? ""
+            var path = gpxFile.gpxFilePath
             path = path.replacingOccurrences(of: srcPath, with: "")
             path = destPath.appendingPathComponent(path)
             // FIXME
@@ -1589,6 +1774,11 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 if let trackPath = item.obj(forKey: pathKey) as? String,
                    let track = rootFolder.getTrackByPath(trackPath),
                    let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
+                    print("")
+                    OARootViewController.instance().mapPanel.openTargetViewWithNewGPX(fromTracksList: track,
+                                                                                                    navControllerHistory: newCurrentHistory,
+                                                                                                    fromTrackMenu: false,
+                                                                                                    selectedTab: .overviewTab)
                     // FIXME:
 //                    OARootViewController.instance().mapPanel.openTargetViewWithGPX(fromTracksList: track,
 //                                                                                   navControllerHistory: newCurrentHistory,

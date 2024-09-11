@@ -7,6 +7,7 @@
 //
 
 #import "OABaseTrackMenuHudViewController.h"
+#import "OsmAndSharedWrapper.h"
 
 @class OATrackMenuViewControllerState, OAColoringType, OAGPX;
 
@@ -28,7 +29,11 @@
 
 @interface OATrackMenuAppearanceHudViewController : OABaseTrackMenuHudViewController
 
+// FIXME: remove
 - (instancetype)initWithGpx:(OAGPX *)gpx state:(OATrackMenuViewControllerState *)state;
 - (instancetype)initWithGpx:(OAGPX *)gpx tracks:(NSArray<OAGPX *> *)tracks state:(OATrackMenuViewControllerState *)state;
+
+- (instancetype)initWithNewGpx:(OASGpxDataItem *)gpx state:(OATrackMenuViewControllerState *)state;
+- (instancetype)initWithNewGpx:(OASGpxDataItem *)gpx tracks:(NSArray<OASGpxDataItem *> *)tracks state:(OATrackMenuViewControllerState *)state;
 
 @end

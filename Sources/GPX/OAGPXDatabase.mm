@@ -647,10 +647,9 @@
 - (void)addGPXFileToDBIfNeeded:(NSString *)filePath {
     OASKFile *file = [[OASKFile alloc] initWithFilePath:filePath];
     OASGpxDataItem *dataItem;
-  //  OASGpxFile *gpxFile1 = [OASGpxUtilities.shared loadGpxFileFile:file];
     dataItem = [_db getGpxDataItemFile:file];
-//    if (!dataItem)
-//    {
+    if (!dataItem)
+    {
         OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
         if (!gpxFile.error)
         {
@@ -669,11 +668,11 @@
         {
             NSLog(@"[ERROR] loadGpxFileFile: %@ | %@", file.path, gpxFile.error.message);
         }
-//    }
-//    else
-//    {
-//        NSLog(@"[INFO] file: %@ | already exist", file.path);
-//    }
+    }
+    else
+    {
+        NSLog(@"[INFO] file: %@ | already exist", file.path);
+    }
 }
 
 - (void)load

@@ -664,7 +664,7 @@ std::string preferredLanguage;
     if (next == nil || ![_settings.speakStreetNames get:_settings.applicationMode.get]) {
         return result;
     }
-    if (player != nil) {
+    if (player != nil && [player supportsStructuredStreetNames]) {
         // Issue 2377: Play Dest here only if not already previously announced, to avoid repetition
         if (includeDest == YES) {
             result[@"toRef"] = [self getSpeakablePointName:next.ref];
@@ -701,20 +701,12 @@ std::string preferredLanguage;
 - (NSDictionary *) getSpeakableExitName:(OARouteDirectionInfo *)routeInfo exitInfo:(OAExitInfo *)exitInfo includeDest:(BOOL)includeDest
 {
     NSMutableDictionary<NSString *, NSString *> *result = [NSMutableDictionary new];
-    if (![_settings.speakStreetNames get])
+    if (!exitInfo || ![_settings.speakStreetNames get])
         return result;
-    if (player != nil && player.supportsStructuredStreetNames)
-    {
-        result[@"toRef"] = [self getSpeakablePointName:exitInfo.ref];
-        result[@"toStreetName"] = [self getSpeakablePointName:exitInfo.exitStreetName];
-        result[@"toDest"] = includeDest ? [self getSpeakablePointName:routeInfo.ref] : @"";
-    }
-    else
-    {
-        result[@"toRef"] = [self getSpeakablePointName:exitInfo.ref];
-        result[@"toStreetName"] = [self getSpeakablePointName:exitInfo.exitStreetName];
-        result[@"toDest"] = @"";
-    }
+    
+    result[@"toRef"] = [self getSpeakablePointName:exitInfo.ref];
+    result[@"toDest"] = [self getSpeakablePointName:routeInfo.destinationName];
+    result[@"toStreetName"] = @"";
     return result;
 }
 

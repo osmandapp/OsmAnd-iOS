@@ -2265,7 +2265,6 @@
 "routeInfo_smoothness_description" = "Clasificación con respecto a la usabilidad física de un camino para vehículos con ruedas, particularmente con respecto a la regularidad y planitud de la superficie.";
 "routeInfo_tracktype_description" = "Colorea la ruta o el trazado de la vía por su composición superficial. Suele aplicarse cuando la red de caminos está en gran parte sin pavimentar.";
 "ltr_or_rtl_combine_via_dash" = "%@ – %@";
-
 "shared_string_open_street_map" = "OpenStreetMap";
 "routing_attr_allow_gate_name" = "Permitir usar puertas";
 "routing_attr_only_permitted_streets_name" = "Calles expresamente autorizadas";
@@ -3517,3 +3516,4 @@
 "shared_string_show" = "Mostrar";
 "weather_wind_animation_enable_descr" = "Permite ver la animación del viento en el mapa.";
 "osmand_cloud_delete_account_descr_with_email" = "¿Borrar la cuenta de OsmAnd Cloud: %@?";
+"battery_saving_mode" = "Modo ahorro de batería";

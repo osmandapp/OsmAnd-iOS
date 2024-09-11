@@ -284,17 +284,11 @@
     return _data.count;
 }
 
-- (void)openColorPickerWithSelectedColor
-{
-    _isStartedNewColorAdding = YES;
-    UICollectionViewCell *selectedCell = [[self getCollectionView] cellForItemAtIndexPath:_selectedIndexPath];
-    [self openColorPickerWithColor:[self getSelectedItem] sourceView:selectedCell];
-}
-
-- (void)openColorPickerWithColor:(OAColorItem *)colorItem sourceView:(UIView *)sourceView
+- (void)openColorPickerWithColor:(OAColorItem *)colorItem sourceView:(UIView *)sourceView newColorAdding:(BOOL)newColorAdding
 {
     if (_hostVC)
     {
+        _isStartedNewColorAdding = newColorAdding;
         OAColorPickerViewController *colorViewController = [[OAColorPickerViewController alloc] init];
         colorViewController.delegate = self;
         colorViewController.closingDelegete = self;
@@ -413,7 +407,7 @@
 {
     _editColorIndexPath = indexPath;
     UICollectionViewCell *editingCell = [[self getCollectionView] cellForItemAtIndexPath:indexPath];
-    [self openColorPickerWithColor:_data[0][indexPath.row] sourceView:editingCell];
+    [self openColorPickerWithColor:_data[0][indexPath.row] sourceView:editingCell newColorAdding:NO];
 }
 
 - (void)duplicateItemFromContextMenu:(NSIndexPath *)indexPath

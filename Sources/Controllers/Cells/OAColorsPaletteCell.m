@@ -67,7 +67,7 @@
 
 - (void) onRightButtonPressed:(UIButton *)sender
 {
-    [[self getColorCollectionHandler] openColorPickerWithColor:[[self getColorCollectionHandler] getSelectedItem] sourceView:sender];
+    [[self getColorCollectionHandler] openColorPickerWithColor:[[self getColorCollectionHandler] getSelectedItem] sourceView:sender newColorAdding:YES];
 }
 
 @end

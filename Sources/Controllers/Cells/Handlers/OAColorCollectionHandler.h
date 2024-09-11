@@ -23,7 +23,7 @@
 @interface OAColorCollectionHandler : OABaseCollectionHandler <OAColorCollectionDelegate, OAColorsCollectionCellDelegate>
 
 @property (nonatomic, weak) id<OAColorsCollectionCellDelegate> delegate;
-@property (weak, nonatomic) OASuperViewController<OAColorCollectionDelegate> *hostVC;
+@property (weak, nonatomic) OASuperViewController *hostVC;
 @property (weak, nonatomic) UIView *hostVCOpenColorPickerButton;
 
 - (void)addColor:(NSIndexPath *)indexPath newItem:(OAColorItem *)newItem;
@@ -34,8 +34,7 @@
 - (NSMutableArray<NSMutableArray<OAColorItem *> *> *) getData;
 - (OAColorItem *)getSelectedItem;
 
-- (void)openColorPickerWithSelectedColor;
-- (void)openColorPickerWithColor:(OAColorItem *)colorItem sourceView:(UIView *)sourceView;
+- (void)openColorPickerWithColor:(OAColorItem *)colorItem sourceView:(UIView *)sourceView newColorAdding:(BOOL)newColorAdding;
 - (void)openAllColorsScreen;
 
 @end

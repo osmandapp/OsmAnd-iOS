@@ -15,6 +15,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *topLabel;
 @property (weak, nonatomic) IBOutlet UIButton *bottomButton;
 
-@property (weak, nonatomic) OASuperViewController<OAColorCollectionDelegate> *hostVC;
+@property (weak, nonatomic) OASuperViewController *hostVC;
 
 @end

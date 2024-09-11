@@ -1153,7 +1153,6 @@
             OAPoiAdditionalCustomFilter *pt = (OAPoiAdditionalCustomFilter *)ptr.pt;
             if (pt.poiAdditionalCategory != nil)
             {
-                // TODO
                 [filtered setObject:ptr forKey:pt.name];
             }
             else

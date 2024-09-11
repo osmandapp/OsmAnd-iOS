@@ -293,10 +293,10 @@
 "reminder_not_set_text" = "Pripomenutie nebolo nastavené, pretože nemáte povolenie prístupu ku kalendáru";
 //inapps
 "plugin_nautical_name" = "Námorný mapový pohľad";
-"product_desc_nautical" = "Námorná mapa celého sveta";
+"product_desc_nautical" = "Vektorové mapy vhodné pre navigáciu po vodných trasách";
 "osmand_parking_plugin_name" = "Parkovacie miesto";
 "plugin_ski_name" = "Lyžiarsky mapový pohľad";
-"product_desc_skimap" = "Zjazdovky pre všetky lyžiarske strediská vo svete";
+"product_desc_skimap" = "Aktuálne mapy lyžiarskych tratí s vlekmi a zjazdovkami";
 "record_plugin_name" = "Zaznamenávanie výletov";
 "product_title_trip_planning" = "Plánovanie cesty";
 "product_desc_africa" = "Neobmedzené sťahovania máp Afriky";
@@ -310,9 +310,9 @@
 "product_desc_allworld" = "Mapy celého sveta";
 "product_desc_asia" = "Neobmedzené sťahovania máp Ázie";
 "download_wikipedia_maps" = "Wikipédia";
-"product_desc_wiki" = "Údaje Wikipédie";
+"product_desc_wiki" = "Články Wikipédie o miestach na mape";
 "srtm_plugin_name" = "Topografia";
-"product_desc_srtm" = "Zobrazenie vrstevníc";
+"product_desc_srtm" = "Vizuálne posúdenie tvaru zemského povrchu";
 "my_location" = "Moja poloha";
 "all_categories" = "Všetky kategórie";
 "get_unlimited_access" = "Získať neobmedzený prístup";
@@ -325,8 +325,8 @@
 "plugin_popup_trip_planning_ask" = "Pre spustenie plánovania musíte aktivovať modul: <b>Plánovanie výletu</b>";
 "plugin_popup_nautical_desc" = "Prosím stiahnite si najprv Námorné mapy.\nPotom choďte do <b>Nastavenia mapy</b> > <b>Typ mapy</b> a zapnite štýl <b>Námorný</b>";
 "plugin_popup_srtm_title" = "Stiahnuť vrstevnice";
-"plugin_popup_srtm_desc" = "Ak chcete začať používať funkciu vrstevníc, prosím stiahnite si najprv vrstevnice regiónu";
-"plugin_popup_srtm_ask" = "Na stiahnutie vrstevní musíte zaktivovať modul: <b>Vrstevnice</b>";
+"plugin_popup_srtm_desc" = "Ak chcete začať používať funkciu topografie, prosím stiahnite si najprv vrstevnice regiónu";
+"plugin_popup_srtm_ask" = "Na stiahnutie vrstevníc musíte aktivovať modul: <b>Topografia</b>";
 "plugin_popup_wiki_ask" = "Pre stiahnutie údajov z Wikipédie údajov musíte aktivovať plugin: <b>Wikipedia</b>";
 "shared_string_open" = "Otvoriť";
 "time_closed" = "Zatvorené";
@@ -383,12 +383,12 @@
 "from_location" = "vzdialený";
 "show_alt_in_drive" = "Zobraziť nadm.výšku v režime jazdy";
 "shared_string_get" = "Získať";
-"srtm_plugin_disabled" = "Vrstevnice vypnuté";
+"srtm_plugin_disabled" = "Topografia vypnutá";
 "prch_wiki_info" = "Modul Wikipédia zobrazuje informácie z Wikipédie k mapám, ktoré máte zakúpené alebo stiahnuté zdarma.";
-"prch_srtm_info" = "Modul Vrstevnice zobrazuje vrstevnice na mapách, ktoré máte zakúpené alebo stiahnuté zdarma.";
+"prch_srtm_info" = "Modul Topografia zobrazuje vrstevnice na mapách, ktoré máte zakúpené alebo stiahnuté zdarma.";
 "purchases_feature_desc_wikipedia" = "Poskytuje offline všetky články Wikipédie vzťahujúce sa k geografickým miestam, čím vám pomôže spoznať navštevované miesta na vašom výlete jednoduchým stlačením na mape. Nezabudnite si stiahnuť mapy Wikipédie pre príslušný región.";
-"product_desc_parking" = "Umožňuje zapamätať kedy bolo zaparkované auto a koľko zostáva času, ak je parkovanie časovo obmedzené";
-"product_desc_track_recording" = "Aktivuje funkciu záznamu a ukladania vašich stôp";
+"product_desc_parking" = "Sleduje čas parkovania a polohu vášho auta";
+"product_desc_track_recording" = "Zaznamenajte a uložte vaše výlety ako stopy GPX";
 "product_desc_trip_planning" = "Pomocou tohto modulu naplánujte svoj výlet, pridajte body trasy, zmerajte vzdialenosť do cieľa";
 "product_desc_ext_trip_planning" = "Modul plánovania výletov umožňuje vytvoriť výlety na mape, uložiť ich, merať vzdialenosti medzi bodmi, atď. Slúži na predbežné plánovanie výletu, nie presný výpočet trasy.";
 "osmand_parking_plugin_description" = "Označte kde je zaparkované vaše auto na ulici a oznámte vášmu kalendáru kedy vyprší čas parkovania. Pre umiestnenie značky označte miesto na mape a choďte do \"Akcie\" a použite \"Pridať parkovanie\".";
@@ -409,7 +409,7 @@
 "no_inet_connection_desc_map" = "Potrebné na stiahnutie máp.";
 "search_location" = "Hľadá sa poloha…";
 "first_usage_greeting" = "Získajte pokyny a objavte nové miesta bez pripojenia na Internet";
-"search_my_location" = "Hľadať moju polohu";
+"search_my_location" = "Nájsť moju polohu";
 "get_started" = "Začať";
 // Shared Strings
 "shared_string_select" = "Zvoliť";
@@ -883,7 +883,7 @@
 "modify_poi" = "Upraviť informácie o POI";
 // GPX colors
 "osm_editing_plugin_name" = "Upravovanie OpenStreetMap";
-"product_desc_osm_editing" = "Urobte zmeny v OpenStreetMap priamo z OsmAnd";
+"product_desc_osm_editing" = "Premeňte svoj telefón na mapovací nástroj";
 "wikivoyage_travel_guide" = "Turistickí sprievodcovia";
 "start_editing_card_image_text" = "Voľný cestovný sprievodca po svete, ktorý môže upravovať každý.";
 "wikivoyage_travel_guide_descr" = "Sprievodcovia Wikivoyage k najzaujímavejším miestam na planéte, priamo v OsmAnd bez pripojenia na Internet.";
@@ -1602,8 +1602,8 @@
 "recalculate_route_distance_promo" = "Trasa bude prepočítaná ak vzdialenosť od trasy k aktuálnej polohe je väčšia ako zvolená hodnota.";
 "accessibility_announce" = "Oznámenie";
 "clear_tiles_warning" = "Aplikovaním týchto zmien sa vymažú uložené dlaždice pre tento zdroj";
-"shared_string_max" = "Maximum";
-"listed_exist" = "Zobrazený %@ už existuje v OsmAnd.";
+"shared_string_max" = "Max";
+"listed_exist" = "Zobrazený %@, už existuje v OsmAnd.";
 "one_image_per_tile" = "Jeden obrazový súbor na dlaždicu";
 "shared_string_menu" = "Menu";
 "appearance_on_the_map" = "Vzhľad na mape";
@@ -1707,7 +1707,7 @@
 "restart" = "Reštartovať";
 "threshold_distance" = "Hraničná vzdialenosť";
 "rendering_value_walkingRoutesOSMC_description" = "Vyfarbiť trasy podľa ich vlastných farieb (ak sú zadané v OpenStreetMap) a turistického symbolu.";
-"srtm_download_list_help_message" = "OsmAnd poskytujeúdaje vrstevníc v metroch a stopách. Budete musieť znovu stiahnuť súbor pre zmenu formátu.";
+"srtm_download_list_help_message" = "OsmAnd poskytuje údaje vrstevníc v metroch a stopách. Budete musieť znovu stiahnuť súbor pre zmenu formátu.";
 "added_profiles_descr" = "Profily pridané modulom";
 "no_waypoints_found" = "Nenašli sa žiadne body cesty";
 "explore_wikipedia_offline" = "Preskúmajte Wikipédiu offline.";
@@ -2925,3 +2925,19 @@
 "rendering_value_pale_name" = "Bledá";
 "driving_region_india" = "India";
 "shared_string_show" = "Zobraziť";
+"add_widget" = "Pridať nástroj";
+"osm_login_needs_ios_16_4" = "Prihlásenie do OpenStreetMap vyžaduje iOS 16.4+";
+"upload_to_osm_short" = "Odoslať do OSM";
+"help_article_plugins_custom_name" = "Vlastný balíček";
+"osmAnd_team" = "Tím OsmAnd";
+"testFlight" = "TestFlight";
+"shared_string_row_number" = "Riadok %d";
+"average_vertical_speed" = "Priemerná vertikálna rýchlosť";
+"position_on_map" = "Umiestnenie polohy na obrazovke";
+"shared_string_instructions" = "Inštrukcie";
+"help_article_plugins_openplacereviews_name" = "OpenPlaceReviews";
+"shared_string_page_number" = "Stránka %d";
+"track_3d_empty_view_title" = "3D zobrazenie stopy";
+"track_3d" = "3D stopa";
+"shared_string_analysis" = "Analýza";
+"shared_string_update_required" = "Vyžaduje sa aktualizácia";

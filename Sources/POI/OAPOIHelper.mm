@@ -40,7 +40,7 @@
 #define kRadiusKmToMetersKoef 1200.0
 #define kZoomToSearchPOI 16.0
 
-static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"nat_name", @"reg_name", @"loc_name", @"old_name", @"alt_name", @"short_name", @"official_name"];
+static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"nat_name", @"reg_name", @"loc_name", @"old_name", @"alt_name", @"short_name", @"official_name", @"lock_name"];
 
 @implementation OAPOIHelper {
 

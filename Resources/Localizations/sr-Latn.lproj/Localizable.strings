@@ -51,12 +51,12 @@
 "new_destination_point_dialog" = "Već ste postavili odredišnu tačku:";
 "replace_destination_point" = "Zameni odredište";
 "shared_string_current" = "Trenutno";
-"make_as_start_point" = "Označi kao tačku polaska";
+"make_as_start_point" = "Zameni početnu tačku";
 "keep_and_add_destination_point" = "Dodaj kao sledeće odredište";
-"subsequent_dest_description" = "Pomeri odredište naviše i napravi ga";
-"add_as_first_destination_point" = "Dodaj kao početno prolazno odredište";
+"subsequent_dest_description" = "Dodaj kao krajnje odredište";
+"add_as_first_destination_point" = "Dodaj kao međuodredište";
 "first_intermediate_dest_description" = "Dodaj prvo stajanje";
-"add_as_last_destination_point" = "Dodaj kao završno prolazno odredište";
+"add_as_last_destination_point" = "Dodaj kao zadnje međuodredište";
 "last_intermediate_dest_description" = "Dodaje prolazno stajanje";
 "show_poi_over_map" = "TOI vidljivi na mapi";
 "shared_string_search" = "Traži";

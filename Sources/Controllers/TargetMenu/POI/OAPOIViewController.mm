@@ -169,8 +169,25 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                                   resultDict:resultDict];
         }
     }
+    NSMutableArray *keysToUpdate = [NSMutableArray array];
+    for (NSString *baseKey in localizationsDict)
+    {
+        NSDictionary *localizations = localizationsDict[baseKey];
+        if (!localizations[baseKey])
+        {
+            [keysToUpdate addObject:baseKey];
+        }
+    }
+    
+    for (NSString *baseKey in keysToUpdate)
+    {
+        NSMutableDictionary *localizations = localizationsDict[baseKey];
+        localizations[baseKey] = originalDict[baseKey];
+        localizationsDict[baseKey] = localizations;
+    }
     
     NSMutableDictionary *finalDict = [self finalizeLocalizationDict:localizationsDict
+                                                       originalDict:originalDict
                                             withCurrentLocalization:currentLocalization];
     
     [self addRemainingEntriesFrom:resultDict to:finalDict];
@@ -245,6 +262,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 }
 
 - (NSMutableDictionary *)finalizeLocalizationDict:(NSDictionary *)localizationsDict
+                                     originalDict:(NSDictionary *)originalDict
                       withCurrentLocalization:(NSString *)currentLocalization
 {
     NSMutableDictionary *finalDict = [NSMutableDictionary dictionary];
@@ -254,8 +272,11 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         NSMutableDictionary *entryDict = [NSMutableDictionary dictionary];
         NSDictionary *localizations = localizationsDict[baseKey];
         
-        NSString *nameKey = [NSString stringWithFormat:@"%@:%@", baseKey, currentLocalization];
-        NSString *nameValue = localizations[nameKey] ?: [localizations allValues].firstObject;
+        NSString *nameValue = originalDict[baseKey];
+        if (!nameValue) {
+            NSString *nameKey = [NSString stringWithFormat:@"%@:%@", baseKey, currentLocalization];
+            nameValue = localizations[baseKey][nameKey] ?: [localizations allValues].firstObject;
+        }
         
         entryDict[@"name"] = nameValue;
         entryDict[@"localization"] = localizations;
@@ -369,7 +390,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
             if (socialMediaUrl)
             {
                 isUrl = YES;
-                textColor =[UIColor colorNamed:ACColorNameTextColorActive];
+                textColor = [UIColor colorNamed:ACColorNameTextColorActive];
             }
         }
 
@@ -619,32 +640,8 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                                         typeName:poiTypeKeyName
                                    isPhoneNumber:isPhoneNumber
                                            isUrl:isUrl];
-            if ([value isKindOfClass:[NSDictionary class]])
-            {
-                NSMutableArray *array = [NSMutableArray array];
-                NSDictionary *val = dic[convertedKey][@"localization"];
-                if ([_poiHelper isNameTag:convertedKey])
-                {
-                    row.text = self.poi.name;
-                    row.textPrefix = OALocalizedString(@"shared_string_name");
-                }
-                if (val.allKeys.count > 0)
-                {
-                    for (NSString *key in val.allKeys)
-                    {
-                        OAPOIBaseType *poi = [_poiHelper getAnyPoiAdditionalTypeByKey:key];
-                        NSString *formattedKey = [key stringByReplacingOccurrencesOfString:convertedKey withString:@"name"];
-
-                        [array addObject:@{
-                            @"key": formattedKey,
-                            @"value": val[key],
-                            @"localizedTitle": poi ? poi.nameLocalized : @""
-                        }];
-                    }
-                    [row setDetailsArray:array];
-                }
-            }
         }
+        [self configureRowValue:value dic:dic convertedKey:convertedKey row:row];
         row.collapsable = collapsable;
         row.collapsed = YES;
         row.collapsableView = collapsableView;
@@ -654,7 +651,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         else if (isCuisine)
             cuisineRow = row;
         else if (isUrl)
-            [self addRowIfNotExsists:row toDestinationRows:urlRows];
+            [self addRowIfNotExists:row toDestinationRows:urlRows];
         else if (!poiType)
             [infoRows addObject:row];
     }
@@ -820,6 +817,38 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     }
 }
 
+- (void)configureRowValue:(id)value
+                      dic:(NSDictionary *)dic
+             convertedKey:(NSString *)convertedKey
+                      row:(OARowInfo *)row
+{
+    if ([value isKindOfClass:[NSDictionary class]])
+    {
+        NSMutableArray *array = [NSMutableArray array];
+        NSDictionary *val = dic[convertedKey][@"localization"];
+        if ([_poiHelper isNameTag:convertedKey])
+        {
+            row.text = self.poi.name;
+            row.textPrefix = OALocalizedString(@"shared_string_name");
+        }
+        if (val.allKeys.count > 0)
+        {
+            for (NSString *key in val.allKeys)
+            {
+                OAPOIBaseType *poi = [_poiHelper getAnyPoiAdditionalTypeByKey:key];
+                NSString *formattedKey = [key stringByReplacingOccurrencesOfString:convertedKey withString:@"name"];
+
+                [array addObject:@{
+                    @"key": formattedKey,
+                    @"value": val[key],
+                    @"localizedTitle": poi ? poi.nameLocalized : @""
+                }];
+            }
+            [row setDetailsArray:array];
+        }
+    }
+}
+
 - (void) addLocalizedNamesTagsToInfo:(NSMutableDictionary<NSString *, NSString *> *)additionalInfo
 {
     [[self filteredLocalizedNames] enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *name, BOOL *stop) {
@@ -836,7 +865,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     return [filteredDict copy];
 }
 
-- (void) addRowIfNotExsists:(OARowInfo *)newRow toDestinationRows:(NSMutableArray<OARowInfo *> *)rows
+- (void)addRowIfNotExists:(OARowInfo *)newRow toDestinationRows:(NSMutableArray<OARowInfo *> *)rows
 {
     if (![rows containsObject:newRow])
         [rows addObject:newRow];

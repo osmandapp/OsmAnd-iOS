@@ -263,8 +263,6 @@
 
 - (BOOL)hasData:(NSString *)tag
 {
-    if ([tag isEqualToString:OAPointAttributes.sensorTagTemperature])
-        return [_availableAttributes containsObject:OAPointAttributes.sensorTagTemperatureW] || [_availableAttributes containsObject:OAPointAttributes.sensorTagTemperatureA];
     return [_availableAttributes containsObject:tag];
 }
 

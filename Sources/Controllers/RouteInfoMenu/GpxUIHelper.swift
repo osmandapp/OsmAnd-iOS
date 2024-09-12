@@ -10,7 +10,7 @@ import UIKit
 import DGCharts
 
 @objc enum GPXDataSetType: Int {
-    case none, altitude, speed, slope, sensorSpeed, sensorHeartRate, sensorBikePower, sensorBikeCadence, sensorTemperature
+    case none, altitude, speed, slope, sensorSpeed, sensorHeartRate, sensorBikePower, sensorBikeCadence, sensorTemperatureA, sensorTemperatureW
 
     func getTitle() -> String {
         OAGPXDataSetType.getTitle(rawValue)
@@ -77,10 +77,11 @@ class GpxUIHelper: NSObject {
         }
 
         func stringForValue(_ value: Double, axis: AxisBase?) -> String {
+            let hasUnits = value == axis?.entries.first || axis is YAxis
             if let formatX, formatX.length > 0 {
-                return String(format: formatX, value) + " " + unitsX
+                return String(format: formatX, value) + (hasUnits ? (" " + unitsX) : "")
             } else {
-                return String(format: "%.0f", value) + " " + unitsX
+                return String(format: "%.0f", value) + (hasUnits ? (" " + unitsX) : "")
             }
         }
     }

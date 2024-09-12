@@ -675,6 +675,15 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
     _nearbyImagesRowInfo = nearbyImagesRowInfo;
 }
 
+- (void)showPOITagsDetails:(OARowInfo *)info
+{
+    POITagsDetailsViewController *tagsDetailsController = [[POITagsDetailsViewController alloc] initWithTags:info.detailsArray];
+    tagsDetailsController.tagTitle = info.textPrefix;
+
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:tagsDetailsController];
+    [self.navController presentViewController:navigationController animated:YES completion:nil];
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -977,8 +986,15 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
     }
     else if (info.isText && info.moreText)
     {
-        OAEditDescriptionViewController *_editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:info.text isNew:NO isEditing:NO readOnly:YES];
-        [self.navController pushViewController:_editDescController animated:YES];
+        if (info.detailsArray.count > 0)
+        {
+            [self showPOITagsDetails:info];
+        }
+        else
+        {
+            OAEditDescriptionViewController *_editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:info.text isNew:NO isEditing:NO readOnly:YES];
+            [self.navController pushViewController:_editDescController animated:YES];
+        }
     }
     else if ([info.typeName isEqualToString:kCollapseDetailsRowType])
     {
@@ -997,11 +1013,7 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
     }
     else if (info.detailsArray.count > 0)
     {
-        POITagsDetailsViewController *tagsDetailsController = [[POITagsDetailsViewController alloc] initWithTags:info.detailsArray];
-        tagsDetailsController.tagTitle = info.textPrefix;
-       
-        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:tagsDetailsController];
-        [self.navController presentViewController:navigationController animated:YES completion:nil];
+        [self showPOITagsDetails:info];
     }
 }
 

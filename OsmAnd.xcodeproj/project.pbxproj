@@ -17,6 +17,7 @@
 		0590D19C2BF88AF400C62AF5 /* ConcurrentDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0590D19B2BF88AF400C62AF5 /* ConcurrentDictionary.swift */; };
 		059D31412C66857F00F8B6EF /* GPXInterpolator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059D31402C66857F00F8B6EF /* GPXInterpolator.swift */; };
 		05A0FCFC2C42D4A200F7ED66 /* models in Resources */ = {isa = PBXBuildFile; fileRef = 05A0FCFB2C42D4A200F7ED66 /* models */; };
+		05AB44602C9062F500BF4F05 /* OAOsmAndContextImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = 05AB445F2C9062F500BF4F05 /* OAOsmAndContextImpl.m */; };
 		05CC79562BB98B0B00BAC638 /* OAOnlinePlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = 05CC79552BB98B0B00BAC638 /* OAOnlinePlugin.mm */; };
 		05CC79592BB99EC700BAC638 /* OAPluginsHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 05CC79582BB99EC700BAC638 /* OAPluginsHelper.mm */; };
 		05CC795B2BB9A1C400BAC638 /* PluginsHelper+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CC795A2BB9A1C400BAC638 /* PluginsHelper+Extension.swift */; };
@@ -524,6 +525,7 @@
 		460C1E702BFC9B490090D67B /* QuickActionIds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460C1E6F2BFC9B490090D67B /* QuickActionIds.swift */; };
 		460E9AC12B71111000411854 /* CloudTrashItemMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460E9AC02B71111000411854 /* CloudTrashItemMenuViewController.swift */; };
 		4611DF3A28569C5000885FD1 /* OASubscriptionBannerCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4611DF3928569C5000885FD1 /* OASubscriptionBannerCardView.xib */; };
+		46132FB02C904D1A00C9F364 /* DisplayPositionAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46132FAF2C904D1A00C9F364 /* DisplayPositionAction.swift */; };
 		4613BFA62A93DECC004385FB /* ic_custom_screen_side_right_48@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4613BF9E2A93DECA004385FB /* ic_custom_screen_side_right_48@2x.png */; };
 		4613BFA72A93DECC004385FB /* ic_custom_screen_side_bottom_48@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4613BF9F2A93DECA004385FB /* ic_custom_screen_side_bottom_48@2x.png */; };
 		4613BFA82A93DECC004385FB /* ic_custom_screen_side_right_48@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4613BFA02A93DECA004385FB /* ic_custom_screen_side_right_48@3x.png */; };
@@ -3298,6 +3300,8 @@
 		0590D19B2BF88AF400C62AF5 /* ConcurrentDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcurrentDictionary.swift; sourceTree = "<group>"; };
 		059D31402C66857F00F8B6EF /* GPXInterpolator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GPXInterpolator.swift; sourceTree = "<group>"; };
 		05A0FCFB2C42D4A200F7ED66 /* models */ = {isa = PBXFileReference; lastKnownFileType = folder; name = models; path = ../resources/models; sourceTree = "<group>"; };
+		05AB445E2C9062F500BF4F05 /* OAOsmAndContextImpl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmAndContextImpl.h; sourceTree = "<group>"; };
+		05AB445F2C9062F500BF4F05 /* OAOsmAndContextImpl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOsmAndContextImpl.m; sourceTree = "<group>"; };
 		05CC79542BB98B0B00BAC638 /* OAOnlinePlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOnlinePlugin.h; sourceTree = "<group>"; };
 		05CC79552BB98B0B00BAC638 /* OAOnlinePlugin.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOnlinePlugin.mm; sourceTree = "<group>"; };
 		05CC79572BB99EC700BAC638 /* OAPluginsHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAPluginsHelper.h; sourceTree = "<group>"; };
@@ -3957,6 +3961,7 @@
 		460C1E6F2BFC9B490090D67B /* QuickActionIds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickActionIds.swift; sourceTree = "<group>"; };
 		460E9AC02B71111000411854 /* CloudTrashItemMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudTrashItemMenuViewController.swift; sourceTree = "<group>"; };
 		4611DF3928569C5000885FD1 /* OASubscriptionBannerCardView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OASubscriptionBannerCardView.xib; sourceTree = "<group>"; };
+		46132FAF2C904D1A00C9F364 /* DisplayPositionAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayPositionAction.swift; sourceTree = "<group>"; };
 		4613BF9E2A93DECA004385FB /* ic_custom_screen_side_right_48@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_screen_side_right_48@2x.png"; path = "Resources/Icons/ic_custom_screen_side_right_48@2x.png"; sourceTree = "<group>"; };
 		4613BF9F2A93DECA004385FB /* ic_custom_screen_side_bottom_48@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_screen_side_bottom_48@2x.png"; path = "Resources/Icons/ic_custom_screen_side_bottom_48@2x.png"; sourceTree = "<group>"; };
 		4613BFA02A93DECA004385FB /* ic_custom_screen_side_right_48@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_screen_side_right_48@3x.png"; path = "Resources/Icons/ic_custom_screen_side_right_48@3x.png"; sourceTree = "<group>"; };
@@ -11070,6 +11075,7 @@
 				323F04CB2C6579C30058DD78 /* ShowHideRunningRoutesAction.swift */,
 				323F04C32C656B970058DD78 /* ShowHideSkiSlopesAction.swift */,
 				323F04C72C6577340058DD78 /* ShowHideWhitewaterSportsAction.swift */,
+				46132FAF2C904D1A00C9F364 /* DisplayPositionAction.swift */,
 			);
 			path = Actions;
 			sourceTree = "<group>";
@@ -13356,6 +13362,8 @@
 				4665DB6D2C20BBFD00F897EC /* ColorsPaletteUtils.swift */,
 				46A35EF42C53F9510089B21C /* DirectoryObserver.swift */,
 				46DB0A622C5CEA8F001356D5 /* ConcurrentArray.swift */,
+				05AB445E2C9062F500BF4F05 /* OAOsmAndContextImpl.h */,
+				05AB445F2C9062F500BF4F05 /* OAOsmAndContextImpl.m */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -16663,6 +16671,7 @@
 				05DACD762C1B0E9A0023FAD9 /* OAXmlStreamReader.mm in Sources */,
 				B24745C027F862C300C18C3F /* OAWeatherLayerSettingsViewController.mm in Sources */,
 				FAA6505F2ADD42C50020DCEA /* DescriptionDeviceHeader.swift in Sources */,
+				05AB44602C9062F500BF4F05 /* OAOsmAndContextImpl.m in Sources */,
 				DA5A839C26C563A800F274C7 /* OADirectionAppearanceViewController.m in Sources */,
 				DA5A844626C563A900F274C7 /* OABaseScrollableHudViewController.mm in Sources */,
 				DA5A841826C563A800F274C7 /* OAGPXEditWptListViewController.mm in Sources */,
@@ -16706,6 +16715,7 @@
 				C589BC9F2C610560002769F6 /* OATwoIconsButtonTableViewCell.swift in Sources */,
 				32E6C7C82AB9BE1A00821F1E /* TravelSearchHelper.swift in Sources */,
 				DA5A840E26C563A800F274C7 /* OAGpxWptEditingHandler.mm in Sources */,
+				46132FB02C904D1A00C9F364 /* DisplayPositionAction.swift in Sources */,
 				323F04C22C65639B0058DD78 /* ShowHideDifficultyClassificationAction.swift in Sources */,
 				DA5A84A126C563A900F274C7 /* OAApplyGpxApproximationCommand.mm in Sources */,
 				DA5A841626C563A800F274C7 /* OAGPXWptViewController.mm in Sources */,

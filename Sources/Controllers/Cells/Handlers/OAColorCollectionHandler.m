@@ -114,18 +114,28 @@
         {
             [weakSelf.delegate onCollectionItemSelected:weakSelf.selectedIndexPath collectionView:collectionView];
         }
-        if (![collectionView.indexPathsForVisibleItems containsObject:weakSelf.selectedIndexPath])
-        {
-            [collectionView scrollToItemAtIndexPath:weakSelf.selectedIndexPath
-                                   atScrollPosition:[weakSelf getScrollDirection] == UICollectionViewScrollDirectionHorizontal
-                                                        ? UICollectionViewScrollPositionCenteredHorizontally
-                                                        : UICollectionViewScrollPositionCenteredVertically
-                                           animated:YES];
-        }
+        
+        [weakSelf scrollToIndexPathIfNeeded:weakSelf.selectedIndexPath];
         
         if (weakSelf.hostCell && [weakSelf.hostCell needUpdateHeight])
             [weakSelf.delegate reloadCollectionData];
     }];
+}
+
+- (void) scrollToIndexPathIfNeeded:(NSIndexPath *)indexPath
+{
+    UICollectionView *collectionView = [self getCollectionView];
+    if (!collectionView)
+        return;
+    
+    if (![collectionView.indexPathsForVisibleItems containsObject:indexPath])
+    {
+        [collectionView scrollToItemAtIndexPath:indexPath
+                               atScrollPosition:[self getScrollDirection] == UICollectionViewScrollDirectionHorizontal
+                                                    ? UICollectionViewScrollPositionCenteredHorizontally
+                                                    : UICollectionViewScrollPositionCenteredVertically
+                                       animated:YES];
+    }
 }
 
 - (void)replaceOldColor:(NSIndexPath *)indexPath
@@ -159,14 +169,7 @@
             NSIndexPath *prevSelectedIndexPath = [NSIndexPath indexPathForRow:weakSelf.selectedIndexPath.row + 1 inSection:weakSelf.selectedIndexPath.section];
             [collectionView reloadItemsAtIndexPaths:@[prevSelectedIndexPath, weakSelf.selectedIndexPath]];
         }
-        if (![collectionView.indexPathsForVisibleItems containsObject:indexPath])
-        {
-            [collectionView scrollToItemAtIndexPath:indexPath
-                                   atScrollPosition:[weakSelf getScrollDirection] == UICollectionViewScrollDirectionHorizontal
-                                                        ? UICollectionViewScrollPositionCenteredHorizontally
-                                                        : UICollectionViewScrollPositionCenteredVertically
-                                           animated:YES];
-        }
+        [weakSelf scrollToIndexPathIfNeeded:indexPath];
     }];
 }
 
@@ -188,14 +191,7 @@
             if (weakSelf.delegate)
                 [weakSelf.delegate onCollectionItemSelected:weakSelf.selectedIndexPath collectionView:collectionView];
 
-            if (![collectionView.indexPathsForVisibleItems containsObject:weakSelf.selectedIndexPath])
-            {
-                [collectionView scrollToItemAtIndexPath:weakSelf.selectedIndexPath
-                                       atScrollPosition:[weakSelf getScrollDirection] == UICollectionViewScrollDirectionHorizontal
-                                                            ? UICollectionViewScrollPositionCenteredHorizontally
-                                                            : UICollectionViewScrollPositionCenteredVertically
-                                               animated:YES];
-            }
+            [weakSelf scrollToIndexPathIfNeeded:weakSelf.selectedIndexPath];
         }
         else if (indexPath.row < weakSelf.selectedIndexPath.row)
         {
@@ -370,6 +366,7 @@
     NSIndexPath *selectedIndex = [NSIndexPath indexPathForRow:[_data[0] indexOfObject:colorItem] inSection:0];
     [self setSelectedIndexPath:selectedIndex];
     [[self getCollectionView]  reloadItemsAtIndexPaths:@[prevSelectedColorIndex, selectedIndex]];
+    [self scrollToIndexPathIfNeeded:selectedIndex];
     
     if (self.delegate)
     {

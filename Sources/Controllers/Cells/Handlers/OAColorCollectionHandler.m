@@ -152,13 +152,9 @@
     } completion:^(BOOL finished) {
         if (indexPath.row <= weakSelf.selectedIndexPath.row)
         {
-            NSIndexPath *prevSelectedIndexPath = weakSelf.selectedIndexPath;
-            weakSelf.selectedIndexPath = [NSIndexPath indexPathForRow:weakSelf.selectedIndexPath.row + 1 inSection:weakSelf.selectedIndexPath.section];
+            NSIndexPath *prevSelectedIndexPath = [NSIndexPath indexPathForRow:weakSelf.selectedIndexPath.row + 1 inSection:weakSelf.selectedIndexPath.section];
             [collectionView reloadItemsAtIndexPaths:@[prevSelectedIndexPath, weakSelf.selectedIndexPath]];
         }
-        if (weakSelf.delegate)
-            [weakSelf.delegate reloadCollectionData];
-
         if (![collectionView.indexPathsForVisibleItems containsObject:indexPath])
         {
             [collectionView scrollToItemAtIndexPath:indexPath
@@ -313,7 +309,17 @@
         OAColorCollectionViewController *colorCollectionViewController =
         [[OAColorCollectionViewController alloc] initWithCollectionType:EOAColorCollectionTypeColorItems items:_data[0] selectedItem:[self getSelectedItem]];
         colorCollectionViewController.delegate = self;
+        colorCollectionViewController.hostColorHandler = self;
         [_hostVC showModalViewController:colorCollectionViewController];
+    }
+}
+
+- (void)onItemSelected:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
+{
+    [super onItemSelected:indexPath collectionView:collectionView];
+    if (_isOpenedFromAllColorsScreen && _hostColorHandler)
+    {
+        [_hostColorHandler onItemSelected:indexPath collectionView:[_hostColorHandler getCollectionView]];
     }
 }
 
@@ -356,12 +362,14 @@
 
 - (void)selectColorItem:(OAColorItem *)colorItem
 {
+    NSIndexPath *prevSelectedColorIndex = [self getSelectedIndexPath];
     NSIndexPath *selectedIndex = [NSIndexPath indexPathForRow:[_data[0] indexOfObject:colorItem] inSection:0];
     [self setSelectedIndexPath:selectedIndex];
+    [[self getCollectionView]  reloadItemsAtIndexPaths:@[prevSelectedColorIndex, selectedIndex]];
+    
     if (self.delegate)
     {
         [self.delegate onCollectionItemSelected:selectedIndex collectionView:[self getCollectionView]];
-        [self.delegate reloadCollectionData];
     }
 }
 
@@ -385,14 +393,23 @@
     OAColorItem *duplicatedColorItem = [[OAGPXAppearanceCollection sharedInstance] duplicateColor:colorItem];
     NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section];
     [self addColor:newIndexPath newItem:duplicatedColorItem];
+    if (_isOpenedFromAllColorsScreen && _hostColorHandler)
+    {
+        [_hostColorHandler addColor:newIndexPath newItem:duplicatedColorItem];
+    }
     return duplicatedColorItem;
 }
 
 - (void)deleteColorItem:(OAColorItem *)colorItem
 {
     NSIndexPath *indexPath = [self indexForColorItem:colorItem];
-    [[OAGPXAppearanceCollection sharedInstance] deleteColor:colorItem];
     [self removeColor:indexPath];
+    if (_isOpenedFromAllColorsScreen && _hostColorHandler)
+    {
+        [_hostColorHandler deleteColorItem:colorItem];
+    }
+    if (!_isOpenedFromAllColorsScreen)
+        [[OAGPXAppearanceCollection sharedInstance] deleteColor:colorItem];
 }
 
 - (NSIndexPath *)indexForColorItem:(OAColorItem *)colorItem

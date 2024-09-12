@@ -44,6 +44,8 @@
     NSMutableArray<NSString *> *_iconItems;
     NSArray<UIImage *> *_iconImages;
     NSString *_selectedIconItem;
+    
+    OAColorCollectionHandler *_colorCollectionHandler;
 }
 
 #pragma mark - Initialization
@@ -266,42 +268,44 @@
         
         if (_collectionType == EOAColorCollectionTypeColorItems)
         {
-            OAColorCollectionHandler *colorHandler = [[OAColorCollectionHandler alloc] initWithData:@[_colorItems] collectionView:cell.collectionView];
-            colorHandler.delegate = self;
-            colorHandler.hostVC = self;
-            colorHandler.hostVCOpenColorPickerButton = self.navigationItem.rightBarButtonItem.customView;
-            [colorHandler setScrollDirection:UICollectionViewScrollDirectionVertical];
-            [colorHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:[_colorItems indexOfObject:_selectedColorItem] inSection:0]];
-            [cell setCollectionHandler:colorHandler];
+            _colorCollectionHandler = [[OAColorCollectionHandler alloc] initWithData:@[_colorItems] collectionView:cell.collectionView];
+            _colorCollectionHandler.isOpenedFromAllColorsScreen = YES;
+            _colorCollectionHandler.hostColorHandler = _hostColorHandler;
+            _colorCollectionHandler.delegate = self;
+            _colorCollectionHandler.hostVC = self;
+            _colorCollectionHandler.hostVCOpenColorPickerButton = self.navigationItem.rightBarButtonItem.customView;
+            [_colorCollectionHandler setScrollDirection:UICollectionViewScrollDirectionVertical];
+            [_colorCollectionHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:[_colorItems indexOfObject:_selectedColorItem] inSection:0]];
+            [cell setCollectionHandler:_colorCollectionHandler];
         }
         else if (_collectionType == EOAColorCollectionTypeIconItems || _collectionType == EOAColorCollectionTypeBigIconItems)
         {
-            IconCollectionHandler *colorHandler = [[IconCollectionHandler alloc] initWithData:@[_iconItems] collectionView:cell.collectionView];
-            colorHandler.delegate = self;
-            colorHandler.hostVC = self;
-            colorHandler.selectedIconColor = _selectedIconColor;
-            colorHandler.regularIconColor = _regularIconColor;
-            [colorHandler setScrollDirection:UICollectionViewScrollDirectionVertical];
-            [colorHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:[_iconItems indexOfObject:_selectedIconItem] inSection:0]];
+            IconCollectionHandler *iconHandler = [[IconCollectionHandler alloc] initWithData:@[_iconItems] collectionView:cell.collectionView];
+            iconHandler.delegate = self;
+            iconHandler.hostVC = self;
+            iconHandler.selectedIconColor = _selectedIconColor;
+            iconHandler.regularIconColor = _regularIconColor;
+            [iconHandler setScrollDirection:UICollectionViewScrollDirectionVertical];
+            [iconHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:[_iconItems indexOfObject:_selectedIconItem] inSection:0]];
             cell.disableAnimationsOnStart = YES;
             
             if (_collectionType == EOAColorCollectionTypeIconItems)
             {
-                [colorHandler setItemSizeWithSize:48];
-                [colorHandler setIconSizeWithSize:30];
-                colorHandler.roundedSquareCells = NO;
-                colorHandler.cornerRadius = -1;
+                [iconHandler setItemSizeWithSize:48];
+                [iconHandler setIconSizeWithSize:30];
+                iconHandler.roundedSquareCells = NO;
+                iconHandler.cornerRadius = -1;
             }
             else if (_collectionType == EOAColorCollectionTypeBigIconItems)
             {
-                [colorHandler setItemSizeWithSize:152];
-                [colorHandler setIconSizeWithSize:52];
-                colorHandler.roundedSquareCells = YES;
-                colorHandler.cornerRadius = 6;
-                colorHandler.iconImagesData = @[_iconImages];
+                [iconHandler setItemSizeWithSize:152];
+                [iconHandler setIconSizeWithSize:52];
+                iconHandler.roundedSquareCells = YES;
+                iconHandler.cornerRadius = 6;
+                iconHandler.iconImagesData = @[_iconImages];
             }
             
-            [cell setCollectionHandler:colorHandler];
+            [cell setCollectionHandler:iconHandler];
         }
         [cell rightActionButtonVisibility:NO];
         [cell anchorContent:EOATableViewCellContentCenterStyle];
@@ -544,13 +548,11 @@
     }
     else 
     {
-        _selectedColorItem = _colorItems[indexPath.row];
+        _selectedColorItem = [_colorCollectionHandler getSelectedItem];
 
         if (self.delegate)
             [self.delegate selectColorItem:_selectedColorItem];
     }
-
-    [self dismissViewController];
 }
 
 - (void)reloadCollectionData
@@ -584,8 +586,7 @@
                                                                    inSection:indexPath.section];
                     OAColorItem *duplicatedColorItem = [self.delegate duplicateColorItem:colorItem];
                     [_colorItems insertObject:duplicatedColorItem atIndex:newIndexPath.row];
-                    OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
-                    [colorHandler addColor:newIndexPath newItem:duplicatedColorItem];
+                    [_colorCollectionHandler addColor:newIndexPath newItem:duplicatedColorItem];
                 }
                 break;
             case EOAColorCollectionTypePaletteItems:
@@ -617,9 +618,7 @@
                     OAColorItem *colorItem = _colorItems[indexPath.row];
                     [_colorItems removeObjectAtIndex:indexPath.row];
                     [self.delegate deleteColorItem:colorItem];
-                    OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorCollectionIndexPath];
-                    OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
-                    [colorHandler removeColor:indexPath];
+                    [_colorCollectionHandler removeColor:indexPath];
                 }
                 break;
             case EOAColorCollectionTypePaletteItems:
@@ -645,15 +644,12 @@
 {
     if (self.delegate && _colorCollectionIndexPath)
     {
-        OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorCollectionIndexPath];
-        OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
-        
         if (_isStartedNewColorAdding)
         {
             _isStartedNewColorAdding = NO;
             OAColorItem *newColorItem = [self.delegate addAndGetNewColorItem:viewController.selectedColor];
-            [_colorItems addObject:newColorItem];
-            [colorHandler addAndSelectColor:[NSIndexPath indexPathForRow:_colorItems.count - 1 inSection:0] newItem:newColorItem];
+            [_colorItems insertObject:newColorItem atIndex:0];
+            [_colorCollectionHandler addAndSelectColor:[NSIndexPath indexPathForRow:0 inSection:0] newItem:newColorItem];
         }
         else
         {
@@ -664,7 +660,10 @@
             if (![[editingColor getHexColor] isEqualToString:[viewController.selectedColor toHexARGBString]])
             {
                 [self.delegate changeColorItem:editingColor withColor:viewController.selectedColor];
-                [colorHandler replaceOldColor:_editColorIndexPath];
+                if (_editColorIndexPath)
+                    [_colorCollectionHandler replaceOldColor:_editColorIndexPath];
+                else
+                    [_colorCollectionHandler replaceOldColor:[NSIndexPath indexPathForRow:0 inSection:0]];
             }
         }
     }

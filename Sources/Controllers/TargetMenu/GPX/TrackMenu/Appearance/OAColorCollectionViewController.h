@@ -18,7 +18,7 @@ typedef enum
     EOAColorCollectionTypeBigIconItems, 
 } EOAColorCollectionType;
 
-@class OAColorItem, PaletteColor;
+@class OAColorItem, PaletteColor, OAColorCollectionHandler;
 
 @protocol OAColorCollectionDelegate
 
@@ -43,6 +43,7 @@ typedef enum
 
 @property(nonatomic, weak, nullable) id<OAColorCollectionDelegate>delegate;
 @property(nonatomic, weak, nullable) id<OAIconCollectionDelegate>iconsDelegate;
+@property (weak, nonatomic) OAColorCollectionHandler *hostColorHandler;
 @property(nonatomic, readonly) EOAColorCollectionType collectionType;
 
 @property(nonatomic) UIColor *selectedIconColor;

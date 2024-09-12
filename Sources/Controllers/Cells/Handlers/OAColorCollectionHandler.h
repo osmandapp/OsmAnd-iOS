@@ -26,6 +26,10 @@
 @property (weak, nonatomic) OASuperViewController *hostVC;
 @property (weak, nonatomic) UIView *hostVCOpenColorPickerButton;
 
+@property (nonatomic) BOOL isOpenedFromAllColorsScreen;
+@property (weak, nonatomic) OAColorCollectionHandler *hostColorHandler;
+
+
 - (void)addColor:(NSIndexPath *)indexPath newItem:(OAColorItem *)newItem;
 - (void)addAndSelectColor:(NSIndexPath *)indexPath newItem:(OAColorItem *)newItem;
 - (void)replaceOldColor:(NSIndexPath *)indexPath;

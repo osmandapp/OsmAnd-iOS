@@ -36,6 +36,7 @@
 #import "OAMapUtils.h"
 #import "OAResultMatcher.h"
 #import "OATopIndexFilter.h"
+#import "OACollatorStringMatcher.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IObfsCollection.h>
@@ -56,6 +57,7 @@
 #include <OsmAndCore/ICU.h>
 #include <OsmAndCore/Search/CommonWords.h>
 #include <GeographicLib/GeoCoords.hpp>
+#include <OsmAndCore/CollatorStringMatcher.h>
 
 #define OLC_RECALC_DISTANCE_THRESHOLD 100000 // 100 km
 
@@ -1279,6 +1281,8 @@
     NSString *search = [phrase getUnknownSearchPhrase];
     bool complete = [phrase isFirstUnknownSearchWordComplete];
     NSMutableArray<OATopIndexMatch *> *matches = [[NSMutableArray alloc] init];
+    OANameStringMatcher *nm = [[OANameStringMatcher alloc] initWithNamePart:search mode:CHECK_ONLY_STARTS_WITH];
+    QString qsearch = QString::fromNSString(search);
     
     for (const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(poiSubtypes)))
     {
@@ -1296,30 +1300,24 @@
             translate = [self getTopIndexTranslation:s];
             if (complete)
             {
-                OACollatorStringMatcher *csm = [[OACollatorStringMatcher alloc] initWithPart:s mode:CHECK_ONLY_STARTS_WITH];
-                if ([csm matches:search])
+                if (OsmAnd::CollatorStringMatcher::cmatches(qsearch, QString::fromNSString(s), OsmAnd::StringMatcherMode::CHECK_ONLY_STARTS_WITH))
                 {
                     topIndexValue = s;
                     break;
                 }
                 else
                 {
-                    csm = [[OACollatorStringMatcher alloc] initWithPart:translate mode:CHECK_ONLY_STARTS_WITH];
-                    if ([csm matches:search])
+                    if (OsmAnd::CollatorStringMatcher::cmatches(qsearch, QString::fromNSString(translate), OsmAnd::StringMatcherMode::CHECK_ONLY_STARTS_WITH))
                     {
                         topIndexValue = s;
                         break;
                     }
                 }
             }
-            else
+            else if ([nm matches:s] || [nm matches:translate])
             {
-                OANameStringMatcher *nm = [[OANameStringMatcher alloc] initWithNamePart:search mode:CHECK_ONLY_STARTS_WITH];
-                if ([nm matches:s] || [nm matches:translate])
-                {
-                    topIndexValue = s;
-                    break;
-                }
+                topIndexValue = s;
+                break;
             }
         }
         if (topIndexValue != nil)

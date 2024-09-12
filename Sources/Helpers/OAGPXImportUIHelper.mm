@@ -183,7 +183,8 @@ static UIViewController *parentController;
                 if (openGpxView)
                 {
                     [self doPush];
-                    [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpx];
+                    // FIXME:
+                   // [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpx];
                 }
             });
         };
@@ -197,7 +198,8 @@ static UIViewController *parentController;
                 if (openGpxView)
                 {
                     [self doPush];
-                    [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpx];
+                    // FIXME:
+                   // [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpx];
                 }
             });
         };
@@ -338,7 +340,8 @@ static UIViewController *parentController;
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self doPush];
-            [[OARootViewController instance].mapPanel openTargetViewWithGPX:item];
+            // FIXME:
+           // [[OARootViewController instance].mapPanel openTargetViewWithGPX:item];
         });
     }
 }

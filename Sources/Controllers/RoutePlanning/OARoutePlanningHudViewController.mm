@@ -717,9 +717,10 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
             else
             {
                 state.openedFromTrackMenu = NO;
-                [_mapPanel openTargetViewWithGPX:[[OAGPXDatabase sharedDb] getGPXItem:_fileName]
-                                    trackHudMode:EOATrackMenuHudMode
-                                           state:state];
+                // FIXME:
+//                [_mapPanel openTargetViewWithGPX:[[OAGPXDatabase sharedDb] getGPXItem:_fileName]
+//                                    trackHudMode:EOATrackMenuHudMode
+//                                           state:state];
             }
         }
     }];

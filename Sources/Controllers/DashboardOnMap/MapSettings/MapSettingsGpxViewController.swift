@@ -487,7 +487,8 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     
     private func onTrackOpenClicked(track: OAGPX) {
         guard let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty else { return }
-        rootVC?.mapPanel.openTargetViewWithGPX(fromTracksList: track, navControllerHistory: newCurrentHistory, fromTrackMenu: false, selectedTab: .overviewTab)
+        // FIXME:
+//        rootVC?.mapPanel.openTargetViewWithGPX(fromTracksList: track, navControllerHistory: newCurrentHistory, fromTrackMenu: false, selectedTab: .overviewTab)
     }
     
     private func onTrackAppearenceClicked(track: OAGPX) {
@@ -496,7 +497,8 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         state.openedFromTracksList = true
         state.gpxFilePath = track.gpxFilePath
         state.navControllerHistory = newCurrentHistory
-        rootVC?.mapPanel.openTargetView(with: track, trackHudMode: .appearanceHudMode, state: state)
+        // FIXME:
+      //  rootVC?.mapPanel.openTargetView(with: track, trackHudMode: .appearanceHudMode, state: state)
     }
     
     private func onTrackNavigationClicked(track: OAGPX) {

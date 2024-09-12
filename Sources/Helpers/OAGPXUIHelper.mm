@@ -699,7 +699,8 @@
         {
             [_exportingHostVC dismissViewControllerAnimated:YES completion:^{
                 [OARootViewController.instance.mapPanel targetHideContextPinMarker];
-                [OARootViewController.instance.mapPanel openTargetViewWithGPX:gpx];
+                // FIXME:
+               // [OARootViewController.instance.mapPanel openTargetViewWithGPX:gpx];
             }];
         }
     }

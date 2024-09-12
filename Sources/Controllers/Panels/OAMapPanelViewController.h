@@ -138,19 +138,19 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu saveState:(BOOL)saveState;
 
 - (void) openRecordingTrackTargetView;
-- (void) openTargetViewWithGPX:(OAGPX *)item;
-- (void) openTargetViewWithGPX:(OAGPX *)item selectedTab:(EOATrackMenuHudTab)selectedTab selectedStatisticsTab:(EOATrackMenuHudSegmentsStatisticsTab)selectedStatisticsTab openedFromMap:(BOOL)openedFromMap;
+- (void) openTargetViewWithGPX:(OASGpxDataItem *)item;
+- (void) openTargetViewWithGPX:(OASGpxDataItem *)item selectedTab:(EOATrackMenuHudTab)selectedTab selectedStatisticsTab:(EOATrackMenuHudSegmentsStatisticsTab)selectedStatisticsTab openedFromMap:(BOOL)openedFromMap;
 
-- (void) openTargetViewWithGPX:(OAGPX *)item
+- (void) openTargetViewWithGPX:(OASGpxDataItem *)item
                   trackHudMode:(EOATrackHudMode)trackHudMode
                          state:(OATrackMenuViewControllerState *)state;
 
-- (void)openTargetViewWithGPX:(OAGPX *)item
-                        items:(nullable NSArray<OAGPX *> *)items
+- (void)openTargetViewWithGPX:(OASGpxDataItem *)item
+                        items:(nullable NSArray<OASGpxDataItem *> *)items
                  trackHudMode:(EOATrackHudMode)trackHudMode
                         state:(OATrackMenuViewControllerState *)state;
 
-- (void)openTargetViewWithGPXFromTracksList:(OAGPX *)item
+- (void)openTargetViewWithGPXFromTracksList:(OASGpxDataItem *)item
                        navControllerHistory:(NSArray<UIViewController *> *)navControllerHistory
                               fromTrackMenu:(BOOL)fromTrackMenu
                                 selectedTab:(EOATrackMenuHudTab)selectedTab;
@@ -173,14 +173,14 @@ NS_ASSUME_NONNULL_BEGIN
                                             isCurrentTrack:(BOOL)isCurrentTrack
                                                      state:(OATrackMenuViewControllerState *)state;
 - (void) openTargetViewWithMovableTarget:(OATargetPoint *)targetPoint;
-- (void) openTargetViewWithNewGpxWptMovableTarget:(OAGPX *)gpx
+- (void) openTargetViewWithNewGpxWptMovableTarget:(OASGpxDataItem *)gpx
                                  menuControlState:(OATargetMenuViewControllerState *)menuControlState;
 - (void) openTargetViewWithTransportRouteDetails:(NSInteger)routeIndex showFullScreen:(BOOL)showFullScreeen;
 - (void) openTargetViewWithDownloadMapSource:(BOOL)pushed;
 
 - (BOOL) hasGpxActiveTargetType;
 
-- (void) displayGpxOnMap:(OAGPX *)item;
+- (void) displayGpxOnMap:(OASGpxDataItem *)item;
 
 - (BOOL) goToMyLocationIfInArea:(CLLocationCoordinate2D)topLeft
                     bottomRight:(CLLocationCoordinate2D)bottomRight;
@@ -258,10 +258,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)detachFromCarPlayWindow;
 
 
-- (void)openTargetViewWithNewGPXFromTracksList:(OASGpxDataItem *)item
-                       navControllerHistory:(NSArray<UIViewController *> *)navControllerHistory
-                              fromTrackMenu:(BOOL)fromTrackMenu
-                                   selectedTab:(EOATrackMenuHudTab)selectedTab;
+//- (void)openTargetViewWithNewGPXFromTracksList:(OASGpxDataItem *)item
+//                       navControllerHistory:(NSArray<UIViewController *> *)navControllerHistory
+//                              fromTrackMenu:(BOOL)fromTrackMenu
+//                                   selectedTab:(EOATrackMenuHudTab)selectedTab;
 
 @end
  

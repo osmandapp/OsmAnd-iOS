@@ -7,6 +7,7 @@
 //
 
 #import "OABaseScrollableHudViewController.h"
+#import "OsmAndSharedWrapper.h"
 
 #define kCellType @"type"
 #define kCellTitle @"title"
@@ -87,7 +88,8 @@ typedef NS_ENUM(NSUInteger, EOATrackHudMode)
 
 @interface OABaseTrackMenuHudViewController : OABaseScrollableHudViewController
 
-@property (nonatomic, readonly) OAGPX *gpx;
+@property (nonatomic, readonly) OASGpxDataItem *gpx;
+// FIXME:
 @property (nonatomic, readonly) OAGPXMutableDocument *doc;
 @property (nonatomic, readonly) OAGPXTrackAnalysis *analysis;
 @property (nonatomic, readonly) BOOL isCurrentTrack;
@@ -99,7 +101,7 @@ typedef NS_ENUM(NSUInteger, EOATrackHudMode)
 @property (weak, nonatomic, readonly) OAMapPanelViewController *mapPanelViewController;
 @property (weak, nonatomic, readonly) OAMapViewController *mapViewController;
 
-- (instancetype)initWithGpx:(OAGPX *)gpx;
+- (instancetype)initWithGpx:(OASGpxDataItem *)gpx;
 
 - (void)updateGpxData:(BOOL)replaceGPX updateDocument:(BOOL)updateDocument;
 - (void)updateAnalysis;

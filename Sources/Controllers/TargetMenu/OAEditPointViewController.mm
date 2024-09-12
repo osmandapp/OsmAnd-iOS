@@ -983,10 +983,11 @@
             OATrackMenuViewControllerState *state = (OATrackMenuViewControllerState *) _targetMenuState;
             state.openedFromTrackMenu = NO;
             OAGPXDatabase *db = [OAGPXDatabase sharedDb];
-            [[OARootViewController instance].mapPanel openTargetViewWithGPX:[db getGPXItem:[
-                    [db getFileDir:self.gpxFileName] stringByAppendingPathComponent:self.gpxFileName.lastPathComponent]]
-                                                               trackHudMode:EOATrackMenuHudMode
-                                                                      state:state];
+            // FIXME:
+//            [[OARootViewController instance].mapPanel openTargetViewWithGPX:[db getGPXItem:[
+//                    [db getFileDir:self.gpxFileName] stringByAppendingPathComponent:self.gpxFileName.lastPathComponent]]
+//                                                               trackHudMode:EOATrackMenuHudMode
+//                                                                      state:state];
         }
     }];
 }

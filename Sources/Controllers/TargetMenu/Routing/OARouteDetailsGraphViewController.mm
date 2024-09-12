@@ -419,9 +419,10 @@
         {
             _trackMenuControlState.openedFromTrackMenu = NO;
             [[OARootViewController instance].mapPanel targetHideMenu:0.3 backButtonClicked:YES onComplete:^{
-                [[OARootViewController instance].mapPanel openTargetViewWithGPX:[[OAGPXDatabase sharedDb] getGPXItem:_trackMenuControlState.gpxFilePath]
-                                                                   trackHudMode:EOATrackMenuHudMode
-                                                                          state:_trackMenuControlState];
+                // FIXME:
+//                [[OARootViewController instance].mapPanel openTargetViewWithGPX:[[OAGPXDatabase sharedDb] getGPXItem:_trackMenuControlState.gpxFilePath]
+//                                                                   trackHudMode:EOATrackMenuHudMode
+//                                                                          state:_trackMenuControlState];
             }];
         }
     }

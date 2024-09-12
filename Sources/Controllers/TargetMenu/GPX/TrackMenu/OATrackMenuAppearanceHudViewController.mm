@@ -149,48 +149,24 @@ static const NSInteger kColorsSection = 1;
     LeftIconRightStackTitleDescriptionButtonView *_trackView3DEmptyView;
 }
 
-//- (instancetype)initWithGpx:(OAGPX *)gpx state:(OATrackMenuViewControllerState *)state
-//{
-//    self = [super initWithGpx:gpx];
-//    if (self)
-//    {
-//        _reopeningTrackMenuState = state;
-//    }
-//    return self;
-//}
-
-//- (instancetype)initWithGpx:(OAGPX *)gpx tracks:(NSArray<OAGPX *> *)tracks state:(OATrackMenuViewControllerState *)state
-//{
-//    self = [super initWithGpx:gpx];
-//    if (self)
-//    {
-//        _wholeFolderTracks = tracks;
-//        _reopeningTrackMenuState = state;
-//        [self setOldValues];
-//    }
-//    return self;
-//}
-
-- (instancetype)initWithNewGpx:(OASGpxDataItem *)gpx state:(OATrackMenuViewControllerState *)state {
-    // FIXME:
-//    self = [super initWithGpx:gpx];
-//    if (self)
-//    {
-//        _reopeningTrackMenuState = state;
-//    }
-//    return self;
+- (instancetype)initWithGpx:(OASGpxDataItem *)gpx state:(OATrackMenuViewControllerState *)state {
+    self = [super initWithGpx:gpx];
+    if (self)
+    {
+        _reopeningTrackMenuState = state;
+    }
+    return self;
 }
 
-- (instancetype)initWithNewGpx:(OASGpxDataItem *)gpx tracks:(NSArray<OASGpxDataItem *> *)tracks state:(OATrackMenuViewControllerState *)state {
-    // FIXME:
-//    self = [super initWithGpx:gpx];
-//    if (self)
-//    {
-//        _wholeFolderTracks = tracks;
-//        _reopeningTrackMenuState = state;
-//        [self setOldValues];
-//    }
-//    return self;
+- (instancetype)initWithGpx:(OASGpxDataItem *)gpx tracks:(NSArray<OASGpxDataItem *> *)tracks state:(OATrackMenuViewControllerState *)state {
+    self = [super initWithGpx:gpx];
+    if (self)
+    {
+        _wholeFolderTracks = tracks;
+        _reopeningTrackMenuState = state;
+        [self setOldValues];
+    }
+    return self;
 }
 
 - (NSString *)getNibName
@@ -1270,9 +1246,10 @@ static const NSInteger kColorsSection = 1;
                 else
                 {
                     weakSelf.reopeningTrackMenuState.openedFromTrackMenu = NO;
-                    [weakSelf.mapPanelViewController openTargetViewWithGPX:weakSelf.gpx
-                                                          trackHudMode:EOATrackMenuHudMode
-                                                                 state:weakSelf.reopeningTrackMenuState];
+                    // FIXME:
+//                    [weakSelf.mapPanelViewController openTargetViewWithGPX:weakSelf.gpx
+//                                                          trackHudMode:EOATrackMenuHudMode
+//                                                                 state:weakSelf.reopeningTrackMenuState];
                 }
             }
         }
@@ -1347,9 +1324,10 @@ static const NSInteger kColorsSection = 1;
             else
             {
                 weakSelf.reopeningTrackMenuState.openedFromTrackMenu = NO;
-                [weakSelf.mapPanelViewController openTargetViewWithGPX:weakSelf.gpx
-                                                      trackHudMode:EOATrackMenuHudMode
-                                                             state:weakSelf.reopeningTrackMenuState];
+                // FIXME:
+//                [weakSelf.mapPanelViewController openTargetViewWithGPX:weakSelf.gpx
+//                                                      trackHudMode:EOATrackMenuHudMode
+//                                                             state:weakSelf.reopeningTrackMenuState];
             }
         }
     }];
@@ -2235,9 +2213,10 @@ static const NSInteger kColorsSection = 1;
             state.openedFromTrackMenu = YES;
             state.scrollToSectionIndex = 3;
             [weakSelf.mapViewController hideContextPinMarker];
-            [weakSelf.mapPanelViewController openTargetViewWithGPX:weakSelf.gpx
-                                                  trackHudMode:EOATrackAppearanceHudMode
-                                                         state:state];
+            // FIXME:
+//            [weakSelf.mapPanelViewController openTargetViewWithGPX:weakSelf.gpx
+//                                                  trackHudMode:EOATrackAppearanceHudMode
+//                                                         state:state];
         };
         [self hide:YES duration:.2 onComplete:^{
             [OARootViewController.instance.mapPanel showScrollableHudViewController:controller];
@@ -2259,9 +2238,10 @@ static const NSInteger kColorsSection = 1;
             state.openedFromTrackMenu = YES;
             state.scrollToSectionIndex = 3;
             [weakSelf.mapViewController hideContextPinMarker];
-            [weakSelf.mapPanelViewController openTargetViewWithGPX:weakSelf.gpx
-                                                      trackHudMode:EOATrackAppearanceHudMode
-                                                             state:state];
+            // FIXME:
+//            [weakSelf.mapPanelViewController openTargetViewWithGPX:weakSelf.gpx
+//                                                      trackHudMode:EOATrackAppearanceHudMode
+//                                                             state:state];
         };
         [self hide:YES duration:.2 onComplete:^{
             [OARootViewController.instance.mapPanel showScrollableHudViewController:controller];
@@ -2295,8 +2275,8 @@ static const NSInteger kColorsSection = 1;
             [self.doc setColoringType:[self.settings.currentTrackColoringType get].name];
             [self.doc setColor:[self.settings.currentTrackColor get]];
         }
-        
-        [self.gpx resetAppearanceToOriginal];
+        // FIXME:
+      //  [self.gpx resetAppearanceToOriginal];
         [self updateAllValues];
         
         if (self.isCurrentTrack)

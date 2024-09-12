@@ -312,7 +312,7 @@ std::string preferredLanguage;
             if (exitInfo != nil && exitInfo.ref.length > 0 && [_settings.speakExitNumberNames get])
             {
                 NSString *stringRef = [self getSpeakableExitRef:exitInfo.ref];
-                [play takeExit:tParam dist:dist exitString:stringRef exitInt:[self getIntRef:exitInfo.ref] streetName:[self getSpeakableExitName:next exitInfo:exitInfo includeDest:YES]];
+                [play takeExit:tParam dist:dist exitString:stringRef exitInt:[self getIntRef:exitInfo.ref] streetName:[self getSpeakableExitName:next exitInfo:exitInfo]];
             }
             else
             {
@@ -415,7 +415,7 @@ std::string preferredLanguage;
         if (tParam && exitInfo && exitInfo.ref && exitInfo.ref.length > 0 && [_settings.speakExitNumberNames get])
         {
             NSString *stringRef = [self getSpeakableExitRef:exitInfo.ref];
-            [[p then] takeExit:tParam exitString:stringRef exitInt:[self getIntRef:exitInfo.ref] streetName:[self getSpeakableExitName:next exitInfo:exitInfo includeDest:YES]];
+            [[p then] takeExit:tParam exitString:stringRef exitInt:[self getIntRef:exitInfo.ref] streetName:[self getSpeakableExitName:next exitInfo:exitInfo]];
         }
     }
 }
@@ -442,7 +442,7 @@ std::string preferredLanguage;
             if (exitInfo != nil && exitInfo.ref.length > 0 && [_settings.speakExitNumberNames get])
             {
                 NSString *stringRef = [self getSpeakableExitRef:exitInfo.ref];
-                [play takeExit:tParam exitString:stringRef exitInt:[self getIntRef:exitInfo.ref] streetName:[self getSpeakableExitName:nextInfo exitInfo:exitInfo includeDest:!suppressDest]];
+                [play takeExit:tParam exitString:stringRef exitInt:[self getIntRef:exitInfo.ref] streetName:[self getSpeakableExitName:nextInfo exitInfo:exitInfo]];
             }
             else
             {
@@ -698,7 +698,7 @@ std::string preferredLanguage;
     }
 }
 
-- (NSDictionary *) getSpeakableExitName:(OARouteDirectionInfo *)routeInfo exitInfo:(OAExitInfo *)exitInfo includeDest:(BOOL)includeDest
+- (NSDictionary *) getSpeakableExitName:(OARouteDirectionInfo *)routeInfo exitInfo:(OAExitInfo *)exitInfo
 {
     NSMutableDictionary<NSString *, NSString *> *result = [NSMutableDictionary new];
     if (!exitInfo || ![_settings.speakStreetNames get])

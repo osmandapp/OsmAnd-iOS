@@ -12,7 +12,7 @@ import UIKit
 final class MarkerDisplayOptionWrapper: NSObject {
     
     static func allValues() -> [MarkerDisplayOption] {
-        return [.off, .resting, .navigation, .restingNavigation]
+        MarkerDisplayOption.allCases
     }
     
     static func off() -> MarkerDisplayOption {

@@ -114,7 +114,6 @@ final class IconCollectionHandler: OABaseCollectionHandler, OAIconCollectionDele
         var vc: OAColorCollectionViewController?
         if !iconImagesData.isEmpty {
             vc = OAColorCollectionViewController(collectionType: EOAColorCollectionTypeBigIconItems, items: iconNamesData[0], selectedItem: getSelectedItem())
-            vc?.setImages(iconImagesData[0])
         } else {
             vc = OAColorCollectionViewController(collectionType: EOAColorCollectionTypeIconItems, items: iconNamesData[0], selectedItem: getSelectedItem())
         }

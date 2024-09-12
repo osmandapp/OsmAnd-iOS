@@ -525,6 +525,7 @@
 		460C1E702BFC9B490090D67B /* QuickActionIds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460C1E6F2BFC9B490090D67B /* QuickActionIds.swift */; };
 		460E9AC12B71111000411854 /* CloudTrashItemMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460E9AC02B71111000411854 /* CloudTrashItemMenuViewController.swift */; };
 		4611DF3A28569C5000885FD1 /* OASubscriptionBannerCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4611DF3928569C5000885FD1 /* OASubscriptionBannerCardView.xib */; };
+		46132FB02C904D1A00C9F364 /* DisplayPositionAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46132FAF2C904D1A00C9F364 /* DisplayPositionAction.swift */; };
 		4613BFA62A93DECC004385FB /* ic_custom_screen_side_right_48@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4613BF9E2A93DECA004385FB /* ic_custom_screen_side_right_48@2x.png */; };
 		4613BFA72A93DECC004385FB /* ic_custom_screen_side_bottom_48@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4613BF9F2A93DECA004385FB /* ic_custom_screen_side_bottom_48@2x.png */; };
 		4613BFA82A93DECC004385FB /* ic_custom_screen_side_right_48@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4613BFA02A93DECA004385FB /* ic_custom_screen_side_right_48@3x.png */; };
@@ -3960,6 +3961,7 @@
 		460C1E6F2BFC9B490090D67B /* QuickActionIds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickActionIds.swift; sourceTree = "<group>"; };
 		460E9AC02B71111000411854 /* CloudTrashItemMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudTrashItemMenuViewController.swift; sourceTree = "<group>"; };
 		4611DF3928569C5000885FD1 /* OASubscriptionBannerCardView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OASubscriptionBannerCardView.xib; sourceTree = "<group>"; };
+		46132FAF2C904D1A00C9F364 /* DisplayPositionAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayPositionAction.swift; sourceTree = "<group>"; };
 		4613BF9E2A93DECA004385FB /* ic_custom_screen_side_right_48@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_screen_side_right_48@2x.png"; path = "Resources/Icons/ic_custom_screen_side_right_48@2x.png"; sourceTree = "<group>"; };
 		4613BF9F2A93DECA004385FB /* ic_custom_screen_side_bottom_48@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_screen_side_bottom_48@2x.png"; path = "Resources/Icons/ic_custom_screen_side_bottom_48@2x.png"; sourceTree = "<group>"; };
 		4613BFA02A93DECA004385FB /* ic_custom_screen_side_right_48@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_screen_side_right_48@3x.png"; path = "Resources/Icons/ic_custom_screen_side_right_48@3x.png"; sourceTree = "<group>"; };
@@ -11073,6 +11075,7 @@
 				323F04CB2C6579C30058DD78 /* ShowHideRunningRoutesAction.swift */,
 				323F04C32C656B970058DD78 /* ShowHideSkiSlopesAction.swift */,
 				323F04C72C6577340058DD78 /* ShowHideWhitewaterSportsAction.swift */,
+				46132FAF2C904D1A00C9F364 /* DisplayPositionAction.swift */,
 			);
 			path = Actions;
 			sourceTree = "<group>";
@@ -16712,6 +16715,7 @@
 				C589BC9F2C610560002769F6 /* OATwoIconsButtonTableViewCell.swift in Sources */,
 				32E6C7C82AB9BE1A00821F1E /* TravelSearchHelper.swift in Sources */,
 				DA5A840E26C563A800F274C7 /* OAGpxWptEditingHandler.mm in Sources */,
+				46132FB02C904D1A00C9F364 /* DisplayPositionAction.swift in Sources */,
 				323F04C22C65639B0058DD78 /* ShowHideDifficultyClassificationAction.swift in Sources */,
 				DA5A84A126C563A900F274C7 /* OAApplyGpxApproximationCommand.mm in Sources */,
 				DA5A841626C563A800F274C7 /* OAGPXWptViewController.mm in Sources */,

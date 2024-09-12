@@ -122,6 +122,15 @@ let languageDict = [
 var allLanguagesDict = languageDict
 allLanguagesDict["en"] = ""
 
+func trim(string: String, from index: Int) -> String {
+    return string.substring(from: string.index(string.startIndex, offsetBy: index))
+}
+
+func charFrom(string: String, at index: Int) -> String {
+    let charIndex = string.index(string.startIndex, offsetBy: index)
+    return String(string[charIndex])
+}
+
 
 
 class Main {
@@ -281,6 +290,18 @@ class IOSReader {
         var updatedDict = androidDict
         for elem in updatedDict {
             var modString = elem.value;
+            
+            // XMLParserDelegate() is working with bug since MacOS 15.
+            // Here is fix, reverting "%1$s- %2$s" back to "%1$ - %2$s"
+            modString = modString.replacingOccurrences(of: "$s—", with: "$s —")
+            modString = modString.replacingOccurrences(of: "$s–", with: "$s –")
+            modString = modString.replacingOccurrences(of: "$s—", with: "$s —")
+            modString = modString.replacingOccurrences(of: "$s•", with: "$s •")
+            modString = modString.replacingOccurrences(of: "$s/%", with: "$s / %")
+            
+            if (modString.hasPrefix("%1$s") && charFrom(string: modString, at: 4) != " " && charFrom(string: modString, at: 4) != ",") {
+                modString = modString.replacingOccurrences(of: "%1$s", with: "%1$s ")
+            }
             
             for i in 1 ..< 10 {
                 let pattern = "%" + String(i) + "$"

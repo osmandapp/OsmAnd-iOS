@@ -273,6 +273,7 @@
             _colorCollectionHandler.hostColorHandler = _hostColorHandler;
             _colorCollectionHandler.delegate = self;
             _colorCollectionHandler.hostVC = self;
+            _colorCollectionHandler.hostCell = cell;
             _colorCollectionHandler.hostVCOpenColorPickerButton = self.navigationItem.rightBarButtonItem.customView;
             [_colorCollectionHandler setScrollDirection:UICollectionViewScrollDirectionVertical];
             [_colorCollectionHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:[_colorItems indexOfObject:_selectedColorItem] inSection:0]];

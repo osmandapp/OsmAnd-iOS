@@ -153,6 +153,12 @@
 {
     self.contentView.frame = self.bounds;
     [self.contentView layoutIfNeeded];
+    self.collectionViewHeight.constant = [self calculateContentHeight];
+    return [self.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
+}
+
+- (CGFloat) calculateContentHeight
+{
     CGFloat height = self.collectionView.contentSize.height;
     if (_collectionHandler)
     {
@@ -168,8 +174,12 @@
                 height = rowsCount * (height + self.collectionStackView.spacing);
         }
     }
-    self.collectionViewHeight.constant = height;
-    return [self.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
+    return height;
+}
+
+- (BOOL) needUpdateHeight
+{
+    return [self calculateContentHeight] != self.collectionViewHeight.constant;
 }
 
 - (UIContextMenuConfiguration *)collectionView:(UICollectionView *)collectionView

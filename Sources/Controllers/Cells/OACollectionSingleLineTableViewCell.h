@@ -36,4 +36,6 @@
 - (void)configureTopOffset:(CGFloat)top;
 - (void)configureBottomOffset:(CGFloat)bottom;
 
+- (BOOL) needUpdateHeight;
+
 @end

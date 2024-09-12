@@ -8,6 +8,7 @@
 
 #import "OAColorCollectionHandler.h"
 #import "OAColorsCollectionViewCell.h"
+#import "OACollectionSingleLineTableViewCell.h"
 #import "OAAppSettings.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
@@ -121,6 +122,9 @@
                                                         : UICollectionViewScrollPositionCenteredVertically
                                            animated:YES];
         }
+        
+        if (weakSelf.hostCell && [weakSelf.hostCell needUpdateHeight])
+            [weakSelf.delegate reloadCollectionData];
     }];
 }
 

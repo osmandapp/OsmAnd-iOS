@@ -10,7 +10,7 @@
 #import "OASuperViewController.h"
 #import "OAColorCollectionViewController.h"
 
-@class OAColorItem;
+@class OAColorItem, OACollectionSingleLineTableViewCell;
 
 @protocol OAColorsCollectionCellDelegate <OACollectionCellDelegate>
 
@@ -24,6 +24,7 @@
 
 @property (nonatomic, weak) id<OACollectionCellDelegate> delegate;
 @property (weak, nonatomic) OASuperViewController *hostVC;
+@property (weak, nonatomic) OACollectionSingleLineTableViewCell *hostCell;
 @property (weak, nonatomic) UIView *hostVCOpenColorPickerButton;
 
 @property (nonatomic) BOOL isOpenedFromAllColorsScreen;

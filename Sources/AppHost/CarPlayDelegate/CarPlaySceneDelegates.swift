@@ -93,12 +93,14 @@ final class CarPlaySceneDelegate: UIResponder {
     
     private func configureCarPlaySettings(initialAppMode: OAApplicationMode) {
         guard let settings = OAAppSettings.sharedManager(), let routingHelper = OARoutingHelper.sharedInstance() else { return }
+        var carPlayMode: OAApplicationMode?
         if settings.isCarPlayModeDefault.get() {
-            let carPlayMode = findAppropriateCarMode(defaultAppMode: initialAppMode)
-            settings.setApplicationModePref(carPlayMode, markAsLastUsed: false)
-            routingHelper.setAppMode(carPlayMode)
+            carPlayMode = findAppropriateCarMode(defaultAppMode: initialAppMode)
         } else {
-            let carPlayMode = settings.carPlayMode.get()
+            carPlayMode = settings.carPlayMode.get()
+        }
+        
+        if let carPlayMode {
             settings.setApplicationModePref(carPlayMode, markAsLastUsed: false)
             routingHelper.setAppMode(carPlayMode)
         }
@@ -112,9 +114,9 @@ final class CarPlaySceneDelegate: UIResponder {
     }
     
     private func findAppropriateCarMode(defaultAppMode: OAApplicationMode) -> OAApplicationMode? {
-        if !OAApplicationMode.isAppModeDerived(fromCar: defaultAppMode) {
+        if !defaultAppMode.isDerivedRouting(from: OAApplicationMode.car()) {
             let availableAppModes = OAApplicationMode.values() ?? []
-            for appMode in availableAppModes where OAApplicationMode.isAppModeDerived(fromCar: appMode) {
+            for appMode in availableAppModes where appMode.isDerivedRouting(from: OAApplicationMode.car()) {
                 return appMode
             }
         }

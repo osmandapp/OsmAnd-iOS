@@ -7,15 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
-//#import <OsmAndShared/OsmAndShared.h>
 
 NS_ASSUME_NONNULL_BEGIN
-//@class OASGpxFile;
 @interface OASharedUtil : NSObject
 
 + (void)initSharedLib:(NSString *)documentsPath gpxPath:(NSString *)gpxPath;
-+ (void)fooGPXDatabase:(NSString *)gpxFileName;
-//+ (OASGpxFile *)loadGpx:(NSString *)fileName;
 
 @end
 

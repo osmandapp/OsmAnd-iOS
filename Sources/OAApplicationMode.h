@@ -74,6 +74,7 @@
 - (BOOL) hasFastSpeed;
 - (int) getRouteTypeProfile;
 - (BOOL) isDerivedRoutingFrom:(OAApplicationMode *)mode;
++ (BOOL) isAppModeDerivedFromCar:(OAApplicationMode *)mode;
 
 /**
  * @return Distance in meters to use as a filter when the app goes into the background during a track recording

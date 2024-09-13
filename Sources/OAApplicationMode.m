@@ -810,6 +810,11 @@ static int PROFILE_TRUCK = 1000;
     return self == mode || _parent == mode;
 }
 
++ (BOOL) isAppModeDerivedFromCar:(OAApplicationMode *)mode
+{
+    return mode == _CAR || [mode isDerivedRoutingFrom:_CAR];
+}
+
 // returns modifiable ! Set<ApplicationMode> to exclude non-wanted derived
 + (NSSet<OAApplicationMode *> *) regWidgetVisibility:(NSString *)widgetId am:(NSArray<OAApplicationMode *> *)am
 {

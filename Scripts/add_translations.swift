@@ -16,7 +16,7 @@ let DEBUG = false
 let LOGGING = false
 
 ///For debug set here your Osmand repositories path
-let OSMAND_REPOSITORIES_PATH = "/Users/nnngrach/Documents/Projects/Coding/OsmAnd/"
+let OSMAND_REPOSITORIES_PATH = "/Users/nnngrach/Projects/Coding/OsmAnd/"
 
 
 var iosEnglishDict: [String : String] = [:]
@@ -121,6 +121,15 @@ let languageDict = [
 
 var allLanguagesDict = languageDict
 allLanguagesDict["en"] = ""
+
+func trim(string: String, from index: Int) -> String {
+    return string.substring(from: string.index(string.startIndex, offsetBy: index))
+}
+
+func charFrom(string: String, at index: Int) -> String {
+    let charIndex = string.index(string.startIndex, offsetBy: index)
+    return String(string[charIndex])
+}
 
 
 
@@ -281,6 +290,7 @@ class IOSReader {
         var updatedDict = androidDict
         for elem in updatedDict {
             var modString = elem.value;
+            modString = modString.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
             
             for i in 1 ..< 10 {
                 let pattern = "%" + String(i) + "$"
@@ -564,7 +574,7 @@ class Parser: NSObject, XMLParserDelegate {
     }
 
     func parser(_ parser: XMLParser, foundCharacters string: String) {
-        let data = string.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+        let data = String(string)
         if (!data.isEmpty) {
             value += data
         }
@@ -615,10 +625,14 @@ class RoutingParamsHelper {
         }
         let androidURL = URL(fileURLWithPath: "../android/OsmAnd/res/values" + myLang + "/strings.xml")
         let myparser = Parser()
-        let androidDict = myparser.myparser(path: androidURL)
-        for elem in androidDict {
-            if elem.key.hasPrefix("routeInfo_") || elem.key.hasPrefix("routing_attr_") || elem.key.hasPrefix("rendering_attr_") || elem.key.hasPrefix("rendering_value_") {
-                routeDict[elem.key] = elem.value
+        var androidDict = myparser.myparser(path: androidURL)
+        for key in androidDict.keys {
+            if var value = androidDict[key] {
+                value = value.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+                androidDict[key] = value
+                if key.hasPrefix("routeInfo_") || key.hasPrefix("routing_attr_") || key.hasPrefix("rendering_attr_") || key.hasPrefix("rendering_value_") {
+                    routeDict[key] = value
+                }
             }
         }
         

@@ -179,7 +179,7 @@ static UIViewController *parentController;
                 
                 _newGpxName = [newName copy];
 
-                OAGPX *gpx = [self doImport:YES];
+                OASGpxDataItem *gpx = [self doImport:YES];
                 if (openGpxView)
                 {
                     [self doPush];
@@ -194,7 +194,7 @@ static UIViewController *parentController;
                 _newGpxName = nil;
                 [self removeFromDB];
 
-                OAGPX *gpx = [self doImport:YES];
+                OASGpxDataItem *gpx = [self doImport:YES];
                 if (openGpxView)
                 {
                     [self doPush];
@@ -288,7 +288,7 @@ static UIViewController *parentController;
 - (void) processUrl:(NSURL *)url showAlerts:(BOOL)showAlerts openGpxView:(BOOL)openGpxView
 {
     _importUrl = [url copy];
-    OAGPX *item;
+    OASGpxDataItem *item;
     
     if ([_importUrl.pathExtension isEqualToString:KML_EXT])
         [self handleKmlImport:[NSData dataWithContentsOfURL:_importUrl]];
@@ -303,7 +303,9 @@ static UIViewController *parentController;
     _doc = [[OAGPXDocument alloc] initWithGpxFile:_importUrl.path];
     if (_doc)
     {
+        // _2024-07-30_.gpx
         NSString *fileName = [_importUrl.path lastPathComponent];
+        // 123/_2024-07-30_.gpx
         NSString *importDestFilepath = [_importGpxRelativePath stringByAppendingPathComponent:fileName];
         if ([[OAGPXDatabase sharedDb] containsGPXItem:importDestFilepath])
         {
@@ -367,9 +369,9 @@ static UIViewController *parentController;
     });
 }
 
--(OAGPX *)doImport:(BOOL)doRefresh
+- (OASGpxDataItem *)doImport:(BOOL)doRefresh
 {
-    OAGPX *item;
+    OASGpxDataItem *item;
     NSFileManager *fileManager = [NSFileManager defaultManager];
     if (![fileManager fileExistsAtPath:_importGpxPath])
         [fileManager createDirectoryAtPath:_importGpxPath withIntermediateDirectories:YES attributes:nil error:nil];
@@ -386,18 +388,21 @@ static UIViewController *parentController;
 
     if (_newGpxName)
     {
-        NSString *storingPathInFolder = [_importGpxRelativePath stringByAppendingPathComponent:_newGpxName];
-        item = [[OAGPXDatabase sharedDb] addGpxItem:storingPathInFolder title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds document:_doc];
+      //  NSString *storingPathInFolder = [_importGpxRelativePath stringByAppendingPathComponent:_newGpxName];
+        // FIXME: rename
+        item = [[OAGPXDatabase sharedDb] addGPXFileToDBIfNeeded:[_importGpxPath stringByAppendingPathComponent:[self getCorrectedFilename:[_importUrl.path lastPathComponent]]] withUpdateDataSource:YES];
     }
     else
     {
-        NSString *name = [self getCorrectedFilename:[_importUrl.path lastPathComponent]];
-        NSString *storingPathInFolder = [_importGpxRelativePath stringByAppendingPathComponent:name];
+//        NSString *name = [self getCorrectedFilename:[_importUrl.path lastPathComponent]];
+//        NSString *storingPathInFolder = [_importGpxRelativePath stringByAppendingPathComponent:name];
         // _doc.metadata.name - 2023-10-22_11-34_Sun
         // _doc.metadata.desc = <object returned empty description>
-        item = [[OAGPXDatabase sharedDb] addGpxItem:storingPathInFolder title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds document:_doc];
+       // storingPathInFolder = 123/_2024-07-30_.gpx
+      //  item = [[OAGPXDatabase sharedDb] addGpxItem:storingPathInFolder title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds document:_doc];
+        [[OAGPXDatabase sharedDb] addGPXFileToDBIfNeeded:[_importGpxPath stringByAppendingPathComponent:[self getCorrectedFilename:[_importUrl.path lastPathComponent]]] withUpdateDataSource:YES];
     }
-    [[OAGPXDatabase sharedDb] save];
+  //  [[OAGPXDatabase sharedDb] save];
     if (item.color != 0)
         [[OAGPXAppearanceCollection sharedInstance] getColorItemWithValue:item.color];
 

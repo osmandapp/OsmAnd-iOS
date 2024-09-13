@@ -7,7 +7,6 @@
 //
 
 #import "OABaseScrollableHudViewController.h"
-#import "OsmAndSharedWrapper.h"
 
 #define kCellType @"type"
 #define kCellTitle @"title"
@@ -33,7 +32,7 @@ typedef NS_ENUM(NSUInteger, EOATrackHudMode)
     EOATrackAppearanceHudMode,
 };
 
-@class OAGPX, OAGPXMutableDocument, OAGPXTrackAnalysis, OAMapPanelViewController, OAMapViewController, OASavingTrackHelper, OAAppSettings;
+@class OASGpxDataItem, OAGPXMutableDocument, OAGPXTrackAnalysis, OAMapPanelViewController, OAMapViewController, OASavingTrackHelper, OAAppSettings;
 
 @interface OAGPXBaseTableData : NSObject
 

@@ -38,7 +38,6 @@
 #import "OACloudAccountVerificationViewController.h"
 #import "OARootViewController.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
-//#import "OsmAndSharedWrapper.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <QDir>

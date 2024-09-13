@@ -19,8 +19,8 @@
 #import "OAGPXUIHelper.h"
 #import "OAPOI.h"
 #import "OAAppData.h"
-#import "OsmAndSharedWrapper.h"
 #import "OASharedUtil.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kDbName @"gpx.db"
 #define GPX_EXT @"gpx"
@@ -152,9 +152,6 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _sharedDb = [[OAGPXDatabase alloc] init];
-//        OASGpxDatabase *db = [[OASGpxDatabase alloc] init];
-//        
-//        NSArray<OASGpxDataItem *> *items = [db getGpxDataItems];
     });
     return _sharedDb;
 }
@@ -168,6 +165,7 @@
         _fetchLock = [[NSObject alloc] init];
         _db = [[OASGpxDatabase alloc] init];
         [self load];
+        [self newLoad];
     }
     return self;
 }
@@ -205,26 +203,6 @@
 - (OAGPX *) buildGpxItem:(NSString *)fileName path:(NSString *)filepath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document fetchNearestCity:(BOOL)fetchNearestCity
 {
     OAGPXTrackAnalysis *analysis = [document getAnalysis:0];
-    
-    // TEST
-//    OASKFile *file = [[OASKFile alloc] initWithFilePath:@"/Users/oleksandrpanchenko/Library/Developer/CoreSimulator/Devices/0F5BEB15-29C9-43D0-9576-113DE466349B/data/Containers/Data/Application/1D12CA79-6134-4BBE-AC30-F2BC3C0BCECA/Documents/GPX/import/2023-10-22_11-34_Sun.gpx"];
-//    OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
-//
-//    NSLog(@"GPX DB TEST - ADD");
-//    OASGpxDatabase *db = [[OASGpxDatabase alloc] init];
-//    OASGpxDataItem *item = [[OASGpxDataItem alloc] initWithFile:file];
-//    BOOL res = [db addItem:item];
-
-    NSLog(@"GPX DB TEST - GET");
-//    OASGpxDataItem *read = [db getGpxDataItemFile:file];
-//    OASGpxTrackAnalysis *analysisKotlin = [read getAnalysis];
-//    // (float) _totalDistance = 295919.656
-//    int totalDistance = analysis.totalDistance;
-//    //(long) _startTime = 1691937496
-//    int startTime = analysis.startTime;
-
-    
-    
 
     NSString *nearestCity;
     if (fetchNearestCity && analysis.locationStart)
@@ -434,7 +412,53 @@
    return EOAGPX3DLineVisualizationPositionTypeTop;
 }
 
--(OAGPX *)getGPXItem:(NSString *)filePath
+- (OASGpxDataItem *)getNewGPXItem:(NSString *)filePath
+{
+    for (OASGpxDataItem *item in self.gpxNewList)
+    {
+        if ([item.gpxFilePath isEqualToString:filePath])
+        {
+            return item;
+        }
+    }
+    return nil;
+}
+
+- (OASGpxDataItem *)getNewGPXItemByFileName:(NSString *)fileName
+{
+    for (OASGpxDataItem *item in self.gpxNewList)
+    {
+        if ([item.gpxFileName isEqualToString:fileName])
+        {
+            return item;
+        }
+    }
+    return nil;
+}
+
+- (void)removeNewGpxItem:(NSString *)filePath
+{
+    OASGpxDataItem *gpx = [self getNewGPXItem:filePath];
+    if (!gpx)
+        gpx = [self getNewGPXItemByFileName:filePath];
+    if (gpx)
+    {
+        NSMutableArray *newGpxList = [_gpxNewList mutableCopy];
+        [newGpxList removeObject:gpx];
+        _gpxNewList = newGpxList;
+        
+        // Remove from DB
+        BOOL success = [_db removeFile:gpx.file];
+        NSString *status = success ? @"SUCCESS" : @"ERROR";
+        NSLog(@" [%@] remove from db | %@", status, gpx.file.path);
+        
+        // Remove local file
+        [[NSFileManager defaultManager] removeItemAtPath:gpx.file.absolutePath error:nil];
+    }
+}
+
+
+- (OAGPX *)getGPXItem:(NSString *)filePath
 {
     for (OAGPX *item in gpxList)
     {
@@ -502,9 +526,9 @@
     return creationDate;
 }
 
--(BOOL)containsGPXItem:(NSString *)filePath
+- (BOOL)containsGPXItem:(NSString *)filePath
 {
-    for (OAGPX *item in gpxList)
+    for (OASGpxDataItem *item in self.gpxNewList)
     {
         if ([item.gpxFilePath isEqualToString:filePath])
         {
@@ -594,7 +618,7 @@
                             NSURL *newFileUrl = [NSURL fileURLWithPath:[gpxPath stringByAppendingPathComponent:fileUrl.lastPathComponent]];
                             [fileManager moveItemAtURL:fileUrl toURL:newFileUrl error:nil];
                         }
-                        [self addGPXFileToDBIfNeeded:fileUrl.path];
+                        [self addGPXFileToDBIfNeeded:fileUrl.path withUpdateDataSource:YES];
                     }
                 }
             }
@@ -602,49 +626,9 @@
     }
 }
 
-//- (NSArray<OASGpxDataItem *> *_Nullable)loadNewGPXs
-//{
-//    @synchronized (_fetchLock)
-//    {
-//        NSFileManager *fileManager = [NSFileManager defaultManager];
-//        NSURL *documentsURL = [NSURL fileURLWithPath:OsmAndApp.instance.documentsPath];
-//        NSArray *keys = @[NSURLIsDirectoryKey];
-//        NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtURL:documentsURL
-//                                              includingPropertiesForKeys:keys
-//                                                                 options:0
-//                                                            errorHandler:^(NSURL *url, NSError *error) {
-//            return YES;
-//        }];
-//        NSString *gpxPath = OsmAndApp.instance.gpxPath;
-//        for (NSURL *url in enumerator)
-//        {
-//            NSURL *fileUrl = url.URLByResolvingSymlinksInPath;
-//            NSNumber *isDirectory = nil;
-//            if ([fileUrl isFileURL])
-//            {
-//                [fileUrl getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:nil];
-//                if ([isDirectory boolValue] && ![fileUrl.path hasPrefix:gpxPath])
-//                {
-//                    [enumerator skipDescendants];
-//                }
-//                else if (![isDirectory boolValue] &&
-//                        ([fileUrl.pathExtension.lowercaseString isEqualToString:GPX_EXT] ||
-//                                [fileUrl.pathExtension.lowercaseString isEqualToString:KML_EXT] ||
-//                                [fileUrl.pathExtension.lowercaseString isEqualToString:KMZ_EXT]) &&
-//                        ![fileUrl.lastPathComponent isEqualToString:@"favourites.gpx"])
-//                {
-//                    NSLog(@"%@", fileUrl.path);
-//                    [self addGPXFileToDBIfNeeded:fileUrl.path];
-//
-//                }
-//            }
-//        }
-//        NSArray<OASGpxDataItem *> *items = [_db getGpxDataItems];
-//        return items;
-//    }
-//}
-
-- (void)addGPXFileToDBIfNeeded:(NSString *)filePath {
+- (OASGpxDataItem *)addGPXFileToDBIfNeeded:(NSString *)filePath
+                      withUpdateDataSource:(BOOL)withUpdateDataSource
+{
     OASKFile *file = [[OASKFile alloc] initWithFilePath:filePath];
     OASGpxDataItem *dataItem;
     dataItem = [_db getGpxDataItemFile:file];
@@ -657,12 +641,16 @@
             dataItem = [[OASGpxDataItem alloc] initWithFile:file];
             [dataItem setAnalysisAnalysis:trackAnalysis];
             [dataItem readGpxParamsGpxFile:gpxFile];
-            NSString *dir = [dataItem getParameterParameter:OASGpxParameter.fileDir];
-            NSString *name = [dataItem getParameterParameter:OASGpxParameter.fileName];
 
             BOOL success = [_db addItem:dataItem];
             NSString *status = success ? @"SUCCESS" : @"ERROR";
             NSLog(@"[%@] added to db | %@", status, dataItem.file.path);
+            if (withUpdateDataSource)
+            {
+                NSArray<OASGpxDataItem *> *items = [_db getGpxDataItems];
+                _gpxNewList = items;
+            }
+            return dataItem;
         }
         else
         {
@@ -673,11 +661,73 @@
     {
         NSLog(@"[INFO] file: %@ | already exist", file.path);
     }
+    return nil;
 }
+
+- (NSArray<NSString *> *)findGPXFilesInDirectory:(NSString *)directoryPath {
+    NSMutableArray<NSString *> *result = [NSMutableArray array];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSURL *directoryURL = [NSURL fileURLWithPath:directoryPath];
+    
+    NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtURL:directoryURL
+                                              includingPropertiesForKeys:@[NSURLIsDirectoryKey]
+                                                                 options:0
+                                                            errorHandler:^BOOL(NSURL *url, NSError *error) {
+        NSLog(@"Error enumerating %@: %@", [url path], error);
+        return YES;
+    }];
+    
+    for (NSURL *fileURL in enumerator) {
+        NSError *error = nil;
+        NSNumber *isDirectory = nil;
+        [fileURL getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:&error];
+        
+        if (error) {
+            NSLog(@"Error getting resource value for %@: %@", [fileURL path], error);
+            continue;
+        }
+        
+        if (![isDirectory boolValue]) {
+            NSString *pathExtension = [fileURL pathExtension];
+            if ([pathExtension isEqualToString:GPX_EXT] || [pathExtension isEqualToString:KML_EXT] || [pathExtension isEqualToString:KMZ_EXT]) {
+                [result addObject:[fileURL path]];
+            }
+        }
+    }
+    
+    return [result copy];
+}
+
+- (void)newLoad
+{
+    NSArray<NSString *> *paths = [self findGPXFilesInDirectory:OsmAndApp.instance.gpxPath];
+    NSMutableSet<NSString *> *existingGpxPaths = [NSMutableSet set];
+    
+    for (NSString *filePath in paths) {
+        [self addGPXFileToDBIfNeeded:filePath withUpdateDataSource:false];
+        
+        if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
+        {
+            [existingGpxPaths addObject:filePath];
+        }
+    }
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        BOOL didAddFiles = [self addNewGPXFilesTest:existingGpxPaths];
+        
+        if (didAddFiles)
+        {
+            NSLog(@"newLoad:didAddFiles");
+        }
+        NSArray<OASGpxDataItem *> *items = [_db getGpxDataItems];
+       _gpxNewList = items;
+        [[NSNotificationCenter defaultCenter] postNotificationName:kGPXDBTracksLoaded object:self];
+    });
+}
+
 
 - (void)load
 {
-   // [[NSNotificationCenter defaultCenter] postNotificationName:kGPXDBTracksLoaded object:self];
     NSMutableArray *res = [NSMutableArray array];
     NSArray *dbContent = [NSArray arrayWithContentsOfFile:self.dbFilePath];
     NSString *gpxFolderPath = [OsmAndApp instance].gpxPath;
@@ -691,7 +741,7 @@
         {
             NSString *filePath = [gpxFilePath hasPrefix:gpxFolderPath] ? gpxFilePath : [gpxFolderPath stringByAppendingPathComponent:gpxFilePath];
             // add local gpx file to DB
-            [self addGPXFileToDBIfNeeded:filePath];
+           // [self addGPXFileToDBIfNeeded:filePath withUpdateDataSource:false];
         }
         
         // Creta
@@ -710,11 +760,8 @@
         }
     }
     gpxList = res;
-    NSArray<OASGpxDataItem *> *items = [_db getGpxDataItems];
-    _gpxListTest = items;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         BOOL didAddFiles = [self addNewGpxFiles:existingGpxPaths];
-        [self addNewGPXFilesTest:existingGpxPaths];
         if (didAddFiles)
         {
             [self save];

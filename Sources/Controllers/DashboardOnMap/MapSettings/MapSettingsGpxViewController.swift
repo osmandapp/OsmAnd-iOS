@@ -535,9 +535,10 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     private func onTrackUploadToOsmClicked(track: OAGPX) {
-        if let vc = OAOsmUploadGPXViewConroller(gpxItems: [track]) {
-            show(vc)
-        }
+        // FIXME:
+//        if let vc = OAOsmUploadGPXViewConroller(gpxItems: [track]) {
+//            show(vc)
+//        }
     }
     
     private func onTrackEditClicked(track: OAGPX) {

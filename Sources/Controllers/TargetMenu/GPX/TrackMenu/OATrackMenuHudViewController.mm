@@ -750,8 +750,9 @@
     CLLocation *newLocation = _app.locationServices.lastKnownLocation;
     if (!newLocation)
         return;
-    // FIXME: self.gpx.bounds.center
-    CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake(self.gpx.startLat, self.gpx.startLon);
+    OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:self.gpx.file];
+    auto rect = gpxFile.getRect;
+    CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake(rect.centerX, rect.centerY);
     if (_selectedTab == EOATrackMenuHudOverviewTab && CLLocationCoordinate2DIsValid(pinLocation))
     {
         CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;
@@ -1378,7 +1379,7 @@
     }
     if (time > 0)
     {
-        return [NSDateFormatter localizedStringFromDate:[NSDate dateWithTimeIntervalSince1970:time]
+        return [NSDateFormatter localizedStringFromDate:[NSDate dateWithTimeIntervalSince1970:time / 1000]
                                               dateStyle:NSDateFormatterMediumStyle
                                               timeStyle:NSDateFormatterNoStyle];
     }

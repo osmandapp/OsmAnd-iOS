@@ -17,7 +17,7 @@ extension GpxDataItem {
     
     func getNiceTitle() -> String {
         if newGpx {
-            return NSLocalizedString("create_new_trip", comment: "")
+            return localizedString("create_new_trip")
         }
         
         if gpxTitle != nil {
@@ -48,6 +48,155 @@ extension GpxDataItem {
             hiddenGroups?.insert(groupName)
         }
     }
+    
+    func updateFolderName(newFilePath: String) {
+      //  gpxFilePath = newFilePath
+        gpxFileName = (newFilePath as NSString).lastPathComponent
+        gpxTitle = (gpxFileName as NSString).deletingPathExtension
+        gpxFolderName = (newFilePath as NSString).deletingLastPathComponent
+    }
+    
+//    static func splitTypeByName(_ splitName: String) -> EOAGpxSplitType {
+//        switch splitName {
+//        case "":
+//            fallthrough
+//        case "no_split":
+//            return .none
+//        case "distance":
+//            return .distance
+//        case "time":
+//            return .time
+//        default:
+//            return .none
+//        }
+//    }
+//    
+//    static func splitTypeNameByValue(_ splitType: EOAGpxSplitType) -> String {
+//        switch splitType {
+//        case .distance:
+//            return "distance"
+//        case .time:
+//            return "time"
+//        case .none:
+//            return "no_split"
+//        default:
+//            return "no_split"
+//        }
+//    }
+    
+    static func lineVisualizationByTypeName(for type: EOAGPX3DLineVisualizationByType) -> String {
+        switch type {
+        case .altitude:
+            return "altitude"
+        case .speed:
+            return "speed"
+        case .heartRate:
+            return "hr"
+        case .bicycleCadence:
+            return "cad"
+        case .bicyclePower:
+            return "power"
+        case .temperature:
+            return "temp_sensor"
+        case .speedSensor:
+            return "speed_sensor"
+        case .fixedHeight:
+            return "fixed_height"
+        case .none:
+            return "none"
+        default:
+            return "none"
+        }
+    }
+    
+    static func lineVisualizationByType(forName name: String) -> EOAGPX3DLineVisualizationByType {
+        switch name {
+        case "altitude":
+            return .altitude
+        case "speed":
+            return .speed
+        case "hr":
+            return .heartRate
+        case "cad":
+            return .bicycleCadence
+        case "power":
+            return .bicyclePower
+        case "temp_sensor":
+            return .temperature
+        case "speed_sensor":
+            return .speedSensor
+        case "fixed_height":
+            return .fixedHeight
+        default:
+            return .none
+        }
+    }
+    
+    static func lineVisualizationWallColorTypeName(for type: EOAGPX3DLineVisualizationWallColorType) -> String {
+        switch type {
+        case .solid:
+            return "solid"
+        case .downwardGradient:
+            return "downward_gradient"
+        case .upwardGradient:
+            return "upward_gradient"
+        case .altitude:
+            return "altitude"
+        case .slope:
+            return "slope"
+        case .speed:
+            return "speed"
+        case .none:
+            return "none"
+        default:
+            return "none"
+        }
+    }
+    
+    static func lineVisualizationWallColorType(forName name: String) -> EOAGPX3DLineVisualizationWallColorType {
+        switch name {
+        case "none":
+            return .none
+        case "solid":
+            return .solid
+        case "downward_gradient":
+            return .downwardGradient
+        case "upward_gradient":
+            return .upwardGradient
+        case "altitude":
+            return .altitude
+        case "slope":
+            return .slope
+        case "speed":
+            return .speed
+        default:
+            return .upwardGradient
+        }
+    }
+    
+    static func lineVisualizationPositionTypeName(for type: EOAGPX3DLineVisualizationPositionType) -> String {
+        switch type {
+        case .bottom:
+            return "bottom"
+        case .topBottom:
+            return "top_bottom"
+        case .top:
+            return "top"
+        default:
+            return "top"
+        }
+    }
+    
+    static func lineVisualizationPositionType(for name: String) -> EOAGPX3DLineVisualizationPositionType {
+        switch name {
+        case "bottom":
+            return .bottom
+        case "top_bottom":
+            return .topBottom
+        default:
+            return .top
+        }
+    }
 }
 
 @objc(OASGpxDataItem)
@@ -72,17 +221,12 @@ extension GpxDataItem {
     }
     
     var gpxFilePath: String {
-        get {
-            let fileName = getParameter(parameter: .fileName) as? String ?? ""
-            let dir = getParameter(parameter: .fileDir) as? String ?? ""
-            print("dir: " + dir)
-            // TODO: check dir (import)
-            return dir + fileName
+        let fileName = getParameter(parameter: .fileName) as? String ?? ""
+        let dir = getParameter(parameter: .fileDir) as? String ?? ""
+        if !dir.isEmpty {
+            return dir + "/" + fileName
         }
-        set {
-            // FIXME:
-            //  setParameter(parameter: .fileDir, value: self)
-        }
+        return fileName
     }
     
     var creationDate: Date {
@@ -232,42 +376,36 @@ extension GpxDataItem {
         }
     }
     
-    // FIXME: convert from value "TEXT" to EOAGPX3DLineVisualizationByType
     var visualization3dByType: EOAGPX3DLineVisualizationByType {
         get {
-            let value = getParameter(parameter: .trackVisualizationType) as? String
-            return .none
+            let name = getParameter(parameter: .trackVisualizationType) as? String ?? ""
+            return Self.lineVisualizationByType(forName: name)
         }
         set {
-            // Convert self to string value // newValue
-            let value = ""
+            let value = Self.lineVisualizationByTypeName(for: newValue)
             setParameter(parameter: .trackVisualizationType, value: value)
         }
     }
     
-    // FIXME: convert from value "TEXT" to EOAGPX3DLineVisualizationWallColorType
     var visualization3dWallColorType: EOAGPX3DLineVisualizationWallColorType {
         get {
-            let value = getParameter(parameter: .track3dWallColoringType) as? String
-            return .none
+            let name = getParameter(parameter: .track3dWallColoringType) as? String ?? ""
+            return Self.lineVisualizationWallColorType(forName: name)
         }
         set {
-            // Convert self to string value
-            let value = ""
+            let value = Self.lineVisualizationWallColorTypeName(for: newValue)
             setParameter(parameter: .track3dWallColoringType, value: value)
         }
     }
     
-    // FIXME: convert from value "TEXT" to EOAGPX3DLineVisualizationPositionType
     var visualization3dPositionType: EOAGPX3DLineVisualizationPositionType {
         get {
-            let value = getParameter(parameter: .track3dLinePositionType) as? String
-            return .top
+            let name = getParameter(parameter: .track3dLinePositionType) as? String ?? ""
+            return Self.lineVisualizationPositionType(for: name)
         }
         set {
-            // Convert self to string value
-            let value = ""
-            setParameter(parameter: .track3dWallColoringType, value: value)
+            let value = Self.lineVisualizationPositionTypeName(for: newValue)
+            setParameter(parameter: .track3dLinePositionType, value: value)
         }
     }
     
@@ -334,10 +472,13 @@ extension GpxDataItem {
             setParameter(parameter: .colorPalette, value: newValue)
         }
     }
-    
+}
+
+@objc(OASGpxDataItem)
+extension GpxDataItem {
     var gpxTitle: String? {
         get {
-            return objc_getAssociatedObject(self, &gpxTitleKey) as? String
+            objc_getAssociatedObject(self, &gpxTitleKey) as? String
         }
         set {
             objc_setAssociatedObject(self, &gpxTitleKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
@@ -346,7 +487,7 @@ extension GpxDataItem {
     
     var newGpx: Bool {
         get {
-            return objc_getAssociatedObject(self, &newGpxKey) as? Bool ?? false
+            objc_getAssociatedObject(self, &newGpxKey) as? Bool ?? false
         }
         set {
             objc_setAssociatedObject(self, &newGpxKey, newValue, .OBJC_ASSOCIATION_ASSIGN)
@@ -355,7 +496,7 @@ extension GpxDataItem {
     
     var hiddenGroups: Set<String>? {
         get {
-            return objc_getAssociatedObject(self, &hiddenGroupsKey) as? Set<String>
+            objc_getAssociatedObject(self, &hiddenGroupsKey) as? Set<String>
         }
         set {
             objc_setAssociatedObject(self, &hiddenGroupsKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
@@ -966,7 +1107,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     }
     
     @objc private func onRefresh() {
-        gpxDB.load()
+        gpxDB.newLoad()
     }
     
     @objc private func onRefreshEnd() {
@@ -1008,7 +1149,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         //  guard let allTracks = gpxDB.gpxList as? [OAGPX] else { return }
         // let file = allTracksTest[0].file ->  /Documents/GPX/2023-10-22_11-34_Sun.gpx
         // original = Documents/GPX/import/2023-10-22_11-34_Sun.gpx
-        guard let allTracksTest = gpxDB.gpxListTest as? [GpxDataItem], !allTracksTest.isEmpty else { return }
+        guard let allTracksTest = gpxDB.gpxNewList as? [GpxDataItem], !allTracksTest.isEmpty else { return }
         //  settings.mapSettingVisibleGpx.get() = import/2023-10-22_11-34_Sun.gpx
         guard let visibleTrackPaths = settings.mapSettingVisibleGpx.get() else { return }
         
@@ -1133,8 +1274,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             
             onNavbarCancelButtonClicked()
             if !allTracks.isEmpty {
-                // FIXME:
-                //show(OAOsmUploadGPXViewConroller(gpxItems: allTracks))
+                show(OAOsmUploadGPXViewConroller(gpxItems: allTracks))
             }
         }
     }
@@ -1161,7 +1301,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                     if isVisible {
                         self.settings.hideGpx([track.gpxFilePath])
                     }
-                    self.gpxDB.removeGpxItem(track.gpxFilePath)
+                    self.gpxDB.removeNewGpxItem(track.gpxFilePath)
                 }
                 
                 updateAllFoldersVCData()
@@ -1239,21 +1379,6 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
         present(alert, animated: true)
     }
-    
-    //    private func onFolderAppearenceButtonClicked(_ selectedFolderName: String) {
-    //        guard let selectedFolder = currentFolder.subfolders[selectedFolderName] else { return }
-    //        let subfolderTracks = Array(selectedFolder.getAllTracks())
-    //        if !subfolderTracks.isEmpty {
-    //            let firstTrack = subfolderTracks[0]
-    //            let state = OATrackMenuViewControllerState()
-    //            state.openedFromTracksList = true
-    //            // FIXME:
-    ////            rootVC.mapPanel.openTargetView(with: firstTrack, items: subfolderTracks, trackHudMode: .appearanceHudMode, state: state)
-    //            navigationController?.popToRootViewController(animated: true)
-    //        } else {
-    //            OAUtilities.showToast(localizedString("shared_string_error"), details: localizedString("my_places_no_tracks_title"), duration: 4, in: self.view)
-    //        }
-    //    }
     
     private func onFolderExportButtonClicked(_ selectedFolderName: String) {
         guard let selectedFolder = currentFolder.subfolders[selectedFolderName] else { return }
@@ -1389,11 +1514,11 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     
     private func onTrackDuplicateClicked(track: GpxDataItem?, isCurrentTrack: Bool) {
         // FIXME:
-        //        if let track {
-        //            gpxHelper.copyGPX(toNewFolder: currentFolderPath, renameToNewName: track.gpxFileName, deleteOriginalFile: false, openTrack: false, gpx: track)
-        //            selectedTrack = nil
-        //            updateAllFoldersVCData()
-        //        }
+//                if let track {
+//                    gpxHelper.copyGPX(toNewFolder: currentFolderPath, renameToNewName: track.gpxFileName, deleteOriginalFile: false, openTrack: false, gpx: track)
+//                    selectedTrack = nil
+//                    updateAllFoldersVCData()
+//                }
     }
     
     private func onTrackRenameClicked(_ track: GpxDataItem?, isCurrentTrack: Bool) {
@@ -1447,7 +1572,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                     if isVisible {
                         settings.hideGpx([gpx.gpxFilePath])
                     }
-                    gpxDB.removeGpxItem(gpx.gpxFilePath)
+                    gpxDB.removeNewGpxItem(gpx.gpxFilePath)
                     updateAllFoldersVCData()
                 }
             }
@@ -1577,7 +1702,10 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 try FileManager.default.moveItem(atPath: oldFolderPath, toPath: newFolderPath)
                 currentFolder.subfolders[newName] = rootFolder.subfolders[oldName]
                 currentFolder.subfolders[oldName] = nil
-                guard let renamedFolder = currentFolder.subfolders[newName] else { return }
+                guard let renamedFolder = currentFolder.subfolders[newName] else {
+                    updateAllFoldersVCData()
+                    return
+                }
                 changeGpxDBSubfolderTags(folderContent: renamedFolder, srcPath: oldFolderShortPath, destPath: newFolderShortPath)
                 updateAllFoldersVCData()
             } catch let error {
@@ -1591,7 +1719,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     private func deleteFolder(_ folderName: String) {
         let folderPath = currentFolderAbsolutePath().appendingPathComponent(folderName)
         do {
-            currentFolder.subfolders[folderName]?.performForAllTracks { gpxDB.removeGpxItem($0.gpxFilePath) }
+            currentFolder.subfolders[folderName]?.performForAllTracks { gpxDB.removeNewGpxItem($0.gpxFilePath) }
             currentFolder.subfolders[folderName] = nil
             try FileManager.default.removeItem(atPath: folderPath)
             updateAllFoldersVCData()
@@ -1655,13 +1783,13 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             var path = gpxFile.gpxFilePath
             path = path.replacingOccurrences(of: srcPath, with: "")
             path = destPath.appendingPathComponent(path)
-            // FIXME
-            //gpxFile.updateFolderName(path)
+            gpxFile.updateFolderName(newFilePath: path)
         }
         for folder in folderContent.subfolders.values {
             changeGpxDBSubfolderTags(folderContent: folder, srcPath: srcPath, destPath: destPath)
         }
-        gpxDB.save()
+        // FIXME: clear
+       // gpxDB.save()
     }
     
     // MARK: - TableView
@@ -1934,7 +2062,6 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 }
                 let lastButtonsSection = UIMenu(title: "", options: .displayInline, children: [deleteAction])
                 return UIMenu(title: "", image: nil, children: [secondButtonsSection, thirdButtonsSection, lastButtonsSection])
-                // return UIMenu(title: "", image: nil, children: [firstButtonsSection, secondButtonsSection, thirdButtonsSection, lastButtonsSection])
             }
             return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: menuProvider)
         } else if item.key == trackKey || item.key == recordingTrackKey {

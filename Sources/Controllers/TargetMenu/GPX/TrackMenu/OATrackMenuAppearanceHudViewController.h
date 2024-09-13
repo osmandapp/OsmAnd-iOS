@@ -7,9 +7,8 @@
 //
 
 #import "OABaseTrackMenuHudViewController.h"
-#import "OsmAndSharedWrapper.h"
 
-@class OATrackMenuViewControllerState, OAColoringType;
+@class OATrackMenuViewControllerState, OAColoringType, OASGpxDataItem;
 
 @interface OATrackAppearanceItem : NSObject
 

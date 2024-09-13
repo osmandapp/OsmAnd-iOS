@@ -183,8 +183,7 @@ static UIViewController *parentController;
                 if (openGpxView)
                 {
                     [self doPush];
-                    // FIXME:
-                   // [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpx];
+                    [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpx];
                 }
             });
         };
@@ -198,8 +197,7 @@ static UIViewController *parentController;
                 if (openGpxView)
                 {
                     [self doPush];
-                    // FIXME:
-                   // [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpx];
+                    [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpx];
                 }
             });
         };

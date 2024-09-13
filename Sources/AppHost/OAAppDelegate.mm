@@ -277,11 +277,6 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     _didFinishLaunching = YES;
-    
-//    OASGpxFile *gpxFileKotlin = [KSharedUtil loadGpx:@""];
-//    if (!gpxFileKotlin.error) {
-//        NSLog(@"$@", gpxFileKotlin.author);
-//    }
    
     if (!_dataFetchQueue)
     {

@@ -38,7 +38,6 @@
 #import "OAColoringType.h"
 #import "OAConcurrentCollections.h"
 #import "OsmAnd_Maps-Swift.h"
-//#import <OsmAndShared/OsmAndShared.h>
 
 #include <OsmAndCore/LatLon.h>
 #include <OsmAndCore/Map/VectorLineBuilder.h>
@@ -1116,9 +1115,6 @@ colorizationScheme:(int)colorizationScheme
     for (auto it = _gpxDocs.begin(); it != _gpxDocs.end(); ++it)
     {
         NSString *path = it.key().toNSString();
-        
-       // OASGpxFile *gpxFileKotlin = [KSharedUtil loadGpx:path];
-       // OASGpxFile *gpxFileKotlin = [OASharedUtil loadGpx:path];
         
         OAGPXDatabase *gpxDb = OAGPXDatabase.sharedDb;
         path = [[gpxDb getFileDir:path] stringByAppendingPathComponent:path.lastPathComponent];

@@ -672,7 +672,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 // track.gpxFilePath.lastPathComponent() - 2023-10-22_11-34_Sun.gpx
                 visibleTracksFolder.insertTrack(fileName: fileName, track: track)
             }
-            // TODO: loast "import" string
+            
             let relativeFolderPath = track.gpxFilePath.deletingLastPathComponent()
             // 2023-10-22_11-34_Sun.gpx
             //let fileName = track.gpxFilePath.lastPathComponent()

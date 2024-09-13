@@ -88,7 +88,6 @@ typedef NS_ENUM(NSUInteger, EOATrackHudMode)
 @interface OABaseTrackMenuHudViewController : OABaseScrollableHudViewController
 
 @property (nonatomic, readonly) OASGpxDataItem *gpx;
-// FIXME:
 @property (nonatomic, readonly) OAGPXMutableDocument *doc;
 @property (nonatomic, readonly) OAGPXTrackAnalysis *analysis;
 @property (nonatomic, readonly) BOOL isCurrentTrack;

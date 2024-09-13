@@ -703,7 +703,8 @@
     NSArray<NSString *> *paths = [self findGPXFilesInDirectory:OsmAndApp.instance.gpxPath];
     NSMutableSet<NSString *> *existingGpxPaths = [NSMutableSet set];
     
-    for (NSString *filePath in paths) {
+    for (NSString *filePath in paths)
+    {
         [self addGPXFileToDBIfNeeded:filePath withUpdateDataSource:false];
         
         if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
@@ -733,18 +734,9 @@
     NSString *gpxFolderPath = [OsmAndApp instance].gpxPath;
     [NSFileManager.defaultManager removeItemAtPath:[gpxFolderPath stringByAppendingPathComponent:@"Temp"] error:nil];
     NSMutableSet<NSString *> *existingGpxPaths = [NSMutableSet set];
-    // TODO: use search for directory
+
     for (NSDictionary *gpxData in dbContent)
     {
-        NSString *gpxFilePath = [gpxData objectForKey:@"gpxFilePath"];
-        if (gpxFilePath)
-        {
-            NSString *filePath = [gpxFilePath hasPrefix:gpxFolderPath] ? gpxFilePath : [gpxFolderPath stringByAppendingPathComponent:gpxFilePath];
-            // add local gpx file to DB
-           // [self addGPXFileToDBIfNeeded:filePath withUpdateDataSource:false];
-        }
-        
-        // Creta
         OAGPX *gpx = [self generateGpxItem:gpxData];
 
         // Make compatible with old database data

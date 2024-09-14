@@ -169,8 +169,25 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                                   resultDict:resultDict];
         }
     }
+    NSMutableArray *keysToUpdate = [NSMutableArray array];
+    for (NSString *baseKey in localizationsDict)
+    {
+        NSDictionary *localizations = localizationsDict[baseKey];
+        if (!localizations[baseKey])
+        {
+            [keysToUpdate addObject:baseKey];
+        }
+    }
+    
+    for (NSString *baseKey in keysToUpdate)
+    {
+        NSMutableDictionary *localizations = localizationsDict[baseKey];
+        localizations[baseKey] = originalDict[baseKey];
+        localizationsDict[baseKey] = localizations;
+    }
     
     NSMutableDictionary *finalDict = [self finalizeLocalizationDict:localizationsDict
+                                                       originalDict:originalDict
                                             withCurrentLocalization:currentLocalization];
     
     [self addRemainingEntriesFrom:resultDict to:finalDict];
@@ -245,6 +262,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 }
 
 - (NSMutableDictionary *)finalizeLocalizationDict:(NSDictionary *)localizationsDict
+                                     originalDict:(NSDictionary *)originalDict
                       withCurrentLocalization:(NSString *)currentLocalization
 {
     NSMutableDictionary *finalDict = [NSMutableDictionary dictionary];
@@ -254,8 +272,11 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         NSMutableDictionary *entryDict = [NSMutableDictionary dictionary];
         NSDictionary *localizations = localizationsDict[baseKey];
         
-        NSString *nameKey = [NSString stringWithFormat:@"%@:%@", baseKey, currentLocalization];
-        NSString *nameValue = localizations[nameKey] ?: [localizations allValues].firstObject;
+        NSString *nameValue = originalDict[baseKey];
+        if (!nameValue) {
+            NSString *nameKey = [NSString stringWithFormat:@"%@:%@", baseKey, currentLocalization];
+            nameValue = localizations[baseKey][nameKey] ?: [localizations allValues].firstObject;
+        }
         
         entryDict[@"name"] = nameValue;
         entryDict[@"localization"] = localizations;

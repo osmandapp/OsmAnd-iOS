@@ -1993,6 +1993,7 @@
 "unsupported_action" = "Unsupported action";
 "unsupported_action_title" = "Unsupported action (%@)";
 "unsupported_action_descr" = "This quick action in not supported now. This can be fixed in new app versions.";
+"quick_action_toggle_preference" = "A toggle to change preference.";
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";
@@ -3868,3 +3869,4 @@
 
 "user_palette" = "User palette";
 "height_legend_description" = "Altitude color maps are used to visualize relief.";
+"shared_string_local" = "Local";

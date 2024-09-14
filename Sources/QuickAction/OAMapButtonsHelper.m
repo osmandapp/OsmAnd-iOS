@@ -300,6 +300,7 @@ static QuickActionType *TYPE_MY_PLACES;
     [allTypes addObject:OANavVoiceAction.TYPE];
     
     // settings
+    [allTypes addObject:DisplayPositionAction.type];
     [allTypes addObject:OASwitchProfileAction.TYPE];
 
     NSMutableArray<QuickActionType *> *enabledTypes = [NSMutableArray arrayWithArray:allTypes];
@@ -344,7 +345,7 @@ static QuickActionType *TYPE_MY_PLACES;
                 }
                 @catch (NSException *e)
                 {
-                    NSLog(e.reason);
+                    NSLog(@"%@", e.reason);
                 }
             }
         }

@@ -643,7 +643,10 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
             __block CPManeuver *maneuver = _navigationSession.upcomingManeuvers.firstObject;
             NSMeasurement<NSUnitLength *> *dist = [self getFormattedDistance:nextTurnDistance];
             CPTravelEstimates *estimates = [[CPTravelEstimates alloc] initWithDistanceRemaining:dist timeRemaining:-1];
-            if (!maneuver || nextTurn.directionInfoInd != _currentDirectionInfo.directionInfoInd || ([maneuver.userInfo[@"imminent"] intValue] != turnImminent))
+            if (!maneuver
+                || nextTurn.directionInfoInd != _currentDirectionInfo.directionInfoInd
+                || nextTurn.directionInfo != _currentDirectionInfo.directionInfo
+                || ([maneuver.userInfo[@"imminent"] intValue] != turnImminent))
             {
                 dispatch_sync(dispatch_get_main_queue(), ^{
                     maneuver = [self createTurnManeuver:estimates directionInfo:nextTurn];
@@ -706,6 +709,11 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     {
         [_locationUpdateObserver detach];
         _locationUpdateObserver = nil;
+    }
+    if (_map3DModeObserver)
+    {
+        [_map3DModeObserver detach];
+        _map3DModeObserver = nil;
     }
 }
 

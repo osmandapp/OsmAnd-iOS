@@ -79,8 +79,8 @@
 "logging_min_speed_descr" = "Filter: no logging below selected speed";
 "auto_split_recording_title" = "Dividir gravacións após unha pausa";
 "auto_split_gap_descr" = "Start a new segment after 6 min gap, new track after 2 h gap, or new file after a longer gap";
-"map_widget_magnetic_bearing" = "Traxectoria magnética";
-"map_widget_bearing" = "Traxectoria relativa";
+"map_widget_magnetic_bearing" = "Rumbo magnético";
+"map_widget_bearing" = "Rumbo relativo";
 "map_widget_transparent" = "Trebellos transparentes";
 "shared_string_near" = "Preto de";
 "map_widget_next_turn" = "Manobra seguinte";
@@ -1969,7 +1969,7 @@
 "user_points" = "Puntos do usuario";
 "map_widget_sunset_desc" = "Mostrala hora do seguinte solpor ou o tempo que queda ata o solpor.";
 "shared_string_error" = "Erro";
-"shared_string_bearing" = "Levando";
+"shared_string_bearing" = "Rumbo";
 "send_log" = "Enviar rexistro (log)";
 "announcement_time_off_route" = "Fóra da ruta";
 "ltr_or_rtl_combine_via_comma" = "%@, %@";

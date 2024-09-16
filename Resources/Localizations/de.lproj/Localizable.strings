@@ -3525,3 +3525,4 @@
 "osmand_cloud_delete_account_descr_with_email" = "Bist du sicher, dass du das OsmAnd-Cloud-Konto %@ löschen möchtest?";
 "battery_saving_mode" = "Akkusparmodus";
 "quick_action_toggle_preference" = "Ein Schalter zum Ändern der Voreinstellung.";
+"shared_string_local" = "Lokal";

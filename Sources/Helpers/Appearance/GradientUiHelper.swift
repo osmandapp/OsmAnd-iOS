@@ -51,16 +51,21 @@ final class GradientUiHelper: NSObject {
 
     private static func getTerrainTypeFormatter(_ terrainType: TerrainType) -> AxisValueFormatter {
         return AxisValueFormatterLocal { (value, axis) in
-            var shouldShowUnit = axis?.entries.contains(value) ?? false
+            let shouldShowUnit = axis?.entries.count ?? 0 >= 1 && value == axis?.entries.first
             var stringValue = Self.formatTerrainTypeValues(value)
             var typeValue = ""
             switch terrainType {
             case .slope:
                 typeValue = "°"
             case .height:
-                let formattedValue = OAOsmAndFormatter.getFormattedAlt(value, mc: OAAppSettings.sharedManager().metricSystem.get())
-                stringValue = formattedValue ?? ""
-                shouldShowUnit = false
+                if let formattedValue = OAOsmAndFormatter.getFormattedAlt(value, mc: OAAppSettings.sharedManager().metricSystem.get()) {
+                    if let lastSpaceIndex = formattedValue.lastIndex(of: " ") {
+                        stringValue = String(formattedValue[..<lastSpaceIndex])
+                        typeValue = String(formattedValue[formattedValue.index(after: lastSpaceIndex)...])
+                    } else {
+                        stringValue = formattedValue
+                    }
+                }
             default:
                 break
             }
@@ -70,7 +75,7 @@ final class GradientUiHelper: NSObject {
 
     private static func getColorizationTypeFormatter(_ colorizationType: ColorizationType, analysis: OAGPXTrackAnalysis?) -> AxisValueFormatter {
         return AxisValueFormatterLocal { (value, axis) in
-            var shouldShowUnit = axis?.entries.contains(value) ?? false
+            let shouldShowUnit = axis?.entries.count ?? 0 >= 1 && value == axis?.entries.first
             var stringValue = Self.formatValue(value, multiplier: 100)
             var type = "%"
             if let analysis = analysis {
@@ -85,9 +90,14 @@ final class GradientUiHelper: NSObject {
                     let maxElevation = analysis.maxElevation + maxAltitudeAddition
                     if minElevation != 99999.0 && maxElevation != -100.0 {
                         let calculatedValue = value == 0 ? minElevation : minElevation + (value * (maxElevation - minElevation))
-                        let formattedValue = OAOsmAndFormatter.getFormattedAlt(calculatedValue, mc: OAAppSettings.sharedManager().metricSystem.get())
-                        stringValue = formattedValue ?? ""
-                        shouldShowUnit = false
+                        if let formattedValue = OAOsmAndFormatter.getFormattedAlt(calculatedValue, mc: OAAppSettings.sharedManager().metricSystem.get()) {
+                            if let lastSpaceIndex = formattedValue.lastIndex(of: " ") {
+                                stringValue = String(formattedValue[..<lastSpaceIndex])
+                                type = String(formattedValue[formattedValue.index(after: lastSpaceIndex)...])
+                            } else {
+                                stringValue = formattedValue
+                            }
+                        }
                     }
                 default:
                     break

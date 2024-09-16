@@ -160,7 +160,8 @@
         case GPXDataSetTypeSensorBikeCadence:
             return OALocalizedString(@"revolutions_per_minute_unit");
         case GPXDataSetTypeSensorTemperatureA:
-            return @"";
+        case GPXDataSetTypeSensorTemperatureW:
+            return @"°";
         default:
             return @"";
     }

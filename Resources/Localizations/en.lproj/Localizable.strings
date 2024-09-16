@@ -1125,6 +1125,8 @@
 
 "shared_string_weather" = "Weather";
 "map_settings_weather_temp" = "Temperature";
+"map_settings_weather_temp_air" = "Air temperature";
+"map_settings_weather_temp_water" = "Water temperature";
 "map_settings_weather_pressure" = "Pressure";
 "map_settings_weather_wind" = "Wind";
 "map_settings_weather_cloud" = "Cloud";

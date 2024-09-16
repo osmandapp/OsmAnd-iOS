@@ -18,6 +18,7 @@
 #import "OAPOIType.h"
 #import "OAAddress.h"
 #import "OAPOI.h"
+#import "OAPOIHelper.h"
 #import "Localization.h"
 #import "OADistanceDirection.h"
 #import "OAPointDescription.h"
@@ -205,7 +206,7 @@
     {
         if (needsSeparator)
             [res appendString:@" • "];
-        [res appendString:poi.openingHours];
+        [res appendString:[[OAPOIHelper sharedInstance] getOpeningHoursStatusChange:poi]];
     }
     
     return res;

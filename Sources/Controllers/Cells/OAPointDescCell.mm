@@ -10,8 +10,7 @@
 #import "OAUtilities.h"
 #import "Localization.h"
 #import "OANativeUtilities.h"
-
-#include <openingHoursParser.h>
+#import "OAPOIHelper.h"
 
 @implementation OAPointDescCell
 
@@ -30,55 +29,7 @@
     self.titleView.font = [UIFont scaledSystemFontOfSize:14.];
 }
 
-- (NSString *)findOpeningHours
-{
-    const int intervalMinutes = 120; // 2 hours
-    const int arrLength = intervalMinutes / 5;
-    int minutesArr[arrLength];
-
-    int k = 0;
-    for (int i = 0; i < arrLength; i++)
-    {
-        minutesArr[i] = k;
-        k += 5;
-    }
-    
-    auto parser = OpeningHoursParser::parseOpenedHours([_openingHoursView.text UTF8String]);
-    bool isOpenedNow = parser->isOpened();
-
-    NSDate *newTime = [NSDate dateWithTimeIntervalSince1970:[NSDate date].timeIntervalSince1970 + intervalMinutes * 60];
-    bool isOpened = parser->isOpenedForTime([newTime toTm]);
-    if (isOpened == isOpenedNow)
-        return (isOpenedNow ? OALocalizedString(@"shared_string_open") : OALocalizedString(@"time_closed"));
-
-    int imax = arrLength - 1;
-    int imin = 0;
-    int imid;
-    while (imax >= imin)
-    {
-        imid = (imin + imax) / 2;
-        
-        newTime = [NSDate dateWithTimeIntervalSince1970:[NSDate date].timeIntervalSince1970 + minutesArr[imid] * 60];
-        bool isOpened = parser->isOpenedForTime([newTime toTm]);
-        if (isOpened == isOpenedNow)
-            imin = imid + 1;
-        else
-            imax = imid - 1;
-    }
-    
-    int hours, minutes, seconds;
-    [OAUtilities getHMS:minutesArr[imid] * 60 hours:&hours minutes:&minutes seconds:&seconds];
-
-    NSMutableString *timeStr = [NSMutableString string];
-    if (hours > 0)
-        [timeStr appendFormat:@"%d %@", hours, OALocalizedString(@"int_hour")];
-    if (minutes > 0)
-        [timeStr appendFormat:@"%@%d %@", (timeStr.length > 0 ? @" " : @""), minutes, OALocalizedString(@"int_min")];
-    
-    return (isOpenedNow ? [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"will_close_at"), timeStr] : [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"time_will_open"), timeStr]);
-}
-
-- (void) updateOpeningTimeInfo
+- (void) updateOpeningTimeInfo:(OAPOI *)poi
 {
     if (_openingHoursView.text.length == 0)
     {
@@ -105,7 +56,7 @@
         _timeIcon.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_small_time"] color:color];
         
         _openingHoursView.textColor = color;
-        _openingHoursView.text = [self findOpeningHours];
+        _openingHoursView.text = [[OAPOIHelper sharedInstance] getOpeningHoursStatusChange:poi];
         
         _timeIcon.hidden = NO;
         _openingHoursView.hidden = NO;

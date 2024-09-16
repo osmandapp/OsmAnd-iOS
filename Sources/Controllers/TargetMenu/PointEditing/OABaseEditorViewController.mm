@@ -393,7 +393,7 @@
 {
     _selectedColorItem = [_appearanceCollection getColorItemWithValue:[self.editColor toARGBNumber]];
     _sortedColorItems = [NSMutableArray arrayWithArray:[_appearanceCollection getAvailableColorsSortingByLastUsed]];
-    _colorCollectionHandler =  [[OAColorCollectionHandler alloc] initWithData:@[_sortedColorItems] collectionView:nil];
+    _colorCollectionHandler = [[OAColorCollectionHandler alloc] initWithData:@[_sortedColorItems] collectionView:nil];
     _colorCollectionHandler.delegate = self;
     _colorCollectionHandler.hostVC = self;
 }

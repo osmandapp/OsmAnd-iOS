@@ -111,24 +111,19 @@ final class IconCollectionHandler: OABaseCollectionHandler, OAIconCollectionDele
     
     func openAllIconsScreen() {
         guard let hostVC else { return }
-        var vc: OAColorCollectionViewController?
-        if !iconImagesData.isEmpty {
-            vc = OAColorCollectionViewController(collectionType: EOAColorCollectionTypeBigIconItems, items: iconNamesData[0], selectedItem: getSelectedItem())
-        } else {
-            vc = OAColorCollectionViewController(collectionType: EOAColorCollectionTypeIconItems, items: iconNamesData[0], selectedItem: getSelectedItem())
+        var vc = OAColorCollectionViewController(collectionType: iconImagesData.isEmpty ? EOAColorCollectionTypeIconItems : EOAColorCollectionTypeBigIconItems, items: iconNamesData[0], selectedItem: getSelectedItem())
+        if (!iconImagesData.isEmpty) {
+            vc.setImages(iconImagesData[0])
         }
-        vc?.customTitle = customTitle
-        
-        if let vc {
-            vc.iconsDelegate = self
-            if let selectedIconColor {
-                vc.selectedIconColor = selectedIconColor
-            }
-            if let regularIconColor {
-                vc.regularIconColor = regularIconColor
-            }
-            hostVC.showModalViewController(vc)
+        vc.customTitle = customTitle
+        vc.iconsDelegate = self
+        if let selectedIconColor {
+            vc.selectedIconColor = selectedIconColor
         }
+        if let regularIconColor {
+            vc.regularIconColor = regularIconColor
+        }
+        hostVC.showModalViewController(vc)
     }
     
     func getSelectedItem() -> Any {

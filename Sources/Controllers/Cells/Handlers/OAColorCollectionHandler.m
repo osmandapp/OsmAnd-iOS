@@ -365,7 +365,7 @@
     NSIndexPath *prevSelectedColorIndex = [self getSelectedIndexPath];
     NSIndexPath *selectedIndex = [NSIndexPath indexPathForRow:[_data[0] indexOfObject:colorItem] inSection:0];
     [self setSelectedIndexPath:selectedIndex];
-    [[self getCollectionView]  reloadItemsAtIndexPaths:@[prevSelectedColorIndex, selectedIndex]];
+    [[self getCollectionView] reloadItemsAtIndexPaths:@[prevSelectedColorIndex, selectedIndex]];
     [self scrollToIndexPathIfNeeded:selectedIndex];
     
     if (self.delegate)

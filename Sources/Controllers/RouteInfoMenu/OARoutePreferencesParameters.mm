@@ -617,17 +617,6 @@
     return @"";
 }
 
-- (BOOL) isChecked
-{
-    return YES;
-//    return [self isSelected];
-}
-
-- (UIColor *)getTintColor
-{
-    return self.isChecked ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
-}
-
 - (void)rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
 {
     if (self.delegate)

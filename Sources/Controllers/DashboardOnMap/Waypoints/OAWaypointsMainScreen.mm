@@ -73,6 +73,7 @@
     OAWaypointHelper *_waypointHelper;
     OATargetPointsHelper *_targetPointsHelper;
     
+    BOOL _isShowAlong;
     BOOL _flat;
     BOOL _calculatingRoute;
     
@@ -82,7 +83,7 @@
 
 @synthesize waypointsScreen, tableData, vwController, tblView, title;
 
-- (id) initWithTable:(UITableView *)tableView viewController:(OAWaypointsViewController *)viewController param:(id)param
+- (id) initWithTable:(UITableView *)tableView viewController:(OAWaypointsViewController *)viewController param:(id)param isShowAlong:(BOOL)isShowAlong
 {
     self = [super init];
     if (self)
@@ -91,6 +92,8 @@
         _settings = [OAAppSettings sharedManager];
         _waypointHelper = [OAWaypointHelper sharedInstance];
         _targetPointsHelper = [OATargetPointsHelper sharedInstance];
+        
+        _isShowAlong = isShowAlong;
         
         if (param)
             _flat = ((NSNumber *)param).boolValue;
@@ -244,36 +247,54 @@
     {
         NSMutableArray *points = [NSMutableArray array];
         NSArray<OALocationPointWrapper *> *tp = [_waypointHelper getWaypoints:i];
-        if ((rc || i == LPW_WAYPOINTS || i == LPW_TARGETS)
-            && [_waypointHelper isTypeVisible:i])
+        if (!_isShowAlong)
         {
-            [points addObject:@(i)];
-            if (i == LPW_TARGETS)
+            if ((rc || i == LPW_WAYPOINTS || i == LPW_TARGETS)
+                && [_waypointHelper isTypeVisible:i])
             {
-                OARTargetPoint *start = [_targetPointsHelper getPointToStart];
-                if (!start)
+                if (i == LPW_TARGETS)
                 {
-                    CLLocation *loc = _app.locationServices.lastKnownLocation;
-                    if (!loc)
-                        loc = [[OARootViewController instance].mapPanel.mapViewController getMapLocation];
+                    [points addObject:@(i)];
                     
-                    start = [OARTargetPoint createStartPoint:loc name:[[OAPointDescription alloc] initWithType:POINT_TYPE_MY_LOCATION name:OALocalizedString(@"shared_string_my_location")]];
-                }
-                else
-                {
-                    NSString *oname = [start getOnlyName].length > 0 ? [start getOnlyName] : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"shared_string_map"), [NSString stringWithFormat:@"%@ %.3f %@ %.3f", OALocalizedString(@"Lat"), [start getLatitude], OALocalizedString(@"Lon"), [start getLongitude]]];
+                    OARTargetPoint *start = [_targetPointsHelper getPointToStart];
+                    if (!start)
+                    {
+                        CLLocation *loc = _app.locationServices.lastKnownLocation;
+                        if (!loc)
+                            loc = [[OARootViewController instance].mapPanel.mapViewController getMapLocation];
+                        
+                        start = [OARTargetPoint createStartPoint:loc name:[[OAPointDescription alloc] initWithType:POINT_TYPE_MY_LOCATION name:OALocalizedString(@"shared_string_my_location")]];
+                    }
+                    else
+                    {
+                        NSString *oname = [start getOnlyName].length > 0 ? [start getOnlyName] : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"shared_string_map"), [NSString stringWithFormat:@"%@ %.3f %@ %.3f", OALocalizedString(@"Lat"), [start getLatitude], OALocalizedString(@"Lon"), [start getLongitude]]];
+                        
+                        start = [OARTargetPoint createStartPoint:[[CLLocation alloc] initWithLatitude:[start getLatitude] longitude:[start getLongitude]] name:[[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION name:oname]];
+                    }
+                    [points addObject:[[OALocationPointWrapper alloc] initWithRouteCalculationResult:nil type:LPW_TARGETS point:start deviationDistance:0 routeIndex:0]];
                     
-                    start = [OARTargetPoint createStartPoint:[[CLLocation alloc] initWithLatitude:[start getLatitude] longitude:[start getLongitude]] name:[[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION name:oname]];
+                    if (tp.count > 0)
+                        [points addObjectsFromArray:tp];
                 }
-                [points addObject:[[OALocationPointWrapper alloc] initWithRouteCalculationResult:nil type:LPW_TARGETS point:start deviationDistance:0 routeIndex:0]];
             }
-            else if ((i == LPW_POI || i == LPW_FAVORITES || i == LPW_WAYPOINTS) && rc)
+        }
+        else
+        {
+            if ((i == LPW_POI || i == LPW_FAVORITES || i == LPW_WAYPOINTS) && [_waypointHelper isTypeVisible:i])
             {
+                [points addObject:@(i)];
                 if ([_waypointHelper isTypeEnabled:i])
                     [points addObject:[[OARadiusItem alloc] initWithType:i]];
+                
+                if (tp.count > 0)
+                    [points addObjectsFromArray:tp];
             }
-            if (tp.count > 0)
-                [points addObjectsFromArray:tp];
+            else if (i == LPW_ALARMS)
+            {
+                [points addObject:@(i)];
+                if (tp.count > 0)
+                    [points addObjectsFromArray:tp];
+            }
         }
         res[@(i)] = points;
     }

@@ -417,7 +417,8 @@
 
 - (void) openShowAlongScreen
 {
-    [[OARootViewController instance].mapPanel showWaypoints];
+    [[OARootViewController instance].mapPanel showWaypoints:YES];
+    [self dismissViewController];
 }
 
 - (void) showTripSettingsScreen

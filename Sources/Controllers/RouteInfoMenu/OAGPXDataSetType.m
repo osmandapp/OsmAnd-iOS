@@ -31,7 +31,9 @@
         case GPXDataSetTypeSensorBikeCadence:
             return OALocalizedString(@"map_widget_ant_bicycle_cadence");
         case GPXDataSetTypeSensorTemperatureA:
-            return OALocalizedString(@"map_settings_weather_temp");
+            return OALocalizedString(@"map_settings_weather_temp_air");
+        case GPXDataSetTypeSensorTemperatureW:
+            return OALocalizedString(@"map_settings_weather_temp_water");
         default:
             return @"";
     }
@@ -56,6 +58,7 @@
         case GPXDataSetTypeSensorBikeCadence:
             return @"ic_custom_sensor_cadence_outlined";
         case GPXDataSetTypeSensorTemperatureA:
+        case GPXDataSetTypeSensorTemperatureW:
             return @"ic_custom_sensor_thermometer";
         default:
             return @"";
@@ -108,6 +111,7 @@
         case GPXDataSetTypeSensorBikeCadence:
             return [UIColor colorNamed:ACColorNameChartTextColorBicycleCadence];
         case GPXDataSetTypeSensorTemperatureA:
+        case GPXDataSetTypeSensorTemperatureW:
             return [UIColor colorNamed:ACColorNameChartTextColorTemperature];
         default:
             return nil;
@@ -133,6 +137,7 @@
         case GPXDataSetTypeSensorBikeCadence:
             return [UIColor colorNamed:ACColorNameChartLineColorBicycleCadence];
         case GPXDataSetTypeSensorTemperatureA:
+        case GPXDataSetTypeSensorTemperatureW:
             return [UIColor colorNamed:ACColorNameChartLineColorTemperature];
         default:
             return nil;

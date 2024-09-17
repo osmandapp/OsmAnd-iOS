@@ -630,7 +630,8 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                 case EOAGPX3DLineVisualizationByTypeHeartRate:
                 case EOAGPX3DLineVisualizationByTypeBicycleCadence:
                 case EOAGPX3DLineVisualizationByTypeBicyclePower:
-                case EOAGPX3DLineVisualizationByTypeTemperature:
+                case EOAGPX3DLineVisualizationByTypeTemperatureA:
+                case EOAGPX3DLineVisualizationByTypeTemperatureW:
                 case EOAGPX3DLineVisualizationByTypeSpeedSensor:
                     [elevations addObject:@([self processSensorData:point forType:gpx.visualization3dByType])];
                     break;
@@ -659,8 +660,10 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
         case EOAGPX3DLineVisualizationByTypeBicyclePower:
             relevantTag = OAPointAttributes.sensorTagBikePower;
             break;
-        case EOAGPX3DLineVisualizationByTypeTemperature:
-            return [self processTemperatureData:point numberFormatter:numberFormatter];
+        case EOAGPX3DLineVisualizationByTypeTemperatureA:
+            return [self processTemperatureData:point numberFormatter:numberFormatter isAirTemp:YES];
+        case EOAGPX3DLineVisualizationByTypeTemperatureW:
+            return [self processTemperatureData:point numberFormatter:numberFormatter isAirTemp:NO];
         case EOAGPX3DLineVisualizationByTypeSpeedSensor:
             relevantTag = OAPointAttributes.sensorTagSpeed;
             isSpeedSensorTag = YES;
@@ -696,22 +699,23 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     return defaultValue;
 }
 
-- (float)processTemperatureData:(OAWptPt *)point numberFormatter:(NSNumberFormatter *)numberFormatter
+- (float)processTemperatureData:(OAWptPt *)point
+                numberFormatter:(NSNumberFormatter *)numberFormatter
+                      isAirTemp:(BOOL)isAirTemp
 {
     OAGpxExtension *trackpointextension = [point getExtensionByKey:@"trackpointextension"];
-    NSNumber *waterTempValue = nil;
-    NSNumber *airTempValue = nil;
+    NSNumber *tempValue = nil;
     double elevationValue = [self getValidElevation:point.elevation];
     
     if (trackpointextension)
     {
         for (OAGpxExtension *subextension in trackpointextension.subextensions)
         {
-            if ([subextension.name isEqualToString:OAPointAttributes.sensorTagTemperatureA])
+            if ([subextension.name isEqualToString:(isAirTemp ? OAPointAttributes.sensorTagTemperatureA : OAPointAttributes.sensorTagTemperatureW)])
             {
-                airTempValue = [numberFormatter numberFromString:subextension.value];
-                float processedAirTemp = airTempValue ? [airTempValue floatValue] + kTemperatureToHeightOffset : NAN;
-                return [self is3DMapsEnabled] && airTempValue ? processedAirTemp + elevationValue : processedAirTemp;
+                tempValue = [numberFormatter numberFromString:subextension.value];
+                float processedTemp = tempValue ? [tempValue floatValue] + kTemperatureToHeightOffset : NAN;
+                return [self is3DMapsEnabled] && tempValue ? processedTemp + elevationValue : processedTemp;
             }
         }
     }
@@ -1053,7 +1057,8 @@ colorizationScheme:(int)colorizationScheme
                         case EOAGPX3DLineVisualizationByTypeHeartRate:
                         case EOAGPX3DLineVisualizationByTypeBicycleCadence:
                         case EOAGPX3DLineVisualizationByTypeBicyclePower:
-                        case EOAGPX3DLineVisualizationByTypeTemperature:
+                        case EOAGPX3DLineVisualizationByTypeTemperatureA:
+                        case EOAGPX3DLineVisualizationByTypeTemperatureW:
                         case EOAGPX3DLineVisualizationByTypeSpeedSensor:
                             splitElevation = [self processSensorData:pt forType:gpx.visualization3dByType];
                             break;
@@ -1649,7 +1654,13 @@ colorizationScheme:(int)colorizationScheme
     static NSSet *sensorTypes = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        sensorTypes = [NSSet setWithArray:@[@(EOAGPX3DLineVisualizationByTypeHeartRate), @(EOAGPX3DLineVisualizationByTypeBicycleCadence), @(EOAGPX3DLineVisualizationByTypeBicyclePower), @(EOAGPX3DLineVisualizationByTypeTemperature), @(EOAGPX3DLineVisualizationByTypeSpeedSensor)]];
+        sensorTypes = [NSSet setWithArray:@[
+            @(EOAGPX3DLineVisualizationByTypeHeartRate),
+            @(EOAGPX3DLineVisualizationByTypeBicycleCadence),
+            @(EOAGPX3DLineVisualizationByTypeBicyclePower),
+            @(EOAGPX3DLineVisualizationByTypeTemperatureA),
+            @(EOAGPX3DLineVisualizationByTypeTemperatureW),
+            @(EOAGPX3DLineVisualizationByTypeSpeedSensor)]];
     });
     return [sensorTypes containsObject:@(type)];
 }

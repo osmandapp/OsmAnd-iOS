@@ -100,4 +100,9 @@
     [audioSession setActive:NO error:nil];
 }
 
+- (BOOL)supportsStructuredStreetNames
+{
+    return YES;
+}
+
 @end

@@ -93,8 +93,6 @@
         _waypointHelper = [OAWaypointHelper sharedInstance];
         _targetPointsHelper = [OATargetPointsHelper sharedInstance];
         
-        _isShowAlong = isShowAlong;
-        
         if (param)
             _flat = ((NSNumber *)param).boolValue;
         else
@@ -102,7 +100,8 @@
         
         _calculatingRoute = NO;
         
-        title = OALocalizedString(@"shared_string_waypoints");
+        _isShowAlong = isShowAlong;
+        title = OALocalizedString(_isShowAlong ? @"show_along_the_route" : @"shared_string_waypoints");
         waypointsScreen = EWaypointsScreenMain;
         
         vwController = viewController;

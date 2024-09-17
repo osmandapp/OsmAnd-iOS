@@ -1215,7 +1215,7 @@
 "osm_note_upload_immediately" = "Одмах отпремите";
 "upload_anonymously" = "Отпреми анонимно";
 "osm_note_empty_message" = "Наведите поруку за ову белешку.";
-"poi_dialog_comment" = "Коментар";
+"poi_dialog_comment" = "Напомена";
 "poi_dialog_reopen" = "Поново отвори";
 "osm_edits_offline_layer" = "OSM измене/белешке (ван мреже)";
 "osm_notes_online_layer" = "OSM Notes (online)";
@@ -3509,3 +3509,4 @@
 "weather_wind_animation_enable_descr" = "Омогућава да видите анимациони слој на мапи.";
 "osmand_cloud_delete_account_descr_with_email" = "Да ли сте сигурни да желите да избришете ОсмАнд Клоуд налог: %@?";
 "battery_saving_mode" = "Режим уштеде батерије";
+"quick_action_toggle_preference" = "Прекидач промене подешавања.";

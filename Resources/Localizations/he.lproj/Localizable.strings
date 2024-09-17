@@ -2471,7 +2471,7 @@
 "contact_support_description" = "אם יש לך שאלות, נא ליצור אתנו קשר דרך %@.";
 "shared_string_selected" = "נבחר";
 "promo_subscription" = "מינוי פרומו";
-"ltr_or_rtl_combine_via_dash" = "%@ — %@";
+"ltr_or_rtl_combine_via_dash" = "%@ —‏ %@";
 "osmand_cloud_create_account_descr" = "נא למלא את כתובת הדוא״ל שלך, אליה ישלח קוד האימות, \nוכל הנתונים שלך יקושרו אליה.";
 "backup_complete" = "הגיבוי הושלם";
 "routing_attr_avoid_fords_name" = "המנעות מגשרים איריים";

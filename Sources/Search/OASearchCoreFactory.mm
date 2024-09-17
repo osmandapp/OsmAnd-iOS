@@ -36,6 +36,7 @@
 #import "OAMapUtils.h"
 #import "OAResultMatcher.h"
 #import "OATopIndexFilter.h"
+#import "OACollatorStringMatcher.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IObfsCollection.h>
@@ -56,6 +57,7 @@
 #include <OsmAndCore/ICU.h>
 #include <OsmAndCore/Search/CommonWords.h>
 #include <GeographicLib/GeoCoords.hpp>
+#include <OsmAndCore/CollatorStringMatcher.h>
 
 #define OLC_RECALC_DISTANCE_THRESHOLD 100000 // 100 km
 
@@ -1013,8 +1015,10 @@
                     f = (OAPoiAdditionalCustomFilter *) existingResult.pt;
                 else
                     f = [[OAPoiAdditionalCustomFilter alloc] initWithType:(OAPOIType *)existingResult.pt];
-                
-                [f.additionalPoiTypes addObject:a];
+                if (![f.additionalPoiTypes containsObject:a])
+                {
+                    [f.additionalPoiTypes addObject:a];
+                }
                 existingResult.pt = f;
             }
             else
@@ -1088,6 +1092,7 @@
         BOOL includeAdditional = ![phrase hasMoreThanOneUnknownSearchWord];
         OANameStringMatcher *nmAdditional = includeAdditional ? [[OANameStringMatcher alloc] initWithNamePart:phrase.getFirstUnknownSearchWord mode:CHECK_EQUALS_FROM_SPACE] : nil;
         NSDictionary<NSString *, OAPoiTypeResult *> *poiTypes = [self getPoiTypeResults:nm additionalMatcher:nmAdditional];
+        poiTypes = [self filterTypes:poiTypes];
         OAPoiTypeResult *wikiCategory = poiTypes[OSM_WIKI_CATEGORY];
         OAPoiTypeResult* wikiType = poiTypes[WIKI_PLACE];
         if (wikiCategory != nil && wikiType != nil)
@@ -1138,6 +1143,38 @@
     }
     [self searchTopIndexPoiAdditional:phrase resultMatcher:resultMatcher];
     return YES;
+}
+
+- (NSDictionary<NSString *, OAPoiTypeResult *> *) filterTypes:(NSDictionary<NSString *, OAPoiTypeResult *> *)poiTypes
+{
+    MutableOrderedDictionary<NSString *, OAPoiTypeResult *> *filtered = [MutableOrderedDictionary new];
+    for (OAPoiTypeResult *ptr in poiTypes.allValues)
+    {
+        if ([ptr.pt isKindOfClass:OAPoiAdditionalCustomFilter.class])
+        {
+            OAPoiAdditionalCustomFilter *pt = (OAPoiAdditionalCustomFilter *)ptr.pt;
+            if (pt.poiAdditionalCategory != nil)
+            {
+                [filtered setObject:ptr forKey:pt.name];
+            }
+            else
+            {
+                for (OAPOIType *t in pt.additionalPoiTypes)
+                {
+                    if (t.poiAdditionalCategory != nil)
+                    {
+                        [filtered setObject:ptr forKey:pt.name];
+                        break;
+                    }
+                }
+            }
+        }
+        else
+        {
+            [filtered setObject:ptr forKey:ptr.pt.name];
+        }
+    }
+    return filtered;
 }
 
 - (void) addPoiTypeResult:(OASearchPhrase *) phrase resultMatcher:(OASearchResultMatcher *)resultMatcher topFiltersOnly:(BOOL)showTopFiltersOnly
@@ -1241,9 +1278,11 @@
 
 - (OATopIndexMatch *)matchTopIndex:(QHash<QString, QStringList>)poiSubtypes phrase:(OASearchPhrase *)phrase lang:(NSString *)lang
 {
-    NSString *search = [phrase getText:YES];
-    OANameStringMatcher *nm = [[OANameStringMatcher alloc] initWithNamePart:search mode:CHECK_ONLY_STARTS_WITH];
+    NSString *search = [phrase getUnknownSearchPhrase];
+    bool complete = [phrase isFirstUnknownSearchWordComplete];
     NSMutableArray<OATopIndexMatch *> *matches = [[NSMutableArray alloc] init];
+    OANameStringMatcher *nm = [[OANameStringMatcher alloc] initWithNamePart:search mode:CHECK_ONLY_STARTS_WITH];
+    QString qsearch = QString::fromNSString(search);
     
     for (const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(poiSubtypes)))
     {
@@ -1259,7 +1298,23 @@
         for (NSString *s in sortedValues)
         {
             translate = [self getTopIndexTranslation:s];
-            if ([nm matches:s] || [nm matches:translate])
+            if (complete)
+            {
+                if (OsmAnd::CollatorStringMatcher::cmatches(qsearch, QString::fromNSString(s), OsmAnd::StringMatcherMode::CHECK_ONLY_STARTS_WITH))
+                {
+                    topIndexValue = s;
+                    break;
+                }
+                else
+                {
+                    if (OsmAnd::CollatorStringMatcher::cmatches(qsearch, QString::fromNSString(translate), OsmAnd::StringMatcherMode::CHECK_ONLY_STARTS_WITH))
+                    {
+                        topIndexValue = s;
+                        break;
+                    }
+                }
+            }
+            else if ([nm matches:s] || [nm matches:translate])
             {
                 topIndexValue = s;
                 break;

@@ -1227,7 +1227,7 @@
 "rendering_value_default13_name" = "Padrão (13)";
 "rendering_attr_surface_snow_name" = "Neve";
 "rendering_attr_OSMMapperAssistant_name" = "Assistente de mapeador OSM";
-"rendering_attr_alpineHiking_name" = "Grau de dificuldade percursos pedestres";
+"rendering_attr_alpineHiking_name" = "Grau de dificuldade de trilhos pedestres";
 "rendering_attr_highway_class_cycleway_name" = "Ciclovia";
 "rendering_attr_alpineHiking_description" = "Tipos de classificação de dificuldade para as rotas.";
 "rendering_attr_currentTrackWidth_description" = "Espessura dos trilhos GPX";
@@ -2386,8 +2386,8 @@
 "backup_error_subscription_was_expired" = "Subscrição expirada";
 "backup_error_user_is_already_registered" = "Este endereço de email está a ser utilizado noutra conta";
 "backup_error_invalid_token" = "O token não é válido";
-"routeInfo_horse_scale_name" = "Dificuldade dos percursos equestres";
-"routeInfo_horse_scale_description" = "Mostrar percursos equestres de acordo com a sua dificuldade";
+"routeInfo_horse_scale_name" = "Dificuldade dos trilhos equestres";
+"routeInfo_horse_scale_description" = "Mostrar trilhos equestres de acordo com a sua dificuldade";
 "user_login" = "Login";
 "simulation_real_mode_title" = "Simulação realista";
 "simulation_constant_mode_desc" = "A simulação será feita na velocidade constante selecionada.";
@@ -3508,3 +3508,5 @@
 "weather_wind_animation_enable_descr" = "Ative para ver a camada do vento animado no mapa.";
 "shared_string_show" = "Mostrar";
 "osmand_cloud_delete_account_descr_with_email" = "Quer mesmo eliminar a conta do OsmAnd Cloud: %@?";
+"battery_saving_mode" = "Modo de economia de bateria";
+"quick_action_toggle_preference" = "Um selector para alterar a preferência.";

@@ -57,6 +57,9 @@ final class SensorAttributesUtils: NSObject {
         if Self.hasTemperatureAData(analysis) {
             availableTypes.add([NSNumber(value: GPXDataSetType.sensorTemperatureA.rawValue)])
         }
+        if Self.hasTemperatureWData(analysis) {
+            availableTypes.add([NSNumber(value: GPXDataSetType.sensorTemperatureW.rawValue)])
+        }
     }
 
     static func getOrderedLineDataSet(chart: LineChartView,
@@ -75,6 +78,8 @@ final class SensorAttributesUtils: NSObject {
         case .sensorBikeCadence where hasBikeCadenceData(analysis):
             return createSensorDataSet(chart: chart, analysis: analysis, graphType: graphType, axisType: axisType, useRightAxis: useRightAxis, drawFilled: true, calcWithoutGaps: calcWithoutGaps)
         case .sensorTemperatureA where hasTemperatureAData(analysis):
+            return createSensorDataSet(chart: chart, analysis: analysis, graphType: graphType, axisType: axisType, useRightAxis: useRightAxis, drawFilled: true, calcWithoutGaps: calcWithoutGaps)
+        case .sensorTemperatureW where hasTemperatureWData(analysis):
             return createSensorDataSet(chart: chart, analysis: analysis, graphType: graphType, axisType: axisType, useRightAxis: useRightAxis, drawFilled: true, calcWithoutGaps: calcWithoutGaps)
         default:
             return nil

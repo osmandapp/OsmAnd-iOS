@@ -16,6 +16,7 @@
 #import "OAGpxRouteApproximation.h"
 
 #include <routePlannerFrontEnd.h>
+#include <gpxRouteApproximation.h>
 
 @interface OAGpxApproximator ()
 

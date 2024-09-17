@@ -2035,7 +2035,7 @@
 "rendering_value_disabled_name" = "Desactivado";
 "rendering_attr_contourColorScheme_name" = "Esquema de color de las curvas de nivel";
 "routing_attr_short_way_name" = "Ruta de bajo consumo (corta)";
-"rendering_attr_alpineHiking_name" = "Clasificación de dificultad";
+"rendering_attr_alpineHiking_name" = "Dificultad de las rutas de senderismo";
 "rendering_attr_showLez_name" = "Mostrar zonas de baja emisión";
 "rendering_value_green_name" = "Verde";
 "routing_attr_piste_type_nordic_description" = "Senderos para esquí nórdico o de travesía.";
@@ -3509,3 +3509,9 @@
 "precipitation_layer" = "Capa de precipitación";
 "quick_action_verb_show_hide" = "Mostrar / Ocultar";
 "shared_string_show" = "Mostrar";
+"battery_saving_mode" = "Modo ahorro de batería";
+"weather_wind_animation_enable_descr" = "Permite ver la animación del viento en el mapa.";
+"route_your_destination_is_on_left" = "Tu destino está a la izquierda";
+"route_your_destination_is_on_right" = "Tu destino está a la derecha";
+"route_your_destination_is_on_ahead" = "Tu destino está justo delante";
+"osmand_cloud_delete_account_descr_with_email" = "¿Borrar la cuenta de OsmAnd Cloud: %@?";

@@ -25,7 +25,8 @@ typedef NS_ENUM(NSInteger, EOAGPX3DLineVisualizationByType) {
     EOAGPX3DLineVisualizationByTypeHeartRate,
     EOAGPX3DLineVisualizationByTypeBicycleCadence,
     EOAGPX3DLineVisualizationByTypeBicyclePower,
-    EOAGPX3DLineVisualizationByTypeTemperature,
+    EOAGPX3DLineVisualizationByTypeTemperatureA,
+    EOAGPX3DLineVisualizationByTypeTemperatureW,
     EOAGPX3DLineVisualizationByTypeSpeedSensor,
     EOAGPX3DLineVisualizationByTypeFixedHeight
 };

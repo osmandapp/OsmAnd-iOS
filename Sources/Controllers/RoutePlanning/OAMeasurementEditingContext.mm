@@ -27,6 +27,7 @@
 #include <routeSegmentResult.h>
 #include <routeCalculationProgress.h>
 #include <routePlannerFrontEnd.h>
+#include <gpxRouteApproximation.h>
 
 static OAApplicationMode *DEFAULT_APP_MODE;
 

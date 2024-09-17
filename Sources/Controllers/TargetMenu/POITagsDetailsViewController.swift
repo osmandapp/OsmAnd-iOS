@@ -85,6 +85,10 @@ final class POITagsDetailsViewController: OABaseNavbarViewController {
         guard let start = title.firstIndex(of: "("),
               let end = title.firstIndex(of: ")"),
               start < end else {
+            // local description
+            if !key.contains(":") {
+                return localizedString("shared_string_local")
+            }
             return ""
         }
         

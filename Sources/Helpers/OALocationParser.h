@@ -33,5 +33,6 @@
 + (void) splitObjects:(NSString *)s d:(NSMutableArray<NSNumber *> *)d all:(NSMutableArray *)all strings:(NSMutableArray<NSString *> *)strings;
 + (void) splitObjects:(NSString *)s d:(NSMutableArray<NSNumber *> *)d all:(NSMutableArray *)all strings:(NSMutableArray<NSString *> *)strings partial:(NSMutableArray<NSNumber *> *)partial;
 + (double) parse1Coordinate:(NSMutableArray *)all begin:(int)begin end:(int)end;
++ (NSString *)prepareLatLonWithDecimalCommas:(NSString *)ll;
 
 @end

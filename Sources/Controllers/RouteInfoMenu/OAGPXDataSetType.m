@@ -164,6 +164,9 @@
             return OALocalizedString(@"power_watts_unit");
         case GPXDataSetTypeSensorBikeCadence:
             return OALocalizedString(@"revolutions_per_minute_unit");
+        case GPXDataSetTypeSensorTemperatureA:
+        case GPXDataSetTypeSensorTemperatureW:
+            return @"°";
         default:
             return @"";
     }

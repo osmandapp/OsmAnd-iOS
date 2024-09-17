@@ -56,7 +56,7 @@
         _timeIcon.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_small_time"] color:color];
         
         _openingHoursView.textColor = color;
-        _openingHoursView.text = [[OAPOIHelper sharedInstance] getOpeningHoursStatusChange:poi];
+        _openingHoursView.text = [[OAPOIHelper sharedInstance] getFormattedOpeningHours:poi];
         
         _timeIcon.hidden = NO;
         _openingHoursView.hidden = NO;

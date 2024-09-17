@@ -206,7 +206,7 @@
     {
         if (needsSeparator)
             [res appendString:@" • "];
-        [res appendString:[[OAPOIHelper sharedInstance] getOpeningHoursStatusChange:poi]];
+        [res appendString:[[OAPOIHelper sharedInstance] getFormattedOpeningHours:poi]];
     }
     
     return res;

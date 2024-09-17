@@ -552,7 +552,7 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
     return [NSString stringWithFormat:@"%@ %@", typeName, n];
 }
 
-- (NSString *) getOpeningHoursStatusChange:(OAPOI *)poi
+- (NSString *) getFormattedOpeningHours:(OAPOI *)poi
 {
     const int intervalMinutes = 120;
     const int arrLength = intervalMinutes / 5;

@@ -704,8 +704,9 @@ std::string preferredLanguage;
     if (!exitInfo || ![_settings.speakStreetNames get])
         return result;
     
-    result[@"toRef"] = [self getSpeakablePointName:exitInfo.ref];
-    result[@"toDest"] = [self getSpeakablePointName:routeInfo.destinationName];
+    result[@"toRef"] = [self getNonNilString:[self getSpeakablePointName:exitInfo.ref]];
+    NSString *destination = [self getSpeakablePointName:[self cutLongDestination:routeInfo.destinationName]];
+    result[@"toDest"] = [self getNonNilString:destination];
     result[@"toStreetName"] = @"";
     return result;
 }
@@ -720,6 +721,23 @@ std::string preferredLanguage;
 {
     NSCharacterSet *numericSet = [NSCharacterSet letterCharacterSet];
     return [numericSet characterIsMember:ch];
+}
+
+- (NSString *) getNonNilString:(NSString *)speakablePointName
+{
+    return speakablePointName ?: @"";
+}
+
+- (NSString *) cutLongDestination:(NSString *)destination
+{
+    if (!destination)
+        return nil;
+    
+    NSArray *words = [destination componentsSeparatedByString:@";"];
+    if ([words count] > 3)
+        return [NSString stringWithFormat:@"%@;%@;%@", words[0], words[1], words[2]];
+    
+    return destination;
 }
 
 - (NSString *) getSpeakableExitRef:(NSString *)exit

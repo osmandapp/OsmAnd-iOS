@@ -1250,6 +1250,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     if (_rotationAnd3DViewDisabled && rotationRecognizer)
         return;
 
+    if (rotationRecognizer && [[OAAppSettings sharedManager].rotateMap get] == ROTATE_MAP_NONE)
+        return;
+
     // If gesture has just began, just capture current zoom
     if (recognizer.state == UIGestureRecognizerStateBegan)
     {

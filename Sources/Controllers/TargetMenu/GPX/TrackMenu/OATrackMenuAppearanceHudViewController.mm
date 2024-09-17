@@ -664,7 +664,8 @@ static const NSInteger kColorsSection = 1;
         @(EOAGPX3DLineVisualizationByTypeHeartRate): @"map_widget_ant_heart_rate",
         @(EOAGPX3DLineVisualizationByTypeBicycleCadence): @"map_widget_ant_bicycle_cadence",
         @(EOAGPX3DLineVisualizationByTypeBicyclePower): @"map_widget_ant_bicycle_power",
-        @(EOAGPX3DLineVisualizationByTypeTemperature): @"shared_string_temperature",
+        @(EOAGPX3DLineVisualizationByTypeTemperatureA): @"map_settings_weather_temp_air",
+        @(EOAGPX3DLineVisualizationByTypeTemperatureW): @"map_settings_weather_temp_water",
         @(EOAGPX3DLineVisualizationByTypeSpeedSensor): @"shared_string_speed",
         @(EOAGPX3DLineVisualizationByTypeFixedHeight): @"fixed_height"
     };
@@ -673,7 +674,8 @@ static const NSInteger kColorsSection = 1;
         @(EOAGPX3DLineVisualizationByTypeHeartRate): OAPointAttributes.sensorTagHeartRate,
         @(EOAGPX3DLineVisualizationByTypeBicycleCadence): OAPointAttributes.sensorTagCadence,
         @(EOAGPX3DLineVisualizationByTypeBicyclePower): OAPointAttributes.sensorTagBikePower,
-        @(EOAGPX3DLineVisualizationByTypeTemperature): OAPointAttributes.sensorTagTemperatureA,
+        @(EOAGPX3DLineVisualizationByTypeTemperatureA): OAPointAttributes.sensorTagTemperatureA,
+        @(EOAGPX3DLineVisualizationByTypeTemperatureW): OAPointAttributes.sensorTagTemperatureW,
         @(EOAGPX3DLineVisualizationByTypeSpeedSensor): OAPointAttributes.sensorTagSpeed
     };
     

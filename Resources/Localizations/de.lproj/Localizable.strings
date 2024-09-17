@@ -3526,3 +3526,5 @@
 "battery_saving_mode" = "Akkusparmodus";
 "quick_action_toggle_preference" = "Ein Schalter zum Ändern der Voreinstellung.";
 "shared_string_local" = "Lokal";
+"map_settings_weather_temp_air" = "Lufttemperatur";
+"map_settings_weather_temp_water" = "Wassertemperatur";

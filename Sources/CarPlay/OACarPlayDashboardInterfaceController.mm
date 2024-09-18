@@ -572,24 +572,34 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     [turnDrawable setNeedsDisplay];
 
     CPManeuver *maneuver = [[CPManeuver alloc] init];
-    maneuver.symbolImage = [turnDrawable toUIImage];
+    if (estimates)
+        maneuver.symbolImage = [turnDrawable toUIImage];
     maneuver.initialTravelEstimates = estimates;
     maneuver.userInfo = @{ @"imminent" : @(directionInfo.imminent) };
     NSString *streetName = [self defineStreetName:directionInfo];
-    
+
     if (streetName)
     {
-        if (estimates) {
+        if (estimates)
+        {
             maneuver.instructionVariants = @[streetName];
         }
         else
         {
-            NSString *distanceString = [OAOsmAndFormatter getFormattedDistance:directionInfo.distanceTo withParams:[OsmAndFormatterParams useLowerBounds]];
-            NSString *instruction = [NSString stringWithFormat:@"%@, %@", distanceString, streetName];
-            maneuver.instructionVariants = @[instruction];
+            NSString *distanceString = [OAOsmAndFormatter getFormattedDistance:directionInfo.distanceTo
+                                                                    withParams:[OsmAndFormatterParams useLowerBounds]];
+            NSTextAttachment *attachment = [[NSTextAttachment alloc] init];
+            attachment.image = [OAUtilities resizeImage:[turnDrawable toUIImage] newSize:CGSizeMake(16, 16)];
+
+            NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] init];
+            [attributedString appendAttributedString:[NSAttributedString attributedStringWithAttachment:attachment]];
+            [attributedString appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" %@, %@",
+                                                                                                 distanceString,
+                                                                                                 streetName]]];
+            maneuver.attributedInstructionVariants = @[attributedString];
         }
     }
-    
+
     return maneuver;
 }
 

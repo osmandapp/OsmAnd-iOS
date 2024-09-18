@@ -3513,3 +3513,5 @@
 "battery_saving_mode" = "Режим енергоощадження";
 "quick_action_toggle_preference" = "Перемикач для зміни налаштувань.";
 "shared_string_local" = "Місцевий";
+"map_settings_weather_temp_air" = "Температура повітря";
+"map_settings_weather_temp_water" = "Температура води";

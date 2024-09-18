@@ -3511,3 +3511,5 @@
 "battery_saving_mode" = "Batterisparetilstand";
 "quick_action_toggle_preference" = "Et skifter til at ændre præference.";
 "shared_string_local" = "Lokal";
+"map_settings_weather_temp_air" = "Lufttemperatur";
+"map_settings_weather_temp_water" = "Vandtemperatur";

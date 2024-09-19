@@ -2587,7 +2587,7 @@
 "login_open_street_map_org" = "Log ind på OpenStreetMap.org";
 "map_updates_for_mappers" = "Kortopdateringer til kortlæggerne";
 "offline_edition_descr" = "Hvis offline redigering er aktiveret, vilændringer først blive gemt lokalt og uploadet på forespørgsel. Ellers vil ændringer blive uploadet øjeblikkeligt.";
-"enough_contributions_descr" = "Tillykke, du har lavet nok OpenStreetMap-bidrag og kan nu nyde godt af ubegrænsede OsmAnd-kortopdateringer!";
+"enough_contributions_descr" = "Tillykke, du har lavet nok OpenStreetMap-bidrag til, at du nu kan nyde godt af ubegrænsede OsmAnd-kortopdateringer!";
 "benefits_for_contributors_primary_descr" = "Aktive bidragydere til OpenStreetMap.org kan være berettiget til ubegrænsede kortopdateringer hver time.";
 "shared_string_unavailable" = "Ikke tilgængelig";
 "shared_string_contributions" = "Bidrag";

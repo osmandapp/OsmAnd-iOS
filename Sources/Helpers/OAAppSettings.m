@@ -24,6 +24,7 @@
 #import "OAMapLayersConfiguration.h"
 #import "OsmAnd_Maps-Swift.h"
 
+static NSString * const settingAppModeKey = @"settingAppModeKey";
 static NSString * const settingShowMapRuletKey = @"settingShowMapRuletKey";
 static NSString * const metricSystemKey = @"settingMetricSystemKey";
 static NSString * const drivingRegionAutomaticKey = @"drivingRegionAutomatic";
@@ -3636,6 +3637,80 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 @end
 
+@implementation OACommonDayNightMode
+
+@dynamic defValue;
+
++ (instancetype)withKey:(NSString *)key defValue:(int)defValue
+{
+    OACommonDayNightMode *obj = [[OACommonDayNightMode alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (int)get
+{
+    return [super get];
+}
+
+- (void)set:(int)dayNightMode
+{
+    [super set:dayNightMode];
+}
+
+- (int)get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void)set:(int)dayNightMode mode:(OAApplicationMode *)mode
+{
+    [super set:dayNightMode mode:mode];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    if ([strValue isEqualToString:@"DAY"])
+        return [self set:DayNightModeDay mode:mode];
+    else if ([strValue isEqualToString:@"NIGHT"])
+        return [self set:DayNightModeNight mode:mode];
+    else if ([strValue isEqualToString:@"APP_THEME"])
+        return [self set:DayNightModeAppTheme mode:mode];
+    else if ([strValue isEqualToString:@"AUTO"])
+        return [self set:DayNightModeAuto mode:mode];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    switch ([self get:mode])
+    {
+        case DayNightModeDay:
+            return @"DAY";
+        case DayNightModeNight:
+            return @"NIGHT";
+        case DayNightModeAppTheme:
+            return @"APP_THEME";
+        default:
+            return @"AUTO";
+    }
+}
+
+- (void)resetToDefault
+{
+    DayNightMode defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (DayNightMode) ((NSNumber *) pDefault).intValue;
+
+    [self set:defaultValue];
+}
+
+@end
+
 @implementation OAAppSettings
 {
     NSMapTable<NSString *, OACommonBoolean *> *_customBooleanRoutingProps;
@@ -3701,10 +3776,10 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [_globalPreferences setObject:_settingMapLanguageTranslit forKey:@"map_transliterate_names"];
         
         _settingShowMapRulet = [[NSUserDefaults standardUserDefaults] objectForKey:settingShowMapRuletKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingShowMapRuletKey] : YES;
-        _appearanceMode = [OACommonInteger withKey:settingAppModeKey defValue:APPEARANCE_MODE_DAY];
-        [_appearanceMode setModeDefaultValue:@(APPEARANCE_MODE_AUTO) mode:OAApplicationMode.CAR];
-        [_appearanceMode setModeDefaultValue:@(APPEARANCE_MODE_AUTO) mode:OAApplicationMode.BICYCLE];
-        [_appearanceMode setModeDefaultValue:@(APPEARANCE_MODE_DAY) mode:OAApplicationMode.PEDESTRIAN];
+        _appearanceMode = [OACommonDayNightMode withKey:settingAppModeKey defValue:DayNightModeDay];
+        [_appearanceMode setModeDefaultValue:@(DayNightModeAuto) mode:OAApplicationMode.CAR];
+        [_appearanceMode setModeDefaultValue:@(DayNightModeAuto) mode:OAApplicationMode.BICYCLE];
+        [_appearanceMode setModeDefaultValue:@(DayNightModeDay) mode:OAApplicationMode.PEDESTRIAN];
         [_profilePreferences setObject:_appearanceMode forKey:@"daynight_mode"];
         
         _appearanceProfileTheme = [OACommonInteger withKey:appearanceProfileThemeKey defValue:0];

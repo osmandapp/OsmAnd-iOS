@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -32,7 +32,7 @@
                     </connections>
                 </segmentedControl>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A1P-Vs-se2">
-                    <rect key="frame" x="20" y="19.666666666666668" width="42" height="21.000000000000004"/>
+                    <rect key="frame" x="20" y="18" width="42" height="24.333333333333329"/>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                     <color key="textColor" name="textColorPrimary"/>
                     <nil key="highlightedColor"/>
@@ -44,11 +44,13 @@
                 <constraint firstItem="A1P-Vs-se2" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="2dX-AJ-5Ao"/>
                 <constraint firstItem="OeK-3a-th4" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="AEY-gd-Mue"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="OeK-3a-th4" secondAttribute="trailing" constant="20" id="AXx-Ra-aaO"/>
+                <constraint firstItem="OeK-3a-th4" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" priority="1" constant="20" id="DeY-Yt-Vof"/>
                 <constraint firstItem="A1P-Vs-se2" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="NDs-8E-aUi"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="segmentedControl" destination="OeK-3a-th4" id="l0i-zj-5dT"/>
+                <outlet property="segmentedControlLeadingConstraint" destination="DeY-Yt-Vof" id="iEO-Kt-wqe"/>
                 <outlet property="titleLabel" destination="A1P-Vs-se2" id="3QC-kr-caH"/>
             </connections>
             <point key="canvasLocation" x="100" y="20"/>

@@ -658,6 +658,7 @@
 		465D7E21295494000099B206 /* OATextMultilineTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 465D7E20295494000099B206 /* OATextMultilineTableViewCell.xib */; };
 		465DB48629AF5BA3007F5989 /* OACarPlayTrackResultListController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 465DB48529AF5AE7007F5989 /* OACarPlayTrackResultListController.mm */; };
 		465DB48929AF9F6C007F5989 /* OACarPlayFavoriteResultListController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 465DB48829AF9E1A007F5989 /* OACarPlayFavoriteResultListController.mm */; };
+		466114022C9DB6E00013095B /* DayNightMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 466114012C9DB6E00013095B /* DayNightMode.swift */; };
 		46624E722993B28C00F425AE /* OABaseNavbarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46624E712993B28C00F425AE /* OABaseNavbarViewController.m */; };
 		46624E742993B4B100F425AE /* OABaseNavbarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46624E732993B4B100F425AE /* OABaseNavbarViewController.xib */; };
 		4663AB402951C95A00D9781E /* OAInputTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4663AB3F2951C95A00D9781E /* OAInputTableViewCell.xib */; };
@@ -712,6 +713,8 @@
 		46AF98FB28D077E900626C9C /* ic_custom_file_routing@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46AF98F928D077E800626C9C /* ic_custom_file_routing@2x.png */; };
 		46B0CC5A299CEB99003D9F40 /* OABaseButtonsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46B0CC59299CEB99003D9F40 /* OABaseButtonsViewController.m */; };
 		46B0E77227F5E88A00D5A075 /* img_plugin_weather.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 46B0E77127F5E88900D5A075 /* img_plugin_weather.jpg */; };
+		46B159CF2C9B4706000BD9A7 /* MapSettingsMapModeParametersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46B159CE2C9B4706000BD9A7 /* MapSettingsMapModeParametersViewController.xib */; };
+		46B159D12C9B49BE000BD9A7 /* MapSettingsMapModeParametersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46B159D02C9B49BE000BD9A7 /* MapSettingsMapModeParametersViewController.swift */; };
 		46B2EAC128E5CA6B00F466F6 /* ic_custom_cloud_info@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B2EABF28E5CA6A00F466F6 /* ic_custom_cloud_info@2x.png */; };
 		46B2EAC228E5CA6B00F466F6 /* ic_custom_cloud_info@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B2EAC028E5CA6B00F466F6 /* ic_custom_cloud_info@3x.png */; };
 		46B3F326282BF9FE00A5A57D /* ic_share_coordinates@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B3F320282BF9FC00A5A57D /* ic_share_coordinates@3x.png */; };
@@ -4111,6 +4114,7 @@
 		465DB48529AF5AE7007F5989 /* OACarPlayTrackResultListController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACarPlayTrackResultListController.mm; sourceTree = "<group>"; };
 		465DB48729AF9D3B007F5989 /* OACarPlayFavoriteResultListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACarPlayFavoriteResultListController.h; sourceTree = "<group>"; };
 		465DB48829AF9E1A007F5989 /* OACarPlayFavoriteResultListController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACarPlayFavoriteResultListController.mm; sourceTree = "<group>"; };
+		466114012C9DB6E00013095B /* DayNightMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayNightMode.swift; sourceTree = "<group>"; };
 		46624E702993B25D00F425AE /* OABaseNavbarViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABaseNavbarViewController.h; sourceTree = "<group>"; };
 		46624E712993B28C00F425AE /* OABaseNavbarViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OABaseNavbarViewController.m; sourceTree = "<group>"; };
 		46624E732993B4B100F425AE /* OABaseNavbarViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OABaseNavbarViewController.xib; sourceTree = "<group>"; };
@@ -4179,6 +4183,8 @@
 		46B0CC58299CEB45003D9F40 /* OABaseButtonsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABaseButtonsViewController.h; sourceTree = "<group>"; };
 		46B0CC59299CEB99003D9F40 /* OABaseButtonsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OABaseButtonsViewController.m; sourceTree = "<group>"; };
 		46B0E77127F5E88900D5A075 /* img_plugin_weather.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = img_plugin_weather.jpg; path = Resources/Icons/img_plugin_weather.jpg; sourceTree = "<group>"; };
+		46B159CE2C9B4706000BD9A7 /* MapSettingsMapModeParametersViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MapSettingsMapModeParametersViewController.xib; sourceTree = "<group>"; };
+		46B159D02C9B49BE000BD9A7 /* MapSettingsMapModeParametersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSettingsMapModeParametersViewController.swift; sourceTree = "<group>"; };
 		46B2EABF28E5CA6A00F466F6 /* ic_custom_cloud_info@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_cloud_info@2x.png"; path = "Resources/Icons/ic_custom_cloud_info@2x.png"; sourceTree = "<group>"; };
 		46B2EAC028E5CA6B00F466F6 /* ic_custom_cloud_info@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_cloud_info@3x.png"; path = "Resources/Icons/ic_custom_cloud_info@3x.png"; sourceTree = "<group>"; };
 		46B3F320282BF9FC00A5A57D /* ic_share_coordinates@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_share_coordinates@3x.png"; path = "Resources/Icons/ic_share_coordinates@3x.png"; sourceTree = "<group>"; };
@@ -13059,6 +13065,8 @@
 				46433229291D5FE7005AEF12 /* OAMapSettingsNauticalDepthScreen.m */,
 				46C49507291E57CA005A9D70 /* OANauticalDepthParametersViewController.h */,
 				46C49508291E57DA005A9D70 /* OANauticalDepthParametersViewController.m */,
+				46B159CE2C9B4706000BD9A7 /* MapSettingsMapModeParametersViewController.xib */,
+				46B159D02C9B49BE000BD9A7 /* MapSettingsMapModeParametersViewController.swift */,
 			);
 			path = MapSettings;
 			sourceTree = "<group>";
@@ -13364,6 +13372,7 @@
 				46DB0A622C5CEA8F001356D5 /* ConcurrentArray.swift */,
 				05AB445E2C9062F500BF4F05 /* OAOsmAndContextImpl.h */,
 				05AB445F2C9062F500BF4F05 /* OAOsmAndContextImpl.m */,
+				466114012C9DB6E00013095B /* DayNightMode.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -15119,6 +15128,7 @@
 				DA32BBF025C443F200ED7100 /* ic_custom_attach_track@3x.png in Resources */,
 				DA45DA84230EE05A0083DFA2 /* img_mapstyle_lightrs@3x.png in Resources */,
 				DA5A82D426C563A800F274C7 /* OAPoiCollectionViewCell.xib in Resources */,
+				46B159CF2C9B4706000BD9A7 /* MapSettingsMapModeParametersViewController.xib in Resources */,
 				DAA738E923E2FE1A00FAB0DE /* ic_share_folder_trips@2x.png in Resources */,
 				46B9E78F29B2298F00FA802D /* ic_navbar_image_disabled_outlined@3x.png in Resources */,
 				847F8FD01EE07CFC00CF5EA5 /* ic_search_empty_state@2x.png in Resources */,
@@ -16547,6 +16557,7 @@
 				8A90CEDB27A7C2310001C84D /* OAMapSettingsWeatherScreen.mm in Sources */,
 				DA0133142A20E24700920C14 /* WidgetsSettingsHelper.swift in Sources */,
 				DA849999287EBEC7002B1E11 /* OADeleteFilesCommand.m in Sources */,
+				466114022C9DB6E00013095B /* DayNightMode.swift in Sources */,
 				DA4ABF1E2876DA6800B996EF /* OAProfileSettingsItem.mm in Sources */,
 				32FF4C332C1A0A4C00246B36 /* DownloadingCellMultipleResourceHelper.swift in Sources */,
 				DA5A830126C563A800F274C7 /* OAIconsTableViewCell.m in Sources */,
@@ -16671,6 +16682,7 @@
 				05DACD762C1B0E9A0023FAD9 /* OAXmlStreamReader.mm in Sources */,
 				B24745C027F862C300C18C3F /* OAWeatherLayerSettingsViewController.mm in Sources */,
 				FAA6505F2ADD42C50020DCEA /* DescriptionDeviceHeader.swift in Sources */,
+				46B159D12C9B49BE000BD9A7 /* MapSettingsMapModeParametersViewController.swift in Sources */,
 				05AB44602C9062F500BF4F05 /* OAOsmAndContextImpl.m in Sources */,
 				DA5A839C26C563A800F274C7 /* OADirectionAppearanceViewController.m in Sources */,
 				DA5A844626C563A900F274C7 /* OABaseScrollableHudViewController.mm in Sources */,

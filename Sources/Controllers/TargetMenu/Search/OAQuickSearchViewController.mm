@@ -335,6 +335,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
     [self stopAddressSearch];
     [self setResultCollection:nil];
+    if (self.searchQuery.length == 0)
+        [self.searchUICore resetPhrase];
 
     OASearchSettings *settings = [[self.searchUICore getSearchSettings] setOriginalLocation:[[CLLocation alloc] initWithLatitude:_searchLocation.latitude longitude:_searchLocation.longitude]];
     settings = [settings setLang:locale ? locale : @"" transliterateIfMissing:transliterate];

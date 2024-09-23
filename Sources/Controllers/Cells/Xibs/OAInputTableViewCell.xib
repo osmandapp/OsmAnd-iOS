@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -14,28 +14,28 @@
         <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="OAInputTableViewCell" id="LxD-NU-PfF" customClass="OAInputTableViewCell">
             <rect key="frame" x="0.0" y="0.0" width="414" height="66"/>
             <autoresizingMask key="autoresizingMask"/>
-            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="LxD-NU-PfF" id="Q2A-uT-p37">
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" tableViewCell="LxD-NU-PfF" id="Q2A-uT-p37">
                 <rect key="frame" x="0.0" y="0.0" width="414" height="66"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2Wq-3b-y6T" userLabel="Content Outside Stack View H">
-                        <rect key="frame" x="20" y="0.0" width="374" height="66"/>
+                    <stackView opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Wq-3b-y6T" userLabel="Content Outside Stack View H">
+                        <rect key="frame" x="20" y="0.0" width="394" height="66"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="Kkk-UD-yxv" userLabel="Content Outside Stack View V">
-                                <rect key="frame" x="0.0" y="0.0" width="338" height="66"/>
+                                <rect key="frame" x="0.0" y="0.0" width="358" height="66"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="qJR-A4-bPm" userLabel="Text Custom Margin Top Stack View">
-                                        <rect key="frame" x="0.0" y="0.0" width="338" height="5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="358" height="5"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qR4-Kk-Of8">
-                                                <rect key="frame" x="0.0" y="0.0" width="338" height="0.0"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="358" height="0.0"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" id="7EY-e6-WQr"/>
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Q3t-5J-CxV">
-                                                <rect key="frame" x="0.0" y="5" width="338" height="0.0"/>
+                                                <rect key="frame" x="0.0" y="5" width="358" height="0.0"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" id="XSd-j0-q8O"/>
@@ -44,14 +44,14 @@
                                         </subviews>
                                     </stackView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bXh-xI-YMo" userLabel="Top Content Space View">
-                                        <rect key="frame" x="0.0" y="9" width="338" height="0.0"/>
+                                        <rect key="frame" x="0.0" y="9" width="358" height="0.0"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" id="qux-E3-kl0"/>
                                         </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="A3Y-hc-VYy" userLabel="Content Inside Stack View">
-                                        <rect key="frame" x="0.0" y="13" width="338" height="40"/>
+                                        <rect key="frame" x="0.0" y="13" width="358" height="40"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="J5E-HL-4Fb">
                                                 <rect key="frame" x="0.0" y="5" width="30" height="30"/>
@@ -88,7 +88,7 @@
                                                 </subviews>
                                             </stackView>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="right" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="DGK-6L-FrY">
-                                                <rect key="frame" x="112" y="4" width="226" height="32"/>
+                                                <rect key="frame" x="112" y="4" width="246" height="32"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="150" id="EYZ-lt-zfC"/>
                                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="32" id="iva-EO-hau"/>
@@ -100,24 +100,24 @@
                                         </subviews>
                                     </stackView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WKs-jh-JoD" userLabel="Bottom Content Space View">
-                                        <rect key="frame" x="0.0" y="57" width="338" height="0.0"/>
+                                        <rect key="frame" x="0.0" y="57" width="358" height="0.0"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" id="Ypq-xg-rm6"/>
                                         </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="XhS-VQ-8vh" userLabel="Text Custom Margin Bottom Stack View">
-                                        <rect key="frame" x="0.0" y="61" width="338" height="5"/>
+                                        <rect key="frame" x="0.0" y="61" width="358" height="5"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sHB-BZ-emJ">
-                                                <rect key="frame" x="0.0" y="0.0" width="338" height="0.0"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="358" height="0.0"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" id="zfd-eY-TCu"/>
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AnI-Ku-bBQ">
-                                                <rect key="frame" x="0.0" y="5" width="338" height="0.0"/>
+                                                <rect key="frame" x="0.0" y="5" width="358" height="0.0"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" id="t3g-Mt-ezg"/>
@@ -128,7 +128,7 @@
                                 </subviews>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Shn-7v-F63" userLabel="Clear Button Container">
-                                <rect key="frame" x="338" y="0.0" width="36" height="66"/>
+                                <rect key="frame" x="358" y="0.0" width="36" height="66"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UiA-N1-vfN" userLabel="Clear Button Area">
                                         <rect key="frame" x="0.0" y="9" width="36" height="48"/>
@@ -166,8 +166,8 @@
                 </subviews>
                 <constraints>
                     <constraint firstItem="2Wq-3b-y6T" firstAttribute="top" secondItem="Q2A-uT-p37" secondAttribute="top" id="0NV-Le-r1z"/>
-                    <constraint firstItem="2Wq-3b-y6T" firstAttribute="leading" secondItem="Q2A-uT-p37" secondAttribute="leadingMargin" id="5Ed-Cr-7Wd"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="2Wq-3b-y6T" secondAttribute="trailing" id="Zf4-0f-IQK"/>
+                    <constraint firstItem="2Wq-3b-y6T" firstAttribute="leadingMargin" secondItem="Q2A-uT-p37" secondAttribute="leadingMargin" id="5Ed-Cr-7Wd"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="2Wq-3b-y6T" secondAttribute="trailingMargin" id="Zf4-0f-IQK"/>
                     <constraint firstAttribute="bottom" secondItem="2Wq-3b-y6T" secondAttribute="bottom" id="h4d-N0-dI5"/>
                 </constraints>
             </tableViewCellContentView>

@@ -7,8 +7,10 @@
 //
 
 #import "OABaseCollectionHandler.h"
+#import "OASuperViewController.h"
+#import "OAColorCollectionViewController.h"
 
-@class OAColorItem;
+@class OAColorItem, OACollectionSingleLineTableViewCell;
 
 @protocol OAColorsCollectionCellDelegate <OACollectionCellDelegate>
 
@@ -18,13 +20,26 @@
 
 @end
 
-@interface OAColorCollectionHandler : OABaseCollectionHandler
+@interface OAColorCollectionHandler : OABaseCollectionHandler <OAColorCollectionDelegate, OAColorsCollectionCellDelegate>
 
-@property (nonatomic, weak) id<OAColorsCollectionCellDelegate> delegate;
+@property (nonatomic, weak) id<OACollectionCellDelegate> delegate;
+@property (weak, nonatomic) OASuperViewController *hostVC;
+@property (weak, nonatomic) OACollectionSingleLineTableViewCell *hostCell;
+@property (weak, nonatomic) UIView *hostVCOpenColorPickerButton;
+
+@property (nonatomic) BOOL isOpenedFromAllColorsScreen;
+@property (weak, nonatomic) OAColorCollectionHandler *hostColorHandler;
+
 
 - (void)addColor:(NSIndexPath *)indexPath newItem:(OAColorItem *)newItem;
 - (void)addAndSelectColor:(NSIndexPath *)indexPath newItem:(OAColorItem *)newItem;
 - (void)replaceOldColor:(NSIndexPath *)indexPath;
 - (void)removeColor:(NSIndexPath *)indexPath;
+
+- (NSMutableArray<NSMutableArray<OAColorItem *> *> *) getData;
+- (OAColorItem *)getSelectedItem;
+
+- (void)openColorPickerWithColor:(OAColorItem *)colorItem sourceView:(UIView *)sourceView newColorAdding:(BOOL)newColorAdding;
+- (void)openAllColorsScreen;
 
 @end

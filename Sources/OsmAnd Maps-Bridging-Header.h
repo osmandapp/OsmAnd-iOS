@@ -150,6 +150,7 @@
 #import "OABenefitsOsmContributorsViewController.h"
 #import "OAOsmEditingSettingsViewController.h"
 #import "OAHistoryViewController.h"
+#import "OAColorCollectionViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"
@@ -171,6 +172,7 @@
 #import "OATextInputFloatingCell.h"
 #import "OAInputTableViewCell.h"
 #import "OAColorsCollectionViewCell.h"
+#import "OAIconsCollectionViewCell.h"
 
 // Views
 #import "OASegmentedSlider.h"
@@ -189,6 +191,7 @@
 // Enums
 #import "OAGPXDataSetType.h"
 #import "OADownloadMode.h"
+#import "OAMyPositionLayerState.h"
 
 // Backup
 #import "OABackupHelper.h"

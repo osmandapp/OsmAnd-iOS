@@ -22,6 +22,9 @@
 @property (weak, nonatomic) IBOutlet UIButton *rightActionButton;
 
 @property (weak, nonatomic) id<OACollectionTableViewCellDelegate> delegate;
+@property (nonatomic) BOOL disableAnimationsOnStart;
+@property (nonatomic) BOOL useMultyLines;
+@property (nonatomic) BOOL forceScrollOnStart;
 
 - (void)setCollectionHandler:(OABaseCollectionHandler *)collectionHandler;
 - (OABaseCollectionHandler *)getCollectionHandler;
@@ -32,5 +35,7 @@
 
 - (void)configureTopOffset:(CGFloat)top;
 - (void)configureBottomOffset:(CGFloat)bottom;
+
+- (BOOL) needUpdateHeight;
 
 @end

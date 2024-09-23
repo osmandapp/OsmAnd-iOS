@@ -111,6 +111,10 @@
 - (void) setNavigationIconName:(NSString *) navIcon;
 - (OALocationIcon *) getLocationIcon;
 - (void) setLocationIconName:(NSString *) locIcon;
+- (NSInteger) getViewAngleVisibility;
+- (void) setViewAngleVisibility:(NSInteger) viewAngle;
+- (NSInteger) getLocationRadiusVisibility;
+- (void) setLocationRadiusVisibility:(NSInteger) locationRadius;
 - (UIColor *) getProfileColor;
 - (int) getIconColor;
 - (void) setIconColor:(int)iconColor;
@@ -148,6 +152,8 @@
 @property (nonatomic) NSInteger customIconColor;
 @property (nonatomic) NSString *locationIcon;
 @property (nonatomic) NSString *navigationIcon;
+@property (nonatomic) NSInteger viewAngleVisibility;
+@property (nonatomic) NSInteger locationRadiusVisibility;
 @property (nonatomic) NSInteger order;
 
 - (OAApplicationMode *) customReg;

@@ -14,6 +14,7 @@ enum DayNightMode: Int32, CaseIterable {
     case day
     case night
     case auto
+    // todo: compatibility with Android, 3 - light sensor
     case appTheme = 4
 
     var title: String {

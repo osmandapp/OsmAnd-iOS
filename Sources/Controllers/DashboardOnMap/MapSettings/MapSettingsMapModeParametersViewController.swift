@@ -55,11 +55,12 @@ final class MapSettingsMapModeParametersViewController: OABaseScrollableHudViewC
         registerCells()
         generateData()
 
-        resetButton.setImage(UIImage.icCustomReset, for: .normal)
-        resetButton.addBlurEffect(ThemeManager.shared.isLightTheme(),
+        resetButton.setImage(.icCustomReset, for: .normal)
+        let isLightTheme = ThemeManager.shared.isLightTheme()
+        resetButton.addBlurEffect(isLightTheme,
                                   cornerRadius: 12,
                                   padding: 0)
-        cancelButton.addBlurEffect(ThemeManager.shared.isLightTheme(),
+        cancelButton.addBlurEffect(isLightTheme,
                                    cornerRadius: 12,
                                    padding: 0)
 
@@ -111,20 +112,6 @@ final class MapSettingsMapModeParametersViewController: OABaseScrollableHudViewC
         50
     }
 
-    @IBAction private func cancelButtonPressed() {
-        hide()
-    }
-
-    @IBAction private func resetButtonPressed() {
-        currentMode = baseMode
-        updateModeUI()
-        if let baseMode {
-            OADayNightHelper.instance().setTempMode(Int(baseMode.rawValue))
-        }
-        generateData()
-        tableView.reloadData()
-    }
-
     private func applyLocalization() {
         cancelButton.setTitle(localizedString("shared_string_cancel"),
                               for: .normal)
@@ -163,10 +150,8 @@ final class MapSettingsMapModeParametersViewController: OABaseScrollableHudViewC
 
     private func updateModeUI() {
         let isValueChanged = baseMode != currentMode
-        applyButton.backgroundColor = isValueChanged
-            ? UIColor.buttonBgColorPrimary
-            : UIColor.buttonBgColorSecondary
-        applyButton.setTitleColor(isValueChanged ? UIColor.buttonTextColorPrimary : UIColor.lightGray,
+        applyButton.backgroundColor = isValueChanged ? .buttonBgColorPrimary : .buttonBgColorSecondary
+        applyButton.setTitleColor(isValueChanged ? .buttonTextColorPrimary : .lightGray,
                                   for: .normal)
         applyButton.isUserInteractionEnabled = isValueChanged
         resetButton.isEnabled = isValueChanged
@@ -208,6 +193,20 @@ final class MapSettingsMapModeParametersViewController: OABaseScrollableHudViewC
         }
         hide()
     }
+
+    @IBAction private func cancelButtonPressed() {
+        hide()
+    }
+
+    @IBAction private func resetButtonPressed() {
+        currentMode = baseMode
+        updateModeUI()
+        if let baseMode {
+            OADayNightHelper.instance().setTempMode(Int(baseMode.rawValue))
+        }
+        generateData()
+        tableView.reloadData()
+    }
 }
 
 extension MapSettingsMapModeParametersViewController {
@@ -247,7 +246,7 @@ extension MapSettingsMapModeParametersViewController {
                 guard let self else { return }
 
                 currentMode = DayNightMode(rawValue: Int32(index))
-                if currentMode == nil && index == 3 {
+                if currentMode == nil && index == 3 { // todo: compatibility with Android, 3 - light sensor
                     currentMode = .appTheme
                 }
                 updateModeUI()
@@ -265,7 +264,7 @@ extension MapSettingsMapModeParametersViewController {
             cell.descriptionVisibility(false)
             cell.leftIconVisibility(false)
             cell.titleLabel.font = UIFont.preferredFont(forTextStyle: isName ? .body : .subheadline)
-            cell.titleLabel.textColor = isName ? UIColor.textColorPrimary : UIColor(rgb: color_extra_text_gray)
+            cell.titleLabel.textColor = isName ? .textColorPrimary : UIColor(rgb: color_extra_text_gray)
             cell.titleLabel.text = isName ? currentMode?.title : currentMode?.desc
             cell.titleLabel.accessibilityLabel = cell.titleLabel.text
             return cell

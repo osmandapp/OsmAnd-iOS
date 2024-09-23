@@ -399,7 +399,8 @@ extension GpxDataItem {
             return "cad"
         case .bicyclePower:
             return "power"
-        case .temperature:
+            // FIXME: .temperatureW
+        case .temperatureA: /*, .temperatureW*/
             return "temp_sensor"
         case .speedSensor:
             return "speed_sensor"
@@ -425,7 +426,7 @@ extension GpxDataItem {
         case "power":
             return .bicyclePower
         case "temp_sensor":
-            return .temperature
+            return .temperatureA
         case "speed_sensor":
             return .speedSensor
         case "fixed_height":

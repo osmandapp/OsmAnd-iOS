@@ -566,7 +566,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             totalUphill += track.diffElevationUp
             totalDownhill += track.diffElevationDown
             totalTime += track.timeSpan
-            if let attributes = try? FileManager.default.attributesOfItem(atPath: track.file.absolutePath()),
+            if let attributes = try? FileManager.default.attributesOfItem(atPath: track.file.path()),
                let fileSize = attributes[.size] as? UInt64 {
                 totalSizeBytes += fileSize
             }

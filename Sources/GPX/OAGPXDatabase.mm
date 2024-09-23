@@ -651,7 +651,7 @@
             NSLog(@"[%@] added to db | %@", status, dataItem.file.path);
             if (withUpdateDataSource)
             {
-                NSArray<OASGpxDataItem *> *items = [_db getGpxDataItems];
+                NSArray<OASGpxDataItem *> *items = [_db getGpxDataItemsSync];
                 _gpxNewList = items;
             }
             return dataItem;
@@ -724,7 +724,7 @@
         {
             NSLog(@"newLoad:didAddFiles");
         }
-        NSArray<OASGpxDataItem *> *items = [_db getGpxDataItems];
+        NSArray<OASGpxDataItem *> *items = [_db getGpxDataItemsSync];
        _gpxNewList = items;
         [[NSNotificationCenter defaultCenter] postNotificationName:kGPXDBTracksLoaded object:self];
     });

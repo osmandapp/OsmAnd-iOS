@@ -85,7 +85,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) updateRouteInfo;
 - (void) updateRouteInfoData;
 - (void) updateTargetDescriptionLabel;
-- (void) showWaypoints;
+- (void) showWaypoints:(BOOL)isShowAlong;
 - (void) showRoutePreferences;
 - (void) showConfigureScreen;
 - (void) showConfigureScreen:(OAApplicationMode *)targetMode;

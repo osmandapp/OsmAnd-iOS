@@ -3575,6 +3575,7 @@
 "routing_attr_difficulty_preference_beginner_name" = "Beginner";
 "dangerous_goods" = "Dangerous goods";
 "dangerous_goods_description" = "On some roads and tunnels transporting of hazardous materials is forbidden.";
+"show_along_the_route" = "Show along the route";
     
 "exit_number" = "Exit number";
 "announce_when_exceeded" = "Announce when exceeded";

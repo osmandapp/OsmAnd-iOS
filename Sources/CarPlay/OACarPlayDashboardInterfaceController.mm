@@ -573,6 +573,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
     CPManeuver *maneuver = [[CPManeuver alloc] init];
     if (estimates)
+        // automatic trimming of the text from the end and automatic resizing of the icon to a minimum of 1px
         maneuver.symbolImage = [turnDrawable toUIImage];
     maneuver.initialTravelEstimates = estimates;
     maneuver.userInfo = @{ @"imminent" : @(directionInfo.imminent) };
@@ -586,6 +587,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
         }
         else
         {
+            // shows full text without trimming and fixes the icon size
             NSString *distanceString = [OAOsmAndFormatter getFormattedDistance:directionInfo.distanceTo
                                                                     withParams:[OsmAndFormatterParams useLowerBounds]];
             NSTextAttachment *attachment = [[NSTextAttachment alloc] init];

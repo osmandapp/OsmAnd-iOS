@@ -19,6 +19,14 @@ final class DownloadingListViewController: OABaseNavbarViewController, Downloadi
         generateData()
     }
     
+    override func getTitle() -> String! {
+        localizedString("downloading")
+    }
+    
+    override func getLeftNavbarButtonTitle() -> String {
+        localizedString("shared_string_close")
+    }
+    
     func setupDownloadingCellHelper() {
         weak var weakSelf = self
         downloadingListHelper = DownloadingListHelper()
@@ -29,8 +37,9 @@ final class DownloadingListViewController: OABaseNavbarViewController, Downloadi
         downloadingCellResourceHelper?.delegate = weakSelf
         downloadingCellResourceHelper?.stopWithAlertMessage = true
         downloadingCellResourceHelper?.isDownloadedLeftIconRecolored = true
-        downloadingCellResourceHelper?.leftIconColor = .iconColorGreen
         downloadingCellResourceHelper?.rightIconStyle = .hideIconAfterDownloading
+        downloadingCellResourceHelper?.rightIconName = "ic_custom_done"
+        downloadingCellResourceHelper?.rightIconColor = .iconColorActive
     }
     
     private func fetchResources() {
@@ -63,7 +72,15 @@ final class DownloadingListViewController: OABaseNavbarViewController, Downloadi
                 let resourceId = item.string(forKey: "resourceId") ?? ""
                 let resource = item.obj(forKey: "item") as? OAResourceSwiftItem
                 let cell = downloadingCellResourceHelper.getOrCreateCell(resourceId, swiftResourceItem: resource)
-                cell?.leftIconView.tintColor = downloadingCellResourceHelper.isInstalled(resourceId) ? .iconColorGreen : .iconColorDefault
+                if downloadingCellResourceHelper.isInstalled(resourceId) {
+                    cell?.leftIconView.tintColor = .iconColorActive
+                    cell?.rightIconView.image = UIImage.templateImageNamed(downloadingCellResourceHelper.rightIconName)
+                    cell?.rightIconVisibility(true)
+                } else {
+                    cell?.leftIconView.tintColor = .iconColorDefault
+                    cell?.rightIconView.image = nil
+                    cell?.rightIconVisibility(false)
+                }
                 return cell
             }
         }

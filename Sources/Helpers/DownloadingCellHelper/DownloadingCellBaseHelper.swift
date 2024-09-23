@@ -13,7 +13,7 @@ import UIKit
 }
 
 @objc enum DownloadingCellRightIconType: Int {
-    case hideIconAfterDownloading, showIconAlways, showShevronAlways, showIconAndShevronAlways, showShevronBeforeDownloading, showShevronAfterDownloading, showInfoAndShevronAfterDownloading
+    case hideIconAfterDownloading, showIconAlways, showShevronAlways, showIconAndShevronAlways, showShevronBeforeDownloading, showShevronAfterDownloading, showInfoAndShevronAfterDownloading, showDoneIconAfterDownloading
 }
 
 @objcMembers
@@ -205,6 +205,8 @@ class DownloadingCellBaseHelper: NSObject {
             } else {
                 showIcon = true
             }
+        } else if rightIconStyle == .showDoneIconAfterDownloading {
+            showIcon = true
         }
         
         if showIcon {
@@ -215,7 +217,12 @@ class DownloadingCellBaseHelper: NSObject {
     }
     
     func getRightIconName() -> String {
-        rightIconName ?? "ic_custom_download"
+        if let rightIconName {
+            return rightIconName
+        } else if rightIconStyle == .showDoneIconAfterDownloading {
+            return "ic_custom_done"
+        }
+        return "ic_custom_download"
     }
     
     func getRightIconColor() -> UIColor {

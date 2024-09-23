@@ -63,7 +63,7 @@ final class DownloadingListViewController: OABaseNavbarViewController, Downloadi
                 let resourceId = item.string(forKey: "resourceId") ?? ""
                 let resource = item.obj(forKey: "item") as? OAResourceSwiftItem
                 let cell = downloadingCellResourceHelper.getOrCreateCell(resourceId, swiftResourceItem: resource)
-                cell?.leftIconView.tintColor = downloadingCellResourceHelper.isInstalled(resourceId) ? .iconColorGreen :  .iconColorDefault
+                cell?.leftIconView.tintColor = downloadingCellResourceHelper.isInstalled(resourceId) ? .iconColorGreen : .iconColorDefault
                 return cell
             }
         }

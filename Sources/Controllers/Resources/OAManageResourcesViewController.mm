@@ -1453,8 +1453,6 @@ static BOOL _repositoryUpdated = NO;
 {
     CGRect frame = self.tableView.frame;
     CGFloat h = self.view.bounds.size.height - frame.origin.y;
-    if (self.downloadView.superview)
-        h -= self.downloadView.bounds.size.height;
     
     [UIView animateWithDuration:.2 animations:^{
         self.tableView.frame = CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, h);

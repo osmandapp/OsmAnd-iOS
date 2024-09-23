@@ -16,8 +16,6 @@
 
 @property (nonatomic, assign) BOOL dataInvalidated;
 
-@property OADownloadProgressView* downloadView;
-
 @property (readonly) NSComparator resourceItemsComparator;
 @property (strong, nonatomic) OAWorldRegion* region;
 

@@ -12,12 +12,11 @@ final class DownloadingListViewController: OABaseNavbarViewController, Downloadi
     
     private var downloadingListHelper: DownloadingListHelper?
     private var downloadingCellResourceHelper: DownloadingCellResourceHelper?
-//    private var downloadingCellMultipleResourceHelper: DownloadingCellMultipleResourceHelper?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupDownloadingCellHelper()
-        fetchResources()
+        generateData()
     }
     
     func setupDownloadingCellHelper() {
@@ -32,24 +31,13 @@ final class DownloadingListViewController: OABaseNavbarViewController, Downloadi
         downloadingCellResourceHelper?.isDownloadedLeftIconRecolored = true
         downloadingCellResourceHelper?.leftIconColor = .iconColorGreen
         downloadingCellResourceHelper?.rightIconStyle = .hideIconAfterDownloading
-        
-//        downloadingCellMultipleResourceHelper = DownloadingCellMultipleResourceHelper()
-//        downloadingCellMultipleResourceHelper?.hostViewController = weakSelf
-//        downloadingCellMultipleResourceHelper?.setHostTableView(weakSelf?.tableView)
-//        downloadingCellMultipleResourceHelper?.delegate = weakSelf
-//        downloadingCellMultipleResourceHelper?.rightIconStyle = .hideIconAfterDownloading
-//        downloadingCellMultipleResourceHelper?.stopWithAlertMessage = true
-        
-        //TODO: delete
-//        downloadingCellResourceHelper?.debugName = "DownloadingListVC - simple"
-//        downloadingCellMultipleResourceHelper?.debugName = "DownloadingListVC - multiple"
     }
     
     private func fetchResources() {
-        generateData()
-        downloadingCellResourceHelper?.cleanCellCache()
-//        downloadingCellMultipleResourceHelper?.cleanCellCache()
-        tableView.reloadData()
+        DispatchQueue.main.async { [weak self] in
+            self?.downloadingCellResourceHelper?.cleanCellCache()
+            self?.tableView.reloadData()
+        }
     }
     
     override func generateData() {
@@ -68,12 +56,16 @@ final class DownloadingListViewController: OABaseNavbarViewController, Downloadi
         }
     }
     
-    override func getRow(_ indexPath: IndexPath!) -> UITableViewCell? {
+    override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
         let item = tableData.item(for: indexPath)
         if item.cellType == DownloadingCell.reuseIdentifier {
-            let resourceId = item.string(forKey: "resourceId") ?? ""
-            let resource = item.obj(forKey: "item") as? OAResourceSwiftItem
-            return downloadingCellResourceHelper?.getOrCreateCell(resourceId, swiftResourceItem: resource)
+            if let downloadingCellResourceHelper {
+                let resourceId = item.string(forKey: "resourceId") ?? ""
+                let resource = item.obj(forKey: "item") as? OAResourceSwiftItem
+                let cell = downloadingCellResourceHelper.getOrCreateCell(resourceId, swiftResourceItem: resource)
+                cell?.leftIconView.tintColor = downloadingCellResourceHelper.isInstalled(resourceId) ? .iconColorGreen :  .iconColorDefault
+                return cell
+            }
         }
         return nil
     }

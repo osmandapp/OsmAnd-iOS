@@ -1399,6 +1399,8 @@
 "ltr_or_rtl_combine_via_comma" = "%@, %@";
 "ltr_or_rtl_combine_via_of" = "%ld of %ld";
 
+"of" = "%@ of %@";
+
 "shared_string_class" = "Class";
 
 "listed_exist" = "Listed %@, already exist in OsmAnd.";

@@ -53,6 +53,7 @@ typedef NS_ENUM(NSInteger, EOAOAResourceSwiftItemType) {
 - (EOAOAResourceSwiftItemType) resourceType;
 - (NSString *) formatedSize;
 - (NSString *) formatedSizePkg;
+- (NSString *) formatedDownloadedSizePkg:(float)progress;
 - (UIImage *) icon;
 - (NSString *) iconName;
 - (BOOL) isInstalled;

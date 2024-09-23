@@ -16,6 +16,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     weak var delegate: DownloadingCellResourceHelperDelegate?
     var hostViewController: UIViewController?
     var stopWithAlertMessage = false
+    var showDownloadingBytesInDescription = false
     
     private var resourceItems = [String: OAResourceSwiftItem]()
     private var downloadTaskProgressObserver: OAAutoObserverProxy?
@@ -121,7 +122,13 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     override func setupCell(_ resourceId: String) -> DownloadingCell? {
         if let resourceItem = getResource(resourceId) {
             resourceItem.refreshDownloadTask()
-            let subtitle = String(format: "%@  •  %@", resourceItem.type(), resourceItem.formatedSizePkg())
+            var subtitle = ""
+            if showDownloadingBytesInDescription {
+                subtitle = String(resourceItem.formatedSizePkg())
+            } else {
+                subtitle = String(format: "%@  •  %@", resourceItem.type(), resourceItem.formatedSizePkg())
+            }
+            
             let title = resourceItem.title()
             let iconName = resourceItem.iconName()
             let isDownloading = isDownloading(resourceId)
@@ -188,6 +195,16 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
                 
                 self?.setCellProgress(resourceId: resourceId, progress: progress, status: .inProgress)
             }
+        }
+    }
+    
+    override func setCellProgress(resourceId: String, progress: Float, status: ItemStatusType) {
+        super.setCellProgress(resourceId: resourceId, progress: progress, status: status)
+        if showDownloadingBytesInDescription {
+            guard let resourceItem = getResource(resourceId) else { return }
+            guard let cell = getOrCreateCell(resourceId) else { return }
+            let subtitle = String(format: localizedString("of"), resourceItem.formatedDownloadedSizePkg(progress), resourceItem.formatedSizePkg())
+            cell.descriptionLabel.text = subtitle
         }
     }
     

@@ -105,6 +105,13 @@
     return [NSByteCountFormatter stringFromByteCount:res.sizePkg countStyle:NSByteCountFormatterCountStyleFile];
 }
 
+- (NSString *) formatedDownloadedSizePkg:(float)progress
+{
+    OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
+    long long downloadedSizePkg = ((long long) res.sizePkg * progress);
+    return [NSByteCountFormatter stringFromByteCount:downloadedSizePkg countStyle:NSByteCountFormatterCountStyleFile];
+}
+
 - (UIImage *) icon
 {
     OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;

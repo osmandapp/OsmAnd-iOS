@@ -40,6 +40,7 @@ final class DownloadingListViewController: OABaseNavbarViewController, Downloadi
         downloadingCellResourceHelper?.rightIconStyle = .hideIconAfterDownloading
         downloadingCellResourceHelper?.rightIconName = "ic_custom_done"
         downloadingCellResourceHelper?.rightIconColor = .iconColorActive
+        downloadingCellResourceHelper?.showDownloadingBytesInDescription = true
     }
     
     private func fetchResources() {

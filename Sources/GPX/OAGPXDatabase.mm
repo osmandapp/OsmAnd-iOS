@@ -312,8 +312,10 @@
             return @"cad";
         case EOAGPX3DLineVisualizationByTypeBicyclePower:
             return @"power";
-        case EOAGPX3DLineVisualizationByTypeTemperature:
-            return @"temp_sensor";
+        case EOAGPX3DLineVisualizationByTypeTemperatureA:
+            return @"atemp";
+        case EOAGPX3DLineVisualizationByTypeTemperatureW:
+            return @"wtemp";
         case EOAGPX3DLineVisualizationByTypeSpeedSensor:
             return @"speed_sensor";
         case EOAGPX3DLineVisualizationByTypeFixedHeight:
@@ -335,8 +337,10 @@
         return EOAGPX3DLineVisualizationByTypeBicycleCadence;
     else if ([name isEqualToString:@"power"])
         return EOAGPX3DLineVisualizationByTypeBicyclePower;
-    else if ([name isEqualToString:@"temp_sensor"])
-        return EOAGPX3DLineVisualizationByTypeTemperature;
+    else if ([name isEqualToString:@"atemp"])
+        return EOAGPX3DLineVisualizationByTypeTemperatureA;
+    else if ([name isEqualToString:@"wtemp"])
+        return EOAGPX3DLineVisualizationByTypeTemperatureW;
     else if ([name isEqualToString:@"speed_sensor"])
         return EOAGPX3DLineVisualizationByTypeSpeedSensor;
     else if ([name isEqualToString:@"fixed_heigh"])

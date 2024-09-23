@@ -2981,7 +2981,7 @@
 "navigation_points_desc" = "I widget di navigazione sono abilitati durante la navigazione per mostrare informazioni quali distanza, tempo di arrivo o rimanente, prossime svolte, direzione, il nome della strada attuale o successiva, indicazione di corsia, velocità massima, avvisi di avvicinamento, PDI, punti intermedi.";
 "add_row" = "Aggiungi una riga";
 "no_widgets_here_yet" = "Ancora nessun widget qui";
-"ruler_circles" = "Cerchi righello";
+"ruler_circles" = "Righelli a cerchio";
 "shared_string_coloring" = "Colorazione";
 "shared_string_rearrange" = "Riordinare";
 "free_account" = "Account gratuito";
@@ -3490,3 +3490,8 @@
 "osmand_depelopment_use_3d_icons" = "Utilizza le icone di posizione 3D";
 "osmand_cloud_delete_account_descr_with_email" = "Sei sicuro di voler eliminare l'account OsmAnd Cloud: %@?";
 "battery_saving_mode" = "Modalità di risparmio batteria";
+"quick_action_toggle_preference" = "Un pulsante per modificare le preferenze.";
+"shared_string_local" = "Locale";
+"rendering_value_pale_name" = "Chiaro";
+"map_settings_weather_temp_air" = "Temperatura dell'aria";
+"map_settings_weather_temp_water" = "Temperatura dell'acqua";

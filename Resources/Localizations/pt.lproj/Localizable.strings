@@ -3509,3 +3509,4 @@
 "shared_string_show" = "Mostrar";
 "osmand_cloud_delete_account_descr_with_email" = "Quer mesmo eliminar a conta do OsmAnd Cloud: %@?";
 "battery_saving_mode" = "Modo de economia de bateria";
+"quick_action_toggle_preference" = "Um selector para alterar a preferência.";

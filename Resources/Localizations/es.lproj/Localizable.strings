@@ -3509,3 +3509,6 @@
 "osmand_cloud_delete_account_descr_with_email" = "¿Estás seguro de que quieres borrar la cuenta de OsmAnd Cloud: %@?";
 "battery_saving_mode" = "Modo de ahorro de batería";
 "quick_action_toggle_preference" = "Un botón que cambia las preferencias.";
+"shared_string_local" = "Local";
+"map_settings_weather_temp_air" = "Temperatura atmosférica";
+"map_settings_weather_temp_water" = "Temperatura del agua";

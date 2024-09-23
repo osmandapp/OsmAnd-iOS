@@ -3511,3 +3511,7 @@
 "route_your_destination_is_on_ahead" = "Ваш пункт призначення прямо перед вами";
 "osmand_cloud_delete_account_descr_with_email" = "Ви впевнені, що хочете видалити обліковий запис OsmAnd Cloud: %@?";
 "battery_saving_mode" = "Режим енергоощадження";
+"quick_action_toggle_preference" = "Перемикач для зміни налаштувань.";
+"shared_string_local" = "Місцевий";
+"map_settings_weather_temp_air" = "Температура повітря";
+"map_settings_weather_temp_water" = "Температура води";

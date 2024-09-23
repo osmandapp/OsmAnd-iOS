@@ -78,11 +78,11 @@
             UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
             layout.scrollDirection = scrollDirection;
             layout.itemSize = [_collectionHandler getItemSize];
-            [self.collectionView setCollectionViewLayout:layout animated:YES];
+            [self.collectionView setCollectionViewLayout:layout animated:!_disableAnimationsOnStart];
 
             NSIndexPath *selectedIndexPath = [_collectionHandler getSelectedIndexPath];
             if (selectedIndexPath.row != NSNotFound
-                && ![self.collectionView.indexPathsForVisibleItems containsObject:selectedIndexPath]
+                && (_forceScrollOnStart || ![self.collectionView.indexPathsForVisibleItems containsObject:selectedIndexPath])
                 && selectedIndexPath.section < [collectionHandler sectionsCount]
                 && selectedIndexPath.row < [collectionHandler itemsCount:selectedIndexPath.section])
             {
@@ -90,7 +90,7 @@
                                             atScrollPosition:isHorizontal
                     ? UICollectionViewScrollPositionCenteredHorizontally
                     : UICollectionViewScrollPositionCenteredVertically
-                                                    animated:YES];
+                                                    animated:!_disableAnimationsOnStart];
             }
         });
     }];
@@ -153,15 +153,33 @@
 {
     self.contentView.frame = self.bounds;
     [self.contentView layoutIfNeeded];
+    self.collectionViewHeight.constant = [self calculateContentHeight];
+    return [self.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
+}
+
+- (CGFloat) calculateContentHeight
+{
     CGFloat height = self.collectionView.contentSize.height;
     if (_collectionHandler)
     {
         CGSize itemSize = [_collectionHandler getItemSize];
-        if (height < itemSize.height)
-            height = itemSize.height;
+        height = itemSize.height;
+        
+        if (_useMultyLines)
+        {
+            CGFloat width = self.collectionView.frame.size.width;
+            int rowsPerLine = width / (itemSize.width + self.collectionStackView.spacing);
+            int rowsCount = ceil((double)[_collectionHandler itemsCount:0] / (double)rowsPerLine);
+            if (rowsCount > 1)
+                height = rowsCount * (height + self.collectionStackView.spacing);
+        }
     }
-    self.collectionViewHeight.constant = height;
-    return [self.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
+    return height;
+}
+
+- (BOOL) needUpdateHeight
+{
+    return [self calculateContentHeight] != self.collectionViewHeight.constant;
 }
 
 - (UIContextMenuConfiguration *)collectionView:(UICollectionView *)collectionView

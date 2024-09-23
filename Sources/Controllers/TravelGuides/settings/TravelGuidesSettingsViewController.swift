@@ -8,6 +8,7 @@
 
 import UIKit
 
+@objc
 protocol Updatable {
     func update()
 }

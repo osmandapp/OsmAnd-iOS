@@ -3496,3 +3496,7 @@
 "downward_gradient" = "Spád dolů";
 "battery_saving_mode" = "Režim úspory baterie";
 "osmand_cloud_delete_account_descr_with_email" = "Opravdu chcete smazat účet %@ na OsmAnd Cloud?";
+"quick_action_toggle_preference" = "Přepínač pro změnu předvoleb.";
+"map_settings_weather_temp_air" = "Teplota vzduchu";
+"map_settings_weather_temp_water" = "Teplota vody";
+"shared_string_local" = "Místní";

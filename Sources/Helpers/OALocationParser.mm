@@ -143,6 +143,8 @@
     if (!valid)
         return nil;
 
+    s = [self prepareLatLonWithDecimalCommas:s];
+
     NSMutableArray<NSNumber *> *d = [NSMutableArray array];
     NSMutableArray *all = [NSMutableArray array];
     NSMutableArray<NSString *> *strings = [NSMutableArray array];
@@ -506,6 +508,37 @@
         return [[CLLocation alloc] initWithLatitude:latitude longitude:longitude];
     else
         return nil;
+}
+
++ (NSString *)prepareLatLonWithDecimalCommas:(NSString *)ll
+{
+    static const int DIGITS_BEFORE_COMMA = 1, DIGITS_AFTER_COMMA = 3;
+    for (int i = DIGITS_BEFORE_COMMA, first = -1; i < ll.length - DIGITS_AFTER_COMMA; i++) {
+        if ([ll characterAtIndex:i] == ',') {
+            int before = 0, after = 0;
+            for (int j = i - 1; j >= i - DIGITS_BEFORE_COMMA; j--) {
+                if ([[NSCharacterSet decimalDigitCharacterSet] characterIsMember:[ll characterAtIndex:j]]) {
+                    before++;
+                }
+            }
+            for (int j = i + 1; j <= i + DIGITS_AFTER_COMMA && before >= DIGITS_BEFORE_COMMA; j++) {
+                if ([[NSCharacterSet decimalDigitCharacterSet] characterIsMember:[ll characterAtIndex:j]]) {
+                    after++;
+                }
+            }
+            if (before >= DIGITS_BEFORE_COMMA && after >= DIGITS_AFTER_COMMA) {
+                if (first != -1) {
+                    return [NSString stringWithFormat:@"%@.%@.%@",
+                            [ll substringToIndex:first],
+                            [ll substringWithRange:NSMakeRange(first + 1, i - first - 1)],
+                            [ll substringFromIndex:i + 1]];
+                } else {
+                    first = i;
+                }
+            }
+        }
+    }
+    return ll;
 }
 
 @end

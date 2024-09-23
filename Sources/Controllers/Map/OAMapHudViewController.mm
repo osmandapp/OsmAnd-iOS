@@ -37,7 +37,7 @@
 #import "OAProfileGeneralSettingsParametersViewController.h"
 #import "OAReverseGeocoder.h"
 #import "OAMapRendererViewProtocol.h"
-#import "OAApplicationMode.h""
+#import "OAApplicationMode.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAMapStyleSettings.h"
@@ -54,7 +54,7 @@ static const float kWidgetsOffset = 3.0;
 static const float kDistanceMeters = 100.0;
 
 
-@interface OAMapHudViewController () <OAMapInfoControllerProtocol>
+@interface OAMapHudViewController () <OAMapInfoControllerProtocol, UIGestureRecognizerDelegate>
 
 @property (nonatomic) OADownloadProgressView *downloadView;
 @property (nonatomic) OARoutingProgressView *routingProgressView;
@@ -76,7 +76,9 @@ static const float kDistanceMeters = 100.0;
     OAMapViewController* _mapViewController;
 
     UIPanGestureRecognizer* _grMove;
-    UILongPressGestureRecognizer *_longPress;
+    UILongPressGestureRecognizer *_compassLongPressRecognizer;
+    UITapGestureRecognizer *_compassSingleTapRecognizer;
+    UITapGestureRecognizer *_compassDoubleTapRecognizer;
     
     OAAutoObserverProxy* _dayNightModeObserver;
     OAAutoObserverProxy* _locationServicesStatusObserver;
@@ -233,10 +235,26 @@ static const float kDistanceMeters = 100.0;
 
     _mapInfoController.delegate = self;
 
-    _longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressCompass:)];
-    _longPress.delaysTouchesBegan = YES;
-    [self.compassBox addGestureRecognizer:_longPress];
-    
+    _compassSingleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTapCompass)];
+    _compassSingleTapRecognizer.numberOfTapsRequired = 1;
+    _compassSingleTapRecognizer.delaysTouchesBegan = YES;
+
+    _compassDoubleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTapCompass)];
+    _compassDoubleTapRecognizer.numberOfTapsRequired = 2;
+
+    [_compassSingleTapRecognizer requireGestureRecognizerToFail:_compassDoubleTapRecognizer];
+
+    [self.compassButton addGestureRecognizer:_compassSingleTapRecognizer];
+    [self.compassButton addGestureRecognizer:_compassDoubleTapRecognizer];
+
+    _compassLongPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressCompass)];
+    _compassLongPressRecognizer.minimumPressDuration = .5;
+    [self.compassButton addGestureRecognizer:_compassLongPressRecognizer];
+
+    _compassSingleTapRecognizer.delegate = self;
+    _compassDoubleTapRecognizer.delegate = self;
+    _compassLongPressRecognizer.delegate = self;
+
     [self configureWeatherContoursButton];
 
     [self.leftWidgetsView addShadow];
@@ -699,11 +717,6 @@ static const float kDistanceMeters = 100.0;
     });
 }
 
-- (IBAction) onCompassButtonClicked:(id)sender
-{
-    [[OAMapViewTrackingUtilities instance] switchRotateMapMode];
-}
-
 - (IBAction) onZoomInButtonClicked:(id)sender
 {
     [_mapViewController zoomInAndAdjustTiltAngle];
@@ -742,7 +755,7 @@ static const float kDistanceMeters = 100.0;
     });
 }
 
-- (void) handleLongPressCompass:(UILongPressGestureRecognizer *)gestureRecognizer
+- (void)handleLongPressCompass
 {
     OAProfileGeneralSettingsParametersViewController *settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initMapOrientationFromMap];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:settingsViewController];
@@ -755,6 +768,16 @@ static const float kDistanceMeters = 100.0;
     }
     
     [self.navigationController presentViewController:navigationController animated:YES completion:nil];
+}
+
+- (void)handleSingleTapCompass
+{
+    [[OAMapViewTrackingUtilities instance] animatedAlignAzimuthToNorth];
+}
+
+- (void)handleDoubleTapCompass
+{
+    [[OAMapViewTrackingUtilities instance] switchRotateMapMode];
 }
 
 - (void) onLocationServicesFirstTimeUpdate
@@ -1641,6 +1664,19 @@ static const float kDistanceMeters = 100.0;
 - (void) widgetsLayoutDidChange:(BOOL)animated
 {
     [self updateControlsLayout:animated];
+}
+
+#pragma mark - UIGestureRecognizerDelegate
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    return YES;
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
+    shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return YES;
 }
 
 @end

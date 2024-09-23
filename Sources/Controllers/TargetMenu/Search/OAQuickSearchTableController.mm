@@ -635,7 +635,7 @@
                     {
                         [cell.openingHoursView setText:poi.openingHours];
                         cell.timeIcon.hidden = NO;
-                        [cell updateOpeningTimeInfo];
+                        [cell updateOpeningTimeInfo:poi];
                     }
                     else
                     {

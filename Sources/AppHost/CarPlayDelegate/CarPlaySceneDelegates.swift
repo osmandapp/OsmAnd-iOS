@@ -6,6 +6,7 @@ final class CarPlaySceneDelegate: UIResponder {
     private var carPlayDashboardController: OACarPlayDashboardInterfaceController?
     private var windowToAttach: CPWindow?
     private var carPlayInterfaceController: CPInterfaceController?
+    private var defaultAppMode: OAApplicationMode?
     private var isForegroundScene = false
     
     func sceneWillEnterForeground(_ scene: UIScene) {
@@ -79,14 +80,15 @@ final class CarPlaySceneDelegate: UIResponder {
     
     private func configureCarPlayNavigationMode() {
         guard let settings = OAAppSettings.sharedManager(), let routingHelper = OARoutingHelper.sharedInstance() else { return }
-        let defaultAppMode = getDefaultAppMode()
+        defaultAppMode = settings.applicationMode.get()
+        guard let unwrappedDefaultAppMode = defaultAppMode else { return }
         var appModeToSet: OAApplicationMode?
         if settings.isCarPlayModeDefault.get() {
-            if !defaultAppMode.isDerivedRouting(from: OAApplicationMode.car()) {
+            if !unwrappedDefaultAppMode.isDerivedRouting(from: OAApplicationMode.car()) {
                 let derivedMode = OAApplicationMode.values()?.first(where: { $0.isDerivedRouting(from: OAApplicationMode.car()) })
-                appModeToSet = derivedMode ?? defaultAppMode
+                appModeToSet = derivedMode ?? unwrappedDefaultAppMode
             } else {
-                appModeToSet = defaultAppMode
+                appModeToSet = unwrappedDefaultAppMode
             }
         } else {
             appModeToSet = settings.carPlayMode.get()
@@ -97,14 +99,10 @@ final class CarPlaySceneDelegate: UIResponder {
             routingHelper.setAppMode(appMode)
         }
         
-        if defaultAppMode != settings.applicationMode.get() && isRoutingActive() {
+        if unwrappedDefaultAppMode != settings.applicationMode.get() && isRoutingActive() {
             routingHelper.recalculateRouteDueToSettingsChange()
             OATargetPointsHelper.sharedInstance().updateRouteAndRefresh(true)
         }
-    }
-    
-    private func getDefaultAppMode() -> OAApplicationMode {
-        OAAppSettings.sharedManager().useLastApplicationModeByDefault.get() ? OAApplicationMode.value(ofStringKey: OAAppSettings.sharedManager().lastUsedApplicationMode.get(), def: OAApplicationMode.default()) : OAAppSettings.sharedManager().defaultApplicationMode.get()
     }
     
     private func isRoutingActive() -> Bool {
@@ -137,10 +135,11 @@ extension CarPlaySceneDelegate: CPTemplateApplicationSceneDelegate {
         NSLog("[CarPlay] CarPlaySceneDelegate didDisconnect")
         
         OsmAndApp.swiftInstance().carPlayActive = false
-        if !isRoutingActive() {
-            OAAppSettings.sharedManager().setApplicationModePref(getDefaultAppMode(), markAsLastUsed: false)
+        if defaultAppMode != nil && !isRoutingActive() {
+            OAAppSettings.sharedManager().setApplicationModePref(defaultAppMode, markAsLastUsed: false)
         }
         
+        defaultAppMode = nil
         guard let mapPanel = OARootViewController.instance()?.mapPanel else {
             NSLog("[CarPlay] CarPlaySceneDelegate rootViewController mapPanel is nil")
             return

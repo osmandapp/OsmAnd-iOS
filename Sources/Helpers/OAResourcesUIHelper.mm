@@ -1666,6 +1666,8 @@ includeHidden:(BOOL)includeHidden
             item.downloadTask = task = [app.downloadsManager downloadTaskWithRequest:request andKey:[@"resource:" stringByAppendingString:item.resource->id.toNSString()] andName:name andHidden:item.hidden];
         else
             task = item.downloadTask;
+        
+        item.downloadTask.resourceItem = item;
 
         if (onTaskCreated)
             onTaskCreated(task);

@@ -88,6 +88,7 @@ struct RegionResources
     OsmAndAppInstance _app;
     OAIAPHelper *_iapHelper;
     OAWeatherHelper *_weatherHelper;
+    DownloadingListHelper *_downloadingListHelper;
     DownloadingCellResourceHelper *_downloadingCellResourceHelper;
     DownloadingCellMultipleResourceHelper * _downloadingCellMultipleResourceHelper;
 
@@ -448,6 +449,8 @@ static BOOL _repositoryUpdated = NO;
 - (void) setupDownloadingCellHelper
 {
     __weak OAManageResourcesViewController *weakSelf = self;
+    _downloadingListHelper = [DownloadingListHelper new];
+    
     _downloadingCellResourceHelper = [DownloadingCellResourceHelper new];
     [_downloadingCellResourceHelper setHostTableView:weakSelf.tableView];
     _downloadingCellResourceHelper.rightIconStyle = DownloadingCellRightIconTypeShowInfoAndShevronAfterDownloading;
@@ -1949,7 +1952,7 @@ static BOOL _repositoryUpdated = NO;
     if (section == _subscriptionBannerSection)
         return 0;
     if (section == _freeMemorySection)
-        return 0;
+        return [_downloadingListHelper hasDownloads] ? 1 : 0;
     if (section == _freeMapsBannerSection)
         return 1;
     if (section == _extraMapsSection)
@@ -2058,6 +2061,7 @@ static BOOL _repositoryUpdated = NO;
     static NSString * const downloadingResourceCell = @"downloadingResourceCell";
     static NSString * const outdatedResourcesSubmenuCell = @"outdatedResourcesSubmenuCell";
     static NSString * const installedResourcesSubmenuCell = @"installedResourcesSubmenuCell";
+    static NSString * const allDownloadingsCell = @"allDownloadingsCell";
 
     NSString *cellTypeId = nil;
     NSString *title = nil;
@@ -2152,6 +2156,10 @@ static BOOL _repositoryUpdated = NO;
                                                                countStyle:NSByteCountFormatterCountStyleFile]]
                         : OALocalizedString(@"all_maps_are_up_to_date");
             }
+        }
+        else if (indexPath.section == _freeMemorySection)
+        {
+            cellTypeId = allDownloadingsCell;
         }
         else if (indexPath.section == _extraMapsSection)
         {
@@ -2531,6 +2539,10 @@ static BOOL _repositoryUpdated = NO;
             cell = nib[0];
             cell.separatorInset = UIEdgeInsetsMake(0., DBL_MAX, 0., 0.);
         }
+        else if ([cellTypeId isEqualToString:allDownloadingsCell])
+        {
+            return [_downloadingListHelper buildAllDownloadingsCell];
+        }
         else if ([cellTypeId isEqualToString:[OAButtonTableViewCell getCellIdentifier]])
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
@@ -2827,6 +2839,11 @@ static BOOL _repositoryUpdated = NO;
     {
         if (_searchResults.count > 0)
             item = _searchResults[indexPath.row];
+    }
+    else if (indexPath.section == _freeMemorySection)
+    {
+        if (indexPath.row == 0)
+            [self showModalViewController:[_downloadingListHelper getListViewController]];
     }
     else if (indexPath.section == _downloadDescriptionSection)
     {

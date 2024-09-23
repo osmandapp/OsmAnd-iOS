@@ -179,7 +179,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     // MARK: - Downloading cell progress observer's methods
     
     @objc private func onDownloadResourceTaskProgressChanged(observer: Any, key: Any, value: Any) {
-        guard let resourceId = getResourceIdFromNotificationKey(key: key, value: value) else { return }
+        guard let resourceId = Self.getResourceIdFromNotificationKey(key: key, value: value) else { return }
         guard let parsedValue = value as? NSNumber else { return }
         let progress = parsedValue.floatValue
         
@@ -192,7 +192,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     }
     
     @objc private func onDownloadResourceTaskFinished(observer: Any, key: Any, value: Any) {
-        guard let resourceId = getResourceIdFromNotificationKey(key: key, value: value) else { return }
+        guard let resourceId = Self.getResourceIdFromNotificationKey(key: key, value: value) else { return }
         var progress: Float = 1
         if let parsedValue = value as? NSNumber {
             progress = parsedValue.floatValue
@@ -249,7 +249,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
         }
     }
     
-    private func getResourceIdFromNotificationKey(key: Any, value: Any) -> String? {
+    static func getResourceIdFromNotificationKey(key: Any, value: Any) -> String? {
         // When we're creating a cell Contour Lines resource, we don't know which subfile user will download (srtm or srtmf).
         // But we're allready need a "resourceId" key for dictionary at this moment.
         // Anyway, user allowed to download and store only type of Contour Line resource (srtm or srtmf file).

@@ -20,9 +20,10 @@
 #import "GeneratedAssetSymbols.h"
 #import "OsmAnd_Maps-Swift.h"
 
-#define kRowsInUpdatesSection 2
+static int kRowsDownloadingListCellSection = 1;
+static int kRowsInUpdatesSection = 2;
 
-#define kOpenLiveUpdatesSegue @"openLiveUpdatesSegue"
+static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
 
 @interface OAOutdatedResourcesViewController () <UITableViewDelegate, UITableViewDataSource, OASubscriptionBannerCardViewDelegate>
 
@@ -35,6 +36,7 @@
     OsmAndAppInstance _app;
     NSObject* _dataLock;
 
+    NSInteger _downloadingListCellSection;
     NSInteger _updatesSection;
     NSInteger _availableMapsSection;
     NSInteger _liveUpdatesRow;
@@ -47,6 +49,7 @@
     OASubscriptionBannerCardView *_subscriptionBannerView;
     
     UIBarButtonItem *_updateAllButton;
+    DownloadingListHelper *_downloadingListHelper;
     DownloadingCellResourceHelper * _downloadingCellResourceHelper;
 }
 
@@ -149,6 +152,7 @@
 - (void) setupDownloadingCellHelper
 {
     __weak OAOutdatedResourcesViewController *weakSelf = self;
+    _downloadingListHelper = [DownloadingListHelper new];
     _downloadingCellResourceHelper = [DownloadingCellResourceHelper new];
     [_downloadingCellResourceHelper setHostTableView:weakSelf.tableView];
     _downloadingCellResourceHelper.rightIconStyle = DownloadingCellRightIconTypeShowIconAlways;
@@ -159,8 +163,10 @@
 {
     @synchronized (_dataLock)
     {
-        _updatesSection = 0;
-        _availableMapsSection = 1;
+        _downloadingListCellSection = [_downloadingListHelper hasDownloads] ? 0 : -1;
+        _updatesSection = _downloadingListCellSection + 1;
+        _availableMapsSection = _updatesSection + 1;
+        
         _liveUpdatesRow = 0;
         _weatherForecastsRow = 1;
     }
@@ -393,12 +399,14 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+    return [_downloadingListHelper hasDownloads] ? 3 : 2;;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == _updatesSection)
+    if (section == _downloadingListCellSection)
+        return kRowsDownloadingListCellSection;
+    else if (section == _updatesSection)
         return kRowsInUpdatesSection;
     else if (section == _availableMapsSection)
         return _resourcesItems.count;
@@ -477,7 +485,11 @@
         }
     }
     
-    if (indexPath.section == _updatesSection)
+    if (indexPath.section == _downloadingListCellSection)
+    {
+        return [_downloadingListHelper buildAllDownloadingsCell];
+    }
+    else if (indexPath.section == _updatesSection)
     {
         UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellTypeId];
         if (cell == nil)

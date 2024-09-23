@@ -80,6 +80,8 @@ typedef NS_ENUM(NSInteger, EOAOAResourceSwiftItemType) {
 + (NSArray<OAResourceSwiftItem *> *) getResourcesInRepositoryIdsByRegionId:(NSString *)regionId resourceTypeNames:(NSArray<NSString *> *)resourceTypeNames;
 + (NSArray<OAResourceSwiftItem *> *) getResourcesInRepositoryIdsByRegion:(OAWorldRegion *)region resourceTypes:(NSArray<NSNumber *> *)resourceTypes;
 
++ (OAResourceSwiftItem *) getResourceFromDownloadTask:(id<OADownloadTask>)downloadTask;
+
 + (UIBezierPath *) tickPath:(FFCircularProgressView *)progressView;
 
 + (void)offerDownloadAndInstallOf:(OAResourceSwiftItem *)item

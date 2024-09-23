@@ -19,11 +19,12 @@ import UIKit
 @objcMembers
 class DownloadingCellBaseHelper: NSObject {
     
+    var leftIconColor: UIColor?
     var rightIconName: String?
     var rightIconColor: UIColor?
     var isBoldTitleStyle = false
     var isAlwaysClickable = false
-    var isDownloadedRecolored = false
+    var isDownloadedLeftIconRecolored = false
     var rightIconStyle: DownloadingCellRightIconType = .hideIconAfterDownloading
     
     private var cells = [String: DownloadingCell]()
@@ -134,8 +135,8 @@ class DownloadingCellBaseHelper: NSObject {
         if let leftIconName, !leftIconName.isEmpty {
             cell.leftIconVisibility(true)
             cell.leftIconView.image = UIImage.templateImageNamed(leftIconName)
-            if isInstalled(resourceId) && isDownloadedRecolored {
-                cell.leftIconView.tintColor = .iconColorActive
+            if isInstalled(resourceId) && isDownloadedLeftIconRecolored {
+                cell.leftIconView.tintColor = leftIconColor != nil ? leftIconColor : .iconColorActive
             } else {
                 cell.leftIconView.tintColor = .iconColorDefault
             }

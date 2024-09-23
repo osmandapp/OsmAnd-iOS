@@ -428,6 +428,8 @@
 		32A7EE16261BBF6C00F7A697 /* bg_point_octagon_contour@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A7EE14261BBF6C00F7A697 /* bg_point_octagon_contour@2x.png */; };
 		32A7EE1B261BBF7E00F7A697 /* bg_point_square_contour@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A7EE19261BBF7D00F7A697 /* bg_point_square_contour@2x.png */; };
 		32A7EE1C261BBF7E00F7A697 /* bg_point_square_contour@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A7EE1A261BBF7E00F7A697 /* bg_point_square_contour@3x.png */; };
+		32AB48692C9C50CB005EF1D4 /* DownloadingListHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32AB48682C9C50CB005EF1D4 /* DownloadingListHelper.swift */; };
+		32AB486B2C9C84B3005EF1D4 /* DownloadingListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32AB486A2C9C84B3005EF1D4 /* DownloadingListViewController.swift */; };
 		32ABB64E2AEBC02D00491E99 /* OAWebImagesCacheHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32ABB64D2AEBC02D00491E99 /* OAWebImagesCacheHelper.mm */; };
 		32ABB6502AEC01C000491E99 /* ImageToStringConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32ABB64F2AEC01C000491E99 /* ImageToStringConverter.swift */; };
 		32AD5D5A2A2F111600A51B60 /* OsmAccessTokenModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32AD5D592A2F111600A51B60 /* OsmAccessTokenModel.swift */; };
@@ -3847,6 +3849,8 @@
 		32A7EE14261BBF6C00F7A697 /* bg_point_octagon_contour@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_point_octagon_contour@2x.png"; path = "Resources/Icons/bg_point_octagon_contour@2x.png"; sourceTree = "<group>"; };
 		32A7EE19261BBF7D00F7A697 /* bg_point_square_contour@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_point_square_contour@2x.png"; path = "Resources/Icons/bg_point_square_contour@2x.png"; sourceTree = "<group>"; };
 		32A7EE1A261BBF7E00F7A697 /* bg_point_square_contour@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_point_square_contour@3x.png"; path = "Resources/Icons/bg_point_square_contour@3x.png"; sourceTree = "<group>"; };
+		32AB48682C9C50CB005EF1D4 /* DownloadingListHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadingListHelper.swift; sourceTree = "<group>"; };
+		32AB486A2C9C84B3005EF1D4 /* DownloadingListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadingListViewController.swift; sourceTree = "<group>"; };
 		32ABB64C2AEBC02100491E99 /* OAWebImagesCacheHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAWebImagesCacheHelper.h; sourceTree = "<group>"; };
 		32ABB64D2AEBC02D00491E99 /* OAWebImagesCacheHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWebImagesCacheHelper.mm; sourceTree = "<group>"; };
 		32ABB64F2AEC01C000491E99 /* ImageToStringConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageToStringConverter.swift; sourceTree = "<group>"; };
@@ -8050,6 +8054,15 @@
 				32A0CDF32C29B01D00FDD8E0 /* OAModel3dHelper.mm */,
 			);
 			path = Model3dHelper;
+			sourceTree = "<group>";
+		};
+		32AB48672C9C50A1005EF1D4 /* DownloadingListHelper */ = {
+			isa = PBXGroup;
+			children = (
+				32AB48682C9C50CB005EF1D4 /* DownloadingListHelper.swift */,
+				32AB486A2C9C84B3005EF1D4 /* DownloadingListViewController.swift */,
+			);
+			path = DownloadingListHelper;
 			sourceTree = "<group>";
 		};
 		32AD5D582A2F10EA00A51B60 /* OAuthHelper */ = {
@@ -13237,6 +13250,7 @@
 		DA5A808E26C563A500F274C7 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				32AB48672C9C50A1005EF1D4 /* DownloadingListHelper */,
 				32D24D1F2BE54A5E000FA504 /* DownloadingCellHelper */,
 				FA327BFB2BB418B500CFADCF /* MissingMapsCalculator */,
 				46ED6C3C2B333A4600A5555F /* Extensions */,
@@ -16865,6 +16879,7 @@
 				DA5A835C26C563A800F274C7 /* OAPreviewZoomLevelsCell.m in Sources */,
 				46C841412C32F3CA00E284B0 /* OANavStartStopAction.m in Sources */,
 				DA5A81A926C563A700F274C7 /* OAAbbreviations.mm in Sources */,
+				32AB48692C9C50CB005EF1D4 /* DownloadingListHelper.swift in Sources */,
 				DAD3FD242A4ACB2E00BFA03A /* WidgetGroupListViewController.swift in Sources */,
 				FAA650532ADD42C50020DCEA /* Sensor.swift in Sources */,
 				FAC166282B21BEF900D63755 /* Central.swift in Sources */,
@@ -17173,6 +17188,7 @@
 				DADF31A928D07D1100DC2886 /* OACarPlayPurchaseViewController.m in Sources */,
 				DA5A836926C563A800F274C7 /* OARouteSettingsViewController.mm in Sources */,
 				DA5A83FD26C563A800F274C7 /* OAHistoryTableViewController.mm in Sources */,
+				32AB486B2C9C84B3005EF1D4 /* DownloadingListViewController.swift in Sources */,
 				461A3F0729F6E2BA008EE079 /* OACollectionSingleLineTableViewCell.m in Sources */,
 				DA5A84FD26C563A900F274C7 /* OATableViewCell.m in Sources */,
 				C52E750F2C2BECAC00C45ED0 /* OsmAndFormatterParams.swift in Sources */,

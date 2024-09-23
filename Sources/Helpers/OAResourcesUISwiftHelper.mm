@@ -17,6 +17,7 @@
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
 #import "OsmAndApp.h"
+#import "OADownloadTask.h"
 
 @implementation OAResourceSwiftItem
 
@@ -235,6 +236,13 @@
     }
 
     return swiftResources;
+}
+
++ (OAResourceSwiftItem *) getResourceFromDownloadTask:(id<OADownloadTask>)downloadTask
+{
+    if (downloadTask && downloadTask.resourceItem)
+        return [[OAResourceSwiftItem alloc] initWithItem:downloadTask.resourceItem];
+    return nil;
 }
 
 + (OAResourceItem *) resourceItemByResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> &)resource region:(OAWorldRegion *)region

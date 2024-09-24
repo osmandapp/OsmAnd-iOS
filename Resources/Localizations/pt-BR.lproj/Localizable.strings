@@ -3508,3 +3508,7 @@
 "weather_wind_animation_enable_descr" = "Ative a visualização da camada de animação do vento no mapa.";
 "osmand_cloud_delete_account_descr_with_email" = "Tem certeza de que deseja excluir a conta do OsmAnd Cloud: %@?";
 "battery_saving_mode" = "Modo de economia de bateria";
+"quick_action_toggle_preference" = "Um botão de alternância para alterar a preferência.";
+"map_settings_weather_temp_air" = "Temperatura do ar";
+"map_settings_weather_temp_water" = "Temperatura da água";
+"shared_string_local" = "Local";

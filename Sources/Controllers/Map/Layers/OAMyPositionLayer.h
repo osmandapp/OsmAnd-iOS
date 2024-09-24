@@ -15,5 +15,8 @@
 - (void) updateMode;
 - (void) updateLocation:(CLLocation *)newLocation heading:(CLLocationDirection)newHeading;
 - (CLLocationCoordinate2D) getActiveMarkerLocation;
+- (void) setMyLocationCircleRadius:(float)radiusInMeters;
+- (BOOL) shouldShowHeading;
+- (BOOL) shouldShowLocationRadius;
 
 @end

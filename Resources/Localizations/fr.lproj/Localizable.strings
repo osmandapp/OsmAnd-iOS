@@ -3509,3 +3509,5 @@
 "battery_saving_mode" = "Mode économie d'énergie";
 "quick_action_toggle_preference" = "Un interrupteur pour changer le paramètre.";
 "shared_string_local" = "Local(e)";
+"map_settings_weather_temp_water" = "Température de l'eau";
+"map_settings_weather_temp_air" = "Température de l'air";

@@ -346,7 +346,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
                 int currentMapRotation = [_settings.rotateMap get];
                 BOOL smallSpeedForCompass = [self isSmallSpeedForCompass:location];
                 
-                showViewAngle = (![location hasBearing] || smallSpeedForCompass) && [OANativeUtilities containsLatLon:location];
+                showViewAngle = [OANativeUtilities containsLatLon:location];
                 if (currentMapRotation == ROTATE_MAP_BEARING)
                 {
                     // special case when bearing equals to zero (we don't change anything)
@@ -382,7 +382,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
             }
             else if (location)
             {
-                showViewAngle = (![location hasBearing] || [self isSmallSpeedForCompass:location]) && [OANativeUtilities containsLatLon:location];
+                showViewAngle = [OANativeUtilities containsLatLon:location];
             }
             
             _showViewAngle = showViewAngle;

@@ -2991,7 +2991,7 @@
 "map_widget_trip_recording_downhill" = "Malsupreniroj";
 "route_maneuvers" = "Manovroj";
 "time_to_intermediate_widget_desc" = "Montras tempon de alveno kaj pluan tempon al la unua intercelo. Tempo estas senĉese aktualigata dum navigado. Kiam intercelo estos pasigita, la fenestraĵo montros tempon al la sekva intercelo.";
-"audionotes_plugin_name" = "Sonaj/videaj notoj";
+"audionotes_plugin_name" = "Sonaj/filmaj notoj";
 "user_name" = "Via OSM-uzantnomo";
 "recently_visible" = "Antaŭe vidigitaj %@";
 "generate_hillshade_from_3d_maps" = "Generi nivelombruman kahelan mapon uzante 3-dimensiajn mapojn";
@@ -3089,7 +3089,7 @@
 "wikivoyage_download_pics" = "Elŝuti bildojn";
 "no_widgets_descr" = "Aldonu almenaŭ unu fenestraĵon el la listo de disponeblaj fenestraĵoj.";
 "determine_location" = "Permesu al OsmAnd trovi vian pozicion";
-"av_notes_video_widget_desc" = "Fenestraĵo ebliganta registri videan noton.";
+"av_notes_video_widget_desc" = "Fenestraĵo ebliganta registri filman noton.";
 "map_orientation_landscape" = "Horizontala";
 "there_are_no_connected_sensors_of_this_type" = "Estas neniu konektita sentilo de tiuĉi speco";
 "report_an_issues" = "Raporti problemon";

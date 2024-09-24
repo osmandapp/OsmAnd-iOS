@@ -2054,7 +2054,7 @@
 "routing_attr_motor_type_name" = "引擎使用的燃料";
 "gpx_selection_segment_title" = "區段";
 "search_poi_types_descr" = "組合來自不同分類的 POI 類型。點擊開關以全選，點擊左側選取分類。";
-"routing_attr_motor_type_gas_name" = "天然氣";
+"routing_attr_motor_type_gas_name" = "壓縮天然氣";
 "weather_online_cache" = "線上預報";
 "backup_data" = "備份資料";
 "backup_delete_all_data" = "刪除我所有的資料";

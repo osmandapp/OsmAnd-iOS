@@ -33,6 +33,7 @@ typedef NS_ENUM(NSInteger, EWaypointsViewControllerRequestAction)
 @property (nonatomic) id<OAWaypointsScreen> screenObj;
 @property (nonatomic, readonly) EWaypointsScreen waypointsScreen;
 
+- (instancetype) initWithShowAlongType:(BOOL)isShowAlong;
 - (instancetype) initWithWaypointsScreen:(EWaypointsScreen)waypointsScreen;
 - (instancetype) initWithWaypointsScreen:(EWaypointsScreen)waypointsScreen param:(id)param;
 

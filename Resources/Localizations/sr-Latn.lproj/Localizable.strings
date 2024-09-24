@@ -3508,3 +3508,6 @@
 "osmand_cloud_delete_account_descr_with_email" = "Da li ste sigurni da želite da izbrišete OsmAnd Cloud nalog: %@?";
 "battery_saving_mode" = "Režim uštede baterije";
 "quick_action_toggle_preference" = "Prekidač promene podešavanja.";
+"map_settings_weather_temp_air" = "Temperatura vazduha";
+"map_settings_weather_temp_water" = "Temperatura vode";
+"shared_string_local" = "Lokal";

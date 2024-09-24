@@ -595,6 +595,41 @@
 
 @end
 
+@implementation OAShowAlongTheRouteItem
+
+- (NSString *) getText
+{
+    return OALocalizedString(@"show_along_the_route");
+}
+
+- (UIImage *) getIcon
+{
+    return [UIImage imageNamed:@"ic_custom_show_along_route"];
+}
+
+- (NSString *) getCellType
+{
+    return [OAValueTableViewCell getCellIdentifier];
+}
+
+- (NSString *) getValue
+{
+    return @"";
+}
+
+- (void)rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
+{
+    if (self.delegate)
+        [self.delegate openShowAlongScreen];
+}
+
+- (BOOL) hasOptions
+{
+    return YES;
+}
+
+@end
+
 @implementation OAAvoidRoadsRoutingParameter
 
 - (NSString *) getText

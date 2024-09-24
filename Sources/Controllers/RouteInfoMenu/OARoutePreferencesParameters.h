@@ -73,6 +73,7 @@ struct RoutingParameter;
 - (void) showTripSettingsScreen;
 - (void) showAvoidTransportScreen;
 - (void) openSimulateNavigationScreen;
+- (void) openShowAlongScreen;
 
 @end
 
@@ -139,6 +140,9 @@ struct RoutingParameter;
 @end
 
 @interface OAAvoidRoadsRoutingParameter : OALocalRoutingParameter
+@end
+
+@interface OAShowAlongTheRouteItem : OALocalRoutingParameter
 @end
 
 @interface OAAvoidTransportTypesRoutingParameter : OALocalRoutingParameter

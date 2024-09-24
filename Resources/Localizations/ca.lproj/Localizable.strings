@@ -1463,7 +1463,7 @@
 "routeInfo_smoothness_name" = "Uniformitat";
 "rendering_attr_hideWaterPolygons_description" = "Hidràulic";
 "rendering_attr_hidePOILabels_name" = "Etiquetes PDI";
-"routing_attr_freeride_policy_description" = "\'Camp a través\' i \'Fora pistes\' són vies no oficials. Normalment no estan regulades ni mantingudes ni revisades de nit. Entrant-hi, sereu responsables del que passi.";
+"routing_attr_freeride_policy_description" = "'Camp a través' i 'Fora pistes' són vies no oficials. Normalment, no estan regulades ni mantingudes ni revisades de nit. Entrant-hi, sereu responsables del que passi.";
 "rendering_attr_piste_type_downhill_name" = "Descens";
 "routing_attr_allow_classic_only_name" = "Restringeix a rutes clàssiques";
 "rendering_attr_currentTrackWidth_description" = "Amplada traça GPX";

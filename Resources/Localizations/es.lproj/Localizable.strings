@@ -3512,3 +3512,17 @@
 "shared_string_local" = "Local";
 "map_settings_weather_temp_air" = "Temperatura atmosférica";
 "map_settings_weather_temp_water" = "Temperatura del agua";
+"shared_string_all_icons" = "Todos los iconos";
+"resting_position_icon" = "Icono de tu ubicación cuando estás parado";
+"navigation_position_icon_summary" = "Icono que se muestra mientras navegas o te mueves.";
+"show_along_the_route" = "Mostrar a lo largo de la ruta";
+"location_radius_description" = "Muestra el área circular que representa la precisión de la ubicación actual";
+"resting_position" = "Posición de reposo";
+"resting_navigation_position" = "Posición de navegación en reposo";
+"navigation_position_icon" = "Icono de posición de navegación";
+"view_angle" = "Ángulo de visión";
+"profile_icon" = "Icono del perfil";
+"resting_position_icon_summary" = "Icono que se muestra cuando no te estás moviendo.";
+"navigation_position" = "Posición de navegación";
+"location_radius" = "Radio de la ubicación";
+"view_angle_description" = "Muestra el área en forma de cono a la que te enfrentas actualmente";

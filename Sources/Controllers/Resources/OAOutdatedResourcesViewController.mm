@@ -25,7 +25,7 @@ static int kRowsInUpdatesSection = 2;
 
 static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
 
-@interface OAOutdatedResourcesViewController () <UITableViewDelegate, UITableViewDataSource, OASubscriptionBannerCardViewDelegate>
+@interface OAOutdatedResourcesViewController () <UITableViewDelegate, UITableViewDataSource, OASubscriptionBannerCardViewDelegate, DownloadingCellResourceHelperDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
@@ -111,7 +111,6 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
 
     [self setupSubscriptionBanner];
     [self updateContent];
-    [self prepareContent];
     [self.tableView reloadData];
     if (_downloadingCellResourceHelper)
         [_downloadingCellResourceHelper refreshCellSpinners];
@@ -153,9 +152,11 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
 {
     __weak OAOutdatedResourcesViewController *weakSelf = self;
     _downloadingListHelper = [DownloadingListHelper new];
+    _downloadingListHelper.hostDelegate = self;
+    
     _downloadingCellResourceHelper = [DownloadingCellResourceHelper new];
     [_downloadingCellResourceHelper setHostTableView:weakSelf.tableView];
-    _downloadingCellResourceHelper.rightIconStyle = DownloadingCellRightIconTypeShowIconAlways;
+    _downloadingCellResourceHelper.rightIconStyle = DownloadingCellRightIconTypeShowInfoAndShevronAfterDownloading;
     _downloadingCellResourceHelper.isAlwaysClickable = YES;
 }
 
@@ -204,6 +205,7 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
 - (void)updateContent
 {
     [self obtainDataAndItems];
+    [self prepareContent];
     [self refreshContent:YES];
 }
 
@@ -350,7 +352,7 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
             NSString *resourceName = [OAResourcesUIHelper titleOfResource:item.resource inRegion:item.worldRegion
                                                            withRegionName:YES
                                                          withResourceType:YES];
-            [self startDownloadOf:resourceInRepository resourceName:resourceName];
+            [self startDownloadOf:resourceInRepository resourceName:resourceName resourceItem:item];
         }
     }];
     [alert addAction:cancelAction];
@@ -534,14 +536,17 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == _availableMapsSection)
+    if (indexPath.section == _downloadingListCellSection)
+    {
+        [self showModalViewController:[_downloadingListHelper getListViewController]];
+    }
+    else if (indexPath.section == _availableMapsSection)
     {
         id item = _resourcesItems[indexPath.row];
 
         if (item != nil)
             [self onItemClicked:item];
     }
-    
     else if (indexPath.section == _updatesSection && indexPath.row == _weatherForecastsRow)
     {
         if (![[OAIAPHelper sharedInstance].weather isActive])
@@ -590,6 +595,16 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
 - (void) onButtonPressed
 {
     [OAChoosePlanHelper showChoosePlanScreen:self.navigationController];
+}
+
+#pragma mark - DownloadingCellResourceHelperDelegate
+
+- (void)onDownloadingCellResourceNeedUpdate
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateContent];
+        [self.tableView reloadData];
+    });
 }
 
 @end

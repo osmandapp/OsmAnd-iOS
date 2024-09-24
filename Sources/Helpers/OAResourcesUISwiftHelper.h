@@ -59,6 +59,7 @@ typedef NS_ENUM(NSInteger, EOAOAResourceSwiftItemType) {
 - (BOOL) isInstalled;
 - (id<OADownloadTask>) downloadTask;
 - (void) refreshDownloadTask;
+- (BOOL) isOutdatedItem;
 
 @end
 
@@ -94,6 +95,10 @@ typedef NS_ENUM(NSInteger, EOAOAResourceSwiftItemType) {
                     onTaskResumed:(OADownloadTaskCallback)onTaskResumed
                 completionHandler:(void(^)(UIAlertController *))completionHandler;
 
++ (void)offerDownloadAndUpdateOf:(OAResourceSwiftItem *)item
+                   onTaskCreated:(OADownloadTaskCallback)onTaskCreated
+                   onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
+
 + (void) offerCancelDownloadOf:(OAResourceSwiftItem *)item onTaskStop:(OADownloadTaskCallback)onTaskStop completionHandler:(void(^)(UIAlertController *))completionHandler;
 
 + (void)offerMultipleDownloadAndInstallOf:(OAMultipleResourceSwiftItem *)multipleItem
@@ -104,5 +109,7 @@ typedef NS_ENUM(NSInteger, EOAOAResourceSwiftItemType) {
 + (void)checkAndDeleteOtherSRTMResources:(NSArray<OAResourceSwiftItem *> *)itemsToCheck;
 
 + (void) onDownldedResourceInstalled;
+
++ (BOOL) isInOutdatedResourcesList:(NSString *)resourceId;
 
 @end

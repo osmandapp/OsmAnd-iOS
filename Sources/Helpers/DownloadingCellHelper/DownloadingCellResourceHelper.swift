@@ -7,7 +7,7 @@
 //
 
 @objc protocol DownloadingCellResourceHelperDelegate: AnyObject {
-    func onDownldedResourceInstalled()
+    func onDownloadingCellResourceNeedUpdate()
 }
 
 @objcMembers
@@ -50,7 +50,18 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     
     override func startDownload(_ resourceId: String) {
         if let resourceItem = getResource(resourceId) {
-            OAResourcesUISwiftHelper.offerDownloadAndInstall(of: resourceItem, onTaskCreated: nil, onTaskResumed: nil)
+            if resourceItem.isOutdatedItem() {
+                OAResourcesUISwiftHelper.offerDownloadAndUpdate(of: resourceItem) { [weak self] task in
+                    self?.delegate?.onDownloadingCellResourceNeedUpdate()
+                } onTaskResumed: { task in
+                }
+            } else {
+                OAResourcesUISwiftHelper.offerDownloadAndInstall(of: resourceItem) { [weak self] task in
+                    self?.delegate?.onDownloadingCellResourceNeedUpdate()
+                } onTaskResumed: { task in
+                }
+            }
+            
         }
     }
     
@@ -84,6 +95,13 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
             return resourceItem.downloadTask() != nil && super.isDownloading(resourceId)
         }
         return false
+    }
+    
+    override func isFinished(_ resourceId: String) -> Bool {
+        let isDownloading = isDownloading(resourceId)
+        let isInstalled = isInstalled(resourceId)
+        let isOutdated = OAResourcesUISwiftHelper.is(inOutdatedResourcesList: resourceId)
+        return !isDownloading && isInstalled && !isOutdated
     }
     
     override func helperHasItemFor(_ resourceId: String) -> Bool {
@@ -146,7 +164,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     }
     
     override func onCellClicked(_ resourceId: String) {
-        if !isInstalled(resourceId) || isAlwaysClickable {
+        if !isFinished(resourceId) || isAlwaysClickable {
             if !isDownloading(resourceId) {
                 if !isDisabled(resourceId) {
                     startDownload(resourceId)
@@ -239,7 +257,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
                 return
             }
             OAResourcesUISwiftHelper.onDownldedResourceInstalled()
-            self?.delegate?.onDownldedResourceInstalled()
+            self?.delegate?.onDownloadingCellResourceNeedUpdate()
         }
     }
     

@@ -153,6 +153,11 @@
     return [[OsmAndApp.instance.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resourceId]] firstObject];
 }
 
+- (BOOL) isOutdatedItem
+{
+    return [self.objcResourceItem isKindOfClass:OAOutdatedResourceItem.class];
+}
+
 @end
 
 
@@ -317,6 +322,17 @@
     [OAResourcesUIHelper offerDownloadAndInstallOf:res onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed completionHandler:completionHandler silent:NO];
 }
 
++ (void)offerDownloadAndUpdateOf:(OAResourceSwiftItem *)item
+                   onTaskCreated:(OADownloadTaskCallback)onTaskCreated
+                   onTaskResumed:(OADownloadTaskCallback)onTaskResumed
+{
+    if ([item isOutdatedItem])
+    {
+        OAOutdatedResourceItem *res = (OAOutdatedResourceItem *)item.objcResourceItem;
+        [OAResourcesUIHelper offerDownloadAndUpdateOf:res onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+    }
+}
+
 + (void) offerCancelDownloadOf:(OAResourceSwiftItem *)item onTaskStop:(OADownloadTaskCallback)onTaskStop completionHandler:(void(^)(UIAlertController *))completionHandler
 {
     OAResourceItem *res = (OAResourceItem *)item.objcResourceItem;
@@ -382,6 +398,11 @@
 {
     [[OARootViewController instance].mapPanel.mapViewController updatePoiLayer];
     [OAManageResourcesViewController prepareData];
+}
+
++ (BOOL) isInOutdatedResourcesList:(NSString *)resourceId
+{
+    return [OAResourcesUIHelper isInOutdatedResourcesList:resourceId];
 }
 
 @end

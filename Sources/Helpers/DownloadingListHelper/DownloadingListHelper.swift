@@ -9,7 +9,9 @@
 import UIKit
 
 @objcMembers
-final class DownloadingListHelper: NSObject {
+final class DownloadingListHelper: NSObject, DownloadingCellResourceHelperDelegate {
+    
+    weak var hostDelegate: DownloadingCellResourceHelperDelegate?
     
     private var downloadsManager: OADownloadsManager
     private var allDownloadingsCell: OATitleIconProgressbarCell?
@@ -76,7 +78,10 @@ final class DownloadingListHelper: NSObject {
     }
     
     func getListViewController() -> DownloadingListViewController {
-        return DownloadingListViewController()
+        let vc = DownloadingListViewController()
+        weak var weakSelf = self
+        vc.delegate = weakSelf
+        return vc
     }
     
     private func calculateAllDownloadingsCellProgress() -> Double {
@@ -119,5 +124,11 @@ final class DownloadingListHelper: NSObject {
                 }
             }
         }
+    }
+    
+    // MARK: - DownloadingCellResourceHelperDelegate
+   
+    func onDownloadingCellResourceNeedUpdate() {
+        hostDelegate?.onDownloadingCellResourceNeedUpdate()
     }
 }

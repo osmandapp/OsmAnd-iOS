@@ -10,6 +10,8 @@ import UIKit
 
 final class DownloadingListViewController: OABaseNavbarViewController, DownloadingCellResourceHelperDelegate {
     
+    weak var delegate: DownloadingCellResourceHelperDelegate?
+    
     private var downloadingListHelper: DownloadingListHelper?
     private var downloadingCellResourceHelper: DownloadingCellResourceHelper?
     
@@ -37,7 +39,7 @@ final class DownloadingListViewController: OABaseNavbarViewController, Downloadi
         downloadingCellResourceHelper?.delegate = weakSelf
         downloadingCellResourceHelper?.stopWithAlertMessage = true
         downloadingCellResourceHelper?.isDownloadedLeftIconRecolored = true
-        downloadingCellResourceHelper?.rightIconStyle = .hideIconAfterDownloading
+        downloadingCellResourceHelper?.rightIconStyle = .showDoneIconAfterDownloading
         downloadingCellResourceHelper?.rightIconName = "ic_custom_done"
         downloadingCellResourceHelper?.rightIconColor = .iconColorActive
         downloadingCellResourceHelper?.showDownloadingBytesInDescription = true
@@ -73,7 +75,7 @@ final class DownloadingListViewController: OABaseNavbarViewController, Downloadi
                 let resourceId = item.string(forKey: "resourceId") ?? ""
                 let resource = item.obj(forKey: "item") as? OAResourceSwiftItem
                 let cell = downloadingCellResourceHelper.getOrCreateCell(resourceId, swiftResourceItem: resource)
-                if downloadingCellResourceHelper.isInstalled(resourceId) {
+                if downloadingCellResourceHelper.isFinished(resourceId) {
                     cell?.leftIconView.tintColor = .iconColorActive
                     cell?.rightIconView.image = UIImage.templateImageNamed(downloadingCellResourceHelper.rightIconName)
                     cell?.rightIconVisibility(true)
@@ -98,7 +100,8 @@ final class DownloadingListViewController: OABaseNavbarViewController, Downloadi
     
     // MARK: - DownloadingCellResourceHelperDelegate
    
-    func onDownldedResourceInstalled() {
+    func onDownloadingCellResourceNeedUpdate() {
         fetchResources()
+        delegate?.onDownloadingCellResourceNeedUpdate()
     }
 }

@@ -77,6 +77,11 @@ class DownloadingCellBaseHelper: NSObject {
         return false
     }
     
+    // Override in subclass
+    func isFinished(_ resourceId: String) -> Bool {
+        isInstalled(resourceId)
+    }
+    
     func startDownload(_ resourceId: String) {
         // Override in subclass
     }
@@ -206,7 +211,7 @@ class DownloadingCellBaseHelper: NSObject {
                 showIcon = true
             }
         } else if rightIconStyle == .showDoneIconAfterDownloading {
-            showIcon = true
+            showIcon = isFinished(resourceId)
         }
         
         if showIcon {
@@ -320,6 +325,10 @@ class DownloadingCellBaseHelper: NSObject {
             }
             setupRightIconForIdleCell(cell: cell, rightIconName: getRightIconName(), resourceId: resourceId)
         }
+    }
+    
+    func getStatus(resourceId: String) -> ItemStatusType? {
+        statuses[resourceId]
     }
     
     func saveStatus(resourceId: String, status: ItemStatusType) {

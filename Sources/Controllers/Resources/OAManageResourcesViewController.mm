@@ -68,7 +68,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 #define kAllResourcesScope 0
 #define kLocalResourcesScope 1
 
-@interface OAManageResourcesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate, UISearchResultsUpdating, UISearchBarDelegate, OASubscriptionBannerCardViewDelegate, OASubscribeEmailViewDelegate, OADownloadMultipleResourceDelegate, OAWeatherForecastDetails>
+@interface OAManageResourcesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate, UISearchResultsUpdating, UISearchBarDelegate, OASubscriptionBannerCardViewDelegate, OASubscribeEmailViewDelegate, OADownloadMultipleResourceDelegate, OAWeatherForecastDetails, DownloadingCellResourceHelperDelegate>
 
 //@property (weak, nonatomic) IBOutlet UISegmentedControl *scopeControl;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -450,6 +450,7 @@ static BOOL _repositoryUpdated = NO;
 {
     __weak OAManageResourcesViewController *weakSelf = self;
     _downloadingListHelper = [DownloadingListHelper new];
+    _downloadingListHelper.hostDelegate = self;
     
     _downloadingCellResourceHelper = [DownloadingCellResourceHelper new];
     [_downloadingCellResourceHelper setHostTableView:weakSelf.tableView];
@@ -3341,6 +3342,13 @@ static BOOL _repositoryUpdated = NO;
     {
         [self updateDisplayItem:_regionMapItems[_weatherForecastRow]];
     }
+}
+
+#pragma mark - DownloadingCellResourceHelperDelegate
+
+- (void)onDownloadingCellResourceNeedUpdate
+{
+    
 }
 
 @end

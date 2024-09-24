@@ -3513,3 +3513,17 @@
 "shared_string_local" = "Lokal";
 "map_settings_weather_temp_air" = "Lufttemperatur";
 "map_settings_weather_temp_water" = "Vandtemperatur";
+"shared_string_all_icons" = "Alle ikoner";
+"resting_position_icon" = "Ikon for hvileposition";
+"navigation_position_icon" = "Ikon for navigationsposition";
+"resting_position_icon_summary" = "Ikon, der vises, når du ikke bevæger dig.";
+"navigation_position_icon_summary" = "Ikon, der vises, mens du navigerer eller bevæger dig.";
+"show_along_the_route" = "Vis langs ruten";
+"view_angle" = "Betragtningsvinkel";
+"location_radius" = "Placeringsradius";
+"view_angle_description" = "Viser det kegleformede område, du aktuelt vender mod";
+"resting_navigation_position" = "Position for hvile-navigation";
+"profile_icon" = "Profilikon";
+"resting_position" = "Hvileposition";
+"location_radius_description" = "Viser det cirkulære område, der repræsenterer din aktuelle placeringsnøjagtighed";
+"navigation_position" = "Navigationsposition";

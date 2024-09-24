@@ -885,7 +885,7 @@
 "osm_closes_at" = "Tanca a les:";
 "contact_info" = "Informació de contacte";
 "map_widget_top_text" = "Nom del carrer";
-"osm_building_num" = "Número de finca";
+"osm_building_num" = "Número de l'edifici";
 "phone" = "Telèfon";
 "website" = "Lloc web";
 "osm_add_place" = "Afegeix lloc";

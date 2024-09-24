@@ -80,29 +80,31 @@ final class CarPlaySceneDelegate: UIResponder {
     
     private func configureCarPlayNavigationMode() {
         guard let settings = OAAppSettings.sharedManager(), let routingHelper = OARoutingHelper.sharedInstance() else { return }
-        defaultAppMode = settings.applicationMode.get()
-        if let defaultAppMode = defaultAppMode {
-            var appModeToSet: OAApplicationMode?
-            if settings.isCarPlayModeDefault.get() {
-                if !defaultAppMode.isDerivedRouting(from: OAApplicationMode.car()) {
-                    let derivedMode = OAApplicationMode.values()?.first(where: { $0.isDerivedRouting(from: OAApplicationMode.car()) })
-                    appModeToSet = derivedMode ?? defaultAppMode
-                } else {
-                    appModeToSet = defaultAppMode
-                }
+        if defaultAppMode == nil {
+            defaultAppMode = settings.applicationMode.get()
+        }
+        
+        guard let defaultAppMode = defaultAppMode else { return }
+        var appModeToSet: OAApplicationMode?
+        if settings.isCarPlayModeDefault.get() {
+            if !defaultAppMode.isDerivedRouting(from: OAApplicationMode.car()) {
+                let derivedMode = OAApplicationMode.values()?.first(where: { $0.isDerivedRouting(from: OAApplicationMode.car()) })
+                appModeToSet = derivedMode ?? defaultAppMode
             } else {
-                appModeToSet = settings.carPlayMode.get()
+                appModeToSet = defaultAppMode
             }
-            
-            if let appMode = appModeToSet {
-                settings.setApplicationModePref(appMode, markAsLastUsed: false)
-                routingHelper.setAppMode(appMode)
-            }
-            
-            if defaultAppMode != settings.applicationMode.get() && isRoutingActive() {
-                routingHelper.recalculateRouteDueToSettingsChange()
-                OATargetPointsHelper.sharedInstance().updateRouteAndRefresh(true)
-            }
+        } else {
+            appModeToSet = settings.carPlayMode.get()
+        }
+        
+        if let appMode = appModeToSet {
+            settings.setApplicationModePref(appMode, markAsLastUsed: false)
+            routingHelper.setAppMode(appMode)
+        }
+        
+        if defaultAppMode != settings.applicationMode.get() && isRoutingActive() {
+            routingHelper.recalculateRouteDueToSettingsChange()
+            OATargetPointsHelper.sharedInstance().updateRouteAndRefresh(true)
         }
     }
     

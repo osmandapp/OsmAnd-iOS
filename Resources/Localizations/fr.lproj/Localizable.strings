@@ -2018,7 +2018,7 @@
 "available_languages" = "Langues disponibles";
 "some_articles_may_not_available_in_lang" = "Certains articles Wikipédia peuvent ne pas être disponibles dans votre langue.";
 "wiki_menu_download_descr" = "D’autres cartes sont nécessaires pour afficher les POI Wikipédia sur la carte.";
-"select_wikipedia_article_langs" = "Sélectionnez les langues dans lesquelles les articles Wikipédia s\'afficheront sur la carte. Vous pouvez basculer entre toutes les langues disponibles pendant la lecture de l\'article.";
+"select_wikipedia_article_langs" = "Sélectionnez les langues dans lesquelles les articles Wikipédia s'afficheront sur la carte. Vous pouvez basculer entre toutes les langues disponibles pendant la lecture de l'article.";
 "shared_string_all_languages" = "Toutes les langues";
 "board_at" = "Embarquement à";
 "download_suggestion" = "Pour voir les détails de cette zone, téléchargez la carte %@";
@@ -2811,7 +2811,7 @@
 "announcement_time_prepare" = "Préparation";
 "announcement_time_approach" = "Approche";
 "announcement_time_passing" = "Durée";
-"compass_click_desc" = "Astuce : appuyez sur la boussole pour basculer entre les modes d\'orientation de la carte.";
+"compass_click_desc" = "Astuce : appuyez sur la boussole pour basculer entre les modes d'orientation de la carte.";
 "search_history_disabled" = "L'historique de recherche est désactivé";
 "last_seven_days" = "Ces 7 derniers jours";
 "delete_history_items" = "Supprimer %@ éléments d’historique \?";
@@ -2969,7 +2969,7 @@
 "radius_rules_widget_desc" = "L\'outil Rayon affiche des cercles de rayon autour d\'un point sélectionné sur la carte.";
 "current_speed_widget_desc" = "Indique votre vitesse actuelle (d\'après le GPS).";
 "street_name_widget_desc" = "Le widget des noms de rue affiche le nom de la rue actuelle ou le nom de la rue suivante avec une flèche indiquant la prochaine manœuvre à effectuer.";
-"bearing_secondary_desc" = "Vous pouvez modifier le format d\'affichage utilisé en : %@ - %@ - %@.";
+"bearing_secondary_desc" = "Vous pouvez modifier le format d'affichage utilisé en : %@ - %@ - %@.";
 "coordinates_widget_secondary_desc" = "Vous pouvez modifier le format des coordonnées en %@ - %@ - %@.";
 "weather_widgets_secondary_desc" = "Les unités de mesure peuvent être modifiées dans les paramètres du plugin météo.";
 "map_markers_bar" = "Barre de marqueurs";
@@ -3511,9 +3511,8 @@
 "shared_string_local" = "Stockage";
 "map_settings_weather_temp_water" = "Température de l'eau";
 "map_settings_weather_temp_air" = "Température de l'air";
-
 "rendering_attr_showDirtbikeTrails_name" = "Afficher les sentiers de terre pour vélos";
-"rendering_attr_showDirtbikeTrails_description" = "Afficher les sentiers de terre pour vélos";;
+"rendering_attr_showDirtbikeTrails_description" = "Afficher les sentiers de terre pour vélos";
 "navigation_position" = "Position de guidage";
 "resting_position_icon" = "Icône de votre position lorsque vous êtes immobile";
 "navigation_position_icon" = "Icône de votre position lors du guidage";

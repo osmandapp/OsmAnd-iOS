@@ -2941,9 +2941,8 @@
 "track_3d" = "3D stopa";
 "shared_string_analysis" = "Analýza";
 "shared_string_update_required" = "Vyžaduje sa aktualizácia";
-
 "rendering_attr_showDirtbikeTrails_description" = "Zobraziť blatisté cyklocesty";
-"rendering_attr_showDirtbikeTrails_name" = "Zobraziť blatisté cyklocesty";;
+"rendering_attr_showDirtbikeTrails_name" = "Zobraziť blatisté cyklocesty";
 "resting_position_icon" = "Ikona pozície v pokoji";
 "shared_string_all_icons" = "Všetky ikony";
 "navigation_position" = "Pozícia počas navigácie";

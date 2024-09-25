@@ -29,7 +29,7 @@ final class DownloadingListHelper: NSObject, DownloadingCellResourceHelperDelega
     }
     
     func hasDownloads() -> Bool {
-        return !getDownloadingTasks().isEmpty
+        !getDownloadingTasks().isEmpty
     }
     
     func getDownloadingTasks() -> [OADownloadTask] {
@@ -56,7 +56,7 @@ final class DownloadingListHelper: NSObject, DownloadingCellResourceHelperDelega
         
         cell.accessoryType = .disclosureIndicator
         cell.imgView.image = UIImage.templateImageNamed("ic_custom_multi_download")
-        cell.imgView.tintColor = UIColor.iconColorActive
+        cell.imgView.tintColor = .iconColorActive
         
         var title = localizedString("downloading") + ": "
         let tasks = getDownloadingTasks()
@@ -69,7 +69,7 @@ final class DownloadingListHelper: NSObject, DownloadingCellResourceHelperDelega
         cell.textView.text = title
         
         cell.progressBar.setProgress(Float(calculateAllDownloadingsCellProgress()), animated: false)
-        cell.progressBar.progressTintColor = UIColor.iconColorActive
+        cell.progressBar.progressTintColor = .iconColorActive
         
         allDownloadingsCell = cell
         return allDownloadingsCell
@@ -77,8 +77,7 @@ final class DownloadingListHelper: NSObject, DownloadingCellResourceHelperDelega
     
     func getListViewController() -> DownloadingListViewController {
         let vc = DownloadingListViewController()
-        weak var weakSelf = self
-        vc.delegate = weakSelf
+        vc.delegate = self
         return vc
     }
     
@@ -111,14 +110,14 @@ final class DownloadingListHelper: NSObject, DownloadingCellResourceHelperDelega
     private func updateProgreesBar(animated: Bool) {
         if let allDownloadingsCell {
             DispatchQueue.main.async { [weak self] in
-                let newProgress = Float(self?.calculateAllDownloadingsCellProgress() ?? 0)
-                self?.allDownloadingsCell?.progressBar.setProgress(newProgress , animated: animated)
+                guard let self else { return }
+                let newProgress = Float(self.calculateAllDownloadingsCellProgress())
+                self.allDownloadingsCell?.progressBar.setProgress(newProgress , animated: animated)
                 
-                if let newDownloadingsCount = self?.getDownloadingTasks().count {
-                    if newDownloadingsCount != self?.downloadTaskCount {
-                        self?.downloadTaskCount = newDownloadingsCount
-                        self?.buildAllDownloadingsCell()
-                    }
+                let newDownloadingsCount = self.getDownloadingTasks().count
+                if newDownloadingsCount != self.downloadTaskCount {
+                    self.downloadTaskCount = newDownloadingsCount
+                    self.buildAllDownloadingsCell()
                 }
             }
         }

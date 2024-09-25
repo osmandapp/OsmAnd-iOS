@@ -196,8 +196,7 @@
     {
         [OAResourcesUIHelper startDownloadOfCustomItem:_item onTaskCreated:^(id<OADownloadTask> task) {
             [self.navigationController popViewControllerAnimated:YES];
-        } onTaskResumed:^(id<OADownloadTask> task) {
-        }];
+        } onTaskResumed:nil];
     }
 }
 

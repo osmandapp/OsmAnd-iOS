@@ -225,16 +225,14 @@ static BOOL dataInvalidated = NO;
 {
     [OAResourcesUIHelper startDownloadOfCustomItem:item onTaskCreated:^(id<OADownloadTask> task) {
         [self updateContent];
-    } onTaskResumed:^(id<OADownloadTask> task) {
-    }];
+    } onTaskResumed:nil];
 }
 
 - (void) offerDownloadAndInstallOf:(OARepositoryResourceItem *)item
 {
     [OAResourcesUIHelper offerDownloadAndInstallOf:item onTaskCreated:^(id<OADownloadTask> task) {
             [self updateContent];
-    } onTaskResumed:^(id<OADownloadTask> task) {
-    }];
+    } onTaskResumed:nil];
 }
 
 - (void) offerDownloadAndUpdateOf:(OAOutdatedResourceItem *)item
@@ -256,8 +254,7 @@ static BOOL dataInvalidated = NO;
 
     [OAResourcesUIHelper offerDownloadAndUpdateOf:item onTaskCreated:^(id<OADownloadTask> task) {
         [self updateContent];
-    } onTaskResumed:^(id<OADownloadTask> task) {
-    }];
+    } onTaskResumed:nil];
 }
 
 - (void) startDownloadOfItem:(OARepositoryResourceItem *)item

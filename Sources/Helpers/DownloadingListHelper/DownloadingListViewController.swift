@@ -30,13 +30,12 @@ final class DownloadingListViewController: OABaseNavbarViewController, Downloadi
     }
     
     func setupDownloadingCellHelper() {
-        weak var weakSelf = self
         downloadingListHelper = DownloadingListHelper()
         
         downloadingCellResourceHelper = DownloadingCellResourceHelper()
-        downloadingCellResourceHelper?.hostViewController = weakSelf
-        downloadingCellResourceHelper?.setHostTableView(weakSelf?.tableView)
-        downloadingCellResourceHelper?.delegate = weakSelf
+        downloadingCellResourceHelper?.hostViewController = self
+        downloadingCellResourceHelper?.setHostTableView(self.tableView)
+        downloadingCellResourceHelper?.delegate = self
         downloadingCellResourceHelper?.stopWithAlertMessage = true
         downloadingCellResourceHelper?.isDownloadedLeftIconRecolored = true
         downloadingCellResourceHelper?.rightIconStyle = .showDoneIconAfterDownloading

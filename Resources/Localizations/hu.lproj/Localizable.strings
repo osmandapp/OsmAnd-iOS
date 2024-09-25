@@ -2945,9 +2945,8 @@
 "shared_string_favorites" = "Kedvencek";
 "shared_string_change" = "Módosítás";
 "shared_string_show" = "Megjelenítés";
-
 "rendering_attr_showDirtbikeTrails_name" = "Crossmotor utak mutatása";
-"rendering_attr_showDirtbikeTrails_description" = "Crossmotor utak mutatása";;
+"rendering_attr_showDirtbikeTrails_description" = "Crossmotor utak mutatása";
 "shared_string_local" = "Telepítve";
 "navigation_position_icon_summary" = "Navigálás vagy mozgás közben megjelenő ikon.";
 "resting_navigation_position" = "Állóhelyzeti és navigálási pozíció";

@@ -3511,9 +3511,8 @@
 "map_settings_weather_temp_air" = "Temperatura vazduha";
 "map_settings_weather_temp_water" = "Temperatura vode";
 "shared_string_local" = "Preuzeto";
-
 "rendering_attr_showDirtbikeTrails_name" = "Prikazati staze za bicikle";
-"rendering_attr_showDirtbikeTrails_description" = "Prikazati staze za bicikle";;
+"rendering_attr_showDirtbikeTrails_description" = "Prikazati staze za bicikle";
 "resting_position_icon" = "Ikona položaja za odmor";
 "shared_string_all_icons" = "Sve ikone";
 "navigation_position" = "U pokretu";

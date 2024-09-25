@@ -3527,6 +3527,5 @@
 "resting_position" = "Hvileposition";
 "location_radius_description" = "Viser det cirkulære område, der repræsenterer din aktuelle placeringsnøjagtighed";
 "navigation_position" = "Navigationsposition";
-
 "rendering_attr_showDirtbikeTrails_description" = "Vis motocross-stier";
-"rendering_attr_showDirtbikeTrails_name" = "Vis motocross-stier";;
+"rendering_attr_showDirtbikeTrails_name" = "Vis motocross-stier";

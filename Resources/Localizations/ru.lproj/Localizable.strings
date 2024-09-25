@@ -3258,9 +3258,8 @@
 "height_legend_description" = "Для визуализации рельефа используются цветовые карты высот.";
 "quick_action_verb_start_stop" = "Старт/стоп";
 "shared_string_show" = "Показать";
-
 "rendering_attr_showDirtbikeTrails_description" = "Показывает трассы для мотокросса";
-"rendering_attr_showDirtbikeTrails_name" = "Трассы для мотокросса";;
+"rendering_attr_showDirtbikeTrails_name" = "Трассы для мотокросса";
 "navigation_position_icon_summary" = "Значок отображается во время навигации или перемещения.";
 "shared_string_local" = "Локальные";
 "location_radius" = "Радиус местоположения";

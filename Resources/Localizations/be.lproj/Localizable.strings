@@ -2374,7 +2374,7 @@
 "depth_contour_lines" = "Ізабаты";
 "routing_attr_avoid_low_emission_zone_description" = "Пазбягаць зон з нізкім узроўнем выкідаў";
 "recalc_angle_dialog_title" = "Мінімальны вугал паміж маёй пазіцыяй і маршрутам";
-"empty_purchases_description" = "Калі вашы пакупкі не з\'явіліся тут, націсніце на «%@» або звярніцеся ў нашу службу падтрымкі.";
+"empty_purchases_description" = "Калі вашы пакупкі не з'явіліся тут, націсніце на «%@» або звярніцеся ў нашу службу падтрымкі.";
 "renew_subscription" = "Працягнуць падпіску";
 "benefits_for_contributors_primary_descr" = "Актыўныя ўдзельнікі OpenStreetMap.org маюць права на неабмежаваную колькасць штогадзінных абнаўленняў мапаў.";
 "copy_poi_name" = "Капіяваць назву POI";

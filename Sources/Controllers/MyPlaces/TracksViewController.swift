@@ -8,6 +8,16 @@
 
 import OsmAndShared
 
+extension Array {
+    func toKotlinArray<Item: AnyObject>() -> KotlinArray<Item> {
+        return KotlinArray(size: Int32(self.count)) { (i: KotlinInt) in
+            var shutUpCompiler: Item?
+            shutUpCompiler = (self[i.intValue] as! Item)
+            return shutUpCompiler
+        }
+    }
+}
+
 private protocol TrackListUpdatableDelegate: AnyObject {
     func updateHostVCWith(rootFolder: TrackFolder, visibleTracksFolder: TrackFolder)
 }
@@ -116,7 +126,12 @@ private enum ButtonActionNumberTag: Int {
     case save = 2
 }
 
-class TracksViewController: OACompoundViewController, UITableViewDelegate, UITableViewDataSource, OATrackSavingHelperUpdatableDelegate, TrackListUpdatableDelegate, OASelectTrackFolderDelegate, OAGPXImportUIHelperDelegate, MapSettingsGpxViewControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate {
+//fileprivate extension TrackFolderLoaderTaskLoadTracksListener {
+//
+//}
+
+
+class TracksViewController: OACompoundViewController, UITableViewDelegate, UITableViewDataSource, OATrackSavingHelperUpdatableDelegate, TrackListUpdatableDelegate, OASelectTrackFolderDelegate, OAGPXImportUIHelperDelegate, MapSettingsGpxViewControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate, TrackFolderLoaderTaskLoadTracksListener {
     
     private let visibleTracksKey = "visibleTracksKey"
     private let tracksFolderKey = "tracksFolderKey"
@@ -135,6 +150,8 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     private let isFullWidthSeparatorKey = "isFullWidthSeparatorKey"
     
     @IBOutlet private weak var tableView: UITableView!
+    
+    private var asyncLoader: TrackFolderLoaderTask?
     
     fileprivate weak var hostVCDelegate: TrackListUpdatableDelegate?
     private var tableData = OATableDataModel()
@@ -167,6 +184,8 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     private var importHelper: OAGPXImportUIHelper
     private var dateFormatter: DateFormatter
     
+    private var rootFolderTest: OsmAndShared.TrackFolder?
+    
     required init?(coder: NSCoder) {
         app = OsmAndApp.swiftInstance()
         settings = OAAppSettings.sharedManager()
@@ -185,6 +204,39 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         super.init(coder: coder)
         importHelper = OAGPXImportUIHelper(hostViewController: self)
         importHelper.delegate = self
+    }
+    
+    internal func deferredLoadTracksFinished(folder: OsmAndShared.TrackFolder) {
+        print("function: \(#function)")
+    }
+    
+    internal func loadTracksFinished(folder: OsmAndShared.TrackFolder) {
+        print("function: \(#function)")
+            
+            let trackItems = folder.getTrackItems()
+            let subFolders = folder.getSubFolders()
+            let flattenedSubFolders = folder.getFlattenedSubFolders()
+            let getFlattenedTrackItems = folder.getFlattenedTrackItems()
+            print("function:")
+        
+        
+        let trackItems1 = rootFolderTest!.getTrackItems()
+        let subFolders1 = rootFolderTest!.getSubFolders()
+        let flattenedSubFolders1 = rootFolderTest!.getFlattenedSubFolders()
+        print("function:")
+    
+    }
+    
+    func loadTracksProgress(items: KotlinArray<TrackItem>) {
+        print("function: \(#function)")
+    }
+    
+    func loadTracksStarted() {
+        print("function: \(#function)")
+    }
+    
+    internal func tracksLoaded(folder: OsmAndShared.TrackFolder) {
+        print("function: \(#function)")
     }
     
     // MARK: - Base UI settings
@@ -209,9 +261,21 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         }
     }
     
+    private func loadTrack() {
+        let file = KFile(filePath: OsmAndApp.swiftInstance().gpxPath)
+        rootFolderTest = OsmAndShared.TrackFolder(dirFile: file, parentFolder: nil)
+        
+        let kotlinEmptyArray: KotlinArray<KotlinUnit> = [].toKotlinArray()
+        
+        asyncLoader = TrackFolderLoaderTask(folder: rootFolderTest!, listener: self, forceLoad: true)
+        asyncLoader?.execute(params: kotlinEmptyArray)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.keyboardDismissMode = .onDrag
+        loadTrack()
+        
         addRefreshControl()
         if isRootFolder && rootFolder.tracks.isEmpty && rootFolder.subfolders.isEmpty {
             buildFoldersTree()
@@ -611,7 +675,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     }
     
     @objc private func onRefresh() {
-        gpxDB.newLoad()
+       // gpxDB.newLoad()
     }
     
     @objc private func onRefreshEnd() {

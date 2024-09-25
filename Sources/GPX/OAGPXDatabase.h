@@ -138,7 +138,6 @@ typedef NS_ENUM(NSInteger, EOAGPX3DLineVisualizationPositionType) {
 -(void)replaceGpxItem:(OAGPX *)gpx;
 -(void)removeGpxItem:(NSString *)filePath;
 -(BOOL)containsGPXItem:(NSString *)filePath;
--(BOOL)containsGPXItemByFileName:(NSString *)fileName;
 -(BOOL)updateGPXItemPointsCount:(NSString *)filePath pointsCount:(int)pointsCount;
 -(BOOL)updateGPXItemColor:(OAGPX *)item color:(int)color;
 

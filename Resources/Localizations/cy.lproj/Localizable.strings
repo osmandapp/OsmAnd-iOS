@@ -2690,7 +2690,7 @@
 "navigation_points" = "Pwyntiau llywio";
 "lang_zh-Hans" = "Tsieineeg (Syml)";
 "announce_when_exceeded" = "Cyhoeddi pan dros y terfyn";
-"bearing_secondary_desc" = "Gellir newid fformat y ddata sy\'n ymddangos yn %@ - %@ - %@.";
+"bearing_secondary_desc" = "Gellir newid fformat y ddata sy'n ymddangos yn %@ - %@ - %@.";
 "activity_type_motorbike_name" = "Beic modur";
 "coordinates_format" = "Fformat cyfesurynnau";
 "last_seven_days" = "7 diwrnod diwethaf";

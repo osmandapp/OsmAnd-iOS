@@ -110,7 +110,7 @@
 "rotate_map_to_bearing_descr" = "Select the map screen alignment.";
 "rotate_map_compass_opt" = "To compass";
 "rotate_map_bearing_opt" = "To direction of movement";
-"rotate_map_north_opt" = "Do not rotate (north is up)";
+"rotate_map_north_opt" = "North is up";
 "driving_region_descr" = "Select the driving region: US, Europe, UK, Asia and others.";
 "driving_region" = "Driving region";
 "shared_string_automatic" = "Automatic";

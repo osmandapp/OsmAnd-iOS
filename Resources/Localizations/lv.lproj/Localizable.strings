@@ -1,4 +1,3 @@
-"OsmAnd Maps" = "OsmAnd Maps";
 "download_depth_countours" = "Jūras dziļuma kontūras";
 "day_short" = "D";
 "week_short" = "Wk";
@@ -64,7 +63,6 @@
 "search_radius" = "Search radius";
 "shared_string_target_points" = "Galapunkti";
 "search_radius_proximity" = "Attālumā līdz";
-"poi" = "POI";
 "search_more" = "Search more…";
 "day_off_label" = "Izejamās dienas";
 "open_from" = "Atvērts no";
@@ -328,7 +326,6 @@
 "navigation_over_track" = "Sākt navigāciju pa trasi?";
 "use_displayed_track_for_navigation" = "Vai lietot norādīto ceļu navigācijai?";
 "previous_route" = "Iepriekšējais maršruts";
-"shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Norādīt uz kartes";
 "selected_roads" = "Selected roads";
 "shared_string_my_location" = "Mana atrašanās vieta";
@@ -396,11 +393,7 @@
 "si_min_km" = "Minūtes kilometrā";
 "si_min_m" = "Minūtes jūdzē";
 "si_nm_h" = "Jūras jūdzes stundā (mezgli)";
-"nm" = "nm";
 "units_nm_h" = "nmi/h";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
 "shared_string_tones" = "tones";
 "nothing_found" = "Neko neatrada";
 "nothing_found_descr" = "Meklējiet pēc cita vārda vai palieliniet meklēšanas rādiusu.";
@@ -671,7 +664,6 @@
 "shared_string_transparency" = "Transparency";
 "map_transparency" = "Bāzes kartes caurspīdīgums";
 "map_settings_avail_lay" = "Available layers";
-"mapillary" = "Mapillary";
 "street_level_imagery" = "Street-level imagery";
 "shared_string_terrain" = "Terrain";
 "map_settings_layer_transparency" = "Layer transparency";
@@ -775,7 +767,6 @@
 "lang_el" = "Grieķu";
 "lang_en" = "Angļu";
 "lang_en_gb" = "Angļu (apvienotā karaliste)";
-"lang_eo" = "Esperanto";
 "lang_es" = "Spāņu";
 "lang_es_ar" = "Spāņu (argentīniešu)";
 "lang_es_us" = "Spāņu (amerikāņu)";
@@ -854,7 +845,6 @@
 "lang_sv" = "Zviedru";
 "lang_sw" = "Svahili";
 "lang_ta" = "Tamilu";
-"lang_te" = "Telugu";
 "lang_tg" = "Tajik";
 "lang_th" = "Taizemiešu";
 "lang_tl" = "Tagalogu";
@@ -913,8 +903,6 @@
 "shared_string_settings" = "Iestatījumi";
 "configure_screen_quick_action" = "Ātrās darbības";
 "search_activity" = "Meklēt";
-"ltr_or_rtl_combine_via_space" = "%@ %@";
-"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "listed_exist" = "Listed %@ already exist in OsmAnd.";
 "shared_string_import_complete" = "Import complete";
 "import_complete_description" = "All data from the %@ is imported, you can use buttons below to open needed part of the app to manage it";
@@ -1127,7 +1115,6 @@
 "res_edit_map_source" = "Edit map source";
 "res_online_name_descr" = "Provide name for online source";
 "res_online_url_descr" = "Enter or copy and paste URL for online source";
-"edit_tilesource_url_to_load" = "URL";
 "shared_string_zoom_levels" = "Zoom levels";
 "res_expire_time" = "Expire time";
 "res_mercator" = "Mercator Projection";
@@ -1440,13 +1427,9 @@
 "mile" = "jūdze";
 "yard" = "Jards";
 "foot" = "Pēdas";
-"km_h" = "km/h";
 "mile_per_hour" = "mil/h";
-"int_hour" = "h";
-"int_min" = "min.";
 "shared_string_sec" = "sec";
 "units_sec_short" = "s";
-"metric_ton" = "t";
 
 // Help
 "help_first_steps" = "First steps";
@@ -1823,7 +1806,6 @@
 "sett_ext_input_desc" = "Select a device such as a generic keyboard or WunderLINQ for external controls.";
 "external_input_device" = "Ārējās ievades ierīces";
 "sett_generic_ext_input" = "Klaviatūra";
-"sett_wunderlinq_ext_input" = "WunderLINQ";
 "key_hint_zoom_in" = "Zoom In";
 "key_hint_zoom_out" = "Zoom Out";
 "shared_string_deselect" = "Noņemt iezīmi";
@@ -1843,7 +1825,6 @@
 "osm_live_payment_renews_monthly" = "Atjaunojas katru mēnesi";
 "osm_live_payment_renews_quarterly" = "Atjaunojas katru ceturksni";
 "osm_live_payment_renews_annually" = "Atjaunojas katru gadu";
-"default_price_currency_format" = "%.2f %@";
 "osm_live_payment_header" = "Izvēlieties jums piemērotāko apmaksas intervālu:";
 "osm_live_payment_contribute_descr" = "Daļa no iemaksām aiziet OpenStreetMap izstrādātājiem.";
 "purchase_dialog_title" = "Izvēlieties plānu";
@@ -2213,10 +2194,8 @@
 "app_mode_offroad" = "Bezceļa";
 "app_mode_camper" = "Treileris";
 "app_mode_campervan" = "Autofurgons";
-"app_mode_wagon" = "Wagon";
 "app_mode_pickup_truck" = "Pikaps";
 "app_mode_utv" = "Side by Side";
-"app_mode_osm" = "OSM";
 "desert" = "Desert";
 "travel_routes" = "Travel routes";
 "walking_route_osmc_description" = "Color routes according to their individual local color (if present on OpenStreetMap) and type (international, regional, local).";
@@ -2241,7 +2220,6 @@
 "backup_error_gzip_only_supported_upload" = "Faila sūtīšanai izmantot .gzip formātu";
 "backup_error_user_is_already_registered" = "Šī epasta adrese jau tiek izmantota";
 "points_delete_multiple" = "Jūs izdzēsīsiet %d punktu(us). Vai turpināt?";
-"shared_string_open_street_map" = "OpenStreetMap";
 "backup_error_subscription_was_expired_descr" = "Jūsu OsmAnd Pro abonoments ir beidzies, atjaunojiet to, lai lietotu dublējumkopiju. Datus joprojām variet atjaunot no Cloud.";
 "backup_error_size_is_exceeded" = "Maksimālais OsmAnd Cloud izmērs pārsniegts par %@";
 "backup_restore_now" = "Atjaunot";
@@ -2265,7 +2243,6 @@
 "osmand_development_plugin_description" = "Rādīt izstrādes un atkļūdošanas iestatījumus, kā piemēram, animētā navigācija, renderēšanas izpildījuma attēlošana vai balss uzvednes. Šie iestatījumi ir paredzēti izstrādātājiem un nav vajadzīgi gala lietotājam.";
 "complete_purchase" = "Pabeidziet pirkumu";
 "shared_string_capacity" = "Kapacitāte";
-"cubic_m" = "m³";
 "private_access_routing_req" = "Galamērķis atrodas privātas teritorijas vietā. Vai iekļaut maršrutā ierobežotas piekļuves ceļus\?";
 "share_geo" = "ģeo:";
 "osmand_pro_tagline" = "Iegūstiet maksimālās iespējas";
@@ -2282,9 +2259,7 @@
 "no_purchases" = "Jums nav pirkumi";
 "map_updates_are_unavailable_yet" = "Karšu atjauninājumi pagaidām nav pieejami. :-(";
 "are_you_sure" = "Vai esiet pārliecināts?";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
 "animate_my_location" = "Atrašanās vietas animācija";
-"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "position_on_map_center" = "Centrs";
 "shared_string_status" = "Statuss";
 "login_open_street_map_org" = "Pierakstīties OpenStreetMap.org";
@@ -2296,7 +2271,6 @@
 "shared_string_selected" = "Atlasīts";
 "shared_string_added" = "Pievienots";
 "shared_string_not_included" = "Nav iekļauts";
-"shared_string_progress" = "Progress";
 "recording_delete_confirm" = "Vai vēlaties dzēst ierakstu?";
 "shared_string_refresh" = "Atsvaidzināt";
 "download_all" = "Lejupielādēt visu";
@@ -2309,8 +2283,6 @@
 "rendering_attr_seabedDetail_description" = "Paplašināts teksts ar dibena klasifikāciju, apvienotiem reljefu tipiem, jūraszāļu kategorijas un taksoni";
 "auth_failed" = "Autorizācija neizdevās";
 "download_wikipedia_data" = "Lejupielādēt Vikipēdijas datus";
-"km" = "km";
-"m" = "m";
 "privacy_and_security" = "Privātums un drošība";
 "uninstall_speed_cameras" = "Atinstalēt ātruma kameras";
 "lang_zh-Hant" = "Ķīniešu (tradicionālā)";
@@ -2339,7 +2311,6 @@
 "shared_string_read" = "Lasīt";
 "shared_string_error" = "Kļūda";
 "perform_oauth_authorization" = "Ielogoties ar OAuth";
-"ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
 "shared_string_light" = "Gaišs";
 "search_history" = "Meklēšanas vēsture";
 "map_screen_orientation" = "Ekrāna orientācija";
@@ -2381,7 +2352,6 @@
 "press_again_to_change_the_map_orientation" = "Pieskarieties vēlreiz, lai mainītu kartes orientāciju";
 "coordinates_format" = "Koordināšu formāts";
 "angular_measeurement" = "Azimuts";
-"short_min" = "m";
 "lang_zh-Hans" = "Ķīniešu (vienkāršotā)";
 "map_marker_2nd" = "Otrais marķieris";
 "map_orientation_portrait" = "Portrets";

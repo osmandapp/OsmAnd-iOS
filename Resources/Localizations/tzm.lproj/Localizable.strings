@@ -1,4 +1,3 @@
-"OsmAnd Maps" = "OsmAnd Maps";
 "download_depth_countours" = "Nautical depth contours";
 "day_short" = "D";
 "week_short" = "Wk";
@@ -1018,7 +1017,6 @@
 "search_activity" = "Search";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
-"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "ltr_or_rtl_combine_via_or" = "%@ or %@";
 "ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "listed_exist" = "Listed %@ already exist in OsmAnd.";

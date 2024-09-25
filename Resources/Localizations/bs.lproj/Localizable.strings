@@ -1,4 +1,3 @@
-"OsmAnd Maps" = "OsmAnd Maps";
 "download_depth_countours" = "Nautical depth contours";
 "day_short" = "D";
 "week_short" = "Wk";
@@ -173,7 +172,6 @@
 "map_widget_plain_time" = "Current time";
 "map_widget_max_speed" = "Ograničenje brzine";
 "access_arrival_time" = "Vrijeme dolaska";
-"map_widget_time" = "Time to go";
 "map_widget_ruler_control" = "Radius ruler";
 "show_compass_ruler" = "Show compass ruler";
 "hide_compass_ruler" = "Hide compass ruler";

@@ -1,4 +1,3 @@
-"OsmAnd Maps" = "OsmAnd Maps";
 "download_depth_countours" = "Nautical depth contours";
 "day_short" = "D";
 "week_short" = "Wk";
@@ -425,7 +424,6 @@
 "shared_string_apply" = "Áp dụng";
 "shared_string_select" = "Chọn";
 "shared_string_back" = "Back";
-"shared_string_ok" = "OK";
 "shared_string_cancel" = "Hủy";
 "shared_string_exit" = "Thoát";
 "shared_string_close" = "Đóng";
@@ -726,7 +724,6 @@
 "shared_string_location" = "Location";
 "sett_arr_map" = "Map center";
 "short_location_on_map" = "Lat %@ Lon %@";
-"navigate_point_format_D" = "DDD.DDDDD";
 "navigate_point_format_DM" = "DDD MM.MMMMM";
 "navigate_point_format_DMS" = "DDD MM SS.SSSSS";
 "navigate_point_format_OLC" = "Open Location Code (OLC)";
@@ -2245,14 +2242,12 @@
 "shared_string_undefined" = "Chưa rõ";
 "shared_string_refresh" = "Làm mới";
 "position_on_map_bottom" = "Dưới";
-"tts_title" = "TTS";
 "position_on_map_center" = "Tâm";
 "rendering_attr_OSMMapperAssistantFixme_name" = "Thẻ fixme";
 "rendering_attr_OSMMapperAssistantFixme_description" = "Hiển thị các thẻ fixme";
 "rendering_attr_OSMMapperAssistantNote_name" = "Thẻ ghi chú";
 "auth_failed" = "Định danh thất bại";
 "rendering_attr_OSMMapperAssistantNote_description" = "Hiển thị thẻ ghi chú";
-"network" = "Network";
 "map_orientation_landscape" = "Nằm ngang";
 "show_all_tracks" = "Hiển thị tất cả các theo dõi";
 "change_appearance" = "Thay đổi ngoại hình";

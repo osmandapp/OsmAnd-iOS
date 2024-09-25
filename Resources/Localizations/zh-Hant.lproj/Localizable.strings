@@ -535,7 +535,6 @@
 "route_from" = "從：";
 "lat" = "緯度";
 "lon" = "經度";
-"shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "在地圖上選取";
 "shared_string_my_location" = "我的位置";
 "route_descr_select_destination" = "設定目的地";
@@ -646,7 +645,6 @@
 "access_arrival_time" = "抵達時間";
 "map_widget_time" = "剩餘時間";
 "map_widget_altitude" = "目前位置的海拔高度";
-"monitoring_control_start" = "REC";
 "map_widget_intermediate_distance" = "中轉地點";
 "route_descr_destination" = "目的地";
 "always_center_position_on_map" = "位置顯示始終處於中心";
@@ -701,7 +699,6 @@
 "will_open_tomorrow_at" = "明天營業於";
 "shared_string_target_points" = "目的地";
 "search_radius_proximity" = "範圍內";
-"poi" = "POI";
 "shared_string_search" = "搜尋";
 "search_radius" = "搜尋半徑";
 // Shared Strings
@@ -776,7 +773,6 @@
 "import_from_docs" = "從文件匯入";
 "use_osm_live_routing" = "OsmAnd Live 導航";
 "osm_live_routing_descr" = "讓導航使用 OsmAnd Live 進行更新";
-"osmand_live" = "OsmAnd Live";
 "live_updates" = "即時更新";
 "available_maps" = "可用地圖";
 "osmand_live_last_changed" = "上次地圖更改：%@";
@@ -798,7 +794,6 @@
 "osm_live_payment_renews_monthly" = "每月續訂";
 "osm_live_payment_renews_quarterly" = "每季續訂";
 "osm_live_payment_renews_annually" = "每年續訂";
-"default_price_currency_format" = "%.2f %@";
 "osm_live_payment_header" = "付款週期：";
 "osm_live_payment_contribute_descr" = "捐款資助 OSM 的製圖者。";
 "update_frequency" = "更新頻率";
@@ -919,11 +914,7 @@
 "shared_string_reload" = "重新載入";
 "save_poi_too_many_uppercase" = "名稱中包含太多的大寫字母。要繼續嗎？";
 "sett_generic_ext_input" = "鍵盤";
-"sett_wunderlinq_ext_input" = "WunderLINQ";
 "shared_string_read_more" = "讀取更多";
-"navigate_point_format_D" = "DDD.DDDDD";
-"navigate_point_format_DM" = "DDD MM.MMM";
-"navigate_point_format_DMS" = "DDD MM SS.S";
 "shared_string_distance" = "距離";
 "day" = "天";
 "days_2_4" = "天";
@@ -945,7 +936,6 @@
 "add_intermediate" = "加入中繼點";
 "add_home" = "新增住家";
 "add_work" = "新增工作地點";
-"reddit" = "Reddit";
 "shared_string_clear_all" = "清除全部";
 "shared_string_on" = "開啟";
 "shared_string_off" = "關閉";
@@ -1011,7 +1001,6 @@
 "quick_action_bug_descr" = "此訊息會包含在註解欄。";
 "quick_action_add_parking" = "增加停車地點";
 "quick_action_add_marker" = "增加地圖標記";
-"mapillary" = "Mapillary";
 "add_gpx_waypoint" = "增加 GPX 航點";
 "show_more" = "顯示更多";
 "filter_current_poiButton" = "篩選";
@@ -1022,7 +1011,6 @@
 "nautical_maps" = "航海地圖";
 "quick_action_map_overlay_title" = "地圖上圖層";
 "quick_action_map_source" = "更改地圖來源";
-"edit_tilesource_url_to_load" = "URL";
 "hide_notes" = "隱藏 OSM 註記";
 "edit_tilesource_elliptic_tile" = "橢圓麥卡托投影";
 "show_notes" = "顯示 OSM 註記";
@@ -1093,7 +1081,6 @@
 "rendering_attr_tramTrainRoutes_name" = "有軌電車和火車路線";
 "rendering_value_dark_brown_name" = "深棕色";
 "rendering_attr_noAdminboundaries_description" = "抑制顯示行政區界(管理級別5-9)。";
-"rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "routing_attr_avoid_ice_roads_fords_description" = "避開結冰和涉水的道路。";
 "rendering_attr_highway_class_cycleway_name" = "自行車道";
 "rendering_attr_publicTransportMode_name" = "公車、無軌電車，班車路線";
@@ -1327,14 +1314,12 @@
 "app_mode_scooter" = "速克達";
 "app_mode_monowheel" = "單輪";
 "app_mode_personal_transporter" = "個人運輸工具";
-"app_mode_ufo" = "UFO";
 "app_mode_offroad" = "越野";
 "app_mode_campervan" = "露營車 (RV)";
 "app_mode_camper" = "露營車";
 "app_mode_pickup_truck" = "皮卡車";
 "app_mode_wagon" = "旅行車";
 "app_mode_utv" = "並排";
-"app_mode_osm" = "OSM";
 "srtm_color_scheme" = "色調配置";
 "context_menu_points_of_group" = "群組的全部標點";
 "shared_string_zoom_levels" = "縮放等級";
@@ -1450,7 +1435,6 @@
 "shared_string_legend" = "圖例";
 "select_distance_route_will_recalc" = "選取要重新計算路徑的距離。";
 "add_to_a_track" = "新增到軌跡";
-"ltr_or_rtl_combine_via_space" = "%@ %@";
 "profile_type_osmand_string" = "OsmAnd 設定檔";
 "shared_string_two" = "二";
 "route_between_points" = "點與點之間的路線";
@@ -1461,7 +1445,6 @@
 "clear_tiles_warning" = "套用這些變更將會清除這個圖磚來源的快取資料";
 "show_direction" = "距離指示";
 "shared_string_menu" = "選單";
-"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "vessel_width_limit_description" = "設定船艦寬度以避免窄橋";
 "arrived_at_destination" = "您已抵達。";
 "quick_action_mapillary_show" = "顯示 Mapillary";
@@ -1478,7 +1461,6 @@
 "select_base_profile_dialog_message" = "讓您自訂的設定檔以其中一個預設應用程式設定檔為基礎，這定義了如小工具、速度單位與距離的顯示方式。這些是預設的應用程式設定檔，連同其可以擴展成的自訂設定檔範例：";
 "shared_string_terrain" = "地形";
 "select_icon_profile_dialog_title" = "選取圖示";
-"mapillary_item" = "OsmAnd + Mapillary";
 "reverse_route" = "反向路線";
 "public_transport_try_change_settings" = "嘗試變更設定。";
 "osm_edit_comment_note" = "評論 OSM 註記";
@@ -1617,7 +1599,6 @@
 "lang_id" = "印尼語";
 "lang_ur" = "烏爾都語";
 "lang_ko" = "韓語";
-"lang_oc" = "Occitan";
 "lang_sr_latn" = "塞爾維亞語（拉丁文）";
 "lang_pt" = "葡萄牙";
 "lang_lo" = "寮語";
@@ -1846,7 +1827,6 @@
 "routing_attr_only_permitted_streets_description" = "僅使用明確允許的街道";
 "cloud_conflicts" = "衝突";
 "backup_error_gzip_only_supported_upload" = "檔案必須以 .gzip 格式傳送";
-"osmand_cloud" = "OsmAnd Cloud";
 "backup_error_token_is_not_valid" = "提供的裝置 ID 或權杖有問題";
 "osmand_cloud_authorize_descr" = "絕對不會遺失您的資料。輕鬆備份與還原所有資訊。";
 "register_opr_have_account" = "我已經有帳號了";
@@ -1857,8 +1837,6 @@
 "points_delete_multiple" = "刪除 %d 個點？";
 "backup_welcome_back" = "歡迎回來！";
 "cloud_conflicts_descr" = "部份檔案無法上傳至伺服器，因為伺服器上已儲存了較新的版本。";
-"navigate_point_mgrs" = "MGRS";
-"shared_string_open_street_map" = "OpenStreetMap";
 "last_backup" = "上次備份";
 "simulation_real_mode_title" = "逼真模擬";
 "altitude_ascent" = "上坡";
@@ -2033,7 +2011,6 @@
 "fav_point_emoticons_message" = "我的最愛被重新命名為「%@」以將包含表情符號的字串儲存到檔案中。";
 "turn_arrows_descr" = "選取是否要在路線上指示轉彎箭頭。";
 "local_backup_descr" = "從本機檔案備份或還原資料。";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
 "gpx_upload_public_visibility_descr" = "「公開」代表軌跡將會公開顯示在您的 GPS 軌跡與公開的 GPS 軌跡清單中，且在公開軌跡清單中會以帶有原始形式的時間戳顯示。透過 API 取得的資料不會引用您的軌跡頁面。軌跡點的時間戳不會透過公開的 GPS API 提供，也不會按時間排序。";
 "backup_delete_old_data" = "移除舊版本";
 "offline_edition_descr" = "如果啟用離線編輯，則更動將會先儲存在本機，然後按請求上傳，否則更動會立刻上傳。";
@@ -2054,12 +2031,11 @@
 "routing_attr_motor_type_name" = "引擎使用的燃料";
 "gpx_selection_segment_title" = "區段";
 "search_poi_types_descr" = "組合來自不同分類的 POI 類型。點擊開關以全選，點擊左側選取分類。";
-"routing_attr_motor_type_gas_name" = "壓縮天然氣";
+"routing_attr_motor_type_gas_name" = "天然氣";
 "weather_online_cache" = "線上預報";
 "backup_data" = "備份資料";
 "backup_delete_all_data" = "刪除我所有的資料";
 "recalculate_route" = "重新計算路線";
-"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "renew_subscription" = "續訂";
 "tracks_on_map" = "顯示軌跡";
 "map_widget_parking" = "停車場";
@@ -2263,7 +2239,6 @@
 "osm_add_timespan" = "新增時段";
 "modify_poi" = "修改 POI 資料";
 "nav_type_osmand" = "OSMAnd （離線路線規劃）";
-"nav_type_brouter" = "BRouter";
 "osm_upload_failed_descr" = "請檢查您的登入資料及網絡連線然後再試一次。";
 "osm_delete_confirmation_descr" = "您確定要移除這個 POI ？";
 "osm_note_upload_info" = "您可以匿名上載註解，或使用您的 OpenStreetMap 帳戶。";
@@ -2321,7 +2296,7 @@
 "poi_category_and_type" = "類別及POI類型";
 "mapil_usernames" = "用戶名稱";
 "history_actions_footer_text" = "您可以匯出歷史至檔案。您可以刪除至今記錄的所有歷史項目。";
-"compass_click_desc" = "點兩下指南針按鈕切換地圖方向模式。";
+"compass_click_desc" = "秘訣：點擊指南針按鈕切換地圖方向模式。";
 "map_widget_next_sunset" = "下次日落";
 "nav_type_descr" = "選擇這個設定檔如何計算路線";
 "choose_auto_center_map_view_descr" = "移動後地圖視角同步至目前位置的等候時間";
@@ -2393,14 +2368,12 @@
 "weather_forecast_is_outdated" = "預報已過期。";
 "cloud_storage_used" = "已使用 %@ / %@";
 "short_min" = "公尺";
-"shared_a_z" = "A - Z";
 "visible_in_3d_mode" = "在3D模式下可見";
 "map_3d_mode_description" = "用兩隻手指觸摸地圖並上下移動以調整地圖傾斜。";
 "displayed_route_save" = "儲存到 OsmAnd 軌跡";
 "map_settings_show_slider_map" = "在地圖上顯示滑桿";
 "global_settings_descr" = "影響整個應用程式。";
 "plugin_settings_descr" = "選定設定檔的外掛設定。";
-"navigate_point_olc_short" = "OLC";
 "utm_description" = "請注意，OsmAnd 使用的是 UTM 標準格式，這與 UTM NATO 相似但不完全相同。";
 "select_underlay" = "選擇底圖";
 "select_manually" = "手動選擇";
@@ -2437,12 +2410,9 @@
 "weather_wind_unit_m_s" = "公尺/秒";
 "delete_custom_categories" = "刪除自訂分類";
 "user_name" = "您 OSM 的使用者名稱";
-"shared_z_a" = "Z - A";
 "send_anonymous_data" = "傳送匿名資料";
 "key_hint_zoom_out" = "縮小";
 "activity_type_running_name" = "跑步";
-"rendering_value_sacScale_name" = "SAC";
-"rendering_value_caiScale_name" = "CAI";
 "preferred_terrain" = "偏好地形";
 "fetching_from_server" = "正在從伺服器擷取資料";
 "cloud_conflict_descr" = "自上次同步以來，本地和雲端版本都包含變更。";
@@ -2451,7 +2421,6 @@
 "quarterly_subscription" = "季度訂閱";
 "option_available_only_by_subscription" = "僅在訂閱方案中提供";
 "weather_accuracy_forecast_description" = "離線預報可用至：%@。\n準確度：%@，每小時。%@ 每 3 小時。";
-"product_title_pro" = "OsmAnd Pro";
 "perform_oauth_authorization" = "透過 OAuth 登入";
 "rendering_attr_alpineHikingScaleScheme_description" = "路線的困難分類類型。";
 "exit_number" = "出口編號";
@@ -2545,7 +2514,6 @@
 "manage_storage" = "管理儲存空間";
 "subscription_cancel_description" = "隨時在 AppStore 取消。";
 "osm_live_payment_subscription_management_aid" = "購買確認後，將向您的 Apple ID 帳戶收取付款。\n\n除非在目前期間結束前至少 24 小時取消，否則訂閱將自動續訂。在目前期間結束前 24 小時內，將向您的帳戶收取續訂費用。\n\n購買後，您可以透過在 App Store 中進入您的帳戶設定來管理和取消您的訂閱";
-"app_store" = "App Store";
 "huawei_appgallery" = "華為 AppGallery";
 "update_only_over_wi_fi" = "僅透過 Wi-Fi 更新";
 "update_parameters" = "更新參數";
@@ -2559,7 +2527,6 @@
 "wikivoyage_download_pics" = "下載圖片";
 "touting_specified_vehicle_parameters_descr" = "指定的車輛參數可能會影響路線規劃。";
 "routing_attr_goods_restrictions_footer_desc" = "僅適用於載有貨物、至少有四個輪子且重量不超過 3.5 噸的車輛。\n\n如果您的車輛重量超過 3.5 噸，您需要使用卡車設定檔。";
-"login_footer_email_part" = "support@osmand.net";
 "ios_release_3_80" = "• 引入了具有獨立設定的「應用程式設定檔」\n• 依設定檔和類型重新排列設定：導航、一般、地圖和螢幕\n• 可以匯入或匯出設定檔設定\n• 新增了線上照片的資料來源\n• 新增了將線上地圖下載到快取的功能\n• 改進了「搜尋」演算法\n";
 "user_points" = "使用者點數";
 "err_profile_import" = "讀取項目資料時出錯：%@";
@@ -2579,7 +2546,7 @@
 "quick_action_get_info" = "取得資訊";
 "quick_action_dialog" = "對話框";
 "units_of_speed" = "速度單位";
-"settings_app_theme" = "應用程式佈景主題";
+"settings_app_theme" = "應用程式主題";
 "map_settings_available_srtm_maps_descr" = "需要額外的地圖才能在地圖上檢視地形陰影";
 "res_url_warning" = "URL 不能為空";
 "toggle_day_night" = "切換日/夜模式";
@@ -2611,7 +2578,6 @@
 "cloud_confirm_delete_type" = "您確定要從 OsmAnd 雲端刪除 \"%@\" 嗎？";
 "backup_delete_data_type_description" = "這將會刪除 OsmAnd 雲端上所有的 %@ 資料。這個操作無法復原。";
 "purchases_feature_desc_carplay" = "將 OsmAnd 離線地圖和導航帶到您的車輛螢幕，並與您的車輛控制器整合。";
-"amazon_appstore" = "Amazon Appstore";
 "subscription_banner_no_free_maps_title" = "您已經用完所有免費下載";
 "subscription_banner_osmand_pro_title" = "使用 OsmAnd Pro 取得每小時、每日或每週的地圖更新。";
 "weather_plugin" = "天氣外掛程式";
@@ -2639,7 +2605,6 @@
 "restore_purchase" = "恢復購買";
 "q_clear_weather_cache" = "您要清除天氣快取嗎？";
 "coordinates_copy_descr" = "點選以將坐標複製到剪貼簿。";
-"navigate_point_format_UTM" = "UTM";
 "export_profile_select_descr" = "選擇要匯出的資料。";
 "osmand_live_deleted_object" = "已刪除的物件";
 "res_expire_warning" = "過期時間應為 0 到 10000000 之間的數字";
@@ -2678,7 +2643,6 @@
 "weather_miss_forecasts_description" = "離線預報每個國家都有。持續時間最長為 7 天。您需要選擇需要的國家。";
 "ios_release_4_3" = "• 移動時位置變化的平滑動畫\n• CarPlay：新增車道、2.5D 檢視，修復透過藍牙連接時的聲音問題\n• 引入新的購買方案：「OsmAnd Pro」訂閱可使用所有功能，「地圖+」購買可無限下載地圖並存取付費外掛程式。\n• 為 OsmAnd Pro 使用者新增雲端備份和離線天氣預報\n• 新的便利「購買」畫面，列出所有購買\n• 對於活躍的 OpenStreetMap.org 貢獻者的好處\n• 軌跡現在可以按高度、速度或坡度著色\n• 離線地圖現在可以透過檔案應用程式存取\n• 收藏夾：每次變更後新增本地備份產生，備份可從檔案應用程式存取\n• 儲存到收藏夾的 POI 將儲存並顯示所有 POI 資料，即使沒有離線地圖\n• GPX 新增了對 link、cmt、desc 標籤和任何自訂擴充的支援\n• 為指南針按鈕新增模式\n• 修復了 UTM 座標格式的問題\n• 修復了導航中的中轉點問題\n";
 "mapil_contribute" = "貢獻您自己的街道級別圖像";
-"ltr_or_rtl_combine_via_comma" = "%@, %@";
 "product_desc_development" = "適用於開發人員和經驗豐富的使用者";
 "gpx_join_gaps_descr" = "區段之間的間隙將被連接。";
 "temperature_show" = "顯示溫度";
@@ -2700,7 +2664,6 @@
 "precipitation_show" = "顯示降水量";
 "hide_poi_action" = "隱藏 POI";
 "sett_ext_input_desc" = "選擇一個設備，如通用鍵盤或 WunderLINQ 作為外部控制。";
-"carplay" = "CarPlay";
 "backup_conflicts_action_descr" = "此檔案的另一個版本已儲存在伺服器上。您需要選擇操作";
 "announcement_time_passing" = "通過";
 "av_notes_choose_action_widget_desc" = "選擇動作。";
@@ -2742,9 +2705,6 @@
 "res_zoom_levels_desc" = "這些參數將影響地圖顯示，當用作地圖類型或上層/下層。\n\n地圖類型：地圖將限於選定的縮放級別。\n\n上層 / 下層：可見圖塊的縮放級別。放大或縮小將在設定值的上方或下方發生。";
 "res_zoom_warning" = "最小縮放值不能等於或大於最大縮放值";
 "res_zoom_invalid_value" = "縮放值應在 1 - 22 的範圍內";
-"simulate_location_movement_speed_x2" = "x2";
-"simulate_location_movement_speed_x3" = "x3";
-"simulate_location_movement_speed_x4" = "x4";
 "simulate_location_movement_speed_original_desc" = "模擬期間的位置移動速度將等於選定檔案中的速度。";
 "osm_tag_too_long_message" = "標籤 %@ 的最大值長度為 255 個字元。\n請縮短以繼續。";
 "osm_editing_access_descr" = "您可以在 %@ 中檢視所有的本地編輯和註解。已上傳的點不會在 OsmAnd 中列出。";
@@ -2792,7 +2752,6 @@
 "osm_edits_poi" = "POI 編輯";
 "select_tracks" = "選擇軌跡";
 "delete_tracks_bottom_sheet_description_regular_part" = "您確定要刪除 ";
-"osm_poi_id_label" = "POI id：";
 
 // Mapillary
 "mapil_no_inet_descr" = "您需要網路連線才能檢視 Mapillary 照片。";
@@ -2824,7 +2783,6 @@
 "quick_action_name_alert" = "為避免重複，快速動作名稱已更改為 %@。";
 "app_mode_moped" = "機車";
 "subscription" = "訂閱";
-"google_play" = "Google Play";
 "trip_recording_downhill_widget_desc" = "顯示目前記錄旅程的所有下坡總和。";
 "trip_recording_uphill_widget_desc" = "顯示目前記錄旅程的所有上坡總和。";
 "trip_recording_duration_widget_desc" = "顯示目前記錄旅程的時間。";
@@ -2914,7 +2872,6 @@
 "plugin_popup_osm_editing_title" = "開啟 OpenStreetMap 編輯";
 "tomorrow" = "明天";
 "calculating_progress" = "正在計算...";
-"email_example_hint" = "user@example.com";
 "shared_string_required" = "必填";
 "key_hint_zoom_in" = "放大";
 "backup_delete_all_data_finished" = "您在 OsmAnd 雲端的所有資料已成功刪除。";
@@ -3029,21 +2986,17 @@
 "help_article_map_legend_ski_map_name" = "滑雪地圖風格";
 "help_article_map_track_context_menu_name" = "軌跡選單內容";
 "help_article_map_vector_maps_name" = "向量地圖 (地圖樣式)";
-"help_article_navigation_auto_car_name" = "Android Auto";
 "help_article_navigation_guidance_name" = "導航指引";
 "help_article_navigation_guidance_map_during_navigation_name" = "導航時的地圖螢幕";
 "help_article_navigation_guidance_voice_navigation_name" = "語音介面 / 通知";
 "help_article_navigation_routing_name" = "路徑參數";
 "help_article_map_tracks_on_map_name" = "軌跡與路徑";
-"help_article_navigation_car_play_name" = "CarPlay";
-"help_article_troubleshooting_android_auto_name" = "Android Auto";
 "global_settings" = "整體設定";
 "help_article_plugins_custom_name" = "客製套件";
 "shared_string_markers" = "標記";
 "shared_string_setup_route" = "設定路線";
 "audionotes_plugin_name" = "語音/影音註記";
 "shared_string_accessibility" = "無障礙設施";
-"tracker_item" = "OsmAnd tracker";
 "help_article_navigation_routing_pedestrian_routing_name" = "行人導航";
 "help_article_navigation_routing_public_transport_navigation_name" = "大眾運輸導航";
 "help_article_navigation_routing_ski_routing_name" = "滑雪導航";
@@ -3069,7 +3022,6 @@
 "help_article_personal_profiles_name" = "設定檔 (設定)";
 "help_article_navigation_routing_bicycle_based_routing_name" = "單車導航 (登山車)";
 "help_article_navigation_routing_boat_navigation_name" = "船隻導航";
-"help_article_navigation_routing_brouter_name" = "BRouter";
 "help_article_troubleshooting_maps_data_name" = "地圖與資料";
 "help_article_troubleshooting_track_recording_issues_name" = "軌跡錄製";
 "help_article_widgets_name" = "地圖小工具";
@@ -3078,7 +3030,6 @@
 "help_article_widgets_markers_name" = "標記小工具";
 "help_article_widgets_nav_widgets_name" = "導航小工具";
 "help_article_widgets_radius_ruler_name" = "半徑尺規與尺規";
-"help_article_plugins_openplacereviews_name" = "OpenPlaceReviews";
 "help_article_plan_route_coordinate_input_name" = "座標輸入";
 "help_article_plan_route_name" = "計畫路線";
 "help_article_plan_route_web_name" = "網路路徑規劃";
@@ -3138,7 +3089,6 @@
 "target_elevation" = "目標海拔";
 "shared_string_mode" = "模式";
 "oldest_date_first" = "最舊日期優先";
-"ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
 "map_widget_ant_bicycle_cadence" = "自行車節奏";
 "enter_new_name" = "輸入新名稱";
 "subscribe_email_error" = "錯誤";
@@ -3318,7 +3268,6 @@
 "when_exceeded" = "當超過時";
 "visualization_3d_track_line" = "軌跡線";
 "empty_name" = "空名稱";
-"osm_id" = "OSM ID";
 "fixed_height" = "固定高度";
 "avoid_pt_types" = "避免運輸類型……";
 "downward_gradient" = "向下斜率";
@@ -3347,7 +3296,7 @@
 "step_by_step" = "按步驟";
 "add_button" = "新增按鈕";
 "shared_string_always" = "總是";
-"shared_string_bottom" = "底部";
+"shared_string_bottom" = "下面";
 "auto_zoom" = "自動縮放";
 "track_3d_empty_view_description" = "以互動式 3D 方式探索軌跡！在地圖上直接視覺化高度、速度等。";
 "shared_string_millimeters" = "公釐";
@@ -3360,9 +3309,7 @@
 "rendering_value_pale_name" = "灰白";
 "missing_maps_ignore_details" = "已下載的地圖涵蓋了您的路線嗎？若您熟悉該區域，請使用它們來導航。";
 "transport_hazmat_title" = "危險物品運輸";
-"weather_source_GFS_title" = "GFS";
 "map_settings_weather_wind_animation" = "風動畫";
-"weather_source_ecmwf_title" = "ECMWF";
 "data_source" = "資料來源";
 "weather_source_ecmwf_description" = "歐洲中期天氣預報中心";
 "weather_source_GFS_description" = "國家環境預報中心的全球預報系統";

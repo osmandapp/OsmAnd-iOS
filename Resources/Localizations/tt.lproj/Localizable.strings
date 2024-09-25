@@ -1,4 +1,3 @@
-"OsmAnd Maps" = "OsmAnd Maps";
 "download_depth_countours" = "Nautical depth contours";
 "day_short" = "D";
 "week_short" = "Wk";
@@ -167,7 +166,6 @@
 "map_widget_compass" = "Compass";
 "map_widget_intermediate_distance" = "Intermediate destination";
 "route_descr_destination" = "Destination";
-"monitoring_control_start" = "REC";
 "map_widget_altitude" = "Altitude";
 "map_widget_battery" = "Battery level";
 "map_widget_plain_time" = "Current time";
@@ -750,7 +748,6 @@
 "shared_string_transparency" = "Transparency";
 "map_transparency" = "Base map transparency";
 "map_settings_avail_lay" = "Available layers";
-"mapillary" = "Mapillary";
 "street_level_imagery" = "Street-level imagery";
 "shared_string_terrain" = "Terrain";
 "map_settings_layer_transparency" = "Layer transparency";
@@ -1016,11 +1013,7 @@
 "shared_string_settings" = "Settings";
 "configure_screen_quick_action" = "Quick action";
 "search_activity" = "Search";
-"ltr_or_rtl_combine_via_space" = "%@ %@";
-"ltr_or_rtl_combine_via_colon" = "%@: %@";
-"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "ltr_or_rtl_combine_via_or" = "%@ or %@";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
 "listed_exist" = "Listed %@ already exist in OsmAnd.";
 "shared_string_import_complete" = "Import complete";
 "import_complete_description" = "All data from the %@ is imported, you can use buttons below to open needed part of the app to manage it";
@@ -1165,7 +1158,6 @@
 "shared_string_resources" = "Resources";
 "res_mapsres" = "Maps & Resources";
 "download_tab_local" = "Local";
-"osmand_live" = "OsmAnd Live";
 "live_updates" = "Live updates";
 "available_maps" = "Available maps";
 "osmand_live_last_changed" = "Last map change: %@";
@@ -1613,7 +1605,6 @@
 "osmand_purchases_item" = "OsmAnd purchases";
 "subscription_osmandlive_item" = "Subscription - OsmAnd Live";
 "help_travel" = "Travel (Wikipedia & Wikivoyage)";
-"mapillary_item" = "OsmAnd + Mapillary";
 "map_legend" = "Map legend";
 "help_legend_descr" = "The guide to map's symbols";
 "other_location" = "Other";
@@ -2027,7 +2018,6 @@
 "osm_live_payment_renews_monthly" = "Renews monthly";
 "osm_live_payment_renews_quarterly" = "Renews quarterly";
 "osm_live_payment_renews_annually" = "Renews annually";
-"default_price_currency_format" = "%.2f %@";
 "osm_live_payment_header" = "Select the payment period convenient for you:";
 "osm_live_payment_contribute_descr" = "Part of income goes to OpenStreetMap contributors.";
 "purchase_dialog_title" = "Choose plan";
@@ -2454,7 +2444,6 @@
 "app_mode_wagon" = "Wagon";
 "app_mode_pickup_truck" = "Pickup truck";
 "app_mode_utv" = "Side by Side";
-"app_mode_osm" = "OSM";
 "desert" = "Desert";
 "user_login" = "Логин";
 "osmand_cloud_login_descr" = "Please enter the e-mail address you registred with. A one-time password for the next step will be sent to it.";
@@ -2712,6 +2701,5 @@
 "activity_type_water_name" = "Су";
 "shared_string_error" = "Хата";
 "activity_type_car_name" = "Машина";
-"shared_string_wikivoyage" = "Wikivoyage";
 "shared_string_move" = "Күчерү";
 "activity_type_winter_name" = "Кыш";

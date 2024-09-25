@@ -1,4 +1,3 @@
-"OsmAnd Maps" = "OsmAnd Maps";
 "download_depth_countours" = "Nautical depth contours";
 "day_short" = "D";
 "week_short" = "Wk";
@@ -64,7 +63,6 @@
 "search_radius" = "Search radius";
 "shared_string_target_points" = "Местоназначения";
 "search_radius_proximity" = "В близост до";
-"poi" = "POI";
 "search_more" = "Търсене на други…";
 "day_off_label" = "off";
 "open_from" = "Отворено от";
@@ -150,7 +148,6 @@
 "map_widget_compass" = "Компас";
 "map_widget_intermediate_distance" = "Междинна точка";
 "route_descr_destination" = "Местоназначение";
-"monitoring_control_start" = "REC";
 "map_widget_altitude" = "Текуща надм. височина";
 "map_widget_battery" = "Ниво на батерията";
 "map_widget_plain_time" = "Текущо време";
@@ -232,7 +229,6 @@
 "nav_type_osmand" = "OsmAnd (offline routing)";
 "routing_profile_straightline" = "Права линия";
 "routing_profile_direct_to" = "Директно към точката";
-"nav_type_brouter" = "BRouter";
 "routing_profile_ski" = "Ски";
 "routing_profile_geocoding" = "Геокодиране";
 "fast_route_mode_descr" = "Отметнете за изчисляване на най-бърз маршрут. Ако няма отметка се изчислява най-къс маршрут.";
@@ -328,7 +324,6 @@
 "navigation_over_track" = "Стартиране на навигацията по маршрута?";
 "use_displayed_track_for_navigation" = "Искате ли да ползвате показания маршрут за навигация?";
 "previous_route" = "Предишен маршрут";
-"shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Избиране от картата";
 "selected_roads" = "Selected roads";
 "shared_string_my_location" = "Моето местоположение";
@@ -913,8 +908,6 @@
 "shared_string_settings" = "Настройки";
 "configure_screen_quick_action" = "Бързо действие";
 "search_activity" = "Търсене";
-"ltr_or_rtl_combine_via_space" = "%@ %@";
-"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "listed_exist" = "Изброените %@, вече съществуват в OsmAnd.";
 "shared_string_import_complete" = "Внасянето е завършено";
 "import_complete_description" = "Внесена е цялата информация от %@. Използвайте бутоните по-долу, за да отворите която и да било част от приложението и да я управлявате.";
@@ -1060,7 +1053,6 @@
 "shared_string_resources" = "Ресурси";
 "res_mapsres" = "Карти и ресурси";
 "download_tab_local" = "Изтеглени";
-"osmand_live" = "OsmAnd Live";
 "live_updates" = "Обновяване на живо";
 "available_maps" = "Достъпни карти";
 "osmand_live_last_changed" = "Last map change: %@";
@@ -1127,7 +1119,6 @@
 "res_edit_map_source" = "Edit map source";
 "res_online_name_descr" = "Provide name for online source";
 "res_online_url_descr" = "Enter or copy and paste URL for online source";
-"edit_tilesource_url_to_load" = "URL";
 "shared_string_zoom_levels" = "Увеличения";
 "res_expire_time" = "Expire time";
 "res_mercator" = "Mercator Projection";
@@ -1576,7 +1567,6 @@
 "product_desc_allworld" = "Maps of All World";
 "product_desc_asia" = "Unlimited map downloads for Asia";
 "product_desc_asia_short" = "Asia region maps";
-"download_wikipedia_maps" = "Wikipedia";
 "product_desc_wiki" = "Wikipedia data";
 "purchases_feature_desc_wikipedia" = "Осигурява без мрежа всички статии в Уикипедия, свързани с места, като ви помага да научите повече за местата, които посещавате по време на пътуването си, само с едно докосване на картата. Не забравяйте да изтеглите файловете с карти на Уикипедия за съответните райони.";
 "shared_string_all_languages" = "Всички езици";
@@ -1844,7 +1834,6 @@
 "osm_live_payment_renews_monthly" = "Renews monthly";
 "osm_live_payment_renews_quarterly" = "Renews quarterly";
 "osm_live_payment_renews_annually" = "Renews annually";
-"default_price_currency_format" = "%.2f %@";
 "osm_live_payment_header" = "Select the payment period convenient for you:";
 "osm_live_payment_contribute_descr" = "Даренията помагат за финансиране на картографията на OSM.";
 "purchase_dialog_title" = "Choose plan";
@@ -2024,7 +2013,6 @@
 "routing_attr_piste_type_downhill_description" = "Склонове за алпийски ски или спускане и достъп до ски лифтове.";
 "rendering_attr_hideWaterPolygons_name" = "Hide water";
 "routing_attr_avoid_stairs_name" = "Избягване на стълби";
-"rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "rendering_attr_piste_type_skitour_name" = "Skitour";
 "routing_attr_avoid_unpaved_description" = "Избягване на черни (неасфалтирани) пътища";
 "routing_attr_prefer_unpaved_description" = "Предпочитане на селски пътища.";
@@ -2217,7 +2205,6 @@
 "app_mode_wagon" = "Фургон";
 "app_mode_pickup_truck" = "Пикап";
 "app_mode_utv" = "Side by Side";
-"app_mode_osm" = "OSM";
 "desert" = "Desert";
 "travel_routes" = "Маршрути за пътуване";
 "walking_route_osmc_description" = "Оцветяване маршрутите в зависимост от цвета, зададен на устройството (ако е наличен в OpenStreetMap) и тип (международен, регионален, местен).";
@@ -2254,7 +2241,6 @@
 "restore_from_file" = "Възстановяване от файл";
 "rendering_attr_showRunningRoutes_name" = "Маршрути за бягане";
 "backup_error_size_is_exceeded" = "Максималният размер на OsmAnd Cloud превишава %@";
-"osmand_cloud" = "OsmAnd Cloud";
 "backup_error_no_valid_subscription" = "Няма действащ абонамент";
 "backup_error_subscription_was_used" = "Абонамент или промокод, използвани от друг профил %@";
 "osmand_cloud_authorize_descr" = "Не губете информация. Използвайте резервни копия за лесното ѝ съхраняване и възстановяване.";
@@ -2325,7 +2311,6 @@
 "shared_string_contributions" = "Принос";
 "benefits_for_contributors_secondary_descr" = "Влезте в OpenStreetMap и проверете дали имате право да получавате неограничени месечни и почасови обновявания на картата.";
 "routing_attr_motor_type_gas_name" = "Газ под налягане";
-"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "position_on_map_bottom" = "Долу";
 "login_open_street_map_org" = "Вход в OpenStreetMap.org";
 "recalc_angle_dialog_descr" = "Допълнителна права между моето местоположение и изчертаният маршрут ще се появи докато маршрутът се преизчислява";
@@ -2356,7 +2341,6 @@
 "routing_attr_avoid_tunnels_description" = "Избягване на тунели";
 "promo_subscription" = "Промоционален абонамент";
 "enough_contributions_descr" = "Поздравления, имате необходимия принос към OpenStreetMap и можете да се наслаждавате на неограничено обновяване на картата!";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
 "logout_from_osmand_cloud_decsr" = "Изход от системата\? \nЩе трябва да влезете отново, за да направите резервно копие или да възстановите данните.";
 "activity_type_mountainbike_name" = "Планинско колоездене";
 "shared_string_progress" = "Напредък";
@@ -2564,7 +2548,6 @@
 "rendering_attr_seabedDetail_description" = "Допълнителна текстова информация за повърхността на морското дъно, видове комбинирани повърхности, категоризация и таксономия на водораслите или морските треви";
 "rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Представя пиктограмите схематично при малко увеличение";
 "turn_arrows_descr" = "Изберете дали на линията на маршрута да се показват стрелки на завоите.";
-"shared_string_open_street_map" = "OpenStreetMap";
 "shared_string_logout" = "Излизане";
 "uninstall_speed_cameras" = "Премахване на камери за контрол на скоростта";
 "speed_camera_pois" = "POI на камери за контрол на скоростта";
@@ -2585,12 +2568,10 @@
 "rendering_value_sector3_name" = "Сектор 3";
 "routing_attr_hazmat_category_usa_2_name" = "Газове";
 "routing_attr_hazmat_category_usa_6_name" = "Отровни и заразни вещества";
-"rendering_value_caiScale_name" = "CAI";
 "routing_attr_hazmat_category_usa_8_name" = "Корозивни вещества";
 "rendering_value_sectors_name" = "Сектори";
 "rendering_attr_lightDetail_name" = "Подробности за светлината";
 "routing_attr_hazmat_category_usa_1_name" = "Взривни вещества";
-"rendering_value_sacScale_name" = "SAC";
 "routing_attr_hazmat_category_usa_3_name" = "Леснозапалими течности";
 "rendering_value_small_name" = "Малко";
 "routing_attr_hazmat_category_usa_7_name" = "Радиоактивни материали";
@@ -2671,7 +2652,6 @@
 "map_orientation_landscape" = "Пейзаж";
 "backup_error_invalid_token" = "Споделената тайна е недействителна";
 "ant_plus_open_settings" = "Настройки";
-"ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
 "true_bearing_widget_desc" = "Оказва ъгъла между истинския север и местоназначението, спрямо вашето местоположение.";
 "route_maneuvers_desc" = "Приспособленията за маршрутизиране се включват по време на навигация, за да показват информация като разстояние, време на пристигане или оставащо време, предстоящи завои, направление на движение, име на текущата улица, информация за платното на движение, максимална скорост, приближаващи опасности, POI, отправни точки.";
 "external_sensors_plugin_name" = "Външни сензори";
@@ -2753,7 +2733,6 @@
 "free_favorites_backup_description" = "Регистрирайте се в OsmAnd Cloud, за да получите безплатно резервно копие на избраните точки и настройките.";
 "second_marker_widget_desc" = "Можете да настроите приспособлението да показва разстоянието или очакваното време на пристигане до втория маркер на картата.";
 "help_article_personal_import_export_name" = "Внасяне / изнасяне";
-"help_article_navigation_car_play_name" = "CarPlay";
 "lanes_widgets_desc" = "Показва схема на лентите на текущия път и подчертава тези, които трябва да използвате при маршрутизиране.";
 "detailed_log_file" = "Подробен файл на дневника";
 "side_marker_eta" = "Очаквано време на пристигане";
@@ -2762,7 +2741,6 @@
 "activity_type_running_name" = "Бягане";
 "ant_plus_bluetooth_off" = "Bluetooth е включен";
 "external_sensors_support" = "Поддръжка на външни датчици";
-"carplay" = "CarPlay";
 "glide_ratio_to_target" = "Коефициент на планиране до целта";
 "shared_string_wrist" = "Китка";
 "search_history" = "История на търсене";
@@ -2806,7 +2784,6 @@
 "map_widget_ant_bicycle_cadence" = "Каданс на велосипеда";
 "weather_update_disabled" = "Спрян";
 "map_widget_zoom_level_desc" = "Показва текущото увеличение на картата.";
-"help_article_navigation_routing_brouter_name" = "BRouter";
 "radius_rules_widget_desc" = "Инструментът „Линия за радиуси“ показва окръжности с разстояния около избрана точка от картата.";
 "average_speed_time_interval_desc" = "Задайте интервала от време, за който да бъде усреднена скоростта.";
 "map_widget_trip_recording_duration" = "Продължителност";
@@ -2915,8 +2892,6 @@
 "shared_string_cache" = "Временни файлове";
 "shared_string_markers" = "Маркери";
 "weather_source_GFS_description" = "Глобална система за прогнози от национални центрове за предсказване на околната среда";
-"weather_source_ecmwf_title" = "ECMWF";
-"weather_source_GFS_title" = "GFS";
 "map_settings_weather_wind_animation" = "Анимиран вятър";
 "help_article_navigation_setup_markers_navigation_name" = "Маршрут по маркери";
 "help_article_widgets_markers_name" = "Приспособления за маркери";
@@ -2954,7 +2929,6 @@
 "shared_string_result" = "Резултати";
 "shared_string_max_height" = "Макс. височина";
 "shared_string_min_height" = "Мин. височина";
-"shared_string_wikivoyage" = "Wikivoyage";
 "backup_pause_all" = "Всички на пауза";
 "make_backup_descr" = "На устройството има много промени. За да не ги изгубите направете резервно копие.";
 "backup_danger_zone" = "Внимание";
@@ -3008,7 +2982,6 @@
 "shared_string_all_colors" = "Всички цветове";
 "shared_string_show" = "Показване";
 "shared_string_is_deleted" = "%@ премахнато.";
-"osm_id" = "OSM ID";
 "quick_action_toggle_preference" = "Превключете за промяна на настройката.";
 "shared_string_local" = "Изтеглени";
 "shared_string_all_icons" = "Всички пиктограми";

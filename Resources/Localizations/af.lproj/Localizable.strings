@@ -1,4 +1,3 @@
-"OsmAnd Maps" = "OsmAnd Maps";
 "download_depth_countours" = "Nautical depth contours";
 "day_short" = "D";
 "week_short" = "Wk";
@@ -41,7 +40,6 @@
 "transport_Routes" = "Roetes";
 "transport_nearby_routes_within" = "Nearby routes within";
 "transport_nearby_routes" = "Within";
-"shared_string_control_stop" = "Stop";
 "cancel_navigation" = "Staak navigasie";
 "start_navigation" = "Start navigation";
 "intermediate_items_sort_by_distance" = "Sorteer deur-tot-deur";
@@ -361,7 +359,6 @@
 "route_descr_select_destination" = "Kies bestemming";
 "swap_points" = "Swap start and destination";
 "route_to" = "Na:";
-"route_via" = "Via:";
 "route_from" = "Van:";
 "transfers" = "Transfers:";
 "lat" = "Lat";
@@ -408,7 +405,6 @@
 "traffic_warning_hazard" = "Hazard";
 "tunnel_warning" = "Tunnel ahead";
 "accessibility_announce" = "Announce";
-"driving_region_japan" = "Japan";
 "driving_region_us" = "Verenigde State van Amerika";
 "driving_region_canada" = "Kanada";
 "driving_region_europe_asia" = "Europa & Asië";
@@ -418,7 +414,6 @@
 "si_mi_feet" = "Myle / voete";
 "si_mi_yard" = "Myle/jaarts";
 "si_mi_meters" = "Miles/meters";
-"si_km_m" = "Kilometers/meters";
 "si_nm" = "Nautical miles";
 "si_nm_mt" = "Nautical miles/meters";
 "si_nm_ft" = "Nautical miles/feet";
@@ -458,7 +453,6 @@
 "shared_string_apply" = "toepas";
 "shared_string_select" = "Select";
 "shared_string_back" = "Back";
-"shared_string_ok" = "OK";
 "shared_string_cancel" = "Kanseleer";
 "shared_string_exit" = "Verlaat";
 "shared_string_close" = "Sluit";
@@ -481,7 +475,6 @@
 "shared_string_and" = "en";
 "shared_string_edit" = "Edit";
 "shared_string_modify" = "Modify";
-"first_time_continue" = "Later";
 "shared_string_of" = "of";
 "shared_string_all" = "All";
 "shared_string_from" = "from";
@@ -845,7 +838,6 @@
 "sett_pref_lang" = "Preferred Language";
 "sett_lang_show_local" = "Show local names";
 "translit_names" = "Transliterate names";
-"lang_af" = "Afrikaans";
 "lang_al" = "Albanian";
 "lang_als" = "Albanian (Tosk)";
 "lang_an" = "Aragonese";
@@ -1261,7 +1253,6 @@
 "shared_string_menu" = "Menu";
 "menu_my_trips" = "My Tracks";
 "feedback" = "Feedback";
-"shared_string_help" = "Help";
 "select_tracks" = "Select tracks";
 "selected_tracks_count" = "Tracks - %d";
 "delete_tracks_bottom_sheet_description_regular_part" = "Are you sure you want to delete ";
@@ -1381,7 +1372,6 @@
 "shared_string_reload" = "Reload";
 "show_more" = "Show more";
 "mapil_reload_cache" = "Reload tiles to see the newest data";
-"filter_current_poiButton" = "Filter";
 "mapil_filter_user_descr" = "Filter images by user";
 "mapil_filter_date" = "Filter images by date";
 "mapil_usernames" = "Usernames";
@@ -1584,15 +1574,12 @@
 "yard" = "Jrt";
 "foot" = "vt";
 "nm" = "nmi";
-"km_h" = "km/h";
-"mile_per_hour" = "mph";
 "units_nm_h" = "nmi/h";
 "min_mile" = "min/m";
 "min_km" = "min/km";
 "m_s" = "m/s";
 "metric_ton" = "t";
 "int_hour" = "h";
-"int_min" = "min.";
 "shared_string_sec" = "sec";
 "units_sec_short" = "s";
 "int_seconds" = "sekondes";
@@ -2305,7 +2292,6 @@
 "rendering_attr_smoothness_very_horrible_name" = "Very horrible";
 "routing_attr_allow_intermediate_name" = "Allow intermediate routes";
 "rendering_attr_trolleybusRoutes_name" = "Trolleybus routes";
-"rendering_attr_hideWaterPolygons_description" = "Water";
 "rendering_attr_piste_difficulty_extreme_name" = "Extreme";
 "rendering_value_low_name" = "Laag";
 "rendering_value_lightgreen_name" = "Light green";
@@ -2699,8 +2685,6 @@
 "ios_release_4_0" = "• New! \"Add favorite\" screen with options to select the custom icon, color, and shape\n• Added new \"Coordinates widget\" with coordinates of the current location\n• Added ability to import custom user-defined plugins\n• Significantly extended the import/export functionality\n• Distance by tap moved from the Radius ruler into a separate option\n• Fixed CarPlay app freezes when iPhone screen is turned off\n• Plugins screen moved from the Maps & Resources to the main menu\n• Added Finnish localization\n• Fixed UI in landscape orientation for \"Plan a route\" screen\n• Added support for custom routing and rendering files\n• Fixed performance of markers direction line\n• Fixed issue with importing GPX files with uppercase extensions\n• Fixed issue with \"Follow track\" menu\n• Fixed import of OBF files\n";
 "ios_release_4_1" = "• Completely redesigned interaction with tracks: a new menu with charts, statistics, ability to change the appearance, coloring by speed, height and slope, and track selection on the map• New screen for searching by coordinates in different formats\n• Improved coordinate search in OLC format\n• New user-friendly menu for choosing languages to display Wikipedia articles on the map\n• Added ability to easily load maps of all regions of the country with a couple of clicks.\n• Added contour lines in feet (You need to download additional files)\n• Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n• New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n• Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
 "ios_release_4_2" = "• Route line appearance: added ability to set width and color\n• Tracks: added option for deleting several tracks at once\n• Track context menu: added scroll bar with waypoint groups\n• Map appearance: divided additional routes by type with ability to enable one from each category separately\n• Horseback riding: add new navigation type and app profile\n• OsmAnd files are now visible in the \"Files\" application\n• UX of options \"Use elevation data\" and \"Select elevation fluctuation\"  was improved, they were combined and renamed to \"Preferred terrain\", currently available for \"Bicycle\" and \"Pedestrian\" profiles.\n• New option \"Include heading\" for track recording\n• Street name widget: now show road shield and exit number during navigation\n• New Fitness and running routes on the map\n• CarPlay bug fixes, added gestures for touchscreens\n• Fixed import of GPX files from OSF package\n• Fixed import of custom plugins with included files\n• Fixed various crashes in the Route planning mode\n• Fixed crashes during Navigation\n";
-"m" = "m";
-"km" = "km";
 "global_settings" = "Oorhoofse instellings";
 "visibility" = "Sigbaarheid";
 "user_name" = "Jou OSM gebruiker naam";
@@ -2708,10 +2692,9 @@
 "map_orientation_portrait" = "Portret";
 "network" = "Netwerk";
 "map_orientation_default" = "Dieselfde as toestel";
-"map_settings_topography" = "Kontoer lyne inligting";
+"map_settings_topography" = "Kontoerlyne";
 "map_orientation_landscape" = "Landskap";
 "general_settings" = "Algemene instellings";
-"short_min" = "m";
 "shared_string_format" = "Formaat :";
 "shared_string_any" = "Enige";
 "audionotes_plugin_name" = "Oudio/video notas";

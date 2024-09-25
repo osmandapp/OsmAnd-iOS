@@ -1,4 +1,3 @@
-"OsmAnd Maps" = "OsmAnd Maps";
 "day_short" = "D";
 "week_short" = "Wk";
 "weeks_short" = "Wks";
@@ -37,7 +36,6 @@
 "transport_Routes" = "Čary";
 "transport_nearby_routes_within" = "Bliske linije w radiusu";
 "transport_nearby_routes" = "Within";
-"shared_string_control_stop" = "Stop";
 "cancel_navigation" = "Stop navigation";
 "start_navigation" = "Start navigation";
 "intermediate_items_sort_by_distance" = "Sort door-to-door";
@@ -211,7 +209,6 @@
 "routing_preferences_descr" = "Nastajenja za wobličenje čarow";
 "recording_preferences_descr" = "Trip recording preferences";
 "routing_settings" = "Nawigacija";
-"app_mode_bus" = "Bus";
 "app_mode_train" = "Ćah";
 "app_mode_truck" = "Nakładne awto";
 "app_mode_hiking" = "Pućowanje";
@@ -249,7 +246,6 @@
 "navigation_over_track" = "Start navigation along trip?";
 "use_displayed_track_for_navigation" = "Pokazanu čaru za nawigaciju wužić\?";
 "previous_route" = "Previous route";
-"shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Na karće wubrać";
 "selected_roads" = "Selected roads";
 "shared_string_my_location" = "Moje stejišćo";
@@ -313,7 +309,6 @@
 "si_min_km" = "mjeńšiny na kilometer";
 "si_min_m" = "mjeńšiny na milu";
 "si_nm_h" = "nawtiske mile na hodźinu (suki)";
-"nm" = "nmi";
 "units_nm_h" = "nmi/h";
 "min_mile" = "mjeń/m";
 "min_km" = "mjeń/km";
@@ -440,7 +435,6 @@
 "gpx_route_time" = "Route time";
 "gpx_uphldownhl" = "Uphills/Downhills";
 "map_widget_average_speed" = "přerěznu spěšnosć";
-"shared_string_control_start" = "Start";
 "gpx_avg_elev" = "Average elevation";
 "gpx_elev_range" = "Elevation range";
 "gpx_updown" = "Up/Down";
@@ -491,7 +485,6 @@
 "shared_string_online_maps" = "Online-karty";
 "shared_string_transparency" = "Transparenca";
 "map_settings_avail_lay" = "Available layers";
-"mapillary" = "Mapillary";
 // Intro
 "shared_string_skip" = "přeskočić";
 "intro_download" = "Download\nmap";
@@ -643,7 +636,6 @@
 "osm_around_the_clock" = "Around the clock (24/7)";
 "osm_opens_at" = "Opens at:";
 "osm_closes_at" = "Closes at:";
-"contact_info" = "Contact info";
 "map_widget_top_text" = "Mjeno dróhi";
 "osm_building_num" = "Building number";
 "phone" = "Telefon";
@@ -841,13 +833,7 @@
 "cannot_add_marker_desc" = "Please remove one direction at least and retry";
 "cannot_add_destination" = "Cannot add Direction";
 // Units
-"mile" = "mi";
-"yard" = "yd";
-"foot" = "ft";
-"km_h" = "km/h";
-"mile_per_hour" = "mph";
 "int_hour" = "h";
-"int_min" = "min.";
 "shared_string_sec" = "sec";
 "units_sec_short" = "s";
 // Help
@@ -1156,7 +1142,6 @@
 "get_osmand_live" = "Get OsmAnd Live to unlock all features:";
 "osm_live_subscription" = "OsmAnd Live subscription";
 "cancel_subscription" = "Cancel subscription";
-"wikivoyage_offline" = "Wikivoyage offline";
 "unlimited_downloads" = "Njewobmjezowane sćehnjenja";
 "wikipedia_offline" = "Wikipedija offline";
 "contour_lines_hillshade_maps" = "Wysokostne linije&reliefowe karty";
@@ -1350,7 +1335,6 @@
 "shared_string_deselect_all" = "Wšě wotwolić";
 "application_profiles" = "Profile aplikacije";
 "icon_group_emergency" = "Nuzowy pad";
-"icon_group_sport" = "Sport";
 "new_plugin_added" = "Nowy plugin přidaty";
 "address_search_desc" = "Pytanje za adresu";
 "replace_favorite_confirmation" = "Sy sej wěsty/a, zo chceš narunać faworit %@?";
@@ -1363,11 +1347,9 @@
 "fav_points_not_exist" = "Njejsu žane faworitowe dypki";
 "shared_string_icon" = "Symbol";
 "favorite_places_category" = "Městna";
-"icon_group_transport" = "Transport";
 "transport" = "Zjawny transport";
 "searching" = "Pytam…";
 "none_point_error" = "Prošu dodaj znajmjeńša jedyn dypk.";
-"shared_string_import" = "Import";
 "coordinates" = "Koordinaty";
 "favorite_friends_category" = "Přećeljo";
 "access_default_color" = "Standardna barba";
@@ -1393,7 +1375,6 @@
 "lang_uk" = "ukrainšćina";
 "lang_pt" = "portugalšćina";
 "any_poi" = "Wšě";
-"lang_new" = "Newar / Nepal Bhasa";
 "lang_es" = "španišćina";
 "lang_iw" = "hebrejšćina";
 "lang_sr" = "serbišćina";
@@ -1416,7 +1397,6 @@
 "lang_sw" = "Suahelšćina";
 "lang_fr" = "francošćina";
 "lang_da" = "danšćina";
-"lang_nv" = "Navajo";
 "lang_zh_cn" = "chinšćina (zjednorjena)";
 "lang_ro" = "rumunšćina";
 "lang_pms" = "piemontšćina";
@@ -1424,14 +1404,12 @@
 "lang_sk" = "słowakšćina";
 "lang_la" = "łaćonšćina";
 "lang_tr" = "turkowšćina";
-"lang_bpy" = "Bishnupriya";
 "lang_ca" = "katalanšćina";
 "lang_fa" = "perzišćina";
 "lang_hy" = "armenšćina";
 "lang_zh_tw" = "chinšćina (tradicionelna)";
 "altitude" = "Wysokosć";
 "lang_kn" = "kannadašćina";
-"lang_eo" = "Esperanto";
 "lang_al" = "albanšćina";
 "lang_hu_formal" = "madźaršćina (formalna)";
 "lang_br" = "bretonšćina";
@@ -1453,7 +1431,6 @@
 "lang_is" = "islandšćina";
 "lang_ru" = "rušćina";
 "distance_moving" = "Zdalenosć skorigowana";
-"lang_ml" = "Malayalam";
 "lang_sr_latn" = "serbišćina (łaćonsce)";
 "lang_he" = "Hebrejšćina";
 "lang_nn" = "norwegski Nynorsk";
@@ -1465,7 +1442,6 @@
 "lang_hi" = "hindišćina";
 "lang_ku" = "kurdišćina";
 "lang_it" = "italšćina";
-"lang_te" = "Telugu";
 "lang_lt" = "litawšćina";
 "lang_sq" = "albanšćina";
 "lang_es_us" = "španišćina (Amerika)";
@@ -1473,7 +1449,6 @@
 "lang_bg" = "bołharšćina";
 "lang_zh_hk" = "chinšćina (Hongkong)";
 "lang_be" = "běłorušćina";
-"lang_ceb" = "Cebuano";
 "lang_nb" = "norwegska knižna rěč";
 "lang_et" = "estišćina";
 "lang_ga" = "iršćina";
@@ -1532,7 +1507,6 @@
 "show_map_symbols" = "Kartowe symbole pokazać";
 "gpx_selection_segment_title" = "Wotrězk";
 "animate_my_location" = "Animěruj swójske stejišćo";
-"shared_string_status" = "Status";
 "shared_string_octagon" = "wosomróžk";
 "map_widget_parking" = "Parkowanišćo";
 "profile_settings" = "Specifiske nastajenja za profile";
@@ -1544,8 +1518,6 @@
 "add_point_after" = "Přichodny dypk dodać";
 "depth_contours" = "Hłubokostne kontury";
 "move_marker_bottom_sheet_title" = "Pohibńće kartu, zo by so pozicija pokazowaka změniła";
-"m" = "m";
-"km" = "km";
 "lang_zh-Hant" = "chinšćina (tradicionelna)";
 "icon_group_service" = "Posłužby";
 "some_articles_may_not_available_in_lang" = "Někotre zapiski Wikipedije w twojej rěči snadź njepředleža.";
@@ -1653,7 +1625,6 @@
 "lang_zh-Hans" = "chinšćina (zjednorjena)";
 "no_travel_guides_data_descr" = "Sćahń sej pućowanske přewodniki zo bychu so zapiski wo městnach po wšěm swěće bjez zwiska do interneta pokazać móhli.";
 "map_widget_altitude_current_location" = "Wysokosć: tuchwilne stejišćo";
-"ltr_or_rtl_combine_via_comma" = "%@, %@";
 "shared_string_markers" = "Chorhojčki";
 "shared_string_dark" = "Ćmowe";
 "coordinates_widget_current_location" = "Koordinaty: tuchwilne stejišćo";
@@ -1698,7 +1669,6 @@
 "audionotes_plugin_name" = "Awdijowe/widejowe noticy";
 "map_screen_orientation" = "Wusměrjenje wobraza";
 "privacy_and_security" = "Priwatnosć a wěstota";
-"short_min" = "m";
 "popular_destinations" = "Woblubowane cile";
 "search_history" = "Historija pytanja";
 "shared_string_bottom" = "Deleka";
@@ -1716,12 +1686,10 @@
 "weather_offline_forecast" = "Připowědź offline";
 "routeInfo_steepness_name" = "Nahłosć";
 "weather_forecast_is_outdated" = "Připowědź je zestarjena.";
-"weather_source_ecmwf_title" = "ECMWF";
 "shared_string_travel_guides" = "Pućowanske přewodniki";
 "weather_precip_milimeters" = "milimetrach";
 "announcement_time_arrive" = "Přichad na cilu";
 "weather_forecast" = "Připowědź wjedra";
-"weather_source_GFS_title" = "GFS";
 "map_settings_weather_wind_animation" = "Animacija wětřika";
 "weather_precip_inches" = "inch";
 "routeInfo_roadClass_name" = "Typ dróhi";
@@ -1784,7 +1752,6 @@
 "missing_or_outdated_maps_title" = "Falowace abo zestarjene karty";
 "oldest_date_first" = "najstarši datum horjeka";
 "newest_date_first" = "najnowši datum horjeka";
-"shared_string_millimeters_short" = "mm";
 "shared_string_all_colors" = "Wšě barby";
 "shortest_distance_first" = "najkrótša čara horjeka";
 "shared_string_show" = "Pokazać";

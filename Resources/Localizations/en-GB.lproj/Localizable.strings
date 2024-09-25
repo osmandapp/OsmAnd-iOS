@@ -1,4 +1,3 @@
-"OsmAnd Maps" = "OsmAnd Maps";
 "download_depth_countours" = "Nautical depth contours";
 "day_short" = "D";
 "week_short" = "Wk";
@@ -351,7 +350,6 @@
 "ending_point_too_far" = "Ending point too far from nearest road.";
 "intermediate_point_too_far" = "Intermediate destination %@ is too far from the nearest road.";
 "arrived_at_destination" = "You have arrived";
-"towards" = "towards";
 "route_roundabout" = "Roundabout: take %d exit and go";
 "route_roundabout_short" = "Take %d exit and go";
 "route_kl" = "Keep left and go";
@@ -1116,7 +1114,6 @@
 "shared_string_details" = "Details";
 "shared_string_type" = "Type";
 "res_unknown" = "Unknown";
-"shared_string_size" = "Size";
 "created_on" = "Created on";
 "res_update_all" = "Update all";
 "res_updates_no_space" = "Not enough space to install %d update(s). %@ is needed. Please free up some space.";
@@ -1839,7 +1836,6 @@
 "osm_live_payment_annual_title" = "Pay once a year";
 "osm_live_payment_month_cost_descr" = "%@ / month";
 "osm_live_payment_month_cost_descr_ex" = "%.2f %@ / month";
-"osm_live_payment_discount_descr" = "Save %@";
 "osm_live_payment_current_subscription" = "Your current subscription";
 "osm_live_payment_renews_monthly" = "Renews monthly";
 "osm_live_payment_renews_quarterly" = "Renews quarterly";
@@ -2212,7 +2208,6 @@
 "app_mode_scooter" = "Scooter";
 "app_mode_ufo" = "UFO";
 "app_mode_offroad" = "Offroad";
-"app_mode_camper" = "Camper";
 "app_mode_campervan" = "Campervan (RV)";
 "app_mode_wagon" = "Wagon";
 "app_mode_pickup_truck" = "Pickup truck";

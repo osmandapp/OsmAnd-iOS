@@ -245,11 +245,6 @@
 "more" = "Več ...";
 "time_limited" = "Časovno omejeno";
 // Units
-"mile" = "mi";
-"yard" = "yd";
-"foot" = "ft";
-"km_h" = "km/h";
-"mile_per_hour" = "mph";
 "int_hour" = "ur";
 "int_min" = "min";
 "shared_string_sec" = "sek";
@@ -298,11 +293,7 @@
 "si_min_km" = "Minute na kilometer";
 "si_min_m" = "Minute na miljo";
 "si_nm_h" = "Morske milje na uro (vozli)";
-"nm" = "nmi";
 "units_nm_h" = "nmi/h";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
 "sett_arr" = "Puščice zemljevida";
 "res_search_world" = "Poišči po svetu";
 "res_worldwide" = "Po svetu";
@@ -387,7 +378,6 @@
 "ending_point_too_far" = "Končna točka je predaleč od najbližje ceste.";
 "intermediate_point_too_far" = "Vmesni cilji %@ je predaleč od najbližje ceste.";
 "route_head" = "Začetek poti";
-"shared_string_ellipsis" = "…";
 "route_to" = "Konec poti:";
 "route_via" = "Preko:";
 "route_from" = "Začetek poti:";
@@ -653,7 +643,6 @@
 "save_current_track_descr" = "Shrani trenutno sled v datoteko GPX.";
 "shared_string_clear" = "Počisti";
 "save_track_to_gpx" = "Samodejno beleži sled med navigacijo";
-"osmand_live" = "OsmAnd Live";
 "live_updates" = "Posodobitve v živo";
 "available_maps" = "Razpoložljivi zemljevidi";
 "hourly" = "Vsako uro";
@@ -799,14 +788,10 @@
 "get_discount_short_descr" = "%@ za %d %@, nato %@";
 "save_poi_too_many_uppercase" = "V imenu je preveč velikih črk. Ali želite vseeno nadaljevati?";
 "shared_string_read_more" = "Preberite več";
-"navigate_point_format_D" = "DDD.DDDDD";
-"navigate_point_format_DM" = "DDD MM.MMM";
-"navigate_point_format_DMS" = "DDD MM SS.S";
 "months_3" = "Tri mesece";
 "get_discount_first_part" = "%@ za prvi %@";
 "get_discount_second_part" = "nato %@";
 "sett_generic_ext_input" = "Tipkovnica";
-"sett_wunderlinq_ext_input" = "WunderLINQ";
 "shared_string_distance" = "Razdalja";
 "configure_map" = "Nastavitve zemljevida";
 "simulate_navigation" = "Izvedi navidezno navigacijo";
@@ -860,7 +845,6 @@
 "vector_data" = "Vektorski zemljevidi za delo brez povezave";
 "opening_hours" = "Delovni čas";
 "quick_action_add_marker" = "Dodaj označbo na zemljevidu";
-"filter_current_poiButton" = "Filter";
 "external_input_device" = "Zunanja vhodna naprava";
 "quick_action_navigation_voice" = "Glasovno vodenje";
 "show_from_zoom_level" = "Prikazovanje se začne na ravni povečave";
@@ -871,7 +855,6 @@
 "quick_action_resume_pause_navigation" = "Ustavi/Nadaljuj navigacijo";
 "shared_string_example" = "Primer";
 "poi_remove_success" = "Izbrisano";
-"mapillary" = "Mapillary";
 "poi_dialog_poi_type" = "Vrsta točke POI";
 "map_magnifier" = "Velikost zemljevida";
 "map_downloaded" = "Zemljevid je prejet";
@@ -1159,7 +1142,6 @@
 "rendering_attr_highway_class_road_name" = "Cesta";
 "routing_attr_height_description" = "Navedi dovoljeno višino vozila na poteh.";
 "routing_attr_avoid_ferry_description" = "Načrtovanje poti brez uporabe trajektov";
-"rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "rendering_value_translucent_lightblue_name" = "Prosojna svetlo modra";
 "routing_attr_allow_advanced_name" = "Dovoli napredne poti";
 "app_mode_taxi" = "Prevoz s taksijem";
@@ -1265,7 +1247,6 @@
 "select_icon_profile_dialog_title" = "Izbor ikone";
 "select_navigation_icon" = "Ikona položaja med premikanjem";
 "routing_profile_geocoding" = "Geokodiranje";
-"metric_ton" = "t";
 "poi_filter_public_transport" = "Javni potniški promet";
 "profile_alert_need_profile_name_title" = "Ime profila";
 "profile_type_custom_string" = "Profil po meri";
@@ -1466,7 +1447,6 @@
 "lang_de" = "Nemščina";
 "lang_ber" = "Berberščina";
 "lang_te" = "Telugujščina";
-"lang_eo" = "Esperanto";
 "lang_ar" = "Arabščina";
 "lang_pt_br" = "Portugalščina (Brazilija)";
 "number_of_tiles" = "Število ploščic";
@@ -1476,7 +1456,6 @@
 "move_map_to_select_area" = "Premakni zemljevid, za izbor potrebnega območja.";
 "rendering_attr_showRunningRoutes_name" = "Tekaške poti";
 "shared_string_hide_all" = "Skrij vse";
-"shared_string_open_street_map" = "OpenStreetMap";
 "turn_arrows" = "Puščice za obračanje";
 "shared_string_min_height" = "Min. višina";
 "gpx_upload_private_visibility_descr" = "»Zasebno« pomeni, da se sled ne prikaže v nobenem javnem seznamu, vendar so točke iz sledi, v nekronološkem vrstnem redu in brez časovnih žigov, na voljo prek javnega API-ja GPS.";
@@ -1491,7 +1470,6 @@
 "resend_verification_code" = "Ponovno pošlji";
 "backup_and_restore" = "Varnostno kopiranje in obnovitev";
 "attribute" = "Lastnost";
-"shared_string_interval" = "Interval";
 "shared_strings_all_regions" = "Vse regije";
 "gpx_upload_trackable_visibility_descr" = "»Sledljivo« pomeni, da se sled ne prikaže v nobenem javnem seznamu, ampak se prikažejo samo obdelane točke sledi s časovnimi žigi (ki jih ni mogoče neposredno povezati s tabo) iz javnega API-ja GPS.";
 
@@ -1508,7 +1486,6 @@
 "cloud_email_already_registered" = "Ta e-poštni naslov je že registriran.";
 "backup_error_subscription_was_expired" = "Potekla naročnina";
 "backup_error_user_is_already_registered" = "Ta e-poštni naslov se že uporablja v drugem računu";
-"osmand_cloud" = "OsmAnd Cloud";
 "shared_string_feet" = "čevlji";
 "routeInfo_surface_description" = "Navedi informacije o fizični površini cest/pešpoti.";
 "routing_attr_allow_gate_description" = "Dovoli uporabo vrat";
@@ -1547,7 +1524,6 @@
 "import_duplicates_title" = "Nekateri elementi že obstajajo";
 "shared_string_import_complete" = "Uvoz je končan";
 "rendering_attr_piste_difficulty_aerialway_name" = "Zračna pot";
-"app_mode_osm" = "OSM";
 "lang_lmo" = "Lombardščina";
 "lang_jv" = "Javanščina";
 "lang_kk" = "Kazaščina";
@@ -1609,7 +1585,6 @@
 "rendering_attr_piste_type_sleigh_name" = "Vprežne sani";
 "rendering_attr_piste_difficulty_advanced_name" = "Napredna";
 "rendering_attr_piste_type_skitour_name" = "Turno smučanje";
-"rendering_attr_piste_type_downhill_name" = "Downhill";
 "routing_attr_driving_style_prefer_unpaved_name" = "Prednostno vodi po neasfaltiranih cestah";
 "routeInfo_piste_type_name" = "Vrsta proge";
 "rendering_attr_piste_difficulty_expert_name" = "Za strokovnjake";
@@ -1634,7 +1609,6 @@
 "street_level_imagery" = "Slike na ravni ulice";
 "shared_string_terrain" = "Teren";
 "rendering_attr_piste_difficulty_undefined_name" = "Nedoločena";
-"rendering_attr_piste_difficulty_freeride_name" = "Freeride";
 "rendering_attr_piste_type_sled_name" = "Sani";
 "app_mode_utv" = "Eno ob drugem";
 "simulation_real_mode_title" = "Realistična simulacija";
@@ -1642,7 +1616,6 @@
 "transport_hazmat_yes_desc" = "Izberi ustrezno kategorijo.";
 "transport_hazmat_no_desc" = "Ceste in predori lahko imajo omejitve za prevoz nevarnih snovi.";
 "not_available_with" = "Ni na voljo z %@";
-"segments_count" = "Segment %d";
 "backup_restore_now" = "Obnovi zdaj";
 "new_device_account" = "Nova naprava / nov račun";
 "sort_last_modified" = "Po zadnji spremembi";
@@ -1673,7 +1646,6 @@
 "routeInfo_horse_scale_name" = "Zahtevnost konjskih poti";
 "purchases_feature_desc_terrain" = "Izohipse terena, sivinsko senčenje terena in označevanje naklona z barvno lestvico, za prikaz vrhov in nižin.";
 "clear_tiles_warning" = "Z uporabo teh sprememb se izbrišejo podatki v predpomnilniku za ta vir ploščic";
-"share_geo" = "geo:";
 "annual_subscription" = "Letna naročnina";
 "profile_prefs_reset_successful" = "Vse nastavitve profila so obnovljene na privzete vrednosti.";
 "make_backup" = "Naredi varnostno kopijo";
@@ -1693,11 +1665,9 @@
 "save_as_new_track" = "Shrani kot novo sled";
 "backup_now" = "Varnostno kopiraj zdaj";
 "register_opr_have_account" = "Že imam račun";
-"mapillary_item" = "OsmAnd + Mapillary";
 "simulation_preview_mode_desc" = "Hitrost simulacije bo največja na ravnih odsekih in se bo upočasnila le na križiščih.";
 "complete_purchase" = "Dokončaj nakup";
 "sqlite_db_file" = "Datoteka SQLiteDB";
-"navigate_point_mgrs" = "MGRS";
 "simulation_constant_mode_title" = "Fiksna hitrost";
 "rendering_attr_showMonorailRoutes_name" = "Proge enotirnih železnic";
 "backup_view_conflicts" = "Ogled sporov";
@@ -1740,10 +1710,7 @@
 "icon_group_travel" = "Potovanje";
 "shared_string_circle" = "Krog";
 "manage_subscription" = "Upravljanje naročnine";
-"ltr_or_rtl_combine_via_space" = "%@ %@";
-"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "purchases_feature_desc_hourly_map_updates" = "Dostopaj do pogostejših posodobitev zemljevidov. Urne, dnevne ali tedenske posodobitve. Posodobitve se prenašajo postopno, samo za spremenjeno območje.";
-"cubic_m" = "m³";
 "accessibility_announce" = "Napovej";
 "purchases_feature_desc_wikivoyage" = "Razišči Wikivoyage brez povezave. Članki, razdeljeni po državah in regijah, na voljo v vseh jezikih.";
 "osm_live_subscriptions" = "Naročnine";
@@ -1758,7 +1725,6 @@
 "simulation_preview_mode_title" = "Način hitrega predogleda";
 "extra_maps_menu_group" = "Dodatni zemljevidi";
 "cloud_conflicts_descr" = "Nekaterih datotek ni bilo mogoče naložiti v strežnik, ker je na strežniku shranjena novejša različica.";
-"shared_string_min" = "Min";
 "login_account" = "Račun";
 "purchases_feature_desc_unlimited_map_download" = "Pridobi neomejeno število prenosov za vse celine in regije zemljevidov brez povezave.";
 "copy_to_map_favorites" = "Kopiraj med priljubljene";
@@ -1820,13 +1786,11 @@
 "shared_string_angle" = "Kot";
 "shared_string_recorded" = "Shranjeno";
 "purchases_feature_desc_cross_buy" = "Uporabi svoje naročniške funkcije na različnih platformah (Android/iOS/splet), brez dodatnih stroškov.";
-"tts_title" = "TTS";
 "backup_danger_zone" = "Nevarno območje";
 "recalc_angle_dialog_title" = "Najmanjši kot med trenutno lokacijo in potjo";
 "routing_attr_avoid_low_emission_zone_name" = "Izogibaj se območjem z nizkimi emisijami";
 "subscribe_email_desc" = "Naročite se na dopisni seznam o popustih programa in si pridobite tri dodatne prejeme zemljevidov!";
 "osm_live_payment_desc" = "Naročnina se obračuna za izbrano obdobje. Kadarkoli jo je mogoče preklicati prek Google Playa.";
-"weather_temperature_fahrenheit" = "Fahrenheit";
 "mtb_imba_full" = "Svetovna gorsko kolesarska zveza (International Mountain Bicycling Association)";
 "search_poi_types_descr" = "Združi vrste POI iz različnih kategorij. Tapnite stikalo, da izberete vse, tapnite levo stran za izbiro kategorije.";
 "position_on_map_center" = "Sredina";
@@ -1843,7 +1807,6 @@
 "backup_delete_all_data_warning" = "Izbrisani bodo vsi podatki, ki so bili prej naloženi v OsmAnd Cloud, vključno z zgodovino različic. \n \nIzbrisanih podatkov ne bo mogoče obnoviti.";
 "weather_online_cache" = "Spletni predpomnilnik";
 "gpx_selection_segment_title" = "Odsek";
-"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "sort_by" = "Razvrsti po";
 "dialogs_and_notifications_descr" = "Nadzoruj pojavna okna, pogovorna okna in obvestila.";
 "reset_to_default_category_button_promo" = "»Ponastavi na privzeto« bo vrstni red razvrščanja znova ponastavil na privzeto ob namestitvi.";
@@ -1871,12 +1834,10 @@
 "profile_settings" = "Nastavitve profila";
 "benefits_for_contributors" = "Ugodnosti za aktivne sodelavce OSM";
 "duration_ago" = "pred %@";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
 "go_to_map" = "Pokaži zemljevid";
 "routing_attr_motor_type_description" = "Izberi vrsto goriva tvojega motorja, to je potrebno za oceno emisij CO2.";
 "public_transport_ped_route_title" = "Pešačenje do cilja traja okoli %@ in je lahko hitrejše od javnega prevoza";
 "approximate_file_size" = "Približna velikost datoteke";
-"default_price_currency_format" = "%.2f %@";
 "no_purchases" = "Nimaš nobenih nakupov";
 "get_osmand_live" = "Naročite se na storitev OsmAnd Live za dostop do vseh zmožnosti: dnevnih posodobitev zemljevidov brez omejitev prejema, plačljive vstavke, povezave do vsebin Wikipedije in Wikivoyage in še mnogo več.";
 "backup_delete_types_descr" = "Želiš izbrisati vse podatke za zastarele vrste podatkov iz OsmAnd Cloud\?";
@@ -2048,11 +2009,8 @@
 "quick_action_auto_zoom" = "Omogoči/Onemogoči samodejno približanje zemljevida";
 "osm_edit_reopened_note" = "Ponovno odprte opombe OSM";
 "srtm_plugin_description" = "Informacije o terenu, kot so izohipse, senčenje terena in naklon, ti pomagajo vizualno oceniti lego terena in relief, navigacijo in drugo. Topografske informacije na zemljevidu so lahko predstavljene s senčenjem naklonov, izohipsami in/ali barvanjem strmine. \n \nOsnovni podatki izvirajo iz SRTM in ASTER. \n \nNadaljnje branje na %@.";
-"kg" = "kg";
 "weather_plugin_description" = "Zagotavlja: \n- 24-urno in 7-dnevno vremensko napoved s petimi plastmi. \n- gradniki, ki temeljijo na lokaciji. \n- izoterme in izobare (izočrte temperature in zračnega tlaka). \n \nVremenske podatke zagotavlja globalni sistem napovedi (Global Forecast System - GFS, %@).";
 "plugin_nautical_descr" = "Obogati zemljevid z informacijami o plovnih poteh, navigacijskih lučeh, navtičnih nevarnih območjih, območjih z omejitvami jadranja ali privezovanja itd. Za uporabo prenesi ustrezne navtične karte in omogočite slog »Navtična karta« pod »Nastavitvah zemljevida«. \n \nNadaljnje branje na %@.";
-"m" = "m";
-"km" = "km";
 "record_plugin_description" = "Posnemi svoja potovanja ali treninge in analizirajte podatke v smislu hitrosti, skupnih vzponov in spustov, višinskega profila itd. Posnete poti je mogoče arhivirati, deliti s prijatelji, urejati in naknadno obdelati. \n \nNadaljnje branje na %@.";
 "osmand_parking_plugin_description" = "Označi, kje je tvoj avto parkiran, in obvesti koledar, kdaj se izteče parkirni števec. Če želiš dodati oznako, izberi mesto na zemljevidu, pojdi na »Dejanja« in tapni »Dodaj parkirišče«.";
 "speed_cameras_legal_descr" = "V nekaterih državah ali regijah je uporaba aplikacij za opozarjanje na radarje za merjenje hitrosti zakonsko prepovedana. \n \nOdločiti se moraš glede na zakonodajo tvoje države. \n \nIzberi %@ in prejemal/a boš opozorila o radarjih za merjenje hitrosti. \n \nIzberi %@. Vsi podatki, povezani z radarji za merjenje hitrosti: opozorila, obvestila, točke zanimanja bodo izbrisani, dokler ne boš v celoti ponovno namestil aplikacije OsmAnd.";
@@ -2071,7 +2029,6 @@
 "rendering_value_caiScale_description" = "Club Alpino Italiano (Italijanska planinska zveza)";
 "map_widget_distance_to_intermediate" = "Razdalja do vmesne točke";
 "rendering_value_sacScale_description" = "Swiss Alpine Club (Švicarska planinska zveza)";
-"rendering_value_caiScale_name" = "CAI";
 "rendering_value_sectors_name" = "Sektorji";
 "rendering_value_small_name" = "Majhno";
 "rendering_value_name_only_name" = "Samo ime";
@@ -2091,7 +2048,6 @@
 "routing_attr_hazmat_category_usa_3_name" = "Vnetljive tekočine";
 "rendering_value_sector1_name" = "Sektor 1";
 "rendering_value_sector4_name" = "Sektor 4";
-"rendering_value_sacScale_name" = "SAC";
 "rendering_attr_lightDetail_name" = "Podrobnosti o svetlobi";
 "routing_attr_allow_via_ferrata_name" = "Gorska pot (Via ferrata)";
 "routing_attr_hazmat_category_usa_2_name" = "Plini";
@@ -2132,7 +2088,6 @@
 "shared_string_result" = "Rezultat";
 "coordinates_widget_map_center" = "Koordinate: središče zemljevida";
 "announcement_time_prepare_long" = "Dolgo pripravljanje";
-"activity_type_offroad_name" = "Off-road";
 "shared_string_uploading" = "Poteka pošiljanje";
 "no_travel_guides_data_descr" = "Prejmite popotniške vodnike Wikivoyage za pregled prispevkov različnih svetovnih krajev brez povezave na internet.";
 "select_tracks_to_display" = "Izberi sledi, ki jih želiš prikazati na zemljevidu.";
@@ -2182,13 +2137,11 @@
 "bottom_widgets_panel" = "Spodnja plošča";
 "external_device_details_battery" = "Baterija";
 "network" = "Omrežje";
-"short_min" = "m";
 "map_orientation_landscape" = "Ležeče";
 "map_widget_sunset" = "Sončni zahod";
 "navigation_points" = "Navigacijske točke";
 "shared_string_open_track" = "Odprta sled";
 "ant_plus_bluetooth_off" = "Bluetooth je izklopljen";
-"ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
 "local_changes_will_be_dismissed" = "Lokalne spremembe bodo opuščene";
 "map_3d_mode_description" = "Dotakni se zemljevida z dvema prstoma in ju premikaj navzgor in navzdol, da prilagodiš nagib zemljevida.";
 "mapillary_widget_desc" = "Omogoča hiter dostop do aplikacije Mapillary za dodajanje slik na ravni ulice.";
@@ -2260,7 +2213,6 @@
 "map_widget_ant_bicycle_dist" = "Kolesarska razdalja";
 "map_widget_next_sunrise" = "Naslednji sončni vzhod";
 "time_to_destination_widget_desc" = "Gradnik prikazuje »Čas prihoda« ali »Čas potovanja« do zadnje ciljne točke. Čas se med navigacijo nenehno posodablja in je enak času poti od trenutne lokacije.";
-"beats_per_minute_short" = "bpm";
 "shortest_distance_first" = "Najprej krajša razdalja";
 "radius_rules_widget_desc" = "Orodje ravnilo polmera prikazuje kroge razdalj okoli izbrane točke na zemljevidu.";
 "download_file" = "Prejmi datoteko";
@@ -2346,7 +2298,6 @@
 "map_widget_camera_distance" = "Nadmorska višina kamere";
 "osmand_cloud_deleted_account_descr" = "Račun in vsi podatki so bili izbrisani iz storitve OsmAnd Cloud.";
 "osmand_cloud_deletion_secondary_devices_warning" = "Sekundarne naprave bodo odjavljene iz OsmAnd Cloud-a in bodo izgubile dostop do plačljivih funkcij.";
-"shared_string_wikivoyage" = "Wikivoyage";
 "activity_type_running_name" = "Tek";
 "clouds_widget_desc" = "Prikazuje pokritost z oblaki za trenutno središče zemljevida.";
 "map_marker_1st" = "Prva oznaka zemljevida";
@@ -2386,7 +2337,7 @@
 "coordinates_format" = "Zapis koordinat";
 "developer_widgets" = "Gradniki za razvijalce";
 "bluetooth_found_title" = "Najdeno: %d";
-"external_device_status_connect" = "Poveži";
+"external_device_status_connect" = "Poveži se";
 "press_again_to_change_the_map_orientation" = "Pritisnite znova, da spremenite usmerjenost zemljevida";
 "purchases_feature_relief_3d_description" = "Imej in opazuj maketo svoje soseske ali cele celine.";
 "external_device_details_information" = "Podrobnosti";
@@ -2414,7 +2365,6 @@
 "verify_account" = "Potrdi svoj račun";
 "longest_duration_first" = "Najprej daljše trajanje";
 "ant_plus_pair_bluetooth_prompt" = "Z OsmAnd lahko seznaniš senzorje Bluetooth LE in ANT+.";
-"app_mode_moped" = "Moped";
 "map_orientation_default" = "Glede na nastavitve naprave";
 "bearing_desc" = "Prikazuje absolutno ali relativno usmeritev do cilja v kotnih enotah (v načinu 180 stopinj, 360 stopinj ali miliradianov).";
 "free_favorites_backup_description" = "Registriraj se v OsmAnd oblak, da dobiš brezplačno varnostno kopiranje za priljubljene in nastavitve.";
@@ -2456,7 +2406,6 @@
 "import_create_track_files" = "Z OsmAnd lahko uvoziš, ustvariš ali posnameš datoteke s sledmi.";
 "announcement_time_prepare" = "Pripravljanje";
 "generate_slope_from_3d_maps" = "Ustvarjanje rastrskih zemljevidov naklonov iz 3D zemljevidov";
-"ltr_or_rtl_combine_via_comma" = "%@, %@";
 "side_marker_eta" = "Predvideni čas prihoda";
 "gps_info_widget_desc" = "Prikazuje število trenutno vidnih in uporabljenih satelitov.";
 "average_speed_widget_desc" = "Prikazuje povprečno hitrost trenutne vožnje.";
@@ -2476,7 +2425,6 @@
 "avoid_pt_types_descr" = "Izbor vrst javnega transporta za izogibanje:";
 "edit_tilesource_minzoom" = "Najmanjše približanje";
 "calculate_online" = "Izračunavanje na spletu";
-"shared_string_millimeters_short" = "mm";
 "shared_string_millimeters" = "Milimetrov";
 "edit_tilesource_maxzoom" = "Največje približanje";
 "shared_string_bottom" = "Dno";

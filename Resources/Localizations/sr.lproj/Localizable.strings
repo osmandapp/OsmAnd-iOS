@@ -328,7 +328,6 @@
 "navigation_over_track" = "Да започнем навођење дуж трага?";
 "use_displayed_track_for_navigation" = "Користи приказани траг за навођење?";
 "previous_route" = "Претходни пут";
-"shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Изабери на карти";
 "selected_roads" = "Одабрани путеви";
 "shared_string_my_location" = "Мој положај";
@@ -397,9 +396,6 @@
 "si_min_m" = "Минута по миљи";
 "si_nm_h" = "Наутичких миља на сат (чворови)";
 "units_nm_h" = "nmi/h";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
 "shared_string_tones" = "тона";
 "nothing_found" = "Нема ничег пронађеног";
 "nothing_found_descr" = "Промените претрагу или повећајте област претраге.";
@@ -726,9 +722,6 @@
 "shared_string_location" = "Положај";
 "sett_arr_map" = "Центар мапе";
 "short_location_on_map" = "Шир %@ \nДуж %@";
-"navigate_point_format_D" = "DDD.DDDDD";
-"navigate_point_format_DM" = "DDD MM.MMM";
-"navigate_point_format_DMS" = "DDD MM SS.S";
 "navigate_point_format_OLC" = "Отворени код локације (OLC)";
 "navigate_point_format_UTM" = "UTM";
 "navigate_point_format_unknown" = "Непознат формат";
@@ -912,8 +905,6 @@
 "shared_string_settings" = "Поставке";
 "configure_screen_quick_action" = "Брзе радње";
 "search_activity" = "Тражи";
-"ltr_or_rtl_combine_via_space" = "%@ %@";
-"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "listed_exist" = "Излистан %@, већ постоји у ОсмАнд-у.";
 "shared_string_import_complete" = "Увоз је завршен";
 "import_complete_description" = "Сви подаци из %@ су увезени. Користите дугмад испод ради отварања било којег дела програма за управљања њиме.";
@@ -1436,17 +1427,10 @@
 "cannot_add_marker_desc" = "Уклоните барем један правац и покушајте поново";
 "cannot_add_destination" = "Није могуће додати смер";
 // Units
-"mile" = "mi";
-"yard" = "yd";
-"foot" = "ft";
 "nm" = "нми";
-"km_h" = "km/h";
-"mile_per_hour" = "mph";
-"int_hour" = "h";
 "int_min" = "мин.";
 "shared_string_sec" = "сек";
 "units_sec_short" = "s";
-"metric_ton" = "t";
 
 // Help
 "help_first_steps" = "Почетни кораци";
@@ -1843,7 +1827,6 @@
 "osm_live_payment_renews_monthly" = "Месечно обнављање";
 "osm_live_payment_renews_quarterly" = "Четвртинско обнављање";
 "osm_live_payment_renews_annually" = "Годишње обнављање";
-"default_price_currency_format" = "%.2f %@";
 "osm_live_payment_header" = "Временски размак плаћања:";
 "osm_live_payment_contribute_descr" = "Прилози помажу плаћање картописаца ОСМ-а.";
 "purchase_dialog_title" = "Одаберите план";
@@ -2264,7 +2247,6 @@
 "turn_arrows" = "Стрелице скретања";
 "shared_string_min_height" = "Мин. висина";
 "shared_string_max_height" = "Макс. висина";
-"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "routing_attr_allow_gate_name" = "Дозволи коришћење капије";
 "routing_attr_only_permitted_streets_description" = "Користи само улице које су изричито дозвољене";
 "routing_attr_only_permitted_ways_name" = "Изричито дозвољени путеви";
@@ -2403,7 +2385,6 @@
 "routing_attr_allow_private_for_truck_name" = "Дозвољен приватни приступ (теретно возило)";
 "altitude_descent" = "Низбрдо";
 "weather_temp_enable_descr" = "Омогућите да видите температурни слој на мапи.";
-"cubic_m" = "m³";
 "weather_wind_enable_descr" = "Омогућите да видите слој ветра на мапи.";
 "routing_attr_allow_private_for_truck_description" = "Омогућен приступ приватним просторима теретним возилима.";
 "ios_release_4_2" = "• Изглед линије руте: додата могућност подешавања ширине и боје\n• Стазе: додата опција за брисање неколико стаза одједном\n• Контекстни мени стазе: додата трака за померање са групама путних тачака\n• Изглед карте: подељене додатне руте по типу са могућношћу да се омогући једна из сваке категорије посебно\n• Јахање: додајте нови тип навигације и профил апликације\n• ОсмАнд датотеке су сада видљиве у апликацији „Датотеке“.\n• Побољшан је кориснички доживљај опција „Користи податке о надморској висини“ и „Изабери флуктуацију надморске висине“, комбиноване су и преименоване у „Жељени терен“, тренутно доступне за профиле „Бицикл“ и „Пешак“.\n• Нова опција \"Укључи наслов\" за снимање стазе\n• Виџет за назив улице: сада прикажите штит за пут и број излаза током навигације\n• Нове руте за фитнес и трчање на мапи\n• Исправке грешака у CarPlay-у, додани покрети за екране осетљиве на додир\n• Поправљен увоз GPX фајлова из OSF пакета\n• Поправљен увоз прилагођених додатака са укљученим датотекама\n• Поправљени различити падови у режиму планирања руте\n• Поправљени падови током Навигације\n";
@@ -2547,7 +2528,6 @@
 "choose_what_to_restore" = "Изаберите шта желите да вратите.";
 "download_all" = "Преузми све";
 "contact_support" = "Обратите се подршци";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
 "shared_string_status" = "Стање";
 "shared_string_angle" = "Угао";
 "sign_in_with_open_street_map" = "Пријавите се помоћу OpenStreetMap-а";
@@ -2576,7 +2556,6 @@
 "position_on_map_bottom" = "На дну";
 "recalc_angle_dialog_title" = "Најмањи угао између мојег положаја и пута";
 "shared_string_contributions" = "Доприноси";
-"tts_title" = "TTS";
 "backup_delete_types_descr" = "Да ли желите да избришете податке за онеспособљене типове из облака\?";
 "contributions_may_calculate_with_delay" = "Прорачунавање допроноса може потрајати неколико часова.";
 "backup_version_history" = "Историја верзија";
@@ -2653,9 +2632,6 @@
 "purchases_feature_desc_pro_widgets" = "Добавите приступ могућностима стручног ОсмАнда. бојење путева и још штошта.";
 "download_wikipedia_data" = "Преузми податке са Википедије";
 "auth_failed" = "Провера овлашћења није успела";
-"km" = "km";
-"m" = "m";
-"kg" = "kg";
 "shared_string_legal" = "Правно";
 "shared_string_height" = "Висина";
 "uninstall_speed_cameras" = "Избриши радаре";
@@ -3019,9 +2995,8 @@
 "cache_cleared" = "Кеш очишћен";
 "hide_map_center" = "Сакриј координате: мапа у центру";
 "shared_string_location_unknown" = "Локација непозната";
-"map_settings_topography" = "Изохипсе";
+"map_settings_topography" = "Контурне линије";
 "test_heightmap" = "Тест висинска мапа";
-"ltr_or_rtl_combine_via_comma" = "%@, %@";
 "upload_poi" = "Отпреми тачку занимања";
 "simulate_location_track_select_descr" = "Одаберите путању као извор за померање локације.";
 "shared_string_discard_changes" = "Одбаци измене";
@@ -3198,7 +3173,7 @@
 "speak_route_recalculation" = "Најављује прерачунавање путање";
 "announcement_time_title" = "Време објаве";
 "ant_plus_open_settings" = "Отвори поставке";
-"external_device_status_connect" = "Повежи";
+"external_device_status_connect" = "Повежи се";
 "external_device_status_disconnecting" = "Прекидање везе";
 "external_device_unpair_description" = "Повежите пријемник са уређајем да бисте добили информације.";
 "external_device_status_connected" = "Повезан";
@@ -3334,7 +3309,6 @@
 "download_only_now" = "Преузми само сада";
 "skip_download" = "Прескочи преузимање";
 "determine_location" = "Омогућава нам да одредимо ваш положај";
-"ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
 "glide_ratio_to_target" = "Размера једрења до циља";
 "map_widget_group_glide_ratio" = "Размера једрења";
 "target_elevation" = "Висина циља";
@@ -3423,10 +3397,8 @@
 "shared_string_top_bottom" = "Врх и дно";
 "track_3d_empty_view_title" = "ЗД приказ Путање";
 "track_3d_empty_view_description" = "Истражите траг у просторном приказу! Прегледајте по висини, брзини и још много тога непосредно на карти.";
-"short_min" = "m";
 "shared_string_millimeters" = "Милиметри";
 "display_position_automatic_descr" = "Зависи од усмерења карте: дно за смер кретања, средиште за све остало.";
-"shared_string_millimeters_short" = "mm";
 "edit_tilesource_maxzoom" = "Највеће увеличање";
 "edit_tilesource_minzoom" = "Најмање увеличање";
 "shared_string_speedometer" = "Брзиномер";

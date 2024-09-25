@@ -58,7 +58,6 @@
 "first_intermediate_dest_description" = "Legg til fyrste stopp";
 "add_as_last_destination_point" = "Legg til som siste mellomliggjande reisemål";
 "last_intermediate_dest_description" = "Adds the last stop along the route";
-"start_point" = "Start";
 "altitude" = "Altitude";
 "shared_string_speed" = "Fart";
 "show_poi_over_map" = "Show POI";
@@ -361,7 +360,6 @@
 "route_descr_select_destination" = "Vel mål";
 "swap_points" = "Swap start and destination";
 "route_to" = "Til:";
-"route_via" = "Via:";
 "route_from" = "Frå:";
 "transfers" = "Overføringar";
 "lat" = "Lat";
@@ -408,9 +406,7 @@
 "traffic_warning_hazard" = "Hazard";
 "tunnel_warning" = "Tunnel ahead";
 "accessibility_announce" = "Announce";
-"driving_region_japan" = "Japan";
 "driving_region_us" = "USA";
-"driving_region_canada" = "Canada";
 "driving_region_europe_asia" = "Europa og Asia";
 "driving_region_australia" = "Australia";
 "left_side_navigation" = "Left-hand driving";
@@ -528,7 +524,6 @@
 "shared_string_learn_more" = "Learn more";
 "shared_string_includes" = "Includes";
 "shared_string_purchased" = "Purchased";
-"shared_string_control_start" = "Start";
 "compass_always_visible" = "Always visible";
 "compass_always_hidden" = "Always hidden";
 "data_settings" = "Data";
@@ -846,7 +841,6 @@
 "sett_pref_lang" = "Preferred Language";
 "sett_lang_show_local" = "Show local names";
 "translit_names" = "Transliterate names";
-"lang_af" = "Afrikaans";
 "lang_al" = "Albansk";
 "lang_als" = "Albanian (Tosk)";
 "lang_an" = "Aragonese";
@@ -891,7 +885,6 @@
 "lang_gn_py" = "Guaraní";
 "lang_gu" = "Gujarati";
 "lang_he" = "Hebraisk";
-"lang_hi" = "Hindi";
 "lang_hr" = "Kroatisk";
 "lang_hsb" = "Sorbian (Upper)";
 "lang_ht" = "Haitian";
@@ -922,7 +915,6 @@
 "lang_mk" = "Macedonian";
 "lang_ml" = "Malayalam";
 "lang_mn" = "Mongolian";
-"lang_mr" = "Marathi";
 "lang_ms" = "Malaysian";
 "lang_my" = "Burmese";
 "lang_nap" = "Neapolitan";
@@ -953,7 +945,6 @@
 "lang_sr" = "Serbisk";
 "lang_sr_latn" = "Serbian (latin)";
 "lang_sv" = "Svensk";
-"lang_sw" = "Swahili";
 "lang_ta" = "Tamil";
 "lang_te" = "Telugu";
 "lang_tg" = "Tajik";
@@ -2719,7 +2710,6 @@
 "shared_string_buttons" = "Knappar";
 "map_markers_history" = "Kartmarkørhistorikk";
 "shared_string_height" = "Høgd";
-"short_min" = "m";
 "free_account" = "Gratis konto";
 "test_heightmap" = "Test høgdekart";
 "shared_string_add_color" = "Legg til farge";
@@ -2729,7 +2719,6 @@
 "shared_string_location_unknown" = "Posisjonen er ukjend";
 "shared_string_app_profile" = "App-profil";
 "free_downloads" = "Gratis nedlastingar";
-"kg" = "kg";
 "activity_type_running_name" = "Springing";
 "icon_group_service" = "Teneste";
 "add_row" = "Legg til rad";
@@ -2791,7 +2780,6 @@
 "routing_attr_avoid_highway_name" = "Unngå motorvegar";
 "rendering_attr_horse_scale_critical_name" = "Kritisk";
 "announcement_time_intervals" = "Tid- og avstandsintervall";
-"km" = "km";
 "rendering_attr_showTramRoutes_name" = "Trikkeruter";
 "routing_attr_freeride_policy_only_if_necessary_name" = "Berre om naudsynt";
 "rendering_attr_horse_scale_difficult_name" = "Vanskeleg";
@@ -2813,13 +2801,11 @@
 "map_widget_zoom_level" = "Zoomnivå";
 "route_info" = "Ruteinfo";
 "poi_operator" = "Operatør";
-"shared_string_symbol" = "Symbol";
 "navigation_history" = "Navigasjonshistorikk";
 "search_history_disabled" = "Søkehistorikk er slått av";
 "shared_string_all_colors" = "Alle fargar";
 "change_language" = "Bytt språk";
 "user_name" = "Brukarnamn";
-"app_mode_moped" = "Moped";
 "rendering_attr_horse_scale_dangerous_name" = "Farleg";
 "search_favorites" = "Søk i favorittar";
 "history_preferences_descr" = "Du kan skru av historikklogging individuelt for kvar av historikktypane.";
@@ -2863,7 +2849,6 @@
 "audionotes_plugin_name" = "Lyd-/videonotat";
 "lang_zh-Hans" = "Kinesisk – forenkla";
 "map_settings_topography" = "Høgdekurvedata";
-"m" = "m";
 "shared_string_bottom" = "Nedst";
 "edit_tilesource_minzoom" = "Minste forstørring";
 "edit_tilesource_maxzoom" = "Maksforstørring";

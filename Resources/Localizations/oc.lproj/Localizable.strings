@@ -102,7 +102,6 @@
 "rotate_map_north_opt" = "Ges de rotacion (nòrd adaut)";
 "driving_region_descr" = "Seleccionatz la region guida: EUA, Euròpa, Reiaume Unit, Asia ò autres.";
 "driving_region" = "Region de guida";
-"shared_string_automatic" = "Automatic";
 // Trip recording settings
 "save_global_track_interval" = "Intervalle d\'enregistrament generau";
 "save_global_track_interval_descr" = "Indicar l\'intervalle per l\'enregistrament generau dei traças (aiçò s\'activa per lo boton \'Enregistrament de percors\' sus la mapa).";
@@ -128,7 +127,6 @@
 "map_widget_compass" = "Bossòla";
 "map_widget_intermediate_distance" = "Etapa intermediària";
 "route_descr_destination" = "Destinacion";
-"monitoring_control_start" = "REC";
 "map_widget_altitude" = "Altitud";
 "map_widget_battery" = "Nivèu de la batariá";
 "map_widget_plain_time" = "Ora actuala";
@@ -249,7 +247,6 @@
 "navigation_over_track" = "Començar la navigacion sus lo percors \?";
 "use_displayed_track_for_navigation" = "Utilizar la traça visibla per la navigacion\?";
 "previous_route" = "Itinerari precedent";
-"shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Chausir sus la mapa";
 "selected_roads" = "Vias seleccionadas";
 "shared_string_my_location" = "Ma posicion";
@@ -295,11 +292,8 @@
 "traffic_warning_pedestrian" = "Pas pedonier";
 "traffic_warning_hazard" = "Perilh";
 "tunnel_warning" = "Arribada en una galariá";
-"driving_region_japan" = "Japan";
 "driving_region_us" = "Estats Units";
-"driving_region_canada" = "Canada";
 "driving_region_europe_asia" = "Euròpa, Asia, America latina e semblants";
-"driving_region_australia" = "Australia";
 "left_side_navigation" = "Circulacion a senèstra";
 "right_side_navigation" = "Circulacion a drecha";
 "si_mi_feet" = "Milas/pè";
@@ -311,7 +305,6 @@
 "si_mph" = "Milas a l\'ora";
 "si_m_s" = "Mètres a la segonda";
 "si_min_km" = "Minutas au quilomètre";
-"si_min_m" = "Minutes per mile";
 "si_nm_h" = "Milas nautics per ora (nos)";
 "nm" = "MN";
 "units_nm_h" = "nos";
@@ -489,7 +482,6 @@
 "shared_string_online_maps" = "Mapas en linha";
 "shared_string_transparency" = "Transparéncia";
 "map_settings_avail_lay" = "Jaças disponiblas";
-"mapillary" = "Mapillary";
 // Intro
 "shared_string_skip" = "Sautar";
 "intro_download" = "Teledescargar \nla mapa";
@@ -546,7 +538,6 @@
 // Resources
 "res_mapsres" = "Mapas & Ressorsas";
 "download_tab_local" = "Installat en locau";
-"osmand_live" = "OsmAnd Live";
 "live_updates" = "Actualizacions sus lo còp";
 "available_maps" = "Mapas disponiblas";
 "osmand_live_last_changed" = "Darriera modificacion de la mapa: %@";
@@ -839,12 +830,10 @@
 // Units
 "mile" = "mi";
 "yard" = "yd";
-"foot" = "ft";
 "km_h" = "km/h";
 "mile_per_hour" = "mph";
 "int_hour" = "h";
 "int_min" = "min.";
-"shared_string_sec" = "sec";
 "units_sec_short" = "s";
 // Help
 "help_first_steps" = "Premiers pas";
@@ -890,7 +879,6 @@
 "loc_access_denied_desc" = "L'accès au servici de posicionament es estat refusat";
 // Colors
 "col_gray" = "Gris";
-"shared_string_color_magenta" = "Magenta";
 // GPX colors
 // World Regions
 "index_name_africa" = "Africa";
@@ -1122,7 +1110,6 @@
 "sett_ext_input_desc" = "Seleccionatz un aparelh coma un clavier generic ò WunderLINQ per lei contròlas extèrnes.";
 "external_input_device" = "Dispositius d'intrada externa";
 "sett_generic_ext_input" = "Clavier";
-"sett_wunderlinq_ext_input" = "WunderLINQ";
 "key_hint_zoom_in" = "Aprochar";
 "key_hint_zoom_out" = "Alunhar";
 "shared_string_deselect" = "Desseleccionar";
@@ -1141,7 +1128,6 @@
 "osm_live_payment_renews_monthly" = "Abonament mesadier";
 "osm_live_payment_renews_quarterly" = "Abonament trimestriau";
 "osm_live_payment_renews_annually" = "Abonament annadier";
-"default_price_currency_format" = "%.2f %@";
 "osm_live_payment_header" = "Periòde de pagament:";
 "osm_live_payment_contribute_descr" = "Lei donacions ajudan a finançar OpenStreetMap.";
 "purchase_dialog_title" = "Seleccionar un plan";
@@ -1195,7 +1181,6 @@
 "rendering_attr_surface_paved_name" = "Caladat";
 "routing_attr_avoid_bus_description" = "Evitar autobus e troleibus";
 "routing_attr_max_num_changes_description" = "Precisatz lo nombre maximau de cambiaments";
-"rendering_attr_smoothness_excellent_name" = "Excellent";
 "routing_attr_avoid_ice_roads_fords_description" = "Evitar lei rotas que riscan de gelar e lei gas.";
 "rendering_attr_highway_class_street_name" = "Carriera";
 "rendering_attr_surface_salt_name" = "Sau";
@@ -1257,9 +1242,7 @@
 "app_mode_subway" = "Mètro";
 "app_mode_skiing" = "Esquilh";
 "app_mode_horse" = "Cavau";
-"app_mode_taxi" = "Taxi";
 "app_mode_personal_transporter" = "Transpòrt personau";
-"app_mode_ufo" = "UFO";
 "app_mode_shuttle_bus" = "Bus naveta";
 "app_mode_monowheel" = "Monocicleta";
 "show_direction" = "Indicacion de la distància";
@@ -1271,7 +1254,6 @@
 "profile_alert_need_save_title" = "Sauvagardar lei cambiaments";
 "shared_string_min_speed" = "Velocitat minimala";
 "public_transport_try_change_settings" = "Assajatz de cambiar lei paramètres.";
-"metric_ton" = "t";
 "base_profile_descr_aircraft" = "Avion, Planador";
 "routing_profile_straightline" = "Endrechiera";
 "select_icon_profile_dialog_title" = "Selecciona una icòna";
@@ -1460,7 +1442,6 @@
 "routing_attr_avoid_unpaved_description" = "Evitar lei rotas non enquitranadas";
 "routing_attr_avoid_ferries_name" = "Ges de barca a tralha";
 "routing_attr_prefer_motorway_description" = "Per leis autorotas de preferéncia";
-"rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "osmand_settings" = "Configuracion d\'OsmAnd";
 "prev_seg_dist" = "Estirada %@ precedenta";
 "next_segment" = "Etapa novèla";
@@ -1471,7 +1452,6 @@
 "plan_route_open_existing_track" = "Dobrir una traça existenta";
 "route_between_points_add_track_desc" = "Chausir lo fichier de traças en quau s\'ajustarà l\'etapa novèla.";
 "select_segment" = "Chausir una estirada";
-"segments_count" = "Segment %d";
 "welmode_download_maps" = "Teledescargar de mapas";
 "default_speed_dialog_msg" = "Estimar l\'ora d\'arribada dei rotas desconegudas e limitar la velocitat de totei lei vias (podriá afectar lo percors)";
 "new_plugin_added" = "Ajust novèu apondut";
@@ -1660,7 +1640,6 @@
 "fav_points_not_exist" = "Ges de ponchs preferits";
 "only_manually" = "Manualament solament";
 "shared_string_search_history" = "Istoric de la recèrca";
-"track_coloring_solid" = "Solid";
 
 // Shared Strings
 "shared_string_custom" = "Personalizat";
@@ -1668,8 +1647,6 @@
 "shared_string_copy" = "Còpia";
 "shared_string_continue" = "Contuniar";
 "shared_string_preparing" = "A se preparar";
-"shared_string_min" = "Min";
-"shared_string_max" = "Max";
 "shared_strings_all_regions" = "Totei lei país";
 "regions" = "País";
 "shared_string_width" = "Larjor";
@@ -1727,7 +1704,6 @@
 "global_settings_descr" = "Afècta tota l’aplicacion.";
 "sett_deg360" = "360 gras";
 "shared_string_hide_all" = "Tot escondre";
-"gpxup_public" = "Public";
 "gpxup_identifiable" = "Identificable";
 "gpxup_private" = "Privat";
 "gpx_upload_private_visibility_descr" = "\"Privada\" vòu dire que la traça es pas visibla en ges de lista publica, mai lei ponchs que contèn seràn disponibles per l\'API publica GPS, desordenadas e sensa informacion temporala.";
@@ -1747,7 +1723,6 @@
 "navigate_point_olc" = "Còde de localizacion dobèrt";
 "navigate_point_olc_short" = "OLC";
 "approximate_file_size" = "Mesura aproximativa dau fichier";
-"lang_al" = "Albanian";
 "lang_als" = "Albanian (Tosk)";
 "lang_an" = "Aragonés";
 "lang_ar" = "Arab";
@@ -1820,7 +1795,6 @@
 "lang_os" = "Ossetian";
 "lang_pl" = "Polonés";
 "lang_pms" = "Piemontés";
-"lang_pnb" = "Punjabi";
 "lang_pt" = "Portugués";
 "lang_pt_br" = "Portugués (Brasiu)";
 "lang_sc" = "Sarde";
@@ -1828,7 +1802,6 @@
 "lang_sk" = "Eslovac";
 "lang_sl" = "Eslovèn";
 "toggle_current_location" = "Monstrar/ amagar la vinheta de coordonadas";
-"lang_af" = "Afrikaans";
 "shared_string_show_all" = "Tot mostrar";
 "import_from_files" = "Importar de fichiers";
 "altitude_range" = "Intervalle d'altitud";
@@ -1925,7 +1898,6 @@
 "lang_ur" = "Ordó";
 "lang_uz" = "Ozbek";
 "lang_vi" = "Vietnamian";
-"lang_vo" = "Volapuk";
 "lang_war" = "Oarai";
 "lang_yo" = "Ioroba";
 "lang_zh_cn" = "Chinés (simplificat)";
@@ -2064,7 +2036,6 @@
 "context_menu_edit_descr" = "Modificar la descripcion";
 "weather_wind_kilimeters_per_hour" = "Quilomètres a l\'ora";
 "horseback_riding" = "Equèstre";
-"shared_string_open_street_map" = "OpenStreetMap";
 "download_regular_maps" = "Mapas estandard";
 "turn_arrows" = "Virar lei sagetas";
 "register_opr_create_new_account" = "Crear un còmpte nòu";
@@ -2198,7 +2169,6 @@
 
 // Shared Strings
 "shared_string_cancelled" = "Abandonat";
-"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "shared_string_layers" = "Jaças";
 "shared_string_restoring" = "Es a restaurar";
 "toggle_precipitation" = "Mostrar & Amagar la jaça de nívol";
@@ -2281,7 +2251,6 @@
 "navigate_point_mgrs" = "STCM (Military Grid Reference System)";
 "mgrs_format_descr" = "OsmAnd se sièrv dau format MGRS qu'es identic au TUM NATO.";
 "weather_online_cache" = "Memòria virtuala en linha";
-"tts_title" = "TTS";
 "routing_attr_goods_restrictions_name" = "Liurasons de bens";
 "default_speed_descr" = "Estimar l'ora d'arribada si la mena de vias es pas conoissuda e en aplicant lei limitacions de velocitat en totei lei carrieras (aquò podriá afectar la navigacion)";
 "weather_precip_inches" = "Poces";
@@ -2372,7 +2341,6 @@
 "routing_attr_allow_private_for_truck_description" = "L\'accès ai camions es permés.";
 "routing_attr_allow_classic_only_description" = "Percors per l\'estil classic sensa pistas de skateboard. Aiçò compren leis percors per la moto de neu pichona amb de pistas fachas a la man per leis esquilhaires.";
 "app_mode_pedestrian" = "A pès";
-"app_mode_osm" = "OSM";
 "verification_code_placeholder" = "Còde";
 "routing_attr_allow_private_for_truck_name" = "Permet l\'accès privat (camion)";
 "width_limit_description" = "Indicatz l\'ample de vòstre veïcul, de restriccions de passatge se pòdon rescontrar per lei veïcules larges.";
@@ -2460,7 +2428,7 @@
 "backup_delete_old_data" = "Escafar lei versions ancianas";
 "you_can_get_feature_as_part_of_pattern" = "Obtenir“%@” de part dau plan %@ . Comparatz :";
 "login_open_street_map_org" = "Se connectar a OpenStreetMap.org";
-"empty_purchases_description" = "Se vòstra cròmpa se visualiza pas aicí, clicatz sus «%@» ò contactatz nòstra equipa d'ajuda.";
+"empty_purchases_description" = "Se vòstra cròmpa se visualiza pas aicí, clicatz sus «%@» ò contactatz nòstra equipa d\'ajuda.";
 "contact_support_description" = "Per tota demanda, seretz ben brave de nos contactar au %@ .";
 "backup_danger_zone" = "Zòna perilhosa";
 "activity_type_mountainbike_name" = "Bicicleta de montanha";
@@ -2499,7 +2467,6 @@
 "rendering_attr_OSMMapperAssistantFixme_description" = "Veire lei balisas fixme";
 "rendering_attr_OSMMapperAssistantNote_description" = "Mostrar lei nòtas de balisa";
 "offline_edition_descr" = "Sensa connexion, la modificacion es activada, mai lei cambis se devon sauvagardar localament en premier, se telecargaràn au besonh. autrament s\'actualizan immediatament.";
-"m" = "m";
 "speed_cameras_alert" = "Leis avís sus la preséncia de radars son interdits dins de país que i a.";
 "shared_string_height" = "Auçada";
 "privacy_and_security" = "Vida privada e seguretat";
@@ -2541,7 +2508,6 @@
 "toggle_map_center" = "Mostrar/amagar lei coordonadas dau centre de la mapa";
 "show_map_center" = "Mostrar lei coordonadas dau centre de la mapa";
 "hide_map_center" = "Amagar lei coordonadas dau centre de la mapa";
-"km" = "km";
 "wiki_article_search_text" = "Recèrca de l’article Wiki correspondent";
 "animate_my_location_descr" = "Transicion lisca de la posicion sur la mapa dau temps de la navigacion";
 "position_on_map" = "Posicion sus l’ecran";
@@ -2589,8 +2555,6 @@
 "map_widget_trip_recording_uphill" = "Montada";
 "map_widget_trip_recording_duration" = "Durada";
 "map_widget_trip_recording_distance" = "Distància";
-"shared_string_angle" = "Angle";
-"kg" = "kg";
 "depth_contours" = "Isobates";
 "routing_attr_piste_type_skitour_description" = "Percors per l’esquí d’escorreguda.";
 "routing_attr_motor_type_diesel_name" = "Gasòli";
@@ -2605,7 +2569,6 @@
 "routing_attr_piste_type_sled_description" = "Pistas de tirassèus.";
 "routing_attr_allow_intermediate_description" = "Percors pus dificils amb de pendas sobdas. Generalament d’obstacles que faudrà evitar.";
 "routing_attr_motor_type_lpg_name" = "Gas liquid dau petròli (GPL)";
-"routing_attr_motor_type_electric_name" = "Electric";
 "routing_attr_piste_type_nordic_name" = "Esquí nordic e de fons";
 "rendering_attr_showLightRailRoutes_name" = "Camin de ferre leugier";
 "shared_string_email" = "Corrier electronic";
@@ -2673,11 +2636,8 @@
 "ask_question_propose_features" = "Demandar, prepausar de fonccionalitats";
 "rendering_value_small_name" = "Pichon";
 "rendering_attr_lightDetail_name" = "Menú dau Senhau lumenós";
-"rendering_value_sectors_name" = "Sectors";
 "rendering_value_name_only_name" = "Nom solament";
-"rendering_value_sector4_name" = "Sector 4";
 "rendering_attr_showProposed_name" = "Objèctes proposats";
-"rendering_value_sector5_name" = "Sector 5";
 "external_device_details_battery" = "Batariá";
 "announcement_time_prepare" = "Preparar";
 "shared_string_foot" = "Pè";
@@ -2724,7 +2684,6 @@
 "shared_string_travel" = "Viatge";
 "external_device_characteristic_total_distance" = "Distància totala";
 "shared_string_deleted" = "Eliminat";
-"beats_per_minute_short" = "bpm";
 "duration_moment_ago" = "i a gaire";
 "bicycle_scd_device_name" = "Dispositiu per bicicleta";
 "shared_string_read" = "Legit";
@@ -2780,7 +2739,6 @@
 "shared_string_wrist" = "Ponhet";
 "no_widgets_descr" = "Ajustar un ò mai clavelet(s) partent de la lista de clavelets disponibles.";
 "help_article_navigation_guidance_name" = "Guidatge";
-"help_article_troubleshooting_android_auto_name" = "Android Auto";
 "shared_string_setup_route" = "Definir un percors";
 "shared_string_accessibility" = "Accessibilitat";
 "tracker_item" = "OsmAnd Traçador";
@@ -2814,7 +2772,6 @@
 "help_article_map_point_layers_on_map_name" = "Ponchs sus la mapa";
 "help_article_map_track_context_menu_name" = "Menú contextuau dei traças";
 "help_article_map_vector_maps_name" = "Mapas vectorialas (Renduts de mapas)";
-"help_article_navigation_auto_car_name" = "Android Auto";
 "help_article_navigation_car_play_name" = "Carplay";
 "help_article_navigation_guidance_voice_navigation_name" = "Anóncias vocalas / Notificacions";
 "help_article_navigation_routing_name" = "Paramètres dau percors";
@@ -2851,7 +2808,6 @@
 "help_article_widgets_map_buttons_name" = "Claveles de la mapa";
 "help_article_widgets_markers_name" = "Clavelets de marcadors";
 "help_article_widgets_nav_widgets_name" = "Clavelets de guidatge";
-"short_min" = "m";
 "carplay" = "Carplay";
 "shared_string_bottom" = "En bas";
 "in_case_of_reverse_direction" = "En cas de direccion envèrsa";

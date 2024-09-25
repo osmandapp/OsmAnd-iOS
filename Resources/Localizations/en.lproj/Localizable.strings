@@ -229,7 +229,7 @@
 "rotate_map_bearing_opt" = "Movement direction";
 "rotate_map_north_opt" = "North is up";
 "rotate_map_manual_opt" = "Manually rotated";
-"compass_click_desc" = "Double tap the compass button to switch the map orientation mode.";
+"compass_click_desc" = "Hint: Tap the compass button to switch the map orientation mode.";
 "driving_region_descr" = "Select driving region: US, Europe, UK, Asia, and others.";
 "driving_region" = "Driving region";
 "shared_string_automatic" = "Automatic";

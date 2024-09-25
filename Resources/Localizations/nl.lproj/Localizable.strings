@@ -1,10 +1,8 @@
-"OsmAnd Maps" = "OsmAnd Maps";
 "shared_string_previous" = "Vorige";
 "route_stops_before" = "nog %@ haltes";
 "transport_Routes" = "(Bus)Lijnen";
 "transport_nearby_routes_within" = "Nabije routes binnen";
 "transport_nearby_routes" = "Binnen";
-"shared_string_control_stop" = "Stop";
 "cancel_navigation" = "Stop navigatie";
 "intermediate_items_sort_by_distance" = "Sorteer kortste afstand";
 "switch_start_finish" = "Startpunt en bestemming omwisselen";
@@ -25,7 +23,6 @@
 "search_radius" = "Zoekradius";
 "shared_string_target_points" = "Bestemmingen";
 "search_radius_proximity" = "Binnen";
-"poi" = "POI";
 "day_off_label" = "gesloten";
 "open_from" = "Open vanaf";
 "open_till" = "Open tot";
@@ -40,7 +37,6 @@
 "shared_string_road" = "Weg";
 "avoid_roads_msg" = "Je kan een alternatieve route vinden door aan te geven welke wegen niet gebruikt mogen worden";
 "shared_string_go" = "Start";
-"info_button" = "Info";
 "simulate_your_location" = "Routesimulatie";
 "simulate_routing_descr" = "Simuleer je positie met behulp van een berekende route";
 "day_night_info_description" = "Zonsopgang: %@ \nZonsondergang: %@";
@@ -89,7 +85,6 @@
 "map_widget_time" = "Resterende tijd";
 "shared_string_collapse" = "Inklappen";
 "shared_string_topbar" = "Bovenste balk";
-"shared_string_widgets" = "Widgets";
 "map_widget_right" = "Widgets Rechter Kolom";
 "map_widget_left" = "Widgets Linker Kolom";
 "layer_map_appearance" = "Configureer scherm";
@@ -188,12 +183,10 @@
 "route_is_too_long_v2" = "Voor grote afstanden: voeg tussenpunten toe als binnen 10 minuten geen route berekend is.";
 "navigation_over_track" = "Navigatie langs GPX-track starten\?";
 "use_displayed_track_for_navigation" = "De getoonde GPX-track gebruiken voor navigatie\?";
-"shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Selecteer op de kaart";
 "shared_string_my_location" = "Huidige Positie";
 "route_descr_select_destination" = "Bestemming kiezen";
 "route_to" = "Naar:";
-"route_via" = "Via:";
 "route_from" = "Van:";
 "lat" = "Breedte";
 "lon" = "Lengte";
@@ -231,9 +224,7 @@
 "traffic_warning_railways" = "Spoorwegovergang";
 "traffic_warning_pedestrian" = "Voetgangers oversteekplaats";
 "traffic_warning_hazard" = "Gevaar";
-"driving_region_japan" = "Japan";
 "driving_region_us" = "Verenigde Staten";
-"driving_region_canada" = "Canada";
 "driving_region_europe_asia" = "Europa, Azië, Latijns-Amerika en dergelijke";
 "driving_region_australia" = "Australië";
 "left_side_navigation" = "Linksrijdend verkeer";
@@ -249,15 +240,10 @@
 "si_min_km" = "Minuten per kilometer";
 "si_min_m" = "Minuten per mijl";
 "si_nm_h" = "Zeemijlen per uur (knopen)";
-"nm" = "nmi";
 "units_nm_h" = "nmi/h";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
 "nothing_found" = "Niets gevonden";
 "nothing_found_descr" = "Wijzig de zoekterm of vergroot het zoekgebied.";
 "select_street" = "Selecteer een straat";
-"shared_string_in_name" = "in %@";
 "select_city" = "Plaats kiezen";
 "type_city_town" = "Plaatsnaam invoeren";
 "select_postcode" = "Postcode zoeken";
@@ -270,13 +256,11 @@
 "shared_string_apply" = "Pas toe";
 "shared_string_select" = "Kies";
 "shared_string_back" = "Terug";
-"shared_string_ok" = "OK";
 "shared_string_cancel" = "Annuleren";
 "shared_string_no" = "Nee";
 "shared_string_yes" = "Ja";
 "shared_string_save" = "Opslaan";
 "shared_string_done" = "Klaar";
-"shared_string_update" = "Update";
 "shared_string_install" = "Installeer";
 "shared_string_uninstall" = "Verwijder";
 "shared_string_delete" = "Verwijder";
@@ -329,7 +313,6 @@
 "shared_string_hide" = "Verberg";
 // My Places
 "favorites_item" = "Favorieten";
-"shared_string_gpx_tracks" = "Tracks";
 // GPX
 "plugin_distance_point" = "Punt";
 "shared_string_waypoint" = "Routepunt";
@@ -348,11 +331,9 @@
 "gpx_no_tracks" = "There are no trips";
 "gpx_remove" = "Remove trip?";
 "shared_string_statistics" = "Statistieken";
-"layer_route" = "Route";
 "gpx_route_time" = "Route time";
 "gpx_uphldownhl" = "Uphills/Downhills";
 "map_widget_average_speed" = "Gemiddelde snelheid";
-"shared_string_control_start" = "Start";
 "gpx_avg_elev" = "Average elevation";
 "gpx_elev_range" = "Elevation range";
 "gpx_updown" = "Up/Down";
@@ -428,7 +409,6 @@
 "prch_nau_q2_wifi" = "Downloading requires %@ over WiFi network.";
 "prch_nau_q3" = "You may install it later through the Maps & Resources.";
 "proceed_q" = "Proceed?";
-"shared_string_download" = "Download";
 "shared_string_no_thanks" = "Niet nodig";
 "download_now" = "Download map now";
 "prch_failed" = "Purchase of \"%@\" has failed";
@@ -439,7 +419,6 @@
 "res_search_world" = "Zoek wereldwijd";
 "res_catalog_upd" = "Catalogus update";
 "res_world_map" = "Wereldkaart";
-"download_tab_updates" = "Updates";
 "res_worldwide" = "Wereldwijd";
 "res_region_map" = "Regiokaart";
 "res_updates_avail" = "Updates beschikbaar";
@@ -461,8 +440,6 @@
 "res_cancel_inst_q" = "Je gaat de %@ installatie annuleren.";
 "res_uninst_managed_q" = "Je gaat %@ deïnstalleren. Je kunt deze later reïnstalleren uit de catalogus.";
 "res_uninst_unmanaged_q" = "Je gaat %@ verwijderen. Deze komt niet uit onze catalogus, dus zorg ervoor dat je een backup hebt gemaakt als dat nodig is.";
-"shared_string_details" = "Details";
-"shared_string_type" = "Type";
 "res_unknown" = "Onbekend";
 "shared_string_size" = "Grootte";
 "created_on" = "Aangemaakt op";
@@ -495,13 +472,10 @@
 "cannot_add_destination" = "Cannot add Direction";
 // Units
 "mile" = "mijl";
-"yard" = "yard";
 "foot" = "voet";
 "km_h" = "km/u";
 "mile_per_hour" = "mpu";
 "int_hour" = "u.";
-"int_min" = "min.";
-"shared_string_sec" = "sec";
 // Map
 "map_inst_det_map_q" = "Install detailed map overview to get more information about your locations.";
 "map_remind" = "Remind me later";
@@ -524,7 +498,6 @@
 "loc_access_denied_desc" = "Access to location service has been denied";
 // Colors
 "col_gray" = "Gray";
-"shared_string_color_magenta" = "Magenta";
 // World Regions
 "index_name_africa" = "Afrika";
 "index_name_asia" = "Azië";
@@ -538,8 +511,6 @@
 "help_quiz" = "Quiz";
 // Rendering categories
 "rendering_category_hide" = "Verberg";
-"rendering_category_routes" = "Routes";
-"rendering_category_details" = "Details";
 "rendering_category_transport" = "Openbaar Vervoer";
 "rendering_category_others" = "Overige kaart attributen";
 // Rendering attributes
@@ -571,7 +542,6 @@
 "worldwide_maps" = "Wereldwijde kaarten";
 "product_desc_allworld" = "Map of All World";
 "product_desc_asia" = "Map of Asia";
-"download_wikipedia_maps" = "Wikipedia";
 "product_desc_wiki" = "Wikipedia data";
 "purchases_feature_desc_wikipedia" = "Biedt alle plaatsgerelateerde Wikipedia-artikelen offline, zodat u meer te weten komt over de plaatsen die u tijdens uw reis bezoekt door eenvoudig te tikken op de kaart. Vergeet niet de Wikipedia-kaartbestanden voor de specifieke regio\'s te downloaden.";
 "srtm_plugin_name" = "Topografie";
@@ -634,7 +604,6 @@
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";
-"plugins_menu_group" = "Plugins";
 "open_map_settings" = "Open Map Settings";
 "plugin_popup_ski_title" = "Turn on Ski map style";
 "plugin_popup_ski_desc" = "To turn on <b>Ski map</b> style, please go to the <b>Map Settings</b> > <b>Map type</b>";
@@ -698,7 +667,6 @@
 "create_custom_poi" = "Eigen filter maken";
 "selected_categories" = "Gekozen categorieën";
 "new_filter_desc" = "Geen een naam aan het nieuwe filter. Deze naam wordt aan de lijst Categorieën toegevoegd.";
-"shared_string_filters" = "Filters";
 "edit_filter" = "Bewerk filter";
 "edit_filter_save_as_menu_item" = "Bewaar als";
 "delete_filter" = "Wis filter";
@@ -713,7 +681,6 @@
 "city_type_city" = "Stad";
 "city_type_district" = "Stadsdeel";
 "city_type_neighbourhood" = "Wijk";
-"postcode" = "Postcode";
 "show_something_on_map" = "Toon %@ op de kaart";
 "search_POI_level_btn" = "Zoek meer";
 "search_address_street" = "Straat";
@@ -751,7 +718,6 @@
 "day" = "Dag";
 "days_2_4" = "Dagen";
 "days_5" = "Dagen";
-"week" = "Week";
 "weeks_2_4" = "Weken";
 "weeks_5" = "Weken";
 "month" = "Maand";
@@ -763,18 +729,14 @@
 "price_free" = "Gratis";
 "months_3" = "Drie maanden";
 "unlimited_downloads" = "Onbeperkte downloads";
-"wikivoyage_offline" = "Wikivoyage offline";
 "contour_lines_hillshade_maps" = "Hoogtelijnen&reliëfschaduwkaarten";
 "unlock_all_features" = "Ontgrendel alle OsmAnd-functies";
 "donation_to_osm" = "Gift aan de OSM-gemeenschap";
 "in_app_purchase_desc_ex" = "Eens aangekocht, kun je het permanent blijven gebruiken.";
 "mapillary_image" = "Mapillary foto";
-"sett_wunderlinq_ext_input" = "WunderLINQ";
-"wikipedia_offline" = "Wikipedia offline";
 "in_app_purchase_desc" = "Eenmalige betaling";
 "shared_string_time" = "Tijd";
 "shared_string_milliradians" = "Milliradialen";
-"shared_string_reset" = "Reset";
 "shared_string_reload" = "Opnieuw laden";
 "simulate_navigation" = "Simuleer navigatie";
 "add_intermediate" = "Tussenpunt toevoegen";
@@ -786,7 +748,6 @@
 "in_app_purchase" = "In-app aankoop";
 "osm_live_subscribe_btn" = "Abonneren";
 "shared_string_email_address" = "E-mailadres";
-"shared_string_upload" = "Upload";
 "shared_string_enabled" = "Ingeschakeld";
 "shared_string_read_more" = "Lees meer";
 "configure_map" = "Kaart instellen";
@@ -807,7 +768,6 @@
 "confirm_every_run" = "Altijd vragen";
 "quick_action_start_stop_navigation" = "Navigatie starten/stoppen";
 "quick_action_edit_action" = "Sneltoets bewerken";
-"filter_current_poiButton" = "Filter";
 "other_location" = "Andere";
 "poi_dialog_poi_type" = "POI type";
 "osm_edit_modified_poi" = "Gewijzigde OSM POI";
@@ -816,16 +776,13 @@
 "average_altitude" = "Gemiddelde hoogte";
 "exit_without_saving" = "Afsluiten zonder op te slaan?";
 "toggle_poi" = "POI tonen/verbergen";
-"live_updates" = "Live updates";
 "context_menu_item_open_note" = "OSM-opmerking aanmaken";
 "shared_string_world" = "Wereld";
-"website" = "Website";
 "commiting_node" = "Punt wordt vastgelegd…";
 "shared_string_commit" = "Bijdrage versturen";
 "osm_edit_created_note" = "OSM-opmerking aangemaakt";
 "quick_action_pause_nav_descr" = "Tik op deze knop om de navigatie te pauzeren of weer verder te gaan.";
 "rendering_value_category_name" = "Categorie";
-"show_tunnels" = "Tunnels";
 "versions_item" = "Versies";
 "osm_edits_notes" = "AV-Notities";
 "save_track_interval" = "Registratie-interval bij navigatie";
@@ -900,8 +857,6 @@
 "donations" = "Donaties";
 "shared_string_about" = "Over";
 "external_input_device" = "Uitwendig invoer apparaat";
-"mapillary" = "Mapillary";
-"gpx_tags_txt" = "Tags";
 "opening_changeset" = "Wijzigingenset openen…";
 "quick_action_start_stop_nav_descr" = "Tik op deze knop om de navigatie te starten of te stoppen.";
 "quick_action_map_overlay_action" = "Extra kaartlaag toevoegen";
@@ -928,7 +883,6 @@
 "favorite_home_category" = "Thuis";
 "osm_live_payment_month_cost_descr" = "%@ / maand";
 "auto_split_recording_title" = "GPX-track automatisch splitsen na een onderbreking";
-"faq_item" = "FAQ";
 "quick_action_map_source" = "Kaartbron wijzigen";
 "first_usage_item" = "Eerste gebruik";
 "quick_action_replace_destination" = "Bestemming vervangen";
@@ -947,7 +901,6 @@
 "quick_action_map_underlay" = "Onderlaag";
 "no_overlay" = "Geen extra laag";
 "osmand_live_donation_switch_title" = "Doneer aan de OpenStreetMap-gemeenschap";
-"edit_tilesource_url_to_load" = "URL";
 "show_notes" = "Toon OSM-opmerkingen";
 "edit_tilesource_elliptic_tile" = "Elliptische Mercator-projectie";
 "hide_notes" = "Verberg OSM-opmerkingen";
@@ -969,7 +922,6 @@
 "rendering_attr_hideAccess_name" = "Toegangsbeperkingen";
 "rendering_value_white_name" = "Wit";
 "routing_attr_allow_expert_name" = "Sta expert routes toe";
-"rendering_attr_piste_difficulty_expert_name" = "Expert";
 "rendering_attr_contourColorScheme_description" = "Kleur van hoogtelijnen";
 "routing_attr_avoid_motorway_description" = "Vermijdt autowegen";
 "rendering_value_car_name" = "Auto";
@@ -1238,22 +1190,17 @@
 "rendering_attr_currentTrackWidth_name" = "GPX breedte";
 "rendering_attr_streetLightingNight_name" = "Enkel \'s nachts tonen";
 "how_to_open_wiki_title" = "Hoe Wikipedia-artikelen openen\?";
-"app_mode_scooter" = "Scooter";
 "app_mode_personal_transporter" = "Persoonlijk transport";
 "app_mode_pickup_truck" = "Pick-up truck";
 "app_mode_utv" = "Naast elkaar";
-"app_mode_ufo" = "UFO";
 "context_menu_points_of_group" = "Alle punten van de groep";
 "app_mode_default" = "Kaart bekijken";
 "app_mode_bicycle" = "Fiets";
 "app_mode_subway" = "Metro";
 "app_mode_camper" = "Caravan";
-"app_mode_offroad" = "Offroad";
 "map_transparency" = "Basiskaart-transparantie";
 "osmand_parking_warning" = "Waarschuwing";
 "open_in_browser_wiki" = "Artikel online openen";
-"app_mode_osm" = "OSM";
-"app_mode_taxi" = "Taxi";
 "app_mode_monowheel" = "Monowheel, Hoverboard";
 "app_mode_pedestrian" = "Voetganger";
 "srtm_color_scheme" = "Kleurschema";
@@ -1354,13 +1301,11 @@
 "shared_string_import_complete" = "Importeren voltooid";
 "shared_string_importing" = "Bezig met importeren";
 "shared_string_one" = "Een";
-"ltr_or_rtl_combine_via_space" = "%@ %@";
 "osm_notes" = "OSM-aantekeningen";
 "appearance_on_the_map" = "Weergeven op de kaart";
 "importing_from" = "Gegevens importeren uit %@";
 "import_complete_description" = "Alle data uit de %@ geïmporteerd. Gebruik de onderstaande knoppen om enig deel van de app te openen om het te beheren.";
 "shared_string_meters" = "meter";
-"shared_string_min" = "Min";
 "coord_input_add_point" = "Punt toevoegen";
 "application_profiles" = "Profielen";
 "quick_action_showhide_mapillary_title" = "Mapillary tonen/verbergen";
@@ -1387,7 +1332,6 @@
 "profile_alert_need_profile_name_title" = "Profielnaam invoeren";
 "voice_announces" = "Gesproken instructies";
 "reset_plugin_to_default" = "Herstel plugin instellingen naar standaard";
-"shared_string_menu" = "Menu";
 "reorder_profiles" = "Wijzig lijst met profielen";
 "shared_string_zoom_levels" = "Zoomniveaus";
 "select_data_to_import" = "Kies de te importeren gegevens.";
@@ -1397,12 +1341,10 @@
 "accessibility_announce" = "Meld";
 "poi_filter_public_transport" = "Openbaar Vervoer";
 "profile_type_user_string" = "Gebruikersprofiel";
-"mapillary_item" = "OsmAnd + Mapillary";
 "quick_action_mapillary_hide" = "Mapillary verbergen";
 "ui_customization_short_descr" = "Mappen, contextmenu";
 "next_segment" = "Volgende segment";
 "select_map_icon" = "Positie-icoon bij rust";
-"index_name_antarctica" = "Antarctica";
 "shared_string_legend" = "Legenda";
 "save_track_logging_accuracy" = "Opnamenauwkeurigheid";
 "clear_tiles_warning" = "Het toepassen van deze wijzigingen wist de cache van deze rasterkaartbron";
@@ -1411,14 +1353,11 @@
 "add_online_source" = "Online bron toevoegen";
 "show_direction" = "Toon afstand";
 "select_distance_route_will_recalc" = "Selecteer de afstand waarbij de route wordt herberekend.";
-"shared_string_max" = "Max";
 "route_between_points" = "Route tussen punten";
 "quick_action_switch_profile_descr" = "De sneltoets wisselt tussen de geselecteerde profielen.";
-"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "routing_profile_straightline" = "Rechte lijn";
 "update_tile" = "Updaten";
 "shared_string_add_profile" = "Profiel toevoegen";
-"login_account" = "Account";
 "default_speed_setting_title" = "Standaardsnelheid";
 "listed_exist" = "De getoonde %@ zijn in OsmAnd reeds beschikbaar.";
 "quick_action_mapillary_show" = "Mapillary tonen";
@@ -1432,14 +1371,12 @@
 "whole_track" = "De gehele route";
 "navigation_profiles_item" = "Navigatieprofielen";
 "osm_edit_close_note" = "Sluit OSM Note";
-"routing_profile_ski" = "Ski";
 "shared_string_min_speed" = "Minimumsnelheid";
 "select_base_profile_dialog_message" = "Baseer je aangepaste profiel op één van de standaard profielen, dit bepaalt de algemene opzet zoals standaard zichtbaarheid van widgets en eenheden van snelheid en afstand. Dit zijn de standaard profielen samen met voorbeelden van aangepaste profielen die uitgebreid kunnen worden:";
 "profile_type_osmand_string" = "OsmAnd-profiel";
 "routing_profile_geocoding" = "Geocoderen";
 "personal_category_name" = "Persoonlijk";
 "select_icon_profile_dialog_title" = "Selecteer icoon";
-"metric_ton" = "t";
 "special_routing_type" = "Speciale routering";
 "pseudo_mercator_projection" = "Pseudo-Mercatorprojectie";
 "vessel_width_limit_description" = "Stel de breedte van het vaartuig in om smalle bruggen te vermijden";
@@ -1461,7 +1398,6 @@
 "open_saved_track" = "Open opgeslagen track";
 "hide_compass_ruler" = "Verberg kompasliniaal";
 "show_compass_ruler" = "Toon kompasliniaal";
-"icon_group_sport" = "Sport";
 "icon_group_symbols" = "Symbolen";
 "plan_route_split_before" = "Hiervoor splitsen";
 "shared_string_circle" = "Cirkel";
@@ -1471,7 +1407,6 @@
 "download_regular_maps" = "Normale kaarten";
 "sort_last_modified" = "Laatst gewijzigd";
 "searching_gps" = "GPS zoeken";
-"osmand_live" = "OsmAnd Live";
 "fav_point_dublicate" = "Favoriet met deze naam bestaat al";
 "shared_string_gpx_points" = "Punten";
 "new_plugin_added" = "Nieuwe plug-in toegevoegd";
@@ -1486,14 +1421,12 @@
 "favorite_places_category" = "Plaatsen";
 "shared_string_enable" = "Activeer";
 "coordinates_widget_current_location" = "Coördinaten: huidige locatie";
-"segments_count" = "Segment %d";
 "coordinates" = "Coördinaten";
 "extra_maps_menu_group" = "Extra kaarten";
 "shared_string_octagon" = "Achthoek";
 "favorite_group_name" = "Groepsnaam";
 "shared_string_square" = "Vierkant";
 "transport" = "Openbaar Vervoer";
-"icon_group_transport" = "Transport";
 "icon_group_travel" = "Reizen";
 "shared_string_import" = "Importeren";
 "shared_string_icon" = "Icoon";
@@ -1510,7 +1443,6 @@
 "replace_favorite_confirmation" = "Vervang Favoriet %@\?";
 "address_search_desc" = "Adres zoeken";
 "fav_points_not_exist" = "Er zijn geen favoriete punten";
-"shared_string_gpx_track" = "Track";
 "select_group" = "Groep kiezen";
 "shared_string_wifi_only" = "Alleen met Wifi";
 "srtm_download_list_help_message" = "OsmAnd biedt gegevens van contourlijnen in meters en voet aan. Je zal het bestand opnieuw moeten downloaden om het formaat te wijzigen.";
@@ -1540,7 +1472,6 @@
 "gpxup_trackable" = "Traceerbaar";
 "welmode_download_maps" = "Kaarten downloaden";
 "added_profiles_descr" = "Door plug-in toegevoegde profielen";
-"navigate_point_zone" = "Zone";
 "gpxup_identifiable" = "Identificeerbaar";
 "navigate_point_olc" = "Open Location Code (OLC)";
 "no_waypoints_found" = "Geen punten gevonden";
@@ -1548,11 +1479,9 @@
 "srtm_download_single_help_message" = "Selecteer a.u.b. een variant. Je zal het bestand opnieuw moeten downloaden om het formaat te wijzigen.";
 "contour_lines_hillshades_slope" = "Hoogtelijnen, reliëfschaduwen en hellingen";
 "search_more" = "Zoek meer…";
-"lang_pnb" = "Punjabi";
 "lang_zh_hk" = "Chinees (Hong Kong)";
 "osmand_cloud_login_descr" = "Vul het e-mailadres in waarmee u heeft geregistreerd. Er zal een éénmalig wachtwoord naartoe worden gestuurd.";
 "routing_attr_only_permitted_ways_description" = "Gebruik enkel wegen (paden, land- en boswegen) die uitdrukkelijk zijn toegelaten";
-"lang_sw" = "Swahili";
 "lang_bg" = "Bulgaars";
 "lang_id" = "Indonesisch";
 "lang_lb" = "Luxemburgs";
@@ -1561,7 +1490,6 @@
 "lang_lt" = "Litouws";
 "last_backup" = "Laatste back-up";
 "lang_mg" = "Malagasi";
-"lang_eo" = "Esperanto";
 "lang_ga" = "Iers";
 "shared_string_hide_all" = "Verberg alles";
 "make_backup_descr" = "Er zijn vele veranderingen op dit apparaat. Maak alsjeblieft een back-up om geen van deze verandering te verliezen.";
@@ -1571,7 +1499,6 @@
 "lang_an" = "Aragonees";
 "delete_waypoints" = "Waypoints verwijderen";
 "lang_de_casual" = "Duits (spreektaal)";
-"shared_string_open_street_map" = "OpenStreetMap";
 "lang_sv" = "Zweeds";
 "lang_min" = "Minangkabaus";
 "grey_color_undefined" = "Delen zonder gegevens zijn grijs gekleurd.";
@@ -1579,7 +1506,6 @@
 "lang_zh" = "Chinees";
 "save_heading" = "Richting toevoegen";
 "add_description" = "Beschrijving toevoegen";
-"lang_ta" = "Tamil";
 "lang_ber" = "Berbers";
 "upload_to_openstreetmap" = "Uploaden naar OpenStreetMap";
 "shared_string_start_time" = "Starttijd";
@@ -1594,10 +1520,8 @@
 "track_show_start_finish_icons" = "Toon start en aankomst pictogrammen";
 "lang_ne" = "Nepalees";
 "lang_gl" = "Galicisch";
-"lang_tl" = "Tagalog";
 "lang_new" = "Newari / Nepalbhasa";
 "gpx_direction_arrows" = "Richtingspijlen";
-"lang_ml" = "Malayalam";
 "context_menu_edit_descr" = "Beschrijving bewerken";
 "horseback_riding" = "Paardrijden";
 "routing_attr_only_permitted_ways_name" = "Uitdrukkelijk toegestane wegen";
@@ -1611,7 +1535,6 @@
 "routing_attr_prefer_horse_routes_name" = "Verkies paardrijroutes";
 "shared_string_end_time" = "Eindtijd";
 "lang_pt_br" = "Portugees (Brazilië)";
-"lang_af" = "Afrikaans";
 "backup_welcome_back" = "Welkom terug!";
 "weather_wind_kilimeters_per_hour" = "Kilometer per uur";
 "backup_error_file_not_available" = "Bestand onbeschikbaar";
@@ -1641,12 +1564,10 @@
 "set_up_backup" = "Reservekopie instellen";
 "lang_az" = "Azerbeidzjaans";
 "lang_nap" = "Napolitaans";
-"lang_mr" = "Marathi";
 "lang_pt" = "Portugees";
 "lang_nl" = "Nederlands";
 "lang_nb" = "Noors (Bokmål)";
 "routeInfo_roadClass_description" = "Kleur de route volgens de wegclassificatie.";
-"shared_string_interval" = "Interval";
 "gpx_join_gaps" = "Verbind onderbrekingen";
 "lang_tt" = "Tataars";
 "lang_lmo" = "Lombardisch";
@@ -1655,7 +1576,6 @@
 "lang_jv" = "Javaans";
 "gpx_split_interval" = "Splits om de";
 "lang_ku" = "Koerdisch";
-"start_point" = "Start";
 "lang_nds" = "Nederduits";
 "lang_sh" = "Servo-Kroatisch";
 "lang_ko" = "Koreaans";
@@ -1666,7 +1586,6 @@
 "lang_eu" = "Baskisch";
 "routeInfo_surface_description" = "Vermeld informatie over het fysieke oppervlak van wegen en paden.";
 "route_points" = "Route punten";
-"lang_cy" = "Welsh";
 "backup_error_gzip_only_supported_upload" = "Het bestand moet verzonden worden in het .gzip formaat";
 "lang_sq" = "Albanees";
 "icon_group_education" = "Educatie";
@@ -1693,15 +1612,12 @@
 "lang_is" = "IJslands";
 "lang_hu_formal" = "Hongaars (formeel)";
 "backup_error_subscription_was_expired_descr" = "Je OsmAnd Pro abonnement is verlopen, vernieuw dit abonnement om back-ups te gebruiken. Je kan nog steeds je gegevens op OsmAnd Cloud herstellen.";
-"lang_ur" = "Urdu";
 "explore_wikipedia_offline" = "Verken Wikipedia offline.";
 "rendering_value_walkingRoutesScopeOSMC_description" = "Kleur in volgens netwerkrelatie.";
-"lang_ceb" = "Cebuano";
 "backup_error_user_is_not_registered" = "Er is geen gebruiker geregistreerd met het opgegeven e-mailadres";
 "lang_la" = "Latijn";
 "lang_fa" = "Perzisch";
 "shared_string_time_span" = "Tijdsduur";
-"lang_yo" = "Yoruba";
 "restore_from_file" = "Herstel vanuit een bestand";
 "cloud_email_already_registered" = "Dit e-mailadres is reeds geregistreerd.";
 "lang_en" = "Engels";
@@ -1722,16 +1638,11 @@
 "lang_bar" = "Beiers";
 "register_opr_create_new_account" = "Maak een nieuw account aan";
 "lang_zh_cn" = "Chinees (vereenvoudigd)";
-"lang_nv" = "Navajo";
-"lang_hi" = "Hindi";
 "lang_br" = "Bretons";
-"lang_kn" = "Kannada";
-"navigate_point_mgrs" = "MGRS";
 "lang_hsb" = "Oppersorbisch";
 "lang_hr" = "Kroatisch";
 "routing_attr_allow_gate_description" = "Gebruik van poorten toelaten";
 "lang_lv" = "Lets";
-"lang_ba" = "Bashkir";
 "lang_bs" = "Bosnisch";
 "lang_ast" = "Asturisch";
 "lang_war" = "Waray-Waray";
@@ -1745,21 +1656,17 @@
 "reset_to_original" = "Opnieuw instellen naar origineel";
 "lang_es_us" = "Spaans (Amerikaans)";
 "lang_cs" = "Tsjechisch";
-"lang_te" = "Telugu";
 "lang_pms" = "Piëmontees";
 "lang_sk" = "Slowaaks";
-"lang_bpy" = "Bishnupriya";
 "lang_sl" = "Sloveens";
 "gpx_split_interval_descr" = "Selecteer het interval waarmee markeringen met afstand of tijd op de track worden weergegeven.";
 "lang_ro" = "Roemeens";
 "resend_verification_code" = "Opnieuw verzenden";
 "lang_oc" = "Occitaans";
 "lang_es" = "Spaans";
-"lang_gu" = "Gujarati";
 "lang_gn_py" = "Guarani";
 "lang_ru" = "Russisch";
 "lang_no" = "Noors";
-"osmand_cloud" = "OsmAnd Cloud";
 "lang_it" = "Italiaans";
 "lang_kk" = "Kazachs";
 "lang_hy" = "Armeens";
@@ -1775,12 +1682,10 @@
 "monthly_map_updates" = "Maandelijkse kaartupdates";
 "explore_osmnad_plans_to_find_suitable" = "Verken de verschillende OsmAnd abonnementen om diegene te vinden die hebt best bij jouw past.";
 "redeem_promo_code" = "Promotiecode bemachtigen";
-"share_geo" = "geo:";
 "purchases_feature_desc_pro_widgets" = "Krijg toegang tot OsmAnd Pro functies zoals routekleuringen en meer.";
 "wikipedia_and_wikivoyage_offline" = "Wikipedia en Wikivoyage offline";
 "copy_to_map_favorites" = "Kopiëren naar Favorieten";
 "shared_string_learn_more" = "Meer weten";
-"cubic_m" = "m³";
 "shared_string_capacity" = "Capaciteit";
 "terrain_maps" = "Terreinkaarten";
 "osm_live_banner_desc" = "Krijg onbeperkte kaartdownloads, met extra updates per week, dag of zelfs elk uur.";
@@ -1867,7 +1772,6 @@
 "osm_value" = "Waarde";
 "selected_roads" = "Geselecteerde wegen";
 "sort_by" = "Sorteren op";
-"nav_type_brouter" = "BRouter";
 "max_speed" = "Maximumsnelheid";
 "osm_opens_at" = "Opent om:";
 "name_and_descr" = "Naam & beschrijving";
@@ -1892,7 +1796,6 @@
 "displayed_route_save" = "Opslaan naar OsmAnd Tracks";
 "shared_string_unavailable" = "Niet beschikbaar";
 "shared_string_contributions" = "Bijdragen";
-"map_settings_weather_wind" = "Wind";
 "osm_name" = "OpenStreetMap-gebruikersnaam";
 "simulate_location_movement_speed_x2" = "x2";
 "simulate_location_movement_speed_x3" = "x3";
@@ -1906,7 +1809,6 @@
 "local_openstreetmap_uploading" = "Uploaden…";
 "shared_string_total_size" = "Totale grootte";
 "shared_string_countries" = "Landen";
-"shared_string_status" = "Status";
 "osm_add_place" = "Plaats toevoegen";
 "osm_modify_place" = "Plaats aanpassen";
 "move_point" = "Verplaats punt";
@@ -1938,7 +1840,6 @@
 "routeInfo_horse_scale_description" = "Paden laden volgens begaanbaarheid van ruiterpaden";
 "verification_code_missing_description" = "Dit kan tot 10 minuten duren. Gebruik de knop hieronder indien de e-mail ook niet in uw spam terecht is gekomen.";
 "position_on_map_center" = "Midden";
-"shared_string_cloud" = "Cloud";
 "routing_attr_goods_restrictions_name" = "Bezorging van goederen";
 "ui_customization" = "Aanpassing van de gebruikersinterface";
 "transfers" = "Aantal overstappen";
@@ -1946,16 +1847,13 @@
 "service_is_not_available_please_try_later" = "De service is niet beschikbaar, gelieve later opnieuw te proberen.";
 "shared_string_angle_param" = "Hoek: %@°";
 "download_heightmap_maps" = "Hoogtekaart";
-"routing_attr_motor_type_diesel_name" = "Diesel";
 "map_widget_parking" = "Parkeren";
 "change_application_profile" = "App-profiel wijzigingen";
 "promo_subscription" = "Promotie op het abonnement";
 "upload_change" = "Aanpassing uploaden";
-"weather_temperature_fahrenheit" = "Fahrenheit";
 "backup_data" = "Back-up gegevens";
 "backup_complete" = "Back-up voltooid";
 "cloud_all_changes_downloaded" = "Alle aanpassingen gedownload";
-"weather_temperature_celsius" = "Celsius";
 "rendering_attr_showFunicularRoutes_name" = "Kabelspoorwegen";
 "simulation_real_mode_title" = "Realistische simulatie";
 "checking_for_duplicate_description" = "OsmAnd controleert %@ op duplicaten met bestaande items in de app. \n \nDit kan even duren.";
@@ -1999,7 +1897,6 @@
 "osm_live_payment_month_cost_descr_ex" = "%.2f %@ / maand";
 "backup_restore_data" = "Herstel gegevens";
 "routeInfo_horse_scale_name" = "Begaanbaarheid van ruiterpaden";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
 "backup_pause_all" = "Alles pauzeren";
 "dialogs_and_notifications_descr" = "Bepaal popups, dialogen en meldingen.";
 "shared_string_rendering_style" = "Weergavestijl";
@@ -2008,7 +1905,6 @@
 "cloud_conflict" = "Tegenstrijdigheid";
 "quick_action_showhide_mapillary_descr" = "Een schakelknop om de Mapillary-laag al dan niet te tonen op de kaart.";
 "local_changes_will_be_dismissed" = "Lokale aanpassingen zullen genegeerd worden";
-"default_price_currency_format" = "%.2f %@";
 "gpx_upload_trackable_visibility_descr" = "\"Traceerbaar\" betekent dat de track niet wordt getoond in openbare GPS-track-lijsten maar de trackpunten zijn wel beschikbaar door de publieke GPS API met tijdinformatie. Andere gebruikers kunnen alleen bewerkte trackpunten downloaden die niet aan jou herleid kunnen worden.";
 "no_purchases" = "U heeft geen aankopen gedaan";
 "recording_delete_confirm" = "Wil je dit object verwijderen\?";
@@ -2030,7 +1926,6 @@
 "sign_in_with_open_street_map" = "Aanmelden via OpenStreetMap (OAuth)";
 "quick_action_contour_lines_descr" = "Knop om hoogtelijnen al dan niet te tonen op de kaart.";
 "new_file" = "Nieuw bestand";
-"routing_attr_motor_type_gas_name" = "CNG";
 "you_can_get_feature_as_part_of_pattern" = "Verkrijg \"%@\" als onderdeel van het %@ abonnement. Vergelijking:";
 "rendering_attr_depthContourWidth_name" = "Dikte van lijnen";
 "select_wikipedia_article_langs" = "Selecteer de talen voor Wikipedia-artikelen op de kaart. Tijdens het lezen van het artikel kan omgeschakeld worden naar een andere beschikbare taal.";
@@ -2067,7 +1962,6 @@
 "activity_type_mountainbike_name" = "Mountainbike";
 "cloud_recent_changes" = "Aanpassingen";
 "contact_support" = "Contacteer de support";
-"routing_attr_motor_type_lpg_name" = "LPG";
 "show_borders_of_downloaded_maps" = "Grenzen tonen van gedownloade kaarten";
 "fav_point_dublicate_message" = "Favorietnaam veranderd in %@ om dubbel gebruik te voorkomen.";
 "turn_arrows_descr" = "Kies of Afslaan Pijlen zijn aangegeven op de route lijn.";
@@ -2113,7 +2007,6 @@
 "routing_attr_motor_type_hybrid_name" = "Hybride";
 "mtb_imba_full" = "Internationale Mountain Bicycling Association";
 "backup_version_history" = "Versiegeschiedenis";
-"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "contributions_may_calculate_with_delay" = "Het berekenen van bijdragen kan enkele uren duren.";
 "simulation_preview_mode_desc" = "De snelheid van de simulatie is het maximum op rechte wegen, en vertraagt alleen bij kruisingen.";
 "route_between_points_add_track_desc" = "Selecteer een track waaraan je een nieuw segment wil toevoegen.";
@@ -2149,7 +2042,6 @@
 "rendering_attr_hideMilitaryAreas_description" = "Verberg militaire gebieden";
 "routing_attr_difficulty_preference_intermediate_name" = "Gemiddeld";
 "routing_attr_avoid_4wd_only_name" = "4x4 wegen vermijden";
-"routing_attr_difficulty_preference_expert_name" = "Expert";
 "rendering_attr_horse_scale_impossible_name" = "Onmogelijk";
 "rendering_attr_weatherPrecipitationContours_name" = "Contourlijnen van neerslag";
 "routing_attr_avoid_fords_name" = "Voorden vermijden";
@@ -2189,7 +2081,6 @@
 "rendering_attr_weatherTempContours_name" = "Temperatuur hoogtelijnen";
 "routing_attr_difficulty_preference_no_preference_name" = "Geen voorkeur";
 "routing_attr_difficulty_preference_advanced_name" = "Gevorderde";
-"routing_attr_difficulty_preference_beginner_name" = "Beginner";
 "routing_attr_avoid_highway_description" = "Snelwegen vermijden";
 "save_track_to_gpx_descrp" = "Automatisch starten met opname van pad tijdens navigeren, en achteraf automatisch opslaan.";
 "add_point_after" = "Punt erna toevoegen";
@@ -2209,15 +2100,10 @@
 "download_wikipedia_data" = "Wikipedia-gegevens downloaden";
 "quick_action_map_style_action" = "Kaartstijl toevoegen";
 "mgrs_format_descr" = "OsmAnd gebruikt MGRS, die sterk lijkt op het UTM-NATO-formaat.";
-"km" = "km";
 "weather_plugin_description" = "Toont \n- 24-uurs en 7-daagse weersvoorspelling met 5 lagen \n- widgets afgesteld op locatie \n- hoogtelijnen van temperatuur / luchtdruk \n \nDe weersgegevens worden geleverd door de Global Forecast System (GFS, %@).";
-"kg" = "kg";
-"m" = "m";
 "routeInfo_tracktype_description" = "Kleur de route of tracklijn op basis van de samenstelling van het oppervlak. Typisch aangezet wanneer het wegennet grotendeels onverhard is.";
 "speed_cameras_legal_descr" = "In sommige landen of regio’s is het gebruik van apps om te waarschuwen voor snelheidscamera’s in strijd met de wet. \n \nMaak een keuze op basis van de geldende wet. \n \nKies %@ om meldingen en waarschuwingen te ontvangen over snelheidscamera’s. \n \nKies %@ om alle gegevens over snelheidscamera’s te verwijderen: waarschuwingen, meldingen en POI’s worden verwijderd tot OsmAnd volledig opnieuw geïnstalleerd wordt.";
 "lang_zh-Hant" = "Chinees (traditioneel)";
-"lang_sat" = "Santali";
-"weather_online_cache" = "Online cache";
 "shared_string_keep_active" = "Actief houden";
 "privacy_and_security" = "Privacy en veiligheid";
 "shared_string_height" = "Hoogte";
@@ -2314,7 +2200,6 @@
 "shared_string_page_number" = "Pagina %d";
 "compass_on_circles" = "Kompas op cirkels";
 "add_widget" = "Widget toevoegen";
-"map_widget_gps_info" = "GPS info";
 "altitude_widget_desc" = "Toont de hoogte boven de zeespiegel van de huidige geolocatie.";
 "rotate_map_manual_opt" = "Handmatig gedraaid";
 "map_widget_sunrise_desc" = "Toont het tijdstip van - of de tijd tot zonsopgang.";
@@ -2393,21 +2278,16 @@
 "true_bearing_widget_desc" = "Hoek tussen het ware noorden en het doelpunt gezien van uw locatie.";
 "relative_bearing_widget_desc" = "Toont de hoek tussen de richting van uw voorwaartse beweging en het doelpunt.";
 "shared_string_license" = "Licentie";
-"shared_string_link" = "Link";
 "shared_string_author" = "Auteur";
 "rendering_value_caiScale_name" = "CAI schaal";
 "routing_attr_hazmat_category_usa_6_name" = "Giftige en infectueuze stoffen";
 "routing_attr_hazmat_category_usa_2_name" = "Gassen";
-"rendering_value_sector2_name" = "Sector 2";
 "rendering_value_defaultMedium_name" = "Standaard (gemiddeld)";
 "rendering_value_sectors_name" = "Sectoren";
 "rendering_value_sacScale_name" = "SAC schaal";
 "routing_attr_hazmat_category_usa_7_name" = "Radioactieve stoffen";
 "routing_attr_hazmat_category_usa_1_name" = "Explosieven";
 "rendering_value_small_name" = "Klein";
-"rendering_value_sector5_name" = "Sector 5";
-"rendering_value_sector4_name" = "Sector 4";
-"rendering_value_sector1_name" = "Sector 1";
 "routing_attr_allow_via_ferrata_description" = "Een bergroute met vaste kabels, stempels, ladders en bruggen.";
 "routing_attr_hazmat_category_usa_3_name" = "Brandbare vloeistoffen";
 "rendering_attr_lightDetail_name" = "Licht detail";
@@ -2415,14 +2295,12 @@
 "rendering_value_name_only_name" = "Alleen naam";
 "routing_attr_hazmat_category_usa_4_name" = "Brandbare vaste stoffen";
 "routing_attr_hazmat_category_usa_5_name" = "Oxiderende stoffen en organische peroxiden";
-"rendering_value_sector3_name" = "Sector 3";
 "routing_attr_hazmat_category_usa_9_name" = "Diverse gevaarlijke stoffen en voorwerpen";
 "routing_attr_hazmat_category_usa_8_name" = "Bijtende stoffen";
 "map_orientation_landscape" = "Landschap";
 "there_are_no_connected_sensors_of_this_type" = "Er zijn geen aangesloten sensoren van dit type";
 "write_data_from_sensor_to_track" = "Schrijf de gegevens van externe sensoren naar de GPX tijdens de ritopname.";
 "ant_plus_searching_text" = "Sensoren zoeken";
-"tracker_item" = "OsmAnd tracker";
 "press_again_to_change_the_map_orientation" = "Tik nogmaals om de kaartoriëntatie te wijzigen";
 "ant_plus_pair_new_sensor" = "Nieuwe sensor koppelen";
 "apply_only_to_new_points" = "Alleen toepassen bij nieuwe punten";
@@ -2504,7 +2382,6 @@
 "map_orientation_default" = "Zelfde als apparaatinstelling";
 "map_widget_camera_tilt" = "Hoek van camera";
 "map_widget_ant_bicycle_dist_desc" = "Toont de afgelegde afstand";
-"beats_per_minute_short" = "bpm";
 "lang_zh-Hans" = "Chinees (vereenvoudigd)";
 "external_sensors_plugin_description" = "Verbindt met externe sensors om bijv. uw hartslag, fietssnelheid, fiets kracht of ritme te lezen. Vereist dat uw toestel verbonden is met relevante sensors via het ANT+ draadloos netwerk protocol.";
 "shared_string_chest" = "Borst";
@@ -2513,14 +2390,12 @@
 "map_widget_zoom_level" = "Zoomniveau";
 "wikivoyage_download_pics" = "Afbeeldingen downloaden";
 "user_points" = "Gebruikerspunten";
-"activity_type_offroad_name" = "Off-road";
 "apply_to_existing_favorites_descr" = "Veranderingen toepassen bij al bestaande favoriete punten van de groep, of alleen bij nieuwe\?";
 "shared_string_symbol" = "Symbool";
 "general_settings" = "Algemene instellingen";
 "apply_to_existing" = "Toepassen bij al bestaande";
 "map_widget_ant_bicycle_speed" = "Fiets snelheid";
 "shared_string_foot" = "Voet";
-"ltr_or_rtl_combine_via_comma" = "%@, %@";
 "perform_oauth_authorization" = "Inloggen via OAuth";
 "speak_route_recalculation" = "Herberekening van route melden";
 "no_travel_guides_data_descr" = "Download Wikivoyage-reisgidsen om artikelen te lezen over plaatsen wereldwijd, zonder internetverbinding.";
@@ -2530,7 +2405,7 @@
 "backup_error_invalid_token" = "Token is niet geldig";
 "map_widget_target_distance" = "Afstand van camera tot doelwit";
 "external_device_details_battery" = "Batterij";
-"settings_app_theme" = "App-kleurenschema";
+"settings_app_theme" = "Applicatie-thema";
 "banner_payment_free_backup_settings_title" = "Gratis instellingen back-up";
 "shared_string_duplicate" = "Dubbel";
 "shared_string_format" = "Formaat";
@@ -2541,10 +2416,8 @@
 "osm_upload_gpx_tags_footer" = "Voer tags in, gescheiden door komma\'s.";
 "shared_string_finger" = "Vinger";
 "map_3d_mode_hint" = "Door de knop lang ingedrukt te houden, kan de positie van de knop gewijzigd worden.";
-"activity_type_winter_name" = "Winter";
 "ant_plus_bluetooth_off_description" = "Schakel Bluetooth in om sensoren te vinden en te koppelen.";
 "select_tracks_to_display" = "Selecteer tracks om ze op de kaart weer te geven.";
-"short_min" = "m";
 "map_widget_camera_distance_desc" = "Toont hoogte van camera boven de grond.";
 "top_widgets_panel" = "Bovenste paneel";
 "shared_string_contents" = "Inhoud";
@@ -2578,7 +2451,6 @@
 "shared_string_travel" = "Reizen";
 "shared_string_accessibility" = "Toegankelijkheid";
 "purchases_feature_desc_external_sensors" = "Gegevens van externe sensors tonen en opnemen: fietssnelheid, fietskracht, ritme en hartslag.";
-"offline_wikivoyage" = "Offline Wikivoyage";
 "map_widget_ant_bicycle_speed_desc" = "Toont de snelheid van beweging";
 "determine_location" = "Geef toestemming om uw locatie te zien";
 "announcement_time_approach" = "Bij nadering";
@@ -2603,8 +2475,6 @@
 "subscribe_email_error" = "Foutmelding";
 "external_device_status_connect" = "Verbinden";
 "saved_articles" = "Artikelen met bladwijzer";
-"shared_string_wikivoyage" = "Wikivoyage";
-"activity_type_water_name" = "Water";
 "map_widget_ant_bicycle_dist" = "Fiets afstand";
 "shared_string_uploading" = "Opladen";
 "simulate_location_movement_speed" = "Bewegingssnelheid";
@@ -2643,7 +2513,6 @@
 "travel_card_download_descr" = "Download Wikivoyage-reisgidsen om artikelen te lezen over plaatsen wereldwijd, zonder internetverbinding.";
 "ant_plus_searching_text_description" = "Houd het apparaat dicht bij de sensor. U moet de sensor activeren zodat OsmAnd hem kan vinden.";
 "longest_duration_first" = "Langste duur eerst";
-"shared_string_hand" = "Hand";
 "downward_gradient" = "Neerwaartse helling";
 "upward_gradient" = "Opwaartse helling";
 "wall_height" = "Muur hoogte";
@@ -2659,9 +2528,7 @@
 "visualization_3d_track_line" = "Tracklijn";
 "shared_string_item" = "Deel";
 "shared_string_millimeters" = "Millimeter";
-"shared_string_millimeters_short" = "mm";
 "step_by_step" = "Stap voor stap";
-"shared_string_top" = "Top";
 "visualization_3d_wall_color" = "Muurkleur";
 "edit_tilesource_minzoom" = "Min zoomniveau";
 "shared_string_always" = "Altijd";
@@ -2694,7 +2561,6 @@
 "quick_action_directions_from" = "Startpunt";
 "quick_action_destination" = "Bestemming";
 "data_source" = "Databron";
-"weather_source_ecmwf_title" = "ECMWF";
 "missing_maps_ignore" = "Gebruik gedownloade kaart";
 "missing_maps_ignore_details" = "Dekken gedownloade kaarten je route? Gebruik ze om te navigeren als je bekent met het gebied.";
 "required_maps" = "Benodigde kaarten";
@@ -2702,17 +2568,14 @@
 "tomorrow" = "Morgen";
 "map_settings_weather_wind_animation" = "Wind-animatie";
 "user_palette" = "Gebruikerspalet";
-"driving_region_india" = "India";
 "shared_string_set" = "Instellen";
 "shared_string_replace" = "Vervangen";
 "weather_data_sources_prompt" = "OsmAnd biedt weerdata uit twee bronnen:";
 "weather_source_GFS_description" = "Global Forecast System van National Centers for Environmental Prediction";
-"weather_source_GFS_title" = "GFS";
 "quick_action_parking_place" = "Parkeerplaats";
 "quick_action_verb_show_hide" = "Tonen / verbergen";
 "quick_action_verb_pause_resume" = "Pauzeren / Hervatten";
 "quick_action_verb_turn_on_off" = "Aan-/Uitzetten";
-"quick_action_verb_start_stop" = "Start / Stop";
 "app_profile" = "App-profiel";
 "distance_during_navigation" = "Afstand tijdens navigatie";
 "auto_zoom_discrete" = "Discreet";
@@ -2736,7 +2599,6 @@
 "sensor_temperature_desc" = "Toont temperatuur volgens sensor";
 "download_to_device" = "Downloaden naar apparaat";
 "shared_string_delete_immediately" = "Verwijder onmiddelijk";
-"shared_string_cache" = "Cache";
 "map_widget_sun_position_desc" = "Laat de tijd tot zonsopkomst of zonsondergang zien.";
 "shared_string_loading" = "Laden";
 "help_article_map_legend_osmand_name" = "OsmAnd-kaartstijl";
@@ -2825,9 +2687,6 @@
 "map_widget_group_glide_ratio" = "Zweefhoek";
 "map_widget_group_glide_desc" = "Widgets laten de zweefhoek tot het doel of de gemiddelde zweefhoek voor de huidige tocht.";
 "average_glide_time_interval_desc" = "Geef het tijdsinterval voor de gemiddelde zweefhoek op.";
-"help_article_navigation_auto_car_name" = "Android Auto";
-"help_article_navigation_car_play_name" = "CarPlay";
-"help_article_navigation_routing_brouter_name" = "BRouter";
 "help_article_navigation_setup_gpx_navigation_name" = "Navigeer met een spoor";
 "help_article_navigation_setup_markers_navigation_name" = "Navigeer met markeringen";
 "help_article_purchases_giveaway_name" = "Weggevertje";
@@ -2840,7 +2699,6 @@
 "external_device_any_connected" = "Alle verbonden";
 "track_3d_empty_view_description" = "Verken de track in interactieve 3D! Visualiseer hoogte, snelheid en, meer direct, op de kaart.";
 "detailed_log_file" = "Gedetailleerd logbestand";
-"carplay" = "CarPlay";
 "map_widgets" = "Kaartwidgets";
 "help_first_steps" = "Eerste stappen";
 "not_recorded" = "Niet opgenomen";
@@ -2866,10 +2724,8 @@
 "shared_string_app_profile" = "App-profiel";
 "shared_string_show" = "Toon";
 "track_appearance_3D_visualization" = "3D-visualisatie";
-"help_article_troubleshooting_android_auto_name" = "Android Auto";
 "shared_string_relief_3d" = "3D-reliëf";
 "help_contact_us" = "Neem contact op";
-"ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
 "terrain_3D_maps" = "Terreinkaarten";
 "view_angle_description" = "Laat het kegelvormige gebied zien waar u momenteel op gericht staat";
 "navigation_position" = "Navigatiepositie";

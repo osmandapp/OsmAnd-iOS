@@ -3526,6 +3526,5 @@
 "navigation_position" = "Posición de navegación";
 "location_radius" = "Radio de la ubicación";
 "view_angle_description" = "Muestra el área en forma de cono a la que te enfrentas actualmente";
-
 "rendering_attr_showDirtbikeTrails_name" = "Mostrar senderos para motos de cross";
-"rendering_attr_showDirtbikeTrails_description" = "Mostrar senderos para motos de cross";;
+"rendering_attr_showDirtbikeTrails_description" = "Mostrar senderos para motos de cross";

@@ -3399,9 +3399,8 @@
 "wind_layer" = "風力圖層";
 "map_source" = "地圖來源";
 "shared_string_show" = "顯示";
-
 "rendering_attr_showDirtbikeTrails_description" = "顯示越野車路線";
-"rendering_attr_showDirtbikeTrails_name" = "顯示越野車路線";;
+"rendering_attr_showDirtbikeTrails_name" = "顯示越野車路線";
 "view_angle" = "檢視角度";
 "shared_string_all_icons" = "所有圖示";
 "profile_icon" = "設定檔圖示";

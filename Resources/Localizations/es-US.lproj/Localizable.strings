@@ -3515,9 +3515,8 @@
 "route_your_destination_is_on_right" = "Tu destino está a la derecha";
 "route_your_destination_is_on_ahead" = "Tu destino está justo delante";
 "osmand_cloud_delete_account_descr_with_email" = "¿Borrar la cuenta de OsmAnd Cloud: %@?";
-
 "rendering_attr_showDirtbikeTrails_description" = "Muestra senderos para motocross";
-"rendering_attr_showDirtbikeTrails_name" = "Mostrar senderos para motocross";;
+"rendering_attr_showDirtbikeTrails_name" = "Mostrar senderos para motocross";
 "navigation_position_icon" = "Icono de la ubicación al navegar";
 "resting_navigation_position" = "Ubicación en reposo y al navegar";
 "shared_string_local" = "Local";

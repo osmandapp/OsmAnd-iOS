@@ -2454,7 +2454,7 @@
 "checking_progress" = "Controllo…";
 "last_two_month_total" = "Ultimi due mesi in totale";
 "product_desc_africa_short" = "Mappe della regione africana";
-"select_wikipedia_article_langs" = "Seleziona i linguaggi in cui gli articoli di Wikipedia appariranno sulla mappa. Puoi cambiare fra tutte le lingue disponibili mentre leggi l\'articolo.";
+"select_wikipedia_article_langs" = "Seleziona i linguaggi in cui gli articoli di Wikipedia appariranno sulla mappa. Puoi cambiare fra tutte le lingue disponibili mentre leggi l'articolo.";
 "depth_contours" = "Isobate";
 "gpx_join_gaps_descr" = "Gli spazi tra i segmenti saranno collegati.";
 "slope_grey_color_descr" = "Il colore grigio viene utilizzato quando la pendenza non è definita.";
@@ -2639,7 +2639,7 @@
 "osm_live_payment_subscription_management_aid" = "Il pagamento verrà addebitato sul tuo account ID Apple alla conferma dell'acquisto.\n\nL'abbonamento si rinnova automaticamente a meno che non venga annullato almeno 24 ore prima della fine del periodo corrente. Il tuo account verrà addebitato per il rinnovo entro 24 ore prima della fine del periodo corrente.\n\nPuoi gestire e annullare i tuoi abbonamenti accedendo alle impostazioni del tuo account sull'App Store dopo l'acquisto";
 "huawei_appgallery" = "Huawei AppGallery";
 "contact_support_description" = "Se hai delle domande, per favore contattaci al %@.";
-"empty_purchases_description" = "Se l\'acquisto non viene visualizzato qui, premi su \"%@\" o contatta il supporto.";
+"empty_purchases_description" = "Se l'acquisto non viene visualizzato qui, premi su \"%@\" o contatta il supporto.";
 "amazon_appstore" = "Amazon Appstore";
 "subscription_banner_osmand_pro_title" = "Ricevi aggiornamenti di mappe orarie, giornaliere o settimanali con OsmAnd Pro.";
 "weather_clear_offline_cache" = "Questo cancellerà tutta la cache per il riquadro meteo offline.";
@@ -2808,7 +2808,7 @@
 "map_widget_camera_tilt" = "Inclinazione della fotocamera";
 "map_widget_zoom_level" = "Livello di zoom";
 "rotate_map_manual_opt" = "Ruotato manualmente";
-"compass_click_desc" = "Suggerimento: tocca la bussola per cambiare l\'orientamento della mappa.";
+"compass_click_desc" = "Suggerimento: tocca la bussola per cambiare l'orientamento della mappa.";
 "map_widget_camera_distance" = "Elevazione fotocamera";
 "change_language" = "Cambia lingua";
 "icon_group_service" = "Servizi";
@@ -3495,9 +3495,8 @@
 "rendering_value_pale_name" = "Chiaro";
 "map_settings_weather_temp_air" = "Temperatura dell'aria";
 "map_settings_weather_temp_water" = "Temperatura dell'acqua";
-
 "rendering_attr_showDirtbikeTrails_description" = "Mostra percorsi per bici da cross";
-"rendering_attr_showDirtbikeTrails_name" = "Mostra percorsi per moto da cross";;
+"rendering_attr_showDirtbikeTrails_name" = "Mostra percorsi per moto da cross";
 "resting_navigation_position" = "Posizione di riposo e navigazione";
 "location_radius_description" = "Mostra l\'area circolare che rappresenta la precisione della tua posizione attuale";
 "navigation_position_icon_summary" = "Icona visualizzata durante la navigazione o lo spostamento.";

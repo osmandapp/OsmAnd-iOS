@@ -18,6 +18,9 @@ let LOGGING = false
 ///For debug set here your Osmand repositories path
 let OSMAND_REPOSITORIES_PATH = "/Users/nnngrach/Projects/Coding/OsmAnd/"
 
+///For quick debugging you can write interesting key only in this var. And then manually add breakpoint on strings "let breakpoint = true"
+let DEBUG_STOP_KEY = "rotate_map_north_opt"
+
 
 var iosEnglishDict: [String : String] = [:]
 var androidEnglishDict: [String : String] = [:]
@@ -34,90 +37,92 @@ let androidEnglishKey = ""
 //     "ru" : "ru"
 // ]
 
+
 let languageDict = [
-    "af" : "af",
-    "an" : "an",
-    "ar" : "ar",
-    "ars" : "ars",
-    "ast" : "ast",
-    "az" : "az",
-    "be" : "be",
-    "bg" : "bg",
-    "bn" : "bn",
-    "br" : "br",
-    "bs" : "bs",
-    "ca" : "ca",
-    "ckb" : "ckb",
-    "cs" : "cs",
-    "cy" : "cy",
-    "da" : "da",
-    "de" : "de",
-    "el" : "el",
-    "en-GB" : "en-rGB",
-    "eo" : "eo",
-    "es" : "es",
-    "es-AR" : "es-rAR",
-    "es-US" : "es-rUS",
-    "et" : "et",
-    "eu" : "eu",
-    "fa" : "fa",
-    "fi" : "fi",
-    "fr" : "fr",
-    "gl" : "gl",
-    "he" : "iw",
-    "hr" : "hr",
-    "hsb" : "b+hsb",
-    "hu" : "hu",
-    "hy" : "hy",
-    "ia" : "ia",
-    "id" : "in",
-    "is" : "is",
-    "it" : "it",
-    "ja" : "ja",
-    "ka" : "ka",
-    "kab" : "b+kab",
-    "kn" : "kn",
-    "ko" : "ko",
-    "ku" : "ku",
-    "lt" : "lt",
-    "lv" : "lv",
-    "mk" : "mk",
-    "ml" : "ml",
-    "mn" : "mn",
-    "mr" : "mr",
-    "my" : "my",
-    "nb" : "nb",
-    "nl" : "nl",
-    "nn" : "nn",
-    "oc" : "oc",
-    "pa-Arab-PK" : "pa-rPK",
-    "pl" : "pl",
-    "pt" : "pt",
-    "pt-BR" : "pt-rBR",
-    "ro-RO" : "ro",
-    "ru" : "ru",
-    "sat" : "sat",
-    "sc" : "sc",
-    "sk" : "sk",
-    "sl" : "sl",
-    "sq" : "sq",
-    "sr" : "sr",
-    "sr-Latn" : "b+sr+Latn",
-    "sv" : "sv",
-    "ta" : "ta",
-    "te" : "te",
-    "tr" : "tr",
-    "tt" : "tt",
-    "tzm" : "tzm",
-    "uk" : "uk",
-    "ur" : "ur",
-    "uz-Cyrl" : "uz",
-    "vi" : "vi",
-    "zh-Hans" : "zh-rCN" ,
-    "zh-Hant" : "zh-rTW",
+    "af" : "af",                // Afrikaans
+    "an" : "an",                // Dutch
+    "ar" : "ar",                // Arabic
+    "ars" : "ars",              // Arabic, Najdi
+    "ast" : "ast",              // Austrian
+    "az" : "az",                // Azerbaijani
+    "be" : "be",                // Belarusian
+    "bg" : "bg",                // Bulgarian
+    "bn" : "bn",                // Bangla
+    "br" : "br",                // Breton
+    "bs" : "bs",                // Bosnian
+    "ca" : "ca",                // Catalan
+    "ckb" : "ckb",              // Kurdish, Sorani
+    "cs" : "cs",                // Czech
+    "cy" : "cy",                // Welsh
+    "da" : "da",                // Danish
+    "de" : "de",                // German
+    "el" : "el",                // Greek
+    "en-GB" : "en-rGB",         // English (United Kingdom)
+    "eo" : "eo",                // Esperanto
+    "es" : "es",                // Spanish
+    "es-AR" : "es-rAR",         // Spanish (Argentina)
+    "es-US" : "es-rUS",         // Spanish (United States)
+    "et" : "et",                // Estonian
+    "eu" : "eu",                // Basque
+    "fa" : "fa",                // Persian
+    "fi" : "fi",                // Finnish
+    "fr" : "fr",                // French
+    "gl" : "gl",                // Galician
+    "he" : "iw",                // Hebrew
+    "hi" : "hi",                // Hindi
+    "hr" : "hr",                // Croatian
+    "hsb" : "b+hsb",            // Upper Sorbian
+    "hu" : "hu",                // Hungarian
+    "hy" : "hy",                // Armenian
+    "ia" : "ia",                // Interlingua
+    "id" : "in",                // Indonesian
+    "is" : "is",                // Icelandic
+    "it" : "it",                // Italian
+    "ja" : "ja",                // Japanese
+    "ka" : "ka",                // Georgian
+    "kab" : "b+kab",            // Kabyle
+    "kn" : "kn",                // Kannada
+    "ko" : "ko",                // Korean
+    "ku" : "ku",                // Kurdish
+    "lt" : "lt",                // Lithuanian
+    "lv" : "lv",                // Latvian
+    "mk" : "mk",                // Macedinian
+    "ml" : "ml",                // Malayalam
+    "mn" : "mn",                // Mongolian
+    "mr" : "mr",                // Marathi
+    "my" : "my",                // Burmese
+    "nb" : "nb",                // Norwegian Bokmål
+    "nl" : "nl",                // Dutch
+    "nn" : "nn",                // Norwegian Nynorsk
+    "oc" : "oc",                // Occitan
+    "pa-Arab-PK" : "pa-rPK",    // Punjabi (Naskh, Pakistan)
+    "pl" : "pl",                // Polish
+    "pt" : "pt",                // Portuguese
+    "pt-BR" : "pt-rBR",         // Portuguese (Brasil)
+    "ro-RO" : "ro",             // Romanian (Romania)
+    "ru" : "ru",                // Russian
+    "sat" : "sat",              // Santali
+    "sc" : "sc",                // Sardinian
+    "sk" : "sk",                // Slovak
+    "sl" : "sl",                // Slovenian
+    "sq" : "sq",                // Albanian
+    "sr" : "sr",                // Serbian
+    "sr-Latn" : "b+sr+Latn",    // Serbian (Latin)
+    "sv" : "sv",                // Swedish
+    "ta" : "ta",                // Tamil
+    "te" : "te",                // Telugu
+    "tr" : "tr",                // Turkish
+    "tt" : "tt",                // Tatar
+    "tzm" : "tzm",              // Central Atlas Tamazingh
+    "uk" : "uk",                // Ukrainian
+    "ur" : "ur",                // Urdu
+    "uz-Cyrl" : "uz",           // Uzbek (Cyrillic)
+    "vi" : "vi",                // Vietnamese
+    "zh-Hans" : "zh-rCN",       // Chinese Simplified
+    "zh-Hant" : "zh-rTW",       // Chinese Traditional
 ]
 
-
+let englishBasedLangs = ["en-GB"]
 
 var allLanguagesDict = languageDict
 allLanguagesDict["en"] = ""
@@ -139,18 +144,20 @@ class Main {
         print("START: add_translations script \n")
 
         let path = getOsmandRepositoriesPath()
-        updateGitRepositories(path) 
-        copyPhrasesFiles(path) 
+        if !DEBUG {
+            updateGitRepositories(path)
+            copyPhrasesFiles(path)
+        }
         
         Initialiser.initUpdatingTranslationKeyLists(path)
-        addRoutingParametersIfNeeded(arguments, path) 
+        addRoutingParametersIfNeeded(arguments, path)
         updateTranslations(path)
         
         print("DONE: add_translations script \n")
     }
     
     
-    static private func getOsmandRepositoriesPath() -> URL {
+    static func getOsmandRepositoriesPath() -> URL {
         print("RUN: Main.getOsmandRepositoriesPath() \n")
         var path: URL? = nil
         if (DEBUG) {
@@ -234,10 +241,20 @@ class Initialiser {
 
 
     static func compareDicts(iosDict: [String : String], androidDict: [String : String]){
+        if LOGGING {
+            print("COMPARING: ios and android base english translations \n")
+        }
+        
         let androidDict = IOSReader.replacePlaceholders(androidDict: androidDict)
         var commonTranslations: Dictionary = [String:String]()
         for iosTranslation in iosDict
         {
+            if DEBUG && iosTranslation.key == DEBUG_STOP_KEY {
+                let breakpoint = true
+                if LOGGING {
+                    print("#### DEBUG_STOP_KEY #### ")
+                }
+            }
             if let androidTranslationValue = androidDict[iosTranslation.key] {
                 commonTranslations[iosTranslation.key] = iosTranslation.value
                  Main.pringDebugLog(prefix: "FOUND", iosKey: iosTranslation.key, iosValue: iosTranslation.value, androidKey: iosTranslation.key, androidValue: androidTranslationValue)
@@ -279,7 +296,7 @@ class IOSReader {
     
     static func parseTranslationFile(language: String) -> [String : String] {
         var iosDict: [String:String] = [:]
-        let url = URL(fileURLWithPath: "./Resources/Localizations/" + language + ".lproj/Localizable.strings")
+        let url = URL(fileURLWithPath: Main.getOsmandRepositoriesPath().path + "/ios/Resources/Localizations/" + language + ".lproj/Localizable.strings")
         guard let dict = NSDictionary(contentsOf: url) else {return iosDict }
         iosDict = dict as! [String : String]
         return iosDict
@@ -289,6 +306,9 @@ class IOSReader {
     static func replacePlaceholders(androidDict: [String : String]) -> [String : String] {
         var updatedDict = androidDict
         for elem in updatedDict {
+            if DEBUG && elem.key == DEBUG_STOP_KEY {
+                let breakpoint = true
+            }
             var modString = elem.value;
             modString = modString.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
             
@@ -335,18 +355,31 @@ class IOSWriter {
         var existingLinesDict: [String:String] = [:]
 
         for elem in commonDict! {
+            if DEBUG && elem.key == DEBUG_STOP_KEY {
+                let breakpoint = true
+            }
             if androidDict.keys.contains(elem.key)
             {
+                // Update from localized android dict
                 guard isValueCorrect(value: androidDict[elem.key]!) else {continue}
                 if iosDict.keys.contains(elem.key) {
                     existingLinesDict.updateValue(androidDict[elem.key]!, forKey: elem.key)
                 } else {
                     newLinesDict.updateValue(androidDict[elem.key]!, forKey: elem.key)
                 }
+            } else {
+//                // TODO: here we can force update from engligh. if it needed.
+//                // Update from english ios dict
+//                if iosDict.keys.contains(elem.key) {
+//                    existingLinesDict.updateValue(elem.value, forKey: elem.key)
+//                }
             }
         }
         
         for elem in commonValuesDict {
+            if DEBUG && elem.key == DEBUG_STOP_KEY {
+                let breakpoint = true
+            }
             if let key = AndroidReader.dictContainsKeys(androidDict: androidDict, keys: elem.value) {
                 guard isValueCorrect(value: androidDict[key]!) else {continue}
                 if iosDict.keys.contains(elem.key) {
@@ -357,9 +390,9 @@ class IOSWriter {
             }
         }
 
-        print("Updating lines '\(language)' at \(DateFormatter.localizedString(from: Date(), dateStyle: .medium, timeStyle: .medium))")        
+        print("Updating lines '\(language)' at \(DateFormatter.localizedString(from: Date(), dateStyle: .medium, timeStyle: .medium))")
         if existingLinesDict.count > 0 || newLinesDict.count > 0 {
-            let fileURL = URL(fileURLWithPath: "./Resources/Localizations/" + language + ".lproj/Localizable.strings")
+            let fileURL = URL(fileURLWithPath: Main.getOsmandRepositoriesPath().path + "/ios/Resources/Localizations/" + language + ".lproj/Localizable.strings")
             do {
                 let fileContent = try String(contentsOf: fileURL)
                 let strings = fileContent.components(separatedBy: ";\n")
@@ -370,7 +403,7 @@ class IOSWriter {
                     while line.trimmingCharacters(in: .whitespacesAndNewlines).hasPrefix("//") {
                         if let index = line.firstIndex(of: "\n") {
                             processedStrings.append(String(line[..<index]) )
-                            line = String(line[line.index(after: index)...]) 
+                            line = String(line[line.index(after: index)...])
                 
                         } else {
                             processedStrings.append(line)
@@ -531,7 +564,7 @@ class AndroidReader {
                 langSuffix = "-" + lang
             }
         }
-        let url = URL(fileURLWithPath: "../android/OsmAnd/res/values" + langSuffix + "/strings.xml")
+        let url = URL(fileURLWithPath: Main.getOsmandRepositoriesPath().path + "/android/OsmAnd/res/values" + langSuffix + "/strings.xml")
         let myparser = Parser()
         return myparser.myparser(path: url)
     }
@@ -605,7 +638,7 @@ class RoutingParamsHelper {
         var routeDict: [String:String] = [:]
         var addedStringsArray: [String] = []
         
-        let url = URL(fileURLWithPath: "./Resources/Localizations/" + language + ".lproj/Localizable.strings")
+        let url = URL(fileURLWithPath: Main.getOsmandRepositoriesPath().path + "/ios/Resources/Localizations/" + language + ".lproj/Localizable.strings")
         let path = url.path
         
         var str: String = ""
@@ -623,7 +656,7 @@ class RoutingParamsHelper {
                 myLang = "-" + lang
             }
         }
-        let androidURL = URL(fileURLWithPath: "../android/OsmAnd/res/values" + myLang + "/strings.xml")
+        let androidURL = URL(fileURLWithPath: Main.getOsmandRepositoriesPath().path + "/android/OsmAnd/res/values" + myLang + "/strings.xml")
         let myparser = Parser()
         var androidDict = myparser.myparser(path: androidURL)
         for key in androidDict.keys {

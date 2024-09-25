@@ -124,7 +124,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     private let recordingTrackKey = "recordingTrackKey"
     private let tracksCountKey = "tracksCountKey"
     private let pathKey = "pathKey"
-    private let fileNameKey = "filenameKey"
+    private let trackFileKey = "trackFileKey"
     private let colorKey = "colorKey"
     private let buttonTitleKey = "buttonTitleKey"
     private let buttonIconKey = "buttonIconKey"
@@ -166,6 +166,18 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     private var rootVC: OARootViewController
     private var importHelper: OAGPXImportUIHelper
     private var dateFormatter: DateFormatter
+    
+    private lazy var filterButton: UIButton = {
+        var config = UIButton.Configuration.plain()
+        config.imagePadding = 16
+        config.imagePlacement = .trailing
+        config.baseForegroundColor = .iconColorActive
+        config.title = localizedString("filter_current_poiButton")
+        let button = UIButton(configuration: config, primaryAction: nil)
+        button.setImage(UIImage(resource: .icCustomFilter), for: .normal)
+        button.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
+        return button
+    }()
     
     required init?(coder: NSCoder) {
         app = OsmAndApp.swiftInstance()
@@ -225,6 +237,11 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         setupTableFooter()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationItem.searchController = nil
+    }
+    
     private func updateData() {
         generateData()
         tableView.reloadData()
@@ -242,26 +259,18 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     private func generateData() {
         tableData.clearAllData()
         let section = tableData.createNewSection()
-        
-        if isFiltered {
-            var foundedFolders: [TrackFolder] = []
-            var foundedTracks: [GpxDataItem] = []
-            for folder in rootFolder.flattenedFolders.values where folder.path.lastPathComponent().containsCaseInsensitive(text: searchText) {
-                foundedFolders.append(folder)
-            }
+        if isSearchActive {
+            var allTracks: [GpxDataItem] = []
             rootFolder.performForAllTracks { track in
-                if track.gpxFileName.containsCaseInsensitive(text: searchText) {
-                    foundedTracks.append(track)
-                }
+                allTracks.append(track)
             }
             
-            foundedFolders.sort { $0.path.lastPathComponent() < $1.path.lastPathComponent() }
-            foundedTracks.sort { $0.gpxFileName.lastPathComponent() < $1.gpxFileName.lastPathComponent() }
-            
-            for folder in foundedFolders {
-                createRowFor(folder: folder, section: section)
+            if isFiltered {
+                allTracks = allTracks.filter { $0.gpxFileName.containsCaseInsensitive(text: searchText) }
             }
-            for track in foundedTracks {
+            
+            allTracks.sort { $0.gpxFileName.lastPathComponent() < $1.gpxFileName.lastPathComponent() }
+            for track in allTracks {
                 createRowFor(track: track, section: section)
             }
         } else {
@@ -386,7 +395,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         trackRow.key = trackKey
         trackRow.title = fileName.lastPathComponent().deletingPathExtension()
         trackRow.setObj(track.gpxFilePath as Any, forKey: pathKey)
-        trackRow.setObj(fileName, forKey: fileNameKey)
+        trackRow.setObj(track as GpxDataItem, forKey: trackFileKey)
         trackRow.iconName = "ic_custom_trip"
         let isVisible = settings.mapSettingVisibleGpx.contains(track.gpxFilePath)
         trackRow.setObj(isVisible, forKey: isVisibleKey)
@@ -436,6 +445,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         updateNavigationBarTitle()
         navigationController?.setNavigationBarHidden(false, animated: false)
         tabBarController?.navigationItem.searchController = nil
+        navigationItem.searchController = nil
         setupNavBarMenuButton()
     }
     
@@ -535,6 +545,24 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         }
     }
     
+    private func setupHeaderView() -> UIView? {
+        let headerView = UIView(frame: .init(x: 0, y: 0, width: tableView.frame.width, height: 44))
+        headerView.backgroundColor = .groupBg
+        headerView.addSubview(filterButton)
+        filterButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            filterButton.trailingAnchor.constraint(equalTo: headerView.layoutMarginsGuide.trailingAnchor),
+            filterButton.topAnchor.constraint(equalTo: headerView.topAnchor),
+            filterButton.bottomAnchor.constraint(equalTo: headerView.bottomAnchor)
+        ])
+        
+        return headerView
+    }
+    
+    private func updateHeaderViewVisibility(searchIsActive: Bool) {
+        tableView.tableHeaderView = searchIsActive ? setupHeaderView() : nil
+    }
+    
     private func setupTableFooter() {
         guard !currentFolder.tracks.isEmpty, !isSearchActive, !tableView.isEditing else {
             tableView.tableFooterView = nil
@@ -552,6 +580,9 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             
             tableView.tableFooterView = footer
         }
+    }
+    
+    @objc private func filterButtonTapped() {
     }
     
     private func getTotalTracksStatistics() -> String {
@@ -628,6 +659,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         searchController.obscuresBackgroundDuringPresentation = false
         definesPresentationContext = true
         tabBarController?.navigationItem.searchController = searchController
+        navigationItem.searchController = searchController
         updateSearchController()
     }
     
@@ -967,6 +999,8 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
 //            rootVC.mapPanel.mapActions.enterRoutePlanningMode(given: track, useIntermediatePointsByDefault: true, showDialog: true)
 //            navigationController?.popToRootViewController(animated: true)
 //        }
+//        
+//        navigationController?.setNavigationBarHidden(true, animated: true)
     }
     
     private func onTrackAnalyzeClicked(_ track: GpxDataItem?, isCurrentTrack: Bool) {
@@ -1569,9 +1603,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             }
             let isTrackVisible = item.bool(forKey: isVisibleKey)
             let selectedTrackPath = item.string(forKey: self.pathKey) ?? ""
-            let selectedTrackFilename = item.string(forKey: self.fileNameKey) ?? ""
-            let track = currentFolder.tracks[selectedTrackFilename]
-            
+            let track = item.obj(forKey: self.trackFileKey) as! GpxDataItem
             let menuProvider: UIContextMenuActionProvider = { _ in
                 
                 let showOnMapAction = UIAction(title: localizedString(isTrackVisible ? "shared_string_hide_from_map" : "shared_string_show_on_map"), image: UIImage.icCustomMapPinOutlined) { [weak self] _ in
@@ -1700,6 +1732,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             isFiltered = false
         }
         updateSearchController()
+        updateHeaderViewVisibility(searchIsActive: isSearchActive)
         updateData()
     }
     
@@ -1709,6 +1742,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         isSearchActive = false
         isFiltered = false
         updateSearchController()
+        updateHeaderViewVisibility(searchIsActive: isSearchActive)
     }
 }
 

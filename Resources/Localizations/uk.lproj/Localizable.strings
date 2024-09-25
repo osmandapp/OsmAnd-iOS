@@ -3515,9 +3515,8 @@
 "shared_string_local" = "Локальні";
 "map_settings_weather_temp_air" = "Температура повітря";
 "map_settings_weather_temp_water" = "Температура води";
-
 "rendering_attr_showDirtbikeTrails_name" = "Показати стежки для ґрунтового велосипеда";
-"rendering_attr_showDirtbikeTrails_description" = "Показати стежки для ґрунтових велосипедів";;
+"rendering_attr_showDirtbikeTrails_description" = "Показати стежки для ґрунтових велосипедів";
 "location_radius_description" = "Показує круглу ділянку, що показує точність вашого поточного місця перебування";
 "profile_icon" = "Піктограма профілю";
 "view_angle_description" = "Показує конусоподібну ділянку спрямування вашого погляду";

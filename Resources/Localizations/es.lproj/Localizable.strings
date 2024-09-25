@@ -2241,7 +2241,7 @@
 "track_multiple_segments_select" = "%@ tiene más de un segmento. Marca la parte de la ruta que quieres utilizar para la navegación.";
 "selected_tracks_count" = "Trazas - %d";
 "map_widget_parking" = "Aparcamiento";
-"select_wikipedia_article_langs" = "Marca los idiomas de los artículos de Wikipedia en el mapa. Cambia a cualquier idioma disponible mientras lees el artículo.";
+"select_wikipedia_article_langs" = "Selecciona los idiomas de los artículos de Wikipedia en el mapa. Cambia a cualquier idioma disponible mientras lees el artículo.";
 "rendering_attr_showFitnessTrails_name" = "Circuitos aeróbicos";
 "rendering_attr_showFitnessTrails_description" = "Muestra los circuitos aeróbicos";
 "available_groups" = "Grupos disponibles";
@@ -2534,7 +2534,7 @@
 "simulate_location_unselected_track_footer" = "Marca el archivo de la traza";
 "dowload_cloud_version" = "Descargar la versión de la nube";
 "no_purchases" = "No tienes compras";
-"empty_purchases_description" = "Si tus compras no aparecen aquí, pulsa sobre «%@», o ponte en contacto con nuestro equipo de asistencia.";
+"empty_purchases_description" = "Si tus compras no aparecen aquí, pulsa «%@», o ponte en contacto con nuestro equipo de asistencia.";
 "app_store" = "App Store";
 "contact_support" = "Contacto con soporte";
 "weather_clear_offline_cache_for" = "Esto vaciará toda la memoria caché de las teselas meteorológicas sin conexión de %@.";

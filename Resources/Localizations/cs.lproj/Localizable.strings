@@ -3500,9 +3500,8 @@
 "map_settings_weather_temp_air" = "Teplota vzduchu";
 "map_settings_weather_temp_water" = "Teplota vody";
 "shared_string_local" = "Lokální";
-
 "rendering_attr_showDirtbikeTrails_name" = "Zobrazit stezky pro terénní kola";
-"rendering_attr_showDirtbikeTrails_description" = "Zobrazit stezky pro terénní kola";;
+"rendering_attr_showDirtbikeTrails_description" = "Zobrazit stezky pro terénní kola";
 "resting_position_icon" = "Ikona klidové polohy";
 "shared_string_all_icons" = "Všechny ikony";
 "resting_position" = "V klidu";

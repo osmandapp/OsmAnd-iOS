@@ -3521,9 +3521,8 @@
 "shared_string_local" = "Local";
 "map_settings_weather_temp_air" = "Temperatura del aire";
 "map_settings_weather_temp_water" = "Temperatura del agua";
-
 "rendering_attr_showDirtbikeTrails_name" = "Mostrar senderos para motocross";
-"rendering_attr_showDirtbikeTrails_description" = "Muestra senderos para motocross";;
+"rendering_attr_showDirtbikeTrails_description" = "Muestra senderos para motocross";
 "navigation_position" = "Ubicación al navegar";
 "resting_position_icon" = "Icono de la ubicación al estar en reposo";
 "view_angle_description" = "Muestra la dirección de la vista actual con un área triángular";

@@ -685,7 +685,7 @@
 "shared_string_close" = "Закрыць";
 "facebook" = "Facebook";
 "twitter" = "Twitter";
-"route_stops_before" = "%@прыпынкаў да абранага";
+"route_stops_before" = "%@ прыпынкаў да абранага";
 "transport_Routes" = "Маршруты";
 "shared_string_control_stop" = "Спыніць";
 "new_destination_point_dialog" = "Вы ўжо абралі пункт прызначэння:";
@@ -772,7 +772,7 @@
 "sett_generic_ext_input" = "Клавіятура";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "months_3" = "Тры месяцы";
-"get_discount_first_part" = "%@за першы %@";
+"get_discount_first_part" = "%@ за першы %@";
 "get_discount_second_part" = "Пасля %@";
 "reddit" = "Reddit";
 "configure_map" = "Наладзіць мапу";
@@ -834,14 +834,14 @@
 "context_menu_item_directions_from" = "Маршрут адсюль";
 "osm_notes_online_layer" = "OSM-нататкі (у сеціве)";
 "weekly" = "Штотыднёва";
-"osm_edit_deleted_poi" = "OSM POIвыдаленая";
+"osm_edit_deleted_poi" = "OSM POI выдаленая";
 "work_button" = "Праца";
 "phone" = "Тэлефон";
 "quick_action_map_underlay" = "Змяніць падкладку мапы";
 "help_faq_descr" = "Частыя пытанні";
 "purchase_unlim_title" = "Купіць - %@";
 "shared_string_add_photos" = "Дадаць фотаздымкі";
-"osm_edit_modified_poi" = "OSM POIадрэдагаваная";
+"osm_edit_modified_poi" = "OSM POI адрэдагаваная";
 "gpx_descent" = "Спуск";
 "text_size" = "Памер тэксту";
 "wikivoyage_travel_guide_descr" = "Дапаможнік па самым цікавым месцам на планеце ўнутры OsmAnd без злучэння з Інтэрнэтам.";
@@ -862,7 +862,7 @@
 "quick_action_map_underlay_title" = "Падкладка мапы";
 "confirm_every_run" = "Пытацца заўсёды";
 "quick_action_resume_pause_navigation" = "Прыпыніць/аднавіць навігацыю";
-"osm_live_payment_month_cost_descr" = "%@ /месяц";
+"osm_live_payment_month_cost_descr" = "%@ / месяц";
 "altitude_range" = "Дыяпазон вышынь";
 "osb_comment_dialog_message" = "Паведамленне";
 "gpx_tags_txt" = "Пазнакі";
@@ -998,7 +998,7 @@
 "rendering_value_translucent_lightgreen_name" = "Празрысты светла-зялёны";
 "routing_attr_avoid_train_description" = "Пазбягаць цягнікоў";
 "rendering_attr_surface_metal_name" = "Метал";
-"rendering_attr_highway_class_track_grade3_name" = "3клас";
+"rendering_attr_highway_class_track_grade3_name" = "3 клас";
 "routing_attr_piste_type_nordic_description" = "Трасы для лыжных гонак і іх паўночных тыпаў.";
 "routing_attr_driving_style_name" = "Стыль язды";
 "routing_attr_allow_expert_description" = "Надзвычай складаныя трасы, з небяспечным наваколлем і перашкодамі.";
@@ -1054,7 +1054,7 @@
 "rendering_attr_coloredBuildings_name" = "Пазначаць тып будынка колерам";
 "routing_attr_avoid_share_taxi_name" = "Без маршрутных таксі";
 "rendering_attr_showMtbRoutes_name" = "Маршруты для горнага ровара";
-"routing_attr_allow_classic_only_description" = "Маршруты, падрыхтаваныя толькі для класічнага стылю без канькабежных трас. Сюды ўваходзяць маршруты, падрыхтаваныя невялікім снегаходам з больш свабоднай лыжнёйі трасамі, падрыхтаваныя непасрэдна лыжнікамі.";
+"routing_attr_allow_classic_only_description" = "Маршруты, падрыхтаваныя толькі для класічнага стылю без канькабежных трас. Сюды ўваходзяць маршруты, падрыхтаваныя невялікім снегаходам з больш свабоднай лыжнёй і трасамі, падрыхтаваныя непасрэдна лыжнікамі.";
 "rendering_attr_showLez_description" = "Паказваць на мапе зоны з нізкім узроўнем выкідаў. Не ўплывае на маршрутызацыю.";
 "rendering_attr_piste_difficulty_advanced_name" = "Высокая";
 "rendering_value_medium_name" = "Сярэдні";
@@ -1105,7 +1105,7 @@
 "rendering_attr_smoothness_very_horrible_name" = "Вельмі жудасная";
 "rendering_value_translucent_yellow_name" = "Празрысты жоўты";
 "routing_attr_relief_smoothness_factor_hills_name" = "Гарысты";
-"routing_attr_freeride_policy_description" = "Freeridesі offpiste - неафіцыйныя маршруты і праходы. Як правіла, недагледжаныя, неразмечаныя, не асвятляюцца ўвечары. Будзьце вельмі ўважлівымі.";
+"routing_attr_freeride_policy_description" = "Freerides і offpiste - неафіцыйныя маршруты і праходы. Як правіла, недагледжаныя, неразмечаныя, не асвятляюцца ўвечары. Будзьце вельмі ўважлівымі.";
 "routing_attr_avoid_subway_name" = "Без метро";
 "routing_attr_avoid_train_name" = "Без цягнікоў";
 "rendering_attr_currentTrackColor_name" = "Колер GPX";
@@ -1125,7 +1125,7 @@
 "rendering_attr_transportStops_name" = "Прыпынкі транспарту";
 "rendering_attr_noPolygons_description" = "Адлюстроўваць толькі контуры, без залівання.";
 "rendering_attr_highway_class_footway_name" = "Ходнік";
-"rendering_attr_highway_class_track_grade1_name" = "1клас";
+"rendering_attr_highway_class_track_grade1_name" = "1 клас";
 "routing_attr_avoid_borders_description" = "Пазбягаць перасячэння нацыянальных межаў";
 "rendering_attr_contourWidth_name" = "Таўшчыня гарызанталяў";
 "routing_attr_avoid_toll_name" = "Без платных дарог";
@@ -1150,7 +1150,7 @@
 "routing_attr_avoid_ferries_name" = "Без паромных перапраў";
 "rendering_attr_showSurfaces_name" = "Адлюстроўваць тып пакрыцця";
 "rendering_attr_surface_salt_name" = "Соль";
-"rendering_attr_highway_class_track_grade4_name" = "4клас";
+"rendering_attr_highway_class_track_grade4_name" = "4 клас";
 "rendering_attr_surface_fine_gravel_name" = "Шматпластовы жвір";
 "rendering_value_translucent_pink_name" = "Паўпразрысты ружовы";
 "routing_attr_no_new_routing_name" = "Без правілаў маршрутызацыі v1.9";
@@ -1198,11 +1198,11 @@
 "routing_attr_relief_smoothness_factor_name" = "Абраць перасечанасць мясцовасці";
 "rendering_attr_surface_mud_name" = "Іл";
 "rendering_attr_shareTaxiRoutes_name" = "Маршрутныя таксі";
-"rendering_attr_highway_class_track_grade2_name" = "2клас";
+"rendering_attr_highway_class_track_grade2_name" = "2 клас";
 "routing_attr_width_description" = "Увядзіце шырыню транспартнага сродку для ўліку пры разліку маршруту.";
 "routing_attr_avoid_motorway_name" = "Без аўтамагістраляў";
 "rendering_value_translucent_purple_name" = "Празрысты фіялетавы";
-"rendering_attr_highway_class_track_grade5_name" = "5клас";
+"rendering_attr_highway_class_track_grade5_name" = "5 клас";
 "rendering_value_car_name" = "Аўтамабіль";
 "rendering_attr_pisteGrooming_name" = "Дагляд трасы";
 "rendering_attr_surface_unpaved_name" = "Без пакрыцця";
@@ -1314,7 +1314,7 @@
 "ui_customization" = "Наладжванне інтэрфейсу";
 "profile_appearance_descr" = "Значок, колер і назва";
 "profile_settings" = "Налады профілю";
-"select_base_profile_dialog_message" = "Стварыце свой профіль на аснове аднаго з базавых профіляў - гэта будзе вызначаць асноўныя параметры, такія як віджэты, адзінкі вымярэння хуткасці і адлегласці. Гэтатыповыя профілі праграмы, якія разам з прыкладамі профіляў карыстальніка можна пашырыць да:";
+"select_base_profile_dialog_message" = "Стварыце свой профіль на аснове аднаго з базавых профіляў - гэта будзе вызначаць асноўныя параметры, такія як віджэты, адзінкі вымярэння хуткасці і адлегласці. Гэта тыповыя профілі праграмы, якія разам з прыкладамі профіляў карыстальніка можна пашырыць да:";
 "profile_alert_delete_msg" = "Выдаліць профіль \"%@\"";
 "copy_from_other_profile_descr" = "Вы можаце скапіяваць усе налады з любога профілю ў абраны профіль: ";
 "create_profile" = "Стварыць профіль";
@@ -1615,8 +1615,8 @@
 "srtm_plugin_description" = "Звесткі пра мясцовасць (контурныя лініі, рэльеф, схілы) дапамогуць вам візуальна ацаніць рэльеф, навігацыю і многае іншае. Тапаграфічныя звесткі на мапе можна паказаць зацяненнем схілаў, контурнымі лініямі і колерам пакатасці. \n \n Базавыя даныя ўзятыя з SRTM і ASTER. \n \n Працягнуць чытанне на %@.";
 "osm_editing_plugin_description" = "Дапамагаайце паляпшаць OpenStreetMap - глабальную супольнасць, якая падтрымлівае поўную мапу свету і падае даныя з адкрытым зыходным кодам любому карыстальніку. \n \n Вы можаце знайсці інструкцыі па рэдагаванні мапы на нашым сайце %@.";
 "product_desc_ext_trip_planning" = "Убудова для планавання паездкі дазваляе стварыць паездку на мапе, захаваць яе, вымераць адлегласць паміж пунктамі, звязанымі прамымі лініямі і г. д. Яна створаная для папярэдняга планавання паездкі, а не для грунтоўнай пабудовы маршруту.";
-"record_plugin_description" = "Запісвайце свае паездкі або трэнінгі і аналізуйце даныя па хуткасці, колькасці уздымаў і спускаў, профілю вышыні і г.д. Запісаныя сляды можна архіваваць, дзяліцца зсябрамі, рэдагаваць і апрацоўваць. \n \nБольш падрабязна %@.";
-"plugin_ski_descr" = "Патрэбна для навігацыі ў месцах для зімовых відаў спорту. Аглядайце лыжныя трасы, адзнакі пад\'ёмнікаў і каляровыя лініі, якія паказваюць складанасць кожнай трасы.Для выкарыстання пасля ўключэння перайдзіце ў раздзел наладжвання мапы і абярыце тып мапы \"Зімовы/лыжны\".";
+"record_plugin_description" = "Запісвайце свае паездкі або трэнінгі і аналізуйце даныя па хуткасці, колькасці уздымаў і спускаў, профілю вышыні і г.д. Запісаныя сляды можна архіваваць, дзяліцца з сябрамі, рэдагаваць і апрацоўваць. \n \nБольш падрабязна %@.";
+"plugin_ski_descr" = "Патрэбна для навігацыі ў месцах для зімовых відаў спорту. Аглядайце лыжныя трасы, адзнакі пад\'ёмнікаў і каляровыя лініі, якія паказваюць складанасць кожнай трасы. Для выкарыстання пасля ўключэння перайдзіце ў раздзел наладжвання мапы і абярыце тып мапы \"Зімовы/лыжны\".";
 "settings_item_read_error" = "Немагчыма прачытаць з \"%@\".";
 "vessel_width_limit_description" = "Вызначце шырыню судна, каб пазбягаць вузкіх мастоў";
 "vessel_height_limit_description" = "Пазначце вышыню судна, каб пазбегнуць нізкіх мастоў. Звярніце ўвагу, што калі мост развадны, то будзе выкарыстоўвацца яго вышыня ў адкрытым стане.";
@@ -1634,13 +1634,13 @@
 "subscribe_email_desc" = "Падпішыцеся на нашу паштовую рассылку аб зніжках і атрымайце 3 дадатковыя мапы!";
 "daily_map_updates" = "Штогадзінныя абнаўленні мапаў";
 "monthly_map_updates" = "Штомесячныя абнаўленні мапаў";
-"get_osmand_live" = "Атрымайце OsmAnd Live, каб разблакаваць усе функцыі: штодзённыя абнаўленні мапаў з неабмежаванымі спампоўваннямі, усе платныя і бясплатныя ўбудовы, Вікіпедыю, Вікігід ішмат іншага.";
-"free_version_message" = "%@мап для спампоўкі або абнаўлення.";
+"get_osmand_live" = "Атрымайце OsmAnd Live, каб разблакаваць усе функцыі: штодзённыя абнаўленні мапаў з неабмежаванымі спампоўваннямі, усе платныя і бясплатныя ўбудовы, Вікіпедыю, Вікігід і шмат іншага.";
+"free_version_message" = "%@ мап для спампоўкі або абнаўлення.";
 "osm_live_payment_contribute_descr" = "Ахвяраванні дапамагаюць развіваць OpenStreetMap.";
 "default_price_currency_format" = "%.2f %@";
 "osm_live_payment_current_subscription" = "Дзейная падпіска";
 "osm_live_payment_discount_descr" = "Ашчада %@";
-"osm_live_payment_month_cost_descr_ex" = "%.2f %@ /месяц";
+"osm_live_payment_month_cost_descr_ex" = "%.2f %@ / месяц";
 "osm_live_payment_annual_title" = "Штогод";
 "osm_live_payment_3_months_title" = "Раз на тры месяцы";
 "osm_live_payment_monthly_title" = "Штомесячна";
@@ -1717,13 +1717,13 @@
 "index_name_antarctica" = "Антарктыда";
 "product_desc_osm_editing" = "Уносце змены ў OpenStreetMap непасрэдна з OsmAnd";
 "osm_editing_plugin_name" = "Рэдагаванне OpenStreetMap";
-"osmand_parking_plugin_description" = "Адзначце, дзе прыпаркаваны ваш аўтамабіль, і пазначце ў календары, калі скончыцца тэрмін дзеяння паркавання. Каб стварыць адзнаку, абярыце месца на мапе, перайдзіцеў раздзел \"Дзеянні\" і націсніце \"Дадаць паркоўку\".";
+"osmand_parking_plugin_description" = "Адзначце, дзе прыпаркаваны ваш аўтамабіль, і пазначце ў календары, калі скончыцца тэрмін дзеяння паркавання. Каб стварыць адзнаку, абярыце месца на мапе, перайдзіце ў раздзел \"Дзеянні\" і націсніце \"Дадаць паркоўку\".";
 "plugin_nautical_descr" = "Узбагачае вашу мапу звесткамі пра маршруты плавання, маякі, небяспечных зонах, зонах з абмежаваннямі на плаванне і г.д. Каб пачаць выкарыстоўваць, спампуйце адпаведныя марскія мапы і ўключыце стыль \"Марская мапа\" ў раздзеле \"Наладзіць мапу\". \n \n Працягнуць чытанне на %@.";
 "trip_hint" = "Увядзіце назву следу";
 "trip_name" = "Назва следу";
 "help_contact_us" = "Звязацца з намі";
 "help_legend_descr" = "Даведка па знаках мапы";
-"mapillary_item" = "OsmAndі Mapillary";
+"mapillary_item" = "OsmAnd і Mapillary";
 "help_travel" = "Падарожжы (Wikipedia і Wikivoyage)";
 "subscription_osmandlive_item" = "Падпіска - OsmAnd Live";
 "osmand_purchases_item" = "Куплі OsmAnd";
@@ -2077,7 +2077,7 @@
 "lang_it" = "Італьянская";
 "lang_cs" = "Чэшская";
 "lang_et" = "Эстонская";
-"srtm_download_list_help_message" = "OsmAndзабяспечвае даныя контурных ліній у метрах і футах. Для змянення фармату вам будзе неабходна паўторна загрузіць файл.";
+"srtm_download_list_help_message" = "OsmAnd забяспечвае даныя контурных ліній у метрах і футах. Для змянення фармату вам будзе неабходна паўторна загрузіць файл.";
 "routeInfo_smoothness_description" = "Класіфікацыя прыдатнасці дарогі/пешаходнай дарожкі для колавых транспартных сродкаў, у прыватнасці, адносна роўнасці/раўнамернасці паверхні.";
 "routeInfo_tracktype_description" = "Расфарбуйце трасу або след паводле тыпу паверхні. Звычайна ўжываецца, калі дарожная сетка ў асноўным грунтовая.";
 "routing_attr_only_permitted_ways_description" = "Выкарыстоўвайце толькі выразна дазволеныя шляхі (дарожкі, сцежкі і г. д.).";
@@ -2187,7 +2187,7 @@
 "nautical_depth" = "Марскія глыбіні";
 "cubic_m" = "м³";
 "shared_string_purchased" = "Набыта";
-"purchases_feature_desc_hourly_map_updates" = "Атрымайце доступ да больш частых абнаўленняў мапаў. Штогадзінныя, штодзённыя або штотыднёвыя абнаўленні. Абнаўленні спампоўваюцца паступова, толькі для змененыхабласцей.";
+"purchases_feature_desc_hourly_map_updates" = "Атрымайце доступ да больш частых абнаўленняў мапаў. Штогадзінныя, штодзённыя або штотыднёвыя абнаўленні. Абнаўленні спампоўваюцца паступова, толькі для змененых абласцей.";
 "rendering_attr_showLightRailRoutes_name" = "Маршруты гарадскога рэйкавага транспарту";
 "monthly_subscription" = "Штомесячная падпіска";
 "copy_to_map_favorites" = "Скапіяваць ва ўлюбёныя";
@@ -2299,7 +2299,7 @@
 "gpx_upload_trackable_visibility_descr" = "\"Можна адсачыць\" азначае, што след не з\'явіцца ў любым агульнадаступным спісе, але яго кропкі (якія не могуць быць непасрэдна звязаныя з вамі) адпраўляюцца праз агульнадаступны API GPS.";
 "route_preferred_terrain_less_hilly" = "Больш кароткія, менш узгорыстыя маршруты.";
 "map_settings_clear_raster_cache" = "Ачысціць растравыя пліткі";
-"gpx_upload_public_visibility_descr" = "\"Публічны\" азначае, што след публічна адлюстроўваецца ў вашых слядах і ў агульнадаступных спісах слядоў, а таксама ў агульнадаступным спісе слядоў з пазнакамі часуў неапрацаваным выглядзе. Даныя з API, не спасылаюцца на вашу старонку слядоў. Пазнакі часу недаступныя праз агульнадаступны API GPS і не размяшчаюцца ў храналагічным парадку.";
+"gpx_upload_public_visibility_descr" = "\"Публічны\" азначае, што след публічна адлюстроўваецца ў вашых слядах і ў агульнадаступных спісах слядоў, а таксама ў агульнадаступным спісе слядоў з пазнакамі часу ў неапрацаваным выглядзе. Даныя з API, не спасылаюцца на вашу старонку слядоў. Пазнакі часу недаступныя праз агульнадаступны API GPS і не размяшчаюцца ў храналагічным парадку.";
 "gpx_upload_identifiable_visibility_descr" = "\"Можна ідэнтыфікаваць\" азначае, што след будзе публічна адлюстроўвацца ў вашых слядах і ў агульнадаступных спісах слядоў. Гэта азначае, што іншыя карыстальнікі змогуць спампаваць неапрацаваны след і звязаць яго з вашым імем карыстальніка. Агульнадаступныя даныя следу з GPS API, якія абслугоўваюцца з дапамогай API кропак следу, будуць спасылацца на пачатковую старонку следу.";
 "gpx_import_already_exists_short" = "Указаны файл следу ўжо існуе ў спісе.";
 "routing_attr_hazmat_category_no_restrictions_name" = "A (Без абмежаванняў)";
@@ -2318,7 +2318,7 @@
 "backup_and_restore" = "Рэзервовае капіяванне і аднаўленне";
 "navigate_point_format_unknown" = "Невядомы фармат";
 "approximate_file_size" = "Прыблізны памер файла";
-"mgrs_format_descr" = "OsmAndвыкарыстоўвае MGRS, які падобны да фармату UTM NATO.";
+"mgrs_format_descr" = "OsmAnd выкарыстоўвае MGRS, які падобны да фармату UTM NATO.";
 "move_point_descr" = "Каб змяніць месцазнаходжанне гэтай кропкі перамясціце мапу.";
 "add_point_after" = "Дадаць пункт пасля";
 "trim_before" = "Абрэзаць перад гэтай кропкай";
@@ -2328,7 +2328,7 @@
 "screen_settings_weather_toolbar" = "Панэль інструментаў надвор'я";
 "lang_ckb" = "Курдская (цэнтральная)";
 "ltr_or_rtl_combine_via_dash" = "%@ — %@";
-"checking_for_duplicate_description" = "OsmAndправярае %@ на дублікаты існых элементаў праграмы. \n \nГэта можа заняць пэўны час.";
+"checking_for_duplicate_description" = "OsmAnd правярае %@ на дублікаты існых элементаў праграмы. \n \nГэта можа заняць пэўны час.";
 "preparing_file" = "Падрыхтоўка файла";
 "custom_plugins" = "Карыстальніцкія ўбудовы";
 "checking_for_duplicates" = "Праверка на наяўнасць дублікатаў...";
@@ -2362,7 +2362,7 @@
 "shared_string_angle_param" = "Вугал: %@°";
 "upload_local_version" = "Адправіць лакальную версію";
 "are_you_sure" = "Вы ўпэўненыя?";
-"duration_ago" = "%@таму";
+"duration_ago" = "%@ таму";
 "osmand_cloud_create_account_descr" = "Калі ласка, увядзіце свой адрас электроннай пошты, на яго будзе адпраўлены код праверкі, \nі ўсе вашы даныя будуць звязаныя з ім.";
 "backup_data" = "Рэзервовае капіяванне даных";
 "quick_action_showhide_mapillary_descr" = "Пераключальнік для паказу альбо хавання пласта Mapillary.";
@@ -2383,7 +2383,7 @@
 "co2_mission" = "Выкіды CO2";
 "download_all" = "Спампаваць усё";
 "login_open_street_map_org" = "Увайсці ў OpenStreetMap.org";
-"ltr_or_rtl_combine_via_slash" = "%@ / %@";
+"ltr_or_rtl_combine_via_slash" = "%@/%@";
 "routing_attr_avoid_tunnels_description" = "Пазбягаць тунэляў";
 "shared_string_added" = "Дададзена";
 "shared_string_not_included" = "Не ўключае";
@@ -2526,7 +2526,7 @@
 "speed_cameras_alert" = "Апавяшчэнні пра камеры кантролю хуткасці ў некаторых краінах забароненыя законам.";
 "lang_zh-Hant" = "Кітайская (Традыцыйная)";
 "privacy_and_security" = "Прыватнасць і бяспека";
-"speed_camera_pois" = "POIкамер кантролю хуткасці";
+"speed_camera_pois" = "POI камер кантролю хуткасці";
 "uninstall_speed_cameras" = "Выдаліць камеры кантролю хуткасці";
 "icon_group_service" = "Паслугі";
 "disable_vertex_hillshade_3d" = "Адключыць цень вяршынь ў 3D";
@@ -2630,12 +2630,12 @@
 "map_2d_mode_action" = "Двухмерны рэжым";
 "map_orientation_portrait" = "Вертыкальная";
 "free_account" = "Бясплатны ўліковы запіс";
-"time_to_destination_widget_desc" = "Віджэт паказвае \"Час прыбыцця\" або \"Час да прыбыцця\" да апошняга пункта прызначэння. Час пастаянна абнаўляецца падчас навігацыі і адпавядае часу руху ад бягучагамесцазнаходжання.";
+"time_to_destination_widget_desc" = "Віджэт паказвае \"Час прыбыцця\" або \"Час да прыбыцця\" да апошняга пункта прызначэння. Час пастаянна абнаўляецца падчас навігацыі і адпавядае часу руху ад бягучага месцазнаходжання.";
 "wiki_article_search_text" = "Пошук адпаведнага артыкула вікіпедыі";
 "parking_widget_desc" = "Віджэт, які паказвае адлегласць ад сярэдзіны экрана да паркоўкі.";
 "map_widget_trip_recording_distance" = "Адлегласць";
 "map_widget_sunrise_desc" = "Паказвае час ўзыходу сонца або час, які застаўся да ўзыходу сонца.";
-"verify_account_deletion_descr" = "Нам трэба спраўдзіць ваш уліковы запіс перад яго выдаленнем. \n \nКалі ласка, увядзіце адрас электроннай пошты, пад якім вы зарэгістраваліся. На яго будзе адпраўленыаднаразовы пароль для наступнага кроку.";
+"verify_account_deletion_descr" = "Нам трэба спраўдзіць ваш уліковы запіс перад яго выдаленнем. \n \nКалі ласка, увядзіце адрас электроннай пошты, пад якім вы зарэгістраваліся. На яго будзе адпраўлены аднаразовы пароль для наступнага кроку.";
 "average_speed_widget_desc" = "Паказвае сярэднюю хуткасць бягучай паездкі.";
 "newest_date_first" = "Спачатку найноўшыя";
 "announcement_time_off_route" = "Па-за маршрутам";
@@ -2680,7 +2680,7 @@
 "manage_subscriptions" = "Кіраванне падпіскамі.";
 "start_recording" = "Пачаць запіс";
 "quick_action_map_center_widget_descr" = "Пераключальнік для паказу або хавання віджэта цэнтра мапы.";
-"offline_wikivoyage" = "Wikivoyageпа-за сецівам";
+"offline_wikivoyage" = "Wikivoyage па-за сецівам";
 "map_widget_altitude_map_center_desc" = "Паказвае вышыню над узроўнем мора для цэнтра мапы.";
 "delete_folder" = "Выдаліць папку";
 "activity_type_racing_name" = "Гонка";
@@ -2699,7 +2699,7 @@
 "shared_string_symbol" = "Сімвал";
 "activity_type_running_name" = "Бег";
 "enter_new_name" = "Увядзіце новую назву";
-"ant_plus_bluetooth_off" = "Bluetoothадключаны";
+"ant_plus_bluetooth_off" = "Bluetooth адключаны";
 "shared_string_external" = "Вонкавы";
 "get_osmand_cloud" = "Атрымаць OsmAnd Cloud";
 "search_history" = "Гісторыя пошуку";
@@ -2800,7 +2800,7 @@
 "external_device_characteristic_cadence" = "Хуткасць кручэння";
 "app_mode_moped" = "Мапед";
 "global_settings" = "Агульныя налады";
-"shared_string_relief_3d" = "3Dрэльеф";
+"shared_string_relief_3d" = "3D рэльеф";
 "deleting_complete" = "Выдаленне завершана";
 "ble_search_again" = "Шукаць зноў";
 "weather_widget_group_desc" = "Набор віджэтаў, якія паказваюць разнастайную інфармацыю пра надвор\'е.";
@@ -2870,3 +2870,6 @@
 "shared_string_action" = "Дзеянне";
 "download_srtm_maps" = "Контурныя лініі";
 "shared_string_show" = "Паказаць";
+"show_along_the_route" = "Паказваць уздоўж маршруту";
+"quick_action_toggle_preference" = "Пераключальнік для змены параметраў.";
+"shared_string_local" = "Спампаваныя";

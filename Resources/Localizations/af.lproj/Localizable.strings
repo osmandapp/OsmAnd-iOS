@@ -89,7 +89,7 @@
 "simulate_routing_descr" = "Simulate your position using a calculated route";
 "select_avoid_descr" = "Select roads you want to avoid during navigation. You can either select a road on the map or choose a type from the list below.";
 "no_active_route" = "No active route";
-"day_night_info_description" = "Sonopkoms : %@↵\nSonsondergang : %@";
+"day_night_info_description" = "Sonopkoms : %@ ↵\nSonsondergang : %@";
 "day_night_info" = "Dag/nag inligting";
 "daynight_mode_auto" = "sonsop/sonsonder";
 "route_simulation" = "Route simulation";
@@ -355,7 +355,7 @@
 "use_displayed_track_for_navigation" = "Wil jy die aangetoonde spoor gebruik vir navigasie?";
 "previous_route" = "Previous route";
 "shared_string_ellipsis" = "…";
-"shared_string_select_on_map" = "Kies op kaart…";
+"shared_string_select_on_map" = "Kies op kaart …";
 "selected_roads" = "Selected roads";
 "shared_string_my_location" = "My Position";
 "route_descr_select_destination" = "Kies bestemming";
@@ -368,7 +368,7 @@
 "lon" = "Lon";
 "error_calculating_route" = "Fout tydens roeteberekening";
 "route_calc_progress" = "Calculating: %d%%";
-"internet_connection_required_for_online_route" = "\'n Aanlyn navigasie diens is gekies, maar geen internetverbinding is beskikbaarnie.";
+"internet_connection_required_for_online_route" = "\'n Aanlyn navigasie diens is gekies, maar geen internetverbinding is beskikbaar nie.";
 "empty_route_calculated" = "Fout: Berekende roete is leeg";
 "destination_point" = "Bestemming %@";
 "intermediate_point" = "Oorgangspunt %@";
@@ -411,7 +411,7 @@
 "driving_region_japan" = "Japan";
 "driving_region_us" = "Verenigde State van Amerika";
 "driving_region_canada" = "Kanada";
-"driving_region_europe_asia" = "Europa&Asië";
+"driving_region_europe_asia" = "Europa & Asië";
 "driving_region_australia" = "Australia";
 "left_side_navigation" = "Linkerhand bestuur";
 "right_side_navigation" = "Right-hand driving";
@@ -1358,7 +1358,7 @@
 "osm_edit_show_on_map" = "Show modification on the map";
 "osm_edit_show_on_map_descr" = "Open the map centered on this point";
 "shared_string_without_name" = "Without name";
-"local_openstreetmap_uploading" = "Besig om op te laai…";
+"local_openstreetmap_uploading" = "Besig om op te laai …";
 "osm_upload_complete" = "Upload complete";
 "osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
 "save_poi_without_poi_type_message" = "Do you want to save POI without type?";
@@ -1738,7 +1738,7 @@
 "preferred_languages" = "Preferred languages";
 "srtm_plugin_name" = "Kontoerlyn inlasmodule";
 "product_desc_srtm" = "Visual assessment of the shape of the land surface";
-"srtm_plugin_description" = "Vergemoontlik dei aflaai van aflyn kontoerlyne en heuwelsakdus (\'Instellings\'->\'Inligtingsbestuur\' ->\'Aflaai\' ->Kies verlangde kaart-tipe).";
+"srtm_plugin_description" = "Vergemoontlik dei aflaai van aflyn kontoerlyne en heuwelsakdus (\'Instellings\'-> \'Inligtingsbestuur\' -> \'Aflaai\' -> Kies verlangde kaart-tipe).";
 "wikivoyage_travel_guide" = "Travel Guides";
 "start_editing_card_image_text" = "The free worldwide travel guide anyone can edit.";
 "wikivoyage_travel_guide_descr" = "Guides to the most interesting places on the planet, inside OsmAnd, without a connection to the Internet.";
@@ -2708,7 +2708,7 @@
 "map_orientation_portrait" = "Portret";
 "network" = "Netwerk";
 "map_orientation_default" = "Dieselfde as toestel";
-"map_settings_topography" = "Kontoerlyne";
+"map_settings_topography" = "Kontoer lyne inligting";
 "map_orientation_landscape" = "Landskap";
 "general_settings" = "Algemene instellings";
 "short_min" = "m";
@@ -2722,6 +2722,6 @@
 "shared_string_bottom" = "Onder";
 "edit_tilesource_minzoom" = "Min vergroting";
 "map_source" = "Kaartbron";
-"shared_string_favorite" = "Gunsteling…";
+"shared_string_favorite" = "Gunsteling …";
 "shared_string_favorites" = "Gunstelinge";
 "download_srtm_maps" = "Kontoerlyne";

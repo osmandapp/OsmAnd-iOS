@@ -258,9 +258,9 @@
 "wake_on_voice_descr" = "Avaa laitteen näyttö (jos suljettu) kun lähestytään käännöstä.";
 "voice_pref_title" = "Ääni";
 "voice_provider" = "Ääniohjaus";
-"voice_provider_descr" = "Valitseääniohjaus navigaatioon.";
+"voice_provider_descr" = "Valitse ääniohjaus navigaatioon.";
 "choose_audio_stream" = "Ääniohjauksen tuloste";
-"choose_audio_stream_descr" = "Valitse kaiutinääniohjaukselle.";
+"choose_audio_stream_descr" = "Valitse kaiutin ääniohjaukselle.";
 "use_osm_live_routing" = "OsmAnd Live -navigointi";
 "osm_live_routing_descr" = "Use OsmAnd Live updates for navigation";
 "select_nav_profile_dialog_message" = "\"Navigointityyppi\" määrittää, miten reitit lasketaan. Voit valita offline- ja online-reititysmoottoreiden väliltä.";
@@ -444,7 +444,7 @@
 "shared_string_from" = "lähtien";
 "shared_string_time" = "Aika";
 "time_of_day" = "Vuorokaudenaika";
-"shared_string_distance" = "Etäisyys";
+"shared_string_distance" = "Matka";
 "retry" = "Yritä uudelleen";
 "shared_string_enabled" = "Käytössä";
 "shared_string_start_date" = "Start date";
@@ -660,13 +660,13 @@
 "shared_string_appearance" = "Ulkoasu";
 "map_settings_line_density_slowdown_warning" = "High line density may slowdown map rendering";
 "map_settings_available_srtm_maps_descr" = "Additional maps are needed to view Hillshade on the map";
-"settings_app_theme" = "Sovellusteema";
+"settings_app_theme" = "Sovelluksen teema";
 "light_theme" = "Vaalea";
 "do_not_rotate" = "Älä kierrä";
 "allow_3D_view" = "2.5D-näkymä";
 "units_of_speed" = "Nopeuden yksiköt";
 "angular_measurment_units" = "Kulmamittayksiköt";
-"units_and_formats" = "Yksiköt&muotoilut";
+"units_and_formats" = "Yksiköt & muotoilut";
 "device_settings" = "Laiteasetukset";
 "osmand_settings" = "OsmAnd-asetukset";
 "global_settings_descr" = "Vaikuttaa koko sovellukseen.";
@@ -1146,7 +1146,7 @@
 "quick_action_switch_night_mode" = "Night mode";
 "quick_action_switch_day_mode" = "Day mode";
 "quick_action_navigation_voice_on" = "Mykistä ääni";
-"quick_action_navigation_voice_off" = "Poistaäänen mykistys";
+"quick_action_navigation_voice_off" = "Poista äänen mykistys";
 "show_hide_gpx" = "Show/hide tracks";
 "show_gpx" = "Jäljet";
 "hide_gpx" = "Hide track";
@@ -1394,7 +1394,7 @@
 "purchases_feature_desc_wikipedia" = "Tutustu Wikipediaan offline-tilassa. Artikkelit on jaettu maittain ja alueittain, saatavilla kaikilla kielillä.";
 "srtm_plugin_name" = "Korkeuskäyrät";
 "product_desc_srtm" = "Display of contour lines";
-"srtm_plugin_description" = "Tämä lisäosa tarjoaa korkeuskäyräpeitteen ja (kohokuva) mäkivarjostustason näytettäväksi OsmAnd offline-karttojen päällä. Tätä toiminnallisuutta arvostavat paljon urheilijat, retkeilijät, vuoristoseikkailijat, ja ketkä tahansa maisemien ihailusta kiinnostuneet. \n \nMaailmanlaajuisettiedot (välillä 70° pohjoista ja 70° eteläistä) perustuu mittauksiin jotka on tehnyt SRTM (Shuttle Radar Topography Mission) ja ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), ja NASAn maapallontarkkailujärjestelmän lippulaivasatelliitti Terran mukana kulkeva kuvauslaite. ASTER on yhteistyö NASAn, Japanin talous-, kauppa ja teollisuusministeriön (METI), ja Japanin avaruusjärjestelmien (J-spacesystems) välillä.";
+"srtm_plugin_description" = "Tämä lisäosa tarjoaa korkeuskäyräpeitteen ja (kohokuva) mäkivarjostustason näytettäväksi OsmAnd offline-karttojen päällä. Tätä toiminnallisuutta arvostavat paljon urheilijat, retkeilijät, vuoristoseikkailijat, ja ketkä tahansa maisemien ihailusta kiinnostuneet. \n \nMaailmanlaajuiset tiedot (välillä 70° pohjoista ja 70° eteläistä) perustuu mittauksiin jotka on tehnyt SRTM (Shuttle Radar Topography Mission) ja ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), ja NASAn maapallontarkkailujärjestelmän lippulaivasatelliitti Terran mukana kulkeva kuvauslaite. ASTER on yhteistyö NASAn, Japanin talous-, kauppa ja teollisuusministeriön (METI), ja Japanin avaruusjärjestelmien (J-spacesystems) välillä.";
 "wikivoyage_travel_guide" = "Matkaoppaat";
 "start_editing_card_image_text" = "Ilmainen maailmanlaajuinen matkaopas, jota kuka tahansa voi muokata.";
 "wikivoyage_travel_guide_descr" = "Oppaita planeetan mielenkiintoisimpiin paikkoihin OsmAndin sisällä, ilman Internet-yhteyttä.";
@@ -1894,7 +1894,7 @@
 "routing_attr_avoid_train_description" = "Avoids trains";
 "routing_attr_avoid_shuttle_train_name" = "Ei liityntäjunaa";
 "rendering_attr_contourColorScheme_description" = "Korkeuskäyräviivojen väripaletti";
-"rendering_value_boldOutline_name" = "Tummennettuääriviiva";
+"rendering_value_boldOutline_name" = "Tummennettu ääriviiva";
 "routing_attr_avoid_toll_description" = "Vältä tietulleja";
 "rendering_attr_noPolygons_name" = "Monikulmiot";
 "rendering_attr_piste_difficulty_easy_name" = "Helppo";
@@ -2362,7 +2362,7 @@
 "verification_code_missing" = "En saanut vahvistuskoodia";
 "save_heading_descr" = "Tallenna kulkusuunta jokaiseen jälkipisteeseen tallennuksen aikana.";
 "simulate_your_location_gpx_descr" = "Simuloi sijaintiasi käyttäen tallennettua GPX jälkeä.";
-"ltr_or_rtl_combine_via_slash" = "%@ / %@";
+"ltr_or_rtl_combine_via_slash" = "%@/%@";
 "backup_delete_all_data" = "Poista kaikki minun tiedot";
 "rendering_attr_showFitnessTrails_description" = "Näytä kuntopolut";
 "shared_string_refresh" = "Päivitä";
@@ -2670,7 +2670,7 @@
 "lang_sr-Latn" = "Serbia (latinalaisin)";
 "visibility" = "Näkyvyys";
 "coordinates_format" = "Koordinaattien muoto";
-"announcement_time_descr" = "Eriäänikehotteiden ilmoitusten ajoitus riippuu kehotteen tyypistä, nykyisestä navigointinopeudesta ja oletusnavigointinopeudesta.";
+"announcement_time_descr" = "Eri äänikehotteiden ilmoitusten ajoitus riippuu kehotteen tyypistä, nykyisestä navigointinopeudesta ja oletusnavigointinopeudesta.";
 "my_places_no_tracks_title" = "Tyhjä kansio";
 "map_widget_gps_info" = "GPS tiedot";
 "troubleshooting" = "Vianmääritys";
@@ -2815,7 +2815,7 @@
 "shared_string_all_colors" = "Kaikki värit";
 "gitHub_discussion" = "GitHub-keskustelu";
 "open_issue_on_gitHub" = "Avaa ilmoitus GitHubissa";
-"help_article_troubleshooting_maps_data_name" = "Kartat&data";
+"help_article_troubleshooting_maps_data_name" = "Kartat & data";
 "ask_question_propose_features" = "Kysy kysymys, ehdota ominaisuuksia";
 "speedometer_description" = "Näyttää GPS-paikannuksen ilmoittaman nopeuden";
 "avoid_pt_types_descr" = "Valitse navigoinnissa vältettävät joukkoliikennetyypit:";
@@ -2886,3 +2886,14 @@
 "driving_region_uk" = "Yhdistynyt kuningaskunta ja vastaavat";
 "map_source" = "Kartan lähde";
 "shared_string_show" = "Näytä";
+"shared_string_all_icons" = "Kaikki kuvakkeet";
+"resting_position_icon_summary" = "Ikoni, joka näytetään kun olet paikallasi.";
+"view_angle" = "Kuvakulma";
+"shared_string_local" = "Asennetut";
+"navigation_position_icon_summary" = "Kuvake, joka näytetään navigoinnin tai siirtymisen aikana.";
+"location_radius_description" = "Näyttää ympyrän muotoisen alueen, joka kuvaa sijaintitietosi tarkkuutta";
+"show_along_the_route" = "Näytä reitin varrella";
+"navigation_position_icon" = "Navigoinnin sijainti-ikoni";
+"resting_position_icon" = "Lepoikoni";
+"profile_icon" = "Profiilikuvake";
+"location_radius" = "Sijaintikehä";

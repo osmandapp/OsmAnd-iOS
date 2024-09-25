@@ -51,21 +51,21 @@
 "new_destination_point_dialog" = "Artıq təyinat nöqtəsini seçmisiniz:";
 "replace_destination_point" = "Təyinat nöqtəsini əvəz et";
 "shared_string_current" = "Hazırkı";
-"make_as_start_point" = "Bunuçıxış nöqtəsi et";
+"make_as_start_point" = "Bunu çıxış nöqtəsi et";
 "keep_and_add_destination_point" = "Sonrakı təyinat olaraq əlavə et";
 "subsequent_dest_description" = "Təyinat nöqtəsini yuxarı daşı və yarat";
 "add_as_first_destination_point" = "İlk ara təyinat nöqtəsi olaraq əlavə et";
 "first_intermediate_dest_description" = "İlk dayanacaq əlavə edir";
 "add_as_last_destination_point" = "Son ara təyinat nöqtəsi olaraq əlavə et";
-"last_intermediate_dest_description" = "Ara dayanacaqəlavə edir";
-"show_poi_over_map" = "POIörtüyünü göstər";
+"last_intermediate_dest_description" = "Ara dayanacaq əlavə edir";
+"show_poi_over_map" = "POI örtüyünü göstər";
 "shared_string_search" = "Axtar";
 "address_search_desc" = "Ünvan axtar";
 "search_radius" = "Search radius";
 "shared_string_target_points" = "Təyinat nöqtələri";
 "search_radius_proximity" = "Within";
 "poi" = "POI";
-"search_more" = "Dahaçox axtar…";
+"search_more" = "Daha çox axtar…";
 "day_off_label" = "off";
 "open_from" = "Open from";
 "open_till" = "Open till";
@@ -167,10 +167,10 @@
 "map_widget_right" = "Sağ panel";
 "map_widget_left" = "Sol panel";
 "layer_map_appearance" = "Ekranı tənzimlə";
-"edit_profile_screen_options_subtitle" = "Profilüçün ekran seçimlərini seçin";
+"edit_profile_screen_options_subtitle" = "Profil üçün ekran seçimlərini seçin";
 "map_markers" = "Xəritə işarələri";
 "markers_history" = "İşarələr tarixçəsi";
-"confirm_usage_speed_cameras" = "Birçox ölkələrdə (Almaniya, Fransa, İtaliya və s.) sürət kamerası xəbərdarlıqlarının istifadəsi qanunsuzdur. Qanunu pozarsanız, OsmAnd heç bir məsuliyyət daşımır. Yalnız bu xüsusiyyətdən istifadəyə icazə varsa, “Bəli” düyməsinə toxunun.";
+"confirm_usage_speed_cameras" = "Bir çox ölkələrdə (Almaniya, Fransa, İtaliya və s.) sürət kamerası xəbərdarlıqlarının istifadəsi qanunsuzdur. Qanunu pozarsanız, OsmAnd heç bir məsuliyyət daşımır. Yalnız bu xüsusiyyətdən istifadəyə icazə varsa, “Bəli” düyməsinə toxunun.";
 "map_markers_empty" = "You have no active map markers";
 "tracks_empty" = "Your track list is empty";
 "favorites_empty" = "You have not saved any favorite points";
@@ -211,7 +211,7 @@
 "confirm_every_run" = "Hər dəfə soruş";
 "general_settings_2" = "Əsas parametrlər";
 "general_settings_descr" = "Proqramın ekran və ümumi parametrlərini tənzimləyin.";
-"routing_settings_descr" = "Naviqasiyaüçün seçimlər təyin edin.";
+"routing_settings_descr" = "Naviqasiya üçün seçimlər təyin edin.";
 "auto_zoom_none" = "Avto-miqyas yoxdur";
 "auto_zoom_close" = "İri plana";
 "auto_zoom_far" = "Orta plana";
@@ -265,7 +265,7 @@
 "wake_on_voice_descr" = "Döngəyə yaxınlaşdıqda cihazın ekranını yandır (sönülüdürsə).";
 "voice_pref_title" = "Səs";
 "voice_provider" = "Səsli bələdçi";
-"voice_provider_descr" = "Naviqasiyaüçün səsli bələdçini seçin.";
+"voice_provider_descr" = "Naviqasiya üçün səsli bələdçini seçin.";
 "choose_audio_stream" = "Səsli bələdçi çıxışı";
 "choose_audio_stream_descr" = "Səsli bələdçi üçün səsgücləndirici seçin.";
 "use_osm_live_routing" = "OsmAnd Live naviqasiya";
@@ -326,7 +326,7 @@
 "cancel_route" = "Marşrut ləğv edilsin\?";
 "route_is_too_long_v2" = "Uzun məsafələr üçün: 10 dəqiqə ərzində marşrut tapılmasa, ara təyinat nöqtələri əlavə edin.";
 "navigation_over_track" = "İz boyu naviqasiya başladılsın?";
-"use_displayed_track_for_navigation" = "Naviqasiyaüçün göstərilən iz istifadə edilsin?";
+"use_displayed_track_for_navigation" = "Naviqasiya üçün göstərilən iz istifadə edilsin?";
 "previous_route" = "Əvvəlki marşrut";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Xəritədə seç";
@@ -412,7 +412,7 @@
 "coords_search" = "Koordinatlarla axtar";
 "nearest_cities" = "Yaxındakı şəhərlər";
 "type_address" = "Ünvan yazın";
-"search_poi_category_hint" = "Axtarmaqüçün yazın";
+"search_poi_category_hint" = "Axtarmaq üçün yazın";
 "poi_categories" = "POI categories";
 "shared_string_search_history" = "Axtarış tarixçəsi";
 "track_coloring_solid" = "Bütöv";
@@ -540,7 +540,7 @@
 "fav_select" = "Please select favorites";
 "select_favorite" = "Select favorite";
 "group_properties" = "Group preoperties";
-"add_group" = "Qrupəlavə et";
+"add_group" = "Qrup əlavə et";
 "add_favorite" = "Add favorite";
 "name_and_descr" = "Name & description";
 "select_group" = "Qrup seçin";
@@ -1165,7 +1165,7 @@
 "shared_string_loading" = "Loading…";
 "osm_upload_failed_title" = "Upload failed";
 "osm_upload_failed_descr" = "Please check your login details and Internet connection and try again.";
-"exit_without_saving" = "Yadda saxlamadançıxılsın?";
+"exit_without_saving" = "Yadda saxlamadan çıxılsın?";
 "unsaved_changes_will_be_lost" = "Yadda saxlanmamış dəyişikliklər itəcək. Davam edilsin?";
 "osm_upload_no_internet" = "Please check your Internet connection and try again.";
 "osm_delete_confirmation_descr" = "Are you sure you want to delete this POI?";
@@ -1235,7 +1235,7 @@
 "osm_upload_complete" = "Upload complete";
 "osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
 "save_poi_without_poi_type_message" = "POI növ olmadan yadda saxlansın\?";
-"save_poi_too_many_uppercase" = "Addaçoxlu böyük hərflər var. Davam edilsin?";
+"save_poi_too_many_uppercase" = "Adda çoxlu böyük hərflər var. Davam edilsin?";
 "osm_editing_loading_poi" = "Loading POI information";
 "osm_editing_access_descr" = "You can view all your local edits and notes in %@. Already uploaded points are not listed in OsmAnd.";
 
@@ -1252,7 +1252,7 @@
 "mapillary_turn_on_widget_descr" = "This allows you to quickly contribute to Mapillary";
 "mapillary_menu_title_tile_cache" = "Tile cache";
 "shared_string_reload" = "Yenilə";
-"show_more" = "Dahaçox gör";
+"show_more" = "Daha çox gör";
 "mapil_reload_cache" = "Reload tiles to see the newest data";
 "filter_current_poiButton" = "Filtr";
 "mapil_filter_user_descr" = "Filter images by user";
@@ -1310,7 +1310,7 @@
 "add_destination" = "Add destination";
 "route_add_start_point" = "Çıxış nöqtəsi əlavə edin";
 "add_intermediate" = "Add intermediate point";
-"add_home" = "Evəlavə et";
+"add_home" = "Ev əlavə et";
 "add_work" = "İş əlavə et";
 "favorite_home_category" = "Ev";
 "work_button" = "İş";
@@ -1346,7 +1346,7 @@
 "quick_action_template_name" = "Template name";
 "quick_action_fav_name_descr" = "Ünvanı və ya yer adını istifadə etmək üçün boş saxlayın.";
 "quick_action_select_group" = "Select the group to save the favorite in.";
-"quick_action_add_category" = "Kateqoriyaəlavə et";
+"quick_action_add_category" = "Kateqoriya əlavə et";
 "quick_action_add_category_descr" = "You can select multiple POI categories.";
 "quick_action_show_poi_descr" = "Add one or more POI categories to be displayed on the map.";
 "quick_action_fill_params_alert" = "Please fill out the parameters first";
@@ -1397,7 +1397,7 @@
 "quick_action_remove_next_destination_descr" = "Marşrutunuzdakı növbəti təyinatı silir. Əgər bu son təyinatdırsa, naviqasiya dayanacaq.";
 "change_application_profile" = "Proqram profilini dəyiş";
 "select_application_profile" = "Select application profile";
-"shared_string_add_profile" = "Profiləlavə et";
+"shared_string_add_profile" = "Profil əlavə et";
 "quick_action_switch_profile_descr" = "Fəaliyyət düyməsi seçilmiş profillər arasında keçid edir.";
 "profile_type_user_string" = "İstifadəçi profili";
 "profile_type_osmand_string" = "OsmAnd profili";
@@ -1586,7 +1586,7 @@
 "preferred_languages" = "Preferred languages";
 "srtm_plugin_name" = "Kontur xətləri";
 "product_desc_srtm" = "Display of contour lines";
-"srtm_plugin_description" = "Bu qoşma OsmAnd-ın standart xəritələrinin üzərində həm kontur xəttinin, həm də (relyef) təpə kölgəsi örtüyünün göstərilməsini təmin edir. Bu funksionallıq idmançılar, piyada gəzənlər, səyahətçilər və landşaftın relyef quruluşu ilə maraqlanan hər kəs tərəfindənyüksək qiymətləndiriləcək. (Nəzərə alın ki, kontur xətti və/yaxud relyef məlumatları ayrıdır, qoşmanı aktivləşdirdikdən sonra əlavə endirmələr mümkündür.) \n \nQlobal məlumatlar (70° şimal və 70° cənub arasında) SRTM (Shuttle Radar Topography Mission) və NASA-nınYer Müşahidə Sisteminin qabaqcıl peyki olan Terra-nın göyərtəsində təsvir aləti olan ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer) tərəfindən ölçmələrə əsaslanır. ASTER – NASA, Yaponiyanın İqtisadiyyat, Ticarət və Sənaye Nazirliyi (METI) və Yaponiya Kosmik Sistemləri (J-spacesystems) arasında ortaq işdir.";
+"srtm_plugin_description" = "Bu qoşma OsmAnd-ın standart xəritələrinin üzərində həm kontur xəttinin, həm də (relyef) təpə kölgəsi örtüyünün göstərilməsini təmin edir. Bu funksionallıq idmançılar, piyada gəzənlər, səyahətçilər və landşaftın relyef quruluşu ilə maraqlanan hər kəs tərəfindən yüksək qiymətləndiriləcək. (Nəzərə alın ki, kontur xətti və/yaxud relyef məlumatları ayrıdır, qoşmanı aktivləşdirdikdən sonra əlavə endirmələr mümkündür.) \n \nQlobal məlumatlar (70° şimal və 70° cənub arasında) SRTM (Shuttle Radar Topography Mission) və NASA-nın Yer Müşahidə Sisteminin qabaqcıl peyki olan Terra-nın göyərtəsində təsvir aləti olan ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer) tərəfindən ölçmələrə əsaslanır. ASTER – NASA, Yaponiyanın İqtisadiyyat, Ticarət və Sənaye Nazirliyi (METI) və Yaponiya Kosmik Sistemləri (J-spacesystems) arasında ortaq işdir.";
 "wikivoyage_travel_guide" = "Səyahət Bələdçiləri";
 "start_editing_card_image_text" = "Pulsuz dünya səyahət bələdçisinə hər kəs düzəliş edə bilər.";
 "wikivoyage_travel_guide_descr" = "İnternet bağlantısı olmadan OsmAnd daxilində planetin ən maraqlı yerlərinə bələdçi.";
@@ -1776,7 +1776,7 @@
 "shared_string_select_all" = "Hamısını seç";
 "create_custom_poi" = "Xüsusi filtr yarat";
 "selected_categories" = "Seçilən kateqoriyalar";
-"new_filter_desc" = "Yeni filtrüçün ad daxil edin. Bu, sizin “Kateqoriyalar” bölmənizə əlavə olunur.";
+"new_filter_desc" = "Yeni filtr üçün ad daxil edin. Bu, sizin “Kateqoriyalar” bölmənizə əlavə olunur.";
 "rearrange_categories" = "Kateqoriyaları təşkil et";
 "visible_categories" = "Visible categories";
 "hidden_categories" = "Hidden categories";
@@ -1813,7 +1813,7 @@
 "city_type_neighbourhood" = "Ətrafında";
 "postcode" = "Poçt kodu";
 "show_something_on_map" = "%@-i xəritədə göstər";
-"search_POI_level_btn" = "Dahaçoxunu tap";
+"search_POI_level_btn" = "Daha çoxunu tap";
 "search_address_street" = "Küçə";
 "search_address_building_option" = "Bina";
 "shared_string_street_intersection" = "Street intersection";
@@ -2008,7 +2008,7 @@
 "rendering_attr_highway_class_steps_name" = "Addımlar";
 "routing_attr_avoid_tram_name" = "No trams";
 "rendering_attr_piste_type_downhill_name" = "Downhill";
-"rendering_attr_moreDetailed_name" = "Dahaçox detallar";
+"rendering_attr_moreDetailed_name" = "Daha çox detallar";
 "rendering_attr_piste_difficulty_undefined_name" = "Undefined";
 "routing_attr_allow_motorway_name" = "Avtomagistrallara icazə ver";
 "rendering_value_black_name" = "Qara";
@@ -2061,7 +2061,7 @@
 "rendering_attr_pisteGrooming_name" = "Piste grooming";
 "rendering_attr_noAdminboundaries_name" = "Sərhədlər";
 "rendering_attr_tracktype_grade3_name" = "Mostly solid";
-"rendering_attr_showSurfaces_name" = "Yolörtüyünü göstər";
+"rendering_attr_showSurfaces_name" = "Yol örtüyünü göstər";
 "routing_attr_allow_advanced_description" = "Difficult routes, with dangerous obstacles and steep sections.";
 "osm_notes" = "OSM qeydləri";
 "rendering_attr_hidePOILabels_name" = "POI adları";
@@ -2172,9 +2172,9 @@
 "routing_attr_width_name" = "En limiti";
 "routing_attr_avoid_train_name" = "No trains";
 "routing_attr_allow_motorway_description" = "Avtomagistrallara icazə verir.";
-"rendering_attr_hmRendered_name" = "Dahaçox xəritə detalı göstər";
+"rendering_attr_hmRendered_name" = "Daha çox xəritə detalı göstər";
 "rendering_attr_roadColors_name" = "Yol rəng sxemi";
-"weight_limit_description" = "Avtomobilinizinçəkisini göstərin, ağır avtomobillər üçün bəzi marşrut məhdudiyyətləri tətbiq oluna bilər.";
+"weight_limit_description" = "Avtomobilinizin çəkisini göstərin, ağır avtomobillər üçün bəzi marşrut məhdudiyyətləri tətbiq oluna bilər.";
 "height_limit_description" = "Avtomobilinizin hündürlüyünü göstərin, hündür avtomobillər üçün bəzi marşrut məhdudiyyətləri tətbiq oluna bilər.";
 "lenght_limit_description" = "Avtomobilinizin uzunluğunu göstərin, uzun avtomobillər üçün bəzi marşrut məhdudiyyətləri tətbiq oluna bilər.";
 "width_limit_description" = "Avtomobilinizin enini göstərin, enli avtomobillər üçün bəzi marşrut məhdudiyyətləri tətbiq oluna bilər.";
@@ -2235,7 +2235,7 @@
 "ios_release_4_0" = "• New! \"Add favorite\" screen with options to select the custom icon, color, and shape\n• Added new \"Coordinates widget\" with coordinates of the current location\n• Added ability to import custom user-defined plugins\n• Significantly extended the import/export functionality\n• Distance by tap moved from the Radius ruler into a separate option\n• Fixed CarPlay app freezes when iPhone screen is turned off\n• Plugins screen moved from the Maps & Resources to the main menu\n• Added Finnish localization\n• Fixed UI in landscape orientation for \"Plan a route\" screen\n• Added support for custom routing and rendering files\n• Fixed performance of markers direction line\n • Fixed issue with importing GPX files with uppercase extensions\n• Fixed issue with \"Follow track\" menu\n• Fixed import of OBF files\n";
 "ios_release_4_1" = "• Completely redesigned interaction with tracks: a new menu with charts, statistics, ability to change the appearance, coloring by speed, height and slope, and track selection on the map• New screen for searching by coordinates in different formats\n• Improved coordinate search in OLC format\n• New user-friendly menu for choosing languages to display Wikipedia articles on the map\n• Added ability to easily load maps of all regions of the country with a couple of clicks.\n• Added contour lines in feet (You need to download additional files)\n• Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n• New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n• Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
 "resend_verification_code" = "Yenidən göndər";
-"make_backup_descr" = "Bu cihazdaçoxlu dəyişikliklər var, zəhmət olmasa, məlumatları itirməmək üçün nüsxə yaradın.";
+"make_backup_descr" = "Bu cihazda çoxlu dəyişikliklər var, zəhmət olmasa, məlumatları itirməmək üçün nüsxə yaradın.";
 "customize_route_line" = "Marşrut xəttini fərdiləşdir";
 "backup_error_user_is_not_registered" = "Bu e-poçt ünvanı ilə qeydiyyatdan keçmiş istifadəçi yoxdur";
 "osmand_cloud" = "OsmAnd Cloud";
@@ -2245,7 +2245,7 @@
 "register_opr_create_new_account" = "Yeni hesab yarat";
 "cloud_email_already_registered" = "Bu e-poçt ünvanı artıq qeydiyyatdan keçib.";
 "backup_error_gzip_only_supported_upload" = "Fayl .gzip formatında göndərilməlidir";
-"backup_error_file_not_available" = "Fayləlçatan deyil";
+"backup_error_file_not_available" = "Fayl əlçatan deyil";
 "cloud_conflicts_descr" = "Serverdə daha yeni versiya saxlanıldığı üçün bəzi faylları serverə yükləmək mümkün olmadı.";
 "verify_email_address_descr" = "Təsdiq kodu %@ ünvanına göndərildi. Zəhmət olmasa, onu aşağıdakı sahəyə daxil edin.";
 "cloud_email_not_registered" = "Bu e-poçt ünvanı OsmAnd Cloud üçün qeydiyyatdan keçməyib";
@@ -2306,7 +2306,7 @@
 "continue_with" = "%@ ilə davam et";
 "purchases_feature_desc_osmand_cloud" = "Bütün OsmAnd məlumatlarını onlayn saxlamaq üçün OsmAnd Cloud əldə edin. Yenidən quraşdırdıqda məlumatları itirməyin. Bütün məlumatları asanlıqla nüsxələyin və bərpa edin.";
 "expired" = "Müddəti bitdi";
-"osmand_pro_tagline" = "Maksimum funksiyalarəldə edin";
+"osmand_pro_tagline" = "Maksimum funksiyalar əldə edin";
 "data_settings" = "Məlumatlar";
 "shared_string_delete_all" = "Hamısını sil";
 "restore_from_osmand_cloud" = "OsmAnd Cloud-dan bərpa et";
@@ -2350,7 +2350,7 @@
 "not_enough_contributions_descr" = "Limitsiz saatlıq xəritə yeniləmələrinə giriş əldə etmək üçün son iki ay ərzində %@ minimum %@ dəyişiklik tələb olunur.";
 "backup_pause_all" = "Hamısına fasilə ver";
 "shared_string_contributions" = "Töhfələr";
-"ltr_or_rtl_combine_via_slash" = "%@ / %@";
+"ltr_or_rtl_combine_via_slash" = "%@/%@";
 "shared_string_logout" = "Çıx";
 "shared_string_angle_param" = "Bucaq: %@°";
 "shared_string_added" = "Əlavə edildi";
@@ -2372,8 +2372,8 @@
 "mtb_imba_full" = "Beynəlxalq Dağ Velosipedi Assosiasiyası";
 "ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "download_all" = "Hamısını endir";
-"backup_and_restore" = "Nüsxələ&Bərpa et";
-"duration_ago" = "%@əvvəl";
+"backup_and_restore" = "Nüsxələ & Bərpa et";
+"duration_ago" = "%@ əvvəl";
 "shared_string_not_included" = "Daxil deyil";
 "compass_visible_if_map_rotated" = "Xəritə çevrildikdə görünən";
 "logout_from_osmand_cloud_decsr" = "Çıxış edilsin\? \nMəlumatların nüsxəsini çıxarmaq və ya bərpa etmək üçün yenidən daxil olmalısınız.";
@@ -2518,7 +2518,7 @@
 "map_widget_sunrise_sunset_time_left" = "Qalan vaxt";
 "shared_string_markers" = "İşarələr";
 "ltr_or_rtl_combine_via_comma" = "%@, %@";
-"default_appearance_desc" = "Qrupaəlavə edilmiş favorit nöqtələrə standart rəng, ikon və forma tətbiq olunacaq.";
+"default_appearance_desc" = "Qrupa əlavə edilmiş favorit nöqtələrə standart rəng, ikon və forma tətbiq olunacaq.";
 "shared_string_view" = "Bax";
 "map_widget_ant_heart_rate" = "Ürək döyüntüsü";
 "download_file" = "Faylı endir";
@@ -2565,3 +2565,6 @@
 "voices" = "Səsli göstərişlər";
 "download_srtm_maps" = "Kontur xətləri";
 "shared_string_show" = "Göstər";
+"show_along_the_route" = "Marşrut boyunca göstər";
+"quick_action_toggle_preference" = "Seçimi dəyişmək üçün düymə.";
+"shared_string_local" = "Yerli";

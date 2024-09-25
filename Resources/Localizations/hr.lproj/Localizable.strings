@@ -322,7 +322,7 @@
 "map_markers_other" = "Other markers";
 "directions_other" = "Other directions";
 "shared_string_turn" = "Turn";
-"stop_routing_confirm" = "Jeste li sigurni daželite zaustaviti navigaciju?";
+"stop_routing_confirm" = "Jeste li sigurni da želite zaustaviti navigaciju?";
 "cancel_route" = "Odbaci rutu";
 "route_is_too_long_v2" = "This route may be too long to calculate. Please add intermediate destinations if no result is found within 10 minutes.";
 "navigation_over_track" = "Počnite navigaciju uz stazu?";
@@ -776,7 +776,7 @@
 "lang_en_gb" = "English (United Kingdom)";
 "lang_eo" = "Esperanto";
 "lang_es" = "Španjolski";
-"lang_es_ar" = "Argentinskošpanjolski";
+"lang_es_ar" = "Argentinsko španjolski";
 "lang_es_us" = "Spanish (American)";
 "lang_et" = "Estonski";
 "lang_eu" = "Baskijski";
@@ -885,7 +885,7 @@
 "export_profile" = "Export";
 "shared_string_import" = "Uvezi";
 "create_profile" = "Create profile";
-"select_data_to_import" = "Odaberite podatke koježelite uvesti.";
+"select_data_to_import" = "Odaberite podatke koje želite uvesti.";
 "export_profile_select_descr" = "Select the data to be exported.";
 "selected_of" = "Selected - %d/%d";
 "nav_type_hint" = "Navigation type";
@@ -899,7 +899,7 @@
 "keep_both" = "Zadrzi oboje";
 "keep_both_desc" = "Imported items will be added with prefix";
 "replace_all" = "Zamijeni sve";
-"replace_all_desc" = "Trenutne stavke bitće zamijenjene stavkama iz datoteke";
+"replace_all_desc" = "Trenutne stavke bit će zamijenjene stavkama iz datoteke";
 "shared_string_profiles" = "Profili";
 "shared_string_quick_actions" = "Brze akcije";
 "shared_string_poi_types" = "POI types";
@@ -1231,7 +1231,7 @@
 "osm_edit_show_on_map" = "Show modification on the map";
 "osm_edit_show_on_map_descr" = "Open the map centered on this point";
 "shared_string_without_name" = "Without name";
-"local_openstreetmap_uploading" = "Prijenos…";
+"local_openstreetmap_uploading" = "Prijenos …";
 "osm_upload_complete" = "Upload complete";
 "osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
 "save_poi_without_poi_type_message" = "Do you want to save POI without type?";
@@ -1964,7 +1964,7 @@
 "rendering_attr_coloredBuildings_name" = "Obojane zgrade";
 "rendering_attr_piste_difficulty_advanced_name" = "Advanced";
 "routeInfo_road_types_name" = "Road types";
-"rendering_attr_showRoadMaps_description" = "Odredite kadće se prikazati samo cestovne karte:";
+"rendering_attr_showRoadMaps_description" = "Odredite kad će se prikazati samo cestovne karte:";
 "rendering_value_translucent_blue_name" = "Prozirna plava";
 "routing_attr_avoid_bus_description" = "Avoids buses and trolleybuses";
 "rendering_attr_hideOverground_name" = "Overground objects";
@@ -1972,7 +1972,7 @@
 "routeInfo_smoothness_name" = "Smoothness";
 "rendering_attr_highway_class_road_name" = "Road";
 "rendering_value_translucent_green_name" = "Prozirna Zelena";
-"rendering_value_translucent_yellow_name" = "Prozirnažuta";
+"rendering_value_translucent_yellow_name" = "Prozirna žuta";
 "rendering_attr_OSMMapperAssistant_name" = "OSM asistent za mapiranje";
 "routing_attr_avoid_borders_name" = "No border crossings";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Bojanje po okviru rute";
@@ -1984,7 +1984,7 @@
 "rendering_attr_contourDensity_name" = "Contour line density";
 "routing_attr_avoid_motorway_description" = "Izbjegavati autoceste";
 "routing_attr_avoid_motorway_name" = "Izbjegavati autoceste";
-"rendering_attr_hideWoodScrubs_name" = "Sakrijšume i šikare";
+"rendering_attr_hideWoodScrubs_name" = "Sakrij šume i šikare";
 "rendering_attr_surface_wood_name" = "Wood";
 "rendering_attr_smoothness_horrible_name" = "Horrible";
 "rendering_attr_smoothness_impassable_name" = "Impassable";
@@ -2016,7 +2016,7 @@
 "rendering_attr_hideBuildings_name" = "Sakrij zgrade";
 "routing_attr_max_num_changes_description" = "Specify upper limit of changes";
 "rendering_attr_winter_road_name" = "Winter road";
-"rendering_attr_tramTrainRoutes_name" = "Tramvajske iželjezničke rute";
+"rendering_attr_tramTrainRoutes_name" = "Tramvajske i željezničke rute";
 "rendering_attr_smoothness_intermediate_name" = "Intermediate";
 "rendering_attr_surface_snow_name" = "Snow";
 "rendering_attr_highway_class_cycleway_name" = "Cycleway";
@@ -2158,7 +2158,7 @@
 "routing_attr_prefer_unpaved_name" = "Prefer unpaved roads";
 "rendering_value_default_name" = "Zadano";
 "routing_attr_no_new_routing_name" = "No v1.9 routing rules";
-"rendering_attr_subwayMode_name" = "Podzemnaželjeznica";
+"rendering_attr_subwayMode_name" = "Podzemna željeznica";
 "rendering_attr_highway_class_motorway_name" = "Motorway";
 "rendering_value_brown_name" = "smeđa";
 "rendering_attr_hideIcons_name" = "POI icons";
@@ -2320,3 +2320,4 @@
 "map_source" = "Izvor karte";
 "download_srtm_maps" = "Obrisi linija";
 "shared_string_show" = "Prikaži";
+"shared_string_local" = "Lokalno";

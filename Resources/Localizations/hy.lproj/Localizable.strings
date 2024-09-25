@@ -24,7 +24,7 @@
 "get_discount_title" = "Ստացեք %d %@ at %@ off.";
 "get_free_trial_title" = "Start your %d %@ free trial.";
 "get_discount_short_descr" = "%@ for %d %@, then %@";
-"get_discount_first_part" = "%@առաջինի %@";
+"get_discount_first_part" = "%@ առաջինի %@";
 "get_discount_first_few_parts" = "%@ for first %@";
 "get_discount_second_part" = "then %@";
 "mapillary_image" = "Ուղարկել լուսանկարներ Mapillary- ին";
@@ -37,7 +37,7 @@
 "map_widget_intermediate_time" = "Միջանկյալ նպատակակետ ժամանելու ժամը";
 "shared_string_previous" = "Նախորդ";
 "shared_string_next" = "Հաջորդը";
-"route_stops_before" = "%@կանգառներ մինչև ընտրված";
+"route_stops_before" = "%@ կանգառներ մինչև ընտրված";
 "transport_Routes" = "Երթուղիներ";
 "transport_nearby_routes_within" = "Մոտակա երթուղիները";
 "transport_nearby_routes" = "Ներսում";
@@ -268,7 +268,7 @@
 "voice_provider_descr" = "Ընտրեք ձայնային ուղեցույցի լեզուն նավիգացիայի համար։";
 "choose_audio_stream" = "Ձայնային հրահանգներ";
 "choose_audio_stream_descr" = "Ընտրեք ձայնային հրահանգների համար։";
-"use_osm_live_routing" = "OsmAnd Liveնավիգացիա";
+"use_osm_live_routing" = "OsmAnd Live նավիգացիա";
 "osm_live_routing_descr" = "Use OsmAnd Live updates for navigation";
 "select_nav_profile_dialog_message" = "The 'Navigation type' governs how routes are calculated.";
 "osmand_default_routing" = "OsmAnd routing";
@@ -513,7 +513,7 @@
 "shared_string_groups" = "Խմբեր";
 "favorite" = "Սիրված";
 "poi_overlay" = "POI Overlay";
-"poi_dialog_poi_type" = "POIտեսակը";
+"poi_dialog_poi_type" = "POI տեսակը";
 "my_favorites" = "My Favorites";
 "shared_string_my_places" = "Իմ վայրերը";
 "fav_no_group" = "No group";
@@ -631,7 +631,7 @@
 "show_info" = "Show Info";
 "record_trip" = "Record your track";
 "shared_string_clear" = "Մաքրել";
-"quick_action_poi_list" = "POIցուցակ";
+"quick_action_poi_list" = "POI ցուցակ";
 "gpxup_public" = "Հանրային";
 "gpxup_identifiable" = "Պարզաբանվող";
 "gpxup_trackable" = "Հետևելի";
@@ -652,7 +652,7 @@
 "routing_engine_vehicle_type_driving" = "Ավտոմեքենա";
 "poi_filter_public_transport" = "Հասարակական տրանսպորտ";
 "shared_string_map" = "Քարտեզ";
-"layer_amenity_label" = "POIկետերի պիտակները";
+"layer_amenity_label" = "POI կետերի պիտակները";
 "shared_string_show_on_map" = "Ցույց տալ քարտեզի վրա";
 "map_settings_type" = "Map type";
 "map_mode" = "Քարտեզի ռեժիմը";
@@ -744,7 +744,7 @@
 "sett_lang_trans" = "translit";
 "sett_pref_lang" = "Preferred Language";
 "sett_lang_show_local" = "Show local names";
-"translit_names" = "Transliterateանունները";
+"translit_names" = "Transliterate անունները";
 "lang_af" = "Աֆրիկանս";
 "lang_al" = "Ալբաներեն";
 "lang_als" = "Ալբաներեն (Tosk)";
@@ -1060,7 +1060,7 @@
 "res_mapsres" = "Maps & Resources";
 "download_tab_local" = "Տեղական";
 "osmand_live" = "OsmAnd Live";
-"live_updates" = "Liveթարմացումներ";
+"live_updates" = "Live թարմացումներ";
 "available_maps" = "Հասանելի քարտեզներ";
 "osmand_live_last_changed" = "Last map change: %@";
 "last_update" = "Վերջին թարմացումը՝ %@";
@@ -1161,7 +1161,7 @@
 "opening_changeset" = "Խմբագրումների փաթեթի բացումը…";
 "closing_changeset" = "Խմբագրումների փաթեթի փակումը…";
 "commiting_node" = "Օբյեկտի պահպանում…";
-"loading_poi_obj" = "POIբեռնում…";
+"loading_poi_obj" = "POI բեռնում…";
 "shared_string_loading" = "Loading…";
 "osm_upload_failed_title" = "Upload failed";
 "osm_upload_failed_descr" = "Please check your login details and Internet connection and try again.";
@@ -1172,11 +1172,11 @@
 "osm_succsessful_uploads" = "Successful";
 "osm_failed_uploads" = "Failed";
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
-"osn_bug_name" = "OSMնշում";
+"osn_bug_name" = "OSM նշում";
 "osm_created" = "Created";
 "poi_remove_success" = "Նջված է";
 "shared_string_modified" = "Modified";
-"osm_edit_reopened_note" = "OSMնշումը կրկին բացված է";
+"osm_edit_reopened_note" = "OSM նշումը կրկին բացված է";
 "osm_name" = "OpenStreetMap username";
 "osm_pass" = "OpenStreetMap password";
 "osm_offline_editing" = "Always use offline editing";
@@ -1195,11 +1195,11 @@
 "population_num" = "Population";
 "osm_add_place" = "Add place";
 "osm_modify_place" = "Modify place";
-"poi_remove_title" = "POIջնջում";
+"poi_remove_title" = "POI ջնջում";
 "osm_edit_modified_poi" = "Փոփոխված OSM POI";
 "osm_edit_deleted_poi" = "Ջնջված է OSM POI";
 "osm_edit_created_poi" = "Ստեղծեք OSM POI";
-"osm_edit_created_note" = "OSMնշում ստեղծվել է";
+"osm_edit_created_note" = "OSM նշում ստեղծվել է";
 "osm_note_create" = "Create OSM Note";
 "upload_osm_note" = "Վերբեռնել OSM նշումը";
 "osm_edit_close_note" = "Close OSM Note";
@@ -1463,7 +1463,7 @@
 "osmand_purchases_item" = "OsmAnd-ի գնումները";
 "subscription_osmandlive_item" = "Բաժանորդագրություն - OsmAnd Live";
 "help_travel" = "Travel (Wikipedia & Wikivoyage)";
-"mapillary_item" = "OsmAndև Mapillary";
+"mapillary_item" = "OsmAnd և Mapillary";
 "map_legend" = "Քարտեզի նշումներ";
 "help_legend_descr" = "The guide to map's symbols";
 "other_location" = "Այլ";
@@ -1541,7 +1541,7 @@
 //inapps
 "plugin_nautical_name" = "Ծովային քարտեզի դիտում";
 "product_desc_nautical" = "Nautical map of all world";
-"plugin_nautical_descr" = "Այս plugin-ը հարստացնում է OsmAnd նավարկության հավելվածը ինչպես նաև ծովային քարտեզներով նավակների համար, ծովագնացության և այլ տեսակի ջրային շրջաններում: \n \nOsmAnd-ի հատուկքարտեզների add-on-ը կտրամադրի բոլոր ծովային նավագնացության նշանները և աղյուսակը, ներքին, ինչպես նաև մոտակա նավարկության համար: Յուրաքանչյուր նավագնացության նշանի նկարագրությունը ապահովում է նրանց և դրանց իմաստը հայտնաբերելու համար անհրաժեշտ մանրամասները(կատեգորիա, ձև, գույն, հաջորդականություն, հղում և այլն): \n \nOsmAnd-ի ավանդականքարտեզի ոճերից մեկին վերադառնալու համար պարզապես կամ ապաակտիվացրեք այս հավելվածը կամ ըստ ցանկության փոխեք «Քարտեզի ոճը» «Քարտեզի կարգավորում» մենույում:";
+"plugin_nautical_descr" = "Այս plugin-ը հարստացնում է OsmAnd նավարկության հավելվածը ինչպես նաև ծովային քարտեզներով նավակների համար, ծովագնացության և այլ տեսակի ջրային շրջաններում: \n \nOsmAnd-ի հատուկ քարտեզների add-on-ը կտրամադրի բոլոր ծովային նավագնացության նշանները և աղյուսակը, ներքին, ինչպես նաև մոտակա նավարկության համար: Յուրաքանչյուր նավագնացության նշանի նկարագրությունը ապահովում է նրանց և դրանց իմաստը հայտնաբերելու համար անհրաժեշտ մանրամասները(կատեգորիա, ձև, գույն, հաջորդականություն, հղում և այլն): \n \nOsmAnd-ի ավանդական քարտեզի ոճերից մեկին վերադառնալու համար պարզապես կամ ապաակտիվացրեք այս հավելվածը կամ ըստ ցանկության փոխեք «Քարտեզի ոճը» «Քարտեզի կարգավորում» մենույում:";
 "osmand_parking_plugin_name" = "Ավտոկայանատեղ";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
 "osmand_parking_plugin_description" = "Թույլ է տալիս գրանցել, թե որտեղ է ձեր մեքենան կայանել և որքան ժամանակ է մնացել ավտոկայանատեղը ազատելու (եթե առկա է ժամկետ):  \nԹե տեղը, թե ժամանակը տեսանելի են OsmAnd-ի վահանակի վրա, ինչպես նաև քարտեզի էկրանին ինչպես նաև վիդժետի մեջ: Android օրացույցին կարելի է միացնել որպես հիշեցում:";
@@ -1550,10 +1550,10 @@
 "plugin_ski_descr" = "OsmAnd-ի այս հավելվածը տրքմքդրում է մանրամասները գլոբալ ցածր լեռնադահուկային լանջերի, խաչաձեւ լեռնադահուկային լեռնանցքի, ալպիական լեռնադահուկային երթուղիների, ճոպանուղիների և լեռնադահուկային վերելակների մանրամասների մասին:  \n  \nԱյս տեսակը ակտիվացնելու դեպքում, քարտեզի ոճը փոխվում է «Ձմեռային եւ լեռնադահուկային սպորտին», ցույց տալով լանդշաֆտի բոլոր մանրամասները`ձմռանը նայելու ձևով: Այս (ձմեռային) տեսքը կարող է չեղյալ համարվել , այստեղ կրկին անջատելով այն, կամ եթե փոխեք «Քարտի ոճը» ցանկալի տեսք, «Քարտեզների կարգավորումը» ցանկում:";
 "record_plugin_name" = "Ուղեւորության գրանցում";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
-"record_plugin_description" = "Այս plugin-նը ակտիվացնում է հետևյալ ֆունկցիաները`գրանցում և պահպանում ձեր տրեկերը, ձեռքով հպելով GPX-ի գրանցման վիջեթը քարտեզի էկրանին կամ ավտոմատ կերպով մուտքագրելուձեր բոլոր նավիգացիոն երթուղիները GPX ֆայլում: \n \nԳրանցված տրեկերը կարող են տարածվել ձեր ընկերների հետ կամ օգտագործել OSM-ի ներդրումների համար: Մարզիկները կարող են օգտվել արձանագրված տրեկերից, որոնք կարող են վերահսկել իրենց դասընթացները: Որոշ հիմնական տրեկերի վերլուծություն կարելի է իրականացնել ուղղակիորեն OsmAnd-ում, նման գրիչ անգամները, միջին արագությունը և այլն, և տրեկերը կարող են նաև վերլուծվել հատուկ 3-րդ կողմի վերլուծության գործիքներում:";
+"record_plugin_description" = "Այս plugin-նը ակտիվացնում է հետևյալ ֆունկցիաները`գրանցում և պահպանում ձեր տրեկերը, ձեռքով հպելով GPX-ի գրանցման վիջեթը քարտեզի էկրանին կամ ավտոմատ կերպով մուտքագրելու ձեր բոլոր նավիգացիոն երթուղիները GPX ֆայլում: \n \nԳրանցված տրեկերը կարող են տարածվել ձեր ընկերների հետ կամ օգտագործել OSM-ի ներդրումների համար: Մարզիկները կարող են օգտվել արձանագրված տրեկերից, որոնք կարող են վերահսկել իրենց դասընթացները: Որոշ հիմնական տրեկերի վերլուծություն կարելի է իրականացնել ուղղակիորեն OsmAnd-ում, նման գրիչ անգամները, միջին արագությունը և այլն, և տրեկերը կարող են նաև վերլուծվել հատուկ 3-րդ կողմի վերլուծության գործիքներում:";
 "osm_editing_plugin_name" = "OSM-ի խմբագրում";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
-"osm_editing_plugin_description" = "Այս OsmAnd-ի plugin-ի միջոցով կարելի է ներդրում կատարել OSM-ի, ինչպիսիք են OSM POI-ի օբյեկտների ստեղծում կամ փոփոխում, OSM նշումների բացումը կամ մեկնաբանումը և վերբեռնում արձանագրված GPX ֆայլերը: OSM-ն գլոբալ հանրային քարտեզագրման նախագիծ է, որը կառավարվում է OSM համայնքի կողմից: Մանրամասների համար այցելեք https://openstreetmap.org: Ակտիվ մասնակցությունըգնահատվում է, և ներդրումները կարող են կատարվել ուղղակիորեն OsmAnd-ից, եթե նշեք ձեր անձնական OSM-ի հավատարմագրերը հավելվածում:";
+"osm_editing_plugin_description" = "Այս OsmAnd-ի plugin-ի միջոցով կարելի է ներդրում կատարել OSM-ի, ինչպիսիք են OSM POI-ի օբյեկտների ստեղծում կամ փոփոխում, OSM նշումների բացումը կամ մեկնաբանումը և վերբեռնում արձանագրված GPX ֆայլերը: OSM-ն գլոբալ հանրային քարտեզագրման նախագիծ է, որը կառավարվում է OSM համայնքի կողմից: Մանրամասների համար այցելեք https://openstreetmap.org: Ակտիվ մասնակցությունը գնահատվում է, և ներդրումները կարող են կատարվել ուղղակիորեն OsmAnd-ից, եթե նշեք ձեր անձնական OSM-ի հավատարմագրերը հավելվածում:";
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Փողոցային նկարներ բոլորի համար: Բացահայտեք վայրերը, համագործակցեք, նկարեք աշխարհը:";
 "product_desc_africa" = "Unlimited map downloads for Africa";
@@ -1586,7 +1586,7 @@
 "preferred_languages" = "Preferred languages";
 "srtm_plugin_name" = "Բարձունքների գծեր (եզրագծեր)";
 "product_desc_srtm" = "Display of contour lines";
-"srtm_plugin_description" = "Այս plugin-ը ապահովում է ինչպես եզրագծային կափարիչը, այնպես էլ (ռելիեֆը) բլուրային շերտ, որը ցուցադրվում է OsmAnd-ի ստանդարտ քարտեզների վրա: Այս ֆունկցիան շատ բարձր է գնահատվելու մարզիկների, զբոսաշրջիկների, և բոլոր նրանց կողմից, ովքեր հետաքրքրված են լանդշաֆտի կառուցվածքով:  \n  \nՀամաշխարհային տվյալները (70° հյուսիսից 70° հարավ) հիմնված են SRTM-ի (Shuttle Radar Topography Mission) և ASTER- ի (Advanced Spaceborne Thermal Emission and Reflection Radiometer) կողմից չափումների վրա, ՆԱՍԱ-ի Earth Watching-ի առաջատար արբանյակի Համակարգը: ASTER-ն համագործակցային ջանքէ ՆԱՍԱ-ի, Ճապոնիայի էկոնոմիկայի, առեւտրի եւ արդյունաբերության նախարարության (METI) և Ճապոնիայի տիեզերական համակարգերի (J-spacesystems) միջև:";
+"srtm_plugin_description" = "Այս plugin-ը ապահովում է ինչպես եզրագծային կափարիչը, այնպես էլ (ռելիեֆը) բլուրային շերտ, որը ցուցադրվում է OsmAnd-ի ստանդարտ քարտեզների վրա: Այս ֆունկցիան շատ բարձր է գնահատվելու մարզիկների, զբոսաշրջիկների, և բոլոր նրանց կողմից, ովքեր հետաքրքրված են լանդշաֆտի կառուցվածքով:  \n  \nՀամաշխարհային տվյալները (70° հյուսիսից 70° հարավ) հիմնված են SRTM-ի (Shuttle Radar Topography Mission) և ASTER- ի (Advanced Spaceborne Thermal Emission and Reflection Radiometer) կողմից չափումների վրա, ՆԱՍԱ-ի Earth Watching-ի առաջատար արբանյակի Համակարգը: ASTER-ն համագործակցային ջանք է ՆԱՍԱ-ի, Ճապոնիայի էկոնոմիկայի, առեւտրի եւ արդյունաբերության նախարարության (METI) և Ճապոնիայի տիեզերական համակարգերի (J-spacesystems) միջև:";
 "wikivoyage_travel_guide" = "Ճանապարհորդական ուղեցույցներ";
 "start_editing_card_image_text" = "Աշխարհի ուղեցույց, որը կարող է խմբագրել ցանկացած մեկը:";
 "wikivoyage_travel_guide_descr" = "Տեսեք ուղեցույցները, OsmAnd-ում աշխարհի ամենահետաքրքիր վայրերը, առանց ինտերնետին միանալու:";
@@ -1850,7 +1850,7 @@
 "purchase_dialog_travel_description" = "Գնեք հետեւյալներից մեկը, որպեսզի ստանաք ճանապարհորդական հոդվածները անցանց՝";
 "free_version_message" = "Դուք կարող եք ներբեռնել կամ թարմացնել %@ քարտեզներ։";
 "get_osmand_live" = "Ձեռք բերեք OsmAnd Live, որպեսզի կարողանաք օգտվել բոլոր հնարավորություններից՝ քարտեզների օրական թարմացում անսահմանափակ ներբեռնում, բոլոր plugin-րը Wikipedia, Wikivoyage և շատ ավելին։";
-"osm_live_subscription" = "OsmAnd Liveբաժանորդագրություն";
+"osm_live_subscription" = "OsmAnd Live բաժանորդագրություն";
 "cancel_subscription" = "Cancel subscription";
 "wikivoyage_offline" = "Վիքիուղեցույցը անցանց ռեժիմում";
 "unlimited_downloads" = "Անսահմանափակ ներբեռնում";
@@ -1877,7 +1877,7 @@
 "osm_live_banner_descr" = "Subscribe to OsmAnd Live and get unlimited <b>hourly</b> map updates and <b>all features</b> included from %@";
 "osm_live_get_title" = "Get OsmAnd Live";
 "osm_live_ask_for_purchase" = "Խնդրում ենք նախ ձեռք բերեք OsmAnd Live բաժանորդագրությունը";
-"shared_string_io_error" = "I/Oսխալ տեղի ունեցավ";
+"shared_string_io_error" = "I/O սխալ տեղի ունեցավ";
 "osm_live_hide_user_name" = "Մի ցուցադրեք իմ անունը զեկույցներում";
 "subscriptions_public_info" = "Payment will be charged to your iTunes Account at confirmation of purchase. The subscription will automatically renew unless auto-renew is turned off at least 24 hours before the end of the current period. Your account will be charged according to your plan for renewal within 24 hours prior to the end of the current period. You can manage or turn off auto-renew in your Account Settings after purchase. If you purchase a subscription during a free trial period, the unused portion of this period will be forfeited.";
 "terms_of_use" = "Terms of use";
@@ -1973,7 +1973,7 @@
 "rendering_attr_highway_class_road_name" = "Road";
 "rendering_value_translucent_green_name" = "Կիսաթափանցիկ կանաչ";
 "rendering_value_translucent_yellow_name" = "Կիսաթափանցիկ դեղին";
-"rendering_attr_OSMMapperAssistant_name" = "OSMքարտեզագրիչի օգնական";
+"rendering_attr_OSMMapperAssistant_name" = "OSM քարտեզագրիչի օգնական";
 "routing_attr_avoid_borders_name" = "Առանց սահմանի հատմունը";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Գույնը ըստ ցանցի պատկանելության";
 "rendering_attr_smoothness_excellent_name" = "Excellent";
@@ -2033,7 +2033,7 @@
 "rendering_attr_highway_class_track_name" = "Track";
 "rendering_attr_tracktype_grade4_name" = "Mostly soft";
 "rendering_value_disabled_name" = "Անջատված է";
-"rendering_attr_contourColorScheme_name" = "Contour linesգունային սխեման";
+"rendering_attr_contourColorScheme_name" = "Contour lines գունային սխեման";
 "routing_attr_short_way_name" = "Վառելիք տնտեսող ճանապարհ";
 "rendering_attr_showLez_name" = "Show Low Emission Zones";
 "rendering_value_green_name" = "Կանաչ";
@@ -2063,8 +2063,8 @@
 "rendering_attr_tracktype_grade3_name" = "Mostly solid";
 "rendering_attr_showSurfaces_name" = "Ցույց տալ ճանապարհների ծածկույթի տեսակը";
 "routing_attr_allow_advanced_description" = "Difficult routes, with dangerous obstacles and steep sections.";
-"osm_notes" = "OSMնշումներ";
-"rendering_attr_hidePOILabels_name" = "POIպիտակներ";
+"osm_notes" = "OSM նշումներ";
+"rendering_attr_hidePOILabels_name" = "POI պիտակներ";
 "rendering_attr_piste_difficulty_novice_name" = "Novice";
 "rendering_attr_hideUnderground_name" = "Ստորգետնյա օբյեկտներ";
 "rendering_value_dark_brown_name" = "Մուգ շագանակագույն";
@@ -2161,7 +2161,7 @@
 "rendering_attr_subwayMode_name" = "Մետրոի երթուղիները";
 "rendering_attr_highway_class_motorway_name" = "Motorway";
 "rendering_value_brown_name" = "Շագանակագույն";
-"rendering_attr_hideIcons_name" = "POIպատկերակները";
+"rendering_attr_hideIcons_name" = "POI պատկերակները";
 "rendering_attr_roadColors_description" = "Ընտրեք ճանապարհների գունավորման սխեման՝";
 "rendering_value_browse_map_name" = "Դիտել քարտեզը";
 "rendering_attr_surface_asphalt_name" = "Asphalt";
@@ -2306,7 +2306,7 @@
 "shared_string_bearing" = "Կողմնորոշում";
 "wikivoyage_download_pics" = "Ներբեռնել նկարներ";
 "map_orientation_landscape" = "Լանդշաֆտ (Landscape)";
-"map_widget_gps_info" = "GPSինֆորմացիա";
+"map_widget_gps_info" = "GPS ինֆորմացիա";
 "route_info" = "Երթուղու տեղեկատվություն";
 "lang_sr-Latn" = "Սերբերեն (լատինական)";
 "shared_string_error" = "Սխալ";
@@ -2319,7 +2319,7 @@
 "map_marker_1st" = "Առաջին մարկեր";
 "lang_zh-Hans" = "Չինարեն (Պարզեցված)";
 "shared_string_bookmark" = "Էջանշան";
-"tracker_item" = "OsmAndթրեկեր";
+"tracker_item" = "OsmAnd թրեկեր";
 "shared_string_accessibility" = "Հատուկ հնարավորություններ";
 "shared_string_explore" = "Հետազոտել";
 "short_min" = "մ";
@@ -2345,3 +2345,4 @@
 "shared_string_favorite" = "Սիրված";
 "shared_string_favorites" = "Սիրված";
 "shared_string_show" = "Ցույց տալ";
+"shared_string_local" = "Տեղական";

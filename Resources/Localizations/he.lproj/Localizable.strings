@@ -24,7 +24,7 @@
 "get_discount_title" = "לקבל את %d %@ ב־%@ הנחה.";
 "get_free_trial_title" = "Start your %d %@ free trial.";
 "get_discount_short_descr" = "%@ for %d %@, then %@";
-"get_discount_first_part" = "%@למשך %@ הראשונים";
+"get_discount_first_part" = "%@ למשך %@ הראשונים";
 "get_discount_first_few_parts" = "%@ for first %@";
 "get_discount_second_part" = "לאחר מכן %@";
 "mapillary_image" = "תמונת Mapillary";
@@ -37,7 +37,7 @@
 "map_widget_intermediate_time" = "זמן ביניים";
 "shared_string_previous" = "הקודם";
 "shared_string_next" = "הבא";
-"route_stops_before" = "%@תחנות לפני";
+"route_stops_before" = "%@ תחנות לפני";
 "transport_Routes" = "מסלולים";
 "transport_nearby_routes_within" = "נתיבים קרובים בטווח של עד";
 "transport_nearby_routes" = "בסביבת";
@@ -636,7 +636,7 @@
 "gpxup_identifiable" = "ניתן לזיהוי";
 "gpxup_trackable" = "ניתן למעקב";
 "gpxup_private" = "פרטי";
-"gpx_upload_public_visibility_descr" = "„ציבורי” משמעו שהעקבות מופיעים באופן ציבורי בעקבות ה־GPS שלך וברישומי עקבות GPS ציבוריים וברישומי מעקב ציבוריים עם חותמות זמן בתצורה גולמית. הנתונים שמוגשים דרך ה־APIאינם מפנים אל עמוד העקבות שלך. חותמות הזמן של נקודות המעקב אינן זמינות דרך ה־API של ה־GPS ונקודות המעקב אינן מסודרות בהתאם לזמן שתועדו.";
+"gpx_upload_public_visibility_descr" = "„ציבורי” משמעו שהעקבות מופיעים באופן ציבורי בעקבות ה־GPS שלך וברישומי עקבות GPS ציבוריים וברישומי מעקב ציבוריים עם חותמות זמן בתצורה גולמית. הנתונים שמוגשים דרך ה־API אינם מפנים אל עמוד העקבות שלך. חותמות הזמן של נקודות המעקב אינן זמינות דרך ה־API של ה־GPS ונקודות המעקב אינן מסודרות בהתאם לזמן שתועדו.";
 "gpx_upload_identifiable_visibility_descr" = "„ניתן לזיהוי” משמעו שהעקבות תופענה באופן ציבורי בעקבות ה־GPS וברישומי עקבות GPS ציבוריים, כלומר שמשתמשים אחרים יוכלו להוריד את העקבות הגולמיים ולשייך אותם עם שם המשתמש שלך. נתוני נקודות מעקב ציבורית עם חתימת זמן מה־API של ה־GPS שמוגשות דרך ה־API של נקודות המעקב יפנו אל עמוד המעקב המקורי שלך.";
 "gpx_upload_trackable_visibility_descr" = "„ניתן למעקב” משמעו שהמסלול לא מופיע ברישומים ציבוריים אך נקודות המעקב שעובדו עם חותמות זמן ממנו (שלא ניתן לשייך אליך ישירות) תהיינה דרך ההורדות מה־API הציבורי של ה־GPS.";
 "gpx_upload_private_visibility_descr" = "„פרטי” משמעות שהעקבות לא תופענה ברישומים ציבוריים אך נקודות מעקב ממתוכן תהיינה זמינות בסדר אקראי דרך ה־API הציבורי של ה־GPS ללא חותמות זמן.";
@@ -914,7 +914,7 @@
 "search_activity" = "חיפוש";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
-"listed_exist" = "%@מוצג, כבר קיים ב־OsmAnd.";
+"listed_exist" = "%@ מוצג, כבר קיים ב־OsmAnd.";
 "shared_string_import_complete" = "הייבוא הושלם";
 "import_complete_description" = "כל הנתונים מתוך %@ כבר ייובאו. ניתן להשתמש בכפתורים שלהלן כדי לפתוח כל חלק שהוא ביישומון כדי לנהל אותם.";
 "app_restart_required" = "צריך להפעיל את היישומון מחדש כדי שכמה מהשינויים יחולו.";
@@ -967,7 +967,7 @@
 "reset_to_default" = "איפוס לבררת מחדל";
 "reset_profile_action_descr" = "Reset all profile settings to installation defaults. Tapping Reset will discard all your changes, this action can't be undone.";
 "checking_for_duplicates" = "Checking for duplicates...";
-"checking_for_duplicate_description" = "OsmAndיחפש כפילויות של %@ עם פריטים קיימים ביישומון. \n \nהתהליך עשוי לארוך זמן מה.";
+"checking_for_duplicate_description" = "OsmAnd יחפש כפילויות של %@ עם פריטים קיימים ביישומון. \n \nהתהליך עשוי לארוך זמן מה.";
 
 // Purchases
 "prch_addons" = "Addons";
@@ -1059,7 +1059,7 @@
 "shared_string_resources" = "משאבים";
 "res_mapsres" = "Maps & Resources";
 "download_tab_local" = "מקומי";
-"osmand_live" = "OsmAndחי";
+"osmand_live" = "OsmAnd חי";
 "live_updates" = "עדכונים חיים";
 "available_maps" = "מפות זמינות";
 "osmand_live_last_changed" = "Last map change: %@";
@@ -1147,7 +1147,7 @@
 "welmode_download_maps" = "הורדת מפות";
 "srtm_unit_format" = "הגוון יחידת קווי מתאר";
 "srtm_download_single_help_message" = "נא לבחור את ההגוון. יהיה עליך להוריד את הקובץ מחדש כדי לשנות את התצורה.";
-"srtm_download_list_help_message" = "OsmAndמספק נתוני קווי מתאר במטרים וברגל. יהיה עליך להוריד את הקובץ מחדש כדי לשנות את התצורה.";
+"srtm_download_list_help_message" = "OsmAnd מספק נתוני קווי מתאר במטרים וברגל. יהיה עליך להוריד את הקובץ מחדש כדי לשנות את התצורה.";
 "shared_string_meters" = "מטרים";
 "shared_string_feet" = "רגל";
 
@@ -1463,7 +1463,7 @@
 "osmand_purchases_item" = "רכישות OsmAnd";
 "subscription_osmandlive_item" = "מינוי - OsmAnd Live";
 "help_travel" = "Travel (Wikipedia & Wikivoyage)";
-"mapillary_item" = "OsmAndו־Mapillary";
+"mapillary_item" = "OsmAnd ו־Mapillary";
 "map_legend" = "מקרא מפה";
 "help_legend_descr" = "The guide to map's symbols";
 "other_location" = "אחר";
@@ -1541,16 +1541,16 @@
 //inapps
 "plugin_nautical_name" = "תצוגת מפה ימית";
 "product_desc_nautical" = "Nautical map of all world";
-"plugin_nautical_descr" = "תוסף זה מעשיר את המפה ואת הניווט של יישומון OsmAnd ומאפשר לייצר מפות ימיות לחתירה, הפלגה וסוגים נוספים של ספורט ימי.  \n \nתוסף מפה מיוחד ל־OsmAnd יספק את כל סימוני הניווט הימיים והסימנים הימיים המוסכמים, לניווט במקווי מים פנימיים לרבות ניווט באזורים הקרובים לחוף. התיאור של כל סימון ניווט מספק את הפרטים הנדרשים כדי לזהות אותם ואת המשמעותשלהם (קטגוריה, צורה, צבע, רצף, הפניה וכו׳).  \n \nכדי לחזור לאחד מסגנונות המפה הרגילים של OsmAnd עליך פשוט להשבית את התוסף הזה שוב או לשנות את ‚סגנון המפה’ תחת ‚הגדרות המפה’ לפי הצורך.";
+"plugin_nautical_descr" = "תוסף זה מעשיר את המפה ואת הניווט של יישומון OsmAnd ומאפשר לייצר מפות ימיות לחתירה, הפלגה וסוגים נוספים של ספורט ימי.  \n \nתוסף מפה מיוחד ל־OsmAnd יספק את כל סימוני הניווט הימיים והסימנים הימיים המוסכמים, לניווט במקווי מים פנימיים לרבות ניווט באזורים הקרובים לחוף. התיאור של כל סימון ניווט מספק את הפרטים הנדרשים כדי לזהות אותם ואת המשמעות שלהם (קטגוריה, צורה, צבע, רצף, הפניה וכו׳).  \n \nכדי לחזור לאחד מסגנונות המפה הרגילים של OsmAnd עליך פשוט להשבית את התוסף הזה שוב או לשנות את ‚סגנון המפה’ תחת ‚הגדרות המפה’ לפי הצורך.";
 "osmand_parking_plugin_name" = "מיקום החנייה";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
 "osmand_parking_plugin_description" = "מאפשר לך לשמור איפה רכבך חנה וכמה זמן נותר לחנייה. \n המיקום והשעה מופיעים בלוח הבקרה וגם בחלונית מפה. ניתן להוסיף התראה ליומן של Android.";
 "plugin_ski_name" = "תצוגת מפת סקי";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
-"plugin_ski_descr" = "תוסף זה ל־OsmAnd מגיש לך פרטים של מדרוני גלישת סקי, מסלולי סקי חוצי מדינות, מסלולי סקי אלפינים, רכבלים ומעליות סקי. המעברים והמסלולים מופיעים בצבע לפי דרגת קושי ומופיעיםבסגנון מפה מיוחד בשם ‚חורף’ שמטמיע משטחי חורף בצבעי שלג. \n \nהפעלת תצוגה זו משנה את סגנון המפה ל‚חורף וסקי’ והיא מפעילה את כל תכונות הקרקע בתנאי חורף. ניתן לכבות תצוגה זו על ידי השבתתה כאן או על ידי שינוי ‚סגנון המפה’ תחת ‚הגדרת המפה’ לפי הצורך.";
+"plugin_ski_descr" = "תוסף זה ל־OsmAnd מגיש לך פרטים של מדרוני גלישת סקי, מסלולי סקי חוצי מדינות, מסלולי סקי אלפינים, רכבלים ומעליות סקי. המעברים והמסלולים מופיעים בצבע לפי דרגת קושי ומופיעים בסגנון מפה מיוחד בשם ‚חורף’ שמטמיע משטחי חורף בצבעי שלג. \n \nהפעלת תצוגה זו משנה את סגנון המפה ל‚חורף וסקי’ והיא מפעילה את כל תכונות הקרקע בתנאי חורף. ניתן לכבות תצוגה זו על ידי השבתתה כאן או על ידי שינוי ‚סגנון המפה’ תחת ‚הגדרת המפה’ לפי הצורך.";
 "record_plugin_name" = "הקלטת מסלול";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
-"record_plugin_description" = "תוסף זה מפעיל את התכונה להקלטת ולשמירת המסלולים שלך על ידי נגיעה באופן ידני בווידג׳ט רישום ה־GPX במפה, או גם לערוך רישום של כל נתיבי הניווט שלך לקובץ GPX. \n  \nניתן לשתף נתיבים מוקלטים עם חבריך או להשתמש בהם כתרומה ל־OSM. אתלטים יכולים להשתמש במסלולים מוקלטים כדי לעקוב אחר האימונים שלהם. ניתן לבצע ניתוח מסלול בסיסי ישירות ב־OsmAnd, כמו זמניהקפה, מהירות ממוצעת וכו׳, כמו כן, ניתן לנתח את המסלולים בשלב מאוחר יותר על ידי כלי ניתוח מיוחדים מגורמי צד־שלישי.";
+"record_plugin_description" = "תוסף זה מפעיל את התכונה להקלטת ולשמירת המסלולים שלך על ידי נגיעה באופן ידני בווידג׳ט רישום ה־GPX במפה, או גם לערוך רישום של כל נתיבי הניווט שלך לקובץ GPX. \n  \nניתן לשתף נתיבים מוקלטים עם חבריך או להשתמש בהם כתרומה ל־OSM. אתלטים יכולים להשתמש במסלולים מוקלטים כדי לעקוב אחר האימונים שלהם. ניתן לבצע ניתוח מסלול בסיסי ישירות ב־OsmAnd, כמו זמני הקפה, מהירות ממוצעת וכו׳, כמו כן, ניתן לנתח את המסלולים בשלב מאוחר יותר על ידי כלי ניתוח מיוחדים מגורמי צד־שלישי.";
 "osm_editing_plugin_name" = "עריכה של OpenStreetMap";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "ניתן לתרום ל־OSM למשל על ידי שינוי פריטי נקודות עניין ב־OSM או ליצור הערות OSM ולתרום קובצי הקלטות GPX ל־OsmAnd על ידי ציון שם המשתמש והססמה שלך. OpenStreetMap.org הוא מיזם מיפוי גלובלי, בהנהגה קהילתית לרווחת הציבור.";
@@ -1586,7 +1586,7 @@
 "preferred_languages" = "Preferred languages";
 "srtm_plugin_name" = "קווי מתאר";
 "product_desc_srtm" = "Display of contour lines";
-"srtm_plugin_description" = "תוסף זה מספק הן שכבת קווי מתאר והן שכבת הצללה אותן ניתן להציג על המפות הרגילות של OsmAnd. תכונה זו נחוצה ביותר לאתלטים, מטיילי שטח, תרמילאים וכל מי שמעוניין להבין את מבנהפני השטח. (נא לשים לב שנתוני קווי מתאר ו/או נתוני הצללה הם נפרדים, תתאפשרנה הורדות נוספות לאחר הפעלת התוסף.) \n \nהנתונים הגלובליים (בין 70° צפון ל־70° דרום) מבוססים על מדידות שבוצעו על ידי ה־SRTM (משימת הטופוגרפיה של מעבורת המכ״ם) ו־ASTER (רדיומטר חלל מתקדם לגילוי פליטה תרמית והשתקפות), התקן דימות על סיפונה של Terra, לוויין הדגל של מערכת ההשקפה על כדור הארץ של NASA.‏ ASTER הנו שיתוף פעולה בין NASA, משרד התמ״ת היפני (METI) ומערכות החלל היפניות (J-spacesystems).";
+"srtm_plugin_description" = "תוסף זה מספק הן שכבת קווי מתאר והן שכבת הצללה אותן ניתן להציג על המפות הרגילות של OsmAnd. תכונה זו נחוצה ביותר לאתלטים, מטיילי שטח, תרמילאים וכל מי שמעוניין להבין את מבנה פני השטח. (נא לשים לב שנתוני קווי מתאר ו/או נתוני הצללה הם נפרדים, תתאפשרנה הורדות נוספות לאחר הפעלת התוסף.) \n \nהנתונים הגלובליים (בין 70° צפון ל־70° דרום) מבוססים על מדידות שבוצעו על ידי ה־SRTM (משימת הטופוגרפיה של מעבורת המכ״ם) ו־ASTER (רדיומטר חלל מתקדם לגילוי פליטה תרמית והשתקפות), התקן דימות על סיפונה של Terra, לוויין הדגל של מערכת ההשקפה על כדור הארץ של NASA.‏ ASTER הנו שיתוף פעולה בין NASA, משרד התמ״ת היפני (METI) ומערכות החלל היפניות (J-spacesystems).";
 "wikivoyage_travel_guide" = "מדריכי תיירות";
 "start_editing_card_image_text" = "מדריך התיירות המקוון שכל אחד יכול לערוך.";
 "wikivoyage_travel_guide_descr" = "מדריכים למקומות המעניינים ביותר בעולם, בתוך OsmAnd, ללא חיבור לאינטרנט.";
@@ -1737,7 +1737,7 @@
 "import_raster_map_success" = "Raster map has been imported. Open Map Settings and activate it via Overlay/Underlay";
 "import_raster_map_failed" = "Raster map import failed";
 "device_memory" = "זיכרון המכשיר";
-"free" = "%@פנויים";
+"free" = "%@ פנויים";
 "first_usage_greeting" = "קבלת הנחיות ואיתור מקומות חדשים ללא חיבור לאינטרנט";
 "get_started" = "יסודות";
 "first_usage_wizard_desc" = "לאפשר ל־OsmAnd לזהות את המיקום שלך ולהציע מפות להורדה לאותו האזור.";
@@ -1836,8 +1836,8 @@
 "osm_live_payment_monthly_title" = "חודשי";
 "osm_live_payment_3_months_title" = "כל 3 חודשים";
 "osm_live_payment_annual_title" = "שנתית";
-"osm_live_payment_month_cost_descr" = "%@לחודש";
-"osm_live_payment_month_cost_descr_ex" = "%.2f %@לחודש";
+"osm_live_payment_month_cost_descr" = "%@ לחודש";
+"osm_live_payment_month_cost_descr_ex" = "%.2f %@ לחודש";
 "osm_live_payment_discount_descr" = "חיסכון של %@";
 "osm_live_payment_current_subscription" = "המינוי הנוכחי";
 "osm_live_payment_renews_monthly" = "מתחדש חודשית";
@@ -1848,7 +1848,7 @@
 "osm_live_payment_contribute_descr" = "התרומות מסייעות במימון מאמצי המיפוי של OSM.";
 "purchase_dialog_title" = "נא לבחור בתכנית";
 "purchase_dialog_travel_description" = "עליך לרכוש את אחד מהפריטים הבאים כדי לקבל את תכונת הדרכות התיירות:";
-"free_version_message" = "%@מפות להורדה או עדכון.";
+"free_version_message" = "%@ מפות להורדה או עדכון.";
 "get_osmand_live" = "ניתן להירשם ל־OsmAnd חי כדי לקבל גישה לכל התכונות: עדכוני מפה יומיים עם מספר בלתי מוגבל של הורדות, כל התוספים בתשלום ובחינם, ויקיפדיה, ויקימסע ועוד הרבה.";
 "osm_live_subscription" = "מינוי ל־OsmAnd חי";
 "cancel_subscription" = "ביטול מינוי";
@@ -2399,7 +2399,7 @@
 "shared_string_refresh" = "רענון";
 "track_has_no_needed_data" = "למסלול חסרים הנתונים הדרושים.";
 "co2_mission" = "פליטת פחמן דו חמצני";
-"ltr_or_rtl_combine_via_slash" = "%@ / %@";
+"ltr_or_rtl_combine_via_slash" = "%@/%@";
 "upload_local_version" = "להעלות את הגרסה המקומית";
 "choose_what_to_restore" = "נא לבחור מה לשחזר.";
 "shared_string_contributions" = "תרומות";
@@ -2471,7 +2471,7 @@
 "contact_support_description" = "אם יש לך שאלות, נא ליצור אתנו קשר דרך %@.";
 "shared_string_selected" = "נבחר";
 "promo_subscription" = "מינוי פרומו";
-"ltr_or_rtl_combine_via_dash" = "%@ —‏ %@";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "osmand_cloud_create_account_descr" = "נא למלא את כתובת הדוא״ל שלך, אליה ישלח קוד האימות, \nוכל הנתונים שלך יקושרו אליה.";
 "backup_complete" = "הגיבוי הושלם";
 "routing_attr_avoid_fords_name" = "המנעות מגשרים איריים";
@@ -2786,7 +2786,7 @@
 "my_data" = "הנתונים שלי";
 "route_maneuvers" = "מעקפים";
 "map_widget_trip_recording_downhill" = "במורד ההר";
-"map_settings_topography" = "מפות SRTM";
+"map_settings_topography" = "קווי מתאר";
 "activity_type_walking_name" = "הליכה";
 "map_markers_bar_widget_desc" = "בווידג׳ט הסרגל העליון אפשר לראות את המרחק ואת הכיוון לסמן מהמיקום הנוכחי. אפשר להגדיר כדי לראות סמן או שניים מובילים בווידג׳ט.";
 "download_file" = "הורדת קובץ";
@@ -2870,7 +2870,7 @@
 "map_widget_distance_to_destination" = "מרחק ליעד";
 "map_screen_orientation" = "כיוון המסך";
 "bluetooth_found_title" = "נמצאו: %d";
-"last_seven_days" = "7הימים האחרונים";
+"last_seven_days" = "7 הימים האחרונים";
 "ask_question_propose_features" = "פרסום שאלות, הצעת יכולות";
 "help_article_map_tracks_on_map_name" = "מסלולים ונתיבים";
 "activity_type_winter_name" = "חורף";
@@ -2935,3 +2935,6 @@
 "temperature_layer" = "שכבת טמפרטורות";
 "voices" = "הנחיות קוליות";
 "shared_string_show" = "הצגה";
+"quick_action_toggle_preference" = "מתג להחלפת העדפה.";
+"show_along_the_route" = "הצגה לאורך המסלול";
+"shared_string_local" = "מקומי";

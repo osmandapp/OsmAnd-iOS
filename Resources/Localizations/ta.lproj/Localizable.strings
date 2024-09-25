@@ -37,7 +37,7 @@
 "map_widget_intermediate_time" = "Intermediate time";
 "shared_string_previous" = "முன்னே";
 "shared_string_next" = "அடுத்து";
-"route_stops_before" = "%@முன்பு நிறுத்தப்படும்";
+"route_stops_before" = "%@ முன்பு நிறுத்தப்படும்";
 "transport_Routes" = "வழித்தடங்கள்";
 "transport_nearby_routes_within" = "அருகிலுள்ள வழிகள்";
 "transport_nearby_routes" = "அதற்குள்";
@@ -251,7 +251,7 @@
 "show_warnings_title" = "Show alerts…";
 "show_warnings_descr" = "Configure traffic warnings (speed limits, forced stops, speed bumps, tunnels), speed camera warnings, and lane information";
 "speak_title" = "அறிவிக்கவும் …";
-"speak_descr" = "தெரு பெயர்கள், போக்குவரத்து எச்சரிக்கைகள் (கட்டாயமாக நிறுத்தங்கள், வேகம் புடைப்புகள்), வேக கேமரா எச்சரிக்கை, வேகவரம்புகள் ஆகியவற்றை அறிவிக்க கட்டமைக்கவும்.";
+"speak_descr" = "தெரு பெயர்கள், போக்குவரத்து எச்சரிக்கைகள் (கட்டாயமாக நிறுத்தங்கள், வேகம் புடைப்புகள்), வேக கேமரா எச்சரிக்கை, வேக வரம்புகள் ஆகியவற்றை அறிவிக்க கட்டமைக்கவும்.";
 "keep_informing" = "Repeat navigation instructions";
 "repeat_after" = "Repeat after";
 "keep_informing_descr" = "Re-announce navigation instructions at regular intervals";
@@ -268,7 +268,7 @@
 "voice_provider_descr" = "வழிசெலுத்தல் க்கான குரல் வழிகாட்டியைத் தேர்ந்தெடுக்கவும்.";
 "choose_audio_stream" = "குரல் வழிநடத்துதல் வெளியீடு";
 "choose_audio_stream_descr" = "Select speaker to play voice guidance";
-"use_osm_live_routing" = "OsmAndநேரடி வழிசெலுத்தல்";
+"use_osm_live_routing" = "OsmAnd நேரடி வழிசெலுத்தல்";
 "osm_live_routing_descr" = "Use OsmAnd Live updates for navigation";
 "select_nav_profile_dialog_message" = "The 'Navigation type' governs how routes are calculated.";
 "osmand_default_routing" = "OsmAnd routing";
@@ -298,7 +298,7 @@
 "gpx_option_from_start_point" = "முழு பாதையில் செல்க";
 "gpx_option_reverse_route" = "ஜிபிஎக்ஸ் திசையை பின்னோக்கு";
 "use_points_as_intermediates" = "புள்ளிகளுக்கு இடையில் வழியைக் கணக்கிடுங்கள்";
-"calculate_osmand_route_without_internet" = "OsmAndபாதை பிரிவின் ஆஃப்லைன் கணக்கீடு";
+"calculate_osmand_route_without_internet" = "OsmAnd பாதை பிரிவின் ஆஃப்லைன் கணக்கீடு";
 "routing_settings_2" = "வழிதட அமைப்புகள்";
 "impassable_road" = "சாலைகள் தவிர்க்கவும் …";
 "road_speeds" = "Road speeds";
@@ -324,7 +324,7 @@
 "shared_string_turn" = "Turn";
 "stop_routing_confirm" = "வழிநடத்துதலை நீங்கள் நிச்சயமாக நிறுத்த வேண்டுமா\?";
 "cancel_route" = "பாதை அகற்றவும்";
-"route_is_too_long_v2" = "10நிமிடங்களுக்குள் இந்த நீண்ட வழிக்கான பாதை கண்டுபிடிக்கப்படவில்லை எனில் இடைநிலை இடங்களைச் சேர்க்கவும்.";
+"route_is_too_long_v2" = "10 நிமிடங்களுக்குள் இந்த நீண்ட வழிக்கான பாதை கண்டுபிடிக்கப்படவில்லை எனில் இடைநிலை இடங்களைச் சேர்க்கவும்.";
 "navigation_over_track" = "Start navigation along track?";
 "use_displayed_track_for_navigation" = "வழிசெலுத்தலுக்கான டிராக்கைப் பயன்படுத்தவும்\?";
 "previous_route" = "Previous route";
@@ -533,7 +533,7 @@
 "fav_ignore" = "Ignore";
 "shared_string_rename" = "மறுபெயரிடு";
 "update_existing" = "மாற்றவும்";
-"replace_favorite_confirmation" = "%@விருப்பத்தை நிச்சயமாக மாற்ற விரும்புகிறீர்களா \?";
+"replace_favorite_confirmation" = "%@ விருப்பத்தை நிச்சயமாக மாற்ற விரும்புகிறீர்களா \?";
 "fav_points_not_exist" = "பிடித்த புள்ளிகள் இல்லை";
 "fav_rename_q" = "Rename favorite";
 "fav_enter_new_name" = "Please enter new name for the favorite";
@@ -652,7 +652,7 @@
 "routing_engine_vehicle_type_driving" = "Driving";
 "poi_filter_public_transport" = "Public transport";
 "shared_string_map" = "வரைபடம்";
-"layer_amenity_label" = "POIஓவர்லே லேபிள்கள்";
+"layer_amenity_label" = "POI ஓவர்லே லேபிள்கள்";
 "shared_string_show_on_map" = "வரைபடாத்தில் காட்டு";
 "map_settings_type" = "Map type";
 "map_mode" = "வரைபட பயன்முறை";
@@ -1126,7 +1126,7 @@
 "res_edit_map_source" = "Edit map source";
 "res_online_name_descr" = "Provide name for online source";
 "res_online_url_descr" = "Enter or copy and paste URL for online source";
-"edit_tilesource_url_to_load" = "URLஐ";
+"edit_tilesource_url_to_load" = "URL ஐ";
 "shared_string_zoom_levels" = "Zoom levels";
 "res_expire_time" = "Expire time";
 "res_mercator" = "Mercator Projection";
@@ -1161,7 +1161,7 @@
 "opening_changeset" = "மாற்றங்களை திறக்கிறது…";
 "closing_changeset" = "மாற்றம் தொகுப்பை மூடுக…";
 "commiting_node" = "Committing node…";
-"loading_poi_obj" = "POIஐ ஏற்றுகிறது …";
+"loading_poi_obj" = "POI ஐ ஏற்றுகிறது …";
 "shared_string_loading" = "Loading…";
 "osm_upload_failed_title" = "Upload failed";
 "osm_upload_failed_descr" = "Please check your login details and Internet connection and try again.";
@@ -1197,11 +1197,11 @@
 "osm_modify_place" = "Modify place";
 "poi_remove_title" = "Delete POI";
 "osm_edit_modified_poi" = "மாற்றப்பட்ட OSM POI";
-"osm_edit_deleted_poi" = "OSM POIஐ நீக்கியது";
+"osm_edit_deleted_poi" = "OSM POI ஐ நீக்கியது";
 "osm_edit_created_poi" = "Created OSM POI";
 "osm_edit_created_note" = "Created OSM Note";
 "osm_note_create" = "Create OSM Note";
-"upload_osm_note" = "OSMகுறிப்பு பதிவேற்றவும்";
+"upload_osm_note" = "OSM குறிப்பு பதிவேற்றவும்";
 "osm_edit_close_note" = "Close OSM Note";
 "osm_edit_comment_note" = "Comment OSM Note";
 "osm_note_reopen_title" = "Reopen OSM Note";
@@ -1740,7 +1740,7 @@
 "free" = "Free %@";
 "first_usage_greeting" = "இணைய இணைப்பு இல்லாமல் திசைகளைப் பெறவும் புதிய இடங்களை கண்டறியவும்";
 "get_started" = "தொடங்குக";
-"first_usage_wizard_desc" = "OsmAndஉங்கள் இருப்பிடத்தை நிர்ணயித்து, அந்தப் பிராந்தியத்திற்கு ஏற்ற வரைபடங்களை பரிந்துரைக்கவும். \n";
+"first_usage_wizard_desc" = "OsmAnd உங்கள் இருப்பிடத்தை நிர்ணயித்து, அந்தப் பிராந்தியத்திற்கு ஏற்ற வரைபடங்களை பரிந்துரைக்கவும். \n";
 "suggested_maps" = "Suggested maps";
 "suggested_maps_descr" = "These maps are required for the plugin";
 "added_profiles" = "Added profiles";
@@ -1769,7 +1769,7 @@
 "poi_filter_custom_filter" = "விருப்ப வடிப்பான்";
 "delete_custom_categories" = "Delete custom categories";
 "poi_filter_closest_poi" = "அருகில் உள்ள POI கள்";
-"shared_string_is_open_24_7" = "24/7திறக்க";
+"shared_string_is_open_24_7" = "24/7 திறக்க";
 "shared_string_is_open" = "இப்பொழுதே திற";
 "poi_filter_by_name" = "Search by name";
 "subcategories" = "துணை வகைகள்";
@@ -1832,12 +1832,12 @@
 "wiki_buy_description" = "To read full articles - buy Wikipedia plugin and download Wikipedia data of %@";
 "wiki_download_description" = "To read full articles - download Wikipedia data of %@";
 "download_wiki_region_placeholder" = "இந்த பகுதி";
-"osm_live_plan_pricing" = "திட்டம்&விலை";
+"osm_live_plan_pricing" = "திட்டம் & விலை";
 "osm_live_payment_monthly_title" = "\"மாத தவணை \"";
-"osm_live_payment_3_months_title" = "3மாதங்களுக்கு ஒருமுறை செலுத்துங்கள்";
+"osm_live_payment_3_months_title" = "3 மாதங்களுக்கு ஒருமுறை செலுத்துங்கள்";
 "osm_live_payment_annual_title" = "ஒரு வருடத்திற்கு ஒரு முறை செலுத்துங்கள்";
-"osm_live_payment_month_cost_descr" = "%@ /மாதம்";
-"osm_live_payment_month_cost_descr_ex" = "%.2f%@ /மாதம்";
+"osm_live_payment_month_cost_descr" = "%@ / மாதம்";
+"osm_live_payment_month_cost_descr_ex" = "%.2f%@ / மாதம்";
 "osm_live_payment_discount_descr" = "சேமிக்க %@";
 "osm_live_payment_current_subscription" = "உங்கள் தற்போதைய சந்தா";
 "osm_live_payment_renews_monthly" = "மாதாந்திர புதுப்பிப்பு";
@@ -1850,7 +1850,7 @@
 "purchase_dialog_travel_description" = "ஆஃப்லைன் பயண வழிகாட்டி செயல்பாடுகளைப் பெறுவதற்கு பின்வரும் ஒன்றை வாங்கவும்:";
 "free_version_message" = "%@ maps to download or update.";
 "get_osmand_live" = "வரம்பற்ற பதிவிறக்கங்கள், அனைத்து பணம் மற்றும் இலவச கூடுதல், விக்கிபீடியா, விக்கிவோயேஜ், தினசரி வரைபடத்தை மேம்படுத்தல்கள் மற்றும் பல அம்சங்கள் திறக்க பெற OsmAndLive பெறவும்.";
-"osm_live_subscription" = "OsmAndநேரடி சந்தா";
+"osm_live_subscription" = "OsmAnd நேரடி சந்தா";
 "cancel_subscription" = "Cancel subscription";
 "wikivoyage_offline" = "விக்கிவோயாஜ் இணையாநிலை";
 "unlimited_downloads" = "வரம்பற்ற பதிவிறக்கங்கள்";
@@ -1859,7 +1859,7 @@
 "monthly_map_updates" = "வரைபட புதுப்பிப்புகள்: 1 எல்லா மாதமும்2";
 "daily_map_updates" = "வரைபட புதுப்பிப்புகள்:1 எல்லா \nமணிநேரமும் 2";
 "index_item_depth_contours_osmand_ext" = "Nautical depth contours";
-"donation_to_osm" = "OpenStreetMapசமூகத்திற்கு நன்கொடை";
+"donation_to_osm" = "OpenStreetMap சமூகத்திற்கு நன்கொடை";
 "purchase_unlim_title" = "வாங்க -%@";
 "in_app_purchase" = "செயலியுள் வாங்குதல்";
 "in_app_purchase_desc" = "ஒரு முறை பணம் செலுத்துதல்";
@@ -1916,7 +1916,7 @@
 "rendering_attr_smoothness_bad_name" = "Bad";
 "routing_attr_allow_expert_description" = "Extremely difficult routes, with dangerous obstacles and surroundings.";
 "routeInfo_surface_name" = "Surface";
-"rendering_attr_showMtbRoutes_name" = "MTBபாதைகளைக் காண்பி";
+"rendering_attr_showMtbRoutes_name" = "MTB பாதைகளைக் காண்பி";
 "rendering_attr_tracktype_grade5_name" = "Soft";
 "routing_attr_avoid_share_taxi_description" = "Avoids share taxi";
 "routing_attr_width_description" = "Specify permitted vehicle width limit on routes.";
@@ -2000,7 +2000,7 @@
 "rendering_attr_currentTrackColor_description" = "GPX color";
 "routing_attr_driving_style_speed_name" = "Shorter routes";
 "routing_attr_avoid_sett_description" = "Avoids cobblestone and sett";
-"rendering_attr_hikingRoutesOSMC_description" = "OSMCதடங்களின் படி பாதைகளை வழங்கவும்.";
+"rendering_attr_hikingRoutesOSMC_description" = "OSMC தடங்களின் படி பாதைகளை வழங்கவும்.";
 "rendering_value_car_name" = "கார்";
 "routing_attr_avoid_unpaved_name" = "நீக்கப்பட்ட சாலைகள் தவிர்க்கவும்";
 "rendering_attr_lessDetailed_name" = "கொஞ்சம் விவரங்கள்";
@@ -2055,7 +2055,7 @@
 "rendering_attr_pisteGrooming_name" = "Piste grooming";
 "rendering_attr_tracktype_grade3_name" = "Mostly solid";
 "routing_attr_allow_advanced_description" = "Difficult routes, with dangerous obstacles and steep sections.";
-"osm_notes" = "OSMகுறிப்புகள்";
+"osm_notes" = "OSM குறிப்புகள்";
 "rendering_attr_piste_difficulty_novice_name" = "Novice";
 
 
@@ -2213,7 +2213,7 @@
 "ios_release_4_1" = "• Completely redesigned interaction with tracks: a new menu with charts, statistics, ability to change the appearance, coloring by speed, height and slope, and track selection on the map• New screen for searching by coordinates in different formats\n• Improved coordinate search in OLC format\n• New user-friendly menu for choosing languages to display Wikipedia articles on the map\n• Added ability to easily load maps of all regions of the country with a couple of clicks.\n• Added contour lines in feet (You need to download additional files)\n• Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n• New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n• Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
 "altitude" = "உயரம்";
 "osm_live_subscriptions" = "சந்தாக்கள் \n";
-"osm_live_banner_desc" = "வரம்பற்ற வரைபட பதிவிறக்கங்களைப் பெறுக, மேலும் ஒரு மாதத்திற்கு ஒருமுறை விட மேம்படுத்துங்கள்: வாராந்திர, தினசரிஅல்லது மணிநேரம்.";
+"osm_live_banner_desc" = "வரம்பற்ற வரைபட பதிவிறக்கங்களைப் பெறுக, மேலும் ஒரு மாதத்திற்கு ஒருமுறை விட மேம்படுத்துங்கள்: வாராந்திர, தினசரி அல்லது மணிநேரம்.";
 "toast_empty_name_error" = "பெயரிடப்படாத இடம்";
 "shared_string_delete_all" = "அனைத்தையும் நீக்கு";
 "download_all" = "அனைத்தையும் பதிவிறக்கு";
@@ -2262,10 +2262,10 @@
 
 
 
-"rendering_attr_hidePOILabels_name" = "POIமுகப்புவரிச்சீட்டு";
+"rendering_attr_hidePOILabels_name" = "POI முகப்புவரிச்சீட்டு";
 "routing_attr_short_way_name" = "எரிபொருள்-திறனுள்ள வழி";
 "rendering_attr_noAdminboundaries_name" = "எல்லைகள்";
-"rendering_attr_hideIcons_name" = "POIசின்னங்கள்";
+"rendering_attr_hideIcons_name" = "POI சின்னங்கள்";
 "routing_attr_weight_description" = "அனுமதிக்கப்பட்ட வாகனம் எடை வரம்பை வழிகளில் குறிக்கவும்.";
 "rendering_value_pedestrian_name" = "பாதசாரிகள்";
 "rendering_value_bold_name" = "போல்ட்";
@@ -2307,7 +2307,7 @@
 "last_seven_days" = "கடந்த 7 நாட்கள்";
 "shared_string_wikivoyage" = "விக்கிவோயாஜ்";
 "travel_card_download_descr" = "\"இணையத்துடன் ஒரு இணைப்பு இல்லாமல் உலகெங்கிலும் உள்ள இடங்களைப் பற்றிய கட்டுரைகளைப் பார்வையிட   Wikivoyage  பயண வழிகாட்டிகளைப் பதிவிறக்கவும்.\"";
-"map_widget_gps_info" = "GPSதகவல்";
+"map_widget_gps_info" = "GPS தகவல்";
 "shared_string_contents" = "தகவல்கள்";
 "shared_string_deleted" = "அழிக்கப்பட்டது";
 "no_travel_guides_data_descr" = "\"இணையத்துடன் ஒரு இணைப்பு இல்லாமல் உலகெங்கிலும் உள்ள இடங்களைப் பற்றிய கட்டுரைகளைப் பார்வையிட   Wikivoyage  பயண வழிகாட்டிகளைப் பதிவிறக்கவும்.\"";

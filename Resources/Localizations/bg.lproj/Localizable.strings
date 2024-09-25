@@ -37,7 +37,7 @@
 "map_widget_intermediate_time" = "Време до междинна точка";
 "shared_string_previous" = "Предишен";
 "shared_string_next" = "Следващ";
-"route_stops_before" = "%@спирания преди";
+"route_stops_before" = "%@ спирания преди";
 "transport_Routes" = "Маршрути";
 "transport_nearby_routes_within" = "Nearby routes within";
 "transport_nearby_routes" = "В близост до";
@@ -188,7 +188,7 @@
 "speak_traffic_warnings" = "Предупреждения за трафика";
 "shared_string_gpx_waypoints" = "Отправни точки на трасето";
 "speak_favorites" = "Избрани в близост";
-"speak_poi" = "POIнаблизо";
+"speak_poi" = "POI наблизо";
 "speak_pedestrian" = "Пешеходни пътеки";
 "show_tunnels" = "Тунели";
 
@@ -968,7 +968,7 @@
 "reset_to_default" = "Нулиране";
 "reset_profile_action_descr" = "Reset all profile settings to installation defaults. Tapping Reset will discard all your changes, this action can't be undone.";
 "checking_for_duplicates" = "Checking for duplicates...";
-"checking_for_duplicate_description" = "OsmAndпроверете %@ за дубликати със съществуващите елементи в приложението. \n \nМоже да отнеме известно време.";
+"checking_for_duplicate_description" = "OsmAnd проверете %@ за дубликати със съществуващите елементи в приложението. \n \nМоже да отнеме известно време.";
 
 // Purchases
 "prch_addons" = "Addons";
@@ -1148,7 +1148,7 @@
 "welmode_download_maps" = "Изтегляне на карти";
 "srtm_unit_format" = "Единици за измерване на контурните линии";
 "srtm_download_single_help_message" = "Please select the needed format. You will need to re-download the file to change the format.";
-"srtm_download_list_help_message" = "OsmAndпредоставя информация за изолиниите в метри и футове. За да промените избрания формат трябва да изтеглите отново.";
+"srtm_download_list_help_message" = "OsmAnd предоставя информация за изолиниите в метри и футове. За да промените избрания формат трябва да изтеглите отново.";
 "shared_string_meters" = "метри";
 "shared_string_feet" = "футове";
 
@@ -1545,18 +1545,18 @@
 "plugin_nautical_descr" = "Обогатява картата с информация за маршрути за плаване, навигационни светлини, опасни морски зони, зони с ограничения за плаване или акостиране и др. За да я използвате, изтеглете съответните морски карти и включете „Морска карта“ в „Настройки на картата“. \n \nДокументацията е достъпна на адрес %@.";
 "osmand_parking_plugin_name" = "Място на паркиране";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
-"osmand_parking_plugin_description" = "Отбележете мястото, на което е паркирано превозното средство, и уведомете календара за времето на изтичане на плащането. За да поставите отметка, изберете място накартата, отидете в „Действия“ и докоснете „Добавяне на място за паркиране“.";
+"osmand_parking_plugin_description" = "Отбележете мястото, на което е паркирано превозното средство, и уведомете календара за времето на изтичане на плащането. За да поставите отметка, изберете място на картата, отидете в „Действия“ и докоснете „Добавяне на място за паркиране“.";
 "plugin_ski_name" = "Изглед за скиори";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "plugin_ski_descr" = "Маршрутизиране в зони за зимни спортове: преглед на пистите за ски и лифтове, както и трасетата за ски бягане, като цветните линии показват степента на трудност. За да използвате, включете добавката, а също така отидете в „Настройки на картата\" и изберете стил на картата „Зима и ски“.";
 "record_plugin_name" = "Запис на маршрут";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
-"record_plugin_description" = "Записвайте пътуванията или тренировките си и анализирайте данните по отношение на скоростта, натрупаните изкачвания и спускания, профила на надморската височинаи т.н. Записаните маршрути могат да бъдат архивирани, споделяни с приятели, редактирани или обработвани впоследствие. \n \nДокументацията е достъпна на адрес %@.";
+"record_plugin_description" = "Записвайте пътуванията или тренировките си и анализирайте данните по отношение на скоростта, натрупаните изкачвания и спускания, профила на надморската височина и т.н. Записаните маршрути могат да бъдат архивирани, споделяни с приятели, редактирани или обработвани впоследствие. \n \nДокументацията е достъпна на адрес %@.";
 "osm_editing_plugin_name" = "Редактиране на OSM";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "Дайте своя принос към OpenStreetMap - глобална общност, която поддържа цялостна карта на света и предоставя съвременни данни с отворен код на всеки потребител. \n \nИнструкции за редактиране на картата можете да намерите на адрес %@.";
 "product_desc_mapillary" = "Online street-level photos for everyone";
-"plugin_mapillary_descr" = "Снимки от нивото на улицата. Можете да дадете своя принос. За да видите съществуващите данни като слой на картата, включете „Снимки от улицата“ в менюто „Настройкина картата“.";
+"plugin_mapillary_descr" = "Снимки от нивото на улицата. Можете да дадете своя принос. За да видите съществуващите данни като слой на картата, включете „Снимки от улицата“ в менюто „Настройки на картата“.";
 "product_desc_africa" = "Unlimited map downloads for Africa";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";
@@ -1578,7 +1578,7 @@
 "product_desc_asia_short" = "Asia region maps";
 "download_wikipedia_maps" = "Wikipedia";
 "product_desc_wiki" = "Wikipedia data";
-"purchases_feature_desc_wikipedia" = "Осигурява без мрежа всички статии в Уикипедия, свързани с места, като ви помага да научите повече за местата, които посещавате по време на пътуването си, само с еднодокосване на картата. Не забравяйте да изтеглите файловете с карти на Уикипедия за съответните райони.";
+"purchases_feature_desc_wikipedia" = "Осигурява без мрежа всички статии в Уикипедия, свързани с места, като ви помага да научите повече за местата, които посещавате по време на пътуването си, само с едно докосване на картата. Не забравяйте да изтеглите файловете с карти на Уикипедия за съответните райони.";
 "shared_string_all_languages" = "Всички езици";
 "select_wikipedia_article_langs" = "Изберете езиците на които Уикипедия публикациите ще се появяват на картата. Можете да превключвате между наличните езици докато четете публикацията.";
 "wiki_menu_download_descr" = "Необходими са допълнителни карти, за да видите обектите на Уикипедия на картата.";
@@ -1849,7 +1849,7 @@
 "osm_live_payment_contribute_descr" = "Даренията помагат за финансиране на картографията на OSM.";
 "purchase_dialog_title" = "Choose plan";
 "purchase_dialog_travel_description" = "Purchase one of the following to receive the offline travel guide functionality:";
-"free_version_message" = "%@карти за изтегляне или обновяване.";
+"free_version_message" = "%@ карти за изтегляне или обновяване.";
 "get_osmand_live" = "Абонирайте се за OsmAnd Live и отключете всички възможности: всекидневни обновявания с неограничени изтегляния, всички платени и неплатени добавки, Уикиредия, Wikivoyage и много други.";
 "osm_live_subscription" = "Абонамент за OsmAnd Live";
 "cancel_subscription" = "Cancel subscription";
@@ -1946,7 +1946,7 @@
 "rendering_value_orange_name" = "Оранжева";
 "rendering_value_medium_w_name" = "Средна";
 "rendering_attr_contourDensity_description" = "Contour line density";
-"rendering_attr_currentTrackWidth_name" = "GPXширина";
+"rendering_attr_currentTrackWidth_name" = "GPX ширина";
 "rendering_attr_horseRoutes_name" = "Пътеки за конна езда";
 "routing_attr_avoid_ferry_description" = "Avoids ferries";
 "rendering_attr_highway_class_track_grade2_name" = "Grade 2";
@@ -1954,7 +1954,7 @@
 "routing_attr_relief_smoothness_factor_hills_name" = "Планински";
 "rendering_attr_contourWidth_name" = "Contour line width";
 "routing_attr_piste_type_sled_description" = "Склонове за използване на шейни.";
-"rendering_attr_currentTrackWidth_description" = "GPXширина";
+"rendering_attr_currentTrackWidth_description" = "GPX ширина";
 "rendering_attr_piste_type_sleigh_name" = "Шейна";
 "rendering_attr_surface_paved_name" = "Paved";
 "routing_attr_difficulty_preference_name" = "Предпочитана трудност";
@@ -1974,7 +1974,7 @@
 "rendering_attr_highway_class_road_name" = "Път";
 "rendering_value_translucent_green_name" = "Полупрозрачно зелено";
 "rendering_value_translucent_yellow_name" = "Полупрозрачно жълто";
-"rendering_attr_OSMMapperAssistant_name" = "OSM mapperпомощник";
+"rendering_attr_OSMMapperAssistant_name" = "OSM mapper помощник";
 "routing_attr_avoid_borders_name" = "Без пресичане на граници";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Принадкежност към мрежа";
 "rendering_attr_smoothness_excellent_name" = "Отлична";
@@ -1998,7 +1998,7 @@
 "rendering_value_translucent_pink_name" = "Прозрачнорозова";
 "rendering_attr_surface_ground_name" = "Пръст";
 "routing_attr_height_obstacles_description" = "Прогнозното време за пътуване ще отчита въздействието на възвишенията. Предпочитанията за маршрута могат да помогнат за избягване на стръмни изкачвания:";
-"rendering_attr_currentTrackColor_description" = "GPXцвят";
+"rendering_attr_currentTrackColor_description" = "GPX цвят";
 "routing_attr_driving_style_speed_name" = "Shorter routes";
 "routing_attr_avoid_sett_description" = "Избягва паважи";
 "rendering_attr_hikingRoutesOSMC_description" = "Оцветяване на пътищата спрямо следи от OSMC.";
@@ -2064,8 +2064,8 @@
 "rendering_attr_tracktype_grade3_name" = "Предимно твърда";
 "rendering_attr_showSurfaces_name" = "Вид на пътната настилка";
 "routing_attr_allow_advanced_description" = "Difficult routes, with dangerous obstacles and steep sections.";
-"osm_notes" = "OSMбележки";
-"rendering_attr_hidePOILabels_name" = "POIетикети";
+"osm_notes" = "OSM бележки";
+"rendering_attr_hidePOILabels_name" = "POI етикети";
 "rendering_attr_piste_difficulty_novice_name" = "Начинаещ";
 "rendering_attr_hideUnderground_name" = "Подземни обекти";
 "rendering_value_dark_brown_name" = "Тъмнокафява";
@@ -2356,7 +2356,7 @@
 "routing_attr_avoid_tunnels_description" = "Избягване на тунели";
 "promo_subscription" = "Промоционален абонамент";
 "enough_contributions_descr" = "Поздравления, имате необходимия принос към OpenStreetMap и можете да се наслаждавате на неограничено обновяване на картата!";
-"ltr_or_rtl_combine_via_slash" = "%@ / %@";
+"ltr_or_rtl_combine_via_slash" = "%@/%@";
 "logout_from_osmand_cloud_decsr" = "Изход от системата\? \nЩе трябва да влезете отново, за да направите резервно копие или да възстановите данните.";
 "activity_type_mountainbike_name" = "Планинско колоездене";
 "shared_string_progress" = "Напредък";
@@ -2394,7 +2394,7 @@
 "rendering_attr_hideMilitaryAreas_name" = "Скриване на военните зони";
 "routing_attr_prefer_hiking_routes_name" = "Предпочитане на пешеходни маршрути";
 "auth_failed" = "Неуспешно влизане";
-"mgrs_format_descr" = "OsmAndизползва MGRS, който е подобен на формата UTM на НАТО.";
+"mgrs_format_descr" = "OsmAnd използва MGRS, който е подобен на формата UTM на НАТО.";
 "m" = "м";
 "kg" = "кг";
 "km" = "км";
@@ -2567,7 +2567,7 @@
 "shared_string_open_street_map" = "OpenStreetMap";
 "shared_string_logout" = "Излизане";
 "uninstall_speed_cameras" = "Премахване на камери за контрол на скоростта";
-"speed_camera_pois" = "POIна камери за контрол на скоростта";
+"speed_camera_pois" = "POI на камери за контрол на скоростта";
 "speed_cameras_alert" = "Предупрежденията за камери за контрол на скоростта в някои страни са забранени от закона.";
 "map_widget_distance_to_intermediate" = "Разстояние до междинна точка";
 "get_osmand_cloud" = "Вземете OsmAd Cloud";
@@ -2621,7 +2621,7 @@
 "map_widget_ant_bicycle_speed" = "Скорост на велосипеда";
 "gps_info_widget_desc" = "Показва броя на видимите и използвани в момента сателити.";
 "specify_number_of_dir_indicators_desc" = "Изберете брой на индикаторите за посока.";
-"external_sensors_plugin_description" = "Получава достъп до външни сензори, за отчитане например на сърдечен ритъм, скорост на велосипеда, мощност на колоездене или каданса. Необходимо е устройството да есвързано със съответните сензори чрез протокола за безжична персонална мрежа ANT+.";
+"external_sensors_plugin_description" = "Получава достъп до външни сензори, за отчитане например на сърдечен ритъм, скорост на велосипеда, мощност на колоездене или каданса. Необходимо е устройството да е свързано със съответните сензори чрез протокола за безжична персонална мрежа ANT+.";
 "shared_string_foot" = "Крак";
 "not_recorded" = "Не е записано";
 "subscribe_email_error" = "Грешка";
@@ -2760,7 +2760,7 @@
 "shared_string_symbol" = "Символ";
 "help_article_personal_name" = "Мои данни";
 "activity_type_running_name" = "Бягане";
-"ant_plus_bluetooth_off" = "Bluetoothе включен";
+"ant_plus_bluetooth_off" = "Bluetooth е включен";
 "external_sensors_support" = "Поддръжка на външни датчици";
 "carplay" = "CarPlay";
 "glide_ratio_to_target" = "Коефициент на планиране до целта";
@@ -2811,14 +2811,14 @@
 "average_speed_time_interval_desc" = "Задайте интервала от време, за който да бъде усреднена скоростта.";
 "map_widget_trip_recording_duration" = "Продължителност";
 "short_min" = "м";
-"speed_cameras_legal_descr" = "В някои страни или области използването на приложения за предупреждение за камери за контрол на скоростта е незаконно. \n \nТрябва да направите избор в зависимост отзакона на вашата държава. \n \nИзберете %@ и ще получавате сигнали и предупреждения за камери за контрол на скоростта. \n \nИзберете %@. Всички данни, свързани с камериза скорост: предупреждения, известия, POI, ще бъдат премахнати до преинсталиране на OsmAnd.";
+"speed_cameras_legal_descr" = "В някои страни или области използването на приложения за предупреждение за камери за контрол на скоростта е незаконно. \n \nТрябва да направите избор в зависимост от закона на вашата държава. \n \nИзберете %@ и ще получавате сигнали и предупреждения за камери за контрол на скоростта. \n \nИзберете %@. Всички данни, свързани с камери за скорост: предупреждения, известия, POI, ще бъдат премахнати до преинсталиране на OsmAnd.";
 "shared_string_hand" = "Ръка";
 "duration_moment_ago" = "току-що";
 "map_widget_ant_heart_rate_desc" = "Показва честотата на съкращаване на сърдечния мускул на потребителя по време на дадена дейност в реално време";
 "report_an_issues" = "Съобщете за дефект";
 "network" = "Мрежа";
 "distance_to_intermediate_widget_desc" = "Приспособлението показва разстоянието до първата междинна точка. При достигане на междинна точка, времето се обновява да показва оставащото до следващата междинна точка.";
-"map_markers_bar_widget_desc" = "Приспособлението на горния панел показва разстоянието и посоката до следващия маркер на картата от текущото местоположение. Приспособлението може да показва 1 или2 маркера.";
+"map_markers_bar_widget_desc" = "Приспособлението на горния панел показва разстоянието и посоката до следващия маркер на картата от текущото местоположение. Приспособлението може да показва 1 или 2 маркера.";
 "ant_plus_nothing_found_text" = "Не могат да бъдат намерени сензори";
 "activity_type_car_name" = "Автомобил";
 "clouds_widget_desc" = "Показва облачната покривка в текущия център на картата.";
@@ -3007,5 +3007,9 @@
 "no_travel_guides_data_descr" = "Изтеглете пътеводители от Wikivoyage и четете за различни места по света без да имате връзка с интернет.";
 "shared_string_all_colors" = "Всички цветове";
 "shared_string_show" = "Показване";
-"shared_string_is_deleted" = "%@премахнато.";
+"shared_string_is_deleted" = "%@ премахнато.";
 "osm_id" = "OSM ID";
+"quick_action_toggle_preference" = "Превключете за промяна на настройката.";
+"shared_string_local" = "Изтеглени";
+"shared_string_all_icons" = "Всички пиктограми";
+"show_along_the_route" = "Видими точки по маршрута";

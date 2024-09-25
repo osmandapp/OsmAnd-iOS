@@ -455,10 +455,14 @@ static BOOL _repositoryUpdated = NO;
     _downloadingCellResourceHelper = [DownloadingCellResourceHelper new];
     [_downloadingCellResourceHelper setHostTableView:weakSelf.tableView];
     _downloadingCellResourceHelper.rightIconStyle = DownloadingCellRightIconTypeShowInfoAndShevronAfterDownloading;
+    _downloadingCellResourceHelper.isDownloadedLeftIconRecolored = YES;
+    _downloadingCellResourceHelper.leftIconColor = [UIColor colorNamed:ACColorNameIconColorGreen];
     
     _downloadingCellMultipleResourceHelper  = [DownloadingCellMultipleResourceHelper new];
     [_downloadingCellMultipleResourceHelper setHostTableView:weakSelf.tableView];
     _downloadingCellMultipleResourceHelper.rightIconStyle = DownloadingCellRightIconTypeShowInfoAndShevronAfterDownloading;
+    _downloadingCellMultipleResourceHelper.isDownloadedLeftIconRecolored = YES;
+    _downloadingCellMultipleResourceHelper.leftIconColor = [UIColor colorNamed:ACColorNameIconColorGreen];
 }
 
 - (UIView *) getMiddleView
@@ -1753,20 +1757,20 @@ static BOOL _repositoryUpdated = NO;
 
 - (void) updateRepository
 {
-    _doDataUpdateReload = YES;
-    _updateButton.enabled = NO;
-    [_refreshRepositoryProgressHUD show:YES];
-    [OAOcbfHelper downloadOcbfIfUpdated:^{
-        [_app loadWorldRegions];
-        self.region = _app.worldRegion;
-        [_app startRepositoryUpdateAsync:NO];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [_refreshRepositoryProgressHUD hide:YES];
-            [self updateContent];
-            [_app.worldRegion buildResourceGroupItem];
-            _updateButton.enabled = YES;
-        });
-    }];
+//    _doDataUpdateReload = YES;
+//    _updateButton.enabled = NO;
+//    [_refreshRepositoryProgressHUD show:YES];
+//    [OAOcbfHelper downloadOcbfIfUpdated:^{
+//        [_app loadWorldRegions];
+//        self.region = _app.worldRegion;
+//        [_app startRepositoryUpdateAsync:NO];
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [_refreshRepositoryProgressHUD hide:YES];
+//            [self updateContent];
+//            [_app.worldRegion buildResourceGroupItem];
+//            _updateButton.enabled = YES;
+//        });
+//    }];
 }
 
 - (UITableView *) getTableView
@@ -2667,19 +2671,9 @@ static BOOL _repositoryUpdated = NO;
         OAMultipleResourceItem *item = (OAMultipleResourceItem *) item_;
         UIColor *color = [UIColor colorNamed:ACColorNameIconColorDisabled];
         NSArray<OAResourceItem *> *items = [self.region hasGroupItems] ? [self.region.groupItem getItems:item.resourceType] : item.items;
-        for (OAResourceItem *resourceItem in items)
-        {
-            if (_app.resourcesManager->isResourceInstalled(resourceItem.resourceId))
-            {
-                color = [UIColor colorNamed:ACColorNameIconColorGreen];
-                break;
-            }
-        }
         NSString *resourceId = [item getResourceId];
         OAMultipleResourceSwiftItem *mapItem = [[OAMultipleResourceSwiftItem alloc] initWithItem:item];
         DownloadingCell *downloadingCell = [_downloadingCellMultipleResourceHelper getOrCreateCell:resourceId swiftResourceItem:mapItem];
-        downloadingCell.leftIconView.image = [OAResourceType getIcon:item.resourceType templated:YES];
-        downloadingCell.leftIconView.tintColor = color;
         downloadingCell.titleLabel.text = title;
         downloadingCell.descriptionLabel.text = subtitle;
         return downloadingCell;
@@ -2689,9 +2683,6 @@ static BOOL _repositoryUpdated = NO;
         OAResourceItem *item = (OAResourceItem *) ([item_ isKindOfClass:OASearchResult.class] ? ((OASearchResult *) item_).relatedObject : item_);
         OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:item];
         DownloadingCell *downloadingCell = [_downloadingCellResourceHelper getOrCreateCell:mapItem.resourceId swiftResourceItem:mapItem];
-        UIColor *color = _app.resourcesManager->isResourceInstalled(item.resourceId) ? [UIColor colorNamed:ACColorNameIconColorGreen] : [UIColor colorNamed:ACColorNameIconColorDisabled];
-        downloadingCell.leftIconView.image = [OAResourceType getIcon:item.resourceType templated:YES];
-        downloadingCell.leftIconView.tintColor = color;
         downloadingCell.titleLabel.text = title;
         downloadingCell.descriptionLabel.text = subtitle;
         return downloadingCell;
@@ -3276,9 +3267,7 @@ static BOOL _repositoryUpdated = NO;
     _multipleItems = selectedResourceItems;
     [OAResourcesUIHelper offerMultipleDownloadAndInstallOf:item.objcResourceItem selectedItems:selectedResourceItems onTaskCreated:^(id<OADownloadTask> task) {
         [self updateContent];
-    } onTaskResumed:^(id<OADownloadTask> task) {
-        [self showDownloadViewForTask:task];
-    }];
+    } onTaskResumed:nil];
 }
 
 - (void)checkAndDeleteOtherSRTMResources:(NSArray<OAResourceSwiftItem *> *)itemsToCheck

@@ -127,7 +127,7 @@
 - (BOOL) isInstalled
 {
     OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
-    return [res isInstalled];
+    return [OsmAndApp instance].resourcesManager->isResourceInstalled(res.resourceId);
 }
 
 - (NSString *) resourceId

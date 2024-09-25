@@ -84,7 +84,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     
     override func isInstalled(_ resourceId: String) -> Bool {
         if let resourceItem = getResource(resourceId) {
-            return resourceItem.isInstalled() || super.isInstalled(resourceId)
+            return resourceItem.isInstalled()
         }
         return false
     }
@@ -92,7 +92,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     override func isDownloading(_ resourceId: String) -> Bool {
         if let resourceItem = getResource(resourceId) {
             resourceItem.refreshDownloadTask()
-            return resourceItem.downloadTask() != nil && super.isDownloading(resourceId)
+            return resourceItem.downloadTask() != nil
         }
         return false
     }

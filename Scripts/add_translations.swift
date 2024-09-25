@@ -86,7 +86,7 @@ let languageDict = [
     "ku" : "ku",                // Kurdish
     "lt" : "lt",                // Lithuanian
     "lv" : "lv",                // Latvian
-    "mk" : "mk",                // Macedinian
+    "mk" : "mk",                // Macedonian
     "ml" : "ml",                // Malayalam
     "mn" : "mn",                // Mongolian
     "mr" : "mr",                // Marathi
@@ -122,7 +122,30 @@ let languageDict = [
     "zh-Hant" : "zh-rTW",       // Chinese Traditional
 ]
 
-let englishBasedLangs = ["en-GB"]
+let removeLatinOnlyStringsForLanguages = [
+    "ar",
+    "ars",
+    "be",
+    "ckb",
+    "fa",
+    "he",
+    "hi",
+    "hy",
+    "ja",
+    "ka",
+    "kn",
+    "ko",
+    "ml",
+    "mr",
+    "my",
+    "ru",
+    "sat",
+    "ta",
+    "te",
+    "uk",
+    "zh-Hans",
+    "zh-Hant"
+]
 
 var allLanguagesDict = languageDict
 allLanguagesDict["en"] = ""
@@ -335,18 +358,26 @@ class IOSWriter {
     static func addTranslations() {
         
         print("\nTRANSLATING: English at \(DateFormatter.localizedString(from: Date(), dateStyle: .medium, timeStyle: .medium))\n")
-        IOSWriter.makeNewDict(language: iosEnglishKey, iosDict: iosEnglishDict, androidDict: androidEnglishDict)
+        IOSWriter.makeNewDict(language: iosEnglishKey, iosDict: iosEnglishDict, androidDict: androidEnglishDict, iosEnglishDict: [:])
         
         for language in languageDict {
             print("\nTranslating: \(language.key) at \(DateFormatter.localizedString(from: Date(), dateStyle: .medium, timeStyle: .medium))\n")
-            let iosDict = IOSReader.parseTranslationFile(language: language.key)
+            var iosDict = IOSReader.parseTranslationFile(language: language.key)
             let androidDict = AndroidReader.parseTranslationFile(language: language.key)
-            IOSWriter.makeNewDict(language: language.key, iosDict: iosDict, androidDict: androidDict)
+            IOSWriter.makeNewDict(language: language.key, iosDict: iosDict, androidDict: androidDict, iosEnglishDict: iosEnglishDict)
         }
     }
     
     
-    static func makeNewDict(language: String, iosDict: [String : String], androidDict: [String : String]) {
+    static func isStringEnglishOnly(_ text: String?) -> Bool {
+        if let text {
+            let transliteredText = text.applyingTransform(.toLatin, reverse: false)
+            return text == transliteredText
+        }
+        return false
+    }
+    
+    static func makeNewDict(language: String, iosDict: [String : String], androidDict: [String : String], iosEnglishDict: [String : String]) {
         let androidDict = IOSReader.replacePlaceholders(androidDict: androidDict)
         print("Making dictionary '\(language)' at \(DateFormatter.localizedString(from: Date(), dateStyle: .medium, timeStyle: .medium))")
                 
@@ -358,6 +389,7 @@ class IOSWriter {
             if DEBUG && elem.key == DEBUG_STOP_KEY {
                 let breakpoint = true
             }
+            
             if androidDict.keys.contains(elem.key)
             {
                 // Update from localized android dict
@@ -367,12 +399,6 @@ class IOSWriter {
                 } else {
                     newLinesDict.updateValue(androidDict[elem.key]!, forKey: elem.key)
                 }
-            } else {
-//                // TODO: here we can force update from engligh. if it needed.
-//                // Update from english ios dict
-//                if iosDict.keys.contains(elem.key) {
-//                    existingLinesDict.updateValue(elem.value, forKey: elem.key)
-//                }
             }
         }
         
@@ -434,13 +460,35 @@ class IOSWriter {
                             if keyOccurrences[key]! > 1 {
                                 print("Duplicate key ! \(string) ")
                             } else {
-                                if let value = existingLinesDict[key], let updatedString = replaceValueText(newValue: filterUnsafeChars(value), inFullString: string)  {
-                                    updatedStrings.append(updatedString)
-                                } else {
-                                    updatedStrings.append(string);
+                                var newString = string
+                                var value = existingLinesDict[key]
+                                if let value, let updatedString = replaceValueText(newValue: filterUnsafeChars(value), inFullString: string)  {
+                                    newString = updatedString
+                                }
+                                
+                                // Filter accendentally added old english lines
+                                var isTrashString = false
+                                if removeLatinOnlyStringsForLanguages.contains(language) && isStringEnglishOnly(newString) {
+                                    isTrashString = true
+                                } else if language != iosEnglishKey {
+                                    if let value, value == iosEnglishDict[key] {
+                                        isTrashString = true
+                                    } else {
+                                        if let englishValue = iosEnglishDict[key] {
+                                            var trimmedString = newString.replacingOccurrences(of: englishValue, with: "")
+                                            trimmedString = newString.replacingOccurrences(of: key, with: "")
+                                            if trimmedString == "\"\" = \"\"" {
+                                                isTrashString = true
+                                            }
+                                        }
+                                    }
+                                }
+                                
+                                if !isTrashString {
+                                    updatedStrings.append(newString);
                                 }
                             }
-                            //if let updstedString = replaceValueText(newValue: filterUnsafeChars(elem.value), inFullString: strings[i] ) 
+                            //if let updstedString = replaceValueText(newValue: filterUnsafeChars(elem.value), inFullString: strings[i] )
                             // if ind % 1000 == 0 {
                             //     print("Index \(ind) \(key) \(string) ")
                             // }

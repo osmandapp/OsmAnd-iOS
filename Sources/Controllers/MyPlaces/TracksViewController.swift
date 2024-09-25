@@ -583,6 +583,10 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     }
     
     @objc private func filterButtonTapped() {
+        if let filterVC = TracksFiltersViewController() {
+            filterVC.setInitialFilterText(searchText)
+            show(filterVC)
+        }
     }
     
     private func getTotalTracksStatistics() -> String {

@@ -3348,7 +3348,7 @@ static BOOL _repositoryUpdated = NO;
 
 - (void)onDownloadingCellResourceNeedUpdate
 {
-    
+    [self updateContent];
 }
 
 @end

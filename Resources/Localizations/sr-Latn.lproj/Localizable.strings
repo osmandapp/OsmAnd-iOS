@@ -86,7 +86,7 @@
 "simulate_routing_descr" = "Simulirajte svoju poziciju koristeći izračunatu rutu";
 "select_avoid_descr" = "Izaberite puteve koje želite da izbegnete tokom navigacije. Možete ili da izaberete put na mapi ili da izaberete tip sa liste ispod.";
 "no_active_route" = "Nema aktivne rute";
-"day_night_info_description" = "Izlazak sunca: %@  \nZalazak sunca: %@";
+"day_night_info_description" = "Izlazak sunca: %@ \nZalazak sunca: %@";
 "day_night_info" = "Dan/noć info";
 "daynight_mode_auto" = "Automatski";
 "route_simulation" = "Simulacija rute";
@@ -725,7 +725,7 @@
 "sett_arr" = "Strelice mape";
 "shared_string_location" = "Lokacija";
 "sett_arr_map" = "Centar mape";
-"short_location_on_map" = "Širina %@  \nDužina %@";
+"short_location_on_map" = "Širina %@\nDužina %@";
 "navigate_point_format_D" = "DDD.DDDDD";
 "navigate_point_format_DM" = "DDD MM.MMM";
 "navigate_point_format_DMS" = "DDD MM SS.S";
@@ -895,7 +895,7 @@
 "custom_plugins" = "Prilagođeni dodaci";
 "extra_maps_menu_group" = "Dodatne mape";
 "import_duplicates_title" = "Neke stavke već postoje";
-"import_duplicates_description" = "OsmAnd već ima jedinice sa istim imenom kao oni koji se uvoze.  \n  \nOdaberi radnju.";
+"import_duplicates_description" = "OsmAnd već ima jedinice sa istim imenom kao oni koji se uvoze.\n\nOdaberi radnju.";
 "keep_both" = "Zadrži obe";
 "keep_both_desc" = "Uvežene stavke će biti dodate sa predlozima";
 "replace_all" = "Zameni sve";
@@ -967,7 +967,7 @@
 "reset_to_default" = "Vrati na fabrička podešavanja";
 "reset_profile_action_descr" = "Resetujte sva podešavanja profila na podrazumevane vrednosti instalacije. Dodirom na Resetuj će se odbaciti sve vaše promene, ova radnja se ne može opozvati.";
 "checking_for_duplicates" = "Provera duplikata...";
-"checking_for_duplicate_description" = "OsmAnd proverava %@ postojanje umnožaka sa postojećim jedinicama u programu.  \n  \nTo može da potraje neko vreme.";
+"checking_for_duplicate_description" = "OsmAnd proverava %@ postojanje umnožaka sa postojećim jedinicama u programu.\n\nTo može da potraje neko vreme.";
 
 // Purchases
 "prch_addons" = "Dodaci";
@@ -2421,10 +2421,10 @@
 "contributions_may_calculate_with_delay" = "Obračun dopronosa može potrajati nekoliko časova.";
 "shared_string_progress" = "Napredak";
 "simulate_your_location_gpx_descr" = "Simuliraj svoj lokaciju koristeću snimljenu GPX trase.";
-"osmand_cloud_create_account_descr" = "Unesi svoju adresu e-pošte, tamo će vam biti poslan verifikacioni kôd,  \ni svi vaši podaci će biti povezani sa njim.";
+"osmand_cloud_create_account_descr" = "Unesi svoju adresu e-pošte, tamo će vam biti poslan verifikacioni kôd,\ni svi vaši podaci će biti povezani sa njim.";
 "routing_attr_motor_type_hybrid_name" = "Hibrid";
 "shared_string_added" = "Dodato";
-"backup_delete_old_data_warning" = "Izbrisaćete istoriju promena prethodno učitanih podataka.  \n  \nTrenutna verzija podataka biće sačuvana na serveru, ali nećete moći da se vratite na prethodno izvršene promene.";
+"backup_delete_old_data_warning" = "Izbrisaćete istoriju promena prethodno učitanih podataka.\n\nTrenutna verzija podataka biće sačuvana na serveru, ali nećete moći da se vratite na prethodno izvršene promene.";
 "map_updates_for_mappers" = "Ažuriranje mapa za kartografe";
 "local_backup" = "Lokalna rezervna kopija";
 "backup_delete_old_data" = "Ukloni stare verzije";
@@ -2673,7 +2673,7 @@
 "ant_plus_bluetooth_off" = "Bluetooth je isključen";
 "ant_plus_searching_text" = "Pretraga senzora";
 "ant_plus_open_settings" = "Otvori podešavanja";
-"ant_plus_nothing_found_description" = "Proveri da li je: \n- Blutut uključen  \n- Prijemnik uključen  \n- Ovaj uređaj smešten blizu senzora";
+"ant_plus_nothing_found_description" = "Proveri da li je:\n- Blutut uključen\n- Prijemnik uključen\n- Ovaj uređaj smešten blizu senzora";
 "external_device_details_information" = "Informacija";
 "external_device_forget_sensor" = "Zaboravi senzor";
 "external_device_details_battery" = "Baterija";
@@ -3249,7 +3249,7 @@
 "shared_string_edit_color" = "Uredi boju";
 "carplay" = "KarPlej";
 "delete_history_items" = "Obrisati %@ stavke iz istorije?";
-"compass_click_desc" = "Tapni na ikonu kompasa radi promene orijentacije mape.";
+"compass_click_desc" = "Duplo tapni na ikonu kompasa radi promene orijentacije mape.";
 "travel_guides_search_placeholder" = "Pretraga države, grada ili pokrajine";
 "cleared_travel_search_history" = "Istorija očišćena";
 "images" = "Slike";

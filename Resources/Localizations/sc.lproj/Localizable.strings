@@ -2054,7 +2054,7 @@
 "available_languages" = "Limbas a disponimentu";
 "some_articles_may_not_available_in_lang" = "Unos cantos artìculos de Wikipedia diant pòdere no èssere a disponimentu in sa limba tua.";
 "wiki_menu_download_descr" = "Pro bìdere sos PDI de Wikipedia in sa mapa b\'at bisòngiu de mapas agiuntivas.";
-"select_wikipedia_article_langs" = "Issèbera sa limba pro sos artìculos de Wikipedia in sa mapa. Cola dae una limba a disponimentu a s\'àtera cando ses leghende s\'artìculu.";
+"select_wikipedia_article_langs" = "Issèbera sa limba pro sos artìculos de Wikipedia in sa mapa. Cola dae una limba a disponimentu a s'àtera cando ses leghende s'artìculu.";
 "shared_string_all_languages" = "Totu sas limbas";
 "plugin_mapillary_descr" = "Immàgines de vistas a livellu de su caminu. Podes contribuire fintzas tue. Pro bìdere sos datos atuales comente un\'istratu de sa mapa, allughe s\'optzione \"Immàgines a livellu de su caminu\" in su menù \"Cunfigura mapa\".";
 "product_desc_mapillary" = "Vistas a livellu de su caminu pro compidare su logu a fùrriu";
@@ -2913,7 +2913,7 @@
 "top_widgets_panel" = "Pannellu superiore";
 "shared_string_open_track" = "Aberi sa rasta";
 "apply_to_existing" = "Àplica a sos chi esistint";
-"compass_click_desc" = "Cussìgiu: Toca in sa widget de sa bùssola pro colare dae una modalidade de orientamentu a s\'àtera.";
+"compass_click_desc" = "Cussìgiu: Toca in sa widget de sa bùssola pro colare dae una modalidade de orientamentu a s'àtera.";
 "time_to_go_desc" = "Tempus in minutos o oras netzessàriu pro arribbare a sa destinatzione tua.";
 "map_widget_time_to_intermediate" = "Tempus chi mancat finas a su puntu de coladòrgiu";
 "av_notes_choose_action_widget_desc" = "Issèbera s\'atzione.";

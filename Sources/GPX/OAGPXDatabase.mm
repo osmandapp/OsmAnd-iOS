@@ -622,7 +622,7 @@
                             NSURL *newFileUrl = [NSURL fileURLWithPath:[gpxPath stringByAppendingPathComponent:fileUrl.lastPathComponent]];
                             [fileManager moveItemAtURL:fileUrl toURL:newFileUrl error:nil];
                         }
-                        [self addGPXFileToDBIfNeeded:fileUrl.path withUpdateDataSource:YES];
+                    //    [self addGPXFileToDBIfNeeded:fileUrl.path withUpdateDataSource:YES];
                     }
                 }
             }
@@ -633,8 +633,6 @@
 - (OASGpxDataItem *)addGPXFileToDBIfNeeded:(NSString *)filePath
                       withUpdateDataSource:(BOOL)withUpdateDataSource
 {
-    OASKFile *file = [[OASKFile alloc] initWithFilePath:filePath];
-    OASGpxDataItem *dataItem;
     dataItem = [_db getGpxDataItemFile:file];
     if (!dataItem)
     {
@@ -709,7 +707,7 @@
     
     for (NSString *filePath in paths)
     {
-        [self addGPXFileToDBIfNeeded:filePath withUpdateDataSource:false];
+        //[self addGPXFileToDBIfNeeded:filePath withUpdateDataSource:false];
         
         if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
         {
@@ -825,6 +823,17 @@
         }
         return newFilesAdded;
     }
+}
+
+- (void)renameGPX:(OASGpxDataItem *)gpx newFilePath:(NSString *)filePath {
+   // [OASGpxDbHelper shared] renameCurrentFile:<#(nonnull OASKFile *)#> newFile:<#(nonnull OASKFile *)#>
+    
+    
+    OASKFile *newFile = [[OASKFile alloc] initWithFilePath:filePath];
+    [gpx.file renameToToFile:newFile];
+    [OASGpxDbHelper shared] renameCurrentFile:gpx.file newFile:newFile
+    //[_db renameCurrentFile:gpx.file newFile:newFile];
+    _gpxNewList = [_db getGpxDataItemsSync];
 }
 
 - (NSDictionary *)generateGpxData:(OAGPX *)gpx

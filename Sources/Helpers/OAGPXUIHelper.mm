@@ -567,7 +567,59 @@
     }];
 }
 
-- (void)openExportForTrack:(OAGPX *)gpx gpxDoc:(id)gpxDoc isCurrentTrack:(BOOL)isCurrentTrack inViewController:(UIViewController *)hostViewController hostViewControllerDelegate:(id)hostViewControllerDelegate touchPointArea:(CGRect)touchPointArea
+- (void)openNewExportForTrack:(OASGpxDataItem *)gpx
+            isCurrentTrack:(BOOL)isCurrentTrack
+          inViewController:(UIViewController *)hostViewController hostViewControllerDelegate:(id)hostViewControllerDelegate
+            touchPointArea:(CGRect)touchPointArea
+{
+    _isExportingCurrentTrack = isCurrentTrack;
+    _exportingHostVC = hostViewController;
+    _exportingHostVCDelegate = hostViewControllerDelegate;
+    if (isCurrentTrack)
+    {
+        NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
+        [fmt setDateFormat:@"yyyy-MM-dd"];
+
+        NSDateFormatter *simpleFormat = [[NSDateFormatter alloc] init];
+        [simpleFormat setDateFormat:@"HH-mm_EEE"];
+
+        _exportFileName = [NSString stringWithFormat:@"%@_%@",
+                                                     [fmt stringFromDate:[NSDate date]],
+                                                     [simpleFormat stringFromDate:[NSDate date]]];
+        _exportFilePath = [NSString stringWithFormat:@"%@/%@.gpx",
+                                                     NSTemporaryDirectory(),
+                                                     _exportFileName];
+        // FIXME:
+
+//        [OASavingTrackHelper.sharedInstance saveCurrentTrack:_exportFilePath];
+//        _exportingGpxDoc = OASavingTrackHelper.sharedInstance.currentTrack;
+//        _exportingGpx = [OASavingTrackHelper.sharedInstance getCurrentGPX];
+    }
+    else
+    {
+        _exportFileName = gpx.gpxFileName;
+        _exportFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:gpx.gpxFileName];
+// FIXME:
+//        [OAGPXUIHelper addAppearanceToGpx:_exportingGpxDoc gpxItem:_exportingGpx];
+//        [_exportingGpxDoc saveTo:_exportFilePath];
+    }
+    
+    NSString *absoluteGpxFilepath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:_exportFileName];
+    
+    [[NSFileManager defaultManager] copyItemAtPath:absoluteGpxFilepath toPath:_exportFilePath error:nil];
+
+    _exportController = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:_exportFilePath]];
+    _exportController.UTI = @"com.topografix.gpx";
+    _exportController.delegate = self;
+    _exportController.name = _exportFileName;
+    [_exportController presentOptionsMenuFromRect:touchPointArea inView:_exportingHostVC.view animated:YES];
+}
+
+- (void)openExportForTrack:(OAGPX *)gpx
+                    gpxDoc:(id)gpxDoc
+            isCurrentTrack:(BOOL)isCurrentTrack
+          inViewController:(UIViewController *)hostViewController hostViewControllerDelegate:(id)hostViewControllerDelegate
+            touchPointArea:(CGRect)touchPointArea
 {
     _isExportingCurrentTrack = isCurrentTrack;
     _exportingHostVC = hostViewController;
@@ -600,6 +652,7 @@
         if (!_exportingGpxDoc || ![_exportingGpxDoc isKindOfClass:OAGPXDocument.class])
         {
             NSString *absoluteGpxFilepath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:_exportFileName];
+            //Users/oleksandrpanchenko/Library/Containers/57D28383-0CA5-477F-994B-B823A5E5A0B1/Data/Documents/GPX/2023-10-22_11-34_Sun.gpx
             _exportingGpxDoc = [[OAGPXDocument alloc] initWithGpxFile:absoluteGpxFilepath];
         }
         else
@@ -674,7 +727,6 @@
     }
     if (openTrack)
     {
-        NSString *s = [newFolderName stringByAppendingPathComponent:newFileName];
         OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:[newFolderName stringByAppendingPathComponent:newFileName]];
         if (gpx && _exportingHostVC)
         {
@@ -779,6 +831,33 @@
     }
 }
 
+- (void)renameTrackNew:(OASGpxDataItem *)gpx
+               newName:(NSString *)newName
+                hostVC:(UIViewController*)hostVC
+{
+    if (newName.length > 0)
+    {
+        NSString *oldFilePath = gpx.gpxFilePath;
+        NSString *oldPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:oldFilePath];
+        NSString *newFileName = newName;
+        NSString *newFilePath = [[gpx.gpxFilePath stringByDeletingLastPathComponent] stringByAppendingPathComponent:newFileName];
+        NSString *newPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:newFilePath];
+        if (![NSFileManager.defaultManager fileExistsAtPath:newPath])
+        {
+            [[OAGPXDatabase sharedDb] renameGPX:gpx newFilePath:newPath];
+            [OASelectedGPXHelper renameVisibleTrack:oldFilePath newPath:newFilePath];
+        }
+        else
+        {
+            [self showAlertWithText:OALocalizedString(@"gpx_already_exsists") inViewController:hostVC];
+        }
+    }
+    else
+    {
+        [self showAlertWithText:OALocalizedString(@"empty_filename") inViewController:hostVC];
+    }
+}
+
 - (void)renameTrack:(OAGPX *)gpx newName:(NSString *)newName hostVC:(UIViewController*)hostVC
 {
     NSString *docPath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
@@ -790,10 +869,10 @@
 {
     if (newName.length > 0)
     {
-        NSString *oldFilePath = gpx.gpxFilePath;
-        NSString *oldPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:oldFilePath];
+        NSString *oldFilePath = gpx.gpxFilePath; // 2023-10-22_11-34_Sun 1.gpx
+        NSString *oldPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:oldFilePath]; // /Users/oleksandrpanchenko/Library/Containers/57D28383-0CA5-477F-994B-B823A5E5A0B1/Data/Documents/GPX/2023-10-22_11-34_Sun 1.gpx
         NSString *newFileName = [newName stringByAppendingPathExtension:@"gpx"];
-        NSString *newFilePath = [[gpx.gpxFilePath stringByDeletingLastPathComponent] stringByAppendingPathComponent:newFileName];
+        NSString *newFilePath = [[gpx.gpxFilePath stringByDeletingLastPathComponent] stringByAppendingPathComponent:newFileName]; // 2023-10-22_11-34_Sun 2.gpx
         NSString *newPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:newFilePath];
         if (![NSFileManager.defaultManager fileExistsAtPath:newPath])
         {

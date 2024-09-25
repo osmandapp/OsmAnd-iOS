@@ -354,6 +354,7 @@ extension GpxDataItem {
     
     func updateFolderName(newFilePath: String) {
       //  gpxFilePath = newFilePath
+        // FIXME: save to db
         gpxFileName = (newFilePath as NSString).lastPathComponent
         gpxTitle = (gpxFileName as NSString).deletingPathExtension
         gpxFolderName = (newFilePath as NSString).deletingLastPathComponent

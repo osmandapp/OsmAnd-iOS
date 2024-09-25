@@ -3162,6 +3162,73 @@ typedef enum
     }
 }
 
+- (void)openNewTargetViewFromTracksListWithRouteDetailsGraph:(OASGpxFile *)gpxFile
+                                            isCurrentTrack:(BOOL)isCurrentTrack
+                                                     state:(OATrackMenuViewControllerState *)state;
+{
+//    OASGpxFile *gpx = isCurrentTrack ? [OASavingTrackHelper.sharedInstance currentTrackSharedLib] : gpxFile;
+//    if (gpx)
+//    {
+//        OASGpxTrackAnalysis *currentTrackAnalysis = [[OASGpxTrackAnalysis alloc] init];
+//        [currentTrackAnalysis prepareInformationFileTimeStamp:0 pointsAnalyser:nil splitSegments:gpx.getGeneralSegment];
+//        
+//        OASGpxTrackAnalysis *analysis = !isCurrentTrack && [gpx getGeneralTrack] && [gpx getGeneralSegment]
+//            ? [OAGPXTrackAnalysis segment:0 seg:doc.generalSegment]
+//            : [gpx getAnalysisFileTimestamp:0];
+//        state.scrollToSectionIndex = -1;
+//        state.routeStatistics = @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)];
+//        [self openTargetViewWithRouteDetailsGraph:doc analysis:analysis menuControlState:state];
+//    }
+    
+// FIXME:
+//    OASGpxTrackAnalysis *currentTrackAnalysis = [gpxFile getAnalysisFileTimestamp:0];//[[OASGpxTrackAnalysis alloc] init];
+//    state.scrollToSectionIndex = -1;
+//    state.routeStatistics = @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)];
+//    
+//    [self openNewTargetViewWithRouteDetailsGraph:gpxFile analysis:currentTrackAnalysis menuControlState:state isRoute:YES];
+}
+
+- (void)openNewTargetViewWithRouteDetailsGraph:(OASGpxFile *)gpx
+                                    analysis:(OASGpxTrackAnalysis *)analysis
+                            menuControlState:(OATargetMenuViewControllerState *)menuControlState
+                                     isRoute:(BOOL)isRoute
+{
+    [_mapViewController hideContextPinMarker];
+    [self closeDashboard];
+    [self closeRouteInfo];
+
+    OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+    
+    targetPoint.type = OATargetRouteDetailsGraph;
+    
+    _targetMenuView.isAddressFound = YES;
+    _formattedTargetName = nil;
+
+    targetPoint.title = _formattedTargetName;
+    targetPoint.toolbarNeeded = NO;
+    
+    if (gpx && analysis)
+        targetPoint.targetObj = @{@"gpx" : gpx, @"analysis" : analysis, @"route" : @(isRoute)};
+    else
+        targetPoint.targetObj = nil;
+    
+    _activeTargetType = targetPoint.type;
+    _activeTargetObj = targetPoint.targetObj;
+    _activeViewControllerState = menuControlState;
+    _targetMenuView.activeTargetType = _activeTargetType;
+
+    [_targetMenuView setTargetPoint:targetPoint];
+    [self applyTargetPoint:targetPoint];
+
+    [self enterContextMenuMode];
+    [self showTargetPointMenu:NO showFullMenu:NO onComplete:^{
+        _activeTargetActive = YES;
+    }];
+}
+
+
+
+
 - (void) openTargetViewWithRouteDetailsGraph:(OAGPXDocument *)gpx
                                     analysis:(OAGPXTrackAnalysis *)analysis
                             menuControlState:(OATargetMenuViewControllerState *)menuControlState

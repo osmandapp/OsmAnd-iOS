@@ -27,6 +27,8 @@
 #import <sqlite3.h>
 #import <CoreLocation/CoreLocation.h>
 
+#import "OsmAndSharedWrapper.h"
+
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 
@@ -97,6 +99,26 @@
     [currentTrack setVisualization3dPositionType:(EOAGPX3DLineVisualizationPositionType)[settings.currentTrackVisualization3dPositionType get]];
     [currentTrack setColor:[settings.currentTrackColor get]];
     [currentTrack setColoringType:[settings.currentTrackColoringType get].name];
+    
+    
+    _currentTrackSharedLib = [[OASGpxFile alloc] initWithAuthor:@""];
+    [_currentTrackSharedLib setWidthWidth:[settings.currentTrackWidth get]];
+    [_currentTrackSharedLib setShowArrowsShowArrows:[settings.currentTrackWidth get]];
+    [_currentTrackSharedLib setShowStartFinishShowStartFinish:[settings.currentTrackShowStartFinish get]];
+    // setVerticalExaggerationScale -> setAdditionalExaggerationAdditionalExaggeration
+    [_currentTrackSharedLib setAdditionalExaggerationAdditionalExaggeration:[settings.currentTrackVerticalExaggerationScale get]];
+    [_currentTrackSharedLib setElevationMetersElevation:[settings.currentTrackElevationMeters get]];
+   
+    [_currentTrackSharedLib set3DVisualizationTypeVisualizationType:[OAGPXDatabase lineVisualizationByTypeNameForType:(EOAGPX3DLineVisualizationByType)[settings.currentTrackVisualization3dByType get]]];
+    
+    [_currentTrackSharedLib set3DWallColoringTypeTrackWallColoringType:[OAGPXDatabase lineVisualizationWallColorTypeNameForType:(EOAGPX3DLineVisualizationWallColorType)[settings.currentTrackVisualization3dWallColorType get]]];
+    
+    [_currentTrackSharedLib set3DVisualizationTypeVisualizationType:[OAGPXDatabase lineVisualizationPositionTypeNameForType:(EOAGPX3DLineVisualizationPositionType)[settings.currentTrackVisualization3dPositionType get]]];
+    
+    OASInt *color = [[OASInt alloc] initWithInt:[settings.currentTrackColor get]];
+    [_currentTrackSharedLib setColorColor:color];
+    [_currentTrackSharedLib setColoringTypeColoringType:[settings.currentTrackColoringType get].name];
+    
 }
 
 - (instancetype)init
@@ -353,6 +375,11 @@
     lastPoint = kCLLocationCoordinate2DInvalid;
     
     [self setupCurrentTrack];
+    
+  // FIXME:
+  //  [_currentTrackSharedLib initBounds];
+    _currentTrackSharedLib.modifiedTime = (long)[[NSDate date] timeIntervalSince1970];
+    
     [currentTrack initBounds];
     currentTrack.modifiedTime = (long)[[NSDate date] timeIntervalSince1970];
     
@@ -427,9 +454,12 @@
 - (BOOL) saveCurrentTrack:(NSString *)fileName
 {
     BOOL __block res = NO;
-    
+    //
+   // [OASGpxUtilities.shared ];
     dispatch_sync(syncQueue, ^{
         res = [currentTrack saveTo:fileName];
+        // FIXME:
+       // res = [_currentTrackSharedLib saveTo:fileName];
     });
     
     return res;
@@ -782,6 +812,31 @@
     [self addTrackPoint:pt newSegment:newSegment time:time];
 }
 
+- (void)addTrackPointTest:(OASWptPt *)pt newSegment:(BOOL)newSegment time:(long)time {
+//    OASTrack *track = [_currentTrackSharedLib tracks].firstObject;
+//
+//    BOOL segmentAdded = NO;
+//    if (track.segments.count == 0 || newSegment)
+//    {
+//        OASTrkSegment *segment = [[OASTrkSegment alloc] init];
+//        segment.points = [NSMutableArray array];
+//        [track.segments addObject:segment];
+//        segmentAdded = YES;
+//    }
+//    if (pt != nil)
+//    {
+//        OASTrkSegment *lt = [track.segments lastObject];
+////        _currentTrackSharedLib.appendTrackPointToDisplay(pt, app);
+////        TrkSegment lt = track.getSegments().get(track.getSegments().size() - 1);
+////        lt.getPoints().add(pt);
+//    }
+//    if (segmentAdded)
+//    {
+//        currentTrack.processPoints(app);
+//    }
+//    currentTrack.getModifiableGpxFile().setModifiedTime(time);
+}
+
 - (void) addTrackPoint:(OAWptPt *)pt newSegment:(BOOL)newSegment time:(long)time
 {
     OATrack *track = [currentTrack.tracks firstObject];
@@ -1049,6 +1104,23 @@
                  background:[wpt getBackgroundIcon]];
 }
 
+//public void loadGpxFromDatabase() {
+//    Map<String, GpxFile> files = collectRecordedData();
+//    List<Track> tracks = new ArrayList<>();
+//    for (Map.Entry<String, GpxFile> entry : files.entrySet()) {
+//        app.getSelectedGpxHelper().addPoints(entry.getValue().getPointsList(), currentTrack.getModifiableGpxFile());
+//        tracks.addAll(entry.getValue().getTracks());
+//    }
+//    currentTrack.getModifiableGpxFile().setTracks(tracks);
+//    currentTrack.processPoints(app);
+//    prepareCurrentTrackForRecording();
+//    GpxTrackAnalysis analysis = currentTrack.getModifiableGpxFile().getAnalysis(System.currentTimeMillis());
+//    distance = analysis.getTotalDistance();
+//    points = analysis.getWptPoints();
+//    duration = analysis.getTimeSpan();
+//    trkPoints = analysis.getPoints();
+//}
+
 - (void) loadGpxFromDatabase
 {
     dispatch_sync(syncQueue, ^{
@@ -1094,6 +1166,12 @@
         
     });
 }
+
+- (OASGpxFile *)getCurrentGPXSharedLib
+{
+    return _currentTrackSharedLib;
+}
+
 
 - (OAGPX *)getCurrentGPX
 {

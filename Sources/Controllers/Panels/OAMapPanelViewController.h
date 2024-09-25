@@ -15,7 +15,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OAMapViewController, OAFavoriteItem, OAGpxWptItem, OAGPX, OADestination, OAPointDescription, OAHistoryItem, OAAddress, OARTarg, OAToolbarViewController, OAMapActions, OAMapWidgetRegistry, OAMapHudViewController, OABaseScrollableHudViewController, OAApplicationMode, OAGPXDocument, OAGPXTrackAnalysis, OARoutePlanningHudViewController, OATrackMenuViewControllerState, OAObservable, OARTargetPoint, OATargetMenuViewControllerState, OAPOIUIFilter, OASGpxDataItem;
+@class OAMapViewController, OAFavoriteItem, OAGpxWptItem, OAGPX, OADestination, OAPointDescription, OAHistoryItem, OAAddress, OARTarg, OAToolbarViewController, OAMapActions, OAMapWidgetRegistry, OAMapHudViewController, OABaseScrollableHudViewController, OAApplicationMode, OAGPXDocument, OAGPXTrackAnalysis, OARoutePlanningHudViewController, OATrackMenuViewControllerState, OAObservable, OARTargetPoint, OATargetMenuViewControllerState, OAPOIUIFilter, OASGpxDataItem, OASGpxFile;
 
 @interface OAMapPanelViewController : UIViewController<OATargetPointViewDelegate>
 
@@ -255,6 +255,10 @@ NS_ASSUME_NONNULL_BEGIN
 // CarPlay
 - (void) setMapViewController:(nullable OAMapViewController *)mapViewController;
 - (void)detachFromCarPlayWindow;
+
+- (void)openNewTargetViewFromTracksListWithRouteDetailsGraph:(OASGpxFile *)gpxFile
+                                            isCurrentTrack:(BOOL)isCurrentTrack
+                                                     state:(OATrackMenuViewControllerState *)state;
 
 
 //- (void)openTargetViewWithNewGPXFromTracksList:(OASGpxDataItem *)item

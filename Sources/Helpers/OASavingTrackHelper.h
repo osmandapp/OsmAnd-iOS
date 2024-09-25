@@ -14,6 +14,7 @@
 @class OAGPXMutableDocument;
 @class OAGPX;
 @class OAWptPt;
+@class OASGpxFile;
 
 @interface OASavingTrackHelper : NSObject
 
@@ -24,10 +25,13 @@
 @property (nonatomic, readonly) int currentTrackIndex;
 
 @property (nonatomic, readonly) OAGPXMutableDocument *currentTrack;
+@property (nonatomic, readonly) OASGpxFile *currentTrackSharedLib;
 
 + (OASavingTrackHelper *)sharedInstance;
 
 - (OAGPX *)getCurrentGPX;
+
+- (OASGpxFile *)getCurrentGPXSharedLib;
 
 - (BOOL) hasData;
 - (BOOL) hasDataToSave;

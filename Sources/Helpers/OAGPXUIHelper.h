@@ -78,5 +78,14 @@
                  openTrack:(BOOL)openTrack
                           gpx:(OASGpxDataItem *)gpx;
 
+- (void)openNewExportForTrack:(OASGpxDataItem *)gpx
+            isCurrentTrack:(BOOL)isCurrentTrack
+          inViewController:(UIViewController *)hostViewController hostViewControllerDelegate:(id)hostViewControllerDelegate
+               touchPointArea:(CGRect)touchPointArea;
+
+- (void)renameTrackNew:(OASGpxDataItem *)gpx
+               newName:(NSString *)newName
+                hostVC:(UIViewController*)hostVC;
+
 @end
 

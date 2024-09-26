@@ -596,7 +596,6 @@
 "profile_type_base_string" = "Pohjaprofiili";
 "selected_profile" = "Valittu profiili";
 "application_profiles" = "Sovellusprofiilit";
-"import_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";
 "new_plugin_added" = "Uusi laajennus lisätty";
 "reset_to_default" = "Palauta oletusarvot";
 
@@ -742,7 +741,6 @@
 "copied_to_clipboard" = "Kopioitu leikepöydälle";
 // Quick action
 "no_overlay" = "Ei peittokuvaa";
-"toggle_current_location" = "Show/hide coordinates widget";
 
 
 "quick_action_current_location_widget_descr" = "Painike Koordinaatit-widgetin näyttämiseen tai piilottamiseen kartalla.";
@@ -884,15 +882,11 @@
 
 //inapps
 "plugin_nautical_name" = "Merikartat";
-"plugin_nautical_descr" = "OsmAnd Nautical Charts is a plugin for OsmAnd Maps & Navigation app. It is a detailed graphical representation of oceans, seas, coastal areas and rivers. The charts can contain various information like sailing routes, navigation lights, dangerous areas, areas where it's allowed or not allowed to sail or dock, etc.\n\nUsage Instructions: it is highly recommended to download nautical basemap in order to see the maps regardless of detailed map presence. To turn on Nautical charts, tap the map button and set map type to Nautical.\n\nNote: All professional sailors are obliged to have official nautical charts on their ships.\n\nOsmAnd Nautical charts are based on the data from OpenSeaMap project. While OpenSeaMap charts at the moment cannot compete with official nautical charts, they can be used by recreational sailors for orientation or route planning.";
 "osmand_parking_plugin_name" = "Pysäköinnin sijainti";
-"osmand_parking_plugin_description" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
 "plugin_ski_name" = "Hiihtokarttanäkymä";
-"plugin_ski_descr" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
 "record_plugin_name" = "Matkatallennus";
 "record_plugin_description" = "Tämä lisäosa ottaa käyttöön toiminnallisuudet nauhoittaa ja tallentaa jälkiä manuaalisesti koskettamalla GPX-kirjauswidgettiä kartalla, tai myös automaattisesti tallentaa kaikki navigointireitit GPX-tiedostoon. \n \nTallennetut jäljet voidaan jakaa ystävillesi tai käyttää OSM osallistumisissa. Urheilijat voivat käyttää tallennettuja jälkiä harjoittelun seuraamiseen. Jotain perusanalyysejä jäljille voidaan tehdä suoraan OsmAndissa, kuten kierrosaikoja, keskimääräistä nopeutta jne., ja jälkiä voi tietysti myös myöhemmin analysoida erityisissä kolmannen osapuolen analysointityökaluissa.";
 "osm_editing_plugin_name" = "OSM muokkaus";
-"osm_editing_plugin_description" = "OSM Editing plugin can be used to make OSM contributions like creating or modifying POI objects, opening or commenting on OSM Notes, and contributing recorded GPX files. OSM is a community driven global public domain mapping project. For more information, please refer to https://osm.org. Contributions can be made directly from OsmAnd, if you specify your OSM credentials in the app.";
 "product_desc_africa_short" = "Afrikan alueen kartat";
 "product_desc_australia_short" = "Australian alueen kartat";
 "product_desc_centralamerica_short" = "Keski-Amerikan alueen kartat";
@@ -929,7 +923,6 @@
 "shared_string_language" = "Kieli";
 "shared_string_get" = "Lataa";
 "srtm_plugin_disabled" = "Korkeuskäyrät poistettu käytöstä";
-"prch_srtm_info" = "Contour lines plugin enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Avaa";
 "time_closed" = "Suljettu";
 "osm_live_active" = "Aktiivinen";
@@ -1399,7 +1392,6 @@
 
 "latest_version" = "Sinulla on uusin versio: %@";
 "ios_release_3_80" = "• Introduced \“Application Profiles\" with independent settings\n• New arrangement of settings by profiles and types: navigation, general, map and screen\n• Ability to import or export profile settings\n• Added data sources for Online photos\n• Added ability to download online maps to cache\n• Improved \"Search\" algorithms\n";
-"ios_release_3_90" = "• Introduced a \"Plan a route\" feature for planning future trips with the ability to create track segments using different navigation types\n• Added an option to enable a сompass over the \"Radius Ruler\" tool\n• Added \"POI label overlays\" option that allows to show names for favorites, track waypoints and markers on the map\n• Added new Quick actions for visibility of contour lines and terrain on the map, changing an application profile, deleting a nearest intermediate point\n• Fixed issues with missing Wikipedia search category\n• Settings Import: fixed bugs, added support for all data types available in OsmAnd\n• OpenStreetMap editing: fixed the time picker and inability to change the changeset comment\n";
 "shared_string_export" = "Vie";
 "gpx_upload_private_visibility_descr" = "\"Yksityinen\" tarkoittaa sitä, että jälki ei näy missään julkisissa listoissa, mutta sen jälkipisteet (jotka eivät ole aikajärjestyksessä) ovat saatavilla julkisen GPS-API:n kautta ilman aikaleimoja.";
 "gpx_upload_trackable_visibility_descr" = "\"Jäljitettävissä\" tarkoittaa sitä, että jälki ei näy missään julkisissa listoissa, mutta siitä prosessoidut jälkipisteet ja niiden aikaleimat (joita ei voida yhdistää suoraan sinuun), näkyvät julkisesta GPS-API:stä tehtyjen latausten kautta.";

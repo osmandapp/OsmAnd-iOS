@@ -291,11 +291,6 @@
 "shared_string_export" = "Eksport";
 "import_export" = "Import/eksport";
 "import_tracks" = "Import trip";
-"gpx_import_already_exists" = "The specified trip file is already exists in the list. Please choose action.";
-"gpx_export_title" = "Export trip";
-"gpx_export_select_track" = "Please select trip for Export";
-"gpx_no_tracks" = "There are no trips";
-"gpx_remove" = "Remove trip?";
 "map_widget_average_speed" = "přerěznu spěšnosć";
 "shared_string_currently_recording_track" = "Tuchwilne nahrawanje puća";
 "gpx_start_new_segment" = "Nowy wotrězk zahajić";
@@ -306,7 +301,6 @@
 "track_rec_addon_q" = "Please activate Trip recording plugin to record and save your trips";
 "track_clear" = "Clear current trip";
 "track_clear_q" = "Do you want to clear current trip?";
-"record_trip" = "Record your trip";
 "shared_string_clear" = "Wotstronić";
 "quick_action_poi_list" = "Lisćina POI";
 "save_track_to_gpx" = "Auto-record trip during navigation";
@@ -352,7 +346,6 @@
 "download_tab_updates" = "Aktualizacije";
 "shared_string_details" = "Podrobnosće";
 "shared_string_type" = "Družina";
-"menu_my_trips" = "My Trips";
 "menu_my_directions" = "My Directions";
 "shared_string_help" = "Pomoc";
 // OSM Editing actions
@@ -422,7 +415,6 @@
 "quick_action_fav_name_descr" = "Wostaj prózdne za wužiwanje adresy abo městneho mjena.";
 "quick_action_add_category" = "Kategoriju dodać";
 "quick_action_add_marker_descr" = "Tapping this action button adds a map marker at the map center point.";
-"add_waypoint" = "Add waypoint to trip";
 "poi_context_menu_modify" = "POI wobdźěłać";
 "context_menu_item_create_poi" = "POI dodać";
 "context_menu_item_open_note" = "OSM-noticu wočinić";
@@ -466,29 +458,21 @@
 // Rendering attributes
 //inapps
 "plugin_nautical_name" = "Nautical map";
-"product_desc_nautical" = "Nautical map of all world";
 "plugin_nautical_descr" = "OsmAnd Nautical Charts is a plugin for OsmAnd Maps & Navigation app. It is a detailed graphical representation of oceans, seas, coastal areas and rivers. The charts can contain various information like sailing routes, navigation lights, dangerous areas, areas where it's allowed or not allowed to sail or dock, etc.\n\nUsage Instructions: it is highly recommended to download nautical basemap in order to see the maps regardless of detailed map presence. To turn on Nautical charts, tap the map button and set map type to Nautical.\n\nNote: All professional sailors are obliged to have official nautical charts on their ships.\n\nOsmAnd Nautical charts are based on the data from OpenSeaMap project. While OpenSeaMap charts at the moment cannot compete with official nautical charts, they can be used by recreational sailors for orientation or route planning.";
 "osmand_parking_plugin_name" = "Parking Position";
-"product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
 "osmand_parking_plugin_description" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
 "plugin_ski_name" = "Ski map";
-"product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "plugin_ski_descr" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
 "record_plugin_name" = "Nahrawanje jězbow";
 "product_desc_track_recording" = "Activates the functionality to record and save your trips";
 "record_plugin_description" = "Record your trips and save them manually using OsmAnd Trip recording plugin. Export your trip as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their trips.";
-"product_title_trip_planning" = "Trip planning";
-"product_desc_trip_planning" = "Plan your trip, add waypoints, measure the distance to your destination using this plugin";
-"product_desc_ext_trip_planning" = "Trip planning plugin allows you to create your trip on the map, save it, measure the distance between points connected with straight lines, etc. Created for preliminary trip planning rather than thorough route building.";
 "osm_editing_plugin_name" = "Wobdźěłanje OSM";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "OSM Editing plugin can be used to make OSM contributions like creating or modifying POI objects, opening or commenting on OSM Notes, and contributing recorded GPX files. OSM is a community driven global public domain mapping project. For more information, please refer to https://osm.org. Contributions can be made directly from OsmAnd, if you specify your OSM credentials in the app.";
 "worldwide_maps" = "Karty wšeho swěta";
 "download_wikipedia_maps" = "Wikipedija";
-"product_desc_wiki" = "Wikipedia data";
 "purchases_feature_desc_wikipedia" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
 "srtm_plugin_name" = "Topografija";
-"product_desc_srtm" = "Display of contour lines";
 "srtm_plugin_description" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 "wikivoyage_travel_guide" = "Pućowanske přewodniki";
 "start_editing_card_image_text" = "Swobodny pućowanski přewodnik, kotryž móže kóždy wobdźěłać.";
@@ -499,7 +483,6 @@
 "track_save_short_q" = "Trip is too short, do you want to save?";
 "shared_string_description" = "Wopis";
 "roads" = "puće";
-"gpx_select_track" = "Select trip";
 "current_track" = "Tuchwilna čara";
 "access_hint_enter_name" = "Zapodajće mjeno";
 "shared_string_not_selected" = "Njeje wubrane";
@@ -508,27 +491,15 @@
 "prch_srtm_info" = "Contour lines plugin enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Wotewrjenskečasy";
 "osm_live_active" = "Aktiwne";
-"menu_all_trips" = "All Trips";
-"moving_time" = "Moving time";
 "change_color" = "Barbu změnić";
-"create_new_trip" = "Create new trip";
-"select_wpt_on_map" = "Select point on map to add to the trip";
 "rename_track" = "Rename trip";
-"gpx_enter_new_name" = "Please enter new name for the trip";
-"gpx_trip_groups" = "Trip groups";
 "shared_string_show_all" = "Wšě pokazać";
 "get_directions" = "Nawigacija";
 "poi_filter_parking" = "Parkowanišćo";
 "context_menu_item_directions_from" = "Nawigacija wottud";
 "search_nearby" = "Wokoło stejišća pytać";
 "plugins_menu_group" = "Přidatki";
-"plugin_popup_wiki_ask" = "To download Wikipedia data you need to activate plugin: <b>Wikipedia</b>";
-"plugin_popup_srtm_desc" = "To start using Contour lines feature, please download Contour lines of an region first";
-"plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Contour lines</b>";
-"plugin_popup_trip_planning_ask" = "To start planning the trip you need to activate plugin: <b>Trip planning</b>";
 "map_downloaded" = "Karta sćehnjena";
-"sqlitedb_import_title" = "Import Map Creator file";
-"map_creator" = "Map Creator";
 "online_map" = "Online-karta";
 "local_map_names" = "Lokalne mjena";
 "shared_string_history" = "Stawizny";

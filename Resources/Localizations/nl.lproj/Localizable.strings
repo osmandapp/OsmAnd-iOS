@@ -316,15 +316,10 @@
 "shared_string_export" = "Exporteer";
 "import_export" = "Importeren/exporteren";
 "import_tracks" = "Tracks importeren";
-"gpx_import_already_exists" = "The specified trip file is already exists in the list. Please choose action.";
 "gpx_add_new" = "Nieuw bestand toevoegen";
 "gpx_overwrite" = "Overschrijven";
 "gpx_cannot_import" = "Kan het opgegeven GPX-bestand niet importeren";
-"gpx_export_title" = "Export trip";
-"gpx_export_select_track" = "Please select trip for Export";
 "gpx_import_desc" = "Om je GPX bestanden (standaard GPS gegevensformaat) te importeren uit Dropbox, Email, of andere programma's, gebruik de \"Kopieer naar OsmAnd Maps\" optie";
-"gpx_no_tracks" = "There are no trips";
-"gpx_remove" = "Remove trip?";
 "shared_string_statistics" = "Statistieken";
 "map_widget_average_speed" = "Gemiddelde snelheid";
 "track_recording" = "Trackopnamen maken";
@@ -341,7 +336,6 @@
 "track_clear" = "Huidige track leeg maken";
 "track_clear_q" = "Wil je de huidige track leegmaken?";
 "show_info" = "Toon info";
-"record_trip" = "Record your trip";
 "gpx_max_speed" = "Maximale snelheid";
 "shared_string_speed" = "Snelheid";
 // Map settings
@@ -372,8 +366,6 @@
 "sett_zoom" = "Zoom knop";
 "recording_context_menu_show" = "Toon";
 "sett_notshow" = "Niet weergeven";
-"sett_loc_fmt" = "Location format";
-"sett_deg" = "Degrees";
 "sett_deg_min" = "Graden en minuten";
 "sett_arr" = "Kaart pijlen";
 "shared_string_location" = "Coördinaten";
@@ -421,12 +413,9 @@
 "res_updates_exp" = "Schaf continent(en) aan om de kaarten bij te werken";
 // Menu
 "shared_string_my_places" = "Mijn plaatsen";
-"menu_my_trips" = "My Trips";
 "menu_my_directions" = "My Directions";
 "feedback" = "Commentaar";
-"menu_about" = "About";
 "add_waypoint" = "Voeg tussenpunt toe";
-"more" = "More";
 "parking_place_limited" = "Parkeertijd beperkt tot";
 "osmand_parking_time_left" = "over";
 "osmand_parking_overdue" = "overschreden";
@@ -461,34 +450,16 @@
 // Rendering attributes
 //inapps
 "plugin_nautical_name" = "Nautische kaartweergave";
-"product_desc_nautical" = "Nautical map of all world";
 "plugin_nautical_descr" = "Toon nautische gegevens op de kaart voor varen, zeilen, en andere vormen van watersport. Download ook het kaartbestand \'Zeebakens (wereld)\' om deze plugin te gebruiken. \n \nDeze plug-in biedt alle nautische navigatietekens en kaartsymbolen voor de binnenvaart en voor navigatie bij de kust. In de beschrijving van elke navigatieteken staat de informatie die nodig is om hem te identificeren en over de betekenis (categorie, vorm, kleur, volgorde, referentie, enz.) ervan. \n \nOm weer de gewone kaart te zien kun je de plug-in uitschakelen of de \'Kaart stijl\' onder \'Kaart instellen\' veranderen. \n \nLees verder op %@.";
 "osmand_parking_plugin_name" = "Parkeerlocatie";
-"product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
 "osmand_parking_plugin_description" = "Bewaart de locatie waar je auto geparkeerd staat en de resterende parkeertijd. \nDe parkeerlocatie en resterende parkeertijd staan op het Osmand dashboard en in een widget op de kaart. Er kan een alarmsignaal in de Android kalender geplaatst worden ter herinnering.";
 "plugin_ski_name" = "Ski kaartweergave";
-"product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "plugin_ski_descr" = "Toon gedetailleerde informatie over slalompistes, langlaufroutes, alpine ski routes, kabelbanen en skiliften wereldwijd. Routes en pistes worden getoond in een kleurcode naar moeilijkheidsgraad, en afgebeeld in een speciale \'Winter en ski\' kaartstijl die lijkt op een besneeuwd winterlandschap. \n \nHet activeren van deze weergave verandert de kaartstijl in \'Winter en ski\', met alle kenmerken van het landschap onder winterse omstandigheden. Deze weergave kan worden teruggezet door het deactiveren van de plug-in, of door het veranderen van de \'Kaart stijl\' onder \'Kaart instellen\'.";
 "record_plugin_name" = "Trackopnames";
-"product_desc_track_recording" = "Activates the functionality to record and save your tracks";
 "record_plugin_description" = "Neem je reizen of trainingen in GPX formaat en analyseer de gegevens zoals snelheid, opgebouwde beklimmingen en afdalingen, hoogteprofiel, etc. Opgenomen tracks kunnen worden gearchiveerd, gedeeld met vrienden, bewerkt en verwerkt worden in andere programma\'s. \n \nLees verder op %@.";
-"product_title_trip_planning" = "Trip planning";
-"product_desc_trip_planning" = "Plan your trip, add waypoints, measure the distance to your destination using this plugin";
-"product_desc_ext_trip_planning" = "Trip planning plugin allows you to create your trip on the map, save it, measure the distance between points connected with straight lines, etc. Created for preliminary trip planning rather than thorough route building.";
-"product_desc_africa" = "Map of Africa";
-"product_desc_australia" = "Map of Australia";
-"product_desc_centralamerica" = "Map of Central America";
-"product_desc_europe" = "Map of Europe";
-"product_desc_northamerica" = "Map of North America";
-"product_desc_russia" = "Map of Russia";
-"product_desc_southamerica" = "Map of South America";
 "worldwide_maps" = "Wereldwijde kaarten";
-"product_desc_allworld" = "Map of All World";
-"product_desc_asia" = "Map of Asia";
-"product_desc_wiki" = "Wikipedia data";
 "purchases_feature_desc_wikipedia" = "Biedt alle plaatsgerelateerde Wikipedia-artikelen offline, zodat u meer te weten komt over de plaatsen die u tijdens uw reis bezoekt door eenvoudig te tikken op de kaart. Vergeet niet de Wikipedia-kaartbestanden voor de specifieke regio\'s te downloaden.";
 "srtm_plugin_name" = "Topografie";
-"product_desc_srtm" = "Display of contour lines";
 "srtm_plugin_description" = "Deze plug-in toont hoogtelijnen en een reliëfschaduwlaag bovenop de normale OsmAnd-kaart. Uitermate praktisch voor sporters, wandelaars, trekkers, en iedereen die geïnteresseerd is in de hoogteverschillen van een landschap. \n \nDe wereldwijde gegevens (van 70° noorderbreedte tot 70° zuiderbreedte) zijn gebaseerd op metingen door SRTM(Shuttle Radar Topography Mission) en ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), een beeldvormend instrument aan boord van de Terra-satelliet, het vlaggenschip van NASA\'s Earth Observing System. ASTER is een samenwerkingsverband tussen NASA, het Japanse Ministerie van Economie, Handel en Industrie (METI), en Japan Space Systems (J-spacesystems). \n \nLees verder op %@.";
 "my_location" = "Mijn positie";
 "get_unlimited_access" = "Krijg onbeperkte toegang";
@@ -498,7 +469,6 @@
 "res_installing" = "Installeren…";
 "roads" = "Wegen";
 "shared_string_hillshade" = "Reliëfschaduw";
-"gpx_select_track" = "Select trip";
 "current_track" = "Huidig pad";
 "access_hint_enter_name" = "Voer naam in";
 "shared_string_not_selected" = "Niet geselecteerd";
@@ -508,26 +478,15 @@
 "prch_srtm_info" = "Contour lines plugin enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Openen";
 "osm_live_active" = "Actief";
-"menu_all_trips" = "All Trips";
 "moving_time" = "Tijd in beweging";
 "change_color" = "Kleur wijzigen";
-"create_new_trip" = "Create new trip";
-"select_wpt_on_map" = "Select point on map to add to the trip";
 "rename_track" = "GPX-track hernoemen";
-"gpx_enter_new_name" = "Please enter new name for the trip";
 "local_indexes_cat_backup" = "Gedeactiveerd";
-"gpx_trip_groups" = "Trip groups";
 "shared_string_show_all" = "Toon alles";
 "get_directions" = "Routebeschrijving";
 "poi_filter_parking" = "Parkeren";
-"plugin_popup_wiki_ask" = "To download Wikipedia data you need to activate plugin: <b>Wikipedia</b>";
-"plugin_popup_srtm_desc" = "To start using Contour lines feature, please download Contour lines of an region first";
-"plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Contour lines</b>";
-"plugin_popup_trip_planning_ask" = "To start planning the trip you need to activate plugin: <b>Trip planning</b>";
 "shared_string_restore" = "Herstellen";
 "map_downloaded" = "Kaart gedownload";
-"sqlitedb_import_title" = "Import Map Creator file";
-"map_creator" = "Map Creator";
 "local_map_names" = "Plaatselijke namen";
 "shared_string_history" = "Geschiedenis";
 "today" = "Vandaag";

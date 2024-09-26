@@ -678,7 +678,6 @@
 "show_poi_over_map" = "Afficher la sur-couche points d\'intérêt";
 "search_radius" = "Recherche dans un rayon";
 "shared_string_clear" = "Effacer";
-"map_creator" = "Map Creator";
 "shared_string_close" = "Fermer";
 "transport_Routes" = "Lignes";
 "new_destination_point_dialog" = "Vous avez déjà indiqué une arrivée :";

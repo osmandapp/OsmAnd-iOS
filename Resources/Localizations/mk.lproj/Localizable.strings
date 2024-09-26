@@ -498,7 +498,6 @@
 "gpx_selection_segment_title" = "Del";
 "route_points" = "Tocki na marsrutata";
 "copy_to_map_favorites" = "Kopiraj vo omileni (favorites)";
-"import_export" = "Import/Export";
 "import_tracks" = "Vnesete gi zapisite";
 "gpx_parse_error" = "OsmAnd GPX ne e dobro formiran, ve molime kontaktirajte go timot za poddrška za dopolnitelno da istraži.";
 "tracks_on_map" = "Prikažani zapisi";
@@ -1119,8 +1118,6 @@
 "search_nearby" = "Prebaruvajte vo blizina";
 "move_marker_bottom_sheet_title" = "Pomestete ja kartata za da ja promenite pozicijata na markerot";
 "plugins_menu_group" = "Priklucoci";
-"plugin_popup_srtm_desc" = "To start using Contour lines feature, please download Contour lines of an region first";
-"plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Contour lines</b>";
 "weather_plugin_description" = "Enable the Weather Plugin to plan a route considering the weather. Watch the coloured map of weather forecast, which is updated hourly for today, tomorrow, and the week ahead. \n\nWhile traveling see location based info widgets with temperature, precipitation, wind speed, pressure. \n\nWill be useful for hiking and long trips by bike or motorcycle.";
 "shared_string_restore" = "Vrati vo pocetna sostojba";
 "restore_purchases" = "Vratete gi na pocetno kupuvanjata";

@@ -994,16 +994,12 @@
 
 //inapps
 "plugin_nautical_name" = "Mapa nautikoa ikuspegia";
-"product_desc_nautical" = "Nautical map of all world";
 "plugin_nautical_descr" = "Zure mapa aberasten du nabigazio-ibilbideei, nabigazio-argiei, arrisku nautikoko guneei, nabigatzeko edo atrakatzeko mugak dituzten guneei buruzko informazioarekin. Erabiltzeko, deskargatu dagozkien Nautika-mapak eta gaitu \"Mapa nautikoa\" estiloa \"Konfiguratu mapa\" atalean. \n \nIrakurketa gehiago %@ helbidean.";
 "osmand_parking_plugin_name" = "Aparkalekuaren kokapena";
-"product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
 "osmand_parking_plugin_description" = "Markatu autoa non dagoen aparkatuta eta jakinarazi egutegira noiz iraungiko den parkimetroa. Markagailua jartzeko, aukeratu toki bat mapan, joan \"Ekintzak\" atalera eta sakatu \"Gehitu aparkalekua\".";
 "plugin_ski_name" = "Ski-mapa ikuspegia";
-"product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "plugin_ski_descr" = "Neguko kirol guneetan nabigatzeko diseinatua: ikusi eski-pistak eta eski-igogailuak, eta kros-eskiko pistak, zailtasun-mailak adierazten dituzten kolore-lerroekin. Erabiltzeko, gaitu plugin hau eta joan \"Mapa konfiguratu\"ra eta aukeratu \"Negua eta eskia\" mapa estiloa.";
 "record_plugin_name" = "Bidaiaren grabaketa";
-"product_desc_track_recording" = "Activates the functionality to record and save your tracks";
 "record_plugin_description" = "Grabatu zure bidaiak edo entrenamenduak, eta aztertu datuak abiadura, metatutako igoerak eta jaitsierak, kota-profila, etab. Grabatutako arrastoak artxibatu, lagunekin partekatu, editatu eta prozesatu egin daitezke. \n \nIrakurketa gehiago %@ helbidean.";
 "osm_editing_plugin_name" = "OpenStreetMap edizioa";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
@@ -1011,14 +1007,12 @@
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Kale-mailako ikuspegien irudiak. Zuk ere ekarpenak egin ditzakezu. Dauden datuak mapa geruza gisa ikusteko, aktibatu \"Kale mailako irudiak\" \"Konfiguratu mapa\" menuan.";
 "worldwide_maps" = "Mundu osoko mapak";
-"product_desc_wiki" = "Wikipedia data";
 "purchases_feature_desc_wikipedia" = "Tokiekin erlazionatutako Wikipediako artikulu guztiak lineaz kanpo eskaintzen ditu, zure bidaian bisitatzen dituzun tokiei buruz ikasten lagunduko dizu mapan sakatu soilekin. Ez ahaztu dagozkien eskualdeetako Wikipediako mapa fitxategiak deskargatzea.";
 "shared_string_all_languages" = "Hizkuntza guztiak";
 "select_wikipedia_article_langs" = "Hautatu mapako Wikipediako artikuluen hizkuntzak. Hizkuntza eskuragarrien artean txandakatu dezakezu artikulua irakurtzean.";
 "wiki_menu_download_descr" = "Mapa osagarriak behar dira Wikipediaren POIak mapan ikusteko.";
 "some_articles_may_not_available_in_lang" = "Wikipediako artikulu batzuk agian ez daude zure hizkuntzan eskuragarri.";
 "srtm_plugin_name" = "Topografia";
-"product_desc_srtm" = "Display of contour lines";
 "srtm_plugin_description" = "Lurzoruaren informazioa, hala nola sestra-kurbak, mendiko itzalak eta maldak, lur-erliebea, nabigagarritasuna eta abar ikusmenaren arabera ebaluatzen laguntzen dizu. Informazio topografikoa mapan malda itzalez, sestra-kurben bidez eta/edo malda-kolorearen bidez irudikatu daiteke. \n \nAzpiko datuak SRTM eta ASTER-en jatorria dira. \n \nIrakurketa gehiago %@ helbidean.";
 "wikivoyage_travel_guide" = "Bidai-gidak";
 "start_editing_card_image_text" = "Edonork idatzi dezakeen mundu osoko doako gida.";
@@ -1074,8 +1068,6 @@
 "search_nearby" = "Bilatu inguruan";
 "move_marker_bottom_sheet_title" = "Mugitu mapa markatzailearen posizioa aldatzeko";
 "plugins_menu_group" = "Gehigarriak";
-"plugin_popup_srtm_desc" = "To start using Contour lines feature, please download Contour lines of an region first";
-"plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Contour lines</b>";
 "shared_string_restore" = "Berreskuratu";
 "map_downloaded" = "Mapa deskargatu da";
 "online_map" = "Sareko mapa";

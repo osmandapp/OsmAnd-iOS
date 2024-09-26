@@ -405,7 +405,6 @@
 "shared_string_export" = "İxrac et";
 "gpx_selection_segment_title" = "Segments";
 "route_points" = "Marşrut nöqtələri";
-"import_export" = "Import/Export";
 "gpx_parse_error" = "OsmAnd GPX is not well formed, please contact the support team to investigate further.";
 "tracks_on_map" = "Tracks on map";
 "shared_string_statistics" = "Statistika";
@@ -874,16 +873,12 @@
 
 //inapps
 "plugin_nautical_name" = "Nautical map";
-"product_desc_nautical" = "Nautical map of all world";
 "plugin_nautical_descr" = "OsmAnd Nautical Charts is a plugin for OsmAnd Maps & Navigation app. It is a detailed graphical representation of oceans, seas, coastal areas and rivers. The charts can contain various information like sailing routes, navigation lights, dangerous areas, areas where it's allowed or not allowed to sail or dock, etc.\n\nUsage Instructions: it is highly recommended to download nautical basemap in order to see the maps regardless of detailed map presence. To turn on Nautical charts, tap the map button and set map type to Nautical.\n\nNote: All professional sailors are obliged to have official nautical charts on their ships.\n\nOsmAnd Nautical charts are based on the data from OpenSeaMap project. While OpenSeaMap charts at the moment cannot compete with official nautical charts, they can be used by recreational sailors for orientation or route planning.";
 "osmand_parking_plugin_name" = "Parkinq mövqeyi";
-"product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
 "osmand_parking_plugin_description" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
 "plugin_ski_name" = "Ski map";
-"product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "plugin_ski_descr" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
 "record_plugin_name" = "Səfər qeydetmə";
-"product_desc_track_recording" = "Activates the functionality to record and save your tracks";
 "record_plugin_description" = "Bu qoşma xəritədə GPX qeydetmə vidcetinə əl ilə toxunmaqla izlərinizi qeyd etmək və saxlamaq, həmçinin bütün naviqasiya marşrutlarınızı avtomatik olaraq GPX faylına qeyd etmək funksiyasını aktivləşdirir. \n \nQeyd edilmiş izlər dostlarınızla paylaşıla və ya OSM töhfələri üçün istifadə edilə bilər. İdmançılar məşqlərinə nəzarət etmək üçün qeyd edilmiş izlərdən istifadə edə bilərlər. Dövrə vaxtları, orta sürət və s. kimi bəzi əsas iz analizləri birbaşa OsmAnd-da həyata keçirilə bilər və əlbəttə ki, daha sonra izlər xüsusi 3-cü tərəf analiz alətlərində də təhlil edilə bilər.";
 "osm_editing_plugin_name" = "OpenStreetMap Editing";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
@@ -892,12 +887,10 @@
 "plugin_mapillary_descr" = "Hər kəs üçün küçə səviyyəsində şəkillər. Yerləri kəşf edin, əməkdaşlıq edin, dünyanı çəkin.";
 "worldwide_maps" = "All World Maps";
 "download_wikipedia_maps" = "Vikipediya";
-"product_desc_wiki" = "Wikipedia data";
 "purchases_feature_desc_wikipedia" = "Vikipediyanı oflayn kəşf edin. Məqalələr ölkələr və regionlar üzrə bölünür və bütün dillərdə mövcuddur.";
 "shared_string_all_languages" = "Bütün dillər";
 "select_wikipedia_article_langs" = "Xəritədə Vikipediya məqalələri üçün dilləri seçin. Məqaləni oxuyarkən mövcud olan hər hansı dilə keçin.";
 "srtm_plugin_name" = "Kontur xətləri";
-"product_desc_srtm" = "Display of contour lines";
 "srtm_plugin_description" = "Bu qoşma OsmAnd-ın standart xəritələrinin üzərində həm kontur xəttinin, həm də (relyef) təpə kölgəsi örtüyünün göstərilməsini təmin edir. Bu funksionallıq idmançılar, piyada gəzənlər, səyahətçilər və landşaftın relyef quruluşu ilə maraqlanan hər kəs tərəfindən yüksək qiymətləndiriləcək. (Nəzərə alın ki, kontur xətti və/yaxud relyef məlumatları ayrıdır, qoşmanı aktivləşdirdikdən sonra əlavə endirmələr mümkündür.) \n \nQlobal məlumatlar (70° şimal və 70° cənub arasında) SRTM (Shuttle Radar Topography Mission) və NASA-nın Yer Müşahidə Sisteminin qabaqcıl peyki olan Terra-nın göyərtəsində təsvir aləti olan ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer) tərəfindən ölçmələrə əsaslanır. ASTER – NASA, Yaponiyanın İqtisadiyyat, Ticarət və Sənaye Nazirliyi (METI) və Yaponiya Kosmik Sistemləri (J-spacesystems) arasında ortaq işdir.";
 "wikivoyage_travel_guide" = "Səyahət Bələdçiləri";
 "start_editing_card_image_text" = "Pulsuz dünya səyahət bələdçisinə hər kəs düzəliş edə bilər.";
@@ -948,8 +941,6 @@
 "search_nearby" = "Yaxınlıqda axtar";
 "move_marker_bottom_sheet_title" = "İşarənin mövqeyini dəyişmək üçün xəritəni daşıyın";
 "plugins_menu_group" = "Qoşmalar";
-"plugin_popup_srtm_desc" = "To start using Contour lines feature, please download Contour lines of an region first";
-"plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Contour lines</b>";
 "shared_string_restore" = "Bərpa et";
 "map_downloaded" = "Xəritə endirildi";
 "online_map" = "Onlayn xəritə";

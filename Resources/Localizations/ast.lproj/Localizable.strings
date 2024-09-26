@@ -247,7 +247,6 @@
 // GPX
 "shared_string_export" = "Esportar";
 "gpx_selection_segment_title" = "Segmentu";
-"import_export" = "Import/Export";
 "gpx_parse_error" = "OsmAnd GPX is not well formed, please contact the support team to investigate further.";
 "map_widget_average_speed" = "Velocidá media";
 "shared_string_control_start" = "Aniciar";
@@ -570,25 +569,19 @@
 // Rendering attributes
 
 //inapps
-"product_desc_nautical" = "Nautical map of all world";
 "plugin_nautical_descr" = "This plugin enriches the OsmAnd map and navigation app to also produce nautical maps for boating, sailing, and other types of watersports. \n \nA special map add-on for OsmAnd will provide all nautical navigation marks and chart symbols, for inland as well as for nearshore navigation. The description of each navigation mark provides the details needed to identify them and their meaning (category, shape, color, sequence, reference, etc.). \n \nTo return to one of OsmAnd\'s conventional map styles, simply either de-activate this plugin again, or change the \'Map style\' under \'Configure map\' as desired.";
-"product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
 "osmand_parking_plugin_description" = "Lets you record where your car is parked, including how much parking time remains. \n Both location and time are visible on the dashboard as well as in a map widget. An alarm reminder can be added to the Android calendar.";
-"product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "plugin_ski_descr" = "This plugin for OsmAnd puts at your fingertips details of global downhill ski slopes, cross country ski runs, Alpine ski routes, cable cars and ski lifts. Routes and pistes are shown color-coded by difficulty, and depicted in a special \'Winter\' map style which assimilates a snow-colored winter landscape. \n \nActivating this view changes the map style to \'Winter and ski\', showing all landscape features under wintry conditions. This view can be reverted by either de-activating it again here, or by changing the \'Map style\' under \'Configure map\' as desired.";
 "record_plugin_name" = "Rexistru de viaxes";
-"product_desc_track_recording" = "Activates the functionality to record and save your tracks";
 "record_plugin_description" = "This plugin activates the functionality to record and save your tracks by manually touching the GPX logging widget on the map, or also to automatically log all of your navigation routes to a GPX file. \n \n Recorded tracks can be shared with your friends or be used for OSM contributions. Athletes can use recorded tracks to monitor their trainings. Some basic track analysis can be performed directly in OsmAnd, like lap times, average speed etc., and tracks can of course also later be analyzed in special 3rd party analysis tools.";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "Make OSM contributions like creating or modifying OSM POI objects, opening or commenting OSM notes, and contributing recorded GPX files in OsmAnd by supplying your username and password. OpenStreetMap.org is a community driven, global public domain mapping project.";
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Semeyes a nivel de cai pa tol mundu. Descubri llugares, collabora y fotografia\'l mundu.";
 "worldwide_maps" = "All World Maps";
-"product_desc_wiki" = "Wikipedia data";
 "purchases_feature_desc_wikipedia" = "Esplora Wikipedia ensin internet. Los artículos dixébrense per países y rexones, y tán disponibles en toles llingües.";
 "shared_string_all_languages" = "Toles llingües";
 "srtm_plugin_name" = "Contour lines";
-"product_desc_srtm" = "Display of contour lines";
 "srtm_plugin_description" = "This plugin provides both a contour line overlay and a (relief) hillshade layer to be displayed on top of OsmAnd\'s standard maps. This functionality will be much appreciated by athletes, hikers, trekkers, and anybody interested in the relief structure of a landscape. (Please note that contour line and/or relief data are separate, additional downloads available after activating the plugin.) \n \nThe global data (between 70 ° north and 70 ° south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA\'s Earth Observing System. ASTER is a cooperative effort between NASA, Japan\'s Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 "start_editing_card_image_text" = "La guía de viaxes mundial que tol mundu pue editar.";
 "my_location" = "La mio posición";
@@ -608,8 +601,6 @@
 "shared_string_gpx_points" = "Puntos";
 "local_indexes_cat_backup" = "Desactivóse";
 "shared_string_show_all" = "Amosar too";
-"plugin_popup_srtm_desc" = "To start using Contour lines feature, please download Contour lines of an region first";
-"plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Contour lines</b>";
 "online_map" = "Mapa en llinia";
 "local_map_names" = "Nomes llocales";
 "shared_string_history" = "Historial";

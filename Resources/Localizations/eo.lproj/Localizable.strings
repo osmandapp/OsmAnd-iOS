@@ -1012,16 +1012,12 @@
 
 //inapps
 "plugin_nautical_name" = "Mara map-vido";
-"product_desc_nautical" = "Nautical map of all world";
 "plugin_nautical_descr" = "Pliriĉigas la mapon per naŭtikaj kursoj, navigadaj lumoj, danĝerejoj, zonoj (mal)permesataj por navigi, alligi akvoveturilon, ktp. Por uzi la kromprogramon, elŝutu marajn mapojn kaj aktivigu la map-aspekton “Marnavigada” per la menuo “Agordi mapon”. \n \nPliaj informoj: %@";
 "osmand_parking_plugin_name" = "Parkumeja pozicio";
-"product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
 "osmand_parking_plugin_description" = "Ebligas marki kie vi parkumis vian aŭtomobilon kaj aldoni sciigon al via kalendaro pri parkumada templimo. Por aldoni markon, frapetadu lokon sur la mapo kaj elektu “Marki kiel pozicion de parkumado” el la menuo “Agoj”.";
 "plugin_ski_name" = "Skiada map-vido";
-"product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "plugin_ski_descr" = "Projektita por navigi en vintraj sportejoj. Vidigas descendejojn, skiliftojn kaj skikuradajn kursojn kiel kolorajn liniojn, kiuj indikas malfacilecon. Por uzi la kromprogramon, aktivigu la map-aspekton “Vintro kaj skiado” en la menuo “Agordi mapon”.";
 "record_plugin_name" = "Spur-registrilo";
-"product_desc_track_recording" = "Activates the functionality to record and save your tracks";
 "record_plugin_description" = "Ebligas registri viajn vojaĝojn aŭ trejnadojn kaj analizi ilin konsiderante rapidon, tutajn suprenirojn kaj malsuprenirojn, profilon de altitudo kaj pli. Registritajn spurojn oni povas arĥivigi, kunhavigi, redakti kaj pritrakti. \n \nPliaj informoj: %@";
 "osm_editing_plugin_name" = "OSM-redaktilo";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
@@ -1030,14 +1026,12 @@
 "plugin_mapillary_descr" = "Liveras strat-nivelan fotaron. Vi ankaŭ povas kontribui per aldoni fotojn al la projekto. Por vidigi la ekzistajn datumojn kiel map-tavolon, aktivigu la agordon “Start-nivela fotaro” en la menuo “Agordi mapon”.";
 "worldwide_maps" = "Tutteraj mapoj";
 "download_wikipedia_maps" = "Vikipedio";
-"product_desc_wiki" = "Wikipedia data";
 "purchases_feature_desc_wikipedia" = "Malkonekta aliro al ĉiuj artikoloj de Vikipedio pri lokoj por ke vi povu sciiĝi pri la vizitataj ejoj per simple frapi la mapon. Ne forgesu elŝuti Vikipediajn mapojn de la dezirataj lokoj antaŭ komenci vojaĝon.";
 "shared_string_all_languages" = "Ĉiuj lingvoj";
 "select_wikipedia_article_langs" = "Elektu lingvojn por artikoloj de Vikipedio montrataj sur la mapo. Eblos baskuli inter ĉiuj disponeblaj lingvoj dum legi artikolon.";
 "wiki_menu_download_descr" = "Kromaj mapoj estas necesaj por vidigi punktojn de Vikipedio sur la mapo.";
 "some_articles_may_not_available_in_lang" = "Iuj artikoloj de Vikipedio povas ne esti disponeblaj en via lingvo.";
 "srtm_plugin_name" = "Topografio";
-"product_desc_srtm" = "Display of contour lines";
 "srtm_plugin_description" = "Informoj pri tereno – kiel nivelkurboj, nivelombrumo kaj dekliveco – helpas al vi perokule taksi formon de la tereno, ĝian navigeblecon kaj pli. Topografiaj informoj povas esti reprezentataj sur la mapo per vidigi nivelkurbojn (egal-nivel-linioj), ombrumi malebenaĵojn (reliefo) aŭ per vidigi angulon de dekliveco uzante kolorojn. \n \nDatumoj devenas de la projektoj SRTM kaj ASTER. \n \nPliaj informoj: %@";
 "wikivoyage_travel_guide" = "Vojaĝaj gvidiloj";
 "start_editing_card_image_text" = "Senpaga/libera vojaĝ-gvidilo redaktebla de ĉiu.";
@@ -1093,8 +1087,6 @@
 "search_nearby" = "Serĉi proksime";
 "move_marker_bottom_sheet_title" = "Movu la mapon por ŝanĝi pozicion de marko";
 "plugins_menu_group" = "Kromprogramoj";
-"plugin_popup_srtm_desc" = "To start using Contour lines feature, please download Contour lines of an region first";
-"plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Contour lines</b>";
 "shared_string_restore" = "Restarigi";
 "map_downloaded" = "Mapo elŝutita";
 "online_map" = "Enreta mapo";

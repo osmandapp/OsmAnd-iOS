@@ -389,8 +389,6 @@
 "sett_zoom" = "Tlačítko přiblížení";
 "recording_context_menu_show" = "Zobrazit";
 "sett_notshow" = "Nezobrazovat";
-"sett_loc_fmt" = "Location format";
-"sett_deg" = "Degrees";
 "sett_deg_min" = "Stupně a minuty";
 "sett_arr" = "Mapové šipky";
 "shared_string_location" = "Poloha";
@@ -455,11 +453,9 @@
 "menu_my_trips" = "Moje stopy";
 "menu_my_directions" = "My Directions";
 "feedback" = "Anketa";
-"menu_about" = "About";
 "add_waypoint" = "Přidat trasový bod";
 "add_waypoint_short" = "Přidat mezicíl";
 "edit_waypoint_short" = "Upravit mezicíl";
-"more" = "More";
 "time_limited" = "Časově omezené";
 "pickup_car" = "Vyzvednout auto";
 "pickup_car_at" = "Vyzvednout auto v";
@@ -623,7 +619,6 @@
 "show_region_on_map_go" = "Přejít na mapu";
 "sqlitedb_import_title" = "Importovat soubor rastrové mapy";
 "sqlitedb_import_already_exists" = "Zadaný sqlitedb soubor již existuje. Zvolte prosím akci.";
-"map_creator" = "Map Creator";
 "local_map_names" = "Lokální názvy";
 "shared_string_history" = "Minulé";
 "today" = "Dnes";

@@ -120,7 +120,6 @@
 "show_region_on_map_go" = "Prejsť na mapu";
 "sqlitedb_import_title" = "Importovať súbor rastrovej mapy";
 "sqlitedb_import_already_exists" = "Zadaný sqlitedb súbor už existuje. Vyberte akciu.";
-"map_creator" = "Map Creator";
 "local_map_names" = "Lokálne názvy";
 "shared_string_history" = "História";
 "today" = "Dnes";

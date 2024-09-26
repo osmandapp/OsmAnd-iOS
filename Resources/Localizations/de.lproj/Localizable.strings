@@ -147,7 +147,6 @@
 "index_name_south_america" = "Südamerika";
 // Help
 "help_quiz" = "Rätsel";
-"import_export" = "Import/Export";
 "shared_string_currently_recording_track" = "Momentane Trackaufzeichnung";
 "track_stop_rec" = "Aufzeichnung stoppen";
 "gpx_start_new_segment" = "Neues Segment starten";

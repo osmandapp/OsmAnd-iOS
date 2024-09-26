@@ -383,7 +383,6 @@
 "go_to_map" = "Térkép megjelenítése";
 "product_title_trip_planning" = "Utazástervezés";
 "sqlitedb_import_title" = "Raszteres térképfájl importálása";
-"map_creator" = "Map Creator";
 "device_memory" = "Eszköz memóriája";
 "free" = "%@ szabad";
 "shared_string_waypoint" = "Útpont";

@@ -1278,7 +1278,6 @@
 "gpx_add_new" = "Adăugați un nou fișier";
 "gpx_import_already_exists" = "Fișierul de track specificat există deja în listă. Vă rugăm să alegeți o acțiune.";
 "import_tracks" = "Importă trasee";
-"import_export" = "Import/Export";
 "gpx_points" = "Punct (e)";
 "poi_search_near_center" = "Căutarea se efectuează în apropierea centrului hărții";
 "poi_max_radius_reached" = "Raza maximă de căutare atinsă";

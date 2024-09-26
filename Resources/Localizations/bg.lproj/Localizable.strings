@@ -914,16 +914,12 @@
 
 //inapps
 "plugin_nautical_name" = "Морски карти";
-"product_desc_nautical" = "Nautical map of all world";
 "plugin_nautical_descr" = "Обогатява картата с информация за маршрути за плаване, навигационни светлини, опасни морски зони, зони с ограничения за плаване или акостиране и др. За да я използвате, изтеглете съответните морски карти и включете „Морска карта“ в „Настройки на картата“. \n \nДокументацията е достъпна на адрес %@.";
 "osmand_parking_plugin_name" = "Място на паркиране";
-"product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
 "osmand_parking_plugin_description" = "Отбележете мястото, на което е паркирано превозното средство, и уведомете календара за времето на изтичане на плащането. За да поставите отметка, изберете място на картата, отидете в „Действия“ и докоснете „Добавяне на място за паркиране“.";
 "plugin_ski_name" = "Изглед за скиори";
-"product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "plugin_ski_descr" = "Маршрутизиране в зони за зимни спортове: преглед на пистите за ски и лифтове, както и трасетата за ски бягане, като цветните линии показват степента на трудност. За да използвате, включете добавката, а също така отидете в „Настройки на картата\" и изберете стил на картата „Зима и ски“.";
 "record_plugin_name" = "Запис на маршрут";
-"product_desc_track_recording" = "Activates the functionality to record and save your tracks";
 "record_plugin_description" = "Записвайте пътуванията или тренировките си и анализирайте данните по отношение на скоростта, натрупаните изкачвания и спускания, профила на надморската височина и т.н. Записаните маршрути могат да бъдат архивирани, споделяни с приятели, редактирани или обработвани впоследствие. \n \nДокументацията е достъпна на адрес %@.";
 "osm_editing_plugin_name" = "Редактиране на OSM";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
@@ -931,17 +927,14 @@
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Снимки от нивото на улицата. Можете да дадете своя принос. За да видите съществуващите данни като слой на картата, включете „Снимки от улицата“ в менюто „Настройки на картата“.";
 "worldwide_maps" = "Карти на света";
-"product_desc_wiki" = "Wikipedia data";
 "purchases_feature_desc_wikipedia" = "Осигурява без мрежа всички статии в Уикипедия, свързани с места, като ви помага да научите повече за местата, които посещавате по време на пътуването си, само с едно докосване на картата. Не забравяйте да изтеглите файловете с карти на Уикипедия за съответните райони.";
 "shared_string_all_languages" = "Всички езици";
 "select_wikipedia_article_langs" = "Изберете езиците на които Уикипедия публикациите ще се появяват на картата. Можете да превключвате между наличните езици докато четете публикацията.";
 "wiki_menu_download_descr" = "Необходими са допълнителни карти, за да видите обектите на Уикипедия на картата.";
 "some_articles_may_not_available_in_lang" = "Някои статии в Уикипедия може да не са достъпни на вашия език.";
 "srtm_plugin_name" = "Релеф";
-"product_desc_srtm" = "Display of contour lines";
 "srtm_plugin_description" = "Информацията за терена, като контурни линии, хълмове и склонове, помага визуално да оцените разположението на земята и релефа, възможностите за навигация и др. Топографската информация може да бъде представена на картата чрез контурни линии, засенчване на релефа и/или оцветяване на стръмнините. \n \nДанните, върху които лежи тази функционалност, произхождат от SRTM и ASTER. \n \nОще информация на %@.";
 "wikivoyage_travel_guide" = "Пътеводител";
-"my_location" = "My Location";
 "navigate_point_latitude" = "Геогр. ширина";
 "navigate_point_longitude" = "Геогр. дължина";
 "context_menu_points_of_group" = "Всички точки в групата";
@@ -971,7 +964,6 @@
 "exit_at" = "Изход на";
 "by_transport_type" = "На %@";
 "transport_stops" = "спирки";
-"moving_time" = "Moving time";
 "rename_track" = "Преименуване на трасе";
 "shared_string_gpx_points" = "Точки";
 "shared_string_overview" = "Преглед";
@@ -984,8 +976,6 @@
 "search_nearby" = "Търси наблизо";
 "move_marker_bottom_sheet_title" = "Преместете картата за да смените позицията на маркера";
 "plugins_menu_group" = "Добавки";
-"plugin_popup_srtm_desc" = "To start using Contour lines feature, please download Contour lines of an region first";
-"plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Contour lines</b>";
 "shared_string_restore" = "Възстановяване";
 "map_downloaded" = "Картата е изтеглена";
 "online_map" = "Онлайн карта";

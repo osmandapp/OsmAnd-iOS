@@ -1010,7 +1010,6 @@
 "product_desc_skimap" = "Peta jalur ski terkini dengan angkatan dan lempengan";
 "plugin_ski_descr" = "Dirancang untuk bernavigasi di area olahraga musim dingin. Lihat jalur dan lift ski, dan trek ski perbatasan negara, dengan garis berwarna yang menandakan nilai kerumitan. Untuk menggunakan, aktifkan plugin ini dan juga pergi ke \"Konfigurasi peta\" dan pilih gaya peta \"Musim dingin dan ski\".";
 "record_plugin_name" = "Perekaman perjalanan";
-"product_desc_track_recording" = "Activates the functionality to record and save your tracks";
 "record_plugin_description" = "Rekam perjalanan atau latihan Anda, dan analisa data tentang kecepatan, kenaikan dan keturunan yang terjadi, profil ketinggian, dll. Trek yang direkam dapat diarsip, dibagikan kepada orang lain, disunting, dan diproses setelah itu. \n \nBaca lebih lanjut di %@.";
 "osm_editing_plugin_name" = "Penyuntingan OpenStreetMap";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
@@ -1019,14 +1018,12 @@
 "plugin_mapillary_descr" = "Citra tampilan tingkat jalan. Anda dapat berkontribusi sendiri. Untuk melihat data yang sudah ada sebagai lapisan peta, aktifkan \"Citra tingkat jalan\" dalam menu \"Konfigurasi peta\".";
 "worldwide_maps" = "Peta dunia";
 "download_wikipedia_maps" = "Wiki";
-"product_desc_wiki" = "Wikipedia data";
 "purchases_feature_desc_wikipedia" = "Menyediakan semua artikel Wikipedia berkaitan dengan tempat secara luring, membantu Anda untuk mempelajari tentang tempat-tempat yang Anda kunjungi saat perjalanan Anda dengan ketukan sederhana di peta. Jangan lupa untuk mengunduh berkas peta Wikipedia untuk wilayah sendiri-sendiri.";
 "shared_string_all_languages" = "Semua bahasa";
 "select_wikipedia_article_langs" = "Pilih bahasa untuk artikel Wikipedia pada peta. Beralih ke bahasa apa pun yang tersedia saat membaca artikel.";
 "wiki_menu_download_descr" = "Peta tambahan diperlukan untuk melihat POI Wikipedia pada peta.";
 "some_articles_may_not_available_in_lang" = "Beberapa artikel Wikipedia mungkin tidak tersedia dalam bahasa Anda.";
 "srtm_plugin_name" = "Topografi";
-"product_desc_srtm" = "Display of contour lines";
 "srtm_plugin_description" = "Informasi medan, seperti garis kontur, bukitshade, lereng, membantu Anda untuk secara visual menilai peletakan tanah, bantuan, navigabilitas, dan banyak lagi. Informasi topografi dapat di peta diwakili oleh garis kontur, pencukur bantuan dan / atau pewarnaan steepness. \n \nData yang mendasari berasal dari SRTM dan ASTER. \n \nBaca lebih lanjut di %@.";
 "wikivoyage_travel_guide" = "Panduan Perjalanan";
 "start_editing_card_image_text" = "Penduan perjalanan gratis semua orang bisa berkontribusi.";
@@ -1082,8 +1079,6 @@
 "search_nearby" = "Cari di sekitar";
 "move_marker_bottom_sheet_title" = "Pindahkan peta untuk mengubah posisi penanda";
 "plugins_menu_group" = "Plugin";
-"plugin_popup_srtm_desc" = "To start using Contour lines feature, please download Contour lines of an region first";
-"plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Contour lines</b>";
 "shared_string_restore" = "Pulihkan";
 "map_downloaded" = "Peta diunduh";
 "online_map" = "Peta daring";

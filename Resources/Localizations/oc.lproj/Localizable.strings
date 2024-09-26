@@ -490,7 +490,6 @@
 "sett_zoom" = "Boton de zoom";
 "recording_context_menu_show" = "Mostrar";
 "sett_notshow" = "Amagar";
-"sett_deg" = "Degrees";
 "sett_deg_min" = "Gras e minutas";
 "sett_arr" = "Cursors de la mapa";
 "shared_string_location" = "Posicion";
@@ -888,9 +887,6 @@
 "record_plugin_name" = "Enregistrament d\'escorregudas";
 "product_desc_track_recording" = "Enregistra e sauva lei percors coma traças GPX";
 "record_plugin_description" = "Permet d'enregistrar, de sauvegardar emai d'analisar lei donadas d'assai ò de percors, coma la velocitat, lei montadas e lei devaladas, lo relèu… e que se pòdon puei partejar amb leis amics.\n\nDe consultar - https://osmand.net/docs/user/plugins/trip-recording";
-"product_title_trip_planning" = "Trip planning";
-"product_desc_trip_planning" = "Plan your trip, add waypoints, measure the distance to your destination using this plugin";
-"product_desc_ext_trip_planning" = "Trip planning plugin allows you to create your trip on the map, save it, measure the distance between points connected with straight lines, etc. Created for preliminary trip planning rather than thorough route building.";
 "osm_editing_plugin_name" = "Modificar OpenStreetMap";
 "product_desc_osm_editing" = "Modificatz OpenStreetMap amb vòstre telefonet";
 "osm_editing_plugin_description" = "Vos permet de collaborar a OpenStreetMap, una comunautat mondiala per crear la mapa pus completa dau monde e fornir de donadas liuras en cadun.\n\nPer mai d'informacion, consultatz : https://osmand.net/docs/user/plugins/osm-editing";
@@ -991,7 +987,6 @@
 "plugin_popup_srtm_ask" = "Per teledescargar lei corbas de nivèu avètz d'activar l'ajust : <b>Corbas de nivèu</b>";
 "plugin_popup_nautical_title" = "Teledescargar lei mapas marinas";
 "plugin_popup_nautical_desc" = "Per plaser, teledescargatz premier lei mapas marinas\nAnètz puei a la <b>Configuracion de la mapa</b> > <b>Mena de mapa</b> e activatz lo rendut <b>Nautic</b>";
-"plugin_popup_trip_planning_ask" = "To start planning the trip you need to activate plugin: <b>Trip planning</b>";
 "go_to_downloads" = "Anatz ai Teledescargaments";
 "turn_on_plugin" = "Activar l'ajust";
 "all_world_popup_desc" = "Teledescargar la mapa basica dau monde per veire lei noms deis Estats, lei frontieras e autreis informacions";
@@ -1012,7 +1007,6 @@
 "routing_import_please_restart" = "Per utilizar lo 'routing.xml' novèu devètz relançar l'aplicacion.";
 "sqlitedb_import_title" = "Importar lo fichier raster";
 "sqlitedb_import_already_exists" = "Lo fichier sqlitedb indicat ja existís. Que fau faire ?";
-"map_creator" = "Map Creator";
 "local_map_names" = "Denominacions localas";
 "shared_string_history" = "Istoric";
 "today" = "Uei";

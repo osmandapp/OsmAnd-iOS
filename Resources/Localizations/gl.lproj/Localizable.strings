@@ -304,14 +304,7 @@
 "shared_string_waypoint" = "Punto de pasaxe";
 "shared_string_waypoints" = "Puntos de pasaxe";
 "shared_string_export" = "Exportar";
-"import_export" = "Import/Export";
 "import_tracks" = "Import trip";
-"gpx_import_already_exists" = "The specified trip file is already exists in the list. Please choose action.";
-"gpx_export_title" = "Export trip";
-"gpx_export_select_track" = "Please select trip for Export";
-"gpx_import_desc" = "You can import your GPX files (common GPS data format)\n\nTo share the GPX file you can open file from Dropbox, Email, or any other source - Use Open In function";
-"gpx_no_tracks" = "There are no trips";
-"gpx_remove" = "Remove trip?";
 "layer_route" = "Itinerario";
 "map_widget_average_speed" = "Velocidade media";
 "shared_string_control_start" = "Comezar";
@@ -321,7 +314,6 @@
 "save_current_track_descr" = "Garda a pista actual coma ficheiro GPX agora.";
 "save_track_interval_globally" = "Intre de rexistro";
 "track_rec_addon_q" = "Please activate Trip recording plugin to record and save your tracks";
-"record_trip" = "Record your trip";
 "shared_string_clear" = "Limpar";
 "save_track_to_gpx" = "Gravar a pista de xeito automático ó navegar";
 "save_track_to_gpx_descrp" = "Inicia de xeito automático a gravación da pista mentres navegas e gárdarase despois.";
@@ -343,8 +335,6 @@
 // Settings
 "map_locale" = "Lingua do mapa";
 "recording_context_menu_show" = "Amosar";
-"sett_loc_fmt" = "Location format";
-"sett_deg" = "Degrees";
 "shared_string_location" = "Localización";
 "translit_names" = "Transliterar os nomes";
 "shared_string_maps" = "Mapas";
@@ -360,7 +350,6 @@
 "shared_string_type" = "Tipo";
 // Menu
 "shared_string_my_places" = "Os meus lugares";
-"menu_my_trips" = "My Trips";
 "menu_my_directions" = "My Directions";
 "feedback" = "Enquisa";
 "shared_string_help" = "Axuda";
@@ -416,34 +405,16 @@
 // Rendering attributes
 //inapps
 "plugin_nautical_name" = "Vista do mapa náutico";
-"product_desc_nautical" = "Nautical map of all world";
 "plugin_nautical_descr" = "Este plugin enriquece a aplicación de mapas de navegación OsmAnd para que amose tamén mapas náuticos para viaxes en barco e outros tipos de deportes acuáticos.  \n  \nUnha extensión dos mapas especial para o OsmAnd fornece tódalas marcaxes náuticas e símbolos das cartas para a navegación en augas interiores e de cabotaxe. A descrición de cada marcaxe da navegación fornece os detalles precisos para identificala, así coma o seu significado (categoría, forma, cor, secuencia, referencia, etc.).  \n  \nPara voltar a un dos estilos do mapa convencionais do OsmAnd, sinxelamente hai que desactivar este plugin de novo ou mudar o \"Estilo do mapa\" en \"Configurar o mapa\" coma se desexe.";
 "osmand_parking_plugin_name" = "Posición de aparcamento";
-"product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
 "osmand_parking_plugin_description" = "Rexistra onde foi aparcado o automóbil, incluíndo canto tempo falta.  \n Tanto a localización coma o tempo do aparcamento amósanse no menú principal e nun trebello sobre o mapa. Pódese engadir unha alarma de lembranza ó calendario do Android.";
 "plugin_ski_name" = "Vista dos mapas de esquí";
-"product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "plugin_ski_descr" = "Este plugin para o OsmAnd pon ó teu acade detalles sobre pistas do esquí de baixada, de travesía, roteiros do esquí alpino, teleféricos e refachos a nivel mundial. As rotas e pistas amósanse polo código de cor en función da súa dificuldade e representados cun estilo do mapa especial \"Inverno\" que o asemella a unha paisaxe invernal nevada. \n  \nActivando esta vista, muda o estilo do mapa a «Inverno e esquí», amosando as características do terreo en condicións invernais. Esta vista pódese revertir desactivando de novo eiquí ou mudando o \"Estilo do mapa\" en \"Configurar mapa\" cando o desexes.";
 "record_plugin_name" = "Gravación de viaxes";
-"product_desc_track_recording" = "Activates the functionality to record and save your tracks";
 "record_plugin_description" = "Este plugin activa a funcionalidade para rexistrar e gardar as túas pistas de xeito manual premendo no trebello de gravación GPX no mapa, ou automáticamente rexistrando todas as túas rutas percorridas nun ficheiro GPX.  \n  \nAs pistas gravadas poden ser compartidas coas túas amizades ou ser empregadas para contribuír ó OSM. Os atletas poden empregar as pistas gravadas para seguir os seus adestramentos. Algunhas análises básicas de pistas pódense facer directamente no OsmAnd, coma tempos por volta, velocidade media, etc., e por suposto as pistas poden analizarse de xeito posterior con ferramentas de análise de terceiros.";
-"product_title_trip_planning" = "Trip planning";
-"product_desc_trip_planning" = "Plan your trip, add waypoints, measure the distance to your destination using this plugin";
-"product_desc_ext_trip_planning" = "Trip planning plugin allows you to create your trip on the map, save it, measure the distance between points connected with straight lines, etc. Created for preliminary trip planning rather than thorough route building.";
-"product_desc_africa" = "Map of Africa";
-"product_desc_australia" = "Map of Australia";
-"product_desc_centralamerica" = "Map of Central America";
-"product_desc_europe" = "Map of Europe";
-"product_desc_northamerica" = "Map of North America";
-"product_desc_russia" = "Map of Russia";
-"product_desc_southamerica" = "Map of South America";
 "worldwide_maps" = "All World Maps";
-"product_desc_allworld" = "Map of All World";
-"product_desc_asia" = "Map of Asia";
-"product_desc_wiki" = "Wikipedia data";
 "purchases_feature_desc_wikipedia" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
 "srtm_plugin_name" = "Curvas de nivel";
-"product_desc_srtm" = "Display of contour lines";
 "srtm_plugin_description" = "Este plugin fornece unha capa de sobreposición das curvas do nivel e unha capa de sombras da altitude (relevo) que poden ser amosadas nos mapas sen conexión do OsmAnd. Esta funcionalidade pode ser moi apreciada por atletas, camiñantes, sendeiristas e calquera que teña interese pola estrutura de relevo da paisaxe. (Ten en conta que as curvas do nivel e/ou os datos do relevo están dispoñíbeis en descargas adicionais separadas logo de activares o plugin) \n  \nOs datos globais (entre os 70 graos norte e os 70 graos sul) están baseados nas medicións do SRTM (Misión Topográfica con Radar da Lanzadeira Espacial) e o ASTER (Radiómetro Espacial Avanzado de Emisión Térmica e Reflexión) e instrumentos de imaxes a bordo do Terra, o satélite máis importante do Sistema de Observación Terrestre da NASA. O ASTER é un esforzo cooperativo entre a NASA, o Ministerio de Economía do Xapón, Comercio e Industria (METI) e Sistemas Espaciais Xaponeses (J-spaceystems).";
 "my_location" = "A miña posición";
 "get_unlimited_access" = "Obter acceso ilimitado";
@@ -452,7 +423,6 @@
 "res_installing" = "Instalando…";
 "roads" = "Estradas";
 "shared_string_hillshade" = "Sombras do relevo";
-"gpx_select_track" = "Select trip";
 "current_track" = "Pista actual";
 "access_hint_enter_name" = "Insira o nome";
 "shared_string_not_selected" = "Non seleccionado";
@@ -462,28 +432,17 @@
 "prch_srtm_info" = "Contour lines plugin enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Aberto";
 "osm_live_active" = "Activo";
-"menu_all_trips" = "All Trips";
 "moving_time" = "Tempo en movemento";
 "change_color" = "Mudar a cor";
-"create_new_trip" = "Create new trip";
-"select_wpt_on_map" = "Select point on map to add to the trip";
 "rename_track" = "Renomear pista";
-"gpx_enter_new_name" = "Please enter new name for the trip";
 "local_indexes_cat_backup" = "Desactivado";
-"gpx_trip_groups" = "Trip groups";
 "shared_string_show_all" = "AMOSAR TODO";
 "get_directions" = "Indicacións";
 "poi_filter_parking" = "Aparcamento";
 "context_menu_item_directions_from" = "Indicacións dende";
 "search_nearby" = "Procurar preto";
-"plugin_popup_wiki_ask" = "To download Wikipedia data you need to activate plugin: <b>Wikipedia</b>";
-"plugin_popup_srtm_desc" = "To start using Contour lines feature, please download Contour lines of an region first";
-"plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Contour lines</b>";
-"plugin_popup_trip_planning_ask" = "To start planning the trip you need to activate plugin: <b>Trip planning</b>";
 "shared_string_restore" = "Restaurar";
 "map_downloaded" = "Mapa baixado";
-"sqlitedb_import_title" = "Import Map Creator file";
-"map_creator" = "Map Creator";
 "local_map_names" = "Mapas locais";
 "shared_string_history" = "Historial";
 "today" = "Hoxe";

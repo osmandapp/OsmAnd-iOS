@@ -414,7 +414,6 @@
 "shared_string_export" = "Eksportuoti";
 "gpx_selection_segment_title" = "Segmentas";
 "route_points" = "Maršruto taškai";
-"import_export" = "Import/Export";
 "gpx_parse_error" = "OsmAnd GPX is not well formed, please contact the support team to investigate further.";
 "tracks_on_map" = "Tracks on map";
 "layer_route" = "Maršrutas";
@@ -879,16 +878,12 @@
 
 //inapps
 "plugin_nautical_name" = "Jūriniai žemėlapiai";
-"product_desc_nautical" = "Nautical map of all world";
 "plugin_nautical_descr" = "Šis įskiepis papildo OsmAnd programą jūrlapiais skirtais laivybai, būriavimui ir kitoms vandens sporto veikloms. \n \nSpecialus OsmAnd žemėlapio įskiepis pateiks visus navigacinius ženklus ir jūrlapių simbolius reikalingus jūros ir vidaus vandenų navigacijai. Kiekvieno navigacinio ženklo aprašymas pateiks informaciją apie jų reikšmę (kategorija, forma, spalva, eiliškumas, nuoroda ir kt.). \n \nNorėdami grįžti į įprastinių OsmAnd žemėlapių atvaizdavimą paprasčiausiai išjunkite šį įskiepį arba \'Žemėlapio nustatymų\' skirsnyje pakeiskite \'Žemėlapio stilių\' į pageidaujamą.";
 "osmand_parking_plugin_name" = "Statymo vieta";
-"product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
 "osmand_parking_plugin_description" = "Šis įskiepis leidžia įsiminti vietą, kurioje palikote savo automobilį ir kiek laiko liko iki parkavimo pabaigos .  \nTiek vieta, tiek laikas yra matomi OsmAnd valdymo skydelyje bei skydelyje žemėlapyje rodinyje. Šis įskiepis taip pat gali įrašyti priminimą į Android kalendorių.";
 "plugin_ski_name" = "Slidinėjimo žemėlapiai";
-"product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "plugin_ski_descr" = "Šis įskiepis suteikia priėjimą prie pasaulio kalnų slidinėjimo trasų, lygumų slidinėjimo trasų, kalnų slidinėjimo maršrutų, keltuvų ir slidinėjimo keltuvų duomenų. Maršrutai ir trasos yra nuspalvintos spalvomis atsižvelgiant į jų sudėtingumą bei atvaizduojami specialiu \"Žiemos\" žemėlapio stiliumi, kuris naudoja sniego spalvos žiemos peizažą.  \n \nAktyvavus šį žemėlapio stilių, kraštovaizdis atvaizduojamas taip, kaip jis atrodytų žiemą. Šis rodinys gali būti išjungtas arba deaktyvuojant jį arba pakeitus \"Žemėlapio stilių\" meniu \"Žemėlapio nustatymuose\", į norimą.";
 "record_plugin_name" = "Įrašyti savo keliones";
-"product_desc_track_recording" = "Activates the functionality to record and save your tracks";
 "record_plugin_description" = "Išsaugo kelionės istoriją vieno mygtuko ekrane paspaudimu bei pateikia nustatymus, leidžiančius kelionės istoriją išsaugoti GPX faile. \n \nĮrašytais maršrutais galima pasidalinti su draugais arba pridėti kaip kontribuciją OSM. Sportininkai gali naudoti įrašytus maršrutus norėdami stebėti savo treniruotes. Elementarią analizę, tokią kaip ratų laikai, vidutinis greitis, ir t.t., galima atlikti tiesiai OsmAnd bei, be abejo, vėliau išanalizuoti su trečių šalių progamine įranga.";
 "osm_editing_plugin_name" = "OSM redagavimas";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
@@ -897,11 +892,9 @@
 "plugin_mapillary_descr" = "Internetinės gatvės nuotraukos visiems. Atraskite vietas, bendradarbiaukite, fotografuokite pasaulį.";
 "worldwide_maps" = "All World Maps";
 "download_wikipedia_maps" = "Vikipedija";
-"product_desc_wiki" = "Wikipedia data";
 "purchases_feature_desc_wikipedia" = "Naršykite Wikipedia neprisijungę prie interneto. Straipsniai suskirstyti pagal šalis ir regionus ir pateikiami visomis kalbomis.";
 "select_wikipedia_article_langs" = "Select the languages in which Wikipedia articles will appear on the map. You can switch between all available languages while reading the article.";
 "srtm_plugin_name" = "Kontūrinės linijos";
-"product_desc_srtm" = "Display of contour lines";
 "srtm_plugin_description" = "Šis įskiepis įgalina tiek aukščio kontūrų linijų tiek ir (reljefo) kalnų šešėlių sluoksnių atvaizdavimą ant OsmAnd žemėlapių. Ši funkcija gali būti naudinga atletams, keliautojams ir visiems, kas aktuali reljefo struktūra. (Atkreipkite dėmesį į tai kad kontūrų linijos ir/arba reljefo duomenys yra atskiri, papildomi parsiuntimai prieinami aktyvavus įskiepį) \n \nPasaulio duomenys (tarp 70 laipsnių šiaurės ir 70 laipsnių pietų) yra paremti SRTM (Shuttle Radar Topography Mission) ir ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), vaizdo fiksavimo instrumento Terra, NASA Earth Observing System palydovo, matavimais. ASTER yra bendradarbiavimo tarp NASA, Japonijos ekonomikos, prekybos ir industrijos (METI) ministerijos ir Japan Space Systems (J-spacesystems) projektas.";
 "wikivoyage_travel_guide" = "Kelionių vadovas";
 "start_editing_card_image_text" = "Atviras pasaulinis kelionių vadovas, kurie kiekvienas gali redaguoti.";
@@ -949,8 +942,6 @@
 "search_nearby" = "Ieškoti šalia";
 "move_marker_bottom_sheet_title" = "Slinkite žemėlapį, norėdami pakeisti žymeklio vietą";
 "plugins_menu_group" = "Įskiepiai";
-"plugin_popup_srtm_desc" = "To start using Contour lines feature, please download Contour lines of an region first";
-"plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Contour lines</b>";
 "shared_string_restore" = "Atkurti";
 "map_downloaded" = "Žemėlapis atsiųstas";
 "online_map" = "Žemėlapis online";

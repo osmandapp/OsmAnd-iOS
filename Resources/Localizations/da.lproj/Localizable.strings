@@ -370,7 +370,6 @@
 "show_region_on_map_go" = "Gå til kortet";
 "sqlitedb_import_title" = "Importer Map Creator fil";
 "sqlitedb_import_already_exists" = "Den angivne sqlitedb-fil findes allerede. Vælg handling.";
-"map_creator" = "Map Creator";
 "local_map_names" = "Lokale navne";
 "shared_string_history" = "Historik";
 "today" = "I dag";

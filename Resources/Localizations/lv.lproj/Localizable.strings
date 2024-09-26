@@ -423,7 +423,6 @@
 "shared_string_export" = "Eksportēt";
 "gpx_selection_segment_title" = "Segments";
 "route_points" = "Maršruta punkti";
-"import_export" = "Import/Export";
 "import_tracks" = "Importēt trekus";
 "gpx_parse_error" = "OsmAnd GPX nav pareizi noformēts, lūdzu kontaktējieties ar atbalsta grupu, lai noskaidrotu iemeslus.";
 "tracks_on_map" = "Parādītie treki";
@@ -880,16 +879,12 @@
 
 //inapps
 "plugin_nautical_name" = "Jūras kartes";
-"product_desc_nautical" = "Nautical map of all world";
 "plugin_nautical_descr" = "\"Spraudnis papildina OsmaAnd kartes ar jūras kartēm kuģošanai, ūdenslēpošanai un citiem ūdens sporta veidiem. \n \nSpeciāls kartes papildinājums rāda navigācijas ceļus, zīmes un simbolus uz ūdens un iekšzemē krastu tuvumā. Katra navigācijas zīme ir aprakstīta, lai to varētu viegli indentificēt un ir dots skaidrojums par tās nozīmi (kategorija, izmēri, krāsa, secība, atsauces, u.t.t.). \n \nLai atgrieztos uz OsmAnd standarta kartēm, deaktivizējiet spraudni vai nomainiet karti galvenajā izvēlnē - kartes attēlošana. \"";
 "osmand_parking_plugin_name" = "Stāvvieta";
-"product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
 "osmand_parking_plugin_description" = "Viegli pamanāms logrīks uz kartes norāda jūsu auto stāvvietu un atlikušo laiku (ja ir uzlikts laika limits). Vietas koordinātes un laiks redzami arī atsevišķā sadaļā Manā Izvēlnē. Ir iespējams pievienot laika atgādinātāju Android kalendārā.";
 "plugin_ski_name" = "Slēpošanas kartes";
-"product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "plugin_ski_descr" = "\"Šis OsmAnd spraudnis ļauj piekļūt datiem par slēpošanas trasēm un maršrutiem, trošu vagoniem un pacēlājiem. Maršruti un trases tiek rādīti pēc krāsām, atkarībā no grūtības pakāpes un tiek attēlotas īpašā \"ziemas\" kartes stilā. \n \nAktivizējot spraudni, kartes stils tiek nomainīts uz \"Ziema un slēpošana,\" attēlojot visus ainavas elementus ziemas apstākļiem atbilstošus. Deaktivizēt spraudni var vai nu šeit vai nomainot kartes stilu kartes uzstādījumos. \"";
 "record_plugin_name" = "Ceļa ieraksts";
-"product_desc_track_recording" = "Activates the functionality to record and save your tracks";
 "record_plugin_description" = "Ar šo spraudni jūs varat manuāli saglabāt trekus, nospiežot GPX ieraksta logrīku uz kartes vai veikt automātisku visu maršrutu ierakstu GPX failā. \n \nIerakstītie treki vēlāk var tikt izmantoti treka analīzei, koplietošanai ar draugiem vai OSM izstrādei. Atlēti var izmantot trekus, lai monitorētu treniņus. Pamata treku analīze var tikt veikta tieši caur OsmAnd kā piemēram, apļu laiki, vidējais ātrums utt., bet paplašinātai analīzei trekus var atvērt citās programmās.";
 "osm_editing_plugin_name" = "OSM labošana";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
@@ -898,11 +893,9 @@
 "plugin_mapillary_descr" = "Ielas līmeņa fotoattēli ikvienam - atklājiet vietas, kopīgojiet, iemūžiniet pasauli.";
 "worldwide_maps" = "All World Maps";
 "download_wikipedia_maps" = "Vikipēdija";
-"product_desc_wiki" = "Wikipedia data";
 "purchases_feature_desc_wikipedia" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
 "select_wikipedia_article_langs" = "Select the languages in which Wikipedia articles will appear on the map. You can switch between all available languages while reading the article.";
 "srtm_plugin_name" = "Kontūrlīniju spraudnis";
-"product_desc_srtm" = "Display of contour lines";
 "srtm_plugin_description" = "\"Šis spraudnis dod iespēju rādīt kontūrlīniju un reljefu pārklājus uz standarta OsmAnd kartēm. Šo iespēju novērtēs dabas mīļotāji, aktīvās atpūtas cienītāji un jebkurš ar padziļinātu interesi par zemes reljefu.  \n \nGlobālie dati (starp 70° Z un 70° D) ir bāzēti uz SRTM (Shuttle Radar Topography Mission) un ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer) mērījumiem, attēlveidošanas rīks uz Terra\'s, vadošais NASA Zemes Novērošanas Sistēmas satelīts. ASTER ir kopējs veikums ar NASA, Japānas Ekonomikas Ministriju, Trade and Industry (METI) un Japānas Izplatījuma Sistēmām (J-spacesystems). \"";
 "wikivoyage_travel_guide" = "Ceļojumu gids";
 "start_editing_card_image_text" = "Brīvais pasaules ceļojumu gids, ko ikviens var papildināt.";
@@ -947,8 +940,6 @@
 "search_nearby" = "Meklēt tuvumā";
 "move_marker_bottom_sheet_title" = "Velciet karti, lai pārvietotu marķieri";
 "plugins_menu_group" = "Spraudņi";
-"plugin_popup_srtm_desc" = "To start using Contour lines feature, please download Contour lines of an region first";
-"plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Contour lines</b>";
 "shared_string_restore" = "Atjaunot";
 "map_downloaded" = "Karte ir lejupielādēta";
 "online_map" = "Karte tiešsaistē";

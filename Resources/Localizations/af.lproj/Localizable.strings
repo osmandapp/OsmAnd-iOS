@@ -229,7 +229,6 @@
 // GPX
 "plugin_distance_point" = "Punt";
 "gpx_selection_segment_title" = "Segments";
-"import_export" = "Import/Export";
 "gpx_parse_error" = "OsmAnd GPX is not well formed, please contact the support team to investigate further.";
 "tracks_on_map" = "Tracks on map";
 "layer_route" = "Roete";
@@ -433,7 +432,6 @@
 "select_wikipedia_article_langs" = "Select the languages in which Wikipedia articles will appear on the map. You can switch between all available languages while reading the article.";
 "srtm_plugin_name" = "Kontoerlyn inlasmodule";
 "srtm_plugin_description" = "Vergemoontlik dei aflaai van aflyn kontoerlyne en heuwelsakdus (\'Instellings\'-> \'Inligtingsbestuur\' -> \'Aflaai\' -> Kies verlangde kaart-tipe).";
-"my_location" = "My Location";
 "navigate_point_latitude" = "Breedtegraad";
 "navigate_point_longitude" = "Lengtegraad";
 "shared_string_description" = "Beskrywing";
@@ -441,7 +439,6 @@
 "public_transport_ped_route_title" = "The route on foot is approximately %@, and may be faster than by public transport.";
 "public_transport_warning_descr_blog" = "Read more about OsmAnd routing in our blog.";
 "transport_stops" = "haltes";
-"moving_time" = "Moving time";
 "local_indexes_cat_backup" = "gedeaktiveer";
 "poi_filter_parking" = "Parkering";
 "parked_at" = "Parked at";
@@ -450,7 +447,6 @@
 "move_marker_bottom_sheet_title" = "Move the map to change object's position";
 "weather_plugin_description" = "Enable the Weather Plugin to plan a route considering the weather. Watch the coloured map of weather forecast, which is updated hourly for today, tomorrow, and the week ahead. \n\nWhile traveling see location based info widgets with temperature, precipitation, wind speed, pressure. \n\nWill be useful for hiking and long trips by bike or motorcycle.";
 "shared_string_history" = "Geskiedenis";
-"go_to_map" = "Go to Map";
 "first_usage_greeting" = "Get directions and discover new places without Internet connection";
 "suggested_maps_descr" = "These maps are required for the plugin";
 "search_my_location" = "Search my location";

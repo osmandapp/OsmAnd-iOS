@@ -1,6 +1,51 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"shared_string_previous" = "Previous";
+"route_stops_before" = "%d stops before";
+"transport_routes" = "Routes";
+"transport_nearby_routes_within" = "Nearby routes within";
+"transport_nearby_routes" = "Within";
+"transport_stop" = "Stop";
+
+"cancel_navigation" = "Stop navigation";
+"intermediate_items_sort_by_distance" = "Sort door-to-door";
+"switch_start_finish" = "Reverse starting point & destination";
+"clear_all_intermediates" = "Clear all intermediate points";
+
+"shared_string_options" = "Options";
+"new_destination_point_dialog" = "You have already set a destination";
+"replace_destination_point" = "Replace the destination";
+"shared_string_current" = "Current";
+"make_as_start_point" = "Make this the start point";
+"keep_and_add_destination_point" = "Add as subsequent destination";
+"subsequent_dest_description" = "Move destination up, and create destination";
+"add_as_first_destination_point" = "Add as first intermediate destination";
+"first_intermediate_dest_description" = "Adds the first stop on the route";
+"add_as_last_destination_point" = "Add as last intermediate destination";
+"last_intermediate_dest_description" = "Adds the last stop along the route";
+
+"show_poi_over_map" = "Show POI";
+"shared_string_search" = "Search";
+"search_radius" = "Search radius";
+"targets" = "Destinations";
+"search_radius_proximity" = "Within";
+"poi" = "POI";
+
+"day_off_label" = "off";
+"open_from" = "Open from";
+"open_till" = "Open till";
+"will_close_at" = "Will close at";
+"will_open_at" = "Will open at";
+"will_open_on" = "Will open on";
+"will_open_tomorrow_at" = "Will open tomorrow at";
+
+"error_avoid_specific_road" = "No bypass found";
+"road_blocked" = "Road blocked";
+"starting_point" = "Starting point";
+"shared_string_select_avoid_road_on_map" = "Select a road to be avoided during the routing";
+"shared_string_road" = "Road";
+"avoid_roads_msg" = "You can trigger an alternative route by selecting roads to avoid";
 "shared_string_go" = "Go";
 "shared_string_info" = "Info";
 "simulate_routing" = "Simulate your position";
@@ -23,8 +68,6 @@
 "coords_format_descr" = "Format for geographical coordinates.";
 "do_not_show_discount_desc" = "Suppresses displaying app discounts & special local event messages.";
 "do_not_send_anonymous_data_desc" = "We are not collecting location data. Only app usage and map downloading statistics.";
-"save_global_track_interval" = "General logging interval";
-"save_global_track_interval_descr" = "Choose logging interval for the general track recording (enabled via the GPX logging widget on the map).";
 "rotate_map_to_bearing" = "Map orientation";
 "rotate_map_to_bearing_descr" = "Select the map screen alignment.";
 "rotate_map_compass_opt" = "To compass";
@@ -33,6 +76,20 @@
 "driving_region_descr" = "Select the driving region: US, Europe, UK, Asia and others.";
 "driving_region" = "Driving region";
 "driving_region_automatic" = "Automatic";
+
+// Trip recording settings
+"save_global_track_interval" = "General logging interval";
+"save_global_track_interval_descr" = "Choose logging interval for the general track recording (enabled via the GPX logging widget on the map).";
+"logging_interval_navigation" = "Logging interval during navigation";
+"logging_interval_navigation_descr" = "Choose logging interval for track recording during navigation";
+"logging_min_distance" = "Minimum logging distance";
+"logging_min_distance_descr" = "Filter: minimum distance to log a new point";
+"logging_min_accuracy" = "Minimum logging accuracy";
+"logging_min_accuracy_descr" = "Filter: no logging unless the accuracy is reached";
+"logging_min_speed" = "Minimum logging speed";
+"logging_min_speed_descr" = "Filter: no logging below selected speed";
+"auto_split_gap" = "Auto-split recordings after gap";
+"auto_split_gap_descr" = "Start a new segment after 6 min gap, new track after 2 h gap, or new file after a longer gap";
 
 "map_widget_magnetic_bearing" = "Magnetic bearing";
 "map_widget_bearing" = "Relative bearing";
@@ -54,6 +111,7 @@
 "max_speed_none" = "none";
 "access_arrival_time" = "Arrival time";
 "map_widget_time" = "Time to go";
+"map_widget_radius_ruler" = "Radius ruler";
 
 "shared_string_collapse" = "Collapse";
 "shared_string_topbar" = "Top bar";
@@ -77,6 +135,7 @@
 "speak_favorites" = "Nearby Favorites";
 "speak_poi" = "Nearby POI";
 "speak_pedestrian" = "Pedestrian crosswalks";
+"speak_tunnels" = "Tunnels";
 
 "routing_attr_prefer_motorway_name" = "Prefer motorways";
 "routing_attr_prefer_motorway_description" = "Prefer motorways";
@@ -117,6 +176,7 @@
 
 "int_seconds" = "seconds";
 "shared_string_never" = "Never";
+"shared_setting_always_ask" = "Always ask";
 "general_settings_2" = "General settings";
 "general_settings_descr" = "Configure display and common settings for the application";
 "routing_settings_descr" = "Specify options for navigation";
@@ -164,9 +224,12 @@
 "voice_provider_descr" = "Select voice guidance for navigation";
 "choose_audio_stream" = "Voice guidance output";
 "choose_audio_stream_descr" = "Select speaker to play voice guidance";
+"osm_live_routing" = "OsmAnd Live navigation";
+"osm_live_routing_descr" = "Use OsmAnd Live updates for navigation";
 
 "guidance_preferences_descr" = "Navigation preferences";
 "routing_preferences_descr" = "Routing preferences";
+"recording_preferences_descr" = "Trip recording preferences";
 "routing_settings" = "Navigation";
 "app_mode_bus" = "Bus";
 "app_mode_train" = "Train";
@@ -187,6 +250,7 @@
 "interrupt_music_descr" = "Fully pause any music during voice prompts (not just lower its volume)";
 "interrupt_music" = "Pause music";
 "shared_string_do_not_use" = "Do not use";
+"voice_provider" = "Voice guidance";
 "shared_string_sound" = "Sound";
 "select_route_start_on_map" = "Select start point of the route";
 "select_route_finish_on_map" = "Select end point of the route";
@@ -245,6 +309,10 @@
 "traffic_warning_railways" = "Railroad crossing";
 "traffic_warning_pedestrian" = "Pedestrian crosswalk";
 "traffic_warning_hazard" = "Hazard";
+"traffic_warning_tunnel" = "Tunnel";
+
+
+"driving_region" = "Driving region";
 "driving_region_japan" = "Japan";
 "driving_region_us" = "United States";
 "driving_region_canada" = "Canada";
@@ -288,10 +356,12 @@
 "search_poi_category_hint" = "Type to search all";
 
 // Shared Strings
+"shared_string_apply" = "Apply";
 "shared_string_select" = "Select";
 "shared_string_back" = "Back";
 "shared_string_ok" = "OK";
 "shared_string_cancel" = "Cancel";
+"shared_string_close" = "Close";
 "shared_string_no" = "No";
 "shared_string_yes" = "Yes";
 "shared_string_save" = "Save";
@@ -328,6 +398,7 @@
 "fav_group" = "Group";
 "groups" = "Groups";
 "favorite" = "Favorite";
+"poi_overlay" = "POI Overlay";
 "my_favorites" = "My Favorites";
 "fav_no_group" = "No group";
 "fav_remove_q" = "Remove favorite?";
@@ -375,7 +446,8 @@
 
 "gpx_export_title" = "Export trip";
 "gpx_export_select_track" = "Please select trip for Export";
-"gpx_import_desc" = "You can import your GPX files (common GPS data format)\n\nTo share the GPX file you can open file from Dropbox, Email, or any other source - Use Open In function";
+"gpx_import_desc" = "To import your GPX files (common GPS data format) from Dropbox, Email, or any other source use \"Copy to OsmAnd Maps\" option";
+"import_from_docs" = "Import from documents";
 "gpx_no_tracks" = "There are no trips";
 
 "gpx_remove" = "Remove trip?";
@@ -396,6 +468,7 @@
 "track_stop_rec" = "Stop recording";
 "track_new_segment" = "Start new segment";
 "track_save" = "Save current track";
+"track_save_descr" = "Save current track as GPX file now.";
 "track_continue_rec" = "Continue recording";
 "track_continue_rec_q" = "Do you want to continue recording?";
 "rec_interval" = "Logging interval";
@@ -407,6 +480,10 @@
 "track_clear_q" = "Do you want to clear current track?";
 "show_info" = "Show Info";
 "record_trip" = "Record your trip";
+"poi_clear" = "Clear";
+
+"track_during_nav" = "Auto-record track during navigation";
+"track_during_nav_descr" = "A GPX track is automatically saved during navigation";
 
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
@@ -487,6 +564,30 @@
 // Resources
 "res_mapsres" = "Maps & Resources";
 "res_installed" = "Installed";
+"osmand_live_title" = "OsmAnd Live";
+"osmand_live_updates" = "Live updates";
+"osmand_live_available_maps" = "Available maps";
+"osmand_live_last_changed" = "Last map change: %@";
+"osmand_live_last_live_update" = "Last update: %@";
+"osmand_live_not_updated" = "Not yet updated";
+"osmand_live_hourly" = "Hourly";
+"osmand_live_daily" = "Daily";
+"osmand_live_weekly" = "Weekly";
+"osmand_live_reports" = "Reports";
+"osmand_live_server_date" = "Last server update: %@";
+"osmand_live_upd_frequency" = "Update frequency";
+"osmand_live_wifi_only" = "Update only via WiFi";
+"osmand_live_donation_header" = "Donation settings";
+"osmand_live_donations" = "Donations";
+"osmand_live_donation_switch_title" = "Donation to OpenStreetMap community";
+"osmand_live_donation_switch_descr" = "Part of your donation is distributed among the OSM users who submit changes to OpenStreetMap. The cost of the subscription remains the same";
+"osmand_live_donations_enter_email" = "Enter your email address";
+"osmand_live_donations_email_descr" = "Please provide your e-mail address to get the donation reports";
+"osmand_live_support_reg_title" = "Support region";
+"osmand_live_support_reg_descr" = "Part of your donation will be sent to OSM users who submit changes to the map in that region";
+"osmand_live_public_name" = "Enter your public name";
+"osmand_live_subscription_canceled" = "You have cancelled OsmAnd Live Subscription";
+"osmand_live_cancel_descr" = "Renew the subscription to continue using the full functionality:\n— Contour lines and hillshades\n— Nautical maps\n— Wikipedia\n— Daily map updates\n";
 "res_banner_free_maps_title" = "You have %d free maps!";
 "res_banner_free_maps_desc" = "You can download %d free maps, without updates";
 "res_banner_no_free_maps_title" = "You have no free maps!";
@@ -494,6 +595,7 @@
 "res_search_world" = "Search worldwide";
 "res_catalog_upd" = "Catalog update";
 "res_world_map" = "World map";
+"res_world_region" = "World";
 "res_updates" = "Updates";
 "res_worldwide" = "Worldwide";
 "res_region_map" = "Region map";
@@ -531,7 +633,7 @@
 "menu_my_trips" = "My Trips";
 "menu_my_directions" = "My Directions";
 "menu_feedback" = "Feedback";
-"menu_about" = "About";
+"menu_help" = "Help";
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";
@@ -539,7 +641,7 @@
 "add_waypoint" = "Add waypoint to trip";
 "add_waypoint_short" = "Add waypoint";
 "edit_waypoint_short" = "Edit waypoint";
-"more" = "More";
+"actions" = "Actions";
 "parking_marker" = "Parking marker";
 "time_limited" = "Time limited";
 "pickup_car" = "Pickup the car";
@@ -565,6 +667,27 @@
 "units_min" = "min";
 "units_sec" = "sec";
 
+// Help
+"help_first_steps" = "First steps";
+"help_first_use" = "First use";
+"help_first_use_descr" = "How to download maps and set basic settings";
+"help_navigation_descr" = "How to set up navigation";
+"help_faq" = "FAQ";
+"help_faq_descr" = "Frequently asked questions";
+"help_features" = "Features";
+"help_map_viewing" = "Map viewing";
+"help_search" = "Map search";
+"help_trip_planning" = "Planning a trip";
+"help_legend" = "Map legend";
+"help_other_header" = "Other";
+"help_install_and_troubleshoot" = "Installation and troubleshooting";
+"help_tech_articles" = "Technical articles";
+"help_versions" = "Versions";
+"help_contact_us" = "Contact us";
+"help_about" = "About";
+"help_follow_us" = "Follow us";
+"facebook" = "Facebook";
+"twitter" = "Twitter";
 
 // Map
 "map_inst_det_map_q" = "Install detailed map overview to get more information about your locations.";
@@ -707,6 +830,13 @@
 "product_desc_srtm" = "Display of contour lines";
 "product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 
+"product_title_wikivoyage" = "Travel Guides";
+"product_desc_wikivoyage" = "The free worldwide travel guide anyone can edit.";
+"product_desc_ext_wikivoyage" = "Guides to the most interesting places on the planet, inside OsmAnd, without a connection to the Internet.";
+
+"product_title_sea_depth_contours" = "Nautical depth contours";
+"product_desc_sea_depth_contours" = "Sea depth contour lines and seamarks";
+
 "my_location" = "My Location";
 "all_categories" = "All categories";
 "get_unlimited_access" = "Get unlimited access";
@@ -773,6 +903,9 @@
 "show_all" = "Show all";
 "directions" = "Directions";
 "parking" = "Parking";
+
+"directions_more_options" = "Directions from";
+"nearby_search" = "Search nearby";
 
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
@@ -890,3 +1023,45 @@
 "wiki_buy_description" = "To read full articles - buy Wikipedia plugin and download Wikipedia data of %@";
 "wiki_download_description" = "To read full articles - download Wikipedia data of %@";
 "map_an_region" = "an region";
+
+"osm_live_plan_pricing" = "Plan & Pricing";
+"osm_live_payment_monthly_title" = "Pay monthly";
+"osm_live_payment_3_months_title" = "Pay once in 3 months";
+"osm_live_payment_annual_title" = "Pay once a year";
+"osm_live_payment_month_cost_descr" = "%@ / month";
+"osm_live_payment_month_cost_descr_ex" = "%@ %@ / month";
+"osm_live_payment_discount_descr" = "Save %@!";
+"osm_live_payment_current_subscription" = "Your current subscription";
+"osm_live_payment_renews_monthly" = "Renews monthly";
+"osm_live_payment_renews_quarterly" = "Renews quarterly";
+"osm_live_payment_renews_annually" = "Renews annually";
+"default_price_currency_format" = "%@ %@";
+"osm_live_payment_header" = "Select the payment period convenient for you:";
+"osm_live_payment_contribute_descr" = "Part of income goes to OpenStreetMap contributors.";
+
+"purchase_dialog_title" = "Choose plan";
+"purchase_dialog_travel_description" = "Purchase one of the following to receive the offline travel guide functionality:";
+"shared_string_later" = "Later";
+"free_version_message" = "You can download or update %d maps";
+"get_osmand_live" = "Get OsmAnd Live to unlock all features: Daily map updates with unlimited downloads, all paid and free plugins, Wikipedia and much more.";
+"osm_live_subscription" = "OsmAnd Live subscription";
+
+"wikivoyage_offline" = "Wikivoyage offline";
+"unlimited_downloads" = "Unlimited downloads";
+"wikipedia_offline" = "Wikipedia offline";
+"contour_lines_hillshade_maps" = "Contour lines & Hillshade maps";
+"monthly_map_updates" = "Map updates: every month";
+"daily_map_updates" = "Map updates: every hour";
+"index_item_depth_contours_osmand_ext" = "Nautical depth contours";
+"donation_to_osm" = "Donation to OpenStreetMap community";
+"purchase_unlim_title" = "Buy - %@";
+"in_app_purchase" = "In-app purchase";
+"in_app_purchase_desc" = "One-time payment";
+"in_app_purchase_desc_ex" = "Once purchased, it will be permanently available to you.";
+"unlock_all_features" = "Unlock all OsmAnd features";
+"subscribe_email_desc" = "Subscribe to our mailing list:<br/>• Get 3 extra maps to download<br/>• Hear about discounts first<br/>• Participiate in promocodes <a href='https://osmand.net/giveaway'>giveaways</a>";
+"osm_live_subscribe_btn" = "Subscribe";
+"shared_string_email_address" = "E-mail address";
+"osm_live_enter_email" = "Please enter a valid e-mail address";
+"shared_string_unexpected_error" = "Unexpected error";
+

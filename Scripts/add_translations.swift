@@ -19,7 +19,9 @@ let LOGGING = false
 let OSMAND_REPOSITORIES_PATH = "/Users/nnngrach/Projects/Coding/OsmAnd/"
 
 ///For quick debugging you can write interesting key only in this var. And then manually add breakpoint on strings "// breakpointHere()"
-let DEBUG_STOP_KEY = "will_open_tomorrow_at"
+let DEBUG_STOP_KEY = "empty_purchases_description"
+
+let DEBUG_STOP_UPDATING_TRANSLATIONS = false
 
 
 var iosEnglishDict: [String : String] = [:]
@@ -235,6 +237,7 @@ class Main {
     
     
     static private func addRoutingParametersIfNeeded(_ arguments: [String], _ osmandRepositoriesFolder: URL) {
+        guard !DEBUG_STOP_UPDATING_TRANSLATIONS else { return }
         print("RUN: Main.addRoutingParametersIfNeeded() \n")
         System.changeDir(osmandRepositoriesFolder.appendingPathComponent("ios/").path)
         //if (arguments.count == 2) && (arguments[1] == "-routing") || DEBUG {
@@ -397,6 +400,11 @@ class IOSWriter {
     private static func isEnglishDuplicateInLocalFile(_ language: String, _ key: String, _ androidValue: String) -> Bool {
         let androidTrimmedValue = androidValue.replacingOccurrences(of: "\\", with: "")
         let iosEnglishTrimmedValue = (iosEnglishDict[key] ?? "").replacingOccurrences(of: "\\", with: "")
+        let isDuplicate = language != iosEnglishKey && androidTrimmedValue == iosEnglishTrimmedValue
+        
+        if DEBUG && key == DEBUG_STOP_KEY && isDuplicate {
+            // breakpointHere()
+        }
         return language != iosEnglishKey && androidTrimmedValue == iosEnglishTrimmedValue
     }
     
@@ -538,8 +546,15 @@ class IOSWriter {
                                 }
                                 */
                                 
+                                
+                                // add updated string if it's ok
                                 if !isTrashString {
-                                    updatedStrings.append(newString);
+                                    if !DEBUG_STOP_UPDATING_TRANSLATIONS {
+                                        updatedStrings.append(newString);
+                                    } else {
+                                        // delete trash strings. don't change or update any another strings
+                                        updatedStrings.append(string);
+                                    }
                                 }
                             }
                             //if let updstedString = replaceValueText(newValue: filterUnsafeChars(elem.value), inFullString: strings[i] )
@@ -549,7 +564,7 @@ class IOSWriter {
                             
                             //return keyOccurrences[key]! == 1
                         } else if string.trimmingCharacters(in: .whitespaces) == "" {
-                            // keep empty lines
+                            // keep empty lines in the same order
                             updatedStrings.append(string)
                         } else {
                             print("Missing key \(string) ")
@@ -558,11 +573,15 @@ class IOSWriter {
                     }
                     
                 }
-                for elem in newLinesDict {
-                    updatedStrings.append("\"" + elem.key + "\" = \"" + filterUnsafeChars(elem.value) + "\"")
+                
+                // new translations adding
+                if !DEBUG_STOP_UPDATING_TRANSLATIONS {
+                    for elem in newLinesDict {
+                        updatedStrings.append("\"" + elem.key + "\" = \"" + filterUnsafeChars(elem.value) + "\"")
+                    }
                 }
                 
-                //let newFileContent = strings.joined(separator: ";\n")
+                // build a new Localizable.strings file
                 var newFileContent = ""
                 for string in updatedStrings {
                     let trim = string.trimmingCharacters(in: .whitespaces)

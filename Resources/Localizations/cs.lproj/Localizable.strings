@@ -451,7 +451,6 @@
 // Menu
 "shared_string_my_places" = "Moje místa";
 "menu_my_trips" = "Moje stopy";
-"menu_my_directions" = "My Directions";
 "feedback" = "Anketa";
 "add_waypoint" = "Přidat trasový bod";
 "add_waypoint_short" = "Přidat mezicíl";

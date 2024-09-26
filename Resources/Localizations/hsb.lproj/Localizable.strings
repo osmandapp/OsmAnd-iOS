@@ -346,7 +346,6 @@
 "download_tab_updates" = "Aktualizacije";
 "shared_string_details" = "Podrobnosće";
 "shared_string_type" = "Družina";
-"menu_my_directions" = "My Directions";
 "shared_string_help" = "Pomoc";
 // OSM Editing actions
 "commiting_node" = "Přenošu suk…";
@@ -508,7 +507,6 @@
 "go_to_map" = "Kartu pokazać";
 "device_memory" = "Skład nastroja";
 "free" = "Swobodne %@";
-"first_usage_greeting" = "Get directions and discover new places without Internet connection";
 "location_not_found" = "Stejišćo njebu namakane";
 "search_my_location" = "Moje stejišćo namakać";
 "no_inet_connection" = "Žadyn zwisk z internetom";
@@ -526,7 +524,6 @@
 "subcategories" = "Podkategorije";
 "shared_string_select_all" = "Wšě wubrać";
 "selected_categories" = "Wubrane kategorije";
-"new_filter_desc" = "Please enter a name for the new filter, this will be added to your Categories tab.";
 "user_password" = "Waše hesło pola OSM";
 "shared_string_filters" = "Filtry";
 "edit_filter" = "Kategorije wobdźěłać";

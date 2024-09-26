@@ -1014,7 +1014,6 @@
 "poi_filter_by_name" = "Търсене по име";
 "shared_string_select_all" = "Избор всички";
 "create_custom_poi" = "Създаване на филтър по избор";
-"new_filter_desc" = "Please enter a name for the new filter, this will be added to your Categories tab.";
 "rearrange_categories" = "Подредба на категориите";
 "create_custom_categories_list_promo" = "Променяте подредбата на списъка и скривайте категории. Внасяйте или изнасяйте промените като профили.";
 "reset_to_default_category_button_promo" = "Бутонът „Нулиране“, ще върне реда на сортиране към състоянието при инсталация.";

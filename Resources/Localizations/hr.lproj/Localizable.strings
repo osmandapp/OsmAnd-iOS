@@ -619,11 +619,8 @@
 "shared_string_history" = "Povijest";
 "device_memory" = "Memorija uređaja";
 "free" = "\"Slobodno %@ \"";
-"first_usage_greeting" = "Get directions and discover new places without Internet connection";
 "suggested_maps_descr" = "These maps are required for the plugin";
-"search_my_location" = "Search my location";
 "searching" = "Tražim…";
-"search_location" = "Searching location…";
 "search_map" = "Searching map";
 "skip_map_downloading" = "Preskoči Preuzimanje karata";
 "custom_search" = "Prilagođeno pretraživanje";

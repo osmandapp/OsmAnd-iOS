@@ -361,17 +361,13 @@
 "plugins_menu_group" = "Plugin";
 "shared_string_history" = "Lịch sử";
 "device_memory" = "Bộ nhớ thiết bị";
-"first_usage_greeting" = "Get directions and discover new places without Internet connection";
 "suggested_maps_descr" = "These maps are required for the plugin";
-"search_my_location" = "Search my location";
 "searching" = "Tìm kiếm…";
-"search_location" = "Searching location…";
 "search_map" = "Searching map";
 "poi_filter_custom_filter" = "Tùy chỉnh bộ lọc";
 "poi_filter_closest_poi" = "Địa điểm gần nhất";
 "poi_filter_by_name" = "Tìm theo tên";
 "shared_string_select_all" = "Lựa chọn tất cả";
-"new_filter_desc" = "Please enter a name for the new filter, this will be added to your Categories tab.";
 "create_custom_categories_list_promo" = "You can add custom categories, hide categories that you don’t find necessary, and change the sort order of the list. Custom categories can be imported and exported with profiles.";
 "reset_to_default_category_button_promo" = "Resetting to default will restore the sort order to its initial state.";
 "search_poi_types_descr" = "You can combine POI types from different categories.";

@@ -789,7 +789,6 @@
 "public_transport_show" = "Näytä joukkoliikenne";
 "public_transport_hide" = "Piilota joukkoliikenne";
 "quick_action_showhide_mapillary_title" = "Näytä/piilota Mapillary";
-"quick_action_showhide_mapillary_descr" = "Tapping this action button shows or hides the Mapillary layer on the map.";
 "quick_action_mapillary_hide" = "Piilota Mapillary";
 "quick_action_mapillary_show" = "Näytä Mapillary";
 "quick_action_remove_next_destination" = "Seuraava määränpää";

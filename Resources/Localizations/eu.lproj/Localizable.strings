@@ -912,7 +912,6 @@
 "profile_type_osmand_string" = "OsmAnd profila";
 "add_waypoint" = "Gehitu bide-puntua";
 "delete_waypoints" = "Ezabatu bide-puntuak";
-"delete_group_confirm" = "Are you sure you want to delete ”%@” group?";
 "no_waypoints_found" = "Ez da bide-punturik aurkitu";
 "poi_context_menu_modify" = "Aldatu POI-a";
 "context_menu_item_create_poi" = "Sortu interesgune bat";
@@ -996,7 +995,6 @@
 "record_plugin_description" = "Grabatu zure bidaiak edo entrenamenduak, eta aztertu datuak abiadura, metatutako igoerak eta jaitsierak, kota-profila, etab. Grabatutako arrastoak artxibatu, lagunekin partekatu, editatu eta prozesatu egin daitezke. \n \nIrakurketa gehiago %@ helbidean.";
 "osm_editing_plugin_name" = "OpenStreetMap edizioa";
 "osm_editing_plugin_description" = "Egin ekarpenak OpenStreetMap-i, munduaren mapa osoa mantentzen duen komunitate globalari eta erabiltzaile guztiei kode irekiko datu eguneratuak eskaintzen dizkie. \n \nMapa editatzeko argibideak gure webgunean aurki ditzakezu %@.";
-"product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Kale-mailako ikuspegien irudiak. Zuk ere ekarpenak egin ditzakezu. Dauden datuak mapa geruza gisa ikusteko, aktibatu \"Kale mailako irudiak\" \"Konfiguratu mapa\" menuan.";
 "worldwide_maps" = "Mundu osoko mapak";
 "purchases_feature_desc_wikipedia" = "Tokiekin erlazionatutako Wikipediako artikulu guztiak lineaz kanpo eskaintzen ditu, zure bidaian bisitatzen dituzun tokiei buruz ikasten lagunduko dizu mapan sakatu soilekin. Ez ahaztu dagozkien eskualdeetako Wikipediako mapa fitxategiak deskargatzea.";

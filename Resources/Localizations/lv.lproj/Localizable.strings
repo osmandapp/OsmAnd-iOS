@@ -319,7 +319,6 @@
 "nearest_cities" = "Tuvākās pilsētas";
 "type_address" = "Ierakstiet adresi";
 "search_poi_category_hint" = "Meklēt visās kategorijās";
-"poi_categories" = "POI categories";
 "shared_string_search_history" = "Meklēšanas vēsture";
 "attribute" = "Atribūts";
 
@@ -416,7 +415,6 @@
 "shared_string_waypoint" = "Ceļapunkts";
 "shared_string_waypoints" = "Ceļapunkti";
 "shared_string_export" = "Eksportēt";
-"gpx_selection_segment_title" = "Segments";
 "route_points" = "Maršruta punkti";
 "import_tracks" = "Importēt trekus";
 "gpx_parse_error" = "OsmAnd GPX nav pareizi noformēts, lūdzu kontaktējieties ar atbalsta grupu, lai noskaidrotu iemeslus.";
@@ -580,7 +578,6 @@
 "lang_zh_hk" = "Ķīniešu (Honkongas)";
 "lang_zh_tw" = "Ķīniešu (tradicionālā)";
 "purchases" = "Pirkumi";
-"export_profile" = "Export";
 "shared_string_import" = "Importēt";
 "nav_type_hint" = "Navigācijas veids";
 "shared_string_nothing_selected" = "Nekas nav izvēlēts";
@@ -590,8 +587,6 @@
 "shared_string_settings" = "Iestatījumi";
 "configure_screen_quick_action" = "Ātrās darbības";
 "search_activity" = "Meklēt";
-"listed_exist" = "Listed %@ already exist in OsmAnd.";
-"app_restart_required" = "Application restart required to apply some settings.";
 "shared_string_finish" = "Finišs";
 "copy_from_other_profile" = "Kopēt no cita profila";
 "profile_alert_delete_title" = "Izdzēst profilu";
@@ -633,13 +628,10 @@
 "plan_route_create_new_route" = "Veidot jaunu maršrutu";
 "plan_route_open_existing_track" = "Atvērt saglabāto treku";
 "sort_last_modified" = "Labots";
-"route_between_points_add_track_desc" = "Select a track file for which a new segment will be added.";
 "none_point_error" = "Lūdzu pievienojiet vismaz vienu punktu.";
-"empty_filename" = "Filename cannot be empty";
 "plan_route_split_before" = "Sadalīt pirms";
 "plan_route_split_after" = "Sadalīt pēc";
 "shared_string_gpx_track" = "Treks";
-"select_folder_descr" = "Select folder or add a new one";
 
 // Resources
 "shared_string_resources" = "Resursi";
@@ -659,9 +651,6 @@
 "shared_string_type" = "Tips";
 "edit_tilesource_elliptic_tile" = "Eliptisks merkators";
 "welmode_download_maps" = "Lejupielādes";
-"srtm_unit_format" = "Contour lines unit format";
-"srtm_download_single_help_message" = "Please select the needed format. You will need to re-download the file to change the format.";
-"srtm_download_list_help_message" = "OsmAnd provides contour lines data in meters and feet. You will need to re-download the file to change the format.";
 
 // Menu
 "shared_string_menu" = "Izvēlne";
@@ -673,7 +662,6 @@
 "closing_changeset" = "Aizver izmaiņu kopu…";
 "commiting_node" = "Ieraksta nodi…";
 "loading_poi_obj" = "Ielādē POI…";
-"shared_string_loading" = "Loading…";
 "exit_without_saving" = "Aizvērt bez saglabāšanas?";
 "unsaved_changes_will_be_lost" = "Izmaiņas netiks saglabātas. Vai turpināt?";
 "osn_bug_name" = "OSM piezīme";
@@ -765,7 +753,6 @@
 "quick_action_switch_day_mode" = "Dienas režīms";
 "quick_action_navigation_voice_on" = "Balss ir ieslēgta";
 "quick_action_navigation_voice_off" = "Balss ir izslēgta";
-"show_gpx" = "Show track";
 "shared_string_action_name" = "Darbības vārds";
 "quick_action_interim_dialog" = "Rādīt interim dialogu";
 "quick_action_fav_name_descr" = "Atstājiet tukšu, lai automātiski lietotu adreses vai vietas nosaukumu";
@@ -775,14 +762,11 @@
 "quick_action_bug_descr" = "Šī ziņa tiks automātiski piepildīta komentāru laukā.";
 "quick_action_add_marker_descr" = "Spiežot darbības pogu, ekrāna centrā tiks ielikts ceļapunkts.";
 "show_from_zoom_level" = "Rādīt no zoom līmeņa";
-"quick_action_showhide_mapillary_descr" = "Tapping this action button shows or hides the Mapillary layer on the map.";
-"quick_action_remove_next_destination" = "Delete nearest destination point";
 "change_application_profile" = "Mainīt aplikācijas profilu";
 "shared_string_add_profile" = "Pievienot profilu";
 "quick_action_switch_profile_descr" = "Darbības poga pārslēdz izvēlētos profilus.";
 "profile_type_osmand_string" = "OsmAnd profili";
 "add_waypoint" = "Pievienot ceļapunktu";
-"delete_group_confirm" = "Are you sure you want to delete ”%@” group?";
 "no_waypoints_found" = "Nav atrasts neviens ceļa punkts";
 "poi_context_menu_modify" = "Labot POI";
 "context_menu_item_create_poi" = "Izveidot POI";
@@ -866,12 +850,10 @@
 "record_plugin_description" = "Ar šo spraudni jūs varat manuāli saglabāt trekus, nospiežot GPX ieraksta logrīku uz kartes vai veikt automātisku visu maršrutu ierakstu GPX failā. \n \nIerakstītie treki vēlāk var tikt izmantoti treka analīzei, koplietošanai ar draugiem vai OSM izstrādei. Atlēti var izmantot trekus, lai monitorētu treniņus. Pamata treku analīze var tikt veikta tieši caur OsmAnd kā piemēram, apļu laiki, vidējais ātrums utt., bet paplašinātai analīzei trekus var atvērt citās programmās.";
 "osm_editing_plugin_name" = "OSM labošana";
 "osm_editing_plugin_description" = "Rādīt iestatījumus OSM pilnveidošanai - OSM POI objektu izveidei/labošanai, GPX treku izplatīšanai un ziņošanai par OSM kļūdām. Vairāk uzziniet https://openstreetmap.org vietnē. Ikviens ir aicināts ņemt aktīvu dalību, ko ir iespējams darīt caur OsmAnd aplikāciju, norādot jūsu OSM lietotāja datus.";
-"product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Ielas līmeņa fotoattēli ikvienam - atklājiet vietas, kopīgojiet, iemūžiniet pasauli.";
 "worldwide_maps" = "All World Maps";
 "download_wikipedia_maps" = "Vikipēdija";
 "purchases_feature_desc_wikipedia" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
-"select_wikipedia_article_langs" = "Select the languages in which Wikipedia articles will appear on the map. You can switch between all available languages while reading the article.";
 "srtm_plugin_name" = "Kontūrlīniju spraudnis";
 "srtm_plugin_description" = "\"Šis spraudnis dod iespēju rādīt kontūrlīniju un reljefu pārklājus uz standarta OsmAnd kartēm. Šo iespēju novērtēs dabas mīļotāji, aktīvās atpūtas cienītāji un jebkurš ar padziļinātu interesi par zemes reljefu.  \n \nGlobālie dati (starp 70° Z un 70° D) ir bāzēti uz SRTM (Shuttle Radar Topography Mission) un ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer) mērījumiem, attēlveidošanas rīks uz Terra\'s, vadošais NASA Zemes Novērošanas Sistēmas satelīts. ASTER ir kopējs veikums ar NASA, Japānas Ekonomikas Ministriju, Trade and Industry (METI) un Japānas Izplatījuma Sistēmām (J-spacesystems). \"";
 "wikivoyage_travel_guide" = "Ceļojumu gids";
@@ -930,7 +912,6 @@
 "first_usage_greeting" = "Veidojiet maršrutus un atklājiet jaunas vietas bez interneta savienojuma";
 "get_started" = "Sākt";
 "first_usage_wizard_desc" = "OsmAnd noteiks jūsu atrašanās vietu un piedāvās lejupielādēt šī reģiona karti.";
-"suggested_maps_descr" = "These maps are required for the plugin";
 "location_not_found" = "Atrašanās vieta nav zināma";
 "search_my_location" = "Meklēt manu vietu";
 "no_inet_connection" = "Nav interneta savienojuma";
@@ -962,7 +943,6 @@
 "rearrange_categories" = "Pārkārtot kategorijas";
 "create_custom_categories_list_promo" = "Jūs varat pievienot savas kategorijas, paslēpt liekās kategorijas un mainīt kārtošanas secību. Saraksts var tikt importēts un eksportēts ar profiliem.";
 "reset_to_default_category_button_promo" = "Atjaunot uz noklusēto atjaunos noklusēto kārtošanas secību pēc instalācijas.";
-"search_poi_types_descr" = "You can combine POI types from different categories.";
 "login_account" = "Konts";
 "user_password" = "Parole";
 "shared_string_filters" = "Filtri";
@@ -1324,7 +1304,6 @@
 "app_mode_camper" = "Treileris";
 "app_mode_campervan" = "Autofurgons";
 "app_mode_pickup_truck" = "Pikaps";
-"walking_route_osmc_description" = "Color routes according to their individual local color (if present on OpenStreetMap) and type (international, regional, local).";
 
 // Release Notes
 // instruction:

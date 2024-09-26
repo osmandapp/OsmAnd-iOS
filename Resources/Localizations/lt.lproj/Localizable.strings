@@ -63,7 +63,6 @@
 "animate_routing_route_not_calculated" = "Pirmiausia apskaičiuokite maršrutą";
 "settings_preset" = "Naudojimo profilis";
 "dialogs_and_notifications_title" = "Dialogai ir pranešimai";
-"dialogs_and_notifications_descr" = "Control pop-ups, dialogs, and notifications";
 "settings_preset_descr" = "Pasirinkite naudojimo profilį su individualiu žemėlapiu ir navigacijos nustatymais.";
 "unit_of_length" = "Ilgio matavimo vienetai";
 "unit_of_length_descr" = "Pakeiskite, kuo matuojamas atstumas.";
@@ -407,7 +406,6 @@
 "shared_string_export" = "Eksportuoti";
 "gpx_selection_segment_title" = "Segmentas";
 "route_points" = "Maršruto taškai";
-"tracks_on_map" = "Tracks on map";
 "layer_route" = "Maršrutas";
 "map_widget_average_speed" = "Vidutinis greitis";
 "shared_string_control_start" = "Pradėti";
@@ -586,7 +584,6 @@
 "lang_zh_hk" = "Kiniečių (Honkongas)";
 "lang_zh_tw" = "Kinų (Tradicinė)";
 "shared_string_maps" = "Žemėlapiai";
-"export_profile" = "Export";
 "shared_string_import" = "Importuoti";
 "nav_type_hint" = "Navigacijos tipas";
 "shared_string_profiles" = "Profiliai";
@@ -596,7 +593,6 @@
 "shared_string_settings" = "Nustatymai";
 "configure_screen_quick_action" = "Spartusis veiksmas";
 "search_activity" = "Ieškoti";
-"listed_exist" = "Listed %@ already exist in OsmAnd.";
 "app_restart_required" = "Norint pritaikyti kai kuriuos nustatymus, reikia iš naujo paleisti programą.";
 "shared_string_finish" = "Pabaiga";
 "copy_from_other_profile" = "Kopijuoti iš kito profilio";
@@ -632,9 +628,7 @@
 "join_segments" = "Sujungti segmentus";
 "plan_route_create_new_route" = "Sukurti naują maršrutą";
 "plan_route_open_existing_track" = "Atidaryti egzistuojančia trasą";
-"route_between_points_add_track_desc" = "Select a track file for which a new segment will be added.";
 "none_point_error" = "Prašome pridėti bent vieną tašką.";
-"empty_filename" = "Filename cannot be empty";
 "shared_string_gpx_track" = "Kelias";
 "plan_route_folder" = "Aplankas";
 "select_folder" = "Pasirinkite folderį";
@@ -664,9 +658,6 @@
 "sqlite_db_file" = "SQLiteDB failas";
 "one_image_per_tile" = "Vienas nuotraukos failas per skiltį";
 "welmode_download_maps" = "Atsisiųsti žemėlapius";
-"srtm_unit_format" = "Contour lines unit format";
-"srtm_download_single_help_message" = "Please select the needed format. You will need to re-download the file to change the format.";
-"srtm_download_list_help_message" = "OsmAnd provides contour lines data in meters and feet. You will need to re-download the file to change the format.";
 "shared_string_meters" = "metrai";
 
 // Menu
@@ -774,13 +765,10 @@
 "quick_action_add_marker_descr" = "Bakstelėję veiksmo mygtuką pridėsite žemėlapio žymeklį ekrano centre.";
 "show_from_zoom_level" = "Rodyti nuo mąstelio";
 "quick_action_transport_descr" = "Mygtukas, rodantis arba slepiantis viešąjį transportą žemėlapyje.";
-"quick_action_showhide_mapillary_descr" = "Tapping this action button shows or hides the Mapillary layer on the map.";
 "quick_action_remove_next_destination" = "Ištrinti sekančio atvykimo tašką";
 "change_application_profile" = "Keisti programos profilį";
 "shared_string_add_profile" = "Pridėti profilį";
 "quick_action_switch_profile_descr" = "Veiksmo mygtukas perjungia pasirinktus profilius.";
-"add_waypoint" = "Add waypoint to track";
-"delete_group_confirm" = "Are you sure you want to delete ”%@” group?";
 "no_waypoints_found" = "Jokių krypčių taškų nerasta";
 "poi_context_menu_modify" = "Koreguoti LV";
 "context_menu_item_create_poi" = "Sukurti LV";
@@ -865,12 +853,10 @@
 "record_plugin_description" = "Išsaugo kelionės istoriją vieno mygtuko ekrane paspaudimu bei pateikia nustatymus, leidžiančius kelionės istoriją išsaugoti GPX faile. \n \nĮrašytais maršrutais galima pasidalinti su draugais arba pridėti kaip kontribuciją OSM. Sportininkai gali naudoti įrašytus maršrutus norėdami stebėti savo treniruotes. Elementarią analizę, tokią kaip ratų laikai, vidutinis greitis, ir t.t., galima atlikti tiesiai OsmAnd bei, be abejo, vėliau išanalizuoti su trečių šalių progamine įranga.";
 "osm_editing_plugin_name" = "OSM redagavimas";
 "osm_editing_plugin_description" = "Šis įskiepis leidžia kurti ar redaguoti LV, užregistruoti ar komentuoti OSM Pastabas, dalintis įrašytais GPX failais. OSM yra atviros visuomenės valdomas, viešas žemėlapio žymėjimo projektas. Dėl smulkesnės informacijos prašome kreiptis į https://openstreetmap.org. Aktyvus dalyvavimas yra labai vertinamas, prisidėti galite tiesiai OsmAnd, jei programoje nurodysite savo prisijungimo duomenis.";
-"product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Internetinės gatvės nuotraukos visiems. Atraskite vietas, bendradarbiaukite, fotografuokite pasaulį.";
 "worldwide_maps" = "All World Maps";
 "download_wikipedia_maps" = "Vikipedija";
 "purchases_feature_desc_wikipedia" = "Naršykite Wikipedia neprisijungę prie interneto. Straipsniai suskirstyti pagal šalis ir regionus ir pateikiami visomis kalbomis.";
-"select_wikipedia_article_langs" = "Select the languages in which Wikipedia articles will appear on the map. You can switch between all available languages while reading the article.";
 "srtm_plugin_name" = "Kontūrinės linijos";
 "srtm_plugin_description" = "Šis įskiepis įgalina tiek aukščio kontūrų linijų tiek ir (reljefo) kalnų šešėlių sluoksnių atvaizdavimą ant OsmAnd žemėlapių. Ši funkcija gali būti naudinga atletams, keliautojams ir visiems, kas aktuali reljefo struktūra. (Atkreipkite dėmesį į tai kad kontūrų linijos ir/arba reljefo duomenys yra atskiri, papildomi parsiuntimai prieinami aktyvavus įskiepį) \n \nPasaulio duomenys (tarp 70 laipsnių šiaurės ir 70 laipsnių pietų) yra paremti SRTM (Shuttle Radar Topography Mission) ir ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), vaizdo fiksavimo instrumento Terra, NASA Earth Observing System palydovo, matavimais. ASTER yra bendradarbiavimo tarp NASA, Japonijos ekonomikos, prekybos ir industrijos (METI) ministerijos ir Japan Space Systems (J-spacesystems) projektas.";
 "wikivoyage_travel_guide" = "Kelionių vadovas";
@@ -958,9 +944,6 @@
 "create_custom_poi" = "Sukurti pasirinktiną filtravimą";
 "selected_categories" = "Pasirinktos kategorijos";
 "new_filter_desc" = "Įrašykite naujo filtro pavadinimą. Jis bus įtrauktas į jūsų \"Kategorijų\" sąrašą.";
-"create_custom_categories_list_promo" = "You can add custom categories, hide categories that you don’t find necessary, and change the sort order of the list. Custom categories can be imported and exported with profiles.";
-"reset_to_default_category_button_promo" = "Resetting to default will restore the sort order to its initial state.";
-"search_poi_types_descr" = "You can combine POI types from different categories.";
 "user_password" = "Slaptažodis";
 "shared_string_filters" = "Filtrai";
 "edit_filter" = "Redaguoti kategorijas";
@@ -1284,7 +1267,6 @@
 "app_mode_campervan" = "Kemperis (RV)";
 "app_mode_wagon" = "Vagonas";
 "app_mode_pickup_truck" = "Pikapas";
-"walking_route_osmc_description" = "Color routes according to their individual local color (if present on OpenStreetMap) and type (international, regional, local).";
 
 // Release Notes
 // instruction:

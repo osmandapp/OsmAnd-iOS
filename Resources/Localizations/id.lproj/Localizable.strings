@@ -1006,7 +1006,6 @@
 "record_plugin_description" = "Rekam perjalanan atau latihan Anda, dan analisa data tentang kecepatan, kenaikan dan keturunan yang terjadi, profil ketinggian, dll. Trek yang direkam dapat diarsip, dibagikan kepada orang lain, disunting, dan diproses setelah itu. \n \nBaca lebih lanjut di %@.";
 "osm_editing_plugin_name" = "Penyuntingan OpenStreetMap";
 "osm_editing_plugin_description" = "Buat kontribusi ke OpenStreetMap, sebuah komunitas global yang membuat peta dunia dan menyediakan data sumber terbuka terbaru kepada pengguna siapa pun. \n \nAnda dapat menemukan petunjuk cara menyunting peta di situs web kami %@.";
-"product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Citra tampilan tingkat jalan. Anda dapat berkontribusi sendiri. Untuk melihat data yang sudah ada sebagai lapisan peta, aktifkan \"Citra tingkat jalan\" dalam menu \"Konfigurasi peta\".";
 "worldwide_maps" = "Peta dunia";
 "download_wikipedia_maps" = "Wiki";

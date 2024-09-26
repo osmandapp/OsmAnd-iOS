@@ -48,7 +48,6 @@
 "unknown_location" = "Местоположението все още не е определено.";
 "animate_routing_route_not_calculated" = "Първо изчислете маршрута";
 "settings_preset" = "Текущ профил";
-"dialogs_and_notifications_descr" = "Control pop-ups, dialogs, and notifications";
 "settings_preset_descr" = "Изгледът на картата и настройките за навигация се запомнят за всеки потребителски профил. Настройте своя профил по подразбиране тук.";
 "unit_of_length" = "Мерни единици за дължина";
 "unit_of_length_descr" = "Промяна на мерната единица за разстояние.";
@@ -674,7 +673,6 @@
 "plan_route_create_new_route" = "Създаване на маршрут";
 "plan_route_open_existing_track" = "Отваряне на съществуваща следа";
 "sort_last_modified" = "Последна промяна";
-"route_between_points_add_track_desc" = "Select a track file for which a new segment will be added.";
 "empty_filename" = "Празно име на файл";
 "follow_track" = "Следване на трасе";
 "shared_string_gpx_track" = "Трасе";
@@ -710,7 +708,6 @@
 "edit_tilesource_elliptic_tile" = "Елиптична проекция на Меркатор";
 "welmode_download_maps" = "Изтегляне на карти";
 "srtm_unit_format" = "Единици за измерване на контурните линии";
-"srtm_download_single_help_message" = "Please select the needed format. You will need to re-download the file to change the format.";
 "srtm_download_list_help_message" = "OsmAnd предоставя информация за изолиниите в метри и футове. За да промените избрания формат трябва да изтеглите отново.";
 "shared_string_meters" = "метри";
 "shared_string_feet" = "футове";
@@ -808,13 +805,11 @@
 "quick_action_showhide_mapillary_descr" = "Бутон, превключващ слоя на Mapillary на картата.";
 "quick_action_remove_next_destination" = "Следващо местоназначение";
 "quick_action_remove_next_destination_descr" = "Следващата междинна точка ще бъде премахната. Ако това е местоназначението, маршрутизирането ще спре.";
-"change_application_profile" = "Change application profile";
 "shared_string_add_profile" = "Добавяне на профил";
 "quick_action_switch_profile_descr" = "Бутонът за действия превлкючва между избраните профили.";
 "profile_type_osmand_string" = "Профил на OsmAnd";
 "add_waypoint" = "Добавяне на отправна точка";
 "delete_waypoints" = "Премахване на потправни точки";
-"delete_group_confirm" = "Are you sure you want to delete ”%@” group?";
 "no_waypoints_found" = "Не са намерени отправни точки";
 "poi_context_menu_modify" = "Промяна на POI";
 "context_menu_item_create_poi" = "Добавяне на POI";
@@ -903,7 +898,6 @@
 "record_plugin_description" = "Записвайте пътуванията или тренировките си и анализирайте данните по отношение на скоростта, натрупаните изкачвания и спускания, профила на надморската височина и т.н. Записаните маршрути могат да бъдат архивирани, споделяни с приятели, редактирани или обработвани впоследствие. \n \nДокументацията е достъпна на адрес %@.";
 "osm_editing_plugin_name" = "Редактиране на OSM";
 "osm_editing_plugin_description" = "Дайте своя принос към OpenStreetMap - глобална общност, която поддържа цялостна карта на света и предоставя съвременни данни с отворен код на всеки потребител. \n \nИнструкции за редактиране на картата можете да намерите на адрес %@.";
-"product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Снимки от нивото на улицата. Можете да дадете своя принос. За да видите съществуващите данни като слой на картата, включете „Снимки от улицата“ в менюто „Настройки на картата“.";
 "worldwide_maps" = "Карти на света";
 "purchases_feature_desc_wikipedia" = "Осигурява без мрежа всички статии в Уикипедия, свързани с места, като ви помага да научите повече за местата, които посещавате по време на пътуването си, само с едно докосване на картата. Не забравяйте да изтеглите файловете с карти на Уикипедия за съответните райони.";
@@ -949,7 +943,6 @@
 "local_indexes_cat_backup" = "Изключено";
 "shared_string_show_all" = "Показване на всички";
 "poi_filter_parking" = "Паркинг";
-"parked_at" = "Parked at";
 "context_menu_item_directions_from" = "Упътване от тук";
 "search_nearby" = "Търси наблизо";
 "move_marker_bottom_sheet_title" = "Преместете картата за да смените позицията на маркера";
@@ -995,7 +988,6 @@
 "rearrange_categories" = "Подредба на категориите";
 "create_custom_categories_list_promo" = "Променяте подредбата на списъка и скривайте категории. Внасяйте или изнасяйте промените като профили.";
 "reset_to_default_category_button_promo" = "Бутонът „Нулиране“, ще върне реда на сортиране към състоянието при инсталация.";
-"search_poi_types_descr" = "You can combine POI types from different categories.";
 "user_password" = "Парола";
 "shared_string_filters" = "Филтри";
 "edit_filter_save_as_menu_item" = "Запазване като";

@@ -22,11 +22,9 @@
 "animate_routing_route_not_calculated" = "Bereken asseblief eers die roete";
 "simulation_real_mode_desc" = "• On straight road sections, speed will be approximate to the maximum allowed speed.\n• At intersections, the simulation will slow down.\n• Extra penalties will be applied on traffic signals, stop signs, etc.";
 "settings_preset" = "Gebruikersprofiel";
-"dialogs_and_notifications_descr" = "Control pop-ups, dialogs, and notifications";
 "settings_preset_descr" = "Kies \'n gebruiker profiel met \'n persoonlike kaart en navigasie instellings.";
 "unit_of_length" = "Meeteenheid";
 "unit_of_length_descr" = "Verander eenhede van lengte en spoed";
-"coords_format" = "Coordinates format";
 "rotate_map_to" = "Kaart oriëntasie";
 "rotate_map_compass_opt" = "Volgens kompas";
 "rotate_map_bearing_opt" = "Volgens rigting van beweging";
@@ -132,7 +130,6 @@
 "left_side_navigation" = "Linkerhand bestuur";
 "si_mi_feet" = "Myle / voete";
 "si_mi_yard" = "Myle/jaarts";
-"poi_categories" = "POI categories";
 
 // Shared Strings
 "shared_string_undefined" = "ongedefinieerd";
@@ -156,7 +153,6 @@
 "shared_string_control_start" = "begin";
 "data_settings" = "Inligting";
 "shared_string_delete_all" = "Wis alles uit";
-"shared_string_logout" = "Logout";
 "shared_string_refresh" = "Verfris";
 "shared_string_do_not_exist" = "Do not exist";
 "shared_string_download_map" = "laai kaart af";
@@ -169,9 +165,7 @@
 "favorite" = "Gunsteling";
 "shared_string_rename" = "Herbenoem";
 "update_existing" = "Vervang";
-"replace_favorite_confirmation" = "Are you sure you want to replace Favorite %@?";
 "fav_points_not_exist" = "Geen gunstelingpunte bestaan nie";
-"fav_point_dublicate_message" = "Favorite renamed to \'%@\' to avoid duplication.";
 "favorite_friends_category" = "Vriende";
 "favorite_places_category" = "Plekke";
 
@@ -183,8 +177,6 @@
 
 // GPX
 "plugin_distance_point" = "Punt";
-"gpx_selection_segment_title" = "Segments";
-"tracks_on_map" = "Tracks on map";
 "layer_route" = "Roete";
 "save_current_track" = "Berg huidige spoor";
 "save_current_track_descr" = "Berg huidige spoor nou op SD";
@@ -225,14 +217,11 @@
 "lang_hy" = "Armeens";
 "lang_pt_br" = "Portugees (Brazilië)";
 "lang_zh" = "Sjinees";
-"export_profile" = "Export";
 "shared_string_import" = "Inbring";
 "shared_string_settings" = "Stellings";
 "search_activity" = "Soek";
 "ltr_or_rtl_combine_via_dash" = "%@ - %@";
 "ltr_or_rtl_combine_via_slash" = "%@ / %@";
-"listed_exist" = "Listed %@ already exist in OsmAnd.";
-"app_restart_required" = "Application restart required to apply some settings.";
 "profile_settings" = "Profiel Besondere Stellings";
 "import_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";
 
@@ -245,16 +234,10 @@
 "add_point_after" = "Add points after";
 "delete_point" = "Vee punt uit";
 "only_selected_segment_recalc" = "Only the selected segment will be recalculated using the selected profile";
-"route_between_points_add_track_desc" = "Select a track file for which a new segment will be added.";
-"empty_filename" = "Filename cannot be empty";
-"select_folder_descr" = "Select folder or add a new one";
 
 // Resources
 "edit_tilesource_url_to_load" = "Bronadres (URL)";
 "edit_tilesource_elliptic_tile" = "Elliptiese merkator";
-"srtm_unit_format" = "Contour lines unit format";
-"srtm_download_single_help_message" = "Please select the needed format. You will need to re-download the file to change the format.";
-"srtm_download_list_help_message" = "OsmAnd provides contour lines data in meters and feet. You will need to re-download the file to change the format.";
 
 // Menu
 
@@ -263,7 +246,6 @@
 "closing_changeset" = "Besig om verandering-sessie af te sluit…";
 "commiting_node" = "Besig om node by te voeg…";
 "loading_poi_obj" = "Besig om POI te laai…";
-"shared_string_loading" = "Loading…";
 "simulate_your_location_gpx_descr" = "You can simulate location moving by using GPX track.";
 "poi_remove_success" = "die interessante plek is suksesvol verwyder";
 "osm_edit_reopened_note" = "Reopened";
@@ -297,13 +279,8 @@
 "quick_action_auto_zoom" = "Auto zoom on/off";
 "quick_action_navigation_voice_on" = "Mute voice";
 "quick_action_navigation_voice_off" = "Unmute voice";
-"show_gpx" = "Show track";
 "gpx_tags_txt" = "Naamplaatjies";
 "quick_action_add_marker_descr" = "Tapping this action button adds a map marker at the map center point.";
-"quick_action_showhide_mapillary_descr" = "Tapping this action button shows or hides the Mapillary layer on the map.";
-"quick_action_remove_next_destination" = "Delete nearest destination point";
-"change_application_profile" = "Change application profile";
-"add_waypoint" = "Add waypoint to track";
 "poi_context_menu_modify" = "verander interessante plek";
 "context_menu_item_create_poi" = "skep interessante plek";
 "osb_comment_dialog_message" = "Boodskap";
@@ -362,7 +339,6 @@
 "osmand_development_plugin_description" = "Wys stellings vir ontwikkeling en ontfoutingsfunksies bv. bewegende navigasie of beeldvertoon werkverrigting.";
 "worldwide_maps" = "All World Maps";
 "purchases_feature_desc_wikipedia" = "Having offline Wikipedia on your trip helps you learn more about the places you visit. It is available offline and shows Wikipedia articles in relation to the points of interest right on the map. Don't forget to download Wikipedia maps for chosen region.";
-"select_wikipedia_article_langs" = "Select the languages in which Wikipedia articles will appear on the map. You can switch between all available languages while reading the article.";
 "srtm_plugin_name" = "Kontoerlyn inlasmodule";
 "srtm_plugin_description" = "Vergemoontlik dei aflaai van aflyn kontoerlyne en heuwelsakdus (\'Instellings\'-> \'Inligtingsbestuur\' -> \'Aflaai\' -> Kies verlangde kaart-tipe).";
 "navigate_point_latitude" = "Breedtegraad";
@@ -372,22 +348,17 @@
 "transport_stops" = "haltes";
 "local_indexes_cat_backup" = "gedeaktiveer";
 "poi_filter_parking" = "Parkering";
-"parked_at" = "Parked at";
 "context_menu_item_directions_from" = "Aanwysings Van";
 "search_nearby" = "Soek naby";
 "move_marker_bottom_sheet_title" = "Move the map to change object's position";
 "weather_plugin_description" = "Enable the Weather Plugin to plan a route considering the weather. Watch the coloured map of weather forecast, which is updated hourly for today, tomorrow, and the week ahead. \n\nWhile traveling see location based info widgets with temperature, precipitation, wind speed, pressure. \n\nWill be useful for hiking and long trips by bike or motorcycle.";
 "shared_string_history" = "Geskiedenis";
-"suggested_maps_descr" = "These maps are required for the plugin";
 "searching" = "Besig om te soek…";
 "search_map" = "Searching map";
 "poi_filter_custom_filter" = "persoonlike filter";
 "poi_filter_closest_poi" = "naaste interessante plek";
 "poi_filter_by_name" = "Soek met die naam";
 "shared_string_select_all" = "Kies alles";
-"create_custom_categories_list_promo" = "You can add custom categories, hide categories that you don’t find necessary, and change the sort order of the list. Custom categories can be imported and exported with profiles.";
-"reset_to_default_category_button_promo" = "Resetting to default will restore the sort order to its initial state.";
-"search_poi_types_descr" = "You can combine POI types from different categories.";
 "user_password" = "Jou OSM wagwoord";
 "edit_filter_save_as_menu_item" = "Berg As";
 "edit_filter_delete_dialog_title" = "Verwyder gekose filter?";
@@ -425,14 +396,12 @@
 "routing_attr_avoid_low_emission_zone_description" = "Avoids low emission zones";
 "routing_attr_avoid_tunnels_name" = "No tunnels";
 "routing_attr_avoid_tunnels_description" = "Avoids tunnels";
-"rendering_value_car_name" = "Driving";
 "routing_attr_avoid_unpaved_name" = "Vermy grondpad";
 "rendering_attr_hideWaterPolygons_name" = "Verberg watervlaktes";
 "routing_attr_avoid_unpaved_description" = "Vermy grondpad";
 "routing_attr_prefer_motorway_description" = "Verkies snelweg";
 "routing_attr_avoid_ferries_name" = "Vermy veerboot";
 "rendering_attr_noAdminboundaries_description" = "Onderduk streeksgrense (adminvlk 5-9)";
-"rendering_value_bicycle_name" = "Cycling";
 "rendering_attr_contourLines_name" = "Wys kontoerlyne";
 "routing_attr_prefer_motorway_name" = "Verkies snelweg";
 "routing_attr_weight_name" = "Gewig";
@@ -474,7 +443,6 @@
 "promo_subscription" = "OsmAnd Pro (Promo)";
 "osmand_cloud_create_account_descr" = "Please enter your e-mail address, a verification code will be sent there, and all your data will be linked to it.";
 "verification_code_missing_description" = "It can take up to 10 minutes. Use the button below if it isn't in your spam folder.";
-"walking_route_osmc_description" = "Color routes according to their individual local color (if present on OpenStreetMap) and type (international, regional, local).";
 "local_backup" = "Local Backup";
 "local_backup_descr" = "Backup or restore data from a local file.";
 "backup_into_file" = "Backup into file";

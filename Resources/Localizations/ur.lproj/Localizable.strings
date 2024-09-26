@@ -1,7 +1,5 @@
 "transport_Routes" = "راستے";
 "simulation_real_mode_desc" = "• On straight road sections, speed will be approximate to the maximum allowed speed.\n• At intersections, the simulation will slow down.\n• Extra penalties will be applied on traffic signals, stop signs, etc.";
-"dialogs_and_notifications_descr" = "Control pop-ups, dialogs, and notifications";
-"coords_format" = "Coordinates format";
 "rotate_map_north_opt" = "Do not rotate (north is up)";
 "animate_my_location" = "Animate location change";
 
@@ -14,22 +12,18 @@
 // Route info
 "avoid_in_routing_descr_" = "Avoid toll roads, unpaved, ferries";
 "turn_arrows_descr" = "Control the visibility of the turn arrows on the route line.";
-"arrived_at_destination" = "You have arrived";
-"poi_categories" = "POI categories";
 "on_hold" = "رکیے";
 
 // Shared Strings
 "shared_string_min_height" = "کم سے کم اونچائی";
 "shared_string_max_height" = "زیادہ سے زیادہ اونچائی";
-"shared_string_logout" = "Logout";
+
 "shared_string_do_not_exist" = "Do not exist";
 "update_tile" = "Update map";
 
 // HUD
 
 // Favorites
-"replace_favorite_confirmation" = "Are you sure you want to replace Favorite %@?";
-"fav_point_dublicate_message" = "Favorite renamed to \'%@\' to avoid duplication.";
 
 // Shapes
 
@@ -38,8 +32,6 @@
 // My Places
 
 // GPX
-"gpx_selection_segment_title" = "Segments";
-"tracks_on_map" = "Tracks on map";
 "gpx_upload_public_visibility_descr" = "\"Public\" means the trace is shown publicly in your GPS traces and in public GPS trace listings, and in the public trace list with timestamps in raw form. Data served via the API does not reference your trace page. Tracepoint timestamps are not available through the public GPS API, and tracepoints are not chronologically ordered.";
 "gpx_upload_identifiable_visibility_descr" = "\"Identifiable\" means that the trace will be shown publicly in your GPS traces and in public GPS trace listings, i.e. other users will be able to download the raw trace and associate it with your username. Public timestamped tracepoint data from the GPS API served via the trackpoints API will reference your original trace page.";
 "gpx_upload_trackable_visibility_descr" = "\"Trackable\" means the trace does not show up in any public listings, but processed trackpoints with timestamps from it (that can\'t be associated with you directly) do through downloads from the public GPS API.";
@@ -54,11 +46,8 @@
 // Settings
 "map_locale" = "Map Language";
 "mgrs_format_descr" = "OsmAnd uses MGRS format which is identical to UTM NATO.";
-"export_profile" = "Export";
 "ltr_or_rtl_combine_via_dash" = "%@ - %@";
 "ltr_or_rtl_combine_via_slash" = "%@ / %@";
-"listed_exist" = "Listed %@ already exist in OsmAnd.";
-"app_restart_required" = "Application restart required to apply some settings.";
 "import_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";
 
 // Purchases
@@ -67,21 +56,14 @@
 "add_point_before" = "Add points before";
 "add_point_after" = "Add points after";
 "only_selected_segment_recalc" = "Only the selected segment will be recalculated using the selected profile";
-"route_between_points_add_track_desc" = "Select a track file for which a new segment will be added.";
-"empty_filename" = "Filename cannot be empty";
-"select_folder_descr" = "Select folder or add a new one";
 
 // Resources
 "edit_tilesource_elliptic_tile" = "Elliptic mercator";
-"srtm_unit_format" = "Contour lines unit format";
-"srtm_download_single_help_message" = "Please select the needed format. You will need to re-download the file to change the format.";
-"srtm_download_list_help_message" = "OsmAnd provides contour lines data in meters and feet. You will need to re-download the file to change the format.";
 "shared_string_feet" = "فٹ";
 
 // Menu
 
 // OSM Editing actions
-"shared_string_loading" = "Loading…";
 "simulate_your_location_gpx_descr" = "You can simulate location moving by using GPX track.";
 "osm_edit_reopened_note" = "Reopened";
 "local_openstreetmap_uploading" = "Uploading...";
@@ -101,16 +83,10 @@
 "quick_action_map_overlay" = "Change map overlay";
 "quick_action_map_underlay" = "Change map underlay";
 "route_add_start_point" = "Add starting point";
-"map_widget_parking" = "Parking spot";
 "quick_action_auto_zoom" = "Auto zoom on/off";
 "quick_action_navigation_voice_on" = "Mute voice";
 "quick_action_navigation_voice_off" = "Unmute voice";
-"show_gpx" = "Show track";
 "quick_action_add_marker_descr" = "Tapping this action button adds a map marker at the map center point.";
-"quick_action_showhide_mapillary_descr" = "Tapping this action button shows or hides the Mapillary layer on the map.";
-"quick_action_remove_next_destination" = "Delete nearest destination point";
-"change_application_profile" = "Change application profile";
-"add_waypoint" = "Add waypoint to track";
 // Units
 
 // Help
@@ -149,18 +125,12 @@
 "osmand_development_plugin_description" = "Allows to configure OsmAnd for testing: simulate navigation routes, check the screen rendering performance, etc. Plugin is not required for normal application use.";
 "worldwide_maps" = "All World Maps";
 "purchases_feature_desc_wikipedia" = "Having offline Wikipedia on your trip helps you learn more about the places you visit. It is available offline and shows Wikipedia articles in relation to the points of interest right on the map. Don't forget to download Wikipedia maps for chosen region.";
-"select_wikipedia_article_langs" = "Select the languages in which Wikipedia articles will appear on the map. You can switch between all available languages while reading the article.";
 "srtm_plugin_description" = "Terrain information, such as contour lines, hillshades and slopes, helps you visually assess the shape of the land surface, considering curvature, extremes, steepness, points of equal height, and more. Topographic information on a map can be represented by slope shading, contour lines for the uphill and downhill, and the colour of the slope angle deviation from flat. Data from SRTM and ASTER. \n\nHow to - https://osmand.net/docs/user/plugins/contour-lines";
 "srtm_plugin_disabled" = "Contour lines disabled";
 "prch_srtm_info" = "Contour lines plugin enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
-"parked_at" = "Parked at";
 "move_marker_bottom_sheet_title" = "Move the map to change object's position";
 "weather_plugin_description" = "Enable the Weather Plugin to plan a route considering the weather. Watch the coloured map of weather forecast, which is updated hourly for today, tomorrow, and the week ahead. \n\nWhile traveling see location based info widgets with temperature, precipitation, wind speed, pressure. \n\nWill be useful for hiking and long trips by bike or motorcycle.";
-"suggested_maps_descr" = "These maps are required for the plugin";
 "search_map" = "Searching map";
-"create_custom_categories_list_promo" = "You can add custom categories, hide categories that you don’t find necessary, and change the sort order of the list. Custom categories can be imported and exported with profiles.";
-"reset_to_default_category_button_promo" = "Resetting to default will restore the sort order to its initial state.";
-"search_poi_types_descr" = "You can combine POI types from different categories.";
 "contour_lines_hillshade_maps" = "Terrain maps: contour lines, hillshades, slope";
 "rendering_attr_showMtbScale_name" = "MTB Scale";
 "rendering_attr_showMtbScaleIMBATrails_name" = "IMBA";
@@ -168,8 +138,6 @@
 "routing_attr_avoid_low_emission_zone_description" = "Avoids low emission zones";
 "routing_attr_avoid_tunnels_name" = "No tunnels";
 "routing_attr_avoid_tunnels_description" = "Avoids tunnels";
-"rendering_value_car_name" = "Driving";
-"rendering_value_bicycle_name" = "Cycling";
 "rendering_attr_depthContourWidth_name" = "Lines width";
 "rendering_attr_depthContourColorScheme_name" = "Lines color scheme";
 "routing_attr_allow_private_for_truck_description" = "Allow access to private areas for trucks";
@@ -187,7 +155,6 @@
 "promo_subscription" = "OsmAnd Pro (Promo)";
 "osmand_cloud_create_account_descr" = "Please enter your e-mail address, a verification code will be sent there, and all your data will be linked to it.";
 "verification_code_missing_description" = "It can take up to 10 minutes. Use the button below if it isn't in your spam folder.";
-"walking_route_osmc_description" = "Color routes according to their individual local color (if present on OpenStreetMap) and type (international, regional, local).";
 "local_backup" = "Local Backup";
 "local_backup_descr" = "Backup or restore data from a local file.";
 "backup_into_file" = "Backup into file";

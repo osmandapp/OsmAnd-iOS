@@ -317,7 +317,6 @@
 "nearest_cities" = "Dinasoedd agosaf";
 "type_address" = "Rhowch gyfeiriad";
 "search_poi_category_hint" = "Teipiwch i chwilio\'r cyfan";
-"poi_categories" = "POI categories";
 "shared_string_search_history" = "Hanes chwilio";
 "track_coloring_solid" = "Solet";
 "attribute" = "Priodoledd";
@@ -779,7 +778,6 @@
 
 // OSM Editing actions
 "loading_poi_obj" = "Yn llwytho MODd…";
-"shared_string_loading" = "Loading…";
 "exit_without_saving" = "Gadael heb gadw\?";
 "osn_bug_name" = "Nodyn OSM";
 "poi_remove_success" = "Dilëwyd";
@@ -887,7 +885,6 @@
 "profile_type_osmand_string" = "Proffil OsmAnd";
 "add_waypoint" = "Ychwanegu Cyfeirbwynt";
 "delete_waypoints" = "Dileu cyfeirbwyntiau";
-"delete_group_confirm" = "Are you sure you want to delete ”%@” group?";
 "no_waypoints_found" = "Ni chanfuwyd cyfeirbwyntiau";
 "poi_context_menu_modify" = "Addasu MODdau";
 "context_menu_item_create_poi" = "Creu MODd";
@@ -979,7 +976,6 @@
 "record_plugin_description" = "Mae\'r ategyn hwn yn agor y swyddogaeth i recordio a chadw eich traciau trwy gyffwrdd â\'r teclyn cofnodi GPX ar y map â llaw, neu hefyd i fewngofnodi\'ch holl lwybrau llywio yn awtomatig i ffeil GPX. \n \n Gellir rhannu traciau wedi\'u recordio gyda\'ch ffrindiau neu eu defnyddio ar gyfer cyfraniadau OSM. Gall athletwyr ddefnyddio traciau wedi\'u recordio i fonitro eu sesiynau hyfforddi. Gellir perfformio rhywfaint o ddadansoddi trac sylfaenol yn uniongyrchol yn OsmAnd, fel amseroedd lap, cyflymder cyfartalog ac ati, ac wrth gwrs gellir dadansoddi traciau yn ddiweddarach hefyd mewn offer dadansoddi trydydd parti arbennig.";
 "osm_editing_plugin_name" = "Golygu OpenStreetMap";
 "osm_editing_plugin_description" = "Gwnewch gyfraniadau OSM fel creu neu addasu gwrthrychau OSM POI, agor neu roi sylwadau ar nodiadau OSM, a chyfrannu ffeiliau GPX wedi\'u recordio yn OsmAnd trwy gyflenwi\'ch enw defnyddiwr a\'ch cyfrinair. Mae OpenStreetMap.org yn brosiect mapio parth cyhoeddus byd-eang a yrrir gan y gymuned.";
-"product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Lluniau lefel stryd ar-lein i bawb. Darganfod lleoedd, cydweithio, cipio\'r byd.";
 "worldwide_maps" = "All World Maps";
 "download_wikipedia_maps" = "Wicipedia";

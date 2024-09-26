@@ -925,7 +925,6 @@
 "profile_type_osmand_string" = "OsmAnd‑profilo";
 "add_waypoint" = "Aldoni navigadpunkton";
 "delete_waypoints" = "Forigi navigadpunktojn";
-"delete_group_confirm" = "Are you sure you want to delete ”%@” group?";
 "no_waypoints_found" = "Ne trovis navigadpunktojn";
 "poi_context_menu_modify" = "Modifi interesejon";
 "context_menu_item_create_poi" = "Krei interesejon";
@@ -1013,7 +1012,6 @@
 "record_plugin_description" = "Ebligas registri viajn vojaĝojn aŭ trejnadojn kaj analizi ilin konsiderante rapidon, tutajn suprenirojn kaj malsuprenirojn, profilon de altitudo kaj pli. Registritajn spurojn oni povas arĥivigi, kunhavigi, redakti kaj pritrakti. \n \nPliaj informoj: %@";
 "osm_editing_plugin_name" = "OSM-redaktilo";
 "osm_editing_plugin_description" = "Ebligas kontribui al OpenStreetMap – tutmonda komunumo, kies celo estas prizorgi detalan mapon de la mondo kaj liveri aktualajn malfermajn datumojn por ĉiu uzanto. \n \nPliaj informoj pri kiel redakti la mapon OSM: %@";
-"product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Liveras strat-nivelan fotaron. Vi ankaŭ povas kontribui per aldoni fotojn al la projekto. Por vidigi la ekzistajn datumojn kiel map-tavolon, aktivigu la agordon “Start-nivela fotaro” en la menuo “Agordi mapon”.";
 "worldwide_maps" = "Tutteraj mapoj";
 "download_wikipedia_maps" = "Vikipedio";

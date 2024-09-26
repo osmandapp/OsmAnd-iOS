@@ -1,6 +1,4 @@
 "auto_follow_location_enabled" = "Auto-centre map view in use.";
-"dialogs_and_notifications_descr" = "Control pop-ups, dialogs, and notifications";
-"coords_format" = "Coordinates format";
 
 // Track recording settings
 "always_center_position_on_map" = "Display position always in centre";
@@ -14,11 +12,9 @@
 "choose_auto_follow_route" = "Auto-centre map view";
 "choose_auto_follow_route_descr" = "Time until the map view synchronises with the current position.";
 "auto_zoom_map_descr" = "Zoom level according to your speed (while the map is synchronised with current position).";
-"arrived_at_destination" = "You have arrived";
 "traffic_warning_railways" = "Railway crossing";
 "traffic_warning_pedestrian" = "Pedestrian crossing";
 "traffic_warning_pedestrian_crosswalk" = "Pedestrian crosswalk";
-"poi_categories" = "POI categories";
 
 // Shared Strings
 "update_tile" = "Update map";
@@ -43,8 +39,6 @@
 "favorites_item" = "Favourites";
 
 // GPX
-"gpx_selection_segment_title" = "Segments";
-"tracks_on_map" = "Tracks on map";
 "gpx_upload_public_visibility_descr" = "\"Public\" means the trace is shown publicly in your GPS traces and in public GPS trace listings, and in the public trace list with timestamps in raw form. Data served via the API does not reference your trace page. Tracepoint timestamps are not available through the public GPS API, and tracepoints are not chronologically ordered.";
 "gpx_upload_identifiable_visibility_descr" = "\"Identifiable\" means that the trace will be shown publicly in your GPS traces and in public GPS trace listings, i.e. other users will be able to download the raw trace and associate it with your username. Public timestamped tracepoint data from the GPS API served via the trackpoints API will reference your original trace page.";
 "gpx_upload_trackable_visibility_descr" = "\"Trackable\" means the trace does not show up in any public listings, but processed trackpoints with timestamps from it (that can\'t be associated with you directly) do through downloads from the public GPS API.";
@@ -60,9 +54,6 @@
 // Settings
 "map_locale" = "Map Language";
 "lang_af" = "Afrikaan";
-"export_profile" = "Export";
-"listed_exist" = "Listed %@ already exist in OsmAnd.";
-"app_restart_required" = "Application restart required to apply some settings.";
 "base_profile_descr_aircraft" = "Aeroplane, gliding";
 "import_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";
 
@@ -72,20 +63,13 @@
 "add_point_before" = "Add points before";
 "add_point_after" = "Add points after";
 "only_selected_segment_recalc" = "Only the selected segment will be recalculated using the selected profile";
-"route_between_points_add_track_desc" = "Select a track file for which a new segment will be added.";
-"empty_filename" = "Filename cannot be empty";
-"select_folder_descr" = "Select folder or add a new one";
 
 // Resources
 "edit_tilesource_elliptic_tile" = "Elliptic mercator";
-"srtm_unit_format" = "Contour lines unit format";
-"srtm_download_single_help_message" = "Please select the needed format. You will need to re-download the file to change the format.";
-"srtm_download_list_help_message" = "OsmAnd provides contour lines data in meters and feet. You will need to re-download the file to change the format.";
 
 // Menu
 
 // OSM Editing actions
-"shared_string_loading" = "Loading…";
 "osm_edit_reopened_note" = "Reopened";
 "local_openstreetmap_uploading" = "Uploading...";
 
@@ -104,18 +88,11 @@
 "quick_action_map_overlay" = "Change map overlay";
 "quick_action_map_underlay" = "Change map underlay";
 "route_add_start_point" = "Add starting point";
-"map_widget_parking" = "Parking spot";
 "quick_action_auto_zoom" = "Auto zoom on/off";
 "quick_action_navigation_voice_on" = "Mute voice";
 "quick_action_navigation_voice_off" = "Unmute voice";
-"show_gpx" = "Show track";
 "quick_action_add_marker_descr" = "Tapping the action button will add a map marker at the screen centre location.";
 "show_from_zoom_level" = "Display starting at zoom level";
-"quick_action_showhide_mapillary_descr" = "Tapping this action button shows or hides the Mapillary layer on the map.";
-"quick_action_remove_next_destination" = "Delete nearest destination point";
-"change_application_profile" = "Change application profile";
-"add_waypoint" = "Add waypoint to track";
-"delete_group_confirm" = "Are you sure you want to delete ”%@” group?";
 // Units
 "int_min" = "min";
 
@@ -152,40 +129,30 @@
 "record_plugin_description" = "Record your tracks and save them manually using OsmAnd Track recording plugin. Export your track as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their tracks.";
 "osm_editing_plugin_name" = "OpenStreetMap Editing";
 "osm_editing_plugin_description" = "OSM Editing plugin can be used to make OSM contributions like creating or modifying POI objects, opening or commenting on OSM Notes, and contributing recorded GPX files. OSM is a community driven global public domain mapping project. For more information, please refer to https://osm.org. Contributions can be made directly from OsmAnd, if you specify your OSM credentials in the app.";
-"product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Online street-level photos for everyone. Discover places, collaborate, capture the world.";
 "worldwide_maps" = "All World Maps";
 "purchases_feature_desc_wikipedia" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
-"select_wikipedia_article_langs" = "Select the languages in which Wikipedia articles will appear on the map. You can switch between all available languages while reading the article.";
 "srtm_plugin_description" = "Terrain information like contour lines, hillshades, and slopes, help you to visually assess the lay of the land and relief, navigability, and more. The topographic information can on the map be represented by slope shading, contour lines, and/or steepness coloring.\n\nThe underlying data originates from SRTM and ASTER.\n\nFurther reading at http://osmand.net/docs/user/plugins/contour-lines .";
 "analyze_on_map" = "Analyse on map";
 "srtm_plugin_disabled" = "Contour lines disabled";
 "prch_srtm_info" = "Contour lines plugin enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "change_color" = "Change colour";
-"parked_at" = "Parked at";
 "move_marker_bottom_sheet_title" = "Move the map to change object's position";
-"suggested_maps_descr" = "These maps are required for the plugin";
 "search_map" = "Searching map";
-"create_custom_categories_list_promo" = "You can add custom categories, hide categories that you don’t find necessary, and change the sort order of the list. Custom categories can be imported and exported with profiles.";
-"reset_to_default_category_button_promo" = "Resetting to default will restore the sort order to its initial state.";
-"search_poi_types_descr" = "You can combine POI types from different categories.";
 "rendering_attr_appMode_description" = "Optimise map for";
 "rendering_attr_currentTrackColor_name" = "GPX colour";
 "routing_attr_short_way_description" = "Optimised shorter route (energy saving)";
 "rendering_attr_coloredBuildings_name" = "Colour-code buildings by type";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Colouring according to route scope";
 "rendering_attr_currentTrackColor_description" = "GPX colour";
-"rendering_value_car_name" = "Driving";
 "rendering_value_walkingRoutesOSMC_name" = "Colouring according to OSMC";
 "rendering_attr_contourColorScheme_name" = "Contour lines colour scheme";
-"rendering_value_bicycle_name" = "Cycling";
 "rendering_attr_subwayMode_name" = "Underground routes";
 "rendering_attr_roadColors_description" = "Select a road colour scheme:";
 "rendering_attr_roadColors_name" = "Road colour scheme";
 
 
 //Icon categories
-"walking_route_osmc_description" = "Color routes according to their individual local color (if present on OpenStreetMap) and type (international, regional, local).";
 
 // Release Notes
 // instruction:

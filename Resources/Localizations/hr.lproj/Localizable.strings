@@ -24,11 +24,9 @@
 "unknown_location" = "Položaj nije poznat";
 "animate_routing_route_not_calculated" = "Molimo vas, prvo izračunajte rutu";
 "settings_preset" = "Korisnički profil";
-"dialogs_and_notifications_descr" = "Control pop-ups, dialogs, and notifications";
 "settings_preset_descr" = "Odaberite korisnički profil s već prilagođenim kartama i navigacijskim postavkama.";
 "unit_of_length" = "Jedinice duljine";
 "unit_of_length_descr" = "Promijeni jedinicu mjerenja duljine.";
-"coords_format" = "Coordinates format";
 "coordinates" = "Koordinate";
 "rotate_map_to" = "Orijentacija karte";
 "rotate_map_compass_opt" = "Po kompasu";
@@ -177,7 +175,6 @@
 "si_nm_h" = "Nautičke milje na sat (čvorovi)";
 "coords_search" = "Pretraga koordinata";
 "search_poi_category_hint" = "Upiši za pretragu";
-"poi_categories" = "POI categories";
 
 // Shared Strings
 "shared_string_enable" = "Aktiviraj";
@@ -231,9 +228,7 @@
 "shared_string_my_places" = "Moja mjesta";
 "shared_string_rename" = "Preimenuj";
 "update_existing" = "Zamijeni";
-"replace_favorite_confirmation" = "Are you sure you want to replace Favorite %@?";
 "fav_points_not_exist" = "Točke favorita ne postoje";
-"fav_point_dublicate_message" = "Favorite renamed to \'%@\' to avoid duplication.";
 "favorite_friends_category" = "Prijatelji";
 "favorite_places_category" = "Mjesta";
 
@@ -251,9 +246,7 @@
 "shared_string_waypoint" = "Međutočke";
 "shared_string_waypoints" = "Međutočke";
 "shared_string_export" = "Izvezi";
-"gpx_selection_segment_title" = "Segments";
 "route_points" = "Točke rute";
-"tracks_on_map" = "Tracks on map";
 "layer_route" = "Ruta";
 "map_widget_average_speed" = "Prosječna brzina";
 "shared_string_control_start" = "Započni";
@@ -369,7 +362,6 @@
 "lang_zh_cn" = "Pojednostavljeni Kineski";
 "lang_zh_hk" = "Kineski (Hong Kong)";
 "lang_zh_tw" = "Tradicionalni kineski";
-"export_profile" = "Export";
 "shared_string_import" = "Uvezi";
 "select_data_to_import" = "Odaberite podatke koje želite uvesti.";
 "shared_string_nothing_selected" = "Ništa nije odabrano";
@@ -382,7 +374,6 @@
 "shared_string_settings" = "Postavke";
 "search_activity" = "Traži";
 "listed_exist" = "Navedene %@, već postoje u OsmAnd.";
-"app_restart_required" = "Application restart required to apply some settings.";
 "profile_type_custom_string" = "Prilagođeni profil";
 "profile_settings" = "Specifične Postavke Profila";
 "application_profiles" = "Profili aplikacije";
@@ -398,10 +389,7 @@
 "add_point_after" = "Add points after";
 "delete_point" = "Izbriši točku";
 "only_selected_segment_recalc" = "Only the selected segment will be recalculated using the selected profile";
-"route_between_points_add_track_desc" = "Select a track file for which a new segment will be added.";
-"empty_filename" = "Filename cannot be empty";
 "shared_string_gpx_track" = "Trag";
-"select_folder_descr" = "Select folder or add a new one";
 
 // Resources
 "download_tab_local" = "Lokalno";
@@ -410,9 +398,6 @@
 "shared_string_details" = "Detalji";
 "edit_tilesource_elliptic_tile" = "Elliptic mercator";
 "welmode_download_maps" = "Preuzimanje karata";
-"srtm_unit_format" = "Contour lines unit format";
-"srtm_download_single_help_message" = "Please select the needed format. You will need to re-download the file to change the format.";
-"srtm_download_list_help_message" = "OsmAnd provides contour lines data in meters and feet. You will need to re-download the file to change the format.";
 
 // Menu
 "shared_string_menu" = "izbornik";
@@ -420,7 +405,6 @@
 
 // OSM Editing actions
 "loading_poi_obj" = "Učitavanje POI…";
-"shared_string_loading" = "Loading…";
 "poi_remove_success" = "POI je uspješno izbrisan";
 "osm_edit_reopened_note" = "Reopened";
 "offline_edition" = "Offline uređivanje";
@@ -457,16 +441,10 @@
 "quick_action_auto_zoom" = "Auto zoom on/off";
 "quick_action_navigation_voice_on" = "Mute voice";
 "quick_action_navigation_voice_off" = "Unmute voice";
-"show_gpx" = "Show track";
 "gpx_tags_txt" = "Oznake";
 "quick_action_add_marker_descr" = "Tapping this action button adds a map marker at the map center point.";
 "show_from_zoom_level" = "Display starting at zoom level";
-"quick_action_showhide_mapillary_descr" = "Tapping this action button shows or hides the Mapillary layer on the map.";
-"quick_action_remove_next_destination" = "Delete nearest destination point";
-"change_application_profile" = "Change application profile";
-"add_waypoint" = "Add waypoint to track";
 "delete_waypoints" = "Obriši putne točke";
-"delete_group_confirm" = "Are you sure you want to delete ”%@” group?";
 "poi_context_menu_modify" = "Izmjeni POI";
 "context_menu_item_create_poi" = "Stvori POI";
 "shared_string_commit" = "Izvršiti";
@@ -528,11 +506,9 @@
 "record_plugin_description" = "Record your tracks and save them manually using OsmAnd Track recording plugin. Export your track as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their tracks.";
 "osm_editing_plugin_name" = "OSM uređivanje";
 "osm_editing_plugin_description" = "OSM Editing plugin can be used to make OSM contributions like creating or modifying POI objects, opening or commenting on OSM Notes, and contributing recorded GPX files. OSM is a community driven global public domain mapping project. For more information, please refer to https://osm.org. Contributions can be made directly from OsmAnd, if you specify your OSM credentials in the app.";
-"product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Online street-level photos for everyone. Discover places, collaborate, capture the world.";
 "worldwide_maps" = "All World Maps";
 "purchases_feature_desc_wikipedia" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
-"select_wikipedia_article_langs" = "Select the languages in which Wikipedia articles will appear on the map. You can switch between all available languages while reading the article.";
 "srtm_plugin_name" = "Slojnice";
 "srtm_plugin_description" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 "wikivoyage_travel_guide" = "Turistički vodiči";
@@ -560,7 +536,6 @@
 "shared_string_history" = "Povijest";
 "device_memory" = "Memorija uređaja";
 "free" = "\"Slobodno %@ \"";
-"suggested_maps_descr" = "These maps are required for the plugin";
 "searching" = "Tražim…";
 "search_map" = "Searching map";
 "skip_map_downloading" = "Preskoči Preuzimanje karata";
@@ -574,9 +549,6 @@
 "create_custom_poi" = "Stvaranje prilagođenog filtra";
 "selected_categories" = "Odabrane kategorije";
 "new_filter_desc" = "Upišite naziv za novi filtar, on će biti dodan na karticu kategorije.";
-"create_custom_categories_list_promo" = "You can add custom categories, hide categories that you don’t find necessary, and change the sort order of the list. Custom categories can be imported and exported with profiles.";
-"reset_to_default_category_button_promo" = "Resetting to default will restore the sort order to its initial state.";
-"search_poi_types_descr" = "You can combine POI types from different categories.";
 "login_account" = "Račun";
 "user_password" = "Vaša OSM lozinka";
 "shared_string_filters" = "Filteri";
@@ -709,7 +681,6 @@
 "app_mode_car" = "Auto";
 "app_mode_bicycle" = "Bicikl";
 "app_mode_pedestrian" = "Pješak";
-"walking_route_osmc_description" = "Color routes according to their individual local color (if present on OpenStreetMap) and type (international, regional, local).";
 
 // Release Notes
 // instruction:

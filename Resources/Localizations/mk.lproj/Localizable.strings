@@ -352,7 +352,6 @@
 "nearest_cities" = "Najbliski gradovi";
 "type_address" = "Napisi adresa";
 "search_poi_category_hint" = "Napišete za da gi prebaruvate site";
-"poi_categories" = "POI categories";
 "shared_string_search_history" = "Barajte vo istorija";
 "track_coloring_solid" = "Celokupen";
 "attribute" = "Atribut";
@@ -845,7 +844,6 @@
 "closing_changeset" = "Se zatvora kompletot za promeni…";
 "commiting_node" = "Se izvršuva jazol…";
 "loading_poi_obj" = "Se včituva POI…";
-"shared_string_loading" = "Loading…";
 "exit_without_saving" = "Izlez bez zacuvuvanje\?";
 "unsaved_changes_will_be_lost" = "Site nezačuvani promeni ḱe bidat izgubeni. Prodolži\?";
 "simulate_your_location_gpx_descr" = "Simulirajte ja vašata pozicija koristejḱi go snimenit GPX zapis.";

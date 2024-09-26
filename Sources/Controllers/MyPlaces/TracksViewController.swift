@@ -8,112 +8,9 @@
 
 import OsmAndShared
 
-extension Array {
-    func toKotlinArray<Item: AnyObject>() -> KotlinArray<Item> {
-        return KotlinArray(size: Int32(self.count)) { (i: KotlinInt) in
-            guard let item = self[i.intValue] as? Item else {
-                 fatalError("Element at index \(i) cannot be cast to \(Item.self)")
-             }
-             return item
-//            var shutUpCompiler: Item?
-//            shutUpCompiler = (self[i.intValue] as! Item)
-//            return shutUpCompiler
-        }
-    }
-}
-
 private protocol TrackListUpdatableDelegate: AnyObject {
     func updateHostVCWith(rootFolder: TrackFolder, visibleTracksFolder: TrackFolder)
 }
-
-//private class TrackFolder {
-//    var path: String = ""
-//    var tracks: [String: GpxDataItem] = [:]
-//    var subfolders: [String: TrackFolder] = [:]
-//    var tracksCount: Int = 0 // count of tracks in current folder and in subfolders
-//    var parentFolder: TrackFolder?
-//    var flattenedFolders: [String: TrackFolder] = [:]
-//    
-//    func performForAllTracks(action: (_ track: GpxDataItem) -> Void) {
-//        for track in tracks.values {
-//            action(track)
-//        }
-//        for subfolder in subfolders.values {
-//            subfolder.performForAllTracks(action: action)
-//        }
-//    }
-//    
-//    func performForSelfAndParent(action: (_ folder: TrackFolder) -> Void) {
-//        action(self)
-//        if let parentFolder {
-//            parentFolder.performForSelfAndParent(action: action)
-//        }
-//    }
-//    
-//    func insertTrack(fileName: String, track: GpxDataItem) {
-//        tracks[fileName] = track
-//        performForSelfAndParent { folder in
-//            folder.tracksCount += 1
-//        }
-//    }
-//    
-//    func insertToFlattenedFolders(path: String, subfolder: TrackFolder) {
-//        performForSelfAndParent { folder in
-//            folder.flattenedFolders[path] = subfolder
-//        }
-//    }
-//    
-//    func collectFolderInfo(_ folderPath: URL) {
-//        do {
-//            let allFolderContentURLs = try FileManager.default.contentsOfDirectory(at: folderPath, includingPropertiesForKeys: nil, options: [])
-//            let subfoldersURLs = allFolderContentURLs.filter { $0.hasDirectoryPath }
-//            
-//            for subfolderURL in subfoldersURLs {
-//                let newSubfolderNode = TrackFolder()
-//                newSubfolderNode.parentFolder = self
-//                let subfolderName = subfolderURL.lastPathComponent
-//                subfolders[subfolderName] = newSubfolderNode
-//                
-//                let relativeSubfolderPath = subfolderURL.standardizedFileURL.relativePath.replacingOccurrences(of: OsmAndApp.swiftInstance().gpxPath + "/", with: "")
-//                newSubfolderNode.path = relativeSubfolderPath
-//                insertToFlattenedFolders(path: relativeSubfolderPath, subfolder: newSubfolderNode)
-//                
-//                newSubfolderNode.collectFolderInfo(subfolderURL)
-//            }
-//        } catch let error {
-//            debugPrint(error)
-//        }
-//    }
-//    
-//    func getAllTracks() -> [GpxDataItem] {
-//        var tracks = [GpxDataItem]()
-//        performForAllTracks { gpx in
-//            tracks.append(gpx)
-//        }
-//        return tracks
-//    }
-//    
-//    func getAllTracksFilePaths() -> [String] {
-//        var filePaths = [String]()
-//        performForAllTracks { filePaths.append(OsmAndApp.swiftInstance().gpxPath.appendingPathComponent($0.gpxFilePath)) }
-//        return filePaths
-//    }
-//    
-//    func getFolderByPath(_ path: String) -> TrackFolder? {
-//        let trimmedPath = path.hasPrefix("/") ? path.substring(from: 1) : path
-//        return trimmedPath.isEmpty ? self : flattenedFolders[trimmedPath]
-//    }
-//    
-//    func getTrackByPath(_ path: String) -> GpxDataItem? {
-//        var result: GpxDataItem?
-//        performForAllTracks { track in
-//            if path == track.gpxFilePath {
-//                result = track
-//            }
-//        }
-//        return result
-//    }
-//}
 
 private enum SortingOptions {
     case name
@@ -130,21 +27,20 @@ private enum ButtonActionNumberTag: Int {
     case save = 2
 }
 
-//fileprivate extension TrackFolderLoaderTaskLoadTracksListener {
-//
-//}
-
-
 final class TracksViewController: OACompoundViewController, UITableViewDelegate, UITableViewDataSource, OATrackSavingHelperUpdatableDelegate, TrackListUpdatableDelegate, OASelectTrackFolderDelegate, OAGPXImportUIHelperDelegate, MapSettingsGpxViewControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate, TrackFolderLoaderTaskLoadTracksListener {
     
     @IBOutlet private weak var tableView: UITableView!
     
+    // swiftlint:disable force_unwrapping
     fileprivate var rootFolder: TrackFolder!
+    fileprivate var visibleTracksFolder: TrackFolder!
+    fileprivate var currentFolder: TrackFolder!
+    // swiftlint:enable force_unwrapping
+    
     fileprivate var isRootFolder = true
     fileprivate var isVisibleOnMapFolder = false
     fileprivate var shouldReload = false
     fileprivate var currentFolderPath = ""   // in format: "rec/new folder"
-    fileprivate var currentFolder: TrackFolder!
     
     fileprivate weak var hostVCDelegate: TrackListUpdatableDelegate?
     
@@ -165,7 +61,6 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     private let isFullWidthSeparatorKey = "isFullWidthSeparatorKey"
     
     private var tableData = OATableDataModel()
-    private var visibleTracksFolder: TrackFolder!
     private var asyncLoader: TrackFolderLoaderTask?
     
     private var recCell: OATwoButtonsTableViewCell?
@@ -210,27 +105,19 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         importHelper.delegate = self
     }
     
-    internal func deferredLoadTracksFinished(folder: OsmAndShared.TrackFolder) {
-        print("function: \(#function)")
+    internal func deferredLoadTracksFinished(folder: TrackFolder) {
+        debugPrint("function: \(#function)")
     }
     
-    internal func loadTracksFinished(folder: OsmAndShared.TrackFolder) {
-        print("function: \(#function)")
+    internal func loadTracksFinished(folder: TrackFolder) {
+        debugPrint("function: \(#function)")
             
-            let trackItems = folder.getTrackItems()
-            let subFolders = folder.getSubFolders()
-            let flattenedSubFolders = folder.getFlattenedSubFolders()
-            let getFlattenedTrackItems = folder.getFlattenedTrackItems()
-            print("function:")
+//        let trackItems = folder.getTrackItems()
+//        let subFolders = folder.getSubFolders()
+//        let flattenedSubFolders = folder.getFlattenedSubFolders()
+//        let getFlattenedTrackItems = folder.getFlattenedTrackItems()
         
-        addRefreshControl()
-        if isRootFolder && rootFolder.getTrackItems().isEmpty && rootFolder.getSubFolders().isEmpty {
-            buildFoldersTree()
-        }
-        // FIXME:
-        currentFolder = getTrackFolderByPath(currentFolderPath) ?? rootFolder
-        visibleTracksFolder = TrackFolder(trackFolder: rootFolder)
-        
+        onRefreshEnd()
         updateNavigationBarTitle()
         generateData()
         tableView.reloadData()
@@ -238,22 +125,18 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     func loadTracksProgress(items: KotlinArray<TrackItem>) {
-        print("function: \(#function)")
+        debugPrint("function: \(#function)")
     }
     
     func loadTracksStarted() {
-        print("function: \(#function)")
+        debugPrint("function: \(#function)")
     }
     
-    internal func tracksLoaded(folder: OsmAndShared.TrackFolder) {
-        print("function: \(#function)")
+    internal func tracksLoaded(folder: TrackFolder) {
+        debugPrint("function: \(#function)")
     }
     
     // MARK: - Base UI settings
-    
-    override func registerNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(onRefreshEnd), name: Notification.Name(kGPXDBTracksLoaded), object: nil)
-    }
     
     override func registerObservers() {
         addObserver(OAAutoObserverProxy(self, withHandler: #selector(onObservedRecordedTrackChanged), andObserve: app.trackRecordingObservable))
@@ -271,6 +154,22 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         }
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        tableView.keyboardDismissMode = .onDrag
+        addRefreshControl()
+        loadTrack()
+        
+        if isRootFolder && rootFolder.getTrackItems().isEmpty && rootFolder.getSubFolders().isEmpty {
+            buildFoldersTree()
+        }
+        
+        tableView.register(UINib(nibName: OAButtonTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OAButtonTableViewCell.reuseIdentifier)
+        tableView.register(UINib(nibName: OATwoButtonsTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OATwoButtonsTableViewCell.reuseIdentifier)
+        tableView.register(UINib(nibName: OASimpleTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OASimpleTableViewCell.reuseIdentifier)
+        tableView.register(UINib(nibName: OALargeImageTitleDescrTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OALargeImageTitleDescrTableViewCell.reuseIdentifier)
+    }
+    
     private func loadTrack() {
         let file = KFile(filePath: OsmAndApp.swiftInstance().gpxPath)
         rootFolder = OsmAndShared.TrackFolder(dirFile: file, parentFolder: nil)
@@ -279,24 +178,6 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         
         asyncLoader = TrackFolderLoaderTask(folder: rootFolder, listener: self, forceLoad: true)
         asyncLoader?.execute(params: kotlinEmptyArray)
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        tableView.keyboardDismissMode = .onDrag
-        loadTrack()
-        
-//        addRefreshControl()
-//        if isRootFolder && rootFolder!.getTrackItems().isEmpty && rootFolder!.getSubFolders().isEmpty {
-//            buildFoldersTree()
-//        }
-//        generateData()
-//        setupTableFooter()
-        
-        tableView.register(UINib(nibName: OAButtonTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OAButtonTableViewCell.reuseIdentifier)
-        tableView.register(UINib(nibName: OATwoButtonsTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OATwoButtonsTableViewCell.reuseIdentifier)
-        tableView.register(UINib(nibName: OASimpleTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OASimpleTableViewCell.reuseIdentifier)
-        tableView.register(UINib(nibName: OALargeImageTitleDescrTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OALargeImageTitleDescrTableViewCell.reuseIdentifier)
     }
     
     private func updateData() {
@@ -686,19 +567,14 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         present(alert, animated: true)
     }
     
-    @objc private func onRefresh() {
-        // FIXME:
-       // gpxDB.newLoad()
-    }
-    
-    @objc private func onRefreshEnd() {
+    private func onRefreshEnd() {
         DispatchQueue.main.async { [weak self] in
             self?.updateAllFoldersVCData()
             self?.tableView.refreshControl?.endRefreshing()
         }
     }
     
-    func setupSearchController() {
+    private func setupSearchController() {
         searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
         searchController.searchBar.delegate = self
@@ -722,6 +598,10 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             searchController.searchBar.searchTextField.backgroundColor = UIColor(white: 1, alpha: 0.3)
             searchController.searchBar.searchTextField.leftView?.tintColor = UIColor(white: 1, alpha: 0.5)
         }
+    }
+    
+    @objc private func onRefresh() {
+        loadTrack()
     }
     
     // MARK: - Data
@@ -869,7 +749,6 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     @objc private func onNavbarDeleteButtonClicked() {
         if hasSelectedItems() {
             let tracksInSelectedFolders = selectedFolders.reduce(0) { (result, folderName) -> Int in
-                let folderPath = currentFolder.getDirFile().path().appendingPathComponent(folderName)
                 if let folder = currentFolder.getFlattenedSubFolders().first(where: { $0.getDirName() == folderName }) {
                     return result + Int(folder.totalTracksCount)
                 }

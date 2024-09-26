@@ -36,11 +36,14 @@
 "mapillary_image" = "Mapillary image";
 "shared_string_milliradians" = "Milliradians";
 "angular_units" = "Angular measurement units";
-"angular_units_descr" = "Change what azimuth is measured in.";
+"angular_units_descr" = "Change azimuth measurement units.";
+"allow_3d" = "Allow 2.5D view";
+"allow_3d_descr" = "Enable this option to be able to view the map in the 2.5D perspective";
 
 "access_intermediate_arrival_time" = "Intermediate arrival time";
 "map_widget_intermediate_time" = "Intermediate time";
 "shared_string_previous" = "Previous";
+"shared_string_next" = "Next";
 "route_stops_before" = "%d stops before";
 "transport_routes" = "Routes";
 "transport_nearby_routes_within" = "Nearby routes within";
@@ -81,7 +84,7 @@
 "will_open_tomorrow_at" = "Will open tomorrow at";
 
 "error_avoid_specific_road" = "No bypass found";
-"road_blocked" = "Road blocked";
+"road_blocked" = "Blocked road";
 "starting_point" = "Starting point";
 "shared_string_select_avoid_road_on_map" = "Select a road to be avoided during the routing";
 "shared_string_road" = "Road";
@@ -104,13 +107,14 @@
 "animate_routing_route_not_calculated" = "Please calculate the route first";
 
 "settings_preset" = "Default profile";
+"default_profile_descr" = "Select a profile that will be used the application launch.";
 "settings_preset_descr" = "Map view and navigation settings are remembered per use profile. Set your default profile here.";
 "unit_of_length" = "Units of length";
 "unit_of_length_descr" = "Change units of length.";
 "coords_format" = "Coordinate format";
 "coords_format_descr" = "Format for geographical coordinates.";
 "do_not_show_discount_desc" = "Suppresses displaying app discounts & special local event messages.";
-"do_not_send_anonymous_data_desc" = "We are not collecting location data. Only app usage and map downloading statistics.";
+"send_anonymous_data_desc" = "Send to OsmAnd map download statistics, we are not collecting location data, or any personal info.";
 "rotate_map_to_bearing" = "Map orientation";
 "rotate_map_to_bearing_descr" = "Select the map screen alignment.";
 "rotate_map_compass_opt" = "To compass";
@@ -119,20 +123,31 @@
 "driving_region_descr" = "Select the driving region: US, Europe, UK, Asia and others.";
 "driving_region" = "Driving region";
 "driving_region_automatic" = "Automatic";
+"routing_attr_length_name" = "Length limit";
+"default_speed" = "Default speed";
+"min_speed" = "Min. speed";
+"max_speed" = "Max. speed";
+"maximum_speed" = "Maximum speed";
+"road_speeds_descr" = "These parameters can affect the route calculation.";
+"road_min_speed_descr" = "Sets the minimum travel speed for all roads in the route. Raises priority for roads with recommended speeds less than the minimum.";
+"road_max_speed_descr" = "Sets the maximum travel speed for all roads in the route. Lowers the priority for roads with a possible speed higher than the maximum.";
 
 // Trip recording settings
 "save_global_track_interval" = "General logging interval";
 "save_global_track_interval_descr" = "Choose logging interval for the general trip recording (enabled via the GPX logging widget on the map).";
 "logging_interval_navigation" = "Logging interval during navigation";
 "logging_interval_navigation_descr" = "Choose logging interval for trip recording during navigation";
-"logging_min_distance" = "Minimum logging distance";
+"logging_min_distance" = "Minimum displacement";
 "logging_min_distance_descr" = "Filter: minimum distance to log a new point";
-"logging_min_accuracy" = "Minimum logging accuracy";
+"logging_accuracy" = "Logging accuracy";
+"logging_min_accuracy" = "Minimum accuracy";
 "logging_min_accuracy_descr" = "Filter: no logging unless the accuracy is reached";
-"logging_min_speed" = "Minimum logging speed";
+"logging_min_speed" = "Minimum speed";
 "logging_min_speed_descr" = "Filter: no logging below selected speed";
 "auto_split_gap" = "Auto-split recordings after gap";
 "auto_split_gap_descr" = "Start a new segment after 6 min gap, new trip after 2 h gap, or new file after a longer gap";
+"trip_rec_actions_descr" = "You can find all your recorded tracks in %@";
+"plugin_settings_reset" = "Reset plugin settings to default";
 
 "map_widget_magnetic_bearing" = "Magnetic bearing";
 "map_widget_bearing" = "Relative bearing";
@@ -162,6 +177,7 @@
 "map_widget_right" = "Right panel";
 "map_widget_left" = "Left panel";
 "layer_map_appearance" = "Configure screen";
+"configure_screen_descr" = "Select screen options for the profile";
 "map_markers" = "Map markers";
 "confirm_usage_speed_cameras" = "In many countries (Germany, France, Italy, and others) the use of speed camera warnings is not permitted by law. OsmAnd does not assume any liability if you violate the law. Please tap yes only if you are eligible to use this feature.";
 
@@ -173,68 +189,33 @@
 "speak_speed_limit" = "Speed limit";
 "speak_cameras" = "Speed cameras";
 "speak_traffic_warnings" = "Traffic warnings";
-"announce_gpx_waypoints" = "GPX waypoints";
+"announce_gpx_waypoints" = "Track waypoints";
 "speak_favorites" = "Nearby Favorites";
 "speak_poi" = "Nearby POI";
 "speak_pedestrian" = "Pedestrian crosswalks";
 "speak_tunnels" = "Tunnels";
 "show_tunnels" = "Tunnels";
 
-"routing_attr_prefer_motorway_name" = "Prefer motorways";
-"routing_attr_prefer_motorway_description" = "Prefer motorways";
-"routing_attr_avoid_toll_name" = "Avoid toll roads";
-"routing_attr_avoid_toll_description" = "Avoid toll roads";
-"routing_attr_avoid_unpaved_name" = "Avoid unpaved roads";
-"routing_attr_avoid_unpaved_description" = "Avoid unpaved roads";
-"routing_attr_avoid_ferries_name" = "Avoid ferries";
-"routing_attr_avoid_ferries_description" = "Avoid ferries";
-"routing_attr_avoid_motorway_name" = "Avoid motorways";
-"routing_attr_avoid_motorway_description" = "Avoid motorways";
-"routing_attr_avoid_stairs_name" = "Avoid stairs";
-"routing_attr_avoid_stairs_description" = "Avoid stairs";
-"routing_attr_avoid_borders_name" = "Avoid border crossing";
-"routing_attr_avoid_borders_description" = "Avoid crossing a border into another country";
-"routing_attr_weight_name" = "Weight limit";
-"routing_attr_weight_description" = "Specify vehicle weight to be permitted on routes";
-"routing_attr_height_name" = "Height limit";
-"routing_attr_height_description" = "Specify vehicle height to be permitted on routes";
-"routing_attr_avoid_shuttle_train_name" = "Avoid shuttle train";
-"routing_attr_avoid_shuttle_train_description" = "Avoid shuttle train";
-"routing_attr_short_way_name" = "Fuel-efficient way";
-"routing_attr_short_way_description" = "Use fuel-efficient way (usually shorter)";
-"routing_attr_allow_motorway_name" = "Allow motorways";
-"routing_attr_allow_motorway_description" = "Allow motorways";
-"routing_attr_relief_smoothness_factor_name" = "Select elevation fluctuation";
-"routing_attr_height_obstacles_name" = "Use elevation data";
-"routing_attr_height_obstacles_description" = "Use terrain elevation data provided by SRTM, ASTER and EU-DEM";
-"routing_attr_driving_style_name" = "Driving style";
-"routing_attr_relief_smoothness_factor_hills_name" = "Hilly";
-"routing_attr_relief_smoothness_factor_plains_name" = "Less hilly";
-"routing_attr_relief_smoothness_factor_more_plains_name" = "Flat";
-"routing_attr_driving_style_speed_name" = "Shorter routes";
-"routing_attr_driving_style_balance_name" = "Balanced";
-"routing_attr_driving_style_prefer_unpaved_name" = "Prefer unpaved roads";
-"routing_attr_driving_style_safety_name" = "Prefer byways";
-"routing_attr_allow_private_name" = "Allow private access";
-"routing_attr_allow_private_description" = "Allow access to private areas";
+// Dirrection appearance
+"one" = "One";
+"two" = "Two";
+"distance_indication" = "Distance indication";
+"arrows_on_map" = "Arrows on the map";
+"direction_lines" = "Direction lines";
+"active_markers" = "Active markers";
+"specify_number_of_dir_indicators" = "Specify number of direction indicators, it affects all settings below.";
+"choose_how_display_distance" = "Choose how to display the distance to active markers";
+"appearance_on_map" = "Appearance on the map";
+"arrows_direction_to_markers" = "Arrows show direction to active marker if it’s located outside the screen. Direction lines draw a line to active markers.";
 
 // Route info
-"routeInfo_road_types_name" = "Road types";
-"routeInfo_roadClass_name" = "Road type";
-"routeInfo_surface_name" = "Surface";
-"routeInfo_smoothness_name" = "Smoothness";
-"routeInfo_steepness_name" = "Steepness";
-"routeInfo_piste_type_name" = "Piste type";
-"routeInfo_piste_difficulty_name" = "Piste difficulty";
-"routeInfo_winter_ice_road_name" = "Winter and ice roads";
-"routeInfo_tracktype_name" = "Surface firmness";
 
 "int_seconds" = "seconds";
 "shared_string_never" = "Never";
 "shared_setting_always_ask" = "Always ask";
 "general_settings_2" = "General settings";
-"general_settings_descr" = "Configure display and common settings for the application";
-"routing_settings_descr" = "Specify options for navigation";
+"general_settings_descr" = "App theme, units, region";
+"routing_settings_descr" = "Configure navigation";
 "auto_zoom_none" = "No auto zoom";
 "auto_zoom_close" = "To close-up";
 "auto_zoom_far" = "To mid-range";
@@ -249,6 +230,19 @@
 
 "route_params" = "Route parameters";
 "fast_route_mode" = "Fastest route";
+"nav_type_title" = "Navigation type";
+"voice_prompts" = "Voice prompts";
+"screen_alerts" = "Screen alerts";
+"vehicle_parameters" = "Vehicle parameters";
+"map_behavior" = "Map behavior";
+"change_map_behavior" = "Change map behavior during navigation";
+"nav_type_descr" = "Select how to calculate a route for this profile";
+"nav_type_osmand" = "OsmAnd (offline routing)";
+"nav_type_straight_line" = "Straight line";
+"nav_type_direct_to" = "Direct-to-point";
+"nav_type_brouter" = "BRouter";
+"nav_type_ski" = "Ski";
+"nav_type_geocoding" = "Geocoding";
 "fast_route_mode_descr" = "Enable to calculate fastest route or disable for fuel-saving route";
 "avoid_in_routing_title" = "Avoid…";
 "avoid_in_routing_descr" = "Avoid toll roads, unpaved, ferries";
@@ -257,6 +251,7 @@
 "relief_smoothness_factor_descr" = "Preferred terrain: flat or hilly";
 "choose_auto_follow_route" = "Auto-center map view";
 "choose_auto_follow_route_descr" = "Time until map view synchronizes with current position";
+"choose_auto_center_map_view_descr" = "Time until map view synchronizes with current position after moving";
 "auto_zoom_map" = "Auto zoom map";
 "auto_zoom_map_descr" = "Auto zoom map according to your speed (while map is synchronized with current position)";
 "snap_to_road" = "Snap to road";
@@ -266,6 +261,7 @@
 "speak_title" = "Announce…";
 "speak_descr" = "Configure to announce street names, traffic warnings (forced stops, speed bumps), speed camera warnings, speed limits";
 "keep_informing" = "Repeat navigation instructions";
+"repeat_after" = "Repeat after";
 "keep_informing_descr" = "Re-announce navigation instructions at regular intervals";
 "arrival_distance" = "Arrival announcement";
 "arrival_distance_descr" = "How soon do you want the arrival announcement?";
@@ -282,6 +278,19 @@
 "choose_audio_stream_descr" = "Select speaker to play voice guidance";
 "osm_live_routing" = "OsmAnd Live navigation";
 "osm_live_routing_descr" = "Use OsmAnd Live updates for navigation";
+"select_nav_profile_dialog_message" = "The 'Navigation type' governs how routes are calculated.";
+"osmand_routing" = "OsmAnd routing";
+"special_routing" = "Special routing";
+"import_routing_file_descr" = "You can import routing file from any cloud storage app or by putting it into the OsmAnd folder in iTunes.";
+"recalculate_route" = "Recalculate route in case of deviation";
+"recalculate_wrong_dir" = "Recalculate route in case of reverse direction";
+"avoid_routes_and_road" = "Avoid certain routes and road types";
+"route_recalculation_descr" = "The route will be recalculated if the distance from the route to the current location is more than selected value.";
+"select_distance_for_recalculation" = "Select the distance after which the route will be recalculated.";
+"arrival_announcement_frequency" = "How soon do you want the arrival announcement?";
+"speed_limit_tolerance_descr" = "Select the speed limit tolerance margin above which you will receive a voice warning.";
+"only_manually" = "Only manually";
+"instructions_repeat" = "Tap \"Next turn\" widget to repeat instructions";
 
 "guidance_preferences_descr" = "Navigation preferences";
 "routing_preferences_descr" = "Routing preferences";
@@ -302,6 +311,9 @@
 "routing_settings_2" = "Navigation settings";
 "gpx_navigation" = "Follow trip";
 "impassable_road" = "Avoid roads";
+"road_speeds" = "Road speeds";
+"avoid_transport_type" = "Avoid transport types";
+"consider_limitations_param" = "Consider temporary limitations";
 "impassable_road_desc" = "Select roads you want to avoid during navigation";
 "interrupt_music_descr" = "Fully pause any music during voice prompts (not just lower its volume)";
 "interrupt_music" = "Pause music";
@@ -336,6 +348,7 @@
 "route_to" = "To";
 "route_via" = "Via";
 "route_from" = "From";
+"transfers" = "Transfers:";
 "lat" = "Lat";
 "lon" = "Lon";
 "error_calculating_route" = "Error calculating route";
@@ -375,7 +388,7 @@
 "traffic_warning_pedestrian" = "Pedestrian crosswalk";
 "traffic_warning_hazard" = "Hazard";
 "traffic_warning_tunnel" = "Tunnel ahead";
-
+"announce" = "Announce";
 
 "driving_region_japan" = "Japan";
 "driving_region_us" = "United States";
@@ -403,10 +416,11 @@
 "min_mile" = "min/m";
 "min_km" = "min/km";
 "m_s" = "m/s";
+"tones" = "tones";
+"meters" = "meters";
 
-
-
-"nothing_found" = "Nothing found :(";
+"nothing_found" = "Nothing found: %@";
+"nothing_found_empty" = "Nothing found";
 "nothing_found_descr" = "Modify the search query or increase the search radius";
 "select_street" = "Select street";
 "shared_string_in_name" = "in %@";
@@ -425,6 +439,7 @@
 "shared_string_back" = "Back";
 "shared_string_ok" = "OK";
 "shared_string_cancel" = "Cancel";
+"shared_string_exit" = "Exit";
 "shared_string_close" = "Close";
 "shared_string_no" = "No";
 "shared_string_yes" = "Yes";
@@ -461,10 +476,29 @@
 "shared_string_read_more" = "Read more";
 "shared_string_on" = "On";
 "shared_string_off" = "Off";
+"shared_string_clear_cache" = "Clear cache";
+"shared_string_maximum" = "Maximum";
+"shared_string_warning" = "Warning";
+"shared_string_copy" = "Copy";
+"shared_string_continue" = "Continue";
+"shared_string_deselect_all" = "Deselect all";
+"shared_string_preparing" = "Preparing";
+"shared_string_min" = "Min.";
+"shared_string_max" = "Max.";
 
 "offline_maps" = "Offline Maps";
 "download_map" = "Download map";
+"update_map" = "Update map";
 "download_pending" = "Download pending";
+"move_map_to_select_area" = "Move map to select needed area.";
+"number_of_tiles" = "Number of tiles";
+"download_size" = "Download size";
+"preview_of_selected_zoom_levels" = "Preview of selected zoom levels";
+"select_online_source" = "Select source";
+"online_sources" = "Online sources";
+"size_of_downloaded_data" = "The big difference between zoom levels can increase the size of the downloaded data.";
+"use_of_downloaded_map" = "You can now use this map offline as main map source or as overlay/underlay layer";
+"map_update_warning" = "Do you want to reload tile data from the Internet?";
 
 // HUD
 "hud_heading" = "Heading";
@@ -514,6 +548,7 @@
 // My Places
 "favorites" = "Favorites";
 "tracks" = "Trips";
+"personal_category_name" = "Personal";
 
 // GPX
 "gpx_point" = "Point";
@@ -529,16 +564,19 @@
 "gpx_add_new" = "Add new file";
 "gpx_overwrite" = "Overwrite";
 "gpx_cannot_import" = "Cannot import specified GPX file";
+"gpx_parse_error" = "OsmAnd GPX is not well formed, please contact the support team to investigate further.";
 
 "gpx_export_title" = "Export trip";
 "gpx_export_select_track" = "Please select trip for Export";
 "gpx_import_desc" = "To import your GPX files (common GPS data format) from Dropbox, Email, or any other source use \"Copy to OsmAnd Maps\" option";
 "import_from_docs" = "Import from documents";
+"import_from_files" = "Import from files";
 "gpx_no_tracks" = "There are no trips";
 
 "gpx_remove" = "Remove trip?";
 "gpx_stat" = "Statistics";
 "gpx_route" = "Route";
+"gpx_analyze" = "Analyze";
 "gpx_route_time" = "Route time";
 "gpx_uphldownhl" = "Uphills/Downhills";
 "gpx_average_speed" = "Average speed";
@@ -557,6 +595,7 @@
 "track_stop_rec" = "Stop recording";
 "track_new_segment" = "Start new segment";
 "track_save" = "Save current trip";
+"displayed_route_save" = "Save to OsmAnd Trips";
 "track_save_descr" = "Save current trip as GPX file now.";
 "track_continue_rec" = "Continue recording";
 "track_continue_rec_q" = "Do you want to continue recording?";
@@ -573,8 +612,8 @@
 "poi_list" = "POI list";
 
 
-"track_during_nav" = "Auto-record trip during navigation";
-"track_during_nav_descr" = "A trip is automatically saved during navigation";
+"track_during_nav" = "Auto-record trip";
+"track_during_nav_descr" = "Turn on to automatically save a trip during navigation";
 
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
@@ -588,8 +627,10 @@
 "m_style_car" = "Car";
 "m_style_walk" = "Walking";
 "m_style_bicycle" = "Bicycle";
+"m_style_pulic_transport" = "Public transport";
 
 "map_settings_map" = "Map";
+"layer_amenity_label" = "POI overlay labels";
 "map_settings_show" = "Show on map";
 "map_settings_type" = "Map type";
 "map_settings_mode" = "Application mode";
@@ -607,9 +648,44 @@
 "map_settings_offline" = "Styles for offline maps";
 "map_settings_online" = "Online maps";
 "map_settings_transp" = "Transparency";
+"map_settings_base_transp" = "Base map transparency";
 "map_settings_avail_lay" = "Available layers";
 "map_settings_hillshade" = "Hillshade";
 "map_settings_mapillary" = "Mapillary";
+"map_settings_terrain" = "Terrain";
+"map_settings_layer_transparency" = "Layer transparency";
+"map_settings_slopes_legend" = "You can read more about the slopes on Wikipedia";
+"map_settings_slopes_description" = "Slope maps use different colors to visualize the terrain";
+"map_settings_hillshade_description" = "Hillshade maps visualize slopes, peaks and lowlands using different levels of gray";
+"map_settings_zoom_level_description" = "Set the minimum and maximum zoom level to display the layer";
+"map_settings_add_maps_hillshade" = "Additional maps are needed to view hillshades on the map";
+"map_settings_add_maps_slopes" = "Additional maps are needed to view slopes on the map";
+"map_settings_legend" = "Legend";
+
+"map_settings_show_slider_map" = "Show slider on the map";
+"map_settings_add_online_source" = "Add online source";
+"map_settings_hide_polygons" = "Hide polygons";
+"map_settings_hide_polygons_desc" = "This option affects only OsmAnd Offline vector maps";
+"map_settings_add_maps_desc" = "You can add new maps via link, or by importing SQLite files.";
+"map_settings_color_scheme" = "Color scheme";
+"map_settings_line_width" = "Line width";
+"map_settings_line_density" = "Line density";
+"map_settings_contour_zoom_level_descr" = "Select zoom level, from wich contour lines will be displayed";
+"map_settings_appearance" = "Appearance";
+"map_settings_line_density_slowdown_warning" = "High line density may slowdown map rendering";
+"map_settings_available_srtm_maps_descr" = "Additional maps are needed to view Hillshade on the map";
+
+"settings_app_theme" = "Application theme";
+"app_theme_light" = "Light";
+"do_not_rotate" = "Do not rotate";
+"allow_3D_view" = "2.5D view";
+"units_of_speed" = "Units of speed";
+"angular_measurment_units" = "Angular measurment units";
+"units_and_formats" = "Units & formats";
+"device_settings" = "Device settings";
+"global_settings" = "Global settings";
+"global_settings_descr" = "Affect the entire application.";
+"plugin_settings_descr" = "Plugin settings for the selected profile.";
 
 // Intro
 "intro_skip" = "Skip";
@@ -641,7 +717,7 @@
 "navigate_point_format_OLC" = "Open Location Code (OLC)";
 
 "coordinates_example" = "Example";
-"utm_description" = "OsmAnd uses UTM Standard format which is similar but not identical to UTM NATO format.";
+"utm_description" = "Please note, OsmAnd uses UTM Standard format which is similar but not identical to UTM NATO.";
 "coordinates_copy_descr" = "Tap to copy coordintates to clipboard.";
 
 "sett_lang_local" = "Local";
@@ -659,6 +735,96 @@
 "select_underlay" = "Select underlay map";
 "select_manually" = "Select manually";
 "avoid_by_type" = "Avoid by type";
+"available_map_styles" = "Available map styles";
+"available_map_sources" = "Available map sources";
+
+"export_profile" = "Export profile";
+"shared_string_import" = "Import profile";
+"create_profile" = "Create profile";
+"import_profile_select_descr" = "Select the data to be imported.";
+"selected_profiles" = "%d of %d";
+"nav_type_hint" = "Navigation type: %@";
+"shared_string_nothing_selected" = "Nothing selected";
+
+"import_duplicates_title" = "Some items already exist";
+"import_duplicates_description" = "OsmAnd already has elements with the same names as those imported.\n\nSelect an action.";
+"keep_both" = "Keep both";
+"keep_both_desc" = "Imported items will be added with prefix";
+"replace_all" = "Replace all";
+"replace_all_desc" = "Current items will be replaced with items from the file";
+"shared_string_profiles" = "Profiles";
+"shared_string_quick_actions" = "Quick actions";
+"shared_string_poi_types" = "POI types";
+"quick_action_map_source_title" = "Map sources";
+"shared_string_routing" = "Routing";
+"shared_string_rendering_style" = "Rendering styles";
+"avoid_road" = "Avoid road";
+"shared_string_importing" = "Importing";
+"importing_from" = "Importing data from %@";
+
+"shared_string_settings" = "Settings";
+"configure_screen_quick_action" = "Quick action";
+"search_activity" = "Search";
+
+"ltr_or_rtl_combine_via_space" = "%@ %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
+
+"listed_exist" = "Listed %@, already exist in OsmAnd.";
+
+"shared_string_import_complete" = "Import complete";
+"import_complete_description" = "All data from the %@ is imported, you can use buttons below to open needed part of the app to manage it";
+"shared_string_finish" = "Finish";
+"added_items" = "Added items: %@";
+
+"copy_from_other_profile" = "Copy from another profile";
+"copy_from_other_profile_descr" = "You can copy all settings from any profile to the selected profile: ";
+"reset_to_default" = "Reset to default";
+"profile_alert_delete_title" = "Delete profile";
+"profile_alert_delete_msg" = "Are you sure you want to completly delete \"%@\" profile?";
+"create_profile_descr" = "Base your custom profile on one of the default app profiles, this defines the basic setup like default visibility of widgets and units of speed and distance. These are the default app profiles, together with examples of custom profiles they may be extended to:";
+"profile_type_custom_string" = "Custom profile";
+"new_profile" = "New profile";
+"configure_profile" = "Configure profile";
+"profile_settings" = "Profile settings";
+"profile_appearance" = "Profile appearance";
+"profile_appearance_descr" = "Icon, color, and name";
+"ui_customization" = "UI customization";
+"ui_customization_descr" = "Drawer items, context menu";
+"edit_profile_list" = "Edit profile list";
+"enter_profile_name" = "Enter profile name";
+"select_color" = "Select color";
+"select_icon" = "Select icon";
+"position_icon_at_rest" = "Position icon at rest";
+"position_icon_while_moving" = "Position icon while moving";
+"will_be_show_while_moving" = "It will be show while moving";
+"base_profile_descr_car" = "Car, truck, motorcycle";
+"base_profile_descr_bicycle" = "Mountain bike, moped, horse";
+"base_profile_descr_pedestrian" = "Walking, hiking, running";
+"base_profile_descr_public_transport" = "Public transport types";
+"base_profile_descr_boat" = "Ship, rowing, sailing";
+"base_profile_descr_aircraft" = "Airplane, gliding";
+"rearrange_profiles" = "Rearrange profiles";
+"rearrange_profile_descr" = "Default OsmAnd profiles cannot be deleted, but you can disable them on the previous screen or drag them to the bottom of the list.";
+"all_application_profiles" = "All application profiles";
+"after_tapping_done" = "After you tap Done, deleted profiles will be lost completely.";
+"empty_profile_name_warning" = "Profile name cannot be empty.";
+"err_profile_import" = "Error reading item data: %@";
+"profile_import_success" = "Application profile was imported successfully";
+"profile_prefs_reset_successful" = "All profile settings restored to default";
+"not_available_profile_name" = "Profile with this name already exists.";
+"profile_type_base_string" = "Base profile";
+"osmand_profile" = "OsmAnd profile";
+"selected_profile" = "Selected profile";
+"app_profiles" = "App profiles";
+"profile_sett_descr" = "Affect selected application profile";
+"import_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";
+"export_profile_descr" = "You can export all profile settings, copy all settings from another profile or reset all profile settings to default state.";
+
+"reset_to_default" = "Reset to default";
+"reset_profile_action_descr" = "Reset all profile settings to installation defaults. Tapping Reset will discard all your changes, this action can't be undone.";
+
+"checking_for_duplicates" = "Checking for duplicates...";
+"checking_for_duplicate_description" = "OsmAnd checks %@ for duplicates with existing items in the application. It may take some time.";
 
 // Purchases
 "prch_addons" = "Addons";
@@ -675,6 +841,39 @@
 "download_now" = "Download map now";
 "prch_failed" = "Purchase of \"%@\" has failed";
 "prch_items_failed" = "item(s) were not restored. Please try again.";
+"downloading" = "Downloading";
+
+// Route planning
+"plan_route" = "Plan a route";
+"add_point" = "Add point";
+"point_num" = "Point %d";
+"points_count" = "Points:";
+"route_betw_points" = "Route between points";
+"save_changes" = "Save changes";
+"save_new_track" = "Save as new track";
+"add_to_track" = "Add to a track";
+"move_point" = "Move point";
+"move_point_descr" = "Move map to change the position of this point.";
+"add_before" = "Add points before";
+"add_after" = "Add points after";
+"trim_before" = "Trim before this point";
+"trim_after" = "Trim after this point";
+"change_route_type_before" = "Change route type before this point";
+"change_route_type_after" = "Change route type after this point";
+"delete_point" = "Delete point";
+"add_one_more_pnt" = "Add one more point";
+"route_betw_points_descr" = "Choose how to connect connect the poits: with a straight line or by calculating a route using one of profiles listed below.";
+"next_seg_descr" = "The next segment will be recalculated using selected profile.";
+"whole_track_descr" = "The whole track will be recalculated using selected profile.";
+"next_seg" = "Next segment";
+"whole_track" = "Whole track";
+"next_seg_dist" = "Next segment %@";
+"next_segs_dist" = "All subsequent segments %@";
+"prev_seg_dist" = "Previous segment %@";
+"prev_segs_dist" = "All Previous segments %@";
+"selected_seg_recalc_descr" = "Only the selected segment will be recalculated using the selected profile";
+"next_segs_recalc_descr" = "All subsequent segments will be recalculated using the selected profile";
+"prev_segs_recalc_descr" = "All previous segments will be recalculated using the selected profile";
 
 // Resources
 "res_mapsres" = "Maps & Resources";
@@ -745,8 +944,32 @@
 "res_updates_no_space" = "Not enough space to install %d update(s). %@ is needed. Please free up some space.";
 "res_updates_avail_q" = "update(s) are available.";
 "res_updates_exp" = "Please purchase continent(s) to update the maps";
+"res_confirmation_delete" = "Are you sure you want to delete %@?";
+"res_confirmation_clear_cache" = "Are you sure you want to clear cache for %@?";
+"res_edit_map_source" = "Edit map source";
+"res_online_name_descr" = "Provide name for online source";
+"res_online_url_descr" = "Enter or copy and paste URL for online source";
+"res_url" = "URL";
+"res_zoom_levels" = "Zoom levels";
+"res_expire_time" = "Expire time";
+"res_mercator" = "Mercator Projection";
+"res_elliptic_mercator" = "Elliptic mercator";
+"res_pseudo_mercator" = "Pseudo-Mercator projection";
+"res_source_format" = "Source format";
+"res_source_sqlite" = "SQLiteDB file";
+"res_source_one_per_tile" = "One image file per tile";
+"res_zoom_levels_desc" = "This parameters will affect the map display when used as a map type or overlay/underlay.\n\nMap type: the map will be limited to the selected zooms.\n\nOverlay / Underlay: Zoom levels at which tiles will be visible. Upscale or downscale will occur above or below the set values.";
+"res_expire_time_desc" = "Expiration time in minutes. Cached tiles will be reloaded after specified time. Leave this field empty if you do not need to reload tiles for this source.\nOne day is 1440 minutes.\nOne week is 10 080 minutes.\n30 days are 43 200 minutes.";
+"res_name_warning" = "File name cannot be empty";
+"res_url_warning" = "URL cannot be empty";
+"res_zoom_warning" = "Minimum zoom value cannot be equal or greater than Maximum zoom";
+"res_expire_warning" = "Expiration time should be a number between 0 and 10000000";
+"res_zoom_invalid_value" = "Zoom values should be in range 1 - 22";
+"res_offlineSQL_URL_warning" = "Not supported for this map type";
+"res_online_source_cache_alert" = "Applying these changes will clear the cached data for this tile source";
 
 // Menu
+"menu" = "Menu";
 "menu_my_places" = "My Places";
 "menu_my_trips" = "My Trips";
 "menu_my_directions" = "My Directions";
@@ -767,6 +990,7 @@
 "osm_delete_confirmation_descr" = "Are you sure you want to delete this POI?";
 "osm_succsessful_uploads" = "Successful";
 "osm_failed_uploads" = "Failed";
+"osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
 
 "osm_note" = "OSM Note";
 "osm_created" = "Created";
@@ -832,7 +1056,7 @@
 "save_poi_without_poi_type_message" = "Do you want to save POI without type?";
 "save_poi_too_many_uppercase" = "The name contains too many capital letters. Continue?";
 "osm_editing_loading_poi" = "Loading POI information";
-
+"osm_editing_access_descr" = "You can view all your local edits and notes in %@. Already uploaded points are not listed in OsmAnd.";
 
 // Mapillary
 "mapil_no_inet_descr" = "You need Internet connection to view Mapillary photos.";
@@ -846,7 +1070,6 @@
 "mapillary_turn_on_widget" = "Turn on Mapillary widget";
 "mapillary_turn_on_widget_descr" = "This allows you to quickly contribute to Mapillary";
 "tile_cache" = "Tile cache";
-"tile_data" = "Tile data";
 "shared_string_reload" = "Reload";
 "shared_string_show_more" = "Show more";
 "mapil_reload_cache" = "Reload tiles to see the newest data";
@@ -872,8 +1095,10 @@
 "map_sources" = "Map sources";
 "map_styles" = "Map styles";
 "add_action" = "Add action";
+"unsupported_items" = "Unsupported items";
 "create_items" = "Create items";
 "configure_map" = "Configure map";
+"configure_map_descr" = "Map appearance";
 "add_map_marker" = "Add map marker";
 "select_map_marker" = "Select map marker";
 "add_gpx_waypoint" = "Add GPX waypoint";
@@ -959,15 +1184,26 @@
 "quick_action_toggle_notes_descr" = "Tap this action button to show or hide online OSM notes.";
 "quick_action_toggle_edits_descr" = "Tap this action button to show or hide offline OSM edits.";
 "quick_action_edit_list" = "Edit actions list";
-"quick_action_hillshade_descr" = "Tapping this action button shows or hides hillshade layer.";
-"show_hillshade" = "Show Hillshade";
-"hide_hillshade" = "Hide Hillshade";
+"quick_action_hillshade_descr" = "Tapping this action button shows or hides the terrain layer.";
+"show_terrain" = "Show Terrain";
+"hide_terrain" = "Hide Terrain";
 "toggle_contour_lines" = "Show/Hide contour lines";
-"toggle_hillshade" = "Show/Hide hillshade";
+"toggle_hillshade" = "Show/Hide terrain";
 "display_starting_at_zoom_level" = "Display starting at zoom level";
 "quick_action_contour_lines_descr" = "Tapping this action button shows or hides contour lines layer.";
 "hide_contour_lines" = "Hide contour lines";
 "show_contour_lines" = "Show contour lines";
+"enable_contour_lines" = "Enable to view contour lines on the map";
+"enable_hillshade" = "Enable to view terrain data";
+"quick_action_dir_from_descr" = "Tap this action to navigate from the current screen center point.";
+"public_transport_menu" = "Transport";
+"quick_action_transport_descr" = "Tap this action to show or hide public transport routes / stops on the map.";
+"toggle_public_transport" = "Show/hide public transport";
+"public_transport_show" = "Show public transport";
+"public_transport_hide" = "Hide public transport";
+"unsupported_action" = "Unsupported action";
+"unsupported_action_title" = "Unsupported action (%@)";
+"unsupported_action_descr" = "This quick action in not suppotred now. This can be fixed in new app versions.";
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";
@@ -1012,6 +1248,8 @@
 "units_min_short" = "m";
 "units_sec_short" = "s";
 
+"units_t" = "t";
+
 // Help
 "help_first_steps" = "First steps";
 "help_first_use" = "First use";
@@ -1023,8 +1261,15 @@
 "help_map_viewing" = "Map viewing";
 "help_search" = "Map search";
 "help_trip_planning" = "Planning a trip";
+"help_nav_profiles" = "Navigation profiles";
+"help_purchases" = "OsmAnd purchases";
+"help_osmand_live" = "Subscription - OsmAnd Live";
+"help_travel" = "Travel (Wikipedia & Wikivoyage)";
+"help_mapillary" = "OsmAnd + Mapillary";
 "help_legend" = "Map legend";
+"help_legend_descr" = "The guide to map's symbols";
 "help_other_header" = "Other";
+"help_what_is_new" = "What\'s new";
 "help_install_and_troubleshoot" = "Installation and troubleshooting";
 "help_tech_articles" = "Technical articles";
 "help_versions" = "Versions";
@@ -1034,6 +1279,7 @@
 "facebook" = "Facebook";
 "twitter" = "Twitter";
 "reddit" = "Reddit";
+"vk" = "VK";
 
 // Map
 "map_inst_det_map_q" = "Install detailed map overview to get more information about your locations.";
@@ -1047,6 +1293,8 @@
 "import_failed" = "Import failed";
 "import_cannot" = "The specified file cannot be imported";
 "import_gpx" = "GPX Trip";
+"trip_name" = "Trip name";
+"trip_hint" = "Enter trip name";
 
 // Alerts
 "alert_inet_needed" = "Internet connection required to perform this action. Please check your Internet connection.";
@@ -1118,102 +1366,6 @@
 "rendering_category_others" = "Other map attributes";
 
 // Rendering attributes
-"rendering_attr_depthContours_name" = "Depth contours";
-"rendering_attr_showAccess_name" = "Show access restrictions";
-"rendering_attr_horseRoutes_name" = "Horse routes";
-"rendering_attr_showMtbRoutes_name" = "Show MTB routes";
-"rendering_attr_whiteWaterSports_name" = "Whitewater sports";
-"rendering_attr_showSurfaceGrade_name" = "Show road quality";
-"rendering_attr_showSurfaces_name" = "Show road surface";
-"rendering_attr_transportStops_name" = "Transport stops";
-"rendering_attr_contourColorScheme_name" = "Contour lines color scheme";
-"rendering_attr_contourDensity_name" = "Contour line density";
-"rendering_attr_contourWidth_name" = "Contour line width";
-"rendering_attr_moreDetailed_name" = "More details";
-"rendering_attr_subwayMode_name" = "Subway routes";
-"rendering_attr_tramTrainRoutes_name" = "Tram and train routes";
-"rendering_attr_streetLighting_name" = "Street lighting";
-"rendering_attr_coloredBuildings_name" = "Color-code buildings by type";
-"rendering_attr_alpineHiking_name" = "Alpine hiking scale (SAC)";
-"rendering_attr_hikingRoutesOSMC_name" = "Hiking symbol overlay";
-"rendering_attr_showCycleRoutes_name" = "Show cycle routes";
-"rendering_attr_hideBuildings_name" = "Hide buildings";
-"rendering_attr_noPolygons_name" = "Hide polygons";
-"rendering_attr_noAdminboundaries_name" = "Hide boundaries";
-"rendering_attr_publicTransportMode_name" = "Bus, trolleybus, shuttle routes";
-"rendering_attr_contourLines_name" = "Show contour lines";
-"rendering_attr_OSMMapperAssistant_name" = "OSM mapper assistant";
-"rendering_attr_roadStyle_name" = "Road style";
-"rendering_attr_surface_unpaved_name" = "Unpaved";
-"rendering_attr_surface_sand_name" = "Sand";
-"rendering_attr_surface_grass_name" = "Grass";
-"rendering_attr_surface_grass_paver_name" = "Grass paver";
-"rendering_attr_surface_ground_name" = "Ground";
-"rendering_attr_surface_dirt_name" = "Dirt";
-"rendering_attr_surface_mud_name" = "Mud";
-"rendering_attr_surface_ice_name" = "Ice";
-"rendering_attr_surface_salt_name" = "Salt";
-"rendering_attr_surface_snow_name" = "Snow";
-"rendering_attr_surface_asphalt_name" = "Asphalt";
-"rendering_attr_surface_paved_name" = "Paved";
-"rendering_attr_surface_concrete_name" = "Concrete";
-"rendering_attr_surface_sett_name" = "Sett";
-"rendering_attr_surface_cobblestone_name" = "Cobblestone";
-"rendering_attr_surface_paving_stones_name" = "Paving stones";
-"rendering_attr_surface_pebblestone_name" = "Pebblestone";
-"rendering_attr_surface_stone_name" = "Stone";
-"rendering_attr_surface_metal_name" = "Metal";
-"rendering_attr_surface_wood_name" = "Wood";
-"rendering_attr_surface_gravel_name" = "Gravel";
-"rendering_attr_surface_fine_gravel_name" = "Fine gravel";
-"rendering_attr_surface_compacted_name" = "Compacted";
-"rendering_attr_smoothness_excellent_name" = "Excellent";
-"rendering_attr_smoothness_good_name" = "Good";
-"rendering_attr_smoothness_intermediate_name" = "Intermediate";
-"rendering_attr_smoothness_bad_name" = "Bad";
-"rendering_attr_smoothness_very_bad_name" = "Very bad";
-"rendering_attr_smoothness_horrible_name" = "Horrible";
-"rendering_attr_smoothness_very_horrible_name" = "Very horrible";
-"rendering_attr_smoothness_impassable_name" = "Impassable";
-"rendering_attr_highway_class_motorway_name" = "Motorway";
-"rendering_attr_highway_class_state_road_name" = "State road";
-"rendering_attr_highway_class_road_name" = "Road";
-"rendering_attr_highway_class_street_name" = "Street";
-"rendering_attr_highway_class_service_name" = "Service";
-"rendering_attr_highway_class_footway_name" = "Footway";
-"rendering_attr_highway_class_track_name" = "Track";
-"rendering_attr_highway_class_bridleway_name" = "Bridleway";
-"rendering_attr_highway_class_steps_name" = "Steps";
-"rendering_attr_highway_class_path_name" = "Path";
-"rendering_attr_highway_class_cycleway_name" = "Cycleway";
-"rendering_attr_undefined_name" = "Undefined";
-"rendering_attr_highway_class_track_grade1_name" = "Grade 1";
-"rendering_attr_highway_class_track_grade2_name" = "Grade 2";
-"rendering_attr_highway_class_track_grade3_name" = "Grade 3";
-"rendering_attr_highway_class_track_grade4_name" = "Grade 4";
-"rendering_attr_highway_class_track_grade5_name" = "Grade 5";
-"rendering_value_high_name" = "High";
-"rendering_value_medium_w_name" = "Medium";
-"rendering_value_low_name" = "Low";
-"rendering_value_thin_name" = "Thin";
-"rendering_value_medium_name" = "Medium";
-"rendering_value_default_name" = "Default";
-"rendering_value_disabled_name" = "Disabled";
-"rendering_value_orange_name" = "Orange";
-"rendering_value_germanRoadAtlas_name" = "German road atlas";
-"rendering_value_highContrastRoads_name" = "High contrast roads";
-"rendering_value_americanRoadAtlas_name" = "American road atlas";
-"rendering_value_walkingRoutesOSMC_name" = "Coloring according to OSMC";
-"rendering_value_walkingRoutesScopeOSMC_name" = "Coloring according to route scope";
-"rendering_value_light_brown_name" = "Light brown";
-"rendering_value_dark_brown_name" = "Dark brown";
-"rendering_value_brown_name" = "Brown";
-"rendering_value_white_name" = "White";
-"rendering_value_yellow_name" = "Yellow";
-"rendering_value_green_name" = "Green";
-"rendering_value_red_name" = "Red";
-"rendering_value_boldOutline_name" = "Bold outline";
-"rendering_value_default13_name" = "Default (13)";
 
 "units_minutes_short" = "min";
 "units_seconds_short" = "sec";
@@ -1248,6 +1400,8 @@
 
 "product_title_africa" = "Africa";
 "product_desc_africa" = "Unlimited map downloads for Africa";
+"product_title_antarctica" = "Antarctica";
+"product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";
 "product_title_australia" = "Australia";
 "product_desc_australia" = "Unlimited map downloads for Australia";
@@ -1297,6 +1451,7 @@
 "add_as" = "Add as";
 "make_call" = "Make a call";
 
+"all_group_points" = "All points of the group";
 "enter_description" = "Enter description";
 "description" = "Description";
 "enter_fav_name" = "Enter favorite name";
@@ -1305,6 +1460,7 @@
 "res_srtm" = "Contour lines";
 "res_wiki" = "Wikipedia";
 "res_hillshade" = "Hillshade";
+"res_slope" = "Slope";
 
 "select_language" = "Select language";
 "language_short" = "Lang";
@@ -1334,6 +1490,19 @@
 "menu_active_trips" = "Active";
 "menu_all_trips" = "All Trips";
 
+"public_transport_ped_route_title" = "The route on foot is approximately %@, and may be faster than by public transport.";
+"calc_pedestrian_route" = "Calculate pedestrian route";
+"public_transport_warning_title" = "Public transport navigation is currently in beta testing, expect errors and inaccuracies.";
+"public_transport_warning_descr_blog" = "Read more about OsmAnd routing in our blog.";
+"public_transport_empty_warning_title" = "Unfortunately, OsmAnd could not find a route for your settings.";
+"public_transport_empty_warning_descr" = "Try changing the settings.";
+
+"total" = "Total";
+"walk" = "Walk";
+"board_at" = "Board at";
+"exit_at" = "Exit at";
+"by_type" = "By %@";
+"num_stops" = "stops";
 "total_time" = "Total time";
 "moving_time" = "Moving time";
 "change_group" = "Change group";
@@ -1345,6 +1514,7 @@
 "select_wpt_on_map" = "Select point on map to add to the trip";
 "gpx_rename_q" = "Rename trip";
 "gpx_enter_new_name" = "Please enter new name for the trip";
+"map_coords" = "Map: Lat %.5f Lon %.5f";
 
 "gpx_cancel_route_q" = "Do you want to cancel this route?";
 "gpx_deactivated" = "Deactivated";
@@ -1356,10 +1526,13 @@
 
 "directions_more_options" = "Directions from";
 "nearby_search" = "Search nearby";
+"change_object_posiotion" = "Change object's position";
+"change_position_descr" = "Move the map to change object's position";
 
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";
+"default_speed_descr" = "Estimates arrival time for unknown road types and limits speed for all roads (may affect routing)";
 
 "plugins" = "Plugins";
 "open_map_settings" = "Open Map Settings";
@@ -1368,12 +1541,14 @@
 "plugin_popup_ski_desc" = "To turn on <b>Ski map</b> style, please go to the <b>Map Settings</b> > <b>Map type</b>";
 "plugin_popup_wiki_title" = "Download Wikipedia";
 "plugin_popup_wiki_desc" = "To start using Wikipedia plugin, please download Wikipedia data of an region first";
-"plugin_popup_wiki_ask" = "To download Wikipedia data you need to activate plugin: <b>Wikipedia</b>";
+"plugin_popup_wiki_ask" = "In order to download Wikipedia data you need to activate plugin: <b>Wikipedia</b>";
 "plugin_popup_srtm_title" = "Download contour lines";
 "plugin_popup_srtm_desc" = "To start using Contour lines feature, please download Contour lines of an region first";
 "plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Contour lines</b>";
 "plugin_popup_nautical_title" = "Download Nautical maps";
 "plugin_popup_nautical_desc" = "Please download Nautical maps first.\nThen go to the <b>Map Settings</b> > <b>Map type</b> and turn on <b>Nautical</b> style";
+"plugin_popup_osm_editing_title" = "Turn on OpenStreetMap Editing";
+"plugin_popup_osm_editing_ask" = "Please enable OpenStreetMap Editing plugin to add and manage map edits and notes";
 
 "plugin_popup_trip_planning_ask" = "To start planning the trip you need to activate plugin: <b>Trip planning</b>";
 
@@ -1399,9 +1574,12 @@
 "res_import_success" = "%@ was successfully imported";
 "res_import_unsupported" = "Incorrect file type. Only routing.xml and *.render.xml files are supported.";
 "routing_import_please_restart" = "To use the new routing.xml please restart the application.";
-"sqlitedb_import_title" = "Import Map Creator file";
+"sqlitedb_import_title" = "Import raster map file";
 "sqlitedb_import_already_exists" = "The specified sqlitedb file is already exists. Please choose action.";
-"map_creator" = "Map Creator";
+"online_raster_map" = "Online raster map";
+"offline_raster_map" = "Offline raster map";
+"offline_raster_maps" = "Offline raster maps";
+"online_raster_maps" = "Online raster maps";
 "online_map" = "Online map";
 "calculating_progress" = "Calculating...";
 "local_names" = "Local names";
@@ -1412,6 +1590,8 @@
 "hist_remove_q" = "Do you want to remove history items?";
 "gpx_edit_mode" = "Edit mode";
 "go_to_map" = "Go to Map";
+"import_raster_map_success" = "Raster map has been imported. Open Map Settings and activate it via Overlay/Underlay";
+"import_raster_map_failed" = "Raster map import failed";
 
 "device_memory" = "Device memory";
 "free_memory" = "Free %@";
@@ -1439,6 +1619,11 @@
 "categories" = "Categories";
 "items_selected" = "%d selected";
 
+"wiki_sheet_title" = "How to open Wikipedia articles?";
+"download_wiki_data" = "Download Wikipedia data for %@";
+"open_wiki_online" = "Open article online";
+"online_webpage_warning" = "Page only available online. Open in web browser?";
+
 "custom_search" = "Custom search";
 "poi_filter_custom_filter" = "Custom filter";
 "poi_filter_closest_poi" = "Nearest POIs";
@@ -1451,6 +1636,11 @@
 "selected_categories" = "Selected categories";
 "new_filter_desc" = "Please enter a name for the new filter, this will be added to your Categories tab.";
 
+"email_example_hint" = "user@example.com";
+"shared_string_required" = "Required";
+"shared_string_account" = "Account";
+"shared_string_account_add" = "Add account";
+"shared_string_email" = "Email";
 "shared_string_password" = "Password";
 "shared_string_filters" = "Filters";
 "edit_filter" = "Edit categories";
@@ -1483,7 +1673,7 @@
 "shared_string_address" = "Address";
 
 "do_not_show_discount" = "Do not show promotions";
-"do_not_send_anonymous_data" = "Do not send anonymous data";
+"send_anonymous_data" = "Send anonymous data";
 
 "sett_ext_input_desc" = "Select a device such as a generic keyboard or WunderLINQ for external controls.";
 "sett_ext_input" = "External input devices";
@@ -1499,7 +1689,7 @@
 
 "wiki_buy_description" = "To read full articles - buy Wikipedia plugin and download Wikipedia data of %@";
 "wiki_download_description" = "To read full articles - download Wikipedia data of %@";
-"map_an_region" = "an region";
+"map_an_region" = "this region";
 
 "osm_live_plan_pricing" = "Plans & Pricing";
 "osm_live_payment_monthly_title" = "Pay monthly";
@@ -1559,3 +1749,346 @@
 "already_has_subscription" = "You have already subscribed to OsmAnd Live and have all the functionality unlocked.";
 "already_has_inapp" = "You have already subscribed to %@.";
 "inapp_not_found" = "The %@ is not found in the OsmAnd. Probably it has been canceled.";
+
+"rendering_value_high_name" = "High";
+"routing_attr_difficulty_preference_description" = "Prefer routes of this difficulty, although routing over harder or easier pistes is still possible if shorter.";
+"routing_attr_height_description" = "Specify vehicle height to be permitted on routes.";
+"touting_specified_vehicle_parameters_descr" = "Specified vehicle parameters may affect routing.";
+"routing_attr_height_obstacles_name" = "Use elevation data";
+"routing_attr_avoid_toll_name" = "No toll roads";
+"rendering_attr_appMode_description" = "Optimize map for";
+"routing_attr_avoid_ice_roads_fords_name" = "No ice roads or fords";
+"rendering_value_germanRoadAtlas_name" = "German road atlas";
+"rendering_attr_hikingRoutesOSMC_name" = "Hiking symbol overlay";
+"rendering_attr_showRoadMaps_name" = "Roads-only maps";
+"routing_attr_avoid_ferries_description" = "Avoids ferries";
+"rendering_attr_contourWidth_description" = "Contour line width";
+"routing_attr_driving_style_name" = "Driving style";
+"rendering_attr_surface_pebblestone_name" = "Pebblestone";
+"rendering_value_lightblue_name" = "Light blue";
+"rendering_value_americanRoadAtlas_name" = "American road atlas";
+"rendering_value_fine_name" = "Fine";
+"routing_attr_relief_smoothness_factor_plains_name" = "Less hilly";
+"rendering_value_purple_name" = "Purple";
+"routing_attr_allow_classic_only_name" = "Allow classic only routes";
+"rendering_attr_streetLighting_name" = "Street lighting";
+"rendering_attr_appMode_name" = "Rendering mode";
+"routing_attr_avoid_subway_description" = "Avoids subways and lightweight rail transport";
+"routing_attr_driving_style_prefer_unpaved_description" = "Prefer unpaved over paved roads for routing.";
+"rendering_value_light_brown_name" = "Light brown";
+"rendering_attr_surface_ice_name" = "Ice";
+"routing_attr_piste_type_sled_name" = "Sled";
+"rendering_attr_smoothness_bad_name" = "Bad";
+"routing_attr_allow_expert_description" = "Extremely difficult routes, with dangerous obstacles and surroundings.";
+"routeInfo_surface_name" = "Surface";
+"rendering_attr_showMtbRoutes_name" = "Show mountain bike trails";
+"rendering_attr_tracktype_grade5_name" = "Soft";
+"routing_attr_avoid_share_taxi_description" = "Avoids share taxi";
+"routing_attr_width_description" = "Specify permitted vehicle width limit on routes.";
+"rendering_attr_showSurfaceGrade_name" = "Show road quality";
+"rendering_attr_currentTrackColor_name" = "GPX color";
+"rendering_attr_contourLines_description" = "Display from zoom level (requires contour data):";
+"routing_attr_avoid_stairs_description" = "Avoids stairs";
+"rendering_attr_surface_mud_name" = "Mud";
+"rendering_attr_ice_road_name" = "Ice road";
+"rendering_attr_highway_class_track_grade4_name" = "Grade 4";
+"rendering_attr_piste_difficulty_connection_name" = "Connection";
+"rendering_attr_streetLightingNight_name" = "Show only at night";
+"rendering_attr_piste_difficulty_aerialway_name" = "Aerialway";
+"routing_attr_freeride_policy_name" = "Off-piste";
+"routing_attr_relief_smoothness_factor_more_plains_name" = "Flat";
+"rendering_attr_surface_concrete_name" = "Concrete";
+"rendering_attr_piste_difficulty_intermediate_name" = "Intermediate";
+"routeInfo_piste_difficulty_name" = "Piste difficulty";
+"routing_attr_short_way_description" = "Use fuel-efficient way (usually shorter).";
+"rendering_attr_highway_class_track_grade3_name" = "Grade 3";
+"routing_attr_freeride_policy_description" = "\'Freeride\' and \'Off-piste\' are unofficial routes and passages. Typically ungroomed, unmaintained and not checked in the evening. Enter at your own risk.";
+"rendering_attr_highway_class_street_name" = "Street";
+"rendering_attr_surface_grass_name" = "Grass";
+"routing_attr_piste_type_skitour_description" = "Routes for ski touring.";
+"rendering_attr_surface_fine_gravel_name" = "Fine gravel";
+"rendering_value_orange_name" = "Orange";
+"rendering_value_medium_w_name" = "Medium";
+"rendering_attr_contourDensity_description" = "Contour line density";
+"rendering_attr_currentTrackWidth_name" = "GPX width";
+"rendering_attr_horseRoutes_name" = "Horse routes";
+"routing_attr_avoid_ferry_description" = "Avoids ferries";
+"rendering_attr_highway_class_track_grade2_name" = "Grade 2";
+"rendering_attr_shareTaxiRoutes_name" = "Share taxi routes";
+"routing_attr_relief_smoothness_factor_hills_name" = "Hilly";
+"rendering_attr_contourWidth_name" = "Contour line width";
+"routing_attr_piste_type_sled_description" = "Slopes for sled usage.";
+"rendering_attr_currentTrackWidth_description" = "GPX width";
+"rendering_attr_piste_type_sleigh_name" = "Sleigh";
+"rendering_attr_surface_paved_name" = "Paved";
+"routing_attr_difficulty_preference_name" = "Preferred difficulty";
+"routing_attr_avoid_subway_name" = "No subways";
+"rendering_attr_showLez_description" = "Show Low Emission Zones on the map. Does not affect routing.";
+"rendering_attr_surfaceIntegrity_name" = "Road surface integrity";
+"routing_attr_allow_intermediate_description" = "More difficult routes with steeper sections. Generally some obstacles that should be avoided.";
+"rendering_attr_coloredBuildings_name" = "Color-code buildings by type";
+"rendering_attr_piste_difficulty_advanced_name" = "Advanced";
+"routeInfo_road_types_name" = "Road types";
+"rendering_attr_showRoadMaps_description" = "Choose when to display roads-only maps:";
+"rendering_value_translucent_blue_name" = "Translucent blue";
+"routing_attr_avoid_bus_description" = "Avoids buses and trolleybuses";
+"rendering_attr_hideOverground_name" = "Overground objects";
+"rendering_attr_hideProposed_name" = "Proposed objects";
+"routeInfo_smoothness_name" = "Smoothness";
+"rendering_attr_highway_class_road_name" = "Road";
+"rendering_value_translucent_green_name" = "Translucent green";
+"rendering_value_translucent_yellow_name" = "Translucent yellow";
+"rendering_attr_OSMMapperAssistant_name" = "OSM mapper assistant";
+"routing_attr_avoid_borders_name" = "No border crossings";
+"rendering_value_walkingRoutesScopeOSMC_name" = "Color by network affiliation";
+"rendering_attr_smoothness_excellent_name" = "Excellent";
+"rendering_value_pink_name" = "Pink";
+"routing_attr_allow_expert_name" = "Allow expert routes";
+"rendering_attr_showCycleNodeNetworkRoutes_name" = "Show node network cycle routes";
+"rendering_attr_hideText_name" = "Text";
+"rendering_attr_contourDensity_name" = "Contour line density";
+"routing_attr_avoid_motorway_description" = "Avoids motorways";
+"routing_attr_avoid_motorway_name" = "No motorways";
+"rendering_attr_hideWoodScrubs_name" = "Wood and scrubs";
+"rendering_attr_surface_wood_name" = "Wood";
+"rendering_attr_smoothness_horrible_name" = "Horrible";
+"rendering_attr_smoothness_impassable_name" = "Impassable";
+"rendering_attr_surface_sett_name" = "Sett";
+"rendering_attr_roadStyle_name" = "Road style";
+"rendering_attr_surface_gravel_name" = "Gravel";
+"routing_attr_max_num_changes_name" = "Number of changes";
+"rendering_attr_publicTransportMode_name" = "Bus, trolleybus, shuttle routes";
+"rendering_attr_hideNonVehicleHighways_name" = "Non-vehicle highways";
+"rendering_value_translucent_pink_name" = "Translucent pink";
+"rendering_attr_surface_ground_name" = "Ground";
+"routing_attr_height_obstacles_description" = "Factor in terrain elevation (via SRTM, ASTER, and EU-DEM data).";
+"rendering_attr_currentTrackColor_description" = "GPX color";
+"routing_attr_driving_style_speed_name" = "Shorter routes";
+"routing_attr_avoid_sett_description" = "Avoids cobblestone and sett";
+"rendering_attr_hikingRoutesOSMC_description" = "Render paths according to OSMC traces.";
+"rendering_value_car_name" = "Car";
+"routing_attr_avoid_unpaved_name" = "No unpaved roads";
+"rendering_attr_lessDetailed_name" = "Fewer details";
+"routing_attr_avoid_borders_description" = "Avoids crossing national borders";
+"rendering_attr_highway_class_steps_name" = "Steps";
+"routing_attr_avoid_tram_name" = "No trams";
+"rendering_attr_piste_type_downhill_name" = "Downhill";
+"rendering_attr_moreDetailed_name" = "More details";
+"rendering_attr_piste_difficulty_undefined_name" = "Undefined";
+"routing_attr_allow_motorway_name" = "Use motorways";
+"rendering_value_black_name" = "Black";
+"routeInfo_winter_ice_road_name" = "Winter and ice roads";
+"rendering_attr_hideBuildings_name" = "Buildings";
+"routing_attr_max_num_changes_description" = "Specify upper limit of changes";
+"rendering_attr_winter_road_name" = "Winter road";
+"rendering_attr_tramTrainRoutes_name" = "Tram and train routes";
+"rendering_attr_smoothness_intermediate_name" = "Intermediate";
+"rendering_attr_surface_snow_name" = "Snow";
+"rendering_attr_highway_class_cycleway_name" = "Cycleway";
+"routing_attr_piste_type_downhill_description" = "Slopes for alpine or downhill skiing and access to ski lifts.";
+"rendering_attr_hideWaterPolygons_name" = "Hide water";
+"routing_attr_avoid_stairs_name" = "No stairs";
+"rendering_value_walkingRoutesOSMC_name" = "Color by OSMC hiking symbol";
+"rendering_attr_piste_type_skitour_name" = "Skitour";
+"routing_attr_avoid_unpaved_description" = "Avoids unpaved roads";
+"routing_attr_prefer_unpaved_description" = "Prefer unpaved roads.";
+"rendering_attr_roadStyle_description" = "Road style";
+"routing_attr_prefer_motorway_description" = "Prefer motorways";
+"routing_attr_avoid_ferries_name" = "No ferries";
+"rendering_attr_highway_class_track_name" = "Track";
+"rendering_attr_tracktype_grade4_name" = "Mostly soft";
+"rendering_value_disabled_name" = "Disabled";
+"rendering_attr_contourColorScheme_name" = "Contour lines color scheme";
+"routing_attr_short_way_name" = "Fuel-efficient way";
+"rendering_attr_alpineHiking_name" = "Alpine hiking scale (SAC)";
+"rendering_attr_showLez_name" = "Show Low Emission Zones";
+"rendering_value_green_name" = "Green";
+"routing_attr_piste_type_nordic_description" = "Trails for nordic or cross-country skiing.";
+"rendering_attr_surface_unpaved_name" = "Unpaved";
+"rendering_attr_noAdminboundaries_description" = "Suppress display of regional boundaries (admin levels 5–9).";
+"rendering_value_bicycle_name" = "Bicycle";
+"rendering_value_translucent_lightgreen_name" = "Translucent light green";
+"rendering_attr_contourLines_name" = "Show contour lines";
+"rendering_attr_showAccess_name" = "Show access restrictions and toll";
+"rendering_attr_surface_dirt_name" = "Dirt";
+"routing_attr_piste_type_skitour_name" = "Ski touring";
+"routing_attr_driving_style_prefer_unpaved_name" = "Prefer unpaved roads";
+"rendering_attr_surface_sand_name" = "Sand";
+"routing_attr_no_new_routing_description" = "Do not use routing rules introduced in v1.9.";
+"routing_attr_prefer_motorway_name" = "Prefer motorways";
+"rendering_attr_surface_cobblestone_name" = "Cobblestone";
+"rendering_attr_highway_class_state_road_name" = "State road";
+"routing_attr_avoid_sett_name" = "No cobblestone or sett";
+"rendering_value_translucent_lightblue_name" = "Translucent light blue";
+"rendering_attr_smoothness_good_name" = "Good";
+"routing_attr_weight_name" = "Weight limit";
+"rendering_value_bold_name" = "Bold";
+"rendering_attr_surface_stone_name" = "Stone";
+"rendering_attr_pisteGrooming_name" = "Piste grooming";
+"rendering_attr_noAdminboundaries_name" = "Boundaries";
+"rendering_attr_tracktype_grade3_name" = "Mostly solid";
+"rendering_attr_showSurfaces_name" = "Show road surface";
+"routing_attr_allow_advanced_description" = "Difficult routes, with dangerous obstacles and steep sections.";
+"osm_notes" = "OSM notes";
+"rendering_attr_hidePOILabels_name" = "POI labels";
+"rendering_attr_piste_difficulty_novice_name" = "Novice";
+"rendering_attr_hideUnderground_name" = "Underground objects";
+"rendering_value_dark_brown_name" = "Dark brown";
+"routeInfo_piste_type_name" = "Piste type";
+"routing_attr_driving_style_safety_name" = "Prefer byways";
+"rendering_attr_surface_paving_stones_name" = "Paving stones";
+"rendering_attr_depthContours_name" = "Nautical depth contours";
+"rendering_attr_piste_difficulty_freeride_name" = "Freeride";
+"routeInfo_steepness_name" = "Steepness";
+"rendering_attr_smoothness_very_bad_name" = "Very bad";
+"rendering_attr_surface_compacted_name" = "Compacted";
+"rendering_attr_undefined_name" = "Undefined";
+"rendering_value_red_name" = "Red";
+"routing_attr_allow_private_name" = "Allow private access";
+"routeInfo_tracktype_name" = "Surface firmness";
+"rendering_attr_highway_class_path_name" = "Path";
+"rendering_value_white_name" = "White";
+"rendering_value_blue_name" = "Blue";
+"routing_attr_avoid_ice_roads_fords_description" = "Avoids ice roads and fords.";
+"routing_attr_allow_advanced_name" = "Allow advanced routes";
+"rendering_attr_surface_grass_paver_name" = "Grass paver";
+"rendering_attr_hideAccess_name" = "Access restrictions";
+"rendering_value__name" = "Default";
+"rendering_attr_smoothness_very_horrible_name" = "Very horrible";
+"routing_attr_allow_intermediate_name" = "Allow intermediate routes";
+"rendering_attr_trolleybusRoutes_name" = "Trolleybus routes";
+"rendering_attr_hideWaterPolygons_description" = "Water";
+"rendering_attr_piste_difficulty_extreme_name" = "Extreme";
+"rendering_value_low_name" = "Low";
+"rendering_value_lightgreen_name" = "Light green";
+"rendering_attr_busRoutes_name" = "Bus routes";
+"rendering_value_defaultTranslucentCyan_name" = "Default (translucent cyan)";
+"rendering_attr_hideHouseNumbers_name" = "House numbers";
+"rendering_value_translucent_red_name" = "Translucent red";
+"rendering_attr_highway_class_track_grade1_name" = "Grade 1";
+"rendering_attr_transportStops_name" = "Transport stops";
+"rendering_value_walkingRoutesOSMCNodes_name" = "Node networks";
+"rendering_attr_piste_difficulty_expert_name" = "Expert";
+"rendering_attr_buildings15zoom_name" = "Buildings on zoom 15";
+"rendering_attr_tracktype_grade1_name" = "Solid (paved)";
+"routing_attr_avoid_train_description" = "Avoids trains";
+"routing_attr_avoid_shuttle_train_name" = "No shuttle train";
+"rendering_attr_contourColorScheme_description" = "Contour lines color scheme";
+"rendering_value_boldOutline_name" = "Bold outline";
+"routing_attr_avoid_toll_description" = "Avoids toll roads";
+"rendering_attr_noPolygons_name" = "Polygons";
+"rendering_attr_piste_difficulty_easy_name" = "Easy";
+"routing_attr_weight_description" = "Specify permitted vehicle weight limit on routes.";
+"rendering_attr_surface_salt_name" = "Salt";
+"rendering_value_yellow_name" = "Yellow";
+"routing_attr_allow_private_description" = "Allow access to private areas.";
+"rendering_attr_alpineHiking_description" = "Render paths according to the SAC scale.";
+"rendering_attr_highway_class_bridleway_name" = "Bridleway";
+"routing_attr_avoid_share_taxi_name" = "No share taxi";
+"rendering_attr_pisteRoutes_name" = "Ski slopes";
+"rendering_attr_piste_type_sled_name" = "Sled";
+"rendering_attr_noPolygons_description" = "Make all areal land features on map transparent.";
+"routing_attr_allow_classic_only_description" = "Routes groomed for classic style only without skating trails. This includes routes groomed by a smaller snowmobile with looser piste and tracks made manually by skiers.";
+"routing_attr_allow_skating_only_name" = "Allow skating only routes";
+"routing_attr_avoid_shuttle_train_description" = "Avoids using shuttle trains";
+"routing_attr_driving_style_balance_name" = "Balanced";
+"routing_attr_piste_type_nordic_name" = "Cross country/nordic ski";
+"routing_attr_avoid_bus_name" = "No buses";
+"rendering_value_highContrastRoads_name" = "High contrast roads";
+"rendering_attr_highway_class_service_name" = "Service";
+"rendering_attr_showCycleRoutes_name" = "Show cycle routes";
+"rendering_attr_surface_metal_name" = "Metal";
+"rendering_value_translucent_purple_name" = "Translucent purple";
+"rendering_attr_hmRendered_description" = "Increase amount of map detail shown.";
+"rendering_attr_tramRoutes_name" = "Tram routes";
+"rendering_attr_tracktype_grade2_name" = "Solid (unpaved)";
+"rendering_attr_piste_type_hike_name" = "Hike";
+"rendering_value_medium_name" = "Medium";
+"rendering_attr_piste_type_snow_park_name" = "Terrain park";
+"rendering_attr_highway_class_footway_name" = "Footway";
+"routing_attr_avoid_tram_description" = "Avoids trams";
+"rendering_value_default13_name" = "Default (13)";
+"rendering_value_thin_name" = "Thin";
+"rendering_attr_whiteWaterSports_name" = "Whitewater sports";
+"routeInfo_roadClass_name" = "Road type";
+"routing_attr_allow_skating_only_description" = "Routes groomed for freestyle or skating only without classic tracks.";
+"rendering_attr_piste_type_nordic_name" = "Nordic";
+"rendering_attr_trainLightrailRoutes_name" = "Train routes";
+"rendering_value_pedestrian_name" = "On foot";
+"rendering_attr_highway_class_track_grade5_name" = "Grade 5";
+"routing_attr_height_name" = "Height limit";
+"rendering_attr_piste_type_connection_name" = "Connection";
+"routing_attr_relief_smoothness_factor_name" = "Select elevation fluctuation";
+"routing_attr_piste_type_downhill_name" = "Alpine/downhill ski";
+"rendering_value_darkyellow_name" = "Dark yellow";
+"routing_attr_prefer_unpaved_name" = "Prefer unpaved roads";
+"rendering_value_default_name" = "Default";
+"routing_attr_no_new_routing_name" = "No v1.9 routing rules";
+"rendering_attr_subwayMode_name" = "Subway routes";
+"rendering_attr_highway_class_motorway_name" = "Motorway";
+"rendering_value_brown_name" = "Brown";
+"rendering_attr_hideIcons_name" = "POI icons";
+"rendering_attr_roadColors_description" = "Select a road color scheme:";
+"rendering_value_browse_map_name" = "Browse map";
+"rendering_attr_surface_asphalt_name" = "Asphalt";
+"rendering_value_translucent_orange_name" = "Translucent orange";
+"rendering_attr_depthContours_description" = "Show depth contours and points.";
+"rendering_value_thick_name" = "Thick";
+"routing_attr_avoid_ferry_name" = "No ferries";
+"routing_attr_width_name" = "Width limit";
+"routing_attr_avoid_train_name" = "No trains";
+"routing_attr_allow_motorway_description" = "Allows motorways.";
+"rendering_attr_hmRendered_name" = "Show more map detail";
+"rendering_attr_roadColors_name" = "Road color scheme";
+"weight_limit_description" = "Provide your vehicle weight, some route restrictions may apply for heavy vehicles.";
+"height_limit_description" = "Provide your vehicle height, some route restrictions may apply for high vehicles.";
+"lenght_limit_description" = "Provide your vehicle length, some route restrictions may be applied for long vehicles.";
+"width_limit_description" = "Provide your vehicle width some route restrictions may apply for wide vehicles.";
+"vessel_height_limit_description" = "Set vessel height to avoid low bridges. Keep in mind, if the bridge is movable, the calculation uses its height in the open state.";
+"vessel_width_limit_description" = "Set vessel width to avoid narrow bridges.";
+"default_speed_dialog_msg" = "Estimates arrival time for unknown road types, and limits speed for all roads (may affect routing)";
+
+"settings_item_read_error" = "Could not read %@.";
+"app_mode_default" = "Browse map";
+"app_mode_car" = "Driving";
+"app_mode_bicycle" = "Cycling";
+"app_mode_pedestrian" = "Walking";
+"app_mode_taxi" = "Taxi";
+"app_mode_shuttle_bus" = "Shuttle bus";
+"app_mode_subway" = "Subway";
+"app_mode_horse" = "Horse";
+"app_mode_helicopter" = "Helicopter";
+"app_mode_skiing" = "Skiing";
+"app_mode_personal_transporter" = "Personal transporter";
+"app_mode_monowheel" = "Monowheel";
+"app_mode_scooter" = "Scooter";
+"app_mode_ufo" = "UFO";
+"app_mode_offroad" = "Offroad";
+"app_mode_camper" = "Camper";
+"app_mode_campervan" = "Campervan (RV)";
+"app_mode_wagon" = "Wagon";
+"app_mode_pickup_truck" = "Pickup truck";
+"app_mode_utv" = "Side by Side";
+"app_mode_osm" = "OSM";
+"desert" = "Desert";
+
+
+// Release Notes
+// instruction:
+//https://github.com/osmandapp/OsmAnd-Issues/blob/master/Adding%20release%20information%20to%20IOS.md
+
+"latest_version" = "You have the latest version: %@";
+
+"ios_release_3_80" = "• Introduced \“Application Profiles\" with independent settings\n
+• New arrangement of settings by profiles and types: navigation, general, map and screen\n
+• Ability to import or export profile settings\n
+• Added data sources for Online photos\n
+• Added ability to download online maps to cache\n
+• Improved \"Search\" algorithms\n";
+
+"ios_release_3_90" = "• Introduced \“Application Profiles\" with independent settings\n
+• New arrangement of settings by profiles and types: navigation, general, map and screen\n
+• Ability to import or export profile settings\n
+• Added data sources for Online photos\n
+• Added ability to download online maps to cache\n
+• Improved \"Search\" algorithms\n";

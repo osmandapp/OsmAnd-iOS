@@ -458,6 +458,7 @@
 
 - (void)removeNewGpxItem:(NSString *)filePath
 {
+    // FIXME:
     OASGpxDataItem *gpx = [self getNewGPXItem:filePath];
     if (!gpx)
         gpx = [self getNewGPXItemByFileName:filePath];

@@ -403,12 +403,7 @@
 "gpxup_public" = "İctimai";
 "gpxup_trackable" = "İzlənə bilən";
 "gpxup_private" = "Şəxsi";
-"gpx_upload_public_visibility_descr" = "\"Public\" means the trace is shown publicly in your GPS traces and in public GPS trace listings, and in the public trace list with timestamps in raw form. Data served via the API does not reference your trace page. Tracepoint timestamps are not available through the public GPS API, and tracepoints are not chronologically ordered.";
-"gpx_upload_identifiable_visibility_descr" = "\"Identifiable\" means that the trace will be shown publicly in your GPS traces and in public GPS trace listings, i.e. other users will be able to download the raw trace and associate it with your username. Public timestamped tracepoint data from the GPS API served via the trackpoints API will reference your original trace page.";
-"gpx_upload_trackable_visibility_descr" = "\"Trackable\" means the trace does not show up in any public listings, but processed trackpoints with timestamps from it (that can\'t be associated with you directly) do through downloads from the public GPS API.";
-"gpx_upload_private_visibility_descr" = "\"Private\" means the trace does not show up in any public listings, but trackpoints from it in unchronological order are available through the public GPS API without timestamps.";
 "save_track_to_gpx" = "Naviqasiya zamanı izi avtomatik qeyd et";
-"save_track_to_gpx_descrp" = "Turn on to automatically save a track during navigation";
 "shared_string_speed" = "Sürət";
 "shared_string_slope" = "Yamac";
 
@@ -585,7 +580,6 @@
 "profile_type_base_string" = "Təməl profil";
 "selected_profile" = "Seçilmiş profil";
 "application_profiles" = "Proqram profilləri";
-"import_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";
 "new_plugin_added" = "Yeni qoşma əlavə edildi";
 "reset_to_default" = "Standarta sıfırla";
 "checking_for_duplicate_description" = "OsmAnd proqramdakı mövcud elementlərlə dublikatların olub-olmaması üçün %@-ni yoxlayır. \n \nBir az vaxt ala bilər.";
@@ -607,7 +601,6 @@
 "delete_point" = "Nöqtəni sil";
 "next_segment" = "Növbəti seqment";
 "whole_track" = "Bütün iz";
-"only_selected_segment_recalc" = "Only the selected segment will be recalculated using the selected profile";
 "reverse_route" = "Əks marşrut";
 "simplified_track_description" = "Yalnız marşrut xətti yadda saxlanacaq, yol nöqtələri silinəcək.";
 "open_saved_track" = "Yadda saxlanan izi aç";
@@ -701,7 +694,6 @@
 "quick_action_map_overlay_action" = "Örtük əlavə et";
 "no_underlay" = "Altlıq yoxdur";
 "quick_action_map_underlay_action" = "Altlıq əlavə et";
-"toggle_current_location" = "Show/hide coordinates widget";
 
 
 "quick_action_current_location_widget_descr" = "Xəritədə Koordinatlar vidcetini göstərmək və ya gizlətmək üçün düymə.";
@@ -837,18 +829,10 @@
 // Rendering attributes
 
 //inapps
-"plugin_nautical_name" = "Nautical map";
-"plugin_nautical_descr" = "OsmAnd Nautical Charts is a plugin for OsmAnd Maps & Navigation app. It is a detailed graphical representation of oceans, seas, coastal areas and rivers. The charts can contain various information like sailing routes, navigation lights, dangerous areas, areas where it's allowed or not allowed to sail or dock, etc.\n\nUsage Instructions: it is highly recommended to download nautical basemap in order to see the maps regardless of detailed map presence. To turn on Nautical charts, tap the map button and set map type to Nautical.\n\nNote: All professional sailors are obliged to have official nautical charts on their ships.\n\nOsmAnd Nautical charts are based on the data from OpenSeaMap project. While OpenSeaMap charts at the moment cannot compete with official nautical charts, they can be used by recreational sailors for orientation or route planning.";
 "osmand_parking_plugin_name" = "Parkinq mövqeyi";
-"osmand_parking_plugin_description" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
-"plugin_ski_name" = "Ski map";
-"plugin_ski_descr" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
 "record_plugin_name" = "Səfər qeydetmə";
 "record_plugin_description" = "Bu qoşma xəritədə GPX qeydetmə vidcetinə əl ilə toxunmaqla izlərinizi qeyd etmək və saxlamaq, həmçinin bütün naviqasiya marşrutlarınızı avtomatik olaraq GPX faylına qeyd etmək funksiyasını aktivləşdirir. \n \nQeyd edilmiş izlər dostlarınızla paylaşıla və ya OSM töhfələri üçün istifadə edilə bilər. İdmançılar məşqlərinə nəzarət etmək üçün qeyd edilmiş izlərdən istifadə edə bilərlər. Dövrə vaxtları, orta sürət və s. kimi bəzi əsas iz analizləri birbaşa OsmAnd-da həyata keçirilə bilər və əlbəttə ki, daha sonra izlər xüsusi 3-cü tərəf analiz alətlərində də təhlil edilə bilər.";
-"osm_editing_plugin_name" = "OpenStreetMap Editing";
-"osm_editing_plugin_description" = "OSM Editing plugin can be used to make OSM contributions like creating or modifying POI objects, opening or commenting on OSM Notes, and contributing recorded GPX files. OSM is a community driven global public domain mapping project. For more information, please refer to https://osm.org. Contributions can be made directly from OsmAnd, if you specify your OSM credentials in the app.";
 "plugin_mapillary_descr" = "Hər kəs üçün küçə səviyyəsində şəkillər. Yerləri kəşf edin, əməkdaşlıq edin, dünyanı çəkin.";
-"worldwide_maps" = "All World Maps";
 "download_wikipedia_maps" = "Vikipediya";
 "purchases_feature_desc_wikipedia" = "Vikipediyanı oflayn kəşf edin. Məqalələr ölkələr və regionlar üzrə bölünür və bütün dillərdə mövcuddur.";
 "shared_string_all_languages" = "Bütün dillər";
@@ -882,7 +866,6 @@
 "shared_string_language" = "Dil";
 "shared_string_get" = "Əldə et";
 "srtm_plugin_disabled" = "Kontur xətləri sönülüdür";
-"prch_srtm_info" = "Contour lines plugin enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "İş vaxtı:";
 "osm_live_active" = "Aktiv";
 "public_transport_try_change_settings" = "Parametrləri dəyişməyə çalışın.";
@@ -1207,10 +1190,6 @@
 // Release Notes
 // instruction:
 //https://github.com/osmandapp/OsmAnd-Issues/blob/master/Adding%20release%20information%20to%20IOS.md
-"ios_release_3_80" = "• Introduced \"Application Profiles\" with independent settings\n• New arrangement of settings by profiles and types: navigation, general, map and screen\n• Ability to import or export profile settings\n• Added data sources for Online photos\n• Added ability to download online maps to cache\n• Improved \"Search\" algorithms\n";
-"ios_release_3_90" = "• Introduced a \"Plan a route\" feature for planning future trips with the ability to create track segments using different navigation types\n• Added an option to enable a сompass over the \"Radius Ruler\" tool\n• Added \"POI label overlays\" option that allows to show names for favorites, track waypoints and markers on the map\n• Added new Quick actions for visibility of contour lines and terrain on the map, changing an application profile, deleting a nearest intermediate point\n• Fixed issues with missing Wikipedia search category\n• Settings Import: fixed bugs, added support for all data types available in OsmAnd\n• OpenStreetMap editing: fixed the time picker and inability to change the changeset comment\n";
-"ios_release_4_0" = "• New! \"Add favorite\" screen with options to select the custom icon, color, and shape\n• Added new \"Coordinates widget\" with coordinates of the current location\n• Added ability to import custom user-defined plugins\n• Significantly extended the import/export functionality\n• Distance by tap moved from the Radius ruler into a separate option\n• Fixed CarPlay app freezes when iPhone screen is turned off\n• Plugins screen moved from the Maps & Resources to the main menu\n• Added Finnish localization\n• Fixed UI in landscape orientation for \"Plan a route\" screen\n• Added support for custom routing and rendering files\n• Fixed performance of markers direction line\n • Fixed issue with importing GPX files with uppercase extensions\n• Fixed issue with \"Follow track\" menu\n• Fixed import of OBF files\n";
-"ios_release_4_1" = "• Completely redesigned interaction with tracks: a new menu with charts, statistics, ability to change the appearance, coloring by speed, height and slope, and track selection on the map• New screen for searching by coordinates in different formats\n• Improved coordinate search in OLC format\n• New user-friendly menu for choosing languages to display Wikipedia articles on the map\n• Added ability to easily load maps of all regions of the country with a couple of clicks.\n• Added contour lines in feet (You need to download additional files)\n• Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n• New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n• Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
 "resend_verification_code" = "Yenidən göndər";
 "make_backup_descr" = "Bu cihazda çoxlu dəyişikliklər var, zəhmət olmasa, məlumatları itirməmək üçün nüsxə yaradın.";
 "customize_route_line" = "Marşrut xəttini fərdiləşdir";

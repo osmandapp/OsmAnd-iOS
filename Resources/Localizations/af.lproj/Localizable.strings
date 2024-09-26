@@ -62,7 +62,6 @@
 "fast_route_mode" = "Vinnigste roete";
 "fast_route_mode_descr" = "\"Skakel aan om vinnigste roete te bereken of skakel af vir kortste roete \"";
 "avoid_in_routing_title" = "Vermy…";
-"avoid_in_routing_descr_" = "Avoid toll roads, unpaved, ferries";
 "prefer_in_routing_title" = "Verkies…";
 "prefer_in_routing_descr" = "Verkies snelweë";
 "choose_auto_follow_route" = "Outo-senter kaart uitsig";
@@ -179,12 +178,6 @@
 "gpxup_identifiable" = "Identifiseerbare";
 "gpxup_trackable" = "Volgbare";
 "gpxup_private" = "Privaat";
-"gpx_upload_public_visibility_descr" = "\"Public\" means the trace is shown publicly in your GPS traces and in public GPS trace listings, and in the public trace list with timestamps in raw form. Data served via the API does not reference your trace page. Tracepoint timestamps are not available through the public GPS API, and tracepoints are not chronologically ordered.";
-"gpx_upload_identifiable_visibility_descr" = "\"Identifiable\" means that the trace will be shown publicly in your GPS traces and in public GPS trace listings, i.e. other users will be able to download the raw trace and associate it with your username. Public timestamped tracepoint data from the GPS API served via the trackpoints API will reference your original trace page.";
-"gpx_upload_trackable_visibility_descr" = "\"Trackable\" means the trace does not show up in any public listings, but processed trackpoints with timestamps from it (that can\'t be associated with you directly) do through downloads from the public GPS API.";
-"gpx_upload_private_visibility_descr" = "\"Private\" means the trace does not show up in any public listings, but trackpoints from it in unchronological order are available through the public GPS API without timestamps.";
-"save_track_to_gpx" = "Auto-record track";
-"save_track_to_gpx_descrp" = "Turn on to automatically save a track during navigation";
 
 // Map settings
 "poi_filter_public_transport" = "Publieke vervoer";
@@ -195,17 +188,13 @@
 "shared_string_online_maps" = "Internet kaarte";
 "map_transparency" = "Basis kaart deursigtigheid";
 "settings_app_theme" = "Toepassing tema";
-"light_theme" = "Light";
 
 // Intro
 // Settings
-"map_locale" = "Map Language";
 "recording_context_menu_show" = "Wys";
 "navigate_point_format_D" = "GGG.GG";
 "navigate_point_format_DM" = "GGG MM.MM";
 "navigate_point_format_DMS" = "GGG MM SS.SS";
-"mgrs_format_descr" = "OsmAnd uses MGRS format which is identical to UTM NATO.";
-"lang_en" = "Engels";
 "lang_eu" = "Baskies";
 "lang_hr" = "Kroaties";
 "lang_hy" = "Armeens";
@@ -214,19 +203,14 @@
 "shared_string_import" = "Inbring";
 "shared_string_settings" = "Stellings";
 "search_activity" = "Soek";
-"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "profile_settings" = "Profiel Besondere Stellings";
-"import_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";
 
 // Purchases
 "shared_string_download" = "Aflaai";
 "shared_string_no_thanks" = "Nee, dankie";
 
 // Route planning
-"add_point_before" = "Add points before";
-"add_point_after" = "Add points after";
 "delete_point" = "Vee punt uit";
-"only_selected_segment_recalc" = "Only the selected segment will be recalculated using the selected profile";
 
 // Resources
 "edit_tilesource_url_to_load" = "Bronadres (URL)";
@@ -240,7 +224,6 @@
 "commiting_node" = "Besig om node by te voeg…";
 "loading_poi_obj" = "Besig om POI te laai…";
 "poi_remove_success" = "die interessante plek is suksesvol verwyder";
-"osm_edit_reopened_note" = "Reopened";
 "offline_edition" = "Aflyn redigering";
 "map_widget_top_text" = "Straat naam";
 "phone" = "Foon";
@@ -253,23 +236,14 @@
 // Mapillary
 
 // Coordinate widget
-"coordinates_widget_current_location" = "Coordinates widget";
 // Quick action
-"toggle_current_location" = "Show/hide coordinates widget";
 
 
 
 "vector_data" = "Aflyn vektor kaarte";
-
-
-"route_add_start_point" = "Add starting point";
 "favorite_home_category" = "Huis";
 "map_widget_parking" = "Parkering";
-"quick_action_auto_zoom" = "Auto zoom on/off";
-"quick_action_navigation_voice_on" = "Mute voice";
-"quick_action_navigation_voice_off" = "Unmute voice";
 "gpx_tags_txt" = "Naamplaatjies";
-"quick_action_add_marker_descr" = "Tapping this action button adds a map marker at the map center point.";
 "poi_context_menu_modify" = "verander interessante plek";
 "context_menu_item_create_poi" = "skep interessante plek";
 "osb_comment_dialog_message" = "Boodskap";
@@ -313,21 +287,13 @@
 // Rendering attributes
 
 //inapps
-"plugin_nautical_name" = "Nautical map";
-"plugin_nautical_descr" = "Turn on to enrich your map with information about sailing routes, navigation lights, danger zones, zones where it is allowed or prohibited to sail or dock, etc. To use download Nautical maps and enable \"Nautical map\" type in Configure map. \n\nHow to - https://osmand.net/docs/user/plugins/nautical-charts";
 "osmand_parking_plugin_name" = "Parkering Posisie Inlasmodule";
 "osmand_parking_plugin_description" = "Hierdie inlasmodule laat toe dat die ligging van jou geparkeerde motor geberg kan word.";
-"plugin_ski_name" = "Ski map";
-"plugin_ski_descr" = "Designed to navigate at winter sports locations. Watch ski pistes, ski lift markers and colored lines indicating the complexity of each track. To use after enabling go to Configure map and choose \"Winter and ski\" map type.";
 "record_plugin_name" = "Aanteken dienste&Sluimertoestand";
-"record_plugin_description" = "Allows you to record, save and analyze your training or movement data, such as speed, ascents, descents or route relief, which can then be reused, improved, supplemented or shared with friends. \n\nHow to - https://osmand.net/docs/user/plugins/trip-recording";
 "osm_editing_plugin_name" = "OSM veranderings";
 "osm_editing_plugin_description" = "Wys stellings nodig vir OSM terugvoer bv. versamel / aanpas van OSM POI voorwerpe, oopmaak / komentaarlewer op OSM foute, en bydra van opgeneemde GPX dokumente (vereis OSM inlog besonderhede).";
-"plugin_mapillary_descr" = "Brings street-level views. Where imagery is missing, you can just add it yourself so that others can make use of it. To enable the Mapillary layer turn on the \"Street-level imagery\" in Configure map menu.";
 "debugging_and_development" = "OsmAnd ontwikkeling";
 "osmand_development_plugin_description" = "Wys stellings vir ontwikkeling en ontfoutingsfunksies bv. bewegende navigasie of beeldvertoon werkverrigting.";
-"worldwide_maps" = "All World Maps";
-"purchases_feature_desc_wikipedia" = "Having offline Wikipedia on your trip helps you learn more about the places you visit. It is available offline and shows Wikipedia articles in relation to the points of interest right on the map. Don't forget to download Wikipedia maps for chosen region.";
 "srtm_plugin_name" = "Kontoerlyn inlasmodule";
 "srtm_plugin_description" = "Vergemoontlik dei aflaai van aflyn kontoerlyne en heuwelsakdus (\'Instellings\'-> \'Inligtingsbestuur\' -> \'Aflaai\' -> Kies verlangde kaart-tipe).";
 "navigate_point_latitude" = "Breedtegraad";
@@ -339,11 +305,8 @@
 "poi_filter_parking" = "Parkering";
 "context_menu_item_directions_from" = "Aanwysings Van";
 "search_nearby" = "Soek naby";
-"move_marker_bottom_sheet_title" = "Move the map to change object's position";
-"weather_plugin_description" = "Enable the Weather Plugin to plan a route considering the weather. Watch the coloured map of weather forecast, which is updated hourly for today, tomorrow, and the week ahead. \n\nWhile traveling see location based info widgets with temperature, precipitation, wind speed, pressure. \n\nWill be useful for hiking and long trips by bike or motorcycle.";
 "shared_string_history" = "Geskiedenis";
 "searching" = "Besig om te soek…";
-"search_map" = "Searching map";
 "poi_filter_custom_filter" = "persoonlike filter";
 "poi_filter_closest_poi" = "naaste interessante plek";
 "poi_filter_by_name" = "Soek met die naam";
@@ -356,13 +319,10 @@
 "city_type_hamlet" = "Dorpie";
 "city_type_village" = "Dorpie";
 "city_type_town" = "Dorp";
-"city_type_city" = "Stad";
 "search_POI_level_btn" = "Vind meer";
-"search_address_street" = "Straat";
 "search_address_building_option" = "Gebou";
 "free_version_message" = "Hierdie gratis OsmAnd weergawe is beperk tot %@ aflaailêers en ondersteun nie aflyn Wikipedia artikels nie.";
 "shared_string_io_error" = "Lees/skryf fout het voorgekom";
-"rendering_value_high_name" = "Hoog";
 "routing_attr_avoid_toll_name" = "Vermy tolpaaie";
 "rendering_attr_appMode_description" = "Kaart optimalisering vir onderskeie Gebruikersprofiele";
 "rendering_attr_showRoadMaps_name" = "Paaie-uitsluitlik kaarte";
@@ -370,7 +330,6 @@
 "rendering_attr_contourWidth_description" = "Dikte van die hoogtelyne";
 "rendering_attr_appMode_name" = "Weergewing wyse";
 "rendering_attr_contourLines_description" = "Vertoon minimum vergrotingsvlak. (Aparte SRTM-dokument benodig):";
-"rendering_value_medium_w_name" = "Gemiddeld";
 "rendering_attr_contourDensity_description" = "Digtheid van die hoogtelyne";
 "rendering_attr_contourWidth_name" = "Dikte van die hoogtelyne";
 "rendering_attr_showRoadMaps_description" = "Kies wanneer om paaie-uitsluitlik kaarte te toon:";
@@ -389,7 +348,6 @@
 "routing_attr_weight_name" = "Gewig";
 "rendering_attr_noAdminboundaries_name" = "Versteek grense";
 "rendering_attr_depthContours_name" = "Dieptelyne";
-"rendering_value_low_name" = "Laag";
 "routing_attr_avoid_toll_description" = "Vermy tolpaaie";
 "rendering_attr_noPolygons_name" = "Geen veelhoeke";
 "routing_attr_weight_description" = "Spesifiseer gewigsbeperking";
@@ -408,8 +366,6 @@
 "transport" = "Vervoer";
 "app_mode_default" = "Verstek";
 "app_mode_car" = "Motor";
-"app_mode_bicycle" = "Fiets";
-"app_mode_pedestrian" = "Voetganger";
 "recording_delete_confirm" = "Wil jy hierdie opname verwyder?";
 "offline_edition_descr" = "Gebruik altyd aflyn redigering";
 "auth_failed" = "Magtiging het misluk";
@@ -417,11 +373,6 @@
 // Release Notes
 // instruction:
 //https://github.com/osmandapp/OsmAnd-Issues/blob/master/Adding%20release%20information%20to%20IOS.md
-"ios_release_3_80" = "• Introduced \"Application Profiles\" with independent settings\n• New arrangement of settings by profiles and types: navigation, general, map and screen\n• Ability to import or export profile settings\n• Added data sources for Online photos\n• Added ability to download online maps to cache\n• Improved \"Search\" algorithms\n";
-"ios_release_3_90" = "• Introduced a \"Plan a route\" feature for planning future trips with the ability to create track segments using different navigation types\n• Added an option to enable a сompass over the \"Radius Ruler\" tool\n• Added \"POI label overlays\" option that allows to show names for favorites, track waypoints and markers on the map\n• Added new Quick actions for visibility of contour lines and terrain on the map, changing an application profile, deleting a nearest intermediate point\n• Fixed issues with missing Wikipedia search category\n• Settings Import: fixed bugs, added support for all data types available in OsmAnd\n• OpenStreetMap editing: fixed the time picker and inability to change the changeset comment\n";
-"ios_release_4_0" = "• New! \"Add favorite\" screen with options to select the custom icon, color, and shape\n• Added new \"Coordinates widget\" with coordinates of the current location\n• Added ability to import custom user-defined plugins\n• Significantly extended the import/export functionality\n• Distance by tap moved from the Radius ruler into a separate option\n• Fixed CarPlay app freezes when iPhone screen is turned off\n• Plugins screen moved from the Maps & Resources to the main menu\n• Added Finnish localization\n• Fixed UI in landscape orientation for \"Plan a route\" screen\n• Added support for custom routing and rendering files\n• Fixed performance of markers direction line\n• Fixed issue with importing GPX files with uppercase extensions\n• Fixed issue with \"Follow track\" menu\n• Fixed import of OBF files\n";
-"ios_release_4_1" = "• Completely redesigned interaction with tracks: a new menu with charts, statistics, ability to change the appearance, coloring by speed, height and slope, and track selection on the map• New screen for searching by coordinates in different formats\n• Improved coordinate search in OLC format\n• New user-friendly menu for choosing languages to display Wikipedia articles on the map\n• Added ability to easily load maps of all regions of the country with a couple of clicks.\n• Added contour lines in feet (You need to download additional files)\n• Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n• New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n• Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
-"ios_release_4_2" = "• Route line appearance: added ability to set width and color\n• Tracks: added option for deleting several tracks at once\n• Track context menu: added scroll bar with waypoint groups\n• Map appearance: divided additional routes by type with ability to enable one from each category separately\n• Horseback riding: add new navigation type and app profile\n• OsmAnd files are now visible in the \"Files\" application\n• UX of options \"Use elevation data\" and \"Select elevation fluctuation\"  was improved, they were combined and renamed to \"Preferred terrain\", currently available for \"Bicycle\" and \"Pedestrian\" profiles.\n• New option \"Include heading\" for track recording\n• Street name widget: now show road shield and exit number during navigation\n• New Fitness and running routes on the map\n• CarPlay bug fixes, added gestures for touchscreens\n• Fixed import of GPX files from OSF package\n• Fixed import of custom plugins with included files\n• Fixed various crashes in the Route planning mode\n• Fixed crashes during Navigation\n";
 "global_settings" = "Oorhoofse instellings";
 "visibility" = "Sigbaarheid";
 "user_name" = "Jou OSM gebruiker naam";

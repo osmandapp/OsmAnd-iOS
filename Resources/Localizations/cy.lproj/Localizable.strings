@@ -83,7 +83,6 @@
 "dialogs_and_notifications_descr" = "Rheoli deialogau, hysbysiadau a popups.";
 "settings_preset_descr" = "Mae gosodiadau llywio a golwg map yn cael eu cofio yn ôl proffil defnyddwyr. Gosodwch broffil fan hyn.";
 "unit_of_length" = "Unedau hyd";
-"unit_of_length_descr" = "Change units of length.";
 "coords_format" = "Fformat cyfesurynnau";
 "coordinates" = "Cyfesurynnau";
 "coords_format_descr" = "Fformat ar gyfer cyfesurynnau daearyddol.";
@@ -175,7 +174,6 @@
 "arrival_distance_factor_early" = "Cynnar";
 "arrival_distance_factor_normally" = "Arferol";
 "arrival_distance_factor_late" = "Hwyr";
-"arrival_distance_factor_at_last" = "In the last meters";
 "route_parameters" = "Paramedrau llwybr";
 "fast_route_mode" = "Llwybr cyflymaf";
 "voice_announces" = "Cyfarwyddiadau llais";
@@ -186,13 +184,11 @@
 "routing_profile_direct_to" = "Yn syth i bwynt";
 "routing_profile_ski" = "Sgïo";
 "routing_profile_geocoding" = "Daeargodio";
-"fast_route_mode_descr" = "Enable to calculate fastest route or disable for fuel-saving route";
 "avoid_in_routing_title" = "Osgoi…";
 "avoid_in_routing_descr_" = "Osgoi rhai llwybrau a mathau o ffyrdd";
 "prefer_in_routing_title" = "Ffafrio…";
 "prefer_in_routing_descr" = "Ffafrio traffyrdd.";
 "relief_smoothness_factor_descr" = "Tir a ffefrir: gwastad neu fryniog.";
-"choose_auto_follow_route_descr" = "Time until map view synchronizes with current position";
 "auto_zoom_map" = "Awto chwyddo\'r map";
 "auto_zoom_map_descr" = "Lefel chwyddo yn ôl eich cyflymder (tra bod y map wedi\'i gysoni â\'ch lleoliad presennol).";
 "snap_to_road" = "Snapio i\'r ffordd";
@@ -212,9 +208,7 @@
 "wake_on_voice_descr" = "Troi\'r sgrin y ddyfais ymlaen (os yw wedi\'i diffodd) wrth agosáu at dro.";
 "voice_pref_title" = "Llais";
 "voice_provider" = "Canllaw llais";
-"voice_provider_descr" = "Select voice guidance for navigation";
 "choose_audio_stream" = "Allbwn canllaw llais";
-"choose_audio_stream_descr" = "Select speaker to play voice guidance";
 "use_osm_live_routing" = "Llywio OsmAnd Live";
 "select_nav_profile_dialog_message" = "Mae \'math o lywio\' yn dewis sut y mae llwybrau yn cael eu cyfrifo, gyda\'r peiriannau llwybro all-lein ac ar-lein sydd ar gael.";
 "osmand_default_routing" = "Llwybro OsmA";
@@ -237,12 +231,10 @@
 "gpx_option_from_start_point" = "Pasio ar hyd y trac cyfan";
 "gpx_option_reverse_route" = "Gwrthdroi cyfeiriad y trac";
 "use_points_as_intermediates" = "Cyfrifo\'r llwybr rhwng pwyntiau";
-"calculate_osmand_route_without_internet" = "Calculate OsmAnd route segment without Internet";
 "routing_settings_2" = "Gosodiadau llywio";
 "impassable_road" = "Osgoi ffyrdd…";
 "temporary_conditional_routing" = "Ystyried cyfyngiadau dros dro";
 "impassable_road_desc" = "Dewis ffyrdd rwyt am eu hosgoi wrth lywio.";
-"interrupt_music_descr" = "Fully pause any music during voice prompts (not just lower its volume)";
 "shared_string_do_not_use" = "Peidio â defnyddio";
 "shared_string_sound" = "Sain";
 "sort_by" = "Trefnu yn ôl";
@@ -261,9 +253,6 @@
 "route_via" = "Trwy:";
 "route_from" = "O:";
 "transfers" = "Trosglwyddiadau";
-"error_calculating_route" = "Error calculating route";
-"internet_connection_required_for_online_route" = "An online navigation service is selected but no Internet connection is available.";
-"empty_route_calculated" = "Error: Calculated route is empty";
 "destination_point" = "Cyrchfan %@";
 "intermediate_point" = "Cyrchfan ar y ffordd %@";
 "arrived_at_intermediate_point" = "Wedi cyrraedd cyrchfan ar y ffordd";
@@ -1127,7 +1116,6 @@
 "edit_filter_save_as_menu_item" = "Cadw Fel";
 "delete_filter" = "Dileu hidlydd";
 "save_filter" = "Cadw hidlydd";
-"edit_filter_delete_dialog_title" = "Delete selected filter?";
 "apply_filters" = "Gosod hidlyddion";
 "filter_poi_hint" = "Hidlo yn ôl enw";
 "rendering_value_category_name" = "Categori";

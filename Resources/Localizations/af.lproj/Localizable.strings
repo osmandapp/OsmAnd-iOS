@@ -51,7 +51,6 @@
 "animate_my_location" = "Animate location change";
 
 // Track recording settings
-"save_global_track_interval_descr" = "Choose logging interval for the general track recording (enabled via the GPX logging widget on the map).";
 "save_track_interval" = "Log tussenpose";
 "save_heading_descr" = "Save heading information for each recorded point";
 "map_widget_transparent" = "Deursigtige vel";
@@ -64,12 +63,10 @@
 "position_on_map_bottom" = "Onder";
 "map_widget_compass" = "Kompas";
 "map_widget_intermediate_distance" = "Oorgangspunt";
-"map_widget_altitude" = "Altitude";
 "map_widget_max_speed" = "Snelheidsgrens";
 "access_arrival_time" = "Aankomstyd";
 "map_widget_time" = "Tyd oor";
 "layer_map_appearance" = "Verstel skerm";
-"confirm_usage_speed_cameras" = "In many countries (Germany, France, Italy, and others) the use of speed camera warnings is not permitted by law. OsmAnd does not assume any liability if you violate the law. Please tap yes only if you are eligible to use this feature.";
 "show_traffic_warnings" = "Wys spoedbeperkings";
 "show_cameras" = "Wys spoedkameras";
 "show_lanes" = "Toon lane";
@@ -77,36 +74,27 @@
 "speak_speed_limit" = "Kondig spoedbeperking aan";
 "speak_cameras" = "Kondig spoedkameras aan";
 "speak_traffic_warnings" = "Kondig verkeerswaarskuwings aan";
-"speak_favorites" = "Nearby Favorites";
 
 // Dirrection appearance
 
 // Route info
 "general_settings_descr" = "Instel van oorhoofse verstellings";
 "routing_settings_descr" = "Spesifiseer navigasie opsies";
-"auto_zoom_none" = "No auto zoom";
-"arrival_distance_factor_at_last" = "In the last meters";
 "fast_route_mode" = "Vinnigste roete";
 "fast_route_mode_descr" = "\"Skakel aan om vinnigste roete te bereken of skakel af vir kortste roete \"";
 "avoid_in_routing_title" = "Vermy…";
 "avoid_in_routing_descr_" = "Avoid toll roads, unpaved, ferries";
 "prefer_in_routing_title" = "Verkies…";
 "prefer_in_routing_descr" = "Verkies snelweë";
-"relief_smoothness_factor_descr" = "Preferred terrain: flat or hilly";
 "choose_auto_follow_route" = "Outo-senter kaart uitsig";
 "choose_auto_follow_route_descr" = "Tyd tot kaart sal ooreenkom met die huidige posisie";
 "auto_zoom_map" = "Vergroot kaart outomaties";
 "auto_zoom_map_descr" = "Outo vergroot kaart volgens jou spoed";
 "snap_to_road" = "Knip vas aan pad";
-"snap_to_road_descr" = "Snap position to roads during navigation";
 "show_warnings_title" = "Wys alarms…";
 "show_warnings_descr" = "Verstel verkeer waarskuwings (spoedbeperkings, geforseerde stoppe, spoedhobbels), spoed kameras, en laan inligting";
 "speak_title" = "Aankondig…";
 "speak_descr" = "Verstel aankondig van straatname, verkeerswaarskuwings(geforseerde stoppe, spoed-hobbels), spoedkamera, spoedbeperkings";
-"keep_informing_descr" = "Re-announce navigation instructions at regular intervals";
-"default_speed_system_descr" = "Define unit of speed";
-"speed_limit_exceed_message" = "Select speed limit tolerance margin, above which you will receive a voice warning.";
-"wake_on_voice_descr" = "Turn on device screen (if off) when approaching a turn";
 "voice_pref_title" = "Stem";
 "voice_provider" = "Stem begeleiding";
 "voice_provider_descr" = "Kies stem begeleiding vir navigasie (taalkodes sien ISO 639-1)";
@@ -125,16 +113,11 @@
 "app_mode_aircraft" = "Vliegtuig";
 "gpx_option_from_start_point" = "Ry oor die hele spoor";
 "gpx_option_reverse_route" = "Keer GPX rigting om";
-"calculate_osmand_route_without_internet" = "Calculate OsmAnd route segment without Internet";
 "turn_arrows_descr" = "Control the visibility of the turn arrows on the route line.";
 "impassable_road" = "Avoid roads";
-"impassable_road_desc" = "Select roads you want to avoid during navigation";
-"interrupt_music_descr" = "Fully pause any music during voice prompts (not just lower its volume)";
-"shared_string_do_not_use" = "Do not use";
 "sort_by" = "Sort";
 "stop_routing_confirm" = "Is jy seker jy wil die navigasie staak?";
 "cancel_route" = "Verwerp roete";
-"route_is_too_long_v2" = "This route may be too long to calculate. Please add intermediate destinations if no result is found within 10 minutes.";
 "use_displayed_track_for_navigation" = "Wil jy die aangetoonde spoor gebruik vir navigasie?";
 "shared_string_select_on_map" = "Kies op kaart …";
 "route_descr_select_destination" = "Kies bestemming";
@@ -167,13 +150,8 @@
 "driving_region_canada" = "Kanada";
 "driving_region_europe_asia" = "Europa & Asië";
 "left_side_navigation" = "Linkerhand bestuur";
-"right_side_navigation" = "Right-hand driving";
 "si_mi_feet" = "Myle / voete";
 "si_mi_yard" = "Myle/jaarts";
-"si_nm_h" = "Nautical miles per hour (knot)";
-"nothing_found_descr" = "Modify the search query or increase the search radius";
-"type_city_town" = "Type city or town";
-"select_postcode" = "Select postcode";
 "poi_categories" = "POI categories";
 
 // Shared Strings
@@ -458,7 +436,6 @@
 "reset_to_default_category_button_promo" = "Resetting to default will restore the sort order to its initial state.";
 "search_poi_types_descr" = "You can combine POI types from different categories.";
 "user_password" = "Jou OSM wagwoord";
-"edit_filter" = "Edit categories";
 "edit_filter_save_as_menu_item" = "Berg As";
 "edit_filter_delete_dialog_title" = "Verwyder gekose filter?";
 "opening_hours" = "Openingsure";
@@ -494,7 +471,6 @@
 "rendering_attr_showRoadMaps_name" = "Paaie-uitsluitlik kaarte";
 "routing_attr_avoid_ferries_description" = "Vermy veerboot";
 "rendering_attr_contourWidth_description" = "Dikte van die hoogtelyne";
-"routing_attr_driving_style_name" = "Driving style";
 "rendering_attr_appMode_name" = "Weergewing wyse";
 "rendering_attr_showMtbScale_name" = "MTB Scale";
 "rendering_attr_showMtbScaleIMBATrails_name" = "IMBA";
@@ -540,7 +516,6 @@
 "rendering_attr_noPolygons_description" = "Maak alle area landmerke op die kaart deursigtig";
 "routing_attr_piste_type_nordic_name" = "Cross country/nordic ski";
 "rendering_attr_hmRendered_description" = "Vermeerder die detail wat in die kaart vertoon word";
-"routing_attr_height_name" = "Height limit";
 "routing_attr_piste_type_downhill_name" = "Alpine/downhill ski";
 "rendering_value_brown_name" = "bruin";
 "rendering_attr_roadColors_description" = "Kies `n pad kleurskema:";

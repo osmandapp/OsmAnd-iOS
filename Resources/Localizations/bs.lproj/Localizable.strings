@@ -16,96 +16,52 @@
 "will_open_tomorrow_at" = "Will open tomorrow at";
 "road_blocked" = "Blocked road";
 "avoid_roads_msg" = "You can trigger an alternative route by selecting roads to avoid";
-"day_night_info_description" = "Sunrise: %@\nSunset: %@";
 "unknown_location" = "Pozicija je još uvijek nepoznata";
 "simulation_real_mode_desc" = "• On straight road sections, speed will be approximate to the maximum allowed speed.\n• At intersections, the simulation will slow down.\n• Extra penalties will be applied on traffic signals, stop signs, etc.";
 "dialogs_and_notifications_descr" = "Control pop-ups, dialogs, and notifications";
-"unit_of_length_descr" = "Change units of length.";
 "coords_format" = "Coordinates format";
-"rotate_map_compass_opt" = "To compass";
-"rotate_map_bearing_opt" = "To direction of movement";
 "rotate_map_north_opt" = "Do not rotate (north is up)";
-"driving_region_descr" = "Select the driving region: US, Europe, UK, Asia and others.";
 "routing_attr_length_name" = "Length limit";
 "max_speed" = "Max. speed";
 "animate_my_location" = "Animate location change";
 
 // Track recording settings
-"save_global_track_interval_descr" = "Choose logging interval for the general track recording (enabled via the GPX logging widget on the map).";
 "save_heading_descr" = "Save heading information for each recorded point";
 "map_widget_next_turn" = "Sljedeće skretanje";
 "map_widget_next_turn_small" = "Sljedeće skretanje (umanjeno)";
 "map_widget_next_next_turn" = "Drugo sljedeće skretanje";
-"always_center_position_on_map" = "Display position always in center";
 "position_on_map" = "Display position";
 "map_widget_compass" = "Kompas";
-"map_widget_altitude" = "Altitude";
 "map_widget_max_speed" = "Ograničenje brzine";
 "access_arrival_time" = "Vrijeme dolaska";
-"confirm_usage_speed_cameras" = "In many countries (Germany, France, Italy, and others) the use of speed camera warnings is not permitted by law. OsmAnd does not assume any liability if you violate the law. Please tap yes only if you are eligible to use this feature.";
 "show_traffic_warnings" = "Prikaži saobraćajna upozorenja";
 "show_cameras" = "Prikaži kamere za mjerenje brzine";
-"speak_favorites" = "Nearby Favorites";
 
 // Dirrection appearance
 
 // Route info
 "general_settings_descr" = "App theme, units, region";
 "routing_settings_descr" = "Configure navigation";
-"auto_zoom_none" = "No auto zoom";
-"arrival_distance_factor_at_last" = "In the last meters";
-"fast_route_mode_descr" = "Enable to calculate fastest route or disable for fuel-saving route";
 "avoid_in_routing_descr_" = "Avoid toll roads, unpaved, ferries";
 "prefer_in_routing_title" = "Preferiraj…";
 "prefer_in_routing_descr" = "Preferiraj autocestu";
-"relief_smoothness_factor_descr" = "Preferred terrain: flat or hilly";
-"choose_auto_follow_route_descr" = "Time until map view synchronizes with current position";
-"auto_zoom_map_descr" = "Auto zoom map according to your speed (while map is synchronized with current position)";
-"snap_to_road_descr" = "Snap position to roads during navigation";
 "show_warnings_title" = "Prikazi alarme…";
 "show_warnings_descr" = "Konfiguracija saobraćajnih upozorenja (ograničenja brzine, prisilno zaustavljanje, ležeći policajci), kontrola brzine i informacije";
-"speak_descr" = "Configure to announce street names, traffic warnings (forced stops, speed bumps), speed camera warnings, speed limits";
-"keep_informing_descr" = "Re-announce navigation instructions at regular intervals";
-"default_speed_system_descr" = "Define unit of speed";
-"speed_limit_exceed_message" = "Select speed limit tolerance margin, above which you will receive a voice warning.";
-"wake_on_voice_descr" = "Turn on device screen (if off) when approaching a turn";
-"voice_provider_descr" = "Select voice guidance for navigation";
-"choose_audio_stream_descr" = "Select speaker to play voice guidance";
 "select_nav_profile_dialog_message" = "The 'Navigation type' governs how routes are calculated.";
 "recalculate_route" = "Recalculate route in case of deviation";
-"gpx_option_reverse_route" = "Reverse GPX direction";
-"calculate_osmand_route_without_internet" = "Calculate OsmAnd route segment without Internet";
 "turn_arrows_descr" = "Control the visibility of the turn arrows on the route line.";
 "impassable_road" = "Avoid roads";
-"impassable_road_desc" = "Select roads you want to avoid during navigation";
-"interrupt_music_descr" = "Fully pause any music during voice prompts (not just lower its volume)";
-"shared_string_do_not_use" = "Do not use";
 "sort_by" = "Sort";
 "stop_routing_confirm" = "Jeste li sigurni da želite zaustaviti navigaciju?";
-"cancel_route" = "Dismiss route";
-"route_is_too_long_v2" = "This route may be too long to calculate. Please add intermediate destinations if no result is found within 10 minutes.";
-"use_displayed_track_for_navigation" = "Do you want to use displayed track for navigation?";
-"route_descr_select_destination" = "Select Destination";
 "route_to" = "To";
 "route_via" = "Via";
 "route_from" = "From";
 "transfers" = "Transfers:";
-"error_calculating_route" = "Error calculating route";
-"internet_connection_required_for_online_route" = "An online navigation service is selected but no Internet connection is available.";
-"empty_route_calculated" = "Error: Calculated route is empty";
-"arrived_at_intermediate_point" = "You have arrived at your intermediate destination";
-"starting_point_too_far" = "Starting point too far from nearest road.";
 "arrived_at_destination" = "You have arrived";
 "route_roundabout" = "Kružni tok : idite %d izlaz i idite";
 "route_kl" = "Držite se lijeve strane i idite";
 "route_kr" = "Držite se desne strane i idite";
-"driving_region_europe_asia" = "Europe, Asia, Latin America & similar";
 "left_side_navigation" = "Vožnja sa lijeve strane";
-"right_side_navigation" = "Right-hand driving";
-"si_nm_h" = "Nautical miles per hour (knot)";
-"nothing_found_descr" = "Modify the search query or increase the search radius";
-"type_city_town" = "Type city or town";
-"select_postcode" = "Select postcode";
 "poi_categories" = "POI categories";
 
 // Shared Strings
@@ -286,9 +242,6 @@
 "create_custom_categories_list_promo" = "You can add custom categories, hide categories that you don’t find necessary, and change the sort order of the list. Custom categories can be imported and exported with profiles.";
 "reset_to_default_category_button_promo" = "Resetting to default will restore the sort order to its initial state.";
 "search_poi_types_descr" = "You can combine POI types from different categories.";
-"edit_filter" = "Edit categories";
-"edit_filter_delete_dialog_title" = "Delete selected filter?";
-"search_POI_level_btn" = "Increase search radius";
 "sett_generic_ext_input" = "Generic Keyboard";
 "osm_live_plan_pricing" = "Plans & Pricing";
 "osm_live_payment_monthly_title" = "Pay monthly";
@@ -307,7 +260,6 @@
 "osm_live_payment_desc" = "You can manage and cancel your subscriptions in your App Store account settings after purchase";
 "rendering_attr_appMode_description" = "\"Karta za optimizaciju korisničkog profila\"";
 "rendering_attr_showRoadMaps_name" = "Samo cestovne karte";
-"routing_attr_driving_style_name" = "Driving style";
 "rendering_attr_appMode_name" = "Režim iscrtavanja";
 "rendering_attr_showMtbScale_name" = "MTB Scale";
 "rendering_attr_showMtbScaleIMBATrails_name" = "IMBA";
@@ -325,7 +277,6 @@
 "rendering_attr_contourLines_name" = "Prikaži linije konture";
 "rendering_attr_showAccess_name" = "Show access restrictions and toll";
 "routing_attr_avoid_sett_name" = "No cobblestone or sett";
-"routing_attr_weight_name" = "Weight limit";
 "rendering_attr_noAdminboundaries_name" = "Sakrij granice";
 "rendering_attr_depthContourWidth_name" = "Lines width";
 "rendering_attr_depthContourColorScheme_name" = "Lines color scheme";
@@ -335,7 +286,6 @@
 "rendering_attr_noPolygons_description" = "Sve prave slike zemljišta učinite providnim";
 "routing_attr_piste_type_nordic_name" = "Cross country/nordic ski";
 "rendering_attr_hmRendered_description" = "Povećajte nivo detalja na mapi";
-"routing_attr_height_name" = "Height limit";
 "routing_attr_piste_type_downhill_name" = "Alpine/downhill ski";
 "routing_attr_width_name" = "Width limit";
 "rendering_attr_hmRendered_name" = "Prikaži više detalja na mapi";

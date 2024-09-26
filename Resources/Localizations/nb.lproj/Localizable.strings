@@ -78,7 +78,6 @@
 "unit_of_length_descr" = "Endre hva lengde måles i.";
 "coords_format" = "Koordinatformat";
 "coords_format_descr" = "Format for geografiske koordinater.";
-"do_not_send_anonymous_data_desc" = "We are not collecting location data. Only app usage and map downloading statistics.";
 "rotate_map_to" = "Kartorientering";
 "rotate_map_compass_opt" = "Kompassretning";
 "rotate_map_bearing_opt" = "Bevegelsesretning";
@@ -723,7 +722,6 @@
 "search_address_street" = "Gate";
 "search_address_building_option" = "Bygning";
 "shared_string_address" = "Adresse";
-"do_not_send_anonymous_data" = "Do not send anonymous data";
 "external_input_device" = "Eksterne inndataenheter";
 "sett_generic_ext_input" = "Tastatur";
 "key_hint_zoom_in" = "Zoom inn";

@@ -223,7 +223,6 @@
 "shared_string_turn" = "Завой";
 "stop_routing_confirm" = "Спиране на маршрутизирането\?";
 "cancel_route" = "Прекратяване на маршрута\?";
-"route_is_too_long_v2" = "This route may be too long to calculate. Please add intermediate destinations if no result is found within 10 minutes.";
 "navigation_over_track" = "Стартиране на навигацията по маршрута?";
 "use_displayed_track_for_navigation" = "Искате ли да ползвате показания маршрут за навигация?";
 "previous_route" = "Предишен маршрут";
@@ -277,7 +276,6 @@
 "driving_region_uk" = "Великобритания и подобни";
 "driving_region_australia" = "Австралия";
 "left_side_navigation" = "Обратно движение";
-"right_side_navigation" = "Right-hand driving";
 "si_mi_feet" = "Мили/фута";
 "si_mi_yard" = "Мили/ярда";
 "si_mi_meters" = "Мили / метри";
@@ -295,7 +293,6 @@
 "shared_string_tones" = "тонове";
 "nothing_found_descr" = "Променете търсенето или радиуса.";
 "shared_string_in_name" = "в %@";
-"type_city_town" = "Type city or town";
 "select_postcode" = "Търсене по пощенски код";
 "coords_search" = "Търсене по координати";
 "nearest_cities" = "Най-близките градове";
@@ -1020,7 +1017,6 @@
 "search_poi_types_descr" = "You can combine POI types from different categories.";
 "user_password" = "Парола";
 "shared_string_filters" = "Филтри";
-"edit_filter" = "Edit categories";
 "edit_filter_save_as_menu_item" = "Запазване като";
 "edit_filter_delete_dialog_title" = "Изтриване на избрания филтър?";
 "filter_poi_hint" = "Филтриране по име";

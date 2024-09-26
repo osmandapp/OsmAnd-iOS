@@ -52,7 +52,6 @@
 "unit_of_length_descr" = "Mudar as unidades de lonxitude.";
 "coords_format" = "Formato das coordenadas";
 "coords_format_descr" = "Formato das coordenadas xeográficas.";
-"do_not_send_anonymous_data_desc" = "We are not collecting location data. Only app usage and map downloading statistics.";
 "rotate_map_to" = "Orientación do mapa";
 "rotate_map_compass_opt" = "Dirección do compás";
 "rotate_map_bearing_opt" = "Dirección do movemento";
@@ -495,7 +494,6 @@
 "search_address_street" = "Rúa";
 "search_address_building_option" = "Edificio";
 "shared_string_address" = "Enderezo";
-"do_not_send_anonymous_data" = "Do not send anonymous data";
 "download_wiki_region_placeholder" = "esta rexión";
 "osm_live_payment_header" = "Período de pagamento:";
 "unlimited_downloads" = "Descargas sen límite";

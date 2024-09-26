@@ -53,7 +53,6 @@
 "coords_format" = "Coördinatenformaat";
 "coords_format_descr" = "Formaat van geografische coördinaten.";
 "do_not_show_discount_desc" = "Onderdrukt het weergeven van app kortingen & berichten over speciale lokale evenementen.";
-"do_not_send_anonymous_data_desc" = "We are not collecting location data. Only app usage and map downloading statistics.";
 "save_global_track_interval" = "Standaard logging-interval";
 "save_global_track_interval_descr" = "Specificeer het registratie-interval voor de algemene trackregistratie (ingeschakeld via de track-widget op de kaart).";
 "rotate_map_to" = "Kaartoriëntatie";
@@ -89,7 +88,6 @@
 "map_widget_left" = "Widgets Linker Kolom";
 "layer_map_appearance" = "Configureer scherm";
 "map_markers" = "Markeervlaggetjes";
-"select_gpx" = "Select GPX…";
 "confirm_usage_speed_cameras" = "In veel landen (Duitsland, Frankrijk, Italië en meer) is het verboden om waarschuwingen voor snelheidscontroles te gebruiken. OsmAnd neemt geen verantwoording als je de wet overtreedt. Druk alleen op Ja als je deze functie mag gebruiken.";
 "show_traffic_warnings" = "Verkeerswaarschuwingen";
 "show_pedestrian_warnings" = "Zebrapaden";
@@ -537,7 +535,6 @@
 "search_address_street" = "Straat";
 "search_address_building_option" = "Gebouw";
 "shared_string_address" = "Adres";
-"do_not_send_anonymous_data" = "Do not send anonymous data";
 "download_wiki_region_placeholder" = "deze regio";
 "osm_live_plan_pricing" = "Tariefoverzicht";
 "osm_live_payment_monthly_title" = "Maandelijks";

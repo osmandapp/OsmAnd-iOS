@@ -58,7 +58,6 @@
 "reset_plugin_to_default" = "Reafitar los axustes del plugin";
 "map_widget_transparent" = "Widgets tresparentes";
 "map_widget_next_turn" = "Xiru siguiente";
-"always_center_position_on_map" = "Display position always in center";
 "map_widget_compass" = "Brúxula";
 "map_widget_intermediate_distance" = "Destín intermediu";
 "route_descr_destination" = "Destín";
@@ -96,8 +95,6 @@
 "shared_string_never" = "Enxamás";
 "confirm_every_run" = "Entrugar siempres";
 "general_settings_2" = "Axustes xenerales";
-"auto_zoom_none" = "No auto zoom";
-"arrival_distance_factor_at_last" = "In the last meters";
 "fast_route_mode" = "El camín más rápidu";
 "voice_announces" = "Indicaciones per voz";
 "vehicle_parameters" = "Parámetros del vehículu";
@@ -629,7 +626,6 @@
 "login_account" = "Cuenta";
 "user_password" = "Contraseña";
 "shared_string_filters" = "Peñeres";
-"edit_filter" = "Edit categories";
 "save_filter" = "Guardar la peñera";
 "edit_filter_delete_dialog_title" = "¿Quies desaniciar esta peñera\?";
 "rendering_value_category_name" = "Estaya";
@@ -661,7 +657,6 @@
 "shared_string_unexpected_error" = "Fallu inesperáu";
 "shared_string_io_error" = "Fallu d\'E/S";
 "rendering_attr_hikingRoutesOSMC_name" = "Siendes";
-"routing_attr_driving_style_name" = "Driving style";
 "rendering_value_lightblue_name" = "Azul claro";
 "rendering_value_purple_name" = "Moráu";
 "rendering_value_light_brown_name" = "Marrón claro";
@@ -707,7 +702,6 @@
 "rendering_attr_surface_sand_name" = "Sable";
 "routing_attr_avoid_sett_name" = "No cobblestone or sett";
 "rendering_value_translucent_lightblue_name" = "Azul claro tresllúcido";
-"routing_attr_weight_name" = "Weight limit";
 "rendering_attr_surface_stone_name" = "Piedra";
 "osm_notes" = "Nomes d\'OSM";
 "rendering_attr_hideUnderground_name" = "Oxetos soterraños";

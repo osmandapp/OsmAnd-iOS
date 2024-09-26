@@ -92,7 +92,6 @@
 
 // Track recording settings
 "save_global_track_interval" = "Ierakstīšanas intervāls";
-"save_global_track_interval_descr" = "Choose logging interval for the general track recording (enabled via the GPX logging widget on the map).";
 "save_track_interval" = "Logošanas intervāls navigācijas laikā";
 "monitoring_min_distance" = "Minimālā pārvietošanās";
 "save_track_logging_accuracy" = "žurnalēšanas precizitāte";
@@ -189,7 +188,6 @@
 "auto_zoom_map" = "Automātiski mērogot karti";
 "auto_zoom_map_descr" = "Automātiski mērogot karti atkarībā no pārvietošanās ātruma.";
 "snap_to_road" = "Tuvināt ceļam";
-"snap_to_road_descr" = "Snap position to roads during navigation";
 "show_warnings_title" = "Rādīt signālus…";
 "show_warnings_descr" = "Iestatīt satiksmes brīdinājumus (ātruma ierobežojumi, stop zīmes, ātruma vaļņi, tuneļi), ātruma kameras un ceļu joslas.";
 "speak_title" = "Paziņot…";

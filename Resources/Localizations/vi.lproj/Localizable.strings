@@ -20,7 +20,6 @@
 "road_blocked" = "Đường bị chặn";
 "starting_point" = "Điểm xuất phát";
 "avoid_roads_msg" = "You can trigger an alternative route by selecting roads to avoid";
-"day_night_info_description" = "Sunrise: %@\nSunset: %@";
 "daynight_mode_auto" = "Bình minh/Hoàng hôn";
 "auto_follow_location_enabled" = "Đã kích hoạt thiết lập tự động bám theo.";
 "unknown_location" = "Vị trí chưa được biết.";
@@ -34,17 +33,11 @@
 "rotate_map_compass_opt" = "Theo la bàn";
 "rotate_map_bearing_opt" = "Theo vị trí di chuyển";
 "rotate_map_north_opt" = "Không xoay";
-"driving_region_descr" = "Select the driving region: US, Europe, UK, Asia and others.";
 "routing_attr_length_name" = "Length limit";
 "max_speed" = "Max. speed";
 
 // Track recording settings
-"save_global_track_interval_descr" = "Choose logging interval for the general track recording (enabled via the GPX logging widget on the map).";
 "save_track_interval" = "Khoảng thời gian ghi nhật ký trong quá trình điều hướng";
-"always_center_position_on_map" = "Display position always in center";
-"map_widget_altitude" = "Altitude";
-"confirm_usage_speed_cameras" = "In many countries (Germany, France, Italy, and others) the use of speed camera warnings is not permitted by law. OsmAnd does not assume any liability if you violate the law. Please tap yes only if you are eligible to use this feature.";
-"speak_favorites" = "Nearby Favorites";
 
 // Dirrection appearance
 
@@ -54,21 +47,13 @@
 "general_settings_descr" = "Thiết lập hiển thị và cài đặt chung cho ứng dụng.";
 "routing_settings_descr" = "Các thiết lập tìm đường.";
 "auto_zoom_none" = "Không có tự động thu phóng";
-"arrival_distance_factor_at_last" = "In the last meters";
 "fast_route_mode" = "Nhanh nhất";
 "fast_route_mode_descr" = "Cho phép tính toán tuyến đường nhanh nhất hoặc tắt cho tuyến đường tiết kiệm nhiên liệu.";
 "avoid_in_routing_descr_" = "Avoid toll roads, unpaved, ferries";
-"prefer_in_routing_descr" = "Prefer motorways";
-"relief_smoothness_factor_descr" = "Preferred terrain: flat or hilly";
 "choose_auto_follow_route_descr" = "Thời gian cho đến khi chế độ xem bản đồ đồng bộ hóa với vị trí hiện tại.";
 "auto_zoom_map" = "Tự động Zoom bản đồ";
 "auto_zoom_map_descr" = "Mức độ thu phóng theo tốc độ của bạn (trong khi bản đồ được đồng bộ hóa với vị trí hiện tại).";
-"snap_to_road_descr" = "Snap position to roads during navigation";
 "show_warnings_descr" = "Configure traffic warnings (speed limits, forced stops, speed bumps, tunnels), speed camera warnings, and lane information";
-"speak_descr" = "Configure to announce street names, traffic warnings (forced stops, speed bumps), speed camera warnings, speed limits";
-"keep_informing_descr" = "Re-announce navigation instructions at regular intervals";
-"default_speed_system_descr" = "Define unit of speed";
-"speed_limit_exceed_message" = "Select speed limit tolerance margin, above which you will receive a voice warning.";
 "wake_on_voice" = "Bật màn hình";
 "wake_on_voice_descr" = "Bật màn hình thiết bị (nếu đang tắt) khi tiếp cận một chỗ rẽ.";
 "voice_provider" = "Hướng dẫn bằng giọng nói";
@@ -81,17 +66,8 @@
 "get_directions" = "Hướng";
 "gpx_option_from_start_point" = "Dọc theo toàn bộ track";
 "gpx_option_reverse_route" = "Đảo hướng GPX";
-"calculate_osmand_route_without_internet" = "Calculate OsmAnd route segment without Internet";
 "impassable_road" = "Tránh đường …";
-"impassable_road_desc" = "Select roads you want to avoid during navigation";
-"interrupt_music_descr" = "Fully pause any music during voice prompts (not just lower its volume)";
-"shared_string_do_not_use" = "Do not use";
 "sort_by" = "Sort";
-"stop_routing_confirm" = "Are you sure you want to stop the navigation?";
-"cancel_route" = "Dismiss route";
-"route_is_too_long_v2" = "This route may be too long to calculate. Please add intermediate destinations if no result is found within 10 minutes.";
-"use_displayed_track_for_navigation" = "Do you want to use displayed track for navigation?";
-"route_descr_select_destination" = "Select Destination";
 "route_to" = "To";
 "route_via" = "Via";
 "route_from" = "From";
@@ -99,10 +75,7 @@
 "error_calculating_route" = "Không thể tính toán lộ trình.";
 "internet_connection_required_for_online_route" = "Một dịch vụ định tuyến trực tuyến được chọn nhưng không có kết nối Internet có sẵn.";
 "empty_route_calculated" = "Tuyến đường được tính toán là rỗng.";
-"arrived_at_intermediate_point" = "You have arrived at your intermediate destination";
-"starting_point_too_far" = "Starting point too far from nearest road.";
 "arrived_at_destination" = "Bạn đã đến điểm đích.";
-"route_roundabout" = "Roundabout: take %d exit and go";
 "route_tr" = "Rẽ phải và đi";
 "route_tshr" = "Quẹo trái và đi";
 "route_tslr" = "Quẹo phải và đi";
@@ -111,13 +84,6 @@
 "route_tsll" = "Quẹo trái và đi";
 "route_tu" = "Quay đầu lại và đi thẳng";
 "route_head" = "Tiến";
-"driving_region_europe_asia" = "Europe, Asia, Latin America & similar";
-"left_side_navigation" = "Left-hand driving";
-"right_side_navigation" = "Right-hand driving";
-"si_nm_h" = "Nautical miles per hour (knot)";
-"nothing_found_descr" = "Modify the search query or increase the search radius";
-"type_city_town" = "Type city or town";
-"select_postcode" = "Select postcode";
 "coords_search" = "Tìm kiếm bằng tọa độ";
 "poi_categories" = "POI categories";
 
@@ -372,7 +338,6 @@
 "reset_to_default_category_button_promo" = "Resetting to default will restore the sort order to its initial state.";
 "search_poi_types_descr" = "You can combine POI types from different categories.";
 "user_password" = "Mật khẩu";
-"edit_filter" = "Edit categories";
 "edit_filter_save_as_menu_item" = "Lưu thành";
 "edit_filter_delete_dialog_title" = "Xóa bộ lọc vừa chọn?";
 "opening_hours" = "Giờ mở cửa";
@@ -405,7 +370,6 @@
 "osm_live_enter_user_name" = "Please enter public name";
 "osm_live_payment_desc" = "You can manage and cancel your subscriptions in your App Store account settings after purchase";
 "shared_string_io_error" = "Có lỗi xảy ra với thiết bị vào / ra";
-"routing_attr_driving_style_name" = "Driving style";
 "rendering_attr_contourLines_description" = "Display from zoom level (requires contour data):";
 "routing_attr_short_way_description" = "Use fuel-efficient way (usually shorter).";
 "routing_attr_height_obstacles_description" = "Factor in terrain elevation (via SRTM, ASTER, and EU-DEM data).";
@@ -415,13 +379,11 @@
 "rendering_value_bicycle_name" = "Cycling";
 "rendering_attr_showAccess_name" = "Show access restrictions and toll";
 "routing_attr_avoid_sett_name" = "No cobblestone or sett";
-"routing_attr_weight_name" = "Weight limit";
 "rendering_attr_hideUnderground_name" = "Vật thể dưới lòng đất";
 "rendering_attr_alpineHiking_description" = "Render paths according to the SAC scale.";
 "routing_attr_piste_type_nordic_name" = "Cross country/nordic ski";
 "rendering_attr_tramRoutes_name" = "Định tuyến xe điện";
 "rendering_attr_trainLightrailRoutes_name" = "Đường đi của tàu hoả";
-"routing_attr_height_name" = "Height limit";
 "routing_attr_piste_type_downhill_name" = "Alpine/downhill ski";
 "rendering_attr_hideIcons_name" = "Biểu tượng POI";
 "routing_attr_width_name" = "Width limit";

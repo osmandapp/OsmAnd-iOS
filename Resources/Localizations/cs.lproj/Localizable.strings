@@ -56,7 +56,6 @@
 "coords_format" = "Formát souřadnic";
 "coords_format_descr" = "Formát pro zeměpisné souřadnice.";
 "do_not_show_discount_desc" = "Neupozorňovat na slevy a zvláštní místní události v aplikaci.";
-"do_not_send_anonymous_data_desc" = "We are not collecting location data. Only app usage and map downloading statistics.";
 "save_global_track_interval" = "Globální interval záznamu";
 "save_global_track_interval_descr" = "Zadejte interval ukládání pro obecný záznam stopy (aktivovaný přes nástroj Záznam trasy na mapové obrazovce).";
 "rotate_map_to" = "Natočení mapy";
@@ -678,7 +677,6 @@
 "shared_string_street_intersection" = "Křižovatka ulic";
 "shared_string_address" = "Adresa";
 "do_not_show_discount" = "Nezobrazovat reklamní nabídky";
-"do_not_send_anonymous_data" = "Do not send anonymous data";
 "wiki_buy_description" = "Pro čtení celých článků - zakupte modul Wikipedie a stáhněte si data Wikipedie pro %@";
 "wiki_download_description" = "Pro čtení celých článků - stáhněte si data Wikipedie pro %@";
 "download_wiki_region_placeholder" = "tato oblast";

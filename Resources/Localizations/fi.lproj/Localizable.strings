@@ -192,12 +192,10 @@
 "routing_profile_straightline" = "Suora viiva";
 "routing_profile_direct_to" = "Suoraan pisteeseen";
 "routing_profile_ski" = "Hiihto";
-"fast_route_mode_descr" = "Enable to calculate fastest route or disable for fuel-saving route";
 "avoid_in_routing_title" = "Vältä…";
 "avoid_in_routing_descr_" = "Vältä tiettyjä reittejä ja tietyyppejä";
 "prefer_in_routing_title" = "Suosi…";
 "prefer_in_routing_descr" = "Suosi moottoriteitä.";
-"relief_smoothness_factor_descr" = "Preferred terrain: flat or hilly";
 "choose_auto_follow_route" = "Keskitä karttanäkymä automaattisesti";
 "choose_auto_follow_route_descr" = "Aika kunnes karttanäyttö synkronoituu nykysijaintiin.";
 "auto_zoom_map" = "Automaattinen kartan zoomaus";

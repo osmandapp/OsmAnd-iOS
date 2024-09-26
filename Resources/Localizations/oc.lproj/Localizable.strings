@@ -94,7 +94,6 @@
 "coords_format" = "Format de coordonadas";
 "coords_format_descr" = "Format dei coordenadas geograficas.";
 "do_not_show_discount_desc" = "Amagar la promocion d'aplicacions e lei messatges d'eveniments locaus particulars.";
-"do_not_send_anonymous_data_desc" = "We are not collecting location data. Only app usage and map downloading statistics.";
 "rotate_map_to" = "Orientacion de la mapa";
 "rotate_map_to_bearing_descr" = "Chausissètz l'alinhament de l'ecran de la mapa.";
 "rotate_map_compass_opt" = "Segon la bossòla";
@@ -1072,7 +1071,6 @@
 "shared_string_street_intersection" = "Crosament";
 "shared_string_address" = "Adreiça";
 "do_not_show_discount" = "Pas presentar d'ofèrtas comercialas";
-"do_not_send_anonymous_data" = "Do not send anonymous data";
 "sett_ext_input_desc" = "Seleccionatz un aparelh coma un clavier generic ò WunderLINQ per lei contròlas extèrnes.";
 "external_input_device" = "Dispositius d'intrada externa";
 "sett_generic_ext_input" = "Clavier";

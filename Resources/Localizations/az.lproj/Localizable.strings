@@ -81,7 +81,6 @@
 "max_speed" = "Maksimum sürət";
 
 // Track recording settings
-"save_global_track_interval_descr" = "Choose logging interval for the general track recording (enabled via the GPX logging widget on the map).";
 "reset_plugin_to_default" = "Qoşma parametrlərini standarta sıfırla";
 "map_widget_transparent" = "Şəffaf vidcetlər";
 "shared_string_near" = "Yaxın";
@@ -152,27 +151,21 @@
 "vehicle_parameters" = "Nəqliyyat vasitəsi parametrləri";
 "map_during_navigation" = "Naviqasiya zamanı xəritə";
 "routing_profile_straightline" = "Düz xətt";
-"fast_route_mode_descr" = "Enable to calculate fastest route or disable for fuel-saving route";
 "avoid_in_routing_title" = "Yayın…";
 "avoid_in_routing_descr_" = "Müəyyən marşrutlardan və yol növlərindən yayın";
 "prefer_in_routing_title" = "Üstün tut…";
 "prefer_in_routing_descr" = "Avtomagistralları üstün tut.";
 "relief_smoothness_factor_descr" = "Üstün tutulan relyef: düzənlik və ya dağlıq.";
 "choose_auto_follow_route" = "Xəritə görünüşünü avtomatik mərkəzləşdir";
-"choose_auto_follow_route_descr" = "Time until map view synchronizes with current position";
 "auto_zoom_map" = "Avtomatik miqyas";
-"auto_zoom_map_descr" = "Auto zoom map according to your speed (while map is synchronized with current position)";
 "snap_to_road" = "Yola bərkit";
 "snap_to_road_descr" = "Hazırkı mövqe ikonu hazırkı naviqasiya marşrutuna bağlanacaq";
 "show_warnings_title" = "Xəbərdarlıqları göstər…";
 "show_warnings_descr" = "Configure traffic warnings (speed limits, forced stops, speed bumps, tunnels), speed camera warnings, and lane information";
 "speak_title" = "Elan et…";
-"speak_descr" = "Configure to announce street names, traffic warnings (forced stops, speed bumps), speed camera warnings, speed limits";
 "keep_informing" = "Naviqasiya təlimatlarını təkrarla";
-"keep_informing_descr" = "Re-announce navigation instructions at regular intervals";
 "default_speed_system" = "Sürət vahidi";
 "default_speed_system_descr" = "Sürət vahidi təyin edin.";
-"speed_limit_exceed_message" = "Select speed limit tolerance margin, above which you will receive a voice warning.";
 "wake_on_voice" = "Ekranı yandır";
 "wake_on_voice_descr" = "Döngəyə yaxınlaşdıqda cihazın ekranını yandır (sönülüdürsə).";
 "voice_pref_title" = "Səs";
@@ -205,7 +198,6 @@
 "impassable_road" = "Yollardan yayın…";
 "temporary_conditional_routing" = "Müvəqqəti məhdudiyyətləri nəzərə al";
 "impassable_road_desc" = "Naviqasiya zamanı yayınmaq istədiyiniz yolları seçin.";
-"interrupt_music_descr" = "Fully pause any music during voice prompts (not just lower its volume)";
 "interrupt_music" = "Musiqini dayandır";
 "shared_string_do_not_use" = "İstifadə etmə";
 "shared_string_sound" = "Səs";
@@ -232,7 +224,6 @@
 "empty_route_calculated" = "Hesablanan marşrut boşdur.";
 "destination_point" = "Təyinat nöqtəsi %@";
 "intermediate_point" = "Ara təyinat nöqtəsi %@";
-"arrived_at_intermediate_point" = "You have arrived at your intermediate destination";
 "starting_point_too_far" = "Çıxış nöqtəsi ən yaxın yoldan çox uzaqdır.";
 "ending_point_too_far" = "Son nöqtə ən yaxın yoldan çox uzaqdır.";
 "intermediate_point_too_far" = "Ara təyinat %@ ən yaxın yoldan çox uzaqdır.";

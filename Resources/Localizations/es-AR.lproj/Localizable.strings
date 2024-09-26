@@ -707,10 +707,6 @@
 "sett_arr" = "Flechas del mapa";
 "shared_string_location" = "Ubicación";
 "sett_arr_map" = "Centro del mapa";
-"short_location_on_map" = "Lat %@ \nLon %@";
-"navigate_point_format_D" = "GGG.GGGGG";
-"navigate_point_format_DM" = "GGG MM.MMM";
-"navigate_point_format_DMS" = "GGG MM SS.S";
 "navigate_point_format_OLC" = "Código de Ubicación Abierto (OLC)";
 "navigate_point_format_unknown" = "Formato desconocido";
 "navigate_point_northing" = "Al norte";

@@ -980,9 +980,6 @@
 "local_openstreetmap_uploading" = "S\'està pujant…";
 "sett_generic_ext_input" = "Teclat";
 "shared_string_read_more" = "Més informació";
-"navigate_point_format_D" = "GGG.GGGGG";
-"navigate_point_format_DM" = "GGG MM.MMM";
-"navigate_point_format_DMS" = "GGG MM SS.S";
 "shared_string_example" = "Exemple";
 "utm_description" = "Tingueu en compte que 'OsmAnd usa el format UTM estàndard, que és similar però no idèntic UTM NATO.";
 "coordinates_copy_descr" = "Toqueu per a copiar les coordenades al porta-retalls.";

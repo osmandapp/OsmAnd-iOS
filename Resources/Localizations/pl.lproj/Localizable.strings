@@ -1,5 +1,3 @@
-"OsmAnd Maps" = "Mapy OsmAnd";
-"shared_string_ok" = "Ok";
 "shared_string_cancel" = "Anuluj";
 "shared_string_yes" = "Tak";
 "shared_string_no" = "Nie";
@@ -1513,12 +1511,10 @@
 "app_mode_subway" = "Metro";
 "app_mode_car" = "Jazda";
 "shared_string_appearance" = "Wygląd";
-"app_mode_offroad" = "Off-road";
 "map_transparency" = "Przezroczystość mapy podstawowej";
 "srtm_color_scheme" = "Zestaw kolorów";
 "app_mode_personal_transporter" = "Transporter osobisty";
 "app_mode_taxi" = "Taksówka";
-"app_mode_pickup_truck" = "Pickup";
 "app_mode_wagon" = "Wóz";
 "open_in_browser_wiki" = "Otwórz artykuł online";
 "app_mode_utv" = "Obok siebie";
@@ -1704,7 +1700,6 @@
 "settings_item_read_error" = "Nie udało się odczytać z \"%@\".";
 "lenght_limit_description" = "Podaj długość pojazdu, niektóre ograniczenia tras mogą być stosowane dla długich pojazdów.";
 "send_anonymous_data" = "Wysyłaj anonimowe dane";
-"shared_string_email" = "E-mail";
 "shared_string_account_add" = "Dodaj konto";
 "email_example_hint" = "uzytkownik@example.com";
 "public_transport_try_change_settings" = "Spróbuj zmienić ustawienia.";
@@ -2643,7 +2638,6 @@
 "rendering_value_sector1_name" = "Sektor 1";
 "routing_attr_hazmat_category_usa_1_name" = "Materiały wybuchowe";
 "routing_attr_hazmat_category_usa_9_name" = "Różne";
-"rendering_value_sectors_name" = "Sektory";
 "routing_attr_hazmat_category_usa_8_name" = "Substancje żrące";
 "routing_attr_hazmat_category_usa_5_name" = "Środki utleniające i nadtlenki organiczne";
 "rendering_value_sector5_name" = "Sektor 5";
@@ -2748,7 +2742,6 @@
 "ant_plus_searching_text" = "Wyszukiwanie czujników";
 "not_recorded" = "Nie zarejestrowano";
 "help_article_troubleshooting_general_name" = "Ogólne";
-"shared_string_relief_3d" = "Relief 3D";
 "widget_secondary_desc_part_of" = "Część wtyczki %@.";
 "map_widget_next_sunrise" = "Następny wschód słońca";
 "switch_profile" = "Przełącz profil";

@@ -2850,7 +2850,7 @@
 "shared_string_deleted" = "Удалено";
 "longest_duration_first" = "Сначала более продолжительные";
 "temperature_widget_desc" = "Виджет показывает температуру для текущего центра карты.";
-"external_device_status_connect" = "Подключить";
+"external_device_status_connect" = "Соединение";
 "no_widgets_here_yet" = "Виджеты не добавлены";
 "help_article_start_with_main_menu_name" = "Главное меню";
 "osmand_cloud_deletion_secondary_devices_warning" = "Вторичные устройства будут отключены от OsmAnd Cloud и потеряют доступ к платным функциям.";

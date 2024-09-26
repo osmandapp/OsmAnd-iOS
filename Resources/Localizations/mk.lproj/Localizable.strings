@@ -236,7 +236,6 @@
 "recalculate_route" = "Povtorno presmetajte ja rutata";
 "recalculate_route_distance_promo" = "Trasata ḱe se presmetuva povtorno ako rastojanieto od maršrutata do momentalnata lokacija e poveḱe od izbranata vrednost.";
 "select_distance_route_will_recalc" = "Izberete go rastojanieto po koe maršrutata ḱe se presmetuva povtorno.";
-"instructions_repeat" = "Tap \"Next turn\" widget to repeat instructions";
 "guidance_preferences_descr" = "Navigacioni pogodnosti";
 "routing_preferences_descr" = "Patuvacki pogodnosti";
 "routing_settings" = "Navigacija";
@@ -461,8 +460,6 @@
 "poi_dialog_poi_type" = "POI Tip";
 "shared_string_my_places" = "Moi mesta";
 "favorite_group_name" = "Ime na grupata";
-"fav_import_desc" = "You can import your favorites as waypoints in GPX file (common GPS data format)\n\nTo share the favorites.gpx file you can open file from Dropbox, Email, or any other source - Use Open In function.";
-"fav_exists" = "Favorite with name \"%@\" already exists";
 "shared_string_rename" = "Preimenuvaj";
 "update_existing" = "Zameni";
 "replace_favorite_confirmation" = "Zameni go omileniot \"%@\"\?";
@@ -505,7 +502,6 @@
 "import_tracks" = "Vnesete gi zapisite";
 "gpx_parse_error" = "OsmAnd GPX ne e dobro formiran, ve molime kontaktirajte go timot za poddrška za dopolnitelno da istraži.";
 "tracks_on_map" = "Prikažani zapisi";
-"gpx_import_desc" = "To import your GPX files (common GPS data format) from Dropbox, Email, or any other source use \"Copy to OsmAnd Maps\" option";
 "shared_string_statistics" = "Statistika";
 "layer_route" = "Marsruta";
 "map_widget_average_speed" = "Prosecna brzina";
@@ -566,9 +562,7 @@
 
 // Intro
 "shared_string_skip" = "Preskokni";
-"intro_download" = "Download\nmap";
 "next_proceed" = "Sleden";
-"intro_welcome" = "Welcome to\nOsmAnd";
 // Settings
 "map_locale" = "Jazik na kartata";
 "recording_context_menu_show" = "Prikazi";
@@ -773,10 +767,8 @@
 "checking_for_duplicate_description" = "OsmAnd proverete %@ za duplikati so postoečki stavki vo aplikacijata. \n \nMože da potrae nekoe vreme.";
 
 // Purchases
-"prch_nau_q1" = "Please turn on \"Nautical\" style in the Map Settings and install world seamarks basemap.";
 "shared_string_download" = "Prevzemi";
 "shared_string_no_thanks" = "Ne, blagodaram";
-"prch_failed" = "Purchase of \"%@\" has failed";
 
 // Route planning
 "plan_route" = "Planiraj ja marsrutata";
@@ -798,7 +790,6 @@
 "simplified_track_description" = "Samo linijata na maršrutata ḱe se začuva, patokazite ḱe se izbrišat.";
 "open_saved_track" = "Otvoredete zacuvan zapis";
 "plan_route_create_new_route" = "Kreirajte nova ruta";
-"track_is_saved" = "%@\nis saved!";
 "plan_route_open_existing_track" = "Otvorete go postoeckiot zapis";
 "sort_last_modified" = "Posledno modificiranje";
 "route_between_points_add_track_desc" = "Izberete datoteka na trasa za da go dodadete noviot segment.";
@@ -842,8 +833,6 @@
 "pseudo_mercator_projection" = "Pseudo-Mercator proekcija";
 "sqlite_db_file" = "SQLiteDB datoteka";
 "one_image_per_tile" = "Edna slika za edna datoteka";
-"res_zoom_levels_desc" = "This parameters will affect the map display when used as a map type or overlay/underlay.\n\nMap type: the map will be limited to the selected zooms.\n\nOverlay / Underlay: Zoom levels at which tiles will be visible. Upscale or downscale will occur above or below the set values.";
-"res_expire_time_desc" = "Expiration time in minutes. Cached tiles will be reloaded after specified time. Leave this field empty if you do not need to reload tiles for this source.\nOne day is 1440 minutes.\nOne week is 10 080 minutes.\n30 days are 43 200 minutes.";
 "clear_tiles_warning" = "Primenata na ovie promeni ḱe gi izbriše keširanite podatoci za ovoj izvor na pločka";
 "welmode_download_maps" = "Prevzemete mapi";
 "srtm_unit_format" = "Varijanta na edinicata za konturni linii";
@@ -892,7 +881,6 @@
 "tab_title_advanced" = "Napreden";
 "shared_string_without_name" = "Bez ime";
 "local_openstreetmap_uploading" = "Se prikačuva…";
-"osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
 "save_poi_without_poi_type_message" = "Da se začuva POI bez tip\?";
 "save_poi_too_many_uppercase" = "Imeto sodrži premnogu golemi bukvi. Prodolži\?";
 
@@ -982,7 +970,6 @@
 "add_waypoint" = "Dodadete patna točka";
 "delete_waypoints" = "Izbrisi gi tockite na patot";
 "points_delete_multiple" = "Da se izbriše %d točka(i)\?";
-"delete_group_confirm" = "Are you sure you want to delete \"%@\" group?";
 "no_waypoints_found" = "Nema naznaceni patista";
 "poi_context_menu_modify" = "Izmeni go POI";
 "context_menu_item_create_poi" = "Kreirajte POI";
@@ -1011,7 +998,6 @@
 "subscription_osmandlive_item" = "Pretplata - OsmAnd Live";
 "map_legend" = "Legenda na kartata";
 "other_location" = "Drug";
-"help_what_is_new" = "What\'s new";
 "instalation_troubleshooting_item" = "Instalacija i problemi";
 "techical_articles_item" = "Tehnicki statii";
 "versions_item" = "Verzii";
@@ -1135,7 +1121,6 @@
 "plugins_menu_group" = "Priklucoci";
 "plugin_popup_srtm_desc" = "To start using Contour lines feature, please download Contour lines of an region first";
 "plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Contour lines</b>";
-"plugin_popup_nautical_desc" = "Please download Nautical maps first.\nThen go to the <b>Map Settings</b> > <b>Map type</b> and turn on <b>Nautical</b> style";
 "weather_plugin_description" = "Enable the Weather Plugin to plan a route considering the weather. Watch the coloured map of weather forecast, which is updated hourly for today, tomorrow, and the week ahead. \n\nWhile traveling see location based info widgets with temperature, precipitation, wind speed, pressure. \n\nWill be useful for hiking and long trips by bike or motorcycle.";
 "shared_string_restore" = "Vrati vo pocetna sostojba";
 "restore_purchases" = "Vratete gi na pocetno kupuvanjata";
@@ -1283,7 +1268,6 @@
 "rendering_attr_streetLighting_name" = "Ulicni svetla";
 "rendering_attr_appMode_name" = "Avtomatsko iscrtuvanje na rezimot";
 "routing_attr_goods_restrictions_name" = "Isporaka na stoka";
-"routing_attr_goods_restrictions_footer_desc" = "Applies only for vehicles carrying goods that have at least four wheells and weigh no more then 3.5 tonnes.\n\nIf your vehicle weight is more than 3.5 tonnes you need to use Truck profile.";
 "routing_attr_avoid_subway_description" = "Izbegnuva metro i lesen železnički transport";
 "routing_attr_driving_style_prefer_unpaved_description" = "Pretpočitajte neasfaltirani pred asfaltirani patišta za ruta.";
 "rendering_value_light_brown_name" = "Svetlo kafeno";
@@ -1635,7 +1619,6 @@
 "app_mode_utv" = "Eden po drug";
 "user_login" = "Logiraj Se";
 "osmand_cloud_login_descr" = "Ve molime vnesete ja adresata na e-pošta so koja ste se registrirale. Ḱe mu bide ispratena ednokratna lozinka za sledniot čekor.";
-"login_footer_full_text" = "Need help? Please contact us at \nsupport@osmand.net";
 "cloud_email_not_registered" = "Ovaa e-mail adresa ne e registrirana za OsmAnd Cloud";
 "cloud_email_already_registered" = "Ovaa e-mail adresa e vece registrirana.";
 "restore_from_osmand_cloud" = "Obnovete od OsmAnd Cloud";
@@ -1698,7 +1681,6 @@
 "backup_delete_old_data_warning" = "Ḱe ja izbrišete istorijata na promeni za prethodno včitanite podatoci. \n \nTekovnata verzija na podatocite ḱe bide začuvana na serverot, no nema da možete da se vratite na prethodno napravenite promeni.";
 "delete_all_confirmation" = "Da, izbrishi se\'";
 "backup_delete_types_descr" = "Da se izbrišat site podatoci za zastarenite tipovi podatoci od OsmAnd Cloud\?";
-"cloud_confirm_delete_type" = "Are you sure you want to delete \"%@\" from OsmAnd Cloud?";
 "backup_pause_all" = "Pauza za se\'";
 "cloud_no_conflicts" = "There are no conflicts";
 "upload_local_version" = "Postavete lokalna verzija";
@@ -1719,7 +1701,6 @@
 "purchases_feature_desc_cross_buy" = "Use all subscription features on multiple platforms at no additional cost.";
 "purchases_feature_desc_monthly_map_updates" = "Dobijte pristap do redovnite mesečni ažuriranja za oflajn karti.";
 "purchases_feature_desc_unlimited_map_download" = "Dobijte neograničeni prezemanja za site oflajn karti na kontinenti i regioni.";
-"purchases_feature_desc_carplay" = "Brings OsmAnd offline maps and navigation to your vehicle screen and integrates with your vehicle\'s controls.";
 "purchases_feature_desc_combined_wiki" = "stražuvajte gi statiite na Vikipedija vo dviženje, bez internet konekcija. Oflajn podatoci podeleni po zemji i dostapni na site jazici.";
 "purchases_feature_desc_wikivoyage" = "Istražete go Vikipatuvanjeto oflajn. Statiite podeleni po zemji i regioni i dostapni na site jazici.";
 "purchases_feature_desc_terrain" = "Konturni linii na terenot, karta so celosna ridska senka so temni nijansi i karti na padinite so boi za prikažuvanje na vrvovite i nizinite.";
@@ -1733,7 +1714,6 @@
 "not_available_with" = "Nedostapno so %@";
 "continue_with" = "Prodolzete so %@";
 "complete_purchase" = "Celosno kupuvanje";
-"osm_live_payment_subscription_management_aid" = "Payment will be charged to your Apple ID account at the confirmation of purchase.\n\nSubscription automatically renews unless it is canceled at least 24 hours before the end of the current period. Your account will be charged for renewal within 24 hours prior to the end of the current period.\n\nYou can manage and cancel your subscriptions by going to your account settings on the App Store after purchase";
 "no_purchases" = "Nemate kupuvanja";
 "empty_purchases_description" = "Ako vašite kupuvanja ne se prikažat ovde, doprete na “%@” ili kontaktirajte so našiot tim za poddrška.";
 "explore_osmnad_plans_to_find_suitable" = "Istražete gi OsmAnd Plans za da najdete soodvetna za vas.";
@@ -1745,7 +1725,6 @@
 "contact_support" = "Kontaktirajte ja podrskata";
 "contact_support_description" = "Ako imate kakvi bilo prašanja, ve molime kontaktirajte ne\' na %@.";
 "compass_visible_if_map_rotated" = "Vidlivo ako kartata se rotira";
-"weather_accuracy_forecast_description" = "Offline forecast is available until: %@.\nAccuracy: %@, hourly. %@ for every 3 hours.";
 "recording_delete_confirm" = "Da se izbriše ovaa stavka\?";
 "login_open_street_map_org" = "Najavete se na OpenStreetMap.org";
 "map_updates_for_mappers" = "Ažuriranja na karti za maperite";
@@ -2054,50 +2033,3 @@
 "quick_action_toggle_preference" = "Prefrluvanje za promena na pretpočitanje.";
 "shared_string_local" = "Lokalen";
 "show_along_the_route" = "Prikaži po dolžinata na rutata";
-"short_min" = "m";
-"icon_group_transport" = "Transport";
-"min_mile" = "min/m";
-"mile" = "mi";
-"metric_ton" = "t";
-"m_s" = "m/s";
-"int_min" = "min.";
-"m" = "m";
-"app_mode_osm" = "OSM";
-"poi" = "POI";
-"osmand_cloud" = "OsmAnd Cloud";
-"lang_ur" = "Urdu";
-"ltr_or_rtl_combine_via_space" = "%@ %@";
-"ltr_or_rtl_combine_via_colon" = "%@: %@";
-"shared_string_max" = "Max";
-"navigate_point_format_D" = "DDD.DDDDD";
-"cubic_m" = "m³";
-"ltr_or_rtl_combine_via_dash" = "%@ — %@";
-"filter_current_poiButton" = "Filter";
-"shared_string_color_magenta" = "Magenta";
-"lang_eo" = "Esperanto";
-"start_point" = "Start";
-"navigate_point_mgrs" = "MGRS";
-"int_hour" = "h";
-"min_km" = "min/km";
-"share_geo" = "geo:";
-"navigate_point_format_DMS" = "DDD MM SS.S";
-"ltr_or_rtl_combine_via_comma" = "%@, %@";
-"mapillary" = "Mapillary";
-"shared_string_status" = "Status";
-"transport" = "Transport";
-"mapillary_item" = "OsmAnd + Mapillary";
-"edit_tilesource_url_to_load" = "URL";
-"default_price_currency_format" = "%.2f %@";
-"shared_string_format" = "Format";
-"shared_string_ellipsis" = "…";
-"lang_min" = "Minangkabau";
-"tts_title" = "TTS";
-"faq_item" = "FAQ";
-"km" = "km";
-"foot" = "ft";
-"shared_string_ok" = "OK";
-"yard" = "yd";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
-"km_h" = "km/h";
-"navigate_point_format_DM" = "DDD MM.MMM";
-"icon_group_sport" = "Sport";

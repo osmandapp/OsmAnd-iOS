@@ -200,7 +200,6 @@
 "use_osm_live_routing" = "OsmAnd Live navigacija";
 "select_nav_profile_dialog_message" = "The 'Navigation type' governs how routes are calculated.";
 "recalculate_route" = "Perskaičiuoti maršrutą";
-"instructions_repeat" = "Tap \"Next turn\" widget to repeat instructions";
 "guidance_preferences_descr" = "Navigacijos nustatymai";
 "routing_preferences_descr" = "Maršruto skaičiavimo nustatymai";
 "routing_settings" = "Navigacija";
@@ -383,8 +382,6 @@
 "poi_dialog_poi_type" = "LV tipas";
 "shared_string_my_places" = "Mano vietos";
 "favorite_group_name" = "Grupės pavadinimas";
-"fav_import_desc" = "You can import your favorites as waypoints in GPX file (common GPS data format)\n\nTo share the favorites.gpx file you can open file from Dropbox, Email, or any other source - Use Open In function.";
-"fav_exists" = "Favorite with name \"%@\" already exists";
 "shared_string_rename" = "Pakeisti pavadinimą";
 "update_existing" = "Pakeisti";
 "replace_favorite_confirmation" = "Ar tikrai norite pakeisti išsaugotą vietą %@?";
@@ -420,7 +417,6 @@
 "import_export" = "Import/Export";
 "gpx_parse_error" = "OsmAnd GPX is not well formed, please contact the support team to investigate further.";
 "tracks_on_map" = "Tracks on map";
-"gpx_import_desc" = "To import your GPX files (common GPS data format) from Dropbox, Email, or any other source use \"Copy to OsmAnd Maps\" option";
 "layer_route" = "Maršrutas";
 "map_widget_average_speed" = "Vidutinis greitis";
 "shared_string_control_start" = "Pradėti";
@@ -476,9 +472,7 @@
 
 // Intro
 "shared_string_skip" = "Praleisti";
-"intro_download" = "Download\nmap";
 "next_proceed" = "Toliau";
-"intro_welcome" = "Welcome to\nOsmAnd";
 // Settings
 "map_locale" = "Žemėlapio kalba";
 "recording_context_menu_show" = "Rodyti";
@@ -609,7 +603,6 @@
 "export_profile" = "Export";
 "shared_string_import" = "Importuoti";
 "nav_type_hint" = "Navigacijos tipas";
-"import_duplicates_description" = "OsmAnd already has elements with the same names as those imported.\n\nSelect an action.";
 "shared_string_profiles" = "Profiliai";
 "quick_action_map_source_title" = "Žemėlapio šaltiniai";
 "shared_string_rendering_style" = "Rendering styles";
@@ -641,10 +634,8 @@
 "checking_for_duplicate_description" = "OsmAnd checks %@ for duplicates with existing items in the application. It may take some time.";
 
 // Purchases
-"prch_nau_q1" = "Please turn on \"Nautical\" style in the Map Settings and install world seamarks basemap.";
 "shared_string_download" = "Parsiųst";
 "shared_string_no_thanks" = "Ačiū, ne";
-"prch_failed" = "Purchase of \"%@\" has failed";
 
 // Route planning
 "plan_route" = "Planuoti maršrutą";
@@ -659,7 +650,6 @@
 "only_selected_segment_recalc" = "Only the selected segment will be recalculated using the selected profile";
 "join_segments" = "Sujungti segmentus";
 "plan_route_create_new_route" = "Sukurti naują maršrutą";
-"track_is_saved" = "%@\nis saved!";
 "plan_route_open_existing_track" = "Atidaryti egzistuojančia trasą";
 "route_between_points_add_track_desc" = "Select a track file for which a new segment will be added.";
 "none_point_error" = "Prašome pridėti bent vieną tašką.";
@@ -692,8 +682,6 @@
 "edit_tilesource_elliptic_tile" = "Elipsinė Merkatoriaus projekcija";
 "sqlite_db_file" = "SQLiteDB failas";
 "one_image_per_tile" = "Vienas nuotraukos failas per skiltį";
-"res_zoom_levels_desc" = "This parameters will affect the map display when used as a map type or overlay/underlay.\n\nMap type: the map will be limited to the selected zooms.\n\nOverlay / Underlay: Zoom levels at which tiles will be visible. Upscale or downscale will occur above or below the set values.";
-"res_expire_time_desc" = "Expiration time in minutes. Cached tiles will be reloaded after specified time. Leave this field empty if you do not need to reload tiles for this source.\nOne day is 1440 minutes.\nOne week is 10 080 minutes.\n30 days are 43 200 minutes.";
 "welmode_download_maps" = "Atsisiųsti žemėlapius";
 "srtm_unit_format" = "Contour lines unit format";
 "srtm_download_single_help_message" = "Please select the needed format. You will need to re-download the file to change the format.";
@@ -737,7 +725,6 @@
 "tab_title_advanced" = "Išplėstinis";
 "shared_string_without_name" = "Be pavadinimo";
 "local_openstreetmap_uploading" = "Siunčiama…";
-"osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
 "save_poi_without_poi_type_message" = "Ar tikrai norite išsaugoti LV nenurodydami jos tipo?";
 "save_poi_too_many_uppercase" = "Pavadinime yra per daug didžiųjų raidžių. Ar norite tęsti?";
 
@@ -844,7 +831,6 @@
 "planning_trip_item" = "Kelionės planavimas";
 "map_legend" = "Legenda";
 "other_location" = "Kita";
-"help_what_is_new" = "What\'s new";
 "instalation_troubleshooting_item" = "Diegimas ir problemų sprendimas";
 "techical_articles_item" = "Techniniai straipsniai";
 "versions_item" = "Versijos";
@@ -965,7 +951,6 @@
 "plugins_menu_group" = "Įskiepiai";
 "plugin_popup_srtm_desc" = "To start using Contour lines feature, please download Contour lines of an region first";
 "plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Contour lines</b>";
-"plugin_popup_nautical_desc" = "Please download Nautical maps first.\nThen go to the <b>Map Settings</b> > <b>Map type</b> and turn on <b>Nautical</b> style";
 "shared_string_restore" = "Atkurti";
 "map_downloaded" = "Žemėlapis atsiųstas";
 "online_map" = "Žemėlapis online";
@@ -1111,7 +1096,6 @@
 "rendering_attr_surface_concrete_name" = "Betonas";
 "rendering_attr_piste_difficulty_intermediate_name" = "Vidutinis";
 "routing_attr_short_way_description" = "Optimizuotas trumpesnis maršrutas (energijos taupymas)";
-"routing_attr_freeride_policy_description" = "\'Freeride\' and \'Off-piste\' are unofficial routes and passages. Typically ungroomed, unmaintained and not checked in the evening. Enter at your own risk.";
 "rendering_attr_highway_class_street_name" = "Gatvė";
 "rendering_attr_surface_grass_name" = "Žolė";
 "rendering_value_orange_name" = "Oranžinis";
@@ -1596,7 +1580,7 @@
 "shared_string_read" = "Skaityti";
 "shared_string_any" = "Bet kurią";
 "map_marker_1st" = "Pirmoji žymė";
-"weather_update_disabled" = "Išjungta";
+"weather_update_disabled" = "Išjungtas";
 "shared_string_move" = "Perkelti";
 "global_settings" = "Globalūs nustatymai";
 "visibility" = "Matomumas";
@@ -1619,13 +1603,13 @@
 "shared_string_light" = "Šviesi";
 "wikivoyage_download_pics" = "Atsisiųsti paveikslėlius";
 "shared_string_error" = "Klaida";
-"external_device_status_connect" = "Prisijungti";
+"external_device_status_connect" = "Prijungti";
 "lang_sr-Latn" = "Serbų (lotynų)";
 "specify_number_of_dir_indicators_desc" = "Pasirinkti, kiek krypčių rodyklių bus rodoma.";
 "map_orientation_default" = "Kaip ir įrenginys";
 "route_info" = "Maršruto informacija";
 "shared_string_dark" = "Tamsi";
-"map_settings_topography" = "Kontūrinės linijos";
+"map_settings_topography" = "SRTM žemėlapiai";
 "activity_type_offroad_name" = "Bekelė";
 "shared_string_explore" = "Tyrinėti";
 "lang_zh-Hans" = "Kinų (supaprastinta)";
@@ -1798,31 +1782,3 @@
 "driving_region_india" = "Indija";
 "shared_string_show" = "Rodyti";
 "shared_string_local" = "Vietinis";
-"ltr_or_rtl_combine_via_colon" = "%@: %@";
-"int_min" = "min.";
-"metric_ton" = "t";
-"default_price_currency_format" = "%.2f %@";
-"km" = "km";
-"m" = "m";
-"mapillary" = "Mapillary";
-"shared_string_open_street_map" = "OpenStreetMap";
-"app_mode_osm" = "OSM";
-"min_km" = "min/km";
-"data_settings" = "Data";
-"monitoring_control_start" = "REC";
-"sett_wunderlinq_ext_input" = "WunderLINQ";
-"km_h" = "km/h";
-"lang_hi" = "Hindi";
-"ltr_or_rtl_combine_via_dash" = "%@ — %@";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
-"lang_eo" = "Esperanto";
-"info_button" = "Info";
-"shared_string_control_stop" = "Stop";
-"shared_string_wikivoyage" = "Wikivoyage";
-"min_mile" = "min/m";
-"shared_string_ellipsis" = "…";
-"cubic_m" = "m³";
-"short_min" = "m";
-"m_s" = "m/s";
-"osm_id" = "OSM ID";
-"share_geo" = "geo:";

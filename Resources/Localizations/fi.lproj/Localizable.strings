@@ -231,7 +231,6 @@
 "recalculate_wrong_dir" = "Laske reitti uudelleen, jos suunta on päinvastainen";
 "recalculate_route_distance_promo" = "Reitti lasketaan uudelleen, jos etäisyys reitistä nykyiseen sijaintiin on suurempi kuin valittu arvo.";
 "select_distance_route_will_recalc" = "Valitse etäisyys, jonka jälkeen reitti lasketaan uudelleen.";
-"instructions_repeat" = "Tap \"Next turn\" widget to repeat instructions";
 "guidance_preferences_descr" = "Navigointivalinnat";
 "routing_preferences_descr" = "Reititysvalinnat";
 "routing_settings" = "Navigointi";
@@ -378,7 +377,7 @@
 "shared_string_from" = "lähtien";
 "shared_string_time" = "Aika";
 "time_of_day" = "Vuorokaudenaika";
-"shared_string_distance" = "Matka";
+"shared_string_distance" = "Etäisyys";
 "retry" = "Yritä uudelleen";
 "shared_string_enabled" = "Käytössä";
 "shared_string_reset" = "Resetoi";
@@ -411,8 +410,6 @@
 "poi_dialog_poi_type" = "KP tyyppi";
 "shared_string_my_places" = "Omat paikat";
 "favorite_group_name" = "Ryhmän nimi";
-"fav_import_desc" = "You can import your favorites as waypoints in GPX file (common GPS data format)\n\nTo share the favorites.gpx file you can open file from Dropbox, Email, or any other source - Use Open In function.";
-"fav_exists" = "Favorite with name \"%@\" already exists";
 "shared_string_rename" = "Nimeä uudelleen";
 "update_existing" = "Korvaa";
 "replace_favorite_confirmation" = "Haluatko varmasti korvata suosikin %@?";
@@ -425,7 +422,6 @@
 "shared_string_shape" = "Muoto";
 "fav_point_dublicate" = "Suosikkipisteen nimen duplikaatti";
 "fav_point_dublicate_message" = "Suosikki nimettiin uudelleen %@, jotta vältyttäisiin päällekkäisyyksiltä.";
-"fav_point_emoticons_message" = "Favorite renamed to \'%@\' to save the string containing emoticons to a file.";
 "access_default_color" = "Oletusväri";
 "favorite_friends_category" = "Ystävät";
 "favorite_places_category" = "Paikat";
@@ -455,7 +451,6 @@
 "gpx_parse_error" = "GPX-tiedostosta löytyi ongelmia. \n \nVoit ottaa yhteyttä OsmAndin tukeen asian selvittämiseksi.";
 "tracks_on_map" = "Näytetyt jäljet";
 "gpx_export_title" = "Vie jälki";
-"gpx_import_desc" = "To import your GPX files (common GPS data format) from Dropbox, Email, or any other source use \"Copy to OsmAnd Maps\" option";
 "shared_string_statistics" = "Tilastot";
 "layer_route" = "Reitti";
 "map_widget_average_speed" = "Keskinopeus";
@@ -506,7 +501,7 @@
 "add_online_source" = "Lisää verkkolähde";
 "srtm_color_scheme" = "Värimaailma";
 "shared_string_appearance" = "Ulkoasu";
-"settings_app_theme" = "Sovellusteema";
+"settings_app_theme" = "Sovelluksen teema";
 "light_theme" = "Vaalea";
 "do_not_rotate" = "Älä kierrä";
 "allow_3D_view" = "2.5D-näkymä";
@@ -618,7 +613,6 @@
 "checking_for_duplicate_description" = "OsmAnd checks %@ for duplicates with existing items in the application. It may take some time.";
 
 // Purchases
-"prch_nau_q1" = "Please turn on \"Nautical\" style in the Map Settings and install world seamarks basemap.";
 "proceed_q" = "Jatka?";
 "shared_string_download" = "Lataa";
 "shared_string_no_thanks" = "Ei kiitos";
@@ -651,7 +645,6 @@
 "simplified_track_description" = "Vain reittiviiva tallennetaan, väyläpisteet poistetaan.";
 "open_saved_track" = "Avaa tallennettu rata";
 "plan_route_create_new_route" = "Luo uusi reitti";
-"track_is_saved" = "%@\nis saved!";
 "plan_route_open_existing_track" = "Avaa olemassaoleva jälki";
 "sort_last_modified" = "Viimeksi muokattu";
 "route_between_points_add_track_desc" = "Valitse jälkitiedosto johon uusi segmentti lisätään.";
@@ -700,8 +693,6 @@
 "pseudo_mercator_projection" = "Pseudo-Mercatorin projektio";
 "sqlite_db_file" = "SQLiteDB -tiedosto";
 "one_image_per_tile" = "Yksi kuva ruutua kohden";
-"res_zoom_levels_desc" = "This parameters will affect the map display when used as a map type or overlay/underlay.\n\nMap type: the map will be limited to the selected zooms.\n\nOverlay / Underlay: Zoom levels at which tiles will be visible. Upscale or downscale will occur above or below the set values.";
-"res_expire_time_desc" = "Expiration time in minutes. Cached tiles will be reloaded after specified time. Leave this field empty if you do not need to reload tiles for this source.\nOne day is 1440 minutes.\nOne week is 10 080 minutes.\n30 days are 43 200 minutes.";
 "clear_tiles_warning" = "Näiden muutosten tekeminen tyhjentää tämän ruutulähteen välimuistiin tallennetut tiedot";
 
 // Menu
@@ -744,7 +735,6 @@
 "tab_title_advanced" = "Edistynyt";
 "shared_string_without_name" = "Ilman nimeä";
 "local_openstreetmap_uploading" = "Lähetetään…";
-"osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
 "save_poi_without_poi_type_message" = "Haluatko todella tallentaa KP:n ilman tyyppiä\?";
 "save_poi_too_many_uppercase" = "Nimi sisältää liikaa isoja kirjaimia. Jatka\?";
 "osm_editing_loading_poi" = "Ladataan KP-tietoja";
@@ -999,7 +989,6 @@
 "plugins_menu_group" = "Liitännäiset";
 "plugin_popup_srtm_desc" = "To start using Contour lines feature, please download Contour lines of an region first";
 "plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Contour lines</b>";
-"plugin_popup_nautical_desc" = "Please download Nautical maps first.\nThen go to the <b>Map Settings</b> > <b>Map type</b> and turn on <b>Nautical</b> style";
 "plugin_popup_trip_planning_ask" = "To start planning the trip you need to activate plugin: <b>Trip planning</b>";
 "shared_string_restore" = "Palauta";
 "no_statistics" = "Ei tilastoja";
@@ -1182,7 +1171,6 @@
 "routeInfo_piste_difficulty_name" = "Ladun vaikeustaso";
 "routing_attr_short_way_description" = "Optimoitu lyhyempi reitti (energiansäästö)";
 "rendering_attr_highway_class_track_grade3_name" = "Luokka 3";
-"routing_attr_freeride_policy_description" = "\'Freeride\' and \'Off-piste\' are unofficial routes and passages. Typically ungroomed, unmaintained and not checked in the evening. Enter at your own risk.";
 "rendering_attr_highway_class_street_name" = "Katu";
 "rendering_attr_surface_grass_name" = "Ruoho";
 "rendering_attr_surface_fine_gravel_name" = "Hiekka";

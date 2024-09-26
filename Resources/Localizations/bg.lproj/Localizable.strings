@@ -191,7 +191,6 @@
 "recalculate_route" = "Преизчисляване на маршрута";
 "recalculate_route_distance_promo" = "Маршрутът ще бъде преизчислен, ако разстоянието от маршрута до текущото местоположение е повече от избраната стойност.";
 "select_distance_route_will_recalc" = "Изберете разстоянието, след което маршрутът ще бъде преизчислен.";
-"instructions_repeat" = "Tap \"Next turn\" widget to repeat instructions";
 "guidance_preferences_descr" = "Настройки на маршрутизация";
 "routing_preferences_descr" = "Настройки на маршрутизиране";
 "routing_settings" = "Навигация";
@@ -379,8 +378,6 @@
 "poi_dialog_poi_type" = "Вид POI";
 "shared_string_my_places" = "Моите места";
 "favorite_group_name" = "Име на група";
-"fav_import_desc" = "You can import your favorites as waypoints in GPX file (common GPS data format)\n\nTo share the favorites.gpx file you can open file from Dropbox, Email, or any other source - Use Open In function.";
-"fav_exists" = "Favorite with name \"%@\" already exists";
 "shared_string_rename" = "Преименуване";
 "update_existing" = "Заместване";
 "replace_favorite_confirmation" = "Заместване на „%@“ от Избрани\?";
@@ -420,7 +417,6 @@
 "import_tracks" = "Внасяне на трасета";
 "gpx_parse_error" = "Открити са проблеми с файл GPX. \n \nСвържете се с поддръжката на OsmAnd, за да помогнете да проучат проблема.";
 "tracks_on_map" = "Показани трасета";
-"gpx_import_desc" = "To import your GPX files (common GPS data format) from Dropbox, Email, or any other source use \"Copy to OsmAnd Maps\" option";
 "shared_string_statistics" = "Статистика";
 "layer_route" = "Маршрут";
 "map_widget_average_speed" = "Средна скорост";
@@ -476,9 +472,7 @@
 
 // Intro
 "shared_string_skip" = "Пропускане";
-"intro_download" = "Download\nmap";
 "next_proceed" = "Следващ";
-"intro_welcome" = "Welcome to\nOsmAnd";
 // Settings
 "map_locale" = "Език на картата";
 "recording_context_menu_show" = "Покажи";
@@ -672,10 +666,8 @@
 "checking_for_duplicate_description" = "OsmAnd проверете %@ за дубликати със съществуващите елементи в приложението. \n \nМоже да отнеме известно време.";
 
 // Purchases
-"prch_nau_q1" = "Please turn on \"Nautical\" style in the Map Settings and install world seamarks basemap.";
 "shared_string_download" = "Изтегляне";
 "shared_string_no_thanks" = "Не, благодаря";
-"prch_failed" = "Purchase of \"%@\" has failed";
 
 // Route planning
 "plan_route" = "Планиране на маршрут";
@@ -697,7 +689,6 @@
 "simplified_track_description" = "Само линията на маршрута ще бъде запазена, точките ще бъдат изтрити.";
 "open_saved_track" = "Отваряне на записано трасе";
 "plan_route_create_new_route" = "Създаване на маршрут";
-"track_is_saved" = "%@\nis saved!";
 "plan_route_open_existing_track" = "Отваряне на съществуваща следа";
 "sort_last_modified" = "Последна промяна";
 "route_between_points_add_track_desc" = "Select a track file for which a new segment will be added.";
@@ -734,8 +725,6 @@
 "created_on" = "Създаден";
 "shared_string_zoom_levels" = "Увеличения";
 "edit_tilesource_elliptic_tile" = "Елиптична проекция на Меркатор";
-"res_zoom_levels_desc" = "This parameters will affect the map display when used as a map type or overlay/underlay.\n\nMap type: the map will be limited to the selected zooms.\n\nOverlay / Underlay: Zoom levels at which tiles will be visible. Upscale or downscale will occur above or below the set values.";
-"res_expire_time_desc" = "Expiration time in minutes. Cached tiles will be reloaded after specified time. Leave this field empty if you do not need to reload tiles for this source.\nOne day is 1440 minutes.\nOne week is 10 080 minutes.\n30 days are 43 200 minutes.";
 "welmode_download_maps" = "Изтегляне на карти";
 "srtm_unit_format" = "Единици за измерване на контурните линии";
 "srtm_download_single_help_message" = "Please select the needed format. You will need to re-download the file to change the format.";
@@ -781,7 +770,6 @@
 "tab_title_advanced" = "Разширени";
 "shared_string_without_name" = "Без име";
 "local_openstreetmap_uploading" = "Изпращане…";
-"osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
 "save_poi_without_poi_type_message" = "Запазване на POI без указване на вида?";
 "save_poi_too_many_uppercase" = "Името съдържа прекалено много главни букви. Продължаване \?";
 
@@ -878,7 +866,6 @@
 "subscription_osmandlive_item" = "Абонамент – OsmAnd Live";
 "map_legend" = "Легенда на картата";
 "other_location" = "Друго";
-"help_what_is_new" = "What\'s new";
 "instalation_troubleshooting_item" = "Инсталиране и отстраняване на неизправности";
 "techical_articles_item" = "Технически статии";
 "versions_item" = "Версии";
@@ -999,7 +986,6 @@
 "plugins_menu_group" = "Добавки";
 "plugin_popup_srtm_desc" = "To start using Contour lines feature, please download Contour lines of an region first";
 "plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Contour lines</b>";
-"plugin_popup_nautical_desc" = "Please download Nautical maps first.\nThen go to the <b>Map Settings</b> > <b>Map type</b> and turn on <b>Nautical</b> style";
 "shared_string_restore" = "Възстановяване";
 "map_downloaded" = "Картата е изтеглена";
 "online_map" = "Онлайн карта";
@@ -1131,7 +1117,6 @@
 "rendering_attr_surface_concrete_name" = "Бетон";
 "routeInfo_piste_difficulty_name" = "Трудност на пистите";
 "routing_attr_short_way_description" = "Оптимизиран по-кратък маршрут (спестяване на енергия)";
-"routing_attr_freeride_policy_description" = "\'Freeride\' and \'Off-piste\' are unofficial routes and passages. Typically ungroomed, unmaintained and not checked in the evening. Enter at your own risk.";
 "rendering_attr_highway_class_street_name" = "Улица";
 "rendering_attr_surface_grass_name" = "Трева";
 "rendering_value_orange_name" = "Оранжева";
@@ -2126,26 +2111,3 @@
 "monthly_subscription" = "Месечен абонамент";
 "annual_subscription" = "Годишен абонамент";
 "quarterly_subscription" = "Тримесечен абонамент";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
-"default_price_currency_format" = "%.2f %@";
-"ltr_or_rtl_combine_via_space" = "%@ %@";
-"monitoring_control_start" = "REC";
-"ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
-"shared_string_wikivoyage" = "Wikivoyage";
-"osmand_live" = "OsmAnd Live";
-"shared_string_ellipsis" = "…";
-"download_wikipedia_maps" = "Wikipedia";
-"ltr_or_rtl_combine_via_dash" = "%@ — %@";
-"edit_tilesource_url_to_load" = "URL";
-"osm_id" = "OSM ID";
-"poi" = "POI";
-"carplay" = "CarPlay";
-"nav_type_brouter" = "BRouter";
-"shared_string_open_street_map" = "OpenStreetMap";
-"weather_source_GFS_title" = "GFS";
-"ltr_or_rtl_combine_via_colon" = "%@: %@";
-"help_article_navigation_routing_brouter_name" = "BRouter";
-"help_article_navigation_car_play_name" = "CarPlay";
-"app_mode_osm" = "OSM";
-"weather_source_ecmwf_title" = "ECMWF";
-"osmand_cloud" = "OsmAnd Cloud";

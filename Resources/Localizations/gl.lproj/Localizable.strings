@@ -292,8 +292,6 @@
 "shared_string_name" = "Nome";
 "shared_string_groups" = "Grupos";
 "favorite" = "Favorito";
-"fav_import_desc" = "You can import your favorites as waypoints in GPX file (common GPS data format)\n\nTo share the favorites.gpx file you can open file from Dropbox, Email, or any other source - Use Open In function.";
-"fav_exists" = "Favorite with name \"%@\" already exists";
 "shared_string_rename" = "Mudar o nome";
 "update_existing" = "Substituír";
 // POI
@@ -341,9 +339,7 @@
 "shared_string_transparency" = "Transparencia";
 // Intro
 "shared_string_skip" = "Omitir";
-"intro_download" = "Download\nmap";
 "next_proceed" = "Seguinte";
-"intro_welcome" = "Welcome to\nOsmAnd";
 // Settings
 "map_locale" = "Lingua do mapa";
 "recording_context_menu_show" = "Amosar";
@@ -354,10 +350,8 @@
 "shared_string_maps" = "Mapas";
 "purchases" = "Compras";
 // Purchases
-"prch_nau_q1" = "Please turn on \"Nautical\" style in the Map Settings and install world seamarks basemap.";
 "shared_string_download" = "Baixar";
 "shared_string_no_thanks" = "Non, grazas";
-"prch_failed" = "Purchase of \"%@\" has failed";
 // Resources
 "res_mapsres" = "Mapas e recursos";
 "download_tab_updates" = "Actualizacións";
@@ -485,7 +479,6 @@
 "plugin_popup_wiki_ask" = "To download Wikipedia data you need to activate plugin: <b>Wikipedia</b>";
 "plugin_popup_srtm_desc" = "To start using Contour lines feature, please download Contour lines of an region first";
 "plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Contour lines</b>";
-"plugin_popup_nautical_desc" = "Please download Nautical maps first.\nThen go to the <b>Map Settings</b> > <b>Map type</b> and turn on <b>Nautical</b> style";
 "plugin_popup_trip_planning_ask" = "To start planning the trip you need to activate plugin: <b>Trip planning</b>";
 "shared_string_restore" = "Restaurar";
 "map_downloaded" = "Mapa baixado";
@@ -1772,57 +1765,3 @@
 "show_along_the_route" = "Amosar ó longo da ruta";
 "location_radius" = "Raio da ubicación";
 "view_angle" = "Ángulo de visión";
-"app_mode_osm" = "OSM";
-"network" = "Network";
-"index_name_asia" = "Asia";
-"navigate_point_latitude" = "Latitude";
-"km" = "km";
-"shared_string_local" = "Local";
-"lang_eo" = "Esperanto";
-"edit_tilesource_url_to_load" = "URL";
-"tts_title" = "TTS";
-"mile" = "mi";
-"download_tab_local" = "Local";
-"mapillary" = "Mapillary";
-"default_price_currency_format" = "%.2f %@";
-"int_min" = "min.";
-"app_mode_taxi" = "Taxi";
-"short_min" = "m";
-"min_km" = "min/km";
-"lang_gn_py" = "Guaraní";
-"download_wikipedia_maps" = "Wikipedia";
-"lang_kn" = "Kannada";
-"altitude" = "Altitude";
-"driving_region_india" = "India";
-"sett_wunderlinq_ext_input" = "WunderLINQ";
-"ltr_or_rtl_combine_via_comma" = "%@, %@";
-"lang_sw" = "Swahili";
-"shared_string_ellipsis" = "…";
-"data_settings" = "Data";
-"lang_ta" = "Tamil";
-"lang_min" = "Minangkabau";
-"ltr_or_rtl_combine_via_dash" = "%@ — %@";
-"navigate_point_mgrs" = "MGRS";
-"navigate_point_format_DM" = "DDD MM.MMM";
-"plugins_menu_group" = "Plugins";
-"shared_string_total" = "Total";
-"arrival_distance_factor_normally" = "Normal";
-"lang_ml" = "Malayalam";
-"lang_mr" = "Marathi";
-"shared_string_legal" = "Legal";
-"lang_pnb" = "Punjabi";
-"km_h" = "km/h";
-"lang_hi" = "Hindi";
-"lang_te" = "Telugu";
-"mapillary_item" = "OsmAnd + Mapillary";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
-"ltr_or_rtl_combine_via_colon" = "%@: %@";
-"ltr_or_rtl_combine_via_space" = "%@ %@";
-"navigate_point_format_DMS" = "DDD MM SS.S";
-"cubic_m" = "m³";
-"navigate_point_format_D" = "DDD.DDDDD";
-"driving_region_australia" = "Australia";
-"osmand_live" = "OsmAnd Live";
-"metric_ton" = "t";
-"int_hour" = "h";
-"m" = "m";

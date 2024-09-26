@@ -221,7 +221,6 @@
 "recalculate_route" = "Rekalkuli kurson";
 "recalculate_route_distance_promo" = "La kurso estos rekalkulita se la distanco inter la kurso kaj la nuna pozicio superas la enigitan valoron.";
 "select_distance_route_will_recalc" = "Enigu la distancon super kiu la kurso estos rekalkulita.";
-"instructions_repeat" = "Tap \"Next turn\" widget to repeat instructions";
 "guidance_preferences_descr" = "Navigadaj agordoj";
 "routing_preferences_descr" = "Difinado de kurso";
 "routing_settings" = "Navigado";
@@ -416,8 +415,6 @@
 "poi_dialog_poi_type" = "Speco de interesejo";
 "shared_string_my_places" = "Miaj ejoj";
 "favorite_group_name" = "Grupa nomo";
-"fav_import_desc" = "You can import your favorites as waypoints in GPX file (common GPS data format)\n\nTo share the favorites.gpx file you can open file from Dropbox, Email, or any other source - Use Open In function.";
-"fav_exists" = "Favorite with name \"%@\" already exists";
 "shared_string_rename" = "Alinomi";
 "update_existing" = "Anstataŭigi";
 "replace_favorite_confirmation" = "Ĉu anstataŭigi la ŝatatan ejon “%@”\?";
@@ -459,7 +456,6 @@
 "import_tracks" = "Enporti spurojn";
 "gpx_parse_error" = "Trovis problemon pri GPX-dosiero. \n \nKontaktu la helpteamon de OsmAnd por solvi la problemon.";
 "tracks_on_map" = "Montrataj kursoj";
-"gpx_import_desc" = "To import your GPX files (common GPS data format) from Dropbox, Email, or any other source use \"Copy to OsmAnd Maps\" option";
 "shared_string_statistics" = "Statistiko";
 "layer_route" = "Kurso";
 "map_widget_average_speed" = "Mezuma rapido";
@@ -515,16 +511,14 @@
 "add_online_source" = "Aldoni enretan fonton";
 "srtm_color_scheme" = "Kolor-skemo";
 "shared_string_appearance" = "Aspekto";
-"settings_app_theme" = "Etoso de aplikaĵo";
+"settings_app_theme" = "Etoso";
 "light_theme" = "Hela";
 "units_and_formats" = "Mezurunuoj kaj formoj";
 "osmand_settings" = "Ĝeneralaj agordoj";
 
 // Intro
 "shared_string_skip" = "Transsalti";
-"intro_download" = "Download\nmap";
 "next_proceed" = "Sekva";
-"intro_welcome" = "Welcome to\nOsmAnd";
 // Settings
 "map_locale" = "Lingvo de mapo";
 "recording_context_menu_show" = "Montri";
@@ -731,10 +725,8 @@
 "checking_for_duplicate_description" = "Kontrolado de %@ pri duplikatoj kontraŭ la ekzistaj elementoj en la aplikaĵo. \n \nPovas okupi iom da tempo.";
 
 // Purchases
-"prch_nau_q1" = "Please turn on \"Nautical\" style in the Map Settings and install world seamarks basemap.";
 "shared_string_download" = "Elŝuti";
 "shared_string_no_thanks" = "Ne, dankon";
-"prch_failed" = "Purchase of \"%@\" has failed";
 
 // Route planning
 "plan_route" = "Plani kurson";
@@ -756,7 +748,6 @@
 "simplified_track_description" = "Nur la linio de kurso estos konservita, la navigadpunktoj estos forigitaj.";
 "open_saved_track" = "Malfermi konservitan spuron";
 "plan_route_create_new_route" = "Krei novan kurson";
-"track_is_saved" = "%@\nis saved!";
 "plan_route_open_existing_track" = "Malfermi ekzistan spuron";
 "sort_last_modified" = "dato de modifo";
 "route_between_points_add_track_desc" = "Elektu dosieron de spuro al kiu nova segmento estos aldonita.";
@@ -804,8 +795,6 @@
 "pseudo_mercator_projection" = "Kvazaŭ-merkatora projekcio";
 "sqlite_db_file" = "SQLiteDB-dosiero";
 "one_image_per_tile" = "Po unu bild‑dosiero per kahelo";
-"res_zoom_levels_desc" = "This parameters will affect the map display when used as a map type or overlay/underlay.\n\nMap type: the map will be limited to the selected zooms.\n\nOverlay / Underlay: Zoom levels at which tiles will be visible. Upscale or downscale will occur above or below the set values.";
-"res_expire_time_desc" = "Expiration time in minutes. Cached tiles will be reloaded after specified time. Leave this field empty if you do not need to reload tiles for this source.\nOne day is 1440 minutes.\nOne week is 10 080 minutes.\n30 days are 43 200 minutes.";
 "clear_tiles_warning" = "Per apliki tiujn ĉi ŝanĝojn, la kaŝmemorigitaj datumoj por tiu ĉi fonto de kaheloj forviŝiĝos";
 "welmode_download_maps" = "Elŝuti mapojn";
 "srtm_unit_format" = "Unuo por nivelkurboj";
@@ -854,7 +843,6 @@
 "tab_title_advanced" = "Altnivelaj";
 "shared_string_without_name" = "Sennoma";
 "local_openstreetmap_uploading" = "Alŝutado…";
-"osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
 "save_poi_without_poi_type_message" = "Ĉu konservi interesejon sen determinita speco\?";
 "save_poi_too_many_uppercase" = "La nomo enhavas tro multe da grandaj literoj? Ĉu pluigi?";
 
@@ -975,7 +963,6 @@
 "subscription_osmandlive_item" = "Aboni OsmAnd Live";
 "map_legend" = "Mapklarigo";
 "other_location" = "Alia";
-"help_what_is_new" = "What\'s new";
 "instalation_troubleshooting_item" = "Instalado kaj problemoj";
 "techical_articles_item" = "Teĥnikaj artikoloj";
 "versions_item" = "Versioj";
@@ -1108,7 +1095,6 @@
 "plugins_menu_group" = "Kromprogramoj";
 "plugin_popup_srtm_desc" = "To start using Contour lines feature, please download Contour lines of an region first";
 "plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Contour lines</b>";
-"plugin_popup_nautical_desc" = "Please download Nautical maps first.\nThen go to the <b>Map Settings</b> > <b>Map type</b> and turn on <b>Nautical</b> style";
 "shared_string_restore" = "Restarigi";
 "map_downloaded" = "Mapo elŝutita";
 "online_map" = "Enreta mapo";
@@ -2440,7 +2426,7 @@
 "dangerous_goods_description" = "Sur kelkaj vojoj kaj tuneloj transporto de danĝeraj materialoj estas malpermesata.";
 "shared_string_item" = "Elemento";
 "step_by_step" = "Turno-post-turno";
-"shared_string_bottom" = "Sube";
+"shared_string_bottom" = "malsupro";
 "display_position_automatic_descr" = "Dependas de map-orientiĝo: sube por “Direkto de movado” kaj centre por ĉiuj aliaj.";
 "visualization_3d_track_line" = "Linio de spuro";
 "visualization_3d_visualized_by" = "Vidigi per";
@@ -2534,44 +2520,3 @@
 "shared_string_all_icons" = "Ĉiuj emblemoj";
 "navigation_position_icon_summary" = "Bildsimbolo montrata kiam vi navigas aŭ moviĝas.";
 "shared_string_local" = "Lokaj";
-"ltr_or_rtl_combine_via_colon" = "%@: %@";
-"weather_source_ecmwf_title" = "ECMWF";
-"kg" = "kg";
-"cubic_m" = "m³";
-"osmand_live" = "OsmAnd Live";
-"navigate_point_mgrs" = "MGRS";
-"weather_source_GFS_title" = "GFS";
-"mapillary_item" = "OsmAnd + Mapillary";
-"nav_type_brouter" = "BRouter";
-"help_article_troubleshooting_android_auto_name" = "Android Auto";
-"app_mode_osm" = "OSM";
-"shared_string_open_street_map" = "OpenStreetMap";
-"ltr_or_rtl_combine_via_space" = "%@ %@";
-"km_h" = "km/h";
-"m" = "m";
-"foot" = "ft";
-"short_min" = "m";
-"nm" = "nmi";
-"carplay" = "CarPlay";
-"shared_string_ellipsis" = "…";
-"mile" = "mi";
-"sett_wunderlinq_ext_input" = "WunderLINQ";
-"yard" = "yd";
-"help_article_navigation_car_play_name" = "CarPlay";
-"min_km" = "min/km";
-"km" = "km";
-"min_mile" = "min/m";
-"ltr_or_rtl_combine_via_dash" = "%@ — %@";
-"mapillary" = "Mapillary";
-"lang_eo" = "Esperanto";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
-"ltr_or_rtl_combine_via_comma" = "%@, %@";
-"default_price_currency_format" = "%.2f %@";
-"edit_tilesource_url_to_load" = "URL";
-"ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
-"shared_string_millimeters_short" = "mm";
-"int_hour" = "h";
-"share_geo" = "geo:";
-"m_s" = "m/s";
-"help_article_navigation_auto_car_name" = "Android Auto";
-"help_article_navigation_routing_brouter_name" = "BRouter";

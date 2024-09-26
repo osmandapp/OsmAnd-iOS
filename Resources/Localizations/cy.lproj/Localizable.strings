@@ -222,7 +222,6 @@
 "recalculate_route" = "Ailgyfrifo\'r llwybr";
 "recalculate_route_distance_promo" = "Bydd y llwybr yn cael ei ailgyfrif os yw\'r pellter o\'r llwybr i\'r lleoliad presennol yn fwy na\'r gwerth a ddewiswyd.";
 "select_distance_route_will_recalc" = "Dewis y pellter ar ôl hynny bydd y llwybr yn cael ei ailgyfrifo.";
-"instructions_repeat" = "Tap \"Next turn\" widget to repeat instructions";
 "guidance_preferences_descr" = "Dewisiadau llywio";
 "routing_preferences_descr" = "Dewisiadau llwybro";
 "routing_settings" = "Llywio";
@@ -418,8 +417,6 @@
 "poi_dialog_poi_type" = "Math o MODd";
 "shared_string_my_places" = "Fy llefydd";
 "favorite_group_name" = "Enw grŵp";
-"fav_import_desc" = "You can import your favorites as waypoints in GPX file (common GPS data format)\n\nTo share the favorites.gpx file you can open file from Dropbox, Email, or any other source - Use Open In function.";
-"fav_exists" = "Favorite with name \"%@\" already exists";
 "fav_ignore" = "Anwybyddu";
 "shared_string_rename" = "Ailenwi";
 "update_existing" = "Amnewid";
@@ -462,7 +459,6 @@
 "gpx_overwrite" = "Trosysgrifo";
 "gpx_parse_error" = "Nid yw OsmAnd GPX wedi\'i ffurfio\'n dda, cysyllta â\'r tîm cymorth i ymchwilio ymhellach.";
 "tracks_on_map" = "Traciau sy\'n cael eu dangos";
-"gpx_import_desc" = "To import your GPX files (common GPS data format) from Dropbox, Email, or any other source use \"Copy to OsmAnd Maps\" option";
 "shared_string_statistics" = "Ystadegau";
 "layer_route" = "Llwybr";
 "gpx_analyze" = "Dadansoddi";
@@ -525,9 +521,7 @@
 
 // Intro
 "shared_string_skip" = "Neidio";
-"intro_download" = "Download\nmap";
 "next_proceed" = "Nesaf";
-"intro_welcome" = "Welcome to\nOsmAnd";
 // Settings
 "sett_units" = "Unedau";
 "map_locale" = "Iaith y map";
@@ -722,10 +716,8 @@
 "checking_for_duplicate_description" = "OsmAnd i wirio %@ am gopïau dyblyg o eitemau sydd eisoes yn bodoli yn yr ap. \n \nGall gymryd peth amser.";
 
 // Purchases
-"prch_nau_q1" = "Please turn on \"Nautical\" style in the Map Settings and install world seamarks basemap.";
 "shared_string_download" = "Lawrlwytho";
 "shared_string_no_thanks" = "Dim, diolch";
-"prch_failed" = "Purchase of \"%@\" has failed";
 
 // Route planning
 "plan_route" = "Cynllunio llwybr";
@@ -747,7 +739,6 @@
 "simplified_track_description" = "Dim ond llinell y llwybr caiff ei gadw. Caiff y cyfeirbwyntiau eu dileu.";
 "open_saved_track" = "Agor trac wedi\'i gadw";
 "plan_route_create_new_route" = "Creu llwybr newydd";
-"track_is_saved" = "%@\nis saved!";
 "plan_route_open_existing_track" = "Agor trac sy\'n bodoli eisoes";
 "sort_last_modified" = "Newidiwyd diwethaf";
 "route_between_points_add_track_desc" = "Dewiswch ffeil trac i ychwanegu\'r segment newydd iddi.";
@@ -791,8 +782,6 @@
 "pseudo_mercator_projection" = "Taluniad ffug-Mercator";
 "sqlite_db_file" = "Ffeil SQLiteDB";
 "one_image_per_tile" = "Un ffeil delwedd fesul teilsen";
-"res_zoom_levels_desc" = "This parameters will affect the map display when used as a map type or overlay/underlay.\n\nMap type: the map will be limited to the selected zooms.\n\nOverlay / Underlay: Zoom levels at which tiles will be visible. Upscale or downscale will occur above or below the set values.";
-"res_expire_time_desc" = "Expiration time in minutes. Cached tiles will be reloaded after specified time. Leave this field empty if you do not need to reload tiles for this source.\nOne day is 1440 minutes.\nOne week is 10 080 minutes.\n30 days are 43 200 minutes.";
 "clear_tiles_warning" = "Bydd gosod y newidiadau hyn yn clirio\'r data sydd wedi\'i storio ar gyfer y ffynhonnell teils hon";
 "welmode_download_maps" = "Lawrlwytho mapiau";
 "srtm_unit_format" = "Amrywiolyn uned cyfuchlinellau";
@@ -835,7 +824,6 @@
 "tab_title_advanced" = "Uwch";
 "shared_string_without_name" = "Heb enw";
 "local_openstreetmap_uploading" = "Wrthi\'n uwchlwytho…";
-"osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
 "save_poi_without_poi_type_message" = "Do you want to save POI without type?";
 
 // Mapillary
@@ -1092,7 +1080,6 @@
 "plugins_menu_group" = "Ategolion";
 "plugin_popup_srtm_desc" = "To start using Contour lines feature, please download Contour lines of an region first";
 "plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Contour lines</b>";
-"plugin_popup_nautical_desc" = "Please download Nautical maps first.\nThen go to the <b>Map Settings</b> > <b>Map type</b> and turn on <b>Nautical</b> style";
 "shared_string_restore" = "Adfer";
 "map_downloaded" = "Map wedi\'i lawrlwytho";
 "online_map" = "Map arlein";
@@ -1256,7 +1243,6 @@
 "routeInfo_piste_difficulty_name" = "Anhawster piste";
 "routing_attr_short_way_description" = "Llwybr byrrach (arbed ynni)";
 "rendering_attr_highway_class_track_grade3_name" = "Gradd 3";
-"routing_attr_freeride_policy_description" = "\'Freeride\' and \'Off-piste\' are unofficial routes and passages. Typically ungroomed, unmaintained and not checked in the evening. Enter at your own risk.";
 "rendering_attr_highway_class_street_name" = "Stryd";
 "rendering_attr_surface_grass_name" = "Glaswellt";
 "rendering_attr_surface_fine_gravel_name" = "Graean mân";
@@ -2048,7 +2034,7 @@
 "arrival_time_widget_desc" = "Amser cyrraedd pen y daith.";
 "max_speed_widget_desc" = "Mae\'n dangos cyfyngiad cyflymder y ffordd bresennol.";
 "shared_string_format" = "Fformat";
-"map_settings_topography" = "Cyfuchliniau";
+"map_settings_topography" = "Cyfuchlinellau";
 "map_orientation_default" = "Fel gosodiad y ddyfais";
 "lanes_widgets_desc" = "Dangosa\'r ategyn lonydd y drefn lonydd cyfredol a pha lonydd i gadw ynddynt.";
 "shared_string_weather" = "Tywydd";
@@ -2075,65 +2061,3 @@
 "show_along_the_route" = "Dangos ar hyd y llwybr";
 "quick_action_toggle_preference" = "Togl i newid dewis.";
 "shared_string_local" = "Lleol";
-"segments_count" = "Segment %d";
-"shared_string_open_street_map" = "OpenStreetMap";
-"osmand_cloud" = "OsmAnd Cloud";
-"default_price_currency_format" = "%.2f %@";
-"app_mode_ufo" = "UFO";
-"driving_region_canada" = "Canada";
-"ltr_or_rtl_combine_via_colon" = "%@: %@";
-"nav_type_brouter" = "BRouter";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
-"share_geo" = "geo:";
-"ltr_or_rtl_combine_via_comma" = "%@, %@";
-"carplay" = "CarPlay";
-"lang_kab" = "Kabyle";
-"lang_lo" = "Lao";
-"lang_mr" = "Marathi";
-"lang_eo" = "Esperanto";
-"navigate_point_mgrs" = "MGRS";
-"edit_tilesource_url_to_load" = "URL";
-"help_article_navigation_routing_brouter_name" = "BRouter";
-"shared_string_ellipsis" = "…";
-"foot" = "ft";
-"help_article_troubleshooting_android_auto_name" = "Android Auto";
-"activity_type_car_name" = "Car";
-"lang_bpy" = "Bishnupriya";
-"shared_string_symbol" = "Symbol";
-"shared_string_map" = "Map";
-"shared_string_color_magenta" = "Magenta";
-"osmand_live" = "OsmAnd Live";
-"navigate_point_format_D" = "DDD.DDDDD";
-"help_article_navigation_car_play_name" = "CarPlay";
-"beats_per_minute_short" = "bpm";
-"metric_ton" = "t";
-"ltr_or_rtl_combine_via_dash" = "%@ — %@";
-"lang_tl" = "Tagalog";
-"driving_region_japan" = "Japan";
-"shared_string_octagon" = "Octagon";
-"mapillary" = "Mapillary";
-"help_article_navigation_auto_car_name" = "Android Auto";
-"lang_war" = "Waray";
-"lang_th" = "Thai";
-"poi" = "POI";
-"index_name_asia" = "Asia";
-"km" = "km";
-"cubic_m" = "m³";
-"ltr_or_rtl_combine_via_space" = "%@ %@";
-"lang_ceb" = "Cebuano";
-"m" = "m";
-"gpx_split_interval" = "Split interval";
-"app_mode_osm" = "OSM";
-"data_settings" = "Data";
-"tts_title" = "TTS";
-"short_min" = "m";
-"lang_sat" = "Santali";
-"monitoring_control_start" = "REC";
-"lang_hi" = "Hindi";
-"nm" = "nmi";
-"lang_min" = "Minangkabau";
-"lang_cv" = "Chuvash";
-"lang_kn" = "Kannada";
-"mapillary_item" = "OsmAnd + Mapillary";
-"lang_ber" = "Berber";
-"mile" = "mi";

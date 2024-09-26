@@ -220,7 +220,6 @@
 "recalculate_route" = "Birkalkulatu ibilbidea";
 "recalculate_route_distance_promo" = "Ibilbidea birkalkulatuko da ibilbidetik uneko punturainoko distantzia hautatutako balioa baino handiagoa bada.";
 "select_distance_route_will_recalc" = "Hautatu ibilbidea birkalkulatzeko distantzia.";
-"instructions_repeat" = "Tap \"Next turn\" widget to repeat instructions";
 "guidance_preferences_descr" = "Nabigazio hobespenak";
 "routing_preferences_descr" = "Ibilbide-kalkuluaren hobespenak";
 "routing_settings" = "Nabigazioa";
@@ -412,8 +411,6 @@
 "poi_dialog_poi_type" = "Interesgune mota";
 "shared_string_my_places" = "Nire lekuak";
 "favorite_group_name" = "Taldearen izena";
-"fav_import_desc" = "You can import your favorites as waypoints in GPX file (common GPS data format)\n\nTo share the favorites.gpx file you can open file from Dropbox, Email, or any other source - Use Open In function.";
-"fav_exists" = "Favorite with name \"%@\" already exists";
 "shared_string_rename" = "Izenez aldatu";
 "update_existing" = "Ordezkatu";
 "replace_favorite_confirmation" = "\"%@\" gogokoena ordeztu\?";
@@ -455,7 +452,6 @@
 "import_tracks" = "Inportatu arrastoak";
 "gpx_parse_error" = "GPX fitxategi batean aurkitutako arazoak. \n \nOsmAnd laguntzarekin jar zaitezke harremanetan ikertzeko.";
 "tracks_on_map" = "Bistaratutako arrastoak";
-"gpx_import_desc" = "To import your GPX files (common GPS data format) from Dropbox, Email, or any other source use \"Copy to OsmAnd Maps\" option";
 "shared_string_statistics" = "Estatistika";
 "layer_route" = "Ibilbidea";
 "map_widget_average_speed" = "Batez besteko abiadura";
@@ -518,14 +514,11 @@
 
 // Intro
 "shared_string_skip" = "Saltatu";
-"intro_download" = "Download\nmap";
 "next_proceed" = "Hurrengoa";
-"intro_welcome" = "Welcome to\nOsmAnd";
 // Settings
 "map_locale" = "Maparen hizkuntza";
 "recording_context_menu_show" = "Erakutsi";
 "shared_string_location" = "Kokapena";
-"short_location_on_map" = "Lat %@\nLon %@";
 "navigate_point_northing" = "Iparrera";
 "navigate_point_easting" = "Ekialdera";
 "navigate_point_zone" = "Zonaldea";
@@ -718,10 +711,8 @@
 "checking_for_duplicate_description" = "%@-ren bikoizketen egiaztaketa OsmAnd aplikazioan dauden elementuekin. \n \nDenboratxo bat hartu lezake.";
 
 // Purchases
-"prch_nau_q1" = "Please turn on \"Nautical\" style in the Map Settings and install world seamarks basemap.";
 "shared_string_download" = "Deskargatu";
 "shared_string_no_thanks" = "Ez, milesker";
-"prch_failed" = "Purchase of \"%@\" has failed";
 
 // Route planning
 "plan_route" = "Planifikatu ibilbide bat";
@@ -743,7 +734,6 @@
 "simplified_track_description" = "Ibilbidearen lerroa bakarrik gordeko da, bide-puntuak ezabatuko dira.";
 "open_saved_track" = "Ireki gordetako arrastoa";
 "plan_route_create_new_route" = "Sortu ibilbide berria";
-"track_is_saved" = "%@\nis saved!";
 "plan_route_open_existing_track" = "Ireki dagoen arrasto bat";
 "sort_last_modified" = "Azken aldaketa";
 "route_between_points_add_track_desc" = "Hautatu zein arrasto-fitxategiri gehituko zaion segmentu berria.";
@@ -791,8 +781,6 @@
 "pseudo_mercator_projection" = "Sasi-Mercator proiekzioa";
 "sqlite_db_file" = "SQLiteDB fitxategia";
 "one_image_per_tile" = "Irudi fitxategi bat lauzako";
-"res_zoom_levels_desc" = "This parameters will affect the map display when used as a map type or overlay/underlay.\n\nMap type: the map will be limited to the selected zooms.\n\nOverlay / Underlay: Zoom levels at which tiles will be visible. Upscale or downscale will occur above or below the set values.";
-"res_expire_time_desc" = "Expiration time in minutes. Cached tiles will be reloaded after specified time. Leave this field empty if you do not need to reload tiles for this source.\nOne day is 1440 minutes.\nOne week is 10 080 minutes.\n30 days are 43 200 minutes.";
 "clear_tiles_warning" = "Aldaketa hauek aplikatzean lauzen iturburu honetako cache datuak garbituko dira";
 "welmode_download_maps" = "Deskargatu mapak";
 "srtm_unit_format" = "Sestra-marren unitate aldaketa";
@@ -841,7 +829,6 @@
 "tab_title_advanced" = "Aurreratua";
 "shared_string_without_name" = "Izenik gabe";
 "local_openstreetmap_uploading" = "Igotzen…";
-"osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
 "save_poi_without_poi_type_message" = "Interesguneak mota zehaztu gabe gorde\?";
 "save_poi_too_many_uppercase" = "Izenak letra larri gehiegi ditu. Jarraitu?";
 
@@ -960,7 +947,6 @@
 "subscription_osmandlive_item" = "Harpidetza- OsmAnd Live";
 "map_legend" = "Maparen legenda";
 "other_location" = "Bestelakoa";
-"help_what_is_new" = "What\'s new";
 "instalation_troubleshooting_item" = "Instalazioa eta arazoen konponketa";
 "techical_articles_item" = "Artikulu teknikoak";
 "versions_item" = "Bertsioak";
@@ -1090,7 +1076,6 @@
 "plugins_menu_group" = "Gehigarriak";
 "plugin_popup_srtm_desc" = "To start using Contour lines feature, please download Contour lines of an region first";
 "plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Contour lines</b>";
-"plugin_popup_nautical_desc" = "Please download Nautical maps first.\nThen go to the <b>Map Settings</b> > <b>Map type</b> and turn on <b>Nautical</b> style";
 "shared_string_restore" = "Berreskuratu";
 "map_downloaded" = "Mapa deskargatu da";
 "online_map" = "Sareko mapa";
@@ -2502,70 +2487,3 @@
 "location_radius_description" = "Uneko kokapenaren zehaztasuna adierazten duen eremu zirkularra erakusten du";
 "navigation_position_icon" = "Nabigazio-posizioaren ikonoa";
 "location_radius" = "Kokapen erradioa";
-"weather_source_GFS_title" = "GFS";
-"shared_string_open_street_map" = "OpenStreetMap";
-"shared_string_cache" = "Cache";
-"shared_string_min" = "Min";
-"int_hour" = "h";
-"m_s" = "m/s";
-"info_button" = "Info";
-"ltr_or_rtl_combine_via_colon" = "%@: %@";
-"weather_temperature_celsius" = "Celsius";
-"osmand_cloud" = "OsmAnd Cloud";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
-"sett_wunderlinq_ext_input" = "WunderLINQ";
-"shared_string_on" = "On";
-"default_price_currency_format" = "%.2f %@";
-"lang_te" = "Telugu";
-"nav_type_brouter" = "BRouter";
-"share_geo" = "geo:";
-"int_min" = "min.";
-"ltr_or_rtl_combine_via_comma" = "%@, %@";
-"download_wikipedia_maps" = "Wikipedia";
-"carplay" = "CarPlay";
-"shared_string_millimeters_short" = "mm";
-"lang_eo" = "Esperanto";
-"navigate_point_mgrs" = "MGRS";
-"edit_tilesource_url_to_load" = "URL";
-"help_article_navigation_routing_brouter_name" = "BRouter";
-"km_h" = "km/h";
-"shared_string_ellipsis" = "…";
-"help_article_troubleshooting_android_auto_name" = "Android Auto";
-"navigate_point_format_DMS" = "DDD MM SS.S";
-"shared_string_color_magenta" = "Magenta";
-"kg" = "kg";
-"lang_af" = "Afrikaans";
-"lang_bpy" = "Bishnupriya";
-"navigate_point_format_D" = "DDD.DDDDD";
-"osmand_live" = "OsmAnd Live";
-"help_article_navigation_car_play_name" = "CarPlay";
-"min_km" = "min/km";
-"metric_ton" = "t";
-"ltr_or_rtl_combine_via_dash" = "%@ — %@";
-"driving_region_australia" = "Australia";
-"mapillary" = "Mapillary";
-"help_article_navigation_auto_car_name" = "Android Auto";
-"cubic_m" = "m³";
-"poi" = "POI";
-"index_name_asia" = "Asia";
-"km" = "km";
-"lang_sw" = "Swahili";
-"ltr_or_rtl_combine_via_space" = "%@ %@";
-"faq_item" = "FAQ";
-"driving_region_india" = "India";
-"mile_per_hour" = "mph";
-"weather_source_ecmwf_title" = "ECMWF";
-"m" = "m";
-"app_mode_osm" = "OSM";
-"navigate_point_format_DM" = "DDD MM.MMM";
-"tts_title" = "TTS";
-"min_mile" = "min/m";
-"short_min" = "m";
-"lang_sat" = "Santali";
-"lang_new" = "Newar / Nepal Bhasa";
-"ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
-"weather_temperature_fahrenheit" = "Fahrenheit";
-"yard" = "yd";
-"lang_kn" = "Kannada";
-"mapillary_item" = "OsmAnd + Mapillary";
-"mile" = "mi";

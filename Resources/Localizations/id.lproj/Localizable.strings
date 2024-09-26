@@ -247,7 +247,6 @@
 "recalculate_route" = "Kalkulasi ulang rute";
 "recalculate_route_distance_promo" = "Rute akan dikalkulasi ulang jika jarak dari rute ke lokasi saat ini lebih dari nilai yang dipilih.";
 "select_distance_route_will_recalc" = "Pilih jarak setelah itu rute akan dikalkulasi ulang.";
-"instructions_repeat" = "Tap \"Next turn\" widget to repeat instructions";
 "guidance_preferences_descr" = "Preferensi Navigasi";
 "routing_preferences_descr" = "Preferensi perutean";
 "routing_settings" = "Navigasi";
@@ -443,8 +442,6 @@
 "poi_dialog_poi_type" = "Jenis POI";
 "shared_string_my_places" = "Tempat Saya";
 "favorite_group_name" = "Nama grup";
-"fav_import_desc" = "You can import your favorites as waypoints in GPX file (common GPS data format)\n\nTo share the favorites.gpx file you can open file from Dropbox, Email, or any other source - Use Open In function.";
-"fav_exists" = "Favorite with name \"%@\" already exists";
 "shared_string_rename" = "Ubah nama";
 "update_existing" = "Ubah";
 "replace_favorite_confirmation" = "Ubah Favorit \"%@\"\?";
@@ -485,7 +482,6 @@
 "import_tracks" = "Impor trek";
 "gpx_parse_error" = "Masalah ditemukan dengan sebuah berkas GPX. \n \nAnda dapat menghubungi dukungan OsmAnd untuk menyelidiki.";
 "tracks_on_map" = "Trek yang ditampilkan";
-"gpx_import_desc" = "To import your GPX files (common GPS data format) from Dropbox, Email, or any other source use \"Copy to OsmAnd Maps\" option";
 "shared_string_statistics" = "Statistik";
 "layer_route" = "Rute";
 "map_widget_average_speed" = "Kecepatan rata-rata";
@@ -550,9 +546,7 @@
 
 // Intro
 "shared_string_skip" = "Lewati";
-"intro_download" = "Download\nmap";
 "next_proceed" = "Selanjutnya";
-"intro_welcome" = "Welcome to\nOsmAnd";
 // Settings
 "map_locale" = "Bahasa peta";
 "recording_context_menu_show" = "Tampilkan";
@@ -723,10 +717,8 @@
 "checking_for_duplicate_description" = "OsmAnd periksa %@ untuk duplikat dengan item yang ada di aplikasi. \n \nMungkin perlu beberapa waktu.";
 
 // Purchases
-"prch_nau_q1" = "Please turn on \"Nautical\" style in the Map Settings and install world seamarks basemap.";
 "shared_string_download" = "Unduh";
 "shared_string_no_thanks" = "Tidak, terima kasih";
-"prch_failed" = "Purchase of \"%@\" has failed";
 
 // Route planning
 "plan_route" = "Rencanakan rute";
@@ -748,7 +740,6 @@
 "simplified_track_description" = "Hanya garis rute yang akan disimpan, titik jalan akan dihapus.";
 "open_saved_track" = "Buka trek yang tersimpan";
 "plan_route_create_new_route" = "Buat rute baru";
-"track_is_saved" = "%@\nis saved!";
 "plan_route_open_existing_track" = "Buka trek yang sudah ada";
 "sort_last_modified" = "Terakhir dimodifikasi";
 "route_between_points_add_track_desc" = "Pilih file trek untuk menambahkan segmen baru.";
@@ -795,8 +786,6 @@
 "pseudo_mercator_projection" = "Proyeksi Pseudo-Mercator";
 "sqlite_db_file" = "Berkas SQLiteDB";
 "one_image_per_tile" = "Satu file gambar per ubin";
-"res_zoom_levels_desc" = "This parameters will affect the map display when used as a map type or overlay/underlay.\n\nMap type: the map will be limited to the selected zooms.\n\nOverlay / Underlay: Zoom levels at which tiles will be visible. Upscale or downscale will occur above or below the set values.";
-"res_expire_time_desc" = "Expiration time in minutes. Cached tiles will be reloaded after specified time. Leave this field empty if you do not need to reload tiles for this source.\nOne day is 1440 minutes.\nOne week is 10 080 minutes.\n30 days are 43 200 minutes.";
 "clear_tiles_warning" = "Menerapkan perubahan ini akan menghapus data cache untuk sumber ubin ini";
 "welmode_download_maps" = "Unduh peta";
 "srtm_unit_format" = "Varian unit garis kontur";
@@ -844,7 +833,6 @@
 "tab_title_advanced" = "Lanjutan";
 "shared_string_without_name" = "Tanpa nama";
 "local_openstreetmap_uploading" = "Mengunggah…";
-"osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
 "save_poi_without_poi_type_message" = "Simpan POI tanpa tipe\?";
 "save_poi_too_many_uppercase" = "Nama ini mengandung terlalu banyak huruf kapital. Lanjutkan\?";
 
@@ -966,7 +954,6 @@
 "subscription_osmandlive_item" = "Langganan - OsmAnd Live";
 "map_legend" = "Legenda peta";
 "other_location" = "Lainnya";
-"help_what_is_new" = "What\'s new";
 "instalation_troubleshooting_item" = "Pemasangan dan pemecahan masalah";
 "techical_articles_item" = "Artikel-artikel teknis";
 "versions_item" = "Versi-versi";
@@ -1097,7 +1084,6 @@
 "plugins_menu_group" = "Plugin";
 "plugin_popup_srtm_desc" = "To start using Contour lines feature, please download Contour lines of an region first";
 "plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Contour lines</b>";
-"plugin_popup_nautical_desc" = "Please download Nautical maps first.\nThen go to the <b>Map Settings</b> > <b>Map type</b> and turn on <b>Nautical</b> style";
 "shared_string_restore" = "Pulihkan";
 "map_downloaded" = "Peta diunduh";
 "online_map" = "Peta daring";
@@ -2474,109 +2460,3 @@
 "location_radius_description" = "Menunjukkan seberapa luas lingkaran yang menunjukkan keakuratan lokasi Anda saat ini";
 "quick_action_toggle_preference" = "Sebuah alihan untuk mengubah preferensi.";
 "location_radius" = "Radius lokasi";
-"activity_type_offroad_name" = "Off-road";
-"lang_ba" = "Bashkir";
-"help_article_navigation_auto_car_name" = "Android Auto";
-"navigate_point_format_DM" = "DDD MM.MMM";
-"lang_sw" = "Swahili";
-"plan_route_folder" = "Folder";
-"monitoring_control_start" = "REC";
-"short_min" = "m";
-"lang_hi" = "Hindi";
-"cubic_m" = "m³";
-"lang_eu" = "Basque";
-"shared_string_status" = "Status";
-"sett_generic_ext_input" = "Keyboard";
-"lang_pnb" = "Punjabi";
-"carplay" = "CarPlay";
-"lang_la" = "Latin";
-"lang_th" = "Thai";
-"lang_kab" = "Kabyle";
-"lang_fy" = "Frysk";
-"index_name_asia" = "Asia";
-"poi" = "POI";
-"routing_profile_ski" = "Ski";
-"lang_min" = "Minangkabau";
-"lang_tt" = "Tatar";
-"shared_string_item" = "Item";
-"lang_war" = "Waray";
-"personal_category_name" = "Personal";
-"lang_sat" = "Santali";
-"navigate_point_format_D" = "DDD.DDDDD";
-"app_mode_ufo" = "UFO";
-"lang_ur" = "Urdu";
-"shared_string_menu" = "Menu";
-"edit_tilesource_url_to_load" = "URL";
-"tts_title" = "TTS";
-"mile" = "mi";
-"metric_ton" = "t";
-"shared_string_ellipsis" = "…";
-"weather_source_ecmwf_title" = "ECMWF";
-"shared_string_format" = "Format";
-"ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
-"driving_region_australia" = "Australia";
-"lang_cv" = "Chuvash";
-"yard" = "yd";
-"lang_oc" = "Occitan";
-"shared_string_color_magenta" = "Magenta";
-"shared_string_go" = "Go";
-"shared_string_mode" = "Mode";
-"ltr_or_rtl_combine_via_colon" = "%@: %@";
-"navigate_point_format_DMS" = "DDD MM SS.S";
-"weather_temperature_fahrenheit" = "Fahrenheit";
-"lang_tg" = "Tajik";
-"weather_temperature_celsius" = "Celsius";
-"nav_type_brouter" = "BRouter";
-"lang_hsb" = "Sorbian (Upper)";
-"mapillary_item" = "OsmAnd + Mapillary";
-"help_article_navigation_car_play_name" = "CarPlay";
-"lang_te" = "Telugu";
-"osmand_cloud" = "OsmAnd Cloud";
-"beats_per_minute_short" = "bpm";
-"lang_br" = "Breton";
-"shared_string_legal" = "Legal";
-"lang_yo" = "Yoruba";
-"shared_string_min" = "Min";
-"shared_string_wikivoyage" = "Wikivoyage";
-"lang_gn_py" = "Guaraní";
-"mapillary" = "Mapillary";
-"osmand_live" = "OsmAnd Live";
-"lang_ne" = "Nepali";
-"mile_per_hour" = "mph";
-"app_mode_moped" = "Moped";
-"lang_eo" = "Esperanto";
-"user_login" = "Login";
-"lang_nv" = "Navajo";
-"arrival_distance_factor_normally" = "Normal";
-"app_mode_osm" = "OSM";
-"lang_ceb" = "Cebuano";
-"ltr_or_rtl_combine_via_dash" = "%@ — %@";
-"ltr_or_rtl_combine_via_slash" = "%@/%@";
-"help_article_troubleshooting_android_auto_name" = "Android Auto";
-"info_button" = "Info";
-"help_article_navigation_routing_brouter_name" = "BRouter";
-"lang_ber" = "Berber";
-"shared_string_speedometer" = "Speedometer";
-"km" = "km";
-"navigate_point_olc" = "Open Location Code";
-"m" = "m";
-"navigate_point_mgrs" = "MGRS";
-"data_settings" = "Data";
-"lang_tl" = "Tagalog";
-"shared_string_open_street_map" = "OpenStreetMap";
-"app_mode_offroad" = "Offroad";
-"lang_vo" = "Volapuk";
-"lang_mr" = "Marathi";
-"ltr_or_rtl_combine_via_space" = "%@ %@";
-"lang_new" = "Newar / Nepal Bhasa";
-"kg" = "kg";
-"lang_kk" = "Kazakh";
-"nm" = "nmi";
-"share_geo" = "geo:";
-"default_price_currency_format" = "%.2f %@";
-"lang_uz" = "Uzbek";
-"lang_ml" = "Malayalam";
-"driving_region_india" = "India";
-"ltr_or_rtl_combine_via_comma" = "%@, %@";
-"shared_string_millimeters_short" = "mm";
-"sett_wunderlinq_ext_input" = "WunderLINQ";

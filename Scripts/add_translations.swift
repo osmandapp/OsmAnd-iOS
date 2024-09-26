@@ -173,6 +173,8 @@ func breakpointHere() {
 }
 
 
+// MARK: - Main
+
 class Main {
     
     static func run(_ arguments: [String]) {
@@ -261,6 +263,7 @@ class Main {
 }
 
 
+// MARK: - Initialiser
 
 class Initialiser {
     
@@ -326,13 +329,14 @@ class Initialiser {
 }
 
 
+// MARK: - IOSReader
 
 class IOSReader {
     
     static func parseTranslationFile(language: String) -> [String : String] {
         var iosDict: [String:String] = [:]
         let url = URL(fileURLWithPath: Main.getOsmandRepositoriesPath().path + "/ios/Resources/Localizations/" + language + ".lproj/Localizable.strings")
-        guard let dict = NSDictionary(contentsOf: url) else {return iosDict }
+        guard let dict = NSDictionary(contentsOf: url) else { return iosDict }
         iosDict = dict as! [String : String]
         return iosDict
     }
@@ -364,6 +368,7 @@ class IOSReader {
 }
  
 
+// MARK: - IOSWriter
 
 class IOSWriter {
     
@@ -405,11 +410,12 @@ class IOSWriter {
             if androidDict.keys.contains(elem.key)
             {
                 // Update from localized android dict
-                guard isValueCorrect(value: androidDict[elem.key]!) else {continue}
+                guard let androidValue = androidDict[elem.key] else { continue }
+                guard isValueCorrect(value: androidValue) else { continue }
                 if iosDict.keys.contains(elem.key) {
-                    existingLinesDict.updateValue(androidDict[elem.key]!, forKey: elem.key)
-                } else {
-                    newLinesDict.updateValue(androidDict[elem.key]!, forKey: elem.key)
+                    existingLinesDict.updateValue(androidValue, forKey: elem.key)
+                } else if iosEnglishDict[elem.key] != androidValue {
+                    newLinesDict.updateValue(androidValue, forKey: elem.key)
                 }
             }
         }
@@ -418,12 +424,13 @@ class IOSWriter {
             if DEBUG && elem.key == DEBUG_STOP_KEY {
                 // breakpointHere()
             }
-            if let key = AndroidReader.dictContainsKeys(androidDict: androidDict, keys: elem.value) {
-                guard isValueCorrect(value: androidDict[key]!) else {continue}
+            if let androidKey = AndroidReader.dictContainsKeys(androidDict: androidDict, keys: elem.value) {
+                guard let androidValue = androidDict[androidKey] else { continue }
+                guard isValueCorrect(value: androidValue) else { continue }
                 if iosDict.keys.contains(elem.key) {
-                    existingLinesDict.updateValue(androidDict[key]!, forKey: elem.key)
-                } else {
-                    newLinesDict.updateValue(androidDict[key]!, forKey: elem.key)
+                    existingLinesDict.updateValue(androidValue, forKey: elem.key)
+                } else if iosEnglishDict[elem.key] != androidValue {
+                    newLinesDict.updateValue(androidValue, forKey: elem.key)
                 }
             }
         }
@@ -471,10 +478,10 @@ class IOSWriter {
                         var currentValue = ""
                         if components.count > 1 {
                             key = components[0].trimmingCharacters(in: CharacterSet(charactersIn: "\""))
-                            currentValue = components[1].trimmingCharacters(in: CharacterSet(charactersIn: "\""))
+                            currentValue = iosDict[key] ?? ""
                         }
                         
-                        if !key.isEmpty && iosDict.keys.contains(key) {
+                        if !key.isEmpty {
                             if DEBUG && key == DEBUG_STOP_KEY {
                                 // breakpointHere()
                             }
@@ -484,7 +491,7 @@ class IOSWriter {
                                 print("Duplicate key ! \(string) ")
                             } else {
                                 var newString = string
-                                var newValue = existingLinesDict[key]
+                                let newValue = existingLinesDict[key]
                                 if let newValue, let updatedString = replaceValueText(newValue: filterUnsafeChars(newValue), inFullString: string)  {
                                     newString = updatedString
                                 }
@@ -591,7 +598,7 @@ class IOSWriter {
     
     static func getKey(inFullString fullString: String) -> String {
         let quotationMarkIndexes = getAllSubstringIndexes(fullString: fullString, subString: "\"")
-        guard (quotationMarkIndexes.count >= 4) else {return fullString}
+        guard (quotationMarkIndexes.count >= 4) else { return fullString }
         
         let startIndex = fullString.index(fullString.startIndex, offsetBy: quotationMarkIndexes[0] + 1)
         let endIndex = fullString.index(fullString.startIndex, offsetBy: quotationMarkIndexes[1])
@@ -638,6 +645,7 @@ class IOSWriter {
 }
 
 
+// MARK: - AndroidReader
 
 class AndroidReader {
     
@@ -668,6 +676,7 @@ class AndroidReader {
 }
 
 
+// MARK: - Parser
 
 class Parser: NSObject, XMLParserDelegate {
 
@@ -707,6 +716,7 @@ class Parser: NSObject, XMLParserDelegate {
     }
 }
 
+// MARK: - RoutingParamsHelper
 
 class RoutingParamsHelper {
     
@@ -800,7 +810,7 @@ class RoutingParamsHelper {
         do {
             try joined.write(to: url, atomically: false, encoding: .utf8)
         }
-        catch {return}
+        catch { return }
     }
     
     
@@ -824,7 +834,7 @@ class RoutingParamsHelper {
     
 }
 
-
+// MARK: - System
 
 class System {
     
@@ -877,6 +887,6 @@ class System {
 
 
 
+// MARK: - Script is launching here
 
-//MARK: Script launching
 Main.run(CommandLine.arguments)

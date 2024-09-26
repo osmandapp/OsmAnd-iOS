@@ -1766,7 +1766,6 @@
 "road_min_speed_descr" = "Legt die minimale Fahrgeschwindigkeit für alle Straßen auf der Route fest. Erhöht die Priorität für Straßen mit empfohlenen Geschwindigkeiten unter der Mindestgeschwindigkeit.";
 "road_max_speed_descr" = "Legt die maximale Fahrgeschwindigkeit für alle Straßen auf der Route fest. Verringert die Priorität für Straßen mit einer möglichen Geschwindigkeit, die höher als die Höchstgeschwindigkeit ist.";
 "road_speeds_descr" = "Diese Parameter können die Routenberechnung beeinflussen.";
-"vk" = "VKontakte";
 "ios_release_3_90" = "• Einführung der Funktion \"Eine Route planen\" zur Planung zukünftiger Strecken mit der Möglichkeit, Streckenabschnitte mit verschiedenen Navigationsarten zu erstellen\n• Option zum Aktivieren eines Kompasses über das Werkzeug \"Radiuslineal\" hinzugefügt\n• Option \"POI-Overlay-Bezeichnungen\" hinzugefügt, die es erlaubt, Namen für Favoriten, Track-Wegpunkte und Markierungen auf der Karte anzuzeigen\n• Neue Schnellaktionen für die Sichtbarkeit von Höhenlinien und Gelände auf der Karte, das Ändern eines Anwendungsprofils und das Löschen eines nächstgelegenen Zwischenpunkts hinzugefügt\n• Probleme mit fehlender Wikipedia-Suchkategorie behoben\n• Import von Einstellungen: Fehler behoben, Unterstützung für alle in OsmAnd verfügbaren Datentypen hinzugefügt\n• OpenStreetMap-Bearbeitung: Die Zeitauswahl und die Unmöglichkeit, den Changeset-Kommentar zu ändern, wurden korrigiert\n";
 "ios_release_3_80" = "• \"Anwendungsprofile\" mit unabhängigen Einstellungen eingeführt\n• Neue Anordnung der Einstellungen nach Profilen und Typen: Navigation, Allgemein, Karte und Bildschirm\n• Möglichkeit hinzugefügt, Profileinstellungen zu importieren oder zu exportieren\n• Datenquellen für Online-Fotos hinzugefügt\n• Möglichkeit zum Herunterladen von Online-Karten in den Cache hinzugefügt\n• Verbesserte \"Such\"-Algorithmen\n";
 
@@ -3014,7 +3013,6 @@
 "report_an_issues" = "Ein Problem melden";
 "open_issue_on_gitHub" = "Fehler auf GitHub melden";
 "about_osmAnd" = "Über OsmAnd";
-"offline_wikivoyage" = "Wikivoyage offline";
 "help_article_search_search_all_name" = "Alle suchen";
 "help_article_search_search_coordinates_name" = "Koordinaten suchen";
 "shared_string_accessibility" = "Bedienungshilfen";
@@ -3252,7 +3250,6 @@
 "required_maps_list" = "Karten, die auch verwendet werden: %@";
 "missing_or_outdated_maps_description" = "Einige Offline-Karten, die für diese Route benötigt werden, fehlen oder sind nicht auf dem neuesten Stand. Bitte laden Sie diese Karten herunter oder aktualisieren Sie diese.";
 "getting_list_required_maps" = "Abrufen einer Liste der benötigten Karten...";
-"osm_id" = "OSM-ID";
 "average_vertical_speed" = "Durchschnittliche vertikale Geschwindigkeit";
 "osmand_depelopment_use_old_routing" = "Altes Routing verwenden (A*)";
 "shared_string_development" = "Entwicklung";

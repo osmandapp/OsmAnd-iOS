@@ -7,7 +7,7 @@
 "shared_string_control_stop" = "Deter";
 "cancel_navigation" = "Deter a navegación";
 "intermediate_items_sort_by_distance" = "Ordenar porta a porta";
-"switch_start_finish" = "Inverter o punto de partida e o destino";
+"switch_start_finish" = "Inverter os puntos de partida e destino";
 "clear_all_intermediates" = "Limpar tódolos puntos intermedios";
 "shared_string_options" = "Opcións";
 "new_destination_point_dialog" = "Xa existe un destino:";
@@ -1476,7 +1476,7 @@
 "change_folder" = "Mudar cartafol";
 "shared_string_others" = "Outros";
 "rearrange_categories" = "Reorganizar categorías";
-"osmand_settings" = "Axustes do OsmAnd";
+"osmand_settings" = "Axustes de OsmAnd";
 "markers_history" = "Historial de marcaxes";
 "icon_group_symbols" = "Símbolos";
 "searching_gps" = "Estase a procurar o GPS";
@@ -1790,7 +1790,7 @@
 "short_location_on_map" = "Lat %@ \nLon %@";
 "select_another_colorization" = "Escolle outro tipo de cor.";
 "osm_live_payment_current_subscription" = "Subscrición actual";
-"empty_purchases_description" = "Se as túas compras non aparecen aquí, preme en \"%@\", ou ponte en contacto co noso equipo de asistencia.";
+"empty_purchases_description" = "Se as súas compras non aparecen aquí, prema en «%@» ou contacte co noso equipo de asistencia.";
 "public_transport_ped_route_title" = "A ruta a pé é de aproximadamente %@ e podería ser máis rápida que no transporte público";
 "recalc_angle_dialog_descr" = "Amosarase un segmento recto adicional entre a miña localización e a ruta calculada até que se volva calcular a ruta";
 "sort_by" = "Ordenar por";
@@ -1832,7 +1832,7 @@
 "shared_string_angle_param" = "Ángulo: %@°";
 "osm_live_payment_annual_title" = "Anual";
 "shared_string_recorded" = "Gravada";
-"select_wikipedia_article_langs" = "Escolle as linguas para os artigos da Wikipedia no mapa. Muda a calquera lingua dispoñíbel mentres les o artigo.";
+"select_wikipedia_article_langs" = "Seleccione os idiomas dos artigos da Wikipedia no mapa. Cambie a calquera idioma dispoñíbel mentres le o artigo.";
 "shared_string_contours" = "Contornos";
 "animate_my_location" = "Animar posición propia";
 "mapillary_descr" = "Imaxes a nivel de rúa en liña para todos. Descobre lugares, contribúe, captura o mundo.";
@@ -2037,3 +2037,5 @@
 "shared_string_local" = "Local";
 "location_radius" = "Raio da ubicación";
 "view_angle" = "Ángulo de visión";
+"device_settings" = "Axustes do dispositivo";
+"backup_and_restore" = "Copia de seguranza e restauración";

@@ -51,7 +51,7 @@ let languageDict = [
     "an" : "an",                // Dutch
     "ar" : "ar",                // Arabic
     "ars" : "ars",              // Arabic, Najdi
-    "ast" : "ast",              // Austrian
+    "ast" : "ast",              // Asturian
     "az" : "az",                // Azerbaijani
     "be" : "be",                // Belarusian
     "bg" : "bg",                // Bulgarian
@@ -394,6 +394,12 @@ class IOSWriter {
         return false
     }
     
+    private static func isEnglishDuplicateInLocalFile(_ language: String, _ key: String, _ androidValue: String) -> Bool {
+        let androidTrimmedValue = androidValue.replacingOccurrences(of: "\\", with: "")
+        let iosEnglishTrimmedValue = (iosEnglishDict[key] ?? "").replacingOccurrences(of: "\\", with: "")
+        return language != iosEnglishKey && androidTrimmedValue == iosEnglishTrimmedValue
+    }
+    
     static func makeNewDict(language: String, iosDict: [String : String], androidDict: [String : String], iosEnglishDict: [String : String]) {
         let androidDict = IOSReader.replacePlaceholders(androidDict: androidDict)
         print("Making dictionary '\(language)' at \(DateFormatter.localizedString(from: Date(), dateStyle: .medium, timeStyle: .medium))")
@@ -412,9 +418,10 @@ class IOSWriter {
                 // Update from localized android dict
                 guard let androidValue = androidDict[elem.key] else { continue }
                 guard isValueCorrect(value: androidValue) else { continue }
+                guard !isEnglishDuplicateInLocalFile(language, elem.key, androidValue) else { continue }
                 if iosDict.keys.contains(elem.key) {
                     existingLinesDict.updateValue(androidValue, forKey: elem.key)
-                } else if iosEnglishDict[elem.key] != androidValue {
+                } else {
                     newLinesDict.updateValue(androidValue, forKey: elem.key)
                 }
             }
@@ -427,6 +434,10 @@ class IOSWriter {
             if let androidKey = AndroidReader.dictContainsKeys(androidDict: androidDict, keys: elem.value) {
                 guard let androidValue = androidDict[androidKey] else { continue }
                 guard isValueCorrect(value: androidValue) else { continue }
+                guard !isEnglishDuplicateInLocalFile(language, elem.key, androidValue) else {
+                    continue
+                }
+                
                 if iosDict.keys.contains(elem.key) {
                     existingLinesDict.updateValue(androidValue, forKey: elem.key)
                 } else if iosEnglishDict[elem.key] != androidValue {

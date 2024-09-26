@@ -2,6 +2,7 @@
 "OsmAnd Maps" = "OsmAnd Maps";
 
 // Shared Strings
+"shared_string_select" = "Select";
 "shared_string_back" = "Back";
 "shared_string_ok" = "OK";
 "shared_string_cancel" = "Cancel";
@@ -23,6 +24,8 @@
 "shared_string_edit" = "Edit";
 "shared_string_modify" = "Modify";
 "shared_string_later" = "Later";
+"shared_string_of" = "of";
+"shared_string_all" = "All";
 
 "offline_maps" = "Offline Maps";
 "download_map" = "Download map";
@@ -70,6 +73,7 @@
 
 // GPX
 "gpx_point" = "Point";
+"gpx_waypoint" = "Waypoint";
 "gpx_waypoints" = "Waypoints";
 "gpx_points" = "Point(s)";
 "gpx_export" = "Export";
@@ -238,6 +242,7 @@
 // Menu
 "menu_my_places" = "My Places";
 "menu_my_trips" = "My Trips";
+"menu_my_directions" = "My Directions";
 "menu_feedback" = "Feedback";
 "menu_about" = "About";
 
@@ -525,4 +530,41 @@
 "gpx_edit_mode" = "Edit mode";
 "go_to_map" = "Go to Map";
 
-;
+"device_memory" = "Device memory";
+"free_memory" = "Free %@";
+
+"first_usage_greeting" = "Get directions and discover new places without Internet connection";
+"get_started" = "Get started";
+
+"first_usage_wizard_desc" = "Let OsmAnd determine your location and suggest maps to download for that region.";
+
+"location_not_found" = "Location not found";
+"search_my_location" = "Search my location";
+
+"no_inet_connection" = "No Internet connection";
+"no_inet_connection_desc_map" = "Required to download maps.";
+"try_again" = "Try again";
+
+"search_location" = "Searching location…";
+"search_map" = "Searching map…";
+"search_another_country" = "Select another region";
+
+"skip_map_downloading" = "Skip downloading maps";
+"skip_map_downloading_desc" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";
+
+"wiki_around" = "Nearby Wikipedia articles";
+"categories" = "Categories";
+"items_selected" = "%d selected";
+
+"custom_search" = "Custom search";
+"poi_filter_custom_filter" = "Custom filter";
+"poi_filter_closest_poi" = "Nearest POIs";
+"shared_string_is_open_24_7" = "Open 24/7";
+"shared_string_is_open" = "Open now";
+"poi_filter_by_name" = "Search by name";
+"subcategories" = "Subcategories";
+"select_all" = "Select all";
+"create_custom_poi" = "Create custom filter";
+"selected_categories" = "Selected categories";
+"new_filter_desc" = "Please enter a name for the new filter, this will be added to your Categories tab.";
+

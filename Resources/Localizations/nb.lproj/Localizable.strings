@@ -2619,7 +2619,7 @@
 "missing_or_outdated_maps_title" = "Manglende eller utdaterte kart";
 "osm_id" = "OSM-ID";
 "shared_string_millimeters" = "Millimeter";
-"shared_string_bottom" = "Bunn";
+"shared_string_bottom" = "Nederst";
 "visualization_3d_track_line" = "Sporlinje";
 "shared_string_row_number" = "Rad %d";
 "unsaved_changes" = "Ulagrede endringer";

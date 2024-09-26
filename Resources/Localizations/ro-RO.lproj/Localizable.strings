@@ -204,7 +204,7 @@
 "daynight_mode_auto" = "Răsărit/Apus";
 "traffic_warning" = "Avertizare trafic";
 "osm_live_subscription" = "Abonament OsmAnd Live";
-"shared_string_distance" = "Distanța";
+"shared_string_distance" = "Distanță";
 "local_map_names" = "Nume locale";
 "osm_notes_online_layer" = "Bug hartă OSM";
 "work_button" = "Serviciu";
@@ -1207,7 +1207,7 @@
 "units_of_speed" = "Unități de viteză";
 "allow_3D_view" = "Vedere 2.5D";
 "do_not_rotate" = "Nu rotiți";
-"settings_app_theme" = "Tema aplicației";
+"settings_app_theme" = "Temă aplicație";
 "map_settings_available_srtm_maps_descr" = "Hărți suplimentare sunt necesare pentru a vedea Hillshade pe hartă";
 "map_settings_line_density_slowdown_warning" = "Densitatea mare a liniilor poate încetini redarea hărților";
 "map_settings_contour_zoom_level_descr" = "Selectați nivelul de zoom, de la care vor fi afișate curbele (izolinii)";
@@ -3143,7 +3143,7 @@
 "ant_plus_searching_text_description" = "Țineți dispozitivul aproape de senzor. Trebuie să activați senzorul pentru ca OsmAnd să îl poată găsi.";
 "external_device_forget_sensor" = "Uită senzor";
 "external_device_forget_sensor_description" = "Senzorul va fi eliminat din listă. Veți putea să împerecheați din nou acest senzor în orice moment.";
-"external_device_status_connect" = "Conectare";
+"external_device_status_connect" = "Conectați-vă";
 "ant_plus_nothing_found_description" = "Asigurați-vă că: \n– Bluetooth e pornit \n– Senzorul e activ \n– Acest dispozitiv se află lângă senzor";
 "purchases_feature_desc_external_sensors" = "Afișați și înregistrați date de la senzorii externi: viteza bicicletei, puterea exercitată, cadența pedalării și pulsul.";
 "default_appearance_desc" = "Culoarea, pictograma și forma implicite se vor aplica punctelor favorite adăugate în grup.";

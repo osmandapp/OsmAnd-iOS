@@ -2546,7 +2546,7 @@
 "quick_action_get_info" = "取得資訊";
 "quick_action_dialog" = "對話框";
 "units_of_speed" = "速度單位";
-"settings_app_theme" = "應用程式佈景主題";
+"settings_app_theme" = "應用程式主題";
 "map_settings_available_srtm_maps_descr" = "需要額外的地圖才能在地圖上檢視地形陰影";
 "res_url_warning" = "URL 不能為空";
 "toggle_day_night" = "切換日/夜模式";
@@ -3296,7 +3296,7 @@
 "step_by_step" = "按步驟";
 "add_button" = "新增按鈕";
 "shared_string_always" = "總是";
-"shared_string_bottom" = "底部";
+"shared_string_bottom" = "下面";
 "auto_zoom" = "自動縮放";
 "track_3d_empty_view_description" = "以互動式 3D 方式探索軌跡！在地圖上直接視覺化高度、速度等。";
 "shared_string_millimeters" = "公釐";

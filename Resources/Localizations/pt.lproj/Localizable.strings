@@ -3314,7 +3314,7 @@
 "fixed_height" = "Altura fixa";
 "downward_gradient" = "Gradiente descendente";
 "shared_string_top" = "Topo";
-"shared_string_bottom" = "Base";
+"shared_string_bottom" = "Em baixo";
 "track_3d_empty_view_title" = "Vista 3D do trilho";
 "track_3d_empty_view_description" = "Explore o trilho em 3D interativo! Visualize a altura, a velocidade e muito mais diretamente no mapa.";
 "display_position_automatic_descr" = "Depende da orientação do mapa: em baixo para a direção do movimento, ao centro para todas as outras.";

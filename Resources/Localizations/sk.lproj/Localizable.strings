@@ -2592,7 +2592,7 @@
 "map_markers_bar" = "Panel mapových značiek";
 "map_widget_trip_recording_downhill" = "Z kopca";
 "shared_string_loading" = "Načítanie";
-"weather_update_disabled" = "Vypnuté";
+"weather_update_disabled" = "Zakázané";
 "average_speed_time_interval_desc" = "Zadajte časový interval pre priemerovanie rýchlosti.";
 "map_widget_sun_position_desc" = "Zobrazuje čas do východu alebo západu slnka.";
 "temperature_widget_desc" = "Zobrazí teplotu pre súčasný stred mapy.";

@@ -630,7 +630,7 @@
 "map_orientation_portrait" = "Portret";
 "network" = "Netwerk";
 "map_orientation_default" = "Dieselfde as toestel";
-"map_settings_topography" = "Kontoer lyne inligting";
+"map_settings_topography" = "Kontoerlyne";
 "map_orientation_landscape" = "Landskap";
 "general_settings" = "Algemene instellings";
 "shared_string_format" = "Formaat :";

@@ -3026,7 +3026,7 @@
 "telegram_chats" = "Telegram-Chats";
 "download_install_beta_version" = "Beta-Version von OsmAnd herunterladen und installieren";
 "general_settings" = "Allgemein";
-"map_settings_topography" = "Höhenlinien";
+"map_settings_topography" = "Konturlinie";
 "write_data_from_sensor_to_track" = "Daten von externen Sensoren während der Fahrtaufzeichnung in GPX schreiben.";
 "external_device_characteristic_distance" = "Entfernung";
 "external_device_characteristic_stride_length" = "Schrittweite";

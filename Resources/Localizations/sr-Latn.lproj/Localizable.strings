@@ -678,7 +678,7 @@
 "shared_string_appearance" = "Izgled";
 "map_settings_line_density_slowdown_warning" = "Velika gustina linija može usporiti prikazivanje mape";
 "map_settings_available_srtm_maps_descr" = "Dodatne mape su potrebne da biste videli senke brda na mapi";
-"settings_app_theme" = "Tema aplikacije";
+"settings_app_theme" = "Kolor šema";
 "light_theme" = "Svetla";
 "do_not_rotate" = "Ne rotiraj";
 "allow_3D_view" = "2.5D prikaz";
@@ -2920,7 +2920,7 @@
 "app_store" = "Ap Prodavnica";
 "weather_data_provider" = "Dobavljač podataka GFS.";
 "weather_updates_automatically" = "OsmAnd će preuzeti ažuriranja automatski kada je aktivan.";
-"external_device_status_connect" = "Poveži";
+"external_device_status_connect" = "Poveži se";
 "new_track" = "Nova snimljena ruta";
 "download_to_device" = "Preuzmi na uređaj";
 "shared_string_next_event" = "Sledeći događaj";
@@ -3335,7 +3335,7 @@
 "fixed_height" = "Fiksna visina";
 "downward_gradient" = "Gradijent na dole";
 "shared_string_top" = "Vrh";
-"shared_string_bottom" = "Na dnu";
+"shared_string_bottom" = "Dno";
 "track_3d_empty_view_description" = "Istraži stazu u interaktivnom 3D! Vizualiziraj visinu, brzinu i još toga direktno na mapi.";
 "shared_string_millimeters" = "Milimetri";
 "display_position_automatic_descr" = "Zavisi od orijentacije mape: dno za smer kretanja, centar za sve ostalo.";

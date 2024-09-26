@@ -511,7 +511,7 @@
 "add_online_source" = "Aldoni enretan fonton";
 "srtm_color_scheme" = "Kolor-skemo";
 "shared_string_appearance" = "Aspekto";
-"settings_app_theme" = "Etoso";
+"settings_app_theme" = "Etoso de aplikaĵo";
 "light_theme" = "Hela";
 "units_and_formats" = "Mezurunuoj kaj formoj";
 "osmand_settings" = "Ĝeneralaj agordoj";
@@ -2426,7 +2426,7 @@
 "dangerous_goods_description" = "Sur kelkaj vojoj kaj tuneloj transporto de danĝeraj materialoj estas malpermesata.";
 "shared_string_item" = "Elemento";
 "step_by_step" = "Turno-post-turno";
-"shared_string_bottom" = "malsupro";
+"shared_string_bottom" = "Sube";
 "display_position_automatic_descr" = "Dependas de map-orientiĝo: sube por “Direkto de movado” kaj centre por ĉiuj aliaj.";
 "visualization_3d_track_line" = "Linio de spuro";
 "visualization_3d_visualized_by" = "Vidigi per";

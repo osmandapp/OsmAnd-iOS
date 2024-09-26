@@ -2925,7 +2925,7 @@
 "article_added_to_bookmark" = " aggiunto ai segnalibri.";
 "map_orientation_landscape" = "Orizzontale";
 "weather_update_over_any_network" = "Con qualsiasi rete";
-"external_device_status_connect" = "Collegare";
+"external_device_status_connect" = "Connetti";
 "shared_string_result" = "Risultato";
 "no_travel_guides_data_descr" = "Scarica le guide di viaggio Wikivoyage per visualizzare articoli su luoghi di tutto il mondo senza una connessione a Internet.";
 "shared_string_travel" = "Viaggio";
@@ -3272,7 +3272,7 @@
 "routing_attr_avoid_cobblestone_name" = "Evita acciottolato";
 "rendering_value_dark_orange_name" = "Arancione scuro";
 "custom_map_button_name_present" = "Tale pulsante è già presente";
-"shared_string_bottom" = "Sotto";
+"shared_string_bottom" = "In basso";
 "dangerous_goods" = "Merci pericolose";
 "empty_name" = "Nome vuoto";
 "in_case_of_reverse_direction" = "In caso di direzione inversa";

@@ -2164,7 +2164,7 @@
 "help_article_navigation_routing_online_routing_name" = "线上路线规划";
 "shared_string_loading" = "正在加载";
 "shared_string_buttons" = "按钮";
-"map_settings_topography" = "等高线";
+"map_settings_topography" = "等高线数据";
 "apply_to_existing_favorites_descr" = "将更改应用于组中现有的收藏点，还是仅应用于新收藏点？";
 "top_widgets_panel" = "顶部面板";
 "ant_plus_open_settings" = "打开设置";

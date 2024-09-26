@@ -3112,7 +3112,7 @@
 "speak_route_recalculation" = "Најављује прерачунавање путање";
 "announcement_time_title" = "Време објаве";
 "ant_plus_open_settings" = "Отвори поставке";
-"external_device_status_connect" = "Повежи се";
+"external_device_status_connect" = "Повежи";
 "external_device_status_disconnecting" = "Прекидање везе";
 "external_device_unpair_description" = "Повежите пријемник са уређајем да бисте добили информације.";
 "external_device_status_connected" = "Повезан";

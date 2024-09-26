@@ -2967,7 +2967,7 @@
 "coordinates_widget_secondary_desc" = "Format współrzędnych można zmienić w %@ - %@ - %@.";
 "trip_recording_duration_widget_desc" = "Pokazuje aktualnie zarejestrowany czas podróży.";
 "help_article_map_track_context_menu_name" = "Menu kontekstowe ścieżek";
-"weather_update_disabled" = "Wyłączone";
+"weather_update_disabled" = "Wyłączenie";
 "external_sensors_plugin_description" = "Uzyskuje dostęp do zewnętrznych czujników, aby odczytać np. tętno, prędkość roweru, moc jazdy na rowerze lub kadencję. Wymaga podłączenia urządzenia do odpowiednich czujników za pośrednictwem protokołu bezprzewodowej sieci osobistej ANT+.";
 "external_device_characteristic_speed" = "Prędkość";
 "help_article_map_legend_nautical_map_name" = "Styl mapy morskiej";
@@ -3141,7 +3141,7 @@
 "visualization_3d_visualized_by" = "Wizualizowane przez";
 "shared_string_always" = "Zawsze";
 "shared_string_item" = "Pozycja";
-"shared_string_bottom" = "Na dole";
+"shared_string_bottom" = "Dół";
 "speedometer_description" = "Pokazuje bieżącą prędkość zgłoszoną przez GPS";
 "default_buttons" = "Przyciski domyślne";
 "track_3d_empty_view_description" = "Przeglądaj tor w interaktywnym 3D! Wizualizuj wysokość, prędkość i inne parametry bezpośrednio na mapie.";

@@ -3366,7 +3366,7 @@
 "track_3d" = "المسار 3D";
 "fixed_height" = "ارتفاع ثابت";
 "upward_gradient" = "التدرج التصاعدي";
-"shared_string_bottom" = "الأسفل";
+"shared_string_bottom" = "أسفل";
 "track_3d_empty_view_title" = "عرض المسار ثلاثي الأبعاد";
 "shared_string_millimeters_short" = "مليمتر";
 "routing_algorithm" = "خوارزمية التوجيه";

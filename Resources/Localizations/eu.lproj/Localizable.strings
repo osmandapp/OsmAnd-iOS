@@ -2393,7 +2393,7 @@
 "default_buttons" = "Berezko botoiak";
 "track_vertical_exaggeration_description" = "Eskalaren balioa aldatuz gero, 3D pistaren altuera alda dezakezu.";
 "avoid_pt_types" = "Ekidin garraio motak…";
-"shared_string_bottom" = "Bekaldea";
+"shared_string_bottom" = "Behean";
 "visualization_3d_track_line" = "Arrastoaren lerroa";
 "when_exceeded" = "Gainditzean";
 "shared_string_millimeters" = "Milimetroak";
@@ -2487,3 +2487,4 @@
 "location_radius_description" = "Uneko kokapenaren zehaztasuna adierazten duen eremu zirkularra erakusten du";
 "navigation_position_icon" = "Nabigazio-posizioaren ikonoa";
 "location_radius" = "Kokapen erradioa";
+"short_location_on_map" = "Lat %@\nLon %@";

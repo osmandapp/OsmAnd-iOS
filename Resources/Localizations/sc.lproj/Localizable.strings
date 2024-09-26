@@ -928,7 +928,7 @@
 "access_intermediate_arrival_time" = "Ora de arrivu a sa tapa";
 "map_widget_intermediate_time" = "Tempus de arrivu a sa tapa";
 "shared_string_time" = "Tempus";
-"shared_string_distance" = "Distàntzia";
+"shared_string_distance" = "Distantzia";
 "shared_string_milliradians" = "Millèsimos angulares (radiantes)";
 "angular_units" = "Unidades de medida angulare";
 "angular_units_descr" = "Càmbia sas unidades de medida de s'àzimut.";

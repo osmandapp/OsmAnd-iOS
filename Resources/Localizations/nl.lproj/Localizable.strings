@@ -2285,7 +2285,7 @@
 "backup_error_invalid_token" = "Token is niet geldig";
 "map_widget_target_distance" = "Afstand van camera tot doelwit";
 "external_device_details_battery" = "Batterij";
-"settings_app_theme" = "App-kleurenschema";
+"settings_app_theme" = "Applicatie-thema";
 "banner_payment_free_backup_settings_title" = "Gratis instellingen back-up";
 "shared_string_duplicate" = "Dubbel";
 "shared_string_format" = "Formaat";

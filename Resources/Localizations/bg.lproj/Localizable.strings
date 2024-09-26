@@ -1903,7 +1903,7 @@
 "ant_plus_bluetooth_off_description" = "Включване на Bluetooth, търсене и сдвояване със сензори.";
 "external_sensors_source_of_data" = "Източник на данни";
 "map_widget_ant_bicycle_cadence" = "Каданс на велосипеда";
-"weather_update_disabled" = "Спрян";
+"weather_update_disabled" = "Изключено";
 "map_widget_zoom_level_desc" = "Показва текущото увеличение на картата.";
 "radius_rules_widget_desc" = "Инструментът „Линия за радиуси“ показва окръжности с разстояния около избрана точка от картата.";
 "average_speed_time_interval_desc" = "Задайте интервала от време, за който да бъде усреднена скоростта.";

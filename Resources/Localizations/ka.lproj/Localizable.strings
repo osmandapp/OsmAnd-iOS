@@ -2098,7 +2098,7 @@
 "map_widget_gps_info" = "GPS ინფორმაცია";
 "troubleshooting" = "დიაგნოსტიკა";
 "activity_type_winter_name" = "ზამთარი";
-"weather_update_disabled" = "გამორთულია";
+"weather_update_disabled" = "გამორთული";
 "activity_type_cycling_name" = "ველოსიპედით";
 "shared_string_open_track" = "ღია გზა";
 "osm_upload_gpx_tags_footer" = "შეიყვანეთ მძიმით დაცილებული ჭდეები.";

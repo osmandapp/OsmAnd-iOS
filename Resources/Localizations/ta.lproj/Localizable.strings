@@ -686,7 +686,7 @@
 "saved_articles" = "புத்தகக்குறியிட்ட கட்டுரை";
 "image_cache" = "புகைப்படம் மறைவிடம்";
 "map_marker_2nd" = "இரண்டாவது வரைபடம் மார்க்கர்";
-"weather_update_disabled" = "முடக்கியது";
+"weather_update_disabled" = "முடக்கப்பட்டது";
 "shared_string_travel_guides" = "பயண வழிகாட்டிகள்";
 "context_menu_read_article" = "கட்டுரை வாசிக்க";
 "edit_tilesource_minzoom" = "குறைந்தபட்ச ஜூம்";

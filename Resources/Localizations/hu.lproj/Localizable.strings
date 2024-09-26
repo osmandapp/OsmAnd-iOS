@@ -2823,7 +2823,7 @@
 "shared_string_top" = "Fent";
 "shared_string_top_bottom" = "Fent és lent";
 "missing_or_outdated_maps_title" = "Hiányzó vagy nem naprakész térképek";
-"shared_string_bottom" = "Alulra";
+"shared_string_bottom" = "Lent";
 "avoid_pt_types_descr" = "A navigáció során elkerülendő tömegközlekedési módok kijelölése:";
 "add_button" = "Gomb hozzáadása";
 "shared_string_millimeters" = "milliméter";

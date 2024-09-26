@@ -2541,7 +2541,7 @@
 "auto_zoom_smooth" = "매끄러운";
 "shared_string_class" = "등급";
 "shared_string_always" = "항상 사용";
-"shared_string_bottom" = "맨 아래";
+"shared_string_bottom" = "아래";
 "shared_string_limit" = "한계";
 "when_exceeded" = "초과 시";
 "custom_buttons" = "사용자지정 버튼";

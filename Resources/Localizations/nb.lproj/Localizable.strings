@@ -186,7 +186,6 @@
 "use_osm_live_routing" = "OsmAnd Live-navigering";
 "guidance_preferences_descr" = "Navigeringsinnstillinger";
 "routing_preferences_descr" = "Rutingsinnstillinger";
-"recording_preferences_descr" = "Trip recording preferences";
 "routing_settings" = "Navigering";
 "app_mode_bus" = "Buss";
 "app_mode_train" = "Tog";

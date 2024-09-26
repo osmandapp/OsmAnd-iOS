@@ -21,9 +21,7 @@
 "keep_and_add_destination_point" = "Добавяне като следващо местоназначение";
 "subsequent_dest_description" = "Текущото местоназначение става последна междинна точка";
 "add_as_first_destination_point" = "Първа междинна точка";
-"first_intermediate_dest_description" = "Adds the first stop on the route";
 "add_as_last_destination_point" = "Последна междинна точка";
-"last_intermediate_dest_description" = "Adds the last stop along the route";
 "show_poi_over_map" = "Показване на POI";
 "shared_string_search" = "Търсене";
 "address_search_desc" = "Търсене по адрес";
@@ -1045,16 +1043,11 @@
 "osm_live_payment_month_cost_descr" = "%@ / месец";
 "osm_live_payment_month_cost_descr_ex" = "%.2f %@ / месец";
 "osm_live_payment_discount_descr" = "Спестете %@";
-"osm_live_payment_current_subscription" = "Your current subscription";
-"osm_live_payment_header" = "Select the payment period convenient for you:";
 "osm_live_payment_contribute_descr" = "Даренията помагат за финансиране на картографията на OSM.";
 "free_version_message" = "%@ карти за изтегляне или обновяване.";
 "get_osmand_live" = "Абонирайте се за OsmAnd Live и отключете всички възможности: всекидневни обновявания с неограничени изтегляния, всички платени и неплатени добавки, Уикиредия, Wikivoyage и много други.";
 "osm_live_subscription" = "Абонамент за OsmAnd Live";
 "wikivoyage_offline" = "Wikivoyage без мрежа";
-"contour_lines_hillshade_maps" = "Contour lines & Hillshade maps";
-"monthly_map_updates" = "Map updates: every month";
-"daily_map_updates" = "Map updates: every hour";
 "donation_to_osm" = "Дарение за OSM общността";
 "subscribe_email_desc" = "Subscribe to our mailing list:<br/>• Get 3 extra maps to download<br/>• Hear about discounts first<br/>• Participate in promocodes <a href='https://osmand.net/giveaway'>giveaways</a>";
 "osm_live_subscribe_btn" = "Абониране";

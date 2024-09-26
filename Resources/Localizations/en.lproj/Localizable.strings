@@ -250,7 +250,6 @@
 "interrupt_music_descr" = "Fully pause any music during voice prompts (not just lower its volume)";
 "interrupt_music" = "Pause music";
 "shared_string_do_not_use" = "Do not use";
-"voice_provider" = "Voice guidance";
 "shared_string_sound" = "Sound";
 "select_route_start_on_map" = "Select start point of the route";
 "select_route_finish_on_map" = "Select end point of the route";
@@ -310,9 +309,6 @@
 "traffic_warning_pedestrian" = "Pedestrian crosswalk";
 "traffic_warning_hazard" = "Hazard";
 "traffic_warning_tunnel" = "Tunnel";
-
-
-"driving_region" = "Driving region";
 "driving_region_japan" = "Japan";
 "driving_region_us" = "United States";
 "driving_region_canada" = "Canada";
@@ -1041,7 +1037,6 @@
 
 "purchase_dialog_title" = "Choose plan";
 "purchase_dialog_travel_description" = "Purchase one of the following to receive the offline travel guide functionality:";
-"shared_string_later" = "Later";
 "free_version_message" = "You can download or update %d maps";
 "get_osmand_live" = "Get OsmAnd Live to unlock all features: Daily map updates with unlimited downloads, all paid and free plugins, Wikipedia and much more.";
 "osm_live_subscription" = "OsmAnd Live subscription";
@@ -1065,3 +1060,4 @@
 "osm_live_enter_email" = "Please enter a valid e-mail address";
 "shared_string_unexpected_error" = "Unexpected error";
 
+;

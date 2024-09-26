@@ -45,8 +45,6 @@
 "shared_string_target_points" = "Təyinat nöqtələri";
 "search_more" = "Daha çox axtar…";
 "will_close_at" = "Bağlanır";
-"will_open_at" = "Will open at";
-"will_open_on" = "Will open on";
 "will_open_tomorrow_at" = "Açılır: sabah";
 "road_blocked" = "Yol bağlanıb";
 "starting_point" = "Başlanğıc nöqtəsi";
@@ -1016,8 +1014,6 @@
 "osm_live_payment_month_cost_descr_ex" = "%.2f %@ / ay";
 "osm_live_payment_discount_descr" = "%@ qənaət";
 "osm_live_payment_current_subscription" = "Hazırkı abunəlik";
-"osm_live_payment_header" = "Select the payment period convenient for you:";
-"osm_live_payment_contribute_descr" = "Part of income goes to OpenStreetMap contributors.";
 "purchase_dialog_title" = "Plan seçin";
 "purchase_dialog_travel_description" = "Oflayn səyahət bələdçisi funksiyasını əldə etmək üçün aşağıdakılardan birini alın:";
 "free_version_message" = "Endirmək və ya yeniləmək üçün %@ xəritə.";

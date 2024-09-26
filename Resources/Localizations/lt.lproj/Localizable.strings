@@ -33,13 +33,10 @@
 "new_destination_point_dialog" = "Jūs jau turite nustatę kelionės tikslą:";
 "replace_destination_point" = "Pakeisti kelionės tikslą";
 "shared_string_current" = "Dabartinis";
-"make_as_start_point" = "Make this the start point";
 "keep_and_add_destination_point" = "Įtraukti kaip sekantį kelionės tikslą";
-"subsequent_dest_description" = "Move destination up, and create destination";
 "add_as_first_destination_point" = "Pridėti kaip pirmą tarpinį tikslą";
 "first_intermediate_dest_description" = "Prideda pradinę stotelę";
 "add_as_last_destination_point" = "Pridėti kaip paskutinį tarpinį tikslą";
-"last_intermediate_dest_description" = "Adds the last stop along the route";
 "show_poi_over_map" = "Rodyti LV sluoksnį";
 "shared_string_search" = "Ieškoti";
 "address_search_desc" = "Adreso paieška";
@@ -1020,7 +1017,6 @@
 "osm_live_payment_month_cost_descr" = "%@ / mėnuo";
 "osm_live_payment_month_cost_descr_ex" = "%.2f %@ / mėnuo";
 "osm_live_payment_discount_descr" = "Sutaupyk %@";
-"osm_live_payment_current_subscription" = "Your current subscription";
 "osm_live_payment_renews_annually" = "Kasmet atnaujinama";
 "osm_live_payment_header" = "Mokėjimo intervalas:";
 "osm_live_payment_contribute_descr" = "Aukos padeda finansuoti OSM kartografiją.";
@@ -1030,7 +1026,6 @@
 "osm_live_subscription" = "OsmAnd Live prenumerata";
 "cancel_subscription" = "Nutraukti prenumeratą";
 "unlimited_downloads" = "Neriboti atsisiuntimai";
-"contour_lines_hillshade_maps" = "Contour lines & Hillshade maps";
 "monthly_map_updates" = "Mėnesinis žemėlapio atnaujinamas";
 "daily_map_updates" = "Valandinis žemėlapio atnaujinamas";
 "index_item_depth_contours_osmand_ext" = "Jūrlapiai su gylio kontūrais";

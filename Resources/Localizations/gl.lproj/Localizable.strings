@@ -156,7 +156,6 @@
 "choose_audio_stream_descr" = "Escolle que altofalante reproducirá as indicacións por voz.";
 "guidance_preferences_descr" = "Preferencias da navegación";
 "routing_preferences_descr" = "Preferencias do cálculo das rotas";
-"recording_preferences_descr" = "Trip recording preferences";
 "routing_settings" = "Navegación";
 "app_mode_bus" = "Bus ou coche de liña";
 "app_mode_train" = "Tren";

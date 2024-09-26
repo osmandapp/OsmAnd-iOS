@@ -766,8 +766,8 @@
 "no_overlay" = "Без насложени слоеве";
 "quick_action_map_overlay_action" = "Добавяне на насложена карта";
 "toggle_current_location" = "Show/hide coordinates widget";
-"show_current_location" = "Show coordinates";
-"hide_current_location" = "Hide coordinates";
+
+
 "quick_action_current_location_widget_descr" = "Бутон, превключващ приспособлението за местоположение на картата.";
 "quick_action_map_overlay_title" = "Насложени карти";
 "vector_data" = "Офлайн векторни карти";
@@ -779,10 +779,9 @@
 "context_menu_item_edit_waypoint" = "Редактиране на отправна точка от GPX";
 "quick_action_add_parking" = "Добавяне на място за паркиране";
 "parking_place" = "Паркинг място";
-"quick_action_add_osm_bug" = "Add OSM note";
+
 "quick_action_map_style" = "Стил на картата";
 "quick_action_map_overlay" = "Променяне на насложената карта";
-"quick_action_map_underlay" = "Change map underlay";
 "route_add_start_point" = "Добавяне на начална цел";
 "add_home" = "Добавяне на вкъщи";
 "add_work" = "Добавяне на работно място";

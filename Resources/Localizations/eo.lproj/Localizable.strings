@@ -860,8 +860,8 @@
 "no_underlay" = "Neniu subtavolo";
 "quick_action_map_underlay_action" = "Aldoni subtavolon";
 "toggle_current_location" = "Show/hide coordinates widget";
-"show_current_location" = "Show coordinates";
-"hide_current_location" = "Hide coordinates";
+
+
 "quick_action_current_location_widget_descr" = "Butono por montri/kaŝi fenestraĵon de koordinatoj de via nuna pozicio.";
 "quick_action_map_overlay_title" = "Mapaj surtavoloj";
 "quick_action_map_underlay_title" = "Mapaj subtavoloj";

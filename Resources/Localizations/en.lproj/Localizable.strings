@@ -1796,7 +1796,7 @@
 "quick_action_add_parking" = "Add parking place";
 "parking_place" = "Parking spot";
 "quick_action_navigation_voice" = "Voice on/off";
-"quick_action_add_osm_bug" = "Add OSM Note";
+
 "toggle_online_notes" = "Toggle OSM notes";
 "toggle_local_edits" = "Toggle local OSM edits";
 "quick_action_add_poi" = "Add POI";

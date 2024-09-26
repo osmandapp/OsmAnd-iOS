@@ -712,9 +712,9 @@
 "no_underlay" = "Nav apakšklāja";
 "quick_action_map_underlay_action" = "Pievienot apakšklāju";
 "toggle_current_location" = "Show/hide coordinates widget";
-"show_current_location" = "Show coordinates";
-"hide_current_location" = "Hide coordinates";
-"quick_action_current_location_widget_descr" = "Tapping this action button shows or hides the Coordinates widget.";
+
+
+
 "quick_action_map_overlay_title" = "Kartes virsklāji";
 "quick_action_map_underlay_title" = "Kartes apakšklāji";
 "vector_data" = "Bezsaistes vektoru kartes";

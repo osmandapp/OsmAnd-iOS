@@ -893,8 +893,8 @@
 "no_underlay" = "Bez podloga";
 "quick_action_map_underlay_action" = "Dodadete podloga";
 "toggle_current_location" = "Show/hide coordinates widget";
-"show_current_location" = "Show coordinates";
-"hide_current_location" = "Hide coordinates";
+
+
 "quick_action_current_location_widget_descr" = "Prekinuvač za prikažuvanje ili sokrivanje na vidžetot Koordinati na kartata.";
 "quick_action_map_overlay_title" = "Preklopuvanja na karti";
 "quick_action_map_underlay_title" = "Podlogi na kartata";

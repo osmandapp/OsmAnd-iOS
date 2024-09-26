@@ -361,10 +361,9 @@
 "quick_action_map_styles" = "Kartowe stile";
 "configure_map" = "Napohlad karty";
 "select_map_marker" = "Chorhojčku wubrać";
-"quick_action_add_osm_bug" = "Add OSM note";
+
 "quick_action_map_style" = "Stil karty změnić";
 "quick_action_map_source" = "Kartowežórło změnić";
-"quick_action_map_overlay" = "Change map overlay";
 "quick_action_map_underlay" = "Kartowu podłohu změnić";
 "quick_action_replace_destination" = "Cil zarunać";
 "route_add_start_point" = "Add starting point";

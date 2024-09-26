@@ -847,8 +847,8 @@
 "no_underlay" = "Azpi-azalik ez";
 "quick_action_map_underlay_action" = "Gehitu azpi-azala";
 "toggle_current_location" = "Show/hide coordinates widget";
-"show_current_location" = "Show coordinates";
-"hide_current_location" = "Hide coordinates";
+
+
 "quick_action_current_location_widget_descr" = "Uneko kokapenaren trepeta mapan erakusteko edo ezkutatzeko botoia.";
 "quick_action_map_overlay_title" = "Maparen gain-azalak";
 "quick_action_map_underlay_title" = "Maparen azpi-azalak";
@@ -2469,4 +2469,3 @@
 "location_radius_description" = "Uneko kokapenaren zehaztasuna adierazten duen eremu zirkularra erakusten du";
 "navigation_position_icon" = "Nabigazio-posizioaren ikonoa";
 "location_radius" = "Kokapen erradioa";
-"short_location_on_map" = "Lat %@\nLon %@";

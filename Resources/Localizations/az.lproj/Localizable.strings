@@ -702,8 +702,8 @@
 "no_underlay" = "Altlıq yoxdur";
 "quick_action_map_underlay_action" = "Altlıq əlavə et";
 "toggle_current_location" = "Show/hide coordinates widget";
-"show_current_location" = "Show coordinates";
-"hide_current_location" = "Hide coordinates";
+
+
 "quick_action_current_location_widget_descr" = "Xəritədə Koordinatlar vidcetini göstərmək və ya gizlətmək üçün düymə.";
 "quick_action_map_overlay_title" = "Xəritə örtükləri";
 "quick_action_map_underlay_title" = "Xəritə altlıqları";

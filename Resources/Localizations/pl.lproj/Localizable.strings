@@ -2827,7 +2827,6 @@
 "map_widget_ant_bicycle_power" = "Moc roweru";
 "activity" = "Aktywność";
 "coordinates_widget_desc" = "Pokazuje współrzędne geograficzne bieżącej geolokalizacji.";
-"tracker_item" = "OsmAnd Tracker";
 "external_device_status_connected" = "Połączony";
 "help_article_navigation_guidance_voice_navigation_name" = "Komunikaty głosowe / Powiadomienia";
 "shared_string_system_default" = "Domyślny systemowy";

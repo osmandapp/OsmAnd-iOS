@@ -716,9 +716,9 @@
 "no_overlay" = "Jokio viršutinio sluoksnio";
 "no_underlay" = "Jokio apatnio sluoksnio";
 "toggle_current_location" = "Show/hide coordinates widget";
-"show_current_location" = "Show coordinates";
-"hide_current_location" = "Hide coordinates";
-"quick_action_current_location_widget_descr" = "Tapping this action button shows or hides the Coordinates widget.";
+
+
+
 "vector_data" = "Parsiųsti vektoriniai žemėlapiai";
 "quick_action_map_source_action" = "Pridėti žemėlapio šaltinį";
 "quick_action_map_style_action" = "Pridėti žemėlapio stilių";
@@ -737,8 +737,6 @@
 "quick_action_add_poi" = "Pridėti LV";
 "quick_action_map_style" = "Pakeistižemėlapio stilių";
 "quick_action_map_source" = "Pakeistižemėlapio šaltinį";
-"quick_action_map_overlay" = "Change map overlay";
-"quick_action_map_underlay" = "Change map underlay";
 "quick_action_replace_destination" = "Pakeisti kelionės tikslą";
 "route_add_start_point" = "Pridėti išvykimo pradžios tašką";
 "add_intermediate" = "Pridėti tarpinį tašką";

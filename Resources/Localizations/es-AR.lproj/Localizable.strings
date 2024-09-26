@@ -3098,7 +3098,6 @@
 "popular_articles_not_found_title" = "Artículos populares no encontrados";
 "popular_articles_not_found_descr" = "No hay ningún artículo cerca del centro del mapa actual. Usa la búsqueda para encontrar artículos.";
 "shared_string_license" = "Licencia";
-"tracker_item" = "OsmAnd Tracker";
 "help_article_navigation_routing_straight_line_routing_name" = "Navegación en línea recta (avión)";
 "help_article_navigation_routing_train_routing_name" = "Navegación en tren";
 "help_article_navigation_routing_public_transport_navigation_name" = "Navegación en transporte público";

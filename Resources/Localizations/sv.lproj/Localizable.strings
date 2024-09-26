@@ -1183,8 +1183,8 @@
 "no_underlay" = "Inget underlägg";
 "quick_action_map_underlay_action" = "Lägg till underlägg";
 "toggle_current_location" = "Show/hide coordinates widget";
-"show_current_location" = "Show coordinates";
-"hide_current_location" = "Hide coordinates";
+
+
 "quick_action_current_location_widget_descr" = "En knapp för att visa eller dölja widgeten för aktuell plats på kartan.";
 "quick_action_map_overlay_title" = "Kartöverlägg";
 "quick_action_map_underlay_title" = "Kartunderlägg";
@@ -2913,7 +2913,6 @@
 "help_article_purchases_android_name" = "Androidköp";
 "audionotes_plugin_name" = "Ljud-/Videoanteckningar";
 "shared_string_accessibility" = "Tillgänglighet";
-"tracker_item" = "OsmAnd Tracker";
 "user_guide" = "Användarmanual";
 "general_settings" = "Allmänna inställningar";
 "temperature_hide" = "Dölj temperatur";

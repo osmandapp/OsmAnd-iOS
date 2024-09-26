@@ -213,7 +213,6 @@
 "shared_string_none" = "Nada";
 "shared_string_download_map" = "Baxar el mapa";
 "download_map_dialog" = "Diálogu de descarga de mapes";
-"update_tile" = "Update map";
 
 // HUD
 
@@ -466,8 +465,8 @@
 "copied_to_clipboard" = "Copióse nel cartafueyu";
 // Quick action
 "toggle_current_location" = "Show/hide coordinates widget";
-"show_current_location" = "Show coordinates";
-"hide_current_location" = "Hide coordinates";
+
+
 "quick_action_current_location_widget_descr" = "Un alternador p'amosar/anubrir el widget Coordenaes nel mapa.";
 "vector_data" = "Mapa de vectores ensin internet";
 "quick_action_new_action" = "Amestar una aición";
@@ -476,16 +475,12 @@
 "quick_action_add_marker" = "Amestar un marcador nel mapa";
 "quick_action_add_osm_bug" = "Amestar una nota d\'OSM";
 "quick_action_add_poi" = "Amestar un PdI";
-"quick_action_map_style" = "Change map style";
-"quick_action_map_overlay" = "Change map overlay";
-"quick_action_map_underlay" = "Change map underlay";
 "quick_action_replace_destination" = "Trocar el destín";
 "route_add_start_point" = "Amiesta\'l puntu de salida";
 "add_intermediate" = "Amestar un puntu intermediu";
 "favorite_home_category" = "Casa";
 "work_button" = "Trabayu";
 "quick_action_add_first_intermediate" = "Amestar el primer puntu intermediu";
-"quick_action_auto_zoom" = "Auto zoom map on/off";
 "quick_action_resume_pause_navigation" = "Posar la navegación o siguir con ella";
 "quick_action_start_stop_navigation" = "Aniciar/parar la navegación";
 "quick_action_switch_night_mode" = "Mou nocherniegu";
@@ -493,7 +488,6 @@
 "show_gpx" = "Trazaos";
 "shared_string_action_name" = "Nome de l\'aición";
 "gpx_tags_txt" = "Etiquetes";
-"quick_action_hillshade_descr" = "A button to show or hide hillshades on the map.";
 "show_from_zoom_level" = "Display starting at zoom level";
 "quick_action_showhide_mapillary_descr" = "Un alternador p\'amosar/anubrir la capa de Mapillary nel mapa.";
 "quick_action_remove_next_destination" = "Desaniciar el puntu de destín más cercanu";

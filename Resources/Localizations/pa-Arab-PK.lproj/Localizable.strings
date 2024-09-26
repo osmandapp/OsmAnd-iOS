@@ -1404,14 +1404,14 @@
 "quick_action_map_underlay_action" = "Add underlay";
 "quick_action_list_descr" = "Tapping this action button pages through the list below";
 "toggle_current_location" = "Show/hide coordinates widget";
-"show_current_location" = "Show coordinates";
-"hide_current_location" = "Hide coordinates";
-"quick_action_current_location_widget_descr" = "Tapping this action button shows or hides the Coordinates widget.";
+
+
+
 "quick_action_map_overlay_title" = "Map overlays";
 "quick_action_map_underlay_title" = "Map underlays";
 "vector_data" = "Offline vector maps";
 "quick_action_map_source_action" = "Add map source";
-"quick_action_map_style_action" = "Add map style";
+
 "quick_action_map_styles" = "Map styles";
 "quick_action_new_action" = "Add action";
 "unsupported_items" = "Unsupported items";
@@ -1445,7 +1445,7 @@
 "quick_action_add_parking" = "Add parking place";
 "parking_place" = "Parking place";
 "quick_action_navigation_voice" = "Voice on/off";
-"quick_action_add_osm_bug" = "Add OSM note";
+
 "toggle_online_notes" = "Toggle OSM notes";
 "toggle_local_edits" = "Toggle local OSM edits";
 "quick_action_add_poi" = "Add POI";

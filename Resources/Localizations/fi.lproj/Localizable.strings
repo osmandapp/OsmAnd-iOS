@@ -743,8 +743,8 @@
 // Quick action
 "no_overlay" = "Ei peittokuvaa";
 "toggle_current_location" = "Show/hide coordinates widget";
-"show_current_location" = "Show coordinates";
-"hide_current_location" = "Hide coordinates";
+
+
 "quick_action_current_location_widget_descr" = "Painike Koordinaatit-widgetin näyttämiseen tai piilottamiseen kartalla.";
 "quick_action_map_overlay_title" = "Kartan peitekuvat";
 "vector_data" = "Offline vektorikartat";
@@ -763,7 +763,6 @@
 "quick_action_map_style" = "Karttatyyli";
 "quick_action_map_source" = "Muuta kartan lähdettä";
 "quick_action_map_overlay" = "Peite";
-"quick_action_map_underlay" = "Change map underlay";
 "quick_action_replace_destination" = "Korvaa määränpää";
 "route_add_start_point" = "Lisää lähtöpiste";
 "add_home" = "Lisää koti";
@@ -1978,7 +1977,6 @@
 "shared_string_bearing" = "Suuntima";
 "angular_measeurement" = "Kulmayksikkö";
 "map_widget_sunrise" = "Auringonnousu";
-"tracker_item" = "OsmAnd Tracker";
 "external_device_status_disconnect" = "Katkaise yhteys";
 "mapillary_widget_descr" = "Mahdollistaa nopean osallistumisen Mapillaryyn.";
 "longest_duration_first" = "Pisin kesto ensimmäisenä";

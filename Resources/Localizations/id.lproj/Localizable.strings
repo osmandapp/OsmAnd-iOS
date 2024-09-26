@@ -851,8 +851,8 @@
 "no_underlay" = "Tidak ada dasaran";
 "quick_action_map_underlay_action" = "Tambahkan dasaran";
 "toggle_current_location" = "Show/hide coordinates widget";
-"show_current_location" = "Show coordinates";
-"hide_current_location" = "Hide coordinates";
+
+
 "quick_action_current_location_widget_descr" = "Sebuah saklar untuk menampilkan atau menyembunyikan widget lokasi saat ini di peta.";
 "quick_action_map_overlay_title" = "Hamparan peta";
 "quick_action_map_underlay_title" = "Dasaran peta";

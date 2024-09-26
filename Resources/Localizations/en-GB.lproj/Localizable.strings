@@ -17,7 +17,6 @@
 "traffic_warning_pedestrian_crosswalk" = "Pedestrian crosswalk";
 
 // Shared Strings
-"update_tile" = "Update map";
 
 // HUD
 
@@ -79,14 +78,11 @@
 "coordinates_widget_current_location" = "Coordinates widget";
 // Quick action
 "toggle_current_location" = "Show/hide coordinates widget";
-"show_current_location" = "Show coordinates";
-"hide_current_location" = "Hide coordinates";
-"quick_action_current_location_widget_descr" = "Tapping this action button shows or hides the Coordinates widget.";
-"quick_action_map_style_action" = "Add map style";
-"quick_action_add_osm_bug" = "Add OSM note";
-"quick_action_map_style" = "Change map style";
-"quick_action_map_overlay" = "Change map overlay";
-"quick_action_map_underlay" = "Change map underlay";
+
+
+
+
+
 "route_add_start_point" = "Add starting point";
 "quick_action_auto_zoom" = "Auto zoom on/off";
 "quick_action_navigation_voice_on" = "Mute voice";
@@ -132,7 +128,6 @@
 "plugin_mapillary_descr" = "Online street-level photos for everyone. Discover places, collaborate, capture the world.";
 "worldwide_maps" = "All World Maps";
 "purchases_feature_desc_wikipedia" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
-"srtm_plugin_description" = "Terrain information like contour lines, hillshades, and slopes, help you to visually assess the lay of the land and relief, navigability, and more. The topographic information can on the map be represented by slope shading, contour lines, and/or steepness coloring.\n\nThe underlying data originates from SRTM and ASTER.\n\nFurther reading at http://osmand.net/docs/user/plugins/contour-lines .";
 "analyze_on_map" = "Analyse on map";
 "srtm_plugin_disabled" = "Contour lines disabled";
 "prch_srtm_info" = "Contour lines plugin enables contour lines for maps you are entitled, purchased or downloaded within free limit.";

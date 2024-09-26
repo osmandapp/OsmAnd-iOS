@@ -8,7 +8,6 @@
 "avoid_in_routing_descr_" = "Avoid toll roads, unpaved, ferries";
 
 // Shared Strings
-"update_tile" = "Update map";
 
 // HUD
 
@@ -60,14 +59,11 @@
 "coordinates_widget_current_location" = "Coordinates widget";
 // Quick action
 "toggle_current_location" = "Show/hide coordinates widget";
-"show_current_location" = "Show coordinates";
-"hide_current_location" = "Hide coordinates";
-"quick_action_current_location_widget_descr" = "Tapping this action button shows or hides the Coordinates widget.";
-"quick_action_map_style_action" = "Add map style";
-"quick_action_add_osm_bug" = "Add OSM note";
-"quick_action_map_style" = "Change map style";
-"quick_action_map_overlay" = "Change map overlay";
-"quick_action_map_underlay" = "Change map underlay";
+
+
+
+
+
 "route_add_start_point" = "Add starting point";
 "quick_action_auto_zoom" = "Auto zoom on/off";
 "quick_action_navigation_voice_on" = "Mute voice";

@@ -825,8 +825,8 @@
 "no_underlay" = "Dim is-haen";
 "quick_action_map_underlay_action" = "Ychwanegu is-haen";
 "toggle_current_location" = "Show/hide coordinates widget";
-"show_current_location" = "Show coordinates";
-"hide_current_location" = "Hide coordinates";
+
+
 "quick_action_current_location_widget_descr" = "Toglo i ddangos neu guddio'r ategyn cyfesurynnau ar y map.";
 "quick_action_map_overlay_title" = "Troshaenau mapiau";
 "quick_action_map_underlay_title" = "Is-haenau mapiau";
@@ -844,9 +844,6 @@
 "quick_action_navigation_voice" = "Llais ymlaen/i ffwrdd";
 "quick_action_add_osm_bug" = "Ychwanegu Nodyn OSM";
 "quick_action_add_poi" = "Ychwanegu pwynt o ddiddordeb";
-"quick_action_map_style" = "Change map style";
-"quick_action_map_overlay" = "Change map overlay";
-"quick_action_map_underlay" = "Change map underlay";
 "quick_action_replace_destination" = "Newid y gyrchfan";
 "route_add_start_point" = "Ychwanegu pwynt ymadael";
 "add_intermediate" = "Ychwanegu pwynt canolradd";
@@ -1771,7 +1768,6 @@
 "free_downloads" = "Lawrlwythiadau am ddim";
 "activity_type_running_name" = "Rhedeg";
 "activity_type_cycling_name" = "Seiclo";
-"rendering_value_caiScale_name" = "cai";
 "other_countries" = "Gwledydd eraill";
 "shared_string_bookmark" = "Nod tudalen";
 "shared_string_contents" = "Cynnwys";
@@ -1832,7 +1828,6 @@
 "shared_string_uploading" = "Yn uwchlwytho";
 "simulate_in_progress" = "Yn y broses";
 "activity_type_water_name" = "Dŵr";
-"rendering_value_sacScale_name" = "sac";
 "user_name" = "Dy enw defnyddiwr OSM";
 "help_article_map_legend_nautical_map_name" = "Arddull map morol";
 "help_article_map_legend_osmand_name" = "Arddull map OsmAnd";

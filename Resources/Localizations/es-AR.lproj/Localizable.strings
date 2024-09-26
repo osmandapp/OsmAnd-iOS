@@ -2828,7 +2828,7 @@
 "last_seven_days" = "Últimos 7 días";
 "confirm_history_item_delete" = "¿Borrar (%ld) elementos del historial?";
 "search_favorites" = "Buscar en favoritos";
-"compass_click_desc" = "Sugerencia: Pulsa el botón de la brújula para cambiar el modo de orientación del mapa.";
+"compass_click_desc" = "Mantén pulsado el botón de la brújula para cambiar el modo de orientación del mapa.";
 "rotate_map_manual_opt" = "Rotación manual";
 "map_widget_camera_tilt" = "Inclinación de la cámara";
 "map_widget_camera_distance" = "Elevación de la cámara";

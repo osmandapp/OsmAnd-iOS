@@ -18,8 +18,8 @@ let LOGGING = false
 ///For debug set here your Osmand repositories path
 let OSMAND_REPOSITORIES_PATH = "/Users/nnngrach/Projects/Coding/OsmAnd/"
 
-///For quick debugging you can write interesting key only in this var. And then manually add breakpoint on strings "let breakpoint = true"
-let DEBUG_STOP_KEY = "rotate_map_north_opt"
+///For quick debugging you can write interesting key only in this var. And then manually add breakpoint on strings "// breakpointHere()"
+let DEBUG_STOP_KEY = "will_open_tomorrow_at"
 
 
 var iosEnglishDict: [String : String] = [:]
@@ -32,10 +32,18 @@ var duplicatesCount = 0
 
 let iosEnglishKey = "en"
 let androidEnglishKey = ""
-// Test
-// let languageDict = [
-//     "ru" : "ru"
-// ]
+
+/// For quick debug just comment out all unnecessary languages. Like this
+/*
+let languageDict = [
+    //"af" : "af",
+    //"an" : "an",
+    "ar" : "ar",
+    //"ars" : "ars",
+    //"ast" : "ast",
+    // ...
+]
+*/
 
 
 let languageDict = [
@@ -159,6 +167,10 @@ func charFrom(string: String, at index: Int) -> String {
     return String(string[charIndex])
 }
 
+func breakpointHere() {
+    // it's not a function for real use. it's just to mark the place of debugging start (in most caces)
+    raise(SIGINT)
+}
 
 
 class Main {
@@ -273,7 +285,7 @@ class Initialiser {
         for iosTranslation in iosDict
         {
             if DEBUG && iosTranslation.key == DEBUG_STOP_KEY {
-                let breakpoint = true
+                // breakpointHere()
                 if LOGGING {
                     print("#### DEBUG_STOP_KEY #### ")
                 }
@@ -330,7 +342,7 @@ class IOSReader {
         var updatedDict = androidDict
         for elem in updatedDict {
             if DEBUG && elem.key == DEBUG_STOP_KEY {
-                let breakpoint = true
+                // breakpointHere()
             }
             var modString = elem.value;
             modString = modString.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
@@ -387,7 +399,7 @@ class IOSWriter {
 
         for elem in commonDict! {
             if DEBUG && elem.key == DEBUG_STOP_KEY {
-                let breakpoint = true
+                // breakpointHere()
             }
             
             if androidDict.keys.contains(elem.key)
@@ -404,7 +416,7 @@ class IOSWriter {
         
         for elem in commonValuesDict {
             if DEBUG && elem.key == DEBUG_STOP_KEY {
-                let breakpoint = true
+                // breakpointHere()
             }
             if let key = AndroidReader.dictContainsKeys(androidDict: androidDict, keys: elem.value) {
                 guard isValueCorrect(value: androidDict[key]!) else {continue}
@@ -453,36 +465,60 @@ class IOSWriter {
                     } else {
                         // Split the string into key and value components using the "=" delimiter
                         let components = string.split(separator: "=", maxSplits: 1).map { String($0).trimmingCharacters(in: .whitespacesAndNewlines) }
+                        
                         // Extract the key, removing the surrounding quotation marks
-                        let key = components.first?.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
-                        if  let key = key, iosDict.keys.contains(key) {
+                        var key = ""
+                        var currentValue = ""
+                        if components.count > 1 {
+                            key = components[0].trimmingCharacters(in: CharacterSet(charactersIn: "\""))
+                            currentValue = components[1].trimmingCharacters(in: CharacterSet(charactersIn: "\""))
+                        }
+                        
+                        if !key.isEmpty && iosDict.keys.contains(key) {
+                            if DEBUG && key == DEBUG_STOP_KEY {
+                                // breakpointHere()
+                            }
+                            
                             keyOccurrences[key, default: 0] += 1
                             if keyOccurrences[key]! > 1 {
                                 print("Duplicate key ! \(string) ")
                             } else {
                                 var newString = string
-                                var value = existingLinesDict[key]
-                                if let value, let updatedString = replaceValueText(newValue: filterUnsafeChars(value), inFullString: string)  {
+                                var newValue = existingLinesDict[key]
+                                if let newValue, let updatedString = replaceValueText(newValue: filterUnsafeChars(newValue), inFullString: string)  {
                                     newString = updatedString
                                 }
                                 
-                                // Filter accendentally added old english lines
+                                // Filtering accendentally added old english lines
                                 var isTrashString = false
-                                if removeLatinOnlyStringsForLanguages.contains(language) && isStringEnglishOnly(newString) {
-                                    isTrashString = true
-                                } else if language != iosEnglishKey {
-                                    if let value, value == iosEnglishDict[key] {
-                                        isTrashString = true
-                                    } else {
-                                        if let englishValue = iosEnglishDict[key] {
-                                            var trimmedString = newString.replacingOccurrences(of: englishValue, with: "")
-                                            trimmedString = newString.replacingOccurrences(of: key, with: "")
-                                            if trimmedString == "\"\" = \"\"" {
-                                                isTrashString = true
+                                
+                                // Remove strings identical to the same string in english file - trash duplicates.
+                                if let englishValue = iosEnglishDict[key] {
+                                    if language != iosEnglishKey && !isTrashString {
+                                        
+                                        // Check new value
+                                        if let newValue, newValue == englishValue {
+                                            isTrashString = true
+                                        }
+                                        // Check current value
+                                        let trimmedEnglishValue = englishValue.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
+                                        if currentValue == trimmedEnglishValue {
+                                            isTrashString = true
+                                        } else {
+                                            if DEBUG && key == DEBUG_STOP_KEY {
+                                                // breakpointHere()
                                             }
                                         }
                                     }
                                 }
+                                
+                                /*
+                                // For non-latin languages (Korean, Arabic, etc) just remove every english-only string. It's usuallu just a duplicate like "GPX", "GPS", etc
+                                // Upd: this cleaning is already done. Maybe we don't need to run it much more.
+                                if removeLatinOnlyStringsForLanguages.contains(language) && isStringEnglishOnly(newString) {
+                                    isTrashString = true
+                                }
+                                */
                                 
                                 if !isTrashString {
                                     updatedStrings.append(newString);

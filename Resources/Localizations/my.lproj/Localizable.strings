@@ -288,3 +288,10 @@
 "avoid_pt_types_descr" = "လမ်းညွှန်ရန် မသုံးမြည့်ပြည်သူပို့ဆောင်ရေးအမျိုးအစားများကိုရွေးပါ။";
 "avoid_pt_types" = "ရှောင်ထားသောပို့ဆောင်ရေးအမျိုးအစားများ";
 "show_along_the_route" = "လမ်းကြောင်းတစ်လျှောက်ပြ";
+"routing_profile_geocoding" = "Geocoding";
+"shared_string_milliradians" = "Milliradians";
+"cubic_m" = "m³";
+"nm" = "nmi";
+"shared_string_widgets" = "Widgets";
+"si_mi_meters" = "Miles/meters";
+"poi" = "POI";

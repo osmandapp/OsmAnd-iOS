@@ -80,12 +80,8 @@
 "rendering_category_hide" = "Veşêre";
 "map_marker" = "Alî";
 "shared_string_share" = "Parve bike";
-"mile_per_hour" = "mph";
 "int_hour" = "st";
 "int_min" = "dq";
-"km_h" = "km/h";
-"foot" = "ft";
-"yard" = "yd";
 // Units
 "osmand_parking_time_left" = "çep";
 "menu_about" = "Derbar";
@@ -172,3 +168,6 @@
 "enter_new_name" = "Navê nû binivîse";
 "shared_string_markers" = "Hêmaker";
 "shared_string_deleted" = "Jêbirî";
+"m" = "m";
+"short_min" = "m";
+"km" = "km";

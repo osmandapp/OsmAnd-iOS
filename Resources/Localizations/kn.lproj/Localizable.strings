@@ -291,3 +291,5 @@
 "shared_string_favorites" = "ಇಷ್ಟವಾದವುಗಳು";
 "shared_string_show" = "ತೋರಿಸು";
 "shared_string_local" = "ಸ್ಥಳಿಯ";
+"ltr_or_rtl_combine_via_comma" = "%@, %@";
+"shared_string_ellipsis" = "…";

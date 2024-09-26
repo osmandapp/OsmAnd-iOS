@@ -1226,3 +1226,11 @@
 "shared_string_favorites" = "Սիրված";
 "shared_string_show" = "Ցույց տալ";
 "shared_string_local" = "Տեղական";
+"poi" = "POI";
+"navigate_point_format_D" = "DDD.DDDDD";
+"navigate_point_format_DM" = "DDD MM.MMM";
+"edit_tilesource_url_to_load" = "URL";
+"shared_string_in_name" = "%@";
+"shared_string_ellipsis" = "…";
+"navigate_point_format_DMS" = "DDD MM SS.S";
+"shared_string_ok" = "OK";

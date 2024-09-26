@@ -1197,7 +1197,7 @@
 "shared_string_view" = "\"കാണുക \"";
 "map_marker_2nd" = "രണ്ടാമത്തെ മാപ്പ് മാര്‍ക്കര്‍";
 "travel_card_download_descr" = "\"ലോകത്തെ വിവിധ സ്ഥലങ്ങളെക്കുറിച്ചുള്ള ലേഖനങ്ങള്‍ ഇന്റെര്‍നെറ്റ് ഇല്ലാതെ കാണാന്‍ വിക്കിവൊയേജ് യാത്രസഹായികള്‍ ഡൗണ്‍ലോഡ് ചെയ്യുക \"";
-"map_settings_topography" = "\"കോണ്ടൂര്‍ ലൈനുകള്‍ \"";
+"map_settings_topography" = "കോണ്ടൂര്‍ ലൈനുക";
 "shared_string_bookmark" = "ബുക്ക്മാര്‍ക്ക്";
 "coordinates_format" = "കോഓര്‍ഡിനേറ്റ് രൂപഘടന";
 "image_cache" = "ഇമേജ് ക്യാഷേ";
@@ -1250,3 +1250,7 @@
 "shared_string_show" = "കാണിക്കുക";
 "shared_string_local" = "പ്രാദേശികം";
 "show_along_the_route" = "വഴിയിൽ കാണിക്കുക";
+"cubic_m" = "m³";
+"navigate_point_format_D" = "DDD.DD";
+"navigate_point_format_DM" = "DDD MM.MM";
+"default_price_currency_format" = "%.2f %@";

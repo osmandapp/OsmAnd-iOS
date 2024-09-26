@@ -698,3 +698,5 @@
 "shared_string_change" = "மாற்றம்";
 "shared_string_favorite" = "பிடித்தவை";
 "shared_string_show" = "காட்டு";
+"shared_string_ellipsis" = "…";
+"default_price_currency_format" = "%.2f %@ \n";

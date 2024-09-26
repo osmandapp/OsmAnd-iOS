@@ -1,6 +1,5 @@
 "OsmAnd Maps" = "OsmAnd karte";
 "download_depth_countours" = "Pomorske izobate";
-"day_short" = "D";
 "week_short" = "Ned";
 "weeks_short" = "ned.";
 "month_short" = "Mes";
@@ -85,7 +84,7 @@
 "simulate_routing_descr" = "Simulirajte svoju poziciju koristeći izračunatu rutu";
 "select_avoid_descr" = "Izaberite puteve koje želite da izbegnete tokom navigacije. Možete ili da izaberete put na mapi ili da izaberete tip sa liste ispod.";
 "no_active_route" = "Nema aktivne rute";
-"day_night_info_description" = "Izlazak sunca: %@ \nZalazak sunca: %@";
+"day_night_info_description" = "Izlazak sunca: %@  \nZalazak sunca: %@";
 "day_night_info" = "Dan/noć info";
 "daynight_mode_auto" = "Automatski";
 "route_simulation" = "Simulacija rute";
@@ -335,8 +334,6 @@
 "route_via" = "Preko:";
 "route_from" = "Početak:";
 "transfers" = "Transferi";
-"lat" = "Lat";
-"lon" = "Lon";
 "error_calculating_route" = "Izračunavanja rute nije uspelo.";
 "route_calc_progress" = "Izračunavanje: %d%%";
 "internet_connection_required_for_online_route" = "Navođenje preko interneta ne radi kad niste na internetu.";
@@ -392,7 +389,6 @@
 "si_min_km" = "Minuta po kilometru";
 "si_min_m" = "Minuta po milji";
 "si_nm_h" = "Nautička milja na sat (čvorovi)";
-"units_nm_h" = "nmi/h";
 "shared_string_tones" = "tone";
 "nothing_found" = "Nema ničeg";
 "nothing_found_descr" = "Promeni pretragu ili povećaj radius pretrage.";
@@ -613,7 +609,6 @@
 "track_continue_rec" = "Nastavi sa snimanjem";
 "track_continue_rec_q" = "Da li želite da nastavite sa snimanjem?";
 "save_track_interval_globally" = "Učestalost beleženja";
-"rec_interval_minimum" = "Minimum";
 "track_start_rec" = "Započni snimanje putanje";
 "track_rec_addon_q" = "Aktivirajte dodatak Snimanje putanja da biste snimili i sačuvali svoje putanje";
 "track_interval_remember" = "Zapamti moj izbor";
@@ -716,23 +711,17 @@
 "sett_arr" = "Strelice mape";
 "shared_string_location" = "Lokacija";
 "sett_arr_map" = "Centar mape";
-"short_location_on_map" = "Širina %@\nDužina %@";
-"navigate_point_format_D" = "DDD.DDDDD";
-"navigate_point_format_DM" = "DDD MM.MMM";
-"navigate_point_format_DMS" = "DDD MM SS.S";
+"short_location_on_map" = "Širina %@  \nDužina %@";
 "navigate_point_format_OLC" = "Otvoreni kod lokacije (OLC)";
-"navigate_point_format_UTM" = "UTM";
 "navigate_point_format_unknown" = "Nepoznat format";
 "navigate_point_northing" = "Istočna geografska širina";
 "navigate_point_easting" = "Istočna geografska dužina";
 "navigate_point_zone" = "Zona";
 "navigate_point_olc" = "Otvoreni kôd lokacije";
-"navigate_point_olc_short" = "OLC";
 "approximate_file_size" = "Približna veličina fajla";
 "shared_string_example" = "Primer";
 "utm_description" = "OsmAnd koristi UTM stardandni format koji je sličan, ali nije identičan sa UTM NATO formatom.";
 "coordinates_copy_descr" = "Dodirnite da biste kopirali koordinate u međuspremnik.";
-"sett_lang_trans" = "translit";
 "sett_pref_lang" = "Željeni jezik";
 "sett_lang_show_local" = "Prikaži lokalna imena";
 "translit_names" = "Preslovi imena";
@@ -881,7 +870,7 @@
 "custom_plugins" = "Prilagođeni dodaci";
 "extra_maps_menu_group" = "Dodatne mape";
 "import_duplicates_title" = "Neke stavke već postoje";
-"import_duplicates_description" = "OsmAnd već ima jedinice sa istim imenom kao oni koji se uvoze.\n\nOdaberi radnju.";
+"import_duplicates_description" = "OsmAnd već ima jedinice sa istim imenom kao oni koji se uvoze.  \n  \nOdaberi radnju.";
 "keep_both" = "Zadrži obe";
 "keep_both_desc" = "Uvežene stavke će biti dodate sa predlozima";
 "replace_all" = "Zameni sve";
@@ -951,7 +940,7 @@
 "reset_to_default" = "Vrati na fabrička podešavanja";
 "reset_profile_action_descr" = "Resetujte sva podešavanja profila na podrazumevane vrednosti instalacije. Dodirom na Resetuj će se odbaciti sve vaše promene, ova radnja se ne može opozvati.";
 "checking_for_duplicates" = "Provera duplikata...";
-"checking_for_duplicate_description" = "OsmAnd proverava %@ postojanje umnožaka sa postojećim jedinicama u programu.\n\nTo može da potraje neko vreme.";
+"checking_for_duplicate_description" = "OsmAnd proverava %@ postojanje umnožaka sa postojećim jedinicama u programu.  \n  \nTo može da potraje neko vreme.";
 
 // Purchases
 "prch_addons" = "Dodaci";
@@ -1415,7 +1404,6 @@
 "cannot_add_destination" = "Nije moguće dodati smer";
 // Units
 "shared_string_sec" = "sek";
-"units_sec_short" = "s";
 
 // Help
 "help_first_steps" = "Početni koraci";
@@ -1768,8 +1756,6 @@
 "opening_hours" = "Radno vreme";
 "poi_select_category" = "Izaberite kategoriju";
 "poi_select_type" = "Izaberite tip";
-"shared_a_z" = "A - Z";
-"shared_z_a" = "Z - A";
 "city_type_suburb" = "Predgrađe";
 "city_type_hamlet" = "Zaseok";
 "city_type_village" = "Selo";
@@ -2374,10 +2360,10 @@
 "contributions_may_calculate_with_delay" = "Obračun dopronosa može potrajati nekoliko časova.";
 "shared_string_progress" = "Napredak";
 "simulate_your_location_gpx_descr" = "Simuliraj svoj lokaciju koristeću snimljenu GPX trase.";
-"osmand_cloud_create_account_descr" = "Unesi svoju adresu e-pošte, tamo će vam biti poslan verifikacioni kôd,\ni svi vaši podaci će biti povezani sa njim.";
+"osmand_cloud_create_account_descr" = "Unesi svoju adresu e-pošte, tamo će vam biti poslan verifikacioni kôd,  \ni svi vaši podaci će biti povezani sa njim.";
 "routing_attr_motor_type_hybrid_name" = "Hibrid";
 "shared_string_added" = "Dodato";
-"backup_delete_old_data_warning" = "Izbrisaćete istoriju promena prethodno učitanih podataka.\n\nTrenutna verzija podataka biće sačuvana na serveru, ali nećete moći da se vratite na prethodno izvršene promene.";
+"backup_delete_old_data_warning" = "Izbrisaćete istoriju promena prethodno učitanih podataka.  \n  \nTrenutna verzija podataka biće sačuvana na serveru, ali nećete moći da se vratite na prethodno izvršene promene.";
 "map_updates_for_mappers" = "Ažuriranje mapa za kartografe";
 "local_backup" = "Lokalna rezervna kopija";
 "backup_delete_old_data" = "Ukloni stare verzije";
@@ -2622,7 +2608,7 @@
 "ant_plus_bluetooth_off" = "Bluetooth je isključen";
 "ant_plus_searching_text" = "Pretraga senzora";
 "ant_plus_open_settings" = "Otvori podešavanja";
-"ant_plus_nothing_found_description" = "Proveri da li je:\n- Blutut uključen\n- Prijemnik uključen\n- Ovaj uređaj smešten blizu senzora";
+"ant_plus_nothing_found_description" = "Proveri da li je: \n- Blutut uključen  \n- Prijemnik uključen  \n- Ovaj uređaj smešten blizu senzora";
 "external_device_details_information" = "Informacija";
 "external_device_forget_sensor" = "Zaboravi senzor";
 "external_device_details_battery" = "Baterija";
@@ -2909,7 +2895,6 @@
 "backup_delete_all_data_finished" = "Svi vaši podaci su uspešno izbrisani iz OsmAnd Oblaka.";
 "backup_delete_data_type_description" = "Ovo će obrisati sve %@ podatke iz OsmAnd Oblaka. Ova se akcija ne može poništiti.";
 "cloud_storage_used" = "%@ od %@ upotrebljeno'";
-"product_title_pro" = "OsmAnd Pro";
 "subscription_cancel_description" = "Otkažite bilo kada u ApProdavnici.";
 "banner_payment_free_backup_settings_title" = "Skladištenje besplatnih postavki";
 "weather_plugin" = "Dodatak vremenske prognoze";
@@ -2935,7 +2920,7 @@
 "app_store" = "Ap Prodavnica";
 "weather_data_provider" = "Dobavljač podataka GFS.";
 "weather_updates_automatically" = "OsmAnd će preuzeti ažuriranja automatski kada je aktivan.";
-"external_device_status_connect" = "Poveži se";
+"external_device_status_connect" = "Poveži";
 "new_track" = "Nova snimljena ruta";
 "download_to_device" = "Preuzmi na uređaj";
 "shared_string_next_event" = "Sledeći događaj";
@@ -3008,7 +2993,6 @@
 "map_widget_sunrise_sunset_time_left" = "Preostalo vreme";
 "widget_panels_descr" = "Selektujte deo ekrana da bi dodali ili rasporedili vidžete.";
 "carplay_available_in_sub_plans" = "Kupite OsmAnd Pro ili Maps+ da bi koristili OsmAnd sa KarPlejom.";
-"poi_operator" = "Operator";
 "connect_rp" = "Poveži tačke rute";
 "no_track_files" = "Nemate fajlove tragova";
 "import_create_track_files" = "Možeš uvoziti, kreirati ili snimati fajlove rute korišćenjem OsmAnda.";
@@ -3131,7 +3115,6 @@
 "routing_attr_goods_restrictions_footer_desc" = "Važi samo za vozila koja prevoze robu a imaju najmanje četiri točka i teže ne više od 3,5 tona.\n\nAko vaše vozilo ima težinu veću od 3,5 tona trebate koristiti Teretni profil.";
 "purchases_feature_desc_carplay" = "Prikazuje OsmAnd oflajn mape i navigaciju na ekran vašeg vozila i integriše se sa kontrolama vašeg vozila.";
 "option_available_only_by_subscription" = "Dostupno u planovima pretplate";
-"product_title_plus" = "Maps+";
 "subscription_banner_osmand_pro_title" = "Pribavite satna, dnevna ili nedeljna ažuriranja mapa sa OsmAnd Pro.";
 "weather_offline_forecast_only_desc" = "Prognoza biće dostupna samo za zemlje sa prethodno preuzetim podacima.";
 "amazon_appstore" = "Amazon Approdavnica";
@@ -3189,7 +3172,7 @@
 "shared_string_edit_color" = "Uredi boju";
 "carplay" = "KarPlej";
 "delete_history_items" = "Obrisati %@ stavke iz istorije?";
-"compass_click_desc" = "Duplo tapni na ikonu kompasa radi promene orijentacije mape.";
+"compass_click_desc" = "Tapni na ikonu kompasa radi promene orijentacije mape.";
 "travel_guides_search_placeholder" = "Pretraga države, grada ili pokrajine";
 "cleared_travel_search_history" = "Istorija očišćena";
 "images" = "Slike";
@@ -3205,7 +3188,6 @@
 "cloud_backup" = "Rezervna kopija";
 "osmand_cloud_deleting_account_descr" = "Kroz nekoliko trenutaka će svi Vaši podaci i nalozi biti izbrisani iz Oblaka OsmAnda. \n \nSvi podaci na uređaju ostaće celoviti.";
 "preferred_terrain" = "Preferirani teren";
-"login_footer_email_part" = "support@osmand.net";
 "login_help_email_title" = "OsmAnd iOS oblak";
 "shared_string_move" = "Pomeri";
 "shared_string_not_available" = "Nije dostupno";
@@ -3271,7 +3253,6 @@
 "trash_is_empty_banner_desc" = "Fajlovi, izbrisani iz Osmand Cloud, će biti dostupni ovde za %@ dana.";
 "delete_all_items" = "Obriši sve stavke";
 "plugin_popup_nautical_ask" = "Molimo omogućite Nautički dodatak";
-"degree_celsius" = "°C";
 "skip_download" = "Preskoči preuzimanje";
 "determine_location" = "Omogućava nam da odredimo vaš položaj";
 "over_any_network" = "Preko bilo koje mreže";
@@ -3343,8 +3324,6 @@
 "routing_algorithm_highway_hierarchies" = "Hijerarhija autoputeva";
 "auto_zoom_smooth" = "Glatko";
 "auto_zoom_discrete" = "Diskretno";
-"routing_algorithm_a" = "A*";
-"ft_s" = "ft/s";
 "track_vertical_exaggeration_description" = "Promenom vrednosti na skali možeš promeniti visinu 3D staze.";
 "upward_gradient" = "Gradijent na gore";
 "shared_string_top_bottom" = "Vrh i dno";
@@ -3356,7 +3335,7 @@
 "fixed_height" = "Fiksna visina";
 "downward_gradient" = "Gradijent na dole";
 "shared_string_top" = "Vrh";
-"shared_string_bottom" = "Dno";
+"shared_string_bottom" = "Na dnu";
 "track_3d_empty_view_description" = "Istraži stazu u interaktivnom 3D! Vizualiziraj visinu, brzinu i još toga direktno na mapi.";
 "shared_string_millimeters" = "Milimetri";
 "display_position_automatic_descr" = "Zavisi od orijentacije mape: dno za smer kretanja, centar za sve ostalo.";
@@ -3459,3 +3438,66 @@
 "location_radius_description" = "Prikazuje kružno područje koje predstavlja tačnost trenutne lokacije";
 "navigation_position_icon" = "Ikona navigacione pozicije";
 "location_radius" = "Radijus lokacije";
+"share_geo" = "geo:";
+"ltr_or_rtl_combine_via_comma" = "%@, %@";
+"shared_string_ellipsis" = "…";
+"icon_group_sport" = "Sport";
+"quick_action_verb_start_stop" = "Start / Stop";
+"mile_per_hour" = "mph";
+"m_s" = "m/s";
+"app_mode_osm" = "OSM";
+"help_article_troubleshooting_android_auto_name" = "Android Auto";
+"lang_eo" = "Esperanto";
+"foot" = "ft";
+"nm" = "nmi";
+"lang_tl" = "Tagalog";
+"shared_string_link" = "Link";
+"app_mode_moped" = "Moped";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
+"restart" = "Restart";
+"kg" = "kg";
+"cubic_m" = "m³";
+"min_mile" = "min/m";
+"simulate_location_movement_speed_original" = "Original";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
+"lang_ur" = "Urdu";
+"map_widget_gps_info" = "GPS info";
+"mapillary_item" = "OsmAnd + Mapillary";
+"ltr_or_rtl_combine_via_space" = "%@ %@";
+"map_widget_parking" = "Parking";
+"driving_region_japan" = "Japan";
+"yard" = "yd";
+"short_min" = "m";
+"info_button" = "Info";
+"tts_title" = "TTS";
+"shared_string_format" = "Format";
+"mile" = "mi";
+"int_min" = "min.";
+"osm_id" = "OSM ID";
+"shared_string_min" = "Min";
+"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"filter_current_poiButton" = "Filter";
+"km_h" = "km/h";
+"km" = "km";
+"transport" = "Transport";
+"shared_string_millimeters_short" = "mm";
+"poi_filter_parking" = "Parking";
+"weather_source_ecmwf_title" = "ECMWF";
+"osmand_live" = "OsmAnd Live";
+"navigate_point_mgrs" = "MGRS";
+"lang_te" = "Telugu";
+"lang_kn" = "Kannada";
+"metric_ton" = "t";
+"ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
+"shared_string_status" = "Status";
+"min_km" = "min/km";
+"m" = "m";
+"edit_tilesource_url_to_load" = "URL";
+"segments_count" = "Segment %d";
+"faq_item" = "FAQ";
+"monitoring_control_start" = "REC";
+"plan_route_folder" = "Folder";
+"help_article_navigation_auto_car_name" = "Android Auto";
+"weather_source_GFS_title" = "GFS";
+"int_hour" = "h";
+"default_price_currency_format" = "%.2f %@";

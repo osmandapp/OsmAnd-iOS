@@ -119,3 +119,4 @@
 "when_exceeded" = "మించినప్పుడు";
 "speed_limit_warning" = "వేగ పరిమితి హెచ్చరిక";
 "shared_string_speedometer" = "స్పీడోమీటరు";
+"ltr_or_rtl_combine_via_slash" = "%@/%@";

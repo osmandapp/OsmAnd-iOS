@@ -456,7 +456,6 @@
 "si_min_km" = "Dakika/kilometre";
 "si_min_m" = "Dakika/mil";
 "si_nm_h" = "Deniz mili/saat (knot)";
-"units_nm_h" = "nmi/h";
 "coords_format" = "Koordinat biçimi";
 "info_button" = "Bilgi";
 "simulate_your_location" = "Konumunuzu simüle et";
@@ -656,8 +655,6 @@
 "years_2_4" = "Yıl";
 "years_5" = "Yıl";
 "price_free" = "Ücretsiz";
-"facebook" = "Facebook";
-"twitter" = "Twitter";
 "opening_hours" = "Çalışma saatleri";
 "driving_region_australia" = "Avustralya";
 "towards" = "karşı";
@@ -721,7 +718,6 @@
 "add_intermediate" = "Ara nokta ekle";
 "add_home" = "Ev ekle";
 "add_work" = "Iş ekle";
-"reddit" = "Reddit";
 "day_short" = "G";
 "week_short" = "Hf";
 "weeks_short" = "Hf";
@@ -1176,7 +1172,6 @@
 "parking_place" = "Park yeri";
 "route_add_start_point" = "Kalkış noktası ekle";
 "selected_roads" = "Seçilen yollar";
-"units_sec_short" = "s";
 "select_home" = "Ev noktasını seç";
 "select_work_point" = "İş noktasını seç";
 "sett_deg180" = "180 derece";
@@ -1659,7 +1654,6 @@
 "choose_auto_center_map_view_descr" = "Hareket ettikten sonra harita görünümünün geçerli konumla eşzamanlanmasına kadar geçen süre";
 "routing_profile_geocoding" = "Coğrafi Kodlama";
 "routing_profile_ski" = "Kayak";
-"nav_type_brouter" = "BRouter";
 "voice_announces" = "Sesli uyarılar";
 "max_speed" = "Maksimum hız";
 "shared_string_min_speed" = "En düşük hız";
@@ -1675,7 +1669,7 @@
 "allow_3D_view" = "2.5B görünüm";
 "do_not_rotate" = "Döndürme";
 "light_theme" = "Açık";
-"settings_app_theme" = "Uygulama teması";
+"settings_app_theme" = "Uygulama gövdesi";
 "shared_string_meters" = "metre";
 "shared_string_tones" = "ton";
 "accessibility_announce" = "Duyuru";
@@ -1844,8 +1838,6 @@
 "quick_action_showhide_mapillary_title" = "Mapillary'i göster/gizle";
 "plan_route_open_existing_track" = "Var olan yolu aç";
 "key_hint_recenter_map" = "Haritayı Yeniden Ortala";
-"shared_z_a" = "Z - A";
-"shared_a_z" = "A - Z";
 "select_application_profile" = "Uygulama profili seç";
 "change_application_profile" = "Uygulama profilini değiştir";
 "quick_action_showhide_mapillary_descr" = "Harita üzerinde Mapillary katmanını göstermek veya gizlemek için bir geçiş.";
@@ -2047,7 +2039,6 @@
 // Shared Strings
 "shared_string_custom" = "Özel";
 "gpx_selection_segment_title" = "Bölüm";
-"navigate_point_format_UTM" = "UTM";
 "navigate_point_format_unknown" = "Bilinmeyen biçim";
 "invalid_format" = "Geçersiz biçim";
 "gpx_join_gaps_descr" = "Bölümler arasındaki boşluklar birbirine bağlanacaktır.";
@@ -2065,7 +2056,6 @@
 "shared_string_time_moving" = "Hareket zamanı";
 "regions" = "Bölgeler";
 "distance_moving" = "Düzeltilmiş uzaklık";
-"navigate_point_olc_short" = "OLC";
 "delete_waypoints" = "Ara noktaları sil";
 "gpx_join_gaps" = "Boşlukları birleştir";
 "analyze_on_map" = "Harita üzerinde analiz et";
@@ -2279,7 +2269,6 @@
 "user_login" = "Giriş bilgisi";
 "login_footer_full_text" = "Yardıma mı ihtiyacınız var? Lütfen bize ulaşın: \nsupport@osmand.net";
 "cloud_email_already_registered" = "Bu e-posta adresi zaten kayıtlı.";
-"login_help_email_title" = "OsmAnd iOS Cloud";
 "register_opr_create_new_account" = "Yeni hesap oluştur";
 "osmand_cloud_create_account_descr" = "Lütfen e-posta adresinizi girin, bu adrese bir doğrulama kodu gönderilecek, \nve tüm verileriniz ona bağlanacaktır.";
 "verification" = "Doğrulama";
@@ -2308,7 +2297,6 @@
 "plugin_popup_weather_ask" = "Lütfen Hava Durumu eklentisini etkinleştirin";
 "weather_plugin_description" = "Sağladıkları: \n- 5 katman içeren 24 saatlik ve 7 günlük hava tahmini \n- konum tabanlı widget\'lar \n- sıcaklık/basınç eş değer eğrileri \n \nHava durumu verileri Global Forecast System (GFS, %@) tarafından sağlanır.";
 "osmand_cloud_login_descr" = "Lütfen kayıt olduğunuz e-posta adresini girin. Bu adrese tek seferlik bir parola gönderilecek.";
-"login_footer_email_part" = "support@osmand.net";
 "cloud_email_not_registered" = "Bu e-posta adresi OsmAnd Cloud için kayıtlı değil";
 "make_backup_descr" = "Bu aygıtta birçok değişiklik var, lütfen bu verileri kaybetmemek için yedekleyin.";
 "set_up_backup" = "Yedeklemeyi ayarla";
@@ -2380,11 +2368,8 @@
 "simulate_in_progress" = "Devam ediyor";
 "simulate_location_movement_speed" = "Hareket hızı";
 "simulate_location_movement_speed_original" = "Orijinal";
-"simulate_location_movement_speed_x2" = "x2";
-"simulate_location_movement_speed_x3" = "x3";
 "simulate_location_track_select_descr" = "Konum hareketi için kaynak olarak kullanılacak yolu seçin.";
 "simulate_location_unselected_track_footer" = "Yol dosyasını seçmeniz gerekiyor";
-"simulate_location_movement_speed_x4" = "x4";
 "simulate_location_movement_speed_original_desc" = "Simülasyon sırasında konum hareket hızı, seçilen dosyadaki hıza eşit olacaktır.";
 "simulate_location_movement_speed_x2_desc" = "Simülasyon sırasında konum hareket hızı, seçilen dosyadaki hızın 2 katına eşit olacaktır.";
 "simulate_location_movement_speed_x3_desc" = "Simülasyon sırasında konum hareket hızı, seçilen dosyadaki hızın 3 katına eşit olacaktır.";
@@ -2408,9 +2393,7 @@
 "annual_subscription" = "Yıllık abonelik";
 "quarterly_subscription" = "Üç aylık abonelik";
 "option_available_only_by_subscription" = "Abonelik planlarında kullanılabilir";
-"product_title_pro" = "OsmAnd Pro";
 "osmand_pro_tagline" = "Azami özellikleri edinin";
-"product_title_plus" = "Maps+";
 "osmand_maps_plus_tagline" = "Genişletilmiş özellikleri edinin";
 "not_available_with" = "%@ ile kullanılamıyor";
 "continue_with" = "%@ ile devam et";
@@ -2446,8 +2429,6 @@
 "private_access_routing_req" = "Hedefiniz özel erişimi olan bir bölgede bulunmaktadır. Bu yolculuk için özel yollar kullanmaya izin verilsin mi\?";
 "promo_subscription" = "Tanıtım aboneliği";
 "subscription" = "Abonelik";
-"google_play" = "Google Play";
-"app_store" = "App Store";
 "promo" = "Tanıtım";
 "purchase_origin" = "Satın almanın kökeni";
 "on_hold" = "Beklemede";
@@ -2953,7 +2934,6 @@
 "permanent_delete_warning" = "%@ kalıcı olarak silinecek. Emin misiniz?";
 "whats_here" = "Burada ne var";
 "external_device_characteristic_stride_length" = "Adım uzunluğu";
-"degree_celsius" = "°C";
 "external_device_menu_forget" = "Unut";
 "external_device_status_connected" = "Bağlandı";
 "external_device_status_disconnected" = "Bağlantı kesildi";
@@ -2982,7 +2962,6 @@
 "bluetooth_found_title" = "Bulundu: %d";
 "delete_folder" = "Klasörü sil";
 "my_places_no_tracks_title" = "Boş klasör";
-"help_article_plugins_openplacereviews_name" = "OpenPlaceReviews";
 "shared_string_deleting_complete" = "Silme işlemi tamamlandı";
 "shared_string_ear_lobe" = "Kulak memesi";
 "shared_string_all_colors" = "Tüm renkler";
@@ -3050,7 +3029,6 @@
 "download_images_settings_header" = "OsmAnd'daki çevrim dışı Wikipedia dosyaları resim içermez. Ancak makaleler görüntülenirken indirilebilirler.";
 "free_downloads" = "Ücretsiz indirmeler";
 "error_contact_support" = "Sorun devam ederse, lütfen destek ekibimizle iletişime geçin.";
-"huawei_appgallery" = "Huawei AppGallery";
 "loading_purchase_information" = "Satın alma bilgileri yükleniyor";
 "banner_payment_free_backup_settings_title" = "Ücretsiz Ayarlar Yedeklemesi";
 "weather_forecast_is_outdated" = "Tahmin güncel değil.";
@@ -3094,7 +3072,6 @@
 "backup_empty_data_from_category" = "OsmAnd Bulut bu kategoriden herhangi bir veri içermiyor.";
 "dowload_cloud_version" = "Bulut sürümünü indir";
 "free_favorites_backup_description" = "Sık kullanılanlar ve ayarlar için ücretsiz yedekleme için OsmAnd Bulut\'a kaydolun.";
-"amazon_appstore" = "Amazon Appstore";
 "with_offline_maps" = "Çevrim dışı haritalarla";
 "other_countries" = "Diğer ülkeler";
 "weather_remove_forecast" = "Tahmini kaldır";
@@ -3217,7 +3194,6 @@
 "shortest_distance_first" = "Önce en kısa mesafe";
 "longest_duration_first" = "Önce en uzun süre";
 "shorter_duration_first" = "Önce daha kısa süre";
-"routing_algorithm_a" = "A*";
 "shared_string_article" = "Makale";
 "cleared_travel_search_history" = "Geçmiş temizlendi";
 "remove_cache_alert" = "Önbelleği temizlemek istediğinizden emin misiniz?";
@@ -3301,3 +3277,55 @@
 "shared_string_local" = "Yerel";
 "show_along_the_route" = "Rotayı göster";
 "quick_action_toggle_preference" = "Tercihi değiştirmek için bir geçiş.";
+"kg" = "kg";
+"default_price_currency_format" = "%.2f %@";
+"help_article_navigation_car_play_name" = "CarPlay";
+"app_mode_osm" = "OSM";
+"ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
+"help_article_navigation_auto_car_name" = "Android Auto";
+"mapillary" = "Mapillary";
+"cubic_m" = "m³";
+"shared_string_wikivoyage" = "Wikivoyage";
+"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"tts_title" = "TTS";
+"mile" = "mi";
+"lang_mr" = "Marathi";
+"metric_ton" = "t";
+"m" = "m";
+"foot" = "ft";
+"ltr_or_rtl_combine_via_comma" = "%@, %@";
+"mile_per_hour" = "mph";
+"osmand_live" = "OsmAnd Live";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
+"ltr_or_rtl_combine_via_space" = "%@ %@";
+"carplay" = "CarPlay";
+"km" = "km";
+"shared_string_millimeters_short" = "mm";
+"help_article_troubleshooting_android_auto_name" = "Android Auto";
+"int_hour" = "h";
+"mapillary_item" = "OsmAnd + Mapillary";
+"shared_string_ellipsis" = "…";
+"poi" = "POI";
+"osmand_cloud" = "OsmAnd Cloud";
+"app_mode_ufo" = "UFO";
+"m_s" = "m/s";
+"km_h" = "km/h";
+"lang_bpy" = "Bishnupriya";
+"shared_string_open_street_map" = "OpenStreetMap";
+"min_km" = "min/km";
+"monitoring_control_start" = "REC";
+"download_wikipedia_maps" = "Wikipedia";
+"nm" = "nmi";
+"lang_sat" = "Santali";
+"sett_wunderlinq_ext_input" = "WunderLINQ";
+"navigate_point_format_DMS" = "DDD MM SS.S";
+"yard" = "yd";
+"min_mile" = "min/m";
+"navigate_point_format_DM" = "DDD MM.MMM";
+"app_mode_offroad" = "Offroad";
+"navigate_point_mgrs" = "MGRS";
+"edit_tilesource_url_to_load" = "URL";
+"short_min" = "m";
+"arrival_distance_factor_normally" = "Normal";
+"navigate_point_format_D" = "DDD.DDDDD";

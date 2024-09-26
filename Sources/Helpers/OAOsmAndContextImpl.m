@@ -14,6 +14,54 @@
 static NSString * const kGpxRecDir = @"rec";
 static NSString * const kGpxImportDir = @"import";
 
+// NOTE: Test implementation
+@interface ContextSettingsManager : NSObject <OASSettingsAPI>
+
+@property (nonatomic, strong) NSMutableDictionary<NSString *, NSString *> *preferences;
+@property (nonatomic, strong) NSMutableDictionary<NSString *, NSMutableArray<id<OASKStateChangedListener>> *> *listeners;
+
+@end
+
+@implementation ContextSettingsManager
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _preferences = [NSMutableDictionary dictionary];
+        _listeners = [NSMutableDictionary dictionary];
+    }
+    return self;
+}
+
+- (void)addPreferenceListenerName:(NSString *)name listener:(id<OASKStateChangedListener>)listener {
+    if (!self.listeners[name]) {
+        self.listeners[name] = [NSMutableArray array];
+    }
+    [self.listeners[name] addObject:listener];
+}
+
+- (NSString *)getStringPreferenceName:(NSString *)name defValue:(NSString *)defValue global:(BOOL)global shared:(BOOL)shared {
+    return self.preferences[name] ?: defValue;
+}
+
+- (void)registerPreferenceName:(NSString *)name defValue:(NSString *)defValue global:(BOOL)global shared:(BOOL)shared {
+    if (!self.preferences[name]) {
+        self.preferences[name] = defValue;
+    }
+}
+
+- (void)setStringPreferenceName:(NSString *)name value:(NSString *)value {
+    self.preferences[name] = value;
+    
+    NSArray<id<OASKStateChangedListener>> *listenersForKey = self.listeners[name];
+    for (id<OASKStateChangedListener> listener in listenersForKey) {
+      //  [listener onStateChanged:name newValue:value];
+    }
+}
+
+@end
+
+
 @implementation OANameStringMatcherImpl
 {
     OANameStringMatcher *_matcher;
@@ -83,7 +131,24 @@ static NSString * const kGpxImportDir = @"import";
 
 - (id<OASSettingsAPI>)getSettings __attribute__((swift_name("getSettings()")))
 {
-	//TODO: Not implement until settings moved to shared lib
+    // TODO: Not implement until settings moved to shared lib
+    return [ContextSettingsManager new];
+}
+
+- (NSString *)getAssetAsStringName:(NSString *)name {
+    // TODO: Not implement until getAssetAsString moved to shared lib
+        return nil;
+}
+
+- (void)searchNearestCityNameLatLon:(OASKLatLon *)latLon callback:(void (^)(NSString * _Nonnull))callback
+{
+    // TODO: Not implement until searchNearestCityNameLatLon moved to shared lib
+    if (callback) callback(@"");
+}
+
+- (OASGpxTrackAnalysis *)getTrackPointsAnalyser
+{
+    //TODO: Not implement until settings moved to shared lib
     return nil;
 }
 

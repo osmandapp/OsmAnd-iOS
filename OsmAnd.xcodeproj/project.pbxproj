@@ -1303,6 +1303,7 @@
 		BBA3AF97197FC4BB0039D991 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BB451DF318D8F7D7005FBE09 /* Localizable.strings */; };
 		BBA3AFC4197FC4BB0039D991 /* Resources.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB451F1018EB34A5005FBE09 /* Resources.storyboard */; };
 		C50E32822CA3FBDF00EEC41F /* TracksFiltersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E32812CA3FBDF00EEC41F /* TracksFiltersViewController.swift */; };
+		C50E32842CA57DDB00EEC41F /* TracksFilterDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E32832CA57DDB00EEC41F /* TracksFilterDetailsViewController.swift */; };
 		C51967AD2C247E9000476E4B /* POITagsDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51967AC2C247E9000476E4B /* POITagsDetailsViewController.swift */; };
 		C51BE6FD2BBC3E7C00B63A1A /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = C51BE6FC2BBC3E7C00B63A1A /* PrivacyInfo.xcprivacy */; };
 		C52E750F2C2BECAC00C45ED0 /* OsmAndFormatterParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52E750E2C2BECAC00C45ED0 /* OsmAndFormatterParams.swift */; };
@@ -4810,6 +4811,7 @@
 		BBB3F6AA18A4DEF0001C3175 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		BBBDADB818BCF53500E4A359 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		C50E32812CA3FBDF00EEC41F /* TracksFiltersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksFiltersViewController.swift; sourceTree = "<group>"; };
+		C50E32832CA57DDB00EEC41F /* TracksFilterDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksFilterDetailsViewController.swift; sourceTree = "<group>"; };
 		C51967AC2C247E9000476E4B /* POITagsDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POITagsDetailsViewController.swift; sourceTree = "<group>"; };
 		C51BE6FC2BBC3E7C00B63A1A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = Resources/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		C52E750E2C2BECAC00C45ED0 /* OsmAndFormatterParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsmAndFormatterParams.swift; sourceTree = "<group>"; };
@@ -11911,6 +11913,7 @@
 				327D68A42A8F9BA80076D1E0 /* SavedArticlesTabViewController.swift */,
 				325CFBEA2B5052E000090DF2 /* TracksViewController.swift */,
 				C50E32812CA3FBDF00EEC41F /* TracksFiltersViewController.swift */,
+				C50E32832CA57DDB00EEC41F /* TracksFilterDetailsViewController.swift */,
 			);
 			path = MyPlaces;
 			sourceTree = "<group>";
@@ -16173,6 +16176,7 @@
 				C546C0072AC2438F00377EDE /* OAOsmNoteViewController.mm in Sources */,
 				32048FC92A26132600AA4B71 /* OsmOAuthView.swift in Sources */,
 				DA5A845826C563A900F274C7 /* OAOverlayMapLayer.mm in Sources */,
+				C50E32842CA57DDB00EEC41F /* TracksFilterDetailsViewController.swift in Sources */,
 				DA5A853E26C563A900F274C7 /* OADayNightHelper.m in Sources */,
 				FAA6505C2ADD42C50020DCEA /* BLEExternalSensorsViewController.swift in Sources */,
 				FA7DCF552AF10ABF0045D136 /* BluetoothDisableView.swift in Sources */,

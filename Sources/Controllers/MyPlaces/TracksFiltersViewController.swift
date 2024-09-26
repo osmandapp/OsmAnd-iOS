@@ -139,6 +139,58 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
         return nil
     }
     
+    override func onRowSelected(_ indexPath: IndexPath?) {
+        guard let indexPath = indexPath else { return }
+        let item = tableData.item(for: indexPath)
+        var filterType: FilterParameterType?
+        var isModalPresentation = false
+        switch item.key {
+        case Self.lengthFilterRowKey:
+            filterType = .lengthFilterType
+        case Self.durationFilterRowKey:
+            filterType = .durationFilterType
+        case Self.timeInMotionFilterRowKey:
+            filterType = .timeInMotionFilterType
+        case Self.dateCreationFilterRowKey:
+            filterType = .dateCreationFilterType
+        case Self.averageSpeedFilterRowKey:
+            filterType = .averageSpeedFilterType
+        case Self.maxSpeedFilterRowKey:
+            filterType = .maxSpeedFilterType
+        case Self.averageAltitudeFilterRowKey:
+            filterType = .averageAltitudeFilterType
+        case Self.maxAltitudeFilterRowKey:
+            filterType = .maxAltitudeFilterType
+        case Self.uphillFilterRowKey:
+            filterType = .uphillFilterType
+        case Self.downhillFilterRowKey:
+            filterType = .downhillFilterType
+        case Self.colorFilterRowKey:
+            filterType = .colorillFilterType
+            isModalPresentation = true
+        case Self.widthFilterRowKey:
+            filterType = .widthillFilterType
+            isModalPresentation = true
+        case Self.nearestCitiesFilterRowKey:
+            filterType = .nearestCitiesFilterType
+            isModalPresentation = true
+        case Self.folderFilterRowKey:
+            filterType = .folderFilterType
+            isModalPresentation = true
+        default:
+            return
+        }
+        
+        if let filterType = filterType {
+            let filterDetailsVC = TracksFilterDetailsViewController(filterType: filterType)
+            if isModalPresentation {
+                showModalViewController(filterDetailsVC)
+            } else {
+                showMediumSheetViewController(filterDetailsVC, isLargeAvailable: false)
+            }
+        }
+    }
+    
     override func onTopButtonPressed() {
     }
     

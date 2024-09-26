@@ -1,23 +1,17 @@
-"simulation_real_mode_desc" = "• On straight road sections, speed will be approximate to the maximum allowed speed.\n• At intersections, the simulation will slow down.\n• Extra penalties will be applied on traffic signals, stop signs, etc.";
 "rotate_map_north_opt" = "Do not rotate (north is up)";
-"animate_my_location" = "Animate location change";
 
 // Track recording settings
-"save_heading_descr" = "Save heading information for each recorded point";
-"position_on_map" = "Display position";
 
 // Dirrection appearance
 
 // Route info
 "avoid_in_routing_descr_" = "Avoid toll roads, unpaved, ferries";
 "shared_string_navigation" = "দিক নির্ণয়";
-"turn_arrows_descr" = "Control the visibility of the turn arrows on the route line.";
 
 // Shared Strings
 "shared_string_preparing" = "তৈরী করা হচ্ছে";
 "regions" = "অঞ্চল";
 "shared_string_angle" = "কোন";
-"shared_string_do_not_exist" = "Do not exist";
 "update_tile" = "Update map";
 
 // HUD
@@ -46,7 +40,6 @@
 "map_locale" = "Map Language";
 "mgrs_format_descr" = "OsmAnd uses MGRS format which is identical to UTM NATO.";
 "shared_string_nothing_selected" = "কিছু নির্বাচন করা হয়নি";
-"ltr_or_rtl_combine_via_dash" = "%@ - %@";
 "ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "shared_string_finish" = "সম্পূর্ণ";
 "import_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";
@@ -65,7 +58,6 @@
 // Menu
 
 // OSM Editing actions
-"simulate_your_location_gpx_descr" = "You can simulate location moving by using GPX track.";
 "osm_edit_reopened_note" = "Reopened";
 "local_openstreetmap_uploading" = "Uploading...";
 
@@ -137,64 +129,13 @@
 "move_marker_bottom_sheet_title" = "Move the map to change object's position";
 "weather_plugin_description" = "Enable the Weather Plugin to plan a route considering the weather. Watch the coloured map of weather forecast, which is updated hourly for today, tomorrow, and the week ahead. \n\nWhile traveling see location based info widgets with temperature, precipitation, wind speed, pressure. \n\nWill be useful for hiking and long trips by bike or motorcycle.";
 "search_map" = "Searching map";
-"contour_lines_hillshade_maps" = "Terrain maps: contour lines, hillshades, slope";
 "routing_attr_avoid_ice_roads_fords_name" = "বরফাবৃত, জলমগ্ন রাস্তা পরিত্যক্ত করুন";
-"rendering_attr_showMtbScale_name" = "MTB Scale";
-"rendering_attr_showMtbScaleIMBATrails_name" = "IMBA";
-"routing_attr_avoid_low_emission_zone_name" = "No low emission zones";
-"routing_attr_avoid_low_emission_zone_description" = "Avoids low emission zones";
-"routing_attr_avoid_tunnels_name" = "No tunnels";
-"routing_attr_avoid_tunnels_description" = "Avoids tunnels";
-"rendering_attr_depthContourWidth_name" = "Lines width";
-"rendering_attr_depthContourColorScheme_name" = "Lines color scheme";
 "routing_attr_avoid_ice_roads_fords_description" = "বরফাবৃত এবং জলমগ্ন রাস্তা পরিত্যক্ত করুন";
-"routing_attr_allow_private_for_truck_description" = "Allow access to private areas for trucks";
-"routing_attr_hazmat_category_name" = "Transporting of hazardous materials";
-"transport_hazmat_yes_desc" = "You need to choose proper category.";
-"transport_hazmat_no_desc" = "On some roads and tunnels transporting of hazardous materials is forbidden.";
-"routing_attr_motor_type_description" = "Select the fuel type of your vehicle to calculate CO2 emission.";
 
 //Icon categories
-"osmand_cloud_login_descr" = "Please enter the e-mail address you registred with. A one-time password for the next step will be sent to it.";
-"choose_what_to_restore" = "Choose items to restore";
-"backup_error_token_is_not_valid_or_expired" = "Invalid or expired verification code";
-"backup_error_subscription_was_expired" = "Subscription expired";
-"service_is_not_available_please_try_later" = "Service is temporarily unavailable. Please try again later.";
-"promo_subscription" = "OsmAnd Pro (Promo)";
-"osmand_cloud_create_account_descr" = "Please enter your e-mail address, a verification code will be sent there, and all your data will be linked to it.";
-"verification_code_missing_description" = "It can take up to 10 minutes. Use the button below if it isn't in your spam folder.";
-"local_backup" = "Local Backup";
-"local_backup_descr" = "Backup or restore data from a local file.";
-"backup_into_file" = "Backup into file";
-"cloud_version_will_be_removed" = "Cloud version will be removed";
-"cloud_changes_will_be_dismissed" = "Cloud changes will be dismissed";
-"local_file_will_be_restored" = "Local file will be restored";
-"backup_data" = "Backup data";
-"select_backup_data_descr" = "Select data and folders to backup.";
-"logout_from_osmand_cloud_decsr" = "Are you sure you want to log out?\nYou will need to sign in again to backup or restore the data.";
-"backup_deleting_all_data" = "Deleting all data";
-"backup_delete_all_data_warning" = "You are about to delete all data previously uploaded to OsmAnd Cloud, including version history. You will not be able to recover deleted data.";
-"backup_delete_types_descr" = "Delete all data for disabled data types from OsmAnd Cloud?";
-"cloud_no_conflicts" = "There are no conflicts";
-"copy_poi_name" = "Copy POI Name";
-"pro_features" = "Pro Features";
-"select_another_colorization" = "Please select another coloring type.";
-"purchases_feature_desc_osmand_cloud" = "Store all OsmAnd data online. No lost data after reinstalling. Back up and restore all info easily.";
-"purchases_feature_desc_cross_buy" = "Use all subscription features on multiple platforms at no additional cost.";
-"purchases_feature_desc_terrain" = "Terrain contour lines, full hillshade map with dark shades and slope maps with colors to show peaks and lowlands.";
-"purchases_feature_desc_nautical" = "Vector maps appropriate for sailing routes navigation";
-"you_can_get_feature_as_part_of_pattern" = "Get \"%@\" as part of the %@ plan. Comparison:";
-"no_purchases" = "You don’t have any purchases";
-"empty_purchases_description" = "If your purchases don't show up here, tap on \"%@\", or contact our support team.";
-"offline_edition_descr" = "If offline editing is enabled, changes will be saved locally and can only be uploaded manually, otherwise, changes will be uploaded immediately.";
-"use_login_and_password" = "Use login and password";
-"contributions_may_calculate_with_delay" = "Contributions might be calculated with several hour delay.";
-"map_updates_are_unavailable_yet" = "Map updates are not yet available :-(";
-"enough_contributions_descr" = "Congratulations, you have made enough OpenStreetMap contributions and can now enjoy unlimited OsmAnd map updates!";
 "auth_failed" = "Authorization Error";
 "recalc_angle_dialog_title" = "আমার অবস্থান ও গন্তব্য এর মধ্যকার সর্বনিম্ন কোন";
 "recalc_angle_dialog_descr" = "আমার নিজের অবস্থান এবং গন্তব্য এর হিসাব করা অতিরিক্ত সরলরেখাংশ গুলো দেখানো হবে, যতক্ষণ না গন্তব্যে পৌছানোর রাস্তাটি আবার খুঁজে পাওয়া যাচ্ছে";
-"checking_progress" = "Checking..";
 
 // Release Notes
 // instruction:

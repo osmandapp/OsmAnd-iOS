@@ -2132,7 +2132,6 @@
 "routeInfo_surface_description" = "Fournit des informations sur la surface des routes / chemins.";
 "routeInfo_smoothness_description" = "Classification des caractéristiques physiques des voies pour les véhicules à roues, notamment la nature et la régularité de leurs surfaces.";
 "route_line_use_map_style_width" = "Utiliser la largeur par défaut du style de carte (%@).";
-"ltr_or_rtl_combine_via_dash" = "%@ - %@";
 "routing_attr_allow_gate_name" = "Autoriser l\'utilisation des portes";
 "routing_attr_allow_gate_description" = "Autoriser l\'utilisation des portes";
 "routing_attr_only_permitted_streets_description" = "N\'utiliser que les rues expressément autorisées";

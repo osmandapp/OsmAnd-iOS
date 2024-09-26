@@ -744,7 +744,6 @@
 "horseback_riding" = "Equitación";
 "register_opr_have_account" = "Yá tengo una cuenta";
 "register_opr_create_new_account" = "Crear una cuenta";
-"osmand_cloud_login_descr" = "Please enter the e-mail address you registred with. A one-time password for the next step will be sent to it.";
 "backup_welcome_back" = "¡Volvi afayate!";
 "routeInfo_smoothness_description" = "Provides a classification scheme regarding the physical usability of a way for wheeled vehicles, particularly regarding surface regularity/flatness.";
 "cloud_conflicts_descr" = "Some files could not be uploaded to the server because a newer version is stored on the server.";
@@ -757,7 +756,6 @@
 "restore_purchases" = "Restaurar les compres";
 "copy_coordinates" = "Copiar les coordenaes";
 "new_device_account" = "Preséu nuevu / cuenta nueva";
-"purchases_feature_desc_terrain" = "Terrain contour lines, full hillshade map with dark shades and slope maps with colors to show peaks and lowlands.";
 "monthly_subscription" = "Soscripción mensual";
 "purchases_feature_desc_wikivoyage" = "Esplora Wikivoyage ensin internet. Los artículos dixébrense per países y rexones, y tán disponibles en toles llingües.";
 "complete_purchase" = "Completar la compra";

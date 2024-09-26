@@ -2298,7 +2298,6 @@
 "weather_wind_enable_descr" = "Virkja til að skoða vindalag á kortinu.";
 "weather_cloud_enable_descr" = "Virkja til að skoða skýjahululag á kortinu.";
 "weather_precip_enable_descr" = "Virkja til að skoða úrkomulag á kortinu.";
-"ltr_or_rtl_combine_via_dash" = "%@ - %@";
 "weather_plugin_description" = "Gefur kost á \n- 24-stunda og 7-daga veðurspá með 5 gagnalögum \n- staðarháðum viðmótshlutum \n- hitastigs- / loftþrýstingslínum \n \nVeðurgögnin koma frá Global Forecast System (GFS, %@).";
 "weather_cloud_data_description" = "Veðurgögn verða sótt fyrir skoðað svæði í hvert skipti.";
 "obf_import_already_exists_short" = "Skrá með þessu heiti er þegar til staðar.";

@@ -121,7 +121,6 @@
 "map_widget_next_turn_small" = "Sledno vrtenje (malo)";
 "map_widget_next_next_turn" = "Vtoro sledno vrtenje";
 "always_center_position_on_map" = "Pozicijata na prikažuvanje sekogaš vo centarot";
-"position_on_map" = "Display position";
 "position_on_map_center" = "Centar";
 "position_on_map_bottom" = "Dno";
 "map_widget_appearance_rem" = "Preostanati elementi";
@@ -440,7 +439,6 @@
 "shared_string_refresh" = "Osvezi";
 "shared_string_angle" = "Agol";
 "shared_string_angle_param" = "Agol: %@°";
-"shared_string_do_not_exist" = "Do not exist";
 "restart" = "Restartiraj";
 "shared_string_download_map" = "Prevzemete karta";
 "download_map_dialog" = "Prevezemete go dijalogot na kartata";
@@ -1269,7 +1267,6 @@
 "routeInfo_horse_scale_description" = "Izvedete gi patekite spored teskotiite na konjskite pateki";
 "rendering_attr_showMtbRoutes_name" = "Pateki za planinski velosipedi";
 "activity_type_mountainbike_name" = "Planinski velosiped";
-"rendering_attr_showMtbScale_name" = "MTB Scale";
 "rendering_attr_showMtbScaleIMBATrails_name" = "Prikazi gi MTB IMBA pateki";
 "rendering_attr_tracktype_grade5_name" = "Meko";
 "routing_attr_avoid_share_taxi_description" = "Izbegnuva spodeluvanje na taksi";
@@ -1438,8 +1435,6 @@
 "routing_attr_driving_style_safety_name" = "Pretpočitajte patni patišta";
 "rendering_attr_surface_paving_stones_name" = "Kameni kocki";
 "rendering_attr_depthContours_name" = "Nauticki dlabinski konturi";
-"rendering_attr_depthContourWidth_name" = "Lines width";
-"rendering_attr_depthContourColorScheme_name" = "Lines color scheme";
 "rendering_attr_piste_difficulty_freeride_name" = "Besplatno vozenje";
 "routeInfo_steepness_name" = "Strmnost";
 "rendering_attr_smoothness_very_bad_name" = "Mnogu losho";
@@ -1645,9 +1640,6 @@
 "restore_from_file" = "Vrati od datoteka";
 "backup_complete" = "Rezervnata kopija e kompletna";
 "duration_ago" = "Pred %@";
-"cloud_version_will_be_removed" = "Cloud version will be removed";
-"cloud_changes_will_be_dismissed" = "Cloud changes will be dismissed";
-"local_file_will_be_restored" = "Local file will be restored";
 "backup_welcome_back" = "Dobredojde nazad!";
 "backup_restore_now" = "Vrati sega vo orignalna sostojba";
 "last_backup" = "Posledna rezervna kopija";
@@ -1670,7 +1662,6 @@
 "delete_all_confirmation" = "Da, izbrishi se\'";
 "backup_delete_types_descr" = "Da se izbrišat site podatoci za zastarenite tipovi podatoci od OsmAnd Cloud\?";
 "backup_pause_all" = "Pauza za se\'";
-"cloud_no_conflicts" = "There are no conflicts";
 "upload_local_version" = "Postavete lokalna verzija";
 "copy_address" = "Iskopiraj ja adresata";
 "copy_poi_name" = "Kopiraj POI ime";
@@ -1686,7 +1677,6 @@
 "purchases_feature_desc_osmand_cloud" = "Zemete OsmAnd Cloud za da gi začuvate site podatoci OsmAnd onlajn. Nema izgubeni podatoci po povtorno instaliranje. Napravete rezervna kopija i lesno vratete gi site informacii.";
 "purchases_feature_desc_pro_widgets" = "Dobijte pristap do funkciite na OsmAnd Pro: Boenje na maršrutata i povece.";
 "purchases_feature_desc_hourly_map_updates" = "Dobijte pristap do počesti ažuriranja na kartata. Ažuriranja na čas, dnevno ili nedelno. Ažuriranjata se prezemaat postepeno, samo za promenetata oblast.";
-"purchases_feature_desc_cross_buy" = "Use all subscription features on multiple platforms at no additional cost.";
 "purchases_feature_desc_monthly_map_updates" = "Dobijte pristap do redovnite mesečni ažuriranja za oflajn karti.";
 "purchases_feature_desc_unlimited_map_download" = "Dobijte neograničeni prezemanja za site oflajn karti na kontinenti i regioni.";
 "purchases_feature_desc_combined_wiki" = "stražuvajte gi statiite na Vikipedija vo dviženje, bez internet konekcija. Oflajn podatoci podeleni po zemji i dostapni na site jazici.";
@@ -1729,7 +1719,6 @@
 "auth_failed" = "Ovlastuvanjeto ne uspea";
 "recalc_angle_dialog_title" = "Minimalen agol pomeǵu mojata lokacija i maršrutata";
 "recalc_angle_dialog_descr" = "Ekstra direkten segment pomeǵu mojata lokacija i presmetanata maršruta ḱe se prikažuva dodeka maršrutata ne se presmeta povtorno";
-"checking_progress" = "Checking..";
 "co2_mission" = "CO2 emisija";
 
 // Release Notes

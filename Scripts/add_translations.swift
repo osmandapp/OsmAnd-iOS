@@ -21,7 +21,14 @@ let OSMAND_REPOSITORIES_PATH = "/Users/nnngrach/Projects/Coding/OsmAnd/"
 ///For quick debugging you can write interesting key only in this var. And then manually add breakpoint on strings "// breakpointHere()"
 let DEBUG_STOP_KEY = "empty_purchases_description"
 
-let DEBUG_STOP_UPDATING_TRANSLATIONS = false
+///For turning off updating translations. In this mode scrip will only delete trash strings
+let DEBUG_STOP_UPDATING_TRANSLATIONS = true
+
+///Start really slow finding process. Deletes all strings with equals keys and values.
+///Usialy there are duplicates like "map_locale" = "Map Language";
+///But sometimes it cal delete correct loalization like "shared_string_done" = "Готово"; for ru, bel, uk languages.
+///So this is risky method. Use Git Diff for manually check and rever all non-english deleting.
+let DEBUG_RUN_SLOW_DUPLICATES_DELETING = true   // Danger mode
 
 
 var iosEnglishDict: [String : String] = [:]
@@ -30,6 +37,7 @@ var androidEnglishDictOrig: [String : String] = [:]
 
 var commonDict: [String:String]?
 var commonValuesDict: [String:[String]] = [:]
+var duplicatesValues: [String: String] = [:]    // it stores inverted key and values. duplicatesValues["tranlation_value"] = "tranlation_key"
 var duplicatesCount = 0
 
 let iosEnglishKey = "en"
@@ -375,15 +383,55 @@ class IOSReader {
 
 class IOSWriter {
     
+    static func deleteDuplicates() {
+    }
+    
     static func addTranslations() {
         
         print("\nTRANSLATING: English at \(DateFormatter.localizedString(from: Date(), dateStyle: .medium, timeStyle: .medium))\n")
         IOSWriter.makeNewDict(language: iosEnglishKey, iosDict: iosEnglishDict, androidDict: androidEnglishDict, iosEnglishDict: [:])
         
+        duplicatesValues = [:]
+        var parsedIosDicts: [String: [String : String]] = [:]
+        var parsedAndroidDicts: [String: [String : String]] = [:]
+        
         for language in languageDict {
-            print("\nTranslating: \(language.key) at \(DateFormatter.localizedString(from: Date(), dateStyle: .medium, timeStyle: .medium))\n")
+            print("\nparsing dictionaries for lang: " + language.key)
             var iosDict = IOSReader.parseTranslationFile(language: language.key)
             let androidDict = AndroidReader.parseTranslationFile(language: language.key)
+            parsedIosDicts[language.key] = iosDict
+            parsedAndroidDicts[language.key] = androidDict
+        }
+        
+        // There was meny strings, duplicated from english file. this function find it
+        if DEBUG_RUN_SLOW_DUPLICATES_DELETING {
+            print("\nStart slow duplicates finding")
+            for languageA in languageDict {
+                guard let iosDictA = parsedIosDicts[languageA.key] else { continue }
+                for languageB in languageDict {
+                    guard languageA != languageB else { continue }
+                    guard let iosDictB = parsedIosDicts[languageB.key] else { continue }
+                    print("\nFinding duplicates. " + languageA.key  + " : " + languageB.key)
+
+                    for elemA in iosDictA {
+                        if duplicatesValues.keys.contains(elemA.value) {
+                            continue
+                        }
+                        if iosDictB[elemA.key] == elemA.value {
+                            // it stores inverted key and values. duplicatesValues["tranlation_value"] = "tranlation_key"
+                            duplicatesValues[elemA.value] = elemA.key
+                            // print("\nFound duplicate! " + elemA.key  + " : " + elemA.value)
+                        }
+                    }
+                    
+                }
+            }
+        }
+        
+        for language in languageDict {
+            print("\nTranslating: \(language.key) at \(DateFormatter.localizedString(from: Date(), dateStyle: .medium, timeStyle: .medium))\n")
+            guard let iosDict = parsedIosDicts[language.key] else { continue }
+            guard let androidDict = parsedAndroidDicts[language.key] else { continue }
             IOSWriter.makeNewDict(language: language.key, iosDict: iosDict, androidDict: androidDict, iosEnglishDict: iosEnglishDict)
         }
     }
@@ -408,6 +456,16 @@ class IOSWriter {
         return language != iosEnglishKey && androidTrimmedValue == iosEnglishTrimmedValue
     }
     
+    private static func isDuplicatedValueInSeveralLanguages(_ key: String, _ value: String) -> Bool {
+        if duplicatesValues.keys.contains(value) {
+            let keyOfFoundedDuplicate = duplicatesValues[value]
+            if key == keyOfFoundedDuplicate {
+                return true
+            }
+        }
+        return false
+    }
+    
     static func makeNewDict(language: String, iosDict: [String : String], androidDict: [String : String], iosEnglishDict: [String : String]) {
         let androidDict = IOSReader.replacePlaceholders(androidDict: androidDict)
         print("Making dictionary '\(language)' at \(DateFormatter.localizedString(from: Date(), dateStyle: .medium, timeStyle: .medium))")
@@ -427,6 +485,8 @@ class IOSWriter {
                 guard let androidValue = androidDict[elem.key] else { continue }
                 guard isValueCorrect(value: androidValue) else { continue }
                 guard !isEnglishDuplicateInLocalFile(language, elem.key, androidValue) else { continue }
+                guard !isDuplicatedValueInSeveralLanguages(elem.key, androidValue) else { continue }
+                
                 if iosDict.keys.contains(elem.key) {
                     existingLinesDict.updateValue(androidValue, forKey: elem.key)
                 } else {
@@ -442,9 +502,8 @@ class IOSWriter {
             if let androidKey = AndroidReader.dictContainsKeys(androidDict: androidDict, keys: elem.value) {
                 guard let androidValue = androidDict[androidKey] else { continue }
                 guard isValueCorrect(value: androidValue) else { continue }
-                guard !isEnglishDuplicateInLocalFile(language, elem.key, androidValue) else {
-                    continue
-                }
+                guard !isEnglishDuplicateInLocalFile(language, elem.key, androidValue) else { continue }
+                guard !isDuplicatedValueInSeveralLanguages(elem.key, androidValue) else { continue }
                 
                 if iosDict.keys.contains(elem.key) {
                     existingLinesDict.updateValue(androidValue, forKey: elem.key)
@@ -537,6 +596,15 @@ class IOSWriter {
                                         }
                                     }
                                 }
+                                
+                                // Filter the same value in several translations
+                                if isDuplicatedValueInSeveralLanguages(key, currentValue) {
+                                    isTrashString = true
+                                }
+                                if let newValue, isDuplicatedValueInSeveralLanguages(key, newValue) {
+                                    isTrashString = true
+                                }
+
                                 
                                 /*
                                 // For non-latin languages (Korean, Arabic, etc) just remove every english-only string. It's usuallu just a duplicate like "GPX", "GPS", etc

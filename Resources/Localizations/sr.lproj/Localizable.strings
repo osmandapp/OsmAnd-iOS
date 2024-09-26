@@ -2721,7 +2721,7 @@
 "distance_to_destination_widget_desc" = "Справица приказује преостало растојање до последње долазне тачке.";
 "rotate_map_manual_opt" = "Ручно окретање";
 "history_actions_footer_text" = "Историју можете извозити у фајлу. Можете да избришете све уносе историје до сада забележене.";
-"compass_click_desc" = "Тапните по компасу ради промене усмерења карте.";
+"compass_click_desc" = "Дупло тапните по компасу ради промене усмерења карте.";
 "help_article_map_point_layers_on_map_name" = "Тачке на карти";
 "help_article_map_raster_maps_name" = "Растерске карте (мрежне / ванмрежне)";
 "help_article_map_track_context_menu_name" = "Приручни изборник трагова";

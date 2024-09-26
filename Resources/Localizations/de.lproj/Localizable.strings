@@ -2720,7 +2720,7 @@
 "restart_is_required_title" = "Neustart ist erforderlich";
 "free_downloads" = "Kostenlose Downloads";
 "search_favorites" = "In Favoriten suchen";
-"compass_click_desc" = "Hinweis: Tippen Sie auf den Kompass, um die Art der Kartenausrichtung zu ändern.";
+"compass_click_desc" = "Doppeltes Tippen auf die Kompass-Schaltfläche wechselt den Kartenausrichtungsmodus.";
 "rotate_map_manual_opt" = "Manuell gedreht (fest)";
 "map_widget_camera_tilt" = "Kameraneigung";
 "map_widget_camera_distance" = "Kamerahöhe";
@@ -2838,7 +2838,7 @@
 "weather_widget_group_desc" = "Eine Reihe von Widgets mit verschiedenen Wetterinformationen.";
 "angular_measeurement" = "Winkeleinheit";
 "coordinates_format" = "Koordinatenformat";
-"coordinates_widget_secondary_desc" = "Sie können das Koordinatenformat ändern in %@ - %@ - %@.";
+"coordinates_widget_secondary_desc" = "Sie können das Koordinatenformat ändern in %@ – %@ – %@.";
 "widget_secondary_desc_part_of" = "Teil des Plugins %@.";
 "weather_widgets_secondary_desc" = "Die Maßeinheiten können in den Einstellungen des Wetter-Plugins geändert werden.";
 "shared_string_dark" = "Dunkel";

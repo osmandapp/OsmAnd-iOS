@@ -2354,7 +2354,7 @@
 "subscription_cancel_description" = "Opsig når som helst i AppStore.";
 "osm_live_payment_subscription_management_aid" = "Betalingen vil blive trukket på din Apple ID-konto ved bekræftelsen af købet.\n\nAbonnementet fornyes automatisk, medmindre det opsiges mindst 24 timer før udløbet af den aktuelle periode. Din konto vil blive debiteret for fornyelse senest 24 timer før udløbet af den aktuelle periode.\n\nDu kan administrere og opsige dine abonnementer ved at gå til dine kontoindstillinger i App Store efter købet";
 "no_purchases" = "Du har ingen køb";
-"empty_purchases_description" = "Hvis dine køb ikke vises her, kan du trykke på \"%@\" eller kontakte vores supportteam.";
+"empty_purchases_description" = "Hvis dine køb ikke vises her, kan du trykke på “%@” eller kontakte vores supportteam.";
 "explore_osmnad_plans_to_find_suitable" = "Udforsk OsmAnd-abonnementer for at finde et, der passer til dig.";
 "osm_live_banner_desc" = "Få ubegrænset downloads af kort, tilføjelse af opdateringer ugentligt, dagligt eller hver time.";
 "redeem_promo_code" = "Indløs kampagnekode";
@@ -2373,7 +2373,7 @@
 "wikipedia_and_wikivoyage_offline" = "Wikipedia og Wikivoyage offline";
 "purchases_feature_desc_osmand_cloud" = "Få OsmAnd Cloud for at gemme alle OsmAnd-data online. Ingen mistede data efter geninstallation. Sikkerhedskopiér og gendan nemt alle informationer.";
 "purchases_feature_desc_unlimited_map_download" = "Få ubegrænset download af offline kort for alle kontinenter og regioner.";
-"you_can_get_feature_as_part_of_pattern" = "Få \"%@\" som en del af %@ abonnementet. Sammenligning:";
+"you_can_get_feature_as_part_of_pattern" = "Få “%@” som en del af %@ abonnementet. Sammenligning:";
 "purchases_feature_desc_carplay" = "Giver dig OsmAnd offline kort og navigation på skærmen i dit køretøj og integreres med bilens betjeningselementer.";
 "purchases_feature_desc_combined_wiki" = "Udforsk Wikipedia-artikler på farten uden internetforbindelse. Offline-data opdelt efter lande og tilgængelig på alle sprog.";
 "purchases_feature_desc_wikivoyage" = "Udforsk Wikivoyage offline. Artikler er opdelt efter lande og regioner og er tilgængelige på alle sprog.";

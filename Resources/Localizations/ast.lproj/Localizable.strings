@@ -247,11 +247,6 @@
 "gpx_start_new_segment" = "Aniciar un segmentu nuevu";
 "save_track_interval_globally" = "Intervalu de rexistru";
 "shared_string_clear" = "Llimpiar";
-"gpx_upload_public_visibility_descr" = "\"Public\" means the trace is shown publicly in your GPS traces and in public GPS trace listings, and in the public trace list with timestamps in raw form. Data served via the API does not reference your trace page. Tracepoint timestamps are not available through the public GPS API, and tracepoints are not chronologically ordered.";
-"gpx_upload_identifiable_visibility_descr" = "\"Identifiable\" means that the trace will be shown publicly in your GPS traces and in public GPS trace listings, i.e. other users will be able to download the raw trace and associate it with your username. Public timestamped tracepoint data from the GPS API served via the trackpoints API will reference your original trace page.";
-"gpx_upload_trackable_visibility_descr" = "\"Trackable\" means the trace does not show up in any public listings, but processed trackpoints with timestamps from it (that can\'t be associated with you directly) do through downloads from the public GPS API.";
-"gpx_upload_private_visibility_descr" = "\"Private\" means the trace does not show up in any public listings, but trackpoints from it in unchronological order are available through the public GPS API without timestamps.";
-"save_track_to_gpx_descrp" = "Turn on to automatically save a track during navigation";
 "shared_string_speed" = "Velocidá";
 
 // Map settings
@@ -400,7 +395,6 @@
 "base_profile_descr_car" = "Coche, camín y motocicleta";
 "selected_profile" = "Perfil esbilláu";
 "application_profiles" = "Perfiles de l\'aplicación";
-"import_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";
 "reset_to_default" = "Reafitar";
 "checking_for_duplicate_description" = "OsmAnd check %@ for duplicates with existing items in the app. \n \nIt may take some time.";
 
@@ -464,7 +458,6 @@
 "searching_gps" = "Buscando la señal GPS";
 "copied_to_clipboard" = "Copióse nel cartafueyu";
 // Quick action
-"toggle_current_location" = "Show/hide coordinates widget";
 
 
 "quick_action_current_location_widget_descr" = "Un alternador p'amosar/anubrir el widget Coordenaes nel mapa.";
@@ -488,7 +481,6 @@
 "show_gpx" = "Trazaos";
 "shared_string_action_name" = "Nome de l\'aición";
 "gpx_tags_txt" = "Etiquetes";
-"show_from_zoom_level" = "Display starting at zoom level";
 "quick_action_showhide_mapillary_descr" = "Un alternador p\'amosar/anubrir la capa de Mapillary nel mapa.";
 "quick_action_remove_next_destination" = "Desaniciar el puntu de destín más cercanu";
 "change_application_profile" = "Camudar el perfil de l\'aplicación";
@@ -553,7 +545,6 @@
 "record_plugin_description" = "This plugin activates the functionality to record and save your tracks by manually touching the GPX logging widget on the map, or also to automatically log all of your navigation routes to a GPX file. \n \n Recorded tracks can be shared with your friends or be used for OSM contributions. Athletes can use recorded tracks to monitor their trainings. Some basic track analysis can be performed directly in OsmAnd, like lap times, average speed etc., and tracks can of course also later be analyzed in special 3rd party analysis tools.";
 "osm_editing_plugin_description" = "Make OSM contributions like creating or modifying OSM POI objects, opening or commenting OSM notes, and contributing recorded GPX files in OsmAnd by supplying your username and password. OpenStreetMap.org is a community driven, global public domain mapping project.";
 "plugin_mapillary_descr" = "Semeyes a nivel de cai pa tol mundu. Descubri llugares, collabora y fotografia\'l mundu.";
-"worldwide_maps" = "All World Maps";
 "purchases_feature_desc_wikipedia" = "Esplora Wikipedia ensin internet. Los artículos dixébrense per países y rexones, y tán disponibles en toles llingües.";
 "shared_string_all_languages" = "Toles llingües";
 "srtm_plugin_name" = "Contour lines";
@@ -570,8 +561,6 @@
 "shared_string_not_selected" = "Nun s\'esbilló";
 "shared_string_language" = "Llingua";
 "shared_string_get" = "Consiguir";
-"srtm_plugin_disabled" = "Contour lines disabled";
-"prch_srtm_info" = "Contour lines plugin enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "public_transport_try_change_settings" = "Prueba a camudar los axustes.";
 "shared_string_gpx_points" = "Puntos";
 "local_indexes_cat_backup" = "Desactivóse";
@@ -723,10 +712,6 @@
 // Release Notes
 // instruction:
 //https://github.com/osmandapp/OsmAnd-Issues/blob/master/Adding%20release%20information%20to%20IOS.md
-"ios_release_3_80" = "• Introduced \"Application Profiles\" with independent settings\n• New arrangement of settings by profiles and types: navigation, general, map and screen\n• Ability to import or export profile settings\n• Added data sources for Online photos\n• Added ability to download online maps to cache\n• Improved \"Search\" algorithms\n";
-"ios_release_3_90" = "• Introduced a \"Plan a route\" feature for planning future trips with the ability to create track segments using different navigation types\n• Added an option to enable a сompass over the \"Radius Ruler\" tool\n• Added \"POI label overlays\" option that allows to show names for favorites, track waypoints and markers on the map\n• Added new Quick actions for visibility of contour lines and terrain on the map, changing an application profile, deleting a nearest intermediate point\n• Fixed issues with missing Wikipedia search category\n• Settings Import: fixed bugs, added support for all data types available in OsmAnd\n• OpenStreetMap editing: fixed the time picker and inability to change the changeset comment\n";
-"ios_release_4_0" = "• New! \"Add favorite\" screen with options to select the custom icon, color, and shape\n• Added new \"Coordinates widget\" with coordinates of the current location\n• Added ability to import custom user-defined plugins\n• Significantly extended the import/export functionality\n• Distance by tap moved from the Radius ruler into a separate option\n• Fixed CarPlay app freezes when iPhone screen is turned off\n• Plugins screen moved from the Maps & Resources to the main menu\n• Added Finnish localization\n• Fixed UI in landscape orientation for \"Plan a route\" screen\n• Added support for custom routing and rendering files\n• Fixed performance of markers direction line\n • Fixed issue with importing GPX files with uppercase extensions\n• Fixed issue with \"Follow track\" menu\n• Fixed import of OBF files\n";
-"ios_release_4_1" = "• Completely redesigned interaction with tracks: a new menu with charts, statistics, ability to change the appearance, coloring by speed, height and slope, and track selection on the map• New screen for searching by coordinates in different formats\n• Improved coordinate search in OLC format\n• New user-friendly menu for choosing languages to display Wikipedia articles on the map\n• Added ability to easily load maps of all regions of the country with a couple of clicks.\n• Added contour lines in feet (You need to download additional files)\n• Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n• New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n• Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
 "routeInfo_winter_ice_road_description" = "Coloring the route or track line according to the winter road classification that is only usable during the winter.";
 "add_description" = "Amestar una descripción";
 "routeInfo_surface_description" = "Provide additional information about the physical surface of roads/footpaths.";

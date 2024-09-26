@@ -13,7 +13,6 @@
 "years_5" = "İl";
 "months_3" = "Üç ay";
 "price_free" = "Pulsuz";
-"get_discount_title" = "Get %d %@ at %d%% off.";
 "get_discount_first_part" = "İlk %@ üçün %@";
 "get_discount_second_part" = "Sonra %@";
 "mapillary_image" = "Mapillary təsviri";
@@ -159,7 +158,6 @@
 "snap_to_road" = "Yola bərkit";
 "snap_to_road_descr" = "Hazırkı mövqe ikonu hazırkı naviqasiya marşrutuna bağlanacaq";
 "show_warnings_title" = "Xəbərdarlıqları göstər…";
-"show_warnings_descr" = "Configure traffic warnings (speed limits, forced stops, speed bumps, tunnels), speed camera warnings, and lane information";
 "speak_title" = "Elan et…";
 "keep_informing" = "Naviqasiya təlimatlarını təkrarla";
 "default_speed_system" = "Sürət vahidi";
@@ -455,7 +453,6 @@
 "map_locale" = "Xəritə dili";
 "recording_context_menu_show" = "Göstər";
 "shared_string_location" = "Məkan";
-"short_location_on_map" = "Lat %@ Lon %@";
 "navigate_point_zone" = "Zona";
 "navigate_point_olc" = "Açıq məkan kodu (OLC)";
 "shared_string_example" = "Nümunə";
@@ -870,7 +867,6 @@
 "record_plugin_name" = "Səfər qeydetmə";
 "record_plugin_description" = "Bu qoşma xəritədə GPX qeydetmə vidcetinə əl ilə toxunmaqla izlərinizi qeyd etmək və saxlamaq, həmçinin bütün naviqasiya marşrutlarınızı avtomatik olaraq GPX faylına qeyd etmək funksiyasını aktivləşdirir. \n \nQeyd edilmiş izlər dostlarınızla paylaşıla və ya OSM töhfələri üçün istifadə edilə bilər. İdmançılar məşqlərinə nəzarət etmək üçün qeyd edilmiş izlərdən istifadə edə bilərlər. Dövrə vaxtları, orta sürət və s. kimi bəzi əsas iz analizləri birbaşa OsmAnd-da həyata keçirilə bilər və əlbəttə ki, daha sonra izlər xüsusi 3-cü tərəf analiz alətlərində də təhlil edilə bilər.";
 "osm_editing_plugin_name" = "OpenStreetMap Editing";
-"product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "OSM Editing plugin can be used to make OSM contributions like creating or modifying POI objects, opening or commenting on OSM Notes, and contributing recorded GPX files. OSM is a community driven global public domain mapping project. For more information, please refer to https://osm.org. Contributions can be made directly from OsmAnd, if you specify your OSM credentials in the app.";
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Hər kəs üçün küçə səviyyəsində şəkillər. Yerləri kəşf edin, əməkdaşlıq edin, dünyanı çəkin.";
@@ -1006,7 +1002,6 @@
 "sett_generic_ext_input" = "Klaviatura";
 "shared_string_deselect" = "Seçimi ləğv et";
 "download_wiki_region_placeholder" = "bu region";
-"osm_live_plan_pricing" = "Plans & Pricing";
 "osm_live_payment_monthly_title" = "Aylıq";
 "osm_live_payment_3_months_title" = "Hər üç aydan bir";
 "osm_live_payment_annual_title" = "İllik";
@@ -1035,7 +1030,6 @@
 "osm_live_subscribe_btn" = "Abunə ol";
 "shared_string_email_address" = "E-poçt ünvanı";
 "osm_live_enter_email" = "Zəhmət olmasa düzgün e-poçt ünvanı daxil edin";
-"osm_live_enter_user_name" = "Please enter public name";
 "shared_string_unexpected_error" = "Gözlənilməyən səhv";
 "osm_live_payment_desc" = "Abunəlik seçilən dövr üçün ödənilir. İstədiyiniz vaxt Google Play-dən ləğv edin.";
 "osm_live_ask_for_purchase" = "Zəhmət olmasa əvvəlcə OsmAnd Live abunəliyini alın";

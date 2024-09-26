@@ -478,7 +478,6 @@
 "si_min_km" = "Minuts per kilòmetre";
 "si_min_m" = "Minuts per milla";
 "si_nm_h" = "Milles marines per hora (nusos)";
-"nm" = "NM";
 "units_nm_h" = "nusos";
 "towards" = "cap a";
 "route_roundabout" = "Rotonda: Preneu la %d sortida i continueu";

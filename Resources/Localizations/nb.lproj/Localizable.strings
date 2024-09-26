@@ -89,12 +89,10 @@
 "save_global_track_interval" = "Generelt loggeintervall";
 "save_global_track_interval_descr" = "Spesifiser loggingsintervallet for det generelle sporopptaket (slått på via \'Turopptak\'-modulen på kartet).";
 "save_track_interval" = "Loggeintervall under navigering";
-"logging_interval_navigation_descr" = "Choose logging interval for trip recording during navigation";
 "monitoring_min_distance" = "Minimumsforskyvning";
 "monitoring_min_accuracy" = "Minimumsnøyaktighet";
 "monitoring_min_speed" = "Minimumshastighet";
 "auto_split_recording_title" = "Del opp opptak automatisk etter avbrudd";
-"auto_split_gap_descr" = "Start a new segment after 6 min gap, new trip after 2 h gap, or new file after a longer gap";
 "map_widget_magnetic_bearing" = "Magnetisk peiling";
 "map_widget_bearing" = "Relativ peiling";
 "map_widget_transparent" = "Gjennomsiktige miniprogrammer";
@@ -365,10 +363,7 @@
 "save_current_track" = "Lagre gjeldende spor";
 "save_current_track_descr" = "Lagre nåværende spor som GPX-fil nå.";
 "save_track_interval_globally" = "Loggeintervall";
-"track_start_rec" = "Start trip recording";
 "track_rec_addon_q" = "Please activate Trip recording plugin to record and save your trips";
-"track_clear" = "Clear current trip";
-"track_clear_q" = "Do you want to clear current trip?";
 "shared_string_clear" = "Slett";
 "quick_action_poi_list" = "Interessepunktliste";
 "save_track_to_gpx" = "Auto-opptak av spor under navigering";
@@ -404,7 +399,6 @@
 "navigate_point_format_DM" = "GGG MM,MMM";
 "navigate_point_format_DMS" = "GGG MM SS,S";
 "shared_string_example" = "Eksempel";
-"utm_description" = "OsmAnd uses UTM Standard format which is similar but not identical to UTM NATO format.";
 "coordinates_copy_descr" = "Trykk for å kopiere koordinater til utklippstavle.";
 "translit_names" = "Transkriber navn";
 "shared_string_maps" = "Kart";
@@ -531,9 +525,7 @@
 "quick_action_switch_day_mode" = "Dagmodus";
 "quick_action_navigation_voice_on" = "Slå av tale";
 "quick_action_navigation_voice_off" = "Slå på tale";
-"show_hide_gpx" = "Show/hide trips";
 "show_gpx" = "Spor";
-"hide_gpx" = "Hide trips";
 "show_notes" = "Vis OSM-notater";
 "hide_notes" = "Skjul OSM-notater";
 "search_results" = "Søkeresultater";
@@ -589,7 +581,6 @@
 "follow_us" = "Følg oss";
 // Map
 // Import
-"import_gpx" = "GPX Trip";
 // Alerts
 // Context menu
 "ctx_mnu_edit_fav" = "Rediger favoritt";
@@ -623,10 +614,8 @@
 "plugin_ski_name" = "Skikartvisning";
 "plugin_ski_descr" = "Designet til å navigere i vintersportsområder: Se skibakker, skiheiser og langrennsløyper, og med fargede linjer som indikerer vanskelighetsgrader. For å bruke, aktiver dette tillegget og gå også til \"Kartinnstilling\" og velg kartstilen \"Vinter og ski\".";
 "record_plugin_name" = "Turopptak";
-"product_desc_track_recording" = "Activates the functionality to record and save your trips";
 "record_plugin_description" = "Ta opp turene eller treningene dine og analyser dataene når det gjelder hastighet, akkumulerte opp- og nedstigninger, høydeprofil etc. Spor som er tatt opp kan arkiveres, deles med venner, redigeres og etterbehandles. \n \nMer lesing på %@.";
 "osm_editing_plugin_name" = "OSM-redigering";
-"product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "Lag bidrag til OpenStreetMap, et globalt felleskap som vedlikeholder et omfattende kart over verden og gir oppdaterte åpen-kildekodedata til enhver bruker. \n \nDu kan finne instruksjoner om hvordan du redigerer kartet på vårt nettsted %@.";
 "worldwide_maps" = "Verdenskart";
 "purchases_feature_desc_wikipedia" = "Gir alle stedsrelaterte Wikipedia-artikler frakoblet, og hjelper deg å lære om stedene du besøker på turen ved å trykke på kartet. Ikke glem å laste ned Wikipedia-kartfilene for de respektive regionene.";
@@ -639,7 +628,6 @@
 "get_unlimited_access" = "Få ubegrenset tilgang";
 "navigate_point_latitude" = "Breddegrad";
 "navigate_point_longitude" = "Lengdegrad";
-"track_save_short_q" = "Trip is too short, do you want to save?";
 "shared_string_description" = "Beskrivelse";
 "enter_fav_name" = "Oppfør favorittnavn";
 "roads" = "Veier";

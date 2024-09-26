@@ -1,6 +1,3 @@
-"get_discount_title" = "Get %d %@ at %d%% off.";
-"get_discount_first_part" = "%@ for first %@";
-"get_discount_second_part" = "then %@";
 "shared_string_previous" = "Quay lại";
 "shared_string_next" = "Tiếp";
 "transport_Routes" = "Tuyến";
@@ -43,7 +40,6 @@
 "choose_auto_follow_route_descr" = "Thời gian cho đến khi chế độ xem bản đồ đồng bộ hóa với vị trí hiện tại.";
 "auto_zoom_map" = "Tự động Zoom bản đồ";
 "auto_zoom_map_descr" = "Mức độ thu phóng theo tốc độ của bạn (trong khi bản đồ được đồng bộ hóa với vị trí hiện tại).";
-"show_warnings_descr" = "Configure traffic warnings (speed limits, forced stops, speed bumps, tunnels), speed camera warnings, and lane information";
 "wake_on_voice" = "Bật màn hình";
 "wake_on_voice_descr" = "Bật màn hình thiết bị (nếu đang tắt) khi tiếp cận một chỗ rẽ.";
 "voice_provider" = "Hướng dẫn bằng giọng nói";
@@ -57,10 +53,6 @@
 "gpx_option_from_start_point" = "Dọc theo toàn bộ track";
 "gpx_option_reverse_route" = "Đảo hướng GPX";
 "impassable_road" = "Tránh đường …";
-"sort_by" = "Sort";
-"route_to" = "To";
-"route_via" = "Via";
-"route_from" = "From";
 "transfers" = "Transfers:";
 "error_calculating_route" = "Không thể tính toán lộ trình.";
 "internet_connection_required_for_online_route" = "Một dịch vụ định tuyến trực tuyến được chọn nhưng không có kết nối Internet có sẵn.";
@@ -107,7 +99,6 @@
 "update_existing" = "Thay đổi";
 "replace_favorite_confirmation" = "Are you sure you want to replace Favorite %@?";
 "fav_points_not_exist" = "Không có điểm ưa thích nào";
-"add_group" = "Add group";
 "fav_point_dublicate_message" = "Favorite renamed to \'%@\' to avoid duplication.";
 "favorite_friends_category" = "Bạn bè";
 "favorite_places_category" = "Địa điểm";
@@ -152,7 +143,6 @@
 "next_proceed" = "Tiếp";
 // Settings
 "map_locale" = "Map Language";
-"short_location_on_map" = "Lat %@ Lon %@";
 "navigate_point_format_DM" = "DDD MM.MMMMM";
 "navigate_point_format_DMS" = "DDD MM SS.SSSSS";
 "lang_af" = "Afrikaan";
@@ -210,10 +200,8 @@
 "poi_remove_title" = "Xóa địa điểm";
 "poi_dialog_comment" = "Bình luận";
 "local_openstreetmap_uploading" = "Uploading...";
-"save_poi_without_poi_type_message" = "Do you want to save POI without type?";
 
 // Mapillary
-"mapillary_descr" = "Online street photos for everyone. Discover places, collaborate, capture the world";
 "filter_current_poiButton" = "Bộ lọc";
 
 // Coordinate widget
@@ -225,7 +213,6 @@
 "quick_action_current_location_widget_descr" = "Tapping this action button shows or hides the Coordinates widget.";
 "vector_data" = "Bản đồ vector Offline";
 "quick_action_map_style_action" = "Add map style";
-"parking_place" = "Parking place";
 "quick_action_add_osm_bug" = "Add OSM note";
 "quick_action_map_style" = "Change map style";
 "quick_action_map_overlay" = "Change map overlay";
@@ -240,7 +227,6 @@
 "quick_action_add_marker_descr" = "Tapping this action button adds a map marker at the map center point.";
 "quick_action_hillshade_descr" = "Tapping this action button shows or hides the terrain layer.";
 "show_from_zoom_level" = "Display starting at zoom level";
-"quick_action_contour_lines_descr" = "Tapping this action button shows or hides contour lines layer.";
 "enable_hillshade" = "Enable to view terrain data";
 "quick_action_transport_descr" = "Tap this action to show or hide public transport routes / stops on the map.";
 "quick_action_showhide_mapillary_descr" = "Tapping this action button shows or hides the Mapillary layer on the map.";
@@ -293,7 +279,6 @@
 "record_plugin_name" = "Track recording";
 "record_plugin_description" = "Record your tracks and save them manually using OsmAnd Track recording plugin. Export your track as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their tracks.";
 "osm_editing_plugin_name" = "OSM";
-"product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "OSM Editing plugin can be used to make OSM contributions like creating or modifying POI objects, opening or commenting on OSM Notes, and contributing recorded GPX files. OSM is a community driven global public domain mapping project. For more information, please refer to https://osm.org. Contributions can be made directly from OsmAnd, if you specify your OSM credentials in the app.";
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Online street-level photos for everyone. Discover places, collaborate, capture the world.";
@@ -339,14 +324,8 @@
 "search_POI_level_btn" = "Tìm thêm";
 "search_address_street" = "Phố";
 "search_address_building_option" = "Tòa nhà";
-"sett_generic_ext_input" = "Generic Keyboard";
-"osm_live_plan_pricing" = "Plans & Pricing";
-"get_osmand_live" = "Get OsmAnd Live to unlock all features:";
-"subscribe_email_desc" = "Subscribe to our mailing list:<br/>• Get 3 extra maps to download<br/>• Hear about discounts first<br/>• Participate in promocodes <a href='https://osmand.net/giveaway'>giveaways</a>";
 "osm_live_subscribe_btn" = "Đăng ký";
 "shared_string_email_address" = "Địa chỉ E-mail";
-"osm_live_enter_user_name" = "Please enter public name";
-"osm_live_payment_desc" = "You can manage and cancel your subscriptions in your App Store account settings after purchase";
 "shared_string_io_error" = "Có lỗi xảy ra với thiết bị vào / ra";
 "rendering_attr_contourLines_description" = "Display from zoom level (requires contour data):";
 "routing_attr_short_way_description" = "Use fuel-efficient way (usually shorter).";

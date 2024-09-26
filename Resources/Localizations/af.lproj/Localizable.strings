@@ -1,6 +1,3 @@
-"get_discount_title" = "Get %d %@ at %d%% off.";
-"get_discount_first_part" = "%@ for first %@";
-"get_discount_second_part" = "then %@";
 "shared_string_previous" = "Vorige";
 "shared_string_next" = "Volgende";
 "transport_Routes" = "Roetes";
@@ -105,8 +102,6 @@
 "gpx_option_from_start_point" = "Ry oor die hele spoor";
 "gpx_option_reverse_route" = "Keer GPX rigting om";
 "turn_arrows_descr" = "Control the visibility of the turn arrows on the route line.";
-"impassable_road" = "Avoid roads";
-"sort_by" = "Sort";
 "stop_routing_confirm" = "Is jy seker jy wil die navigasie staak?";
 "cancel_route" = "Verwerp roete";
 "use_displayed_track_for_navigation" = "Wil jy die aangetoonde spoor gebruik vir navigasie?";
@@ -184,7 +179,6 @@
 "update_existing" = "Vervang";
 "replace_favorite_confirmation" = "Are you sure you want to replace Favorite %@?";
 "fav_points_not_exist" = "Geen gunstelingpunte bestaan nie";
-"add_group" = "Add group";
 "fav_point_dublicate_message" = "Favorite renamed to \'%@\' to avoid duplication.";
 "favorite_friends_category" = "Vriende";
 "favorite_places_category" = "Plekke";
@@ -235,7 +229,6 @@
 // Settings
 "map_locale" = "Map Language";
 "recording_context_menu_show" = "Wys";
-"short_location_on_map" = "Lat %@ Lon %@";
 "navigate_point_format_D" = "GGG.GG";
 "navigate_point_format_DM" = "GGG MM.MM";
 "navigate_point_format_DMS" = "GGG MM SS.SS";
@@ -303,10 +296,8 @@
 "close_changeset" = "Sluit verandering-sessie af";
 "poi_dialog_comment" = "Kommentaar";
 "local_openstreetmap_uploading" = "Besig om op te laai …";
-"save_poi_without_poi_type_message" = "Do you want to save POI without type?";
 
 // Mapillary
-"mapillary_descr" = "Online street photos for everyone. Discover places, collaborate, capture the world";
 
 // Coordinate widget
 "coordinates_widget_current_location" = "Coordinates widget";
@@ -317,7 +308,6 @@
 "quick_action_current_location_widget_descr" = "Tapping this action button shows or hides the Coordinates widget.";
 "vector_data" = "Aflyn vektor kaarte";
 "quick_action_map_style_action" = "Add map style";
-"parking_place" = "Parking place";
 "quick_action_add_osm_bug" = "Add OSM note";
 "quick_action_map_style" = "Change map style";
 "quick_action_map_overlay" = "Change map overlay";
@@ -332,7 +322,6 @@
 "gpx_tags_txt" = "Naamplaatjies";
 "quick_action_add_marker_descr" = "Tapping this action button adds a map marker at the map center point.";
 "quick_action_hillshade_descr" = "Tapping this action button shows or hides the terrain layer.";
-"quick_action_contour_lines_descr" = "Tapping this action button shows or hides contour lines layer.";
 "enable_hillshade" = "Enable to view terrain data";
 "quick_action_transport_descr" = "Tap this action to show or hide public transport routes / stops on the map.";
 "quick_action_showhide_mapillary_descr" = "Tapping this action button shows or hides the Mapillary layer on the map.";
@@ -438,14 +427,8 @@
 "search_POI_level_btn" = "Vind meer";
 "search_address_street" = "Straat";
 "search_address_building_option" = "Gebou";
-"sett_generic_ext_input" = "Generic Keyboard";
-"osm_live_plan_pricing" = "Plans & Pricing";
 "free_version_message" = "Hierdie gratis OsmAnd weergawe is beperk tot %@ aflaailêers en ondersteun nie aflyn Wikipedia artikels nie.";
-"get_osmand_live" = "Get OsmAnd Live to unlock all features:";
 "contour_lines_hillshade_maps" = "Terrain maps: contour lines, hillshades, slope";
-"subscribe_email_desc" = "Subscribe to our mailing list:<br/>• Get 3 extra maps to download<br/>• Hear about discounts first<br/>• Participate in promocodes <a href='https://osmand.net/giveaway'>giveaways</a>";
-"osm_live_enter_user_name" = "Please enter public name";
-"osm_live_payment_desc" = "You can manage and cancel your subscriptions in your App Store account settings after purchase";
 "shared_string_io_error" = "Lees/skryf fout het voorgekom";
 "rendering_value_high_name" = "Hoog";
 "routing_attr_avoid_toll_name" = "Vermy tolpaaie";

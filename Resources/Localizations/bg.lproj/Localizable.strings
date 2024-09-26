@@ -1,5 +1,3 @@
-"get_discount_title" = "Get %d %@ at %d%% off.";
-"get_discount_first_part" = "%@ for first %@";
 "get_discount_second_part" = "После %@";
 "shared_string_milliradians" = "Милирадиани";
 "access_intermediate_arrival_time" = "Време на пристигане в междинна точка";
@@ -377,7 +375,6 @@
 "update_existing" = "Заместване";
 "replace_favorite_confirmation" = "Заместване на „%@“ от Избрани\?";
 "fav_points_not_exist" = "Не съществуват любими точки";
-"add_group" = "Add group";
 "select_group" = "Изберете група";
 "shared_string_icon" = "Пиктограма";
 "shared_string_shape" = "Форма";
@@ -770,7 +767,6 @@
 
 // Mapillary
 "shared_string_add_photos" = "Добавяне на снимки";
-"mapillary_descr" = "Online street photos for everyone. Discover places, collaborate, capture the world";
 "shared_string_reload" = "Презареждане";
 "show_more" = "Повече";
 "filter_current_poiButton" = "Филтър";
@@ -917,7 +913,6 @@
 "record_plugin_name" = "Запис на маршрут";
 "record_plugin_description" = "Записвайте пътуванията или тренировките си и анализирайте данните по отношение на скоростта, натрупаните изкачвания и спускания, профила на надморската височина и т.н. Записаните маршрути могат да бъдат архивирани, споделяни с приятели, редактирани или обработвани впоследствие. \n \nДокументацията е достъпна на адрес %@.";
 "osm_editing_plugin_name" = "Редактиране на OSM";
-"product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "Дайте своя принос към OpenStreetMap - глобална общност, която поддържа цялостна карта на света и предоставя съвременни данни с отворен код на всеки потребител. \n \nИнструкции за редактиране на картата можете да намерите на адрес %@.";
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Снимки от нивото на улицата. Можете да дадете своя принос. За да видите съществуващите данни като слой на картата, включете „Снимки от улицата“ в менюто „Настройки на картата“.";
@@ -1033,7 +1028,6 @@
 "search_address_street" = "Улица";
 "search_address_building_option" = "Номер";
 "shared_string_address" = "Адрес";
-"sett_generic_ext_input" = "Generic Keyboard";
 "shared_string_deselect" = "Отмяна на избора";
 "download_wiki_region_placeholder" = "тази област";
 "osm_live_plan_pricing" = "Ценови планове";
@@ -1049,7 +1043,6 @@
 "osm_live_subscription" = "Абонамент за OsmAnd Live";
 "wikivoyage_offline" = "Wikivoyage без мрежа";
 "donation_to_osm" = "Дарение за OSM общността";
-"subscribe_email_desc" = "Subscribe to our mailing list:<br/>• Get 3 extra maps to download<br/>• Hear about discounts first<br/>• Participate in promocodes <a href='https://osmand.net/giveaway'>giveaways</a>";
 "osm_live_subscribe_btn" = "Абониране";
 "shared_string_email_address" = "Адрес на електронна поща";
 "osm_live_enter_email" = "Въведете валиден адрес за електронна поща";

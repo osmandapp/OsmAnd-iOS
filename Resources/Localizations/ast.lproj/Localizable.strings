@@ -11,7 +11,6 @@
 "years_2_4" = "Años";
 "years_5" = "Años";
 "months_3" = "Trés meses";
-"get_discount_second_part" = "then %@";
 "mapillary_image" = "Imaxe de Mapillary";
 "shared_string_previous" = "Anterior";
 "shared_string_next" = "Siguiente";
@@ -571,7 +570,6 @@
 "plugin_ski_descr" = "This plugin for OsmAnd puts at your fingertips details of global downhill ski slopes, cross country ski runs, Alpine ski routes, cable cars and ski lifts. Routes and pistes are shown color-coded by difficulty, and depicted in a special \'Winter\' map style which assimilates a snow-colored winter landscape. \n \nActivating this view changes the map style to \'Winter and ski\', showing all landscape features under wintry conditions. This view can be reverted by either de-activating it again here, or by changing the \'Map style\' under \'Configure map\' as desired.";
 "record_plugin_name" = "Rexistru de viaxes";
 "record_plugin_description" = "This plugin activates the functionality to record and save your tracks by manually touching the GPX logging widget on the map, or also to automatically log all of your navigation routes to a GPX file. \n \n Recorded tracks can be shared with your friends or be used for OSM contributions. Athletes can use recorded tracks to monitor their trainings. Some basic track analysis can be performed directly in OsmAnd, like lap times, average speed etc., and tracks can of course also later be analyzed in special 3rd party analysis tools.";
-"product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "Make OSM contributions like creating or modifying OSM POI objects, opening or commenting OSM notes, and contributing recorded GPX files in OsmAnd by supplying your username and password. OpenStreetMap.org is a community driven, global public domain mapping project.";
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Semeyes a nivel de cai pa tol mundu. Descubri llugares, collabora y fotografia\'l mundu.";

@@ -120,7 +120,6 @@
 "prefer_in_routing_descr" = "Føretrekk motorvegar";
 "snap_to_road" = "Lås på veg";
 "show_warnings_title" = "Vis alarmar …";
-"show_warnings_descr" = "Configure traffic warnings (speed limits, forced stops, speed bumps, tunnels), speed camera warnings, and lane information";
 "speak_descr" = "Konfigurer til å annonsera gatenamn, trafikkvarslingar (tvungne stopp, fartshumpar), fotoboksvarslingar, fartsgrenser";
 "select_nav_profile_dialog_message" = "The 'Navigation type' governs how routes are calculated.";
 "recalculate_route" = "Recalculate route in case of deviation";
@@ -131,11 +130,9 @@
 "app_mode_boat" = "Båt";
 "app_mode_aircraft" = "Fly";
 "turn_arrows_descr" = "Control the visibility of the turn arrows on the route line.";
-"impassable_road" = "Avoid roads";
 "interrupt_music" = "Avbryt musikk";
 "sort_by_distance" = "Sorter etter avstand";
 "sort_by_name" = "Sorter etter namn";
-"sort_by" = "Sort";
 "cancel_route" = "Vil du forkasta ruta\?";
 "shared_string_select_on_map" = "Vel på kartet …";
 "route_descr_select_destination" = "Vel mål";
@@ -166,7 +163,6 @@
 // Favorites
 "shared_string_my_places" = "Mine stadar";
 "replace_favorite_confirmation" = "Are you sure you want to replace Favorite %@?";
-"add_group" = "Add group";
 "fav_point_dublicate_message" = "Favorite renamed to \'%@\' to avoid duplication.";
 
 // Shapes
@@ -203,7 +199,6 @@
 // Settings
 "map_locale" = "Map Language";
 "recording_context_menu_show" = "Vis";
-"short_location_on_map" = "Lat %@ Lon %@";
 "mgrs_format_descr" = "OsmAnd uses MGRS format which is identical to UTM NATO.";
 "lang_al" = "Albansk";
 "lang_ar" = "Arabisk";
@@ -295,10 +290,8 @@
 "website" = "Nettside";
 "close_changeset" = "Lukk endringssett";
 "local_openstreetmap_uploading" = "Uploading...";
-"save_poi_without_poi_type_message" = "Do you want to save POI without type?";
 
 // Mapillary
-"mapillary_descr" = "Online street photos for everyone. Discover places, collaborate, capture the world";
 
 // Coordinate widget
 "coordinates_widget_current_location" = "Coordinates widget";
@@ -308,7 +301,6 @@
 "hide_current_location" = "Hide coordinates";
 "quick_action_current_location_widget_descr" = "Tapping this action button shows or hides the Coordinates widget.";
 "quick_action_map_style_action" = "Add map style";
-"parking_place" = "Parking place";
 "quick_action_add_osm_bug" = "Add OSM note";
 "quick_action_map_style" = "Change map style";
 "quick_action_map_overlay" = "Change map overlay";
@@ -321,7 +313,6 @@
 "show_gpx" = "Show track";
 "quick_action_add_marker_descr" = "Tapping this action button adds a map marker at the map center point.";
 "quick_action_hillshade_descr" = "Tapping this action button shows or hides the terrain layer.";
-"quick_action_contour_lines_descr" = "Tapping this action button shows or hides contour lines layer.";
 "enable_hillshade" = "Enable to view terrain data";
 "quick_action_transport_descr" = "Tap this action to show or hide public transport routes / stops on the map.";
 "quick_action_showhide_mapillary_descr" = "Tapping this action button shows or hides the Mapillary layer on the map.";
@@ -390,14 +381,10 @@
 "create_custom_categories_list_promo" = "You can add custom categories, hide categories that you don’t find necessary, and change the sort order of the list. Custom categories can be imported and exported with profiles.";
 "reset_to_default_category_button_promo" = "Resetting to default will restore the sort order to its initial state.";
 "search_poi_types_descr" = "You can combine POI types from different categories.";
-"sett_generic_ext_input" = "Generic Keyboard";
-"osm_live_plan_pricing" = "Plans & Pricing";
 "osm_live_payment_discount_descr" = "Lagre %@";
 "get_osmand_live" = "Skaff deg OsmAnd Live for å låsa opp alle funksjonar: Daglege kartoppdateringar med ubegrensa nedlastingar, alle programtillegga, Wikipedia, Wikivoyage og mykje meir.";
 "contour_lines_hillshade_maps" = "Terrain maps: contour lines, hillshades, slope";
 "subscribe_email_desc" = "Abonner på e-postlista vår om programrabattar og få tre kartnedlastingar til!";
-"osm_live_enter_user_name" = "Please enter public name";
-"osm_live_payment_desc" = "You can manage and cancel your subscriptions in your App Store account settings after purchase";
 "rendering_attr_showRoadMaps_name" = "Kart med berre vegar";
 "routing_attr_avoid_ferries_description" = "Unngå ferjer";
 "rendering_attr_showMtbScale_name" = "MTB Scale";

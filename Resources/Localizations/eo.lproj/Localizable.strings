@@ -1020,7 +1020,6 @@
 "record_plugin_name" = "Spur-registrilo";
 "record_plugin_description" = "Ebligas registri viajn vojaĝojn aŭ trejnadojn kaj analizi ilin konsiderante rapidon, tutajn suprenirojn kaj malsuprenirojn, profilon de altitudo kaj pli. Registritajn spurojn oni povas arĥivigi, kunhavigi, redakti kaj pritrakti. \n \nPliaj informoj: %@";
 "osm_editing_plugin_name" = "OSM-redaktilo";
-"product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "Ebligas kontribui al OpenStreetMap – tutmonda komunumo, kies celo estas prizorgi detalan mapon de la mondo kaj liveri aktualajn malfermajn datumojn por ĉiu uzanto. \n \nPliaj informoj pri kiel redakti la mapon OSM: %@";
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Liveras strat-nivelan fotaron. Vi ankaŭ povas kontribui per aldoni fotojn al la projekto. Por vidigi la ekzistajn datumojn kiel map-tavolon, aktivigu la agordon “Start-nivela fotaro” en la menuo “Agordi mapon”.";

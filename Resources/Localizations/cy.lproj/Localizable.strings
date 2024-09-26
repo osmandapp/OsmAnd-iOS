@@ -813,7 +813,6 @@
 "tab_title_advanced" = "Uwch";
 "shared_string_without_name" = "Heb enw";
 "local_openstreetmap_uploading" = "Wrthi\'n uwchlwytho…";
-"save_poi_without_poi_type_message" = "Do you want to save POI without type?";
 
 // Mapillary
 "shared_string_add_photos" = "Ychwanegu lluniau";
@@ -988,7 +987,6 @@
 "record_plugin_name" = "Recordio\'r daith";
 "record_plugin_description" = "Mae\'r ategyn hwn yn agor y swyddogaeth i recordio a chadw eich traciau trwy gyffwrdd â\'r teclyn cofnodi GPX ar y map â llaw, neu hefyd i fewngofnodi\'ch holl lwybrau llywio yn awtomatig i ffeil GPX. \n \n Gellir rhannu traciau wedi\'u recordio gyda\'ch ffrindiau neu eu defnyddio ar gyfer cyfraniadau OSM. Gall athletwyr ddefnyddio traciau wedi\'u recordio i fonitro eu sesiynau hyfforddi. Gellir perfformio rhywfaint o ddadansoddi trac sylfaenol yn uniongyrchol yn OsmAnd, fel amseroedd lap, cyflymder cyfartalog ac ati, ac wrth gwrs gellir dadansoddi traciau yn ddiweddarach hefyd mewn offer dadansoddi trydydd parti arbennig.";
 "osm_editing_plugin_name" = "Golygu OpenStreetMap";
-"product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "Gwnewch gyfraniadau OSM fel creu neu addasu gwrthrychau OSM POI, agor neu roi sylwadau ar nodiadau OSM, a chyfrannu ffeiliau GPX wedi\'u recordio yn OsmAnd trwy gyflenwi\'ch enw defnyddiwr a\'ch cyfrinair. Mae OpenStreetMap.org yn brosiect mapio parth cyhoeddus byd-eang a yrrir gan y gymuned.";
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Lluniau lefel stryd ar-lein i bawb. Darganfod lleoedd, cydweithio, cipio\'r byd.";

@@ -12,11 +12,7 @@
 "years_5" = "lět";
 "months_3" = "tři měsacy";
 "price_free" = "zadarmo";
-"get_discount_title" = "Get %d %@ at %d%% off.";
-"get_discount_first_part" = "%@ for first %@";
-"get_discount_second_part" = "then %@";
 "mapillary_image" = "Wobraz z Mapillary";
-"angular_units_descr" = "Change what azimuth is measured in.";
 "shared_string_previous" = "Předchadne";
 "transport_Routes" = "Čary";
 "transport_nearby_routes_within" = "Bliske linije w radiusu";
@@ -61,13 +57,10 @@
 "shared_string_automatic" = "Awtomatisce";
 // Trip recording settings
 "save_global_track_interval" = "Powšitkowny interwal nahrawanja";
-"save_global_track_interval_descr" = "Choose logging interval for the general trip recording (enabled via the GPX logging widget on the map).";
 "save_track_interval" = "Interwal nahrawanja w běhu nawigacije";
-"logging_interval_navigation_descr" = "Choose logging interval for trip recording during navigation";
 "monitoring_min_distance" = "Minimum logging distance";
 "monitoring_min_accuracy" = "Minimum logging accuracy";
 "monitoring_min_speed" = "Minimum logging speed";
-"auto_split_gap_descr" = "Start a new segment after 6 min gap, new trip after 2 h gap, or new file after a longer gap";
 "shared_string_near" = "Blisko";
 "always_center_position_on_map" = "Stejišćo přeco w srjedźišću pokazać";
 "map_widget_compass" = "Kompas";
@@ -151,7 +144,6 @@
 "map_markers_other" = "Druhe chorhojčki";
 "stop_routing_confirm" = "Chceš nawigaciju woprawdźe přetorhnyć?";
 "cancel_route" = "Čaru zaćisnyć";
-"navigation_over_track" = "Start navigation along trip?";
 "use_displayed_track_for_navigation" = "Pokazanu čaru za nawigaciju wužić\?";
 "shared_string_select_on_map" = "Na karće wubrać";
 "shared_string_my_location" = "Moje stejišćo";
@@ -283,10 +275,7 @@
 "save_current_track" = "Tuchwilnu čaru składować";
 "save_current_track_descr" = "Tuchwilnu čaru nětko jako GPX-dataju składować.";
 "save_track_interval_globally" = "Interwal nahrawanja";
-"track_start_rec" = "Start trip recording";
 "track_rec_addon_q" = "Please activate Trip recording plugin to record and save your trips";
-"track_clear" = "Clear current trip";
-"track_clear_q" = "Do you want to clear current trip?";
 "shared_string_clear" = "Wotstronić";
 "quick_action_poi_list" = "Lisćina POI";
 "save_track_to_gpx" = "Auto-record trip during navigation";
@@ -314,7 +303,6 @@
 "recording_context_menu_show" = "Pokazać";
 "shared_string_location" = "městno";
 "short_location_on_map" = "Šěr %@ \nDołh %@";
-"utm_description" = "OsmAnd uses UTM Standard format which is similar but not identical to UTM NATO format.";
 "translit_names" = "Mjena transliterować";
 "shared_string_maps" = "Karty";
 "purchases" = "Nakupy";
@@ -358,12 +346,9 @@
 "tab_title_advanced" = "pokročene";
 "shared_string_without_name" = "Bjez mjena";
 "local_openstreetmap_uploading" = "Nahrawanje…";
-"save_poi_without_poi_type_message" = "Do you want to save POI without type?";
 // Mapillary
 "shared_string_add_photos" = "Wobrazy přidać";
-"mapillary_descr" = "Online street photos for everyone. Discover places, collaborate, capture the world";
 "mapillary_menu_title_tile_cache" = "Mjezyskład kachličkow";
-"tile_data" = "Tile data";
 "shared_string_reload" = "wobnowić";
 "show_more" = "Wjace pokazać";
 "filter_current_poiButton" = "filter";
@@ -376,7 +361,6 @@
 "quick_action_map_styles" = "Kartowe stile";
 "configure_map" = "Napohlad karty";
 "select_map_marker" = "Chorhojčku wubrać";
-"parking_place" = "Parking place";
 "quick_action_add_osm_bug" = "Add OSM note";
 "quick_action_map_style" = "Stil karty změnić";
 "quick_action_map_source" = "Kartowežórło změnić";
@@ -394,9 +378,6 @@
 "quick_action_start_stop_navigation" = "Nawigaciju zahajić/přetorhnyć";
 "quick_action_navigation_voice_on" = "Mute voice";
 "quick_action_navigation_voice_off" = "Unmute voice";
-"show_hide_gpx" = "Show/hide trips";
-"show_gpx" = "Show trips";
-"hide_gpx" = "Hide trips";
 "quick_action_fav_name_descr" = "Wostaj prózdne za wužiwanje adresy abo městneho mjena.";
 "quick_action_add_category" = "Kategoriju dodać";
 "quick_action_add_marker_descr" = "Tapping this action button adds a map marker at the map center point.";
@@ -418,7 +399,6 @@
 "follow_us" = "Slědujće nas";
 // Map
 // Import
-"import_gpx" = "GPX Trip";
 // Alerts
 // Context menu
 "shared_string_share" = "Zdźělić";
@@ -449,10 +429,8 @@
 "plugin_ski_name" = "Ski map";
 "plugin_ski_descr" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
 "record_plugin_name" = "Nahrawanje jězbow";
-"product_desc_track_recording" = "Activates the functionality to record and save your trips";
 "record_plugin_description" = "Record your trips and save them manually using OsmAnd Trip recording plugin. Export your trip as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their trips.";
 "osm_editing_plugin_name" = "Wobdźěłanje OSM";
-"product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "OSM Editing plugin can be used to make OSM contributions like creating or modifying POI objects, opening or commenting on OSM Notes, and contributing recorded GPX files. OSM is a community driven global public domain mapping project. For more information, please refer to https://osm.org. Contributions can be made directly from OsmAnd, if you specify your OSM credentials in the app.";
 "worldwide_maps" = "Karty wšeho swěta";
 "download_wikipedia_maps" = "Wikipedija";
@@ -465,7 +443,6 @@
 "get_unlimited_access" = "Wobstaraj sej njewobmjezowany přistup";
 "navigate_point_latitude" = "šěrina";
 "navigate_point_longitude" = "dołhota";
-"track_save_short_q" = "Trip is too short, do you want to save?";
 "shared_string_description" = "Wopis";
 "roads" = "puće";
 "current_track" = "Tuchwilna čara";
@@ -534,20 +511,16 @@
 "search_address_street" = "Dróha";
 "search_address_building_option" = "Twarjenje";
 "shared_string_address" = "Adresa";
-"sett_generic_ext_input" = "Generic Keyboard";
 "shared_string_deselect" = "Wotwolić";
 "download_wiki_region_placeholder" = "an region";
-"osm_live_plan_pricing" = "Plans & Pricing";
 "osm_live_payment_renews_monthly" = "So měsačnje wobnowja";
 "osm_live_payment_renews_quarterly" = "So kwartalnje wobnowja";
 "osm_live_payment_renews_annually" = "So kóždolětnje wobnowja";
 "free_version_message" = "Móžeš %@ kartow sćahnyć abo aktualizować.";
-"get_osmand_live" = "Get OsmAnd Live to unlock all features:";
 "unlimited_downloads" = "Njewobmjezowane sćehnjenja";
 "wikipedia_offline" = "Wikipedija offline";
 "contour_lines_hillshade_maps" = "Wysokostne linije&reliefowe karty";
 "in_app_purchase" = "Kupy w aplikaciji";
-"subscribe_email_desc" = "Subscribe to our mailing list:<br/>• Get 3 extra maps to download<br/>• Hear about discounts first<br/>• Participate in promocodes <a href='https://osmand.net/giveaway'>giveaways</a>";
 "osm_live_subscribe_btn" = "Abonować";
 "shared_string_email_address" = "Mejlowa adresa";
 "osm_live_enter_email" = "Prošu zapodaj płaćiwu mejlowu adresu";

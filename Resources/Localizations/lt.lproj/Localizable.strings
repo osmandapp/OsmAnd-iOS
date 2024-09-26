@@ -14,8 +14,6 @@
 "months_3" = "Trys mėnesiai";
 "price_free" = "Nemokama";
 "get_discount_title" = "Gaukite %d %@ su %@ nuolaida.";
-"get_discount_first_part" = "%@ for first %@";
-"get_discount_second_part" = "then %@";
 "mapillary_image" = "Mapillary nuotrauka";
 "shared_string_milliradians" = "Miliradianai";
 "access_intermediate_arrival_time" = "Tarpinis atvykimo laikas";
@@ -789,7 +787,6 @@
 "quick_action_add_marker_descr" = "Bakstelėję veiksmo mygtuką pridėsite žemėlapio žymeklį ekrano centre.";
 "quick_action_hillshade_descr" = "Tapping this action button shows or hides the terrain layer.";
 "show_from_zoom_level" = "Rodyti nuo mąstelio";
-"quick_action_contour_lines_descr" = "Tapping this action button shows or hides contour lines layer.";
 "enable_hillshade" = "Enable to view terrain data";
 "quick_action_transport_descr" = "Mygtukas, rodantis arba slepiantis viešąjį transportą žemėlapyje.";
 "quick_action_showhide_mapillary_descr" = "Tapping this action button shows or hides the Mapillary layer on the map.";
@@ -883,7 +880,6 @@
 "record_plugin_name" = "Įrašyti savo keliones";
 "record_plugin_description" = "Išsaugo kelionės istoriją vieno mygtuko ekrane paspaudimu bei pateikia nustatymus, leidžiančius kelionės istoriją išsaugoti GPX faile. \n \nĮrašytais maršrutais galima pasidalinti su draugais arba pridėti kaip kontribuciją OSM. Sportininkai gali naudoti įrašytus maršrutus norėdami stebėti savo treniruotes. Elementarią analizę, tokią kaip ratų laikai, vidutinis greitis, ir t.t., galima atlikti tiesiai OsmAnd bei, be abejo, vėliau išanalizuoti su trečių šalių progamine įranga.";
 "osm_editing_plugin_name" = "OSM redagavimas";
-"product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "Šis įskiepis leidžia kurti ar redaguoti LV, užregistruoti ar komentuoti OSM Pastabas, dalintis įrašytais GPX failais. OSM yra atviros visuomenės valdomas, viešas žemėlapio žymėjimo projektas. Dėl smulkesnės informacijos prašome kreiptis į https://openstreetmap.org. Aktyvus dalyvavimas yra labai vertinamas, prisidėti galite tiesiai OsmAnd, jei programoje nurodysite savo prisijungimo duomenis.";
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Internetinės gatvės nuotraukos visiems. Atraskite vietas, bendradarbiaukite, fotografuokite pasaulį.";

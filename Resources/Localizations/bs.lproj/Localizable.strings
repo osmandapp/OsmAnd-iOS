@@ -1,6 +1,3 @@
-"get_discount_title" = "Get %d %@ at %d%% off.";
-"get_discount_first_part" = "%@ for first %@";
-"get_discount_second_part" = "then %@";
 "shared_string_control_stop" = "stani";
 "replace_destination_point" = "Promjeni odredište";
 "address_search_desc" = "Pretraga po adresi";
@@ -39,12 +36,7 @@
 "select_nav_profile_dialog_message" = "The 'Navigation type' governs how routes are calculated.";
 "recalculate_route" = "Recalculate route in case of deviation";
 "turn_arrows_descr" = "Control the visibility of the turn arrows on the route line.";
-"impassable_road" = "Avoid roads";
-"sort_by" = "Sort";
 "stop_routing_confirm" = "Jeste li sigurni da želite zaustaviti navigaciju?";
-"route_to" = "To";
-"route_via" = "Via";
-"route_from" = "From";
 "transfers" = "Transfers:";
 "arrived_at_destination" = "You have arrived";
 "route_roundabout" = "Kružni tok : idite %d izlaz i idite";
@@ -67,7 +59,6 @@
 
 // Favorites
 "replace_favorite_confirmation" = "Are you sure you want to replace Favorite %@?";
-"add_group" = "Add group";
 "fav_point_dublicate_message" = "Favorite renamed to \'%@\' to avoid duplication.";
 
 // Shapes
@@ -103,7 +94,6 @@
 // Settings
 "map_locale" = "Map Language";
 "recording_context_menu_show" = "Prikaži";
-"short_location_on_map" = "Lat %@ Lon %@";
 "mgrs_format_descr" = "OsmAnd uses MGRS format which is identical to UTM NATO.";
 "export_profile" = "Export";
 "shared_string_rendering_style" = "Rendering styles";
@@ -145,10 +135,8 @@
 "osm_edit_reopened_note" = "Reopened";
 "map_widget_top_text" = "Naziv ulice";
 "local_openstreetmap_uploading" = "Uploading...";
-"save_poi_without_poi_type_message" = "Do you want to save POI without type?";
 
 // Mapillary
-"mapillary_descr" = "Online street photos for everyone. Discover places, collaborate, capture the world";
 
 // Coordinate widget
 "coordinates_widget_current_location" = "Coordinates widget";
@@ -158,7 +146,6 @@
 "hide_current_location" = "Hide coordinates";
 "quick_action_current_location_widget_descr" = "Tapping this action button shows or hides the Coordinates widget.";
 "quick_action_map_style_action" = "Add map style";
-"parking_place" = "Parking place";
 "quick_action_add_osm_bug" = "Add OSM note";
 "quick_action_map_style" = "Change map style";
 "quick_action_map_overlay" = "Change map overlay";
@@ -171,7 +158,6 @@
 "show_gpx" = "Show track";
 "quick_action_add_marker_descr" = "Tapping this action button adds a map marker at the map center point.";
 "quick_action_hillshade_descr" = "Tapping this action button shows or hides the terrain layer.";
-"quick_action_contour_lines_descr" = "Tapping this action button shows or hides contour lines layer.";
 "enable_hillshade" = "Enable to view terrain data";
 "quick_action_transport_descr" = "Tap this action to show or hide public transport routes / stops on the map.";
 "quick_action_showhide_mapillary_descr" = "Tapping this action button shows or hides the Mapillary layer on the map.";
@@ -231,13 +217,7 @@
 "create_custom_categories_list_promo" = "You can add custom categories, hide categories that you don’t find necessary, and change the sort order of the list. Custom categories can be imported and exported with profiles.";
 "reset_to_default_category_button_promo" = "Resetting to default will restore the sort order to its initial state.";
 "search_poi_types_descr" = "You can combine POI types from different categories.";
-"sett_generic_ext_input" = "Generic Keyboard";
-"osm_live_plan_pricing" = "Plans & Pricing";
-"get_osmand_live" = "Get OsmAnd Live to unlock all features:";
 "contour_lines_hillshade_maps" = "Terrain maps: contour lines, hillshades, slope";
-"subscribe_email_desc" = "Subscribe to our mailing list:<br/>• Get 3 extra maps to download<br/>• Hear about discounts first<br/>• Participate in promocodes <a href='https://osmand.net/giveaway'>giveaways</a>";
-"osm_live_enter_user_name" = "Please enter public name";
-"osm_live_payment_desc" = "You can manage and cancel your subscriptions in your App Store account settings after purchase";
 "rendering_attr_appMode_description" = "\"Karta za optimizaciju korisničkog profila\"";
 "rendering_attr_showRoadMaps_name" = "Samo cestovne karte";
 "rendering_attr_appMode_name" = "Režim iscrtavanja";

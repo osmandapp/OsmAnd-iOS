@@ -483,9 +483,6 @@
 "recording_context_menu_show" = "Parādīt";
 "shared_string_location" = "Vieta";
 "short_location_on_map" = "Lat %@↵\n Lon %@";
-"navigate_point_format_D" = "DDD.DD";
-"navigate_point_format_DM" = "DDD MM.MM";
-"navigate_point_format_DMS" = "DDD MM SS.SS";
 "navigate_point_northing" = "Ziemeļvirziens";
 "navigate_point_easting" = "Austrumvirziens";
 "navigate_point_zone" = "Zona";
@@ -791,7 +788,6 @@
 "quick_action_add_marker_descr" = "Spiežot darbības pogu, ekrāna centrā tiks ielikts ceļapunkts.";
 "quick_action_hillshade_descr" = "Tapping this action button shows or hides the terrain layer.";
 "show_from_zoom_level" = "Rādīt no zoom līmeņa";
-"quick_action_contour_lines_descr" = "Tapping this action button shows or hides contour lines layer.";
 "enable_hillshade" = "Enable to view terrain data";
 "quick_action_transport_descr" = "Tap this action to show or hide public transport routes / stops on the map.";
 "quick_action_showhide_mapillary_descr" = "Tapping this action button shows or hides the Mapillary layer on the map.";
@@ -885,7 +881,6 @@
 "record_plugin_name" = "Ceļa ieraksts";
 "record_plugin_description" = "Ar šo spraudni jūs varat manuāli saglabāt trekus, nospiežot GPX ieraksta logrīku uz kartes vai veikt automātisku visu maršrutu ierakstu GPX failā. \n \nIerakstītie treki vēlāk var tikt izmantoti treka analīzei, koplietošanai ar draugiem vai OSM izstrādei. Atlēti var izmantot trekus, lai monitorētu treniņus. Pamata treku analīze var tikt veikta tieši caur OsmAnd kā piemēram, apļu laiki, vidējais ātrums utt., bet paplašinātai analīzei trekus var atvērt citās programmās.";
 "osm_editing_plugin_name" = "OSM labošana";
-"product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "Rādīt iestatījumus OSM pilnveidošanai - OSM POI objektu izveidei/labošanai, GPX treku izplatīšanai un ziņošanai par OSM kļūdām. Vairāk uzziniet https://openstreetmap.org vietnē. Ikviens ir aicināts ņemt aktīvu dalību, ko ir iespējams darīt caur OsmAnd aplikāciju, norādot jūsu OSM lietotāja datus.";
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Ielas līmeņa fotoattēli ikvienam - atklājiet vietas, kopīgojiet, iemūžiniet pasauli.";
@@ -1523,4 +1518,3 @@
 "shared_string_show" = "Rādīt";
 "shared_string_local" = "Krātuve";
 "show_along_the_route" = "Rādīt maršruta laikā";
-"nm" = "nm";

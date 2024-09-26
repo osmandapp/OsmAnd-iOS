@@ -1250,5 +1250,3 @@
 "shared_string_show" = "കാണിക്കുക";
 "shared_string_local" = "പ്രാദേശികം";
 "show_along_the_route" = "വഴിയിൽ കാണിക്കുക";
-"navigate_point_format_D" = "DDD.DD";
-"navigate_point_format_DM" = "DDD MM.MM";

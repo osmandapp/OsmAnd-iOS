@@ -1,6 +1,3 @@
-"get_discount_title" = "Get %d %@ at %d%% off.";
-"get_discount_first_part" = "%@ for first %@";
-"get_discount_second_part" = "then %@";
 "road_blocked" = "Blocked road";
 "auto_follow_location_enabled" = "Auto-centre map view in use.";
 "dialogs_and_notifications_descr" = "Control pop-ups, dialogs, and notifications";
@@ -22,14 +19,8 @@
 "choose_auto_follow_route" = "Auto-centre map view";
 "choose_auto_follow_route_descr" = "Time until the map view synchronises with the current position.";
 "auto_zoom_map_descr" = "Zoom level according to your speed (while the map is synchronised with current position).";
-"show_warnings_descr" = "Configure traffic warnings (speed limits, forced stops, speed bumps, tunnels), speed camera warnings, and lane information";
 "select_nav_profile_dialog_message" = "The 'Navigation type' governs how routes are calculated.";
 "recalculate_route" = "Recalculate route in case of deviation";
-"impassable_road" = "Avoid roads";
-"sort_by" = "Sort";
-"route_to" = "To";
-"route_via" = "Via";
-"route_from" = "From";
 "transfers" = "Transfers:";
 "arrived_at_destination" = "You have arrived";
 "traffic_warning_railways" = "Railway crossing";
@@ -49,7 +40,6 @@
 "fav_colors" = "Colours";
 "replace_favorite_confirmation" = "Are you sure you want to replace favourite %@?";
 "fav_points_not_exist" = "No favourite points exist";
-"add_group" = "Add group";
 "fav_point_dublicate" = "Favourite point name duplicate";
 "fav_point_dublicate_message" = "Specified favourite name already in use, was changed to %@ to avoid duplication.";
 "fav_point_emoticons_message" = "The favourite point name has been modified to %@ to facilitate properly saving the string with emoticons to a file.";
@@ -86,7 +76,6 @@
 // Intro
 // Settings
 "map_locale" = "Map Language";
-"short_location_on_map" = "Lat %@ Lon %@";
 "lang_af" = "Afrikaan";
 "export_profile" = "Export";
 "shared_string_rendering_style" = "Rendering styles";
@@ -125,10 +114,8 @@
 "shared_string_loading" = "Loading…";
 "osm_edit_reopened_note" = "Reopened";
 "local_openstreetmap_uploading" = "Uploading...";
-"save_poi_without_poi_type_message" = "Do you want to save POI without type?";
 
 // Mapillary
-"mapillary_descr" = "Online street photos for everyone. Discover places, collaborate, capture the world";
 
 // Coordinate widget
 "coordinates_widget_current_location" = "Coordinates widget";
@@ -138,7 +125,6 @@
 "hide_current_location" = "Hide coordinates";
 "quick_action_current_location_widget_descr" = "Tapping this action button shows or hides the Coordinates widget.";
 "quick_action_map_style_action" = "Add map style";
-"parking_place" = "Parking place";
 "quick_action_add_osm_bug" = "Add OSM note";
 "quick_action_map_style" = "Change map style";
 "quick_action_map_overlay" = "Change map overlay";
@@ -152,7 +138,6 @@
 "quick_action_add_marker_descr" = "Tapping the action button will add a map marker at the screen centre location.";
 "quick_action_hillshade_descr" = "Tapping this action button shows or hides the terrain layer.";
 "show_from_zoom_level" = "Display starting at zoom level";
-"quick_action_contour_lines_descr" = "Tapping this action button shows or hides contour lines layer.";
 "enable_hillshade" = "Enable to view terrain data";
 "quick_action_transport_descr" = "Tap this action to show or hide public transport routes / stops on the map.";
 "quick_action_showhide_mapillary_descr" = "Tapping this action button shows or hides the Mapillary layer on the map.";
@@ -196,7 +181,6 @@
 "record_plugin_name" = "Track recording";
 "record_plugin_description" = "Record your tracks and save them manually using OsmAnd Track recording plugin. Export your track as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their tracks.";
 "osm_editing_plugin_name" = "OpenStreetMap Editing";
-"product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "OSM Editing plugin can be used to make OSM contributions like creating or modifying POI objects, opening or commenting on OSM Notes, and contributing recorded GPX files. OSM is a community driven global public domain mapping project. For more information, please refer to https://osm.org. Contributions can be made directly from OsmAnd, if you specify your OSM credentials in the app.";
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Online street-level photos for everyone. Discover places, collaborate, capture the world.";
@@ -217,12 +201,6 @@
 "create_custom_categories_list_promo" = "You can add custom categories, hide categories that you don’t find necessary, and change the sort order of the list. Custom categories can be imported and exported with profiles.";
 "reset_to_default_category_button_promo" = "Resetting to default will restore the sort order to its initial state.";
 "search_poi_types_descr" = "You can combine POI types from different categories.";
-"sett_generic_ext_input" = "Generic Keyboard";
-"osm_live_plan_pricing" = "Plans & Pricing";
-"get_osmand_live" = "Get OsmAnd Live to unlock all features:";
-"subscribe_email_desc" = "Subscribe to our mailing list:<br/>• Get 3 extra maps to download<br/>• Hear about discounts first<br/>• Participate in promocodes <a href='https://osmand.net/giveaway'>giveaways</a>";
-"osm_live_enter_user_name" = "Please enter public name";
-"osm_live_payment_desc" = "You can manage and cancel your subscriptions in your App Store account settings after purchase";
 "rendering_attr_appMode_description" = "Optimise map for";
 "rendering_attr_currentTrackColor_name" = "GPX colour";
 "rendering_attr_contourLines_description" = "Display from zoom level (requires contour data):";

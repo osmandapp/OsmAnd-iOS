@@ -2585,6 +2585,3 @@
 "shared_string_local" = "로컬";
 "show_along_the_route" = "경로를 따라 표시";
 "quick_action_toggle_preference" = "기본 설정을 변경하도록 전환합니다.";
-"navigate_point_format_DMS" = "DDD MM SS.SS";
-"nm" = "nm";
-"navigate_point_format_D" = "DDD.DD";

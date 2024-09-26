@@ -20,9 +20,7 @@
 "years_5" = "Vuotta";
 "months_3" = "Kolme kuukautta";
 "price_free" = "Ilmainen";
-"get_discount_title" = "Get %d %@ at %d%% off.";
 "get_free_trial_title" = "Aloita %d %@ ilmainen kokeilujaksosi.";
-"get_discount_first_part" = "%@ for first %@";
 "get_discount_second_part" = "jonka jälkeen %@";
 "mapillary_image" = "Mapillary-kuva";
 "shared_string_milliradians" = "milliradiaanit";
@@ -906,7 +904,6 @@
 "record_plugin_name" = "Matkatallennus";
 "record_plugin_description" = "Tämä lisäosa ottaa käyttöön toiminnallisuudet nauhoittaa ja tallentaa jälkiä manuaalisesti koskettamalla GPX-kirjauswidgettiä kartalla, tai myös automaattisesti tallentaa kaikki navigointireitit GPX-tiedostoon. \n \nTallennetut jäljet voidaan jakaa ystävillesi tai käyttää OSM osallistumisissa. Urheilijat voivat käyttää tallennettuja jälkiä harjoittelun seuraamiseen. Jotain perusanalyysejä jäljille voidaan tehdä suoraan OsmAndissa, kuten kierrosaikoja, keskimääräistä nopeutta jne., ja jälkiä voi tietysti myös myöhemmin analysoida erityisissä kolmannen osapuolen analysointityökaluissa.";
 "osm_editing_plugin_name" = "OSM muokkaus";
-"product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "OSM Editing plugin can be used to make OSM contributions like creating or modifying POI objects, opening or commenting on OSM Notes, and contributing recorded GPX files. OSM is a community driven global public domain mapping project. For more information, please refer to https://osm.org. Contributions can be made directly from OsmAnd, if you specify your OSM credentials in the app.";
 "product_desc_africa_short" = "Afrikan alueen kartat";
 "product_desc_australia_short" = "Australian alueen kartat";
@@ -1071,7 +1068,6 @@
 "key_hint_goback" = "Palaa";
 "key_hint_recenter_map" = "Keskitä kartta";
 "download_wiki_region_placeholder" = "tämä alue";
-"osm_live_plan_pricing" = "Plans & Pricing";
 "osm_live_payment_monthly_title" = "Kuukausittain";
 "osm_live_payment_3_months_title" = "Joka kolmas kuukausi";
 "osm_live_payment_annual_title" = "Vuosittain";
@@ -1100,7 +1096,6 @@
 "in_app_purchase_desc" = "Kertamaksu";
 "in_app_purchase_desc_ex" = "Ostamisen jälkeen se on pysyvästi käytettävissäsi.";
 "unlock_all_features" = "Avaa kaikki OsmAndin ominaisuudet";
-"subscribe_email_desc" = "Subscribe to our mailing list:<br/>• Get 3 extra maps to download<br/>• Hear about discounts first<br/>• Participate in promocodes <a href='https://osmand.net/giveaway'>giveaways</a>";
 "osm_live_subscribe_btn" = "Tilaa";
 "shared_string_email_address" = "Sähköpostiosoite";
 "osm_live_enter_email" = "Ole hyvä ja anna kelvollinen sähköpostiosoite";

@@ -1002,7 +1002,6 @@
 "record_plugin_name" = "Bidaiaren grabaketa";
 "record_plugin_description" = "Grabatu zure bidaiak edo entrenamenduak, eta aztertu datuak abiadura, metatutako igoerak eta jaitsierak, kota-profila, etab. Grabatutako arrastoak artxibatu, lagunekin partekatu, editatu eta prozesatu egin daitezke. \n \nIrakurketa gehiago %@ helbidean.";
 "osm_editing_plugin_name" = "OpenStreetMap edizioa";
-"product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "Egin ekarpenak OpenStreetMap-i, munduaren mapa osoa mantentzen duen komunitate globalari eta erabiltzaile guztiei kode irekiko datu eguneratuak eskaintzen dizkie. \n \nMapa editatzeko argibideak gure webgunean aurki ditzakezu %@.";
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Kale-mailako ikuspegien irudiak. Zuk ere ekarpenak egin ditzakezu. Dauden datuak mapa geruza gisa ikusteko, aktibatu \"Kale mailako irudiak\" \"Konfiguratu mapa\" menuan.";

@@ -1621,7 +1621,6 @@
 "show_direction" = "Indicação da distância";
 "routing_profile_direct_to" = "Direto ao ponto";
 "reorder_profiles" = "Editar lista de perfis";
-"vk" = "VK";
 "res_zoom_warning" = "O valor mínimo de ampliação não pode ser igual ou superior ao nível de ampliação máximo";
 "map_settings_available_srtm_maps_descr" = "São necessários mapas adicionais para ver sombras de relevo no mapa";
 "nav_type_osmand" = "OsmAnd (roteamento offline)";

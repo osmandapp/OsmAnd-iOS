@@ -488,11 +488,6 @@
 "map_transparency" = "Peruskartan läpinäkyvyys";
 "street_level_imagery" = "Katutason kuvat";
 "shared_string_terrain" = "Maasto";
-"map_settings_slopes_description" = "Slope maps use different colors to visualize the terrain";
-"map_settings_hillshade_description" = "Hillshade maps visualize slopes, peaks and lowlands using different levels of gray";
-"map_settings_zoom_level_description" = "Set the minimum and maximum zoom level to display the layer";
-"map_settings_add_maps_hillshade" = "Additional maps are needed to view hillshades on the map";
-"map_settings_add_maps_slopes" = "Additional maps are needed to view slopes on the map";
 "shared_string_legend" = "Selite";
 "add_online_source" = "Lisää verkkolähde";
 "srtm_color_scheme" = "Värimaailma";
@@ -575,7 +570,6 @@
 "search_activity" = "Etsi";
 "listed_exist" = "Lueteltu %@ on jo olemassa OsmAndissa.";
 "shared_string_import_complete" = "Tuonti valmis";
-"import_complete_description" = "All data from the %@ is imported, you can use buttons below to open needed part of the app to manage it";
 "shared_string_finish" = "Päätepiste";
 "copy_from_other_profile" = "Kopioi toisesta profiilista";
 "profile_alert_delete_title" = "Poista profiili";
@@ -585,7 +579,6 @@
 "configure_profile" = "Määritä profiili";
 "profile_settings" = "Profiilikohtaiset asetukset";
 "profile_appearance" = "Profiilin ulkoasu";
-"ui_customization" = "UI customization";
 "ui_customization_short_descr" = "Valikon kohteet, kontekstivalikko";
 "reorder_profiles" = "Muokkaa profiililuetteloa";
 "profile_alert_need_profile_name_title" = "Kirjoita profiilin nimi";
@@ -606,7 +599,6 @@
 "import_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";
 "new_plugin_added" = "Uusi laajennus lisätty";
 "reset_to_default" = "Palauta oletusarvot";
-"checking_for_duplicate_description" = "OsmAnd checks %@ for duplicates with existing items in the application. It may take some time.";
 
 // Purchases
 "proceed_q" = "Jatka?";
@@ -792,7 +784,6 @@
 "quick_action_hillshade_descr" = "Painike, joka näyttää tai piilottaa kukkulavarjostuksen kartalla.";
 "show_from_zoom_level" = "Näytä alkaen zoomaustasolta";
 "quick_action_contour_lines_descr" = "Painike, joka näyttää tai piilottaa korkeuskäyrät kartalla.";
-"enable_hillshade" = "Enable to view terrain data";
 "quick_action_transport_descr" = "Painike, joka näyttää tai piilottaa joukkoliikenteen kartalla.";
 "toggle_public_transport" = "Näytä/piilota joukkoliikenne";
 "public_transport_show" = "Näytä joukkoliikenne";
@@ -851,7 +842,6 @@
 "help_contact_us" = "Ota yhteyttä";
 "shared_string_about" = "Tietoja";
 "follow_us" = "Seuraa meitä";
-"vk" = "VK";
 
 // Map
 
@@ -948,7 +938,6 @@
 "menu_all_trips" = "Kaikki jäljet";
 "public_transport_ped_route_title" = "Jalkaisin kuljettava reitti on noin %@ ja se voi olla nopeampi kuin joukkoliikenne";
 "public_transport_warning_title" = "Joukkoliikenteen navigointi on tällä hetkellä beta-testausvaiheessa, joten virheitä ja epätarkkuuksia on odotettavissa.";
-"public_transport_warning_descr_blog" = "Read more about OsmAnd routing in our blog.";
 "public_transport_empty_warning_title" = "Valitettavasti OsmAnd ei löytänyt asetuksillesi sopivaa reittiä.";
 "public_transport_try_change_settings" = "Yritä muuttaa asetuksia.";
 "shared_string_total" = "Yhteensä";
@@ -1206,7 +1195,6 @@
 "routing_attr_height_obstacles_description" = "Reititys voisi välttää voimakkaita ylämäkiä.";
 "rendering_attr_currentTrackColor_description" = "GPX:n väri";
 "routing_attr_driving_style_speed_name" = "Lyhyemmät reitit";
-"routing_attr_avoid_sett_description" = "Avoids cobblestone and sett";
 "rendering_attr_hikingRoutesOSMC_description" = "Piirrä polut OSMC-jälkien pohjalta.";
 "rendering_value_car_name" = "Auto";
 "routing_attr_avoid_unpaved_name" = "Vältä päällystämättömiä teitä";
@@ -1257,7 +1245,6 @@
 "routing_attr_prefer_motorway_name" = "Suosi moottoriteitä";
 "rendering_attr_surface_cobblestone_name" = "Mukulakivi";
 "rendering_attr_highway_class_state_road_name" = "Valtatie";
-"routing_attr_avoid_sett_name" = "No cobblestone or sett";
 "rendering_value_translucent_lightblue_name" = "Läpikuultava vaaleansininen";
 "rendering_attr_smoothness_good_name" = "Hyvä";
 "routing_attr_weight_name" = "Painorajoitus";
@@ -1372,7 +1359,6 @@
 "height_limit_description" = "Ilmoita ajoneuvosi korkeus, sillä korkeisiin ajoneuvoihin voi kohdistua joitakin reittirajoituksia.";
 "lenght_limit_description" = "Ilmoita ajoneuvosi pituus, sillä pitkiin ajoneuvoihin voi kohdistua joitakin reittirajoituksia.";
 "width_limit_description" = "Ilmoita ajoneuvosi leveys, sillä leveisiin ajoneuvoihin voi kohdistua joitakin reittirajoituksia.";
-"vessel_height_limit_description" = "Set vessel height to avoid low bridges. Keep in mind, if the bridge is movable, the calculation uses its height in the open state.";
 "vessel_width_limit_description" = "Aseta aluksen leveys kapeiden siltojen välttämiseksi.";
 "default_speed_dialog_msg" = "Arvioi saapumisajan tuntemattomille tietyypeille ja rajoittaa nopeutta kaikilla teillä (voi vaikuttaa reititykseen)";
 

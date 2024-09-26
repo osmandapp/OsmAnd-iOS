@@ -1675,7 +1675,6 @@
 "select_base_profile_dialog_message" = "El perfil personalizado se basa en uno de los perfiles de aplicación predefinidos, lo que define los ajustes básicos como la visibilidad predefinida de los widgets, las unidades de velocidad y distancia. Estos son los perfiles de aplicación predefinidos, junto con ejemplos de perfiles personalizados a los que se pueden ampliar:";
 "will_be_show_while_moving" = "Se mostrará al moverse";
 "whole_track_descr" = "Recalcular toda la traza usando el perfil elegido.";
-"vk" = "VK";
 "vessel_height_limit_description" = "Define la altura de la embarcación para evitar puentes bajos. Tener en cuenta que si el puente es móvil, usaremos su altura en estado abierto.";
 "use_of_downloaded_map" = "Ahora puedes usar este mapa sin conexión, como repositorio principal del mapa o como capa de superposición o subyacencia";
 "unsupported_items" = "Elementos no admitidos";

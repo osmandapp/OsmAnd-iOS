@@ -1773,7 +1773,6 @@
 "checking_for_duplicate_description" = "OsmAnd kontrollib faili %@, et leida rakenduses korduvaid kirjeid. \n \nSelleks võib kuluda aega.";
 "import_complete_description" = "Imporditud kõik andmed %@. Kasuta allpool olevaid nuppe, et avada rakenduse mis tahes osa selle haldamiseks.";
 "road_speeds_descr" = "Need parameetrid võivad mõjutada teekonna koostamist.";
-"vk" = "VK";
 "help_what_is_new" = "Mida on meil uut";
 
 

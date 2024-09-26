@@ -1165,7 +1165,6 @@
 "base_profile_descr_public_transport" = "Offentlige transporttyper";
 "base_profile_descr_bicycle" = "Terrengsykkel, moped, hest";
 "base_profile_descr_car" = "Bil, lastebil, motorsykkel";
-"public_transport_menu" = "Transport";
 "shared_string_preparing" = "Forbereder";
 "select_data_to_import" = "Velg data å importere.";
 "selected_profile" = "Valgt profil";

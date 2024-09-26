@@ -14,7 +14,6 @@
 "address_search_desc" = "Traži adresu";
 "shared_string_target_points" = "Ciljevi";
 "search_radius_proximity" = "U blizini";
-"road_blocked" = "Blocked road";
 "avoid_roads_msg" = "Možete aktivirati alternativni pravac odabirom cesta koje želite izbjeći";
 "shared_string_go" = "Kreni";
 "info_button" = "Informacije";
@@ -37,7 +36,6 @@
 "rotate_map_north_opt" = "Nemojte okretati (sjever je gore)";
 "driving_region_descr" = "Odaberite područje u kojem vozite: SAD, Europa, Velika Britanija, Azija i ostalo";
 "driving_region" = "Područje vožnje";
-"routing_attr_length_name" = "Length limit";
 "max_speed" = "Max brzina";
 
 // Track recording settings
@@ -103,8 +101,6 @@
 "voice_provider_descr" = "Odaberite glasovno navođenje za navigaciju (kodovi jezika vidi ISO 639-1)";
 "choose_audio_stream" = "Izlaz za glasovno navođenje";
 "choose_audio_stream_descr" = "Odaberite kanal za reprodukciju glasovnih uputa";
-"select_nav_profile_dialog_message" = "The 'Navigation type' governs how routes are calculated.";
-"recalculate_route" = "Recalculate route in case of deviation";
 "guidance_preferences_descr" = "Postavke navigacije";
 "routing_settings" = "Navigacija";
 "get_directions" = "Smjer";
@@ -132,7 +128,6 @@
 "route_to" = "Do:";
 "route_via" = "Preko:";
 "route_from" = "Od:";
-"transfers" = "Transfers:";
 "error_calculating_route" = "Dogodila se greška pri izračunu rute";
 "internet_connection_required_for_online_route" = "Online navigacija je odabrana, ali internet veza nije dostupna.";
 "empty_route_calculated" = "Pogreška: Izračunata ruta je prazna";
@@ -222,8 +217,6 @@
 "shared_string_continue" = "Nastavi";
 "shared_string_deselect_all" = "Odznači sve";
 "shared_string_preparing" = "Priprema";
-"shared_string_min" = "Min.";
-"shared_string_max" = "Max.";
 "shared_string_wifi_only" = "Samo na Wi-Fi mreži";
 "shared_string_none" = "Bez";
 "shared_string_download_map" = "Preuzmi kartu";
@@ -260,7 +253,6 @@
 "shared_string_export" = "Izvezi";
 "gpx_selection_segment_title" = "Segments";
 "route_points" = "Točke rute";
-"gpx_parse_error" = "OsmAnd GPX is not well formed, please contact the support team to investigate further.";
 "tracks_on_map" = "Tracks on map";
 "layer_route" = "Ruta";
 "map_widget_average_speed" = "Prosječna brzina";
@@ -292,11 +284,6 @@
 "daynight_mode_night" = "Noć";
 "map_widget_renderer" = "Stil karte";
 "shared_string_online_maps" = "Online karte";
-"map_settings_slopes_description" = "Slope maps use different colors to visualize the terrain";
-"map_settings_hillshade_description" = "Hillshade maps visualize slopes, peaks and lowlands using different levels of gray";
-"map_settings_zoom_level_description" = "Set the minimum and maximum zoom level to display the layer";
-"map_settings_add_maps_hillshade" = "Additional maps are needed to view hillshades on the map";
-"map_settings_add_maps_slopes" = "Additional maps are needed to view slopes on the map";
 "shared_string_appearance" = "Izgled";
 "settings_app_theme" = "Tema aplikacije";
 "light_theme" = "Svijetla";
@@ -392,20 +379,14 @@
 "replace_all_desc" = "Trenutne stavke bit će zamijenjene stavkama iz datoteke";
 "shared_string_profiles" = "Profili";
 "shared_string_quick_actions" = "Brze akcije";
-"shared_string_rendering_style" = "Rendering styles";
 "shared_string_settings" = "Postavke";
 "search_activity" = "Traži";
 "listed_exist" = "Navedene %@, već postoje u OsmAnd.";
-"import_complete_description" = "All data from the %@ is imported, you can use buttons below to open needed part of the app to manage it";
 "app_restart_required" = "Application restart required to apply some settings.";
-"profile_alert_delete_msg" = "Are you sure you want to completly delete \"%@\" profile?";
 "profile_type_custom_string" = "Prilagođeni profil";
 "profile_settings" = "Specifične Postavke Profila";
-"ui_customization" = "UI customization";
-"profile_prefs_reset_successful" = "All profile settings restored to default";
 "application_profiles" = "Profili aplikacije";
 "import_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";
-"checking_for_duplicate_description" = "OsmAnd checks %@ for duplicates with existing items in the application. It may take some time.";
 
 // Purchases
 "shared_string_download" = "Preuzimanje";
@@ -413,7 +394,6 @@
 
 // Route planning
 "coord_input_add_point" = "Dodaj točku";
-"move_point" = "Move point";
 "add_point_before" = "Add points before";
 "add_point_after" = "Add points after";
 "delete_point" = "Izbriši točku";
@@ -480,10 +460,7 @@
 "show_gpx" = "Show track";
 "gpx_tags_txt" = "Oznake";
 "quick_action_add_marker_descr" = "Tapping this action button adds a map marker at the map center point.";
-"quick_action_hillshade_descr" = "Tapping this action button shows or hides the terrain layer.";
 "show_from_zoom_level" = "Display starting at zoom level";
-"enable_hillshade" = "Enable to view terrain data";
-"quick_action_transport_descr" = "Tap this action to show or hide public transport routes / stops on the map.";
 "quick_action_showhide_mapillary_descr" = "Tapping this action button shows or hides the Mapillary layer on the map.";
 "quick_action_remove_next_destination" = "Delete nearest destination point";
 "change_application_profile" = "Change application profile";
@@ -504,7 +481,6 @@
 
 // Help
 "other_location" = "Ostalo";
-"vk" = "VK";
 
 // Map
 
@@ -568,8 +544,6 @@
 "srtm_plugin_disabled" = "Contour lines disabled";
 "prch_srtm_info" = "Contour lines plugin enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Otvori";
-"public_transport_ped_route_title" = "The route on foot is approximately %@, and may be faster than by public transport.";
-"public_transport_warning_descr_blog" = "Read more about OsmAnd routing in our blog.";
 "shared_string_total" = "Ukupno";
 "transport_stops" = "Postaje";
 "shared_string_gpx_points" = "Točke";
@@ -647,8 +621,6 @@
 "rendering_attr_streetLighting_name" = "Ulična rasvjeta";
 "rendering_attr_showSurfaceGrade_name" = "Prikaži kvalitetu cesta";
 "rendering_attr_currentTrackColor_name" = "Boja GPX traga";
-"rendering_attr_contourLines_description" = "Display from zoom level (requires contour data):";
-"routing_attr_short_way_description" = "Use fuel-efficient way (usually shorter).";
 "rendering_value_orange_name" = "Narančasta";
 "rendering_attr_currentTrackWidth_name" = "Širina GPX traga";
 "rendering_attr_shareTaxiRoutes_name" = "Podijeli taxi rute";
@@ -666,8 +638,6 @@
 "rendering_attr_hideWoodScrubs_name" = "Sakrij šume i šikare";
 "rendering_attr_roadStyle_name" = "Stil ceste";
 "rendering_attr_publicTransportMode_name" = "Autobus, trolejbus, Shuttle bus";
-"routing_attr_height_obstacles_description" = "Factor in terrain elevation (via SRTM, ASTER, and EU-DEM data).";
-"routing_attr_avoid_sett_description" = "Avoids cobblestone and sett";
 "rendering_value_car_name" = "Auto";
 "routing_attr_avoid_unpaved_name" = "Izbjegavati neasfaltirane ceste";
 "rendering_attr_lessDetailed_name" = "Manje detalja";
@@ -689,7 +659,6 @@
 "rendering_attr_showAccess_name" = "Prikaži ograničenja pristupa";
 "routing_attr_no_new_routing_description" = "Nemoj koristiti pravila usmjeravanje uvedena u v1.9.";
 "routing_attr_prefer_motorway_name" = "Preferiram autoceste";
-"routing_attr_avoid_sett_name" = "No cobblestone or sett";
 "rendering_value_translucent_lightblue_name" = "Prozirna svijetlo plava";
 "routing_attr_weight_name" = "Ograničenje težine";
 "rendering_attr_noAdminboundaries_name" = "Sakrij granice";
@@ -711,10 +680,8 @@
 "rendering_attr_noPolygons_name" = "Sakrij poligone";
 "routing_attr_weight_description" = "Odredi dozvoljenu težinu vozila na putovima.";
 "rendering_value_yellow_name" = "Žuta";
-"rendering_attr_alpineHiking_description" = "Render paths according to the SAC scale.";
 "rendering_attr_pisteRoutes_name" = "Skijališta";
 "rendering_attr_noPolygons_description" = "Prikaži sve prostorne i zemljište značajke na karti prozirno.";
-"routing_attr_piste_type_nordic_name" = "Cross country/nordic ski";
 "rendering_value_highContrastRoads_name" = "Visoki kontrast ceste";
 "rendering_attr_showCycleRoutes_name" = "Prikaži biciklističke staze";
 "rendering_value_translucent_purple_name" = "Prozirna ljubičasta";
@@ -723,19 +690,14 @@
 "rendering_attr_trainLightrailRoutes_name" = "Željezničke rute";
 "rendering_value_pedestrian_name" = "Pješak";
 "routing_attr_height_name" = "Ograničenje visine";
-"routing_attr_piste_type_downhill_name" = "Alpine/downhill ski";
 "rendering_value_default_name" = "Zadano";
 "rendering_attr_subwayMode_name" = "Podzemna željeznica";
 "rendering_value_brown_name" = "smeđa";
 "rendering_attr_roadColors_description" = "Odaberite shemu boja za ceste:";
 "rendering_value_translucent_orange_name" = "Prozirna narančasta";
-"routing_attr_width_name" = "Width limit";
 "routing_attr_allow_motorway_description" = "Dozvoljava autoceste.";
 "rendering_attr_hmRendered_name" = "Prikaži više pojedinosti na karti";
 "rendering_attr_roadColors_name" = "Sheme boja za ceste";
-"lenght_limit_description" = "Provide your vehicle length, some route restrictions may be applied for long vehicles.";
-"vessel_height_limit_description" = "Set vessel height to avoid low bridges. Keep in mind, if the bridge is movable, the calculation uses its height in the open state.";
-"vessel_width_limit_description" = "Set vessel width to avoid narrow bridges.";
 
 
 //Icon categories
@@ -743,7 +705,6 @@
 "icon_group_transport" = "Prijevoz";
 "icon_group_education" = "Obrazovanje";
 "transport" = "Prijevoz";
-"settings_item_read_error" = "Could not read %@.";
 "app_mode_default" = "Karta";
 "app_mode_car" = "Auto";
 "app_mode_bicycle" = "Bicikl";

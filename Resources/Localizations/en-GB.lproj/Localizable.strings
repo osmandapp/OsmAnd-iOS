@@ -1,9 +1,6 @@
-"road_blocked" = "Blocked road";
 "auto_follow_location_enabled" = "Auto-centre map view in use.";
 "dialogs_and_notifications_descr" = "Control pop-ups, dialogs, and notifications";
 "coords_format" = "Coordinates format";
-"routing_attr_length_name" = "Length limit";
-"max_speed" = "Max. speed";
 
 // Track recording settings
 "always_center_position_on_map" = "Display position always in centre";
@@ -13,15 +10,10 @@
 // Dirrection appearance
 
 // Route info
-"general_settings_descr" = "App theme, units, region";
-"routing_settings_descr" = "Configure navigation";
 "avoid_in_routing_descr_" = "Avoid toll roads, unpaved, ferries";
 "choose_auto_follow_route" = "Auto-centre map view";
 "choose_auto_follow_route_descr" = "Time until the map view synchronises with the current position.";
 "auto_zoom_map_descr" = "Zoom level according to your speed (while the map is synchronised with current position).";
-"select_nav_profile_dialog_message" = "The 'Navigation type' governs how routes are calculated.";
-"recalculate_route" = "Recalculate route in case of deviation";
-"transfers" = "Transfers:";
 "arrived_at_destination" = "You have arrived";
 "traffic_warning_railways" = "Railway crossing";
 "traffic_warning_pedestrian" = "Pedestrian crossing";
@@ -29,8 +21,6 @@
 "poi_categories" = "POI categories";
 
 // Shared Strings
-"shared_string_min" = "Min.";
-"shared_string_max" = "Max.";
 "update_tile" = "Update map";
 
 // HUD
@@ -54,7 +44,6 @@
 
 // GPX
 "gpx_selection_segment_title" = "Segments";
-"gpx_parse_error" = "OsmAnd GPX is not well formed, please contact the support team to investigate further.";
 "tracks_on_map" = "Tracks on map";
 "gpx_upload_public_visibility_descr" = "\"Public\" means the trace is shown publicly in your GPS traces and in public GPS trace listings, and in the public trace list with timestamps in raw form. Data served via the API does not reference your trace page. Tracepoint timestamps are not available through the public GPS API, and tracepoints are not chronologically ordered.";
 "gpx_upload_identifiable_visibility_descr" = "\"Identifiable\" means that the trace will be shown publicly in your GPS traces and in public GPS trace listings, i.e. other users will be able to download the raw trace and associate it with your username. Public timestamped tracepoint data from the GPS API served via the trackpoints API will reference your original trace page.";
@@ -64,13 +53,7 @@
 "save_track_to_gpx_descrp" = "Turn on to automatically save a track during navigation";
 
 // Map settings
-"map_settings_slopes_description" = "Slope maps use different colors to visualize the terrain";
-"map_settings_hillshade_description" = "Hillshade maps visualize slopes, peaks and lowlands using different levels of gray";
-"map_settings_zoom_level_description" = "Set the minimum and maximum zoom level to display the layer";
-"map_settings_add_maps_hillshade" = "Additional maps are needed to view hillshades on the map";
-"map_settings_add_maps_slopes" = "Additional maps are needed to view slopes on the map";
 "srtm_color_scheme" = "Colour scheme";
-"settings_app_theme" = "Application theme";
 "light_theme" = "Light";
 
 // Intro
@@ -78,25 +61,16 @@
 "map_locale" = "Map Language";
 "lang_af" = "Afrikaan";
 "export_profile" = "Export";
-"shared_string_rendering_style" = "Rendering styles";
 "listed_exist" = "Listed %@ already exist in OsmAnd.";
-"import_complete_description" = "All data from the %@ is imported, you can use buttons below to open needed part of the app to manage it";
 "app_restart_required" = "Application restart required to apply some settings.";
-"profile_alert_delete_msg" = "Are you sure you want to completly delete \"%@\" profile?";
-"profile_settings" = "Profile settings";
-"ui_customization" = "UI customization";
 "base_profile_descr_aircraft" = "Aeroplane, gliding";
-"profile_prefs_reset_successful" = "All profile settings restored to default";
 "import_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";
-"checking_for_duplicate_description" = "OsmAnd checks %@ for duplicates with existing items in the application. It may take some time.";
 
 // Purchases
 
 // Route planning
-"move_point" = "Move point";
 "add_point_before" = "Add points before";
 "add_point_after" = "Add points after";
-"delete_point" = "Delete point";
 "only_selected_segment_recalc" = "Only the selected segment will be recalculated using the selected profile";
 "route_between_points_add_track_desc" = "Select a track file for which a new segment will be added.";
 "empty_filename" = "Filename cannot be empty";
@@ -136,10 +110,7 @@
 "quick_action_navigation_voice_off" = "Unmute voice";
 "show_gpx" = "Show track";
 "quick_action_add_marker_descr" = "Tapping the action button will add a map marker at the screen centre location.";
-"quick_action_hillshade_descr" = "Tapping this action button shows or hides the terrain layer.";
 "show_from_zoom_level" = "Display starting at zoom level";
-"enable_hillshade" = "Enable to view terrain data";
-"quick_action_transport_descr" = "Tap this action to show or hide public transport routes / stops on the map.";
 "quick_action_showhide_mapillary_descr" = "Tapping this action button shows or hides the Mapillary layer on the map.";
 "quick_action_remove_next_destination" = "Delete nearest destination point";
 "change_application_profile" = "Change application profile";
@@ -149,7 +120,6 @@
 "int_min" = "min";
 
 // Help
-"vk" = "VK";
 
 // Map
 
@@ -191,8 +161,6 @@
 "analyze_on_map" = "Analyse on map";
 "srtm_plugin_disabled" = "Contour lines disabled";
 "prch_srtm_info" = "Contour lines plugin enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
-"public_transport_ped_route_title" = "The route on foot is approximately %@, and may be faster than by public transport.";
-"public_transport_warning_descr_blog" = "Read more about OsmAnd routing in our blog.";
 "change_color" = "Change colour";
 "parked_at" = "Parked at";
 "move_marker_bottom_sheet_title" = "Move the map to change object's position";
@@ -203,33 +171,20 @@
 "search_poi_types_descr" = "You can combine POI types from different categories.";
 "rendering_attr_appMode_description" = "Optimise map for";
 "rendering_attr_currentTrackColor_name" = "GPX colour";
-"rendering_attr_contourLines_description" = "Display from zoom level (requires contour data):";
 "routing_attr_short_way_description" = "Optimised shorter route (energy saving)";
 "rendering_attr_coloredBuildings_name" = "Colour-code buildings by type";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Colouring according to route scope";
-"routing_attr_height_obstacles_description" = "Factor in terrain elevation (via SRTM, ASTER, and EU-DEM data).";
 "rendering_attr_currentTrackColor_description" = "GPX colour";
-"routing_attr_avoid_sett_description" = "Avoids cobblestone and sett";
 "rendering_value_car_name" = "Driving";
 "rendering_value_walkingRoutesOSMC_name" = "Colouring according to OSMC";
 "rendering_attr_contourColorScheme_name" = "Contour lines colour scheme";
 "rendering_value_bicycle_name" = "Cycling";
-"rendering_attr_showAccess_name" = "Show access restrictions and toll";
-"routing_attr_avoid_sett_name" = "No cobblestone or sett";
-"rendering_attr_alpineHiking_description" = "Render paths according to the SAC scale.";
-"routing_attr_piste_type_nordic_name" = "Cross country/nordic ski";
-"routing_attr_piste_type_downhill_name" = "Alpine/downhill ski";
 "rendering_attr_subwayMode_name" = "Underground routes";
 "rendering_attr_roadColors_description" = "Select a road colour scheme:";
-"routing_attr_width_name" = "Width limit";
 "rendering_attr_roadColors_name" = "Road colour scheme";
-"lenght_limit_description" = "Provide your vehicle length, some route restrictions may be applied for long vehicles.";
-"vessel_height_limit_description" = "Set vessel height to avoid low bridges. Keep in mind, if the bridge is movable, the calculation uses its height in the open state.";
-"vessel_width_limit_description" = "Set vessel width to avoid narrow bridges.";
 
 
 //Icon categories
-"settings_item_read_error" = "Could not read %@.";
 "walking_route_osmc_description" = "Color routes according to their individual local color (if present on OpenStreetMap) and type (international, regional, local).";
 
 // Release Notes

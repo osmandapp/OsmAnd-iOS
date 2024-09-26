@@ -1803,7 +1803,6 @@
 "road_max_speed_descr" = "Setur hámarksferðahraða fyrir alla vegi á leiðinni. Lækkar forgang vega sem merktir eru með hraðamörkum sem eru hærri en hámarkið.";
 "road_min_speed_descr" = "Setur lágmarksferðahraða fyrir alla vegi á leiðinni. Hækkar forgang vega sem merktir eru með hraðamörkum sem eru lægri en lágmarkið.";
 "ios_release_3_90" = "• Kynnt til sögunnar “Skipuleggja leið\" aðgerðin til að skipuleggja ferðir í framtíðinni, þar sem hægt er að útbúa leiðarhluta með mismunandi gerðum leiðsagnar\n• Bætt við valkosti til að bæta áttavita ofan á mælistiku út frá miðju hrings\n• Bætt við valkostinum \"Merkingar á þekju merkisstaða\" sem gerir kleift að birta nöfn merkisstaða, ferilpunkta og kortamerkja á kortinu\n• Bætt við flýtiaðgerðum fyrir sýnileika hæðarlína og yfirborðs á kortinu, breytingar á notkunarsniðum og til að eyða næsta millipunkti\n• Lagfærð vandamál með leitarflokka Wikipedia sem vantaði\n• Innflutningur stillinga: lagfærðir gallar, bættur stuðningur við allar gerðir gagna sem tiltækar eru í OsmAnd\n• Breytingar í OpenStreetMap: lagfært val á tíma og það að ekki var hægt að breyta athugasemdum við breytingasett\n";
-"vk" = "VK";
 "road_speeds_descr" = "Þessi viðföng geta haft áhrif á útreikning leiða.";
 "road_speeds" = "Hraði á vegum";
 

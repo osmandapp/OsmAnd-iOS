@@ -170,7 +170,6 @@
 "choose_audio_stream" = "Səsli bələdçi çıxışı";
 "choose_audio_stream_descr" = "Səsli bələdçi üçün səsgücləndirici seçin.";
 "use_osm_live_routing" = "OsmAnd Live naviqasiya";
-"select_nav_profile_dialog_message" = "The 'Navigation type' governs how routes are calculated.";
 "recalculate_route" = "Marşrutu yenidən hesabla";
 "recalculate_route_distance_promo" = "Marşrutdan indiki yerə qədər olan məsafə seçilmiş dəyərdən çox olarsa, marşrut yenidən hesablanacaq.";
 "select_distance_route_will_recalc" = "Marşrutun yenidən hesablanacağı məsafəni seçin.";
@@ -214,7 +213,6 @@
 "route_to" = "Buraya:";
 "route_via" = "Buradan keçməklə:";
 "route_from" = "Buradan:";
-"transfers" = "Transfers:";
 "error_calculating_route" = "Marşrut hesablana bilmədi.";
 "internet_connection_required_for_online_route" = "Onlayn naviqasiya oflayn rejimdə işləmir.";
 "empty_route_calculated" = "Hesablanan marşrut boşdur.";
@@ -332,7 +330,6 @@
 "shared_string_continue" = "Davam et";
 "shared_string_deselect_all" = "Bütün seçilməri ləğv et";
 "shared_string_preparing" = "Hazırlanır";
-"shared_string_min" = "Min.";
 "shared_string_max" = "Maksimum";
 "shared_string_wifi_only" = "Yalnız Wi-Fi";
 "shared_string_turn_off" = "Söndür";
@@ -392,7 +389,6 @@
 "shared_string_export" = "İxrac et";
 "gpx_selection_segment_title" = "Segments";
 "route_points" = "Marşrut nöqtələri";
-"gpx_parse_error" = "OsmAnd GPX is not well formed, please contact the support team to investigate further.";
 "tracks_on_map" = "Tracks on map";
 "shared_string_statistics" = "Statistika";
 "layer_route" = "Marşrut";
@@ -433,11 +429,6 @@
 "shared_string_online_maps" = "Onlayn xəritələr";
 "shared_string_transparency" = "Şəffaflıq";
 "street_level_imagery" = "Küçə səviyyəsində şəkillər";
-"map_settings_slopes_description" = "Slope maps use different colors to visualize the terrain";
-"map_settings_hillshade_description" = "Hillshade maps visualize slopes, peaks and lowlands using different levels of gray";
-"map_settings_zoom_level_description" = "Set the minimum and maximum zoom level to display the layer";
-"map_settings_add_maps_hillshade" = "Additional maps are needed to view hillshades on the map";
-"map_settings_add_maps_slopes" = "Additional maps are needed to view slopes on the map";
 "add_online_source" = "Onlayn mənbə əlavə et";
 "srtm_color_scheme" = "Rəng sxemi";
 "shared_string_appearance" = "Görünüş";
@@ -563,7 +554,6 @@
 "shared_string_quick_actions" = "Sürətli fəaliyyətlər";
 "shared_string_poi_types" = "POI növləri";
 "quick_action_map_source_title" = "Xəritə mənbələri";
-"shared_string_rendering_style" = "Rendering styles";
 "avoid_road" = "Yoldan yayın";
 "shared_string_importing" = "İdxal edilir";
 "importing_from" = "Məlumatlar %@-dan idxal edilir";
@@ -771,7 +761,6 @@
 "quick_action_hillshade_descr" = "Xəritədə təpə kölgələrini göstərmək və ya gizlətmək üçün düymə.";
 "show_from_zoom_level" = "Göstərilməyə başlanacaq miqyas səviyyəsi";
 "quick_action_contour_lines_descr" = "Xəritədə kontur xətlərini göstərən və ya gizlədən düymə.";
-"enable_hillshade" = "Enable to view terrain data";
 "contour_lines_hillshades_slope" = "Kontur xətləri, təpə kölgələri, yamac";
 "quick_action_transport_descr" = "Xəritədə ictimai nəqliyyatı göstərən və ya gizlədən düymə.";
 "quick_action_showhide_mapillary_descr" = "Xəritədə Mapillary qatını göstərmək və ya gizlətmək üçün düymə.";
@@ -817,7 +806,6 @@
 "versions_item" = "Versiyalar";
 "shared_string_about" = "Haqqında";
 "follow_us" = "Bizi izləyin";
-"vk" = "VK";
 
 // Map
 
@@ -907,8 +895,6 @@
 "prch_srtm_info" = "Contour lines plugin enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "İş vaxtı:";
 "osm_live_active" = "Aktiv";
-"public_transport_ped_route_title" = "The route on foot is approximately %@, and may be faster than by public transport.";
-"public_transport_warning_descr_blog" = "Read more about OsmAnd routing in our blog.";
 "public_transport_try_change_settings" = "Parametrləri dəyişməyə çalışın.";
 "shared_string_total" = "Cəmi";
 "by_transport_type" = "%@ ilə";
@@ -1057,7 +1043,6 @@
 "routing_attr_width_description" = "Marşrutlarda icazə veriləcək nəqliyyat vasitəsinin en limitini təyin edin.";
 "rendering_attr_showSurfaceGrade_name" = "Yol keyfiyyətini göstər";
 "rendering_attr_currentTrackColor_name" = "GPX rəngi";
-"rendering_attr_contourLines_description" = "Display from zoom level (requires contour data):";
 "routing_attr_avoid_stairs_description" = "Pilləkənlərdən yayınır";
 "rendering_attr_surface_mud_name" = "Palçıq";
 "rendering_attr_streetLightingNight_name" = "Yalnız gecə göstər";
@@ -1102,7 +1087,6 @@
 "routing_attr_height_obstacles_description" = "Marşrut kəskin yoxuşlardan yayına bilər.";
 "rendering_attr_currentTrackColor_description" = "GPX rəngi";
 "routing_attr_driving_style_speed_name" = "Qısa marşrutlar";
-"routing_attr_avoid_sett_description" = "Avoids cobblestone and sett";
 "rendering_value_car_name" = "Avtomobil";
 "routing_attr_avoid_unpaved_name" = "Asfaltsız yollardan yayın";
 "rendering_attr_lessDetailed_name" = "Daha az detallar";
@@ -1134,7 +1118,6 @@
 "routing_attr_driving_style_prefer_unpaved_name" = "Asfaltsız yollara üstünlük ver";
 "routing_attr_prefer_motorway_name" = "Avtomagistralları üstün tut";
 "rendering_attr_highway_class_state_road_name" = "Dövlət yolu";
-"routing_attr_avoid_sett_name" = "No cobblestone or sett";
 "rendering_value_translucent_lightblue_name" = "Şəffaf açıq mavi";
 "rendering_attr_smoothness_good_name" = "Yaxşı";
 "routing_attr_weight_name" = "Çəki limiti";
@@ -1176,9 +1159,7 @@
 "rendering_attr_surface_salt_name" = "Duz";
 "rendering_value_yellow_name" = "Sarı";
 "routing_attr_allow_private_description" = "Xüsusi sahələrə girişə icazə ver.";
-"rendering_attr_alpineHiking_description" = "Render paths according to the SAC scale.";
 "routing_attr_driving_style_balance_name" = "Balanslı";
-"routing_attr_piste_type_nordic_name" = "Cross country/nordic ski";
 "rendering_value_highContrastRoads_name" = "Yüksək kontrastlı yollar";
 "rendering_attr_highway_class_service_name" = "Xidmət";
 "rendering_attr_showCycleRoutes_name" = "Velosiped marşrutları";
@@ -1191,7 +1172,6 @@
 "rendering_attr_trainLightrailRoutes_name" = "Qatar marşrutları";
 "rendering_value_pedestrian_name" = "Piyada";
 "routing_attr_height_name" = "Hündürlük limiti";
-"routing_attr_piste_type_downhill_name" = "Alpine/downhill ski";
 "rendering_value_darkyellow_name" = "Tünd sarı";
 "routing_attr_prefer_unpaved_name" = "Asfaltsız yollara üstünlük ver";
 "rendering_value_default_name" = "Standart";
@@ -1226,7 +1206,6 @@
 "icon_group_travel" = "Səyahət";
 "icon_group_education" = "Təhsil";
 "transport" = "Nəqliyyat";
-"settings_item_read_error" = "Could not read %@.";
 "app_mode_default" = "Xəritəyə baxış";
 "app_mode_car" = "Avtomobil";
 "app_mode_bicycle" = "Velosiped";

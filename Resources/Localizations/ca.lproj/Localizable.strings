@@ -1596,7 +1596,6 @@
 "public_transport_hide" = "Amaga el transport públic";
 "public_transport_show" = "Mostra el transport públic";
 "toggle_public_transport" = "Mostra/amaga el transport públic";
-"public_transport_menu" = "Transport";
 "number_of_tiles" = "Nombre de tessel·les";
 "move_map_to_select_area" = "Moveu el mapa per a seleccionar l\'àrea requerida.";
 "update_tile" = "Actualitza el mapa";
@@ -1799,7 +1798,6 @@
 "plugin_popup_osm_editing_ask" = "Activeu el connector d’edició d’OpenStreetMap per afegir i gestionar edicions i notes del mapa";
 "plugin_popup_osm_editing_title" = "Activa l'edició d'OpenStreetMap";
 "layer_amenity_label" = "Etiquetes superposades de PDIs";
-"vk" = "VK";
 "prev_segs_recalc_descr" = "Tots els segments anteriors es tornaran a calcular amb el perfil seleccionat";
 "next_segs_recalc_descr" = "Tots els segments següents es tornaran a calcular amb el perfil seleccionat";
 "only_selected_segment_recalc" = "Només es recalcularà el segment seleccionat mitjançant el perfil seleccionat.";

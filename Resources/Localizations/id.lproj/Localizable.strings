@@ -530,11 +530,6 @@
 "map_transparency" = "Transparansi peta basis";
 "street_level_imagery" = "Citra tingkat jalanan";
 "shared_string_terrain" = "Medan";
-"map_settings_slopes_description" = "Slope maps use different colors to visualize the terrain";
-"map_settings_hillshade_description" = "Hillshade maps visualize slopes, peaks and lowlands using different levels of gray";
-"map_settings_zoom_level_description" = "Set the minimum and maximum zoom level to display the layer";
-"map_settings_add_maps_hillshade" = "Additional maps are needed to view hillshades on the map";
-"map_settings_add_maps_slopes" = "Additional maps are needed to view slopes on the map";
 "shared_string_legend" = "Legenda";
 "add_online_source" = "Tambahkan sumber daring";
 "srtm_color_scheme" = "Skema warna";
@@ -909,7 +904,6 @@
 "quick_action_hillshade_descr" = "Tombol untuk menampilkan atau menyembunyikan bayangan bukit di peta.";
 "show_from_zoom_level" = "Tampilkan dari level perbesaran";
 "quick_action_contour_lines_descr" = "Tombol menampilkan atau menyembunyikan garis kontur pada peta.";
-"enable_hillshade" = "Enable to view terrain data";
 "contour_lines_hillshades_slope" = "Garis kontur, bayangan bukit, lereng";
 "quick_action_transport_descr" = "Tombol menampilkan atau menyembunyikan transportasi umum pada peta.";
 "quick_action_showhide_mapillary_descr" = "Sebuah alihan untuk menampilkan atau menyembunyikan layer Mapillary pada peta.";
@@ -960,7 +954,6 @@
 "help_contact_us" = "Hubungi kami";
 "shared_string_about" = "Tentang";
 "follow_us" = "Ikuti kami";
-"vk" = "VK";
 
 // Map
 

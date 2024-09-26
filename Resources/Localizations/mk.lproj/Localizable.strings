@@ -544,11 +544,6 @@
 "map_transparency" = "Transparentnost na osnovnata karta";
 "street_level_imagery" = "Sliki na nivo na ulica";
 "shared_string_terrain" = "Teren";
-"map_settings_slopes_description" = "Slope maps use different colors to visualize the terrain";
-"map_settings_hillshade_description" = "Hillshade maps visualize slopes, peaks and lowlands using different levels of gray";
-"map_settings_zoom_level_description" = "Set the minimum and maximum zoom level to display the layer";
-"map_settings_add_maps_hillshade" = "Additional maps are needed to view hillshades on the map";
-"map_settings_add_maps_slopes" = "Additional maps are needed to view slopes on the map";
 "shared_string_legend" = "Legenda";
 "add_online_source" = "Dodadete izvor na onlajn";
 "srtm_color_scheme" = "Шема на бои";
@@ -955,7 +950,6 @@
 "quick_action_hillshade_descr" = "Kopče za prikažuvanje ili sokrivanje na ridovite na kartata.";
 "show_from_zoom_level" = "Ekranot započnuva od nivoto na zumiranje";
 "quick_action_contour_lines_descr" = "Kopče što prikažuva ili krie konturni linii na kartata.";
-"enable_hillshade" = "Enable to view terrain data";
 "contour_lines_hillshades_slope" = "Konturni linii, ridovi, nagib";
 "quick_action_transport_descr" = "Kopče što pokažuva ili krie javen prevoz na kartata.";
 "quick_action_showhide_mapillary_descr" = "Prekinuvač za prikažuvanje ili sokrivanje na slojot Mapillary na kartata.";
@@ -1002,7 +996,6 @@
 "versions_item" = "Verzii";
 "shared_string_about" = "Za";
 "follow_us" = "Sledete ne\'";
-"vk" = "VK";
 
 // Map
 

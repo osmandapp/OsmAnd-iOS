@@ -2130,7 +2130,6 @@
 "unsupported_action_title" = "Azione non supportata (%@)";
 "hide_current_location" = "Nascondi coordinate";
 "map_markers_empty" = "Non hai alcun marcatore mappa attivo";
-"vk" = "VK";
 
 // Route planning
 "plan_route" = "Pianifica un percorso";

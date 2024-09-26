@@ -1573,7 +1573,6 @@
 "settings_item_read_error" = "Kunne ikke læse fra \'%@\'.";
 "public_transport_hide" = "Skjul offentlig transport";
 "public_transport_show" = "Vis offentlig transport";
-"public_transport_menu" = "Transport";
 "downloading" = "Henter";
 "rearrange_profiles" = "Omorganiser profiler";
 "base_profile_descr_aircraft" = "Fly, svævefly";
@@ -2002,7 +2001,6 @@
 "track_is_saved" = "%@\ner gemt!";
 "route_between_points_add_track_desc" = "Vælg en sporfil, som det nye segment skal føjes til.";
 "delete_group_confirm" = "Er du sikker på, at du ønsker at slette gruppe \"%@\"?";
-"vk" = "VK";
 "reset_to_default_category_button_promo" = "\'Nulstil til standard\' vil genindføre sorteringsrækkefølgen fra installationsstandarden.";
 "search_poi_types_descr" = "Kombiner IP-typer fra forskellige kategorier. Tryk på knappen for at vælge alt, tryk på venstre side for valg af kategori.";
 "shared_a_z" = "A - Å";

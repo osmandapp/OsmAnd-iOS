@@ -498,11 +498,6 @@
 "map_transparency" = "Oinarri den maparen gardentasuna";
 "street_level_imagery" = "Kale mailako irudiak";
 "shared_string_terrain" = "Terrenoa";
-"map_settings_slopes_description" = "Slope maps use different colors to visualize the terrain";
-"map_settings_hillshade_description" = "Hillshade maps visualize slopes, peaks and lowlands using different levels of gray";
-"map_settings_zoom_level_description" = "Set the minimum and maximum zoom level to display the layer";
-"map_settings_add_maps_hillshade" = "Additional maps are needed to view hillshades on the map";
-"map_settings_add_maps_slopes" = "Additional maps are needed to view slopes on the map";
 "shared_string_legend" = "Legenda";
 "add_online_source" = "Gehitu sareko iturria";
 "srtm_color_scheme" = "Kolore eskema";
@@ -905,7 +900,6 @@
 "quick_action_hillshade_descr" = "Mendiko itzalak mapan erakutsi edo ezkutatzeko botoia.";
 "show_from_zoom_level" = "Bistaratzea zoom mailan hasten da";
 "quick_action_contour_lines_descr" = "Sestra-kurbak mapan erakusteko edo ezkutatzeko botoia.";
-"enable_hillshade" = "Enable to view terrain data";
 "contour_lines_hillshades_slope" = "Sestra-lerroak, itzalak, maldak";
 "quick_action_transport_descr" = "Garraio publikoa mapan erakutsi edo ezkutatzen duen botoia.";
 "quick_action_showhide_mapillary_descr" = "Mapillary geruza mapan erakutsi edo ezkutatzeko botoia.";
@@ -953,7 +947,6 @@
 "help_contact_us" = "Jarri gurekin harremanetan";
 "shared_string_about" = "Honi buruz";
 "follow_us" = "Jarraitu gaitzazu";
-"vk" = "VK";
 
 // Map
 

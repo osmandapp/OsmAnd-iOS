@@ -387,7 +387,6 @@
 "shared_string_continue" = "Daŭrigi";
 "shared_string_deselect_all" = "Malelekti ĉiujn";
 "shared_string_preparing" = "Preparado";
-"shared_string_min" = "Min.";
 "shared_string_max" = "Maks.";
 "shared_string_wifi_only" = "Nur tra vifio";
 "shared_string_turn_off" = "Malaktivigi";
@@ -502,11 +501,6 @@
 "map_transparency" = "Travideblo de bazmapo";
 "street_level_imagery" = "Strat-nivela fotaro";
 "shared_string_terrain" = "Tereno";
-"map_settings_slopes_description" = "Slope maps use different colors to visualize the terrain";
-"map_settings_hillshade_description" = "Hillshade maps visualize slopes, peaks and lowlands using different levels of gray";
-"map_settings_zoom_level_description" = "Set the minimum and maximum zoom level to display the layer";
-"map_settings_add_maps_hillshade" = "Additional maps are needed to view hillshades on the map";
-"map_settings_add_maps_slopes" = "Additional maps are needed to view slopes on the map";
 "shared_string_legend" = "Mapklarigo";
 "add_online_source" = "Aldoni enretan fonton";
 "srtm_color_scheme" = "Kolor-skemo";
@@ -919,7 +913,6 @@
 "quick_action_hillshade_descr" = "Butono por montri/kaŝi nivelombrumon (reliefon) sur la mapo.";
 "show_from_zoom_level" = "Vidigi komence de skal‑nivelo";
 "quick_action_contour_lines_descr" = "Butono por montri/kaŝi nivelkurbojn sur la mapo.";
-"enable_hillshade" = "Enable to view terrain data";
 "contour_lines_hillshades_slope" = "Nivelkurboj, nivelombrumo, dekliveco";
 "quick_action_transport_descr" = "Butono por montri/kaŝi publikan transporton sur la mapo.";
 "quick_action_showhide_mapillary_descr" = "Ŝaltilo por montri aŭ kaŝi tavolon de Mapillary sur la mapo.";
@@ -969,7 +962,6 @@
 "help_contact_us" = "Kontakti";
 "shared_string_about" = "Pri";
 "follow_us" = "Observi nin";
-"vk" = "VK";
 
 // Map
 

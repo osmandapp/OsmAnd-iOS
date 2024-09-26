@@ -66,7 +66,6 @@
 "routing_attr_length_name" = "Дължина";
 "default_speed_setting_title" = "Скорост по подразбиране";
 "shared_string_min_speed" = "Мин. скорост";
-"max_speed" = "Max. speed";
 
 // Track recording settings
 "save_global_track_interval" = "Интервал за запис";
@@ -183,7 +182,6 @@
 "choose_audio_stream" = "Канал за гласовите напътствия";
 "choose_audio_stream_descr" = "Избор на звуков канал за гласовите напътствия.";
 "use_osm_live_routing" = "Маршрутизация на OsmAnd Live";
-"select_nav_profile_dialog_message" = "The 'Navigation type' governs how routes are calculated.";
 "recalculate_route" = "Преизчисляване на маршрута";
 "recalculate_route_distance_promo" = "Маршрутът ще бъде преизчислен, ако разстоянието от маршрута до текущото местоположение е повече от избраната стойност.";
 "select_distance_route_will_recalc" = "Изберете разстоянието, след което маршрутът ще бъде преизчислен.";
@@ -228,7 +226,6 @@
 "route_to" = "За:";
 "route_via" = "През:";
 "route_from" = "От:";
-"transfers" = "Transfers:";
 "error_calculating_route" = "Грешка при изчисляване на маршрута";
 "internet_connection_required_for_online_route" = "Навигацията онлайн не работи без връзка с интернет.";
 "empty_route_calculated" = "Грешка: Изчисленият маршрут е празен";
@@ -449,11 +446,6 @@
 "map_transparency" = "Прозрачност на базовата карта";
 "street_level_imagery" = "Снимки от улицата";
 "shared_string_terrain" = "Терен";
-"map_settings_slopes_description" = "Slope maps use different colors to visualize the terrain";
-"map_settings_hillshade_description" = "Hillshade maps visualize slopes, peaks and lowlands using different levels of gray";
-"map_settings_zoom_level_description" = "Set the minimum and maximum zoom level to display the layer";
-"map_settings_add_maps_hillshade" = "Additional maps are needed to view hillshades on the map";
-"map_settings_add_maps_slopes" = "Additional maps are needed to view slopes on the map";
 "shared_string_legend" = "Легенда";
 "srtm_color_scheme" = "Цветова схема";
 "shared_string_appearance" = "Външен вид";
@@ -668,7 +660,6 @@
 "profile_alert_need_save_title" = "Запазване на промените";
 "save_as_new_track" = "Запазване като ново трасе";
 "add_to_a_track" = "Добавяне към трасе";
-"move_point" = "Move point";
 "add_point_before" = "Добавяне на точка пред";
 "add_point_after" = "Добавяне на точка след";
 "delete_point" = "Изтриване на точка";
@@ -812,7 +803,6 @@
 "quick_action_hillshade_descr" = "Бутон, превключващ засенчването на релефа на картата.";
 "show_from_zoom_level" = "Видими при увеличение";
 "quick_action_contour_lines_descr" = "Бутон, превключващ контурните линии на картата.";
-"enable_hillshade" = "Enable to view terrain data";
 "contour_lines_hillshades_slope" = "Контурни линии, засенчване на релефа, склонове";
 "quick_action_transport_descr" = "Бутон, превключващ обществения транспорт на картата.";
 "quick_action_showhide_mapillary_descr" = "Бутон, превключващ слоя на Mapillary на картата.";
@@ -863,7 +853,6 @@
 "help_contact_us" = "Свържете се с нас";
 "shared_string_about" = "Относно";
 "follow_us" = "Следвайте ни";
-"vk" = "VK";
 
 // Map
 
@@ -948,7 +937,6 @@
 "osm_live_active" = "Активен";
 "public_transport_ped_route_title" = "Маршрутът пеша представлява около %@ и вероятно е по-бърз от обществения транспорт";
 "public_transport_warning_title" = "Маршрутизацията с обществен транспорт е в изпитателна фаза, възможни са грешки и неточности.";
-"public_transport_warning_descr_blog" = "Read more about OsmAnd routing in our blog.";
 "shared_string_total" = "Общо";
 "shared_string_walk" = "Пеша";
 "exit_at" = "Изход на";
@@ -1223,7 +1211,6 @@
 "rendering_attr_pisteRoutes_name" = "Ски писти";
 "rendering_attr_noPolygons_description" = "Показване само на контури, без оцветяване.";
 "routing_attr_avoid_shuttle_train_description" = "Избягване ползването на трансферни влакове";
-"routing_attr_piste_type_nordic_name" = "Cross country/nordic ski";
 "rendering_value_highContrastRoads_name" = "Контрастни пътища";
 "rendering_attr_showCycleRoutes_name" = "Велосипедни маршрути";
 "rendering_attr_surface_metal_name" = "Метал";
@@ -1244,7 +1231,6 @@
 "routing_attr_height_name" = "Височина";
 "rendering_attr_piste_type_connection_name" = "Връзка";
 "routing_attr_relief_smoothness_factor_name" = "Изберете преобладаващия релеф";
-"routing_attr_piste_type_downhill_name" = "Alpine/downhill ski";
 "rendering_value_darkyellow_name" = "Тъмножълта";
 "routing_attr_prefer_unpaved_name" = "Предпочитане на селски пътища";
 "rendering_value_default_name" = "По подразбиране";
@@ -1262,10 +1248,7 @@
 "routing_attr_width_name" = "Ширина";
 "rendering_attr_hmRendered_name" = "Повече подробности";
 "rendering_attr_roadColors_name" = "Цветова схема на пътищата";
-"lenght_limit_description" = "Provide your vehicle length, some route restrictions may be applied for long vehicles.";
 "width_limit_description" = "Задайте ширината на автомобила, по маршрута може да има ограничения за широки превозни средства.";
-"vessel_height_limit_description" = "Set vessel height to avoid low bridges. Keep in mind, if the bridge is movable, the calculation uses its height in the open state.";
-"vessel_width_limit_description" = "Set vessel width to avoid narrow bridges.";
 "default_speed_dialog_msg" = "Изчислява времето за пристигане за непознати видове пътища и ограничава скоростта за всички пътища (може да повлияе на маршрута)";
 
 

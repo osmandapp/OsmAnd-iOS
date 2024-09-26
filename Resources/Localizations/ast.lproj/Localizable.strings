@@ -243,7 +243,6 @@
 // GPX
 "shared_string_export" = "Esportar";
 "gpx_selection_segment_title" = "Segmentu";
-"gpx_parse_error" = "OsmAnd GPX is not well formed, please contact the support team to investigate further.";
 "map_widget_average_speed" = "Velocidá media";
 "shared_string_control_start" = "Aniciar";
 "average_altitude" = "Altitú media";
@@ -268,11 +267,6 @@
 "shared_string_online_maps" = "Mapes en llinia";
 "shared_string_transparency" = "Tresparencia";
 "shared_string_terrain" = "Terrén";
-"map_settings_slopes_description" = "Slope maps use different colors to visualize the terrain";
-"map_settings_hillshade_description" = "Hillshade maps visualize slopes, peaks and lowlands using different levels of gray";
-"map_settings_zoom_level_description" = "Set the minimum and maximum zoom level to display the layer";
-"map_settings_add_maps_hillshade" = "Additional maps are needed to view hillshades on the map";
-"map_settings_add_maps_slopes" = "Additional maps are needed to view slopes on the map";
 "shared_string_legend" = "Lleenda";
 "shared_string_appearance" = "Aspeutu";
 "settings_app_theme" = "Estilu de l\'aplicación";
@@ -505,7 +499,6 @@
 "gpx_tags_txt" = "Etiquetes";
 "quick_action_hillshade_descr" = "A button to show or hide hillshades on the map.";
 "show_from_zoom_level" = "Display starting at zoom level";
-"enable_hillshade" = "Enable to view terrain data";
 "quick_action_showhide_mapillary_descr" = "Un alternador p\'amosar/anubrir la capa de Mapillary nel mapa.";
 "quick_action_remove_next_destination" = "Desaniciar el puntu de destín más cercanu";
 "change_application_profile" = "Camudar el perfil de l\'aplicación";
@@ -526,7 +519,6 @@
 "instalation_troubleshooting_item" = "Instalación ya igua de problemes";
 "techical_articles_item" = "Artículos téunicos";
 "versions_item" = "Versiones";
-"vk" = "VK";
 
 // Map
 
@@ -659,7 +651,6 @@
 "rendering_value_purple_name" = "Moráu";
 "rendering_value_light_brown_name" = "Marrón claro";
 "rendering_attr_surface_ice_name" = "Xelu";
-"rendering_attr_contourLines_description" = "Display from zoom level (requires contour data):";
 "rendering_attr_surface_mud_name" = "Llamuerga";
 "rendering_attr_highway_class_track_grade4_name" = "Grau 4";
 "rendering_attr_piste_difficulty_connection_name" = "Conexón";
@@ -683,7 +674,6 @@
 "rendering_value_translucent_pink_name" = "Rosa tresllúcido";
 "routing_attr_height_obstacles_description" = "Routing could avoid strong uphills.";
 "routing_attr_driving_style_speed_name" = "Caminos más curtios";
-"routing_attr_avoid_sett_description" = "Avoids cobblestone and sett";
 "rendering_value_car_name" = "Coche";
 "rendering_attr_lessDetailed_name" = "Menos detalles";
 "routing_attr_avoid_tram_name" = "Ensin tranvíes";
@@ -696,9 +686,7 @@
 "rendering_value_green_name" = "Verde";
 "rendering_value_bicycle_name" = "Bicicleta";
 "rendering_value_translucent_lightgreen_name" = "Verde claro tresllúcido";
-"rendering_attr_showAccess_name" = "Show access restrictions and toll";
 "rendering_attr_surface_sand_name" = "Sable";
-"routing_attr_avoid_sett_name" = "No cobblestone or sett";
 "rendering_value_translucent_lightblue_name" = "Azul claro tresllúcido";
 "rendering_attr_surface_stone_name" = "Piedra";
 "osm_notes" = "Nomes d\'OSM";
@@ -715,7 +703,6 @@
 "rendering_attr_transportStops_name" = "Paraes de tresporte";
 "rendering_attr_noPolygons_name" = "Polígonos";
 "rendering_value_yellow_name" = "Mariellu";
-"rendering_attr_alpineHiking_description" = "Render paths according to the SAC scale.";
 "routing_attr_avoid_share_taxi_name" = "Ensin taxis compartíos";
 "routing_attr_avoid_bus_name" = "Ensin buses";
 "rendering_value_translucent_purple_name" = "Moráu tresllúcido";

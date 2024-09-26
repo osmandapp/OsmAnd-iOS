@@ -85,7 +85,6 @@
 "driving_region_descr" = "Izvēlieties braukšanas apgabalu: ASV, Eiropa, Apvienotā Karaliste, Āzija un citi";
 "driving_region" = "Apgabals";
 "shared_string_automatic" = "Automātiski";
-"routing_attr_length_name" = "Length limit";
 "default_speed_setting_title" = "Noklusētais ātrums";
 "shared_string_min_speed" = "Min. ātrums";
 "max_speed" = "Maks. ātrums";
@@ -208,7 +207,6 @@
 "choose_audio_stream" = "Balss vadības kanāls";
 "choose_audio_stream_descr" = "Izvēlieties balss vadības kanālu";
 "use_osm_live_routing" = "OSM Live navigācija";
-"select_nav_profile_dialog_message" = "The 'Navigation type' governs how routes are calculated.";
 "osmand_default_routing" = "OsmAnd navigācija";
 "special_routing_type" = "Specializētā navigācija";
 "recalculate_route" = "Pārrēķināt maršrutu";
@@ -371,7 +369,6 @@
 "shared_string_copy" = "Kopēt";
 "shared_string_continue" = "Turpināt";
 "shared_string_deselect_all" = "Neatlasīt neko";
-"shared_string_min" = "Min.";
 "shared_string_max" = "Maks.";
 "shared_string_wifi_only" = "Tikai Wi-Fi tīklā";
 "regions" = "Reģions";
@@ -463,11 +460,6 @@
 "map_widget_renderer" = "Renderēšanas veids";
 "shared_string_online_maps" = "Tiešsaistes kartes";
 "map_transparency" = "Bāzes kartes caurspīdīgums";
-"map_settings_slopes_description" = "Slope maps use different colors to visualize the terrain";
-"map_settings_hillshade_description" = "Hillshade maps visualize slopes, peaks and lowlands using different levels of gray";
-"map_settings_zoom_level_description" = "Set the minimum and maximum zoom level to display the layer";
-"map_settings_add_maps_hillshade" = "Additional maps are needed to view hillshades on the map";
-"map_settings_add_maps_slopes" = "Additional maps are needed to view slopes on the map";
 "srtm_color_scheme" = "Krāsu shēma";
 "shared_string_appearance" = "Izskats";
 "settings_app_theme" = "Lietotnes motīvs";
@@ -594,13 +586,11 @@
 "shared_string_nothing_selected" = "Nekas nav izvēlēts";
 "quick_action_map_source_title" = "Kartes avoti";
 "shared_string_routing" = "Maršrutēšana";
-"shared_string_rendering_style" = "Rendering styles";
 "avoid_road" = "Izvairīties no ceļa";
 "shared_string_settings" = "Iestatījumi";
 "configure_screen_quick_action" = "Ātrās darbības";
 "search_activity" = "Meklēt";
 "listed_exist" = "Listed %@ already exist in OsmAnd.";
-"import_complete_description" = "All data from the %@ is imported, you can use buttons below to open needed part of the app to manage it";
 "app_restart_required" = "Application restart required to apply some settings.";
 "shared_string_finish" = "Finišs";
 "copy_from_other_profile" = "Kopēt no cita profila";
@@ -610,7 +600,6 @@
 "new_profile" = "Jauns profils";
 "configure_profile" = "Iestatīt profilu";
 "profile_settings" = "Profila iestatījumi";
-"ui_customization" = "UI customization";
 "reorder_profiles" = "Rediģēt profilu sarakstu";
 "profile_alert_need_profile_name_title" = "Ievadiet profila vārdu";
 "select_icon_profile_dialog_title" = "Izvēlieties ikonu";
@@ -626,7 +615,6 @@
 "application_profiles" = "Lietotnes profili";
 "import_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";
 "reset_to_default" = "Atiestatīt uz noklusējumiem";
-"checking_for_duplicate_description" = "OsmAnd checks %@ for duplicates with existing items in the application. It may take some time.";
 
 // Purchases
 "shared_string_download" = "Lejupielādēt";
@@ -786,10 +774,7 @@
 "gpx_tags_txt" = "Iezīmes";
 "quick_action_bug_descr" = "Šī ziņa tiks automātiski piepildīta komentāru laukā.";
 "quick_action_add_marker_descr" = "Spiežot darbības pogu, ekrāna centrā tiks ielikts ceļapunkts.";
-"quick_action_hillshade_descr" = "Tapping this action button shows or hides the terrain layer.";
 "show_from_zoom_level" = "Rādīt no zoom līmeņa";
-"enable_hillshade" = "Enable to view terrain data";
-"quick_action_transport_descr" = "Tap this action to show or hide public transport routes / stops on the map.";
 "quick_action_showhide_mapillary_descr" = "Tapping this action button shows or hides the Mapillary layer on the map.";
 "quick_action_remove_next_destination" = "Delete nearest destination point";
 "change_application_profile" = "Mainīt aplikācijas profilu";
@@ -830,7 +815,6 @@
 "versions_item" = "Versijas";
 "shared_string_about" = "Par";
 "follow_us" = "Sekojiet mums";
-"vk" = "VK";
 
 // Map
 
@@ -1093,7 +1077,6 @@
 "routing_attr_freeride_policy_name" = "Beztrases";
 "routing_attr_relief_smoothness_factor_more_plains_name" = "Līdzens";
 "rendering_attr_surface_concrete_name" = "Betons";
-"routing_attr_short_way_description" = "Use fuel-efficient way (usually shorter).";
 "rendering_attr_highway_class_track_grade3_name" = "3. klase";
 "routing_attr_freeride_policy_description" = "Brīvā stila un beztrases ir neoficiālie maršruti un pārejas. Parasti neiebraukti un oficiāli netiek neuzturēti. Brauciet tikai uz savu risku.";
 "rendering_attr_highway_class_street_name" = "Iela";
@@ -1151,7 +1134,6 @@
 "rendering_attr_hideNonVehicleHighways_name" = "Neizbraucamie ceļi";
 "rendering_value_translucent_pink_name" = "Caurspīdīgs rozā";
 "rendering_attr_surface_ground_name" = "Neapstrādāts";
-"routing_attr_height_obstacles_description" = "Factor in terrain elevation (via SRTM, ASTER, and EU-DEM data).";
 "rendering_attr_currentTrackColor_description" = "GPX krāsa";
 "routing_attr_driving_style_speed_name" = "Īsāki maršruti";
 "routing_attr_avoid_sett_description" = "Bez bruģakmeņa";
@@ -1304,7 +1286,6 @@
 "rendering_value_translucent_orange_name" = "Caurspīdīgi oranžs";
 "rendering_attr_depthContours_description" = "Rādīt dziļuma kontūras un punktus";
 "routing_attr_avoid_ferry_name" = "Nelietot prāmjus";
-"routing_attr_width_name" = "Width limit";
 "routing_attr_avoid_train_name" = "Nelietot vilcienus";
 "routing_attr_allow_motorway_description" = "Atļaut automağistrāles.";
 "rendering_attr_hmRendered_name" = "Vairāk kartes detaļas";
@@ -1313,8 +1294,6 @@
 "height_limit_description" = "Norādiet transportlīdzekļa augstumu, augstākiem transportlīdzekļiem var tik piemēroti maršruta ierobežojumi.";
 "lenght_limit_description" = "Norādiet transportlīdzekļa garumu, garākiem transportlīdzekļiem var tikt piemēroti maršruta ierobežojumi.";
 "width_limit_description" = "\"Norādiet transportlīdzekļa platumu, platākiem  transportlīdzekļiem var tikt piemēroti maršruta ierobežojumi.\"";
-"vessel_height_limit_description" = "Set vessel height to avoid low bridges. Keep in mind, if the bridge is movable, the calculation uses its height in the open state.";
-"vessel_width_limit_description" = "Set vessel width to avoid narrow bridges.";
 
 
 //Icon categories
@@ -1327,7 +1306,6 @@
 "icon_group_travel" = "Ceļošana";
 "icon_group_nautical" = "Jūras";
 "icon_group_education" = "Izglītība";
-"settings_item_read_error" = "Could not read %@.";
 "app_mode_default" = "Skatīt karti";
 "app_mode_car" = "Auto";
 "app_mode_bicycle" = "Velobraucējs";

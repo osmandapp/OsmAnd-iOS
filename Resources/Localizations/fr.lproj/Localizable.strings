@@ -1652,7 +1652,6 @@
 "quick_action_showhide_mapillary_title" = "Afficher/masquer Mapillary";
 "arrived_at_destination" = "Vous êtes arrivé.";
 "add_to_a_track" = "Ajouter à une trace";
-"public_transport_menu" = "Transport";
 "shared_string_add_profile" = "Ajouter un profil";
 "profile_type_user_string" = "Profil utilisateur";
 "quick_action_switch_profile_descr" = "Le bouton d’action bascule entre les profils sélectionnés.";
@@ -1670,7 +1669,6 @@
 "ui_customization_short_descr" = "Éléments du panneau déroulant, menu contextuel";
 "lenght_limit_description" = "Indiquez la longueur de votre véhicule, certaines restrictions d\'itinéraire peuvent s\'appliquer aux véhicules longs.";
 "trip_name" = "Nom de la trace";
-"vk" = "VK";
 "select_application_profile" = "Sélectionner le profil d'application";
 "quick_action_template_name" = "Nom de modèle";
 "quick_action_screen_header" = "Écran %ld";

@@ -2186,7 +2186,6 @@
 "select_application_profile" = "Chausir lo perfiu de l'aplicacion";
 "shared_string_add_profile" = "Ajustar un perfiu";
 "replace_waypoint_confirmation" = "Siatz ben segur que volètz remplaçar lo ponch d'etapa %@ ?";
-"vk" = "VK";
 "trip_name" = "Nom dau percors";
 
 // World Regions

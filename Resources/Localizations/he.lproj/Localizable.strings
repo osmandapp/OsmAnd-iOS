@@ -701,7 +701,7 @@
 "units_and_formats" = "יחידות ותבניות";
 "device_settings" = "Device settings";
 "osmand_settings" = "הגדרות OsmAnd";
-"global_settings_descr" = "Affect the entire application.";
+"global_settings_descr" = "משפיע על כל היישומון.";
 "plugin_settings_descr" = "Plugin settings for the selected profile.";
 
 // Intro

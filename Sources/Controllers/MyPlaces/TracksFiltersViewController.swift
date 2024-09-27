@@ -177,6 +177,26 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
         case Self.folderFilterRowKey:
             filterType = .folderFilterType
             isModalPresentation = true
+        case Self.sensorSpeedMaxFilterRowKey:
+            filterType = .sensorSpeedMaxFilterType
+        case Self.sensorSpeedAverageFilterRowKey:
+            filterType = .sensorSpeedAverageFilterType
+        case Self.heartRateMaxFilterRowKey:
+            filterType = .heartRateMaxFilterType
+        case Self.heartRateAverageFilterRowKey:
+            filterType = .heartRateAverageFilterType
+        case Self.bicycleCadenceMaxFilterRowKey:
+            filterType = .bicycleCadenceMaxFilterType
+        case Self.bicycleCadenceAverageFilterRowKey:
+            filterType = .bicycleCadenceAverageFilterType
+        case Self.bicyclePowerMaxFilterRowKey:
+            filterType = .bicyclePowerMaxFilterType
+        case Self.bicyclePowerAverageFilterRowKey:
+            filterType = .bicyclePowerAverageFilterType
+        case Self.temperatureMaxFilterRowKey:
+            filterType = .temperatureMaxFilterType
+        case Self.temperatureAverageFilterRowKey:
+            filterType = .temperatureAverageFilterType
         default:
             return
         }

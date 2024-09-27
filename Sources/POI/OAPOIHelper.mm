@@ -1455,12 +1455,14 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
         return nil;
     
     OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(amenity->position31);
+    NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
     
     OAPOI *poi = [[OAPOI alloc] init];
     poi.obfId = amenity->id;
     poi.latitude = latLon.latitude;
     poi.longitude = latLon.longitude;
     poi.name = amenity->nativeName.toNSString();
+    poi.cityName = amenity->getCityFromTagGroups(QString::fromNSString(lang)).toNSString();
     
     NSMutableDictionary *names = [NSMutableDictionary dictionary];
     NSString *nameLocalized = [OAPOIHelper processLocalizedNames:amenity->localizedNames nativeName:amenity->nativeName names:names];

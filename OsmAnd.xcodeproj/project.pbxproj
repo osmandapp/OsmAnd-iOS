@@ -1304,6 +1304,8 @@
 		BBA3AFC4197FC4BB0039D991 /* Resources.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB451F1018EB34A5005FBE09 /* Resources.storyboard */; };
 		C50E32822CA3FBDF00EEC41F /* TracksFiltersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E32812CA3FBDF00EEC41F /* TracksFiltersViewController.swift */; };
 		C50E32842CA57DDB00EEC41F /* TracksFilterDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E32832CA57DDB00EEC41F /* TracksFilterDetailsViewController.swift */; };
+		C50E32862CA6879500EEC41F /* OADatePickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E32852CA6879500EEC41F /* OADatePickerTableViewCell.swift */; };
+		C50E32882CA6884200EEC41F /* OADatePickerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C50E32872CA6884200EEC41F /* OADatePickerTableViewCell.xib */; };
 		C51967AD2C247E9000476E4B /* POITagsDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51967AC2C247E9000476E4B /* POITagsDetailsViewController.swift */; };
 		C51BE6FD2BBC3E7C00B63A1A /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = C51BE6FC2BBC3E7C00B63A1A /* PrivacyInfo.xcprivacy */; };
 		C52E750F2C2BECAC00C45ED0 /* OsmAndFormatterParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52E750E2C2BECAC00C45ED0 /* OsmAndFormatterParams.swift */; };
@@ -4812,6 +4814,8 @@
 		BBBDADB818BCF53500E4A359 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		C50E32812CA3FBDF00EEC41F /* TracksFiltersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksFiltersViewController.swift; sourceTree = "<group>"; };
 		C50E32832CA57DDB00EEC41F /* TracksFilterDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksFilterDetailsViewController.swift; sourceTree = "<group>"; };
+		C50E32852CA6879500EEC41F /* OADatePickerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OADatePickerTableViewCell.swift; sourceTree = "<group>"; };
+		C50E32872CA6884200EEC41F /* OADatePickerTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OADatePickerTableViewCell.xib; sourceTree = "<group>"; };
 		C51967AC2C247E9000476E4B /* POITagsDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POITagsDetailsViewController.swift; sourceTree = "<group>"; };
 		C51BE6FC2BBC3E7C00B63A1A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = Resources/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		C52E750E2C2BECAC00C45ED0 /* OsmAndFormatterParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsmAndFormatterParams.swift; sourceTree = "<group>"; };
@@ -11576,6 +11580,7 @@
 				B0D61B247F6E55B974404878 /* OATitleSwitchRoundCell.h */,
 				B0D616ED5414E4F939C10BB6 /* OATitleSwitchRoundCell.mm */,
 				32DE2BE32B6D13730025F2B9 /* OATwoButtonsTableViewCell.swift */,
+				C50E32852CA6879500EEC41F /* OADatePickerTableViewCell.swift */,
 				B247455427E6470900C18C3F /* OATwoFilledButtonsTableViewCell.h */,
 				B247455527E6470900C18C3F /* OATwoFilledButtonsTableViewCell.m */,
 				C589BC9E2C610560002769F6 /* OATwoIconsButtonTableViewCell.swift */,
@@ -11708,6 +11713,7 @@
 				DA5A7BF026C563A100F274C7 /* OATitleSliderTableViewCell.xib */,
 				0A832602270BE0E3006B8946 /* OATitleSwitchRoundCell.xib */,
 				3241BC852B611D0500101894 /* OATwoButtonsTableViewCell.xib */,
+				C50E32872CA6884200EEC41F /* OADatePickerTableViewCell.xib */,
 				B247455627E6470A00C18C3F /* OATwoFilledButtonsTableViewCell.xib */,
 				C589BCA02C6105F7002769F6 /* OATwoIconsButtonTableViewCell.xib */,
 				46E9AD9828DC8E8C00CC55F9 /* OAValueTableViewCell.xib */,
@@ -14782,6 +14788,7 @@
 				DA5A827526C563A700F274C7 /* OABottomSheetHeaderDescrButtonCell.xib in Resources */,
 				DAF820CD2369BC5D007003FA /* ic_custom_start_point@2x.png in Resources */,
 				DA5A826226C563A700F274C7 /* OAPointDescCell.xib in Resources */,
+				C50E32882CA6884200EEC41F /* OADatePickerTableViewCell.xib in Resources */,
 				DA2DC41D23B2116300F40D1D /* ic_custom_arrow_down@2x.png in Resources */,
 				C57354502AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.xib in Resources */,
 				8454DA1E1B2F16D700E5A5C5 /* ic_coordinates@2x.png in Resources */,
@@ -17016,6 +17023,7 @@
 				DA5A81C226C563A700F274C7 /* OAPOICategory.m in Sources */,
 				FAA650572ADD42C50020DCEA /* BLEHeartRateDevice.swift in Sources */,
 				DA5A840D26C563A800F274C7 /* OAFavoriteEditingHandler.mm in Sources */,
+				C50E32862CA6879500EEC41F /* OADatePickerTableViewCell.swift in Sources */,
 				DA5A813626C563A700F274C7 /* OAEditPOIData.mm in Sources */,
 				DA5A84F326C563A900F274C7 /* OAMapViewState.m in Sources */,
 				DA5A814326C563A700F274C7 /* OAOsmBugsLocalUtil.mm in Sources */,

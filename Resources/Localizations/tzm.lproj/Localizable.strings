@@ -1,11 +1,9 @@
-"rotate_map_north_opt" = "Do not rotate (north is up)";
 
 // Track recording settings
 
 // Dirrection appearance
 
 // Route info
-"avoid_in_routing_descr_" = "Avoid toll roads, unpaved, ferries";
 
 // Shared Strings
 
@@ -20,32 +18,17 @@
 // My Places
 
 // GPX
-"gpx_upload_public_visibility_descr" = "\"Public\" means the trace is shown publicly in your GPS traces and in public GPS trace listings, and in the public trace list with timestamps in raw form. Data served via the API does not reference your trace page. Tracepoint timestamps are not available through the public GPS API, and tracepoints are not chronologically ordered.";
-"gpx_upload_identifiable_visibility_descr" = "\"Identifiable\" means that the trace will be shown publicly in your GPS traces and in public GPS trace listings, i.e. other users will be able to download the raw trace and associate it with your username. Public timestamped tracepoint data from the GPS API served via the trackpoints API will reference your original trace page.";
-"gpx_upload_trackable_visibility_descr" = "\"Trackable\" means the trace does not show up in any public listings, but processed trackpoints with timestamps from it (that can\'t be associated with you directly) do through downloads from the public GPS API.";
-"gpx_upload_private_visibility_descr" = "\"Private\" means the trace does not show up in any public listings, but trackpoints from it in unchronological order are available through the public GPS API without timestamps.";
-"save_track_to_gpx" = "Auto-record track";
-"save_track_to_gpx_descrp" = "Turn on to automatically save a track during navigation";
 
 // Map settings
-"light_theme" = "Light";
 
 // Intro
 // Settings
-"map_locale" = "Map Language";
-"mgrs_format_descr" = "OsmAnd uses MGRS format which is identical to UTM NATO.";
-"ltr_or_rtl_combine_via_slash" = "%@ / %@";
-"import_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";
 
 // Purchases
 
 // Route planning
-"add_point_before" = "Add points before";
-"add_point_after" = "Add points after";
-"only_selected_segment_recalc" = "Only the selected segment will be recalculated using the selected profile";
 
 // Resources
-"edit_tilesource_elliptic_tile" = "Elliptic mercator";
 
 // Menu
 

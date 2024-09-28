@@ -950,9 +950,6 @@
 "shared_string_reload" = "Recarregar";
 "save_poi_too_many_uppercase" = "O nome contém muitas letras maiúsculas. Continuar\?";
 "shared_string_read_more" = "Leia mais";
-"navigate_point_format_D" = "GGG.GGGGG";
-"navigate_point_format_DM" = "GGG MM.MMM";
-"navigate_point_format_DMS" = "GGG MM SS.S";
 "sett_generic_ext_input" = "Teclado";
 "day" = "Dia";
 "days_2_4" = "Dias";
@@ -1042,7 +1039,6 @@
 "osm_tag_too_long_message" = "O comprimento máximo do valor da etiqueta %@ é de 255 caracteres.\nUtilize menos caracteres para continuar.";
 "save_poi_without_poi_type_message" = "Salvar o POI sem especificar o tipo\?";
 "local_openstreetmap_uploading" = "Enviando…";
-"short_location_on_map" = "Latitude %@ \nLongitude %@";
 "navigate_point_format_OLC" = "Código de localização aberto (OLC)";
 "shared_string_example" = "Exemplo";
 "utm_description" = "Note que o OsmAnd usa o formato UTM Standard que é similar, mas não idêntico ao UTM NATO.";
@@ -3078,7 +3074,6 @@
 "help_article_troubleshooting_general_name" = "Geral";
 "help_article_navigation_guidance_voice_navigation_name" = "Comandos de voz / Notificações";
 "audionotes_plugin_name" = "Notas de áudio/vídeo";
-"offline_wikivoyage" = "Wikivoyage offline";
 "setup" = "Configuração";
 "calendar_new_event_title" = "Novo evento";
 "help_article_map_tracks_on_map_name" = "Trilhas e rotas";

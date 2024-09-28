@@ -2937,7 +2937,6 @@
 "upload_poi" = "Отпреми тачку занимања";
 "simulate_location_track_select_descr" = "Одаберите путању као извор за померање локације.";
 "shared_string_discard_changes" = "Одбаци измене";
-"simulate_location_movement_speed_x4" = "×4";
 "use_heightmap_setting" = "Користи 3Д рељефне висинске мапе";
 "weather_update_over_any_network" = "Преко било које мреже";
 "ltr_or_rtl_combine_via_of" = "%ld од %ld";
@@ -2948,8 +2947,6 @@
 "lang_zh-Hans" = "Кинески (појадностављени)";
 "generate_hillshade_from_3d_maps" = "Образуј оквирне карте сенчених падина из просторних, 3Д карата";
 "simulate_location_movement_speed_original" = "Изворно";
-"simulate_location_movement_speed_x2" = "×2";
-"simulate_location_movement_speed_x3" = "×3";
 "simulate_in_progress" = "У току";
 "simulate_location_movement_speed_x3_desc" = "Брзина померања локације током симулације биће 3 пута већа од брзине у селектованом фајлу.";
 "simulate_location_movement_speed_x4_desc" = "Брзина померања локације током симулације биће 4 пута већа од брзине у селектованом фајлу.";

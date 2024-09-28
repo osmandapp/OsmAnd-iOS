@@ -1142,7 +1142,6 @@
 // Release Notes
 // instruction:
 //https://github.com/osmandapp/OsmAnd-Issues/blob/master/Adding%20release%20information%20to%20IOS.md
-"ios_release_3_90" = "• Introduced a \"Plan a route\" feature for planning future trips with the ability to create track segments using different navigation types\n• Added an option to enable a сompass over the \"Radius Ruler\" tool\n• Added \"POI label overlays\" option that allows to show names for favorites, track waypoints and markers on the map\n• Added new Quick actions for visibility of contour lines and terrain on the map, changing an application profile, deleting a nearest intermediate point\n• Fixed issues with missing Wikipedia search category\n• Settings Import: fixed bugs, added support for all data types available in OsmAnd\n• OpenStreetMap editing: fixed the time picker and inability to change the changeset comment\n";
 "weather_wind_kilimeters_per_hour" = "കിലോമീറ്റര്‍/മണിക്കൂര്‍";
 "altitude" = "ഉയരം";
 "points_delete_multiple" = "നിങ്ങൾ %d പോയിന്റ് (കൾ) ഇല്ലാതാക്കാൻ പോകുന്നു. ഉറപ്പാണോ\?";

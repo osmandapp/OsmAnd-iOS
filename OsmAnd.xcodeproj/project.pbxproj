@@ -1308,6 +1308,8 @@
 		C50E32882CA6884200EEC41F /* OADatePickerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C50E32872CA6884200EEC41F /* OADatePickerTableViewCell.xib */; };
 		C51967AD2C247E9000476E4B /* POITagsDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51967AC2C247E9000476E4B /* POITagsDetailsViewController.swift */; };
 		C51BE6FD2BBC3E7C00B63A1A /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = C51BE6FC2BBC3E7C00B63A1A /* PrivacyInfo.xcprivacy */; };
+		C52776A82CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52776A62CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.swift */; };
+		C52776A92CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C52776A72CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.xib */; };
 		C52E750F2C2BECAC00C45ED0 /* OsmAndFormatterParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52E750E2C2BECAC00C45ED0 /* OsmAndFormatterParams.swift */; };
 		C53920C2291E4E770076D5BB /* ic_custom_van@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C53920C0291E4E770076D5BB /* ic_custom_van@2x.png */; };
 		C53920C3291E4E770076D5BB /* ic_custom_van@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C53920C1291E4E770076D5BB /* ic_custom_van@3x.png */; };
@@ -4818,6 +4820,8 @@
 		C50E32872CA6884200EEC41F /* OADatePickerTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OADatePickerTableViewCell.xib; sourceTree = "<group>"; };
 		C51967AC2C247E9000476E4B /* POITagsDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POITagsDetailsViewController.swift; sourceTree = "<group>"; };
 		C51BE6FC2BBC3E7C00B63A1A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = Resources/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		C52776A62CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OARangeSliderFilterTableViewCell.swift; sourceTree = "<group>"; };
+		C52776A72CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OARangeSliderFilterTableViewCell.xib; sourceTree = "<group>"; };
 		C52E750E2C2BECAC00C45ED0 /* OsmAndFormatterParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsmAndFormatterParams.swift; sourceTree = "<group>"; };
 		C53920C0291E4E770076D5BB /* ic_custom_van@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_van@2x.png"; path = "Resources/Icons/ic_custom_van@2x.png"; sourceTree = "<group>"; };
 		C53920C1291E4E770076D5BB /* ic_custom_van@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_van@3x.png"; path = "Resources/Icons/ic_custom_van@3x.png"; sourceTree = "<group>"; };
@@ -11581,6 +11585,8 @@
 				B0D616ED5414E4F939C10BB6 /* OATitleSwitchRoundCell.mm */,
 				32DE2BE32B6D13730025F2B9 /* OATwoButtonsTableViewCell.swift */,
 				C50E32852CA6879500EEC41F /* OADatePickerTableViewCell.swift */,
+				C52776A62CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.swift */,
+				C52776A72CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.xib */,
 				B247455427E6470900C18C3F /* OATwoFilledButtonsTableViewCell.h */,
 				B247455527E6470900C18C3F /* OATwoFilledButtonsTableViewCell.m */,
 				C589BC9E2C610560002769F6 /* OATwoIconsButtonTableViewCell.swift */,
@@ -15225,6 +15231,7 @@
 				C5879A4B299FBF7A00F53249 /* bg_tts.js in Resources */,
 				844499931AAA1FFA00ACA20D /* bt_bought_addon@2x.png in Resources */,
 				157F3CD724A1F43C000A66F0 /* ic_custom_straight_line@2x.png in Resources */,
+				C52776A92CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.xib in Resources */,
 				DAFE4D3B22169B4D009731CA /* map_osm_note_unresolved@2x.png in Resources */,
 				DA5A826526C563A700F274C7 /* OAQuickActionCell.xib in Resources */,
 				DA83600823438512003374B5 /* ic_small_arrow_up@3x.png in Resources */,
@@ -17058,6 +17065,7 @@
 				46CBC9742B962707005CC244 /* GlideAverageWidget.swift in Sources */,
 				DA5A842526C563A800F274C7 /* OATargetHistoryItemViewController.m in Sources */,
 				32464B7E2A6FCC6700DA6980 /* TravelExploreViewController.swift in Sources */,
+				C52776A82CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.swift in Sources */,
 				8A31787527E1D8A800CA8AA4 /* OAMapRendererEnvironment.mm in Sources */,
 				DA4ABF352876ECB300B996EF /* OAAbstractWriter.m in Sources */,
 				464FF36B2B309488001D855E /* SensorAttributesUtils.swift in Sources */,

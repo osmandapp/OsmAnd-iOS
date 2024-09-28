@@ -11586,7 +11586,6 @@
 				32DE2BE32B6D13730025F2B9 /* OATwoButtonsTableViewCell.swift */,
 				C50E32852CA6879500EEC41F /* OADatePickerTableViewCell.swift */,
 				C52776A62CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.swift */,
-				C52776A72CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.xib */,
 				B247455427E6470900C18C3F /* OATwoFilledButtonsTableViewCell.h */,
 				B247455527E6470900C18C3F /* OATwoFilledButtonsTableViewCell.m */,
 				C589BC9E2C610560002769F6 /* OATwoIconsButtonTableViewCell.swift */,
@@ -11612,6 +11611,7 @@
 			isa = PBXGroup;
 			children = (
 				DA5A7C1126C563A200F274C7 /* OAActivityViewWithTitleCell.xib */,
+				C52776A72CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.xib */,
 				DA5A7BBA26C563A100F274C7 /* OABottomSheetHeaderButtonCell.xib */,
 				DA5A7BFC26C563A200F274C7 /* OABottomSheetHeaderCell.xib */,
 				DA5A7BCB26C563A100F274C7 /* OABottomSheetHeaderDescrButtonCell.xib */,

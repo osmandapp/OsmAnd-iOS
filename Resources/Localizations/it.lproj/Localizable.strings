@@ -1,4 +1,3 @@
-"shared_string_ok" = "Ok";
 "shared_string_yes" = "Sì";
 "shared_string_save" = "Salva";
 "shared_string_delete" = "Elimina";
@@ -171,7 +170,6 @@
 "shared_string_my_places" = "I miei luoghi";
 "menu_about" = "Informazioni";
 // Units
-"mile_per_hour" = "mi/h";
 // Map
 "map_inst_det_map_q" = "Installa la mappa panoramica dettagliata per avere maggiori informazioni sulle tue posizioni.";
 "map_remind" = "Ricorda in seguito";
@@ -264,13 +262,10 @@
 "product_desc_allworld" = "Mappe di Tutto il Mondo";
 "product_desc_asia" = "Scaricamenti illimitati delle mappe per l'Asia";
 "product_desc_wiki" = "Articoli di Wikipedia basati sulla posizione sulla mappa";
-"srtm_plugin_name" = "Topografia";
 "product_desc_srtm" = "Valutazione visiva della forma della superficie terrestre";
 "my_location" = "Mia posizione";
 "all_categories" = "Tutte le categorie";
 "get_unlimited_access" = "Ottieni l\'accesso illimitato";
-"navigate_point_latitude" = "Latitudine";
-"navigate_point_longitude" = "Longitudine";
 "track_save_short_q" = "Il percorso è troppo breve, vuoi salvarlo?";
 "add_as" = "Aggiungi come";
 "make_call" = "Fai una chiamata";
@@ -466,7 +461,6 @@
 "shared_string_topbar" = "Barra superiore";
 "fast_route_mode_descr" = "Abilita per calcolare il percorso più veloce o disabilita per il percorso dal minor consumo.";
 "shared_string_collapse" = "Compatta";
-"shared_string_widgets" = "Widget";
 "map_markers" = "Marcatori";
 "confirm_usage_speed_cameras" = "In molti Paesi (Germania, Francia, Italia, e altri) l\'uso degli avvertimenti di autovelox è illegale. OsmAnd non si assume alcuna responsabilità in caso di violazione della legge. Si prega di premere \'Sì\' solo nel caso in cui sia autorizzato l\'uso di questa funzionalità.";
 "show_pedestrian_warnings" = "Attraversamenti pedonali";
@@ -1323,7 +1317,6 @@
 "save_poi_without_poi_type_message" = "Salvare il PDI senza specificarne il tipo\?";
 "local_openstreetmap_uploading" = "Caricamento…";
 "key_hint_zoom_out" = "Diminuisci zoom";
-"short_location_on_map" = "Lat %@ \nLon %@";
 "utm_description" = "Da notare che OsmAnd utilizza il formato UTM Standard che è simile ma non identico a UTM NATO.";
 "coordinates_copy_descr" = "Tappa per copiare le coordinate negli appunti.";
 "obf_import_title" = "Importa il file della mappa offline";
@@ -2958,7 +2951,6 @@
 "gitHub_discussion" = "Discussione su GitHub";
 "open_issue_on_gitHub" = "Problema aperto su GitHub";
 "report_an_issues" = "Segnala un problema";
-"telegram_chats" = "Chat Telegram";
 "troubleshooting" = "Risoluzione dei problemi";
 "weather_updates_manual" = "Le previsioni del tempo devono essere aggiornate manualmente.";
 "travel_guides_no_file_error" = "Errore: nessun dato nel file della regione";
@@ -2970,7 +2962,6 @@
 "shared_string_data_type" = "Tipo di dato";
 "shared_string_relief_3d" = "Rilievo 3D";
 "weather_update_parameters_wifi" = "Le previsioni del tempo verranno aggiornate solo se la rete Wi-Fi è disponibile.";
-"offline_wikivoyage" = "Wikivoyage offline";
 "clear_travel_search_history" = "Cancellare la cronologia delle ricerche di viaggio?";
 "calendar_new_event_title" = "Nuovo evento";
 "osmAnd_team" = "Team OsmAnd";

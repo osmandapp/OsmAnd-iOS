@@ -892,7 +892,6 @@
 "profile_type_base_string" = "Basprofil";
 "selected_profile" = "Vald profil";
 "application_profiles" = "App-profiler";
-"import_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";
 "export_profile_descr" = "Du kan exportera alla profilinställningar, kopiera alla inställningar från en annan profil, eller återställa inställningarna till standardvärden.";
 "new_plugin_added" = "Nytt insticksprogram tillagd";
 "reset_to_default" = "Återställ till standard";
@@ -1182,7 +1181,6 @@
 "quick_action_map_overlay_action" = "Lägg till överlägg";
 "no_underlay" = "Inget underlägg";
 "quick_action_map_underlay_action" = "Lägg till underlägg";
-"toggle_current_location" = "Show/hide coordinates widget";
 
 
 "quick_action_current_location_widget_descr" = "En knapp för att visa eller dölja widgeten för aktuell plats på kartan.";
@@ -2072,10 +2070,7 @@
 //https://github.com/osmandapp/OsmAnd-Issues/blob/master/Adding%20release%20information%20to%20IOS.md
 
 "latest_version" = "Du har den senaste versionen: %@";
-"ios_release_3_80" = "• Introduced \"Application Profiles\" with independent settings\n• New arrangement of settings by profiles and types: navigation, general, map and screen\n• Ability to import or export profile settings\n• Added data sources for Online photos\n• Added ability to download online maps to cache\n• Improved \"Search\" algorithms\n";
-"ios_release_3_90" = "• Introduced a \"Plan a route\" feature for planning future trips with the ability to create track segments using different navigation types\n• Added an option to enable a сompass over the \"Radius Ruler\" tool\n• Added \"POI label overlays\" option that allows to show names for favorites, track waypoints and markers on the map\n• Added new Quick actions for visibility of contour lines and terrain on the map, changing an application profile, deleting a nearest intermediate point\n• Fixed issues with missing Wikipedia search category\n• Settings Import: fixed bugs, added support for all data types available in OsmAnd\n• OpenStreetMap editing: fixed the time picker and inability to change the changeset comment\n";
 "ios_release_4_0" = "• Nytt! \"Lägg till favorit\"-skärm med alternativ för att välja anpassad ikon, färg och form\n• Ny \"Koordinatwidget\" med koordinater för den aktuella positionen\n• Möjlighet att importera anpassade användardefinierade insticksmoduler\n• Ordentligt utökad import/export funktionalitet\n• Avstånd med tryck flyttade från Radielinjalen till ett separat alternativ\n• Fixat CarPlay-appen hängde när iPhone-skärmen stängdes av\n• Insticksmodul-skärmen flyttad från Kartor & Resurser till huvudmenyn\n• Finsk översättning\n• Fixat gränssnittet i landskapsorientering för \"Planera en rutt\"-skärmen\n• Tillagt stöd för anpassade ruttberäknings- och renderingsfiler\n• Fixat prestandan för riktningslinje till markör\n• Fixat problem med att importera GPX-filer med stor bokstav i filändelsen\n• Fixat problem med \"Följ spår\"-menyn\n• Fixat import av OBF-filer\n";
-"ios_release_4_1" = "• Completely redesigned interaction with tracks: a new menu with charts, statistics, ability to change the appearance, coloring by speed, height and slope, and track selection on the map• New screen for searching by coordinates in different formats\n• Improved coordinate search in OLC format\n• New user-friendly menu for choosing languages to display Wikipedia articles on the map\n• Added ability to easily load maps of all regions of the country with a couple of clicks.\n• Added contour lines in feet (You need to download additional files)\n• Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n• New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n• Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
 "connect_rp" = "Koppla ihop ruttpunkter";
 "shared_string_hide_all" = "Dölj alla";
 "points_delete_multiple" = "Ta bort %d punkt(er)\?";
@@ -2550,7 +2545,6 @@
 "map_markers_history" = "Kartmarkörhistorik";
 "shared_string_light" = "Ljust";
 "map_widget_sunset" = "Solnedgång";
-"map_widget_gps_info" = "GPS-info";
 "precipitation_hide" = "Dölj nederbörd";
 "route_maneuvers" = "Ruttmanövrar";
 "widget_panels_descr" = "Välj skärmdel att tillföra eller ändra widgetar.";
@@ -2812,7 +2806,6 @@
 "context_menu_read_article" = "Läs artikel";
 "backup_error_invalid_token" = "Token är inte giltig";
 "shared_string_travel" = "Resa";
-"offline_wikivoyage" = "Wikivoyage offline";
 "shared_string_article" = "Artikel";
 "article_has_no_points" = "Artikeln har inga punkter";
 "cache_size" = "Cachestorlek";
@@ -2860,7 +2853,6 @@
 "cloud_conflict_descr" = "Den lokala och molnversionen har ändringar sedan senaste synkronisering.";
 "cloud_backup" = "Säkerhetskopia";
 "backup_delete_from_cloud" = "Radera från molnet";
-"shared_string_relief_3d" = "3D relief";
 "purchases_feature_relief_3d_description" = "Äg och se en skalmodell över ditt närområde eller hela kontinenten.";
 "use_heightmap_setting" = "Använd höjdkartor med 3D-relief";
 "coordinates_widget_map_center" = "Koordinater: kartcentrum";
@@ -2874,7 +2866,6 @@
 "cleared_travel_search_history" = "Historiken rensad";
 "shared_string_result" = "Resultat";
 "login_footer_full_text" = "Behöver du hjälp? Kontakta oss på \nsupport@osmand.net";
-"verification" = "Verifikation";
 "cloud_create_account" = "Skapa konto";
 "cloud_no_online_backup" = "Du har ingen säkerhetskopia online ännu";
 "manage_storage" = "Hantera lagring";
@@ -3188,7 +3179,6 @@
 "shared_string_precise" = "Precis";
 "speed_limit_warning" = "Hastighetsgränsvarning";
 "avoid_pt_types_descr" = "Välj typer av kollektivtrafik som ska undvikas vid navigaton:";
-"osm_id" = "OSM-ID";
 "dangerous_goods_description" = "På vissa vägar och tunnlar är transport av farligt gods förbjudet.";
 "visualization_3d_visualized_by" = "Visualiseras av";
 "shared_string_always" = "Alltid";

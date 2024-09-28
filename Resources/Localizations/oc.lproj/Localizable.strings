@@ -2136,7 +2136,6 @@
 "weather_wind_enable_descr" = "D'activar per mostrar leis indicacions de vent sus la mapa.";
 "weather_cloud_enable_descr" = "D'activar per mostrar leis indicacions de nivolada sus la mapa.";
 "weather_precip_enable_descr" = "D'activar per mostrar leis indicacions de plueia sus la mapa.";
-"ltr_or_rtl_combine_via_slash" = "%@ / %@";
 "simulate_location_track_select_descr" = "Chausissètz la traça que servirà de fònt per lo desplaçament de la posicion.";
 "simulate_your_location_gpx_descr" = "Podètz simular lo desplaçament de la posicion en emplegant la traça GPX.";
 "delete_tracks_bottom_sheet_description_regular_part" = "Siatz ben segur de voler escafar ";

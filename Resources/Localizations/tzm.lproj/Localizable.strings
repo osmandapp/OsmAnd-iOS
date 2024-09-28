@@ -33,25 +33,11 @@
 // Menu
 
 // OSM Editing actions
-"osm_edit_reopened_note" = "Reopened";
-"local_openstreetmap_uploading" = "Uploading...";
 
 // Mapillary
 
 // Coordinate widget
-"coordinates_widget_current_location" = "Coordinates widget";
 // Quick action
-"toggle_current_location" = "Show/hide coordinates widget";
-
-
-
-
-
-"route_add_start_point" = "Add starting point";
-"quick_action_auto_zoom" = "Auto zoom on/off";
-"quick_action_navigation_voice_on" = "Mute voice";
-"quick_action_navigation_voice_off" = "Unmute voice";
-"quick_action_add_marker_descr" = "Tapping this action button adds a map marker at the map center point.";
 // Units
 
 // Help
@@ -77,35 +63,10 @@
 // Rendering attributes
 
 //inapps
-"plugin_nautical_name" = "Nautical map";
-"plugin_nautical_descr" = "Turn on to enrich your map with information about sailing routes, navigation lights, danger zones, zones where it is allowed or prohibited to sail or dock, etc. To use download Nautical maps and enable \"Nautical map\" type in Configure map. \n\nHow to - https://osmand.net/docs/user/plugins/nautical-charts";
-"osmand_parking_plugin_name" = "Parking Position";
-"osmand_parking_plugin_description" = "Enable to set a point on the map where your car is left on the street and notify your calendar when parking time starts. Plugin helps to track the parking time and location of your car. To place a marker choose a place on the map, then go to Actions and press \"Add parking\".";
-"plugin_ski_name" = "Ski map";
-"plugin_ski_descr" = "Designed to navigate at winter sports locations. Watch ski pistes, ski lift markers and colored lines indicating the complexity of each track. To use after enabling go to Configure map and choose \"Winter and ski\" map type.";
-"record_plugin_description" = "Allows you to record, save and analyze your training or movement data, such as speed, ascents, descents or route relief, which can then be reused, improved, supplemented or shared with friends. \n\nHow to - https://osmand.net/docs/user/plugins/trip-recording";
-"osm_editing_plugin_name" = "OpenStreetMap Editing";
-"osm_editing_plugin_description" = "Allows you to make contributions to OpenStreetMap, a global community aimed at creating a comprehensive map of the world and providing up-to date open-source data to every user. \n\nYou can find instruction on how to edit the map on out website https://osmand.net/docs/user/plugins/osm-editing";
-"plugin_mapillary_descr" = "Brings street-level views. Where imagery is missing, you can just add it yourself so that others can make use of it. To enable the Mapillary layer turn on the \"Street-level imagery\" in Configure map menu.";
-"osmand_development_plugin_description" = "Allows to configure OsmAnd for testing: simulate navigation routes, check the screen rendering performance, etc. Plugin is not required for normal application use.";
-"worldwide_maps" = "All World Maps";
-"purchases_feature_desc_wikipedia" = "Having offline Wikipedia on your trip helps you learn more about the places you visit. It is available offline and shows Wikipedia articles in relation to the points of interest right on the map. Don't forget to download Wikipedia maps for chosen region.";
-"srtm_plugin_description" = "Terrain information, such as contour lines, hillshades and slopes, helps you visually assess the shape of the land surface, considering curvature, extremes, steepness, points of equal height, and more. Topographic information on a map can be represented by slope shading, contour lines for the uphill and downhill, and the colour of the slope angle deviation from flat. Data from SRTM and ASTER. \n\nHow to - https://osmand.net/docs/user/plugins/contour-lines";
-"srtm_plugin_disabled" = "Contour lines disabled";
-"prch_srtm_info" = "Contour lines plugin enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
-"move_marker_bottom_sheet_title" = "Move the map to change object's position";
-"weather_plugin_description" = "Enable the Weather Plugin to plan a route considering the weather. Watch the coloured map of weather forecast, which is updated hourly for today, tomorrow, and the week ahead. \n\nWhile traveling see location based info widgets with temperature, precipitation, wind speed, pressure. \n\nWill be useful for hiking and long trips by bike or motorcycle.";
-"search_map" = "Searching map";
 
 //Icon categories
-"auth_failed" = "Authorization Error";
 
 // Release Notes
 // instruction:
 //https://github.com/osmandapp/OsmAnd-Issues/blob/master/Adding%20release%20information%20to%20IOS.md
-"ios_release_3_80" = "• Introduced \"Application Profiles\" with independent settings\n• New arrangement of settings by profiles and types: navigation, general, map and screen\n• Ability to import or export profile settings\n• Added data sources for Online photos\n• Added ability to download online maps to cache\n• Improved \"Search\" algorithms\n";
-"ios_release_3_90" = "• Introduced a \"Plan a route\" feature for planning future trips with the ability to create track segments using different navigation types\n• Added an option to enable a сompass over the \"Radius Ruler\" tool\n• Added \"POI label overlays\" option that allows to show names for favorites, track waypoints and markers on the map\n• Added new Quick actions for visibility of contour lines and terrain on the map, changing an application profile, deleting a nearest intermediate point\n• Fixed issues with missing Wikipedia search category\n• Settings Import: fixed bugs, added support for all data types available in OsmAnd\n• OpenStreetMap editing: fixed the time picker and inability to change the changeset comment\n";
-"ios_release_4_0" = "• New! \"Add favorite\" screen with options to select the custom icon, color, and shape\n• Added new \"Coordinates widget\" with coordinates of the current location\n• Added ability to import custom user-defined plugins\n• Significantly extended the import/export functionality\n• Distance by tap moved from the Radius ruler into a separate option\n• Fixed CarPlay app freezes when iPhone screen is turned off\n• Plugins screen moved from the Maps & Resources to the main menu\n• Added Finnish localization\n• Fixed UI in landscape orientation for \"Plan a route\" screen\n• Added support for custom routing and rendering files\n• Fixed performance of markers direction line\n• Fixed issue with importing GPX files with uppercase extensions\n• Fixed issue with \"Follow track\" menu\n• Fixed import of OBF files\n";
-"ios_release_4_1" = "• Completely redesigned interaction with tracks: a new menu with charts, statistics, ability to change the appearance, coloring by speed, height and slope, and track selection on the map• New screen for searching by coordinates in different formats\n• Improved coordinate search in OLC format\n• New user-friendly menu for choosing languages to display Wikipedia articles on the map\n• Added ability to easily load maps of all regions of the country with a couple of clicks.\n• Added contour lines in feet (You need to download additional files)\n• Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n• New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n• Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
-"ios_release_4_2" = "• Route line appearance: added ability to set width and color\n• Tracks: added option for deleting several tracks at once\n• Track context menu: added scroll bar with waypoint groups\n• Map appearance: divided additional routes by type with ability to enable one from each category separately\n• Horseback riding: add new navigation type and app profile\n• OsmAnd files are now visible in the \"Files\" application\n• UX of options \"Use elevation data\" and \"Select elevation fluctuation\"  was improved, they were combined and renamed to \"Preferred terrain\", currently available for \"Bicycle\" and \"Pedestrian\" profiles.\n• New option \"Include heading\" for track recording\n• Street name widget: now show road shield and exit number during navigation\n• New Fitness and running routes on the map\n• CarPlay bug fixes, added gestures for touchscreens\n• Fixed import of GPX files from OSF package\n• Fixed import of custom plugins with included files\n• Fixed various crashes in the Route planning mode\n• Fixed crashes during Navigation\n";
 "icon_group_service" = "Tanafut";

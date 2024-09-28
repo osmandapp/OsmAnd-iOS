@@ -1852,7 +1852,6 @@
 "poi_select_category" = "Selectați categoria";
 "poi_category_and_type" = "Categoria și tipul de POI";
 "edit_filter_delete_dialog_title" = "Ștergeți acest filtru\?";
-"shared_string_email" = "E-mail";
 "shared_string_account_add" = "Adăugați un cont";
 "login_account" = "Cont";
 "shared_string_required" = "Necesar";
@@ -2887,7 +2886,6 @@
 "get_osmand_cloud" = "Obține OsmAnd Cloud";
 "map_widget_target_distance_desc" = "Arată distanța dintre cameră și locația țintă.";
 "map_widget_camera_tilt_desc" = "Arată unghiul de înclinare al camerei în modul perspectivă. Implicit este 90° (fără înclinare).";
-"shared_string_relief_3d" = "Relief 3D";
 "average_speed_time_interval_desc" = "Specificați intervalul de timp pentru calcularea vitezei medii.";
 "map_widget_zoom_level_desc" = "Arată nivelul actual de zoom al hărții.";
 "map_widget_camera_distance_desc" = "Arată altitudinea camerei deasupra nivelului suprafeței.";
@@ -2955,7 +2953,6 @@
 "osmAnd_team" = "Echipa OsmAnd";
 "ask_question_propose_features" = "Puneți întrebări, propuneți funcționalitate nouă";
 "download_install_beta_version" = "Descarcă și instalează versiunea beta a OsmAnd";
-"offline_wikivoyage" = "Wikivoyage offline";
 "download_file" = "Descarcă fișier";
 "saved_articles" = "Articole salvate";
 "shared_string_explore" = "Explorare";
@@ -3019,9 +3016,7 @@
 "shared_string_setup_route" = "Configurează o rută";
 "audionotes_plugin_name" = "Notițe audio/video";
 "shared_string_accessibility" = "Accesibilitate";
-"tracker_item" = "OsmAnd monitor";
 "my_data" = "Informațiile mele";
-"shared_string_author" = "Autor";
 "shared_string_remove_bookmark" = "Eliminați salvarea";
 "help_article_plugins_custom_name" = "Pachet personalizat";
 "shared_string_row_number" = "Rând %d";
@@ -3245,7 +3240,6 @@
 "track_appearance_3D_visualization" = "Vizualizare 3D";
 "shared_string_scale" = "Scară";
 "missing_or_outdated_maps_title" = "Hărți lipsă sau învechite";
-"osm_id" = "ID OSM";
 "vertical_exaggeration" = "Exagerare verticală";
 "calculate_online" = "Calculează online";
 "ios_release_4_7" = "• Panouri widget îmbunătățite în partea de sus și de jos pentru a găzdui toate widgeturile\n• Gestionare îmbunătățită pentru pistele vizibile pe hartă\n• Actualizat \"Analiză pe hartă\" cu posibilitatea de a afișa măsurători de la senzori\n• A fost adăugat suport îmbunătățit pentru etichete pentru GPX: link, autor, copyright și cuvinte cheie\n• A fost îmbunătățită configurarea widgeturilor, permițând utilizatorilor să mute paginile și rândurile\n• Gestionarea îmbunătățită a pistelor în \"My Places\" cu subfoldere și meniuri contextuale pentru piste și dosare\n• Sens giratoriu cu numărul de ieșire afișat acum pe CarPlay în timpul navigării\n• Controlul reliefului 3D cu o nouă opțiune \"Exagerare verticală\" pentru un peisaj mai dramatic\n• Vizualizați altitudinea pistei direct pe hartă într-o vizualizare 3D dinamică\n• Noi widget-uri: \"Glide Ratio\" și \"Sun Position\"\n• Personalizați \"Distanța în timpul navigației\": alegeți între numere precise sau rotunjite în sus\n• Limba aplicației va fi utilizată pentru denumirile de pe harta de ansamblu a lumii în locul limbilor locale\n• OsmAnd Cloud: A fost adăugată posibilitatea de a vă gestiona datele, inclusiv restaurarea fișierelor șterse și ștergerea contului dvs.\n• A fost adăugat suportul pentru etichete suplimentare pentru rutele turistice\n• A fost reparat widget-ul \"Coordonate\" unde, în unele cazuri, ultimele cifre erau omise\n• S-a reparat comportamentul butonului \"Mod 3D\": atingerea butonului nu salva unghiul de înclinare\n• S-a fixat culoarea barei de stare pentru versiunile mai vechi de iOS\n• Corectarea gesturilor de rotire și de ciupire pentru a mări harta pentru aplicația care rulează pe macOS\n";

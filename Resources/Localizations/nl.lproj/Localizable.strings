@@ -329,7 +329,6 @@
 "track_continue_rec_q" = "Wil je doorgaan met opnemen?";
 "save_track_interval_globally" = "Interval tussen geregistreerde punten";
 "track_start_rec" = "Start track opname";
-"track_rec_addon_q" = "Please activate Trip recording plugin to record and save your tracks";
 "track_interval_remember" = "Onthoud mijn keuze";
 "track_clear" = "Huidige track leeg maken";
 "track_clear_q" = "Wil je de huidige track leegmaken?";
@@ -472,7 +471,6 @@
 "shared_string_language" = "Taal";
 "shared_string_get" = "Installeren";
 "srtm_plugin_disabled" = "Hoogtelijnen uitgeschakeld";
-"prch_srtm_info" = "Contour lines plugin enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Openen";
 "osm_live_active" = "Actief";
 "moving_time" = "Tijd in beweging";
@@ -1312,7 +1310,6 @@
 "welmode_download_maps" = "Kaarten downloaden";
 "added_profiles_descr" = "Door plug-in toegevoegde profielen";
 "gpxup_identifiable" = "Identificeerbaar";
-"navigate_point_olc" = "Open Location Code (OLC)";
 "no_waypoints_found" = "Geen punten gevonden";
 "gpx_upload_identifiable_visibility_descr" = "\"Identificeerbaar\" betekent dat de track openbaar wordt getoond in je GPS-tracks en in openbare GPS-track-lijsten. Dat wil zeggen dat andere gebruikers de onbewerkte track kunnen downloaden en deze aan je gebruikersnaam kunnen koppelen. Gegevens die via de trackpoints-API worden aangeboden, verwijzen naar je oorspronkelijke trackpagina. Tijdaanduidingen van de traceerpunten zijn beschikbaar via de openbare GPS-API.";
 "srtm_download_single_help_message" = "Selecteer a.u.b. een variant. Je zal het bestand opnieuw moeten downloaden om het formaat te wijzigen.";
@@ -1836,7 +1833,6 @@
 "upload_local_version" = "Load lokale versie op";
 "shared_string_expires" = "Vervalt";
 "rendering_attr_showMtbScale_name" = "MTB moeilijkheidsgraad tonen";
-"navigate_point_format_DMS" = "GGG MM SS.S";
 "reset_to_default_category_button_promo" = "\'Terugzetten naar standaardwaarden\' zal de sorteervolgorde terugzetten zoals die was bij installatie.";
 "profile_settings" = "Instellingen voor profiel";
 "routing_attr_motor_type_hybrid_name" = "Hybride";
@@ -1848,7 +1844,6 @@
 "rendering_attr_showFitnessTrails_description" = "Toon sport paden";
 "short_location_on_map" = "Breedtegraad:\t%@ \nLengtegraad: %@";
 "sett_generic_ext_input" = "Toetsenbord";
-"navigate_point_format_DM" = "GGG MM.MMM";
 "routing_attr_freeride_policy_only_if_necessary_name" = "Alleen indien noodzakelijk";
 "rendering_attr_depthContourColorScheme_description" = "Kleurschema van dieptelijnen";
 "rendering_attr_horseScale_name" = "Begaanbaarheid van ruiterpaden";
@@ -2548,7 +2543,6 @@
 "ask_question_propose_features" = "Vragen stellen, functies voorstellen";
 "missing_or_outdated_maps_description" = "Sommige offlinekaarten die nodig zijn voor deze route, ontbreken of zijn niet up to date. Download of update deze kaarten.";
 "shared_string_round_up" = "Afronden";
-"osm_id" = "OSM-ID";
 "show_icon" = "Icoon tonen";
 "about_osmAnd" = "Over OsmAnd";
 "activity" = "Activiteit";

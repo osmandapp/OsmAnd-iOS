@@ -985,7 +985,7 @@
 "downloading" = "Preuzima se";
 
 // Route planning
-"plan_route" = "Planiranje rute";
+"plan_route" = "Plan rute";
 "coord_input_add_point" = "Dodaj tačku";
 "point_num" = "Tačka %d";
 "points_count" = "Tačke:";
@@ -2803,7 +2803,7 @@
 "help_article_personal_import_export_name" = "Uvoz / izvoz";
 "help_article_personal_profiles_name" = "Profili (podešavanja)";
 "help_article_personal_storage_name" = "Skladište";
-"help_article_plan_route_name" = "Planiranje rute";
+"help_article_plan_route_name" = "Plan rute";
 "help_article_plan_route_coordinate_input_name" = "Unos koordinata";
 "help_article_plan_route_web_name" = "WEB planer rute";
 "help_article_search_search_all_name" = "Pretraži sve";

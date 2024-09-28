@@ -534,7 +534,7 @@
 "add_online_source" = "Tambahkan sumber daring";
 "srtm_color_scheme" = "Skema warna";
 "shared_string_appearance" = "Tampilan";
-"settings_app_theme" = "Tema aplikasi";
+"settings_app_theme" = "Tema App";
 "light_theme" = "Terang";
 "units_and_formats" = "Satuan & format";
 "osmand_settings" = "Pengaturan OsmAnd";
@@ -2441,3 +2441,4 @@
 "location_radius_description" = "Menunjukkan seberapa luas lingkaran yang menunjukkan keakuratan lokasi Anda saat ini";
 "quick_action_toggle_preference" = "Sebuah alihan untuk mengubah preferensi.";
 "location_radius" = "Radius lokasi";
+"osm_id" = "ID OSM";

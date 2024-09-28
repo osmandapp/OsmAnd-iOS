@@ -1702,7 +1702,7 @@
 "allow_3D_view" = "2.5D вигляд";
 "do_not_rotate" = "Не обертати";
 "light_theme" = "Світла";
-"settings_app_theme" = "Тема застосунку";
+"settings_app_theme" = "Тема";
 "shared_string_meters" = "метри";
 "shared_string_tones" = "тонни";
 "accessibility_announce" = "Оголошення";
@@ -3475,3 +3475,4 @@
 "location_radius" = "Радіус розташування";
 "weather_temperature_fahrenheit" = "F°";
 "weather_temperature_celsius" = "C°";
+"navigate_point_olc" = "Open Location Code (OLC)";

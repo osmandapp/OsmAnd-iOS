@@ -2332,7 +2332,7 @@
 "coordinates_format" = "Zapis koordinat";
 "developer_widgets" = "Gradniki za razvijalce";
 "bluetooth_found_title" = "Najdeno: %d";
-"external_device_status_connect" = "Poveži";
+"external_device_status_connect" = "Poveži se";
 "press_again_to_change_the_map_orientation" = "Pritisnite znova, da spremenite usmerjenost zemljevida";
 "purchases_feature_relief_3d_description" = "Imej in opazuj maketo svoje soseske ali cele celine.";
 "external_device_details_information" = "Podrobnosti";

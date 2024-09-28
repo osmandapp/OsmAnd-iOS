@@ -3193,3 +3193,8 @@
 "show_along_the_route" = "Wyświetlaj wzdłuż trasy";
 "shared_string_local" = "Pobrane";
 "quick_action_toggle_preference" = "Zmiana preferencji.";
+"rendering_value_sectors_name" = "Sektory";
+"app_mode_offroad" = "Off-road";
+"app_mode_pickup_truck" = "Pickup";
+"shared_string_relief_3d" = "Relief 3D";
+"shared_string_ok" = "Ok";

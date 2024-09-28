@@ -315,7 +315,7 @@
 "shared_string_from" = "fra";
 "shared_string_time" = "Tid";
 "time_of_day" = "Tid på dagen";
-"shared_string_distance" = "Distanse";
+"shared_string_distance" = "Avstand";
 "retry" = "Prøv igjen";
 "shared_string_enabled" = "Aktivert";
 "shared_string_reset" = "Tilbakestill";
@@ -2571,7 +2571,7 @@
 "shared_string_development" = "Utvikling";
 "missing_or_outdated_maps_title" = "Manglende eller utdaterte kart";
 "shared_string_millimeters" = "Millimeter";
-"shared_string_bottom" = "Nederst";
+"shared_string_bottom" = "Bunn";
 "visualization_3d_track_line" = "Sporlinje";
 "shared_string_row_number" = "Rad %d";
 "unsaved_changes" = "Ulagrede endringer";
@@ -2662,3 +2662,6 @@
 "view_angle" = "Synsvinkel";
 "resting_navigation_position" = "Hvile- og navigasjonsposisjon";
 "navigation_position" = "Navigasjonsposisjon";
+"navigate_point_olc" = "Open Location Code (OLC)";
+"map_widget_gps_info" = "GPS-info";
+"osm_id" = "OSM-ID";

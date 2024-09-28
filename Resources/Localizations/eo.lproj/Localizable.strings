@@ -505,7 +505,7 @@
 "add_online_source" = "Aldoni enretan fonton";
 "srtm_color_scheme" = "Kolor-skemo";
 "shared_string_appearance" = "Aspekto";
-"settings_app_theme" = "Etoso de aplikaĵo";
+"settings_app_theme" = "Etoso";
 "light_theme" = "Hela";
 "units_and_formats" = "Mezurunuoj kaj formoj";
 "osmand_settings" = "Ĝeneralaj agordoj";
@@ -2402,7 +2402,7 @@
 "dangerous_goods_description" = "Sur kelkaj vojoj kaj tuneloj transporto de danĝeraj materialoj estas malpermesata.";
 "shared_string_item" = "Elemento";
 "step_by_step" = "Turno-post-turno";
-"shared_string_bottom" = "Sube";
+"shared_string_bottom" = "malsupro";
 "display_position_automatic_descr" = "Dependas de map-orientiĝo: sube por “Direkto de movado” kaj centre por ĉiuj aliaj.";
 "visualization_3d_track_line" = "Linio de spuro";
 "visualization_3d_visualized_by" = "Vidigi per";
@@ -2496,3 +2496,4 @@
 "shared_string_all_icons" = "Ĉiuj emblemoj";
 "navigation_position_icon_summary" = "Bildsimbolo montrata kiam vi navigas aŭ moviĝas.";
 "shared_string_local" = "Lokaj";
+"shared_string_min" = "Min.";

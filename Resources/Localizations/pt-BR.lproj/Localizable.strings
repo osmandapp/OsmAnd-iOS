@@ -3303,7 +3303,7 @@
 "visualization_3d_track_line" = "Linha da trilha";
 "fixed_height" = "Altura fixa";
 "shared_string_top" = "Topo";
-"shared_string_bottom" = "Em baixo";
+"shared_string_bottom" = "Base";
 "shared_string_top_bottom" = "Topo e base";
 "track_3d_empty_view_title" = "Visualização da trilha 3D";
 "display_position_automatic_descr" = "Depende da orientação do mapa: a parte inferior para orientação do movimento, o centro para todo o resto.";
@@ -3405,3 +3405,8 @@
 "resting_navigation_position" = "Posição de repouso e navegação";
 "rendering_attr_showDirtbikeTrails_name" = "Mostrar trilhas de terra para bicicletas";
 "rendering_attr_showDirtbikeTrails_description" = "Mostrar trilhas de terra para bicicletas";
+"navigate_point_format_DM" = "GGG MM.MMM";
+"navigate_point_format_D" = "GGG.GGGGG";
+"navigate_point_format_DMS" = "GGG MM SS.S";
+"short_location_on_map" = "Latitude %@ \nLongitude %@";
+"offline_wikivoyage" = "Wikivoyage offline";

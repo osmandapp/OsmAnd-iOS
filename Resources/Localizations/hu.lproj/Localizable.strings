@@ -2724,7 +2724,7 @@
 "activity" = "tevékenység";
 "shared_string_travel_guides" = "Útikalauzok";
 "mapillary_widget_desc" = "Gyors hozzáférést biztosít a Mapillary alkalmazáshoz utcaszintű képek hozzáadásához.";
-"settings_app_theme" = "Alkalmazás témája";
+"settings_app_theme" = "Téma";
 "route_maneuvers_desc" = "A navigációs widgetek a navigáció során vannak engedélyezve, és olyan információkat jelenítenek meg, mint a távolság, az érkezési vagy hátralévő idő, a következő kanyarok, az irány, az aktuális utcanév, a sávokra vonatkozó információk, a sebességkorlátozás, a közeledő figyelmeztetések, az érdekes pontok (POI-k) vagy az útpontok.";
 "saved_articles" = "Könyvjelzőzött szócikkek";
 "osmand_cloud_deletion_all_data_warning" = "Minden adat %@ lesz az OsmAnd Cloud-ból. Az eszközön lévő adatok érintetlenek maradnak.";
@@ -2822,7 +2822,7 @@
 "shared_string_top" = "Fent";
 "shared_string_top_bottom" = "Fent és lent";
 "missing_or_outdated_maps_title" = "Hiányzó vagy nem naprakész térképek";
-"shared_string_bottom" = "Lent";
+"shared_string_bottom" = "Alulra";
 "avoid_pt_types_descr" = "A navigáció során elkerülendő tömegközlekedési módok kijelölése:";
 "add_button" = "Gomb hozzáadása";
 "shared_string_millimeters" = "milliméter";

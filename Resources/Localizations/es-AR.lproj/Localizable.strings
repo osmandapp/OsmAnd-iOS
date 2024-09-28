@@ -3415,3 +3415,7 @@
 "location_radius" = "Radio de ubicación";
 "resting_position_icon_summary" = "Icono que se muestra en reposo.";
 "profile_icon" = "Icono del perfil";
+"short_location_on_map" = "Lat %@ \nLon %@";
+"navigate_point_format_D" = "GGG.GGGGG";
+"navigate_point_format_DMS" = "GGG MM SS.S";
+"navigate_point_format_DM" = "GGG MM.MMM";

@@ -3220,3 +3220,7 @@
 "shared_string_local" = "Hämtat";
 "show_along_the_route" = "Visa utmed rutten";
 "quick_action_toggle_preference" = "Knapp för att växla preferens.";
+"offline_wikivoyage" = "Wikivoyage offline";
+"osm_id" = "OSM-ID";
+"shared_string_relief_3d" = "3D relief";
+"map_widget_gps_info" = "GPS-info";

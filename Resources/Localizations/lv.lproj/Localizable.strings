@@ -1464,3 +1464,8 @@
 "shared_string_show" = "Rādīt";
 "shared_string_local" = "Krātuve";
 "show_along_the_route" = "Rādīt maršruta laikā";
+"nm" = "nm";
+"navigate_point_format_D" = "DDD.DD";
+"navigate_point_format_DM" = "DDD MM.MM";
+"gpx_selection_segment_title" = "Segments";
+"navigate_point_format_DMS" = "DDD MM SS.SS";

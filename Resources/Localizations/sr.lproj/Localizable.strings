@@ -671,7 +671,7 @@
 "shared_string_appearance" = "Изглед";
 "map_settings_line_density_slowdown_warning" = "Велика густина линија може успорити приказивање мапе";
 "map_settings_available_srtm_maps_descr" = "Додатне мапе су потребне да бисте видели сенке брда на мапи";
-"settings_app_theme" = "Тема прогама";
+"settings_app_theme" = "Тема програма";
 "light_theme" = "Светла";
 "do_not_rotate" = "Не ротирај";
 "units_of_speed" = "Јединице брзине";
@@ -3325,7 +3325,7 @@
 "visualization_3d_wall_color" = "Боја зида";
 "visualization_3d_track_line" = "Линија трага";
 "track_3d" = "3Д путања";
-"shared_string_bottom" = "На дну";
+"shared_string_bottom" = "Дно";
 "shared_string_top_bottom" = "Врх и дно";
 "track_3d_empty_view_title" = "ЗД приказ Путање";
 "track_3d_empty_view_description" = "Истражите траг у просторном приказу! Прегледајте по висини, брзини и још много тога непосредно на карти.";

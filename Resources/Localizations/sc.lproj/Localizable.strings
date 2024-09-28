@@ -2986,3 +2986,4 @@
 "show_along_the_route" = "Ammustra in s\'àndala";
 "quick_action_toggle_preference" = "Unu butone pro mudare sas preferèntzias.";
 "shared_string_local" = "Installadas";
+"short_location_on_map" = "Lat %@ \nLon %@";

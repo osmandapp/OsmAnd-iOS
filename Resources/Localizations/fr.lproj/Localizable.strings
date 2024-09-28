@@ -3335,3 +3335,4 @@
 "location_radius_description" = "Affiche un rond représentant la précision de votre position actuelle";
 "navigation_position_icon_summary" = "Icône affichée lorsque vous êtes guidés ou que vous vous déplacez.";
 "profile_icon" = "Icône du profil";
+"shared_string_distance" = "DIstance";

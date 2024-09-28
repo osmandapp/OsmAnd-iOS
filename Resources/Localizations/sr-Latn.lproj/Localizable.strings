@@ -3432,3 +3432,4 @@
 "location_radius_description" = "Prikazuje kružno područje koje predstavlja tačnost trenutne lokacije";
 "navigation_position_icon" = "Ikona navigacione pozicije";
 "location_radius" = "Radijus lokacije";
+"tracker_item" = "OsmAnd monitor";

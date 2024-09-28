@@ -3411,3 +3411,7 @@
 "profile_icon" = "Icono del perfil";
 "resting_position_icon" = "Icono de la ubicación al estar en reposo";
 "view_angle" = "Ángulo de visión";
+"navigate_point_format_DM" = "GGG MM.MMM";
+"navigate_point_format_DMS" = "GGG MM SS.S";
+"navigate_point_format_D" = "GGG.GGGGG";
+"short_location_on_map" = "Lat %@ \nLon %@";

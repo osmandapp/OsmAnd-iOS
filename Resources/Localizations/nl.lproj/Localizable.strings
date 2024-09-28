@@ -2235,7 +2235,7 @@
 "backup_error_invalid_token" = "Token is niet geldig";
 "map_widget_target_distance" = "Afstand van camera tot doelwit";
 "external_device_details_battery" = "Batterij";
-"settings_app_theme" = "Applicatie-thema";
+"settings_app_theme" = "App-kleurenschema";
 "banner_payment_free_backup_settings_title" = "Gratis instellingen back-up";
 "shared_string_duplicate" = "Dubbel";
 "shared_string_format" = "Formaat";
@@ -2573,3 +2573,7 @@
 "shared_string_local" = "Geïnstalleerd";
 "show_along_the_route" = "Toon langs de route";
 "yard" = "yard";
+"navigate_point_olc" = "Open Location Code (OLC)";
+"navigate_point_format_DMS" = "GGG MM SS.S";
+"osm_id" = "OSM-ID";
+"navigate_point_format_DM" = "GGG MM.MMM";

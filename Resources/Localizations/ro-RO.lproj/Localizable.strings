@@ -1206,7 +1206,7 @@
 "units_of_speed" = "Unități de viteză";
 "allow_3D_view" = "Vedere 2.5D";
 "do_not_rotate" = "Nu rotiți";
-"settings_app_theme" = "Temă aplicație";
+"settings_app_theme" = "Tema aplicației";
 "map_settings_available_srtm_maps_descr" = "Hărți suplimentare sunt necesare pentru a vedea Hillshade pe hartă";
 "map_settings_line_density_slowdown_warning" = "Densitatea mare a liniilor poate încetini redarea hărților";
 "map_settings_contour_zoom_level_descr" = "Selectați nivelul de zoom, de la care vor fi afișate curbele (izolinii)";
@@ -2964,7 +2964,7 @@
 "troubleshooting" = "Deparare";
 "about_osmAnd" = "Despre OsmAnd";
 "shared_string_data_type" = "Tip date";
-"map_settings_topography" = "Curbe de nivel";
+"map_settings_topography" = "Linii de contur";
 "shared_string_discard_changes" = "Anulați modificările";
 "setup" = "Configurează";
 "gitHub_discussion" = "Discuții pe GitHub";
@@ -3136,7 +3136,7 @@
 "ant_plus_searching_text_description" = "Țineți dispozitivul aproape de senzor. Trebuie să activați senzorul pentru ca OsmAnd să îl poată găsi.";
 "external_device_forget_sensor" = "Uită senzor";
 "external_device_forget_sensor_description" = "Senzorul va fi eliminat din listă. Veți putea să împerecheați din nou acest senzor în orice moment.";
-"external_device_status_connect" = "Conectați-vă";
+"external_device_status_connect" = "Conectare";
 "ant_plus_nothing_found_description" = "Asigurați-vă că: \n– Bluetooth e pornit \n– Senzorul e activ \n– Acest dispozitiv se află lângă senzor";
 "purchases_feature_desc_external_sensors" = "Afișați și înregistrați date de la senzorii externi: viteza bicicletei, puterea exercitată, cadența pedalării și pulsul.";
 "default_appearance_desc" = "Culoarea, pictograma și forma implicite se vor aplica punctelor favorite adăugate în grup.";
@@ -3367,3 +3367,8 @@
 "profile_icon" = "Pictogramă profil";
 "location_radius" = "Raza de localizare";
 "resting_position_icon" = "Pictograma poziției de odihnă";
+"shared_string_author" = "Autor";
+"osm_id" = "ID OSM";
+"shared_string_relief_3d" = "Relief 3D";
+"offline_wikivoyage" = "Wikivoyage offline";
+"tracker_item" = "OsmAnd monitor";

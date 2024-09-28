@@ -2428,7 +2428,7 @@
 "specify_number_of_dir_indicators_desc" = "Indiqueu el nombre d\'indicadors de direcció.";
 "shared_string_light" = "Lluminós";
 "external_sensors_source_of_data" = "Procedència de les dades";
-"map_settings_topography" = "Dades de corbes de nivell";
+"map_settings_topography" = "Corbes de nivell";
 "map_screen_orientation" = "Orientació de pantalla";
 "shared_string_hand" = "Mà";
 "default_appearance_desc" = "El color, l’icona i la forma predeterminada s’aplicaran als punts preferits agregats al grup.";
@@ -2536,3 +2536,7 @@
 "shared_string_all_icons" = "Totes les icones";
 "profile_icon" = "Icona del perfil";
 "location_radius" = "Radi d\'ubicació";
+"navigate_point_format_DM" = "GGG MM.MMM";
+"navigate_point_format_D" = "GGG.GGGGG";
+"nm" = "NM";
+"navigate_point_format_DMS" = "GGG MM SS.S";

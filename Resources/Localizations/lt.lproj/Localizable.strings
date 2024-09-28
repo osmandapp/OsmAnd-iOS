@@ -1499,7 +1499,7 @@
 "shared_string_read" = "Skaityti";
 "shared_string_any" = "Bet kurią";
 "map_marker_1st" = "Pirmoji žymė";
-"weather_update_disabled" = "Išjungta";
+"weather_update_disabled" = "Išjungtas";
 "shared_string_move" = "Perkelti";
 "global_settings" = "Globalūs nustatymai";
 "visibility" = "Matomumas";
@@ -1522,7 +1522,7 @@
 "shared_string_light" = "Šviesi";
 "wikivoyage_download_pics" = "Atsisiųsti paveikslėlius";
 "shared_string_error" = "Klaida";
-"external_device_status_connect" = "Prijungti";
+"external_device_status_connect" = "Prisijungti";
 "lang_sr-Latn" = "Serbų (lotynų)";
 "specify_number_of_dir_indicators_desc" = "Pasirinkti, kiek krypčių rodyklių bus rodoma.";
 "map_orientation_default" = "Kaip ir įrenginys";
@@ -1701,3 +1701,4 @@
 "driving_region_india" = "Indija";
 "shared_string_show" = "Rodyti";
 "shared_string_local" = "Vietinis";
+"download_wikipedia_maps" = "Vikipedija";

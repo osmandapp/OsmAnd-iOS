@@ -2423,7 +2423,7 @@
 "shared_string_trash" = "Kôš";
 "shortest_distance_first" = "Najkratšia vzdialenosť nahor";
 "external_device_status_connect" = "Pripojiť";
-"map_settings_topography" = "Údaje vrstevníc";
+"map_settings_topography" = "Vrstevnice";
 "precipitation_widget_desc" = "Zobrazí zrážky pre súčasný stred mapy.";
 "map_widget_sunset_desc" = "Zobrazuje čas najbližšieho západu slnka alebo zostávajúci čas do západu slnka.";
 "generate_slope_from_3d_maps" = "Generovať rastrové mapy sklonov svahov z 3D máp";

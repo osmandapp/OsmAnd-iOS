@@ -396,3 +396,11 @@
 "shared_string_favorite" = "Gunsteling …";
 "shared_string_favorites" = "Gunstelinge";
 "download_srtm_maps" = "Kontoerlyne";
+"rendering_value_high_name" = "Hoog";
+"rendering_value_medium_w_name" = "Gemiddeld";
+"rendering_value_low_name" = "Laag";;
+"lang_en" = "Engels";
+"city_type_city" = "Stad";
+"app_mode_pedestrian" = "Voetganger";
+"search_address_street" = "Straat";
+"app_mode_bicycle" = "Fiets";

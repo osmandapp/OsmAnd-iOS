@@ -2917,7 +2917,7 @@
 "article_added_to_bookmark" = " aggiunto ai segnalibri.";
 "map_orientation_landscape" = "Orizzontale";
 "weather_update_over_any_network" = "Con qualsiasi rete";
-"external_device_status_connect" = "Connetti";
+"external_device_status_connect" = "Collegare";
 "shared_string_result" = "Risultato";
 "no_travel_guides_data_descr" = "Scarica le guide di viaggio Wikivoyage per visualizzare articoli su luoghi di tutto il mondo senza una connessione a Internet.";
 "shared_string_travel" = "Viaggio";
@@ -3355,3 +3355,12 @@
 "resting_position_icon" = "Icona della posizione di riposo";
 "resting_position_icon_summary" = "Icona visualizzata quando non ti stai muovendo.";
 "resting_position" = "Posizione di riposo";
+"mile_per_hour" = "mi/h";
+"shared_string_ok" = "Ok";
+"offline_wikivoyage" = "Wikivoyage offline";
+"srtm_plugin_name" = "Topografia";
+"short_location_on_map" = "Lat %@ \nLon %@";
+"shared_string_widgets" = "Widget";
+"navigate_point_latitude" = "Latitudine";
+"navigate_point_longitude" = "Longitudine";
+"telegram_chats" = "Chat Telegram";

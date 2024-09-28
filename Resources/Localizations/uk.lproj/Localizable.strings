@@ -2422,7 +2422,6 @@
 "simulate_in_progress" = "Виконується";
 "simulate_location_unselected_track_footer" = "Вам потрібно вибрати файл треку";
 "simulate_location_track_select_descr" = "Виберіть трек, який використовуватиметься джерелом для переміщення.";
-"simulate_location_movement_speed_x2" = "х2";
 "simulate_location_movement_speed_x3_desc" = "Швидкість руху під час імітування буде у 3 рази вищою за швидкість у вибраному файлі.";
 "simulate_location_movement_speed_original_desc" = "Швидкість переміщення під час імітації дорівнюватиме швидкості у вибраному файлі.";
 "simulate_location_movement_speed_x4_desc" = "Швидкість руху під час імітування буде у 4 рази вищою за швидкість у вибраному файлі.";
@@ -3476,4 +3475,3 @@
 "location_radius" = "Радіус розташування";
 "weather_temperature_fahrenheit" = "F°";
 "weather_temperature_celsius" = "C°";
-"navigate_point_olc" = "Open Location Code (OLC)";

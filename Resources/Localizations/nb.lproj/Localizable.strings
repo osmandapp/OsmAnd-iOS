@@ -363,7 +363,6 @@
 "save_current_track" = "Lagre gjeldende spor";
 "save_current_track_descr" = "Lagre nåværende spor som GPX-fil nå.";
 "save_track_interval_globally" = "Loggeintervall";
-"track_rec_addon_q" = "Please activate Trip recording plugin to record and save your trips";
 "shared_string_clear" = "Slett";
 "quick_action_poi_list" = "Interessepunktliste";
 "save_track_to_gpx" = "Auto-opptak av spor under navigering";
@@ -1463,7 +1462,6 @@
 "travel_routes" = "Reiseruter";
 "added_profiles" = "Tillagte profiler";
 "route_between_points_warning_desc" = "Deretter juster ditt spor til nærmeste tillatte vei med en av navigeringsprofilene for å bruke dette alternativet.";
-"navigate_point_olc" = "Open Location Code (OLC)";
 "shared_string_feet" = "fot";
 "download_map_dialog" = "Kartnedlastingsdialog";
 "shared_string_navigation" = "Navigering";
@@ -2212,7 +2210,6 @@
 "map_orientation_landscape" = "Landskap";
 "activity_type_riding_name" = "Ridning";
 "time_to_destination_widget_desc" = "Viser «Ankomsttid» eller «Anslått tid til ankomst» til siste målpunkt. Tid oppdateres hele tiden under navigasjon og er lik måltiden fra nåværende posisjon.";
-"map_widget_gps_info" = "GPS-info";
 "help_article_navigation_guidance_voice_navigation_name" = "Talemeldinger / Varsler";
 "terrain_3D_maps" = "Terrengkart";
 "help_article_map_raster_maps_name" = "Rasterkart (nettbasert / frakoblet)";
@@ -2573,7 +2570,6 @@
 "edit_tilesource_minzoom" = "Minste forstørrelse";
 "shared_string_development" = "Utvikling";
 "missing_or_outdated_maps_title" = "Manglende eller utdaterte kart";
-"osm_id" = "OSM-ID";
 "shared_string_millimeters" = "Millimeter";
 "shared_string_bottom" = "Nederst";
 "visualization_3d_track_line" = "Sporlinje";

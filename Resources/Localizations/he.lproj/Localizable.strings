@@ -524,6 +524,7 @@
 "light_theme" = "בהיר";
 "units_and_formats" = "יחידות ותבניות";
 "osmand_settings" = "הגדרות OsmAnd";
+"global_settings_descr" = "משפיע על כל היישומון.";
 
 // Intro
 "shared_string_skip" = "דילוג";

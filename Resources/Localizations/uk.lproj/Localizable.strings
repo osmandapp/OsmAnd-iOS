@@ -2785,7 +2785,7 @@
 "confirm_history_item_delete" = "Ви впевнені, що хочете видалити (%ld) елементи історії?";
 "search_favorites" = "Пошук в Закладках";
 "rotate_map_manual_opt" = "Обертається вручну";
-"compass_click_desc" = "Підказка: Торкніться віджета компаса, щоб змінити режим орієнтації мапи.";
+"compass_click_desc" = "Двічі торкніться віджета компаса, щоб змінити режим орієнтації мапи.";
 "map_widget_zoom_level" = "Масштаб";
 "map_widget_target_distance" = "Відстань від камери до цілі";
 "wikivoyage_download_pics" = "Завантажити зображення";

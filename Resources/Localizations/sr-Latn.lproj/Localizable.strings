@@ -1592,7 +1592,6 @@
 "shared_string_get" = "Preuzmi";
 "srtm_plugin_disabled" = "Topografija je onemogućena";
 "prch_wiki_info" = "Dodatak Vikipedija omogućava informacije na Vikipediji za mape na koje imate pravo, koje ste kupili ili preuzeli u okviru besplatnog ograničenja.";
-"prch_srtm_info" = "Contour lines plugin enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Otvori";
 "time_closed" = "Zatvoreno";
 "time_will_open" = "Otvoriće se";
@@ -2972,7 +2971,6 @@
 "osmand_depelopment_simulate_location_section" = "Simulirati";
 "simulate_in_progress" = "U toku";
 "simulate_location_track_select_descr" = "Odaberite putanju kao izvor za pomeranje lokacije.";
-"simulate_location_movement_speed_x3" = "×3";
 "product_desc_development" = "Za programere i iskusne korisnike";
 "cloud_show" = "Prikaži oblake";
 "use_login_and_password_description" = "Upotrebite vaš i-meil/login i lozinku da bi se ulogovali na OpenStreetMap.org.";
@@ -3027,8 +3025,6 @@
 "weather_pressure_enable_descr" = "Omogućite da vidite sloj pritiska na mapi.";
 "selected_tracks_count" = "Putanje - %d";
 "delete_tracks_bottom_sheet_description_regular_part" = "Da li ste sigurni da želite da izbrišete ";
-"simulate_location_movement_speed_x2" = "×2";
-"simulate_location_movement_speed_x4" = "×4";
 "wind_show" = "Prikaži vetar";
 "whats_here" = "Šta je ovde";
 "travel_guides_no_file_error" = "Greška: Nema regionalnog fajla podataka";
@@ -3222,7 +3218,6 @@
 "help_article_plugins_openplacereviews_name" = "Utisci otvorenih mesta (OpenPlaceReviews)";
 "global_settings" = "Opšta podešavanja";
 "shared_string_setup_route" = "Podešavanje rute";
-"tracker_item" = "OsmAnd monitor";
 "bearing_secondary_desc" = "Možeš promeniti u: %@ – %@ – %@.";
 "coordinates_widget_secondary_desc" = "Oblik koordinata se može promeniti u %@ – %@ – %@.";
 "widget_secondary_desc_part_of" = "Deo %@ dodatka.";

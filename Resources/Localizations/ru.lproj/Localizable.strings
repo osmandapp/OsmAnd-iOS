@@ -2731,7 +2731,7 @@
 "external_device_blood_pressure" = "Артериальное давление";
 "map_widget_next_sunset" = "Следующий закат";
 "help_article_map_point_layers_on_map_name" = "Точки на карте";
-"compass_click_desc" = "Нажатие на компас переключает режим ориентации.";
+"compass_click_desc" = "Двойное нажатие на компас переключает режим ориентации.";
 "simulate_in_progress" = "В процессе";
 "map_3d_mode_hint" = "Удерживайте кнопку для изменения положения.";
 "average_speed_skip_stops" = "Учитывать остановки";

@@ -161,7 +161,6 @@
 "routing_profile_geocoding" = "Geokodinimas";
 "fast_route_mode_descr" = "Įjunkite, kad būtų skaičiuojamas greičiausias maršrutas arba išjunkite, kad skaičiuotų taupiausią maršrutą.";
 "avoid_in_routing_title" = "Vengti…";
-"avoid_in_routing_descr_" = "Avoid toll roads, unpaved, ferries";
 "prefer_in_routing_title" = "Teikti pirmenybę…";
 "prefer_in_routing_descr" = "Teikti pirmenybę greitkeliams.";
 "relief_smoothness_factor_descr" = "Pageidaujama reljefas: plokščias arba kalvotas.";
@@ -425,12 +424,7 @@
 "gpxup_identifiable" = "Atpažįstamas";
 "gpxup_trackable" = "Stebimi";
 "gpxup_private" = "Privatūs";
-"gpx_upload_public_visibility_descr" = "\"Public\" means the trace is shown publicly in your GPS traces and in public GPS trace listings, and in the public trace list with timestamps in raw form. Data served via the API does not reference your trace page. Tracepoint timestamps are not available through the public GPS API, and tracepoints are not chronologically ordered.";
-"gpx_upload_identifiable_visibility_descr" = "\"Identifiable\" means that the trace will be shown publicly in your GPS traces and in public GPS trace listings, i.e. other users will be able to download the raw trace and associate it with your username. Public timestamped tracepoint data from the GPS API served via the trackpoints API will reference your original trace page.";
-"gpx_upload_trackable_visibility_descr" = "\"Trackable\" means the trace does not show up in any public listings, but processed trackpoints with timestamps from it (that can\'t be associated with you directly) do through downloads from the public GPS API.";
-"gpx_upload_private_visibility_descr" = "\"Private\" means the trace does not show up in any public listings, but trackpoints from it in unchronological order are available through the public GPS API without timestamps.";
 "save_track_to_gpx" = "Naviguojant išsaugoti judėjimo istoriją į GPX failą automatiškai";
-"save_track_to_gpx_descrp" = "Turn on to automatically save a track during navigation";
 "shared_string_speed" = "Greitis";
 "shared_string_slope" = "Nuolydis";
 
@@ -606,7 +600,6 @@
 "select_icon_profile_dialog_title" = "Pasirinkite piktogramą";
 "selected_profile" = "Pasirinktas profilis";
 "application_profiles" = "Programos profiliai";
-"import_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";
 "new_plugin_added" = "Pridėtas naujas papildinys";
 "reset_to_default" = "Atstatyti numatytąsias reikšmes";
 
@@ -624,7 +617,6 @@
 "add_point_before" = "Pridėti tašką prieš";
 "add_point_after" = "Pridėti tašką po";
 "delete_point" = "Ištrinti tašką";
-"only_selected_segment_recalc" = "Only the selected segment will be recalculated using the selected profile";
 "join_segments" = "Sujungti segmentus";
 "plan_route_create_new_route" = "Sukurti naują maršrutą";
 "plan_route_open_existing_track" = "Atidaryti egzistuojančia trasą";
@@ -710,12 +702,10 @@
 "filter_current_poiButton" = "Filtras";
 
 // Coordinate widget
-"coordinates_widget_current_location" = "Coordinates widget";
 "copied_to_clipboard" = "Nukopijuota į įškarpinę";
 // Quick action
 "no_overlay" = "Jokio viršutinio sluoksnio";
 "no_underlay" = "Jokio apatnio sluoksnio";
-"toggle_current_location" = "Show/hide coordinates widget";
 
 
 
@@ -852,8 +842,6 @@
 "osm_editing_plugin_name" = "OSM redagavimas";
 "osm_editing_plugin_description" = "Šis įskiepis leidžia kurti ar redaguoti LV, užregistruoti ar komentuoti OSM Pastabas, dalintis įrašytais GPX failais. OSM yra atviros visuomenės valdomas, viešas žemėlapio žymėjimo projektas. Dėl smulkesnės informacijos prašome kreiptis į https://openstreetmap.org. Aktyvus dalyvavimas yra labai vertinamas, prisidėti galite tiesiai OsmAnd, jei programoje nurodysite savo prisijungimo duomenis.";
 "plugin_mapillary_descr" = "Internetinės gatvės nuotraukos visiems. Atraskite vietas, bendradarbiaukite, fotografuokite pasaulį.";
-"worldwide_maps" = "All World Maps";
-"download_wikipedia_maps" = "Vikipedija";
 "purchases_feature_desc_wikipedia" = "Naršykite Wikipedia neprisijungę prie interneto. Straipsniai suskirstyti pagal šalis ir regionus ir pateikiami visomis kalbomis.";
 "srtm_plugin_name" = "Kontūrinės linijos";
 "srtm_plugin_description" = "Šis įskiepis įgalina tiek aukščio kontūrų linijų tiek ir (reljefo) kalnų šešėlių sluoksnių atvaizdavimą ant OsmAnd žemėlapių. Ši funkcija gali būti naudinga atletams, keliautojams ir visiems, kas aktuali reljefo struktūra. (Atkreipkite dėmesį į tai kad kontūrų linijos ir/arba reljefo duomenys yra atskiri, papildomi parsiuntimai prieinami aktyvavus įskiepį) \n \nPasaulio duomenys (tarp 70 laipsnių šiaurės ir 70 laipsnių pietų) yra paremti SRTM (Shuttle Radar Topography Mission) ir ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), vaizdo fiksavimo instrumento Terra, NASA Earth Observing System palydovo, matavimais. ASTER yra bendradarbiavimo tarp NASA, Japonijos ekonomikos, prekybos ir industrijos (METI) ministerijos ir Japan Space Systems (J-spacesystems) projektas.";
@@ -881,7 +869,6 @@
 "shared_string_not_selected" = "Nepasirinkta";
 "shared_string_get" = "Gauti";
 "srtm_plugin_disabled" = "Kontūro linijos išjungtos";
-"prch_srtm_info" = "Contour lines plugin enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Darbo laikas";
 "osm_live_active" = "Aktyvus";
 "public_transport_warning_title" = "Viešojo transporto navigacija šiuo metu beta testavime, tikėkitės klaidų ir netikslumų.";
@@ -1269,10 +1256,6 @@
 // Release Notes
 // instruction:
 //https://github.com/osmandapp/OsmAnd-Issues/blob/master/Adding%20release%20information%20to%20IOS.md
-"ios_release_3_80" = "• Introduced \"Application Profiles\" with independent settings\n• New arrangement of settings by profiles and types: navigation, general, map and screen\n• Ability to import or export profile settings\n• Added data sources for Online photos\n• Added ability to download online maps to cache\n• Improved \"Search\" algorithms\n";
-"ios_release_3_90" = "• Introduced a \"Plan a route\" feature for planning future trips with the ability to create track segments using different navigation types\n• Added an option to enable a сompass over the \"Radius Ruler\" tool\n• Added \"POI label overlays\" option that allows to show names for favorites, track waypoints and markers on the map\n• Added new Quick actions for visibility of contour lines and terrain on the map, changing an application profile, deleting a nearest intermediate point\n• Fixed issues with missing Wikipedia search category\n• Settings Import: fixed bugs, added support for all data types available in OsmAnd\n• OpenStreetMap editing: fixed the time picker and inability to change the changeset comment\n";
-"ios_release_4_0" = "• New! \"Add favorite\" screen with options to select the custom icon, color, and shape\n• Added new \"Coordinates widget\" with coordinates of the current location\n• Added ability to import custom user-defined plugins\n• Significantly extended the import/export functionality\n• Distance by tap moved from the Radius ruler into a separate option\n• Fixed CarPlay app freezes when iPhone screen is turned off\n• Plugins screen moved from the Maps & Resources to the main menu\n• Added Finnish localization\n• Fixed UI in landscape orientation for \"Plan a route\" screen\n• Added support for custom routing and rendering files\n• Fixed performance of markers direction line\n • Fixed issue with importing GPX files with uppercase extensions\n• Fixed issue with \"Follow track\" menu\n• Fixed import of OBF files\n";
-"ios_release_4_1" = "• Completely redesigned interaction with tracks: a new menu with charts, statistics, ability to change the appearance, coloring by speed, height and slope, and track selection on the map• New screen for searching by coordinates in different formats\n• Improved coordinate search in OLC format\n• New user-friendly menu for choosing languages to display Wikipedia articles on the map\n• Added ability to easily load maps of all regions of the country with a couple of clicks.\n• Added contour lines in feet (You need to download additional files)\n• Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n• New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n• Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
 "backup_welcome_back" = "Sveiki sugrįžę!";
 "altitude" = "Aukštis";
 "backup_error_subscription_was_used" = "Prenumerata arba akcijos kodas, naudojama kitoje paskyroje %@";

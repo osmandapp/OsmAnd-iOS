@@ -22,13 +22,17 @@ let OSMAND_REPOSITORIES_PATH = "/Users/nnngrach/Projects/Coding/OsmAnd/"
 let DEBUG_STOP_KEY = "empty_purchases_description"
 
 ///For turning off updating translations. In this mode scrip will only delete trash strings
-let DEBUG_STOP_UPDATING_TRANSLATIONS = true
+let DEBUG_STOP_UPDATING_TRANSLATIONS = false
 
 ///Start really slow finding process. Deletes all strings with equals keys and values.
 ///Usialy there are duplicates like "map_locale" = "Map Language";
 ///But sometimes it cal delete correct loalization like "shared_string_done" = "Готово"; for ru, bel, uk languages.
 ///So this is risky method. Use Git Diff for manually check and rever all non-english deleting.
-let DEBUG_RUN_SLOW_DUPLICATES_DELETING = true   // Danger mode
+let DEBUG_RUN_SLOW_DUPLICATES_DELETING = false   // Danger mode
+
+// For non-latin languages (Korean, Arabic, etc) just remove every english-only string. It's usuallu just a duplicate like "GPX", "GPS", etc
+// Upd: this cleaning is already done. Maybe we don't need to run it much more.
+let DEBUG_DELETE_ALL_LATIN_ONLY_STRINGS_FROM_NONLATIN_LANGS = false
 
 
 var iosEnglishDict: [String : String] = [:]
@@ -606,13 +610,10 @@ class IOSWriter {
                                 }
 
                                 
-                                /*
                                 // For non-latin languages (Korean, Arabic, etc) just remove every english-only string. It's usuallu just a duplicate like "GPX", "GPS", etc
-                                // Upd: this cleaning is already done. Maybe we don't need to run it much more.
-                                if removeLatinOnlyStringsForLanguages.contains(language) && isStringEnglishOnly(newString) {
+                                if DEBUG_DELETE_ALL_LATIN_ONLY_STRINGS_FROM_NONLATIN_LANGS && removeLatinOnlyStringsForLanguages.contains(language) && isStringEnglishOnly(newString) {
                                     isTrashString = true
                                 }
-                                */
                                 
                                 
                                 // add updated string if it's ok

@@ -6,99 +6,10 @@
 //  Copyright © 2024 OsmAnd. All rights reserved.
 //
 
-import Foundation
+import OsmAndShared
 
 private protocol TrackListUpdatableDelegate: AnyObject {
     func updateHostVCWith(rootFolder: TrackFolder, visibleTracksFolder: TrackFolder)
-}
-
-private class TrackFolder {
-    var path: String = ""
-    var tracks: [String: OAGPX] = [:]
-    var subfolders: [String: TrackFolder] = [:]
-    var tracksCount: Int = 0 // count of tracks in current folder and in subfolders
-    var parentFolder: TrackFolder?
-    var flattenedFolders: [String: TrackFolder] = [:]
-
-    func performForAllTracks(action: (_ track: OAGPX) -> Void) {
-        for track in tracks.values {
-            action(track)
-        }
-        for subfolder in subfolders.values {
-            subfolder.performForAllTracks(action: action)
-        }
-    }
-    
-    func performForSelfAndParent(action: (_ folder: TrackFolder) -> Void) {
-        action(self)
-        if let parentFolder {
-            parentFolder.performForSelfAndParent(action: action)
-        }
-    }
-    
-    func insertTrack(fileName: String, track: OAGPX) {
-        tracks[fileName] = track
-        performForSelfAndParent { folder in
-            folder.tracksCount += 1
-        }
-    }
-    
-    func insertToFlattenedFolders(path: String, subfolder: TrackFolder) {
-        performForSelfAndParent { folder in
-            folder.flattenedFolders[path] = subfolder
-        }
-    }
-    
-    func collectFolderInfo(_ folderPath: URL) {
-        do {
-            let allFolderContentURLs = try FileManager.default.contentsOfDirectory(at: folderPath, includingPropertiesForKeys: nil, options: [])
-            let subfoldersURLs = allFolderContentURLs.filter { $0.hasDirectoryPath }
-
-            for subfolderURL in subfoldersURLs {
-                let newSubfolderNode = TrackFolder()
-                newSubfolderNode.parentFolder = self
-                let subfolderName = subfolderURL.lastPathComponent
-                subfolders[subfolderName] = newSubfolderNode
-                
-                let relativeSubfolderPath = subfolderURL.standardizedFileURL.relativePath.replacingOccurrences(of: OsmAndApp.swiftInstance().gpxPath + "/", with: "")
-                newSubfolderNode.path = relativeSubfolderPath
-                insertToFlattenedFolders(path: relativeSubfolderPath, subfolder: newSubfolderNode)
-
-                newSubfolderNode.collectFolderInfo(subfolderURL)
-            }
-        } catch let error {
-            debugPrint(error)
-        }
-    }
-    
-    func getAllTracks() -> [OAGPX] {
-        var tracks = [OAGPX]()
-        performForAllTracks { gpx in
-            tracks.append(gpx)
-        }
-        return tracks
-    }
-    
-    func getAllTracksFilePaths() -> [String] {
-        var filePaths = [String]()
-        performForAllTracks { filePaths.append(OsmAndApp.swiftInstance().gpxPath.appendingPathComponent($0.gpxFilePath)) }
-        return filePaths
-    }
-    
-    func getFolderByPath(_ path: String) -> TrackFolder? {
-        let trimmedPath = path.hasPrefix("/") ? path.substring(from: 1) : path
-        return trimmedPath.isEmpty ? self : flattenedFolders[trimmedPath]
-    }
-    
-    func getTrackByPath(_ path: String) -> OAGPX? {
-        var result: OAGPX?
-        performForAllTracks { track in
-            if path == track.gpxFilePath {
-                result = track
-            }
-        }
-        return result
-    }
 }
 
 private enum SortingOptions {
@@ -116,7 +27,20 @@ private enum ButtonActionNumberTag: Int {
     case save = 2
 }
 
-class TracksViewController: OACompoundViewController, UITableViewDelegate, UITableViewDataSource, OATrackSavingHelperUpdatableDelegate, TrackListUpdatableDelegate, OASelectTrackFolderDelegate, OAGPXImportUIHelperDelegate, MapSettingsGpxViewControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate {
+final class TracksViewController: OACompoundViewController, UITableViewDelegate, UITableViewDataSource, OATrackSavingHelperUpdatableDelegate, TrackListUpdatableDelegate, OASelectTrackFolderDelegate, OAGPXImportUIHelperDelegate, MapSettingsGpxViewControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate, TrackFolderLoaderTaskLoadTracksListener {
+    
+    @IBOutlet private weak var tableView: UITableView!
+    
+    fileprivate var rootFolder: TrackFolder!
+    fileprivate var visibleTracksFolder: TrackFolder!
+    fileprivate var currentFolder: TrackFolder!
+    
+    fileprivate var isRootFolder = true
+    fileprivate var isVisibleOnMapFolder = false
+    fileprivate var shouldReload = false
+    fileprivate var currentFolderPath = ""   // in format: "rec/new folder"
+    
+    fileprivate weak var hostVCDelegate: TrackListUpdatableDelegate?
     
     private let visibleTracksKey = "visibleTracksKey"
     private let tracksFolderKey = "tracksFolderKey"
@@ -134,26 +58,18 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     private let isVisibleKey = "isVisibleKey"
     private let isFullWidthSeparatorKey = "isFullWidthSeparatorKey"
     
-    @IBOutlet private weak var tableView: UITableView!
-    
-    fileprivate weak var hostVCDelegate: TrackListUpdatableDelegate?
     private var tableData = OATableDataModel()
-    private var visibleTracksFolder = TrackFolder()
-    fileprivate var rootFolder = TrackFolder()
-    fileprivate var isRootFolder = true
-    fileprivate var isVisibleOnMapFolder = false
-    fileprivate var shouldReload = false
-    fileprivate var currentFolderPath = ""   // in format: "rec/new folder"
-    fileprivate var currentFolder = TrackFolder()
+    private var asyncLoader: TrackFolderLoaderTask?
+    
     private var recCell: OATwoButtonsTableViewCell?
     private var searchController = UISearchController()
     private var isSearchActive = false
     private var isFiltered = false
     private var searchText = ""
     
-    private var selectedTrack: OAGPX?
+    private var selectedTrack: GpxDataItem?
     private var selectedFolderPath: String?
-    private var selectedTracks: [OAGPX] = []
+    private var selectedTracks: [GpxDataItem] = []
     private var selectedFolders: [String] = []
     
     private var app: OsmAndAppProtocol
@@ -187,17 +103,39 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         importHelper.delegate = self
     }
     
-    // MARK: - Base UI settings
-
-    override func registerNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(onRefreshEnd), name: Notification.Name(kGPXDBTracksLoaded), object: nil)
+    internal func deferredLoadTracksFinished(folder: TrackFolder) {
+        debugPrint("function: \(#function)")
     }
-
+    
+    internal func loadTracksFinished(folder: TrackFolder) {
+        debugPrint("function: \(#function)")
+        currentFolder = getTrackFolderByPath(currentFolderPath) ?? rootFolder
+        onRefreshEnd()
+        updateNavigationBarTitle()
+        generateData()
+        tableView.reloadData()
+        setupTableFooter()
+    }
+    
+    func loadTracksProgress(items: KotlinArray<TrackItem>) {
+        debugPrint("function: \(#function)")
+    }
+    
+    func loadTracksStarted() {
+        debugPrint("function: \(#function)")
+    }
+    
+    internal func tracksLoaded(folder: TrackFolder) {
+        debugPrint("function: \(#function)")
+    }
+    
+    // MARK: - Base UI settings
+    
     override func registerObservers() {
         addObserver(OAAutoObserverProxy(self, withHandler: #selector(onObservedRecordedTrackChanged), andObserve: app.trackRecordingObservable))
         addObserver(OAAutoObserverProxy(self, withHandler: #selector(onObservedRecordedTrackChanged), andObserve: app.trackStartStopRecObservable))
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupNavbar()
@@ -213,16 +151,29 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         super.viewDidLoad()
         tableView.keyboardDismissMode = .onDrag
         addRefreshControl()
-        if isRootFolder && rootFolder.tracks.isEmpty && rootFolder.subfolders.isEmpty {
-            buildFoldersTree()
+        reloadTracks(forceLoad: true)
+        
+        if isRootFolder && rootFolder.getTrackItems().isEmpty && rootFolder.getSubFolders().isEmpty {
+            configureFolders()
         }
-        generateData()
-
+        
         tableView.register(UINib(nibName: OAButtonTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OAButtonTableViewCell.reuseIdentifier)
         tableView.register(UINib(nibName: OATwoButtonsTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OATwoButtonsTableViewCell.reuseIdentifier)
         tableView.register(UINib(nibName: OASimpleTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OASimpleTableViewCell.reuseIdentifier)
         tableView.register(UINib(nibName: OALargeImageTitleDescrTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OALargeImageTitleDescrTableViewCell.reuseIdentifier)
-        setupTableFooter()
+    }
+    
+    private func reloadTracks(forceLoad: Bool = false) {
+        if let asyncLoader {
+            asyncLoader.cancel()
+        }
+        let file = KFile(filePath: OsmAndApp.swiftInstance().gpxPath)
+        rootFolder = OsmAndShared.TrackFolder(dirFile: file, parentFolder: nil)
+        
+        let kotlinEmptyArray: KotlinArray<KotlinUnit> = [].toKotlinArray()
+        
+        asyncLoader = TrackFolderLoaderTask(folder: rootFolder, listener: self, forceLoad: forceLoad)
+        asyncLoader?.execute(params: kotlinEmptyArray)
     }
     
     private func updateData() {
@@ -231,9 +182,8 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         setupTableFooter()
     }
     
-    private func updateAllFoldersVCData() {
-        buildFoldersTree()
-        updateData()
+    private func updateAllFoldersVCData(forceLoad: Bool = false) {
+        reloadTracks(forceLoad: forceLoad)
         if let hostVCDelegate {
             hostVCDelegate.updateHostVCWith(rootFolder: rootFolder, visibleTracksFolder: visibleTracksFolder)
         }
@@ -245,17 +195,18 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         
         if isFiltered {
             var foundedFolders: [TrackFolder] = []
-            var foundedTracks: [OAGPX] = []
-            for folder in rootFolder.flattenedFolders.values where folder.path.lastPathComponent().containsCaseInsensitive(text: searchText) {
+            var foundedTracks: [GpxDataItem] = []
+            
+            for folder in rootFolder.getFlattenedSubFolders() where folder.getDirName().containsCaseInsensitive(text: searchText) {
                 foundedFolders.append(folder)
             }
-            rootFolder.performForAllTracks { track in
-                if track.gpxFileName.containsCaseInsensitive(text: searchText) {
-                    foundedTracks.append(track)
-                }
+            
+            for track in rootFolder.getTrackItems() where track.name.containsCaseInsensitive(text: searchText) {
+                guard let trackItem = track.dataItem else { continue }
+                foundedTracks.append(trackItem)
             }
-
-            foundedFolders.sort { $0.path.lastPathComponent() < $1.path.lastPathComponent() }
+            
+            foundedFolders.sort { $0.getDirName() < $1.getDirName() }
             foundedTracks.sort { $0.gpxFileName.lastPathComponent() < $1.gpxFileName.lastPathComponent() }
             
             for folder in foundedFolders {
@@ -272,7 +223,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                         currentRecordingTrackRow.cellType = OATwoButtonsTableViewCell.reuseIdentifier
                         currentRecordingTrackRow.key = recordingTrackKey
                         currentRecordingTrackRow.title = localizedString("recorded_track")
-                        currentRecordingTrackRow.descr = getTrackDescription(distance: savingHelper.distance, timeSpan: savingHelper.getCurrentGPX().timeSpan, waypoints: savingHelper.points, showDate: false, filepath: nil)
+                        currentRecordingTrackRow.descr = getTrackDescription(distance: savingHelper.distance, timeSpan: Int(savingHelper.getCurrentGPXSharedLib().getAnalysis(fileTimestamp: 0).timeSpan), waypoints: savingHelper.points, showDate: false, filepath: nil)
                         let isVisible = settings.mapSettingShowRecordingTrack.get()
                         currentRecordingTrackRow.setObj(isVisible, forKey: isVisibleKey)
                         currentRecordingTrackRow.iconName = "ic_custom_track_recordable"
@@ -287,7 +238,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                             currentPausedTrackRow.cellType = OATwoButtonsTableViewCell.reuseIdentifier
                             currentPausedTrackRow.key = recordingTrackKey
                             currentPausedTrackRow.title = localizedString("recorded_track")
-                            currentPausedTrackRow.descr = getTrackDescription(distance: savingHelper.distance, timeSpan: savingHelper.getCurrentGPX().timeSpan, waypoints: savingHelper.points, showDate: false, filepath: nil)
+                            currentPausedTrackRow.descr = getTrackDescription(distance: savingHelper.distance, timeSpan: Int(savingHelper.getCurrentGPXSharedLib().getAnalysis(fileTimestamp: 0).timeSpan), waypoints: savingHelper.points, showDate: false, filepath: nil)
                             let isVisible = settings.mapSettingShowRecordingTrack.get()
                             currentPausedTrackRow.setObj(isVisible, forKey: isVisibleKey)
                             currentPausedTrackRow.iconName = "ic_custom_track_recordable"
@@ -317,7 +268,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             
             guard let currentTrackFolder = (isVisibleOnMapFolder ? visibleTracksFolder : getTrackFolderByPath(currentFolderPath)) else { return }
             
-            if currentTrackFolder.subfolders.isEmpty && currentTrackFolder.tracks.isEmpty && !tableView.isEditing {
+            if currentTrackFolder.getSubFolders().isEmpty && currentTrackFolder.getTrackItems().isEmpty && !tableView.isEditing {
                 let emptyFolderBannerRow = section.createNewRow()
                 emptyFolderBannerRow.cellType = OALargeImageTitleDescrTableViewCell.reuseIdentifier
                 emptyFolderBannerRow.title = localizedString(isRootFolder ? "my_places_no_tracks_title_root" : "my_places_no_tracks_title")
@@ -333,22 +284,23 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                     visibleTracksFolderRow.title = localizedString("tracks_on_map")
                     visibleTracksFolderRow.iconName = "ic_custom_map_pin"
                     visibleTracksFolderRow.setObj(UIColor.iconColorActive, forKey: colorKey)
-                    visibleTracksFolderRow.descr = String(format: localizedString("folder_tracks_count"), visibleTracksFolder.tracks.count)
+                    visibleTracksFolderRow.descr = String(format: localizedString("folder_tracks_count"), settings.mapSettingVisibleGpx.get().count)
                 }
                 
-                var foldersNames = Array(currentTrackFolder.subfolders.keys)
+                var foldersNames: [String] = currentTrackFolder.getSubFolders().compactMap({ $0.getDirName() })
                 foldersNames = sortWithOptions(foldersNames, options: .name)
                 for folderName in foldersNames {
-                    if let folder = currentTrackFolder.subfolders[folderName] {
+                    if let folder = currentTrackFolder.getSubFolders().first(where: { $0.getDirName() == folderName }) {
                         createRowFor(folder: folder, section: section)
                     }
                 }
                 
-                var fileNames = Array(currentTrackFolder.tracks.keys)
+                var fileNames = currentTrackFolder.getTrackItems().compactMap({ $0.name }) // Array(currentTrackFolder.tracks.keys)
                 fileNames = sortWithOptions(fileNames, options: .name)
                 for fileName in fileNames {
-                    if let track = currentTrackFolder.tracks[fileName] {
-                        createRowFor(track: track, section: section)
+                    if let track = currentTrackFolder.getTrackItems().first(where: { $0.name == fileName }),
+                       let trackItem = track.dataItem {
+                        createRowFor(track: trackItem, section: section)
                     }
                 }
             }
@@ -362,14 +314,14 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     
     fileprivate func createRowFor(folder: TrackFolder, section: OATableSectionData) {
         let folderRow = section.createNewRow()
-        let folderName = folder.path.lastPathComponent()
+        let folderName = folder.getDirName()
         folderRow.cellType = OASimpleTableViewCell.reuseIdentifier
         folderRow.key = tracksFolderKey
         folderRow.title = folderName
         folderRow.iconName = "ic_custom_folder"
         folderRow.setObj(UIColor.iconColorSelected, forKey: colorKey)
-        folderRow.setObj(folder.path, forKey: pathKey)
-        let tracksCount = folder.tracksCount
+        folderRow.setObj(folder.relativePath, forKey: pathKey)
+        let tracksCount = folder.totalTracksCount
         folderRow.setObj(tracksCount, forKey: tracksCountKey)
         let descr = String(format: localizedString("folder_tracks_count"), tracksCount)
         folderRow.descr = descr
@@ -379,15 +331,17 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         }
     }
     
-    fileprivate func createRowFor(track: OAGPX, section: OATableSectionData) {
+    fileprivate func createRowFor(track: GpxDataItem, section: OATableSectionData) {
         let trackRow = section.createNewRow()
-        let fileName = track.gpxFileName ?? ""
+        let fileName = track.gpxFileName
         trackRow.cellType = OASimpleTableViewCell.reuseIdentifier
         trackRow.key = trackKey
         trackRow.title = fileName.lastPathComponent().deletingPathExtension()
         trackRow.setObj(track.gpxFilePath as Any, forKey: pathKey)
         trackRow.setObj(fileName, forKey: fileNameKey)
         trackRow.iconName = "ic_custom_trip"
+        let visibleTrackPaths = settings.mapSettingVisibleGpx.get()
+
         let isVisible = settings.mapSettingVisibleGpx.contains(track.gpxFilePath)
         trackRow.setObj(isVisible, forKey: isVisibleKey)
         trackRow.setObj(isVisible ? UIColor.iconColorActive : UIColor.iconColorDefault, forKey: colorKey)
@@ -397,6 +351,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     private func getTrackDescription(distance: Float, timeSpan: Int, waypoints: Int32, showDate: Bool, filepath: String?) -> String {
         var result = ""
         if showDate {
+            // TODO: can use fileLastModifiedTime from gpx object
             if let lastModifiedDate = OAUtilities.getFileLastModificationDate(filepath) {
                 let lastModified = dateFormatter.string(from: lastModifiedDate)
                 result += lastModified + " | "
@@ -430,9 +385,8 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             navigationItem.hidesBackButton = false
             navigationItem.leftBarButtonItem = nil
         }
-
+        
         configureNavigationBarAppearance()
-        updateNavigationBarTitle()
         navigationController?.setNavigationBarHidden(false, animated: false)
         tabBarController?.navigationItem.searchController = nil
         setupNavBarMenuButton()
@@ -458,7 +412,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     }
     
     private func updateNavigationBarTitle() {
-        var title: String = currentFolder.path.lastPathComponent()
+        var title: String = currentFolder.getDirName()
         if tableView.isEditing {
             let totalSelectedTracks = selectedTracks.count
             let totalSelectedFolders = selectedFolders.count
@@ -466,10 +420,9 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             if totalSelectedItems == 0 {
                 title = localizedString("select_items")
             } else {
-                let tracksInSelectedFolders = selectedFolders.reduce(0) { (result, folderName) -> Int in
-                    let folderPath = currentFolder.path.appendingPathComponent(folderName)
-                    if let folder = currentFolder.getFolderByPath(folderPath) {
-                        return result + folder.tracksCount
+                let tracksInSelectedFolders = selectedFolders.reduce(0) { result, folderName -> Int in
+                    if let folder = currentFolder.getFlattenedSubFolders().first(where: { $0.getDirName() == folderName }) {
+                        return result + Int(folder.totalTracksCount)
                     }
                     return result
                 }
@@ -490,17 +443,17 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         tabBarController?.navigationItem.title = title
         navigationItem.title = title
     }
-
+    
     private func setupNavBarMenuButton() {
         var menuActions: [UIMenuElement] = []
         if !tableView.isEditing {
-            let selectAction = UIAction(title: localizedString("shared_string_select"), image: UIImage.icCustomSelectOutlined) { [weak self] _ in
+            let selectAction = UIAction(title: localizedString("shared_string_select"), image: .icCustomSelectOutlined) { [weak self] _ in
                 self?.onNavbarSelectButtonClicked()
             }
-            let addFolderAction = UIAction(title: localizedString("add_folder"), image: UIImage.icCustomFolderAddOutlined) { [weak self] _ in
+            let addFolderAction = UIAction(title: localizedString("add_folder"), image: .icCustomFolderAddOutlined) { [weak self] _ in
                 self?.onNavbarAddFolderButtonClicked()
             }
-            let importAction = UIAction(title: localizedString("shared_string_import"), image: UIImage.icCustomImportOutlined) { [weak self] _ in
+            let importAction = UIAction(title: localizedString("shared_string_import"), image: .icCustomImportOutlined) { [weak self] _ in
                 self?.onNavbarImportButtonClicked()
             }
             
@@ -535,7 +488,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     }
     
     private func setupTableFooter() {
-        guard !currentFolder.tracks.isEmpty, !isSearchActive, !tableView.isEditing else {
+        guard !currentFolder.getTrackItems().isEmpty, !isSearchActive, !tableView.isEditing else {
             tableView.tableFooterView = nil
             return
         }
@@ -548,30 +501,34 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                     label.autoresizingMask = [.flexibleWidth, .flexibleHeight]
                 }
             }
-
+            
             tableView.tableFooterView = footer
         }
     }
     
     private func getTotalTracksStatistics() -> String {
-        let allTracks = currentFolder.getAllTracks()
+        guard let allTracks = getTrackFolderByPath(currentFolderPath)?.getTrackItems() else {
+            return ""
+        }
         var totalDistance: Float = 0.0
         var totalUphill: Double = 0.0
         var totalDownhill: Double = 0.0
         var totalTime: Int = 0
         var totalSizeBytes: UInt64 = 0
         for track in allTracks {
-            totalDistance += track.totalDistance
-            totalUphill += track.diffElevationUp
-            totalDownhill += track.diffElevationDown
-            totalTime += track.timeSpan
-            if let attributes = try? FileManager.default.attributesOfItem(atPath: track.absolutePath),
+            // TODO: test on .folderAnalysis
+            guard let trackItem = track.dataItem else { continue }
+            totalDistance += trackItem.totalDistance
+            totalUphill += trackItem.diffElevationUp
+            totalDownhill += trackItem.diffElevationDown
+            totalTime += trackItem.timeSpan
+            if let attributes = try? FileManager.default.attributesOfItem(atPath: trackItem.file.path()),
                let fileSize = attributes[.size] as? UInt64 {
                 totalSizeBytes += fileSize
             }
         }
         
-        var statistics = "\(localizedString("shared_string_gpx_tracks")) – \(currentFolder.tracksCount)"
+        var statistics = "\(localizedString("shared_string_gpx_tracks")) – \(currentFolder.totalTracksCount)"
         if let distance = OAOsmAndFormatter.getFormattedDistance(totalDistance) {
             statistics += ", \(localizedString("shared_string_distance").lowercased()) – \(distance)"
         }
@@ -609,18 +566,13 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         present(alert, animated: true)
     }
     
-    @objc private func onRefresh() {
-        gpxDB.load()
-    }
-    
-    @objc private func onRefreshEnd() {
+    private func onRefreshEnd() {
         DispatchQueue.main.async { [weak self] in
-            self?.updateAllFoldersVCData()
             self?.tableView.refreshControl?.endRefreshing()
         }
     }
     
-    func setupSearchController() {
+    private func setupSearchController() {
         searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
         searchController.searchBar.delegate = self
@@ -646,40 +598,24 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         }
     }
     
+    @objc private func onRefresh() {
+        reloadTracks(forceLoad: true)
+    }
+    
     // MARK: - Data
     
-    private func buildFoldersTree() {
-        guard let allTracks = gpxDB.gpxList as? [OAGPX] else { return }
-        guard let visibleTrackPaths = settings.mapSettingVisibleGpx.get() else { return }
-
-        rootFolder = TrackFolder()
-        visibleTracksFolder = TrackFolder()
-
-        // create all needed folders
-        if let rootTrackFolderUrl = URL(string: app.gpxPath) {
-            rootFolder.collectFolderInfo(rootTrackFolderUrl)
-        }
-        
-        // add tracks to existing folders
-        for track in allTracks {
-            if visibleTrackPaths.contains(track.gpxFilePath) {
-                visibleTracksFolder.insertTrack(fileName: track.gpxFilePath.lastPathComponent(), track: track)
-            }
-            
-            let relativeFolderPath = track.gpxFilePath.deletingLastPathComponent()
-            let fileName = track.gpxFilePath.lastPathComponent()
-            if let fillingFolder = getTrackFolderByPath(relativeFolderPath) {
-                fillingFolder.insertTrack(fileName: fileName, track: track)
-            }
-        }
-        
+    private func configureFolders() {
+        visibleTracksFolder = TrackFolder(trackFolder: rootFolder)
         currentFolder = getTrackFolderByPath(currentFolderPath) ?? rootFolder
     }
     
     private func getTrackFolderByPath(_ path: String) -> TrackFolder? {
-        return rootFolder.getFolderByPath(path)
+        guard !path.isEmpty else {
+            return rootFolder
+        }
+        return rootFolder.getFlattenedSubFolders().first(where: { $0.getDirFile().path().hasSuffix(path) }) ?? rootFolder
     }
-        
+    
     // MARK: - Navbar Toolbar Actions
     
     private func onNavbarSelectButtonClicked() {
@@ -723,8 +659,10 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             })
             
             for folderName in selectedFolders {
-                if let folder = currentFolder.subfolders[folderName] {
-                    let folderTracksToShow = folder.getAllTracks().compactMap {
+                if let folder = currentFolder.getSubFolders().first(where: { $0.getName() == folderName }) {
+                    let folderTracksToShow = folder.getTrackItems()
+                        .compactMap({ $0.dataItem })
+                        .compactMap {
                         settings.mapSettingVisibleGpx.contains($0.gpxFilePath) ? nil : $0.gpxFilePath
                     }
                     tracksToShow.append(contentsOf: folderTracksToShow)
@@ -735,7 +673,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 settings.showGpx(tracksToShow, update: true)
             }
             
-            updateAllFoldersVCData()
+            updateAllFoldersVCData(forceLoad: true)
             onNavbarCancelButtonClicked()
         }
     }
@@ -744,8 +682,12 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         if hasSelectedItems() {
             var allExportFilePaths: [String] = []
             for folderName in selectedFolders {
-                if let folder = currentFolder.subfolders[folderName] {
-                    allExportFilePaths.append(contentsOf: folder.getAllTracksFilePaths())
+                if let folder = currentFolder.getSubFolders().first(where: { $0.getDirName() == folderName }) {
+                    let allTracksFilePaths = folder.getTrackItems()
+                        .compactMap({ $0.dataItem?.gpxFilePath })
+                        .map { OsmAndApp.swiftInstance().gpxPath.appendingPathComponent($0)
+                    }
+                    allExportFilePaths.append(contentsOf: allTracksFilePaths)
                 }
             }
             
@@ -760,11 +702,12 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     
     @objc private func onNavbarUploadToOsmButtonClicked() {
         if hasSelectedItems() {
-            var allTracks: [OAGPX] = []
+            var allTracks: [GpxDataItem] = []
             allTracks.append(contentsOf: selectedTracks)
             for folderName in selectedFolders {
-                if let folder = currentFolder.subfolders[folderName] {
-                    allTracks.append(contentsOf: folder.getAllTracks())
+                if let folder = currentFolder.getSubFolders().first(where: { $0.getDirName() == folderName }) {
+                    let tracks = folder.getTrackItems().compactMap({ $0.dataItem })
+                    allTracks.append(contentsOf: tracks)
                 }
             }
             
@@ -778,8 +721,10 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     @objc private func onNavbarDeleteButtonClicked() {
         if hasSelectedItems() {
             let tracksInSelectedFolders = selectedFolders.reduce(0) { (result, folderName) -> Int in
-                let folderPath = currentFolder.path.appendingPathComponent(folderName)
-                return result + (currentFolder.getFolderByPath(folderPath)?.tracksCount ?? 0)
+                if let folder = currentFolder.getFlattenedSubFolders().first(where: { $0.getDirName() == folderName }) {
+                    return result + Int(folder.totalTracksCount)
+                }
+                return result
             }
             
             let totalTracksToDelete = selectedTracks.count + tracksInSelectedFolders
@@ -797,10 +742,10 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                     if isVisible {
                         self.settings.hideGpx([track.gpxFilePath])
                     }
-                    self.gpxDB.removeGpxItem(track.gpxFilePath)
+                    self.gpxDB.removeNewGpxItem(track, withLocalRemove: true)
                 }
                 
-                updateAllFoldersVCData()
+                updateAllFoldersVCData(forceLoad: true)
                 onNavbarCancelButtonClicked()
             })
             alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
@@ -834,9 +779,9 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             }
         } else {
             guard let currentFolder = getTrackFolderByPath(currentFolderPath) else { return }
-            let allFolders = currentFolder.subfolders.values
-            selectedFolders = allFolders.map { $0.path.lastPathComponent() }
-            selectedTracks = currentFolder.getAllTracks().filter { track in
+            let allFolders = currentFolder.getSubFolders()
+            selectedFolders = allFolders.map { $0.getDirName() }
+            selectedTracks = currentFolder.getTrackItems().compactMap({ $0.dataItem }).filter { track in
                 !selectedFolders.contains(where: { folderName in
                     track.gpxFilePath.contains(folderName)
                 })
@@ -866,9 +811,9 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             guard let self else { return }
             if let newFolderName = alert.textFields?.first?.text {
                 if OAUtilities.isValidFileName(newFolderName) {
-                    self.renameFolder(oldName: oldFolderName, newName: newFolderName)
+                    renameFolder(newName: newFolderName, oldName: oldFolderName)
                 } else {
-                    self.showErrorAlert(localizedString("incorrect_symbols"))
+                    showErrorAlert(localizedString("incorrect_symbols"))
                 }
             }
         })
@@ -876,23 +821,9 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         present(alert, animated: true)
     }
     
-    private func onFolderAppearenceButtonClicked(_ selectedFolderName: String) {
-        guard let selectedFolder = currentFolder.subfolders[selectedFolderName] else { return }
-        let subfolderTracks = Array(selectedFolder.getAllTracks())
-        if !subfolderTracks.isEmpty {
-            let firstTrack = subfolderTracks[0]
-            let state = OATrackMenuViewControllerState()
-            state.openedFromTracksList = true
-            rootVC.mapPanel.openTargetView(with: firstTrack, items: subfolderTracks, trackHudMode: .appearanceHudMode, state: state)
-            navigationController?.popToRootViewController(animated: true)
-        } else {
-            OAUtilities.showToast(localizedString("shared_string_error"), details: localizedString("my_places_no_tracks_title"), duration: 4, in: self.view)
-        }
-    }
-    
     private func onFolderExportButtonClicked(_ selectedFolderName: String) {
-        guard let selectedFolder = currentFolder.subfolders[selectedFolderName] else { return }
-        let exportFilePaths = selectedFolder.getAllTracksFilePaths()
+        guard let selectedFolder = currentFolder.getSubFolders().first(where: { $0.getDirName() == selectedFolderName }) else { return }
+        let exportFilePaths = selectedFolder.getTrackItems().compactMap({ $0.path })
         let state = OATrackMenuViewControllerState()
         state.openedFromTracksList = true
         let vc = OAExportItemsViewController(tracks: exportFilePaths)
@@ -905,20 +836,18 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         selectedFolderPath = trimmedPath
         let selectedFolderName = trimmedPath.deletingLastPathComponent()
         // hide from this screen moving folder and all it's subfolders, to deny move folder inside itself
-        let sourceFolderPath = (selectedFolderPath ?? "") + "/"
         if let vc = OASelectTrackFolderViewController(selectedFolderName: selectedFolderName, excludedSubfolderPath: trimmedPath) {
             vc.delegate = self
             let navController = UINavigationController(rootViewController: vc)
             present(navController, animated: true)
         }
     }
-        
+    
     private func onFolderDeleteButtonClicked(folderName: String, tracksCount: Int) {
         let message = String(format: localizedString("remove_folder_with_files_descr"), arguments: [folderName, tracksCount])
         let alert = UIAlertController(title: localizedString("delete_folder"), message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: localizedString("shared_string_delete"), style: .destructive) { [weak self] _ in
-            guard let self else { return }
-            self.deleteFolder(folderName)
+            self?.deleteFolder(folderName)
         })
         alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
         present(alert, animated: true)
@@ -942,120 +871,160 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 settings.showGpx([trackPath], update: true)
             }
         }
-        updateAllFoldersVCData()
+        updateAllFoldersVCData(forceLoad: true)
     }
-
-    private func onTrackAppearenceClicked(track: OAGPX?, isCurrentTrack: Bool) {
-        guard let gpx = isCurrentTrack ? savingHelper.getCurrentGPX() : track else { return }
+    
+    private func onTrackAppearenceClicked(track: GpxDataItem?, isCurrentTrack: Bool) {
+        var gpx = track
+        if isCurrentTrack, let gpxFile = savingHelper.getCurrentGPXSharedLib() {
+            gpx = OAGPXDatabase.sharedDb().getNewGPXItem(gpxFile.path)
+        }
+        guard let gpx else { return }
         if let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
             let state = OATrackMenuViewControllerState()
             state.openedFromTracksList = true
             state.gpxFilePath = track?.gpxFilePath
             state.navControllerHistory = newCurrentHistory
-            rootVC.mapPanel.openTargetView(with: gpx, trackHudMode: .appearanceHudMode, state: state)
+            rootVC.mapPanel.openTargetView(withGPX: gpx, trackHudMode: .appearanceHudMode, state: state)
         }
     }
-
-    private func onTrackNavigationClicked(_ track: OAGPX?, isCurrentTrack: Bool) {
-        guard let gpx = isCurrentTrack ? savingHelper.getCurrentGPX() : track else { return }
-        if gpx.totalTracks > 1 {
-            let absolutePath = getAbsolutePath(gpx.gpxFilePath)
-            if let vc = OATrackSegmentsViewController(filepath: absolutePath, isCurrentTrack: isCurrentTrack) {
-                vc.startNavigationOnSelect = true
-                rootVC.present(vc, animated: true)
-                navigationController?.popToRootViewController(animated: true)
+    
+    private func onTrackNavigationClicked(_ track: GpxDataItem?, isCurrentTrack: Bool) {
+        // FIXME: savingHelper.getCurrentGPX()
+        guard let gpx = isCurrentTrack ? savingHelper.getCurrentGPXSharedLib() : track else { return }
+//        if gpx.totalTracks > 1 {
+//            let absolutePath = getAbsolutePath(gpx.gpxFilePath)
+//            if let vc = OATrackSegmentsViewController(filepath: absolutePath, isCurrentTrack: isCurrentTrack) {
+//                vc.startNavigationOnSelect = true
+//                rootVC.present(vc, animated: true)
+//                navigationController?.popToRootViewController(animated: true)
+//            }
+//        } else {
+//            if routingHelper.isFollowingMode() {
+//                rootVC.mapPanel.mapActions.stopNavigationActionConfirm()
+//            }
+//            rootVC.mapPanel.mapActions.enterRoutePlanningMode(given: track, useIntermediatePointsByDefault: true, showDialog: true)
+//            navigationController?.popToRootViewController(animated: true)
+//        }
+    }
+    
+    private func onTrackAnalyzeClicked(_ track: GpxDataItem?, isCurrentTrack: Bool) {
+        var gpx: GpxFile?
+        if isCurrentTrack {
+            if let gpxFile = savingHelper.getCurrentGPXSharedLib() {
+                gpx = gpxFile
             }
         } else {
-            if routingHelper.isFollowingMode() {
-                rootVC.mapPanel.mapActions.stopNavigationActionConfirm()
+            let result = GpxUtilities.shared.loadGpxFile(file: track!.file)
+            gpx = result
+        }
+        
+        guard let gpx else { return }
+        
+        if let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
+            let state = OATrackMenuViewControllerState()
+            state.navControllerHistory = newCurrentHistory
+            state.openedFromTracksList = true
+            state.selectedStatisticsTab = .overviewTab
+            // FIXME:
+//            navigationController?.setNavigationBarHidden(true, animated: true)
+//            rootVC.mapPanel.openNewTargetViewFromTracksList(withRouteDetailsGraph: gpx, isCurrentTrack: isCurrentTrack, state: state)
+            
+//            
+//            rootVC.mapPanel.openTargetViewFromTracksList(withRouteDetailsGraph: absolutePath,
+//                                                         isCurrentTrack: isCurrentTrack,
+//                                                         state: state)
+            
+            
+        }
+    }
+    
+    private func onTrackShareClicked(_ track: GpxDataItem?, isCurrentTrack: Bool, touchPointArea: CGRect) {
+        var gpxTrack: GpxDataItem? = track
+        if isCurrentTrack, let gpxFile = savingHelper.getCurrentGPXSharedLib() {
+            gpxTrack = OAGPXDatabase.sharedDb().getNewGPXItem(gpxFile.path)
+        }
+
+        guard let gpxTrack else { return }
+        
+        gpxHelper.openNewExport(forTrack: gpxTrack,
+                                isCurrentTrack: isCurrentTrack,
+                                in: self,
+                                hostViewControllerDelegate: self,
+                                touchPointArea: touchPointArea)
+    }
+    
+    private func onTrackUploadToOsmClicked(_ track: GpxDataItem?, isCurrentTrack: Bool) {
+        var gpxTrack: GpxDataItem? = track
+        if isCurrentTrack, let gpxFile = savingHelper.getCurrentGPXSharedLib() {
+            gpxTrack = OAGPXDatabase.sharedDb().getNewGPXItem(gpxFile.path)
+        }
+
+        guard let gpxTrack else { return }
+        
+        show(OAOsmUploadGPXViewConroller(gpxItems: [gpxTrack]))
+    }
+    
+    private func onTrackEditClicked(_ track: GpxDataItem?, isCurrentTrack: Bool) {
+        // FIXME:
+        //        if let gpx = isCurrentTrack ? savingHelper.getCurrentGPXSharedLib() : track {
+        //            if let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
+        //                let state = OATrackMenuViewControllerState()
+        //                state.openedFromTracksList = true
+        //                state.gpxFilePath = gpx.gpxFilePath
+        //                state.navControllerHistory = newCurrentHistory
+        //                if let vc = OARoutePlanningHudViewController(fileName: gpx.gpxFilePath, targetMenuState: state, adjustMapPosition: false) {
+        //                    rootVC.mapPanel.showScrollableHudViewController(vc)
+        //                }
+        //            }
+        //        }
+    }
+    
+    private func onTrackDuplicateClicked(track: GpxDataItem?, isCurrentTrack: Bool) {
+        guard let track else { return }
+        gpxHelper.copyNewGPX(toNewFolder: currentFolderPath, renameToNewName: track.gpxFileName, deleteOriginalFile: false, openTrack: false, gpx: track)
+        selectedTrack = nil
+        updateAllFoldersVCData(forceLoad: true)
+    }
+    
+    private func onTrackRenameClicked(_ track: GpxDataItem?, isCurrentTrack: Bool) {
+        var gpxTrack: GpxDataItem? = track
+        if isCurrentTrack, let gpxFile = savingHelper.getCurrentGPXSharedLib() {
+            gpxTrack = OAGPXDatabase.sharedDb().getNewGPXItem(gpxFile.path)
+        }
+        
+        guard let gpxTrack else { return }
+        let gpxFilename = gpxTrack.gpxFileName
+        let message = localizedString("gpx_enter_new_name") + " " + gpxFilename
+        let alert = UIAlertController(title: localizedString("rename_track"), message: message, preferredStyle: .alert)
+        alert.addTextField { textField in
+            textField.text = gpxFilename
+        }
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .default) { [weak self] _ in
+            guard let self else { return }
+            if let newName = alert.textFields?.first?.text {
+                gpxHelper.renameTrackNew(gpxTrack, newName: newName, hostVC: self)
+                updateAllFoldersVCData(forceLoad: true)
             }
-            rootVC.mapPanel.mapActions.enterRoutePlanningMode(given: track, useIntermediatePointsByDefault: true, showDialog: true)
-            navigationController?.popToRootViewController(animated: true)
+        })
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
+        present(alert, animated: true)
+    }
+    
+    private func onTrackMoveClicked(_ track: GpxDataItem?, isCurrentTrack: Bool) {
+        var gpxTrack: GpxDataItem? = track
+        if isCurrentTrack, let gpxFile = savingHelper.getCurrentGPXSharedLib() {
+            gpxTrack = OAGPXDatabase.sharedDb().getNewGPXItem(gpxFile.path)
+        }
+        selectedTrack = gpxTrack
+        if let vc = OASelectTrackFolderViewController(selectedFolderName: gpxTrack?.gpxFolderName) {
+            vc.delegate = self
+            let navController = UINavigationController(rootViewController: vc)
+            present(navController, animated: true)
         }
     }
     
-    private func onTrackAnalyzeClicked(_ track: OAGPX?, isCurrentTrack: Bool) {
-        if let gpx = isCurrentTrack ? savingHelper.getCurrentGPX() : track {
-            if let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
-                let state = OATrackMenuViewControllerState()
-                state.navControllerHistory = newCurrentHistory
-                state.openedFromTracksList = true
-                state.selectedStatisticsTab = .overviewTab
-                let absolutePath = getAbsolutePath(gpx.gpxFilePath)
-                navigationController?.setNavigationBarHidden(true, animated: true)
-                rootVC.mapPanel.openTargetViewFromTracksList(withRouteDetailsGraph: absolutePath,
-                                                             isCurrentTrack: isCurrentTrack,
-                                                             state: state)
-            }
-        }
-    }
-    
-    private func onTrackShareClicked(_ track: OAGPX?, isCurrentTrack: Bool, touchPointArea: CGRect) {
-        if let gpx = isCurrentTrack ? savingHelper.getCurrentGPX() : track {
-            gpxHelper.openExport(forTrack: gpx, gpxDoc: nil, isCurrentTrack: isCurrentTrack, in: self, hostViewControllerDelegate: self, touchPointArea: touchPointArea)
-        }
-    }
-    
-    private func onTrackUploadToOsmClicked(_ track: OAGPX?, isCurrentTrack: Bool) {
-        if let gpx = isCurrentTrack ? savingHelper.getCurrentGPX() : track, let vc = OAOsmUploadGPXViewConroller(gpxItems: [gpx]) {
-            show(vc)
-        }
-    }
-    
-    private func onTrackEditClicked(_ track: OAGPX?, isCurrentTrack: Bool) {
-        if let gpx = isCurrentTrack ? savingHelper.getCurrentGPX() : track {
-            if let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
-                let state = OATrackMenuViewControllerState()
-                state.openedFromTracksList = true
-                state.gpxFilePath = gpx.gpxFilePath
-                state.navControllerHistory = newCurrentHistory
-                if let vc = OARoutePlanningHudViewController(fileName: gpx.gpxFilePath, targetMenuState: state, adjustMapPosition: false) {
-                    rootVC.mapPanel.showScrollableHudViewController(vc)
-                }
-            }
-        }
-    }
-    
-    private func onTrackDuplicateClicked(track: OAGPX?, isCurrentTrack: Bool) {
-        if let track {
-            gpxHelper.copyGPX(toNewFolder: currentFolderPath, renameToNewName: track.gpxFileName, deleteOriginalFile: false, openTrack: false, gpx: track)
-            selectedTrack = nil
-            updateAllFoldersVCData()
-        }
-    }
-    
-    private func onTrackRenameClicked(_ track: OAGPX?, isCurrentTrack: Bool) {
-        if let gpx = isCurrentTrack ? savingHelper.getCurrentGPX() : track {
-            let gpxFilename = gpx.gpxFilePath.lastPathComponent().deletingPathExtension()
-            let message = localizedString("gpx_enter_new_name") + " " + gpxFilename
-            let alert = UIAlertController(title: localizedString("rename_track"), message: message, preferredStyle: .alert)
-            alert.addTextField { textField in
-                textField.text = gpxFilename
-            }
-            alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .default) { [weak self] _ in
-                guard let self else { return }
-                if let newName = alert.textFields?.first?.text {
-                    gpxHelper.renameTrack(gpx, newName: newName, hostVC: self)
-                    updateAllFoldersVCData()
-                }
-            })
-            alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
-            present(alert, animated: true)
-        }
-    }
-    
-    private func onTrackMoveClicked(_ track: OAGPX?, isCurrentTrack: Bool) {
-        if let gpx = isCurrentTrack ? savingHelper.getCurrentGPX() : track {
-            selectedTrack = gpx
-            if let vc = OASelectTrackFolderViewController(gpx: gpx) {
-                vc.delegate = self
-                let navController = UINavigationController(rootViewController: vc)
-                present(navController, animated: true)
-            }
-        }
-    }
-    
-    private func onTrackDeleteClicked(track: OAGPX?, isCurrentTrack: Bool) {
+    private func onTrackDeleteClicked(track: GpxDataItem?, isCurrentTrack: Bool) {
         let message = isCurrentTrack ? localizedString("track_clear_q") : localizedString("gpx_remove")
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: localizedString("shared_string_yes"), style: .default) { [weak self] _ in
@@ -1073,8 +1042,8 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                     if isVisible {
                         settings.hideGpx([gpx.gpxFilePath])
                     }
-                    gpxDB.removeGpxItem(gpx.gpxFilePath)
-                    updateAllFoldersVCData()
+                    gpxDB.removeNewGpxItem(gpx, withLocalRemove: true)
+                    updateAllFoldersVCData(forceLoad: true)
                 }
             }
         })
@@ -1122,7 +1091,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     
     private func saveRecordingClicked() {
         if savingHelper.hasDataToSave() && savingHelper.distance < 10 {
-            OAAlertBottomSheetViewController.showAlert(withTitle: nil, 
+            OAAlertBottomSheetViewController.showAlert(withTitle: nil,
                                                        titleIcon: nil,
                                                        message: localizedString("track_save_short_q"),
                                                        cancelTitle: localizedString("shared_string_no"),
@@ -1171,7 +1140,6 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     }
     
     private func currentFolderAbsolutePath() -> String {
-        
         var path = app.gpxPath ?? ""
         if !currentFolderPath.isEmpty {
             path = path.appendingPathComponent(currentFolderPath)
@@ -1184,7 +1152,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         if !FileManager.default.fileExists(atPath: newFolderPath) {
             do {
                 try FileManager.default.createDirectory(atPath: newFolderPath, withIntermediateDirectories: true)
-                updateAllFoldersVCData()
+                updateAllFoldersVCData(forceLoad: true)
             } catch let error {
                 debugPrint(error)
             }
@@ -1193,21 +1161,71 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         }
     }
     
-    private func renameFolder(oldName: String, newName: String) {
+    private func updateMovedGpxFiles(files: [KFile], srcDir: KFile, destDir: KFile) {
+        for srcFile in files {
+            let path = srcFile.absolutePath()
+            let newPath = path.replacingOccurrences(of: srcDir.absolutePath(), with: destDir.absolutePath())
+            
+            let destFile = KFile(filePath: newPath)
+            if destFile.exists() {
+                updateRenamedGpx(src: srcFile, dest: destFile)
+            }
+        }
+    }
+    
+    private func updateRenamedGpx(src: KFile, dest: KFile) {
+        GpxDbHelper.shared.rename(currentFile: src, newFile: dest)
+        /*
+         GpxSelectionHelper gpxSelectionHelper = app.getSelectedGpxHelper();
+             SelectedGpxFile selectedGpxFile = gpxSelectionHelper.getSelectedFileByPath(src.getAbsolutePath());
+             if (selectedGpxFile != null) {
+                 gpxFile = selectedGpxFile.getGpxFile();
+                 gpxFile.setPath(dest.getAbsolutePath());
+                 gpxSelectionHelper.updateSelectedGpxFile(selectedGpxFile);
+                 GpxDisplayHelper gpxDisplayHelper = app.getGpxDisplayHelper();
+                 gpxDisplayHelper.updateDisplayGroupsNames(selectedGpxFile);
+             }
+             updateGpxMetadata(gpxFile, dest);
+         */
+    }
+    
+    private func renameFolder(newName: String, oldName: String) {
+        guard let trackFolder = getTrackFolderByPath(oldName) else { return }
         let oldFolderPath = currentFolderAbsolutePath().appendingPathComponent(oldName)
         let newFolderPath = currentFolderAbsolutePath().appendingPathComponent(newName)
-        let oldFolderShortPath = currentFolderPath.appendingPathComponent(oldName)
-        let newFolderShortPath = currentFolderPath.appendingPathComponent(newName)
+        // "123/ccc4/test_2.gpx" | "123/ccc4/444/test_123.gpx"
+        let visibleGpx = settings.mapSettingVisibleGpx.get()
+        
         if !FileManager.default.fileExists(atPath: newFolderPath) {
-            do {
-                try FileManager.default.moveItem(atPath: oldFolderPath, toPath: newFolderPath)
-                currentFolder.subfolders[newName] = rootFolder.subfolders[oldName]
-                currentFolder.subfolders[oldName] = nil
-                guard let renamedFolder = currentFolder.subfolders[newName] else { return }
-                changeGpxDBSubfolderTags(folderContent: renamedFolder, srcPath: oldFolderShortPath, destPath: newFolderShortPath)
-                updateAllFoldersVCData()
-            } catch let error {
-                debugPrint(error)
+            let oldDir = KFile(filePath: oldFolderPath)
+            if let parentFile = oldDir.getParentFile() {
+                let newDir = KFile(file: parentFile, fileName: newName)
+                if oldDir.renameTo(toFile: newDir) {
+                    trackFolder.setDirFile(dirFile: newDir)
+                    trackFolder.resetCachedData()
+                    
+                    var files = [KFile]()
+                    
+                    let tracksItems = trackFolder.getFlattenedTrackItems()
+
+                    for trackItem in trackFolder.getFlattenedTrackItems() {
+                        if let file = trackItem.getFile() {
+                            files.append(file)
+                        }
+                    }
+                    if !files.isEmpty {
+                        updateMovedGpxFiles(files: files, srcDir: oldDir, destDir: newDir)
+                        if let gpxPath = OsmAndApp.swiftInstance().gpxPath {
+                            let gpxPathRemovePrefix = gpxPath + "/"
+                            let oldPath = oldFolderPath.removePrefix(gpxPathRemovePrefix)
+                            let newPath = newFolderPath.removePrefix(gpxPathRemovePrefix)
+                            renameVisibleTracks(oldPath: oldPath, newPath: newPath)
+                        }
+                    }
+                    updateAllFoldersVCData(forceLoad: true)
+                }
+            } else {
+                NSLog("renameFolder -> parentFile is empty")
             }
         } else {
             showErrorAlert(localizedString("folder_already_exsists"))
@@ -1217,55 +1235,94 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     private func deleteFolder(_ folderName: String) {
         let folderPath = currentFolderAbsolutePath().appendingPathComponent(folderName)
         do {
-            currentFolder.subfolders[folderName]?.performForAllTracks { gpxDB.removeGpxItem($0.gpxFilePath) }
-            currentFolder.subfolders[folderName] = nil
+            if let folderForDelete = currentFolder.getSubFolders().first(where: { $0.getDirName() == folderName }) {
+                let tracksItems: [GpxDataItem] = folderForDelete.getFlattenedTrackItems().compactMap({ $0.dataItem })
+                if !tracksItems.isEmpty {
+                    tracksItems.forEach({
+                        gpxDB.removeNewGpxItem($0, withLocalRemove: false)
+                        let gpxFilePath = $0.gpxFilePath
+                        let isVisible = settings.mapSettingVisibleGpx.contains(gpxFilePath)
+                        if isVisible {
+                            settings.hideGpx([gpxFilePath])
+                        }
+                    })
+                }
+            }
+            // remove folders with tracks
             try FileManager.default.removeItem(atPath: folderPath)
-            updateAllFoldersVCData()
+            updateAllFoldersVCData(forceLoad: true)
         } catch let error {
             debugPrint(error)
         }
     }
     
     private func moveFile(selectedFolderName: String) {
-        gpxHelper.copyGPX(toNewFolder: selectedFolderName, renameToNewName: nil, deleteOriginalFile: true, openTrack: false, gpx: selectedTrack)
-        updateAllFoldersVCData()
+        gpxHelper.copyNewGPX(toNewFolder: selectedFolderName, renameToNewName: nil, deleteOriginalFile: true, openTrack: false, gpx: selectedTrack)
+        updateAllFoldersVCData(forceLoad: true)
+    }
+    
+    private func renameVisibleTracks(oldPath: String, newPath: String) {
+        guard var visibleGpx = settings.mapSettingVisibleGpx.get() else { return }
+        
+        visibleGpx = visibleGpx.map { filePath in filePath.replacingOccurrences(of: oldPath, with: newPath) }
+        settings.mapSettingVisibleGpx.set(visibleGpx)
     }
     
     private func moveFolder(folderPathForOpenedContextMenu: String, selectedFolderName: String) {
         let sourceFolderPath = getAbsolutePath(folderPathForOpenedContextMenu)
         let destinationShortFolderPath = (selectedFolderName == localizedString("shared_string_gpx_tracks") ? "" : selectedFolderName).appendingPathComponent(sourceFolderPath.lastPathComponent())
         let destinationFolderPath = getAbsolutePath(destinationShortFolderPath)
-        do {
-            try FileManager.default.moveItem(atPath: sourceFolderPath, toPath: destinationFolderPath)
-            
-            if let movingFolder = getTrackFolderByPath(folderPathForOpenedContextMenu) {
-                changeGpxDBSubfolderTags(folderContent: movingFolder, srcPath: folderPathForOpenedContextMenu, destPath: destinationShortFolderPath)
-            }
-            
-            updateAllFoldersVCData()
-        } catch let error {
-            debugPrint(error)
-        }
-    }
+        
+        guard let trackFolder = getTrackFolderByPath(folderPathForOpenedContextMenu) else { return }
+        
+        let src: KFile = KFile(filePath: sourceFolderPath)
+        let dest: KFile = KFile(filePath: destinationFolderPath)
     
+        if src.renameTo(toFilePath: dest.absolutePath()) {
+            try? FileManager.default.setAttributes([.modificationDate: Date()], ofItemAtPath: destinationFolderPath)
+            
+            var files = [KFile]()
+            
+            let tracksItems = trackFolder.getFlattenedTrackItems()
+
+            for trackItem in tracksItems {
+                if let file = trackItem.getFile() {
+                    files.append(file)
+                }
+            }
+            if !files.isEmpty {
+                updateMovedGpxFiles(files: files, srcDir: src, destDir: dest)
+                
+                if let gpxPath = OsmAndApp.swiftInstance().gpxPath {
+                    let gpxPathRemovePrefix = gpxPath + "/"
+                    let oldPath = src.absolutePath().removePrefix(gpxPathRemovePrefix)
+                    let newPath = dest.absolutePath().removePrefix(gpxPathRemovePrefix)
+                    renameVisibleTracks(oldPath: oldPath, newPath: newPath)
+                }
+            }
+        }
+    
+        updateAllFoldersVCData(forceLoad: true)
+    }
+   
     private func areAllItemsSelected() -> Bool {
         guard let currentFolder = getTrackFolderByPath(currentFolderPath) else { return false }
-        let allDisplayedTracks = currentFolder.getAllTracks()
-        let allDisplayedFolders = currentFolder.subfolders.values
+        let allDisplayedTracks = currentFolder.getTrackItems().compactMap({ $0.dataItem })
+        let allDisplayedFolders = currentFolder.getSubFolders()
         let allTracksSelected = allDisplayedTracks.allSatisfy { track in
             if selectedTracks.contains(track) {
                 return true
             }
             
             return selectedFolders.contains { folderName -> Bool in
-                let folderPath = currentFolder.path.appendingPathComponent(folderName)
+                let folderPath = currentFolder.relativePath.appendingPathComponent(folderName)
                 let trackPath = track.gpxFilePath.deletingLastPathComponent()
                 return trackPath.hasPrefix(folderPath)
             }
         }
         
         let allFoldersSelected = allDisplayedFolders.allSatisfy { folder in
-            selectedFolders.contains(folder.path.lastPathComponent())
+            selectedFolders.contains(folder.relativePath.lastPathComponent())
         }
         
         return allTracksSelected && allFoldersSelected
@@ -1273,19 +1330,6 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     
     private func hasSelectedItems() -> Bool {
         !selectedFolders.isEmpty || !selectedTracks.isEmpty
-    }
-    
-    fileprivate func changeGpxDBSubfolderTags(folderContent: TrackFolder, srcPath: String, destPath: String) {
-        for gpxFile in folderContent.tracks.values {
-            var path = gpxFile.gpxFilePath ?? ""
-            path = path.replacingOccurrences(of: srcPath, with: "")
-            path = destPath.appendingPathComponent(path)
-            gpxFile.updateFolderName(path)
-        }
-        for folder in folderContent.subfolders.values {
-            changeGpxDBSubfolderTags(folderContent: folder, srcPath: srcPath, destPath: destPath)
-        }
-        gpxDB.save()
     }
     
     // MARK: - TableView
@@ -1341,7 +1385,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 cell.rightButton.layer.cornerRadius = 9
                 cell.setCustomLeftSeparatorInset(true)
                 cell.separatorInset = .zero
-
+                
                 cell.titleLabel.text = item.title
                 cell.descriptionLabel.text = item.descr
                 if let iconName = item.iconName {
@@ -1415,7 +1459,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 cell.button?.addTarget(self, action: #selector(onNavbarImportButtonClicked), for: .touchUpInside)
             }
             outCell = cell
-
+            
             let update: Bool = outCell?.needsUpdateConstraints() ?? false
             if update {
                 outCell?.setNeedsUpdateConstraints()
@@ -1441,7 +1485,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         if tableView.isEditing {
             if item.key == trackKey {
                 if let trackPath = item.obj(forKey: pathKey) as? String,
-                   let track = rootFolder.getTrackByPath(trackPath) {
+                   let track = rootFolder.getTrackItems().compactMap({ $0.dataItem }).first(where: { $0.gpxFilePath == trackPath }) {
                     if !selectedTracks.contains(track) {
                         selectedTracks.append(track)
                     }
@@ -1464,7 +1508,9 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 if let subfolderPath = item.obj(forKey: pathKey) as? String {
                     let storyboard = UIStoryboard(name: "MyPlaces", bundle: nil)
                     if let vc = storyboard.instantiateViewController(withIdentifier: "TracksViewController") as? TracksViewController {
-                        if let subfolder = rootFolder.getFolderByPath(subfolderPath) {
+                        if let subfolder = currentFolder.getSubFolders().first(where: {
+                            $0.getDirFile().path().hasSuffix(subfolderPath)
+                        }) {
                             vc.currentFolder = subfolder
                             vc.currentFolderPath = subfolderPath
                             vc.rootFolder = rootFolder
@@ -1477,7 +1523,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 }
             } else if item.key == trackKey {
                 if let trackPath = item.obj(forKey: pathKey) as? String,
-                   let track = rootFolder.getTrackByPath(trackPath),
+                   let track = rootFolder.getTrackItems().compactMap({ $0.dataItem }).first(where: { $0.gpxFilePath == trackPath }),
                    let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
                     OARootViewController.instance().mapPanel.openTargetViewWithGPX(fromTracksList: track,
                                                                                    navControllerHistory: newCurrentHistory,
@@ -1486,6 +1532,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 }
             } else if item.key == recordingTrackKey {
                 if savingHelper.hasData() {
+                    // FIXME:
                     rootVC.mapPanel.openRecordingTrackTargetView()
                     rootVC.navigationController?.popToRootViewController(animated: true)
                 }
@@ -1499,7 +1546,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         if tableView.isEditing {
             if item.key == trackKey {
                 if let trackPath = item.obj(forKey: pathKey) as? String,
-                   let track = rootFolder.getTrackByPath(trackPath),
+                   let track = rootFolder.getTrackItems().compactMap({ $0.dataItem }).first(where: { $0.gpxFilePath == trackPath }),
                    let index = selectedTracks.firstIndex(of: track) {
                     selectedTracks.remove(at: index)
                 }
@@ -1558,7 +1605,6 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 }
                 let lastButtonsSection = UIMenu(title: "", options: .displayInline, children: [deleteAction])
                 return UIMenu(title: "", image: nil, children: [secondButtonsSection, thirdButtonsSection, lastButtonsSection])
-                // return UIMenu(title: "", image: nil, children: [firstButtonsSection, secondButtonsSection, thirdButtonsSection, lastButtonsSection])
             }
             return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: menuProvider)
         } else if item.key == trackKey || item.key == recordingTrackKey {
@@ -1569,10 +1615,11 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             let isTrackVisible = item.bool(forKey: isVisibleKey)
             let selectedTrackPath = item.string(forKey: self.pathKey) ?? ""
             let selectedTrackFilename = item.string(forKey: self.fileNameKey) ?? ""
-            let track = currentFolder.tracks[selectedTrackFilename]
-           
+            
+            let track = getTrackFolderByPath(currentFolderPath)?.getTrackItems().compactMap({ $0.dataItem }).first(where: { $0.gpxFileName == selectedTrackFilename })
+            
             let menuProvider: UIContextMenuActionProvider = { _ in
-               
+                
                 let showOnMapAction = UIAction(title: localizedString(isTrackVisible ? "shared_string_hide_from_map" : "shared_string_show_on_map"), image: UIImage.icCustomMapPinOutlined) { [weak self] _ in
                     self?.onTrackShowOnMapClicked(trackPath: selectedTrackPath, isVisible: isTrackVisible, isCurrentTrack: isCurrentTrack)
                 }
@@ -1638,7 +1685,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     // MARK: - OATrackSavingHelperUpdatableDelegate
     
     func onNeedUpdateHostData() {
-        updateAllFoldersVCData()
+        updateAllFoldersVCData(forceLoad: true)
     }
     
     // MARK: - OASelectTrackFolderDelegate
@@ -1660,7 +1707,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         if !FileManager.default.fileExists(atPath: newFolderPath) {
             do {
                 try FileManager.default.createDirectory(atPath: newFolderPath, withIntermediateDirectories: true)
-                updateAllFoldersVCData()
+                updateAllFoldersVCData(forceLoad: true)
             } catch let error {
                 debugPrint(error)
             }
@@ -1675,13 +1722,13 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     // MARK: - OAGPXImportUIHelperDelegate
     
     func updateVCData() {
-        updateAllFoldersVCData()
+        updateAllFoldersVCData(forceLoad: true)
     }
     
     // MARK: - MapSettingsGpxViewControllerDelegate
     
     func onVisibleTracksUpdate() {
-        updateAllFoldersVCData()
+        updateAllFoldersVCData(forceLoad: true)
     }
     
     // MARK: - UISearchResultsUpdating

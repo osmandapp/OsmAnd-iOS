@@ -21,8 +21,8 @@
 
 - (instancetype) initWithHostViewController:(UIViewController *)hostVC;
 
-- (void) onImportClicked;
-- (void) onImportClickedWithDestinationFolderPath:(NSString *)destPath;
+- (void)onImportClicked;
+- (void)onImportClickedWithDestinationFolderPath:(NSString *)destPath;
 - (void)prepareProcessUrl:(NSURL *)url showAlerts:(BOOL)showAlerts openGpxView:(BOOL)openGpxView completion:(void (^)(BOOL success))completion;
 
 @end

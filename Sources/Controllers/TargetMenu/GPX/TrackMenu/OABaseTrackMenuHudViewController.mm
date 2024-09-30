@@ -183,7 +183,7 @@
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *backButtonLeadingConstraint;
 
-@property (nonatomic) OAGPX *gpx;
+@property (nonatomic) OASGpxDataItem *gpx;
 @property (nonatomic) BOOL isShown;
 @property (nonatomic) NSArray<OAGPXTableSectionData *> *tableData;
 
@@ -194,7 +194,7 @@
     CGFloat _cachedYViewPort;
 }
 
-- (instancetype)initWithGpx:(OAGPX *)gpx
+- (instancetype)initWithGpx:(OASGpxDataItem *)gpx
 {
     self = [self initWithNibName:[self getNibName] bundle:nil];
     if (self)
@@ -263,7 +263,8 @@
     {
         if (_isCurrentTrack)
         {
-            _gpx = [_savingHelper getCurrentGPX];
+           // FIXME:
+          //  _gpx = [_savingHelper getCurrentGPX];
         }
         else if (_doc)
         {
@@ -272,7 +273,8 @@
             gpx.nearestCity = _gpx.nearestCity;
             [db replaceGpxItem:gpx];
             [db save];
-            _gpx = gpx;
+            // FIXME:
+           // _gpx = gpx;
         }
     }
 }

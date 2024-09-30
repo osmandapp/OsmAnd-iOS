@@ -431,7 +431,7 @@
 
     if (!_selectedIconName || _selectedIconName.length == 0)
     {
-        _selectedIconName = DEFAULT_ICON_NAME;
+        _selectedIconName = DEFAULT_ICON_NAME_KEY;
         self.editIconName = _selectedIconName;
     }
 
@@ -462,7 +462,7 @@
         return preselectedIconName;
     else if (_lastUsedIcons && _lastUsedIcons.count > 0)
         return _lastUsedIcons[0];
-    return DEFAULT_ICON_NAME;
+    return DEFAULT_ICON_NAME_KEY;
 }
 
 - (void)createIconSelector

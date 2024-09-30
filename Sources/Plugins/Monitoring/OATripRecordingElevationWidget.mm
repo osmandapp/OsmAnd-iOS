@@ -57,7 +57,8 @@
             if (analysis.hasElevationData)
             {
                 OAGPX *gpxFile = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
-                [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpxFile selectedTab:EOATrackMenuHudSegmentsTab selectedStatisticsTab:EOATrackMenuHudSegmentsStatisticsAlititudeTab openedFromMap:YES];
+                // FIXME:
+//                [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpxFile selectedTab:EOATrackMenuHudSegmentsTab selectedStatisticsTab:EOATrackMenuHudSegmentsStatisticsAltitudeTab openedFromMap:YES];
             }
         };
         [self updateInfo];

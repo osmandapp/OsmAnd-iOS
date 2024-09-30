@@ -166,8 +166,10 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
             gpx = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
         }
         
-        if (gpx)
-            [mapPanel openTargetViewWithGPX:gpx];
+        if (gpx) {
+            // FIXME:
+            // [mapPanel openTargetViewWithGPX:gpx];
+        }
     }
     else if (_type == EOAWaypointFavorite)
     {

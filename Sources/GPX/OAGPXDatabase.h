@@ -48,7 +48,7 @@ typedef NS_ENUM(NSInteger, EOAGPX3DLineVisualizationPositionType) {
 };
 
 @class OAGPXTrackAnalysis;
-@class OAWptPt, OAGPXDocument;
+@class OAWptPt, OAGPXDocument, OASGpxDataItem;
 
 @interface OAGPX : NSObject
 
@@ -137,7 +137,6 @@ typedef NS_ENUM(NSInteger, EOAGPX3DLineVisualizationPositionType) {
 -(void)replaceGpxItem:(OAGPX *)gpx;
 -(void)removeGpxItem:(NSString *)filePath;
 -(BOOL)containsGPXItem:(NSString *)filePath;
--(BOOL)containsGPXItemByFileName:(NSString *)fileName;
 -(BOOL)updateGPXItemPointsCount:(NSString *)filePath pointsCount:(int)pointsCount;
 -(BOOL)updateGPXItemColor:(OAGPX *)item color:(int)color;
 
@@ -145,6 +144,8 @@ typedef NS_ENUM(NSInteger, EOAGPX3DLineVisualizationPositionType) {
 
 - (void)load;
 - (void)save;
+
+- (void)newLoad;
 
 + (EOAGpxSplitType) splitTypeByName:(NSString *)splitName;
 + (NSString *) splitTypeNameByValue:(EOAGpxSplitType)splitType;
@@ -157,5 +158,14 @@ typedef NS_ENUM(NSInteger, EOAGPX3DLineVisualizationPositionType) {
 
 + (NSString *)lineVisualizationPositionTypeNameForType:(EOAGPX3DLineVisualizationPositionType)type;
 + (EOAGPX3DLineVisualizationPositionType)lineVisualizationPositionTypeForName:(NSString *)name;
+
+
+
+- (OASGpxDataItem *)addGPXFileToDBIfNeeded:(NSString *)filePath
+                      withUpdateDataSource:(BOOL)withUpdateDataSource;
+- (void)removeNewGpxItem:(OASGpxDataItem *)item withLocalRemove:(BOOL)withLocalRemove;
+- (OASGpxDataItem *_Nullable)getNewGPXItem:(NSString *)filePath;
+
+- (void)renameGPX:(OASGpxDataItem *)gpx newFilePath:(NSString *)filePath;
 
 @end

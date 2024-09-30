@@ -3090,6 +3090,7 @@
 		FA44BF5B2A72A91C000D2F5F /* CarPlaySceneDelegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA44BF582A72A91C000D2F5F /* CarPlaySceneDelegates.swift */; };
 		FA44BF5C2A72A91C000D2F5F /* DashboardCarPlaySceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA44BF592A72A91C000D2F5F /* DashboardCarPlaySceneDelegate.swift */; };
 		FA44BF692A72F810000D2F5F /* SceneDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA44BF672A72F810000D2F5F /* SceneDelegate.mm */; };
+		FA45851E2C9474A3003A5AD7 /* GpxDataItemExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA45851D2C9474A3003A5AD7 /* GpxDataItemExtension.swift */; };
 		FA4768B32A66E73000D533E8 /* FreeBackupBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4768B22A66E73000D533E8 /* FreeBackupBanner.swift */; };
 		FA4768B52A67B86400D533E8 /* FreeBackupBanner.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4768B42A67B86400D533E8 /* FreeBackupBanner.xib */; };
 		FA4D7F572B03D366003208D7 /* BLEWheelSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4D7F562B03D366003208D7 /* BLEWheelSettingsViewController.swift */; };
@@ -3098,6 +3099,7 @@
 		FA63F24C2AF3DAA00040A0CE /* SensorDataField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA63F24B2AF3DAA00040A0CE /* SensorDataField.swift */; };
 		FA63F24E2AF3DC550040A0CE /* SensorWidgetDataField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA63F24D2AF3DC550040A0CE /* SensorWidgetDataField.swift */; };
 		FA63F2502AF3DFF60040A0CE /* SensorTextWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA63F24F2AF3DFF60040A0CE /* SensorTextWidget.swift */; };
+		FA64173B2CA5A57500982297 /* SharedLibExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA64173A2CA5A57500982297 /* SharedLibExtension.swift */; };
 		FA6439E72B04D70A00331006 /* CyclingCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6439E62B04D70A00331006 /* CyclingCharacteristic.swift */; };
 		FA6439E92B04D81B00331006 /* Data+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6439E82B04D81B00331006 /* Data+Extension.swift */; };
 		FA6439EB2B051A5300331006 /* MeasurementFormatter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6439EA2B051A5300331006 /* MeasurementFormatter+Extension.swift */; };
@@ -7598,6 +7600,7 @@
 		FA44BF592A72A91C000D2F5F /* DashboardCarPlaySceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashboardCarPlaySceneDelegate.swift; sourceTree = "<group>"; };
 		FA44BF672A72F810000D2F5F /* SceneDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SceneDelegate.mm; sourceTree = "<group>"; };
 		FA44BF682A72F810000D2F5F /* SceneDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
+		FA45851D2C9474A3003A5AD7 /* GpxDataItemExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GpxDataItemExtension.swift; sourceTree = "<group>"; };
 		FA4768B22A66E73000D533E8 /* FreeBackupBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeBackupBanner.swift; sourceTree = "<group>"; };
 		FA4768B42A67B86400D533E8 /* FreeBackupBanner.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FreeBackupBanner.xib; sourceTree = "<group>"; };
 		FA4D7F562B03D366003208D7 /* BLEWheelSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEWheelSettingsViewController.swift; sourceTree = "<group>"; };
@@ -7607,6 +7610,7 @@
 		FA63F24B2AF3DAA00040A0CE /* SensorDataField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorDataField.swift; sourceTree = "<group>"; };
 		FA63F24D2AF3DC550040A0CE /* SensorWidgetDataField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorWidgetDataField.swift; sourceTree = "<group>"; };
 		FA63F24F2AF3DFF60040A0CE /* SensorTextWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorTextWidget.swift; sourceTree = "<group>"; };
+		FA64173A2CA5A57500982297 /* SharedLibExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedLibExtension.swift; sourceTree = "<group>"; };
 		FA6439E62B04D70A00331006 /* CyclingCharacteristic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CyclingCharacteristic.swift; sourceTree = "<group>"; };
 		FA6439E82B04D81B00331006 /* Data+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extension.swift"; sourceTree = "<group>"; };
 		FA6439EA2B051A5300331006 /* MeasurementFormatter+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MeasurementFormatter+Extension.swift"; sourceTree = "<group>"; };
@@ -7668,6 +7672,7 @@
 		FAC5D4302BFC7F5200E9E658 /* SpeedLimitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedLimitView.swift; sourceTree = "<group>"; };
 		FACE409D2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAExternalSensorsPlugin.mm; sourceTree = "<group>"; };
 		FACE409E2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAExternalSensorsPlugin.h; sourceTree = "<group>"; };
+		FADFF8872C885AFD00F68E4F /* OsmAndSharedWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OsmAndSharedWrapper.h; sourceTree = "<group>"; };
 		FAE0B7102AFCDAD400C02438 /* BLEPairedSensorsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEPairedSensorsViewController.swift; sourceTree = "<group>"; };
 		FAE0B7122AFCDC6B00C02438 /* BLEPairedSensors.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = BLEPairedSensors.storyboard; sourceTree = "<group>"; };
 		FAE0B7152AFCEF4D00C02438 /* СhoicePairedDeviceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "СhoicePairedDeviceTableViewCell.swift"; sourceTree = "<group>"; };
@@ -10683,6 +10688,7 @@
 				DA5A79BC26C563A000F274C7 /* OsmAndAppProtocol.h */,
 				DA223EDE299A7229009412AA /* OAFetchBackgroundDataOperation.h */,
 				DA223EDF299A722A009412AA /* OAFetchBackgroundDataOperation.m */,
+				FADFF8872C885AFD00F68E4F /* OsmAndSharedWrapper.h */,
 			);
 			path = AppHost;
 			sourceTree = "<group>";
@@ -13005,6 +13011,7 @@
 		DA5A808E26C563A500F274C7 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				FA45851C2C946046003A5AD7 /* SharedLibHelpers */,
 				32D24D1F2BE54A5E000FA504 /* DownloadingCellHelper */,
 				FA327BFB2BB418B500CFADCF /* MissingMapsCalculator */,
 				46ED6C3C2B333A4600A5555F /* Extensions */,
@@ -13123,9 +13130,6 @@
 				32FE7AA62B65138800F82728 /* OAGPXImportUIHelper.mm */,
 				4663EC792BA1FEEF006B0EBB /* MigrationManager.swift */,
 				0590D19B2BF88AF400C62AF5 /* ConcurrentDictionary.swift */,
-				05DACD7D2C1CAF470023FAD9 /* OASharedUtil.h */,
-				05DACD7E2C1CAF470023FAD9 /* OASharedUtil.m */,
-				05DACD832C1F1CE20023FAD9 /* SharedUtil.swift */,
 				32A0CDF52C29B07B00FDD8E0 /* Model3dHelper */,
 				4665DB6D2C20BBFD00F897EC /* ColorsPaletteUtils.swift */,
 				46A35EF42C53F9510089B21C /* DirectoryObserver.swift */,
@@ -13563,6 +13567,18 @@
 				FA44BF592A72A91C000D2F5F /* DashboardCarPlaySceneDelegate.swift */,
 			);
 			path = CarPlayDelegate;
+			sourceTree = "<group>";
+		};
+		FA45851C2C946046003A5AD7 /* SharedLibHelpers */ = {
+			isa = PBXGroup;
+			children = (
+				05DACD7D2C1CAF470023FAD9 /* OASharedUtil.h */,
+				05DACD7E2C1CAF470023FAD9 /* OASharedUtil.m */,
+				05DACD832C1F1CE20023FAD9 /* SharedUtil.swift */,
+				FA45851D2C9474A3003A5AD7 /* GpxDataItemExtension.swift */,
+				FA64173A2CA5A57500982297 /* SharedLibExtension.swift */,
+			);
+			path = SharedLibHelpers;
 			sourceTree = "<group>";
 		};
 		FA4768B02A66E6DB00D533E8 /* Banners */ = {
@@ -16521,6 +16537,7 @@
 				FAE6E8642C2A9BC600907FBE /* WeatherLayerSettingsViewController.swift in Sources */,
 				FA4768B32A66E73000D533E8 /* FreeBackupBanner.swift in Sources */,
 				DA5A81AF26C563A700F274C7 /* OASearchCoreFactory.mm in Sources */,
+				FA45851E2C9474A3003A5AD7 /* GpxDataItemExtension.swift in Sources */,
 				DA5A849626C563A900F274C7 /* InitialRoutePlanningBottomSheetViewController.mm in Sources */,
 				DA5A81EC26C563A700F274C7 /* OARendererRegistry.mm in Sources */,
 				DA5A81C526C563A700F274C7 /* OANameStringMatcher.m in Sources */,
@@ -16868,6 +16885,7 @@
 				DA5A83DB26C563A800F274C7 /* OASelectFavoriteGroupViewController.mm in Sources */,
 				DA5A854726C563A900F274C7 /* OANetworkUtilities.m in Sources */,
 				B247453827E35E9B00C18C3F /* OACloudIntroductionHeaderView.m in Sources */,
+				FA64173B2CA5A57500982297 /* SharedLibExtension.swift in Sources */,
 				C588D1EC298BF2D3001FEDBD /* OASearchHistoryTableItem.m in Sources */,
 				FAC166292B21BEF900D63755 /* CBUUIDPath.swift in Sources */,
 				FA359EE52ADF026D0001C11D /* DeviceType.swift in Sources */,

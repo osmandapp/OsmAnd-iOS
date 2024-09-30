@@ -783,9 +783,9 @@ static const CGFloat kVerticalExaggerationScaleMax = 4.0;
 
     NSMutableArray<OAGpxExtension *> *extArray = [w.extensions mutableCopy];
     NSString *profile = [w getProfileType];
-    if ([GAP_PROFILE_TYPE isEqualToString:profile])
+    if ([kGapProfileTypeKey isEqualToString:profile])
     {
-        OAGpxExtension *profileExtension = [w getExtensionByKey:PROFILE_TYPE_EXTENSION];
+        OAGpxExtension *profileExtension = [w getExtensionByKey:PROFILE_TYPE_EXTENSION_KEY];
         [extArray removeObject:profileExtension];
     }
 

@@ -45,6 +45,7 @@
 #include <OsmAndCore/Map/GpxAdditionalIconsProvider.h>
 #include <OsmAndCore/SingleSkImage.h>
 
+
 static const CGFloat kSpeedToHeightScale = 10.0;
 static const CGFloat kTemperatureToHeightOffset = 100.0;
 
@@ -1119,6 +1120,7 @@ colorizationScheme:(int)colorizationScheme
     for (auto it = _gpxDocs.begin(); it != _gpxDocs.end(); ++it)
     {
         NSString *path = it.key().toNSString();
+        
         OAGPXDatabase *gpxDb = OAGPXDatabase.sharedDb;
         path = [[gpxDb getFileDir:path] stringByAppendingPathComponent:path.lastPathComponent];
         OAGPX *gpx = [gpxDb getGPXItem:path];
@@ -1802,7 +1804,7 @@ colorizationScheme:(int)colorizationScheme
         return [OAFavoritesLayer getImageWithColor:point.color background:point.point.getBackgroundIcon icon:[@"mx_" stringByAppendingString:point.point.getIcon]];
     }
     OAFavoriteColor *def = [OADefaultFavorite nearestFavColor:OADefaultFavorite.builtinColors.firstObject];
-    return [OAFavoritesLayer getImageWithColor:def.color background:@"circle" icon:[@"mx_" stringByAppendingString:DEFAULT_ICON_NAME]];
+    return [OAFavoritesLayer getImageWithColor:def.color background:@"circle" icon:[@"mx_" stringByAppendingString:DEFAULT_ICON_NAME_KEY]];
 }
 
 - (void) setPointVisibility:(id)object hidden:(BOOL)hidden

@@ -60,7 +60,8 @@
             if (cachedTimeSpan > 0)
             {
                 OAGPX *gpxFile = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
-                [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpxFile selectedTab:EOATrackMenuHudSegmentsTab selectedStatisticsTab:EOATrackMenuHudSegmentsStatisticsOverviewTab openedFromMap:YES];
+                // FIXME:
+//                [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpxFile selectedTab:EOATrackMenuHudSegmentsTab selectedStatisticsTab:EOATrackMenuHudSegmentsStatisticsOverviewTab openedFromMap:YES];
             }
         };
         

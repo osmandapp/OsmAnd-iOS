@@ -10,8 +10,9 @@
 #import "OABaseScrollableHudViewController.h"
 #import "OATargetMenuViewController.h"
 #import "OATrackMenuHudViewControllerConstants.h"
+#import "OsmAndSharedWrapper.h"
 
-@class ElevationChart, OATrack, OATrkSegment, OARouteLineChartHelper, OARouteKey, OAAuthor, OACopyright, OALink, OAMetadata, OATravelArticleIdentifier, OAGpxWptItem, OAGPXTrackAnalysis, OAGPXTableData, OAGPX;
+@class ElevationChart, OATrack, OATrkSegment, OARouteLineChartHelper, OARouteKey, OAAuthor, OACopyright, OALink, OAMetadata, OATravelArticleIdentifier, OAGpxWptItem, OAGPXTrackAnalysis, OAGPXTableData;
 
 @protocol OATrackMenuViewControllerDelegate <NSObject>
 
@@ -121,7 +122,7 @@
 
 @interface OATrackMenuHudViewController : OABaseTrackMenuHudViewController
 
-- (instancetype)initWithGpx:(OAGPX *)gpx tab:(EOATrackMenuHudTab)tab;
-- (instancetype)initWithGpx:(OAGPX *)gpx routeKey:(OARouteKey *)routeKey state:(OATargetMenuViewControllerState *)state;
+- (instancetype)initWithGpx:(OASGpxDataItem *)gpx tab:(EOATrackMenuHudTab)tab;
+- (instancetype)initWithGpx:(OASGpxDataItem *)gpx routeKey:(OARouteKey *)routeKey state:(OATargetMenuViewControllerState *)state;
 
 @end

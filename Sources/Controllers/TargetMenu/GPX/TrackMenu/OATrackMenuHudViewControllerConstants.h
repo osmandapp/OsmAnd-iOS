@@ -17,6 +17,6 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
 typedef NS_ENUM(NSUInteger, EOATrackMenuHudSegmentsStatisticsTab)
 {
     EOATrackMenuHudSegmentsStatisticsOverviewTab = 0,
-    EOATrackMenuHudSegmentsStatisticsAlititudeTab,
+    EOATrackMenuHudSegmentsStatisticsAltitudeTab,
     EOATrackMenuHudSegmentsStatisticsSpeedTab
 };

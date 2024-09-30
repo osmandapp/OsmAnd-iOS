@@ -9,12 +9,14 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-#define MIN_LATITUDE -85.0511
-#define MAX_LATITUDE 85.0511
-#define LATITUDE_TURN 180.0
-#define MIN_LONGITUDE -180.0
-#define MAX_LONGITUDE 180.0
-#define LONGITUDE_TURN 360.0
+#define MIN_LATITUDE_KEY -85.0511
+#define MAX_LATITUDE_KEY 85.0511
+#define LATITUDE_TURN_KEY 180.0
+
+#define MIN_LONGITUDE_KEY -180.0
+#define MAX_LONGITUDE_KEY 180.0
+#define LONGITUDE_TURN_KEY 360.0
+
 
 @class OAPOI;
 @class QuadRect;

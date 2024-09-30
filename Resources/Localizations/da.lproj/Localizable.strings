@@ -3529,3 +3529,8 @@
 "navigation_position" = "Navigationsposition";
 "rendering_attr_showDirtbikeTrails_description" = "Vis motocross-stier";
 "rendering_attr_showDirtbikeTrails_name" = "Vis motocross-stier";
+"of" = "%@ af %@";
+"daynight_mode_app_theme_summary" = "Kortets visning tilpasses appens overordnede tema — dagtilstand for et lyst tema og nattilstand for et mørkt tema";
+"daynight_mode_sunrise_sunset_summary" = "Skifter automatisk mellem dag- og nattemaer baseret på lokale solopgangs- og solnedgangstider.";
+"daynight_mode_night_summary" = "Viser altid kortet i et mørkt tema, der er velegnet til natlige eller svage lysforhold.";
+"daynight_mode_day_summary" = "Viser altid kortet i et lyst tema, ideelt til synlighed i dagtimerne.";

@@ -60,7 +60,7 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
     }
     
     override func getTopButtonTitle() -> String? {
-        localizedString("discard_filter_changes_prompt")
+        localizedString("shared_string_reset_all")
     }
     
     override func getBottomButtonTitle() -> String? {

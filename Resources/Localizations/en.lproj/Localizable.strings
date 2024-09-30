@@ -2352,9 +2352,11 @@
 "avg_sensor_temperature" = "Temperature, averag";
 "shared_string_visible_on_map" = "Visible on map";
 "with_waypoints" = "With waypoints";
-"discard_filter_changes_prompt" = "Reset all";
+"shared_string_reset_all" = "Reset all";
 "shared_string_to" = "To";
 "discard_filter_changes_prompt" = "Reset all filters?";
+"power_watts_unit" = "Watts";
+"revolutions_per_minute_unit" = "RPM";
 
 "shared_string_total" = "Total";
 "shared_string_walk" = "Walk";

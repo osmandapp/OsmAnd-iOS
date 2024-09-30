@@ -1757,20 +1757,20 @@ static BOOL _repositoryUpdated = NO;
 
 - (void) updateRepository
 {
-//    _doDataUpdateReload = YES;
-//    _updateButton.enabled = NO;
-//    [_refreshRepositoryProgressHUD show:YES];
-//    [OAOcbfHelper downloadOcbfIfUpdated:^{
-//        [_app loadWorldRegions];
-//        self.region = _app.worldRegion;
-//        [_app startRepositoryUpdateAsync:NO];
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [_refreshRepositoryProgressHUD hide:YES];
-//            [self updateContent];
-//            [_app.worldRegion buildResourceGroupItem];
-//            _updateButton.enabled = YES;
-//        });
-//    }];
+    _doDataUpdateReload = YES;
+    _updateButton.enabled = NO;
+    [_refreshRepositoryProgressHUD show:YES];
+    [OAOcbfHelper downloadOcbfIfUpdated:^{
+        [_app loadWorldRegions];
+        self.region = _app.worldRegion;
+        [_app startRepositoryUpdateAsync:NO];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_refreshRepositoryProgressHUD hide:YES];
+            [self updateContent];
+            [_app.worldRegion buildResourceGroupItem];
+            _updateButton.enabled = YES;
+        });
+    }];
 }
 
 - (UITableView *) getTableView

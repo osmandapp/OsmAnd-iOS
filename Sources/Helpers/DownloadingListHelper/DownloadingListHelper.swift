@@ -60,11 +60,8 @@ final class DownloadingListHelper: NSObject, DownloadingCellResourceHelperDelega
         
         var title = localizedString("downloading") + ": "
         let tasks = getDownloadingTasks()
-        for task in tasks {
-            if task.state == .running {
-                title += task.name
-                break
-            }
+        if let downloadingTask = tasks.first(where: { $0.state == .running }) {
+            title += downloadingTask.name
         }
         cell.textView.text = title
         

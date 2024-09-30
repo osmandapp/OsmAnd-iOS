@@ -51,17 +51,14 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     override func startDownload(_ resourceId: String) {
         if let resourceItem = getResource(resourceId) {
             if resourceItem.isOutdatedItem() {
-                OAResourcesUISwiftHelper.offerDownloadAndUpdate(of: resourceItem) { [weak self] task in
+                OAResourcesUISwiftHelper.offerDownloadAndUpdate(of: resourceItem, onTaskCreated: { [weak self] task in
                     self?.delegate?.onDownloadingCellResourceNeedUpdate()
-                } onTaskResumed: { task in
-                }
+                }, onTaskResumed: nil)
             } else {
-                OAResourcesUISwiftHelper.offerDownloadAndInstall(of: resourceItem) { [weak self] task in
+                OAResourcesUISwiftHelper.offerDownloadAndInstall(of: resourceItem, onTaskCreated: { [weak self] task in
                     self?.delegate?.onDownloadingCellResourceNeedUpdate()
-                } onTaskResumed: { task in
-                }
+                }, onTaskResumed: nil)
             }
-            
         }
     }
     

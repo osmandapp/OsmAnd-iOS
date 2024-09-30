@@ -3889,5 +3889,11 @@
 "height_legend_description" = "Altitude color maps are used to visualize relief.";
 "shared_string_local" = "Local";
 
+"daynight_mode_app_theme_summary" = "The map\'s display aligns with the app\'s overall theme—day mode for a light theme and night mode for a dark theme";
+"daynight_mode_sunrise_sunset_summary" = "Automatically switches between day and night themes based on local sunrise and sunset times.";
+"daynight_mode_night_summary" = "Always displays the map in a dark theme, suited for nighttime or low-light conditions.";
+"daynight_mode_day_summary" = "Always displays the map in a light theme, ideal for daytime visibility.";
+
 "rendering_attr_showDirtbikeTrails_name" = "Show dirt bike trails";
 "rendering_attr_showDirtbikeTrails_description" = "Show dirt bike trails";;
+

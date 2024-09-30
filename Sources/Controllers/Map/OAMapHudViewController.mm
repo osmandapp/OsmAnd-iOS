@@ -1302,6 +1302,7 @@ static const float kDistanceMeters = 100.0;
         || _mapPanelViewController.activeTargetType == OATargetWeatherLayerSettings
         || _mapPanelViewController.activeTargetType == OATargetRouteLineAppearance
         || _mapPanelViewController.activeTargetType == OATargetTerrainParametersSettings
+        || _mapPanelViewController.activeTargetType == OATargetMapModeParametersSettings
         || _mapPanelViewController.activeTargetType == OATargetRouteDetails
         || _mapPanelViewController.activeTargetType == OATargetRouteDetailsGraph;
     BOOL isInContextMenuVisible = self.contextMenuMode && !isTargetToHideVisible;

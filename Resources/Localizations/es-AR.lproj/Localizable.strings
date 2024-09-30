@@ -3537,3 +3537,8 @@
 "location_radius" = "Radio de ubicación";
 "resting_position_icon_summary" = "Icono que se muestra en reposo.";
 "profile_icon" = "Icono del perfil";
+"of" = "%@ de %@";
+"daynight_mode_sunrise_sunset_summary" = "Alterna automáticamente entre los temas diurno y nocturno, basado en el amanecer y atardecer local.";
+"daynight_mode_app_theme_summary" = "La pantalla del mapa se vincula al tema general de la aplicación: «modo diurno» para un tema claro y «modo nocturno» para un tema oscuro";
+"daynight_mode_night_summary" = "Siempre muestra el mapa con el tema oscuro, adecuado para las condiciones nocturnas o de baja iluminación.";
+"daynight_mode_day_summary" = "Siempre muestra el mapa con el tema claro, ideal con la luz del día.";

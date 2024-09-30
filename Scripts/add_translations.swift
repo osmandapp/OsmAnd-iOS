@@ -172,15 +172,6 @@ let removeLatinOnlyStringsForLanguages = [
 var allLanguagesDict = languageDict
 allLanguagesDict["en"] = ""
 
-func trim(string: String, from index: Int) -> String {
-    return string.substring(from: string.index(string.startIndex, offsetBy: index))
-}
-
-func charFrom(string: String, at index: Int) -> String {
-    let charIndex = string.index(string.startIndex, offsetBy: index)
-    return String(string[charIndex])
-}
-
 
 // MARK: - Main
 

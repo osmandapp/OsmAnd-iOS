@@ -432,52 +432,20 @@
    return EOAGPX3DLineVisualizationPositionTypeTop;
 }
 
-- (OASGpxDataItem *)getNewGPXItem:(NSString *)filePath
+- (OASGpxDataItem *_Nullable)getNewGPXItem:(NSString *)filePath
 {
-    for (OASGpxDataItem *item in self.gpxNewList)
-    {
-        if ([item.gpxFilePath isEqualToString:filePath])
-        {
-            return item;
-        }
-    }
-    return nil;
+    OASKFile *file = [[OASKFile alloc] initWithFilePath:filePath];
+    [[OASGpxDbHelper shared] getItemFile:file];
 }
 
-- (OASGpxDataItem *)getNewGPXItemByFileName:(NSString *)fileName
+- (void)removeNewGpxItem:(OASGpxDataItem *)item withLocalRemove:(BOOL)withLocalRemove
 {
-    for (OASGpxDataItem *item in self.gpxNewList)
+    [[OASGpxDbHelper shared] removeItem:item];
+    if (withLocalRemove)
     {
-        if ([item.gpxFileName isEqualToString:fileName])
-        {
-            return item;
-        }
-    }
-    return nil;
-}
-
-- (void)removeNewGpxItem:(NSString *)filePath
-{
-    // FIXME:
-    OASGpxDataItem *gpx = [self getNewGPXItem:filePath];
-    if (!gpx)
-        gpx = [self getNewGPXItemByFileName:filePath];
-    if (gpx)
-    {
-        NSMutableArray *newGpxList = [_gpxNewList mutableCopy];
-        [newGpxList removeObject:gpx];
-        _gpxNewList = newGpxList;
-        
-        // Remove from DB
-        BOOL success = [_db removeFile:gpx.file];
-        NSString *status = success ? @"SUCCESS" : @"ERROR";
-        NSLog(@" [%@] remove from db | %@", status, gpx.file.path);
-        
-        // Remove local file
-        [[NSFileManager defaultManager] removeItemAtPath:gpx.file.absolutePath error:nil];
+        [[NSFileManager defaultManager] removeItemAtPath:item.file.absolutePath error:nil];
     }
 }
-
 
 - (OAGPX *)getGPXItem:(NSString *)filePath
 {
@@ -829,8 +797,6 @@
     OASKFile *newFile = [[OASKFile alloc] initWithFilePath:filePath];
     [gpx.file renameToToFile:newFile];
     [[OASGpxDbHelper shared] renameCurrentFile:gpx.file newFile:newFile];
-    //[_db renameCurrentFile:gpx.file newFile:newFile];
-    _gpxNewList = [_db getGpxDataItemsSync];
 }
 
 - (NSDictionary *)generateGpxData:(OAGPX *)gpx

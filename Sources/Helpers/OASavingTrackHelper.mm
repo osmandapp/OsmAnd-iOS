@@ -653,6 +653,9 @@
             long time = (long)[[NSDate date] timeIntervalSince1970];
             [self doUpdateTrackLat:0.0 lon:0.0 alt:0.0 speed:0.0 hdop:0.0 time:time heading:NAN pluginsInfo:nil];
             [self addTrackPoint:nil newSegment:YES time:time];
+             // NOTE: START new logic
+            [self addTrackPointNew:nil newSegment:YES time:time];
+            // NOTE: END new logic
         }
     });
 }
@@ -797,7 +800,7 @@
     }
     
     lastTimeUpdated = time;
-    
+    // FIXME: old objects - remove
     OAWptPt *pt = [[OAWptPt alloc] init];
     pt.position = CLLocationCoordinate2DMake(lat, lon);
     pt.time = time;
@@ -810,31 +813,44 @@
     [self addPluginsExtensions:extensions toPoint:pt];
 
     [self addTrackPoint:pt newSegment:newSegment time:time];
+    
+    
+    // NOTE: START new logic
+    
+    OASWptPt *ptNew = [[OASWptPt alloc] initWithLat:lat lon:lon time:time ele:alt speed:speed hdop:hdop heading:heading];
+    if (extensions.count > 0)
+    {
+        [OASGpxUtilities.shared assignExtensionWriterWptPt:ptNew extensions:extensions];
+    }
+    [self addTrackPointNew:ptNew newSegment:newSegment time:time];
+    
+    // NOTE: END new logic
 }
 
-- (void)addTrackPointTest:(OASWptPt *)pt newSegment:(BOOL)newSegment time:(long)time {
-//    OASTrack *track = [_currentTrackSharedLib tracks].firstObject;
-//
-//    BOOL segmentAdded = NO;
-//    if (track.segments.count == 0 || newSegment)
-//    {
-//        OASTrkSegment *segment = [[OASTrkSegment alloc] init];
-//        segment.points = [NSMutableArray array];
-//        [track.segments addObject:segment];
-//        segmentAdded = YES;
-//    }
-//    if (pt != nil)
-//    {
-//        OASTrkSegment *lt = [track.segments lastObject];
-////        _currentTrackSharedLib.appendTrackPointToDisplay(pt, app);
-////        TrkSegment lt = track.getSegments().get(track.getSegments().size() - 1);
-////        lt.getPoints().add(pt);
-//    }
-//    if (segmentAdded)
-//    {
-//        currentTrack.processPoints(app);
-//    }
-//    currentTrack.getModifiableGpxFile().setModifiedTime(time);
+- (void)addTrackPointNew:(OASWptPt *)pt newSegment:(BOOL)newSegment time:(long)time {
+    OASTrack *track = [_currentTrackSharedLib tracks].firstObject;
+    
+    BOOL segmentAdded = NO;
+    
+    if (track.segments.count == 0 || newSegment)
+    {
+        OASTrkSegment *segment = [[OASTrkSegment alloc] init];
+        segment.points = [NSMutableArray array];
+        [track.segments addObject:segment];
+        segmentAdded = YES;
+    }
+    if (pt != nil)
+    {
+        OASTrkSegment *lt = [track.segments lastObject];
+        [lt.points addObject:pt];
+    }
+    if (segmentAdded)
+    {
+        [_currentTrackSharedLib processPoints];
+    }
+    
+    _currentTrackSharedLib.modifiedTime = time;
+
 }
 
 - (void) addTrackPoint:(OAWptPt *)pt newSegment:(BOOL)newSegment time:(long)time

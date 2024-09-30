@@ -591,13 +591,13 @@
                                                      _exportFileName];
         // FIXME:
 
-//        [OASavingTrackHelper.sharedInstance saveCurrentTrack:_exportFilePath];
+        [OASavingTrackHelper.sharedInstance saveCurrentTrack:_exportFilePath];
 //        _exportingGpxDoc = OASavingTrackHelper.sharedInstance.currentTrack;
 //        _exportingGpx = [OASavingTrackHelper.sharedInstance getCurrentGPX];
     }
     else
     {
-        _exportFileName = gpx.gpxFileName;
+        _exportFileName = gpx.gpxFilePath;
         _exportFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:gpx.gpxFileName];
 // FIXME:
 //        [OAGPXUIHelper addAppearanceToGpx:_exportingGpxDoc gpxItem:_exportingGpx];
@@ -712,8 +712,6 @@
     if (deleteOriginalFile)
     {
         [gpx updateFolderNameWithNewFilePath:newStoringPath];
-//        doc.path = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
-//        [gpxDatabase save];
         [[NSFileManager defaultManager] removeItemAtPath:sourcePath error:nil];
 
         [OASelectedGPXHelper renameVisibleTrack:oldPath newPath:newStoringPath];
@@ -838,7 +836,6 @@
     if (newName.length > 0)
     {
         NSString *oldFilePath = gpx.gpxFilePath;
-        NSString *oldPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:oldFilePath];
         NSString *newFileName = newName;
         NSString *newFilePath = [[gpx.gpxFilePath stringByDeletingLastPathComponent] stringByAppendingPathComponent:newFileName];
         NSString *newPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:newFilePath];

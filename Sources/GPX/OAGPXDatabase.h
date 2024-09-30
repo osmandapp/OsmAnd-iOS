@@ -126,7 +126,6 @@ typedef NS_ENUM(NSInteger, EOAGPX3DLineVisualizationPositionType) {
 @interface OAGPXDatabase : NSObject
 
 @property (nonatomic, readonly) NSArray *gpxList;
-@property (nonatomic, readonly) NSArray *gpxNewList;
 
 + (OAGPXDatabase *)sharedDb;
 
@@ -164,11 +163,9 @@ typedef NS_ENUM(NSInteger, EOAGPX3DLineVisualizationPositionType) {
 
 - (OASGpxDataItem *)addGPXFileToDBIfNeeded:(NSString *)filePath
                       withUpdateDataSource:(BOOL)withUpdateDataSource;
-- (void)removeNewGpxItem:(NSString *)filePath;
-- (OASGpxDataItem *)getNewGPXItem:(NSString *)filePath;
+- (void)removeNewGpxItem:(OASGpxDataItem *)item withLocalRemove:(BOOL)withLocalRemove;
+- (OASGpxDataItem *_Nullable)getNewGPXItem:(NSString *)filePath;
 
 - (void)renameGPX:(OASGpxDataItem *)gpx newFilePath:(NSString *)filePath;
-//- (void)renameGPX:(NSStr
-
 
 @end

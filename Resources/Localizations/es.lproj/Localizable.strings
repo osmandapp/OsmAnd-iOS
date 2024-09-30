@@ -3530,3 +3530,6 @@
 "rendering_attr_showDirtbikeTrails_description" = "Mostrar senderos para motos de cross";
 "daynight_mode_day_summary" = "Siempre muestra el mapa en un tema claro, ideal para la visibilidad diurna.";
 "daynight_mode_night_summary" = "Siempre muestra el mapa en un tema oscuro, adecuado para condiciones nocturnas o de poca luz.";
+"daynight_mode_app_theme_summary" = "La pantalla del mapa se alinea con el modo día de la aplicación para un tema claro y el modo noche para un tema oscuro";
+"daynight_mode_sunrise_sunset_summary" = "Cambia automáticamente entre los temas de día y de noche en función de las horas locales del amanecer y el atardecer.";
+"of" = "%@ de %@";

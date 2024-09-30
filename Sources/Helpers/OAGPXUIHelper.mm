@@ -590,7 +590,7 @@
                                                      NSTemporaryDirectory(),
                                                      _exportFileName];
         // FIXME:
-
+       // /Data/tmp//2024-09-30_15-02_Пн.gpx
         [OASavingTrackHelper.sharedInstance saveCurrentTrack:_exportFilePath];
 //        _exportingGpxDoc = OASavingTrackHelper.sharedInstance.currentTrack;
 //        _exportingGpx = [OASavingTrackHelper.sharedInstance getCurrentGPX];
@@ -652,7 +652,7 @@
         if (!_exportingGpxDoc || ![_exportingGpxDoc isKindOfClass:OAGPXDocument.class])
         {
             NSString *absoluteGpxFilepath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:_exportFileName];
-            //Users/oleksandrpanchenko/Library/Containers/57D28383-0CA5-477F-994B-B823A5E5A0B1/Data/Documents/GPX/2023-10-22_11-34_Sun.gpx
+            //.../Documents/GPX/2023-10-22_11-34_Sun.gpx
             _exportingGpxDoc = [[OAGPXDocument alloc] initWithGpxFile:absoluteGpxFilepath];
         }
         else

@@ -435,7 +435,7 @@
 - (OASGpxDataItem *_Nullable)getNewGPXItem:(NSString *)filePath
 {
     OASKFile *file = [[OASKFile alloc] initWithFilePath:filePath];
-    [[OASGpxDbHelper shared] getItemFile:file];
+    return [[OASGpxDbHelper shared] getItemFile:file];
 }
 
 - (void)removeNewGpxItem:(OASGpxDataItem *)item withLocalRemove:(BOOL)withLocalRemove

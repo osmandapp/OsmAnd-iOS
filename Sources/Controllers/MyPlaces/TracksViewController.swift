@@ -1532,6 +1532,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                 }
             } else if item.key == recordingTrackKey {
                 if savingHelper.hasData() {
+                    // FIXME:
                     rootVC.mapPanel.openRecordingTrackTargetView()
                     rootVC.navigationController?.popToRootViewController(animated: true)
                 }

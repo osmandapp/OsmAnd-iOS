@@ -18,7 +18,7 @@ let LOGGING = false
 ///For debug set here your Osmand repositories path
 let OSMAND_REPOSITORIES_PATH = "/Users/nnngrach/Projects/Coding/OsmAnd/"
 
-///For quick debugging you can write interesting key only in this var. And then manually add breakpoint on strings "// breakpointHere()"
+///For quick debugging you can write interesting key only in this var.
 let DEBUG_STOP_KEY = "empty_purchases_description"
 
 ///For turning off updating translations. In this mode scrip will only delete trash strings
@@ -181,11 +181,6 @@ func charFrom(string: String, at index: Int) -> String {
     return String(string[charIndex])
 }
 
-func breakpointHere() {
-    // it's not a function for real use. it's just to mark the place of debugging start (in most caces)
-    raise(SIGINT)
-}
-
 
 // MARK: - Main
 
@@ -303,7 +298,6 @@ class Initialiser {
         for iosTranslation in iosDict
         {
             if DEBUG && iosTranslation.key == DEBUG_STOP_KEY {
-                // breakpointHere()
                 if LOGGING {
                     print("#### DEBUG_STOP_KEY #### ")
                 }
@@ -361,7 +355,9 @@ class IOSReader {
         var updatedDict = androidDict
         for elem in updatedDict {
             if DEBUG && elem.key == DEBUG_STOP_KEY {
-                // breakpointHere()
+                if LOGGING {
+                    print("#### DEBUG_STOP_KEY #### ")
+                }
             }
             var modString = elem.value;
             modString = modString.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
@@ -455,7 +451,9 @@ class IOSWriter {
         let isDuplicate = language != iosEnglishKey && androidTrimmedValue == iosEnglishTrimmedValue
         
         if DEBUG && key == DEBUG_STOP_KEY && isDuplicate {
-            // breakpointHere()
+            if LOGGING {
+                print("#### DEBUG_STOP_KEY #### ")
+            }
         }
         return language != iosEnglishKey && androidTrimmedValue == iosEnglishTrimmedValue
     }
@@ -480,7 +478,9 @@ class IOSWriter {
 
         for elem in commonDict! {
             if DEBUG && elem.key == DEBUG_STOP_KEY {
-                // breakpointHere()
+                if LOGGING {
+                    print("#### DEBUG_STOP_KEY #### ")
+                }
             }
             
             if androidDict.keys.contains(elem.key)
@@ -501,7 +501,9 @@ class IOSWriter {
         
         for elem in commonValuesDict {
             if DEBUG && elem.key == DEBUG_STOP_KEY {
-                // breakpointHere()
+                if LOGGING {
+                    print("#### DEBUG_STOP_KEY #### ")
+                }
             }
             if let androidKey = AndroidReader.dictContainsKeys(androidDict: androidDict, keys: elem.value) {
                 guard let androidValue = androidDict[androidKey] else { continue }
@@ -565,7 +567,9 @@ class IOSWriter {
                         
                         if !key.isEmpty {
                             if DEBUG && key == DEBUG_STOP_KEY {
-                                // breakpointHere()
+                                if LOGGING {
+                                    print("#### DEBUG_STOP_KEY #### ")
+                                }
                             }
                             
                             keyOccurrences[key, default: 0] += 1
@@ -595,7 +599,9 @@ class IOSWriter {
                                             isTrashString = true
                                         } else {
                                             if DEBUG && key == DEBUG_STOP_KEY {
-                                                // breakpointHere()
+                                                if LOGGING {
+                                                    print("#### DEBUG_STOP_KEY #### ")
+                                                }
                                             }
                                         }
                                     }

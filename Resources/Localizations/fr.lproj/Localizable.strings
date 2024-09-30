@@ -2336,7 +2336,7 @@
 "quarterly_subscription" = "Abonnement trimestriel";
 "simulate_location_unselected_track_footer" = "Vous devez sélectionner un fichier de trace";
 "shared_string_paused" = "Mis en pause";
-"you_can_get_feature_as_part_of_pattern" = "Obtenez \"%@ provenant du pack %@. Comparaison :";
+"you_can_get_feature_as_part_of_pattern" = "Obtenez « %@ » provenant du pack %@. Comparaison :";
 "in_grace_period" = "En période d\'essai";
 "shared_string_expires" = "Expire";
 "simulate_your_location_gpx_descr" = "Simulez votre position à partir d\\\'une trace GPX enregistrée.";
@@ -2806,8 +2806,8 @@
 "radius_rules_widget_desc" = "L\'outil Rayon affiche des cercles de rayon autour d\'un point sélectionné sur la carte.";
 "current_speed_widget_desc" = "Indique votre vitesse actuelle (d\'après le GPS).";
 "street_name_widget_desc" = "Le widget des noms de rue affiche le nom de la rue actuelle ou le nom de la rue suivante avec une flèche indiquant la prochaine manœuvre à effectuer.";
-"bearing_secondary_desc" = "Vous pouvez modifier le format d\'affichage utilisé en : %@ - %@ - %@.";
-"coordinates_widget_secondary_desc" = "Vous pouvez modifier le format des coordonnées en %@ - %@ - %@.";
+"bearing_secondary_desc" = "Vous pouvez modifier le format d'affichage utilisé en : %@ – %@ – %@.";
+"coordinates_widget_secondary_desc" = "Vous pouvez modifier le format des coordonnées en %@ – %@ – %@.";
 "weather_widgets_secondary_desc" = "Les unités de mesure peuvent être modifiées dans les paramètres du plugin météo.";
 "map_markers_bar" = "Barre de marqueurs";
 "map_widget_time_to_destination" = "Temps restant jusqu\'à destination";

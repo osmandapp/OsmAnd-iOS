@@ -2474,7 +2474,7 @@
 "navigation_points" = "Navigačné body";
 "second_next_turn_widget_desc" = "Nástroj zobrazuje informácie o druhom nasledujúcom zabočení, ktoré sa zobrazí ak je už v dostatočnej blízkosti.";
 "shared_string_relief_3d" = "3D reliéf";
-"compass_click_desc" = "Pomôcka: Stlačte tlačidlo kompasu pre prepnutie režimu orientácie mapy.";
+"compass_click_desc" = "Dvakrát stlačte tlačidlo kompasu pre prepnutie režimu orientácie mapy.";
 "current_speed_widget_desc" = "Zobrazuje aktuálnu rýchlosť podľa GPS senzora.";
 "shared_string_move" = "Presunúť";
 "activity_type_running_name" = "Beh";

@@ -1812,7 +1812,7 @@
 "city_type_district" = "जिल्हा";
 "city_type_neighbourhood" = "शेजार";
 "postcode" = "पिनकोड";
-"show_something_on_map" = "%@नकाशावर दाखवा";
+"show_something_on_map" = "%@ नकाशावर दाखवा";
 "search_POI_level_btn" = "अजून शोधा";
 "search_address_street" = "रस्ता";
 "search_address_building_option" = "इमारत";
@@ -2258,3 +2258,4 @@
 "map_source" = "नकाशाचा स्त्रोत";
 "shared_string_favorites" = "आवडती ठिकाणे";
 "shared_string_change" = "बदला";
+"shared_string_local" = "आधीच उतरवलेले";

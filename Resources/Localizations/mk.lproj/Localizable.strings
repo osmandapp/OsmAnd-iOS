@@ -289,7 +289,7 @@
 "voice_provider_descr" = "Izberete go glasovnoto vodenje za navigacija.";
 "choose_audio_stream" = "Izlez od glasovno vodenje";
 "choose_audio_stream_descr" = "Izberete zvučnik za glasovno vodenje.";
-"use_osm_live_routing" = "OsmAnd navigacija voživo";
+"use_osm_live_routing" = "OsmAnd navigacija vo živo";
 "osm_live_routing_descr" = "Use OsmAnd Live updates for navigation";
 "select_nav_profile_dialog_message" = "„Tip na navigacija“ izbira kako se presmetuvaat maršrutite, so dostapni oflajn i onlajn motori za rutiranje.";
 "osmand_default_routing" = "OsmAnd rutiranje";
@@ -323,7 +323,7 @@
 "routing_settings_2" = "Postavki za navigacija";
 "customize_route_line" = "Prisposobete ja linijata na maršrutata";
 "route_line_use_map_style_color" = "Koristete standardna boja na stilot na mapata (%@).";
-"route_line_use_map_style_width" = "Koristete go stilot na mapata (%@) standardnaširina.";
+"route_line_use_map_style_width" = "Koristete go stilot na mapata (%@) standardna širina.";
 "turn_arrows" = "Svrtete strelki";
 "turn_arrows_descr" = "Izberete dali strelkite za vrtenje se označeni na linijata na maršrutata.";
 "impassable_road" = "Izbegnuvajte patišta…";
@@ -624,7 +624,7 @@
 "shared_string_shape" = "Oblik";
 "fav_point_dublicate" = "Navedeno e duplikat Omileno ime";
 "fav_point_dublicate_message" = "Omilenata e preimenuvana vo %@ za da se izbegne dupliranje.";
-"fav_point_emoticons_message" = "Omilenata e preimenuvana vo„%@“ za da se začuva nizata što sodrži emotikoni vo datoteka.";
+"fav_point_emoticons_message" = "Omilenata e preimenuvana vo „%@“ za da se začuva nizata što sodrži emotikoni vo datoteka.";
 "access_default_color" = "Standardna boja";
 "default_color_descr" = "This color wil be used for all new favorites added to the group.";
 "favorite_friends_category" = "Prijateli";
@@ -715,7 +715,7 @@
 "gpxup_identifiable" = "Može da se identifikuva";
 "gpxup_trackable" = "Može da se sledi";
 "gpxup_private" = "Privatno";
-"gpx_upload_public_visibility_descr" = "„Javno“ znači deka tragata e javno prikažana vo vašite GPS tragi i vo javnite spisoci za tragi na GPS i vo spisokot za javna traga so vremenski pečati vo surova forma. Podatocite servirani preku API ne upatuvaat na vašata stranica za traga. Vremenskite oznaki za trasite ne se dostapni prekujavnoto GPS API, a točkite za sledenje ne se hronološki podredeni.";
+"gpx_upload_public_visibility_descr" = "„Javno“ znači deka tragata e javno prikažana vo vašite GPS tragi i vo javnite spisoci za tragi na GPS i vo spisokot za javna traga so vremenski pečati vo surova forma. Podatocite servirani preku API ne upatuvaat na vašata stranica za traga. Vremenskite oznaki za trasite ne se dostapni preku javnoto GPS API, a točkite za sledenje ne se hronološki podredeni.";
 "gpx_upload_identifiable_visibility_descr" = "„Identifikuvan“ znači deka tragata ḱe bide javno prikažana vo vašite GPS tragi i vo javnite spisoci so GPS tragi, t.e. drugite korisnici ḱe možat da ja prezemat sirovata traga i da ja povrzat so vašeto korisničko ime. Javnite podatoci za traga so vremenski pečat od GPS API servirani preku trackpoints API ḱe upatuvaat na vašata originalna stranica za traga.";
 "gpx_upload_trackable_visibility_descr" = "„Može da se sledi“ znači deka tragata ne se pojavuva na nitu eden javen oglas, tuku obrabotenite točki za sledenje so vremenski pečati od nego (koi ne možat direktno da se povrzat so vas) go pravat preku prezemanja od javnoto GPS API.";
 "gpx_upload_private_visibility_descr" = "„Privatno“ znači deka tragata ne se pojavuva na nitu eden javen oglas, no točkite za sledenje od nea po nehronološki redosled se dostapni preku javnoto GPS API bez vremenski oznaki.";
@@ -823,7 +823,7 @@
 "sett_arr" = "Map arrows";
 "shared_string_location" = "Lokacija";
 "sett_arr_map" = "Map center";
-"short_location_on_map" = "Geografskaširina %@ \nGeografska širina dolzina %@";
+"short_location_on_map" = "Geografska širina %@ \nGeografska širina dolzina %@";
 "navigate_point_format_D" = "DDD.DDDDD";
 "navigate_point_format_DM" = "DDD MM.MMM";
 "navigate_point_format_DMS" = "DDD MM SS.S";
@@ -986,7 +986,7 @@
 "export_profile" = "Izvezi go profilot";
 "shared_string_import" = "Uvezi";
 "create_profile" = "Create profile";
-"select_data_to_import" = "Izberete gi podatocitešto treba da se uvezat.";
+"select_data_to_import" = "Izberete gi podatocite što treba da se uvezat.";
 "export_profile_select_descr" = "Select the data to be exported.";
 "selected_of" = "Selected - %d/%d";
 "nav_type_hint" = "Tip na navigacija";
@@ -1019,7 +1019,7 @@
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
 "ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "ltr_or_rtl_combine_via_or" = "%@ ili %@";
-"ltr_or_rtl_combine_via_slash" = "%@ / %@";
+"ltr_or_rtl_combine_via_slash" = "%@/%@";
 "listed_exist" = "Navedeniot %@, veḱe postoi vo OsmAnd.";
 "shared_string_import_complete" = "Uvezi celosno";
 "import_complete_description" = "Uvezeni se site podatoci od %@. Koristete gi kopčinjata podolu za da otvorite koj bilo del od aplikacijata za da upravuvate so nea.";
@@ -1170,7 +1170,7 @@
 "osmand_live_last_changed" = "Last map change: %@";
 "last_update" = "Posledno ažuriranje: %@";
 "osmand_live_not_updated" = "Not yet updated";
-"hourly" = "Načas";
+"hourly" = "Na čas";
 "daily" = "Dnevno";
 "weekly" = "Nedelno";
 "osmand_live_reports" = "Reports";
@@ -1690,16 +1690,16 @@
 //inapps
 "plugin_nautical_name" = "Prikaz na nautička karta";
 "product_desc_nautical" = "Vector maps appropriate for sailing routes navigation";
-"plugin_nautical_descr" = "Ovoj priklučok ja zbogatuva aplikacijata za mapi i navigacija OsmAnd za da proizveduva i nautički karti za plovenje, edrenje i drugi vidovi na vodeni sportovi. \n \nSpecijalen dodatok za mapi za OsmAnd ḱe gi obezbedi site oznaki za nautička navigacija i simboli na grafikoni, za navigacija vo vnatrešnostai vo blizina na bregot. Opisot na sekoja navigaciska oznaka gi dava detalite potrebni za nivno identifikuvanje i nivnoto značenje (kategorija, forma, boja, niza, referenca itn.). \n \nZa da se vratite na eden od konvencionalnite stilovi na mapi na OsmAnd, ednostavno ili povtorno deaktivirajte go ovoj priklučok ili promenete go „Stilot na karta“ pod „Konfiguriraj mapa“ po želba.";
+"plugin_nautical_descr" = "Ovoj priklučok ja zbogatuva aplikacijata za mapi i navigacija OsmAnd za da proizveduva i nautički karti za plovenje, edrenje i drugi vidovi na vodeni sportovi. \n \nSpecijalen dodatok za mapi za OsmAnd ḱe gi obezbedi site oznaki za nautička navigacija i simboli na grafikoni, za navigacija vo vnatrešnosta i vo blizina na bregot. Opisot na sekoja navigaciska oznaka gi dava detalite potrebni za nivno identifikuvanje i nivnoto značenje (kategorija, forma, boja, niza, referenca itn.). \n \nZa da se vratite na eden od konvencionalnite stilovi na mapi na OsmAnd, ednostavno ili povtorno deaktivirajte go ovoj priklučok ili promenete go „Stilot na karta“ pod „Konfiguriraj mapa“ po želba.";
 "osmand_parking_plugin_name" = "Parking pozicija";
 "product_desc_parking" = "Track the parking time and location of your car";
 "osmand_parking_plugin_description" = "Vi ovozmožuva da snimate kade e parkiran vašiot avtomobil, vklučitelno i kolku vreme ostanuva za parkiranje. \n I lokacijata i vremeto se vidlivi na kontrolnata tabla, kako i vo dodatokot za mapa. Potsetnik za alarm može da se dodade vo kalendarot na Android.";
 "plugin_ski_name" = "Prikaz na karta za skijanje";
 "product_desc_skimap" = "Up-to-date ski trail map with lifts and slopes";
-"plugin_ski_descr" = "Ovoj priklučok za OsmAnd vi gi stava na dofat detalite za globalnite skijački pateki, kros-kantri skijački pateki, alpskite ski pateki, žičarnicite i ski-liftovite. Patekite i patekite se prikažani vo boja spored teškotija i prikažani vo specijalen stil na mapa „Zimski“ koj asimilira zimski pejzažoboen so sneg. \n \nAktiviranjeto na ovoj prikaz go menuva stilot na kartata vo „Zima i skijanje“, prikažuvajḱi gi site karakteristiki na pejzažot vo zimski uslovi. Ovoj prikaz može da se vrati ili so deaktiviranje povtorno ovde ili so menuvanje na „stilot na karta“ pod „Konfigurirajmapa“ po želba.";
+"plugin_ski_descr" = "Ovoj priklučok za OsmAnd vi gi stava na dofat detalite za globalnite skijački pateki, kros-kantri skijački pateki, alpskite ski pateki, žičarnicite i ski-liftovite. Patekite i patekite se prikažani vo boja spored teškotija i prikažani vo specijalen stil na mapa „Zimski“ koj asimilira zimski pejzaž oboen so sneg. \n \nAktiviranjeto na ovoj prikaz go menuva stilot na kartata vo „Zima i skijanje“, prikažuvajḱi gi site karakteristiki na pejzažot vo zimski uslovi. Ovoj prikaz može da se vrati ili so deaktiviranje povtorno ovde ili so menuvanje na „stilot na karta“ pod „Konfiguriraj mapa“ po želba.";
 "record_plugin_name" = "Snimanje na patuvanjeto";
 "product_desc_track_recording" = "Record and save your trips as GPX tracks";
-"record_plugin_description" = "Ovoj priklučok ja aktivira funkcionalnosta za snimanje i začuvuvanje na vašite pesni so račno dopiranje na dodatokot za evidencija na GPX na kartata ili, isto taka, za avtomatsko evidentiranje na site vaši navigaciski pravci vo datoteka GPX. \n \n Snimenite pesni može da se spodelat so vašite prijateliili da se koristat za pridonesi za OSM. Sportistite možat da koristat snimeni pateki za da gi sledat nivnite treninzi. Nekoi osnovni analizi na patekite može da se izvedat direktno vo OsmAnd, kako što se vreminjata na krugovi, prosečnata brzina itn., a trakite, se razbira, može i podocna da seanaliziraat vo specijalni alatki za analiza od treta strana.";
+"record_plugin_description" = "Ovoj priklučok ja aktivira funkcionalnosta za snimanje i začuvuvanje na vašite pesni so račno dopiranje na dodatokot za evidencija na GPX na kartata ili, isto taka, za avtomatsko evidentiranje na site vaši navigaciski pravci vo datoteka GPX. \n \n Snimenite pesni može da se spodelat so vašite prijateli ili da se koristat za pridonesi za OSM. Sportistite možat da koristat snimeni pateki za da gi sledat nivnite treninzi. Nekoi osnovni analizi na patekite može da se izvedat direktno vo OsmAnd, kako što se vreminjata na krugovi, prosečnata brzina itn., a trakite, se razbira, može i podocna da se analiziraat vo specijalni alatki za analiza od treta strana.";
 "osm_editing_plugin_name" = "Ureduvanje na OpenStreetMap";
 "product_desc_osm_editing" = "Turn your mobile phone into a mapping tool";
 "osm_editing_plugin_description" = "Napravete pridonesi za OSM kako kreiranje ili menuvanje objekti na OSM POI, otvoranje ili komentiranje beleški za OSM i pridonesuvanje snimeni GPX-datoteki vo OsmAnd so dostavuvanje na vašeto korisničko ime i lozinka. OpenStreetMap.org e globalen proekt za mapiranje na javen domen upravuvan od zaednicata.";
@@ -1731,14 +1731,14 @@
 "product_desc_wiki" = "Location based Wikipedia articles on the map";
 "purchases_feature_desc_wikipedia" = "Istražete ja Vikipedija oflajn. Statiite podeleni po zemji i regioni i dostapni na site jazici.";
 "shared_string_all_languages" = "Site jazici";
-"select_wikipedia_article_langs" = "Izberete gi jazicite za statiite na Vikipedija na kartata.Prefrlete se na koj bilo dostapen jazik dodeka ja čitate statijata.";
+"select_wikipedia_article_langs" = "Izberete gi jazicite za statiite na Vikipedija na kartata.​ Prefrlete se na koj bilo dostapen jazik dodeka ja čitate statijata.";
 "wiki_menu_download_descr" = "Potrebni se dopolnitelni karti za pregleduvanje na POI na Vikipedija na kartata.";
 "some_articles_may_not_available_in_lang" = "Nekoi statii na Vikipedija možebi ne se dostapni na vašiot jazik.";
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
 "srtm_plugin_name" = "Konturni linii";
 "product_desc_srtm" = "Visual assessment of the shape of the land surface";
-"srtm_plugin_description" = "Ovoj priklučok obezbeduva i preklopuvanje na konturnata linija i (reljef) sloj na senka na ridot što ḱe se prikažat na vrvot na standardnite karti na OsmAnd. Ovaa funkcionalnost ḱe bide mnogu ceneta od sportisti, planinari, velossipedisti i site zainteresirani za reljefnata struktura na pejzažot. (Ve molime imajte predvid deka podatocite za linijata na konturata i/ili relefot se odvoeni, dostapni se dopolnitelni prezemanja po aktiviranjeto na priklučokot.) \n \nGlobalnite podatoci (pomeǵu 70 ° sever i 70 ° južno) se zasnovaat na merenjata na SRTM (Shuttle Radar Topography Mission) i ASTER (Advanced Spaceborne Termal Emission and Reflection Radiometer), instrument za slikanje na odborot Terra, vodečkiot satelit na NASA za nabljuduvanje na Zemjata. Sistem. ASTER e kooperativen napor pomeǵu NASA, japonskoto Ministerstvo za ekonomija, trgovija i industrija (METI) i Japan Space Systems(J-spacesystems).";
+"srtm_plugin_description" = "Ovoj priklučok obezbeduva i preklopuvanje na konturnata linija i (reljef) sloj na senka na ridot što ḱe se prikažat na vrvot na standardnite karti na OsmAnd. Ovaa funkcionalnost ḱe bide mnogu ceneta od sportisti, planinari, velossipedisti i site zainteresirani za reljefnata struktura na pejzažot. (Ve molime imajte predvid deka podatocite za linijata na konturata i/ili relefot se odvoeni, dostapni se dopolnitelni prezemanja po aktiviranjeto na priklučokot.) \n \nGlobalnite podatoci (pomeǵu 70 ° sever i 70 ° južno) se zasnovaat na merenjata na SRTM (Shuttle Radar Topography Mission) i ASTER (Advanced Spaceborne Termal Emission and Reflection Radiometer), instrument za slikanje na odborot Terra, vodečkiot satelit na NASA za nabljuduvanje na Zemjata. Sistem. ASTER e kooperativen napor pomeǵu NASA, japonskoto Ministerstvo za ekonomija, trgovija i industrija (METI) i Japan Space Systems (J-spacesystems).";
 "wikivoyage_travel_guide" = "Vodiči za patuvanje";
 "start_editing_card_image_text" = "Besplatniot svetski turistički vodič koj sekoj može da go ureduva.";
 "wikivoyage_travel_guide_descr" = "Vodiči za najinteresnite mesta na planetata, vnatre vo OsmAnd, bez vrska na Internet.";
@@ -1749,7 +1749,7 @@
 "my_location" = "Moja pozicija";
 "all_categories" = "All categories";
 "get_unlimited_access" = "Dobi neogranicen pristap";
-"navigate_point_latitude" = "Geografskaširina";
+"navigate_point_latitude" = "Geografska širina";
 "navigate_point_longitude" = "Geografska dolzina";
 "track_save_short_q" = "Track is too short, do you want to save?";
 "add_as" = "Add as";
@@ -2071,7 +2071,7 @@
 "inapp_not_found" = "The %@ is not found in the OsmAnd. Probably it has been canceled.";
 "rendering_value_high_name" = "Visoko";
 "routing_attr_difficulty_preference_description" = "Pretpočitajte marsruti so ovaa teškotija, iako rutiranjeto preku poteški ili polesni pateki sè ušte e možno ako e pokratko.";
-"routing_attr_height_description" = "Navedete ja visinata na vozilotošto treba da se dozvoli na maršrutite.";
+"routing_attr_height_description" = "Navedete ja visinata na voziloto što treba da se dozvoli na maršrutite.";
 "touting_specified_vehicle_parameters_descr" = "Specified vehicle parameters may affect routing.";
 "routing_attr_height_obstacles_name" = "Koristi visinska datoteka";
 "routing_attr_avoid_toll_name" = "Patista bez patarini";
@@ -2096,7 +2096,7 @@
 "routing_attr_goods_restrictions_header_name" = "Vehicle transporting goods can be restricted to access some roads.";
 "routing_attr_goods_restrictions_footer_desc" = "Applies only for vehicles carrying goods that have at least four wheells and weigh no more then 3.5 tonnes.\n\nIf your vehicle weight is more than 3.5 tonnes you need to use Truck profile.";
 "routing_attr_goods_restrictions_yes_desc" = "Roads that are closed for goods delivery will be avoided.";
-"routing_attr_avoid_subway_description" = "Izbegnuva metro i lesenželeznički transport";
+"routing_attr_avoid_subway_description" = "Izbegnuva metro i lesen železnički transport";
 "routing_attr_driving_style_prefer_unpaved_description" = "Pretpočitajte neasfaltirani pred asfaltirani patišta za ruta.";
 "rendering_value_light_brown_name" = "Svetlo kafeno";
 "rendering_attr_surface_ice_name" = "Mraz";
@@ -2137,7 +2137,7 @@
 "rendering_attr_highway_class_street_name" = "Ulica";
 "rendering_attr_surface_grass_name" = "Treva";
 "routing_attr_piste_type_skitour_description" = "Marsruti za skijacko patuvanje.";
-"rendering_attr_surface_fine_gravel_name" = "PrecistenČakal";
+"rendering_attr_surface_fine_gravel_name" = "Precisten Čakal";
 "rendering_value_orange_name" = "Pomarandza";
 "rendering_value_medium_w_name" = "Sredno";
 "rendering_attr_contourDensity_description" = "Gustina na konturnata linija";
@@ -2146,9 +2146,9 @@
 "routing_attr_avoid_ferry_description" = "Izbegnuva feribrodovi";
 "rendering_attr_highway_class_track_grade2_name" = "Oceni 2";
 "rendering_attr_shareTaxiRoutes_name" = "Spodelete taksi ruti";
-"rendering_attr_showLightRailRoutes_name" = "Lesniželeznicki marsruti";
+"rendering_attr_showLightRailRoutes_name" = "Lesni železnicki marsruti";
 "rendering_attr_showMonorailRoutes_name" = "Marsruti na visinski vozovi";
-"rendering_attr_showFunicularRoutes_name" = "Marsruti naŽičarnici";
+"rendering_attr_showFunicularRoutes_name" = "Marsruti na Žičarnici";
 "routing_attr_relief_smoothness_factor_hills_name" = "Ridsko";
 "rendering_attr_contourWidth_name" = "Širina na konturnata linija";
 "routing_attr_piste_type_sled_description" = "Padini za upotreba na sanki.";
@@ -2160,7 +2160,7 @@
 "rendering_attr_showLez_description" = "Prikaži zoni so niski emisii na kartata. Ne vlijae na nasočuvanjeto.";
 "rendering_attr_surfaceIntegrity_name" = "Integritet na površinata na patot";
 "routing_attr_allow_intermediate_description" = "Poteški pravci so poostri delnici. Generalno nekoi prečki što treba da se izbegnuvaat.";
-"rendering_attr_coloredBuildings_name" = "Gradbi sošifra na boja po tip";
+"rendering_attr_coloredBuildings_name" = "Gradbi so šifra na boja po tip";
 "rendering_attr_piste_difficulty_advanced_name" = "Napreden";
 "routeInfo_road_types_name" = "Vidovi na patista";
 "rendering_attr_showRoadMaps_description" = "Izberete koga da se prikažuvaat karti samo za patišta:";
@@ -2200,7 +2200,7 @@
 "rendering_attr_roadStyle_name" = "Paten stil";
 "rendering_attr_surface_gravel_name" = "Čakal";
 "routing_attr_max_num_changes_name" = "Broj na promeni";
-"rendering_attr_publicTransportMode_name" = "Avtobuski, trolejbus,šatl pravci";
+"rendering_attr_publicTransportMode_name" = "Avtobuski, trolejbus, šatl pravci";
 "rendering_attr_hideNonVehicleHighways_name" = "Avtopati bez vozila";
 "rendering_value_translucent_pink_name" = "Prodzirno rozova";
 "rendering_attr_surface_ground_name" = "Zemja";
@@ -2225,7 +2225,7 @@
 "rendering_attr_hideBuildings_name" = "Zgradi";
 "routing_attr_max_num_changes_description" = "Navedete ja gornata granica na promeni";
 "rendering_attr_winter_road_name" = "Zimski pat";
-"rendering_attr_tramTrainRoutes_name" = "Tramvajski iželeznički linii";
+"rendering_attr_tramTrainRoutes_name" = "Tramvajski i železnički linii";
 "rendering_attr_smoothness_intermediate_name" = "Sredno";
 "rendering_attr_surface_snow_name" = "Sneg";
 "rendering_attr_highway_class_cycleway_name" = "Velosipedska pateka";
@@ -2320,7 +2320,7 @@
 "rendering_attr_buildings15zoom_name" = "Zgradi so zum 15";
 "rendering_attr_tracktype_grade1_name" = "Cvrst (popločen)";
 "routing_attr_avoid_train_description" = "Izbegnuva vozovi";
-"routing_attr_avoid_shuttle_train_name" = "Nemašatl-voz";
+"routing_attr_avoid_shuttle_train_name" = "Nema šatl-voz";
 "rendering_attr_contourColorScheme_description" = "Šema na boi na konturni linii";
 "rendering_value_boldOutline_name" = "Zadebeleni madvoresni linii";
 "routing_attr_avoid_toll_description" = "Izbegnuvaj patista so patarini";
@@ -2339,7 +2339,7 @@
 "rendering_attr_noPolygons_description" = "Napravete gi transparentni site karakteristiki na zemjišteto na kartata.";
 "routing_attr_allow_classic_only_description" = "Uredeni marsruti za klasičen stil samo bez pateki za lizganje. Ova gi vklučuva patekite uredeni so pomala motorna sanka so polabava pateka i pateki napraveni račno od skijačite.";
 "routing_attr_allow_skating_only_name" = "Dozvolete marsruti samo za lizganje";
-"routing_attr_avoid_shuttle_train_description" = "Izbegnuva koristenje našatl vozovi";
+"routing_attr_avoid_shuttle_train_description" = "Izbegnuva koristenje na šatl vozovi";
 "routing_attr_driving_style_balance_name" = "Izbalansiran";
 "routing_attr_piste_type_nordic_name" = "Kros kantri i nordisko skijanje";
 "routing_attr_avoid_bus_name" = "Nema avtobusi";
@@ -2379,7 +2379,7 @@
 "rendering_attr_highway_class_motorway_name" = "Avtopat";
 "rendering_value_brown_name" = "Kafena";
 "rendering_attr_hideIcons_name" = "Ikoni na POI";
-"rendering_attr_roadColors_description" = "Izberetešema na boi na patot:";
+"rendering_attr_roadColors_description" = "Izberete šema na boi na patot:";
 "rendering_value_browse_map_name" = "Baraj karta";
 "rendering_attr_surface_asphalt_name" = "Asfalt";
 "rendering_value_translucent_orange_name" = "Prodzirno pomarandza";
@@ -2402,16 +2402,16 @@
 "weight_limit_description" = "Navedete ja težinata na vašeto vozilo, nekoi ograničuvanja na maršrutata može da važat za teški vozila.";
 "height_limit_description" = "Navedete ja visinata na vašeto vozilo, nekoi ograničuvanja na maršrutata može da važat za visoki vozila.";
 "lenght_limit_description" = "Navedete ja dolžinata na vašeto vozilo, nekoi ograničuvanja na maršrutite može da se primenat za dolgi vozila.";
-"width_limit_description" = "Obezbedete jaširinata na vašeto vozilo, nekoi ograničuvanja na maršrutata može da važat za vozila so široki dimenzii.";
+"width_limit_description" = "Obezbedete ja širinata na vašeto vozilo, nekoi ograničuvanja na maršrutata može da važat za vozila so široki dimenzii.";
 "vessel_height_limit_description" = "Postavete visina na brodot za da izbegnete niski mostovi. Imajte na um, ako mostot e podvižen, ḱe ja koristime negovata visina vo otvorena sostojba.";
-"vessel_width_limit_description" = "Postaveteširina na brodot za da izbegnete tesni mostovi";
+"vessel_width_limit_description" = "Postavete širina na brodot za da izbegnete tesni mostovi";
 "default_speed_dialog_msg" = "Go procenuva vremeto na pristignuvanje za nepoznati tipovi patišta i ja ograničuva brzinata za site patišta (može da vlijae na rutata)";
 "routing_attr_hazmat_category_name" = "Kategorija na opasni materii";
 "routing_attr_hazmat_category_no_restrictions_name" = "A (Bez ogranicuvanja)";
 "transport_hazmat_yes_desc" = "Vi treba da odberete soodvetna kategorija.";
 "transport_hazmat_no_desc" = "Na nekoi patista i tuneli zabranet e prevoz na opasni materii.";
-"routing_attr_motor_type_name" = "Gorivošto go koristi motorot";
-"routing_attr_motor_type_description" = "Izberete tip na gorivošto go koristi motorot na vašeto vozilo, za da ja presmetate emisijata na CO2.";
+"routing_attr_motor_type_name" = "Gorivo što go koristi motorot";
+"routing_attr_motor_type_description" = "Izberete tip na gorivo što go koristi motorot na vašeto vozilo, za da ja presmetate emisijata na CO2.";
 "routing_attr_motor_type_diesel_name" = "Dizel";
 "routing_attr_motor_type_petrol_name" = "Bezoloven benzin";
 "routing_attr_motor_type_lpg_name" = "Avtomobilski gas";
@@ -2471,7 +2471,7 @@
 "backup_error_file_not_available" = "Datotekata e nedostapna";
 "backup_error_gzip_only_supported_upload" = "Datotekata treba da se isprati vo format .gzip";
 "backup_error_size_is_exceeded" = "Maksimalnata golemina na OsmAnd Cloud nadmina %@";
-"backup_error_subscription_was_used" = "Pretplata ili promošto se koristi od druga smetka %@";
+"backup_error_subscription_was_used" = "Pretplata ili promo što se koristi od druga smetka %@";
 "backup_error_subscription_was_expired_descr" = "Vašata pretplata OsmAnd Pro e istečena, obnovete ja za da koristite rezervna kopija. Sè ušte možete da gi vratite podatocite od Oblakot (Cloud).";
 "backup_error_subscription_was_expired" = "Istečena pretplata";
 "backup_error_user_is_already_registered" = "Ovaa adresa na e-pošta se koristi na druga smetka";
@@ -2493,7 +2493,7 @@
 "walking_route_osmc_description" = "Oboeni pravci spored nivnata individualna lokalna boja (ako se prisutni na OpenStreetMap) i tip (meǵunarodna, regionalna, lokalna).";
 "rendering_value_walkingRoutesOSMCNodes_description" = "Ruti vo boja spored nivniot tip na mreža na jazli (medjunarodna, regionalna, lokalna).";
 "rendering_value_walkingRoutesScopeOSMC_description" = "Boja spored mrežna pripadnost.";
-"rendering_value_walkingRoutesOSMC_description" = "Boja na pravci spored nivnata individualna lokalna boja (ako e prisutna na OpenStreetMap) i simbol naštitot za pešačenje.";
+"rendering_value_walkingRoutesOSMC_description" = "Boja na pravci spored nivnata individualna lokalna boja (ako e prisutna na OpenStreetMap) i simbol na štitot za pešačenje.";
 "routes_color_by_type" = "Pateki na boja po…";
 "q_clear_weather_cache" = "Do you want to clear weather cache?";
 "osmand_cloud" = "OsmAnd Cloud";
@@ -2600,7 +2600,7 @@
 "purchases_feature_desc_terrain" = "Konturni linii na terenot, karta so celosna ridska senka so temni nijansi i karti na padinite so boi za prikažuvanje na vrvovite i nizinite.";
 "purchases_feature_desc_nautical" = "Dobijte pristap do informacii za pomorskata dlabočina";
 "purchases_feature_weather" = "24h hourly forecast 7 days ahead coloured on the map";
-"you_can_get_feature_as_part_of_pattern" = "Dobijte“%@” kako del od planot %@ . Sporedba:";
+"you_can_get_feature_as_part_of_pattern" = "Dobijte “%@” kako del od planot %@ . Sporedba:";
 "monthly_subscription" = "Mesecna pretplata";
 "annual_subscription" = "Godisna pretplata";
 "quarterly_subscription" = "Quarterly subscription";
@@ -2737,7 +2737,7 @@
 "routing_attr_avoid_fords_description" = "Izbegnuvajte pokratki sporedni patista";
 "rendering_attr_showTrainRoutes_name" = "Pravci na vozovi";
 "rendering_attr_showBusRoutes_name" = "Avtobuski marsruti";
-"routing_attr_carriage_restrictions_description" = "Imajte vo predvid da dozvolite pristap za vozilatašto vlečat konji";
+"routing_attr_carriage_restrictions_description" = "Imajte vo predvid da dozvolite pristap za vozilata što vlečat konji";
 "routing_attr_prefer_hiking_routes_name" = "Pretpočitaj planinski ruti";
 "routing_attr_avoid_footways_name" = "Izbegnuvaj pesacki pateki";
 "rendering_attr_weatherTempContours_name" = "Temperaturni izolinii";
@@ -2807,7 +2807,7 @@
 "global_settings" = "Globalni postavki";
 "enter_new_name" = "Vnesi novo ime";
 "subscribe_email_error" = "Greska";
-"time_to_go_desc" = "Vreme vo minuti iličasovi potrebni za da stignete do vašata destinacija.";
+"time_to_go_desc" = "Vreme vo minuti ili časovi potrebni za da stignete do vašata destinacija.";
 "shared_string_system_default" = "Standardno na sistemot";
 "short_min" = "m";
 "distance_to_intermediate_widget_desc" = "Vidzetot go pokazuva rastojanieto ostaveno do prvata sredna tocka. Otkako ce se pominat srednite tocki, rastojanieto ce se azurira do slednata sredna tocka.";
@@ -2857,7 +2857,7 @@
 "activity_type_water_name" = "Voda";
 "navigation_points_desc" = "Navigaciskite vidžeti se ovozmoženi za vreme na navigacijata za prikažuvanje informacii kako rastojanie, vreme na pristignuvanje ili levo, slednite krivini, ležište, tekovno ime na ulica, informacii za lenti, maksimalna brzina, predupreduvanja za približuvanje, POI, točki na dviženje.";
 "popular_destinations" = "Popularni destinacii";
-"weather_update_disabled" = "Onevozmozeno";
+"weather_update_disabled" = "Onevozmoženo";
 "av_notes_video_widget_desc" = "Dopiranjeto na vidzetot ovozmozuva zapocnuvanje na snimanje video.";
 "last_seven_days" = "Poslednite sedum dena";
 "add_page" = "Dodadete stranica";
@@ -2886,7 +2886,7 @@
 "mapillary_widget_desc" = "Aplikacijata ovozmozuva brz pristap do Mapillary aplikacijata za dodavanje slika na nivo na ulicata.";
 "current_time_widget_desc" = "Go prikažuva tekovnoto vreme od vašiot ured.";
 "current_speed_widget_desc" = "Ja prikažuva vašata momentalna brzina detektirana so GPS-senzorot.";
-"bearing_secondary_desc" = "Mozete da go prikazete formatot na podatocite vo: %@– %@ – %@.";
+"bearing_secondary_desc" = "Mozete da go prikazete formatot na podatocite vo: %@ – %@ – %@.";
 "trip_recording_uphill_widget_desc" = "Go prikazuva zbirot na site kacuvanja na tekovnoto snimeno patuvanje.";
 "activity_type_cycling_name" = "Vozenje velosiped";
 "announcement_time_arrive" = "Pristiganje do odredisteto";
@@ -2917,7 +2917,7 @@
 "angular_measeurement_descr" = "Promenete vo koj azimut se meri.";
 "shared_string_view" = "Pogled";
 "download_file" = "Prezemete ja datotekata";
-"coordinates_widget_secondary_desc" = "Formatot na koordinatite bi mozel da se promeni vo %@– %@ – %@.";
+"coordinates_widget_secondary_desc" = "Formatot na koordinatite bi mozel da se promeni vo %@ – %@ – %@.";
 "second_next_turn_widget_desc" = "Vidzetot prikazuva informacii za vaseto vtoro sledno vrtenje sto e ovozmozeno ako se svrtite na priblizno rastojanie.";
 "lang_zh-Hans" = "Kineski (Ednostaven)";
 "visibility" = "Vidlivost";
@@ -2928,7 +2928,7 @@
 "distance_circles" = "Rastojanie-krugovi";
 "shared_string_deleted" = "Izbrisano";
 "map_widget_gps_info" = "GPS Informacija";
-"time_to_intermediate_widget_desc" = "Vidzetot pokazuva„Vreme na pristignuvanje“ ili „Vreme za odenje“ do prvata sredna tocka. Vremeto postojano se azurira za vreme na navigacijata, stom ce pominat srednite tocki, vremeto ce se azurira na slednata sredna tocka.";
+"time_to_intermediate_widget_desc" = "Vidzetot pokazuva „Vreme na pristignuvanje“ ili „Vreme za odenje“ do prvata sredna tocka. Vremeto postojano se azurira za vreme na navigacijata, stom ce pominat srednite tocki, vremeto ce se azurira na slednata sredna tocka.";
 "trip_recording_distance_widget_desc" = "Go prikazuva rastojanieto na tekovno snimenoto patuvanje.";
 "bottom_widgets_panel" = "Kopche na panelot";
 "true_bearing_widget_desc" = "Agol pomedju vistinskiot sever i celnata tocka zabeležan od vasata lokacija.";
@@ -2967,7 +2967,7 @@
 "avoid_pt_types" = "Izbegnete vidovi na transport…";
 "edit_tilesource_maxzoom" = "Maksimalen zum";
 "edit_tilesource_minzoom" = "Minimalen zum";
-"avoid_pt_types_descr" = "Izberete tipovi na javen prevozšto treba da gi izbegnete za navigacija:";
+"avoid_pt_types_descr" = "Izberete tipovi na javen prevoz što treba da gi izbegnete za navigacija:";
 "step_by_step" = "Turn-by-turn navigacija";
 "calculate_online" = "Presmetajte na onlajn";
 "in_case_of_reverse_direction" = "Vo slučaj na obratna nasoka";
@@ -2982,3 +2982,6 @@
 "shared_string_favorite" = "Omilen";
 "shared_string_favorites" = "Omileni";
 "shared_string_show" = "Prikazi";
+"quick_action_toggle_preference" = "Prefrluvanje za promena na pretpočitanje.";
+"shared_string_local" = "Lokalen";
+"show_along_the_route" = "Prikaži po dolžinata na rutata";

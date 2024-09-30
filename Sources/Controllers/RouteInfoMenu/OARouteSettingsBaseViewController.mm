@@ -283,6 +283,10 @@
         avoidRoadsRoutingParameter.delegate = self;
         [list addObject:avoidRoadsRoutingParameter];
         
+        OAShowAlongTheRouteItem *showAlongTheRouteItem = [[OAShowAlongTheRouteItem alloc] initWithAppMode:am];
+        showAlongTheRouteItem.delegate = self;
+        [list addObject:showAlongTheRouteItem];
+        
         [list addObjectsFromArray:[self getNonAvoidRoutingParameters:am]];
         
         OAConsiderLimitationsParameter *considerLimitations = [[OAConsiderLimitationsParameter alloc] initWithAppMode:am];
@@ -409,6 +413,12 @@
     simulateController.delegate = self;
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:simulateController];
     [self presentViewController:navigationController animated:YES completion:nil];
+}
+
+- (void) openShowAlongScreen
+{
+    [[OARootViewController instance].mapPanel showWaypoints:YES];
+    [self dismissViewController];
 }
 
 - (void) showTripSettingsScreen

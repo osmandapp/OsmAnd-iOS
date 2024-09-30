@@ -99,7 +99,7 @@
 "dialogs_and_notifications_descr" = "Control pop-ups, dialogs, and notifications";
 "settings_preset_descr" = "Chế độ xem bản đồ và cài đặt điều hướng được ghi nhớ trên mỗi hồ sơ sử dụng. Đặt hồ sơ mặc định của bạn ở đây.";
 "unit_of_length" = "Đơn vị độ dài";
-"unit_of_length_descr" = "Thayđổi khoảng cách được đo.";
+"unit_of_length_descr" = "Thay đổi khoảng cách được đo.";
 "coords_format" = "Coordinates format";
 "coords_format_descr_quick_search" = "You can change coordinates format for profile in General settings";
 "coordinates" = "Coordinates";
@@ -362,7 +362,7 @@
 "route_tl" = "Rẽ trái và đi";
 "route_tshl" = "Rẽ trái và đi";
 "route_tsll" = "Quẹo trái và đi";
-"route_tu" = "Quayđầu lại và đi thẳng";
+"route_tu" = "Quay đầu lại và đi thẳng";
 "route_head" = "Tiến";
 "looking_up_address" = "Looking up address";
 "no_address_found" = "No address determined";
@@ -532,7 +532,7 @@
 "fav_exists" = "Favorite with name \"%@\" already exists";
 "fav_ignore" = "Ignore";
 "shared_string_rename" = "Đổi tên";
-"update_existing" = "Thayđổi";
+"update_existing" = "Thay đổi";
 "replace_favorite_confirmation" = "Are you sure you want to replace Favorite %@?";
 "fav_points_not_exist" = "Không có điểm ưa thích nào";
 "fav_rename_q" = "Rename favorite";
@@ -1595,7 +1595,7 @@
 "all_categories" = "All categories";
 "get_unlimited_access" = "Get unlimited access";
 "navigate_point_latitude" = "Vĩ độ";
-"navigate_point_longitude" = "Kinhđộ";
+"navigate_point_longitude" = "Kinh độ";
 "track_save_short_q" = "Track is too short, do you want to save?";
 "add_as" = "Add as";
 "make_call" = "Make a call";
@@ -2198,7 +2198,7 @@
 "settings_item_read_error" = "Could not read %@.";
 "app_mode_default" = "Mặc định";
 "app_mode_car" = "Ô tô";
-"app_mode_bicycle" = "Xeđạp";
+"app_mode_bicycle" = "Xe đạp";
 "app_mode_pedestrian" = "Đi bộ";
 "app_mode_taxi" = "Taxi";
 "app_mode_shuttle_bus" = "Shuttle bus";
@@ -2255,7 +2255,7 @@
 "network" = "Network";
 "map_orientation_landscape" = "Nằm ngang";
 "show_all_tracks" = "Hiển thị tất cả các theo dõi";
-"change_appearance" = "Thayđổi ngoại hình";
+"change_appearance" = "Thay đổi ngoại hình";
 "announce_when_exceeded" = "Tuyên bố khi vượt quá";
 "shared_string_any" = "Bất kỳ";
 "map_orientation_default" = "Giống cài đặt của máy";

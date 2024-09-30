@@ -37,7 +37,7 @@
 "map_widget_intermediate_time" = "ഇടയ്ക്കുള്ള സമയം";
 "shared_string_previous" = "കഴിഞ്ഞത്";
 "shared_string_next" = "അടുത്തത്";
-"route_stops_before" = "%@മുമ്പായ് നിര്‍ത്തുക";
+"route_stops_before" = "%@ മുമ്പായ് നിര്‍ത്തുക";
 "transport_Routes" = "റൂട്ടുകള്‍";
 "transport_nearby_routes_within" = "ഉള്ളില്‍ സമീപത്തുള്ള റൂട്ടുകൾ";
 "transport_nearby_routes" = "\"അകത്ത് \"";
@@ -148,7 +148,7 @@
 "always_center_position_on_map" = "തല്‍സ്ഥാനം എല്ലയ്പ്പോഴും നടുവിലായി കാണിക്കുക";
 "map_widget_appearance_rem" = "ശേഷിക്കുന്ന അംശങ്ങള്‍";
 "map_widget_compass" = "\"വടക്ക്നോക്കി \"";
-"map_widget_intermediate_distance" = "\"ഇട-ലക്ഷ്യസ്ഥാനം \"";
+"map_widget_intermediate_distance" = "\"  ഇട-ലക്ഷ്യസ്ഥാനം \"";
 "route_descr_destination" = "ലക്ഷ്യസ്ഥാനം";
 "monitoring_control_start" = "REC";
 "map_widget_altitude" = "ഉയരം";
@@ -296,7 +296,7 @@
 "app_mode_aircraft" = "വിമാനം";
 "gpx_option_calculate_first_last_segment" = "ആദ്യത്തേയും അവസാനത്തേയും റൂട്ട് സെഗ്മെന്റിനായി OsmAnd വഴി കണക്കാക്കുക";
 "gpx_option_from_start_point" = "മുഴുവൻ ട്രാക്കിലൂടെയും കടന്നുപോകുക";
-"gpx_option_reverse_route" = "GPXദിശ തിരിച്ചാക്കുക";
+"gpx_option_reverse_route" = "GPX ദിശ തിരിച്ചാക്കുക";
 "use_points_as_intermediates" = "\"ബിന്ദുക്കള്‍ക്കിടയില്‍ റൂട്ട് കണ്ട്പിടിക്കുക \"";
 "calculate_osmand_route_without_internet" = "ഇന്റര്‍നെറ്റ് ഇല്ലാതെ റൂട്ട് കക്ഷണം കണ്ട്പിടിക്കുക (ഓഎസ്എം ആന്റ്)";
 "routing_settings_2" = "വഴികാട്ടി സജ്ജീകരണങ്ങള്‍";
@@ -345,7 +345,7 @@
 "internet_connection_required_for_online_route" = "ഒരു ഓൺലൈൻ നാവിഗേഷൻ സേവനം തിരഞ്ഞെടുത്തിരിക്കുന്നു, എന്നാൽ നിങ്ങൾ ഇന്റർനെറ്റിൽ കണക്റ്റുചെയ്തിട്ടില്ല.";
 "empty_route_calculated" = "\"കണ്ട് പിടിച്ച റൂട്ട് ശൂന്യമാണ് \"";
 "destination_point" = "\"ലക്ഷ്യസ്ഥാനം %@ \"";
-"intermediate_point" = "\"ഇട-ലക്ഷ്യസ്ഥാനം %@\"";
+"intermediate_point" = "\"  ഇട-ലക്ഷ്യസ്ഥാനം %@\"";
 "arrived_at_intermediate_point" = "ഇട-ലക്ഷ്യസ്ഥാനത്തെത്തി";
 "starting_point_too_far" = "അടുത്തുള്ള റോഡില്‍ നിന്നും വളരെ അകലെയാണു പ്രാരംഭബിന്ദു.";
 "ending_point_too_far" = "അടുത്തുള്ള റോഡില്‍ നിന്നും വളരെ അകലെയാണു അവസാനബിന്ദു.";
@@ -353,7 +353,7 @@
 "arrived_at_destination" = "\"നിങ്ങള്‍  ലക്ഷ്യസ്ഥാനത്തെത്തിയിരിക്കുന്നു\"";
 "towards" = "നേരെ";
 "route_roundabout" = "\"റൗണ്ടാന: %d പുറത്തേക്കുള്ള വഴി എടുത്ത് പോവുക \"";
-"route_roundabout_short" = "%dഎക്സിറ്റ് എടുത്തു പോവുക";
+"route_roundabout_short" = "%d എക്സിറ്റ് എടുത്തു പോവുക";
 "route_kl" = "ഇടത് വശം ചേര്‍ന്ന് പോവുക";
 "route_kr" = "വലതുവശം ചേര്‍ന്ന് പോവുക";
 "route_tr" = "\"വലത്തോട്ടു  തിരിഞ്ഞ് പോവുക\"";
@@ -513,7 +513,7 @@
 "shared_string_groups" = "ഗ്രൂപ്പുകൾ";
 "favorite" = "താല്‍പര്യമുള്ളവ";
 "poi_overlay" = "POI Overlay";
-"poi_dialog_poi_type" = "POIതരം";
+"poi_dialog_poi_type" = "POI തരം";
 "my_favorites" = "My Favorites";
 "shared_string_my_places" = "\"എന്റെ സ്ഥലങ്ങള്‍ \"";
 "fav_no_group" = "No group";
@@ -606,7 +606,7 @@
 "gpx_avg_elev" = "Average elevation";
 "gpx_elev_range" = "Elevation range";
 "average_altitude" = "ശരാശരി ഉയരം";
-"altitude_range" = "\"ഉയര വ്യത്യാസം\"";
+"altitude_range" = "\" ഉയര വ്യത്യാസം\"";
 "gpx_ascent" = "Ascent";
 "gpx_descent" = "Descent";
 "gpx_updown" = "Up/Down";
@@ -631,7 +631,7 @@
 "show_info" = "Show Info";
 "record_trip" = "Record your track";
 "shared_string_clear" = "വൃത്തിയാക്കുക";
-"quick_action_poi_list" = "POIലിസ്റ്റ്";
+"quick_action_poi_list" = "POI ലിസ്റ്റ്";
 "gpxup_public" = "പബ്ളിക്";
 "gpxup_identifiable" = "\"തിരിച്ചറിയാവുന്ന \"";
 "gpxup_trackable" = "\"പിന്തുടരാവുന്ന \"";
@@ -771,8 +771,8 @@
 "lang_da" = "ഡാനിഷ്";
 "lang_de" = "ജര്‍മ്മ";
 "lang_de_casual" = "German (casual)";
-"lang_el" = "\"ഗ്രീക്ക് \"";
-"lang_en" = "\"ഇംഗ്ലീഷ് \"";
+"lang_el" = "\" ഗ്രീക്ക് \"";
+"lang_en" = "\" ഇംഗ്ലീഷ് \"";
 "lang_en_gb" = "ഇംഗ്ലീഷ് (യുണിറ്റഡ് കിങ്ഡം)";
 "lang_eo" = "എസ്പെരന്തോ";
 "lang_es" = "സ്പാനിഷ്";
@@ -977,7 +977,7 @@
 "prch_nau_q2_wifi" = "Downloading requires %@ over WiFi network.";
 "prch_nau_q3" = "You may install it later through the Maps & Resources.";
 "proceed_q" = "Proceed?";
-"shared_string_download" = "\"ഡൗണ്‍ലോഡ്\"";
+"shared_string_download" = "\" ഡൗണ്‍ലോഡ്\"";
 "shared_string_no_thanks" = "വേണ്ട, നന്ദി";
 "download_now" = "Download map now";
 "prch_failed" = "Purchase of \"%@\" has failed";
@@ -1063,7 +1063,7 @@
 "live_updates" = "\"തത്സമയ പരിഷ്കരണങ്ങള്‍ \"";
 "available_maps" = "ലഭ്യമായ ഭൂപടങ്ങള്‍";
 "osmand_live_last_changed" = "Last map change: %@";
-"last_update" = "\"അവസാന പരിഷ്ക്കരണം : %@\"";
+"last_update" = "\" അവസാന പരിഷ്ക്കരണം : %@\"";
 "osmand_live_not_updated" = "Not yet updated";
 "hourly" = "പ്രതിമണിക്കൂര്‍";
 "daily" = "ദിവസവും";
@@ -1176,7 +1176,7 @@
 "osm_created" = "Created";
 "poi_remove_success" = "താല്‍പര്യ ബിന്ദു (പിഓഐ) വിജയകരമായി നീക്കം ചെയ്തിരിക്കുന്നു";
 "shared_string_modified" = "Modified";
-"osm_edit_reopened_note" = "OSMകുറിപ്പ് വീണ്ടും തുറന്നു";
+"osm_edit_reopened_note" = "OSM കുറിപ്പ് വീണ്ടും തുറന്നു";
 "osm_name" = "OpenStreetMap username";
 "osm_pass" = "OpenStreetMap password";
 "osm_offline_editing" = "Always use offline editing";
@@ -1197,9 +1197,9 @@
 "osm_modify_place" = "Modify place";
 "poi_remove_title" = "താല്‍പര്യ ബിന്ദു (പിഓഐ) നീക്കം ചെയ്യുക";
 "osm_edit_modified_poi" = "പരിഷ്കരിച്ച OSM POI";
-"osm_edit_deleted_poi" = "OSM POIഇല്ലാതാക്കി";
-"osm_edit_created_poi" = "OSM POIസൃഷ്ടിച്ചു";
-"osm_edit_created_note" = "OSMകുറിപ്പു് സൃഷ്ടിച്ചു";
+"osm_edit_deleted_poi" = "OSM POI ഇല്ലാതാക്കി";
+"osm_edit_created_poi" = "OSM POI സൃഷ്ടിച്ചു";
+"osm_edit_created_note" = "OSM കുറിപ്പു് സൃഷ്ടിച്ചു";
 "osm_note_create" = "Create OSM Note";
 "upload_osm_note" = "ഓഎസ്എം കുറിപ്പ് അപ്ലോഡ് ചെയ്യുക";
 "osm_edit_close_note" = "Close OSM Note";
@@ -1353,7 +1353,7 @@
 "quick_action_dialog" = "Dialog";
 "quick_action_edit_action" = "പ്രവർത്തനം എഡിറ്റുചെയ്യുക";
 "quick_action_add_tag" = "Add tag";
-"gpx_tags_txt" = "\"ടാഗുകള്‍\"";
+"gpx_tags_txt" = "\" ടാഗുകള്‍\"";
 "quick_action_get_info" = "Get info";
 "quick_action_enter_message" = "Enter message";
 "quick_action_bug_descr" = "ഈ സന്ദേശം അഭിപ്രായ കോളത്തില്‍ ഉൾപ്പെടുത്തിയിരിക്കുന്നു.";
@@ -1415,7 +1415,7 @@
 "edit_waypoint_short" = "Edit waypoint";
 "replace_waypoint_confirmation" = "Are you sure you want to replace Waypoint %@?";
 "no_waypoints_found" = "\"വഴിത്തിരിവുകളൊന്നും കണ്ടെത്താനായില്ല \"";
-"poi_context_menu_modify" = "POIപരിഷ്ക്കരിക്കുക";
+"poi_context_menu_modify" = "POI പരിഷ്ക്കരിക്കുക";
 "context_menu_item_create_poi" = "\"പി ഓ ഐക്ക്  രുപം നല്‍കുക\"";
 "poi_context_menu_modify_osm_change" = "\"ഓഎസ്എം  മാറ്റ വരുത്തുക \"";
 "context_menu_item_open_note" = "ഓഎസ്എം കുറിപ്പ് തുറക്കുക";
@@ -1455,7 +1455,7 @@
 "help_navigation_descr" = "How to set up navigation";
 "faq_item" = "എഫ് ഏ ക്യൂ";
 "help_faq_descr" = "Frequently asked questions";
-"features_menu_group" = "\"സവിശേഷതകള്‍ \"";
+"features_menu_group" = "\" സവിശേഷതകള്‍ \"";
 "map_viewing_item" = "ഭൂപടം കാണിക്കുക";
 "help_search" = "Map search";
 "planning_trip_item" = "ഒരു യാത്ര ആസൂത്രണം ചെയ്യുക";
@@ -1544,7 +1544,7 @@
 "plugin_nautical_descr" = "OsmAnd Nautical Charts is a plugin for OsmAnd Maps & Navigation app. It is a detailed graphical representation of oceans, seas, coastal areas and rivers. The charts can contain various information like sailing routes, navigation lights, dangerous areas, areas where it's allowed or not allowed to sail or dock, etc.\n\nUsage Instructions: it is highly recommended to download nautical basemap in order to see the maps regardless of detailed map presence. To turn on Nautical charts, tap the map button and set map type to Nautical.\n\nNote: All professional sailors are obliged to have official nautical charts on their ships.\n\nOsmAnd Nautical charts are based on the data from OpenSeaMap project. While OpenSeaMap charts at the moment cannot compete with official nautical charts, they can be used by recreational sailors for orientation or route planning.";
 "osmand_parking_plugin_name" = "പാര്‍ക്കിങ്ങ് സ്ഥാനം";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
-"osmand_parking_plugin_description" = "\"പാര്‍ക്കിങ്ങ് സ്ഥാന അനുബന്ധം എവിടെയാണ് കാര്‍ പാര്‍ക്ക് ചെയ്തത് എന്നും എത്രസമയം കൂടി ലഭ്യമാണ്(സമയപരിമിതമെങ്കില്‍) ഓര്‍മിപ്പിക്കുന്നു.  പാര്‍ക്കിങ്ങ് സ്ഥലവും സമയവും ഓഎസ്എംആന്ഡിന്റെ ഡാഷ്ബോഡിലും ഭൂപത്തിലും കാണാവുന്നതാണ്.കൂടാതെ ആന്ഡ്രോയിഡ് കലണ്ടറിലൊരു  ഓര്‍മ്മക്കത്ത് ചേര്‍ക്കാവുന്നതാണ്.\"";
+"osmand_parking_plugin_description" = "\"പാര്‍ക്കിങ്ങ് സ്ഥാന അനുബന്ധം എവിടെയാണ് കാര്‍ പാര്‍ക്ക് ചെയ്തത് എന്നും എത്രസമയം കൂടി ലഭ്യമാണ്(സമയപരിമിതമെങ്കില്‍) ഓര്‍മിപ്പിക്കുന്നു.  പാര്‍ക്കിങ്ങ് സ്ഥലവും സമയവും ഓഎസ്എംആന്ഡിന്റെ ഡാഷ്ബോഡിലും ഭൂപത്തിലും കാണാവുന്നതാണ്. കൂടാതെ ആന്ഡ്രോയിഡ് കലണ്ടറിലൊരു  ഓര്‍മ്മക്കത്ത് ചേര്‍ക്കാവുന്നതാണ്.\"";
 "plugin_ski_name" = "സ്കീ ഭൂപടവിന്യാസം";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "plugin_ski_descr" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
@@ -1749,7 +1749,7 @@
 "search_my_location" = "എന്റെ സ്ഥാനം തെരയുക";
 "no_inet_connection" = "ഇന്റര്‍നെറ്റ് കണക്ഷന്‍ ഇല്ല";
 "no_inet_connection_desc_map" = "ആവശ്യമുള്ള മാപ്പുകള്‍ ഡൗണ്‍ലോഡ് ചെയ്യാന്‍.";
-"try_again" = "\"ദയവായി വീണ്ടും ശ്രമിയ്ക്കുക\"";
+"try_again" = "\" ദയവായി വീണ്ടും ശ്രമിയ്ക്കുക\"";
 "searching" = "തെരഞ്ഞുകൊണ്ടിരിക്കുന്നു…";
 "search_location" = "സ്ഥാനം തിരയുന്നു…";
 "search_map" = "ഭൂപടം തെരയുന്നു…";
@@ -1812,7 +1812,7 @@
 "city_type_district" = "ജില്ല";
 "city_type_neighbourhood" = "സമീപദേശം";
 "postcode" = "പോസ്റ്റ്കോഡ്";
-"show_something_on_map" = "%@നെ ഭൂപടത്തില്‍ കാണിക്കുക";
+"show_something_on_map" = "%@ നെ ഭൂപടത്തില്‍ കാണിക്കുക";
 "search_POI_level_btn" = "കൂടുതല്‍ കണ്ടെത്തുക";
 "search_address_street" = "തെരുവ്";
 "search_address_building_option" = "കെട്ടിടം";
@@ -1838,7 +1838,7 @@
 "osm_live_payment_annual_title" = "വര്ഷത്തിലൊരിക്കൽ";
 "osm_live_payment_month_cost_descr" = "\"പ്റതിമാസം  %@\"";
 "osm_live_payment_month_cost_descr_ex" = "\"പ്റതിമാസം %.2f %@ \"";
-"osm_live_payment_discount_descr" = "%@ലാഭിക്കുക";
+"osm_live_payment_discount_descr" = "%@ ലാഭിക്കുക";
 "osm_live_payment_current_subscription" = "നിലവിലെ സബ്സ്ക്രിപ്ഷൻ";
 "osm_live_payment_renews_monthly" = "മാസത്തിലൊരിക്കൽ ആവര്‍ത്തിക്കുക";
 "osm_live_payment_renews_quarterly" = "മൂന്നുമാസത്തിലൊരിക്കൽ ആവര്‍ത്തിക്കുക";
@@ -1849,8 +1849,8 @@
 "purchase_dialog_title" = "പ്ലാൻ തിരഞ്ഞെടുക്കുക";
 "purchase_dialog_travel_description" = "\"ഓഫ്‌ലൈന്‍  യാത്രാ ഗൈഡ് പ്രവർത്തനം ലഭിക്കുന്നതിന് ഇനിപ്പറയുന്നവയിൽ ഒന്ന് വാങ്ങുക:\"";
 "free_version_message" = "ഈ സൗജന്യ ഓഎസ്എം ആന്ഡ് പതിപ്പ് %@ ഡൗണ്‍ലോഡുകളെ അനുവദിക്കൂ, ഓഫ്ലൈന് വിക്കിപീഡിയ ലേഖനങ്ങളുമില്ല. ഈ നിയന്ത്രണമൊഴിവാക്കാന്‍ ദയവായി ഓഎസ്ംആന്ഡ്+ അല്ലെങ്കില്‍ എഫ്ഡ്രോയിഡ് പതിപ്പിലേക്ക് പരിഷ്കരിക്കുക.";
-"get_osmand_live" = "\"എല്ലാ പ്ളഗ്ഗിനുകളും, വിക്കിപ്പീഡിയ, വിക്കിവൊയേജ്, എല്ലാദിവസവും പുതുക്കുന്ന ഭൂപടങ്ങള്‍  നിയന്ത്രണങ്ങളില്ലാതെഡൗണ്ലോഡ്  ചെയ്യുക തുടങ്ങിയ   സവിശേഷകള്‍ക്ക്    ഓഎസ്എംആന്‍ഡ്  ലൈവ് നേടുക. \"";
-"osm_live_subscription" = "OsmAndലൈവ് സബ്സ്ക്രിപ്ഷൻ";
+"get_osmand_live" = "\"എല്ലാ പ്ളഗ്ഗിനുകളും, വിക്കിപ്പീഡിയ, വിക്കിവൊയേജ്, എല്ലാദിവസവും പുതുക്കുന്ന ഭൂപടങ്ങള്‍  നിയന്ത്രണങ്ങളില്ലാതെ ഡൗണ്ലോഡ്  ചെയ്യുക തുടങ്ങിയ   സവിശേഷകള്‍ക്ക്    ഓഎസ്എംആന്‍ഡ്  ലൈവ് നേടുക. \"";
+"osm_live_subscription" = "OsmAnd ലൈവ് സബ്സ്ക്രിപ്ഷൻ";
 "cancel_subscription" = "Cancel subscription";
 "wikivoyage_offline" = "ഓഫ്‌ലൈന്‍ വിക്കിവൊയേജ്";
 "unlimited_downloads" = "\"പരിധിയില്ലാത്ത  ഡൌണ്‍ലോഡുകള്‍\"";
@@ -1865,7 +1865,7 @@
 "in_app_purchase_desc" = "ഒറ്റത്തവണ പേയ്മെന്റ്";
 "in_app_purchase_desc_ex" = "ഒരിക്കൽ വാങ്ങിയാൽ, ഇത് നിങ്ങൾക്ക് ശാശ്വതമായി ലഭ്യമാകും.";
 "unlock_all_features" = "എല്ലാ OsmAnd സവിശേഷതകളും അൺലോക്കുചെയ്യുക";
-"subscribe_email_desc" = "\"ഞങ്ങളുടെ ഡിസ്കൗണ്ടുകളെക്കുറിച്ചുള്ള മെയിലിംഗ് ലിസ്റ്റിലേക്ക് സബ്സ്ക്രൈബ് ചെയ്യൂ 3 കൂടുതൽ മാപ്പ് ഡൌൺലോഡുകൾ നേടുക!\"";
+"subscribe_email_desc" = "\"  ഞങ്ങളുടെ ഡിസ്കൗണ്ടുകളെക്കുറിച്ചുള്ള മെയിലിംഗ് ലിസ്റ്റിലേക്ക് സബ്സ്ക്രൈബ് ചെയ്യൂ 3 കൂടുതൽ മാപ്പ് ഡൌൺലോഡുകൾ നേടുക!\"";
 "osm_live_subscribe_btn" = "സബ്സ്ക്രൈബ്";
 "shared_string_email_address" = "ഈ-മെയില്‍ വിലാസം";
 "osm_live_enter_email" = "ദയവായി ഈ-മെയില്‍ വിലാസം തരുക";
@@ -2000,9 +2000,9 @@
 "rendering_attr_currentTrackColor_description" = "ജിപിഎക്സ് നിറം";
 "routing_attr_driving_style_speed_name" = "ദൂരം കുറഞ്ഞ പാതകള്‍";
 "routing_attr_avoid_sett_description" = "കല്ല് പാകിയത് ഒഴിവാക്കുക (cobblestone and sett)";
-"rendering_attr_hikingRoutesOSMC_description" = "OSMCട്രെയ്സ് അനുസരിച്ച് പാതകൾ റെണ്ടര്‍ ചെയ്യുക.";
+"rendering_attr_hikingRoutesOSMC_description" = "OSMC ട്രെയ്സ് അനുസരിച്ച് പാതകൾ റെണ്ടര്‍ ചെയ്യുക.";
 "rendering_value_car_name" = "കാര്‍";
-"routing_attr_avoid_unpaved_name" = "\"ടാര്‍ ചെയ്യാത്ത(പാകാത്ത) റോഡുകള്‍ ഒഴിവാക്കുക \"";
+"routing_attr_avoid_unpaved_name" = "\" ടാര്‍ ചെയ്യാത്ത(പാകാത്ത) റോഡുകള്‍ ഒഴിവാക്കുക \"";
 "rendering_attr_lessDetailed_name" = "കുറച്ച് വിവരങ്ങള്‍";
 "routing_attr_avoid_borders_description" = "\"രാജ്യാന്തര  അതിര്‍ത്തി മറികടക്കാതിരിക്കുക \"";
 "rendering_attr_highway_class_steps_name" = "സ്ടെപ്പുകള്‍";
@@ -2016,16 +2016,16 @@
 "rendering_attr_hideBuildings_name" = "കെട്ടിടങ്ങ";
 "routing_attr_max_num_changes_description" = "Specify upper limit of changes";
 "rendering_attr_winter_road_name" = "Winter road";
-"rendering_attr_tramTrainRoutes_name" = "ട്രാം&ട്രെയിന്‍ റൂട്ടുകള്‍";
+"rendering_attr_tramTrainRoutes_name" = "ട്രാം & ട്രെയിന്‍ റൂട്ടുകള്‍";
 "rendering_attr_smoothness_intermediate_name" = "ഇന്റർമീഡിയറ്റ്";
 "rendering_attr_surface_snow_name" = "മഞ്ഞ്";
 "rendering_attr_highway_class_cycleway_name" = "സൈക്കിൾ വേ";
 "routing_attr_piste_type_downhill_description" = "Slopes for alpine or downhill skiing and access to ski lifts.";
 "rendering_attr_hideWaterPolygons_name" = "വെള്ളം മറയ്ക്കുക";
 "routing_attr_avoid_stairs_name" = "സ്ടേയര്‍കേസ് ഒഴിവാക്കുക";
-"rendering_value_walkingRoutesOSMC_name" = "OSMCഹൈക്കിംഗ് ചിഹ്നമനുസരിച്ച് നിറം";
+"rendering_value_walkingRoutesOSMC_name" = "OSMC ഹൈക്കിംഗ് ചിഹ്നമനുസരിച്ച് നിറം";
 "rendering_attr_piste_type_skitour_name" = "Skitour";
-"routing_attr_avoid_unpaved_description" = "\"ടാര്‍ ചെയ്യാത്ത(പാകാത്ത) റോഡുകള്‍ ഒഴിവാക്കുക \"";
+"routing_attr_avoid_unpaved_description" = "\" ടാര്‍ ചെയ്യാത്ത(പാകാത്ത) റോഡുകള്‍ ഒഴിവാക്കുക \"";
 "routing_attr_prefer_unpaved_description" = "Prefer unpaved roads.";
 "rendering_attr_roadStyle_description" = "റോഡ് സ്ടൈല്‍";
 "routing_attr_prefer_motorway_description" = "അതിവേഗപാതകള്‍ തെരഞ്ഞെടുക്കുക";
@@ -2048,7 +2048,7 @@
 "routing_attr_piste_type_skitour_name" = "Ski touring";
 "routing_attr_driving_style_prefer_unpaved_name" = "Prefer unpaved roads";
 "rendering_attr_surface_sand_name" = "മണൽ";
-"routing_attr_no_new_routing_description" = "V1.9ൽ അവതരിപ്പിച്ച റൂട്ടിങ്ങ് നിയമങ്ങൾ ഉപയോഗിക്കരുത്.";
+"routing_attr_no_new_routing_description" = "V1.9 ൽ അവതരിപ്പിച്ച റൂട്ടിങ്ങ് നിയമങ്ങൾ ഉപയോഗിക്കരുത്.";
 "routing_attr_prefer_motorway_name" = "അതിവേഗപാതകള്‍ തെരഞ്ഞെടുക്കുക";
 "rendering_attr_surface_cobblestone_name" = "കല്ല് പാകിയത്";
 "rendering_attr_highway_class_state_road_name" = "സ്റ്റേറ്റ് റോഡ്";
@@ -2063,8 +2063,8 @@
 "rendering_attr_tracktype_grade3_name" = "Mostly solid";
 "rendering_attr_showSurfaces_name" = "പാതയുടെ പ്രതലം കാണിക്കുക";
 "routing_attr_allow_advanced_description" = "Difficult routes, with dangerous obstacles and steep sections.";
-"osm_notes" = "OSMകുറിപ്പുകൾ";
-"rendering_attr_hidePOILabels_name" = "POIലേബലുകൾ";
+"osm_notes" = "OSM കുറിപ്പുകൾ";
+"rendering_attr_hidePOILabels_name" = "POI ലേബലുകൾ";
 "rendering_attr_piste_difficulty_novice_name" = "Novice";
 "rendering_attr_hideUnderground_name" = "ഭൂഗര്‍ഭവസ്തുക്കള്‍";
 "rendering_value_dark_brown_name" = "ഇരുണ്ട തവിട്ടുനിറം";
@@ -2288,7 +2288,7 @@
 "context_menu_read_article" = "\"ലേഖനം വായിക്കുക \"";
 "shared_string_view" = "\"കാണുക \"";
 "map_marker_2nd" = "രണ്ടാമത്തെ മാപ്പ് മാര്‍ക്കര്‍";
-"travel_card_download_descr" = "\"ലോകത്തെ വിവിധ സ്ഥലങ്ങളെക്കുറിച്ചുള്ള ലേഖനങ്ങള്‍ ഇന്റെര്‍നെറ്റ് ഇല്ലാതെ കാണാന്‍ വിക്കിവൊയേജ് യാത്രസഹായികള്‍ഡൗണ്‍ലോഡ് ചെയ്യുക \"";
+"travel_card_download_descr" = "\"ലോകത്തെ വിവിധ സ്ഥലങ്ങളെക്കുറിച്ചുള്ള ലേഖനങ്ങള്‍ ഇന്റെര്‍നെറ്റ് ഇല്ലാതെ കാണാന്‍ വിക്കിവൊയേജ് യാത്രസഹായികള്‍ ഡൗണ്‍ലോഡ് ചെയ്യുക \"";
 "map_settings_topography" = "കോണ്ടൂര്‍ ലൈനുക";
 "shared_string_bookmark" = "ബുക്ക്മാര്‍ക്ക്";
 "coordinates_format" = "കോഓര്‍ഡിനേറ്റ് രൂപഘടന";
@@ -2310,13 +2310,13 @@
 "weather_update_disabled" = "നിര്‍ജ്ജീവമാക്കിയ";
 "route_info" = "മാര്‍ഗ വിവരങ്ങള്‍";
 "user_name" = "നിങ്ങളുടെ ഓഎസ്എം സര്‍ നേം";
-"upload_poi" = "POIഅപ്ലോഡ് ചെയ്യുക";
+"upload_poi" = "POI അപ്ലോഡ് ചെയ്യുക";
 "general_settings" = "സാധാരണ";
 "shared_string_accessibility" = "സാമീപ്യത";
 "download_file" = "\"ഫയല്‍ ഡൗണ്‍ലോഡ് ചെയ്യുക \"";
 "enter_new_name" = "\"പുതിയ പേര്  ചേര്‍ക്കുക \"";
 "shared_string_light" = "പ്രകാശമയം";
-"no_travel_guides_data_descr" = "\"ലോകത്തെ വിവിധ സ്ഥലങ്ങളെക്കുറിച്ചുള്ള ലേഖനങ്ങള്‍ ഇന്റെര്‍നെറ്റ് ഇല്ലാതെ കാണാന്‍ വിക്കിവൊയേജ് യാത്രസഹായികള്‍ഡൗണ്‍ലോഡ് ചെയ്യുക \"";
+"no_travel_guides_data_descr" = "\"ലോകത്തെ വിവിധ സ്ഥലങ്ങളെക്കുറിച്ചുള്ള ലേഖനങ്ങള്‍ ഇന്റെര്‍നെറ്റ് ഇല്ലാതെ കാണാന്‍ വിക്കിവൊയേജ് യാത്രസഹായികള്‍ ഡൗണ്‍ലോഡ് ചെയ്യുക \"";
 "global_settings" = "ആഗോള ക്രമീകരണങ്ങൾ";
 "shared_string_result" = "\"ഫലം \"";
 "shared_string_format" = "ഘടന";
@@ -2340,3 +2340,5 @@
 "shared_string_change" = "\"മാറ്റുക \"";
 "shared_string_favorites" = "ഇഷ്ടമുളളവ";
 "shared_string_show" = "കാണിക്കുക";
+"shared_string_local" = "പ്രാദേശികം";
+"show_along_the_route" = "വഴിയിൽ കാണിക്കുക";

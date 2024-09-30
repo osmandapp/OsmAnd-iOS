@@ -263,7 +263,7 @@
 "prch_nau_q3" = "Podeu instal·lar-ho més tard des de «Mapes i recursos».";
 "prch_items_failed" = "element(s) no s'han restaurat. Intenteu-ho altre cop.";
 // Resources
-"res_mapsres" = "Mapes i recursos";
+"res_mapsres" = "Mapes i Descàrregues";
 "res_search_world" = "Cerca a tot el món";
 "res_wsea_map" = "Mapa bàsic mundial marítim";
 "sett_lang_trans" = "transliterats";
@@ -370,7 +370,7 @@
 "plugin_ski_descr" = "Dissenyat per navegar per zones d\'esports d\'hivern: veure pistes d\'esquí i remuntadors, i pistes d\'esquí de fons, amb línies de colors que indiquen els nivells de dificultat. Per utilitzar-lo, activeu aquest connector i aneu també a \"Configura el mapa\" i trieu l\'estil de mapa \"Hivern i esquí\".";
 "record_plugin_description" = "Enregistreu els vostres viatges o entrenaments i analitzeu les dades en termes de velocitat, ascensos i descensos acumulats, perfil d\'elevació, etc. Les pistes gravades es poden arxivar, compartir amb els amics, editar i processar posteriorment. \n \nMés informació a %@.";
 "purchases_feature_desc_wikipedia" = "Obteniu informació de punts d'interès des la Viquipèdia. Serà la vostra guia de butxaca en desconnexió - només cal que activeu el connector Viquipèdia i fruireu dels articles que tracten de les coses que us rodegen.";
-"srtm_plugin_description" = "La informació del terreny, com ara corbes de nivell, ombres i vessants, us ajuda a avaluar visualment la disposició del terreny i el relleu, la navegabilitat i molt més. La informació topogràfica es pot representar al mapa per ombrejat de vessants, corbes de nivell i/o coloració de pendent. \n \nLes dadessubjacents provenen de SRTM i ASTER. \n \nMés informació a %@.";
+"srtm_plugin_description" = "La informació del terreny, com ara corbes de nivell, ombres i vessants, us ajuda a avaluar visualment la disposició del terreny i el relleu, la navegabilitat i molt més. La informació topogràfica es pot representar al mapa per ombrejat de vessants, corbes de nivell i/o coloració de pendent. \n \nLes dades subjacents provenen de SRTM i ASTER. \n \nMés informació a %@.";
 "plugin_popup_ski_desc" = "Per activar l'estil <b>Mapa d'esquí</b> , aneu a l<b>Configuració del mapa</b> > <b>Tipus de mapa </b>";
 "plugin_popup_wiki_desc" = "Per començar a utilitzar el connector de la Vikipèdia, primer baixeu les dades Viquipèdia d'una regió";
 "plugin_popup_nautical_desc" = "Primer baixeu els mapes nàutics.\nDesprès aneu a la <b>Configuració del mapa</b> <b>Tipus de mapa</b> i activeu l'estil <b>Nàutic</b>";
@@ -477,7 +477,7 @@
 "driving_region_japan" = "Japó";
 "driving_region_us" = "Estats Units";
 "driving_region_canada" = "Canadà";
-"driving_region_europe_asia" = "Europa,Àsia, Amèrica llatina i similars";
+"driving_region_europe_asia" = "Europa, Àsia, Amèrica llatina i similars";
 "driving_region_australia" = "Austràlia";
 "left_side_navigation" = "Conducció per l\'esquerra";
 "right_side_navigation" = "Trànsit per la dreta";
@@ -526,8 +526,8 @@
 "intermediate_point" = "Punt de pas %@";
 "arrived_at_intermediate_point" = "Assolida destinació intermèdia";
 "starting_point_too_far" = "El punt de sortida massa lluny de la carretera més propera.";
-"ending_point_too_far" = "El punt finalés massa lluny de la carretera més propera.";
-"intermediate_point_too_far" = "La fita %@és massa lluny de la carretera més propera.";
+"ending_point_too_far" = "El punt final és massa lluny de la carretera més propera.";
+"intermediate_point_too_far" = "La fita %@ és massa lluny de la carretera més propera.";
 "error_calculating_route" = "No s\'ha pogut calcular la ruta.";
 "internet_connection_required_for_online_route" = "El servei de navegació en línia no funciona sense connexió.";
 "empty_route_calculated" = "La ruta calculada està buida.";
@@ -819,7 +819,7 @@
 "donation_to_osm" = "Donació a la comunitat OSM";
 "purchase_unlim_title" = "Compra - %@";
 "in_app_purchase" = "Compres des de l\'aplicació";
-"in_app_purchase_desc" = "Pagamentúnic";
+"in_app_purchase_desc" = "Pagament únic";
 "wikivoyage_travel_guide" = "Guies de viatge";
 "start_editing_card_image_text" = "La guia de viatges de tot el món oberta que qualsevol pot editar.";
 "wikivoyage_travel_guide_descr" = "Guies dels llocs més interessants del planeta, dins OsmAnd, sense cap connexió a Internet.";
@@ -885,7 +885,7 @@
 "osm_closes_at" = "Tanca a les:";
 "contact_info" = "Informació de contacte";
 "map_widget_top_text" = "Nom del carrer";
-"osm_building_num" = "Número de finca";
+"osm_building_num" = "Número de l'edifici";
 "phone" = "Telèfon";
 "website" = "Lloc web";
 "osm_add_place" = "Afegeix lloc";
@@ -1463,7 +1463,7 @@
 "routeInfo_smoothness_name" = "Uniformitat";
 "rendering_attr_hideWaterPolygons_description" = "Hidràulic";
 "rendering_attr_hidePOILabels_name" = "Etiquetes PDI";
-"routing_attr_freeride_policy_description" = "\'Camp a través\' i \'Fora pistes\' són vies no oficials. Normalment no estan regulades ni mantingudes ni revisades de nit. Entrant-hi, sereu responsables del que passi.";
+"routing_attr_freeride_policy_description" = "\'Camp a través\' i \'Fora pistes\' són vies no oficials. Normalment, no estan regulades ni mantingudes ni revisades de nit. Entrant-hi, sereu responsables del que passi.";
 "rendering_attr_piste_type_downhill_name" = "Descens";
 "routing_attr_allow_classic_only_name" = "Restringeix a rutes clàssiques";
 "rendering_attr_currentTrackWidth_description" = "Amplada traça GPX";
@@ -1654,7 +1654,7 @@
 "recalculate_route" = "Recalcula la ruta";
 "special_routing_type" = "Navegació especial";
 "osmand_default_routing" = "Navegació OsmAnd";
-"select_nav_profile_dialog_message" = "El«Tipus de navegació» selecciona com es calculen les rutes, amb motors de navegació en línia i fora de línia disponibles.";
+"select_nav_profile_dialog_message" = "El «Tipus de navegació» selecciona com es calculen les rutes, amb motors de navegació en línia i fora de línia disponibles.";
 "choose_auto_center_map_view_descr" = "Lapse per sincronitzar el mapa a la posició actual un cop iniciat el desplaçament";
 "routing_profile_geocoding" = "Geocodificació";
 "routing_profile_ski" = "Esquí";
@@ -2168,7 +2168,7 @@
 "cloud_all_changes_downloaded" = "S\'han baixat tots els canvis";
 "enough_contributions_descr" = "Enhorabona, heu fet prou contribucions a OpenStreetMap per a gaudir d\'actualitzacions de mapes il·limitades!";
 "shared_string_weather" = "Oratge";
-"ltr_or_rtl_combine_via_slash" = "%@ / %@";
+"ltr_or_rtl_combine_via_slash" = "%@/%@";
 "nautical_depth_points" = "Punts de profunditat nàutica";
 "approximate_file_size" = "Mida aproximada del fitxer";
 "show_borders_of_downloaded_maps" = "Mostra les vores dels mapes baixats";
@@ -2410,7 +2410,7 @@
 "help_article_navigation_routing_brouter_name" = "BRouter";
 "shared_string_duplicate" = "Duplicat";
 "map_widget_target_distance" = "Distància de la càmera a l\'objectiu";
-"bearing_secondary_desc" = "Podeu canviar el format de les dades visualitzades a: %@– %@ – %@.";
+"bearing_secondary_desc" = "Podeu canviar el format de les dades visualitzades a: %@ – %@ – %@.";
 "search_favorites" = "Cerca a Preferits";
 "ant_plus_searching" = "Buscant";
 "help_article_navigation_guidance_name" = "Orientació";
@@ -2528,7 +2528,7 @@
 "specify_number_of_dir_indicators_desc" = "Indiqueu el nombre d\'indicadors de direcció.";
 "shared_string_light" = "Lluminós";
 "external_sensors_source_of_data" = "Procedència de les dades";
-"map_settings_topography" = "Corbes de nivell";
+"map_settings_topography" = "Dades de corbes de nivell";
 "map_screen_orientation" = "Orientació de pantalla";
 "shared_string_hand" = "Mà";
 "default_appearance_desc" = "El color, l’icona i la forma predeterminada s’aplicaran als punts preferits agregats al grup.";
@@ -2567,7 +2567,7 @@
 "help_article_navigation_car_play_name" = "CarPlay";
 "lang_zh-Hans" = "Xinès (simplificat)";
 "shared_string_mode" = "Mode";
-"external_device_status_connect" = "Connecta\'t";
+"external_device_status_connect" = "Connecta";
 "global_settings" = "Paràmetres globals";
 "map_widget_ant_bicycle_cadence" = "Cadència de la bicicleta";
 "map_widget_trip_recording_duration" = "Durada";
@@ -2638,3 +2638,9 @@
 "osmand_depelopment_simulate_location_section" = "Simular";
 "shared_string_show" = "Mostra";
 "driving_region_uk" = "Regne Unit i semblants";
+"view_angle" = "Angle de visió";
+"show_along_the_route" = "Mostra al llarg de la ruta";
+"shared_string_all_icons" = "Totes les icones";
+"shared_string_local" = "Local";
+"profile_icon" = "Icona del perfil";
+"location_radius" = "Radi d\'ubicació";

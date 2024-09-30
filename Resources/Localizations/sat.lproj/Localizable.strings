@@ -798,7 +798,7 @@
 "angular_measurment_units" = "Angular measurment units";
 "units_and_formats" = "Units & formats";
 "device_settings" = "Device settings";
-"osmand_settings" = "OsmAndᱥᱟᱡᱟᱣᱠᱚ";
+"osmand_settings" = "OsmAnd ᱥᱟᱡᱟᱣᱠᱚ";
 "backup_and_restore" = "ᱡᱚᱜᱟᱣ ᱟᱨ ᱫᱚᱦᱲᱟ ᱡᱚᱜᱟᱣ";
 "global_settings_descr" = "Affect the entire application.";
 "plugin_settings_descr" = "Plugin settings for the selected profile.";
@@ -1165,7 +1165,7 @@
 "shared_string_resources" = "Resources";
 "res_mapsres" = "Maps & Resources";
 "download_tab_local" = "Local";
-"osmand_live" = "OsmAndᱞᱟᱭᱤᱵᱷ";
+"osmand_live" = "OsmAnd ᱞᱟᱭᱤᱵᱷ";
 "live_updates" = "Live updates";
 "available_maps" = "Available maps";
 "osmand_live_last_changed" = "Last map change: %@";
@@ -1330,7 +1330,7 @@
 "osm_edit_created_note" = "Created OSM Note";
 "osm_note_create" = "Create OSM Note";
 "upload_osm_note" = "Upload OSM Note";
-"osm_edit_close_note" = "OSMᱠᱷᱟᱴᱚ ᱚᱞ ᱵᱚᱸᱫᱚᱭ ᱢᱮ";
+"osm_edit_close_note" = "OSM ᱠᱷᱟᱴᱚ ᱚᱞ ᱵᱚᱸᱫᱚᱭ ᱢᱮ";
 "osm_edit_comment_note" = "Comment OSM Note";
 "osm_note_reopen_title" = "Reopen OSM Note";
 "osm_confirm_bulk_delete" = "Delete %d edits?";
@@ -1391,7 +1391,7 @@
 
 // Coordinate widget
 "coordinates_widget_current_location" = "Coordinates widget";
-"searching_gps" = "GPSᱥᱮᱸᱫᱽᱨᱟ ᱦᱩᱭᱩᱜ ᱠᱟᱱᱟ";
+"searching_gps" = "GPS ᱥᱮᱸᱫᱽᱨᱟ ᱦᱩᱭᱩᱜ ᱠᱟᱱᱟ";
 "copied_to_clipboard" = "Copied to clipboard";
 // Quick action
 "no_overlay" = "No overlay";
@@ -1543,7 +1543,7 @@
 "shared_string_add_profile" = "ᱢᱚᱦᱲᱟ ᱥᱮᱞᱮᱫᱽ ᱢᱮ";
 "quick_action_switch_profile_descr" = "The action button switches between selected profiles.";
 "profile_type_user_string" = "ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱢᱚᱦᱲᱟ";
-"profile_type_osmand_string" = "OsmAndᱢᱚᱦᱲᱟ";
+"profile_type_osmand_string" = "OsmAnd ᱢᱚᱦᱲᱟ";
 "unsupported_action" = "Unsupported action";
 "unsupported_action_title" = "Unsupported action (%@)";
 "unsupported_action_descr" = "This quick action in not supported now. This can be fixed in new app versions.";
@@ -1701,7 +1701,7 @@
 "record_plugin_name" = "ᱫᱟᱸᱲᱟᱱ ᱨᱮᱠᱚᱰᱤᱝ";
 "product_desc_track_recording" = "Record and save your trips as GPX tracks";
 "record_plugin_description" = "Allows you to record, save and analyze your training or movement data, such as speed, ascents, descents or route relief, which can then be reused, improved, supplemented or shared with friends. \n\nHow to - https://osmand.net/docs/user/plugins/trip-recording";
-"osm_editing_plugin_name" = "OpenStreetMapᱨᱮᱭᱟᱜ ᱥᱟᱯᱲᱟᱣ";
+"osm_editing_plugin_name" = "OpenStreetMap ᱨᱮᱭᱟᱜ ᱥᱟᱯᱲᱟᱣ";
 "product_desc_osm_editing" = "Turn your mobile phone into a mapping tool";
 "osm_editing_plugin_description" = "Allows you to make contributions to OpenStreetMap, a global community aimed at creating a comprehensive map of the world and providing up-to date open-source data to every user. \n\nYou can find instruction on how to edit the map on out website https://osmand.net/docs/user/plugins/osm-editing";
 "product_desc_mapillary" = "Street-level views to check out the surroundings";
@@ -1814,7 +1814,7 @@
 "shared_string_walk" = "Walk";
 "board_at" = "Board at";
 "exit_at" = "Exit at";
-"by_transport_type" = "%@ᱛᱮ";
+"by_transport_type" = "%@ ᱛᱮ";
 "transport_stops" = "stops";
 "total_time" = "Total time";
 "moving_time" = "Moving time";
@@ -2379,7 +2379,7 @@
 "rendering_attr_subwayMode_name" = "Subway routes";
 "rendering_attr_highway_class_motorway_name" = "Motorway";
 "rendering_value_brown_name" = "Brown";
-"rendering_attr_hideIcons_name" = "POIᱟᱭᱠᱚᱱ ᱠᱚ";
+"rendering_attr_hideIcons_name" = "POI ᱟᱭᱠᱚᱱ ᱠᱚ";
 "rendering_attr_roadColors_description" = "Select a road color scheme:";
 "rendering_value_browse_map_name" = "ᱱᱚᱠᱥᱟ ᱯᱟᱱᱛᱮ ᱢᱮ";
 "rendering_attr_surface_asphalt_name" = "Asphalt";
@@ -2460,10 +2460,10 @@
 "osmand_cloud_login_descr" = "Please enter the e-mail address you registred with. A one-time password for the next step will be sent to it.";
 "login_footer_full_text" = "Need help? Please contact us at \nsupport@osmand.net";
 "login_footer_email_part" = "support@osmand.net";
-"cloud_email_not_registered" = "OsmAnd Cloudᱞᱟᱹᱜᱤᱫ ᱱᱚᱣᱟ ᱤᱢᱮᱞ ᱴᱷᱤᱠᱟᱹᱬᱟ ᱨᱮᱡᱤᱥᱴᱚᱨ ᱵᱟᱹᱱᱩᱜᱼᱟ";
+"cloud_email_not_registered" = "OsmAnd Cloud ᱞᱟᱹᱜᱤᱫ ᱱᱚᱣᱟ ᱤᱢᱮᱞ ᱴᱷᱤᱠᱟᱹᱬᱟ ᱨᱮᱡᱤᱥᱴᱚᱨ ᱵᱟᱹᱱᱩᱜᱼᱟ";
 "cloud_email_already_registered" = "ᱱᱚᱣᱟ ᱤᱢᱮᱞ ᱫᱚ ᱞᱟᱦᱟ ᱠᱷᱚᱱ ᱨᱮᱡᱤᱥᱴᱚᱨ ᱢᱮᱱᱟᱜᱼᱟ᱾";
 "login_help_email_title" = "OsmAnd iOS Cloud";
-"restore_from_osmand_cloud" = "OsmAnd Cloudᱠᱷᱚᱱ ᱫᱚᱦᱲᱟ ᱡᱚᱜᱟᱣ ᱢᱮ";
+"restore_from_osmand_cloud" = "OsmAnd Cloud ᱠᱷᱚᱱ ᱫᱚᱦᱲᱟ ᱡᱚᱜᱟᱣ ᱢᱮ";
 "choose_what_to_restore" = "ᱵᱟᱪᱷᱟᱣ ᱢᱮ ᱪᱮᱫ ᱠᱚ ᱫᱚᱦᱲᱟ ᱡᱚᱜᱟᱣ ᱦᱩᱭᱩᱜᱼᱟ᱾";
 "backup_error_no_valid_subscription" = "No valid subscription present";
 "backup_error_user_is_not_registered" = "ᱚᱱᱟ ᱤᱢᱮᱞ ᱴᱷᱤᱠᱟᱹᱱᱟ ᱛᱮ ᱠᱚᱱᱦᱚᱸ ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱨᱮᱡᱤᱥᱴᱚᱨ ᱵᱟᱹᱱᱩᱜ ᱠᱚᱣᱟ";
@@ -2576,7 +2576,7 @@
 "upload_local_version" = "Upload local version";
 "dowload_cloud_version" = "Dowload cloud version";
 "copy_address" = "ᱴᱷᱤᱠᱟᱹᱬᱟ ᱱᱚᱠᱚᱞ ᱢᱮ";
-"copy_poi_name" = "POIᱧᱩᱛᱩᱢ ᱱᱚᱠᱚᱞ ᱢᱮ";
+"copy_poi_name" = "POI ᱧᱩᱛᱩᱢ ᱱᱚᱠᱚᱞ ᱢᱮ";
 "copy_coordinates" = "Copy coordinates";
 "share_geo" = "geo:";
 "toast_empty_name_error" = "Unnamed location";
@@ -2612,12 +2612,12 @@
 "product_title_plus" = "Maps+";
 "osmand_maps_plus_tagline" = "ᱯᱩᱥᱴᱟᱹᱣ ᱜᱩᱱ ᱠᱚ ᱧᱟᱢ ᱢᱮ";
 "not_available_with" = "Not available with %@";
-"continue_with" = "%@ᱥᱟᱣᱛᱮ ᱞᱮᱛᱟᱲ ᱢᱮ";
+"continue_with" = "%@ ᱥᱟᱣᱛᱮ ᱞᱮᱛᱟᱲ ᱢᱮ";
 "complete_purchase" = "ᱠᱤᱨᱤᱧ ᱯᱩᱨᱟᱹᱣ ᱢᱮ";
 "subscription_cancel_description" = "Cancel anytime in AppStore.";
 "osm_live_payment_subscription_management_aid" = "Payment will be charged to your Apple ID account at the confirmation of purchase.\n\nSubscription automatically renews unless it is canceled at least 24 hours before the end of the current period. Your account will be charged for renewal within 24 hours prior to the end of the current period.\n\nYou can manage and cancel your subscriptions by going to your account settings on the App Store after purchase";
 "no_purchases" = "You don’t have any purchases";
-"empty_purchases_description" = "If your purchases don\'t show up here, tap on \"%@\", or contact our support team.";
+"empty_purchases_description" = "If your purchases don't show up here, tap on \"%@\", or contact our support team.";
 "explore_osmnad_plans_to_find_suitable" = "Explore OsmAnd Plans to find one suitable for you.";
 "osm_live_banner_desc" = "Get unlimited map downloads, adding weekly, daily, or even hourly updates.";
 "redeem_promo_code" = "ᱯᱨᱚᱢᱚ ᱠᱚᱰ ᱨᱤᱰᱤᱢ ᱢᱮ";
@@ -2669,11 +2669,11 @@
 "auto_update" = "Auto-update";
 "update_parameters" = "Update parameters";
 "recording_delete_confirm" = "Delete this item?";
-"login_open_street_map_org" = "OpenStreetMap.orgᱨᱮ ᱵᱚᱞᱚᱱ ᱢᱮ";
+"login_open_street_map_org" = "OpenStreetMap.org ᱨᱮ ᱵᱚᱞᱚᱱ ᱢᱮ";
 "map_updates_for_mappers" = "Map updates for mappers";
 "offline_edition_descr" = "If offline editing is enabled, changes will be saved locally and can only be uploaded manually, otherwise, changes will be uploaded immediately.";
 "open_street_map_login_mode_simple" = "You need to log in to upload your changes.";
-"sign_in_with_open_street_map" = "OpenStreetMapᱥᱟᱣᱛᱮ ᱵᱚᱞᱚᱱ ᱥᱩᱦᱤ ᱢᱮ";
+"sign_in_with_open_street_map" = "OpenStreetMap ᱥᱟᱣᱛᱮ ᱵᱚᱞᱚᱱ ᱥᱩᱦᱤ ᱢᱮ";
 "use_login_and_password" = "ᱵᱮᱵᱷᱟᱨᱤᱡ ᱧᱩᱛᱩᱢ ᱟᱨ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ ᱵᱮᱵᱷᱟᱨ ᱢᱮ";
 "use_login_and_password_description" = "Use your email/login and password to log in to OpenStreetMap.org.";
 "benefits_for_contributors" = "ᱩᱥᱨᱟᱹᱣ OSM ᱮᱱᱮᱢ ᱠᱚᱣᱟ ᱞᱟᱵᱷ ᱠᱚ";
@@ -2749,7 +2749,7 @@
 "general_settings" = "ᱥᱟᱫᱷᱟᱨᱚᱱ";
 "add_page" = "ᱥᱟᱦᱟᱴᱟ ᱥᱮᱞᱮᱫᱽ ᱢᱮ";
 "navigation_history" = "ᱯᱟᱱᱛᱮᱭᱟᱜᱽ ᱱᱟᱜᱟᱢ";
-"delete_history_items" = "%@ᱱᱟᱜᱟᱢ ᱡᱤᱱᱤᱥ ᱠᱚ ᱢᱮᱴᱟᱣ ᱢᱟ\?";
+"delete_history_items" = "%@ ᱱᱟᱜᱟᱢ ᱡᱤᱱᱤᱥ ᱠᱚ ᱢᱮᱴᱟᱣ ᱢᱟ\?";
 "activity_type_car_name" = "ᱠᱟᱨ";
 "shared_string_symbol" = "ᱪᱤᱱᱦᱟᱹ";
 "subscribe_email_error" = "ᱵᱷᱩᱞ ᱦᱩᱭᱮᱱᱟ";
@@ -2757,7 +2757,7 @@
 "search_history" = "ᱥᱮᱸᱫᱽᱨᱟ ᱱᱟᱜᱟᱢ";
 "shared_string_travel" = "ᱫᱟᱸᱲᱟᱱ";
 "shared_string_dark" = "ᱧᱩᱛ";
-"perform_oauth_authorization" = "OAuthᱣᱟᱭᱟ ᱵᱚᱞᱚᱱ ᱢᱮ";
+"perform_oauth_authorization" = "OAuth ᱣᱟᱭᱟ ᱵᱚᱞᱚᱱ ᱢᱮ";
 "shared_string_external" = "ᱵᱟᱦᱨᱮ";
 "start_recording" = "ᱨᱮᱠᱚᱰᱤᱝ ᱮᱛᱚᱦᱚᱵᱽ ᱢᱮ";
 "map_widget_trip_recording_distance" = "ᱥᱟᱺᱜᱤᱧ";

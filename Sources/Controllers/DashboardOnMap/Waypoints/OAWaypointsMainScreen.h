@@ -8,6 +8,10 @@
 
 #import "OAWaypointsScreen.h"
 
+@class OAWaypointsViewController;
+
 @interface OAWaypointsMainScreen : NSObject<OAWaypointsScreen>
+
+- (id) initWithTable:(UITableView *)tableView viewController:(OAWaypointsViewController *)viewController param:(id)param isShowAlong:(BOOL)isShowAlong;
 
 @end

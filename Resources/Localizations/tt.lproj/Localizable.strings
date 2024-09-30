@@ -590,7 +590,7 @@
 "shared_string_groups" = "Groups";
 "favorite" = "Favorite";
 "poi_overlay" = "POI Overlay";
-"poi_dialog_poi_type" = "POIтибы";
+"poi_dialog_poi_type" = "POI тибы";
 "my_favorites" = "My Favorites";
 "shared_string_my_places" = "My Places";
 "fav_no_group" = "No group";
@@ -1020,7 +1020,7 @@
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
 "ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "ltr_or_rtl_combine_via_or" = "%@ or %@";
-"ltr_or_rtl_combine_via_slash" = "%@ / %@";
+"ltr_or_rtl_combine_via_slash" = "%@/%@";
 "listed_exist" = "Listed %@ already exist in OsmAnd.";
 "shared_string_import_complete" = "Import complete";
 "import_complete_description" = "All data from the %@ is imported, you can use buttons below to open needed part of the app to manage it";
@@ -1239,7 +1239,7 @@
 "edit_tilesource_elliptic_tile" = "Elliptic mercator";
 "pseudo_mercator_projection" = "Pseudo-Mercator projection";
 "res_source_format" = "Source format";
-"sqlite_db_file" = "SQLiteDBфайл";
+"sqlite_db_file" = "SQLiteDB файл";
 "one_image_per_tile" = "One image file per tile";
 "res_zoom_levels_desc" = "This parameters will affect the map display when used as a map type or overlay/underlay.\n\nMap type: the map will be limited to the selected zooms.\n\nOverlay / Underlay: Zoom levels at which tiles will be visible. Upscale or downscale will occur above or below the set values.";
 "res_expire_time_desc" = "Expiration time in minutes. Cached tiles will be reloaded after specified time. Leave this field empty if you do not need to reload tiles for this source.\nOne day is 1440 minutes.\nOne week is 10 080 minutes.\n30 days are 43 200 minutes.";
@@ -1952,7 +1952,7 @@
 "poi_filter_custom_filter" = "Custom filter";
 "delete_custom_categories" = "Delete custom categories";
 "poi_filter_closest_poi" = "Nearest POIs";
-"shared_string_is_open_24_7" = "24/7ачык";
+"shared_string_is_open_24_7" = "24/7 ачык";
 "shared_string_is_open" = "Open now";
 "poi_filter_by_name" = "Search by name";
 "subcategories" = "Subcategories";
@@ -2019,10 +2019,10 @@
 "osm_live_payment_monthly_title" = "Pay monthly";
 "osm_live_payment_3_months_title" = "Pay once in 3 months";
 "osm_live_payment_annual_title" = "Pay once a year";
-"osm_live_payment_month_cost_descr" = "%@ /ай";
+"osm_live_payment_month_cost_descr" = "%@ / ай";
 "osm_live_payment_year_cost_descr" = "%@ / year";
-"osm_live_payment_month_cost_descr_ex" = "%.2f %@ /ай";
-"osm_live_payment_discount_descr" = "%@саклау";
+"osm_live_payment_month_cost_descr_ex" = "%.2f %@ / ай";
+"osm_live_payment_discount_descr" = "%@ саклау";
 "osm_live_payment_current_subscription" = "Your current subscription";
 "osm_live_payment_renews_monthly" = "Renews monthly";
 "osm_live_payment_renews_quarterly" = "Renews quarterly";
@@ -2036,9 +2036,9 @@
 "get_osmand_live" = "Get OsmAnd Live to unlock all features:";
 "osm_live_subscription" = "OsmAnd Live subscription";
 "cancel_subscription" = "Cancel subscription";
-"wikivoyage_offline" = "Wikivoyageоффлайн";
+"wikivoyage_offline" = "Wikivoyage оффлайн";
 "unlimited_downloads" = "Unlimited downloads";
-"wikipedia_offline" = "Wikipediaоффлайн";
+"wikipedia_offline" = "Wikipedia оффлайн";
 "contour_lines_hillshade_maps" = "Terrain maps: contour lines, hillshades, slope";
 "monthly_map_updates" = "Monthly map updates";
 "daily_map_updates" = "Hourly map updates";
@@ -2617,7 +2617,7 @@
 "subscription_cancel_description" = "Cancel anytime in AppStore.";
 "osm_live_payment_subscription_management_aid" = "Payment will be charged to your Apple ID account at the confirmation of purchase.\n\nSubscription automatically renews unless it is canceled at least 24 hours before the end of the current period. Your account will be charged for renewal within 24 hours prior to the end of the current period.\n\nYou can manage and cancel your subscriptions by going to your account settings on the App Store after purchase";
 "no_purchases" = "You don’t have any purchases";
-"empty_purchases_description" = "If your purchases don\'t show up here, tap on \"%@\", or contact our support team.";
+"empty_purchases_description" = "If your purchases don't show up here, tap on \"%@\", or contact our support team.";
 "explore_osmnad_plans_to_find_suitable" = "Explore OsmAnd Plans to find one suitable for you.";
 "osm_live_banner_desc" = "Get unlimited map downloads, adding weekly, daily, or even hourly updates.";
 "redeem_promo_code" = "Redeem promo code";

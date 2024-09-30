@@ -45,7 +45,7 @@
 "cancel_navigation" = "Stop navigation";
 "start_navigation" = "Start navigation";
 "intermediate_items_sort_by_distance" = "Sort door-to-door";
-"switch_start_finish" = "Reverse starting point&destination";
+"switch_start_finish" = "Reverse starting point & destination";
 "clear_all_intermediates" = "Clear all intermediate points";
 "shared_string_options" = "Opciones";
 "new_destination_point_dialog" = "Yá afitesti un destín:";
@@ -1166,7 +1166,7 @@
 "osm_upload_failed_title" = "Upload failed";
 "osm_upload_failed_descr" = "Please check your login details and Internet connection and try again.";
 "exit_without_saving" = "¿Quies colar ensin guardar\?";
-"unsaved_changes_will_be_lost" = "Van perdese tolos cambeos ensin guardar.¿Quies siguir\?";
+"unsaved_changes_will_be_lost" = "Van perdese tolos cambeos ensin guardar. ¿Quies siguir\?";
 "osm_upload_no_internet" = "Please check your Internet connection and try again.";
 "osm_delete_confirmation_descr" = "Are you sure you want to delete this POI?";
 "osm_succsessful_uploads" = "Successful";
@@ -1579,14 +1579,14 @@
 "product_desc_wiki" = "Wikipedia data";
 "purchases_feature_desc_wikipedia" = "Esplora Wikipedia ensin internet. Los artículos dixébrense per países y rexones, y tán disponibles en toles llingües.";
 "shared_string_all_languages" = "Toles llingües";
-"select_wikipedia_article_langs" = "Select the languages forWikipedia articles on the map.​​ Switch to any available language while reading the article.";
+"select_wikipedia_article_langs" = "Select the languages for ​​Wikipedia articles on the map.​​ Switch to any available language while reading the article.";
 "wiki_menu_download_descr" = "Additional maps are needed to view Wikipedia POIs on the map.";
 "some_articles_may_not_available_in_lang" = "Some Wikipedia articles may not be available in your language.";
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
 "srtm_plugin_name" = "Contour lines";
 "product_desc_srtm" = "Display of contour lines";
-"srtm_plugin_description" = "This plugin provides both a contour line overlay and a (relief) hillshade layer to be displayed on top of OsmAnd\'s standard maps. This functionality will be much appreciated by athletes, hikers, trekkers, and anybody interested in the relief structure of a landscape. (Please note that contour line and/or relief data are separate, additional downloads available after activating the plugin.) \n \nThe global data (between 70° north and 70 ° south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA\'s Earth Observing System. ASTER is a cooperative effort between NASA, Japan\'s Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
+"srtm_plugin_description" = "This plugin provides both a contour line overlay and a (relief) hillshade layer to be displayed on top of OsmAnd\'s standard maps. This functionality will be much appreciated by athletes, hikers, trekkers, and anybody interested in the relief structure of a landscape. (Please note that contour line and/or relief data are separate, additional downloads available after activating the plugin.) \n \nThe global data (between 70 ° north and 70 ° south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA\'s Earth Observing System. ASTER is a cooperative effort between NASA, Japan\'s Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 "wikivoyage_travel_guide" = "Travel Guides";
 "start_editing_card_image_text" = "La guía de viaxes mundial que tol mundu pue editar.";
 "wikivoyage_travel_guide_descr" = "Guides to the most interesting places on the planet, inside OsmAnd, without a connection to the Internet.";
@@ -1832,7 +1832,7 @@
 "wiki_buy_description" = "To read full articles - buy Wikipedia plugin and download Wikipedia data of %@";
 "wiki_download_description" = "To read full articles - download Wikipedia data of %@";
 "download_wiki_region_placeholder" = "esta rexón";
-"osm_live_plan_pricing" = "Plan&Pricing";
+"osm_live_plan_pricing" = "Plan & Pricing";
 "osm_live_payment_monthly_title" = "Mensualmente";
 "osm_live_payment_3_months_title" = "Cada tres meses";
 "osm_live_payment_annual_title" = "Añalmente";
@@ -1862,7 +1862,7 @@
 "donation_to_osm" = "Donation to the OSM community";
 "purchase_unlim_title" = "Buy - %@";
 "in_app_purchase" = "In-app purchase";
-"in_app_purchase_desc" = "Paguúnicu";
+"in_app_purchase_desc" = "Pagu únicu";
 "in_app_purchase_desc_ex" = "Once purchased, it will be permanently available to you.";
 "unlock_all_features" = "Unlock all OsmAnd features";
 "subscribe_email_desc" = "¡Soscríbite a la nuesa llista de corréu que ye de descuentos y consigui 3 descargues de mapes más!";
@@ -2257,7 +2257,7 @@
 "altitude" = "Altitú";
 "navigate_point_mgrs" = "MGRS";
 "set_up_backup" = "Set up backup";
-"grey_color_undefined" = "El color buxuúsase pa les partes que nun tienen datos.";
+"grey_color_undefined" = "El color buxu úsase pa les partes que nun tienen datos.";
 "cloud_conflicts" = "Conflicts";
 "routing_attr_prefer_horse_routes_name" = "Prefer horse routes";
 "backup_error_gzip_only_supported_upload" = "The file should be sent in .gzip format";
@@ -2373,7 +2373,7 @@
 "backup_version_history" = "Version history";
 "use_login_and_password" = "Usar un nome d\'usuariu y una contraseña";
 "activity_type_mountainbike_name" = "Bicicleta de monte";
-"empty_purchases_description" = "If your purchases don\'t show up here, tap on“%@”, or contact our support team.";
+"empty_purchases_description" = "If your purchases don\'t show up here, tap on “%@”, or contact our support team.";
 "contact_support_description" = "Si tienes dalguna entruga, ponte en contautu con nós per %@.";
 "shared_string_refresh" = "Refrescar";
 "routing_attr_avoid_low_emission_zone_description" = "Avoid low emission zones";
@@ -2384,7 +2384,7 @@
 "osmand_cloud_create_account_descr" = "Introduz la to direición de corréu pa recibir un códigu de verificación \ny enllaciar tolos datos con ella.";
 "sign_in_with_open_street_map" = "Aniciar sesión con OSM";
 "backup_restore_data" = "Restore data";
-"you_can_get_feature_as_part_of_pattern" = "Get“%@” as part of the %@ plan. Comparison:";
+"you_can_get_feature_as_part_of_pattern" = "Get “%@” as part of the %@ plan. Comparison:";
 "recalc_angle_dialog_title" = "L\'ángulu mínimu ente\'l mio allugamientu y el camín";
 "verification_code_missing" = "Nun recibí nengún códigu de verificación";
 "backup_delete_all_data_warning" = "Tas a piques de desaniciar tolos datos xubíos anteriormente a OsmAnd Cloud, incluyíu l\'historial de versiones. \n \nNun vas ser a recuperar los datos desaniciaos.";
@@ -2393,7 +2393,7 @@
 "service_is_not_available_please_try_later" = "El serviciu nun ta disponible, volvi tentalo dempués";
 "track_has_no_needed_data" = "El trazáu nun contién los datos necesarios.";
 "contributions_may_calculate_with_delay" = "Calculating the contributions may take several hours.";
-"backup_and_restore" = "Backup&Restore";
+"backup_and_restore" = "Backup & Restore";
 "backup_delete_types_descr" = "Delete all data for deprecated data types from OsmAnd Cloud\?";
 "benefits_for_contributors_primary_descr" = "You may be entitled to unlimited hourly map updates if you are an active contributor to OpenStreetMap.org.";
 "tts_title" = "TTS";
@@ -2414,9 +2414,9 @@
 "duration_ago" = "%@ ago";
 "recording_delete_confirm" = "¿Quies desaniciar esti elementu\?";
 "shared_string_selected" = "Na esbilla";
-"ltr_or_rtl_combine_via_slash" = "%@ / %@";
+"ltr_or_rtl_combine_via_slash" = "%@/%@";
 "offline_edition_descr" = "If offline editing is enabled, then changes will be saved locally first and uploaded by request, otherwise changes will be uploaded immediately.";
-"benefits_for_contributors_secondary_descr" = "Sign in to OpenStreetMap to check if you are eligible for unlimited monthly&hourly map updates.";
+"benefits_for_contributors_secondary_descr" = "Sign in to OpenStreetMap to check if you are eligible for unlimited monthly & hourly map updates.";
 "backup_pause_all" = "Posar too";
 "select_another_colorization" = "Please select another type of coloring.";
 "renew_subscription" = "Renew subscription";
@@ -2467,7 +2467,7 @@
 "shared_string_bearing" = "Bearing";
 "travel_card_download_descr" = "Download Wikivoyage travel guides to view articles about places around the world without a connection to the Internet.";
 "shared_string_move" = "Mover";
-"last_seven_days" = "Losúltimos 7 díes";
+"last_seven_days" = "Los últimos 7 díes";
 "search_history" = "Search history";
 "lang_sr-Latn" = "Serbian (latin)";
 "activity_type_snowmobile_name" = "Snowmobile";
@@ -2575,3 +2575,5 @@
 "shared_string_change" = "Camudar";
 "map_source" = "Map source";
 "shared_string_show" = "Amosar";
+"shared_string_local" = "Local";
+"show_along_the_route" = "Show along the route";

@@ -12840,15 +12840,15 @@
 		DA5A801426C563A500F274C7 /* Waypoints */ = {
 			isa = PBXGroup;
 			children = (
+				DA5A801A26C563A500F274C7 /* OAWaypointsMainScreen.h */,
 				DA5A801526C563A500F274C7 /* OAWaypointsMainScreen.mm */,
-				DA5A801626C563A500F274C7 /* OAWaypointsRadiusScreen.mm */,
-				DA5A801726C563A500F274C7 /* OAWaypointsViewController.h */,
 				DA5A801826C563A500F274C7 /* OAWaypointsPOIScreen.h */,
 				DA5A801926C563A500F274C7 /* OAWaypointsPOIScreen.mm */,
-				DA5A801A26C563A500F274C7 /* OAWaypointsMainScreen.h */,
-				DA5A801B26C563A500F274C7 /* OAWaypointsViewController.mm */,
-				DA5A801C26C563A500F274C7 /* OAWaypointsScreen.h */,
 				DA5A801D26C563A500F274C7 /* OAWaypointsRadiusScreen.h */,
+				DA5A801626C563A500F274C7 /* OAWaypointsRadiusScreen.mm */,
+				DA5A801C26C563A500F274C7 /* OAWaypointsScreen.h */,
+				DA5A801726C563A500F274C7 /* OAWaypointsViewController.h */,
+				DA5A801B26C563A500F274C7 /* OAWaypointsViewController.mm */,
 			);
 			path = Waypoints;
 			sourceTree = "<group>";

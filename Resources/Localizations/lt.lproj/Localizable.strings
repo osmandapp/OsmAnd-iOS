@@ -90,7 +90,7 @@
 "day_night_info" = "Dienos/nakties info";
 "daynight_mode_auto" = "Saulėtekis/saulėlydis";
 "route_simulation" = "Route simulation";
-"auto_follow_location_enabled" = "Naudojamas automatinisžemėlapio centravimas.";
+"auto_follow_location_enabled" = "Naudojamas automatinis žemėlapio centravimas.";
 "unknown_location" = "Vieta dar nežinoma.";
 "animate_routing_route_not_calculated" = "Pirmiausia apskaičiuokite maršrutą";
 "settings_preset" = "Naudojimo profilis";
@@ -123,7 +123,7 @@
 "road_max_speed_descr" = "Sets the maximum travel speed for all roads in the route. Lowers the priority for roads with a possible speed higher than the maximum.";
 
 // Track recording settings
-"save_global_track_interval" = "Bendrasįrašymo intervalas";
+"save_global_track_interval" = "Bendras įrašymo intervalas";
 "save_global_track_interval_descr" = "Pasirinkite bendrojo maršruto įrašymo intervalą (įjungtas per \"kelionės įrašymo\" valdiklį žemėlapyje).";
 "save_track_interval" = "Informacijos išsaugojimo intervalas naviguojant";
 "logging_interval_navigation_descr" = "Choose logging interval for track recording during navigation";
@@ -134,13 +134,13 @@
 "logging_min_accuracy_descr" = "Filter: no logging unless the accuracy is reached";
 "monitoring_min_speed" = "Minimum speed";
 "logging_min_speed_descr" = "Filter: no logging below selected speed";
-"auto_split_recording_title" = "Automatinisįrašo padalinimas po pertraukimo";
+"auto_split_recording_title" = "Automatinis įrašo padalinimas po pertraukimo";
 "auto_split_gap_descr" = "Start a new segment after 6 min gap, new track after 2 h gap, or new file after a longer gap";
 "trip_rec_actions_descr" = "You can find all your recorded tracks in %@";
 "reset_plugin_to_default" = "Reset plugin settings to default";
 "map_widget_magnetic_bearing" = "Magnetinė kryptis";
 "map_widget_bearing" = "Reliatyvi kryptis";
-"map_widget_transparent" = "Permatomiįrankiai";
+"map_widget_transparent" = "Permatomi įrankiai";
 "shared_string_near" = "Netoliese";
 "map_widget_next_turn" = "Kitas posūkis";
 "map_widget_next_turn_small" = "Kitas posūkis (mažas)";
@@ -170,7 +170,7 @@
 "edit_profile_screen_options_subtitle" = "Select screen options for the profile";
 "map_markers" = "Žemėlapio žymės";
 "markers_history" = "Markers history";
-"confirm_usage_speed_cameras" = "Daugelyješalių (Vokietijoje, Prancūzijoje, Italijoje ir kitose) naudoti greičio kamerų perspėjimo priemones draudžia įstatymai. OsmAnd neatsako, jei Jūs pažeisite įstatymus. Pažymėkite \"Taip\", jei turite teisę naudoti šią funkciją.";
+"confirm_usage_speed_cameras" = "Daugelyje šalių (Vokietijoje, Prancūzijoje, Italijoje ir kitose) naudoti greičio kamerų perspėjimo priemones draudžia įstatymai. OsmAnd neatsako, jei Jūs pažeisite įstatymus. Pažymėkite \"Taip\", jei turite teisę naudoti šią funkciją.";
 "map_markers_empty" = "You have no active map markers";
 "tracks_empty" = "Your track list is empty";
 "favorites_empty" = "You have not saved any favorite points";
@@ -187,7 +187,7 @@
 "speak_cameras" = "Greičio radarai";
 "speak_traffic_warnings" = "Eismo perspėjimai";
 "shared_string_gpx_waypoints" = "Track waypoints";
-"speak_favorites" = "Artimiausiosįsimintos vietos";
+"speak_favorites" = "Artimiausios įsimintos vietos";
 "speak_poi" = "Artimiausios lankytinos vietos";
 "speak_pedestrian" = "Pėsčiųjų perėjos";
 "show_tunnels" = "Tuneliai";
@@ -198,7 +198,7 @@
 "show_direction" = "Atstumo nuoroda";
 "arrows_on_map" = "Arrows on the map";
 "direction_lines" = "Direction lines";
-"active_markers" = "Aktyviosžymės";
+"active_markers" = "Aktyvios žymės";
 "specify_number_of_dir_indicators" = "Specify number of direction indicators, it affects all settings below.";
 "choose_how_display_distance" = "Choose how to display the distance to active markers";
 "appearance_on_the_map" = "Išvaizda žemėlapyje";
@@ -224,7 +224,7 @@
 "route_parameters" = "Maršruto parametrai";
 "fast_route_mode" = "Greičiausias maršrutas";
 "voice_announces" = "Balso pranešimai";
-"screen_alerts" = "Ekranoįspėjimai";
+"screen_alerts" = "Ekrano įspėjimai";
 "vehicle_parameters" = "Transporto priemonės parametrai";
 "map_during_navigation" = "Žemėlapis navigacijos metu";
 "change_map_behavior" = "Change map behavior during navigation";
@@ -241,14 +241,14 @@
 "prefer_in_routing_title" = "Teikti pirmenybę…";
 "prefer_in_routing_descr" = "Teikti pirmenybę greitkeliams.";
 "relief_smoothness_factor_descr" = "Pageidaujama reljefas: plokščias arba kalvotas.";
-"choose_auto_follow_route" = "Automatinisžemėlapio centravimas";
-"choose_auto_follow_route_descr" = "Laikas po kuriožemėlapio vaizdas bus sinchronizuotas su dabartine pozicija.";
+"choose_auto_follow_route" = "Automatinis žemėlapio centravimas";
+"choose_auto_follow_route_descr" = "Laikas po kurio žemėlapio vaizdas bus sinchronizuotas su dabartine pozicija.";
 "choose_auto_center_map_view_descr" = "Time until map view synchronizes with current position after moving";
 "auto_zoom_map" = "Automatiškai keisti mastelį";
-"auto_zoom_map_descr" = "Priderintižemėlapio mastelį pagal jūsų greitį (kai žemėlapis sinchronizuojamas su esama padėtimi).";
+"auto_zoom_map_descr" = "Priderinti žemėlapio mastelį pagal jūsų greitį (kai žemėlapis sinchronizuojamas su esama padėtimi).";
 "snap_to_road" = "Rodyti ant kelio";
 "snap_to_road_descr" = "Dabartinės pozicijos piktograma įsijungs į esamą navigacijos maršrutą";
-"show_warnings_title" = "Rodytiįspėjimus…";
+"show_warnings_title" = "Rodyti įspėjimus…";
 "show_warnings_descr" = "Nustatyti srauto perspėjimus (greičio ribojimus, greičio ribojimo kalnelius, tunelius), greičio matuoklių aptikimo pranešimus, kelio juostos informaciją.";
 "speak_title" = "Pranešti…";
 "speak_descr" = "Nustatyti gatvių pavadinimų, eismo perspėjimų (priverstinių sustojimų, greičio ribotuvų), greičio radarų, greičio apribojimų pranešimą.";
@@ -319,7 +319,7 @@
 "by_name" = "By name";
 "by_dist" = "By distance";
 "sort_by" = "Rūšiuoti pagal";
-"map_markers_other" = "Kitosžymės";
+"map_markers_other" = "Kitos žymės";
 "directions_other" = "Other directions";
 "shared_string_turn" = "Posūkis";
 "stop_routing_confirm" = "Sustabdyti navigaciją\?";
@@ -329,7 +329,7 @@
 "use_displayed_track_for_navigation" = "Ar rodomą maršrutą norite naudoti navigacijai?";
 "previous_route" = "Ankstesnis maršrutas";
 "shared_string_ellipsis" = "…";
-"shared_string_select_on_map" = "Pasirinktižemėlapyje";
+"shared_string_select_on_map" = "Pasirinkti žemėlapyje";
 "selected_roads" = "Selected roads";
 "shared_string_my_location" = "Mano dabartinė vieta";
 "route_descr_select_destination" = "Pasirinkti kelionės tikslą";
@@ -353,13 +353,13 @@
 "arrived_at_destination" = "Jūs atvykote.";
 "towards" = "link";
 "route_roundabout" = "Žiedinė sankryža : sukite į %d išvažiavimą";
-"route_roundabout_short" = "Sukiteį %d išvažiavimą ir keliaukite";
+"route_roundabout_short" = "Sukite į %d išvažiavimą ir keliaukite";
 "route_kl" = "Laikykitės kairės ir važiuokite";
 "route_kr" = "Laikykitės dešinės ir važiuokite";
-"route_tr" = "Pasukiteį dešinę ir važiuokite";
+"route_tr" = "Pasukite į dešinę ir važiuokite";
 "route_tshr" = "Darykite staigų posūkį į dešinę ir važiuokite";
 "route_tslr" = "Pasukite dešiniau ir važiuokite";
-"route_tl" = "Pasukiteį kairę ir važiuokite";
+"route_tl" = "Pasukite į kairę ir važiuokite";
 "route_tshl" = "Darykite staigų posūkį į kairę ir važiuokite";
 "route_tsll" = "Pasukite kairiau ir važiuokite";
 "route_tu" = "Apsisukite ir važiuokite";
@@ -369,7 +369,7 @@
 "traffic_warning_speed_limit" = "Greičio ribojimas";
 "traffic_warning_border_control" = "Pasienio kontrolė";
 "traffic_warning_payment" = "Mokamas pravažiavimas";
-"traffic_warning_stop" = "\"Stop\"ženklas";
+"traffic_warning_stop" = "\"Stop\" ženklas";
 "traffic_warning_calming" = "Eismo greičio ribojimas";
 "traffic_warning_speed_camera" = "Greičio matavimo kamera";
 "traffic_warning" = "Eismo perspėjimas";
@@ -473,7 +473,7 @@
 "osmand_parking_warning" = "Dėmesio";
 "shared_string_copy" = "Kopijuoti";
 "shared_string_continue" = "Tęsti";
-"shared_string_deselect_all" = "Nuimtižymėjimą viskam";
+"shared_string_deselect_all" = "Nuimti žymėjimą viskam";
 "shared_string_preparing" = "Preparing";
 "shared_string_min" = "Min.";
 "shared_string_max" = "Maks.";
@@ -488,7 +488,7 @@
 "offline_maps" = "Offline Maps";
 "shared_string_download_map" = "Parsiųsti žemėlapį";
 "download_map_dialog" = "Download map dialog";
-"update_tile" = "Atnaujintižemėlapį";
+"update_tile" = "Atnaujinti žemėlapį";
 "download_pending" = "Download pending";
 "download_suggestion" = "Download detailed %@ map to view this area";
 "move_map_to_select_area" = "Move map to select needed area.";
@@ -546,7 +546,7 @@
 "select_group" = "Select group";
 "shared_string_icon" = "Piktograma";
 "shared_string_shape" = "Shape";
-"fav_point_dublicate" = "Pasikartojantisįsimintinos vietos pavadinimas";
+"fav_point_dublicate" = "Pasikartojantis įsimintinos vietos pavadinimas";
 "fav_point_dublicate_message" = "Toks pavadinimas jau yra, todėl mes pakeitėme įsimintinos vietos pavadinimą į %@ kad išvengtume pasikartojimų.";
 "fav_point_emoticons_message" = "Mes pakeitėme jūsų įsimintos vietos pavadinimą į %@, nes teksto su veidukais išsaugoti faile neįmanoma.";
 "access_default_color" = "Numatytoji spalva";
@@ -653,7 +653,7 @@
 "poi_filter_public_transport" = "Viešasis transportas";
 "shared_string_map" = "Žemėlapis";
 "layer_amenity_label" = "LV sluoksnių pavadinimai";
-"shared_string_show_on_map" = "Rodytižemėlapyje";
+"shared_string_show_on_map" = "Rodyti žemėlapyje";
 "map_settings_type" = "Map type";
 "map_mode" = "Žemėlapio režimas";
 "map_magnifier" = "Žemėlapio padidinimo stiklas";
@@ -666,9 +666,9 @@
 "map_settings_install_maps" = "Choose maps to install or update";
 "map_settings_install_more" = "Install more...";
 "map_settings_offline" = "Styles for offline maps";
-"shared_string_online_maps" = "Internetožemėlapiai";
+"shared_string_online_maps" = "Interneto žemėlapiai";
 "shared_string_transparency" = "Transparency";
-"map_transparency" = "Baziniožemėlapio skaidrumas";
+"map_transparency" = "Bazinio žemėlapio skaidrumas";
 "map_settings_avail_lay" = "Available layers";
 "mapillary" = "Mapillary";
 "street_level_imagery" = "Street-level imagery";
@@ -1057,11 +1057,11 @@
 
 // Resources
 "shared_string_resources" = "Resources";
-"res_mapsres" = "Maps & Resources";
+"res_mapsres" = "Žemėlapiai ir ištekliai";
 "download_tab_local" = "Vietinis";
 "osmand_live" = "OsmAnd Live";
 "live_updates" = "Tiesioginiai atnaujinimai";
-"available_maps" = "Galimižemėlapiai";
+"available_maps" = "Galimi žemėlapiai";
 "osmand_live_last_changed" = "Last map change: %@";
 "last_update" = "Paskutinįkart atnaujinta: %@";
 "osmand_live_not_updated" = "Not yet updated";
@@ -1264,7 +1264,7 @@
 // Coordinate widget
 "coordinates_widget_current_location" = "Coordinates widget";
 "searching_gps" = "Searching GPS";
-"copied_to_clipboard" = "Nukopijuotaį įškarpinę";
+"copied_to_clipboard" = "Nukopijuota į įškarpinę";
 // Quick action
 "no_overlay" = "Jokio viršutinio sluoksnio";
 "quick_action_map_overlay_action" = "Add overlay";
@@ -1287,7 +1287,7 @@
 "configure_map" = "Konfigūruoti žemėlapį";
 "map_look_descr" = "Žemėlapio išvaizda";
 "quick_action_add_marker" = "Pridėti žemėlapio žymeklį";
-"select_map_marker" = "Pasirinitežemėlapio žymę";
+"select_map_marker" = "Pasirinite žemėlapio žymę";
 "add_gpx_waypoint" = "Add GPX waypoint";
 "context_menu_item_edit_waypoint" = "Redaguoti GPX tašką";
 "toggle_fav" = "Show/hide favorites";
@@ -1297,7 +1297,7 @@
 "hide_poi_action" = "Hide POI";
 "quick_action_add_parking" = "Pridėti parkavimo vietą";
 "parking_place" = "Parkavimo vieta";
-"quick_action_navigation_voice" = "Balsoįj/išj";
+"quick_action_navigation_voice" = "Balso įj/išj";
 "quick_action_add_osm_bug" = "Pridėti OSM Pastabą";
 "toggle_online_notes" = "Toggle OSM notes";
 "toggle_local_edits" = "Toggle local OSM edits";
@@ -1316,7 +1316,7 @@
 "work_button" = "Darbas";
 "map_widget_parking" = "Automobilio statymas";
 "quick_action_add_first_intermediate" = "Pridėti pirmąjį tarpinį tašką";
-"quick_action_auto_zoom" = "Aut.žem. mąst. į/išj";
+"quick_action_auto_zoom" = "Aut. žem. mąst. į/išj";
 "auto_zoom_on" = "Auto zoom on";
 "auto_zoom_off" = "Auto zoom off";
 "quick_action_resume_pause_navigation" = "Pristabdyti/Pratęsti navigaciją";
@@ -1326,7 +1326,7 @@
 "toggle_day_night" = "Switch Day/Night mode";
 "quick_action_switch_night_mode" = "Nakties rėžimas";
 "quick_action_switch_day_mode" = "Dienos režimas";
-"quick_action_navigation_voice_on" = "Balsasįjungtas";
+"quick_action_navigation_voice_on" = "Balsas įjungtas";
 "quick_action_navigation_voice_off" = "Balso išjungtas";
 "show_hide_gpx" = "Show/hide tracks";
 "show_gpx" = "Maršrutai";
@@ -1521,7 +1521,7 @@
 "index_name_russia" = "Rusija";
 "index_name_south_america" = "Pietų Amerika";
 "nautical_maps" = "Jūrų žemėlapiai";
-"download_select_map_types" = "Kitižemėlapiai";
+"download_select_map_types" = "Kiti žemėlapiai";
 
 // Help
 "help_quiz" = "Quiz";
@@ -1531,7 +1531,7 @@
 "rendering_category_routes" = "Maršrutai";
 "rendering_category_details" = "Detalės";
 "rendering_category_transport" = "Transportas";
-"rendering_category_others" = "Kitižemėlapio atributai";
+"rendering_category_others" = "Kiti žemėlapio atributai";
 
 // Rendering attributes
 
@@ -1625,7 +1625,7 @@
 "route_line_color_elevation_description" = "Route line will be colorized depending on the elevation profile of the route.";
 "gpx_split_interval_none_descr" = "Pasirinkite norima dalinimo variantą: pagal laiką arba pagal atstumą.";
 "slope_grey_color_descr" = "Grey color is used when slope is undefined.";
-"analyze_on_map" = "Analizuotižemėlapyje";
+"analyze_on_map" = "Analizuoti žemėlapyje";
 "upload_to_openstreetmap" = "Siųsti į OpenStreetMap";
 "edit_track" = "Edit track";
 "duplicate_track" = "Duplicate track";
@@ -1681,7 +1681,7 @@
 "context_menu_item_directions_from" = "Kelio nuorodos nuo";
 "search_nearby" = "Ieškoti šalia";
 "change_object_posiotion" = "Change object's position";
-"move_marker_bottom_sheet_title" = "Slinkitežemėlapį, norėdami pakeisti žymeklio vietą";
+"move_marker_bottom_sheet_title" = "Slinkite žemėlapį, norėdami pakeisti žymeklio vietą";
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";
@@ -1733,7 +1733,7 @@
 "hist_select_remove" = "Please select history items to remove";
 "hist_remove_q" = "Do you want to remove history items?";
 "gpx_edit_mode" = "Edit mode";
-"go_to_map" = "Rodytižemėlapį";
+"go_to_map" = "Rodyti žemėlapį";
 "import_raster_map_success" = "Raster map has been imported. Open Map Settings and activate it via Overlay/Underlay";
 "import_raster_map_failed" = "Raster map import failed";
 "device_memory" = "Įrenginio atmintis";
@@ -1754,7 +1754,7 @@
 "search_location" = "Nustatoma vietos padėtis…";
 "search_map" = "Ieškomi žemėlapiai…";
 "search_another_country" = "Pasirinkite kitą regioną";
-"skip_map_downloading" = "Praleistižemėlapių parsiuntimą";
+"skip_map_downloading" = "Praleisti žemėlapių parsiuntimą";
 "skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";
 "wiki_around" = "Šalia esantys Vikipedijos straipsniai";
 "search_categories" = "Kategorijos";
@@ -1812,7 +1812,7 @@
 "city_type_district" = "Mikrorajonas";
 "city_type_neighbourhood" = "Kaimynystė";
 "postcode" = "Pašto kodas";
-"show_something_on_map" = "Rodyti %@žemėlapyje";
+"show_something_on_map" = "Rodyti %@ žemėlapyje";
 "search_POI_level_btn" = "Rasti daugiau";
 "search_address_street" = "Gatvė";
 "search_address_building_option" = "Pastatas";
@@ -1826,7 +1826,7 @@
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "key_hint_zoom_in" = "Zoom In";
 "key_hint_zoom_out" = "Zoom Out";
-"shared_string_deselect" = "Nuimtižymėjimą";
+"shared_string_deselect" = "Nuimti žymėjimą";
 "key_hint_goback" = "Go Back";
 "key_hint_recenter_map" = "Recenter Map";
 "wiki_buy_description" = "To read full articles - buy Wikipedia plugin and download Wikipedia data of %@";
@@ -1857,7 +1857,7 @@
 "wikipedia_offline" = "Wikipedia offline";
 "contour_lines_hillshade_maps" = "Contour lines & Hillshade maps";
 "monthly_map_updates" = "Mėnesinis žemėlapio atnaujinamas";
-"daily_map_updates" = "Valandinisžemėlapio atnaujinamas";
+"daily_map_updates" = "Valandinis žemėlapio atnaujinamas";
 "index_item_depth_contours_osmand_ext" = "Jūrlapiai su gylio kontūrais";
 "donation_to_osm" = "Parama OpenStreeMap bendruomenei";
 "purchase_unlim_title" = "Pirkti - %@";
@@ -1894,7 +1894,7 @@
 "rendering_attr_appMode_description" = "Žemėlapį optimizuoti";
 "routing_attr_avoid_ice_roads_fords_name" = "Jokių ledo kelių ar brastų";
 "rendering_value_germanRoadAtlas_name" = "Vokietijos kelių atlasas";
-"rendering_attr_hikingRoutesOSMC_name" = "Padengimasžygių simboliais";
+"rendering_attr_hikingRoutesOSMC_name" = "Padengimas žygių simboliais";
 "rendering_attr_showRoadMaps_name" = "Tik kelių žemėlapiai";
 "routing_attr_avoid_ferries_description" = "Vengti keltų";
 "rendering_attr_contourWidth_description" = "Kontūrų linijos plotis";
@@ -1971,9 +1971,9 @@
 "rendering_attr_hideProposed_name" = "Siūlomi objektai";
 "routeInfo_smoothness_name" = "Lygumas";
 "rendering_attr_highway_class_road_name" = "Kelias";
-"rendering_value_translucent_green_name" = "Permatomažalia";
+"rendering_value_translucent_green_name" = "Permatoma žalia";
 "rendering_value_translucent_yellow_name" = "Permatoma geltona";
-"rendering_attr_OSMMapperAssistant_name" = "OSMžymėtojo pagalbininkas";
+"rendering_attr_OSMMapperAssistant_name" = "OSM žymėtojo pagalbininkas";
 "routing_attr_avoid_borders_name" = "Vengti sienų kirtimo";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Spalvos pagal priklausomybę tinklui";
 "rendering_attr_smoothness_excellent_name" = "Puiki";
@@ -2041,7 +2041,7 @@
 "rendering_attr_surface_unpaved_name" = "Negrįstas";
 "rendering_attr_noAdminboundaries_description" = "Neberodyti regionų ribų (administratoriaus 5-9 lygiai).";
 "rendering_value_bicycle_name" = "Dviratis";
-"rendering_value_translucent_lightgreen_name" = "Permatomašviesiai žalia";
+"rendering_value_translucent_lightgreen_name" = "Permatoma šviesiai žalia";
 "rendering_attr_contourLines_name" = "Rodyti kontūrų linijas";
 "rendering_attr_showAccess_name" = "Rodyti pateikimo ribojimus bei rinkliavą";
 "rendering_attr_surface_dirt_name" = "Purvas";
@@ -2053,7 +2053,7 @@
 "rendering_attr_surface_cobblestone_name" = "Akmenys";
 "rendering_attr_highway_class_state_road_name" = "State road";
 "routing_attr_avoid_sett_name" = "No cobblestone or sett";
-"rendering_value_translucent_lightblue_name" = "Permatomašviesiai mėlyna";
+"rendering_value_translucent_lightblue_name" = "Permatoma šviesiai mėlyna";
 "rendering_attr_smoothness_good_name" = "Gera";
 "routing_attr_weight_name" = "Maksimalus svoris";
 "rendering_value_bold_name" = "Storas";
@@ -2096,7 +2096,7 @@
 "rendering_value_low_name" = "Žemas";
 "rendering_value_lightgreen_name" = "Šviesiai žalia";
 "rendering_attr_busRoutes_name" = "Autobusų maršrutai";
-"rendering_value_defaultTranslucentCyan_name" = "Numatytoji (skaidrižalsvai mėlyna)";
+"rendering_value_defaultTranslucentCyan_name" = "Numatytoji (skaidri žalsvai mėlyna)";
 "rendering_attr_hideHouseNumbers_name" = "Pastatų numeriai";
 "rendering_value_translucent_red_name" = "Permatomas raudona";
 "rendering_attr_highway_class_track_grade1_name" = "Grade 1";
@@ -2172,7 +2172,7 @@
 "routing_attr_width_name" = "Width limit";
 "routing_attr_avoid_train_name" = "Be traukinių";
 "routing_attr_allow_motorway_description" = "Leisti greitkelius.";
-"rendering_attr_hmRendered_name" = "Rodyti daugiaužemėlapio detalių";
+"rendering_attr_hmRendered_name" = "Rodyti daugiau žemėlapio detalių";
 "rendering_attr_roadColors_name" = "Kelių spalvinimo schema";
 "weight_limit_description" = "Provide your vehicle weight, some route restrictions may apply for heavy vehicles.";
 "height_limit_description" = "Provide your vehicle height, some route restrictions may apply for high vehicles.";
@@ -2272,14 +2272,14 @@
 "wikipedia_and_wikivoyage_offline" = "Wikipedia ir Wikivoyage be interneto";
 "nautical_depth" = "Jūrinis gylis";
 "cubic_m" = "m³";
-"terrain_maps" = "Reljefožemėlapiai";
+"terrain_maps" = "Reljefo žemėlapiai";
 "restore_purchases" = "Atkurti pirkinius";
 "osmand_maps_plus_tagline" = "Gauti išplėstines funkcijas";
 "not_available_with" = "Neprieinama su %@";
 "toast_empty_name_error" = "Neįvardinta vieta";
 "debugging_and_development" = "OsmAnd vystymas";
 "shared_string_learn_more" = "Sužinoti daugiau";
-"unlimited_map_downloads" = "Neribotasžemėlapių atsisiuntimas";
+"unlimited_map_downloads" = "Neribotas žemėlapių atsisiuntimas";
 "purchases_feature_desc_combined_wiki" = "Naršykite Wikipedia straipsnius keliaudami, neturėdami interneto ryšio. Duomenys neprisijungus prie interneto suskirstyti pagal šalis ir prieinami visomis kalbomis.";
 "osmand_pro_tagline" = "Gaukite maksimalias funkcijas";
 "shared_string_delete_all" = "Viską ištrinti";
@@ -2326,7 +2326,7 @@
 "delete_all_confirmation" = "Taip, ištrinti viską";
 "shared_string_contours" = "Kontūrai";
 "backup_view_conflicts" = "Peržiūrėti konfliktus";
-"copy_to_map_favorites" = "Kopijuotiį mėgstamiausius";
+"copy_to_map_favorites" = "Kopijuoti į mėgstamiausius";
 "screen_settings_weather_toolbar" = "Orų įrankių juosta";
 "simulate_location_movement_speed" = "Judėjimo greitis";
 "wind_hide" = "Slėpti vėją";
@@ -2392,7 +2392,7 @@
 "shared_string_weather" = "Orai";
 "shared_string_layers" = "Sluoksniai";
 "backup_and_restore" = "Atsarginė kopija ir atkūrimas";
-"ltr_or_rtl_combine_via_slash" = "%@ / %@";
+"ltr_or_rtl_combine_via_slash" = "%@/%@";
 "simulate_location_movement_speed_x2" = "x2";
 "simulate_location_movement_speed_x3" = "x3";
 "simulate_in_progress" = "Vykdoma";
@@ -2476,7 +2476,7 @@
 "activity_type_walking_name" = "Ėjimas";
 "download_file" = "Atsisiųsti failą";
 "user_name" = "Jūsų OSM vartotojo vardas";
-"map_marker_2nd" = "Antrojižymė";
+"map_marker_2nd" = "Antroji žymė";
 "shared_string_deleted" = "Panaikinta";
 "shared_string_bearing" = "Kryptis";
 "map_orientation_landscape" = "Gulsčias";
@@ -2488,7 +2488,7 @@
 "subscribe_email_error" = "Klaida";
 "shared_string_read" = "Skaityti";
 "shared_string_any" = "Bet kurią";
-"map_marker_1st" = "Pirmojižymė";
+"map_marker_1st" = "Pirmoji žymė";
 "weather_update_disabled" = "Išjungta";
 "shared_string_move" = "Perkelti";
 "global_settings" = "Globalūs nustatymai";
@@ -2512,10 +2512,10 @@
 "shared_string_light" = "Šviesi";
 "wikivoyage_download_pics" = "Atsisiųsti paveikslėlius";
 "shared_string_error" = "Klaida";
-"external_device_status_connect" = "Prijungti";
+"external_device_status_connect" = "Prisijungti";
 "lang_sr-Latn" = "Serbų (lotynų)";
 "specify_number_of_dir_indicators_desc" = "Pasirinkti, kiek krypčių rodyklių bus rodoma.";
-"map_orientation_default" = "Kaip irįrenginys";
+"map_orientation_default" = "Kaip ir įrenginys";
 "route_info" = "Maršruto informacija";
 "shared_string_dark" = "Tamsi";
 "map_settings_topography" = "SRTM žemėlapiai";
@@ -2539,19 +2539,19 @@
 "shared_string_scale" = "Mastelis";
 "vertical_exaggeration_description" = "Keisdami mastelio vertę, galite pabrėžti 3D reljefą.";
 "shared_string_trash" = "Šiukšlės";
-"required_maps" = "Reikalingižemėlapiai";
+"required_maps" = "Reikalingi žemėlapiai";
 "shared_string_link" = "Nuoroda";
 "shared_string_author" = "Autorius";
 "shared_string_license" = "Licencija";
-"shared_string_keywords" = "Raktiniaižodžiai";
+"shared_string_keywords" = "Raktiniai žodžiai";
 "trash_is_empty" = "Šiukšliadėžė tuščia";
 "add_row" = "Pridėti eilutę";
 "vertical_exaggeration" = "Vertikalus perdėjimas";
 "shared_string_next_event" = "Kitas renginys";
 "map_widget_sun_position_desc" = "Rodo laiką iki saulėtekio arba saulėlydžio.";
 "map_widget_sun_position" = "Saulės padėtis";
-"downward_gradient" = "Gradientasžemyn";
-"speed_cameras_alert" = "Kai kuriosešalyse greičio matavimo kamerų įspėjimai draudžiami įstatymų.";
+"downward_gradient" = "Gradientas žemyn";
+"speed_cameras_alert" = "Kai kuriose šalyse greičio matavimo kamerų įspėjimai draudžiami įstatymų.";
 "rendering_value_managerName_name" = "Pagal vadovo vardą";
 "rendering_attr_padusHideBoundaries_name" = "Slėpti valstybinės žemės ribas";
 "rendering_attr_padusHideBoundaries_description" = "Slėpti viešosios žemės ribas, bet palikti sritis";
@@ -2592,7 +2592,7 @@
 "map_updates_for_mappers" = "Žemėlapių atnaujinimai žemėlapių kūrėjams";
 "use_login_and_password" = "Naudokite vartotojo vardą ir slaptažodį";
 "ant_plus_bluetooth_off" = "Bluetooth išjungtas";
-"arrival_time_widget_desc" = "Atvykimoį paskirties tašką laikas.";
+"arrival_time_widget_desc" = "Atvykimo į paskirties tašką laikas.";
 "announcement_time_off_route" = "";
 "cloud_email_already_registered" = "Šis elektroninis pašto adresas jau užregistruotas.";
 "enough_contributions_descr" = "Sveikiname, pateikėte pakankamai OpenStreetMap pakeitimų ir dabar galite mėgautis neribotais OsmAnd žemėlapių atnaujinimais!";
@@ -2629,10 +2629,10 @@
 "determine_location" = "Leiskite mums nustatyti jūsų buvimo vietą";
 "relative_bearing_widget_desc" = "Rodo kampą tarp jūsų judėjimo pirmyn krypties ir tikslo taško.";
 "map_widget_true_bearing" = "Tikra kryptis";
-"true_bearing_wdiget_desc" = "Kampas tarp tikrosiosšiaurės ir tikslo taško, stebimo iš jūsų vietos.";
+"true_bearing_wdiget_desc" = "Kampas tarp tikrosios šiaurės ir tikslo taško, stebimo iš jūsų vietos.";
 "bearing_desc" = "Rodo absoliučią arba santykinę kryptį į taikinį kampiniais vienetais (180 laipsnių, 360 laipsnių arba miliradianų režimu).";
-"route_maneuvers_desc" = "Navigacijos valdikliaiįjungiami navigacijos metu, kad būtų rodoma tokia informacija kaip atstumas, atvykimo arba likęs laikas, kiti posūkiai, kryptis, esamos gatvės pavadinimas, eismo juostų informacija, maksimalus greitis, artėjimo įspėjimai, LV, kelio taškai.";
-"navigation_points_desc" = "Navigacijos valdikliai yraįjungti navigacijos metu, kad būtų rodoma tokia informacija kaip atstumas, atvykimas ar likęs laikas, kiti posūkiai, posūkis, esamos/kitos gatvės pavadinimas, juostos informacija, maksimalus greitis, įspėjimai apie artėjimą, LV, kelio taškai.";
+"route_maneuvers_desc" = "Navigacijos valdikliai įjungiami navigacijos metu, kad būtų rodoma tokia informacija kaip atstumas, atvykimo arba likęs laikas, kiti posūkiai, kryptis, esamos gatvės pavadinimas, eismo juostų informacija, maksimalus greitis, artėjimo įspėjimai, LV, kelio taškai.";
+"navigation_points_desc" = "Navigacijos valdikliai yra įjungti navigacijos metu, kad būtų rodoma tokia informacija kaip atstumas, atvykimas ar likęs laikas, kiti posūkiai, posūkis, esamos/kitos gatvės pavadinimas, juostos informacija, maksimalus greitis, įspėjimai apie artėjimą, LV, kelio taškai.";
 "magnetic_bearing_widget_desc" = "Kampas tarp magnetinės šiaurės ir tikslo taško, stebimo iš jūsų vietos.";
 "routing_attr_avoid_cobblestone_description" = "Vengti trinkelių";
 "routing_attr_avoid_cobblestone_name" = "Vengti trinkelių";
@@ -2642,7 +2642,7 @@
 "shared_string_round_up" = "Suapvalintas";
 "shared_string_all_colors" = "Visos spalvos";
 "speedometer_description" = "Rodo jūsų dabartinį greitį, kaip pranešama per GPS";
-"terrain_3D_maps" = "Reljefožemėlapiai";
+"terrain_3D_maps" = "Reljefo žemėlapiai";
 "shared_string_item" = "Elementas";
 "fixed_height" = "Fiksuotas aukštis";
 "shared_string_speedometer" = "Spidometras";
@@ -2672,7 +2672,7 @@
 "required_maps_list" = "Žemėlapiai, kurie taip pat gali būti naudojami: %@";
 "external_device_any_connected" = "Bet koks prijungtas";
 "custom_map_button_name_present" = "Toks mygtukas jau yra";
-"true_bearing_widget_desc" = "Kampas tarp tikrosiosšiaurės ir tikslo taško, stebimo iš jūsų vietos.";
+"true_bearing_widget_desc" = "Kampas tarp tikrosios šiaurės ir tikslo taško, stebimo iš jūsų vietos.";
 "custom_buttons" = "Pasirinktiniai mygtukai";
 "delete_history_items" = "Ištrinti %@ istorijos elementus?";
 "track_vertical_exaggeration_description" = "Keisdami mastelio vertę, galite pakeisti 3D takelio aukštį.";
@@ -2694,3 +2694,4 @@
 "shared_string_favorite" = "Įsiminta vieta";
 "driving_region_india" = "Indija";
 "shared_string_show" = "Rodyti";
+"shared_string_local" = "Vietinis";

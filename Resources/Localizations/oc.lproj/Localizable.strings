@@ -179,7 +179,7 @@
 "avoid_in_routing_descr_" = "Evitar lei rotas de peatge, lei non enquitranadas e lei barcas a tralha";
 "prefer_in_routing_title" = "Preferéncias…";
 "prefer_in_routing_descr" = "Preferéncia per autorotas";
-"relief_smoothness_factor_descr" = "Terren preferit : planò escalabrós.";
+"relief_smoothness_factor_descr" = "Terren preferit : plan ò escalabrós.";
 "choose_auto_follow_route" = "Centrar automaticament la mapa";
 "choose_auto_follow_route_descr" = "Temps de sincronizacion de la vista segon la posicion actuala";
 "auto_zoom_map" = "Zoom automatic de la mapa";
@@ -319,7 +319,7 @@
 "min_km" = "min/km";
 "m_s" = "m/s";
 "nothing_found" = "Ges de resultat";
-"nothing_found_descr" = "Modificarò relargar la recèrca.";
+"nothing_found_descr" = "Modificar ò relargar la recèrca.";
 "select_street" = "Chausir la carriera";
 "shared_string_in_name" = "en %@";
 "select_city" = "Chausir la vila";
@@ -1846,7 +1846,7 @@
 "stats_select_graph_data" = "Seleccionatz lei donadas graficas";
 "map_widget_parking" = "Aparcament";
 "gpx_upload_public_visibility_descr" = "\"Public\" vòu dire que la traça se visualiza publicament dins vòstrei traças GPS, dins lei listas publicas de traças GPS amb seis informacions temporalas en forma grassa. Lei donadas fornidas per l\'API menan pas a vòstra pagina de traças. Leis informacions temporalas dei ponchs de traça son pas disponibles per l\'API GPS publica, e lei ponchs de la traça son pas ordenats segon lo temps.";
-"gpx_upload_identifiable_visibility_descr" = "\"Identificable\" vòu dire que la traça se visualiza publicament dins vòstrei traças GPS e sus la lista publica de traças GPS, valent a dire, que leis autreis utilizators la podràn teledescargar en forma grassa e l\'associar amb vòstre nom d\'utilizator. Lei donadas temporalas e lei ponchs de la traça servitsper l’API GPS faràn referéncia a la pagina de vòstra traça originala.";
+"gpx_upload_identifiable_visibility_descr" = "\"Identificable\" vòu dire que la traça se visualiza publicament dins vòstrei traças GPS e sus la lista publica de traças GPS, valent a dire, que leis autreis utilizators la podràn teledescargar en forma grassa e l\'associar amb vòstre nom d\'utilizator. Lei donadas temporalas e lei ponchs de la traça servits per l’API GPS faràn referéncia a la pagina de vòstra traça originala.";
 "lang_ku" = "Kurd";
 "gpx_upload_trackable_visibility_descr" = "« Traçable » vòu dire que la traça pareisse pas dins ges de lista publica, mai solament lei ponchs intermediaris e son informacion temporala (que se pòdon pas associar directament amb vos) per lei teledescargaments de l\'API GPS publica.";
 "lang_az" = "Azerbaijanés";
@@ -2078,13 +2078,13 @@
 "routing_attr_prefer_horse_routes_description" = "Preferéncia per lei percors cavalins";
 "backup_view_conflicts" = "Visualizar lei conflictes";
 "backup_error_user_is_not_registered" = "Ges d\'utilizator enregistrat amb aquesta adreiça electronica";
-"backup_error_subscription_was_used" = "Abonamentò promocion utilizada per un autre còmpte %@";
+"backup_error_subscription_was_used" = "Abonament ò promocion utilizada per un autre còmpte %@";
 "backup_restore_now" = "Restaurar tot d\'un temps";
 "backup_now" = "Sauvagardar tot d\'un temps";
 "last_backup" = "Darriera sauvagarda";
 "customize_route_line" = "Personalizar la linha dau percors";
 "backup_error_no_valid_subscription" = "Ges d\'abonament valide";
-"routeInfo_winter_ice_road_description" = "Colorar lo percorsò la traça segon la classificacion ivernala.";
+"routeInfo_winter_ice_road_description" = "Colorar lo percors ò la traça segon la classificacion ivernala.";
 "backup_error_user_is_already_registered" = "Aquesta adreiça electronica es emplegada per una autre còmpte";
 "user_login" = "Identificant";
 "routing_attr_allow_gate_name" = "Permetre l\'usatge de pòrtas";
@@ -2093,15 +2093,15 @@
 "routing_attr_only_permitted_streets_name" = "Carrieras expressament permesas";
 "nautical_maps" = "Mapas nauticas";
 "backup_error_size_is_exceeded" = "Passa la dimension maximala dau Nívol OsmAnd de %@";
-"routeInfo_tracktype_description" = "Colorar lo percorsò la traça segon la composicion de la superficia. Aquò s\'emplega generalament quand lo malhum rotier es gaire enquitranat.";
+"routeInfo_tracktype_description" = "Colorar lo percors ò la traça segon la composicion de la superficia. Aquò s\'emplega generalament quand lo malhum rotier es gaire enquitranat.";
 "route_line_use_map_style_color" = "Utilizar lei colors predefinidas de la mapa (%@).";
-"routeInfo_roadClass_description" = "Colorar lo percorsò la traça segon la classificacion de la rota.";
+"routeInfo_roadClass_description" = "Colorar lo percors ò la traça segon la classificacion de la rota.";
 "backup_welcome_back" = "Content de vos tornar veire !";
 "cloud_conflicts" = "Conflictes";
 "verify_email_address_descr" = "Còde de verificacion mandat a %@. Ben brave de lo marcar dins lo camp çai-sota.";
 "login_account" = "Còmpte";
 "altitude" = "Altitud";
-"backup_error_token_is_not_valid" = "I a quauqua-ren que va pas amb l\'ID de l\'aparelhò lo testimòni de seguretat fornit";
+"backup_error_token_is_not_valid" = "I a quauqua-ren que va pas amb l\'ID de l\'aparelh ò lo testimòni de seguretat fornit";
 "backup_error_gzip_only_supported_upload" = "Lo fichier se deu mandar au format .gzip";
 "osmand_cloud" = "La Nívol OsmAnd";
 "osmand_cloud_authorize_descr" = "Jamai perdretz vòstrei donadas. Sauvagardatz e restauratz totei leis informacions facilament.";
@@ -2126,7 +2126,7 @@
 "expired" = "Expirar";
 "wikipedia_and_wikivoyage_offline" = "Wikipèdia e Wikiviatge fòra de linha";
 "manage_subscription" = "Administrar l\'abonament";
-"explore_osmnad_plans_to_find_suitable" = "Exploratz lei plans d\'OsmAnd per trobarçò que vos convèn.";
+"explore_osmnad_plans_to_find_suitable" = "Exploratz lei plans d\'OsmAnd per trobar çò que vos convèn.";
 "redeem_promo_code" = "Utilisar lo còde promocionau";
 "purchases_feature_desc_pro_widgets" = "Obtenètz l\'accès ai fonccionalitats OsmAnd avançadas : coloracion dei percors eca.";
 "unlimited_map_downloads" = "Teledescargaments illimitats dei mapas";
@@ -2154,7 +2154,7 @@
 "copied_to_clipboard" = "Copiat dins lo sauvamemòria";
 "toggle_contour_lines" = "Mostrar & Amagar lei corbas de nivèu";
 "shared_string_contours" = "Corbas e contorns";
-"backup_and_restore" = "Sauvagardar&Restaurar";
+"backup_and_restore" = "Sauvagardar & Restaurar";
 "shared_string_account_add" = "Ajustar un còmpte";
 "screen_settings_weather_toolbar" = "Bendèu dau temps que fa";
 "delete_tracks_bottom_sheet_description_bold_part" = "%d traças ?";
@@ -2185,7 +2185,7 @@
 "osmand_cloud_create_account_descr" = "Per plaser, indicatz vòstra adreiça electronica, un còde de verificacion vos serà mandat \ne totei vòstrei donadas i seràn ligadas.";
 "cloud_create_account" = "Crear un còmpte";
 "local_backup" = "Sauvagarda locala";
-"local_backup_descr" = "Sauvagardarò restaurar de donadas partent d\'un fichier locau.";
+"local_backup_descr" = "Sauvagardar ò restaurar de donadas partent d\'un fichier locau.";
 "backup_into_file" = "Sauvagardar coma fichier";
 "backup_complete" = "Sauvagarda completa";
 "cloud_no_online_backup" = "Per ara, avètz ges de sauvagarda en linha";
@@ -2193,8 +2193,8 @@
 "cloud_backup" = "Sauvagarda";
 "restore_backup_descr" = "Restaurar lei donadas sus l’aparelh amb l’ajuda dei sauvagardas en linha";
 "route_preferred_terrain_flat" = "Percors planiers. La longor pòt aumentar.";
-"quick_action_showhide_mapillary_descr" = "Boton per mostrarò amagar la jaça Mapillary sus la mapa.";
-"quick_action_transport_descr" = "Boton per mostrarò amagar lo transpòrt public sus la mapa.";
+"quick_action_showhide_mapillary_descr" = "Boton per mostrar ò amagar la jaça Mapillary sus la mapa.";
+"quick_action_transport_descr" = "Boton per mostrar ò amagar lo transpòrt public sus la mapa.";
 
 // Shared Strings
 "shared_string_cancelled" = "Abandonat";
@@ -2332,7 +2332,7 @@
 "error_contact_support" = "Se la dificultat persita, contactatz nòstra equipa de supòrt.";
 "promo_subscription" = "Abonament promocionau";
 "renew_subscription" = "Renovelar l\'abonament";
-"routeInfo_winter_ice_road_name" = "Vias geladasò ennevadas";
+"routeInfo_winter_ice_road_name" = "Vias geladas ò ennevadas";
 "weight_limit_description" = "Indicatz lo pes de vòstre veïcul, de restriccions de passatge se pòdon rescontrar per lei veïcules pesants.";
 "no_waypoints_found" = "S\'es pas trobat de ponch d\'etapa";
 "help_legend_descr" = "Guida dei simbòles de la mapa";
@@ -2394,7 +2394,7 @@
 "settings_item_read_error" = "S'es pas poscut legir %@.";
 "login_footer_full_text" = "Besonh d'ajuda ? Nos podètz contactar a \nsupport@osmand.net";
 "routing_attr_relief_smoothness_factor_more_plains_name" = "Planier";
-"routing_attr_piste_type_nordic_description" = "Percors d\'esquilh nordicò de fons.";
+"routing_attr_piste_type_nordic_description" = "Percors d\'esquilh nordic ò de fons.";
 "routing_attr_avoid_sett_name" = "Sensa peirada nimai caladat";
 "routeInfo_piste_type_name" = "Mena de dralha";
 "routeInfo_steepness_name" = "Inclinason";
@@ -2417,7 +2417,7 @@
 "rendering_attr_showFitnessTrails_name" = "Percors de Santat";
 "routing_attr_avoid_tunnels_name" = "Evitar lei galariás";
 "routing_attr_avoid_tunnels_description" = "Evitar lei galariás";
-"routing_attr_piste_type_downhill_description" = "Pistas per esquilh alpinò eslalom e accès ai remonradors.";
+"routing_attr_piste_type_downhill_description" = "Pistas per esquilh alpin ò eslalom e accès ai remonradors.";
 "routing_attr_avoid_stairs_name" = "Sensa escaliers";
 "rendering_attr_depthContourWidth_name" = "Espessor dei linhas";
 "rendering_attr_depthContourColorScheme_name" = "Combinason de colors dei linhas";
@@ -2453,14 +2453,14 @@
 "duration_ago" = "%@ fach(s)";
 "contributions_may_calculate_with_delay" = "Lo calcul dei contribucions pòt demandar mai d\'una ora.";
 "select_another_colorization" = "Per plaser, chausissètz una autra mena de colorizacion.";
-"logout_from_osmand_cloud_decsr" = "Se deconnectar \? \nVos deuretz tornar connectar per sauvagardarò restaurar lei donadas.";
+"logout_from_osmand_cloud_decsr" = "Se deconnectar \? \nVos deuretz tornar connectar per sauvagardar ò restaurar lei donadas.";
 "shared_string_added" = "Ajustat";
 "enough_contributions_descr" = "Felicitacions, avètz un nombre de contribucions OpenStreetMap sufisent e podètz profichar de l\'actualizacion illimitada de la mapa OsmAnd !";
 "pro_features" = "Fonccionalitats avançadas";
 "backup_delete_old_data" = "Escafar lei versions ancianas";
 "you_can_get_feature_as_part_of_pattern" = "Obtenir“%@” de part dau plan %@ . Comparatz :";
 "login_open_street_map_org" = "Se connectar a OpenStreetMap.org";
-"empty_purchases_description" = "Se vòstra cròmpa se visualiza pas aicí, clicatz sus «%@» ò contactatz nòstra equipa d\'ajuda.";
+"empty_purchases_description" = "Se vòstra cròmpa se visualiza pas aicí, clicatz sus «%@» ò contactatz nòstra equipa d'ajuda.";
 "contact_support_description" = "Per tota demanda, seretz ben brave de nos contactar au %@ .";
 "backup_danger_zone" = "Zòna perilhosa";
 "activity_type_mountainbike_name" = "Bicicleta de montanha";
@@ -2743,7 +2743,7 @@
 "ant_plus_bluetooth_off_description" = "Activatz lo Bluetooth per recercar e apariar de captadors.";
 "activity_type_winter_name" = "Ivèrn";
 "delete_history_items" = "Eliminar leis elements de l\'istoric %@\?";
-"quick_action_coordinates_widget_descr" = "Una bascula per mostrarò amagar lei vinhetas dei Coordenadas sus la mapa.";
+"quick_action_coordinates_widget_descr" = "Una bascula per mostrar ò amagar lei vinhetas dei Coordenadas sus la mapa.";
 "weather_update_disabled" = "Desactivat";
 "activity_type_cycling_name" = "Bicicleta";
 "osm_upload_gpx_tags_footer" = "Marcatz lei balisas separadas d\'una virgula.";
@@ -2778,7 +2778,7 @@
 "offline_wikivoyage" = "Wikiviatge fòra de linha";
 "shared_string_view" = "Visualizacion";
 "shared_string_wrist" = "Ponhet";
-"no_widgets_descr" = "Ajustar unò mai clavelet(s) partent de la lista de clavelets disponibles.";
+"no_widgets_descr" = "Ajustar un ò mai clavelet(s) partent de la lista de clavelets disponibles.";
 "help_article_navigation_guidance_name" = "Guidatge";
 "help_article_troubleshooting_android_auto_name" = "Android Auto";
 "shared_string_setup_route" = "Definir un percors";
@@ -2861,3 +2861,6 @@
 "step_by_step" = "Pas a pas";
 "shared_string_favorites" = "Preferéncias";
 "download_srtm_maps" = "Corbas de nivèu";
+"show_along_the_route" = "Mostrar l\'itinerari tot de lòng";
+"quick_action_toggle_preference" = "Una bascula per cambiar de preferéncias.";
+"shared_string_local" = "Installat en locau";

@@ -39,6 +39,7 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
     private static let selectedKey = "selected"
     
     private var initialFilterText: String?
+    private var isFiltersModified = false
     
     override func registerCells() {
         addCell(OAInputTableViewCell.reuseIdentifier)
@@ -211,6 +212,14 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
         }
     }
     
+    override func onLeftNavbarButtonPressed() {
+        if isFiltersModified {
+            showResetFiltersAlert()
+        } else {
+            super.onLeftNavbarButtonPressed()
+        }
+    }
+    
     override func onTopButtonPressed() {
     }
     
@@ -359,6 +368,22 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
         temperatureAverageRow.cellType = OAValueTableViewCell.reuseIdentifier
         temperatureAverageRow.key = Self.temperatureAverageFilterRowKey
         temperatureAverageRow.title = localizedString("avg_sensor_temperature")
+    }
+    
+    private func showResetFiltersAlert() {
+        let alertController = UIAlertController(title: localizedString("shared_string_discard_changes") + "?", message: localizedString("discard_filter_changes_prompt"), preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel, handler: nil)
+        let resetAction = UIAlertAction(title: localizedString("shared_string_reset"), style: .destructive) { _ in
+            self.resetAllFilters()
+            super.onLeftNavbarButtonPressed()
+        }
+        
+        alertController.addAction(cancelAction)
+        alertController.addAction(resetAction)
+        present(alertController, animated: true)
+    }
+    
+    private func resetAllFilters() {
     }
     
     func setInitialFilterText(_ text: String) {

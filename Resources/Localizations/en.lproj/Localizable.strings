@@ -2354,6 +2354,7 @@
 "with_waypoints" = "With waypoints";
 "discard_filter_changes_prompt" = "Reset all";
 "shared_string_to" = "To";
+"discard_filter_changes_prompt" = "Reset all filters?";
 
 "shared_string_total" = "Total";
 "shared_string_walk" = "Walk";

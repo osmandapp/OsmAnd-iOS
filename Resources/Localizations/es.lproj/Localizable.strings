@@ -3528,3 +3528,5 @@
 "view_angle_description" = "Muestra el área en forma de cono a la que te enfrentas actualmente";
 "rendering_attr_showDirtbikeTrails_name" = "Mostrar senderos para motos de cross";
 "rendering_attr_showDirtbikeTrails_description" = "Mostrar senderos para motos de cross";
+"daynight_mode_day_summary" = "Siempre muestra el mapa en un tema claro, ideal para la visibilidad diurna.";
+"daynight_mode_night_summary" = "Siempre muestra el mapa en un tema oscuro, adecuado para condiciones nocturnas o de poca luz.";

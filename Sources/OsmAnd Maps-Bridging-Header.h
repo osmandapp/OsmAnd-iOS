@@ -172,6 +172,7 @@
 #import "OATextInputFloatingCell.h"
 #import "OAInputTableViewCell.h"
 #import "OAColorsCollectionViewCell.h"
+#import "OATitleIconProgressbarCell.h"
 #import "OAIconsCollectionViewCell.h"
 
 // Views

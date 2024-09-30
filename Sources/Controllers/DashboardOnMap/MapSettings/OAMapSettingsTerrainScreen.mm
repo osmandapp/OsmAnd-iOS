@@ -672,7 +672,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 #pragma mark - DownloadingCellResourceHelperDelegate
 
-- (void)onDownldedResourceInstalled
+- (void)onDownloadingCellResourceNeedUpdate
 {
     __weak __typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{

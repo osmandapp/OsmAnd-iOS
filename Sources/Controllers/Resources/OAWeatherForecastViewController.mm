@@ -1288,7 +1288,7 @@
 
 #pragma mark - DownloadingCellResourceHelperDelegate
 
-- (void)onDownldedResourceInstalled
+- (void)onDownloadingCellResourceNeedUpdate
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self setupView];

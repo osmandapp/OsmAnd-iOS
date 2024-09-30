@@ -34,5 +34,6 @@
                        andHidden:(BOOL)hidden;
 
 @property(readonly) NSURLSessionDownloadTask* task;
+@property(nonatomic) id resourceItem;
 
 @end

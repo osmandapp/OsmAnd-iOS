@@ -17,6 +17,7 @@
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
 #import "OsmAndApp.h"
+#import "OADownloadTask.h"
 
 @implementation OAResourceSwiftItem
 
@@ -104,6 +105,13 @@
     return [NSByteCountFormatter stringFromByteCount:res.sizePkg countStyle:NSByteCountFormatterCountStyleFile];
 }
 
+- (NSString *) formatedDownloadedSizePkg:(float)progress
+{
+    OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
+    long long downloadedSizePkg = ((long long) res.sizePkg * progress);
+    return [NSByteCountFormatter stringFromByteCount:downloadedSizePkg countStyle:NSByteCountFormatterCountStyleFile];
+}
+
 - (UIImage *) icon
 {
     OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
@@ -119,7 +127,7 @@
 - (BOOL) isInstalled
 {
     OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
-    return [res isInstalled];
+    return [OsmAndApp instance].resourcesManager->isResourceInstalled(res.resourceId);
 }
 
 - (NSString *) resourceId
@@ -143,6 +151,11 @@
 - (id<OADownloadTask>) getDownloadTaskFor:(NSString*)resourceId
 {
     return [[OsmAndApp.instance.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resourceId]] firstObject];
+}
+
+- (BOOL) isOutdatedItem
+{
+    return [self.objcResourceItem isKindOfClass:OAOutdatedResourceItem.class];
 }
 
 @end
@@ -237,6 +250,13 @@
     return swiftResources;
 }
 
++ (OAResourceSwiftItem *) getResourceFromDownloadTask:(id<OADownloadTask>)downloadTask
+{
+    if (downloadTask && downloadTask.resourceItem)
+        return [[OAResourceSwiftItem alloc] initWithItem:downloadTask.resourceItem];
+    return nil;
+}
+
 + (OAResourceItem *) resourceItemByResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> &)resource region:(OAWorldRegion *)region
 {
     OsmAndAppInstance app = OsmAndApp.instance;
@@ -300,6 +320,17 @@
 {
     OARepositoryResourceItem *res = (OARepositoryResourceItem *)item.objcResourceItem;
     [OAResourcesUIHelper offerDownloadAndInstallOf:res onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed completionHandler:completionHandler silent:NO];
+}
+
++ (void)offerDownloadAndUpdateOf:(OAResourceSwiftItem *)item
+                   onTaskCreated:(OADownloadTaskCallback)onTaskCreated
+                   onTaskResumed:(OADownloadTaskCallback)onTaskResumed
+{
+    if ([item isOutdatedItem])
+    {
+        OAOutdatedResourceItem *res = (OAOutdatedResourceItem *)item.objcResourceItem;
+        [OAResourcesUIHelper offerDownloadAndUpdateOf:res onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+    }
 }
 
 + (void) offerCancelDownloadOf:(OAResourceSwiftItem *)item onTaskStop:(OADownloadTaskCallback)onTaskStop completionHandler:(void(^)(UIAlertController *))completionHandler
@@ -367,6 +398,11 @@
 {
     [[OARootViewController instance].mapPanel.mapViewController updatePoiLayer];
     [OAManageResourcesViewController prepareData];
+}
+
++ (BOOL) isInOutdatedResourcesList:(NSString *)resourceId
+{
+    return [OAResourcesUIHelper isInOutdatedResourcesList:resourceId];
 }
 
 @end

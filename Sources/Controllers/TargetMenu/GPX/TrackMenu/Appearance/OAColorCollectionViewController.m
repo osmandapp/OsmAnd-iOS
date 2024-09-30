@@ -22,7 +22,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
-@interface OAColorCollectionViewController () <UIColorPickerViewControllerDelegate, OAColorsCollectionCellDelegate>
+@interface OAColorCollectionViewController () <UIColorPickerViewControllerDelegate, OAColorPickerViewControllerDelegate, OAColorsCollectionCellDelegate>
 
 @property(nonatomic) GradientColorsCollection *colorsCollection;
 @property(nonatomic) PaletteColor *selectedPaletteItem;
@@ -39,6 +39,13 @@
     NSMutableArray<OAColorItem *> *_colorItems;
     OAColorItem *_selectedColorItem;
     NSIndexPath *_editColorIndexPath;
+    BOOL _isStartedNewColorAdding;
+    
+    NSMutableArray<NSString *> *_iconItems;
+    NSArray<UIImage *> *_iconImages;
+    NSString *_selectedIconItem;
+    
+    OAColorCollectionHandler *_colorCollectionHandler;
 }
 
 #pragma mark - Initialization
@@ -60,6 +67,11 @@
                 _paletteItems = [[OAConcurrentArray alloc] init];
                 [_paletteItems addObjectsSync:[_colorsCollection getColors:PaletteSortingModeOriginal]];
                 _selectedPaletteItem = selectedItem;
+                break;
+            case EOAColorCollectionTypeIconItems:
+            case EOAColorCollectionTypeBigIconItems:
+                _iconItems = items;
+                _selectedIconItem = selectedItem;
                 break;
         }
     }
@@ -98,6 +110,12 @@
             [self.tableView registerNib:[UINib nibWithNibName:[OATwoIconsButtonTableViewCell reuseIdentifier] bundle:nil]
                  forCellReuseIdentifier:[OATwoIconsButtonTableViewCell reuseIdentifier]];
         }
+        case EOAColorCollectionTypeIconItems:
+        case EOAColorCollectionTypeBigIconItems:
+        {
+            [self.tableView registerNib:[UINib nibWithNibName:[OACollectionSingleLineTableViewCell reuseIdentifier] bundle:nil]
+                 forCellReuseIdentifier:[OACollectionSingleLineTableViewCell reuseIdentifier]];
+        }
     }
 }
 
@@ -131,7 +149,7 @@
 
 - (NSString *)getTitle
 {
-    return OALocalizedString(@"shared_string_all_colors");
+    return _customTitle.length > 0 ? _customTitle : OALocalizedString(@"shared_string_all_colors");
 }
 
 - (NSString *)getLeftNavbarButtonTitle
@@ -161,12 +179,17 @@
     return  _collectionType == EOAColorCollectionTypeColorItems ? YES : NO;
 }
 
+- (void) setImages:(NSArray<UIImage *> *)images
+{
+    _iconImages = images;
+}
+
 #pragma mark - Table data
 
 - (void)generateData
 {
     _data = [OATableDataModel model];
-    if (_collectionType == EOAColorCollectionTypeColorItems)
+    if (_collectionType == EOAColorCollectionTypeColorItems || _collectionType == EOAColorCollectionTypeIconItems || _collectionType == EOAColorCollectionTypeBigIconItems)
     {
         OATableSectionData *colorsSection = [_data createNewSection];
         [colorsSection addRowFromDictionary:@{
@@ -242,14 +265,53 @@
     if ([item.cellType isEqualToString:[OACollectionSingleLineTableViewCell getCellIdentifier]])
     {
         OACollectionSingleLineTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OACollectionSingleLineTableViewCell reuseIdentifier]];
-        OAColorCollectionHandler *colorHandler = [[OAColorCollectionHandler alloc] initWithData:@[_colorItems] collectionView:cell.collectionView];
-        colorHandler.delegate = self;
-        [colorHandler setScrollDirection:UICollectionViewScrollDirectionVertical];
-        [colorHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:[_colorItems indexOfObject:_selectedColorItem] inSection:0]];
-        [cell setCollectionHandler:colorHandler];
+        
+        if (_collectionType == EOAColorCollectionTypeColorItems)
+        {
+            _colorCollectionHandler = [[OAColorCollectionHandler alloc] initWithData:@[_colorItems] collectionView:cell.collectionView];
+            _colorCollectionHandler.isOpenedFromAllColorsScreen = YES;
+            _colorCollectionHandler.hostColorHandler = _hostColorHandler;
+            _colorCollectionHandler.delegate = self;
+            _colorCollectionHandler.hostVC = self;
+            _colorCollectionHandler.hostCell = cell;
+            _colorCollectionHandler.hostVCOpenColorPickerButton = self.navigationItem.rightBarButtonItem.customView;
+            [_colorCollectionHandler setScrollDirection:UICollectionViewScrollDirectionVertical];
+            [_colorCollectionHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:[_colorItems indexOfObject:_selectedColorItem] inSection:0]];
+            [cell setCollectionHandler:_colorCollectionHandler];
+        }
+        else if (_collectionType == EOAColorCollectionTypeIconItems || _collectionType == EOAColorCollectionTypeBigIconItems)
+        {
+            IconCollectionHandler *iconHandler = [[IconCollectionHandler alloc] initWithData:@[_iconItems] collectionView:cell.collectionView];
+            iconHandler.delegate = self;
+            iconHandler.hostVC = self;
+            iconHandler.selectedIconColor = _selectedIconColor;
+            iconHandler.regularIconColor = _regularIconColor;
+            [iconHandler setScrollDirection:UICollectionViewScrollDirectionVertical];
+            [iconHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:[_iconItems indexOfObject:_selectedIconItem] inSection:0]];
+            cell.disableAnimationsOnStart = YES;
+            
+            if (_collectionType == EOAColorCollectionTypeIconItems)
+            {
+                [iconHandler setItemSizeWithSize:48];
+                [iconHandler setIconSizeWithSize:30];
+                iconHandler.roundedSquareCells = NO;
+                iconHandler.cornerRadius = -1;
+            }
+            else if (_collectionType == EOAColorCollectionTypeBigIconItems)
+            {
+                [iconHandler setItemSizeWithSize:152];
+                [iconHandler setIconSizeWithSize:52];
+                iconHandler.roundedSquareCells = YES;
+                iconHandler.cornerRadius = 6;
+                iconHandler.iconImagesData = @[_iconImages];
+            }
+            
+            [cell setCollectionHandler:iconHandler];
+        }
         [cell rightActionButtonVisibility:NO];
         [cell anchorContent:EOATableViewCellContentCenterStyle];
         cell.collectionView.scrollEnabled = NO;
+        cell.useMultyLines = YES;
         [cell.collectionView reloadData];
         [cell layoutIfNeeded];
         return cell;
@@ -291,9 +353,12 @@
 
 - (void)openColorPickerWithColor:(OAColorItem *)colorItem
 {
-    UIColorPickerViewController *colorViewController = [[UIColorPickerViewController alloc] init];
+    OAColorPickerViewController *colorViewController = [[OAColorPickerViewController alloc] init];
     colorViewController.delegate = self;
+    colorViewController.closingDelegete = self;
     colorViewController.selectedColor = [colorItem getColor];
+    colorViewController.modalPresentationStyle = UIModalPresentationPopover;
+    colorViewController.popoverPresentationController.sourceView = self.navigationItem.rightBarButtonItem.customView;
     [self.navigationController presentViewController:colorViewController animated:YES completion:nil];
 }
 
@@ -339,6 +404,7 @@
 
 - (void)onRightNavbarButtonPressed
 {
+    _isStartedNewColorAdding = YES;
     [self openColorPickerWithColor:_selectedColorItem];
 }
 
@@ -472,14 +538,22 @@
 
 #pragma mark - OACollectionCellDelegate
 
-- (void)onCollectionItemSelected:(NSIndexPath *)indexPath
+- (void)onCollectionItemSelected:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
 {
-    _selectedColorItem = _colorItems[indexPath.row];
+    if (_collectionType == EOAColorCollectionTypeIconItems || _collectionType == EOAColorCollectionTypeBigIconItems)
+    {
+        _selectedIconItem = _iconItems[indexPath.row];
 
-    if (self.delegate)
-        [self.delegate selectColorItem:_selectedColorItem];
+        if (self.iconsDelegate)
+            [self.iconsDelegate selectIconName:_selectedIconItem];
+    }
+    else 
+    {
+        _selectedColorItem = [_colorCollectionHandler getSelectedItem];
 
-    [self dismissViewController];
+        if (self.delegate)
+            [self.delegate selectColorItem:_selectedColorItem];
+    }
 }
 
 - (void)reloadCollectionData
@@ -513,8 +587,7 @@
                                                                    inSection:indexPath.section];
                     OAColorItem *duplicatedColorItem = [self.delegate duplicateColorItem:colorItem];
                     [_colorItems insertObject:duplicatedColorItem atIndex:newIndexPath.row];
-                    OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
-                    [colorHandler addColor:newIndexPath newItem:duplicatedColorItem];
+                    [_colorCollectionHandler addColor:newIndexPath newItem:duplicatedColorItem];
                 }
                 break;
             case EOAColorCollectionTypePaletteItems:
@@ -546,9 +619,7 @@
                     OAColorItem *colorItem = _colorItems[indexPath.row];
                     [_colorItems removeObjectAtIndex:indexPath.row];
                     [self.delegate deleteColorItem:colorItem];
-                    OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorCollectionIndexPath];
-                    OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
-                    [colorHandler removeColor:indexPath];
+                    [_colorCollectionHandler removeColor:indexPath];
                 }
                 break;
             case EOAColorCollectionTypePaletteItems:
@@ -570,29 +641,41 @@
 
 #pragma mark - UIColorPickerViewControllerDelegate
 
-- (void)colorPickerViewControllerDidFinish:(UIColorPickerViewController *)viewController
+- (void)colorPickerViewController:(UIColorPickerViewController *)viewController didSelectColor:(UIColor *)color continuously:(BOOL)continuously
 {
     if (self.delegate && _colorCollectionIndexPath)
     {
-        OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorCollectionIndexPath];
-        OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
-        if (_editColorIndexPath)
+        if (_isStartedNewColorAdding)
         {
-            if (![[_colorItems[_editColorIndexPath.row] getHexColor] isEqualToString:[viewController.selectedColor toHexARGBString]])
-            {
-                [self.delegate changeColorItem:_colorItems[_editColorIndexPath.row]
-                                     withColor:viewController.selectedColor];
-                [colorHandler replaceOldColor:_editColorIndexPath];
-            }
-            _editColorIndexPath = nil;
+            _isStartedNewColorAdding = NO;
+            OAColorItem *newColorItem = [self.delegate addAndGetNewColorItem:viewController.selectedColor];
+            [_colorItems insertObject:newColorItem atIndex:0];
+            [_colorCollectionHandler addAndSelectColor:[NSIndexPath indexPathForRow:0 inSection:0] newItem:newColorItem];
         }
         else
         {
-            OAColorItem *newColorItem = [self.delegate addAndGetNewColorItem:viewController.selectedColor];
-            [_colorItems addObject:newColorItem];
-            [colorHandler addAndSelectColor:[NSIndexPath indexPathForRow:_colorItems.count - 1 inSection:0] newItem:newColorItem];
+            OAColorItem *editingColor = _colorItems[0];
+            if (_editColorIndexPath)
+                editingColor = _colorItems[_editColorIndexPath.row];
+            
+            if (![[editingColor getHexColor] isEqualToString:[viewController.selectedColor toHexARGBString]])
+            {
+                [self.delegate changeColorItem:editingColor withColor:viewController.selectedColor];
+                if (_editColorIndexPath)
+                    [_colorCollectionHandler replaceOldColor:_editColorIndexPath];
+                else
+                    [_colorCollectionHandler replaceOldColor:[NSIndexPath indexPathForRow:0 inSection:0]];
+            }
         }
     }
+}
+
+#pragma mark - OAColorPickerViewControllerDelegate
+
+- (void)onColorPickerDisappear:(OAColorPickerViewController *)colorPicker
+{
+    _isStartedNewColorAdding = NO;
+    _editColorIndexPath = nil;
 }
 
 @end

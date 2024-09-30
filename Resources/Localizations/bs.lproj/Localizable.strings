@@ -348,7 +348,7 @@
 "map_markers_other" = "Other markers";
 "directions_other" = "Other directions";
 "shared_string_turn" = "Turn";
-"stop_routing_confirm" = "Jeste li sigurni daželite zaustaviti navigaciju?";
+"stop_routing_confirm" = "Jeste li sigurni da želite zaustaviti navigaciju?";
 "cancel_route" = "Dismiss route";
 "route_is_too_long_v2" = "This route may be too long to calculate. Please add intermediate destinations if no result is found within 10 minutes.";
 "navigation_over_track" = "Start navigation along track?";
@@ -2164,7 +2164,7 @@
 "rendering_attr_coloredBuildings_name" = "Color-code buildings by type";
 "rendering_attr_piste_difficulty_advanced_name" = "Advanced";
 "routeInfo_road_types_name" = "Road types";
-"rendering_attr_showRoadMaps_description" = "Odaberite kadaće se prikazati samo cestovne karte:";
+"rendering_attr_showRoadMaps_description" = "Odaberite kada će se prikazati samo cestovne karte:";
 "rendering_value_translucent_blue_name" = "Translucent blue";
 "routing_attr_avoid_bus_description" = "Avoids buses and trolleybuses";
 "rendering_attr_hideOverground_name" = "Overground objects";
@@ -2617,7 +2617,7 @@
 "subscription_cancel_description" = "Cancel anytime in AppStore.";
 "osm_live_payment_subscription_management_aid" = "Payment will be charged to your Apple ID account at the confirmation of purchase.\n\nSubscription automatically renews unless it is canceled at least 24 hours before the end of the current period. Your account will be charged for renewal within 24 hours prior to the end of the current period.\n\nYou can manage and cancel your subscriptions by going to your account settings on the App Store after purchase";
 "no_purchases" = "You don’t have any purchases";
-"empty_purchases_description" = "If your purchases don\'t show up here, tap on \"%@\", or contact our support team.";
+"empty_purchases_description" = "If your purchases don't show up here, tap on \"%@\", or contact our support team.";
 "explore_osmnad_plans_to_find_suitable" = "Explore OsmAnd Plans to find one suitable for you.";
 "osm_live_banner_desc" = "Get unlimited map downloads, adding weekly, daily, or even hourly updates.";
 "redeem_promo_code" = "Redeem promo code";

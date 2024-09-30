@@ -7,7 +7,7 @@
 "shared_string_control_stop" = "Deter";
 "cancel_navigation" = "Deter a navegación";
 "intermediate_items_sort_by_distance" = "Ordenar porta a porta";
-"switch_start_finish" = "Inverter o punto de partida e o destino";
+"switch_start_finish" = "Inverter os puntos de partida e destino";
 "clear_all_intermediates" = "Limpar tódolos puntos intermedios";
 "shared_string_options" = "Opcións";
 "new_destination_point_dialog" = "Xa existe un destino:";
@@ -29,9 +29,9 @@
 "day_off_label" = "pechado";
 "open_from" = "Aberto dende as";
 "open_till" = "Aberto até as";
-"will_close_at" = "Pechaás";
-"will_open_at" = "Abreás";
-"will_open_on" = "Abreás";
+"will_close_at" = "Pecha ás";
+"will_open_at" = "Abre ás";
+"will_open_on" = "Abre ás";
 "will_open_tomorrow_at" = "Abre mañá ás";
 "error_avoid_specific_road" = "Non foi posíbel atopar un desvío";
 "road_blocked" = "Estrada bloqueada";
@@ -146,7 +146,7 @@
 "choose_auto_follow_route_descr" = "Tempo até que a vista do mapa volva sincronizarse coa posición actual.";
 "auto_zoom_map" = "Achegamento automático do mapa";
 "auto_zoom_map_descr" = "Variar o achegamento do mapa segundo a velocidade (mentres o mapa estiver sincronizado coa posición actual).";
-"snap_to_road" = "Axustará estrada";
+"snap_to_road" = "Axustar á estrada";
 "snap_to_road_descr" = "A icona da posición actual será axustada á ruta de navegación actual";
 "show_warnings_title" = "Amosar alertas…";
 "show_warnings_descr" = "Configurar os avisos de tráfico (límites de velocidade, paradas forzosas, bandas sonoras, túneles), radares de velocidade e información de faixas ou carrís da estrada.";
@@ -161,7 +161,7 @@
 "speed_limit_exceed" = "Tolerancia no límite da velocidade";
 "speed_limit_exceed_message" = "Escolle a marxe de tolerancia do límite de velocidade por riba da cal desexas ser avisado por voz.";
 "wake_on_voice" = "Acender a pantalla";
-"wake_on_voice_descr" = "Acende a pantalla do dispositivo (se estiver apagada)ó aproximarse a unha manobra.";
+"wake_on_voice_descr" = "Acende a pantalla do dispositivo (se estiver apagada) ó aproximarse a unha manobra.";
 "voice_pref_title" = "Voz";
 "voice_provider" = "Indicacións por voz";
 "voice_provider_descr" = "Escolle a voz das indicacións para a navegación.";
@@ -225,12 +225,12 @@
 "route_roundabout_short" = "Colla a %d saída e siga";
 "route_kl" = "Mantéñase á esquerda e continúe";
 "route_kr" = "Mantéñase á dereita e continúe";
-"route_tr" = "Vireá dereita e continúe";
-"route_tshr" = "Vire de xeito forteá dereita e continúe";
-"route_tslr" = "Vire de xeito lixeiroá dereita e continúe";
-"route_tl" = "Vireá esquerda e continúe";
-"route_tshl" = "Vire de xeito forteá esquerda e continúe";
-"route_tsll" = "Vire de xeito lixeiroá esquerda e continúe";
+"route_tr" = "Vire á dereita e continúe";
+"route_tshr" = "Vire de xeito forte á dereita e continúe";
+"route_tslr" = "Vire de xeito lixeiro á dereita e continúe";
+"route_tl" = "Vire á esquerda e continúe";
+"route_tshl" = "Vire de xeito forte á esquerda e continúe";
+"route_tsll" = "Vire de xeito lixeiro á esquerda e continúe";
 "route_tu" = "Faga un cambio de sentido e continúe";
 "route_head" = "Diríxase cara";
 "looking_up_address" = "Estase a procurar o enderezo";
@@ -455,7 +455,7 @@
 "prch_failed" = "Purchase of \"%@\" has failed";
 "prch_items_failed" = "item(s) were not restored. Please try again.";
 // Resources
-"res_mapsres" = "Maps & Resources";
+"res_mapsres" = "Mapas e recursos";
 "download_tab_local" = "Local";
 "res_search_world" = "Search worldwide";
 "res_catalog_upd" = "Catalog update";
@@ -596,7 +596,7 @@
 "osmand_parking_plugin_description" = "Rexistra onde foi aparcado o automóbil, incluíndo canto tempo falta.  \n Tanto a localización coma o tempo do aparcamento amósanse no menú principal e nun trebello sobre o mapa. Pódese engadir unha alarma de lembranza ó calendario do Android.";
 "plugin_ski_name" = "Vista dos mapas de esquí";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
-"plugin_ski_descr" = "Este plugin para o OsmAnd ponó teu acade detalles sobre pistas do esquí de baixada, de travesía, roteiros do esquí alpino, teleféricos e refachos a nivel mundial. As rotas e pistas amósanse polo código de cor en función da súa dificuldade e representados cun estilo do mapa especial \"Inverno\" que o asemella a unha paisaxe invernal nevada. \n  \nActivando esta vista, muda o estilo do mapa a «Inverno e esquí», amosando as características do terreo en condicións invernais. Esta vista pódese revertir desactivando de novo eiquí ou mudando o \"Estilo do mapa\" en \"Configurar mapa\" cando o desexes.";
+"plugin_ski_descr" = "Este plugin para o OsmAnd pon ó teu acade detalles sobre pistas do esquí de baixada, de travesía, roteiros do esquí alpino, teleféricos e refachos a nivel mundial. As rotas e pistas amósanse polo código de cor en función da súa dificuldade e representados cun estilo do mapa especial \"Inverno\" que o asemella a unha paisaxe invernal nevada. \n  \nActivando esta vista, muda o estilo do mapa a «Inverno e esquí», amosando as características do terreo en condicións invernais. Esta vista pódese revertir desactivando de novo eiquí ou mudando o \"Estilo do mapa\" en \"Configurar mapa\" cando o desexes.";
 "record_plugin_name" = "Gravación de viaxes";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
 "record_plugin_description" = "Este plugin activa a funcionalidade para rexistrar e gardar as túas pistas de xeito manual premendo no trebello de gravación GPX no mapa, ou automáticamente rexistrando todas as túas rutas percorridas nun ficheiro GPX.  \n  \nAs pistas gravadas poden ser compartidas coas túas amizades ou ser empregadas para contribuír ó OSM. Os atletas poden empregar as pistas gravadas para seguir os seus adestramentos. Algunhas análises básicas de pistas pódense facer directamente no OsmAnd, coma tempos por volta, velocidade media, etc., e por suposto as pistas poden analizarse de xeito posterior con ferramentas de análise de terceiros.";
@@ -1027,13 +1027,13 @@
 "rendering_attr_piste_type_downhill_name" = "Descendemento";
 "routing_attr_max_num_changes_name" = "Número de transbordos";
 "rendering_attr_smoothness_impassable_name" = "Intransitábel";
-"routing_attr_allow_private_description" = "Permitir accesoás zonas privadas.";
+"routing_attr_allow_private_description" = "Permitir acceso ás zonas privadas.";
 "rendering_attr_showLez_name" = "Amosar zonas de baixas emisións";
 "rendering_attr_buildings15zoom_name" = "Edificios no achegamento 15";
 "rendering_value_high_name" = "Alta";
 "routing_attr_height_obstacles_name" = "Empregar datos de elevación";
 "rendering_attr_transportStops_name" = "Paradas do transporte";
-"rendering_attr_noAdminboundaries_description" = "Agochar fronteiras rexionais (niveis administrativos do 5ó 9).";
+"rendering_attr_noAdminboundaries_description" = "Agochar fronteiras rexionais (niveis administrativos do 5 ó 9).";
 "rendering_value_americanRoadAtlas_name" = "Atlas de estradas norteamericanas";
 "routing_attr_height_name" = "Límite da altitude";
 "routing_attr_short_way_description" = "Ruta optimizada máis curta (baixo consumo)";
@@ -1294,7 +1294,7 @@
 "routing_attr_length_name" = "Límite de lonxitude";
 "profile_type_osmand_string" = "Perfil do OsmAnd";
 "next_segment" = "Seguinte segmento";
-"routing_profile_direct_to" = "Directoó punto";
+"routing_profile_direct_to" = "Directo ó punto";
 "reorder_profiles" = "Editar a listaxe de perfís";
 "icon_group_amenity" = "Instalación";
 "profile_type_custom_string" = "Perfil personalizado";
@@ -1304,7 +1304,7 @@
 "reset_plugin_to_default" = "Restabelecer a configuración do plugin ós valores por defecto";
 "light_theme" = "Claro";
 "base_profile_descr_pedestrian" = "Andar, sendeirismo, correr";
-"quick_action_remove_next_destination_descr" = "Elimina o seguinte destino da ruta. Seé o destino final, a navegación será detida.";
+"quick_action_remove_next_destination_descr" = "Elimina o seguinte destino da ruta. Se é o destino final, a navegación será detida.";
 "profile_alert_delete_title" = "Eliminar perfil";
 "temporary_conditional_routing" = "Considerar limitacións temporais";
 "shared_string_menu" = "Menú";
@@ -1437,7 +1437,7 @@
 "plan_route_create_new_route" = "Crear nova ruta";
 "open_saved_track" = "Abrir pista gardada";
 "access_default_color" = "Cor por omisión";
-"attach_to_the_roads" = "Unirás estradas";
+"attach_to_the_roads" = "Unir ás estradas";
 "segments_count" = "Segmento %d";
 "shared_string_visible" = "Visíbel";
 "none_point_error" = "Engade polo menos un punto.";
@@ -1476,7 +1476,7 @@
 "change_folder" = "Mudar cartafol";
 "shared_string_others" = "Outros";
 "rearrange_categories" = "Reorganizar categorías";
-"osmand_settings" = "Axustes do OsmAnd";
+"osmand_settings" = "Axustes de OsmAnd";
 "markers_history" = "Historial de marcaxes";
 "icon_group_symbols" = "Símbolos";
 "searching_gps" = "Estase a procurar o GPS";
@@ -1512,7 +1512,7 @@
 "shared_string_feet" = "pés";
 "some_articles_may_not_available_in_lang" = "Algúns artigos da Wikipedia poden non estar dispoñíbeis na túa lingua.";
 "navigate_point_olc" = "Código de Localización Aberto (OLC)";
-"shared_string_last_used" = "Usado porúltima vez";
+"shared_string_last_used" = "Usado por última vez";
 "shared_string_turn_off" = "Apagar";
 "restart" = "Reiniciar";
 "download_map_dialog" = "Diálogo de descarga do mapa";
@@ -1731,7 +1731,7 @@
 "measurement_units" = "Unidades de medida";
 "map_settings_weather_cloud" = "Nube";
 "weather_offline_forecast" = "Pronóstico sen conexión";
-"route_between_points_add_track_desc" = "Escolle un ficheiro de pistaó que se engadirá un novo segmento.";
+"route_between_points_add_track_desc" = "Escolle un ficheiro de pista ó que se engadirá un novo segmento.";
 "position_on_map_bottom" = "Abaixo";
 "rendering_attr_depthContourColorScheme_name" = "Esquema de cores de liña";
 "ui_customization" = "Personalización da interface de usuario";
@@ -1790,7 +1790,7 @@
 "short_location_on_map" = "Lat %@ \nLon %@";
 "select_another_colorization" = "Escolle outro tipo de cor.";
 "osm_live_payment_current_subscription" = "Subscrición actual";
-"empty_purchases_description" = "Se as túas compras non aparecen aquí, preme en \"%@\", ou ponte en contacto co noso equipo de asistencia.";
+"empty_purchases_description" = "Se as súas compras non aparecen aquí, prema en «%@» ou contacte co noso equipo de asistencia.";
 "public_transport_ped_route_title" = "A ruta a pé é de aproximadamente %@ e podería ser máis rápida que no transporte público";
 "recalc_angle_dialog_descr" = "Amosarase un segmento recto adicional entre a miña localización e a ruta calculada até que se volva calcular a ruta";
 "sort_by" = "Ordenar por";
@@ -1804,7 +1804,7 @@
 "public_transport_warning_descr_blog" = "Le máis sobre o cálculo das rutas do OsmAnd no noso blogue.";
 "shared_string_added" = "Engadido";
 "save_poi_without_poi_type_message" = "Estás na certeza de que desexas gardar o PDI sen especificar o tipo\?";
-"reset_to_default_category_button_promo" = "\'Restabeleceró valor por defecto\' restabelecerá a orde de clasificación ós valores por defecto da instalación.";
+"reset_to_default_category_button_promo" = "\'Restabelecer ó valor por defecto\' restabelecerá a orde de clasificación ós valores por defecto da instalación.";
 "shared_string_rendering_style" = "Estilo da renderización";
 "select_folder_descr" = "Selecionar cartafol ou engadir un novo";
 "create_custom_categories_list_promo" = "Mudar a orde de clasificación da listaxe ou agochar categorías. Podes importar ou exportar todas as modificacións cos perfís.";
@@ -1815,7 +1815,7 @@
 "search_poi_types_descr" = "Combina tipos de PDI de diferentes categorías. Preme en \"trocar\" para marcar todo, preme o lado esquerdo para escoller unha categoría.";
 "navigate_point_format_D" = "DDD.DDDDD";
 "shared_string_status" = "Estado";
-"ltr_or_rtl_combine_via_slash" = "%@ / %@";
+"ltr_or_rtl_combine_via_slash" = "%@/%@";
 "profile_alert_delete_msg" = "Tes a certeza de que desexas eliminar o perfil \"%@\"";
 "renew_subscription" = "Renovar a subscrición";
 "osm_live_payment_month_cost_descr_ex" = "%.2f %@ / mes";
@@ -1832,7 +1832,7 @@
 "shared_string_angle_param" = "Ángulo: %@°";
 "osm_live_payment_annual_title" = "Anual";
 "shared_string_recorded" = "Gravada";
-"select_wikipedia_article_langs" = "Escolle as linguas para os artigos da Wikipedia no mapa. Muda a calquera lingua dispoñíbel mentres les o artigo.";
+"select_wikipedia_article_langs" = "Seleccione os idiomas dos artigos da Wikipedia no mapa. Cambie a calquera idioma dispoñíbel mentres le o artigo.";
 "shared_string_contours" = "Contornos";
 "animate_my_location" = "Animar posición propia";
 "mapillary_descr" = "Imaxes a nivel de rúa en liña para todos. Descobre lugares, contribúe, captura o mundo.";
@@ -1862,7 +1862,7 @@
 "quick_action_add_osm_bug" = "Engadir unha nota do OSM";
 "osm_edit_reopened_note" = "Reabriuse a nota de OSM";
 "quick_action_add_marker_descr" = "Un botón que engade unha marcaxe no centro da pantalla.";
-"mgrs_format_descr" = "O OsmAnd emprega MGRS, queé semellante ó formato UTM NATO.";
+"mgrs_format_descr" = "O OsmAnd emprega MGRS, que é semellante ó formato UTM NATO.";
 "osm_editing_plugin_name" = "Edición do OpenStreetMap";
 "route_add_start_point" = "Engadir punto de comezo";
 "add_point_after" = "Engadir punto despois";
@@ -1879,7 +1879,7 @@
 "speed_camera_pois" = "PDI de radares de velocidade";
 "speed_cameras_alert" = "As alertas de radares de velocidade nalgúns países están prohibidas por lei.";
 "shared_string_keep_active" = "Manter activo";
-"speed_cameras_legal_descr" = "Nalgúns países ou rexións, o emprego de aplicacións de aviso de radares está prohibido por lei. \n \nTes que facer unha escolla, dependendo da lei do teu país. \n \nEscolle %@ e recibirás alertas e avisos sobre radares de velocidade. \n \nEscolle %@. Todos os datos relacionados de radares develocidade: alertas, notificacións e PDI serán eliminados até que o OsmAnd sexa reinstalado de xeito completo.";
+"speed_cameras_legal_descr" = "Nalgúns países ou rexións, o emprego de aplicacións de aviso de radares está prohibido por lei. \n \nTes que facer unha escolla, dependendo da lei do teu país. \n \nEscolle %@ e recibirás alertas e avisos sobre radares de velocidade. \n \nEscolle %@. Todos os datos relacionados de radares de velocidade: alertas, notificacións e PDI serán eliminados até que o OsmAnd sexa reinstalado de xeito completo.";
 "shared_string_height" = "Altura";
 "lang_zh-Hant" = "Chinés tradicional";
 "icon_group_service" = "Servizo";
@@ -2030,3 +2030,12 @@
 "backup_pause_all" = "Pausar todo";
 "driving_region_india" = "India";
 "shared_string_show" = "Amosar";
+"resting_position" = "Posición de repouso";
+"navigation_position" = "Posición de navegación";
+"resting_navigation_position" = "Posición de repouso e navegación";
+"show_along_the_route" = "Amosar ó longo da ruta";
+"shared_string_local" = "Local";
+"location_radius" = "Raio da ubicación";
+"view_angle" = "Ángulo de visión";
+"device_settings" = "Axustes do dispositivo";
+"backup_and_restore" = "Copia de seguranza e restauración";

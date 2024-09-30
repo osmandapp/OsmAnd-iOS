@@ -51,7 +51,7 @@
 "new_destination_point_dialog" = "Galapunkts jau ir uzstādīts:";
 "replace_destination_point" = "Nomainīt galapunktu";
 "shared_string_current" = "Pašreizējais";
-"make_as_start_point" = "Izveidotšo par sākuma punktu";
+"make_as_start_point" = "Izveidot šo par sākuma punktu";
 "keep_and_add_destination_point" = "Pievienot kā nākamo galamērķi";
 "subsequent_dest_description" = "Izveido apstāšanās vietu un pārvieto galamērķi uz augšu";
 "add_as_first_destination_point" = "Pievienot kā pirmo starpposma punktu";
@@ -116,8 +116,8 @@
 "shared_string_automatic" = "Automātiski";
 "routing_attr_length_name" = "Length limit";
 "default_speed_setting_title" = "Noklusētais ātrums";
-"shared_string_min_speed" = "Min.ātrums";
-"max_speed" = "Maks.ātrums";
+"shared_string_min_speed" = "Min. ātrums";
+"max_speed" = "Maks. ātrums";
 "road_speeds_descr" = "These parameters can affect the route calculation.";
 "road_min_speed_descr" = "Sets the minimum travel speed for all roads in the route. Raises priority for roads with recommended speeds less than the minimum.";
 "road_max_speed_descr" = "Sets the maximum travel speed for all roads in the route. Lowers the priority for roads with a possible speed higher than the maximum.";
@@ -381,7 +381,7 @@
 "driving_region_japan" = "Japāna";
 "driving_region_us" = "ASV";
 "driving_region_canada" = "Kanāda";
-"driving_region_europe_asia" = "Eiropa,Āzija, Latīņamerika";
+"driving_region_europe_asia" = "Eiropa, Āzija, Latīņamerika";
 "driving_region_australia" = "Austrālija";
 "left_side_navigation" = "Kreisās joslas kustība";
 "right_side_navigation" = "Navigācija ar stūri labajā pusē";
@@ -1541,7 +1541,7 @@
 //inapps
 "plugin_nautical_name" = "Jūras kartes";
 "product_desc_nautical" = "Nautical map of all world";
-"plugin_nautical_descr" = "\"Spraudnis papildina OsmaAnd kartes ar jūras kartēm kuģošanai, ūdenslēpošanai un citiem ūdens sporta veidiem. \n \nSpeciāls kartes papildinājums rāda navigācijas ceļus, zīmes un simbolus uz ūdens un iekšzemē krastu tuvumā. Katra navigācijas zīme ir aprakstīta, lai to varētu viegli indentificēt un ir dots skaidrojumspar tās nozīmi (kategorija, izmēri, krāsa, secība, atsauces, u.t.t.). \n \nLai atgrieztos uz OsmAnd standarta kartēm, deaktivizējiet spraudni vai nomainiet karti galvenajā izvēlnē - kartes attēlošana. \"";
+"plugin_nautical_descr" = "\"Spraudnis papildina OsmaAnd kartes ar jūras kartēm kuģošanai, ūdenslēpošanai un citiem ūdens sporta veidiem. \n \nSpeciāls kartes papildinājums rāda navigācijas ceļus, zīmes un simbolus uz ūdens un iekšzemē krastu tuvumā. Katra navigācijas zīme ir aprakstīta, lai to varētu viegli indentificēt un ir dots skaidrojums par tās nozīmi (kategorija, izmēri, krāsa, secība, atsauces, u.t.t.). \n \nLai atgrieztos uz OsmAnd standarta kartēm, deaktivizējiet spraudni vai nomainiet karti galvenajā izvēlnē - kartes attēlošana. \"";
 "osmand_parking_plugin_name" = "Stāvvieta";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
 "osmand_parking_plugin_description" = "Viegli pamanāms logrīks uz kartes norāda jūsu auto stāvvietu un atlikušo laiku (ja ir uzlikts laika limits). Vietas koordinātes un laiks redzami arī atsevišķā sadaļā Manā Izvēlnē. Ir iespējams pievienot laika atgādinātāju Android kalendārā.";
@@ -1550,7 +1550,7 @@
 "plugin_ski_descr" = "\"Šis OsmAnd spraudnis ļauj piekļūt datiem par slēpošanas trasēm un maršrutiem, trošu vagoniem un pacēlājiem. Maršruti un trases tiek rādīti pēc krāsām, atkarībā no grūtības pakāpes un tiek attēlotas īpašā \"ziemas\" kartes stilā. \n \nAktivizējot spraudni, kartes stils tiek nomainīts uz \"Ziema un slēpošana,\" attēlojot visus ainavas elementus ziemas apstākļiem atbilstošus. Deaktivizēt spraudni var vai nu šeit vai nomainot kartes stilu kartes uzstādījumos. \"";
 "record_plugin_name" = "Ceļa ieraksts";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
-"record_plugin_description" = "Aršo spraudni jūs varat manuāli saglabāt trekus, nospiežot GPX ieraksta logrīku uz kartes vai veikt automātisku visu maršrutu ierakstu GPX failā. \n \nIerakstītie treki vēlāk var tikt izmantoti treka analīzei, koplietošanai ar draugiem vai OSM izstrādei. Atlēti var izmantot trekus, laimonitorētu treniņus. Pamata treku analīze var tikt veikta tieši caur OsmAnd kā piemēram, apļu laiki, vidējais ātrums utt., bet paplašinātai analīzei trekus var atvērt citās programmās.";
+"record_plugin_description" = "Ar šo spraudni jūs varat manuāli saglabāt trekus, nospiežot GPX ieraksta logrīku uz kartes vai veikt automātisku visu maršrutu ierakstu GPX failā. \n \nIerakstītie treki vēlāk var tikt izmantoti treka analīzei, koplietošanai ar draugiem vai OSM izstrādei. Atlēti var izmantot trekus, lai monitorētu treniņus. Pamata treku analīze var tikt veikta tieši caur OsmAnd kā piemēram, apļu laiki, vidējais ātrums utt., bet paplašinātai analīzei trekus var atvērt citās programmās.";
 "osm_editing_plugin_name" = "OSM labošana";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "Rādīt iestatījumus OSM pilnveidošanai - OSM POI objektu izveidei/labošanai, GPX treku izplatīšanai un ziņošanai par OSM kļūdām. Vairāk uzziniet https://openstreetmap.org vietnē. Ikviens ir aicināts ņemt aktīvu dalību, ko ir iespējams darīt caur OsmAnd aplikāciju, norādot jūsu OSM lietotāja datus.";
@@ -1586,7 +1586,7 @@
 "preferred_languages" = "Preferred languages";
 "srtm_plugin_name" = "Kontūrlīniju spraudnis";
 "product_desc_srtm" = "Display of contour lines";
-"srtm_plugin_description" = "\"Šis spraudnis dod iespēju rādīt kontūrlīniju un reljefu pārklājus uz standarta OsmAnd kartēm. Šo iespēju novērtēs dabas mīļotāji, aktīvās atpūtas cienītāji un jebkurš ar padziļinātu interesi par zemes reljefu.  \n \nGlobālie dati (starp 70° Z un 70° D) ir bāzēti uz SRTM(Shuttle Radar Topography Mission) un ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer) mērījumiem, attēlveidošanas rīks uz Terra\'s, vadošais NASA Zemes Novērošanas Sistēmas satelīts. ASTER ir kopējs veikums ar NASA, Japānas Ekonomikas Ministriju, Trade and Industry(METI) un Japānas Izplatījuma Sistēmām (J-spacesystems). \"";
+"srtm_plugin_description" = "\"Šis spraudnis dod iespēju rādīt kontūrlīniju un reljefu pārklājus uz standarta OsmAnd kartēm. Šo iespēju novērtēs dabas mīļotāji, aktīvās atpūtas cienītāji un jebkurš ar padziļinātu interesi par zemes reljefu.  \n \nGlobālie dati (starp 70° Z un 70° D) ir bāzēti uz SRTM (Shuttle Radar Topography Mission) un ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer) mērījumiem, attēlveidošanas rīks uz Terra\'s, vadošais NASA Zemes Novērošanas Sistēmas satelīts. ASTER ir kopējs veikums ar NASA, Japānas Ekonomikas Ministriju, Trade and Industry (METI) un Japānas Izplatījuma Sistēmām (J-spacesystems). \"";
 "wikivoyage_travel_guide" = "Ceļojumu gids";
 "start_editing_card_image_text" = "Brīvais pasaules ceļojumu gids, ko ikviens var papildināt.";
 "wikivoyage_travel_guide_descr" = "Interesantāko vietu apraksti uz planētas OsmAnd lietotnē bez pieslēguma internetam.";
@@ -1678,7 +1678,7 @@
 "shared_string_show_all" = "Rādīt visu";
 "poi_filter_parking" = "Autostāvvietas";
 "parked_at" = "Noparkots";
-"context_menu_item_directions_from" = "Doties nošejienes";
+"context_menu_item_directions_from" = "Doties no šejienes";
 "search_nearby" = "Meklēt tuvumā";
 "change_object_posiotion" = "Change object's position";
 "move_marker_bottom_sheet_title" = "Velciet karti, lai pārvietotu marķieri";
@@ -2282,7 +2282,7 @@
 "no_purchases" = "Jums nav pirkumi";
 "map_updates_are_unavailable_yet" = "Karšu atjauninājumi pagaidām nav pieejami. :-(";
 "are_you_sure" = "Vai esiet pārliecināts?";
-"ltr_or_rtl_combine_via_slash" = "%@ / %@";
+"ltr_or_rtl_combine_via_slash" = "%@/%@";
 "animate_my_location" = "Atrašanās vietas animācija";
 "ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "position_on_map_center" = "Centrs";
@@ -2404,3 +2404,5 @@
 "map_source" = "Kartes Avots";
 "download_srtm_maps" = "Kontūrlīnijas";
 "shared_string_show" = "Rādīt";
+"shared_string_local" = "Krātuve";
+"show_along_the_route" = "Rādīt maršruta laikā";

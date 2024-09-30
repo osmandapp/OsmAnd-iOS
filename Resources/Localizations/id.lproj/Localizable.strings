@@ -45,7 +45,7 @@
 "cancel_navigation" = "Hentikan navigasi";
 "start_navigation" = "Start navigation";
 "intermediate_items_sort_by_distance" = "Sortir pintu ke pintu";
-"switch_start_finish" = "Balikkan titik awal&destinasi";
+"switch_start_finish" = "Balikkan titik awal & destinasi";
 "clear_all_intermediates" = "Hapus semua titik perantara";
 "shared_string_options" = "Opsi";
 "new_destination_point_dialog" = "Anda sudah menetapkan tujuan:";
@@ -692,13 +692,13 @@
 "shared_string_appearance" = "Tampilan";
 "map_settings_line_density_slowdown_warning" = "High line density may slowdown map rendering";
 "map_settings_available_srtm_maps_descr" = "Additional maps are needed to view Hillshade on the map";
-"settings_app_theme" = "Tema App";
+"settings_app_theme" = "Tema aplikasi";
 "light_theme" = "Terang";
 "do_not_rotate" = "Do not rotate";
 "allow_3D_view" = "2.5D view";
 "units_of_speed" = "Units of speed";
 "angular_measurment_units" = "Angular measurment units";
-"units_and_formats" = "Satuan&format";
+"units_and_formats" = "Satuan & format";
 "device_settings" = "Device settings";
 "osmand_settings" = "Pengaturan OsmAnd";
 "global_settings_descr" = "Affect the entire application.";
@@ -1057,7 +1057,7 @@
 
 // Resources
 "shared_string_resources" = "Sumber daya";
-"res_mapsres" = "Maps & Resources";
+"res_mapsres" = "Peta & Sumber Daya";
 "download_tab_local" = "Lokal";
 "osmand_live" = "OsmAnd Live";
 "live_updates" = "Pembaruan langsung";
@@ -1832,7 +1832,7 @@
 "wiki_buy_description" = "To read full articles - buy Wikipedia plugin and download Wikipedia data of %@";
 "wiki_download_description" = "To read full articles - download Wikipedia data of %@";
 "download_wiki_region_placeholder" = "daerah ini";
-"osm_live_plan_pricing" = "Paket&Harga";
+"osm_live_plan_pricing" = "Paket & Harga";
 "osm_live_payment_monthly_title" = "Bulanan";
 "osm_live_payment_3_months_title" = "Setiap 3 bulan";
 "osm_live_payment_annual_title" = "Tahunan";
@@ -2429,7 +2429,7 @@
 "weather_temperature_fahrenheit" = "Fahrenheit";
 "rendering_attr_showMtbScale_name" = "Tampilkan skala MTB";
 "routing_attr_motor_type_petrol_name" = "Bensin";
-"empty_purchases_description" = "Jika pembelian Anda tidak muncul di sini, ketuk“%@”, atau hubungi tim dukungan kami.";
+"empty_purchases_description" = "Jika pembelian Anda tidak muncul di sini, ketuk “%@”, atau hubungi tim dukungan kami.";
 "depth_contours" = "Kontur kedalaman";
 "use_login_and_password" = "Gunakan nama pengguna dan sandi";
 "weather_pressure_hectopascals" = "Hektopaskal";
@@ -2455,7 +2455,7 @@
 "weather_wind_knots" = "Knot";
 "backup_version_history" = "Riwayat versi";
 "backup_restore_data" = "Pulihkan data";
-"backup_and_restore" = "Cadangkan&Pulihkan";
+"backup_and_restore" = "Cadangkan & Pulihkan";
 "benefits_for_contributors_secondary_descr" = "Masuk ke OpenStreetMap untuk periksa jika Anda berhak untuk pembaruan peta bulanan dan per jam tak terbatas.";
 "benefits_for_contributors_primary_descr" = "Kontributor OpenSteetMap.org aktif mungkin berhak untuk pembaruan peta per jam tak terbatas.";
 "backup_delete_all_data" = "Hapus semua data saya";
@@ -2463,7 +2463,7 @@
 "purchases_feature_desc_cross_buy" = "Gunakan fitur langganan Anda di platform yang berbeda (Android/iOS/web) tanpa biaya tambahan.";
 "backup_delete_old_data_warning" = "Anda akan menghapus riwayat perubahan untuk data yang dimuat sebelumnya. \n \nVersi data saat ini akan disimpan pada server, tetapi Anda tidak akan dapat mengembalikan ke perubahan yang dibuat sebelumnya.";
 "shared_string_angle_param" = "Sudut: %@°";
-"ltr_or_rtl_combine_via_slash" = "%@ / %@";
+"ltr_or_rtl_combine_via_slash" = "%@/%@";
 "contact_support" = "Hubungi dukungan";
 "backup_deleting_all_data" = "Menghapus semua data…";
 "contributions_may_calculate_with_delay" = "Menghitung kontribusi mungkin membutuhkan beberapa jam.";
@@ -2473,7 +2473,7 @@
 "activity_type_mountainbike_name" = "Sepeda gunung";
 "download_all" = "Unduh semua";
 "shared_string_progress" = "Kemajuan";
-"you_can_get_feature_as_part_of_pattern" = "Dapatkan“%@” sebagai bagian dari paket %@. Perbandingan:";
+"you_can_get_feature_as_part_of_pattern" = "Dapatkan “%@” sebagai bagian dari paket %@. Perbandingan:";
 "rendering_attr_depthContourWidth_name" = "Lebar garis";
 "tts_title" = "TTS";
 "shared_string_contributions" = "Kontribusi";
@@ -3007,12 +3007,12 @@
 "mapillary_widget_desc" = "Menyediakan akses cepat ke aplikasi Mapillary untuk menambahkan citra tingkat jalanan.";
 "travel_card_download_descr" = "Unduh panduan perjalanan Wikivoyage untuk melihat artikel tentang tempat diseluruh dunia tanpa perlu tersambung ke jaringan internet.";
 "help_article_navigation_routing_online_routing_name" = "Perutean daring";
-"help_article_troubleshooting_maps_data_name" = "Peta&Data";
+"help_article_troubleshooting_maps_data_name" = "Peta & Data";
 "help_article_widgets_markers_name" = "Widget penanda";
 "telegram_chats" = "Chat Telegram";
 "map_widget_altitude_map_center_desc" = "Menunjukkan ketinggian di atas permukaan laut dari pusat peta saat ini.";
 "external_device_status_disconnected" = "Terputus";
-"coordinates_widget_secondary_desc" = "Anda dapat mengubah format koordinat dalam %@– %@ – %@.";
+"coordinates_widget_secondary_desc" = "Anda dapat mengubah format koordinat dalam %@ – %@ – %@.";
 "shared_string_view" = "Lihat";
 "help_article_map_track_context_menu_name" = "Menu Konteks Trek";
 "trip_recording_duration_widget_desc" = "Menampilkan waktu perekaman trek, durasi dalam menit/jam dari perjalanan yang sedang direkam.";
@@ -3049,7 +3049,7 @@
 "map_widget_group_sunrise_sunset" = "Matahari terbit, matahari terbenam";
 "help_article_navigation_routing_bicycle_based_routing_name" = "Perutean sepeda (MTB)";
 "external_device_blood_pressure" = "Tekanan darah";
-"bearing_secondary_desc" = "Anda dapat mengubah format data yang digunakan dalam: %@– %@ – %@.";
+"bearing_secondary_desc" = "Anda dapat mengubah format data yang digunakan dalam: %@ – %@ – %@.";
 "weather_forecast_is_outdated" = "Prakiraan kedaluwarsa.";
 "help_article_navigation_routing_name" = "Parameter rute";
 "angular_measeurement_descr" = "Ubah dalam azimuth apa yang diukur.";
@@ -3191,3 +3191,10 @@
 "quick_action_verb_pause_resume" = "Jeda / Lanjutkan";
 "quick_action_verb_start_stop" = "Mulai / Berhenti";
 "shared_string_show" = "Tampilkan";
+"shared_string_all_icons" = "Semua ikon";
+"shared_string_local" = "Lokal";
+"show_along_the_route" = "Tampilkan sepanjang rute";
+"profile_icon" = "Ikon profil";
+"location_radius_description" = "Menunjukkan seberapa luas lingkaran yang menunjukkan keakuratan lokasi Anda saat ini";
+"quick_action_toggle_preference" = "Sebuah alihan untuk mengubah preferensi.";
+"location_radius" = "Radius lokasi";

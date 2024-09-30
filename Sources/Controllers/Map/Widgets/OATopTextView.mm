@@ -771,7 +771,7 @@
 
 - (IBAction) onMoreButtonClicked:(id)sender
 {
-    [[OARootViewController instance].mapPanel showWaypoints];
+    [[OARootViewController instance].mapPanel showWaypoints:YES];
 }
 
 - (IBAction) onRemoveButtonClicked:(id)sender

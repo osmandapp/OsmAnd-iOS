@@ -97,7 +97,7 @@
 "default_profile_descr" = "Select a profile that will be used the application launch.";
 "dialogs_and_notifications_title" = "Deialogau a hysbysiadau";
 "dialogs_and_notifications_descr" = "Rheoli deialogau, hysbysiadau a popups.";
-"settings_preset_descr" = "Mae gosodiadau llywio a golwg map yn cael eu cofio ynôl proffil defnyddwyr. Gosodwch broffil fan hyn.";
+"settings_preset_descr" = "Mae gosodiadau llywio a golwg map yn cael eu cofio yn ôl proffil defnyddwyr. Gosodwch broffil fan hyn.";
 "unit_of_length" = "Unedau hyd";
 "unit_of_length_descr" = "Change units of length.";
 "coords_format" = "Fformat cyfesurynnau";
@@ -134,7 +134,7 @@
 "logging_min_accuracy_descr" = "Filter: no logging unless the accuracy is reached";
 "monitoring_min_speed" = "Isafswm cyflymder";
 "logging_min_speed_descr" = "Filter: no logging below selected speed";
-"auto_split_recording_title" = "Auto-hollti recordiadau arôl bwlch";
+"auto_split_recording_title" = "Auto-hollti recordiadau ar ôl bwlch";
 "auto_split_gap_descr" = "Start a new segment after 6 min gap, new track after 2 h gap, or new file after a longer gap";
 "trip_rec_actions_descr" = "You can find all your recorded tracks in %@";
 "reset_plugin_to_default" = "Ailosod yr ategyn i\'r rhagosodiad";
@@ -216,7 +216,7 @@
 "auto_zoom_close" = "To close-up";
 "auto_zoom_far" = "To mid-range";
 "auto_zoom_farthest" = "To long-range";
-"keep_informing_never" = "Dim ondâ llaw (tapio\'r saeth)";
+"keep_informing_never" = "Dim ond â llaw (tapio\'r saeth)";
 "arrival_distance_factor_early" = "Cynnar";
 "arrival_distance_factor_normally" = "Arferol";
 "arrival_distance_factor_late" = "Hwyr";
@@ -245,7 +245,7 @@
 "choose_auto_follow_route_descr" = "Time until map view synchronizes with current position";
 "choose_auto_center_map_view_descr" = "Time until map view synchronizes with current position after moving";
 "auto_zoom_map" = "Awto chwyddo\'r map";
-"auto_zoom_map_descr" = "Lefel chwyddo ynôl eich cyflymder (tra bod y map wedi\'i gysoni â\'ch lleoliad presennol).";
+"auto_zoom_map_descr" = "Lefel chwyddo yn ôl eich cyflymder (tra bod y map wedi\'i gysoni â\'ch lleoliad presennol).";
 "snap_to_road" = "Snapio i\'r ffordd";
 "snap_to_road_descr" = "Bydd yr eicon lleoliad presennol yn snapio i\'r llwybr llywio cyfredol";
 "show_warnings_title" = "Dangos rhybuddion…";
@@ -277,7 +277,7 @@
 "recalculate_route" = "Ailgyfrifo\'r llwybr";
 "recalculate_wrong_dir" = "Recalculate route in case of reverse direction";
 "recalculate_route_distance_promo" = "Bydd y llwybr yn cael ei ailgyfrif os yw\'r pellter o\'r llwybr i\'r lleoliad presennol yn fwy na\'r gwerth a ddewiswyd.";
-"select_distance_route_will_recalc" = "Dewis y pellter arôl hynny bydd y llwybr yn cael ei ailgyfrifo.";
+"select_distance_route_will_recalc" = "Dewis y pellter ar ôl hynny bydd y llwybr yn cael ei ailgyfrifo.";
 "speed_limit_tolerance_descr" = "Select the speed limit tolerance margin above which you will receive a voice warning.";
 "only_manually" = "Only manually";
 "instructions_repeat" = "Tap \"Next turn\" widget to repeat instructions";
@@ -307,7 +307,7 @@
 "impassable_road_desc" = "Dewis ffyrdd rwyt am eu hosgoi wrth lywio.";
 "interrupt_music_descr" = "Fully pause any music during voice prompts (not just lower its volume)";
 "interrupt_music" = "Pause music";
-"shared_string_do_not_use" = "Peidioâ defnyddio";
+"shared_string_do_not_use" = "Peidio â defnyddio";
 "shared_string_sound" = "Sain";
 "select_route_start_on_map" = "Select start point of the route";
 "select_route_finish_on_map" = "Select end point of the route";
@@ -318,7 +318,7 @@
 "sort_by_name" = "Sort by name";
 "by_name" = "By name";
 "by_dist" = "By distance";
-"sort_by" = "Trefnu ynôl";
+"sort_by" = "Trefnu yn ôl";
 "map_markers_other" = "Nodau eraill";
 "directions_other" = "Other directions";
 "shared_string_turn" = "Troi";
@@ -586,7 +586,7 @@
 "gpx_add_new" = "Add new file";
 "gpx_overwrite" = "Trosysgrifo";
 "gpx_cannot_import" = "Cannot import specified GPX file";
-"gpx_parse_error" = "Nid yw OsmAnd GPX wedi\'i ffurfio\'n dda, cysylltaâ\'r tîm cymorth i ymchwilio ymhellach.";
+"gpx_parse_error" = "Nid yw OsmAnd GPX wedi\'i ffurfio\'n dda, cysyllta â\'r tîm cymorth i ymchwilio ymhellach.";
 "tracks_on_map" = "Traciau sy\'n cael eu dangos";
 "gpx_export_title" = "Export track";
 "gpx_export_select_track" = "Please select track for Export";
@@ -637,7 +637,7 @@
 "gpxup_trackable" = "Traciadwy";
 "gpxup_private" = "Preifat";
 "gpx_upload_public_visibility_descr" = "Mae \"cyhoeddus\" yn golygu bod yr olrhain yn cael ei ddangos yn gyhoeddus yn eich olrhain GPS ac mewn rhestrau olrhain GPS cyhoeddus, ac yn y rhestr olrhain gyhoeddus gyda stampiau amser ar ffurf amrwd. Nid yw data a gyflwynir trwy\'r API yn cyfeirio at eich tudalen olrhain. Nid yw stampiau amser pwyntiau olrhain ar gael trwy\'r API GPS cyhoeddus, ac nid yw pwyntiau olrhain wedi\'u trefnu\'n gronolegol.";
-"gpx_upload_identifiable_visibility_descr" = "Golyga \"canfyddadwy\" y bydd y trywydd yn ymddangos yn gyhoeddus yn eich trywyddau GPS a chofnodion cyhoeddus trywyddau GPS, h.y. bydd defnyddwyr eraill yn gallu lawrlwytho\'r trywydd craidd a\'i gysylltuâ\'ch enw defnyddiwr. Bydd data pwyntiau trac gyda stampiau amser o API cyhoeddus y GPS sy\'n cael ei weini trwy API pwyntiau traciau yn cyfeirio at dy dudalen trywydd gwreiddiol.";
+"gpx_upload_identifiable_visibility_descr" = "Golyga \"canfyddadwy\" y bydd y trywydd yn ymddangos yn gyhoeddus yn eich trywyddau GPS a chofnodion cyhoeddus trywyddau GPS, h.y. bydd defnyddwyr eraill yn gallu lawrlwytho\'r trywydd craidd a\'i gysylltu â\'ch enw defnyddiwr. Bydd data pwyntiau trac gyda stampiau amser o API cyhoeddus y GPS sy\'n cael ei weini trwy API pwyntiau traciau yn cyfeirio at dy dudalen trywydd gwreiddiol.";
 "gpx_upload_trackable_visibility_descr" = "Golyga \"traciadwy\" nad yw\'r trywydd yn ymddangos mewn unrhyw gofnodion cyhoeddus, ond mae pwyntiau trac wedi\'u prosesu a gyda stampiau amser (na ellir eu cysylltu gyda chi\'n uniongyrchol) yn mynd trwy lwythi o API cyhoeddus y GPS.";
 "gpx_upload_private_visibility_descr" = "Golyga \"preifat\" nad yw eich trywydd yn ymddangos mewn unrhyw gofrestri cyhoeddus, ond bydd pwyntiau trac ohono ar gael mewn trefn anghronolegol ar gael trwy API cyhoeddus y GPS heb stampiau amser.";
 "save_track_to_gpx" = "Recordio trac yn awtomatig wrth lywio";
@@ -895,7 +895,7 @@
 "custom_plugins" = "Custom plugins";
 "extra_maps_menu_group" = "Mapiau ychwanegol";
 "import_duplicates_title" = "Mae rhai eitemau eisoes yn bodoli";
-"import_duplicates_description" = "Mae gan OsmAnd eisoes elfennau gyda\'r un enwauâ\'r rhai a fewnforiwyd. \n \nDewis gweithred.";
+"import_duplicates_description" = "Mae gan OsmAnd eisoes elfennau gyda\'r un enwau â\'r rhai a fewnforiwyd. \n \nDewis gweithred.";
 "keep_both" = "Cadw\'r ddau";
 "keep_both_desc" = "Bydd eitemau a fewnforiwyd yn cael eu hychwanegu gyda rhagddodiad";
 "replace_all" = "Amnewid y cyfan";
@@ -996,7 +996,7 @@
 "move_point" = "Symud Pwynt";
 "move_point_descr" = "Move map to change the position of this point.";
 "add_point_before" = "Ychwanegu pwynt cyn";
-"add_point_after" = "Ychwanegu pwynt arôl";
+"add_point_after" = "Ychwanegu pwynt ar ôl";
 "trim_before" = "Trim before this point";
 "trim_after" = "Trim after this point";
 "change_route_type_before" = "Change route type before this point";
@@ -1035,7 +1035,7 @@
 "gpx_already_exsists" = "File with this name already exists";
 "folder_already_exsists" = "Folder with this name already exists";
 "plan_route_split_before" = "Hollti cyn";
-"plan_route_split_after" = "Hollti arôl";
+"plan_route_split_after" = "Hollti ar ôl";
 "follow_track" = "Dilyn trac";
 "shared_string_gpx_track" = "Trac";
 "select_another_track" = "Dewis drac arall";
@@ -1057,7 +1057,7 @@
 
 // Resources
 "shared_string_resources" = "Adnoddau";
-"res_mapsres" = "Maps & Resources";
+"res_mapsres" = "Mapiau ac adnoddau";
 "download_tab_local" = "Lleol";
 "osmand_live" = "OsmAnd Live";
 "live_updates" = "Diweddariadau byw";
@@ -1430,7 +1430,7 @@
 "pickup_car_at" = "Pickup the car at";
 "add_notification_calendar" = "Add notification to Calendar";
 "parking_place_limited" = "Amser parcio wedi\'i gyfyngu i";
-"osmand_parking_time_left" = "arôl";
+"osmand_parking_time_left" = "ar ôl";
 "osmand_parking_overdue" = "yn hwyr";
 "cannot_add_marker" = "Cannot add Parking";
 "cannot_add_marker_desc" = "Please remove one direction at least and retry";
@@ -1550,7 +1550,7 @@
 "plugin_ski_descr" = "Mae\'r ategyn hwn ar gyfer OsmAnd yn rhoi manylion llethrau sgïo lawr allt fyd-eang, rhediadau sgïo traws gwlad, llwybrau sgïo Alpaidd, ceir cebl a lifftiau sgïo ar flaenau eich bysedd. Mae llwybrau a pistes yn cael eu dangos â chod lliw yn ôl anhawster, a\'u darlunio mewn arddull map \'Gaeaf\' arbennig sy\'n cymathu tirwedd aeafol lliw eira. \n \nMae agor yr olwg hon yn newid arddull y map i \'Gaeaf a sgïo\', gan ddangos holl nodweddion y dirwedd dan amodau gaeafol. Gellir dychwelyd y wedd hon trwy naill ai ei gau eto yma, neu trwy newid yr \'Arddull Map\' o dan \'Ffurfweddu map\' fel y dymunir.";
 "record_plugin_name" = "Recordio\'r daith";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
-"record_plugin_description" = "Mae\'r ategyn hwn yn agor y swyddogaeth i recordio a chadw eich traciau trwy gyffwrddâ\'r teclyn cofnodi GPX ar y map â llaw, neu hefyd i fewngofnodi\'ch holl lwybrau llywio yn awtomatig i ffeil GPX. \n \n Gellir rhannu traciau wedi\'u recordio gyda\'ch ffrindiau neu eu defnyddio ar gyfer cyfraniadau OSM. Gall athletwyr ddefnyddio traciau wedi\'u recordio i fonitro eu sesiynau hyfforddi. Gellir perfformio rhywfaint o ddadansoddi trac sylfaenol yn uniongyrchol yn OsmAnd, fel amseroedd lap, cyflymder cyfartalog ac ati, ac wrth gwrs gellir dadansoddi traciau yn ddiweddarach hefyd mewn offer dadansoddi trydydd parti arbennig.";
+"record_plugin_description" = "Mae\'r ategyn hwn yn agor y swyddogaeth i recordio a chadw eich traciau trwy gyffwrdd â\'r teclyn cofnodi GPX ar y map â llaw, neu hefyd i fewngofnodi\'ch holl lwybrau llywio yn awtomatig i ffeil GPX. \n \n Gellir rhannu traciau wedi\'u recordio gyda\'ch ffrindiau neu eu defnyddio ar gyfer cyfraniadau OSM. Gall athletwyr ddefnyddio traciau wedi\'u recordio i fonitro eu sesiynau hyfforddi. Gellir perfformio rhywfaint o ddadansoddi trac sylfaenol yn uniongyrchol yn OsmAnd, fel amseroedd lap, cyflymder cyfartalog ac ati, ac wrth gwrs gellir dadansoddi traciau yn ddiweddarach hefyd mewn offer dadansoddi trydydd parti arbennig.";
 "osm_editing_plugin_name" = "Golygu OpenStreetMap";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "Gwnewch gyfraniadau OSM fel creu neu addasu gwrthrychau OSM POI, agor neu roi sylwadau ar nodiadau OSM, a chyfrannu ffeiliau GPX wedi\'u recordio yn OsmAnd trwy gyflenwi\'ch enw defnyddiwr a\'ch cyfrinair. Mae OpenStreetMap.org yn brosiect mapio parth cyhoeddus byd-eang a yrrir gan y gymuned.";
@@ -1577,19 +1577,19 @@
 "product_desc_asia_short" = "Asia region maps";
 "download_wikipedia_maps" = "Wicipedia";
 "product_desc_wiki" = "Wikipedia data";
-"purchases_feature_desc_wikipedia" = "Archwiliwch Wicipedia all-lein. Erthyglau wedi\'u rhannu ynôl gwledydd a rhanbarthau ac ar gael ym mhob iaith.";
+"purchases_feature_desc_wikipedia" = "Archwiliwch Wicipedia all-lein. Erthyglau wedi\'u rhannu yn ôl gwledydd a rhanbarthau ac ar gael ym mhob iaith.";
 "shared_string_all_languages" = "Pob iaith";
-"select_wikipedia_article_langs" = "Dewiswch iaith erthyglau Wicipedia ar y map.Newidiwch i unrhyw iaith sydd ar gael wrth ddarllen yr erthygl.";
+"select_wikipedia_article_langs" = "Dewiswch iaith erthyglau Wicipedia ar y map.​​​ Newidiwch i unrhyw iaith sydd ar gael wrth ddarllen yr erthygl.";
 "wiki_menu_download_descr" = "Mae angen mapiau ychwanegol i weld POIs Wicipedia ar y map.";
 "some_articles_may_not_available_in_lang" = "Efallai na fydd rhai erthyglau Wicipedia ar gael yn eich iaith.";
 "available_languages" = "Ieithoedd ar gael";
 "preferred_languages" = "Hoff ieithoedd";
 "srtm_plugin_name" = "Cyfuchliniau";
 "product_desc_srtm" = "Display of contour lines";
-"srtm_plugin_description" = "Mae\'r ategyn hwn yn cynnig troshaen cyfuchlinau a haen cysgodion bryniau (tirwedd) i\'w dangos dros ben mapiau safonol OsmAnd. Gwerthfawrogir y nodwedd hon mwyaf gan athletwyr, heicwyr, cerddwyr mynyddoedd, ac unrhyw unâ diddordeb yn ffurf tirwedd. (Noder fod data cyfuchlinau a thirwedd ar gael ac i\'w lwytho ar wahân ar ôl gosod yr ategyn.) \n \nMae\'r data byd-eang (rhwng 70° i\'r gogledd a 70° i\'r de) yn seiliedig ar fesuriadau gan SRTM (Shuttle Radar Topography Mission) ac ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), offeryn delweddu ar fwrdd Terra, lloeren arloesol System Arsylwi\'r Ddaear NASA. Mae ASTER yn ymdrech ar y cyd rhwng NASA, Gweinyddiaeth Economeg, Masnach a Diwydiant (METI) Japan, a Systemau Gofod Japan (J-spacesystems).";
+"srtm_plugin_description" = "Mae\'r ategyn hwn yn cynnig troshaen cyfuchlinau a haen cysgodion bryniau (tirwedd) i\'w dangos dros ben mapiau safonol OsmAnd. Gwerthfawrogir y nodwedd hon mwyaf gan athletwyr, heicwyr, cerddwyr mynyddoedd, ac unrhyw un â diddordeb yn ffurf tirwedd. (Noder fod data cyfuchlinau a thirwedd ar gael ac i\'w lwytho ar wahân ar ôl gosod yr ategyn.) \n \nMae\'r data byd-eang (rhwng 70° i\'r gogledd a 70° i\'r de) yn seiliedig ar fesuriadau gan SRTM (Shuttle Radar Topography Mission) ac ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), offeryn delweddu ar fwrdd Terra, lloeren arloesol System Arsylwi\'r Ddaear NASA. Mae ASTER yn ymdrech ar y cyd rhwng NASA, Gweinyddiaeth Economeg, Masnach a Diwydiant (METI) Japan, a Systemau Gofod Japan (J-spacesystems).";
 "wikivoyage_travel_guide" = "Canllawiau Teithio";
 "start_editing_card_image_text" = "Y canllaw teithio byd-eang rhad ac am ddim y gall unrhyw un ei olygu.";
-"wikivoyage_travel_guide_descr" = "Canllawiau i\'r lleoedd mwyaf diddorol ar y blaned, y tu mewn i OsmAnd, heb gysylltiadâ\'r Rhyngrwyd.";
+"wikivoyage_travel_guide_descr" = "Canllawiau i\'r lleoedd mwyaf diddorol ar y blaned, y tu mewn i OsmAnd, heb gysylltiad â\'r Rhyngrwyd.";
 "product_desc_sea_depth_contours" = "Sea depth contour lines and seamarks";
 "my_location" = "Fy lleoliad";
 "all_categories" = "Pob categori";
@@ -1623,7 +1623,7 @@
 "track_show_start_finish_icons" = "Dangos eiconau dechrau a diwedd";
 "reset_to_original" = "Ailosod i\'r gwreiddiol";
 "route_line_color_elevation_description" = "Route line will be colorized depending on the elevation profile of the route.";
-"gpx_split_interval_none_descr" = "Dewis yr opsiwn hollti a ddymunir: ynôl amser neu bellter.";
+"gpx_split_interval_none_descr" = "Dewis yr opsiwn hollti a ddymunir: yn ôl amser neu bellter.";
 "slope_grey_color_descr" = "Grey color is used when slope is undefined.";
 "analyze_on_map" = "Dadansoddi ar y map";
 "upload_to_openstreetmap" = "Uwchlwytho i OpenStreetMap";
@@ -1738,7 +1738,7 @@
 "import_raster_map_failed" = "Raster map import failed";
 "device_memory" = "Cof y ddyfais";
 "free" = "%@ ar gael";
-"first_usage_greeting" = "Cael cyfarwyddiadau a darganfod llefydd newydd heb gysylltiadâ\'r we";
+"first_usage_greeting" = "Cael cyfarwyddiadau a darganfod llefydd newydd heb gysylltiad â\'r we";
 "get_started" = "Dechrau arni";
 "first_usage_wizard_desc" = "Gadewch i OSMAnd ddarganfod eich lleoliad ac awgrymu mapiau i\'w llwytho ar gyfer yr ardal honno.";
 "suggested_maps" = "Mapiau a awgrymir";
@@ -1747,7 +1747,7 @@
 "added_profiles_descr" = "Proffiliau wedi\'u hychwanegu gan ategyn";
 "location_not_found" = "Lleoliad heb ei ganfod";
 "search_my_location" = "Canfod fy safbwynt";
-"no_inet_connection" = "Dim cysylltiadâ\'r rhyngrwyd";
+"no_inet_connection" = "Dim cysylltiad â\'r rhyngrwyd";
 "no_inet_connection_desc_map" = "Angenrheidiol er mwyni lawrlwytho mapiau.";
 "try_again" = "Ceisio eto";
 "searching" = "Yn chwilio…";
@@ -1796,7 +1796,7 @@
 "save_filter" = "Cadw hidlydd";
 "edit_filter_delete_dialog_title" = "Delete selected filter?";
 "apply_filters" = "Gosod hidlyddion";
-"filter_poi_hint" = "Hidlo ynôl enw";
+"filter_poi_hint" = "Hidlo yn ôl enw";
 "rendering_value_category_name" = "Categori";
 "poi_category_and_type" = "Category and POI Type";
 "opening_hours" = "Oriau agor";
@@ -1863,7 +1863,7 @@
 "purchase_unlim_title" = "Prynu - %@";
 "in_app_purchase" = "Prynu o fewn yr ap";
 "in_app_purchase_desc" = "Taliad Un-Amser";
-"in_app_purchase_desc_ex" = "Arôl ei brynu, bydd ar gael yn barhaol i chi.";
+"in_app_purchase_desc_ex" = "Ar ôl ei brynu, bydd ar gael yn barhaol i chi.";
 "unlock_all_features" = "Datgloi holl nodweddion OsmAnd";
 "subscribe_email_desc" = "Tanysgrifiwch i\'n rhestr bostio am ostyngiadau ap a chael 3 map arall i\'w lawrlwytho!";
 "osm_live_subscribe_btn" = "Tanysgrifio";
@@ -1878,7 +1878,7 @@
 "osm_live_get_title" = "Get OsmAnd Live";
 "osm_live_ask_for_purchase" = "Prynwch danysgrifiad i OsmAnd Live yn gyntaf";
 "shared_string_io_error" = "Gwall I/O";
-"osm_live_hide_user_name" = "Peidioâ dangos fy enw mewn adroddiadau";
+"osm_live_hide_user_name" = "Peidio â dangos fy enw mewn adroddiadau";
 "subscriptions_public_info" = "Payment will be charged to your iTunes Account at confirmation of purchase. The subscription will automatically renew unless auto-renew is turned off at least 24 hours before the end of the current period. Your account will be charged according to your plan for renewal within 24 hours prior to the end of the current period. You can manage or turn off auto-renew in your Account Settings after purchase. If you purchase a subscription during a free trial period, the unused portion of this period will be forfeited.";
 "terms_of_use" = "Terms of use";
 "privacy_policy" = "Privacy policy";
@@ -1961,7 +1961,7 @@
 "rendering_attr_showLez_description" = "Dangos Parthau Allyriadau Isel ar y map. Nid yw\'n effeithio ar y llwybro.";
 "rendering_attr_surfaceIntegrity_name" = "Cywirdeb wyneb y ffordd";
 "routing_attr_allow_intermediate_description" = "Llwybrau mwy anodd gyda rhannau mwy serth. Yn gyffredinol, bydd rhai rhwystrau i\'w osgoi.";
-"rendering_attr_coloredBuildings_name" = "Lliwio adeiladau ynôl eu defnydd";
+"rendering_attr_coloredBuildings_name" = "Lliwio adeiladau yn ôl eu defnydd";
 "rendering_attr_piste_difficulty_advanced_name" = "Uwch";
 "routeInfo_road_types_name" = "Mathau o ffyrdd";
 "rendering_attr_showRoadMaps_description" = "Dewis pa bryd i ddangos mapiau ffyrdd yn unig:";
@@ -2048,7 +2048,7 @@
 "routing_attr_piste_type_skitour_name" = "Ski touring";
 "routing_attr_driving_style_prefer_unpaved_name" = "Gwell ffyrdd heb balmantu";
 "rendering_attr_surface_sand_name" = "Tywod";
-"routing_attr_no_new_routing_description" = "Peidioâ defnyddio rheolau llwybro a gyflwynwyd yn v1.9.";
+"routing_attr_no_new_routing_description" = "Peidio â defnyddio rheolau llwybro a gyflwynwyd yn v1.9.";
 "routing_attr_prefer_motorway_name" = "Ffafrio traffyrdd";
 "rendering_attr_surface_cobblestone_name" = "Cobbls";
 "rendering_attr_highway_class_state_road_name" = "Ffordd y wladwriaeth";
@@ -2219,11 +2219,11 @@
 "app_mode_osm" = "OSM";
 "desert" = "Desert";
 "travel_routes" = "Llwybrau teithio";
-"walking_route_osmc_description" = "Lliwio llwybrau ynôl eu lliwiau lleol (os ar OpenStreetMap) a math (rhyngwladol, rhanbarthol, lleol).";
-"rendering_value_walkingRoutesOSMCNodes_description" = "Lliw y lwybrau ynôl eu math o rwydwaith nodau (rhyngwladol, rhanbarthol, lleol).";
-"rendering_value_walkingRoutesScopeOSMC_description" = "Lliw ynôl cysylltiad rhwydwaith.";
-"rendering_value_walkingRoutesOSMC_description" = "Lliw y llwybrau ynôl eu lliw lleol unigol (os yw\'n bresennol ar OpenStreetMap) a symbol tarian heicio.";
-"routes_color_by_type" = "Lliwio llwybrau ynôl…";
+"walking_route_osmc_description" = "Lliwio llwybrau yn ôl eu lliwiau lleol (os ar OpenStreetMap) a math (rhyngwladol, rhanbarthol, lleol).";
+"rendering_value_walkingRoutesOSMCNodes_description" = "Lliw y lwybrau yn ôl eu math o rwydwaith nodau (rhyngwladol, rhanbarthol, lleol).";
+"rendering_value_walkingRoutesScopeOSMC_description" = "Lliw yn ôl cysylltiad rhwydwaith.";
+"rendering_value_walkingRoutesOSMC_description" = "Lliw y llwybrau yn ôl eu lliw lleol unigol (os yw\'n bresennol ar OpenStreetMap) a symbol tarian heicio.";
+"routes_color_by_type" = "Lliwio llwybrau yn ôl…";
 
 // Release Notes
 // instruction:
@@ -2234,13 +2234,13 @@
 "ios_release_3_90" = "• Introduced a \"Plan a route\" feature for planning future trips with the ability to create track segments using different navigation types\n• Added an option to enable a сompass over the \"Radius Ruler\" tool\n• Added \"POI label overlays\" option that allows to show names for favorites, track waypoints and markers on the map\n• Added new Quick actions for visibility of contour lines and terrain on the map, changing an application profile, deleting a nearest intermediate point\n• Fixed issues with missing Wikipedia search category\n• Settings Import: fixed bugs, added support for all data types available in OsmAnd\n• OpenStreetMap editing: fixed the time picker and inability to change the changeset comment\n";
 "ios_release_4_0" = "• New! \"Add favorite\" screen with options to select the custom icon, color, and shape\n• Added new \"Coordinates widget\" with coordinates of the current location\n• Added ability to import custom user-defined plugins\n• Significantly extended the import/export functionality\n• Distance by tap moved from the Radius ruler into a separate option\n• Fixed CarPlay app freezes when iPhone screen is turned off\n• Plugins screen moved from the Maps & Resources to the main menu\n• Added Finnish localization\n• Fixed UI in landscape orientation for \"Plan a route\" screen\n• Added support for custom routing and rendering files\n• Fixed performance of markers direction line\n • Fixed issue with importing GPX files with uppercase extensions\n• Fixed issue with \"Follow track\" menu\n• Fixed import of OBF files\n";
 "ios_release_4_1" = "• Completely redesigned interaction with tracks: a new menu with charts, statistics, ability to change the appearance, coloring by speed, height and slope, and track selection on the map• New screen for searching by coordinates in different formats\n• Improved coordinate search in OLC format\n• New user-friendly menu for choosing languages to display Wikipedia articles on the map\n• Added ability to easily load maps of all regions of the country with a couple of clicks.\n• Added contour lines in feet (You need to download additional files)\n• Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n• New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n• Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
-"routeInfo_roadClass_description" = "Lliwio llinell y llwybr neu drac ynôl y math o ffordd.";
+"routeInfo_roadClass_description" = "Lliwio llinell y llwybr neu drac yn ôl y math o ffordd.";
 "routing_attr_allow_gate_name" = "Caniatáu defnydd gât";
 "routing_attr_prefer_horse_routes_name" = "Ffafrio llwybrau marchogaeth";
 "routing_attr_prefer_horse_routes_description" = "Ffafrio llwybrau marchogaeth";
 "connect_rp" = "Cysylltu pwyntiau taith";
 "routeInfo_surface_description" = "Dangos gwybodaeth arwyneb ffyrdd/palmentydd.";
-"routeInfo_winter_ice_road_description" = "Lliwio llinell y llwybr neu drac ynôl cyflwr y ffyrdd yn y gaeaf.";
+"routeInfo_winter_ice_road_description" = "Lliwio llinell y llwybr neu drac yn ôl cyflwr y ffyrdd yn y gaeaf.";
 "shared_string_hide_all" = "Cuddio\'r cwbl";
 "routing_attr_allow_gate_description" = "Caniatáu defnydd gatiau";
 "shared_string_open_street_map" = "OpenStreetMap";
@@ -2260,12 +2260,12 @@
 "restore_from_file" = "Adfer o ffeil";
 "register_opr_have_account" = "Mae gen i gyfrif eisoes";
 "last_backup" = "Copi wrth gefn diwethaf";
-"osmand_cloud_authorize_descr" = "Peidiwch bythâ cholli\'ch data . Cadwch gopi wrth gefn ac adfer y cwbl yn hawdd.";
+"osmand_cloud_authorize_descr" = "Peidiwch byth â cholli\'ch data . Cadwch gopi wrth gefn ac adfer y cwbl yn hawdd.";
 "any_poi" = "Unrhyw";
 "resend_verification_code" = "Ail-anfon";
 "backup_error_subscription_was_expired" = "Tanysgrifiad i ben";
 "route_line_use_map_style_width" = "Defnyddio lled arferol arddull map (%@).";
-"routeInfo_tracktype_description" = "Lliwio llinell y llwybr neu drac ynôl y mathau o wyneb. Mwyaf defnyddiol pan fo\'r ffyrdd yn bennaf heb wynebau caled.";
+"routeInfo_tracktype_description" = "Lliwio llinell y llwybr neu drac yn ôl y mathau o wyneb. Mwyaf defnyddiol pan fo\'r ffyrdd yn bennaf heb wynebau caled.";
 "backup_error_file_not_available" = "Ffeil ddim ar gael";
 "osmand_cloud" = "OsmAnd Cloud";
 "cloud_conflicts" = "Gwrthdrawiadau";
@@ -2282,7 +2282,7 @@
 "shared_string_min_height" = "Uchder isf.";
 "route_line_use_map_style_color" = "Defnddio lliw arferol arddull map (%@).";
 "shared_string_max_height" = "Uchder uchaf";
-"osmand_cloud_login_descr" = "Rhowch y cyfeiriad e-bost bu i chi ei ddefnyddio i gofrestru. Byddwch yn derbyn negesâ chyfrinair i\'w ddefnyddio unwaith ar gyfer y am nesaf.";
+"osmand_cloud_login_descr" = "Rhowch y cyfeiriad e-bost bu i chi ei ddefnyddio i gofrestru. Byddwch yn derbyn neges â chyfrinair i\'w ddefnyddio unwaith ar gyfer y am nesaf.";
 "verify_email_address_descr" = "Anfonwyd cod dilysu at %@. Rhowch y cod yn y maes isod.";
 "customize_route_line" = "Addasu llinell llwybr";
 "backup_view_conflicts" = "Gweld gwrthdrawiadau";
@@ -2302,7 +2302,7 @@
 "save_heading" = "Cynnwys y pennawd";
 "routeInfo_smoothness_description" = "Dosbarthiad symudedd ffyrdd/llwybrau troed ar gyfer cerbydau olwyn, yn enwedig o ran rheoleidd-dra/gwastadedd yr arwyneb.";
 "rendering_attr_showFitnessTrails_name" = "Llwybrau ffitrwydd";
-"routeInfo_horse_scale_description" = "Rendro llwybrau ynôl anhawster llwybrau ceffylau";
+"routeInfo_horse_scale_description" = "Rendro llwybrau yn ôl anhawster llwybrau ceffylau";
 "copy_coordinates" = "Copïo cyfesurynnau";
 "simulation_real_mode_title" = "Efelychiad realistig";
 "simulation_constant_mode_desc" = "Bydd yr efelychiad yn cael ei gyflawni gyda chyflymder dethol cyson.";
@@ -2336,7 +2336,7 @@
 "annual_subscription" = "Tanysgrifiad blynyddol";
 "osmand_pro_tagline" = "Cael pob nodwedd posib";
 "osmand_maps_plus_tagline" = "Cael nodweddion estynedig";
-"purchases_feature_desc_wikivoyage" = "Pori Wikivoyage all-lein. Erthyglau wedi\'u rhannu ynôl gwledydd a rhanbarthau ac ar gael ym mhob iaith.";
+"purchases_feature_desc_wikivoyage" = "Pori Wikivoyage all-lein. Erthyglau wedi\'u rhannu yn ôl gwledydd a rhanbarthau ac ar gael ym mhob iaith.";
 "points_delete_multiple" = "Dileu %d pwynt(iau)\?";
 "copy_address" = "Copïo cyfeiriad";
 "new_device_account" = "Dyfais newydd / cyfrif newydd";
@@ -2352,14 +2352,14 @@
 "purchases_feature_desc_unlimited_map_download" = "Sicrhau lawrlwythiadau diderfyn ar gyfer mapiau all-lein o bob cyfandir a rhanbarth.";
 "purchases_feature_desc_terrain" = "Cyfuchlinellau\'r dirwedd, map cysgodion bryniau gyda chysgodion tywyll, a mapiau llethrau gyda lliwiau i ddangos copaon ac iseldiroedd.";
 "restore_purchases" = "Adfer pryniannau";
-"purchases_feature_desc_combined_wiki" = "Archwiliwch erthyglau Wicipedia wrth fynd, heb gysylltiad rhyngrwyd. Data all-lein wedi\'i rannu ynôl gwledydd ac ar gael ym mhob iaith.";
+"purchases_feature_desc_combined_wiki" = "Archwiliwch erthyglau Wicipedia wrth fynd, heb gysylltiad rhyngrwyd. Data all-lein wedi\'i rannu yn ôl gwledydd ac ar gael ym mhob iaith.";
 "rendering_attr_showMonorailRoutes_name" = "Llwybrau monorail";
 "altitude_ascent" = "Am i fyny";
 "osmand_development_plugin_description" = "Gosodiadau ar gyfer nodweddion datblygu a dadfygio, megis efelychu llywio, perfformiad rendro, neu anogaeth llais. Bwriedir ar gyfer datblygwyr, heb fod ei angen wrth ddefnyddio\'r ap mewn dulliau arferol.";
 "rendering_attr_showFunicularRoutes_name" = "Llwybrau ffyniciwlar";
 "unlimited_map_downloads" = "Dim cyfyngiad ar lawrlwytho mapiau";
 "transport_hazmat_no_desc" = "Ar rai ffyrdd a thwneli, mae cludo sylweddau peryglus wedi\'i wahardd.";
-"purchases_feature_desc_osmand_cloud" = "Cael OsmAnd Cloud i gadw holl ddata OsmAnd ar-lein. Dim colli data arôl ailosod. Cadw gwybodaeth wrth gefn a\'i hadfer yn hawdd.";
+"purchases_feature_desc_osmand_cloud" = "Cael OsmAnd Cloud i gadw holl ddata OsmAnd ar-lein. Dim colli data ar ôl ailosod. Cadw gwybodaeth wrth gefn a\'i hadfer yn hawdd.";
 "complete_purchase" = "Cwblhau\'r archeb";
 "routing_attr_allow_private_for_truck_description" = "Mae\'n caniatáu mynediad i lefydd preifat i lorïau.";
 "data_settings" = "Data";
@@ -2418,8 +2418,8 @@
 "no_purchases" = "Nid ydych wedi prynu unrhyw beth";
 "renew_subscription" = "Adnewyddu tanysgrifiad";
 "simulation_real_mode_desc" = "Ar rannau syth o\'r ffordd, bydd y cyflymder yn cyfateb yn fras i\'r cyflymder uchaf a ganiateir. \nAr groefannau, bydd yr efelychiad yn arafu. \nRhoddir cosbau ychwanegol ar arwyddion traffig, arwyddion stopio, ac ati.";
-"osmand_cloud_create_account_descr" = "Rhowch eich cyfeiriad e-bost. Bydd cod dilysu yn cael ei anfon i\'r cyfeiriad hwn, \na bydd eich holl ddata yn gysylltiedigâ\'r e-bost hwn.";
-"contact_support_description" = "Os oes gennych unrhyw gwestiwn, cysylltwchâ ni ar %@.";
+"osmand_cloud_create_account_descr" = "Rhowch eich cyfeiriad e-bost. Bydd cod dilysu yn cael ei anfon i\'r cyfeiriad hwn, \na bydd eich holl ddata yn gysylltiedig â\'r e-bost hwn.";
+"contact_support_description" = "Os oes gennych unrhyw gwestiwn, cysylltwch â ni ar %@.";
 "shared_string_contributions" = "Cyfraniadau";
 "shared_string_logout" = "Allgofnodi";
 "shared_string_not_included" = "Dim yn cynnwys";
@@ -2434,9 +2434,9 @@
 "benefits_for_contributors_secondary_descr" = "Mewngofnoda i OpenStreetMap i weld os wyt ti\'n gymwys i gael diweddariadau mapiau diderfyn.";
 "animate_my_location" = "Animeiddio fy lleoliad";
 "backup_delete_old_data" = "Wedi tynnu hen fersiynau";
-"empty_purchases_description" = "Os nad yw eich pryniadau yn ymddangos fan hyn, tapiwch ar \"%@\" neu gysylltuâ\'n tîm cymorth.";
+"empty_purchases_description" = "Os nad yw eich pryniadau yn ymddangos fan hyn, tapiwch ar \"%@\" neu gysylltu â\'n tîm cymorth.";
 "login_open_street_map_org" = "Mewngofnodi i OpenStreetMap.org";
-"duration_ago" = "%@ ynôl";
+"duration_ago" = "%@ yn ôl";
 "use_login_and_password" = "Defnyddio enw defnyddiwr a chyfrinair";
 "backup_deleting_all_data" = "Yn dileu\'r holl ddata…";
 "recalc_angle_dialog_descr" = "Bydd segment syth ychwanegol rhwng fy lleoliad a\'r llwybr a gyfrifwyd yn cael ei ddangos nes bod y llwybr wedi\'i ailgyfrifo";
@@ -2448,7 +2448,7 @@
 "tts_title" = "TTS";
 "not_enough_contributions_descr" = "Rhaid gwneud o leiaf %@ newid dros gyfnod y ddeufis diwethaf %@ er mwyn cael mynediad at ddiweddariadau mapiau hyd at bob awr heb derfyn.";
 "backup_delete_all_data" = "Dileu fy nata";
-"ltr_or_rtl_combine_via_slash" = "%@ / %@";
+"ltr_or_rtl_combine_via_slash" = "%@/%@";
 "routing_attr_freeride_policy_only_if_necessary_name" = "Dim ond os oes angen";
 "routing_attr_freeride_policy_allow_name" = "Caniatáu";
 "routing_attr_avoid_highway_name" = "Osgoi priffyrdd";
@@ -2487,7 +2487,7 @@
 "routing_attr_carriage_restrictions_description" = "Ystyried caniatâd mynediad ar gyfer cerbydau a dynnir gan geffylau";
 "rendering_attr_OSMMapperAssistantNote_name" = "Tagiau nodiadau";
 "rendering_attr_OSMMapperAssistantFixme_name" = "tagiau Fixme";
-"routing_attr_freeride_policy_do_not_go_offpiste_name" = "Paidâ mynd offpiste";
+"routing_attr_freeride_policy_do_not_go_offpiste_name" = "Paid â mynd offpiste";
 "rendering_attr_hideMilitaryAreas_name" = "Cuddio ardaloedd milwrol";
 "rendering_attr_showTrainRoutes_name" = "Llwybrau trenau";
 "rendering_attr_horseScale_name" = "Anhawster llwybrau ceffylau";
@@ -2497,7 +2497,7 @@
 "rendering_attr_OSMMapperAssistantIconsLowZooms_name" = "Eiconau ar lefelau chwyddo isel";
 "routing_attr_allow_streams_description" = "Caniatáu nentydd a ffosydd";
 "routing_attr_difficulty_preference_expert_name" = "Arbenigwr";
-"rendering_attr_showWaterwayTunnels_description" = "Peidioâ chuddio twnelau dyfrffyrdd";
+"rendering_attr_showWaterwayTunnels_description" = "Peidio â chuddio twnelau dyfrffyrdd";
 "routing_attr_difficulty_preference_intermediate_name" = "Canolradd";
 "rendering_attr_horse_scale_difficult_name" = "Anodd";
 "rendering_attr_showTramRoutes_name" = "Llwybrau tramiau";
@@ -2518,7 +2518,7 @@
 "privacy_and_security" = "Preifatrwydd a diogelwch";
 "speed_camera_pois" = "POI camerâu cyflymder";
 "shared_string_height" = "Uchder";
-"speed_cameras_legal_descr" = "Mewn rhai gwledydd neu ardaloedd, mae\'n anghyfreithlon defnyddio apiau sy\'n rhybuddio am gamerâu cyflymder. \n \nDylech ddewis yn ôl y gyfraith yn eich gwlad chi. \n \nDewiswch %@, a byddwch yn cael rhybudd am gamerâu cyflymder. \n \nDewiswch %@, a chaiff yr holl ddata yn ymwneud â chamerâu: rhybuddion, hysbysiadau, pwyntiau o wybodaeth, ei ddileu nes bod OsmAnd yn cael ei ail-osodo\'r newydd.";
+"speed_cameras_legal_descr" = "Mewn rhai gwledydd neu ardaloedd, mae\'n anghyfreithlon defnyddio apiau sy\'n rhybuddio am gamerâu cyflymder. \n \nDylech ddewis yn ôl y gyfraith yn eich gwlad chi. \n \nDewiswch %@, a byddwch yn cael rhybudd am gamerâu cyflymder. \n \nDewiswch %@, a chaiff yr holl ddata yn ymwneud â chamerâu: rhybuddion, hysbysiadau, pwyntiau o wybodaeth, ei ddileu nes bod OsmAnd yn cael ei ail-osod o\'r newydd.";
 "lang_sat" = "Santali";
 "uninstall_speed_cameras" = "Dadosod camerâu cyflymder";
 "speed_cameras_alert" = "Mewn rhai gwledydd, mae\'n anghyfreithlon rhybuddio am gamerâu cyflymder.";
@@ -2628,7 +2628,7 @@
 "help_article_map_legend_nautical_map_name" = "Arddull map morol";
 "help_article_map_legend_osmand_name" = "Arddull map OsmAnd";
 "help_article_map_legend_ski_map_name" = "Arddull map sgi";
-"help_article_map_interact_with_map_name" = "Rhyngweithioâ map";
+"help_article_map_interact_with_map_name" = "Rhyngweithio â map";
 "help_article_map_map_context_menu_name" = "Dewislen Cyd-destun map";
 "help_article_map_point_layers_on_map_name" = "Pwyntiau ar y map";
 "help_article_map_raster_maps_name" = "Mapiau Raster (Ar-lein / All-lein)";
@@ -2644,7 +2644,7 @@
 "help_article_start_with_main_menu_name" = "Prif ddewislen";
 "help_article_troubleshooting_crash_logs_name" = "Logiau chwal";
 "help_article_troubleshooting_general_name" = "Cyffredinol";
-"help_article_troubleshooting_maps_data_name" = "Mapiau&Data";
+"help_article_troubleshooting_maps_data_name" = "Mapiau & Data";
 "help_article_troubleshooting_track_recording_issues_name" = "Recordio traciau";
 "help_article_widgets_map_buttons_name" = "Botymau map";
 "help_article_plugins_openplacereviews_name" = "OpenPlaceReviews";
@@ -2690,7 +2690,7 @@
 "navigation_points" = "Pwyntiau llywio";
 "lang_zh-Hans" = "Tsieineeg (Syml)";
 "announce_when_exceeded" = "Cyhoeddi pan dros y terfyn";
-"bearing_secondary_desc" = "Gellir newid fformat y ddata sy\'n ymddangos yn %@ - %@ - %@.";
+"bearing_secondary_desc" = "Gellir newid fformat y ddata sy'n ymddangos yn %@ - %@ - %@.";
 "activity_type_motorbike_name" = "Beic modur";
 "coordinates_format" = "Fformat cyfesurynnau";
 "last_seven_days" = "7 diwrnod diwethaf";
@@ -2705,7 +2705,7 @@
 "bottom_widgets_panel" = "Panel isaf";
 "announcement_time_descr" = "Mae amseriad cyhoeddi gwahanol ysgogiadau llais yn dibynnu ar y math o anogiad, cyflymder llywio cyfredol, a chyflymder y llywio rhagosodedig.";
 "image_cache" = "Storfa delweddau";
-"travel_card_download_descr" = "Lawrlwythwch canllawiau teithio Wikivoyage i weld erthyglau am leoedd o gwmpas y byd heb gysylltiadâ\'r Rhyngrwyd.";
+"travel_card_download_descr" = "Lawrlwythwch canllawiau teithio Wikivoyage i weld erthyglau am leoedd o gwmpas y byd heb gysylltiad â\'r Rhyngrwyd.";
 "time_to_navigation_point_widget_settings_desc" = "Gelli newid modd trwy dapio ar y teclyn.";
 "map_widget_current_speed" = "Cyflymder cyfredol";
 "battery_widget_desc" = "Dangosa\'r ategyn lefel batri dy ddyfais.";
@@ -2729,7 +2729,7 @@
 "map_widget_trip_recording_duration" = "Hyd";
 "announcement_time_prepare_long" = "Paratoi hir";
 "route_maneuvers_desc" = "Mae teclynnau llywio\'n cael eu galluogi yn ystod llywio i ddangos gwybodaeth fel pellter, amser cyrraedd neu adael, troadau nesaf, cyfeiriant, enw stryd cyfredol, manylion lonydd, cyflymder uchaf, rhybuddion yn agosáu, POIs, cyfeirbwyntiau.";
-"duration_moment_ago" = "moment ynôl";
+"duration_moment_ago" = "moment yn ôl";
 "troubleshooting" = "Datrys problemau";
 "send_log" = "Anfon log";
 "top_widgets_panel" = "Panel uchaf";
@@ -2741,12 +2741,12 @@
 "distance_circles" = "Cylchoedd-pellter";
 "announcement_time_arrive" = "Cyrraedd pen y daith";
 "add_page" = "Ychwanegu tudalen";
-"current_speed_widget_desc" = "Mae\'n dangos dy gyflymder cyfredol ynôl synhwyrydd GPS.";
-"saved_articles" = "Erthyglauâ nod tudalen";
+"current_speed_widget_desc" = "Mae\'n dangos dy gyflymder cyfredol yn ôl synhwyrydd GPS.";
+"saved_articles" = "Erthyglau â nod tudalen";
 "map_orientation_portrait" = "Darlun";
 "current_time_widget_desc" = "Dangosa\'r ategyn yr amser cyfredol o dy ddyfais.";
 "activity_type_snowmobile_name" = "Car eira";
-"no_travel_guides_data_descr" = "Lawrlwythwch canllawiau teithio Wikivoyage i weld erthyglau am leoedd o gwmpas y byd heb gysylltiadâ\'r Rhyngrwyd.";
+"no_travel_guides_data_descr" = "Lawrlwythwch canllawiau teithio Wikivoyage i weld erthyglau am leoedd o gwmpas y byd heb gysylltiad â\'r Rhyngrwyd.";
 "wiki_article_search_text" = "Yn chwilio am y cofnod Wicipedia cyfatebol";
 "parking_widget_desc" = "Ategyn sy\'n dangos y pellter o ganol y sgrin i\'r man parcio.";
 "map_widget_trip_recording_distance" = "Pellter";
@@ -2790,7 +2790,7 @@
 "arrival_time_widget_desc" = "Amser cyrraedd pen y daith.";
 "max_speed_widget_desc" = "Mae\'n dangos cyfyngiad cyflymder y ffordd bresennol.";
 "shared_string_format" = "Fformat";
-"map_settings_topography" = "Cyfuchliniau";
+"map_settings_topography" = "Cyfuchlinellau";
 "map_orientation_default" = "Fel gosodiad y ddyfais";
 "lanes_widgets_desc" = "Dangosa\'r ategyn lonydd y drefn lonydd cyfredol a pha lonydd i gadw ynddynt.";
 "shared_string_weather" = "Tywydd";
@@ -2815,3 +2815,6 @@
 "shared_string_change" = "Newid";
 "shared_string_favorites" = "Ffefrynnau";
 "shared_string_show" = "Dangos";
+"show_along_the_route" = "Dangos ar hyd y llwybr";
+"quick_action_toggle_preference" = "Togl i newid dewis.";
+"shared_string_local" = "Lleol";

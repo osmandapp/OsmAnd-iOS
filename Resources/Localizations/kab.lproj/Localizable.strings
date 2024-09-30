@@ -22,7 +22,7 @@
 "shared_string_dismiss" = "Aggi";
 "km_h" = "h";
 "rendering_value_black_name" = "Aberkan";
-"looking_up_address" = "Anadiɣef tansa";
+"looking_up_address" = "Anadi ɣef tansa";
 "filter_current_poiButton" = "Imzizdig";
 "shared_string_previous" = "Ɣer deffir";
 "rendering_attr_piste_difficulty_intermediate_name" = "2: Alemmas";
@@ -130,7 +130,7 @@
 "shared_string_maps" = "Tikarḍiwin";
 "quick_action_poi_list" = "Umuɣ";
 "index_name_europe" = "Turuft";
-"shared_string_show_on_map" = "\"Skenɣef  tkarḍa\"";
+"shared_string_show_on_map" = "\"Sken ɣef  tkarḍa\"";
 "shared_string_unexpected_error" = "Tuccḍa tarussint.";
 "rendering_attr_highway_class_state_road_name" = "Aɣrem";
 "search_address_street" = "Abrid";
@@ -155,7 +155,7 @@
 "loading_poi_obj" = "Asali...";
 "quick_action_new_action" = "Rnu tigawt";
 "month" = "Ayyur";
-"search_poi_category_hint" = "Aru kra iw nadiɣef kullec";
+"search_poi_category_hint" = "Aru kra iw nadi ɣef kullec";
 "rendering_attr_smoothness_intermediate_name" = "2: Alemmas";
 "rendering_attr_hideText_name" = "Aḍris";
 "shared_string_speed" = "Arured";
@@ -265,10 +265,10 @@
 "configure_map" = "Swel…";
 "rendering_attr_surface_stone_name" = "Ablaḍ";
 "save_filter" = "Imsizdeg";
-"route_tl" = "Brenɣer tama tazelmaṭ t edfraḍ";
+"route_tl" = "Bren ɣer tama tazelmaṭ t edfraḍ";
 "text_size" = "Tiddi n waḍris";
 "edit_filter_save_as_menu_item" = "Sekles s yisem";
-"route_tr" = "Brenɣer tama tayeffust t edfreḍ";
+"route_tr" = "Bren ɣer tama tayeffust t edfreḍ";
 "plugin_distance_point" = "Taneqqiḍt";
 "shared_string_open" = "Ldi";
 "rendering_value_category_name" = "Taggayt";
@@ -430,15 +430,15 @@
 "starting_point" = "Taneqqiḍt n beddu";
 "road_blocked" = "Yergel ubrid";
 "will_open_tomorrow_at" = "Ad yeldi azekka ɣef";
-"will_open_at" = "Ad yeldiɣef";
-"will_close_at" = "Ad imdelɣef";
+"will_open_at" = "Ad yeldi ɣef";
+"will_close_at" = "Ad imdel ɣef";
 "will_open_on" = "Ad yeldi ass";
 "shared_string_target_points" = "Tiɣerwaḍin";
 "first_intermediate_dest_description" = "Rnu aḥbas amezwaru deg ubrid";
 "make_as_start_point" = "Err-t d taneqqiḍt n tazwara";
 "replace_destination_point" = "Semselsi taɣerwaḍt";
 "new_destination_point_dialog" = "Tesbaduḍ yakan taɣerwaḍt";
-"intermediate_items_sort_by_distance" = "Smizzwer s tewwurtɣer tewwurt";
+"intermediate_items_sort_by_distance" = "Smizzwer s tewwurt ɣer tewwurt";
 "start_navigation" = "Bdu tunigin";
 "transport_nearby_routes_within" = "Iberdan iqerben deg";
 "map_widget_intermediate_time" = "Akud agrayan";
@@ -547,10 +547,10 @@
 "favorite_places_category" = "Imukan";
 "download_tab_local" = "Adigan";
 "coordinates" = "Tisidag";
-"searching" = "Anadi…";
+"searching" = "Anadi …";
 "custom_osmand_plugin" = "Azegrir OsmAnd udmawan";
 "shared_string_visible" = "Uman";
-"address_search_desc" = "Anadiɣef tansa";
+"address_search_desc" = "Anadi ɣef tansa";
 "download_regular_maps" = "tizeɣt";
 "favorite_group_name" = "Isem n wegraw";
 "plan_route_create_new_route" = "Rnu abrid amaynut";
@@ -568,7 +568,7 @@
 "gpxup_private" = "Uslig";
 "shared_string_navigation" = "Assilel";
 "shared_string_turn_off" = "Sens";
-"shared_string_wifi_only" = "Alaɣef Wi-Fi";
+"shared_string_wifi_only" = "Ala ɣef Wi-Fi";
 "shared_string_all_languages" = "Akk tutlayin";
 "navigate_point_olc" = "Ldi adeg…";
 "gpxup_public" = "Azayez";
@@ -744,7 +744,7 @@
 "osm_live_payment_monthly_title" = "Yal aggur";
 "by_transport_type" = "\"di  %@\"";
 "parked_at" = "Sers deg";
-"go_to_map" = "Skenɣef tkarḍa";
+"go_to_map" = "Sken ɣef tkarḍa";
 "search_POI_level_btn" = "Tzemreḍ ad taffeḍ ugar n italɣut sakin ad tesnifleḍ deg ugdil n izegrar.";
 "are_you_sure" = "Tebɣiḍ \?";
 "nav_type_hint" = "Tunigin";
@@ -752,7 +752,7 @@
 "route_via" = "S :";
 "shared_string_refresh" = "Sismeḍ";
 "shared_string_added" = "Iţwarna";
-"select_wikipedia_article_langs" = "Fren tutlayin ideg ad d-banen yimagraden Wikipediaɣef tkarḍa-ik. Tzemreḍ ad tuɣaleḍ seg tutlayt ɣer tayeḍ seg tid yellan deg tɣuri n umagrad.";
+"select_wikipedia_article_langs" = "Fren tutlayin ideg ad d-banen yimagraden Wikipedia ɣef tkarḍa-ik. Tzemreḍ ad tuɣaleḍ seg tutlayt ɣer tayeḍ seg tid yellan deg tɣuri n umagrad.";
 "osm_live_payment_annual_title" = "S useggas";
 "my_location" = "ideg";
 "shared_string_do_not_use" = "Ur seqdac ara";
@@ -786,7 +786,7 @@
 "shared_string_view" = "Sken";
 "shared_string_deleted" = "Ittwakkes";
 "send_log" = "Azen";
-"search_favorites" = "Anadiɣef imenyafen";
+"search_favorites" = "Anadi ɣef imenyafen";
 "lang_zh-Hans" = "Tacinwat (Taḥerfit)";
 "external_device_status_connect" = "Qqen";
 "ltr_or_rtl_combine_via_comma" = "\"%@, %@ \"";
@@ -826,3 +826,4 @@
 "map_source" = "aɣbalu";
 "shared_string_change" = "Senfel";
 "shared_string_show" = "Sken";
+"shared_string_local" = "Adigan";

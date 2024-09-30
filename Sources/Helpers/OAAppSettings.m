@@ -134,6 +134,8 @@ static NSString * const locationIconKey = @"locationIcon";
 static NSString * const use3dIconsByDefaultKey = @"use3dIconsByDefault";
 static NSString * const batterySavingModeKey = @"batterySavingMode";
 static NSString * const appModeOrderKey = @"appModeOrder";
+static NSString * const viewAngleVisibilityKey = @"viewAngleVisibility";
+static NSString * const locationRadiusVisibilityKey = @"locationRadiusVisibility";
 static NSString * const defaultSpeedKey = @"defaultSpeed";
 static NSString * const minSpeedKey = @"minSpeed";
 static NSString * const maxSpeedKey = @"maxSpeed";
@@ -4003,7 +4005,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [_profileIconName setModeDefaultValue:@"ic_action_sail_boat_dark" mode:OAApplicationMode.BOAT];
         [_profileIconName setModeDefaultValue:@"ic_action_aircraft" mode:OAApplicationMode.AIRCRAFT];
         [_profileIconName setModeDefaultValue:@"ic_action_skiing" mode:OAApplicationMode.SKI];
-        [_profileIconName setModeDefaultValue:@"ic_action_truck" mode:OAApplicationMode.TRUCK];
+        [_profileIconName setModeDefaultValue:@"ic_action_truck_dark" mode:OAApplicationMode.TRUCK];
         [_profileIconName setModeDefaultValue:@"ic_action_motorcycle_dark" mode:OAApplicationMode.MOTORCYCLE];
         [_profileIconName setModeDefaultValue:@"ic_action_motor_scooter" mode:OAApplicationMode.MOPED];
         [_profileIconName setModeDefaultValue:@"ic_action_horse" mode:OAApplicationMode.HORSE];
@@ -4036,6 +4038,11 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
         _appModeOrder = [OACommonInteger withKey:appModeOrderKey defValue:0];
         [_profilePreferences setObject:_appModeOrder forKey:@"app_mode_order"];
+        
+        _viewAngleVisibility = [[[OACommonInteger withKey:viewAngleVisibilityKey defValue:[MarkerDisplayOptionWrapper resting]] makeProfile] makeShared];
+        _locationRadiusVisibility = [[[OACommonInteger withKey:locationRadiusVisibilityKey defValue:[MarkerDisplayOptionWrapper restingNavigation]] makeProfile] makeShared];
+        [_profilePreferences setObject:_viewAngleVisibility forKey:@"view_angle_visibility"];
+        [_profilePreferences setObject:_locationRadiusVisibility forKey:@"location_radius_visibility"];
 
         _defaultSpeed = [OACommonDouble withKey:defaultSpeedKey defValue:10.];
         [_defaultSpeed setModeDefaultValue:@1.5 mode:OAApplicationMode.DEFAULT];
@@ -4862,6 +4869,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [self.userProfileName resetModeToDefault:mode];
         [self.profileIconName resetModeToDefault:mode];
         [self.profileIconColor resetModeToDefault:mode];
+        [self.profileCustomIconColor resetModeToDefault:mode];
     }
 
     [OAAppData.defaults resetProfileSettingsForMode:mode];

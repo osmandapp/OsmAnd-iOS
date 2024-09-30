@@ -269,7 +269,7 @@
 "auto_zoom_map_descr" = "Auto zoom map according to your speed (while map is synchronized with current position)";
 "snap_to_road" = "Lås på veg";
 "snap_to_road_descr" = "Snap position to roads during navigation";
-"show_warnings_title" = "Vis alarmar…";
+"show_warnings_title" = "Vis alarmar …";
 "show_warnings_descr" = "Configure traffic warnings (speed limits, forced stops, speed bumps, tunnels), speed camera warnings, and lane information";
 "speak_title" = "Announce…";
 "speak_descr" = "Konfigurer til å annonsera gatenamn, trafikkvarslingar (tvungne stopp, fartshumpar), fotoboksvarslingar, fartsgrenser";
@@ -969,9 +969,9 @@
 "lang_war" = "Waray";
 "lang_yo" = "Yoruba";
 "lang_zh" = "Kinesisk";
-"lang_zh_cn" = "Kinesisk– forenkla";
+"lang_zh_cn" = "Kinesisk – forenkla";
 "lang_zh_hk" = "Chinese (Hong Kong)";
-"lang_zh_tw" = "Kinesisk– tradisjonell";
+"lang_zh_tw" = "Kinesisk – tradisjonell";
 "lang_zhminnan" = "Southern Min";
 "lang_zhyue" = "Cantonese";
 "shared_string_maps" = "Maps";
@@ -2033,7 +2033,7 @@
 "purchase_dialog_title" = "Choose plan";
 "purchase_dialog_travel_description" = "Purchase one of the following to receive the offline travel guide functionality:";
 "free_version_message" = "%@ maps to download or update.";
-"get_osmand_live" = "Skaff deg OsmAnd Live forå låsa opp alle funksjonar: Daglege kartoppdateringar med ubegrensa nedlastingar, alle programtillegga, Wikipedia, Wikivoyage og mykje meir.";
+"get_osmand_live" = "Skaff deg OsmAnd Live for å låsa opp alle funksjonar: Daglege kartoppdateringar med ubegrensa nedlastingar, alle programtillegga, Wikipedia, Wikivoyage og mykje meir.";
 "osm_live_subscription" = "OsmAnd Live subscription";
 "cancel_subscription" = "Cancel subscription";
 "wikivoyage_offline" = "Wikivoyage offline";
@@ -2618,7 +2618,7 @@
 "subscription_cancel_description" = "Cancel anytime in AppStore.";
 "osm_live_payment_subscription_management_aid" = "Payment will be charged to your Apple ID account at the confirmation of purchase.\n\nSubscription automatically renews unless it is canceled at least 24 hours before the end of the current period. Your account will be charged for renewal within 24 hours prior to the end of the current period.\n\nYou can manage and cancel your subscriptions by going to your account settings on the App Store after purchase";
 "no_purchases" = "You don’t have any purchases";
-"empty_purchases_description" = "If your purchases don\'t show up here, tap on \"%@\", or contact our support team.";
+"empty_purchases_description" = "If your purchases don't show up here, tap on \"%@\", or contact our support team.";
 "explore_osmnad_plans_to_find_suitable" = "Explore OsmAnd Plans to find one suitable for you.";
 "osm_live_banner_desc" = "Get unlimited map downloads, adding weekly, daily, or even hourly updates.";
 "redeem_promo_code" = "Redeem promo code";
@@ -2701,7 +2701,7 @@
 "ios_release_4_0" = "• New! \"Add favorite\" screen with options to select the custom icon, color, and shape\n• Added new \"Coordinates widget\" with coordinates of the current location\n• Added ability to import custom user-defined plugins\n• Significantly extended the import/export functionality\n• Distance by tap moved from the Radius ruler into a separate option\n• Fixed CarPlay app freezes when iPhone screen is turned off\n• Plugins screen moved from the Maps & Resources to the main menu\n• Added Finnish localization\n• Fixed UI in landscape orientation for \"Plan a route\" screen\n• Added support for custom routing and rendering files\n• Fixed performance of markers direction line\n• Fixed issue with importing GPX files with uppercase extensions\n• Fixed issue with \"Follow track\" menu\n• Fixed import of OBF files\n";
 "ios_release_4_1" = "• Completely redesigned interaction with tracks: a new menu with charts, statistics, ability to change the appearance, coloring by speed, height and slope, and track selection on the map• New screen for searching by coordinates in different formats\n• Improved coordinate search in OLC format\n• New user-friendly menu for choosing languages to display Wikipedia articles on the map\n• Added ability to easily load maps of all regions of the country with a couple of clicks.\n• Added contour lines in feet (You need to download additional files)\n• Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n• New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n• Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
 "ios_release_4_2" = "• Route line appearance: added ability to set width and color\n• Tracks: added option for deleting several tracks at once\n• Track context menu: added scroll bar with waypoint groups\n• Map appearance: divided additional routes by type with ability to enable one from each category separately\n• Horseback riding: add new navigation type and app profile\n• OsmAnd files are now visible in the \"Files\" application\n• UX of options \"Use elevation data\" and \"Select elevation fluctuation\"  was improved, they were combined and renamed to \"Preferred terrain\", currently available for \"Bicycle\" and \"Pedestrian\" profiles.\n• New option \"Include heading\" for track recording\n• Street name widget: now show road shield and exit number during navigation\n• New Fitness and running routes on the map\n• CarPlay bug fixes, added gestures for touchscreens\n• Fixed import of GPX files from OSF package\n• Fixed import of custom plugins with included files\n• Fixed various crashes in the Route planning mode\n• Fixed crashes during Navigation\n";
-"lang_zh-Hant" = "Kinesisk– tradisjonell";
+"lang_zh-Hant" = "Kinesisk – tradisjonell";
 "rendering_attr_showTrolleybusRoutes_name" = "Trolleybussruter";
 "routing_attr_freeride_policy_prefer_offpiste_name" = "Føretrekk frikøyring";
 "rendering_attr_horseScale_name" = "Vanskegrad for ridevegar";
@@ -2806,7 +2806,7 @@
 "activity_type_motorbike_name" = "Motorsykkel";
 "activity_type_snowmobile_name" = "Snøscooter";
 "av_notes_choose_action_widget_desc" = "Vel handling.";
-"time_to_go_desc" = "Tid i minutt eller timar som trengst forå nå destinasjonen din.";
+"time_to_go_desc" = "Tid i minutt eller timar som trengst for å nå destinasjonen din.";
 "add_page" = "Legg til side";
 "side_marker_eta" = "Estimert tilkomsttid";
 "go_to_marker_location" = "Gå til markørposisjonen";
@@ -2861,11 +2861,11 @@
 "compass_click_desc" = "Trykk på kompasset for å gå til kartorienteringsmodus.";
 "external_device_status_connect" = "Kopla til";
 "audionotes_plugin_name" = "Lyd-/videonotat";
-"lang_zh-Hans" = "Kinesisk– forenkla";
+"lang_zh-Hans" = "Kinesisk – forenkla";
 "map_settings_topography" = "Høgdekurvedata";
 "m" = "m";
 "shared_string_bottom" = "Nedst";
 "edit_tilesource_minzoom" = "Minste forstørring";
 "edit_tilesource_maxzoom" = "Maksforstørring";
-"shared_string_favorite" = "Favoritt…";
+"shared_string_favorite" = "Favoritt …";
 "download_srtm_maps" = "Høgdekurver";

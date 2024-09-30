@@ -1018,7 +1018,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (void) editDestinationsPressed:(id)sender
 {
-    [[OARootViewController instance].mapPanel showWaypoints];
+    [[OARootViewController instance].mapPanel showWaypoints:NO];
 }
 
 - (void) addDestinationPressed:(id)sender

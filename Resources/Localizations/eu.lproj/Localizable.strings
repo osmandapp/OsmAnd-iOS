@@ -86,7 +86,7 @@
 "simulate_routing_descr" = "Simulate your position using a calculated route";
 "select_avoid_descr" = "Select roads you want to avoid during navigation. You can either select a road on the map or choose a type from the list below.";
 "no_active_route" = "No active route";
-"day_night_info_description" = "Egunsentia: %@⏎\nIlunabarra: %@";
+"day_night_info_description" = "Egunsentia: %@ ⏎\nIlunabarra: %@";
 "day_night_info" = "Egun/gau info";
 "daynight_mode_auto" = "Egunsentia/ilunabarra";
 "route_simulation" = "Route simulation";
@@ -1057,7 +1057,7 @@
 
 // Resources
 "shared_string_resources" = "Baliabideak";
-"res_mapsres" = "Maps & Resources";
+"res_mapsres" = "Mapa eta baliabideak";
 "download_tab_local" = "Deskargatuta";
 "osmand_live" = "OsmAnd Live";
 "live_updates" = "Berehalako eguneraketak";
@@ -2377,7 +2377,7 @@
 "select_another_colorization" = "Hautatu beste kolore mota bat.";
 "contact_support_description" = "Galderarik baduzu, jarri gurekin harremanetan %@ helbidean.";
 "benefits_for_contributors" = "OSMren kolaboratzaile aktiboen onurak";
-"you_can_get_feature_as_part_of_pattern" = "Lortu“%@” %@ planaren barruan. Konparazioa:";
+"you_can_get_feature_as_part_of_pattern" = "Lortu “%@” %@ planaren barruan. Konparazioa:";
 "local_backup_descr" = "Egin babeskopia edo leheneratu datuak fitxategi lokal batetik.";
 "use_login_and_password" = "Erabili erabiltzaile izena eta pasahitza";
 "backup_delete_old_data" = "Kendu bertsio zaharrak";
@@ -2392,9 +2392,9 @@
 "map_updates_are_unavailable_yet" = "Mapen eguneraketak oraindik ez daude erabilgarri :-(";
 "no_purchases" = "Ez duzu erosketarik";
 "position_on_map_center" = "Zentroa";
-"ltr_or_rtl_combine_via_slash" = "%@ / %@";
+"ltr_or_rtl_combine_via_slash" = "%@/%@";
 "weather_online_cache" = "Lineako cachea";
-"empty_purchases_description" = "Zure erosketak hemen agertzen ez badira, sakatu“%@” edo jarri harremanetan gure laguntza-taldearekin.";
+"empty_purchases_description" = "Zure erosketak hemen agertzen ez badira, sakatu “%@” edo jarri harremanetan gure laguntza-taldearekin.";
 "tts_title" = "TTS";
 "routing_attr_avoid_tunnels_description" = "Saihestu tunelak";
 "recording_delete_confirm" = "Ezabatu elementu hau?";
@@ -2766,7 +2766,7 @@
 "map_widget_ant_bicycle_speed" = "Bizikletaren abiadura";
 "visible_in_3d_mode" = "3D moduan ikusgai";
 "newest_date_first" = "Lehenengoa datarik hurbilenekoa";
-"bearing_secondary_desc" = "Hauetan erabilitako datu-formatua alda dezakezu: %@– %@ – %@.";
+"bearing_secondary_desc" = "Hauetan erabilitako datu-formatua alda dezakezu: %@ – %@ – %@.";
 "speak_route_recalculation" = "Iragarri ibilbidearen birkalkulua";
 "delete_all_items" = "Ezabatu elementu guztiak";
 "map_orientation_landscape" = "Horizontalean";
@@ -2878,7 +2878,7 @@
 "help_article_map_raster_maps_name" = "Raster Mapak (Lineakoak / Lineaz kanpoak)";
 "map_widget_camera_tilt_desc" = "Kameraren okertze-angelua erakusten du perspektiba moduan. Lehenetsia 90ªkoa da (inklinaziorik gabe).";
 "shared_string_travel_guides" = "Bidaia";
-"coordinates_widget_secondary_desc" = "Koordenatuen formatua alda dezakezu %@– %@ – %@.";
+"coordinates_widget_secondary_desc" = "Koordenatuen formatua alda dezakezu %@ – %@ – %@.";
 "mapillary_widget_descr" = "Mapillary-n parte hartze azkar bat baimentzen du.";
 "parking_widget_desc" = "Pantailaren erdigunetik zure aparkalekuraino dagoen distantzia erakusten du.";
 "help_article_map_vector_maps_name" = "Mapa bektorialak (Mapen estiloak)";
@@ -3115,7 +3115,7 @@
 "shared_string_millimeters_short" = "mm";
 "track_vertical_exaggeration_description" = "Eskalaren balioa aldatuz gero, 3D pistaren altuera alda dezakezu.";
 "avoid_pt_types" = "Ekidin garraio motak…";
-"shared_string_bottom" = "Bekaldea";
+"shared_string_bottom" = "Behean";
 "visualization_3d_track_line" = "Arrastoaren lerroa";
 "when_exceeded" = "Gainditzean";
 "shared_string_millimeters" = "Milimetroak";
@@ -3195,3 +3195,20 @@
 "driving_region_india" = "India";
 "driving_region_uk" = "Erresuma Batua eta antzekoak";
 "shared_string_show" = "Erakutsi";
+"resting_position_icon" = "Atseden-kokapenaren ikonoa";
+"shared_string_all_icons" = "Ikono guztiak";
+"navigation_position" = "Nabigazio-posizioa";
+"view_angle_description" = "Une honetan aurrez aurreko kono-formako eremua bistaratzen du";
+"resting_position" = "Atseden-posizioa";
+"navigation_position_icon_summary" = "Nabigatzen edo mugitzen ari zaren bitartean bistaratzen da ikonoa.";
+"battery_saving_mode" = "Bateria aurrezteko modua";
+"resting_position_icon_summary" = "Mugitzen ez zarenean bistaratzen da ikonoa.";
+"view_angle" = "Ikuspegiaren angelua";
+"resting_navigation_position" = "Atseden eta nabigazio posizioa";
+"profile_icon" = "Profilaren ikonoa";
+"shared_string_local" = "Deskargatuta";
+"quick_action_toggle_preference" = "Hobespenak aldatzeko botoia.";
+"show_along_the_route" = "Erakutsi ibilbidean zehar";
+"location_radius_description" = "Uneko kokapenaren zehaztasuna adierazten duen eremu zirkularra erakusten du";
+"navigation_position_icon" = "Nabigazio-posizioaren ikonoa";
+"location_radius" = "Kokapen erradioa";

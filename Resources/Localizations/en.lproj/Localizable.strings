@@ -52,7 +52,7 @@
 "cancel_navigation" = "Stop navigation";
 "start_navigation" = "Start navigation";
 "intermediate_items_sort_by_distance" = "Sort door-to-door";
-"switch_start_finish" = "Reverse starting point&destination";
+"switch_start_finish" = "Reverse starting point & destination";
 "clear_all_intermediates" = "Clear all intermediate points";
 
 "shared_string_options" = "Options";
@@ -172,7 +172,7 @@
 "help_article_start_with_main_menu_name" = "Main menu";
 "help_article_troubleshooting_crash_logs_name" = "Crash logs";
 "help_article_troubleshooting_general_name" = "General";
-"help_article_troubleshooting_maps_data_name" = "Maps&Data";
+"help_article_troubleshooting_maps_data_name" = "Maps & Data";
 "help_article_troubleshooting_track_recording_issues_name" = "Track recording";
 "help_article_widgets_name" = "Map Widgets";
 "help_article_widgets_info_widgets_name" = "Informational widgets";
@@ -229,7 +229,7 @@
 "rotate_map_bearing_opt" = "Movement direction";
 "rotate_map_north_opt" = "North is up";
 "rotate_map_manual_opt" = "Manually rotated";
-"compass_click_desc" = "Hint: Tap the compass button to switch the map orientation mode.";
+"compass_click_desc" = "Double tap the compass button to switch the map orientation mode.";
 "driving_region_descr" = "Select driving region: US, Europe, UK, Asia, and others.";
 "driving_region" = "Driving region";
 "shared_string_automatic" = "Automatic";
@@ -322,11 +322,11 @@
 "weather_widget_group_desc" = "A set of widgets showing various weather information.";
 "map_widget_group_sunrise_sunset_desc" = "These widgets show information about the next sunrise and sunset.";
 "map_widget_group_sunrise_sunset" = "Sunrise, sunset";
-"bearing_secondary_desc" = "You can change the data format used in: %@– %@ – %@.";
+"bearing_secondary_desc" = "You can change the data format used in: %@ – %@ – %@.";
 "angular_measeurement" = "Angular unit";
 "angular_measeurement_descr" = "Change what azimuth is measured in.";
 "coordinates_format" = "Coordinate format";
-"coordinates_widget_secondary_desc" = "You can change the coordinate format in %@– %@ – %@.";
+"coordinates_widget_secondary_desc" = "You can change the coordinate format in %@ – %@ – %@.";
 "widget_secondary_desc_part_of" = "Part of \“%@\” plugin.";
 "weather_widgets_secondary_desc" = "Measurement units can be changed in the Weather plugin settings.";
 
@@ -867,6 +867,7 @@
 "shared_string_external" = "External";
 "shared_string_coloring" = "Coloring";
 "shared_string_all_colors" = "All colors";
+"shared_string_all_icons" = "All icons";
 "shared_string_add_color" = "Add color";
 "shared_string_edit_color" = "Edit color";
 "shared_string_duplicate_color" = "Duplicate color";
@@ -888,6 +889,7 @@
 "shared_string_deleting_complete" = "Deleting complete";
 "shared_string_colors" = "Colors";
 
+"profile_icon" = "Profile icon";
 "restart" = "Restart";
 
 "offline_maps" = "Offline Maps";
@@ -1156,10 +1158,10 @@
 "shared_string_round_up" = "Round up";
 "distance_during_navigation_footer" = "Choose how distance information is displayed in navigation widgets (distance to point, next turn, lanes).\n\nChoose “Precise” for exact numbers, or “Round up” for easier readability.";
 "display_position_automatic_descr" = "Depends on Map orientation: bottom for movement direction, center for all others.";
-"units_and_formats" = "Units&formats";
+"units_and_formats" = "Units & formats";
 "device_settings" = "Device settings";
 "osmand_settings" = "OsmAnd settings";
-"backup_and_restore" = "Backup&Restore";
+"backup_and_restore" = "Backup & Restore";
 "global_settings_descr" = "Affect the entire application.";
 "plugin_settings_descr" = "Plugin settings for the selected profile.";
 
@@ -1395,7 +1397,7 @@
 "ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
 "ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "ltr_or_rtl_combine_via_or" = "%@ or %@";
-"ltr_or_rtl_combine_via_slash" = "%@ / %@";
+"ltr_or_rtl_combine_via_slash" = "%@/%@";
 "ltr_or_rtl_combine_via_comma" = "%@, %@";
 "ltr_or_rtl_combine_via_of" = "%ld of %ld";
 
@@ -1429,6 +1431,10 @@
 "select_icon_profile_dialog_title" = "Select icon";
 "select_map_icon" = "Position icon at rest";
 "select_navigation_icon" = "Position icon while moving";
+"resting_position_icon" = "Resting position icon";
+"navigation_position_icon" = "Navigation position icon";
+"resting_position_icon_summary" = "Icon displayed when you\'re not moving.";
+"navigation_position_icon_summary" = "Icon displayed while you\'re navigating or moving.";
 "will_be_show_while_moving" = "It will be show while moving";
 "base_profile_descr_car" = "Car, truck, motorcycle";
 "base_profile_descr_bicycle" = "Mountain bike, moped, horse";
@@ -2236,7 +2242,7 @@
 "product_desc_wiki" = "Location based Wikipedia articles on the map";
 "purchases_feature_desc_wikipedia" = "Provides all place related Wikipedia articles offline, helping you to learn about the places you visit on your trip by simple taps on the map. Don\'t forget to download the Wikipedia map files for the respective regions.";
 "shared_string_all_languages" = "All languages";
-"select_wikipedia_article_langs" = "Select the languages forWikipedia articles on the map.​​ Switch to any available language while reading the article.";
+"select_wikipedia_article_langs" = "Select the languages for ​​Wikipedia articles on the map.​​ Switch to any available language while reading the article.";
 "wiki_menu_download_descr" = "Additional maps are needed to view Wikipedia POIs on the map.";
 "some_articles_may_not_available_in_lang" = "Some Wikipedia articles may not be available in your language.";
 "available_languages" = "Available languages";
@@ -2575,7 +2581,7 @@
 "wiki_download_description" = "To read full articles - download Wikipedia data of %@";
 "download_wiki_region_placeholder" = "this region";
 
-"osm_live_plan_pricing" = "Plan&Pricing";
+"osm_live_plan_pricing" = "Plan & Pricing";
 "osm_live_payment_monthly_title" = "Monthly";
 "osm_live_payment_3_months_title" = "Every three months";
 "osm_live_payment_annual_title" = "Annually";
@@ -3205,7 +3211,7 @@
 "purchases_feature_desc_terrain" = "Terrain contour lines, grayscale hillshade and color scale slope indication, to show peaks and lowlands.";
 "purchases_feature_desc_nautical" = "Get access to nautical depth information";
 "purchases_feature_weather" = "24h hourly forecast 7 days ahead coloured on the map";
-"you_can_get_feature_as_part_of_pattern" = "Get“%@” as part of the %@ plan. Comparison:";
+"you_can_get_feature_as_part_of_pattern" = "Get “%@” as part of the %@ plan. Comparison:";
 
 "monthly_subscription" = "Monthly subscription";
 "annual_subscription" = "Annual subscription";
@@ -3227,7 +3233,7 @@
 "osm_live_payment_subscription_management_aid" = "Payment will be charged to your Apple ID account at the confirmation of purchase.\n\nSubscription automatically renews unless it is canceled at least 24 hours before the end of the current period. Your account will be charged for renewal within 24 hours prior to the end of the current period.\n\nYou can manage and cancel your subscriptions by going to your account settings on the App Store after purchase";
 
 "no_purchases" = "You don\'t have any purchases";
-"empty_purchases_description" = "If your purchases don\'t show up here, tap on“%@”, or contact our support team.";
+"empty_purchases_description" = "If your purchases don\'t show up here, tap on “%@”, or contact our support team.";
 "explore_osmnad_plans_to_find_suitable" = "Explore OsmAnd Plans to find one suitable for you.";
 "osm_live_banner_desc" = "Get unlimited map downloads, adding weekly, daily, or even hourly updates.";
 "redeem_promo_code" = "Redeem promo code";
@@ -3569,6 +3575,7 @@
 "routing_attr_difficulty_preference_beginner_name" = "Beginner";
 "dangerous_goods" = "Dangerous goods";
 "dangerous_goods_description" = "On some roads and tunnels transporting of hazardous materials is forbidden.";
+"show_along_the_route" = "Show along the route";
     
 "exit_number" = "Exit number";
 "announce_when_exceeded" = "Announce when exceeded";
@@ -3869,6 +3876,15 @@
 "shared_string_update_required" = "Update Required";
 "osm_login_needs_ios_16_4" = "OpenStreetMap login needs iOS 16.4+";
 
+"view_angle" = "View angle";
+"location_radius" = "Location radius";
+"view_angle_description" = "Displays the cone-shaped area you\'re currently facing";
+"location_radius_description" = "Shows the circular area representing your current location accuracy";
+
+"resting_position" = "Resting position";
+"navigation_position" = "Navigation position";
+"resting_navigation_position" = "Rest & navigation position";
+
 "user_palette" = "User palette";
 "height_legend_description" = "Altitude color maps are used to visualize relief.";
 "shared_string_local" = "Local";
@@ -3877,3 +3893,7 @@
 "daynight_mode_sunrise_sunset_summary" = "Automatically switches between day and night themes based on local sunrise and sunset times.";
 "daynight_mode_night_summary" = "Always displays the map in a dark theme, suited for nighttime or low-light conditions.";
 "daynight_mode_day_summary" = "Always displays the map in a light theme, ideal for daytime visibility.";
+
+"rendering_attr_showDirtbikeTrails_name" = "Show dirt bike trails";
+"rendering_attr_showDirtbikeTrails_description" = "Show dirt bike trails";;
+

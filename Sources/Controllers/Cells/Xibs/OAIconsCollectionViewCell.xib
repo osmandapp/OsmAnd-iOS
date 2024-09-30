@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -18,9 +18,8 @@
                 <rect key="frame" x="0.0" y="0.0" width="48" height="48"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
-                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wdb-Ov-Iaf">
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wdb-Ov-Iaf">
                         <rect key="frame" x="4" y="4" width="40" height="40"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" name="groupBgColorSecondary"/>
                     </view>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="JJy-ga-Um4">
@@ -30,22 +29,37 @@
                             <constraint firstAttribute="width" constant="30" id="Sdk-l7-LWf"/>
                         </constraints>
                     </imageView>
-                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pgm-Xi-Ply" userLabel="Background View">
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pgm-Xi-Ply" userLabel="Background View">
                         <rect key="frame" x="0.0" y="0.0" width="48" height="48"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="48" id="Tyg-SL-FXD"/>
+                            <constraint firstAttribute="height" constant="48" id="jHp-7C-QvC"/>
+                        </constraints>
                     </view>
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="3ME-lq-Fou"/>
             <constraints>
+                <constraint firstAttribute="trailing" secondItem="pgm-Xi-Ply" secondAttribute="trailing" id="1lT-mP-MOb"/>
+                <constraint firstAttribute="bottom" secondItem="pgm-Xi-Ply" secondAttribute="bottom" id="A2G-v6-5uA"/>
                 <constraint firstItem="JJy-ga-Um4" firstAttribute="centerX" secondItem="dQt-sE-UyU" secondAttribute="centerX" id="JEO-gP-vk0"/>
                 <constraint firstItem="JJy-ga-Um4" firstAttribute="centerY" secondItem="dQt-sE-UyU" secondAttribute="centerY" id="Lga-Ru-APe"/>
+                <constraint firstItem="pgm-Xi-Ply" firstAttribute="top" secondItem="dQt-sE-UyU" secondAttribute="top" id="UYu-u3-9Q4"/>
+                <constraint firstItem="pgm-Xi-Ply" firstAttribute="leading" secondItem="dQt-sE-UyU" secondAttribute="leading" id="XOh-j9-hDp"/>
+                <constraint firstAttribute="bottom" secondItem="wdb-Ov-Iaf" secondAttribute="bottom" constant="4" id="kCU-rc-NHe"/>
+                <constraint firstItem="wdb-Ov-Iaf" firstAttribute="leading" secondItem="dQt-sE-UyU" secondAttribute="leading" constant="4" id="nE0-t4-rac"/>
+                <constraint firstAttribute="trailing" secondItem="wdb-Ov-Iaf" secondAttribute="trailing" constant="4" id="nkz-KL-ovf"/>
+                <constraint firstItem="wdb-Ov-Iaf" firstAttribute="top" secondItem="dQt-sE-UyU" secondAttribute="top" constant="4" id="r8J-Ax-6oc"/>
             </constraints>
             <connections>
                 <outlet property="backView" destination="pgm-Xi-Ply" id="CeQ-5d-vTH"/>
+                <outlet property="cellHeightConstraint" destination="jHp-7C-QvC" id="qwN-7Y-AWQ"/>
+                <outlet property="cellWidthConstraint" destination="Tyg-SL-FXD" id="PBu-M3-eiI"/>
+                <outlet property="iconHeightConstraint" destination="8gv-RV-pkw" id="evh-vM-QG5"/>
                 <outlet property="iconImageView" destination="JJy-ga-Um4" id="zUy-yH-erS"/>
                 <outlet property="iconView" destination="wdb-Ov-Iaf" id="Fs0-Xr-9SM"/>
+                <outlet property="iconWidthConstraint" destination="Sdk-l7-LWf" id="kUg-0h-zQY"/>
             </connections>
             <point key="canvasLocation" x="131.8840579710145" y="118.52678571428571"/>
         </collectionViewCell>

@@ -27,7 +27,7 @@
 "get_discount_first_part" = "%@ for first %@";
 "get_discount_first_few_parts" = "%@ for first %@";
 "get_discount_second_part" = "then %@";
-"mapillary_image" = "Mapillaryಚಿತ್ರ";
+"mapillary_image" = "Mapillary ಚಿತ್ರ";
 "shared_string_milliradians" = "Milliradians";
 "angular_units" = "Angular measurement units";
 "angular_units_descr" = "Change azimuth measurement units.";
@@ -1877,7 +1877,7 @@
 "osm_live_banner_descr" = "Subscribe to OsmAnd Live and get unlimited <b>hourly</b> map updates and <b>all features</b> included from %@";
 "osm_live_get_title" = "Get OsmAnd Live";
 "osm_live_ask_for_purchase" = "Please purchase a subscription to OsmAnd Live first";
-"shared_string_io_error" = "I/Oತಪ್ಪು ಕಂಡತ್ತಿದೆ";
+"shared_string_io_error" = "I/O ತಪ್ಪು ಕಂಡತ್ತಿದೆ";
 "osm_live_hide_user_name" = "ವರದಿಯಲ್ಲಿ ನನ್ನ ಹೆಸರು ತೋರಿಸಬೇಡಿ";
 "subscriptions_public_info" = "Payment will be charged to your iTunes Account at confirmation of purchase. The subscription will automatically renew unless auto-renew is turned off at least 24 hours before the end of the current period. Your account will be charged according to your plan for renewal within 24 hours prior to the end of the current period. You can manage or turn off auto-renew in your Account Settings after purchase. If you purchase a subscription during a free trial period, the unused portion of this period will be forfeited.";
 "terms_of_use" = "Terms of use";
@@ -2250,3 +2250,4 @@
 "shared_string_favorite" = "ಇಷ್ಟವಾದ";
 "shared_string_favorites" = "ಇಷ್ಟವಾದವುಗಳು";
 "shared_string_show" = "ತೋರಿಸು";
+"shared_string_local" = "ಸ್ಥಳಿಯ";

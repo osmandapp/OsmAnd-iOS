@@ -1020,7 +1020,7 @@
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
 "ltr_or_rtl_combine_via_dash" = "%@ - %@";
 "ltr_or_rtl_combine_via_or" = "%@ or %@";
-"ltr_or_rtl_combine_via_slash" = "%@ / %@";
+"ltr_or_rtl_combine_via_slash" = "%@/%@";
 "listed_exist" = "Listed %@ already exist in OsmAnd.";
 "shared_string_import_complete" = "Import complete";
 "import_complete_description" = "All data from the %@ is imported, you can use buttons below to open needed part of the app to manage it";
@@ -2617,7 +2617,7 @@
 "subscription_cancel_description" = "Cancel anytime in AppStore.";
 "osm_live_payment_subscription_management_aid" = "Payment will be charged to your Apple ID account at the confirmation of purchase.\n\nSubscription automatically renews unless it is canceled at least 24 hours before the end of the current period. Your account will be charged for renewal within 24 hours prior to the end of the current period.\n\nYou can manage and cancel your subscriptions by going to your account settings on the App Store after purchase";
 "no_purchases" = "You don’t have any purchases";
-"empty_purchases_description" = "If your purchases don\'t show up here, tap on \"%@\", or contact our support team.";
+"empty_purchases_description" = "If your purchases don't show up here, tap on \"%@\", or contact our support team.";
 "explore_osmnad_plans_to_find_suitable" = "Explore OsmAnd Plans to find one suitable for you.";
 "osm_live_banner_desc" = "Get unlimited map downloads, adding weekly, daily, or even hourly updates.";
 "redeem_promo_code" = "Redeem promo code";
@@ -2705,7 +2705,7 @@
 "shared_string_license" = "లైసెన్స్";
 "shared_string_link" = "లంకె";
 "map_widget_sun_position_desc" = "సూర్యోదయం లేదా సూర్యాస్తమయం వరకు సమయాన్ని చూపుతుంది.";
-"complex_widget_alert" = "%@విడ్జెట్ దాని స్వంత వరుసలో మాత్రమే ఉంచబడుతుంది.";
+"complex_widget_alert" = "%@ విడ్జెట్ దాని స్వంత వరుసలో మాత్రమే ఉంచబడుతుంది.";
 "map_widget_sun_position" = "సూర్య స్థానం";
 "shared_string_bookmark" = "ఇష్టాంశం";
 "external_device_any_connected" = "ఏదైనా కనెక్ట్ చేయబడింది";

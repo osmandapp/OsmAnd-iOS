@@ -250,7 +250,6 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [_tabs setTitle:OALocalizedString(@"shared_string_history") forSegmentAtIndex:0];
     [_tabs setTitle:OALocalizedString(@"search_categories") forSegmentAtIndex:1];
     [_tabs setTitle:OALocalizedString(@"shared_string_address") forSegmentAtIndex:2];
-    [_tabs setSelectedSegmentIndex:0];
     [_tabs setTitleTextAttributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:14.] } forState:UIControlStateNormal];
     [_tabs setTitleTextAttributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:14.] } forState:UIControlStateSelected];
 
@@ -271,6 +270,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [_textField.leftView addSubview:_leftImgView];
     [_textField.leftView addSubview:_activityIndicatorView];
 
+    [self setTabIndex:_tabIndex];
     [self setupSearch];
     [self updateHint];
 
@@ -335,7 +335,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
     [self stopAddressSearch];
     [self setResultCollection:nil];
-    [self.searchUICore resetPhrase];
+    if (self.searchQuery.length == 0)
+        [self.searchUICore resetPhrase];
 
     OASearchSettings *settings = [[self.searchUICore getSearchSettings] setOriginalLocation:[[CLLocation alloc] initWithLatitude:_searchLocation.latitude longitude:_searchLocation.longitude]];
     settings = [settings setLang:locale ? locale : @"" transliterateIfMissing:transliterate];

@@ -989,13 +989,13 @@ typedef enum
 //    self.sidePanelController.recognizesPanGesture = NO;
 }
 
-- (void) showWaypoints
+- (void) showWaypoints:(BOOL)isShowAlong
 {
     [OAAnalyticsHelper logEvent:@"waypoints_open"];
     
     [self removeGestureRecognizers];
     
-    _dashboard = [[OAWaypointsViewController alloc] init];
+    _dashboard = [[OAWaypointsViewController alloc] initWithShowAlongType:isShowAlong];
     [_dashboard show:self parentViewController:nil animated:YES];
     
     [self createShadowButton:@selector(closeDashboard) withLongPressEvent:nil topView:_dashboard.view];

@@ -2650,7 +2650,7 @@
 "announcement_time_prepare" = "Préparation";
 "announcement_time_approach" = "Approche";
 "announcement_time_passing" = "Durée";
-"compass_click_desc" = "Appuyez deux fois sur la boussole pour basculer entre les modes d\'orientation de la carte.";
+"compass_click_desc" = "Appuyez deux fois sur la boussole pour basculer entre les modes d'orientation de la carte.";
 "search_history_disabled" = "L'historique de recherche est désactivé";
 "last_seven_days" = "Ces 7 derniers jours";
 "delete_history_items" = "Supprimer %@ éléments d’historique \?";

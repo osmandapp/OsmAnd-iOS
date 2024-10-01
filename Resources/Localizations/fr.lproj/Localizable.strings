@@ -3183,7 +3183,7 @@
 "popular_articles_not_found_title" = "Articles populaires non trouvés";
 "popular_articles_not_found_descr" = "Il n'y a aucun article à proximité du centre de la carte actuel. Utilisez la recherche pour trouver des articles.";
 "shared_string_license" = "Licence";
-"tracker_item" = "OsmAnd Tracker";
+"tracker_item" = "OsmAnd tracker";
 "help_article_navigation_routing_straight_line_routing_name" = "Ligne droite (à vol d\'oiseau)";
 "help_article_navigation_routing_train_routing_name" = "Navigation en train";
 "help_article_navigation_routing_public_transport_navigation_name" = "Navigation en transports publics";

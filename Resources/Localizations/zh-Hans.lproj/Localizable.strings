@@ -2018,7 +2018,7 @@
 "help_article_start_with_main_menu_name" = "主菜单";
 "help_article_map_legend_nautical_map_name" = "航海地图样式";
 "map_widget_trip_recording_uphill" = "上坡";
-"compass_click_desc" = "点击指南针以切换地图方向模式。";
+"compass_click_desc" = "双击指南针按钮以切换地图方向模式。";
 "manage_subscriptions" = "管理订阅。";
 "map_2d_mode_action" = "2D 模式";
 "weather_widget_group_desc" = "一组显示各种天气信息的小工具。";

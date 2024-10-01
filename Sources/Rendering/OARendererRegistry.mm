@@ -31,6 +31,7 @@ static NSDictionary<NSString *, NSString *> *stylesTitlesOffline;
                 LIGHTRS_RENDER: [NSString stringWithFormat:@"LightRS%@", RENDERER_INDEX_EXT],
                 UNIRS_RENDER: [NSString stringWithFormat:@"UniRS%@", RENDERER_INDEX_EXT],
                 NAUTICAL_RENDER: [NSString stringWithFormat:@"nautical%@", RENDERER_INDEX_EXT],
+                MARINE_RENDER: [NSString stringWithFormat:@"marine%@", RENDERER_INDEX_EXT],
                 WINTER_SKI_RENDER: [NSString stringWithFormat:@"skimap%@", RENDERER_INDEX_EXT],
                 OFFROAD_RENDER: [NSString stringWithFormat:@"offroad%@", RENDERER_INDEX_EXT],
                 DESERT_RENDER: [NSString stringWithFormat:@"desert%@", RENDERER_INDEX_EXT],
@@ -141,6 +142,7 @@ static NSDictionary<NSString *, NSString *> *stylesTitlesOffline;
         stylesTitlesOffline = @{
                 @"default" : DEFAULT_RENDER,
                 @"nautical" : NAUTICAL_RENDER,
+                @"marine" : MARINE_RENDER,
                 @"Ski-map" : WINTER_SKI_RENDER,
                 UNIRS_RENDER : UNIRS_RENDER,
                 @"Touring-view_(more-contrast-and-details).render" : TOURING_VIEW,
@@ -169,14 +171,16 @@ static NSDictionary<NSString *, NSString *> *stylesTitlesOffline;
         return 4;
     else if ([title isEqualToString:NAUTICAL_RENDER])
         return 5;
-    else if ([title isEqualToString:OFFROAD_RENDER])
+    else if ([title isEqualToString:MARINE_RENDER])
         return 6;
-    else if ([title isEqualToString:DESERT_RENDER])
+    else if ([title isEqualToString:OFFROAD_RENDER])
         return 7;
-    else if ([title isEqualToString:SNOWMOBILE_RENDER])
+    else if ([title isEqualToString:DESERT_RENDER])
         return 8;
-    else
+    else if ([title isEqualToString:SNOWMOBILE_RENDER])
         return 9;
+    else
+        return 10;
 }
 
 @end

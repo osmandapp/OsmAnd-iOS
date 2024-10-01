@@ -382,7 +382,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         kCellTitleKey : OALocalizedString(@"view_angle"),
         kCellDescrKey : OALocalizedString(viewAngleVisibilityName),
         kCellIconNameKey : @"ic_custom_location_view_angle",
-        kCellIconTintColor : UIColorFromRGB(_changedProfile.profileColor),
+        kCellIconTintColor : viewAngleVisibility != MarkerDisplayOptionOff ? UIColorFromRGB(_changedProfile.profileColor) : [UIColor colorNamed:ACColorNameIconColorDisabled],
         kCellKeyKey : kViewAngleCellKey,
     }];
     [optionsSection addRowFromDictionary:@{
@@ -390,7 +390,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         kCellTitleKey : OALocalizedString(@"location_radius"),
         kCellDescrKey : OALocalizedString(locationRadiusVisibilityName),
         kCellIconNameKey : @"ic_custom_location_radius",
-        kCellIconTintColor : UIColorFromRGB(_changedProfile.profileColor),
+        kCellIconTintColor : locationRadiusVisibility != MarkerDisplayOptionOff ? UIColorFromRGB(_changedProfile.profileColor) : [UIColor colorNamed:ACColorNameIconColorDisabled],
         kCellKeyKey : kLocationRadiusCellKey,
     }];
 }
@@ -474,7 +474,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     _positionIconCollectionHandler = [[IconCollectionHandler alloc] initWithData:@[_locationIconNames] collectionView:nil];
     _positionIconCollectionHandler.iconImagesData = @[_locationIconImages];
     _positionIconCollectionHandler.roundedSquareCells = true;
-    _positionIconCollectionHandler.cornerRadius = 6;
+    _positionIconCollectionHandler.cornerRadius = 9;
     _positionIconCollectionHandler.delegate = self;
     _positionIconCollectionHandler.hostVC = self;
     _positionIconCollectionHandler.customTitle = OALocalizedString(@"resting_position_icon");
@@ -491,7 +491,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     _locationIconCollectionHandler = [[IconCollectionHandler alloc] initWithData:@[_navigationIconNames] collectionView:nil];
     _locationIconCollectionHandler.iconImagesData = @[_navigationIconImages];
     _locationIconCollectionHandler.roundedSquareCells = true;
-    _locationIconCollectionHandler.cornerRadius = 6;
+    _locationIconCollectionHandler.cornerRadius = 9;
     _locationIconCollectionHandler.delegate = self;
     _locationIconCollectionHandler.hostVC = self;
     _locationIconCollectionHandler.customTitle = OALocalizedString(@"navigation_position_icon");
@@ -709,9 +709,13 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
             cell = (OAInputTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
             [cell titleVisibility:NO];
-            [cell clearButtonVisibility:NO];
+            [cell clearButtonVisibility:YES];
             [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
             [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
+            [cell.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+            [cell.clearButton addTarget:self action:@selector(onClearButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.clearButtonArea removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+            [cell.clearButtonArea addTarget:self action:@selector(onClearButtonClick:) forControlEvents:UIControlEventTouchUpInside];
             cell.inputField.autocapitalizationType = UITextAutocapitalizationTypeSentences;
             cell.inputField.textAlignment = NSTextAlignmentNatural;
         }
@@ -899,6 +903,19 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     _hasChangesBeenMade = YES;
     _changedProfile.name = textView.text;
     _titleLabel.text = _changedProfile.name.length == 0 ? [self getEmptyNameTitle] : _changedProfile.name;
+}
+
+- (IBAction) onClearButtonClick:(UIButton *)sender
+{
+    _hasChangesBeenMade = YES;
+    _changedProfile.name = @"";
+    _titleLabel.text = [self getEmptyNameTitle];
+
+    [self.tableView beginUpdates];
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    if ([cell isKindOfClass:OAInputTableViewCell.class])
+        ((OAInputTableViewCell *) cell).inputField.text = @"";
+    [self.tableView endUpdates];
 }
 
 #pragma mark - Keyboard Notifications

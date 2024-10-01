@@ -83,6 +83,18 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     private var importHelper: OAGPXImportUIHelper
     private var dateFormatter: DateFormatter
     
+    private lazy var filterButton: UIButton = {
+        var config = UIButton.Configuration.plain()
+        config.imagePadding = 16
+        config.imagePlacement = .trailing
+        config.baseForegroundColor = .iconColorActive
+        config.title = localizedString("filter_current_poiButton")
+        let button = UIButton(configuration: config, primaryAction: nil)
+        button.setImage(UIImage(resource: .icCustomFilter), for: .normal)
+        button.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
+        return button
+    }()
+    
     required init?(coder: NSCoder) {
         app = OsmAndApp.swiftInstance()
         settings = OAAppSettings.sharedManager()
@@ -163,6 +175,11 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         tableView.register(UINib(nibName: OALargeImageTitleDescrTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OALargeImageTitleDescrTableViewCell.reuseIdentifier)
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationItem.searchController = nil
+    }
+    
     private func reloadTracks(forceLoad: Bool = false) {
         if let asyncLoader {
             asyncLoader.cancel()
@@ -192,27 +209,22 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     private func generateData() {
         tableData.clearAllData()
         let section = tableData.createNewSection()
-        
-        if isFiltered {
-            var foundedFolders: [TrackFolder] = []
-            var foundedTracks: [GpxDataItem] = []
-            
-            for folder in rootFolder.getFlattenedSubFolders() where folder.getDirName().containsCaseInsensitive(text: searchText) {
-                foundedFolders.append(folder)
+        var tracksToShow: [GpxDataItem] = []
+        if isSearchActive {
+            let foldersToCheck = [rootFolder] + rootFolder.getFlattenedSubFolders()
+            for folder in foldersToCheck {
+                if let folder = folder {
+                    let tracks = isFiltered ? folder.getTrackItems().filter { $0.name.containsCaseInsensitive(text: searchText) && $0.dataItem != nil } : folder.getTrackItems()
+                    for track in tracks {
+                        if let trackItem = track.dataItem {
+                            tracksToShow.append(trackItem)
+                        }
+                    }
+                }
             }
             
-            for track in rootFolder.getTrackItems() where track.name.containsCaseInsensitive(text: searchText) {
-                guard let trackItem = track.dataItem else { continue }
-                foundedTracks.append(trackItem)
-            }
-            
-            foundedFolders.sort { $0.getDirName() < $1.getDirName() }
-            foundedTracks.sort { $0.gpxFileName.lastPathComponent() < $1.gpxFileName.lastPathComponent() }
-            
-            for folder in foundedFolders {
-                createRowFor(folder: folder, section: section)
-            }
-            for track in foundedTracks {
+            tracksToShow.sort { $0.gpxFileName.lastPathComponent() < $1.gpxFileName.lastPathComponent() }
+            for track in tracksToShow {
                 createRowFor(track: track, section: section)
             }
         } else {
@@ -389,6 +401,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         configureNavigationBarAppearance()
         navigationController?.setNavigationBarHidden(false, animated: false)
         tabBarController?.navigationItem.searchController = nil
+        navigationItem.searchController = nil
         setupNavBarMenuButton()
     }
     
@@ -487,6 +500,24 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         }
     }
     
+    private func setupHeaderView() -> UIView? {
+        let headerView = UIView(frame: .init(x: 0, y: 0, width: tableView.frame.width, height: 44))
+        headerView.backgroundColor = .groupBg
+        headerView.addSubview(filterButton)
+        filterButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            filterButton.trailingAnchor.constraint(equalTo: headerView.layoutMarginsGuide.trailingAnchor),
+            filterButton.topAnchor.constraint(equalTo: headerView.topAnchor),
+            filterButton.bottomAnchor.constraint(equalTo: headerView.bottomAnchor)
+        ])
+        
+        return headerView
+    }
+    
+    private func updateHeaderViewVisibility(searchIsActive: Bool) {
+        tableView.tableHeaderView = searchIsActive ? setupHeaderView() : nil
+    }
+    
     private func setupTableFooter() {
         guard !currentFolder.getTrackItems().isEmpty, !isSearchActive, !tableView.isEditing else {
             tableView.tableFooterView = nil
@@ -504,6 +535,14 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             
             tableView.tableFooterView = footer
         }
+    }
+    
+    @objc private func filterButtonTapped() {
+        //        if let filterVC = TracksFiltersViewController() {
+        //            filterVC.setInitialFilterText(searchText)
+        //            searchText = ""
+        //            show(filterVC)
+        //        }
     }
     
     private func getTotalTracksStatistics() -> String {
@@ -579,6 +618,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         searchController.obscuresBackgroundDuringPresentation = false
         definesPresentationContext = true
         tabBarController?.navigationItem.searchController = searchController
+        navigationItem.searchController = searchController
         updateSearchController()
     }
     
@@ -1746,6 +1786,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             isFiltered = false
         }
         updateSearchController()
+        updateHeaderViewVisibility(searchIsActive: isSearchActive)
         updateData()
     }
     
@@ -1755,6 +1796,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         isSearchActive = false
         isFiltered = false
         updateSearchController()
+        updateHeaderViewVisibility(searchIsActive: isSearchActive)
     }
 }
 

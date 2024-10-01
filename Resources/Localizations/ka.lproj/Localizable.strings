@@ -45,7 +45,7 @@
 "cancel_navigation" = "ნავიგაციის შეწყვეტა";
 "start_navigation" = "Start navigation";
 "intermediate_items_sort_by_distance" = "სახლის ნომრებით დალაგება";
-"switch_start_finish" = "Reverse starting point & destination";
+"switch_start_finish" = "საწყისი წერტილის და დანიშნულების პუნქტის შებრუნება";
 "clear_all_intermediates" = "ყველა შუალედური წერტილის გასუფთავება";
 "shared_string_options" = "პარამეტრები";
 "new_destination_point_dialog" = "თქვენ უკვე მიუთითეთ დანიშნულების წერტილი:";
@@ -698,7 +698,7 @@
 "allow_3D_view" = "2.5D view";
 "units_of_speed" = "სიჩქარის ერთეული";
 "angular_measurment_units" = "კუთხის საზომი ერთეული";
-"units_and_formats" = "Units & formats";
+"units_and_formats" = "ერთეულები და ფორმატები";
 "device_settings" = "მოწყობილობის მორგება";
 "osmand_settings" = "OsmAnd-ის გამართვა";
 "global_settings_descr" = "გადატარება მთელ აპლიკაციაზე.";
@@ -1134,7 +1134,7 @@
 "pseudo_mercator_projection" = "ფსევდო მერკატორის პროექცია";
 "res_source_format" = "Source format";
 "sqlite_db_file" = "SQLiteDB ფაილი";
-"one_image_per_tile" = "ერთი გამოსახულების ფაილი ერთი ფილისთვის.";
+"one_image_per_tile" = "ერთი გამოსახულების ფაილი თითოეული ფილისთვის";
 "res_zoom_levels_desc" = "This parameters will affect the map display when used as a map type or overlay/underlay.\n\nMap type: the map will be limited to the selected zooms.\n\nOverlay / Underlay: Zoom levels at which tiles will be visible. Upscale or downscale will occur above or below the set values.";
 "res_expire_time_desc" = "Expiration time in minutes. Cached tiles will be reloaded after specified time. Leave this field empty if you do not need to reload tiles for this source.\nOne day is 1440 minutes.\nOne week is 10 080 minutes.\n30 days are 43 200 minutes.";
 "res_name_warning" = "ფაილის სახელი ცარიელი ვერ იქნება";
@@ -1888,7 +1888,7 @@
 "rendering_value_high_name" = "მაღალი";
 "routing_attr_difficulty_preference_description" = "Prefer routes of this difficulty, although routing over harder or easier pistes is still possible if shorter.";
 "routing_attr_height_description" = "Specify vehicle height to be permitted on routes.";
-"touting_specified_vehicle_parameters_descr" = "მითითებული ტრანსპორტის პარამეტრებს გზებზე შეუძლიათ გავლენის მოხდენა";
+"touting_specified_vehicle_parameters_descr" = "მითითებული ტრანსპორტის პარამეტრებს გზებზე შეუძლიათ გავლენის მოხდენა.";
 "routing_attr_height_obstacles_name" = "სიმაღლის მონაცემების გამოყენება";
 "routing_attr_avoid_toll_name" = "ფასიანი გზებისათვის თავის არიდება";
 "rendering_attr_appMode_description" = "რუკის გაუმჯობესება მომხმარებლის პროფილის მიხედვით";

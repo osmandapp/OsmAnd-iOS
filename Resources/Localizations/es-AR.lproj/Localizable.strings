@@ -2734,7 +2734,7 @@
 "last_seven_days" = "Últimos 7 días";
 "confirm_history_item_delete" = "¿Borrar (%ld) elementos del historial?";
 "search_favorites" = "Buscar en favoritos";
-"compass_click_desc" = "Sugerencia: Pulsa el botón de la brújula para cambiar el modo de orientación del mapa.";
+"compass_click_desc" = "Mantén pulsado el botón de la brújula para cambiar el modo de orientación del mapa.";
 "rotate_map_manual_opt" = "Rotación manual";
 "map_widget_camera_tilt" = "Inclinación de la cámara";
 "map_widget_camera_distance" = "Elevación de la cámara";
@@ -3419,8 +3419,9 @@
 "navigate_point_format_D" = "GGG.GGGGG";
 "navigate_point_format_DMS" = "GGG MM SS.S";
 "navigate_point_format_DM" = "GGG MM.MMM";
-"of" = "%@ de %@";
+"of" = "%d de %d";
 "daynight_mode_sunrise_sunset_summary" = "Alterna automáticamente entre los temas diurno y nocturno, basado en el amanecer y atardecer local.";
 "daynight_mode_app_theme_summary" = "La pantalla del mapa se vincula al tema general de la aplicación: «modo diurno» para un tema claro y «modo nocturno» para un tema oscuro";
 "daynight_mode_night_summary" = "Siempre muestra el mapa con el tema oscuro, adecuado para las condiciones nocturnas o de baja iluminación.";
 "daynight_mode_day_summary" = "Siempre muestra el mapa con el tema claro, ideal con la luz del día.";
+"tracker_item" = "OsmAnd Tracker";

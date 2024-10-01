@@ -2658,7 +2658,7 @@
 "distance_to_destination_widget_desc" = "Справица приказује преостало растојање до последње долазне тачке.";
 "rotate_map_manual_opt" = "Ручно окретање";
 "history_actions_footer_text" = "Историју можете извозити у фајлу. Можете да избришете све уносе историје до сада забележене.";
-"compass_click_desc" = "Тапните по компасу ради промене усмерења карте.";
+"compass_click_desc" = "Дупло тапните по компасу ради промене усмерења карте.";
 "help_article_map_point_layers_on_map_name" = "Тачке на карти";
 "help_article_map_raster_maps_name" = "Растерске карте (мрежне / ванмрежне)";
 "help_article_map_track_context_menu_name" = "Приручни изборник трагова";
@@ -2932,7 +2932,7 @@
 "cache_cleared" = "Кеш очишћен";
 "hide_map_center" = "Сакриј координате: мапа у центру";
 "shared_string_location_unknown" = "Локација непозната";
-"map_settings_topography" = "Изохипсе";
+"map_settings_topography" = "Контурне линије";
 "test_heightmap" = "Тест висинска мапа";
 "upload_poi" = "Отпреми тачку занимања";
 "simulate_location_track_select_descr" = "Одаберите путању као извор за померање локације.";
@@ -3433,7 +3433,7 @@
 "view_angle_description" = "Приказуј област у облику купе према којој сте тренутно усмерени";
 "resting_position" = "Положај мировања";
 "location_radius" = "Пречник положаја";
-"of" = "%@ од %@";
+"of" = "%d од %d";
 "daynight_mode_night_summary" = "Увек приказује мапу у тамној теми, погодној за ноћне услове или услове слабог осветљења.";
 "daynight_mode_sunrise_sunset_summary" = "Аутоматски пребацује између дневне и ноћне теме на основу локалног времена изласка и заласка сунца.";
 "daynight_mode_app_theme_summary" = "Приказ мапе је у складу са општом темом апликације — дневни режим за светлу тему и ноћни режим за тамну тему";

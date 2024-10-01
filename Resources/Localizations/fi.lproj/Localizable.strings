@@ -492,7 +492,7 @@
 "add_online_source" = "Lisää verkkolähde";
 "srtm_color_scheme" = "Värimaailma";
 "shared_string_appearance" = "Ulkoasu";
-"settings_app_theme" = "Sovelluksen teema";
+"settings_app_theme" = "Sovellusteema";
 "light_theme" = "Vaalea";
 "do_not_rotate" = "Älä kierrä";
 "allow_3D_view" = "2.5D-näkymä";
@@ -2242,3 +2242,4 @@
 "resting_position_icon" = "Lepoikoni";
 "profile_icon" = "Profiilikuvake";
 "location_radius" = "Sijaintikehä";
+"of" = "%d / %d";

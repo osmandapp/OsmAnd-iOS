@@ -2911,3 +2911,4 @@
 "day_off_label" = "OFF";
 "navigate_point_mgrs" = "MGRS(Military Grid Reference System)";
 "shared_string_off" = "OFF";
+"of" = "全%d中%d";

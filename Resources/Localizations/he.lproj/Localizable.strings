@@ -2240,3 +2240,4 @@
 "quick_action_toggle_preference" = "מתג להחלפת העדפה.";
 "show_along_the_route" = "הצגה לאורך המסלול";
 "shared_string_local" = "מקומי";
+"of" = "%d מתוך %d";

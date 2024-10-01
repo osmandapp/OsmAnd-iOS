@@ -2680,7 +2680,7 @@
 "map_widget_camera_tilt" = "Inclinazione della fotocamera";
 "map_widget_zoom_level" = "Livello di zoom";
 "rotate_map_manual_opt" = "Ruotato manualmente";
-"compass_click_desc" = "Suggerimento: tocca la bussola per cambiare l'orientamento della mappa.";
+"compass_click_desc" = "Suggerimento: tocca la bussola per cambiare l\'orientamento della mappa.";
 "map_widget_camera_distance" = "Elevazione fotocamera";
 "change_language" = "Cambia lingua";
 "icon_group_service" = "Servizi";
@@ -3364,3 +3364,8 @@
 "navigate_point_latitude" = "Latitudine";
 "navigate_point_longitude" = "Longitudine";
 "telegram_chats" = "Chat Telegram";
+"daynight_mode_sunrise_sunset_summary" = "Passa automaticamente dai temi diurni a quelli notturni in base agli orari locali di alba e tramonto.";
+"daynight_mode_day_summary" = "Visualizza sempre la mappa con un tema chiaro, ideale per la visibilità diurna.";
+"daynight_mode_night_summary" = "Visualizza sempre la mappa con un tema scuro, adatto alle ore notturne o alle condizioni di scarsa illuminazione.";
+"daynight_mode_app_theme_summary" = "La visualizzazione della mappa si allinea al tema generale dell\'app: modalità giorno per un tema chiaro e modalità notturna per un tema scuro";
+"of" = "%d di %d";

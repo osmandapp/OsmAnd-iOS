@@ -2692,7 +2692,7 @@
 "restart_is_required_title" = "Neustart ist erforderlich";
 "free_downloads" = "Kostenlose Downloads";
 "search_favorites" = "In Favoriten suchen";
-"compass_click_desc" = "Hinweis: Tippen Sie auf den Kompass, um die Art der Kartenausrichtung zu ändern.";
+"compass_click_desc" = "Doppeltes Tippen auf die Kompass-Schaltfläche wechselt den Kartenausrichtungsmodus.";
 "rotate_map_manual_opt" = "Manuell gedreht (fest)";
 "map_widget_camera_tilt" = "Kameraneigung";
 "map_widget_camera_distance" = "Kamerahöhe";
@@ -3373,4 +3373,8 @@
 "location_radius_description" = "Zeigt den kreisförmigen Bereich an, der die Genauigkeit Ihres aktuellen Standorts darstellt";
 "osm_id" = "OSM-ID";
 "offline_wikivoyage" = "Wikivoyage offline";
-"of" = "%@ von %@";
+"of" = "%d von %d";
+"daynight_mode_app_theme_summary" = "Die Kartendarstellung passt sich dem Gesamtthema der App an - Tagmodus für eine helle Darstellung und Nachtmodus für eine dunkle Darstellung";
+"daynight_mode_day_summary" = "Zeigt die Karte immer in einer hellen Darstellung an, ideal für die Sichtbarkeit bei Tag.";
+"daynight_mode_night_summary" = "Zeigt die Karte immer in einer dunklen Darstellung an, die für nächtliche oder lichtarme Bedingungen geeignet ist.";
+"daynight_mode_sunrise_sunset_summary" = "Schaltet automatisch zwischen Tag- und Nachtmodus um, je nach Sonnenauf- und -untergangszeit vor Ort.";

@@ -3303,7 +3303,7 @@
 "visualization_3d_track_line" = "Linha da trilha";
 "fixed_height" = "Altura fixa";
 "shared_string_top" = "Topo";
-"shared_string_bottom" = "Base";
+"shared_string_bottom" = "Em baixo";
 "shared_string_top_bottom" = "Topo e base";
 "track_3d_empty_view_title" = "Visualização da trilha 3D";
 "display_position_automatic_descr" = "Depende da orientação do mapa: a parte inferior para orientação do movimento, o centro para todo o resto.";
@@ -3410,3 +3410,8 @@
 "navigate_point_format_DMS" = "GGG MM SS.S";
 "short_location_on_map" = "Latitude %@ \nLongitude %@";
 "offline_wikivoyage" = "Wikivoyage offline";
+"of" = "%d de %d";
+"daynight_mode_day_summary" = "Sempre exibe o mapa em um tema claro, ideal para visibilidade durante o dia.";
+"daynight_mode_night_summary" = "Sempre exibe o mapa em um tema escuro, adequado para condições noturnas ou de baixa luminosidade.";
+"daynight_mode_sunrise_sunset_summary" = "Alterna automaticamente entre temas claro e escuro com base nos horários locais do nascer e do pôr do sol.";
+"daynight_mode_app_theme_summary" = "A exibição do mapa se alinha ao tema geral do aplicativo - modo dia para um tema claro e modo noite para um tema escuro";

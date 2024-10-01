@@ -1649,7 +1649,7 @@
 "map_settings_weather_wind" = "Άνεμος";
 "external_sensors_plugin_name" = "Εξωτερικοί Αισθητήρες";
 "shared_string_weather" = "Καιρός";
-"weather_update_disabled" = "Απενεργοποιημένο";
+"weather_update_disabled" = "Ανενεργό";
 "weather_update_over_any_network" = "Σε οποιοδήποτε δίκτυο";
 "plugin_popup_weather_title" = "Ενεργοποίηση Καιρού";
 "weather_update_over_wifi_only" = "Μόνο WIFI";
@@ -1946,7 +1946,7 @@
 "shared_string_item" = "Αντικείμενο";
 "avoid_pt_types" = "Αποφυγή ειδών Μ.Μ.Μ…";
 "speed_limit_warning" = "Προειδοποίηση ορίου ταχύτητας";
-"shared_string_bottom" = "Κάτω μέρος";
+"shared_string_bottom" = "Πάτος";
 "avoid_pt_types_descr" = "Αποφυγή ειδών δημοσίων ΜΜΜ στην πλοήγηση:";
 "shared_string_always" = "Πάντοτε";
 "auto_zoom" = "Αυτόματο ζουμ";
@@ -2175,3 +2175,4 @@
 "shared_string_top" = "Κορυφή";
 "shared_string_local" = "Τοπικά";
 "shared_string_top_bottom" = "Κορυφή και πάτος";
+"of" = "%d από %d";

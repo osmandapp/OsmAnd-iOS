@@ -2857,7 +2857,7 @@
 "announcement_time_approach" = "Yaklaşma";
 "route_info" = "Rota bilgisi";
 "image_cache" = "Resim önbelleği";
-"external_device_status_connect" = "Bağlamak";
+"external_device_status_connect" = "Bağlan";
 "coordinates_widget_secondary_desc" = "Koordinat biçimi %@ – %@ – %@ içinde değiştirilebilir.";
 "map_widget_sunrise_sunset_time_left" = "Kalan zaman";
 "shared_string_view" = "Görünüm";
@@ -3276,3 +3276,7 @@
 "shared_string_local" = "Yerel";
 "show_along_the_route" = "Rotayı göster";
 "quick_action_toggle_preference" = "Tercihi değiştirmek için bir geçiş.";
+"daynight_mode_night_summary" = "Haritayı devamlı karanlık temada göster, karanlık yada düşük ışık şartlarına uygundur.";
+"daynight_mode_sunrise_sunset_summary" = "Gece ve gündüz teması yerel gün doğumu ve batımına göre otomatik seçilir.";
+"of" = "%d / %d";
+"daynight_mode_day_summary" = "Haritayı devamlı aydınlık temada göster, gündüz görünürlüğü için idealdir.";

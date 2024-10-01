@@ -678,7 +678,7 @@
 "shared_string_appearance" = "Izgled";
 "map_settings_line_density_slowdown_warning" = "Velika gustina linija može usporiti prikazivanje mape";
 "map_settings_available_srtm_maps_descr" = "Dodatne mape su potrebne da biste videli senke brda na mapi";
-"settings_app_theme" = "Kolor šema";
+"settings_app_theme" = "Tema aplikacije";
 "light_theme" = "Svetla";
 "do_not_rotate" = "Ne rotiraj";
 "allow_3D_view" = "2.5D prikaz";
@@ -3167,7 +3167,7 @@
 "shared_string_edit_color" = "Uredi boju";
 "carplay" = "KarPlej";
 "delete_history_items" = "Obrisati %@ stavke iz istorije?";
-"compass_click_desc" = "Tapni na ikonu kompasa radi promene orijentacije mape.";
+"compass_click_desc" = "Duplo tapni na ikonu kompasa radi promene orijentacije mape.";
 "travel_guides_search_placeholder" = "Pretraga države, grada ili pokrajine";
 "cleared_travel_search_history" = "Istorija očišćena";
 "images" = "Slike";
@@ -3433,7 +3433,7 @@
 "navigation_position_icon" = "Ikona navigacione pozicije";
 "location_radius" = "Radijus lokacije";
 "tracker_item" = "OsmAnd monitor";
-"of" = "%@ od %@";
+"of" = "%d od %d";
 "daynight_mode_night_summary" = "Mapu uvek prikazivati u tamnoj temi, prikladnoj za noć ili u uslovima slabog osvetljenja.";
 "daynight_mode_app_theme_summary" = "Prikaz mape usklađen je s celokupnom temom aplikacije—dnevni način rada za svetlu temu i noćni način rada za tamnu temu";
 "daynight_mode_sunrise_sunset_summary" = "Automatski se prebacuje između dnevne i noćne teme na temelju lokalnog izlaska i zalaska sunca.";

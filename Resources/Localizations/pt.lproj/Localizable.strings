@@ -3414,3 +3414,8 @@
 "shared_string_local" = "Descarregados";
 "resting_position_icon" = "Ícone da posição parado";
 "navigation_position" = "Posição de navegação";
+"daynight_mode_app_theme_summary" = "O ecrã do mapa ajusta-se ao tema geral da aplicação - modo dia para um tema claro e modo noite para um tema escuro";
+"of" = "%d de %d";
+"daynight_mode_sunrise_sunset_summary" = "Muda automaticamente entre temas diurnos e noturnos com base nas horas locais do nascer e do pôr do sol.";
+"daynight_mode_day_summary" = "Apresenta sempre o mapa num tema claro, ideal para a visibilidade durante o dia.";
+"daynight_mode_night_summary" = "Apresenta sempre o mapa num tema escuro, adequado para condições noturnas ou de fraca luminosidade.";

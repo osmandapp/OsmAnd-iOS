@@ -3366,7 +3366,7 @@
 "track_3d" = "المسار 3D";
 "fixed_height" = "ارتفاع ثابت";
 "upward_gradient" = "التدرج التصاعدي";
-"shared_string_bottom" = "أسفل";
+"shared_string_bottom" = "الأسفل";
 "track_3d_empty_view_title" = "عرض المسار ثلاثي الأبعاد";
 "shared_string_millimeters_short" = "مليمتر";
 "routing_algorithm" = "خوارزمية التوجيه";
@@ -3491,3 +3491,8 @@
 "shared_string_local" = "على الهاتف";
 "resting_navigation_position" = "وضع التنقل أثناء الراحة";
 "app_mode_osm" = "Osm";
+"of" = "%d من %d";
+"daynight_mode_night_summary" = "يعرض دائمًا الخريطة بمظهر داكن، مناسب لظروف الليل أو الإضاءة المنخفضة.";
+"daynight_mode_sunrise_sunset_summary" = "يقوم بالتبديل تلقائيا بين سمات النهار والليل بناءً على أوقات شروق الشمس وغروبها المحلية.";
+"daynight_mode_day_summary" = "تعرض الخريطة دائما بمظهر فاتح، مما يجعلها مثالية للرؤية أثناء النهار.";
+"daynight_mode_app_theme_summary" = "تتماشى شاشة الخريطة مع المظهر العام للتطبيق — الوضع النهاري للثيم الفاتح والوضع الليلي للثيم الداكن";

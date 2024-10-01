@@ -3132,7 +3132,7 @@
 "visualization_3d_visualized_by" = "Wizualizowane przez";
 "shared_string_always" = "Zawsze";
 "shared_string_item" = "Pozycja";
-"shared_string_bottom" = "Dół";
+"shared_string_bottom" = "Na dole";
 "speedometer_description" = "Pokazuje bieżącą prędkość zgłoszoną przez GPS";
 "default_buttons" = "Przyciski domyślne";
 "track_3d_empty_view_description" = "Przeglądaj tor w interaktywnym 3D! Wizualizuj wysokość, prędkość i inne parametry bezpośrednio na mapie.";
@@ -3198,3 +3198,8 @@
 "app_mode_pickup_truck" = "Pickup";
 "shared_string_relief_3d" = "Relief 3D";
 "shared_string_ok" = "Ok";
+"daynight_mode_app_theme_summary" = "Wyświetlanie mapy jest zgodne z ogólnym motywem aplikacji - tryb dzienny dla jasnego motywu i tryb nocny dla ciemnego motywu";
+"daynight_mode_day_summary" = "Zawsze wyświetla mapę w jasnym motywie, idealnym do widoczności w ciągu dnia.";
+"of" = "%d z %d";
+"daynight_mode_sunrise_sunset_summary" = "Automatycznie przełącza się między motywami dziennym i nocnym w oparciu o lokalne godziny wschodu i zachodu słońca.";
+"daynight_mode_night_summary" = "Zawsze wyświetla mapę w ciemnym motywie, dostosowanym do warunków nocnych lub słabego oświetlenia.";

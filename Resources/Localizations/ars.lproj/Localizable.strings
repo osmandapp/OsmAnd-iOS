@@ -3332,3 +3332,4 @@
 "quick_action_toggle_preference" = "كبسة لتبديل الخيارات المفضلة.";
 "shared_string_local" = "على الهاتف";
 "app_mode_osm" = "Osm";
+"of" = "%d من %d";

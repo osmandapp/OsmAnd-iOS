@@ -3476,3 +3476,8 @@
 "weather_temperature_fahrenheit" = "F°";
 "weather_temperature_celsius" = "C°";
 "navigate_point_olc" = "Open Location Code (OLC)";
+"daynight_mode_app_theme_summary" = "Показ мапи узгоджується з темою застосунку: денний режим для світлої теми та нічний режим для темної теми";
+"daynight_mode_day_summary" = "Завжди показує мапу у світлій темі, що ідеально для перегляду вдень.";
+"daynight_mode_night_summary" = "Завжди показує мапу в темній темі, що найкраще вночі або в умовах слабкої освітленості.";
+"daynight_mode_sunrise_sunset_summary" = "Автоматично перемикається між денними та нічними темами на основі місцевого часу сходу та заходу сонця.";
+"of" = "%d зі %d";

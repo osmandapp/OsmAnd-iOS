@@ -1681,7 +1681,7 @@
 "shared_string_email" = "Correo electrónico";
 "shared_string_account_add" = "Añadir cuenta";
 "settings_item_read_error" = "No se pudo leer desde «%@».";
-"settings_app_theme" = "Tema de la aplicación";
+"settings_app_theme" = "Tema";
 "send_anonymous_data" = "Enviar datos anónimos";
 "only_selected_segment_recalc" = "Sólo el segmento marcado será recalculado usando el perfil elegido.";
 "select_application_profile" = "Elegir perfil de la aplicación";
@@ -2176,7 +2176,7 @@
 "track_multiple_segments_select" = "%@ tiene más de un segmento. Marca la parte de la ruta que quieres utilizar para la navegación.";
 "selected_tracks_count" = "Trazas - %d";
 "map_widget_parking" = "Aparcamiento";
-"select_wikipedia_article_langs" = "Marca los idiomas de los artículos de Wikipedia en el mapa. Cambia a cualquier idioma disponible mientras lees el artículo.";
+"select_wikipedia_article_langs" = "Selecciona los idiomas de los artículos de Wikipedia en el mapa. Cambia a cualquier idioma disponible mientras lees el artículo.";
 "rendering_attr_showFitnessTrails_name" = "Circuitos aeróbicos";
 "rendering_attr_showFitnessTrails_description" = "Muestra los circuitos aeróbicos";
 "available_groups" = "Grupos disponibles";
@@ -2729,7 +2729,7 @@
 "confirm_history_item_delete" = "¿Estás seguro de que quieres borrar (%ld) elementos del historial?";
 "search_favorites" = "Buscar en favoritos";
 "rotate_map_manual_opt" = "Rotación manual";
-"compass_click_desc" = "Sugerencia: pulsa el botón de la brújula para cambiar el modo de la orientación del mapa.";
+"compass_click_desc" = "Toca dos veces el botón de la brújula para cambiar el modo de orientación del mapa.";
 "map_widget_camera_tilt" = "Inclinación de la cámara";
 "map_widget_camera_distance" = "Altura de la cámara";
 "map_widget_zoom_level" = "Nivel del zoom";
@@ -3401,7 +3401,7 @@
 "resting_navigation_position" = "Posición de reposo y navegación";
 "navigation_position_icon" = "Icono de posición de navegación";
 "view_angle" = "Ángulo de visión";
-"profile_icon" = "Icono de perfil";
+"profile_icon" = "Icono del perfil";
 "resting_position_icon_summary" = "Icono que se muestra cuando no te estás moviendo.";
 "navigation_position" = "Posición de navegación";
 "location_radius" = "Radio de la ubicación";
@@ -3412,12 +3412,5 @@
 "daynight_mode_night_summary" = "Siempre muestra el mapa en un tema oscuro, adecuado para condiciones nocturnas o de poca luz.";
 "daynight_mode_app_theme_summary" = "La pantalla del mapa se alinea con el modo día de la aplicación para un tema claro y el modo noche para un tema oscuro";
 "daynight_mode_sunrise_sunset_summary" = "Cambia automáticamente entre los temas de día y de noche en función de las horas locales del amanecer y el atardecer.";
-"of" = "%@ de %@";
-"help_article_navigation_car_play_name" = "CarPlay";
+"of" = "%d de %d";
 "help_article_navigation_routing_brouter_name" = "Brouter";
-"help_article_navigation_auto_car_name" = "Android Auto";
-"help_article_troubleshooting_general_name" = "General";
-"help_article_plugins_openplacereviews_name" = "OpenPlaceReviews";
-"help_article_troubleshooting_android_auto_name" = "Android Auto";
-"driving_region_australia" = "Australia";
-"testFlight" = "TestFlight";

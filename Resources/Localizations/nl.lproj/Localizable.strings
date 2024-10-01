@@ -2367,7 +2367,7 @@
 "display_position_automatic_descr" = "Afhankelijk van de Kaartoriëntatie: \"Onderaan\" voor de kaartoriëntatie \"Bewegingsrichting\" en in het \"Midden\" voor alle andere gevallen.";
 "visualization_3d_visualized_by" = "Weergegeven door";
 "dangerous_goods" = "Gevaarlijke goederen";
-"shared_string_bottom" = "Onderaan";
+"shared_string_bottom" = "Onderkant";
 "in_case_of_reverse_direction" = "In geval van een omgekeerde richting";
 "shared_string_development" = "Ontwikkeling";
 "edit_tilesource_maxzoom" = "Max zoomniveau";
@@ -2577,3 +2577,8 @@
 "navigate_point_format_DMS" = "GGG MM SS.S";
 "osm_id" = "OSM-ID";
 "navigate_point_format_DM" = "GGG MM.MMM";
+"of" = "%d van de %d";
+"daynight_mode_app_theme_summary" = "De weergave van de map is aangepast aan het kleurenschema van de app - dagmodus voor een licht schema, en nachtmodus voor een donker schema";
+"daynight_mode_day_summary" = "Toont de kaart altijd in een licht kleurenschema, ideaal voor zichtbaarheid in daglicht.";
+"daynight_mode_night_summary" = "Toont de kaart altijd in een donker kleurenschema, geschikt voor \'s nachts of in lichtarme omstandigheden.";
+"daynight_mode_sunrise_sunset_summary" = "Schakelt automatisch tussen dacht- en nachtschema\'s op basis van de lokale zonsopgangs- en zonsondergangstijden.";

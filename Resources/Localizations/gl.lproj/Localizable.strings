@@ -1481,7 +1481,7 @@
 "short_location_on_map" = "Lat %@ \nLon %@";
 "select_another_colorization" = "Escolle outro tipo de cor.";
 "osm_live_payment_current_subscription" = "Subscrición actual";
-"empty_purchases_description" = "Se as súas compras non aparecen aquí, prema en «%@» ou contacte co noso equipo de asistencia.";
+"empty_purchases_description" = "Se as túas compras non aparecen aquí, preme en \"%@\", ou ponte en contacto co noso equipo de asistencia.";
 "public_transport_ped_route_title" = "A ruta a pé é de aproximadamente %@ e podería ser máis rápida que no transporte público";
 "recalc_angle_dialog_descr" = "Amosarase un segmento recto adicional entre a miña localización e a ruta calculada até que se volva calcular a ruta";
 "sort_by" = "Ordenar por";
@@ -1720,3 +1720,4 @@
 "view_angle" = "Ángulo de visión";
 "device_settings" = "Axustes do dispositivo";
 "backup_and_restore" = "Copia de seguranza e restauración";
+"of" = "%d de %d";

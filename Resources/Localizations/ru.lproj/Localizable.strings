@@ -2850,7 +2850,7 @@
 "shared_string_deleted" = "Удалено";
 "longest_duration_first" = "Сначала более продолжительные";
 "temperature_widget_desc" = "Виджет показывает температуру для текущего центра карты.";
-"external_device_status_connect" = "Соединение";
+"external_device_status_connect" = "Подключить";
 "no_widgets_here_yet" = "Виджеты не добавлены";
 "help_article_start_with_main_menu_name" = "Главное меню";
 "osmand_cloud_deletion_secondary_devices_warning" = "Вторичные устройства будут отключены от OsmAnd Cloud и потеряют доступ к платным функциям.";
@@ -3232,3 +3232,8 @@
 "view_angle" = "Угол обзора";
 "profile_icon" = "Значок профиля";
 "navigation_position_icon" = "Значок местоположения в движении";
+"daynight_mode_sunrise_sunset_summary" = "Автоматическое переключение между дневным и ночным режимами в соответствии с местным временем восхода и захода солнца.";
+"daynight_mode_day_summary" = "Карта всегда отображается в светлых тонах, идеально подходящих для дневной видимости.";
+"daynight_mode_app_theme_summary" = "Отображение карты соответствует теме приложения: дневной режим для светлой темы и ночной режим для темной темы";
+"of" = "%d из %d";
+"daynight_mode_night_summary" = "Карта всегда отображается в темных тонах, подходящих для ночного времени или условий недостаточной освещенности.";

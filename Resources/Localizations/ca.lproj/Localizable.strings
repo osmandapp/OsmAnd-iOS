@@ -1422,7 +1422,7 @@
 "routeInfo_smoothness_name" = "Uniformitat";
 "rendering_attr_hideWaterPolygons_description" = "Hidràulic";
 "rendering_attr_hidePOILabels_name" = "Etiquetes PDI";
-"routing_attr_freeride_policy_description" = "\'Camp a través\' i \'Fora pistes\' són vies no oficials. Normalment no estan regulades ni mantingudes ni revisades de nit. Entrant-hi, sereu responsables del que passi.";
+"routing_attr_freeride_policy_description" = "\'Camp a través\' i \'Fora pistes\' són vies no oficials. Normalment, no estan regulades ni mantingudes ni revisades de nit. Entrant-hi, sereu responsables del que passi.";
 "rendering_attr_piste_type_downhill_name" = "Descens";
 "routing_attr_allow_classic_only_name" = "Restringeix a rutes clàssiques";
 "rendering_attr_currentTrackWidth_description" = "Amplada traça GPX";
@@ -2428,7 +2428,7 @@
 "specify_number_of_dir_indicators_desc" = "Indiqueu el nombre d\'indicadors de direcció.";
 "shared_string_light" = "Lluminós";
 "external_sensors_source_of_data" = "Procedència de les dades";
-"map_settings_topography" = "Corbes de nivell";
+"map_settings_topography" = "Dades de corbes de nivell";
 "map_screen_orientation" = "Orientació de pantalla";
 "shared_string_hand" = "Mà";
 "default_appearance_desc" = "El color, l’icona i la forma predeterminada s’aplicaran als punts preferits agregats al grup.";
@@ -2462,7 +2462,7 @@
 "map_widget_ant_bicycle_power" = "Potència de la bicicleta";
 "elevation_profile_widget_desc" = "El giny mostra el perfil d\'elevació i pendent de la ruta actual.";
 "lang_zh-Hans" = "Xinès (simplificat)";
-"external_device_status_connect" = "Connecta";
+"external_device_status_connect" = "Connecta\'t";
 "global_settings" = "Paràmetres globals";
 "map_widget_ant_bicycle_cadence" = "Cadència de la bicicleta";
 "map_widget_trip_recording_duration" = "Durada";
@@ -2540,3 +2540,4 @@
 "navigate_point_format_D" = "GGG.GGGGG";
 "nm" = "NM";
 "navigate_point_format_DMS" = "GGG MM SS.S";
+"of" = "%d de %d";

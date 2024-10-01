@@ -1647,7 +1647,7 @@
 "number_of_tiles" = "Paanide arv";
 "update_tile" = "Uuenda";
 "shared_string_maximum" = "Maksimum";
-"shared_string_meters" = "meetrit";
+"shared_string_meters" = "Meetrid";
 "shared_string_tones" = "toonid";
 "accessibility_announce" = "Teata";
 "transfers" = "Ümberistumised";
@@ -2730,3 +2730,4 @@
 "quick_action_toggle_preference" = "Võimalus eelistust sisse/välja lülitada.";
 "show_along_the_route" = "Näita teekonnal";
 "view_angle_description" = "Kuvab koonusekujulise vaate, mida sa hetkel näed";
+"of" = "%d / %d";

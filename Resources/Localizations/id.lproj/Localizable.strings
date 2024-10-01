@@ -2442,3 +2442,7 @@
 "quick_action_toggle_preference" = "Sebuah alihan untuk mengubah preferensi.";
 "location_radius" = "Radius lokasi";
 "osm_id" = "ID OSM";
+"of" = "%d dari %d";
+"daynight_mode_night_summary" = "Selalu tampilkan aplikasi dalam tema gelap. Tema ini cocok digunakan saat malam hari atau saat cahaya sedang redup.";
+"daynight_mode_day_summary" = "Selalu tampilkan aplikasi dalam tema terang. Tema ini cocok digunakan saat siang hari.";
+"daynight_mode_sunrise_sunset_summary" = "Mengganti tema gawai menjadi tema siang atau malam sesuai dengan waktu fajar dan senja setempat.";

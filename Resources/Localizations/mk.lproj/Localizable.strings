@@ -2000,3 +2000,4 @@
 "quick_action_toggle_preference" = "Prefrluvanje za promena na pretpočitanje.";
 "shared_string_local" = "Lokalen";
 "show_along_the_route" = "Prikaži po dolžinata na rutata";
+"of" = "%d od %d";

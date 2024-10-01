@@ -59,7 +59,7 @@
 "rotate_map_compass_opt" = "Според компаса";
 "rotate_map_bearing_opt" = "Посока на движение";
 "rotate_map_north_opt" = "Север е горе";
-"driving_region_descr" = "Изберете регион на шофиране: САЩ, Европа, Великобритания, Азия или друг.";
+"driving_region_descr" = "Изберете областта на шофиране: САЩ, Европа, Великобритания, Азия или друг.";
 "driving_region" = "Район на шофиране";
 "shared_string_automatic" = "Автоматично";
 "routing_attr_length_name" = "Дължина";
@@ -890,7 +890,7 @@
 "worldwide_maps" = "Карти на света";
 "purchases_feature_desc_wikipedia" = "Осигурява без мрежа всички статии в Уикипедия, свързани с места, като ви помага да научите повече за местата, които посещавате по време на пътуването си, само с едно докосване на картата. Не забравяйте да изтеглите файловете с карти на Уикипедия за съответните райони.";
 "shared_string_all_languages" = "Всички езици";
-"select_wikipedia_article_langs" = "Изберете езиците на които Уикипедия публикациите ще се появяват на картата. Можете да превключвате между наличните езици докато четете публикацията.";
+"select_wikipedia_article_langs" = "Изберете езиците, на които публикациите в Уикипедия ще се появяват на картата. Можете да превключвате между наличните езици докато ги четете.";
 "wiki_menu_download_descr" = "Необходими са допълнителни карти, за да видите обектите на Уикипедия на картата.";
 "some_articles_may_not_available_in_lang" = "Някои статии в Уикипедия може да не са достъпни на вашия език.";
 "srtm_plugin_name" = "Релеф";
@@ -1378,7 +1378,7 @@
 "shared_string_angle_param" = "Ъгъл: %@°";
 "duration_ago" = "Преди %@";
 "routing_attr_motor_type_electric_name" = "Електричество";
-"backup_and_restore" = "Резервни копия и възстановяване";
+"backup_and_restore" = "Резервно копие и възстановяване";
 "backup_version_history" = "Хронология на изданията";
 "local_backup_descr" = "Създаване на резервно копие или възстановяване на данни от местен файл.";
 "backup_restore_data" = "Възстановяване на данни";
@@ -1832,7 +1832,7 @@
 "ant_plus_bluetooth_off_description" = "Включване на Bluetooth, търсене и сдвояване със сензори.";
 "external_sensors_source_of_data" = "Източник на данни";
 "map_widget_ant_bicycle_cadence" = "Каданс на велосипеда";
-"weather_update_disabled" = "Изключено";
+"weather_update_disabled" = "Спрян";
 "map_widget_zoom_level_desc" = "Показва текущото увеличение на картата.";
 "radius_rules_widget_desc" = "Инструментът „Линия за радиуси“ показва окръжности с разстояния около избрана точка от картата.";
 "average_speed_time_interval_desc" = "Задайте интервала от време, за който да бъде усреднена скоростта.";
@@ -1894,7 +1894,7 @@
 "map_widget_ant_bicycle_power_desc" = "Показва мощността на велосипедиста, която се използва за придвижването му";
 "help_article_personal_storage_name" = "Хранилище";
 "external_device_characteristic_speed" = "Скорост";
-"compass_click_desc" = "Съвет: Докоснете бутона с компаса, за да превключите режима на ориентация на картата.";
+"compass_click_desc" = "Докоснете два пъти бутона с компаса, за да превключите режима на ориентация на картата.";
 "ant_plus_searching_text_description" = "Дръжте устройството близо до сензора. Сензорът трябва да работи, за да може OsmAnd да го намери.";
 "visible_in_3d_mode" = "Видимо в триизмерен режим";
 "simulate_location_movement_speed_original" = "Оригинал";

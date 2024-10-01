@@ -2031,7 +2031,7 @@
 "routing_attr_motor_type_name" = "引擎使用的燃料";
 "gpx_selection_segment_title" = "區段";
 "search_poi_types_descr" = "組合來自不同分類的 POI 類型。點擊開關以全選，點擊左側選取分類。";
-"routing_attr_motor_type_gas_name" = "天然氣";
+"routing_attr_motor_type_gas_name" = "壓縮天然氣";
 "weather_online_cache" = "線上預報";
 "backup_data" = "備份資料";
 "backup_delete_all_data" = "刪除我所有的資料";
@@ -2296,7 +2296,7 @@
 "poi_category_and_type" = "類別及POI類型";
 "mapil_usernames" = "用戶名稱";
 "history_actions_footer_text" = "您可以匯出歷史至檔案。您可以刪除至今記錄的所有歷史項目。";
-"compass_click_desc" = "秘訣：點擊指南針按鈕切換地圖方向模式。";
+"compass_click_desc" = "點兩下指南針按鈕切換地圖方向模式。";
 "map_widget_next_sunset" = "下次日落";
 "nav_type_descr" = "選擇這個設定檔如何計算路線";
 "choose_auto_center_map_view_descr" = "移動後地圖視角同步至目前位置的等候時間";
@@ -2546,7 +2546,7 @@
 "quick_action_get_info" = "取得資訊";
 "quick_action_dialog" = "對話框";
 "units_of_speed" = "速度單位";
-"settings_app_theme" = "應用程式佈景主題";
+"settings_app_theme" = "應用程式主題";
 "map_settings_available_srtm_maps_descr" = "需要額外的地圖才能在地圖上檢視地形陰影";
 "res_url_warning" = "URL 不能為空";
 "toggle_day_night" = "切換日/夜模式";
@@ -3223,7 +3223,7 @@
 "restore_from_trash" = "從回收桶還原";
 "external_device_blood_pressure" = "血壓";
 "osmand_cloud_deletion_account_warning" = "您的帳號與所有帳號詳細資訊都將會 %@";
-"external_device_status_connect" = "連接";
+"external_device_status_connect" = "連結";
 "shared_string_wrist" = "手腕";
 "external_device_characteristic_speed" = "速度";
 "longest_duration_first" = "最長時間優先";
@@ -3297,7 +3297,7 @@
 "step_by_step" = "按步驟";
 "add_button" = "新增按鈕";
 "shared_string_always" = "總是";
-"shared_string_bottom" = "下面";
+"shared_string_bottom" = "底部";
 "auto_zoom" = "自動縮放";
 "track_3d_empty_view_description" = "以互動式 3D 方式探索軌跡！在地圖上直接視覺化高度、速度等。";
 "shared_string_millimeters" = "公釐";
@@ -3366,3 +3366,8 @@
 "shared_string_local" = "本機";
 "show_along_the_route" = "在路徑旁顯示";
 "resting_position" = "暫停位置";
+"daynight_mode_day_summary" = "一律以淺色主題顯示地圖，非常適合白天的可讀性。";
+"of" = "%d 的 %d";
+"daynight_mode_app_theme_summary" = "地圖的顯示與應用程式的整體主題一致，白天模式適用於淺色主題，夜間模式適用於深色主題";
+"daynight_mode_night_summary" = "一律以深色主題顯示地圖，適合夜間或低光源條件。";
+"daynight_mode_sunrise_sunset_summary" = "根據當地日出與日落的時間自動切換日間與夜間主題。";

@@ -1469,3 +1469,4 @@
 "navigate_point_format_DM" = "DDD MM.MM";
 "gpx_selection_segment_title" = "Segments";
 "navigate_point_format_DMS" = "DDD MM SS.SS";
+"of" = "%d no %d";

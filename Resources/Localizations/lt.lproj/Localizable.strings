@@ -1522,7 +1522,7 @@
 "shared_string_light" = "Šviesi";
 "wikivoyage_download_pics" = "Atsisiųsti paveikslėlius";
 "shared_string_error" = "Klaida";
-"external_device_status_connect" = "Prisijungti";
+"external_device_status_connect" = "Prijungti";
 "lang_sr-Latn" = "Serbų (lotynų)";
 "specify_number_of_dir_indicators_desc" = "Pasirinkti, kiek krypčių rodyklių bus rodoma.";
 "map_orientation_default" = "Kaip ir įrenginys";
@@ -1702,3 +1702,4 @@
 "shared_string_show" = "Rodyti";
 "shared_string_local" = "Vietinis";
 "download_wikipedia_maps" = "Vikipedija";
+"of" = "%d iš %d";

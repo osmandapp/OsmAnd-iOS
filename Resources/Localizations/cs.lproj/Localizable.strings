@@ -2882,7 +2882,7 @@
 "map_widget_zoom_level_desc" = "Zobrazuje aktuální úroveň přiblížení mapy.";
 "map_widget_camera_distance_desc" = "Zobrazuje výšku kamery nad úrovní povrchu.";
 "map_widget_target_distance_desc" = "Zobrazuje vzdálenost mezi kamerou a cílovým místem.";
-"weather_update_disabled" = "Vypnuto";
+"weather_update_disabled" = "Zakázán";
 "weather_update_over_wifi_only" = "Pouze přes WIFI";
 "weather_update_over_any_network" = "Přes jakoukoli síť";
 "weather_updates_manual" = "Předpověď počasí je nutné aktualizovat manuálně.";
@@ -3375,3 +3375,8 @@
 "location_radius_description" = "Zobrazí oblast ve tvaru kruhu znázorňující přesnost vaší aktuální polohy";
 "resting_position_icon_summary" = "Ikona se zobrazuje, když se nepohybujete.";
 "show_along_the_route" = "Ukázat podél trasy";
+"daynight_mode_day_summary" = "Vždy zobrazí mapu ve světlém režimu, vhodné pro viditelnost během dne.";
+"of" = "%d z %d";
+"daynight_mode_night_summary" = "Vždy zobrazí mapu ve tmavém režimu, vhodné v noci a v podmínkách se slabým osvětlením.";
+"daynight_mode_sunrise_sunset_summary" = "Automaticky přepíná mezi denním a nočním režimem podle místního času východu a západu slunce.";
+"daynight_mode_app_theme_summary" = "Zobrazení mapy se přizpůsobí obecnému motivu aplikace — denní režim pro světlý motiv a noční režim pro tmavý motiv";

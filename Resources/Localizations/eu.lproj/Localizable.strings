@@ -502,7 +502,7 @@
 "add_online_source" = "Gehitu sareko iturria";
 "srtm_color_scheme" = "Kolore eskema";
 "shared_string_appearance" = "Itxura";
-"settings_app_theme" = "Aplikazioaren gaia";
+"settings_app_theme" = "Aplikazioaren itxura";
 "light_theme" = "Argia";
 "units_and_formats" = "Unitate eta formatuak";
 "osmand_settings" = "OsmAnd ezarpenak";
@@ -2368,7 +2368,7 @@
 "default_buttons" = "Berezko botoiak";
 "track_vertical_exaggeration_description" = "Eskalaren balioa aldatuz gero, 3D pistaren altuera alda dezakezu.";
 "avoid_pt_types" = "Ekidin garraio motak…";
-"shared_string_bottom" = "Behean";
+"shared_string_bottom" = "Bekaldea";
 "visualization_3d_track_line" = "Arrastoaren lerroa";
 "when_exceeded" = "Gainditzean";
 "shared_string_millimeters" = "Milimetroak";
@@ -2462,3 +2462,8 @@
 "location_radius_description" = "Uneko kokapenaren zehaztasuna adierazten duen eremu zirkularra erakusten du";
 "navigation_position_icon" = "Nabigazio-posizioaren ikonoa";
 "location_radius" = "Kokapen erradioa";
+"of" = "%d / %d";
+"daynight_mode_day_summary" = "Mapa gai argi batean bistaratzen du beti, egunez ikusteko aproposa.";
+"daynight_mode_night_summary" = "Mapa gai ilun batean bistaratzen du beti, gaueko edo argi gutxiko baldintzetarako egokia.";
+"daynight_mode_sunrise_sunset_summary" = "Eguneko eta gaueko gaien artean automatikoki aldatzen da eguzkiaren eta ilunabarraren orduetan oinarrituta.";
+"daynight_mode_app_theme_summary" = "Maparen pantaila aplikazioaren gai orokorrarekin bat dator: eguneko modua gai argi baterako eta gaueko modua gai ilun baterako";

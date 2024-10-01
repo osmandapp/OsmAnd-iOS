@@ -249,7 +249,8 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
 - (void) applyLocalization
 {
     [_saveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
-    _titleLabel.text = _changedProfile.name.length == 0 ? [self getEmptyNameTitle] : _changedProfile.name;
+    self.title = [self getTitle];
+    _titleLabel.text = self.title;
 }
 
 - (NSString *) getEmptyNameTitle
@@ -257,14 +258,19 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     return _isNewProfile ? OALocalizedString(@"new_profile") : OALocalizedString(@"profile_appearance");
 }
 
+- (NSString *)getTitle
+{
+    return [self getEmptyNameTitle];
+}
+
 - (void) viewDidLoad
 {
     [super viewDidLoad];
     [self.cancelButton setImage:[UIImage rtlImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
-    _tableView.delegate = self;
-    _tableView.dataSource = self;
-    _tableView.separatorInset = UIEdgeInsetsMake(0., 16., 0., 0.);
-    _tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    self.tableView.separatorInset = UIEdgeInsetsMake(0., 16., 0., 0.);
+    self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
     [self setupNavBar];
     [self generateData];
 
@@ -272,6 +278,18 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [self.navigationController.interactivePopGestureRecognizer addTarget:self
                                                                       action:@selector(swipeToCloseRecognized:)];
+}
+
+- (NSString *)getLeftNavbarButtonTitle
+{
+    return OALocalizedString(@"shared_string_cancel");
+}
+
+- (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
+{
+    UIBarButtonItem *rightButton = [self createRightNavbarButton:OALocalizedString(@"shared_string_save") iconName:nil action:@selector(onRightNavbarButtonPressed) menu:nil];
+    rightButton.accessibilityLabel = OALocalizedString(@"shared_string_save");
+    return @[rightButton];
 }
 
 - (void) swipeToCloseRecognized:(UIGestureRecognizer *)recognizer
@@ -557,7 +575,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-- (IBAction) cancelButtonClicked:(id)sender
+- (void)onLeftNavbarButtonPressed
 {
     if (_hasChangesBeenMade)
         [self showExitWithoutSavingAlert];
@@ -565,7 +583,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (IBAction) saveButtonClicked:(id)sender
+- (void)onRightNavbarButtonPressed
 {
     _changedProfile.name = [_changedProfile.name trim];
     if (_changedProfile.name.length == 0)
@@ -659,7 +677,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        [_tableView reloadData];
+        [self.tableView reloadData];
     } completion:nil];
 }
 
@@ -972,7 +990,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         [[_profileIconCollectionHandler getCollectionView] reloadData];
         [[_positionIconCollectionHandler getCollectionView] reloadData];
         [[_locationIconCollectionHandler getCollectionView] reloadData];
-        [_tableView reloadSections:[NSIndexSet indexSetWithIndex:kOptionsSectionIndex] withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:kOptionsSectionIndex] withRowAnimation:UITableViewRowAnimationNone];
     }
     else if (collectionView == [_profileIconCollectionHandler getCollectionView])
     {
@@ -1005,7 +1023,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
 {
     _changedProfile.viewAngleVisibility = newValue;
     [self generateData];
-    [_tableView reloadSections:[NSIndexSet indexSetWithIndex:kOptionsSectionIndex] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:kOptionsSectionIndex] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 #pragma mark - ProfileAppearanceLocationRadiusUpdatable
@@ -1014,7 +1032,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
 {
     _changedProfile.locationRadiusVisibility = newValue;
     [self generateData];
-    [_tableView reloadSections:[NSIndexSet indexSetWithIndex:kOptionsSectionIndex] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:kOptionsSectionIndex] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 @end

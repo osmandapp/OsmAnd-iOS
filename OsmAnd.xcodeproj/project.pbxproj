@@ -2014,7 +2014,6 @@
 		DA5A820626C563A700F274C7 /* OAFeatureCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B0326C563A100F274C7 /* OAFeatureCardView.m */; };
 		DA5A820A26C563A700F274C7 /* OAProfileGeneralSettingsParametersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B0C26C563A100F274C7 /* OAProfileGeneralSettingsParametersViewController.m */; };
 		DA5A820B26C563A700F274C7 /* OAProfileGeneralSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B0D26C563A100F274C7 /* OAProfileGeneralSettingsViewController.m */; };
-		DA5A820D26C563A700F274C7 /* OAProfileAppearanceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7B1326C563A100F274C7 /* OAProfileAppearanceViewController.xib */; };
 		DA5A820E26C563A700F274C7 /* OARearrangeProfilesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B1426C563A100F274C7 /* OARearrangeProfilesViewController.m */; };
 		DA5A821326C563A700F274C7 /* OAPluginInstalledViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B1C26C563A100F274C7 /* OAPluginInstalledViewController.mm */; };
 		DA5A822F26C563A700F274C7 /* OABaseSettingsListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B5C26C563A100F274C7 /* OABaseSettingsListViewController.mm */; };
@@ -5967,7 +5966,6 @@
 		DA5A7B1026C563A100F274C7 /* OAConfigureProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAConfigureProfileViewController.h; sourceTree = "<group>"; };
 		DA5A7B1126C563A100F274C7 /* OAMainSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMainSettingsViewController.h; sourceTree = "<group>"; };
 		DA5A7B1226C563A100F274C7 /* OACoordinatesFormatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACoordinatesFormatViewController.h; sourceTree = "<group>"; };
-		DA5A7B1326C563A100F274C7 /* OAProfileAppearanceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAProfileAppearanceViewController.xib; sourceTree = "<group>"; };
 		DA5A7B1426C563A100F274C7 /* OARearrangeProfilesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OARearrangeProfilesViewController.m; sourceTree = "<group>"; };
 		DA5A7B1526C563A100F274C7 /* OABaseSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OABaseSettingsViewController.h; sourceTree = "<group>"; };
 		DA5A7B1A26C563A100F274C7 /* OAOsmEditingSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAOsmEditingSettingsViewController.h; sourceTree = "<group>"; };
@@ -11252,7 +11250,6 @@
 				DA5A7B7126C563A100F274C7 /* OAMainSettingsViewController.m */,
 				DA5A7BA426C563A100F274C7 /* OAProfileAppearanceViewController.h */,
 				DA5A7BA626C563A100F274C7 /* OAProfileAppearanceViewController.mm */,
-				DA5A7B1326C563A100F274C7 /* OAProfileAppearanceViewController.xib */,
 				DA5A7BA126C563A100F274C7 /* OARearrangeProfilesViewController.h */,
 				DA5A7B1426C563A100F274C7 /* OARearrangeProfilesViewController.m */,
 				DA5A7BA926C563A100F274C7 /* OATripRecordingSettingsViewController.h */,
@@ -15772,7 +15769,6 @@
 				DAB854AE23054C7C002566A6 /* ic_navbar_search@3x.png in Resources */,
 				0AC29CF826E763E600A78C53 /* ic_custom_contour_lines_colored@2x.png in Resources */,
 				0A832603270BE0E3006B8946 /* OATitleSwitchRoundCell.xib in Resources */,
-				DA5A820D26C563A700F274C7 /* OAProfileAppearanceViewController.xib in Resources */,
 				DA04D775284F86060097CAED /* ic_custom_osmand_pro_logo_monotone_big@2x.png in Resources */,
 				DA5A827B26C563A700F274C7 /* OATargetInfoCollapsableViewCell.xib in Resources */,
 				158DE48F25AEF31B007C1B57 /* ic_destination_pin_6@3x.png in Resources */,

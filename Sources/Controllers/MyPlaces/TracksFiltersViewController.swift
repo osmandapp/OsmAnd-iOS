@@ -47,6 +47,14 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
         addCell(OASwitchTableViewCell.reuseIdentifier)
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onOutsideCellsTapped))
+        tapGesture.cancelsTouchesInView = false
+        tableView.addGestureRecognizer(tapGesture)
+    }
+    
     override func getTitle() -> String? {
         localizedString("filter_current_poiButton")
     }
@@ -113,6 +121,9 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
             cell.leftIconVisibility(false)
             cell.titleVisibility(false)
             cell.clearButtonVisibility(false)
+            cell.inputField.delegate = self
+            cell.inputField.returnKeyType = .go
+            cell.inputField.enablesReturnKeyAutomatically = true
             cell.inputField.textAlignment = .left
             if let text = initialFilterText, !text.isEmpty {
                 cell.inputField.text = text
@@ -167,10 +178,10 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
         case Self.downhillFilterRowKey:
             filterType = .downhillFilterType
         case Self.colorFilterRowKey:
-            filterType = .colorillFilterType
+            filterType = .colorFilterType
             isModalPresentation = true
         case Self.widthFilterRowKey:
-            filterType = .widthillFilterType
+            filterType = .widthFilterType
             isModalPresentation = true
         case Self.nearestCitiesFilterRowKey:
             filterType = .nearestCitiesFilterType
@@ -224,6 +235,10 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
     }
     
     override func onBottomButtonPressed() {
+    }
+    
+    @objc private func onOutsideCellsTapped() {
+        view.endEditing(true)
     }
     
     private func addBasicFilterSections() {
@@ -388,5 +403,12 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
     
     func setInitialFilterText(_ text: String) {
         initialFilterText = text
+    }
+}
+
+extension TracksFiltersViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }

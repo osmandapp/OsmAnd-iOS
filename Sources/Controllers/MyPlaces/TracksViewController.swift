@@ -585,6 +585,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     @objc private func filterButtonTapped() {
         if let filterVC = TracksFiltersViewController() {
             filterVC.setInitialFilterText(searchText)
+            searchText = ""
             show(filterVC)
         }
     }

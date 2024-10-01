@@ -33,6 +33,8 @@ typedef NS_ENUM(NSInteger, OADownloadTaskState) {
 @property(readonly) NSTimeInterval downloadTime;
 @property(readonly) CGFloat fileSize; // in MB
 
+@property(nonatomic) id resourceItem;
+
 @property(readonly) OADownloadTaskState state;
 - (void)resume;
 - (void)pause;

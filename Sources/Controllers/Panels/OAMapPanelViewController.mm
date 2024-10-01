@@ -411,6 +411,8 @@ typedef enum
         _activeTargetType = OATargetWeatherLayerSettings;
     else if ([controller isKindOfClass:OAMapSettingsTerrainParametersViewController.class])
         _activeTargetType = OATargetTerrainParametersSettings;
+    else if ([controller isKindOfClass:MapSettingsMapModeParametersViewController.class])
+        _activeTargetType = OATargetMapModeParametersSettings;
 
     [self setupScrollableHud:controller];
 }
@@ -1375,7 +1377,8 @@ typedef enum
     || _activeTargetType == OATargetRouteLineAppearance
     || _activeTargetType == OATargetWeatherLayerSettings
     || _activeTargetType == OATargetWeatherToolbar
-    || _activeTargetType == OATargetTerrainParametersSettings;
+    || _activeTargetType == OATargetTerrainParametersSettings
+    || _activeTargetType == OATargetMapModeParametersSettings;
 }
 
 - (void)showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState preferredZoom:(float)preferredZoom

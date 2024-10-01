@@ -13,17 +13,18 @@ import UIKit
 }
 
 @objc enum DownloadingCellRightIconType: Int {
-    case hideIconAfterDownloading, showIconAlways, showShevronAlways, showIconAndShevronAlways, showShevronBeforeDownloading, showShevronAfterDownloading, showInfoAndShevronAfterDownloading
+    case hideIconAfterDownloading, showIconAlways, showShevronAlways, showIconAndShevronAlways, showShevronBeforeDownloading, showShevronAfterDownloading, showInfoAndShevronAfterDownloading, showDoneIconAfterDownloading
 }
 
 @objcMembers
 class DownloadingCellBaseHelper: NSObject {
     
+    var leftIconColor: UIColor?
     var rightIconName: String?
     var rightIconColor: UIColor?
     var isBoldTitleStyle = false
     var isAlwaysClickable = false
-    var isDownloadedRecolored = false
+    var isDownloadedLeftIconRecolored = false
     var rightIconStyle: DownloadingCellRightIconType = .hideIconAfterDownloading
     
     private var cells = [String: DownloadingCell]()
@@ -76,6 +77,11 @@ class DownloadingCellBaseHelper: NSObject {
         return false
     }
     
+    // Override in subclass
+    func isFinished(_ resourceId: String) -> Bool {
+        isInstalled(resourceId)
+    }
+    
     func startDownload(_ resourceId: String) {
         // Override in subclass
     }
@@ -106,6 +112,8 @@ class DownloadingCellBaseHelper: NSObject {
         if cell == nil {
             cell = setupCell(resourceId)
             cells[resourceId] = cell
+        } else if !isDownloading(resourceId) {
+            cell = setupCell(resourceId)
         }
         return cell
     }
@@ -134,8 +142,8 @@ class DownloadingCellBaseHelper: NSObject {
         if let leftIconName, !leftIconName.isEmpty {
             cell.leftIconVisibility(true)
             cell.leftIconView.image = UIImage.templateImageNamed(leftIconName)
-            if isInstalled(resourceId) && isDownloadedRecolored {
-                cell.leftIconView.tintColor = .iconColorActive
+            if isInstalled(resourceId) && isDownloadedLeftIconRecolored {
+                cell.leftIconView.tintColor = leftIconColor != nil ? leftIconColor : .iconColorActive
             } else {
                 cell.leftIconView.tintColor = .iconColorDefault
             }
@@ -204,6 +212,8 @@ class DownloadingCellBaseHelper: NSObject {
             } else {
                 showIcon = true
             }
+        } else if rightIconStyle == .showDoneIconAfterDownloading {
+            showIcon = isFinished(resourceId)
         }
         
         if showIcon {
@@ -214,7 +224,12 @@ class DownloadingCellBaseHelper: NSObject {
     }
     
     func getRightIconName() -> String {
-        rightIconName ?? "ic_custom_download"
+        if let rightIconName {
+            return rightIconName
+        } else if rightIconStyle == .showDoneIconAfterDownloading {
+            return "ic_custom_done"
+        }
+        return "ic_custom_download"
     }
     
     func getRightIconColor() -> UIColor {
@@ -312,6 +327,10 @@ class DownloadingCellBaseHelper: NSObject {
             }
             setupRightIconForIdleCell(cell: cell, rightIconName: getRightIconName(), resourceId: resourceId)
         }
+    }
+    
+    func getStatus(resourceId: String) -> ItemStatusType? {
+        statuses[resourceId]
     }
     
     func saveStatus(resourceId: String, status: ItemStatusType) {

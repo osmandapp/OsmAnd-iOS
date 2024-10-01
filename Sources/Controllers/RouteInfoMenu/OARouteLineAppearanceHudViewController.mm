@@ -220,7 +220,6 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 @property (nonatomic) NSInteger sectionColors;
 @property (nonatomic) OAAppSettings *settings;
 @property (nonatomic) OAApplicationMode *appMode;
-@property (nonatomic) NSInteger oldDayNightMode;
 @property (nonatomic) OAPreviewRouteLineInfo *oldPreviewRouteLineInfo;
 @property (nonatomic) OAAutoObserverProxy *mapSourceUpdatedObserver;
 @property (nonatomic) OAMapPanelViewController *mapPanelViewController;
@@ -310,7 +309,6 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 - (void)setOldValues
 {
     _oldPreviewRouteLineInfo = [_mapPanelViewController.mapViewController.mapLayers.routeMapLayer getPreviewRouteLineInfo] ?: _previewRouteLineInfo;
-    _oldDayNightMode = [_settings.appearanceMode get:_appMode];
 }
 
 - (void)updateAllValues
@@ -495,8 +493,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             [weakSelf.mapSourceUpdatedObserver detach];
             weakSelf.mapSourceUpdatedObserver = nil;
         }
-        [weakSelf.settings.appearanceMode set:weakSelf.oldDayNightMode mode:weakSelf.appMode];
-        [[OADayNightHelper instance] forceUpdate];
+        [[OADayNightHelper instance] resetTempMode];
 
         [weakSelf updateRouteLayer:weakSelf.oldPreviewRouteLineInfo];
         [weakSelf.mapPanelViewController.mapViewController.mapLayers.routePreviewLayer resetLayer];
@@ -1209,7 +1206,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     }
     else if ([tableData.key isEqualToString:@"color_day_night_value"])
     {
-        [[OADayNightHelper instance] forceUpdate];
+        [[OADayNightHelper instance] setTempMode:_nightMode ? DayNightModeNight : DayNightModeDay];
     }
     else if ([tableData.key isEqualToString:@"color_grid"] && [_selectedType.coloringType isGradient])
     {
@@ -1303,7 +1300,6 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             NSArray<NSString *> *dayNightValues = tableData.values[@"array_value"];
             _nightMode = [dayNightValues[index] isEqualToString:kColorNightMode];
             _selectedDayNightMode = _nightMode ? dayNightValues[1] : dayNightValues[0];
-            [_settings.appearanceMode set:index mode:_appMode];
         }
     }
     else if ([tableData.key isEqualToString:@"width_custom_slider"])
@@ -1372,8 +1368,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             [weakSelf.mapSourceUpdatedObserver detach];
             weakSelf.mapSourceUpdatedObserver = nil;
         }
-        [weakSelf.settings.appearanceMode set:weakSelf.oldDayNightMode mode:weakSelf.appMode];
-        [[OADayNightHelper instance] forceUpdate];
+        [[OADayNightHelper instance] resetTempMode];
 
         [weakSelf updateRouteLayer:weakSelf.previewRouteLineInfo];
         [weakSelf.mapPanelViewController.mapViewController.mapLayers.routePreviewLayer resetLayer];

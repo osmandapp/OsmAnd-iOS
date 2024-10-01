@@ -3433,3 +3433,8 @@
 "navigation_position_icon" = "Ikona navigacione pozicije";
 "location_radius" = "Radijus lokacije";
 "tracker_item" = "OsmAnd monitor";
+"of" = "%@ od %@";
+"daynight_mode_night_summary" = "Mapu uvek prikazivati u tamnoj temi, prikladnoj za noć ili u uslovima slabog osvetljenja.";
+"daynight_mode_app_theme_summary" = "Prikaz mape usklađen je s celokupnom temom aplikacije—dnevni način rada za svetlu temu i noćni način rada za tamnu temu";
+"daynight_mode_sunrise_sunset_summary" = "Automatski se prebacuje između dnevne i noćne teme na temelju lokalnog izlaska i zalaska sunca.";
+"daynight_mode_day_summary" = "Uvek prikazivati mapu u svetloj temi, idealno za dnevnu vidljivost.";

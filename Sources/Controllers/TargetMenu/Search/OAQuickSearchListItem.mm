@@ -338,6 +338,11 @@
         {
             OAPOI *poi = (OAPOI *) searchResult.object;
             NSString * subType = [poi getSubTypeStr];
+            NSString * city = poi.cityName;
+            if ([city length] > 0)
+            {
+                subType = [subType stringByAppendingFormat:@" • %@", city];
+            }
             return [[self.class getName:searchResult] isEqualToString:subType] ? @"" : subType;
         }
         case LOCATION:

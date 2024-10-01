@@ -68,7 +68,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 #define kAllResourcesScope 0
 #define kLocalResourcesScope 1
 
-@interface OAManageResourcesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate, UISearchResultsUpdating, UISearchBarDelegate, OASubscriptionBannerCardViewDelegate, OASubscribeEmailViewDelegate, OADownloadMultipleResourceDelegate, OAWeatherForecastDetails>
+@interface OAManageResourcesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate, UISearchResultsUpdating, UISearchBarDelegate, OASubscriptionBannerCardViewDelegate, OASubscribeEmailViewDelegate, OADownloadMultipleResourceDelegate, OAWeatherForecastDetails, DownloadingCellResourceHelperDelegate>
 
 //@property (weak, nonatomic) IBOutlet UISegmentedControl *scopeControl;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -88,6 +88,7 @@ struct RegionResources
     OsmAndAppInstance _app;
     OAIAPHelper *_iapHelper;
     OAWeatherHelper *_weatherHelper;
+    DownloadingListHelper *_downloadingListHelper;
     DownloadingCellResourceHelper *_downloadingCellResourceHelper;
     DownloadingCellMultipleResourceHelper * _downloadingCellMultipleResourceHelper;
 
@@ -448,13 +449,20 @@ static BOOL _repositoryUpdated = NO;
 - (void) setupDownloadingCellHelper
 {
     __weak OAManageResourcesViewController *weakSelf = self;
+    _downloadingListHelper = [DownloadingListHelper new];
+    _downloadingListHelper.hostDelegate = self;
+    
     _downloadingCellResourceHelper = [DownloadingCellResourceHelper new];
     [_downloadingCellResourceHelper setHostTableView:weakSelf.tableView];
     _downloadingCellResourceHelper.rightIconStyle = DownloadingCellRightIconTypeShowInfoAndShevronAfterDownloading;
+    _downloadingCellResourceHelper.isDownloadedLeftIconRecolored = YES;
+    _downloadingCellResourceHelper.leftIconColor = [UIColor colorNamed:ACColorNameIconColorGreen];
     
     _downloadingCellMultipleResourceHelper  = [DownloadingCellMultipleResourceHelper new];
     [_downloadingCellMultipleResourceHelper setHostTableView:weakSelf.tableView];
     _downloadingCellMultipleResourceHelper.rightIconStyle = DownloadingCellRightIconTypeShowInfoAndShevronAfterDownloading;
+    _downloadingCellMultipleResourceHelper.isDownloadedLeftIconRecolored = YES;
+    _downloadingCellMultipleResourceHelper.leftIconColor = [UIColor colorNamed:ACColorNameIconColorGreen];
 }
 
 - (UIView *) getMiddleView
@@ -1450,8 +1458,6 @@ static BOOL _repositoryUpdated = NO;
 {
     CGRect frame = self.tableView.frame;
     CGFloat h = self.view.bounds.size.height - frame.origin.y;
-    if (self.downloadView.superview)
-        h -= self.downloadView.bounds.size.height;
     
     [UIView animateWithDuration:.2 animations:^{
         self.tableView.frame = CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, h);
@@ -1949,7 +1955,7 @@ static BOOL _repositoryUpdated = NO;
     if (section == _subscriptionBannerSection)
         return 0;
     if (section == _freeMemorySection)
-        return 0;
+        return [_downloadingListHelper hasDownloads] ? 1 : 0;
     if (section == _freeMapsBannerSection)
         return 1;
     if (section == _extraMapsSection)
@@ -2058,6 +2064,7 @@ static BOOL _repositoryUpdated = NO;
     static NSString * const downloadingResourceCell = @"downloadingResourceCell";
     static NSString * const outdatedResourcesSubmenuCell = @"outdatedResourcesSubmenuCell";
     static NSString * const installedResourcesSubmenuCell = @"installedResourcesSubmenuCell";
+    static NSString * const allDownloadingsCell = @"allDownloadingsCell";
 
     NSString *cellTypeId = nil;
     NSString *title = nil;
@@ -2152,6 +2159,10 @@ static BOOL _repositoryUpdated = NO;
                                                                countStyle:NSByteCountFormatterCountStyleFile]]
                         : OALocalizedString(@"all_maps_are_up_to_date");
             }
+        }
+        else if (indexPath.section == _freeMemorySection)
+        {
+            cellTypeId = allDownloadingsCell;
         }
         else if (indexPath.section == _extraMapsSection)
         {
@@ -2531,6 +2542,10 @@ static BOOL _repositoryUpdated = NO;
             cell = nib[0];
             cell.separatorInset = UIEdgeInsetsMake(0., DBL_MAX, 0., 0.);
         }
+        else if ([cellTypeId isEqualToString:allDownloadingsCell])
+        {
+            return [_downloadingListHelper buildAllDownloadingsCell];
+        }
         else if ([cellTypeId isEqualToString:[OAButtonTableViewCell getCellIdentifier]])
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
@@ -2656,19 +2671,9 @@ static BOOL _repositoryUpdated = NO;
         OAMultipleResourceItem *item = (OAMultipleResourceItem *) item_;
         UIColor *color = [UIColor colorNamed:ACColorNameIconColorDisabled];
         NSArray<OAResourceItem *> *items = [self.region hasGroupItems] ? [self.region.groupItem getItems:item.resourceType] : item.items;
-        for (OAResourceItem *resourceItem in items)
-        {
-            if (_app.resourcesManager->isResourceInstalled(resourceItem.resourceId))
-            {
-                color = [UIColor colorNamed:ACColorNameIconColorGreen];
-                break;
-            }
-        }
         NSString *resourceId = [item getResourceId];
         OAMultipleResourceSwiftItem *mapItem = [[OAMultipleResourceSwiftItem alloc] initWithItem:item];
         DownloadingCell *downloadingCell = [_downloadingCellMultipleResourceHelper getOrCreateCell:resourceId swiftResourceItem:mapItem];
-        downloadingCell.leftIconView.image = [OAResourceType getIcon:item.resourceType templated:YES];
-        downloadingCell.leftIconView.tintColor = color;
         downloadingCell.titleLabel.text = title;
         downloadingCell.descriptionLabel.text = subtitle;
         return downloadingCell;
@@ -2678,9 +2683,6 @@ static BOOL _repositoryUpdated = NO;
         OAResourceItem *item = (OAResourceItem *) ([item_ isKindOfClass:OASearchResult.class] ? ((OASearchResult *) item_).relatedObject : item_);
         OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:item];
         DownloadingCell *downloadingCell = [_downloadingCellResourceHelper getOrCreateCell:mapItem.resourceId swiftResourceItem:mapItem];
-        UIColor *color = _app.resourcesManager->isResourceInstalled(item.resourceId) ? [UIColor colorNamed:ACColorNameIconColorGreen] : [UIColor colorNamed:ACColorNameIconColorDisabled];
-        downloadingCell.leftIconView.image = [OAResourceType getIcon:item.resourceType templated:YES];
-        downloadingCell.leftIconView.tintColor = color;
         downloadingCell.titleLabel.text = title;
         downloadingCell.descriptionLabel.text = subtitle;
         return downloadingCell;
@@ -2827,6 +2829,11 @@ static BOOL _repositoryUpdated = NO;
     {
         if (_searchResults.count > 0)
             item = _searchResults[indexPath.row];
+    }
+    else if (indexPath.section == _freeMemorySection)
+    {
+        if (indexPath.row == 0)
+            [self showModalViewController:[_downloadingListHelper getListViewController]];
     }
     else if (indexPath.section == _downloadDescriptionSection)
     {
@@ -3260,9 +3267,7 @@ static BOOL _repositoryUpdated = NO;
     _multipleItems = selectedResourceItems;
     [OAResourcesUIHelper offerMultipleDownloadAndInstallOf:item.objcResourceItem selectedItems:selectedResourceItems onTaskCreated:^(id<OADownloadTask> task) {
         [self updateContent];
-    } onTaskResumed:^(id<OADownloadTask> task) {
-        [self showDownloadViewForTask:task];
-    }];
+    } onTaskResumed:nil];
 }
 
 - (void)checkAndDeleteOtherSRTMResources:(NSArray<OAResourceSwiftItem *> *)itemsToCheck
@@ -3326,6 +3331,13 @@ static BOOL _repositoryUpdated = NO;
     {
         [self updateDisplayItem:_regionMapItems[_weatherForecastRow]];
     }
+}
+
+#pragma mark - DownloadingCellResourceHelperDelegate
+
+- (void)onDownloadingCellResourceNeedUpdate
+{
+    [self updateContent];
 }
 
 @end

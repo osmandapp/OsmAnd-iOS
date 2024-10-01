@@ -3084,6 +3084,7 @@
 "troubleshooting" = "Resolución de problemas";
 "ask_question_propose_features" = "Pregunta, propón nuevas funciones";
 "shared_string_license" = "Licencia";
+"tracker_item" = "Rastreador de OsmAnd";
 "help_article_navigation_routing_straight_line_routing_name" = "Trazado en línea recta (Avión)";
 "help_article_navigation_routing_train_routing_name" = "Recorrido de los trenes";
 "help_article_navigation_routing_public_transport_navigation_name" = "Ruta del transporte público";
@@ -3407,3 +3408,8 @@
 "view_angle_description" = "Muestra el área en forma de cono a la que te enfrentas actualmente";
 "rendering_attr_showDirtbikeTrails_name" = "Mostrar senderos para motos de cross";
 "rendering_attr_showDirtbikeTrails_description" = "Mostrar senderos para motos de cross";
+"daynight_mode_day_summary" = "Siempre muestra el mapa en un tema claro, ideal para la visibilidad diurna.";
+"daynight_mode_night_summary" = "Siempre muestra el mapa en un tema oscuro, adecuado para condiciones nocturnas o de poca luz.";
+"daynight_mode_app_theme_summary" = "La pantalla del mapa se alinea con el modo día de la aplicación para un tema claro y el modo noche para un tema oscuro";
+"daynight_mode_sunrise_sunset_summary" = "Cambia automáticamente entre los temas de día y de noche en función de las horas locales del amanecer y el atardecer.";
+"of" = "%@ de %@";

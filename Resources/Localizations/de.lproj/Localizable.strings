@@ -3544,3 +3544,4 @@
 "resting_position" = "Ruheposition";
 "resting_navigation_position" = "Ruhe- und Navigationsposition";
 "location_radius_description" = "Zeigt den kreisförmigen Bereich an, der die Genauigkeit Ihres aktuellen Standorts darstellt";
+"of" = "%@ von %@";

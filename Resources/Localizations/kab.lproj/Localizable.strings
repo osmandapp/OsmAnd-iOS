@@ -1,4 +1,3 @@
-"OsmAnd Maps" = "OsmAnd Maps";
 "shared_string_never" = "Werǧin";
 "index_name_asia" = "Asya";
 "rendering_attr_surface_wood_name" = "Amadeɣ";
@@ -77,13 +76,11 @@
 "rendering_value_high_name" = "Haut";
 "local_indexes_cat_backup" = "Tamahilt-agi tensa akka tura.";
 "rendering_value_blue_name" = "Azegzaw";
-"m_s" = "m/s";
 "weekly" = "Yal imalas";
 "rendering_value_default_name" = "Lexṣas";
 "rendering_value_red_name" = "Azeggaɣ";
 "follow_us" = "Ḍfer aɣ";
 "index_name_south_america" = "Marikan n Unẓul";
-"download_wikipedia_maps" = "Wikipedia";
 "srtm_color_scheme" = "Initen n ugrudem n tedbelt";
 "rendering_value_brown_name" = "Aqahwi";
 "app_mode_bus" = "Azrug";
@@ -229,7 +226,6 @@
 "open_till" = "Yeldi almi";
 "rendering_attr_surface_mud_name" = "Ixmiṛ";
 "available_maps" = "Yella";
-"shared_string_ellipsis" = "…";
 "rendering_attr_piste_type_connection_name" = "Tuqqna";
 "shared_string_sound" = "Imesli";
 "towards" = "ɣer";
@@ -343,7 +339,6 @@
 "transport_Routes" = "Iberdan";
 "shared_string_clear" = "Sfeḍ";
 "shared_string_color" = "Ini";
-"yard" = "yd";
 "app_mode_pedestrian" = "Amsebrid";
 "shared_string_description" = "Asnummel";
 "filter_poi_hint" = "Sizdeg s";
@@ -373,7 +368,6 @@
 "no_overlay" = "Incrustations";
 "shared_string_remove" = "Kkes";
 "select_city" = "Ffren tamdint";
-"edit_tilesource_url_to_load" = "URL";
 "shared_string_get" = "Awi";
 "shared_string_widgets" = "Iwiǧiten";
 "rendering_attr_highway_class_road_name" = "Abrid";
@@ -390,7 +384,6 @@
 "get_started" = "Aha bdu tura";
 "record_plugin_name" = "Asekles";
 "mapillary_menu_title_tile_cache" = "Tuffirt";
-"day_off_label" = "off";
 "rendering_value_orange_name" = "Ačinawi";
 "shared_string_export" = "Sifeḍ";
 "transport_nearby_routes" = "Deg";
@@ -406,17 +399,14 @@
 "weeks_short" = "mls";
 "week_short" = "mls";
 "day_short" = "S";
-"units_nm_h" = "nmi/h";
 "user_password" = "Awal-ik uffir n OSM";
 "by_name" = "S yisem";
 "si_mi_meters" = "Amayel / Amitr";
 "si_km_m" = "Ikilumitren/imitren";
-"si_mi_yard" = "Miles/yards";
 "si_mi_feet" = "Amayel/aḍar";
 "si_nm_h" = "Amayel n waman deg usrag (tikerras)";
 "si_min_m" = "Tisdatin deg umayl";
 "si_min_km" = "Tisdatin deg ukilumitr";
-"nm" = "nmi";
 "routing_attr_length_name" = "Talast n teɣzef";
 "driving_region" = "Tamnaḍt n tenhaṛt";
 "unit_of_length_descr" = "Beddel tayunt n uktili n umeccaq.";
@@ -473,18 +463,14 @@
 "subscription_osmandlive_item" = "Ajerred - OsmAnd Srid";
 "navigation_profiles_item" = "Imuɣna n tunigin";
 "shared_string_next" = "Ar zdat";
-"foot" = "ft";
 "select_color" = "Fren ini";
 "new_profile" = "Nouveau profil";
 "shared_string_poi_types" = "Tiwsiyin";
 "coord_input_add_point" = "Taneqqiḍt";
-"ltr_or_rtl_combine_via_space" = "%@ %@";
 "ui_customization_short_descr" = "Iferdisen n ugalis adruram, umuɣ n usatal";
 "shared_string_import_complete" = "Akter yemmed";
-"shared_string_menu" = "Menu";
 "shared_string_min" = "Adday";
 "personal_category_name" = "Udmawan";
-"ltr_or_rtl_combine_via_colon" = "%@: %@";
 "rendering_attr_hideBuildings_name" = "Ixxamen";
 "profile_type_user_string" = "Amaɣnu n useqdac";
 "select_distance_route_will_recalc" = "Fren ameccaq ugar n wanida ara d-yettwasiden ubrid.";
@@ -640,7 +626,6 @@
 "lang_sr" = "Tasiṛbit (Sirilik)";
 "add_description" = "Aglam";
 "weather_wind_kilimeters_per_hour" = "Kilometr deg usrag";
-"lang_os" = "Ossetian";
 "lang_sco" = "Taskutlandit";
 "lang_ro" = "Tarumanit";
 "lang_de" = "Talmanit";
@@ -689,7 +674,6 @@
 "lang_ja" = "Tajapunit";
 "lang_el" = "Tagrikit";
 "lang_pt" = "Tapurtugit";
-"lang_nv" = "Navajo";
 "lang_kn" = "Takannadat";
 "lang_iw" = "Taɛbrit";
 "lang_hi" = "Tahendit";
@@ -737,9 +721,7 @@
 "sort_by" = "Smizzwer s";
 "shared_string_recorded" = "Imeslawen i yessekles {author}";
 "rotate_map_bearing_opt" = "Ar tnila n umussu";
-"gpx_selection_segment_title" = "Segment";
 "shared_string_status" = "Addad";
-"shared_string_angle" = "Angle";
 "map_widget_parking" = "Aneɣsar";
 "osm_live_payment_monthly_title" = "Yal aggur";
 "by_transport_type" = "\"di  %@\"";
@@ -770,8 +752,6 @@
 "quick_action_map_style_action" = "Rnu aɣanib n tkarḍa";
 "quick_action_navigation_voice_on" = "Taɣect:";
 "osmand_parking_plugin_name" = "Amḍiq n aniɣsur";
-"km" = "km";
-"m" = "m";
 "shared_string_height" = "Teɣzi";
 "shared_string_legal" = "Asaḍuf";
 "lang_zh-Hant" = "Tacinwat (Tamansayt)";
@@ -810,10 +790,8 @@
 "shared_string_light" = "Aceɛlal";
 "shared_string_bookmark" = "Signet";
 "shared_string_error" = "Tuccḍa";
-"short_min" = "m";
 "shared_string_dark" = "Aberkan";
 "settings_app_theme" = "Asentel n usnas";
-"shared_string_format" = "Format";
 "shared_string_any" = "Ayen yellan";
 "map_orientation_landscape" = "S tehri";
 "switch_profile" = "Beddel amaɣnu";

@@ -547,7 +547,7 @@
 "shared_string_updates_size" = "Updates size";
 "shared_string_updates_frequency" = "Updates frequency";
 "shared_string_not_included" = "Not included";
-"shared_string_logout" = "Logout";
+
 "shared_string_progress" = "Progress";
 "shared_string_leave" = "Leave";
 "shared_string_delete_data" = "Delete data";
@@ -1295,9 +1295,6 @@
 "simulate_location_unselected_track_footer" = "You need to select track file";
 "simulate_location_movement_speed" = "Movement speed";
 "simulate_location_movement_speed_original" = "Original";
-"simulate_location_movement_speed_x2" = "x2";
-"simulate_location_movement_speed_x3" = "x3";
-"simulate_location_movement_speed_x4" = "x4";
 "simulate_location_movement_speed_original_desc" = "The location movement speed during the simulation will be equal to the speed in the selected file.";
 "simulate_location_movement_speed_x2_desc" = "The location movement speed during the simulation will be x2 bigger to the speed in the selected file.";
 "simulate_location_movement_speed_x3_desc" = "The location movement speed during the simulation will be x3 bigger to the speed in the selected file.";
@@ -1404,14 +1401,14 @@
 "quick_action_map_underlay_action" = "Add underlay";
 "quick_action_list_descr" = "Tapping this action button pages through the list below";
 "toggle_current_location" = "Show/hide coordinates widget";
-"show_current_location" = "Show coordinates";
-"hide_current_location" = "Hide coordinates";
-"quick_action_current_location_widget_descr" = "Tapping this action button shows or hides the Coordinates widget.";
+
+
+
 "quick_action_map_overlay_title" = "Map overlays";
 "quick_action_map_underlay_title" = "Map underlays";
 "vector_data" = "Offline vector maps";
 "quick_action_map_source_action" = "Add map source";
-"quick_action_map_style_action" = "Add map style";
+
 "quick_action_map_styles" = "Map styles";
 "quick_action_new_action" = "Add action";
 "unsupported_items" = "Unsupported items";
@@ -1445,7 +1442,7 @@
 "quick_action_add_parking" = "Add parking place";
 "parking_place" = "Parking place";
 "quick_action_navigation_voice" = "Voice on/off";
-"quick_action_add_osm_bug" = "Add OSM note";
+
 "toggle_online_notes" = "Toggle OSM notes";
 "toggle_local_edits" = "Toggle local OSM edits";
 "quick_action_add_poi" = "Add POI";
@@ -2138,7 +2135,6 @@
 "routing_attr_avoid_stairs_description" = "Avoids stairs";
 "rendering_attr_surface_mud_name" = "Mud";
 "rendering_attr_ice_road_name" = "Ice road";
-"rendering_attr_highway_class_track_grade4_name" = "Grade 4";
 "rendering_attr_piste_difficulty_connection_name" = "Connection";
 "rendering_attr_streetLightingNight_name" = "Show only at night";
 "rendering_attr_piste_difficulty_aerialway_name" = "Aerialway";
@@ -2148,7 +2144,6 @@
 "rendering_attr_piste_difficulty_intermediate_name" = "Intermediate";
 "routeInfo_piste_difficulty_name" = "Piste difficulty";
 "routing_attr_short_way_description" = "Use fuel-efficient way (usually shorter).";
-"rendering_attr_highway_class_track_grade3_name" = "Grade 3";
 "routing_attr_freeride_policy_description" = "\'Freeride\' and \'Off-piste\' are unofficial routes and passages. Typically ungroomed, unmaintained and not checked in the evening. Enter at your own risk.";
 "rendering_attr_highway_class_street_name" = "Street";
 "rendering_attr_surface_grass_name" = "Grass";
@@ -2160,7 +2155,6 @@
 "rendering_attr_currentTrackWidth_name" = "GPX width";
 "rendering_attr_horseRoutes_name" = "Horse routes";
 "routing_attr_avoid_ferry_description" = "Avoids ferries";
-"rendering_attr_highway_class_track_grade2_name" = "Grade 2";
 "rendering_attr_shareTaxiRoutes_name" = "Share taxi routes";
 "rendering_attr_showLightRailRoutes_name" = "Light rail routes";
 "rendering_attr_showMonorailRoutes_name" = "Monorail routes";
@@ -2329,7 +2323,7 @@
 "rendering_value_defaultTranslucentCyan_name" = "Default (translucent cyan)";
 "rendering_attr_hideHouseNumbers_name" = "House numbers";
 "rendering_value_translucent_red_name" = "Translucent red";
-"rendering_attr_highway_class_track_grade1_name" = "Grade 1";
+
 "rendering_attr_transportStops_name" = "Transport stops";
 "rendering_value_walkingRoutesOSMCNodes_name" = "Node networks";
 "rendering_attr_piste_difficulty_expert_name" = "Expert";
@@ -2381,7 +2375,6 @@
 "rendering_attr_piste_type_nordic_name" = "Nordic";
 "rendering_attr_trainLightrailRoutes_name" = "Train routes";
 "rendering_value_pedestrian_name" = "On foot";
-"rendering_attr_highway_class_track_grade5_name" = "Grade 5";
 "routing_attr_height_name" = "Height limit";
 "rendering_attr_piste_type_connection_name" = "Connection";
 "routing_attr_relief_smoothness_factor_name" = "Select elevation fluctuation";

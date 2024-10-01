@@ -31,6 +31,10 @@ final class ProfileAppearanceLocationRadiusViewController: OABaseNavbarViewContr
         localizedString("location_radius_description")
     }
     
+    override func getLeftNavbarButtonTitle() -> String {
+        localizedString("shared_string_cancel")
+    }
+    
     override func registerCells() {
         addCell(OASimpleTableViewCell.reuseIdentifier)
     }

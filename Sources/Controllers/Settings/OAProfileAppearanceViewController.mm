@@ -896,7 +896,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         ProfileAppearanceViewAngleViewController *vc = [[ProfileAppearanceViewAngleViewController alloc] init];
         vc.delegate = self;
         vc.selectedIndex = _changedProfile.viewAngleVisibility;
-        [self showModalViewController:vc];
+        [self showMediumSheetViewController:vc isLargeAvailable:NO];
     }
     else if ([item.key isEqualToString:kLocationRadiusCellKey])
     {
@@ -904,6 +904,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         vc.delegate = self;
         vc.selectedIndex = _changedProfile.locationRadiusVisibility;
         [self showModalViewController:vc];
+        [self showMediumSheetViewController:vc isLargeAvailable:NO];
     }
 }
 

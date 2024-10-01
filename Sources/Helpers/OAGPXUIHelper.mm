@@ -642,8 +642,9 @@
                                                      _exportFileName];
 
         [OASavingTrackHelper.sharedInstance saveCurrentTrack:_exportFilePath];
-        _exportingGpxDoc = OASavingTrackHelper.sharedInstance.currentTrack;
-        _exportingGpx = [OASavingTrackHelper.sharedInstance getCurrentGPX];
+        // FIXME:
+//        _exportingGpxDoc = OASavingTrackHelper.sharedInstance.currentTrack;
+//        _exportingGpx = [OASavingTrackHelper.sharedInstance getCurrentGPX];
     }
     else
     {
@@ -718,7 +719,7 @@
     }
     else
     {
-        [gpxDatabase addGPXFileToDBIfNeeded:destinationPath withUpdateDataSource:YES];
+        [gpxDatabase addGPXFileToDBIfNeeded:destinationPath];
         
         if ([OAAppSettings.sharedManager.mapSettingVisibleGpx.get containsObject:oldPath])
             [OAAppSettings.sharedManager showGpx:@[newStoringPath]];

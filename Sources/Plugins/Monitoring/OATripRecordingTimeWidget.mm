@@ -37,29 +37,30 @@
         self.updateInfoFunction = ^BOOL {
 
             [weakSelf setIcon:@"widget_track_recording_duration"];
-            
-            OAGPXMutableDocument *currentTrack = [[OASavingTrackHelper sharedInstance] currentTrack];
-            OAGPX *gpxFile = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
+           // FIXME:
+            OAGPXMutableDocument *currentTrack = nil;//[[OASavingTrackHelper sharedInstance] currentTrack];
+            // FIXME:
+            OAGPX *gpxFile = nil;//[[OASavingTrackHelper sharedInstance] getCurrentGPX];
 
-            BOOL withoutGaps = !gpxFile.joinSegments &&
-            ( (!currentTrack.tracks || currentTrack.tracks.count == 0) || currentTrack.tracks[0].generalTrack);
-
-            OAGPXTrackAnalysis *analysis = [currentTrack getAnalysis:0];
-            long timeSpan =  withoutGaps ? analysis.timeSpanWithoutGaps : analysis.timeSpan;
-            
-            if (cachedTimeSpan != timeSpan)
-            {
-                cachedTimeSpan = timeSpan;
-                NSString *formattedTime = [OAOsmAndFormatter getFormattedDurationShort:timeSpan fullForm:NO];
-                [weakSelf setText:formattedTime subtext:nil];
-            }
+//            BOOL withoutGaps = !gpxFile.joinSegments &&
+//            ( (!currentTrack.tracks || currentTrack.tracks.count == 0) || currentTrack.tracks[0].generalTrack);
+//
+//            OAGPXTrackAnalysis *analysis = [currentTrack getAnalysis:0];
+//            long timeSpan =  withoutGaps ? analysis.timeSpanWithoutGaps : analysis.timeSpan;
+//            
+//            if (cachedTimeSpan != timeSpan)
+//            {
+//                cachedTimeSpan = timeSpan;
+//                NSString *formattedTime = [OAOsmAndFormatter getFormattedDurationShort:timeSpan fullForm:NO];
+//                [weakSelf setText:formattedTime subtext:nil];
+//            }
             return YES;
         };
         
         self.onClickFunction = ^(id sender) {
             if (cachedTimeSpan > 0)
             {
-                OAGPX *gpxFile = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
+            //    OAGPX *gpxFile = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
                 // FIXME:
 //                [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpxFile selectedTab:EOATrackMenuHudSegmentsTab selectedStatisticsTab:EOATrackMenuHudSegmentsStatisticsOverviewTab openedFromMap:YES];
             }

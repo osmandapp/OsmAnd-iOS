@@ -229,7 +229,8 @@
         _doc = nil;
         if (_isCurrentTrack)
         {
-            _doc = _savingHelper.currentTrack;
+            // FIXME:
+           // _doc = _savingHelper.currentTrack;
         }
         else
         {

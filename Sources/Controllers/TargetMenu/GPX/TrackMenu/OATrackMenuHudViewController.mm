@@ -1117,7 +1117,8 @@
             [OAGPXDocument fillWpt:waypoint.point.wpt usingWpt:waypoint.point];
             OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
             [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[waypoint.point getColor:0]]];
-            [self.savingHelper saveWpt:waypoint.point];
+            // FIXME: saveWptNew
+         //   [self.savingHelper saveWpt:waypoint.point];
         }
     }
 
@@ -1139,7 +1140,8 @@
                         [OAGPXDocument fillWpt:existWaypoint.point.wpt usingWpt:existWaypoint.point];
                         OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
                         [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[existWaypoint.point getColor:0]]];
-                        [self.savingHelper saveWpt:existWaypoint.point];
+                        // FIXME: saveWptNew
+                       // [self.savingHelper saveWpt:existWaypoint.point];
                     }
                     else
                     {

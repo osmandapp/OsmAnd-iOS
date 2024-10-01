@@ -62,10 +62,12 @@
     self = [super init];
     if (self)
     {
-        if (isCurrentTrack)
-            _gpx = [OASavingTrackHelper.sharedInstance currentTrack];
-        else
+        if (isCurrentTrack) {
+            // FIXME:
+            // _gpx = [OASavingTrackHelper.sharedInstance currentTrack];
+        } else {
             _gpx = [[OAGPXDocument alloc] initWithGpxFile:filepath];
+        }
         [self generateData];
     }
     return self;

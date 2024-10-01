@@ -2764,10 +2764,14 @@ typedef enum
 
 - (void)openTargetViewWithGPX:(OASGpxDataItem *)item
 {
-    OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:item.file];
-    auto rect = gpxFile.getRect;
-    CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake(rect.centerX, rect.centerY);
-    
+    OASGpxFile *gpxFile = nil;
+    CLLocationCoordinate2D pinLocation;
+    if (item)
+    {
+        gpxFile = [OASGpxUtilities.shared loadGpxFileFile:item.file];
+        auto rect = gpxFile.getRect;
+        pinLocation = CLLocationCoordinate2DMake(rect.centerX, rect.centerY);
+    }
     [self openTargetViewWithGPX:item
                    trackHudMode:EOATrackMenuHudMode
                           state:[_activeViewControllerState isKindOfClass:OATrackMenuViewControllerState.class]
@@ -2879,8 +2883,7 @@ typedef enum
     {
         if (item == nil)
         {
-            // FIXME:
-            // item = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
+            // item = [[OASavingTrackHelper sharedInstance] getCurrentGPXSharedLib];
         }
         if (!item.gpxTitle || item.gpxTitle.length == 0)
             item.gpxTitle = OALocalizedString(@"shared_string_currently_recording_track");
@@ -3150,7 +3153,8 @@ typedef enum
                                             isCurrentTrack:(BOOL)isCurrentTrack
                                                      state:(OATrackMenuViewControllerState *)state;
 {
-    OAGPXDocument *doc = isCurrentTrack ? [OASavingTrackHelper.sharedInstance currentTrack] : [[OAGPXDocument alloc] initWithGpxFile:gpxFilepath];
+    // FIXME:
+    OAGPXDocument *doc = isCurrentTrack ? nil/*[OASavingTrackHelper.sharedInstance currentTrack]*/ : [[OAGPXDocument alloc] initWithGpxFile:gpxFilepath];
     if (doc)
     {
         OAGPXTrackAnalysis *analysis = !isCurrentTrack && [doc getGeneralTrack] && [doc getGeneralSegment]

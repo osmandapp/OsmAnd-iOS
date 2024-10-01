@@ -163,7 +163,8 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
         }
         else
         {
-            gpx = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
+            // FIXME:
+           // gpx = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
         }
         
         if (gpx) {

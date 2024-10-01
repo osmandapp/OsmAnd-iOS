@@ -86,7 +86,7 @@
 - (void)commonInit
 {
     _app = [OsmAndApp instance];
-    _gpxDocument = _gpxFileName.length > 0 ? [[OAGPXDocument alloc] initWithGpxFile:_gpxFileName] : (OAGPXDocument *) [[OASavingTrackHelper sharedInstance] currentTrack];
+    _gpxDocument = _gpxFileName.length > 0 ? [[OAGPXDocument alloc] initWithGpxFile:_gpxFileName] : nil/* (OAGPXDocument *) [[OASavingTrackHelper sharedInstance] currentTrack] */;
 }
 
 - (UIColor *)getColor

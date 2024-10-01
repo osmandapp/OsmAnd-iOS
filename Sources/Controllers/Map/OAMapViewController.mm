@@ -2893,8 +2893,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             [_mapLayers.gpxRecMapLayer resetLayer];
         
         [helper runSyncBlock:^{
-            
-            const auto& doc = [helper.currentTrack getDocument];
+            // FIXME:
+            const auto& doc = nil;//[helper.currentTrack getDocument];
             if (doc != nullptr && [helper hasData])
             {
                 _recTrackShowing = YES;
@@ -2969,13 +2969,15 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     
     BOOL found = NO;
     
-    for (OAWptPt *wptItem in helper.currentTrack.points)
-    {
-        if ([OAUtilities isCoordEqual:wptItem.position.latitude srcLon:wptItem.position.longitude destLat:location.latitude destLon:location.longitude])
-        {
-            found = YES;
-        }
-    }
+    // FIXME:
+    
+//    for (OAWptPt *wptItem in helper.currentTrack.points)
+//    {
+//        if ([OAUtilities isCoordEqual:wptItem.position.latitude srcLon:wptItem.position.longitude destLat:location.latitude destLon:location.longitude])
+//        {
+//            found = YES;
+//        }
+//    }
     
     if (found)
         return YES;
@@ -3034,22 +3036,24 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     NSMutableSet *groupSet = [NSMutableSet set];
     QSet<QString> groups;
     
-    for (OAWptPt *wptItem in helper.currentTrack.points)
-    {
-        if ([[[OASavingTrackHelper sharedInstance] getCurrentGPX].hiddenGroups containsObject:wptItem.type])
-            continue;
-
-        if (wptItem.type.length > 0)
-            [groupSet addObject:wptItem.type];
-        
-        if ([OAUtilities isCoordEqual:wptItem.position.latitude srcLon:wptItem.position.longitude destLat:location.latitude destLon:location.longitude])
-        {
-            self.foundWpt = wptItem;
-            self.foundWptDocPath = nil;
-            
-            found = YES;
-        }
-    }
+    // FIXME:
+    
+//    for (OAWptPt *wptItem in helper.currentTrack.points)
+//    {
+//        if ([[[OASavingTrackHelper sharedInstance] getCurrentGPX].hiddenGroups containsObject:wptItem.type])
+//            continue;
+//
+//        if (wptItem.type.length > 0)
+//            [groupSet addObject:wptItem.type];
+//        
+//        if ([OAUtilities isCoordEqual:wptItem.position.latitude srcLon:wptItem.position.longitude destLat:location.latitude destLon:location.longitude])
+//        {
+//            self.foundWpt = wptItem;
+//            self.foundWptDocPath = nil;
+//            
+//            found = YES;
+//        }
+//    }
 
     if (found)
     {
@@ -3171,8 +3175,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     if (!self.foundWptDocPath)
     {
         OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
-        
-        [helper deleteWpt:self.foundWpt];
+        // FIXME:
+       // [helper deleteWpt:self.foundWpt];
         
         // update map
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -3235,8 +3239,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     if (!self.foundWptDocPath)
     {
         OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
-        
-        [helper saveWpt:self.foundWpt];
+        // FIXME:
+       // [helper saveWpt:self.foundWpt];
 
         // update map
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -3291,17 +3295,18 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     if (!gpxFileName)
     {
         OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
-
-        [helper addWpt:wpt];
+        // FIXME:
+       // [helper addWpt:wpt];
         self.foundWpt = wpt;
         self.foundWptDocPath = nil;
         
         NSMutableSet *groups = [NSMutableSet set];
-        for (OAWptPt *wptItem in helper.currentTrack.points)
-        {
-            if (wptItem.type.length > 0)
-                [groups addObject:wptItem.type];
-        }
+        // FIXME:
+//        for (OAWptPt *wptItem in helper.currentTrack.points)
+//        {
+//            if (wptItem.type.length > 0)
+//                [groups addObject:wptItem.type];
+//        }
         
         self.foundWptGroups = [groups allObjects];
 
@@ -3394,7 +3399,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
     if (!gpxFileName)
     {
-        gpxDocument = helper.currentTrack;
+        // FIXME:
+       // gpxDocument = helper.currentTrack;
     }
     else if ([_gpxDocFileTemp isEqualToString:[gpxFileName lastPathComponent]])
     {
@@ -3583,7 +3589,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
         for (OAGpxWptItem *item in items)
         {
-            [helper deleteWpt:item.point];
+            // FIXME:
+           // [helper deleteWpt:item.point];
         }
         dispatch_async(dispatch_get_main_queue(), ^{
             [_mapLayers.gpxRecMapLayer refreshGpxWaypoints];

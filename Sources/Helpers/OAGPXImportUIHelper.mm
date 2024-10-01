@@ -388,7 +388,7 @@ static UIViewController *parentController;
     {
       //  NSString *storingPathInFolder = [_importGpxRelativePath stringByAppendingPathComponent:_newGpxName];
         // FIXME: rename
-        item = [[OAGPXDatabase sharedDb] addGPXFileToDBIfNeeded:[_importGpxPath stringByAppendingPathComponent:[self getCorrectedFilename:[_importUrl.path lastPathComponent]]] withUpdateDataSource:YES];
+        item = [[OAGPXDatabase sharedDb] addGPXFileToDBIfNeeded:[_importGpxPath stringByAppendingPathComponent:[self getCorrectedFilename:[_importUrl.path lastPathComponent]]]];
     }
     else
     {
@@ -398,7 +398,7 @@ static UIViewController *parentController;
         // _doc.metadata.desc = <object returned empty description>
        // storingPathInFolder = 123/_2024-07-30_.gpx
       //  item = [[OAGPXDatabase sharedDb] addGpxItem:storingPathInFolder title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds document:_doc];
-        [[OAGPXDatabase sharedDb] addGPXFileToDBIfNeeded:[_importGpxPath stringByAppendingPathComponent:[self getCorrectedFilename:[_importUrl.path lastPathComponent]]] withUpdateDataSource:YES];
+        [[OAGPXDatabase sharedDb] addGPXFileToDBIfNeeded:[_importGpxPath stringByAppendingPathComponent:[self getCorrectedFilename:[_importUrl.path lastPathComponent]]]];
     }
   //  [[OAGPXDatabase sharedDb] save];
     if (item.color != 0)

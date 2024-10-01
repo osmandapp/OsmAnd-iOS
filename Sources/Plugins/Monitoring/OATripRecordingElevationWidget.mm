@@ -53,13 +53,13 @@
         };
         
         self.onClickFunction = ^(id sender) {
-            OAGPXTrackAnalysis *analysis = [[[OASavingTrackHelper sharedInstance] currentTrack] getAnalysis:0];
-            if (analysis.hasElevationData)
-            {
-                OAGPX *gpxFile = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
-                // FIXME:
+            // FIXME:
+//            OAGPXTrackAnalysis *analysis = [[[OASavingTrackHelper sharedInstance] currentTrack] getAnalysis:0];
+//            if (analysis.hasElevationData)
+//            {
+//                OAGPX *gpxFile = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
 //                [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpxFile selectedTab:EOATrackMenuHudSegmentsTab selectedStatisticsTab:EOATrackMenuHudSegmentsStatisticsAltitudeTab openedFromMap:YES];
-            }
+//            }
         };
         [self updateInfo];
     }
@@ -121,9 +121,10 @@
 {
     if (reset)
         _diffElevationUp = 0.0;
-
-    OAGPXTrackAnalysis *analysis = [[[OASavingTrackHelper sharedInstance] currentTrack] getAnalysis:0];
-    _diffElevationUp = MAX(analysis.diffElevationUp, _diffElevationUp);
+// FIXME:
+//    OAGPXTrackAnalysis *analysis = [[[OASavingTrackHelper sharedInstance] currentTrack] getAnalysis:0];
+//    _diffElevationUp = MAX(analysis.diffElevationUp, _diffElevationUp);
+    
     return _diffElevationUp;
 }
 
@@ -158,9 +159,9 @@
 {
     if (reset)
         _diffElevationDown = 0.0;
-
-    OAGPXTrackAnalysis *analysis = [[[OASavingTrackHelper sharedInstance] currentTrack] getAnalysis:0];
-    _diffElevationDown = MAX(analysis.diffElevationDown, _diffElevationDown);
+// FIXME:
+//    OAGPXTrackAnalysis *analysis = [[[OASavingTrackHelper sharedInstance] currentTrack] getAnalysis:0];
+//    _diffElevationDown = MAX(analysis.diffElevationDown, _diffElevationDown);
     return _diffElevationDown;
 }
 

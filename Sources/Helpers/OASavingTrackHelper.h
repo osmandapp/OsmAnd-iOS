@@ -24,12 +24,12 @@
 @property (nonatomic, readonly) BOOL isRecording;
 @property (nonatomic, readonly) int currentTrackIndex;
 
-@property (nonatomic, readonly) OAGPXMutableDocument *currentTrack;
+//@property (nonatomic, readonly) OAGPXMutableDocument *currentTrack;
 @property (nonatomic, readonly) OASGpxFile *currentTrackSharedLib;
 
 + (OASavingTrackHelper *)sharedInstance;
 
-- (OAGPX *)getCurrentGPX;
+//- (OAGPX *)getCurrentGPX;
 
 - (OASGpxFile *)getCurrentGPXSharedLib;
 
@@ -45,11 +45,11 @@
 
 - (void) updateLocation:(CLLocation *)location heading:(CLLocationDirection)heading;
 
-- (void)addWpt:(OAWptPt *)wpt;
-- (void)deleteWpt:(OAWptPt *)wpt;
-- (void)deleteAllWpts;
-- (void)saveWpt:(OAWptPt *)wpt;
-- (void)updatePointCoordinates:(OAWptPt *)wpt newLocation:(CLLocationCoordinate2D)newLocation;
+//- (void)addWpt:(OAWptPt *)wpt;
+//- (void)deleteWpt:(OAWptPt *)wpt;
+//- (void)deleteAllWpts;
+//- (void)saveWpt:(OAWptPt *)wpt;
+//- (void)updatePointCoordinates:(OAWptPt *)wpt newLocation:(CLLocationCoordinate2D)newLocation;
 
 - (BOOL) getIsRecording;
 

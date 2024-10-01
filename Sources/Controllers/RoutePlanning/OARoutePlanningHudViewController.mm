@@ -1840,10 +1840,12 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)onFileSelected:(NSString *)gpxFileName
 {
     OAGPXMutableDocument *gpxFile;
-    if (!gpxFileName)
-        gpxFile = OASavingTrackHelper.sharedInstance.currentTrack;
-    else
+    if (!gpxFileName) {
+        // FIXME:
+        //gpxFile = OASavingTrackHelper.sharedInstance.currentTrack;
+    } else {
         gpxFile = [self getGpxFile:gpxFileName];
+    }
     OASelectedGPXHelper *selectedGpxHelper = OASelectedGPXHelper.instance;
     BOOL showOnMap = selectedGpxHelper.activeGpx.find(QString::fromNSString(gpxFileName.lastPathComponent)) != selectedGpxHelper.activeGpx.end();
     [self saveExistingGpx:gpxFile showOnMap:showOnMap simplified:NO addToTrack:YES finalSaveAction:SHOW_IS_SAVED_FRAGMENT];

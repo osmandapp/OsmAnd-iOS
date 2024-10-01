@@ -238,14 +238,17 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     {
         OAGPX *gpx;
         OAGPXDocument *doc;
-        if (isCurrentTrack)
-            gpx = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
-        else
+        if (isCurrentTrack) {
+            // FIXME:
+            // gpx = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
+        } else {
             gpx = [self getGpxItem:key];
+        }
         
         if (isCurrentTrack)
         {
-            doc = [OASavingTrackHelper sharedInstance].currentTrack;
+            // FIXME:
+           // doc = [OASavingTrackHelper sharedInstance].currentTrack;
         }
         else
         {
@@ -1415,7 +1418,7 @@ colorizationScheme:(int)colorizationScheme
                 OAGPX *gpx = [_cachedTracks.allKeys containsObject:filePath]
                         ? _cachedTracks[filePath][@"gpx"]
                         : it.key().isNull()
-                                ? [[OASavingTrackHelper sharedInstance] getCurrentGPX]
+                                ? nil/*[[OASavingTrackHelper sharedInstance] getCurrentGPX]*/
                                 : [self getGpxItem:it.key()];
                 for (const auto& waypoint : it.value()->points)
                 {
@@ -1496,8 +1499,8 @@ colorizationScheme:(int)colorizationScheme
     textSize = textSize < 1. ? 1. : textSize;
     int r = [self getDefaultRadiusPoi] * textSize;
     auto activeGpx = OASelectedGPXHelper.instance.activeGpx;
-
-    auto doc = std::const_pointer_cast<OsmAnd::GpxDocument>([[OASavingTrackHelper sharedInstance].currentTrack getDocument]);
+    // FIXME:
+    auto doc = nil;/*std::const_pointer_cast<OsmAnd::GpxDocument>([[OASavingTrackHelper sharedInstance].currentTrack getDocument]);*/
     if (doc)
         activeGpx.insert(QString::fromNSString(kCurrentTrack), doc);
 
@@ -1512,8 +1515,9 @@ colorizationScheme:(int)colorizationScheme
         }
         else if (it.value() != nullptr)
         {
+            // FIXME:
             document = isCurrentTrack
-                    ? [OASavingTrackHelper sharedInstance].currentTrack
+                    ? nil/*[OASavingTrackHelper sharedInstance].currentTrack */
                     : [[OAGPXDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(it.value())];
         }
 
@@ -1529,9 +1533,9 @@ colorizationScheme:(int)colorizationScheme
                                                                                                 longitude:points.firstObject.position.longitude]
                                                           toLocation:[[CLLocation alloc] initWithLatitude:points.lastObject.position.latitude
                                                                                                 longitude:points.lastObject.position.longitude]];
-
+            // FiXME:
             OAGPX *gpx = [_cachedTracks.allKeys containsObject:filePath] ? _cachedTracks[filePath][@"gpx"]
-                    : isCurrentTrack ? [[OASavingTrackHelper sharedInstance] getCurrentGPX] : [self getGpxItem:it.key()];
+                    : isCurrentTrack ? nil/*[[OASavingTrackHelper sharedInstance] getCurrentGPX]*/ : [self getGpxItem:it.key()];
             OATargetPoint *targetPoint = [self getTargetPoint:gpx];
             targetPoint.location = selectedGpxPoint.coordinate;
             if (targetPoint && ![res containsObject:targetPoint])
@@ -1786,7 +1790,8 @@ colorizationScheme:(int)colorizationScheme
         else
         {
             OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
-            [helper updatePointCoordinates:item.point newLocation:position];
+            // FIXME: updatePointCoordinatesNew
+          //  [helper updatePointCoordinates:item.point newLocation:position];
             item.point.wpt->position = OsmAnd::LatLon(position.latitude, position.longitude);
             [self.app.updateRecTrackOnMapObservable notifyEventWithKey:@(YES)];
         }

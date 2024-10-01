@@ -3373,3 +3373,4 @@
 "location_radius_description" = "Zeigt den kreisförmigen Bereich an, der die Genauigkeit Ihres aktuellen Standorts darstellt";
 "osm_id" = "OSM-ID";
 "offline_wikivoyage" = "Wikivoyage offline";
+"of" = "%@ von %@";

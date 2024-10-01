@@ -42,6 +42,7 @@
 "shared_string_control_stop" = "შეწყვეტა";
 "cancel_navigation" = "ნავიგაციის შეწყვეტა";
 "intermediate_items_sort_by_distance" = "სახლის ნომრებით დალაგება";
+"switch_start_finish" = "საწყისი წერტილის და დანიშნულების პუნქტის შებრუნება";
 "clear_all_intermediates" = "ყველა შუალედური წერტილის გასუფთავება";
 "shared_string_options" = "პარამეტრები";
 "new_destination_point_dialog" = "თქვენ უკვე მიუთითეთ დანიშნულების წერტილი:";
@@ -605,6 +606,7 @@
 "do_not_rotate" = "არ მოაბრუნო";
 "units_of_speed" = "სიჩქარის ერთეული";
 "angular_measurment_units" = "კუთხის საზომი ერთეული";
+"units_and_formats" = "ერთეულები და ფორმატები";
 "device_settings" = "მოწყობილობის მორგება";
 "osmand_settings" = "OsmAnd-ის გამართვა";
 "global_settings_descr" = "გადატარება მთელ აპლიკაციაზე.";

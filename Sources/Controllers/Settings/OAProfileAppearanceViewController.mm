@@ -929,11 +929,11 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     _changedProfile.name = @"";
     _titleLabel.text = [self getEmptyNameTitle];
 
-    [self.tableView beginUpdates];
-    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-    if ([cell isKindOfClass:OAInputTableViewCell.class])
-        ((OAInputTableViewCell *) cell).inputField.text = @"";
-    [self.tableView endUpdates];
+    [self.tableView performBatchUpdates:^{
+        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+        if ([cell isKindOfClass:OAInputTableViewCell.class])
+            ((OAInputTableViewCell *) cell).inputField.text = @"";
+    } completion:nil];
 }
 
 #pragma mark - Keyboard Notifications

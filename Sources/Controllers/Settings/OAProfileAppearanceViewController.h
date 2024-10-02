@@ -6,9 +6,7 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-//#import "OACompoundViewController.h"
 #import "OABaseNavbarViewController.h"
-
 #import "OAApplicationMode.h"
 
 @interface OAProfileAppearanceViewController : OABaseNavbarViewController

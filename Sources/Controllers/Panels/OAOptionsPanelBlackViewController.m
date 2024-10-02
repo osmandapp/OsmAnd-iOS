@@ -94,8 +94,10 @@
                                                         andObserve:[OsmAndApp instance].data.weatherChangeObservable];
 }
 
-- (void)dealloc
+- (void)viewWillDisappear:(BOOL)animated
 {
+    [super viewWillDisappear:animated];
+
     if (_weatherChangeObserver)
     {
         [_weatherChangeObserver detach];
@@ -117,7 +119,7 @@
 
 - (void) updateLayout
 {
-    if (!_menuButtonsArray) // if class is not initialized
+    if (!self.isViewLoaded)
         return;
 
     CGFloat topY = [OAUtilities getStatusBarHeight];

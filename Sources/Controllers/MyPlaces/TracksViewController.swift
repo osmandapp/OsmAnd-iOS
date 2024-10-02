@@ -362,7 +362,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         if let trackDistance = OAOsmAndFormatter.getFormattedDistance(distance) {
             result += trackDistance + " • "
         }
-        if let trackDuration = OAOsmAndFormatter.getFormattedTimeInterval(TimeInterval(timeSpan), shortFormat: true) {
+        if let trackDuration = OAOsmAndFormatter.getFormattedTimeInterval(TimeInterval(timeSpan / 1000), shortFormat: true) {
             result += trackDuration + " • "
         }
         let waypointsCount = String(waypoints)
@@ -567,7 +567,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         if let downhill = OAOsmAndFormatter.getFormattedAlt(totalDownhill) {
             statistics += ", \(localizedString("map_widget_trip_recording_downhill").lowercased()) – \(downhill)"
         }
-        if let duration = OAOsmAndFormatter.getFormattedTimeInterval(TimeInterval(totalTime), shortFormat: true) {
+        if let duration = OAOsmAndFormatter.getFormattedTimeInterval(TimeInterval(totalTime / 100), shortFormat: true) {
             statistics += ", \(localizedString("map_widget_trip_recording_duration").lowercased()) – \(duration)."
         }
         let size = ByteCountFormatter.string(fromByteCount: Int64(totalSizeBytes), countStyle: .file)
@@ -1310,16 +1310,9 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     
         if src.renameTo(toFilePath: dest.absolutePath()) {
             try? FileManager.default.setAttributes([.modificationDate: Date()], ofItemAtPath: destinationFolderPath)
-            
-            var files = [KFile]()
-            
             let tracksItems = trackFolder.getFlattenedTrackItems()
+            let files = tracksItems.compactMap { $0.getFile() }
 
-            for trackItem in tracksItems {
-                if let file = trackItem.getFile() {
-                    files.append(file)
-                }
-            }
             if !files.isEmpty {
                 updateMovedGpxFiles(files: files, srcDir: src, destDir: dest)
                 

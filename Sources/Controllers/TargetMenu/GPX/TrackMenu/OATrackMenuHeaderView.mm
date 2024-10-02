@@ -331,7 +331,7 @@
             long timeSpan = withoutGaps ? analysis.timeSpanWithoutGaps : analysis.timeSpan;
             [statisticCells addObject:[OAGPXTableCellData withData:@{
                     kTableValues: @{
-                            @"string_value": [OAOsmAndFormatter getFormattedTimeInterval:timeSpan shortFormat:YES],
+                            @"string_value": [OAOsmAndFormatter getFormattedTimeInterval:timeSpan / 1000 shortFormat:YES],
                             @"int_value": @[@(GPXDataSetTypeSpeed)]
                     },
                     kCellTitle: OALocalizedString(@"total_time"),
@@ -344,7 +344,7 @@
             long timeMoving = withoutGaps ? analysis.timeMovingWithoutGaps : analysis.timeMoving;
             [statisticCells addObject:[OAGPXTableCellData withData:@{
                     kTableValues: @{
-                            @"string_value": [OAOsmAndFormatter getFormattedTimeInterval:timeMoving shortFormat:YES],
+                            @"string_value": [OAOsmAndFormatter getFormattedTimeInterval:timeMoving / 1000 shortFormat:YES],
                             @"int_value": @[@(GPXDataSetTypeSpeed)]
                     },
                     kCellTitle: OALocalizedString(@"moving_time"),

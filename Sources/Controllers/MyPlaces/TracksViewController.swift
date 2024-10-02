@@ -90,7 +90,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         config.baseForegroundColor = .iconColorActive
         config.title = localizedString("filter_current_poiButton")
         let button = UIButton(configuration: config, primaryAction: nil)
-        button.setImage(UIImage(resource: .icCustomFilter), for: .normal)
+        button.setImage(.icCustomFilter, for: .normal)
         button.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
         return button
     }()
@@ -216,11 +216,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             }
             
             allTracks.sort { $0.name.lastPathComponent() < $1.name.lastPathComponent() }
-            for track in allTracks {
-                if let trackItem = track.dataItem {
-                    createRowFor(track: trackItem, section: section)
-                }
-            }
+            allTracks.compactMap { $0.dataItem }.forEach { createRowFor(track: $0, section: section) }
         } else {
             if !tableView.isEditing {
                 if isRootFolder && iapHelper.trackRecording.isActive() {

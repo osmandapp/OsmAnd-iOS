@@ -173,6 +173,7 @@
 #import "OAInputTableViewCell.h"
 #import "OAColorsCollectionViewCell.h"
 #import "OAIconsCollectionViewCell.h"
+#import "OARangeSlider.h"
 
 // Views
 #import "OASegmentedSlider.h"

@@ -2336,6 +2336,28 @@
 "public_transport_empty_warning_title" = "Unfortunately, OsmAnd could not find a route for your settings.";
 "public_transport_try_change_settings" = "Try changing the settings.";
 
+"date_of_creation" = "Date of creation";
+"altitud_and_elevation" = "Altitude & Elevation";
+"max_altitude" = "Max altitude";
+"shared_string_sensors" = "Sensors";
+"max_sensor_speed" = "Sensor speed, max";
+"avg_sensor_speed" = "Sensor speed, average";
+"max_sensor_heartrate" = "Heart rate, max";
+"avg_sensor_heartrate" = "Heart rate, average";
+"max_sensor_cadence" = "Bicycle Cadence, max";
+"avg_sensor_cadence" = "Bicycle Cadence, average";
+"max_sensor_bycicle_power" = "Bicycle Power, max";
+"avg_sensor_bycicle_power" = "Bicycle Power, average";
+"max_sensor_temperature" = "Temperature, max";
+"avg_sensor_temperature" = "Temperature, averag";
+"shared_string_visible_on_map" = "Visible on map";
+"with_waypoints" = "With waypoints";
+"shared_string_reset_all" = "Reset all";
+"shared_string_to" = "To";
+"discard_filter_changes_prompt" = "Reset all filters?";
+"power_watts_unit" = "Watts";
+"revolutions_per_minute_unit" = "RPM";
+
 "shared_string_total" = "Total";
 "shared_string_walk" = "Walk";
 "board_at" = "Board at";

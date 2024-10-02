@@ -209,23 +209,17 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     private func generateData() {
         tableData.clearAllData()
         let section = tableData.createNewSection()
-        var tracksToShow: [GpxDataItem] = []
         if isSearchActive {
-            let foldersToCheck = [rootFolder] + rootFolder.getFlattenedSubFolders()
-            for folder in foldersToCheck {
-                if let folder = folder {
-                    let tracks = isFiltered ? folder.getTrackItems().filter { $0.name.containsCaseInsensitive(text: searchText) && $0.dataItem != nil } : folder.getTrackItems()
-                    for track in tracks {
-                        if let trackItem = track.dataItem {
-                            tracksToShow.append(trackItem)
-                        }
-                    }
-                }
+            var allTracks = rootFolder.getFlattenedTrackItems()
+            if isFiltered {
+                allTracks = allTracks.filter { $0.name.containsCaseInsensitive(text: searchText) && $0.dataItem != nil }
             }
             
-            tracksToShow.sort { $0.gpxFileName.lastPathComponent() < $1.gpxFileName.lastPathComponent() }
-            for track in tracksToShow {
-                createRowFor(track: track, section: section)
+            allTracks.sort { $0.name.lastPathComponent() < $1.name.lastPathComponent() }
+            for track in allTracks {
+                if let trackItem = track.dataItem {
+                    createRowFor(track: trackItem, section: section)
+                }
             }
         } else {
             if !tableView.isEditing {

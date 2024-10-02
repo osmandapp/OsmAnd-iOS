@@ -149,7 +149,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
             let isDownloading = isDownloading(resourceId)
             
             // get cell with default settings
-            let cell = super.setupCell(resourceId: resourceId, title: title, isTitleBold: false, desc: subtitle, leftIconName: iconName, rightIconName: getRightIconName(), isDownloading: isDownloading)
+            let cell = super.setupCell(resourceId: resourceId, title: title, isTitleBold: false, desc: subtitle, leftIconName: iconName, rightIconName: getRightIconName(resourceId), isDownloading: isDownloading)
             
             if isDisabled(resourceId) {
                 cell?.titleLabel.textColor = .textColorSecondary
@@ -220,7 +220,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
             guard let cell = getOrCreateCell(resourceId) else { return }
             guard let fullSize = resourceItem.formatedSizePkg() else { return }
             guard let downloadedSize = resourceItem.formatedDownloadedSizePkg(progress) else { return }
-            let subtitle = String(format: localizedString("downloaded_bytes"), downloadedSize, downloadedSize)
+            let subtitle = String(format: localizedString("downloaded_bytes"), downloadedSize, fullSize)
             cell.descriptionLabel.text = subtitle
         }
     }

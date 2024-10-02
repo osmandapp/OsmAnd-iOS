@@ -106,9 +106,7 @@ final class TerrainColorSchemeAction: OASwitchableAction {
                 var desc = ""
                 if let mode = TerrainMode.getByKey(paletteKey) {
                     title = mode.getDefaultDescription()
-                    if let colorPalette = ColorPaletteHelper
-                        .shared
-                        .getGradientColorPalette(mode.getMainFile()) {
+                    if let colorPalette = ColorPaletteHelper.shared.getGradientColorPalette(mode.getMainFile()) {
                         desc = PaletteCollectionHandler.createDescriptionForPalette(colorPalette)
                         arr.append([
                             "type": OATitleDescrDraggableCell.reuseIdentifier,
@@ -135,17 +133,16 @@ final class TerrainColorSchemeAction: OASwitchableAction {
     override func fillParams(_ model: [AnyHashable: Any]) -> Bool {
         var params = getParams()
         var palettes = [String]()
-        for arr in model.values where arr is [Any] {
-            for item in arr as! [Any] where item is [AnyHashable: Any] {
-                if let items = item as? [AnyHashable: Any] {
-                    if let key = items["key"] as? String,
-                       key == kDialog {
-                        params[kDialog] = items["value"]
-                    } else if let type = items["type"] as? String,
-                              type == OATitleDescrDraggableCell.reuseIdentifier,
-                              let palette = items["palette"] as? String {
-                        palettes.append(palette)
-                    }
+        for value in model.values {
+            guard let arr = value as? [[AnyHashable: Any]] else { continue }
+            for item in arr {
+                if let key = item["key"] as? String,
+                   key == kDialog {
+                    params[kDialog] = item["value"]
+                } else if let type = item["type"] as? String,
+                          type == OATitleDescrDraggableCell.reuseIdentifier,
+                          let palette = item["palette"] as? String {
+                    palettes.append(palette)
                 }
             }
         }
@@ -167,7 +164,7 @@ final class TerrainColorSchemeAction: OASwitchableAction {
     }
 
     private func getSrtmPlugin() -> OASRTMPlugin? {
-        return OAPluginsHelper.getPlugin(OASRTMPlugin.self) as? OASRTMPlugin
+        OAPluginsHelper.getPlugin(OASRTMPlugin.self) as? OASRTMPlugin
     }
 
     private func getSelectedItem() -> String {

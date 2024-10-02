@@ -72,8 +72,6 @@ final class ActionAddTerrainColorSchemeViewController: OABaseNavbarViewControlle
             }
             if !modes.isEmpty {
                 modes.sort {
-                    let name0 = $0.getDefaultDescription()
-                    let name1 = $1.getDefaultDescription()
                     if $0.isDefaultMode() {
                         return true
                     } else if $1.isDefaultMode() {
@@ -82,14 +80,14 @@ final class ActionAddTerrainColorSchemeViewController: OABaseNavbarViewControlle
                         let isDuplicate0 = $0.isDefaultDuplicatedMode()
                         let isDuplicate1 = $1.isDefaultDuplicatedMode()
                         if isDuplicate0 && isDuplicate1 {
-                            return name0 < name1
+                            return $0.getDefaultDescription() < $1.getDefaultDescription()
                         } else if isDuplicate0 {
                             return true
                         } else if isDuplicate1 {
                             return false
                         }
                     }
-                    return name0 < name1
+                    return $0.getDefaultDescription() < $1.getDefaultDescription()
                 }
                 data.append((header, modes))
             }

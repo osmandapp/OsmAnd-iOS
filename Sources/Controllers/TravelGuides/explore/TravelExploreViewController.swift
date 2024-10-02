@@ -168,9 +168,9 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                                 gpxRow.descr = item.user
                                 gpxRow.setObj(item, forKey: "article")
                                 
-                                let analysis = item.getAnalysis()
-                                let statisticsCells = OATrackMenuHeaderView.generateGpxBlockStatistics(analysis, withoutGaps: false)
-                                gpxRow.setObj(statisticsCells, forKey: "statistics_cells")
+//                                let analysis = item.getAnalysis()
+//                                let statisticsCells = OATrackMenuHeaderView.generateGpxBlockStatistics(analysis, withoutGaps: false)
+//                                gpxRow.setObj(statisticsCells, forKey: "statistics_cells")
                             }     
                         } else {
                             
@@ -183,7 +183,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                             articleRow.setObj(item, forKey: "article")
                             articleRow.setObj(item.lang, forKey: "lang")
                             if let imageTitle = item.imageTitle, !imageTitle.isEmpty {
-                                articleRow.iconName = TravelArticle.getImageUrl(imageTitle: item.imageTitle ?? "", thumbnail: false)
+                                articleRow.iconName = TravelArticle.getImageUrl(imageTitle: imageTitle, thumbnail: false)
                             }
                         }
                     }

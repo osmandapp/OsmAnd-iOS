@@ -57,55 +57,56 @@
     BOOL hasArticle = NO;
     if (self.trackMenuDelegate)
     {
-        OAMetadata *metadata = [self.trackMenuDelegate getMetadata];
+        OASMetadata *metadata = [self.trackMenuDelegate getMetadata];
         if (metadata)
         {
-            OAGpxExtension *articleTitleExtension = [metadata getExtensionByKey:@"article_title"];
-            if (articleTitleExtension)
-            {
-                OAGPXTableSectionData *wikivoyageSectionData = [OAGPXTableSectionData withData:@{
-                    kTableKey: @"sectionWikivoyage",
-                    kSectionHeader: OALocalizedString(@"shared_string_wikivoyage"),
-                    kSectionHeaderHeight: @56.
-                }];
-                [self.tableData.subjects addObject:wikivoyageSectionData];
-                
-                OATravelObfHelper *helper = [OATravelObfHelper shared];
-                OAGpxExtension *articleLangExtension = [metadata getExtensionByKey:@"article_lang"];
-                NSString *lang = articleLangExtension ? articleLangExtension.value : @"en";
-                OATravelArticle *article = [helper getArticleByTitle:articleTitleExtension.value lang:lang];
-                if (article)
-                {
-                    hasArticle = YES;
-                    NSString *geoDescription = [article getGeoDescription];
-                    NSString *iconName = @"";
-                    if (article.imageTitle && article.imageTitle.length > 0)
-                    {
-                        iconName = [OATravelArticle getImageUrlWithImageTitle:article.imageTitle ? article.imageTitle : @"" thumbnail:NO];
-                    }
-                    OAGPXTableCellData *articleRow = [OAGPXTableCellData withData:@{
-                        kTableKey: @"article",
-                        kCellType: [OAArticleTravelCell getCellIdentifier],
-                        kCellTitle: article.title ? article.title : @"nil",
-                        kCellDesc: [OATravelGuidesHelper getPatrialContent:article.content],
-                        kCellRightIconName: iconName,
-                        kTableValues: @{
-                            @"isPartOf": geoDescription ? geoDescription : @"",
-                            @"article": article,
-                            @"lang": lang
-                        }
-                    }];
-                    [wikivoyageSectionData.subjects addObject:articleRow];
-
-                    OAGPXTableCellData *readCellData = [OAGPXTableCellData withData:@{
-                        kTableKey: @"readArticle",
-                        kCellType: [OASimpleTableViewCell getCellIdentifier],
-                        kCellTitle: OALocalizedString(@"shared_string_read"),
-                        kTableValues: @{ @"articleId": [article generateIdentifier], @"lang": lang }
-                    }];
-                    [wikivoyageSectionData.subjects addObject:readCellData];
-                }
-            }
+            // FIXME:
+//            OAGpxExtension *articleTitleExtension = [metadata getExtensionByKey:@"article_title"];
+//            if (articleTitleExtension)
+//            {
+//                OAGPXTableSectionData *wikivoyageSectionData = [OAGPXTableSectionData withData:@{
+//                    kTableKey: @"sectionWikivoyage",
+//                    kSectionHeader: OALocalizedString(@"shared_string_wikivoyage"),
+//                    kSectionHeaderHeight: @56.
+//                }];
+//                [self.tableData.subjects addObject:wikivoyageSectionData];
+//                
+//                OATravelObfHelper *helper = [OATravelObfHelper shared];
+//                OAGpxExtension *articleLangExtension = [metadata getExtensionByKey:@"article_lang"];
+//                NSString *lang = articleLangExtension ? articleLangExtension.value : @"en";
+//                OATravelArticle *article = [helper getArticleByTitle:articleTitleExtension.value lang:lang];
+//                if (article)
+//                {
+//                    hasArticle = YES;
+//                    NSString *geoDescription = [article getGeoDescription];
+//                    NSString *iconName = @"";
+//                    if (article.imageTitle && article.imageTitle.length > 0)
+//                    {
+//                        iconName = [OATravelArticle getImageUrlWithImageTitle:article.imageTitle ? article.imageTitle : @"" thumbnail:NO];
+//                    }
+//                    OAGPXTableCellData *articleRow = [OAGPXTableCellData withData:@{
+//                        kTableKey: @"article",
+//                        kCellType: [OAArticleTravelCell getCellIdentifier],
+//                        kCellTitle: article.title ? article.title : @"nil",
+//                        kCellDesc: [OATravelGuidesHelper getPatrialContent:article.content],
+//                        kCellRightIconName: iconName,
+//                        kTableValues: @{
+//                            @"isPartOf": geoDescription ? geoDescription : @"",
+//                            @"article": article,
+//                            @"lang": lang
+//                        }
+//                    }];
+//                    [wikivoyageSectionData.subjects addObject:articleRow];
+//
+//                    OAGPXTableCellData *readCellData = [OAGPXTableCellData withData:@{
+//                        kTableKey: @"readArticle",
+//                        kCellType: [OASimpleTableViewCell getCellIdentifier],
+//                        kCellTitle: OALocalizedString(@"shared_string_read"),
+//                        kTableValues: @{ @"articleId": [article generateIdentifier], @"lang": lang }
+//                    }];
+//                    [wikivoyageSectionData.subjects addObject:readCellData];
+//                }
+//            }
         }
 
         if (!hasArticle)
@@ -465,7 +466,7 @@
 
 - (OAGPXTableSectionData *)generateAuthorSectionData
 {
-    OAAuthor *author = self.trackMenuDelegate ? [self.trackMenuDelegate getAuthor] : nil;
+    OASAuthor *author = self.trackMenuDelegate ? [self.trackMenuDelegate getAuthor] : nil;
     BOOL hasAuthorName = author && author.name.length > 0;
     BOOL hasAuthorEmail = author && author.email.length > 0;
     BOOL hasAuthorLink = author && author.link;
@@ -499,15 +500,17 @@
         }
         if (hasAuthorLink)
         {
-            BOOL hasText = author.link.text && author.link.text.length > 0;
+            BOOL hasText = author.link.length > 0;
             OAGPXTableCellData *linkCellData = [OAGPXTableCellData withData:@{
                     kTableKey: @"link_author",
                     kCellType: [OAValueTableViewCell getCellIdentifier],
-                    kCellTitle: OALocalizedString(@"shared_string_link"),
-                    kCellDesc: hasText ? author.link.text : author.link.url.absoluteString
+                    kCellTitle: OALocalizedString(@"shared_string_link")
+                    // FIXME:
+                   // kCellDesc: hasText ? author.link.text : author.link.url.absoluteString
             }];
-            if (hasText)
-                linkCellData.values[@"url"] = author.link.url.absoluteString;
+            // FIXME:
+//            if (hasText)
+//                linkCellData.values[@"url"] = author.link.url.absoluteString;
             [authorSectionData.subjects addObject:linkCellData];
         }
         return authorSectionData;
@@ -517,7 +520,7 @@
 
 - (OAGPXTableSectionData *)generateCopyrightSectionData
 {
-    OACopyright *copyright = self.trackMenuDelegate ? [self.trackMenuDelegate getCopyright] : nil;
+    OASCopyright *copyright = self.trackMenuDelegate ? [self.trackMenuDelegate getCopyright] : nil;
     BOOL hasCopyrightAuthor = copyright && copyright.author.length > 0;
     BOOL hasCopyrightLicense = copyright && copyright.license.length > 0;
     if (hasCopyrightAuthor || hasCopyrightLicense)

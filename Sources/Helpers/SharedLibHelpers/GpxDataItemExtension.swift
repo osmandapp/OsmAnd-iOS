@@ -6,6 +6,8 @@
 //  Copyright © 2024 OsmAnd. All rights reserved.
 //
 
+import OsmAndShared
+
 private var gpxTitleKey: UInt8 = 0
 private var newGpxKey: UInt8 = 0
 private var hiddenGroupsKey: UInt8 = 0
@@ -70,9 +72,9 @@ extension GpxDataItem {
         }
     }
     
-    var nearestCity: String {
+    var nearestCity: String? {
         get {
-            getParameter(parameter: .nearestCityName) as? String ?? ""
+            getParameter(parameter: .nearestCityName) as? String
         }
         set {
             setParameter(parameter: .nearestCityName, value: newValue)
@@ -323,7 +325,7 @@ extension GpxDataItem {
             return localizedString("create_new_trip")
         }
         
-        if gpxTitle != nil {
+        if gpxTitle == nil {
             return (gpxFileName as NSString).lastPathComponent.deletingPathExtension()
         }
         

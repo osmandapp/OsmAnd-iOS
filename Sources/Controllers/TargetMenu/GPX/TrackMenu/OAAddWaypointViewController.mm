@@ -70,9 +70,10 @@
 
 - (void)commonInit
 {
-    OAWptPt *movedPoint = [[OAWptPt alloc] init];
+    OASWptPt *movedPoint = [[OASWptPt alloc] init];
     movedPoint.name = OALocalizedString(@"shared_string_waypoint");
-    movedPoint.position = _gpx.bounds.center;
+    // FIXME:
+   // movedPoint.position = _gpx.bounds.center;
     _movedPoint = [OAGpxWptItem withGpxWpt:movedPoint];
 }
 

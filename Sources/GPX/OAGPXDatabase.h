@@ -167,4 +167,6 @@ typedef NS_ENUM(NSInteger, EOAGPX3DLineVisualizationPositionType) {
 
 - (void)renameGPX:(OASGpxDataItem *)gpx newFilePath:(NSString *)filePath;
 
+- (BOOL)updateDataItem:(OASGpxDataItem *_Nonnull)item;
+
 @end

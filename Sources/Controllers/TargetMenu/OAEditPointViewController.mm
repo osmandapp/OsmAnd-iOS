@@ -167,7 +167,8 @@
         self.name = gpxWpt.point.name;
         _waypoint = gpxWpt;
         self.desc = gpxWpt.point.desc;
-        self.address = [gpxWpt.point getExtensionByKey:ADDRESS_EXTENSION_KEY].value;
+        self.address = [gpxWpt.point getAddress];
+        // self.address = [gpxWpt.point getExtensionByKey:ADDRESS_EXTENSION_KEY].value;
         self.groupTitle = [self getGroupTitle]/*gpxWpt.point.type*/;
         [self postInit];
     }
@@ -1255,10 +1256,11 @@
 
         data.descr = waypointItem.point.desc;
         data.address = [waypointItem.point getAddress];
-        data.color = waypointItem.color ? waypointItem.color : [waypointItem.point getColor];
-        data.backgroundIcon = [waypointItem.point getBackgroundIcon];
-        data.icon = [waypointItem.point getIcon];
-        data.category = waypointItem.point.type;
+        data.color = waypointItem.color ? waypointItem.color : UIColorFromARGB([waypointItem.point getColor]);
+        data.backgroundIcon = [waypointItem.point getBackgroundType];
+        data.icon = [waypointItem.point getIconName];
+        // FIXME:
+        //data.category = waypointItem.point.type;
         data.name = waypointItem.point.name;
 
         if (_editPointType == EOAEditPointTypeWaypoint && !_pointHandler.gpxWptDelegate)

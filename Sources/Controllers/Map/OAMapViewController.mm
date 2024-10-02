@@ -3092,12 +3092,14 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             {
                 OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> *_wpt = (OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>*)&loc;
                 const std::shared_ptr<OsmAnd::GpxDocument::WptPt> w = _wpt->shared_ptr();
-
-                OAWptPt *wptItem = [OAGPXDocument fetchWpt:w];
-                wptItem.wpt = w;
+                // FIXME:
+//                OASWptPt *wptItem = [OAGPXDocument fetchWpt:w];
+//                wptItem.wpt = w;
                 
-                self.foundWpt = wptItem;
-                self.foundWptDocPath = it.key().toNSString();
+                // FIXME:
+                
+//                self.foundWpt = wptItem;
+//                self.foundWptDocPath = it.key().toNSString();
                 
                 found = YES;
             }
@@ -3138,12 +3140,14 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             {
                 OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> *_wpt = (OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>*)&loc;
                 const std::shared_ptr<OsmAnd::GpxDocument::WptPt> w = _wpt->shared_ptr();
+// FIXME:
+//                OASWptPt *wptItem = [OAGPXDocument fetchWpt:w];
+//                wptItem.wpt = w;
                 
-                OAWptPt *wptItem = [OAGPXDocument fetchWpt:w];
-                wptItem.wpt = w;
+                // FIXME:
                 
-                self.foundWpt = wptItem;
-                self.foundWptDocPath = _gpxDocFileTemp;
+//                self.foundWpt = wptItem;
+//                self.foundWptDocPath = _gpxDocFileTemp;
                 
                 found = YES;
             }
@@ -3199,18 +3203,18 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             if ([path isEqualToString:self.foundWptDocPath])
             {
                 auto doc = std::const_pointer_cast<OsmAnd::GpxDocument>(it.value());
-                
-                if (!doc->points.removeOne(_foundWpt.wpt))
-                    for (int i = 0; i < doc->points.count(); i++)
-                    {
-                        const auto& w = doc->points[i];
-                        if ([OAUtilities doublesEqualUpToDigits:5 source:w->position.latitude destination:_foundWpt.wpt->position.latitude] &&
-                            [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:_foundWpt.wpt->position.longitude])
-                        {
-                            doc->points.removeAt(i);
-                            break;
-                        }
-                    }
+      // FIXME:
+//                if (!doc->points.removeOne(_foundWpt.wpt))
+//                    for (int i = 0; i < doc->points.count(); i++)
+//                    {
+//                        const auto& w = doc->points[i];
+//                        if ([OAUtilities doublesEqualUpToDigits:5 source:w->position.latitude destination:_foundWpt.wpt->position.latitude] &&
+//                            [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:_foundWpt.wpt->position.longitude])
+//                        {
+//                            doc->points.removeAt(i);
+//                            break;
+//                        }
+//                    }
                 
                 doc->saveTo(QString::fromNSString(self.foundWptDocPath), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
                 
@@ -3267,13 +3271,14 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
                     OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> *_wpt = (OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>*)&loc;
                     const std::shared_ptr<OsmAnd::GpxDocument::WptPt> w = _wpt->shared_ptr();
 
-                    if ([OAUtilities doublesEqualUpToDigits:5 source:w->position.latitude destination:self.foundWpt.position.latitude] &&
-                        [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:self.foundWpt.position.longitude])
+                    if ([OAUtilities doublesEqualUpToDigits:5 source:w->position.latitude destination:self.foundWpt.lat] &&
+                        [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:self.foundWpt.lon])
                     {
-                        [OAGPXDocument fillWpt:w usingWpt:self.foundWpt];
-                        [OAGPXDocument fillPointsGroup:self.foundWpt wptPtPtr:w doc:doc];
+                        // FIXME:
+//                        [OAGPXDocument fillWpt:w usingWpt:self.foundWpt];
+//                        [OAGPXDocument fillPointsGroup:self.foundWpt wptPtPtr:w doc:doc];
                         OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-                        [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[self.foundWpt getColor:0]]];
+                        [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[self.foundWpt getColor]]];
                         break;
                     }
                 }
@@ -3290,7 +3295,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     return NO;
 }
 
-- (BOOL) addNewWpt:(OAWptPt *)wpt gpxFileName:(NSString *)gpxFileName
+- (BOOL) addNewWpt:(OASWptPt *)wpt gpxFileName:(NSString *)gpxFileName
 {
     if (!gpxFileName)
     {
@@ -3331,10 +3336,11 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
                 auto doc = std::const_pointer_cast<OsmAnd::GpxDocument>(it.value());
 
                 std::shared_ptr<OsmAnd::GpxDocument::WptPt> w(new OsmAnd::GpxDocument::WptPt());
-                [OAGPXDocument fillWpt:w usingWpt:wpt];
-                [OAGPXDocument fillPointsGroup:wpt wptPtPtr:w doc:doc];
+                // FIXME:
+//                [OAGPXDocument fillWpt:w usingWpt:wpt];
+//                [OAGPXDocument fillPointsGroup:wpt wptPtPtr:w doc:doc];
                 OAGPXAppearanceCollection *appeacaneCollection = [OAGPXAppearanceCollection sharedInstance];
-                [appeacaneCollection selectColor:[appeacaneCollection getColorItemWithValue:[wpt getColor:0]]];
+                [appeacaneCollection selectColor:[appeacaneCollection getColorItemWithValue:[wpt getColor]]];
 
                 doc->saveTo(QString::fromNSString(gpxFileName), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
 
@@ -3367,10 +3373,11 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             auto doc = std::const_pointer_cast<OsmAnd::GpxDocument>(_gpxDocsTemp.first());
 
             std::shared_ptr<OsmAnd::GpxDocument::WptPt> w(new OsmAnd::GpxDocument::WptPt());
-            [OAGPXDocument fillWpt:w usingWpt:wpt];
-            [OAGPXDocument fillPointsGroup:wpt wptPtPtr:w doc:doc];
+            // FIXME:
+//            [OAGPXDocument fillWpt:w usingWpt:wpt];
+//            [OAGPXDocument fillPointsGroup:wpt wptPtPtr:w doc:doc];
             OAGPXAppearanceCollection *appeacaneCollection = [OAGPXAppearanceCollection sharedInstance];
-            [appeacaneCollection selectColor:[appeacaneCollection getColorItemWithValue:[wpt getColor:0]]];
+            [appeacaneCollection selectColor:[appeacaneCollection getColorItemWithValue:[wpt getColor]]];
 
             doc->saveTo(QString::fromNSString(gpxFileName), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
 
@@ -3393,7 +3400,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     return YES;
 }
 
-- (NSArray<OAWptPt *> *)getPointsOf:(NSString *)gpxFileName groupName:(NSString *)groupName
+- (NSArray<OASWptPt *> *)getPointsOf:(NSString *)gpxFileName groupName:(NSString *)groupName
 {
     OAGPXDocument *gpxDocument;
     OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
@@ -3423,7 +3430,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         }
     }
     if (gpxDocument)
-        return [gpxDocument.pointsGroups.allKeys containsObject:groupName] ? gpxDocument.pointsGroups[groupName].points : gpxDocument.points;
+        // FIXME:
+        return @[];
+//        return [gpxDocument.pointsGroups.allKeys containsObject:groupName] ? gpxDocument.pointsGroups[groupName].points : gpxDocument.points;
     else
         return @[];
 }
@@ -3452,13 +3461,14 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
                     OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> *_wpt = (OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>*)&loc;
                     const std::shared_ptr<OsmAnd::GpxDocument::WptPt> w = _wpt->shared_ptr();
                     
-                    if ([OAUtilities doublesEqualUpToDigits:5 source:w->position.latitude destination:item.point.position.latitude] &&
-                        [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:item.point.position.longitude])
+                    if ([OAUtilities doublesEqualUpToDigits:5 source:w->position.latitude destination:item.point.lat] &&
+                        [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:item.point.lon])
                     {
-                        [OAGPXDocument fillWpt:w usingWpt:item.point];
-                        [OAGPXDocument fillPointsGroup:item.point wptPtPtr:w doc:doc];
+                        // FIXME:
+                       // [OAGPXDocument fillWpt:w usingWpt:item.point];
+                      //  [OAGPXDocument fillPointsGroup:item.point wptPtPtr:w doc:doc];
                         OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-                        [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[item.point getColor:0]]];
+                        [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:item.point.getColor]];
                         found = YES;
                         break;
                     }
@@ -3493,13 +3503,14 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
                 OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> *_wpt = (OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>*)&loc;
                 const std::shared_ptr<OsmAnd::GpxDocument::WptPt> w = _wpt->shared_ptr();
                 
-                if ([OAUtilities doublesEqualUpToDigits:5 source:w->position.latitude destination:item.point.position.latitude] &&
-                    [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:item.point.position.longitude])
+                if ([OAUtilities doublesEqualUpToDigits:5 source:w->position.latitude destination:item.point.lat] &&
+                    [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:item.point.lon])
                 {
-                    [OAGPXDocument fillWpt:w usingWpt:item.point];
-                    [OAGPXDocument fillPointsGroup:item.point wptPtPtr:w doc:doc];
+                    // FIXME:
+//                    [OAGPXDocument fillWpt:w usingWpt:item.point];
+//                    [OAGPXDocument fillPointsGroup:item.point wptPtPtr:w doc:doc];
                     OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-                    [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[item.point getColor:0]]];
+                    [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:item.point.getColor]];
                     found = YES;
                     break;
                 }
@@ -3614,8 +3625,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
                 for (int i = 0; i < doc->points.count(); i++)
                 {
                     const auto& w = doc->points[i];
-                    if ([OAUtilities doublesEqualUpToDigits:5 source:w->position.latitude destination:item.point.position.latitude] &&
-                        [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:item.point.position.longitude])
+                    if ([OAUtilities doublesEqualUpToDigits:5 source:w->position.latitude destination:item.point.lat] &&
+                        [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:item.point.lon])
                     {
                         doc->points.removeAt(i);
                         found = YES;
@@ -3650,8 +3661,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             for (int i = 0; i < doc->points.count(); i++)
             {
                 const auto& w = doc->points[i];
-                if ([OAUtilities doublesEqualUpToDigits:5 source:w->position.latitude destination:item.point.position.latitude] &&
-                    [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:item.point.position.longitude])
+                if ([OAUtilities doublesEqualUpToDigits:5 source:w->position.latitude destination:item.point.lat] &&
+                    [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:item.point.lon])
                 {
                     doc->points.removeAt(i);
                     found = YES;

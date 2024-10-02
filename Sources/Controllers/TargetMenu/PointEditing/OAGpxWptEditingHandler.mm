@@ -19,6 +19,7 @@
 #import "OAGPXDocument.h"
 #import "OAGPXAppearanceCollection.h"
 #import "Localization.h"
+#import "OsmAndSharedWrapper.h"
 
 @implementation OAGpxWptEditingHandler
 {
@@ -38,7 +39,7 @@
     {
         _gpxWpt = gpxWpt;
         _gpxFileName = _gpxWpt.docPath;
-        _iconName = _gpxWpt.point.getIcon;
+        _iconName = _gpxWpt.point.getIconName;
 
         [self commonInit];
     }
@@ -53,25 +54,28 @@
         _gpxFileName = gpxFileName;
         UIColor *color = [OADefaultFavorite getDefaultColor];
 
-        OAGpxWptItem* wpt = [[OAGpxWptItem alloc] init];
-        OAWptPt* p = [[OAWptPt alloc] init];
+        OAGpxWptItem *wpt = [[OAGpxWptItem alloc] init];
+        OASWptPt* p = [[OASWptPt alloc] init];
         p.name = formattedLocation;
-        CLLocationCoordinate2D loc = location;
-        p.position = loc;
+        p.lat = location.latitude;
+        p.lon = location.longitude;
         p.time = (long)[[NSDate date] timeIntervalSince1970];
-        [p setColor:[color toARGBNumber]];
+        OASInt *colorToSave = [[OASInt alloc] initWithInt:[color toARGBNumber]];
+        
+        [p setColorColor:colorToSave];
         p.desc = @"";
         
         _iconName = nil;
         NSString *poiIconName = [self.class getPoiIconName:poi];
         if (poiIconName && poiIconName.length > 0)
             _iconName = poiIconName;
-
-        [p setIcon:_iconName];
-        [p setBackgroundIcon:@"circle"];
-        [p setExtension:ADDRESS_EXTENSION_KEY value:address];
-        [p setAmenity:poi];
-        [p setAmenityOriginName:poi.toStringEn];
+        
+        [p setIconNameIconName:_iconName];
+        [p setBackgroundTypeBackType:@"circle"];
+// FIXME:
+//        [p setExtension:ADDRESS_EXTENSION_KEY value:address];
+//        [p setAmenity:poi];
+        [p setAmenityOriginNameOriginName:poi.toStringEn];
 
         wpt.color = color;
         wpt.point = p;
@@ -91,12 +95,14 @@
 
 - (UIColor *)getColor
 {
-    return _gpxWpt.color ? _gpxWpt.color : [_gpxWpt.point getColor];
+    return _gpxWpt.color ? _gpxWpt.color : UIColorFromARGB([_gpxWpt.point getColor]);
 }
 
 - (NSString *)getGroupTitle
 {
-    return _gpxWpt.point.type && _gpxWpt.point.type.length > 0 ? _gpxWpt.point.type : OALocalizedString(@"shared_string_waypoints");
+    return OALocalizedString(@"shared_string_waypoints");;
+    // FIXME: gpxWpt.point.type ?
+//    return _gpxWpt.point.type && _gpxWpt.point.type.length > 0 ? _gpxWpt.point.type : OALocalizedString(@"shared_string_waypoints");
 }
 - (OAGPXDocument *)getGpxDocument
 {
@@ -175,7 +181,7 @@
 
 - (NSString *)getBackgroundIcon
 {
-    return [_gpxWpt.point getBackgroundIcon];
+    return [_gpxWpt.point getBackgroundType];
 }
 
 - (NSString *)getAddress
@@ -185,8 +191,10 @@
 
 - (void)setGroup:(NSString *)groupName color:(UIColor *)color save:(BOOL)save
 {
-    _gpxWpt.point.type = groupName;
-    [_gpxWpt.point setColor:[color toARGBNumber]];
+    // FIXME:
+   // _gpxWpt.point.type = groupName;
+    OASInt *colorToSave = [[OASInt alloc] initWithInt:[color toARGBNumber]];
+    [_gpxWpt.point setColorColor:colorToSave];
     _gpxWpt.color = color;
 
     OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
@@ -224,9 +232,10 @@
     [_gpxWpt.point setName:data.name];
     [_gpxWpt.point setDesc:data.descr];
     [self setGroup:data.category color:data.color save:NO];
-    [_gpxWpt.point setIcon:data.icon];
-    [_gpxWpt.point setBackgroundIcon:data.backgroundIcon];
-    [_gpxWpt.point setExtension:ADDRESS_EXTENSION_KEY value:data.address];
+    [_gpxWpt.point setIconNameIconName:data.icon];
+    [_gpxWpt.point setBackgroundTypeBackType:data.backgroundIcon];
+    // FIXME:
+    // [_gpxWpt.point setExtension:ADDRESS_EXTENSION_KEY value:data.address];
     _gpxWpt.docPath = _gpxFileName;
 
     if (newPoint)

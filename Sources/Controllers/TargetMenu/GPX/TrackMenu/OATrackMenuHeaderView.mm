@@ -18,6 +18,7 @@
 #import "GeneratedAssetSymbols.h"
 #import "OAGPXUIHelper.h"
 #import "OAButton.h"
+#import "OsmAndSharedWrapper.h"
 
 #define kTitleHeightMax 44.
 #define kTitleHeightMin 30.
@@ -250,13 +251,13 @@
         [self updateConstraints];
 }
 
-- (void)generateGpxBlockStatistics:(OAGPXTrackAnalysis *)analysis
+- (void)generateGpxBlockStatistics:(OASGpxTrackAnalysis *)analysis
                        withoutGaps:(BOOL)withoutGaps
 {
     [self setStatisticsCollection:[self.class generateGpxBlockStatistics:analysis withoutGaps:withoutGaps]];
 }
 
-+ (NSMutableArray<OAGPXTableCellData *> *)generateGpxBlockStatistics:(OAGPXTrackAnalysis *)analysis
++ (NSMutableArray<OAGPXTableCellData *> *)generateGpxBlockStatistics:(OASGpxTrackAnalysis *)analysis
                        withoutGaps:(BOOL)withoutGaps
 {
     NSMutableArray<OAGPXTableCellData *> *statisticCells = [NSMutableArray array];

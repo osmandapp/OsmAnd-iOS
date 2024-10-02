@@ -448,6 +448,11 @@
     }
 }
 
+- (BOOL)updateDataItem:(OASGpxDataItem *)item
+{
+    return [[OASGpxDbHelper shared] updateDataItemItem:item];
+}
+
 - (OAGPX *)getGPXItem:(NSString *)filePath
 {
     for (OAGPX *item in gpxList)

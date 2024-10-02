@@ -1523,7 +1523,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                 }
             } else if item.key == trackKey {
                 if let trackPath = item.obj(forKey: pathKey) as? String,
-                   let track = rootFolder.getTrackItems().compactMap({ $0.dataItem }).first(where: { $0.gpxFilePath == trackPath }),
+                   let track = currentFolder.getTrackItems().compactMap({ $0.dataItem }).first(where: { $0.gpxFilePath == trackPath }),
                    let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
                     OARootViewController.instance().mapPanel.openTargetViewWithGPX(fromTracksList: track,
                                                                                    navControllerHistory: newCurrentHistory,
@@ -1532,7 +1532,6 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                 }
             } else if item.key == recordingTrackKey {
                 if savingHelper.hasData() {
-                    // FIXME:
                     rootVC.mapPanel.openRecordingTrackTargetView()
                     rootVC.navigationController?.popToRootViewController(animated: true)
                 }
@@ -1546,7 +1545,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         if tableView.isEditing {
             if item.key == trackKey {
                 if let trackPath = item.obj(forKey: pathKey) as? String,
-                   let track = rootFolder.getTrackItems().compactMap({ $0.dataItem }).first(where: { $0.gpxFilePath == trackPath }),
+                   let track = currentFolder.getTrackItems().compactMap({ $0.dataItem }).first(where: { $0.gpxFilePath == trackPath }),
                    let index = selectedTracks.firstIndex(of: track) {
                     selectedTracks.remove(at: index)
                 }

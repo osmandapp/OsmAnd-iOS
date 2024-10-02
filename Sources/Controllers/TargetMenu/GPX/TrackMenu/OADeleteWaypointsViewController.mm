@@ -395,6 +395,7 @@
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10];
     
     NSMutableArray<OAGpxWptItem *> *gpxWptItems = [self getGpxWptItems:indexPath.section];
+    
     NSString *groupName = gpxWptItems.firstObject.point.type;
     if (self.trackMenuDelegate)
         groupName = [self.trackMenuDelegate checkGroupName:groupName];

@@ -32,7 +32,9 @@ typedef NS_ENUM(NSUInteger, EOATrackHudMode)
     EOATrackAppearanceHudMode,
 };
 
-@class OASGpxDataItem, OAGPXMutableDocument, OAGPXTrackAnalysis, OAMapPanelViewController, OAMapViewController, OASavingTrackHelper, OAAppSettings;
+@class OASGpxDataItem, OAGPXMutableDocument, /*OAGPXTrackAnalysis,*/ OAMapPanelViewController, OAMapViewController, OASavingTrackHelper, OAAppSettings;
+
+@class OASGpxTrackAnalysis, OASGpxFile;
 
 @interface OAGPXBaseTableData : NSObject
 
@@ -88,8 +90,8 @@ typedef NS_ENUM(NSUInteger, EOATrackHudMode)
 @interface OABaseTrackMenuHudViewController : OABaseScrollableHudViewController
 
 @property (nonatomic, readonly) OASGpxDataItem *gpx;
-@property (nonatomic, readonly) OAGPXMutableDocument *doc;
-@property (nonatomic, readonly) OAGPXTrackAnalysis *analysis;
+@property (nonatomic, readonly) OASGpxFile *doc;
+@property (nonatomic, readonly) OASGpxTrackAnalysis *analysis;
 @property (nonatomic, readonly) BOOL isCurrentTrack;
 @property (nonatomic, readonly) BOOL isShown;
 

@@ -46,7 +46,6 @@
 #import "OASavingTrackHelper.h"
 #import "OASelectedGPXHelper.h"
 #import "OAGPXUIHelper.h"
-#import "OAGPXTrackAnalysis.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXMutableDocument.h"
 #import "OAMapActions.h"
@@ -71,6 +70,7 @@
 #import <SafariServices/SafariServices.h>
 #import "OsmAnd_Maps-Swift.h"
 #import <DGCharts/DGCharts-Swift.h>
+#import "OsmAndSharedWrapper.h"
 
 #define kGpxDescriptionImageHeight 149
 #define kOverviewTabIndex @0
@@ -106,7 +106,7 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *groupsButtonTrailingConstraint;
 
 @property (nonatomic) OASGpxDataItem *gpx;
-@property (nonatomic) OAGPXTrackAnalysis *analysis;
+@property (nonatomic) OASGpxTrackAnalysis *analysis;
 @property (nonatomic) BOOL isShown;
 @property (nonatomic) OARouteLineChartHelper *routeLineChartHelper;
 @property (nonatomic) OATrackMenuHeaderView *headerView;
@@ -666,10 +666,10 @@
 
     if ([self.doc hasWptPt])
     {
-        for (OAWptPt *gpxWpt in self.doc.points)
+        for (OASWptPt *gpxWpt in self.doc.getAllPoints)
         {
             OAGpxWptItem *gpxWptItem = [OAGpxWptItem withGpxWpt:gpxWpt];
-            if (gpxWpt.type.length == 0)
+            if (gpxWpt.category.length == 0)
             {
                 NSMutableArray<OAGpxWptItem *> *withoutGroup = _waypointGroups[OALocalizedString(@"shared_string_gpx_points")];
                 if (!withoutGroup)
@@ -702,7 +702,7 @@
 
     if ([self.doc hasRtePt])
     {
-        for (OAWptPt *rtePt in [self.doc getRoutePoints])
+        for (OASWptPt *rtePt in [self.doc getRoutePoints])
         {
             OAGpxWptItem *rtePtItem = [OAGpxWptItem withGpxWpt:rtePt];
             rtePtItem.routePoint = YES;
@@ -862,7 +862,7 @@
     [self openAnalysis:self.analysis withTypes:types];
 }
 
-- (void)openAnalysis:(OAGPXTrackAnalysis *)analysis
+- (void)openAnalysis:(OASGpxTrackAnalysis *)analysis
            withTypes:(NSArray<NSNumber *> *)types
 {
     _pushedNewScreen = YES;
@@ -870,10 +870,11 @@
     [self hide:YES duration:.2 onComplete:^{
         OATrackMenuViewControllerState *state = [weakSelf getCurrentStateForAnalyze:types];
         state.openedFromTrackMenu = YES;
-        [weakSelf.mapPanelViewController openTargetViewWithRouteDetailsGraph:weakSelf.doc
-                                                                    analysis:analysis
-                                                            menuControlState:state
-                                                                     isRoute:NO];
+        // FIXME:
+//        [weakSelf.mapPanelViewController openTargetViewWithRouteDetailsGraph:weakSelf.doc
+//                                                                    analysis:analysis
+//                                                            menuControlState:state
+//                                                                     isRoute:NO];
     }];
 }
 
@@ -882,7 +883,7 @@
     return _routeKey;
 }
 
-- (OAGPXTrackAnalysis *)getGeneralAnalysis
+- (OASGpxTrackAnalysis *)getGeneralAnalysis
 {
     if (!self.analysis)
         [self updateAnalysis];
@@ -890,15 +891,15 @@
     return self.analysis;
 }
 
-- (OATrkSegment *)getGeneralSegment
+- (OASTrkSegment *)getGeneralSegment
 {
     return [self.doc getGeneralSegment];
 }
 
-- (NSArray<OATrkSegment *> *)getSegments
+- (NSArray<OASTrkSegment *> *)getSegments
 {
     if (self.doc)
-        return [self.doc getNonEmptyTrkSegments:NO];
+        [self.doc getNonEmptyTrkSegmentsRoutesOnly:NO];
 
     return @[];
 }
@@ -917,11 +918,12 @@
     }];
 }
 
-- (void)deleteAndSaveSegment:(OATrkSegment *)segment
+- (void)deleteAndSaveSegment:(OASTrkSegment *)segment
 {
-    if (self.doc && segment && [self.doc removeTrackSegment:segment])
+    if (self.doc && segment && [self.doc removeTrkSegmentSegment:segment])
     {
-        [self.doc saveTo:self.doc.path];
+        // FIXME:
+        //[self.doc saveTo:self.doc.path];
         [self.doc processPoints];
         [self updateGpxData:YES updateDocument:YES];
 
@@ -952,14 +954,15 @@
     }
 }
 
-- (void)openEditSegmentScreen:(OATrkSegment *)segment
-                     analysis:(OAGPXTrackAnalysis *)analysis
+- (void)openEditSegmentScreen:(OASTrkSegment *)segment
+                     analysis:(OASGpxTrackAnalysis *)analysis
 {
-    OAEditWaypointsGroupBottomSheetViewController *editWaypointsBottomSheet =
-            [[OAEditWaypointsGroupBottomSheetViewController alloc] initWithSegment:segment
-                                                                          analysis:analysis];
-    editWaypointsBottomSheet.trackMenuDelegate = self;
-    [editWaypointsBottomSheet presentInViewController:self];
+    // FIXME:
+//    OAEditWaypointsGroupBottomSheetViewController *editWaypointsBottomSheet =
+//            [[OAEditWaypointsGroupBottomSheetViewController alloc] initWithSegment:segment
+//                                                                          analysis:analysis];
+//    editWaypointsBottomSheet.trackMenuDelegate = self;
+//    [editWaypointsBottomSheet presentInViewController:self];
 }
 
 - (void)refreshLocationServices
@@ -997,7 +1000,7 @@
     if (groupName && groupName.length > 0 && [self getWaypointsCount:groupName] > 0)
     {
         OAGpxWptItem *waypoint = _waypointGroups[groupName].firstObject;
-        groupColor = waypoint.color ? waypoint.color : [waypoint.point getColor];
+        groupColor = waypoint.color ?: UIColorFromRGBA([waypoint.point getColor]);
     }
     if (!groupColor)
         groupColor = [OADefaultFavorite getDefaultColor];
@@ -1102,7 +1105,7 @@
     {
         if (newGroupName)
         {
-            waypoint.point.type = newGroupName;
+           waypoint.point.type = newGroupName;
         }
 
         if (newGroupColor)
@@ -1114,9 +1117,10 @@
 
         if (self.isCurrentTrack)
         {
-            [OAGPXDocument fillWpt:waypoint.point.wpt usingWpt:waypoint.point];
+            // FIXME:
+           // [OAGPXDocument fillWpt:waypoint.point.wpt usingWpt:waypoint.point];
             OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-            [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[waypoint.point getColor:0]]];
+            [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[waypoint.point getColor]]];
             // FIXME: saveWptNew
          //   [self.savingHelper saveWpt:waypoint.point];
         }
@@ -1137,9 +1141,10 @@
                     existWaypoint.color = UIColorFromRGB([self getWaypointsGroupColor:groupName]);
                     if (self.isCurrentTrack)
                     {
-                        [OAGPXDocument fillWpt:existWaypoint.point.wpt usingWpt:existWaypoint.point];
+                        // FIXME:
+                        //[OAGPXDocument fillWpt:existWaypoint.point.wpt usingWpt:existWaypoint.point];
                         OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-                        [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[existWaypoint.point getColor:0]]];
+                        [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[existWaypoint.point getColor]]];
                         // FIXME: saveWptNew
                        // [self.savingHelper saveWpt:existWaypoint.point];
                     }
@@ -1248,7 +1253,7 @@
 }
 
 - (void)updateChartHighlightValue:(ElevationChart *)chart
-                          segment:(OATrkSegment *)segment
+                          segment:(OASTrkSegment *)segment
 {
     CLLocationCoordinate2D pinLocation = [self getPinLocation];
     LineChartData *lineData = chart.lineData;
@@ -1257,16 +1262,16 @@
     {
         float pos;
         double totalDistance = 0;
-        OAWptPt *previousPoint = nil;
-        for (OAWptPt *currentPoint in segment.points)
+        OASWptPt *previousPoint = nil;
+        for (OASWptPt *currentPoint in segment.points)
         {
-           if (currentPoint.position.latitude == pinLocation.latitude
-                   && currentPoint.position.longitude == pinLocation.longitude)
+           if (currentPoint.lat == pinLocation.latitude
+                   && currentPoint.lon == pinLocation.longitude)
             {
-                totalDistance += getDistance(previousPoint.position.latitude,
-                                             previousPoint.position.longitude,
-                                             currentPoint.position.latitude,
-                                             currentPoint.position.longitude);
+                totalDistance += getDistance(previousPoint.lat,
+                                             previousPoint.lon,
+                                             currentPoint.lat,
+                                             currentPoint.lon);
                 pos = (float) (totalDistance / [GpxUIHelper getDivXWithDataSet:ds[0]]);
 
                 float lowestVisibleX = chart.lowestVisibleX;
@@ -1287,10 +1292,10 @@
 
             if (previousPoint)
             {
-                totalDistance += getDistance(previousPoint.position.latitude,
-                        previousPoint.position.longitude,
-                        currentPoint.position.latitude,
-                        currentPoint.position.longitude);
+                totalDistance += getDistance(previousPoint.lat,
+                        previousPoint.lon,
+                        currentPoint.lat,
+                        currentPoint.lon);
             }
             previousPoint = currentPoint;
         }
@@ -1299,23 +1304,25 @@
 
 - (OARouteLineChartHelper *)getLineChartHelper
 {
-    if (!_routeLineChartHelper)
-    {
-        _routeLineChartHelper = [[OARouteLineChartHelper alloc] initWithGpxDoc:self.doc layer:self.mapViewController.mapLayers.gpxMapLayer];
-        _routeLineChartHelper.delegate = self;
-        _routeLineChartHelper.isLandscape = [self isLandscape];
-        _routeLineChartHelper.screenBBox = CGRectMake(
-                [self isLandscape] ? [self getLandscapeViewWidth] : 0.,
-                0.,
-                [self isLandscape] ? DeviceScreenWidth - [self getLandscapeViewWidth] : DeviceScreenWidth,
-                [self isLandscape] ? DeviceScreenHeight : DeviceScreenHeight - [self getViewHeight]);
-    }
-    return _routeLineChartHelper;
+    return nil;
+    // FIXME:
+//    if (!_routeLineChartHelper)
+//    {
+//        _routeLineChartHelper = [[OARouteLineChartHelper alloc] initWithGpxDoc:self.doc layer:self.mapViewController.mapLayers.gpxMapLayer];
+//        _routeLineChartHelper.delegate = self;
+//        _routeLineChartHelper.isLandscape = [self isLandscape];
+//        _routeLineChartHelper.screenBBox = CGRectMake(
+//                [self isLandscape] ? [self getLandscapeViewWidth] : 0.,
+//                0.,
+//                [self isLandscape] ? DeviceScreenWidth - [self getLandscapeViewWidth] : DeviceScreenWidth,
+//                [self isLandscape] ? DeviceScreenHeight : DeviceScreenHeight - [self getViewHeight]);
+//    }
+//    return _routeLineChartHelper;
 }
 
-- (OATrack *)getTrack:(OATrkSegment *)segment
+- (OASTrack *)getTrack:(OASTrkSegment *)segment
 {
-    for (OATrack *trk in self.doc.tracks)
+    for (OASTrack *trk in self.doc.tracks)
     {
         if ([trk.segments containsObject:segment])
             return trk;
@@ -1323,13 +1330,56 @@
     return nil;
 }
 
-- (NSString *)getTrackSegmentTitle:(OATrkSegment *)segment
+- (NSString *)getTrackSegmentTitle:(OASTrkSegment *)segment
 {
-    OATrack *track = [self getTrack:segment];
+    OASTrack *track = [self getTrack:segment];
     if (track)
-        return [OAGPXDocument buildTrackSegmentName:self.doc track:track segment:segment];
-
+        return [self buildTrackSegmentName:self.doc track:track segment:segment];
     return nil;
+}
+
+- (NSString *)getSegmentTitle:(OASTrkSegment *)segment segmentIdx:(NSInteger)segmentIdx
+{
+    NSString *segmentName = !segment.name || segment.name.length == 0
+            ? [NSString stringWithFormat:@"%li", segmentIdx + 1]
+            : segment.name;
+    NSString *segmentString = OALocalizedString(@"gpx_selection_segment_title");
+    return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_space"), segmentString, segmentName];
+}
+
+- (NSString *)getTrackTitle:(OASGpxFile *)gpxFile track:(OASTrack *)track
+{
+    NSString *trackName;
+    if (!track.name || track.name.length == 0)
+    {
+        NSInteger trackIdx = [gpxFile.tracks indexOfObject:track];
+        NSInteger visibleTrackIdx = [gpxFile hasGeneralTrack] ? trackIdx : trackIdx + 1;
+        trackName = [NSString stringWithFormat:@"%li", visibleTrackIdx];
+    }
+    else
+    {
+        trackName = track.name;
+    }
+    NSString *trackString = OALocalizedString(@"shared_string_gpx_track");
+    return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), trackString, trackName];
+}
+
+- (NSString *)buildTrackSegmentName:(OASGpxFile *)gpxFile track:(OASTrack *)track segment:(OASTrkSegment *)segment
+{
+    NSString *trackTitle = [self getTrackTitle:gpxFile track:track];
+    NSString *segmentTitle = [self getSegmentTitle:segment segmentIdx:[track.segments indexOfObject:segment]];
+
+    BOOL oneSegmentPerTrack =
+            [gpxFile getNonEmptySegmentsCount] == [gpxFile getNonEmptyTracksCount];
+    BOOL oneOriginalTrack = ([gpxFile hasGeneralTrack] && [gpxFile getNonEmptyTracksCount] == 2)
+            || (![gpxFile hasGeneralTrack] && [gpxFile getNonEmptyTracksCount] == 1);
+
+    if (oneSegmentPerTrack)
+        return trackTitle;
+    else if (oneOriginalTrack)
+        return segmentTitle;
+    else
+        return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_dash"), trackTitle, segmentTitle];
 }
 
 - (NSString *)getDirName
@@ -1345,17 +1395,17 @@
                                           countStyle:NSByteCountFormatterCountStyleFile];
 }
 
-- (OAAuthor *)getAuthor
+- (OASAuthor *)getAuthor
 {
     return self.doc.metadata.author;
 }
 
-- (OACopyright *)getCopyright
+- (OASCopyright *)getCopyright
 {
     return self.doc.metadata.copyright;
 }
 
-- (OAMetadata *)getMetadata;
+- (OASMetadata *)getMetadata;
 {
     return self.doc.metadata;
 }
@@ -1367,7 +1417,17 @@
 
 - (NSArray<OALink *> *)getLinks
 {
-    return self.doc.metadata.links;
+    return @[];
+    // FIXME:
+//    @property OASAuthor * _Nullable author __attribute__((swift_name("author")));
+//    @property OASBounds * _Nullable bounds __attribute__((swift_name("bounds")));
+//    @property OASCopyright * _Nullable copyright __attribute__((swift_name("copyright")));
+//    @property NSString * _Nullable desc __attribute__((swift_name("desc")));
+//    @property NSString * _Nullable keywords __attribute__((swift_name("keywords")));
+//    @property NSString * _Nullable link __attribute__((swift_name("link")));
+//    @property NSString * _Nullable name __attribute__((swift_name("name")));
+//    @property int64_t time __attribute__((swift_name("time")));
+   // return self.doc.metadata.links;
 }
 
 - (NSString *)getCreatedOn
@@ -1401,9 +1461,10 @@
             }
             else
             {
-                OAGpxExtension *descExtension = [self.doc.metadata getExtensionByKey:@"desc"];
-                if (descExtension)
-                    return descExtension.value;
+                // FIXME:
+//                OAGpxExtension *descExtension = [self.doc.metadata getExtensionByKey:@"desc"];
+//                if (descExtension)
+//                    return descExtension.value;
 
                 break;
             }
@@ -1428,25 +1489,27 @@
 
 - (NSString *)getMetadataImageLink
 {
-    NSArray *links = self.doc.metadata.links;
-    if (links && links.count > 0)
-    {
-        for (OALink *link in links)
-        {
-            if (link.url && link.url.absoluteString && link.url.absoluteString.length > 0)
-            {
-                NSString *lowerCaseLink = [link.url.absoluteString lowerCase];
-                if ([lowerCaseLink containsString:@".jpg"] ||
-                    [lowerCaseLink containsString:@".jpeg"] ||
-                    [lowerCaseLink containsString:@".png"] ||
-                    [lowerCaseLink containsString:@".bmp"] ||
-                    [lowerCaseLink containsString:@".webp"])
-                {
-                    return link.url.absoluteString;
-                }
-            }
-        }
-    }
+    return self.doc.metadata.link;
+    // FIXME:
+//    NSArray *links = self.doc.metadata.links;
+//    if (links && links.count > 0)
+//    {
+//        for (OALink *link in links)
+//        {
+//            if (link.url && link.url.absoluteString && link.url.absoluteString.length > 0)
+//            {
+//                NSString *lowerCaseLink = [link.url.absoluteString lowerCase];
+//                if ([lowerCaseLink containsString:@".jpg"] ||
+//                    [lowerCaseLink containsString:@".jpeg"] ||
+//                    [lowerCaseLink containsString:@".png"] ||
+//                    [lowerCaseLink containsString:@".bmp"] ||
+//                    [lowerCaseLink containsString:@".webp"])
+//                {
+//                    return link.url.absoluteString;
+//                }
+//            }
+//        }
+//    }
     return nil;
 }
 
@@ -1474,7 +1537,8 @@
 
 - (CLLocationCoordinate2D)getCenterGpxLocation
 {
-    return self.doc.bounds.center;
+    return CLLocationCoordinate2DMake(0.0, 0.0);
+   // return self.doc.bounds.center;
 }
 
 - (CLLocationCoordinate2D)getPinLocation
@@ -1518,9 +1582,10 @@
 {
     if ([self.doc getNonEmptySegmentsCount] > 1)
     {
-        OATrackSegmentsViewController *trackSegmentViewController = [[OATrackSegmentsViewController alloc] initWithFile:self.doc];
-        trackSegmentViewController.delegate = self;
-        [self presentViewController:trackSegmentViewController animated:YES completion:nil];
+        // FIXME:
+//        OATrackSegmentsViewController *trackSegmentViewController = [[OATrackSegmentsViewController alloc] initWithFile:self.doc];
+//        trackSegmentViewController.delegate = self;
+//        [self presentViewController:trackSegmentViewController animated:YES completion:nil];
     }
     else
     {
@@ -1549,7 +1614,8 @@
         filename = [OAUtilities generateCurrentDateFilename];
         
     NSString *path = [self createUniqueFileName:filename path:folderPath];
-    [self.doc saveTo:path];
+    // FIXME:
+    //[self.doc saveTo:path];
     self.doc.path = path;
     // FIXME:
 //    OAGPX *gpx = [[OAGPXDatabase sharedDb] addGpxItem:path title:self.doc.metadata.name desc:nil bounds:self.doc.bounds document:self.doc];
@@ -1561,12 +1627,12 @@
     self.isShown = NO;
     [self changeTrackVisible];
     // FIXME:
-//    [_headerView updateHeader:self.isCurrentTrack
-//                   shownTrack:self.isShown
-//               isNetworkRoute:_isNewRoute
-//                    routeIcon:_reopeningState.trackIcon
-//                        title:[self.gpx getNiceTitle]
-//                  nearestCity:gpx.nearestCity];
+    [_headerView updateHeader:self.isCurrentTrack
+                   shownTrack:self.isShown
+               isNetworkRoute:_isNewRoute
+                    routeIcon:_reopeningState.trackIcon
+                        title:[self.gpx getNiceTitle]
+                  nearestCity:self.gpx.nearestCity];
     [self setupUIBuilder];
     [_uiBuilder setupTabBar:self.tabBarView
                 parentWidth:self.scrollableView.frame.size.width];
@@ -1702,7 +1768,7 @@
     NSMutableArray<CLLocation *> *points = [NSMutableArray array];
     if (self.doc)
     {
-        for (OAWptPt *wptPt in [self.doc getAllPoints])
+        for (OASWptPt *wptPt in [self.doc getAllPoints])
         {
             [points addObject:[[CLLocation alloc] initWithLatitude:[wptPt getLatitude] longitude:[wptPt getLongitude]]];
         }
@@ -1898,8 +1964,8 @@
 - (void)onSegmentSelected:(NSInteger)position gpx:(OAGPXDocument *)gpx
 {
     [OAAppSettings.sharedManager.gpxRouteSegment set:position];
-
-    [self.mapPanelViewController.mapActions setGPXRouteParamsWithDocument:self.doc path:self.doc.path];
+    // FIXME:
+   // [self.mapPanelViewController.mapActions setGPXRouteParamsWithDocument:self.doc path:self.doc.path];
     [OARoutingHelper.sharedInstance recalculateRouteDueToSettingsChange];
     [[OATargetPointsHelper sharedInstance] updateRouteAndRefresh:YES];
 
@@ -1918,12 +1984,13 @@
     }
 
     [self.mapPanelViewController.mapActions stopNavigationWithoutConfirm];
-    [self.mapPanelViewController.mapActions enterRoutePlanningModeGivenGpx:self.doc
-                                                                      path:self.gpx.gpxFilePath
-                                                                      from:nil
-                                                                  fromName:nil
-                                            useIntermediatePointsByDefault:YES
-                                                                showDialog:YES];
+    // FIXME:
+//    [self.mapPanelViewController.mapActions enterRoutePlanningModeGivenGpx:self.doc
+//                                                                      path:self.gpx.gpxFilePath
+//                                                                      from:nil
+//                                                                  fromName:nil
+//                                            useIntermediatePointsByDefault:YES
+//                                                                showDialog:YES];
     [self hide];
 }
 
@@ -2760,13 +2827,18 @@
 - (void) descriptionChanged:(NSString *)descr
 {
     self.doc.metadata.desc = descr;
+        
     if (!descr || descr.length == 0)
     {
-        OAGpxExtension *descExtension = [self.doc.metadata getExtensionByKey:@"desc"];
-        if (descExtension)
-            [self.doc.metadata removeExtension:descExtension];
+        // FIXME:
+//        OAGpxExtension *descExtension = [self.doc.metadata getExtensionByKey:@"desc"];
+//        if (descExtension)
+//            [self.doc.metadata removeExtension:descExtension];
     }
-    [self.doc saveTo:self.doc.path];
+    
+    OASKFile *file = [[OASKFile alloc] initWithFilePath:self.doc.path];
+    [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:self.doc];
+    
     if (_headerView)
     {
         [_headerView setDescription];

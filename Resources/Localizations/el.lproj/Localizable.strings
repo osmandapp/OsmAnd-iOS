@@ -2176,3 +2176,4 @@
 "shared_string_local" = "Τοπικά";
 "shared_string_top_bottom" = "Κορυφή και πάτος";
 "of" = "%d από %d";
+"downloaded_bytes" = "%@ από %@";

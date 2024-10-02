@@ -3413,6 +3413,7 @@
 "daynight_mode_app_theme_summary" = "La pantalla del mapa se alinea con el modo día de la aplicación para un tema claro y el modo noche para un tema oscuro";
 "daynight_mode_sunrise_sunset_summary" = "Cambia automáticamente entre los temas de día y de noche en función de las horas locales del amanecer y el atardecer.";
 "of" = "%d de %d";
+"downloaded_bytes" = "%@ de %@";
 "help_article_navigation_routing_brouter_name" = "Brouter";
 "simulate_location_movement_speed_x2" = "x2";
 "lang_yo" = "Yoruba";

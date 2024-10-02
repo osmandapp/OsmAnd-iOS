@@ -3416,6 +3416,7 @@
 "navigate_point_format_D" = "GGG.GGGGG";
 "short_location_on_map" = "Lat %@ \nLon %@";
 "of" = "%d de %d";
+"downloaded_bytes" = "%@ de %@";
 "daynight_mode_night_summary" = "Siempre muestra el mapa con el tema oscuro, adecuado para las condiciones nocturnas o de baja iluminación.";
 "daynight_mode_day_summary" = "Siempre muestra el mapa con el tema claro, ideal con la luz del día.";
 "daynight_mode_app_theme_summary" = "La pantalla del mapa se vincula al tema general de la aplicación: «modo diurno» para un tema claro y «modo nocturno» para un tema oscuro";

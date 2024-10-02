@@ -3377,6 +3377,7 @@
 "show_along_the_route" = "Ukázat podél trasy";
 "daynight_mode_day_summary" = "Vždy zobrazí mapu ve světlém režimu, vhodné pro viditelnost během dne.";
 "of" = "%d z %d";
+"downloaded_bytes" = "%@ z %@";
 "daynight_mode_night_summary" = "Vždy zobrazí mapu ve tmavém režimu, vhodné v noci a v podmínkách se slabým osvětlením.";
 "daynight_mode_sunrise_sunset_summary" = "Automaticky přepíná mezi denním a nočním režimem podle místního času východu a západu slunce.";
 "daynight_mode_app_theme_summary" = "Zobrazení mapy se přizpůsobí obecnému motivu aplikace — denní režim pro světlý motiv a noční režim pro tmavý motiv";

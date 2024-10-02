@@ -3492,6 +3492,7 @@
 "resting_navigation_position" = "وضع التنقل أثناء الراحة";
 "app_mode_osm" = "Osm";
 "of" = "%d من %d";
+"downloaded_bytes" = "%@ من %@";
 "daynight_mode_night_summary" = "يعرض دائمًا الخريطة بمظهر داكن، مناسب لظروف الليل أو الإضاءة المنخفضة.";
 "daynight_mode_sunrise_sunset_summary" = "يقوم بالتبديل تلقائيا بين سمات النهار والليل بناءً على أوقات شروق الشمس وغروبها المحلية.";
 "daynight_mode_day_summary" = "تعرض الخريطة دائما بمظهر فاتح، مما يجعلها مثالية للرؤية أثناء النهار.";

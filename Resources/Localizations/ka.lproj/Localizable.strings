@@ -2191,3 +2191,4 @@
 "sett_wunderlinq_ext_input" = "BMW WunderLINQ";
 "ltr_or_rtl_combine_via_space" = "%@-%@";
 "of" = "%d %d-დან";
+"downloaded_bytes" = "%@ %@-დან";

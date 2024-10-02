@@ -2243,3 +2243,4 @@
 "profile_icon" = "Profiilikuvake";
 "location_radius" = "Sijaintikehä";
 "of" = "%d / %d";
+"downloaded_bytes" = "%@ / %@";

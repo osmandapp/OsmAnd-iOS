@@ -3389,3 +3389,4 @@
 "navigation_position_icon" = "Táknmynd stöðu leiðsagnar";
 "location_radius_description" = "Sýnir hringlaga svæðið sem stendur fyrir nákvæmni núverandi staðsetningar þinnar";
 "of" = "%d af %d";
+"downloaded_bytes" = "%@ af %@";

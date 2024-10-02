@@ -2871,6 +2871,7 @@
 "location_radius" = "Polomer polohy";
 "daynight_mode_day_summary" = "Vždy zobrazí mapu v svetlej téme, vhodnej pre viditeľnosť počas dňa.";
 "of" = "%d z %d";
+"downloaded_bytes" = "%@ z %@";
 "daynight_mode_app_theme_summary" = "Zobrazenie mapy sa prispôsobuje všeobecnej téme aplikácie — denný režim pre svetlú tému a nočný režim pre tmavú tému";
 "daynight_mode_sunrise_sunset_summary" = "Automaticky prepne medzi dennou a nočnou témou podľa východu a západu slnka na danom mieste.";
 "daynight_mode_night_summary" = "Vždy zobrazí mapu v tmavej téme, vhodnej pre noc a podmienky so slabým osvetlením.";

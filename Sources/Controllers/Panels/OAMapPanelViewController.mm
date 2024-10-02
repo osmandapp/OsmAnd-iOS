@@ -2771,7 +2771,7 @@ typedef enum
     {
         gpxFile = [OASGpxUtilities.shared loadGpxFileFile:item.file];
         auto rect = gpxFile.getRect;
-        pinLocation = CLLocationCoordinate2DMake(rect.centerX, rect.centerY);
+        pinLocation = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
     }
     [self openTargetViewWithGPX:item
                    trackHudMode:EOATrackMenuHudMode
@@ -2789,7 +2789,7 @@ typedef enum
 {
     OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:item.file];
     auto rect = gpxFile.getRect;
-    CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake(rect.centerX, rect.centerY);
+    CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
  
     OATrackMenuViewControllerState *state = [OATrackMenuViewControllerState withPinLocation:pinLocation openedFromMap:NO];
     state.openedFromTracksList = YES;
@@ -2803,7 +2803,7 @@ typedef enum
 {
     OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:item.file];
     auto rect = gpxFile.getRect;
-    CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake(rect.centerX, rect.centerY);
+    CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
     
     OATrackMenuViewControllerState *state = [OATrackMenuViewControllerState withPinLocation:pinLocation openedFromMap:openedFromMap];
     state.lastSelectedTab = selectedTab;
@@ -2839,7 +2839,7 @@ typedef enum
         [_scrollableHudViewController hide:YES duration:0.2 onComplete:^{
             OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:item.file];
             auto rect = gpxFile.getRect;
-            CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake(rect.centerX, rect.centerY);
+            CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
             
             state.pinLocation = pinLocation;
             if (!state.openedFromTrackMenu)
@@ -2862,7 +2862,7 @@ typedef enum
         [_scrollableHudViewController hide:YES duration:0.2 onComplete:^{
             OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:item.file];
             auto rect = gpxFile.getRect;
-            CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake(rect.centerX, rect.centerY);
+            CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
             state.pinLocation = pinLocation;
             if (!state.openedFromTrackMenu)
                 state.navControllerHistory = nil;
@@ -2901,7 +2901,7 @@ typedef enum
     {
         OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:item.file];
         auto rect = gpxFile.getRect;
-        CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake(rect.centerX, rect.centerY);
+        CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
         if (CLLocationCoordinate2DIsValid(pinLocation))
         {
             targetPoint.location = pinLocation;

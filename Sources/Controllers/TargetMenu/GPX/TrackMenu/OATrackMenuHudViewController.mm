@@ -752,7 +752,7 @@
         return;
     OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:self.gpx.file];
     auto rect = gpxFile.getRect;
-    CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake(rect.centerX, rect.centerY);
+    CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
     if (_selectedTab == EOATrackMenuHudOverviewTab && CLLocationCoordinate2DIsValid(pinLocation))
     {
         CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;

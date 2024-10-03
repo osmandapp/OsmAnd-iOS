@@ -8,7 +8,7 @@
 
 #import "OARouteImporter.h"
 #import "OAGPXDocumentPrimitives.h"
-#import "OAGPXDocument.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <routeDataResources.h>
 #include <routeSegmentResult.h>
@@ -18,15 +18,15 @@
 {
 
     NSString *_file;
-    OAGPXDocument *_gpxFile;
-    OATrkSegment *_segment;
-    NSArray<OAWptPt *> *_segmentRoutePoints;
+    OASGpxFile *_gpxFile;
+    OASTrkSegment *_segment;
+    NSArray<OASWptPt *> *_segmentRoutePoints;
     BOOL _leftSide;
 
     std::vector<std::shared_ptr<RouteSegmentResult>> _route;
 }
 
-- (instancetype) initWithGpxFile:(OAGPXDocument *)gpxFile
+- (instancetype) initWithGpxFile:(OASGpxFile *)gpxFile
 {
     self = [super init];
     if (self) {
@@ -36,7 +36,7 @@
     return self;
 }
 
-- (instancetype) initWithGpxFile:(OAGPXDocument *)gpxFile leftSide:(BOOL)leftSide
+- (instancetype) initWithGpxFile:(OASGpxFile *)gpxFile leftSide:(BOOL)leftSide
 {
     self = [super init];
     if (self) {
@@ -46,7 +46,7 @@
     return self;
 }
 
-- (instancetype) initWithTrkSeg:(OATrkSegment *)segment segmentRoutePoints:(NSArray<OAWptPt *> *)segmentRoutePoints
+- (instancetype) initWithTrkSeg:(OASTrkSegment *)segment segmentRoutePoints:(NSArray<OASWptPt *> *)segmentRoutePoints
 {
     self = [super init];
     if (self) {
@@ -64,7 +64,10 @@
     }
     else if (_file != nil)
     {
-        _gpxFile = [[OAGPXDocument alloc] initWithGpxFile:_file];
+        OASKFile *file = [[OASKFile alloc] initWithFilePath:_file];
+        OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
+        
+        _gpxFile = gpxFile;
         [self parseRoute];
         _gpxFile.path = _file;
     }
@@ -79,16 +82,16 @@
     }
     else if (_gpxFile)
     {
-        NSArray<OATrkSegment *> *segments = [_gpxFile getNonEmptyTrkSegments:YES];
-        for (NSInteger i = 0; i < segments.count; i++)
+        NSArray<OASTrkSegment *> *segments = [_gpxFile getNonEmptyTrkSegmentsRoutesOnly:YES];
+        for (int i = 0; i < segments.count; i++)
         {
-            OATrkSegment *segment = segments[i];
-            [self parseRoute:segment segmentRoutePoints:[_gpxFile getRoutePoints:i]];
+            OASTrkSegment *segment = segments[i];
+            [self parseRoute:segment segmentRoutePoints:[_gpxFile getRoutePointsRouteIndex:i]];
         }
     }
 }
 
-- (void) parseRoute:(OATrkSegment *)segment segmentRoutePoints:(NSArray<OAWptPt *> *)segmentRoutePoints
+- (void) parseRoute:(OASTrkSegment *)segment segmentRoutePoints:(NSArray<OASWptPt *> *)segmentRoutePoints
 {
     auto region = std::make_shared<RoutingIndex>();
     auto resources = std::make_shared<RouteDataResources>();
@@ -104,31 +107,31 @@
     _route.insert(_route.end(), route.begin(), route.end());
 }
 
-- (void) collectRoutePointIndexes:(std::shared_ptr<RouteDataResources> &)resources segmentRoutePoints:(NSArray<OAWptPt *> *)segmentRoutePoints
+- (void) collectRoutePointIndexes:(std::shared_ptr<RouteDataResources> &)resources segmentRoutePoints:(NSArray<OASWptPt *> *)segmentRoutePoints
 {
         auto& routePointIndexes = resources->routePointIndexes;
         if (segmentRoutePoints.count > 0)
         {
-            for (OAWptPt *routePoint in segmentRoutePoints)
+            for (OASWptPt *routePoint in segmentRoutePoints)
             {
                 routePointIndexes.push_back((int)routePoint.getTrkPtIndex);
             }
         }
     }
 
-- (void) collectLocations:(std::shared_ptr<RouteDataResources> &)resources segment:(OATrkSegment *)segment
+- (void) collectLocations:(std::shared_ptr<RouteDataResources> &)resources segment:(OASTrkSegment *)segment
 {
     auto& locations = resources->locations;
     double lastElevation = RouteDataObject::HEIGHT_UNDEFINED;
     if (segment.hasRoute)
     {
-        for (OAWptPt *point in segment.points)
+        for (OASWptPt *point in segment.points)
         {
             Location loc(point.getLatitude, point.getLongitude);
-            if (!isnan(point.elevation))
+            if (!isnan(point.ele))
             {
-                loc.altitude = point.elevation;
-                lastElevation = point.elevation;
+                loc.altitude = point.ele;
+                lastElevation = point.ele;
             }
             else if (lastElevation != RouteDataObject::HEIGHT_UNDEFINED)
             {
@@ -139,7 +142,7 @@
     }
 }
 
-- (std::vector<std::shared_ptr<RouteSegmentResult>>) collectRouteSegments:(const std::shared_ptr<RoutingIndex>&)region resources:(std::shared_ptr<RouteDataResources> &)resources segment:(OATrkSegment *)segment
+- (std::vector<std::shared_ptr<RouteSegmentResult>>) collectRouteSegments:(const std::shared_ptr<RoutingIndex>&)region resources:(std::shared_ptr<RouteDataResources> &)resources segment:(OASTrkSegment *)segment
 {
     std::vector<std::shared_ptr<RouteSegmentResult>> route;
     for (OARouteSegment *routeSegment in segment.routeSegments)
@@ -160,7 +163,7 @@
     return route;
 }
 
-- (void) collectRouteTypes:(const std::shared_ptr<RoutingIndex>&)region segment:(OATrkSegment *)segment
+- (void) collectRouteTypes:(const std::shared_ptr<RoutingIndex>&)region segment:(OASTrkSegment *)segment
 {
     int i = 0;
     for (OARouteType *routeType in segment.routeTypes)

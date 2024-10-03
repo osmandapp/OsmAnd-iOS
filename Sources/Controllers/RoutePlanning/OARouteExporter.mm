@@ -7,9 +7,7 @@
 //
 
 #import "OARouteExporter.h"
-#import "OAGPXDocumentPrimitives.h"
-#import "OAGPXDocument.h"
-#import "OAGPXMutableDocument.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <routeSegmentResult.h>
 #include <routeDataBundle.h>
@@ -21,10 +19,14 @@
     std::vector<std::shared_ptr<RouteSegmentResult>> _route;
     NSArray<CLLocation *> *_locations;
     std::vector<int> _routePointIndexes;
-    NSArray<OAWptPt *> *_points;
+    NSArray<OASWptPt *> *_points;
 }
 
-- (instancetype) initWithName:(NSString *)name route:(std::vector<std::shared_ptr<RouteSegmentResult>> &)route locations:(NSArray<CLLocation *> *)locations routePointIndexes:(std::vector<int>)routePointIndexes points:(NSArray<OAWptPt *> *)points
+- (instancetype)initWithName:(NSString *)name
+                        route:(std::vector<std::shared_ptr<RouteSegmentResult>> &)route
+                    locations:(NSArray<CLLocation *> *)locations
+            routePointIndexes:(std::vector<int>)routePointIndexes
+                       points:(NSArray<OASWptPt *> *)points
 {
     self = [super init];
     if (self) {
@@ -37,44 +39,45 @@
     return self;
 }
 
-- (OAGPXDocument *) exportRoute
+- (OASGpxFile *)exportRoute
 {
-    OAGPXMutableDocument *gpx = [[OAGPXMutableDocument alloc] init];
-    gpx.creator = OSMAND_ROUTER_V2;
-    OATrack *track = [[OATrack alloc] init];
+    OASGpxFile *gpx = [[OASGpxFile alloc] initWithAuthor:OSMAND_ROUTER_V2];
+    OASTrack *track = [[OASTrack alloc] init];
     track.name = _name;
-    track.segments = @[[self generateRouteSegment]];
-    [gpx addTrack:track];
+    track.segments = [[self generateRouteSegment] mutableCopy];
+    [gpx.tracks addObject:track];
     if (_points != nil)
     {
-        for (OAWptPt *pt in _points)
+        for (OASWptPt *pt in _points)
         {
-            [gpx addWpt:pt];
+            [gpx addPointPoint:pt];
         }
     }
     return gpx;
 }
 
-+ (OAGPXMutableDocument *)exportRoute:(NSString *)name trkSegments:(NSArray<OATrkSegment *> *)trkSegments points:(NSArray<OAWptPt *> *)points
++ (OASGpxFile *)exportRoute:(NSString *)name
+                trkSegments:(NSArray<OASTrkSegment *> *)trkSegments
+                     points:(NSArray<OASWptPt *> *)points
 {
-    OAGPXMutableDocument *gpx = [[OAGPXMutableDocument alloc] init];
-    gpx.creator = OSMAND_ROUTER_V2;
-    OATrack *track = [[OATrack alloc] init];
+    OASGpxFile *gpx = [[OASGpxFile alloc] initWithAuthor:OSMAND_ROUTER_V2];
+    OASTrack *track = [[OASTrack alloc] init];
     track.name = name;
-    [gpx addTrack:track];
-    for (OATrkSegment *seg in trkSegments)
-        [gpx addTrackSegment:seg track:track];
+    [gpx.tracks addObject:track];
+
+    for (OASTrkSegment *seg in trkSegments)
+        [track.segments addObject:seg];
     if (points != nil)
     {
-        for (OAWptPt *pt in points)
+        for (OASWptPt *pt in points)
         {
-            [gpx addWpt:pt];
+            [gpx addPointPoint:pt];
         }
     }
     return gpx;
 }
 
-- (OATrkSegment *) generateRouteSegment
+- (OASTrkSegment *)generateRouteSegment
 {
     std::shared_ptr<RouteDataResources> resources = std::make_shared<RouteDataResources>([self coordinatesToLocationVector:_locations], _routePointIndexes);
     std::vector<std::shared_ptr<RouteDataBundle>> routeItems;
@@ -101,41 +104,42 @@
         typeList.push_back(typeBundle);
     }
     
-    OATrkSegment *trkSegment = [[OATrkSegment alloc] init];
-    trkSegment.points = @[];
+    OASTrkSegment *trkSegment = [[OASTrkSegment alloc] init];
+    trkSegment.points = [@[] mutableCopy];
     if (_locations == nil || _locations.count == 0)
         return trkSegment;
     
     for (NSInteger i = 0; i < _locations.count; i++)
     {
         CLLocation *loc = _locations[i];
-        OAWptPt *pt = [[OAWptPt alloc] init];
-        [pt setPosition:loc.coordinate];
+        OASWptPt *pt = [[OASWptPt alloc] initWithLat:loc.coordinate.latitude lon:loc.coordinate.longitude];
         if (loc.speed > 0)
             pt.speed = loc.speed;
         
         if (loc.altitude > 0)
-            pt.elevation = loc.altitude;
+            pt.ele = loc.altitude;
         
 //        if (loc.horizontalAccuracy)
 //            pt.hdop = loc.horizontalAccuracy;
         
-        trkSegment.points = [trkSegment.points arrayByAddingObject:pt];
+        trkSegment.points = [[trkSegment.points arrayByAddingObject:pt] mutableCopy];
     }
-    NSMutableArray<OARouteSegment *> *routeSegments = [NSMutableArray new];
-    for (const auto& item : routeItems)
-    {
-        [routeSegments addObject:[OARouteSegment fromStringBundle:item]];
-    }
-    trkSegment.routeSegments = routeSegments;
-    NSMutableArray<OARouteType *> *routeTypes = [NSMutableArray new];
-    for (const auto& item : typeList)
-    {
-        [routeTypes addObject:[OARouteType fromStringBundle:item]];
-    }
-    trkSegment.routeTypes = routeTypes;
-    [trkSegment fillExtensions];
-    return trkSegment;
+    
+// FIXME:
+//    NSMutableArray<OARouteSegment *> *routeSegments = [NSMutableArray new];
+//    for (const auto& item : routeItems)
+//    {
+//        [routeSegments addObject:[OARouteSegment fromStringBundle:item]];
+//    }
+//    trkSegment.routeSegments = routeSegments;
+//    NSMutableArray<OARouteType *> *routeTypes = [NSMutableArray new];
+//    for (const auto& item : typeList)
+//    {
+//        [routeTypes addObject:[OARouteType fromStringBundle:item]];
+//    }
+//    trkSegment.routeTypes = routeTypes;
+//    [trkSegment fillExtensions];
+//    return trkSegment;
 }
 
 - (std::vector<Location>) coordinatesToLocationVector:(NSArray<CLLocation *> *)points

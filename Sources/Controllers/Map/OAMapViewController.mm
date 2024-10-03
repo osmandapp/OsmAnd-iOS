@@ -2831,7 +2831,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     }
 }
 
-- (void) showTempGpxTrackFromDocument:(OAGPXDocument *)doc
+- (void) showTempGpxTrackFromDocument:(OASGpxFile *)doc
 {
     if (_recTrackShowing)
         [self hideRecGpxTrack];
@@ -3140,7 +3140,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             {
                 OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> *_wpt = (OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>*)&loc;
                 const std::shared_ptr<OsmAnd::GpxDocument::WptPt> w = _wpt->shared_ptr();
-// FIXME:
+                // FIXME: 
+                
 //                OASWptPt *wptItem = [OAGPXDocument fetchWpt:w];
 //                wptItem.wpt = w;
                 
@@ -3179,8 +3180,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     if (!self.foundWptDocPath)
     {
         OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
-        // FIXME:
-       // [helper deleteWpt:self.foundWpt];
+        [helper deleteWptNew:self.foundWpt];
         
         // update map
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -3264,6 +3264,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             NSString *path = it.key().toNSString();
             if ([path isEqualToString:self.foundWptDocPath])
             {
+                // OAGPXFile - for
                 auto doc = std::const_pointer_cast<OsmAnd::GpxDocument>(it.value());
 
                 for (const auto& loc : doc->points)
@@ -3275,14 +3276,15 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
                         [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:self.foundWpt.lon])
                     {
                         // FIXME:
-//                        [OAGPXDocument fillWpt:w usingWpt:self.foundWpt];
-//                        [OAGPXDocument fillPointsGroup:self.foundWpt wptPtPtr:w doc:doc];
+ //                       [OAGPXDocument fillWpt:w usingWpt:self.foundWpt];
+ //                        [OAGPXDocument fillPointsGroup:self.foundWpt wptPtPtr:w doc:doc];
                         OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
                         [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[self.foundWpt getColor]]];
                         break;
                     }
                 }
-                doc->saveTo(QString::fromNSString(self.foundWptDocPath), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
+                // writeGPX to disk
+               // doc->saveTo(QString::fromNSString(self.foundWptDocPath), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
 
                 // update map
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -3300,8 +3302,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     if (!gpxFileName)
     {
         OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
-        // FIXME:
-       // [helper addWpt:wpt];
+        [helper addWptNew:wpt];
         self.foundWpt = wpt;
         self.foundWptDocPath = nil;
         

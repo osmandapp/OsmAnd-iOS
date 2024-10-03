@@ -14,7 +14,6 @@
 #import "Localization.h"
 #import "OAGPXDatabase.h"
 #import "OAGPXMutableDocument.h"
-#import "OAGPXTrackAnalysis.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OATrackMenuHudViewController.h"

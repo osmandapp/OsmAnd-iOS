@@ -3161,6 +3161,7 @@
 		FAC5D4312BFC7F5200E9E658 /* SpeedLimitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC5D4302BFC7F5200E9E658 /* SpeedLimitView.swift */; };
 		FACE409F2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = FACE409D2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm */; };
 		FAD8489A2CAD6F950018AF92 /* WptPtExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD848992CAD6F950018AF92 /* WptPtExtension.swift */; };
+		FAD848A02CAE9FDD0018AF92 /* GpxFileExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD8489F2CAE9FDD0018AF92 /* GpxFileExtension.swift */; };
 		FAE0B7112AFCDAD400C02438 /* BLEPairedSensorsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE0B7102AFCDAD400C02438 /* BLEPairedSensorsViewController.swift */; };
 		FAE0B7132AFCDC6B00C02438 /* BLEPairedSensors.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAE0B7122AFCDC6B00C02438 /* BLEPairedSensors.storyboard */; };
 		FAE0B7162AFCEF4D00C02438 /* СhoicePairedDeviceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE0B7152AFCEF4D00C02438 /* СhoicePairedDeviceTableViewCell.swift */; };
@@ -7674,6 +7675,7 @@
 		FACE409D2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAExternalSensorsPlugin.mm; sourceTree = "<group>"; };
 		FACE409E2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAExternalSensorsPlugin.h; sourceTree = "<group>"; };
 		FAD848992CAD6F950018AF92 /* WptPtExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WptPtExtension.swift; sourceTree = "<group>"; };
+		FAD8489F2CAE9FDD0018AF92 /* GpxFileExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GpxFileExtension.swift; sourceTree = "<group>"; };
 		FADFF8872C885AFD00F68E4F /* OsmAndSharedWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OsmAndSharedWrapper.h; sourceTree = "<group>"; };
 		FAE0B7102AFCDAD400C02438 /* BLEPairedSensorsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEPairedSensorsViewController.swift; sourceTree = "<group>"; };
 		FAE0B7122AFCDC6B00C02438 /* BLEPairedSensors.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = BLEPairedSensors.storyboard; sourceTree = "<group>"; };
@@ -13580,6 +13582,7 @@
 				FA45851D2C9474A3003A5AD7 /* GpxDataItemExtension.swift */,
 				FA64173A2CA5A57500982297 /* SharedLibExtension.swift */,
 				FAD848992CAD6F950018AF92 /* WptPtExtension.swift */,
+				FAD8489F2CAE9FDD0018AF92 /* GpxFileExtension.swift */,
 			);
 			path = SharedLibHelpers;
 			sourceTree = "<group>";
@@ -16804,6 +16807,7 @@
 				DA5A842A26C563A800F274C7 /* OAImpassableRoadSelectionViewController.mm in Sources */,
 				DA238BF92A1C9A04006A1E0E /* AppModeSelectionViewController.swift in Sources */,
 				DA5A856426C563A900F274C7 /* OAGpxApproximator.mm in Sources */,
+				FAD848A02CAE9FDD0018AF92 /* GpxFileExtension.swift in Sources */,
 				FA204E962B19E29C008AF3D2 /* BLERunningSensor.swift in Sources */,
 				DA5A814026C563A700F274C7 /* OAOsmBaseStorage.m in Sources */,
 				DA5A837026C563A800F274C7 /* OARoutingTargetCell.m in Sources */,

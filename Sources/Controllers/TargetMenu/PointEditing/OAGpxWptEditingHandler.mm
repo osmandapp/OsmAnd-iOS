@@ -20,6 +20,7 @@
 #import "OAGPXAppearanceCollection.h"
 #import "Localization.h"
 #import "OsmAndSharedWrapper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OAGpxWptEditingHandler
 {
@@ -72,9 +73,10 @@
         
         [p setIconNameIconName:_iconName];
         [p setBackgroundTypeBackType:@"circle"];
-// FIXME:
-//        [p setExtension:ADDRESS_EXTENSION_KEY value:address];
-//        [p setAmenity:poi];
+        [p setAddressAddress:address];
+        NSDictionary<NSString *, NSString *> *extensions = [poi toTagValue:PRIVATE_PREFIX osmPrefix:OSM_PREFIX_KEY];
+        [[p getExtensionsToWrite] addEntriesFromDictionary:extensions];
+       // wpt.getExtensionsToWrite().putAll(amenity.getAmenityExtensions(app.getPoiTypes(), true));
         [p setAmenityOriginNameOriginName:poi.toStringEn];
 
         wpt.color = color;
@@ -100,9 +102,7 @@
 
 - (NSString *)getGroupTitle
 {
-    return OALocalizedString(@"shared_string_waypoints");;
-    // FIXME: gpxWpt.point.type ?
-//    return _gpxWpt.point.type && _gpxWpt.point.type.length > 0 ? _gpxWpt.point.type : OALocalizedString(@"shared_string_waypoints");
+    return _gpxWpt.point.type && _gpxWpt.point.type.length > 0 ? _gpxWpt.point.type : OALocalizedString(@"shared_string_waypoints");
 }
 - (OAGPXDocument *)getGpxDocument
 {

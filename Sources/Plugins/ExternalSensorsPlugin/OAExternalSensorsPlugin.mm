@@ -234,13 +234,13 @@ NSString * const OATrackRecordingAnyConnectedDevice = @"any_connected_device_wri
     return nil;
 }
 
-- (void)getAvailableGPXDataSetTypes:(OAGPXTrackAnalysis *)analysis
+- (void)getAvailableGPXDataSetTypes:(OASGpxTrackAnalysis *)analysis
                      availableTypes:(NSMutableArray<NSArray<NSNumber *> *> *)availableTypes
 {
     [OASensorAttributesUtils getAvailableGPXDataSetTypesWithAnalysis:analysis availableTypes:availableTypes];
 }
 
-- (void)onAnalysePoint:(OAGPXTrackAnalysis *)analysis point:(NSObject *)point attribute:(OAPointAttributes *)attribute
+- (void)onAnalysePoint:(OASGpxTrackAnalysis *)analysis point:(NSObject *)point attribute:(OAPointAttributes *)attribute
 {
     if ([point isKindOfClass:OAWptPt.class])
     {

@@ -21,4 +21,14 @@ extension WptPt {
             objc_setAssociatedObject(self, &wptTypeKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
+    
+    var position: CLLocationCoordinate2D {
+        get {
+            CLLocationCoordinate2DMake(lat, lon)
+        }
+        set {
+            self.lat = newValue.latitude
+            self.lon = newValue.longitude
+        }
+    }
 }

@@ -26,6 +26,7 @@
 #import "OADestinationItemsListViewController.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -100,14 +101,14 @@
                      [OAGPXDataSetType getTitle:types.firstObject.integerValue],
                      [OAGPXDataSetType getTitle:types.lastObject.integerValue]];
             iconName = @"ic_custom_altitude_and_slope";
-            hasData = [vwController.analysis hasData:[OAGPXDataSetType getDataKey:types.firstObject.integerValue]]
-                    || [vwController.analysis hasData:[OAGPXDataSetType getDataKey:types.lastObject.integerValue]];
+            hasData = [vwController.analysis hasDataTag:[OAGPXDataSetType getDataKey:types.firstObject.integerValue]]
+                    || [vwController.analysis hasDataTag:[OAGPXDataSetType getDataKey:types.lastObject.integerValue]];
         }
         else
         {
             title = [OAGPXDataSetType getTitle:types.firstObject.integerValue];
             iconName = [OAGPXDataSetType getIconName:types.firstObject.integerValue];
-            hasData = [vwController.analysis hasData:[OAGPXDataSetType getDataKey:types.firstObject.integerValue]];
+            hasData = [vwController.analysis hasDataTag:[OAGPXDataSetType getDataKey:types.firstObject.integerValue]];
         }
         [arr addObject:@{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
@@ -269,7 +270,7 @@
 
 @implementation OAStatisticsSelectionBottomSheetViewController
 
-- (instancetype)initWithTypes:(NSArray<NSNumber *> *)types analysis:(OAGPXTrackAnalysis *)analysis;
+- (instancetype)initWithTypes:(NSArray<NSNumber *> *)types analysis:(OASGpxTrackAnalysis *)analysis;
 {
     _types = types;
     _analysis = analysis;

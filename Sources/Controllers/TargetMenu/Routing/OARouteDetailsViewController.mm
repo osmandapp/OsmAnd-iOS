@@ -15,7 +15,6 @@
 #import "OAColors.h"
 #import "OAStateChangedListener.h"
 #import "OARoutingHelper.h"
-#import "OAGPXTrackAnalysis.h"
 #import "OARouteInfoCell.h"
 #import "OAGPXDocument.h"
 #import "OAGPXUIHelper.h"

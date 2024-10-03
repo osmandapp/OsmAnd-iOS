@@ -530,11 +530,11 @@ public static void addMyPlacesTabPlugins(FavoritesActivity favoritesActivity, Li
 }
  */
 
-- (void)onAnalysePoint:(OAGPXTrackAnalysis *)analysis point:(NSObject *)point attribute:(OAPointAttributes *)attribute
+- (void)onAnalysePoint:(OASGpxTrackAnalysis *)analysis point:(NSObject *)point attribute:(OAPointAttributes *)attribute
 {
 }
 
-- (void)getAvailableGPXDataSetTypes:(OAGPXTrackAnalysis *)analysis
+- (void)getAvailableGPXDataSetTypes:(OASGpxTrackAnalysis *)analysis
                      availableTypes:(NSMutableArray<NSArray<NSNumber *> *> *)availableTypes
 {
 }

@@ -11,7 +11,6 @@
 #import "OARouteStatisticsHelper.h"
 #import "OARouteCalculationResult.h"
 #import "OAGPXDocument.h"
-#import "OAGPXTrackAnalysis.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAAppSettings.h"
 #import "OARouteExporter.h"

@@ -7,12 +7,10 @@
 //
 
 #import "OAGPXUIHelper.h"
-#import "OAGPXDocument.h"
 #import "OARouteCalculationResult.h"
 #import "OARoutingHelper.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXDatabase.h"
-#import "OAGPXTrackAnalysis.h"
 #import "OAPOI.h"
 #import "OAPOIHelper.h"
 #import "OAPOIFiltersHelper.h"
@@ -26,7 +24,6 @@
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
 #import "OASavingTrackHelper.h"
-#import "OAGPXMutableDocument.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Utilities.h>
@@ -57,32 +54,33 @@
 {
     NSString *_exportFileName;
     NSString *_exportFilePath;
-    OAGPX *_exportingGpx;
-    OAGPXDocument *_exportingGpxDoc;
+    OASGpxDataItem *_exportingGpx;
+    OASGpxFile *_exportingGpxDoc;
     BOOL _isExportingCurrentTrack;
     UIDocumentInteractionController *_exportController;
     UIViewController __weak *_exportingHostVC;
     id<OATrackSavingHelperUpdatableDelegate> _exportingHostVCDelegate;
 }
 
-+ (OAGPXDocument *) makeGpxFromRoute:(OARouteCalculationResult *)route
++ (OASGpxFile *)makeGpxFromRoute:(OARouteCalculationResult *)route
 {
-    OAGPXDocument *gpx = [[OAGPXDocument alloc] init];
+    OASGpxFile *gpx = [[OASGpxFile alloc] init];
     NSArray<CLLocation *> *locations = [route getRouteLocations];
-    OATrack *track = [[OATrack alloc] init];
-    OATrkSegment *seg = [[OATrkSegment alloc] init];
-    NSMutableArray<OAWptPt *> *pts = [NSMutableArray new];
+    OASTrack *track = [[OASTrack alloc] init];
+    OASTrkSegment *seg = [[OASTrkSegment alloc] init];
+    NSMutableArray<OASWptPt *> *pts = [NSMutableArray new];
     if (locations)
     {
         for (CLLocation *l in locations)
         {
-            OAWptPt *point = [[OAWptPt alloc] init];
-            [point setPosition:l.coordinate];
+            OASWptPt *point = [[OASWptPt alloc] init];
+            point.lat = l.coordinate.latitude;
+            point.lon = l.coordinate.longitude;
             if (!isnan(l.altitude) && l.altitude != 0)
             {
                 if (gpx)
                     gpx.hasAltitude = YES;
-                point.elevation = l.altitude;
+                point.ele = l.altitude;
             }
             if (pts.count == 0)
             {
@@ -90,7 +88,7 @@
             }
             else
             {
-                OAWptPt *prevPoint = pts[pts.count - 1];
+                OASWptPt *prevPoint = pts[pts.count - 1];
                 if (l.speed != 0)
                 {
                     point.speed = l.speed;
@@ -113,23 +111,23 @@
     return gpx;
 }
 
-+ (void)interpolateEmptyElevationWpts:(NSMutableArray<OAWptPt *> *)pts
++ (void)interpolateEmptyElevationWpts:(NSMutableArray<OASWptPt *> *)pts
 {
     for (int i = 0; i < pts.count; )
     {
         int processedPoints = 0;
-        OAWptPt *currentPt = pts[i];
-        if (isnan(currentPt.elevation))
+        OASWptPt *currentPt = pts[i];
+        if (isnan(currentPt.ele))
         {
             int startIndex = i, prevValidIndex = -1, nextValidIndex = -1;
             double prevValidElevation = NAN, nextValidElevation = NAN;
 
             for (int j = startIndex - 1; j >= 0; j--)
             {
-                OAWptPt *prevPt = pts[j];
-                if (!isnan(prevPt.elevation))
+                OASWptPt *prevPt = pts[j];
+                if (!isnan(prevPt.ele))
                 {
-                    prevValidElevation = prevPt.elevation;
+                    prevValidElevation = prevPt.ele;
                     prevValidIndex = j;
                     break;
                 }
@@ -137,10 +135,10 @@
 
             for (int j = startIndex + 1; j < pts.count; j++)
             {
-                OAWptPt *nextPt = pts[j];
-                if (!isnan(nextPt.elevation))
+                OASWptPt *nextPt = pts[j];
+                if (!isnan(nextPt.ele))
                 {
-                    nextValidElevation = nextPt.elevation;
+                    nextValidElevation = nextPt.ele;
                     nextValidIndex = j;
                     break;
                 }
@@ -156,10 +154,10 @@
                 // outermost section without interpolation
                 for (int j = startIndex; j < pts.count; j++)
                 {
-                    OAWptPt *pt = pts[j];
-                    if (isnan(pt.elevation))
+                    OASWptPt *pt = pts[j];
+                    if (isnan(pt.ele))
                     {
-                        pt.elevation = startIndex == 0 ? nextValidElevation : prevValidElevation;
+                        pt.ele = startIndex == 0 ? nextValidElevation : prevValidElevation;
                         processedPoints++;
                     } else
                     {
@@ -173,19 +171,19 @@
                 NSMutableArray<NSNumber *> *distanceArray = [NSMutableArray arrayWithCapacity:(nextValidIndex - prevValidIndex)];
                 for (int j = prevValidIndex; j < nextValidIndex; j++)
                 {
-                    OAWptPt *thisPt = pts[j];
-                    OAWptPt *nextPt = pts[j + 1];
+                    OASWptPt *thisPt = pts[j];
+                    OASWptPt *nextPt = pts[j + 1];
                     double distance = getDistance(thisPt.position.latitude, thisPt.position.longitude,
                                                   nextPt.position.latitude, nextPt.position.longitude);
                     [distanceArray addObject:@(distance)];
                     totalDistance += distance;
                 }
-                double deltaElevation = pts[nextValidIndex].elevation - pts[prevValidIndex].elevation;
+                double deltaElevation = pts[nextValidIndex].ele - pts[prevValidIndex].ele;
                 for (int j = startIndex; totalDistance > 0 && j < nextValidIndex; j++)
                 {
                     double currentDistance = [distanceArray[j - startIndex] doubleValue];
                     double increaseElevation = deltaElevation * (currentDistance / totalDistance);
-                    pts[j].elevation = pts[j - 1].elevation + increaseElevation;
+                    pts[j].ele = pts[j - 1].ele + increaseElevation;
                     processedPoints++;
                 }
             }
@@ -194,20 +192,20 @@
     }
 }
 
-+ (NSString *) getDescription:(OAGPX *)gpx
++ (NSString *) getDescription:(OASGpxDataItem *)gpx
 {
     NSString *dist = [OAOsmAndFormatter getFormattedDistance:gpx.totalDistance];
     NSString *wpts = [NSString stringWithFormat:@"%@: %d", OALocalizedString(@"shared_string_waypoints"), gpx.wptPoints];
     return [NSString stringWithFormat:@"%@ • %@", dist, wpts];
 }
 
-+ (long) getSegmentTime:(OATrkSegment *)segment
++ (long)getSegmentTime:(OASTrkSegment *)segment
 {
     long startTime = LONG_MAX;
     long endTime = LONG_MIN;
     for (NSInteger i = 0; i < segment.points.count; i++)
     {
-        OAWptPt *point = segment.points[i];
+        OASWptPt *point = segment.points[i];
         long time = point.time;
         if (time != 0) {
             startTime = MIN(startTime, time);
@@ -217,13 +215,13 @@
     return endTime - startTime;
 }
 
-+ (double) getSegmentDistance:(OATrkSegment *)segment
++ (double) getSegmentDistance:(OASTrkSegment *)segment
 {
     double distance = 0;
-    OAWptPt *prevPoint = nil;
+    OASWptPt *prevPoint = nil;
     for (NSInteger i = 0; i < segment.points.count; i++)
     {
-        OAWptPt *point = segment.points[i];
+        OASWptPt *point = segment.points[i];
         if (prevPoint != nil)
             distance += getDistance(prevPoint.getLatitude, prevPoint.getLongitude, point.getLatitude, point.getLongitude);
         prevPoint = point;
@@ -330,36 +328,40 @@
     return NO;
 }
 
-+ (void) addAppearanceToGpx:(OAGPXDocument *)gpxFile gpxItem:(OAGPX *)gpxItem
++ (void) addAppearanceToGpx:(OASGpxFile *)gpxFile gpxItem:(OASGpxDataItem *)gpxItem
 {
-    [gpxFile setShowArrows:gpxItem.showArrows];
-    [gpxFile setShowStartFinish:gpxItem.showStartFinish];
+    [gpxFile setShowArrowsShowArrows:gpxItem.showArrows];
+    [gpxFile setShowStartFinishShowStartFinish:gpxItem.showStartFinish];
     if (gpxItem.visualization3dByType != EOAGPX3DLineVisualizationByTypeNone)
     {
-        [gpxFile setVerticalExaggerationScale:gpxItem.verticalExaggerationScale];
-        [gpxFile setElevationMeters:gpxItem.elevationMeters];
-        [gpxFile setVisualization3dByType:gpxItem.visualization3dByType];
-        [gpxFile setVisualization3dWallColorType:gpxItem.visualization3dWallColorType];
-        [gpxFile setVisualization3dPositionType:gpxItem.visualization3dPositionType];
+        [gpxFile setAdditionalExaggerationAdditionalExaggeration:gpxItem.verticalExaggerationScale];
+        [gpxFile setElevationMetersElevation:gpxItem.elevationMeters];
+        
+        [gpxFile set3DVisualizationTypeVisualizationType:[OAGPXDatabase lineVisualizationByTypeNameForType:(EOAGPX3DLineVisualizationByType)gpxItem.visualization3dByType]];
+        [gpxFile set3DWallColoringTypeTrackWallColoringType:[OAGPXDatabase lineVisualizationWallColorTypeNameForType:(EOAGPX3DLineVisualizationWallColorType)gpxItem.visualization3dWallColorType]];
+        [gpxFile set3DVisualizationTypeVisualizationType:[OAGPXDatabase lineVisualizationPositionTypeNameForType:(EOAGPX3DLineVisualizationPositionType)gpxItem.visualization3dPositionType]];
     }
     
-    [gpxFile setSplitInterval:gpxItem.splitInterval];
-    [gpxFile setSplitType:[OAGPXDatabase splitTypeNameByValue:gpxItem.splitType]];
+    [gpxFile setSplitIntervalSplitInterval:gpxItem.splitInterval];
+    [gpxFile setSplitTypeGpxSplitType:[OAGPXDatabase splitTypeNameByValue:gpxItem.splitType]];
     if (gpxItem.color != 0)
-        [gpxFile setColor:(int)gpxItem.color];
+    {
+        OASInt *color = [[OASInt alloc] initWithInt:(int)gpxItem.color];
+        [gpxFile setColorColor:color];
+    }
     
     if (gpxItem.width && gpxItem.width.length > 0)
-        [gpxFile setWidth:gpxItem.width];
+        [gpxFile setWidthWidth:gpxItem.width];
     
     if (gpxItem.coloringType && gpxItem.coloringType.length > 0)
-        [gpxFile setColoringType:gpxItem.coloringType];
+        [gpxFile setColoringTypeColoringType:gpxItem.coloringType];
 
     if (gpxItem.gradientPaletteName && gpxItem.gradientPaletteName.length > 0)
-        [gpxFile setGradientColorPalette:gpxItem.gradientPaletteName];
+        [gpxFile setGradientColorPaletteGradientColorPaletteName:gpxItem.gradientPaletteName];
 }
 
-+ (CLLocationCoordinate2D)getSegmentPointByTime:(OATrkSegment *)segment
-                                        gpxFile:(OAGPXDocument *)gpxFile
++ (CLLocationCoordinate2D)getSegmentPointByTime:(OASTrkSegment *)segment
+                                        gpxFile:(OASGpxFile *)gpxFile
                                            time:(double)time
                                 preciseLocation:(BOOL)preciseLocation
                                    joinSegments:(BOOL)joinSegments
@@ -373,12 +375,12 @@
     }
 
     long passedSegmentsTime = 0;
-    for (OATrack *track in gpxFile.tracks)
+    for (OASTrack *track in gpxFile.tracks)
     {
         if (track.generalTrack)
             continue;
 
-        for (OATrkSegment *seg in track.segments)
+        for (OASTrkSegment *seg in track.segments)
         {
             CLLocationCoordinate2D latLon = [self getSegmentPointByTime:seg
                                                             timeToPoint:time
@@ -398,14 +400,14 @@
     return kCLLocationCoordinate2DInvalid;
 }
 
-+ (CLLocationCoordinate2D)getSegmentPointByTime:(OATrkSegment *)segment
++ (CLLocationCoordinate2D)getSegmentPointByTime:(OASTrkSegment *)segment
                                     timeToPoint:(double)timeToPoint
                              passedSegmentsTime:(long)passedSegmentsTime
                                 preciseLocation:(BOOL)preciseLocation
 {
-    OAWptPt *previousPoint = nil;
+    OASWptPt *previousPoint = nil;
     long segmentStartTime = segment.points.firstObject.time;
-    for (OAWptPt *currentPoint in segment.points)
+    for (OASWptPt *currentPoint in segment.points)
     {
         long totalPassedTime = passedSegmentsTime + currentPoint.time - segmentStartTime;
         if (totalPassedTime >= timeToPoint)
@@ -422,8 +424,8 @@
     return kCLLocationCoordinate2DInvalid;
 }
 
-+ (CLLocationCoordinate2D)getSegmentPointByDistance:(OATrkSegment *)segment
-                                            gpxFile:(OAGPXDocument *)gpxFile
++ (CLLocationCoordinate2D)getSegmentPointByDistance:(OASTrkSegment *)segment
+                                            gpxFile:(OASGpxFile *)gpxFile
                                     distanceToPoint:(double)distanceToPoint
                                     preciseLocation:(BOOL)preciseLocation
                                        joinSegments:(BOOL)joinSegments
@@ -432,10 +434,10 @@
 
     if (!segment.generalSegment || joinSegments)
     {
-        OAWptPt *prevPoint = nil;
+        OASWptPt *prevPoint = nil;
         for (int i = 0; i < segment.points.count; i++)
         {
-            OAWptPt *currPoint = segment.points[i];
+            OASWptPt *currPoint = segment.points[i];
             if (prevPoint)
             {
                 passedDistance += getDistance(
@@ -459,18 +461,18 @@
     }
 
     double passedSegmentsPointsDistance = 0;
-    OAWptPt *prevPoint = nil;
-    for (OATrack *track in gpxFile.tracks)
+    OASWptPt *prevPoint = nil;
+    for (OASTrack *track in gpxFile.tracks)
     {
         if (track.generalTrack)
             continue;
 
-        for (OATrkSegment *seg in track.segments)
+        for (OASTrkSegment *seg in track.segments)
         {
             if (!seg.points || seg.points.count == 0)
                 continue;
 
-            for (OAWptPt *currPoint in seg.points)
+            for (OASWptPt *currPoint in seg.points)
             {
                 if (prevPoint)
                 {
@@ -500,8 +502,8 @@
 
 + (CLLocationCoordinate2D)getIntermediatePointByTime:(double)passedTime
                                  timeToPoint:(double)timeToPoint
-                                   prevPoint:(OAWptPt *)prevPoint
-                                   currPoint:(OAWptPt *)currPoint
+                                   prevPoint:(OASWptPt *)prevPoint
+                                   currPoint:(OASWptPt *)currPoint
 {
     double percent = 1 - (passedTime - timeToPoint) / (currPoint.time - prevPoint.time);
     double dLat = (currPoint.position.latitude - prevPoint.position.latitude) * percent;
@@ -511,8 +513,8 @@
 
 + (CLLocationCoordinate2D)getIntermediatePointByDistance:(double)passedDistance
                                          distanceToPoint:(double)distanceToPoint
-                                               currPoint:(OAWptPt *)currPoint
-                                               prevPoint:(OAWptPt *)prevPoint
+                                               currPoint:(OASWptPt *)currPoint
+                                               prevPoint:(OASWptPt *)prevPoint
 {
     double percent = 1 - (passedDistance - distanceToPoint) / (currPoint.distance - prevPoint.distance);
     double dLat = (currPoint.position.latitude - prevPoint.position.latitude) * percent;
@@ -615,7 +617,7 @@
     [_exportController presentOptionsMenuFromRect:touchPointArea inView:_exportingHostVC.view animated:YES];
 }
 
-- (void)openExportForTrack:(OAGPX *)gpx
+- (void)openExportForTrack:(OASGpxDataItem *)gpx
                     gpxDoc:(id)gpxDoc
             isCurrentTrack:(BOOL)isCurrentTrack
           inViewController:(UIViewController *)hostViewController hostViewControllerDelegate:(id)hostViewControllerDelegate
@@ -650,18 +652,20 @@
     {
         _exportFileName = gpx.gpxFileName;
         _exportFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:gpx.gpxFileName];
-        if (!_exportingGpxDoc || ![_exportingGpxDoc isKindOfClass:OAGPXDocument.class])
+        if (!_exportingGpxDoc || ![_exportingGpxDoc isKindOfClass:OASGpxFile.class])
         {
             NSString *absoluteGpxFilepath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:_exportFileName];
             //.../Documents/GPX/2023-10-22_11-34_Sun.gpx
-            _exportingGpxDoc = [[OAGPXDocument alloc] initWithGpxFile:absoluteGpxFilepath];
+            // FIXME:
+          //  _exportingGpxDoc = [[OASGpxFile alloc] initWithGpxFile:absoluteGpxFilepath];
         }
         else
         {
             _exportingGpxDoc = gpxDoc;
         }
         [OAGPXUIHelper addAppearanceToGpx:_exportingGpxDoc gpxItem:_exportingGpx];
-        [_exportingGpxDoc saveTo:_exportFilePath];
+        // FIXME:
+       // [_exportingGpxDoc saveTo:_exportFilePath];
     }
 
     _exportController = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:_exportFilePath]];
@@ -743,10 +747,12 @@
            renameToNewName:(NSString *)newFileName
         deleteOriginalFile:(BOOL)deleteOriginalFile
                  openTrack:(BOOL)openTrack
-                       gpx:(OAGPX *)gpx
+                       gpx:(OASGpxDataItem *)gpx
 {
     NSString *gpxFilepath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
-    OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:gpxFilepath];
+    
+    OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFilepath];
+    OASGpxFile *doc = [OASGpxUtilities.shared loadGpxFileFile:file];
     if (doc)
     {
         [self copyGPXToNewFolder:newFolderName renameToNewName:newFileName deleteOriginalFile:deleteOriginalFile openTrack:openTrack gpx:gpx doc:doc];
@@ -758,8 +764,8 @@
            renameToNewName:(NSString *)newFileName
         deleteOriginalFile:(BOOL)deleteOriginalFile
                  openTrack:(BOOL)openTrack
-                       gpx:(OAGPX *)gpx
-                       doc:(OAGPXDocument *)doc
+                       gpx:(OASGpxDataItem *)gpx
+                       doc:(OASGpxFile *)doc
 {
     NSString *oldPath = gpx.gpxFilePath;
     NSString *sourcePath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:oldPath];
@@ -796,7 +802,8 @@
     OAGPXDatabase *gpxDatabase = [OAGPXDatabase sharedDb];
     if (deleteOriginalFile)
     {
-        [gpx updateFolderName:newStoringPath];
+        // FIXME:
+        //[gpx updateFolderName:newStoringPath];
         doc.path = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
         [gpxDatabase save];
         [[NSFileManager defaultManager] removeItemAtPath:sourcePath error:nil];
@@ -805,12 +812,13 @@
     }
     else
     {
-        OAGPXMutableDocument *gpxDoc = [[OAGPXMutableDocument alloc] initWithGpxFile:sourcePath];
-        [gpxDatabase addGpxItem:[newFolder stringByAppendingPathComponent:newName]
-                          title:newName
-                           desc:gpxDoc.metadata.desc
-                         bounds:gpxDoc.bounds
-                       document:gpxDoc];
+        // FIXME:
+//        OASGpxFile *gpxDoc = [[OASGpxFile alloc] initWithGpxFile:sourcePath];
+//        [gpxDatabase addGpxItem:[newFolder stringByAppendingPathComponent:newName]
+//                          title:newName
+//                           desc:gpxDoc.metadata.desc
+//                         bounds:gpxDoc.bounds
+//                       document:gpxDoc];
 
         
         if ([OAAppSettings.sharedManager.mapSettingVisibleGpx.get containsObject:oldPath])
@@ -818,13 +826,12 @@
     }
     if (openTrack)
     {
-        OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[newFolderName stringByAppendingPathComponent:newFileName]];
+        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:[newFolderName stringByAppendingPathComponent:newFileName]];
         if (gpx && _exportingHostVC)
         {
             [_exportingHostVC dismissViewControllerAnimated:YES completion:^{
                 [OARootViewController.instance.mapPanel targetHideContextPinMarker];
-                // FIXME:
-               // [OARootViewController.instance.mapPanel openTargetViewWithGPX:gpx];
+                [OARootViewController.instance.mapPanel openTargetViewWithGPX:gpx];
             }];
         }
     }
@@ -856,14 +863,15 @@
     }
 }
 
-- (void)renameTrack:(OAGPX *)gpx newName:(NSString *)newName hostVC:(UIViewController*)hostVC
+- (void)renameTrack:(OASGpxDataItem *)gpx newName:(NSString *)newName hostVC:(UIViewController*)hostVC
 {
     NSString *docPath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
-    OAGPXMutableDocument *doc = [[OAGPXMutableDocument alloc] initWithGpxFile:docPath];
+    OASKFile *file = [[OASKFile alloc] initWithFilePath:docPath];
+    OASGpxFile *doc = [OASGpxUtilities.shared loadGpxFileFile:file];
     [self renameTrack:gpx doc:doc newName:newName hostVC:hostVC];
 }
 
-- (void)renameTrack:(OAGPX *)gpx doc:(OAGPXMutableDocument *)doc newName:(NSString *)newName hostVC:(UIViewController*)hostVC
+- (void)renameTrack:(OASGpxDataItem *)gpx doc:(OASGpxFile *)doc newName:(NSString *)newName hostVC:(UIViewController*)hostVC
 {
     if (newName.length > 0)
     {
@@ -876,30 +884,31 @@
         {
             gpx.gpxTitle = newName;
             gpx.gpxFileName = newFileName;
-            gpx.gpxFilePath = newFilePath;
+            // FIXME:
+            //gpx.gpxFilePath = newFilePath;
             [[OAGPXDatabase sharedDb] save];
 
-            OAMetadata *metadata;
+            OASMetadata *metadata;
             if (doc.metadata)
             {
                 metadata = doc.metadata;
             }
             else
             {
-                metadata = [[OAMetadata alloc] init];
+                metadata = [[OASMetadata alloc] init];
                 long time = 0;
-                if (doc.points.count > 0)
-                    time = doc.points[0].time;
+                if (doc.getAllPoints.count > 0)
+                    time = doc.getAllPoints[0].time;
                 if (doc.tracks.count > 0)
                 {
-                    OATrack *track = doc.tracks[0];
+                    OASTrack *track = doc.tracks[0];
                     track.name = newName;
                     if (track.segments.count > 0)
                     {
-                        OATrkSegment *seg = track.segments[0];
+                        OASTrkSegment *seg = track.segments[0];
                         if (seg.points.count > 0)
                          {
-                            OAWptPt *p = seg.points[0];
+                            OASWptPt *p = seg.points[0];
                             if (time > p.time)
                                 time = p.time;
                         }
@@ -908,7 +917,7 @@
                 metadata.time = time == 0 ? (long) [[NSDate date] timeIntervalSince1970] : time;
             }
 
-            if (doc.creator && [doc.creator containsString:@"OsmAnd"])
+            if (doc.author && [doc.author containsString:@"OsmAnd"])
                 metadata.name = newName;
 
             if ([NSFileManager.defaultManager fileExistsAtPath:oldPath])
@@ -919,7 +928,11 @@
             doc.metadata = metadata;
 
             if (saveFailed)
-                [doc saveTo:newPath];
+            {
+                OASKFile *file = [[OASKFile alloc] initWithFilePath:newPath];
+                [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:doc];
+               // [doc saveTo:newPath];
+            }
 
             [OASelectedGPXHelper renameVisibleTrack:oldFilePath newPath:newFilePath];
         }
@@ -1020,6 +1033,50 @@
                          gpx:_exportingGpx
                          doc:_exportingGpxDoc];
     [self onCloseShareMenu];
+}
+
++ (NSString *)buildTrackSegmentName:(OASGpxFile *)gpxFile track:(OASTrack *)track segment:(OASTrkSegment *)segment
+{
+    NSString *trackTitle = [self getTrackTitle:gpxFile track:track];
+    NSString *segmentTitle = [self getSegmentTitle:segment segmentIdx:[track.segments indexOfObject:segment]];
+
+    BOOL oneSegmentPerTrack =
+            [gpxFile getNonEmptySegmentsCount] == [gpxFile getNonEmptyTracksCount];
+    BOOL oneOriginalTrack = ([gpxFile hasGeneralTrack] && [gpxFile getNonEmptyTracksCount] == 2)
+            || (![gpxFile hasGeneralTrack] && [gpxFile getNonEmptyTracksCount] == 1);
+
+    if (oneSegmentPerTrack)
+        return trackTitle;
+    else if (oneOriginalTrack)
+        return segmentTitle;
+    else
+        return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_dash"), trackTitle, segmentTitle];
+}
+
++ (NSString *)getSegmentTitle:(OASTrkSegment *)segment segmentIdx:(NSInteger)segmentIdx
+{
+    NSString *segmentName = !segment.name || segment.name.length == 0
+            ? [NSString stringWithFormat:@"%li", segmentIdx + 1]
+            : segment.name;
+    NSString *segmentString = OALocalizedString(@"gpx_selection_segment_title");
+    return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_space"), segmentString, segmentName];
+}
+
++ (NSString *)getTrackTitle:(OASGpxFile *)gpxFile track:(OASTrack *)track
+{
+    NSString *trackName;
+    if (!track.name || track.name.length == 0)
+    {
+        NSInteger trackIdx = [gpxFile.tracks indexOfObject:track];
+        NSInteger visibleTrackIdx = [gpxFile hasGeneralTrack] ? trackIdx : trackIdx + 1;
+        trackName = [NSString stringWithFormat:@"%li", visibleTrackIdx];
+    }
+    else
+    {
+        trackName = track.name;
+    }
+    NSString *trackString = OALocalizedString(@"shared_string_gpx_track");
+    return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), trackString, trackName];
 }
 
 @end

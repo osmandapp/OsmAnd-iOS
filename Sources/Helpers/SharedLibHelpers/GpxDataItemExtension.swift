@@ -12,6 +12,18 @@ private var gpxTitleKey: UInt8 = 0
 private var newGpxKey: UInt8 = 0
 private var hiddenGroupsKey: UInt8 = 0
 
+@objc(OASTrackItem)
+extension TrackItem {
+    var gpxFileName: String {
+        get {
+            dataItem?.getParameter(parameter: .fileName) as? String ?? ""
+        }
+        set {
+            dataItem?.setParameter(parameter: .fileName, value: newValue)
+        }
+    }
+}
+
 @objc(OASGpxDataItem)
 extension GpxDataItem {
     
@@ -58,6 +70,7 @@ extension GpxDataItem {
             return Date(timeIntervalSince1970: lastModifiedTime)
         }
         set {
+            // FIXME: mil? don't use timeIntervalSince1970
             setParameter(parameter: .fileLastModifiedTime, value: newValue.timeIntervalSince1970)
         }
     }

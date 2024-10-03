@@ -11,7 +11,6 @@
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
 #import "OAGPXDocument.h"
-#import "OAGPXTrackAnalysis.h"
 #import "OAGPXDatabase.h"
 #import "OAIndexConstants.h"
 #import "OASettingsItemReader.h"

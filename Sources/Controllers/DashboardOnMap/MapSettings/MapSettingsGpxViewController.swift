@@ -513,8 +513,8 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             if let isFollowing = routingHelper?.isFollowingMode(), isFollowing {
                 rootVC?.mapPanel.mapActions.stopNavigationActionConfirm()
             }
-            
-            rootVC?.mapPanel.mapActions.enterRoutePlanningMode(given: track, useIntermediatePointsByDefault: true, showDialog: true)
+            // FIXME:
+          //  rootVC?.mapPanel.mapActions.enterRoutePlanningMode(given: track, useIntermediatePointsByDefault: true, showDialog: true)
             rootVC?.mapPanel.closeDashboardLastScreen()
             navigationController?.popToRootViewController(animated: true)
         }
@@ -531,7 +531,8 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     private func onTrackShareClicked(track: OAGPX, touchPointArea: CGRect) {
-        gpxHelper?.openExport(forTrack: track, gpxDoc: nil, isCurrentTrack: false, in: self, hostViewControllerDelegate: self, touchPointArea: touchPointArea)
+        // FIXME:
+//        gpxHelper?.openExport(forTrack: track, gpxDoc: nil, isCurrentTrack: false, in: self, hostViewControllerDelegate: self, touchPointArea: touchPointArea)
     }
     
     private func onTrackUploadToOsmClicked(track: OAGPX) {
@@ -554,7 +555,8 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     private func onTrackDuplicateClicked(track: OAGPX) {
-        gpxHelper?.copyGPX(toNewFolder: track.gpxFolderName, renameToNewName: track.gpxFileName, deleteOriginalFile: false, openTrack: false, gpx: track)
+        // FIXME:
+//        gpxHelper?.copyGPX(toNewFolder: track.gpxFolderName, renameToNewName: track.gpxFileName, deleteOriginalFile: false, openTrack: false, gpx: track)
         loadGpxTracks()
         loadVisibleTracks()
         loadRecentlyVisibleTracks()
@@ -1119,7 +1121,8 @@ extension MapSettingsGpxViewController: OASelectTrackFolderDelegate {
     func onFolderSelected(_ selectedFolderName: String?) {
         if let selectedFolderName {
             if selectedTrack != nil {
-                gpxHelper?.copyGPX(toNewFolder: selectedFolderName, renameToNewName: nil, deleteOriginalFile: true, openTrack: false, gpx: selectedTrack)
+                // FIXME:
+//                gpxHelper?.copyGPX(toNewFolder: selectedFolderName, renameToNewName: nil, deleteOriginalFile: true, openTrack: false, gpx: selectedTrack)
                 updateData()
                 delegate?.onVisibleTracksUpdate()
             }

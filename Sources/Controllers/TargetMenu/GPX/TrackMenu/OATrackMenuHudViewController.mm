@@ -1334,52 +1334,8 @@
 {
     OASTrack *track = [self getTrack:segment];
     if (track)
-        return [self buildTrackSegmentName:self.doc track:track segment:segment];
+        return [OAGPXUIHelper buildTrackSegmentName:self.doc track:track segment:segment];
     return nil;
-}
-
-- (NSString *)getSegmentTitle:(OASTrkSegment *)segment segmentIdx:(NSInteger)segmentIdx
-{
-    NSString *segmentName = !segment.name || segment.name.length == 0
-            ? [NSString stringWithFormat:@"%li", segmentIdx + 1]
-            : segment.name;
-    NSString *segmentString = OALocalizedString(@"gpx_selection_segment_title");
-    return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_space"), segmentString, segmentName];
-}
-
-- (NSString *)getTrackTitle:(OASGpxFile *)gpxFile track:(OASTrack *)track
-{
-    NSString *trackName;
-    if (!track.name || track.name.length == 0)
-    {
-        NSInteger trackIdx = [gpxFile.tracks indexOfObject:track];
-        NSInteger visibleTrackIdx = [gpxFile hasGeneralTrack] ? trackIdx : trackIdx + 1;
-        trackName = [NSString stringWithFormat:@"%li", visibleTrackIdx];
-    }
-    else
-    {
-        trackName = track.name;
-    }
-    NSString *trackString = OALocalizedString(@"shared_string_gpx_track");
-    return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), trackString, trackName];
-}
-
-- (NSString *)buildTrackSegmentName:(OASGpxFile *)gpxFile track:(OASTrack *)track segment:(OASTrkSegment *)segment
-{
-    NSString *trackTitle = [self getTrackTitle:gpxFile track:track];
-    NSString *segmentTitle = [self getSegmentTitle:segment segmentIdx:[track.segments indexOfObject:segment]];
-
-    BOOL oneSegmentPerTrack =
-            [gpxFile getNonEmptySegmentsCount] == [gpxFile getNonEmptyTracksCount];
-    BOOL oneOriginalTrack = ([gpxFile hasGeneralTrack] && [gpxFile getNonEmptyTracksCount] == 2)
-            || (![gpxFile hasGeneralTrack] && [gpxFile getNonEmptyTracksCount] == 1);
-
-    if (oneSegmentPerTrack)
-        return trackTitle;
-    else if (oneOriginalTrack)
-        return segmentTitle;
-    else
-        return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_dash"), trackTitle, segmentTitle];
 }
 
 - (NSString *)getDirName

@@ -20,6 +20,9 @@
 #import "OAGPXDatabase.h"
 #import "Localization.h"
 #import <CarPlay/CarPlay.h>
+#import "OsmAnd_Maps-Swift.h"
+#import "OsmAndSharedWrapper.h"
+
 
 #include <OsmAndCore/GpxDocument.h>
 
@@ -77,7 +80,7 @@
     }
 }
 
-- (NSString *)getTrackDescription:(OAGPX *)gpx
+- (NSString *)getTrackDescription:(OASGpxDataItem *)gpx
 {
     NSMutableString *res = [NSMutableString new];
     BOOL needsSeparator = NO;
@@ -117,8 +120,10 @@
     
     [[OARoutingHelper sharedInstance] setAppMode:OAApplicationMode.CAR];
     [[OARootViewController instance].mapPanel.mapActions setGPXRouteParams:info.gpx];
-    CLLocation *loc = [[CLLocation alloc] initWithLatitude:[info.gpx.locationEnd getLatitude]
-                                                 longitude:[info.gpx.locationEnd getLongitude]];
+    OASGpxTrackAnalysis *analysis = info.gpx.getAnalysis;
+   
+    CLLocation *loc = [[CLLocation alloc] initWithLatitude:analysis.locationEnd.getLatitude
+                                                 longitude:analysis.locationEnd.getLongitude];
     [[OATargetPointsHelper sharedInstance] navigateToPoint:loc updateRoute:YES intermediate:-1];
     [OARootViewController.instance.mapPanel.mapActions enterRoutePlanningModeGivenGpx:info.gpx
                                                                                  from:nil

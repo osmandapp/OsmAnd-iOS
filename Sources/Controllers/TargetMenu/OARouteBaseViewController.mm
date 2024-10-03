@@ -12,9 +12,8 @@
 #import "OAMapViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OARoutingHelper.h"
-#import "OAGPXTrackAnalysis.h"
 #import "OANativeUtilities.h"
-#import "OAGPXDocument.h"
+//#import "OAGPXDocument.h"
 #import "OAGPXUIHelper.h"
 #import "OAMapLayers.h"
 #import "OARouteStatisticsHelper.h"
@@ -29,11 +28,11 @@
 
 @implementation OARouteLineChartHelper
 {
-    OAGPXDocument *_gpxDoc;
+    OASGpxFile *_gpxDoc;
     OABaseVectorLinesLayer *_layer;
 }
 
-- (instancetype)initWithGpxDoc:(OAGPXDocument *)gpxDoc layer:(OABaseVectorLinesLayer *)layer
+- (instancetype)initWithGpxDoc:(OASGpxFile *)gpxDoc layer:(OABaseVectorLinesLayer *)layer
 {
     self = [super init];
     if (self)
@@ -46,10 +45,10 @@
 
 - (void)changeChartTypes:(NSArray<NSNumber *> *)types
                   chart:(ElevationChart *)chart
-               analysis:(OAGPXTrackAnalysis *)analysis
+               analysis:(OASGpxTrackAnalysis *)analysis
                modeCell:(OARouteStatisticsModeCell *)statsModeCell
 {
-    OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:_gpxDoc.path]];
+    OAGPX *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:[OAUtilities getGpxShortPath:_gpxDoc.path]];
     BOOL calcWithoutGaps = !gpx.joinSegments && (_gpxDoc.tracks.count > 0 && _gpxDoc.tracks.firstObject.generalTrack);
     GPXDataSetType secondType = GPXDataSetTypeNone;
     if (types.count == 2)
@@ -92,9 +91,9 @@
 - (void)refreshHighlightOnMap:(BOOL)forceFit
                     chartView:(ElevationChart *)chartView
              trackChartPoints:(OATrackChartPoints *)trackChartPoints
-                     analysis:(OAGPXTrackAnalysis *)analysis
+                     analysis:(OASGpxTrackAnalysis *)analysis
 {
-    OATrkSegment *segment = [self getTrackSegment:chartView analysis:analysis];
+    OASTrkSegment *segment = [self getTrackSegment:chartView analysis:analysis];
     [self refreshHighlightOnMap:forceFit
                       chartView:chartView
                trackChartPoints:trackChartPoints
@@ -104,7 +103,7 @@
 - (void)refreshHighlightOnMap:(BOOL)forceFit
                     chartView:(ElevationChart *)chartView
              trackChartPoints:(OATrackChartPoints *)trackChartPoints
-                      segment:(OATrkSegment *)segment
+                      segment:(OASTrkSegment *)segment
 {
     if (!_gpxDoc)
         return;
@@ -162,15 +161,15 @@
 }
 
 - (OATrackChartPoints *)generateTrackChartPoints:(ElevationChart *)chartView
-                                        analysis:(OAGPXTrackAnalysis *)analysis
+                                        analysis:(OASGpxTrackAnalysis *)analysis
 {
-    OATrkSegment *segment = [self getTrackSegment:chartView analysis:analysis];
+    OASTrkSegment *segment = [self getTrackSegment:chartView analysis:analysis];
     return [self generateTrackChartPoints:chartView startPoint:kCLLocationCoordinate2DInvalid segment:segment];
 }
 
 - (OATrackChartPoints *)generateTrackChartPoints:(ElevationChart *)chartView
                                       startPoint:(CLLocationCoordinate2D)startPoint
-                                        segment:(OATrkSegment *)segment
+                                        segment:(OASTrkSegment *)segment
 {
     OATrackChartPoints *trackChartPoints = [[OATrackChartPoints alloc] init];
     trackChartPoints.segmentColor = -1;
@@ -185,7 +184,7 @@
 
 - (NSArray<CLLocation *> *)getXAxisPoints:(OATrackChartPoints *)points
                             lineChartView:(ElevationChart *)chartView
-                                  segment:(OATrkSegment *)segment
+                                  segment:(OASTrkSegment *)segment
 {
     if (!points.axisPointsInvalidated)
         return points.xAxisPoints;
@@ -215,11 +214,11 @@
     return result;
 }
 
-+ (OATrkSegment *)getSegmentForAnalysis:(OAGPXDocument *)gpxDoc analysis:(OAGPXTrackAnalysis *)analysis
++ (OASTrkSegment *)getSegmentForAnalysis:(OAGPXDocument *)gpxDoc analysis:(OASGpxTrackAnalysis *)analysis
 {
     for (OATrack *track in gpxDoc.tracks)
     {
-        for (OATrkSegment *segment in track.segments)
+        for (OASTrkSegment *segment in track.segments)
         {
             NSInteger size = segment.points.count;
             if (size > 0 && [segment.points.firstObject isEqual:analysis.locationStart]
@@ -230,9 +229,9 @@
     return nil;
 }
 
-- (OATrkSegment *)getTrackSegment:(LineChartView *)chart analysis:(OAGPXTrackAnalysis *)analysis
+- (OASTrkSegment *)getTrackSegment:(LineChartView *)chart analysis:(OASGpxTrackAnalysis *)analysis
 {
-    OATrkSegment *segment;
+    OASTrkSegment *segment;
     LineChartData *lineData = chart.lineData;
     NSArray<id <ChartDataSetProtocol>> *ds = lineData ? lineData.dataSets : [NSArray array];
 
@@ -244,7 +243,7 @@
 
 - (CLLocationCoordinate2D)getLocationAtPos:(double)position
                              lineChartView:(LineChartView *)lineChartView
-                                   segment:(OATrkSegment *)segment
+                                   segment:(OASTrkSegment *)segment
 {
     LineChartData *data = lineChartView.lineData;
     NSArray<id<ChartDataSetProtocol>> *dataSets = data ? data.dataSets : nil;
@@ -279,7 +278,7 @@
 - (void)fitTrackOnMap:(CLLocationCoordinate2D)location
              forceFit:(BOOL)forceFit
         lineChartView:(LineChartView *)lineChartView
-              segment:(OATrkSegment *)segment
+              segment:(OASTrkSegment *)segment
 {
     OABBox rect = [self getRect:lineChartView segment:segment];
     OAMapViewController *mapViewController = [OARootViewController instance].mapPanel.mapViewController;
@@ -304,8 +303,16 @@
     }
 }
 
+- (OASGpxTrackAnalysis *)getAnalysisFor:(OASTrkSegment *)segment
+{
+    OASGpxTrackAnalysis *analysis = [[OASGpxTrackAnalysis alloc] init];
+    auto splitSegments = [ArraySplitSegmentConverter toKotlinArrayFrom:@[[[OASSplitSegment alloc] initWithSegment:segment]]];
+    [analysis prepareInformationFileTimeStamp:0 pointsAnalyser:nil splitSegments:splitSegments];
+    return analysis;
+}
+
 - (OABBox)getRect:(LineChartView *)lineChartView
-          segment:(OATrkSegment *)segment
+          segment:(OASTrkSegment *)segment
 {
     OABBox bbox;
 
@@ -324,8 +331,9 @@
         {
             float startTime = startPos * 1000;
             float endTime = endPos * 1000;
-            OAGPXTrackAnalysis *analysis = [OAGPXTrackAnalysis segment:0 seg:segment];
-            for (OAWptPt *p in segment.points)
+           // OASGpxTrackAnalysis *analysis = [OASGpxTrackAnalysis segment:0 seg:segment];
+            OASGpxTrackAnalysis *analysis = [self getAnalysisFor:segment];
+            for (OASWptPt *p in segment.points)
             {
                 if (p.time - analysis.startTime >= startTime && p.time - analysis.startTime <= endTime)
                 {
@@ -354,10 +362,10 @@
             double previousSplitDistance = 0;
             for (NSInteger i = 0; i < segment.points.count; i++)
             {
-                OAWptPt *currentPoint = segment.points[i];
+                OASWptPt *currentPoint = segment.points[i];
                 if (i != 0)
                 {
-                    OAWptPt *previousPoint = segment.points[i - 1];
+                    OASWptPt *previousPoint = segment.points[i - 1];
                     if (currentPoint.distance < previousPoint.distance)
                         previousSplitDistance += previousPoint.distance;
                 }
@@ -472,7 +480,7 @@
     return YES;
 }
 
-+ (NSAttributedString *) getFormattedElevationString:(OAGPXTrackAnalysis *)analysis
++ (NSAttributedString *) getFormattedElevationString:(OASGpxTrackAnalysis *)analysis
 {
     UIFont *textFont = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
     NSDictionary *textAttrs = @{ NSFontAttributeName: textFont, NSForegroundColorAttributeName: [UIColor colorNamed:ACColorNameTextColorSecondary] };

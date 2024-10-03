@@ -7,7 +7,6 @@
 //
 
 #import "OAGpxAppearanceInfo.h"
-#import "OAGPXTrackAnalysis.h"
 #import "OAGPXDocument.h"
 
 @interface OAGpxAppearanceInfo()

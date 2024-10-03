@@ -29,7 +29,7 @@
 
 + (OASavingTrackHelper *)sharedInstance;
 
-//- (OAGPX *)getCurrentGPX;
+- (OASGpxFile *)getCurrentGPX;
 
 - (OASGpxFile *)getCurrentGPXSharedLib;
 

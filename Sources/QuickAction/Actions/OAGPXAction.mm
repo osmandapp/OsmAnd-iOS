@@ -114,8 +114,6 @@ static QuickActionType *TYPE;
     // FIXME:
    // p.type = groupName;
     p.time = (long)[[NSDate date] timeIntervalSince1970];
-    // FIXME:
-   // p.wpt = std::make_shared<OsmAnd::GpxDocument::WptPt>();
     wpt.point = p;
     wpt.color = color;
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;

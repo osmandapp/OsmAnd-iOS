@@ -8,12 +8,10 @@
 
 #import "OASavingTrackHelper.h"
 #import "OALog.h"
-//#import "OAGPXMutableDocument.h"
 #import "OAGPXDatabase.h"
 #import "OsmAndApp.h"
 #import "OAAutoObserverProxy.h"
 #import "OAAppSettings.h"
-#import "OAGPXTrackAnalysis.h"
 #import "OACommonTypes.h"
 #import "OARoutingHelper.h"
 #import "OAMonitoringPlugin.h"
@@ -1380,7 +1378,7 @@
 }
 
 
-- (OAGPX *)getCurrentGPX
+- (OASGpxFile *)getCurrentGPX
 {
     return nil;
 //    [currentTrack applyBounds];

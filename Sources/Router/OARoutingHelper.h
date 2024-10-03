@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "OACommonTypes.h"
 
-@class OAWorldRegion, OAApplicationMode, OARouteCalculationResult, OARouteDirectionInfo, OAGPXRouteParamsBuilder, OAVoiceRouter, OANextDirectionInfo, OAGPXTrackAnalysis, OARouteCalculationParams, OARouteProvider, OARoutingEnvironment, OALocationsHolder, OAGpxRouteApproximation, OAGPXDocument, OAObservable, OACurrentStreetName;
+@class OAWorldRegion, OAApplicationMode, OARouteCalculationResult, OARouteDirectionInfo, OAGPXRouteParamsBuilder, OAVoiceRouter, OANextDirectionInfo, OASGpxTrackAnalysis, OARouteCalculationParams, OARouteProvider, OARoutingEnvironment, OALocationsHolder, OAGpxRouteApproximation, OAObservable, OACurrentStreetName, OASGpxFile;
 
 @protocol OARouteInformationListener <NSObject>
 
@@ -77,7 +77,7 @@ struct RouteSegmentResult;
 - (NSArray<CLLocation *> *) getCurrentCalculatedRoute;
 - (OARouteCalculationResult *) getRoute;
 - (void) setRoute:(OARouteCalculationResult *)route;
-- (OAGPXTrackAnalysis *) getTrackAnalysis;
+- (OASGpxTrackAnalysis *) getTrackAnalysis;
 - (int) getLeftDistance;
 - (int) getLeftDistanceNextIntermediate;
 - (long) getLeftTime;
@@ -111,7 +111,7 @@ struct RouteSegmentResult;
 
 - (OARoutingEnvironment *) getRoutingEnvironment:(OAApplicationMode *)mode start:(CLLocation *)start end:(CLLocation *)end;
 
-- (OAGPXDocument *) generateGPXFileWithRoute:(NSString *)name;
+- (OASGpxFile *) generateGPXFileWithRoute:(NSString *)name;
 
 + (void) applyApplicationSettings:(OARouteCalculationParams *) params  appMode:(OAApplicationMode *) mode;
 

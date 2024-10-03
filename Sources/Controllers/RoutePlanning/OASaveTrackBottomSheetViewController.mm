@@ -94,10 +94,9 @@
 {
     [self hide:YES];
     NSString *gpxFilePath = [OAUtilities getGpxShortPath:_fileName];
-    OAGPX *gpx = [OAGPXDatabase.sharedDb getGPXItem:gpxFilePath];
-    // FIXME:
-//    if (gpx)
-//        [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpx];
+    OASGpxDataItem *gpx = [OAGPXDatabase.sharedDb getNewGPXItem:gpxFilePath];
+    if (gpx)
+        [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpx];
 }
 
 - (IBAction)createNewTrackButtonPressed:(id)sender

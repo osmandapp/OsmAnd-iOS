@@ -8,11 +8,11 @@
 
 import Foundation
 import DGCharts
+import OsmAndShared
 
 extension OAExternalSensorsPlugin {
-
     @objc override func getOrderedLineDataSet(chart: LineChartView,
-                                              analysis: OAGPXTrackAnalysis,
+                                              analysis: GpxTrackAnalysis,
                                               graphType: GPXDataSetType,
                                               axisType: GPXDataSetAxisType,
                                               calcWithoutGaps: Bool,

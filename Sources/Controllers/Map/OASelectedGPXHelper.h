@@ -17,6 +17,7 @@
 
 // Active gpx
 @property (nonatomic, readonly) QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> > activeGpx;
+// @[OAGPXFiles]
 
 + (OASelectedGPXHelper *)instance;
 

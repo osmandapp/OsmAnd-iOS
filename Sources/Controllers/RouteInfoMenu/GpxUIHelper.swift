@@ -8,6 +8,7 @@
 
 import UIKit
 import DGCharts
+import OsmAndShared
 
 @objc enum GPXDataSetType: Int {
     case none, altitude, speed, slope, sensorSpeed, sensorHeartRate, sensorBikePower, sensorBikeCadence, sensorTemperatureA, sensorTemperatureW
@@ -312,7 +313,7 @@ class GpxUIHelper: NSObject {
     }
 
     static func refreshLineChart(chartView: ElevationChart,
-                                 analysis: OAGPXTrackAnalysis,
+                                 analysis: GpxTrackAnalysis,
                                  firstType: GPXDataSetType,
                                  secondType: GPXDataSetType,
                                  axisType: GPXDataSetAxisType,
@@ -329,7 +330,7 @@ class GpxUIHelper: NSObject {
 
     static func refreshBarChart(chartView: HorizontalBarChartView,
                                 statistics: OARouteStatistics,
-                                analysis: OAGPXTrackAnalysis,
+                                analysis: GpxTrackAnalysis,
                                 nightMode: Bool) {
         setupHorizontalGPXChart(chart: chartView,
                                 yLabelsCount: 4,
@@ -542,7 +543,7 @@ class GpxUIHelper: NSObject {
     }
 
     static func getDivX(lineChart: LineChartView,
-                        analysis: OAGPXTrackAnalysis,
+                        analysis: GpxTrackAnalysis,
                         axisType: GPXDataSetAxisType,
                         calcWithoutGaps: Bool) -> Double {
         let xAxis: XAxis = lineChart.xAxis
@@ -647,7 +648,7 @@ class GpxUIHelper: NSObject {
     }
 
     static func getDataSets(chartView: LineChartView?,
-                            analysis: OAGPXTrackAnalysis?,
+                            analysis: GpxTrackAnalysis?,
                             firstType: GPXDataSetType,
                             secondType: GPXDataSetType,
                             gpxDataSetAxisType: GPXDataSetAxisType,
@@ -713,7 +714,7 @@ class GpxUIHelper: NSObject {
     }
     
     private static func getDataSet(chartView: LineChartView,
-                                   analysis: OAGPXTrackAnalysis,
+                                   analysis: GpxTrackAnalysis,
                                    type: GPXDataSetType,
                                    otherType: GPXDataSetType?,
                                    gpxDataSetAxisType: GPXDataSetAxisType,
@@ -758,7 +759,7 @@ class GpxUIHelper: NSObject {
 
     private static func buildStatisticChart(chartView: HorizontalBarChartView,
                                             routeStatistics: OARouteStatistics,
-                                            analysis: OAGPXTrackAnalysis,
+                                            analysis: GpxTrackAnalysis,
                                             useRightAxis: Bool,
                                             nightMode: Bool) -> BarChartData {
         let xAxis = chartView.xAxis
@@ -801,7 +802,7 @@ class GpxUIHelper: NSObject {
     }
 
     private static func createGPXElevationDataSet(chartView: LineChartView,
-                                                  analysis: OAGPXTrackAnalysis,
+                                                  analysis: GpxTrackAnalysis,
                                                   graphType: GPXDataSetType,
                                                   axisType: GPXDataSetAxisType,
                                                   useRightAxis: Bool,
@@ -847,7 +848,7 @@ class GpxUIHelper: NSObject {
     }
 
     private static func createGPXSlopeDataSet(chartView: LineChartView,
-                                              analysis: OAGPXTrackAnalysis,
+                                              analysis: GpxTrackAnalysis,
                                               graphType: GPXDataSetType,
                                               axisType: GPXDataSetAxisType,
                                               eleValues: [ChartDataEntry]?,
@@ -1062,14 +1063,14 @@ class GpxUIHelper: NSObject {
         return divX
     }
 
-    private static func calculateElevationArray(analysis: OAGPXTrackAnalysis, 
+    private static func calculateElevationArray(analysis: GpxTrackAnalysis, 
                                                 axisType: GPXDataSetAxisType,
                                                 divX: Double,
                                                 convEle: Double,
                                                 useGeneralTrackPoints: Bool,
                                                 calcWithoutGaps: Bool) -> [ChartDataEntry] {
         var values: [ChartDataEntry] = []
-        if analysis.elevationData == nil {
+        if !analysis.hasElevationData() {
             return values
         }
         let elevationData: [OAElevation] = analysis.elevationData
@@ -1132,7 +1133,7 @@ class GpxUIHelper: NSObject {
     }
 
     private static func createGPXSpeedDataSet(chartView: LineChartView,
-                                              analysis: OAGPXTrackAnalysis,
+                                              analysis: GpxTrackAnalysis,
                                               graphType: GPXDataSetType,
                                               axisType: GPXDataSetAxisType,
                                               useRightAxis: Bool,

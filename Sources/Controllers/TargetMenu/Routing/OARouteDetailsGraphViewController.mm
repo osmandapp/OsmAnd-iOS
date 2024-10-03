@@ -13,7 +13,6 @@
 #import "OASizes.h"
 #import "OAStateChangedListener.h"
 #import "OARoutingHelper.h"
-#import "OAGPXTrackAnalysis.h"
 #import "OANativeUtilities.h"
 #import "OsmAndApp.h"
 #import "OAGPXDocument.h"

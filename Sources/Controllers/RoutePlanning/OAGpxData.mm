@@ -14,13 +14,15 @@
 
 @implementation OAGpxData
 
-- (instancetype) initWithFile:(OAGPXMutableDocument *)gpxFile
+- (instancetype) initWithFile:(OASGpxFile *)gpxFile
 {
     self = [super init];
     if (self) {
         _gpxFile = gpxFile;
-        if (_gpxFile)
-            _rect = _gpxFile.bounds;
+        if (_gpxFile) {
+            // FIXME:
+            // _rect = _gpxFile.bounds;
+        }
         else
         {
             OAGpxBounds bounds;

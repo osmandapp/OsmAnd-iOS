@@ -25,7 +25,6 @@
 #import "OAMapViewTrackingUtilities.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
-#import "OAGPXDocument.h"
 #import "OADestinationsHelper.h"
 #import "OADestination.h"
 #import "OATargetPoint.h"
@@ -33,6 +32,8 @@
 #import "OAAppData.h"
 #import "OAAddWaypointBottomSheetViewController.h"
 #import "OAUninstallSpeedCamerasViewController.h"
+#import "OsmAndSharedWrapper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define START_TRACK_POINT_MY_LOCATION_RADIUS_METERS 50 * 1000
 
@@ -70,30 +71,42 @@
     [self enterRoutePlanningModeGivenGpx:nil from:from fromName:fromName useIntermediatePointsByDefault:useIntermediatePointsByDefault showDialog:YES];
 }
 
-- (void) enterRoutePlanningModeGivenGpx:(OAGPX *)gpxFile useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault showDialog:(BOOL)showDialog
+- (void) enterRoutePlanningModeGivenGpx:(OASGpxDataItem *)gpxFile useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault showDialog:(BOOL)showDialog
 {
     [self enterRoutePlanningModeGivenGpx:[self getGpxDocumentByGpx:gpxFile] path:gpxFile.gpxFilePath from:nil fromName:nil useIntermediatePointsByDefault:useIntermediatePointsByDefault showDialog:showDialog];
 }
 
-- (void) enterRoutePlanningModeGivenGpx:(OAGPX *)gpxFile from:(CLLocation *)from fromName:(OAPointDescription *)fromName
+- (void) enterRoutePlanningModeGivenGpx:(OASGpxDataItem *)gpxFile from:(CLLocation *)from fromName:(OAPointDescription *)fromName
          useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault showDialog:(BOOL)showDialog
 {
     [self enterRoutePlanningModeGivenGpx:[self getGpxDocumentByGpx:gpxFile] path:gpxFile.gpxFilePath from:from fromName:fromName useIntermediatePointsByDefault:useIntermediatePointsByDefault showDialog:showDialog];
 }
 
-- (void) enterRoutePlanningModeGivenGpx:(OAGPXDocument *)gpxFile path:(NSString *)path from:(CLLocation *)from fromName:(OAPointDescription *)fromName
+- (void) enterRoutePlanningModeGivenGpx:(OASGpxFile *)gpxFile path:(NSString *)path from:(CLLocation *)from fromName:(OAPointDescription *)fromName
          useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault showDialog:(BOOL)showDialog
 {
     [self enterRoutePlanningModeGivenGpx:gpxFile appMode:nil path:path from:from fromName:fromName useIntermediatePointsByDefault:useIntermediatePointsByDefault showDialog:showDialog];
 }
 
-- (void) enterRoutePlanningModeGivenGpx:(OAGPXDocument *)gpxFile appMode:(OAApplicationMode *)appMode path:(NSString *)path from:(CLLocation *)from fromName:(OAPointDescription *)fromName
+- (OAApplicationMode *)getRouteProfile:(OASGpxFile *)gpxFile
+{
+    NSArray<OASWptPt *> *points = [gpxFile getRoutePoints];
+    if (points && points.count > 0)
+    {
+        OAApplicationMode *mode = [OAApplicationMode valueOfStringKey:[points[0] getProfileType] def:nil];
+        if (mode)
+            return mode;
+    }
+    return nil;
+}
+
+- (void) enterRoutePlanningModeGivenGpx:(OASGpxFile *)gpxFile appMode:(OAApplicationMode *)appMode path:(NSString *)path from:(CLLocation *)from fromName:(OAPointDescription *)fromName
          useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault showDialog:(BOOL)showDialog
 {
     [_settings.useIntermediatePointsNavigation set:useIntermediatePointsByDefault];
     OATargetPointsHelper *targets = [OATargetPointsHelper sharedInstance];
     
-    OAApplicationMode *mode = appMode ? appMode : [gpxFile getRouteProfile];
+    OAApplicationMode *mode = appMode ? appMode : [self getRouteProfile:gpxFile];
     if (!mode)
         mode = appMode ? appMode : [self getRouteMode];
     
@@ -127,71 +140,75 @@
     }
 }
 
-- (void) setGPXRouteParamsWithDocument:(OAGPXDocument *)doc path:(NSString *)path
+- (void) setGPXRouteParamsWithDocument:(OASGpxFile *)doc path:(NSString *)path
 {
-    if (!doc)
-    {
-        [_routingHelper setGpxParams:nil];
-        [_settings.followTheGpxRoute set:nil];
-    }
-    else
-    {
-        OAGPXRouteParamsBuilder *params = [[OAGPXRouteParamsBuilder alloc] initWithDoc:doc];
-        if ([doc hasRtePt] && ![doc hasTrkPt])
-            [_settings.gpxCalculateRtept set:YES];
-        else
-            [_settings.gpxCalculateRtept set:NO];
-        
-        [params setCalculateOsmAndRouteParts:_settings.gpxRouteCalcOsmandParts.get];
-        [params setUseIntermediatePointsRTE:_settings.gpxCalculateRtept.get];
-        [params setCalculateOsmAndRoute:_settings.gpxRouteCalc.get];
-        [params setSelectedSegment:_settings.gpxRouteSegment.get];
-        NSArray<CLLocation *> *ps = [params getPoints];
-        [_routingHelper setGpxParams:params];
-        [_settings.followTheGpxRoute set:path];
-        if (ps.count > 0)
-        {
-            OATargetPointsHelper *pointsHelper = [OATargetPointsHelper sharedInstance];
-            CLLocation *startLoc = ps.firstObject;
-            CLLocation *finishLoc = ps.lastObject;
-            CLLocation *location = _app.locationServices.lastKnownLocation;
-            [pointsHelper clearAllIntermediatePoints:NO];
-            if (!location || [location distanceFromLocation:startLoc] <= START_TRACK_POINT_MY_LOCATION_RADIUS_METERS)
-            {
-                [pointsHelper clearStartPoint:NO];
-            }
-            else
-            {
-                [pointsHelper setStartPoint:startLoc.copy updateRoute:NO name:nil];
-                [params setPassWholeRoute:YES];
-            }
-            
-            [pointsHelper navigateToPoint:finishLoc.copy updateRoute:NO intermediate:-1];
-        }
-    }
+//    if (!doc)
+//    {
+//        [_routingHelper setGpxParams:nil];
+//        [_settings.followTheGpxRoute set:nil];
+//    }
+//    else
+//    {
+//        OAGPXRouteParamsBuilder *params = [[OAGPXRouteParamsBuilder alloc] initWithDoc:doc];
+//        if ([doc hasRtePt] && ![doc hasTrkPt])
+//            [_settings.gpxCalculateRtept set:YES];
+//        else
+//            [_settings.gpxCalculateRtept set:NO];
+//        
+//        [params setCalculateOsmAndRouteParts:_settings.gpxRouteCalcOsmandParts.get];
+//        [params setUseIntermediatePointsRTE:_settings.gpxCalculateRtept.get];
+//        [params setCalculateOsmAndRoute:_settings.gpxRouteCalc.get];
+//        [params setSelectedSegment:_settings.gpxRouteSegment.get];
+//        NSArray<CLLocation *> *ps = [params getPoints];
+//        [_routingHelper setGpxParams:params];
+//        [_settings.followTheGpxRoute set:path];
+//        if (ps.count > 0)
+//        {
+//            OATargetPointsHelper *pointsHelper = [OATargetPointsHelper sharedInstance];
+//            CLLocation *startLoc = ps.firstObject;
+//            CLLocation *finishLoc = ps.lastObject;
+//            CLLocation *location = _app.locationServices.lastKnownLocation;
+//            [pointsHelper clearAllIntermediatePoints:NO];
+//            if (!location || [location distanceFromLocation:startLoc] <= START_TRACK_POINT_MY_LOCATION_RADIUS_METERS)
+//            {
+//                [pointsHelper clearStartPoint:NO];
+//            }
+//            else
+//            {
+//                [pointsHelper setStartPoint:startLoc.copy updateRoute:NO name:nil];
+//                [params setPassWholeRoute:YES];
+//            }
+//            
+//            [pointsHelper navigateToPoint:finishLoc.copy updateRoute:NO intermediate:-1];
+//        }
+//    }
 }
 
-- (OAGPXDocument *) getGpxDocumentByGpx:(OAGPX *)gpx
+- (OASGpxFile *)getGpxDocumentByGpx:(OASGpxDataItem *)gpx
 {
-    OAGPXDocument* document = nil;
+    OASGpxFile *document = nil;
     const auto& gpxMap = [OASelectedGPXHelper instance].activeGpx;
-    NSString * path = gpx.absolutePath;
+    NSString * path = gpx.file.absolutePath;
     QString qPath = QString::fromNSString(path);
     if (gpxMap.contains(qPath) && gpxMap[qPath] != nullptr)
     {
-        document = [[OAGPXDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(gpxMap[qPath])];
-        document.path = path;
+        // FIXME:
+//        document = [[OAGPXDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(gpxMap[qPath])];
+//        document.path = path;
     }
     else
     {
-        document = [[OAGPXDocument alloc] initWithGpxFile:path];
+        OASKFile *file = [[OASKFile alloc] initWithFilePath:path];
+        OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
+        
+        document = gpxFile;
     }
     return document;
 }
 
-- (void) setGPXRouteParams:(OAGPX *)result
+- (void) setGPXRouteParams:(OASGpxDataItem *)result
 {
-    OAGPXDocument* doc = [self getGpxDocumentByGpx:result];
+    OASGpxFile *doc = [self getGpxDocumentByGpx:result];
     [self setGPXRouteParamsWithDocument:doc path:doc.path];
 }
 

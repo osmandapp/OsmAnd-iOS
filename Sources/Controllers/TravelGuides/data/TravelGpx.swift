@@ -31,8 +31,8 @@ final class TravelGpx : TravelArticle {
     var minElevation: Double = Double.nan
     var avgElevation: Double = 0
     
-    override func getAnalysis() -> OAGPXTrackAnalysis? {
-        var analysis = OAGPXTrackAnalysis()
+    override func getAnalysis() -> GpxTrackAnalysis? {
+        var analysis = GpxTrackAnalysis()
         if gpxFile != nil && gpxFile!.hasAltitude() {
             analysis = gpxFile!.getAnalysis(0)
         } else {

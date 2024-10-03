@@ -8,20 +8,20 @@
 
 #import <Foundation/Foundation.h>
 
-@class OAGPX;
+@class OASGpxDataItem;
 
 @interface OAGpxInfo : NSObject
 
 @property (nonatomic) BOOL currentlyRecordingTrack;
-@property (nonatomic) OAGPX *gpx;
+@property (nonatomic) OASGpxDataItem *gpx;
 @property (nonatomic) NSString *file;
 @property (nonatomic) NSString *subfolder;
 
-- (instancetype) initWithGpx:(OAGPX *)gpx name:(NSString *)name;
-- (NSString *) getName;
-- (BOOL) isCorrupted;
-- (NSInteger) getSize;
-- (NSDate *) getFileDate;
-- (NSString *) getFileName;
+- (instancetype)initWithGpx:(OASGpxDataItem *)gpx name:(NSString *)name;
+- (NSString *)getName;
+- (BOOL)isCorrupted;
+- (NSInteger)getSize;
+- (NSDate *)getFileDate;
+- (NSString *)getFileName;
 
 @end

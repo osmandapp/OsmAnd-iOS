@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OAGPXDocument, OAGPXTrackAnalysis, ColorPalette;
+@class OASGpxTrackAnalysis, OASGpxFile, ColorPalette;
 
 @interface OARouteColorizationPoint: NSObject
 
@@ -26,8 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OARouteColorize : NSObject
 
-- (instancetype)initWithGpxFile:(OAGPXDocument *)gpxFile
-                       analysis:(OAGPXTrackAnalysis *)analysis
+- (instancetype)initWithGpxFile:(OASGpxFile *)gpxFile
+                       analysis:(OASGpxTrackAnalysis *)analysis
                            type:(NSInteger)colorizationType
                         palette:(ColorPalette *)palette
                 maxProfileSpeed:(float)maxProfileSpeed;

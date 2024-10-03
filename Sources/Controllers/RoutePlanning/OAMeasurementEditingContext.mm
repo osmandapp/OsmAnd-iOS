@@ -10,7 +10,6 @@
 #import "OAApplicationMode.h"
 #import "OAMeasurementCommandManager.h"
 #import "OAGpxData.h"
-#import "OAGPXDocument.h"
 #import "OAGPXMutableDocument.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OARoadSegmentData.h"
@@ -20,6 +19,7 @@
 #import "OARouteExporter.h"
 #import "OAGpxRouteApproximation.h"
 #import "OANativeUtilities.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
@@ -37,18 +37,18 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 
 @implementation OAMeasurementEditingContext
 {
-    OATrkSegment *_before;
-    NSMutableArray<OATrkSegment *> *_beforeSegments;
-    NSMutableArray<OATrkSegment *> *_beforeSegmentsForSnap;
-    OATrkSegment *_after;
-    NSMutableArray<OATrkSegment *> *_afterSegments;
-    NSMutableArray<OATrkSegment *> *_afterSegmentsForSnap;
+    OASTrkSegment *_before;
+    NSMutableArray<OASTrkSegment *> *_beforeSegments;
+    NSMutableArray<OASTrkSegment *> *_beforeSegmentsForSnap;
+    OASTrkSegment *_after;
+    NSMutableArray<OASTrkSegment *> *_afterSegments;
+    NSMutableArray<OASTrkSegment *> *_afterSegmentsForSnap;
     
     NSInteger _calculatedPairs;
     NSInteger _pointsToCalculateSize;
     
     OARouteCalculationParams *_params;
-    NSArray<OAWptPt *> *_currentPair;
+    NSArray<OASWptPt *> *_currentPair;
     
     std::shared_ptr<RouteCalculationProgress> _calculationProgress;
 }
@@ -69,11 +69,11 @@ static OAApplicationMode *DEFAULT_APP_MODE;
         _appMode = DEFAULT_APP_MODE;
         _addPointMode = EOAAddPointModeUndefined;
         
-        _before = [[OATrkSegment alloc] init];
-        _before.points = @[];
+        _before = [[OASTrkSegment alloc] init];
+        _before.points = [@[] mutableCopy];
         _beforeSegments = [NSMutableArray new];
-        _after = [[OATrkSegment alloc] init];
-        _after.points = @[];
+        _after = [[OASTrkSegment alloc] init];
+        _after.points = [@[] mutableCopy];
         _afterSegments = [NSMutableArray new];
         
         _roadSegmentData = [NSMutableDictionary new];
@@ -103,9 +103,9 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     BOOL newData = self.isNewData;
     if (!newData)
     {
-        NSArray<OAWptPt *> *points = self.getPoints;
+        NSArray<OASWptPt *> *points = self.getPoints;
         hasDefaultPointsOnly = YES;
-        for (OAWptPt *point in points)
+        for (OASWptPt *point in points)
         {
             if (point.hasProfile)
             {
@@ -145,15 +145,15 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 - (double) getRouteDistance
 {
     double distance = 0;
-    for (NSArray<OAWptPt *> *points in @[_before.points, _after.points])
+    for (NSArray<OASWptPt *> *points in @[_before.points, _after.points])
     {
         if (points.count == 0)
             continue;
         
         for (NSUInteger i = 0; i < points.count - 1; i++)
         {
-            OAWptPt *first = points[i];
-            OAWptPt *second = points[i + 1];
+            OASWptPt *first = points[i];
+            OASWptPt *second = points[i + 1];
             OARoadSegmentData *data = _roadSegmentData[@[first, second]];
             
             if (data == nil)
@@ -162,10 +162,10 @@ static OAApplicationMode *DEFAULT_APP_MODE;
                 {
                     double localDist = getDistance(first.getLatitude, first.getLongitude,
                                                    second.getLatitude, second.getLongitude);
-                    if(!isnan(first.elevation) && !isnan(second.elevation) &&
-                       first.elevation != 0 && second.elevation != 0)
+                    if(!isnan(first.ele) && !isnan(second.ele) &&
+                       first.ele != 0 && second.ele != 0)
                     {
-                        double h = fabs(first.elevation - second.elevation);
+                        double h = fabs(first.ele - second.ele);
                         localDist = sqrt(localDist * localDist + h * h);
                     }
                     distance += localDist;
@@ -190,48 +190,48 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     [_roadSegmentData removeAllObjects];
 }
 
-- (NSArray<OATrkSegment *> *) getBeforeTrkSegmentLine
+- (NSArray<OASTrkSegment *> *) getBeforeTrkSegmentLine
 {
     if (_beforeSegmentsForSnap != nil)
         return _beforeSegmentsForSnap;
     return _beforeSegments;
 }
 
-- (NSArray<OATrkSegment *> *) getAfterTrkSegmentLine
+- (NSArray<OASTrkSegment *> *) getAfterTrkSegmentLine
 {
     if (_afterSegmentsForSnap != nil)
         return _afterSegmentsForSnap;
     return _afterSegments;
 }
 
-- (NSArray<OATrkSegment *> *)getBeforeSegments
+- (NSArray<OASTrkSegment *> *)getBeforeSegments
 {
     return _beforeSegments;
 }
 
-- (NSArray<OATrkSegment *> *)getAfterSegments
+- (NSArray<OASTrkSegment *> *)getAfterSegments
 {
     return _afterSegments;
 }
 
 
-- (NSArray<OAWptPt *> *) getAllPoints
+- (NSArray<OASWptPt *> *) getAllPoints
 {
     return [_before.points arrayByAddingObjectsFromArray:_after.points];
 }
 
-- (NSArray<OAWptPt *> *) getPoints
+- (NSArray<OASWptPt *> *) getPoints
 {
     return [self getBeforePoints];
 }
 
-- (NSArray<NSArray<OAWptPt *> *> *) getPointsSegments:(BOOL)plain route:(BOOL)route
+- (NSArray<NSArray<OASWptPt *> *> *) getPointsSegments:(BOOL)plain route:(BOOL)route
 {
-	NSMutableArray<NSArray<OAWptPt *> *> *res = [NSMutableArray array];
-	NSArray<OAWptPt *> *allPoints = self.getPoints;
-	NSMutableArray<OAWptPt *> *segment = [NSMutableArray array];
+	NSMutableArray<NSArray<OASWptPt *> *> *res = [NSMutableArray array];
+	NSArray<OASWptPt *> *allPoints = self.getPoints;
+	NSMutableArray<OASWptPt *> *segment = [NSMutableArray array];
 	NSString *prevProfileType = nil;
-	for (OAWptPt *point in allPoints)
+	for (OASWptPt *point in allPoints)
 	{
 		NSString *profileType = point.getProfileType;
 		BOOL isGap = point.isGap;
@@ -253,12 +253,12 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 	return res;
 }
 
-- (NSArray<OAWptPt *> *) getBeforePoints
+- (NSArray<OASWptPt *> *) getBeforePoints
 {
     return _before.points;
 }
 
-- (NSArray<OAWptPt *> *) getAfterPoints
+- (NSArray<OASWptPt *> *) getAfterPoints
 {
     return _after.points;
 }
@@ -270,45 +270,45 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 
 - (void) clearPoints
 {
-    _before.points = [NSArray new];
+    _before.points = [@[] mutableCopy];
 }
 
 - (void) splitSegments:(NSInteger)position
 {
-    NSMutableArray<OAWptPt *> *points = [NSMutableArray new];
+    NSMutableArray<OASWptPt *> *points = [NSMutableArray new];
     [points addObjectsFromArray:_before.points];
     [points addObjectsFromArray:_after.points];
     
-    _before.points = [points subarrayWithRange:NSMakeRange(0, position)];
-    _after.points = [points subarrayWithRange:NSMakeRange(position, points.count - position)];
+    _before.points = [[points subarrayWithRange:NSMakeRange(0, position)] mutableCopy];
+    _after.points = [[points subarrayWithRange:NSMakeRange(position, points.count - position)] mutableCopy];
     
     [self updateSegmentsForSnap:YES];
 }
 
-- (void) preAddPoint:(NSInteger)position mode:(EOAAddPointMode)mode point:(OAWptPt *)point
+- (void) preAddPoint:(NSInteger)position mode:(EOAAddPointMode)mode point:(OASWptPt *)point
 {
     switch (mode) {
         case EOAAddPointModeUndefined:
         {
             if (_appMode != DEFAULT_APP_MODE)
             {
-                [point setProfileType:_appMode.stringKey];
+                [point setProfileTypeProfileType:_appMode.stringKey];
             }
             break;
         }
         case EOAAddPointModeAfter:
         {
-            NSArray<OAWptPt *> *points = self.getBeforePoints;
+            NSArray<OASWptPt *> *points = self.getBeforePoints;
             if (position > 0 && position <= points.count)
             {
-                OAWptPt *prevPt = points.lastObject;
+                OASWptPt *prevPt = points.lastObject;
                 if (prevPt.isGap)
                 {
                     if (position == points.count && self.getAfterPoints.count == 0)
                     {
                         if (_appMode != DEFAULT_APP_MODE)
                         {
-                            [point setProfileType:_appMode.stringKey];
+                            [point setProfileTypeProfileType:_appMode.stringKey];
                         }
                     }
                     else
@@ -316,10 +316,10 @@ static OAApplicationMode *DEFAULT_APP_MODE;
                         [point setGap];
                         if (position > 1)
                         {
-                            OAWptPt *pt = points[position - 2];
+                            OASWptPt *pt = points[position - 2];
                             if ([pt hasProfile])
                             {
-                                [prevPt setProfileType:pt.getProfileType];
+                                [prevPt setProfileTypeProfileType:pt.getProfileType];
                             }
                             else
                             {
@@ -330,84 +330,84 @@ static OAApplicationMode *DEFAULT_APP_MODE;
                 }
                 else if ([prevPt hasProfile])
                 {
-                    [point setProfileType:prevPt.getProfileType];
+                    [point setProfileTypeProfileType:prevPt.getProfileType];
                 }
             }
             else if (_appMode != DEFAULT_APP_MODE)
             {
-                [point setProfileType:_appMode.stringKey];
+                [point setProfileTypeProfileType:_appMode.stringKey];
             }
             break;
         }
         case EOAAddPointModeBefore: {
-            NSArray<OAWptPt *> *points = self.getAfterPoints;
+            NSArray<OASWptPt *> *points = self.getAfterPoints;
             if (position >= -1 && position + 1 < points.count)
             {
-                OAWptPt *nextPt = points[position + 1];
+                OASWptPt *nextPt = points[position + 1];
                 if ([nextPt hasProfile])
                 {
-                    [point setProfileType:nextPt.getProfileType];
+                    [point setProfileTypeProfileType:nextPt.getProfileType];
                 }
             }
             else if (_appMode != DEFAULT_APP_MODE)
             {
-                [point setProfileType:_appMode.stringKey];
+                [point setProfileTypeProfileType:_appMode.stringKey];
             }
             break;
         }
     }
 }
 
-- (void) addPoint:(OAWptPt *)pt
+- (void) addPoint:(OASWptPt *)pt
 {
     [self addPoint:pt mode:EOAAddPointModeUndefined];
 }
 
-- (void) addPoint:(OAWptPt *)pt mode:(EOAAddPointMode)mode
+- (void) addPoint:(OASWptPt *)pt mode:(EOAAddPointMode)mode
 {
     if (mode == EOAAddPointModeAfter || mode == EOAAddPointModeBefore)
         [self preAddPoint:(mode == EOAAddPointModeBefore ? -1 : self.getBeforePoints.count) mode:mode point:pt];
-    _before.points = [_before.points arrayByAddingObject:pt];
+    _before.points = [[_before.points arrayByAddingObject:pt] mutableCopy];
     [self updateSegmentsForSnap:NO];
 }
 
-- (void) addPoint:(NSInteger)position pt:(OAWptPt *)pt
+- (void) addPoint:(NSInteger)position pt:(OASWptPt *)pt
 {
     [self addPoint:position point:pt mode:EOAAddPointModeUndefined];
 }
 
-- (void) addPoint:(NSInteger)position point:(OAWptPt *)pt mode:(EOAAddPointMode)mode
+- (void) addPoint:(NSInteger)position point:(OASWptPt *)pt mode:(EOAAddPointMode)mode
 {
     if (mode == EOAAddPointModeAfter || mode == EOAAddPointModeBefore)
         [self preAddPoint:position mode:mode point:pt];
-    NSMutableArray<OAWptPt *> *points = [NSMutableArray arrayWithArray:_before.points];
+    NSMutableArray<OASWptPt *> *points = [NSMutableArray arrayWithArray:_before.points];
     [points insertObject:pt atIndex:position];
     _before.points = points;
     [self updateSegmentsForSnap:false];
 }
 
-- (void) addPoints:(NSArray<OAWptPt *> *)points
+- (void) addPoints:(NSArray<OASWptPt *> *)points
 {
-    NSMutableArray<OAWptPt *> *pnts = [NSMutableArray arrayWithArray:_before.points];
+    NSMutableArray<OASWptPt *> *pnts = [NSMutableArray arrayWithArray:_before.points];
     [pnts addObjectsFromArray:points];
     _before.points = pnts;
     [self updateSegmentsForSnap:NO];
 }
 
-- (void) setPoints:(NSArray<OAWptPt *> *)points
+- (void) setPoints:(NSArray<OASWptPt *> *)points
 {
-    _before.points = points;
+    _before.points =  [points mutableCopy];;
 }
 
-- (OAWptPt *) removePoint:(NSInteger)position updateSnapToRoad:(BOOL)updateSnapToRoad
+- (OASWptPt *) removePoint:(NSInteger)position updateSnapToRoad:(BOOL)updateSnapToRoad
 {
     if (position < 0 || position >= _before.points.count)
-        return [[OAWptPt alloc] init];
-    NSMutableArray<OAWptPt *> *points = [NSMutableArray arrayWithArray:_before.points];
-    OAWptPt *pt = points[position];
+        return [[OASWptPt alloc] init];
+    NSMutableArray<OASWptPt *> *points = [NSMutableArray arrayWithArray:_before.points];
+    OASWptPt *pt = points[position];
     if (updateSnapToRoad && position > 0 && pt.isGap)
     {
-        OAWptPt *prevPt = _before.points[position - 1];
+        OASWptPt *prevPt = _before.points[position - 1];
         if (!prevPt.isGap)
             [prevPt setGap];
     }
@@ -435,11 +435,11 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     NSInteger pointIndex = after ? selectedPointPosition : selectedPointPosition - 1;
     if (pointIndex >=0 && pointIndex < _before.points.count)
     {
-        OAWptPt *point = _before.points[pointIndex];
-        OAWptPt *nextPoint = _before.points.count > pointIndex + 1 ? _before.points[pointIndex + 1] : nil;
+        OASWptPt *point = _before.points[pointIndex];
+        OASWptPt *nextPoint = _before.points.count > pointIndex + 1 ? _before.points[pointIndex + 1] : nil;
         [point setGap];
         
-        NSMutableArray<OAWptPt *> *points = [NSMutableArray arrayWithArray:_before.points];
+        NSMutableArray<OASWptPt *> *points = [NSMutableArray arrayWithArray:_before.points];
         [points removeObjectAtIndex:pointIndex];
         [points insertObject:point atIndex:pointIndex];
         _before.points = points;
@@ -452,7 +452,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 
 - (void) joinPoints:(NSInteger) selectedPointPosition
 {
-    OAWptPt *gapPoint = [[OAWptPt alloc] init];
+    OASWptPt *gapPoint = [[OASWptPt alloc] init];
     NSInteger gapIndex = -1;
     if ([self isFirstPointSelected:selectedPointPosition outer:NO])
     {
@@ -471,7 +471,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     {
         [gapPoint removeProfileType];
 
-        NSMutableArray<OAWptPt *> *points = [NSMutableArray arrayWithArray:_before.points];
+        NSMutableArray<OASWptPt *> *points = [NSMutableArray arrayWithArray:_before.points];
         [points removeObjectAtIndex:gapIndex];
         [points insertObject:gapPoint atIndex:gapIndex];
         _before.points = points;
@@ -489,7 +489,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 
 - (void) clearBeforeSegments
 {
-    _before.points = [NSArray new];
+    _before.points = [@[] mutableCopy];
     [_beforeSegments removeAllObjects];
     if (_beforeSegmentsForSnap != nil)
         [_beforeSegmentsForSnap removeAllObjects];
@@ -497,7 +497,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 
 - (void) clearAfterSegments
 {
-    _after.points = [NSArray new];
+    _after.points = [@[] mutableCopy];
     [_afterSegments removeAllObjects];
     if (_afterSegmentsForSnap != nil)
         [_afterSegmentsForSnap removeAllObjects];
@@ -541,14 +541,14 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 
 - (BOOL) isBorderPointSelected:(NSInteger) selectedPointPosition first:(BOOL)first
 {
-    NSArray<OAWptPt *> *points = [self getPoints];
+    NSArray<OASWptPt *> *points = [self getPoints];
     if (selectedPointPosition < 0 || points.count < selectedPointPosition)
         return NO;
 
-    OAWptPt *selectedPoint = points[selectedPointPosition];
-    NSArray <OATrkSegment *> *segments = [NSArray arrayWithArray: [self getBeforeSegments]];
+    OASWptPt *selectedPoint = points[selectedPointPosition];
+    NSArray <OASTrkSegment *> *segments = [NSArray arrayWithArray: [self getBeforeSegments]];
     NSInteger count = 0;
-    for (OATrkSegment *segment in segments)
+    for (OASTrkSegment *segment in segments)
     {
         NSInteger i = [segment.points indexOfObject:selectedPoint];
         if (i != -1)
@@ -585,16 +585,16 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     return [OAApplicationMode valueOfStringKey:profileType def:OAApplicationMode.DEFAULT];
 }
 
-- (NSArray<NSArray<OAWptPt *> *> *) getPointsToCalculate
+- (NSArray<NSArray<OASWptPt *> *> *) getPointsToCalculate
 {
-    NSMutableArray<NSArray<OAWptPt *> *> *res = [NSMutableArray new];
-    for (NSArray<OAWptPt *> *points in @[_before.points, _after.points])
+    NSMutableArray<NSArray<OASWptPt *> *> *res = [NSMutableArray new];
+    for (NSArray<OASWptPt *> *points in @[_before.points, _after.points])
     {
         for (NSInteger i = 0; i < (NSInteger) points.count - 1; i++)
         {
-            OAWptPt *startPoint = points[i];
-            OAWptPt *endPoint = points[i + 1];
-            NSArray<OAWptPt *> *pair = @[startPoint, endPoint];
+            OASWptPt *startPoint = points[i];
+            OASWptPt *endPoint = points[i + 1];
+            NSArray<OASWptPt *> *pair = @[startPoint, endPoint];
             if (_roadSegmentData[pair] == nil && (startPoint.hasProfile || self.hasRoute))
                 [res addObject:pair];
         }
@@ -631,18 +631,18 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     }
 }
   
-- (void)recreateSegments:(NSMutableArray<OATrkSegment *> *)segments segmentsForSnap:(NSMutableArray<OATrkSegment *> *)segmentsForSnap points:(NSArray<OAWptPt *> *)points calculateIfNeeded:(BOOL)calculateIfNeeded
+- (void)recreateSegments:(NSMutableArray<OASTrkSegment *> *)segments segmentsForSnap:(NSMutableArray<OASTrkSegment *> *)segmentsForSnap points:(NSArray<OASWptPt *> *)points calculateIfNeeded:(BOOL)calculateIfNeeded
 {
     NSMutableArray<NSNumber *> *roadSegmentIndexes = [NSMutableArray new];
-    OATrkSegment *s = [[OATrkSegment alloc] init];
-    NSMutableArray<OAWptPt *> *sPnts = [NSMutableArray array];
+    OASTrkSegment *s = [[OASTrkSegment alloc] init];
+    NSMutableArray<OASWptPt *> *sPnts = [NSMutableArray array];
     [segments addObject:s];
     BOOL defaultMode = YES;
     if (points.count > 1)
     {
         for (NSInteger i = 0; i < points.count; i++)
         {
-            OAWptPt *point = points[i];
+            OASWptPt *point = points[i];
             [sPnts addObject:point];
             NSString *profileType = point.getProfileType;
             if (profileType != nil)
@@ -659,7 +659,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
                     if (sPnts.count > 0)
                     {
                         s.points = sPnts;
-                        s = [[OATrkSegment alloc] init];
+                        s = [[OASTrkSegment alloc] init];
                         sPnts = [NSMutableArray array];
                         [segments addObject:s];
                         defaultMode = YES;
@@ -678,15 +678,15 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     
     if (segments.count > 0)
     {
-        for (OATrkSegment *segment in segments)
+        for (OASTrkSegment *segment in segments)
         {
-            OATrkSegment *segmentForSnap = [[OATrkSegment alloc] init];
-            NSMutableArray<OAWptPt *> *pnts = [NSMutableArray new];
+            OASTrkSegment *segmentForSnap = [[OASTrkSegment alloc] init];
+            NSMutableArray<OASWptPt *> *pnts = [NSMutableArray new];
             for (NSInteger i = 0; i < (NSInteger) segment.points.count - 1; i++)
             {
-                NSArray<OAWptPt *> *pair = @[segment.points[i], segment.points[i + 1]];
+                NSArray<OASWptPt *> *pair = @[segment.points[i], segment.points[i + 1]];
                 OARoadSegmentData *data = _roadSegmentData[pair];
-                NSArray<OAWptPt *> *pts = data != nil ? data.gpxPoints : nil;
+                NSArray<OASWptPt *> *pts = data != nil ? data.gpxPoints : nil;
                 if (pts != nil)
                 {
                     [pnts addObjectsFromArray:pts];
@@ -707,17 +707,17 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     }
     else if (points.count > 0)
     {
-        OATrkSegment *segmentForSnap = [[OATrkSegment alloc] init];
-        segmentForSnap.points = points;
+        OASTrkSegment *segmentForSnap = [[OASTrkSegment alloc] init];
+        segmentForSnap.points = [points mutableCopy];
         [segmentsForSnap addObject:segmentForSnap];
     }
 }
 
-- (NSArray<OAWptPt *> *)collectRoutePointsFromSegment:(OATrkSegment *)segment segmentInd:(NSInteger)segmentInd
+- (NSArray<OASWptPt *> *)collectRoutePointsFromSegment:(OASTrkSegment *)segment segmentInd:(NSInteger)segmentInd
 {
-    NSArray<OAWptPt *> *routePointsRte = [_gpxData.gpxFile getRoutePoints:segmentInd];
-    NSMutableArray<OAWptPt *> *routePoints = [NSMutableArray arrayWithArray:routePointsRte];
-    NSArray<OAWptPt *> *points = segment.points;
+    NSArray<OASWptPt *> *routePointsRte = [_gpxData.gpxFile getRoutePointsRouteIndex:(int)segmentInd];
+    NSMutableArray<OASWptPt *> *routePoints = [NSMutableArray arrayWithArray:routePointsRte];
+    NSArray<OASWptPt *> *points = segment.points;
     NSInteger prevPointIndex = 0;
     if (routePoints.count == 0 && points.count > 1)
     {
@@ -730,7 +730,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     
     for (NSInteger i = 0; i < (NSInteger) routePoints.count - 1; i++)
     {
-        NSArray<OAWptPt *> *pair = @[routePoints[i], routePoints[i + 1]];
+        NSArray<OASWptPt *> *pair = @[routePoints[i], routePoints[i + 1]];
         NSInteger startIndex = pair.firstObject.getTrkPtIndex;
         if (startIndex < 0 || startIndex < prevPointIndex || startIndex >= points.count)
             startIndex = [self findPointIndex:pair.firstObject points:points firstIndex:prevPointIndex];
@@ -739,7 +739,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
             endIndex = [self findPointIndex:pair.lastObject points:points firstIndex:startIndex];
         if (startIndex >= 0 && endIndex >= 0)
         {
-            NSMutableArray<OAWptPt *> *pairPoints = [NSMutableArray new];
+            NSMutableArray<OASWptPt *> *pairPoints = [NSMutableArray new];
             for (NSInteger j = startIndex; j < endIndex && j < points.count; j++)
             {
                 [pairPoints addObject:points[j]];
@@ -779,19 +779,19 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     OAGpxData *gpxData = self.gpxData;
     if (gpxData == nil || gpxData.gpxFile == nil)
         return;
-    OAGPXDocument *gpxFile = gpxData.gpxFile;
+    OASGpxFile *gpxFile = gpxData.gpxFile;
     if (gpxFile.hasRtePt && !gpxFile.hasTrkPt)
     {
         [self addPoints:gpxFile.getRoutePoints];
         return;
     }
-    NSArray<OATrkSegment *> *segments = [gpxData.gpxFile getNonEmptyTrkSegments:NO];
+    NSArray<OASTrkSegment *> *segments = [gpxData.gpxFile getNonEmptyTrkSegmentsRoutesOnly:NO];
     if (segments.count == 0)
         return;
 
     if (_selectedSegment != -1 && segments.count > _selectedSegment)
     {
-        OATrkSegment *seg = segments[_selectedSegment];
+        OASTrkSegment *seg = segments[_selectedSegment];
         if (seg.hasRoute)
             [self addPoints:[self collectRoutePointsFromSegment:seg segmentInd:_selectedSegment]];
         else
@@ -801,17 +801,17 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     {
         for (NSInteger si = 0; si < segments.count; si++)
         {
-            OATrkSegment *segment = segments[si];
+            OASTrkSegment *segment = segments[si];
             if (segment.hasRoute)
             {
-                NSArray<OAWptPt *> *routePoints = [self collectRoutePointsFromSegment:segment segmentInd:si];
+                NSArray<OASWptPt *> *routePoints = [self collectRoutePointsFromSegment:segment segmentInd:si];
                 if (routePoints.count > 0 && si < segments.count - 1)
                     [routePoints[routePoints.count - 1] setGap];
                 [self addPoints:routePoints];
             }
             else
             {
-                NSArray<OAWptPt *> *points = segment.points;
+                NSArray<OASWptPt *> *points = segment.points;
                 [self addPoints:points];
                 if (points.count > 0 && si < segments.count - 1)
                     [points[points.count - 1] setGap];
@@ -820,18 +820,18 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     }
 }
 
-- (NSArray<OAWptPt *> *) setPoints:(OAGpxRouteApproximation *)gpxApproximation originalPoints:(NSArray<OAWptPt *> *)originalPoints mode:(OAApplicationMode *)mode
+- (NSArray<OASWptPt *> *) setPoints:(OAGpxRouteApproximation *)gpxApproximation originalPoints:(NSArray<OASWptPt *> *)originalPoints mode:(OAApplicationMode *)mode
 {
 	if (gpxApproximation == nil || gpxApproximation.gpxApproximation->finalPoints.size() == 0 || gpxApproximation.gpxApproximation->fullRoute.size() == 0)
 		return nil;
 	
-	NSMutableArray<OAWptPt *> *routePoints = [NSMutableArray array];
+	NSMutableArray<OASWptPt *> *routePoints = [NSMutableArray array];
 	const auto gpxPoints = gpxApproximation.gpxApproximation->finalPoints;
 	for (NSInteger i = 0; i < gpxPoints.size(); i++)
 	{
 		const auto& gp1 = gpxPoints[i];
 		BOOL lastGpxPoint = [self isLastGpxPoint:gpxPoints index:i];
-		NSMutableArray<OAWptPt *> *points = [NSMutableArray array];
+		NSMutableArray<OASWptPt *> *points = [NSMutableArray array];
 		vector<SHARED_PTR<RouteSegmentResult>> segments;
 		for (NSInteger k = 0; k < gp1->routeToTarget.size(); k++)
 		{
@@ -848,23 +848,27 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 		}
 		if (points.count > 0)
 		{
-			OAWptPt *wp1 = [[OAWptPt alloc] init];
-			wp1.position = CLLocationCoordinate2DMake(gp1->lat, gp1->lon);
-			[wp1 setProfileType:mode.stringKey];
+			OASWptPt *wp1 = [[OASWptPt alloc] init];
+            wp1.lat = gp1->lat;
+            wp1.lon = gp1->lon;
+			[wp1 setProfileTypeProfileType:mode.stringKey];
 			[routePoints addObject:wp1];
-			OAWptPt *wp2 = [[OAWptPt alloc] init];
+			OASWptPt *wp2 = [[OASWptPt alloc] init];
 			if (lastGpxPoint)
 			{
-				wp2.position = points.lastObject.position;
+                OASWptPt *lastObject = points.lastObject;
+				wp2.lat = lastObject.lat;
+                wp2.lon = lastObject.lon;
 				[routePoints addObject:wp2];
 			}
 			else
 			{
 				const auto& gp2 = gpxPoints[i + 1];
-				wp2.position = CLLocationCoordinate2DMake(gp2->lat, gp2->lon);
+                wp2.lat = gp2->lat;
+                wp2.lon = gp2->lon;
 			}
-			[wp2 setProfileType:mode.stringKey];
-			NSArray<OAWptPt *> *pair = @[wp1, wp2];
+			[wp2 setProfileTypeProfileType:mode.stringKey];
+			NSArray<OASWptPt *> *pair = @[wp1, wp2];
 			_roadSegmentData[pair] = [[OARoadSegmentData alloc] initWithAppMode:_appMode start:pair.firstObject end:pair.lastObject points:points segments:segments];
 		}
 		if (lastGpxPoint)
@@ -872,8 +876,8 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 			break;
 		}
 	}
-	OAWptPt *lastOriginalPoint = originalPoints.lastObject;
-	OAWptPt *lastRoutePoint = routePoints.lastObject;
+	OASWptPt *lastOriginalPoint = originalPoints.lastObject;
+	OASWptPt *lastRoutePoint = routePoints.lastObject;
 	if (lastOriginalPoint.isGap)
 		[lastRoutePoint setGap];
 	
@@ -881,13 +885,13 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 	return routePoints;
 }
 
-- (void) replacePoints:(NSArray<OAWptPt *> *)originalPoints points:(NSArray<OAWptPt *> *)points
+- (void) replacePoints:(NSArray<OASWptPt *> *)originalPoints points:(NSArray<OASWptPt *> *)points
 {
 	if (originalPoints.count > 1)
 	{
 		NSInteger firstPointIndex = [_before.points indexOfObject:originalPoints.firstObject];
 		NSInteger lastPointIndex = [_before.points indexOfObject:originalPoints.lastObject];
-		NSMutableArray<OAWptPt *> *newPoints = [NSMutableArray array];
+		NSMutableArray<OASWptPt *> *newPoints = [NSMutableArray array];
 		if (firstPointIndex != NSNotFound && lastPointIndex != NSNotFound)
 		{
 			[newPoints addObjectsFromArray:[_before.points subarrayWithRange:NSMakeRange(0, firstPointIndex)]];
@@ -905,7 +909,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 	}
 	else
 	{
-		_before.points = points;
+        _before.points = [points mutableCopy];
 	}
 	[self updateSegmentsForSnap:NO];
 }
@@ -935,7 +939,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 	return YES;
 }
 
-- (void) fillPointsArray:(NSMutableArray<OAWptPt *> *)points
+- (void) fillPointsArray:(NSMutableArray<OASWptPt *> *)points
 					 seg:(const SHARED_PTR<RouteSegmentResult> &)seg
 		 includeEndPoint:(BOOL)includeEndPoint
 {
@@ -951,28 +955,29 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 		[self addPointToArray:points seg:seg index:ind heightArray:heightArray];
 }
 
-- (void) addPointToArray:(NSMutableArray<OAWptPt *> *)points
+- (void) addPointToArray:(NSMutableArray<OASWptPt *> *)points
 					 seg:(const SHARED_PTR<RouteSegmentResult> &)seg
 				   index:(NSInteger)index
 			 heightArray:(const std::vector<double>&)heightArray
 {
 	LatLon l = seg->getPoint((int)index);
-	OAWptPt *pt = [[OAWptPt alloc] init];
+	OASWptPt *pt = [[OASWptPt alloc] init];
 	if (heightArray.size() > index * 2 + 1)
-		pt.elevation = heightArray[index * 2 + 1];
-	pt.position = CLLocationCoordinate2DMake(l.lat, l.lon);
+		pt.ele = heightArray[index * 2 + 1];
+    pt.lat = l.lat;
+    pt.lon = l.lon;
 	[points addObject:pt];
 }
 
 - (BOOL) canSplit:(BOOL)after
 {
-    NSArray<OAWptPt *> *points = [self getPoints];
+    NSArray<OASWptPt *> *points = [self getPoints];
     if (self.selectedPointPosition < 0 || points.count < self.selectedPointPosition)
         return NO;
 
-    OAWptPt *selectedPoint = points[self.selectedPointPosition];
-    NSArray<OATrkSegment *> *segments = [self getBeforeSegments];
-    for (OATrkSegment *segment in segments)
+    OASWptPt *selectedPoint = points[self.selectedPointPosition];
+    NSArray<OASTrkSegment *> *segments = [self getBeforeSegments];
+    for (OASTrkSegment *segment in segments)
     {
         NSInteger i = [segment.points indexOfObject:selectedPoint];
         if (i != NSNotFound)
@@ -983,7 +988,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     return NO;
 }
 
-- (NSInteger) findPointIndex:(OAWptPt *)point points:(NSArray<OAWptPt *> *)points firstIndex:(NSInteger)firstIndex
+- (NSInteger) findPointIndex:(OASWptPt *)point points:(NSArray<OASWptPt *> *)points firstIndex:(NSInteger)firstIndex
 {
     double minDistance = DBL_MAX;
     NSInteger index = 0;
@@ -1041,7 +1046,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 
 - (OARouteCalculationParams *) getParams:(BOOL)resetCounter
 {
-    NSArray<NSArray<OAWptPt *> *> *pointsToCalculate = [self getPointsToCalculate];
+    NSArray<NSArray<OASWptPt *> *> *pointsToCalculate = [self getPointsToCalculate];
     if (pointsToCalculate.count == 0)
         return nil;
     if (resetCounter)
@@ -1049,7 +1054,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
         _calculatedPairs = 0;
         _pointsToCalculateSize = pointsToCalculate.count;
     }
-    NSArray<OAWptPt *> *currentPair = pointsToCalculate.firstObject;
+    NSArray<OASWptPt *> *currentPair = pointsToCalculate.firstObject;
     CLLocation *start = [[CLLocation alloc] initWithLatitude:currentPair.firstObject.getLatitude longitude:currentPair.firstObject.getLongitude];
     
     CLLocation *end = [[CLLocation alloc] initWithLatitude:currentPair.lastObject.getLatitude longitude:currentPair.lastObject.getLongitude];
@@ -1078,13 +1083,13 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     return params;
 }
 
-- (NSArray<NSArray<OAWptPt *> *> *) getRoutePoints
+- (NSArray<NSArray<OASWptPt *> *> *) getRoutePoints
 {
-    NSMutableArray<NSArray <OAWptPt *> *> *res = [NSMutableArray new];
-    NSMutableArray<OAWptPt *> *plainPoints = [NSMutableArray arrayWithArray:_before.points];
+    NSMutableArray<NSArray <OASWptPt *> *> *res = [NSMutableArray new];
+    NSMutableArray<OASWptPt *> *plainPoints = [NSMutableArray arrayWithArray:_before.points];
     [plainPoints addObjectsFromArray:_after.points];
-    NSMutableArray<OAWptPt *> *points = [NSMutableArray new];
-    for (OAWptPt *point in plainPoints)
+    NSMutableArray<OASWptPt *> *points = [NSMutableArray new];
+    for (OASWptPt *point in plainPoints)
     {
         if (point.getTrkPtIndex != -1)
         {
@@ -1101,7 +1106,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     return res;
 }
 
-- (OAGPXMutableDocument *) exportGpx:(NSString *)gpxName
+- (OASGpxFile *) exportGpx:(NSString *)gpxName
 {
     if (_before.points.count == 0)
         return nil;
@@ -1109,13 +1114,13 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     return [OARouteExporter exportRoute:gpxName trkSegments:[self getRouteSegments] points:nil];
 }
 
-- (NSArray<OATrkSegment *> *) getRouteSegments
+- (NSArray<OASTrkSegment *> *) getRouteSegments
 {
-    NSMutableArray<OATrkSegment *> *res = [NSMutableArray new];
+    NSMutableArray<OASTrkSegment *> *res = [NSMutableArray new];
     NSMutableArray<NSNumber *> *lastPointIndexes = [NSMutableArray new];
     for (NSInteger i = 0; i < _before.points.count; i++)
     {
-        OAWptPt *pt = _before.points[i];
+        OASWptPt *pt = _before.points[i];
         if (pt.isGap)
             [lastPointIndexes addObject:@(i)];
     }
@@ -1124,7 +1129,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     NSInteger firstPointIndex = 0;
     for (NSNumber *lastPointIndex in lastPointIndexes)
     {
-        OATrkSegment *segment = [self getRouteSegment:firstPointIndex endPointIndex:lastPointIndex.integerValue];
+        OASTrkSegment *segment = [self getRouteSegment:firstPointIndex endPointIndex:lastPointIndex.integerValue];
         if (segment)
             [res addObject:segment];
         firstPointIndex = lastPointIndex.integerValue + 1;
@@ -1132,7 +1137,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     return res;
 }
 
-- (OATrkSegment *)getRouteSegment:(NSInteger)startPointIndex endPointIndex:(NSInteger)endPointIndex
+- (OASTrkSegment *)getRouteSegment:(NSInteger)startPointIndex endPointIndex:(NSInteger)endPointIndex
 {
     std::vector<std::shared_ptr<RouteSegmentResult>> route;
     NSMutableArray<CLLocation *> *locations = [NSMutableArray new];
@@ -1140,34 +1145,34 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     routePointIndexes.push_back(0);
     for (NSInteger i = startPointIndex; i < endPointIndex; i++)
     {
-        NSArray<OAWptPt *> *pair = @[_before.points[i], _before.points[i + 1]];
+        NSArray<OASWptPt *> *pair = @[_before.points[i], _before.points[i + 1]];
         OARoadSegmentData *data = _roadSegmentData[pair];
-        NSArray<OAWptPt *> *dataPoints = data != nil ? data.gpxPoints : nil;
+        NSArray<OASWptPt *> *dataPoints = data != nil ? data.gpxPoints : nil;
         std::vector<std::shared_ptr<RouteSegmentResult>> dataSegments;
         if (data)
             dataSegments = data.segments;
         if (dataPoints != nil && dataSegments.size() > 0)
         {
-            for (OAWptPt *pt in dataPoints)
+            for (OASWptPt *pt in dataPoints)
             {
-                CLLocation *l = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(pt.getLatitude, pt.getLongitude) altitude:pt.elevation horizontalAccuracy:0 verticalAccuracy:0 timestamp:NSDate.date];
+                CLLocation *l = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(pt.getLatitude, pt.getLongitude) altitude:pt.ele horizontalAccuracy:0 verticalAccuracy:0 timestamp:NSDate.date];
                 
                 [locations addObject:l];
             }
-            [pair.lastObject setTrkPtIndex:(i + 1 < _before.points.count - 1 ? locations.count : locations.count - 1)];
+            [pair.lastObject setTrkPtIndexIndex:(int)(i + 1 < _before.points.count - 1 ? locations.count : locations.count - 1)];
             route.insert(route.end(), dataSegments.begin(), dataSegments.end());
             routePointIndexes.push_back((int) (i + 1 == endPointIndex ? locations.count - 1 : locations.count));
         }
     }
     if (locations.count > 0 && route.size() > 0)
     {
-        [_before.points[startPointIndex] setTrkPtIndex:0];
+        [_before.points[startPointIndex] setTrkPtIndexIndex:0];
         return [[[OARouteExporter alloc] initWithName:@"" route:route locations:locations routePointIndexes:routePointIndexes points:nil] generateRouteSegment];
     }
     else if (endPointIndex - startPointIndex >= 0)
     {
-        OATrkSegment *segment = [[OATrkSegment alloc] init];
-        segment.points = [_before.points subarrayWithRange:NSMakeRange(startPointIndex, (endPointIndex + 1) - startPointIndex)];
+        OASTrkSegment *segment = [[OASTrkSegment alloc] init];
+        segment.points = [[_before.points subarrayWithRange:NSMakeRange(startPointIndex, (endPointIndex + 1) - startPointIndex)] mutableCopy];
         return segment;
     }
     return nil;
@@ -1204,23 +1209,27 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 
 #pragma mark - OARouteCalculationResultListener
 
-- (void)onRouteCalculated:(OARouteCalculationResult *)route segment:(OAWalkingRouteSegment *)segment start:(CLLocation *)start end:(CLLocation *)end
+- (void)onRouteCalculated:(OARouteCalculationResult *)route
+                  segment:(OAWalkingRouteSegment *)segment
+                    start:(CLLocation *)start
+                      end:(CLLocation *)end
 {
     NSArray<CLLocation *> *locations = route.getRouteLocations;
-    NSMutableArray<OAWptPt *> *pts = [NSMutableArray arrayWithCapacity:locations.count];
+    NSMutableArray<OASWptPt *> *pts = [NSMutableArray arrayWithCapacity:locations.count];
     double prevAltitude = NAN;
     for (CLLocation *loc in locations)
     {
-        OAWptPt *pt = [[OAWptPt alloc] init];
-        pt.position = loc.coordinate;
+        OASWptPt *pt = [[OASWptPt alloc] init];
+        pt.lat = loc.coordinate.latitude;
+        pt.lon = loc.coordinate.longitude;
         if (loc.altitude > 0)
         {
             prevAltitude = loc.altitude;
-            pt.elevation = prevAltitude;
+            pt.ele = prevAltitude;
         }
         else if (!isnan(prevAltitude))
         {
-            pt.elevation = prevAltitude;
+            pt.ele = prevAltitude;
         }
         [pts addObject:pt];
     }
@@ -1248,10 +1257,10 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     });
 }
 
-- (std::vector<std::pair<double, double>>) waypointsToLocations:(NSArray<OAWptPt *> *)points
+- (std::vector<std::pair<double, double>>) waypointsToLocations:(NSArray<OASWptPt *> *)points
 {
     std::vector<std::pair<double, double>> res;
-    for (OAWptPt *pt in points)
+    for (OASWptPt *pt in points)
     {
         res.push_back({pt.getLatitude, pt.getLongitude});
     }

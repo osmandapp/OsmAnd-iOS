@@ -8,7 +8,6 @@
 
 #import "OAGPXDatabase.h"
 #import "OARootViewController.h"
-#import "OAGPXTrackAnalysis.h"
 #import "OsmAndApp.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXDocument.h"

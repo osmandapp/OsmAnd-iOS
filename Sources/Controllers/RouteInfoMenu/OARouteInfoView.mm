@@ -68,6 +68,7 @@
 #import "GeneratedAssetSymbols.h"
 #import "OARequiredMapsResourceViewController.h"
 #import "OAResourcesUIHelper.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
@@ -124,8 +125,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     
     ElevationChartCell *_routeStatsCell;
     UIProgressView *_progressBarView;
-    
-    OAGPXTrackAnalysis *_trackAnalysis;
+    OASGpxTrackAnalysis *_trackAnalysis;
     OAGPXDocument *_gpx;
     BOOL _needChartUpdate;
     
@@ -660,7 +660,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             }];
             [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
             
-            OAGPXTrackAnalysis *trackAnalysis = [self getTrackAnalysis];
+            OASGpxTrackAnalysis *trackAnalysis = [self getTrackAnalysis];
             if (_needChartUpdate)
             {
                 OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:_gpx.path]];
@@ -1244,9 +1244,9 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         [self show:NO fullMenu:YES onComplete:nil];
 }
 
-- (OAGPXTrackAnalysis *) getTrackAnalysis
+- (OASGpxTrackAnalysis *) getTrackAnalysis
 {
-    OAGPXTrackAnalysis *trackAnalysis = _trackAnalysis;
+    OASGpxTrackAnalysis *trackAnalysis = _trackAnalysis;
     if (!trackAnalysis)
     {
         _gpx = [OAGPXUIHelper makeGpxFromRoute:_routingHelper.getRoute];

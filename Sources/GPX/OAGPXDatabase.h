@@ -47,8 +47,8 @@ typedef NS_ENUM(NSInteger, EOAGPX3DLineVisualizationPositionType) {
     EOAGPX3DLineVisualizationPositionTypeTopBottom,
 };
 
-@class OAGPXTrackAnalysis;
-@class OAWptPt, OAGPXDocument, OASGpxDataItem;
+@class OASGpxTrackAnalysis;
+@class OASWptPt, OAGPXDocument, OASGpxDataItem;
 
 @interface OAGPX : NSObject
 
@@ -132,7 +132,7 @@ typedef NS_ENUM(NSInteger, EOAGPX3DLineVisualizationPositionType) {
 -(OAGPX *)buildGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document fetchNearestCity:(BOOL)fetchNearestCity;
 - (OAGPX *) buildGpxItem:(NSString *)fileName path:(NSString *)filepath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document fetchNearestCity:(BOOL)fetchNearestCity;
 -(OAGPX *)addGpxItem:(NSString *)filePath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document;
--(OAGPX *)getGPXItem:(NSString *)filePath;
+//-(OAGPX *)getGPXItem:(NSString *)filePath;
 -(OAGPX *)getGPXItemByFileName:(NSString *)fileName;
 -(void)replaceGpxItem:(OAGPX *)gpx;
 -(void)removeGpxItem:(NSString *)filePath;

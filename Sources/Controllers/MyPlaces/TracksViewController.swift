@@ -225,7 +225,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                         currentRecordingTrackRow.cellType = OATwoButtonsTableViewCell.reuseIdentifier
                         currentRecordingTrackRow.key = recordingTrackKey
                         currentRecordingTrackRow.title = localizedString("recorded_track")
-                        currentRecordingTrackRow.descr = getTrackDescription(distance: savingHelper.distance, timeSpan: Int(savingHelper.getCurrentGPXSharedLib().getAnalysis(fileTimestamp: 0).timeSpan), waypoints: savingHelper.points, showDate: false, filepath: nil)
+                        currentRecordingTrackRow.descr = getTrackDescription(distance: savingHelper.distance, timeSpan: Int(savingHelper.currentTrack.getAnalysis(fileTimestamp: 0).timeSpan), waypoints: savingHelper.points, showDate: false, filepath: nil)
                         let isVisible = settings.mapSettingShowRecordingTrack.get()
                         currentRecordingTrackRow.setObj(isVisible, forKey: isVisibleKey)
                         currentRecordingTrackRow.iconName = "ic_custom_track_recordable"
@@ -240,7 +240,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                             currentPausedTrackRow.cellType = OATwoButtonsTableViewCell.reuseIdentifier
                             currentPausedTrackRow.key = recordingTrackKey
                             currentPausedTrackRow.title = localizedString("recorded_track")
-                            currentPausedTrackRow.descr = getTrackDescription(distance: savingHelper.distance, timeSpan: Int(savingHelper.getCurrentGPXSharedLib().getAnalysis(fileTimestamp: 0).timeSpan), waypoints: savingHelper.points, showDate: false, filepath: nil)
+                            currentPausedTrackRow.descr = getTrackDescription(distance: savingHelper.distance, timeSpan: Int(savingHelper.currentTrack.getAnalysis(fileTimestamp: 0).timeSpan), waypoints: savingHelper.points, showDate: false, filepath: nil)
                             let isVisible = settings.mapSettingShowRecordingTrack.get()
                             currentPausedTrackRow.setObj(isVisible, forKey: isVisibleKey)
                             currentPausedTrackRow.iconName = "ic_custom_track_recordable"
@@ -906,7 +906,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     
     private func onTrackAppearenceClicked(track: GpxDataItem?, isCurrentTrack: Bool) {
         var gpx = track
-        if isCurrentTrack, let gpxFile = savingHelper.getCurrentGPXSharedLib() {
+        if isCurrentTrack, let gpxFile = savingHelper.currentTrack {
             gpx = OAGPXDatabase.sharedDb().getNewGPXItem(gpxFile.path)
         }
         guard let gpx else { return }
@@ -920,8 +920,8 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func onTrackNavigationClicked(_ track: GpxDataItem?, isCurrentTrack: Bool) {
-        // FIXME: savingHelper.getCurrentGPX()
-        guard let gpx = isCurrentTrack ? savingHelper.getCurrentGPXSharedLib() : track else { return }
+        // FIXME: savingHelper.getCurrentGPX() currentTrack == OASGpxFile
+        guard let gpx = isCurrentTrack ? savingHelper.currentTrack : track else { return }
 //        if gpx.totalTracks > 1 {
 //            let absolutePath = getAbsolutePath(gpx.gpxFilePath)
 //            if let vc = OATrackSegmentsViewController(filepath: absolutePath, isCurrentTrack: isCurrentTrack) {
@@ -941,7 +941,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     private func onTrackAnalyzeClicked(_ track: GpxDataItem?, isCurrentTrack: Bool) {
         var gpx: GpxFile?
         if isCurrentTrack {
-            if let gpxFile = savingHelper.getCurrentGPXSharedLib() {
+            if let gpxFile = savingHelper.currentTrack {
                 gpx = gpxFile
             }
         } else {
@@ -971,7 +971,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     
     private func onTrackShareClicked(_ track: GpxDataItem?, isCurrentTrack: Bool, touchPointArea: CGRect) {
         var gpxTrack: GpxDataItem? = track
-        if isCurrentTrack, let gpxFile = savingHelper.getCurrentGPXSharedLib() {
+        if isCurrentTrack, let gpxFile = savingHelper.currentTrack {
             gpxTrack = OAGPXDatabase.sharedDb().getNewGPXItem(gpxFile.path)
         }
 
@@ -986,7 +986,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     
     private func onTrackUploadToOsmClicked(_ track: GpxDataItem?, isCurrentTrack: Bool) {
         var gpxTrack: GpxDataItem? = track
-        if isCurrentTrack, let gpxFile = savingHelper.getCurrentGPXSharedLib() {
+        if isCurrentTrack, let gpxFile = savingHelper.currentTrack {
             gpxTrack = OAGPXDatabase.sharedDb().getNewGPXItem(gpxFile.path)
         }
 
@@ -1019,7 +1019,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     
     private func onTrackRenameClicked(_ track: GpxDataItem?, isCurrentTrack: Bool) {
         var gpxTrack: GpxDataItem? = track
-        if isCurrentTrack, let gpxFile = savingHelper.getCurrentGPXSharedLib() {
+        if isCurrentTrack, let gpxFile = savingHelper.currentTrack {
             gpxTrack = OAGPXDatabase.sharedDb().getNewGPXItem(gpxFile.path)
         }
         
@@ -1043,7 +1043,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     
     private func onTrackMoveClicked(_ track: GpxDataItem?, isCurrentTrack: Bool) {
         var gpxTrack: GpxDataItem? = track
-        if isCurrentTrack, let gpxFile = savingHelper.getCurrentGPXSharedLib() {
+        if isCurrentTrack, let gpxFile = savingHelper.currentTrack {
             gpxTrack = OAGPXDatabase.sharedDb().getNewGPXItem(gpxFile.path)
         }
         selectedTrack = gpxTrack

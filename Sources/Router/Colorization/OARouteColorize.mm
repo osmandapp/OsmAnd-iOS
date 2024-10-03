@@ -14,6 +14,7 @@
 #import "OAMapUtils.h"
 #import "OsmAnd_Maps-Swift.h"
 #import <CoreLocation/CoreLocation.h>
+#import "OsmAndSharedWrapper.h"
 
 static CGFloat const defaultBase = 17.2;
 static CGFloat const maxCorrectElevationDistance = 100.0; // in meters
@@ -81,14 +82,15 @@ static CGFloat const minDifferenceSlope = 0.05; //5%
                 if (seg.generalSegment || seg.points.count < 2)
                     continue;
                 
-                for (OAWptPt *pt in seg.points)
+                for (OASWptPt *pt in seg.points)
                 {
                     [latList addObject:@(pt.getLatitude)];
                     [lonList addObject:@(pt.getLongitude)];
-                    if (colorizaionType == ColorizationTypeSpeed)
-                        [values addObject:@(analysis.speedData[wptIdx].speed)];
-                    else
-                        [values addObject:@(analysis.elevationData[wptIdx].elevation)];
+ // FIXME:
+//                    if (colorizaionType == ColorizationTypeSpeed)
+//                        [values addObject:@(analysis.speedData[wptIdx].speed)];
+//                    else
+//                        [values addObject:@(analysis.elevationData[wptIdx].elevation)];
                     wptIdx++;
                 }
             }

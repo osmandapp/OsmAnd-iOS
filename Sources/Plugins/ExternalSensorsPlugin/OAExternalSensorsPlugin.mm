@@ -273,8 +273,10 @@ NSString * const OATrackRecordingAnyConnectedDevice = @"any_connected_device_wri
             value = val ? val.floatValue : value;
             [attribute setAttributeValueFor:tag value:value];
             
-            if (![analysis hasData:tag] && [attribute hasValidValueFor:tag] && analysis.totalDistance > 0)
-                [analysis setTag:tag hasData:YES];
+            if (![analysis hasDataTag:tag] && [attribute hasValidValueFor:tag] && analysis.totalDistance > 0)
+            {
+                [analysis setHasDataTag:tag hasData:YES];
+            }
         }
     }
 }

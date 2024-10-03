@@ -17,6 +17,6 @@ extension OAExternalSensorsPlugin {
                                               axisType: GPXDataSetAxisType,
                                               calcWithoutGaps: Bool,
                                               useRightAxis: Bool) -> GpxUIHelper.OrderedLineDataSet? {
-        return SensorAttributesUtils.getOrderedLineDataSet(chart: chart, analysis: analysis, graphType: graphType, axisType: axisType, calcWithoutGaps: calcWithoutGaps, useRightAxis: useRightAxis)
+        SensorAttributesUtils.getOrderedLineDataSet(chart: chart, analysis: analysis, graphType: graphType, axisType: axisType, calcWithoutGaps: calcWithoutGaps, useRightAxis: useRightAxis)
     }
 }

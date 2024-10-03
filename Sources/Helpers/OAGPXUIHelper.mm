@@ -64,7 +64,10 @@
 
 + (OASGpxFile *)makeGpxFromRoute:(OARouteCalculationResult *)route
 {
+    // FIXME:
+    // OAGPXDocument *gpx = [[OAGPXDocument alloc] init];
     OASGpxFile *gpx = [[OASGpxFile alloc] init];
+    
     NSArray<CLLocation *> *locations = [route getRouteLocations];
     OASTrack *track = [[OASTrack alloc] init];
     OASTrkSegment *seg = [[OASTrkSegment alloc] init];
@@ -106,8 +109,8 @@
     }
     [OAGPXUIHelper interpolateEmptyElevationWpts:pts];
     seg.points = pts;
-    track.segments = @[seg];
-    gpx.tracks = @[track];
+    track.segments = [@[seg] mutableCopy];
+    gpx.tracks = [@[track] mutableCopy];
     return gpx;
 }
 

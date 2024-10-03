@@ -2821,9 +2821,10 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         if (![_gpxDocFileTemp isEqualToString:filePath] || _gpxDocsTemp.isEmpty()) {
             _gpxDocsTemp.clear();
             _gpxDocFileTemp = [filePath copy];
-            OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:filePath];
-            NSString *path = gpx.absolutePath;
-            _gpxDocsTemp.append(OsmAnd::GpxDocument::loadFrom(QString::fromNSString(path)));
+            OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:filePath];
+            NSString *path = gpx.file.absolutePath;
+            // FIXME:
+          //  _gpxDocsTemp.append(OsmAnd::GpxDocument::loadFrom(QString::fromNSString(path)));
         }
         
         if (update)
@@ -2927,8 +2928,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         return;
 
     std::shared_ptr<const OsmAnd::GpxDocument> doc = _gpxDocsTemp.first();
-    OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:_gpxDocFileTemp];
-    NSString *path = gpx.absolutePath;
+    OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:_gpxDocFileTemp];
+    NSString *path = gpx.file.absolutePath;
     QString qPath = QString::fromNSString(path);
     if (![[OAAppSettings sharedManager].mapSettingVisibleGpx.get containsObject:_gpxDocFileTemp])
     {
@@ -3078,7 +3079,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         NSString *gpxFilePath = [it.key().toNSString()
                 stringByReplacingOccurrencesOfString:[_app.gpxPath stringByAppendingString:@"/"]
                                           withString:@""];
-        OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:gpxFilePath];
+        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:gpxFilePath];
         for (auto locIt = doc->points.begin(); locIt != doc->points.end(); ++locIt)
         {
             auto loc = *locIt;
@@ -3127,7 +3128,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         NSString *gpxFilePath = [document.path
                 stringByReplacingOccurrencesOfString:[_app.gpxPath stringByAppendingString:@"/"]
                                           withString:@""];
-        OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:gpxFilePath];
+        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:gpxFilePath];
         for (auto& loc : doc->points)
         {
             if ([gpx.hiddenGroups containsObject:loc->type.toNSString()])
@@ -3140,7 +3141,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             {
                 OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> *_wpt = (OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>*)&loc;
                 const std::shared_ptr<OsmAnd::GpxDocument::WptPt> w = _wpt->shared_ptr();
-                // FIXME: 
+                // FIXME:
                 
 //                OASWptPt *wptItem = [OAGPXDocument fetchWpt:w];
 //                wptItem.wpt = w;
@@ -3180,7 +3181,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     if (!self.foundWptDocPath)
     {
         OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
-        [helper deleteWptNew:self.foundWpt];
+        [helper deleteWpt:self.foundWpt];
         
         // update map
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -3243,8 +3244,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     if (!self.foundWptDocPath)
     {
         OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
-        // FIXME:
-       // [helper saveWpt:self.foundWpt];
+        [helper saveWpt:self.foundWpt];
 
         // update map
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -3302,7 +3302,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     if (!gpxFileName)
     {
         OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
-        [helper addWptNew:wpt];
+        [helper addWpt:wpt];
         self.foundWpt = wpt;
         self.foundWptDocPath = nil;
         
@@ -3534,7 +3534,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     return found;
 }
 
-- (BOOL)updateMetadata:(OAMetadata *)metadata oldPath:(NSString *)oldPath docPath:(NSString *)docPath
+- (BOOL)updateMetadata:(OASMetadata *)metadata oldPath:(NSString *)oldPath docPath:(NSString *)docPath
 {
     if (!metadata)
         return NO;
@@ -3558,7 +3558,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
                 doc->metadata = m;
             }
             
-            [OAGPXDocument fillMetadata:m usingMetadata:metadata];
+            // FIXME:
+            // [OAGPXDocument fillMetadata:m usingMetadata:metadata];
 
             _selectedGpxHelper.activeGpx.remove(QString::fromNSString(oldPath));
             _selectedGpxHelper.activeGpx[QString::fromNSString(docPath)] = doc;

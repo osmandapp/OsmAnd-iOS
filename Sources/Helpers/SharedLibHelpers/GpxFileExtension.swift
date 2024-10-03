@@ -12,17 +12,18 @@ import OsmAndShared
 extension GpxFile {
     func hasTrkPt(withElevation: Bool) -> Bool {
         for track in tracks {
-            for segment in track.segments {
-                if withElevation {
-                    for point in segment.points {
-                        if !point.elevation.isNaN {
-                            return true
-                        }
-                    }
-                } else if segment.points.count > 0 {
-                    return true
-                }
-            }
+            // FIXME:
+//            for segment in track.segments {
+//                if withElevation {
+//                    for point in segment.points {
+//                        if !point.elevation.isNaN {
+//                            return true
+//                        }
+//                    }
+//                } else if segment.points.count > 0 {
+//                    return true
+//                }
+//            }
         }
         return false
     }

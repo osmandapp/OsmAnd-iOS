@@ -12,7 +12,7 @@
 #import "OATrackMenuHudViewControllerConstants.h"
 #import "OsmAndSharedWrapper.h"
 
-@class ElevationChart, OASTrack, OASTrkSegment, OARouteLineChartHelper, OARouteKey, OAAuthor, OACopyright, OALink, OAMetadata, OATravelArticleIdentifier, OAGpxWptItem, OAGPXTableData;
+@class ElevationChart, OASTrack, OASTrkSegment, OARouteLineChartHelper, OARouteKey, OAAuthor, OACopyright, OALink, OASMetadata, OATravelArticleIdentifier, OAGpxWptItem, OAGPXTableData;
 
 @protocol OATrackMenuViewControllerDelegate <NSObject>
 

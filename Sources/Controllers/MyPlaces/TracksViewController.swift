@@ -528,11 +528,11 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     @objc private func filterButtonTapped() {
-        //        if let filterVC = TracksFiltersViewController() {
-        //            filterVC.setInitialFilterText(searchText)
-        //            searchText = ""
-        //            show(filterVC)
-        //        }
+        if let filterVC = TracksFiltersViewController() {
+            filterVC.setInitialFilterText(searchText)
+            searchText = ""
+            show(filterVC)
+        }
     }
     
     private func getTotalTracksStatistics() -> String {

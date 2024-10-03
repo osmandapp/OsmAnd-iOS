@@ -534,6 +534,12 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
                                            _app.data.mapLastViewedState.target31.y);
 
         float zoom = _app.data.mapLastViewedState.zoom;
+        
+        //calculate minimal zoom value for current screen
+        OAZoom *zoomObject = [[OAZoom alloc] initWitZoom:zoom minZoom:1 maxZoom:_mapView.maxZoom];
+        [zoomObject checkZoomBounds];
+        zoom = [zoomObject getBaseZoom] + [zoomObject getZoomFloatPart];
+        
         _mapView.zoom = qBound(_mapView.minZoom, isnan(zoom) ? 5 : zoom, _mapView.maxZoom);
         float azimuth = _app.data.mapLastViewedState.azimuth;
         _mapView.azimuth = isnan(azimuth) ? 0 : azimuth;
@@ -1845,12 +1851,16 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         return;
     }
     
-    [zoom changeZoom:zoomStep];
+    if (zoomStep > 0)
+        [zoom zoomIn];
+    else
+        [zoom zoomOut];
+    float updatedZoom = zoom.getBaseZoom + zoom.getZoomFloatPart;
     
     _mapView.mapAnimator->pause();
     _mapView.mapAnimator->cancelAllAnimations();
     
-    _mapView.mapAnimator->animateZoomBy(zoomStep,
+    _mapView.mapAnimator->animateZoomTo(updatedZoom,
                                         kQuickAnimationTime,
                                         OsmAnd::MapAnimator::TimingFunction::Linear,
                                         kUserInteractionAnimationKey);

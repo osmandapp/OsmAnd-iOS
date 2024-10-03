@@ -3457,3 +3457,4 @@
 "help_article_plugins_openplacereviews_name" = "OpenPlaceReviews";
 "help_article_troubleshooting_android_auto_name" = "Android Auto";
 "shared_string_status" = "Status";
+"simulate_location_movement_speed_original" = "Original";

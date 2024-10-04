@@ -172,19 +172,18 @@ final class MapSettingsMapModeParametersViewController: OABaseScrollableHudViewC
         section.addRow(from: [
             kCellKeyKey: "modes",
             kCellTypeKey: SegmentImagesWithRightLabelTableViewCell.reuseIdentifier,
-            "icons": modes.map({
-                if let image = UIImage(named: $0.iconName) {
-                    return OAUtilities.resize(image, newSize: CGSize(width: 20, height: 20))
-                }
-                return UIImage()
-            }),
-            "selectedIcons": modes.map({
-                if let image = UIImage(named: $0.selectedIconName) {
-                    return OAUtilities.resize(image, newSize: CGSize(width: 20, height: 20))
-                }
-                return UIImage()
-            })
+            "icons": getImagesFromModes(false),
+            "selectedIcons": getImagesFromModes(true)
         ])
+    }
+
+    private func getImagesFromModes(_ selected: Bool) -> [UIImage] {
+        DayNightMode.allCases.map({
+            if let image = UIImage(named: selected ? $0.selectedIconName : $0.iconName) {
+                return OAUtilities.resize(image, newSize: CGSize(width: 20, height: 20))
+            }
+            return UIImage()
+        })
     }
 
     @objc private func onApplyButtonPressed() {

@@ -168,7 +168,6 @@ final class MapSettingsMapModeParametersViewController: OABaseScrollableHudViewC
             kCellTypeKey: OASimpleTableViewCell.reuseIdentifier
         ])
 
-        let modes = DayNightMode.allCases
         section.addRow(from: [
             kCellKeyKey: "modes",
             kCellTypeKey: SegmentImagesWithRightLabelTableViewCell.reuseIdentifier,

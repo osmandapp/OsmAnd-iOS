@@ -87,6 +87,8 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     
     UIColor *_lightGuidanceBackgroundColor;
     UIColor *_darkGuidanceBackgroundColor;
+
+    BOOL _isNewManeuverCreated;
 }
 
 - (void) commonInit
@@ -651,15 +653,17 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                     secondaryVisible = true;
                 }
             }
-            
+
             __block CPManeuver *maneuver = _navigationSession.upcomingManeuvers.firstObject;
             NSMeasurement<NSUnitLength *> *dist = [self getFormattedDistance:nextTurnDistance];
             CPTravelEstimates *estimates = [[CPTravelEstimates alloc] initWithDistanceRemaining:dist timeRemaining:-1];
             if (!maneuver
                 || nextTurn.directionInfoInd != _currentDirectionInfo.directionInfoInd
                 || nextTurn.directionInfo != _currentDirectionInfo.directionInfo
-                || ([maneuver.userInfo[@"imminent"] intValue] != turnImminent))
+                || ![maneuver.instructionVariants.firstObject isEqualToString:nextTurn.directionInfo.streetName]
+                || [maneuver.userInfo[@"imminent"] intValue] != turnImminent)
             {
+                _isNewManeuverCreated = YES;
                 dispatch_sync(dispatch_get_main_queue(), ^{
                     maneuver = [self createTurnManeuver:estimates directionInfo:nextTurn];
                     if (lanesVisible)
@@ -688,14 +692,21 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                     else
                         _navigationSession.upcomingManeuvers = @[maneuver];
                     _currentDirectionInfo = nextTurn;
+                    [_navigationSession updateTravelEstimates:estimates forManeuver:maneuver];
+                    [self updateTripEstimates:_navigationSession.trip];
+                    _isNewManeuverCreated = NO;
                 });
             }
-            else
+            else if (!_isNewManeuverCreated)
             {
                 [_navigationSession updateTravelEstimates:estimates forManeuver:maneuver];
+                [self updateTripEstimates:_navigationSession.trip];
             }
         }
-        [self updateTripEstimates:_navigationSession.trip];
+        else if (!_isNewManeuverCreated)
+        {
+            [self updateTripEstimates:_navigationSession.trip];
+        }
     }
     [self.delegate onLocationChanged];
 }

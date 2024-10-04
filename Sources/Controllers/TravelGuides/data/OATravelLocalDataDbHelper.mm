@@ -610,10 +610,11 @@
                             if (!stringContent.isEmpty())
                             {
                                 OAGPXDocumentAdapter *adapter = [[OAGPXDocumentAdapter alloc] init];
-                                OAGPXDocument *document = [[OAGPXDocument alloc] init];
-                                QXmlStreamReader xmlReader(stringContent);
-                                [document fetch:OsmAnd::GpxDocument::loadFrom(xmlReader)];
-                                adapter.object = document;
+                                // FIXME:
+//                                OAGPXDocument *document = [[OAGPXDocument alloc] init];
+//                                QXmlStreamReader xmlReader(stringContent);
+//                                [document fetch:OsmAnd::GpxDocument::loadFrom(xmlReader)];
+//                                adapter.object = document;
                                 dbArticle.gpxFile = adapter;
                             }
                         }

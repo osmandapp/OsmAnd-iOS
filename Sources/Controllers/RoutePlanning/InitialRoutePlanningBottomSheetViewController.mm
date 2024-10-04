@@ -110,7 +110,7 @@
     [data addObject:actionSection];
 
     OAGPXDatabase *db = [OAGPXDatabase sharedDb];
-    NSArray *gpxList = [db.gpxList sortedArrayUsingComparator:^NSComparisonResult(OAGPX *obj1, OAGPX *obj2) {
+    NSArray *gpxList = [db.gpxList sortedArrayUsingComparator:^NSComparisonResult(OASGpxDataItem *obj1, OASGpxDataItem *obj2) {
         NSDate *time1 = [OAUtilities getFileLastModificationDate:obj1.gpxFilePath];
         NSDate *time2 = [OAUtilities getFileLastModificationDate:obj2.gpxFilePath];
         return [time2 compare:time1];
@@ -126,7 +126,7 @@
             @"key" : @"header"
         }];
 
-        for (OAGPX *gpx in gpxTopList)
+        for (OASGpxDataItem *gpx in gpxTopList)
         {
             [existingTracksSection addObject:@{
                     @"type" : [OAGPXRouteRoundCell getCellIdentifier],

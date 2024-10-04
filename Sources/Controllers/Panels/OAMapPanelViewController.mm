@@ -104,7 +104,7 @@
 #import "OAGPXAppearanceCollection.h"
 #import "OAMapSettingsTerrainParametersViewController.h"
 #import "OADiscountToolbarViewController.h"
-#import "OAGPXMutableDocument.h"
+//#import "OAGPXMutableDocument.h"
 #import "OAPluginsHelper.h"
 #import "OAApplicationMode.h"
 #import "OARouteKey.h"
@@ -1802,7 +1802,7 @@ typedef enum
 
 - (void) resetActiveTargetMenu
 {
-    if ([self hasGpxActiveTargetType] && _activeTargetObj && [_activeTargetObj isKindOfClass:OAGPX.class])
+    if ([self hasGpxActiveTargetType] && _activeTargetObj && [_activeTargetObj isKindOfClass:OASGpxDataItem.class])
         ((OASGpxDataItem *)_activeTargetObj).newGpx = NO;
     
     _activeTargetActive = NO;

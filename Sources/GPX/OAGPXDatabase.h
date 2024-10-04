@@ -108,8 +108,8 @@ typedef NS_ENUM(NSInteger, EOAGPX3DLineVisualizationPositionType) {
 @property (nonatomic) NSSet<NSString *> *hiddenGroups;
 
 @property (nonatomic) double   metricEnd;
-@property (nonatomic) OAWptPt *locationStart;
-@property (nonatomic) OAWptPt *locationEnd;
+@property (nonatomic) OASWptPt *locationStart;
+@property (nonatomic) OASWptPt *locationEnd;
 @property (nonatomic) NSString *nearestCity;
 
 - (NSString *)getNiceTitle;
@@ -132,8 +132,7 @@ typedef NS_ENUM(NSInteger, EOAGPX3DLineVisualizationPositionType) {
 -(OAGPX *)buildGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document fetchNearestCity:(BOOL)fetchNearestCity;
 - (OAGPX *) buildGpxItem:(NSString *)fileName path:(NSString *)filepath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document fetchNearestCity:(BOOL)fetchNearestCity;
 -(OAGPX *)addGpxItem:(NSString *)filePath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document;
-//-(OAGPX *)getGPXItem:(NSString *)filePath;
--(OAGPX *)getGPXItemByFileName:(NSString *)fileName;
+
 -(void)replaceGpxItem:(OAGPX *)gpx;
 -(void)removeGpxItem:(NSString *)filePath;
 -(BOOL)containsGPXItem:(NSString *)filePath;
@@ -168,5 +167,7 @@ typedef NS_ENUM(NSInteger, EOAGPX3DLineVisualizationPositionType) {
 - (void)renameGPX:(OASGpxDataItem *)gpx newFilePath:(NSString *)filePath;
 
 - (BOOL)updateDataItem:(OASGpxDataItem *_Nonnull)item;
+- (NSArray<OASGpxDataItem *> *)getDataItems;
+- (OASGpxDataItem *)getGPXItemByFileName:(NSString *)fileName;
 
 @end

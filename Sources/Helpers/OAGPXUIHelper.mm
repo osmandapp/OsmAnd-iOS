@@ -66,7 +66,7 @@
 {
     // FIXME:
     // OAGPXDocument *gpx = [[OAGPXDocument alloc] init];
-    OASGpxFile *gpx = [[OASGpxFile alloc] init];
+    OASGpxFile *gpx = [[OASGpxFile alloc] initWithAuthor:@""];
     
     NSArray<CLLocation *> *locations = [route getRouteLocations];
     OASTrack *track = [[OASTrack alloc] init];

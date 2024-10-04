@@ -53,12 +53,13 @@
         
         self.onClickFunction = ^(id sender) {
             // FIXME:
-//            OAGPXTrackAnalysis *analysis = [[[OASavingTrackHelper sharedInstance] currentTrack] getAnalysis:0];
-//            if (analysis.hasElevationData)
-//            {
-//                OAGPX *gpxFile = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
+            OASGpxTrackAnalysis *analysis = [[[OASavingTrackHelper sharedInstance] currentTrack] getAnalysisFileTimestamp:0];
+            if (analysis.hasElevationData)
+            {
+                OASGpxFile *gpxFile = [[OASavingTrackHelper sharedInstance] currentTrack];
+                // FIXME:
 //                [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpxFile selectedTab:EOATrackMenuHudSegmentsTab selectedStatisticsTab:EOATrackMenuHudSegmentsStatisticsAltitudeTab openedFromMap:YES];
-//            }
+            }
         };
         [self updateInfo];
     }

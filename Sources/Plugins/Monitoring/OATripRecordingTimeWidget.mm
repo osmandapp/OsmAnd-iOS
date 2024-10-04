@@ -59,7 +59,7 @@
         self.onClickFunction = ^(id sender) {
             if (cachedTimeSpan > 0)
             {
-            //    OAGPX *gpxFile = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
+                OASGpxFile *gpxFile = [OASavingTrackHelper sharedInstance].currentTrack;
                 // FIXME:
 //                [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpxFile selectedTab:EOATrackMenuHudSegmentsTab selectedStatisticsTab:EOATrackMenuHudSegmentsStatisticsOverviewTab openedFromMap:YES];
             }

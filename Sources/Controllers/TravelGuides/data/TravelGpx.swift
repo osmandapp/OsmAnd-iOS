@@ -44,7 +44,9 @@ final class TravelGpx : TravelArticle {
             analysis.totalDistanceWithoutGaps = totalDistance
             analysis.avgElevation = avgElevation
             if maxElevation != Double.nan && minElevation != Double.nan {
-                analysis.hasElevationData = true
+               
+                // FIXME: analysis.setHasData(tag: <#T##String#>, hasData: <#T##Bool#>) ?
+                //analysis.hasElevationData = true
             }
         }
         return analysis

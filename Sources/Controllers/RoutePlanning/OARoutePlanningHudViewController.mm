@@ -555,13 +555,12 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:gpxFileName];
     if (!gpx)
     {
-        // FIXME:
-       // gpx = [[OAGPXDatabase sharedDb] getGPXItemByFileName:gpxFileName];
+        gpx = [[OAGPXDatabase sharedDb] getGPXItemByFileName:gpxFileName];
     }
-    const auto &selectedFile = selectedGpxHelper.activeGpx[QString::fromNSString(gpxFileName.lastPathComponent)];
+    OASGpxFile *selectedFile = selectedGpxHelper.activeGpx[gpxFileName.lastPathComponent];
+;
     if (selectedFile != nullptr) {
-        // FIXME:
-       // mutableDocument = [[OAGPXMutableDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(selectedFile)];
+        mutableDocument = selectedFile;
     } else {
         OASKFile *file = [[OASKFile alloc] initWithFilePath:gpx.file.absolutePath];
         mutableDocument = [OASGpxUtilities.shared loadGpxFileFile:file];
@@ -573,8 +572,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         mutableDocument.tracks = [NSMutableArray new];
     if (!mutableDocument.getAllPoints) {
         [mutableDocument clearPoints];
-        
-       // mutableDocument.points = [NSMutableArray new];
     }
     
     return mutableDocument;
@@ -1046,7 +1043,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     if (gpx != nil)
     {
         OASelectedGPXHelper *helper = OASelectedGPXHelper.instance;
-        BOOL showOnMap = helper.activeGpx.find(QString::fromNSString(gpx.path)) != helper.activeGpx.end();
+        BOOL showOnMap = [helper.activeGpx.allKeys containsObject:gpx.path];
         [self saveExistingGpx:gpx showOnMap:showOnMap simplified:NO addToTrack:NO finalSaveAction:finalSaveAction];
     }
 }
@@ -1184,7 +1181,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     {
         // Refresh track if visible
         [_settings hideGpx:@[gpxFilePath] update:YES];
-        helper.activeGpx.remove(QString::fromNSString(outFile));
+        [helper removeGpxFileWith:outFile];
         [helper buildGpxList];
     }
     if (gpxFilePath && showOnMap)
@@ -1855,13 +1852,12 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 {
     OASGpxFile *gpxFile;
     if (!gpxFileName) {
-        // FIXME:
-        //gpxFile = OASavingTrackHelper.sharedInstance.currentTrack;
+        gpxFile = OASavingTrackHelper.sharedInstance.currentTrack;
     } else {
         gpxFile = [self getGpxFile:gpxFileName];
     }
     OASelectedGPXHelper *selectedGpxHelper = OASelectedGPXHelper.instance;
-    BOOL showOnMap = selectedGpxHelper.activeGpx.find(QString::fromNSString(gpxFileName.lastPathComponent)) != selectedGpxHelper.activeGpx.end();
+    BOOL showOnMap = [selectedGpxHelper.activeGpx.allKeys containsObject:gpxFileName.lastPathComponent];
     [self saveExistingGpx:gpxFile showOnMap:showOnMap simplified:NO addToTrack:YES finalSaveAction:SHOW_IS_SAVED_FRAGMENT];
 }
 

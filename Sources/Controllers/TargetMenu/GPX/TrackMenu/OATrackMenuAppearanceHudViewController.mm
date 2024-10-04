@@ -1859,7 +1859,7 @@ static const NSInteger kColorsSection = 1;
         self.gpx.showArrows = toggle;
         if (_wholeFolderTracks)
         {
-            for (OAGPX *track in _wholeFolderTracks)
+            for (OASGpxDataItem *track in _wholeFolderTracks)
                 track.showArrows = toggle;
         }
 
@@ -1879,7 +1879,7 @@ static const NSInteger kColorsSection = 1;
         self.gpx.showStartFinish = toggle;
         if (_wholeFolderTracks)
         {
-            for (OAGPX *track in _wholeFolderTracks)
+            for (OASGpxDataItem *track in _wholeFolderTracks)
                 track.showStartFinish = toggle;
         }
 
@@ -1898,7 +1898,7 @@ static const NSInteger kColorsSection = 1;
         self.gpx.joinSegments = toggle;
         if (_wholeFolderTracks)
         {
-            for (OAGPX *track in _wholeFolderTracks)
+            for (OASGpxDataItem *track in _wholeFolderTracks)
                 track.joinSegments = toggle;
         }
 
@@ -2040,7 +2040,7 @@ static const NSInteger kColorsSection = 1;
             self.gpx.width = [_selectedWidth isCustom] ? _selectedWidth.customValue : _selectedWidth.key;
             if (_wholeFolderTracks)
             {
-                for (OAGPX *track in _wholeFolderTracks)
+                for (OASGpxDataItem *track in _wholeFolderTracks)
                     track.width = [_selectedWidth isCustom] ? _selectedWidth.customValue : _selectedWidth.key;
             }
 
@@ -2092,7 +2092,7 @@ static const NSInteger kColorsSection = 1;
                 self.gpx.splitInterval = splitInterval;
                 if (_wholeFolderTracks)
                 {
-                    for (OAGPX *track in _wholeFolderTracks)
+                    for (OASGpxDataItem *track in _wholeFolderTracks)
                     {
                         track.splitType = _selectedSplit.type;
                         track.splitInterval = splitInterval;
@@ -2129,7 +2129,7 @@ static const NSInteger kColorsSection = 1;
                 self.gpx.width = _selectedWidth.customValue = selectedValue;
                 if (_wholeFolderTracks)
                 {
-                    for (OAGPX *track in _wholeFolderTracks)
+                    for (OASGpxDataItem *track in _wholeFolderTracks)
                         track.width = _selectedWidth.customValue = selectedValue;
                 }
             }
@@ -2156,7 +2156,7 @@ static const NSInteger kColorsSection = 1;
                 self.gpx.splitInterval = _selectedSplit.values[[value intValue]].doubleValue;
                 if (_wholeFolderTracks)
                 {
-                    for (OAGPX *track in _wholeFolderTracks)
+                    for (OASGpxDataItem *track in _wholeFolderTracks)
                         track.splitInterval = _selectedSplit.values[[value intValue]].doubleValue;
                 }
             }
@@ -2333,7 +2333,7 @@ static const NSInteger kColorsSection = 1;
     self.gpx.coloringType = coloringType;
     if (_wholeFolderTracks)
     {
-        for (OAGPX *track in _wholeFolderTracks)
+        for (OASGpxDataItem *track in _wholeFolderTracks)
             track.coloringType = coloringType;
     }
 
@@ -2599,7 +2599,7 @@ static const NSInteger kColorsSection = 1;
         self.gpx.color = _selectedColorItem.value;
         if (_wholeFolderTracks)
         {
-            for (OAGPX *track in _wholeFolderTracks)
+            for (OASGpxDataItem *track in _wholeFolderTracks)
             {
                 track.color = _selectedColorItem.value;
             }
@@ -2614,7 +2614,7 @@ static const NSInteger kColorsSection = 1;
             self.gpx.gradientPaletteName = paletteColor.paletteName;
             if (_wholeFolderTracks)
             {
-                for (OAGPX *track in _wholeFolderTracks)
+                for (OASGpxDataItem *track in _wholeFolderTracks)
                 {
                     track.gradientPaletteName = paletteColor.paletteName;
                 }

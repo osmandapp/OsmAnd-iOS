@@ -187,14 +187,12 @@
 - (OASGpxFile *)getGpxDocumentByGpx:(OASGpxDataItem *)gpx
 {
     OASGpxFile *document = nil;
-    const auto& gpxMap = [OASelectedGPXHelper instance].activeGpx;
-    NSString * path = gpx.file.absolutePath;
-    QString qPath = QString::fromNSString(path);
-    if (gpxMap.contains(qPath) && gpxMap[qPath] != nullptr)
+    NSDictionary<NSString *, OASGpxFile *> *gpxMap = [[OASelectedGPXHelper instance].activeGpx copy];
+    NSString *path = gpx.file.absolutePath;
+    if ([gpxMap objectForKey:path])
     {
-        // FIXME:
-//        document = [[OAGPXDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(gpxMap[qPath])];
-//        document.path = path;
+        document = gpxMap[path];
+        document.path = path;
     }
     else
     {

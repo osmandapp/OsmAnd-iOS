@@ -389,7 +389,7 @@
     OAGPXMutableDocument *doc = [[OAGPXMutableDocument alloc] init];
     for (OADestination *marker in markers)
     {
-        OAWptPt *wpt = [[OAWptPt alloc] init];
+        OASWptPt *wpt = [[OASWptPt alloc] init];
         wpt.position = CLLocationCoordinate2DMake(marker.latitude, marker.longitude);
         wpt.name = marker.desc;
         [wpt setColor:[marker.color toARGBNumber]];

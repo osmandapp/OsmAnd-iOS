@@ -34,6 +34,7 @@
 #import "OAFavoriteItem.h"
 #import "OAPOIType.h"
 #import "OAResultMatcher.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -139,7 +140,7 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
 
 - (BOOL) search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
-    for (OAGPX *gpxInfo : [[OAGPXDatabase sharedDb] gpxList])
+    for (OASGpxDataItem *gpxInfo : [[OAGPXDatabase sharedDb] getDataItems])
     {
         OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
         sr.objectType = GPX_TRACK;
@@ -311,7 +312,7 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
         }
         else if ([pd isGpxFile])
         {
-            OAGPX *gpxInfo = [[OAGPXDatabase sharedDb] getGPXItemByFileName:pd.name];
+            OASGpxDataItem *gpxInfo = [[OAGPXDatabase sharedDb] getGPXItemByFileName:pd.name];
             if (gpxInfo)
             {
                 sr.localeName = [gpxInfo gpxFileName];

@@ -82,8 +82,7 @@
                                         topOffset:20
                                      bottomOffset:4
                               useGesturesAndScale:YES];
-    
-    OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.gpx.path]];
+    OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:[OAUtilities getGpxShortPath:self.gpx.path]];
     BOOL calcWithoutGaps = !gpx.joinSegments && (self.gpx.tracks.count > 0 && self.gpx.tracks.firstObject.generalTrack);
     [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.chartView
                                       analysis:self.analysis
@@ -127,7 +126,7 @@
     if (!self.gpx || !self.analysis)
     {
         self.gpx = [OAGPXUIHelper makeGpxFromRoute:self.routingHelper.getRoute];
-        self.analysis = [self.gpx getAnalysis:0];
+        self.analysis = [self.gpx getAnalysisFileTimestamp:0];
     }
     _types = _trackMenuControlState ? _trackMenuControlState.routeStatistics : @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSlope)];
     _lastTranslation = CGPointZero;

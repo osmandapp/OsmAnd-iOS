@@ -37,7 +37,7 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomSeparatorTopConstraint;
 
 @property (nonatomic) OAMapPanelViewController *mapPanelViewController;
-@property (nonatomic) OAGPX *gpx;
+@property (nonatomic) OASGpxDataItem *gpx;
 @property (nonatomic) OATargetMenuViewControllerState *targetMenuState;
 
 @end
@@ -51,7 +51,7 @@
     OAGpxWptItem *_movedPoint;
 }
 
-- (instancetype)initWithGpx:(OAGPX *)gpx
+- (instancetype)initWithGpx:(OASGpxDataItem *)gpx
             targetMenuState:(OATargetMenuViewControllerState *)targetMenuState
 {
     self = [super init];

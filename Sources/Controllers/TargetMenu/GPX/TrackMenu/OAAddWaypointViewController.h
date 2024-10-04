@@ -8,11 +8,11 @@
 
 #import "OATargetMenuViewController.h"
 
-@class OAGPX;
+@class OASGpxDataItem;
 
 @interface OAAddWaypointViewController : OATargetMenuViewController
 
-- (instancetype)initWithGpx:(OAGPX *)gpx
+- (instancetype)initWithGpx:(OASGpxDataItem *)gpx
             targetMenuState:(OATargetMenuViewControllerState *)targetMenuState;
 
 @end

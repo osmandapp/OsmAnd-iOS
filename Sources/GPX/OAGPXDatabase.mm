@@ -201,15 +201,15 @@
     return gpx;
 }
 
-- (void) replaceGpxItem:(OAGPX *)gpx
-{
-    NSMutableArray *res = [NSMutableArray arrayWithArray:gpxList];
-    OAGPX *existing = [self getGPXItem:gpx.gpxFilePath];
-    if (existing)
-        [res removeObject:existing];
-    [res addObject:gpx];
-    gpxList = res;
-}
+//- (void) replaceGpxItem:(OAGPX *)gpx
+//{
+//    NSMutableArray *res = [NSMutableArray arrayWithArray:gpxList];
+//    OAGPX *existing = [self getGPXItem:gpx.gpxFilePath];
+//    if (existing)
+//        [res removeObject:existing];
+//    [res addObject:gpx];
+//    gpxList = res;
+//}
 
 - (OAGPX *) buildGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document fetchNearestCity:(BOOL)fetchNearestCity
 {
@@ -218,72 +218,72 @@
 
 - (OAGPX *) buildGpxItem:(NSString *)fileName path:(NSString *)filepath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document fetchNearestCity:(BOOL)fetchNearestCity
 {
-    OAGPXTrackAnalysis *analysis = [document getAnalysis:0];
-
-    NSString *nearestCity;
-    if (fetchNearestCity && analysis.locationStart)
-    {
-        OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:analysis.locationStart.position];
-        nearestCity = nearestCityPOI ? nearestCityPOI.nameLocalized : @"";
-    }
+//    OASGpxTrackAnalysis *analysis = [document getAnalysis:0];
+//
+//    NSString *nearestCity;
+//    if (fetchNearestCity && analysis.locationStart)
+//    {
+//        OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:analysis.locationStart.position];
+//        nearestCity = nearestCityPOI ? nearestCityPOI.nameLocalized : @"";
+//    }
 
     OAGPX *gpx = [[OAGPX alloc] init];
-    NSString *pathToRemove = [OsmAndApp.instance.gpxPath stringByAppendingString:@"/"];
-    gpx.bounds = bounds;
-    gpx.gpxFileName = fileName;
-    gpx.gpxFolderName = [[filepath stringByReplacingOccurrencesOfString:pathToRemove withString:@""] stringByDeletingLastPathComponent];
-    gpx.gpxFilePath = [filepath stringByReplacingOccurrencesOfString:pathToRemove withString:@""];
-    title = [title length] != 0 ? title : nil;
-    if (title)
-        gpx.gpxTitle = title;
-    else
-        gpx.gpxTitle = [fileName stringByDeletingPathExtension];
-    
-    if (desc)
-        gpx.gpxDescription = desc;
-    else
-        gpx.gpxDescription = @"";
-    
-    gpx.importDate = [NSDate date];
-    gpx.creationDate = [self getCreationDateForGPX:gpx document:document];
-    
-    gpx.totalDistance = analysis.totalDistance;
-    gpx.totalTracks = analysis.totalTracks;
-    gpx.startTime = analysis.startTime;
-    gpx.endTime = analysis.endTime;
-    gpx.timeSpan = analysis.timeSpan;
-    gpx.timeMoving = analysis.timeMoving;
-    gpx.totalDistanceMoving = analysis.totalDistanceMoving;
-    gpx.diffElevationUp = analysis.diffElevationUp;
-    gpx.diffElevationDown = analysis.diffElevationDown;
-    
-    gpx.avgElevation = analysis.avgElevation;
-    gpx.minElevation = analysis.minElevation;
-    gpx.maxElevation = analysis.maxElevation;
-    gpx.maxSpeed = analysis.maxSpeed;
-    gpx.avgSpeed = analysis.avgSpeed;
-    gpx.points = analysis.points;
-    
-    gpx.wptPoints = analysis.wptPoints;
-    gpx.metricEnd = analysis.metricEnd;
-    gpx.locationStart = analysis.locationStart;
-    gpx.locationEnd = analysis.locationEnd;
-    gpx.nearestCity = nearestCity;
-
-    gpx.splitType = [self.class splitTypeByName:document.getSplitType];
-
-    gpx.splitInterval = [document getSplitInterval];
-    gpx.color = [document getColor:0];
-    gpx.coloringType = [document getColoringType];
-    gpx.gradientPaletteName = [document getGradientColorPalette];
-    gpx.width = [document getWidth:nil];
-    gpx.showArrows = [document isShowArrows];
-    gpx.showStartFinish = [document isShowStartFinish];
-    gpx.verticalExaggerationScale = [document getVerticalExaggerationScale];
-    gpx.elevationMeters = [document getElevationMeters];
-    gpx.visualization3dByType = [self.class lineVisualizationByTypeForName:document.getVisualization3dByTypeValue];
-    gpx.visualization3dWallColorType = [self.class lineVisualizationWallColorTypeForName:document.getVisualization3dWallColorTypeValue];
-    gpx.visualization3dPositionType = [self.class lineVisualizationPositionTypeForName:document.getVisualization3dPositionTypeValue];
+//    NSString *pathToRemove = [OsmAndApp.instance.gpxPath stringByAppendingString:@"/"];
+//    gpx.bounds = bounds;
+//    gpx.gpxFileName = fileName;
+//    gpx.gpxFolderName = [[filepath stringByReplacingOccurrencesOfString:pathToRemove withString:@""] stringByDeletingLastPathComponent];
+//    gpx.gpxFilePath = [filepath stringByReplacingOccurrencesOfString:pathToRemove withString:@""];
+//    title = [title length] != 0 ? title : nil;
+//    if (title)
+//        gpx.gpxTitle = title;
+//    else
+//        gpx.gpxTitle = [fileName stringByDeletingPathExtension];
+//    
+//    if (desc)
+//        gpx.gpxDescription = desc;
+//    else
+//        gpx.gpxDescription = @"";
+//    
+//    gpx.importDate = [NSDate date];
+//    gpx.creationDate = [self getCreationDateForGPX:gpx document:document];
+//    
+//    gpx.totalDistance = analysis.totalDistance;
+//    gpx.totalTracks = analysis.totalTracks;
+//    gpx.startTime = analysis.startTime;
+//    gpx.endTime = analysis.endTime;
+//    gpx.timeSpan = analysis.timeSpan;
+//    gpx.timeMoving = analysis.timeMoving;
+//    gpx.totalDistanceMoving = analysis.totalDistanceMoving;
+//    gpx.diffElevationUp = analysis.diffElevationUp;
+//    gpx.diffElevationDown = analysis.diffElevationDown;
+//    
+//    gpx.avgElevation = analysis.avgElevation;
+//    gpx.minElevation = analysis.minElevation;
+//    gpx.maxElevation = analysis.maxElevation;
+//    gpx.maxSpeed = analysis.maxSpeed;
+//    gpx.avgSpeed = analysis.avgSpeed;
+//    gpx.points = analysis.points;
+//    
+//    gpx.wptPoints = analysis.wptPoints;
+//    gpx.metricEnd = analysis.metricEnd;
+//    gpx.locationStart = analysis.locationStart;
+//    gpx.locationEnd = analysis.locationEnd;
+//    gpx.nearestCity = nearestCity;
+//
+//    gpx.splitType = [self.class splitTypeByName:document.getSplitType];
+//
+//    gpx.splitInterval = [document getSplitInterval];
+//    gpx.color = [document getColor:0];
+//    gpx.coloringType = [document getColoringType];
+//    gpx.gradientPaletteName = [document getGradientColorPalette];
+//    gpx.width = [document getWidth:nil];
+//    gpx.showArrows = [document isShowArrows];
+//    gpx.showStartFinish = [document isShowStartFinish];
+//    gpx.verticalExaggerationScale = [document getVerticalExaggerationScale];
+//    gpx.elevationMeters = [document getElevationMeters];
+//    gpx.visualization3dByType = [self.class lineVisualizationByTypeForName:document.getVisualization3dByTypeValue];
+//    gpx.visualization3dWallColorType = [self.class lineVisualizationWallColorTypeForName:document.getVisualization3dWallColorTypeValue];
+//    gpx.visualization3dPositionType = [self.class lineVisualizationPositionTypeForName:document.getVisualization3dPositionTypeValue];
     
     return gpx;
 }
@@ -452,21 +452,14 @@
     return [[OASGpxDbHelper shared] updateDataItemItem:item];
 }
 
-- (OAGPX *)getGPXItem:(NSString *)filePath
+- (NSArray<OASGpxDataItem *> *)getDataItems
 {
-    for (OAGPX *item in gpxList)
-    {
-        if ([item.gpxFilePath isEqualToString:filePath])
-        {
-            return item;
-        }
-    }
-    return nil;
+    return [[OASGpxDbHelper shared] getItems];
 }
 
--(OAGPX *)getGPXItemByFileName:(NSString *)fileName
+- (OASGpxDataItem *)getGPXItemByFileName:(NSString *)fileName
 {
-    for (OAGPX *item in gpxList)
+    for (OASGpxDataItem *item in [self getDataItems])
     {
         if ([item.gpxFileName isEqualToString:fileName])
         {
@@ -474,20 +467,6 @@
         }
     }
     return nil;
-}
-
--(void)removeGpxItem:(NSString *)filePath
-{
-    OAGPX *gpx = [self getGPXItem:filePath];
-    if (!gpx)
-        gpx = [self getGPXItemByFileName:filePath];
-    if (gpx)
-    {
-        NSMutableArray *newGpxList = [gpxList mutableCopy];
-        [newGpxList removeObject:gpx];
-        gpxList = newGpxList;
-        [[NSFileManager defaultManager] removeItemAtPath:gpx.absolutePath error:nil];
-    }
 }
 
 - (NSString *) getFileDir:(NSString *)filePath
@@ -869,7 +848,7 @@
         [wpt setObject:@(gpx.locationStart.position.longitude) forKey:@"position_lon"];
         [wpt setObject:(gpx.locationStart.name ? gpx.locationStart.name : @"") forKey:@"name"];
         [wpt setObject:(gpx.locationStart.desc ? gpx.locationStart.desc : @"") forKey:@"desc"];
-        [wpt setObject:@(gpx.locationStart.elevation) forKey:@"elevation"];
+        [wpt setObject:@(gpx.locationStart.ele) forKey:@"elevation"];
         [wpt setObject:@(gpx.locationStart.time) forKey:@"time"];
         [wpt setObject:(gpx.locationStart.comment ? gpx.locationStart.comment : @"") forKey:@"comment"];
         [wpt setObject:(gpx.locationStart.type ? gpx.locationStart.type : @"") forKey:@"type"];
@@ -884,7 +863,7 @@
         [wpt setObject:@(gpx.locationEnd.position.longitude) forKey:@"position_lon"];
         [wpt setObject:(gpx.locationEnd.name ? gpx.locationEnd.name : @"") forKey:@"name"];
         [wpt setObject:(gpx.locationEnd.desc ? gpx.locationEnd.desc : @"") forKey:@"desc"];
-        [wpt setObject:@(gpx.locationEnd.elevation) forKey:@"elevation"];
+        [wpt setObject:@(gpx.locationEnd.ele) forKey:@"elevation"];
         [wpt setObject:@(gpx.locationEnd.time) forKey:@"time"];
         [wpt setObject:(gpx.locationEnd.comment ? gpx.locationEnd.comment : @"") forKey:@"comment"];
         [wpt setObject:(gpx.locationEnd.type ? gpx.locationEnd.type : @"") forKey:@"type"];
@@ -969,22 +948,22 @@
         } else if ([key isEqualToString:@"splitInterval"]) {
             gpx.splitInterval = [value doubleValue];
         } else if ([key isEqualToString:@"locationStart"]) {
-            OAWptPt *wpt = [[OAWptPt alloc] init];
+            OASWptPt *wpt = [[OASWptPt alloc] init];
             wpt.position = CLLocationCoordinate2DMake([value[@"position_lat"] doubleValue], [value[@"position_lon"] doubleValue]) ;
             wpt.name = value[@"name"];
             wpt.desc = value[@"desc"];
-            wpt.elevation = [value[@"elevation"] doubleValue];
+            wpt.ele = [value[@"elevation"] doubleValue];
             wpt.time = [value[@"time"] longValue];
             wpt.comment = value[@"comment"];
             wpt.type = value[@"type"];
             wpt.speed = [value[@"speed"] doubleValue];
             gpx.locationStart = wpt;
         } else if ([key isEqualToString:@"locationEnd"]) {
-            OAWptPt *wpt = [[OAWptPt alloc] init];
+            OASWptPt *wpt = [[OASWptPt alloc] init];
             wpt.position = CLLocationCoordinate2DMake([value[@"position_lat"] doubleValue], [value[@"position_lon"] doubleValue]) ;
             wpt.name = value[@"name"];
             wpt.desc = value[@"desc"];
-            wpt.elevation = [value[@"elevation"] doubleValue];
+            wpt.ele = [value[@"elevation"] doubleValue];
             wpt.time = [value[@"time"] longValue];
             wpt.comment = value[@"comment"];
             wpt.type = value[@"type"];

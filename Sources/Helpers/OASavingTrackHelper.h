@@ -11,9 +11,6 @@
 
 #define kTrackNoHeading -1.0
 
-@class OAGPXMutableDocument;
-@class OAGPX;
-@class OAWptPt;
 @class OASGpxFile, OASWptPt;
 
 @interface OASavingTrackHelper : NSObject

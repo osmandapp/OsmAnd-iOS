@@ -2972,7 +2972,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     
     // FIXME:
     
-//    for (OAWptPt *wptItem in helper.currentTrack.points)
+//    for (OASWptPt *wptItem in helper.currentTrack.points)
 //    {
 //        if ([OAUtilities isCoordEqual:wptItem.position.latitude srcLon:wptItem.position.longitude destLat:location.latitude destLon:location.longitude])
 //        {
@@ -3039,7 +3039,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     
     // FIXME:
     
-//    for (OAWptPt *wptItem in helper.currentTrack.points)
+//    for (OASWptPt *wptItem in helper.currentTrack.points)
 //    {
 //        if ([[[OASavingTrackHelper sharedInstance] getCurrentGPX].hiddenGroups containsObject:wptItem.type])
 //            continue;
@@ -3308,7 +3308,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         
         NSMutableSet *groups = [NSMutableSet set];
         // FIXME:
-//        for (OAWptPt *wptItem in helper.currentTrack.points)
+//        for (OASWptPt *wptItem in helper.currentTrack.points)
 //        {
 //            if (wptItem.type.length > 0)
 //                [groups addObject:wptItem.type];

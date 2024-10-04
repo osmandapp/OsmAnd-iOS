@@ -242,7 +242,7 @@ NSString * const OATrackRecordingAnyConnectedDevice = @"any_connected_device_wri
 
 - (void)onAnalysePoint:(OASGpxTrackAnalysis *)analysis point:(NSObject *)point attribute:(OAPointAttributes *)attribute
 {
-    if ([point isKindOfClass:OAWptPt.class])
+    if ([point isKindOfClass:OASWptPt.class])
     {
         NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
         numberFormatter.decimalSeparator = @".";
@@ -251,7 +251,7 @@ NSString * const OATrackRecordingAnyConnectedDevice = @"any_connected_device_wri
             CGFloat value = ([OAPointAttributes.sensorTagTemperatureW isEqualToString:tag] || [OAPointAttributes.sensorTagTemperatureA isEqualToString:tag]) ? NAN : 0;
             NSNumber *val = nil;
             BOOL isSpeedSensorTag = [tag isEqualToString:@"speed_sensor"];
-            OAGpxExtension *trackpointextension = [((OAWptPt *) point) getExtensionByKey:isSpeedSensorTag ? @"speed_sensor" : @"trackpointextension"];
+            OAGpxExtension *trackpointextension = [((OASWptPt *) point) getExtensionByKey:isSpeedSensorTag ? @"speed_sensor" : @"trackpointextension"];
             if (trackpointextension)
             {
                 if (isSpeedSensorTag)

@@ -8,6 +8,7 @@
 
 #import "OAGpxAppearanceInfo.h"
 #import "OAGPXDocument.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OAGpxAppearanceInfo()
 
@@ -15,7 +16,7 @@
 
 @implementation OAGpxAppearanceInfo
 
-- (instancetype) initWithItem:(OAGPX *)dataItem
+- (instancetype) initWithItem:(OASGpxDataItem *)dataItem
 {
     self = [super init];
     if (self)

@@ -576,7 +576,8 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .default) { [weak self] _ in
             guard let self else { return }
             if let newName = alert.textFields?.first?.text {
-                gpxHelper?.renameTrack(track, newName: newName, hostVC: self)
+                // FIXME:
+              //  gpxHelper?.renameTrack(track, newName: newName, hostVC: self)
                 updateData()
                 delegate?.onVisibleTracksUpdate()
             }

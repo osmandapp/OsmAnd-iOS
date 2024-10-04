@@ -663,9 +663,9 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     self.favorite->setCalendarEvent(calendarEvent);
 }
 
-- (OAWptPt *) toWpt
+- (OASWptPt *) toWpt
 {
-    OAWptPt *pt = [[OAWptPt alloc] init];
+    OASWptPt *pt = [[OASWptPt alloc] init];
     pt.position = CLLocationCoordinate2DMake(self.getLatitude, self.getLongitude);
     if (self.getAltitude > 0)
         pt.elevation = self.getAltitude;
@@ -731,7 +731,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     return pt;
 }
 
-+ (OAFavoriteItem *)fromWpt:(OAWptPt *)pt category:(NSString *)category
++ (OAFavoriteItem *)fromWpt:(OASWptPt *)pt category:(NSString *)category
 {
     NSString *name = pt.name;
     NSString *categoryName = category != nil ? category : (pt.type != nil ? pt.type : @"");

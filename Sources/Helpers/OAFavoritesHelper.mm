@@ -1122,11 +1122,11 @@ static NSOperationQueue *_favQueue;
     return NO;
 }
 
-+ (NSArray<OAFavoriteItem *> *)wptAsFavorites:(NSArray<OAWptPt *> *)points
++ (NSArray<OAFavoriteItem *> *)wptAsFavorites:(NSArray<OASWptPt *> *)points
                               defaultCategory:(NSString *)defaultCategory
 {
     NSMutableArray<OAFavoriteItem *> *favorites = [NSMutableArray array];
-    for (OAWptPt *point in points)
+    for (OASWptPt *point in points)
     {
         if (!point.name || point.name.length == 0)
             point.name = OALocalizedString(@"shared_string_waypoint");
@@ -1243,7 +1243,7 @@ static NSOperationQueue *_favQueue;
                                                             iconName:_iconName
                                                       backgroundType:_backgroundType
                                                                color:_color];
-    NSMutableArray<OAWptPt *> *points = [NSMutableArray array];
+    NSMutableArray<OASWptPt *> *points = [NSMutableArray array];
     for (OAFavoriteItem *point in _points)
     {
         [points addObject:[point toWpt]];
@@ -1265,7 +1265,7 @@ static NSOperationQueue *_favQueue;
     favoriteGroup.color = pointsGroup.color;
     favoriteGroup.iconName = pointsGroup.iconName;
     favoriteGroup.backgroundType = pointsGroup.backgroundType;
-    for (OAWptPt *point in pointsGroup.points)
+    for (OASWptPt *point in pointsGroup.points)
     {
         [favoriteGroup.points addObject:[OAFavoriteItem fromWpt:point
                                                        category:nil]];

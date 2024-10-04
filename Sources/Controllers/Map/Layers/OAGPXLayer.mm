@@ -29,7 +29,6 @@
 #import "OAMapUtils.h"
 #import "OARouteImporter.h"
 #import "OAAppVersion.h"
-#import "OAGpxTrackAnalysis.h"
 #import "OAOsmAndFormatter.h"
 #import "OAAtomicInteger.h"
 #import "OACompoundIconUtils.h"
@@ -77,6 +76,8 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     QList<float> _startFinishPointsElevations;
     QList<OsmAnd::GpxAdditionalIconsProvider::SplitLabel> _splitLabels;
     OASRTMPlugin *_plugin;
+    
+    NSMutableDictionary<NSString *, OASGpxFile *> *_gpxDocs;
 }
 
 - (NSString *) layerId
@@ -98,7 +99,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
 
     [self.mapView addKeyedSymbolsProvider:_linesCollection];
-
+    _gpxDocs = [NSMutableDictionary dictionary];
     _cachedTracks = [NSMutableDictionary dictionary];
     _cachedTrackWidth = [NSMutableDictionary dictionary];
     _updatedColorPaletteFiles = [[OAConcurrentDictionary alloc] init];
@@ -120,7 +121,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     [self.mapView removeKeyedSymbolsProvider:_linesCollection];
 
     _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
-    _gpxDocs.clear();
+    [_gpxDocs removeAllObjects];
 }
 
 - (BOOL) updateLayer
@@ -173,12 +174,12 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     }
 }
 
-- (void) refreshGpxTracks:(QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> >)gpxDocs reset:(BOOL)reset
+- (void) refreshGpxTracks:(NSDictionary<NSString *, OASGpxFile *> *)gpxDocs reset:(BOOL)reset
 {
     if (reset)
         [self resetLayer];
 
-    _gpxDocs = gpxDocs;
+    _gpxDocs = [gpxDocs mutableCopy];
     [self refreshCachedTracks];
     [self refreshGpxTracks];
 }
@@ -188,24 +189,39 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     if (_cachedTracks.count > 0)
     {
         [_cachedTracks.allKeys enumerateObjectsUsingBlock:^(NSString * _Nonnull key, NSUInteger idx, BOOL * _Nonnull stop) {
-            QString qKey = QString::fromNSString(key);
-            if (!_gpxDocs.contains(qKey))
+            if (![_gpxDocs objectForKey:key])
             {
                 [_cachedTracks removeObjectForKey:key];
+                QString qKey = QString::fromNSString(key);
                 _cachedColors.remove(qKey);
                 _cachedWallColors.remove(qKey);
             }
         }];
     }
     
-    for (auto it = _gpxDocs.begin(); it != _gpxDocs.end(); ++it)
+    for (NSString *key in _gpxDocs.allKeys)
     {
-        if (!it.value())
+        OASGpxFile *gpxFile = _gpxDocs[key];
+        if (!gpxFile)
+        {
             continue;
-        NSString *key = it.key().toNSString();
+        }
+
         if (![_cachedTracks.allKeys containsObject:key] || [key isEqualToString:kCurrentTrack])
-            [self addTrackToCached:it.key() value:it.value()];
+        {
+            QString qKey = QString::fromNSString(key);
+            [self addTrackToCached:qKey value:gpxFile];
+        }
     }
+    
+//    for (auto it = _gpxDocs.begin(); it != _gpxDocs.end(); ++it)
+//    {
+//        if (!it.value())
+//            continue;
+//        NSString *key = it.key().toNSString();
+//        if (![_cachedTracks.allKeys containsObject:key] || [key isEqualToString:kCurrentTrack])
+//            [self addTrackToCached:it.key() value:it.value()];
+//    }
 }
 
 - (OASGpxDataItem *)getGpxItem:(const QString &)filename
@@ -241,21 +257,18 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
 
         
         if (isCurrentTrack) {
-            gpx = nil;//[[OASavingTrackHelper sharedInstance] getCurrentGPX];
+            gpx = nil;
         } else {
             gpx = [self getGpxItem:key];
         }
         
         if (isCurrentTrack)
         {
-            doc = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
+            doc = [OASavingTrackHelper sharedInstance].currentTrack;
         }
         else
         {
-            // FIXME:
             doc = value;
-//            doc = [[OAGPXDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(value)];
-//            doc.path = gpx.absolutePath;
         }
         
         NSMutableDictionary<NSString *, id> *cachedTrack = [NSMutableDictionary dictionary];
@@ -318,19 +331,23 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     if (_linesCollection->hasVolumetricSymbols != hasVolumetricSymbols)
         _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>(hasVolumetricSymbols);
 
-    if (!_gpxDocs.empty())
+    if (_gpxDocs.count > 0)
     {
         int baseOrder = self.baseOrder;
         int lineId = 1;
-        for (auto it = _gpxDocs.begin(); it != _gpxDocs.end(); ++it)
+        
+        for (NSString *key in _gpxDocs.allKeys)
         {
-            if (!it.value())
+            OASGpxFile *doc_ = _gpxDocs[key];
+
+            if (!doc_)
+            {
                 continue;
-            auto doc_ = std::const_pointer_cast<OsmAnd::GpxDocument>(it.value());
-            QString key = it.key();
-            NSString *keyStr = key.toNSString();
-            BOOL isCurrentTrack = [keyStr isEqualToString:kCurrentTrack];
-            NSMutableDictionary<NSString *, id> *cachedTrack = _cachedTracks[keyStr];
+            }
+            
+            QString qKey = QString::fromNSString(key);
+            BOOL isCurrentTrack = [key isEqualToString:kCurrentTrack];
+            NSMutableDictionary<NSString *, id> *cachedTrack = _cachedTracks[key];
             OASGpxDataItem *gpx = cachedTrack[@"gpx"];
             OASGpxFile *doc = cachedTrack[@"doc"];
             if (!gpx || !doc)
@@ -357,7 +374,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                     || ![cachedTrack[@"prev_color_palette"] isEqualToString:gpx.gradientPaletteName]
                     || [cachedTrack[@"colorization_scheme"] intValue] != COLORIZATION_GRADIENT
                     || [_updatedColorPaletteFiles objectForKeySync:colorPaletteFile]
-                    || _cachedColors[key].isEmpty()))
+                    || _cachedColors[qKey].isEmpty()))
             {
                 NSString *updatedColorPaletteValue = [_updatedColorPaletteFiles objectForKeySync:colorPaletteFile];
                 BOOL isColorPaletteDeleted = [updatedColorPaletteValue isEqualToString:ColorPaletteHelper.deletedFileKey];
@@ -371,13 +388,13 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                 switch (gpx.visualization3dWallColorType)
                 {
                     case EOAGPX3DLineVisualizationWallColorTypeAltitude:
-                        shouldCalculateColorCache = !([type isAltitude] && !_cachedWallColors[key].isEmpty());
+                        shouldCalculateColorCache = !([type isAltitude] && !_cachedWallColors[qKey].isEmpty());
                         break;
                     case EOAGPX3DLineVisualizationWallColorTypeSlope:
-                        shouldCalculateColorCache = !([type isSlope] && !_cachedWallColors[key].isEmpty());
+                        shouldCalculateColorCache = !([type isSlope] && !_cachedWallColors[qKey].isEmpty());
                         break;
                     case EOAGPX3DLineVisualizationWallColorTypeSpeed:
-                        shouldCalculateColorCache = !([type isSpeed] && !_cachedWallColors[key].isEmpty());
+                        shouldCalculateColorCache = !([type isSpeed] && !_cachedWallColors[qKey].isEmpty());
                         break;
                     default:
                         break;
@@ -397,20 +414,20 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                                                             type:[type toColorizationType]
                                                          palette:palette
                                                  maxProfileSpeed:0];
-                    _cachedColors[key].clear();
+                    _cachedColors[qKey].clear();
                     if (routeColorize)
-                        _cachedColors[key].append([routeColorize getResultQList]);
+                        _cachedColors[qKey].append([routeColorize getResultQList]);
                 }
                 else
                 {
-                    _cachedColors[key] = _cachedWallColors[key];
+                    _cachedColors[qKey] = _cachedWallColors[qKey];
                 }
             }
             else if ([type isRouteInfoAttribute]
                      && (![cachedTrack[@"prev_coloring_type"] isEqualToString:gpx.coloringType]
                          || ![cachedTrack[@"prev_color_palette"] isEqualToString:gpx.gradientPaletteName]
                         || [cachedTrack[@"colorization_scheme"] intValue] != COLORIZATION_SOLID
-                        || _cachedColors[key].isEmpty()))
+                        || _cachedColors[qKey].isEmpty()))
             {
                 OARouteImporter *routeImporter = [[OARouteImporter alloc] initWithGpxFile:doc];
                 auto segs = [routeImporter importRoute];
@@ -426,8 +443,8 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                 cachedTrack[@"colorization_scheme"] = @(COLORIZATION_SOLID);
                 cachedTrack[@"prev_coloring_type"] = gpx.coloringType;
                 cachedTrack[@"prev_color_palette"] = gpx.gradientPaletteName.length > 0 ? gpx.gradientPaletteName : PaletteGradientColor.defaultName;
-                _cachedColors[key].clear();
-                [self calculateSegmentsColor:_cachedColors[key]
+                _cachedColors[qKey].clear();
+                [self calculateSegmentsColor:_cachedColors[qKey]
                                     attrName:gpx.coloringType
                                segmentResult:segs
                                    locations:locations];
@@ -435,22 +452,22 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
             else if ([type isSolidSingleColor]
                      && ([cachedTrack[@"colorization_scheme"] intValue] != COLORIZATION_NONE
                          || ![cachedTrack[@"prev_color_palette"] isEqualToString:gpx.gradientPaletteName]
-                         || !_cachedColors[key].isEmpty()))
+                         || !_cachedColors[qKey].isEmpty()))
             {
                 cachedTrack[@"colorization_scheme"] = @(COLORIZATION_NONE);
                 cachedTrack[@"prev_coloring_type"] = gpx.coloringType;
                 cachedTrack[@"prev_color_palette"] = gpx.gradientPaletteName.length > 0 ? gpx.gradientPaletteName : PaletteGradientColor.defaultName;
-                _cachedColors[key].clear();
+                _cachedColors[qKey].clear();
             }
-            
-            if (cachedTrack[@"prev_wall_coloring_type"] != @(gpx.visualization3dWallColorType) || _cachedWallColors[key].isEmpty())
+            // mb isEqual
+            if (cachedTrack[@"prev_wall_coloring_type"] != @(gpx.visualization3dWallColorType) || _cachedWallColors[qKey].isEmpty())
             {
                 switch (gpx.visualization3dWallColorType)
                 {
                     case EOAGPX3DLineVisualizationWallColorTypeAltitude:
                         [self configureCachedWallColorsFor:OAColoringType.ALTITUDE
                                                        doc:doc
-                                                       key:key
+                                                       key:qKey
                                                   analysis:analysis
                                      shouldCheckColorCache:[type isAltitude]
                                            gradientPalette:cachedTrack[@"prev_color_palette"]];
@@ -458,7 +475,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                     case EOAGPX3DLineVisualizationWallColorTypeSlope:
                         [self configureCachedWallColorsFor:OAColoringType.SLOPE
                                                        doc:doc
-                                                       key:key
+                                                       key:qKey
                                                   analysis:analysis
                                      shouldCheckColorCache:[type isSlope]
                                            gradientPalette:cachedTrack[@"prev_color_palette"]];
@@ -466,19 +483,19 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                     case EOAGPX3DLineVisualizationWallColorTypeSpeed:
                         [self configureCachedWallColorsFor:OAColoringType.SPEED
                                                        doc:doc
-                                                       key:key
+                                                       key:qKey
                                                   analysis:analysis
                                      shouldCheckColorCache:[type isSpeed]
                                            gradientPalette:cachedTrack[@"prev_color_palette"]];
                         break;
                     default:
-                        _cachedWallColors[key].clear();
+                        _cachedWallColors[qKey].clear();
                         break;
                 }
                 cachedTrack[@"prev_wall_coloring_type"] = @(gpx.visualization3dWallColorType);
             }
 
-            if (doc_->hasTrkPt())
+            if (doc_.hasTrkPt)
             {
                 int segStartIndex = 0;
                 QVector<OsmAnd::PointI> points;
@@ -490,21 +507,21 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                 {
                     [self processGPXDataElements:doc.tracks withGPX:gpx addToElevations:elevations];
                 }
-                for (const auto& track : doc_->tracks)
+                for (OASTrack *track in doc_.tracks)
                 {
-                    for (const auto& seg : track->segments)
+                    for (OASTrkSegment *seg in track.segments)
                     {
-                        for (const auto& pt : seg->points)
+                        for (OASWptPt *pt in seg.points)
                         {
-                            points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt->position)));
-                            double elevationValue = [self getValidElevation:pt->elevation];
+                            points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.lat, pt.lon)));
+                            double elevationValue = [self getValidElevation:pt.ele];
                             switch (gpx.visualization3dByType)
                             {
                                 case EOAGPX3DLineVisualizationByTypeAltitude:
-                                    [elevations addObject:@(pt->elevation)];
+                                    [elevations addObject:@(pt.ele)];
                                     break;
                                 case EOAGPX3DLineVisualizationByTypeSpeed:
-                                    [elevations addObject:@([self is3DMapsEnabled] ? (pt->speed * kSpeedToHeightScale) + elevationValue : pt->speed * kSpeedToHeightScale)];
+                                    [elevations addObject:@([self is3DMapsEnabled] ? (pt.speed * kSpeedToHeightScale) + elevationValue : pt.speed * kSpeedToHeightScale)];
                                     break;
                                 case EOAGPX3DLineVisualizationByTypeFixedHeight:
                                     [elevations addObject:@([self is3DMapsEnabled] ? elevationValue + gpx.elevationMeters : gpx.elevationMeters)];
@@ -513,23 +530,24 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                                     break;
                             }
                         }
-                        if (points.size() > 1 && !_cachedWallColors[key].isEmpty() && segStartIndex < _cachedWallColors[key].size() && segStartIndex + seg->points.size() - 1 < _cachedWallColors[key].size())
+                        if (points.size() > 1 && !_cachedWallColors[qKey].isEmpty() && segStartIndex < _cachedWallColors[qKey].size() && segStartIndex + seg.points.count - 1 < _cachedWallColors[qKey].size())
                         {
-                            segmentWallColors.append(_cachedWallColors[key].mid(segStartIndex, seg->points.size()));
+                            segmentWallColors.append(_cachedWallColors[qKey].mid(segStartIndex, (int)seg.points.count));
                         }
-                        if (points.size() > 1 && !_cachedColors[key].isEmpty() && segStartIndex < _cachedColors[key].size() && segStartIndex + seg->points.size() - 1 < _cachedColors[key].size())
+                        if (points.size() > 1 && !_cachedColors[qKey].isEmpty() && segStartIndex < _cachedColors[qKey].size() && segStartIndex + seg.points.count - 1 < _cachedColors[qKey].size())
                         {
-                            segmentColors.append(_cachedColors[key].mid(segStartIndex, seg->points.size()));
+                            segmentColors.append(_cachedColors[qKey].mid(segStartIndex, (int)seg.points.count));
                         }
                         else if ([cachedTrack[@"colorization_scheme"] intValue] == COLORIZATION_NONE && segmentColors.isEmpty() && gpx.color == 0)
                         {
-                            int trackIndex = doc_->tracks.indexOf(track);
+                            NSInteger trackIndex = [doc_.tracks indexOfObject:track];
+                            
                             OASTrack *gpxTrack = tracks[trackIndex];
                             OASInt *color = [[OASInt alloc] initWithInt:(int)kDefaultTrackColor];
                             const auto colorARGB = [UIColorFromARGB([color intValue]) toFColorARGB];
                             segmentColors.push_back(colorARGB);
                         }
-                        segStartIndex += seg->points.count();
+                        segStartIndex += seg.points.count;
                         if (!gpx.joinSegments)
                         {
                             if (isCurrentTrack)
@@ -559,27 +577,27 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                     }
                 }
             }
-            else if (doc_->hasRtePt())
+            else if (doc_.hasRtePt)
             {
                 NSMutableArray *elevations = [NSMutableArray array];
                 if ([self isSensorLineVisualizationType:gpx.visualization3dByType])
                 {
                     [self processGPXDataElements:doc.routes withGPX:gpx addToElevations:elevations];
                 }
-                for (const auto& route : doc_->routes)
+                for (OASRoute *route in doc_.routes)
                 {
                     QVector<OsmAnd::PointI> points;
-                    for (const auto& pt : route->points)
+                    for (OASWptPt *pt in route.points)
                     {
-                        points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt->position)));
-                        double elevationValue = [self getValidElevation:pt->elevation];
+                        points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.lat, pt.lon)));
+                        double elevationValue = [self getValidElevation:pt.ele];
                         switch (gpx.visualization3dByType)
                         {
                             case EOAGPX3DLineVisualizationByTypeAltitude:
-                                [elevations addObject:@(pt->elevation)];
+                                [elevations addObject:@(pt.ele)];
                                 break;
                             case EOAGPX3DLineVisualizationByTypeSpeed:
-                                [elevations addObject:@([self is3DMapsEnabled] ? (pt->speed * kSpeedToHeightScale) + elevationValue : pt->speed * kSpeedToHeightScale)];
+                                [elevations addObject:@([self is3DMapsEnabled] ? (pt.speed * kSpeedToHeightScale) + elevationValue : pt.speed * kSpeedToHeightScale)];
                                 break;
                             case EOAGPX3DLineVisualizationByTypeFixedHeight:
                                 [elevations addObject:@([self is3DMapsEnabled] ? elevationValue + gpx.elevationMeters : gpx.elevationMeters)];
@@ -618,9 +636,9 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                 [self evaluateSensorDataForPoints:segment.points withGPX:gpx addToElevations:elevations];
             }
         }
-        else if ([element isKindOfClass:[OARoute class]])
+        else if ([element isKindOfClass:[OASRoute class]])
         {
-            points = [(OARoute *)element points];
+            points = [(OASRoute *)element points];
             [self evaluateSensorDataForPoints:points withGPX:gpx addToElevations:elevations];
         }
     }
@@ -630,7 +648,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
 {
     for (OASWptPt *point in points)
     {
-        if ([self isInstanceOfOAWptPt:point])
+        if ([self isInstanceOfOASWptPt:point])
         {
             switch (gpx.visualization3dByType)
             {
@@ -680,28 +698,29 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     }
     
     double elevationValue = [self getValidElevation:point.ele];
-    OAGpxExtension *trackpointextension = [point getExtensionByKey:isSpeedSensorTag ? @"speed_sensor" : @"trackpointextension"];
-    if (trackpointextension)
-    {
-        if (isSpeedSensorTag)
-        {
-            NSNumber *value = [numberFormatter numberFromString:trackpointextension.value];
-            float processedValue = value ? [value floatValue] * kSpeedToHeightScale : defaultValue;
-            return [self is3DMapsEnabled] && value ? processedValue + elevationValue : processedValue;
-        }
-        else
-        {
-            for (OAGpxExtension *subextension in trackpointextension.subextensions)
-            {
-                if ([subextension.name isEqualToString:relevantTag])
-                {
-                    NSNumber *value = [numberFormatter numberFromString:subextension.value];
-                    float processedValue = value ? [value floatValue] : defaultValue;
-                    return [self is3DMapsEnabled] && value ? processedValue + elevationValue : processedValue;
-                }
-            }
-        }
-    }
+   // FIXME: [point getExtensionsToRead] | [point getExtensionsToWrite] | [point extension] ?
+//    OAGpxExtension *trackpointextension = [point getExtensionByKey:isSpeedSensorTag ? @"speed_sensor" : @"trackpointextension"];
+//    if (trackpointextension)
+//    {
+//        if (isSpeedSensorTag)
+//        {
+//            NSNumber *value = [numberFormatter numberFromString:trackpointextension.value];
+//            float processedValue = value ? [value floatValue] * kSpeedToHeightScale : defaultValue;
+//            return [self is3DMapsEnabled] && value ? processedValue + elevationValue : processedValue;
+//        }
+//        else
+//        {
+//            for (OAGpxExtension *subextension in trackpointextension.subextensions)
+//            {
+//                if ([subextension.name isEqualToString:relevantTag])
+//                {
+//                    NSNumber *value = [numberFormatter numberFromString:subextension.value];
+//                    float processedValue = value ? [value floatValue] : defaultValue;
+//                    return [self is3DMapsEnabled] && value ? processedValue + elevationValue : processedValue;
+//                }
+//            }
+//        }
+//    }
     
     return defaultValue;
 }
@@ -1012,7 +1031,7 @@ colorizationScheme:(int)colorizationScheme
     return nullptr;
 }
 
-- (void)processSplitLabels:(OASGpxDataItem *)gpx doc:(const std::shared_ptr<const OsmAnd::GpxDocument>)doc
+- (void)processSplitLabels:(OASGpxDataItem *)gpx doc:(OASGpxFile *)doc
 {
     NSBlockOperation* operation = [[NSBlockOperation alloc] init];
     __weak NSBlockOperation* weakOperation = operation;
@@ -1021,16 +1040,14 @@ colorizationScheme:(int)colorizationScheme
     [operation addExecutionBlock:^{
         if (splitCounter != _splitCounter || weakOperation.isCancelled)
             return;
-        // FIXME:
-       // OASGpxFile *document = [[OASGpxFile alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(doc)];
-        OASGpxFile *document = nil;
+        OASGpxFile *document = doc;
         NSArray<OASGpxTrackAnalysis *> *splitData = nil;
         BOOL splitByTime = NO;
         BOOL splitByDistance = NO;
         switch (gpx.splitType) {
             case EOAGpxSplitTypeDistance: {
                 // FIXME:
-               // splitData = [document splitByDistance:gpx.splitInterval joinSegments:gpx.joinSegments];
+              //  splitData = [document splitByDistance:gpx.splitInterval joinSegments:gpx.joinSegments];
                 splitByDistance = YES;
                 break;
             }
@@ -1127,9 +1144,9 @@ colorizationScheme:(int)colorizationScheme
     
     QList<OsmAnd::PointI> startFinishPoints;
     QList<float> startFinishPointsElevations;
-    for (auto it = _gpxDocs.begin(); it != _gpxDocs.end(); ++it)
-    {
-        NSString *path = it.key().toNSString();
+    
+    for (NSString *key in _gpxDocs.allKeys) {
+        NSString *path = key;
         
         OAGPXDatabase *gpxDb = OAGPXDatabase.sharedDb;
         path = [[gpxDb getFileDir:path] stringByAppendingPathComponent:path.lastPathComponent];
@@ -1139,12 +1156,12 @@ colorizationScheme:(int)colorizationScheme
         OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
         
         const bool raiseRoutesAboveRelief = gpx.visualization3dByType != EOAGPX3DLineVisualizationByTypeNone;
-        const auto& doc = it.value();
+        OASGpxFile *doc = [_gpxDocs objectForKey:key];
         if ((!gpx && ![path isEqualToString:kCurrentTrack]) || gpx.showStartFinish)
         {
             if (!doc)
                 continue;
-            const auto& tracks = doc->tracks;
+            NSArray<OASTrack *> *tracks = [doc.tracks copy];
             OsmAnd::LatLon start, finish;
             CLLocationCoordinate2D startLoc, finishLoc;
             float startPointElevation, finishPointElevation;
@@ -1198,41 +1215,44 @@ colorizationScheme:(int)colorizationScheme
             }
             else
             {
-                for (const auto& trk : constOf(tracks))
-                {
-                    const auto& segments = constOf(trk->segments);
-                    for (int i = 0; i < segments.size(); i++)
-                    {
-                        const auto& seg = segments[i];
-                        if (seg->points.count() < 2)
+                for (OASTrack *trk in tracks) {
+                    NSArray<OASTrkSegment *> *segments = trk.segments;
+
+                    for (NSUInteger i = 0; i < segments.count; i++) {
+                        OASTrkSegment *seg = segments[i];
+                        if (seg.points.count < 2) {
                             continue;
-                        double firstPointElevation = [self getValidElevation:seg->points.first()->elevation];
-                        double lastPointElevation = [self getValidElevation:seg->points.last()->elevation];
+                        }
+                        double firstPointElevation = [self getValidElevation:seg.points.firstObject.ele];
+                        double lastPointElevation = [self getValidElevation:seg.points.lastObject.ele];
                         if (gpx.joinSegments)
                         {
                             if (i == 0)
                             {
-                                start = seg->points.first()->position;
+                                CLLocationCoordinate2D position = seg.points.firstObject.position;
+                                start = OsmAnd::LatLon(position.latitude, position.longitude);
                                 if (raiseRoutesAboveRelief)
                                 {
                                     _elevationScaleFactor = gpx.verticalExaggerationScale;
                                     if (gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeAltitude)
-                                        startPointElevation = seg->points.first()->elevation;
+                                        startPointElevation = seg.points.firstObject.ele;
                                     else if (gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeSpeed)
-                                        startPointElevation = [self is3DMapsEnabled] ? (seg->points.first()->speed * kSpeedToHeightScale) + firstPointElevation : seg->points.first()->speed * kSpeedToHeightScale;
+                                        startPointElevation = [self is3DMapsEnabled] ? (seg.points.firstObject.speed * kSpeedToHeightScale) + firstPointElevation : seg.points.firstObject.speed * kSpeedToHeightScale;
                                     else
                                         startPointElevation = [self is3DMapsEnabled] ? firstPointElevation + gpx.elevationMeters : gpx.elevationMeters;
                                 }
                             }
-                            else if (i == segments.size() - 1)
+                            else if (i == segments.count - 1)
                             {
-                                finish = seg->points.last()->position;
+                                CLLocationCoordinate2D position = seg.points.lastObject.position;
+                                finish = OsmAnd::LatLon(position.latitude, position.longitude);
+                                
                                 if (raiseRoutesAboveRelief)
                                 {
                                     if (gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeAltitude)
-                                        finishPointElevation = seg->points.last()->elevation;
+                                        finishPointElevation = seg.points.lastObject.ele;
                                     else if (gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeSpeed)
-                                        finishPointElevation = [self is3DMapsEnabled] ? (seg->points.last()->speed * kSpeedToHeightScale) + lastPointElevation : seg->points.last()->speed * kSpeedToHeightScale;
+                                        finishPointElevation = [self is3DMapsEnabled] ? (seg.points.lastObject.speed * kSpeedToHeightScale) + lastPointElevation : seg.points.lastObject.speed  * kSpeedToHeightScale;
                                     else
                                         finishPointElevation = [self is3DMapsEnabled] ? lastPointElevation + gpx.elevationMeters : gpx.elevationMeters;
                                 }
@@ -1245,13 +1265,13 @@ colorizationScheme:(int)colorizationScheme
                                 _elevationScaleFactor = gpx.verticalExaggerationScale;
                                 if (gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeAltitude)
                                 {
-                                    startFinishPointsElevations.append(seg->points.first()->elevation);
-                                    startFinishPointsElevations.append(seg->points.last()->elevation);
+                                    startFinishPointsElevations.append(seg.points.firstObject.ele);
+                                    startFinishPointsElevations.append(seg.points.lastObject.ele);
                                 }
                                 else if (gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeSpeed)
                                 {
-                                    startFinishPointsElevations.append([self is3DMapsEnabled] ? (seg->points.first()->speed * kSpeedToHeightScale) + firstPointElevation : seg->points.first()->speed * kSpeedToHeightScale);
-                                    startFinishPointsElevations.append([self is3DMapsEnabled] ? (seg->points.last()->speed * kSpeedToHeightScale) + lastPointElevation : seg->points.last()->speed * kSpeedToHeightScale);
+                                    startFinishPointsElevations.append([self is3DMapsEnabled] ? (seg.points.firstObject.speed * kSpeedToHeightScale) + firstPointElevation : seg.points.firstObject.speed * kSpeedToHeightScale);
+                                    startFinishPointsElevations.append([self is3DMapsEnabled] ? (seg.points.lastObject.speed * kSpeedToHeightScale) + lastPointElevation : seg.points.lastObject.speed * kSpeedToHeightScale);
                                 }
                                 else
                                 {
@@ -1259,9 +1279,11 @@ colorizationScheme:(int)colorizationScheme
                                     startFinishPointsElevations.append([self is3DMapsEnabled] ? lastPointElevation + gpx.elevationMeters : gpx.elevationMeters);
                                 }
                             }
+                            CLLocationCoordinate2D positionStart = seg.points.firstObject.position;
+                            CLLocationCoordinate2D positionFinish = seg.points.lastObject.position;
                             startFinishPoints.append({
-                                OsmAnd::Utilities::convertLatLonTo31(seg->points.first()->position),
-                                OsmAnd::Utilities::convertLatLonTo31(seg->points.last()->position)});
+                                OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(positionStart.latitude, positionStart.longitude)),
+                                OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(positionFinish.latitude, positionFinish.longitude))});
                         }
                     }
                 }
@@ -1413,21 +1435,23 @@ colorizationScheme:(int)colorizationScheme
         _waypointsMapProvider = nullptr;
     }
 
-    if (!_gpxDocs.empty())
+    if (_gpxDocs.allKeys.count > 0)
     {
         QList<OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>> points;
         QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> >::iterator it;
-        for (it = _gpxDocs.begin(); it != _gpxDocs.end(); ++it)
-        {
-            if (!it.value())
+        
+        for (NSString *key in _gpxDocs.allKeys) {
+            auto value = [_gpxDocs objectForKey:key];
+            if (!value)
                 continue;
-            
-            if (!it.value()->points.empty())
+
+            if (value.getAllPoints.count > 0)
             {
-                NSString *filePath = it.key().toNSString();
+                NSString *filePath = key;
+                // FIXME:
                 OASGpxDataItem *gpx = [_cachedTracks.allKeys containsObject:filePath]
                         ? _cachedTracks[filePath][@"gpx"]
-                        : it.key().isNull()
+                        : key == nil
                                 ? nil/*[[OASavingTrackHelper sharedInstance] getCurrentGPX]*/
                                 : [self getGpxItem:it.key()];
                 for (const auto& waypoint : it.value()->points)
@@ -1508,22 +1532,23 @@ colorizationScheme:(int)colorizationScheme
     double textSize = [OAAppSettings.sharedManager.textSize get];
     textSize = textSize < 1. ? 1. : textSize;
     int r = [self getDefaultRadiusPoi] * textSize;
-    auto activeGpx = OASelectedGPXHelper.instance.activeGpx;
-    // FIXME:
-    auto doc = nil;/*std::const_pointer_cast<OsmAnd::GpxDocument>([[OASavingTrackHelper sharedInstance].currentTrack getDocument]);*/
+    NSMutableDictionary<NSString *, OASGpxFile *> *activeGpx = [OASelectedGPXHelper.instance.activeGpx mutableCopy];
+    auto doc = [OASavingTrackHelper sharedInstance].currentTrack;
     if (doc)
-        activeGpx.insert(QString::fromNSString(kCurrentTrack), doc);
+        activeGpx[kCurrentTrack] = doc;
+    
+    for (NSString *key in activeGpx.allKeys) {
+        OASGpxFile *gpxFile = activeGpx[key];
+        // FIXME: isEqual - need to check mb use gpxFile.path
+        BOOL isCurrentTrack = (doc != nil && [gpxFile.path isEqual:doc]);
 
-    for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
-    {
-        BOOL isCurrentTrack = doc != nullptr && it.value() == doc;
         OASGpxFile *document = nil;
-        NSString *filePath = isCurrentTrack ? kCurrentTrack : it.key().toNSString();
+        NSString *filePath = isCurrentTrack ? kCurrentTrack : key;
         if ([_cachedTracks.allKeys containsObject:filePath])
         {
             document = _cachedTracks[filePath][@"doc"];
         }
-        else if (it.value() != nullptr)
+        else if (gpxFile)
         {
             // FIXME:
 //            document = isCurrentTrack
@@ -1533,7 +1558,7 @@ colorizationScheme:(int)colorizationScheme
 
         if (!document)
             continue;
-
+// FIXME:
 //        NSArray<OASWptPt *> *points = [self findPointsNearSegments:[document getPointsToDisplay] radius:r point:point];
 //        if (points != nil)
 //        {
@@ -1543,9 +1568,9 @@ colorizationScheme:(int)colorizationScheme
 //                                                                                                longitude:points.firstObject.position.longitude]
 //                                                          toLocation:[[CLLocation alloc] initWithLatitude:points.lastObject.position.latitude
 //                                                                                                longitude:points.lastObject.position.longitude]];
-//            // FiXME:
+////            // FiXME:
 //            OASGpxDataItem *gpx = [_cachedTracks.allKeys containsObject:filePath] ? _cachedTracks[filePath][@"gpx"]
-//                    : isCurrentTrack ? nil/*[[OASavingTrackHelper sharedInstance] getCurrentGPX]*/ : [self getGpxItem:it.key()];
+//                    : isCurrentTrack ? nil/*[[OASavingTrackHelper sharedInstance] getCurrentGPX]*/ : [self getGpxItem:QString::fromNSString(key)];
 //            OATargetPoint *targetPoint = [self getTargetPoint:gpx];
 //            targetPoint.location = selectedGpxPoint.coordinate;
 //            if (targetPoint && ![res containsObject:targetPoint])
@@ -1686,7 +1711,7 @@ colorizationScheme:(int)colorizationScheme
     return isnan(elevation) ? 0 : elevation;
 }
 
-- (BOOL)isInstanceOfOAWptPt:(id)point
+- (BOOL)isInstanceOfOASWptPt:(id)point
 {
     return [point isKindOfClass:[OASWptPt class]];
 }
@@ -1789,14 +1814,15 @@ colorizationScheme:(int)colorizationScheme
             item.point.lon = position.longitude;
             // FIXME:
             //item.point.wpt->position = OsmAnd::LatLon(position.latitude, position.longitude);
-            const auto activeGpx = [OASelectedGPXHelper instance].activeGpx;
-            const auto& doc = activeGpx[QString::fromNSString(item.docPath)];
-            if (doc != nullptr)
+
+            OASGpxFile * doc = [[OASelectedGPXHelper instance] getGpxFileFor:item.docPath];
+            if (doc)
             {
-                doc->saveTo(QString::fromNSString(item.docPath), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
-                QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> > docs;
-                docs[QString::fromNSString(item.docPath)] = doc;
-                [self refreshGpxTracks:docs reset:YES];
+                // FIXME:
+//                doc->saveTo(QString::fromNSString(item.docPath), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
+//                QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> > docs;
+//                docs[QString::fromNSString(item.docPath)] = doc;
+ //               [self refreshGpxTracks:docs reset:YES];
             }
         }
         else

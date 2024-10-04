@@ -13,7 +13,7 @@
 #define kDefaultCategoryKey @"favorites_item"
 #define kPersonalCategory @"personal"
 
-@class OAFavoriteItem, OAFavoriteGroup, OASpecialPointType, OAGPXDocument, OAGPXMutableDocument, OAPointsGroup, OAWptPt;
+@class OAFavoriteItem, OAFavoriteGroup, OASpecialPointType, OAGPXDocument, OAGPXMutableDocument, OAPointsGroup, OASWptPt;
 
 @interface OAFavoritesHelper : NSObject
 
@@ -99,7 +99,7 @@
 
 + (UIImage *) getCompositeIcon:(NSString *)icon backgroundIcon:(NSString *)backgroundIcon color:(UIColor *)color;
 + (BOOL) hasFavoriteAt:(CLLocationCoordinate2D)location;
-+ (NSArray<OAFavoriteItem *> *)wptAsFavorites:(NSArray<OAWptPt *> *)points
++ (NSArray<OAFavoriteItem *> *)wptAsFavorites:(NSArray<OASWptPt *> *)points
                               defaultCategory:(NSString *)defaultCategory;
 
 + (void) saveFile:(NSArray<OAFavoriteGroup *> *)favoriteGroups file:(NSString *)file;

@@ -12,6 +12,7 @@
 #import "OsmAndApp.h"
 #import "OAGPXAppearanceCollection.h"
 #import "OAGPXDocument.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OAGpxSettingsItem()
 
@@ -136,11 +137,12 @@
 - (void)updateGpxParams:(NSString *)filePath
 {
     OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
-    OAGPX *gpx = [gpxDb getGPXItem:[OAUtilities getGpxShortPath:self.filePath]];
+    OASGpxDataItem *gpx = [gpxDb getNewGPXItem:[OAUtilities getGpxShortPath:self.filePath]];
     if (!gpx)
     {
-        OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:filePath];
-        gpx = [gpxDb addGpxItem:filePath title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds document:doc];
+        // FIXME:
+//        OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:filePath];
+//        gpx = [gpxDb addGpxItem:filePath title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds document:doc];
     }
     gpx.color = _appearanceInfo.color;
     gpx.coloringType = _appearanceInfo.coloringType;
@@ -154,14 +156,15 @@
     gpx.visualization3dPositionType = _appearanceInfo.visualization3dPositionType;
     gpx.splitType = _appearanceInfo.splitType;
     gpx.splitInterval = _appearanceInfo.splitInterval;
-    [gpxDb save];
+    // FIXME:
+    //[gpxDb save];
     if (gpx.color != 0)
         [[OAGPXAppearanceCollection sharedInstance] getColorItemWithValue:gpx.color];
 }
 
 - (void) createGpxAppearanceInfo
 {
-    OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.filePath]];
+    OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:[OAUtilities getGpxShortPath:self.filePath]];
     if (gpx)
         _appearanceInfo = [[OAGpxAppearanceInfo alloc] initWithItem:gpx];
 }

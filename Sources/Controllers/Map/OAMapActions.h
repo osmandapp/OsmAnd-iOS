@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class OAPointDescription, OAGPX, OATargetPoint, OAApplicationMode;
+@class OAPointDescription, OATargetPoint, OAApplicationMode;
 @class OASGpxFile, OASGpxDataItem;
 
 @interface OAMapActions : NSObject

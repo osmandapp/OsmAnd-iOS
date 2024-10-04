@@ -14,9 +14,9 @@
 
 @implementation OAReversePointsCommand
 {
-    NSArray<OAWptPt *> *_oldPoints;
-    NSArray<OAWptPt *> *_newPoints;
-    NSMutableDictionary<NSArray<OAWptPt *> *, OARoadSegmentData *> *_oldRoadSegmentData;
+    NSArray<OASWptPt *> *_oldPoints;
+    NSArray<OASWptPt *> *_newPoints;
+    NSMutableDictionary<NSArray<OASWptPt *> *, OARoadSegmentData *> *_oldRoadSegmentData;
     OAApplicationMode *_oldMode;
 }
 
@@ -34,12 +34,12 @@
     OAMeasurementEditingContext *editingCtx = self.getEditingCtx;
     _oldPoints = [NSArray arrayWithArray:editingCtx.getPoints];
     _oldRoadSegmentData = editingCtx.roadSegmentData;
-    NSMutableArray<OAWptPt *> *newPoints = [[NSMutableArray alloc] initWithCapacity:_oldPoints.count];
+    NSMutableArray<OASWptPt *> *newPoints = [[NSMutableArray alloc] initWithCapacity:_oldPoints.count];
     
     for (NSInteger i = (NSInteger) _oldPoints.count - 1; i >= 0; i--)
     {
-        OAWptPt *point = _oldPoints[i];
-        OAWptPt *prevPoint = i > 0 ? _oldPoints[i - 1] : nil;
+        OASWptPt *point = _oldPoints[i];
+        OASWptPt *prevPoint = i > 0 ? _oldPoints[i - 1] : nil;
         [point copyExtensions:point];
         if (prevPoint != nil)
         {
@@ -68,7 +68,7 @@
     [editingCtx addPoints:_newPoints];
     if (_newPoints.count > 0)
     {
-        OAWptPt *lastPoint = _newPoints.lastObject;
+        OASWptPt *lastPoint = _newPoints.lastObject;
         editingCtx.appMode = [OAApplicationMode valueOfStringKey:lastPoint.getProfileType def:OAApplicationMode.DEFAULT];
     }
     [editingCtx updateSegmentsForSnap];

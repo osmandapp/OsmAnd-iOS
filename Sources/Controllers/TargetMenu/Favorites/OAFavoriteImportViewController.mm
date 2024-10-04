@@ -25,7 +25,7 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
     NSURL *_url;
     NSMutableArray<NSString *> *_ignoredNames;
     OAGPXDocument *_gpxFile;
-    OAWptPt *_conflictedItem;
+    OASWptPt *_conflictedItem;
 }
 
 #pragma mark - Initialization
@@ -94,7 +94,7 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
             OATableSectionData *section = [self.tableData createNewSection];
             section.headerText = [OAFavoriteGroup getDisplayName:pointsGroup.name];
             
-            for (OAWptPt *wptPt in pointsGroup.points)
+            for (OASWptPt *wptPt in pointsGroup.points)
             {
                 OATableRowData *row = [section createNewRow];
                 row.cellType = [OAPointTableViewCell getCellIdentifier];
@@ -120,7 +120,7 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
         }
         if (cell)
         {
-            OAWptPt *wptPt = [item objForKey:@"wptPt"];
+            OASWptPt *wptPt = [item objForKey:@"wptPt"];
 
             cell.titleView.text = wptPt.name;
             cell.rightArrow.image = nil;
@@ -191,7 +191,7 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
         for (NSString *key in _gpxFile.pointsGroups.allKeys)
         {
             OAPointsGroup *pointGroup = _gpxFile.pointsGroups[key];
-            for (OAWptPt *item in pointGroup.points)
+            for (OASWptPt *item in pointGroup.points)
             {
                 NSString *importItemName = item.name;
                 NSString *importItemFolder = item.type;
@@ -292,7 +292,7 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
                             for (NSString *keyGroup in _gpxFile.pointsGroups.allKeys)
                             {
                                 OAPointsGroup *group = _gpxFile.pointsGroups[keyGroup];
-                                for (OAWptPt *wptPt in group.points)
+                                for (OASWptPt *wptPt in group.points)
                                 {
                                     for (OAFavoriteItem *localFavortite in favoriteItems)
                                     {

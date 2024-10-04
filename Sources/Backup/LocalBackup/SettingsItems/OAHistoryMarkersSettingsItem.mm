@@ -141,7 +141,7 @@
     OAGPXMutableDocument *doc = [[OAGPXMutableDocument alloc] init];
     for (OAHistoryItem *historyItem in historyItems)
     {
-        OAWptPt *wpt = [[OAWptPt alloc] init];
+        OASWptPt *wpt = [[OASWptPt alloc] init];
         wpt.position = CLLocationCoordinate2DMake(historyItem.latitude, historyItem.longitude);
         wpt.name = historyItem.name;
 
@@ -177,7 +177,7 @@
     OAGPXDocument *gpxFile = [[OAGPXDocument alloc] initWithGpxFile:filePath];
     if (gpxFile)
     {
-        for (OAWptPt *wpt in gpxFile.points)
+        for (OASWptPt *wpt in gpxFile.points)
         {
             OAHistoryItem *historyItem = [[OAHistoryItem alloc] init];
             historyItem.name = wpt.name;

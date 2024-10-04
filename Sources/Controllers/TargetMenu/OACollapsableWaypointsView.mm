@@ -154,12 +154,12 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
     if (_type == EOAWaypointGPX)
     {
-        OAGPX *gpx = nil;
+        OASGpxDataItem *gpx = nil;
         if (_docPath)
         {
             OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
             NSString *gpxFilePath = [OAUtilities getGpxShortPath:_docPath];
-            gpx = [gpxDb getGPXItem:gpxFilePath];
+            gpx = [gpxDb getNewGPXItem:gpxFilePath];
         }
         else
         {
@@ -167,9 +167,9 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
            // gpx = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
         }
         
-        if (gpx) {
-            // FIXME:
-            // [mapPanel openTargetViewWithGPX:gpx];
+        if (gpx)
+        {
+             [mapPanel openTargetViewWithGPX:gpx];
         }
     }
     else if (_type == EOAWaypointFavorite)

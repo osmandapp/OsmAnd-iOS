@@ -9,6 +9,7 @@
 import UIKit
 import WebKit
 import JavaScriptCore
+import OsmAndShared
 
 protocol TravelArticleDialogProtocol : AnyObject {
     func getWebView() -> WKWebView
@@ -103,7 +104,7 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
     var isDownloadNow = false
     
     var gpxFile: OAGPXDocumentAdapter?
-    var gpx: OAGPX?
+    var gpx: GpxDataItem?
     var isGpxReading = false
     
     var bottomView: UIView?

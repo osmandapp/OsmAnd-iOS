@@ -80,7 +80,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     else if (_replaceItemType == EOAReplacePointTypeWaypoint)
     {
         NSMutableArray *arr = [NSMutableArray array];
-        for (OAWptPt *point in _gpxDocument.points)
+        for (OASWptPt *point in _gpxDocument.points)
         {
             // FIXME:
 //            OAGpxWptItem *itemData = [[OAGpxWptItem alloc] init];

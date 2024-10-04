@@ -391,7 +391,7 @@
                 if (searchResult.wpt)
                 {
                     // FIXME:
-//                    OAWptPt *wpt = [OAGPXDocument fetchWpt:std::const_pointer_cast<OsmAnd::GpxDocument::WptPt>(searchResult.wpt)];
+//                    OASWptPt *wpt = [OAGPXDocument fetchWpt:std::const_pointer_cast<OsmAnd::GpxDocument::WptPt>(searchResult.wpt)];
 //                    OAGpxWptItem *wptItem = [[OAGpxWptItem alloc] init];
 //                    wptItem.point = wpt;
 //

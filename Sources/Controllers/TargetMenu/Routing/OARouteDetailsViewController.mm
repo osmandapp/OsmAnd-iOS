@@ -40,6 +40,7 @@
 #import "GeneratedAssetSymbols.h"
 #import "CLLocation+Extension.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OsmAndSharedWrapper.h"
 
 #define kStatsSection 0
 #define kAdditionalRouteDetailsOffset 184.0
@@ -290,7 +291,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
                                      bottomOffset:4
                               useGesturesAndScale:YES];
 
-    OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.gpx.path]];
+    OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:[OAUtilities getGpxShortPath:self.gpx.path]];
     BOOL calcWithoutGaps = !gpx.joinSegments && (self.gpx.tracks.count > 0 && self.gpx.tracks.firstObject.generalTrack);
     [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.chartView
                                       analysis:self.analysis
@@ -392,7 +393,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     if (!self.gpx || !self.analysis)
     {
         self.gpx = [OAGPXUIHelper makeGpxFromRoute:self.routingHelper.getRoute];
-        self.analysis = [self.gpx getAnalysis:0];
+        self.analysis = [self.gpx getAnalysisFileTimestamp:0];
     }
     _types = @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSlope)];
     _lastTranslation = CGPointZero;
@@ -813,12 +814,16 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     NSString *path = [NSTemporaryDirectory() stringByAppendingPathComponent:title];
     [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US"]];
     [formatter setDateFormat:@"yyyy-MM-dd_HH-mm_EEE"];
-    OAGPXDocument *doc = [OARoutingHelper.sharedInstance generateGPXFileWithRoute:[formatter stringFromDate:[NSDate date]]];
+    OASGpxFile *doc = [OARoutingHelper.sharedInstance generateGPXFileWithRoute:[formatter stringFromDate:[NSDate date]]];
     if (!doc)
         return;
     
     doc.tracks.firstObject.name = [formatter stringFromDate:[NSDate date]];
-    [doc saveTo:path];
+    
+    OASKFile *filePathToSaveGPX = [[OASKFile alloc] initWithFilePath:path];
+    // save to disk
+    [[OASGpxUtilities shared] writeGpxFileFile:filePathToSaveGPX gpxFile:doc];
+    //[doc saveTo:path];
     NSURL* url = [NSURL fileURLWithPath:path];
     
     UIActivityViewController *activityViewController =

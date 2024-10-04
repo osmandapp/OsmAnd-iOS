@@ -197,7 +197,7 @@
         }
         case WPT:
         {
-            OAWptPt *wpt = (OAWptPt *) searchResult.object;
+            OASWptPt *wpt = (OASWptPt *) searchResult.object;
             return [wpt getIcon];
         }
 

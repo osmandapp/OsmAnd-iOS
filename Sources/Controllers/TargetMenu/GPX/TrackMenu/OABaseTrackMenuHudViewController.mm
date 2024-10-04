@@ -228,23 +228,18 @@
         _doc = nil;
         if (_isCurrentTrack)
         {
-            // FIXME:
-           // _doc = _savingHelper.currentTrack;
+            _doc = _savingHelper.currentTrack;
         }
         else
         {
             NSString *gpxFullPath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:_gpx.gpxFilePath];
-            const auto& activeGpx = [OASelectedGPXHelper instance].activeGpx;
-            auto it = activeGpx.find(QString::fromNSString(gpxFullPath));
-            if (it != activeGpx.end() && it.value() != nullptr) {
-                // FIXME:
-                //                _doc = [[OAGPXMutableDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(it.value())];
-            } else {
-               // Documents/GPX/2023-10-22_11-34_Su_1n.gpx
+            
+            OASGpxFile *gpx = [[OASelectedGPXHelper instance] getGpxFileFor:gpxFullPath];
+            if (!gpx)
+            {
                 OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFullPath];
                 OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
                 _doc = gpxFile;
-                
             }
         }
     }

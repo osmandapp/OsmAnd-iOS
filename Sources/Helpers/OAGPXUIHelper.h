@@ -70,8 +70,8 @@
                        gpx:(OASGpxDataItem *)gpx
                         doc:(OASGpxFile *)doc;
 
-- (void) renameTrack:(OAGPX *)gpx newName:(NSString *)newName hostVC:(UIViewController*)hostVC;
-- (void) renameTrack:(OAGPX *)gpx doc:(OASGpxFile *)doc newName:(NSString *)newName hostVC:(UIViewController*)hostVC;
+- (void) renameTrack:(OASGpxDataItem *)gpx newName:(NSString *)newName hostVC:(UIViewController*)hostVC;
+- (void) renameTrack:(OASGpxDataItem *)gpx doc:(OASGpxFile *)doc newName:(NSString *)newName hostVC:(UIViewController*)hostVC;
 
 - (void)copyNewGPXToNewFolder:(NSString *)newFolderName
            renameToNewName:(NSString *)newFileName

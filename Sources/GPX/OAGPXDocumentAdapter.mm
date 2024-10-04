@@ -7,34 +7,33 @@
 //
 
 #import "OAGPXDocumentAdapter.h"
-#import "OAGPXDocument.h"
+#import "OsmAndSharedWrapper.h"
 
 @implementation OAGPXDocumentAdapter
 
-- (OAGPXDocument *)getObject
+- (OASGpxFile *)getObject
 {
     return _object;
 }
 
-- (OAGPXTrackAnalysis*) getAnalysis:(long)fileTimestamp
+- (OASGpxTrackAnalysis*) getAnalysis:(long)fileTimestamp
 {
-    return [_object getAnalysis:fileTimestamp];
+    return [_object getAnalysisFileTimestamp:fileTimestamp];
 }
 
-- (BOOL) hasAltitude
+- (BOOL)hasAltitude
 {
     return [_object hasAltitude];
 }
 
-- (int) pointsCount
-{;
-    return _object.points.count;
+- (int)pointsCount
+{
+    return (int)_object.getAllPoints.count;
 }
 
 - (NSString *) getMetadataValueBy:(NSString *)tag
 {
-    OAGpxExtension *extension = [_object.metadata getExtensionByKey:tag];
-    return extension ? extension.value : nil;
+    return [_object.metadata getExtensionsToRead][tag];
 }
 
 @end

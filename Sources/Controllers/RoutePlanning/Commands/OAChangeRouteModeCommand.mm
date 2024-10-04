@@ -15,10 +15,10 @@
 
 @implementation OAChangeRouteModeCommand
 {
-    NSMutableArray<OAWptPt *> *_oldPoints;
-    NSMutableArray<OAWptPt *> *_newPoints;
-    NSMutableDictionary<NSArray<OAWptPt *> *, OARoadSegmentData *> *_oldRoadSegmentData;
-    NSMutableDictionary<NSArray<OAWptPt *> *, OARoadSegmentData *> *_newRoadSegmentData;
+    NSMutableArray<OASWptPt *> *_oldPoints;
+    NSMutableArray<OASWptPt *> *_newPoints;
+    NSMutableDictionary<NSArray<OASWptPt *> *, OARoadSegmentData *> *_oldRoadSegmentData;
+    NSMutableDictionary<NSArray<OASWptPt *> *, OARoadSegmentData *> *_newRoadSegmentData;
     OAApplicationMode *_oldMode;
     OAApplicationMode *_newMode;
     EOAChangeRouteType _changeRouteType;
@@ -59,7 +59,7 @@
             }
             case EOAChangeRouteWhole:
             {
-                for (OAWptPt *pt in _newPoints)
+                for (OASWptPt *pt in _newPoints)
                 {
                     [self updateProfileType:pt];
                 }
@@ -130,13 +130,13 @@
     return CHANGE_ROUTE_MODE;
 }
 
-- (NSArray<OAWptPt *> *) getPairAt:(NSInteger)pointIndex
+- (NSArray<OASWptPt *> *) getPairAt:(NSInteger)pointIndex
 {
-    NSMutableArray<OAWptPt *> *res = [NSMutableArray array];
-    OAWptPt *first = pointIndex >= 0 && pointIndex < _newPoints.count ? _newPoints[pointIndex] : nil;
+    NSMutableArray<OASWptPt *> *res = [NSMutableArray array];
+    OASWptPt *first = pointIndex >= 0 && pointIndex < _newPoints.count ? _newPoints[pointIndex] : nil;
     if (first)
         [res addObject:first];
-    OAWptPt *second = pointIndex >= 0 && pointIndex < _newPoints.count - 1 ? _newPoints[pointIndex + 1] : nil;
+    OASWptPt *second = pointIndex >= 0 && pointIndex < _newPoints.count - 1 ? _newPoints[pointIndex + 1] : nil;
     if (second)
         [res addObject:second];
 
@@ -154,7 +154,7 @@
     }
     else
     {
-        OAWptPt *lastPoint = _newPoints[_newPoints.count - 1];
+        OASWptPt *lastPoint = _newPoints[_newPoints.count - 1];
         editingCtx.appMode = [OAApplicationMode valueOfStringKey:lastPoint.getProfileType def:OAApplicationMode.DEFAULT];
     }
     if (_newRoadSegmentData != nil)
@@ -163,7 +163,7 @@
     [self refreshMap];
 }
 
-- (void) updateProfileType:(OAWptPt *)pt
+- (void) updateProfileType:(OASWptPt *)pt
 {
     if (!pt.isGap)
     {

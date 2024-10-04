@@ -1073,31 +1073,31 @@ class GpxUIHelper: NSObject {
         if !analysis.hasElevationData() {
             return values
         }
-        let elevationData: [OAElevation] = analysis.elevationData
         var nextX: Double = 0
         var nextY: Double
         var elev: Double
         var prevElevOrig: Double = -80000
         var prevElev: Double = 0
         var i: Int = -1
-        let lastIndex: Int = elevationData.count - 1
+        let lastIndex: Int = analysis.pointAttributes.count - 1
         var lastEntry: ChartDataEntry?
         var lastXSameY: Double = -1
         var hasSameY = false
         var x: Double
-        for e in elevationData {
+        for e in analysis.pointAttributes {
+            guard let e = e as? OsmAndShared.PointAttributes else { continue }
             i += 1
             if axisType == .time || axisType == .timeOfDay {
-                x = Double(e.time)
+                x = Double(e.timeDiff)
             } else {
-                x = e.distance
+                x = Double(e.distance)
             }
             if x >= 0 {
                 if !(calcWithoutGaps && e.firstPoint && lastEntry != nil) {
                     nextX += x / divX
                 }
                 if !e.elevation.isNaN {
-                    elev = e.elevation
+                    elev = Double(e.elevation)
                     if prevElevOrig != -80000 {
                         if elev > prevElevOrig {
                             // elev -= 1
@@ -1119,7 +1119,7 @@ class GpxUIHelper: NSObject {
                     if useGeneralTrackPoints, e.firstPoint, let lastEntry {
                         values.append(ChartDataEntry(x: nextX, y: lastEntry.y))
                     }
-                    prevElevOrig = e.elevation
+                    prevElevOrig = Double(e.elevation)
                     prevElev = elev
                     nextY = elev * convEle
                     lastEntry = ChartDataEntry(x: nextX, y: nextY)

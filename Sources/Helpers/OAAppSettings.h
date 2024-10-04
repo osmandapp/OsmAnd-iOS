@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
 
 @class OAApplicationMode, OAColoringType, OADownloadMode, OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState;
 

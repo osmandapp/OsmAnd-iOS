@@ -75,7 +75,7 @@
 "gpx_updown" = "Arriba/Abajo";
 "gpx_uphills_total" = "Ascenso total";
 // Map settings
-"rendering_value_browse_map_name" = "Ver mapa";
+"rendering_value_browse_map_name" = "Explorar mapa";
 "routing_engine_vehicle_type_driving" = "Automóvil";
 "shared_string_map" = "Mapa";
 "shared_string_show_on_map" = "Mostrar en el mapa";
@@ -393,7 +393,7 @@
 "shared_string_waypoint" = "Punto de referencia";
 "menu_my_directions" = "Mis direcciones";
 // Shared Strings
-"shared_string_select" = "Elegir";
+"shared_string_select" = "Seleccionar";
 "shared_string_of" = "de";
 "shared_string_all" = "Todo";
 "first_usage_greeting" = "Obtén direcciones y descubre sitios nuevos sin una conexión a Internet";
@@ -410,21 +410,21 @@
 "skip_map_downloading" = "Omitir descargas de mapas";
 "skip_map_downloading_desc_ios" = "Sin mapas descargados. Puedes elegir uno de la lista o descargarlos luego desde el menú «Gestionar mapas»";
 "wiki_around" = "Artículos de Wikipedia cerca";
-"edit_filter" = "Editar el filtro";
+"edit_filter" = "Editar filtro";
 "subcategories" = "Subcategorías";
 "selected_categories" = "Categorías elegidas";
 "create_custom_poi" = "Crear filtro personalizado";
 "custom_search" = "Búsqueda personalizada";
 "shared_string_filters" = "Filtros";
 "save_filter" = "Guardar filtro";
-"delete_filter" = "Borrar filtro";
+"delete_filter" = "Eliminar filtro";
 "new_filter_desc" = "Ingresa el nombre del nuevo filtro, que se añadirá en tu pestaña «Categorías».";
 "shared_string_is_open_24_7" = "Abierto 24/7";
 "shared_string_is_open" = "Abierto ahora";
 "poi_filter_by_name" = "Buscar por nombre";
 "poi_filter_closest_poi" = "PDI más cercanos";
 "poi_filter_custom_filter" = "Filtro personal";
-"edit_filter_delete_dialog_title" = "¿Borrar este filtro\?";
+"edit_filter_delete_dialog_title" = "¿Quiere eliminar este filtro?";
 "apply_filters" = "Aplicar filtros";
 "postcode" = "Código postal";
 "shared_string_from" = "desde";
@@ -1681,7 +1681,7 @@
 "shared_string_email" = "Correo electrónico";
 "shared_string_account_add" = "Añadir cuenta";
 "settings_item_read_error" = "No se pudo leer desde «%@».";
-"settings_app_theme" = "Tema";
+"settings_app_theme" = "Tema de la aplicación";
 "send_anonymous_data" = "Enviar datos anónimos";
 "only_selected_segment_recalc" = "Sólo el segmento marcado será recalculado usando el perfil elegido.";
 "select_application_profile" = "Elegir perfil de la aplicación";
@@ -3289,7 +3289,7 @@
 "osm_id" = "ID de OSM";
 "osmand_depelopment_use_old_routing" = "Utilizar la ruta antigua (A*)";
 "routing_algorithm" = "Algoritmo de ruta";
-"auto_zoom" = "Zoom automático";
+"auto_zoom" = "Zum automático";
 "shared_string_development" = "Desarrollo";
 "auto_zoom_smooth" = "Suave";
 "auto_zoom_discrete" = "Discreto";
@@ -3413,7 +3413,7 @@
 "daynight_mode_app_theme_summary" = "La pantalla del mapa se alinea con el modo día de la aplicación para un tema claro y el modo noche para un tema oscuro";
 "daynight_mode_sunrise_sunset_summary" = "Cambia automáticamente entre los temas de día y de noche en función de las horas locales del amanecer y el atardecer.";
 "of" = "%d de %d";
-"help_article_navigation_routing_brouter_name" = "Brouter";
+"help_article_navigation_routing_brouter_name" = "BRouter";
 "simulate_location_movement_speed_x2" = "x2";
 "lang_yo" = "Yoruba";
 "lang_gn_py" = "Guaraní";
@@ -3439,7 +3439,7 @@
 "ltr_or_rtl_combine_via_slash" = "%@/%@";
 "ltr_or_rtl_combine_via_comma" = "%@, %@";
 "download_tab_local" = "Local";
-"mile" = "ml";
+"mile" = "mi";
 "yard" = "yd";
 "mapillary" = "Mapillary";
 "testFlight" = "TestFlight";
@@ -3463,7 +3463,7 @@
 "day_short" = "d";
 "lang_ur" = "Urdu";
 "nm" = "nmi";
-"shared_string_cache" = "Caché";
+"shared_string_cache" = "Antememoria";
 "shared_string_open_street_map" = "OpenStreetMap";
 "shared_string_visible" = "Visible";
 "driving_region_india" = "India";
@@ -3476,20 +3476,20 @@
 "km_h" = "km/h";
 "reddit" = "Reddit";
 "min_mile" = "min/m";
-"shared_z_a" = "Z - A";
+"shared_z_a" = "Z-A";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "index_name_asia" = "Asia";
 "rendering_value_sacScale_name" = "SAC";
 "m" = "m";
 "int_min" = "min";
-"int_hour" = "hr.";
+"int_hour" = "h";
 "mapillary_item" = "OsmAnd + Mapillary";
 "units_sec_short" = "seg.";
 "shared_string_total" = "Total";
 "default_price_currency_format" = "%.2f %@";
 "m_s" = "m/s";
 "kg" = "kg";
-"shared_a_z" = "A - Z";
+"shared_a_z" = "A-Z";
 "download_wikipedia_maps" = "Wikipedia";
 "units_nm_h" = "nmi/h";
 "shared_string_wikivoyage" = "Wikivoyage";

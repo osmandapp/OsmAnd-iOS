@@ -692,6 +692,7 @@
 		469F0C242C627F9000874CC6 /* PaletteCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 469F0C232C627F9000874CC6 /* PaletteCollectionViewCell.xib */; };
 		46A27270281DD05E00FF591D /* osm-carto.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 46A2726F281DD05D00FF591D /* osm-carto.render.xml */; };
 		46A35EF52C53F9510089B21C /* DirectoryObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A35EF42C53F9510089B21C /* DirectoryObserver.swift */; };
+		46A5A3872CA5DCDA00A206C2 /* ActionAddTerrainColorSchemeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A5A3862CA5DCDA00A206C2 /* ActionAddTerrainColorSchemeViewController.swift */; };
 		46A8FD33297D985700AF9C0C /* OAUninstallSpeedCamerasViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 46A8FD32297D985700AF9C0C /* OAUninstallSpeedCamerasViewController.mm */; };
 		46AB58A729C4C979003B2FB9 /* OAWikipediaImagesSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46AB58A629C4C979003B2FB9 /* OAWikipediaImagesSettingsViewController.m */; };
 		46AD052A2C29E2060032C3B7 /* color-palette in Resources */ = {isa = PBXBuildFile; fileRef = 46AD05292C29E2060032C3B7 /* color-palette */; };
@@ -740,6 +741,7 @@
 		46BCD1922C2DCA0F008749EC /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 463EFDD92C2C92A300549EF7 /* ColorPalette.swift */; };
 		46BD939B2B763CC8004BC4F5 /* FFCircularProgressView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46BD939A2B763CC8004BC4F5 /* FFCircularProgressView+Extension.swift */; };
 		46BE1FFE2AF0317D005F952E /* ScreenOrientationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46BE1FFD2AF0317D005F952E /* ScreenOrientationHelper.swift */; };
+		46BF38DC2CA44C090056D2C2 /* TerrainColorSchemeAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46BF38DB2CA44C090056D2C2 /* TerrainColorSchemeAction.swift */; };
 		46C2FD8328B38EF600771E6E /* ic_custom_user_profile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46C2FD7D28B38EF400771E6E /* ic_custom_user_profile@2x.png */; };
 		46C2FD8428B38EF600771E6E /* ic_custom_user_profile@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46C2FD7E28B38EF500771E6E /* ic_custom_user_profile@3x.png */; };
 		46C2FD8528B38EF600771E6E /* ic_custom_storage@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46C2FD7F28B38EF500771E6E /* ic_custom_storage@3x.png */; };
@@ -4079,6 +4081,7 @@
 		469F0C232C627F9000874CC6 /* PaletteCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PaletteCollectionViewCell.xib; sourceTree = "<group>"; };
 		46A2726F281DD05D00FF591D /* osm-carto.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "osm-carto.render.xml"; path = "../resources/rendering_styles/osm-carto.render.xml"; sourceTree = "<group>"; };
 		46A35EF42C53F9510089B21C /* DirectoryObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectoryObserver.swift; sourceTree = "<group>"; };
+		46A5A3862CA5DCDA00A206C2 /* ActionAddTerrainColorSchemeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionAddTerrainColorSchemeViewController.swift; sourceTree = "<group>"; };
 		46A8FD31297D982200AF9C0C /* OAUninstallSpeedCamerasViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAUninstallSpeedCamerasViewController.h; sourceTree = "<group>"; };
 		46A8FD32297D985700AF9C0C /* OAUninstallSpeedCamerasViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAUninstallSpeedCamerasViewController.mm; sourceTree = "<group>"; };
 		46AB58A529C4C967003B2FB9 /* OAWikipediaImagesSettingsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAWikipediaImagesSettingsViewController.h; sourceTree = "<group>"; };
@@ -4138,6 +4141,7 @@
 		46BB3678294BE77200155EC8 /* OAEmissionHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAEmissionHelper.mm; sourceTree = "<group>"; };
 		46BD939A2B763CC8004BC4F5 /* FFCircularProgressView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FFCircularProgressView+Extension.swift"; sourceTree = "<group>"; };
 		46BE1FFD2AF0317D005F952E /* ScreenOrientationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenOrientationHelper.swift; sourceTree = "<group>"; };
+		46BF38DB2CA44C090056D2C2 /* TerrainColorSchemeAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerrainColorSchemeAction.swift; sourceTree = "<group>"; };
 		46C2FD7D28B38EF400771E6E /* ic_custom_user_profile@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_user_profile@2x.png"; path = "Resources/Icons/ic_custom_user_profile@2x.png"; sourceTree = "<group>"; };
 		46C2FD7E28B38EF500771E6E /* ic_custom_user_profile@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_user_profile@3x.png"; path = "Resources/Icons/ic_custom_user_profile@3x.png"; sourceTree = "<group>"; };
 		46C2FD7F28B38EF500771E6E /* ic_custom_storage@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_storage@3x.png"; path = "Resources/Icons/ic_custom_storage@3x.png"; sourceTree = "<group>"; };
@@ -10851,6 +10855,7 @@
 				323F04C32C656B970058DD78 /* ShowHideSkiSlopesAction.swift */,
 				323F04C72C6577340058DD78 /* ShowHideWhitewaterSportsAction.swift */,
 				46132FAF2C904D1A00C9F364 /* DisplayPositionAction.swift */,
+				46BF38DB2CA44C090056D2C2 /* TerrainColorSchemeAction.swift */,
 			);
 			path = Actions;
 			sourceTree = "<group>";
@@ -11948,6 +11953,7 @@
 				DA5A7DD826C563A300F274C7 /* OAQuickActionsSheetView.h */,
 				DA5A7DCF26C563A300F274C7 /* OAQuickActionsSheetView.m */,
 				DA5A7DD326C563A300F274C7 /* OAQuickActionsSheetView.xib */,
+				46A5A3862CA5DCDA00A206C2 /* ActionAddTerrainColorSchemeViewController.swift */,
 			);
 			path = QuickAction;
 			sourceTree = "<group>";
@@ -16207,6 +16213,7 @@
 				DA5A834426C563A800F274C7 /* OATitleDescriptionIconRoundCell.m in Sources */,
 				DA5A847D26C563A900F274C7 /* OANextTurnWidget.mm in Sources */,
 				DA5A817326C563A700F274C7 /* OAFavoriteItem.mm in Sources */,
+				46A5A3872CA5DCDA00A206C2 /* ActionAddTerrainColorSchemeViewController.swift in Sources */,
 				46220B702AD6D6F2006C3248 /* OABaseEditorViewController.mm in Sources */,
 				DA5A855B26C563A900F274C7 /* OAWorldRegion.mm in Sources */,
 				DAEDAAA12865A0F100CE54D0 /* OABackupInfoGenerationTask.m in Sources */,
@@ -17222,6 +17229,7 @@
 				46D38A9C29C398E1000AAE0C /* OARoutingDataUtils.mm in Sources */,
 				DA5A836226C563A800F274C7 /* OATitleDescriptionCollapsableCell.m in Sources */,
 				DA5A815826C563A700F274C7 /* OAOsmEditingPlugin.mm in Sources */,
+				46BF38DC2CA44C090056D2C2 /* TerrainColorSchemeAction.swift in Sources */,
 				DA5A845A26C563A900F274C7 /* OAGPXRecLayer.mm in Sources */,
 				DA5A837826C563A800F274C7 /* OARouteSettingsBaseViewController.mm in Sources */,
 				DA5A847226C563A900F274C7 /* OATurnResource.m in Sources */,

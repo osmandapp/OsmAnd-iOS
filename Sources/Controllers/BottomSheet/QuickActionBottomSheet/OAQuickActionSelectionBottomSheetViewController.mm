@@ -18,6 +18,7 @@
 #import "OAMapStyleAction.h"
 #import "OAIndexConstants.h"
 #import "OAMapSource.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kButtonsDividerTag 150
 #define kMessageFieldIndex 1
@@ -33,7 +34,7 @@
     NSArray* _data;
     
     OASwitchableAction *_action;
-    EOAMapSourceType _type;
+    EOAQASelectionType _type;
 }
 
 @synthesize tableData, tblView;
@@ -70,7 +71,7 @@
                      @"title" : _action.getDescrTitle,
                      @"description" : @""
                      }];
-    if (vwController.type == EOAMapSourceTypeStyle)
+    if (vwController.type == EOAQASelectionTypeStyle)
     {
         if ([_action isKindOfClass:OAMapStyleAction.class])
         {
@@ -85,6 +86,23 @@
                     @"title" : param,
                     @"source" : source,
                     @"img" : [NSString stringWithFormat:@"img_mapstyle_%@", [source.resourceId stringByReplacingOccurrencesOfString:RENDERER_INDEX_EXT withString:@""]]
+                }];
+            }
+        }
+    }
+    else if (vwController.type == EOAQASelectionTypeTerrainScheme)
+    {
+        for (NSString *palette in params)
+        {
+            TerrainMode *mode = [TerrainMode getByKey:palette];
+            if (mode)
+            {
+                ColorPalette *colorPalette = [[ColorPaletteHelper shared] getGradientColorPalette:[mode getMainFile]];
+                [arr addObject:@{
+                    @"type": [OASimpleTableViewCell getCellIdentifier],
+                    @"title": [mode getDefaultDescription],
+                    @"value": colorPalette,
+                    @"param": @[palette]
                 }];
             }
         }
@@ -155,35 +173,52 @@
         
         if (cell)
         {
-            UIImage *img = nil;
-            NSString *imgName = item[@"img"];
-            if (imgName)
-                img = [UIImage imageNamed:imgName];
-            
+            if (vwController.type == EOAQASelectionTypeTerrainScheme)
+            {
+                cell.leftIconView.layer.cornerRadius = 3;
+                ColorPalette *colorPalette = item[@"value"];
+                [PaletteCollectionHandler applyGradientTo:cell.leftIconView
+                                                     with:colorPalette];
+                [cell descriptionVisibility:YES];
+                cell.descriptionLabel.text = [PaletteCollectionHandler createDescriptionForPalette:colorPalette];
+            }
+            else
+            {
+                NSString *imgName = item[@"img"];
+                cell.leftIconView.image = imgName ? [UIImage imageNamed:imgName] : nil;
+
+                NSString *desc = item[@"descr"];
+                cell.descriptionLabel.text = desc;
+                [cell descriptionVisibility:desc.length != 0];
+            }
+
             cell.titleLabel.text = item[@"title"];
-            NSString *desc = item[@"descr"];
-            cell.descriptionLabel.text = desc;
-            [cell descriptionVisibility:desc.length != 0];
-            cell.leftIconView.image = img;
             BOOL isActive;
             switch (vwController.type)
             {
-                case EOAMapSourceTypeSource:
-                case EOAMapSourceTypeStyle:
+                case EOAQASelectionTypeSource:
+                case EOAQASelectionTypeStyle:
                 {
                     isActive = [_app.data.lastMapSource.name isEqualToString:item[@"title"]];
                     break;
                 }
-                case EOAMapSourceTypeOverlay:
+                case EOAQASelectionTypeOverlay:
                 {
                     isActive = [_app.data.overlayMapSource.name isEqualToString:item[@"title"]]
                     || (_app.data.overlayMapSource == nil && [item[@"value"] isEqualToString:@"no_overlay"]);
                     break;
                 }
-                case EOAMapSourceTypeUnderlay:
+                case EOAQASelectionTypeUnderlay:
                 {
                     isActive = [_app.data.underlayMapSource.name isEqualToString:item[@"title"]]
                     || (_app.data.underlayMapSource == nil && [item[@"value"] isEqualToString:@"no_underlay"]);
+                    break;
+                }
+                case EOAQASelectionTypeTerrainScheme:
+                {
+                    OASRTMPlugin *plugin = (OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class];
+                    NSArray<NSString *> *param = item[@"param"];
+                    isActive = plugin && [[[plugin getTerrainMode] getKeyName] isEqualToString:param.firstObject];
                     break;
                 }
                 default:
@@ -193,6 +228,8 @@
                 }
             }
             cell.accessoryType = isActive ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+            cell.accessibilityLabel = cell.titleLabel.text;
+            cell.accessibilityValue = OALocalizedString(isActive ? @"shared_string_selected" : @"shared_string_not_selected");
         }
         return cell;
     }
@@ -236,7 +273,7 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
-    if (vwController.type == EOAMapSourceTypeStyle)
+    if (vwController.type == EOAQASelectionTypeStyle)
     {
         OAMapSource *newMapSource = item[@"source"];
         _app.data.lastMapSource = newMapSource;
@@ -266,7 +303,7 @@
 
 @implementation OAQuickActionSelectionBottomSheetViewController
 
-- (instancetype) initWithAction:(OASwitchableAction *)action type:(EOAMapSourceType)type
+- (instancetype) initWithAction:(OASwitchableAction *)action type:(EOAQASelectionType)type
 {
     _type = type;
     return [super initWithParam:action];

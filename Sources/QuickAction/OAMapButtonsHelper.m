@@ -268,6 +268,7 @@ static QuickActionType *TYPE_MY_PLACES;
     [allTypes addObject:OAShowHidePoiAction.TYPE];
     [allTypes addObject:OADayNightModeAction.TYPE];
     [allTypes addObject:OAMapStyleAction.TYPE];
+    [allTypes addObject:TerrainColorSchemeAction.type];
     [allTypes addObject:OAMapSourceAction.TYPE];
     [allTypes addObject:OAMapOverlayAction.TYPE];
     [allTypes addObject:OAMapUnderlayAction.TYPE];

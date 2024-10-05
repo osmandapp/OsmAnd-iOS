@@ -398,9 +398,9 @@
 "fav_enter_group_name" = "Sisesta grupi nimi";
 "fav_exists" = "Lemmik nimega \"%@\" on juba olemas";
 "fav_ignore" = "Eira";
-"shared_string_rename" = "Nimeta ümber";
+"shared_string_rename" = "Muuda nime";
 "update_existing" = "Asenda";
-"fav_rename_q" = "Nimeta lemmik ümber";
+"fav_rename_q" = "Muuda lemmiku nime";
 "fav_enter_new_name" = "Palun sisesta lemmiku uus nimi";
 "fav_select" = "Palun vali lemmikud";
 "select_favorite" = "Vali lemmik";
@@ -993,7 +993,7 @@
 "create_new_trip" = "Loo uus teekond";
 "editing_waypoints" = "Teekonnapunktide muutmine";
 "select_wpt_on_map" = "Vali kaardilt punkt ja lisa teekonnale";
-"rename_track" = "Nimeta teekond ümber";
+"rename_track" = "Muuda teekonna nime";
 "gpx_enter_new_name" = "Palun sisesta teekonna uus nimi";
 "gpx_cancel_route_q" = "Kas soovid käesoleva teekonna katkestada?";
 "local_indexes_cat_backup" = "Keelatud";
@@ -1947,8 +1947,8 @@
 "gpxup_identifiable" = "Äratuntav";
 "gpxup_public" = "Avalik";
 "default_color_descr" = "Seda värvi kasutatakse kõigi uute gruppi lisatud lemmikute puhul.";
-"fav_point_emoticons_message" = "Emotikone sisaldava stringi salvestamiseks faili nimetati lemmik ümber \'%@\'.";
-"fav_point_dublicate_message" = "Korduvuse vältimiseks nimetatud lemmik ümber %@.";
+"fav_point_emoticons_message" = "Emotikone sisaldava stringi salvestamiseks faili muutsime lemmiku uueks nimeks '%@'.";
+"fav_point_dublicate_message" = "Korduvuse vältimiseks muutsime lemmiku uueks nimeks %@.";
 "shared_string_shape" = "Kuju";
 "name_and_descr" = "Nimi ja kirjeldus";
 "add_favorite" = "Lisa lemmik";

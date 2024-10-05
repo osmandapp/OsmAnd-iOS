@@ -2642,7 +2642,7 @@
 "delete_folder" = "Mappa törlése";
 "osmand_cloud_deletion_subscriptions_warning" = "Ezzel nem törli az OsmAnd Pro előfizetését.";
 "shared_string_system_default" = "Rendszer-alapértelmezés";
-"navigation_points_desc" = "A navigációs widgeteket a navigáció során lehet engedélyezni, és többek között a következő információkat jeleníthetik meg: távolság, érkezési vagy hátralévő idő, következő kanyarodások, irány, jelenlegi/következő utcanév, sávinformációk, sebességkorlátozás, közeledő figyelmeztetések, érdekes pontok (POI-k), útpontok.";
+"navigation_points_desc" = "A navigációs modulok a navigáció során vannak engedélyezve, és olyan információkat jelenítenek meg, mint a távolság, az érkezési vagy hátralévő idő, a következő kanyarok, az irány, az aktuális/következő utcanév, a sávokra vonatkozó információk, a sebességkorlátozás, a közeledő figyelmeztetések, az érdekes pontok (POI-k) vagy az útpontok.";
 "shared_string_deleting" = "Törlés folyamatban";
 "osm_created" = "Létrehozva";
 "true_bearing_widget_desc" = "A valódi észak és a célpont közötti, az Ön tartózkodási helyéről megfigyelt szög.";

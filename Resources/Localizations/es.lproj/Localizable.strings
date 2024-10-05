@@ -3533,3 +3533,5 @@
 "shared_string_local" = "Local";
 "weather_source_ecmwf_title" = "ECMWF";
 "beats_per_minute_short" = "bpm";
+"quick_action_terrain_color_scheme" = "Esquema de colores del terreno";
+"quick_action_need_to_add_item_to_list" = "Añadir al menos un elemento a la lista en los ajustes de «Acción rápida»";

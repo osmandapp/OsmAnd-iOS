@@ -3459,3 +3459,10 @@
 "help_article_troubleshooting_android_auto_name" = "Android Auto";
 "shared_string_status" = "Status";
 "simulate_location_movement_speed_original" = "Original";
+"cubic_m" = "m³";
+"foot" = "ft";
+"yard" = "yd";
+"km" = "km";
+"mile" = "mi";
+"quick_action_need_to_add_item_to_list" = "Adicionar ao menos um item à lista nas configurações de 'Ação rápida'";
+"quick_action_terrain_color_scheme" = "Esquema de cores do terreno";

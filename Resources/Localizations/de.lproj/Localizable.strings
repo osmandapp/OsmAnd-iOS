@@ -3398,7 +3398,7 @@
 "lang_af" = "Afrikaans";
 "routing_attr_motor_type_hybrid_name" = "Hybrid";
 "app_mode_ufo" = "UFO";
-"app_mode_offroad" = "Offroad";
+"app_mode_offroad" = "Gelände";
 "shared_string_export" = "Exportieren";
 "mapillary" = "Mapillary";
 "shared_string_hand" = "Hand";
@@ -3494,7 +3494,7 @@
 "int_hour" = "h";
 "lang_gn_py" = "Guaraní";
 "shared_string_import" = "Import";
-"shared_string_routing" = "Routing";
+"shared_string_routing" = "Routenführung";
 "m_s" = "m/s";
 "facebook" = "Facebook";
 "shared_a_z" = "A - Z";

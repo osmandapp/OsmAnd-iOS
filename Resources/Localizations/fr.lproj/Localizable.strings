@@ -3342,3 +3342,7 @@
 "daynight_mode_night_summary" = "Affiche toujours la carte en mode sombre, adapté pour la nuit ou une faible luminosité.";
 "daynight_mode_app_theme_summary" = "L\'affichage de la carte s\'adapte au thème de l\'application (mode jour pour un thème clair et mode nuit pour un thème sombre)";
 "daynight_mode_sunrise_sunset_summary" = "Bascule automatiquement entre les thèmes clair et sombre en fonction du lever et du coucher du soleil.";
+"lang_pnb" = "Punjabi";
+"tracker_item" = "OsmAnd tracker";
+"info_button" = "Info";
+"rendering_attr_horse_scale_impossible_name" = "Impossible";

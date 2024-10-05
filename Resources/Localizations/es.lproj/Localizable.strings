@@ -424,7 +424,7 @@
 "poi_filter_by_name" = "Buscar por nombre";
 "poi_filter_closest_poi" = "PDI más cercanos";
 "poi_filter_custom_filter" = "Filtro personal";
-"edit_filter_delete_dialog_title" = "¿Quiere eliminar este filtro?";
+"edit_filter_delete_dialog_title" = "¿Eliminar este filtro?";
 "apply_filters" = "Aplicar filtros";
 "postcode" = "Código postal";
 "shared_string_from" = "desde";
@@ -3464,7 +3464,7 @@
 "day_short" = "d";
 "lang_ur" = "Urdu";
 "nm" = "nmi";
-"shared_string_cache" = "Antememoria";
+"shared_string_cache" = "Caché";
 "shared_string_open_street_map" = "OpenStreetMap";
 "shared_string_visible" = "Visible";
 "driving_region_india" = "India";

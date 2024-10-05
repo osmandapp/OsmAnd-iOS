@@ -3542,3 +3542,5 @@
 "ft_s" = "ft/s";
 "driving_region_australia" = "Australia";
 "shared_string_no" = "No";
+"quick_action_terrain_color_scheme" = "Esquema de color del terreno";
+"quick_action_need_to_add_item_to_list" = "Añadir al menos un elemento a la lista en los ajustes de «Acción rápida»";

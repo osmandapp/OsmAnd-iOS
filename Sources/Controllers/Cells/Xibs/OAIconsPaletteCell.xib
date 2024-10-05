@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_12" orientation="portrait" appearance="dark"/>
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
@@ -96,13 +96,25 @@
                                             <constraint firstAttribute="height" id="lO0-is-kOv"/>
                                         </constraints>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fki-YG-97m">
+                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HeO-Dq-xW7">
                                         <rect key="frame" x="0.0" y="9" width="393" height="1"/>
-                                        <color key="backgroundColor" systemColor="separatorColor"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="1" id="Ezj-p8-v0I"/>
-                                        </constraints>
-                                    </view>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yas-2I-GUn">
+                                                <rect key="frame" x="0.0" y="0.0" width="20" height="1"/>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="20" id="2Fj-vz-yvL"/>
+                                                </constraints>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fki-YG-97m" userLabel="Separator View">
+                                                <rect key="frame" x="20" y="0.0" width="373" height="1"/>
+                                                <color key="backgroundColor" systemColor="separatorColor"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="1" id="Ezj-p8-v0I"/>
+                                                </constraints>
+                                            </view>
+                                        </subviews>
+                                    </stackView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UC7-iw-mHb">
                                         <rect key="frame" x="0.0" y="19" width="393" height="0.0"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -172,6 +184,7 @@
                 <outlet property="collectionView" destination="DOd-wT-r3R" id="vOQ-He-2Ra"/>
                 <outlet property="collectionViewHeight" destination="Ft8-45-Pf1" id="u9e-mm-AHH"/>
                 <outlet property="contentOutsideStackViewVertical" destination="Pde-Gp-UrD" id="xiC-Ve-Sf5"/>
+                <outlet property="separatorHeight" destination="Ezj-p8-v0I" id="Qla-HS-OjB"/>
                 <outlet property="topLabel" destination="64G-5F-WnM" id="gCI-qs-SCW"/>
                 <outlet property="topMarginStackView" destination="AxO-VI-ivf" id="BE5-Ss-SJY"/>
                 <outlet property="topTitleOffset" destination="uTJ-YG-ThI" id="3PP-dv-rKz"/>

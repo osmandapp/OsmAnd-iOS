@@ -302,7 +302,7 @@
                 [iconHandler setItemSizeWithSize:152];
                 [iconHandler setIconSizeWithSize:52];
                 iconHandler.roundedSquareCells = YES;
-                iconHandler.cornerRadius = 6;
+                iconHandler.cornerRadius = 9;
                 iconHandler.iconImagesData = @[_iconImages];
             }
             
@@ -546,6 +546,9 @@
 
         if (self.iconsDelegate)
             [self.iconsDelegate selectIconName:_selectedIconItem];
+        
+        if (_collectionType == EOAColorCollectionTypeBigIconItems)
+            [self dismissViewController];
     }
     else 
     {

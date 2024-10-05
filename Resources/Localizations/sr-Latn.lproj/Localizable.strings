@@ -3434,6 +3434,7 @@
 "location_radius" = "Radijus lokacije";
 "tracker_item" = "OsmAnd monitor";
 "of" = "%d od %d";
+"downloaded_bytes" = "%@ od %@";
 "daynight_mode_night_summary" = "Mapu uvek prikazivati u tamnoj temi, prikladnoj za noć ili u uslovima slabog osvetljenja.";
 "daynight_mode_app_theme_summary" = "Prikaz mape usklađen je s celokupnom temom aplikacije—dnevni način rada za svetlu temu i noćni način rada za tamnu temu";
 "daynight_mode_sunrise_sunset_summary" = "Automatski se prebacuje između dnevne i noćne teme na temelju lokalnog izlaska i zalaska sunca.";

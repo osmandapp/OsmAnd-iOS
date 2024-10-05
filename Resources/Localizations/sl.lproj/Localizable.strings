@@ -2441,3 +2441,4 @@
 "show_along_the_route" = "Pokaži vzdolž poti";
 "quick_action_toggle_preference" = "Stikalo za spremembo nastavitev.";
 "of" = "%d od %d";
+"downloaded_bytes" = "%@ od %@";

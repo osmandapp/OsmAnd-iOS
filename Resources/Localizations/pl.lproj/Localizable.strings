@@ -3201,5 +3201,6 @@
 "daynight_mode_app_theme_summary" = "Wyświetlanie mapy jest zgodne z ogólnym motywem aplikacji - tryb dzienny dla jasnego motywu i tryb nocny dla ciemnego motywu";
 "daynight_mode_day_summary" = "Zawsze wyświetla mapę w jasnym motywie, idealnym do widoczności w ciągu dnia.";
 "of" = "%d z %d";
+"downloaded_bytes" = "%@ z %@";
 "daynight_mode_sunrise_sunset_summary" = "Automatycznie przełącza się między motywami dziennym i nocnym w oparciu o lokalne godziny wschodu i zachodu słońca.";
 "daynight_mode_night_summary" = "Zawsze wyświetla mapę w ciemnym motywie, dostosowanym do warunków nocnych lub słabego oświetlenia.";

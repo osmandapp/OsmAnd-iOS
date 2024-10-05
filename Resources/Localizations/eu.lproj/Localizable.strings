@@ -2463,6 +2463,7 @@
 "navigation_position_icon" = "Nabigazio-posizioaren ikonoa";
 "location_radius" = "Kokapen erradioa";
 "of" = "%d / %d";
+"downloaded_bytes" = "%@ / %@";
 "daynight_mode_day_summary" = "Mapa gai argi batean bistaratzen du beti, egunez ikusteko aproposa.";
 "daynight_mode_night_summary" = "Mapa gai ilun batean bistaratzen du beti, gaueko edo argi gutxiko baldintzetarako egokia.";
 "daynight_mode_sunrise_sunset_summary" = "Eguneko eta gaueko gaien artean automatikoki aldatzen da eguzkiaren eta ilunabarraren orduetan oinarrituta.";

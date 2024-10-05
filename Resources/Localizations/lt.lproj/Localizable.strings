@@ -1703,3 +1703,4 @@
 "shared_string_local" = "Vietinis";
 "download_wikipedia_maps" = "Vikipedija";
 "of" = "%d iš %d";
+"downloaded_bytes" = "%@ iš %@";

@@ -39,7 +39,6 @@ final class DownloadingListViewController: OABaseNavbarViewController, Downloadi
         downloadingCellResourceHelper?.stopWithAlertMessage = true
         downloadingCellResourceHelper?.isDownloadedLeftIconRecolored = true
         downloadingCellResourceHelper?.rightIconStyle = .showDoneIconAfterDownloading
-        downloadingCellResourceHelper?.rightIconName = "ic_custom_done"
         downloadingCellResourceHelper?.rightIconColor = .iconColorActive
         downloadingCellResourceHelper?.showDownloadingBytesInDescription = true
     }

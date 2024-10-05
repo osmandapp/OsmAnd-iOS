@@ -1252,3 +1252,4 @@
 "navigate_point_format_D" = "DDD.DD";
 "navigate_point_format_DM" = "DDD MM.MM";
 "of" = "%d / %d";
+"downloaded_bytes" = "%@ / %@";

@@ -3369,3 +3369,4 @@
 "daynight_mode_night_summary" = "Visualizza sempre la mappa con un tema scuro, adatto alle ore notturne o alle condizioni di scarsa illuminazione.";
 "daynight_mode_app_theme_summary" = "La visualizzazione della mappa si allinea al tema generale dell\'app: modalità giorno per un tema chiaro e modalità notturna per un tema scuro";
 "of" = "%d di %d";
+"downloaded_bytes" = "%@ di %@";

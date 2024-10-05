@@ -2009,3 +2009,4 @@
 "quick_action_toggle_preference" = "Togl i newid dewis.";
 "shared_string_local" = "Lleol";
 "of" = "%d o %d";
+"downloaded_bytes" = "%@ o %@";

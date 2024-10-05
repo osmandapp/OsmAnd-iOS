@@ -806,3 +806,4 @@
 "shared_string_show" = "Sken";
 "shared_string_local" = "Adigan";
 "of" = "%d ɣef %d";
+"downloaded_bytes" = "%@ ɣef %@";

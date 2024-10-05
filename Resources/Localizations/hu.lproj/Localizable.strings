@@ -2915,5 +2915,6 @@
 "daynight_mode_night_summary" = "Mindig sötét témában jeleníti meg a térképet, éjszaka vagy gyenge fényviszonyokhoz ideális.";
 "daynight_mode_day_summary" = "Mindig világos témával jeleníti meg a térképet, nappali fényviszonyokhoz ideális.";
 "of" = "%d / %d";
+"downloaded_bytes" = "%@ / %@";
 "daynight_mode_app_theme_summary" = "A térkép megjelenése igazodik az alkalmazás általános témájához – nappali mód világos témához, éjszakai mód sötét témához";
 "daynight_mode_sunrise_sunset_summary" = "A helyi napkelte és napnyugta időpontja alapján automatikusan vált a nappali és éjszakai téma között.";

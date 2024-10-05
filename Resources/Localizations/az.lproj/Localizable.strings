@@ -1510,3 +1510,4 @@
 "quick_action_toggle_preference" = "Seçimi dəyişmək üçün düymə.";
 "shared_string_local" = "Yerli";
 "of" = "%d / %d";
+"downloaded_bytes" = "%@ / %@";

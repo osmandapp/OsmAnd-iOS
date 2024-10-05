@@ -699,3 +699,4 @@
 "shared_string_show" = "காட்டு";
 "default_price_currency_format" = "%.2f %@ \n";
 "of" = "%d இல் %d";
+"downloaded_bytes" = "%@ இல் %@";

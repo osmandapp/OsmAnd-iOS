@@ -1980,3 +1980,4 @@
 "ltr_or_rtl_combine_via_comma" = "%@،‏ %@";
 "app_mode_utv" = "UTV";
 "of" = "%d از %d";
+"downloaded_bytes" = "%@ از %@";

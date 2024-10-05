@@ -40,7 +40,7 @@ final class DownloadingListHelper: NSObject, DownloadingCellResourceHelperDelega
                 tasks.append(task)
             }
         }
-        tasks.sort { $0.name < $1.name }
+        tasks.sort { $0.creationTime < $1.creationTime }  
         return tasks
     }
     

@@ -1721,3 +1721,4 @@
 "device_settings" = "Axustes do dispositivo";
 "backup_and_restore" = "Copia de seguranza e restauración";
 "of" = "%d de %d";
+"downloaded_bytes" = "%@ de %@";

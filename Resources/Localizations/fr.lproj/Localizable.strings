@@ -3337,6 +3337,7 @@
 "profile_icon" = "Icône du profil";
 "shared_string_distance" = "DIstance";
 "of" = "%d de %d";
+"downloaded_bytes" = "%@ de %@";
 "daynight_mode_day_summary" = "Affiche toujours la carte avec le thème clair, adapté à la journée.";
 "daynight_mode_night_summary" = "Affiche toujours la carte en mode sombre, adapté pour la nuit ou une faible luminosité.";
 "daynight_mode_app_theme_summary" = "L\'affichage de la carte s\'adapte au thème de l\'application (mode jour pour un thème clair et mode nuit pour un thème sombre)";

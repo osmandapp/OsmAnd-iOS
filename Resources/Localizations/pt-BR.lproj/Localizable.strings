@@ -3411,6 +3411,7 @@
 "short_location_on_map" = "Latitude %@ \nLongitude %@";
 "offline_wikivoyage" = "Wikivoyage offline";
 "of" = "%d de %d";
+"downloaded_bytes" = "%@ de %@";
 "daynight_mode_day_summary" = "Sempre exibe o mapa em um tema claro, ideal para visibilidade durante o dia.";
 "daynight_mode_night_summary" = "Sempre exibe o mapa em um tema escuro, adequado para condições noturnas ou de baixa luminosidade.";
 "daynight_mode_sunrise_sunset_summary" = "Alterna automaticamente entre temas claro e escuro com base nos horários locais do nascer e do pôr do sol.";

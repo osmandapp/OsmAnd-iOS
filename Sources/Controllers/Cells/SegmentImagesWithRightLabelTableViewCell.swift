@@ -14,8 +14,8 @@ final class SegmentImagesWithRightLabelTableViewCell: UITableViewCell {
 
     var didSelectSegmentIndex: ((Int) -> Void)?
 
-    private var icons: [String]?
-    private var selectedIcons: [String]?
+    private var icons: [UIImage]?
+    private var selectedIcons: [UIImage]?
     private var selectedSegmentIndex = 0
     
     func configureTitle(title: String?) {
@@ -25,35 +25,30 @@ final class SegmentImagesWithRightLabelTableViewCell: UITableViewCell {
         titleLabel.isHidden = !hasTitle
     }
     
-    func configureSegmentedControl(icons: [String],
+    func configureSegmentedControl(icons: [UIImage],
                                    selectedSegmentIndex: Int,
-                                   selectedIcons: [String]? = nil) {
+                                   selectedIcons: [UIImage]? = nil) {
         self.selectedSegmentIndex = selectedSegmentIndex
         segmentedControl.removeAllSegments()
         self.icons = icons
         self.selectedIcons = selectedIcons
         for (index, icon) in icons.enumerated() {
-            if let image = UIImage(named: icon) {
-                segmentedControl.insertSegment(with: image, at: index, animated: true)
-            }
+            segmentedControl.insertSegment(with: icon, at: index, animated: false)
         }
         segmentedControl.selectedSegmentIndex = selectedSegmentIndex
-        if let selectedIcons,
-           let image = UIImage(named: selectedIcons[selectedSegmentIndex]) {
-            segmentedControl.setImage(image,
+        if let selectedIcons {
+            segmentedControl.setImage(selectedIcons[selectedSegmentIndex],
                                       forSegmentAt: selectedSegmentIndex)
         }
     }
 
     @IBAction private func segmentedControlButtonClickAction(_ sender: UISegmentedControl) {
-        if let selectedIcons,
-           let image = UIImage(named: selectedIcons[sender.selectedSegmentIndex]) {
-            segmentedControl.setImage(image,
+        if let selectedIcons {
+            segmentedControl.setImage(selectedIcons[sender.selectedSegmentIndex],
                                       forSegmentAt: sender.selectedSegmentIndex)
         }
-        if let icons,
-           let image = UIImage(named: icons[selectedSegmentIndex]) {
-            segmentedControl.setImage(image,
+        if let icons {
+            segmentedControl.setImage(icons[selectedSegmentIndex],
                                       forSegmentAt: selectedSegmentIndex)
         }
         selectedSegmentIndex = sender.selectedSegmentIndex

@@ -3532,3 +3532,5 @@
 "product_title_pro" = "OsmAnd Pro";
 "shared_string_interval" = "Interval";
 "shared_string_open_street_map" = "OpenStreetMap";
+"quick_action_terrain_color_scheme" = "Farvetema for terræn";
+"quick_action_need_to_add_item_to_list" = "Tilføj mindst ét element til listen i 'Genvej'-indstillingerne";

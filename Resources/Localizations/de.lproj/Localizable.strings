@@ -3374,6 +3374,7 @@
 "osm_id" = "OSM-ID";
 "offline_wikivoyage" = "Wikivoyage offline";
 "of" = "%d von %d";
+"downloaded_bytes" = "%@ von %@";
 "daynight_mode_app_theme_summary" = "Die Kartendarstellung passt sich dem Gesamtthema der App an - Tagmodus für eine helle Darstellung und Nachtmodus für eine dunkle Darstellung";
 "daynight_mode_day_summary" = "Zeigt die Karte immer in einer hellen Darstellung an, ideal für die Sichtbarkeit bei Tag.";
 "daynight_mode_night_summary" = "Zeigt die Karte immer in einer dunklen Darstellung an, die für nächtliche oder lichtarme Bedingungen geeignet ist.";
@@ -3397,7 +3398,7 @@
 "lang_af" = "Afrikaans";
 "routing_attr_motor_type_hybrid_name" = "Hybrid";
 "app_mode_ufo" = "UFO";
-"app_mode_offroad" = "Offroad";
+"app_mode_offroad" = "Gelände";
 "shared_string_export" = "Exportieren";
 "mapillary" = "Mapillary";
 "shared_string_hand" = "Hand";
@@ -3493,7 +3494,7 @@
 "int_hour" = "h";
 "lang_gn_py" = "Guaraní";
 "shared_string_import" = "Import";
-"shared_string_routing" = "Routing";
+"shared_string_routing" = "Routenführung";
 "m_s" = "m/s";
 "facebook" = "Facebook";
 "shared_a_z" = "A - Z";
@@ -3548,3 +3549,5 @@
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
 "ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
 "ltr_or_rtl_combine_via_dash" = "%@ — %@";
+"quick_action_terrain_color_scheme" = "Gelände Farbschema";
+"quick_action_need_to_add_item_to_list" = "Mindestens ein Element der Liste in den „Schnellaktion“ Einstellungen hinzufügen";

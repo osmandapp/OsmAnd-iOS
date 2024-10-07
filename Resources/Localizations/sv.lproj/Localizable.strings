@@ -3225,3 +3225,4 @@
 "shared_string_relief_3d" = "3D relief";
 "map_widget_gps_info" = "GPS-info";
 "of" = "%d av %d";
+"downloaded_bytes" = "%@ av %@";

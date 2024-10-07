@@ -2578,6 +2578,7 @@
 "osm_id" = "OSM-ID";
 "navigate_point_format_DM" = "GGG MM.MMM";
 "of" = "%d van de %d";
+"downloaded_bytes" = "%@ van de %@";
 "daynight_mode_app_theme_summary" = "De weergave van de map is aangepast aan het kleurenschema van de app - dagmodus voor een licht schema, en nachtmodus voor een donker schema";
 "daynight_mode_day_summary" = "Toont de kaart altijd in een licht kleurenschema, ideaal voor zichtbaarheid in daglicht.";
 "daynight_mode_night_summary" = "Toont de kaart altijd in een donker kleurenschema, geschikt voor \'s nachts of in lichtarme omstandigheden.";

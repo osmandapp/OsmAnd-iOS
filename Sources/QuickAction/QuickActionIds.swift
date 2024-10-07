@@ -75,5 +75,10 @@ enum QuickActionIds: Int {
     case showHideWhitewaterSportsRoutesActionId = 64
     case showHideFitnessTrailsRoutesActionId = 65
     case showHideRunningRoutesActionId = 66
-    case openWinderlinqDatagridAction = 67
+    case openWunderlinqDatagridAction = 67
+    case changeMapOrientationAction = 68
+    case openNavigationViewAction = 69
+    case openSearchViewAction = 70
+    case showHideDrawerAction = 71
+    case navigatePreviousScreenAction = 72
 }

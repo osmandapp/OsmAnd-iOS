@@ -2551,3 +2551,4 @@
 "ltr_or_rtl_combine_via_colon" = "%@：%@";
 "daynight_mode_sunrise_sunset_summary" = "根据当地日出和日落时间，自动切换日间和夜间主题。";
 "of" = "%d 中的 %d";
+"downloaded_bytes" = "%@ 中的 %@";

@@ -462,14 +462,12 @@ typedef enum {
                 
         if (navigationModel)
         {
-            if (mode == currentMode)
-                [navigationModel setMainColor:iconColor];
+            [navigationModel setMainColor:iconColor];
             navigationModelCpp = [navigationModel model];
         }
         if (locationModel)
         {
-            if (mode == currentMode)
-                [locationModel setMainColor:iconColor];
+            [locationModel setMainColor:iconColor];
             locationModelCpp = [locationModel model];
         }
         

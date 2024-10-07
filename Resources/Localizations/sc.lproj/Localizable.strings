@@ -2988,3 +2988,4 @@
 "shared_string_local" = "Installadas";
 "short_location_on_map" = "Lat %@ \nLon %@";
 "of" = "%d de %d";
+"downloaded_bytes" = "%@ de %@";

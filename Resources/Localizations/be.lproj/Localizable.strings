@@ -2840,3 +2840,4 @@
 "quick_action_toggle_preference" = "Пераключальнік для змены параметраў.";
 "shared_string_local" = "Спампаваныя";
 "of" = "%d з %d";
+"downloaded_bytes" = "%@ з %@";

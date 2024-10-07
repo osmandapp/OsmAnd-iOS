@@ -3355,6 +3355,7 @@
 "rendering_attr_showDirtbikeTrails_description" = "Vis motocross-stier";
 "rendering_attr_showDirtbikeTrails_name" = "Vis motocross-stier";
 "of" = "%d af %d";
+"downloaded_bytes" = "%@ af %@";
 "daynight_mode_app_theme_summary" = "Kortets visning tilpasses appens overordnede tema — dagtilstand for et lyst tema og nattilstand for et mørkt tema";
 "daynight_mode_sunrise_sunset_summary" = "Skifter automatisk mellem dag- og nattemaer baseret på lokale solopgangs- og solnedgangstider.";
 "daynight_mode_night_summary" = "Viser altid kortet i et mørkt tema, der er velegnet til natlige eller svage lysforhold.";
@@ -3531,3 +3532,5 @@
 "product_title_pro" = "OsmAnd Pro";
 "shared_string_interval" = "Interval";
 "shared_string_open_street_map" = "OpenStreetMap";
+"quick_action_terrain_color_scheme" = "Farvetema for terræn";
+"quick_action_need_to_add_item_to_list" = "Tilføj mindst ét element til listen i 'Genvej'-indstillingerne";

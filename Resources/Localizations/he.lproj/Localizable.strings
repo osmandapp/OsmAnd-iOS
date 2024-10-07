@@ -2241,3 +2241,4 @@
 "show_along_the_route" = "הצגה לאורך המסלול";
 "shared_string_local" = "מקומי";
 "of" = "%d מתוך %d";
+"downloaded_bytes" = "%@ מתוך %@";

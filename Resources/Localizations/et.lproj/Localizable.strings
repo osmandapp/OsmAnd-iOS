@@ -2731,3 +2731,4 @@
 "show_along_the_route" = "Näita teekonnal";
 "view_angle_description" = "Kuvab koonusekujulise vaate, mida sa hetkel näed";
 "of" = "%d / %d";
+"downloaded_bytes" = "%@ / %@";

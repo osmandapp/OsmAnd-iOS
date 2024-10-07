@@ -3368,6 +3368,7 @@
 "resting_position" = "暫停位置";
 "daynight_mode_day_summary" = "一律以淺色主題顯示地圖，非常適合白天的可讀性。";
 "of" = "%d 的 %d";
+"downloaded_bytes" = "%@ 的 %@";
 "daynight_mode_app_theme_summary" = "地圖的顯示與應用程式的整體主題一致，白天模式適用於淺色主題，夜間模式適用於深色主題";
 "daynight_mode_night_summary" = "一律以深色主題顯示地圖，適合夜間或低光源條件。";
 "daynight_mode_sunrise_sunset_summary" = "根據當地日出與日落的時間自動切換日間與夜間主題。";

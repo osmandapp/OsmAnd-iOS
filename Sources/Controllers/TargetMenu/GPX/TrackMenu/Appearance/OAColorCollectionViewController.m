@@ -302,7 +302,7 @@
                 [iconHandler setItemSizeWithSize:152];
                 [iconHandler setIconSizeWithSize:52];
                 iconHandler.roundedSquareCells = YES;
-                iconHandler.cornerRadius = 6;
+                iconHandler.cornerRadius = 9;
                 iconHandler.iconImagesData = @[_iconImages];
             }
             
@@ -321,12 +321,17 @@
         OATwoIconsButtonTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OATwoIconsButtonTableViewCell reuseIdentifier]];
         PaletteColor *palette = [item objForKey:@"palette"];
         cell.titleLabel.text = item.title;
-        cell.descriptionLabel.text = [PaletteCollectionHandler createDescriptionForPaletteWithPalette:palette];
+        if ([palette isKindOfClass:PaletteGradientColor.class])
+        {
+            ColorPalette *colorPalette = ((PaletteGradientColor *) palette).colorPalette;
+            cell.descriptionLabel.text = [PaletteCollectionHandler createDescriptionForPalette:colorPalette];
+            [PaletteCollectionHandler applyGradientTo:cell.secondLeftIconView
+                                                 with:colorPalette];
+        }
+        cell.secondLeftIconView.layer.cornerRadius = 3;
         cell.leftIconView.image = palette == _selectedPaletteItem
             ? [UIImage imageNamed:@"ic_checkmark_default"]
             : nil;
-        [PaletteCollectionHandler applyGradientTo:cell.secondLeftIconView with:palette];
-        cell.secondLeftIconView.layer.cornerRadius = 3;
         [cell.button setTitle:nil forState:UIControlStateNormal];
         [cell.button setImage:[UIImage templateImageNamed:@"ic_navbar_overflow_menu_outlined"] forState:UIControlStateNormal];
         cell.button.menu = [self createPaletteMenuForCellButton:indexPath];
@@ -546,6 +551,9 @@
 
         if (self.iconsDelegate)
             [self.iconsDelegate selectIconName:_selectedIconItem];
+        
+        if (_collectionType == EOAColorCollectionTypeBigIconItems)
+            [self dismissViewController];
     }
     else 
     {

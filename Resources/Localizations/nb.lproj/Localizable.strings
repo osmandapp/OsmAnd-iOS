@@ -2666,3 +2666,4 @@
 "map_widget_gps_info" = "GPS-info";
 "osm_id" = "OSM-ID";
 "of" = "%d av %d";
+"downloaded_bytes" = "%@ av %@";

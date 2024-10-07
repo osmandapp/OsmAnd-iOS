@@ -3532,3 +3532,5 @@
 "navigate_point_mgrs" = "MGRS";
 "int_hour" = "h";
 "shared_string_status" = "Status";
+"quick_action_terrain_color_scheme" = "Šema boja terena";
+"quick_action_need_to_add_item_to_list" = "Dodaj bar jednu stavku u podešavanjima na „Brzim radnjama“";

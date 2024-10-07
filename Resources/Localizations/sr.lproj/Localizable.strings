@@ -3534,3 +3534,5 @@
 "email_example_hint" = "korisnik@primer.com";
 "short_min" = "m";
 "product_desc_wiki" = "Чланци Википедије засновани на локацији на мапи";
+"quick_action_terrain_color_scheme" = "Теренска шема боја";
+"quick_action_need_to_add_item_to_list" = "Додајте бар једну ставку на поставкама у Брзим радњама";

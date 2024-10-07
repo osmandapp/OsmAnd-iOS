@@ -2242,3 +2242,4 @@
 "shared_string_local" = "מקומי";
 "of" = "%d מתוך %d";
 "downloaded_bytes" = "%@ מתוך %@";
+"battery_saving_mode" = "מצב חסכון בסוללה";

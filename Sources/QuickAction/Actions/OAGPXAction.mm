@@ -107,24 +107,28 @@ static QuickActionType *TYPE;
     }
     
     OAGpxWptItem* wpt = [[OAGpxWptItem alloc] init];
-    OAWptPt* p = [[OAWptPt alloc] init];
+    OASWptPt *p = [[OASWptPt alloc] init];
     p.name = title;
-    p.position = CLLocationCoordinate2DMake(lat, lon);
-    p.type = groupName;
+    p.lat = lat;
+    p.lon = lon;
+    // FIXME:
+   // p.type = groupName;
     p.time = (long)[[NSDate date] timeIntervalSince1970];
-    p.wpt = std::make_shared<OsmAnd::GpxDocument::WptPt>();
+    // FIXME:
+   // p.wpt = std::make_shared<OsmAnd::GpxDocument::WptPt>();
     wpt.point = p;
     wpt.color = color;
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     OAMapViewController *mapVC = mapPanel.mapViewController;
     [mapVC addNewWpt:wpt.point gpxFileName:nil];
     wpt.groups = mapVC.foundWptGroups;
-    if (wpt.point.wpt != nullptr)
-    {
-        [OAGPXDocument fillWpt:wpt.point.wpt usingWpt:wpt.point];
-        mapVC.foundWpt = p;
-        [mapVC saveFoundWpt];
-    }
+    // FIXME:
+//    if (wpt.point.wpt != nullptr)
+//    {
+//        [OAGPXDocument fillWpt:wpt.point.wpt usingWpt:wpt.point];
+//        mapVC.foundWpt = p;
+//        [mapVC saveFoundWpt];
+//    }
 }
 
 - (BOOL) isItemExists:(NSString *)name

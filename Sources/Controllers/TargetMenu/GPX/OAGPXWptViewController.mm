@@ -49,11 +49,13 @@
         _app = [OsmAndApp instance];
         if (!wpt.docPath)
         {
-            wpt.docPath = [[OASelectedGPXHelper instance] getSelectedGpx:wpt.point].path;
+            // FIXME:
+          //  wpt.docPath = [[OASelectedGPXHelper instance] getSelectedGpx:wpt.point].path;
         }
         self.wpt = wpt;
-        OAGpxExtension *openingHoursExt = [self.wpt.point getExtensionByKey:[PRIVATE_PREFIX stringByAppendingString:OPENING_HOURS_TAG]];
-        _openingHoursInfo = OpeningHoursParser::getInfo(openingHoursExt && openingHoursExt.value ? openingHoursExt.value.UTF8String : "");
+        // FIXME:
+//        OAGpxExtension *openingHoursExt = [self.wpt.point getExtensionByKey:[PRIVATE_PREFIX stringByAppendingString:OPENING_HOURS_TAG]];
+//        _openingHoursInfo = OpeningHoursParser::getInfo(openingHoursExt && openingHoursExt.value ? openingHoursExt.value.UTF8String : "");
         [self acquireOriginObject];
         self.topToolbarType = ETopToolbarTypeMiddleFixed;
         self.leftControlButton = [[OATargetMenuControlButton alloc] init];
@@ -97,23 +99,24 @@
     {
         [self buildCommentRow:rows comment:self.wpt.point.comment];
     }
-    if (self.wpt.point.links && self.wpt.point.links.count > 0)
-    {
-        for (OALink *link in self.wpt.point.links)
-        {
-            [rows addObject:[[OARowInfo alloc] initWithKey:nil
-                                                      icon:[OATargetInfoViewController getIcon:@"mx_website"]
-                                                textPrefix:link.text
-                                                      text:link.url.absoluteString
-                                                 textColor:UIColorFromRGB(kHyperlinkColor)
-                                                    isText:NO
-                                                 needLinks:YES
-                                                     order:2
-                                                  typeName:@""
-                                             isPhoneNumber:NO
-                                                     isUrl:YES]];
-        }
-    }
+    // FIXME:
+//    if (self.wpt.point.links && self.wpt.point.links.count > 0)
+//    {
+//        for (OALink *link in self.wpt.point.links)
+//        {
+//            [rows addObject:[[OARowInfo alloc] initWithKey:nil
+//                                                      icon:[OATargetInfoViewController getIcon:@"mx_website"]
+//                                                textPrefix:link.text
+//                                                      text:link.url.absoluteString
+//                                                 textColor:UIColorFromRGB(kHyperlinkColor)
+//                                                    isText:NO
+//                                                 needLinks:YES
+//                                                     order:2
+//                                                  typeName:@""
+//                                             isPhoneNumber:NO
+//                                                     isUrl:YES]];
+//        }
+//    }
     
     //TODO: add extra fields
     //wpt.speed
@@ -123,7 +126,7 @@
     if ( _originObject && [ _originObject isKindOfClass:OAPOI.class])
     {
         OAPOIViewController *builder = [[OAPOIViewController alloc] initWithPOI: _originObject];
-        builder.location = CLLocationCoordinate2DMake(_wpt.point.position.latitude, _wpt.point.position.longitude);
+        builder.location = CLLocationCoordinate2DMake(_wpt.point.lat, _wpt.point.lon);
         NSMutableArray<OARowInfo *> *internalRows = [NSMutableArray array];
         [builder buildRowsInternal:internalRows];
         [rows addObjectsFromArray:internalRows];
@@ -232,7 +235,9 @@
 
 - (NSString *) getItemGroup
 {
-    return (self.wpt.point.type ? self.wpt.point.type : @"");
+    return @"";
+    // FIXME:
+    //return (self.wpt.point.type ? self.wpt.point.type : @"");
 }
 
 - (NSArray *) getItemGroups

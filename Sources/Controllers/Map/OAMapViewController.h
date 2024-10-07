@@ -56,6 +56,8 @@ static const int BOTTOM_CONSTANT = 1;
 
 @class OAWptPt, OAMetadata, OASearchWptAPI, OAMapRendererView, OAMapLayers, OAWorldRegion, OAMapRendererEnvironment, OAMapPresentationEnvironment, OAGPXDocument, OAObservable;
 
+@class OASWptPt;
+
 @interface OAMapViewController : UIViewController <UIGestureRecognizerDelegate>
 
 @property (nonatomic, readonly) OAMapRendererView *mapView;
@@ -72,7 +74,7 @@ static const int BOTTOM_CONSTANT = 1;
 @property (readonly) OAObservable *mapObservable;
 @property (readonly) OAObservable *mapSourceUpdatedObservable;
 
-@property (nonatomic, nullable) OAWptPt *foundWpt;
+@property (nonatomic, nullable) OASWptPt *foundWpt;
 @property (nonatomic, nullable) NSArray *foundWptGroups;
 @property (nonatomic, nullable) NSString *foundWptDocPath;
 
@@ -111,8 +113,8 @@ static const int BOTTOM_CONSTANT = 1;
 - (BOOL) findWpt:(CLLocationCoordinate2D)location currentTrackOnly:(BOOL)currentTrackOnly;
 - (BOOL) deleteFoundWpt;
 - (BOOL) saveFoundWpt;
-- (BOOL) addNewWpt:(OAWptPt *)wpt gpxFileName:(nullable NSString *)gpxFileName;
-- (NSArray<OAWptPt *> *)getPointsOf:(nullable NSString *)gpxFileName groupName:(NSString *)groupName;
+- (BOOL) addNewWpt:(OASWptPt *)wpt gpxFileName:(nullable NSString *)gpxFileName;
+- (NSArray<OASWptPt *> *)getPointsOf:(nullable NSString *)gpxFileName groupName:(NSString *)groupName;
 
 - (BOOL) canZoomIn;
 - (void) zoomIn;

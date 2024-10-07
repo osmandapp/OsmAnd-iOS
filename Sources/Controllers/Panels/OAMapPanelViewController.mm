@@ -1920,7 +1920,8 @@ typedef enum
     else if ([self.targetMenuView.targetPoint.targetObj isKindOfClass:OAGpxWptItem.class])
     {
         OAGpxWptItem *wptItem = self.targetMenuView.targetPoint.targetObj;
-        poi = [wptItem.point getAmenity];
+        // FIXME:
+      //  poi = [wptItem.point getAmenity];
     }
     return poi;
 }
@@ -2721,16 +2722,16 @@ typedef enum
 
 - (void) openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu saveState:(BOOL)saveState
 {
-    double lat = item.point.position.latitude;
-    double lon = item.point.position.longitude;
+    double lat = item.point.lat;
+    double lon = item.point.lon;
     
     [_mapViewController showContextPinMarker:lat longitude:lon animated:NO];
-    
-    if ([_mapViewController findWpt:item.point.position])
-    {
-        item.point = _mapViewController.foundWpt;
-        item.groups = _mapViewController.foundWptGroups;
-    }
+// FIXME:
+//    if ([_mapViewController findWpt:item.point.position])
+//    {
+//        item.point = _mapViewController.foundWpt;
+//        item.groups = _mapViewController.foundWptGroups;
+//    }
     
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     NSString *caption = item.point.name;
@@ -2770,7 +2771,7 @@ typedef enum
     {
         gpxFile = [OASGpxUtilities.shared loadGpxFileFile:item.file];
         auto rect = gpxFile.getRect;
-        pinLocation = CLLocationCoordinate2DMake(rect.centerX, rect.centerY);
+        pinLocation = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
     }
     [self openTargetViewWithGPX:item
                    trackHudMode:EOATrackMenuHudMode
@@ -2788,7 +2789,7 @@ typedef enum
 {
     OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:item.file];
     auto rect = gpxFile.getRect;
-    CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake(rect.centerX, rect.centerY);
+    CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
  
     OATrackMenuViewControllerState *state = [OATrackMenuViewControllerState withPinLocation:pinLocation openedFromMap:NO];
     state.openedFromTracksList = YES;
@@ -2802,7 +2803,7 @@ typedef enum
 {
     OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:item.file];
     auto rect = gpxFile.getRect;
-    CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake(rect.centerX, rect.centerY);
+    CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
     
     OATrackMenuViewControllerState *state = [OATrackMenuViewControllerState withPinLocation:pinLocation openedFromMap:openedFromMap];
     state.lastSelectedTab = selectedTab;
@@ -2838,7 +2839,7 @@ typedef enum
         [_scrollableHudViewController hide:YES duration:0.2 onComplete:^{
             OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:item.file];
             auto rect = gpxFile.getRect;
-            CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake(rect.centerX, rect.centerY);
+            CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
             
             state.pinLocation = pinLocation;
             if (!state.openedFromTrackMenu)
@@ -2861,7 +2862,7 @@ typedef enum
         [_scrollableHudViewController hide:YES duration:0.2 onComplete:^{
             OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:item.file];
             auto rect = gpxFile.getRect;
-            CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake(rect.centerX, rect.centerY);
+            CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
             state.pinLocation = pinLocation;
             if (!state.openedFromTrackMenu)
                 state.navControllerHistory = nil;
@@ -2900,7 +2901,7 @@ typedef enum
     {
         OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:item.file];
         auto rect = gpxFile.getRect;
-        CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake(rect.centerX, rect.centerY);
+        CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
         if (CLLocationCoordinate2DIsValid(pinLocation))
         {
             targetPoint.location = pinLocation;
@@ -4165,7 +4166,8 @@ typedef enum
 
 - (void)saveGpxWpt:(OAGpxWptItem *)gpxWpt gpxFileName:(NSString *)gpxFileName
 {
-    [_mapViewController addNewWpt:gpxWpt.point gpxFileName:gpxFileName];
+    // FIXME:
+  //  [_mapViewController addNewWpt:gpxWpt.point gpxFileName:gpxFileName];
 
     gpxWpt.groups = _mapViewController.foundWptGroups;
 
@@ -4196,11 +4198,12 @@ typedef enum
 
 - (void)saveItemToStorage:(OAGpxWptItem *)gpxWptItem
 {
-    if (gpxWptItem.point.wpt != nullptr)
-    {
-        [OAGPXDocument fillWpt:gpxWptItem.point.wpt usingWpt:gpxWptItem.point];
-        [_mapViewController saveFoundWpt];
-    }
+    // FIXME:
+//    if (gpxWptItem.point.wpt != nullptr)
+//    {
+//        [OAGPXDocument fillWpt:gpxWptItem.point.wpt usingWpt:gpxWptItem.point];
+//        [_mapViewController saveFoundWpt];
+//    }
 }
 
 #pragma mark - OAOpenAddTrackDelegate

@@ -48,7 +48,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     EOAWaypointsType _type;
     
     NSString *_docPath;
-    OAWptPt *_currentWpt;
+    OASWptPt *_currentWpt;
     
     OAFavoriteItem *_favorite;
 }
@@ -123,7 +123,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
         OAButton * btn = nil;
         if (_type == EOAWaypointGPX)
         {
-            btn = [self createButton:((OAWptPt *)_data[i]).name tag:i];
+            btn = [self createButton:((OASWptPt *)_data[i]).name tag:i];
         }
         else if (_type == EOAWaypointFavorite)
         {
@@ -254,7 +254,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
                     if (_type == EOAWaypointGPX)
                     {
                         OAGpxWptItem *item = [[OAGpxWptItem alloc] init];
-                        OAWptPt *point = _data[tag];
+                        OASWptPt *point = _data[tag];
                         item.point = point;
                         item.docPath = _docPath;
                         OATargetPoint *targetPoint = [mapPanel.mapViewController.mapLayers.gpxMapLayer getTargetPoint:item];

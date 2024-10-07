@@ -1711,7 +1711,7 @@ colorizationScheme:(int)colorizationScheme
         
         OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
         targetPoint.type = OATargetWpt;
-        targetPoint.location = item.point.position;
+        targetPoint.location = CLLocationCoordinate2DMake(item.point.lat, item.point.lon);
         targetPoint.targetObj = item;
 
         targetPoint.icon = item.getCompositeIcon;
@@ -1739,7 +1739,7 @@ colorizationScheme:(int)colorizationScheme
     {
         if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo->mapSymbol->groupPtr) && [mapViewController findWpt:point])
         {
-            OAWptPt *wpt = mapViewController.foundWpt;
+            OASWptPt *wpt = mapViewController.foundWpt;
             NSArray *foundWptGroups = mapViewController.foundWptGroups;
             NSString *foundWptDocPath = mapViewController.foundWptDocPath;
 
@@ -1775,8 +1775,10 @@ colorizationScheme:(int)colorizationScheme
         
         if (item.docPath)
         {
-            item.point.position = position;
-            item.point.wpt->position = OsmAnd::LatLon(position.latitude, position.longitude);
+            item.point.lat = position.latitude;
+            item.point.lon = position.longitude;
+            // FIXME:
+            //item.point.wpt->position = OsmAnd::LatLon(position.latitude, position.longitude);
             const auto activeGpx = [OASelectedGPXHelper instance].activeGpx;
             const auto& doc = activeGpx[QString::fromNSString(item.docPath)];
             if (doc != nullptr)
@@ -1792,7 +1794,7 @@ colorizationScheme:(int)colorizationScheme
             OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
             // FIXME: updatePointCoordinatesNew
           //  [helper updatePointCoordinates:item.point newLocation:position];
-            item.point.wpt->position = OsmAnd::LatLon(position.latitude, position.longitude);
+          //  item.point.wpt->position = OsmAnd::LatLon(position.latitude, position.longitude);
             [self.app.updateRecTrackOnMapObservable notifyEventWithKey:@(YES)];
         }
     }
@@ -1806,7 +1808,7 @@ colorizationScheme:(int)colorizationScheme
             return [UIImage imageNamed:@"ic_map_pin"];
 
         OAGpxWptItem *point = (OAGpxWptItem *)object;
-        return [OAFavoritesLayer getImageWithColor:point.color background:point.point.getBackgroundIcon icon:[@"mx_" stringByAppendingString:point.point.getIcon]];
+        return [OAFavoritesLayer getImageWithColor:point.color background:point.point.getBackgroundType icon:[@"mx_" stringByAppendingString:point.point.getIconName]];
     }
     OAFavoriteColor *def = [OADefaultFavorite nearestFavColor:OADefaultFavorite.builtinColors.firstObject];
     return [OAFavoritesLayer getImageWithColor:def.color background:@"circle" icon:[@"mx_" stringByAppendingString:DEFAULT_ICON_NAME_KEY]];

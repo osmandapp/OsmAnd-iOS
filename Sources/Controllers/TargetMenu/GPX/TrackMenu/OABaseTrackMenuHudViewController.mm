@@ -17,7 +17,6 @@
 #import "OAGPXMutableDocument.h"
 #import "OsmAndApp.h"
 #import "OASavingTrackHelper.h"
-#import "OAGPXTrackAnalysis.h"
 #import "GeneratedAssetSymbols.h"
 #import "OASelectedGPXHelper.h"
 #import "OAGPXUIHelper.h"
@@ -237,26 +236,33 @@
             NSString *gpxFullPath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:_gpx.gpxFilePath];
             const auto& activeGpx = [OASelectedGPXHelper instance].activeGpx;
             auto it = activeGpx.find(QString::fromNSString(gpxFullPath));
-            if (it != activeGpx.end() && it.value() != nullptr)
-                _doc = [[OAGPXMutableDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(it.value())];
-            else
-                _doc = [[OAGPXMutableDocument alloc] initWithGpxFile:gpxFullPath];
+            if (it != activeGpx.end() && it.value() != nullptr) {
+                // FIXME:
+                //                _doc = [[OAGPXMutableDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(it.value())];
+            } else {
+               // Documents/GPX/2023-10-22_11-34_Su_1n.gpx
+                OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFullPath];
+                OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
+                _doc = gpxFile;
+                
+            }
         }
     }
     [self updateAnalysis];
 
-    if (!_isCurrentTrack && _gpx && !_gpx.nearestCity && _analysis && _analysis.locationStart)
+    if (!_isCurrentTrack && _gpx && _gpx.nearestCity.length == 0 && _analysis && _analysis.locationStart)
     {
-        OAPOI *nearestCity = [OAGPXUIHelper searchNearestCity:_analysis.locationStart.position];
+        auto locationStart = _analysis.locationStart;
+        
+        OAPOI *nearestCity = [OAGPXUIHelper searchNearestCity:CLLocationCoordinate2DMake(locationStart.lat, locationStart.lon)];
         _gpx.nearestCity = nearestCity ? nearestCity.nameLocalized : @"";
 
         OAGPXDatabase *db = [OAGPXDatabase sharedDb];
-        OAGPX *gpx = [db getGPXItem:_gpx.gpxFilePath];
+        OASGpxDataItem *gpx = [db getNewGPXItem:_gpx.gpxFilePath];
         if (gpx)
         {
             gpx.nearestCity = _gpx.nearestCity;
-            [db replaceGpxItem:gpx];
-            [db save];
+            [db updateDataItem:gpx];
         }
     }
 
@@ -269,24 +275,34 @@
         }
         else if (_doc)
         {
-            OAGPXDatabase *db = [OAGPXDatabase sharedDb];
-            OAGPX *gpx = [db buildGpxItem:_gpx.gpxFilePath title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds document:_doc fetchNearestCity:NO];
-            gpx.nearestCity = _gpx.nearestCity;
-            [db replaceGpxItem:gpx];
-            [db save];
             // FIXME:
+//            OAGPXDatabase *db = [OAGPXDatabase sharedDb];
+//            OAGPX *gpx = [db buildGpxItem:_gpx.gpxFilePath title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds document:_doc fetchNearestCity:NO];
+//            gpx.nearestCity = _gpx.nearestCity;
+//            [db replaceGpxItem:gpx];
+//            [db save];
            // _gpx = gpx;
         }
     }
 }
+
+
+- (OASGpxTrackAnalysis *)getAnalysisFor:(OASTrkSegment *)segment
+{
+    OASGpxTrackAnalysis *analysis = [[OASGpxTrackAnalysis alloc] init];
+    auto splitSegments = [ArraySplitSegmentConverter toKotlinArrayFrom:@[[[OASSplitSegment alloc] initWithSegment:segment]]];
+    [analysis prepareInformationFileTimeStamp:0 pointsAnalyser:nil splitSegments:splitSegments];
+    return analysis;
+}
+
 
 - (void)updateAnalysis
 {
     if (_doc)
     {
         _analysis = !_isCurrentTrack && [_doc getGeneralTrack] && [_doc getGeneralSegment]
-        	? [OAGPXTrackAnalysis segment:0 seg:_doc.generalSegment]
-        	: [_doc getAnalysis:0];
+            ? [self getAnalysisFor:[_doc getGeneralSegment]]
+            : [_doc getAnalysisFileTimestamp:0];
     }
     else
     {

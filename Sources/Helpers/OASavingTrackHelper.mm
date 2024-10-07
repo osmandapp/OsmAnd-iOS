@@ -115,7 +115,7 @@
     
     [_currentTrackSharedLib set3DWallColoringTypeTrackWallColoringType:[OAGPXDatabase lineVisualizationWallColorTypeNameForType:(EOAGPX3DLineVisualizationWallColorType)[settings.currentTrackVisualization3dWallColorType get]]];
     
-    [_currentTrackSharedLib set3DVisualizationTypeVisualizationType:[OAGPXDatabase lineVisualizationPositionTypeNameForType:(EOAGPX3DLineVisualizationPositionType)[settings.currentTrackVisualization3dPositionType get]]];
+    [_currentTrackSharedLib set3DLinePositionTypeTrackLinePositionType:[OAGPXDatabase lineVisualizationPositionTypeNameForType:(EOAGPX3DLineVisualizationPositionType)[settings.currentTrackVisualization3dPositionType get]]];
     
     OASInt *color = [[OASInt alloc] initWithInt:[settings.currentTrackColor get]];
     [_currentTrackSharedLib setColorColor:color];

@@ -29,7 +29,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
 @interface OAEditWaypointsGroupBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, OAEditWaypointsGroupOptionsDelegate>
 
 @property(nonatomic) NSString *groupName;
-@property(nonatomic) OATrkSegment *segment;
+@property(nonatomic) OASTrkSegment *segment;
 
 @end
 
@@ -43,7 +43,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
     BOOL _isShown;
     UIColor *_groupColor;
 
-    OAGPXTrackAnalysis *_analysis;
+    OASGpxTrackAnalysis *_analysis;
 }
 
 - (instancetype)initWithWaypointsGroupName:(NSString *)groupName
@@ -59,7 +59,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
     return self;
 }
 
-- (instancetype)initWithSegment:(OATrkSegment *)segment analysis:(OAGPXTrackAnalysis *)analysis
+- (instancetype)initWithSegment:(OASTrkSegment *)segment analysis:(OASGpxTrackAnalysis *)analysis
 
 {
     self = [super init];
@@ -430,8 +430,9 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
     NSMutableArray<OAFavoriteItem *> *favoriteItems = [NSMutableArray array];
     for (OAGpxWptItem *waypoint in waypoints)
     {
-        OAFavoriteItem *favoriteItem = [OAFavoriteItem fromWpt:waypoint.point category:name];
-        [favoriteItems addObject:favoriteItem];
+        // FIXME:
+//        OAFavoriteItem *favoriteItem = [OAFavoriteItem fromWpt:waypoint.point category:name];
+//        [favoriteItems addObject:favoriteItem];
     }
     [OAFavoritesHelper addFavorites:favoriteItems];
 }

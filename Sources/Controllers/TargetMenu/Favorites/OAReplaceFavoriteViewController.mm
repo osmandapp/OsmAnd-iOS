@@ -82,10 +82,11 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         NSMutableArray *arr = [NSMutableArray array];
         for (OAWptPt *point in _gpxDocument.points)
         {
-            OAGpxWptItem *itemData = [[OAGpxWptItem alloc] init];
-            itemData.point = point;
-            [self setDistanceAndDirections:itemData];
-            [arr addObject:itemData];
+            // FIXME:
+//            OAGpxWptItem *itemData = [[OAGpxWptItem alloc] init];
+//            itemData.point = point;
+//            [self setDistanceAndDirections:itemData];
+//            [arr addObject:itemData];
         }
 
         _allWaypoints = arr;
@@ -374,7 +375,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 
 - (void)setDistanceAndDirections:(OAGpxWptItem *)itemData
 {
-    OsmAnd::LatLon latLon(itemData.point.position.latitude, itemData.point.position.longitude);
+    OsmAnd::LatLon latLon(itemData.point.lat, itemData.point.lon);
     const auto wptPosition31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
     const auto wptLon = OsmAnd::Utilities::get31LongitudeX(wptPosition31.x);
     const auto wptLat = OsmAnd::Utilities::get31LatitudeY(wptPosition31.y);

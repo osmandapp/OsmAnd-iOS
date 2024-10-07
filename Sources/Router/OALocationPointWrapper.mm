@@ -90,7 +90,8 @@
     {
         OAWptPt *wpt = (OAWptPt *) _point;
         OAGpxWptItem *wptItem = [[OAGpxWptItem alloc] init];
-        [wptItem setPoint:wpt];
+        // FIXME:
+        // [wptItem setPoint:wpt];
         return wptItem.getCompositeIcon;
     }
     else if (_type == LPW_ALARMS)

@@ -19,7 +19,6 @@
 #import "OAMapLayers.h"
 #import "OAOsmAndFormatter.h"
 #import "OAGPXDocumentPrimitives.h"
-#import "OAGPXTrackAnalysis.h"
 #import <DGCharts/DGCharts-Swift.h>
 #import "OsmAnd_Maps-Swift.h"
 #import "OARouteStatisticsHelper.h"
@@ -66,7 +65,7 @@
 {
     self.tableData = [OAGPXTableData withData: @{ kTableKey: @"table_tab_segments" }];
 
-    NSArray<OATrkSegment *> *segments = @[];
+    NSArray<OASTrkSegment *> *segments = @[];
     if (self.trackMenuDelegate)
     {
         segments = [self.trackMenuDelegate getSegments];
@@ -75,8 +74,8 @@
             _routeLineChartHelper = [self.trackMenuDelegate getLineChartHelper];
     }
 
-    OATrkSegment *generalSegment = self.trackMenuDelegate ? [self.trackMenuDelegate getGeneralSegment] : nil;
-    OAGPXTrackAnalysis *generalAnalysis = self.trackMenuDelegate ? [self.trackMenuDelegate getGeneralAnalysis] : nil;
+    OASTrkSegment *generalSegment = self.trackMenuDelegate ? [self.trackMenuDelegate getGeneralSegment] : nil;
+    OASGpxTrackAnalysis *generalAnalysis = self.trackMenuDelegate ? [self.trackMenuDelegate getGeneralAnalysis] : nil;
     if (generalSegment && generalAnalysis)
     {
         [self generateSegmentSectionData:generalSegment
@@ -86,7 +85,10 @@
 
     for (NSInteger index = 0; index < segments.count; index++)
     {
-        OAGPXTrackAnalysis *analysis = [OAGPXTrackAnalysis segment:0 seg:segments[index]];
+       // OASGpxTrackAnalysis *analysis = [OASGpxTrackAnalysis segment:0 seg:segments[index]];
+        
+        OASGpxTrackAnalysis *analysis = [self getAnalysisFor:segments[index]];
+        
         [self generateSegmentSectionData:segments[index]
                                 analysis:analysis
                                    index:generalSegment ? index + 1 : index];
@@ -95,8 +97,16 @@
     self.isGeneratedData = YES;
 }
 
-- (void)generateSegmentSectionData:(OATrkSegment *)segment
-                          analysis:(OAGPXTrackAnalysis *)analysis
+- (OASGpxTrackAnalysis *)getAnalysisFor:(OASTrkSegment *)segment
+{
+    OASGpxTrackAnalysis *analysis = [[OASGpxTrackAnalysis alloc] init];
+    auto splitSegments = [ArraySplitSegmentConverter toKotlinArrayFrom:@[[[OASSplitSegment alloc] initWithSegment:segment]]];
+    [analysis prepareInformationFileTimeStamp:0 pointsAnalyser:nil splitSegments:splitSegments];
+    return analysis;
+}
+
+- (void)generateSegmentSectionData:(OASTrkSegment *)segment
+                          analysis:(OASGpxTrackAnalysis *)analysis
                              index:(NSInteger)index
 {
     if (!segment)
@@ -112,10 +122,11 @@
 
     if (_routeLineChartHelper)
     {
-        [_routeLineChartHelper changeChartTypes:@[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)]
-                                         chart:cell.chartView
-                                      analysis:analysis
-                                      modeCell:nil];
+        // FIXME:
+//        [_routeLineChartHelper changeChartTypes:@[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)]
+//                                         chart:cell.chartView
+//                                      analysis:analysis
+//                                      modeCell:nil];
     }
 
     CLLocationCoordinate2D startChartPoint = self.trackMenuDelegate && [self.trackMenuDelegate openedFromMap]
@@ -127,11 +138,12 @@
                     @"segment_value": segment,
                     @"analysis_value": analysis,
                     @"mode_value": @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)],
-                    @"points_value": _routeLineChartHelper
-                            ? [_routeLineChartHelper generateTrackChartPoints:cell.chartView
-                                                                   startPoint:startChartPoint
-                                                                      segment:segment]
-                            : [[OATrackChartPoints alloc] init]
+                    // FIXME:
+//                    @"points_value": _routeLineChartHelper
+//                            ? [_routeLineChartHelper generateTrackChartPoints:cell.chartView
+//                                                                   startPoint:startChartPoint
+//                                                                      segment:segment]
+//                            : [[OATrackChartPoints alloc] init]
             }
     }];
     if (cell)
@@ -249,15 +261,15 @@
     }
 }
 
-- (NSDictionary<NSString *, NSDictionary *> *)getStatisticsDataForAnalysis:(OAGPXTrackAnalysis *)analysis
-                                                                   segment:(OATrkSegment *)segment
+- (NSDictionary<NSString *, NSDictionary *> *)getStatisticsDataForAnalysis:(OASGpxTrackAnalysis *)analysis
+                                                                   segment:(OASTrkSegment *)segment
                                                                      types:(NSArray<NSNumber *> *)types
 {
     NSMutableDictionary *titles = [NSMutableDictionary dictionary];
     NSMutableDictionary *icons = [NSMutableDictionary dictionary];
     NSMutableDictionary *descriptions = [NSMutableDictionary dictionary];
 
-    OATrack *track = self.trackMenuDelegate ? [self.trackMenuDelegate getTrack:segment] : nil;
+    OASTrack *track = self.trackMenuDelegate ? [self.trackMenuDelegate getTrack:segment] : nil;
     BOOL joinSegments = self.trackMenuDelegate && [self.trackMenuDelegate isJoinSegments];
     if (types.count == 2)
     {
@@ -520,7 +532,7 @@
         if (sectionData)
         {
             NSArray<NSNumber *> *types = sectionData.values[@"mode_value"];
-            OAGPXTrackAnalysis *analysis = sectionData.values[@"analysis_value"];
+            OASGpxTrackAnalysis *analysis = sectionData.values[@"analysis_value"];
             [tableData setData:@{
                     kTableValues: [self getStatisticsDataForAnalysis:analysis
                                                              segment:sectionData.values[@"segment_value"]
@@ -602,12 +614,13 @@
         if (sectionData)
         {
             NSArray<NSNumber *> *types = sectionData.values[@"mode_value"];
-            OAGPXTrackAnalysis *analysis = sectionData.values[@"analysis_value"];
+            OASGpxTrackAnalysis *analysis = sectionData.values[@"analysis_value"];
             BOOL isLeftButtonSelected = [tableData.values[@"is_left_button_selected"] boolValue];
-            if (isLeftButtonSelected)
-                [self.trackMenuDelegate openAnalysis:analysis withTypes:types];
-            else
-                [self.trackMenuDelegate openEditSegmentScreen:sectionData.values[@"segment_value"] analysis:analysis];
+            // FIXME:
+//            if (isLeftButtonSelected)
+//                [self.trackMenuDelegate openAnalysis:analysis withTypes:types];
+//            else
+//                [self.trackMenuDelegate openEditSegmentScreen:sectionData.values[@"segment_value"] analysis:analysis];
         }
     }
 }

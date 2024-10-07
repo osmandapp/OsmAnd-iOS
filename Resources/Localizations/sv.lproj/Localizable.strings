@@ -1894,7 +1894,7 @@
 "rendering_value_bicycle_name" = "Cykel";
 "rendering_value_translucent_lightgreen_name" = "Genomskinlig ljusgrön";
 "rendering_attr_contourLines_name" = "Visa höjdkurvor";
-"rendering_attr_showAccess_name" = "Visa åtkomstbegränsningar";
+"rendering_attr_showAccess_name" = "Visa åtkomstbegränsningar och betalvägar";
 "rendering_attr_surface_dirt_name" = "Jord";
 "routing_attr_piste_type_skitour_name" = "Turskidor";
 "routing_attr_driving_style_prefer_unpaved_name" = "Föredra obelagda vägar";
@@ -2657,7 +2657,7 @@
 "weather_update_over_any_network" = "Via alla nätverk";
 "simulate_location_unselected_track_footer" = "Du behöver välja en spår-fil";
 "test_heightmap" = "Testa höjdkarta";
-"compass_click_desc" = "Tips: Tryck på kompassen för att växla kartorientering.";
+"compass_click_desc" = "Dubbeltryck på kompassen för att växla kartorientering.";
 "ltr_or_rtl_combine_via_of" = "%ld av %ld";
 "restoring_from" = "Återställer valda data från molnlagring";
 "animate_my_location_descr" = "Mjuk övergångsanimering av position på kartan vid navigering";
@@ -2877,7 +2877,7 @@
 "help_article_map_point_layers_on_map_name" = "Punkter på kartan";
 "help_article_map_raster_maps_name" = "Rasterkartor (Online / Offline)";
 "help_article_map_track_context_menu_name" = "Kontextmeny för spår";
-"help_article_navigation_guidance_name" = "Vägledning";
+"help_article_navigation_guidance_name" = "Navigeringsvägledning";
 "help_article_navigation_guidance_map_during_navigation_name" = "Kartvy under navigering";
 "help_article_navigation_guidance_voice_navigation_name" = "Röstinstruktioner / Aviseringar";
 "help_article_navigation_routing_name" = "Ruttparametrar";

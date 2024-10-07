@@ -24,7 +24,6 @@
 #import "OAGPXUIHelper.h"
 #import "OARouteColorize.h"
 #import "OARouteColorize+cpp.h"
-#import "OAGPXDocument.h"
 #import "OAMapLayers.h"
 #import "OAMapUtils.h"
 #import "OAApplicationMode.h"

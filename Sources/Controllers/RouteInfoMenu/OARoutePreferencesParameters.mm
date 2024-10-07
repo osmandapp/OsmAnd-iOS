@@ -18,7 +18,6 @@
 #import "OARouteProvider.h"
 #import "OAColors.h"
 #import "OAAvoidSpecificRoads.h"
-#import "OAGPXDocument.h"
 #import "OsmAndApp.h"
 #import "OAValueTableViewCell.h"
 #import "OASwitchTableViewCell.h"

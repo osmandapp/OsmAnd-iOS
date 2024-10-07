@@ -114,9 +114,13 @@
             completionBlock();
         return;
     }
-    const auto& activeGpx = [OASelectedGPXHelper instance].activeGpx;
-    if (activeGpx.find(QString::fromNSString(info.gpx.gpxFilePath)) == activeGpx.end())
-        [OAAppSettings.sharedManager showGpx:@[info.gpx.gpxFilePath]];
+    NSDictionary<NSString *, OASGpxFile *> *activeGpx = [OASelectedGPXHelper instance].activeGpx;
+    
+    NSString *gpxFilePath = info.gpx.gpxFilePath;
+
+    if (![activeGpx objectForKey:gpxFilePath]) {
+        [OAAppSettings.sharedManager showGpx:@[gpxFilePath]];
+    }
     
     [[OARoutingHelper sharedInstance] setAppMode:OAApplicationMode.CAR];
     [[OARootViewController instance].mapPanel.mapActions setGPXRouteParams:info.gpx];

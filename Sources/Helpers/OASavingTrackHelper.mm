@@ -423,7 +423,10 @@
 //            [doc setColor:[settings.currentTrackColor get]];
 //            [doc setColoringType:[settings.currentTrackColoringType get].name];
 
-          //  [doc saveTo:fout];
+            OASKFile *file = [[OASKFile alloc] initWithFilePath:fout];
+            [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
+            
+           // [doc saveTo:fout];
             // rec/2024-09-12_15-43_Чт.gpx
             NSString *gpxFilePath = [OAUtilities getGpxShortPath:fout];
             

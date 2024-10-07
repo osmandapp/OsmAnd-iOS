@@ -66,12 +66,12 @@ extension GpxDataItem {
     
     var lastModifiedTime: Date {
         get {
-            let lastModifiedTime = getParameter(parameter: .fileLastModifiedTime) as? Double ?? 0.0
-            return Date(timeIntervalSince1970: lastModifiedTime)
+            let lastModifiedTimeInMilliseconds = getParameter(parameter: .fileLastModifiedTime) as? Double ?? 0.0
+            return Date(timeIntervalSince1970: lastModifiedTimeInMilliseconds / 1000)
         }
         set {
-            // FIXME: mil? don't use timeIntervalSince1970
-            setParameter(parameter: .fileLastModifiedTime, value: newValue.timeIntervalSince1970)
+            let milliseconds = newValue.timeIntervalSince1970 * 1000
+            setParameter(parameter: .fileLastModifiedTime, value: milliseconds)
         }
     }
     

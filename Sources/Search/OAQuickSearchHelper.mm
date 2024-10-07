@@ -222,8 +222,7 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
             OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
             sr.localeName = point.name;
             sr.wpt = point;
-            // FIXME:
-           // sr.object = [OAGPXDocument fetchWpt:std::const_pointer_cast<OsmAnd::GpxDocument::WptPt>(sr.wpt)];
+            sr.object = sr.wpt;
             sr.priority = SEARCH_WPT_OBJECT_PRIORITY;
             sr.objectType = WPT;
             sr.location = [[CLLocation alloc] initWithLatitude:point.position.latitude longitude:point.position.longitude];

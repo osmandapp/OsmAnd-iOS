@@ -7,7 +7,6 @@
 //
 
 #import "OAGpxData.h"
-#import "OAGPXMutableDocument.h"
 #import "OAGPXDocumentPrimitives.h"
 
 #include <OsmAndCore/GpxDocument.h>

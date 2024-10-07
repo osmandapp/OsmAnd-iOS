@@ -11,7 +11,6 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 #import "OAObjectType.h"
-#import "OAGPXDocument.h"
 
 #include <OsmAndCore/Data/Amenity.h>
 #include <OsmAndCore/IFavoriteLocation.h>

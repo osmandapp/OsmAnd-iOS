@@ -86,11 +86,12 @@ static CGFloat const minDifferenceSlope = 0.05; //5%
                 {
                     [latList addObject:@(pt.getLatitude)];
                     [lonList addObject:@(pt.getLongitude)];
- // FIXME:
-//                    if (colorizaionType == ColorizationTypeSpeed)
-//                        [values addObject:@(analysis.speedData[wptIdx].speed)];
-//                    else
-//                        [values addObject:@(analysis.elevationData[wptIdx].elevation)];
+                    
+                    if (colorizaionType == ColorizationTypeSpeed) {
+                        [values addObject:@(analysis.pointAttributes[wptIdx].speed)];
+                    } else {
+                        [values addObject:@(analysis.pointAttributes[wptIdx].elevation)];
+                    }
                     wptIdx++;
                 }
             }

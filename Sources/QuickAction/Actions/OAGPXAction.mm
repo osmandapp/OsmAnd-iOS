@@ -18,7 +18,6 @@
 #import "OAGpxWptItem.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXDocument.h"
-#import "OAGPXDatabase.h"
 #import "OAValueTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAInputTableViewCell.h"
@@ -111,8 +110,7 @@ static QuickActionType *TYPE;
     p.name = title;
     p.lat = lat;
     p.lon = lon;
-    // FIXME:
-   // p.type = groupName;
+    p.type = groupName;
     p.time = (long)[[NSDate date] timeIntervalSince1970];
     wpt.point = p;
     wpt.color = color;

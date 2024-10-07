@@ -14,7 +14,6 @@
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OAGPXDatabase.h"
-#import "OAGPXMutableDocument.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OATrackMenuHudViewController.h"
@@ -36,15 +35,12 @@
         self.updateInfoFunction = ^BOOL {
 
             [weakSelf setIcon:@"widget_track_recording_duration"];
-           // FIXME:
-            OAGPXMutableDocument *currentTrack = nil;//[[OASavingTrackHelper sharedInstance] currentTrack];
-            // FIXME:
-            OAGPX *gpxFile = nil;//[[OASavingTrackHelper sharedInstance] getCurrentGPX];
-
-//            BOOL withoutGaps = !gpxFile.joinSegments &&
+            OASGpxFile *currentTrack = [[OASavingTrackHelper sharedInstance] currentTrack];
+// FIXME: joinSegments
+//            BOOL withoutGaps = !currentTrack.joinSegments &&
 //            ( (!currentTrack.tracks || currentTrack.tracks.count == 0) || currentTrack.tracks[0].generalTrack);
 //
-//            OAGPXTrackAnalysis *analysis = [currentTrack getAnalysis:0];
+//            OASGpxTrackAnalysis *analysis = [currentTrack getAnalysisFileTimestamp:0];
 //            long timeSpan =  withoutGaps ? analysis.timeSpanWithoutGaps : analysis.timeSpan;
 //            
 //            if (cachedTimeSpan != timeSpan)

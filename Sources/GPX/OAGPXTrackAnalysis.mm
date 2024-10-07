@@ -543,7 +543,7 @@
         [self setTag:OAPointAttributes.pointSpeed hasData:YES];
     if (![self hasData:OAPointAttributes.pointElevation] && !isnan(attribute.elevation) && _totalDistance > 0)
         [self setTag:OAPointAttributes.pointElevation hasData:YES];
-    [OAPluginsHelper analysePoint:self point:point attribute:attribute];
+   // [OAPluginsHelper analysePoint:self point:point attribute:attribute];
     [_pointAttributes addObject:attribute];
 }
 

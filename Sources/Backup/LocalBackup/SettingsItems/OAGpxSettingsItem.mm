@@ -11,7 +11,6 @@
 #import "OAGPXUIHelper.h"
 #import "OsmAndApp.h"
 #import "OAGPXAppearanceCollection.h"
-#import "OAGPXDocument.h"
 #import "OsmAnd_Maps-Swift.h"
 
 @interface OAGpxSettingsItem()

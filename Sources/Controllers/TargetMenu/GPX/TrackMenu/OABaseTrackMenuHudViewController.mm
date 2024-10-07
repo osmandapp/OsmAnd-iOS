@@ -14,7 +14,6 @@
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAGPXDatabase.h"
-#import "OAGPXMutableDocument.h"
 #import "OsmAndApp.h"
 #import "OASavingTrackHelper.h"
 #import "GeneratedAssetSymbols.h"

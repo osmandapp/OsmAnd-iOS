@@ -934,7 +934,6 @@
             {
                 OASKFile *file = [[OASKFile alloc] initWithFilePath:newPath];
                 [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:doc];
-               // [doc saveTo:newPath];
             }
 
             [OASelectedGPXHelper renameVisibleTrack:oldFilePath newPath:newFilePath];

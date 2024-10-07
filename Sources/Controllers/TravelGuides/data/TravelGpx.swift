@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import OsmAndShared
 
 @objc(OATravelGpx)
 @objcMembers
@@ -44,9 +45,7 @@ final class TravelGpx : TravelArticle {
             analysis.totalDistanceWithoutGaps = totalDistance
             analysis.avgElevation = avgElevation
             if maxElevation != Double.nan && minElevation != Double.nan {
-               
-                // FIXME: analysis.setHasData(tag: <#T##String#>, hasData: <#T##Bool#>) ?
-                //analysis.hasElevationData = true
+                analysis.setHasData(tag: GpxUtilities.shared.POINT_ELEVATION, hasData: true)
             }
         }
         return analysis

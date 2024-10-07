@@ -11,7 +11,6 @@
 #import "Localization.h"
 #import "OASaveTrackViewController.h"
 #import "OAGPXDatabase.h"
-#import "OAGPXDocument.h"
 #import "OAAppSettings.h"
 
 #define kImportFolderName @"import"
@@ -106,14 +105,15 @@
         
         if (success)
         {
-            OAGPXDatabase *gpxDatabase = [OAGPXDatabase sharedDb];
-            OAGPXDocument *gpxDoc = [[OAGPXDocument alloc] initWithGpxFile:gpxPath];
-            [gpxDatabase addGpxItem:shortPath
-                              title:trackName
-                               desc:gpxDoc.metadata.desc
-                             bounds:gpxDoc.bounds
-                           document:gpxDoc];
-            [gpxDatabase save];
+            // FIXME:
+//            OAGPXDatabase *gpxDatabase = [OAGPXDatabase sharedDb];
+//            OAGPXDocument *gpxDoc = [[OAGPXDocument alloc] initWithGpxFile:gpxPath];
+//            [gpxDatabase addGpxItem:shortPath
+//                              title:trackName
+//                               desc:gpxDoc.metadata.desc
+//                             bounds:gpxDoc.bounds
+//                           document:gpxDoc];
+//            [gpxDatabase save];
             
             if (showOnMap)
                 [OAAppSettings.sharedManager showGpx:@[shortPath]];

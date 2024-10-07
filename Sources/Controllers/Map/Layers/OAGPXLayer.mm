@@ -16,7 +16,6 @@
 #import "OADefaultFavorite.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXDatabase.h"
-#import "OAGPXMutableDocument.h"
 #import "OAGpxWptItem.h"
 #import "OASelectedGPXHelper.h"
 #import "OASavingTrackHelper.h"
@@ -542,7 +541,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                         {
                             NSInteger trackIndex = [doc_.tracks indexOfObject:track];
                             
-                            OASTrack *gpxTrack = tracks[trackIndex];
+                           // OASTrack *gpxTrack = tracks[trackIndex];
                             OASInt *color = [[OASInt alloc] initWithInt:(int)kDefaultTrackColor];
                             const auto colorARGB = [UIColorFromARGB([color intValue]) toFColorARGB];
                             segmentColors.push_back(colorARGB);
@@ -1527,6 +1526,7 @@ colorizationScheme:(int)colorizationScheme
     return (int) (r * self.mapView.displayDensityFactor);
 }
 
+
 - (void) getTracksFromPoint:(CLLocationCoordinate2D)point res:(NSMutableArray<OATargetPoint *> *)res
 {
     double textSize = [OAAppSettings.sharedManager.textSize get];
@@ -1550,10 +1550,9 @@ colorizationScheme:(int)colorizationScheme
         }
         else if (gpxFile)
         {
-            // FIXME:
-//            document = isCurrentTrack
-//                    ? nil/*[OASavingTrackHelper sharedInstance].currentTrack */
-//                    : [[OASGpxFile alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(it.value())];
+            document = isCurrentTrack
+                    ? [OASavingTrackHelper sharedInstance].currentTrack
+                    : gpxFile;
         }
 
         if (!document)
@@ -1568,7 +1567,7 @@ colorizationScheme:(int)colorizationScheme
 //                                                                                                longitude:points.firstObject.position.longitude]
 //                                                          toLocation:[[CLLocation alloc] initWithLatitude:points.lastObject.position.latitude
 //                                                                                                longitude:points.lastObject.position.longitude]];
-////            // FiXME:
+//           // FiXME:
 //            OASGpxDataItem *gpx = [_cachedTracks.allKeys containsObject:filePath] ? _cachedTracks[filePath][@"gpx"]
 //                    : isCurrentTrack ? nil/*[[OASavingTrackHelper sharedInstance] getCurrentGPX]*/ : [self getGpxItem:QString::fromNSString(key)];
 //            OATargetPoint *targetPoint = [self getTargetPoint:gpx];
@@ -1813,7 +1812,7 @@ colorizationScheme:(int)colorizationScheme
             item.point.lat = position.latitude;
             item.point.lon = position.longitude;
             // FIXME:
-            //item.point.wpt->position = OsmAnd::LatLon(position.latitude, position.longitude);
+            // item.point.wpt.position = OsmAnd::LatLon(position.latitude, position.longitude);
 
             OASGpxFile * doc = [[OASelectedGPXHelper instance] getGpxFileFor:item.docPath];
             if (doc)
@@ -1828,9 +1827,9 @@ colorizationScheme:(int)colorizationScheme
         else
         {
             OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
-            // FIXME: updatePointCoordinatesNew
-          //  [helper updatePointCoordinates:item.point newLocation:position];
-          //  item.point.wpt->position = OsmAnd::LatLon(position.latitude, position.longitude);
+            [helper updatePointCoordinates:item.point newLocation:position];
+            // FIXME:
+            // item.point.wpt->position = OsmAnd::LatLon(position.latitude, position.longitude);
             [self.app.updateRecTrackOnMapObservable notifyEventWithKey:@(YES)];
         }
     }

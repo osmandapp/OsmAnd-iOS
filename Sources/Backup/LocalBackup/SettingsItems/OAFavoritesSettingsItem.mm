@@ -8,7 +8,6 @@
 
 #import "OAFavoritesSettingsItem.h"
 #import "OAAppSettings.h"
-#import "OAGPXDocument.h"
 #import "OASelectedGPXHelper.h"
 #import "OsmAndApp.h"
 #import "OAFavoriteItem.h"
@@ -18,6 +17,7 @@
 #import "OAIndexConstants.h"
 #import "OAPluginsHelper.h"
 #import "Localization.h"
+#import "OsmAndSharedWrapper.h"
 
 #define APPROXIMATE_FAVOURITE_SIZE_BYTES 470
 
@@ -265,8 +265,9 @@
 
 - (OASettingsItemWriter *)getWriter
 {
-    OAGPXMutableDocument *doc = [OAFavoritesHelper asGpxFile:self.items];
-    return [self getGpxWriter:(OAGPXDocument *) doc];
+    // FIXME:
+//    OAGPXMutableDocument *doc = [OAFavoritesHelper asGpxFile:self.items];
+//    return [self getGpxWriter:(OAGPXDocument *) doc];
 }
 
 @end
@@ -277,43 +278,44 @@
 
 - (BOOL) readFromFile:(NSString *)filePath error:(NSError * _Nullable *)error
 {
-    if (self.item.read)
-    {
-        if (error)
-            *error = [NSError errorWithDomain:kSettingsItemErrorDomain code:kSettingsItemErrorCodeAlreadyRead userInfo:nil];
-
-        return NO;
-    }
-
-    OAGPXDocument *gpxFile = [[OAGPXDocument alloc] initWithGpxFile:filePath];
-    if (gpxFile)
-    {
-        NSMutableDictionary<NSString *, OAFavoriteGroup *> *flatGroups = [NSMutableDictionary dictionary];
-        NSArray<OAFavoriteItem *> *favorites = [OAFavoritesHelper wptAsFavorites:gpxFile.points defaultCategory:@""];
-        for (OAFavoriteItem *point in favorites)
-        {
-            OAFavoriteGroup *group = flatGroups[[point getCategory]];
-            if (!group)
-            {
-                group = [self createFavoriteGroup:gpxFile point:point];
-                flatGroups[group.name] = group;
-                [self.item.items addObject:group];
-            }
-            [group.points addObject:point];
-        }
-    }
-
-    self.item.read = YES;
+    // FIXME:
+//    if (self.item.read)
+//    {
+//        if (error)
+//            *error = [NSError errorWithDomain:kSettingsItemErrorDomain code:kSettingsItemErrorCodeAlreadyRead userInfo:nil];
+//
+//        return NO;
+//    }
+//
+//    OAGPXDocument *gpxFile = [[OAGPXDocument alloc] initWithGpxFile:filePath];
+//    if (gpxFile)
+//    {
+//        NSMutableDictionary<NSString *, OAFavoriteGroup *> *flatGroups = [NSMutableDictionary dictionary];
+//        NSArray<OAFavoriteItem *> *favorites = [OAFavoritesHelper wptAsFavorites:gpxFile.points defaultCategory:@""];
+//        for (OAFavoriteItem *point in favorites)
+//        {
+//            OAFavoriteGroup *group = flatGroups[[point getCategory]];
+//            if (!group)
+//            {
+//                group = [self createFavoriteGroup:gpxFile point:point];
+//                flatGroups[group.name] = group;
+//                [self.item.items addObject:group];
+//            }
+//            [group.points addObject:point];
+//        }
+//    }
+//
+//    self.item.read = YES;
     return YES;
 }
 
-- (OAFavoriteGroup *)createFavoriteGroup:(OAGPXDocument *)gpxFile point:(OAFavoriteItem *)point
+- (OAFavoriteGroup *)createFavoriteGroup:(OASGpxFile *)gpxFile point:(OAFavoriteItem *)point
 {
     OAFavoriteGroup *favoriteGroup = [[OAFavoriteGroup alloc] initWithPoint:point];
-    OAPointsGroup *pointsGroup = gpxFile.pointsGroups[favoriteGroup.name];
+    OASGpxUtilitiesPointsGroup *pointsGroup = gpxFile.pointsGroups[favoriteGroup.name];
     if (pointsGroup)
     {
-        favoriteGroup.color = pointsGroup.color;
+        favoriteGroup.color = UIColorFromRGB(pointsGroup.color);
         favoriteGroup.iconName = pointsGroup.iconName;
         favoriteGroup.backgroundType = pointsGroup.backgroundType;
     }

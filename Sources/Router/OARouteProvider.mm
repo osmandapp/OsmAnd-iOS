@@ -175,8 +175,7 @@
     builder.calculateOsmAndRoute = NO; // Disabled temporary builder.calculateOsmAndRoute;
     if (file.getAllPoints.count > 0)
     {
-        // FIXME:
-      //  self.wpt = [NSArray arrayWithArray:file.points];
+        self.wpt = [NSArray arrayWithArray:file.getAllPoints];
     }
     NSInteger selectedSegment = builder.selectedSegment;
     if ([OSMAND_ROUTER_V2 isEqualToString:file.author])
@@ -476,8 +475,8 @@
         {
             // FIXME: pt.verticalDilutionOfPrecision
 //            CLLocation *loc = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(pt.position.latitude, pt.position.longitude) altitude:pt.ele horizontalAccuracy:pt.hdop verticalAccuracy:pt.verticalDilutionOfPrecision course:0 speed:pt.speed timestamp:[NSDate dateWithTimeIntervalSince1970:pt.time]];
-//            
-//            [res addObject:loc];
+            
+ //           [res addObject:loc];
         }
     }
     else

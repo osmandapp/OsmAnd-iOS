@@ -170,21 +170,22 @@ static NSOperationQueue *_favQueue;
 
 + (void)importFavoritesFromGpx:(OAGPXDocument *)gpxFile
 {
-    NSString *defCategory = @"";
-    OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPluginsHelper getPlugin:OAParkingPositionPlugin.class];
-    NSArray<OAPointsGroup *> *pointsGroups = gpxFile.pointsGroups.allValues;
-    for (OAPointsGroup *pointsGroup in pointsGroups)
-    {
-        NSArray<OAFavoriteItem *> *favorites = [self wptAsFavorites:pointsGroup.points defaultCategory:defCategory];
-        [self checkDuplicateNames:favorites];
-        [self deleteFavorites:favorites.copy saveImmediately:NO];
-        [self addFavorites:favorites lookupAddress:YES sortAndSave:pointsGroup == pointsGroups.lastObject pointsGroup:pointsGroup];
-        for (OAFavoriteItem *favorite in favorites)
-        {
-            if (plugin && favorite.specialPointType == OASpecialPointType.PARKING)
-                [plugin updateParkingPoint:favorite];
-        }
-    }
+    // FIXME:
+//    NSString *defCategory = @"";
+//    OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPluginsHelper getPlugin:OAParkingPositionPlugin.class];
+//    NSArray<OAPointsGroup *> *pointsGroups = gpxFile.pointsGroups.allValues;
+//    for (OAPointsGroup *pointsGroup in pointsGroups)
+//    {
+//        NSArray<OAFavoriteItem *> *favorites = [self wptAsFavorites:pointsGroup.points defaultCategory:defCategory];
+//        [self checkDuplicateNames:favorites];
+//        [self deleteFavorites:favorites.copy saveImmediately:NO];
+//        [self addFavorites:favorites lookupAddress:YES sortAndSave:pointsGroup == pointsGroups.lastObject pointsGroup:pointsGroup];
+//        for (OAFavoriteItem *favorite in favorites)
+//        {
+//            if (plugin && favorite.specialPointType == OASpecialPointType.PARKING)
+//                [plugin updateParkingPoint:favorite];
+//        }
+//    }
 }
 
 + (void)checkDuplicateNames:(NSArray<OAFavoriteItem *> *)favorites
@@ -1248,7 +1249,8 @@ static NSOperationQueue *_favQueue;
     {
         [points addObject:[point toWpt]];
     }
-    pointsGroup.points = points;
+    // FIXME:
+   // pointsGroup.points = points;
 
     std::shared_ptr<OsmAnd::GpxDocument::PointsGroup> pg;
     pg.reset(new OsmAnd::GpxDocument::PointsGroup());

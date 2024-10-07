@@ -1191,14 +1191,14 @@ static const CGFloat kVerticalExaggerationScaleMax = 4.0;
 
 - (NSArray<OATrkSegment *> *) getPointsToDisplay
 {
-    OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.path]];
+  //  OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.path]];
 //    if (filteredSelectedGpxFile != null) {
 //        return filteredSelectedGpxFile.getPointsToDisplay();
 //    } else
-    if (gpx && gpx.joinSegments)
-        return [self getGeneralTrack] ? self.generalTrack.segments : [NSArray array];
-    else
-        return _processedPointsToDisplay;
+//    if (gpx && gpx.joinSegments)
+//        return [self getGeneralTrack] ? self.generalTrack.segments : [NSArray array];
+//    else
+//        return _processedPointsToDisplay;
 }
 
 - (NSArray<OATrkSegment *> *) proccessPoints

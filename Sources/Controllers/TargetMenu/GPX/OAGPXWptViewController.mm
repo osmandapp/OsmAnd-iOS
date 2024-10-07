@@ -13,7 +13,6 @@
 #import "OALog.h"
 #import "OADefaultFavorite.h"
 #import "OAGPXDocumentPrimitives.h"
-#import "OAGPXDocument.h"
 #import "OAMapViewController.h"
 #import "OACollapsableWaypointsView.h"
 #import "OAPOI.h"
@@ -49,8 +48,7 @@
         _app = [OsmAndApp instance];
         if (!wpt.docPath)
         {
-            // FIXME:
-          //  wpt.docPath = [[OASelectedGPXHelper instance] getSelectedGpx:wpt.point].path;
+            wpt.docPath = [[OASelectedGPXHelper instance] getSelectedGpx:wpt.point].path;
         }
         self.wpt = wpt;
         // FIXME:
@@ -235,9 +233,7 @@
 
 - (NSString *) getItemGroup
 {
-    return @"";
-    // FIXME:
-    //return (self.wpt.point.type ? self.wpt.point.type : @"");
+    return (self.wpt.point.type ? self.wpt.point.type : @"");
 }
 
 - (NSArray *) getItemGroups

@@ -12,6 +12,7 @@
 #import "OARoadSegmentData.h"
 #import "OAMeasurementEditingContext.h"
 #import "OAMeasurementToolLayer.h"
+#import "OsmAndSharedWrapper.h"
 
 @implementation OAChangeRouteModeCommand
 {
@@ -168,7 +169,7 @@
     if (!pt.isGap)
     {
         if (_newMode != nil && _newMode != OAApplicationMode.DEFAULT)
-            [pt setProfileType:_newMode.stringKey];
+            [pt setProfileTypeProfileType:_newMode.stringKey];
         else
             [pt removeProfileType];
     }

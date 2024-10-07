@@ -10,7 +10,6 @@
 #import "OAOpenAddTrackViewController.h"
 #import "OARoutePlanningHudViewController.h"
 #import "Localization.h"
-//#import "OAGPXDocumentPrimitives.h"
 #import "OAColors.h"
 #import "OAApplicationMode.h"
 #import "OAGPXTrackCell.h"
@@ -19,7 +18,6 @@
 #import "OARoutingHelper.h"
 #import "OARoutePreferencesParameters.h"
 #import "OARouteProvider.h"
-#import "OAGPXMutableDocument.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapActions.h"
@@ -64,8 +62,7 @@
     if (self)
     {
         if (isCurrentTrack) {
-            // FIXME:
-            // _gpx = [OASavingTrackHelper.sharedInstance currentTrack];
+             _gpx = [OASavingTrackHelper.sharedInstance currentTrack];
         } else {
             OASKFile *file = [[OASKFile alloc] initWithFilePath:filepath];
             OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];

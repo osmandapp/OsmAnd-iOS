@@ -32,7 +32,7 @@ typedef NS_ENUM(NSUInteger, EOATrackHudMode)
     EOATrackAppearanceHudMode,
 };
 
-@class OASGpxDataItem, OAGPXMutableDocument, OAMapPanelViewController, OAMapViewController, OASavingTrackHelper, OAAppSettings;
+@class OASGpxDataItem, OAMapPanelViewController, OAMapViewController, OASavingTrackHelper, OAAppSettings;
 
 @class OASGpxTrackAnalysis, OASGpxFile;
 

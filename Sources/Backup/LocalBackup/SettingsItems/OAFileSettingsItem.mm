@@ -10,7 +10,6 @@
 #import "OASettingsHelper.h"
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
-#import "OAGPXDocument.h"
 #import "OAGPXDatabase.h"
 #import "OAIndexConstants.h"
 #import "OASettingsItemReader.h"

@@ -7,6 +7,7 @@
 //
 
 #import "OARouteExporter.h"
+#import "OAGPXDocumentPrimitives.h"
 #import "OsmAndSharedWrapper.h"
 
 #include <routeSegmentResult.h>
@@ -140,6 +141,19 @@
 //    trkSegment.routeTypes = routeTypes;
 //    [trkSegment fillExtensions];
 //    return trkSegment;
+    
+// JAVA code
+//    List<RouteSegment> routeSegments = new ArrayList<>();
+//        for (StringBundle item : routeItems) {
+//            routeSegments.add(RouteSegment.fromStringBundle(item));
+//        }
+//        trkSegment.routeSegments = routeSegments;
+//        List<RouteType> routeTypes = new ArrayList<>();
+//        for (StringBundle item : typeList) {
+//            routeTypes.add(RouteType.fromStringBundle(item));
+//        }
+//        trkSegment.routeTypes = routeTypes;
+//        return trkSegment;
 }
 
 - (std::vector<Location>) coordinatesToLocationVector:(NSArray<CLLocation *> *)points

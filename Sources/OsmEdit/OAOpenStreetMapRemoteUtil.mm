@@ -9,7 +9,6 @@
 #import "OAOpenStreetMapRemoteUtil.h"
 #import "OAEntityInfo.h"
 #import "OAEntity.h"
-#import "OAGPXDocument.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OANode.h"

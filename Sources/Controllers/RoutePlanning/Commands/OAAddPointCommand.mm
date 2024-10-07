@@ -10,6 +10,7 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OAMeasurementToolLayer.h"
 #import "OAMeasurementEditingContext.h"
+#import "OsmAndSharedWrapper.h"
 
 @implementation OAAddPointCommand
 {
@@ -43,8 +44,7 @@
     OAMeasurementEditingContext *ctx = self.getEditingCtx;
     if (latLon != nil)
     {
-        _point = [[OASWptPt alloc] init];
-        [_point setPosition:latLon.coordinate];
+        _point = [[OASWptPt alloc] initWithLat:latLon.coordinate.latitude lon:latLon.coordinate.longitude];
     }
     _center = center;
     _position = ctx.getPointsCount;
@@ -85,7 +85,7 @@
         OASWptPt *prevPt = ctx.getPoints[_position - 1];
         if (_prevPointProfile != nil)
         {
-            [prevPt setProfileType:_prevPointProfile];
+            [prevPt setProfileTypeProfileType:_prevPointProfile];
         }
         else
         {

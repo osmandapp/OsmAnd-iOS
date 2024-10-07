@@ -7,7 +7,6 @@
 //
 
 #import "OAHistoryMarkersSettingsItem.h"
-#/*import "OAGPXMutableDocument.h"*/
 #import "OAHistoryHelper.h"
 #import "Localization.h"
 #import "OsmAndSharedWrapper.h"

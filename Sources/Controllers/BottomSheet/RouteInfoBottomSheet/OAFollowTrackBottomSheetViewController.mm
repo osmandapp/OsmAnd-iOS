@@ -23,7 +23,6 @@
 #import "OARoutingHelper.h"
 #import "OARoutePreferencesParameters.h"
 #import "OARouteProvider.h"
-#import "OAGPXMutableDocument.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMeasurementEditingContext.h"
@@ -269,10 +268,6 @@
     if (_gpx)
     {
         OASGpxFile *mutableGpx = _gpx;
-//        if (_gpx.path && _gpx.path.length > 0)
-//            mutableGpx = [[OAGPXMutableDocument alloc] initWithGpxFile:_gpx.path];
-//        else if ([_gpx isKindOfClass:OAGPXMutableDocument.class])
-//            mutableGpx = (OAGPXMutableDocument *) _gpx;
         OAGpxData *gpxData = [[OAGpxData alloc] initWithFile:mutableGpx];
         OAMeasurementEditingContext *editingContext = [[OAMeasurementEditingContext alloc] init];
         editingContext.gpxData = gpxData;

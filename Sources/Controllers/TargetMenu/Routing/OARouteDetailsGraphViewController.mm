@@ -15,7 +15,6 @@
 #import "OARoutingHelper.h"
 #import "OANativeUtilities.h"
 #import "OsmAndApp.h"
-#import "OAGPXDocument.h"
 #import "OAGPXUIHelper.h"
 #import "OAMapLayers.h"
 #import "OARouteLayer.h"
@@ -417,10 +416,9 @@
         {
             _trackMenuControlState.openedFromTrackMenu = NO;
             [[OARootViewController instance].mapPanel targetHideMenu:0.3 backButtonClicked:YES onComplete:^{
-                // FIXME:
-//                [[OARootViewController instance].mapPanel openTargetViewWithGPX:[[OAGPXDatabase sharedDb] getGPXItem:_trackMenuControlState.gpxFilePath]
-//                                                                   trackHudMode:EOATrackMenuHudMode
-//                                                                          state:_trackMenuControlState];
+                [[OARootViewController instance].mapPanel openTargetViewWithGPX:[[OAGPXDatabase sharedDb] getNewGPXItem:_trackMenuControlState.gpxFilePath]
+                                                                   trackHudMode:EOATrackMenuHudMode
+                                                                          state:_trackMenuControlState];
             }];
         }
     }

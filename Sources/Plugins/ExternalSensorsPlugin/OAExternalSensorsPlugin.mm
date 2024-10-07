@@ -251,24 +251,25 @@ NSString * const OATrackRecordingAnyConnectedDevice = @"any_connected_device_wri
             CGFloat value = ([OAPointAttributes.sensorTagTemperatureW isEqualToString:tag] || [OAPointAttributes.sensorTagTemperatureA isEqualToString:tag]) ? NAN : 0;
             NSNumber *val = nil;
             BOOL isSpeedSensorTag = [tag isEqualToString:@"speed_sensor"];
-            OAGpxExtension *trackpointextension = [((OASWptPt *) point) getExtensionByKey:isSpeedSensorTag ? @"speed_sensor" : @"trackpointextension"];
-            if (trackpointextension)
-            {
-                if (isSpeedSensorTag)
-                {
-                    val = [numberFormatter numberFromString:trackpointextension.value];
-                }
-                else
-                {
-                    for (OAGpxExtension *subextension in trackpointextension.subextensions)
-                    {
-                        if ([subextension.name isEqualToString:tag])
-                        {
-                            val = [numberFormatter numberFromString:subextension.value];
-                        }
-                    }
-                }
-            }
+            // FIXME:
+//            OAGpxExtension *trackpointextension = [((OASWptPt *) point) getExtensionByKey:isSpeedSensorTag ? @"speed_sensor" : @"trackpointextension"];
+//            if (trackpointextension)
+//            {
+//                if (isSpeedSensorTag)
+//                {
+//                    val = [numberFormatter numberFromString:trackpointextension.value];
+//                }
+//                else
+//                {
+//                    for (OAGpxExtension *subextension in trackpointextension.subextensions)
+//                    {
+//                        if ([subextension.name isEqualToString:tag])
+//                        {
+//                            val = [numberFormatter numberFromString:subextension.value];
+//                        }
+//                    }
+//                }
+//            }
             
             value = val ? val.floatValue : value;
             [attribute setAttributeValueFor:tag value:value];

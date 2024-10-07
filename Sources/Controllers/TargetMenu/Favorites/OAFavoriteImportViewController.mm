@@ -17,6 +17,8 @@
 #import "OATableRowData.h"
 #import "OAColors.h"
 #import "Localization.h"
+#import "OsmAndSharedWrapper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = @"OAFavoriteImportViewControllerDidDismissNotification";
 
@@ -134,9 +136,11 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
             cell.directionImageView.image = [UIImage templateImageNamed:@"ic_small_direction"];
             cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
 //            cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
-            cell.titleIcon.image = [OAFavoritesHelper getCompositeIcon:[wptPt getIcon]
-                                                        backgroundIcon:[wptPt getBackgroundIcon]
-                                                                 color:[wptPt getColor]];
+            
+           
+            cell.titleIcon.image = [OAFavoritesHelper getCompositeIcon:[wptPt getIconName]
+                                                        backgroundIcon:[wptPt getBackgroundType]
+                                                                 color: UIColorFromRGBA([wptPt getColor])];
 
         }
         return cell;

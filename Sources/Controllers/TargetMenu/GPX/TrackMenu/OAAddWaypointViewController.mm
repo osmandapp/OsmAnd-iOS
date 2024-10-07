@@ -86,8 +86,7 @@
 
     if (![OAUtilities isLandscapeIpadAware])
         [OAUtilities setMaskTo:self.contentView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
-    // FIXME:
-   // [_mapPanelViewController displayGpxOnMap:_gpx];
+    [_mapPanelViewController displayGpxOnMap:_gpx];
     if (self.delegate)
         [self.delegate requestHeaderOnlyMode];
 
@@ -223,10 +222,9 @@
         {
             OATrackMenuViewControllerState *state = (OATrackMenuViewControllerState *) weakSelf.targetMenuState;
             state.openedFromTrackMenu = NO;
-            // FIXME:
-//            [weakSelf.mapPanelViewController openTargetViewWithGPX:weakSelf.gpx
-//                                              trackHudMode:EOATrackMenuHudMode
-//                                                     state:state];
+            [weakSelf.mapPanelViewController openTargetViewWithGPX:weakSelf.gpx
+                                              trackHudMode:EOATrackMenuHudMode
+                                                     state:state];
         }
     }];
 

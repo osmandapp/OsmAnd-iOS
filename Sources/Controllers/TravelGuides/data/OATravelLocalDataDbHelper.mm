@@ -8,7 +8,6 @@
 
 #import "OATravelLocalDataDbHelper.h"
 #import "OsmAndApp.h"
-#import "OAGPXDocument.h"
 #import "OsmAnd_Maps-Swift.h"
 #import <sqlite3.h>
 

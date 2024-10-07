@@ -12,7 +12,6 @@
 #import "OAMapRendererView.h"
 #import "OARoutingHelper.h"
 #import "OANativeUtilities.h"
-#import "OAGPXDocument.h"
 #import "OAMeasurementEditingContext.h"
 #import "OAAppSettings.h"
 #import "CLLocation+Extension.h"

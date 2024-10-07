@@ -16,7 +16,6 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OAEditPointViewController.h"
 #import "OASavingTrackHelper.h"
-#import "OAGPXDocument.h"
 #import "OAGPXAppearanceCollection.h"
 #import "Localization.h"
 #import "OsmAndSharedWrapper.h"
@@ -27,7 +26,7 @@
     OAGpxWptItem *_gpxWpt;
     OsmAndAppInstance _app;
     NSString *_gpxFileName;
-    OAGPXDocument *_gpxDocument;
+    OASGpxFile *_gpxDocument;
     NSString *_newGroupTitle;
     UIColor *_newGroupColor;
     NSString *_iconName;
@@ -92,7 +91,17 @@
 - (void)commonInit
 {
     _app = [OsmAndApp instance];
-    _gpxDocument = _gpxFileName.length > 0 ? [[OAGPXDocument alloc] initWithGpxFile:_gpxFileName] : nil/* (OAGPXDocument *) [[OASavingTrackHelper sharedInstance] currentTrack] */;
+    if (_gpxFileName.length > 0)
+    {
+        OASKFile *file = [[OASKFile alloc] initWithFilePath:_gpxFileName];
+        OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
+        
+        _gpxDocument = gpxFile;
+    }
+    else
+    {
+        _gpxDocument =  [[OASavingTrackHelper sharedInstance] currentTrack];
+    }
 }
 
 - (UIColor *)getColor
@@ -104,14 +113,15 @@
 {
     return _gpxWpt.point.type && _gpxWpt.point.type.length > 0 ? _gpxWpt.point.type : OALocalizedString(@"shared_string_waypoints");
 }
-- (OAGPXDocument *)getGpxDocument
+- (OASGpxFile *)getGpxDocument
 {
     return _gpxDocument;
 }
 
 - (NSArray<NSDictionary<NSString *, NSString *> *> *)getGroups
 {
-    NSArray<NSDictionary<NSString *, NSString *> *> *groups = [_gpxDocument getWaypointCategoriesWithAllData:YES];
+    // FIXME:
+    NSArray<NSDictionary<NSString *, NSString *> *> *groups = [NSArray array];/* [_gpxDocument getWaypointCategoriesWithAllData:YES];*/
 
     if (_newGroupTitle)
     {
@@ -156,7 +166,9 @@
 
 - (NSDictionary<NSString *, NSString *> *)getGroupsWithColors
 {
-    NSDictionary<NSString *, NSString *> *groups = [_gpxDocument getWaypointCategoriesWithColors:NO];
+    // FIXME:
+    NSDictionary<NSString *, NSString *> *groups = [NSDictionary dictionary];
+   // NSDictionary<NSString *, NSString *> *groups = [_gpxDocument getWaypointCategoriesWithColors:NO];
 
     if (_newGroupTitle)
     {
@@ -191,8 +203,7 @@
 
 - (void)setGroup:(NSString *)groupName color:(UIColor *)color save:(BOOL)save
 {
-    // FIXME:
-   // _gpxWpt.point.type = groupName;
+    _gpxWpt.point.type = groupName;
     OASInt *colorToSave = [[OASInt alloc] initWithInt:[color toARGBNumber]];
     [_gpxWpt.point setColorColor:colorToSave];
     _gpxWpt.color = color;

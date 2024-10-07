@@ -11,7 +11,6 @@
 #import "OAGPXDatabase.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
-#import "OAGPXDocument.h"
 #import "OAKml2Gpx.h"
 #import "OAIndexConstants.h"
 #import "Localization.h"
@@ -340,8 +339,7 @@ static UIViewController *parentController;
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self doPush];
-            // FIXME:
-           // [[OARootViewController instance].mapPanel openTargetViewWithGPX:item];
+            [[OARootViewController instance].mapPanel openTargetViewWithGPX:item];
         });
     }
 }

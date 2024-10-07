@@ -21,7 +21,6 @@
 #import "OAMapCreatorHelper.h"
 #import "OADownloadTask.h"
 #import "OAIAPHelper.h"
-#import "OAGPXDocument.h"
 #import "OAGPXDatabase.h"
 #import "OAWeatherHelper.h"
 #import "OAWorldRegion.h"
@@ -127,11 +126,19 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
 
 + (void)installGpxResource:(NSString *)localPath fileName:(NSString *)fileName
 {
-    OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:localPath];
+    //OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:localPath];
+    
+    OASKFile *file = [[OASKFile alloc] initWithFilePath:localPath];
+    OASGpxFile *doc = [OASGpxUtilities.shared loadGpxFileFile:file];
+
+    
     NSString *destFilePath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:fileName];
     [NSFileManager.defaultManager createDirectoryAtPath:destFilePath.stringByDeletingLastPathComponent withIntermediateDirectories:YES attributes:nil error:nil];
-    [doc saveTo:destFilePath];
-    [[OAGPXDatabase sharedDb] addGpxItem:destFilePath title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds document:doc];
+    
+    OASKFile *fileDest = [[OASKFile alloc] initWithFilePath:destFilePath];
+    [OASGpxUtilities.shared writeGpxFileFile:fileDest gpxFile:doc];
+   // FIXME:
+//    [[OAGPXDatabase sharedDb] addGpxItem:destFilePath title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds document:doc];
     [[OAGPXDatabase sharedDb] save];
 }
 

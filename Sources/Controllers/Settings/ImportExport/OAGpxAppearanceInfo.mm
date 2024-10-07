@@ -7,7 +7,6 @@
 //
 
 #import "OAGpxAppearanceInfo.h"
-#import "OAGPXDocument.h"
 #import "OsmAnd_Maps-Swift.h"
 
 @interface OAGpxAppearanceInfo()

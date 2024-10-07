@@ -25,7 +25,6 @@
 #import "OAPOIHelper.h"
 #import "OAPOIFiltersHelper.h"
 #import "OASavingTrackHelper.h"
-#import "OAGPXMutableDocument.h"
 #import "OAGPXDatabase.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAUtilities.h"
@@ -3469,7 +3468,6 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
     if (!gpxFileName)
     {
-        // FIXME:
         gpxDocument = helper.currentTrack;
     }
     else if ([_gpxDocFileTemp isEqualToString:[gpxFileName lastPathComponent]])
@@ -3546,7 +3544,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             
             if (found)
             {
-                // FIXME;
+                // FIXME:
               //  doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
                 
                 // update map

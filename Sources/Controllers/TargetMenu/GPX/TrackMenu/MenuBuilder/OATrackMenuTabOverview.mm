@@ -504,13 +504,11 @@
             OAGPXTableCellData *linkCellData = [OAGPXTableCellData withData:@{
                     kTableKey: @"link_author",
                     kCellType: [OAValueTableViewCell getCellIdentifier],
-                    kCellTitle: OALocalizedString(@"shared_string_link")
-                    // FIXME:
-                   // kCellDesc: hasText ? author.link.text : author.link.url.absoluteString
+                    kCellTitle: OALocalizedString(@"shared_string_link"),
+                    kCellDesc: hasText ? author.link : @""/*author.link.url.absoluteString*/
             }];
-            // FIXME:
-//            if (hasText)
-//                linkCellData.values[@"url"] = author.link.url.absoluteString;
+            if (hasText)
+                linkCellData.values[@"url"] = author.link;
             [authorSectionData.subjects addObject:linkCellData];
         }
         return authorSectionData;

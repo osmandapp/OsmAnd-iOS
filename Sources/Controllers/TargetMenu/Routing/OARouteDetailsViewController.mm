@@ -16,7 +16,6 @@
 #import "OAStateChangedListener.h"
 #import "OARoutingHelper.h"
 #import "OARouteInfoCell.h"
-#import "OAGPXDocument.h"
 #import "OAGPXUIHelper.h"
 #import "OAMapLayers.h"
 #import "OARouteStatisticsHelper.h"
@@ -823,7 +822,6 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     OASKFile *filePathToSaveGPX = [[OASKFile alloc] initWithFilePath:path];
     // save to disk
     [[OASGpxUtilities shared] writeGpxFileFile:filePathToSaveGPX gpxFile:doc];
-    //[doc saveTo:path];
     NSURL* url = [NSURL fileURLWithPath:path];
     
     UIActivityViewController *activityViewController =

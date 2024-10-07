@@ -10,7 +10,6 @@
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
 #import "OAGPXDatabase.h"
-#import "OAGPXDocument.h"
 #import "OAObservable.h"
 #import "OsmAndSharedWrapper.h"
 

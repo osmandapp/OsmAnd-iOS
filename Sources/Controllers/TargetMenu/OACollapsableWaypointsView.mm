@@ -11,7 +11,6 @@
 #import "OsmAndApp.h"
 #import "OAColors.h"
 #import "OAGpxWptItem.h"
-#import "OAGPXDocument.h"
 #import "OAFavoriteItem.h"
 #import "OAFavoritesHelper.h"
 #import "OARootViewController.h"

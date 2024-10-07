@@ -13,7 +13,6 @@
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OAGPXDatabase.h"
-#import "OAGPXMutableDocument.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OATrackMenuHudViewController.h"
@@ -52,7 +51,6 @@
         };
         
         self.onClickFunction = ^(id sender) {
-            // FIXME:
             OASGpxTrackAnalysis *analysis = [[[OASavingTrackHelper sharedInstance] currentTrack] getAnalysisFileTimestamp:0];
             if (analysis.hasElevationData)
             {
@@ -121,9 +119,9 @@
 {
     if (reset)
         _diffElevationUp = 0.0;
-// FIXME:
-//    OAGPXTrackAnalysis *analysis = [[[OASavingTrackHelper sharedInstance] currentTrack] getAnalysis:0];
-//    _diffElevationUp = MAX(analysis.diffElevationUp, _diffElevationUp);
+
+    OASGpxTrackAnalysis *analysis = [[[OASavingTrackHelper sharedInstance] currentTrack] getAnalysisFileTimestamp:0];
+    _diffElevationUp = MAX(analysis.diffElevationUp, _diffElevationUp);
     
     return _diffElevationUp;
 }
@@ -159,9 +157,8 @@
 {
     if (reset)
         _diffElevationDown = 0.0;
-// FIXME:
-//    OAGPXTrackAnalysis *analysis = [[[OASavingTrackHelper sharedInstance] currentTrack] getAnalysis:0];
-//    _diffElevationDown = MAX(analysis.diffElevationDown, _diffElevationDown);
+    OASGpxTrackAnalysis *analysis = [[[OASavingTrackHelper sharedInstance] currentTrack] getAnalysisFileTimestamp:0];
+    _diffElevationDown = MAX(analysis.diffElevationDown, _diffElevationDown);
     return _diffElevationDown;
 }
 

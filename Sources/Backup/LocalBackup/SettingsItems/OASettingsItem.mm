@@ -7,7 +7,6 @@
 //
 
 #import "OASettingsItem.h"
-#import "OAGPXDocument.h"
 #import "OrderedDictionary.h"
 #import "OASettingsHelper.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -398,8 +397,8 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
 {
     if (_gpxFile)
     {
-        // FIXME:
-      //  [_gpxFile saveTo:filePath];
+        OASKFile *file = [[OASKFile alloc] initWithFilePath:filePath];
+        [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:_gpxFile];
         return YES;
     }
     return NO;

@@ -10,7 +10,6 @@
 #import "OARootViewController.h"
 #import "OsmAndApp.h"
 #import "OAGPXDocumentPrimitives.h"
-#import "OAGPXDocument.h"
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OASavingTrackHelper.h"

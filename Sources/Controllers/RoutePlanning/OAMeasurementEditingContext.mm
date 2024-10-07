@@ -10,7 +10,6 @@
 #import "OAApplicationMode.h"
 #import "OAMeasurementCommandManager.h"
 #import "OAGpxData.h"
-#import "OAGPXMutableDocument.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OARoadSegmentData.h"
 #import "OARouteImporter.h"

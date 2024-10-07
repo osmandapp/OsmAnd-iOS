@@ -30,6 +30,6 @@
 - (void)removeGpxFileWith:(NSString *)path;
 - (nullable OASGpxFile *)getGpxFileFor:(NSString *)path;
 - (BOOL)containsGpxFileWith:(NSString *)path;
-
+- (void)addGpxFile:(OASGpxFile *)file for:(NSString *)path;
 
 @end

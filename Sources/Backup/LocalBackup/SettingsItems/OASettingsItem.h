@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 FOUNDATION_EXTERN NSString *const kSettingsItemErrorDomain;
 FOUNDATION_EXTERN NSInteger const kSettingsItemErrorCodeAlreadyRead;
 
-@class OAGPXDocument;
+@class OASGpxFile;
 
 @interface OASettingsItem : NSObject
 
@@ -62,7 +62,7 @@ FOUNDATION_EXTERN NSInteger const kSettingsItemErrorCodeAlreadyRead;
 - (void) applyRoutingPreferences:(NSDictionary<NSString *,NSString *> *)prefs;
 - (OASettingsItemReader *) getJsonReader;
 - (OASettingsItemWriter *) getJsonWriter;
-- (OASettingsItemWriter *) getGpxWriter:(OAGPXDocument *)gpxFile;
+- (OASettingsItemWriter *) getGpxWriter:(OASGpxFile *)gpxFile;
 
 @end
 
@@ -76,7 +76,7 @@ FOUNDATION_EXTERN NSInteger const kSettingsItemErrorCodeAlreadyRead;
 
 @interface OASettingsItemGpxWriter : OASettingsItemWriter<OASettingsItem *>
 
-- (instancetype) initWithItem:(OASettingsItem *)item gpxDocument:(OAGPXDocument *)gpxFile;
+- (instancetype) initWithItem:(OASettingsItem *)item gpxDocument:(OASGpxFile *)gpxFile;
 
 @end
 

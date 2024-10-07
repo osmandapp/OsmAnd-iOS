@@ -214,9 +214,9 @@
     return result;
 }
 
-+ (OASTrkSegment *)getSegmentForAnalysis:(OAGPXDocument *)gpxDoc analysis:(OASGpxTrackAnalysis *)analysis
++ (OASTrkSegment *)getSegmentForAnalysis:(OASGpxFile *)gpxDoc analysis:(OASGpxTrackAnalysis *)analysis
 {
-    for (OATrack *track in gpxDoc.tracks)
+    for (OASTrack *track in gpxDoc.tracks)
     {
         for (OASTrkSegment *segment in track.segments)
         {
@@ -250,7 +250,7 @@
 
     if (dataSets && dataSets.count > 0 && segment && _gpxDoc)
     {
-        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:_gpxDoc.path]];
+        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:[OAUtilities getGpxShortPath:_gpxDoc.path]];
         BOOL joinSegments = gpx.joinSegments;
         id<ChartDataSetProtocol> dataSet = dataSets.firstObject;
         if ([GpxUIHelper getDataSetAxisTypeWithDataSet:dataSet] == GPXDataSetAxisTypeTime)
@@ -672,16 +672,17 @@
     }
 }
 
-- (void)centerMapOnGpx:(OAGPXDocument *)gpx
+- (void)centerMapOnGpx:(OASGpxFile *)gpx
 {
     if (gpx)
     {
         OABBox routeBBox;
-        OAGpxBounds gpxBounds = gpx.bounds;
-        routeBBox.top = gpxBounds.topLeft.latitude;
-        routeBBox.bottom = gpxBounds.bottomRight.latitude;
-        routeBBox.left = gpxBounds.topLeft.longitude;
-        routeBBox.right = gpxBounds.bottomRight.longitude;
+        // FIXME:
+      //  OAGpxBounds gpxBounds = gpx.bounds;
+//        routeBBox.top = gpxBounds.topLeft.latitude;
+//        routeBBox.bottom = gpxBounds.bottomRight.latitude;
+//        routeBBox.left = gpxBounds.topLeft.longitude;
+//        routeBBox.right = gpxBounds.bottomRight.longitude;
         [self centerMapOnBBox:routeBBox];
     }
 }

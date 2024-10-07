@@ -9,7 +9,7 @@
 #import "OATravelGuidesHelper.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXMutableDocument.h"
-#import "OAGPXDocument.h"
+//#import "OAGPXDocument.h"
 #import "OAPOIHelper.h"
 #import "OsmAndApp.h"
 #import "OAAppData.h"
@@ -403,14 +403,16 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
   //  return [self buildGpx:path title:title gpxDoc:document.object];
 }
 
-+ (OASGpxDataItem *) buildGpx:(NSString *)path title:(NSString *)title gpxDoc:(OAGPXDocument *)gpxDoc
++ (OASGpxDataItem *) buildGpx:(NSString *)path title:(NSString *)title gpxDoc:(OASGpxFile *)gpxDoc
 {
-    OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
-    OASGpxDataItem *gpx = [OAGPXDatabase.sharedDb buildGpxItem:path.lastPathComponent path:path title:title desc:gpxDoc.metadata.desc bounds:gpxDoc.bounds document:gpxDoc fetchNearestCity:YES];
+    return nil;
+    // FIXME:
+//    OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
+//    OASGpxDataItem *gpx = [OAGPXDatabase.sharedDb buildGpxItem:path.lastPathComponent path:path title:title desc:gpxDoc.metadata.desc bounds:gpxDoc.bounds document:gpxDoc fetchNearestCity:YES];
     // FIXME:
    // [gpxDb replaceGpxItem:gpx];
-    [gpxDb save];
-    return gpx;
+ //   [gpxDb save];
+   // return gpx;
 }
 
 + (NSString *) getSelectedGPXFilePath:(NSString *)fileName

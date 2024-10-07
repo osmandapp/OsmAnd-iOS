@@ -11,6 +11,7 @@
 #import "OARoadSegmentData.h"
 #import "OAMeasurementEditingContext.h"
 #import "OAApplicationMode.h"
+#import "OsmAndSharedWrapper.h"
 
 @implementation OAReversePointsCommand
 {
@@ -40,13 +41,14 @@
     {
         OASWptPt *point = _oldPoints[i];
         OASWptPt *prevPoint = i > 0 ? _oldPoints[i - 1] : nil;
-        [point copyExtensions:point];
+        // FIXME:
+       // [point copyExtensions:point];
         if (prevPoint != nil)
         {
             NSString *profileType = prevPoint.getProfileType;
             if (profileType != nil)
             {
-                [point setProfileType:profileType];
+                [point setProfileTypeProfileType:profileType];
             } else
             {
                 [point removeProfileType];

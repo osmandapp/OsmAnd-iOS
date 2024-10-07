@@ -67,6 +67,10 @@
     [_activeGpx removeObjectForKey:path];
 }
 
+- (void)addGpxFile:(OASGpxFile *)file for:(NSString *)path {
+    _activeGpx[path] = file;
+}
+
 - (nullable OASGpxFile *)getGpxFileFor:(NSString *)path {
     return _activeGpx[path];
 }

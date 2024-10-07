@@ -11,6 +11,7 @@
 #import "OAOpenStreetMapRemoteUtil.h"
 #import "OAOsmBugsRemoteUtil.h"
 #import "OsmAndApp.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OAUploadGPXFilesTask
 {

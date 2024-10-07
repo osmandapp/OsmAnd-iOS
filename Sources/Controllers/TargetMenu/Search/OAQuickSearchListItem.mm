@@ -30,6 +30,7 @@
 #import "OAPOIFiltersHelper.h"
 #import "OAFavoriteItem.h"
 #import "OAFavoritesHelper.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore/Data/Address.h>
 #include <OsmAndCore/Data/Street.h>
@@ -198,7 +199,7 @@
         case WPT:
         {
             OASWptPt *wpt = (OASWptPt *) searchResult.object;
-            return [wpt getIcon];
+            return [wpt getIconName];
         }
 
         default:

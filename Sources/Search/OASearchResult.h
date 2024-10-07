@@ -29,7 +29,7 @@
 
 @end
 
-@class OASearchPhrase;
+@class OASearchPhrase, OASWptPt, OASGpxFile;
 
 @interface OASearchResult : NSObject
 
@@ -44,7 +44,7 @@
 @property (nonatomic) NSObject *object;
 @property (nonatomic, assign) std::shared_ptr<const OsmAnd::Amenity> amenity;
 @property (nonatomic, assign) std::shared_ptr<const OsmAnd::IFavoriteLocation> favorite;
-@property (nonatomic, assign) std::shared_ptr<const OsmAnd::GpxDocument::WptPt> wpt;
+@property (nonatomic, assign) OASWptPt *wpt;
 
 @property (nonatomic) EOAObjectType objectType;
 @property (nonatomic) NSString *resourceId;
@@ -65,7 +65,7 @@
 @property (nonatomic) NSString *localeRelatedObjectName;
 @property (nonatomic) NSObject *relatedObject;
 @property (nonatomic) NSString *relatedResourceId;
-@property (nonatomic, assign) std::shared_ptr<const OsmAnd::GpxDocument> relatedGpx;
+@property (nonatomic, assign) OASGpxFile *relatedGpx;
 @property (nonatomic) double distRelatedObjectName;
 
 

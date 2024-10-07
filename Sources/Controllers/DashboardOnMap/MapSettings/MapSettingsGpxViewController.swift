@@ -589,10 +589,11 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     
     private func onTrackMoveClicked(track: OAGPX) {
         selectedTrack = track
-        if let vc = OASelectTrackFolderViewController(gpx: track) {
-            vc.delegate = self
-            present(UINavigationController(rootViewController: vc), animated: true)
-        }
+        // FIXME:
+//        if let vc = OASelectTrackFolderViewController(gpx: track) {
+//            vc.delegate = self
+//            present(UINavigationController(rootViewController: vc), animated: true)
+//        }
     }
     
     private func onTrackDeleteClicked(track: OAGPX) {

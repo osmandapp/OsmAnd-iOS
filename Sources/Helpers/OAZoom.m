@@ -34,18 +34,6 @@
 {
     int baseZoom = floor(zoom);
     float zoomFloatPart = zoom - baseZoom;
-    
-    // rounding values near int
-    if (zoomFloatPart > 0.9999)
-    {
-        zoomFloatPart = 0;
-        baseZoom += 1;
-    }
-    else if (zoomFloatPart < 0.0001)
-    {
-        zoomFloatPart = 0;
-    }
-    
     return [self initWithBaseZoom:baseZoom zoomFloatPart:zoomFloatPart minZoom:minZoom maxZoom:maxZoom];
 }
 
@@ -71,7 +59,7 @@
 
 - (BOOL) isZoomOutAllowed
 {
-    return (_baseZoom > _minZoom || (_baseZoom == _minZoom && _zoomFloatPart > 0)) && (_baseZoom != 1);
+    return _baseZoom > _minZoom || (_baseZoom == _minZoom && _zoomFloatPart > 0);
 }
 
 - (void) zoomIn

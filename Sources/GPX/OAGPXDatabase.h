@@ -116,7 +116,7 @@ typedef NS_ENUM(NSInteger, EOAGPX3DLineVisualizationPositionType) {
 
 - (void)removeHiddenGroups:(NSString *)groupName;
 - (void)addHiddenGroups:(NSString *)groupName;
-- (void)resetAppearanceToOriginal;
+//- (void)resetAppearanceToOriginal;
 - (void)updateFolderName:(NSString *)newFilePath;
 
 - (BOOL)isTempTrack;
@@ -129,22 +129,22 @@ typedef NS_ENUM(NSInteger, EOAGPX3DLineVisualizationPositionType) {
 
 + (OAGPXDatabase *)sharedDb;
 
--(OAGPX *)buildGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document fetchNearestCity:(BOOL)fetchNearestCity;
-- (OAGPX *) buildGpxItem:(NSString *)fileName path:(NSString *)filepath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document fetchNearestCity:(BOOL)fetchNearestCity;
--(OAGPX *)addGpxItem:(NSString *)filePath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document;
+//-(OAGPX *)buildGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document fetchNearestCity:(BOOL)fetchNearestCity;
+//- (OAGPX *) buildGpxItem:(NSString *)fileName path:(NSString *)filepath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document fetchNearestCity:(BOOL)fetchNearestCity;
+//-(OAGPX *)addGpxItem:(NSString *)filePath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document;
 
 -(void)replaceGpxItem:(OAGPX *)gpx;
 -(void)removeGpxItem:(NSString *)filePath;
 -(BOOL)containsGPXItem:(NSString *)filePath;
--(BOOL)updateGPXItemPointsCount:(NSString *)filePath pointsCount:(int)pointsCount;
+//-(BOOL)updateGPXItemPointsCount:(NSString *)filePath pointsCount:(int)pointsCount;
 -(BOOL)updateGPXItemColor:(OAGPX *)item color:(int)color;
 
 -(NSString *)getFileDir:(NSString *)filePath;
 
-- (void)load;
+//- (void)load;
 - (void)save;
 
-- (void)newLoad;
+//- (void)newLoad;
 
 + (EOAGpxSplitType) splitTypeByName:(NSString *)splitName;
 + (NSString *) splitTypeNameByValue:(EOAGpxSplitType)splitType;

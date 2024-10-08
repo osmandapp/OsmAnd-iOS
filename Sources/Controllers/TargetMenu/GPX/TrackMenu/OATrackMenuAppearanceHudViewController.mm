@@ -835,9 +835,9 @@ static const NSInteger kColorsSection = 1;
 
 - (BOOL)hasValidDataForKey:(NSString *)key
 {
-    for (OAPointAttributes *point in self.analysis.pointAttributes)
+    for (OASPointAttributes *point in self.analysis.pointAttributes)
     {
-        if ([point hasValidValueFor:key])
+        if ([point hasValidValueTag:key])
             return YES;
     }   
     return NO;

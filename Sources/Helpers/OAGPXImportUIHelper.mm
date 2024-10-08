@@ -42,7 +42,7 @@
     NSURL *_importUrl;
     NSString *_importGpxPath;
     NSString *_importGpxRelativePath;
-    OAGPXDocument *_doc;
+    OASGpxFile *_doc;
     NSString *_newGpxName;
 }
 
@@ -297,7 +297,10 @@ static UIViewController *parentController;
         return;
     
     // Try to import gpx
-    _doc = [[OAGPXDocument alloc] initWithGpxFile:_importUrl.path];
+    OASKFile *file = [[OASKFile alloc] initWithFilePath:_importUrl.path];
+    OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
+    
+    _doc = gpxFile;//[[OAGPXDocument alloc] initWithGpxFile:_importUrl.path];
     if (_doc)
     {
         // _2024-07-30_.gpx

@@ -578,6 +578,7 @@ class GpxUIHelper: NSObject {
         var currentX: Double = 0
 
         for i in 0..<pointAttributes.count {
+            
             let attribute: PointAttributes = pointAttributes[i]
             let stepX: Double = Double(axisType == .time || axisType == .timeOfDay ? attribute.timeDiff : attribute.distance)
             if i == 0 || stepX > 0 {

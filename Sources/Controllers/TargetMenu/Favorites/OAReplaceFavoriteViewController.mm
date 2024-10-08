@@ -52,13 +52,13 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     EOASortingMode _sortingMode;
     OAAutoObserverProxy* _locationServicesUpdateObserver;
     NSTimeInterval _lastUpdateTime;
-    OAGPXDocument *_gpxDocument;
+    OASGpxFile *_gpxDocument;
     EOAReplacePointType _replaceItemType;
 }
 
 #pragma mark - Initialization
 
-- (instancetype)initWithItemType:(EOAReplacePointType)replaceItemType gpxDocument:(OAGPXDocument *)gpxDocument
+- (instancetype)initWithItemType:(EOAReplacePointType)replaceItemType gpxDocument:(OASGpxFile *)gpxDocument
 {
     self = [super init];
     if (self)
@@ -80,14 +80,13 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     else if (_replaceItemType == EOAReplacePointTypeWaypoint)
     {
         NSMutableArray *arr = [NSMutableArray array];
-        // FIXME:
-//        for (OASWptPt *point in _gpxDocument.points)
-//        {
-//            OAGpxWptItem *itemData = [[OAGpxWptItem alloc] init];
-//            itemData.point = point;
-//            [self setDistanceAndDirections:itemData];
-//            [arr addObject:itemData];
-//        }
+        for (OASWptPt *point in _gpxDocument.getAllPoints)
+        {
+            OAGpxWptItem *itemData = [[OAGpxWptItem alloc] init];
+            itemData.point = point;
+            [self setDistanceAndDirections:itemData];
+            [arr addObject:itemData];
+        }
 
         _allWaypoints = arr;
     }

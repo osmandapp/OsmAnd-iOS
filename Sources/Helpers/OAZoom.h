@@ -25,7 +25,6 @@
 
 - (void) calculateAnimatedZoom:(int)currentBaseZoom deltaZoom:(float)deltaZoom;
 
-- (void) checkZoomBounds;
 + (OAZoom *) checkZoomBoundsWithZoom:(float)zoom minZoom:(int)minZoom maxZoom:(int)maxZoom;
 + (OAZoom *) checkZoomBoundsWithBaseZoom:(int)baseZoom floatZoomPart:(float)floatZoomPart minZoom:(int)minZoom maxZoom:(int)maxZoom;
 

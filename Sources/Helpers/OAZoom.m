@@ -13,7 +13,7 @@
     int _baseZoom;
     float _zoomFloatPart;
     float _zoomAnimation;
-    float _minZoom;
+    int _minZoom;
     int _maxZoom;
 }
 
@@ -24,7 +24,7 @@
     {
         _baseZoom = baseZoom;
         _zoomFloatPart = zoomFloatPart;
-        _minZoom = log(ceil([OAUtilities calculateScreenHeight] / 256));
+        _minZoom = minZoom;
         _maxZoom = maxZoom;
     }
     return self;
@@ -64,18 +64,11 @@
 
 - (void) zoomIn
 {
-    if (_zoomFloatPart > 0)
-        _zoomFloatPart = 0;
     [self changeZoom:1];
-    [self checkZoomBounds];
 }
 - (void) zoomOut
 {
-    if (_zoomFloatPart > 0)
-        _zoomFloatPart = 0;
-    else
-        [self changeZoom:-1];
-    [self checkZoomBounds];
+    [self changeZoom:-1];
 }
 
 - (void) changeZoom:(int)step
@@ -142,8 +135,8 @@
     }
     else if (_baseZoom < _minZoom)
     {
-        _baseZoom = (int) _minZoom;
-        _zoomFloatPart = _minZoom - _baseZoom;
+        _baseZoom = _minZoom;
+        _zoomFloatPart = 0;
     }
 }
 
@@ -184,6 +177,7 @@
     int startIntZoom = ((int) startZoom);
     float startZoomFloatPart = startZoom - startIntZoom;
     double startDistanceIntZoom = startDistance * [self.class floatPartToVisual:startZoomFloatPart];
+    double log2 = log(startDistanceIntZoom / endDistance) / log(2);
     int intZoomDelta = ((int) log(2));
     double startDistanceIntZoomed = intZoomDelta >= 0
         ? startDistanceIntZoom / (1 << intZoomDelta)

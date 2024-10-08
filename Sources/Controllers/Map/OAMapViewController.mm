@@ -1851,16 +1851,15 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         return;
     }
     
-    if (zoomStep > 0)
-        [zoom zoomIn];
-    else
-        [zoom zoomOut];
-    float updatedZoom = zoom.getBaseZoom + zoom.getZoomFloatPart;
+    float currentZoom = zoom.getBaseZoom + zoom.getZoomFloatPart;
+    float nextZoom = currentZoom + zoomStep;
+    float updatedZoomStep = zoomStep;
+    if (nextZoom < [zoom getMinZoom])
+        updatedZoomStep = [zoom getMinZoom] - currentZoom;
     
     _mapView.mapAnimator->pause();
     _mapView.mapAnimator->cancelAllAnimations();
-    
-    _mapView.mapAnimator->animateZoomTo(updatedZoom,
+    _mapView.mapAnimator->animateZoomBy(updatedZoomStep,
                                         kQuickAnimationTime,
                                         OsmAnd::MapAnimator::TimingFunction::Linear,
                                         kUserInteractionAnimationKey);

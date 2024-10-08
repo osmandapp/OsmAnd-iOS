@@ -59,6 +59,11 @@
     return _zoomFloatPart;
 }
 
+- (float) getMinZoom
+{
+    return _minZoom;
+}
+
 - (float) getZoomAnimation
 {
     return _zoomAnimation;

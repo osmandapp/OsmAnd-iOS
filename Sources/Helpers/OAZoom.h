@@ -18,6 +18,7 @@
 - (float) getZoomAnimation;
 - (BOOL) isZoomInAllowed;
 - (BOOL) isZoomOutAllowed;
+- (float) getMinZoom;
 
 - (void) zoomIn;
 - (void) zoomOut;

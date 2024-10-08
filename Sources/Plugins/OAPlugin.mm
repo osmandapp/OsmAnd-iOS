@@ -530,7 +530,7 @@ public static void addMyPlacesTabPlugins(FavoritesActivity favoritesActivity, Li
 }
  */
 
-- (void)onAnalysePoint:(OASGpxTrackAnalysis *)analysis point:(NSObject *)point attribute:(OAPointAttributes *)attribute
+- (void)onAnalysePoint:(OASGpxTrackAnalysis *)analysis point:(NSObject *)point attribute:(OASPointAttributes *)attribute
 {
 }
 

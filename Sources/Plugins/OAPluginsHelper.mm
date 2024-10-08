@@ -494,7 +494,7 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     }
 }
 
-+ (void)analysePoint:(OASGpxTrackAnalysis *)analysis point:(NSObject *)point attribute:(OAPointAttributes *)attribute
++ (void)analysePoint:(OASGpxTrackAnalysis *)analysis point:(NSObject *)point attribute:(OASPointAttributes *)attribute
 {
     for (OAPlugin *plugin in [self getAvailablePlugins])
     {

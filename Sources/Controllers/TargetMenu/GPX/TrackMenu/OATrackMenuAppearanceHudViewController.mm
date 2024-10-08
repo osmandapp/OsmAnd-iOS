@@ -678,12 +678,12 @@ static const NSInteger kColorsSection = 1;
     };
     
     NSDictionary<NSNumber *, NSString *> *dataKeys = @{
-        @(EOAGPX3DLineVisualizationByTypeHeartRate): OAPointAttributes.sensorTagHeartRate,
-        @(EOAGPX3DLineVisualizationByTypeBicycleCadence): OAPointAttributes.sensorTagCadence,
-        @(EOAGPX3DLineVisualizationByTypeBicyclePower): OAPointAttributes.sensorTagBikePower,
-        @(EOAGPX3DLineVisualizationByTypeTemperatureA): OAPointAttributes.sensorTagTemperatureA,
-        @(EOAGPX3DLineVisualizationByTypeTemperatureW): OAPointAttributes.sensorTagTemperatureW,
-        @(EOAGPX3DLineVisualizationByTypeSpeedSensor): OAPointAttributes.sensorTagSpeed
+        @(EOAGPX3DLineVisualizationByTypeHeartRate): OASPointAttributes.sensorTagHeartRate,
+        @(EOAGPX3DLineVisualizationByTypeBicycleCadence): OASPointAttributes.sensorTagCadence,
+        @(EOAGPX3DLineVisualizationByTypeBicyclePower): OASPointAttributes.sensorTagBikePower,
+        @(EOAGPX3DLineVisualizationByTypeTemperatureA): OASPointAttributes.sensorTagTemperatureA,
+        @(EOAGPX3DLineVisualizationByTypeTemperatureW): OASPointAttributes.sensorTagTemperatureW,
+        @(EOAGPX3DLineVisualizationByTypeSpeedSensor): OASPointAttributes.sensorTagSpeed
     };
     
     NSMutableArray<UIAction *> *sensorActions = [NSMutableArray array];

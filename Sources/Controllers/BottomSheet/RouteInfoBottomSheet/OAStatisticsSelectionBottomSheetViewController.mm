@@ -108,7 +108,8 @@
         {
             title = [OAGPXDataSetType getTitle:types.firstObject.integerValue];
             iconName = [OAGPXDataSetType getIconName:types.firstObject.integerValue];
-            hasData = [vwController.analysis hasDataTag:[OAGPXDataSetType getDataKey:types.firstObject.integerValue]];
+            NSString *tag = [OAGPXDataSetType getDataKey:types.firstObject.integerValue];
+            hasData = [vwController.analysis hasDataTag:tag];
         }
         [arr addObject:@{
             @"type" : [OATitleIconRoundCell getCellIdentifier],

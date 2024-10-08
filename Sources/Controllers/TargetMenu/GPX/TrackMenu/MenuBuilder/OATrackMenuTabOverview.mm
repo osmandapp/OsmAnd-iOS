@@ -60,53 +60,52 @@
         OASMetadata *metadata = [self.trackMenuDelegate getMetadata];
         if (metadata)
         {
-            // FIXME:
-//            OAGpxExtension *articleTitleExtension = [metadata getExtensionByKey:@"article_title"];
-//            if (articleTitleExtension)
-//            {
-//                OAGPXTableSectionData *wikivoyageSectionData = [OAGPXTableSectionData withData:@{
-//                    kTableKey: @"sectionWikivoyage",
-//                    kSectionHeader: OALocalizedString(@"shared_string_wikivoyage"),
-//                    kSectionHeaderHeight: @56.
-//                }];
-//                [self.tableData.subjects addObject:wikivoyageSectionData];
-//                
-//                OATravelObfHelper *helper = [OATravelObfHelper shared];
-//                OAGpxExtension *articleLangExtension = [metadata getExtensionByKey:@"article_lang"];
-//                NSString *lang = articleLangExtension ? articleLangExtension.value : @"en";
-//                OATravelArticle *article = [helper getArticleByTitle:articleTitleExtension.value lang:lang];
-//                if (article)
-//                {
-//                    hasArticle = YES;
-//                    NSString *geoDescription = [article getGeoDescription];
-//                    NSString *iconName = @"";
-//                    if (article.imageTitle && article.imageTitle.length > 0)
-//                    {
-//                        iconName = [OATravelArticle getImageUrlWithImageTitle:article.imageTitle ? article.imageTitle : @"" thumbnail:NO];
-//                    }
-//                    OAGPXTableCellData *articleRow = [OAGPXTableCellData withData:@{
-//                        kTableKey: @"article",
-//                        kCellType: [OAArticleTravelCell getCellIdentifier],
-//                        kCellTitle: article.title ? article.title : @"nil",
-//                        kCellDesc: [OATravelGuidesHelper getPatrialContent:article.content],
-//                        kCellRightIconName: iconName,
-//                        kTableValues: @{
-//                            @"isPartOf": geoDescription ? geoDescription : @"",
-//                            @"article": article,
-//                            @"lang": lang
-//                        }
-//                    }];
-//                    [wikivoyageSectionData.subjects addObject:articleRow];
-//
-//                    OAGPXTableCellData *readCellData = [OAGPXTableCellData withData:@{
-//                        kTableKey: @"readArticle",
-//                        kCellType: [OASimpleTableViewCell getCellIdentifier],
-//                        kCellTitle: OALocalizedString(@"shared_string_read"),
-//                        kTableValues: @{ @"articleId": [article generateIdentifier], @"lang": lang }
-//                    }];
-//                    [wikivoyageSectionData.subjects addObject:readCellData];
-//                }
-//            }
+            NSString *articleTitleExtension = [metadata getArticleTitle];
+            if (articleTitleExtension)
+            {
+                OAGPXTableSectionData *wikivoyageSectionData = [OAGPXTableSectionData withData:@{
+                    kTableKey: @"sectionWikivoyage",
+                    kSectionHeader: OALocalizedString(@"shared_string_wikivoyage"),
+                    kSectionHeaderHeight: @56.
+                }];
+                [self.tableData.subjects addObject:wikivoyageSectionData];
+                
+                OATravelObfHelper *helper = [OATravelObfHelper shared];
+                NSString *articleLangExtension = [metadata getArticleLang];
+                NSString *lang = articleLangExtension ?: @"en";
+                OATravelArticle *article = [helper getArticleByTitle:articleTitleExtension lang:lang];
+                if (article)
+                {
+                    hasArticle = YES;
+                    NSString *geoDescription = [article getGeoDescription];
+                    NSString *iconName = @"";
+                    if (article.imageTitle && article.imageTitle.length > 0)
+                    {
+                        iconName = [OATravelArticle getImageUrlWithImageTitle:article.imageTitle ? article.imageTitle : @"" thumbnail:NO];
+                    }
+                    OAGPXTableCellData *articleRow = [OAGPXTableCellData withData:@{
+                        kTableKey: @"article",
+                        kCellType: [OAArticleTravelCell getCellIdentifier],
+                        kCellTitle: article.title ? article.title : @"nil",
+                        kCellDesc: [OATravelGuidesHelper getPatrialContent:article.content],
+                        kCellRightIconName: iconName,
+                        kTableValues: @{
+                            @"isPartOf": geoDescription ? geoDescription : @"",
+                            @"article": article,
+                            @"lang": lang
+                        }
+                    }];
+                    [wikivoyageSectionData.subjects addObject:articleRow];
+
+                    OAGPXTableCellData *readCellData = [OAGPXTableCellData withData:@{
+                        kTableKey: @"readArticle",
+                        kCellType: [OASimpleTableViewCell getCellIdentifier],
+                        kCellTitle: OALocalizedString(@"shared_string_read"),
+                        kTableValues: @{ @"articleId": [article generateIdentifier], @"lang": lang }
+                    }];
+                    [wikivoyageSectionData.subjects addObject:readCellData];
+                }
+            }
         }
 
         if (!hasArticle)

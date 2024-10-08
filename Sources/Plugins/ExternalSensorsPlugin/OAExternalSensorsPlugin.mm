@@ -19,6 +19,7 @@
 #import "OsmAndApp.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OsmAndSharedWrapper.h"
 
 #define PLUGIN_ID kInAppId_Addon_External_Sensors
 
@@ -240,7 +241,7 @@ NSString * const OATrackRecordingAnyConnectedDevice = @"any_connected_device_wri
     [OASensorAttributesUtils getAvailableGPXDataSetTypesWithAnalysis:analysis availableTypes:availableTypes];
 }
 
-- (void)onAnalysePoint:(OASGpxTrackAnalysis *)analysis point:(NSObject *)point attribute:(OAPointAttributes *)attribute
+- (void)onAnalysePoint:(OASGpxTrackAnalysis *)analysis point:(NSObject *)point attribute:(OASPointAttributes *)attribute
 {
     if ([point isKindOfClass:OASWptPt.class])
     {
@@ -248,7 +249,7 @@ NSString * const OATrackRecordingAnyConnectedDevice = @"any_connected_device_wri
         numberFormatter.decimalSeparator = @".";
         for (NSString *tag in OASensorAttributesUtils.sensorGpxTags)
         {
-            CGFloat value = ([OAPointAttributes.sensorTagTemperatureW isEqualToString:tag] || [OAPointAttributes.sensorTagTemperatureA isEqualToString:tag]) ? NAN : 0;
+            CGFloat value = ([OASPointAttributes.sensorTagTemperatureW isEqualToString:tag] || [OASPointAttributes.sensorTagTemperatureA isEqualToString:tag]) ? NAN : 0;
             NSNumber *val = nil;
             BOOL isSpeedSensorTag = [tag isEqualToString:@"speed_sensor"];
             // FIXME:
@@ -272,9 +273,9 @@ NSString * const OATrackRecordingAnyConnectedDevice = @"any_connected_device_wri
 //            }
             
             value = val ? val.floatValue : value;
-            [attribute setAttributeValueFor:tag value:value];
+            [attribute setAttributeValueTag:tag value:value];
             
-            if (![analysis hasDataTag:tag] && [attribute hasValidValueFor:tag] && analysis.totalDistance > 0)
+            if (![analysis hasDataTag:tag] && [attribute hasValidValueTag:tag] && analysis.totalDistance > 0)
             {
                 [analysis setHasDataTag:tag hasData:YES];
             }

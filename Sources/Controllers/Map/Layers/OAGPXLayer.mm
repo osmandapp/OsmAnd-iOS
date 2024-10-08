@@ -676,20 +676,20 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     switch (visualizationType)
     {
         case EOAGPX3DLineVisualizationByTypeHeartRate:
-            relevantTag = OAPointAttributes.sensorTagHeartRate;
+            relevantTag = OASPointAttributes.sensorTagHeartRate;
             break;
         case EOAGPX3DLineVisualizationByTypeBicycleCadence:
-            relevantTag = OAPointAttributes.sensorTagCadence;
+            relevantTag = OASPointAttributes.sensorTagCadence;
             break;
         case EOAGPX3DLineVisualizationByTypeBicyclePower:
-            relevantTag = OAPointAttributes.sensorTagBikePower;
+            relevantTag = OASPointAttributes.sensorTagBikePower;
             break;
         case EOAGPX3DLineVisualizationByTypeTemperatureA:
             return [self processTemperatureData:point numberFormatter:numberFormatter isAirTemp:YES];
         case EOAGPX3DLineVisualizationByTypeTemperatureW:
             return [self processTemperatureData:point numberFormatter:numberFormatter isAirTemp:NO];
         case EOAGPX3DLineVisualizationByTypeSpeedSensor:
-            relevantTag = OAPointAttributes.sensorTagSpeed;
+            relevantTag = OASPointAttributes.sensorTagSpeed;
             isSpeedSensorTag = YES;
             break;
         default:
@@ -737,7 +737,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
 //    {
 //        for (OAGpxExtension *subextension in trackpointextension.subextensions)
 //        {
-//            if ([subextension.name isEqualToString:(isAirTemp ? OAPointAttributes.sensorTagTemperatureA : OAPointAttributes.sensorTagTemperatureW)])
+//            if ([subextension.name isEqualToString:(isAirTemp ? OASPointAttributes.sensorTagTemperatureA : OASPointAttributes.sensorTagTemperatureW)])
 //            {
 //                tempValue = [numberFormatter numberFromString:subextension.value];
 //                float processedTemp = tempValue ? [tempValue floatValue] + kTemperatureToHeightOffset : NAN;

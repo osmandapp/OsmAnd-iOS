@@ -23,3 +23,39 @@ extension Array {
         array.toKotlinArray()
     }
 }
+
+@objc(OASPointAttributes)
+extension PointAttributes {
+    static let sensorTagHeartRate = GPXTPX_PREFIX + "hr"
+    static let sensorTagSpeed = OSMAND_EXTENSIONS_PREFIX + "speed_sensor"
+    static let sensorTagCadence = GPXTPX_PREFIX + "cad"
+    static let sensorTagBikePower = GPXTPX_PREFIX + "power"
+    static let SENSOR_TAG_TEMPERATURE = "temp_sensor"
+    static let sensorTagTemperatureW = GPXTPX_PREFIX + "wtemp"
+    static let sensorTagTemperatureA = GPXTPX_PREFIX + "atemp"
+    static let sensorTagDistance = OSMAND_EXTENSIONS_PREFIX + "bike_distance_sensor"
+    static let pointElevation = "ele" // point_elevation
+    static let pointSpeed = "speed" // point_speed
+
+//    static let DEV_RAW_ZOOM = "raw_zoom"
+//    static let DEV_ANIMATED_ZOOM = "animated_zoom"
+//    static let DEV_INTERPOLATION_OFFSET_N = "offset"
+//
+//    static let POINT_SPEED = "point_speed"
+//    static let POINT_ELEVATION = "point_elevation"
+    
+    static let GPXTPX_PREFIX = "gpxtpx:"
+    static let OSMAND_EXTENSIONS_PREFIX = "osmand:"
+}
+
+// Old code
+//    static let pointElevation = "ele"
+//    static let pointSpeed = "speed"
+//    static let sensorTagHeartRate = "hr"
+//    static let sensorTagSpeed = "speed_sensor"
+//    static let sensorTagCadence = "cad"
+//    static let sensorTagBikePower = "power"
+//    static let sensorTagTemperatureW = "wtemp"
+//    static let sensorTagTemperatureA = "atemp"
+//    static let sensorTagDistance = "bike_distance_sensor"
+

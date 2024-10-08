@@ -247,6 +247,7 @@
     [_gpxWpt.point setBackgroundTypeBackType:data.backgroundIcon];
     // FIXME:
     // [_gpxWpt.point setExtension:ADDRESS_EXTENSION_KEY value:data.address];
+    
     _gpxWpt.docPath = _gpxFileName;
 
     if (newPoint)

@@ -813,14 +813,14 @@
     return self;
 }
 
-- (instancetype)initWithWptPt:(OAWptPt *)point
+- (instancetype)initWithWptPt:(OASWptPt *)point
 {
     self = [self initWithName:point.type];
     if (self)
     {
-        _color = UIColorFromARGB([point getColor:0]);
-        _iconName = [point getIcon];
-        _backgroundType = [point getBackgroundIcon];
+        _color = UIColorFromARGB([point getColor]);
+        _iconName = [point getIconName];
+        _backgroundType = [point getBackgroundType];
     }
     return self;
 }

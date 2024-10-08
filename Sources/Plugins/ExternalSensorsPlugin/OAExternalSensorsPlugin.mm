@@ -253,15 +253,18 @@ NSString * const OATrackRecordingAnyConnectedDevice = @"any_connected_device_wri
             NSNumber *val = nil;
             BOOL isSpeedSensorTag = [tag isEqualToString:@"speed_sensor"];
             // FIXME:
-//            OAGpxExtension *trackpointextension = [((OASWptPt *) point) getExtensionByKey:isSpeedSensorTag ? @"speed_sensor" : @"trackpointextension"];
-//            if (trackpointextension)
-//            {
-//                if (isSpeedSensorTag)
-//                {
-//                    val = [numberFormatter numberFromString:trackpointextension.value];
-//                }
-//                else
-//                {
+            NSDictionary<NSString *, NSString *> *extensions = [(OASWptPt *) point getExtensionsToRead];
+            NSString *trackpointextension = extensions[isSpeedSensorTag ? @"speed_sensor" : @"trackpointextension"];
+            
+            if (trackpointextension)
+            {
+                if (isSpeedSensorTag)
+                {
+                    val = [numberFormatter numberFromString:trackpointextension];
+                }
+                else
+                {
+// FIXME:
 //                    for (OAGpxExtension *subextension in trackpointextension.subextensions)
 //                    {
 //                        if ([subextension.name isEqualToString:tag])
@@ -269,8 +272,8 @@ NSString * const OATrackRecordingAnyConnectedDevice = @"any_connected_device_wri
 //                            val = [numberFormatter numberFromString:subextension.value];
 //                        }
 //                    }
-//                }
-//            }
+                }
+            }
             
             value = val ? val.floatValue : value;
             [attribute setAttributeValueTag:tag value:value];

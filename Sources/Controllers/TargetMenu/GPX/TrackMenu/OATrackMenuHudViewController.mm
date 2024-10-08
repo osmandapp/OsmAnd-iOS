@@ -1403,10 +1403,9 @@
             }
             else
             {
-                // FIXME:
-//                OAGpxExtension *descExtension = [self.doc.metadata getExtensionByKey:@"desc"];
-//                if (descExtension)
-//                    return descExtension.value;
+                NSString *descExtension = [self.doc.metadata getExtensionsToRead][@"desc"];
+                if (descExtension)
+                    return descExtension;
 
                 break;
             }
@@ -1887,7 +1886,6 @@
          simplifiedTrack:(BOOL)simplifiedTrack
                openTrack:(BOOL)openTrack
 {
-    // FIXME:
     [_gpxUIHelper copyGPXToNewFolder:fileName.stringByDeletingLastPathComponent
              renameToNewName:[fileName.lastPathComponent stringByAppendingPathExtension:@"gpx"]
           deleteOriginalFile:NO
@@ -2766,10 +2764,14 @@
         
     if (!descr || descr.length == 0)
     {
-        // FIXME:
+        // FIXME: need to check
+        NSString *descExtension = [self.doc.metadata getExtensionsToWrite][@"desc"];
+        if (descExtension)
+            [self.doc.metadata removeExtensionsWriterKey:@"desc"];
+ // Old code
 //        OAGpxExtension *descExtension = [self.doc.metadata getExtensionByKey:@"desc"];
-//        if (descExtension)
-//            [self.doc.metadata removeExtension:descExtension];
+//          if (descExtension)
+//              [self.doc.metadata removeExtension:descExtension];
     }
     
     OASKFile *file = [[OASKFile alloc] initWithFilePath:self.doc.path];

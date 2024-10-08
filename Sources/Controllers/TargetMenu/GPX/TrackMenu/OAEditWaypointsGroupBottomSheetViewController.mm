@@ -430,9 +430,8 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
     NSMutableArray<OAFavoriteItem *> *favoriteItems = [NSMutableArray array];
     for (OAGpxWptItem *waypoint in waypoints)
     {
-        // FIXME:
-//        OAFavoriteItem *favoriteItem = [OAFavoriteItem fromWpt:waypoint.point category:name];
-//        [favoriteItems addObject:favoriteItem];
+        OAFavoriteItem *favoriteItem = [OAFavoriteItem fromWpt:waypoint.point category:name];
+        [favoriteItems addObject:favoriteItem];
     }
     [OAFavoritesHelper addFavorites:favoriteItems];
 }

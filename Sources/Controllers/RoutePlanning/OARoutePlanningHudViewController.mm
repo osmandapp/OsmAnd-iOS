@@ -720,10 +720,9 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
             else
             {
                 state.openedFromTrackMenu = NO;
-                // FIXME:
-//                [_mapPanel openTargetViewWithGPX:[[OAGPXDatabase sharedDb] getGPXItem:_fileName]
-//                                    trackHudMode:EOATrackMenuHudMode
-//                                           state:state];
+                [_mapPanel openTargetViewWithGPX:[[OAGPXDatabase sharedDb] getNewGPXItem:_fileName]
+                                    trackHudMode:EOATrackMenuHudMode
+                                           state:state];
             }
         }
     }];
@@ -1760,8 +1759,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
                 if (gpx != nil)
                 {
                     [self onCloseButtonPressed];
-                    // FIXME:
-                   // [self runNavigation:gpx appMode:appMode];
+                    [self runNavigation:gpx appMode:appMode];
                 }
 //                else
 //                {

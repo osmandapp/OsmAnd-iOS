@@ -676,6 +676,7 @@
     if (gpx)
     {
         OABBox routeBBox;
+        
         // FIXME:
       //  OAGpxBounds gpxBounds = gpx.bounds;
 //        routeBBox.top = gpxBounds.topLeft.latitude;

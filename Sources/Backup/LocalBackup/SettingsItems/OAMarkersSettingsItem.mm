@@ -208,16 +208,16 @@
             int color = [wpt getColor];
             dest.color = color != 0 ? UIColorFromRGBA(color) : UIColorFromRGB(marker_pin_color_blue);
             dest.markerResourceName = [self getResourceName:[dest.color.toHexString upperCase]];
-// FIXME:
-//            for (OAGpxExtension *e in wpt.extensions)
-//            {
-//                if ([e.name isEqualToString:@"creation_date"])
-//                {
-//                    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-//                    [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z"];
-//                    dest.creationDate = [dateFormatter dateFromString:e.value];
-//                }
-//            }
+            NSDictionary<NSString *, NSString *> *extensions = [wpt getExtensionsToRead];
+            for (NSString *key in extensions.allKeys)
+            {
+                if ([key isEqualToString:@"creation_date"])
+                {
+                    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+                    [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z"];
+                    dest.creationDate = [dateFormatter dateFromString:extensions[key]];
+                }
+            }
             [self.item.items addObject:dest];
         }
     }

@@ -670,11 +670,10 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
             if hasPoints {
                 OAAppSettings.sharedManager().showGpx([filename], update: true)
                 if let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
-                    // FIXME:
-//                    OARootViewController.instance().mapPanel.openTargetViewWithGPX(fromTracksList: gpx,
-//                                                                                   navControllerHistory: newCurrentHistory,
-//                                                                                   fromTrackMenu: false,
-//                                                                                   selectedTab: .pointsTab)
+                    OARootViewController.instance().mapPanel.openTargetViewWithGPX(fromTracksList: gpx,
+                                                                                   navControllerHistory: newCurrentHistory,
+                                                                                   fromTrackMenu: false,
+                                                                                   selectedTab: .pointsTab)
                 }
             }
         }

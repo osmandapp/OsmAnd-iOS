@@ -697,18 +697,19 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     }
     
     double elevationValue = [self getValidElevation:point.ele];
-   // FIXME: [point getExtensionsToRead] | [point getExtensionsToWrite] | [point extension] ?
-//    OAGpxExtension *trackpointextension = [point getExtensionByKey:isSpeedSensorTag ? @"speed_sensor" : @"trackpointextension"];
-//    if (trackpointextension)
-//    {
-//        if (isSpeedSensorTag)
-//        {
-//            NSNumber *value = [numberFormatter numberFromString:trackpointextension.value];
-//            float processedValue = value ? [value floatValue] * kSpeedToHeightScale : defaultValue;
-//            return [self is3DMapsEnabled] && value ? processedValue + elevationValue : processedValue;
-//        }
-//        else
-//        {
+    NSDictionary<NSString *, NSString *> *extensions = [point getExtensionsToRead];
+    NSString *trackpointextension = extensions[isSpeedSensorTag ? @"speed_sensor" : @"trackpointextension"];
+    if (trackpointextension)
+    {
+        if (isSpeedSensorTag)
+        {
+            NSNumber *value = [numberFormatter numberFromString:trackpointextension];
+            float processedValue = value ? [value floatValue] * kSpeedToHeightScale : defaultValue;
+            return [self is3DMapsEnabled] && value ? processedValue + elevationValue : processedValue;
+        }
+        else
+        {
+            // FIXME:
 //            for (OAGpxExtension *subextension in trackpointextension.subextensions)
 //            {
 //                if ([subextension.name isEqualToString:relevantTag])
@@ -718,8 +719,8 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
 //                    return [self is3DMapsEnabled] && value ? processedValue + elevationValue : processedValue;
 //                }
 //            }
-//        }
-//    }
+        }
+    }
     
     return defaultValue;
 }
@@ -728,13 +729,14 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                 numberFormatter:(NSNumberFormatter *)numberFormatter
                       isAirTemp:(BOOL)isAirTemp
 {
-    // FIXME:
-//    OAGpxExtension *trackpointextension = [point getExtensionByKey:@"trackpointextension"];
-//    NSNumber *tempValue = nil;
-//    double elevationValue = [self getValidElevation:point.ele];
-//    
-//    if (trackpointextension)
-//    {
+   
+    NSString *trackpointextension = [point getExtensionsToRead][@"trackpointextension"];
+    NSNumber *tempValue = nil;
+    double elevationValue = [self getValidElevation:point.ele];
+    
+    if (trackpointextension)
+    {
+        // FIXME:
 //        for (OAGpxExtension *subextension in trackpointextension.subextensions)
 //        {
 //            if ([subextension.name isEqualToString:(isAirTemp ? OASPointAttributes.sensorTagTemperatureA : OASPointAttributes.sensorTagTemperatureW)])
@@ -744,7 +746,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
 //                return [self is3DMapsEnabled] && tempValue ? processedTemp + elevationValue : processedTemp;
 //            }
 //        }
-//    }
+    }
     
     return NAN;
 }

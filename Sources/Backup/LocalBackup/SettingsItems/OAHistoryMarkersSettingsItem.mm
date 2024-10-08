@@ -190,15 +190,15 @@
             historyItem.latitude = wpt.getLatitude;
             historyItem.longitude = wpt.getLongitude;
             historyItem.hType = OAHistoryTypeDirection;
-// FIXME:
-//            for (OAGpxExtension *e in wpt.extensions)
-//            {
-//                if ([e.name isEqualToString:VISITED_TIME_EXTENSION]) {
-//                    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-//                    [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z"];
-//                    historyItem.date = [dateFormatter dateFromString:e.value];
-//                }
-//            }
+            NSDictionary<NSString *, NSString *> *extensions = [wpt getExtensionsToRead];
+            for (NSString *key in extensions.allKeys)
+            {
+                if ([key isEqualToString:@"visited_date"]) {
+                    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+                    [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z"];
+                    historyItem.date = [dateFormatter dateFromString:extensions[key]];
+                }
+            }
             [[OAHistoryHelper sharedInstance] addPoint:historyItem];
 
             [self.item.items addObject:historyItem];

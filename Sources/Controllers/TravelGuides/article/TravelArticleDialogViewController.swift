@@ -336,11 +336,10 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
         OAAppSettings.sharedManager().showGpx([file], update: true)
         if let gpx, let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
             let fromTrackMenu = OARootViewController.instance().mapPanel.scrollableHudViewController != nil
-            // FIXME:
-//            OARootViewController.instance().mapPanel.openTargetViewWithGPX(fromTracksList: gpx,
-//                                                                           navControllerHistory: newCurrentHistory,
-//                                                                           fromTrackMenu: fromTrackMenu,
-//                                                                           selectedTab: .pointsTab)
+            OARootViewController.instance().mapPanel.openTargetViewWithGPX(fromTracksList: gpx,
+                                                                           navControllerHistory: newCurrentHistory,
+                                                                           fromTrackMenu: fromTrackMenu,
+                                                                           selectedTab: .pointsTab)
         }
     }
     

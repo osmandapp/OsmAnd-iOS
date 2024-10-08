@@ -2047,7 +2047,7 @@ typedef enum
     for (NSString *filePath in settings.mapSettingVisibleGpx.get)
     {
         // FIXME:
-        OASGpxDataItem *gpx;//[[OAGPXDatabase sharedDb] getGPXItem:filePath];
+        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:filePath];
         NSString *path = gpx.file.absolutePath;
         if ([[NSFileManager defaultManager] fileExistsAtPath:path])
         {
@@ -2182,7 +2182,7 @@ typedef enum
         [self displayGpxOnMap:_activeTargetObj];
     } else {
         // FIXME:
-       // [self displayGpxOnMap:[[OASavingTrackHelper sharedInstance] getCurrentGPX]];
+       //[self displayGpxOnMap:[[OASavingTrackHelper sharedInstance] currentTrack]];
     }
 }
 
@@ -2729,12 +2729,11 @@ typedef enum
     double lon = item.point.lon;
     
     [_mapViewController showContextPinMarker:lat longitude:lon animated:NO];
-// FIXME:
-//    if ([_mapViewController findWpt:item.point.position])
-//    {
-//        item.point = _mapViewController.foundWpt;
-//        item.groups = _mapViewController.foundWptGroups;
-//    }
+    if ([_mapViewController findWpt:item.point.position])
+    {
+        item.point = _mapViewController.foundWpt;
+        item.groups = _mapViewController.foundWptGroups;
+    }
     
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     NSString *caption = item.point.name;
@@ -3162,8 +3161,6 @@ typedef enum
 //    OASGpxFile *doc = isCurrentTrack ? nil/*[OASavingTrackHelper.sharedInstance currentTrack]*/ : [[OASGpxFile alloc] initWithGpxFile:gpxFilepath];
     if (doc)
     {
-        
-        
         OASGpxTrackAnalysis *analysis = !isCurrentTrack && [doc getGeneralTrack] && [doc getGeneralSegment]
             ? [self getAnalysisFor:doc.getGeneralSegment]
             : [doc getAnalysisFileTimestamp:0];
@@ -3185,26 +3182,16 @@ typedef enum
                                             isCurrentTrack:(BOOL)isCurrentTrack
                                                      state:(OATrackMenuViewControllerState *)state;
 {
-//    OASGpxFile *gpx = isCurrentTrack ? [OASavingTrackHelper.sharedInstance currentTrackSharedLib] : gpxFile;
-//    if (gpx)
-//    {
-//        OASGpxTrackAnalysis *currentTrackAnalysis = [[OASGpxTrackAnalysis alloc] init];
-//        [currentTrackAnalysis prepareInformationFileTimeStamp:0 pointsAnalyser:nil splitSegments:gpx.getGeneralSegment];
-//        
-//        OASGpxTrackAnalysis *analysis = !isCurrentTrack && [gpx getGeneralTrack] && [gpx getGeneralSegment]
-//            ? [OAGPXTrackAnalysis segment:0 seg:doc.generalSegment]
-//            : [gpx getAnalysisFileTimestamp:0];
-//        state.scrollToSectionIndex = -1;
-//        state.routeStatistics = @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)];
-//        [self openTargetViewWithRouteDetailsGraph:doc analysis:analysis menuControlState:state];
-//    }
-    
-// FIXME:
-//    OASGpxTrackAnalysis *currentTrackAnalysis = [gpxFile getAnalysisFileTimestamp:0];//[[OASGpxTrackAnalysis alloc] init];
-//    state.scrollToSectionIndex = -1;
-//    state.routeStatistics = @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)];
-//    
-//    [self openNewTargetViewWithRouteDetailsGraph:gpxFile analysis:currentTrackAnalysis menuControlState:state isRoute:YES];
+    OASGpxFile *doc = isCurrentTrack ? [OASavingTrackHelper.sharedInstance currentTrack] : gpxFile;
+    if (doc)
+    {
+        OASGpxTrackAnalysis *analysis = !isCurrentTrack && [doc getGeneralTrack] && [doc getGeneralSegment]
+            ? [self getAnalysisFor:doc.getGeneralSegment]
+            : [doc getAnalysisFileTimestamp:0];
+        state.scrollToSectionIndex = -1;
+        state.routeStatistics = @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)];
+        [self openTargetViewWithRouteDetailsGraph:doc analysis:analysis menuControlState:state];
+    }
 }
 
 - (void)openNewTargetViewWithRouteDetailsGraph:(OASGpxFile *)gpx

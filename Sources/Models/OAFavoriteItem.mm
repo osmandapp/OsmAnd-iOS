@@ -753,37 +753,33 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     
     // TODO: sync with Android
 
-//    OAGpxExtension *visitedDateExt = [pt getExtensionByKey:VISITED_TIME_EXTENSION];
+//    NSString *visitedDateExt = [pt getExtensionsToRead][VISITED_TIME_EXTENSION];
 //    if (visitedDateExt)
 //    {
 //        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 //        [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
 //        [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
-//
-//        NSString *time = visitedDateExt.value;
-//        [fp setVisitedTime:[dateFormatter dateFromString:time]];
+//        [fp setVisitedTime:[dateFormatter dateFromString:visitedDateExt]];
 //    }
 
-// FIXME:
-//    OAGpxExtension *creationDateExt = [pt getExtensionByKey:CREATION_TIME_EXTENSION];
-//    if (creationDateExt)
-//    {
-//        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-//        [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
-//        [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
-//
-//        NSString *time = creationDateExt.value;
-//        [fp setPickupTime:[dateFormatter dateFromString:time]];
-//    }
-//
-//    OAGpxExtension *calendarExt = [pt getExtensionByKey:CALENDAR_EXTENSION];
-//    if (calendarExt)
-//        [fp setCalendarEvent:[calendarExt.value isEqualToString:@"true"]];
+    NSString *creationDateExt = [pt getExtensionsToRead][CREATION_TIME_EXTENSION];
+    if (creationDateExt)
+    {
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
+        [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
+
+        NSString *time = creationDateExt;
+        [fp setPickupTime:[dateFormatter dateFromString:time]];
+    }
+
+    NSString *calendarExt = [pt getExtensionsToRead][CALENDAR_EXTENSION];
+    if (calendarExt)
+        [fp setCalendarEvent:[calendarExt isEqualToString:@"true"]];
 
     [fp setColor:UIColorFromARGB([pt getColor])];
-// FIXME:
-//    OAGpxExtension *hiddenExt = [pt getExtensionByKey:EXTENSION_HIDDEN];
-//    [fp setVisible:hiddenExt ? [hiddenExt.value isEqualToString:@"true"] : YES];
+    NSString *hiddenExt = [pt getExtensionsToRead][EXTENSION_HIDDEN];
+    [fp setVisible:hiddenExt ? [hiddenExt isEqualToString:@"true"] : YES];
 
     [fp setAddress:[pt getAddress]];
     [fp setIcon:[pt getIconName]];

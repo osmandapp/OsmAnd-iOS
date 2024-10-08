@@ -26,7 +26,7 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
 {
     NSURL *_url;
     NSMutableArray<NSString *> *_ignoredNames;
-    OAGPXDocument *_gpxFile;
+    OASGpxFile *_gpxFile;
     OASWptPt *_conflictedItem;
 }
 
@@ -92,7 +92,7 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
     {
         for (NSString *key in _gpxFile.pointsGroups.allKeys)
         {
-            OAPointsGroup *pointsGroup = _gpxFile.pointsGroups[key];
+            OASGpxUtilitiesPointsGroup *pointsGroup = _gpxFile.pointsGroups[key];
             OATableSectionData *section = [self.tableData createNewSection];
             section.headerText = [OAFavoriteGroup getDisplayName:pointsGroup.name];
             
@@ -194,7 +194,7 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
     {
         for (NSString *key in _gpxFile.pointsGroups.allKeys)
         {
-            OAPointsGroup *pointGroup = _gpxFile.pointsGroups[key];
+            OASGpxUtilitiesPointsGroup *pointGroup = _gpxFile.pointsGroups[key];
             for (OASWptPt *item in pointGroup.points)
             {
                 NSString *importItemName = item.name;
@@ -295,7 +295,7 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
                         {
                             for (NSString *keyGroup in _gpxFile.pointsGroups.allKeys)
                             {
-                                OAPointsGroup *group = _gpxFile.pointsGroups[keyGroup];
+                                OASGpxUtilitiesPointsGroup *group = _gpxFile.pointsGroups[keyGroup];
                                 for (OASWptPt *wptPt in group.points)
                                 {
                                     for (OAFavoriteItem *localFavortite in favoriteItems)

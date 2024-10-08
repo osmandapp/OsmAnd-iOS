@@ -630,7 +630,7 @@ static const CGFloat kVerticalExaggerationScaleMax = 4.0;
                     [wptPts addObject:wptPt];
                     [points addObject:wptPt];
                 }
-                pointsGroup.points = wptPts;
+               // pointsGroup.points = wptPts;
             }
             pointsGroups[groupName.toNSString()] = pointsGroup;
         }
@@ -648,12 +648,12 @@ static const CGFloat kVerticalExaggerationScaleMax = 4.0;
             OAPointsGroup *pointsGroup =  pointsGroups[pointsGroup.name];
             if (!pointsGroup)
             {
-                pointsGroup = [[OAPointsGroup alloc] initWithWptPt:wptPt];
-                pointsGroups[pointsGroup.name] = pointsGroup;
+//                pointsGroup = [[OAPointsGroup alloc] initWithWptPt:wptPt];
+//                pointsGroups[pointsGroup.name] = pointsGroup;
             }
 
-            pointsGroup.points = [pointsGroup.points arrayByAddingObject:wptPt];
-            [points addObject:wptPt];
+//            pointsGroup.points = [pointsGroup.points arrayByAddingObject:wptPt];
+//            [points addObject:wptPt];
         }
     }
 

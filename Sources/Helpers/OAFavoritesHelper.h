@@ -13,7 +13,7 @@
 #define kDefaultCategoryKey @"favorites_item"
 #define kPersonalCategory @"personal"
 
-@class OAFavoriteItem, OAFavoriteGroup, OASpecialPointType, OAGPXDocument, OAGPXMutableDocument, OAPointsGroup, OASWptPt;
+@class OAFavoriteItem, OAFavoriteGroup, OASpecialPointType, OASGpxFile, OAGPXMutableDocument, OASGpxUtilitiesPointsGroup, OASWptPt;
 
 @interface OAFavoritesHelper : NSObject
 
@@ -23,8 +23,8 @@
 
 + (void)loadFileGroups:(NSString *)file
                 groups:(NSMutableDictionary<NSString *, OAFavoriteGroup *> *)groups;
-+ (OAGPXDocument *)loadGpxFile:(NSString *)file;
-+ (void)importFavoritesFromGpx:(OAGPXDocument *)gpxFile;
++ (OASGpxFile *)loadGpxFile:(NSString *)file;
++ (void)importFavoritesFromGpx:(OASGpxFile *)gpxFile;
 
 + (OAFavoriteItem *) getSpecialPoint:(OASpecialPointType *)specialType;
 + (void) setSpecialPoint:(OASpecialPointType *)specialType lat:(double)lat lon:(double)lon address:(NSString *)address;
@@ -43,7 +43,7 @@
 + (BOOL)addFavorites:(NSArray<OAFavoriteItem *> *)favorites
        lookupAddress:(BOOL)lookupAddress
          sortAndSave:(BOOL)sortAndSave
-         pointsGroup:(OAPointsGroup *)pointsGroup;
+         pointsGroup:(OASGpxUtilitiesPointsGroup *)pointsGroup;
 
 + (BOOL) editFavoriteName:(OAFavoriteItem *)item newName:(NSString *)newName group:(NSString *)group descr:(NSString *)descr address:(NSString *)address;
 + (BOOL) editFavorite:(OAFavoriteItem *)item lat:(double)lat lon:(double)lon;
@@ -80,7 +80,7 @@
 
 + (OAFavoriteGroup *)getOrCreateGroup:(OAFavoriteItem *)item;
 + (OAFavoriteGroup *)getOrCreateGroup:(OAFavoriteItem *)item
-                          pointsGroup:(OAPointsGroup *)pointsGroup;
+                          pointsGroup:(OASGpxUtilitiesPointsGroup *)pointsGroup;
 + (BOOL) deleteNewFavoriteItem:(OAFavoriteItem *)favoritesItem;
 + (BOOL) deleteFavoriteGroups:(NSArray<OAFavoriteGroup *> *)groupsToDelete andFavoritesItems:(NSArray<OAFavoriteItem *> *)favoritesItems;
 + (BOOL) deleteFavoriteGroups:(NSArray<OAFavoriteGroup *> *)groupsToDelete andFavoritesItems:(NSArray<OAFavoriteItem *> *)favoritesItems isNewFavorite:(BOOL)isNewFavorite;
@@ -127,7 +127,7 @@
 + (BOOL) isPersonalCategoryDisplayName:(NSString *)name;
 + (NSString *) getDisplayName:(NSString *)name;
 + (NSString *) convertDisplayNameToGroupIdName:(NSString *)name;
-- (OAPointsGroup *)toPointsGroup;
-+ (OAFavoriteGroup *)fromPointsGroup:(OAPointsGroup *)pointsGroup;
+- (OASGpxUtilitiesPointsGroup *)toPointsGroup;
++ (OAFavoriteGroup *)fromPointsGroup:(OASGpxUtilitiesPointsGroup *)pointsGroup;
 
 @end

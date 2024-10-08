@@ -1158,8 +1158,12 @@ class GpxUIHelper: NSObject {
         } else {
             yAxis.resetCustomAxisMin()
         }
+        var dateKey = graphType.getDatakey()
+        if case .speed = graphType {
+            dateKey = "point_speed"
+        }
 
-        let values = getPointAttributeValues(key: graphType.getDatakey(),
+        let values = getPointAttributeValues(key: dateKey,
                                              pointAttributes: analysis.pointAttributes as! [PointAttributes],
                                              axisType: axisType,
                                              divX: divX,

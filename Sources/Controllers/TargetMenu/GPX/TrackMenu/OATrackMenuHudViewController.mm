@@ -1478,9 +1478,14 @@
 
 - (CLLocationCoordinate2D)getCenterGpxLocation
 {
-    return CLLocationCoordinate2DMake(0.0, 0.0);
+    OASGpxTrackAnalysis *analysis = self.gpx.getAnalysis;
+    
+    double clat = analysis.bottom / 2.0 + analysis.top / 2.0;
+    double clon = analysis.left / 2.0 + analysis.right / 2.0;
+    
+    return CLLocationCoordinate2DMake(clat, clon);
     // FIXME:
-   // return self.doc.bounds.center;
+  //  return self.doc.bounds.center;
 }
 
 - (CLLocationCoordinate2D)getPinLocation

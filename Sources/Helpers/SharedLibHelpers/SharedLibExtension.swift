@@ -48,6 +48,9 @@ extension PointAttributes {
     static let OSMAND_EXTENSIONS_PREFIX = "osmand:"
 }
 
+//const val POINT_SPEED = "point_speed"
+//const val POINT_ELEVATION = "point_elevation"
+
 // Old code
 //    static let pointElevation = "ele"
 //    static let pointSpeed = "speed"

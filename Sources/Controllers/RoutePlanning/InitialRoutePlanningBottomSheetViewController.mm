@@ -73,7 +73,7 @@
 
 - (CGFloat) initialHeight
 {
-    int tracksCount = (int)[OAGPXDatabase sharedDb].gpxList.count;
+    int tracksCount = (int)[[OAGPXDatabase sharedDb] getDataItems].count;
     int maxHeight = DeviceScreenHeight / 3 * 2;
     
     int estimatedHeight = kApproximateEmptyMenuHeight + OAUtilities.getBottomMargin;
@@ -110,7 +110,7 @@
     [data addObject:actionSection];
 
     OAGPXDatabase *db = [OAGPXDatabase sharedDb];
-    NSArray *gpxList = [db.gpxList sortedArrayUsingComparator:^NSComparisonResult(OASGpxDataItem *obj1, OASGpxDataItem *obj2) {
+    NSArray *gpxList = [[db getDataItems] sortedArrayUsingComparator:^NSComparisonResult(OASGpxDataItem *obj1, OASGpxDataItem *obj2) {
         NSDate *time1 = [OAUtilities getFileLastModificationDate:obj1.gpxFilePath];
         NSDate *time2 = [OAUtilities getFileLastModificationDate:obj2.gpxFilePath];
         return [time2 compare:time1];

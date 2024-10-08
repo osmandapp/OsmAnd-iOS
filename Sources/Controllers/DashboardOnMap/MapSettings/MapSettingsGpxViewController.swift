@@ -642,16 +642,17 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     private func loadGpxTracks() {
-        if let gpxDatabase = OAGPXDatabase.sharedDb() {
-            allGpxList = gpxDatabase.gpxList.compactMap { $0 as? OAGPX }
-                .sorted {
-                    guard let date1 = $0.importDate, let date2 = $1.importDate else { return false }
-                    return date1 > date2
-                }
-            isTracksAvailable = !allGpxList.isEmpty
-        } else {
-            isTracksAvailable = false
-        }
+        // FIXME:
+//        if let gpxDatabase = OAGPXDatabase.sharedDb() {
+//            allGpxList = gpxDatabase.gpxList.compactMap { $0 as? OAGPX }
+//                .sorted {
+//                    guard let date1 = $0.importDate, let date2 = $1.importDate else { return false }
+//                    return date1 > date2
+//                }
+//            isTracksAvailable = !allGpxList.isEmpty
+//        } else {
+//            isTracksAvailable = false
+//        }
     }
     
     private func loadVisibleTracks() {

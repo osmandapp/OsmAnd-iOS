@@ -148,7 +148,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     NSMutableArray *data = [NSMutableArray new];
     NSMutableArray *existingTracksSection = [NSMutableArray new];
     OAGPXDatabase *db = [OAGPXDatabase sharedDb];
-    NSArray *filteredData = [self filterData:db.gpxList];
+    NSArray *filteredData = [self filterData:[db getDataItems]];
     NSArray *gpxList = [NSMutableArray arrayWithArray:[self sortData:filteredData]];
     
     [existingTracksSection addObject:@{

@@ -159,8 +159,6 @@
   //  OASGpxDbHelper *_gpxDbHelper;
 }
 
-@synthesize gpxList;
-
 + (OAGPXDatabase *)sharedDb
 {
     static OAGPXDatabase *_sharedDb = nil;
@@ -188,15 +186,15 @@
 - (OAGPX *) addGpxItem:(NSString *)filePath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document
 {
     OAGPX *gpx = [self buildGpxItem:filePath.lastPathComponent path:filePath title:title desc:desc bounds:bounds document:document fetchNearestCity:YES];
-    NSMutableArray *res = [NSMutableArray array];
-    for (OAGPX *item in gpxList)
-    {
-        if (![item.gpxFilePath isEqualToString:gpx.gpxFilePath])
-            [res addObject:item];
-    }
-    
-    [res addObject:gpx];
-    gpxList = res;
+//    NSMutableArray *res = [NSMutableArray array];
+//    for (OAGPX *item in gpxList)
+//    {
+//        if (![item.gpxFilePath isEqualToString:gpx.gpxFilePath])
+//            [res addObject:item];
+//    }
+//    
+//    [res addObject:gpx];
+//    gpxList = res;
     return gpx;
 }
 
@@ -474,6 +472,11 @@
     return [[filePath stringByReplacingOccurrencesOfString:pathToDelete withString:@""] stringByDeletingLastPathComponent];
 }
 
+- (BOOL)containsGPXItem:(NSString *)filePath
+{
+    return [[OASGpxDbHelper shared] hasGpxDataItemFile:[[OASKFile alloc] initWithFilePath:filePath]];
+}
+
 //- (NSDate *)getCreationDateForGPX:(OAGPX *)gpx document:(OAGPXDocument *)document
 //{
 //    NSDate *creationDate = nil;
@@ -498,23 +501,18 @@
 //    return creationDate;
 //}
 
-- (BOOL)containsGPXItem:(NSString *)filePath
-{
-    return [[OASGpxDbHelper shared] hasGpxDataItemFile:[[OASKFile alloc] initWithFilePath:filePath]];
-}
-
--(BOOL)updateGPXItemColor:(OAGPX *)item color:(int)color
-{
-    for (OAGPX *gpx in gpxList)
-    {
-        if ([gpx.gpxFilePath isEqualToString:item.gpxFilePath])
-        {
-            gpx.color = color;
-            return YES;
-        }
-    }
-    return NO;
-}
+//-(BOOL)updateGPXItemColor:(OAGPX *)item color:(int)color
+//{
+//    for (OAGPX *gpx in gpxList)
+//    {
+//        if ([gpx.gpxFilePath isEqualToString:item.gpxFilePath])
+//        {
+//            gpx.color = color;
+//            return YES;
+//        }
+//    }
+//    return NO;
+//}
 
 //-(BOOL)updateGPXItemPointsCount:(NSString *)filePath pointsCount:(int)pointsCount
 //{
@@ -615,39 +613,39 @@
     return nil;
 }
 
-- (NSArray<NSString *> *)findGPXFilesInDirectory:(NSString *)directoryPath {
-    NSMutableArray<NSString *> *result = [NSMutableArray array];
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSURL *directoryURL = [NSURL fileURLWithPath:directoryPath];
-    
-    NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtURL:directoryURL
-                                              includingPropertiesForKeys:@[NSURLIsDirectoryKey]
-                                                                 options:0
-                                                            errorHandler:^BOOL(NSURL *url, NSError *error) {
-        NSLog(@"Error enumerating %@: %@", [url path], error);
-        return YES;
-    }];
-    
-    for (NSURL *fileURL in enumerator) {
-        NSError *error = nil;
-        NSNumber *isDirectory = nil;
-        [fileURL getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:&error];
-        
-        if (error) {
-            NSLog(@"Error getting resource value for %@: %@", [fileURL path], error);
-            continue;
-        }
-        
-        if (![isDirectory boolValue]) {
-            NSString *pathExtension = [fileURL pathExtension];
-            if ([pathExtension isEqualToString:GPX_EXT] || [pathExtension isEqualToString:KML_EXT] || [pathExtension isEqualToString:KMZ_EXT]) {
-                [result addObject:[fileURL path]];
-            }
-        }
-    }
-    
-    return [result copy];
-}
+//- (NSArray<NSString *> *)findGPXFilesInDirectory:(NSString *)directoryPath {
+//    NSMutableArray<NSString *> *result = [NSMutableArray array];
+//    NSFileManager *fileManager = [NSFileManager defaultManager];
+//    NSURL *directoryURL = [NSURL fileURLWithPath:directoryPath];
+//    
+//    NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtURL:directoryURL
+//                                              includingPropertiesForKeys:@[NSURLIsDirectoryKey]
+//                                                                 options:0
+//                                                            errorHandler:^BOOL(NSURL *url, NSError *error) {
+//        NSLog(@"Error enumerating %@: %@", [url path], error);
+//        return YES;
+//    }];
+//    
+//    for (NSURL *fileURL in enumerator) {
+//        NSError *error = nil;
+//        NSNumber *isDirectory = nil;
+//        [fileURL getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:&error];
+//        
+//        if (error) {
+//            NSLog(@"Error getting resource value for %@: %@", [fileURL path], error);
+//            continue;
+//        }
+//        
+//        if (![isDirectory boolValue]) {
+//            NSString *pathExtension = [fileURL pathExtension];
+//            if ([pathExtension isEqualToString:GPX_EXT] || [pathExtension isEqualToString:KML_EXT] || [pathExtension isEqualToString:KMZ_EXT]) {
+//                [result addObject:[fileURL path]];
+//            }
+//        }
+//    }
+//    
+//    return [result copy];
+//}
 
 //- (void)newLoad
 //{
@@ -715,12 +713,12 @@
 
 - (void)save
 {
-    NSMutableArray *dbContent = [NSMutableArray array];
-    for (OAGPX *gpx in gpxList)
-    {
-        [dbContent addObject:[self generateGpxData:gpx]];
-    }
-    [dbContent writeToFile:self.dbFilePath atomically:YES];
+//    NSMutableArray *dbContent = [NSMutableArray array];
+//    for (OAGPX *gpx in gpxList)
+//    {
+//        [dbContent addObject:[self generateGpxData:gpx]];
+//    }
+//    [dbContent writeToFile:self.dbFilePath atomically:YES];
 }
 
 //- (BOOL) addNewGpxFiles:(NSSet<NSString *> *)existingFilePaths

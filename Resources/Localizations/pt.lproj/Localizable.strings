@@ -3397,7 +3397,7 @@
 "osmand_cloud_delete_account_descr_with_email" = "Quer mesmo eliminar a conta do OsmAnd Cloud: %@?";
 "battery_saving_mode" = "Modo de economia de bateria";
 "quick_action_toggle_preference" = "Um selector para alterar a preferência.";
-"rendering_attr_showDirtbikeTrails_name" = "Mostrar trilhos de terra para bicicletas";
+"rendering_attr_showDirtbikeTrails_name" = "Trilhos para motos fora de estrada";
 "rendering_attr_showDirtbikeTrails_description" = "Mostrar trilhos de terra para bicicletas";
 "view_angle_description" = "Apresenta a área em forma de cone para a qual está atualmente virado";
 "show_along_the_route" = "Mostrar ao longo da rota";

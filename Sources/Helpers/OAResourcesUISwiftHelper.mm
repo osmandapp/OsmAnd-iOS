@@ -119,10 +119,14 @@
     {
         NSArray<NSString *> *components = [formattedSize componentsSeparatedByString:@" "];
         NSString *numberPart = components[0];
-        if (![numberPart containsString:@","])
+        if (![numberPart containsString:@","] && ![numberPart containsString:@"."])
         {
             NSString *newNumberPart = [numberPart stringByAppendingString:@",0"];
             formattedSize = [formattedSize stringByReplacingOccurrencesOfString:numberPart withString:newNumberPart];
+        }
+        else if ([numberPart containsString:@"."])
+        {
+            formattedSize = [formattedSize stringByReplacingOccurrencesOfString:@"." withString:@","];
         }
     }
     return formattedSize;

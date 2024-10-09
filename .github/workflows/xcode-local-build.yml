@@ -14,7 +14,7 @@ on:
       releaseversion:
         description: 'Release Version'
         required: true
-        default: '4.9.0'
+        default: '4.8.0'
 jobs:
   build:
     runs-on: self-hosted
@@ -41,42 +41,42 @@ jobs:
     - name: Checkout ios
       uses: actions/checkout@v4
       with:
-        ref: refs/heads/master
+        ref: refs/heads/r4.8
         repository: osmandapp/OsmAnd-iOS
         path: ios
         clean: false
     - name: Checkout android
       uses: actions/checkout@v4
       with:
-        ref: refs/heads/master
+        ref: refs/heads/r4.8
         repository: osmandapp/OsmAnd
         path: android
         clean: false
     - name: Checkout build
       uses: actions/checkout@v4
       with:
-        ref: refs/heads/master
+        ref: refs/heads/r4.8
         repository: osmandapp/OsmAnd-build
         path: build
         clean: false
     - name: Checkout core legacy
       uses: actions/checkout@v4
       with:
-        ref: refs/heads/master
+        ref: refs/heads/r4.8
         repository: osmandapp/OsmAnd-core-legacy
         path: core-legacy
         clean: false
     - name: Checkout core
       uses: actions/checkout@v4
       with:
-        ref: refs/heads/master
+        ref: refs/heads/r4.8
         repository: osmandapp/OsmAnd-core
         path: core
         clean: false
     - name: Checkout resources
       uses: actions/checkout@v4
       with:
-        ref: refs/heads/master
+        ref: refs/heads/r4.8
         repository: osmandapp/OsmAnd-resources
         path: resources
         clean: false

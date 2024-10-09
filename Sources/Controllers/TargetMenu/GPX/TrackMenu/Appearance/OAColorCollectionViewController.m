@@ -295,14 +295,15 @@
                 [iconHandler setItemSizeWithSize:48];
                 [iconHandler setIconSizeWithSize:30];
                 iconHandler.roundedSquareCells = NO;
-                iconHandler.cornerRadius = -1;
+                iconHandler.innerViewCornerRadius = -1;
             }
             else if (_collectionType == EOAColorCollectionTypeBigIconItems)
             {
                 [iconHandler setItemSizeWithSize:152];
                 [iconHandler setIconSizeWithSize:52];
                 iconHandler.roundedSquareCells = YES;
-                iconHandler.cornerRadius = 9;
+                iconHandler.innerViewCornerRadius = 6;
+                iconHandler.strokeCornerRadius = 9;
                 iconHandler.iconImagesData = @[_iconImages];
             }
             

@@ -1702,7 +1702,7 @@
 "allow_3D_view" = "2.5D вигляд";
 "do_not_rotate" = "Не обертати";
 "light_theme" = "Світла";
-"settings_app_theme" = "Тема";
+"settings_app_theme" = "Тема застосунку";
 "shared_string_meters" = "метри";
 "shared_string_tones" = "тонни";
 "accessibility_announce" = "Оголошення";
@@ -3457,7 +3457,7 @@
 "shared_string_local" = "Локальні";
 "map_settings_weather_temp_air" = "Температура повітря";
 "map_settings_weather_temp_water" = "Температура води";
-"rendering_attr_showDirtbikeTrails_name" = "Показати стежки для ґрунтового велосипеда";
+"rendering_attr_showDirtbikeTrails_name" = "Стежки для ґрунтового велосипеда";
 "rendering_attr_showDirtbikeTrails_description" = "Показати стежки для ґрунтових велосипедів";
 "location_radius_description" = "Показує круглу ділянку, що показує точність вашого поточного місця перебування";
 "profile_icon" = "Піктограма профілю";
@@ -3481,4 +3481,6 @@
 "daynight_mode_night_summary" = "Завжди показує мапу в темній темі, що найкраще вночі або в умовах слабкої освітленості.";
 "daynight_mode_sunrise_sunset_summary" = "Автоматично перемикається між денними та нічними темами на основі місцевого часу сходу та заходу сонця.";
 "of" = "%d зі %d";
-"downloaded_bytes" = "%@ зі %@";
+"downloaded_bytes" = "%@ з %@";
+"quick_action_terrain_color_scheme" = "Кольорова гама рельєфу";
+"quick_action_need_to_add_item_to_list" = "Потрібно додати принаймні один елемент до списку у налаштуваннях \'Швидкі дії\'";

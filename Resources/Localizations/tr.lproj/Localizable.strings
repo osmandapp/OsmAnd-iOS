@@ -3281,3 +3281,4 @@
 "of" = "%d / %d";
 "downloaded_bytes" = "%@ / %@";
 "daynight_mode_day_summary" = "Haritayı devamlı aydınlık temada göster, gündüz görünürlüğü için idealdir.";
+"quick_action_need_to_add_item_to_list" = "\'Hızlı eylem\' ayarlarında listeye en az bir öge ekleyin";

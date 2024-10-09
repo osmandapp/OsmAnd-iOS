@@ -2912,4 +2912,5 @@
 "navigate_point_mgrs" = "MGRS(Military Grid Reference System)";
 "shared_string_off" = "OFF";
 "of" = "全%d中%d";
-"downloaded_bytes" = "全%@中%@";
+"downloaded_bytes" = "%@／%@";
+"quick_action_need_to_add_item_to_list" = "『クイックアクション』のリストに最低ひとつは項目を設定する必要があります";

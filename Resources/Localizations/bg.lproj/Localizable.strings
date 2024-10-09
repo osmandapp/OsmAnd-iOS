@@ -2040,3 +2040,4 @@
 "monthly_subscription" = "Месечен абонамент";
 "annual_subscription" = "Годишен абонамент";
 "quarterly_subscription" = "Тримесечен абонамент";
+"downloaded_bytes" = "%@ от %@";

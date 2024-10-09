@@ -2408,7 +2408,7 @@
 "map_widget_sun_position" = "태양 위치";
 "map_orientation_default" = "장치와 같음";
 "shared_string_format" = "형식";
-"map_settings_topography" = "등고선 데이터";
+"map_settings_topography" = "등고선";
 "activity_type_walking_name" = "걷기";
 "simulate_location_movement_speed_original" = "원본";
 "map_orientation_portrait" = "세로";
@@ -2428,7 +2428,7 @@
 "activity_type_water_name" = "물";
 "popular_destinations" = "인기 있는 목적지";
 "terrain_3D_maps" = "지형 지도";
-"weather_update_disabled" = "사용 안 함";
+"weather_update_disabled" = "비활성화됨";
 "manage_subscriptions" = "구독을 관리합니다.";
 "contact_support_description" = "질문이 있으시면 %@로 문의하십시오.";
 "verify_email_address_descr" = "%@로 전송되는 검증 코드. 아래 필드에 입력하십시오.";
@@ -2541,7 +2541,7 @@
 "auto_zoom_smooth" = "매끄러운";
 "shared_string_class" = "등급";
 "shared_string_always" = "항상 사용";
-"shared_string_bottom" = "아래";
+"shared_string_bottom" = "맨 아래";
 "shared_string_limit" = "한계";
 "when_exceeded" = "초과 시";
 "custom_buttons" = "사용자지정 버튼";
@@ -2588,3 +2588,5 @@
 "navigate_point_format_DMS" = "DDD MM SS.SS";
 "navigate_point_format_D" = "DDD.DD";
 "nm" = "nm";
+"downloaded_bytes" = "%@ 의 %@";
+"quick_action_need_to_add_item_to_list" = "\'Quick action\' 설정에서 목록으로 적어도 하나의 항목을 추가하십시오";

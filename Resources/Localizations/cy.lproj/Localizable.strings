@@ -1981,7 +1981,7 @@
 "arrival_time_widget_desc" = "Amser cyrraedd pen y daith.";
 "max_speed_widget_desc" = "Mae\'n dangos cyfyngiad cyflymder y ffordd bresennol.";
 "shared_string_format" = "Fformat";
-"map_settings_topography" = "Cyfuchlinellau";
+"map_settings_topography" = "Cyfuchliniau";
 "map_orientation_default" = "Fel gosodiad y ddyfais";
 "lanes_widgets_desc" = "Dangosa\'r ategyn lonydd y drefn lonydd cyfredol a pha lonydd i gadw ynddynt.";
 "shared_string_weather" = "Tywydd";
@@ -2010,3 +2010,4 @@
 "shared_string_local" = "Lleol";
 "of" = "%d o %d";
 "downloaded_bytes" = "%@ o %@";
+"quick_action_need_to_add_item_to_list" = "Ychwanegwch o leiaf un eitem i\'r rhestr yng ngosodiadau \'Gweithred gyflym\'";

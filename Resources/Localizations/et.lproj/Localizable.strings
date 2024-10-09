@@ -1947,7 +1947,7 @@
 "gpxup_identifiable" = "Äratuntav";
 "gpxup_public" = "Avalik";
 "default_color_descr" = "Seda värvi kasutatakse kõigi uute gruppi lisatud lemmikute puhul.";
-"fav_point_emoticons_message" = "Emotikone sisaldava stringi salvestamiseks faili muutsime lemmiku uueks nimeks '%@'.";
+"fav_point_emoticons_message" = "Emotikone sisaldava stringi salvestamiseks faili mutsime lemmiku uueks nimeks \'%@\'.";
 "fav_point_dublicate_message" = "Korduvuse vältimiseks muutsime lemmiku uueks nimeks %@.";
 "shared_string_shape" = "Kuju";
 "name_and_descr" = "Nimi ja kirjeldus";
@@ -2731,4 +2731,6 @@
 "show_along_the_route" = "Näita teekonnal";
 "view_angle_description" = "Kuvab koonusekujulise vaate, mida sa hetkel näed";
 "of" = "%d / %d";
-"downloaded_bytes" = "%@ / %@";
+"downloaded_bytes" = "%@ %@-st";
+"quick_action_terrain_color_scheme" = "Maastiku värvivalik";
+"quick_action_need_to_add_item_to_list" = "Lisa nimekirja vähemalt üks element \'Kiirtegevus\' seadetes";

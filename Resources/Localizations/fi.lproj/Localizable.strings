@@ -492,7 +492,7 @@
 "add_online_source" = "Lisää verkkolähde";
 "srtm_color_scheme" = "Värimaailma";
 "shared_string_appearance" = "Ulkoasu";
-"settings_app_theme" = "Sovellusteema";
+"settings_app_theme" = "Sovelluksen teema";
 "light_theme" = "Vaalea";
 "do_not_rotate" = "Älä kierrä";
 "allow_3D_view" = "2.5D-näkymä";

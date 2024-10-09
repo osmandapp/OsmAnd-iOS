@@ -3312,7 +3312,7 @@
 "fixed_height" = "Altura fixa";
 "downward_gradient" = "Gradiente descendente";
 "shared_string_top" = "Topo";
-"shared_string_bottom" = "Em baixo";
+"shared_string_bottom" = "Base";
 "track_3d_empty_view_title" = "Vista 3D do trilho";
 "track_3d_empty_view_description" = "Explore o trilho em 3D interativo! Visualize a altura, a velocidade e muito mais diretamente no mapa.";
 "display_position_automatic_descr" = "Depende da orientação do mapa: em baixo para a direção do movimento, ao centro para todas as outras.";
@@ -3420,3 +3420,5 @@
 "daynight_mode_sunrise_sunset_summary" = "Muda automaticamente entre temas diurnos e noturnos com base nas horas locais do nascer e do pôr do sol.";
 "daynight_mode_day_summary" = "Apresenta sempre o mapa num tema claro, ideal para a visibilidade durante o dia.";
 "daynight_mode_night_summary" = "Apresenta sempre o mapa num tema escuro, adequado para condições noturnas ou de fraca luminosidade.";
+"quick_action_terrain_color_scheme" = "Esquema de cores do terreno";
+"quick_action_need_to_add_item_to_list" = "Adicione pelo menos um item à lista nas configurações de \"Botão de ações rápidas\"";

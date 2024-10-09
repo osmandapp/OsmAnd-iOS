@@ -2243,3 +2243,4 @@
 "of" = "%d מתוך %d";
 "downloaded_bytes" = "%@ מתוך %@";
 "battery_saving_mode" = "מצב חסכון בסוללה";
+"quick_action_need_to_add_item_to_list" = "יש להוסיף לפחות פריט אחד לרשימה בהגדרות ה‚פעולה המהירה’";

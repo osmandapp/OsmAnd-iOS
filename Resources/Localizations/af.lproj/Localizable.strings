@@ -380,7 +380,7 @@
 "map_orientation_portrait" = "Portret";
 "network" = "Netwerk";
 "map_orientation_default" = "Dieselfde as toestel";
-"map_settings_topography" = "Kontoer lyne inligting";
+"map_settings_topography" = "Kontoerlyne";
 "map_orientation_landscape" = "Landskap";
 "general_settings" = "Algemene instellings";
 "shared_string_format" = "Formaat :";
@@ -406,8 +406,8 @@
 "app_mode_bicycle" = "Fiets";
 
 "rendering_attr_hideWaterPolygons_description" = "Water";;
+"city_type_city" = "Stad";
 "lang_en" = "Engels";
 "app_mode_pedestrian" = "Voetganger";
-"app_mode_bicycle" = "Fiets";
-"city_type_city" = "Stad";
 "search_address_street" = "Straat";
+"app_mode_bicycle" = "Fiets";

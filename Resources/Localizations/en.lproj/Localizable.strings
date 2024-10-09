@@ -2006,7 +2006,7 @@
 "unsupported_action_descr" = "This quick action in not supported now. This can be fixed in new app versions.";
 "quick_action_toggle_preference" = "A toggle to change preference.";
 "quick_action_terrain_color_scheme" = "Terrain color scheme";
-"quick_action_need_to_add_item_to_list" = "Add at least one item to the list in the 'Quick action' settings";
+"quick_action_need_to_add_item_to_list" = "Add at least one item to the list in the \'Quick action\' settings";
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";
@@ -3899,7 +3899,7 @@
 "daynight_mode_night_summary" = "Always displays the map in a dark theme, suited for nighttime or low-light conditions.";
 "daynight_mode_day_summary" = "Always displays the map in a light theme, ideal for daytime visibility.";
 
-"rendering_attr_showDirtbikeTrails_name" = "Show dirt bike trails";
+"rendering_attr_showDirtbikeTrails_name" = "Dirt bike trails";
 "rendering_attr_showDirtbikeTrails_description" = "Show dirt bike trails";;
 
 ;

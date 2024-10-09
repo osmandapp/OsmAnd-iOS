@@ -3390,3 +3390,5 @@
 "location_radius_description" = "Sýnir hringlaga svæðið sem stendur fyrir nákvæmni núverandi staðsetningar þinnar";
 "of" = "%d af %d";
 "downloaded_bytes" = "%@ af %@";
+"quick_action_terrain_color_scheme" = "Litastef yfirborðs";
+"quick_action_need_to_add_item_to_list" = "Þú verður að skilgreina a.m.k. eitt atriði í listanum í stillingum flýtiaðgerða";

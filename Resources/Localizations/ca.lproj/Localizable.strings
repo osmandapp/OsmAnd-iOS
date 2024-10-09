@@ -2462,7 +2462,7 @@
 "map_widget_ant_bicycle_power" = "Potència de la bicicleta";
 "elevation_profile_widget_desc" = "El giny mostra el perfil d\'elevació i pendent de la ruta actual.";
 "lang_zh-Hans" = "Xinès (simplificat)";
-"external_device_status_connect" = "Connecta\'t";
+"external_device_status_connect" = "Connecta";
 "global_settings" = "Paràmetres globals";
 "map_widget_ant_bicycle_cadence" = "Cadència de la bicicleta";
 "map_widget_trip_recording_duration" = "Durada";
@@ -2542,3 +2542,4 @@
 "navigate_point_format_DMS" = "GGG MM SS.S";
 "of" = "%d de %d";
 "downloaded_bytes" = "%@ de %@";
+"quick_action_need_to_add_item_to_list" = "Afegir com a mínim un element a la llista a la configuració de l\'acció ràpida";

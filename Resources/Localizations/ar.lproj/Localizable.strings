@@ -3163,7 +3163,7 @@
 "help_article_navigation_routing_straight_line_routing_name" = "التوجيه بخط مستقيم (الطائرات)";
 "help_article_navigation_routing_train_routing_name" = "توجيه القطار";
 "help_article_navigation_setup_gpx_navigation_name" = "التنقل عن طريق المسار";
-"map_settings_topography" = "خرائط الخطوط الكنتورية";
+"map_settings_topography" = "بيانات الخطوط الكنتورية";
 "travel_guides_no_file_error" = "خطأ: لا توجد بيانات ملف المنطقة";
 "shared_string_accessibility" = "تسهيلات الاستخدام";
 "help_article_map_legend_nautical_map_name" = "نمط الخرائط البحرية";
@@ -3366,7 +3366,7 @@
 "track_3d" = "المسار 3D";
 "fixed_height" = "ارتفاع ثابت";
 "upward_gradient" = "التدرج التصاعدي";
-"shared_string_bottom" = "الأسفل";
+"shared_string_bottom" = "أسفل";
 "track_3d_empty_view_title" = "عرض المسار ثلاثي الأبعاد";
 "shared_string_millimeters_short" = "مليمتر";
 "routing_algorithm" = "خوارزمية التوجيه";
@@ -3497,3 +3497,5 @@
 "daynight_mode_sunrise_sunset_summary" = "يقوم بالتبديل تلقائيا بين سمات النهار والليل بناءً على أوقات شروق الشمس وغروبها المحلية.";
 "daynight_mode_day_summary" = "تعرض الخريطة دائما بمظهر فاتح، مما يجعلها مثالية للرؤية أثناء النهار.";
 "daynight_mode_app_theme_summary" = "تتماشى شاشة الخريطة مع المظهر العام للتطبيق — الوضع النهاري للثيم الفاتح والوضع الليلي للثيم الداكن";
+"quick_action_terrain_color_scheme" = "مخطط لون الإقليم";
+"quick_action_need_to_add_item_to_list" = "أضف عنصراً واحداً على الأقل إلى القائمة في إعدادات \"الاختصار السريع\"";

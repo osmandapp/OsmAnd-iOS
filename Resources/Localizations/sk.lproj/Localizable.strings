@@ -2591,7 +2591,7 @@
 "map_markers_bar" = "Panel mapových značiek";
 "map_widget_trip_recording_downhill" = "Z kopca";
 "shared_string_loading" = "Načítanie";
-"weather_update_disabled" = "Vypnuté";
+"weather_update_disabled" = "Zakázané";
 "average_speed_time_interval_desc" = "Zadajte časový interval pre priemerovanie rýchlosti.";
 "map_widget_sun_position_desc" = "Zobrazuje čas do východu alebo západu slnka.";
 "temperature_widget_desc" = "Zobrazí teplotu pre súčasný stred mapy.";
@@ -2875,3 +2875,5 @@
 "daynight_mode_app_theme_summary" = "Zobrazenie mapy sa prispôsobuje všeobecnej téme aplikácie — denný režim pre svetlú tému a nočný režim pre tmavú tému";
 "daynight_mode_sunrise_sunset_summary" = "Automaticky prepne medzi dennou a nočnou témou podľa východu a západu slnka na danom mieste.";
 "daynight_mode_night_summary" = "Vždy zobrazí mapu v tmavej téme, vhodnej pre noc a podmienky so slabým osvetlením.";
+"quick_action_need_to_add_item_to_list" = "Pridajte aspoň jednu položku do zoznamu v nastaveniach \'Rýchlej akcie\'";
+"quick_action_terrain_color_scheme" = "Farebná schéma terénu";

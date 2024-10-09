@@ -821,7 +821,7 @@
 "commiting_node" = "Envoi des nœuds…";
 "loading_poi_obj" = "Chargement des points d\'intérêt…";
 "osm_upload_failed_descr" = "Veuillez vérifier vos informations de connexion et votre connexion internet et réessayer.";
-"osm_created" = "Créé";
+"osm_created" = "Créé le";
 "osm_add_timespan" = "Ajouter une période de temps";
 "osm_opening_hours_time" = "Heure";
 "osm_around_the_clock" = "24 heures sur 24, 7 jours sur 7";
@@ -2650,7 +2650,7 @@
 "announcement_time_prepare" = "Préparation";
 "announcement_time_approach" = "Approche";
 "announcement_time_passing" = "Durée";
-"compass_click_desc" = "Appuyez deux fois sur la boussole pour basculer entre les modes d'orientation de la carte.";
+"compass_click_desc" = "Appuyez deux fois sur la boussole pour basculer entre les modes d\'orientation de la carte.";
 "search_history_disabled" = "L'historique de recherche est désactivé";
 "last_seven_days" = "Ces 7 derniers jours";
 "delete_history_items" = "Supprimer %@ éléments d’historique \?";
@@ -3342,7 +3342,6 @@
 "daynight_mode_night_summary" = "Affiche toujours la carte en mode sombre, adapté pour la nuit ou une faible luminosité.";
 "daynight_mode_app_theme_summary" = "L\'affichage de la carte s\'adapte au thème de l\'application (mode jour pour un thème clair et mode nuit pour un thème sombre)";
 "daynight_mode_sunrise_sunset_summary" = "Bascule automatiquement entre les thèmes clair et sombre en fonction du lever et du coucher du soleil.";
-"lang_pnb" = "Punjabi";
-"tracker_item" = "OsmAnd tracker";
-"info_button" = "Info";
-"rendering_attr_horse_scale_impossible_name" = "Impossible";
+"ltr_or_rtl_combine_via_dash" = "%@ - %@";
+"quick_action_terrain_color_scheme" = "Palette de couleurs du relief";
+"quick_action_need_to_add_item_to_list" = "Ajoutez au moins une action à la barre d\'Actions rapides";

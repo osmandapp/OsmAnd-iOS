@@ -3204,3 +3204,4 @@
 "downloaded_bytes" = "%@ z %@";
 "daynight_mode_sunrise_sunset_summary" = "Automatycznie przełącza się między motywami dziennym i nocnym w oparciu o lokalne godziny wschodu i zachodu słońca.";
 "daynight_mode_night_summary" = "Zawsze wyświetla mapę w ciemnym motywie, dostosowanym do warunków nocnych lub słabego oświetlenia.";
+"quick_action_need_to_add_item_to_list" = "Dodaj co najmniej jeden element do listy w ustawieniach \"Szybkiej Akcji\"";

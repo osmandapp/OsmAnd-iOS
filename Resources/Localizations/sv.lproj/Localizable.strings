@@ -2723,7 +2723,7 @@
 "make_backup_descr" = "Det är många ändringar på den här enheten. Gör gärna en säkerhetskopia av dessa data för att inte förlora det.";
 "backup_delete_types_descr" = "Radera alla data för föråldrade datatyper från OsmAnd Cloud\?";
 "rendering_value_caiScale_description" = "Italienska alpinistföreningen (Club Alpino Italiano)";
-"map_settings_topography" = "Höjdkurvor";
+"map_settings_topography" = "Höjdkurvsdata";
 "upload_poi" = "Ladda upp POI";
 "rendering_value_sacScale_description" = "Schweiziska alpinistföreningen (Swiss Alpine Club)";
 "backup_error_token_is_not_valid" = "Någonting är fel med angivet enhets-id eller token";
@@ -3187,7 +3187,7 @@
 "in_case_of_reverse_direction" = "Vid omvänd riktning";
 "empty_name" = "Tomt namn";
 "dangerous_goods" = "Farligt gods";
-"shared_string_bottom" = "Nedtill";
+"shared_string_bottom" = "Längst ned";
 "shared_string_item" = "Objekt";
 "visualization_3d_track_line" = "Spårlinje";
 "visualization_3d_wall_color" = "Väggfärg";
@@ -3240,7 +3240,6 @@
 "quick_action_verb_pause_resume" = "Pausa / Återuppta";
 "quick_action_verb_turn_on_off" = "Slå På / Av";
 "rendering_value_pale_name" = "Blek";
-"quick_action_destination" = "Destination";
 "quick_action_parking_place" = "Parkeringsplats";
 "quick_action_verb_show_hide" = "Visa / Dölj";
 "app_profile" = "App-profil";
@@ -3248,3 +3247,4 @@
 "location_radius_description" = "Visar ett cirkulärt område som representerar noggrannhet och felmarginal för nuvarande plats";
 "quick_action_terrain_color_scheme" = "Färgschema för terrängen";
 "navigation_position_icon_summary" = "Symbol som visas medan du förflyttar dig eller navigerar.";
+"quick_action_need_to_add_item_to_list" = "Lägg till minst ett objekt i listan bland inställningarna för \'Snabbhandlingar\'";

@@ -505,7 +505,7 @@
 "add_online_source" = "Aldoni enretan fonton";
 "srtm_color_scheme" = "Kolor-skemo";
 "shared_string_appearance" = "Aspekto";
-"settings_app_theme" = "Etoso";
+"settings_app_theme" = "Etoso de aplikaĵo";
 "light_theme" = "Hela";
 "units_and_formats" = "Mezurunuoj kaj formoj";
 "osmand_settings" = "Ĝeneralaj agordoj";
@@ -2503,3 +2503,5 @@
 "of" = "%d el %d";
 "downloaded_bytes" = "%@ el %@";
 "daynight_mode_app_theme_summary" = "La map-reĝimo agordiĝas laŭ etoso de la aplikaĵo – taga reĝimo por hela etoso kaj nokta reĝimo por malhela etoso.";
+"quick_action_terrain_color_scheme" = "Kolor-skemo de tereno";
+"quick_action_need_to_add_item_to_list" = "Aldonu almenaŭ unu elementon al la listo en agordoj de “rapida ago”";

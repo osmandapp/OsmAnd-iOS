@@ -2546,7 +2546,7 @@
 "quick_action_get_info" = "取得資訊";
 "quick_action_dialog" = "對話框";
 "units_of_speed" = "速度單位";
-"settings_app_theme" = "應用程式主題";
+"settings_app_theme" = "應用程式佈景主題";
 "map_settings_available_srtm_maps_descr" = "需要額外的地圖才能在地圖上檢視地形陰影";
 "res_url_warning" = "URL 不能為空";
 "toggle_day_night" = "切換日/夜模式";
@@ -3297,7 +3297,7 @@
 "step_by_step" = "按步驟";
 "add_button" = "新增按鈕";
 "shared_string_always" = "總是";
-"shared_string_bottom" = "底部";
+"shared_string_bottom" = "下面";
 "auto_zoom" = "自動縮放";
 "track_3d_empty_view_description" = "以互動式 3D 方式探索軌跡！在地圖上直接視覺化高度、速度等。";
 "shared_string_millimeters" = "公釐";
@@ -3372,3 +3372,5 @@
 "daynight_mode_app_theme_summary" = "地圖的顯示與應用程式的整體主題一致，白天模式適用於淺色主題，夜間模式適用於深色主題";
 "daynight_mode_night_summary" = "一律以深色主題顯示地圖，適合夜間或低光源條件。";
 "daynight_mode_sunrise_sunset_summary" = "根據當地日出與日落的時間自動切換日間與夜間主題。";
+"quick_action_need_to_add_item_to_list" = "至少在「快速動作」設定中新增一個項目";
+"quick_action_terrain_color_scheme" = "地形配色方案";

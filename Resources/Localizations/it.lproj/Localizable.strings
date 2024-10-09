@@ -1523,7 +1523,7 @@
 "allow_3D_view" = "Vista 2.5D";
 "do_not_rotate" = "Non ruotare";
 "light_theme" = "Chiaro";
-"settings_app_theme" = "Tema dell\'app";
+"settings_app_theme" = "Tema dell\'applicazione";
 "map_settings_available_srtm_maps_descr" = "Sono necessarie mappe aggiuntive per visualizzare Hillshade sulla mappa";
 "map_settings_line_density_slowdown_warning" = "Un'elevata densità di linea può rallentare il rendering della mappa";
 "map_settings_contour_zoom_level_descr" = "Selezionare il livello di zoom, da cui verranno visualizzate le curve di livello";
@@ -2680,7 +2680,7 @@
 "map_widget_camera_tilt" = "Inclinazione della fotocamera";
 "map_widget_zoom_level" = "Livello di zoom";
 "rotate_map_manual_opt" = "Ruotato manualmente";
-"compass_click_desc" = "Suggerimento: tocca la bussola per cambiare l'orientamento della mappa.";
+"compass_click_desc" = "Suggerimento: tocca la bussola per cambiare l\'orientamento della mappa.";
 "map_widget_camera_distance" = "Elevazione fotocamera";
 "change_language" = "Cambia lingua";
 "icon_group_service" = "Servizi";
@@ -3262,7 +3262,7 @@
 "routing_attr_avoid_cobblestone_name" = "Evita acciottolato";
 "rendering_value_dark_orange_name" = "Arancione scuro";
 "custom_map_button_name_present" = "Tale pulsante è già presente";
-"shared_string_bottom" = "In basso";
+"shared_string_bottom" = "Sotto";
 "dangerous_goods" = "Merci pericolose";
 "empty_name" = "Nome vuoto";
 "in_case_of_reverse_direction" = "In caso di direzione inversa";
@@ -3370,3 +3370,5 @@
 "daynight_mode_app_theme_summary" = "La visualizzazione della mappa si allinea al tema generale dell\'app: modalità giorno per un tema chiaro e modalità notturna per un tema scuro";
 "of" = "%d di %d";
 "downloaded_bytes" = "%@ di %@";
+"quick_action_need_to_add_item_to_list" = "Aggiungi almeno un oggetto alla lista nelle impostazioni di \'Azione Veloce\'";
+"quick_action_terrain_color_scheme" = "Combinazione di colori del terreno";

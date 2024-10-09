@@ -1510,4 +1510,5 @@
 "quick_action_toggle_preference" = "Seçimi dəyişmək üçün düymə.";
 "shared_string_local" = "Yerli";
 "of" = "%d / %d";
-"downloaded_bytes" = "%@ / %@";
+"downloaded_bytes" = "%@-dən %@";
+"quick_action_need_to_add_item_to_list" = "“Sürətli fəaliyyət” parametrlərində siyahıya ən azı bir element əlavə edin";

@@ -775,6 +775,7 @@
 //    }
 //}
 
+// FIXME: FileUtils.java renameGpxFile
 - (void)renameGPX:(OASGpxDataItem *)gpx newFilePath:(NSString *)filePath {
     
     OASKFile *newFile = [[OASKFile alloc] initWithFilePath:filePath];
@@ -851,7 +852,7 @@
         [wpt setObject:@(gpx.locationStart.ele) forKey:@"elevation"];
         [wpt setObject:@(gpx.locationStart.time) forKey:@"time"];
         [wpt setObject:(gpx.locationStart.comment ? gpx.locationStart.comment : @"") forKey:@"comment"];
-        [wpt setObject:(gpx.locationStart.type ? gpx.locationStart.type : @"") forKey:@"type"];
+        [wpt setObject:(gpx.locationStart.category ? gpx.locationStart.category : @"") forKey:@"type"];
         [wpt setObject:@(gpx.locationStart.speed) forKey:@"speed"];
         [d setObject:wpt forKey:@"locationStart"];
     }
@@ -866,7 +867,7 @@
         [wpt setObject:@(gpx.locationEnd.ele) forKey:@"elevation"];
         [wpt setObject:@(gpx.locationEnd.time) forKey:@"time"];
         [wpt setObject:(gpx.locationEnd.comment ? gpx.locationEnd.comment : @"") forKey:@"comment"];
-        [wpt setObject:(gpx.locationEnd.type ? gpx.locationEnd.type : @"") forKey:@"type"];
+        [wpt setObject:(gpx.locationEnd.category ? gpx.locationEnd.category : @"") forKey:@"type"];
         [wpt setObject:@(gpx.locationEnd.speed) forKey:@"speed"];
         [d setObject:wpt forKey:@"locationEnd"];
     }
@@ -955,7 +956,7 @@
             wpt.ele = [value[@"elevation"] doubleValue];
             wpt.time = [value[@"time"] longValue];
             wpt.comment = value[@"comment"];
-            wpt.type = value[@"type"];
+            wpt.category = value[@"type"];
             wpt.speed = [value[@"speed"] doubleValue];
             gpx.locationStart = wpt;
         } else if ([key isEqualToString:@"locationEnd"]) {
@@ -966,7 +967,7 @@
             wpt.ele = [value[@"elevation"] doubleValue];
             wpt.time = [value[@"time"] longValue];
             wpt.comment = value[@"comment"];
-            wpt.type = value[@"type"];
+            wpt.category = value[@"type"];
             wpt.speed = [value[@"speed"] doubleValue];
             gpx.locationEnd = wpt;
         }

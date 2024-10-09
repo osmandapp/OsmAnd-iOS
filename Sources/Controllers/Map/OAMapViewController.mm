@@ -3078,9 +3078,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 //        if ([[[OASavingTrackHelper sharedInstance] currentTrack].hiddenGroups containsObject:wptItem.type])
 //            continue;
 
-        if (wptItem.type.length > 0)
-            [groupSet addObject:wptItem.type];
-        
+        if (wptItem.category.length > 0)
+            [groupSet addObject:wptItem.category];
+
         if ([OAUtilities isCoordEqual:wptItem.position.latitude srcLon:wptItem.position.longitude destLat:location.latitude destLon:location.longitude])
         {
             self.foundWpt = wptItem;
@@ -3113,12 +3113,12 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
         OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:key];
         for (OASWptPt *loc in [doc getAllPoints]) {
-            if ([gpx.hiddenGroups containsObject:loc.type])
+            if ([gpx.hiddenGroups containsObject:loc.category])
                 continue;
 
-            if (loc.type != nil)
+            if (loc.category != nil)
             {
-                [groups addObject:loc.type];
+                [groups addObject:loc.category];
             }
 
             if ([OAUtilities isCoordEqual:loc.position.latitude srcLon:loc.position.longitude destLat:location.latitude destLon:location.longitude])
@@ -3158,7 +3158,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         
         for (OASWptPt *loc in [doc getAllPoints]) {
            
-            NSString *locType = loc.type;
+            NSString *locType = loc.category;
 
             if ([gpx.hiddenGroups containsObject:locType]) {
                 continue;
@@ -3166,7 +3166,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
             if (locType != nil)
             {
-                [groups addObject:loc.type];
+                [groups addObject:loc.category];
             }
             
             if ([OAUtilities isCoordEqual:loc.position.latitude srcLon:loc.position.longitude destLat:location.latitude destLon:location.longitude])
@@ -3222,29 +3222,26 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         NSDictionary<NSString *, OASGpxFile *> *activeGpx = _selectedGpxHelper.activeGpx;
         for (NSString *key in activeGpx) {
             OASGpxFile *value = activeGpx[key];
-
             if (value == nil)
-            {
                 continue;
-            }
 
             NSString *path = key;
             if ([path isEqualToString:self.foundWptDocPath])
             {
                 OASGpxFile *doc = value;
-                // FIXME:
-                BOOL removed = YES;//[doc deleteWptPtPoint:_foundWpt.wpt];
-                
-                if (!removed) {
-                      for (NSInteger i = 0; i < doc.getAllPoints.count; i++) {
+                BOOL removed = [doc deleteWptPtPoint:_foundWpt];
+                if (!removed)
+                {
+                      for (NSInteger i = 0; i < doc.getAllPoints.count; i++)
+                      {
                           OASWptPt *w = doc.getAllPoints[i];
-                          
                           if ([OAUtilities doublesEqualUpToDigits:5
                                                           source:w.position.latitude
                                                       destination:w.position.latitude] &&
                               [OAUtilities doublesEqualUpToDigits:5
                                                           source:w.position.longitude
-                                                      destination:w.position.longitude]) {
+                                                      destination:w.position.longitude])
+                          {
                               [doc deleteWptPtPoint:w];
                               break;
                           }
@@ -3349,8 +3346,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         NSMutableSet *groups = [NSMutableSet set];
         for (OASWptPt *wptItem in helper.currentTrack.getAllPoints)
         {
-            if (wptItem.type.length > 0)
-                [groups addObject:wptItem.type];
+            if (wptItem.category.length > 0)
+                [groups addObject:wptItem.category];
         }
         
         self.foundWptGroups = [groups allObjects];
@@ -3397,9 +3394,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
                 NSMutableSet *groups = [NSMutableSet set];
                 for (OASWptPt *loc in doc.getAllPoints)
                 {
-                    if (loc.type != nil)
+                    if (loc.category != nil)
                     {
-                        [groups addObject:loc.type];
+                        [groups addObject:loc.category];
                     }
                 }
                 
@@ -3436,9 +3433,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             NSMutableSet *groups = [NSMutableSet set];
             for (OASWptPt *loc in doc.getAllPoints)
             {
-                if (loc.type != nil)
+                if (loc.category != nil)
                 {
-                    [groups addObject:loc.type];
+                    [groups addObject:loc.category];
                 }
             }
             

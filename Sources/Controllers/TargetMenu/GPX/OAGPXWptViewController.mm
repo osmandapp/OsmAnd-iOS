@@ -234,7 +234,7 @@
 
 - (NSString *) getItemGroup
 {
-    return (self.wpt.point.type ? self.wpt.point.type : @"");
+    return (self.wpt.point.category ? self.wpt.point.category : @"");
 }
 
 - (NSArray *) getItemGroups

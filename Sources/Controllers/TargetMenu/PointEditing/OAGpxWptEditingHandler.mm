@@ -110,8 +110,9 @@
 
 - (NSString *)getGroupTitle
 {
-    return _gpxWpt.point.type && _gpxWpt.point.type.length > 0 ? _gpxWpt.point.type : OALocalizedString(@"shared_string_waypoints");
+    return _gpxWpt.point.category && _gpxWpt.point.category.length > 0 ? _gpxWpt.point.category : OALocalizedString(@"shared_string_waypoints");
 }
+
 - (OASGpxFile *)getGpxDocument
 {
     return _gpxDocument;
@@ -202,7 +203,7 @@
 
 - (void)setGroup:(NSString *)groupName color:(UIColor *)color save:(BOOL)save
 {
-    _gpxWpt.point.type = groupName;
+    _gpxWpt.point.category = groupName;
     OASInt *colorToSave = [[OASInt alloc] initWithInt:[color toARGBNumber]];
     [_gpxWpt.point setColorColor:colorToSave];
     _gpxWpt.color = color;

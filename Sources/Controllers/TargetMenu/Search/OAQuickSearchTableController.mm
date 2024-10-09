@@ -401,7 +401,7 @@
                     {
                         latitude = wpt.position.latitude;
                         longitude = wpt.position.longitude;
-                        pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_WPT typeName:wpt.type name:wpt.name];
+                        pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_WPT typeName:wpt.category name:wpt.name];
                     }
                 }
                 break;

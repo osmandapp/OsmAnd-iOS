@@ -110,7 +110,7 @@ static QuickActionType *TYPE;
     p.name = title;
     p.lat = lat;
     p.lon = lon;
-    p.type = groupName;
+    p.category = groupName;
     p.time = (long)[[NSDate date] timeIntervalSince1970];
     wpt.point = p;
     wpt.color = color;

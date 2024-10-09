@@ -1439,17 +1439,18 @@ colorizationScheme:(int)colorizationScheme
             if (value.getAllPoints.count > 0)
             {
                 NSString *filePath = key;
-                // FIXME:
-                OASGpxDataItem *gpx = [_cachedTracks.allKeys containsObject:filePath]
-                        ? _cachedTracks[filePath][@"gpx"]
+                OASGpxFile *gpx = [_cachedTracks.allKeys containsObject:filePath]
+                        ? _cachedTracks[filePath][@"doc"]
                         : key == nil
-                                ? nil/*[[OASavingTrackHelper sharedInstance] getCurrentGPX]*/
-                : [self getGpxItem:QString::fromNSString(key)];
-                
+                			? OASavingTrackHelper.sharedInstance.currentTrack
+                			: [self getGpxItem:QString::fromNSString(key)];
+
                 for (OASWptPt *waypoint in value.getAllPoints)
                 {
-                    if (![gpx.hiddenGroups containsObject:waypoint.type])
+                    OASGpxUtilitiesPointsGroup *group = [gpx.pointsGroups objectForKey:waypoint.category];
+                    if (!group || !group.hidden)
                     {
+                        // FIXME:
                         OsmAnd::GpxDocument::WptPt *wptPt = [self createDocumentWptPtFromWptPt:waypoint];
                         points.append(wptPt);
                     }
@@ -1477,7 +1478,7 @@ colorizationScheme:(int)colorizationScheme
     wptPt->elevation = oawptPt.ele;
     wptPt->timestamp = QDateTime::fromMSecsSinceEpoch(oawptPt.time);
     wptPt->comment = QString::fromNSString(oawptPt.comment);
-    wptPt->type = QString::fromNSString(oawptPt.type);
+    wptPt->type = QString::fromNSString(oawptPt.category);
     wptPt->horizontalDilutionOfPrecision = oawptPt.hdop;
     wptPt->verticalDilutionOfPrecision = 0.0;
     wptPt->speed = oawptPt.speed;
@@ -1554,7 +1555,8 @@ colorizationScheme:(int)colorizationScheme
     
     for (NSString *key in activeGpx.allKeys) {
         OASGpxFile *gpxFile = activeGpx[key];
-        BOOL isCurrentTrack = (doc != nil && gpxFile == doc);
+
+        BOOL isCurrentTrack = doc && gpxFile == doc;
 
         OASGpxFile *document = nil;
         NSString *filePath = isCurrentTrack ? kCurrentTrack : key;
@@ -1825,8 +1827,7 @@ colorizationScheme:(int)colorizationScheme
         {
             item.point.lat = position.latitude;
             item.point.lon = position.longitude;
-            // FIXME:
-            // item.point.wpt.position = OsmAnd::LatLon(position.latitude, position.longitude);
+            item.point.position = position;
 
             OASGpxFile * doc = [[OASelectedGPXHelper instance] getGpxFileFor:item.docPath];
             if (doc)
@@ -1842,8 +1843,7 @@ colorizationScheme:(int)colorizationScheme
         {
             OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
             [helper updatePointCoordinates:item.point newLocation:position];
-            // FIXME:
-            // item.point.wpt->position = OsmAnd::LatLon(position.latitude, position.longitude);
+            item.point.position = position;
             [self.app.updateRecTrackOnMapObservable notifyEventWithKey:@(YES)];
         }
     }

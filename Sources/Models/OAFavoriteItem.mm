@@ -666,77 +666,53 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (OASWptPt *) toWpt
 {
-    OASWptPt *pt = [[OASWptPt alloc] init];
-    pt.position = CLLocationCoordinate2DMake(self.getLatitude, self.getLongitude);
+    OASWptPt *pt = [[OASWptPt alloc] initWithLat:self.getLatitude lon:self.getLongitude];
     if (self.getAltitude > 0)
         pt.ele = self.getAltitude;
+
     pt.time = self.getTimestamp ? self.getTimestamp.timeIntervalSince1970 : 0;
+
+    OASMutableDictionary *exts = pt.getExtensionsToWrite;
+    if (!self.isVisible)
+        exts[EXTENSION_HIDDEN] = @"true";
+
+    if (self.isAddressSpecified)
+        exts[ADDRESS_EXTENSION_KEY] = self.getAddress;
+
+    if (self.getPickupTime)
+        exts[PICKUP_DATE_EXTENSION] = self.favorite->getPickupTime().toNSString();
+
+    if (self.getIcon)
+        exts[ICON_NAME_EXTENSION_KEY] = self.getIcon;
+
+    if (self.getBackgroundIcon)
+        exts[BACKGROUND_TYPE_EXTENSION_KEY] = self.getBackgroundIcon;
+
+    if (self.getColor)
+        exts[COLOR_NAME_EXTENSION_KEY] = [self.getColor toHexARGBString].lowercaseString;
+
+    if (self.getCalendarEvent)
+        exts[CALENDAR_EXTENSION] = @"true";
+
+    pt.extensions = exts;
     // FIXME:
-//    NSMutableArray<OAGpxExtension *> *exts = [pt.extensions mutableCopy];
-//    if (!self.isVisible)
-//    {
-//        OAGpxExtension *e = [[OAGpxExtension alloc] init];
-//        e.name = EXTENSION_HIDDEN;
-//        e.value = @"true";
-//        [exts addObject:e];
-//    }
-//    if (self.isAddressSpecified)
-//    {
-//        OAGpxExtension *e = [[OAGpxExtension alloc] init];
-//        e.name = ADDRESS_EXTENSION_KEY;
-//        e.value = self.getAddress;
-//        [exts addObject:e];
-//    }
-//    if (self.getPickupTime)
-//    {
-//        OAGpxExtension *e = [[OAGpxExtension alloc] init];
-//        e.name = PICKUP_DATE_EXTENSION;
-//        e.value = self.favorite->getPickupTime().toNSString();
-//        [exts addObject:e];
-//    }
-//    if (self.getIcon)
-//    {
-//        OAGpxExtension *e = [[OAGpxExtension alloc] init];
-//        e.name = ICON_NAME_EXTENSION_KEY;
-//        e.value = self.getIcon;
-//        [exts addObject:e];
-//    }
-//    if (self.getBackgroundIcon)
-//    {
-//        OAGpxExtension *e = [[OAGpxExtension alloc] init];
-//        e.name = BACKGROUND_TYPE_EXTENSION_KEY;
-//        e.value = self.getBackgroundIcon;
-//        [exts addObject:e];
-//    }
-//    if (self.getColor)
-//    {
-//        OAGpxExtension *e = [[OAGpxExtension alloc] init];
-//        e.name = @"color";
-//        e.value = [self.getColor toHexARGBString].lowercaseString;
-//        [exts addObject:e];
-//    }
-//    if (self.getCalendarEvent)
-//    {
-//        OAGpxExtension *e = [[OAGpxExtension alloc] init];
-//        e.name = CALENDAR_EXTENSION;
-//        e.value = @"true";
-//        [exts addObject:e];
-//    }
-//    pt.extensions = exts;
-//    [pt setAmenity:[self getAmenity]];
+    //[pt setAmenity:[self getAmenity]];
+
     pt.name = self.getName;
     pt.desc = self.getDescription;
     if (self.getCategory.length > 0)
-        pt.type = self.getCategory;
+        pt.category = self.getCategory;
+
     if (self.getAmenityOriginName.length > 0)
         [pt setAmenityOriginNameOriginName:self.getAmenityOriginName];
+
     return pt;
 }
 
 + (OAFavoriteItem *)fromWpt:(OASWptPt *)pt category:(NSString *)category
 {
     NSString *name = pt.name;
-    NSString *categoryName = category != nil ? category : (pt.type != nil ? pt.type : @"");
+    NSString *categoryName = category != nil ? category : (pt.category != nil ? pt.category : @"");
     if (!name)
         name = @"";
     OAFavoriteItem *fp = [[OAFavoriteItem alloc] initWithLat:pt.position.latitude

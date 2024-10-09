@@ -1000,7 +1000,7 @@
 "quick_action_navigation_voice" = "Голосовая навигация";
 "quick_action_add_osm_bug" = "Добавить OSM-заметку";
 "quick_action_add_first_intermediate" = "Первый промежуточный пункт";
-"quick_action_auto_zoom" = "Переключатель автомасштаба карты";
+"quick_action_auto_zoom" = "Автомасштаб карты";
 "quick_action_resume_pause_navigation" = "Пауза/возобновление навигации";
 "auto_zoom_on" = "Автоматическое масштабирование вкл";
 "auto_zoom_off" = "Автоматическое масштабирование выкл";

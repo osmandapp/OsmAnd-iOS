@@ -1599,7 +1599,7 @@
 "routing_attr_piste_type_downhill_description" = "可进行高山或滑降滑雪的斜坡，并可使用滑雪缆车。";
 "routing_attr_piste_type_nordic_description" = "适合北欧或越野滑雪的小径。";
 "routing_attr_allow_classic_only_name" = "只允许经典路线";
-"routing_attr_difficulty_preference_description" = "倾向于这种难度的路线，尽管如果时间较短，在更难或更容易的滑雪道上的路线仍是可能的。";
+"routing_attr_difficulty_preference_description" = "倾向于这种难度的路线，尽管如果时间较短，使用更难或更容易的滑雪道的路线仍是可能的。";
 "routing_attr_piste_type_sled_description" = "供雪橇使用的斜坡。";
 "routing_attr_avoid_sett_name" = "无原石铺砖";
 "routing_attr_allow_skating_only_name" = "只允许滑冰路线";

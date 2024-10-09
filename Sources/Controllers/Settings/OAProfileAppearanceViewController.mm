@@ -903,7 +903,6 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         ProfileAppearanceLocationRadiusViewController *vc = [[ProfileAppearanceLocationRadiusViewController alloc] init];
         vc.delegate = self;
         vc.selectedIndex = _changedProfile.locationRadiusVisibility;
-        [self showModalViewController:vc];
         [self showMediumSheetViewController:vc isLargeAvailable:NO];
     }
 }
@@ -916,18 +915,25 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     return YES;
 }
 
+- (void) setProfileName:(NSString *)newName
+{
+    OATableRowData *item = [_data itemForIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    if (item)
+        item.title = newName;
+    _changedProfile.name = newName;
+    _titleLabel.text = newName == 0 ? [self getEmptyNameTitle] : _changedProfile.name;
+}
+
 - (void) textViewDidChange:(UITextView *)textView
 {
     _hasChangesBeenMade = YES;
-    _changedProfile.name = textView.text;
-    _titleLabel.text = _changedProfile.name.length == 0 ? [self getEmptyNameTitle] : _changedProfile.name;
+    [self setProfileName:textView.text];
 }
 
 - (IBAction) onClearButtonClick:(UIButton *)sender
 {
     _hasChangesBeenMade = YES;
-    _changedProfile.name = @"";
-    _titleLabel.text = [self getEmptyNameTitle];
+    [self setProfileName:@""];
 
     [self.tableView performBatchUpdates:^{
         UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];

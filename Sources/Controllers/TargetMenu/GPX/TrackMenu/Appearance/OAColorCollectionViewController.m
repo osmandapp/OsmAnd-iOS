@@ -552,8 +552,7 @@
         if (self.iconsDelegate)
             [self.iconsDelegate selectIconName:_selectedIconItem];
         
-        if (_collectionType == EOAColorCollectionTypeBigIconItems)
-            [self dismissViewController];
+        [self dismissViewController];
     }
     else 
     {

@@ -673,7 +673,7 @@
 "clear_all_intermediates" = "Effacer toutes les étapes";
 "cancel_navigation" = "Arrêter le guidage";
 "transport_nearby_routes_within" = "Lignes à moins de";
-"transport_nearby_routes" = "À moins de";
+"transport_nearby_routes" = "Situé dans / à moins de";
 "shared_string_previous" = "Précédent";
 "show_poi_over_map" = "Afficher la sur-couche points d\'intérêt";
 "search_radius" = "Recherche dans un rayon";
@@ -3319,8 +3319,8 @@
 "shared_string_local" = "Stockage";
 "map_settings_weather_temp_water" = "Température de l'eau";
 "map_settings_weather_temp_air" = "Température de l'air";
-"rendering_attr_showDirtbikeTrails_name" = "Afficher les sentiers de terre pour vélos";
-"rendering_attr_showDirtbikeTrails_description" = "Afficher les sentiers de terre pour vélos";
+"rendering_attr_showDirtbikeTrails_name" = "Sentiers en terre pour vélo";
+"rendering_attr_showDirtbikeTrails_description" = "Afficher les sentiers en terre pour vélo";
 "navigation_position" = "Position de guidage";
 "resting_position_icon" = "Icône de votre position lorsque vous êtes immobile";
 "navigation_position_icon" = "Icône de votre position lors du guidage";
@@ -3345,3 +3345,6 @@
 "ltr_or_rtl_combine_via_dash" = "%@ - %@";
 "quick_action_terrain_color_scheme" = "Palette de couleurs du relief";
 "quick_action_need_to_add_item_to_list" = "Ajoutez au moins une action à la barre d\'Actions rapides";
+"lang_pnb" = "Punjabi";
+"info_button" = "Info";
+"rendering_attr_horse_scale_impossible_name" = "Impossible";

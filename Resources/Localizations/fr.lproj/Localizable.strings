@@ -3319,8 +3319,8 @@
 "shared_string_local" = "Stockage";
 "map_settings_weather_temp_water" = "Température de l'eau";
 "map_settings_weather_temp_air" = "Température de l'air";
-"rendering_attr_showDirtbikeTrails_name" = "Afficher les sentiers de terre pour vélos";
-"rendering_attr_showDirtbikeTrails_description" = "Afficher les sentiers de terre pour vélos";
+"rendering_attr_showDirtbikeTrails_name" = "Sentiers en terre pour vélo";
+"rendering_attr_showDirtbikeTrails_description" = "Afficher les sentiers en terre pour vélo";
 "navigation_position" = "Position de guidage";
 "resting_position_icon" = "Icône de votre position lorsque vous êtes immobile";
 "navigation_position_icon" = "Icône de votre position lors du guidage";

@@ -310,11 +310,11 @@
             if (item.distance)
                 [distanceStr appendString:item.distance];
 
-            if (item.point.type.length > 0)
+            if (item.point.category.length > 0)
             {
                 if (distanceStr.length > 0)
                     [distanceStr appendString:@", "];
-                [distanceStr appendString:item.point.type];
+                [distanceStr appendString:item.point.category];
             }
             
             [cell.titleView setText:item.point.name];

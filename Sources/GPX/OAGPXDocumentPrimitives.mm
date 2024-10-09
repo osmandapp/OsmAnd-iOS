@@ -815,7 +815,7 @@
 
 - (instancetype)initWithWptPt:(OASWptPt *)point
 {
-    self = [self initWithName:point.type];
+    self = [self initWithName:point.category];
     if (self)
     {
         _color = UIColorFromARGB([point getColor]);

@@ -198,7 +198,7 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
             for (OASWptPt *item in pointGroup.points)
             {
                 NSString *importItemName = item.name;
-                NSString *importItemFolder = item.type;
+                NSString *importItemFolder = item.category;
                 NSString *localItemName = [localItem getName];
                 NSString *localItemFolder = [localItem getCategory];
                 

@@ -1257,7 +1257,7 @@
         data.color = waypointItem.color ? waypointItem.color : UIColorFromARGB([waypointItem.point getColor]);
         data.backgroundIcon = [waypointItem.point getBackgroundType];
         data.icon = [waypointItem.point getIconName];
-        data.category = waypointItem.point.type;
+        data.category = waypointItem.point.category;
         data.name = waypointItem.point.name;
 
         if (_editPointType == EOAEditPointTypeWaypoint && !_pointHandler.gpxWptDelegate)

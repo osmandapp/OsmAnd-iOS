@@ -684,12 +684,12 @@
             }
             else
             {
-                NSMutableArray<OAGpxWptItem *> *group = _waypointGroups[gpxWpt.type];
+                NSMutableArray<OAGpxWptItem *> *group = _waypointGroups[gpxWpt.category];
                 if (!group)
                 {
                     group = [NSMutableArray array];
                     [group addObject:gpxWptItem];
-                    _waypointGroups[gpxWpt.type] = group;
+                    _waypointGroups[gpxWpt.category] = group;
                 }
                 else
                 {
@@ -1103,7 +1103,7 @@
     {
         if (newGroupName)
         {
-           waypoint.point.type = newGroupName;
+           waypoint.point.category = newGroupName;
         }
 
         if (newGroupColor)

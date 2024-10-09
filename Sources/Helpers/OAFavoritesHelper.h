@@ -92,7 +92,7 @@
 + (NSArray<NSString *> *) getFlatBackgroundIconNamesList;
 + (NSArray<NSString *> *) getFlatBackgroundContourIconNamesList;
 
-+ (OAGPXMutableDocument *) asGpxFile:(NSArray<OAFavoriteGroup *> *)favoriteGroups;
++ (OASGpxFile *) asGpxFile:(NSArray<OAFavoriteGroup *> *)favoriteGroups;
 
 + (void) addParkingReminderToCalendar;
 + (void) removeParkingReminderFromCalendar;

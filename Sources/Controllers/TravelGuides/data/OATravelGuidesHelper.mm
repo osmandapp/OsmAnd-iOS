@@ -152,7 +152,7 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
     NSString *category = [amenity getTagSuffix:@"category_"];
     if (category)
     {
-        wptPt.type = [OAUtilities capitalizeFirstLetter:category];
+        wptPt.category = [OAUtilities capitalizeFirstLetter:category];
     }
     for (NSString *key in [amenity getAdditionalInfo].allKeys)
     {

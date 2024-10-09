@@ -198,7 +198,7 @@
     NSMutableSet *groups = [NSMutableSet set];
 
     for (OAGpxWptItem *item in self.unsortedPoints)
-        [groups addObject:(item.point.type ? item.point.type : @"")];
+        [groups addObject:(item.point.category ? item.point.category : @"")];
     
     NSMutableArray *groupsArray = [[[groups allObjects]
                                     sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2)
@@ -216,7 +216,7 @@
     
     for (OAGpxWptItem *item in sortedArr)
     {
-        NSString *group = item.point.type;
+        NSString *group = item.point.category;
         NSMutableArray *arr;
         if (group.length > 0)
             arr = [dict objectForKey:group];

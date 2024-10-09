@@ -265,9 +265,8 @@
 
 - (OASettingsItemWriter *)getWriter
 {
-    // FIXME:
-//    OAGPXMutableDocument *doc = [OAFavoritesHelper asGpxFile:self.items];
-//    return [self getGpxWriter:(OAGPXDocument *) doc];
+    OASGpxFile *gpxFile = [OAFavoritesHelper asGpxFile:self.items];
+    return [self getGpxWriter:gpxFile];
 }
 
 @end
@@ -278,34 +277,34 @@
 
 - (BOOL) readFromFile:(NSString *)filePath error:(NSError * _Nullable *)error
 {
-    // FIXME:
-//    if (self.item.read)
-//    {
-//        if (error)
-//            *error = [NSError errorWithDomain:kSettingsItemErrorDomain code:kSettingsItemErrorCodeAlreadyRead userInfo:nil];
-//
-//        return NO;
-//    }
-//
-//    OAGPXDocument *gpxFile = [[OAGPXDocument alloc] initWithGpxFile:filePath];
-//    if (gpxFile)
-//    {
-//        NSMutableDictionary<NSString *, OAFavoriteGroup *> *flatGroups = [NSMutableDictionary dictionary];
-//        NSArray<OAFavoriteItem *> *favorites = [OAFavoritesHelper wptAsFavorites:gpxFile.points defaultCategory:@""];
-//        for (OAFavoriteItem *point in favorites)
-//        {
-//            OAFavoriteGroup *group = flatGroups[[point getCategory]];
-//            if (!group)
-//            {
-//                group = [self createFavoriteGroup:gpxFile point:point];
-//                flatGroups[group.name] = group;
-//                [self.item.items addObject:group];
-//            }
-//            [group.points addObject:point];
-//        }
-//    }
-//
-//    self.item.read = YES;
+    if (self.item.read)
+    {
+        if (error)
+            *error = [NSError errorWithDomain:kSettingsItemErrorDomain code:kSettingsItemErrorCodeAlreadyRead userInfo:nil];
+
+        return NO;
+    }
+
+    OASKFile *file = [[OASKFile alloc] initWithFilePath:filePath];
+    OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
+    if (gpxFile)
+    {
+        NSMutableDictionary<NSString *, OAFavoriteGroup *> *flatGroups = [NSMutableDictionary dictionary];
+        NSArray<OAFavoriteItem *> *favorites = [OAFavoritesHelper wptAsFavorites:gpxFile.getPointsList defaultCategory:@""];
+        for (OAFavoriteItem *point in favorites)
+        {
+            OAFavoriteGroup *group = flatGroups[[point getCategory]];
+            if (!group)
+            {
+                group = [self createFavoriteGroup:gpxFile point:point];
+                flatGroups[group.name] = group;
+                [self.item.items addObject:group];
+            }
+            [group.points addObject:point];
+        }
+    }
+
+    self.item.read = YES;
     return YES;
 }
 

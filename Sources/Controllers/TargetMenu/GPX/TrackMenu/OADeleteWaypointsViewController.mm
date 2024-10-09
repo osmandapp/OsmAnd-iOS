@@ -288,7 +288,7 @@
     if (indexPath.row > 0)
     {
         OAGpxWptItem *gpxWptItem = [self getGpxWptItem:indexPath.section row:indexPath.row - 1];
-        NSString *groupName = gpxWptItem.point.type;
+        NSString *groupName = gpxWptItem.point.category;
         if (self.trackMenuDelegate)
             groupName = [self.trackMenuDelegate checkGroupName:groupName];
         NSMutableArray<OAGpxWptItem *> *selectedWaypoints = _selectedWaypointGroups[groupName];
@@ -359,7 +359,7 @@
 - (void)selectDeselectItem:(NSIndexPath *)indexPath
 {
     OAGpxWptItem *gpxWptItem = [self getGpxWptItem:indexPath.section row:indexPath.row - 1];
-    NSString *groupName = gpxWptItem.point.type;
+    NSString *groupName = gpxWptItem.point.category;
     if (self.trackMenuDelegate)
         groupName = [self.trackMenuDelegate checkGroupName:groupName];
     NSMutableArray<OAGpxWptItem *> *waypoints = _selectedWaypointGroups[groupName];
@@ -396,7 +396,7 @@
     
     NSMutableArray<OAGpxWptItem *> *gpxWptItems = [self getGpxWptItems:indexPath.section];
     
-    NSString *groupName = gpxWptItems.firstObject.point.type;
+    NSString *groupName = gpxWptItems.firstObject.point.category;
     if (self.trackMenuDelegate)
         groupName = [self.trackMenuDelegate checkGroupName:groupName];
     NSMutableArray<OAGpxWptItem *> *waypoints = _selectedWaypointGroups[groupName];

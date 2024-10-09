@@ -3417,8 +3417,8 @@
 "map_settings_weather_temp_water" = "Температура воде";
 "map_settings_weather_temp_air" = "Температура ваздуха";
 "shared_string_local" = "Местно";
-"rendering_attr_showDirtbikeTrails_name" = "Прикажи утабане бициклистичке стазе";
-"rendering_attr_showDirtbikeTrails_description" = "Прикажи утабане бициклистичке стазе";
+"rendering_attr_showDirtbikeTrails_name" = "Прикажи стазе теренских мотоцикла";
+"rendering_attr_showDirtbikeTrails_description" = "Приказ стаза теренских мотоцикла";
 "resting_position_icon" = "Сличица положаја одмарања";
 "resting_navigation_position" = "Положај мировања и навођења";
 "shared_string_all_icons" = "Све сличице";

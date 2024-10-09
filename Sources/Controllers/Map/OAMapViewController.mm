@@ -3110,10 +3110,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         if (!doc || [doc getAllPoints].count == 0) {
             continue;
         }
-        NSString *gpxFilePath = [key
-                stringByReplacingOccurrencesOfString:[_app.gpxPath stringByAppendingString:@"/"]
-                                          withString:@""];
-        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:gpxFilePath];
+
+        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:key];
         for (OASWptPt *loc in [doc getAllPoints]) {
             if ([gpx.hiddenGroups containsObject:loc.type])
                 continue;
@@ -3125,14 +3123,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
             if ([OAUtilities isCoordEqual:loc.position.latitude srcLon:loc.position.longitude destLat:location.latitude destLon:location.longitude])
             {
-                OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> *_wpt = (OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>*)&loc;
-                const std::shared_ptr<OsmAnd::GpxDocument::WptPt> w = _wpt->shared_ptr();
-                // FIXME:
-//                OASWptPt *wptItem = [OAGPXDocument fetchWpt:w];
-//                wptItem.wpt = w;
-                
-//                self.foundWpt = wptItem;
-//                self.foundWptDocPath = it.key().toNSString();
+                self.foundWpt = [[OASWptPt alloc] initWithWptPt:loc];
+                self.foundWptDocPath = key;
                 
                 found = YES;
             }
@@ -3179,14 +3171,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             
             if ([OAUtilities isCoordEqual:loc.position.latitude srcLon:loc.position.longitude destLat:location.latitude destLon:location.longitude])
             {
-                OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> *_wpt = (OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>*)&loc;
-                const std::shared_ptr<OsmAnd::GpxDocument::WptPt> w = _wpt->shared_ptr();
-                // FIXME:
-                
-//                OASWptPt *wptItem = [OAGPXDocument fetchWpt:w];
-//                wptItem.wpt = w;
-//                self.foundWpt = wptItem;
-//                self.foundWptDocPath = _gpxDocFileTemp;
+                self.foundWpt = [[OASWptPt alloc] initWithWptPt:loc];
+                self.foundWptDocPath = _gpxDocFileTemp;
                 
                 found = YES;
             }

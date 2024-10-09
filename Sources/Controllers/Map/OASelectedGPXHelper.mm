@@ -97,7 +97,8 @@
             [_selectedGPXFilesBackup addObject:filePath];
             continue;
         }
-        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:filePath];
+        NSString *absoluteGpxFilepath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:filePath];
+        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:absoluteGpxFilepath];
         NSString __block *path = gpx.file.absolutePath;
 
         if ([[NSFileManager defaultManager] fileExistsAtPath:path] && ![self containsGpxFileWith:path])
@@ -123,7 +124,7 @@
     NSArray<NSString *> *mapSettingVisibleGpx = [_settings.mapSettingVisibleGpx get];
     NSMutableArray<NSString *> *keysToRemove = [NSMutableArray array];
 
-    for (NSString *key in _activeGpx) {
+    for (NSString *key in _activeGpx.allKeys) {
         NSString *gpxFilePath = [OAUtilities getGpxShortPath:key];
 
         if (![mapSettingVisibleGpx containsObject:gpxFilePath]) {

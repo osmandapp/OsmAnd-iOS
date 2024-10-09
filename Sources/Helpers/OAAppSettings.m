@@ -5121,7 +5121,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
     NSMutableArray *arrToDelete = [NSMutableArray array];
     for (NSString *filepath in arr)
     {
-        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:filepath];
+        NSString *absoluteGpxFilepath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:filepath];
+        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:absoluteGpxFilepath];
         NSString *fileName = filepath.lastPathComponent;
         NSString *filenameWithoutPrefix = nil;
         if ([fileName hasSuffix:@"_osmand_backup"])

@@ -212,21 +212,11 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
             [self addTrackToCached:qKey value:gpxFile];
         }
     }
-    
-//    for (auto it = _gpxDocs.begin(); it != _gpxDocs.end(); ++it)
-//    {
-//        if (!it.value())
-//            continue;
-//        NSString *key = it.key().toNSString();
-//        if (![_cachedTracks.allKeys containsObject:key] || [key isEqualToString:kCurrentTrack])
-//            [self addTrackToCached:it.key() value:it.value()];
-//    }
 }
 
 - (OASGpxDataItem *)getGpxItem:(const QString &)filename
 {
     NSString *filenameNS = filename.toNSString();
-    filenameNS = [OAUtilities getGpxShortPath:filenameNS];
     OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:filenameNS];
     return gpx;
 }
@@ -1150,7 +1140,6 @@ colorizationScheme:(int)colorizationScheme
         NSString *path = key;
         
         OAGPXDatabase *gpxDb = OAGPXDatabase.sharedDb;
-        path = [[gpxDb getFileDir:path] stringByAppendingPathComponent:path.lastPathComponent];
 
         OASGpxDataItem *gpx = [gpxDb getNewGPXItem:path];
         
@@ -1565,8 +1554,7 @@ colorizationScheme:(int)colorizationScheme
     
     for (NSString *key in activeGpx.allKeys) {
         OASGpxFile *gpxFile = activeGpx[key];
-        // FIXME: isEqual - need to check mb use gpxFile.path
-        BOOL isCurrentTrack = (doc != nil && [gpxFile.path isEqual:doc]);
+        BOOL isCurrentTrack = (doc != nil && gpxFile == doc);
 
         OASGpxFile *document = nil;
         NSString *filePath = isCurrentTrack ? kCurrentTrack : key;

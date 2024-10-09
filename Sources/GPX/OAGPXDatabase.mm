@@ -431,6 +431,9 @@
 
 - (OASGpxDataItem *_Nullable)getNewGPXItem:(NSString *)filePath
 {
+    if (![@"current_track" isEqualToString:filePath] && ![filePath containsString:OsmAndApp.instance.gpxPath]) {
+        filePath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:filePath];
+    }
     OASKFile *file = [[OASKFile alloc] initWithFilePath:filePath];
     return [[OASGpxDbHelper shared] getItemFile:file];
 }

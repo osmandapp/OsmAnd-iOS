@@ -658,8 +658,6 @@
                         if (!gpx)
                         {
                             gpx = [[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]];
-                          //  file.getTracks().add(track);
-                          //  dataTracks.put(date, file);//[[OAGPXMutableDocument alloc] init];
                             [dataTracks setObject:gpx forKey:date];
                         }
                         [gpx.tracks addObject:track];

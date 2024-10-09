@@ -118,13 +118,14 @@ static QuickActionType *TYPE;
     OAMapViewController *mapVC = mapPanel.mapViewController;
     [mapVC addNewWpt:wpt.point gpxFileName:nil];
     wpt.groups = mapVC.foundWptGroups;
-    // FIXME:
-//    if (wpt.point.wpt != nullptr)
-//    {
-//        [OAGPXDocument fillWpt:wpt.point.wpt usingWpt:wpt.point];
-//        mapVC.foundWpt = p;
-//        [mapVC saveFoundWpt];
-//    }
+    
+    if (wpt.point)
+    {
+        // FIXME:
+       //  [OAGPXDocument fillWpt:wpt.point.wpt usingWpt:wpt.point];
+        mapVC.foundWpt = p;
+        [mapVC saveFoundWpt];
+    }
 }
 
 - (BOOL) isItemExists:(NSString *)name

@@ -1773,13 +1773,12 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
                     [self setMode:DIRECTION_MODE on:YES];
                     [self enterApproximationMode];
                 } else {
-                    // FIXME:
-//                    OAGPXMutableDocument *gpx = [[OAGPXMutableDocument alloc] init];
-//                    [gpx addRoutePoints:points addRoute:NO];
-//                    [self onCloseButtonPressed];
-//                    [targetPointsHelper clearAllPoints:NO];
-//                    OAGPX *track = [OAGPXDatabase.sharedDb getGPXItem:gpx.path];
-//                    [_mapPanel.mapActions enterRoutePlanningModeGivenGpx:gpx path:track.gpxFilePath from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
+                    OASGpxFile *gpx = [[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]];
+                    [gpx addRoutePointsPoints:points addRoute:NO];
+                    [self onCloseButtonPressed];
+                    [targetPointsHelper clearAllPoints:NO];
+                    OASGpxDataItem *track = [OAGPXDatabase.sharedDb getNewGPXItem:gpx.path];
+                    [_mapPanel.mapActions enterRoutePlanningModeGivenGpx:gpx path:track.gpxFilePath from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
                 }
             }
         }

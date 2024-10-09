@@ -19,6 +19,7 @@
 #import "OAGPXDatabase.h"
 #import "OsmAndSharedWrapper.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OAAppVersion.h"
 
 @implementation OASaveGpxRouteAsyncTask
 {
@@ -76,55 +77,58 @@
 
 - (BOOL) doInBackground
 {
-    return YES;
-    // FIXME:
-//    if (_hudRef == nil)
-//        return NO;
-//    BOOL success = YES;
-//    if (_gpxFile == nil)
-//    {
-//        NSString *fileName = _outFile.lastPathComponent;
-//        NSString *trackName = [fileName stringByDeletingPathExtension];
-//        OASGpxFile *gpx = [self generateGpxFile:trackName gpx:[[OAGPXMutableDocument alloc] init]];
-//       // OAGPXDocument *gpx = [self generateGpxFile:trackName gpx:[[OAGPXMutableDocument alloc] init]];
-//        success = [gpx saveTo:_outFile];
-//        gpx.path = _outFile;
-//        _savedGpxFile = gpx;
-//        //            if (showOnMap) {
-//        //                MeasurementToolFragment.showGpxOnMap(app, gpx, true);
-//        //            }
-//    }
-//    else
-//    {
-////        backupFile = FileUtils.backupFile(app, outFile);
-//        NSString *trackName = [_outFile.lastPathComponent stringByDeletingPathExtension];
-//        OASGpxFile *gpx = [self generateGpxFile:trackName gpx:(OASGpxFile *)_gpxFile];
-//        if (gpx.metadata != nil)
-//        {
-//            gpx.metadata = [[OASMetadata alloc] init];
-//            gpx.metadata.extensions = _gpxFile.metadata.extensions;
+    if (_hudRef == nil)
+        return NO;
+    BOOL success = YES;
+    if (_gpxFile == nil)
+    {
+        NSString *fileName = _outFile.lastPathComponent;
+        NSString *trackName = [fileName stringByDeletingPathExtension];
+        
+        OASGpxFile *gpx = [self generateGpxFile:trackName gpx:[[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]]];
+        OASKFile *file = [[OASKFile alloc] initWithFilePath:_outFile];
+        OASKException *exception = [[OASGpxUtilities shared] writeGpxFileFile:file gpxFile:gpx];
+        
+        success = !exception;
+        gpx.path = _outFile;
+        _savedGpxFile = gpx;
+        //            if (showOnMap) {
+        //                MeasurementToolFragment.showGpxOnMap(app, gpx, true);
+        //            }
+    }
+    else
+    {
+//        backupFile = FileUtils.backupFile(app, outFile);
+        NSString *trackName = [_outFile.lastPathComponent stringByDeletingPathExtension];
+        OASGpxFile *gpx = [self generateGpxFile:trackName gpx:(OASGpxFile *)_gpxFile];
+        if (gpx.metadata != nil)
+        {
+            gpx.metadata = [[OASMetadata alloc] init];
+            gpx.metadata.extensions = _gpxFile.metadata.extensions;
+        }
+//        if (!gpx.showCurrentTrack) {
+//            res = GPXUtilities.writeGpxFile(outFile, gpx);
 //        }
-////        if (!gpx.showCurrentTrack) {
-////            res = GPXUtilities.writeGpxFile(outFile, gpx);
-////        }
-//        _savedGpxFile = gpx;
-//        success = [_savedGpxFile saveTo:_outFile];
-////        if (showOnMap) {
-////            MeasurementToolFragment.showGpxOnMap(app, gpx, false);
-////        }
-//    }
-//    if (success)
-//        [self saveGpxToDatabase];
-//    return success;
+        _savedGpxFile = gpx;
+        OASKFile *file = [[OASKFile alloc] initWithFilePath:_outFile];
+        OASKException *exception = [[OASGpxUtilities shared] writeGpxFileFile:file gpxFile:_savedGpxFile];
+        success = !exception;
+//        if (showOnMap) {
+//            MeasurementToolFragment.showGpxOnMap(app, gpx, false);
+//        }
+    }
+    if (success)
+        [self saveGpxToDatabase];
+    return success;
 }
 
 - (void)saveGpxToDatabase
 {
+    OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
+    NSString *gpxFilePath = [OAUtilities getGpxShortPath:_outFile];
+    OASGpxDataItem *oldGpx = [gpxDb getNewGPXItem:_outFile];
     // FIXME:
-//    OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
-//    NSString *gpxFilePath = [OAUtilities getGpxShortPath:_outFile];
-//    OASGpxDataItem *oldGpx = [gpxDb getNewGPXItem:gpxFilePath];
-//    OASDataItem *gpx = [gpxDb buildGpxItem:gpxFilePath title:_savedGpxFile.metadata.name desc:_savedGpxFile.metadata.desc bounds:_savedGpxFile.bounds document:_savedGpxFile fetchNearestCity:YES];
+//    OASGpxDataItem *gpx = [gpxDb buildGpxItem:gpxFilePath title:_savedGpxFile.metadata.name desc:_savedGpxFile.metadata.desc bounds:_savedGpxFile.bounds document:_savedGpxFile fetchNearestCity:YES];
 //    if (oldGpx)
 //    {
 //        gpx.showArrows = oldGpx.showArrows;
@@ -142,8 +146,6 @@
 //        gpx.creationDate = oldGpx.creationDate;
 //    }
 //    [gpxDb updateDataItem:gpx];
-//   // [gpxDb replaceGpxItem:gpx];
-//    //[gpxDb save];
 }
 
 - (OASGpxFile *) generateGpxFile:(NSString *)trackName gpx:(OASGpxFile *)gpx

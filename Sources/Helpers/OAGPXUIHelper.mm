@@ -25,6 +25,7 @@
 #import "OAMapViewController.h"
 #import "OASavingTrackHelper.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OAAppVersion.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -64,9 +65,7 @@
 
 + (OASGpxFile *)makeGpxFromRoute:(OARouteCalculationResult *)route
 {
-    // FIXME:
-    // OAGPXDocument *gpx = [[OAGPXDocument alloc] init];
-    OASGpxFile *gpx = [[OASGpxFile alloc] initWithAuthor:@""];
+    OASGpxFile *gpx = [[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]];
     
     NSArray<CLLocation *> *locations = [route getRouteLocations];
     OASTrack *track = [[OASTrack alloc] init];
@@ -623,7 +622,8 @@
 - (void)openExportForTrack:(OASGpxDataItem *)gpx
                     gpxDoc:(id)gpxDoc
             isCurrentTrack:(BOOL)isCurrentTrack
-          inViewController:(UIViewController *)hostViewController hostViewControllerDelegate:(id)hostViewControllerDelegate
+          inViewController:(UIViewController *)hostViewController
+hostViewControllerDelegate:(id)hostViewControllerDelegate
             touchPointArea:(CGRect)touchPointArea
 {
     _isExportingCurrentTrack = isCurrentTrack;
@@ -647,9 +647,7 @@
                                                      _exportFileName];
 
         [OASavingTrackHelper.sharedInstance saveCurrentTrack:_exportFilePath];
-        // FIXME:
-//        _exportingGpxDoc = OASavingTrackHelper.sharedInstance.currentTrack;
-//        _exportingGpx = [OASavingTrackHelper.sharedInstance getCurrentGPX];
+        _exportingGpxDoc = OASavingTrackHelper.sharedInstance.currentTrack;
     }
     else
     {
@@ -658,17 +656,18 @@
         if (!_exportingGpxDoc || ![_exportingGpxDoc isKindOfClass:OASGpxFile.class])
         {
             NSString *absoluteGpxFilepath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:_exportFileName];
-            //.../Documents/GPX/2023-10-22_11-34_Sun.gpx
-            // FIXME:
-          //  _exportingGpxDoc = [[OASGpxFile alloc] initWithGpxFile:absoluteGpxFilepath];
+            
+            OASKFile *file = [[OASKFile alloc] initWithFilePath:absoluteGpxFilepath];
+            _exportingGpxDoc = [OASGpxUtilities.shared loadGpxFileFile:file];
         }
         else
         {
             _exportingGpxDoc = gpxDoc;
         }
         [OAGPXUIHelper addAppearanceToGpx:_exportingGpxDoc gpxItem:_exportingGpx];
-        // FIXME:
-       // [_exportingGpxDoc saveTo:_exportFilePath];
+        
+        OASKFile *file = [[OASKFile alloc] initWithFilePath:_exportFilePath];
+        [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:_exportingGpxDoc];
     }
 
     _exportController = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:_exportFilePath]];

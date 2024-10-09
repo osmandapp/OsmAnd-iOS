@@ -3512,3 +3512,6 @@
 "track_vertical_exaggeration_description" = "Með því að breyta gildi kvarðans geturðu breytt hæð þrívíddarferilsins.";
 "shared_string_instructions" = "Leiðbeiningar";
 "shared_string_analysis" = "Greining";
+"daynight_mode_day_summary" = "Birtir kortið alltaf með ljósu þema, hentar fyrir góðan sýnileika í dagsbirtu.";
+"daynight_mode_sunrise_sunset_summary" = "Skiptir sjálfkrafa á milli dags- og næturþema út frá staðartímum sólarupprásar og sólarlags.";
+"daynight_mode_night_summary" = "Birtir kortið alltaf með dökku þema, hentar fyrir notkun að næturlagi eða lítilli birtu.";

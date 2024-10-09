@@ -314,15 +314,11 @@
 - (UIImage *)getArrowImage:(UIImage *)fgImage inImage:(UIImage *)bgImage withShadow:(UIImage *)shadow
 {
     UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:bgImage.size];
-    if (renderer)
-    {
-        return [renderer imageWithActions:^(UIGraphicsImageRendererContext * _Nonnull rendererContext) {
-            [shadow drawInRect:CGRectMake(0.0, 0.0, shadow.size.width, shadow.size.height)];
-            [bgImage drawInRect:CGRectMake(0.0, 0.0, bgImage.size.width, bgImage.size.height)];
-            [fgImage drawInRect:CGRectMake(0.0, 0.0, fgImage.size.width, fgImage.size.height)];
-        }];
-    }
-    return nil;
+    return [renderer imageWithActions:^(UIGraphicsImageRendererContext * _Nonnull rendererContext) {
+        [shadow drawInRect:CGRectMake(0.0, 0.0, shadow.size.width, shadow.size.height)];
+        [bgImage drawInRect:CGRectMake(0.0, 0.0, bgImage.size.width, bgImage.size.height)];
+        [fgImage drawInRect:CGRectMake(0.0, 0.0, fgImage.size.width, fgImage.size.height)];
+    }];
 }
 
 #pragma mark - Supporting methods

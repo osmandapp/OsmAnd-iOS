@@ -252,7 +252,7 @@ NSString * const OATrackRecordingAnyConnectedDevice = @"any_connected_device_wri
             CGFloat value = ([OASPointAttributes.sensorTagTemperatureW isEqualToString:tag] || [OASPointAttributes.sensorTagTemperatureA isEqualToString:tag]) ? NAN : 0;
             NSNumber *val = nil;
             BOOL isSpeedSensorTag = [tag isEqualToString:@"speed_sensor"];
-            // FIXME:
+            
             NSDictionary<NSString *, NSString *> *extensions = [(OASWptPt *) point getExtensionsToRead];
             NSString *trackpointextension = extensions[isSpeedSensorTag ? @"speed_sensor" : @"trackpointextension"];
             

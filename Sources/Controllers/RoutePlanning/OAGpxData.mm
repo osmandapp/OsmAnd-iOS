@@ -8,6 +8,7 @@
 
 #import "OAGpxData.h"
 #import "OAGPXDocumentPrimitives.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore/GpxDocument.h>
 
@@ -21,6 +22,15 @@
         if (_gpxFile) {
             // FIXME:
             // _rect = _gpxFile.bounds;
+            
+            // NOTE: variant new code
+//            OASGpxTrackAnalysis *analysis = [self.gpxFile getAnalysisFileTimestamp:0];
+//            double clat = analysis.bottom / 2.0 + analysis.top / 2.0;
+//            double clon = analysis.left / 2.0 + analysis.right / 2.0;
+//            
+//            OAGpxBounds bounds;
+//            bounds.center = CLLocationCoordinate2DMake(clat, clon);
+//            _rect = bounds;
         }
         else
         {

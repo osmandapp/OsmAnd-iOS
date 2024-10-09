@@ -1151,6 +1151,7 @@ colorizationScheme:(int)colorizationScheme
         
         OAGPXDatabase *gpxDb = OAGPXDatabase.sharedDb;
         path = [[gpxDb getFileDir:path] stringByAppendingPathComponent:path.lastPathComponent];
+
         OASGpxDataItem *gpx = [gpxDb getNewGPXItem:path];
         
         OASKFile *file = [[OASKFile alloc] initWithFilePath:path];
@@ -1439,10 +1440,10 @@ colorizationScheme:(int)colorizationScheme
     if (_gpxDocs.allKeys.count > 0)
     {
         QList<OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>> points;
-        QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> >::iterator it;
+       // QHash<QString, std::shared_ptr<const OsmAnd::GpxDocument> >::iterator it;
         
         for (NSString *key in _gpxDocs.allKeys) {
-            auto value = [_gpxDocs objectForKey:key];
+            OASGpxFile *value = [_gpxDocs objectForKey:key];
             if (!value)
                 continue;
 
@@ -1454,11 +1455,15 @@ colorizationScheme:(int)colorizationScheme
                         ? _cachedTracks[filePath][@"gpx"]
                         : key == nil
                                 ? nil/*[[OASavingTrackHelper sharedInstance] getCurrentGPX]*/
-                                : [self getGpxItem:it.key()];
-                for (const auto& waypoint : it.value()->points)
+                : [self getGpxItem:QString::fromNSString(key)];
+                
+                for (OASWptPt *waypoint in value.getAllPoints)
                 {
-                    if (![gpx.hiddenGroups containsObject:waypoint->type.toNSString()])
-                        points.append(waypoint);
+                    if (![gpx.hiddenGroups containsObject:waypoint.type])
+                    {
+                        OsmAnd::GpxDocument::WptPt *wptPt = [self createDocumentWptPtFromWptPt:waypoint];
+                        points.append(wptPt);
+                    }
                 }
             }
         }
@@ -1472,6 +1477,25 @@ colorizationScheme:(int)colorizationScheme
                                                                     self.showCaptions, self.captionStyle, self.captionTopSpace, rasterTileSize, _textScaleFactor));
         [self.mapView addTiledSymbolsProvider:_waypointsMapProvider];
     }
+}
+
+- (OsmAnd::GpxDocument::WptPt *)createDocumentWptPtFromWptPt:(OASWptPt *)oawptPt {
+    auto *wptPt = new OsmAnd::GpxDocument::WptPt();
+
+    wptPt->position = {oawptPt.lat, oawptPt.lon};
+    wptPt->name = QString::fromNSString(oawptPt.name);
+    wptPt->description = QString::fromNSString(oawptPt.desc);
+    wptPt->elevation = oawptPt.ele;
+    wptPt->timestamp = QDateTime::fromMSecsSinceEpoch(oawptPt.time);
+    wptPt->comment = QString::fromNSString(oawptPt.comment);
+    wptPt->type = QString::fromNSString(oawptPt.type);
+    wptPt->horizontalDilutionOfPrecision = oawptPt.hdop;
+    wptPt->verticalDilutionOfPrecision = 0.0;
+    wptPt->speed = oawptPt.speed;
+    wptPt->heading = oawptPt.heading;
+    // wptPt->links = QList<OsmAnd::Ref<Link>>();
+
+    return wptPt;
 }
 
 - (CGFloat)getLineWidth:(NSString *)gpxWidth

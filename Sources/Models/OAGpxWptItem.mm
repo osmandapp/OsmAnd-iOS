@@ -10,6 +10,7 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OAUtilities.h"
 #import "OAFavoritesHelper.h"
+#import "OAPOI.h"
 #import "OsmAndSharedWrapper.h"
 
 @implementation OAGpxWptItem
@@ -42,9 +43,12 @@
     return nil;
     //return [_point getAmenity];
 }
+
 - (void) setAmenity:(OAPOI *)amenity
 {
-    // FIXME:
+    NSDictionary<NSString *, NSString *> *extensions = [amenity toTagValue:PRIVATE_PREFIX osmPrefix:OSM_PREFIX_KEY];
+    [[_point getExtensionsToWrite] addEntriesFromDictionary:extensions];
+    // NOTE: Old Code:
     // [_point setAmenity:amenity];
 }
 

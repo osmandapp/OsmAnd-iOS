@@ -75,7 +75,6 @@
         [p setAddressAddress:address];
         NSDictionary<NSString *, NSString *> *extensions = [poi toTagValue:PRIVATE_PREFIX osmPrefix:OSM_PREFIX_KEY];
         [[p getExtensionsToWrite] addEntriesFromDictionary:extensions];
-       // wpt.getExtensionsToWrite().putAll(amenity.getAmenityExtensions(app.getPoiTypes(), true));
         [p setAmenityOriginNameOriginName:poi.toStringEn];
 
         wpt.color = color;

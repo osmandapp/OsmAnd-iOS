@@ -23,51 +23,31 @@ private enum TrackSortType {
     
     var title: String {
         switch self {
-        case .nearest:
-            return localizedString("shared_string_nearest")
-        case .lastModified:
-            return localizedString("sort_last_modified")
-        case .nameAZ:
-            return localizedString("track_sort_az")
-        case .nameZA:
-            return localizedString("track_sort_za")
-        case .newestDateFirst:
-            return localizedString("newest_date_first")
-        case .oldestDateFirst:
-            return localizedString("oldest_date_first")
-        case .longestDistanceFirst:
-            return localizedString("longest_distance_first")
-        case .shortestDistanceFirst:
-            return localizedString("shortest_distance_first")
-        case .longestDurationFirst:
-            return localizedString("longest_duration_first")
-        case .shorterDurationFirst:
-            return localizedString("shorter_duration_first")
+        case .nearest: localizedString("shared_string_nearest")
+        case .lastModified: localizedString("sort_last_modified")
+        case .nameAZ: localizedString("track_sort_az")
+        case .nameZA: localizedString("track_sort_za")
+        case .newestDateFirst: localizedString("newest_date_first")
+        case .oldestDateFirst: localizedString("oldest_date_first")
+        case .longestDistanceFirst: localizedString("longest_distance_first")
+        case .shortestDistanceFirst: localizedString("shortest_distance_first")
+        case .longestDurationFirst: localizedString("longest_duration_first")
+        case .shorterDurationFirst: localizedString("shorter_duration_first")
         }
     }
     
     var image: UIImage? {
         switch self {
-        case .nearest:
-            return .icCustomNearby
-        case .lastModified:
-            return .icCustomLastModified
-        case .nameAZ:
-            return .icCustomSortNameAscending
-        case .nameZA:
-            return .icCustomSortNameDescending
-        case .newestDateFirst:
-            return .icCustomSortDateNewest
-        case .oldestDateFirst:
-            return .icCustomSortDateOldest
-        case .longestDistanceFirst:
-            return .icCustomSortLongToShort
-        case .shortestDistanceFirst:
-            return .icCustomSortShortToLong
-        case .longestDurationFirst:
-            return .icCustomSortDurationLongToShort
-        case .shorterDurationFirst:
-            return .icCustomSortDurationShortToLong
+        case .nearest: .icCustomNearby
+        case .lastModified: .icCustomLastModified
+        case .nameAZ: .icCustomSortNameAscending
+        case .nameZA: .icCustomSortNameDescending
+        case .newestDateFirst: .icCustomSortDateNewest
+        case .oldestDateFirst: .icCustomSortDateOldest
+        case .longestDistanceFirst: .icCustomSortLongToShort
+        case .shortestDistanceFirst: .icCustomSortShortToLong
+        case .longestDurationFirst: .icCustomSortDurationLongToShort
+        case .shorterDurationFirst: .icCustomSortDurationShortToLong
         }
     }
 }
@@ -88,12 +68,12 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     private var sortTypeForAllTracks: TrackSortType = .lastModified
     private var sortTypeForVisibleTracks: TrackSortType = .lastModified
     private var sortTypeForSearch: TrackSortType = .nameAZ
-    private var allGpxList: [OAGPX] = []
-    private var visibleGpxList: [OAGPX] = []
-    private var recentlyVisibleGpxList: [OAGPX] = []
-    private var filteredGpxList: [OAGPX] = []
-    private var selectedGpxTracks: [OAGPX] = []
-    private var selectedTrack: OAGPX?
+    private var allGpxList: [GpxDataItem] = []
+    private var visibleGpxList: [GpxDataItem] = []
+    private var recentlyVisibleGpxList: [GpxDataItem] = []
+    private var filteredGpxList: [GpxDataItem] = []
+    private var selectedGpxTracks: [GpxDataItem] = []
+    private var selectedTrack: GpxDataItem?
     private var previousSelectedSegmentIndex: Int = 0
     private var isShowingVisibleTracks = true
     private var isSearchActive = false
@@ -303,7 +283,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             cell.selectedBackgroundView = UIView()
             cell.selectedBackgroundView?.backgroundColor = UIColor.groupBg
             cell.titleLabel.text = item.title
-            if let gpx = item.obj(forKey: "gpx") as? OAGPX {
+            if let gpx = item.obj(forKey: "gpx") as? GpxDataItem {
                 cell.descriptionLabel.attributedText = getDescriptionAttributedText(with: getFormattedData(for: gpx))
             }
             
@@ -359,7 +339,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     
     override func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         let item = tableData.item(for: indexPath)
-        let gpx = item.obj(forKey: "gpx") as! OAGPX
+        let gpx = item.obj(forKey: "gpx") as! GpxDataItem
         let menuProvider: UIContextMenuActionProvider = { _ in
             let openAction = UIAction(title: localizedString("shared_string_open"), image: UIImage.icCustomOverview) { [weak self] _ in
                 self?.onTrackOpenClicked(track: gpx)
@@ -432,7 +412,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     private func handleSelectDeselectAllTracks() {
         guard isTracksAvailable else { return }
         let isSelectAll = !areAllTracksSelected()
-        let gpxListToShow: [OAGPX]
+        let gpxListToShow: [GpxDataItem]
         if isSearchActive {
             gpxListToShow = filteredGpxList
         } else if isShowingVisibleTracks {
@@ -485,25 +465,23 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         }
     }
     
-    private func onTrackOpenClicked(track: OAGPX) {
+    private func onTrackOpenClicked(track: GpxDataItem) {
         guard let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty else { return }
-        // FIXME:
-//        rootVC?.mapPanel.openTargetViewWithGPX(fromTracksList: track, navControllerHistory: newCurrentHistory, fromTrackMenu: false, selectedTab: .overviewTab)
+        rootVC?.mapPanel.openTargetViewWithGPX(fromTracksList: track, navControllerHistory: newCurrentHistory, fromTrackMenu: false, selectedTab: .overviewTab)
     }
     
-    private func onTrackAppearenceClicked(track: OAGPX) {
+    private func onTrackAppearenceClicked(track: GpxDataItem) {
         guard let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty else { return }
         let state = OATrackMenuViewControllerState()
         state.openedFromTracksList = true
         state.gpxFilePath = track.gpxFilePath
         state.navControllerHistory = newCurrentHistory
-        // FIXME:
-      //  rootVC?.mapPanel.openTargetView(with: track, trackHudMode: .appearanceHudMode, state: state)
+        rootVC?.mapPanel.openTargetView(withGPX: track, trackHudMode: .appearanceHudMode, state: state)
     }
     
-    private func onTrackNavigationClicked(track: OAGPX) {
+    private func onTrackNavigationClicked(track: GpxDataItem) {
         if track.totalTracks > 1 {
-            if let vc = OATrackSegmentsViewController(filepath: track.absolutePath, isCurrentTrack: false) {
+            if let vc = OATrackSegmentsViewController(filepath: track.file.absolutePath(), isCurrentTrack: false) {
                 vc.startNavigationOnSelect = true
                 rootVC?.mapPanel.closeDashboardLastScreen()
                 navigationController?.popToRootViewController(animated: true)
@@ -513,36 +491,33 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             if let isFollowing = routingHelper?.isFollowingMode(), isFollowing {
                 rootVC?.mapPanel.mapActions.stopNavigationActionConfirm()
             }
-            // FIXME:
-          //  rootVC?.mapPanel.mapActions.enterRoutePlanningMode(given: track, useIntermediatePointsByDefault: true, showDialog: true)
+            rootVC?.mapPanel.mapActions.enterRoutePlanningMode(givenGpx: track, useIntermediatePointsByDefault: true, showDialog: true)
             rootVC?.mapPanel.closeDashboardLastScreen()
             navigationController?.popToRootViewController(animated: true)
         }
     }
     
-    private func onTrackAnalyzeClicked(track: OAGPX) {
+    private func onTrackAnalyzeClicked(track: GpxDataItem) {
         guard let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty else { return }
         let state = OATrackMenuViewControllerState()
         state.navControllerHistory = newCurrentHistory
         state.openedFromTracksList = true
         state.selectedStatisticsTab = .overviewTab
         navigationController?.setNavigationBarHidden(true, animated: true)
-        rootVC?.mapPanel.openTargetViewFromTracksList(withRouteDetailsGraph: track.absolutePath, isCurrentTrack: false, state: state)
+        rootVC?.mapPanel.openTargetViewFromTracksList(withRouteDetailsGraph: track.file.absolutePath(), isCurrentTrack: false, state: state)
     }
     
-    private func onTrackShareClicked(track: OAGPX, touchPointArea: CGRect) {
-        // FIXME:
-//        gpxHelper?.openExport(forTrack: track, gpxDoc: nil, isCurrentTrack: false, in: self, hostViewControllerDelegate: self, touchPointArea: touchPointArea)
+    private func onTrackShareClicked(track: GpxDataItem, touchPointArea: CGRect) {
+        gpxHelper?.openExport(forTrack: track, gpxDoc: nil, isCurrentTrack: false, in: self, hostViewControllerDelegate: self, touchPointArea: touchPointArea)
     }
     
-    private func onTrackUploadToOsmClicked(track: OAGPX) {
-        // FIXME:
-//        if let vc = OAOsmUploadGPXViewConroller(gpxItems: [track]) {
-//            show(vc)
-//        }
+    private func onTrackUploadToOsmClicked(track: GpxDataItem) {
+        if let vc = OAOsmUploadGPXViewConroller(gpxItems: [track]) {
+            show(vc)
+        }
     }
     
-    private func onTrackEditClicked(track: OAGPX) {
+    private func onTrackEditClicked(track: GpxDataItem) {
         guard let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty else { return }
         let state = OATrackMenuViewControllerState()
         state.openedFromTracksList = true
@@ -554,9 +529,8 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         }
     }
     
-    private func onTrackDuplicateClicked(track: OAGPX) {
-        // FIXME:
-//        gpxHelper?.copyGPX(toNewFolder: track.gpxFolderName, renameToNewName: track.gpxFileName, deleteOriginalFile: false, openTrack: false, gpx: track)
+    private func onTrackDuplicateClicked(track: GpxDataItem) {
+        gpxHelper?.copyNewGPX(toNewFolder: track.gpxFolderName, renameToNewName: track.gpxFileName, deleteOriginalFile: false, openTrack: false, gpx: track)
         loadGpxTracks()
         loadVisibleTracks()
         loadRecentlyVisibleTracks()
@@ -565,7 +539,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         delegate?.onVisibleTracksUpdate()
     }
     
-    private func onTrackRenameClicked(track: OAGPX) {
+    private func onTrackRenameClicked(track: GpxDataItem) {
         let gpxFilename = track.gpxFilePath.lastPathComponent().deletingPathExtension()
         let message = localizedString("gpx_enter_new_name") + " " + gpxFilename
         let alert = UIAlertController(title: localizedString("rename_track"), message: message, preferredStyle: .alert)
@@ -576,8 +550,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .default) { [weak self] _ in
             guard let self else { return }
             if let newName = alert.textFields?.first?.text {
-                // FIXME:
-              //  gpxHelper?.renameTrack(track, newName: newName, hostVC: self)
+                gpxHelper?.renameTrackNew(track, newName: newName, hostVC: self)
                 updateData()
                 delegate?.onVisibleTracksUpdate()
             }
@@ -587,16 +560,15 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         present(alert, animated: true)
     }
     
-    private func onTrackMoveClicked(track: OAGPX) {
+    private func onTrackMoveClicked(track: GpxDataItem) {
         selectedTrack = track
-        // FIXME:
-//        if let vc = OASelectTrackFolderViewController(gpx: track) {
-//            vc.delegate = self
-//            present(UINavigationController(rootViewController: vc), animated: true)
-//        }
+        if let vc = OASelectTrackFolderViewController(gpx: track) {
+            vc.delegate = self
+            present(UINavigationController(rootViewController: vc), animated: true)
+        }
     }
     
-    private func onTrackDeleteClicked(track: OAGPX) {
+    private func onTrackDeleteClicked(track: GpxDataItem) {
         let message = localizedString("gpx_remove")
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: localizedString("shared_string_yes"), style: .default) { [weak self] _ in
@@ -642,17 +614,13 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     private func loadGpxTracks() {
-        // FIXME:
-//        if let gpxDatabase = OAGPXDatabase.sharedDb() {
-//            allGpxList = gpxDatabase.gpxList.compactMap { $0 as? OAGPX }
-//                .sorted {
-//                    guard let date1 = $0.importDate, let date2 = $1.importDate else { return false }
-//                    return date1 > date2
-//                }
-//            isTracksAvailable = !allGpxList.isEmpty
-//        } else {
-//            isTracksAvailable = false
-//        }
+        if let gpxDatabase = OAGPXDatabase.sharedDb() {
+            allGpxList = gpxDatabase.getDataItems()
+                .sorted { $0.fileLastUploadedTime > $1.fileLastUploadedTime }
+            isTracksAvailable = !allGpxList.isEmpty
+        } else {
+            isTracksAvailable = false
+        }
     }
     
     private func loadVisibleTracks() {
@@ -682,7 +650,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         !isTracksAvailable || (isShowingVisibleTracks && !isVisibleTracksAvailable && recentlyVisibleGpxList.isEmpty)
     }
     
-    private func getGpxForSelectedRow(at indexPath: IndexPath) -> OAGPX? {
+    private func getGpxForSelectedRow(at indexPath: IndexPath) -> GpxDataItem? {
         if isSearchActive {
             return filteredGpxList[indexPath.row]
         } else {
@@ -812,20 +780,20 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     private func sortTracks() {
-        func sortList(_ list: inout [OAGPX], by sortType: TrackSortType) {
+        func sortList(_ list: inout [GpxDataItem], by sortType: TrackSortType) {
             switch sortType {
             case .nearest:
                 list.sort { distanceToGPX(gpx: $0) < distanceToGPX(gpx: $1) }
             case .lastModified:
-                list.sort { $0.importDate ?? Date.distantPast > $1.importDate ?? Date.distantPast }
+                list.sort { $0.lastModifiedTime > $1.lastModifiedTime }
             case .nameAZ:
                 list.sort { $0.getNiceTitle().localizedCaseInsensitiveCompare($1.getNiceTitle()) == .orderedAscending }
             case .nameZA:
                 list.sort { $0.getNiceTitle().localizedCaseInsensitiveCompare($1.getNiceTitle()) == .orderedDescending }
             case .newestDateFirst:
-                list.sort { $0.creationDate ?? Date.distantPast > $1.creationDate ?? Date.distantPast }
+                list.sort { $0.creationDate > $1.creationDate }
             case .oldestDateFirst:
-                list.sort { $0.creationDate ?? Date.distantPast < $1.creationDate ?? Date.distantPast }
+                list.sort { $0.creationDate < $1.creationDate }
             case .longestDistanceFirst:
                 list.sort { $0.totalDistance > $1.totalDistance }
             case .shortestDistanceFirst:
@@ -847,13 +815,13 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         }
     }
     
-    private func getFormattedData(for gpx: OAGPX) -> (date: String, distance: String, time: String, waypointCount: String, folderName: String, distanceToTrack: String, regionName: String, directionAngle: CGFloat, creationDate: String) {
+    private func getFormattedData(for gpx: GpxDataItem) -> (date: String, distance: String, time: String, waypointCount: String, folderName: String, distanceToTrack: String, regionName: String, directionAngle: CGFloat, creationDate: String) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy"
-        let date = gpx.importDate.map { dateFormatter.string(from: $0) } ?? localizedString("shared_string_not_available")
-        let creationDate = gpx.creationDate.map { dateFormatter.string(from: $0) } ?? localizedString("shared_string_not_available")
+        let date = dateFormatter.string(from: gpx.lastModifiedTime)
+        let creationDate = dateFormatter.string(from: gpx.creationDate)
         let distance = OAOsmAndFormatter.getFormattedDistance(gpx.totalDistance) ?? localizedString("shared_string_not_available")
-        let time = OAOsmAndFormatter.getFormattedTimeInterval(TimeInterval(gpx.timeSpan), shortFormat: true) ?? localizedString("shared_string_not_available")
+        let time = OAOsmAndFormatter.getFormattedTimeInterval(TimeInterval(gpx.timeSpan / 1000), shortFormat: true) ?? localizedString("shared_string_not_available")
         let waypointCount = "\(gpx.wptPoints)"
         let folderName: String
         if let capitalizedFolderName = OAUtilities.capitalizeFirstLetter(gpx.gpxFolderName), !capitalizedFolderName.isEmpty {
@@ -871,15 +839,18 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         }
         
         let regionName: String
-        let gpxLocation = gpx.bounds.center
-        if gpxLocation.latitude != Double.greatestFiniteMagnitude,
-           let worldRegion = OsmAndApp.swiftInstance().worldRegion.find(atLat: gpxLocation.latitude, lon: gpxLocation.longitude) {
+        let analysis = gpx.getAnalysis()!
+        let lat = analysis.bottom / 2.0 + analysis.top / 2.0
+        let lon = analysis.left / 2.0 + analysis.right / 2.0
+        
+        if lat != Double.greatestFiniteMagnitude,
+           let worldRegion = OsmAndApp.swiftInstance().worldRegion.find(atLat: lat, lon: lon) {
             regionName = worldRegion.localizedName ?? worldRegion.nativeName ?? localizedString("shared_string_not_available")
         } else {
             regionName = localizedString("shared_string_not_available")
         }
         
-        let directionAngle = OADistanceAndDirectionsUpdater.getDirectionAngle(from: OsmAndApp.swiftInstance().locationServices?.lastKnownLocation, toDestinationLatitude: gpxLocation.latitude, destinationLongitude: gpxLocation.longitude)
+        let directionAngle = OADistanceAndDirectionsUpdater.getDirectionAngle(from: OsmAndApp.swiftInstance().locationServices?.lastKnownLocation, toDestinationLatitude: lat, destinationLongitude: lon)
         return (date, distance, time, waypointCount, folderName, distanceToTrack, regionName, directionAngle, creationDate)
     }
     
@@ -928,10 +899,10 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     private func createImageAttributedString(named imageName: String,
-                                                                                                               tintColor: UIColor,
-                                                                                                               defaultAttributes: [NSAttributedString.Key: Any],
-                                                                                                               rotate: Bool = false,
-                                                                                                               rotationAngle: CGFloat = 0) -> NSAttributedString? {
+                                             tintColor: UIColor,
+                                             defaultAttributes: [NSAttributedString.Key: Any],
+                                             rotate: Bool = false,
+                                             rotationAngle: CGFloat = 0) -> NSAttributedString? {
         guard let image = UIImage(systemName: imageName)?.withTintColor(tintColor, renderingMode: .alwaysTemplate) else { return nil }
         let attachment = NSTextAttachment()
         var finalImage = image
@@ -951,13 +922,16 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         return NSAttributedString(attachment: attachment)
     }
     
-    private func distanceToGPX(gpx: OAGPX) -> CGFloat {
-        guard let currentLocation = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation,
-              CLLocationCoordinate2DIsValid(gpx.bounds.center) else {
-            return CGFloat.greatestFiniteMagnitude
+    private func distanceToGPX(gpx: GpxDataItem) -> CGFloat {
+        guard let currentLocation = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation else { return  CGFloat.greatestFiniteMagnitude }
+        if let analysis = gpx.getAnalysis() {
+            let clat = analysis.bottom / 2.0 + analysis.top / 2.0
+            let clon = analysis.left / 2.0 + analysis.right / 2.0
+            if CLLocationCoordinate2DIsValid(CLLocationCoordinate2DMake(clat, clon)) {
+                return OADistanceAndDirectionsUpdater.getDistanceFrom(currentLocation, toDestinationLatitude: clat, destinationLongitude: clon)
+            }
         }
-        
-        return OADistanceAndDirectionsUpdater.getDistanceFrom(currentLocation, toDestinationLatitude: gpx.bounds.center.latitude, destinationLongitude: gpx.bounds.center.longitude)
+        return CGFloat.greatestFiniteMagnitude
     }
     
     func updateDistanceAndDirection(_ forceUpdate: Bool) {
@@ -1124,8 +1098,7 @@ extension MapSettingsGpxViewController: OASelectTrackFolderDelegate {
     func onFolderSelected(_ selectedFolderName: String?) {
         if let selectedFolderName {
             if selectedTrack != nil {
-                // FIXME:
-//                gpxHelper?.copyGPX(toNewFolder: selectedFolderName, renameToNewName: nil, deleteOriginalFile: true, openTrack: false, gpx: selectedTrack)
+                gpxHelper?.copyGPX(toNewFolder: selectedFolderName, renameToNewName: nil, deleteOriginalFile: true, openTrack: false, gpx: selectedTrack)
                 updateData()
                 delegate?.onVisibleTracksUpdate()
             }

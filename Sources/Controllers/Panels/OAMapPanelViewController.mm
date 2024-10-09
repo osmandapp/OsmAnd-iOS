@@ -2046,7 +2046,6 @@ typedef enum
     OAAppSettings *settings = [OAAppSettings sharedManager];
     for (NSString *filePath in settings.mapSettingVisibleGpx.get)
     {
-        // FIXME:
         OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:filePath];
         NSString *path = gpx.file.absolutePath;
         if ([[NSFileManager defaultManager] fileExistsAtPath:path])

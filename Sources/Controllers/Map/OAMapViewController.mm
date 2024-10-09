@@ -287,6 +287,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     _moveTouchLocations = [NSMutableArray array];
     _zoomTouchLocations = [NSMutableArray array];
     _rotateTouchLocations = [NSMutableArray array];
+    
+    _gpxDocsRec = [NSMutableArray array];
+    _gpxDocsTemp = [NSMutableArray array];
 
     _mapLayerChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                              withHandler:@selector(onMapLayerChanged)
@@ -2904,14 +2907,14 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         
         [helper runSyncBlock:^{
             OASGpxFile *doc = helper.currentTrack;
-            if (doc != nullptr && [helper hasData])
+            if (doc && [helper hasData])
             {
                 _recTrackShowing = YES;
                 
                 [_gpxDocsRec removeAllObjects];
                 [_gpxDocsRec addObject:doc];
 
-                NSMutableDictionary<NSString *, OASGpxFile *> *gpxDocs;
+                NSMutableDictionary<NSString *, OASGpxFile *> *gpxDocs = [NSMutableDictionary dictionary];
                 gpxDocs[kCurrentTrack] = doc;
                 [_mapLayers.gpxRecMapLayer refreshGpxTracks:gpxDocs reset:NO];
             }
@@ -3067,7 +3070,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     BOOL found = NO;
     NSMutableSet *groupSet = [NSMutableSet set];
    // QSet<QString> groups;
-    NSMutableSet<NSString *> *groups;
+    NSMutableSet<NSString *> *groups = [NSMutableSet set];
     
     for (OASWptPt *wptItem in helper.currentTrack.getAllPoints)
     {
@@ -3804,7 +3807,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (NSDictionary<NSString *, NSNumber *> *) getGpxColors
 {
     const auto &gpxColorsMap = _mapPresentationEnvironment->getGpxColors();
-    NSMutableDictionary<NSString *, NSNumber *> *result = [NSMutableDictionary new];
+    NSMutableDictionary<NSString *, NSNumber *> *result = [NSMutableDictionary dictionary];
     QHashIterator<QString, int> it(gpxColorsMap);
     while (it.hasNext()) {
         it.next();
@@ -3820,7 +3823,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     auto gpxWidthMap = _mapPresentationEnvironment->getGpxWidth();
     if (gpxWidthMap.isEmpty())
         gpxWidthMap = _app.defaultRenderer->getGpxWidth();
-    NSMutableDictionary<NSString *, NSArray<NSNumber *> *> *result = [NSMutableDictionary new];
+    NSMutableDictionary<NSString *, NSArray<NSNumber *> *> *result = [NSMutableDictionary dictionary];
     QHashIterator<QString, QList<int>> it(gpxWidthMap);
     while (it.hasNext()) {
         it.next();

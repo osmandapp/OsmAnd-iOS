@@ -3355,7 +3355,7 @@
 "shared_string_local" = "Lokal";
 "map_settings_weather_temp_air" = "Lufttemperatur";
 "map_settings_weather_temp_water" = "Wassertemperatur";
-"rendering_attr_showDirtbikeTrails_name" = "Dirtbike-Trails anzeigen";
+"rendering_attr_showDirtbikeTrails_name" = "Dirtbike-Strecken";
 "rendering_attr_showDirtbikeTrails_description" = "Dirtbike-Trails anzeigen";
 "shared_string_all_icons" = "Alle Icons";
 "show_along_the_route" = "Entlang der Route anzeigen";

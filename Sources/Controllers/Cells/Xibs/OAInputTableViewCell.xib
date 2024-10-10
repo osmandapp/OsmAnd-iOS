@@ -140,10 +140,10 @@
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GDl-Q7-rAW" userLabel="Clear Button">
-                                        <rect key="frame" x="6" y="18" width="30" height="30"/>
+                                        <rect key="frame" x="12" y="21" width="24" height="24"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="30" id="ib4-Lr-zFr"/>
-                                            <constraint firstAttribute="height" constant="30" id="kgZ-Lq-1zd"/>
+                                            <constraint firstAttribute="width" constant="24" id="ib4-Lr-zFr"/>
+                                            <constraint firstAttribute="height" constant="24" id="kgZ-Lq-1zd"/>
                                         </constraints>
                                         <color key="tintColor" red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="calibratedRGB"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -156,9 +156,9 @@
                                 <constraints>
                                     <constraint firstItem="GDl-Q7-rAW" firstAttribute="centerY" secondItem="Shn-7v-F63" secondAttribute="centerY" id="77s-EW-VSd"/>
                                     <constraint firstItem="UiA-N1-vfN" firstAttribute="centerX" secondItem="Shn-7v-F63" secondAttribute="centerX" id="CP6-7I-Pjt"/>
-                                    <constraint firstItem="GDl-Q7-rAW" firstAttribute="leading" secondItem="Shn-7v-F63" secondAttribute="leading" constant="6" id="EVw-tE-ZQI"/>
                                     <constraint firstItem="UiA-N1-vfN" firstAttribute="centerY" secondItem="Shn-7v-F63" secondAttribute="centerY" id="FbJ-Zc-Ars"/>
                                     <constraint firstAttribute="width" constant="36" id="Zot-Ef-gTT"/>
+                                    <constraint firstAttribute="trailing" secondItem="GDl-Q7-rAW" secondAttribute="trailing" id="ujF-Y0-V90"/>
                                 </constraints>
                             </view>
                         </subviews>

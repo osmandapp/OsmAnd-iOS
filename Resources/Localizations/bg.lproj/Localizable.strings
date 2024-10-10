@@ -772,7 +772,6 @@
 "context_menu_item_edit_waypoint" = "Редактиране на отправна точка от GPX";
 "quick_action_add_parking" = "Добавяне на място за паркиране";
 "parking_place" = "Паркинг място";
-
 "quick_action_map_style" = "Стил на картата";
 "quick_action_map_overlay" = "Променяне на насложената карта";
 "route_add_start_point" = "Добавяне на начална цел";
@@ -1132,7 +1131,7 @@
 "rendering_value_bicycle_name" = "Велосипед";
 "rendering_value_translucent_lightgreen_name" = "Полупрозрачно светло-зелено";
 "rendering_attr_contourLines_name" = "Показване на контурни линии";
-"rendering_attr_showAccess_name" = "Ограничения за достъп и пътни такси";
+"rendering_attr_showAccess_name" = "Ограничения на достъпа и пътни такси";
 "rendering_attr_surface_dirt_name" = "Кал";
 "routing_attr_driving_style_prefer_unpaved_name" = "Предпочитане на селски пътища";
 "routing_attr_no_new_routing_description" = "За изграждане на маршрути да не се използват алгоритмите, въведени в издание 1.9.";

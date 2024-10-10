@@ -3515,3 +3515,11 @@
 "daynight_mode_day_summary" = "Birtir kortið alltaf með ljósu þema, hentar fyrir góðan sýnileika í dagsbirtu.";
 "daynight_mode_sunrise_sunset_summary" = "Skiptir sjálfkrafa á milli dags- og næturþema út frá staðartímum sólarupprásar og sólarlags.";
 "daynight_mode_night_summary" = "Birtir kortið alltaf með dökku þema, hentar fyrir notkun að næturlagi eða lítilli birtu.";
+"distance_during_navigation_footer" = "Veldu hvernig upplýsingar um vegalengdir eru birtar í leiðsagnarhlutum (vegalengd að punkti, næsta beygja, akreinar).\n\nVeldu “Nákvæmt” fyrir nákvæmar tölur eða “Rúnna upp” fyrir betri læsileika.";
+"weather_wind_animation_enable_descr" = "Virkja til að skoða vindalag með hreyfingu á kortinu.";
+"osmand_depelopment_use_3d_icons" = "Nota þrívíddartákn fyrir staðsetningar";
+"track_3d_empty_view_description" = "Skoðaðu ferilinn í gagnvirkri þrívídd! Sjáðu fyrir þér hæð, hraða og fleira beint á landakortinu.";
+"average_glide_ratio_time_interval_desc" = "Birtir meðal-rennslishlutfall eða lóðréttan hraða fyrir stillt tímabil.";
+"missing_maps_ignore_details" = "Ná sóttu landakortin yfir leiðina þína? Ferðastu eftir þeim ef þú kannast við svæðið.";
+"calculate_online_title" = "Listinn yfir kort sem vantar byggist á leið eftir beinni línu. Til að fá nákvæman lista yfir kort, getur OsmAnd for-reiknað leiðina þína á netinu";
+"daynight_mode_app_theme_summary" = "Skjár kortsins aðlagar sig aðalþema forritsins - dagsljóshamur fyrir ljóst þema og næturhamur fyrir dökkt þema";

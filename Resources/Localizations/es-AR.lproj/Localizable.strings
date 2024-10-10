@@ -3399,7 +3399,7 @@
 "quick_action_toggle_preference" = "Un botón que cambia las preferencias.";
 "map_settings_weather_temp_air" = "Temperatura del aire";
 "map_settings_weather_temp_water" = "Temperatura del agua";
-"rendering_attr_showDirtbikeTrails_name" = "Mostrar senderos para motocross";
+"rendering_attr_showDirtbikeTrails_name" = "Senderos para motos de enduro";
 "rendering_attr_showDirtbikeTrails_description" = "Muestra senderos para motocross";
 "navigation_position" = "Ubicación al navegar";
 "resting_position_icon" = "Icono de la ubicación al estar en reposo";

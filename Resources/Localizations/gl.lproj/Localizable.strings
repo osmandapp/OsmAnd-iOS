@@ -961,7 +961,7 @@
 "rendering_attr_highway_class_track_grade5_name" = "Grao 5";
 "routing_attr_allow_advanced_name" = "Permitir rotas avanzadas";
 "routing_attr_piste_type_nordic_name" = "Esquí de travesía e nórdico";
-"rendering_attr_showCycleRoutes_name" = "Amosar ciclovías";
+"rendering_attr_showCycleRoutes_name" = "Amosar os carrís bici (ciclovías)";
 "rendering_value_translucent_pink_name" = "Rosa translúcido";
 "rendering_attr_hideNonVehicleHighways_name" = "Estradas que non sexan para vehículos";
 "routing_attr_avoid_sett_description" = "Evitar pavimento empedrado e lastrado";

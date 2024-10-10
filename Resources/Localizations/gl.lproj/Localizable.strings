@@ -781,7 +781,7 @@
 "routing_attr_difficulty_preference_name" = "Dificultade preferida";
 "rendering_value_translucent_blue_name" = "Azul translúcido";
 "rendering_value_thin_name" = "Delgado";
-"rendering_attr_showSurfaceGrade_name" = "Amosar calidade das estradas";
+"rendering_attr_showSurfaceGrade_name" = "Amosar a calidade das estradas";
 "routing_attr_difficulty_preference_description" = "Preferir rotas desta dificultade, aínda que o trazado sobre pistas máis duras ou máis doadas segue a ser posíbel se son máis curtas.";
 "routing_attr_driving_style_speed_name" = "Rutas máis curtas";
 "routing_attr_avoid_unpaved_description" = "Evitar estradas sen pavimentar";
@@ -804,7 +804,7 @@
 "routing_attr_avoid_ferries_name" = "Sen ferris";
 "rendering_value_white_name" = "Branco";
 "rendering_attr_surface_paved_name" = "Pavimentado";
-"rendering_attr_showSurfaces_name" = "Amosar superficie das estradas";
+"rendering_attr_showSurfaces_name" = "Amosar a superficie das estradas";
 "routeInfo_tracktype_name" = "Firmeza da superficie";
 "rendering_attr_roadStyle_name" = "Estilo das estradas";
 "rendering_attr_contourDensity_name" = "Densidade da curva do nivel";

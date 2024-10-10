@@ -3419,3 +3419,6 @@
 "lon" = "Log";
 "quick_action_need_to_add_item_to_list" = "Adicionar ao menos um item à lista nas configurações de \'Ação rápida\'";
 "quick_action_terrain_color_scheme" = "Esquema de cores do terreno";
+"OsmAnd Maps" = "OsmAnd Maps";
+"day_short" = "D";
+"altitude" = "Altitude";

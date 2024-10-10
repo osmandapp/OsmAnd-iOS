@@ -148,7 +148,7 @@ static const NSInteger kColorsSection = 1;
     LeftIconRightStackTitleDescriptionButtonView *_trackView3DEmptyView;
 }
 
-- (instancetype)initWithGpx:(OASGpxDataItem *)gpx state:(OATrackMenuViewControllerState *)state {
+- (instancetype)initWithGpx:(OASTrackItem *)gpx state:(OATrackMenuViewControllerState *)state {
     self = [super initWithGpx:gpx];
     if (self)
     {
@@ -157,7 +157,7 @@ static const NSInteger kColorsSection = 1;
     return self;
 }
 
-- (instancetype)initWithGpx:(OASGpxDataItem *)gpx tracks:(NSArray<OASGpxDataItem *> *)tracks state:(OATrackMenuViewControllerState *)state {
+- (instancetype)initWithGpx:(OASTrackItem *)gpx tracks:(NSArray<OASGpxDataItem *> *)tracks state:(OATrackMenuViewControllerState *)state {
     self = [super initWithGpx:gpx];
     if (self)
     {        

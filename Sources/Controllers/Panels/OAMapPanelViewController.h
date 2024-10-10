@@ -15,7 +15,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OAMapViewController, OAFavoriteItem, OAGpxWptItem, OASGpxDataItem, OADestination, OAPointDescription, OAHistoryItem, OAAddress, OARTarg, OAToolbarViewController, OAMapActions, OAMapWidgetRegistry, OAMapHudViewController, OABaseScrollableHudViewController, OAApplicationMode, OASGpxFile, OASGpxTrackAnalysis, OARoutePlanningHudViewController, OATrackMenuViewControllerState, OAObservable, OARTargetPoint, OATargetMenuViewControllerState, OAPOIUIFilter, OASGpxDataItem, OASGpxFile;
+@class OAMapViewController, OAFavoriteItem, OAGpxWptItem, OASGpxDataItem, OADestination, OAPointDescription, OAHistoryItem, OAAddress, OARTarg, OAToolbarViewController, OAMapActions, OAMapWidgetRegistry, OAMapHudViewController, OABaseScrollableHudViewController, OAApplicationMode, OASGpxFile, OASGpxTrackAnalysis, OARoutePlanningHudViewController, OATrackMenuViewControllerState, OAObservable, OARTargetPoint, OATargetMenuViewControllerState, OAPOIUIFilter, OASGpxDataItem, OASGpxFile, OASTrackItem;
 
 @interface OAMapPanelViewController : UIViewController<OATargetPointViewDelegate>
 
@@ -137,19 +137,19 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu saveState:(BOOL)saveState;
 
 - (void) openRecordingTrackTargetView;
-- (void) openTargetViewWithGPX:(OASGpxDataItem *)item;
-- (void) openTargetViewWithGPX:(OASGpxDataItem *)item selectedTab:(EOATrackMenuHudTab)selectedTab selectedStatisticsTab:(EOATrackMenuHudSegmentsStatisticsTab)selectedStatisticsTab openedFromMap:(BOOL)openedFromMap;
+- (void) openTargetViewWithGPX:(OASTrackItem *)item;
+- (void) openTargetViewWithGPX:(OASTrackItem *)item selectedTab:(EOATrackMenuHudTab)selectedTab selectedStatisticsTab:(EOATrackMenuHudSegmentsStatisticsTab)selectedStatisticsTab openedFromMap:(BOOL)openedFromMap;
 
-- (void) openTargetViewWithGPX:(OASGpxDataItem *)item
+- (void) openTargetViewWithGPX:(OASTrackItem *)item
                   trackHudMode:(EOATrackHudMode)trackHudMode
                          state:(OATrackMenuViewControllerState *)state;
 
-- (void)openTargetViewWithGPX:(OASGpxDataItem *)item
+- (void)openTargetViewWithGPX:(OASTrackItem *)item
                         items:(nullable NSArray<OASGpxDataItem *> *)items
                  trackHudMode:(EOATrackHudMode)trackHudMode
                         state:(OATrackMenuViewControllerState *)state;
 
-- (void)openTargetViewWithGPXFromTracksList:(OASGpxDataItem *)item
+- (void)openTargetViewWithGPXFromTracksList:(OASTrackItem *)item
                        navControllerHistory:(NSArray<UIViewController *> *)navControllerHistory
                               fromTrackMenu:(BOOL)fromTrackMenu
                                 selectedTab:(EOATrackMenuHudTab)selectedTab;
@@ -172,7 +172,7 @@ NS_ASSUME_NONNULL_BEGIN
                                             isCurrentTrack:(BOOL)isCurrentTrack
                                                      state:(OATrackMenuViewControllerState *)state;
 - (void) openTargetViewWithMovableTarget:(OATargetPoint *)targetPoint;
-- (void) openTargetViewWithNewGpxWptMovableTarget:(OASGpxDataItem *)gpx
+- (void) openTargetViewWithNewGpxWptMovableTarget:(OASTrackItem *)gpx
                                  menuControlState:(OATargetMenuViewControllerState *)menuControlState;
 - (void) openTargetViewWithTransportRouteDetails:(NSInteger)routeIndex showFullScreen:(BOOL)showFullScreeen;
 - (void) openTargetViewWithDownloadMapSource:(BOOL)pushed;
@@ -256,16 +256,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) setMapViewController:(nullable OAMapViewController *)mapViewController;
 - (void)detachFromCarPlayWindow;
 
-- (void)openNewTargetViewFromTracksListWithRouteDetailsGraph:(OASGpxFile *)gpxFile
-                                            isCurrentTrack:(BOOL)isCurrentTrack
-                                                     state:(OATrackMenuViewControllerState *)state;
-
-
-//- (void)openTargetViewWithNewGPXFromTracksList:(OASGpxDataItem *)item
-//                       navControllerHistory:(NSArray<UIViewController *> *)navControllerHistory
-//                              fromTrackMenu:(BOOL)fromTrackMenu
-//                                   selectedTab:(EOATrackMenuHudTab)selectedTab;
-
+- (void)openNewTargetViewFromTracksListWithRouteDetailsGraph:(OASTrackItem *)trackItem
+                                                       state:(OATrackMenuViewControllerState *)state;
 @end
  
 NS_ASSUME_NONNULL_END

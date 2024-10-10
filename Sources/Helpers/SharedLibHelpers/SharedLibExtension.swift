@@ -36,29 +36,7 @@ extension PointAttributes {
     static let sensorTagDistance = OSMAND_EXTENSIONS_PREFIX + "bike_distance_sensor"
     static let pointElevation = "ele" // point_elevation
     static let pointSpeed = "speed" // point_speed
-
-//    static let DEV_RAW_ZOOM = "raw_zoom"
-//    static let DEV_ANIMATED_ZOOM = "animated_zoom"
-//    static let DEV_INTERPOLATION_OFFSET_N = "offset"
-//
-//    static let POINT_SPEED = "point_speed"
-//    static let POINT_ELEVATION = "point_elevation"
     
     static let GPXTPX_PREFIX = "gpxtpx:"
     static let OSMAND_EXTENSIONS_PREFIX = "osmand:"
 }
-
-//const val POINT_SPEED = "point_speed"
-//const val POINT_ELEVATION = "point_elevation"
-
-// Old code
-//    static let pointElevation = "ele"
-//    static let pointSpeed = "speed"
-//    static let sensorTagHeartRate = "hr"
-//    static let sensorTagSpeed = "speed_sensor"
-//    static let sensorTagCadence = "cad"
-//    static let sensorTagBikePower = "power"
-//    static let sensorTagTemperatureW = "wtemp"
-//    static let sensorTagTemperatureA = "atemp"
-//    static let sensorTagDistance = "bike_distance_sensor"
-

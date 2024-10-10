@@ -571,55 +571,7 @@
     }];
 }
 
-- (void)openNewExportForTrack:(OASGpxDataItem *)gpx
-            isCurrentTrack:(BOOL)isCurrentTrack
-          inViewController:(UIViewController *)hostViewController hostViewControllerDelegate:(id)hostViewControllerDelegate
-            touchPointArea:(CGRect)touchPointArea
-{
-    _isExportingCurrentTrack = isCurrentTrack;
-    _exportingHostVC = hostViewController;
-    _exportingHostVCDelegate = hostViewControllerDelegate;
-    if (isCurrentTrack)
-    {
-        NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
-        [fmt setDateFormat:@"yyyy-MM-dd"];
-
-        NSDateFormatter *simpleFormat = [[NSDateFormatter alloc] init];
-        [simpleFormat setDateFormat:@"HH-mm_EEE"];
-
-        _exportFileName = [NSString stringWithFormat:@"%@_%@",
-                                                     [fmt stringFromDate:[NSDate date]],
-                                                     [simpleFormat stringFromDate:[NSDate date]]];
-        _exportFilePath = [NSString stringWithFormat:@"%@/%@.gpx",
-                                                     NSTemporaryDirectory(),
-                                                     _exportFileName];
-        // FIXME:
-       // /Data/tmp//2024-09-30_15-02_Пн.gpx
-        [OASavingTrackHelper.sharedInstance saveCurrentTrack:_exportFilePath];
-//        _exportingGpxDoc = OASavingTrackHelper.sharedInstance.currentTrack;
-//        _exportingGpx = [OASavingTrackHelper.sharedInstance getCurrentGPX];
-    }
-    else
-    {
-        _exportFileName = gpx.gpxFilePath;
-        _exportFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:gpx.gpxFileName];
-// FIXME:
-//        [OAGPXUIHelper addAppearanceToGpx:_exportingGpxDoc gpxItem:_exportingGpx];
-//        [_exportingGpxDoc saveTo:_exportFilePath];
-    }
-    
-    NSString *absoluteGpxFilepath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:_exportFileName];
-    
-    [[NSFileManager defaultManager] copyItemAtPath:absoluteGpxFilepath toPath:_exportFilePath error:nil];
-
-    _exportController = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:_exportFilePath]];
-    _exportController.UTI = @"com.topografix.gpx";
-    _exportController.delegate = self;
-    _exportController.name = _exportFileName;
-    [_exportController presentOptionsMenuFromRect:touchPointArea inView:_exportingHostVC.view animated:YES];
-}
-
-- (void)openExportForTrack:(OASGpxDataItem *)gpx
+- (void)openExportForTrack:(OASGpxDataItem *)trackItem
                     gpxDoc:(id)gpxDoc
             isCurrentTrack:(BOOL)isCurrentTrack
           inViewController:(UIViewController *)hostViewController
@@ -629,7 +581,7 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
     _isExportingCurrentTrack = isCurrentTrack;
     _exportingHostVC = hostViewController;
     _exportingHostVCDelegate = hostViewControllerDelegate;
-    _exportingGpx = gpx;
+    _exportingGpx = trackItem;
     _exportingGpxDoc = gpxDoc;
     if (isCurrentTrack)
     {
@@ -651,8 +603,8 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
     }
     else
     {
-        _exportFileName = gpx.gpxFileName;
-        _exportFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:gpx.gpxFileName];
+        _exportFileName = trackItem.gpxFileName;
+        _exportFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:trackItem.gpxFileName];
         if (!_exportingGpxDoc || ![_exportingGpxDoc isKindOfClass:OASGpxFile.class])
         {
             NSString *absoluteGpxFilepath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:_exportFileName];
@@ -737,7 +689,9 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
         {
             [_exportingHostVC dismissViewControllerAnimated:YES completion:^{
                 [OARootViewController.instance.mapPanel targetHideContextPinMarker];
-                [OARootViewController.instance.mapPanel openTargetViewWithGPX:gpx];
+                auto trackItem = [[OASTrackItem alloc] initWithFile:gpx.file];
+                trackItem.dataItem = gpx;
+                [OARootViewController.instance.mapPanel openTargetViewWithGPX:trackItem];
             }];
         }
     }
@@ -833,7 +787,9 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
         {
             [_exportingHostVC dismissViewControllerAnimated:YES completion:^{
                 [OARootViewController.instance.mapPanel targetHideContextPinMarker];
-                [OARootViewController.instance.mapPanel openTargetViewWithGPX:gpx];
+                auto trackItem = [[OASTrackItem alloc] initWithFile:gpx.file];
+                trackItem.dataItem = gpx;
+                [OARootViewController.instance.mapPanel openTargetViewWithGPX:trackItem];
             }];
         }
     }

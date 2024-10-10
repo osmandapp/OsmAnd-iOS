@@ -261,7 +261,9 @@
     OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:[OAUtilities getGpxShortPath:self.wpt.docPath]];
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     [mapPanel targetHideMenu:0 backButtonClicked:YES onComplete:^{
-        [mapPanel openTargetViewWithGPX:gpx selectedTab:EOATrackMenuHudOverviewTab selectedStatisticsTab:EOATrackMenuHudSegmentsStatisticsOverviewTab openedFromMap:YES];
+        auto trackItem = [[OASTrackItem alloc] initWithFile:gpx.file];
+        trackItem.dataItem = gpx;
+        [mapPanel openTargetViewWithGPX:trackItem selectedTab:EOATrackMenuHudOverviewTab selectedStatisticsTab:EOATrackMenuHudSegmentsStatisticsOverviewTab openedFromMap:YES];
     }];
 }
 

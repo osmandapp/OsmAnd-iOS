@@ -10,7 +10,7 @@
 #import <CoreLocation/CoreLocation.h>
 
 @class OARouteCalculationResult, OAPOI;
-@class OASTrkSegment, OASGpxFile, OASTrack, OASGpxTrackAnalysis, OASGpxDataItem;
+@class OASTrkSegment, OASGpxFile, OASTrack, OASGpxTrackAnalysis, OASGpxDataItem, OASTrackItem;
 
 @protocol OATrackSavingHelperUpdatableDelegate <NSObject>
 
@@ -78,11 +78,6 @@
         deleteOriginalFile:(BOOL)deleteOriginalFile
                  openTrack:(BOOL)openTrack
                           gpx:(OASGpxDataItem *)gpx;
-
-- (void)openNewExportForTrack:(OASGpxDataItem *)gpx
-            isCurrentTrack:(BOOL)isCurrentTrack
-          inViewController:(UIViewController *)hostViewController hostViewControllerDelegate:(id)hostViewControllerDelegate
-               touchPointArea:(CGRect)touchPointArea;
 
 - (void)renameTrackNew:(OASGpxDataItem *)gpx
                newName:(NSString *)newName

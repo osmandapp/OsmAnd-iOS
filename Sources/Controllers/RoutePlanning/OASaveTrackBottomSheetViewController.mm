@@ -96,7 +96,11 @@
     NSString *gpxFilePath = [OAUtilities getGpxShortPath:_fileName];
     OASGpxDataItem *gpx = [OAGPXDatabase.sharedDb getNewGPXItem:gpxFilePath];
     if (gpx)
-        [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpx];
+    {
+        auto trackItem = [[OASTrackItem alloc] initWithFile:gpx.file];
+        trackItem.dataItem = gpx;
+        [[OARootViewController instance].mapPanel openTargetViewWithGPX:trackItem];
+    }
 }
 
 - (IBAction)createNewTrackButtonPressed:(id)sender

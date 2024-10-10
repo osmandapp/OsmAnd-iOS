@@ -182,7 +182,9 @@ static UIViewController *parentController;
                 if (openGpxView)
                 {
                     [self doPush];
-                    [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpx];
+                    auto trackItem = [[OASTrackItem alloc] initWithFile:gpx.file];
+                    trackItem.dataItem = gpx;
+                    [[OARootViewController instance].mapPanel openTargetViewWithGPX:trackItem];
                 }
             });
         };
@@ -196,7 +198,9 @@ static UIViewController *parentController;
                 if (openGpxView)
                 {
                     [self doPush];
-                    [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpx];
+                    auto trackItem = [[OASTrackItem alloc] initWithFile:gpx.file];
+                    trackItem.dataItem = gpx;
+                    [[OARootViewController instance].mapPanel openTargetViewWithGPX:trackItem];
                 }
             });
         };
@@ -300,7 +304,7 @@ static UIViewController *parentController;
     OASKFile *file = [[OASKFile alloc] initWithFilePath:_importUrl.path];
     OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
     
-    _doc = gpxFile;//[[OAGPXDocument alloc] initWithGpxFile:_importUrl.path];
+    _doc = gpxFile;
     if (_doc)
     {
         // _2024-07-30_.gpx
@@ -342,7 +346,9 @@ static UIViewController *parentController;
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self doPush];
-            [[OARootViewController instance].mapPanel openTargetViewWithGPX:item];
+            auto trackItem = [[OASTrackItem alloc] initWithFile:file];
+            trackItem.dataItem = item;
+            [[OARootViewController instance].mapPanel openTargetViewWithGPX:trackItem];
         });
     }
 }

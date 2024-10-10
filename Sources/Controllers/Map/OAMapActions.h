@@ -9,14 +9,14 @@
 #import <Foundation/Foundation.h>
 
 @class OAPointDescription, OATargetPoint, OAApplicationMode;
-@class OASGpxFile, OASGpxDataItem;
+@class OASGpxFile, OASGpxDataItem, OASTrackItem;
 
 @interface OAMapActions : NSObject
 
 - (void)enterRoutePlanningMode:(CLLocation *)from fromName:(OAPointDescription *)fromName;
 - (void)enterRoutePlanningMode:(CLLocation *)from fromName:(OAPointDescription *)fromName checkDisplayedGpx:(BOOL)shouldCheck;
-- (void)enterRoutePlanningModeGivenGpx:(OASGpxDataItem *)gpxFile useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault showDialog:(BOOL)showDialog;
-- (void)enterRoutePlanningModeGivenGpx:(OASGpxDataItem *)gpxFile from:(CLLocation *)from fromName:(OAPointDescription *)fromName
+- (void)enterRoutePlanningModeGivenGpx:(OASTrackItem *)gpxFile useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault showDialog:(BOOL)showDialog;
+- (void)enterRoutePlanningModeGivenGpx:(OASTrackItem *)gpxFile from:(CLLocation *)from fromName:(OAPointDescription *)fromName
          useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault showDialog:(BOOL)showDialog;
 - (void)enterRoutePlanningModeGivenGpx:(OASGpxFile *)gpxFile path:(NSString *)path from:(CLLocation *)from fromName:(OAPointDescription *)fromName
          useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault showDialog:(BOOL)showDialog;

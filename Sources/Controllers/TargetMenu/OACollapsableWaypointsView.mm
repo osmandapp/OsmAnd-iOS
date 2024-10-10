@@ -153,22 +153,27 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
     if (_type == EOAWaypointGPX)
     {
-        OASGpxDataItem *gpx = nil;
+        OASTrackItem *trackItem = nil;
         if (_docPath)
         {
             OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
             NSString *gpxFilePath = [OAUtilities getGpxShortPath:_docPath];
-            gpx = [gpxDb getNewGPXItem:gpxFilePath];
+            auto gpx = [gpxDb getNewGPXItem:gpxFilePath];
+            trackItem = [[OASTrackItem alloc] initWithFile:gpx.file];
+            trackItem.dataItem = gpx;
         }
         else
         {
-            // FIXME:
-           // gpx = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
+            OASGpxFile *gpxFile = [OASavingTrackHelper sharedInstance].currentTrack;
+            if (gpxFile)
+            {
+                trackItem = [[OASTrackItem alloc] initWithGpxFile:gpxFile];
+            }
         }
         
-        if (gpx)
+        if (trackItem)
         {
-             [mapPanel openTargetViewWithGPX:gpx];
+             [mapPanel openTargetViewWithGPX:trackItem];
         }
     }
     else if (_type == EOAWaypointFavorite)

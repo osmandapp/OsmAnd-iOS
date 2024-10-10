@@ -720,7 +720,12 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
             else
             {
                 state.openedFromTrackMenu = NO;
-                [_mapPanel openTargetViewWithGPX:[[OAGPXDatabase sharedDb] getNewGPXItem:_fileName]
+                auto gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:_fileName];
+                auto trackItem = [[OASTrackItem alloc] initWithFile:gpx.file];
+                trackItem.dataItem = gpx;
+
+              
+                [_mapPanel openTargetViewWithGPX:trackItem
                                     trackHudMode:EOATrackMenuHudMode
                                            state:state];
             }

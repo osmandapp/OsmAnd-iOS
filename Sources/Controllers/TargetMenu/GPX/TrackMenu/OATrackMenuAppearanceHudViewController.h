@@ -8,7 +8,7 @@
 
 #import "OABaseTrackMenuHudViewController.h"
 
-@class OATrackMenuViewControllerState, OAColoringType, OASGpxDataItem;
+@class OATrackMenuViewControllerState, OAColoringType, OASTrackItem, OASGpxDataItem;
 
 @interface OATrackAppearanceItem : NSObject
 
@@ -28,7 +28,7 @@
 
 @interface OATrackMenuAppearanceHudViewController : OABaseTrackMenuHudViewController
 
-- (instancetype)initWithGpx:(OASGpxDataItem *)gpx state:(OATrackMenuViewControllerState *)state;
-- (instancetype)initWithGpx:(OASGpxDataItem *)gpx tracks:(NSArray<OASGpxDataItem *> *)tracks state:(OATrackMenuViewControllerState *)state;
+- (instancetype)initWithGpx:(OASTrackItem *)gpx state:(OATrackMenuViewControllerState *)state;
+- (instancetype)initWithGpx:(OASTrackItem *)gpx tracks:(NSArray<OASGpxDataItem *> *)tracks state:(OATrackMenuViewControllerState *)state;
 
 @end

@@ -129,7 +129,11 @@
     CLLocation *loc = [[CLLocation alloc] initWithLatitude:analysis.locationEnd.getLatitude
                                                  longitude:analysis.locationEnd.getLongitude];
     [[OATargetPointsHelper sharedInstance] navigateToPoint:loc updateRoute:YES intermediate:-1];
-    [OARootViewController.instance.mapPanel.mapActions enterRoutePlanningModeGivenGpx:info.gpx
+    
+    OASTrackItem *trackItem = [[OASTrackItem alloc] initWithFile:info.gpx.file];
+    trackItem.dataItem = info.gpx;
+    
+    [OARootViewController.instance.mapPanel.mapActions enterRoutePlanningModeGivenGpx:trackItem
                                                                                  from:nil
                                                                              fromName:nil
                                                        useIntermediatePointsByDefault:NO

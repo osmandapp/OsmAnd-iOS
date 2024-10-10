@@ -283,8 +283,8 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             cell.selectedBackgroundView = UIView()
             cell.selectedBackgroundView?.backgroundColor = UIColor.groupBg
             cell.titleLabel.text = item.title
-            if let gpx = item.obj(forKey: "gpx") as? GpxDataItem {
-                cell.descriptionLabel.attributedText = getDescriptionAttributedText(with: getFormattedData(for: gpx))
+            if let gpx = item.obj(forKey: "gpx") as? TrackItem {
+                cell.descriptionLabel.attributedText = getDescriptionAttributedText(with: getFormattedData(for: gpx.dataItem!))
             }
             
             let iconName = item.iconName ?? "ic_custom_trip"
@@ -339,7 +339,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     
     override func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         let item = tableData.item(for: indexPath)
-        let gpx = item.obj(forKey: "gpx") as! GpxDataItem
+        let gpx = item.obj(forKey: "gpx") as! TrackItem
         let menuProvider: UIContextMenuActionProvider = { _ in
             let openAction = UIAction(title: localizedString("shared_string_open"), image: UIImage.icCustomOverview) { [weak self] _ in
                 self?.onTrackOpenClicked(track: gpx)
@@ -465,12 +465,12 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         }
     }
     
-    private func onTrackOpenClicked(track: GpxDataItem) {
+    private func onTrackOpenClicked(track: TrackItem) {
         guard let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty else { return }
         rootVC?.mapPanel.openTargetViewWithGPX(fromTracksList: track, navControllerHistory: newCurrentHistory, fromTrackMenu: false, selectedTab: .overviewTab)
     }
     
-    private func onTrackAppearenceClicked(track: GpxDataItem) {
+    private func onTrackAppearenceClicked(track: TrackItem) {
         guard let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty else { return }
         let state = OATrackMenuViewControllerState()
         state.openedFromTracksList = true
@@ -479,9 +479,9 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         rootVC?.mapPanel.openTargetView(withGPX: track, trackHudMode: .appearanceHudMode, state: state)
     }
     
-    private func onTrackNavigationClicked(track: GpxDataItem) {
+    private func onTrackNavigationClicked(track: TrackItem) {
         if track.totalTracks > 1 {
-            if let vc = OATrackSegmentsViewController(filepath: track.file.absolutePath(), isCurrentTrack: false) {
+            if let vc = OATrackSegmentsViewController(filepath: track.dataItem?.file.absolutePath(), isCurrentTrack: false) {
                 vc.startNavigationOnSelect = true
                 rootVC?.mapPanel.closeDashboardLastScreen()
                 navigationController?.popToRootViewController(animated: true)
@@ -491,33 +491,32 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             if let isFollowing = routingHelper?.isFollowingMode(), isFollowing {
                 rootVC?.mapPanel.mapActions.stopNavigationActionConfirm()
             }
+            
             rootVC?.mapPanel.mapActions.enterRoutePlanningMode(givenGpx: track, useIntermediatePointsByDefault: true, showDialog: true)
             rootVC?.mapPanel.closeDashboardLastScreen()
             navigationController?.popToRootViewController(animated: true)
         }
     }
     
-    private func onTrackAnalyzeClicked(track: GpxDataItem) {
+    private func onTrackAnalyzeClicked(track: TrackItem) {
         guard let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty else { return }
         let state = OATrackMenuViewControllerState()
         state.navControllerHistory = newCurrentHistory
         state.openedFromTracksList = true
         state.selectedStatisticsTab = .overviewTab
         navigationController?.setNavigationBarHidden(true, animated: true)
-        rootVC?.mapPanel.openTargetViewFromTracksList(withRouteDetailsGraph: track.file.absolutePath(), isCurrentTrack: false, state: state)
+        rootVC?.mapPanel.openTargetViewFromTracksList(withRouteDetailsGraph: track.dataItem?.file.absolutePath() ?? "", isCurrentTrack: false, state: state)
     }
     
-    private func onTrackShareClicked(track: GpxDataItem, touchPointArea: CGRect) {
-        gpxHelper?.openExport(forTrack: track, gpxDoc: nil, isCurrentTrack: false, in: self, hostViewControllerDelegate: self, touchPointArea: touchPointArea)
+    private func onTrackShareClicked(track: TrackItem, touchPointArea: CGRect) {
+        gpxHelper?.openExport(forTrack: track.dataItem, gpxDoc: nil, isCurrentTrack: false, in: self, hostViewControllerDelegate: self, touchPointArea: touchPointArea)
     }
     
-    private func onTrackUploadToOsmClicked(track: GpxDataItem) {
-        if let vc = OAOsmUploadGPXViewConroller(gpxItems: [track]) {
-            show(vc)
-        }
+    private func onTrackUploadToOsmClicked(track: TrackItem) {
+        show(OAOsmUploadGPXViewConroller(gpxItems: [track]))
     }
     
-    private func onTrackEditClicked(track: GpxDataItem) {
+    private func onTrackEditClicked(track: TrackItem) {
         guard let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty else { return }
         let state = OATrackMenuViewControllerState()
         state.openedFromTracksList = true
@@ -529,8 +528,8 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         }
     }
     
-    private func onTrackDuplicateClicked(track: GpxDataItem) {
-        gpxHelper?.copyNewGPX(toNewFolder: track.gpxFolderName, renameToNewName: track.gpxFileName, deleteOriginalFile: false, openTrack: false, gpx: track)
+    private func onTrackDuplicateClicked(track: TrackItem) {
+        gpxHelper?.copyNewGPX(toNewFolder: track.gpxFolderName, renameToNewName: track.gpxFileName, deleteOriginalFile: false, openTrack: false, gpx: track.dataItem)
         loadGpxTracks()
         loadVisibleTracks()
         loadRecentlyVisibleTracks()
@@ -539,7 +538,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         delegate?.onVisibleTracksUpdate()
     }
     
-    private func onTrackRenameClicked(track: GpxDataItem) {
+    private func onTrackRenameClicked(track: TrackItem) {
         let gpxFilename = track.gpxFilePath.lastPathComponent().deletingPathExtension()
         let message = localizedString("gpx_enter_new_name") + " " + gpxFilename
         let alert = UIAlertController(title: localizedString("rename_track"), message: message, preferredStyle: .alert)
@@ -550,7 +549,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .default) { [weak self] _ in
             guard let self else { return }
             if let newName = alert.textFields?.first?.text {
-                gpxHelper?.renameTrackNew(track, newName: newName, hostVC: self)
+                gpxHelper?.renameTrackNew(track.dataItem, newName: newName, hostVC: self)
                 updateData()
                 delegate?.onVisibleTracksUpdate()
             }
@@ -560,15 +559,15 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         present(alert, animated: true)
     }
     
-    private func onTrackMoveClicked(track: GpxDataItem) {
-        selectedTrack = track
+    private func onTrackMoveClicked(track: TrackItem) {
+        selectedTrack = track.dataItem
         if let vc = OASelectTrackFolderViewController(gpx: track) {
             vc.delegate = self
             present(UINavigationController(rootViewController: vc), animated: true)
         }
     }
     
-    private func onTrackDeleteClicked(track: GpxDataItem) {
+    private func onTrackDeleteClicked(track: TrackItem) {
         let message = localizedString("gpx_remove")
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: localizedString("shared_string_yes"), style: .default) { [weak self] _ in

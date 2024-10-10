@@ -181,7 +181,7 @@
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *backButtonLeadingConstraint;
 
-@property (nonatomic) OASGpxDataItem *gpx;
+@property (nonatomic) OASTrackItem *gpx;
 @property (nonatomic) BOOL isShown;
 @property (nonatomic) NSArray<OAGPXTableSectionData *> *tableData;
 
@@ -192,7 +192,7 @@
     CGFloat _cachedYViewPort;
 }
 
-- (instancetype)initWithGpx:(OASGpxDataItem *)gpx
+- (instancetype)initWithGpx:(OASTrackItem *)gpx
 {
     self = [self initWithNibName:[self getNibName] bundle:nil];
     if (self)
@@ -203,7 +203,7 @@
         _savingHelper = [OASavingTrackHelper sharedInstance];
         _mapPanelViewController = [OARootViewController instance].mapPanel;
         _mapViewController = _mapPanelViewController.mapViewController;
-        _isCurrentTrack = gpx == nil || !gpx.gpxFileName || gpx.gpxFileName.length == 0 || [gpx.gpxTitle isEqualToString:OALocalizedString(@"shared_string_currently_recording_track")];
+        _isCurrentTrack = gpx.isShowCurrentTrack;
         [self updateGpxData:gpx == nil updateDocument:YES];
         if (!_analysis)
             [self updateAnalysis];
@@ -219,7 +219,7 @@
 
 - (void)updateGpxData:(BOOL)replaceGPX updateDocument:(BOOL)updateDocument
 {
-    if (!_isShown && !_gpx.isTempTrack)
+    if (!_isShown && !_gpx.dataItem.isTempTrack)
         [self changeTrackVisible];
 
     if (updateDocument)
@@ -231,7 +231,7 @@
         }
         else
         {
-            NSString *gpxFullPath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:_gpx.gpxFilePath];
+            NSString *gpxFullPath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:_gpx.dataItem.gpxFilePath];
             
             OASGpxFile *gpx = [[OASelectedGPXHelper instance] getGpxFileFor:gpxFullPath];
             if (!gpx)
@@ -244,18 +244,18 @@
     }
     [self updateAnalysis];
 
-    if (!_isCurrentTrack && _gpx && _gpx.nearestCity.length == 0 && _analysis && _analysis.locationStart)
+    if (!_isCurrentTrack && _gpx && _gpx.dataItem.nearestCity.length == 0 && _analysis && _analysis.locationStart)
     {
         auto locationStart = _analysis.locationStart;
         
         OAPOI *nearestCity = [OAGPXUIHelper searchNearestCity:CLLocationCoordinate2DMake(locationStart.lat, locationStart.lon)];
-        _gpx.nearestCity = nearestCity ? nearestCity.nameLocalized : @"";
+        _gpx.dataItem.nearestCity = nearestCity ? nearestCity.nameLocalized : @"";
 
         OAGPXDatabase *db = [OAGPXDatabase sharedDb];
-        OASGpxDataItem *gpx = [db getNewGPXItem:_gpx.gpxFilePath];
+        OASGpxDataItem *gpx = [db getNewGPXItem:_gpx.dataItem.gpxFilePath];
         if (gpx)
         {
-            gpx.nearestCity = _gpx.nearestCity;
+            gpx.nearestCity = _gpx.dataItem.nearestCity;
             [db updateDataItem:gpx];
         }
     }
@@ -315,7 +315,7 @@
         }
         else
         {
-            [self.settings hideGpx:@[self.gpx.gpxFilePath] update:YES];
+            [self.settings hideGpx:@[self.gpx.dataItem.gpxFilePath] update:YES];
         }
     }
     else
@@ -327,7 +327,7 @@
         }
         else
         {
-            [self.settings showGpx:@[self.gpx.gpxFilePath] update:YES];
+            [self.settings showGpx:@[self.gpx.dataItem.gpxFilePath] update:YES];
         }
     }
 

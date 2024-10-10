@@ -219,7 +219,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
             guard let resourceItem = getResource(resourceId) else { return }
             guard let cell = getOrCreateCell(resourceId) else { return }
             guard let fullSize = resourceItem.formatedSizePkg() else { return }
-            guard let downloadedSize = resourceItem.formatedDownloadedSizePkg(progress) else { return }
+            guard let downloadedSize = resourceItem.formatedDownloadedSizePkg(progress, addZero: true) else { return }
             let subtitle = String(format: localizedString("downloaded_bytes"), downloadedSize, fullSize)
             cell.descriptionLabel.text = subtitle
         }

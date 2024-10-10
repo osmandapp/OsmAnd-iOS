@@ -79,15 +79,10 @@ final class DownloadingListHelper: NSObject, DownloadingCellResourceHelperDelega
     }
     
     private func calculateAllDownloadingsCellProgress() -> Double {
-        var currentProgress = 0.0
-        var wholeProgress = 0.0
-        
-        for task in getDownloadingTasks() {
-            currentProgress += Double(task.progressCompleted)
-            wholeProgress += 1
+        if let downloadingTask = getDownloadingTasks().first(where: { $0.state == .running }) {
+            return Double(downloadingTask.progressCompleted)
         }
-        
-        return wholeProgress > 0 ? (currentProgress / wholeProgress) : 0
+        return 0
     }
     
     // MARK: - Downloading cell progress observer's methods

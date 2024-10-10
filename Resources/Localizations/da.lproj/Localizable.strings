@@ -136,7 +136,7 @@
 "gpx_elev_range" = "Højdeinterval";
 "gpx_updown" = "Op/ned";
 "gpx_uphills_total" = "Opad i alt";
-"shared_string_currently_recording_track" = "Optager spor";
+"shared_string_currently_recording_track" = "Igangværende sporoptagelse";
 "track_stop_rec" = "Stop optagelse";
 "gpx_start_new_segment" = "Start nyt segment";
 "save_current_track" = "Gem det aktuelle spor";

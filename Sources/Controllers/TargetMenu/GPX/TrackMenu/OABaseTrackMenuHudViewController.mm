@@ -264,8 +264,8 @@
     {
         if (_isCurrentTrack)
         {
-           // FIXME:
-          //  _gpx = [_savingHelper getCurrentGPX];
+            // FIXME:
+           // _gpx =_savingHelper.currentTrack;
         }
         else if (_doc)
         {

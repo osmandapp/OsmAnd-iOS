@@ -695,8 +695,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
         exts[CALENDAR_EXTENSION] = @"true";
 
     pt.extensions = exts;
-    // FIXME:
-    //[pt setAmenity:[self getAmenity]];
+    [pt setAmenity:[self getAmenity]];
 
     pt.name = self.getName;
     pt.desc = self.getDescription;
@@ -724,8 +723,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     [fp setDescription:pt.desc];
     [fp setComment:pt.comment];
     [fp setAmenityOriginName:pt.getAmenityOriginName];
-    // FIXME:
-   // [fp setAmenity:[pt getAmenity]];
+    [fp setAmenity:[pt getAmenity]];
     
     // TODO: sync with Android
 

@@ -1922,8 +1922,7 @@ typedef enum
     else if ([self.targetMenuView.targetPoint.targetObj isKindOfClass:OAGpxWptItem.class])
     {
         OAGpxWptItem *wptItem = self.targetMenuView.targetPoint.targetObj;
-        // FIXME:
-      //  poi = [wptItem.point getAmenity];
+        poi = [wptItem.point getAmenity];
     }
     return poi;
 }

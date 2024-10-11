@@ -951,7 +951,6 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         }
     }
     
-    // FIXME: isCurrentTrack
     private func onTrackAnalyzeClicked(_ track: TrackItem?, isCurrentTrack: Bool) {
         var trackItem = track
         if trackItem == nil, let gpxFile = savingHelper.currentTrack {

@@ -118,10 +118,49 @@
     return _gpxDocument;
 }
 
+- (NSArray<NSDictionary<NSString *, NSString *> *> *)getWaypointCategoriesWithAllData:(BOOL)withDefaultCategory
+{
+    NSMapTable<NSString *, NSDictionary *> *map = [NSMapTable new];
+    for (OASWptPt *point in _gpxDocument.getAllPoints)
+    {
+        NSMutableDictionary<NSString *, NSString *> *categories = [NSMutableDictionary new];
+        NSString *title = point.category == nil ? @"" : point.category;
+        categories[@"title"] = title;
+        NSString *color = point.category == nil ? @"" : UIColorFromRGBA([point getColor]).toHexARGBString;
+        NSString *count = @"1";
+        categories[@"count"] = count;
+
+        BOOL emptyCategory = title.length == 0;
+        if (!emptyCategory)
+        {
+            NSDictionary<NSString *, NSString *> *existing = [map objectForKey:title];
+            if (existing)
+            {
+                count = [NSString stringWithFormat:@"%i", existing[@"count"].intValue + 1];
+                color = existing[@"color"];
+                categories[@"count"] = count;
+                categories[@"color"] = color;
+            }
+
+            if (!existing || (existing[@"color"].length == 0 && color.length != 0))
+                categories[@"color"] = color;
+
+            [map setObject:categories forKey:title];
+        }
+        else if (withDefaultCategory)
+        {
+            categories[@"title"] = title;
+            categories[@"color"] = color;
+            categories[@"count"] = [NSString stringWithFormat:@"%i", [[map objectForKey:title][@"count"] intValue] + 1];
+            [map setObject:categories forKey:title];
+        }
+    }
+    return map.objectEnumerator.allObjects;
+}
+
 - (NSArray<NSDictionary<NSString *, NSString *> *> *)getGroups
 {
-    // FIXME:
-    NSArray<NSDictionary<NSString *, NSString *> *> *groups = [NSArray array];/* [_gpxDocument getWaypointCategoriesWithAllData:YES];*/
+    NSArray<NSDictionary<NSString *, NSString *> *> *groups = [self getWaypointCategoriesWithAllData:YES];
 
     if (_newGroupTitle)
     {
@@ -164,11 +203,31 @@
     return groups;
 }
 
+- (NSDictionary<NSString *, NSString *> *)getWaypointCategoriesWithColors:(BOOL)withDefaultCategory
+{
+    NSMutableDictionary<NSString *, NSString *> *categories = [NSMutableDictionary new];
+    for (OASWptPt *point in _gpxDocument.getAllPoints)
+    {
+        NSString *title = point.category == nil ? @"" : point.category;
+        NSString *color = point.category == nil ? @"" :  UIColorFromRGBA([point getColor]).toHexARGBString;
+        BOOL emptyCategory = title.length == 0;
+        if (!emptyCategory)
+        {
+            NSString *existingColor = categories[title];
+            if (!existingColor || (existingColor.length == 0 && color.length != 0))
+                categories[title] = color;
+        }
+        else if (withDefaultCategory)
+        {
+            categories[title] = color;
+        }
+    }
+    return categories;
+}
+
 - (NSDictionary<NSString *, NSString *> *)getGroupsWithColors
 {
-    // FIXME:
-    NSDictionary<NSString *, NSString *> *groups = [NSDictionary dictionary];
-   // NSDictionary<NSString *, NSString *> *groups = [_gpxDocument getWaypointCategoriesWithColors:NO];
+    NSDictionary<NSString *, NSString *> *groups = [self getWaypointCategoriesWithColors:NO];
 
     if (_newGroupTitle)
     {

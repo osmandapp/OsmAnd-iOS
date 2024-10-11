@@ -848,9 +848,7 @@ final class TravelObfHelper : NSObject {
     func createTitle(name: String) -> String {
         OAUtilities.capitalizeFirstLetter(name)
     }
-    
 }
-
 
 final class GpxFileReader {
     

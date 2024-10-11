@@ -102,14 +102,22 @@
 - (NSString *) formatedSizePkg
 {
     OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
-    return [NSByteCountFormatter stringFromByteCount:res.sizePkg countStyle:NSByteCountFormatterCountStyleFile];
+    return [self formatSize:res.sizePkg addZero:NO];
 }
 
-- (NSString *) formatedDownloadedSizePkg:(float)progress
+- (NSString *) formatedDownloadedSizePkg:(float)progress addZero:(BOOL)addZero
 {
     OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
     long long downloadedSizePkg = ((long long) res.sizePkg * progress);
-    return [NSByteCountFormatter stringFromByteCount:downloadedSizePkg countStyle:NSByteCountFormatterCountStyleFile];
+    return [self formatSize:downloadedSizePkg addZero:YES];
+}
+
+- (NSString *) formatSize:(long long)bytes addZero:(BOOL)addZero
+{
+    NSByteCountFormatter *formatter = [[NSByteCountFormatter alloc] init];
+    formatter.zeroPadsFractionDigits = addZero;
+    formatter.countStyle = NSByteCountFormatterCountStyleFile;
+    return [formatter stringFromByteCount:bytes];
 }
 
 - (UIImage *) icon

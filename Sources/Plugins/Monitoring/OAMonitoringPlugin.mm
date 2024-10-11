@@ -333,7 +333,7 @@
 
 - (NSString *) getDescription
 {
-    return [NSString stringWithFormat:NSLocalizedString(@"record_plugin_description", nil), k_docs_plugin_trip_recording];
+    return [NSString stringWithFormat:OALocalizedString(@"record_plugin_description", nil), k_docs_plugin_trip_recording];
 }
 
 - (BOOL) isLiveMonitoringEnabled

@@ -8,7 +8,7 @@
 
 #import "OARouteImporter.h"
 #import "OAGPXDocumentPrimitives.h"
-#import "OsmAndSharedWrapper.h"
+//#import "OsmAndSharedWrapper.h"
 
 #include <routeDataResources.h>
 #include <routeSegmentResult.h>
@@ -145,21 +145,22 @@
 - (std::vector<std::shared_ptr<RouteSegmentResult>>) collectRouteSegments:(const std::shared_ptr<RoutingIndex>&)region resources:(std::shared_ptr<RouteDataResources> &)resources segment:(OASTrkSegment *)segment
 {
     std::vector<std::shared_ptr<RouteSegmentResult>> route;
-    for (OASGpxUtilitiesRouteSegment *routeSegment in segment.routeSegments)
-    {
-        auto object = std::make_shared<RouteDataObject>(region);
-        auto segmentResult = std::make_shared<RouteSegmentResult>(object, _leftSide);
-		auto bundle = std::make_shared<RouteDataBundle>(resources, routeSegment.toStringBundle);
-        try
-        {
-            segmentResult->readFromBundle(bundle);
-            route.push_back(segmentResult);
-        }
-        catch (const std::exception &ex)
-        {
-            NSLog(@"%s", ex.what());
-        }
-    }
+    // FIXME:
+//    for (OASGpxUtilitiesRouteSegment *routeSegment in segment.routeSegments)
+//    {
+//        auto object = std::make_shared<RouteDataObject>(region);
+//        auto segmentResult = std::make_shared<RouteSegmentResult>(object, _leftSide);
+//		auto bundle = std::make_shared<RouteDataBundle>(resources, routeSegment.toStringBundle);
+//        try
+//        {
+//            segmentResult->readFromBundle(bundle);
+//            route.push_back(segmentResult);
+//        }
+//        catch (const std::exception &ex)
+//        {
+//            NSLog(@"%s", ex.what());
+//        }
+//    }
     return route;
 }
 

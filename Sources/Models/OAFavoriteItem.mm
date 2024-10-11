@@ -694,7 +694,6 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     if (self.getCalendarEvent)
         exts[CALENDAR_EXTENSION] = @"true";
 
-    pt.extensions = exts;
     [pt setAmenity:[self getAmenity]];
 
     pt.name = self.getName;

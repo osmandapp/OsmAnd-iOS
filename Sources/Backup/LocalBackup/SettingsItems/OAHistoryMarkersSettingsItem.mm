@@ -153,7 +153,6 @@
         [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z"];
         exts[@"visited_date"] = [dateFormatter stringFromDate:historyItem.date];
 
-        wpt.extensions = exts;
         [doc addPointPoint:wpt];
     }
     return doc;

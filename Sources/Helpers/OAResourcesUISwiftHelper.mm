@@ -114,22 +114,10 @@
 
 - (NSString *) formatSize:(long long)bytes addZero:(BOOL)addZero
 {
-    NSString *formattedSize = [NSByteCountFormatter stringFromByteCount:bytes countStyle:NSByteCountFormatterCountStyleFile];
-    if (addZero)
-    {
-        NSArray<NSString *> *components = [formattedSize componentsSeparatedByString:@" "];
-        NSString *numberPart = components[0];
-        if (![numberPart containsString:@","] && ![numberPart containsString:@"."])
-        {
-            NSString *newNumberPart = [numberPart stringByAppendingString:@",0"];
-            formattedSize = [formattedSize stringByReplacingOccurrencesOfString:numberPart withString:newNumberPart];
-        }
-        else if ([numberPart containsString:@"."])
-        {
-            formattedSize = [formattedSize stringByReplacingOccurrencesOfString:@"." withString:@","];
-        }
-    }
-    return formattedSize;
+    NSByteCountFormatter *formatter = [[NSByteCountFormatter alloc] init];
+    formatter.zeroPadsFractionDigits = addZero;
+    formatter.countStyle = NSByteCountFormatterCountStyleFile;
+    return [formatter stringFromByteCount:bytes];
 }
 
 - (UIImage *) icon

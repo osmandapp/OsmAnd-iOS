@@ -29,6 +29,7 @@
 #import "GeneratedAssetSymbols.h"
 #import "OAUtilities.h"
 #import "OAAppVersion.h"
+#import "OAResourcesUISwiftHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -897,11 +898,9 @@ typedef enum
     dispatch_async(dispatch_get_main_queue(), ^{
         if (_indexItems.count > 0 && [_indexItems[0].resourceId.toNSString() isEqualToString:[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""]])
         {
-            NSMutableString *progressStr = [NSMutableString string];
             uint64_t size = _indexItems[0].size;
-            [progressStr appendString:[self.byteCountFormatter stringFromByteCount:(size * [value floatValue])]];
-            [progressStr appendString:@"/"];
-            [progressStr appendString:[NSByteCountFormatter stringFromByteCount:size countStyle:NSByteCountFormatterCountStyleFile]];
+            float progress = [value floatValue];
+            NSString *progressStr = [OAResourcesUISwiftHelper formatedDownloadingProgressString:size progress:progress addZero:YES combineViaSlash:YES];
             [_btnGoToMap setTitle:[OALocalizedString(@"downloading") stringByAppendingFormat:@" %@", progressStr] forState:UIControlStateNormal];
             [_progress1 setProgress:[value floatValue]];
         }

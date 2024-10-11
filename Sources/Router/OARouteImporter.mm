@@ -145,7 +145,7 @@
 - (std::vector<std::shared_ptr<RouteSegmentResult>>) collectRouteSegments:(const std::shared_ptr<RoutingIndex>&)region resources:(std::shared_ptr<RouteDataResources> &)resources segment:(OASTrkSegment *)segment
 {
     std::vector<std::shared_ptr<RouteSegmentResult>> route;
-    for (OARouteSegment *routeSegment in segment.routeSegments)
+    for (OASGpxUtilitiesRouteSegment *routeSegment in segment.routeSegments)
     {
         auto object = std::make_shared<RouteDataObject>(region);
         auto segmentResult = std::make_shared<RouteSegmentResult>(object, _leftSide);
@@ -166,12 +166,14 @@
 - (void) collectRouteTypes:(const std::shared_ptr<RoutingIndex>&)region segment:(OASTrkSegment *)segment
 {
     int i = 0;
-    for (OARouteType *routeType in segment.routeTypes)
+    for (OASGpxUtilitiesRouteType *routeType in segment.routeTypes)
 	{
-		auto bundle = routeType.toStringBundle;
-        const auto t = bundle->getString("t", "");
-        const auto v = bundle->getString("v", "");
-        region->initRouteEncodingRule(i++, t, v);
+        OASStringBundle *bundle = routeType.toStringBundle;
+        
+        NSString *t = [bundle getStringKey:@"t" defaultValue:@""];
+        NSString *v = [bundle getStringKey:@"v" defaultValue:@""];
+       
+        region->initRouteEncodingRule(i++, std::string([t UTF8String]), std::string([v UTF8String]));
     }
 }
 

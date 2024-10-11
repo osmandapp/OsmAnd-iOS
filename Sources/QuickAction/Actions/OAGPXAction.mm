@@ -17,7 +17,6 @@
 #import "OsmAndApp.h"
 #import "OAGpxWptItem.h"
 #import "OAGPXDocumentPrimitives.h"
-#import "OAGPXDocument.h"
 #import "OAValueTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAInputTableViewCell.h"

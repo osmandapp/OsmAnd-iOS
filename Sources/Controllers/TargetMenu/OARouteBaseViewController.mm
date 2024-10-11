@@ -677,13 +677,13 @@
     if (gpx)
     {
         OABBox routeBBox;
+        auto rect = gpx.getRect;
         
-        // FIXME:
-      //  OAGpxBounds gpxBounds = gpx.bounds;
-//        routeBBox.top = gpxBounds.topLeft.latitude;
-//        routeBBox.bottom = gpxBounds.bottomRight.latitude;
-//        routeBBox.left = gpxBounds.topLeft.longitude;
-//        routeBBox.right = gpxBounds.bottomRight.longitude;
+        routeBBox.top = rect.top;
+        routeBBox.left = rect.left;
+        routeBBox.bottom = rect.bottom;
+        routeBBox.right = rect.right;
+
         [self centerMapOnBBox:routeBBox];
     }
 }

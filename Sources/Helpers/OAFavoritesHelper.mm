@@ -15,7 +15,6 @@
 #import "OAUtilities.h"
 #import "OADefaultFavorite.h"
 #import "OAAppSettings.h"
-#import "OAGPXMutableDocument.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAParkingPositionPlugin.h"
 #import "OAPlugin.h"

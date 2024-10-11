@@ -20,17 +20,12 @@
     if (self) {
         _gpxFile = gpxFile;
         if (_gpxFile) {
-            // FIXME:
-            // _rect = _gpxFile.bounds;
-            
-            // NOTE: variant new code
-//            OASGpxTrackAnalysis *analysis = [self.gpxFile getAnalysisFileTimestamp:0];
-//            double clat = analysis.bottom / 2.0 + analysis.top / 2.0;
-//            double clon = analysis.left / 2.0 + analysis.right / 2.0;
-//            
-//            OAGpxBounds bounds;
-//            bounds.center = CLLocationCoordinate2DMake(clat, clon);
-//            _rect = bounds;
+            auto rect = gpxFile.getRect;
+            OAGpxBounds bounds;
+            bounds.topLeft = CLLocationCoordinate2DMake(rect.top, rect.left);
+            bounds.bottomRight = CLLocationCoordinate2DMake(rect.bottom, rect.right);
+            bounds.center = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
+            _rect = bounds;
         }
         else
         {

@@ -2176,10 +2176,24 @@ typedef enum
 - (void) targetGoToGPX
 {
     if (_activeTargetObj) {
-        [self displayGpxOnMap:_activeTargetObj];
-    } else {
-        // FIXME:
-       //[self displayGpxOnMap:[[OASavingTrackHelper sharedInstance] currentTrack]];
+        OASTrackItem *trackItem = _activeTargetObj;
+        if ([trackItem isKindOfClass:[OASTrackItem class]])
+        {
+            OASGpxFile *gpxFile = [[OASavingTrackHelper sharedInstance] currentTrack];
+            if (!trackItem.isShowCurrentTrack)
+            {
+                gpxFile = [OASGpxUtilities.shared loadGpxFileFile:trackItem.dataItem.file];
+            }
+            [self displayGpxOnMap:gpxFile];
+        }
+        else
+        {
+            NSLog(@"targetGoToGPX wrong cast");
+        }
+    }
+    else
+    {
+       [self displayGpxOnMap:[[OASavingTrackHelper sharedInstance] currentTrack]];
     }
 }
 
@@ -3176,7 +3190,6 @@ typedef enum
                                             isCurrentTrack:(BOOL)isCurrentTrack
                                                      state:(OATrackMenuViewControllerState *)state;
 {
-    // FIXME:
     OASGpxFile *doc = nil;
     OASTrackItem *trackItem = nil;
     if (isCurrentTrack)
@@ -3505,19 +3518,25 @@ typedef enum
     }];
 }
 
-- (void) displayGpxOnMap:(OASGpxDataItem *)item
+- (void) displayGpxOnMap:(OASGpxFile *)item
 {
-    // FIXME:
-//    if (item.bounds.topLeft.latitude == DBL_MAX)
-//        return;
-//
-//    [self displayAreaOnMap:item.bounds
-//                      zoom:0.
-//                screenBBox:[self getScreenBBox]
-//               bottomInset:0.
-//                 leftInset:0.
-//                  topInset:0.
-//                  animated:NO];
+    auto rect = item.getRect;
+    
+    if (rect.top == DBL_MAX || rect.left == DBL_MAX)
+        return;
+    
+    OAGpxBounds bounds;
+    bounds.topLeft = CLLocationCoordinate2DMake(rect.top, rect.left);
+    bounds.bottomRight = CLLocationCoordinate2DMake(rect.bottom, rect.right);
+    bounds.center = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
+    
+    [self displayAreaOnMap:bounds
+                      zoom:0.
+                screenBBox:[self getScreenBBox]
+               bottomInset:0.
+                 leftInset:0.
+                  topInset:0.
+                  animated:NO];
 }
 
 - (BOOL)goToMyLocationIfInArea:(CLLocationCoordinate2D)topLeft
@@ -4246,12 +4265,13 @@ typedef enum
 
 - (void)saveItemToStorage:(OAGpxWptItem *)gpxWptItem
 {
-    // FIXME:
-//    if (gpxWptItem.point.wpt != nullptr)
-//    {
-//        [OASGpxFile fillWpt:gpxWptItem.point.wpt usingWpt:gpxWptItem.point];
-//        [_mapViewController saveFoundWpt];
-//    }
+    
+    if (gpxWptItem.point)
+    {
+        // FIXME:
+      //  [OASGpxFile fillWpt:gpxWptItem.point.wpt usingWpt:gpxWptItem.point];
+        [_mapViewController saveFoundWpt];
+    }
 }
 
 #pragma mark - OAOpenAddTrackDelegate

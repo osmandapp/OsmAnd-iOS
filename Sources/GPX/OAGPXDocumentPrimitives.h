@@ -119,10 +119,6 @@ struct RouteDataBundle;
 
 @end
 
-//var name: String? = null
-//var email: String? = null
-//var link: String? = null
-
 @interface OAAuthor : OAGpxExtensions
 
 @property (nonatomic, copy) NSString *name;
@@ -130,10 +126,6 @@ struct RouteDataBundle;
 @property (nonatomic) OALink *link;
 
 @end
-
-//var author: String? = null
-//var year: String? = null
-//var license: String? = null
 
 @interface OACopyright : OAGpxExtensions
 

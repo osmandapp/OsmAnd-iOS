@@ -2774,10 +2774,6 @@
         NSString *descExtension = [self.doc.metadata getExtensionsToWrite][@"desc"];
         if (descExtension)
             [self.doc.metadata removeExtensionsWriterKey:@"desc"];
- // Old code
-//        OAGpxExtension *descExtension = [self.doc.metadata getExtensionByKey:@"desc"];
-//          if (descExtension)
-//              [self.doc.metadata removeExtension:descExtension];
     }
     
     OASKFile *file = [[OASKFile alloc] initWithFilePath:self.doc.path];

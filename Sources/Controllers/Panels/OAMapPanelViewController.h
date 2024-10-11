@@ -183,7 +183,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL) hasGpxActiveTargetType;
 
-- (void) displayGpxOnMap:(OASGpxDataItem *)item;
+- (void) displayGpxOnMap:(OASGpxFile *)item;
 
 - (BOOL) goToMyLocationIfInArea:(CLLocationCoordinate2D)topLeft
                     bottomRight:(CLLocationCoordinate2D)bottomRight;

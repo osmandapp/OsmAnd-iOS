@@ -17,13 +17,13 @@
 #import "OAHistoryItem.h"
 #import "OAHistoryHelper.h"
 #import "OADestinationItem.h"
-#import "OAGPXMutableDocument.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAAppVersion.h"
 #import "OAColors.h"
 #import "OAAppData.h"
 #import "OAAppSettings.h"
 #import "OsmAndSharedWrapper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kMarkersChanged @"markers_modified_time"
 
@@ -387,37 +387,33 @@
 
 - (OASGpxFile *) generateGpx:(NSArray<OADestination *> *)markers completeBackup:(BOOL)completeBackup
 {
-    return nil;
-    // FIXME:
-//    OAGPXMutableDocument *doc = [[OAGPXMutableDocument alloc] init];
-//    for (OADestination *marker in markers)
-//    {
-//        OASWptPt *wpt = [[OASWptPt alloc] init];
-//        wpt.position = CLLocationCoordinate2DMake(marker.latitude, marker.longitude);
-//        wpt.name = marker.desc;
-//        [wpt setColor:[marker.color toARGBNumber]];
-//
-//        OAGpxExtension *e = [[OAGpxExtension alloc] init];
-//        e.name = @"creation_date";
-//
-//        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-//        [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z"];
-//        e.value = [dateFormatter stringFromDate:marker.creationDate];;
-//
-//        wpt.extensions = @[e];
-//
-////        if (completeBackup)
-////        {
-////            if (marker.creationDate != 0) {
-////                wpt.getExtensionsToWrite().put(CREATION_DATE, format.format(new Date(marker.creationDate)));
-////            }
-////            if (marker.visitedDate != 0) {
-////                wpt.getExtensionsToWrite().put(VISITED_DATE, format.format(new Date(marker.visitedDate)));
-////            }
-////        }
-//        [doc addWpt:wpt];
-//    }
-//    return doc;
+    OASGpxFile *doc = [[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]];
+    for (OADestination *marker in markers)
+    {
+        OASWptPt *wpt = [[OASWptPt alloc] init];
+        wpt.position = CLLocationCoordinate2DMake(marker.latitude, marker.longitude);
+        wpt.name = marker.desc;
+        OASInt *color = [[OASInt alloc] initWithInt:[marker.color toARGBNumber]];
+        [wpt setColorColor:color];
+        
+        OASMutableDictionary *exts = wpt.getExtensionsToWrite;
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z"];
+        
+        exts[@"creation_date"] = [dateFormatter stringFromDate:marker.creationDate];
+
+//        if (completeBackup)
+//        {
+//            if (marker.creationDate != 0) {
+//                wpt.getExtensionsToWrite().put(CREATION_DATE, format.format(new Date(marker.creationDate)));
+//            }
+//            if (marker.visitedDate != 0) {
+//                wpt.getExtensionsToWrite().put(VISITED_DATE, format.format(new Date(marker.visitedDate)));
+//            }
+//        }
+        [doc addPointPoint:wpt];
+    }
+    return doc;
 }
 
 - (int) getFreeColorIndex

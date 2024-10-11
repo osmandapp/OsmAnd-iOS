@@ -9,9 +9,9 @@
 #import "OAHistoryMarkersSettingsItem.h"
 #import "OAHistoryHelper.h"
 #import "Localization.h"
-#import "OsmAndSharedWrapper.h"
 #import "OAAppVersion.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OsmAndSharedWrapper.h"
 
 #define APPROXIMATE_HISTORY_MARKER_SIZE_BYTES 380
 

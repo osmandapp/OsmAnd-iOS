@@ -13,7 +13,7 @@
 #define kDefaultCategoryKey @"favorites_item"
 #define kPersonalCategory @"personal"
 
-@class OAFavoriteItem, OAFavoriteGroup, OASpecialPointType, OASGpxFile, OAGPXMutableDocument, OASGpxUtilitiesPointsGroup, OASWptPt;
+@class OAFavoriteItem, OAFavoriteGroup, OASpecialPointType, OASGpxFile, OASGpxUtilitiesPointsGroup, OASWptPt;
 
 @interface OAFavoritesHelper : NSObject
 

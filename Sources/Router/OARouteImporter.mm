@@ -150,6 +150,7 @@
 //    {
 //        auto object = std::make_shared<RouteDataObject>(region);
 //        auto segmentResult = std::make_shared<RouteSegmentResult>(object, _leftSide);
+//        // routeSegment.toStringBundle - crash
 //		auto bundle = std::make_shared<RouteDataBundle>(resources, routeSegment.toStringBundle);
 //        try
 //        {

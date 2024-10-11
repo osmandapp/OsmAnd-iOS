@@ -10,7 +10,6 @@
 #import "OAPointTableViewCell.h"
 #import "OAFavoriteItem.h"
 #import "OAFavoritesHelper.h"
-#import "OAGPXDocument.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"

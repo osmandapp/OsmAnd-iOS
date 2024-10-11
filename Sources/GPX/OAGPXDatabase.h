@@ -133,11 +133,10 @@ typedef NS_ENUM(NSInteger, EOAGPX3DLineVisualizationPositionType) {
 //- (OAGPX *) buildGpxItem:(NSString *)fileName path:(NSString *)filepath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document fetchNearestCity:(BOOL)fetchNearestCity;
 //-(OAGPX *)addGpxItem:(NSString *)filePath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document;
 
--(void)replaceGpxItem:(OAGPX *)gpx;
--(void)removeGpxItem:(NSString *)filePath;
--(BOOL)containsGPXItem:(NSString *)filePath;
-//-(BOOL)updateGPXItemPointsCount:(NSString *)filePath pointsCount:(int)pointsCount;
-//-(BOOL)updateGPXItemColor:(OAGPX *)item color:(int)color;
+- (void)replaceGpxItem:(OAGPX *)gpx;
+- (void)removeGpxItem:(NSString *)filePath;
+- (BOOL)containsGPXItem:(NSString *)filePath;
+
 
 -(NSString *)getFileDir:(NSString *)filePath;
 

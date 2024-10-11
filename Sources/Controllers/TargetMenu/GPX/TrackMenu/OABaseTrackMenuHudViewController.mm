@@ -264,8 +264,7 @@
     {
         if (_isCurrentTrack)
         {
-            // FIXME:
-           // _gpx =_savingHelper.currentTrack;
+            _gpx = [[OASTrackItem alloc] initWithGpxFile:_savingHelper.currentTrack];
         }
         else if (_doc)
         {

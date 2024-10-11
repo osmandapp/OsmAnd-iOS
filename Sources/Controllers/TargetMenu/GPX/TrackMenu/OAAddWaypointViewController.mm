@@ -49,6 +49,8 @@
 
     BOOL _isCurrentTrack;
     OAGpxWptItem *_movedPoint;
+    
+    OASGpxFile *_currentGpx;
 }
 
 - (instancetype)initWithGpx:(OASTrackItem *)gpx
@@ -72,8 +74,19 @@
 {
     OASWptPt *movedPoint = [[OASWptPt alloc] init];
     movedPoint.name = OALocalizedString(@"shared_string_waypoint");
-    // FIXME:
-   // movedPoint.position = _gpx.bounds.center;
+    if (_gpx.isShowCurrentTrack)
+    {
+        _currentGpx = [OASavingTrackHelper sharedInstance].currentTrack;
+        auto rect = _currentGpx.getRect;
+        movedPoint.position = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);;
+    }
+    else
+    {
+        _currentGpx = [OASGpxUtilities.shared loadGpxFileFile:_gpx.dataItem.file];
+        auto rect = _currentGpx.getRect;
+        movedPoint.position = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
+    }
+ 
     _movedPoint = [OAGpxWptItem withGpxWpt:movedPoint];
 }
 
@@ -86,7 +99,7 @@
 
     if (![OAUtilities isLandscapeIpadAware])
         [OAUtilities setMaskTo:self.contentView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
-    [_mapPanelViewController displayGpxOnMap:_gpx.dataItem];
+    [_mapPanelViewController displayGpxOnMap:_currentGpx];
     if (self.delegate)
         [self.delegate requestHeaderOnlyMode];
 

@@ -2810,8 +2810,7 @@ typedef enum
                               fromTrackMenu:(BOOL)fromTrackMenu
                                 selectedTab:(EOATrackMenuHudTab)selectedTab
 {
-    OASKFile *file = [[OASKFile alloc] initWithFilePath:item.path];
-    OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
+    OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:item.dataItem.file];
     auto rect = gpxFile.getRect;
     CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
  
@@ -2825,8 +2824,7 @@ typedef enum
 
 - (void)openTargetViewWithGPX:(OASTrackItem *)item selectedTab:(EOATrackMenuHudTab)selectedTab selectedStatisticsTab:(EOATrackMenuHudSegmentsStatisticsTab)selectedStatisticsTab openedFromMap:(BOOL)openedFromMap
 {
-    OASKFile *file = [[OASKFile alloc] initWithFilePath:item.path];
-    OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
+    OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:item.dataItem.file];
     auto rect = gpxFile.getRect;
     CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
     
@@ -2862,8 +2860,7 @@ typedef enum
     if (_scrollableHudViewController)
     {
         [_scrollableHudViewController hide:YES duration:0.2 onComplete:^{
-            OASKFile *file = [[OASKFile alloc] initWithFilePath:item.path];
-            OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
+            OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:item.dataItem.file];
             
             auto rect = gpxFile.getRect;
             CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
@@ -2894,8 +2891,7 @@ typedef enum
             {
                 gpxFile = [OASavingTrackHelper sharedInstance].currentTrack;
             } else {
-                OASKFile *file = [[OASKFile alloc] initWithFilePath:item.path];
-                gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
+                gpxFile = [OASGpxUtilities.shared loadGpxFileFile:item.dataItem.file];
             }
             
             auto rect = gpxFile.getRect;
@@ -2923,18 +2919,17 @@ typedef enum
     {
         gpxFile = [OASavingTrackHelper sharedInstance].currentTrack;
     } else {
-        OASKFile *file = [[OASKFile alloc] initWithFilePath:item.path];
-        gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
+        gpxFile = [OASGpxUtilities.shared loadGpxFileFile:item.dataItem.file];
     }
-
+    
     [self hideMultiMenuIfNeeded];
     [self hideTargetPointMenu];
-
+    
     if (_dashboard)
         [self closeDashboard];
-
+    
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
-    if (!state || !CLLocationCoordinate2DIsValid(state.pinLocation))
+    if (!state || !CLLocationCoordinate2DIsValid(state.pinLocation) || (state.pinLocation.latitude == 0 && state.pinLocation.longitude == 0))
     {
         auto rect = gpxFile.getRect;
         CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);

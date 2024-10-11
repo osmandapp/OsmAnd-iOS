@@ -2768,6 +2768,7 @@ typedef enum
     OASTrackItem *trackItem;
     if (item)
     {
+        // FIXME: Do not extra load gpx file
         OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:item.file];
         auto rect = gpxFile.getRect;
         pinLocation = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
@@ -4214,8 +4215,7 @@ typedef enum
 
 - (void)saveGpxWpt:(OAGpxWptItem *)gpxWpt gpxFileName:(NSString *)gpxFileName
 {
-    // FIXME:
-  //  [_mapViewController addNewWpt:gpxWpt.point gpxFileName:gpxFileName];
+    [_mapViewController addNewWpt:gpxWpt.point gpxFileName:gpxFileName];
 
     gpxWpt.groups = _mapViewController.foundWptGroups;
 

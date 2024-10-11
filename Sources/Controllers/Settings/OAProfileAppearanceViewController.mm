@@ -270,7 +270,6 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
-    [self setupNavBar];
     [self generateData];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
@@ -306,13 +305,6 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
-}
-
-- (void) setupNavBar
-{
-    _profileIconImageView.image = [UIImage templateImageNamed:_changedProfile.iconName];
-    _profileIconImageView.tintColor = UIColorFromRGB(_changedProfile.profileColor);
-    _profileIconView.layer.cornerRadius = _profileIconView.frame.size.height/2;
 }
 
 - (NSString *) createNonDuplicateName:(NSString *)profileName
@@ -491,7 +483,8 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     _positionIconCollectionHandler = [[IconCollectionHandler alloc] initWithData:@[_locationIconNames] collectionView:nil];
     _positionIconCollectionHandler.iconImagesData = @[_locationIconImages];
     _positionIconCollectionHandler.roundedSquareCells = true;
-    _positionIconCollectionHandler.cornerRadius = 9;
+    _positionIconCollectionHandler.innerViewCornerRadius = 6;
+    _positionIconCollectionHandler.strokeCornerRadius = 9;
     _positionIconCollectionHandler.delegate = self;
     _positionIconCollectionHandler.hostVC = self;
     _positionIconCollectionHandler.customTitle = OALocalizedString(@"resting_position_icon");
@@ -508,7 +501,8 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     _locationIconCollectionHandler = [[IconCollectionHandler alloc] initWithData:@[_navigationIconNames] collectionView:nil];
     _locationIconCollectionHandler.iconImagesData = @[_navigationIconImages];
     _locationIconCollectionHandler.roundedSquareCells = true;
-    _locationIconCollectionHandler.cornerRadius = 9;
+    _locationIconCollectionHandler.innerViewCornerRadius = 6;
+    _locationIconCollectionHandler.strokeCornerRadius = 9;
     _locationIconCollectionHandler.delegate = self;
     _locationIconCollectionHandler.hostVC = self;
     _locationIconCollectionHandler.customTitle = OALocalizedString(@"navigation_position_icon");
@@ -903,7 +897,6 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         ProfileAppearanceLocationRadiusViewController *vc = [[ProfileAppearanceLocationRadiusViewController alloc] init];
         vc.delegate = self;
         vc.selectedIndex = _changedProfile.locationRadiusVisibility;
-        [self showModalViewController:vc];
         [self showMediumSheetViewController:vc isLargeAvailable:NO];
     }
 }
@@ -916,18 +909,25 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     return YES;
 }
 
+- (void) setProfileName:(NSString *)newName
+{
+    OATableRowData *item = [_data itemForIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    if (item)
+        item.title = newName;
+    _changedProfile.name = newName;
+    _titleLabel.text = newName == 0 ? [self getEmptyNameTitle] : _changedProfile.name;
+}
+
 - (void) textViewDidChange:(UITextView *)textView
 {
     _hasChangesBeenMade = YES;
-    _changedProfile.name = textView.text;
-    _titleLabel.text = _changedProfile.name.length == 0 ? [self getEmptyNameTitle] : _changedProfile.name;
+    [self setProfileName:textView.text];
 }
 
 - (IBAction) onClearButtonClick:(UIButton *)sender
 {
     _hasChangesBeenMade = YES;
-    _changedProfile.name = @"";
-    _titleLabel.text = [self getEmptyNameTitle];
+    [self setProfileName:@""];
 
     [self.tableView performBatchUpdates:^{
         UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];

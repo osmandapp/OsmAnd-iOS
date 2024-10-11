@@ -66,6 +66,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
+#import "OAResourcesUISwiftHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -573,12 +574,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         if (_localMapIndexItem && [_localMapIndexItem.resourceId.toNSString() isEqualToString:[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""]])
         {
-            NSMutableString *progressStr = [NSMutableString string];
-            [progressStr appendString:[NSByteCountFormatter stringFromByteCount:(_localMapIndexItem.sizePkg * [value floatValue]) countStyle:NSByteCountFormatterCountStyleFile]];
-            [progressStr appendString:@" "];
-            [progressStr appendString:OALocalizedString(@"shared_string_of")];
-            [progressStr appendString:@" "];
-            [progressStr appendString:[NSByteCountFormatter stringFromByteCount:_localMapIndexItem.sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
+            NSString *progressStr = [OAResourcesUISwiftHelper formatedDownloadingProgressString:_localMapIndexItem.sizePkg progress:[value floatValue]];
             if (self.delegate && [self.delegate respondsToSelector:@selector(setDownloadProgress:text:)])
                 [self.delegate setDownloadProgress:[value floatValue] text:progressStr];
         }

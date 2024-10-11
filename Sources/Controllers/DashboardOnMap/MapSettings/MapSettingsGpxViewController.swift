@@ -283,8 +283,8 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             cell.selectedBackgroundView = UIView()
             cell.selectedBackgroundView?.backgroundColor = UIColor.groupBg
             cell.titleLabel.text = item.title
-            if let gpx = item.obj(forKey: "gpx") as? TrackItem {
-                cell.descriptionLabel.attributedText = getDescriptionAttributedText(with: getFormattedData(for: gpx.dataItem!))
+            if let gpx = item.obj(forKey: "gpx") as? GpxDataItem {
+                cell.descriptionLabel.attributedText = getDescriptionAttributedText(with: getFormattedData(for: gpx))
             }
             
             let iconName = item.iconName ?? "ic_custom_trip"

@@ -716,6 +716,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 - (void) openRouteDetailsGraph
 {
     [[OARootViewController instance].mapPanel openTargetViewWithRouteDetailsGraph:self.gpx
+                                                                        trackItem:self.trackItem
                                                                          analysis:self.analysis
                                                                  menuControlState:nil];
 }

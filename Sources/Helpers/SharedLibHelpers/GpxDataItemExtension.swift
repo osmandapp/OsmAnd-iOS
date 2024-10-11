@@ -47,7 +47,12 @@ extension TrackItem {
 
     var creationDate: Date {
         get {
-            dataItem?.creationDate ?? Date()
+            if isShowCurrentTrack {
+                let lastModifiedTime = Double(lastModified)
+                return Date(timeIntervalSince1970: lastModifiedTime * 1000)
+            } else {
+                return dataItem?.creationDate ?? Date()
+            }
         }
         set {
             dataItem?.creationDate = newValue

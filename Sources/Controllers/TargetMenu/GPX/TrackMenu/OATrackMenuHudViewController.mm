@@ -749,7 +749,7 @@
     CLLocation *newLocation = _app.locationServices.lastKnownLocation;
     if (!newLocation)
         return;
-    OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:self.gpx.getFile];
+    OASGpxFile *gpxFile = self.gpx.isShowCurrentTrack ? [OASavingTrackHelper.sharedInstance currentTrack] : [OASGpxUtilities.shared loadGpxFileFile:self.gpx.getFile];
     auto rect = gpxFile.getRect;
     CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
     if (_selectedTab == EOATrackMenuHudOverviewTab && CLLocationCoordinate2DIsValid(pinLocation))
@@ -870,6 +870,7 @@
         OATrackMenuViewControllerState *state = [weakSelf getCurrentStateForAnalyze:types];
         state.openedFromTrackMenu = YES;
         [weakSelf.mapPanelViewController openTargetViewWithRouteDetailsGraph:weakSelf.doc
+                                                                   trackItem:weakSelf.gpx
                                                                     analysis:analysis
                                                             menuControlState:state
                                                                      isRoute:NO];

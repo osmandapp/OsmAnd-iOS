@@ -35,7 +35,7 @@
         self.updateInfoFunction = ^BOOL {
 
             [weakSelf setIcon:@"widget_track_recording_duration"];
-            OASGpxFile *currentTrack = [[OASavingTrackHelper sharedInstance] currentTrack];
+            OASGpxFile *currentTrack = [OASavingTrackHelper sharedInstance].currentTrack;
 // FIXME: joinSegments
 //            BOOL withoutGaps = !currentTrack.joinSegments &&
 //            ( (!currentTrack.tracks || currentTrack.tracks.count == 0) || currentTrack.tracks[0].generalTrack);
@@ -56,8 +56,8 @@
             if (cachedTimeSpan > 0)
             {
                 OASGpxFile *gpxFile = [OASavingTrackHelper sharedInstance].currentTrack;
-                // FIXME:
-//                [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpxFile selectedTab:EOATrackMenuHudSegmentsTab selectedStatisticsTab:EOATrackMenuHudSegmentsStatisticsOverviewTab openedFromMap:YES];
+                OASTrackItem *trackItem = [[OASTrackItem alloc] initWithGpxFile:gpxFile];
+                [[OARootViewController instance].mapPanel openTargetViewWithGPX:trackItem selectedTab:EOATrackMenuHudSegmentsTab selectedStatisticsTab:EOATrackMenuHudSegmentsStatisticsOverviewTab openedFromMap:YES];
             }
         };
         

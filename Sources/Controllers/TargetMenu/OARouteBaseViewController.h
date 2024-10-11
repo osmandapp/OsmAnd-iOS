@@ -12,7 +12,7 @@
 
 #define kMapMargin 20.0
 
-@class OARoutingHelper, OATrackChartPoints, OASGpxTrackAnalysis, OARouteStatisticsModeCell, OASTrkSegment, OASGpxFile, OABaseVectorLinesLayer, ElevationChart;
+@class OARoutingHelper, OATrackChartPoints, OASGpxTrackAnalysis, OARouteStatisticsModeCell, OASTrkSegment, OASGpxFile, OABaseVectorLinesLayer, ElevationChart, OASTrackItem;
 
 @protocol OARouteLineChartHelperDelegate
 
@@ -60,6 +60,7 @@
 @property (nonatomic, readonly) OARouteLineChartHelper *routeLineChartHelper;
 
 @property (nonatomic) OASGpxFile *gpx;
+@property (nonatomic) OASTrackItem *trackItem;
 @property (nonatomic) ElevationChart *statisticsChart;
 @property (nonatomic) OATrackChartPoints *trackChartPoints;
 @property (nonatomic) OASGpxTrackAnalysis *analysis;

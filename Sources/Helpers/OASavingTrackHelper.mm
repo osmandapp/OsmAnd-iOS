@@ -386,8 +386,7 @@
         {
             // .../Documents/GPX/rec/2024-09-30.gpx
             fout = [NSString stringWithFormat:@"%@%@%@.gpx", _app.gpxPath, recordedTrackFolder, f];
-            // FIXME: change to OASGpxFile
-           // OAGPXMutableDocument *doc = data[f];
+
             OASGpxFile *gpxFile = data[f];
             if (![gpxFile isEmpty])
             {
@@ -422,11 +421,10 @@
 //            [doc setElevationMeters:[settings.currentTrackElevationMeters get]];
 //            [doc setColor:[settings.currentTrackColor get]];
 //            [doc setColoringType:[settings.currentTrackColoringType get].name];
-
+// FIXME: compare doc and master branch logic
             OASKFile *file = [[OASKFile alloc] initWithFilePath:fout];
             [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
             
-           // [doc saveTo:fout];
             // rec/2024-09-12_15-43_Чт.gpx
             NSString *gpxFilePath = [OAUtilities getGpxShortPath:fout];
             
@@ -634,10 +632,8 @@
 
                         if (!newInterval)
                             [segment.points addObject:pt];
-                        // [gpx addTrackPoint:pt segment:segment];
                         
                         [track.segments addObject:segment];
-                        // [gpx addTrackSegment:segment track:track];
                     }
                     else
                     {

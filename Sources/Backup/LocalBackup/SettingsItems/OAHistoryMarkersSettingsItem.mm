@@ -10,6 +10,7 @@
 #import "OAHistoryHelper.h"
 #import "Localization.h"
 #import "OsmAndSharedWrapper.h"
+#import "OAAppVersion.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #define APPROXIMATE_HISTORY_MARKER_SIZE_BYTES 380
@@ -139,26 +140,23 @@
 
 - (OASGpxFile *) generateGpx:(NSArray<OAHistoryItem *> *)historyItems
 {
+    OASGpxFile *doc = [[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]];
     
-    // FIXME:
-//    OAGPXMutableDocument *doc = [[OAGPXMutableDocument alloc] init];
-//    for (OAHistoryItem *historyItem in historyItems)
-//    {
-//        OASWptPt *wpt = [[OASWptPt alloc] init];
-//        wpt.position = CLLocationCoordinate2DMake(historyItem.latitude, historyItem.longitude);
-//        wpt.name = historyItem.name;
-//
-//        OAGpxExtension *e = [[OAGpxExtension alloc] init];
-//        e.name = VISITED_TIME_EXTENSION;
-//
-//        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-//        [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z"];
-//        e.value = [dateFormatter stringFromDate:historyItem.date];
-//
-//        wpt.extensions = @[e];
-//        [doc addWpt:wpt];
-//    }
-//    return doc;
+    for (OAHistoryItem *historyItem in historyItems)
+    {
+        OASWptPt *wpt = [[OASWptPt alloc] init];
+        wpt.position = CLLocationCoordinate2DMake(historyItem.latitude, historyItem.longitude);
+        wpt.name = historyItem.name;
+        
+        OASMutableDictionary *exts = wpt.getExtensionsToWrite;
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z"];
+        exts[@"visited_date"] = [dateFormatter stringFromDate:historyItem.date];
+
+        wpt.extensions = exts;
+        [doc addPointPoint:wpt];
+    }
+    return doc;
 }
 
 @end

@@ -53,7 +53,6 @@
                 description = [track.gpxFileName stringByDeletingPathExtension];
 
             OAOpenStreetMapRemoteUtil *editsUtil = (OAOpenStreetMapRemoteUtil *)_plugin.getPoiModificationRemoteUtil;
-            // FIXME:
             [editsUtil uploadGPXFile:_tags description:description visibility:_visibility gpxDoc:track listener:_listener];
         }
     });

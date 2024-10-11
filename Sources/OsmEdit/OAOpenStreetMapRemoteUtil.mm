@@ -67,7 +67,7 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
     return self;
 }
 
-- (void) uploadGPXFile:(NSString *)tagstring description:(NSString *)description visibility:(NSString *)visibility gpxDoc:(OASGpxDataItem *)gpx listener:(id<OAOnUploadFileListener>)listener
+- (void) uploadGPXFile:(NSString *)tagstring description:(NSString *)description visibility:(NSString *)visibility gpxDoc:(OASTrackItem *)gpx listener:(id<OAOnUploadFileListener>)listener
 {
     NSString *url = [BASE_URL stringByAppendingString:@"api/0.6/gpx/create"];
     NSDictionary<NSString *, NSString *> *additionalData = @{
@@ -77,7 +77,7 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
     };
     
     NSString *fileName = gpx.gpxFileName;
-    NSString *origFilePath = gpx.gpxFilePath;
+    NSString *origFilePath = gpx.isShowCurrentTrack ? fileName : gpx.gpxFilePath;
     origFilePath = [_app.gpxPath stringByAppendingPathComponent:origFilePath];
     QString archiveFilePath = QString::fromNSString([[_tmpDir stringByAppendingPathComponent:fileName] stringByAppendingPathExtension:@"gz"]);
     

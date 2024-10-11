@@ -162,12 +162,16 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) openTargetViewWithImpassableRoadSelection;
 - (void) openTargetViewWithRouteDetails:(nullable OASGpxFile *)gpx analysis:(nullable OASGpxTrackAnalysis *)analysis;
 - (void) openTargetViewWithRouteDetailsGraph:(nullable OASGpxFile *)gpx
+                                   trackItem:(nullable OASTrackItem *)trackItem
                                     analysis:(nullable OASGpxTrackAnalysis *)analysis
                             menuControlState:(OATargetMenuViewControllerState *)menuControlState;
-- (void) openTargetViewWithRouteDetailsGraph:(nullable OASGpxFile *)gpx
-                                    analysis:(nullable OASGpxTrackAnalysis *)analysis
-                            menuControlState:(OATargetMenuViewControllerState *)menuControlState
-                                     isRoute:(BOOL)isRoute;
+
+- (void)openTargetViewWithRouteDetailsGraph:(nullable OASGpxFile *)gpx
+                                  trackItem:(nullable OASTrackItem *)trackItem
+                                   analysis:(OASGpxTrackAnalysis *)analysis
+                           menuControlState:(OATargetMenuViewControllerState *)menuControlState
+                                    isRoute:(BOOL)isRoute;
+
 - (void) openTargetViewFromTracksListWithRouteDetailsGraph:(NSString *)gpxFilepath
                                             isCurrentTrack:(BOOL)isCurrentTrack
                                                      state:(OATrackMenuViewControllerState *)state;

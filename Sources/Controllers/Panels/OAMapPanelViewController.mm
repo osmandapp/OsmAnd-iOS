@@ -2765,16 +2765,24 @@ typedef enum
 
 - (void)openTargetViewWithGPX:(OASGpxDataItem *)item
 {
-    OASGpxFile *gpxFile = nil;
     CLLocationCoordinate2D pinLocation;
+    OASTrackItem *trackItem;
     if (item)
     {
-        gpxFile = [OASGpxUtilities.shared loadGpxFileFile:item.file];
+        OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:item.file];
         auto rect = gpxFile.getRect;
         pinLocation = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
+        trackItem = [[OASTrackItem alloc] initWithFile:item.file];
+        trackItem.dataItem = item;
     }
-    OASTrackItem *trackItem = [[OASTrackItem alloc] initWithFile:item.file];
-    trackItem.dataItem = item;
+    else
+    {
+        OASGpxFile *currentTrack = [OASavingTrackHelper.sharedInstance currentTrack];
+        trackItem = [[OASTrackItem alloc] initWithGpxFile:currentTrack];
+        auto rect = currentTrack.getRect;
+        pinLocation = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
+    }
+
     [self openTargetViewWithGPX:trackItem
                    trackHudMode:EOATrackMenuHudMode
                           state:[_activeViewControllerState isKindOfClass:OATrackMenuViewControllerState.class]
@@ -2783,7 +2791,6 @@ typedef enum
                                                                       openedFromMap:NO]];
 }
 
-// TODO: deprecation
 - (void)openTargetViewWithGPXFromTracksList:(OASTrackItem *)item
                        navControllerHistory:(NSArray<UIViewController *> *)navControllerHistory
                               fromTrackMenu:(BOOL)fromTrackMenu
@@ -2915,7 +2922,6 @@ typedef enum
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     if (!state || !CLLocationCoordinate2DIsValid(state.pinLocation))
     {
-       // OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:item.file];
         auto rect = gpxFile.getRect;
         CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
         if (CLLocationCoordinate2DIsValid(pinLocation))
@@ -3172,7 +3178,22 @@ typedef enum
 {
     // FIXME:
     OASGpxFile *doc = nil;
-//    OASGpxFile *doc = isCurrentTrack ? nil/*[OASavingTrackHelper.sharedInstance currentTrack]*/ : [[OASGpxFile alloc] initWithGpxFile:gpxFilepath];
+    OASTrackItem *trackItem = nil;
+    if (isCurrentTrack)
+    {
+        doc = [OASavingTrackHelper.sharedInstance currentTrack];
+        trackItem = [[OASTrackItem alloc] initWithGpxFile:doc];
+    }
+    else
+    {
+        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:gpxFilepath];
+        if (gpx)
+        {
+            OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFilepath];
+            trackItem = [[OASTrackItem alloc] initWithFile:file];
+            trackItem.dataItem = gpx;
+        }
+    }
     if (doc)
     {
         OASGpxTrackAnalysis *analysis = !isCurrentTrack && [doc getGeneralTrack] && [doc getGeneralSegment]
@@ -3180,7 +3201,7 @@ typedef enum
             : [doc getAnalysisFileTimestamp:0];
         state.scrollToSectionIndex = -1;
         state.routeStatistics = @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)];
-        [self openTargetViewWithRouteDetailsGraph:doc analysis:analysis menuControlState:state];
+        [self openTargetViewWithRouteDetailsGraph:doc trackItem:trackItem analysis:analysis menuControlState:state];
     }
 }
 
@@ -3214,7 +3235,7 @@ typedef enum
             : [gpxFile getAnalysisFileTimestamp:0];
         state.scrollToSectionIndex = -1;
         state.routeStatistics = @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)];
-        [self openTargetViewWithRouteDetailsGraph:gpxFile analysis:analysis menuControlState:state];
+        [self openTargetViewWithRouteDetailsGraph:gpxFile trackItem:trackItem analysis:analysis menuControlState:state];
     }
 }
 
@@ -3259,15 +3280,17 @@ typedef enum
 
 - (void) openTargetViewWithRouteDetailsGraph:(OASGpxFile *)gpx
                                     analysis:(OASGpxTrackAnalysis *)analysis
+                                   trackItem:(OASTrackItem *)trackItem
                             menuControlState:(OATargetMenuViewControllerState *)menuControlState
 {
-    [self openTargetViewWithRouteDetailsGraph:gpx analysis:analysis menuControlState:menuControlState isRoute:YES];
+    [self openTargetViewWithRouteDetailsGraph:gpx trackItem:trackItem analysis:analysis menuControlState:menuControlState isRoute:YES];
 }
 
-- (void) openTargetViewWithRouteDetailsGraph:(OASGpxFile *)gpx
-                                    analysis:(OASGpxTrackAnalysis *)analysis
-                            menuControlState:(OATargetMenuViewControllerState *)menuControlState
-                                     isRoute:(BOOL)isRoute
+- (void)openTargetViewWithRouteDetailsGraph:(OASGpxFile *)gpx
+                                  trackItem:(OASTrackItem *)trackItem
+                                   analysis:(OASGpxTrackAnalysis *)analysis
+                           menuControlState:(OATargetMenuViewControllerState *)menuControlState
+                                    isRoute:(BOOL)isRoute
 {
     [_mapViewController hideContextPinMarker];
     [self closeDashboard];
@@ -3284,7 +3307,10 @@ typedef enum
     targetPoint.toolbarNeeded = NO;
     
     if (gpx && analysis)
-        targetPoint.targetObj = @{@"gpx" : gpx, @"analysis" : analysis, @"route" : @(isRoute)};
+        targetPoint.targetObj = @{@"gpx" : gpx,
+                                  @"trackItem" : trackItem,
+                                  @"analysis" : analysis,
+                                  @"route" : @(isRoute)};
     else
         targetPoint.targetObj = nil;
     

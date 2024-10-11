@@ -417,6 +417,7 @@
         if (data)
         {
             _gpx = data[@"gpx"];
+            _trackItem = data[@"trackItem"];
             _analysis = data[@"analysis"];
             OAMapLayers *layers = [OARootViewController instance].mapPanel.mapViewController.mapLayers;
             _layer = [data[@"route"] boolValue] ? layers.routeMapLayer : layers.gpxMapLayer;

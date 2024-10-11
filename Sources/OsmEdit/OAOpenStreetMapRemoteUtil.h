@@ -15,13 +15,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol OAOnUploadFileListener;
 
-@class OASGpxDataItem, OAEntity, OAEntityInfo;
+@class OASTrackItem, OAEntity, OAEntityInfo;
 
 @interface OAOpenStreetMapRemoteUtil : NSObject <OAOpenStreetMapUtilsProtocol, NSURLSessionDelegate>
 
 -(OAEntityInfo *)loadEntityFromEntity:(OAEntity *)entity;
 -(long) openChangeSet:(NSString *)comment;
--(void)uploadGPXFile:(NSString *)tagstring description:(NSString *)description visibility:(NSString *)visibility gpxDoc:(OASGpxDataItem *)document listener:(id<OAOnUploadFileListener>)listener;
+-(void)uploadGPXFile:(NSString *)tagstring description:(NSString *)description visibility:(NSString *)visibility gpxDoc:(OASTrackItem *)document listener:(id<OAOnUploadFileListener>)listener;
 
 @end
 

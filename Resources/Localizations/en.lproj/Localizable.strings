@@ -2061,6 +2061,7 @@
 "shared_string_sec" = "sec";
 "units_sec_short" = "s";
 "int_seconds" = "seconds";
+"shared_string_minute_lowercase" = "min";
 
 // Help
 "help_first_steps" = "First steps";

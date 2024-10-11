@@ -52,19 +52,21 @@ class TracksSearchFilter: FilterChangedListener {
                     case .range:
                         self.updateRangeFilterMaxValue(trackFilterType)
                     case .singleFieldList:
-                        if let filter = self.getFilterByType(trackFilterType) as? ListTrackFilter {
-                            guard let filterParams = trackFilterType.additionalData as? SingleFieldTrackFilterParams else { continue }
-                            let items = GpxDbHelper.shared.getStringIntItemsCollection(
-                                columnName: trackFilterType.property?.columnName ?? "",
-                                includeEmptyValues: filterParams.includeEmptyValues(),
-                                sortByName: filterParams.sortByName(),
-                                sortDescending: filterParams.sortDescending()
-                            )
-                            filter.setFullItemsCollection(collection_: items)
-                            if trackFilterType == .folder, let folder = self.currentFolder {
-                                filter.firstItem = folder.relativePath
-                            }
-                        }
+                        // TODO: Currently, the commented-out code causes a crash. Investigate and fix the issue.
+                        //                        if let filter = self.getFilterByType(trackFilterType) as? ListTrackFilter {
+                        //                            guard let filterParams = trackFilterType.additionalData as? SingleFieldTrackFilterParams else { continue }
+                        //                            let items = GpxDbHelper.shared.getStringIntItemsCollection(
+                        //                                columnName: trackFilterType.property?.columnName ?? "",
+                        //                                includeEmptyValues: filterParams.includeEmptyValues(),
+                        //                                sortByName: filterParams.sortByName(),
+                        //                                sortDescending: filterParams.sortDescending()
+                        //                            )
+                        //                            filter.setFullItemsCollection(collection_: items)
+                        //                            if trackFilterType == .folder, let folder = self.currentFolder {
+                        //                                filter.firstItem = folder.relativePath
+                        //                            }
+                        //                        }
+                        break
                     default:
                         break
                     }
@@ -128,22 +130,23 @@ class TracksSearchFilter: FilterChangedListener {
             
             results.values = res
         }
-        
-        if let folderFilter = getFilterByType(.folder) as? ListTrackFilter {
-            if let folderItems = filterSpecificSearchResults[.folder], folderItems.isEmpty {
-                let items = GpxDbHelper.shared.getStringIntItemsCollection(
-                    columnName: folderFilter.trackFilterType.property?.columnName ?? "",
-                    includeEmptyValues: folderFilter.collectionFilterParams.includeEmptyValues(),
-                    sortByName: folderFilter.collectionFilterParams.sortByName(),
-                    sortDescending: folderFilter.collectionFilterParams.sortDescending()
-                )
-                folderFilter.setFullItemsCollection(collection_: items)
-            } else if let ignoreFoldersItems = filterSpecificSearchResults[.folder] {
-                folderFilter.updateFullCollection(items: ignoreFoldersItems)
-            }
-        }
+        // TODO: Currently, the commented-out code causes a crash. Investigate and fix the issue.
+        //        if let folderFilter = getFilterByType(.folder) as? ListTrackFilter {
+        //            if let folderItems = filterSpecificSearchResults[.folder], folderItems.isEmpty {
+        //                let items = GpxDbHelper.shared.getStringIntItemsCollection(
+        //                    columnName: folderFilter.trackFilterType.property?.columnName ?? "",
+        //                    includeEmptyValues: folderFilter.collectionFilterParams.includeEmptyValues(),
+        //                    sortByName: folderFilter.collectionFilterParams.sortByName(),
+        //                    sortDescending: folderFilter.collectionFilterParams.sortDescending()
+        //                )
+        //                folderFilter.setFullItemsCollection(collection_: items)
+        //            } else if let ignoreFoldersItems = filterSpecificSearchResults[.folder] {
+        //                folderFilter.updateFullCollection(items: ignoreFoldersItems)
+        //            }
+        //        }
         
         debugPrint("found \(results.count) tracks")
+        setFilteredTrackItems(results.values)
         return results
     }
     
@@ -187,21 +190,13 @@ class TracksSearchFilter: FilterChangedListener {
     
     func resetCurrentFilters() {
         initFilters()
-        //        ?
-    }
-    
-    func filter() {
-        if let nameFilter = getNameFilter() {
-            //            ?
-        }
     }
     
     func getFilterByType(_ type: TrackFilterType) -> BaseTrackFilter? {
-        for filter in currentFilters {
-            if filter.trackFilterType == type {
-                return filter
-            }
+        for filter in currentFilters where filter.trackFilterType == type {
+            return filter
         }
+        
         return nil
     }
     
@@ -217,10 +212,8 @@ class TracksSearchFilter: FilterChangedListener {
         guard let selectedFilters else { return }
         initFilters()
         for filter in getCurrentFilters() {
-            for selectedFilter in selectedFilters {
-                if filter.trackFilterType == selectedFilter.trackFilterType {
-                    filter.doInitWithValue(value: selectedFilter)
-                }
+            for selectedFilter in selectedFilters where filter.trackFilterType == selectedFilter.trackFilterType {
+                filter.doInitWithValue(value: selectedFilter)
             }
         }
     }
@@ -257,5 +250,77 @@ class TracksSearchFilter: FilterChangedListener {
     
     func getFilterSpecificSearchResults() -> [TrackFilterType: [TrackItem]] {
         return filterSpecificSearchResults
+    }
+}
+
+extension TracksSearchFilter {
+    static func getDisplayMinValue(filter: RangeTrackFilter<AnyObject>) -> Int {
+        let formattedValue = getFormattedValue(measureUnitType: filter.trackFilterType.measureUnitType, value: String(filter.ceilMinValue()))
+        return Int(formattedValue.valueSrc)
+    }
+    
+    static func getDisplayMaxValue(filter: RangeTrackFilter<AnyObject>) -> Int {
+        let formattedValue = getFormattedValue(measureUnitType: filter.trackFilterType.measureUnitType, value: filter.ceilMaxValue())
+        return Int(formattedValue.valueSrc)
+    }
+    
+    static func getDisplayValueFrom(filter: RangeTrackFilter<AnyObject>) -> Int {
+        let formattedValue = getFormattedValue(measureUnitType: filter.trackFilterType.measureUnitType, value: String(describing: filter.valueFrom))
+        return Int(formattedValue.valueSrc)
+    }
+    
+    static func getDisplayValueTo(filter: RangeTrackFilter<AnyObject>) -> Int {
+        let formattedValue = getFormattedValue(measureUnitType: filter.trackFilterType.measureUnitType, value: filter.ceilValueTo())
+        return Int(formattedValue.valueSrc)
+    }
+    
+    static func getFormattedValue(measureUnitType: MeasureUnitType, value: String) -> FormattedValue {
+        let metricsConstants = OAAppSettings.sharedManager().metricSystem.get()
+        let formattedString: String?
+        switch measureUnitType {
+        case .speed:
+            formattedString = OAOsmAndFormatter.getFormattedSpeed(Float(value) ?? 0.0)
+        case .altitude:
+            formattedString = OAOsmAndFormatter.getFormattedAlt(Double(value) ?? 0.0, mc: metricsConstants)
+        case .distance:
+            formattedString = OAOsmAndFormatter.getFormattedDistance(Float(value) ?? 0.0)
+        case .timeDuration:
+            let durationValue = Float(value) ?? 0.0
+            return FormattedValue(valueSrc: durationValue / 1000 / 60, value: String(format: "%.2f", durationValue / 1000 / 60), unit: "")
+        default:
+            let defaultValue = Float(value) ?? 0.0
+            return FormattedValue(valueSrc: defaultValue, value: String(format: "%.0f", defaultValue), unit: "")
+        }
+        
+        if let formattedValue = formattedString {
+            let components = formattedValue.components(separatedBy: " ")
+            if components.count > 1 {
+                let numberPart = components.dropLast().joined().replacingOccurrences(of: " ", with: "")
+                let valueSrc = Float(numberPart) ?? 0.0
+                let unit = components.last ?? ""
+                return FormattedValue(valueSrc: valueSrc, value: String(format: "%.0f", valueSrc), unit: unit)
+            }
+        }
+        
+        return FormattedValue(valueSrc: 0, value: "0", unit: "")
+    }
+
+    static func mapEOAMetricsConstantToMetricsConstants(_ eoaConstant: EOAMetricsConstant) -> MetricsConstants {
+        switch eoaConstant {
+        case .KILOMETERS_AND_METERS:
+            return .kilometersAndMeters
+        case .MILES_AND_FEET:
+            return .milesAndFeet
+        case .MILES_AND_YARDS:
+            return .milesAndYards
+        case .MILES_AND_METERS:
+            return .milesAndMeters
+        case .NAUTICAL_MILES_AND_METERS:
+            return .nauticalMilesAndMeters
+        case .NAUTICAL_MILES_AND_FEET:
+            return .nauticalMilesAndFeet
+        @unknown default:
+            return .kilometersAndMeters
+        }
     }
 }

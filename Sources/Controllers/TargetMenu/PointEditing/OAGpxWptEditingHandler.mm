@@ -245,8 +245,10 @@
     [self setGroup:data.category color:data.color save:NO];
     [_gpxWpt.point setIconNameIconName:data.icon];
     [_gpxWpt.point setBackgroundTypeBackType:data.backgroundIcon];
-    // FIXME:
-    // [_gpxWpt.point setExtension:ADDRESS_EXTENSION_KEY value:data.address];
+    
+    auto extension = _gpxWpt.point.getExtensionsToWrite;
+    extension[ADDRESS_EXTENSION_KEY] = data.address;
+    _gpxWpt.point.extensions = extension;
     
     _gpxWpt.docPath = _gpxFileName;
 

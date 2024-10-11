@@ -163,8 +163,9 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
         NSString *amenityValue = [amenity getAdditionalInfo][key];
         if (amenityValue)
         {
-            // FIXME:
-           // [wptPt setExtension:key value:amenityValue];
+            auto extension = wptPt.getExtensionsToWrite;
+            extension[key] = amenityValue;
+            wptPt.extensions = extension;
         }
     }
     return wptPt;

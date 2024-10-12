@@ -3492,3 +3492,4 @@
 "simulate_location_movement_speed_x2" = "x2";
 "shared_string_interval" = "Interval";
 "shared_string_open_street_map" = "OpenStreetMap";
+"rendering_attr_piste_difficulty_freeride_name" = "Freeride";

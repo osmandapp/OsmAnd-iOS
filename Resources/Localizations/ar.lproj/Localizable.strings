@@ -1432,7 +1432,7 @@
 "rendering_attr_surface_sett_name" = "ضبط";
 "routing_attr_allow_intermediate_name" = "السماح بالمسارات المتوسطة";
 "rendering_attr_smoothness_impassable_name" = "غير سالك";
-"rendering_attr_alpineHiking_name" = "تصنيف الصعوبات";
+"rendering_attr_alpineHiking_name" = "تصنيف صعوبات المشي الطويل";
 "routing_attr_driving_style_prefer_unpaved_name" = "تفضيل الطرق الغير معبدة";
 "rendering_attr_surface_fine_gravel_name" = "حصى دقيق";
 "rendering_attr_contourColorScheme_description" = "لون الخطوط الكنتورية";
@@ -2714,7 +2714,7 @@
 "rendering_attr_seabedDetail_description" = "معلومات نصية إضافية عن أهلية سطح قاع البحر وأنواع الأسطح المدمجة والفئة وتصنيف الأعشاب أو الأعشاب البحرية";
 "routing_attr_difficulty_preference_advanced_name" = "متقدم";
 "rendering_attr_OSMMapperAssistantFixme_description" = "إظهار علامات أصلحني";
-"rendering_attr_showWaterwayTunnels_description" = "لا تخفي أنفاق الممرات المائية";
+"rendering_attr_showWaterwayTunnels_description" = "زيادة الرؤية لأنفاق الممرات المائية";
 "rendering_attr_showWaterwayTunnels_name" = "أنفاق الممرات المائية";
 "routing_attr_difficulty_preference_beginner_name" = "مبتدئ";
 "rendering_value_all_name" = "الكل";
@@ -2797,7 +2797,7 @@
 "delete_history_items" = "حذف %@ عنصر سجل؟";
 "search_favorites" = "بحث في المفضلة";
 "rotate_map_manual_opt" = "تدوير يدوي";
-"compass_click_desc" = "تلميح: انقر زر البوصلة لتبديل وضع اتجاه الخريطة.";
+"compass_click_desc" = "اضغط مرتين على زر البوصلة لتبديل وضع اتجاه الخريطة.";
 "map_widget_camera_tilt" = "تحريك الكاميرا";
 "map_widget_zoom_level" = "مستويات التكبير";
 "map_widget_target_distance" = "المسافة من الكاميرا إلى الهدف";
@@ -3497,7 +3497,7 @@
 "daynight_mode_sunrise_sunset_summary" = "يقوم بالتبديل تلقائيا بين سمات النهار والليل بناءً على أوقات شروق الشمس وغروبها المحلية.";
 "daynight_mode_day_summary" = "تعرض الخريطة دائما بمظهر فاتح، مما يجعلها مثالية للرؤية أثناء النهار.";
 "daynight_mode_app_theme_summary" = "تتماشى شاشة الخريطة مع المظهر العام للتطبيق — الوضع النهاري للثيم الفاتح والوضع الليلي للثيم الداكن";
-"quick_action_terrain_color_scheme" = "مخطط لون الإقليم";
+"quick_action_terrain_color_scheme" = "مخطط ألوان التضاريس";
 "quick_action_need_to_add_item_to_list" = "أضف عنصراً واحداً على الأقل إلى القائمة في إعدادات \"الاختصار السريع\"";
 "metric_ton" = "t";
 "navigate_point_format_DMS" = "DDD MM SS.S";

@@ -88,7 +88,7 @@
 "day_night_info" = "Подаци о дану/ноћи";
 "daynight_mode_auto" = "Излазак/залазак сунца";
 "route_simulation" = "Симулација руте";
-"auto_follow_location_enabled" = "Смоусредиштење карте током употребе.";
+"auto_follow_location_enabled" = "Самоусредиштење карте током употребе.";
 "unknown_location" = "Положај још није познат.";
 "animate_routing_route_not_calculated" = "Најпре израчунајте путању";
 "settings_preset" = "Главни профил";

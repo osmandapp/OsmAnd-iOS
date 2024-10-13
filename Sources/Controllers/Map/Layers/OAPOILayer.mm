@@ -33,6 +33,7 @@
 #include <OsmAndCore/Data/ObfMapObject.h>
 #include <OsmAndCore/Map/AmenitySymbolsProvider.h>
 #include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
+#include <OsmAndCore/Map/BillboardRasterMapSymbol.h>
 #include <OsmAndCore/ObfDataInterface.h>
 #include <OsmAndCore/NetworkRouteContext.h>
 #include <OsmAndCore/NetworkRouteSelector.h>
@@ -487,6 +488,37 @@
                 poi.nameLocalized = poi.name;
                 poi.localizedNames = names;
                 poi.obfId = obfMapObject->id;
+                
+                
+//                // TODO: Check it
+                NSMutableDictionary<NSString *, NSString *> *values = [NSMutableDictionary new];
+                for (const auto& key : tags.keys())
+                {
+                    values[key.toNSString()] = tags[key].toNSString();
+                }
+                poi.values = values;
+                
+                for (const auto& pointI : obfMapObject->points31)
+                {
+                    const auto latLon = OsmAnd::Utilities::convert31ToLatLon(pointI);
+                    poi.latitude = latLon.latitude;
+                    poi.longitude = latLon.longitude;
+                }
+                
+                if (const auto billboardRasterMapSymbol = std::static_pointer_cast<const OsmAnd::BillboardRasterMapSymbol>(symbolInfo->mapSymbol))
+                {
+                    if (symbolInfo->mapSymbol->contentClass == OsmAnd::RasterMapSymbol::ContentClass::Caption)
+                    {
+                        [poi setName:billboardRasterMapSymbol->content.toNSString()];
+                    }
+                    if (symbolInfo->mapSymbol->contentClass == OsmAnd::RasterMapSymbol::ContentClass::Icon)
+                    {
+                        [poi setMapIconName:billboardRasterMapSymbol->content.toNSString()];
+                    }
+                }
+
+                
+                
             }
             if (!poi.type)
             {

@@ -1591,6 +1591,8 @@ static const NSInteger _buttonsCount = 4;
     _targetPoint = targetPoint;
     _previousTargetType = targetPoint.type;
     _previousTargetIcon = targetPoint.icon;
+    
+//    _previousTargetIcon = [UIImage templateImageNamed:@"ic_custom_online"];
 }
 
 -(void) updateTargetPointType:(OATargetPointType)targetType
@@ -1684,6 +1686,8 @@ static const NSInteger _buttonsCount = 4;
                 if ([_targetPoint.targetObj isKindOfClass:OAPOI.class])
                     icon = [((OAPOI *)_targetPoint.targetObj) icon];
                 else
+                    icon = _targetPoint.icon;
+                if (!icon)
                     icon = _targetPoint.icon;
             }
             _imageView.image = icon;

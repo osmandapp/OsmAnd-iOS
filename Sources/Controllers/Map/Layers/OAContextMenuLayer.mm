@@ -32,6 +32,7 @@
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
+#include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
 #include <OsmAndCore/Map/IMapRenderer.h>
 #include <OsmAndCore/Data/TransportStop.h>
 #include <OsmAndCore/Search/TransportStopsInAreaSearch.h>
@@ -434,9 +435,22 @@
             }
         }
         
+        // TODO: Check it
+//        if (const auto markerGroup = dynamic_cast<OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup*>(symbolInfo.mapSymbol->groupPtr))
+//        {
+//            markerGroup->mapObject;
+//        }
+        
+        
+        
         CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(lat, lon);
         for (OAMapLayer *layer in layers)
         {
+            if ([layer.layerId isEqualToString:@"poi_on_map"])
+            {
+                BOOL breakpointHere;
+            }
+            
             if ([layer conformsToProtocol:@protocol(OAContextMenuProvider)])
             {
                 NSMutableArray<OATargetPoint *> *currentFound = [NSMutableArray array];
@@ -444,6 +458,7 @@
                
                 for (OATargetPoint *point in currentFound)
                 {
+                    // TODO: Check it
                     if ([point.targetObj isKindOfClass:OAPOI.class])
                         ((OAPOI *)point.targetObj).mapIconName = mapIconName;
                 }

@@ -691,7 +691,7 @@
 "first_intermediate_dest_description" = "Tilføjer første stop";
 "add_as_last_destination_point" = "Tilføj som sidste mellemliggende destination";
 "last_intermediate_dest_description" = "Tilføjer et mellemliggende stop";
-"shared_string_options" = "Indstillinger";
+"shared_string_options" = "Mere";
 "intermediate_items_sort_by_distance" = "Sorter fra dør til dør";
 "switch_start_finish" = "Byt om på startpunkt og destination";
 "clear_all_intermediates" = "Ryd alle mellemliggende punkter";

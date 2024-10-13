@@ -3348,3 +3348,17 @@
 "lang_pnb" = "Punjabi";
 "info_button" = "Info";
 "rendering_attr_horse_scale_impossible_name" = "Impossible";
+"map_widget_trip_recording_distance" = "Distance";
+"routing_profile_ski" = "Ski";
+"shared_string_ellipsis" = "…";
+"poi" = "PI";
+"shared_string_options" = "Options";
+"shared_string_milliradians" = "Milliradiens";
+"altitude" = "Altitude";
+"help_article_navigation_car_play_name" = "CarPlay";
+"help_article_personal_import_export_name" = "Import / Export";
+"tracker_item" = "Traqueur OsmAnd";
+"arrival_distance_factor_normally" = "Normal";
+"routing_settings" = "Navigation";
+"app_mode_bus" = "Bus";
+"app_mode_train" = "Train";

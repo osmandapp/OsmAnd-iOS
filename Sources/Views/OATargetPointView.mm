@@ -1591,8 +1591,6 @@ static const NSInteger _buttonsCount = 4;
     _targetPoint = targetPoint;
     _previousTargetType = targetPoint.type;
     _previousTargetIcon = targetPoint.icon;
-    
-//    _previousTargetIcon = [UIImage templateImageNamed:@"ic_custom_online"];
 }
 
 -(void) updateTargetPointType:(OATargetPointType)targetType

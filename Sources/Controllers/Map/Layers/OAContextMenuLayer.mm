@@ -32,7 +32,6 @@
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
-#include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
 #include <OsmAndCore/Map/IMapRenderer.h>
 #include <OsmAndCore/Data/TransportStop.h>
 #include <OsmAndCore/Search/TransportStopsInAreaSearch.h>

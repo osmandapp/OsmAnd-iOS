@@ -2400,7 +2400,7 @@
 "shared_string_updated" = "Mis à jour";
 "shared_string_updates_size" = "Taille des mises à jour";
 "weather_remove_forecast" = "Supprimer les prévisions";
-"weather_forecast_is_outdated" = "Les prévisions ne sont plus à jour.";
+"weather_forecast_is_outdated" = "Les prévisions ne sont pas à jour.";
 "shared_string_selected" = "Sélectionné";
 "shared_string_next_update" = "Prochaine mise à jour";
 "weather_clear_offline_cache" = "Cela va supprimer tout le cache hors-ligne des tuiles météo.";
@@ -3203,7 +3203,7 @@
 "upward_gradient" = "Gradient vers le haut";
 "shared_string_limit" = "Limite";
 "osmand_depelopment_use_old_routing" = "Utiliser l'ancien algorithme (A*)";
-"missing_or_outdated_maps_description" = "Pour calculer cet itinéraire, certaines cartes hors ligne sont manquantes ou périmées. Veuillez télécharger ou mettre à jour ces cartes.";
+"missing_or_outdated_maps_description" = "Pour calculer cet itinéraire, certaines cartes hors ligne sont manquantes ou pas à jour. Veuillez télécharger ou mettre à jour ces cartes.";
 "speedometer_description" = "Affiche votre vitesse actuelle calculée par GPS";
 "speed_limit_warning" = "Avertissement de limitation de vitesse";
 "shared_string_always" = "Toujours";
@@ -3215,7 +3215,7 @@
 "average_glide_ratio_time_interval_desc" = "Affiche la moyenne du rapport de glisse ou la vitesse verticale pour l'intervalle défini.";
 "wall_height" = "Hauteur de mur";
 "wall_height_description" = "En changeant la valeur de hauteur, vous pouvez élever la trace au-dessus du niveau du sol.";
-"missing_or_outdated_maps_title" = "Cartes manquantes ou périmées";
+"missing_or_outdated_maps_title" = "Cartes manquantes ou pas à jour";
 "getting_list_required_maps" = "Récupération de la liste des cartes nécessaires...";
 "visualization_3d_visualized_by" = "Affiché par";
 "visualization_3d_track_line" = "Ligne de la trace";

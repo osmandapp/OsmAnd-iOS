@@ -408,53 +408,33 @@
             NSString *directory = [fout stringByDeletingLastPathComponent];
             if (![fileManager fileExistsAtPath:directory])
                 [fileManager createDirectoryAtPath:directory withIntermediateDirectories:NO attributes:nil error:nil];
-
+            
             OAAppSettings *settings = [OAAppSettings sharedManager];
-//            [doc setWidth:[settings.currentTrackWidth get]];
-//            [doc setShowArrows:[settings.currentTrackShowArrows get]];
-//            [doc setShowStartFinish:[settings.currentTrackShowStartFinish get]];
-//            [doc setVisualization3dByType:(EOAGPX3DLineVisualizationByType)[settings.currentTrackVisualization3dByType get]];
-//            [doc setVisualization3dWallColorType:(EOAGPX3DLineVisualizationWallColorType)[settings.currentTrackVisualization3dWallColorType get]];
-//            [doc setVisualization3dPositionType:(EOAGPX3DLineVisualizationPositionType)[settings.currentTrackVisualization3dPositionType get]];
-//            
-//            [doc setVerticalExaggerationScale:[settings.currentTrackVerticalExaggerationScale get]];
-//            [doc setElevationMeters:[settings.currentTrackElevationMeters get]];
-//            [doc setColor:[settings.currentTrackColor get]];
-//            [doc setColoringType:[settings.currentTrackColoringType get].name];
-// FIXME: compare doc and master branch logic
-            OASKFile *file = [[OASKFile alloc] initWithFilePath:fout];
-            [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
             
-            // rec/2024-09-12_15-43_Чт.gpx
-            NSString *gpxFilePath = [OAUtilities getGpxShortPath:fout];
-            
-            // NOTE: [Start] new logic
-            
-            [_currentTrack setWidthWidth:[settings.currentTrackWidth get]];
-            [_currentTrack setShowArrowsShowArrows:[settings.currentTrackWidth get]];
-            [_currentTrack setShowStartFinishShowStartFinish:[settings.currentTrackShowStartFinish get]];
+            [gpxFile setWidthWidth:[settings.currentTrackWidth get]];
+            [gpxFile setShowArrowsShowArrows:[settings.currentTrackWidth get]];
+            [gpxFile setShowStartFinishShowStartFinish:[settings.currentTrackShowStartFinish get]];
             // setVerticalExaggerationScale -> setAdditionalExaggerationAdditionalExaggeration (SharedLib)
-            [_currentTrack setAdditionalExaggerationAdditionalExaggeration:[settings.currentTrackVerticalExaggerationScale get]];
-            [_currentTrack setElevationMetersElevation:[settings.currentTrackElevationMeters get]];
-            [_currentTrack set3DVisualizationTypeVisualizationType:[OAGPXDatabase lineVisualizationByTypeNameForType:(EOAGPX3DLineVisualizationByType)[settings.currentTrackVisualization3dByType get]]];
+            [gpxFile setAdditionalExaggerationAdditionalExaggeration:[settings.currentTrackVerticalExaggerationScale get]];
+            [gpxFile setElevationMetersElevation:[settings.currentTrackElevationMeters get]];
+            [gpxFile set3DVisualizationTypeVisualizationType:[OAGPXDatabase lineVisualizationByTypeNameForType:(EOAGPX3DLineVisualizationByType)[settings.currentTrackVisualization3dByType get]]];
             
-            [_currentTrack set3DWallColoringTypeTrackWallColoringType:[OAGPXDatabase lineVisualizationWallColorTypeNameForType:(EOAGPX3DLineVisualizationWallColorType)[settings.currentTrackVisualization3dWallColorType get]]];
+            [gpxFile set3DWallColoringTypeTrackWallColoringType:[OAGPXDatabase lineVisualizationWallColorTypeNameForType:(EOAGPX3DLineVisualizationWallColorType)[settings.currentTrackVisualization3dWallColorType get]]];
             
-            [_currentTrack set3DVisualizationTypeVisualizationType:[OAGPXDatabase lineVisualizationPositionTypeNameForType:(EOAGPX3DLineVisualizationPositionType)[settings.currentTrackVisualization3dPositionType get]]];
+            [gpxFile set3DVisualizationTypeVisualizationType:[OAGPXDatabase lineVisualizationPositionTypeNameForType:(EOAGPX3DLineVisualizationPositionType)[settings.currentTrackVisualization3dPositionType get]]];
            
             OASInt *color = [[OASInt alloc] initWithInt:[settings.currentTrackColor get]];
-            [_currentTrack setColorColor:color];
-            [_currentTrack setColoringTypeColoringType:[settings.currentTrackColoringType get].name];
+            [gpxFile setColorColor:color];
+            [gpxFile setColoringTypeColoringType:[settings.currentTrackColoringType get].name];
             
-            NSString *absolutePathTpGPXFile = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:@"/"];
-            
-            OASKFile *filePathToSaveGPX = [[OASKFile alloc] initWithFilePath:absolutePathTpGPXFile];
+            OASKFile *file = [[OASKFile alloc] initWithFilePath:fout];
+           
             // save to disk
-            OASKException *exception = [[OASGpxUtilities shared] writeGpxFileFile:filePathToSaveGPX gpxFile:_currentTrack];
+            OASKException *exception = [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
             if (!exception)
             {
                 // save to db
-                [[OAGPXDatabase sharedDb] addGPXFileToDBIfNeeded:filePathToSaveGPX.absolutePath];
+                [[OAGPXDatabase sharedDb] addGPXFileToDBIfNeeded:file.absolutePath];
                 
             } else {
                 NSLog(@"[ERROR] -> OASavingTrackHelper | save gpx");

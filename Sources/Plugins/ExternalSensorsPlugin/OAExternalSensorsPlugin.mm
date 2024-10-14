@@ -264,7 +264,7 @@ NSString * const OATrackRecordingAnyConnectedDevice = @"any_connected_device_wri
                 }
                 else
                 {
-// FIXME:
+// FIXME: subextensions
 //                    for (OAGpxExtension *subextension in trackpointextension.subextensions)
 //                    {
 //                        if ([subextension.name isEqualToString:tag])

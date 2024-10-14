@@ -531,9 +531,9 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                         {
                             NSInteger trackIndex = [doc_.tracks indexOfObject:track];
                             
-                           // OASTrack *gpxTrack = tracks[trackIndex];
+                            OASTrack *gpxTrack = tracks[trackIndex];
                             OASInt *color = [[OASInt alloc] initWithInt:(int)kDefaultTrackColor];
-                            const auto colorARGB = [UIColorFromARGB([color intValue]) toFColorARGB];
+                            const auto colorARGB = [UIColorFromARGB([[gpxTrack getColorDefColor:color] intValue]) toFColorARGB];
                             segmentColors.push_back(colorARGB);
                         }
                         segStartIndex += seg.points.count;

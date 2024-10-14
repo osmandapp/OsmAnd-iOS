@@ -764,14 +764,21 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
     }
     else
     {
-        // FIXME:
-//        OASGpxFile *gpxDoc = [[OASGpxFile alloc] initWithGpxFile:sourcePath];
-//        [gpxDatabase addGpxItem:[newFolder stringByAppendingPathComponent:newName]
-//                          title:newName
-//                           desc:gpxDoc.metadata.desc
-//                         bounds:gpxDoc.bounds
-//                       document:gpxDoc];
-
+        OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
+        OASGpxDataItem *gpx = [gpxDb getNewGPXItem:sourcePath];
+        if (!gpx)
+        {
+            gpx = [gpxDb addGPXFileToDBIfNeeded:sourcePath];
+        }
+        OASGpxTrackAnalysis *analysis = [gpx getAnalysis];
+        
+        NSString *nearestCity;
+        if (analysis.locationStart)
+        {
+            OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:analysis.locationStart.position];
+            gpx.nearestCity = nearestCityPOI ? nearestCityPOI.nameLocalized : @"";
+            [gpxDb updateDataItem:gpx];
+        }
         
         if ([OAAppSettings.sharedManager.mapSettingVisibleGpx.get containsObject:oldPath])
             [OAAppSettings.sharedManager showGpx:@[newStoringPath]];

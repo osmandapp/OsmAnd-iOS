@@ -612,7 +612,7 @@
                                 // OASGpxFile
                                 OAGPXDocumentAdapter *adapter = [[OAGPXDocumentAdapter alloc] init];
 
-                                // FIXME:
+                                // FIXME: OASGpxFile read from string 
 //                                OAGPXDocument *document = [[OAGPXDocument alloc] init];
 //                                QXmlStreamReader xmlReader(stringContent);
 //                                [document fetch:OsmAnd::GpxDocument::loadFrom(xmlReader)];

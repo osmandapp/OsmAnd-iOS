@@ -36,7 +36,7 @@
 
             [weakSelf setIcon:@"widget_track_recording_duration"];
             OASGpxFile *currentTrack = [OASavingTrackHelper sharedInstance].currentTrack;
-// FIXME: joinSegments
+// FIXME: miss joinSegments
 //            BOOL withoutGaps = !currentTrack.joinSegments &&
 //            ( (!currentTrack.tracks || currentTrack.tracks.count == 0) || currentTrack.tracks[0].generalTrack);
 //

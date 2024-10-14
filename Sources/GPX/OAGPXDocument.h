@@ -79,8 +79,8 @@
 
 - (BOOL) isCloudmadeRouteFile;
 
-- (void) processPoints;
-- (NSArray<OATrkSegment *> *) getPointsToDisplay;
+//- (void) processPoints;
+//- (NSArray<OATrkSegment *> *) getPointsToDisplay;
 
 - (BOOL) isEmpty;
 - (void) addGeneralTrack;

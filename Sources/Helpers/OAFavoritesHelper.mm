@@ -81,9 +81,8 @@ static NSOperationQueue *_favQueue;
     if (legacyFavoritesExists)
     {
         NSMutableDictionary<NSString *, OAFavoriteGroup *> *groups = [NSMutableDictionary dictionary];
-        // FIXME:
-//        OAGPXDocument *gpx = [self loadGpxFile:favoritesLegacyFilename];
-//        [self collectFavoriteGroups:gpx favoriteGroups:groups legacy:YES];
+         OASGpxFile *gpx = [self loadGpxFile:favoritesLegacyFilename];
+        [self collectFavoriteGroups:gpx favoriteGroups:groups legacy:YES];
         [self saveFile:groups.allValues file:[app favoritesStorageFilename:@"old"]];
         [[NSFileManager defaultManager] removeItemAtPath:favoritesLegacyFilename error:nil];
     }
@@ -148,9 +147,8 @@ static NSOperationQueue *_favQueue;
 
 + (void)loadFileGroups:(NSString *)file groups:(NSMutableDictionary<NSString *, OAFavoriteGroup *> *)groups
 {
-    // FIXME:
-//    OAGPXDocument *gpx = [self loadGpxFile:file];
-//    [self collectFavoriteGroups:gpx favoriteGroups:groups legacy:NO];
+    OASGpxFile *gpx = [self loadGpxFile:file];
+    [self collectFavoriteGroups:gpx favoriteGroups:groups legacy:NO];
 }
 
 + (void)collectFavoriteGroups:(OASGpxFile *)gpxFile
@@ -166,9 +164,9 @@ static NSOperationQueue *_favQueue;
 
 + (OASGpxFile *)loadGpxFile:(NSString *)file
 {
-    // FIXME:
-//    auto collection = std::make_shared<OsmAnd::FavoriteLocationsGpxCollection>();
-//    return [[OAGPXDocument alloc] initWithGpxDocument:collection->loadFrom(QString::fromNSString(file))];
+    OASKFile *favoriteGPXFile = [[OASKFile alloc] initWithFilePath:file];
+    OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:favoriteGPXFile];
+    return gpxFile;
 }
 
 + (void)importFavoritesFromGpx:(OASGpxFile *)gpxFile

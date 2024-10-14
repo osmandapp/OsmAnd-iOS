@@ -1483,7 +1483,6 @@ colorizationScheme:(int)colorizationScheme
     wptPt->verticalDilutionOfPrecision = 0.0;
     wptPt->speed = oawptPt.speed;
     wptPt->heading = oawptPt.heading;
-    // wptPt->links = QList<OsmAnd::Ref<Link>>();
 
     return wptPt;
 }
@@ -1547,9 +1546,9 @@ colorizationScheme:(int)colorizationScheme
 {
     double textSize = [OAAppSettings.sharedManager.textSize get];
     textSize = textSize < 1. ? 1. : textSize;
-    int r = [self getDefaultRadiusPoi] * textSize;
+   // int r = [self getDefaultRadiusPoi] * textSize;
     NSMutableDictionary<NSString *, OASGpxFile *> *activeGpx = [OASelectedGPXHelper.instance.activeGpx mutableCopy];
-    auto doc = [OASavingTrackHelper sharedInstance].currentTrack;
+    OASGpxFile *doc = [OASavingTrackHelper sharedInstance].currentTrack;
     if (doc)
         activeGpx[kCurrentTrack] = doc;
     
@@ -1573,7 +1572,7 @@ colorizationScheme:(int)colorizationScheme
 
         if (!document)
             continue;
-// FIXME:
+ //FIXME: [document getPointsToDisplay]
 //        NSArray<OASWptPt *> *points = [self findPointsNearSegments:[document getPointsToDisplay] radius:r point:point];
 //        if (points != nil)
 //        {
@@ -1829,14 +1828,15 @@ colorizationScheme:(int)colorizationScheme
             item.point.lon = position.longitude;
             item.point.position = position;
 
-            OASGpxFile * doc = [[OASelectedGPXHelper instance] getGpxFileFor:item.docPath];
+            OASGpxFile *doc = [[OASelectedGPXHelper instance] getGpxFileFor:item.docPath];
             if (doc)
             {
-                // FIXME:
-//                doc->saveTo(QString::fromNSString(item.docPath), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
-//                QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> > docs;
-//                docs[QString::fromNSString(item.docPath)] = doc;
- //               [self refreshGpxTracks:docs reset:YES];
+                OASKFile *file = [[OASKFile alloc] initWithFilePath:item.docPath];
+                doc.author = [OAAppVersion getFullVersionWithAppName];
+                [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:doc];
+                
+                NSDictionary<NSString *, OASGpxFile *> *dic = @{ item.docPath : doc };
+                [self refreshGpxTracks:dic reset:YES];
             }
         }
         else

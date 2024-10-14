@@ -697,8 +697,6 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
     }
 }
 
-
-// FIXME: deprecation (remove after refactoring)
 - (void)copyGPXToNewFolder:(NSString *)newFolderName
            renameToNewName:(NSString *)newFileName
         deleteOriginalFile:(BOOL)deleteOriginalFile
@@ -715,7 +713,6 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
     }
 }
 
-// FIXME: deprecation (remove after refactoring)
 - (void)copyGPXToNewFolder:(NSString *)newFolderName
            renameToNewName:(NSString *)newFileName
         deleteOriginalFile:(BOOL)deleteOriginalFile
@@ -758,8 +755,7 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
     OAGPXDatabase *gpxDatabase = [OAGPXDatabase sharedDb];
     if (deleteOriginalFile)
     {
-        // FIXME:
-        //[gpx updateFolderName:newStoringPath];
+
         doc.path = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
         [gpxDatabase save];
         [[NSFileManager defaultManager] removeItemAtPath:sourcePath error:nil];
@@ -833,8 +829,8 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
 {
     if (newName.length > 0)
     {
-        NSString *oldFilePath = gpx.gpxFilePath; // 2023-10-22_11-34_Sun 1.gpx
-        NSString *oldPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:oldFilePath]; // /Users/oleksandrpanchenko/Library/Containers/57D28383-0CA5-477F-994B-B823A5E5A0B1/Data/Documents/GPX/2023-10-22_11-34_Sun 1.gpx
+        NSString *oldFilePath = gpx.gpxFilePath;
+        NSString *oldPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:oldFilePath];
         NSString *newFileName = [newName stringByAppendingPathExtension:@"gpx"];
         NSString *newFilePath = [[gpx.gpxFilePath stringByDeletingLastPathComponent] stringByAppendingPathComponent:newFileName]; // 2023-10-22_11-34_Sun 2.gpx
         NSString *newPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:newFilePath];
@@ -842,9 +838,7 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
         {
             gpx.gpxTitle = newName;
             gpx.gpxFileName = newFileName;
-            // FIXME:
-            //gpx.gpxFilePath = newFilePath;
-            [[OAGPXDatabase sharedDb] save];
+            [[OAGPXDatabase sharedDb] updateDataItem:gpx];
 
             OASMetadata *metadata;
             if (doc.metadata)

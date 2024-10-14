@@ -2289,8 +2289,8 @@ static const NSInteger kColorsSection = 1;
             OASInt *color = [[OASInt alloc] initWithInt:[self.settings.currentTrackColor get]];
             [self.doc setColorColor:color];
         }
-        // FIXME:
-      //  [self.gpx resetAppearanceToOriginal];
+        [self.gpx resetAppearanceToOriginal];
+
         [self updateAllValues];
         
         if (self.isCurrentTrack)

@@ -3247,16 +3247,10 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
                           }
                       }
                   }
-                                
-      // FIXME:
                 
-//                doc->saveTo(QString::fromNSString(self.foundWptDocPath), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
-//                
-//                [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[self.foundWptDocPath lastPathComponent] pointsCount:doc->points.count()];
-//                [[OAGPXDatabase sharedDb] save];
-    
-//                OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFile.path];
-//                [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
+                OASKFile *file = [[OASKFile alloc] initWithFilePath:self.foundWptDocPath];
+                doc.author = [OAAppVersion getFullVersionWithAppName];
+                [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:doc];
                 
                 // update map
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -3319,9 +3313,10 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
                         break;
                     }
                 }
-                // FIXME:
-                // writeGPX to disk
-               // doc->saveTo(QString::fromNSString(self.foundWptDocPath), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
+                
+                OASKFile *file = [[OASKFile alloc] initWithFilePath:self.foundWptDocPath];
+                doc.author = [OAAppVersion getFullVersionWithAppName];
+                [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:doc];
 
                 // update map
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -3382,14 +3377,13 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 //                [OAGPXDocument fillPointsGroup:wpt wptPtPtr:w doc:doc];
                 OAGPXAppearanceCollection *appeacaneCollection = [OAGPXAppearanceCollection sharedInstance];
                 [appeacaneCollection selectColor:[appeacaneCollection getColorItemWithValue:[wpt getColor]]];
-
-            //    doc->saveTo(QString::fromNSString(gpxFileName), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
+                
+                OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFileName];
+                doc.author = [OAAppVersion getFullVersionWithAppName];
+                [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:doc];
 
                 self.foundWpt = wpt;
                 self.foundWptDocPath = gpxFileName;
-// FIXME:
-//                [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[self.foundWptDocPath lastPathComponent] pointsCount:doc->points.count()];
-//                [[OAGPXDatabase sharedDb] save];
                 
                 NSMutableSet *groups = [NSMutableSet set];
                 for (OASWptPt *loc in doc.getAllPoints)
@@ -3422,14 +3416,10 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             OAGPXAppearanceCollection *appeacaneCollection = [OAGPXAppearanceCollection sharedInstance];
             [appeacaneCollection selectColor:[appeacaneCollection getColorItemWithValue:[wpt getColor]]];
             
-            // FIXME:
-
-//            doc->saveTo(QString::fromNSString(gpxFileName), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
-//
-//            [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[self.foundWptDocPath lastPathComponent] pointsCount:doc->points.count()];
-//            [[OAGPXDatabase sharedDb] save];
+            OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFileName];
+            doc.author = [OAAppVersion getFullVersionWithAppName];
+            [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:doc];
             
-  
             NSMutableSet *groups = [NSMutableSet set];
             for (OASWptPt *loc in doc.getAllPoints)
             {
@@ -3530,8 +3520,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             
             if (found)
             {
-                // FIXME:
-              //  doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
+                OASKFile *file = [[OASKFile alloc] initWithFilePath:docPath];
+                doc.author = [OAAppVersion getFullVersionWithAppName];
+                [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:doc];
                 
                 // update map
                 if (updateMap)
@@ -3570,8 +3561,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         
         if (found)
         {
-            // FIXME:
-          //  doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
+            OASKFile *file = [[OASKFile alloc] initWithFilePath:docPath];
+            doc.author = [OAAppVersion getFullVersionWithAppName];
+            [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:doc];
             
             // update map
             if (updateMap)
@@ -3617,8 +3609,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             [_selectedGpxHelper removeGpxFileWith:oldPath];
             [_selectedGpxHelper addGpxFile:doc for:docPath];
             
-           // FIXME:
-         //   doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
+            OASKFile *file = [[OASKFile alloc] initWithFilePath:docPath];
+            doc.author = [OAAppVersion getFullVersionWithAppName];
+            [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:doc];
             
             return YES;
         }
@@ -3635,8 +3628,11 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         }
 // FIXME:
 //        [OAGPXDocument fillMetadata:m usingMetadata:metadata];
-//        doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
-//        
+        
+        OASKFile *file = [[OASKFile alloc] initWithFilePath:docPath];
+        doc.author = [OAAppVersion getFullVersionWithAppName];
+        [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:doc];
+
         return YES;
     }
     
@@ -3693,11 +3689,10 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             
             if (found)
             {
-                // FIXME:
-//                doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
-//
-//                [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[docPath lastPathComponent] pointsCount:doc->points.count()];
-//                [[OAGPXDatabase sharedDb] save];
+                
+                OASKFile *file = [[OASKFile alloc] initWithFilePath:docPath];
+                doc.author = [OAAppVersion getFullVersionWithAppName];
+                [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:doc];
                 
                 // update map
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -3730,11 +3725,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         
         if (found)
         {
-            // FIXME:
-//            doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
-//
-//            [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[docPath lastPathComponent] pointsCount:doc->points.count()];
-//            [[OAGPXDatabase sharedDb] save];
+            OASKFile *file = [[OASKFile alloc] initWithFilePath:docPath];
+            doc.author = [OAAppVersion getFullVersionWithAppName];
+            [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:doc];
             
             // update map
             dispatch_async(dispatch_get_main_queue(), ^{

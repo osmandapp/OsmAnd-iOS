@@ -176,9 +176,9 @@ extension TrackItem {
         }
     }
 
-    var elevationMeters: Bool {
+    var elevationMeters: Double {
         get {
-            dataItem?.elevationMeters ?? false
+            dataItem?.elevationMeters ?? 0.0
         }
         set {
             dataItem?.elevationMeters = newValue
@@ -287,6 +287,35 @@ extension TrackItem {
     func getNiceTitle() -> String {
         dataItem?.getNiceTitle() ?? ""
     }
+    
+    func resetAppearanceToOriginal() {
+        var gpx: GpxFile?
+        if isShowCurrentTrack {
+            gpx = OASavingTrackHelper.sharedInstance().currentTrack
+        } else {
+            if let file = dataItem?.file {
+                gpx = GpxUtilities.shared.loadGpxFile(file: file)
+            }
+        }
+        if let gpx {
+            splitType = OAGPXDatabase.splitType(byName: gpx.getSplitType())
+            splitInterval = gpx.getSplitInterval()
+            color = gpx.getColor(defColor: 0)?.intValue ?? 0
+            coloringType = gpx.getColoringType() ?? ""
+            gradientPaletteName = gpx.getGradientColorPalette()
+            width = gpx.getWidth(defWidth: nil) ?? ""
+            showArrows = gpx.isShowArrows()
+            showStartFinish = gpx.isShowStartFinish()
+            verticalExaggerationScale = Double(gpx.getAdditionalExaggeration())
+            elevationMeters = Double(gpx.getElevationMeters())
+            visualization3dByType = OAGPXDatabase.lineVisualizationByType(forName: gpx.get3DVisualizationType())
+            visualization3dWallColorType = OAGPXDatabase.lineVisualizationWallColorType(forName: gpx.get3DWallColoringType())
+            
+            visualization3dPositionType = OAGPXDatabase.lineVisualizationPositionType(forName: gpx.get3DLinePositionType())
+        } else {
+            debugPrint("resetAppearanceToOriginal -> gpx is empty")
+        }
+    }
 }
 
 @objc(OASGpxDataItem)
@@ -325,7 +354,8 @@ extension GpxDataItem {
             return Date(timeIntervalSince1970: fileCreationTime)
         }
         set {
-            setParameter(parameter: .fileCreationTime, value: newValue.timeIntervalSince1970)
+            let milliseconds = newValue.timeIntervalSince1970 * 1000
+            setParameter(parameter: .fileCreationTime, value: milliseconds)
         }
     }
     
@@ -343,10 +373,11 @@ extension GpxDataItem {
     var fileLastUploadedTime: Date {
         get {
             let lastUploadedTime = getParameter(parameter: .fileLastUploadedTime) as? Double ?? 0.0
-            return Date(timeIntervalSince1970: lastUploadedTime)
+            return Date(timeIntervalSince1970: lastUploadedTime / 1000)
         }
         set {
-            setParameter(parameter: .fileLastUploadedTime, value: newValue.timeIntervalSince1970)
+            let milliseconds = newValue.timeIntervalSince1970 * 1000
+            setParameter(parameter: .fileLastUploadedTime, value: milliseconds)
         }
     }
     
@@ -449,9 +480,9 @@ extension GpxDataItem {
         }
     }
     
-    var elevationMeters: Bool {
+    var elevationMeters: Double {
         get {
-            getParameter(parameter: .elevationMeters) as? Bool ?? false
+            getParameter(parameter: .elevationMeters) as? Double ?? 0.0
         }
         set {
             setParameter(parameter: .elevationMeters, value: newValue)
@@ -633,8 +664,6 @@ extension GpxDataItem {
     }
     
     func updateFolderName(newFilePath: String) {
-      //  gpxFilePath = newFilePath
-        // FIXME: save to db
         gpxFileName = (newFilePath as NSString).lastPathComponent
         gpxTitle = (gpxFileName as NSString).deletingPathExtension
         gpxFolderName = (newFilePath as NSString).deletingLastPathComponent

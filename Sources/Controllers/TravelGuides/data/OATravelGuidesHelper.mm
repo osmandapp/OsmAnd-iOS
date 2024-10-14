@@ -220,14 +220,23 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
     if (!exception)
     {
         // save to db
-        [[OAGPXDatabase sharedDb] addGPXFileToDBIfNeeded:filePathToSaveGPX.absolutePath];
-        
+        OASGpxDataItem *dataItem = [[OAGPXDatabase sharedDb] addGPXFileToDBIfNeeded:filePathToSaveGPX.absolutePath];
+        if (dataItem)
+        {
+            OASGpxTrackAnalysis *analysis = [dataItem getAnalysis];
+            
+            NSString *nearestCity;
+            if (analysis.locationStart)
+            {
+                OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:analysis.locationStart.position];
+                dataItem.nearestCity = nearestCityPOI ? nearestCityPOI.nameLocalized : @"";
+                [[OAGPXDatabase sharedDb] updateDataItem:dataItem];
+            }
+        }
     } else {
         NSLog(@"[ERROR] -> save gpx");
     }
     
-    // FIXME:
-   // [self buildGpx:filePath title:nil gpxDoc:gpx];
     return filePath;
 }
 
@@ -406,15 +415,24 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
 }
 
 + (OASGpxDataItem *) buildGpx:(NSString *)path title:(NSString *)title gpxDoc:(OASGpxFile *)gpxDoc
-{
-    return nil;
-    // FIXME:
-//    OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
-//    OASGpxDataItem *gpx = [OAGPXDatabase.sharedDb buildGpxItem:path.lastPathComponent path:path title:title desc:gpxDoc.metadata.desc bounds:gpxDoc.bounds document:gpxDoc fetchNearestCity:YES];
-    // FIXME:
-   // [gpxDb replaceGpxItem:gpx];
- //   [gpxDb save];
-   // return gpx;
+{    
+    OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
+    OASGpxDataItem *gpx = [gpxDb getNewGPXItem:path];
+    if (!gpx)
+    {
+        gpx = [gpxDb addGPXFileToDBIfNeeded:path];
+        OASGpxTrackAnalysis *analysis = [gpx getAnalysis];
+        
+        NSString *nearestCity;
+        if (analysis.locationStart)
+        {
+            OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:analysis.locationStart.position];
+            gpx.nearestCity = nearestCityPOI ? nearestCityPOI.nameLocalized : @"";
+            [gpxDb updateDataItem:gpx];
+        }
+    }
+    return gpx;
+    
 }
 
 + (NSString *) getSelectedGPXFilePath:(NSString *)fileName

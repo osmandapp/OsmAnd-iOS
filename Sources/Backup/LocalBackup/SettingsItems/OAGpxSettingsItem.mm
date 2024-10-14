@@ -136,12 +136,18 @@
 - (void)updateGpxParams:(NSString *)filePath
 {
     OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
-    OASGpxDataItem *gpx = [gpxDb getNewGPXItem:[OAUtilities getGpxShortPath:self.filePath]];
+    OASGpxDataItem *gpx = [gpxDb getNewGPXItem:self.filePath];
     if (!gpx)
     {
-        // FIXME:
-//        OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:filePath];
-//        gpx = [gpxDb addGpxItem:filePath title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds document:doc];
+        gpx = [gpxDb addGPXFileToDBIfNeeded:filePath];
+        OASGpxTrackAnalysis *analysis = [gpx getAnalysis];
+        
+        NSString *nearestCity;
+        if (analysis.locationStart)
+        {
+            OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:analysis.locationStart.position];
+            gpx.nearestCity = nearestCityPOI ? nearestCityPOI.nameLocalized : @"";
+        }
     }
     gpx.color = _appearanceInfo.color;
     gpx.coloringType = _appearanceInfo.coloringType;
@@ -155,8 +161,9 @@
     gpx.visualization3dPositionType = _appearanceInfo.visualization3dPositionType;
     gpx.splitType = _appearanceInfo.splitType;
     gpx.splitInterval = _appearanceInfo.splitInterval;
-    // FIXME:
-    //[gpxDb save];
+    
+    [gpxDb updateDataItem:gpx];
+
     if (gpx.color != 0)
         [[OAGPXAppearanceCollection sharedInstance] getColorItemWithValue:gpx.color];
 }

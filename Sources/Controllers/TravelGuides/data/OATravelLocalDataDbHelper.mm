@@ -10,6 +10,7 @@
 #import "OsmAndApp.h"
 #import "OsmAnd_Maps-Swift.h"
 #import <sqlite3.h>
+#import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ArchiveWriter.h>
@@ -608,7 +609,9 @@
                             
                             if (!stringContent.isEmpty())
                             {
+                                // OASGpxFile
                                 OAGPXDocumentAdapter *adapter = [[OAGPXDocumentAdapter alloc] init];
+
                                 // FIXME:
 //                                OAGPXDocument *document = [[OAGPXDocument alloc] init];
 //                                QXmlStreamReader xmlReader(stringContent);

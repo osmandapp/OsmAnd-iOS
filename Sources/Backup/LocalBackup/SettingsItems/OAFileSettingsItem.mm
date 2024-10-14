@@ -341,22 +341,29 @@
     {
         case EOASettingsItemFileSubtypeGpx:
         {
-            // FIXME:
-//            OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:destFilePath];
-//            [doc saveTo:destFilePath];
-//            OAGPX *gpx = [[OAGPXDatabase sharedDb] addGpxItem:destFilePath title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds document:doc];
-//            [[OAGPXDatabase sharedDb] save];
             
-            // NOTE: new code
-            OASKFile *file = [[OASKFile alloc] initWithFilePath:destFilePath];
-            OASGpxFile *doc = [OASGpxUtilities.shared loadGpxFileFile:file];
-     // FIXME:
-//            NSDictionary<NSString *, OASGpxFile *> *activeGpx = OASelectedGPXHelper.instance.activeGpx;
-//            NSString *gpxFilePath = gpx.gpxFilePath;
-//            if ([activeGpx.allKeys containsObject:gpxFilePath])
-//            {
-//                [OAAppSettings.sharedManager showGpx:@[gpxFilePath]];
-//            }
+            OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
+            OASGpxDataItem *gpx = [gpxDb getNewGPXItem:destFilePath];
+            if (!gpx)
+            {
+                gpx = [gpxDb addGPXFileToDBIfNeeded:destFilePath];
+                OASGpxTrackAnalysis *analysis = [gpx getAnalysis];
+                
+                NSString *nearestCity;
+                if (analysis.locationStart)
+                {
+                    OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:analysis.locationStart.position];
+                    gpx.nearestCity = nearestCityPOI ? nearestCityPOI.nameLocalized : @"";
+                    [gpxDb updateDataItem:gpx];
+                }
+            }
+
+            NSDictionary<NSString *, OASGpxFile *> *activeGpx = OASelectedGPXHelper.instance.activeGpx;
+            NSString *gpxFilePath = gpx.gpxFilePath;
+            if ([activeGpx.allKeys containsObject:gpxFilePath])
+            {
+                [OAAppSettings.sharedManager showGpx:@[gpxFilePath]];
+            }
 
             break;
         }

@@ -136,10 +136,24 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
     [NSFileManager.defaultManager createDirectoryAtPath:destFilePath.stringByDeletingLastPathComponent withIntermediateDirectories:YES attributes:nil error:nil];
     
     OASKFile *fileDest = [[OASKFile alloc] initWithFilePath:destFilePath];
-    [OASGpxUtilities.shared writeGpxFileFile:fileDest gpxFile:doc];
-   // FIXME:
-//    [[OAGPXDatabase sharedDb] addGpxItem:destFilePath title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds document:doc];
-    [[OAGPXDatabase sharedDb] save];
+    OASKException *exception = [OASGpxUtilities.shared writeGpxFileFile:fileDest gpxFile:doc];
+    if (!exception)
+    {
+        OASGpxDataItem *dataItem = [[OAGPXDatabase sharedDb] addGPXFileToDBIfNeeded:destFilePath];
+        if (dataItem)
+        {
+            OASGpxTrackAnalysis *analysis = [dataItem getAnalysis];
+            
+            NSString *nearestCity;
+            if (analysis.locationStart)
+            {
+                OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:analysis.locationStart.position];
+                dataItem.nearestCity = nearestCityPOI ? nearestCityPOI.nameLocalized : @"";
+                [[OAGPXDatabase sharedDb] updateDataItem:dataItem];
+            }
+        }
+
+    }
 }
 
 + (void)installObfResource:(BOOL &)failed resourceId:(NSString *)resourceId localPath:(NSString *)localPath fileName:(NSString *)fileName hidden:(BOOL)hidden

@@ -237,10 +237,9 @@
             {
                 for (OASWptPt *pt in rte.points)
                 {
-                   // FIXME: pt.verticalDilutionOfPrecision
-//                    CLLocation *loc = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(pt.position.latitude, pt.position.longitude) altitude:pt.ele horizontalAccuracy:pt.hdop verticalAccuracy:pt.verticalDilutionOfPrecision course:0 speed:pt.speed timestamp:[NSDate dateWithTimeIntervalSince1970:pt.time]];
-//                    
-//                    [points addObject:loc];
+                    CLLocation *loc = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(pt.position.latitude, pt.position.longitude) altitude:pt.ele horizontalAccuracy:pt.hdop verticalAccuracy:0 course:0 speed:pt.speed timestamp:[NSDate dateWithTimeIntervalSince1970:pt.time]];
+                    
+                    [points addObject:loc];
                 }
             }
         }
@@ -473,10 +472,9 @@
     {
         for (OASWptPt *pt in gpxFile.getAllPoints)
         {
-            // FIXME: pt.verticalDilutionOfPrecision
-//            CLLocation *loc = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(pt.position.latitude, pt.position.longitude) altitude:pt.ele horizontalAccuracy:pt.hdop verticalAccuracy:pt.verticalDilutionOfPrecision course:0 speed:pt.speed timestamp:[NSDate dateWithTimeIntervalSince1970:pt.time]];
+            CLLocation *loc = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(pt.position.latitude, pt.position.longitude) altitude:pt.ele horizontalAccuracy:pt.hdop verticalAccuracy:0 course:0 speed:pt.speed timestamp:[NSDate dateWithTimeIntervalSince1970:pt.time]];
             
- //           [res addObject:loc];
+            [res addObject:loc];
         }
     }
     else

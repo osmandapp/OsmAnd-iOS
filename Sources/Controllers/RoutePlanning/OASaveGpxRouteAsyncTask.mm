@@ -126,25 +126,38 @@
     OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
     NSString *gpxFilePath = [OAUtilities getGpxShortPath:_outFile];
     OASGpxDataItem *oldGpx = [gpxDb getNewGPXItem:_outFile];
-    // FIXME:
-//    OASGpxDataItem *gpx = [gpxDb buildGpxItem:gpxFilePath title:_savedGpxFile.metadata.name desc:_savedGpxFile.metadata.desc bounds:_savedGpxFile.bounds document:_savedGpxFile fetchNearestCity:YES];
-//    if (oldGpx)
-//    {
-//        gpx.showArrows = oldGpx.showArrows;
-//        gpx.showStartFinish = oldGpx.showStartFinish;
-//        gpx.verticalExaggerationScale = oldGpx.verticalExaggerationScale;
-//        gpx.elevationMeters = oldGpx.elevationMeters;
-//        gpx.visualization3dByType = oldGpx.visualization3dByType;
-//        gpx.visualization3dWallColorType = oldGpx.visualization3dWallColorType;
-//        gpx.visualization3dPositionType = oldGpx.visualization3dPositionType;
-//        gpx.color = oldGpx.color;
-//        gpx.coloringType = oldGpx.coloringType;
-//        gpx.width = oldGpx.width;
-//        gpx.splitType = oldGpx.splitType;
-//        gpx.splitInterval = oldGpx.splitInterval;
-//        gpx.creationDate = oldGpx.creationDate;
-//    }
-//    [gpxDb updateDataItem:gpx];
+    
+    OASGpxDataItem *gpx = [gpxDb getNewGPXItem:gpxFilePath];
+    if (!gpx)
+    {
+        gpx = [gpxDb addGPXFileToDBIfNeeded:gpxFilePath];
+        OASGpxTrackAnalysis *analysis = [gpx getAnalysis];
+        
+        NSString *nearestCity;
+        if (analysis.locationStart)
+        {
+            OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:analysis.locationStart.position];
+            gpx.nearestCity = nearestCityPOI ? nearestCityPOI.nameLocalized : @"";
+        }
+    }
+
+    if (oldGpx)
+    {
+        gpx.showArrows = oldGpx.showArrows;
+        gpx.showStartFinish = oldGpx.showStartFinish;
+        gpx.verticalExaggerationScale = oldGpx.verticalExaggerationScale;
+        gpx.elevationMeters = oldGpx.elevationMeters;
+        gpx.visualization3dByType = oldGpx.visualization3dByType;
+        gpx.visualization3dWallColorType = oldGpx.visualization3dWallColorType;
+        gpx.visualization3dPositionType = oldGpx.visualization3dPositionType;
+        gpx.color = oldGpx.color;
+        gpx.coloringType = oldGpx.coloringType;
+        gpx.width = oldGpx.width;
+        gpx.splitType = oldGpx.splitType;
+        gpx.splitInterval = oldGpx.splitInterval;
+        gpx.creationDate = oldGpx.creationDate;
+    }
+    [gpxDb updateDataItem:gpx];
 }
 
 - (OASGpxFile *) generateGpxFile:(NSString *)trackName gpx:(OASGpxFile *)gpx

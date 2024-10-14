@@ -393,21 +393,12 @@ static UIViewController *parentController;
 
     if (_newGpxName)
     {
-      //  NSString *storingPathInFolder = [_importGpxRelativePath stringByAppendingPathComponent:_newGpxName];
-        // FIXME: rename
         item = [[OAGPXDatabase sharedDb] addGPXFileToDBIfNeeded:[_importGpxPath stringByAppendingPathComponent:[self getCorrectedFilename:[_importUrl.path lastPathComponent]]]];
     }
     else
     {
-//        NSString *name = [self getCorrectedFilename:[_importUrl.path lastPathComponent]];
-//        NSString *storingPathInFolder = [_importGpxRelativePath stringByAppendingPathComponent:name];
-        // _doc.metadata.name - 2023-10-22_11-34_Sun
-        // _doc.metadata.desc = <object returned empty description>
-       // storingPathInFolder = 123/_2024-07-30_.gpx
-      //  item = [[OAGPXDatabase sharedDb] addGpxItem:storingPathInFolder title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds document:_doc];
         [[OAGPXDatabase sharedDb] addGPXFileToDBIfNeeded:[_importGpxPath stringByAppendingPathComponent:[self getCorrectedFilename:[_importUrl.path lastPathComponent]]]];
     }
-  //  [[OAGPXDatabase sharedDb] save];
     if (item.color != 0)
         [[OAGPXAppearanceCollection sharedInstance] getColorItemWithValue:item.color];
 

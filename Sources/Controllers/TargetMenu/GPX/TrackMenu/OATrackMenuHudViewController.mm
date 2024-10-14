@@ -1116,8 +1116,6 @@
 
         if (self.isCurrentTrack)
         {
-            // FIXME:
-           // [OAGPXDocument fillWpt:waypoint.point.wpt usingWpt:waypoint.point];
             OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
             [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[waypoint.point getColor]]];
             [self.savingHelper saveWpt:waypoint.point];
@@ -1139,8 +1137,6 @@
                     existWaypoint.color = UIColorFromRGB([self getWaypointsGroupColor:groupName]);
                     if (self.isCurrentTrack)
                     {
-                        // FIXME:
-                        //[OAGPXDocument fillWpt:existWaypoint.point.wpt usingWpt:existWaypoint.point];
                         OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
                         [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[existWaypoint.point getColor]]];
                         [self.savingHelper saveWpt:existWaypoint.point];
@@ -1562,10 +1558,24 @@
     OASKFile *file = [[OASKFile alloc] initWithFilePath:path];
     [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:self.doc];
     self.doc.path = path;
-    // FIXME:
-//    OAGPX *gpx = [[OAGPXDatabase sharedDb] addGpxItem:path title:self.doc.metadata.name desc:nil bounds:self.doc.bounds document:self.doc];
-//    [[OAGPXDatabase sharedDb] save];
-//    self.gpx = gpx;
+    
+    OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
+    OASGpxDataItem *gpx = [gpxDb getNewGPXItem:path];
+    if (!gpx)
+    {
+        gpx = [gpxDb addGPXFileToDBIfNeeded:path];
+        OASGpxTrackAnalysis *analysis = [gpx getAnalysis];
+        
+        NSString *nearestCity;
+        if (analysis.locationStart)
+        {
+            OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:analysis.locationStart.position];
+            gpx.nearestCity = nearestCityPOI ? nearestCityPOI.nameLocalized : @"";
+            [gpxDb updateDataItem:gpx];
+        }
+    }
+    self.gpx = [[OASTrackItem alloc] initWithFile:gpx.file];
+
     _routeKey = [OARouteKey fromGpx:self.doc.networkRouteKeyTags];
     _isNewRoute = NO;
     [self.mapViewController hideTempGpxTrack];
@@ -2770,7 +2780,6 @@
         
     if (!descr || descr.length == 0)
     {
-        // FIXME: need to check
         NSString *descExtension = [self.doc.metadata getExtensionsToWrite][@"desc"];
         if (descExtension)
             [self.doc.metadata removeExtensionsWriterKey:@"desc"];

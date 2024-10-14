@@ -1476,7 +1476,7 @@ typedef enum
             [weakSelf hideProgress];
             if (!gpxFile)
                 return;
-        //    OAGPXDatabase *db = [OAGPXDatabase sharedDb];
+
             OARouteKey *key = (OARouteKey *)targetPoint.targetObj;
             NSString *name = key.routeKey.getRouteName().toNSString();
             name = name.length == 0 ? OALocalizedString(@"layer_route") : name;
@@ -1491,17 +1491,22 @@ typedef enum
             OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFile.path];
             [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
             [weakSelf.mapViewController showTempGpxTrackFromDocument:gpxFile];
-            // FIXME:
-//            OAGPX *gpx = [db buildGpxItem:[path stringByReplacingOccurrencesOfString:_app.gpxPath withString:@""] title:name desc:gpxFile.metadata.desc bounds:gpxFile.bounds document:gpxFile fetchNearestCity:NO];
+            OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
+            OASGpxDataItem *gpx = [gpxDb getNewGPXItem:path];
+            if (!gpx)
+            {
+                gpx = [gpxDb addGPXFileToDBIfNeeded:path];
+    
+            }
+
             OATrackMenuViewControllerState *state = [OATrackMenuViewControllerState withPinLocation:targetPoint.location
                                                                                       openedFromMap:YES];
             state.trackIcon = targetPoint.icon;
-            // FIXME:
-//            [weakSelf openTargetViewWithGPX:gpx
-//                                      items:nil
-//                               routeKey:targetPoint.targetObj
-//                           trackHudMode:EOATrackMenuHudMode
-//                                  state:state];
+            [weakSelf openTargetViewWithGPX:[[OASTrackItem alloc] initWithFile:file]
+                                      items:nil
+                               routeKey:targetPoint.targetObj
+                           trackHudMode:EOATrackMenuHudMode
+                                  state:state];
         }];
     }
     else
@@ -4263,8 +4268,6 @@ typedef enum
     
     if (gpxWptItem.point)
     {
-        // FIXME:
-      //  [OASGpxFile fillWpt:gpxWptItem.point.wpt usingWpt:gpxWptItem.point];
         [_mapViewController saveFoundWpt];
     }
 }

@@ -120,8 +120,6 @@ static QuickActionType *TYPE;
     
     if (wpt.point)
     {
-        // FIXME:
-       //  [OAGPXDocument fillWpt:wpt.point.wpt usingWpt:wpt.point];
         mapVC.foundWpt = p;
         [mapVC saveFoundWpt];
     }

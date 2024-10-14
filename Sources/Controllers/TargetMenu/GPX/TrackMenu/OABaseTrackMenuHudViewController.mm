@@ -268,13 +268,16 @@
         }
         else if (_doc)
         {
-            // FIXME:
-//            OAGPXDatabase *db = [OAGPXDatabase sharedDb];
-//            OAGPX *gpx = [db buildGpxItem:_gpx.gpxFilePath title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds document:_doc fetchNearestCity:NO];
-//            gpx.nearestCity = _gpx.nearestCity;
-//            [db replaceGpxItem:gpx];
-//            [db save];
-           // _gpx = gpx;
+            
+            OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
+            OASGpxDataItem *gpx = [gpxDb getNewGPXItem:_gpx.gpxFilePath];
+            if (!gpx)
+            {
+                gpx = [gpxDb addGPXFileToDBIfNeeded:_gpx.gpxFilePath];
+            }
+            gpx.nearestCity = _gpx.nearestCity;
+            [gpxDb updateDataItem:gpx];
+            _gpx = [[OASTrackItem alloc] initWithFile:gpx.file];
         }
     }
 }

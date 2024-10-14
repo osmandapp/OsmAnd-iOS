@@ -113,7 +113,6 @@
 
 //- (void)resetAppearanceToOriginal
 //{
-//    // FIXME:
 //    OAGPXDocument *document = [_gpxTitle isEqualToString:OALocalizedString(@"shared_string_currently_recording_track")]
 //            ? nil/*(OAGPXDocument *) [OASavingTrackHelper sharedInstance].currentTrack*/
 //            : [[OAGPXDocument alloc] initWithGpxFile:[[OsmAndApp instance].gpxPath stringByAppendingPathComponent:_gpxFilePath]];
@@ -582,6 +581,10 @@
 
 - (OASGpxDataItem *)addGPXFileToDBIfNeeded:(NSString *)filePath
 {
+    if (![@"current_track" isEqualToString:filePath] && ![filePath containsString:OsmAndApp.instance.gpxPath]) {
+        filePath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:filePath];
+    }
+    
     OASKFile *file = [[OASKFile alloc] initWithFilePath:filePath];
 //    GpxDbHelperGpxDataItemCallback *callback = [GpxDbHelperGpxDataItemCallback new];
 //    [[OASGpxDbHelper shared] getItemFile:file callback:callback];

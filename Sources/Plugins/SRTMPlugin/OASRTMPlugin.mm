@@ -84,7 +84,7 @@ NSInteger const defaultTrasparency = 80;
 
 - (NSString *)getDescription
 {
-    return [NSString stringWithFormat:OALocalizedString(@"srtm_plugin_description", nil), k_docs_plugin_srtm];
+    return [NSString stringWithFormat:OALocalizedString(@"srtm_plugin_description"), k_docs_plugin_srtm];
 }
 
 - (TerrainMode *)getTerrainMode

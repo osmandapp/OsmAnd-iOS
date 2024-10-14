@@ -481,10 +481,10 @@
         {
             UIAlertController *alertController = [UIAlertController
                                                   alertControllerWithTitle:nil
-                                                                   message:OALocalizedString(@"osm_live_enter_email", nil)
+                                                                   message:OALocalizedString(@"osm_live_enter_email")
                                                             preferredStyle:UIAlertControllerStyleAlert];
 
-            UIAlertAction *okAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok", nil)
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok")
                           style:UIAlertActionStyleDefault
                         handler:nil];
             [alertController addAction:okAction];
@@ -496,10 +496,10 @@
         {
             UIAlertController *alertController = [UIAlertController
                                                   alertControllerWithTitle:nil
-                                                                   message:OALocalizedString(@"osm_live_enter_user_name", nil)
+                                                                   message:OALocalizedString(@"osm_live_enter_user_name")
                                                             preferredStyle:UIAlertControllerStyleAlert];
 
-            UIAlertAction *okAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok", nil)
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok")
                           style:UIAlertActionStyleDefault
                         handler:nil];
             [alertController addAction:okAction];
@@ -596,7 +596,7 @@
                                                           message:[NSString stringWithFormat:@"Error: %@", [map objectForKey:@"error"]]
                                                    preferredStyle:UIAlertControllerStyleAlert];
                                      
-                                     UIAlertAction *okAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok", nil)
+                                     UIAlertAction *okAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok")
                                                    style:UIAlertActionStyleDefault handler:nil];
                                      [alertController addAction:okAction];
                                      
@@ -614,10 +614,10 @@
                      if (hasError && !alertDisplayed)
                      {
                          UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil
-                                              message:OALocalizedString(@"shared_string_io_error", nil)
+                                              message:OALocalizedString(@"shared_string_io_error")
                                        preferredStyle:UIAlertControllerStyleAlert];
 
-                         UIAlertAction *okAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok", nil)
+                         UIAlertAction *okAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok")
                                        style:UIAlertActionStyleDefault
                                      handler:nil];
                          [alertController addAction:okAction];
@@ -631,10 +631,10 @@
         {
             UIAlertController *alertController = [UIAlertController
                 alertControllerWithTitle:nil
-                                 message:OALocalizedString(@"shared_string_io_error", nil)
+                                 message:OALocalizedString(@"shared_string_io_error")
                           preferredStyle:UIAlertControllerStyleAlert];
 
-            UIAlertAction *okAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok", nil)
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok")
                           style:UIAlertActionStyleDefault
                         handler:nil];
             [alertController addAction:okAction];

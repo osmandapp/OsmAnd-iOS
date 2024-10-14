@@ -1739,7 +1739,7 @@
 
 - (NSString *) localizedDescriptionExt
 {
-    return [NSString stringWithFormat:OALocalizedString(@"record_plugin_description", nil), k_docs_plugin_trip_recording];
+    return [NSString stringWithFormat:OALocalizedString(@"record_plugin_description"), k_docs_plugin_trip_recording];
 }
 
 @end
@@ -1874,7 +1874,7 @@
 
 - (NSString *) localizedDescriptionExt
 {
-    return [NSString stringWithFormat:OALocalizedString(@"srtm_plugin_description", nil), k_docs_plugin_srtm];
+    return [NSString stringWithFormat:OALocalizedString(@"srtm_plugin_description"), k_docs_plugin_srtm];
 }
 
 @end
@@ -1919,7 +1919,7 @@
 
 - (NSString *) localizedDescriptionExt
 {
-    return [NSString stringWithFormat:OALocalizedString(@"osm_editing_plugin_description", nil), k_docs_plugin_osm];
+    return [NSString stringWithFormat:OALocalizedString(@"osm_editing_plugin_description"), k_docs_plugin_osm];
 }
 
 @end
@@ -2005,7 +2005,7 @@
 
 - (NSString *) localizedDescriptionExt
 {
-    return [NSString stringWithFormat:OALocalizedString(@"weather_plugin_description", nil), k_weather_global_forecast_system];
+    return [NSString stringWithFormat:OALocalizedString(@"weather_plugin_description"), k_weather_global_forecast_system];
 }
 
 @end

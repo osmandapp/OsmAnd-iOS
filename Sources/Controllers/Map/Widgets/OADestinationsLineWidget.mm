@@ -278,14 +278,27 @@
             
             CGContextSaveGState(ctx);
             {
-                UIImage *arrowIcon = [self getArrowImage:[UIImage imageNamed:kArrowFrame]
-                                                 inImage:[UIImage imageNamed:colorName]
-                                              withShadow:[UIImage imageNamed:kArrowShadow]];
-                CGRect imageRect = CGRectMake(0, 0, arrowIcon.size.width, arrowIcon.size.height);
-                CGContextTranslateCTM(ctx, screenCenter.x, screenCenter.y);
-                CGContextRotateCTM(ctx, angle);
-                CGContextTranslateCTM(ctx, (imageRect.size.width * -0.5) + kArrowOffset, imageRect.size.height * -0.5);
-                CGContextDrawImage(ctx, imageRect, arrowIcon.CGImage);
+                UIImage *fgImage = [UIImage imageNamed:kArrowFrame];
+                UIImage *bgImage = [UIImage imageNamed:colorName];
+                UIImage *shadow = [UIImage imageNamed:kArrowShadow];
+                if (fgImage && bgImage && shadow)
+                {
+                    UIImage *arrowIcon = [self getArrowImage:fgImage
+                                                     inImage:bgImage
+                                                  withShadow:shadow];
+                    if (arrowIcon)
+                    {
+                        CGRect imageRect = CGRectMake(0, 0, arrowIcon.size.width, arrowIcon.size.height);
+                        CGContextTranslateCTM(ctx, screenCenter.x, screenCenter.y);
+                        CGContextRotateCTM(ctx, angle);
+                        CGContextTranslateCTM(ctx, (imageRect.size.width * -0.5) + kArrowOffset, imageRect.size.height * -0.5);
+                        CGContextDrawImage(ctx, imageRect, arrowIcon.CGImage);
+                    }
+                }
+                else
+                {
+                    NSLog(@"Faliled to create OADestinationsLineWidget image for colorName: %@", colorName);
+                }
             }
             CGContextRestoreGState(ctx);
         }

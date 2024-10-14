@@ -210,6 +210,7 @@ typedef void (^LocationArrayCallback)(NSArray<CLLocation *> *locations, NSError 
 
 + (void) startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource
             resourceName:(NSString *)name
+            resourceItem:(OAResourceItem *)resourceItem
            onTaskCreated:(OADownloadTaskCallback)onTaskCreated
            onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
 
@@ -242,6 +243,7 @@ typedef void (^LocationArrayCallback)(NSArray<CLLocation *> *locations, NSError 
 + (NSString *) getCountryName:(OAResourceItem *)item;
 + (BOOL) checkIfDownloadAvailable;
 + (BOOL) checkIfDownloadAvailable:(OAWorldRegion *)region;
++ (BOOL) isInOutdatedResourcesList:(NSString *)resourceId;
 
 + (void) requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate
                    resourceType:(OsmAndResourceType)resourceType

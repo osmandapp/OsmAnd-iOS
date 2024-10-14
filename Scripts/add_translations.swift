@@ -18,6 +18,22 @@ let LOGGING = false
 ///For debug set here your Osmand repositories path
 let OSMAND_REPOSITORIES_PATH = "/Users/nnngrach/Projects/Coding/OsmAnd/"
 
+///For quick debugging you can write interesting key only in this var.
+let DEBUG_STOP_KEY = "empty_purchases_description"
+
+///For turning off updating translations. In this mode scrip will only delete trash strings
+let DEBUG_STOP_UPDATING_TRANSLATIONS = false
+
+///Start really slow finding process. Deletes all strings with equals keys and values.
+///Usialy there are duplicates like "map_locale" = "Map Language";
+///But sometimes it cal delete correct loalization like "shared_string_done" = "Готово"; for ru, bel, uk languages.
+///So this is risky method. Use Git Diff for manually check and rever all non-english deleting.
+let DEBUG_RUN_SLOW_DUPLICATES_DELETING = false   // Danger mode
+
+// For non-latin languages (Korean, Arabic, etc) just remove every english-only string. It's usuallu just a duplicate like "GPX", "GPS", etc
+// Upd: this cleaning is already done. Maybe we don't need to run it much more.
+let DEBUG_DELETE_ALL_LATIN_ONLY_STRINGS_FROM_NONLATIN_LANGS = false
+
 
 var iosEnglishDict: [String : String] = [:]
 var androidEnglishDict: [String : String] = [:]
@@ -25,113 +41,139 @@ var androidEnglishDictOrig: [String : String] = [:]
 
 var commonDict: [String:String]?
 var commonValuesDict: [String:[String]] = [:]
+var duplicatesValues: [String: String] = [:]    // it stores inverted key and values. duplicatesValues["tranlation_value"] = "tranlation_key"
 var duplicatesCount = 0
 
 let iosEnglishKey = "en"
 let androidEnglishKey = ""
-// Test
-// let languageDict = [
-//     "ru" : "ru"
-// ]
+
+/// For quick debug just comment out all unnecessary languages. Like this
+/*
+let languageDict = [
+    //"af" : "af",
+    //"an" : "an",
+    "ar" : "ar",
+    //"ars" : "ars",
+    //"ast" : "ast",
+    // ...
+]
+*/
+
 
 let languageDict = [
-    "af" : "af",
-    "an" : "an",
-    "ar" : "ar",
-    "ars" : "ars",
-    "ast" : "ast",
-    "az" : "az",
-    "be" : "be",
-    "bg" : "bg",
-    "bn" : "bn",
-    "br" : "br",
-    "bs" : "bs",
-    "ca" : "ca",
-    "ckb" : "ckb",
-    "cs" : "cs",
-    "cy" : "cy",
-    "da" : "da",
-    "de" : "de",
-    "el" : "el",
-    "en-GB" : "en-rGB",
-    "eo" : "eo",
-    "es" : "es",
-    "es-AR" : "es-rAR",
-    "es-US" : "es-rUS",
-    "et" : "et",
-    "eu" : "eu",
-    "fa" : "fa",
-    "fi" : "fi",
-    "fr" : "fr",
-    "gl" : "gl",
-    "he" : "iw",
-    "hr" : "hr",
-    "hsb" : "b+hsb",
-    "hu" : "hu",
-    "hy" : "hy",
-    "ia" : "ia",
-    "id" : "in",
-    "is" : "is",
-    "it" : "it",
-    "ja" : "ja",
-    "ka" : "ka",
-    "kab" : "b+kab",
-    "kn" : "kn",
-    "ko" : "ko",
-    "ku" : "ku",
-    "lt" : "lt",
-    "lv" : "lv",
-    "mk" : "mk",
-    "ml" : "ml",
-    "mn" : "mn",
-    "mr" : "mr",
-    "my" : "my",
-    "nb" : "nb",
-    "nl" : "nl",
-    "nn" : "nn",
-    "oc" : "oc",
-    "pa-Arab-PK" : "pa-rPK",
-    "pl" : "pl",
-    "pt" : "pt",
-    "pt-BR" : "pt-rBR",
-    "ro-RO" : "ro",
-    "ru" : "ru",
-    "sat" : "sat",
-    "sc" : "sc",
-    "sk" : "sk",
-    "sl" : "sl",
-    "sq" : "sq",
-    "sr" : "sr",
-    "sr-Latn" : "b+sr+Latn",
-    "sv" : "sv",
-    "ta" : "ta",
-    "te" : "te",
-    "tr" : "tr",
-    "tt" : "tt",
-    "tzm" : "tzm",
-    "uk" : "uk",
-    "ur" : "ur",
-    "uz-Cyrl" : "uz",
-    "vi" : "vi",
-    "zh-Hans" : "zh-rCN" ,
-    "zh-Hant" : "zh-rTW",
+    "af" : "af",                // Afrikaans
+    "an" : "an",                // Dutch
+    "ar" : "ar",                // Arabic
+    "ars" : "ars",              // Arabic, Najdi
+    "ast" : "ast",              // Asturian
+    "az" : "az",                // Azerbaijani
+    "be" : "be",                // Belarusian
+    "bg" : "bg",                // Bulgarian
+    "bn" : "bn",                // Bangla
+    "br" : "br",                // Breton
+    "bs" : "bs",                // Bosnian
+    "ca" : "ca",                // Catalan
+    "ckb" : "ckb",              // Kurdish, Sorani
+    "cs" : "cs",                // Czech
+    "cy" : "cy",                // Welsh
+    "da" : "da",                // Danish
+    "de" : "de",                // German
+    "el" : "el",                // Greek
+    "en-GB" : "en-rGB",         // English (United Kingdom)
+    "eo" : "eo",                // Esperanto
+    "es" : "es",                // Spanish
+    "es-AR" : "es-rAR",         // Spanish (Argentina)
+    "es-US" : "es-rUS",         // Spanish (United States)
+    "et" : "et",                // Estonian
+    "eu" : "eu",                // Basque
+    "fa" : "fa",                // Persian
+    "fi" : "fi",                // Finnish
+    "fr" : "fr",                // French
+    "gl" : "gl",                // Galician
+    "he" : "iw",                // Hebrew
+    "hi" : "hi",                // Hindi
+    "hr" : "hr",                // Croatian
+    "hsb" : "b+hsb",            // Upper Sorbian
+    "hu" : "hu",                // Hungarian
+    "hy" : "hy",                // Armenian
+    "ia" : "ia",                // Interlingua
+    "id" : "in",                // Indonesian
+    "is" : "is",                // Icelandic
+    "it" : "it",                // Italian
+    "ja" : "ja",                // Japanese
+    "ka" : "ka",                // Georgian
+    "kab" : "b+kab",            // Kabyle
+    "kn" : "kn",                // Kannada
+    "ko" : "ko",                // Korean
+    "ku" : "ku",                // Kurdish
+    "lt" : "lt",                // Lithuanian
+    "lv" : "lv",                // Latvian
+    "mk" : "mk",                // Macedonian
+    "ml" : "ml",                // Malayalam
+    "mn" : "mn",                // Mongolian
+    "mr" : "mr",                // Marathi
+    "my" : "my",                // Burmese
+    "nb" : "nb",                // Norwegian Bokmål
+    "nl" : "nl",                // Dutch
+    "nn" : "nn",                // Norwegian Nynorsk
+    "oc" : "oc",                // Occitan
+    "pa-Arab-PK" : "pa-rPK",    // Punjabi (Naskh, Pakistan)
+    "pl" : "pl",                // Polish
+    "pt" : "pt",                // Portuguese
+    "pt-BR" : "pt-rBR",         // Portuguese (Brasil)
+    "ro-RO" : "ro",             // Romanian (Romania)
+    "ru" : "ru",                // Russian
+    "sat" : "sat",              // Santali
+    "sc" : "sc",                // Sardinian
+    "sk" : "sk",                // Slovak
+    "sl" : "sl",                // Slovenian
+    "sq" : "sq",                // Albanian
+    "sr" : "sr",                // Serbian
+    "sr-Latn" : "b+sr+Latn",    // Serbian (Latin)
+    "sv" : "sv",                // Swedish
+    "ta" : "ta",                // Tamil
+    "te" : "te",                // Telugu
+    "tr" : "tr",                // Turkish
+    "tt" : "tt",                // Tatar
+    "tzm" : "tzm",              // Central Atlas Tamazingh
+    "uk" : "uk",                // Ukrainian
+    "ur" : "ur",                // Urdu
+    "uz-Cyrl" : "uz",           // Uzbek (Cyrillic)
+    "vi" : "vi",                // Vietnamese
+    "zh-Hans" : "zh-rCN",       // Chinese Simplified
+    "zh-Hant" : "zh-rTW",       // Chinese Traditional
 ]
 
-
+let removeLatinOnlyStringsForLanguages = [
+    "ar",
+    "ars",
+    "be",
+    "ckb",
+    "fa",
+    "he",
+    "hi",
+    "hy",
+    "ja",
+    "ka",
+    "kn",
+    "ko",
+    "ml",
+    "mr",
+    "my",
+    "ru",
+    "sat",
+    "ta",
+    "te",
+    "uk",
+    "zh-Hans",
+    "zh-Hant"
+]
 
 var allLanguagesDict = languageDict
 allLanguagesDict["en"] = ""
 
-func trim(string: String, from index: Int) -> String {
-    return string.substring(from: string.index(string.startIndex, offsetBy: index))
-}
 
-func charFrom(string: String, at index: Int) -> String {
-    let charIndex = string.index(string.startIndex, offsetBy: index)
-    return String(string[charIndex])
-}
-
-
+// MARK: - Main
 
 class Main {
     
@@ -139,18 +181,20 @@ class Main {
         print("START: add_translations script \n")
 
         let path = getOsmandRepositoriesPath()
-        updateGitRepositories(path) 
-        copyPhrasesFiles(path) 
+        if !DEBUG {
+            updateGitRepositories(path)
+            copyPhrasesFiles(path)
+        }
         
         Initialiser.initUpdatingTranslationKeyLists(path)
-        addRoutingParametersIfNeeded(arguments, path) 
+        addRoutingParametersIfNeeded(arguments, path)
         updateTranslations(path)
         
         print("DONE: add_translations script \n")
     }
     
     
-    static private func getOsmandRepositoriesPath() -> URL {
+    static func getOsmandRepositoriesPath() -> URL {
         print("RUN: Main.getOsmandRepositoriesPath() \n")
         var path: URL? = nil
         if (DEBUG) {
@@ -191,6 +235,7 @@ class Main {
     
     
     static private func addRoutingParametersIfNeeded(_ arguments: [String], _ osmandRepositoriesFolder: URL) {
+        guard !DEBUG_STOP_UPDATING_TRANSLATIONS else { return }
         print("RUN: Main.addRoutingParametersIfNeeded() \n")
         System.changeDir(osmandRepositoriesFolder.appendingPathComponent("ios/").path)
         //if (arguments.count == 2) && (arguments[1] == "-routing") || DEBUG {
@@ -219,6 +264,7 @@ class Main {
 }
 
 
+// MARK: - Initialiser
 
 class Initialiser {
     
@@ -234,10 +280,19 @@ class Initialiser {
 
 
     static func compareDicts(iosDict: [String : String], androidDict: [String : String]){
+        if LOGGING {
+            print("COMPARING: ios and android base english translations \n")
+        }
+        
         let androidDict = IOSReader.replacePlaceholders(androidDict: androidDict)
         var commonTranslations: Dictionary = [String:String]()
         for iosTranslation in iosDict
         {
+            if DEBUG && iosTranslation.key == DEBUG_STOP_KEY {
+                if LOGGING {
+                    print("#### DEBUG_STOP_KEY #### ")
+                }
+            }
             if let androidTranslationValue = androidDict[iosTranslation.key] {
                 commonTranslations[iosTranslation.key] = iosTranslation.value
                  Main.pringDebugLog(prefix: "FOUND", iosKey: iosTranslation.key, iosValue: iosTranslation.value, androidKey: iosTranslation.key, androidValue: androidTranslationValue)
@@ -274,13 +329,14 @@ class Initialiser {
 }
 
 
+// MARK: - IOSReader
 
 class IOSReader {
     
     static func parseTranslationFile(language: String) -> [String : String] {
         var iosDict: [String:String] = [:]
-        let url = URL(fileURLWithPath: "./Resources/Localizations/" + language + ".lproj/Localizable.strings")
-        guard let dict = NSDictionary(contentsOf: url) else {return iosDict }
+        let url = URL(fileURLWithPath: Main.getOsmandRepositoriesPath().path + "/ios/Resources/Localizations/" + language + ".lproj/Localizable.strings")
+        guard let dict = NSDictionary(contentsOf: url) else { return iosDict }
         iosDict = dict as! [String : String]
         return iosDict
     }
@@ -289,6 +345,11 @@ class IOSReader {
     static func replacePlaceholders(androidDict: [String : String]) -> [String : String] {
         var updatedDict = androidDict
         for elem in updatedDict {
+            if DEBUG && elem.key == DEBUG_STOP_KEY {
+                if LOGGING {
+                    print("#### DEBUG_STOP_KEY #### ")
+                }
+            }
             var modString = elem.value;
             modString = modString.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
             
@@ -309,24 +370,96 @@ class IOSReader {
 }
  
 
+// MARK: - IOSWriter
 
 class IOSWriter {
+    
+    static func deleteDuplicates() {
+    }
     
     static func addTranslations() {
         
         print("\nTRANSLATING: English at \(DateFormatter.localizedString(from: Date(), dateStyle: .medium, timeStyle: .medium))\n")
-        IOSWriter.makeNewDict(language: iosEnglishKey, iosDict: iosEnglishDict, androidDict: androidEnglishDict)
+        IOSWriter.makeNewDict(language: iosEnglishKey, iosDict: iosEnglishDict, androidDict: androidEnglishDict, iosEnglishDict: [:])
+        
+        duplicatesValues = [:]
+        var parsedIosDicts: [String: [String : String]] = [:]
+        var parsedAndroidDicts: [String: [String : String]] = [:]
+        
+        for language in languageDict {
+            print("\nparsing dictionaries for lang: " + language.key)
+            var iosDict = IOSReader.parseTranslationFile(language: language.key)
+            let androidDict = AndroidReader.parseTranslationFile(language: language.key)
+            parsedIosDicts[language.key] = iosDict
+            parsedAndroidDicts[language.key] = androidDict
+        }
+        
+        // There was meny strings, duplicated from english file. this function find it
+        if DEBUG_RUN_SLOW_DUPLICATES_DELETING {
+            print("\nStart slow duplicates finding")
+            for languageA in languageDict {
+                guard let iosDictA = parsedIosDicts[languageA.key] else { continue }
+                for languageB in languageDict {
+                    guard languageA != languageB else { continue }
+                    guard let iosDictB = parsedIosDicts[languageB.key] else { continue }
+                    print("\nFinding duplicates. " + languageA.key  + " : " + languageB.key)
+
+                    for elemA in iosDictA {
+                        if duplicatesValues.keys.contains(elemA.value) {
+                            continue
+                        }
+                        if iosDictB[elemA.key] == elemA.value {
+                            // it stores inverted key and values. duplicatesValues["tranlation_value"] = "tranlation_key"
+                            duplicatesValues[elemA.value] = elemA.key
+                            // print("\nFound duplicate! " + elemA.key  + " : " + elemA.value)
+                        }
+                    }
+                    
+                }
+            }
+        }
         
         for language in languageDict {
             print("\nTranslating: \(language.key) at \(DateFormatter.localizedString(from: Date(), dateStyle: .medium, timeStyle: .medium))\n")
-            let iosDict = IOSReader.parseTranslationFile(language: language.key)
-            let androidDict = AndroidReader.parseTranslationFile(language: language.key)
-            IOSWriter.makeNewDict(language: language.key, iosDict: iosDict, androidDict: androidDict)
+            guard let iosDict = parsedIosDicts[language.key] else { continue }
+            guard let androidDict = parsedAndroidDicts[language.key] else { continue }
+            IOSWriter.makeNewDict(language: language.key, iosDict: iosDict, androidDict: androidDict, iosEnglishDict: iosEnglishDict)
         }
     }
     
     
-    static func makeNewDict(language: String, iosDict: [String : String], androidDict: [String : String]) {
+    static func isStringEnglishOnly(_ text: String?) -> Bool {
+        if let text {
+            let transliteredText = text.applyingTransform(.toLatin, reverse: false)
+            return text == transliteredText
+        }
+        return false
+    }
+    
+    private static func isEnglishDuplicateInLocalFile(_ language: String, _ key: String, _ androidValue: String) -> Bool {
+        let androidTrimmedValue = androidValue.replacingOccurrences(of: "\\", with: "")
+        let iosEnglishTrimmedValue = (iosEnglishDict[key] ?? "").replacingOccurrences(of: "\\", with: "")
+        let isDuplicate = language != iosEnglishKey && androidTrimmedValue == iosEnglishTrimmedValue
+        
+        if DEBUG && key == DEBUG_STOP_KEY && isDuplicate {
+            if LOGGING {
+                print("#### DEBUG_STOP_KEY #### ")
+            }
+        }
+        return language != iosEnglishKey && androidTrimmedValue == iosEnglishTrimmedValue
+    }
+    
+    private static func isDuplicatedValueInSeveralLanguages(_ key: String, _ value: String) -> Bool {
+        if duplicatesValues.keys.contains(value) {
+            let keyOfFoundedDuplicate = duplicatesValues[value]
+            if key == keyOfFoundedDuplicate {
+                return true
+            }
+        }
+        return false
+    }
+    
+    static func makeNewDict(language: String, iosDict: [String : String], androidDict: [String : String], iosEnglishDict: [String : String]) {
         let androidDict = IOSReader.replacePlaceholders(androidDict: androidDict)
         print("Making dictionary '\(language)' at \(DateFormatter.localizedString(from: Date(), dateStyle: .medium, timeStyle: .medium))")
                 
@@ -335,31 +468,51 @@ class IOSWriter {
         var existingLinesDict: [String:String] = [:]
 
         for elem in commonDict! {
+            if DEBUG && elem.key == DEBUG_STOP_KEY {
+                if LOGGING {
+                    print("#### DEBUG_STOP_KEY #### ")
+                }
+            }
+            
             if androidDict.keys.contains(elem.key)
             {
-                guard isValueCorrect(value: androidDict[elem.key]!) else {continue}
+                // Update from localized android dict
+                guard let androidValue = androidDict[elem.key] else { continue }
+                guard isValueCorrect(value: androidValue) else { continue }
+                guard !isEnglishDuplicateInLocalFile(language, elem.key, androidValue) else { continue }
+                guard !isDuplicatedValueInSeveralLanguages(elem.key, androidValue) else { continue }
+                
                 if iosDict.keys.contains(elem.key) {
-                    existingLinesDict.updateValue(androidDict[elem.key]!, forKey: elem.key)
+                    existingLinesDict.updateValue(androidValue, forKey: elem.key)
                 } else {
-                    newLinesDict.updateValue(androidDict[elem.key]!, forKey: elem.key)
+                    newLinesDict.updateValue(androidValue, forKey: elem.key)
                 }
             }
         }
         
         for elem in commonValuesDict {
-            if let key = AndroidReader.dictContainsKeys(androidDict: androidDict, keys: elem.value) {
-                guard isValueCorrect(value: androidDict[key]!) else {continue}
+            if DEBUG && elem.key == DEBUG_STOP_KEY {
+                if LOGGING {
+                    print("#### DEBUG_STOP_KEY #### ")
+                }
+            }
+            if let androidKey = AndroidReader.dictContainsKeys(androidDict: androidDict, keys: elem.value) {
+                guard let androidValue = androidDict[androidKey] else { continue }
+                guard isValueCorrect(value: androidValue) else { continue }
+                guard !isEnglishDuplicateInLocalFile(language, elem.key, androidValue) else { continue }
+                guard !isDuplicatedValueInSeveralLanguages(elem.key, androidValue) else { continue }
+                
                 if iosDict.keys.contains(elem.key) {
-                    existingLinesDict.updateValue(androidDict[key]!, forKey: elem.key)
-                } else {
-                    newLinesDict.updateValue(androidDict[key]!, forKey: elem.key)
+                    existingLinesDict.updateValue(androidValue, forKey: elem.key)
+                } else if iosEnglishDict[elem.key] != androidValue {
+                    newLinesDict.updateValue(androidValue, forKey: elem.key)
                 }
             }
         }
 
-        print("Updating lines '\(language)' at \(DateFormatter.localizedString(from: Date(), dateStyle: .medium, timeStyle: .medium))")        
+        print("Updating lines '\(language)' at \(DateFormatter.localizedString(from: Date(), dateStyle: .medium, timeStyle: .medium))")
         if existingLinesDict.count > 0 || newLinesDict.count > 0 {
-            let fileURL = URL(fileURLWithPath: "./Resources/Localizations/" + language + ".lproj/Localizable.strings")
+            let fileURL = URL(fileURLWithPath: Main.getOsmandRepositoriesPath().path + "/ios/Resources/Localizations/" + language + ".lproj/Localizable.strings")
             do {
                 let fileContent = try String(contentsOf: fileURL)
                 let strings = fileContent.components(separatedBy: ";\n")
@@ -370,7 +523,7 @@ class IOSWriter {
                     while line.trimmingCharacters(in: .whitespacesAndNewlines).hasPrefix("//") {
                         if let index = line.firstIndex(of: "\n") {
                             processedStrings.append(String(line[..<index]) )
-                            line = String(line[line.index(after: index)...]) 
+                            line = String(line[line.index(after: index)...])
                 
                         } else {
                             processedStrings.append(line)
@@ -394,27 +547,90 @@ class IOSWriter {
                     } else {
                         // Split the string into key and value components using the "=" delimiter
                         let components = string.split(separator: "=", maxSplits: 1).map { String($0).trimmingCharacters(in: .whitespacesAndNewlines) }
+                        
                         // Extract the key, removing the surrounding quotation marks
-                        let key = components.first?.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
-                        if  let key = key, iosDict.keys.contains(key) {
+                        var key = ""
+                        var currentValue = ""
+                        if components.count > 1 {
+                            key = components[0].trimmingCharacters(in: CharacterSet(charactersIn: "\""))
+                            currentValue = iosDict[key] ?? ""
+                        }
+                        
+                        if !key.isEmpty {
+                            if DEBUG && key == DEBUG_STOP_KEY {
+                                if LOGGING {
+                                    print("#### DEBUG_STOP_KEY #### ")
+                                }
+                            }
+                            
                             keyOccurrences[key, default: 0] += 1
                             if keyOccurrences[key]! > 1 {
                                 print("Duplicate key ! \(string) ")
                             } else {
-                                if let value = existingLinesDict[key], let updatedString = replaceValueText(newValue: filterUnsafeChars(value), inFullString: string)  {
-                                    updatedStrings.append(updatedString)
-                                } else {
-                                    updatedStrings.append(string);
+                                var newString = string
+                                let newValue = existingLinesDict[key]
+                                if let newValue, let updatedString = replaceValueText(newValue: filterUnsafeChars(newValue), inFullString: string)  {
+                                    newString = updatedString
+                                }
+                                
+                                // Filtering accendentally added old english lines
+                                var isTrashString = false
+                                
+                                // Remove strings identical to the same string in english file - trash duplicates.
+                                if let englishValue = iosEnglishDict[key] {
+                                    if language != iosEnglishKey && !isTrashString {
+                                        
+                                        // Check new value
+                                        if let newValue, newValue == englishValue {
+                                            isTrashString = true
+                                        }
+                                        // Check current value
+                                        let trimmedEnglishValue = englishValue.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
+                                        if currentValue == trimmedEnglishValue {
+                                            isTrashString = true
+                                        } else {
+                                            if DEBUG && key == DEBUG_STOP_KEY {
+                                                if LOGGING {
+                                                    print("#### DEBUG_STOP_KEY #### ")
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                
+                                // Filter the same value in several translations
+                                if isDuplicatedValueInSeveralLanguages(key, currentValue) {
+                                    isTrashString = true
+                                }
+                                if let newValue, isDuplicatedValueInSeveralLanguages(key, newValue) {
+                                    isTrashString = true
+                                }
+
+                                
+                                // For non-latin languages (Korean, Arabic, etc) just remove every english-only string. It's usuallu just a duplicate like "GPX", "GPS", etc
+                                if DEBUG_DELETE_ALL_LATIN_ONLY_STRINGS_FROM_NONLATIN_LANGS && removeLatinOnlyStringsForLanguages.contains(language) && isStringEnglishOnly(newString) {
+                                    isTrashString = true
+                                }
+                                
+                                
+                                // add updated string if it's ok
+                                if !isTrashString {
+                                    if !DEBUG_STOP_UPDATING_TRANSLATIONS {
+                                        updatedStrings.append(newString);
+                                    } else {
+                                        // delete trash strings. don't change or update any another strings
+                                        updatedStrings.append(string);
+                                    }
                                 }
                             }
-                            //if let updstedString = replaceValueText(newValue: filterUnsafeChars(elem.value), inFullString: strings[i] ) 
+                            //if let updstedString = replaceValueText(newValue: filterUnsafeChars(elem.value), inFullString: strings[i] )
                             // if ind % 1000 == 0 {
                             //     print("Index \(ind) \(key) \(string) ")
                             // }
                             
                             //return keyOccurrences[key]! == 1
                         } else if string.trimmingCharacters(in: .whitespaces) == "" {
-                            // keep empty lines
+                            // keep empty lines in the same order
                             updatedStrings.append(string)
                         } else {
                             print("Missing key \(string) ")
@@ -423,11 +639,15 @@ class IOSWriter {
                     }
                     
                 }
-                for elem in newLinesDict {
-                    updatedStrings.append("\"" + elem.key + "\" = \"" + filterUnsafeChars(elem.value) + "\"")
+                
+                // new translations adding
+                if !DEBUG_STOP_UPDATING_TRANSLATIONS {
+                    for elem in newLinesDict {
+                        updatedStrings.append("\"" + elem.key + "\" = \"" + filterUnsafeChars(elem.value) + "\"")
+                    }
                 }
                 
-                //let newFileContent = strings.joined(separator: ";\n")
+                // build a new Localizable.strings file
                 var newFileContent = ""
                 for string in updatedStrings {
                     let trim = string.trimmingCharacters(in: .whitespaces)
@@ -474,7 +694,7 @@ class IOSWriter {
     
     static func getKey(inFullString fullString: String) -> String {
         let quotationMarkIndexes = getAllSubstringIndexes(fullString: fullString, subString: "\"")
-        guard (quotationMarkIndexes.count >= 4) else {return fullString}
+        guard (quotationMarkIndexes.count >= 4) else { return fullString }
         
         let startIndex = fullString.index(fullString.startIndex, offsetBy: quotationMarkIndexes[0] + 1)
         let endIndex = fullString.index(fullString.startIndex, offsetBy: quotationMarkIndexes[1])
@@ -521,6 +741,7 @@ class IOSWriter {
 }
 
 
+// MARK: - AndroidReader
 
 class AndroidReader {
     
@@ -531,7 +752,7 @@ class AndroidReader {
                 langSuffix = "-" + lang
             }
         }
-        let url = URL(fileURLWithPath: "../android/OsmAnd/res/values" + langSuffix + "/strings.xml")
+        let url = URL(fileURLWithPath: Main.getOsmandRepositoriesPath().path + "/android/OsmAnd/res/values" + langSuffix + "/strings.xml")
         let myparser = Parser()
         return myparser.myparser(path: url)
     }
@@ -551,6 +772,7 @@ class AndroidReader {
 }
 
 
+// MARK: - Parser
 
 class Parser: NSObject, XMLParserDelegate {
 
@@ -590,6 +812,7 @@ class Parser: NSObject, XMLParserDelegate {
     }
 }
 
+// MARK: - RoutingParamsHelper
 
 class RoutingParamsHelper {
     
@@ -605,7 +828,7 @@ class RoutingParamsHelper {
         var routeDict: [String:String] = [:]
         var addedStringsArray: [String] = []
         
-        let url = URL(fileURLWithPath: "./Resources/Localizations/" + language + ".lproj/Localizable.strings")
+        let url = URL(fileURLWithPath: Main.getOsmandRepositoriesPath().path + "/ios/Resources/Localizations/" + language + ".lproj/Localizable.strings")
         let path = url.path
         
         var str: String = ""
@@ -623,7 +846,7 @@ class RoutingParamsHelper {
                 myLang = "-" + lang
             }
         }
-        let androidURL = URL(fileURLWithPath: "../android/OsmAnd/res/values" + myLang + "/strings.xml")
+        let androidURL = URL(fileURLWithPath: Main.getOsmandRepositoriesPath().path + "/android/OsmAnd/res/values" + myLang + "/strings.xml")
         let myparser = Parser()
         var androidDict = myparser.myparser(path: androidURL)
         for key in androidDict.keys {
@@ -683,7 +906,7 @@ class RoutingParamsHelper {
         do {
             try joined.write(to: url, atomically: false, encoding: .utf8)
         }
-        catch {return}
+        catch { return }
     }
     
     
@@ -707,7 +930,7 @@ class RoutingParamsHelper {
     
 }
 
-
+// MARK: - System
 
 class System {
     
@@ -760,6 +983,6 @@ class System {
 
 
 
+// MARK: - Script is launching here
 
-//MARK: Script launching
 Main.run(CommandLine.arguments)

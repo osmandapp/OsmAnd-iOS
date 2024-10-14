@@ -298,7 +298,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
         downloadingCellResourceHelper.hostViewController = self
         downloadingCellResourceHelper.setHostTableView(tableView)
         downloadingCellResourceHelper.rightIconStyle = .hideIconAfterDownloading
-        downloadingCellResourceHelper.isDownloadedRecolored = true
+        downloadingCellResourceHelper.isDownloadedLeftIconRecolored = true
         downloadingCellResourceHelper.stopWithAlertMessage = false
     }
     

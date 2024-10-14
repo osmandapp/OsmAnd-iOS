@@ -1302,6 +1302,7 @@ static const float kDistanceMeters = 100.0;
         || _mapPanelViewController.activeTargetType == OATargetWeatherLayerSettings
         || _mapPanelViewController.activeTargetType == OATargetRouteLineAppearance
         || _mapPanelViewController.activeTargetType == OATargetTerrainParametersSettings
+        || _mapPanelViewController.activeTargetType == OATargetMapModeParametersSettings
         || _mapPanelViewController.activeTargetType == OATargetRouteDetails
         || _mapPanelViewController.activeTargetType == OATargetRouteDetailsGraph;
     BOOL isInContextMenuVisible = self.contextMenuMode && !isTargetToHideVisible;
@@ -1380,6 +1381,7 @@ static const float kDistanceMeters = 100.0;
     BOOL isRouteInfoVisible = [_mapPanelViewController isRouteInfoVisible];
     BOOL isWeatherToolbarVisible = _mapInfoController.weatherToolbarVisible;
     BOOL isScrollableHudVisible = _mapPanelViewController.scrollableHudViewController != nil || _mapPanelViewController.prevScrollableHudViewController != nil;
+    BOOL isScrollableHudAllowed = _mapPanelViewController.activeTargetType == OATargetMapModeParametersSettings;
     BOOL isTargetMultiMenuViewVisible = [_mapPanelViewController isTargetMultiMenuViewVisible];
     BOOL isBottomPanelVisible = _mapInfoController.bottomPanelController && [_mapInfoController.bottomPanelController hasWidgets];
     BOOL isAllHidden = _mapPanelViewController.activeTargetType == OATargetRouteLineAppearance;
@@ -1390,7 +1392,7 @@ static const float kDistanceMeters = 100.0;
     BOOL isAllowToolbarsVisible = isToolbarVisible;
     BOOL visible = isToolbarVisible ? isAllowToolbarsVisible
         : !self.contextMenuMode && !isWeatherToolbarVisible && !isScrollableHudVisible && !isDashboardVisible && !isRouteInfoVisible && !isTargetMultiMenuViewVisible && !isTargetToHideVisible;
-    BOOL isZoomMapModeVisible = !isDashboardVisible && !isRouteInfoVisible && !isTargetMultiMenuViewVisible;
+    BOOL isZoomMapModeVisible = (!isDashboardVisible || isScrollableHudAllowed) && !isRouteInfoVisible && !isTargetMultiMenuViewVisible;
 
     void (^mainBlock)(void) = ^{
 
@@ -1403,7 +1405,7 @@ static const float kDistanceMeters = 100.0;
         _mapModeButton.alpha = mapModeButtonVisible ? 1. : 0.;
         BOOL driveModeButtonVisible = visible;
         _driveModeButton.alpha = driveModeButtonVisible ? 1. : 0.;
-        _rulerLabel.alpha = (self.contextMenuMode && !isScrollableHudVisible) || isAllHidden || isDashboardVisible ? 0. : 1.;
+        _rulerLabel.alpha = (self.contextMenuMode && !isScrollableHudVisible) || isAllHidden || (isDashboardVisible && !isScrollableHudAllowed) ? 0. : 1.;
 
         if (self.mapInfoController.bottomPanelController)
             self.mapInfoController.bottomPanelController.view.alpha = visible && isBottomPanelVisible && (!isToolbarVisible || isAllowToolbarsVisible) ? 1. : 0.;

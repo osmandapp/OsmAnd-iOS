@@ -13,7 +13,6 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
     private var selectedIndexPath: IndexPath?
     private var defaultIndexPath: IndexPath?
     private var data = [[PaletteColor]]()
-    private var roundedSquareImage: UIImage?
 
     override func getCellIdentifier() -> String {
         PaletteCollectionViewCell.reuseIdentifier
@@ -156,16 +155,11 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
 
     override func getCollectionViewCell(_ indexPath: IndexPath) -> UICollectionViewCell {
         let cell: PaletteCollectionViewCell = getCollectionView().dequeueReusableCell(withReuseIdentifier: getCellIdentifier(), for: indexPath) as! PaletteCollectionViewCell
-
-        if roundedSquareImage == nil {
-            roundedSquareImage = createRoundedSquareImage(size: cell.backgroundImageView.frame.size,
-                                                          cornerRadius: cell.backgroundImageView.layer.cornerRadius)
-        }
-        cell.backgroundImageView.image = roundedSquareImage
+        cell.backgroundImageView.layer.cornerRadius = 3
         let paletteColor = data[indexPath.section][indexPath.row]
-        if cell.backgroundImageView.tag != Int(paletteColor.id) {
-            cell.backgroundImageView.gradated(Self.createGradientPoints(paletteColor))
-            cell.backgroundImageView.tag = Int(paletteColor.id)
+        if let gradientPalette = paletteColor as? PaletteGradientColor {
+            Self.applyGradient(to: cell.backgroundImageView,
+                               with: gradientPalette.colorPalette)
         }
 
         if indexPath == selectedIndexPath {
@@ -182,49 +176,31 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
         data.count
     }
     
-    @objc static func applyGradient(to imageView: UIImageView, with palette: PaletteColor) {
-        let gradientPoints = Self.createGradientPoints(palette)
-        imageView.gradated(gradientPoints)
+    @objc static func applyGradient(to imageView: UIImageView,
+                                    with colorPalette: ColorPalette) {
+        imageView.gradated(Self.createGradientPoints(colorPalette))
     }
 
-    @objc static func createDescriptionForPalette(palette: PaletteColor) -> String {
-        guard let gradientPalette = palette as? PaletteGradientColor else {
-            return "Invalid palette type"
-        }
-
+    @objc static func createDescriptionForPalette(_ colorPalette: ColorPalette) -> String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.minimumFractionDigits = 0
         formatter.maximumFractionDigits = 3
         formatter.locale = Locale(identifier: "en_US_POSIX")
-        return gradientPalette.colorPalette.colorValues.compactMap { colorValue -> String? in
+        return colorPalette.colorValues.compactMap { colorValue -> String? in
             let number = NSNumber(value: colorValue.val)
             return formatter.string(from: number)
         }.joined(separator: " • ")
     }
 
-    private static func createGradientPoints(_ palette: PaletteColor) -> [GradientPoint] {
+    private static func createGradientPoints(_ colorPalette: ColorPalette) -> [GradientPoint] {
         var gradientPoints = [GradientPoint]()
-        if let gradientPalette = palette as? PaletteGradientColor {
-            let colorValues = gradientPalette.colorPalette.colorValues
-            let step = 1.0 / CGFloat(colorValues.count - 1)
-            for i in 0...colorValues.count - 1 {
-                let colorValue = colorValues[i]
+            let step = 1.0 / CGFloat(colorPalette.colorValues.count - 1)
+            for i in 0...colorPalette.colorValues.count - 1 {
+                let colorValue = colorPalette.colorValues[i]
                 gradientPoints.append(GradientPoint(location: CGFloat(i) * step,
                                                     color: UIColor(argb: colorValue.clr)))
             }
-        }
         return gradientPoints
-    }
-
-    private func createRoundedSquareImage(size: CGSize, cornerRadius: CGFloat) -> UIImage? {
-        let renderer = UIGraphicsImageRenderer(size: size)
-        let image = renderer.image { _ in
-            let rect = CGRect(origin: .zero, size: size)
-            let path = UIBezierPath(roundedRect: rect, cornerRadius: cornerRadius)
-            UIColor.clear.setFill()
-            path.fill()
-        }
-        return image
     }
 }

@@ -16,6 +16,8 @@
 
 - (BOOL) isNightMode;
 - (void) forceUpdate;
+- (BOOL) setTempMode:(NSInteger)dayNightMode;
+- (BOOL) resetTempMode;
 - (SunriseSunset *) getSunriseSunset;
 
 @end

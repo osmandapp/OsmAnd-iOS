@@ -93,9 +93,7 @@
     if (_gpxFileName.length > 0)
     {
         OASKFile *file = [[OASKFile alloc] initWithFilePath:_gpxFileName];
-        OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
-        
-        _gpxDocument = gpxFile;
+        _gpxDocument = [OASGpxUtilities.shared loadGpxFileFile:file];
     }
     else
     {

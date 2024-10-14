@@ -65,9 +65,7 @@
     else if (_file != nil)
     {
         OASKFile *file = [[OASKFile alloc] initWithFilePath:_file];
-        OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
-        
-        _gpxFile = gpxFile;
+        _gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
         [self parseRoute];
         _gpxFile.path = _file;
     }

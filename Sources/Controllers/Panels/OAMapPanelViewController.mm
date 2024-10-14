@@ -2186,9 +2186,8 @@ typedef enum
         {
             OASGpxFile *gpxFile = [[OASavingTrackHelper sharedInstance] currentTrack];
             if (!trackItem.isShowCurrentTrack)
-            {
                 gpxFile = [OASGpxUtilities.shared loadGpxFileFile:trackItem.dataItem.file];
-            }
+
             [self displayGpxOnMap:gpxFile];
         }
         else
@@ -2783,14 +2782,10 @@ typedef enum
 
 - (void)openTargetViewWithGPX:(OASGpxDataItem *)item
 {
-    CLLocationCoordinate2D pinLocation;
     OASTrackItem *trackItem;
     if (item)
     {
         // FIXME: Do not extra load gpx file
-        OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:item.file];
-        auto rect = gpxFile.getRect;
-        pinLocation = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
         trackItem = [[OASTrackItem alloc] initWithFile:item.file];
         trackItem.dataItem = item;
     }
@@ -2798,15 +2793,13 @@ typedef enum
     {
         OASGpxFile *currentTrack = [OASavingTrackHelper.sharedInstance currentTrack];
         trackItem = [[OASTrackItem alloc] initWithGpxFile:currentTrack];
-        auto rect = currentTrack.getRect;
-        pinLocation = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
     }
 
     [self openTargetViewWithGPX:trackItem
                    trackHudMode:EOATrackMenuHudMode
                           state:[_activeViewControllerState isKindOfClass:OATrackMenuViewControllerState.class]
                                   ? _activeViewControllerState
-                                  : [OATrackMenuViewControllerState withPinLocation:pinLocation
+                               : [OATrackMenuViewControllerState withPinLocation:kCLLocationCoordinate2DInvalid
                                                                       openedFromMap:NO]];
 }
 
@@ -2815,11 +2808,7 @@ typedef enum
                               fromTrackMenu:(BOOL)fromTrackMenu
                                 selectedTab:(EOATrackMenuHudTab)selectedTab
 {
-    OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:item.dataItem.file];
-    auto rect = gpxFile.getRect;
-    CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
- 
-    OATrackMenuViewControllerState *state = [OATrackMenuViewControllerState withPinLocation:pinLocation openedFromMap:NO];
+    OATrackMenuViewControllerState *state = [OATrackMenuViewControllerState withPinLocation:kCLLocationCoordinate2DInvalid openedFromMap:NO];
     state.openedFromTracksList = YES;
     state.openedFromTrackMenu = fromTrackMenu;
     state.navControllerHistory = navControllerHistory;
@@ -2829,11 +2818,7 @@ typedef enum
 
 - (void)openTargetViewWithGPX:(OASTrackItem *)item selectedTab:(EOATrackMenuHudTab)selectedTab selectedStatisticsTab:(EOATrackMenuHudSegmentsStatisticsTab)selectedStatisticsTab openedFromMap:(BOOL)openedFromMap
 {
-    OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:item.dataItem.file];
-    auto rect = gpxFile.getRect;
-    CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
-    
-    OATrackMenuViewControllerState *state = [OATrackMenuViewControllerState withPinLocation:pinLocation openedFromMap:openedFromMap];
+    OATrackMenuViewControllerState *state = [OATrackMenuViewControllerState withPinLocation:kCLLocationCoordinate2DInvalid openedFromMap:openedFromMap];
     state.lastSelectedTab = selectedTab;
     state.selectedStatisticsTab = selectedStatisticsTab;
     [self openTargetViewWithGPX:item
@@ -2865,12 +2850,6 @@ typedef enum
     if (_scrollableHudViewController)
     {
         [_scrollableHudViewController hide:YES duration:0.2 onComplete:^{
-            OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:item.dataItem.file];
-            
-            auto rect = gpxFile.getRect;
-            CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
-            
-            state.pinLocation = pinLocation;
             if (!state.openedFromTrackMenu)
                 state.navControllerHistory = nil;
             [self doShowGpxItem:item items:items routeKey:routeKey state:state trackHudMode:trackHudMode];
@@ -2889,22 +2868,9 @@ typedef enum
     if (_scrollableHudViewController)
     {
         [_scrollableHudViewController hide:YES duration:0.2 onComplete:^{
-            
-            BOOL showCurrentTrack = item.isShowCurrentTrack;
-            OASGpxFile *gpxFile;
-            if (showCurrentTrack)
-            {
-                gpxFile = [OASavingTrackHelper sharedInstance].currentTrack;
-            } else {
-                gpxFile = [OASGpxUtilities.shared loadGpxFileFile:item.dataItem.file];
-            }
-            
-            auto rect = gpxFile.getRect;
-            
-            CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
-            state.pinLocation = pinLocation;
             if (!state.openedFromTrackMenu)
                 state.navControllerHistory = nil;
+
             [self doShowGpxItem:item items:items routeKey:routeKey state:state trackHudMode:trackHudMode];
         }];
         return;
@@ -2919,14 +2885,7 @@ typedef enum
          trackHudMode:(EOATrackHudMode)trackHudMode
 {
     BOOL showCurrentTrack = item.isShowCurrentTrack;
-    OASGpxFile *gpxFile;
-    if (showCurrentTrack)
-    {
-        gpxFile = [OASavingTrackHelper sharedInstance].currentTrack;
-    } else {
-        gpxFile = [OASGpxUtilities.shared loadGpxFileFile:item.dataItem.file];
-    }
-    
+
     [self hideMultiMenuIfNeeded];
     [self hideTargetPointMenu];
     
@@ -2934,31 +2893,6 @@ typedef enum
         [self closeDashboard];
     
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
-    if (!state || !CLLocationCoordinate2DIsValid(state.pinLocation) || (state.pinLocation.latitude == 0 && state.pinLocation.longitude == 0))
-    {
-        auto rect = gpxFile.getRect;
-        CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
-        if (CLLocationCoordinate2DIsValid(pinLocation))
-        {
-            targetPoint.location = pinLocation;
-        }
-        else
-        {
-            OAMapRendererView *renderView = _mapViewController.mapView;
-            OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(renderView.target31);
-            targetPoint.location = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
-        }
-    }
-    else
-    {
-        targetPoint.location = state.pinLocation;
-    }
-    BOOL pinAnimation = _targetLatitude != targetPoint.location.latitude
-            && _targetLongitude != targetPoint.location.longitude;
-
-    _targetLatitude = targetPoint.location.latitude;
-    _targetLongitude = targetPoint.location.longitude;
-
     targetPoint.type = OATargetGPX;
     targetPoint.title = _formattedTargetName;
     targetPoint.icon = state.trackIcon;
@@ -2977,25 +2911,40 @@ typedef enum
 
     OABaseTrackMenuHudViewController *trackMenuHudViewController;
 
+    CLLocationCoordinate2D targetLocation = kCLLocationCoordinate2DInvalid;
+    CLLocationCoordinate2D defaultLocation = kCLLocationCoordinate2DInvalid;
+    OAMapRendererView *renderView = _mapViewController.mapView;
+    OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(renderView.target31);
+    defaultLocation = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
+
     switch (trackHudMode)
     {
         case EOATrackAppearanceHudMode:
         {
-            if (items)
-            {
-                trackMenuHudViewController = [[OATrackMenuAppearanceHudViewController alloc] initWithGpx:item tracks:items state:state];
-            }
-            else
-            {
-                trackMenuHudViewController = [[OATrackMenuAppearanceHudViewController alloc] initWithGpx:item state:state];
-            }
+            trackMenuHudViewController = items
+            	? [[OATrackMenuAppearanceHudViewController alloc] initWithGpx:item tracks:items state:state]
+            	: [[OATrackMenuAppearanceHudViewController alloc] initWithGpx:item state:state];
+
+            auto rect = trackMenuHudViewController.doc ? trackMenuHudViewController.doc.getRect : nil;
+            targetLocation = rect && rect.left != 0 ? CLLocationCoordinate2DMake(rect.centerY, rect.centerX) : defaultLocation;
+            targetPoint.location = targetLocation;
+            _targetLatitude = targetPoint.location.latitude;
+            _targetLongitude = targetPoint.location.longitude;
+
             break;
         }
         default:
         {
-            trackMenuHudViewController = [[OATrackMenuHudViewController alloc] initWithGpx:item
-                                                                                  routeKey:routeKey
-                                                                                     state:state];
+            trackMenuHudViewController = [[OATrackMenuHudViewController alloc] initWithGpx:item routeKey:routeKey state:state];
+            auto rect = trackMenuHudViewController.doc ? trackMenuHudViewController.doc.getRect : nil;
+            targetLocation = rect && rect.left != 0 ? CLLocationCoordinate2DMake(rect.centerY, rect.centerX) : defaultLocation;
+            targetPoint.location = targetLocation;
+            BOOL pinAnimation = _targetLatitude != targetPoint.location.latitude
+                    && _targetLongitude != targetPoint.location.longitude;
+
+            _targetLatitude = targetPoint.location.latitude;
+            _targetLongitude = targetPoint.location.longitude;
+
             [_mapViewController showContextPinMarker:targetPoint.location.latitude
                                            longitude:targetPoint.location.longitude
                                             animated:pinAnimation];

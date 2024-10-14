@@ -201,7 +201,6 @@
     {
         OASKFile *file = [[OASKFile alloc] initWithFilePath:path];
         OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
-        
         document = gpxFile;
     }
     return document;

@@ -110,7 +110,6 @@
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 OASKFile *file = [[OASKFile alloc] initWithFilePath:path];
                 OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
-               
                 loader.document = gpxFile;
                 dispatch_async(dispatch_get_main_queue(), ^{
                     _activeGpx[loader.path] = loader.document;

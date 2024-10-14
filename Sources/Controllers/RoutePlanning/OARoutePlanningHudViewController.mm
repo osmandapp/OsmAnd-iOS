@@ -550,31 +550,31 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (OASGpxFile *) getGpxFile:(NSString *)gpxFileName
 {
-    OASGpxFile *mutableDocument = nil;
+    OASGpxFile *gpxFile = nil;
     OASelectedGPXHelper *selectedGpxHelper = OASelectedGPXHelper.instance;
-    OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:gpxFileName];
-    if (!gpx)
+    OASGpxDataItem *gpxDataItem = [[OAGPXDatabase sharedDb] getNewGPXItem:gpxFileName];
+    if (!gpxDataItem)
     {
-        gpx = [[OAGPXDatabase sharedDb] getGPXItemByFileName:gpxFileName];
+        gpxDataItem = [[OAGPXDatabase sharedDb] getGPXItemByFileName:gpxFileName];
     }
     OASGpxFile *selectedFile = selectedGpxHelper.activeGpx[gpxFileName.lastPathComponent];
 ;
     if (selectedFile != nullptr) {
-        mutableDocument = selectedFile;
+        gpxFile = selectedFile;
     } else {
-        OASKFile *file = [[OASKFile alloc] initWithFilePath:gpx.file.absolutePath];
-        mutableDocument = [OASGpxUtilities.shared loadGpxFileFile:file];
+        OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxDataItem.file.absolutePath];
+        gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
     }
     
-    if (!mutableDocument.routes)
-        mutableDocument.routes = [NSMutableArray new];
-    if (!mutableDocument.tracks)
-        mutableDocument.tracks = [NSMutableArray new];
-    if (!mutableDocument.getAllPoints) {
-        [mutableDocument clearPoints];
+    if (!gpxFile.routes)
+        gpxFile.routes = [NSMutableArray new];
+    if (!gpxFile.tracks)
+        gpxFile.tracks = [NSMutableArray new];
+    if (!gpxFile.getAllPoints) {
+        [gpxFile clearPoints];
     }
     
-    return mutableDocument;
+    return gpxFile;
 }
 
 - (void) addNewGpxData:(OASGpxFile *)gpxFile

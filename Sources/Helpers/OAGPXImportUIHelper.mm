@@ -302,9 +302,7 @@ static UIViewController *parentController;
     
     // Try to import gpx
     OASKFile *file = [[OASKFile alloc] initWithFilePath:_importUrl.path];
-    OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
-    
-    _doc = gpxFile;
+    _doc = [OASGpxUtilities.shared loadGpxFileFile:file];
     if (_doc)
     {
         // _2024-07-30_.gpx

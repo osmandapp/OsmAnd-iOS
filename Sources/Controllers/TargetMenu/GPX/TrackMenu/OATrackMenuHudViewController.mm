@@ -749,10 +749,8 @@
     CLLocation *newLocation = _app.locationServices.lastKnownLocation;
     if (!newLocation)
         return;
-    OASGpxFile *gpxFile = self.gpx.isShowCurrentTrack ? [OASavingTrackHelper.sharedInstance currentTrack] : [OASGpxUtilities.shared loadGpxFileFile:self.gpx.getFile];
-    auto rect = gpxFile.getRect;
-    CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
-    if (_selectedTab == EOATrackMenuHudOverviewTab && CLLocationCoordinate2DIsValid(pinLocation))
+    BOOL hasLocation = [self.gpx.dataItem getParameterParameter:OASGpxParameter.startLat];
+    if (_selectedTab == EOATrackMenuHudOverviewTab && hasLocation)
     {
         CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;
         CLLocationDirection newDirection = (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)

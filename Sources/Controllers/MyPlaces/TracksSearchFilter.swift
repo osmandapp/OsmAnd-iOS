@@ -24,7 +24,7 @@ class TracksSearchFilter: FilterChangedListener {
     private var filterSpecificSearchResults: [TrackFilterType: [TrackItem]] = [:]
     private var currentFolder: TrackFolder?
     
-    init(trackItems: [TrackItem], currentFolder: TrackFolder? = nil) {
+    init(trackItems: [TrackItem], currentFolder: TrackFolder?) {
         self.trackItems = trackItems
         self.currentFolder = currentFolder
         initFilters()
@@ -52,21 +52,19 @@ class TracksSearchFilter: FilterChangedListener {
                     case .range:
                         self.updateRangeFilterMaxValue(trackFilterType)
                     case .singleFieldList:
-                        // TODO: Currently, the commented-out code causes a crash. Investigate and fix the issue.
-                        //                        if let filter = self.getFilterByType(trackFilterType) as? ListTrackFilter {
-                        //                            guard let filterParams = trackFilterType.additionalData as? SingleFieldTrackFilterParams else { continue }
-                        //                            let items = GpxDbHelper.shared.getStringIntItemsCollection(
-                        //                                columnName: trackFilterType.property?.columnName ?? "",
-                        //                                includeEmptyValues: filterParams.includeEmptyValues(),
-                        //                                sortByName: filterParams.sortByName(),
-                        //                                sortDescending: filterParams.sortDescending()
-                        //                            )
-                        //                            filter.setFullItemsCollection(collection_: items)
-                        //                            if trackFilterType == .folder, let folder = self.currentFolder {
-                        //                                filter.firstItem = folder.relativePath
-                        //                            }
-                        //                        }
-                        break
+                        if let filter = self.getFilterByType(trackFilterType) as? ListTrackFilter {
+                            guard let filterParams = trackFilterType.additionalData as? SingleFieldTrackFilterParams else { continue }
+                            let items = GpxDbHelper.shared.getStringIntItemsCollection(
+                                columnName: trackFilterType.property?.columnName ?? "",
+                                includeEmptyValues: filterParams.includeEmptyValues(),
+                                sortByName: filterParams.sortByName(),
+                                sortDescending: filterParams.sortDescending()
+                            )
+                            filter.setFullItemsCollection(collection_: items)
+                            if trackFilterType == .folder, let folder = self.currentFolder {
+                                filter.firstItem = folder.relativePath
+                            }
+                        }
                     default:
                         break
                     }
@@ -130,20 +128,19 @@ class TracksSearchFilter: FilterChangedListener {
             
             results.values = res
         }
-        // TODO: Currently, the commented-out code causes a crash. Investigate and fix the issue.
-        //        if let folderFilter = getFilterByType(.folder) as? ListTrackFilter {
-        //            if let folderItems = filterSpecificSearchResults[.folder], folderItems.isEmpty {
-        //                let items = GpxDbHelper.shared.getStringIntItemsCollection(
-        //                    columnName: folderFilter.trackFilterType.property?.columnName ?? "",
-        //                    includeEmptyValues: folderFilter.collectionFilterParams.includeEmptyValues(),
-        //                    sortByName: folderFilter.collectionFilterParams.sortByName(),
-        //                    sortDescending: folderFilter.collectionFilterParams.sortDescending()
-        //                )
-        //                folderFilter.setFullItemsCollection(collection_: items)
-        //            } else if let ignoreFoldersItems = filterSpecificSearchResults[.folder] {
-        //                folderFilter.updateFullCollection(items: ignoreFoldersItems)
-        //            }
-        //        }
+        if let folderFilter = getFilterByType(.folder) as? ListTrackFilter {
+            if let folderItems = filterSpecificSearchResults[.folder], folderItems.isEmpty {
+                let items = GpxDbHelper.shared.getStringIntItemsCollection(
+                    columnName: folderFilter.trackFilterType.property?.columnName ?? "",
+                    includeEmptyValues: folderFilter.collectionFilterParams.includeEmptyValues(),
+                    sortByName: folderFilter.collectionFilterParams.sortByName(),
+                    sortDescending: folderFilter.collectionFilterParams.sortDescending()
+                )
+                folderFilter.setFullItemsCollection(collection_: items)
+            } else if let ignoreFoldersItems = filterSpecificSearchResults[.folder] {
+                folderFilter.updateFullCollection(items: ignoreFoldersItems)
+            }
+        }
         
         debugPrint("found \(results.count) tracks")
         setFilteredTrackItems(results.values)

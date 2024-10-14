@@ -708,9 +708,7 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
     OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFilepath];
     OASGpxFile *doc = [OASGpxUtilities.shared loadGpxFileFile:file];
     if (doc)
-    {
         [self copyGPXToNewFolder:newFolderName renameToNewName:newFileName deleteOriginalFile:deleteOriginalFile openTrack:openTrack gpx:gpx doc:doc];
-    }
 }
 
 - (void)copyGPXToNewFolder:(NSString *)newFolderName

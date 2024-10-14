@@ -66,7 +66,6 @@
         } else {
             OASKFile *file = [[OASKFile alloc] initWithFilePath:filepath];
             OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
-            
             _gpx = gpxFile;
         }
         [self generateData];

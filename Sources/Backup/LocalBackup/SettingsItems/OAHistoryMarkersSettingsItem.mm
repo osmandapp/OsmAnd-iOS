@@ -176,7 +176,7 @@
     
     OASKFile *file = [[OASKFile alloc] initWithFilePath:filePath];
     OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
-    
+
     if (gpxFile)
     {
         for (OASWptPt *wpt in gpxFile.getPointsList)

@@ -130,8 +130,6 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
     
     OASKFile *file = [[OASKFile alloc] initWithFilePath:localPath];
     OASGpxFile *doc = [OASGpxUtilities.shared loadGpxFileFile:file];
-
-    
     NSString *destFilePath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:fileName];
     [NSFileManager.defaultManager createDirectoryAtPath:destFilePath.stringByDeletingLastPathComponent withIntermediateDirectories:YES attributes:nil error:nil];
     

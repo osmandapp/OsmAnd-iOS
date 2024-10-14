@@ -232,13 +232,11 @@
         else
         {
             NSString *gpxFullPath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:_gpx.dataItem.gpxFilePath];
-            
             OASGpxFile *gpx = [[OASelectedGPXHelper instance] getGpxFileFor:gpxFullPath];
             if (!gpx)
             {
                 OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFullPath];
-                OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
-                _doc = gpxFile;
+                _doc = [OASGpxUtilities.shared loadGpxFileFile:file];
             }
         }
     }

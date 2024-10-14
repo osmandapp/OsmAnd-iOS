@@ -1579,7 +1579,7 @@
 "profile_appearance" = "Apparence du profil";
 "profile_settings" = "Paramètres pour le profil";
 "configure_profile" = "Configurer le profil";
-"profile_alert_delete_msg" = "Supprimer le profil « %@ » \?";
+"profile_alert_delete_msg" = "Supprimer le profil « %@ »";
 "copy_from_other_profile_descr" = "Vous pouvez copier tous les paramètres de n'importe quel profil vers le profil sélectionné : ";
 "shared_string_next" = "Suivant";
 "nav_type_hint" = "Type de navigation";
@@ -3357,7 +3357,7 @@
 "altitude" = "Altitude";
 "help_article_navigation_car_play_name" = "CarPlay";
 "help_article_personal_import_export_name" = "Import / Export";
-"tracker_item" = "Traqueur OsmAnd";
+"tracker_item" = "Suivi de position par OsmAnd";
 "arrival_distance_factor_normally" = "Normal";
 "routing_settings" = "Navigation";
 "app_mode_bus" = "Bus";

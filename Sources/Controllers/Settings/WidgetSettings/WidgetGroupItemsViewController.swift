@@ -28,6 +28,7 @@ class WidgetGroupItemsViewController: OABaseNavbarViewController {
             row.title = widget == .sunPosition ? widgetInfo.getStateIndependentTitle() : widgetInfo.getTitle()
             row.iconName = widgetInfo.widget.widgetType?.iconName
             row.setObj(widgetInfo, forKey: "widget_info")
+            row.setObj(widget, forKey: "widget_type")
         }
     }
     
@@ -45,6 +46,13 @@ class WidgetGroupItemsViewController: OABaseNavbarViewController {
             if let cell {
                 cell.titleLabel.text = item.title
                 cell.leftIconView.image = UIImage(named: item.iconName ?? "")
+                
+                cell.accessoryView = nil
+                if let widgetType = item.obj(forKey: "widget_type") as? WidgetType {
+                    if !widgetType.isAllowed {
+                        cell.accessoryView = UIImageView(image: UIImage(named: "ic_payment_label_pro"))
+                    }
+                }
             }
             outCell = cell
         }
@@ -55,11 +63,20 @@ class WidgetGroupItemsViewController: OABaseNavbarViewController {
         let item = tableData.item(for: indexPath)
         if let widgetInfo = item.obj(forKey: "widget_info") as? MapWidgetInfo {
             let vc = WidgetConfigurationViewController()!
-            vc.selectedAppMode = OAAppSettings.sharedManager()!.applicationMode.get()
-            vc.widgetInfo = widgetInfo
-            vc.widgetPanel = widgetPanel
-            vc.createNew = true
-            show(vc)
+            
+            if let widgetType = item.obj(forKey: "widget_type") as? WidgetType {
+                if widgetType.isAllowed {
+                    vc.selectedAppMode = OAAppSettings.sharedManager()!.applicationMode.get()
+                    vc.widgetInfo = widgetInfo
+                    vc.widgetPanel = widgetPanel
+                    vc.createNew = true
+                    show(vc)
+                } else if widgetType == .altitudeMapCenter {
+                    if let navigationController {
+                        OAChoosePlanHelper.showChoosePlanScreen(with: OAIAPHelper().srtm, navController: navigationController)
+                    }
+                }
+            }
         }
     }
 }

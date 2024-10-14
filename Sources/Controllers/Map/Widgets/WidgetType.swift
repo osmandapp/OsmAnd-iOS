@@ -35,6 +35,7 @@ class WidgetType: NSObject {
             if let plugin = OAPluginsHelper.getEnabledPlugin(OASRTMPlugin.self) as? OASRTMPlugin {
                 return plugin.is3DMapsEnabled()
             }
+            return false
         }
         return true;
     }
@@ -57,12 +58,6 @@ class WidgetType: NSObject {
     }
 
     func getGroup() -> WidgetGroup? {
-        if (group == .altitude) {
-            let plugin: OASRTMPlugin? = OAPluginsHelper.getEnabledPlugin(OASRTMPlugin.self) as? OASRTMPlugin
-            if plugin == nil || !(plugin?.is3DMapsEnabled() ?? false) {
-                return nil
-            }
-        }
         return group
     }
 
@@ -73,7 +68,7 @@ class WidgetType: NSObject {
 //        else if (self == AV_NOTES_ON_REQUEST) {
 //            return R.string.av_notes_choose_action_widget_desc;
 //        }
-        return "";
+        return ""
     }
 
     func getSecondaryDescription() -> String? {

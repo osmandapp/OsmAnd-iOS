@@ -3403,7 +3403,7 @@
 "location_radius_description" = "Mostra a área circular que representa a precisão de sua localização atual";
 "view_angle_description" = "Exibe a área em forma de cone que você está vendo no momento";
 "resting_navigation_position" = "Posição de repouso e navegação";
-"rendering_attr_showDirtbikeTrails_name" = "Mostrar trilhas de terra para bicicletas";
+"rendering_attr_showDirtbikeTrails_name" = "Trilhas de terra para bicicletas";
 "rendering_attr_showDirtbikeTrails_description" = "Mostrar trilhas de terra para bicicletas";
 "navigate_point_format_DM" = "GGG MM.MMM";
 "navigate_point_format_D" = "GGG.GGGGG";

@@ -33,6 +33,7 @@
 
 + (float) floatPartToVisual:(float)zoomFloatPart;
 + (float) visualToFloatPart:(float)visualZoom;
++ (int) getMinValidZoom;
 
 @end
 

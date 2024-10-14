@@ -16,7 +16,8 @@ final class IconCollectionHandler: OABaseCollectionHandler, OAIconCollectionDele
     var customTitle = ""
     var selectedIconColor: UIColor?
     var regularIconColor: UIColor?
-    var cornerRadius: Double = -1
+    var innerViewCornerRadius: Double = -1
+    var strokeCornerRadius: Double = -1
     
     weak var hostVC: OASuperViewController?
     
@@ -95,12 +96,12 @@ final class IconCollectionHandler: OABaseCollectionHandler, OAIconCollectionDele
             cell.backView.layer.borderColor = UIColor.clear.cgColor
             cell.backView.layer.borderWidth = 0
         }
-        if cornerRadius != -1 {
-            cell.iconView.layer.cornerRadius = cornerRadius
-            cell.backView.layer.cornerRadius = cornerRadius
+        if innerViewCornerRadius != -1 && strokeCornerRadius != -1 {
+            cell.iconView.layer.cornerRadius = innerViewCornerRadius
+            cell.backView.layer.cornerRadius = strokeCornerRadius
         } else {
-            cell.iconView.layer.cornerRadius = cell.iconView.frame.size.height/2;
-            cell.backView.layer.cornerRadius = cell.backView.frame.size.height/2;
+            cell.iconView.layer.cornerRadius = cell.iconView.frame.size.height / 2;
+            cell.backView.layer.cornerRadius = cell.backView.frame.size.height / 2;
         }
         return cell
     }

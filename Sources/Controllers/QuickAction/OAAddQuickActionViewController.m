@@ -337,7 +337,7 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
     OATableRowData *item = [_data itemForIndexPath:indexPath];
     if ([item.cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OAActionConfigurationViewController *groupContentVC = [[OAAddQuickActionViewController alloc] initWithButtonState:_buttonState selectedGroup:item.key actions:_actions];
+        OAAddQuickActionViewController *groupContentVC = [[OAAddQuickActionViewController alloc] initWithButtonState:_buttonState selectedGroup:item.key actions:_actions];
         groupContentVC.delegate = self.delegate;
         [self.navigationController pushViewController:groupContentVC animated:YES];
     }

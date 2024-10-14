@@ -65,7 +65,7 @@ static QuickActionType *TYPE;
         BOOL showBottomSheetStyles = [self.getParams[kDialog] boolValue];
         if (showBottomSheetStyles)
         {
-            OAQuickActionSelectionBottomSheetViewController *bottomSheet = [[OAQuickActionSelectionBottomSheetViewController alloc] initWithAction:self type:EOAMapSourceTypeUnderlay];
+            OAQuickActionSelectionBottomSheetViewController *bottomSheet = [[OAQuickActionSelectionBottomSheetViewController alloc] initWithAction:self type:EOAQASelectionTypeUnderlay];
             [bottomSheet show];
             return;
         }

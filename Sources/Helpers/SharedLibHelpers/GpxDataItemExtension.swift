@@ -404,7 +404,7 @@ extension GpxDataItem {
             getParameter(parameter: .totalTracks) as? Int ?? 0
         }
         set {
-            setParameter(parameter: .totalTracks, value: newValue)
+            setParameter(parameter: .totalTracks, value: KotlinInt(integerLiteral: newValue))
         }
     }
     
@@ -413,7 +413,7 @@ extension GpxDataItem {
             getParameter(parameter: .timeSpan) as? Int ?? 0
         }
         set {
-            setParameter(parameter: .timeSpan, value: newValue)
+            setParameter(parameter: .timeSpan, value: KotlinInt(integerLiteral: newValue))
         }
     }
     
@@ -551,10 +551,10 @@ extension GpxDataItem {
     
     var color: Int {
         get {
-            getParameter(parameter: .color) as? Int ?? 0
+            return getParameter(parameter: .color) as? Int ?? 0
         }
         set {
-            setParameter(parameter: .color, value: newValue)
+            setParameter(parameter: .color, value: KotlinInt(integerLiteral: newValue))
         }
     }
     
@@ -564,7 +564,7 @@ extension GpxDataItem {
             return EOAGpxSplitType(rawValue: value) ?? .none
         }
         set {
-            setParameter(parameter: .splitType, value: newValue)
+            setParameter(parameter: .splitType, value: KotlinInt(integerLiteral: newValue.rawValue))
         }
     }
     

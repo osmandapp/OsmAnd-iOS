@@ -274,7 +274,7 @@ static const NSInteger kColorsSection = 1;
         [self.settings.currentTrackShowArrows set:_backupGpxItem.showArrows];
         [self.settings.currentTrackShowStartFinish set:_backupGpxItem.showStartFinish];
         [self.settings.currentTrackVerticalExaggerationScale set:_backupGpxItem.verticalExaggerationScale];
-        [self.settings.currentTrackElevationMeters set:_backupGpxItem.elevationMeters];
+        [self.settings.currentTrackElevationMeters set:(int)_backupGpxItem.elevationMeters];
         [self.settings.currentTrackVisualization3dByType set:(int)_backupGpxItem.visualization3dByType];
         [self.settings.currentTrackVisualization3dWallColorType set:(int)_backupGpxItem.visualization3dWallColorType];
         [self.settings.currentTrackVisualization3dPositionType set:(int)_backupGpxItem.visualization3dPositionType];
@@ -282,7 +282,7 @@ static const NSInteger kColorsSection = 1;
         [self.settings.currentTrackColoringType set:_backupGpxItem.coloringType.length > 0
                 ? [OAColoringType getNonNullTrackColoringTypeByName:_backupGpxItem.coloringType]
                 : OAColoringType.TRACK_SOLID];
-        [self.settings.currentTrackColor set:_backupGpxItem.color];
+        [self.settings.currentTrackColor set:(int)_backupGpxItem.color];
         
         [self.doc setWidthWidth:_backupGpxItem.width];
         [self.doc setShowArrowsShowArrows:_backupGpxItem.showArrows];
@@ -300,7 +300,7 @@ static const NSInteger kColorsSection = 1;
         
         [self.doc setGradientColorPaletteGradientColorPaletteName:_backupGpxItem.gradientPaletteName];
         
-        OASInt *color = [[OASInt alloc] initWithInt:_backupGpxItem.color];
+        OASInt *color = [[OASInt alloc] initWithInt:(int)_backupGpxItem.color];
         [self.doc setColorColor:color];
     }
     
@@ -330,7 +330,7 @@ static const NSInteger kColorsSection = 1;
 
 - (void)updateAllValues
 {
-    _selectedColorItem = [_appearanceCollection getColorItemWithValue:self.gpx.color];
+    _selectedColorItem = [_appearanceCollection getColorItemWithValue:(int)self.gpx.color];
     if (!_selectedColorItem)
         _selectedColorItem = [_appearanceCollection getDefaultLineColorItem];
     _sortedColorItems = [NSMutableArray arrayWithArray:[_appearanceCollection getAvailableColorsSortingByLastUsed]];
@@ -981,7 +981,7 @@ static const NSInteger kColorsSection = 1;
                 
                 double scaleValue = self.gpx.verticalExaggerationScale;
                 NSString *alphaValueString = scaleValue <= kGpxExaggerationDefScale ? OALocalizedString(@"shared_string_none") : (scaleValue < 1.0 ? [NSString stringWithFormat:@"x%.2f", scaleValue] : [NSString stringWithFormat:@"x%.1f", scaleValue]);
-                NSString *elevationMetersValueString = [NSString stringWithFormat:@"%ld %@", self.gpx.elevationMeters, OALocalizedString(@"m")];
+                NSString *elevationMetersValueString = [NSString stringWithFormat:@"%f %@", self.gpx.elevationMeters, OALocalizedString(@"m")];
                 if (self.gpx.visualization3dByType != EOAGPX3DLineVisualizationByTypeFixedHeight)
                 {
                     OAGPXTableCellData *verticalExaggerationData = [OAGPXTableCellData withData:@{
@@ -1309,7 +1309,7 @@ static const NSInteger kColorsSection = 1;
             [weakSelf.settings.currentTrackColoringType set:weakSelf.gpx.coloringType.length > 0
                     ? [OAColoringType getNonNullTrackColoringTypeByName:weakSelf.gpx.coloringType]
                     : OAColoringType.TRACK_SOLID];
-            [weakSelf.settings.currentTrackColor set:weakSelf.gpx.color];
+            [weakSelf.settings.currentTrackColor set:(int)weakSelf.gpx.color];
 
             
             [weakSelf.doc setWidthWidth:weakSelf.gpx.width];
@@ -1322,7 +1322,7 @@ static const NSInteger kColorsSection = 1;
             [weakSelf.doc set3DWallColoringTypeTrackWallColoringType:[OAGPXDatabase lineVisualizationWallColorTypeNameForType:(EOAGPX3DLineVisualizationWallColorType)_backupGpxItem.visualization3dWallColorType]];
             [weakSelf.doc set3DLinePositionTypeTrackLinePositionType:[OAGPXDatabase lineVisualizationPositionTypeNameForType:(EOAGPX3DLineVisualizationPositionType)weakSelf.gpx.visualization3dPositionType]];
             [weakSelf.doc setColoringTypeColoringType:weakSelf.gpx.coloringType];
-            OASInt *color = [[OASInt alloc] initWithInt:weakSelf.gpx.color];
+            OASInt *color = [[OASInt alloc] initWithInt:(int)weakSelf.gpx.color];
             [self.doc setColorColor:color];
             
         }
@@ -2627,7 +2627,7 @@ static const NSInteger kColorsSection = 1;
     if (self.isCurrentTrack)
     {
         if ([self isSelectedTypeSolid]) {
-            OASInt *color = [[OASInt alloc] initWithInt:self.gpx.color];
+            OASInt *color = [[OASInt alloc] initWithInt:(int)self.gpx.color];
             [self.doc setColorColor:color];
         }
         else if ([self isSelectedTypeGradient])

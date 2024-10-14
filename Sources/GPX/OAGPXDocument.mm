@@ -662,7 +662,7 @@ static const CGFloat kVerticalExaggerationScaleMax = 4.0;
 
     [self applyBounds];
     [self addGeneralTrack];
-    [self processPoints];
+  //  [self processPoints];
 
     return YES;
 }
@@ -1246,18 +1246,18 @@ static const CGFloat kVerticalExaggerationScaleMax = 4.0;
     return tpoints;
 }
 
-- (void) processPoints
-{
-    _processedPointsToDisplay = [self proccessPoints];
-    if (!_processedPointsToDisplay || _processedPointsToDisplay.count == 0)
-    {
-        _processedPointsToDisplay = [self processRoutePoints];
-        _routePoints = _processedPointsToDisplay && _processedPointsToDisplay.count > 0;
-    }
-//    if (filteredSelectedGpxFile != null) {
-//        filteredSelectedGpxFile.processPoints(app);
+//- (void) processPoints
+//{
+//    _processedPointsToDisplay = [self proccessPoints];
+//    if (!_processedPointsToDisplay || _processedPointsToDisplay.count == 0)
+//    {
+//        _processedPointsToDisplay = [self processRoutePoints];
+//        _routePoints = _processedPointsToDisplay && _processedPointsToDisplay.count > 0;
 //    }
-}
+////    if (filteredSelectedGpxFile != null) {
+////        filteredSelectedGpxFile.processPoints(app);
+////    }
+//}
 
 - (BOOL) isRoutesPoints
 {

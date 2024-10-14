@@ -412,6 +412,7 @@
 {
     [self.tableView beginUpdates];
     [self.tableView setEditing:NO animated:YES];
+    self.tableView.allowsMultipleSelectionDuringEditing = NO;
     [self updateUIAnimated:nil];
     [self.tableView endUpdates];
 }

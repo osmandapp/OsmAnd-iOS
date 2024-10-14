@@ -81,6 +81,7 @@
 
 @property (nonatomic) OAPOIRoutePoint *routePoint;
 @property (nonatomic) NSString *mapIconName;
+@property (nonatomic) NSString *cityName;
 
 - (UIImage *)icon;
 - (NSString *)iconName;

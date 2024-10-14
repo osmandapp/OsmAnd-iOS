@@ -539,7 +539,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         _mapView.target31 = OsmAnd::PointI(_app.data.mapLastViewedState.target31.x,
                                            _app.data.mapLastViewedState.target31.y);
 
-        float zoom = _app.data.mapLastViewedState.zoom;
+        float zoom = MAX([OAZoom getMinValidZoom], _app.data.mapLastViewedState.zoom);
         _mapView.zoom = qBound(_mapView.minZoom, isnan(zoom) ? 5 : zoom, _mapView.maxZoom);
         float azimuth = _app.data.mapLastViewedState.azimuth;
         _mapView.azimuth = isnan(azimuth) ? 0 : azimuth;

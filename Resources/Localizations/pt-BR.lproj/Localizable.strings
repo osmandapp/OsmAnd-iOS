@@ -3494,3 +3494,9 @@
 "int_min" = "min.";
 "shared_string_status" = "Status";
 "mapillary_item" = "OsmAnd + Mapillary";
+"weather_temperature_celsius" = "Celsius";
+"navigate_point_longitude" = "Longitude";
+"shared_string_total" = "Total";
+"shared_string_color_magenta" = "Magenta";
+"shared_string_wikivoyage" = "Wikivoyage";
+"navigate_point_latitude" = "Latitude";

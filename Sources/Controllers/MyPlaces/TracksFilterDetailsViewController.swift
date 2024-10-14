@@ -310,10 +310,8 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
             valueFromInputText = String(describing: Int(currentValueFrom))
             valueToInputText = String(describing: Int(currentValueTo))
             let mappedConstant = TracksSearchFilter.mapEOAMetricsConstantToMetricsConstants(OAAppSettings.sharedManager().metricSystem.get())
-            let minValuePrompt = "\(decimalFormatter.string(from: NSNumber(value: Float(currentMinValue))) ?? "") \(getMeasureUnitType().getFilterUnitText(mc: mappedConstant))"
-            let maxValuePrompt = "\(decimalFormatter.string(from: NSNumber(value: Float(currentMaxValue))) ?? "") \(getMeasureUnitType().getFilterUnitText(mc: mappedConstant))"
-            minFilterValueText = minValuePrompt
-            maxFilterValueText = maxValuePrompt
+            minFilterValueText = "\(decimalFormatter.string(from: NSNumber(value: Float(currentMinValue))) ?? "") \(getMeasureUnitType().getFilterUnitText(mc: mappedConstant))"
+            maxFilterValueText = "\(decimalFormatter.string(from: NSNumber(value: Float(currentMaxValue))) ?? "") \(getMeasureUnitType().getFilterUnitText(mc: mappedConstant))"
             isBinding = false
         }
     }
@@ -369,8 +367,10 @@ extension TracksFilterDetailsViewController: UISearchBarDelegate {
 
 extension TracksFilterDetailsViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        let newPosition = textField.endOfDocument
-        textField.selectedTextRange = textField.textRange(from: newPosition, to: newPosition)
+        DispatchQueue.main.async {
+            let newPosition = textField.endOfDocument
+            textField.selectedTextRange = textField.textRange(from: newPosition, to: newPosition)
+        }
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {

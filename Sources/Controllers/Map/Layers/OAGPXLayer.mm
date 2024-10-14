@@ -1436,7 +1436,7 @@ colorizationScheme:(int)colorizationScheme
             if (!value)
                 continue;
 
-            if (value.getAllPoints.count > 0)
+            if (value.getPointsList.count > 0)
             {
                 NSString *filePath = key;
                 OASGpxFile *gpx = [_cachedTracks.allKeys containsObject:filePath]
@@ -1445,7 +1445,7 @@ colorizationScheme:(int)colorizationScheme
                 			? OASavingTrackHelper.sharedInstance.currentTrack
                 			: [self getGpxItem:QString::fromNSString(key)];
 
-                for (OASWptPt *waypoint in value.getAllPoints)
+                for (OASWptPt *waypoint in value.getPointsList)
                 {
                     OASGpxUtilitiesPointsGroup *group = [gpx.pointsGroups objectForKey:waypoint.category];
                     if (!group || !group.hidden)

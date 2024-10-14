@@ -856,8 +856,8 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
             {
                 metadata = [[OASMetadata alloc] init];
                 long time = 0;
-                if (doc.getAllPoints.count > 0)
-                    time = doc.getAllPoints[0].time;
+                if (doc.getPointsList.count > 0)
+                    time = doc.getPointsList[0].time;
                 if (doc.tracks.count > 0)
                 {
                     OASTrack *track = doc.tracks[0];

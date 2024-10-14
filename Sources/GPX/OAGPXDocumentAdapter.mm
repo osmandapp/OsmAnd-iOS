@@ -28,7 +28,7 @@
 
 - (int)pointsCount
 {
-    return (int)_object.getAllPoints.count;
+    return (int)_object.getPointsList.count;
 }
 
 - (NSString *) getMetadataValueBy:(NSString *)tag

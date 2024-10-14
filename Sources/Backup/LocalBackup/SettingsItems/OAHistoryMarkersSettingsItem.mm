@@ -176,11 +176,10 @@
     
     OASKFile *file = [[OASKFile alloc] initWithFilePath:filePath];
     OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
-
- //   OAGPXDocument *gpxFile = [[OAGPXDocument alloc] initWithGpxFile:filePath];
+    
     if (gpxFile)
     {
-        for (OASWptPt *wpt in gpxFile.getAllPoints)
+        for (OASWptPt *wpt in gpxFile.getPointsList)
         {
             OAHistoryItem *historyItem = [[OAHistoryItem alloc] init];
             historyItem.name = wpt.name;

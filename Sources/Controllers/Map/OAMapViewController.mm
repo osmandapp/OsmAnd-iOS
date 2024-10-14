@@ -3003,7 +3003,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     
     BOOL found = NO;
     
-    for (OASWptPt *wptItem in helper.currentTrack.getAllPoints)
+    for (OASWptPt *wptItem in helper.currentTrack.getPointsList)
     {
         if ([OAUtilities isCoordEqual:wptItem.position.latitude srcLon:wptItem.position.longitude destLat:location.latitude destLon:location.longitude])
         {
@@ -3015,7 +3015,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         return YES;
     
     int i = 0;
-    NSDictionary<NSString *, OASGpxFile *>  *activeGpx = _selectedGpxHelper.activeGpx;
+    NSDictionary<NSString *, OASGpxFile *> *activeGpx = _selectedGpxHelper.activeGpx;
     for (id key in activeGpx.allKeys)
     {
         OASGpxFile *value = activeGpx[key];
@@ -3024,7 +3024,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         {
             continue;
         }
-        for (OASWptPt *pt in value.getAllPoints) {
+        for (OASWptPt *pt in value.getPointsList) {
             {
                 if ([OAUtilities isCoordEqual:pt.position.latitude srcLon:pt.position.longitude destLat:location.latitude destLon:location.longitude])
                 {
@@ -3043,7 +3043,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     {
         OASGpxFile *doc = _gpxDocsTemp.firstObject;
         
-        for (OASWptPt *loc in doc.getAllPoints)
+        for (OASWptPt *loc in doc.getPointsList)
         {
             if ([OAUtilities isCoordEqual:loc.position.latitude srcLon:loc.position.longitude destLat:location.latitude destLon:location.longitude])
             {
@@ -3069,13 +3069,13 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
     BOOL found = NO;
     NSMutableSet *groupSet = [NSMutableSet set];
-   // QSet<QString> groups;
+   
     NSMutableSet<NSString *> *groups = [NSMutableSet set];
     
-    for (OASWptPt *wptItem in helper.currentTrack.getAllPoints)
+    for (OASWptPt *wptItem in helper.currentTrack.getPointsList)
     {
         // FIXME:
-//        if ([[[OASavingTrackHelper sharedInstance] currentTrack].hiddenGroups containsObject:wptItem.type])
+//        if ([[[OASavingTrackHelper sharedInstance] currentTrack].hiddenGroups containsObject:wptItem.category])
 //            continue;
 
         if (wptItem.category.length > 0)
@@ -3107,12 +3107,12 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     for (NSString *key in activeGpx.allKeys) {
         OASGpxFile * doc = activeGpx[key];
         
-        if (!doc || [doc getAllPoints].count == 0) {
+        if (!doc || [doc getPointsList].count == 0) {
             continue;
         }
 
         OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:key];
-        for (OASWptPt *loc in [doc getAllPoints]) {
+        for (OASWptPt *loc in [doc getPointsList]) {
             if ([gpx.hiddenGroups containsObject:loc.category])
                 continue;
 
@@ -3156,7 +3156,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
                                           withString:@""];
         OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:gpxFilePath];
         
-        for (OASWptPt *loc in [doc getAllPoints]) {
+        for (OASWptPt *loc in [doc getPointsList]) {
            
             NSString *locType = loc.category;
 
@@ -3232,9 +3232,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
                 BOOL removed = [doc deleteWptPtPoint:_foundWpt];
                 if (!removed)
                 {
-                      for (NSInteger i = 0; i < doc.getAllPoints.count; i++)
+                      for (NSInteger i = 0; i < doc.getPointsList.count; i++)
                       {
-                          OASWptPt *w = doc.getAllPoints[i];
+                          OASWptPt *w = doc.getPointsList[i];
                           if ([OAUtilities doublesEqualUpToDigits:5
                                                           source:w.position.latitude
                                                       destination:w.position.latitude] &&
@@ -3298,8 +3298,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             if ([path isEqualToString:self.foundWptDocPath])
             {
                 OASGpxFile *doc = value;
-                for (NSInteger i = 0; i < doc.getAllPoints.count; i++) {
-                    OASWptPt *w = doc.getAllPoints[i];
+                for (NSInteger i = 0; i < doc.getPointsList.count; i++) {
+                    OASWptPt *w = doc.getPointsList[i];
                     
 
                     if ([OAUtilities doublesEqualUpToDigits:5 source:w.position.latitude destination:self.foundWpt.lat] &&
@@ -3339,7 +3339,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         self.foundWptDocPath = nil;
         
         NSMutableSet *groups = [NSMutableSet set];
-        for (OASWptPt *wptItem in helper.currentTrack.getAllPoints)
+        for (OASWptPt *wptItem in helper.currentTrack.getPointsList)
         {
             if (wptItem.category.length > 0)
                 [groups addObject:wptItem.category];
@@ -3386,7 +3386,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
                 self.foundWptDocPath = gpxFileName;
                 
                 NSMutableSet *groups = [NSMutableSet set];
-                for (OASWptPt *loc in doc.getAllPoints)
+                for (OASWptPt *loc in doc.getPointsList)
                 {
                     if (loc.category != nil)
                     {
@@ -3421,7 +3421,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:doc];
             
             NSMutableSet *groups = [NSMutableSet set];
-            for (OASWptPt *loc in doc.getAllPoints)
+            for (OASWptPt *loc in doc.getPointsList)
             {
                 if (loc.category != nil)
                 {
@@ -3472,7 +3472,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         }
     }
     if (gpxDocument)
-        return [gpxDocument.pointsGroups.allKeys containsObject:groupName] ? gpxDocument.pointsGroups[groupName].points : gpxDocument.getAllPoints;
+        return [gpxDocument.pointsGroups.allKeys containsObject:groupName] ? gpxDocument.pointsGroups[groupName].points : gpxDocument.getPointsList;
     else
         return @[];
 }
@@ -3500,7 +3500,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
             for (OAGpxWptItem *item in items)
             {
-                for (OASWptPt *loc in doc.getAllPoints)
+                for (OASWptPt *loc in doc.getPointsList)
                 {
     
                     
@@ -3543,7 +3543,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
         for (OAGpxWptItem *item in items)
         {
-            for (OASWptPt *loc in doc.getAllPoints)
+            for (OASWptPt *loc in doc.getPointsList)
             {
                 if ([OAUtilities doublesEqualUpToDigits:5 source:loc.position.latitude destination:item.point.lat] &&
                     [OAUtilities doublesEqualUpToDigits:5 source:loc.position.longitude destination:item.point.lon])
@@ -3674,9 +3674,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
             for (OAGpxWptItem *item in items)
             {
-                for (int i = 0; i < doc.getAllPoints.count; i++)
+                for (int i = 0; i < doc.getPointsList.count; i++)
                 {
-                    OASWptPt *w = doc.getAllPoints[i];
+                    OASWptPt *w = doc.getPointsList[i];
                     if ([OAUtilities doublesEqualUpToDigits:5 source:w.position.latitude destination:item.point.lat] &&
                         [OAUtilities doublesEqualUpToDigits:5 source:w.position.longitude destination:item.point.lon])
                     {
@@ -3710,9 +3710,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
         for (OAGpxWptItem *item in items)
         {
-            for (int i = 0; i < doc.getAllPoints.count; i++)
+            for (int i = 0; i < doc.getPointsList.count; i++)
             {
-                OASWptPt *w = doc.getAllPoints[i];
+                OASWptPt *w = doc.getPointsList[i];
                 if ([OAUtilities doublesEqualUpToDigits:5 source:w.position.latitude destination:item.point.lat] &&
                     [OAUtilities doublesEqualUpToDigits:5 source:w.position.longitude destination:item.point.lon])
                 {

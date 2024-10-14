@@ -570,7 +570,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         mutableDocument.routes = [NSMutableArray new];
     if (!mutableDocument.tracks)
         mutableDocument.tracks = [NSMutableArray new];
-    if (!mutableDocument.getAllPoints) {
+    if (!mutableDocument.getPointsList) {
         [mutableDocument clearPoints];
     }
     

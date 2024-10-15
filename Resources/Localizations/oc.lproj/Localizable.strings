@@ -911,7 +911,7 @@
 "purchases_feature_desc_wikipedia" = "Dona d’informacions sus lei ponchs d’interès dins la Wikipèdia. Oblidètz pas de teledescargar la Guida de viatge de cada region per ne’n profichar fòra de linha.";
 "srtm_plugin_name" = "Corbas de nivèu";
 "product_desc_srtm" = "Mostrar lei corbas de nivèu";
-"srtm_plugin_description" = "Leis informacions de terren coma lei corbas de nivèu, l'ombra de relèu e la penda, vos ajudan a visualizar l'aspècte de la superficia. Amb aquest ajust podretz veire lo nom dei montanhas e lei caracteristicas particularas a l'encontrada. Donadas SRTM e ASTER.\n\nPer n'en sacher mai : https://osmand.net/docs/user/plugins/contour-lines";
+"srtm_plugin_description" = "Leis informacions de terren coma lei corbas de nivèu, l'ombra de relèu e la penda, vos ajudan a visualizar l'aspècte de la superficia. Amb aquest ajust podretz veire lo nom dei montanhas e lei caracteristicas particularas a l'encontrada. Donadas SRTM e ASTER.\n\nPer n'en sacher mai : https://osmand.net/docs/user/plugins/topography";
 "wikivoyage_travel_guide" = "Guida de viatge";
 "start_editing_card_image_text" = "La guida toristica libra dau monde entier que cadun i pòt collaborar.";
 "wikivoyage_travel_guide_descr" = "Guida dei lòcs pus interessants de la planeta, integrada a OsmAnd, sensa connexion a Internet.";

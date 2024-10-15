@@ -1942,7 +1942,6 @@
 "quick_action_navigation_voice" = "Pornire/oprire voce";
 "population_num" = "Populație";
 "shared_string_turn_off" = "Oprește";
-"open_place_reviews_plugin_description" = "Contribuiți la proiectul OpenPlaceReviews, cum ar fi fotografii, recenzii sau linkuri pentru locuri publice, cum ar fi restaurante, hoteluri sau muzee.\n\nGăsiți instrucțiuni despre cum să contribuiți pe site-ul nostru https://osmand.net/docs/user/plugins/openplacereviews .";
 "product_desc_openplacereviews" = "Împărtășește-ți opinia despre locurile publice";
 "open_place_reviews" = "OpenPlaceRecenzii";
 "plugin_mapillary_descr" = "Imagini stradale. Puteți contribui și dumneavoastră. Pentru a vedea datele existente sub forma unui strat de hartă, activați \"Imagini stradale\" în meniul \"Configurare hartă\".";

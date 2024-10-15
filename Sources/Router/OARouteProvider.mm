@@ -173,9 +173,9 @@
     self.useIntermediatePointsRTE = builder.useIntermediatePointsRTE;
     self.connectPointsStraightly = builder.connectPointsStraightly;
     builder.calculateOsmAndRoute = NO; // Disabled temporary builder.calculateOsmAndRoute;
-    if (file.getAllPoints.count > 0)
+    if (file.getPointsList.count > 0)
     {
-        self.wpt = [NSArray arrayWithArray:file.getAllPoints];
+        self.wpt = [NSArray arrayWithArray:file.getPointsList];
     }
     NSInteger selectedSegment = builder.selectedSegment;
     if ([OSMAND_ROUTER_V2 isEqualToString:file.author])
@@ -470,7 +470,7 @@
     NSMutableArray<OARouteDirectionInfo *> *directions = nil;
     if (!osmandRouter)
     {
-        for (OASWptPt *pt in gpxFile.getAllPoints)
+        for (OASWptPt *pt in gpxFile.getPointsList)
         {
             CLLocation *loc = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(pt.position.latitude, pt.position.longitude) altitude:pt.ele horizontalAccuracy:pt.hdop verticalAccuracy:0 course:0 speed:pt.speed timestamp:[NSDate dateWithTimeIntervalSince1970:pt.time]];
             

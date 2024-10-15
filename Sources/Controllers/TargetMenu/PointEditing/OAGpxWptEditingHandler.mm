@@ -119,7 +119,7 @@
 - (NSArray<NSDictionary<NSString *, NSString *> *> *)getWaypointCategoriesWithAllData:(BOOL)withDefaultCategory
 {
     NSMapTable<NSString *, NSDictionary *> *map = [NSMapTable new];
-    for (OASWptPt *point in _gpxDocument.getAllPoints)
+    for (OASWptPt *point in _gpxDocument.getPointsList)
     {
         NSMutableDictionary<NSString *, NSString *> *categories = [NSMutableDictionary new];
         NSString *title = point.category == nil ? @"" : point.category;
@@ -204,7 +204,7 @@
 - (NSDictionary<NSString *, NSString *> *)getWaypointCategoriesWithColors:(BOOL)withDefaultCategory
 {
     NSMutableDictionary<NSString *, NSString *> *categories = [NSMutableDictionary new];
-    for (OASWptPt *point in _gpxDocument.getAllPoints)
+    for (OASWptPt *point in _gpxDocument.getPointsList)
     {
         NSString *title = point.category == nil ? @"" : point.category;
         NSString *color = point.category == nil ? @"" :  UIColorFromRGBA([point getColor]).toHexARGBString;

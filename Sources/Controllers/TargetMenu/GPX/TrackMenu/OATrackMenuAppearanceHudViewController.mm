@@ -981,7 +981,7 @@ static const NSInteger kColorsSection = 1;
                 
                 double scaleValue = self.gpx.verticalExaggerationScale;
                 NSString *alphaValueString = scaleValue <= kGpxExaggerationDefScale ? OALocalizedString(@"shared_string_none") : (scaleValue < 1.0 ? [NSString stringWithFormat:@"x%.2f", scaleValue] : [NSString stringWithFormat:@"x%.1f", scaleValue]);
-                NSString *elevationMetersValueString = [NSString stringWithFormat:@"%f %@", self.gpx.elevationMeters, OALocalizedString(@"m")];
+                NSString *elevationMetersValueString = [NSString stringWithFormat:@"%.0f %@", self.gpx.elevationMeters, OALocalizedString(@"m")];
                 if (self.gpx.visualization3dByType != EOAGPX3DLineVisualizationByTypeFixedHeight)
                 {
                     OAGPXTableCellData *verticalExaggerationData = [OAGPXTableCellData withData:@{

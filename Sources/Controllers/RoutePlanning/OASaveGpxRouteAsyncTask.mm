@@ -193,7 +193,7 @@
             if (newGpx)
             {
                 NSArray<OASTrack *> *gpxTracks = gpx.tracks;
-                NSArray<OASWptPt *> *gpxPoints = gpx.getAllPoints;
+                NSArray<OASWptPt *> *gpxPoints = gpx.getPointsList;
                 NSArray<OASRoute *> *gpxRoutes = gpx.routes;
                 gpx = newGpx;
                 NSArray<NSArray<OASWptPt *> *> *routePoints = [_editingCtx getRoutePoints];

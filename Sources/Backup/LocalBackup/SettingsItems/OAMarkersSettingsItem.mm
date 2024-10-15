@@ -198,9 +198,10 @@
     
     OASKFile *file = [[OASKFile alloc] initWithFilePath:filePath];
     OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
+
     if (gpxFile)
     {
-        for (OASWptPt *wpt in gpxFile.getAllPoints)
+        for (OASWptPt *wpt in gpxFile.getPointsList)
         {
             OADestination *dest = [[OADestination alloc] initWithDesc:wpt.name latitude:wpt.getLatitude longitude:wpt.getLongitude];
             int color = [wpt getColor];

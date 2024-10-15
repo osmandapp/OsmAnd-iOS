@@ -211,13 +211,13 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
     int i = 0;
     for (OASGpxFile *gpx in _geoDocList)
     {
-        if (!gpx || gpx.getAllPoints.count == 0)
+        if (!gpx || gpx.getPointsList.count == 0)
         {
             i++;
             continue;
         }
         
-        for (OASWptPt *point in gpx.getAllPoints) {
+        for (OASWptPt *point in gpx.getPointsList) {
 
             OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
             sr.localeName = point.name;

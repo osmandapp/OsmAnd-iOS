@@ -665,7 +665,7 @@
 
     if ([self.doc hasWptPt])
     {
-        for (OASWptPt *gpxWpt in self.doc.getAllPoints)
+        for (OASWptPt *gpxWpt in self.doc.getPointsList)
         {
             OAGpxWptItem *gpxWptItem = [OAGpxWptItem withGpxWpt:gpxWpt];
             if (gpxWpt.category.length == 0)
@@ -1720,7 +1720,7 @@
     NSMutableArray<CLLocation *> *points = [NSMutableArray array];
     if (self.doc)
     {
-        for (OASWptPt *wptPt in [self.doc getAllPoints])
+        for (OASWptPt *wptPt in [self.doc getPointsList])
         {
             [points addObject:[[CLLocation alloc] initWithLatitude:[wptPt getLatitude] longitude:[wptPt getLongitude]]];
         }

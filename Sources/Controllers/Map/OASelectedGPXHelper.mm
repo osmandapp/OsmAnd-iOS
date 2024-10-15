@@ -137,23 +137,12 @@
 
 - (OASGpxFile *)getSelectedGpx:(OASWptPt *)gpxWpt {
     for (OASGpxFile *gpxFile in _activeGpx) {
-        if ([[gpxFile getAllPoints] containsObject:gpxWpt]) {
+        if ([[gpxFile getPointsList] containsObject:gpxWpt]) {
             return gpxFile;
         }
     }
     return nil;
 }
-
-//- (OAGPXDocument *)getSelectedGpx:(OASWptPt *)gpxWpt
-//{
-//    for (auto it = _activeGpx.begin(); it != _activeGpx.end(); ++it)
-//    {
-//        OAGPXDocument *gpxDoc = [[OAGPXDocument alloc] initWithGpxFile:it.key().toNSString()];
-//        if ([[gpxDoc points] containsObject:gpxWpt])
-//            return gpxDoc;
-//    }
-//    return nil;
-//}
 
 -(BOOL) isShowingAnyGpxFiles
 {

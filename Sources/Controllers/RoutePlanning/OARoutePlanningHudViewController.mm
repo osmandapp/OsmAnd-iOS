@@ -558,7 +558,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         gpxDataItem = [[OAGPXDatabase sharedDb] getGPXItemByFileName:gpxFileName];
     }
     OASGpxFile *selectedFile = selectedGpxHelper.activeGpx[gpxFileName.lastPathComponent];
-;
     if (selectedFile != nullptr) {
         gpxFile = selectedFile;
     } else {
@@ -570,7 +569,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         gpxFile.routes = [NSMutableArray new];
     if (!gpxFile.tracks)
         gpxFile.tracks = [NSMutableArray new];
-    if (!gpxFile.getAllPoints) {
+    if (!gpxFile.getPointsList) {
         [gpxFile clearPoints];
     }
     

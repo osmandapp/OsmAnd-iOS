@@ -8,6 +8,33 @@
 
 import UIKit
 
+enum FilterParameterType: Int {
+    case lengthFilterType
+    case durationFilterType
+    case timeInMotionFilterType
+    case dateCreationFilterType
+    case averageSpeedFilterType
+    case maxSpeedFilterType
+    case averageAltitudeFilterType
+    case maxAltitudeFilterType
+    case uphillFilterType
+    case downhillFilterType
+    case colorFilterType
+    case widthFilterType
+    case nearestCitiesFilterType
+    case folderFilterType
+    case sensorSpeedMaxFilterType
+    case sensorSpeedAverageFilterType
+    case heartRateMaxFilterType
+    case heartRateAverageFilterType
+    case bicycleCadenceMaxFilterType
+    case bicycleCadenceAverageFilterType
+    case bicyclePowerMaxFilterType
+    case bicyclePowerAverageFilterType
+    case temperatureMaxFilterType
+    case temperatureAverageFilterType
+}
+
 final class TracksFiltersViewController: OABaseButtonsViewController {
     private static let nameFilterRowKey = "nameFilter"
     private static let lengthFilterRowKey = "lengthFilter"
@@ -38,8 +65,61 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
     private static let withWaypointsFilterRowKey = "withWaypointsFilter"
     private static let selectedKey = "selected"
     
-    private var initialFilterText: String?
+    private let decimalFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.groupingSeparator = " "
+        formatter.locale = Locale(identifier: "en_US")
+        return formatter
+    }()
+    
+    private var baseFilters: TracksSearchFilter
+    private var baseFiltersResult: FilterResults
+    private var nameFilterType: TextTrackFilter?
+    private var otherFilterType: OtherTrackFilter?
     private var isFiltersModified = false
+    
+    private lazy var filterMappings: [String: (type: FilterParameterType, isModal: Bool)] = [
+        Self.lengthFilterRowKey: (.lengthFilterType, false),
+        Self.durationFilterRowKey: (.durationFilterType, false),
+        Self.timeInMotionFilterRowKey: (.timeInMotionFilterType, false),
+        Self.dateCreationFilterRowKey: (.dateCreationFilterType, false),
+        Self.averageSpeedFilterRowKey: (.averageSpeedFilterType, false),
+        Self.maxSpeedFilterRowKey: (.maxSpeedFilterType, false),
+        Self.averageAltitudeFilterRowKey: (.averageAltitudeFilterType, false),
+        Self.maxAltitudeFilterRowKey: (.maxAltitudeFilterType, false),
+        Self.uphillFilterRowKey: (.uphillFilterType, false),
+        Self.downhillFilterRowKey: (.downhillFilterType, false),
+        Self.colorFilterRowKey: (.colorFilterType, true),
+        Self.widthFilterRowKey: (.widthFilterType, true),
+        Self.nearestCitiesFilterRowKey: (.nearestCitiesFilterType, true),
+        Self.folderFilterRowKey: (.folderFilterType, true),
+        Self.sensorSpeedMaxFilterRowKey: (.sensorSpeedMaxFilterType, false),
+        Self.sensorSpeedAverageFilterRowKey: (.sensorSpeedAverageFilterType, false),
+        Self.heartRateMaxFilterRowKey: (.heartRateMaxFilterType, false),
+        Self.heartRateAverageFilterRowKey: (.heartRateAverageFilterType, false),
+        Self.bicycleCadenceMaxFilterRowKey: (.bicycleCadenceMaxFilterType, false),
+        Self.bicycleCadenceAverageFilterRowKey: (.bicycleCadenceAverageFilterType, false),
+        Self.bicyclePowerMaxFilterRowKey: (.bicyclePowerMaxFilterType, false),
+        Self.bicyclePowerAverageFilterRowKey: (.bicyclePowerAverageFilterType, false),
+        Self.temperatureMaxFilterRowKey: (.temperatureMaxFilterType, false),
+        Self.temperatureAverageFilterRowKey: (.temperatureAverageFilterType, false)
+    ]
+    
+    init(baseFilters: TracksSearchFilter, baseFiltersResult: FilterResults) {
+        self.baseFilters = baseFilters
+        self.baseFiltersResult = baseFiltersResult
+        super.init()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func commonInit() {
+        nameFilterType = baseFilters.getFilterByType(.name) as? TextTrackFilter
+        otherFilterType = baseFilters.getFilterByType(.other) as? OtherTrackFilter
+    }
     
     override func registerCells() {
         addCell(OAInputTableViewCell.reuseIdentifier)
@@ -53,6 +133,7 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onOutsideCellsTapped))
         tapGesture.cancelsTouchesInView = false
         tableView.addGestureRecognizer(tapGesture)
+        baseFilters.addFiltersChangedListener(self)
     }
     
     override func getTitle() -> String? {
@@ -72,15 +153,15 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
     }
     
     override func getBottomButtonTitle() -> String? {
-        localizedString("shared_string_show") + " (0)"
+        localizedString("shared_string_show") + " (\(baseFilters.getFilteredTrackItems().count))"
     }
     
     override func getTopButtonColorScheme() -> EOABaseButtonColorScheme {
-        .graySimple
+        baseFilters.getAppliedFiltersCount() > 0 ? .graySimple : .inactive
     }
     
     override func getBottomButtonColorScheme() -> EOABaseButtonColorScheme {
-        .graySimple
+        baseFilters.getFilteredTrackItems().count > 0 ? .graySimple : .inactive
     }
     
     override func generateData() {
@@ -89,15 +170,74 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
         let nameRow = nameFilterSection.createNewRow()
         nameRow.cellType = OAInputTableViewCell.reuseIdentifier
         nameRow.key = Self.nameFilterRowKey
-        nameRow.title = initialFilterText
+        nameRow.title = nameFilterType?.value
         nameRow.descr = localizedString("filter_poi_hint")
         
-        addBasicFilterSections()
-        addSpeedFilterSections()
-        addAltitudeElevationFilterSections()
-        addAppearanceElevationFilterSections()
-        addInfoFilterSections()
-        addSensorsFilterSections()
+        addRangeFilterSections(sectionHeader: "", filters: [
+            (key: Self.lengthFilterRowKey, type: .length, title: "routing_attr_length_name"),
+            (key: Self.durationFilterRowKey, type: .duration, title: "map_widget_trip_recording_duration"),
+            (key: Self.timeInMotionFilterRowKey, type: .timeInMotion, title: "moving_time"),
+            (key: Self.dateCreationFilterRowKey, type: .dateCreation, title: "date_of_creation")
+        ])
+        
+        addRangeFilterSections(sectionHeader: "shared_string_speed", filters: [
+            (key: Self.averageSpeedFilterRowKey, type: .averageSpeed, title: "map_widget_average_speed"),
+            (key: Self.maxSpeedFilterRowKey, type: .maxSpeed, title: "gpx_max_speed")
+        ])
+        
+        addRangeFilterSections(sectionHeader: "altitud_and_elevation", filters: [
+            (key: Self.averageAltitudeFilterRowKey, type: .averageAltitude, title: "average_altitude"),
+            (key: Self.maxAltitudeFilterRowKey, type: .maxAltitude, title: "max_altitude"),
+            (key: Self.uphillFilterRowKey, type: .uphill, title: "map_widget_trip_recording_uphill"),
+            (key: Self.downhillFilterRowKey, type: .downhill, title: "map_widget_trip_recording_downhill")
+        ])
+        
+        let appearanceFilterSection = tableData.createNewSection()
+        appearanceFilterSection.headerText = localizedString("shared_string_appearance")
+        let colorRow = appearanceFilterSection.createNewRow()
+        colorRow.cellType = OAValueTableViewCell.reuseIdentifier
+        colorRow.key = Self.colorFilterRowKey
+        colorRow.title = localizedString("shared_string_color")
+        let widthRow = appearanceFilterSection.createNewRow()
+        widthRow.cellType = OAValueTableViewCell.reuseIdentifier
+        widthRow.key = Self.widthFilterRowKey
+        widthRow.title = localizedString("routing_attr_width_name")
+        
+        let infoFilterSection = tableData.createNewSection()
+        infoFilterSection.headerText = localizedString("info_button")
+        let nearestCitiesRow = infoFilterSection.createNewRow()
+        nearestCitiesRow.cellType = OAValueTableViewCell.reuseIdentifier
+        nearestCitiesRow.key = Self.nearestCitiesFilterRowKey
+        nearestCitiesRow.title = localizedString("nearest_cities")
+        let folderRow = infoFilterSection.createNewRow()
+        folderRow.cellType = OAValueTableViewCell.reuseIdentifier
+        folderRow.key = Self.folderFilterRowKey
+        folderRow.title = localizedString("plan_route_folder")
+        
+        addRangeFilterSections(sectionHeader: "shared_string_sensors", filters: [
+            (key: Self.sensorSpeedMaxFilterRowKey, type: .maxSensorSpeed, title: "max_sensor_speed"),
+            (key: Self.sensorSpeedAverageFilterRowKey, type: .averageSensorSpeed, title: "avg_sensor_speed")
+        ])
+        
+        addRangeFilterSections(sectionHeader: "", filters: [
+            (key: Self.heartRateMaxFilterRowKey, type: .maxSensorHeartRate, title: "max_sensor_heartrate"),
+            (key: Self.heartRateAverageFilterRowKey, type: .averageSensorHeartRate, title: "avg_sensor_heartrate")
+        ])
+        
+        addRangeFilterSections(sectionHeader: "", filters: [
+            (key: Self.bicycleCadenceMaxFilterRowKey, type: .maxSensorCadence, title: "max_sensor_cadence"),
+            (key: Self.bicycleCadenceAverageFilterRowKey, type: .averageSensorCadence, title: "avg_sensor_cadence")
+        ])
+        
+        addRangeFilterSections(sectionHeader: "", filters: [
+            (key: Self.bicyclePowerMaxFilterRowKey, type: .maxSensorBicyclePower, title: "max_sensor_bycicle_power"),
+            (key: Self.bicyclePowerAverageFilterRowKey, type: .averageSensorBicyclePower, title: "avg_sensor_bycicle_power")
+        ])
+        
+        addRangeFilterSections(sectionHeader: "", filters: [
+            (key: Self.temperatureMaxFilterRowKey, type: .maxSensorTemperature, title: "max_sensor_temperature"),
+            (key: Self.temperatureAverageFilterRowKey, type: .averageSensorTemperature, title: "avg_sensor_temperature")
+        ])
         
         let otherFilterSection = tableData.createNewSection()
         otherFilterSection.headerText = localizedString("other_location")
@@ -105,12 +245,12 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
         visibleOnMapRow.cellType = OASwitchTableViewCell.reuseIdentifier
         visibleOnMapRow.key = Self.visibleOnMapFilterRowKey
         visibleOnMapRow.title = localizedString("shared_string_visible_on_map")
-        visibleOnMapRow.setObj(true, forKey: Self.selectedKey)
+        visibleOnMapRow.setObj(otherFilterType?.isParamSelected(param: .visibleOnMap) ?? false, forKey: Self.selectedKey)
         let withWaypointsRow = otherFilterSection.createNewRow()
         withWaypointsRow.cellType = OASwitchTableViewCell.reuseIdentifier
         withWaypointsRow.key = Self.withWaypointsFilterRowKey
         withWaypointsRow.title = localizedString("with_waypoints")
-        withWaypointsRow.setObj(true, forKey: Self.selectedKey)
+        withWaypointsRow.setObj(otherFilterType?.isParamSelected(param: .withWaypoints) ?? false, forKey: Self.selectedKey)
     }
 
     override func getRow(_ indexPath: IndexPath?) -> UITableViewCell? {
@@ -125,8 +265,8 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
             cell.inputField.returnKeyType = .go
             cell.inputField.enablesReturnKeyAutomatically = true
             cell.inputField.textAlignment = .left
-            if let text = initialFilterText, !text.isEmpty {
-                cell.inputField.text = text
+            if let title = item.title, !title.isEmpty {
+                cell.inputField.text = title
             } else {
                 cell.inputField.placeholder = item.descr
             }
@@ -145,6 +285,9 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
             cell.descriptionVisibility(false)
             cell.titleLabel.text = item.title
             cell.switchView.isOn = item.bool(forKey: Self.selectedKey)
+            cell.switchView.removeTarget(nil, action: nil, for: .allEvents)
+            cell.switchView.tag = indexPath.section << 10 | indexPath.row
+            cell.switchView.addTarget(self, action: #selector(onSwitchClick(_:)), for: .valueChanged)
             return cell
         }
         
@@ -154,68 +297,9 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
     override func onRowSelected(_ indexPath: IndexPath?) {
         guard let indexPath = indexPath else { return }
         let item = tableData.item(for: indexPath)
-        var filterType: FilterParameterType?
-        var isModalPresentation = false
-        switch item.key {
-        case Self.lengthFilterRowKey:
-            filterType = .lengthFilterType
-        case Self.durationFilterRowKey:
-            filterType = .durationFilterType
-        case Self.timeInMotionFilterRowKey:
-            filterType = .timeInMotionFilterType
-        case Self.dateCreationFilterRowKey:
-            filterType = .dateCreationFilterType
-        case Self.averageSpeedFilterRowKey:
-            filterType = .averageSpeedFilterType
-        case Self.maxSpeedFilterRowKey:
-            filterType = .maxSpeedFilterType
-        case Self.averageAltitudeFilterRowKey:
-            filterType = .averageAltitudeFilterType
-        case Self.maxAltitudeFilterRowKey:
-            filterType = .maxAltitudeFilterType
-        case Self.uphillFilterRowKey:
-            filterType = .uphillFilterType
-        case Self.downhillFilterRowKey:
-            filterType = .downhillFilterType
-        case Self.colorFilterRowKey:
-            filterType = .colorFilterType
-            isModalPresentation = true
-        case Self.widthFilterRowKey:
-            filterType = .widthFilterType
-            isModalPresentation = true
-        case Self.nearestCitiesFilterRowKey:
-            filterType = .nearestCitiesFilterType
-            isModalPresentation = true
-        case Self.folderFilterRowKey:
-            filterType = .folderFilterType
-            isModalPresentation = true
-        case Self.sensorSpeedMaxFilterRowKey:
-            filterType = .sensorSpeedMaxFilterType
-        case Self.sensorSpeedAverageFilterRowKey:
-            filterType = .sensorSpeedAverageFilterType
-        case Self.heartRateMaxFilterRowKey:
-            filterType = .heartRateMaxFilterType
-        case Self.heartRateAverageFilterRowKey:
-            filterType = .heartRateAverageFilterType
-        case Self.bicycleCadenceMaxFilterRowKey:
-            filterType = .bicycleCadenceMaxFilterType
-        case Self.bicycleCadenceAverageFilterRowKey:
-            filterType = .bicycleCadenceAverageFilterType
-        case Self.bicyclePowerMaxFilterRowKey:
-            filterType = .bicyclePowerMaxFilterType
-        case Self.bicyclePowerAverageFilterRowKey:
-            filterType = .bicyclePowerAverageFilterType
-        case Self.temperatureMaxFilterRowKey:
-            filterType = .temperatureMaxFilterType
-        case Self.temperatureAverageFilterRowKey:
-            filterType = .temperatureAverageFilterType
-        default:
-            return
-        }
-        
-        if let filterType = filterType {
-            let filterDetailsVC = TracksFilterDetailsViewController(filterType: filterType)
-            if isModalPresentation {
+        if let key = item.key, let mapping = filterMappings[key] {
+            let filterDetailsVC = TracksFilterDetailsViewController(filterParameter: mapping.type, baseFilters: baseFilters, baseFiltersResult: baseFiltersResult)
+            if mapping.isModal {
                 showModalViewController(filterDetailsVC)
             } else {
                 showMediumSheetViewController(filterDetailsVC, isLargeAvailable: false)
@@ -224,7 +308,7 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
     }
     
     override func onLeftNavbarButtonPressed() {
-        if isFiltersModified {
+        if baseFilters.getAppliedFiltersCount() > 0 {
             showResetFiltersAlert()
         } else {
             super.onLeftNavbarButtonPressed()
@@ -232,164 +316,75 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
     }
     
     override func onTopButtonPressed() {
+        baseFilters.resetCurrentFilters()
+        baseFiltersResult = baseFilters.performFiltering("")
+        generateData()
+        tableView.reloadData()
+        updateBottomButtons()
     }
     
     override func onBottomButtonPressed() {
+        super.onLeftNavbarButtonPressed()
+    }
+    
+    @objc private func onSwitchClick(_ sender: Any) -> Bool {
+        guard let tableData, let sw = sender as? UISwitch else { return false }
+        let indexPath = IndexPath(row: sw.tag & 0x3FF, section: sw.tag >> 10)
+        let data = tableData.item(for: indexPath)
+        otherFilterType = baseFilters.getFilterByType(.other) as? OtherTrackFilter
+        if data.key == Self.visibleOnMapFilterRowKey {
+            otherFilterType?.setItemSelected(param: .visibleOnMap, selected: sw.isOn)
+        } else if data.key == Self.withWaypointsFilterRowKey {
+            otherFilterType?.setItemSelected(param: .withWaypoints, selected: sw.isOn)
+        }
+        
+        baseFiltersResult = baseFilters.performFiltering("")
+        updateBottomButtons()
+        return false
     }
     
     @objc private func onOutsideCellsTapped() {
         view.endEditing(true)
     }
     
-    private func addBasicFilterSections() {
-        let basicFilterSection = tableData.createNewSection()
-        let lengthRow = basicFilterSection.createNewRow()
-        lengthRow.cellType = OAValueTableViewCell.reuseIdentifier
-        lengthRow.key = Self.lengthFilterRowKey
-        lengthRow.title = localizedString("routing_attr_length_name")
-        lengthRow.descr = "25 - 30 km"
-        let durationRow = basicFilterSection.createNewRow()
-        durationRow.cellType = OAValueTableViewCell.reuseIdentifier
-        durationRow.key = Self.durationFilterRowKey
-        durationRow.title = localizedString("map_widget_trip_recording_duration")
-        durationRow.descr = "13 - 120 min"
-        let timeInMotionRow = basicFilterSection.createNewRow()
-        timeInMotionRow.cellType = OAValueTableViewCell.reuseIdentifier
-        timeInMotionRow.key = Self.timeInMotionFilterRowKey
-        timeInMotionRow.title = localizedString("moving_time")
-        timeInMotionRow.descr = "50 - 60 min"
-        let dateCreationRow = basicFilterSection.createNewRow()
-        dateCreationRow.cellType = OAValueTableViewCell.reuseIdentifier
-        dateCreationRow.key = Self.dateCreationFilterRowKey
-        dateCreationRow.title = localizedString("date_of_creation")
-        dateCreationRow.descr = "23 Aug 2017"
+    private func addRangeFilterSections(sectionHeader: String, filters: [(key: String, type: TrackFilterType, title: String)]) {
+        let section = tableData.createNewSection()
+        section.headerText = localizedString(sectionHeader)
+        filters.forEach { filterInfo in
+            let row = section.createNewRow()
+            configureRangeFilterRow(row: row, filterType: filterInfo.type, title: filterInfo.title, key: filterInfo.key)
+        }
     }
     
-    private func addSpeedFilterSections() {
-        let speedFilterSection = tableData.createNewSection()
-        speedFilterSection.headerText = localizedString("shared_string_speed")
-        let averageSpeedRow = speedFilterSection.createNewRow()
-        averageSpeedRow.cellType = OAValueTableViewCell.reuseIdentifier
-        averageSpeedRow.key = Self.averageSpeedFilterRowKey
-        averageSpeedRow.title = localizedString("map_widget_average_speed")
-        averageSpeedRow.descr = "15 - 20 km/h"
-        let maxSpeedRow = speedFilterSection.createNewRow()
-        maxSpeedRow.cellType = OAValueTableViewCell.reuseIdentifier
-        maxSpeedRow.key = Self.maxSpeedFilterRowKey
-        maxSpeedRow.title = localizedString("gpx_max_speed")
-        maxSpeedRow.descr = "100 - 120 km/h"
-    }
-    
-    private func addAltitudeElevationFilterSections() {
-        let altitudeElevationFilterSection = tableData.createNewSection()
-        altitudeElevationFilterSection.headerText = localizedString("altitud_and_elevation")
-        let averageAltitudeRow = altitudeElevationFilterSection.createNewRow()
-        averageAltitudeRow.cellType = OAValueTableViewCell.reuseIdentifier
-        averageAltitudeRow.key = Self.averageAltitudeFilterRowKey
-        averageAltitudeRow.title = localizedString("average_altitude")
-        averageAltitudeRow.descr = ""
-        let maxAltitudeRow = altitudeElevationFilterSection.createNewRow()
-        maxAltitudeRow.cellType = OAValueTableViewCell.reuseIdentifier
-        maxAltitudeRow.key = Self.maxAltitudeFilterRowKey
-        maxAltitudeRow.title = localizedString("max_altitude")
-        maxAltitudeRow.descr = ""
-        let uphillRow = altitudeElevationFilterSection.createNewRow()
-        uphillRow.cellType = OAValueTableViewCell.reuseIdentifier
-        uphillRow.key = Self.uphillFilterRowKey
-        uphillRow.title = localizedString("map_widget_trip_recording_uphill")
-        uphillRow.descr = ""
-        let downhillRow = altitudeElevationFilterSection.createNewRow()
-        downhillRow.cellType = OAValueTableViewCell.reuseIdentifier
-        downhillRow.key = Self.downhillFilterRowKey
-        downhillRow.title = localizedString("map_widget_trip_recording_downhill")
-        downhillRow.descr = ""
-    }
-    
-    private func addAppearanceElevationFilterSections() {
-        let appearanceFilterSection = tableData.createNewSection()
-        appearanceFilterSection.headerText = localizedString("shared_string_appearance")
-        let colorRow = appearanceFilterSection.createNewRow()
-        colorRow.cellType = OAValueTableViewCell.reuseIdentifier
-        colorRow.key = Self.colorFilterRowKey
-        colorRow.title = localizedString("shared_string_color")
-        let widthRow = appearanceFilterSection.createNewRow()
-        widthRow.cellType = OAValueTableViewCell.reuseIdentifier
-        widthRow.key = Self.widthFilterRowKey
-        widthRow.title = localizedString("routing_attr_width_name")
-    }
-    
-    private func addInfoFilterSections() {
-        let infoFilterSection = tableData.createNewSection()
-        infoFilterSection.headerText = localizedString("info_button")
-        let nearestCitiesRow = infoFilterSection.createNewRow()
-        nearestCitiesRow.cellType = OAValueTableViewCell.reuseIdentifier
-        nearestCitiesRow.key = Self.nearestCitiesFilterRowKey
-        nearestCitiesRow.title = localizedString("nearest_cities")
-        let folderRow = infoFilterSection.createNewRow()
-        folderRow.cellType = OAValueTableViewCell.reuseIdentifier
-        folderRow.key = Self.folderFilterRowKey
-        folderRow.title = localizedString("plan_route_folder")
-        folderRow.descr = "All folders"
-    }
-    
-    private func addSensorsFilterSections() {
-        let sensorsFilterSection = tableData.createNewSection()
-        sensorsFilterSection.headerText = localizedString("shared_string_sensors")
-        let sensorSpeedMaxRow = sensorsFilterSection.createNewRow()
-        sensorSpeedMaxRow.cellType = OAValueTableViewCell.reuseIdentifier
-        sensorSpeedMaxRow.key = Self.sensorSpeedMaxFilterRowKey
-        sensorSpeedMaxRow.title = localizedString("max_sensor_speed")
-        let sensorSpeedAverageRow = sensorsFilterSection.createNewRow()
-        sensorSpeedAverageRow.cellType = OAValueTableViewCell.reuseIdentifier
-        sensorSpeedAverageRow.key = Self.sensorSpeedAverageFilterRowKey
-        sensorSpeedAverageRow.title = localizedString("avg_sensor_speed")
-        
-        let heartRateFilterSection = tableData.createNewSection()
-        let heartRateMaxRow = heartRateFilterSection.createNewRow()
-        heartRateMaxRow.cellType = OAValueTableViewCell.reuseIdentifier
-        heartRateMaxRow.key = Self.heartRateMaxFilterRowKey
-        heartRateMaxRow.title = localizedString("max_sensor_heartrate")
-        let heartRateAverageRow = heartRateFilterSection.createNewRow()
-        heartRateAverageRow.cellType = OAValueTableViewCell.reuseIdentifier
-        heartRateAverageRow.key = Self.heartRateAverageFilterRowKey
-        heartRateAverageRow.title = localizedString("avg_sensor_heartrate")
-        
-        let bicycleCadenceFilterSection = tableData.createNewSection()
-        let bicycleCadenceMaxRow = bicycleCadenceFilterSection.createNewRow()
-        bicycleCadenceMaxRow.cellType = OAValueTableViewCell.reuseIdentifier
-        bicycleCadenceMaxRow.key = Self.bicycleCadenceMaxFilterRowKey
-        bicycleCadenceMaxRow.title = localizedString("max_sensor_cadence")
-        let bicycleCadenceAverageRow = bicycleCadenceFilterSection.createNewRow()
-        bicycleCadenceAverageRow.cellType = OAValueTableViewCell.reuseIdentifier
-        bicycleCadenceAverageRow.key = Self.bicycleCadenceAverageFilterRowKey
-        bicycleCadenceAverageRow.title = localizedString("avg_sensor_cadence")
-        
-        let bicyclePowerFilterSection = tableData.createNewSection()
-        let bicyclePowerMaxRow = bicyclePowerFilterSection.createNewRow()
-        bicyclePowerMaxRow.cellType = OAValueTableViewCell.reuseIdentifier
-        bicyclePowerMaxRow.key = Self.bicyclePowerMaxFilterRowKey
-        bicyclePowerMaxRow.title = localizedString("max_sensor_bycicle_power")
-        let bicyclePowerAverageRow = bicyclePowerFilterSection.createNewRow()
-        bicyclePowerAverageRow.cellType = OAValueTableViewCell.reuseIdentifier
-        bicyclePowerAverageRow.key = Self.bicyclePowerAverageFilterRowKey
-        bicyclePowerAverageRow.title = localizedString("avg_sensor_bycicle_power")
-        
-        let temperatureFilterSection = tableData.createNewSection()
-        let temperatureMaxRow = temperatureFilterSection.createNewRow()
-        temperatureMaxRow.cellType = OAValueTableViewCell.reuseIdentifier
-        temperatureMaxRow.key = Self.temperatureMaxFilterRowKey
-        temperatureMaxRow.title = localizedString("max_sensor_temperature")
-        let temperatureAverageRow = temperatureFilterSection.createNewRow()
-        temperatureAverageRow.cellType = OAValueTableViewCell.reuseIdentifier
-        temperatureAverageRow.key = Self.temperatureAverageFilterRowKey
-        temperatureAverageRow.title = localizedString("avg_sensor_temperature")
+    private func configureRangeFilterRow(row: OATableRowData, filterType: TrackFilterType, title: String, key: String) {
+        row.cellType = OAValueTableViewCell.reuseIdentifier
+        row.key = key
+        row.title = localizedString(title)
+        switch filterType {
+        case .dateCreation:
+            if let dateFilter = baseFilters.getFilterByType(filterType) as? DateTrackFilter {
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateStyle = .medium
+                let fromDate = Date(timeIntervalSince1970: TimeInterval(dateFilter.valueFrom) / 1000)
+                let toDate = Date(timeIntervalSince1970: TimeInterval(dateFilter.valueTo) / 1000)
+                row.descr = "\(dateFormatter.string(from: fromDate)) - \(dateFormatter.string(from: toDate))"
+            }
+        default:
+            if let filter = baseFilters.getFilterByType(filterType) as? RangeTrackFilter<AnyObject> {
+                let mappedConstant = TracksSearchFilter.mapEOAMetricsConstantToMetricsConstants(OAAppSettings.sharedManager().metricSystem.get())
+                let minValue = Float(TracksSearchFilter.getDisplayValueFrom(filter: filter))
+                let maxValue = Float(TracksSearchFilter.getDisplayValueTo(filter: filter))
+                row.descr = "\(decimalFormatter.string(from: NSNumber(value: minValue)) ?? "") - \(decimalFormatter.string(from: NSNumber(value: maxValue)) ?? "") \(filter.trackFilterType.measureUnitType.getFilterUnitText(mc: mappedConstant))"
+            }
+        }
     }
     
     private func showResetFiltersAlert() {
         let alertController = UIAlertController(title: localizedString("shared_string_discard_changes") + "?", message: localizedString("discard_filter_changes_prompt"), preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel, handler: nil)
         let resetAction = UIAlertAction(title: localizedString("shared_string_reset"), style: .destructive) { _ in
-            self.resetAllFilters()
+            self.baseFilters.resetCurrentFilters()
+            self.baseFiltersResult = self.baseFilters.performFiltering("")
             super.onLeftNavbarButtonPressed()
         }
         
@@ -397,18 +392,27 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
         alertController.addAction(resetAction)
         present(alertController, animated: true)
     }
-    
-    private func resetAllFilters() {
-    }
-    
-    func setInitialFilterText(_ text: String) {
-        initialFilterText = text
-    }
 }
 
 extension TracksFiltersViewController: UITextFieldDelegate {
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        guard let text = textField.text else { return }
+        nameFilterType?.value = text
+        baseFiltersResult = baseFilters.performFiltering(text)
+    }
+
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+}
+
+extension TracksFiltersViewController: FilterChangedListener {
+    func onFilterChanged() {
+        DispatchQueue.main.async {
+            self.generateData()
+            self.tableView.reloadData()
+            self.updateBottomButtons()
+        }
     }
 }

@@ -13,6 +13,7 @@
 #import "OASettingsItemWriter.h"
 #import "OAFileSettingsItem.h"
 #import "OrderedDictionary.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/ArchiveWriter.h>
 
@@ -57,7 +58,7 @@
 - (void)write:(OASettingsItem *)item
 {
     NSString *error = nil;
-    NSString *fileName = [OABackupHelper getItemFileName:item];
+    NSString *fileName = [BackupUtils getItemFileName:item];
     OASettingsItemWriter *itemWriter = item.getWriter;
     if (itemWriter != nil)
     {
@@ -77,6 +78,8 @@
     }
     if (_listener != nil)
     {
+        if (!error && [item isKindOfClass:OAFileSettingsItem.class])
+            [[LocalFileHashHelper shared] setHashWithFileItem:(OAFileSettingsItem *) item];
         [_listener onItemUploadDone:item fileName:fileName error:error];
     }
     if (error != nil)
@@ -187,9 +190,7 @@
     if ([item isKindOfClass:OAFileSettingsItem.class])
     {
         if ([OAFileSettingsItemFileSubtype isMap:((OAFileSettingsItem *) item).subtype])
-        {
-            return [_backupHelper isObfMapExistsOnServer:fileName];
-        }
+            return [BackupUtils isObfMapExistsOnServer:fileName];
     }
     return false;
 }
@@ -219,7 +220,7 @@
     for (NSString *file in filesToUpload)
     {
         item.filePath = file;
-        NSString *name = [OABackupHelper getFileItemName:file fileSettingsItem:item];
+        NSString *name = [BackupUtils getFileItemName:file fileSettingsItem:item];
         NSString *error = [self uploadItemFile:itemWriter fileName:name listener:self];
         if (error != nil)
             return error;
@@ -237,7 +238,7 @@
     if ([_item isKindOfClass:OAFileSettingsItem.class])
     {
         OAFileSettingsItem *fileItem = (OAFileSettingsItem *) _item;
-        NSString *itemFileName = [OABackupHelper getFileItemName:fileItem];
+        NSString *itemFileName = [BackupUtils getFileItemName:fileItem];
         if (itemFileName.pathExtension.length == 0)
         {
             [_backupHelper updateFileUploadTime:[OASettingsItemType typeName:_item.type] fileName:itemFileName uploadTime:uploadTime];

@@ -301,10 +301,12 @@
 {
     BOOL movedRes = [self moveContentsOfDirectory:[_dataPath stringByAppendingPathComponent:RESOURCES_DIR]
                                            toDest:[_documentsPath stringByAppendingPathComponent:RESOURCES_DIR]
-                               removeOriginalFile:YES];
-    BOOL movedSqlite = [self moveContentsOfDirectory:[_dataPath stringByAppendingPathComponent:MAP_CREATOR_DIR] 
+                               removeOriginalFile:YES
+                                       saveHashes:NO];
+    BOOL movedSqlite = [self moveContentsOfDirectory:[_dataPath stringByAppendingPathComponent:MAP_CREATOR_DIR]
                                               toDest:[_documentsPath stringByAppendingPathComponent:MAP_CREATOR_DIR]
-                                  removeOriginalFile:YES];
+                                  removeOriginalFile:YES
+                                          saveHashes:NO];
     if (movedRes)
         [self migrateMapNames:[_documentsPath stringByAppendingPathComponent:RESOURCES_DIR]];
     if (movedRes || movedSqlite)
@@ -312,10 +314,12 @@
 
     [self moveContentsOfDirectory:[[NSBundle mainBundle] pathForResource:CLR_PALETTE_DIR ofType:nil]
                            toDest:_colorsPalettePath
-               removeOriginalFile:NO];
+               removeOriginalFile:NO
+                       saveHashes:YES];
     [self moveContentsOfDirectory:[[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:MODEL_3D_DIR]
                            toDest:[_documentsPath stringByAppendingPathComponent:MODEL_3D_DIR]
-               removeOriginalFile:NO];
+               removeOriginalFile:NO
+                       saveHashes:NO];
 }
 
 - (BOOL) initializeCore
@@ -750,6 +754,7 @@
 - (BOOL) moveContentsOfDirectory:(NSString *)src
                           toDest:(NSString *)dest
               removeOriginalFile:(BOOL)remove
+              saveHashes:(BOOL)saveHashes
 {
     NSFileManager *fm = [NSFileManager defaultManager];
     if (![fm fileExistsAtPath:src])
@@ -759,26 +764,36 @@
 
     NSArray *files = [fm contentsOfDirectoryAtPath:src error:nil];
     BOOL tryAgain = NO;
+    LocalFileHashHelper *hashHelper = [LocalFileHashHelper shared];
     for (NSString *file in files)
     {
-        if ([fm fileExistsAtPath:[dest stringByAppendingPathComponent:file]])
+        NSString *destPath = [dest stringByAppendingPathComponent:file];
+        if ([fm fileExistsAtPath:destPath])
+        {
+            if (saveHashes)
+                [hashHelper setHash:destPath];
             continue;
+        }
         NSError *err = nil;
         if (remove)
         {
             [fm moveItemAtPath:[src stringByAppendingPathComponent:file]
-                        toPath:[dest stringByAppendingPathComponent:file]
+                        toPath:destPath
                          error:&err];
         }
         else
         {
             [fm copyItemAtPath:[src stringByAppendingPathComponent:file]
-                        toPath:[dest stringByAppendingPathComponent:file]
+                        toPath:destPath
                          error:&err];
         }
         if (err)
             tryAgain = YES;
+        if (saveHashes)
+            [hashHelper setHash:destPath];
     }
+    if (saveHashes)
+        [hashHelper saveHashes];
     if (remove && !tryAgain)
         [fm removeItemAtPath:src error:nil];
     return YES;
@@ -940,6 +955,11 @@
         }
     }
     return builder;
+}
+
+- (void)rescanUnmanagedStoragePaths
+{
+    _resourcesManager->rescanUnmanagedStoragePaths();
 }
 
 - (void) loadRoutingFiles

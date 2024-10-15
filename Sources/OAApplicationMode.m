@@ -681,7 +681,9 @@ static int PROFILE_TRUCK = 1000;
 {
     for (int i = 0; i < _values.count; i++)
     {
-        [_values[i] setOrder:i];
+        OAApplicationMode *mode = _values[i];
+        if ([mode getOrder] != i)
+            [mode setOrder:i];
     }
 }
 

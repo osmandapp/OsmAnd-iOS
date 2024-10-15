@@ -15,6 +15,7 @@
 #import <sqlite3.h>
 #import "OALog.h"
 #import "NSData+CRC32.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define TABLE_NAME @"history"
 #define POINT_COL_HASH @"fhash"
@@ -27,6 +28,7 @@
 #define POINT_COL_TYPE_NAME @"ftypename"
 #define POINT_COL_FROM_NAVIGATION @"ffromnavigation"
 
+#define HISTORY_LAST_MODIFIED_NAME @"history_recents"
 #define MARKERS_HISTORY_LAST_MODIFIED_NAME @"map_markers_history"
 
 @implementation OAHistoryDB
@@ -180,11 +182,16 @@
             sqlite3_finalize(statement);
 
             sqlite3_close(historyDB);
+
+            if (item.hType == OAHistoryTypeDirection)
+                [self updateMarkersHistoryLastModifiedTime];
+            else
+                [self updateHistoryLastModifiedTime];
         }
     });
 }
 
-- (void)deletePoint:(int64_t)hId
+- (void)deletePoint:(OAHistoryItem *)item
 {
     dispatch_async(dbQueue, ^{
         sqlite3_stmt    *statement;
@@ -198,11 +205,16 @@
             const char *update_stmt = [query UTF8String];
             
             sqlite3_prepare_v2(historyDB, update_stmt, -1, &statement, NULL);
-            sqlite3_bind_int64(statement, 1, hId);
+            sqlite3_bind_int64(statement, 1, item.hId);
             sqlite3_step(statement);
             sqlite3_finalize(statement);
             
             sqlite3_close(historyDB);
+
+            if (item.hType == OAHistoryTypeDirection)
+                [self updateMarkersHistoryLastModifiedTime];
+            else
+                [self updateHistoryLastModifiedTime];
         }
     });
 }
@@ -459,18 +471,47 @@
 
 - (long)getMarkersHistoryLastModifiedTime
 {
-    long lastModifiedTime = [OABackupHelper getLastModifiedTime:MARKERS_HISTORY_LAST_MODIFIED_NAME];
+    return [self getHistoryLastModifiedTime:MARKERS_HISTORY_LAST_MODIFIED_NAME];
+}
+
+- (void)setMarkersHistoryLastModifiedTime:(long)lastModified
+{
+    [BackupUtils setLastModifiedTime:MARKERS_HISTORY_LAST_MODIFIED_NAME
+                    lastModifiedTime:lastModified];
+}
+
+- (void)updateMarkersHistoryLastModifiedTime
+{
+    [BackupUtils setLastModifiedTime:MARKERS_HISTORY_LAST_MODIFIED_NAME
+                    lastModifiedTime:(long) NSDate.now.timeIntervalSince1970];
+}
+
+- (long)getHistoryLastModifiedTime
+{
+    return [self getHistoryLastModifiedTime:HISTORY_LAST_MODIFIED_NAME];
+}
+
+- (void)setHistoryLastModifiedTime:(long)lastModified
+{
+    [BackupUtils setLastModifiedTime:HISTORY_LAST_MODIFIED_NAME
+                    lastModifiedTime:lastModified];
+}
+
+- (void)updateHistoryLastModifiedTime
+{
+    [BackupUtils setLastModifiedTime:HISTORY_LAST_MODIFIED_NAME
+                    lastModifiedTime:(long) NSDate.now.timeIntervalSince1970];
+}
+
+- (long)getHistoryLastModifiedTime:(NSString *)key
+{
+    long lastModifiedTime = [BackupUtils getLastModifiedTime:key];
     if (lastModifiedTime == 0)
     {
         lastModifiedTime = [self getDBLastModifiedTime];
-        [OABackupHelper setLastModifiedTime:MARKERS_HISTORY_LAST_MODIFIED_NAME lastModifiedTime:lastModifiedTime];
+        [BackupUtils setLastModifiedTime:key lastModifiedTime:lastModifiedTime];
     }
     return lastModifiedTime;
-}
-
-- (void) setMarkersHistoryLastModifiedTime:(long)lastModified
-{
-    [OABackupHelper setLastModifiedTime:MARKERS_HISTORY_LAST_MODIFIED_NAME lastModifiedTime:lastModified];
 }
 
 - (long) getDBLastModifiedTime

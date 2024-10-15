@@ -25,13 +25,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithKey:(NSString *)key operation:(EOABackupSyncOperationType)operation;
 
-- (void) execute;
+- (void)execute;
 - (void)uploadLocalItem:(OASettingsItem *)item;
 
-- (void)downloadRemoteVersion:(OASettingsItem *)item
-                    filesType:(EOARemoteFilesType)filesType
-                shouldReplace:(BOOL)shouldReplace
-               restoreDeleted:(BOOL)restoreDeleted;
+- (void)downloadItem:(OASettingsItem *)item
+           filesType:(EOARemoteFilesType)filesType
+       shouldReplace:(BOOL)shouldReplace
+      restoreDeleted:(BOOL)restoreDeleted;
 
 - (void)deleteItem:(OASettingsItem *)item;
 - (void)deleteLocalItem:(OASettingsItem *)item;

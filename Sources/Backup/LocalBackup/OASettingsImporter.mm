@@ -44,6 +44,7 @@
 #import "OASuggestedDownloadsItem.h"
 #import "OAExportAsyncTask.h"
 #import "OAApplicationMode.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -697,45 +698,12 @@
     }
     return YES;
 }
- 
-- (void)updateDataIfNeeded
-{
-    OsmAndAppInstance app = OsmAndApp.instance;
-    BOOL updateRoutingFiles = NO;
-    BOOL updateResources = NO;
-    BOOL updateColorPalette = NO;
-    for (OASettingsItem *item in _items)
-    {
-        if ([item isKindOfClass:OAFileSettingsItem.class])
-        {
-            OAFileSettingsItem *fileItem = (OAFileSettingsItem *)item;
-            updateResources = updateResources || fileItem.subtype != EOASettingsItemFileSubtypeUnknown;
-            updateRoutingFiles = updateRoutingFiles || fileItem.subtype == EOASettingsItemFileSubtypeRoutingConfig;
-            updateColorPalette = updateColorPalette || fileItem.subtype == EOASettingsItemFileSubtypeColorPalette;
-            
-            if (updateResources && updateRoutingFiles && updateColorPalette)
-                break;
-        }
-    }
-
-    if (updateColorPalette)
-    {
-        [app.updateGpxTracksOnMapObservable notifyEvent];
-    }
-    if (updateRoutingFiles)
-        [app loadRoutingFiles];
-    if (updateResources)
-    {
-        app.resourcesManager->rescanUnmanagedStoragePaths(true);
-        [app.localResourcesChangedObservable notifyEvent];
-    }
-    [[OARootViewController instance].mapPanel recreateAllControls];
-}
 
 - (void) onPostExecute:(BOOL)success
 {
-    [self updateDataIfNeeded];
-    
+    [BackupUtils updateCacheForItems:_items];
+    [[OARootViewController instance].mapPanel recreateAllControls];
+
     if (_delegate)
         [_delegate onSettingsImportFinished:success items:_items];
     if (self.onImportComplete)

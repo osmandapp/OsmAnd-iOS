@@ -18,6 +18,7 @@
 #import "OAAppSettings.h"
 #import "OASettingsHelper.h"
 #import "OAOperationLog.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OACollectLocalFilesTask
 {
@@ -52,7 +53,7 @@
         [_operationLog log:@"getLocalItems"];
         for (OASettingsItem *item in localItems)
         {
-            NSString *fileName = [OABackupHelper getItemFileName:item];
+            NSString *fileName = [BackupUtils getItemFileName:item];
             if ([item isKindOfClass:OAFileSettingsItem.class])
             {
                 OAFileSettingsItem *fileItem = (OAFileSettingsItem *) item;
@@ -158,24 +159,32 @@
         if (fileInfo)
         {
             localFile.uploadTime = fileInfo.uploadTime;
-            NSString *lastMd5 = fileInfo.md5Digest;
-            BOOL needM5Digest = [item isKindOfClass:OAFileSettingsItem.class]
-            && ((OAFileSettingsItem *) item).needMd5Digest
-            && localFile.uploadTime < lastModifiedTime
-            && lastMd5.length > 0;
-            if (needM5Digest && filePath && [NSFileManager.defaultManager fileExistsAtPath:filePath])
-            {
-                NSString *md5 = [OAUtilities fileMD5:filePath];
-                if ([md5 isEqualToString:lastMd5])
-                {
-                    item.localModifiedTime = localFile.uploadTime;
-                    localFile.localModifiedTime = localFile.uploadTime;
-                }
-            }
+            [self checkM5Digest:localFile fileInfo:fileInfo lastModifiedTime:lastModifiedTime];
         }
     }
     [result addObject:localFile];
     [self publishProgress:localFile];
+}
+
+- (void)checkM5Digest:(OALocalFile *)localFile
+             fileInfo:(OAUploadedFileInfo *)fileInfo
+     lastModifiedTime:(long)lastModifiedTime
+{
+    NSString *lastMd5 = fileInfo.md5Digest;
+    OASettingsItem *item = localFile.item;
+    BOOL needM5Digest = [item isKindOfClass:OAFileSettingsItem.class]
+        && ((OAFileSettingsItem *) item).needMd5Digest
+        && localFile.uploadTime < lastModifiedTime
+        && lastMd5.length > 0;
+    if (needM5Digest && localFile.filePath && [NSFileManager.defaultManager fileExistsAtPath:localFile.filePath])
+    {
+        NSString *md5 = [OAUtilities fileMD5:localFile.filePath];
+        if ([md5 isEqualToString:lastMd5])
+        {
+            item.localModifiedTime = localFile.uploadTime;
+            localFile.localModifiedTime = localFile.uploadTime;
+        }
+    }
 }
 
 - (NSArray<OASettingsItem *> *) getLocalItems
@@ -184,7 +193,7 @@
     NSMutableArray<OAExportSettingsType *> *toDelete = [NSMutableArray array];
     for (OAExportSettingsType *type in types)
     {
-        if (![OABackupHelper.sharedInstance getBackupTypePref:type].get)
+        if (![BackupUtils getBackupTypePref:type].get)
             [toDelete addObject:type];
     }
     return [OASettingsHelper.sharedInstance getFilteredSettingsItems:types addProfiles:YES doExport:YES];

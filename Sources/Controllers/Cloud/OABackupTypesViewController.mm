@@ -23,6 +23,7 @@
 #import "OAButtonTableViewCell.h"
 #import "OAIAPHelper.h"
 #import "OAChoosePlanHelper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OABackupTypesViewController
 {
@@ -206,7 +207,7 @@
 - (void)onTypeSelected:(OAExportSettingsType *)type selected:(BOOL)selected view:(UIView *)view
 {
     [super onTypeSelected:type selected:selected view:view];
-    [[_backupHelper getBackupTypePref:type] set:selected];
+    [[BackupUtils getBackupTypePref:type] set:selected];
     [_backupHelper.backup.backupInfo createItemCollections];
 }
 
@@ -261,7 +262,7 @@
     NSMutableDictionary<OAExportSettingsType *, NSArray *> *selectedItemsMap = [NSMutableDictionary dictionary];
     for (OAExportSettingsType *type in [OAExportSettingsType getAllValues])
     {
-        if ([[_backupHelper getBackupTypePref:type] get])
+        if ([[BackupUtils getBackupTypePref:type] get])
             selectedItemsMap[type] = [self getItemsForType:type];
     }
     return selectedItemsMap;

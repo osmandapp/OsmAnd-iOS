@@ -549,6 +549,7 @@
 		462545AB28D3688900637964 /* ic_custom_cross_buy_colored_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 462545A728D3688800637964 /* ic_custom_cross_buy_colored_day@3x.png */; };
 		4625AF902C2335870099EB89 /* TerrainMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4625AF8F2C2335870099EB89 /* TerrainMode.swift */; };
 		4627664D283D766E00F412F6 /* OASubscriptionCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4627664C283D766E00F412F6 /* OASubscriptionCardView.xib */; };
+		462B6C782CB6C2C900DD6C7E /* BackupUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462B6C772CB6C2C900DD6C7E /* BackupUtils.swift */; };
 		462BF6DC2B7E8347003ECA2C /* DeleteAccountCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462BF6DB2B7E8347003ECA2C /* DeleteAccountCommand.swift */; };
 		462E13E82BFA36D40038BCCB /* CustomMapButtonsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462E13E72BFA36D40038BCCB /* CustomMapButtonsViewController.swift */; };
 		462F13EB283FD0D400B73795 /* OAOsmLiveFeaturesCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 462F13E9283FD0D300B73795 /* OAOsmLiveFeaturesCardView.xib */; };
@@ -784,6 +785,7 @@
 		46DB0A632C5CEA8F001356D5 /* ConcurrentArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46DB0A622C5CEA8F001356D5 /* ConcurrentArray.swift */; };
 		46DB0A7E2C5D1602001356D5 /* GradientUiHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46DB0A7D2C5D1602001356D5 /* GradientUiHelper.swift */; };
 		46DC808629B8898700C477C3 /* OADownloadMode.mm in Sources */ = {isa = PBXBuildFile; fileRef = 46DC808529B8889200C477C3 /* OADownloadMode.mm */; };
+		46DD3CCD2CBD560F0087F8F0 /* LocalFileHashHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46DD3CCC2CBD560F0087F8F0 /* LocalFileHashHelper.swift */; };
 		46DF1D7F28C21B4300135D94 /* ic_custom_openstreetmap_logo_colored_day_big@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46DF1D7B28C21B4100135D94 /* ic_custom_openstreetmap_logo_colored_day_big@2x.png */; };
 		46DF1D8028C21B4300135D94 /* ic_custom_openstreetmap_logo_colored_day_big@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46DF1D7C28C21B4200135D94 /* ic_custom_openstreetmap_logo_colored_day_big@3x.png */; };
 		46DF1D8128C21B4300135D94 /* img_openstreetmap_logo_big@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46DF1D7D28C21B4200135D94 /* img_openstreetmap_logo_big@3x.png */; };
@@ -3922,6 +3924,7 @@
 		462545A728D3688800637964 /* ic_custom_cross_buy_colored_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_cross_buy_colored_day@3x.png"; path = "Resources/Icons/ic_custom_cross_buy_colored_day@3x.png"; sourceTree = "<group>"; };
 		4625AF8F2C2335870099EB89 /* TerrainMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerrainMode.swift; sourceTree = "<group>"; };
 		4627664C283D766E00F412F6 /* OASubscriptionCardView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OASubscriptionCardView.xib; sourceTree = "<group>"; };
+		462B6C772CB6C2C900DD6C7E /* BackupUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupUtils.swift; sourceTree = "<group>"; };
 		462BF6DB2B7E8347003ECA2C /* DeleteAccountCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAccountCommand.swift; sourceTree = "<group>"; };
 		462E13E72BFA36D40038BCCB /* CustomMapButtonsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMapButtonsViewController.swift; sourceTree = "<group>"; };
 		462F13E9283FD0D300B73795 /* OAOsmLiveFeaturesCardView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAOsmLiveFeaturesCardView.xib; sourceTree = "<group>"; };
@@ -4192,6 +4195,7 @@
 		46DB0A7D2C5D1602001356D5 /* GradientUiHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientUiHelper.swift; sourceTree = "<group>"; };
 		46DC808429B8887600C477C3 /* OADownloadMode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OADownloadMode.h; sourceTree = "<group>"; };
 		46DC808529B8889200C477C3 /* OADownloadMode.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OADownloadMode.mm; sourceTree = "<group>"; };
+		46DD3CCC2CBD560F0087F8F0 /* LocalFileHashHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalFileHashHelper.swift; sourceTree = "<group>"; };
 		46DF1D7B28C21B4100135D94 /* ic_custom_openstreetmap_logo_colored_day_big@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_openstreetmap_logo_colored_day_big@2x.png"; path = "Resources/Icons/ic_custom_openstreetmap_logo_colored_day_big@2x.png"; sourceTree = "<group>"; };
 		46DF1D7C28C21B4200135D94 /* ic_custom_openstreetmap_logo_colored_day_big@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_openstreetmap_logo_colored_day_big@3x.png"; path = "Resources/Icons/ic_custom_openstreetmap_logo_colored_day_big@3x.png"; sourceTree = "<group>"; };
 		46DF1D7D28C21B4200135D94 /* img_openstreetmap_logo_big@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_openstreetmap_logo_big@3x.png"; path = "Resources/Icons/img_openstreetmap_logo_big@3x.png"; sourceTree = "<group>"; };
@@ -13460,6 +13464,7 @@
 				DAA9F44B27EC9E99002BB1A8 /* Commands */,
 				DA4ABED22876D98D00B996EF /* LocalBackup */,
 				4657490F2B68129B0006046B /* BackupUiUtils.swift */,
+				462B6C772CB6C2C900DD6C7E /* BackupUtils.swift */,
 				DA1A886227FC66DA00A82DF6 /* OABackupDbHelper.h */,
 				DA1A886327FC66DA00A82DF6 /* OABackupDbHelper.m */,
 				DAA9F44F27ECA5F6002BB1A8 /* OABackupError.h */,
@@ -13502,6 +13507,7 @@
 				DA9901B22918F14700A3C732 /* OASyncBackupTask.mm */,
 				465749112B681E620006046B /* TrashGroup.swift */,
 				4657490D2B6803710006046B /* TrashItem.swift */,
+				46DD3CCC2CBD560F0087F8F0 /* LocalFileHashHelper.swift */,
 			);
 			path = Backup;
 			sourceTree = "<group>";
@@ -16379,6 +16385,7 @@
 				DA5A850626C563A900F274C7 /* OAMultiselectableHeaderView.m in Sources */,
 				DA5A830E26C563A800F274C7 /* OATitleIconRoundCell.m in Sources */,
 				DA5A855A26C563A900F274C7 /* OAMapillaryContributeCard.m in Sources */,
+				46DD3CCD2CBD560F0087F8F0 /* LocalFileHashHelper.swift in Sources */,
 				323F04BE2C6532EF0058DD78 /* BaseRouteQuickAction.swift in Sources */,
 				DA5A824A26C563A700F274C7 /* OADefaultSpeedViewController.mm in Sources */,
 				DA5A846126C563A900F274C7 /* OAContextMenuLayer.mm in Sources */,
@@ -16903,6 +16910,7 @@
 				FAC166292B21BEF900D63755 /* CBUUIDPath.swift in Sources */,
 				FA359EE52ADF026D0001C11D /* DeviceType.swift in Sources */,
 				DA5A813A26C563A700F274C7 /* OAEntityInfo.m in Sources */,
+				462B6C782CB6C2C900DD6C7E /* BackupUtils.swift in Sources */,
 				DA5A846A26C563A900F274C7 /* OADestination.mm in Sources */,
 				464EA9BD2C4948A30034D8C9 /* PaletteGradientColor.swift in Sources */,
 				46220B792AD70AF9006C3248 /* OAGroupEditorViewController.mm in Sources */,

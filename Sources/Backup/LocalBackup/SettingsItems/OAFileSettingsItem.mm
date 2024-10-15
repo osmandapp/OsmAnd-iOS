@@ -540,7 +540,10 @@
 
 - (BOOL) needMd5Digest
 {
-    return _subtype == EOASettingsItemFileSubtypeVoice || _subtype == EOASettingsItemFileSubtypeVoiceTTS;
+    return _subtype == EOASettingsItemFileSubtypeVoice
+        || _subtype == EOASettingsItemFileSubtypeVoiceTTS
+        || _subtype == EOASettingsItemFileSubtypeGpx
+        || _subtype == EOASettingsItemFileSubtypeColorPalette;
 }
 
 @end

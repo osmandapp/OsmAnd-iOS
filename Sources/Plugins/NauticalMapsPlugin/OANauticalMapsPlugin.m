@@ -34,7 +34,7 @@
 
 - (NSString *) getDescription
 {
-    return [NSString stringWithFormat:NSLocalizedString(@"plugin_nautical_descr", nil), k_docs_plugin_nautical];
+    return [NSString stringWithFormat:OALocalizedString(@"plugin_nautical_descr"), k_docs_plugin_nautical];
 }
 
 @end

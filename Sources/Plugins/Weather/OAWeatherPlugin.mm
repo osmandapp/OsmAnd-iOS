@@ -152,7 +152,7 @@
 
 - (NSString *) getDescription
 {
-    return [NSString stringWithFormat:NSLocalizedString(@"weather_plugin_description", nil), k_weather_global_forecast_system];
+    return [NSString stringWithFormat:OALocalizedString(@"weather_plugin_description"), k_weather_global_forecast_system];
 }
 
 - (NSArray<QuickActionType *> *)getQuickActionTypes

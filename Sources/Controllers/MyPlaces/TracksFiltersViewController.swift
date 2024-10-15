@@ -77,7 +77,6 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
     private var baseFiltersResult: FilterResults
     private var nameFilterType: TextTrackFilter?
     private var otherFilterType: OtherTrackFilter?
-    private var isFiltersModified = false
     
     private lazy var filterMappings: [String: (type: FilterParameterType, isModal: Bool)] = [
         Self.lengthFilterRowKey: (.lengthFilterType, false),

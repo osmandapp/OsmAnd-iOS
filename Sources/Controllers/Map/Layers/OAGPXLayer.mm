@@ -1428,7 +1428,7 @@ colorizationScheme:(int)colorizationScheme
 
     if (_gpxDocs.allKeys.count > 0)
     {
-        QList<OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>> points;
+        NSMutableArray<OASWptPt *> *points = [NSMutableArray array];
        // QHash<QString, std::shared_ptr<const OsmAnd::GpxDocument> >::iterator it;
         
         for (NSString *key in _gpxDocs.allKeys) {
@@ -1449,11 +1449,7 @@ colorizationScheme:(int)colorizationScheme
                 {
                     OASGpxUtilitiesPointsGroup *group = [gpx.pointsGroups objectForKey:waypoint.category];
                     if (!group || !group.hidden)
-                    {
-                        // FIXME:
-                        OsmAnd::GpxDocument::WptPt *wptPt = [self createDocumentWptPtFromWptPt:waypoint];
-                        points.append(wptPt);
-                    }
+                        [points addObject:waypoint];
                 }
             }
         }
@@ -1463,28 +1459,10 @@ colorizationScheme:(int)colorizationScheme
         if (_hiddenPointPos31 != OsmAnd::PointI())
             hiddenPoints.append(_hiddenPointPos31);
             
-        _waypointsMapProvider.reset(new OAWaypointsMapLayerProvider(points, self.pointsOrder - points.count() - 1, hiddenPoints,
+        _waypointsMapProvider.reset(new OAWaypointsMapLayerProvider(points, self.pointsOrder - (int)points.count - 1, hiddenPoints,
                                                                     self.showCaptions, self.captionStyle, self.captionTopSpace, rasterTileSize, _textScaleFactor));
         [self.mapView addTiledSymbolsProvider:_waypointsMapProvider];
     }
-}
-
-- (OsmAnd::GpxDocument::WptPt *)createDocumentWptPtFromWptPt:(OASWptPt *)oawptPt {
-    auto *wptPt = new OsmAnd::GpxDocument::WptPt();
-
-    wptPt->position = {oawptPt.lat, oawptPt.lon};
-    wptPt->name = QString::fromNSString(oawptPt.name);
-    wptPt->description = QString::fromNSString(oawptPt.desc);
-    wptPt->elevation = oawptPt.ele;
-    wptPt->timestamp = QDateTime::fromMSecsSinceEpoch(oawptPt.time);
-    wptPt->comment = QString::fromNSString(oawptPt.comment);
-    wptPt->type = QString::fromNSString(oawptPt.category);
-    wptPt->horizontalDilutionOfPrecision = oawptPt.hdop;
-    wptPt->verticalDilutionOfPrecision = 0.0;
-    wptPt->speed = oawptPt.speed;
-    wptPt->heading = oawptPt.heading;
-
-    return wptPt;
 }
 
 - (CGFloat)getLineWidth:(NSString *)gpxWidth

@@ -1344,6 +1344,10 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
                     auto angle = zoomAndRotation.y;
                     if (!isnan(zoom) && !isnan(angle))
                     {
+                        OAZoom *zoomObject = [[OAZoom alloc] initWitZoom:_mapView.zoom minZoom:1 maxZoom:22];
+                        float nextZoomStep = [zoomObject getValidZoomStep:zoom];
+                        zoom = nextZoomStep;
+                        
                         float newZoom = _mapView.zoom + (float)zoom;
                         float newAzimuth = _mapView.azimuth + (float)angle;
                         if (pinchRecognizer)
@@ -1845,12 +1849,13 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         return;
     }
     
-    [zoom changeZoom:zoomStep];
+    float nextZoomStep = [zoom getValidZoomStep:zoomStep];
+    [zoom changeZoom:nextZoomStep];
     
     _mapView.mapAnimator->pause();
     _mapView.mapAnimator->cancelAllAnimations();
     
-    _mapView.mapAnimator->animateZoomBy(zoomStep,
+    _mapView.mapAnimator->animateZoomBy(nextZoomStep,
                                         kQuickAnimationTime,
                                         OsmAnd::MapAnimator::TimingFunction::Linear,
                                         kUserInteractionAnimationKey);

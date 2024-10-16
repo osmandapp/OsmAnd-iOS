@@ -2851,7 +2851,7 @@
 "shared_string_analysis" = "Analýza";
 "shared_string_update_required" = "Vyžaduje sa aktualizácia";
 "rendering_attr_showDirtbikeTrails_description" = "Zobraziť blatisté cyklocesty";
-"rendering_attr_showDirtbikeTrails_name" = "Zobraziť blatisté cyklocesty";
+"rendering_attr_showDirtbikeTrails_name" = "Cesty pre terénne bicykle";
 "resting_position_icon" = "Ikona pozície v pokoji";
 "shared_string_all_icons" = "Všetky ikony";
 "navigation_position" = "Pozícia počas navigácie";
@@ -2877,3 +2877,7 @@
 "daynight_mode_night_summary" = "Vždy zobrazí mapu v tmavej téme, vhodnej pre noc a podmienky so slabým osvetlením.";
 "quick_action_need_to_add_item_to_list" = "Pridajte aspoň jednu položku do zoznamu v nastaveniach \'Rýchlej akcie\'";
 "quick_action_terrain_color_scheme" = "Farebná schéma terénu";
+"wikivoyage_offline" = "Wikivoyage v režime offline";
+"offline_wikivoyage" = "Offline Wikivoyage";
+"info_button" = "Info";
+"import_export" = "Import/export";

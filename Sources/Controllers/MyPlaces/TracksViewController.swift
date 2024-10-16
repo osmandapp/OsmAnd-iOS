@@ -153,8 +153,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         setupNavbar()
         setupSearchController()
         if shouldReload {
-            currentFolder = getTrackFolderByPath(currentFolderPath) ?? rootFolder
-            updateData()
+            reloadTracks(forceLoad: true)
             shouldReload = false
         }
     }
@@ -916,6 +915,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             state.gpxFilePath = trackItem.dataItem?.gpxFilePath
             state.navControllerHistory = newCurrentHistory
             rootVC.mapPanel.openTargetView(withGPX: trackItem, trackHudMode: .appearanceHudMode, state: state)
+            shouldReload = true
         }
     }
     
@@ -949,6 +949,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             rootVC.mapPanel.mapActions.enterRoutePlanningMode(givenGpx: trackItem, useIntermediatePointsByDefault: true, showDialog: true)
             navigationController?.popToRootViewController(animated: true)
         }
+        shouldReload = true
     }
     
     private func onTrackAnalyzeClicked(_ track: TrackItem?, isCurrentTrack: Bool) {
@@ -1541,6 +1542,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                                                                                    navControllerHistory: newCurrentHistory,
                                                                                    fromTrackMenu: false,
                                                                                    selectedTab: .overviewTab)
+                    shouldReload = true
                 }
             } else if item.key == recordingTrackKey {
                 if savingHelper.hasData() {

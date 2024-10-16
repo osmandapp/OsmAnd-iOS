@@ -715,10 +715,18 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 
 - (void) openRouteDetailsGraph
 {
-    [[OARootViewController instance].mapPanel openTargetViewWithRouteDetailsGraph:self.gpx
-                                                                        trackItem:self.trackItem
-                                                                         analysis:self.analysis
-                                                                 menuControlState:nil];
+    if (self.trackItem)
+    {
+        [[OARootViewController instance].mapPanel openTargetViewWithRouteDetailsGraph:self.gpx
+                                                                            trackItem:self.trackItem
+                                                                             analysis:self.analysis
+                                                                     menuControlState:nil];
+    }
+    else
+    {
+        [[OARootViewController instance].mapPanel openNewTargetViewWithRouteDetailsGraph:self.gpx analysis:self.analysis menuControlState:nil isRoute:YES];
+    }
+  
 }
 
 - (void) onBarChartTapped:(UITapGestureRecognizer *)recognizer

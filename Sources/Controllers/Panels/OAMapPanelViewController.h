@@ -262,6 +262,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)openNewTargetViewFromTracksListWithRouteDetailsGraph:(OASTrackItem *)trackItem
                                                        state:(OATrackMenuViewControllerState *)state;
+
+
+- (void)openNewTargetViewWithRouteDetailsGraph:(OASGpxFile *)gpx
+                                    analysis:(OASGpxTrackAnalysis *)analysis
+                            menuControlState:(OATargetMenuViewControllerState *)menuControlState
+                                       isRoute:(BOOL)isRoute;
+
 @end
  
 NS_ASSUME_NONNULL_END

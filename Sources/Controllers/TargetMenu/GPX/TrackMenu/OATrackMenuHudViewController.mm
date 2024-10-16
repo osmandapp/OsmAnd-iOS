@@ -105,7 +105,6 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *groupsButtonTrailingConstraint;
 
 @property (nonatomic) OASTrackItem *gpx;
-@property (nonatomic) OASGpxTrackAnalysis *analysis;
 @property (nonatomic) BOOL isShown;
 @property (nonatomic) OARouteLineChartHelper *routeLineChartHelper;
 @property (nonatomic) OATrackMenuHeaderView *headerView;
@@ -151,7 +150,7 @@
     NSArray<UIViewController *> *_navControllerHistory;
 }
 
-@dynamic gpx, analysis, isShown, backButton, statusBarBackgroundView, contentContainer;
+@dynamic gpx, isShown, backButton, statusBarBackgroundView, contentContainer;
 
 - (instancetype)initWithGpx:(OASTrackItem *)gpx
 {
@@ -856,6 +855,14 @@
 
 - (void)openAnalysis:(NSArray<NSNumber *> *)types
 {
+    if (!self.analysis)
+    {
+        if (!self.gpx.isShowCurrentTrack)
+        {
+            OASGpxTrackAnalysis *aa = self.gpx.dataItem.getAnalysis;
+            self.analysis = aa;
+        }
+    }
     [self openAnalysis:self.analysis withTypes:types];
 }
 
@@ -867,6 +874,13 @@
     [self hide:YES duration:.2 onComplete:^{
         OATrackMenuViewControllerState *state = [weakSelf getCurrentStateForAnalyze:types];
         state.openedFromTrackMenu = YES;
+        OASGpxFile *doc = weakSelf.doc;
+        if (!doc)
+        {
+            weakSelf.doc = [OASGpxUtilities.shared loadGpxFileFile:weakSelf.gpx.dataItem.file];
+        }
+        
+        
         [weakSelf.mapPanelViewController openTargetViewWithRouteDetailsGraph:weakSelf.doc
                                                                    trackItem:weakSelf.gpx
                                                                     analysis:analysis
@@ -1564,7 +1578,7 @@
         gpx = [gpxDb addGPXFileToDBIfNeeded:path];
         OASGpxTrackAnalysis *analysis = [gpx getAnalysis];
         
-        NSString *nearestCity;
+       // NSString *nearestCity;
         if (analysis.locationStart)
         {
             OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:analysis.locationStart.position];

@@ -433,8 +433,13 @@
             OASKException *exception = [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
             if (!exception)
             {
+                if (![[OAGPXDatabase sharedDb] containsGPXItem:file.absolutePath])
+                {
+                    [[OAGPXDatabase sharedDb] addGPXFileToDBIfNeeded:file.absolutePath];
+                }
                 // save to db
-                [[OAGPXDatabase sharedDb] addGPXFileToDBIfNeeded:file.absolutePath];
+                // FIXME: update if exist
+               
                 
             } else {
                 NSLog(@"[ERROR] -> OASavingTrackHelper | save gpx");

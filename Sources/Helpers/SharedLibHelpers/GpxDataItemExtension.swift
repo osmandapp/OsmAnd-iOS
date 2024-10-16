@@ -560,7 +560,7 @@ extension GpxDataItem {
     
     var splitType: EOAGpxSplitType {
         get {
-            let value = getParameter(parameter: .splitType) as? Int ?? 0
+            let value = getParameter(parameter: .splitType) as? Int ?? -1
             return EOAGpxSplitType(rawValue: value) ?? .none
         }
         set {
@@ -582,7 +582,7 @@ extension GpxDataItem {
             getParameter(parameter: .joinSegments) as? Bool ?? false
         }
         set {
-            setParameter(parameter: .joinSegments, value: newValue)
+            setParameter(parameter: .joinSegments, value: KotlinBoolean(bool: newValue))
         }
     }
     

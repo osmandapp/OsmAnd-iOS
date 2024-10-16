@@ -349,7 +349,6 @@
                 gpx = [gpxDb addGPXFileToDBIfNeeded:destFilePath];
                 OASGpxTrackAnalysis *analysis = [gpx getAnalysis];
                 
-                NSString *nearestCity;
                 if (analysis.locationStart)
                 {
                     OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:analysis.locationStart.position];

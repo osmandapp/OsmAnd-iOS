@@ -1139,19 +1139,20 @@ colorizationScheme:(int)colorizationScheme
     for (NSString *key in _gpxDocs.allKeys) {
         NSString *path = key;
         
-        OAGPXDatabase *gpxDb = OAGPXDatabase.sharedDb;
-
-        OASGpxDataItem *gpx = [gpxDb getNewGPXItem:path];
+        OASGpxDataItem *gpx = [OAGPXDatabase.sharedDb getNewGPXItem:path];
         
+        // FIXME:
         OASKFile *file = [[OASKFile alloc] initWithFilePath:path];
         OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
         
-        const bool raiseRoutesAboveRelief = gpx.visualization3dByType != EOAGPX3DLineVisualizationByTypeNone;
         OASGpxFile *doc = [_gpxDocs objectForKey:key];
         if ((!gpx && ![path isEqualToString:kCurrentTrack]) || gpx.showStartFinish)
         {
             if (!doc)
                 continue;
+            
+            const bool raiseRoutesAboveRelief = gpx.visualization3dByType != EOAGPX3DLineVisualizationByTypeNone;
+            
             NSArray<OASTrack *> *tracks = [doc.tracks copy];
             OsmAnd::LatLon start, finish;
             CLLocationCoordinate2D startLoc, finishLoc;

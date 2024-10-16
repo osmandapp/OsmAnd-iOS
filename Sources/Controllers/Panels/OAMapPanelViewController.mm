@@ -3244,8 +3244,8 @@ typedef enum
 
 
 - (void) openTargetViewWithRouteDetailsGraph:(OASGpxFile *)gpx
-                                    analysis:(OASGpxTrackAnalysis *)analysis
                                    trackItem:(OASTrackItem *)trackItem
+                                    analysis:(OASGpxTrackAnalysis *)analysis
                             menuControlState:(OATargetMenuViewControllerState *)menuControlState
 {
     [self openTargetViewWithRouteDetailsGraph:gpx trackItem:trackItem analysis:analysis menuControlState:menuControlState isRoute:YES];
@@ -3270,7 +3270,7 @@ typedef enum
 
     targetPoint.title = _formattedTargetName;
     targetPoint.toolbarNeeded = NO;
-    
+    // FIXME: crash
     if (gpx && analysis)
         targetPoint.targetObj = @{@"gpx" : gpx,
                                   @"trackItem" : trackItem,

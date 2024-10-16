@@ -247,14 +247,15 @@
         auto locationStart = _analysis.locationStart;
         
         OAPOI *nearestCity = [OAGPXUIHelper searchNearestCity:CLLocationCoordinate2DMake(locationStart.lat, locationStart.lon)];
-        _gpx.dataItem.nearestCity = nearestCity ? nearestCity.nameLocalized : @"";
+        NSString *nearestCityString = nearestCity ? nearestCity.nameLocalized : @"";
 
         OAGPXDatabase *db = [OAGPXDatabase sharedDb];
         OASGpxDataItem *gpx = [db getNewGPXItem:_gpx.dataItem.gpxFilePath];
         if (gpx)
         {
-            gpx.nearestCity = _gpx.dataItem.nearestCity;
-            [db updateDataItem:gpx];
+            [[OASGpxDbHelper shared] updateDataItemParameterItem:_gpx.dataItem
+                                                       parameter:OASGpxParameter.nearestCityName
+                                                           value:nearestCityString];
         }
     }
 

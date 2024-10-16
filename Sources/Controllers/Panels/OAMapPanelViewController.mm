@@ -2788,7 +2788,6 @@ typedef enum
     OASTrackItem *trackItem;
     if (item)
     {
-        // FIXME: Do not extra load gpx file
         trackItem = [[OASTrackItem alloc] initWithFile:item.file];
         trackItem.dataItem = item;
     }

@@ -896,7 +896,7 @@
 - (NSArray<OASTrkSegment *> *)getSegments
 {
     if (self.doc)
-        [self.doc getNonEmptyTrkSegmentsRoutesOnly:NO];
+        return [self.doc getNonEmptyTrkSegmentsRoutesOnly:NO];
 
     return @[];
 }

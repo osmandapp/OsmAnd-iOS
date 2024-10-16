@@ -2916,7 +2916,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
                 NSMutableDictionary<NSString *, OASGpxFile *> *gpxDocs = [NSMutableDictionary dictionary];
                 gpxDocs[kCurrentTrack] = doc;
-                [_mapLayers.gpxRecMapLayer refreshGpxTracks:gpxDocs reset:NO];
+                [_mapLayers.gpxRecMapLayer refreshGpxTracks:[gpxDocs copy] reset:NO];
             }
         }];
     }

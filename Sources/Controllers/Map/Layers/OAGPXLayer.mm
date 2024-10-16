@@ -178,7 +178,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     if (reset)
         [self resetLayer];
 
-    _gpxDocs = [gpxDocs mutableCopy];
+    _gpxDocs = (NSMutableDictionary *)[gpxDocs mutableCopy];
     [self refreshCachedTracks];
     [self refreshGpxTracks];
 }

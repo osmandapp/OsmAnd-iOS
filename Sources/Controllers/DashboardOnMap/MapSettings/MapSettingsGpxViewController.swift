@@ -508,7 +508,8 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         state.openedFromTracksList = true
         state.selectedStatisticsTab = .overviewTab
         navigationController?.setNavigationBarHidden(true, animated: true)
-        rootVC?.mapPanel.openTargetViewFromTracksList(withRouteDetailsGraph: track.dataItem?.file.absolutePath() ?? "", isCurrentTrack: false, state: state)
+        
+        rootVC?.mapPanel.openNewTargetViewFromTracksList(withRouteDetailsGraph: track, state: state)
     }
     
     private func onTrackShareClicked(track: TrackItem, touchPointArea: CGRect) {

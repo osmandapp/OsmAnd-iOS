@@ -1402,8 +1402,8 @@
 "copy_to_map_favorites" = "Copiar aos favoritos";
 "new_device_account" = "Novo dispositivo / nova conta";
 "expired" = "Expirado";
-"debugging_and_development" = "Desenvolvemento do OsmAnd";
-"osmand_development_plugin_description" = "Axusta as funcións de desenvolvemento e depuración, como a simulación de navegación, o rendemento do renderizado ou as indicacións por voz. Destinado para desenvolvedores, non é necesario para o normal uso da aplicación.";
+"debugging_and_development" = "Desenvolvemento de OsmAnd";
+"osmand_development_plugin_description" = "Fornece funcionalidades para probar e depurar OsmAnd: simular rutas de navegación, supervisar a representación na pantalla, comprobar o rendemento, etc. Este complemento non é necesario para o uso normal da aplicación.";
 "toast_empty_name_error" = "Localización sen nome";
 "osm_live_subscriptions" = "Subscricións";
 "restore_purchases" = "Restaurar as compras";

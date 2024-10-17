@@ -1344,7 +1344,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
                     auto angle = zoomAndRotation.y;
                     if (!isnan(zoom) && !isnan(angle))
                     {
-                        OAZoom *zoomObject = [[OAZoom alloc] initWitZoom:_mapView.zoom minZoom:1 maxZoom:22];
+                        OAZoom *zoomObject = [[OAZoom alloc] initWitZoom:_mapView.zoom minZoom:_mapView.minZoom maxZoom:_mapView.maxZoom];
                         float nextZoomStep = [zoomObject getValidZoomStep:zoom];
                         zoom = nextZoomStep;
                         

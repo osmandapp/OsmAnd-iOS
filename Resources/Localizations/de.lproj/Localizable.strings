@@ -3356,7 +3356,7 @@
 "map_settings_weather_temp_air" = "Lufttemperatur";
 "map_settings_weather_temp_water" = "Wassertemperatur";
 "rendering_attr_showDirtbikeTrails_name" = "Dirtbike-Strecken";
-"rendering_attr_showDirtbikeTrails_description" = "Dirtbike-Trails anzeigen";
+"rendering_attr_showDirtbikeTrails_description" = "Dirtbike-Strecken anzeigen";
 "shared_string_all_icons" = "Alle Icons";
 "show_along_the_route" = "Entlang der Route anzeigen";
 "profile_icon" = "Profilsymbol";
@@ -3390,9 +3390,9 @@
 "app_mode_monowheel" = "Einreifen";
 "lang_new" = "Newari / Nepal Bhasa";
 "shared_string_routing" = "Routenführung";
-"auto_zoom" = "Auto-Zoom";
-"quick_action_terrain_color_scheme" = "Gelände Farbschema";
-"quick_action_need_to_add_item_to_list" = "Mindestens ein Element der Liste in den „Schnellaktion“ Einstellungen hinzufügen";
+"auto_zoom" = "Autozoom";
+"quick_action_terrain_color_scheme" = "Gelände-Farbschema";
+"quick_action_need_to_add_item_to_list" = "Mindestens ein Element in die Liste der Schnellaktionseinstellungen hinzufügen";
 "lang_nv" = "Navajo";
 "mile" = "mi";
 "faq_item" = "FAQ";

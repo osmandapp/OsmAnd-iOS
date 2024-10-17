@@ -22,6 +22,7 @@
 - (void) zoomIn;
 - (void) zoomOut;
 - (void) changeZoom:(int)step;
+- (float) getValidZoomStep:(float)step;
 
 - (void) calculateAnimatedZoom:(int)currentBaseZoom deltaZoom:(float)deltaZoom;
 

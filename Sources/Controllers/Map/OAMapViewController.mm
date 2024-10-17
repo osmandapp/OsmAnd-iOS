@@ -3150,7 +3150,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     if (_gpxDocsTemp.count != 0)
     {
         OASGpxFile *doc = _gpxDocsTemp.firstObject;
-       // OAGPXDocument *document = [[OAGPXDocument alloc] initWithGpxDocument:doc];
+       
         NSString *gpxFilePath = [doc.path
                 stringByReplacingOccurrencesOfString:[_app.gpxPath stringByAppendingString:@"/"]
                                           withString:@""];

@@ -77,7 +77,7 @@
     if (!travelBook)
         return;
 
-    OAGPXDocument *gpx = (OAGPXDocument *) article.gpxFile.object;
+    OASGpxFile *gpx = (OASGpxFile *) article.gpxFile.object;
     NSString *tmpFilePath = [_tmpDir stringByAppendingPathComponent:TEMP_GPX_FILE_NAME];
     if (gpx)
     {

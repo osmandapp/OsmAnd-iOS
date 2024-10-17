@@ -1462,12 +1462,18 @@ typedef enum
 {
     if (targetPoint.type == OATargetGPX)
     {
-        [self openTargetViewWithGPX:targetPoint.targetObj
-                              items:nil
-                           routeKey:nil
-                       trackHudMode:EOATrackMenuHudMode
-                              state:[OATrackMenuViewControllerState withPinLocation:targetPoint.location
-                                                                      openedFromMap:[targetPoint.values[@"opened_from_map"] boolValue]]];
+        OASGpxDataItem *dataItem = (OASGpxDataItem *)targetPoint.targetObj;
+        if (dataItem)
+        {
+            OASTrackItem *trackItem = [[OASTrackItem alloc] initWithFile:dataItem.file];
+            trackItem.dataItem = dataItem;
+            [self openTargetViewWithGPX:trackItem
+                                  items:nil
+                               routeKey:nil
+                           trackHudMode:EOATrackMenuHudMode
+                                  state:[OATrackMenuViewControllerState withPinLocation:targetPoint.location
+                                                                          openedFromMap:[targetPoint.values[@"opened_from_map"] boolValue]]];
+        }
     }
     else if (targetPoint.type == OATargetNetworkGPX)
     {
@@ -3269,7 +3275,7 @@ typedef enum
 
     targetPoint.title = _formattedTargetName;
     targetPoint.toolbarNeeded = NO;
-    // FIXME: crash
+
     if (gpx && analysis)
         targetPoint.targetObj = @{@"gpx" : gpx,
                                   @"trackItem" : trackItem,

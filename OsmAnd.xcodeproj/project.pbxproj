@@ -441,6 +441,7 @@
 		32B7DC382C762BCC00E5E8BD /* OAColorsPaletteCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32B7DC342C761D1000E5E8BD /* OAColorsPaletteCell.xib */; };
 		32BBDC9B2C0497CF0090D37E /* RouteInfoListItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32BBDC9A2C0497CF0090D37E /* RouteInfoListItemCell.swift */; };
 		32BBDC9C2C049B0C0090D37E /* RouteInfoListItemCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32BBDC962C0493190090D37E /* RouteInfoListItemCell.xib */; };
+		32BC95732CC021CE00FEEAB8 /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32BC95722CC021CE00FEEAB8 /* UIFont+Extension.swift */; };
 		32BD81AC259B5C9B00A54BB5 /* ic_custom_manage_profiles@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32BD81A9259B5C9A00A54BB5 /* ic_custom_manage_profiles@2x.png */; };
 		32BD81B0259B5C9B00A54BB5 /* ic_custom_manage_profiles@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32BD81AB259B5C9B00A54BB5 /* ic_custom_manage_profiles@3x.png */; };
 		32BFF098299137D60023D067 /* OAUploadGPXFilesTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 32BFF097299137D60023D067 /* OAUploadGPXFilesTask.m */; };
@@ -3792,6 +3793,7 @@
 		32B7DC362C761D7300E5E8BD /* OAColorsPaletteCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAColorsPaletteCell.m; sourceTree = "<group>"; };
 		32BBDC962C0493190090D37E /* RouteInfoListItemCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RouteInfoListItemCell.xib; sourceTree = "<group>"; };
 		32BBDC9A2C0497CF0090D37E /* RouteInfoListItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoListItemCell.swift; sourceTree = "<group>"; };
+		32BC95722CC021CE00FEEAB8 /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
 		32BD81A9259B5C9A00A54BB5 /* ic_custom_manage_profiles@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_manage_profiles@2x.png"; path = "Resources/Icons/ic_custom_manage_profiles@2x.png"; sourceTree = "<group>"; };
 		32BD81AB259B5C9B00A54BB5 /* ic_custom_manage_profiles@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_manage_profiles@3x.png"; path = "Resources/Icons/ic_custom_manage_profiles@3x.png"; sourceTree = "<group>"; };
 		32BFF097299137D60023D067 /* OAUploadGPXFilesTask.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAUploadGPXFilesTask.m; sourceTree = "<group>"; };
@@ -13406,6 +13408,7 @@
 				FA86F4142AE7C56E00DC3B2B /* UserDefaults+Extension.swift */,
 				FA069C6A2B9F65750007E4DE /* UILabel+Extension.swift */,
 				4609FAA12C5158F100B57F06 /* UIImageView+Extension.swift */,
+				32BC95722CC021CE00FEEAB8 /* UIFont+Extension.swift */,
 			);
 			path = SwiftExtensions;
 			sourceTree = "<group>";
@@ -16706,6 +16709,7 @@
 				DA5A818326C563A700F274C7 /* OASwitchableAction.m in Sources */,
 				DA5A844A26C563A900F274C7 /* OAHudButton.m in Sources */,
 				46FB65BA2A8BBC2000A21850 /* CoordinatesMapCenterWidget.swift in Sources */,
+				32BC95732CC021CE00FEEAB8 /* UIFont+Extension.swift in Sources */,
 				DA5A845526C563A900F274C7 /* OAOsmEditsLayer.mm in Sources */,
 				DA5A815526C563A700F274C7 /* OACarPlayActiveViewController.m in Sources */,
 				FA359EED2ADFC6910001C11D /* WheelDeviceSettings.swift in Sources */,

@@ -202,7 +202,19 @@
 
 + (int) getMinValidZoom
 {
-    return MAX(round(log(ceil([OAUtilities calculateScreenHeight] / 256))), 1);
+    return MAX(ceil(log(ceil([OAUtilities calculateScreenHeight] / 256))), 1);
+}
+
+- (float) getValidZoomStep:(float)step
+{
+    float newZoomStep = step;
+    float currentZoom = [self getBaseZoom] + [self getZoomFloatPart];
+    float nextZoom = currentZoom + step;
+    float minZoom = [OAZoom getMinValidZoom];
+    
+    if (nextZoom < minZoom)
+        newZoomStep = - (currentZoom - minZoom);
+    return newZoomStep;
 }
 
 @end

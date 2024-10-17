@@ -278,7 +278,7 @@
     if ([item boolForKey:@"enabled"])
     {
         [self dismissViewControllerAnimated:YES completion:^{
-            NSString *fileName = [OABackupHelper getItemFileName:_settingsItem];
+            NSString *fileName = [BackupUtils getItemFileName:_settingsItem];
             EOABackupSyncOperationType operation = EOABackupSyncOperationNone;
             if ([item.key isEqualToString:@"uploadLocal"])
                 operation = EOABackupSyncOperationUpload;
@@ -304,7 +304,7 @@
 - (OATableRowData *)populateUploadAction
 {
     BOOL deleteOperation = _operation == EOABackupSyncOperationDelete;
-    NSString *fileName = [OABackupHelper getItemFileName:_settingsItem];
+    NSString *fileName = [BackupUtils getItemFileName:_settingsItem];
     BOOL enabled = [self isRowEnabled:fileName] && (_localFile || deleteOperation);
     NSString *title = OALocalizedString(deleteOperation ? @"upload_change" : @"upload_local_version");
     NSString *description = @"";
@@ -347,7 +347,7 @@
 - (OATableRowData *)populateDownloadAction
 {
     BOOL deleteOperation = _operation == EOABackupSyncOperationDelete;
-    NSString *fileName = [OABackupHelper getItemFileName:_settingsItem];
+    NSString *fileName = [BackupUtils getItemFileName:_settingsItem];
     BOOL enabled = [self isRowEnabled:fileName] && (_remoteFile || deleteOperation);
     NSString *description = @"";
     if (self.delegate)

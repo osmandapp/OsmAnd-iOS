@@ -20,6 +20,7 @@
 #import "OARemoteFile.h"
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/ResourcesManager.h>
 
@@ -76,7 +77,7 @@
     OAPrepareBackupResult *backup = _backupHelper.backup;
     OABackupInfo *info = backup.backupInfo;
     
-    _settingsItems = [OABackupHelper getItemsForRestore:info settingsItems:backup.settingsItems];
+    _settingsItems = [BackupUtils getItemsForRestore:info settingsItems:backup.settingsItems];
     if (_operation != EOABackupSyncOperationDownload)
         _maxProgress += ([self calculateExportMaxProgress] / 1024);
     if (_operation != EOABackupSyncOperationUpload)
@@ -107,26 +108,26 @@
 
 - (void)uploadLocalItem:(OASettingsItem *)item
 {
-    [OANetworkSettingsHelper.sharedInstance exportSettings:[OABackupHelper getItemFileName:item] items:@[item] itemsToDelete:@[] localItemsToDelete:@[] listener:self];
+    [OANetworkSettingsHelper.sharedInstance exportSettings:[BackupUtils getItemFileName:item] items:@[item] itemsToDelete:@[] localItemsToDelete:@[] listener:self];
 }
 
-- (void)downloadRemoteVersion:(OASettingsItem *)item
-                    filesType:(EOARemoteFilesType)filesType
-                shouldReplace:(BOOL)shouldReplace
-               restoreDeleted:(BOOL)restoreDeleted
+- (void)downloadItem:(OASettingsItem *)item
+           filesType:(EOARemoteFilesType)filesType
+       shouldReplace:(BOOL)shouldReplace
+      restoreDeleted:(BOOL)restoreDeleted
 {
     [item setShouldReplace:shouldReplace];
-    [OANetworkSettingsHelper.sharedInstance importSettings:[OABackupHelper getItemFileName:item] items:@[item] filesType:filesType forceReadData:YES shouldReplace:shouldReplace restoreDeleted:restoreDeleted listener:self];
+    [OANetworkSettingsHelper.sharedInstance importSettings:[BackupUtils getItemFileName:item] items:@[item] filesType:filesType forceReadData:YES shouldReplace:shouldReplace restoreDeleted:restoreDeleted listener:self];
 }
 
 - (void) deleteItem:(OASettingsItem *)item
 {
-    [OANetworkSettingsHelper.sharedInstance exportSettings:[OABackupHelper getItemFileName:item] items:@[] itemsToDelete:@[item] localItemsToDelete:@[] listener:self];
+    [OANetworkSettingsHelper.sharedInstance exportSettings:[BackupUtils getItemFileName:item] items:@[] itemsToDelete:@[item] localItemsToDelete:@[] listener:self];
 }
 
 - (void) deleteLocalItem:(OASettingsItem *)item
 {
-    [OANetworkSettingsHelper.sharedInstance exportSettings:[OABackupHelper getItemFileName:item] items:@[] itemsToDelete:@[] localItemsToDelete:@[item] listener:self];
+    [OANetworkSettingsHelper.sharedInstance exportSettings:[BackupUtils getItemFileName:item] items:@[] itemsToDelete:@[] localItemsToDelete:@[item] listener:self];
 }
 
 - (void)cancel
@@ -169,7 +170,7 @@
         for (OASettingsItem *item in info.itemsToUpload)
         {
             OAExportSettingsType *exportType = [OAExportSettingsType findBySettingsItem:item];
-            if (exportType && [_backupHelper getVersionHistoryTypePref:exportType].get)
+            if (exportType && [BackupUtils getVersionHistoryTypePref:exportType].get)
             {
                 [oldItemsToDelete addObject:item];
             }
@@ -198,17 +199,7 @@
     if (_cancelled)
         return;
     if (succeed)
-    {
-        OsmAndAppInstance app = OsmAndApp.instance;
-        app.resourcesManager->rescanUnmanagedStoragePaths();
-        [app.localResourcesChangedObservable notifyEvent];
-        [app loadRoutingFiles];
-//        reloadIndexes(items);
-//        AudioVideoNotesPlugin plugin = OsmandPlugin.getPlugin(AudioVideoNotesPlugin.class);
-//        if (plugin != null) {
-//            plugin.indexingFiles(true, true);
-//        }
-    }
+        [BackupUtils updateCacheForItems:items];
     if (_singleOperation)
         return [self onSyncFinished:nil];
     [self uploadNewItems];

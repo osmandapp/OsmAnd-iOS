@@ -135,9 +135,22 @@ static NSString * const kGpxImportDir = @"import";
     return [ContextSettingsManager new];
 }
 
-- (NSString *)getAssetAsStringName:(NSString *)name {
-    // TODO: Not implement until getAssetAsString moved to shared lib
-        return nil;
+- (NSString * _Nullable)getAssetAsStringName:(NSString *)name __attribute__((swift_name("getAssetAsString(name:)")))
+{
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:name.stringByDeletingPathExtension ofType:name.pathExtension];
+    if (filePath)
+    {
+        NSError *error;
+        NSString *fileContents = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:&error];
+        if (fileContents) {
+            return fileContents;
+        } else {
+            NSLog(@"Error reading file %@: %@", filePath, [error localizedDescription]);
+        }
+    } else {
+        NSLog(@"File %@ not found in the bundle", name);
+    }
+    return nil;
 }
 
 - (void)searchNearestCityNameLatLon:(OASKLatLon *)latLon callback:(void (^)(NSString * _Nonnull))callback
@@ -154,20 +167,49 @@ static NSString * const kGpxImportDir = @"import";
 
 - (OASSpeedConstants * _Nullable)getSpeedSystem __attribute__((swift_name("getSpeedSystem()")))
 {
-    //TODO: Not implement until settings moved to shared lib
-    return nil;
+    EOASpeedConstant speedSystem = OAAppSettings.sharedManager.speedSystem.get;
+    switch (speedSystem)
+    {
+        case KILOMETERS_PER_HOUR: return OASSpeedConstants.kilometersPerHour;
+        case MILES_PER_HOUR: return OASSpeedConstants.milesPerHour;
+        case METERS_PER_SECOND: return OASSpeedConstants.metersPerSecond;
+        case MINUTES_PER_MILE: return OASSpeedConstants.minutesPerMile;
+        case MINUTES_PER_KILOMETER: return OASSpeedConstants.minutesPerKilometer;
+        case NAUTICALMILES_PER_HOUR: return OASSpeedConstants.nauticalmilesPerHour;
+
+        // FIXME: Not supported?
+        case FEET_PER_SECOND: return nil;
+
+        default: return nil;
+    }
 }
 
 - (OASMetricsConstants * _Nullable)getMetricSystem __attribute__((swift_name("getMetricSystem()")))
 {
-    //TODO: Not implement until settings moved to shared lib
-    return nil;
+    EOAMetricsConstant metricSystem = OAAppSettings.sharedManager.metricSystem.get;
+    switch (metricSystem)
+    {
+        case KILOMETERS_AND_METERS: return OASMetricsConstants.kilometersAndMeters;
+        case MILES_AND_FEET: return OASMetricsConstants.milesAndFeet;
+        case MILES_AND_YARDS: return OASMetricsConstants.milesAndYards;
+        case MILES_AND_METERS: return OASMetricsConstants.milesAndMeters;
+        case NAUTICAL_MILES_AND_METERS: return OASMetricsConstants.nauticalMilesAndMeters;
+        case NAUTICAL_MILES_AND_FEET: return OASMetricsConstants.nauticalMilesAndFeet;
+
+        default: return nil;
+    }
 }
 
 - (BOOL)isGpxFileVisiblePath:(NSString *)path __attribute__((swift_name("isGpxFileVisible(path:)")))
 {
     NSString *gpxFilePath = [OAUtilities getGpxShortPath:path];
     return [OAAppSettings.sharedManager.mapSettingVisibleGpx.get containsObject:gpxFilePath];
+}
+
+- (OASGpxFile * _Nullable)getSelectedFileByPathPath:(nonnull NSString *)path
+{
+    // FIXME:
+    return nil;
 }
 
 @end

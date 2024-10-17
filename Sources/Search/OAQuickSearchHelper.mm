@@ -34,6 +34,7 @@
 #import "OAFavoriteItem.h"
 #import "OAPOIType.h"
 #import "OAResultMatcher.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -139,7 +140,7 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
 
 - (BOOL) search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
-    for (OAGPX *gpxInfo : [[OAGPXDatabase sharedDb] gpxList])
+    for (OASGpxDataItem *gpxInfo : [[OAGPXDatabase sharedDb] getDataItems])
     {
         OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
         sr.objectType = GPX_TRACK;
@@ -172,19 +173,19 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
 
 @implementation OASearchWptAPI
 {
-    QList<std::shared_ptr<const OsmAnd::GpxDocument>> _geoDocList;
+    NSMutableArray<OASGpxFile *> *_geoDocList;
     NSArray *_paths;
 }
 
-- (void) setWptData:(QList<std::shared_ptr<const OsmAnd::GpxDocument>>&)geoDocList paths:(NSArray *)paths
+- (void)setWptData:(NSArray<OASGpxFile *> *)geoDocList paths:(NSArray *)paths
 {
-    _geoDocList.append(geoDocList);
+    [_geoDocList addObjectsFromArray:geoDocList];
     _paths = [NSArray arrayWithArray:paths];
 }
 
 - (void) resetWptData
 {
-    _geoDocList.clear();
+    [_geoDocList removeAllObjects];
     _paths = nil;
 }
 
@@ -208,26 +209,23 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
         dispatch_sync(dispatch_get_main_queue(), onMain);
 
     int i = 0;
-    for (auto gpxIt = _geoDocList.begin(); gpxIt != _geoDocList.end(); ++gpxIt)
+    for (OASGpxFile *gpx in _geoDocList)
     {
-        const auto gpx = *gpxIt;
-        if (!gpx || gpx->points.isEmpty())
+        if (!gpx || gpx.getPointsList.count == 0)
         {
             i++;
             continue;
         }
+        
+        for (OASWptPt *point in gpx.getPointsList) {
 
-        for (auto it = gpx->points.begin(); it != gpx->points.end(); ++it)
-        {
-            const auto& point = *it;
             OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
-            sr.localeName = point->name.toNSString();
+            sr.localeName = point.name;
             sr.wpt = point;
-
-            sr.object = [OAGPXDocument fetchWpt:std::const_pointer_cast<OsmAnd::GpxDocument::WptPt>(sr.wpt)];
+            sr.object = sr.wpt;
             sr.priority = SEARCH_WPT_OBJECT_PRIORITY;
             sr.objectType = WPT;
-            sr.location = [[CLLocation alloc] initWithLatitude:point->position.latitude longitude:point->position.longitude];
+            sr.location = [[CLLocation alloc] initWithLatitude:point.position.latitude longitude:point.position.longitude];
             //sr.localeRelatedObjectName = app.getRegions().getCountryName(sr.location);
             sr.localeRelatedObjectName = i < _paths.count ? [_paths[i] lastPathComponent] : OALocalizedString(@"shared_string_currently_recording_track");
             sr.relatedGpx = gpx;
@@ -311,7 +309,7 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
         }
         else if ([pd isGpxFile])
         {
-            OAGPX *gpxInfo = [[OAGPXDatabase sharedDb] getGPXItemByFileName:pd.name];
+            OASGpxDataItem *gpxInfo = [[OAGPXDatabase sharedDb] getGPXItemByFileName:pd.name];
             if (gpxInfo)
             {
                 sr.localeName = [gpxInfo gpxFileName];

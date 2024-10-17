@@ -630,7 +630,7 @@ static const CGFloat kVerticalExaggerationScaleMax = 4.0;
                     [wptPts addObject:wptPt];
                     [points addObject:wptPt];
                 }
-                pointsGroup.points = wptPts;
+               // pointsGroup.points = wptPts;
             }
             pointsGroups[groupName.toNSString()] = pointsGroup;
         }
@@ -648,12 +648,12 @@ static const CGFloat kVerticalExaggerationScaleMax = 4.0;
             OAPointsGroup *pointsGroup =  pointsGroups[pointsGroup.name];
             if (!pointsGroup)
             {
-                pointsGroup = [[OAPointsGroup alloc] initWithWptPt:wptPt];
-                pointsGroups[pointsGroup.name] = pointsGroup;
+//                pointsGroup = [[OAPointsGroup alloc] initWithWptPt:wptPt];
+//                pointsGroups[pointsGroup.name] = pointsGroup;
             }
 
-            pointsGroup.points = [pointsGroup.points arrayByAddingObject:wptPt];
-            [points addObject:wptPt];
+//            pointsGroup.points = [pointsGroup.points arrayByAddingObject:wptPt];
+//            [points addObject:wptPt];
         }
     }
 
@@ -662,7 +662,7 @@ static const CGFloat kVerticalExaggerationScaleMax = 4.0;
 
     [self applyBounds];
     [self addGeneralTrack];
-    [self processPoints];
+  //  [self processPoints];
 
     return YES;
 }
@@ -1191,14 +1191,14 @@ static const CGFloat kVerticalExaggerationScaleMax = 4.0;
 
 - (NSArray<OATrkSegment *> *) getPointsToDisplay
 {
-    OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.path]];
+  //  OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.path]];
 //    if (filteredSelectedGpxFile != null) {
 //        return filteredSelectedGpxFile.getPointsToDisplay();
 //    } else
-    if (gpx && gpx.joinSegments)
-        return [self getGeneralTrack] ? self.generalTrack.segments : [NSArray array];
-    else
-        return _processedPointsToDisplay;
+//    if (gpx && gpx.joinSegments)
+//        return [self getGeneralTrack] ? self.generalTrack.segments : [NSArray array];
+//    else
+//        return _processedPointsToDisplay;
 }
 
 - (NSArray<OATrkSegment *> *) proccessPoints
@@ -1246,18 +1246,18 @@ static const CGFloat kVerticalExaggerationScaleMax = 4.0;
     return tpoints;
 }
 
-- (void) processPoints
-{
-    _processedPointsToDisplay = [self proccessPoints];
-    if (!_processedPointsToDisplay || _processedPointsToDisplay.count == 0)
-    {
-        _processedPointsToDisplay = [self processRoutePoints];
-        _routePoints = _processedPointsToDisplay && _processedPointsToDisplay.count > 0;
-    }
-//    if (filteredSelectedGpxFile != null) {
-//        filteredSelectedGpxFile.processPoints(app);
+//- (void) processPoints
+//{
+//    _processedPointsToDisplay = [self proccessPoints];
+//    if (!_processedPointsToDisplay || _processedPointsToDisplay.count == 0)
+//    {
+//        _processedPointsToDisplay = [self processRoutePoints];
+//        _routePoints = _processedPointsToDisplay && _processedPointsToDisplay.count > 0;
 //    }
-}
+////    if (filteredSelectedGpxFile != null) {
+////        filteredSelectedGpxFile.processPoints(app);
+////    }
+//}
 
 - (BOOL) isRoutesPoints
 {

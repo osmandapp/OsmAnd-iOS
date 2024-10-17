@@ -23,8 +23,6 @@
 #import "OARouteDirectionInfo.h"
 #import "OATTSCommandPlayerImpl.h"
 #import "OAGPXUIHelper.h"
-#import "OAGPXTrackAnalysis.h"
-#import "OAGPXDocument.h"
 #import "OARouteExporter.h"
 #import "OATransportRoutingHelper.h"
 #import "OAGpxRouteApproximation.h"
@@ -37,6 +35,8 @@
 #import "CLLocation+Extension.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import <OsmAndCore/Utilities.h>
+#import "OsmAndSharedWrapper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <routeSegmentResult.h>
 
@@ -834,10 +834,10 @@ static BOOL _isDeviatedFromRoute = false;
     _route = route;
 }
 
-- (OAGPXTrackAnalysis *) getTrackAnalysis
+- (OASGpxTrackAnalysis *) getTrackAnalysis
 {
-    OAGPXDocument *gpx = [OAGPXUIHelper makeGpxFromRoute:_route];
-    return [gpx getAnalysis:0];
+    OASGpxFile *gpx = [OAGPXUIHelper makeGpxFromRoute:_route];
+    return [gpx getAnalysisFileTimestamp:0];
 }
 
 - (int) getLeftDistance
@@ -1026,19 +1026,19 @@ static BOOL _isDeviatedFromRoute = false;
     [_recalcHelper startRouteCalculationThread:params paramsChanged:paramsChanged updateProgress:updateProgress];
 }
 
-- (OAGPXDocument *) generateGPXFileWithRoute:(NSString *)name
+- (OASGpxFile *) generateGPXFileWithRoute:(NSString *)name
 {
     return [self generateGPXFileWithRoute:_route name:name];
 }
 
-- (OAGPXDocument *) generateGPXFileWithRoute:(OARouteCalculationResult *)route name:(NSString *)name
+- (OASGpxFile *) generateGPXFileWithRoute:(OARouteCalculationResult *)route name:(NSString *)name
 {
     OATargetPointsHelper *targets = [OATargetPointsHelper sharedInstance];
-    NSMutableArray<OAWptPt *> *points = [NSMutableArray array];
+    NSMutableArray<OASWptPt *> *points = [NSMutableArray array];
     NSArray<OARTargetPoint *> *ps = targets.getIntermediatePointsWithTarget;
     for (NSInteger k = 0; k < ps.count; k++)
     {
-        OAWptPt *pt = [[OAWptPt alloc] init];
+        OASWptPt *pt = [[OASWptPt alloc] init];
         pt.position = CLLocationCoordinate2DMake(ps[k].getLatitude, ps[k].getLongitude);
         if (k < ps.count)
         {

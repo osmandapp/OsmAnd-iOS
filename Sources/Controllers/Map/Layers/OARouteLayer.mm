@@ -24,7 +24,6 @@
 #import "OAGPXUIHelper.h"
 #import "OARouteColorize.h"
 #import "OARouteColorize+cpp.h"
-#import "OAGPXDocument.h"
 #import "OAMapLayers.h"
 #import "OAMapUtils.h"
 #import "OAApplicationMode.h"
@@ -906,14 +905,14 @@
                 _routeGradientPalette = PaletteGradientColor.defaultName;
             [_updatedColorPaletteFiles removeObjectForKeySync:colorPaletteFile];
             
-            OAGPXDocument *gpx = [OAGPXUIHelper makeGpxFromRoute:route];
+            OASGpxFile *gpx = [OAGPXUIHelper makeGpxFromRoute:route];
             ColorPalette *colorPalette = [[ColorPaletteHelper shared] getGradientColorPaletteSync:(ColorizationType) [routeColoringType toColorizationType]
                                                                               gradientPaletteName:_routeGradientPalette];
             if (!colorPalette)
                 return;
             OARouteColorize *colorizationHelper =
                 [[OARouteColorize alloc] initWithGpxFile:gpx
-                                                analysis:[gpx getAnalysis:0]
+                                                analysis:[gpx getAnalysisFileTimestamp:0]
                                                     type:[routeColoringType toColorizationType]
                                                  palette:colorPalette
                                          maxProfileSpeed:0

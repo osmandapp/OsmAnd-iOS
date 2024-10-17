@@ -54,9 +54,8 @@ static const int BOTTOM_CONSTANT = 1;
 
 @protocol OAMapRendererViewProtocol;
 
-@class OAWptPt, OAMetadata, OASearchWptAPI, OAMapRendererView, OAMapLayers, OAWorldRegion, OAMapRendererEnvironment, OAMapPresentationEnvironment, OAGPXDocument, OAObservable;
+@class OASWptPt, OASMetadata, OASGpxFile, OASearchWptAPI, OAMapRendererView, OAMapLayers, OAWorldRegion, OAMapRendererEnvironment, OAMapPresentationEnvironment, OAObservable;
 
-@class OASWptPt;
 
 @interface OAMapViewController : UIViewController <UIGestureRecognizerDelegate>
 
@@ -170,7 +169,7 @@ static const int BOTTOM_CONSTANT = 1;
 
 - (void) showTempGpxTrack:(NSString *)filePath update:(BOOL)update;
 - (void) showTempGpxTrack:(NSString *)filePath;
-- (void) showTempGpxTrackFromDocument:(OAGPXDocument *)doc;
+- (void) showTempGpxTrackFromDocument:(OASGpxFile *)doc;
 - (void) hideTempGpxTrack:(BOOL)update;
 - (void) hideTempGpxTrack;
 - (void) keepTempGpxTrackVisible;
@@ -182,7 +181,7 @@ static const int BOTTOM_CONSTANT = 1;
 
 - (BOOL) deleteWpts:(NSArray *)items docPath:(NSString *)docPath;
 - (BOOL) updateWpts:(NSArray *)items docPath:(NSString *)docPath updateMap:(BOOL)updateMap;
-- (BOOL) updateMetadata:(nullable OAMetadata *)metadata oldPath:(NSString *)oldPath docPath:(NSString *)docPath;
+- (BOOL) updateMetadata:(nullable OASMetadata *)metadata oldPath:(NSString *)oldPath docPath:(NSString *)docPath;
 
 - (void) setWptData:(OASearchWptAPI *)wptApi;
 

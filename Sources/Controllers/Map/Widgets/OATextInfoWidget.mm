@@ -912,7 +912,10 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     widgetStyleRow.title = OALocalizedString(@"shared_string_height");
     [widgetStyleRow setObj:self.widgetSizePref forKey:@"prefSegment"];
     [widgetStyleRow setObj:@"simpleWidget" forKey:@"behaviour"];
-    [widgetStyleRow setObj:@[ACImageNameIcCustom20HeightS, ACImageNameIcCustom20HeightM, ACImageNameIcCustom20HeightL] forKey:@"values"];
+    [widgetStyleRow setObj:@[[UIImage imageNamed:ACImageNameIcCustom20HeightS],
+                             [UIImage imageNamed:ACImageNameIcCustom20HeightM],
+                             [UIImage imageNamed:ACImageNameIcCustom20HeightL]]
+                    forKey:@"values"];
     
     OATableRowData *showIconRow = section.createNewRow;
     showIconRow.cellType = OASwitchTableViewCell.getCellIdentifier;

@@ -8,7 +8,6 @@
 
 #import "OANetworkRouteSelectionTask.h"
 #import "OARouteKey.h"
-#import "OAGPXDocument.h"
 #import "OsmAndApp.h"
 
 #include <OsmAndCore/Utilities.h>
@@ -33,7 +32,7 @@
     return self;
 }
 
-- (void) execute:(void(^)(OAGPXDocument *gpxFile))onComplete
+- (void) execute:(void(^)(OASGpxFile *gpxFile))onComplete
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         std::shared_ptr<const OsmAnd::IQueryController> ctrl;
@@ -53,8 +52,9 @@
         {
             auto gpx = it.value();
             dispatch_async(dispatch_get_main_queue(), ^{
-                OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxDocument:gpx];
-                onComplete(doc);
+                // FIXME: c++ doc
+//                OASGpxFile *doc = [[OASGpxFile alloc] initWithGpxDocument:gpx];
+//                onComplete(doc);
             });
         }
         else

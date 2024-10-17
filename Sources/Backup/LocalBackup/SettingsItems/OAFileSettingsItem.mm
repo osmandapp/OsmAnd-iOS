@@ -10,8 +10,6 @@
 #import "OASettingsHelper.h"
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
-#import "OAGPXDocument.h"
-#import "OAGPXTrackAnalysis.h"
 #import "OAGPXDatabase.h"
 #import "OAIndexConstants.h"
 #import "OASettingsItemReader.h"
@@ -343,13 +341,28 @@
     {
         case EOASettingsItemFileSubtypeGpx:
         {
-            OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:destFilePath];
-            [doc saveTo:destFilePath];
-            OAGPX *gpx = [[OAGPXDatabase sharedDb] addGpxItem:destFilePath title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds document:doc];
-            [[OAGPXDatabase sharedDb] save];
-            const auto& activeGpx = OASelectedGPXHelper.instance.activeGpx;
-            if (activeGpx.find(QString::fromNSString(gpx.gpxFilePath)) != activeGpx.end())
-                [OAAppSettings.sharedManager showGpx:@[gpx.gpxFilePath]];
+            
+            OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
+            OASGpxDataItem *gpx = [gpxDb getNewGPXItem:destFilePath];
+            if (!gpx)
+            {
+                gpx = [gpxDb addGPXFileToDBIfNeeded:destFilePath];
+                OASGpxTrackAnalysis *analysis = [gpx getAnalysis];
+                
+                if (analysis.locationStart)
+                {
+                    OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:analysis.locationStart.position];
+                    gpx.nearestCity = nearestCityPOI ? nearestCityPOI.nameLocalized : @"";
+                    [gpxDb updateDataItem:gpx];
+                }
+            }
+
+            NSDictionary<NSString *, OASGpxFile *> *activeGpx = OASelectedGPXHelper.instance.activeGpx;
+            NSString *gpxFilePath = gpx.gpxFilePath;
+            if ([activeGpx.allKeys containsObject:gpxFilePath])
+            {
+                [OAAppSettings.sharedManager showGpx:@[gpxFilePath]];
+            }
 
             break;
         }

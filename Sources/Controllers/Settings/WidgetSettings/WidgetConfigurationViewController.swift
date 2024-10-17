@@ -183,7 +183,7 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
         } else if item.cellType == SegmentImagesWithRightLabelTableViewCell.getIdentifier() {
             let cell = tableView.dequeueReusableCell(withIdentifier: SegmentImagesWithRightLabelTableViewCell.reuseIdentifier) as! SegmentImagesWithRightLabelTableViewCell
             cell.selectionStyle = .none
-            if let icons = item.obj(forKey: "values") as? [String],
+            if let icons = item.obj(forKey: "values") as? [UIImage],
                let pref = item.obj(forKey: "prefSegment") as? OACommonWidgetSizeStyle {
                 let widgetSizeStyle = pref.get(selectedAppMode)
                 if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "") {

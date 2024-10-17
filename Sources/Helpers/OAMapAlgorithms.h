@@ -10,11 +10,11 @@
 #include <OsmAndCore/QtExtensions.h>
 #include <QString>
 
-@class OATrkSegment;
+@class OASTrkSegment;
 
 @interface OAMapAlgorithms : NSObject
 
 + (QList<int>) decodeIntHeightArrayGraph:(const QString &)str repeatBits:(int)repeatBits;
-+ (OATrkSegment *) augmentTrkSegmentWithAltitudes:(OATrkSegment *)sgm decodedSteps:(const QList<int> &)decodedSteps startEle:(double)startEle;
++ (OASTrkSegment *) augmentTrkSegmentWithAltitudes:(OASTrkSegment *)sgm decodedSteps:(const QList<int> &)decodedSteps startEle:(double)startEle;
 
 @end

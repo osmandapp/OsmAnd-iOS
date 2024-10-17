@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_12" orientation="portrait" appearance="dark"/>
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
@@ -72,7 +72,7 @@
                                 <rect key="frame" x="0.0" y="54" width="393" height="48"/>
                                 <subviews>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="DOd-wT-r3R">
-                                        <rect key="frame" x="0.0" y="0.0" width="309" height="48"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="329" height="48"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" priority="750" constant="48" id="Ft8-45-Pf1"/>
@@ -85,7 +85,7 @@
                                         </collectionViewFlowLayout>
                                     </collectionView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W16-m3-jDw" userLabel="Right Action Button">
-                                        <rect key="frame" x="323" y="6" width="36" height="36"/>
+                                        <rect key="frame" x="343" y="6" width="36" height="36"/>
                                         <color key="backgroundColor" name="buttonBgColorTertiary"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="36" id="Okc-Mp-aLZ"/>
@@ -108,10 +108,10 @@
                                         </userDefinedRuntimeAttributes>
                                     </button>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tR4-7a-q4Q">
-                                        <rect key="frame" x="373" y="0.0" width="20" height="48"/>
+                                        <rect key="frame" x="393" y="0.0" width="0.0" height="48"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="20" id="GDn-0q-sIk"/>
+                                            <constraint firstAttribute="width" id="GDn-0q-sIk"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -126,13 +126,25 @@
                                             <constraint firstAttribute="height" id="lO0-is-kOv"/>
                                         </constraints>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fki-YG-97m">
+                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lEp-BK-Q53">
                                         <rect key="frame" x="0.0" y="9" width="393" height="1"/>
-                                        <color key="backgroundColor" systemColor="separatorColor"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="1" id="Ezj-p8-v0I"/>
-                                        </constraints>
-                                    </view>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ktc-Fm-gUs">
+                                                <rect key="frame" x="0.0" y="0.0" width="20" height="1"/>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="20" id="4Pi-Oa-qGI"/>
+                                                </constraints>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fki-YG-97m">
+                                                <rect key="frame" x="20" y="0.0" width="373" height="1"/>
+                                                <color key="backgroundColor" systemColor="separatorColor"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="1" id="Ezj-p8-v0I"/>
+                                                </constraints>
+                                            </view>
+                                        </subviews>
+                                    </stackView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UC7-iw-mHb">
                                         <rect key="frame" x="0.0" y="19" width="393" height="0.0"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -203,6 +215,7 @@
                 <outlet property="collectionViewHeight" destination="Ft8-45-Pf1" id="u9e-mm-AHH"/>
                 <outlet property="contentOutsideStackViewVertical" destination="Pde-Gp-UrD" id="xiC-Ve-Sf5"/>
                 <outlet property="rightActionButton" destination="W16-m3-jDw" id="Qgy-3m-aET"/>
+                <outlet property="separatorHeight" destination="Ezj-p8-v0I" id="J4e-1M-9qa"/>
                 <outlet property="topLabel" destination="64G-5F-WnM" id="gCI-qs-SCW"/>
                 <outlet property="topMarginStackView" destination="AxO-VI-ivf" id="BE5-Ss-SJY"/>
                 <outlet property="topTitleOffset" destination="uTJ-YG-ThI" id="3PP-dv-rKz"/>

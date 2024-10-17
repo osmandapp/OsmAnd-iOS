@@ -16,17 +16,17 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OAEditPointViewController.h"
 #import "OASavingTrackHelper.h"
-#import "OAGPXDocument.h"
 #import "OAGPXAppearanceCollection.h"
 #import "Localization.h"
 #import "OsmAndSharedWrapper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OAGpxWptEditingHandler
 {
     OAGpxWptItem *_gpxWpt;
     OsmAndAppInstance _app;
     NSString *_gpxFileName;
-    OAGPXDocument *_gpxDocument;
+    OASGpxFile *_gpxDocument;
     NSString *_newGroupTitle;
     UIColor *_newGroupColor;
     NSString *_iconName;
@@ -72,9 +72,9 @@
         
         [p setIconNameIconName:_iconName];
         [p setBackgroundTypeBackType:@"circle"];
-// FIXME:
-//        [p setExtension:ADDRESS_EXTENSION_KEY value:address];
-//        [p setAmenity:poi];
+        [p setAddressAddress:address];
+        NSDictionary<NSString *, NSString *> *extensions = [poi toTagValue:PRIVATE_PREFIX osmPrefix:OSM_PREFIX_KEY];
+        [[p getExtensionsToWrite] addEntriesFromDictionary:extensions];
         [p setAmenityOriginNameOriginName:poi.toStringEn];
 
         wpt.color = color;
@@ -90,7 +90,15 @@
 - (void)commonInit
 {
     _app = [OsmAndApp instance];
-    _gpxDocument = _gpxFileName.length > 0 ? [[OAGPXDocument alloc] initWithGpxFile:_gpxFileName] : nil/* (OAGPXDocument *) [[OASavingTrackHelper sharedInstance] currentTrack] */;
+    if (_gpxFileName.length > 0)
+    {
+        OASKFile *file = [[OASKFile alloc] initWithFilePath:_gpxFileName];
+        _gpxDocument = [OASGpxUtilities.shared loadGpxFileFile:file];
+    }
+    else
+    {
+        _gpxDocument =  [[OASavingTrackHelper sharedInstance] currentTrack];
+    }
 }
 
 - (UIColor *)getColor
@@ -100,18 +108,57 @@
 
 - (NSString *)getGroupTitle
 {
-    return OALocalizedString(@"shared_string_waypoints");;
-    // FIXME: gpxWpt.point.type ?
-//    return _gpxWpt.point.type && _gpxWpt.point.type.length > 0 ? _gpxWpt.point.type : OALocalizedString(@"shared_string_waypoints");
+    return _gpxWpt.point.category && _gpxWpt.point.category.length > 0 ? _gpxWpt.point.category : OALocalizedString(@"shared_string_waypoints");
 }
-- (OAGPXDocument *)getGpxDocument
+
+- (OASGpxFile *)getGpxDocument
 {
     return _gpxDocument;
 }
 
+- (NSArray<NSDictionary<NSString *, NSString *> *> *)getWaypointCategoriesWithAllData:(BOOL)withDefaultCategory
+{
+    NSMapTable<NSString *, NSDictionary *> *map = [NSMapTable new];
+    for (OASWptPt *point in _gpxDocument.getPointsList)
+    {
+        NSMutableDictionary<NSString *, NSString *> *categories = [NSMutableDictionary new];
+        NSString *title = point.category == nil ? @"" : point.category;
+        categories[@"title"] = title;
+        NSString *color = point.category == nil ? @"" : UIColorFromRGBA([point getColor]).toHexARGBString;
+        NSString *count = @"1";
+        categories[@"count"] = count;
+
+        BOOL emptyCategory = title.length == 0;
+        if (!emptyCategory)
+        {
+            NSDictionary<NSString *, NSString *> *existing = [map objectForKey:title];
+            if (existing)
+            {
+                count = [NSString stringWithFormat:@"%i", existing[@"count"].intValue + 1];
+                color = existing[@"color"];
+                categories[@"count"] = count;
+                categories[@"color"] = color;
+            }
+
+            if (!existing || (existing[@"color"].length == 0 && color.length != 0))
+                categories[@"color"] = color;
+
+            [map setObject:categories forKey:title];
+        }
+        else if (withDefaultCategory)
+        {
+            categories[@"title"] = title;
+            categories[@"color"] = color;
+            categories[@"count"] = [NSString stringWithFormat:@"%i", [[map objectForKey:title][@"count"] intValue] + 1];
+            [map setObject:categories forKey:title];
+        }
+    }
+    return map.objectEnumerator.allObjects;
+}
+
 - (NSArray<NSDictionary<NSString *, NSString *> *> *)getGroups
 {
-    NSArray<NSDictionary<NSString *, NSString *> *> *groups = [_gpxDocument getWaypointCategoriesWithAllData:YES];
+    NSArray<NSDictionary<NSString *, NSString *> *> *groups = [self getWaypointCategoriesWithAllData:YES];
 
     if (_newGroupTitle)
     {
@@ -154,9 +201,31 @@
     return groups;
 }
 
+- (NSDictionary<NSString *, NSString *> *)getWaypointCategoriesWithColors:(BOOL)withDefaultCategory
+{
+    NSMutableDictionary<NSString *, NSString *> *categories = [NSMutableDictionary new];
+    for (OASWptPt *point in _gpxDocument.getPointsList)
+    {
+        NSString *title = point.category == nil ? @"" : point.category;
+        NSString *color = point.category == nil ? @"" :  UIColorFromRGBA([point getColor]).toHexARGBString;
+        BOOL emptyCategory = title.length == 0;
+        if (!emptyCategory)
+        {
+            NSString *existingColor = categories[title];
+            if (!existingColor || (existingColor.length == 0 && color.length != 0))
+                categories[title] = color;
+        }
+        else if (withDefaultCategory)
+        {
+            categories[title] = color;
+        }
+    }
+    return categories;
+}
+
 - (NSDictionary<NSString *, NSString *> *)getGroupsWithColors
 {
-    NSDictionary<NSString *, NSString *> *groups = [_gpxDocument getWaypointCategoriesWithColors:NO];
+    NSDictionary<NSString *, NSString *> *groups = [self getWaypointCategoriesWithColors:NO];
 
     if (_newGroupTitle)
     {
@@ -191,8 +260,7 @@
 
 - (void)setGroup:(NSString *)groupName color:(UIColor *)color save:(BOOL)save
 {
-    // FIXME:
-   // _gpxWpt.point.type = groupName;
+    _gpxWpt.point.category = groupName;
     OASInt *colorToSave = [[OASInt alloc] initWithInt:[color toARGBNumber]];
     [_gpxWpt.point setColorColor:colorToSave];
     _gpxWpt.color = color;
@@ -234,8 +302,11 @@
     [self setGroup:data.category color:data.color save:NO];
     [_gpxWpt.point setIconNameIconName:data.icon];
     [_gpxWpt.point setBackgroundTypeBackType:data.backgroundIcon];
-    // FIXME:
-    // [_gpxWpt.point setExtension:ADDRESS_EXTENSION_KEY value:data.address];
+    
+    auto extension = _gpxWpt.point.getExtensionsToWrite;
+    extension[ADDRESS_EXTENSION_KEY] = data.address;
+    _gpxWpt.point.extensions = extension;
+    
     _gpxWpt.docPath = _gpxFileName;
 
     if (newPoint)

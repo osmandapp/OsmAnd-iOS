@@ -11,7 +11,6 @@
 #import "OsmAndApp.h"
 #import "OAColors.h"
 #import "OAGpxWptItem.h"
-#import "OAGPXDocument.h"
 #import "OAFavoriteItem.h"
 #import "OAFavoritesHelper.h"
 #import "OARootViewController.h"
@@ -78,7 +77,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
         OAGpxWptItem *item = (OAGpxWptItem *) data;
         _docPath = item.docPath;
         _currentWpt = item.point;
-        _data = [OARootViewController.instance.mapPanel.mapViewController getPointsOf:_docPath groupName:item.point.type];
+        _data = [OARootViewController.instance.mapPanel.mapViewController getPointsOf:_docPath groupName:item.point.category];
         _type = EOAWaypointGPX;
     }
     else if ([data isKindOfClass:OAFavoriteItem.class])
@@ -154,22 +153,27 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
     if (_type == EOAWaypointGPX)
     {
-        OAGPX *gpx = nil;
+        OASTrackItem *trackItem = nil;
         if (_docPath)
         {
             OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
             NSString *gpxFilePath = [OAUtilities getGpxShortPath:_docPath];
-            gpx = [gpxDb getGPXItem:gpxFilePath];
+            auto gpx = [gpxDb getNewGPXItem:gpxFilePath];
+            trackItem = [[OASTrackItem alloc] initWithFile:gpx.file];
+            trackItem.dataItem = gpx;
         }
         else
         {
-            // FIXME:
-           // gpx = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
+            OASGpxFile *gpxFile = [OASavingTrackHelper sharedInstance].currentTrack;
+            if (gpxFile)
+            {
+                trackItem = [[OASTrackItem alloc] initWithGpxFile:gpxFile];
+            }
         }
         
-        if (gpx) {
-            // FIXME:
-            // [mapPanel openTargetViewWithGPX:gpx];
+        if (trackItem)
+        {
+             [mapPanel openTargetViewWithGPX:trackItem];
         }
     }
     else if (_type == EOAWaypointFavorite)

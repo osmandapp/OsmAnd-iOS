@@ -10,17 +10,14 @@
 #import "OAOpenAddTrackViewController.h"
 #import "OARoutePlanningHudViewController.h"
 #import "Localization.h"
-#import "OAGPXDocumentPrimitives.h"
 #import "OAColors.h"
 #import "OAApplicationMode.h"
 #import "OAGPXTrackCell.h"
 #import "OAGPXDatabase.h"
 #import "OsmAndApp.h"
 #import "OARoutingHelper.h"
-#import "OAGPXDocument.h"
 #import "OARoutePreferencesParameters.h"
 #import "OARouteProvider.h"
-#import "OAGPXMutableDocument.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapActions.h"
@@ -31,6 +28,8 @@
 #import "OAGPXUIHelper.h"
 #import "OAOsmAndFormatter.h"
 #import "OASavingTrackHelper.h"
+#import "OsmAndSharedWrapper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OATrackSegmentsViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -38,15 +37,15 @@
 
 @implementation OATrackSegmentsViewController
 {
-    OAWptPt *_point;
+    OASWptPt *_point;
     NSArray<NSDictionary *> *_data;
     
-    OAGPXDocument *_gpx;
+    OASGpxFile *_gpx;
     
     UIView *_tableHeaderView;
 }
 
-- (instancetype) initWithFile:(OAGPXDocument *)gpx
+- (instancetype) initWithFile:(OASGpxFile *)gpx
 {
     self = [super init];
     if (self)
@@ -63,10 +62,11 @@
     if (self)
     {
         if (isCurrentTrack) {
-            // FIXME:
-            // _gpx = [OASavingTrackHelper.sharedInstance currentTrack];
+             _gpx = [OASavingTrackHelper.sharedInstance currentTrack];
         } else {
-            _gpx = [[OAGPXDocument alloc] initWithGpxFile:filepath];
+            OASKFile *file = [[OASKFile alloc] initWithFilePath:filepath];
+            OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
+            _gpx = gpxFile;
         }
         [self generateData];
     }
@@ -110,7 +110,7 @@
     NSString * fileName = [self getFileName];
     
     OAGPXDatabase *db = [OAGPXDatabase sharedDb];
-    OAGPX *gpxData = [db getGPXItem:[OAUtilities getGpxShortPath:_gpx.path]];
+    OASGpxDataItem *gpxData = [db getNewGPXItem:[OAUtilities getGpxShortPath:_gpx.path]];
     
     [data addObject:
      @{
@@ -124,7 +124,7 @@
      ];
     
     NSInteger idx = 1;
-    for (OATrkSegment *seg in [_gpx getNonEmptyTrkSegments:NO])
+    for (OASTrkSegment *seg in [_gpx getNonEmptyTrkSegmentsRoutesOnly:NO])
     {
         long segmentTime = [OAGPXUIHelper getSegmentTime:seg];
         double segmentDist = [OAGPXUIHelper getSegmentDistance:seg];
@@ -154,18 +154,17 @@
     return [NSString stringWithFormat:OALocalizedString(@"track_multiple_segments_select"), [[self getFileName] stringByAppendingPathExtension:@"gpx"]];
 }
 
-- (NSString *)getTrackSegmentTitle:(OATrkSegment *)segment
+- (NSString *)getTrackSegmentTitle:(OASTrkSegment *)segment
 {
-    OATrack *track = [self getTrack:segment];
+    OASTrack *track = [self getTrack:segment];
     if (track)
-        return [OAGPXDocument buildTrackSegmentName:_gpx track:track segment:segment];
-
+        return [OAGPXUIHelper buildTrackSegmentName:_gpx track:track segment:segment];
     return nil;
 }
 
-- (OATrack *)getTrack:(OATrkSegment *)segment
+- (OASTrack *)getTrack:(OASTrkSegment *)segment
 {
-    for (OATrack *trk in _gpx.tracks)
+    for (OASTrack *trk in _gpx.tracks)
     {
         if ([trk.segments containsObject:segment])
             return trk;
@@ -243,7 +242,7 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void) startNavigation:(NSInteger)position gpx:(OAGPXDocument *)gpx;
+- (void) startNavigation:(NSInteger)position gpx:(OASGpxFile *)gpx;
 {
     [OAAppSettings.sharedManager.gpxRouteSegment set:position];
 

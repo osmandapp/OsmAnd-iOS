@@ -35,6 +35,10 @@ final class ProfileAppearanceViewAngleViewController: OABaseNavbarViewController
         addCell(OASimpleTableViewCell.reuseIdentifier)
     }
     
+    override func getLeftNavbarButtonTitle() -> String {
+        localizedString("shared_string_cancel")
+    }
+    
     override func generateData() {
         let section = tableData.createNewSection()
         

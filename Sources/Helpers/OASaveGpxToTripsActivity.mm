@@ -11,8 +11,10 @@
 #import "Localization.h"
 #import "OASaveTrackViewController.h"
 #import "OAGPXDatabase.h"
-#import "OAGPXDocument.h"
 #import "OAAppSettings.h"
+#import "OsmAndSharedWrapper.h"
+#import "OAGPXUIHelper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kImportFolderName @"import"
 #define kGpxFileExtension @"gpx"
@@ -106,14 +108,22 @@
         
         if (success)
         {
-            OAGPXDatabase *gpxDatabase = [OAGPXDatabase sharedDb];
-            OAGPXDocument *gpxDoc = [[OAGPXDocument alloc] initWithGpxFile:gpxPath];
-            [gpxDatabase addGpxItem:shortPath
-                              title:trackName
-                               desc:gpxDoc.metadata.desc
-                             bounds:gpxDoc.bounds
-                           document:gpxDoc];
-            [gpxDatabase save];
+            OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
+            OASGpxDataItem *gpx = [gpxDb getNewGPXItem:gpxPath];
+            if (!gpx)
+            {
+                gpx = [gpxDb addGPXFileToDBIfNeeded:gpxPath];
+                
+                OASGpxTrackAnalysis *analysis = [gpx getAnalysis];
+                
+                NSString *nearestCity;
+                if (analysis.locationStart)
+                {
+                    OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:analysis.locationStart.position];
+                    gpx.nearestCity = nearestCityPOI ? nearestCityPOI.nameLocalized : @"";
+                    [gpxDb updateDataItem:gpx];
+                }
+            }
             
             if (showOnMap)
                 [OAAppSettings.sharedManager showGpx:@[shortPath]];

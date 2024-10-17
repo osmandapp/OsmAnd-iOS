@@ -51,6 +51,7 @@ typedef NS_ENUM(NSInteger, EOAOAResourceSwiftItemType) {
 - (NSString *) title;
 - (NSString *) type;
 - (EOAOAResourceSwiftItemType) resourceType;
+- (long long) sizePkg;
 - (NSString *) formatedSize;
 - (NSString *) formatedSizePkg;
 - (UIImage *) icon;
@@ -58,6 +59,7 @@ typedef NS_ENUM(NSInteger, EOAOAResourceSwiftItemType) {
 - (BOOL) isInstalled;
 - (id<OADownloadTask>) downloadTask;
 - (void) refreshDownloadTask;
+- (BOOL) isOutdatedItem;
 
 @end
 
@@ -80,6 +82,8 @@ typedef NS_ENUM(NSInteger, EOAOAResourceSwiftItemType) {
 + (NSArray<OAResourceSwiftItem *> *) getResourcesInRepositoryIdsByRegionId:(NSString *)regionId resourceTypeNames:(NSArray<NSString *> *)resourceTypeNames;
 + (NSArray<OAResourceSwiftItem *> *) getResourcesInRepositoryIdsByRegion:(OAWorldRegion *)region resourceTypes:(NSArray<NSNumber *> *)resourceTypes;
 
++ (OAResourceSwiftItem *) getResourceFromDownloadTask:(id<OADownloadTask>)downloadTask;
+
 + (UIBezierPath *) tickPath:(FFCircularProgressView *)progressView;
 
 + (void)offerDownloadAndInstallOf:(OAResourceSwiftItem *)item
@@ -91,6 +95,10 @@ typedef NS_ENUM(NSInteger, EOAOAResourceSwiftItemType) {
                     onTaskResumed:(OADownloadTaskCallback)onTaskResumed
                 completionHandler:(void(^)(UIAlertController *))completionHandler;
 
++ (void)offerDownloadAndUpdateOf:(OAResourceSwiftItem *)item
+                   onTaskCreated:(OADownloadTaskCallback)onTaskCreated
+                   onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
+
 + (void) offerCancelDownloadOf:(OAResourceSwiftItem *)item onTaskStop:(OADownloadTaskCallback)onTaskStop completionHandler:(void(^)(UIAlertController *))completionHandler;
 
 + (void)offerMultipleDownloadAndInstallOf:(OAMultipleResourceSwiftItem *)multipleItem
@@ -101,5 +109,13 @@ typedef NS_ENUM(NSInteger, EOAOAResourceSwiftItemType) {
 + (void)checkAndDeleteOtherSRTMResources:(NSArray<OAResourceSwiftItem *> *)itemsToCheck;
 
 + (void) onDownldedResourceInstalled;
+
++ (BOOL) isInOutdatedResourcesList:(NSString *)resourceId;
+
++ (NSString *) formatSize:(long long)bytes addZero:(BOOL)addZero;
+
++ (NSString *) formatedDownloadingProgressString:(long long)wholeSizeBytes progress:(float)progress;
++ (NSString *) formatedDownloadingProgressString:(long long)wholeSizeBytes progress:(float)progress addZero:(BOOL)addZero;
++ (NSString *) formatedDownloadingProgressString:(long long)wholeSizeBytes progress:(float)progress addZero:(BOOL)addZero combineViaSlash:(BOOL)combineViaSlash;
 
 @end

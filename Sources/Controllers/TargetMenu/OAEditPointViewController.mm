@@ -42,7 +42,6 @@
 #import "OAColorsPaletteCell.h"
 #import "OAColorCollectionHandler.h"
 #import "OAColorCollectionViewController.h"
-#import "OAGPXDocument.h"
 #import "OATargetMenuViewController.h"
 #import "MaterialTextFields.h"
 #import "Localization.h"
@@ -857,8 +856,8 @@
         }
         else if (_editPointType == EOAEditPointTypeWaypoint)
         {
-            OAGPXDocument *gpxDocument = [(OAGpxWptEditingHandler *)_pointHandler getGpxDocument];
-            if (gpxDocument.points.count > 0)
+            OASGpxFile *gpxDocument = [(OAGpxWptEditingHandler *)_pointHandler getGpxDocument];
+            if (gpxDocument.getPointsList.count > 0)
                 replaceScreen = [[OAReplaceFavoriteViewController alloc] initWithItemType:EOAReplacePointTypeWaypoint gpxDocument:gpxDocument];
             else
                 return [self showAlertNotFoundReplaceItem];
@@ -942,11 +941,14 @@
             OATrackMenuViewControllerState *state = (OATrackMenuViewControllerState *) _targetMenuState;
             state.openedFromTrackMenu = NO;
             OAGPXDatabase *db = [OAGPXDatabase sharedDb];
-            // FIXME:
-//            [[OARootViewController instance].mapPanel openTargetViewWithGPX:[db getGPXItem:[
-//                    [db getFileDir:self.gpxFileName] stringByAppendingPathComponent:self.gpxFileName.lastPathComponent]]
-//                                                               trackHudMode:EOATrackMenuHudMode
-//                                                                      state:state];
+            auto gpx = [db getNewGPXItem:[
+                [db getFileDir:self.gpxFileName] stringByAppendingPathComponent:self.gpxFileName.lastPathComponent]];
+            
+            auto trackItem = [[OASTrackItem alloc] initWithFile:gpx.file];
+            trackItem.dataItem = gpx;
+            [[OARootViewController instance].mapPanel openTargetViewWithGPX:trackItem
+                                                               trackHudMode:EOATrackMenuHudMode
+                                                                      state:state];
         }
     }];
 }
@@ -1259,8 +1261,7 @@
         data.color = waypointItem.color ? waypointItem.color : UIColorFromARGB([waypointItem.point getColor]);
         data.backgroundIcon = [waypointItem.point getBackgroundType];
         data.icon = [waypointItem.point getIconName];
-        // FIXME:
-        //data.category = waypointItem.point.type;
+        data.category = waypointItem.point.category;
         data.name = waypointItem.point.name;
 
         if (_editPointType == EOAEditPointTypeWaypoint && !_pointHandler.gpxWptDelegate)

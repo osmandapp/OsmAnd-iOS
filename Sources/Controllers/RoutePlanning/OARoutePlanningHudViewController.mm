@@ -27,9 +27,7 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OALocationServices.h"
 #import "OAGpxData.h"
-#import "OAGPXMutableDocument.h"
 #import "OASelectedGPXHelper.h"
-#import "OAGPXTrackAnalysis.h"
 #import "OAGPXDatabase.h"
 #import "OAReorderPointCommand.h"
 #import "OARemovePointCommand.h"
@@ -59,6 +57,7 @@
 #import "CLLocation+Extension.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+#import "OsmAndSharedWrapper.h"
 
 #define kHeaderSectionHeigh 60.0
 
@@ -549,32 +548,35 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [self onPointsListChanged];
 }
 
-- (OAGPXMutableDocument *) getGpxFile:(NSString *)gpxFileName
+- (OASGpxFile *) getGpxFile:(NSString *)gpxFileName
 {
-    OAGPXMutableDocument *mutableDocument = nil;
+    OASGpxFile *gpxFile = nil;
     OASelectedGPXHelper *selectedGpxHelper = OASelectedGPXHelper.instance;
-    OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:gpxFileName];
-    if (!gpx)
+    OASGpxDataItem *gpxDataItem = [[OAGPXDatabase sharedDb] getNewGPXItem:gpxFileName];
+    if (!gpxDataItem)
     {
-        gpx = [[OAGPXDatabase sharedDb] getGPXItemByFileName:gpxFileName];
+        gpxDataItem = [[OAGPXDatabase sharedDb] getGPXItemByFileName:gpxFileName];
     }
-    const auto &selectedFile = selectedGpxHelper.activeGpx[QString::fromNSString(gpxFileName.lastPathComponent)];
-    if (selectedFile != nullptr)
-        mutableDocument = [[OAGPXMutableDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(selectedFile)];
-    else
-        mutableDocument = [[OAGPXMutableDocument alloc] initWithGpxFile:gpx.absolutePath];
+    OASGpxFile *selectedFile = selectedGpxHelper.activeGpx[gpxFileName.lastPathComponent];
+    if (selectedFile != nullptr) {
+        gpxFile = selectedFile;
+    } else {
+        OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxDataItem.file.absolutePath];
+        gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
+    }
     
-    if (!mutableDocument.routes)
-        mutableDocument.routes = [NSMutableArray new];
-    if (!mutableDocument.tracks)
-        mutableDocument.tracks = [NSMutableArray new];
-    if (!mutableDocument.points)
-        mutableDocument.points = [NSMutableArray new];
+    if (!gpxFile.routes)
+        gpxFile.routes = [NSMutableArray new];
+    if (!gpxFile.tracks)
+        gpxFile.tracks = [NSMutableArray new];
+    if (!gpxFile.getPointsList) {
+        [gpxFile clearPoints];
+    }
     
-    return mutableDocument;
+    return gpxFile;
 }
 
-- (void) addNewGpxData:(OAGPXMutableDocument *)gpxFile
+- (void) addNewGpxData:(OASGpxFile *)gpxFile
 {
     OAGpxData *gpxData = [self setupGpxData:gpxFile];
     [self initMeasurementMode:gpxData addPoints:YES];
@@ -600,7 +602,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     _adjustMapPosition = YES;
 }
 
-- (OAGpxData *) setupGpxData:(OAGPXMutableDocument *)gpxFile
+- (OAGpxData *)setupGpxData:(OASGpxFile *)gpxFile
 {
     OAGpxData *gpxData = nil;
     if (gpxFile != nil)
@@ -617,7 +619,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     {
         if (!self.isUndoMode)
         {
-            NSArray<OAWptPt *> *points = gpxData.gpxFile.getRoutePoints;
+            NSArray<OASWptPt *> *points = gpxData.gpxFile.getRoutePoints;
             if (points.count > 0)
             {
                 OAApplicationMode *snapToRoadAppMode = [OAApplicationMode valueOfStringKey:points.lastObject.getProfileType def:nil];
@@ -717,10 +719,14 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
             else
             {
                 state.openedFromTrackMenu = NO;
-                // FIXME:
-//                [_mapPanel openTargetViewWithGPX:[[OAGPXDatabase sharedDb] getGPXItem:_fileName]
-//                                    trackHudMode:EOATrackMenuHudMode
-//                                           state:state];
+                auto gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:_fileName];
+                auto trackItem = [[OASTrackItem alloc] initWithFile:gpx.file];
+                trackItem.dataItem = gpx;
+
+              
+                [_mapPanel openTargetViewWithGPX:trackItem
+                                    trackHudMode:EOATrackMenuHudMode
+                                           state:state];
             }
         }
     }];
@@ -756,7 +762,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     double lowestDistance = [self getLowestDistance:mapView];
     for (NSInteger i = 0; i < _editingContext.getPointsCount; i++)
     {
-        OAWptPt *pt = _editingContext.getPoints[i];
+        OASWptPt *pt = _editingContext.getPoints[i];
         const auto latLon = OsmAnd::LatLon(pt.getLatitude, pt.getLongitude);
         const auto point = OsmAnd::Utilities::convertLatLonTo31(latLon);
         
@@ -802,10 +808,11 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     if (_editingContext.hasRoute || _editingContext.hasChanges)
     {
         NSString *trackName = [self getSuggestedFileName];
-        OAGPXDocument *gpx = [_editingContext exportGpx:trackName];
+        OASGpxFile *gpx = [_editingContext exportGpx:trackName];
         if (gpx != nil)
         {
-            [gpx applyBounds];
+            // FIXME:
+           // [gpx applyBounds];
             OAApplicationMode *appMode = _editingContext.appMode;
             [self onCloseButtonPressed];
             [self runNavigation:gpx appMode:appMode];
@@ -963,7 +970,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     OAGpxData *gpxData = _editingContext.gpxData;
     NSString *displayedName = nil;
     if (gpxData != nil) {
-        OAGPXDocument *gpxFile = gpxData.gpxFile;
+        OASGpxFile *gpxFile = gpxData.gpxFile;
         if (gpxFile.path.length > 0)
             displayedName = gpxFile.path.lastPathComponent.stringByDeletingPathExtension;
         else if (gpxFile.tracks.count > 0)
@@ -1035,16 +1042,16 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void) addToGpx:(EOAFinalSaveAction)finalSaveAction
 {
     OAGpxData *gpxData = _editingContext.gpxData;
-    OAGPXDocument *gpx = gpxData != nil ? gpxData.gpxFile : nil;
+    OASGpxFile *gpx = gpxData != nil ? gpxData.gpxFile : nil;
     if (gpx != nil)
     {
         OASelectedGPXHelper *helper = OASelectedGPXHelper.instance;
-        BOOL showOnMap = helper.activeGpx.find(QString::fromNSString(gpx.path)) != helper.activeGpx.end();
+        BOOL showOnMap = [helper.activeGpx.allKeys containsObject:gpx.path];
         [self saveExistingGpx:gpx showOnMap:showOnMap simplified:NO addToTrack:NO finalSaveAction:finalSaveAction];
     }
 }
 
-- (void) saveExistingGpx:(OAGPXDocument *)gpx showOnMap:(BOOL)showOnMap
+- (void) saveExistingGpx:(OASGpxFile *)gpx showOnMap:(BOOL)showOnMap
                                  simplified:(BOOL)simplified addToTrack:(BOOL)addToTrack finalSaveAction:(EOAFinalSaveAction)finalSaveAction
 {
     [self saveGpx:gpx.path gpxFile:gpx simplified:simplified addToTrack:addToTrack finalSaveAction:finalSaveAction showOnMap:showOnMap];
@@ -1065,19 +1072,24 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [self saveGpx:[dir stringByAppendingPathComponent:fileName] gpxFile:nil simplified:simplified addToTrack:NO finalSaveAction:finalSaveAction showOnMap:showOnMap];
 }
 
-- (void) saveGpx:(NSString *)outFile gpxFile:(OAGPXDocument *)gpxFile simplified:(BOOL)simplified addToTrack:(BOOL)addToTrack finalSaveAction:(EOAFinalSaveAction)finalSaveAction showOnMap:(BOOL)showOnMap
+- (void) saveGpx:(NSString *)outFile
+         gpxFile:(OASGpxFile *)gpxFile
+      simplified:(BOOL)simplified
+      addToTrack:(BOOL)addToTrack
+ finalSaveAction:(EOAFinalSaveAction)finalSaveAction
+       showOnMap:(BOOL)showOnMap
 {
     OASaveGpxRouteAsyncTask *task = [[OASaveGpxRouteAsyncTask alloc] initWithHudController:self outFile:outFile gpxFile:gpxFile simplified:simplified addToTrack:addToTrack showOnMap:showOnMap];
-    [task execute:^(OAGPXDocument * gpx, NSString * outFile) {
+    [task execute:^(OASGpxFile * gpx, NSString * outFile) {
         [self onGpxSaved:gpx outFile:outFile finalSaveAction:finalSaveAction showOnMap:showOnMap];
     }];
 }
 
-- (void) onGpxSaved:(OAGPXDocument *)savedGpxFile outFile:(NSString *)outFile finalSaveAction:(EOAFinalSaveAction)finalSaveAction showOnMap:(BOOL)showOnMap
+- (void) onGpxSaved:(OASGpxFile *)savedGpxFile outFile:(NSString *)outFile finalSaveAction:(EOAFinalSaveAction)finalSaveAction showOnMap:(BOOL)showOnMap
 {
     if (_editingContext.isNewData && savedGpxFile != nil)
     {
-        OAGpxData *gpxData = [[OAGpxData alloc] initWithFile:(OAGPXMutableDocument *)savedGpxFile];
+        OAGpxData *gpxData = [[OAGpxData alloc] initWithFile:(OASGpxFile *)savedGpxFile];
         _editingContext.gpxData = gpxData;
     }
     if ([self isInEditMode])
@@ -1172,7 +1184,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     {
         // Refresh track if visible
         [_settings hideGpx:@[gpxFilePath] update:YES];
-        helper.activeGpx.remove(QString::fromNSString(outFile));
+        [helper removeGpxFileWith:outFile];
         [helper buildGpxList];
     }
     if (gpxFilePath && showOnMap)
@@ -1290,7 +1302,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     {
         cell.titleLabel.text = [NSString stringWithFormat:OALocalizedString(@"point_num"), indexPath.row + 1];
 
-        OAWptPt *point1 = _editingContext.getPoints[indexPath.row];
+        OASWptPt *point1 = _editingContext.getPoints[indexPath.row];
         CLLocation *location1 = [[CLLocation alloc] initWithLatitude:point1.getLatitude longitude:point1.getLongitude];
         if (indexPath.row == 0)
         {
@@ -1307,7 +1319,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         }
         else
         {
-            OAWptPt *point2 = indexPath.row == 0 && _editingContext.getPointsCount > 1 ? _editingContext.getPoints[indexPath.row + 1] : _editingContext.getPoints[indexPath.row - 1];
+            OASWptPt *point2 = indexPath.row == 0 && _editingContext.getPointsCount > 1 ? _editingContext.getPoints[indexPath.row + 1] : _editingContext.getPoints[indexPath.row - 1];
             CLLocation *location2 = [[CLLocation alloc] initWithLatitude:point2.getLatitude longitude:point2.getLongitude];
             double azimuth = [location1 bearingTo:location2];
             cell.descriptionLabel.text = [NSString stringWithFormat:@"%@ • %@", [OAOsmAndFormatter getFormattedDistance:[location1 distanceFromLocation:location2]], [OAOsmAndFormatter getFormattedAzimuth:azimuth]];
@@ -1421,7 +1433,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void) enterMovingMode:(NSInteger)pointPosition
 {
-    OAWptPt *pt = _editingContext.getPoints[pointPosition];
+    OASWptPt *pt = _editingContext.getPoints[pointPosition];
     _editingContext.originalPointToMove = pt;
     [_layer enterMovingPointMode];
     [self onPointsListChanged];
@@ -1500,7 +1512,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void)onRightButtonPressed
 {
-    OAWptPt *newPoint = [_layer getMovedPointToApply];
+    OASWptPt *newPoint = [_layer getMovedPointToApply];
     if (_hudMode == EOAHudModeMovePoint)
     {
         [_editingContext.commandManager execute:[[OAMovePointCommand alloc] initWithLayer:_layer
@@ -1547,7 +1559,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 {
     if (cancelled)
     {
-        OAWptPt *pt = _editingContext.originalPointToMove;
+        OASWptPt *pt = _editingContext.originalPointToMove;
         [_editingContext addPoint:pt];
     }
     _editingContext.selectedPointPosition = -1;
@@ -1731,7 +1743,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     if (appMode == OAApplicationMode.DEFAULT)
         appMode = nil;
     
-    NSArray<OAWptPt *> *points = _editingContext.getPoints;
+    NSArray<OASWptPt *> *points = _editingContext.getPoints;
     if (points.count > 0)
     {
         if (points.count == 1)
@@ -1747,7 +1759,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
             NSString *trackName = [self getSuggestedFileName];
             if (_editingContext.hasRoute)
             {
-                OAGPXDocument *gpx = [_editingContext exportGpx:trackName];
+                OASGpxFile *gpx = [_editingContext exportGpx:trackName];
                 if (gpx != nil)
                 {
                     [self onCloseButtonPressed];
@@ -1765,11 +1777,11 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
                     [self setMode:DIRECTION_MODE on:YES];
                     [self enterApproximationMode];
                 } else {
-                    OAGPXMutableDocument *gpx = [[OAGPXMutableDocument alloc] init];
-                    [gpx addRoutePoints:points addRoute:NO];
+                    OASGpxFile *gpx = [[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]];
+                    [gpx addRoutePointsPoints:points addRoute:NO];
                     [self onCloseButtonPressed];
                     [targetPointsHelper clearAllPoints:NO];
-                    OAGPX *track = [OAGPXDatabase.sharedDb getGPXItem:gpx.path];
+                    OASGpxDataItem *track = [OAGPXDatabase.sharedDb getNewGPXItem:gpx.path];
                     [_mapPanel.mapActions enterRoutePlanningModeGivenGpx:gpx path:track.gpxFilePath from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
                 }
             }
@@ -1782,10 +1794,10 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     }
 }
 
-- (void) runNavigation:(OAGPXDocument *)gpx appMode:(OAApplicationMode *)appMode
+- (void) runNavigation:(OASGpxFile *)gpx appMode:(OAApplicationMode *)appMode
 {
     OARoutingHelper *routingHelper = OARoutingHelper.sharedInstance;
-    OAGPX *track = [OAGPXDatabase.sharedDb getGPXItem:gpx.path];
+    OASGpxDataItem *track = [OAGPXDatabase.sharedDb getNewGPXItem:gpx.path];
     if (routingHelper.isFollowingMode)
     {
         if ([self isFollowTrackMode])
@@ -1810,7 +1822,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void) reverseRouteSelected
 {
-    NSArray<OAWptPt *> *points = _editingContext.getPoints;
+    NSArray<OASWptPt *> *points = _editingContext.getPoints;
     if (points.count > 1)
     {
         [_editingContext.commandManager execute:[[OAReversePointsCommand alloc] initWithLayer:_layer]];
@@ -1839,15 +1851,14 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void)onFileSelected:(NSString *)gpxFileName
 {
-    OAGPXMutableDocument *gpxFile;
+    OASGpxFile *gpxFile;
     if (!gpxFileName) {
-        // FIXME:
-        //gpxFile = OASavingTrackHelper.sharedInstance.currentTrack;
+        gpxFile = OASavingTrackHelper.sharedInstance.currentTrack;
     } else {
         gpxFile = [self getGpxFile:gpxFileName];
     }
     OASelectedGPXHelper *selectedGpxHelper = OASelectedGPXHelper.instance;
-    BOOL showOnMap = selectedGpxHelper.activeGpx.find(QString::fromNSString(gpxFileName.lastPathComponent)) != selectedGpxHelper.activeGpx.end();
+    BOOL showOnMap = [selectedGpxHelper.activeGpx.allKeys containsObject:gpxFileName.lastPathComponent];
     [self saveExistingGpx:gpxFile showOnMap:showOnMap simplified:NO addToTrack:YES finalSaveAction:SHOW_IS_SAVED_FRAGMENT];
 }
 
@@ -1926,7 +1937,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         [self dismiss];
 }
 
-- (void)onGpxApproximationDone:(NSArray<OAGpxRouteApproximation *> *)gpxApproximations pointsList:(NSArray<NSArray<OAWptPt *> *> *)pointsList mode:(OAApplicationMode *)mode
+- (void)onGpxApproximationDone:(NSArray<OAGpxRouteApproximation *> *)gpxApproximations pointsList:(NSArray<NSArray<OASWptPt *> *> *)pointsList mode:(OAApplicationMode *)mode
 {
 	dispatch_async(dispatch_get_main_queue(), ^{
 		if (_layer)

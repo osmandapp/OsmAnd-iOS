@@ -12,10 +12,10 @@
 #import "OAMapRendererView.h"
 #import "OARoutingHelper.h"
 #import "OANativeUtilities.h"
-#import "OAGPXDocument.h"
 #import "OAMeasurementEditingContext.h"
 #import "OAAppSettings.h"
 #import "CLLocation+Extension.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore/Map/VectorLine.h>
 #include <OsmAndCore/Map/VectorLineBuilder.h>
@@ -81,7 +81,7 @@
         double distance = 0, bearing = 0;
         if (_editingCtx.getPointsCount > 0)
         {
-            OAWptPt *lastPoint = _editingCtx.getPoints[_editingCtx.getPointsCount - 1];
+            OASWptPt *lastPoint = _editingCtx.getPoints[_editingCtx.getPointsCount - 1];
             OsmAnd::LatLon centerLatLon = OsmAnd::Utilities::convert31ToLatLon(self.mapView.target31);
             distance = getDistance(lastPoint.getLatitude, lastPoint.getLongitude, centerLatLon.latitude, centerLatLon.longitude);
             CLLocation *loc1 = [[CLLocation alloc] initWithLatitude:lastPoint.getLatitude longitude:lastPoint.getLongitude];
@@ -226,7 +226,7 @@
 {
     _isInMovingMode = YES;
     [self moveMapToPoint:_editingCtx.selectedPointPosition];
-    OAWptPt *pt = [_editingCtx removePoint:_editingCtx.selectedPointPosition updateSnapToRoad:NO];
+    OASWptPt *pt = [_editingCtx removePoint:_editingCtx.selectedPointPosition updateSnapToRoad:NO];
     _editingCtx.originalPointToMove = pt;
     [_editingCtx splitSegments:_editingCtx.selectedPointPosition];
     [self updateLayer];
@@ -237,22 +237,25 @@
     _isInMovingMode = NO;
 }
 
-- (OAWptPt *) getMovedPointToApply
+- (OASWptPt *) getMovedPointToApply
 {
     const auto latLon = OsmAnd::Utilities::convert31ToLatLon(self.mapViewController.mapView.target31);
     
-    OAWptPt *point = [[OAWptPt alloc] initWithWpt:_editingCtx.originalPointToMove];
-    point.position = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
-    [point copyExtensions:_editingCtx.originalPointToMove];
+    OASWptPt *point = [[OASWptPt alloc] initWithWptPt:_editingCtx.originalPointToMove];
+    point.lat = latLon.latitude;
+    point.lon = latLon.longitude;
+    [point doCopyExtensionsE:_editingCtx.originalPointToMove];
     return point;
 }
 
-- (OAWptPt *) addPoint:(BOOL)addPointBefore
+- (OASWptPt *) addPoint:(BOOL)addPointBefore
 {
     if (_pressPointLocation)
     {
-        OAWptPt *pt = [[OAWptPt alloc] init];
-        [pt setPosition:_pressPointLocation.coordinate];
+        OASWptPt *pt = [[OASWptPt alloc] init];
+        pt.lat = _pressPointLocation.coordinate.latitude;
+        pt.lon = _pressPointLocation.coordinate.longitude;
+
         _pressPointLocation = nil;
         BOOL allowed = _editingCtx.getPointsCount == 0 || ![_editingCtx.getAllPoints containsObject:pt];
         if (allowed)
@@ -264,13 +267,15 @@
     return nil;
 }
 
-- (OAWptPt *) addCenterPoint:(BOOL)addPointBefore
+- (OASWptPt *) addCenterPoint:(BOOL)addPointBefore
 {
     const auto center = self.mapViewController.mapView.target31;
     const auto latLon = OsmAnd::Utilities::convert31ToLatLon(center);
     
-    OAWptPt *pt = [[OAWptPt alloc] init];
-    [pt setPosition:CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude)];
+    OASWptPt *pt = [[OASWptPt alloc] init];
+    pt.lat = latLon.latitude;
+    pt.lon = latLon.longitude;
+    
     BOOL allowed = _editingCtx.getPointsCount == 0 || ![_editingCtx.getAllPoints containsObject:pt];
     if (allowed)
     {
@@ -284,15 +289,15 @@
 {
     if (_editingCtx.getPointsCount < 2)
         return 0;
-    NSArray<OAWptPt *> *points = [_editingCtx.getBeforePoints arrayByAddingObjectsFromArray:_editingCtx.getAfterPoints];
+    NSArray<OASWptPt *> *points = [_editingCtx.getBeforePoints arrayByAddingObjectsFromArray:_editingCtx.getAfterPoints];
     
     NSMutableArray<NSNumber *> *distances = [NSMutableArray array];
-    OAWptPt *prev = nil;
-    for (OAWptPt *wptPt in points)
+    OASWptPt *prev = nil;
+    for (OASWptPt *wptPt in points)
     {
         if (prev != nil)
         {
-            double dist = getDistance(wptPt.position.latitude, wptPt.position.longitude, prev.position.latitude, prev.position.longitude);
+            double dist = getDistance(wptPt.lat, wptPt.lon, prev.lat, prev.lon);
             [distances addObject:@(dist)];
         }
         prev = wptPt;
@@ -362,12 +367,12 @@
 {
     QVector<OsmAnd::PointI> points;
     
-    OAWptPt *lastBeforePoint = nil;
-    NSMutableArray<OAWptPt *> *beforePoints = [NSMutableArray arrayWithArray:_editingCtx.getBeforePoints];
+    OASWptPt *lastBeforePoint = nil;
+    NSMutableArray<OASWptPt *> *beforePoints = [NSMutableArray arrayWithArray:_editingCtx.getBeforePoints];
     if (beforePoints.count > 0)
         lastBeforePoint = beforePoints[beforePoints.count - 1];
-    OAWptPt *firstAfterPoint = nil;
-    NSMutableArray<OAWptPt *> *afterPoints = [NSMutableArray arrayWithArray:_editingCtx.getAfterPoints];
+    OASWptPt *firstAfterPoint = nil;
+    NSMutableArray<OASWptPt *> *afterPoints = [NSMutableArray arrayWithArray:_editingCtx.getAfterPoints];
     if (afterPoints.count > 0)
         firstAfterPoint = afterPoints.firstObject;
     
@@ -375,7 +380,7 @@
 
     for (int i = 0; i < beforePoints.count; i++)
     {
-        OAWptPt *pt = beforePoints[i];
+        OASWptPt *pt = beforePoints[i];
         points.append(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude)));
     }
     
@@ -384,8 +389,8 @@
 
 - (void) drawBeforeAfterPath
 {
-    NSArray<OATrkSegment *> *before = _editingCtx.getBeforeSegments;
-    NSArray<OATrkSegment *> *after = _editingCtx.getAfterSegments;
+    NSArray<OASTrkSegment *> *before = _editingCtx.getBeforeSegments;
+    NSArray<OASTrkSegment *> *after = _editingCtx.getAfterSegments;
 
     OsmAnd::PointI center;
     auto centerPixel = self.mapViewController.mapView.getCenterPixel;
@@ -401,11 +406,11 @@
         BOOL hasGapBefore = NO;
         if (before.count > 0)
         {
-            OATrkSegment *segment = before.lastObject;
+            OASTrkSegment *segment = before.lastObject;
             if (segment.points.count > 0)
             {
                 hasPointsBefore = YES;
-                OAWptPt *pt = segment.points.lastObject;
+                OASWptPt *pt = segment.points.lastObject;
                 if (!pt.isGap || (_editingCtx.isInAddPointMode && _editingCtx.addPointMode != EOAAddPointModeBefore))
                 {
                     points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude)));
@@ -415,7 +420,7 @@
         }
         if (after.count > 0)
         {
-            OATrkSegment *segment = after.firstObject;
+            OASTrkSegment *segment = after.firstObject;
             if (segment.points.count > 0)
             {
                 if (!hasPointsBefore)
@@ -424,7 +429,7 @@
                 }
                 if (!hasGapBefore || (_editingCtx.isInAddPointMode && _editingCtx.addPointMode != EOAAddPointModeBefore))
                 {
-                    OAWptPt *pt = segment.points.firstObject;
+                    OASWptPt *pt = segment.points.firstObject;
                     points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude)));
                 }
             }
@@ -445,23 +450,23 @@
 
 - (void) drawRouteSegments
 {
-    NSArray<OATrkSegment *> *beforeSegs = _editingCtx.getBeforeTrkSegmentLine;
-    NSArray<OATrkSegment *> *afterSegs = _editingCtx.getAfterTrkSegmentLine;
+    NSArray<OASTrkSegment *> *beforeSegs = _editingCtx.getBeforeTrkSegmentLine;
+    NSArray<OASTrkSegment *> *afterSegs = _editingCtx.getAfterTrkSegmentLine;
     int lineId = 100;
-    for (OATrkSegment *seg in beforeSegs)
+    for (OASTrkSegment *seg in beforeSegs)
     {
         QVector<OsmAnd::PointI> beforePoints;
-        for (OAWptPt *pt in seg.points)
+        for (OASWptPt *pt in seg.points)
         {
             beforePoints.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude)));
         }
         [self drawLines:beforePoints collection:_collection lineId:lineId++];
     }
     
-    for (OATrkSegment *seg in afterSegs)
+    for (OASTrkSegment *seg in afterSegs)
     {
         QVector<OsmAnd::PointI> afterPoints;
-        for (OAWptPt *pt in seg.points)
+        for (OASWptPt *pt in seg.points)
         {
             afterPoints.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude)));
         }
@@ -493,7 +498,7 @@
             pos = _editingCtx.getPointsCount - 1;
         else if (pos < 0)
             pos = 0;
-        OAWptPt *pt = _editingCtx.getPoints[pos];
+        OASWptPt *pt = _editingCtx.getPoints[pos];
         auto point = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude));
         auto point31 = [OANativeUtilities convertFromPointI:point];
         [self.mapViewController goToPosition:point31 animated:YES];

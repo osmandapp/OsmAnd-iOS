@@ -38,7 +38,7 @@
 #pragma mark - Initialization
 
  #warning("deprecated remove after refactoring")
-- (instancetype)initWithGPX:(OAGPX *)gpx
+- (instancetype)initWithGPX:(OASTrackItem *)gpx
 {
     self = [super init];
     if (self)

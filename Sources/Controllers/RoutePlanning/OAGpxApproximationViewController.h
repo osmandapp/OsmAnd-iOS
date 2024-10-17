@@ -8,11 +8,11 @@
 
 #import "OAPlanningPopupBaseViewController.h"
 
-@class OAWptPt, OAApplicationMode;
+@class OASWptPt, OAApplicationMode;
 
 @interface OAGpxApproximationViewController : OAPlanningPopupBaseViewController
 
 
-- (instancetype)initWithMode:(OAApplicationMode *)mode routePoints:(NSArray<NSArray<OAWptPt *> *> *)routePoints;
+- (instancetype)initWithMode:(OAApplicationMode *)mode routePoints:(NSArray<NSArray<OASWptPt *> *> *)routePoints;
 
 @end

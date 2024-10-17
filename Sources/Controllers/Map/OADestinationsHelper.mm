@@ -17,12 +17,13 @@
 #import "OAHistoryItem.h"
 #import "OAHistoryHelper.h"
 #import "OADestinationItem.h"
-#import "OAGPXMutableDocument.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAAppVersion.h"
 #import "OAColors.h"
 #import "OAAppData.h"
 #import "OAAppSettings.h"
+#import "OsmAndSharedWrapper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kMarkersChanged @"markers_modified_time"
 
@@ -384,24 +385,22 @@
     }
 }
 
-- (OAGPXDocument *) generateGpx:(NSArray<OADestination *> *)markers completeBackup:(BOOL)completeBackup
+- (OASGpxFile *) generateGpx:(NSArray<OADestination *> *)markers completeBackup:(BOOL)completeBackup
 {
-    OAGPXMutableDocument *doc = [[OAGPXMutableDocument alloc] init];
+    OASGpxFile *doc = [[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]];
     for (OADestination *marker in markers)
     {
-        OAWptPt *wpt = [[OAWptPt alloc] init];
+        OASWptPt *wpt = [[OASWptPt alloc] init];
         wpt.position = CLLocationCoordinate2DMake(marker.latitude, marker.longitude);
         wpt.name = marker.desc;
-        [wpt setColor:[marker.color toARGBNumber]];
-
-        OAGpxExtension *e = [[OAGpxExtension alloc] init];
-        e.name = @"creation_date";
-
+        OASInt *color = [[OASInt alloc] initWithInt:[marker.color toARGBNumber]];
+        [wpt setColorColor:color];
+        
+        OASMutableDictionary *exts = wpt.getExtensionsToWrite;
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z"];
-        e.value = [dateFormatter stringFromDate:marker.creationDate];;
-
-        wpt.extensions = @[e];
+        
+        exts[@"creation_date"] = [dateFormatter stringFromDate:marker.creationDate];
 
 //        if (completeBackup)
 //        {
@@ -412,7 +411,7 @@
 //                wpt.getExtensionsToWrite().put(VISITED_DATE, format.format(new Date(marker.visitedDate)));
 //            }
 //        }
-        [doc addWpt:wpt];
+        [doc addPointPoint:wpt];
     }
     return doc;
 }

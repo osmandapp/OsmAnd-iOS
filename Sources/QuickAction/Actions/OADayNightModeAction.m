@@ -45,9 +45,9 @@ static QuickActionType *TYPE;
 - (void)execute
 {
     if (_settings.nightMode)
-        [_settings.appearanceMode set:APPEARANCE_MODE_DAY];
+        [_settings.appearanceMode set:DayNightModeDay];
     else
-        [_settings.appearanceMode set:APPEARANCE_MODE_NIGHT];
+        [_settings.appearanceMode set:DayNightModeNight];
     [[OADayNightHelper instance] forceUpdate];
 }
 

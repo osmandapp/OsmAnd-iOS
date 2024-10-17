@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 #import "OALocationPoint.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/GpxDocument.h>
@@ -118,10 +119,6 @@ struct RouteDataBundle;
 
 @end
 
-//var name: String? = null
-//var email: String? = null
-//var link: String? = null
-
 @interface OAAuthor : OAGpxExtensions
 
 @property (nonatomic, copy) NSString *name;
@@ -129,10 +126,6 @@ struct RouteDataBundle;
 @property (nonatomic) OALink *link;
 
 @end
-
-//var author: String? = null
-//var year: String? = null
-//var license: String? = null
 
 @interface OACopyright : OAGpxExtensions
 
@@ -306,12 +299,12 @@ struct RouteDataBundle;
 @property (nonatomic, readonly) NSString *name;
 @property (nonatomic) NSString *iconName;
 @property (nonatomic) NSString *backgroundType;
-@property (nonatomic) NSArray<OAWptPt *> *points;
+@property (nonatomic) NSArray<OASWptPt *> *points;
 @property (nonatomic) UIColor *color;
 
 - (instancetype)initWithName:(NSString *)name;
 - (instancetype)initWithName:(NSString *)name iconName:(NSString *)iconName backgroundType:(NSString *)backgroundType color:(UIColor *)color;
-- (instancetype)initWithWptPt:(OAWptPt *)point;
+- (instancetype)initWithWptPt:(OASWptPt *)point;
 - (NSUInteger)hash;
 - (BOOL)isEqual:(id)object;
 - (NSDictionary *)toStringBundle;

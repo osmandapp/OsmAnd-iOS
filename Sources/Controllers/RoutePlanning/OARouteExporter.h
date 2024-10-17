@@ -14,15 +14,19 @@
 
 #define OSMAND_ROUTER_V2 @"OsmAndRouterV2"
 
-@class OAWptPt, OAGPXMutableDocument, OAGPXDocument, OATrkSegment;
+@class OASWptPt, OASTrkSegment, OASGpxFile;
 struct RouteSegmentResult;
 
 @interface OARouteExporter : NSObject
 
-- (instancetype) initWithName:(NSString *)name route:(std::vector<std::shared_ptr<RouteSegmentResult>> &)route locations:(NSArray<CLLocation *> *)locations routePointIndexes:(std::vector<int>)routePointIndexes points:(NSArray<OAWptPt *> *)points;
-- (OAGPXDocument *) exportRoute;
-- (OATrkSegment *) generateRouteSegment;
+- (instancetype)initWithName:(NSString *)name
+                       route:(std::vector<std::shared_ptr<RouteSegmentResult>> &)route
+                   locations:(NSArray<CLLocation *> *)locations
+           routePointIndexes:(std::vector<int>)routePointIndexes
+                      points:(NSArray<OASWptPt *> *)points;
+- (OASGpxFile *)exportRoute;
+- (OASTrkSegment *)generateRouteSegment;
 
-+ (OAGPXMutableDocument *)exportRoute:(NSString *)name trkSegments:(NSArray<OATrkSegment *> *)trkSegments points:(NSArray<OAWptPt *> *)points;
++ (OASGpxFile *)exportRoute:(NSString *)name trkSegments:(NSArray<OASTrkSegment *> *)trkSegments points:(NSArray<OASWptPt *> *)points;
 
 @end

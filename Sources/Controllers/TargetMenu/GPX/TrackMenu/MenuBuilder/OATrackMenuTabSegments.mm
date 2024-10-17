@@ -122,11 +122,10 @@
 
     if (_routeLineChartHelper)
     {
-        // FIXME:
-//        [_routeLineChartHelper changeChartTypes:@[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)]
-//                                         chart:cell.chartView
-//                                      analysis:analysis
-//                                      modeCell:nil];
+        [_routeLineChartHelper changeChartTypes:@[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)]
+                                         chart:cell.chartView
+                                      analysis:analysis
+                                      modeCell:nil];
     }
 
     CLLocationCoordinate2D startChartPoint = self.trackMenuDelegate && [self.trackMenuDelegate openedFromMap]
@@ -138,12 +137,11 @@
                     @"segment_value": segment,
                     @"analysis_value": analysis,
                     @"mode_value": @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)],
-                    // FIXME:
-//                    @"points_value": _routeLineChartHelper
-//                            ? [_routeLineChartHelper generateTrackChartPoints:cell.chartView
-//                                                                   startPoint:startChartPoint
-//                                                                      segment:segment]
-//                            : [[OATrackChartPoints alloc] init]
+                    @"points_value": _routeLineChartHelper
+                            ? [_routeLineChartHelper generateTrackChartPoints:cell.chartView
+                                                                   startPoint:startChartPoint
+                                                                      segment:segment]
+                            : [[OATrackChartPoints alloc] init]
             }
     }];
     if (cell)
@@ -616,11 +614,10 @@
             NSArray<NSNumber *> *types = sectionData.values[@"mode_value"];
             OASGpxTrackAnalysis *analysis = sectionData.values[@"analysis_value"];
             BOOL isLeftButtonSelected = [tableData.values[@"is_left_button_selected"] boolValue];
-            // FIXME:
-//            if (isLeftButtonSelected)
-//                [self.trackMenuDelegate openAnalysis:analysis withTypes:types];
-//            else
-//                [self.trackMenuDelegate openEditSegmentScreen:sectionData.values[@"segment_value"] analysis:analysis];
+            if (isLeftButtonSelected)
+                [self.trackMenuDelegate openAnalysis:analysis withTypes:types];
+            else
+                [self.trackMenuDelegate openEditSegmentScreen:sectionData.values[@"segment_value"] analysis:analysis];
         }
     }
 }

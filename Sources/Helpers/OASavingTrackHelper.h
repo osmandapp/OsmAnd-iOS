@@ -11,9 +11,6 @@
 
 #define kTrackNoHeading -1.0
 
-@class OAGPXMutableDocument;
-@class OAGPX;
-@class OAWptPt;
 @class OASGpxFile, OASWptPt;
 
 @interface OASavingTrackHelper : NSObject
@@ -24,14 +21,9 @@
 @property (nonatomic, readonly) BOOL isRecording;
 @property (nonatomic, readonly) int currentTrackIndex;
 
-//@property (nonatomic, readonly) OAGPXMutableDocument *currentTrack;
-@property (nonatomic, readonly) OASGpxFile *currentTrackSharedLib;
+@property (nonatomic, readonly) OASGpxFile *currentTrack;
 
 + (OASavingTrackHelper *)sharedInstance;
-
-//- (OAGPX *)getCurrentGPX;
-
-- (OASGpxFile *)getCurrentGPXSharedLib;
 
 - (BOOL) hasData;
 - (BOOL) hasDataToSave;
@@ -40,26 +32,16 @@
 - (void) saveDataToGpx;
 - (void) startNewSegment;
 - (BOOL) saveCurrentTrack:(NSString *)fileName;
-
 - (BOOL) saveIfNeeded;
-
 - (void) updateLocation:(CLLocation *)location heading:(CLLocationDirection)heading;
-
-//- (void)addWpt:(OAWptPt *)wpt;
-//- (void)deleteWpt:(OAWptPt *)wpt;
-//- (void)deleteAllWpts;
-//- (void)saveWpt:(OAWptPt *)wpt;
-//- (void)updatePointCoordinates:(OAWptPt *)wpt newLocation:(CLLocationCoordinate2D)newLocation;
-
 - (BOOL) getIsRecording;
 
 - (void) runSyncBlock:(void (^)(void))block;
 
-
-- (void)addWptNew:(OASWptPt *)wpt;
-- (void)deleteWptNew:(OASWptPt *)wpt;
-- (void)deleteAllWptsNew;
-- (void)saveWptNew:(OASWptPt *)wpt;
-- (void)updatePointCoordinatesNew:(OASWptPt *)wpt newLocation:(CLLocationCoordinate2D)newLocation;
+- (void)addWpt:(OASWptPt *)wpt;
+- (void)deleteWpt:(OASWptPt *)wpt;
+- (void)deleteAllWpts;
+- (void)saveWpt:(OASWptPt *)wpt;
+- (void)updatePointCoordinates:(OASWptPt *)wpt newLocation:(CLLocationCoordinate2D)newLocation;
 
 @end

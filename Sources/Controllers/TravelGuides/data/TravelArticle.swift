@@ -100,8 +100,8 @@ class TravelArticle: NSObject {
     func getPointFilterString() -> String {
         "route_article_point"
     }
-    
-    func getAnalysis() -> OAGPXTrackAnalysis? {
+
+    func getAnalysis() -> GpxTrackAnalysis? {
         nil
     }
     

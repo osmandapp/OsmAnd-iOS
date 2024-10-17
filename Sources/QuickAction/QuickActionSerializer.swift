@@ -95,7 +95,7 @@ final class QuickActionSerializer: NSObject {
     static func adjustParamsForExport(_ params: [AnyHashable: Any], action: OAQuickAction) -> [String: String] {
         var listKey: String?
         var paramsCopy = params
-        if action is OASwitchableAction<AnyObject>, let switchableAction = action as? OASwitchableAction<AnyObject> {
+        if action is OASwitchableAction, let switchableAction = action as? OASwitchableAction {
             let className = String(describing: type(of: action))
             let key: String = switchableAction.getListKey()
             listKey = key

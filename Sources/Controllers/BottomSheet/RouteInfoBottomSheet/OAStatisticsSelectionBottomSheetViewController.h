@@ -10,7 +10,7 @@
 #import "OABottomSheetTwoButtonsViewController.h"
 #import "OAWaypointUIHelper.h"
 
-@class OAGPXTrackAnalysis;
+@class OASGpxTrackAnalysis;
 
 @class OAStatisticsSelectionBottomSheetViewController;
 
@@ -29,10 +29,10 @@
 @interface OAStatisticsSelectionBottomSheetViewController : OABottomSheetTwoButtonsViewController
 
 @property (nonatomic, readonly) NSArray<NSNumber *> *types;
-@property (nonatomic, readonly) OAGPXTrackAnalysis *analysis;
+@property (nonatomic, readonly) OASGpxTrackAnalysis *analysis;
 @property (nonatomic, weak) id<OAStatisticsSelectionDelegate> delegate;
 
-- (instancetype)initWithTypes:(NSArray<NSNumber *> *)types analysis:(OAGPXTrackAnalysis *)analysis;
+- (instancetype)initWithTypes:(NSArray<NSNumber *> *)types analysis:(OASGpxTrackAnalysis *)analysis;
 
 @end
 

@@ -8,8 +8,6 @@
 
 #import "OASaveGpxRouteAsyncTask.h"
 #import "OARoutePlanningHudViewController.h"
-#import "OAGPXDocument.h"
-#import "OAGPXMutableDocument.h"
 #import "OAMeasurementToolLayer.h"
 #import "OAMapLayers.h"
 #import "OAMapPanelViewController.h"
@@ -18,6 +16,9 @@
 #import "Localization.h"
 #import "OARootViewController.h"
 #import "OAGPXDatabase.h"
+#import "OsmAndSharedWrapper.h"
+#import "OsmAnd_Maps-Swift.h"
+#import "OAAppVersion.h"
 
 @implementation OASaveGpxRouteAsyncTask
 {
@@ -28,14 +29,19 @@
     
     NSString *_outFile;
     NSString *_backupFile;
-    OAGPXDocument *_gpxFile;
-    OAGPXDocument *_savedGpxFile;
+    OASGpxFile *_gpxFile;
+    OASGpxFile *_savedGpxFile;
     BOOL _simplified;
     BOOL _addToTrack;
     BOOL _showOnMap;
 }
 
-- (instancetype) initWithHudController:(OARoutePlanningHudViewController * __weak)hudRef outFile:(NSString *)outFile gpxFile:(OAGPXDocument *)gpx simplified:(BOOL)simplified addToTrack:(BOOL)addToTrack showOnMap:(BOOL)showOnMap
+- (instancetype) initWithHudController:(OARoutePlanningHudViewController * __weak)hudRef
+                               outFile:(NSString *)outFile
+                               gpxFile:(OASGpxFile *)gpx
+                            simplified:(BOOL)simplified
+                            addToTrack:(BOOL)addToTrack
+                             showOnMap:(BOOL)showOnMap
 {
     self = [super init];
     if (self) {
@@ -51,7 +57,7 @@
     return self;
 }
 
-- (void) execute:(void(^)(OAGPXDocument *, NSString *))onComplete
+- (void)execute:(void(^)(OASGpxFile *, NSString *))onComplete
 {
     [self onPreExecute];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -77,8 +83,12 @@
     {
         NSString *fileName = _outFile.lastPathComponent;
         NSString *trackName = [fileName stringByDeletingPathExtension];
-        OAGPXDocument *gpx = [self generateGpxFile:trackName gpx:[[OAGPXMutableDocument alloc] init]];
-        success = [gpx saveTo:_outFile];
+        
+        OASGpxFile *gpx = [self generateGpxFile:trackName gpx:[[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]]];
+        OASKFile *file = [[OASKFile alloc] initWithFilePath:_outFile];
+        OASKException *exception = [[OASGpxUtilities shared] writeGpxFileFile:file gpxFile:gpx];
+        
+        success = !exception;
         gpx.path = _outFile;
         _savedGpxFile = gpx;
         //            if (showOnMap) {
@@ -89,17 +99,19 @@
     {
 //        backupFile = FileUtils.backupFile(app, outFile);
         NSString *trackName = [_outFile.lastPathComponent stringByDeletingPathExtension];
-        OAGPXDocument *gpx = [self generateGpxFile:trackName gpx:(OAGPXMutableDocument *)_gpxFile];
+        OASGpxFile *gpx = [self generateGpxFile:trackName gpx:(OASGpxFile *)_gpxFile];
         if (gpx.metadata != nil)
         {
-            gpx.metadata = [[OAMetadata alloc] init];
+            gpx.metadata = [[OASMetadata alloc] init];
             gpx.metadata.extensions = _gpxFile.metadata.extensions;
         }
 //        if (!gpx.showCurrentTrack) {
 //            res = GPXUtilities.writeGpxFile(outFile, gpx);
 //        }
         _savedGpxFile = gpx;
-        success = [_savedGpxFile saveTo:_outFile];
+        OASKFile *file = [[OASKFile alloc] initWithFilePath:_outFile];
+        OASKException *exception = [[OASGpxUtilities shared] writeGpxFileFile:file gpxFile:_savedGpxFile];
+        success = !exception;
 //        if (showOnMap) {
 //            MeasurementToolFragment.showGpxOnMap(app, gpx, false);
 //        }
@@ -109,12 +121,26 @@
     return success;
 }
 
-- (void) saveGpxToDatabase
+- (void)saveGpxToDatabase
 {
     OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
     NSString *gpxFilePath = [OAUtilities getGpxShortPath:_outFile];
-    OAGPX *oldGpx = [gpxDb getGPXItem:gpxFilePath];
-    OAGPX *gpx = [gpxDb buildGpxItem:gpxFilePath title:_savedGpxFile.metadata.name desc:_savedGpxFile.metadata.desc bounds:_savedGpxFile.bounds document:_savedGpxFile fetchNearestCity:YES];
+    OASGpxDataItem *oldGpx = [gpxDb getNewGPXItem:_outFile];
+    
+    OASGpxDataItem *gpx = [gpxDb getNewGPXItem:gpxFilePath];
+    if (!gpx)
+    {
+        gpx = [gpxDb addGPXFileToDBIfNeeded:gpxFilePath];
+        OASGpxTrackAnalysis *analysis = [gpx getAnalysis];
+        
+        NSString *nearestCity;
+        if (analysis.locationStart)
+        {
+            OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:analysis.locationStart.position];
+            gpx.nearestCity = nearestCityPOI ? nearestCityPOI.nameLocalized : @"";
+        }
+    }
+
     if (oldGpx)
     {
         gpx.showArrows = oldGpx.showArrows;
@@ -131,55 +157,60 @@
         gpx.splitInterval = oldGpx.splitInterval;
         gpx.creationDate = oldGpx.creationDate;
     }
-    [gpxDb replaceGpxItem:gpx];
-    [gpxDb save];
+    [gpxDb updateDataItem:gpx];
 }
 
-- (OAGPXDocument *) generateGpxFile:(NSString *)trackName gpx:(OAGPXMutableDocument *)gpx
+- (OASGpxFile *) generateGpxFile:(NSString *)trackName gpx:(OASGpxFile *)gpx
 {
     if (_measurementLayer != nil)
     {
-        NSArray<OATrkSegment *> *before = _editingCtx.getBeforeTrkSegmentLine;
-        NSArray<OATrkSegment *> *after = _editingCtx.getAfterTrkSegmentLine;
+        NSArray<OASTrkSegment *> *before = _editingCtx.getBeforeTrkSegmentLine;
+        NSArray<OASTrkSegment *> *after = _editingCtx.getAfterTrkSegmentLine;
         if (_simplified)
         {
-            OATrack *track = [[OATrack alloc] init];
+            OASTrack *track = [[OASTrack alloc] init];
             track.name = trackName;
-            [gpx addTrack:track];
-            for (OATrkSegment *s in before)
+            [gpx.tracks addObject:track];
+
+            for (OASTrkSegment *s in before)
             {
-                OATrkSegment *segment = [[OATrkSegment alloc] init];
+                OASTrkSegment *segment = [[OASTrkSegment alloc] init];
                 segment.points = s.points;
-                [gpx addTrackSegment:segment track:track];
+                [track.segments addObject:segment];
+                //[gpx addTrackSegment:segment track:track];
             }
-            for (OATrkSegment *s in after)
+            for (OASTrkSegment *s in after)
             {
-                OATrkSegment *segment = [[OATrkSegment alloc] init];
+                OASTrkSegment *segment = [[OASTrkSegment alloc] init];
                 segment.points = s.points;
-                [gpx addTrackSegment:segment track:track];
+                [track.segments addObject:segment];
+               // [gpx addTrackSegment:segment track:track];
             }
         }
         else
         {
-            OAGPXMutableDocument *newGpx = [_editingCtx exportGpx:trackName];
+            OASGpxFile *newGpx = [_editingCtx exportGpx:trackName];
             if (newGpx)
             {
-                NSArray<OATrack *> *gpxTracks = gpx.tracks;
-                NSArray<OAWptPt *> *gpxPoints = gpx.points;
-                NSArray<OARoute *> *gpxRoutes = gpx.routes;
+                NSArray<OASTrack *> *gpxTracks = gpx.tracks;
+                NSArray<OASWptPt *> *gpxPoints = gpx.getPointsList;
+                NSArray<OASRoute *> *gpxRoutes = gpx.routes;
                 gpx = newGpx;
-                NSArray<NSArray<OAWptPt *> *> *routePoints = [_editingCtx getRoutePoints];
-                for (NSArray<OAWptPt *> *points in routePoints)
+                NSArray<NSArray<OASWptPt *> *> *routePoints = [_editingCtx getRoutePoints];
+                for (NSArray<OASWptPt *> *points in routePoints)
                 {
-                    [gpx addRoutePoints:points addRoute:YES];
+                    [gpx addRoutePointsPoints:points addRoute:YES];
                 }
-                if (gpxPoints.count > 0)
-                    [gpx addWpts:gpxPoints];
-        
+                if (gpxPoints.count > 0) {
+                    for (OASWptPt *point in gpxPoints) {
+                        [gpx addPointPoint:point];
+                    }
+                }
+                    
                 if (_addToTrack)
                 {
-                    [gpx addTracks:gpxTracks];
-                    [gpx addRoutes:gpxRoutes];
+                    [gpx.tracks addObjectsFromArray:gpxTracks];
+                    [gpx.routes addObjectsFromArray:gpxRoutes];
                 }
             }
         }
@@ -187,7 +218,7 @@
     return gpx;
 }
 
-- (void) onPostExecute:(void(^)(OAGPXDocument *, NSString *))onComplete
+- (void) onPostExecute:(void(^)(OASGpxFile *, NSString *))onComplete
 {
 //    if (!success)
 //    {

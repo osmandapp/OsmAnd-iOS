@@ -12,7 +12,7 @@ import DGCharts
 extension OAPlugin {
 
     @objc func getOrderedLineDataSet(chart: LineChartView,
-                                     analysis: OAGPXTrackAnalysis,
+                                     analysis: GpxTrackAnalysis,
                                      graphType: GPXDataSetType,
                                      axisType: GPXDataSetAxisType,
                                      calcWithoutGaps: Bool,

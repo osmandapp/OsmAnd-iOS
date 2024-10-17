@@ -13,7 +13,6 @@
 #import "OALog.h"
 #import "OADefaultFavorite.h"
 #import "OAGPXDocumentPrimitives.h"
-#import "OAGPXDocument.h"
 #import "OAMapViewController.h"
 #import "OACollapsableWaypointsView.h"
 #import "OAPOI.h"
@@ -49,13 +48,13 @@
         _app = [OsmAndApp instance];
         if (!wpt.docPath)
         {
-            // FIXME:
-          //  wpt.docPath = [[OASelectedGPXHelper instance] getSelectedGpx:wpt.point].path;
+            wpt.docPath = [[OASelectedGPXHelper instance] getSelectedGpx:wpt.point].path;
         }
         self.wpt = wpt;
-        // FIXME:
-//        OAGpxExtension *openingHoursExt = [self.wpt.point getExtensionByKey:[PRIVATE_PREFIX stringByAppendingString:OPENING_HOURS_TAG]];
-//        _openingHoursInfo = OpeningHoursParser::getInfo(openingHoursExt && openingHoursExt.value ? openingHoursExt.value.UTF8String : "");
+        NSDictionary<NSString *, NSString *> *extensions = [self.wpt.point getExtensionsToRead];
+        NSString *key = [PRIVATE_PREFIX stringByAppendingString:OPENING_HOURS_TAG];
+        NSString *openingHoursExt = extensions[key];
+        _openingHoursInfo = OpeningHoursParser::getInfo(openingHoursExt && openingHoursExt ? openingHoursExt.UTF8String : "");
         [self acquireOriginObject];
         self.topToolbarType = ETopToolbarTypeMiddleFixed;
         self.leftControlButton = [[OATargetMenuControlButton alloc] init];
@@ -235,9 +234,7 @@
 
 - (NSString *) getItemGroup
 {
-    return @"";
-    // FIXME:
-    //return (self.wpt.point.type ? self.wpt.point.type : @"");
+    return (self.wpt.point.category ? self.wpt.point.category : @"");
 }
 
 - (NSArray *) getItemGroups
@@ -261,11 +258,12 @@
 
 - (void) leftControlButtonPressed
 {
-    OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.wpt.docPath]];
+    OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:[OAUtilities getGpxShortPath:self.wpt.docPath]];
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     [mapPanel targetHideMenu:0 backButtonClicked:YES onComplete:^{
-        // FIXME:
-//        [mapPanel openTargetViewWithGPX:gpx selectedTab:EOATrackMenuHudOverviewTab selectedStatisticsTab:EOATrackMenuHudSegmentsStatisticsOverviewTab openedFromMap:YES];
+        auto trackItem = [[OASTrackItem alloc] initWithFile:gpx.file];
+        trackItem.dataItem = gpx;
+        [mapPanel openTargetViewWithGPX:trackItem selectedTab:EOATrackMenuHudOverviewTab selectedStatisticsTab:EOATrackMenuHudSegmentsStatisticsOverviewTab openedFromMap:YES];
     }];
 }
 

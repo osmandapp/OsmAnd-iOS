@@ -8,6 +8,8 @@
 
 #import "OALocationsHolder.h"
 #import "OAGPXDocumentPrimitives.h"
+#import "OsmAndSharedWrapper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #import <CoreLocation/CoreLocation.h>
 
@@ -24,7 +26,7 @@
 @implementation OALocationsHolder
 {
 	NSArray<CLLocation *> *_locationList;
-	NSArray<OAWptPt *> *_wptPtList;
+	NSArray<OASWptPt *> *_wptPtList;
 }
 
 - (instancetype) initWithLocations:(NSArray *)locations
@@ -56,7 +58,7 @@
 	if (locations.count > 0)
 	{
 		id locationObj = locations.firstObject;
-		if ([locationObj isKindOfClass:OAWptPt.class])
+		if ([locationObj isKindOfClass:OASWptPt.class])
 			return LOCATION_TYPE_WPTPT;
 		else if ([locationObj isKindOfClass:CLLocation.class])
 			return LOCATION_TYPE_LOCATION;
@@ -141,7 +143,7 @@
 	}
 	else if (_locationType == LOCATION_TYPE_WPTPT)
 	{
-		for (OAWptPt *wpt in _wptPtList)
+		for (OASWptPt *wpt in _wptPtList)
 		{
 			res.push_back({wpt.getLatitude, wpt.getLongitude});
 		}
@@ -149,7 +151,7 @@
 	return res;
 }
 
-- (NSArray<OAWptPt *> *)getWptPtList
+- (NSArray<OASWptPt *> *)getWptPtList
 {
 	if (_locationType == LOCATION_TYPE_WPTPT)
 		return _wptPtList;
@@ -170,7 +172,7 @@
 	return std::pair<double, double>([self getLatitude:index], [self getLongitude:index]);
 }
 
-- (OAWptPt *) getWptPt:(NSInteger)index
+- (OASWptPt *) getWptPt:(NSInteger)index
 {
 	if (_locationType == LOCATION_TYPE_WPTPT)
 	{
@@ -178,7 +180,7 @@
 	}
 	else
 	{
-		OAWptPt *wptPt = [[OAWptPt alloc] init];
+        OASWptPt *wptPt = [[OASWptPt alloc] init];
 		wptPt.position = CLLocationCoordinate2DMake([self getLatitude:index], [self getLongitude:index]);
 		return wptPt;
 	}

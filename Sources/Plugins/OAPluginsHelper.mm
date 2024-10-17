@@ -494,7 +494,7 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     }
 }
 
-+ (void)analysePoint:(OAGPXTrackAnalysis *)analysis point:(NSObject *)point attribute:(OAPointAttributes *)attribute
++ (void)analysePoint:(OASGpxTrackAnalysis *)analysis point:(NSObject *)point attribute:(OASPointAttributes *)attribute
 {
     for (OAPlugin *plugin in [self getAvailablePlugins])
     {
@@ -502,7 +502,7 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     }
 }
 
-+ (void)getAvailableGPXDataSetTypes:(OAGPXTrackAnalysis *)analysis
++ (void)getAvailableGPXDataSetTypes:(OASGpxTrackAnalysis *)analysis
                      availableTypes:(NSMutableArray<NSArray<NSNumber *> *> *)availableTypes
 {
     for (OAPlugin *plugin : [self getAvailablePlugins])

@@ -23,7 +23,7 @@
 #import "OsmAndApp.h"
 #import "Localization.h"
 #import "OsmAndSharedWrapper.h"
-
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -309,13 +309,13 @@
             NSMutableString *distanceStr = [NSMutableString string];
             if (item.distance)
                 [distanceStr appendString:item.distance];
-// FIXME:
-//            if (item.point.type.length > 0)
-//            {
-//                if (distanceStr.length > 0)
-//                    [distanceStr appendString:@", "];
-//                [distanceStr appendString:item.point.type];
-//            }
+
+            if (item.point.category.length > 0)
+            {
+                if (distanceStr.length > 0)
+                    [distanceStr appendString:@", "];
+                [distanceStr appendString:item.point.category];
+            }
             
             [cell.titleView setText:item.point.name];
             [cell.distanceView setText:distanceStr];

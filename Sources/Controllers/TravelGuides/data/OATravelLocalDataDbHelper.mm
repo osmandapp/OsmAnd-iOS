@@ -8,9 +8,9 @@
 
 #import "OATravelLocalDataDbHelper.h"
 #import "OsmAndApp.h"
-#import "OAGPXDocument.h"
 #import "OsmAnd_Maps-Swift.h"
 #import <sqlite3.h>
+#import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ArchiveWriter.h>
@@ -609,11 +609,14 @@
                             
                             if (!stringContent.isEmpty())
                             {
+                                // OASGpxFile
                                 OAGPXDocumentAdapter *adapter = [[OAGPXDocumentAdapter alloc] init];
-                                OAGPXDocument *document = [[OAGPXDocument alloc] init];
-                                QXmlStreamReader xmlReader(stringContent);
-                                [document fetch:OsmAnd::GpxDocument::loadFrom(xmlReader)];
-                                adapter.object = document;
+
+                                // FIXME: OASGpxFile read from string 
+//                                OAGPXDocument *document = [[OAGPXDocument alloc] init];
+//                                QXmlStreamReader xmlReader(stringContent);
+//                                [document fetch:OsmAnd::GpxDocument::loadFrom(xmlReader)];
+//                                adapter.object = document;
                                 dbArticle.gpxFile = adapter;
                             }
                         }

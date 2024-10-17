@@ -11,7 +11,6 @@
 #import "OAGPXDatabase.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
-#import "OAGPXDocument.h"
 #import "OAKml2Gpx.h"
 #import "OAIndexConstants.h"
 #import "Localization.h"
@@ -43,7 +42,7 @@
     NSURL *_importUrl;
     NSString *_importGpxPath;
     NSString *_importGpxRelativePath;
-    OAGPXDocument *_doc;
+    OASGpxFile *_doc;
     NSString *_newGpxName;
 }
 
@@ -183,7 +182,9 @@ static UIViewController *parentController;
                 if (openGpxView)
                 {
                     [self doPush];
-                    [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpx];
+                    auto trackItem = [[OASTrackItem alloc] initWithFile:gpx.file];
+                    trackItem.dataItem = gpx;
+                    [[OARootViewController instance].mapPanel openTargetViewWithGPX:trackItem];
                 }
             });
         };
@@ -197,7 +198,9 @@ static UIViewController *parentController;
                 if (openGpxView)
                 {
                     [self doPush];
-                    [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpx];
+                    auto trackItem = [[OASTrackItem alloc] initWithFile:gpx.file];
+                    trackItem.dataItem = gpx;
+                    [[OARootViewController instance].mapPanel openTargetViewWithGPX:trackItem];
                 }
             });
         };
@@ -298,7 +301,8 @@ static UIViewController *parentController;
         return;
     
     // Try to import gpx
-    _doc = [[OAGPXDocument alloc] initWithGpxFile:_importUrl.path];
+    OASKFile *file = [[OASKFile alloc] initWithFilePath:_importUrl.path];
+    _doc = [OASGpxUtilities.shared loadGpxFileFile:file];
     if (_doc)
     {
         // _2024-07-30_.gpx
@@ -340,8 +344,9 @@ static UIViewController *parentController;
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self doPush];
-            // FIXME:
-           // [[OARootViewController instance].mapPanel openTargetViewWithGPX:item];
+            auto trackItem = [[OASTrackItem alloc] initWithFile:file];
+            trackItem.dataItem = item;
+            [[OARootViewController instance].mapPanel openTargetViewWithGPX:trackItem];
         });
     }
 }
@@ -386,21 +391,12 @@ static UIViewController *parentController;
 
     if (_newGpxName)
     {
-      //  NSString *storingPathInFolder = [_importGpxRelativePath stringByAppendingPathComponent:_newGpxName];
-        // FIXME: rename
         item = [[OAGPXDatabase sharedDb] addGPXFileToDBIfNeeded:[_importGpxPath stringByAppendingPathComponent:[self getCorrectedFilename:[_importUrl.path lastPathComponent]]]];
     }
     else
     {
-//        NSString *name = [self getCorrectedFilename:[_importUrl.path lastPathComponent]];
-//        NSString *storingPathInFolder = [_importGpxRelativePath stringByAppendingPathComponent:name];
-        // _doc.metadata.name - 2023-10-22_11-34_Sun
-        // _doc.metadata.desc = <object returned empty description>
-       // storingPathInFolder = 123/_2024-07-30_.gpx
-      //  item = [[OAGPXDatabase sharedDb] addGpxItem:storingPathInFolder title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds document:_doc];
         [[OAGPXDatabase sharedDb] addGPXFileToDBIfNeeded:[_importGpxPath stringByAppendingPathComponent:[self getCorrectedFilename:[_importUrl.path lastPathComponent]]]];
     }
-  //  [[OAGPXDatabase sharedDb] save];
     if (item.color != 0)
         [[OAGPXAppearanceCollection sharedInstance] getColorItemWithValue:item.color];
 

@@ -232,11 +232,11 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
 
         OAAppSettings.sharedManager().showGpx([filename], update: true)
         if let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
-            // FIXME:
-//            OARootViewController.instance().mapPanel.openTargetViewWithGPX(fromTracksList: gpx,
-//                                                                           navControllerHistory: newCurrentHistory,
-//                                                                           fromTrackMenu: false,
-//                                                                           selectedTab: .pointsTab)
+            let trackItem = TrackItem(file: gpx.file)
+            OARootViewController.instance().mapPanel.openTargetViewWithGPX(fromTracksList: trackItem,
+                                                                           navControllerHistory: newCurrentHistory,
+                                                                           fromTrackMenu: false,
+                                                                           selectedTab: .pointsTab)
         }
     }
     

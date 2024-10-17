@@ -17,8 +17,6 @@
 #import "OsmAndApp.h"
 #import "OAGpxWptItem.h"
 #import "OAGPXDocumentPrimitives.h"
-#import "OAGPXDocument.h"
-#import "OAGPXDatabase.h"
 #import "OAValueTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAInputTableViewCell.h"
@@ -111,24 +109,20 @@ static QuickActionType *TYPE;
     p.name = title;
     p.lat = lat;
     p.lon = lon;
-    // FIXME:
-   // p.type = groupName;
+    p.category = groupName;
     p.time = (long)[[NSDate date] timeIntervalSince1970];
-    // FIXME:
-   // p.wpt = std::make_shared<OsmAnd::GpxDocument::WptPt>();
     wpt.point = p;
     wpt.color = color;
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     OAMapViewController *mapVC = mapPanel.mapViewController;
     [mapVC addNewWpt:wpt.point gpxFileName:nil];
     wpt.groups = mapVC.foundWptGroups;
-    // FIXME:
-//    if (wpt.point.wpt != nullptr)
-//    {
-//        [OAGPXDocument fillWpt:wpt.point.wpt usingWpt:wpt.point];
-//        mapVC.foundWpt = p;
-//        [mapVC saveFoundWpt];
-//    }
+    
+    if (wpt.point)
+    {
+        mapVC.foundWpt = p;
+        [mapVC saveFoundWpt];
+    }
 }
 
 - (BOOL) isItemExists:(NSString *)name

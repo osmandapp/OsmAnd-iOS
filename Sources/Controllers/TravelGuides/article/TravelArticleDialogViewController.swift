@@ -9,6 +9,7 @@
 import UIKit
 import WebKit
 import JavaScriptCore
+import OsmAndShared
 
 protocol TravelArticleDialogProtocol : AnyObject {
     func getWebView() -> WKWebView
@@ -103,7 +104,7 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
     var isDownloadNow = false
     
     var gpxFile: OAGPXDocumentAdapter?
-    var gpx: OAGPX?
+    var gpx: GpxDataItem?
     var isGpxReading = false
     
     var bottomView: UIView?
@@ -335,11 +336,12 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
         OAAppSettings.sharedManager().showGpx([file], update: true)
         if let gpx, let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
             let fromTrackMenu = OARootViewController.instance().mapPanel.scrollableHudViewController != nil
-            // FIXME:
-//            OARootViewController.instance().mapPanel.openTargetViewWithGPX(fromTracksList: gpx,
-//                                                                           navControllerHistory: newCurrentHistory,
-//                                                                           fromTrackMenu: fromTrackMenu,
-//                                                                           selectedTab: .pointsTab)
+            let trackItem = TrackItem(file: gpx.file)
+            trackItem.dataItem = gpx
+            OARootViewController.instance().mapPanel.openTargetViewWithGPX(fromTracksList: trackItem,
+                                                                           navControllerHistory: newCurrentHistory,
+                                                                           fromTrackMenu: fromTrackMenu,
+                                                                           selectedTab: .pointsTab)
         }
     }
     
@@ -351,7 +353,7 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
         
         let articleName = article.title ?? localizedString("shared_string_article")
         let message = isSaved ? localizedString("article_removed_from_bookmark") : localizedString("article_added_to_bookmark")
-        OAUtilities.showToast(nil, details: articleName + message , duration: 4, in: self.view)
+        OAUtilities.showToast(nil, details: articleName + message, duration: 4, in: self.view)
     }
     
     func shareArticle() {
@@ -507,39 +509,39 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
         }
     }
     
-    override func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        let newUrl = OATravelGuidesHelper.normalizeFileUrl(navigationAction.request.url?.absoluteString) ?? ""
-        let isWebPage = newUrl.hasPrefix(PAGE_PREFIX_HTTP) || newUrl.hasPrefix(PAGE_PREFIX_HTTPS)
-        let isPhoneNumber = newUrl.hasPrefix("tel:") || newUrl.rangeOfCharacter(from: CharacterSet(charactersIn: "-+()% 0123456789").inverted) == nil
-        let isEmail = newUrl.isValidEmail()
-        
-        if newUrl.hasSuffix("showNavigation") {
-            // Clicked on Breadcrumbs navigation pannel
-            showNavigation()
-            decisionHandler(.cancel)
-        } else if isPhoneNumber || isEmail {
-            decisionHandler(.allow)
-        } else if newUrl == blankUrl {
-            // On open new TravelGuides page via code
-            decisionHandler(.allow)
-        } else if newUrl.contains(WIKIVOYAGE_DOMAIN) && isWebPage {
-            TravelGuidesUtils.processWikivoyageDomain(url: newUrl, delegate: self)
-            decisionHandler(.cancel)
-        } else if newUrl.contains(WIKI_DOMAIN) && isWebPage && article != nil {
-            self.webView.addSpinner()
-            let defaultCoordinates = CLLocation(latitude: article!.lat, longitude: article!.lon)
-            TravelGuidesUtils.processWikipediaDomain(defaultLocation: defaultCoordinates, url: newUrl, delegate: self)
-            decisionHandler(.cancel)
-        } else if isWebPage {
-            OAWikiArticleHelper.warnAboutExternalLoad(newUrl, sourceView: self.webView)
-            decisionHandler(.cancel)
-        } else if newUrl.contains(PREFIX_GEO) {
-            handleGeoUrl(newUrl)
-            decisionHandler(.cancel)
-        } else {
-            decisionHandler(.allow)
-        }
-    }
+//    override func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping @MainActor @Sendable (WKNavigationActionPolicy) -> Void) {
+//        let newUrl = OATravelGuidesHelper.normalizeFileUrl(navigationAction.request.url?.absoluteString) ?? ""
+//        let isWebPage = newUrl.hasPrefix(PAGE_PREFIX_HTTP) || newUrl.hasPrefix(PAGE_PREFIX_HTTPS)
+//        let isPhoneNumber = newUrl.hasPrefix("tel:") || newUrl.rangeOfCharacter(from: CharacterSet(charactersIn: "-+()% 0123456789").inverted) == nil
+//        let isEmail = newUrl.isValidEmail()
+//        
+//        if newUrl.hasSuffix("showNavigation") {
+//            // Clicked on Breadcrumbs navigation pannel
+//            showNavigation()
+//            decisionHandler(.cancel)
+//        } else if isPhoneNumber || isEmail {
+//            decisionHandler(.allow)
+//        } else if newUrl == blankUrl {
+//            // On open new TravelGuides page via code
+//            decisionHandler(.allow)
+//        } else if newUrl.contains(WIKIVOYAGE_DOMAIN) && isWebPage {
+//            TravelGuidesUtils.processWikivoyageDomain(url: newUrl, delegate: self)
+//            decisionHandler(.cancel)
+//        } else if newUrl.contains(WIKI_DOMAIN) && isWebPage && article != nil {
+//            self.webView.addSpinner()
+//            let defaultCoordinates = CLLocation(latitude: article!.lat, longitude: article!.lon)
+//            TravelGuidesUtils.processWikipediaDomain(defaultLocation: defaultCoordinates, url: newUrl, delegate: self)
+//            decisionHandler(.cancel)
+//        } else if isWebPage {
+//            OAWikiArticleHelper.warnAboutExternalLoad(newUrl, sourceView: self.webView)
+//            decisionHandler(.cancel)
+//        } else if newUrl.contains(PREFIX_GEO) {
+//            handleGeoUrl(newUrl)
+//            decisionHandler(.cancel)
+//        } else {
+//            decisionHandler(.allow)
+//        }
+//    }
     
     override func getImagesDownloadMode() -> OADownloadMode! {
         OsmAndApp.swiftInstance().data.travelGuidesImagesDownloadMode

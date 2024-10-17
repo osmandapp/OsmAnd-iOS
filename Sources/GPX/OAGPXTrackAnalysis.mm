@@ -479,11 +479,11 @@
                     }
                 }
             }
-            float attrDistance = (j > 0) ? distance : 0;
-            OAPointAttributes *attribute = [[OAPointAttributes alloc] initWithDistance:attrDistance timeDiff:timeDiffSec firstPoint:firstPoint lastPoint:lastPoint];
-            attribute.speed = speed;
-            attribute.elevation = elevation;
-            [self addWptAttribute:point attribute:attribute];
+//            float attrDistance = (j > 0) ? distance : 0;
+//            OAPointAttributes *attribute = [[OAPointAttributes alloc] initWithDistance:attrDistance timeDiff:timeDiffSec firstPoint:firstPoint lastPoint:lastPoint];
+//            attribute.speed = speed;
+//            attribute.elevation = elevation;
+//            [self addWptAttribute:point attribute:attribute];
         }
         OAElevationApproximator *approximator = [[OAElevationApproximator alloc] init];
         NSArray<OAApproxResult *> *approxData = [approximator approximate:s];
@@ -539,11 +539,11 @@
 
 - (void)addWptAttribute:(OAWptPt *)point attribute:(OAPointAttributes *)attribute
 {
-    if (![self hasData:OAPointAttributes.pointSpeed] && attribute.speed > 0 && _totalDistance > 0)
-        [self setTag:OAPointAttributes.pointSpeed hasData:YES];
-    if (![self hasData:OAPointAttributes.pointElevation] && !isnan(attribute.elevation) && _totalDistance > 0)
-        [self setTag:OAPointAttributes.pointElevation hasData:YES];
-    [OAPluginsHelper analysePoint:self point:point attribute:attribute];
+//    if (![self hasData:OAPointAttributes.pointSpeed] && attribute.speed > 0 && _totalDistance > 0)
+//        [self setTag:OAPointAttributes.pointSpeed hasData:YES];
+//    if (![self hasData:OAPointAttributes.pointElevation] && !isnan(attribute.elevation) && _totalDistance > 0)
+//        [self setTag:OAPointAttributes.pointElevation hasData:YES];
+   // [OAPluginsHelper analysePoint:self point:point attribute:attribute];
     [_pointAttributes addObject:attribute];
 }
 

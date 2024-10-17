@@ -10,7 +10,9 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OAUtilities.h"
 #import "OAFavoritesHelper.h"
+#import "OAPOI.h"
 #import "OsmAndSharedWrapper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OAGpxWptItem
 
@@ -38,14 +40,12 @@
 
 - (OAPOI *)getAmenity
 {
-    // FIXME:
-    return nil;
-    //return [_point getAmenity];
+    return [_point getAmenity];
 }
+
 - (void) setAmenity:(OAPOI *)amenity
 {
-    // FIXME:
-    // [_point setAmenity:amenity];
+     [_point setAmenity:amenity];
 }
 
 - (NSString *) getAmenityOriginName

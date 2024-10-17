@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import OsmAndShared
 
 @objc(OATravelGpx)
 @objcMembers
@@ -31,8 +32,8 @@ final class TravelGpx : TravelArticle {
     var minElevation: Double = Double.nan
     var avgElevation: Double = 0
     
-    override func getAnalysis() -> OAGPXTrackAnalysis? {
-        var analysis = OAGPXTrackAnalysis()
+    override func getAnalysis() -> GpxTrackAnalysis? {
+        var analysis = GpxTrackAnalysis()
         if gpxFile != nil && gpxFile!.hasAltitude() {
             analysis = gpxFile!.getAnalysis(0)
         } else {
@@ -44,7 +45,7 @@ final class TravelGpx : TravelArticle {
             analysis.totalDistanceWithoutGaps = totalDistance
             analysis.avgElevation = avgElevation
             if maxElevation != Double.nan && minElevation != Double.nan {
-                analysis.hasElevationData = true
+                analysis.setHasData(tag: GpxUtilities.shared.POINT_ELEVATION, hasData: true)
             }
         }
         return analysis

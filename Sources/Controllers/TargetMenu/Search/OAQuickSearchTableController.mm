@@ -33,7 +33,6 @@
 #import "OAStreet.h"
 #import "OACity.h"
 #import "OAStreetIntersection.h"
-#import "OAGPXDocument.h"
 #import "OAGpxWptItem.h"
 #import "Localization.h"
 #import "OADistanceDirection.h"
@@ -390,21 +389,20 @@
             {
                 if (searchResult.wpt)
                 {
-                    // FIXME:
-//                    OAWptPt *wpt = [OAGPXDocument fetchWpt:std::const_pointer_cast<OsmAnd::GpxDocument::WptPt>(searchResult.wpt)];
-//                    OAGpxWptItem *wptItem = [[OAGpxWptItem alloc] init];
-//                    wptItem.point = wpt;
-//
-//                    if (searchType == OAQuickSearchType::REGULAR)
-//                    {
-//                        [[OARootViewController instance].mapPanel openTargetViewWithWpt:wptItem pushed:NO showFullMenu:NO saveState:NO];
-//                    }
-//                    else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION || searchType == OAQuickSearchType::INTERMEDIATE || searchType == OAQuickSearchType::HOME || searchType == OAQuickSearchType::WORK)
-//                    {
-//                        latitude = wpt.position.latitude;
-//                        longitude = wpt.position.longitude;
-//                        pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_WPT typeName:wpt.type name:wpt.name];
-//                    }
+                    OASWptPt *wpt = searchResult.wpt;
+                    OAGpxWptItem *wptItem = [[OAGpxWptItem alloc] init];
+                    wptItem.point = wpt;
+
+                    if (searchType == OAQuickSearchType::REGULAR)
+                    {
+                        [[OARootViewController instance].mapPanel openTargetViewWithWpt:wptItem pushed:NO showFullMenu:NO saveState:NO];
+                    }
+                    else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION || searchType == OAQuickSearchType::INTERMEDIATE || searchType == OAQuickSearchType::HOME || searchType == OAQuickSearchType::WORK)
+                    {
+                        latitude = wpt.position.latitude;
+                        longitude = wpt.position.longitude;
+                        pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_WPT typeName:wpt.category name:wpt.name];
+                    }
                 }
                 break;
             }

@@ -9,10 +9,11 @@
 #import "OAMarkersSettingsItem.h"
 #import "OADestination.h"
 #import "OADestinationsHelper.h"
-#import "OAGPXDocument.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
 #import "Localization.h"
+#import "OsmAndSharedWrapper.h"
+
 
 #define APPROXIMATE_MARKER_SIZE_BYTES 240
 
@@ -158,7 +159,7 @@
 
 - (OASettingsItemWriter *)getWriter
 {
-    OAGPXDocument *gpxFile = [_destinationsHelper generateGpx:self.items completeBackup:YES];
+    OASGpxFile *gpxFile = [_destinationsHelper generateGpx:self.items completeBackup:YES];
     return [self getGpxWriter:gpxFile];
 }
 
@@ -194,24 +195,26 @@
 
         return NO;
     }
+    
+    OASKFile *file = [[OASKFile alloc] initWithFilePath:filePath];
+    OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
 
-   OAGPXDocument *gpxFile = [[OAGPXDocument alloc] initWithGpxFile:filePath];
     if (gpxFile)
     {
-        for (OAWptPt *wpt in gpxFile.points)
+        for (OASWptPt *wpt in gpxFile.getPointsList)
         {
             OADestination *dest = [[OADestination alloc] initWithDesc:wpt.name latitude:wpt.getLatitude longitude:wpt.getLongitude];
-            int color = [wpt getColor:0];
+            int color = [wpt getColor];
             dest.color = color != 0 ? UIColorFromRGBA(color) : UIColorFromRGB(marker_pin_color_blue);
             dest.markerResourceName = [self getResourceName:[dest.color.toHexString upperCase]];
-
-            for (OAGpxExtension *e in wpt.extensions)
+            NSDictionary<NSString *, NSString *> *extensions = [wpt getExtensionsToRead];
+            for (NSString *key in extensions.allKeys)
             {
-                if ([e.name isEqualToString:@"creation_date"])
+                if ([key isEqualToString:@"creation_date"])
                 {
                     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
                     [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z"];
-                    dest.creationDate = [dateFormatter dateFromString:e.value];
+                    dest.creationDate = [dateFormatter dateFromString:extensions[key]];
                 }
             }
             [self.item.items addObject:dest];

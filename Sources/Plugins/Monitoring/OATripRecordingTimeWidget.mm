@@ -14,8 +14,6 @@
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OAGPXDatabase.h"
-#import "OAGPXMutableDocument.h"
-#import "OAGPXTrackAnalysis.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OATrackMenuHudViewController.h"
@@ -37,15 +35,12 @@
         self.updateInfoFunction = ^BOOL {
 
             [weakSelf setIcon:@"widget_track_recording_duration"];
-           // FIXME:
-            OAGPXMutableDocument *currentTrack = nil;//[[OASavingTrackHelper sharedInstance] currentTrack];
-            // FIXME:
-            OAGPX *gpxFile = nil;//[[OASavingTrackHelper sharedInstance] getCurrentGPX];
-
-//            BOOL withoutGaps = !gpxFile.joinSegments &&
+            OASGpxFile *currentTrack = [OASavingTrackHelper sharedInstance].currentTrack;
+// FIXME: miss joinSegments
+//            BOOL withoutGaps = !currentTrack.joinSegments &&
 //            ( (!currentTrack.tracks || currentTrack.tracks.count == 0) || currentTrack.tracks[0].generalTrack);
 //
-//            OAGPXTrackAnalysis *analysis = [currentTrack getAnalysis:0];
+//            OASGpxTrackAnalysis *analysis = [currentTrack getAnalysisFileTimestamp:0];
 //            long timeSpan =  withoutGaps ? analysis.timeSpanWithoutGaps : analysis.timeSpan;
 //            
 //            if (cachedTimeSpan != timeSpan)
@@ -60,9 +55,9 @@
         self.onClickFunction = ^(id sender) {
             if (cachedTimeSpan > 0)
             {
-            //    OAGPX *gpxFile = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
-                // FIXME:
-//                [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpxFile selectedTab:EOATrackMenuHudSegmentsTab selectedStatisticsTab:EOATrackMenuHudSegmentsStatisticsOverviewTab openedFromMap:YES];
+                OASGpxFile *gpxFile = [OASavingTrackHelper sharedInstance].currentTrack;
+                OASTrackItem *trackItem = [[OASTrackItem alloc] initWithGpxFile:gpxFile];
+                [[OARootViewController instance].mapPanel openTargetViewWithGPX:trackItem selectedTab:EOATrackMenuHudSegmentsTab selectedStatisticsTab:EOATrackMenuHudSegmentsStatisticsOverviewTab openedFromMap:YES];
             }
         };
         

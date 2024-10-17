@@ -116,7 +116,7 @@
 
 - (void)addPointsGroup:(OAPointsGroup *)group
 {
-    [self.points addObjectsFromArray:group.points];
+   // [self.points addObjectsFromArray:group.points];
     self.pointsGroups[group.name] = group;
     document->pointsGroups.insert(QString::fromNSString(group.name), group.pg);
     document->points.append(group.pg->points);
@@ -130,7 +130,7 @@
     {
         OAPointsGroup *pointsGroup = [self getOrCreateGroup:point];
         pointsGroup.pg->points.append(point.wpt);
-        pointsGroup.points = [pointsGroup.points arrayByAddingObject:point];
+       // pointsGroup.points = [pointsGroup.points arrayByAddingObject:point];
     }
 }
 
@@ -148,8 +148,8 @@
     }
     else
     {
-        pointsGroup = [[OAPointsGroup alloc] initWithWptPt:point];
-        self.pointsGroups[pointsGroup.name] = pointsGroup;
+//        pointsGroup = [[OAPointsGroup alloc] initWithWptPt:point];
+//        self.pointsGroups[pointsGroup.name] = pointsGroup;
     }
     if (pointsGroup.pg == nullptr)
     {

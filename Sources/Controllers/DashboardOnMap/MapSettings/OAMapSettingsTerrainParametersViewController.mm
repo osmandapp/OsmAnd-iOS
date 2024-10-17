@@ -1069,9 +1069,10 @@ static const NSInteger kElevationMaxMeters = 2000;
     }
     else if ([item.key isEqualToString:@"allColors"])
     {
-        OAColorCollectionViewController *colorCollectionViewController = [[OAColorCollectionViewController alloc] initWithCollectionType:EOAColorCollectionTypePaletteItems
-                                                                                                                                   items:_gradientColorsCollection
-                                                                                                                            selectedItem:_currentPaletteColorItem];
+        OAColorCollectionViewController *colorCollectionViewController =
+            [[OAColorCollectionViewController alloc] initWithCollectionType:EOAColorCollectionTypeTerrainPaletteItems
+                                                                      items:_gradientColorsCollection
+                                                               selectedItem:_currentPaletteColorItem];
         colorCollectionViewController.delegate = self;
         [self.navigationController pushViewController:colorCollectionViewController animated:YES];
     }

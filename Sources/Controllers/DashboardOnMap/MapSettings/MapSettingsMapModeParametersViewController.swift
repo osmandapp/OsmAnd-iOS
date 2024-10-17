@@ -174,6 +174,11 @@ final class MapSettingsMapModeParametersViewController: OABaseScrollableHudViewC
             "icons": getImagesFromModes(false),
             "selectedIcons": getImagesFromModes(true)
         ])
+
+        section.addRow(from: [
+            kCellKeyKey: "desc",
+            kCellTypeKey: OASimpleTableViewCell.reuseIdentifier
+        ])
     }
 
     private func getImagesFromModes(_ selected: Bool) -> [UIImage] {
@@ -221,10 +226,6 @@ extension MapSettingsMapModeParametersViewController {
         tableData.sectionData(for: UInt(section)).headerText
     }
 
-    func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        currentMode?.desc
-    }
-
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let item = tableData.item(for: indexPath)
 
@@ -256,13 +257,16 @@ extension MapSettingsMapModeParametersViewController {
             }
             return cell
         } else if item.cellType == OASimpleTableViewCell.getIdentifier() {
+            let isName = item.key == "name"
             let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier) as! OASimpleTableViewCell
             cell.selectionStyle = .none
             cell.setCustomLeftSeparatorInset(true)
             cell.separatorInset = UIEdgeInsets(top: 0, left: CGFLOAT_MAX, bottom: 0, right: 0)
             cell.descriptionVisibility(false)
             cell.leftIconVisibility(false)
-            cell.titleLabel.text = currentMode?.title
+            cell.titleLabel.font = UIFont.preferredFont(forTextStyle: isName ? .body : .subheadline)
+            cell.titleLabel.textColor = isName ? .textColorPrimary : UIColor(rgb: color_extra_text_gray)
+            cell.titleLabel.text = isName ? currentMode?.title : currentMode?.desc
             cell.titleLabel.accessibilityLabel = cell.titleLabel.text
             return cell
         }

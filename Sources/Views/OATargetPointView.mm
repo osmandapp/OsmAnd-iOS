@@ -1682,9 +1682,15 @@ static const NSInteger _buttonsCount = 4;
             if (!icon)
             {
                 if ([_targetPoint.targetObj isKindOfClass:OAPOI.class])
+                {
                     icon = [((OAPOI *)_targetPoint.targetObj) icon];
+                    if (!icon)
+                        icon = _targetPoint.icon;
+                }
                 else
+                {
                     icon = _targetPoint.icon;
+                }
             }
             _imageView.image = icon;
             _imageView.hidden = NO;

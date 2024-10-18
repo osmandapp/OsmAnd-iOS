@@ -339,6 +339,8 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 - (instancetype) makeShared;
 - (instancetype) storeLastModifiedTime;
 
+- (NSObject *) getPrefValue;
+- (NSObject *) getPrefValue:(OAApplicationMode *)mode;
 - (NSObject *) getProfileDefaultValue:(OAApplicationMode *)mode;
 - (void) resetModeToDefault:(OAApplicationMode *)mode;
 - (void) resetToDefault;

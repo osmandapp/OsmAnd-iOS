@@ -15,7 +15,9 @@ final class BackupUiUtils: NSObject {
     private static let minDurationForDateFormat = 48 * 60 * 60
     private static let minDurationForYesterdayDateFormat = 24 * 60 * 60
 
-    static func getItemName(_ item: OASettingsItem) -> String {
+    static func getItemName(_ item: OASettingsItem?) -> String {
+        guard let item else { return localizedString("res_unknown") }
+
         var name: String
         if let profileItem = item as? OAProfileSettingsItem {
             name = profileItem.appMode.toHumanString()
@@ -35,7 +37,9 @@ final class BackupUiUtils: NSObject {
         return !name.isEmpty ? name : localizedString("res_unknown")
     }
 
-    static func getIcon(_ item: OASettingsItem) -> UIImage? {
+    static func getIcon(_ item: OASettingsItem?) -> UIImage? {
+        guard let item else { return nil }
+
         if let profileItem = item as? OAProfileSettingsItem {
             return profileItem.appMode.getIcon()
         }

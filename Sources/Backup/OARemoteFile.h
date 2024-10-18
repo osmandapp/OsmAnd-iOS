@@ -26,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, assign) long clienttimems;
 @property (nonatomic, readonly, assign) NSInteger zipSize;
 
-@property (nonatomic) OASettingsItem *item;
+@property (nonatomic, nullable) OASettingsItem *item;
 
 - (instancetype) initWithJson:(NSDictionary *)json;
 

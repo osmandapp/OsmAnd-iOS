@@ -56,13 +56,17 @@ final class ColorPaletteHelper: NSObject {
         guard let path = notification.object as? String, path == getColorPaletteDir() else { return }
 
         do {
+            let hashHelper = LocalFileHashHelper.shared
             var colorPaletteFilesUpdated = [String: String]()
-            let files = try FileManager.default.contentsOfDirectory(atPath: path).filter { !$0.hasPrefix(TerrainMode.hillshadeScndPrefix)
-            }
+            let files = try FileManager.default.contentsOfDirectory(atPath: path).filter { !$0.hasPrefix(TerrainMode.hillshadeScndPrefix) }
             let deletedPalettes = cachedColorPalette.getAllKeys().filter { !files.contains($0) }
             for deletedPalette in deletedPalettes {
                 colorPaletteFilesUpdated[deletedPalette] = Self.deletedFileKey
                 cachedColorPalette.removeValue(forKey: deletedPalette)
+                hashHelper.removeHash(path.appendingPathComponent(deletedPalette))
+            }
+            if !deletedPalettes.isEmpty {
+                hashHelper.saveHashes()
             }
             for file in files {
                 let colorPaletteFileName = file.lastPathComponent()

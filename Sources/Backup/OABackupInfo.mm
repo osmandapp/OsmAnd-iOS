@@ -14,6 +14,7 @@
 #import "OAExportSettingsType.h"
 #import "OAIAPHelper.h"
 #import "OAAppSettings.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OABackupInfo
 {
@@ -57,7 +58,7 @@
         if (item)
             [items addObject:item];
     }
-    _itemsToUpload = [NSMutableArray arrayWithArray:items.allObjects];
+    _itemsToUpload = [self getSortedItems:items];
 }
 
 - (void) createItemsToDelete
@@ -68,7 +69,7 @@
         if (item)
             [items addObject:item];
     }
-    _itemsToDelete = [NSMutableArray arrayWithArray:items.allObjects];
+    _itemsToDelete = [self getSortedItems:items];
 }
 
 - (void) createLocalItemsToDelete
@@ -79,17 +80,25 @@
         if (item)
             [items addObject:item];
     }
-    _localItemsToDelete = [NSMutableArray arrayWithArray:items.allObjects];
+    _localItemsToDelete = [self getSortedItems:items];
+}
+
+- (NSMutableArray<OASettingsItem *> *)getSortedItems:(NSSet<OASettingsItem *> *)settingsItems
+{
+    NSMutableArray<OASettingsItem *> *items = [NSMutableArray arrayWithArray:settingsItems.allObjects];
+    [items sortUsingComparator:^NSComparisonResult(OASettingsItem * _Nonnull o1, OASettingsItem * _Nonnull o2) {
+        return [@(o2.lastModifiedTime) compare:@(o1.lastModifiedTime)];
+    }];
+    return items;
 }
 
 - (void) createFilteredFilesToDownload
 {
     NSMutableArray<OARemoteFile *> *files = [NSMutableArray array];
-    OABackupHelper *helper = OABackupHelper.sharedInstance;
     for (OARemoteFile *remoteFile in _filesToDownload)
     {
         OAExportSettingsType *type = [OAExportSettingsType findByRemoteFile:remoteFile];
-        if (type != nil && [[helper getBackupTypePref:type] get])
+        if (type != nil && [[BackupUtils getBackupTypePref:type] get])
         {
             [files addObject:remoteFile];
         }
@@ -100,14 +109,11 @@
 - (void) createFilteredFilesToUpload
 {
     NSMutableArray<OALocalFile *> *files = [NSMutableArray array];
-    OABackupHelper *helper = OABackupHelper.sharedInstance;
     for (OALocalFile *localFile in _filesToUpload)
     {
         OAExportSettingsType *type = [OAExportSettingsType findBySettingsItem:localFile.item];
-        if (type != nil && [[helper getBackupTypePref:type] get] && (type.isAllowedInFreeVersion || [OAIAPHelper isOsmAndProAvailable]))
-        {
+        if (type != nil && [[BackupUtils getBackupTypePref:type] get] && (type.isAllowedInFreeVersion || [OAIAPHelper isOsmAndProAvailable]))
             [files addObject:localFile];
-        }
     }
     _filteredFilesToUpload = files;
 }
@@ -115,14 +121,11 @@
 - (void) createFilteredFilesToDelete
 {
     NSMutableArray<OARemoteFile *> *files = [NSMutableArray array];
-    OABackupHelper *helper = OABackupHelper.sharedInstance;
     for (OARemoteFile *remoteFile in _filesToDelete)
     {
         OAExportSettingsType *exportType = [OAExportSettingsType findByRemoteFile:remoteFile];
-        if (exportType != nil && [[helper getBackupTypePref:exportType] get])
-        {
+        if (exportType != nil && [[BackupUtils getBackupTypePref:exportType] get])
             [files addObject:remoteFile];
-        }
     }
     _filteredFilesToDelete = files;
 }
@@ -130,14 +133,11 @@
 - (void) createFilteredLocalFilesToDelete
 {
     NSMutableArray<OALocalFile *> *files = [NSMutableArray array];
-    OABackupHelper *helper = OABackupHelper.sharedInstance;
     for (OALocalFile *localFile in _localFilesToDelete)
     {
         OAExportSettingsType *exportType = [OAExportSettingsType findBySettingsItem:localFile.item];
-        if (exportType != nil && [[helper getBackupTypePref:exportType] get])
-        {
+        if (exportType != nil && [[BackupUtils getBackupTypePref:exportType] get])
             [files addObject:localFile];
-        }
     }
     _filteredLocalFilesToDelete = files;
 }
@@ -146,14 +146,13 @@
 {
     NSMutableArray<NSArray *> *files = [NSMutableArray array];
     NSMutableSet<OASettingsItem *> *items = [NSMutableSet set];
-    OABackupHelper *helper = OABackupHelper.sharedInstance;
     for (NSArray *pair in _filesToMerge)
     {
         OASettingsItem *item = ((OALocalFile *) pair.firstObject).item;
         if (![items containsObject:item])
         {
             OAExportSettingsType *exportType = [OAExportSettingsType findByRemoteFile:pair.lastObject];
-            if (exportType != nil && [[helper getBackupTypePref:exportType] get])
+            if (exportType != nil && [[BackupUtils getBackupTypePref:exportType] get])
             {
                 [files addObject:pair];
                 [items addObject:item];

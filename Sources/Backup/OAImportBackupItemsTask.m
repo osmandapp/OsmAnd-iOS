@@ -55,9 +55,9 @@
         OAPrepareBackupResult *backup = [OABackupHelper sharedInstance].backup;
         NSArray<OARemoteFile *> *remoteFiles = [backup getRemoteFiles:_filesType].allValues;
         [_importer importItems:_items remoteFiles:remoteFiles forceReadData:_foreceReadData restoreDeleted:_restoreDeleted];
-        return YES;
+        return _importer.cancelled;
     } @catch (NSException *exception) {
-        NSLog(@"Failed to import items from backup");
+        NSLog(@"Failed to import items from backup: %@", exception.reason);
     }
     return NO;
 }

@@ -581,7 +581,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
                 settings?.hideGpx([track.gpxFilePath])
             }
 
-            self.gpxDB?.removeGpxItem(track.gpxFilePath)
+            self.gpxDB?.removeNewGpxItem(track.dataItem, withLocalRemove: true)
             loadGpxTracks()
             loadVisibleTracks()
             loadRecentlyVisibleTracks()

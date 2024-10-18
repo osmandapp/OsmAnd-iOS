@@ -403,7 +403,7 @@ static const NSInteger kColorsSection = 1;
 - (BOOL)getGPXShowJoinSegments
 {
     return self.isCurrentTrack
-    ? /*[self.doc joinSegments]*/
+    ? false/*[self.doc joinSegments]*/
     : self.gpx.joinSegments;
 }
 
@@ -1434,9 +1434,8 @@ static const NSInteger kColorsSection = 1;
         } else {
             OASGpxDataItem *dataItem = weakSelf.gpx.dataItem;
         
-//            BOOL result = [[OASGpxDbHelper shared] updateDataItemParameterItem:dataItem parameter:OASGpxParameter.splitType value:[[OASInt alloc] initWithInt:(int)33]];
-            // update data in DB'
-           BOOL result = [[OAGPXDatabase sharedDb] updateDataItem:dataItem];
+            // update data in DB
+           [[OAGPXDatabase sharedDb] updateDataItem:dataItem];
             
             // update data in file on disk
             OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:dataItem.file];

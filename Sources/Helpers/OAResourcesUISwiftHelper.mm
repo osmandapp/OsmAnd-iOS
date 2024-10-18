@@ -34,8 +34,16 @@
 
 - (NSString *) title
 {
-    OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
-    return res.title;
+    if ([self.objcResourceItem isKindOfClass:OACustomResourceItem.class])
+    {
+        OACustomResourceItem *res = (OACustomResourceItem *)self.objcResourceItem;
+        return [res getVisibleName];
+    }
+    else
+    {
+        OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
+        return res.title;
+    }
 }
 
 - (NSString *) type
@@ -309,8 +317,16 @@
                     onTaskCreated:(OADownloadTaskCallback)onTaskCreated
                     onTaskResumed:(OADownloadTaskCallback)onTaskResumed
 {
-    OARepositoryResourceItem *res = (OARepositoryResourceItem *)item.objcResourceItem;
-    [OAResourcesUIHelper offerDownloadAndInstallOf:res onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+    if ([item.objcResourceItem isKindOfClass:OACustomResourceItem.class])
+    {
+        OACustomResourceItem *res = (OACustomResourceItem *)item.objcResourceItem;
+        [OAResourcesUIHelper startDownloadOfCustomItem:res onTaskCreated:onTaskCreated onTaskResumed:onTaskCreated];
+    }
+    else
+    {
+        OARepositoryResourceItem *res = (OARepositoryResourceItem *)item.objcResourceItem;
+        [OAResourcesUIHelper offerDownloadAndInstallOf:res onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+    }
 }
 
 + (void)offerDownloadAndInstallOf:(OAResourceSwiftItem *)item

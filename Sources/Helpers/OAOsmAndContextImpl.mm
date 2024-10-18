@@ -48,6 +48,8 @@ static NSString * const kGpxImportDir = @"import";
         [listener stateChangedChange:[pref getPrefValue]];
 }
 
+
+
 - (void)registerPreferenceName:(NSString *)name defValue:(NSString *)defValue global:(BOOL)global shared:(BOOL)shared __attribute__((swift_name("registerPreference(name:defValue:global:shared:)")))
 {
     OACommonString *pref = [OAAppSettings.sharedManager registerStringPreference:name defValue:defValue];
@@ -57,12 +59,12 @@ static NSString * const kGpxImportDir = @"import";
         [pref makeShared];
 }
 
-- (void)addStringPreferenceListenerName:(nonnull NSString *)name listener:(nonnull id<OASKStateChangedListener>)listener
+- (void)addPreferenceListenerName:(NSString *)name listener:(id<OASKStateChangedListener>)listener
 {
     _prefListeners[name] = listener;
 }
 
-- (NSString * _Nullable)getStringPreferenceName:(nonnull NSString *)name
+- (NSString *)getStringPreferenceName:(NSString *)name defValue:(NSString *)defValue global:(BOOL)global shared:(BOOL)shared
 {
     OACommonPreference *pref = [OAAppSettings.sharedManager getPreferenceByKey:name];
     if ([pref isKindOfClass:OACommonString.class])

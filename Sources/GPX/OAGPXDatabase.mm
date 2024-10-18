@@ -154,8 +154,6 @@
 @implementation OAGPXDatabase
 {
     NSObject *_fetchLock;
-    OASGpxDatabase *_db;
-  //  OASGpxDbHelper *_gpxDbHelper;
 }
 
 + (OAGPXDatabase *)sharedDb
@@ -175,9 +173,6 @@
     {
         self.dbFilePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:kDbName];
         _fetchLock = [[NSObject alloc] init];
-        _db = [[OASGpxDatabase alloc] init];
-       // [self load];
-        [[OASGpxDbHelper shared] loadItemsBlocking];
     }
     return self;
 }

@@ -703,6 +703,7 @@
 
     [[OATargetPointsHelper sharedInstance] removeAllWayPoints:NO clearBackup:NO];
     
+    [[OASGpxDbHelper shared] loadItemsBlocking];
     // Init track recorder
     [OASavingTrackHelper sharedInstance];
     

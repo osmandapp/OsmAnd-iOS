@@ -48,10 +48,8 @@ class WidgetGroupItemsViewController: OABaseNavbarViewController {
                 cell.leftIconView.image = UIImage(named: item.iconName ?? "")
                 
                 cell.accessoryView = nil
-                if let widgetType = item.obj(forKey: "widget_type") as? WidgetType {
-                    if !widgetType.isAllowed {
-                        cell.accessoryView = UIImageView(image: UIImage(named: "ic_payment_label_pro"))
-                    }
+                if let widgetType = item.obj(forKey: "widget_type") as? WidgetType, !widgetType.isPurchased() {
+                    cell.accessoryView = UIImageView(image: UIImage.icPaymentLabelPro)
                 }
             }
             outCell = cell
@@ -59,14 +57,14 @@ class WidgetGroupItemsViewController: OABaseNavbarViewController {
         return outCell
     }
     
-    override func onRowSelected(_ indexPath: IndexPath!) {
+    override func onRowSelected(_ indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
         if let widgetInfo = item.obj(forKey: "widget_info") as? MapWidgetInfo {
             let vc = WidgetConfigurationViewController()!
             
             if let widgetType = item.obj(forKey: "widget_type") as? WidgetType {
-                if widgetType.isAllowed {
-                    vc.selectedAppMode = OAAppSettings.sharedManager()!.applicationMode.get()
+                if widgetType.isPurchased() {
+                    vc.selectedAppMode = OAAppSettings.sharedManager().applicationMode.get()
                     vc.widgetInfo = widgetInfo
                     vc.widgetPanel = widgetPanel
                     vc.createNew = true

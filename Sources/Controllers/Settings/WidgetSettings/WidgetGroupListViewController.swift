@@ -308,11 +308,9 @@ extension WidgetGroupListViewController {
                 
                 cell.accessoryView = nil
                 let widgetGroup = item.obj(forKey: "widget_group") as? WidgetGroup
-                if let widgetType = item.obj(forKey: "widget_type") as? WidgetType {
-                    if widgetGroup == nil && !widgetType.isAllowed {
-                        cell.accessoryView = UIImageView(image: UIImage(named: "ic_payment_label_pro"))
-                        cell.valueLabel.text = ""
-                    }
+                if let widgetType = item.obj(forKey: "widget_type") as? WidgetType, !widgetType.isPurchased(), widgetGroup == nil {
+                    cell.accessoryView = UIImageView(image: UIImage.icPaymentLabelPro)
+                    cell.valueLabel.text = ""
                 }
             }
             outCell = cell
@@ -339,7 +337,7 @@ extension WidgetGroupListViewController {
                     vc.similarAlreadyExist = similarAlreadyExist
                     vc.widgetKey = widgetInfo.key
                 }
-                if widgetType.isAllowed {
+                if widgetType.isPurchased() {
                     vc.selectedAppMode = OAAppSettings.sharedManager().applicationMode.get()
                     vc.widgetInfo = widgetInfo
                     vc.widgetPanel = widgetPanel

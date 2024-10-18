@@ -351,8 +351,9 @@
             BOOL passAvailable = !availableMode || [OAWidgetsAvailabilityHelper isWidgetAvailableWithWidgetId:widget.key appMode:appMode];
             BOOL defaultAvailable = !defaultMode || !widget.isCustomWidget;
             BOOL passMatchedPanels = !matchingPanelsMode || [panels containsObject:widget.widgetPanel];
+            BOOL passTypeAllowed = [widget getWidgetType] == nil || [[widget getWidgetType] isAllowed];
 
-            if (passDisabled && passEnabled && passAvailable && defaultAvailable && passMatchedPanels)
+            if (passDisabled && passEnabled && passAvailable && defaultAvailable && passMatchedPanels && passTypeAllowed)
                 [filteredWidgets addObject:widget];
         }
     }

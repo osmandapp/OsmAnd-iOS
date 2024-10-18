@@ -16,10 +16,7 @@ class MapWidgetsFactory: NSObject {
     }
     
     func createMapWidget(customId: String?, widgetType: WidgetType, widgetParams: [String: Any]? = nil) -> OABaseWidgetView? {
-        if isWidgetCreationAllowed(widgetType: widgetType) {
-            return createMapWidgetImpl(customId: customId, widgetType: widgetType, widgetParams: widgetParams)
-        }
-        return nil
+        return createMapWidgetImpl(customId: customId, widgetType: widgetType, widgetParams: widgetParams)
     }
     
     private func createMapWidgetImpl(customId: String?, widgetType: WidgetType, widgetParams: ([String: Any])? = nil) -> OABaseWidgetView? {
@@ -119,9 +116,5 @@ class MapWidgetsFactory: NSObject {
         default:
             return OAPluginsHelper.createMapWidget(widgetType, customId: customId, appMode: appMode, widgetParams: widgetParams)
         }
-    }
-    
-    private func isWidgetCreationAllowed(widgetType: WidgetType) -> Bool {
-        return true
     }
 }

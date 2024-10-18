@@ -59,12 +59,12 @@ static NSString * const kGpxImportDir = @"import";
         [pref makeShared];
 }
 
-- (void)addPreferenceListenerName:(NSString *)name listener:(id<OASKStateChangedListener>)listener
+- (void)addStringPreferenceListenerName:(nonnull NSString *)name listener:(nonnull id<OASKStateChangedListener>)listener
 {
     _prefListeners[name] = listener;
 }
 
-- (NSString *)getStringPreferenceName:(NSString *)name defValue:(NSString *)defValue global:(BOOL)global shared:(BOOL)shared
+- (NSString * _Nullable)getStringPreferenceName:(nonnull NSString *)name
 {
     OACommonPreference *pref = [OAAppSettings.sharedManager getPreferenceByKey:name];
     if ([pref isKindOfClass:OACommonString.class])

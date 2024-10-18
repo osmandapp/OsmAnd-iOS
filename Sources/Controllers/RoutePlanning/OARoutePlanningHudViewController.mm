@@ -558,11 +558,21 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         gpxDataItem = [[OAGPXDatabase sharedDb] getGPXItemByFileName:gpxFileName];
     }
     OASGpxFile *selectedFile = selectedGpxHelper.activeGpx[gpxFileName.lastPathComponent];
-    if (selectedFile != nullptr) {
+    if (selectedFile)
+    {
         gpxFile = selectedFile;
-    } else {
-        OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxDataItem.file.absolutePath];
-        gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
+    }
+    else
+    {
+        if (gpxFileName.length > 0) {
+            OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxDataItem.file.absolutePath];
+            gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
+        }
+        else
+        {
+            gpxFile = OASavingTrackHelper.sharedInstance.currentTrack;
+        }
+
     }
     
     if (!gpxFile.routes)
@@ -719,14 +729,22 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
             else
             {
                 state.openedFromTrackMenu = NO;
-                auto gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:_fileName];
-                auto trackItem = [[OASTrackItem alloc] initWithFile:gpx.file];
-                trackItem.dataItem = gpx;
-
-              
-                [_mapPanel openTargetViewWithGPX:trackItem
-                                    trackHudMode:EOATrackMenuHudMode
-                                           state:state];
+                OASTrackItem *trackItem;
+                if (_fileName.length > 0)
+                {
+                    auto gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:_fileName];
+                    trackItem = [[OASTrackItem alloc] initWithFile:gpx.file];
+                    trackItem.dataItem = gpx;
+                } else
+                {
+                    trackItem = [[OASTrackItem alloc] initWithGpxFile:[OASavingTrackHelper sharedInstance].currentTrack];
+                }
+                if (trackItem)
+                {
+                    [_mapPanel openTargetViewWithGPX:trackItem
+                                        trackHudMode:EOATrackMenuHudMode
+                                               state:state];
+                }
             }
         }
     }];

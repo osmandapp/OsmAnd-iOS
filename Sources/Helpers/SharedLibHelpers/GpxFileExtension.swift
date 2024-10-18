@@ -7,9 +7,20 @@
 //
 
 import OsmAndShared
+private var gpxProcessedPointsToDisplaKey: UInt8 = 0
 
 @objc(OASGpxFile)
 extension GpxFile {
+    
+    var processedPointsToDisplay: [TrkSegment]? {
+        get {
+            objc_getAssociatedObject(self, &gpxProcessedPointsToDisplaKey) as? [TrkSegment]
+        }
+        set {
+            objc_setAssociatedObject(self, &gpxProcessedPointsToDisplaKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+    
     func hasTrkPt(withElevation: Bool) -> Bool {
         for track in tracks {
             for segment in (track as! Track).segments {
@@ -27,6 +38,25 @@ extension GpxFile {
         return false
     }
     
+    func recalculateProcessPoint() {
+        processedPointsToDisplay = processPoints()
+        guard let processedPoints = processedPointsToDisplay, processedPoints.isEmpty else {
+            return
+        }
+        processedPointsToDisplay = processRoutePoints()
+    }
+    
+    func getPointsToDisplay() -> [TrkSegment] {
+        // FIXME:
+        if (false/*self.joinSegments*/) {
+            if let getGeneralTrack = getGeneralTrack() {
+                return getGeneralTrack.segments as! [TrkSegment]
+            }
+            return []
+        } else {
+            return processedPointsToDisplay ?? []
+        }
+    }
 }
 
 

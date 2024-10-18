@@ -165,8 +165,7 @@ static NSOperationQueue *_favQueue;
 + (OASGpxFile *)loadGpxFile:(NSString *)file
 {
     OASKFile *favoriteGPXFile = [[OASKFile alloc] initWithFilePath:file];
-    OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:favoriteGPXFile];
-    return gpxFile;
+    return [OASGpxUtilities.shared loadGpxFileFile:favoriteGPXFile];
 }
 
 + (void)importFavoritesFromGpx:(OASGpxFile *)gpxFile

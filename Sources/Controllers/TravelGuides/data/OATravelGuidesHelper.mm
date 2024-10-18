@@ -217,25 +217,25 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
     OASKFile *filePathToSaveGPX = [[OASKFile alloc] initWithFilePath:filePath];
     // save to disk
     OASKException *exception = [[OASGpxUtilities shared] writeGpxFileFile:filePathToSaveGPX gpxFile:gpx];
-    if (!exception)
-    {
-        // save to db
-        OASGpxDataItem *dataItem = [[OAGPXDatabase sharedDb] addGPXFileToDBIfNeeded:filePathToSaveGPX.absolutePath];
-        if (dataItem)
-        {
-            OASGpxTrackAnalysis *analysis = [dataItem getAnalysis];
-            
-            NSString *nearestCity;
-            if (analysis.locationStart)
-            {
-                OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:analysis.locationStart.position];
-                dataItem.nearestCity = nearestCityPOI ? nearestCityPOI.nameLocalized : @"";
-                [[OAGPXDatabase sharedDb] updateDataItem:dataItem];
-            }
-        }
-    } else {
-        NSLog(@"[ERROR] -> save gpx");
-    }
+//    if (!exception)
+//    {
+//        // save to db
+//        OASGpxDataItem *dataItem = [[OAGPXDatabase sharedDb] addGPXFileToDBIfNeeded:filePathToSaveGPX.absolutePath];
+//        if (dataItem)
+//        {
+//            OASGpxTrackAnalysis *analysis = [dataItem getAnalysis];
+//            
+//            NSString *nearestCity;
+//            if (analysis.locationStart)
+//            {
+//                OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:analysis.locationStart.position];
+//                dataItem.nearestCity = nearestCityPOI ? nearestCityPOI.nameLocalized : @"";
+//                [[OAGPXDatabase sharedDb] updateDataItem:dataItem];
+//            }
+//        }
+//    } else {
+//        NSLog(@"[ERROR] -> save gpx");
+//    }
     
     return filePath;
 }

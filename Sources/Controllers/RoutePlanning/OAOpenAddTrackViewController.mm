@@ -512,7 +512,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 
 #pragma mark - OASegmentSelectionDelegate
 
-- (void)onSegmentSelected:(NSInteger)position gpx:(OAGPXDocument *)gpx
+- (void)onSegmentSelected:(NSInteger)position gpx:(OASGpxFile *)gpx
 {
     if (self.delegate)
     {

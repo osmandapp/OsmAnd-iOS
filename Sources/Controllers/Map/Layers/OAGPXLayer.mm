@@ -717,7 +717,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     
     if (trackpointextension)
     {
-        // FIXME:
+        // FIXME: gpxtpx:trackpointextension
 //        for (OAGpxExtension *subextension in trackpointextension.subextensions)
 //        {
 //            if ([subextension.name isEqualToString:(isAirTemp ? OASPointAttributes.sensorTagTemperatureA : OASPointAttributes.sensorTagTemperatureW)])
@@ -1578,7 +1578,7 @@ colorizationScheme:(int)colorizationScheme
 {
     double textSize = [OAAppSettings.sharedManager.textSize get];
     textSize = textSize < 1. ? 1. : textSize;
-   // int r = [self getDefaultRadiusPoi] * textSize;
+    int r = [self getDefaultRadiusPoi] * textSize;
     NSMutableDictionary<NSString *, OASGpxFile *> *activeGpx = [OASelectedGPXHelper.instance.activeGpx mutableCopy];
     OASGpxFile *doc = [OASavingTrackHelper sharedInstance].currentTrack;
     if (doc)
@@ -1604,24 +1604,32 @@ colorizationScheme:(int)colorizationScheme
 
         if (!document)
             continue;
- //FIXME: [document getPointsToDisplay]
-//        NSArray<OASWptPt *> *points = [self findPointsNearSegments:[document getPointsToDisplay] radius:r point:point];
-//        if (points != nil)
-//        {
-//            CLLocation *selectedGpxPoint = [OAMapUtils getProjection:[[CLLocation alloc] initWithLatitude:point.latitude
-//                                                                                                longitude:point.longitude]
-//                                                        fromLocation:[[CLLocation alloc] initWithLatitude:points.firstObject.position.latitude
-//                                                                                                longitude:points.firstObject.position.longitude]
-//                                                          toLocation:[[CLLocation alloc] initWithLatitude:points.lastObject.position.latitude
-//                                                                                                longitude:points.lastObject.position.longitude]];
-//           // FiXME:
-//            OASGpxDataItem *gpx = [_cachedTracks.allKeys containsObject:filePath] ? _cachedTracks[filePath][@"gpx"]
-//                    : isCurrentTrack ? nil/*[[OASavingTrackHelper sharedInstance] getCurrentGPX]*/ : [self getGpxItem:QString::fromNSString(key)];
-//            OATargetPoint *targetPoint = [self getTargetPoint:gpx];
-//            targetPoint.location = selectedGpxPoint.coordinate;
-//            if (targetPoint && ![res containsObject:targetPoint])
-//                [res addObject:targetPoint];
-//        }
+        // NOTE: The old logic called processPoints during each initialization of the document (OAGPXDocument -> OASGpxFile). This was necessary for the correct recalculation for getPointsToDisplay. Now this is handled by recalculateProcessPoint. If recalculation is needed, call [document recalculateProcessPoint
+        [document recalculateProcessPoint];
+        NSArray<OASWptPt *> *points = [self findPointsNearSegments:[document getPointsToDisplay] radius:r point:point];
+        if (points != nil)
+        {
+            CLLocation *selectedGpxPoint = [OAMapUtils getProjection:[[CLLocation alloc] initWithLatitude:point.latitude
+                                                                                                longitude:point.longitude]
+                                                        fromLocation:[[CLLocation alloc] initWithLatitude:points.firstObject.position.latitude
+                                                                                                longitude:points.firstObject.position.longitude]
+                                                          toLocation:[[CLLocation alloc] initWithLatitude:points.lastObject.position.latitude
+                                                                                                longitude:points.lastObject.position.longitude]];
+            OASGpxDataItem *gpx = nil;
+
+            if ([_cachedTracks.allKeys containsObject:filePath]) {
+                gpx = _cachedTracks[filePath][@"gpx"];
+            } else if (!isCurrentTrack) {
+                gpx = [self getGpxItem:QString::fromNSString(key)];
+            }
+
+            OATargetPoint *targetPoint = gpx ? [self getTargetPoint:gpx] : [self getTargetPoint:[OASavingTrackHelper sharedInstance].currentTrack];
+
+            
+            targetPoint.location = selectedGpxPoint.coordinate;
+            if (targetPoint && ![res containsObject:targetPoint])
+                [res addObject:targetPoint];
+        }
     }
 }
 
@@ -1771,15 +1779,15 @@ colorizationScheme:(int)colorizationScheme
 
 - (OATargetPoint *) getTargetPoint:(id)obj
 {
-    if ([obj isKindOfClass:[OASGpxDataItem class]])
+    if ([obj isKindOfClass:[OASGpxDataItem class]] || [obj isKindOfClass:[OASGpxFile class]])
     {
         OASGpxDataItem *item = (OASGpxDataItem *) obj;
         OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
         targetPoint.type = OATargetGPX;
-        targetPoint.targetObj = item;
+        targetPoint.targetObj = [obj isKindOfClass:[OASGpxDataItem class]] ? (OASGpxDataItem *)obj : (OASGpxFile *) obj;
 
         targetPoint.icon = [UIImage imageNamed:@"ic_custom_trip"];
-        targetPoint.title = [item getNiceTitle];
+        targetPoint.title = [obj isKindOfClass:[OASGpxDataItem class]] ? [item getNiceTitle] :  OALocalizedString(@"shared_string_currently_recording_track");
 
         targetPoint.sortIndex = (NSInteger)targetPoint.type;
         targetPoint.values = @{ @"opened_from_map": @YES };

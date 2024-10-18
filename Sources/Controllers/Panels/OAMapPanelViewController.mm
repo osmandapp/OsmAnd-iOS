@@ -1462,11 +1462,19 @@ typedef enum
 {
     if (targetPoint.type == OATargetGPX)
     {
-        OASGpxDataItem *dataItem = (OASGpxDataItem *)targetPoint.targetObj;
-        if (dataItem)
-        {
-            OASTrackItem *trackItem = [[OASTrackItem alloc] initWithFile:dataItem.file];
+        OASTrackItem *trackItem;
+        if ([targetPoint.targetObj isKindOfClass:[OASGpxDataItem class]]) {
+            OASGpxDataItem *dataItem = (OASGpxDataItem *)targetPoint.targetObj;
+            trackItem = [[OASTrackItem alloc] initWithFile:dataItem.file];
             trackItem.dataItem = dataItem;
+        }
+        else if ([targetPoint.targetObj isKindOfClass:[OASGpxFile class]])
+        {
+            OASGpxFile *gpxFile = (OASGpxFile *)targetPoint.targetObj;
+            trackItem = [[OASTrackItem alloc] initWithGpxFile:gpxFile];
+        }
+        if (trackItem)
+        {
             [self openTargetViewWithGPX:trackItem
                                   items:nil
                                routeKey:nil

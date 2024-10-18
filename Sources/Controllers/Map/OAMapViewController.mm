@@ -3305,8 +3305,6 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
                 OASGpxFile *doc = value;
                 for (NSInteger i = 0; i < doc.getPointsList.count; i++) {
                     OASWptPt *w = doc.getPointsList[i];
-                    
-
                     if ([OAUtilities doublesEqualUpToDigits:5 source:w.position.latitude destination:self.foundWpt.lat] &&
                         [OAUtilities doublesEqualUpToDigits:5 source:w.position.longitude destination:self.foundWpt.lon])
                     {

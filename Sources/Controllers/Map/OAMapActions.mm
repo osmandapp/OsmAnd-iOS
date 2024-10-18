@@ -189,6 +189,10 @@
 
 - (OASGpxFile *)getGpxDocumentByGpx:(OASTrackItem *)trackItem
 {
+    if (!trackItem)
+    {
+        return nil;
+    }
     OASGpxFile *document = nil;
     NSDictionary<NSString *, OASGpxFile *> *gpxMap = [[OASelectedGPXHelper instance].activeGpx copy];
     NSString *path = trackItem.dataItem.file.absolutePath;

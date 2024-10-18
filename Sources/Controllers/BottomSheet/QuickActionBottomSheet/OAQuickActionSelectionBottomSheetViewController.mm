@@ -180,7 +180,8 @@
                 [PaletteCollectionHandler applyGradientTo:cell.leftIconView
                                                      with:colorPalette];
                 [cell descriptionVisibility:YES];
-                cell.descriptionLabel.text = [PaletteCollectionHandler createDescriptionForPalette:colorPalette];
+                cell.descriptionLabel.text = [PaletteCollectionHandler createDescriptionForPalette:colorPalette isTerrain:YES];
+                cell.descriptionLabel.numberOfLines = 1;
             }
             else
             {

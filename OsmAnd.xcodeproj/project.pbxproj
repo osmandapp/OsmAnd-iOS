@@ -3158,6 +3158,7 @@
 		FAA6505F2ADD42C50020DCEA /* DescriptionDeviceHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA6504C2ADD42C50020DCEA /* DescriptionDeviceHeader.swift */; };
 		FAA650602ADD42C50020DCEA /* DescriptionDeviceHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = FAA6504D2ADD42C50020DCEA /* DescriptionDeviceHeader.xib */; };
 		FAA650682ADD8D0D0020DCEA /* BLEInitHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA650672ADD8D0D0020DCEA /* BLEInitHeader.swift */; };
+		FAA8F9062CC28441008452CF /* TrackItemExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F9052CC2843F008452CF /* TrackItemExtension.swift */; };
 		FAB2B14B2C787E3900B59B7A /* DGCharts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FA6116182C787B7C005C3ABD /* DGCharts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FAB6E7E42AC5A9FD00A82987 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB6E7E32AC5A9FD00A82987 /* UIButton+Extension.swift */; };
 		FAC166212B21BEF900D63755 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC166162B21BEF700D63755 /* Util.swift */; };
@@ -7686,6 +7687,7 @@
 		FAA6504C2ADD42C50020DCEA /* DescriptionDeviceHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DescriptionDeviceHeader.swift; sourceTree = "<group>"; };
 		FAA6504D2ADD42C50020DCEA /* DescriptionDeviceHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DescriptionDeviceHeader.xib; sourceTree = "<group>"; };
 		FAA650672ADD8D0D0020DCEA /* BLEInitHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEInitHeader.swift; sourceTree = "<group>"; };
+		FAA8F9052CC2843F008452CF /* TrackItemExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackItemExtension.swift; sourceTree = "<group>"; };
 		FAB6E7E32AC5A9FD00A82987 /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
 		FAC166162B21BEF700D63755 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		FAC166172B21BEF800D63755 /* PeripheralProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeripheralProxy.swift; sourceTree = "<group>"; };
@@ -13625,6 +13627,7 @@
 		FA45851C2C946046003A5AD7 /* SharedLibHelpers */ = {
 			isa = PBXGroup;
 			children = (
+				FAA8F9052CC2843F008452CF /* TrackItemExtension.swift */,
 				FA5D19E02CC00B0E00E01A27 /* GPXDataItemGPXFileWrapper.swift */,
 				05DACD7D2C1CAF470023FAD9 /* OASharedUtil.h */,
 				05DACD7E2C1CAF470023FAD9 /* OASharedUtil.m */,
@@ -17053,6 +17056,7 @@
 				DA5A832726C563A800F274C7 /* OARouteInfoAltitudeCell.m in Sources */,
 				DA5A817126C563A700F274C7 /* OsmAndApp.mm in Sources */,
 				DA2483E72927916700189AF2 /* OAStatusBackupTableViewController.mm in Sources */,
+				FAA8F9062CC28441008452CF /* TrackItemExtension.swift in Sources */,
 				FAA650512ADD42C50020DCEA /* BLESearchViewController.swift in Sources */,
 				DAA61CC42A03983A00AFF65D /* CenterWidgetInfo.swift in Sources */,
 				DA5A815326C563A700F274C7 /* OACarPlayDashboardInterfaceController.mm in Sources */,

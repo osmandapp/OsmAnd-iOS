@@ -437,9 +437,6 @@
                 {
                     [[OAGPXDatabase sharedDb] addGPXFileToDBIfNeeded:file.absolutePath];
                 }
-                // save to db
-                // FIXME: update if exist
-               
                 
             } else {
                 NSLog(@"[ERROR] -> OASavingTrackHelper | save gpx");

@@ -1392,7 +1392,7 @@
     }
     if (time > 0)
     {
-        return [NSDateFormatter localizedStringFromDate:[NSDate dateWithTimeIntervalSince1970:time / 1000]
+        return [NSDateFormatter localizedStringFromDate:[NSDate dateWithTimeIntervalSince1970:time]
                                               dateStyle:NSDateFormatterMediumStyle
                                               timeStyle:NSDateFormatterNoStyle];
     }
@@ -1771,7 +1771,7 @@
             if (weakSelf.isShown)
                 [weakSelf.settings hideGpx:@[weakSelf.gpx.gpxFilePath] update:YES];
 
-            [[OAGPXDatabase sharedDb] removeGpxItem:weakSelf.gpx.gpxFilePath];
+            [[OAGPXDatabase sharedDb] removeNewGpxItem:weakSelf.gpx.dataItem withLocalRemove:YES];
         }
 
         [weakSelf hide];

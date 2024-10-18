@@ -425,7 +425,15 @@ static UIViewController *parentController;
     NSString *gpxFilePath = [_importUrl.path hasPrefix:_app.gpxPath]
             ? [OAUtilities getGpxShortPath:_importUrl.path]
             : [_importUrl.path lastPathComponent];
-    [[OAGPXDatabase sharedDb] removeGpxItem:gpxFilePath];
+    
+    OASGpxDataItem *item = [[OAGPXDatabase sharedDb] getGPXItemByFileName:gpxFilePath];
+    if (item)
+    {
+        [[OAGPXDatabase sharedDb] removeNewGpxItem:item withLocalRemove:YES];
+    } else
+    {
+        NSLog(@"[OAGPXImportUIHelper] -> [ERROR] -> removeFromDB");
+    }
 }
 
 #pragma mark - OAGPXImportDelegate

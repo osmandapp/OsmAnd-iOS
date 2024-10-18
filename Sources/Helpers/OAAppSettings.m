@@ -1360,6 +1360,16 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
     return self.global ? self.key : [NSString stringWithFormat:@"%@_%@", self.key, mode.stringKey];
 }
 
+- (NSObject *) getPrefValue
+{
+    return [self getValue];
+}
+
+- (NSObject *) getPrefValue:(OAApplicationMode *)mode
+{
+    return [self getValue:mode];
+}
+
 - (NSObject *)getValue
 {
     return [self getValue:self.global ? nil : self.appMode];

@@ -10,6 +10,8 @@
 
 #include <OsmAndCore.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class OASGpxFile, OASWptPt;
 
 @interface OASelectedGPXHelper : NSObject
@@ -17,12 +19,12 @@
 + (OASelectedGPXHelper *)instance;
 
 - (BOOL)buildGpxList;
-- (void) markTrackForReload:(NSString *)filePath;
-- (OASGpxFile *)getSelectedGpx:(OASWptPt *)gpxWpt;
+- (void)markTrackForReload:(NSString *)filePath;
+- (nullable OASGpxFile *)getSelectedGpx:(OASWptPt *)gpxWpt;
 - (BOOL)isShowingAnyGpxFiles;
 - (void)clearAllGpxFilesToShow:(BOOL) backupSelection;
 - (void)restoreSelectedGpxFiles;
-- (NSString *) getSelectedGPXFilePath:(NSString *)fileName;
+- (nullable NSString *) getSelectedGPXFilePath:(NSString *)fileName;
 
 + (void)renameVisibleTrack:(NSString *)oldPath newPath:(NSString *) newPath;
 
@@ -33,3 +35,5 @@
 - (void)addGpxFile:(OASGpxFile *)file for:(NSString *)path;
 
 @end
+
+NS_ASSUME_NONNULL_END

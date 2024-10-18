@@ -10,53 +10,72 @@
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 #import "OANameStringMatcher.h"
+#import "OASelectedGpxHelper.h"
+#import "OAGPXUIHelper.h"
+#import "OAPOI.h"
 
 static NSString * const kGpxRecDir = @"rec";
 static NSString * const kGpxImportDir = @"import";
 
-// NOTE: Test implementation
-@interface ContextSettingsManager : NSObject <OASSettingsAPI>
-
-@property (nonatomic, strong) NSMutableDictionary<NSString *, NSString *> *preferences;
-@property (nonatomic, strong) NSMutableDictionary<NSString *, NSMutableArray<id<OASKStateChangedListener>> *> *listeners;
-
+@interface OASettingsAPIImpl : NSObject <OASSettingsAPI>
 @end
 
-@implementation ContextSettingsManager
+@implementation OASettingsAPIImpl
+{
+    NSMutableDictionary<NSString *, id<OASKStateChangedListener>> *_prefListeners;
+}
 
-- (instancetype)init {
+- (instancetype)init
+{
     self = [super init];
     if (self) {
-        _preferences = [NSMutableDictionary dictionary];
-        _listeners = [NSMutableDictionary dictionary];
+        _prefListeners = [NSMutableDictionary dictionary];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onPreferenceSet:) name:kNotificationSetProfileSetting object:nil];
     }
     return self;
 }
 
-- (void)addPreferenceListenerName:(NSString *)name listener:(id<OASKStateChangedListener>)listener {
-    if (!self.listeners[name]) {
-        self.listeners[name] = [NSMutableArray array];
-    }
-    [self.listeners[name] addObject:listener];
+- (void)dealloc
+{
+    [NSNotificationCenter.defaultCenter removeObserver:self];
 }
 
-- (NSString *)getStringPreferenceName:(NSString *)name defValue:(NSString *)defValue global:(BOOL)global shared:(BOOL)shared {
-    return self.preferences[name] ?: defValue;
+- (void)onPreferenceSet:(NSNotification *)notification
+{
+    OACommonPreference *pref = (OACommonPreference *) notification.object;
+    id<OASKStateChangedListener> listener = _prefListeners[pref.key];
+    if (listener)
+        [listener stateChangedChange:[pref getPrefValue]];
 }
 
-- (void)registerPreferenceName:(NSString *)name defValue:(NSString *)defValue global:(BOOL)global shared:(BOOL)shared {
-    if (!self.preferences[name]) {
-        self.preferences[name] = defValue;
-    }
+- (void)registerPreferenceName:(NSString *)name defValue:(NSString *)defValue global:(BOOL)global shared:(BOOL)shared __attribute__((swift_name("registerPreference(name:defValue:global:shared:)")))
+{
+    OACommonString *pref = [OAAppSettings.sharedManager registerStringPreference:name defValue:defValue];
+    if (global)
+        [pref makeGlobal];
+    if (shared)
+        [pref makeShared];
 }
 
-- (void)setStringPreferenceName:(NSString *)name value:(NSString *)value {
-    self.preferences[name] = value;
-    
-    NSArray<id<OASKStateChangedListener>> *listenersForKey = self.listeners[name];
-    for (id<OASKStateChangedListener> listener in listenersForKey) {
-      //  [listener onStateChanged:name newValue:value];
-    }
+- (void)addStringPreferenceListenerName:(nonnull NSString *)name listener:(nonnull id<OASKStateChangedListener>)listener
+{
+    _prefListeners[name] = listener;
+}
+
+- (NSString * _Nullable)getStringPreferenceName:(nonnull NSString *)name
+{
+    OACommonPreference *pref = [OAAppSettings.sharedManager getPreferenceByKey:name];
+    if ([pref isKindOfClass:OACommonString.class])
+        return [(OACommonString *)pref get];
+
+    return nil;
+}
+
+- (void)setStringPreferenceName:(NSString *)name value:(NSString *)value __attribute__((swift_name("setStringPreference(name:value:)")))
+{
+    OACommonPreference *pref = [OAAppSettings.sharedManager getPreferenceByKey:name];
+    if ([pref isKindOfClass:OACommonString.class])
+        [(OACommonString *)pref set:value];
 }
 
 @end
@@ -102,7 +121,60 @@ static NSString * const kGpxImportDir = @"import";
 
 @end
 
+const static NSArray<NSString *> *SENSOR_GPX_TAGS = @[
+    OASPointAttributes.companion.SENSOR_TAG_HEART_RATE,
+    OASPointAttributes.companion.SENSOR_TAG_SPEED,
+    OASPointAttributes.companion.SENSOR_TAG_CADENCE,
+    OASPointAttributes.companion.SENSOR_TAG_BIKE_POWER,
+    OASPointAttributes.companion.SENSOR_TAG_TEMPERATURE_W,
+    OASPointAttributes.companion.SENSOR_TAG_TEMPERATURE_A
+];
+
+@interface OAExrternalSensorPointsAnalyser : NSObject <OASGpxTrackAnalysisTrackPointsAnalyser>
+@end
+
+@implementation OAExrternalSensorPointsAnalyser
+
+- (float) getPointAttribute:(OASWptPt *)wptPt key:(NSString *)key defaultValue:(float)defaultValue
+{
+    NSString *value = wptPt.getDeferredExtensionsToRead[key];
+    if (value.length == 0)
+        value = wptPt.getExtensionsToRead[key];
+
+    return [OASKAlgorithms.shared parseFloatSilentlyInput:value def:defaultValue];
+}
+
+- (void)onAnalysePointAnalysis:(OASGpxTrackAnalysis *)analysis point:(OASWptPt *)point attribute:(OASPointAttributes *)attribute
+{
+    for (NSString *tag in SENSOR_GPX_TAGS)
+    {
+        float defaultValue = [tag isEqualToString:OASPointAttributes.companion.SENSOR_TAG_TEMPERATURE_W]
+    		|| [tag isEqualToString:OASPointAttributes.companion.SENSOR_TAG_TEMPERATURE_A] ? NAN : 0;
+        float value = [self getPointAttribute:point key:tag defaultValue:defaultValue];
+
+        [attribute setAttributeValueTag:tag value:value];
+
+        if (![analysis hasDataTag:tag] && [attribute hasValidValueTag:tag])
+            [analysis setHasDataTag:tag hasData:YES];
+    }
+}
+
+@end
+
 @implementation OAOsmAndContextImpl
+{
+    id<OASSettingsAPI> _settingsAPI;
+}
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self)
+    {
+        _settingsAPI = [[OASettingsAPIImpl alloc] init];
+    }
+    return self;
+}
 
 - (OASKFile *)getAppDir __attribute__((swift_name("getAppDir()")))
 {
@@ -131,8 +203,7 @@ static NSString * const kGpxImportDir = @"import";
 
 - (id<OASSettingsAPI>)getSettings __attribute__((swift_name("getSettings()")))
 {
-    // TODO: Not implement until settings moved to shared lib
-    return [ContextSettingsManager new];
+    return _settingsAPI;
 }
 
 - (NSString * _Nullable)getAssetAsStringName:(NSString *)name __attribute__((swift_name("getAssetAsString(name:)")))
@@ -155,15 +226,15 @@ static NSString * const kGpxImportDir = @"import";
 
 - (void)searchNearestCityNameLatLon:(OASKLatLon *)latLon callback:(void (^)(NSString * _Nonnull))callback
 {
-    // TODO: Not implement until searchNearestCityNameLatLon moved to shared lib
-    if (callback) callback(@"");
+    OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude)];
+    callback(nearestCityPOI ? nearestCityPOI.name : @"");
 }
 
-- (OASGpxTrackAnalysis *)getTrackPointsAnalyser
+- (id<OASGpxTrackAnalysisTrackPointsAnalyser>)getTrackPointsAnalyser
 {
-    //TODO: Not implement until settings moved to shared lib
-    return nil;
+    return [[OAExrternalSensorPointsAnalyser alloc] init];
 }
+
 
 - (OASSpeedConstants * _Nullable)getSpeedSystem __attribute__((swift_name("getSpeedSystem()")))
 {
@@ -206,10 +277,9 @@ static NSString * const kGpxImportDir = @"import";
     return [OAAppSettings.sharedManager.mapSettingVisibleGpx.get containsObject:gpxFilePath];
 }
 
-- (OASGpxFile * _Nullable)getSelectedFileByPathPath:(nonnull NSString *)path
+- (OASGpxFile *)getSelectedFileByPathPath:(NSString *)path
 {
-    // FIXME:
-    return nil;
+    return [OASelectedGPXHelper.instance getGpxFileFor:path];
 }
 
 @end

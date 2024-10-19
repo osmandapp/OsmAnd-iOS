@@ -3270,3 +3270,5 @@
 "daynight_mode_app_theme_summary" = "Kartstilen anpassas till appens övergripande tema – dagläge vid ljust tema och nattläge vid mörkt tema";
 "daynight_mode_day_summary" = "Visar alltid kartan i ljust läge, lämpligt för optimal synlighet dagtid och i starkt ljus.";
 "battery_saving_mode" = "Batterisparläge";
+"rendering_attr_showDirtbikeTrails_name" = "Off-road motorcykel-leder";
+"rendering_attr_showDirtbikeTrails_description" = "Visa leder för off-road motorcykel (cross, enduro)";

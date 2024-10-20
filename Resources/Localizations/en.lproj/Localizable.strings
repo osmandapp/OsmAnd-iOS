@@ -995,7 +995,7 @@
 "gpx_selection_segment_title" = "Segment";
 "route_points" = "Route points";
 "copy_to_map_favorites" = "Copy to favorites";
-
+"not_specified" = "Not specified";
 "import_export" = "Import/export";
 
 "import_tracks" = "Import tracks";

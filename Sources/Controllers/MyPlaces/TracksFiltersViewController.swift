@@ -8,33 +8,6 @@
 
 import UIKit
 
-enum FilterParameterType: Int {
-    case lengthFilterType
-    case durationFilterType
-    case timeInMotionFilterType
-    case dateCreationFilterType
-    case averageSpeedFilterType
-    case maxSpeedFilterType
-    case averageAltitudeFilterType
-    case maxAltitudeFilterType
-    case uphillFilterType
-    case downhillFilterType
-    case colorFilterType
-    case widthFilterType
-    case nearestCitiesFilterType
-    case folderFilterType
-    case sensorSpeedMaxFilterType
-    case sensorSpeedAverageFilterType
-    case heartRateMaxFilterType
-    case heartRateAverageFilterType
-    case bicycleCadenceMaxFilterType
-    case bicycleCadenceAverageFilterType
-    case bicyclePowerMaxFilterType
-    case bicyclePowerAverageFilterType
-    case temperatureMaxFilterType
-    case temperatureAverageFilterType
-}
-
 final class TracksFiltersViewController: OABaseButtonsViewController {
     private static let nameFilterRowKey = "nameFilter"
     private static let lengthFilterRowKey = "lengthFilter"
@@ -78,31 +51,31 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
     private var nameFilterType: TextTrackFilter?
     private var otherFilterType: OtherTrackFilter?
     
-    private lazy var filterMappings: [String: (type: FilterParameterType, isModal: Bool)] = [
-        Self.lengthFilterRowKey: (.lengthFilterType, false),
-        Self.durationFilterRowKey: (.durationFilterType, false),
-        Self.timeInMotionFilterRowKey: (.timeInMotionFilterType, false),
-        Self.dateCreationFilterRowKey: (.dateCreationFilterType, false),
-        Self.averageSpeedFilterRowKey: (.averageSpeedFilterType, false),
-        Self.maxSpeedFilterRowKey: (.maxSpeedFilterType, false),
-        Self.averageAltitudeFilterRowKey: (.averageAltitudeFilterType, false),
-        Self.maxAltitudeFilterRowKey: (.maxAltitudeFilterType, false),
-        Self.uphillFilterRowKey: (.uphillFilterType, false),
-        Self.downhillFilterRowKey: (.downhillFilterType, false),
-        Self.colorFilterRowKey: (.colorFilterType, true),
-        Self.widthFilterRowKey: (.widthFilterType, true),
-        Self.nearestCitiesFilterRowKey: (.nearestCitiesFilterType, true),
-        Self.folderFilterRowKey: (.folderFilterType, true),
-        Self.sensorSpeedMaxFilterRowKey: (.sensorSpeedMaxFilterType, false),
-        Self.sensorSpeedAverageFilterRowKey: (.sensorSpeedAverageFilterType, false),
-        Self.heartRateMaxFilterRowKey: (.heartRateMaxFilterType, false),
-        Self.heartRateAverageFilterRowKey: (.heartRateAverageFilterType, false),
-        Self.bicycleCadenceMaxFilterRowKey: (.bicycleCadenceMaxFilterType, false),
-        Self.bicycleCadenceAverageFilterRowKey: (.bicycleCadenceAverageFilterType, false),
-        Self.bicyclePowerMaxFilterRowKey: (.bicyclePowerMaxFilterType, false),
-        Self.bicyclePowerAverageFilterRowKey: (.bicyclePowerAverageFilterType, false),
-        Self.temperatureMaxFilterRowKey: (.temperatureMaxFilterType, false),
-        Self.temperatureAverageFilterRowKey: (.temperatureAverageFilterType, false)
+    private lazy var filterMappings: [String: (type: TrackFilterType, isModal: Bool)] = [
+        Self.lengthFilterRowKey: (.length, false),
+        Self.durationFilterRowKey: (.duration, false),
+        Self.timeInMotionFilterRowKey: (.timeInMotion, false),
+        Self.dateCreationFilterRowKey: (.dateCreation, false),
+        Self.averageSpeedFilterRowKey: (.averageSpeed, false),
+        Self.maxSpeedFilterRowKey: (.maxSpeed, false),
+        Self.averageAltitudeFilterRowKey: (.averageAltitude, false),
+        Self.maxAltitudeFilterRowKey: (.maxAltitude, false),
+        Self.uphillFilterRowKey: (.uphill, false),
+        Self.downhillFilterRowKey: (.downhill, false),
+        Self.colorFilterRowKey: (.color, true),
+        Self.widthFilterRowKey: (.width, true),
+        Self.nearestCitiesFilterRowKey: (.city, true),
+        Self.folderFilterRowKey: (.folder, true),
+        Self.sensorSpeedMaxFilterRowKey: (.maxSensorSpeed, false),
+        Self.sensorSpeedAverageFilterRowKey: (.averageSensorSpeed, false),
+        Self.heartRateMaxFilterRowKey: (.maxSensorHeartRate, false),
+        Self.heartRateAverageFilterRowKey: (.averageSensorHeartRate, false),
+        Self.bicycleCadenceMaxFilterRowKey: (.maxSensorCadence, false),
+        Self.bicycleCadenceAverageFilterRowKey: (.averageSensorCadence, false),
+        Self.bicyclePowerMaxFilterRowKey: (.maxSensorBicyclePower, false),
+        Self.bicyclePowerAverageFilterRowKey: (.averageSensorBicyclePower, false),
+        Self.temperatureMaxFilterRowKey: (.maxSensorTemperature, false),
+        Self.temperatureAverageFilterRowKey: (.averageSensorTemperature, false)
     ]
     
     init(baseFilters: TracksSearchFilter, baseFiltersResult: FilterResults) {
@@ -297,7 +270,7 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
         guard let indexPath = indexPath else { return }
         let item = tableData.item(for: indexPath)
         if let key = item.key, let mapping = filterMappings[key] {
-            let filterDetailsVC = TracksFilterDetailsViewController(filterParameter: mapping.type, baseFilters: baseFilters, baseFiltersResult: baseFiltersResult)
+            let filterDetailsVC = TracksFilterDetailsViewController(filterType: mapping.type, baseFilters: baseFilters, baseFiltersResult: baseFiltersResult)
             if mapping.isModal {
                 showModalViewController(filterDetailsVC)
             } else {

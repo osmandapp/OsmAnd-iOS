@@ -77,7 +77,7 @@ class GpxUIHelper: NSObject {
         }
 
         func stringForValue(_ value: Double, axis: AxisBase?) -> String {
-            let hasUnits = value == axis?.entries.first || axis is YAxis
+            let hasUnits = value == axis?.entries.first || value == axis?.entries.last || axis is YAxis
             if let formatX, formatX.length > 0 {
                 return String(format: formatX, value) + (hasUnits ? (" " + unitsX) : "")
             } else {

@@ -62,6 +62,27 @@
     self.titleView.text = _item.getVisibleName;
 }
 
+- (void)querySize
+{
+    if (_item.sizePkg == 0)
+    {
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:_item.downloadUrl]];
+        [request setHTTPMethod:@"HEAD"];
+        [[[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+            NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+            NSInteger responseCode = httpResponse.statusCode;
+            if (!error && (responseCode >= 200 && responseCode < 300))
+            {
+                _item.sizePkg = [response expectedContentLength];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self generateData];
+                    [self.tableView reloadData];
+                });
+            }
+        }] resume];
+    }
+}
+
 - (void)queryImage
 {
     if (_item.descriptionInfo.imageUrls.count > 0 && !_queriedImages)
@@ -135,6 +156,7 @@
     self.actionButton.layer.cornerRadius = 9.;
     self.navBarView.backgroundColor = _region.headerColor;
     
+    [self querySize];
     [self queryImage];
     [self setupActionButtons];
 }

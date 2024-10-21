@@ -225,6 +225,7 @@
         _mapVc.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
         [_mapVc.mapView resumeRendering];
+        [_mapVc.mapView limitFrameRefreshRate];
     }
 }
 
@@ -244,6 +245,9 @@
         _mapVc.view.frame = mapPanel.view.frame;
         _mapVc.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [_mapVc.mapView resumeRendering];
+        OAAppSettings * settings = [OAAppSettings sharedManager];
+        if (![settings.batterySavingMode get])
+            [_mapVc.mapView restoreFrameRefreshRate];
 
         [_mapVc setViewportScaleX:kViewportScale];
         [[OAMapViewTrackingUtilities instance] updateSettings];

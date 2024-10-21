@@ -345,7 +345,7 @@ extension WidgetGroupListViewController {
                     show(vc)
                 } else if widgetType == .altitudeMapCenter {
                     if let navigationController {
-                        OAChoosePlanHelper.showChoosePlanScreen(with: OAIAPHelper().srtm, navController: navigationController)
+                        OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.advanced_WIDGETS(), navController: navigationController)
                     }
                 }
             }

@@ -305,6 +305,13 @@ extension WidgetGroupListViewController {
                 cell.leftIconView.image = UIImage(named: item.iconName ?? "")
                 cell.titleLabel.text = item.title
                 cell.valueLabel.text = item.descr
+                
+                cell.accessoryView = nil
+                let widgetGroup = item.obj(forKey: "widget_group") as? WidgetGroup
+                if let widgetType = item.obj(forKey: "widget_type") as? WidgetType, !widgetType.isPurchased(), widgetGroup == nil {
+                    cell.accessoryView = UIImageView(image: .icPaymentLabelPro)
+                    cell.valueLabel.text = ""
+                }
             }
             outCell = cell
         }
@@ -330,11 +337,17 @@ extension WidgetGroupListViewController {
                     vc.similarAlreadyExist = similarAlreadyExist
                     vc.widgetKey = widgetInfo.key
                 }
-                vc.selectedAppMode = OAAppSettings.sharedManager().applicationMode.get()
-                vc.widgetInfo = widgetInfo
-                vc.widgetPanel = widgetPanel
-                vc.createNew = true
-                show(vc)
+                if widgetType.isPurchased() {
+                    vc.selectedAppMode = OAAppSettings.sharedManager().applicationMode.get()
+                    vc.widgetInfo = widgetInfo
+                    vc.widgetPanel = widgetPanel
+                    vc.createNew = true
+                    show(vc)
+                } else if widgetType == .altitudeMapCenter {
+                    if let navigationController {
+                        OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.advanced_WIDGETS(), navController: navigationController)
+                    }
+                }
             }
         }
     }

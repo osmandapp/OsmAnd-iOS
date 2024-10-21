@@ -16,6 +16,11 @@ class ConcurrentDictionary<Key: Hashable, Value> {
         pthread_rwlock_init(&rwlock, nil)
     }
 
+    init(with dictionary: [Key: Value]) {
+        pthread_rwlock_init(&rwlock, nil)
+        self.dictionary = dictionary
+    }
+
     deinit {
         pthread_rwlock_destroy(&rwlock)
     }
@@ -49,5 +54,10 @@ class ConcurrentDictionary<Key: Hashable, Value> {
         defer { pthread_rwlock_unlock(&rwlock) }
         return Array(dictionary.keys)
     }
-}
 
+    func asDictionary() -> [Key: Value] {
+        pthread_rwlock_rdlock(&rwlock)
+        defer { pthread_rwlock_unlock(&rwlock) }
+        return dictionary
+    }
+}

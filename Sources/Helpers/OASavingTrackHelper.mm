@@ -105,7 +105,6 @@
     OASInt *color = [[OASInt alloc] initWithInt:[settings.currentTrackColor get]];
     [_currentTrack setColorColor:color];
     [_currentTrack setColoringTypeColoringType:[settings.currentTrackColoringType get].name];
-    
 }
 
 - (instancetype)init

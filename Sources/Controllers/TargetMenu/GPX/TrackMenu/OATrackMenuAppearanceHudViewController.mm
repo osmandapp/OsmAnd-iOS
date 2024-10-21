@@ -2388,19 +2388,19 @@ static const NSInteger kColorsSection = 1;
         OAMapSettingsTerrainParametersViewController *controller = [[OAMapSettingsTerrainParametersViewController alloc] initWithSettingsType:EOAGPXSettingsTypeWallHeight];
         NSInteger savedElevationMeters = [self getGPXElevationMeters];
         [controller configureGPXElevationMeters:savedElevationMeters];
-        __weak __typeof(self) weakSelf = self;
-        // FIXME: weakSelf?
+        // NOTE: Due to the specifics of the navigation implementation, it is currently necessary to capture a strong reference to self
         controller.applyWallHeightCallback = ^(NSInteger meters)
         {
-            [weakSelf configureElevationMeters:meters];
+            [self configureElevationMeters:meters];
         };
         controller.hideCallback = ^{
-            OATrackMenuViewControllerState *state = weakSelf.reopeningTrackMenuState;
+            // NOTE: Due to the specifics of the navigation implementation, it is currently necessary to capture a strong reference to self
+            OATrackMenuViewControllerState *state = self.reopeningTrackMenuState;
             state.openedFromTracksList = state.openedFromTracksList;
             state.openedFromTrackMenu = YES;
             state.scrollToSectionIndex = 3;
-            [weakSelf.mapViewController hideContextPinMarker];
-            [weakSelf.mapPanelViewController openTargetViewWithGPX:weakSelf.gpx
+            [self.mapViewController hideContextPinMarker];
+            [self.mapPanelViewController openTargetViewWithGPX:self.gpx
                                                       trackHudMode:EOATrackAppearanceHudMode
                                                              state:state];
         };

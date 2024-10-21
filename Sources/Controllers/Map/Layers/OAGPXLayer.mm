@@ -1598,15 +1598,36 @@ colorizationScheme:(int)colorizationScheme
         else if (gpxFile)
         {
             document = isCurrentTrack
-                    ? [OASavingTrackHelper sharedInstance].currentTrack
+                    ? doc
                     : gpxFile;
         }
 
         if (!document)
             continue;
+
+        BOOL isJointSegments = NO;
+        OASGpxDataItem *gpxDataItem;
+        if (isCurrentTrack)
+        {
+            isJointSegments = [[OAAppSettings sharedManager].currentTrackIsJoinSegments get];
+        }
+        else
+        {
+            if ([_cachedTracks.allKeys containsObject:filePath]) {
+                gpxDataItem = _cachedTracks[filePath][@"gpx"];
+            }
+            else
+            {
+                gpxDataItem = [self getGpxItem:QString::fromNSString(key)];
+            }
+            if (gpxDataItem)
+            {
+                isJointSegments = gpxDataItem.joinSegments;
+            }
+        }
         // NOTE: The old logic called processPoints during each initialization of the document (OAGPXDocument -> OASGpxFile). This was necessary for the correct recalculation for getPointsToDisplay. Now this is handled by recalculateProcessPoint. If recalculation is needed, call [document recalculateProcessPoint
         [document recalculateProcessPoint];
-        NSArray<OASWptPt *> *points = [self findPointsNearSegments:[document getPointsToDisplay] radius:r point:point];
+        NSArray<OASWptPt *> *points = [self findPointsNearSegments:[document getPointsToDisplayWithIsJoinSegments:isJointSegments] radius:r point:point];
         if (points != nil)
         {
             CLLocation *selectedGpxPoint = [OAMapUtils getProjection:[[CLLocation alloc] initWithLatitude:point.latitude
@@ -1615,17 +1636,10 @@ colorizationScheme:(int)colorizationScheme
                                                                                                 longitude:points.firstObject.position.longitude]
                                                           toLocation:[[CLLocation alloc] initWithLatitude:points.lastObject.position.latitude
                                                                                                 longitude:points.lastObject.position.longitude]];
-            OASGpxDataItem *gpx = nil;
+            OATargetPoint *targetPoint = gpxDataItem
+            ? [self getTargetPoint:gpxDataItem]
+            : [self getTargetPoint:[OASavingTrackHelper sharedInstance].currentTrack];
 
-            if ([_cachedTracks.allKeys containsObject:filePath]) {
-                gpx = _cachedTracks[filePath][@"gpx"];
-            } else if (!isCurrentTrack) {
-                gpx = [self getGpxItem:QString::fromNSString(key)];
-            }
-
-            OATargetPoint *targetPoint = gpx ? [self getTargetPoint:gpx] : [self getTargetPoint:[OASavingTrackHelper sharedInstance].currentTrack];
-
-            
             targetPoint.location = selectedGpxPoint.coordinate;
             if (targetPoint && ![res containsObject:targetPoint])
                 [res addObject:targetPoint];

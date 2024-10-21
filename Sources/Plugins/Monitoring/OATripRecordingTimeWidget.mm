@@ -36,19 +36,18 @@
 
             [weakSelf setIcon:@"widget_track_recording_duration"];
             OASGpxFile *currentTrack = [OASavingTrackHelper sharedInstance].currentTrack;
-// FIXME: miss joinSegments
-//            BOOL withoutGaps = !currentTrack.joinSegments &&
-//            ( (!currentTrack.tracks || currentTrack.tracks.count == 0) || currentTrack.tracks[0].generalTrack);
-//
-//            OASGpxTrackAnalysis *analysis = [currentTrack getAnalysisFileTimestamp:0];
-//            long timeSpan =  withoutGaps ? analysis.timeSpanWithoutGaps : analysis.timeSpan;
-//            
-//            if (cachedTimeSpan != timeSpan)
-//            {
-//                cachedTimeSpan = timeSpan;
-//                NSString *formattedTime = [OAOsmAndFormatter getFormattedDurationShort:timeSpan fullForm:NO];
-//                [weakSelf setText:formattedTime subtext:nil];
-//            }
+            BOOL withoutGaps = ![[OAAppSettings sharedManager].currentTrackIsJoinSegments get] &&
+            ((!currentTrack.tracks || currentTrack.tracks.count == 0) || currentTrack.tracks[0].generalTrack);
+
+            OASGpxTrackAnalysis *analysis = [currentTrack getAnalysisFileTimestamp:0];
+            long timeSpan =  withoutGaps ? analysis.timeSpanWithoutGaps : analysis.timeSpan;
+            
+            if (cachedTimeSpan != timeSpan)
+            {
+                cachedTimeSpan = timeSpan;
+                NSString *formattedTime = [OAOsmAndFormatter getFormattedDurationShort:timeSpan fullForm:NO];
+                [weakSelf setText:formattedTime subtext:nil];
+            }
             return YES;
         };
         

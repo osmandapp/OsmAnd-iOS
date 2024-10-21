@@ -829,8 +829,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         OASGpxFile *gpx = [_editingContext exportGpx:trackName];
         if (gpx != nil)
         {
-            // FIXME:
-           // [gpx applyBounds];
             OAApplicationMode *appMode = _editingContext.appMode;
             [self onCloseButtonPressed];
             [self runNavigation:gpx appMode:appMode];

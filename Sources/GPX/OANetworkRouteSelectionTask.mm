@@ -53,8 +53,8 @@
             auto gpx = it.value();
             dispatch_async(dispatch_get_main_queue(), ^{
                 // FIXME: c++ doc
-//                OASGpxFile *doc = [[OASGpxFile alloc] initWithGpxDocument:gpx];
-//                onComplete(doc);
+                //  OASGpxFile *doc = [[OASGpxFile alloc] initWithGpxDocument:gpx];
+                // onComplete(doc);
             });
         }
         else

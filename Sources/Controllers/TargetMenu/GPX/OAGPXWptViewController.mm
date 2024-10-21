@@ -98,24 +98,21 @@
     {
         [self buildCommentRow:rows comment:self.wpt.point.comment];
     }
-    // FIXME:
-//    if (self.wpt.point.links && self.wpt.point.links.count > 0)
-//    {
-//        for (OALink *link in self.wpt.point.links)
-//        {
-//            [rows addObject:[[OARowInfo alloc] initWithKey:nil
-//                                                      icon:[OATargetInfoViewController getIcon:@"mx_website"]
-//                                                textPrefix:link.text
-//                                                      text:link.url.absoluteString
-//                                                 textColor:UIColorFromRGB(kHyperlinkColor)
-//                                                    isText:NO
-//                                                 needLinks:YES
-//                                                     order:2
-//                                                  typeName:@""
-//                                             isPhoneNumber:NO
-//                                                     isUrl:YES]];
-//        }
-//    }
+    
+    if (self.wpt.point.link.length > 0)
+    {
+        [rows addObject:[[OARowInfo alloc] initWithKey:nil
+                                                  icon:[OATargetInfoViewController getIcon:@"mx_website"]
+                                            textPrefix:nil
+                                                  text:self.wpt.point.link
+                                             textColor:UIColorFromRGB(kHyperlinkColor)
+                                                isText:NO
+                                             needLinks:YES
+                                                 order:2
+                                              typeName:@""
+                                         isPhoneNumber:NO
+                                                 isUrl:YES]];
+    }
     
     //TODO: add extra fields
     //wpt.speed

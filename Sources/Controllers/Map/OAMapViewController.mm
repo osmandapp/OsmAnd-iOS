@@ -3079,6 +3079,11 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     
     for (OASWptPt *wptItem in helper.currentTrack.getPointsList)
     {
+        OASGpxUtilitiesPointsGroup *group = [[OASavingTrackHelper sharedInstance] currentTrack].pointsGroups[wptItem.category];
+        if (group.isHidden)
+        {
+            continue;
+        }
         // FIXME:
 //        if ([[[OASavingTrackHelper sharedInstance] currentTrack].hiddenGroups containsObject:wptItem.category])
 //            continue;
@@ -3308,9 +3313,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
                     if ([OAUtilities doublesEqualUpToDigits:5 source:w.position.latitude destination:self.foundWpt.lat] &&
                         [OAUtilities doublesEqualUpToDigits:5 source:w.position.longitude destination:self.foundWpt.lon])
                     {
-                        // FIXME:
- //                       [OAGPXDocument fillWpt:w usingWpt:self.foundWpt];
- //                        [OAGPXDocument fillPointsGroup:self.foundWpt wptPtPtr:w doc:doc];
+                        OASWptPt *w = [[OASWptPt alloc] initWithWptPt:self.foundWpt];
+                        [doc addPointPoint:w];
                         OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
                         [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[self.foundWpt getColor]]];
                         break;
@@ -3372,12 +3376,10 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             if ([path isEqualToString:gpxFileName])
             {
                 OASGpxFile *doc = value;
-
-               // std::shared_ptr<OsmAnd::GpxDocument::WptPt> w(new OsmAnd::GpxDocument::WptPt());
-                OASWptPt *w = [OASWptPt new];
-                // FIXME:
-//                [OAGPXDocument fillWpt:w usingWpt:wpt];
-//                [OAGPXDocument fillPointsGroup:wpt wptPtPtr:w doc:doc];
+                
+                OASWptPt *w = [[OASWptPt alloc] initWithWptPt:wpt];
+                [doc addPointPoint:w];
+                
                 OAGPXAppearanceCollection *appeacaneCollection = [OAGPXAppearanceCollection sharedInstance];
                 [appeacaneCollection selectColor:[appeacaneCollection getColorItemWithValue:[wpt getColor]]];
                 
@@ -3410,12 +3412,11 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         
         if ([_gpxDocFileTemp isEqualToString:[gpxFileName lastPathComponent]])
         {
-            OASGpxFile *doc = _gpxDocsTemp.firstObject ;
+            OASGpxFile *doc = _gpxDocsTemp.firstObject;
+            
+            OASWptPt *w = [[OASWptPt alloc] initWithWptPt:wpt];
+            [doc addPointPoint:w];
 
-            std::shared_ptr<OsmAnd::GpxDocument::WptPt> w(new OsmAnd::GpxDocument::WptPt());
-            // FIXME:
-//            [OAGPXDocument fillWpt:w usingWpt:wpt];
-//            [OAGPXDocument fillPointsGroup:wpt wptPtPtr:w doc:doc];
             OAGPXAppearanceCollection *appeacaneCollection = [OAGPXAppearanceCollection sharedInstance];
             [appeacaneCollection selectColor:[appeacaneCollection getColorItemWithValue:[wpt getColor]]];
             
@@ -3505,14 +3506,12 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             {
                 for (OASWptPt *loc in doc.getPointsList)
                 {
-    
-                    
                     if ([OAUtilities doublesEqualUpToDigits:5 source:loc.position.latitude destination:item.point.lat] &&
                         [OAUtilities doublesEqualUpToDigits:5 source:loc.position.longitude destination:item.point.lon])
                     {
-                        // FIXME:
-                       // [OAGPXDocument fillWpt:w usingWpt:item.point];
-                      //  [OAGPXDocument fillPointsGroup:item.point wptPtPtr:w doc:doc];
+                        OASWptPt *w = [[OASWptPt alloc] initWithWptPt:item.point];
+                        [doc addPointPoint:w];
+                        
                         OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
                         [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:item.point.getColor]];
                         found = YES;
@@ -3551,9 +3550,10 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
                 if ([OAUtilities doublesEqualUpToDigits:5 source:loc.position.latitude destination:item.point.lat] &&
                     [OAUtilities doublesEqualUpToDigits:5 source:loc.position.longitude destination:item.point.lon])
                 {
-                    // FIXME:
-//                    [OAGPXDocument fillWpt:w usingWpt:item.point];
-//                    [OAGPXDocument fillPointsGroup:item.point wptPtPtr:w doc:doc];
+                    
+                    OASWptPt *w = [[OASWptPt alloc] initWithWptPt:item.point];
+                    [doc addPointPoint:w];
+                    
                     OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
                     [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:item.point.getColor]];
                     found = YES;
@@ -3599,11 +3599,11 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         if ([path isEqualToString:oldPath])
         {
             OASGpxFile *doc = value;
-            OASMetadata *metadata = doc.metadata;
+            OASMetadata *m = doc.metadata;
 
-            if (metadata == nil) {
-                metadata = [OASMetadata new];
-                doc.metadata = metadata;
+            if (m == nil) {
+                m = [OASMetadata new];
+                doc.metadata = m;
             }
             
             // FIXME:

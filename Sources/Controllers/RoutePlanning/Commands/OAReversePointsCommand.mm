@@ -41,20 +41,20 @@
     {
         OASWptPt *point = _oldPoints[i];
         OASWptPt *prevPoint = i > 0 ? _oldPoints[i - 1] : nil;
-        // FIXME:
-       // [point copyExtensions:point];
+        
+        OASWptPt *newPoint = [[OASWptPt alloc] initWithWptPt:point];
         if (prevPoint != nil)
         {
             NSString *profileType = prevPoint.getProfileType;
             if (profileType != nil)
             {
-                [point setProfileTypeProfileType:profileType];
+                [newPoint setProfileTypeProfileType:profileType];
             } else
             {
-                [point removeProfileType];
+                [newPoint removeProfileType];
             }
         }
-        [newPoints addObject:point];
+        [newPoints addObject:newPoint];
     }
     _newPoints = [NSArray arrayWithArray:newPoints];
     [self executeCommand];

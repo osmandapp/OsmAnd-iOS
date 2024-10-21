@@ -134,10 +134,7 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
     
     if ([amenity getSite])
     {
-        OALink *gpxLink = [[OALink alloc] init];
-        gpxLink.url = [[NSURL alloc] initWithString:[amenity getSite]];
-        // FIXME: wptPt don't have links
-       // wptPt.links = @[ gpxLink ];
+        wptPt.link = [amenity getSite];
     }
     
     NSString *color = [amenity getColor];
@@ -361,10 +358,7 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
         if (article.imageTitle && article.imageTitle.length > 0)
         {
             NSString *link = [OATravelArticle getImageUrlWithImageTitle:article.imageTitle thumbnail:false];
-            // FIXME:  gpxFile.metadata.link = link ?
-//            OASLink *gpxLink = [[OASLink alloc] init];
-//            gpxLink.url = [[NSURL alloc] initWithString:link];
-//            gpxFile.metadata.links = @[ gpxLink ];
+            gpxFile.metadata.link = link;
         }
         [gpxFile.tracks addObject:track];
         extensions[@"ref"] = article.ref;
@@ -390,11 +384,8 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
             
             if (article.imageTitle && article.imageTitle.length > 0)
             {
-                // FIXME:  gpxFile.metadata.link = link ?
-//                NSString *link = [OATravelArticle getImageUrlWithImageTitle:article.imageTitle thumbnail:false];
-//                OALink *gpxLink = [[OALink alloc] init];
-//                gpxLink.url = [[NSURL alloc] initWithString:link];
-//                gpxFile.metadata.links = @[ gpxLink ];
+                NSString *link = [OATravelArticle getImageUrlWithImageTitle:article.imageTitle thumbnail:false];
+                gpxFile.metadata.link = link;
             }
         }
         for (OAPOI *wayPoint in pointList)

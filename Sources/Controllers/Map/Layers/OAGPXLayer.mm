@@ -717,7 +717,8 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     
     if (trackpointextension)
     {
-        // FIXME: gpxtpx:trackpointextension
+//        point.attributes.waterTemperature
+//        // FIXME: gpxtpx:trackpointextension
 //        for (OAGpxExtension *subextension in trackpointextension.subextensions)
 //        {
 //            if ([subextension.name isEqualToString:(isAirTemp ? OASPointAttributes.sensorTagTemperatureA : OASPointAttributes.sensorTagTemperatureW)])
@@ -731,6 +732,33 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     
     return NAN;
 }
+// SensorPointAnalyser
+//- (float)getSensorAttribute:(OASWptPt *)point type:(EOAGPX3DLineVisualizationByType)type,
+//attributes:(OASPointAttributes *) attributes {
+//    boolean hasAttributes = attributes != null;
+//    switch (type) {
+//        case HEART_RATE:
+//            return hasAttributes ? attributes.getHeartRate() : SensorAttributesUtils.getPointAttribute(point, SENSOR_TAG_HEART_RATE, 0);
+//        case BICYCLE_CADENCE:
+//            return hasAttributes ? attributes.getBikeCadence() : SensorAttributesUtils.getPointAttribute(point, SENSOR_TAG_CADENCE, 0);
+//        case BICYCLE_POWER:
+//            return hasAttributes ? attributes.getBikePower() : SensorAttributesUtils.getPointAttribute(point, SENSOR_TAG_BIKE_POWER, 0);
+//        case TEMPERATURE: {
+//            float airTemp = hasAttributes ? attributes.getAirTemperature() : SensorAttributesUtils.getPointAttribute(point, SENSOR_TAG_TEMPERATURE_A, Float.NaN);
+//            if (!Float.isNaN(airTemp)) {
+//                return airTemp + TEMPERATURE_TO_HEIGHT_OFFSET;
+//            }
+//            float waterTemp = hasAttributes ? attributes.getWaterTemperature() : SensorAttributesUtils.getPointAttribute(point, SENSOR_TAG_TEMPERATURE_W, Float.NaN);
+//            if (!Float.isNaN(waterTemp)) {
+//                return waterTemp + TEMPERATURE_TO_HEIGHT_OFFSET;
+//            }
+//        }
+//        case SPEED_SENSOR: {
+//            return hasAttributes ? attributes.getSensorSpeed() : SensorAttributesUtils.getPointAttribute(point, SENSOR_TAG_BIKE_POWER, 0) * SPEED_TO_HEIGHT_SCALE;
+//        }
+//    }
+//    return 0;
+//}
 
 - (void) drawLine:(QVector<OsmAnd::PointI> &)points
               gpx:(OASGpxDataItem *)gpx

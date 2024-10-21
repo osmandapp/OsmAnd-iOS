@@ -455,6 +455,7 @@
                 }];
                 if (hasText)
                     linkCellData.values[@"url"] = link.url.absoluteString;
+                
                 [infoSectionData.subjects addObject:linkCellData];
             }
         }

@@ -1026,10 +1026,11 @@
 
 - (void)setWaypointsGroupVisible:(NSString *)groupName show:(BOOL)show
 {
-    if (show)
-        [self.gpx.dataItem removeHiddenGroups:[self isDefaultGroup:groupName] ? @"" : groupName];
-    else
-        [self.gpx.dataItem addHiddenGroups:[self isDefaultGroup:groupName] ? @"" : groupName];
+  // FIXME:
+//    if (show)
+//        [self.gpx.dataItem removeHiddenGroups:[self isDefaultGroup:groupName] ? @"" : groupName];
+//    else
+//        [self.gpx.dataItem addHiddenGroups:[self isDefaultGroup:groupName] ? @"" : groupName];
     [[OAGPXDatabase sharedDb] save];
 
     if (_selectedTab == EOATrackMenuHudPointsTab)
@@ -1376,9 +1377,9 @@
 
 - (NSArray<OALink *> *)getLinks
 {
-    // FIXME:
-    return nil;
-   // return self.doc.metadata.links;
+    OALink *link = [OALink new];
+    link.url = [NSURL URLWithString:self.doc.metadata.link];
+    return @[link];
 }
 
 - (NSString *)getCreatedOn
@@ -1439,27 +1440,20 @@
 
 - (NSString *)getMetadataImageLink
 {
-    return self.doc.metadata.link;
-    // FIXME:
-//    NSArray *links = self.doc.metadata.links;
-//    if (links && links.count > 0)
-//    {
-//        for (OALink *link in links)
-//        {
-//            if (link.url && link.url.absoluteString && link.url.absoluteString.length > 0)
-//            {
-//                NSString *lowerCaseLink = [link.url.absoluteString lowerCase];
-//                if ([lowerCaseLink containsString:@".jpg"] ||
-//                    [lowerCaseLink containsString:@".jpeg"] ||
-//                    [lowerCaseLink containsString:@".png"] ||
-//                    [lowerCaseLink containsString:@".bmp"] ||
-//                    [lowerCaseLink containsString:@".webp"])
-//                {
-//                    return link.url.absoluteString;
-//                }
-//            }
-//        }
-//    }
+    NSString *link = self.doc.metadata.link;
+    
+    if (link.length > 0)
+    {
+        NSString *lowerCaseLink = [link lowerCase];
+        if ([lowerCaseLink containsString:@".jpg"] ||
+            [lowerCaseLink containsString:@".jpeg"] ||
+            [lowerCaseLink containsString:@".png"] ||
+            [lowerCaseLink containsString:@".bmp"] ||
+            [lowerCaseLink containsString:@".webp"])
+        {
+            return link;
+        }
+    }
     return nil;
 }
 

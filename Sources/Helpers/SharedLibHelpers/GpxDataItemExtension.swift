@@ -350,24 +350,25 @@ extension GpxDataItem {
     func isTempTrack() -> Bool {
         gpxFilePath.hasPrefix("Temp/")
     }
+    // getOrCreateGroup
     
-    func removeHiddenGroups(_ groupName: String) {
-        guard var groups = hiddenGroups else {
-            hiddenGroups = []
-            return
-        }
-        
-        groups.remove(groupName)
-        hiddenGroups = groups
-    }
-    
-    func addHiddenGroups(_ groupName: String) {
-        if hiddenGroups == nil {
-            hiddenGroups = [groupName]
-        } else {
-            hiddenGroups?.insert(groupName)
-        }
-    }
+//    func removeHiddenGroups(_ groupName: String) {
+//        guard var groups = hiddenGroups else {
+//            hiddenGroups = []
+//            return
+//        }
+//        
+//        groups.remove(groupName)
+//        hiddenGroups = groups
+//    }
+//    
+//    func addHiddenGroups(_ groupName: String) {
+//        if hiddenGroups == nil {
+//            hiddenGroups = [groupName]
+//        } else {
+//            hiddenGroups?.insert(groupName)
+//        }
+//    }
     
     func updateFolderName(newFilePath: String) {
         gpxFileName = (newFilePath as NSString).lastPathComponent

@@ -609,14 +609,13 @@
                             
                             if (!stringContent.isEmpty())
                             {
-                                // OASGpxFile
+                                // FIXME: 
                                 OAGPXDocumentAdapter *adapter = [[OAGPXDocumentAdapter alloc] init];
-
-                                // FIXME: OASGpxFile read from string 
-//                                OAGPXDocument *document = [[OAGPXDocument alloc] init];
-//                                QXmlStreamReader xmlReader(stringContent);
-//                                [document fetch:OsmAnd::GpxDocument::loadFrom(xmlReader)];
-//                                adapter.object = document;
+                                
+                                OASOkioBuffer *buffer = [[OASOkioBuffer alloc] init];
+                                [buffer writeUtf8String:stringContent.toNSString()];
+                                OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileSource:buffer];
+                                adapter.object = gpxFile;
                                 dbArticle.gpxFile = adapter;
                             }
                         }

@@ -126,11 +126,11 @@
         trkSegment.points = [[trkSegment.points arrayByAddingObject:pt] mutableCopy];
     }
     
-// FIXME:
-//    NSMutableArray<OARouteSegment *> *routeSegments = [NSMutableArray new];
+// FIXME: use old document
+//    NSMutableArray<OASGpxUtilitiesRouteSegment *> *routeSegments = [NSMutableArray new];
 //    for (const auto& item : routeItems)
 //    {
-//        [routeSegments addObject:[OARouteSegment fromStringBundle:item]];
+//        [routeSegments addObject:[OASGpxUtilitiesRouteSegment fromStringBundle:item]];
 //    }
 //    trkSegment.routeSegments = routeSegments;
 //    NSMutableArray<OARouteType *> *routeTypes = [NSMutableArray new];

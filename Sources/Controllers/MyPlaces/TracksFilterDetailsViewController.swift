@@ -250,66 +250,12 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
             toDateRow.key = Self.toDateRowKey
             toDateRow.title = localizedString("shared_string_to")
             toDateRow.setObj(dateCreationToValue ?? 0, forKey: "date")
-        case .color:
-            let itemsToDisplay = isSearchActive ? filteredListItems : allListItems
+        case .color, .width, .city:
             let section = tableData.createNewSection()
-            for itemName in itemsToDisplay {
-                let row = section.createNewRow()
-                row.cellType = OAValueTableViewCell.reuseIdentifier
-                row.key = itemName
-                row.title = listFilterType?.collectionFilterParams.getItemText(itemName: itemName)
-                if let tracksCount = listFilterType?.getTracksCountForItem(itemName: itemName) {
-                    row.descr = String(describing: tracksCount)
-                }
-                
-                if itemName.isEmpty {
-                    row.icon = .icCustomAppearanceDisabledOutlined
-                    row.iconTintColor = .iconColorDisabled
-                } else {
-                    if let itemInt = Int(itemName) {
-                        row.iconTintColor = colorFromRGB(itemInt)
-                    }
-                }
-            }
-        case .width:
             let itemsToDisplay = isSearchActive ? filteredListItems : allListItems
-            let section = tableData.createNewSection()
             for itemName in itemsToDisplay {
-                let row = section.createNewRow()
-                row.cellType = OAValueTableViewCell.reuseIdentifier
-                row.key = itemName
-                row.title = itemName.isEmpty ? listFilterType?.collectionFilterParams.getItemText(itemName: itemName) : listFilterType?.collectionFilterParams.getItemText(itemName: itemName).capitalized
-                if let tracksCount = listFilterType?.getTracksCountForItem(itemName: itemName) {
-                    row.descr = String(describing: tracksCount)
-                }
-                if itemName.isEmpty {
-                    row.icon = .icCustomAppearanceDisabledOutlined
-                    row.iconTintColor = .iconColorDisabled
-                } else if itemName == "thin" {
-                    row.icon = .icCustomTrackLineThin
-                    row.iconTintColor = .iconColorDisruptive
-                } else if itemName == "medium" {
-                    row.icon = .icCustomTrackLineMedium
-                    row.iconTintColor = .iconColorDisruptive
-                } else if itemName == "bold" {
-                    row.icon = .icCustomTrackLineBold
-                    row.iconTintColor = .iconColorDisruptive
-                } else {
-                    row.icon = .icCustomTrackLineBold
-                    row.iconTintColor = .iconColorDisruptive
-                }
-            }
-        case .city:
-            let itemsToDisplay = isSearchActive ? filteredListItems : allListItems
-            let section = tableData.createNewSection()
-            for itemName in itemsToDisplay {
-                let row = section.createNewRow()
-                row.cellType = OAValueTableViewCell.reuseIdentifier
-                row.key = itemName
-                row.title = listFilterType?.collectionFilterParams.getItemText(itemName: itemName)
-                if let tracksCount = listFilterType?.getTracksCountForItem(itemName: itemName) {
-                    row.descr = String(describing: tracksCount)
-                }
+                let isWidth = filterType == .width
+                configureRowForSection(section: section, itemName: itemName, isWidth: isWidth)
             }
         case .folder:
             let itemsToDisplay = isSearchActive ? filteredListItems : allListItems
@@ -454,6 +400,40 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
             dateCreationFromValue = timestamp
         } else if data.key == Self.toDateRowKey {
             dateCreationToValue = timestamp
+        }
+    }
+    
+    private func configureRowForSection(section: OATableSectionData, itemName: String, isWidth: Bool) {
+        let row = section.createNewRow()
+        row.cellType = OAValueTableViewCell.reuseIdentifier
+        row.key = itemName
+        if itemName.isEmpty {
+            row.title = listFilterType?.collectionFilterParams.getItemText(itemName: itemName) ?? ""
+        } else {
+            row.title = isWidth ? listFilterType?.collectionFilterParams.getItemText(itemName: itemName).capitalized : listFilterType?.collectionFilterParams.getItemText(itemName: itemName)
+        }
+        
+        if let tracksCount = listFilterType?.getTracksCountForItem(itemName: itemName) {
+            row.descr = String(describing: tracksCount)
+        }
+        
+        if itemName.isEmpty {
+            row.icon = .icCustomAppearanceDisabledOutlined
+            row.iconTintColor = .iconColorDisabled
+        } else if isWidth {
+            switch itemName {
+            case "thin":
+                row.icon = .icCustomTrackLineThin
+            case "medium":
+                row.icon = .icCustomTrackLineMedium
+            case "bold":
+                row.icon = .icCustomTrackLineBold
+            default:
+                row.icon = .icCustomTrackLineMedium
+            }
+            row.iconTintColor = .iconColorDisruptive
+        } else if let itemInt = Int(itemName) {
+            row.iconTintColor = colorFromRGB(itemInt)
         }
     }
     

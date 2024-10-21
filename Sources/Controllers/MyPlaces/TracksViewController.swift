@@ -64,7 +64,6 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     private var recCell: OATwoButtonsTableViewCell?
     private var baseFilters: TracksSearchFilter?
     private var baseFiltersResult: FilterResults?
-    private var nameFilterType: TextTrackFilter?
     private var searchController = UISearchController()
     private var isSearchActive = false
     private var isNameFiltered = false
@@ -1751,7 +1750,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             if let baseFilters = self.baseFilters {
                 self.baseFiltersResult?.values = baseFilters.getFilteredTrackItems()
                 self.isSearchTextFilterChanged = true
-                self.searchController.searchBar.text = self.nameFilterType?.value
+                self.searchController.searchBar.text = (baseFilters.getFilterByType(.name) as? TextTrackFilter)?.value
                 self.isNameFiltered = !(self.searchController.searchBar.text?.isEmpty ?? true)
                 self.updateSearchController()
                 self.generateData()
@@ -1786,11 +1785,10 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             isNameFiltered = false
             baseFilters = TracksSearchFilter(trackItems: rootFolder.getFlattenedTrackItems(), currentFolder: nil)
             baseFilters?.addFiltersChangedListener(self)
-            nameFilterType = baseFilters?.getFilterByType(.name) as? TextTrackFilter
         } else if searchController.isActive && !(searchController.searchBar.searchTextField.text ?? "").isEmpty {
             isSearchActive = true
             isNameFiltered = true
-            nameFilterType?.value = searchController.searchBar.searchTextField.text ?? ""
+            (baseFilters?.getFilterByType(.name) as? TextTrackFilter)?.value = searchController.searchBar.searchTextField.text ?? ""
         } else {
             isSearchActive = false
             isNameFiltered = false

@@ -170,10 +170,12 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
         colorRow.cellType = OAValueTableViewCell.reuseIdentifier
         colorRow.key = Self.colorFilterRowKey
         colorRow.title = localizedString("shared_string_color")
+        updateListFilterRowDescription(forFilterType: .color, inRow: colorRow)
         let widthRow = appearanceFilterSection.createNewRow()
         widthRow.cellType = OAValueTableViewCell.reuseIdentifier
         widthRow.key = Self.widthFilterRowKey
         widthRow.title = localizedString("routing_attr_width_name")
+        updateListFilterRowDescription(forFilterType: .width, inRow: widthRow)
         
         let infoFilterSection = tableData.createNewSection()
         infoFilterSection.headerText = localizedString("info_button")
@@ -181,10 +183,12 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
         nearestCitiesRow.cellType = OAValueTableViewCell.reuseIdentifier
         nearestCitiesRow.key = Self.nearestCitiesFilterRowKey
         nearestCitiesRow.title = localizedString("nearest_cities")
+        updateListFilterRowDescription(forFilterType: .city, inRow: nearestCitiesRow)
         let folderRow = infoFilterSection.createNewRow()
         folderRow.cellType = OAValueTableViewCell.reuseIdentifier
         folderRow.key = Self.folderFilterRowKey
         folderRow.title = localizedString("plan_route_folder")
+        updateListFilterRowDescription(forFilterType: .folder, inRow: folderRow)
         
         addRangeFilterSections(sectionHeader: "shared_string_sensors", filters: [
             (key: Self.sensorSpeedMaxFilterRowKey, type: .maxSensorSpeed, title: "max_sensor_speed"),
@@ -348,6 +352,16 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
                 let maxValue = Float(TracksSearchFilter.getDisplayValueTo(filter: filter))
                 row.descr = "\(decimalFormatter.string(from: NSNumber(value: minValue)) ?? "") - \(decimalFormatter.string(from: NSNumber(value: maxValue)) ?? "") \(filter.trackFilterType.measureUnitType.getFilterUnitText(mc: mappedConstant))"
             }
+        }
+    }
+    
+    private func updateListFilterRowDescription(forFilterType filterType: TrackFilterType, inRow row: OATableRowData) {
+        if let filter = baseFilters.getFilterByType(filterType) as? ListTrackFilter {
+            let selectedNames = filter.selectedItems.compactMap { item -> String? in
+                guard let itemName = item as? String else { return nil }
+                return filter.collectionFilterParams.getItemText(itemName: itemName)
+            }.joined(separator: ", ")
+            row.descr = selectedNames
         }
     }
     

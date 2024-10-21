@@ -28,11 +28,13 @@ final class GradientUiHelper: NSObject {
     static let maxAltitudeAddition = 50.0
 
     static func formatTerrainTypeValues(_ value: Double) -> String {
-        let format = value >= 10 ? "#" : "#.#"
         let formatter = NumberFormatter()
-        formatter.positiveFormat = format
-        var formattedValue = formatter.string(from: NSNumber(value: value)) ?? ""
-        if formattedValue.hasSuffix(".0") {
+        formatter.minimumFractionDigits = (value >= 10) ? 0 : 1
+        formatter.maximumFractionDigits = formatter.minimumFractionDigits
+        formatter.numberStyle = .decimal
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        var formattedValue = formatter.string(from: NSNumber(value: value)) ?? "\(value)"
+        if formattedValue.hasSuffix("\(formatter.decimalSeparator ?? ".")0") {
             formattedValue.removeLast(2)
         }
         return formattedValue

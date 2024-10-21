@@ -181,15 +181,13 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
         imageView.gradated(Self.createGradientPoints(colorPalette))
     }
 
-    @objc static func createDescriptionForPalette(_ colorPalette: ColorPalette) -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.minimumFractionDigits = 0
-        formatter.maximumFractionDigits = 3
-        formatter.locale = Locale(identifier: "en_US_POSIX")
+    @objc static func createDescriptionForPalette(_ colorPalette: ColorPalette, isTerrain: Bool) -> String {
         return colorPalette.colorValues.compactMap { colorValue -> String? in
-            let number = NSNumber(value: colorValue.val)
-            return formatter.string(from: number)
+            if isTerrain {
+                return GradientUiHelper.formatTerrainTypeValues(colorValue.val)
+            } else {
+                return "\(colorValue.val)"
+            }
         }.joined(separator: " • ")
     }
 

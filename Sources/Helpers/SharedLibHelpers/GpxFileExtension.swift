@@ -46,9 +46,8 @@ extension GpxFile {
         processedPointsToDisplay = processRoutePoints()
     }
     
-    func getPointsToDisplay() -> [TrkSegment] {
-        // FIXME:
-        if (false/*self.joinSegments*/) {
+    func getPointsToDisplay(isJoinSegments: Bool) -> [TrkSegment] {
+        if isJoinSegments {
             if let getGeneralTrack = getGeneralTrack() {
                 return getGeneralTrack.segments as! [TrkSegment]
             }
@@ -58,5 +57,3 @@ extension GpxFile {
         }
     }
 }
-
-

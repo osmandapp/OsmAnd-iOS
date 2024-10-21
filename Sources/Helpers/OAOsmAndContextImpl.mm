@@ -123,55 +123,6 @@ static NSString * const kGpxImportDir = @"import";
 
 @end
 
-@interface OAExternalSensorPointsAnalyser : NSObject <OASGpxTrackAnalysisTrackPointsAnalyser>
-@end
-
-@implementation OAExternalSensorPointsAnalyser
-{
-    NSArray<NSString *> *_SENSOR_GPX_TAGS;
-}
-
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-        _SENSOR_GPX_TAGS = @[
-            OASPointAttributes.companion.SENSOR_TAG_HEART_RATE,
-            OASPointAttributes.companion.SENSOR_TAG_SPEED,
-            OASPointAttributes.companion.SENSOR_TAG_CADENCE,
-            OASPointAttributes.companion.SENSOR_TAG_BIKE_POWER,
-            OASPointAttributes.companion.SENSOR_TAG_TEMPERATURE_W,
-            OASPointAttributes.companion.SENSOR_TAG_TEMPERATURE_A
-        ];
-    }
-    return self;
-}
-
-- (float) getPointAttribute:(OASWptPt *)wptPt key:(NSString *)key defaultValue:(float)defaultValue
-{
-    NSString *value = wptPt.getDeferredExtensionsToRead[key];
-    if (value.length == 0)
-        value = wptPt.getExtensionsToRead[key];
-
-    return [OASKAlgorithms.shared parseFloatSilentlyInput:value def:defaultValue];
-}
-
-- (void)onAnalysePointAnalysis:(OASGpxTrackAnalysis *)analysis point:(OASWptPt *)point attribute:(OASPointAttributes *)attribute
-{
-    for (NSString *tag in _SENSOR_GPX_TAGS)
-    {
-        float defaultValue = [tag isEqualToString:OASPointAttributes.companion.SENSOR_TAG_TEMPERATURE_W]
-    		|| [tag isEqualToString:OASPointAttributes.companion.SENSOR_TAG_TEMPERATURE_A] ? NAN : 0;
-        float value = [self getPointAttribute:point key:tag defaultValue:defaultValue];
-
-        [attribute setAttributeValueTag:tag value:value];
-
-        if (![analysis hasDataTag:tag] && [attribute hasValidValueTag:tag])
-            [analysis setHasDataTag:tag hasData:YES];
-    }
-}
-
-@end
 
 @implementation OAOsmAndContextImpl
 {
@@ -238,13 +189,15 @@ static NSString * const kGpxImportDir = @"import";
 
 - (void)searchNearestCityNameLatLon:(OASKLatLon *)latLon callback:(void (^)(NSString * _Nonnull))callback
 {
-    OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude)];
-    callback(nearestCityPOI ? nearestCityPOI.name : @"");
+    @autoreleasepool {
+        OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude)];
+        callback(nearestCityPOI ? nearestCityPOI.name : @"");
+    }
 }
 
-- (id<OASGpxTrackAnalysisTrackPointsAnalyser>)getTrackPointsAnalyser
+- (id<OASGpxTrackAnalysisTrackPointsAnalyser> _Nullable)getTrackPointsAnalyser
 {
-    return [[OAExternalSensorPointsAnalyser alloc] init];
+    return nil;
 }
 
 

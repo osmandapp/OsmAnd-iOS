@@ -262,6 +262,7 @@ static const NSInteger kColorsSection = 1;
         [self.settings.currentTrackWidth set:_backupGpxItem.width];
         [self.settings.currentTrackShowArrows set:_backupGpxItem.showArrows];
         [self.settings.currentTrackShowStartFinish set:_backupGpxItem.showStartFinish];
+        [self.settings.currentTrackIsJoinSegments set:_backupGpxItem.joinSegments];
         [self.settings.currentTrackVerticalExaggerationScale set:_backupGpxItem.verticalExaggerationScale];
         [self.settings.currentTrackElevationMeters set:(int)_backupGpxItem.elevationMeters];
         [self.settings.currentTrackVisualization3dByType set:(int)_backupGpxItem.visualization3dByType];
@@ -272,6 +273,7 @@ static const NSInteger kColorsSection = 1;
                 ? [OAColoringType getNonNullTrackColoringTypeByName:_backupGpxItem.coloringType]
                 : OAColoringType.TRACK_SOLID];
         [self.settings.currentTrackColor set:(int)_backupGpxItem.color];
+       
         
         [self.doc setWidthWidth:_backupGpxItem.width];
         [self.doc setShowArrowsShowArrows:_backupGpxItem.showArrows];
@@ -288,7 +290,7 @@ static const NSInteger kColorsSection = 1;
         [self.doc setColoringTypeColoringType:_backupGpxItem.coloringType];
         
         [self.doc setGradientColorPaletteGradientColorPaletteName:_backupGpxItem.gradientPaletteName];
-        // FIXME: is missed joinSegments?
+
         OASInt *color = [[OASInt alloc] initWithInt:(int)_backupGpxItem.color];
         [self.doc setColorColor:color];
     }
@@ -399,11 +401,10 @@ static const NSInteger kColorsSection = 1;
     : self.gpx.showStartFinish;
 }
 
-// FIXME: joinSegments for current track
 - (BOOL)getGPXShowJoinSegments
 {
     return self.isCurrentTrack
-    ? false/*[self.doc joinSegments]*/
+    ? [OAAppSettings.sharedManager.currentTrackIsJoinSegments get]
     : self.gpx.joinSegments;
 }
 
@@ -1420,6 +1421,7 @@ static const NSInteger kColorsSection = 1;
             [weakSelf.settings.currentTrackWidth set:[weakSelf getGPXWidth]];
             [weakSelf.settings.currentTrackShowArrows set:[weakSelf getGPXShowArrows]];
             [weakSelf.settings.currentTrackShowStartFinish set:[weakSelf getGPXShowStartFinish]];
+            [weakSelf.settings.currentTrackIsJoinSegments set:[weakSelf getGPXShowJoinSegments]];
             [weakSelf.settings.currentTrackVerticalExaggerationScale set:[weakSelf getGPXVerticalExaggerationScale]];
             [weakSelf.settings.currentTrackElevationMeters set:[weakSelf getGPXElevationMeters]];
             [weakSelf.settings.currentTrackVisualization3dByType set:(int)[weakSelf getGPXVisualization3dByType]];
@@ -1431,6 +1433,8 @@ static const NSInteger kColorsSection = 1;
                     ? [OAColoringType getNonNullTrackColoringTypeByName:[weakSelf getGPXColoringType]]
                     : OAColoringType.TRACK_SOLID];
             [weakSelf.settings.currentTrackColor set:(int)[weakSelf getGPXColor]];
+           
+            
         } else {
             OASGpxDataItem *dataItem = weakSelf.gpx.dataItem;
         
@@ -2033,7 +2037,7 @@ static const NSInteger kColorsSection = 1;
 
         if (self.isCurrentTrack)
         {
-            // FIXME: joinSegments for current track ?
+            [OAAppSettings.sharedManager.currentTrackIsJoinSegments set:toggle];
             [[_app updateRecTrackOnMapObservable] notifyEvent];
         }
         else
@@ -2384,19 +2388,19 @@ static const NSInteger kColorsSection = 1;
         OAMapSettingsTerrainParametersViewController *controller = [[OAMapSettingsTerrainParametersViewController alloc] initWithSettingsType:EOAGPXSettingsTypeWallHeight];
         NSInteger savedElevationMeters = [self getGPXElevationMeters];
         [controller configureGPXElevationMeters:savedElevationMeters];
-        __weak __typeof(self) weakSelf = self;
-        // FIXME: weakSelf?
+        // NOTE: Due to the specifics of the navigation implementation, it is currently necessary to capture a strong reference to self
         controller.applyWallHeightCallback = ^(NSInteger meters)
         {
-            [weakSelf configureElevationMeters:meters];
+            [self configureElevationMeters:meters];
         };
         controller.hideCallback = ^{
-            OATrackMenuViewControllerState *state = weakSelf.reopeningTrackMenuState;
+            // NOTE: Due to the specifics of the navigation implementation, it is currently necessary to capture a strong reference to self
+            OATrackMenuViewControllerState *state = self.reopeningTrackMenuState;
             state.openedFromTracksList = state.openedFromTracksList;
             state.openedFromTrackMenu = YES;
             state.scrollToSectionIndex = 3;
-            [weakSelf.mapViewController hideContextPinMarker];
-            [weakSelf.mapPanelViewController openTargetViewWithGPX:weakSelf.gpx
+            [self.mapViewController hideContextPinMarker];
+            [self.mapPanelViewController openTargetViewWithGPX:self.gpx
                                                       trackHudMode:EOATrackAppearanceHudMode
                                                              state:state];
         };
@@ -2411,6 +2415,7 @@ static const NSInteger kColorsSection = 1;
             [self.settings.currentTrackWidth resetToDefault];
             [self.settings.currentTrackShowArrows resetToDefault];
             [self.settings.currentTrackShowStartFinish resetToDefault];
+            [self.settings.currentTrackIsJoinSegments resetToDefault];
             [self.settings.currentTrackVerticalExaggerationScale resetToDefault];
             [self.settings.currentTrackElevationMeters resetToDefault];
             [self.settings.currentTrackVisualization3dByType resetToDefault];

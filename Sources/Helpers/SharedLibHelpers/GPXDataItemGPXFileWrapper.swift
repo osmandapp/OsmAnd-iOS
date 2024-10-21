@@ -13,13 +13,8 @@ final class GPXDataItemGPXFileWrapper: NSObject {
     var gpxDataItem: GpxDataItem?
     var gpxFile: GpxFile?
     
-    init(gpxDataItem: GpxDataItem?, gpxFile: GpxFile?) {
-         self.gpxDataItem = gpxDataItem
-         self.gpxFile = gpxFile
-     }
-
     var elevationMeters: Double {
-        if let gpxDataItem  {
+        if let gpxDataItem {
             return gpxDataItem.elevationMeters
         }
         if let gpxFile {
@@ -29,7 +24,7 @@ final class GPXDataItemGPXFileWrapper: NSObject {
     }
 
     var visualization3dByType: EOAGPX3DLineVisualizationByType {
-        if let gpxDataItem  {
+        if let gpxDataItem {
             return gpxDataItem.visualization3dByType
         }
         if let gpxFile {
@@ -40,12 +35,12 @@ final class GPXDataItemGPXFileWrapper: NSObject {
     }
 
     var visualization3dWallColorType: EOAGPX3DLineVisualizationWallColorType {
-        if let gpxDataItem  {
+        if let gpxDataItem {
             return gpxDataItem.visualization3dWallColorType
         }
         if let gpxFile {
-            let value = gpxFile.get3DWallColoringType()
-            return GpxDataItem.lineVisualizationWallColorType(forName: value!)
+            guard let value = gpxFile.get3DWallColoringType() else { return .upwardGradient }
+            return GpxDataItem.lineVisualizationWallColorType(forName: value)
         }
         return .upwardGradient
     }
@@ -85,9 +80,7 @@ final class GPXDataItemGPXFileWrapper: NSObject {
             return gpxDataItem.joinSegments
         }
         if let gpxFile {
-            return false
-            // FIXME:
-           // return gpxFile.joinSegments
+            return OAAppSettings.sharedManager().currentTrackIsJoinSegments.get()
         }
         return false
     }
@@ -101,4 +94,9 @@ final class GPXDataItemGPXFileWrapper: NSObject {
         }
         return nil
     }
+    
+    init(gpxDataItem: GpxDataItem?, gpxFile: GpxFile?) {
+         self.gpxDataItem = gpxDataItem
+         self.gpxFile = gpxFile
+     }
 }

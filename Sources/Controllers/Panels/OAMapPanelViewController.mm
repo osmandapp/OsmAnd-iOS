@@ -2197,12 +2197,15 @@ typedef enum
 
 - (void) targetGoToGPX
 {
-    if (_activeTargetObj) {
+    if (_activeTargetObj)
+    {
         OASTrackItem *trackItem = _activeTargetObj;
         if ([trackItem isKindOfClass:[OASTrackItem class]])
         {
-            OASGpxFile *gpxFile = [[OASavingTrackHelper sharedInstance] currentTrack];
-            if (!trackItem.isShowCurrentTrack)
+            OASGpxFile *gpxFile;
+            if (trackItem.isShowCurrentTrack)
+                gpxFile = [[OASavingTrackHelper sharedInstance] currentTrack];
+            else
                 gpxFile = [OASGpxUtilities.shared loadGpxFileFile:trackItem.dataItem.file];
 
             [self displayGpxOnMap:gpxFile];

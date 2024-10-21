@@ -49,7 +49,7 @@ class WidgetGroupItemsViewController: OABaseNavbarViewController {
                 
                 cell.accessoryView = nil
                 if let widgetType = item.obj(forKey: "widget_type") as? WidgetType, !widgetType.isPurchased() {
-                    cell.accessoryView = UIImageView(image: UIImage.icPaymentLabelPro)
+                    cell.accessoryView = UIImageView(image: .icPaymentLabelPro)
                 }
             }
             outCell = cell

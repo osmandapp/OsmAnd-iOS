@@ -104,7 +104,7 @@ class WidgetType: NSObject {
     }
 
     func isPurchased() -> Bool {
-        if (WidgetType.getProWidgets().contains(where: { $0.id == self.id } )) {
+        if WidgetType.getProWidgets().contains(where: { $0.id == self.id } ) {
             return OAIAPHelper.isOsmAndProAvailable()
         }
         return true
@@ -162,7 +162,7 @@ class WidgetType: NSObject {
     }
 
     static func getProWidgets() -> [WidgetType] {
-        return [.elevationProfile, .altitudeMapCenter];
+        [.elevationProfile, .altitudeMapCenter];
     }
 
     static func isOriginalWidget(_ id: String) -> Bool {

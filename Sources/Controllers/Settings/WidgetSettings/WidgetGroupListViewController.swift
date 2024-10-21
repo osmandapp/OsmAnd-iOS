@@ -309,7 +309,7 @@ extension WidgetGroupListViewController {
                 cell.accessoryView = nil
                 let widgetGroup = item.obj(forKey: "widget_group") as? WidgetGroup
                 if let widgetType = item.obj(forKey: "widget_type") as? WidgetType, !widgetType.isPurchased(), widgetGroup == nil {
-                    cell.accessoryView = UIImageView(image: UIImage.icPaymentLabelPro)
+                    cell.accessoryView = UIImageView(image: .icPaymentLabelPro)
                     cell.valueLabel.text = ""
                 }
             }

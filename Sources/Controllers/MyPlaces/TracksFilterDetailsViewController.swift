@@ -8,19 +8,56 @@
 
 import UIKit
 
+protocol TrackFilterConfigurable {
+    func configure(with filter: BaseTrackFilter, in controller: TracksFilterDetailsViewController)
+}
+
+class RangeTrackFilterConfigurator: TrackFilterConfigurable {
+    func configure(with filter: BaseTrackFilter, in controller: TracksFilterDetailsViewController) {
+        controller.rangeFilterType = filter as? RangeTrackFilter<AnyObject>
+        guard let rangeFilter = controller.rangeFilterType else { return }
+        controller.rangeFilterType = rangeFilter
+        controller.currentMinValue = Float(TracksSearchFilter.getDisplayMinValue(filter: rangeFilter))
+        controller.currentMaxValue = Float(TracksSearchFilter.getDisplayMaxValue(filter: rangeFilter))
+        controller.currentValueFrom = Float(TracksSearchFilter.getDisplayValueFrom(filter: rangeFilter))
+        controller.currentValueTo = Float(TracksSearchFilter.getDisplayValueTo(filter: rangeFilter))
+        controller.updateRangeValues()
+    }
+}
+
+class DateTrackFilterConfigurator: TrackFilterConfigurable {
+    func configure(with filter: BaseTrackFilter, in controller: TracksFilterDetailsViewController) {
+        controller.dateCreationFilterType = filter as? DateTrackFilter
+        guard let dateFilter = controller.dateCreationFilterType else { return }
+        controller.dateCreationFromValue = dateFilter.valueFrom
+        controller.dateCreationToValue = dateFilter.valueTo
+    }
+}
+
+class ListTrackFilterConfigurator: TrackFilterConfigurable {
+    func configure(with filter: BaseTrackFilter, in controller: TracksFilterDetailsViewController) {
+        controller.listFilterType = filter as? ListTrackFilter
+        guard let listFilter = controller.listFilterType else { return }
+        controller.allListItems = listFilter.allItems.compactMap { $0 as? String }
+        if let emptyIndex = controller.allListItems.firstIndex(of: "") {
+            if emptyIndex != 0 {
+                let emptyItem = controller.allListItems.remove(at: emptyIndex)
+                controller.allListItems.insert(emptyItem, at: 0)
+            }
+        }
+        
+        controller.selectedItems = listFilter.selectedItems.compactMap { $0 as? String }
+    }
+}
+
 final class TracksFilterDetailsViewController: OABaseNavbarViewController {
     private static let fromDateRowKey = "fromDateRowKey"
     private static let toDateRowKey = "toDateRowKey"
     
     private var baseFilters: TracksSearchFilter
     private var baseFiltersResult: FilterResults
-    private var rangeFilterType: RangeTrackFilter<AnyObject>?
-    private var dateCreationFilterType: DateTrackFilter?
+    private var filteredListItems: [String] = []
     private var searchController: UISearchController?
-    private var currentMinValue: Float = 0.0
-    private var currentMaxValue: Float = 0.0
-    private var currentValueFrom: Float = 0.0
-    private var currentValueTo: Float = 0.0
     private var rangeSliderMinValue: Float = 0.0
     private var rangeSliderMaxValue: Float = 0.0
     private var rangeSliderFromValue: Float = 0.0
@@ -29,12 +66,23 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
     private var valueToInputText = ""
     private var minFilterValueText = ""
     private var maxFilterValueText = ""
-    private var dateCreationFromValue: Int64?
-    private var dateCreationToValue: Int64?
     private var isSliderDragging = false
     private var isBinding = false
+    private var isSearchActive = false
     
-    private let filterParameter: FilterParameterType
+    var rangeFilterType: RangeTrackFilter<AnyObject>?
+    var dateCreationFilterType: DateTrackFilter?
+    var listFilterType: ListTrackFilter?
+    var allListItems: [String] = []
+    var selectedItems: [String] = []
+    var currentMinValue: Float = 0.0
+    var currentMaxValue: Float = 0.0
+    var currentValueFrom: Float = 0.0
+    var currentValueTo: Float = 0.0
+    var dateCreationFromValue: Int64?
+    var dateCreationToValue: Int64?
+    
+    private let filterType: TrackFilterType
     private let decimalFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
@@ -43,8 +91,8 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
         return formatter
     }()
     
-    init(filterParameter: FilterParameterType, baseFilters: TracksSearchFilter, baseFiltersResult: FilterResults) {
-        self.filterParameter = filterParameter
+    init(filterType: TrackFilterType, baseFilters: TracksSearchFilter, baseFiltersResult: FilterResults) {
+        self.filterType = filterType
         self.baseFilters = baseFilters
         self.baseFiltersResult = baseFiltersResult
         super.init()
@@ -55,46 +103,41 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
     }
     
     override func commonInit() {
-        let filterTypes: [FilterParameterType: TrackFilterType] = [
-            .lengthFilterType: .length,
-            .durationFilterType: .duration,
-            .timeInMotionFilterType: .timeInMotion,
-            .averageSpeedFilterType: .averageSpeed,
-            .maxSpeedFilterType: .maxSpeed,
-            .averageAltitudeFilterType: .averageAltitude,
-            .maxAltitudeFilterType: .maxAltitude,
-            .uphillFilterType: .uphill,
-            .downhillFilterType: .downhill,
-            .sensorSpeedMaxFilterType: .maxSensorSpeed,
-            .sensorSpeedAverageFilterType: .averageSensorSpeed,
-            .heartRateMaxFilterType: .maxSensorHeartRate,
-            .heartRateAverageFilterType: .averageSensorHeartRate,
-            .bicycleCadenceMaxFilterType: .maxSensorCadence,
-            .bicycleCadenceAverageFilterType: .averageSensorCadence,
-            .bicyclePowerMaxFilterType: .maxSensorBicyclePower,
-            .bicyclePowerAverageFilterType: .averageSensorBicyclePower,
-            .temperatureMaxFilterType: .maxSensorTemperature,
-            .temperatureAverageFilterType: .averageSensorTemperature
+        let configurators: [TrackFilterType: TrackFilterConfigurable] = [
+            .length: RangeTrackFilterConfigurator(),
+            .duration: RangeTrackFilterConfigurator(),
+            .timeInMotion: RangeTrackFilterConfigurator(),
+            .averageSpeed: RangeTrackFilterConfigurator(),
+            .maxSpeed: RangeTrackFilterConfigurator(),
+            .averageAltitude: RangeTrackFilterConfigurator(),
+            .maxAltitude: RangeTrackFilterConfigurator(),
+            .uphill: RangeTrackFilterConfigurator(),
+            .downhill: RangeTrackFilterConfigurator(),
+            .maxSensorSpeed: RangeTrackFilterConfigurator(),
+            .averageSensorSpeed: RangeTrackFilterConfigurator(),
+            .maxSensorHeartRate: RangeTrackFilterConfigurator(),
+            .averageSensorHeartRate: RangeTrackFilterConfigurator(),
+            .maxSensorCadence: RangeTrackFilterConfigurator(),
+            .averageSensorCadence: RangeTrackFilterConfigurator(),
+            .maxSensorBicyclePower: RangeTrackFilterConfigurator(),
+            .averageSensorBicyclePower: RangeTrackFilterConfigurator(),
+            .maxSensorTemperature: RangeTrackFilterConfigurator(),
+            .averageSensorTemperature: RangeTrackFilterConfigurator(),
+            .dateCreation: DateTrackFilterConfigurator(),
+            .color: ListTrackFilterConfigurator(),
+            .width: ListTrackFilterConfigurator(),
+            .city: ListTrackFilterConfigurator(),
+            .folder: ListTrackFilterConfigurator()
         ]
         
-        if let filterType = filterTypes[filterParameter] {
-            rangeFilterType = baseFilters.getFilterByType(filterType) as? RangeTrackFilter<AnyObject>
-            guard let rangeFilterType = rangeFilterType else { return }
-            currentMinValue = Float(TracksSearchFilter.getDisplayMinValue(filter: rangeFilterType))
-            currentMaxValue = Float(TracksSearchFilter.getDisplayMaxValue(filter: rangeFilterType))
-            currentValueFrom = Float(TracksSearchFilter.getDisplayValueFrom(filter: rangeFilterType))
-            currentValueTo = Float(TracksSearchFilter.getDisplayValueTo(filter: rangeFilterType))
-            updateRangeValues()
-        } else if filterParameter == .dateCreationFilterType {
-            dateCreationFilterType = baseFilters.getFilterByType(.dateCreation) as? DateTrackFilter
-            dateCreationFromValue = dateCreationFilterType?.valueFrom
-            dateCreationToValue = dateCreationFilterType?.valueTo
-        }
+        guard let filter = baseFilters.getFilterByType(filterType), let configurator = configurators[filterType] else { return }
+        configurator.configure(with: filter, in: self)
     }
     
     override func registerCells() {
         addCell(OADatePickerTableViewCell.reuseIdentifier)
         addCell(OARangeSliderFilterTableViewCell.reuseIdentifier)
+        addCell(OAValueTableViewCell.reuseIdentifier)
     }
     
     override func viewDidLoad() {
@@ -104,7 +147,9 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
         tapGesture.cancelsTouchesInView = false
         tableView.addGestureRecognizer(tapGesture)
         
-        if filterParameter == .colorFilterType || filterParameter == .nearestCitiesFilterType || filterParameter == .folderFilterType {
+        if filterType == .color || filterType == .width || filterType == .city || filterType == .folder {
+            tableView.setEditing(true, animated: false)
+            tableView.allowsMultipleSelectionDuringEditing = true
             searchController = UISearchController(searchResultsController: nil)
             searchController?.searchBar.delegate = self
             searchController?.obscuresBackgroundDuringPresentation = false
@@ -116,55 +161,57 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
     }
     
     override func getTitle() -> String? {
-        switch filterParameter {
-        case .lengthFilterType:
+        switch filterType {
+        case .length:
             return localizedString("routing_attr_length_name")
-        case .durationFilterType:
+        case .duration:
             return localizedString("map_widget_trip_recording_duration")
-        case .timeInMotionFilterType:
+        case .timeInMotion:
             return localizedString("moving_time")
-        case .dateCreationFilterType:
+        case .dateCreation:
             return localizedString("date_of_creation")
-        case .averageSpeedFilterType:
+        case .averageSpeed:
             return localizedString("map_widget_average_speed")
-        case .maxSpeedFilterType:
+        case .maxSpeed:
             return localizedString("gpx_max_speed")
-        case .averageAltitudeFilterType:
+        case .averageAltitude:
             return localizedString("average_altitude")
-        case .maxAltitudeFilterType:
+        case .maxAltitude:
             return localizedString("max_altitude")
-        case .uphillFilterType:
+        case .uphill:
             return localizedString("map_widget_trip_recording_uphill")
-        case .downhillFilterType:
+        case .downhill:
             return localizedString("map_widget_trip_recording_downhill")
-        case .colorFilterType:
+        case .color:
             return localizedString("shared_string_color")
-        case .widthFilterType:
+        case .width:
             return localizedString("routing_attr_width_name")
-        case .nearestCitiesFilterType:
+        case .city:
             return localizedString("nearest_cities")
-        case .folderFilterType:
+        case .folder:
             return localizedString("plan_route_folder")
-        case .sensorSpeedMaxFilterType:
+        case .maxSensorSpeed:
             return localizedString("max_sensor_speed")
-        case .sensorSpeedAverageFilterType:
+        case .averageSensorSpeed:
             return localizedString("avg_sensor_speed")
-        case .heartRateMaxFilterType:
+        case .maxSensorHeartRate:
             return localizedString("max_sensor_heartrate")
-        case .heartRateAverageFilterType:
+        case .averageSensorHeartRate:
             return localizedString("avg_sensor_heartrate")
-        case .bicycleCadenceMaxFilterType:
+        case .maxSensorCadence:
             return localizedString("max_sensor_cadence")
-        case .bicycleCadenceAverageFilterType:
+        case .averageSensorCadence:
             return localizedString("avg_sensor_cadence")
-        case .bicyclePowerMaxFilterType:
+        case .maxSensorBicyclePower:
             return localizedString("max_sensor_bycicle_power")
-        case .bicyclePowerAverageFilterType:
+        case .averageSensorBicyclePower:
             return localizedString("avg_sensor_bycicle_power")
-        case .temperatureMaxFilterType:
+        case .maxSensorTemperature:
             return localizedString("max_sensor_temperature")
-        case .temperatureAverageFilterType:
+        case .averageSensorTemperature:
             return localizedString("avg_sensor_temperature")
+        default:
+            return ""
         }
     }
     
@@ -181,17 +228,17 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
     }
     
     override func isNavbarSeparatorVisible() -> Bool {
-        filterParameter == .colorFilterType || filterParameter == .widthFilterType || filterParameter == .nearestCitiesFilterType || filterParameter == .folderFilterType
+        filterType == .color || filterType == .width || filterType == .city || filterType == .folder
     }
     
     override func generateData() {
         tableData.clearAllData()
-        switch filterParameter {
-        case .lengthFilterType, .durationFilterType, .timeInMotionFilterType, .averageSpeedFilterType, .maxSpeedFilterType, .averageAltitudeFilterType, .maxAltitudeFilterType, .uphillFilterType, .downhillFilterType, .sensorSpeedMaxFilterType, .sensorSpeedAverageFilterType, .heartRateMaxFilterType, .heartRateAverageFilterType, .bicycleCadenceMaxFilterType, .bicycleCadenceAverageFilterType, .bicyclePowerMaxFilterType, .bicyclePowerAverageFilterType, .temperatureMaxFilterType, .temperatureAverageFilterType:
+        switch filterType {
+        case .length, .duration, .timeInMotion, .averageSpeed, .maxSpeed, .averageAltitude, .maxAltitude, .uphill, .downhill, .maxSensorSpeed, .averageSensorSpeed, .maxSensorHeartRate, .averageSensorHeartRate, .maxSensorCadence, .averageSensorCadence, .maxSensorBicyclePower, .averageSensorBicyclePower, .maxSensorTemperature, .averageSensorTemperature:
             let rangeSection = tableData.createNewSection()
             let row = rangeSection.createNewRow()
             row.cellType = OARangeSliderFilterTableViewCell.reuseIdentifier
-        case .dateCreationFilterType:
+        case .dateCreation:
             let dateSection = tableData.createNewSection()
             let fromDateRow = dateSection.createNewRow()
             fromDateRow.cellType = OADatePickerTableViewCell.reuseIdentifier
@@ -203,13 +250,80 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
             toDateRow.key = Self.toDateRowKey
             toDateRow.title = localizedString("shared_string_to")
             toDateRow.setObj(dateCreationToValue ?? 0, forKey: "date")
-        case .colorFilterType:
-            break
-        case .widthFilterType:
-            break
-        case .nearestCitiesFilterType:
-            break
-        case .folderFilterType:
+        case .color:
+            let itemsToDisplay = isSearchActive ? filteredListItems : allListItems
+            let section = tableData.createNewSection()
+            for itemName in itemsToDisplay {
+                let row = section.createNewRow()
+                row.cellType = OAValueTableViewCell.reuseIdentifier
+                row.key = itemName
+                row.title = listFilterType?.collectionFilterParams.getItemText(itemName: itemName)
+                if let tracksCount = listFilterType?.getTracksCountForItem(itemName: itemName) {
+                    row.descr = String(describing: tracksCount)
+                }
+                
+                if itemName.isEmpty {
+                    row.icon = .icCustomAppearanceDisabledOutlined
+                    row.iconTintColor = .iconColorDisabled
+                } else {
+                    if let itemInt = Int(itemName) {
+                        row.iconTintColor = colorFromRGB(itemInt)
+                    }
+                }
+            }
+        case .width:
+            let itemsToDisplay = isSearchActive ? filteredListItems : allListItems
+            let section = tableData.createNewSection()
+            for itemName in itemsToDisplay {
+                let row = section.createNewRow()
+                row.cellType = OAValueTableViewCell.reuseIdentifier
+                row.key = itemName
+                row.title = itemName.isEmpty ? listFilterType?.collectionFilterParams.getItemText(itemName: itemName) : listFilterType?.collectionFilterParams.getItemText(itemName: itemName).capitalized
+                if let tracksCount = listFilterType?.getTracksCountForItem(itemName: itemName) {
+                    row.descr = String(describing: tracksCount)
+                }
+                if itemName.isEmpty {
+                    row.icon = .icCustomAppearanceDisabledOutlined
+                    row.iconTintColor = .iconColorDisabled
+                } else if itemName == "thin" {
+                    row.icon = .icCustomTrackLineThin
+                    row.iconTintColor = .iconColorDisruptive
+                } else if itemName == "medium" {
+                    row.icon = .icCustomTrackLineMedium
+                    row.iconTintColor = .iconColorDisruptive
+                } else if itemName == "bold" {
+                    row.icon = .icCustomTrackLineBold
+                    row.iconTintColor = .iconColorDisruptive
+                } else {
+                    row.icon = .icCustomTrackLineBold
+                    row.iconTintColor = .iconColorDisruptive
+                }
+            }
+        case .city:
+            let itemsToDisplay = isSearchActive ? filteredListItems : allListItems
+            let section = tableData.createNewSection()
+            for itemName in itemsToDisplay {
+                let row = section.createNewRow()
+                row.cellType = OAValueTableViewCell.reuseIdentifier
+                row.key = itemName
+                row.title = listFilterType?.collectionFilterParams.getItemText(itemName: itemName)
+                if let tracksCount = listFilterType?.getTracksCountForItem(itemName: itemName) {
+                    row.descr = String(describing: tracksCount)
+                }
+            }
+        case .folder:
+            let itemsToDisplay = isSearchActive ? filteredListItems : allListItems
+            let section = tableData.createNewSection()
+            for itemName in itemsToDisplay {
+                let row = section.createNewRow()
+                row.cellType = OAValueTableViewCell.reuseIdentifier
+                row.key = itemName
+                row.title = listFilterType?.collectionFilterParams.getItemText(itemName: itemName)
+                if let tracksCount = listFilterType?.getTracksCountForItem(itemName: itemName) {
+                    row.descr = String(describing: tracksCount)
+                }
+            }
+        default:
             break
         }
     }
@@ -259,21 +373,64 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
             cell.rangeSlider.selectedMinimum = rangeSliderFromValue
             cell.rangeSlider.selectedMaximum = rangeSliderToValue
             return cell
+        } else if item.cellType == OAValueTableViewCell.reuseIdentifier {
+            let cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.reuseIdentifier) as! OAValueTableViewCell
+            cell.descriptionVisibility(false)
+            cell.leftIconVisibility(item.icon != nil || filterType == .color)
+            cell.selectedBackgroundView = UIView()
+            cell.selectedBackgroundView?.backgroundColor = UIColor.groupBg
+            cell.accessoryType = .none
+            cell.titleLabel.text = item.title
+            cell.valueLabel.text = item.descr
+            cell.leftIconView.image = item.icon
+            cell.leftIconView.tintColor = item.iconTintColor
+            if filterType == .color {
+                let isKeyNotEmpty = item.key?.isEmpty == false
+                cell.leftIconView.backgroundColor = isKeyNotEmpty ? item.iconTintColor : nil
+                cell.leftIconView.layer.cornerRadius = isKeyNotEmpty ? cell.leftIconView.frame.height / 2 : 0
+            }
+            let itemsToDisplay = isSearchActive ? filteredListItems : allListItems
+            if let key = item.key, selectedItems.contains(key) {
+                if itemsToDisplay.contains(key) {
+                    tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
+                } else {
+                    tableView.deselectRow(at: indexPath, animated: false)
+                }
+            }
+            return cell
         }
         
         return nil
     }
     
+    override func onRowSelected(_ indexPath: IndexPath) {
+        let itemsToDisplay = isSearchActive ? filteredListItems : allListItems
+        let itemName = itemsToDisplay[indexPath.row]
+        if !selectedItems.contains(itemName) {
+            selectedItems.append(itemName)
+        }
+    }
+    
+    override func onRowDeselected(_ indexPath: IndexPath) {
+        let itemsToDisplay = isSearchActive ? filteredListItems : allListItems
+        let itemName = itemsToDisplay[indexPath.row]
+        if let index = selectedItems.firstIndex(of: itemName) {
+            selectedItems.remove(at: index)
+        }
+    }
+    
     override func onRightNavbarButtonPressed() {
-        switch filterParameter {
-        case .lengthFilterType, .durationFilterType, .timeInMotionFilterType, .averageSpeedFilterType, .maxSpeedFilterType, .averageAltitudeFilterType, .maxAltitudeFilterType, .uphillFilterType, .downhillFilterType, .sensorSpeedMaxFilterType, .sensorSpeedAverageFilterType, .heartRateMaxFilterType, .heartRateAverageFilterType, .bicycleCadenceMaxFilterType, .bicycleCadenceAverageFilterType, .bicyclePowerMaxFilterType, .bicyclePowerAverageFilterType, .temperatureMaxFilterType, .temperatureAverageFilterType:
+        switch filterType {
+        case .length, .duration, .timeInMotion, .averageSpeed, .maxSpeed, .averageAltitude, .maxAltitude, .uphill, .downhill, .maxSensorSpeed, .averageSensorSpeed, .maxSensorHeartRate, .averageSensorHeartRate, .maxSensorCadence, .averageSensorCadence, .maxSensorBicyclePower, .averageSensorBicyclePower, .maxSensorTemperature, .averageSensorTemperature:
             rangeFilterType?.setValueFrom(from: String(Int(currentValueFrom)), updateListeners_: false)
             rangeFilterType?.setValueTo(to: String(Int(currentValueTo)), updateListeners: false)
-        case .dateCreationFilterType:
+        case .dateCreation:
             if let dateFrom = dateCreationFromValue, let dateTo = dateCreationToValue {
                 dateCreationFilterType?.valueFrom = dateFrom
                 dateCreationFilterType?.valueTo = dateTo
             }
+        case .color, .width, .city, .folder:
+            listFilterType?.setSelectedItems(selectedItems: selectedItems)
         default:
             break
         }
@@ -300,7 +457,15 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
         }
     }
     
-    private func updateRangeValues() {
+    private func getMeasureUnitType() -> MeasureUnitType {
+        if let rangeFilterType = rangeFilterType {
+            return rangeFilterType.trackFilterType.measureUnitType
+        }
+        
+        return .none
+    }
+    
+    func updateRangeValues() {
         isBinding = true
         if currentMaxValue > currentMinValue {
             rangeSliderMinValue = Float(currentMinValue)
@@ -314,14 +479,6 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
             maxFilterValueText = "\(decimalFormatter.string(from: NSNumber(value: Float(currentMaxValue))) ?? "") \(getMeasureUnitType().getFilterUnitText(mc: mappedConstant))"
             isBinding = false
         }
-    }
-    
-    private func getMeasureUnitType() -> MeasureUnitType {
-        if let rangeFilterType = rangeFilterType {
-            return rangeFilterType.trackFilterType.measureUnitType
-        }
-        
-        return .none
     }
 }
 
@@ -354,10 +511,22 @@ extension TracksFilterDetailsViewController: TTRangeSliderDelegate {
 }
 
 extension TracksFilterDetailsViewController: UISearchBarDelegate {
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        isSearchActive = !searchText.isEmpty
+        filteredListItems = searchText.isEmpty ? allListItems : allListItems.filter { itemName in
+            listFilterType?.collectionFilterParams.getItemText(itemName: itemName).localizedCaseInsensitiveContains(searchText) ?? false
+        }
+        
+        generateData()
+        tableView.reloadData()
     }
     
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        isSearchActive = false
+        searchBar.text = ""
+        searchBar.resignFirstResponder()
+        generateData()
+        tableView.reloadData()
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {

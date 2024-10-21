@@ -37,6 +37,7 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
     private static let visibleOnMapFilterRowKey = "visibleOnMapFilter"
     private static let withWaypointsFilterRowKey = "withWaypointsFilter"
     private static let selectedKey = "selected"
+    private static let isValidFilterKey = "isValidFilterKey"
     
     private let decimalFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
@@ -251,6 +252,11 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.reuseIdentifier) as! OAValueTableViewCell
             cell.leftIconVisibility(false)
             cell.descriptionVisibility(false)
+            if let isValid = item.obj(forKey: Self.isValidFilterKey) as? Bool, isValid {
+                cell.selectionStyle = .default
+            } else {
+                cell.selectionStyle = .none
+            }
             cell.accessoryType = .disclosureIndicator
             cell.titleLabel.text = item.title
             cell.valueLabel.text = item.descr
@@ -343,14 +349,16 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
                 dateFormatter.dateStyle = .medium
                 let fromDate = Date(timeIntervalSince1970: TimeInterval(dateFilter.valueFrom) / 1000)
                 let toDate = Date(timeIntervalSince1970: TimeInterval(dateFilter.valueTo) / 1000)
-                row.descr = "\(dateFormatter.string(from: fromDate)) - \(dateFormatter.string(from: toDate))"
+                row.descr = dateFilter.isValid() ? "\(dateFormatter.string(from: fromDate)) - \(dateFormatter.string(from: toDate))" : ""
+                row.setObj(dateFilter.isValid(), forKey: Self.isValidFilterKey)
             }
         default:
             if let filter = baseFilters.getFilterByType(filterType) as? RangeTrackFilter<AnyObject> {
                 let mappedConstant = TracksSearchFilter.mapEOAMetricsConstantToMetricsConstants(OAAppSettings.sharedManager().metricSystem.get())
                 let minValue = Float(TracksSearchFilter.getDisplayValueFrom(filter: filter))
                 let maxValue = Float(TracksSearchFilter.getDisplayValueTo(filter: filter))
-                row.descr = "\(decimalFormatter.string(from: NSNumber(value: minValue)) ?? "") - \(decimalFormatter.string(from: NSNumber(value: maxValue)) ?? "") \(filter.trackFilterType.measureUnitType.getFilterUnitText(mc: mappedConstant))"
+                row.descr = filter.isValid() ? "\(decimalFormatter.string(from: NSNumber(value: minValue)) ?? "") - \(decimalFormatter.string(from: NSNumber(value: maxValue)) ?? "") \(filter.trackFilterType.measureUnitType.getFilterUnitText(mc: mappedConstant))" : ""
+                row.setObj(filter.isValid(), forKey: Self.isValidFilterKey)
             }
         }
     }
@@ -361,7 +369,8 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
                 guard let itemName = item as? String else { return nil }
                 return filter.collectionFilterParams.getItemText(itemName: itemName)
             }.joined(separator: ", ")
-            row.descr = selectedNames
+            row.descr = filter.isValid() ? selectedNames : ""
+            row.setObj(filter.isValid(), forKey: Self.isValidFilterKey)
         }
     }
     

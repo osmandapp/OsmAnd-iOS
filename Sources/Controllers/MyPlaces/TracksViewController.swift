@@ -1795,7 +1795,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         }
         updateSearchController()
         updateHeaderViewVisibility(searchIsActive: isSearchActive)
-        baseFiltersResult = baseFilters?.performFiltering("")
+        baseFiltersResult = baseFilters?.performFiltering()
         updateData()
     }
     

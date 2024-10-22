@@ -294,7 +294,7 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
     
     override func onTopButtonPressed() {
         baseFilters.resetCurrentFilters()
-        baseFiltersResult = baseFilters.performFiltering("")
+        baseFiltersResult = baseFilters.performFiltering()
     }
     
     override func onBottomButtonPressed() {
@@ -311,7 +311,7 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
             (baseFilters.getFilterByType(.other) as? OtherTrackFilter)?.setItemSelected(param: .withWaypoints, selected: sw.isOn)
         }
         
-        baseFiltersResult = baseFilters.performFiltering("")
+        baseFiltersResult = baseFilters.performFiltering()
         updateBottomButtons()
         return false
     }
@@ -370,7 +370,7 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
         let cancelAction = UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel, handler: nil)
         let resetAction = UIAlertAction(title: localizedString("shared_string_reset"), style: .destructive) { _ in
             self.baseFilters.resetCurrentFilters()
-            self.baseFiltersResult = self.baseFilters.performFiltering("")
+            self.baseFiltersResult = self.baseFilters.performFiltering()
             super.onLeftNavbarButtonPressed()
         }
         
@@ -384,7 +384,7 @@ extension TracksFiltersViewController: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         guard let text = textField.text else { return }
         (baseFilters.getFilterByType(.name) as? TextTrackFilter)?.value = text
-        baseFiltersResult = baseFilters.performFiltering(text)
+        baseFiltersResult = baseFilters.performFiltering()
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

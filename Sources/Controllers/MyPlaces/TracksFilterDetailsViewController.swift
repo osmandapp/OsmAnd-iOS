@@ -381,7 +381,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
             break
         }
         
-        baseFiltersResult = baseFilters.performFiltering("")
+        baseFiltersResult = baseFilters.performFiltering()
         baseFilters.onFilterChanged()
         super.onLeftNavbarButtonPressed()
     }

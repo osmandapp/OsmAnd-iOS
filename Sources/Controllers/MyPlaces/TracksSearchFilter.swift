@@ -94,7 +94,7 @@ class TracksSearchFilter: FilterChangedListener {
         callback = newCallback
     }
     
-    func performFiltering(_ constraint: String) -> FilterResults {
+    func performFiltering() -> FilterResults {
         debugPrint("perform tracks filtering")
         var results = FilterResults()
         var filterSpecificSearchResults: [TrackFilterType: [TrackItem]] = [:]
@@ -147,7 +147,7 @@ class TracksSearchFilter: FilterChangedListener {
         return results
     }
     
-    func publishResults(constraint: String, results: FilterResults) {
+    func publishResults(results: FilterResults) {
         if let callback = callback {
             callback(results.values)
         }

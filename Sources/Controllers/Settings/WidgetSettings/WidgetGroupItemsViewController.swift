@@ -28,6 +28,7 @@ class WidgetGroupItemsViewController: OABaseNavbarViewController {
             row.title = widget == .sunPosition ? widgetInfo.getStateIndependentTitle() : widgetInfo.getTitle()
             row.iconName = widgetInfo.widget.widgetType?.iconName
             row.setObj(widgetInfo, forKey: "widget_info")
+            row.setObj(widget, forKey: "widget_type")
         }
     }
     
@@ -45,21 +46,35 @@ class WidgetGroupItemsViewController: OABaseNavbarViewController {
             if let cell {
                 cell.titleLabel.text = item.title
                 cell.leftIconView.image = UIImage(named: item.iconName ?? "")
+                
+                cell.accessoryView = nil
+                if let widgetType = item.obj(forKey: "widget_type") as? WidgetType, !widgetType.isPurchased() {
+                    cell.accessoryView = UIImageView(image: .icPaymentLabelPro)
+                }
             }
             outCell = cell
         }
         return outCell
     }
     
-    override func onRowSelected(_ indexPath: IndexPath!) {
+    override func onRowSelected(_ indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
         if let widgetInfo = item.obj(forKey: "widget_info") as? MapWidgetInfo {
             let vc = WidgetConfigurationViewController()!
-            vc.selectedAppMode = OAAppSettings.sharedManager()!.applicationMode.get()
-            vc.widgetInfo = widgetInfo
-            vc.widgetPanel = widgetPanel
-            vc.createNew = true
-            show(vc)
+            
+            if let widgetType = item.obj(forKey: "widget_type") as? WidgetType {
+                if widgetType.isPurchased() {
+                    vc.selectedAppMode = OAAppSettings.sharedManager().applicationMode.get()
+                    vc.widgetInfo = widgetInfo
+                    vc.widgetPanel = widgetPanel
+                    vc.createNew = true
+                    show(vc)
+                } else if widgetType == .altitudeMapCenter {
+                    if let navigationController {
+                        OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.advanced_WIDGETS(), navController: navigationController)
+                    }
+                }
+            }
         }
     }
 }

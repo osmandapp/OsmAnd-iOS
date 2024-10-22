@@ -649,116 +649,52 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
 
 - (float)processSensorData:(OASWptPt *)point forType:(EOAGPX3DLineVisualizationByType)visualizationType
 {
-    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-    numberFormatter.decimalSeparator = @".";
-    NSString *relevantTag = nil;
-    float defaultValue = 0.0;
-    BOOL isSpeedSensorTag = NO;
-    switch (visualizationType)
-    {
-        case EOAGPX3DLineVisualizationByTypeHeartRate:
-            relevantTag = OASPointAttributes.sensorTagHeartRate;
-            break;
-        case EOAGPX3DLineVisualizationByTypeBicycleCadence:
-            relevantTag = OASPointAttributes.sensorTagCadence;
-            break;
-        case EOAGPX3DLineVisualizationByTypeBicyclePower:
-            relevantTag = OASPointAttributes.sensorTagBikePower;
-            break;
-        case EOAGPX3DLineVisualizationByTypeTemperatureA:
-            return [self processTemperatureData:point numberFormatter:numberFormatter isAirTemp:YES];
-        case EOAGPX3DLineVisualizationByTypeTemperatureW:
-            return [self processTemperatureData:point numberFormatter:numberFormatter isAirTemp:NO];
-        case EOAGPX3DLineVisualizationByTypeSpeedSensor:
-            relevantTag = OASPointAttributes.sensorTagSpeed;
-            isSpeedSensorTag = YES;
-            break;
-        default:
-            return NAN;
-    }
-    
-    double elevationValue = [self getValidElevation:point.ele];
-    NSDictionary<NSString *, NSString *> *extensions = [point getExtensionsToRead];
-    NSString *trackpointextension = extensions[isSpeedSensorTag ? @"speed_sensor" : @"trackpointextension"];
-    if (trackpointextension)
-    {
-        if (isSpeedSensorTag)
-        {
-            NSNumber *value = [numberFormatter numberFromString:trackpointextension];
-            float processedValue = value ? [value floatValue] * kSpeedToHeightScale : defaultValue;
-            return [self is3DMapsEnabled] && value ? processedValue + elevationValue : processedValue;
-        }
-        else
-        {
-            // FIXME:
-//            for (OAGpxExtension *subextension in trackpointextension.subextensions)
-//            {
-//                if ([subextension.name isEqualToString:relevantTag])
-//                {
-//                    NSNumber *value = [numberFormatter numberFromString:subextension.value];
-//                    float processedValue = value ? [value floatValue] : defaultValue;
-//                    return [self is3DMapsEnabled] && value ? processedValue + elevationValue : processedValue;
-//                }
-//            }
-        }
-    }
-    
-    return defaultValue;
+    double pointElevation = [self getValidElevation:point.ele];
+    double elevation = [self getSensorAttribute:point
+                                           type:visualizationType attributes:point.attributes];
+    return [self is3DMapsEnabled] && !isnan(elevation)
+            ? elevation + pointElevation
+            : elevation;
 }
 
-- (float)processTemperatureData:(OASWptPt *)point
-                numberFormatter:(NSNumberFormatter *)numberFormatter
-                      isAirTemp:(BOOL)isAirTemp
-{
-   
-    NSString *trackpointextension = [point getExtensionsToRead][@"trackpointextension"];
-    NSNumber *tempValue = nil;
-    double elevationValue = [self getValidElevation:point.ele];
+- (float)getSensorAttribute:(OASWptPt *)point
+                       type:(EOAGPX3DLineVisualizationByType)type
+                 attributes:(nullable OASPointAttributes *)attributes {
+    BOOL hasAttributes = attributes != nil;
     
-    if (trackpointextension)
+    OASSensorPointAnalyser *sensorPointAnalyser = [OASSensorPointAnalyser shared];
+    
+    switch (type)
     {
-//        point.attributes.waterTemperature
-//        // FIXME: gpxtpx:trackpointextension
-//        for (OAGpxExtension *subextension in trackpointextension.subextensions)
-//        {
-//            if ([subextension.name isEqualToString:(isAirTemp ? OASPointAttributes.sensorTagTemperatureA : OASPointAttributes.sensorTagTemperatureW)])
-//            {
-//                tempValue = [numberFormatter numberFromString:subextension.value];
-//                float processedTemp = tempValue ? [tempValue floatValue] + kTemperatureToHeightOffset : NAN;
-//                return [self is3DMapsEnabled] && tempValue ? processedTemp + elevationValue : processedTemp;
-//            }
-//        }
+        case EOAGPX3DLineVisualizationByTypeHeartRate:
+            return hasAttributes ? attributes.heartRate : [sensorPointAnalyser getPointAttributeWptPt:point key:OASPointAttributes.sensorTagHeartRate defaultValue:0];
+        case EOAGPX3DLineVisualizationByTypeBicycleCadence:
+            
+            return hasAttributes ? attributes.bikeCadence : [sensorPointAnalyser getPointAttributeWptPt:point key:OASPointAttributes.sensorTagCadence defaultValue:0];
+        case EOAGPX3DLineVisualizationByTypeBicyclePower:
+            return hasAttributes ? attributes.bikePower : [sensorPointAnalyser getPointAttributeWptPt:point key:OASPointAttributes.sensorTagBikePower defaultValue:0];
+        case EOAGPX3DLineVisualizationByTypeTemperatureA:
+        case EOAGPX3DLineVisualizationByTypeTemperatureW:
+        {
+            float airTemp = hasAttributes ? attributes.airTemperature : [sensorPointAnalyser getPointAttributeWptPt:point key:OASPointAttributes.sensorTagTemperatureA defaultValue:NAN];
+            if (!isnan(airTemp))
+            {
+                return airTemp + kTemperatureToHeightOffset;
+            }
+            
+            float waterTemp = hasAttributes ? attributes.waterTemperature : [sensorPointAnalyser getPointAttributeWptPt:point key:OASPointAttributes.sensorTagTemperatureW defaultValue:NAN];
+            if (!isnan((waterTemp)))
+            {
+                return waterTemp + kTemperatureToHeightOffset;
+            }
+        }
+        case EOAGPX3DLineVisualizationByTypeSpeedSensor:
+        {
+            return hasAttributes ? attributes.sensorSpeed : [sensorPointAnalyser getPointAttributeWptPt:point key:OASPointAttributes.sensorTagBikePower defaultValue:0] * kSpeedToHeightScale;
+        }
     }
-    
-    return NAN;
+    return 0;
 }
-// SensorPointAnalyser
-//- (float)getSensorAttribute:(OASWptPt *)point type:(EOAGPX3DLineVisualizationByType)type,
-//attributes:(OASPointAttributes *) attributes {
-//    boolean hasAttributes = attributes != null;
-//    switch (type) {
-//        case HEART_RATE:
-//            return hasAttributes ? attributes.getHeartRate() : SensorAttributesUtils.getPointAttribute(point, SENSOR_TAG_HEART_RATE, 0);
-//        case BICYCLE_CADENCE:
-//            return hasAttributes ? attributes.getBikeCadence() : SensorAttributesUtils.getPointAttribute(point, SENSOR_TAG_CADENCE, 0);
-//        case BICYCLE_POWER:
-//            return hasAttributes ? attributes.getBikePower() : SensorAttributesUtils.getPointAttribute(point, SENSOR_TAG_BIKE_POWER, 0);
-//        case TEMPERATURE: {
-//            float airTemp = hasAttributes ? attributes.getAirTemperature() : SensorAttributesUtils.getPointAttribute(point, SENSOR_TAG_TEMPERATURE_A, Float.NaN);
-//            if (!Float.isNaN(airTemp)) {
-//                return airTemp + TEMPERATURE_TO_HEIGHT_OFFSET;
-//            }
-//            float waterTemp = hasAttributes ? attributes.getWaterTemperature() : SensorAttributesUtils.getPointAttribute(point, SENSOR_TAG_TEMPERATURE_W, Float.NaN);
-//            if (!Float.isNaN(waterTemp)) {
-//                return waterTemp + TEMPERATURE_TO_HEIGHT_OFFSET;
-//            }
-//        }
-//        case SPEED_SENSOR: {
-//            return hasAttributes ? attributes.getSensorSpeed() : SensorAttributesUtils.getPointAttribute(point, SENSOR_TAG_BIKE_POWER, 0) * SPEED_TO_HEIGHT_SCALE;
-//        }
-//    }
-//    return 0;
-//}
 
 - (void) drawLine:(QVector<OsmAnd::PointI> &)points
               gpx:(OASGpxDataItem *)gpx

@@ -1377,9 +1377,13 @@
 
 - (NSArray<OALink *> *)getLinks
 {
-    OALink *link = [OALink new];
-    link.url = [NSURL URLWithString:self.doc.metadata.link];
-    return @[link];
+    if (self.doc.metadata.link.length > 0)
+    {
+        OALink *link = [OALink new];
+        link.url = [NSURL URLWithString:self.doc.metadata.link];
+        return @[link];
+    }
+    return @[];
 }
 
 - (NSString *)getCreatedOn

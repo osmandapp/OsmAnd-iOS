@@ -417,7 +417,7 @@ extension GpxDataItem {
         case .bicyclePower:
             return "power"
             // FIXME: .temperatureW
-        case .temperatureA: /*, .temperatureW*/
+        case .temperatureA: /*, .temperatureW*/ // atemp ,wtemp
             return "temp_sensor"
         case .speedSensor:
             return "speed_sensor"

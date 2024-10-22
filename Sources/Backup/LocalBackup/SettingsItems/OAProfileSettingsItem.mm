@@ -364,7 +364,7 @@
             NSString *stringValue = [setting toStringValue:self.appMode];
             if (stringValue)
             {
-                if ([setting.key isEqualToString:@"voice_provider"])
+                if ([setting.key isEqualToString:@"voice_provider"] || [key isEqualToString:@"voice_provider"])
                     json[key] = [stringValue stringByAppendingString:@"-tts"];
                 else
                     json[key] = stringValue;

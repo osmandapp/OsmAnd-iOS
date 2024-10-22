@@ -181,6 +181,11 @@
     {
         if ([state isKindOfClass:OATrackMenuViewControllerState.class])
         {
+            if (gpx.isShowCurrentTrack) {
+                self.doc = [OASavingTrackHelper.sharedInstance currentTrack];
+            } else {
+                self.doc = [OASGpxUtilities.shared loadGpxFileFile:gpx.dataItem.file];;
+            }
             _reopeningState = (OATrackMenuViewControllerState *) state;
             _isNewRoute = routeKey;
             _routeKey = routeKey ? routeKey : [OARouteKey fromGpx:self.doc.networkRouteKeyTags];

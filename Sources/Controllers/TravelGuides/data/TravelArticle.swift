@@ -68,7 +68,8 @@ class TravelArticle: NSObject {
         if aggregatedPartOf == nil || aggregatedPartOf?.length == 0 {
             return nil
         }
-        
+        // "Сочи,Черноморское побережье Краснодарского края,Краснодарский край и Адыгея,Юг России,Россия,Европа,en:Destinations"
+        // FIXME: en:Destinations ?
         if let parts = aggregatedPartOf?.components(separatedBy: ",") {
             if !parts.isEmpty {
                 var res = ""

@@ -313,7 +313,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 {
     NSString *title = [OAPointDescription getLocationNamePlain:location.coordinate.latitude lon:location.coordinate.longitude];
     NSString *countryName = [_app.worldRegion getCountryNameAtLat:location.coordinate.latitude lon:location.coordinate.longitude];
-    NSString *subTitle = countryName ? countryName : OALocalizedString(@"shared_string_location");
+    NSString *subTitle = countryName ?: OALocalizedString(@"shared_string_location");
     
     return @{
         @"type" : [OAQuickSearchResultTableViewCell getCellIdentifier],

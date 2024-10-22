@@ -9,17 +9,17 @@
 import Foundation
 
 extension UIFont {
-    
-    @objc static func digitsOnlyMonospacedFont(size: CGFloat) -> UIFont {
-        let systemFont = UIFont.systemFont(ofSize: size)
-        let fontDescriptor = systemFont.fontDescriptor.addingAttributes([
-            UIFontDescriptor.AttributeName.featureSettings: [
-                [
-                    UIFontDescriptor.FeatureKey.type: kNumberSpacingType,
-                    UIFontDescriptor.FeatureKey.selector: kMonospacedNumbersSelector
+    static func monospacedFont(at size: CGFloat, withTextStyle style: TextStyle) -> UIFont {
+        let bodyFontDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: style)
+        let bodyMonospacedNumbersFontDescriptor = bodyFontDescriptor.addingAttributes(
+            [
+                UIFontDescriptor.AttributeName.featureSettings: [
+                    [
+                        UIFontDescriptor.FeatureKey.type: kNumberSpacingType,
+                        UIFontDescriptor.FeatureKey.selector: kMonospacedNumbersSelector
+                    ]
                 ]
-            ]
-        ])
-        return UIFont(descriptor: fontDescriptor, size: size)
+            ])
+        return UIFont(descriptor: bodyMonospacedNumbersFontDescriptor, size: size)
     }
 }

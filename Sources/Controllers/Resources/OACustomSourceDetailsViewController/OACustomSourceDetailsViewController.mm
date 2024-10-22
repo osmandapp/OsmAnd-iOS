@@ -64,7 +64,7 @@
 
 - (void)querySize
 {
-    if (_item.sizePkg == 0)
+    if (_item.sizePkg == 0 && AFNetworkReachabilityManager.sharedManager.isReachable)
     {
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:_item.downloadUrl]];
         [request setHTTPMethod:@"HEAD"];
@@ -85,7 +85,7 @@
 
 - (void)queryImage
 {
-    if (_item.descriptionInfo.imageUrls.count > 0 && !_queriedImages)
+    if (_item.descriptionInfo.imageUrls.count > 0 && !_queriedImages && AFNetworkReachabilityManager.sharedManager.isReachable)
     {
         [_downloadedImages removeAllObjects];
         NSURLSession *imageDownloadSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];

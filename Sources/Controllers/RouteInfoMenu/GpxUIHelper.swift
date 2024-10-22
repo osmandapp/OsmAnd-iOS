@@ -454,67 +454,50 @@ class GpxUIHelper: NSObject {
         chart.maxVisibleCount = 10
         chart.minOffset = 0.0
         chart.dragDecelerationEnabled = false
-        chart.drawGridBackgroundEnabled = false
 
         let xAxis = chart.xAxis
         xAxis.drawAxisLineEnabled = true
         xAxis.axisLineWidth = 1.0
-        xAxis.axisLineDashPhase = 0.0
         xAxis.axisLineColor = xAxisGridColor
-        xAxis.drawGridLinesEnabled = false
+        xAxis.drawGridLinesEnabled = true
+        xAxis.gridLineWidth = 1.0
+        xAxis.gridColor = xAxisGridColor
+        xAxis.gridLineDashLengths = [8.0, CGFLOAT_MAX]
+        xAxis.gridLineDashPhase = 0.0
         xAxis.labelPosition = .bottom
         xAxis.labelTextColor = labelsColor
         xAxis.avoidFirstLastClippingEnabled = true
         xAxis.enabled = true
 
-        let leftYAxis = chart.leftAxis
-        leftYAxis.enabled = false
-
-        let rightYAxis = chart.rightAxis
-        rightYAxis.enabled = false
-
-        let legend = chart.legend
-        legend.enabled = false
+        chart.leftAxis.enabled = false
+        chart.rightAxis.enabled = false
+        chart.legend.enabled = false
     }
 
     static func buildGradientChart(chart: LineChartView,
                                    colorPalette: ColorPalette,
                                    valueFormatter: AxisValueFormatter) -> LineChartData {
-        chart.xAxis.valueFormatter = valueFormatter
+        chart.xAxis.enabled = false
 
         let colorValues = colorPalette.colorValues
-        var cgColors = [CGColor]()
+        var colors = [NSUIColor]()
         var entries = [ChartDataEntry]()
 
         for i in 0..<colorValues.count {
-            let clr = colorValues[i].clr
-            cgColors.append(UIColor(argb: clr).cgColor)
+            colors.append(NSUIColor(argb: colorValues[i].clr))
             entries.append(ChartDataEntry(x: colorValues[i].val, y: 0))
         }
 
         let barDataSet = LineChartDataSet(entries: entries, label: "")
+        barDataSet.colors = colors
         barDataSet.highlightColor = .textColorSecondary
-        // [START] Disable circles and lines
-        barDataSet.drawCirclesEnabled = false
-        barDataSet.drawCircleHoleEnabled = false
-        barDataSet.setColor(.clear)
-        // [END] Disable circles and lines
-
-        let step = 1.0 / CGFloat(colorValues.count - 1)
-        var colorLocations = [CGFloat]()
-        for i in 0...colorValues.count - 1 {
-            colorLocations.append(CGFloat(i) * step)
-        }
-        if let gradient = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(),
-                                     colors: cgColors as CFArray,
-                                     locations: colorLocations) {
-            barDataSet.fill = LinearGradientFill(gradient: gradient)
-            barDataSet.fillAlpha = 1.0
-            barDataSet.drawFilledEnabled = true
-        }
-
+        barDataSet.fillAlpha = 1.0
+        barDataSet.drawFilledEnabled = true
+    
         let dataSet = LineChartData(dataSet: barDataSet)
         dataSet.setDrawValues(false)
+        chart.xAxis.valueFormatter = valueFormatter
+
         return dataSet
     }
 

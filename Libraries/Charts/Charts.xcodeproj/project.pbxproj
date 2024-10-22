@@ -56,6 +56,8 @@
 		468CD38B2C80B84000CC3436 /* ElevationYAxisRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468CD3892C80B84000CC3436 /* ElevationYAxisRenderer.swift */; };
 		468CD38C2C80B84000CC3436 /* ElevationXAxisRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468CD38A2C80B84000CC3436 /* ElevationXAxisRenderer.swift */; };
 		468CD38E2C80B89F00CC3436 /* IOrderedLineDataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468CD38D2C80B89F00CC3436 /* IOrderedLineDataSet.swift */; };
+		46BCB15C2CC26536004E0283 /* GradientChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46BCB15B2CC26536004E0283 /* GradientChart.swift */; };
+		46BCB15E2CC26626004E0283 /* GradientXAxisRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46BCB15D2CC26626004E0283 /* GradientXAxisRenderer.swift */; };
 		48E875BBD6540BDE1C1B7D3D /* AxisBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7AEFBF4D85B9D2EAAB3071 /* AxisBase.swift */; };
 		4E98788ABEF6496C23F3E6C6 /* HorizontalBarHighlighter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BE9A97FFA41D3D85CAFFC7 /* HorizontalBarHighlighter.swift */; };
 		4FACC6FD308AFB231EB4A93D /* XAxisRendererRadarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC19DC2434D65FFB446A61B7 /* XAxisRendererRadarChart.swift */; };
@@ -206,6 +208,8 @@
 		468CD3892C80B84000CC3436 /* ElevationYAxisRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ElevationYAxisRenderer.swift; path = Source/Charts/Renderers/ElevationYAxisRenderer.swift; sourceTree = "<group>"; };
 		468CD38A2C80B84000CC3436 /* ElevationXAxisRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ElevationXAxisRenderer.swift; path = Source/Charts/Renderers/ElevationXAxisRenderer.swift; sourceTree = "<group>"; };
 		468CD38D2C80B89F00CC3436 /* IOrderedLineDataSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IOrderedLineDataSet.swift; path = Source/Charts/Data/Implementations/Standard/IOrderedLineDataSet.swift; sourceTree = "<group>"; };
+		46BCB15B2CC26536004E0283 /* GradientChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientChart.swift; sourceTree = "<group>"; };
+		46BCB15D2CC26626004E0283 /* GradientXAxisRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientXAxisRenderer.swift; sourceTree = "<group>"; };
 		46D8013D44629521B1746364 /* PieChartRenderer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PieChartRenderer.swift; path = Source/Charts/Renderers/PieChartRenderer.swift; sourceTree = "<group>"; };
 		48164CCD83C51B496533CB77 /* MarkerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MarkerView.swift; path = Source/Charts/Components/MarkerView.swift; sourceTree = "<group>"; };
 		4A6C9631C69B2D772BBD9232 /* PieRadarChartViewBase.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PieRadarChartViewBase.swift; path = Source/Charts/Charts/PieRadarChartViewBase.swift; sourceTree = "<group>"; };
@@ -375,6 +379,7 @@
 				688B80F1AA88AE54152BE768 /* YAxisRenderer.swift */,
 				EAE417AAA0FCA0DD00E77489 /* YAxisRendererHorizontalBarChart.swift */,
 				AA5A16F4A382813C4FE8BDF9 /* YAxisRendererRadarChart.swift */,
+				46BCB15D2CC26626004E0283 /* GradientXAxisRenderer.swift */,
 			);
 			name = AxisRenderers;
 			sourceTree = "<group>";
@@ -536,6 +541,7 @@
 				30EFAD7920F76360ADB3B5F5 /* ChartViewBase.swift */,
 				11EF1FE22549E885C8F40738 /* CombinedChartView.swift */,
 				468CD3872C80B79800CC3436 /* ElevationChart.swift */,
+				46BCB15B2CC26536004E0283 /* GradientChart.swift */,
 				6021C9E424C36116AEA78CC9 /* HorizontalBarChartView.swift */,
 				0619A877C69A95ECCC440A44 /* LineChartView.swift */,
 				9DCD13D558BA177D5952AD66 /* PieChartView.swift */,
@@ -753,6 +759,7 @@
 				60EDF735AAB7195DCFA5FE4D /* CandleStickChartView.swift in Sources */,
 				98E2EEF45E8933E4AD182D58 /* ChartViewBase.swift in Sources */,
 				0CAF514A280FF6A14E2A1A23 /* CombinedChartView.swift in Sources */,
+				46BCB15E2CC26626004E0283 /* GradientXAxisRenderer.swift in Sources */,
 				A692D8BDE42717F69DB790BE /* HorizontalBarChartView.swift in Sources */,
 				7E7561DE19DC7CABBE0B2D3A /* LineChartView.swift in Sources */,
 				2876E17AEB1D92D7BBC4C38A /* PieChartView.swift in Sources */,
@@ -819,6 +826,7 @@
 				83BBAF3EDC31FD452F8BF1DB /* RadarChartDataSetProtocol.swift in Sources */,
 				50476F8E6662CAFC1EFE0723 /* ScatterChartDataSetProtocol.swift in Sources */,
 				067934562A324A9D004BFBA9 /* Indexed.swift in Sources */,
+				46BCB15C2CC26536004E0283 /* GradientChart.swift in Sources */,
 				97E033CC0ABEF0F448DAFA8E /* DataApproximator.swift in Sources */,
 				779B46E9F13A087BFA47D539 /* DefaultAxisValueFormatter.swift in Sources */,
 				F744C510DA9B85C228BBB335 /* DefaultFillFormatter.swift in Sources */,

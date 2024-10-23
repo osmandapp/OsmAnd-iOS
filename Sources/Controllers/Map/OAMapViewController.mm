@@ -3587,54 +3587,35 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     
     NSDictionary<NSString *, OASGpxFile *> *activeGpx = _selectedGpxHelper.activeGpx;
     for (NSString *key in activeGpx) {
-        OASGpxFile *value = activeGpx[key];
+        OASGpxFile *gpxFile = activeGpx[key];
 
-        if (value == nil)
-        {
+        if (gpxFile == nil)
             continue;
-        }
-
 
         NSString *path = key;
         if ([path isEqualToString:oldPath])
         {
-            OASGpxFile *doc = value;
-            OASMetadata *m = doc.metadata;
+            gpxFile.metadata = [[OASMetadata alloc] initWithSource:metadata];
 
-            if (m == nil) {
-                m = [OASMetadata new];
-                doc.metadata = m;
-            }
-            
-            // FIXME:
-            // [OAGPXDocument fillMetadata:m usingMetadata:metadata];
-            
             [_selectedGpxHelper removeGpxFileWith:oldPath];
-            [_selectedGpxHelper addGpxFile:doc for:docPath];
-            
+            [_selectedGpxHelper addGpxFile:gpxFile for:docPath];
+
             OASKFile *file = [[OASKFile alloc] initWithFilePath:docPath];
-            doc.author = [OAAppVersion getFullVersionWithAppName];
-            [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:doc];
-            
+            gpxFile.author = [OAAppVersion getFullVersionWithAppName];
+            [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
+
             return YES;
         }
     }
     
     if (_gpxDocsTemp.count != 0)
     {
-        OASGpxFile *doc = _gpxDocsTemp.firstObject;
-        OASMetadata *metadata = doc.metadata;
+        OASGpxFile *gpxFile = _gpxDocsTemp.firstObject;
+        gpxFile.metadata = [[OASMetadata alloc] initWithSource:metadata];
 
-        if (metadata == nil) {
-            metadata = [OASMetadata new];
-            doc.metadata = metadata;
-        }
-// FIXME:
-//        [OAGPXDocument fillMetadata:m usingMetadata:metadata];
-        
         OASKFile *file = [[OASKFile alloc] initWithFilePath:docPath];
-        doc.author = [OAAppVersion getFullVersionWithAppName];
-        [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:doc];
+        gpxFile.author = [OAAppVersion getFullVersionWithAppName];
+        [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
 
         return YES;
     }

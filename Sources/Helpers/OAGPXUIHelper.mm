@@ -747,13 +747,11 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
 
     NSString *newStoringPath = [newFolder stringByAppendingPathComponent:newName];
     NSString *destinationPath = [newFolderPath stringByAppendingPathComponent:newName];
-
     [[NSFileManager defaultManager] copyItemAtPath:sourcePath toPath:destinationPath error:nil];
 
     OAGPXDatabase *gpxDatabase = [OAGPXDatabase sharedDb];
     if (deleteOriginalFile)
     {
-
         doc.path = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
         [gpxDatabase save];
         [[NSFileManager defaultManager] removeItemAtPath:sourcePath error:nil];
@@ -880,16 +878,14 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
             if ([NSFileManager.defaultManager fileExistsAtPath:oldPath])
                 [NSFileManager.defaultManager removeItemAtPath:oldPath error:nil];
 
-            BOOL saveFailed = ![OARootViewController.instance.mapPanel.mapViewController updateMetadata:metadata oldPath:oldPath docPath:newPath];
+            BOOL gpxSaved = [OARootViewController.instance.mapPanel.mapViewController updateMetadata:metadata oldPath:oldPath docPath:newPath];
             doc.path = newPath;
             doc.metadata = metadata;
-
-            if (saveFailed)
+            if (!gpxSaved)
             {
                 OASKFile *file = [[OASKFile alloc] initWithFilePath:newPath];
                 [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:doc];
             }
-
             [OASelectedGPXHelper renameVisibleTrack:oldFilePath newPath:newFilePath];
         }
         else

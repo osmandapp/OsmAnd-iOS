@@ -4037,19 +4037,25 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [_profilePreferences setObject:_locationIcon forKey:@"location_icon"];
 
         _appModeOrder = [OACommonInteger withKey:appModeOrderKey defValue:0];
-        [_appModeOrder setModeDefaultValue:@0 mode:OAApplicationMode.DEFAULT];
-        [_appModeOrder setModeDefaultValue:@1 mode:OAApplicationMode.CAR];
-        [_appModeOrder setModeDefaultValue:@2 mode:OAApplicationMode.BICYCLE];
-        [_appModeOrder setModeDefaultValue:@3 mode:OAApplicationMode.PEDESTRIAN];
-        [_appModeOrder setModeDefaultValue:@4 mode:OAApplicationMode.TRUCK];
-        [_appModeOrder setModeDefaultValue:@5 mode:OAApplicationMode.MOTORCYCLE];
-        [_appModeOrder setModeDefaultValue:@6 mode:OAApplicationMode.MOPED];
-        [_appModeOrder setModeDefaultValue:@7 mode:OAApplicationMode.PUBLIC_TRANSPORT];
-        [_appModeOrder setModeDefaultValue:@8 mode:OAApplicationMode.TRAIN];
-        [_appModeOrder setModeDefaultValue:@9 mode:OAApplicationMode.BOAT];
-        [_appModeOrder setModeDefaultValue:@10 mode:OAApplicationMode.AIRCRAFT];
-        [_appModeOrder setModeDefaultValue:@11 mode:OAApplicationMode.SKI];
-        [_appModeOrder setModeDefaultValue:@12 mode:OAApplicationMode.HORSE];
+        NSArray *modes = @[
+            OAApplicationMode.DEFAULT,
+            OAApplicationMode.CAR,
+            OAApplicationMode.BICYCLE,
+            OAApplicationMode.PEDESTRIAN,
+            OAApplicationMode.TRUCK,
+            OAApplicationMode.MOTORCYCLE,
+            OAApplicationMode.MOPED,
+            OAApplicationMode.PUBLIC_TRANSPORT,
+            OAApplicationMode.TRAIN,
+            OAApplicationMode.BOAT,
+            OAApplicationMode.AIRCRAFT,
+            OAApplicationMode.SKI,
+            OAApplicationMode.HORSE
+        ];
+        for (NSInteger i = 0; i < modes.count; i++)
+        {
+            [_appModeOrder setModeDefaultValue:@(i) mode:modes[i]];
+        }
         [_profilePreferences setObject:_appModeOrder forKey:@"app_mode_order"];
 
         _viewAngleVisibility = [[[OACommonInteger withKey:viewAngleVisibilityKey defValue:[MarkerDisplayOptionWrapper resting]] makeProfile] makeShared];

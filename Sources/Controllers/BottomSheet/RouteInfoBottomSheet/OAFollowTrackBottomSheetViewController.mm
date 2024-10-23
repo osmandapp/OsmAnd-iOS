@@ -159,7 +159,7 @@
     }
     
     NSString *distance = gpxData ? [OAOsmAndFormatter getFormattedDistance:gpxData.totalDistance] : @"";
-    NSString *time = gpxData ? [OAOsmAndFormatter getFormattedTimeInterval:gpxData.timeSpan shortFormat:YES] : @"";
+    NSString *time = gpxData ? [OAOsmAndFormatter getFormattedTimeInterval:gpxData.timeSpan / 1000 shortFormat:YES] : @"";
     if (isSegment)
     {
         OASTrkSegment *seg = params.selectedSegment < _gpx.getNonEmptySegmentsCount ? [_gpx getNonEmptyTrkSegmentsRoutesOnly:NO][params.selectedSegment] : nil;

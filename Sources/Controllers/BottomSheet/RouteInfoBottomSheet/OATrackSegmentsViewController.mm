@@ -117,7 +117,7 @@
          @"type" : [OAGPXTrackCell getCellIdentifier],
          @"title" : gpxData ? [gpxData getNiceTitle] : fileName,
          @"distance" : gpxData ? [OAOsmAndFormatter getFormattedDistance:gpxData.totalDistance] : @"",
-         @"time" : gpxData ? [OAOsmAndFormatter getFormattedTimeInterval:gpxData.timeSpan shortFormat:YES] : @"",
+         @"time" : gpxData ? [OAOsmAndFormatter getFormattedTimeInterval:gpxData.timeSpan / 1000 shortFormat:YES] : @"",
          @"wpt" : gpxData ? [NSString stringWithFormat:@"%d", gpxData.wptPoints] : @"",
          @"img" : @"ic_custom_trip"
      }

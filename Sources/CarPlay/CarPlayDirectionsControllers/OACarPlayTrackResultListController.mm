@@ -92,7 +92,7 @@
     {
         if (needsSeparator)
             [res appendString:@" • "];
-        [res appendString:[OAOsmAndFormatter getFormattedTimeInterval:gpx.timeSpan shortFormat:YES]];
+        [res appendString:[OAOsmAndFormatter getFormattedTimeInterval:gpx.timeSpan / 1000 shortFormat:YES]];
         needsSeparator = YES;
     }
     if (gpx.wptPoints > 0)

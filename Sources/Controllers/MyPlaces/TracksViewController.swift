@@ -565,7 +565,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         if let downhill = OAOsmAndFormatter.getFormattedAlt(totalDownhill) {
             statistics += ", \(localizedString("map_widget_trip_recording_downhill").lowercased()) – \(downhill)"
         }
-        if let duration = OAOsmAndFormatter.getFormattedTimeInterval(TimeInterval(totalTime / 100), shortFormat: true) {
+        if let duration = OAOsmAndFormatter.getFormattedTimeInterval(TimeInterval(totalTime / 1000), shortFormat: true) {
             statistics += ", \(localizedString("map_widget_trip_recording_duration").lowercased()) – \(duration)."
         }
         let size = ByteCountFormatter.string(fromByteCount: Int64(totalSizeBytes), countStyle: .file)
@@ -1227,8 +1227,6 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                     trackFolder.resetCachedData()
                     
                     var files = [KFile]()
-                    
-                    let tracksItems = trackFolder.getFlattenedTrackItems()
 
                     for trackItem in trackFolder.getFlattenedTrackItems() {
                         if let file = trackItem.getFile() {

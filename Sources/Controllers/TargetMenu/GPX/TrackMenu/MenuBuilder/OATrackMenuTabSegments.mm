@@ -289,14 +289,14 @@
             
             descriptions[@"top_right_description_string_value"] = [OAOsmAndFormatter getFormattedTimeInterval:
                                                                    !joinSegments && track && track.generalTrack
-                                                                   ? analysis.timeSpanWithoutGaps : analysis.timeSpan shortFormat:YES];
+                                                                   ? analysis.timeSpanWithoutGaps / 1000 : analysis.timeSpan / 1000 shortFormat:YES];
             
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
             [dateFormatter setDateFormat:@"HH:mm, MM-dd-yy"];
             descriptions[@"bottom_left_description_string_value"] =
-            [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:analysis.startTime]];
+            [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:[self convertToSeconds:analysis.startTime]]];
             descriptions[@"bottom_right_description_string_value"] =
-            [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:analysis.endTime]];
+            [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:[self convertToSeconds:analysis.endTime]]];
         }
         if (types.firstObject.integerValue == GPXDataSetTypeAltitude && types.lastObject.integerValue == GPXDataSetTypeSlope)
         {
@@ -336,7 +336,7 @@
             descriptions[@"top_right_description_string_value"] = [OAOsmAndFormatter getFormattedSpeed:analysis.maxSpeed];
 
             descriptions[@"bottom_left_description_string_value"] = [OAOsmAndFormatter getFormattedTimeInterval:
-                            !joinSegments && track && track.generalTrack ? analysis.timeSpanWithoutGaps : analysis.timeMoving
+                            !joinSegments && track && track.generalTrack ? analysis.timeSpanWithoutGaps / 1000 : analysis.timeMoving / 1000
                                                                                                     shortFormat:YES];
             descriptions[@"bottom_right_description_string_value"] = [OAOsmAndFormatter getFormattedDistance:
                     !joinSegments && track && track.generalTrack
@@ -352,6 +352,11 @@
             @"icons": icons,
             @"descriptions": descriptions
     };
+}
+
+- (float)convertToSeconds:(float)timestamp
+{
+    return timestamp > 10000000000 ? timestamp / 1000 : timestamp;
 }
 
 - (void)syncVisibleCharts:(LineChartView *)chartView

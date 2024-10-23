@@ -5213,7 +5213,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
     for (NSString *filepath in arr)
     {
         NSString *absoluteGpxFilepath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:filepath];
-        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:absoluteGpxFilepath];
+        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:absoluteGpxFilepath];
         NSString *fileName = filepath.lastPathComponent;
         NSString *filenameWithoutPrefix = nil;
         if ([fileName hasSuffix:@"_osmand_backup"])

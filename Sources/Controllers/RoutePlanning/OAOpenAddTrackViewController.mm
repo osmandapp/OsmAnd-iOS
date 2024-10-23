@@ -188,7 +188,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             @"track" : gpx,
             @"title" : [gpx getNiceTitle],
             @"distance" : [OAOsmAndFormatter getFormattedDistance:gpx.totalDistance],
-            @"time" : [OAOsmAndFormatter getFormattedTimeInterval:gpx.timeSpan shortFormat:YES],
+            @"time" : [OAOsmAndFormatter getFormattedTimeInterval:gpx.timeSpan / 1000 shortFormat:YES],
             @"wpt" : [NSString stringWithFormat:@"%d", gpx.wptPoints],
             @"key" : @"gpx_route"
         }];

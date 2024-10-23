@@ -609,7 +609,6 @@
                             
                             if (!stringContent.isEmpty())
                             {
-                                // FIXME: 
                                 OAGPXDocumentAdapter *adapter = [[OAGPXDocumentAdapter alloc] init];
                                 
                                 OASOkioBuffer *buffer = [[OASOkioBuffer alloc] init];

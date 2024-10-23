@@ -149,7 +149,7 @@
     
     OAGPXRouteParamsBuilder *params = OARoutingHelper.sharedInstance.getCurrentGPXRoute;
     OAGPXDatabase *db = [OAGPXDatabase sharedDb];
-    OASGpxDataItem *gpxData = [db getNewGPXItem:[OAUtilities getGpxShortPath:fileName]];
+    OASGpxDataItem *gpxData = [db getGPXItem:[OAUtilities getGpxShortPath:fileName]];
     
     NSString *title = [fileName.lastPathComponent stringByDeletingPathExtension];
     BOOL isSegment = _gpx.getNonEmptySegmentsCount > 1 && params != nil && params.selectedSegment != -1;
@@ -159,7 +159,7 @@
     }
     
     NSString *distance = gpxData ? [OAOsmAndFormatter getFormattedDistance:gpxData.totalDistance] : @"";
-    NSString *time = gpxData ? [OAOsmAndFormatter getFormattedTimeInterval:gpxData.timeSpan shortFormat:YES] : @"";
+    NSString *time = gpxData ? [OAOsmAndFormatter getFormattedTimeInterval:gpxData.timeSpan / 1000 shortFormat:YES] : @"";
     if (isSegment)
     {
         OASTrkSegment *seg = params.selectedSegment < _gpx.getNonEmptySegmentsCount ? [_gpx getNonEmptyTrkSegmentsRoutesOnly:NO][params.selectedSegment] : nil;

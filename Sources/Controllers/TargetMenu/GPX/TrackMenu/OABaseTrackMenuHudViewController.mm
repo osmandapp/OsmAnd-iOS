@@ -198,7 +198,6 @@
     if (self)
     {
         _gpx = gpx;
-
         _settings = [OAAppSettings sharedManager];
         _savingHelper = [OASavingTrackHelper sharedInstance];
         _mapPanelViewController = [OARootViewController instance].mapPanel;
@@ -238,6 +237,10 @@
                 OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFullPath];
                 _doc = [OASGpxUtilities.shared loadGpxFileFile:file];
             }
+            else
+            {
+                _doc = gpx;
+            }
         }
     }
     [self updateAnalysis];
@@ -250,7 +253,7 @@
         NSString *nearestCityString = nearestCity ? nearestCity.nameLocalized : @"";
 
         OAGPXDatabase *db = [OAGPXDatabase sharedDb];
-        OASGpxDataItem *gpx = [db getNewGPXItem:_gpx.dataItem.gpxFilePath];
+        OASGpxDataItem *gpx = [db getGPXItem:_gpx.dataItem.gpxFilePath];
         if (gpx)
         {
             [[OASGpxDbHelper shared] updateDataItemParameterItem:_gpx.dataItem
@@ -269,7 +272,7 @@
         {
             
             OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
-            OASGpxDataItem *gpx = [gpxDb getNewGPXItem:_gpx.gpxFilePath];
+            OASGpxDataItem *gpx = [gpxDb getGPXItem:_gpx.gpxFilePath];
             if (!gpx)
             {
                 gpx = [gpxDb addGPXFileToDBIfNeeded:_gpx.gpxFilePath];
@@ -296,8 +299,8 @@
     if (_doc)
     {
         _analysis = !_isCurrentTrack && [_doc getGeneralTrack] && [_doc getGeneralSegment]
-            ? [self getAnalysisFor:[_doc getGeneralSegment]]
-            : [_doc getAnalysisFileTimestamp:0];
+        ? [self getAnalysisFor:[_doc getGeneralSegment]]
+        : [_doc getAnalysisFileTimestamp:0 fromDistance:nil toDistance:nil pointsAnalyzer:OASPlatformUtil.shared.getTrackPointsAnalyser];
     }
     else
     {

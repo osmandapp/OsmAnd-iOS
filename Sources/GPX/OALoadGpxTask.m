@@ -95,7 +95,7 @@
             OAGpxInfo *info = [[OAGpxInfo alloc] init];
             info.subfolder = relativePath;
             info.file = gpxFilename;
-            info.gpx = [OAGPXDatabase.sharedDb getNewGPXItem:gpxShortPath];
+            info.gpx = [OAGPXDatabase.sharedDb getGPXItem:gpxShortPath];
             [_result addObject:info];
         }
     }

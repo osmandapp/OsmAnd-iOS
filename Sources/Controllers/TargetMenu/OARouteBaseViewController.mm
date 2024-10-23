@@ -47,7 +47,7 @@
                analysis:(OASGpxTrackAnalysis *)analysis
                modeCell:(OARouteStatisticsModeCell *)statsModeCell
 {
-    OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:[OAUtilities getGpxShortPath:_gpxDoc.path]];
+    OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:_gpxDoc.path]];
     BOOL calcWithoutGaps = !gpx.joinSegments && (_gpxDoc.tracks.count > 0 && _gpxDoc.tracks.firstObject.generalTrack);
     GPXDataSetType secondType = GPXDataSetTypeNone;
     if (types.count == 2)
@@ -249,7 +249,7 @@
 
     if (dataSets && dataSets.count > 0 && segment && _gpxDoc)
     {
-        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:[OAUtilities getGpxShortPath:_gpxDoc.path]];
+        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:_gpxDoc.path]];
         BOOL joinSegments = gpx.joinSegments;
         id<ChartDataSetProtocol> dataSet = dataSets.firstObject;
         if ([GpxUIHelper getDataSetAxisTypeWithDataSet:dataSet] == GPXDataSetAxisTypeTime)

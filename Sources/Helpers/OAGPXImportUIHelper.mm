@@ -429,7 +429,7 @@ static UIViewController *parentController;
     OASGpxDataItem *item = [[OAGPXDatabase sharedDb] getGPXItemByFileName:gpxFilePath];
     if (item)
     {
-        [[OAGPXDatabase sharedDb] removeNewGpxItem:item withLocalRemove:YES];
+        [[OAGPXDatabase sharedDb] removeGpxItem:item withLocalRemove:YES];
     } else
     {
         NSLog(@"[OAGPXImportUIHelper] -> [ERROR] -> removeFromDB");

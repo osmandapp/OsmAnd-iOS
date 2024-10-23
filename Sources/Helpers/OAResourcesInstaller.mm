@@ -142,12 +142,13 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
         {
             OASGpxTrackAnalysis *analysis = [dataItem getAnalysis];
             
-            NSString *nearestCity;
             if (analysis.locationStart)
             {
                 OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:analysis.locationStart.position];
-                dataItem.nearestCity = nearestCityPOI ? nearestCityPOI.nameLocalized : @"";
-                [[OAGPXDatabase sharedDb] updateDataItem:dataItem];
+                NSString *nearestCityString = nearestCityPOI ? nearestCityPOI.nameLocalized : @"";
+                [[OASGpxDbHelper shared] updateDataItemParameterItem:dataItem
+                                                           parameter:OASGpxParameter.nearestCityName
+                                                               value:nearestCityString];
             }
         }
 

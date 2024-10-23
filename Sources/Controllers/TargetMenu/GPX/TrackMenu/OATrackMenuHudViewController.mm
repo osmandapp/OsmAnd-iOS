@@ -1575,18 +1575,24 @@
     self.doc.path = path;
     
     OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
-    OASGpxDataItem *gpx = [gpxDb getNewGPXItem:path];
+    OASGpxDataItem *gpx = [gpxDb getGPXItem:path];
     if (!gpx)
     {
         gpx = [gpxDb addGPXFileToDBIfNeeded:path];
+        if (!gpx)
+        {
+            NSLog(@"[ERROR] saveNetworkRoute");
+            return;
+        }
         OASGpxTrackAnalysis *analysis = [gpx getAnalysis];
         
-       // NSString *nearestCity;
         if (analysis.locationStart)
         {
             OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:analysis.locationStart.position];
-            gpx.nearestCity = nearestCityPOI ? nearestCityPOI.nameLocalized : @"";
-            [gpxDb updateDataItem:gpx];
+            NSString *nearestCityString = nearestCityPOI ? nearestCityPOI.nameLocalized : @"";
+            [[OASGpxDbHelper shared] updateDataItemParameterItem:gpx
+                                                       parameter:OASGpxParameter.nearestCityName
+                                                           value:nearestCityString];
         }
     }
     self.gpx = [[OASTrackItem alloc] initWithFile:gpx.file];
@@ -1774,7 +1780,7 @@
             if (weakSelf.isShown)
                 [weakSelf.settings hideGpx:@[weakSelf.gpx.gpxFilePath] update:YES];
 
-            [[OAGPXDatabase sharedDb] removeNewGpxItem:weakSelf.gpx.dataItem withLocalRemove:YES];
+            [[OAGPXDatabase sharedDb] removeGpxItem:weakSelf.gpx.dataItem withLocalRemove:YES];
         }
 
         [weakSelf hide];

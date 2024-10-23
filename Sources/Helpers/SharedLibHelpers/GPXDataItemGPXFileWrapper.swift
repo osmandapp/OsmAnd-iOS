@@ -29,7 +29,7 @@ final class GPXDataItemGPXFileWrapper: NSObject {
         }
         if let gpxFile {
             let value = gpxFile.get3DVisualizationType() ?? ""
-            return GpxDataItem.lineVisualizationByType(forName: value)
+            return OAGPXDatabase.lineVisualizationByType(forName: value)
         }
         return .none
     }
@@ -40,7 +40,7 @@ final class GPXDataItemGPXFileWrapper: NSObject {
         }
         if let gpxFile {
             guard let value = gpxFile.get3DWallColoringType() else { return .upwardGradient }
-            return GpxDataItem.lineVisualizationWallColorType(forName: value)
+            return OAGPXDatabase.lineVisualizationWallColorType(forName: value)
         }
         return .upwardGradient
     }
@@ -79,17 +79,17 @@ final class GPXDataItemGPXFileWrapper: NSObject {
         if let gpxDataItem {
             return gpxDataItem.joinSegments
         }
-        if let gpxFile {
+        if gpxFile != nil {
             return OAAppSettings.sharedManager().currentTrackIsJoinSegments.get()
         }
         return false
     }
 
     var gradientPaletteName: String? {
-        if let gpxDataItem = gpxDataItem {
+        if let gpxDataItem {
             return gpxDataItem.gradientPaletteName
         }
-        if let gpxFile = gpxFile {
+        if let gpxFile {
             return gpxFile.getGradientColorPalette()
         }
         return nil

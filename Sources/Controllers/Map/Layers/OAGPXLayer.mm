@@ -217,7 +217,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
 - (OASGpxDataItem *)getGpxItem:(const QString &)filename
 {
     NSString *filenameNS = filename.toNSString();
-    OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:filenameNS];
+    OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:filenameNS];
     return gpx;
 }
 
@@ -651,7 +651,8 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
 {
     double pointElevation = [self getValidElevation:point.ele];
     double elevation = [self getSensorAttribute:point
-                                           type:visualizationType attributes:point.attributes];
+                                           type:visualizationType
+                                     attributes:point.attributes];
     return [self is3DMapsEnabled] && !isnan(elevation)
             ? elevation + pointElevation
             : elevation;
@@ -692,6 +693,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
         {
             return hasAttributes ? attributes.sensorSpeed : [sensorPointAnalyser getPointAttributeWptPt:point key:OASPointAttributes.sensorTagBikePower defaultValue:0] * kSpeedToHeightScale;
         }
+        default: return NAN;
     }
     return 0;
 }
@@ -1159,7 +1161,7 @@ colorizationScheme:(int)colorizationScheme
     for (NSString *key in _gpxDocs.allKeys) {
         NSString *path = key;
         
-        OASGpxDataItem *gpx = [OAGPXDatabase.sharedDb getNewGPXItem:path];
+        OASGpxDataItem *gpx = [OAGPXDatabase.sharedDb getGPXItem:path];
         
         OASGpxFile *doc = [_gpxDocs objectForKey:key];
         GPXDataItemGPXFileWrapper *dataWrapper = [[GPXDataItemGPXFileWrapper alloc] initWithGpxDataItem:gpx gpxFile:doc];

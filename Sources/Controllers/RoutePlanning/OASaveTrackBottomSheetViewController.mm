@@ -94,7 +94,7 @@
 {
     [self hide:YES];
     NSString *gpxFilePath = [OAUtilities getGpxShortPath:_fileName];
-    OASGpxDataItem *gpx = [OAGPXDatabase.sharedDb getNewGPXItem:gpxFilePath];
+    OASGpxDataItem *gpx = [OAGPXDatabase.sharedDb getGPXItem:gpxFilePath];
     if (gpx)
     {
         auto trackItem = [[OASTrackItem alloc] initWithFile:gpx.file];

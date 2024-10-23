@@ -196,10 +196,10 @@ extension GpxDataItem {
     var visualization3dByType: EOAGPX3DLineVisualizationByType {
         get {
             let name = getParameter(parameter: .trackVisualizationType) as? String ?? ""
-            return Self.lineVisualizationByType(forName: name)
+            return OAGPXDatabase.lineVisualizationByType(forName: name)
         }
         set {
-            let value = Self.lineVisualizationByTypeName(for: newValue)
+            let value = OAGPXDatabase.lineVisualizationByTypeName(for: newValue)
             setParameter(parameter: .trackVisualizationType, value: value)
         }
     }
@@ -207,10 +207,10 @@ extension GpxDataItem {
     var visualization3dWallColorType: EOAGPX3DLineVisualizationWallColorType {
         get {
             let name = getParameter(parameter: .track3dWallColoringType) as? String ?? ""
-            return Self.lineVisualizationWallColorType(forName: name)
+            return OAGPXDatabase.lineVisualizationWallColorType(forName: name)
         }
         set {
-            let value = Self.lineVisualizationWallColorTypeName(for: newValue)
+            let value = OAGPXDatabase.lineVisualizationWallColorTypeName(for: newValue)
             setParameter(parameter: .track3dWallColoringType, value: value)
         }
     }
@@ -218,10 +218,10 @@ extension GpxDataItem {
     var visualization3dPositionType: EOAGPX3DLineVisualizationPositionType {
         get {
             let name = getParameter(parameter: .track3dLinePositionType) as? String ?? ""
-            return Self.lineVisualizationPositionType(for: name)
+            return OAGPXDatabase.lineVisualizationPositionType(forName: name)
         }
         set {
-            let value = Self.lineVisualizationPositionTypeName(for: newValue)
+            let value = OAGPXDatabase.lineVisualizationPositionTypeName(for: newValue)
             setParameter(parameter: .track3dLinePositionType, value: value)
         }
     }
@@ -374,148 +374,5 @@ extension GpxDataItem {
         gpxFileName = (newFilePath as NSString).lastPathComponent
         gpxTitle = (gpxFileName as NSString).deletingPathExtension
         gpxFolderName = (newFilePath as NSString).deletingLastPathComponent
-    }
-    
-//    static func splitTypeByName(_ splitName: String) -> EOAGpxSplitType {
-//        switch splitName {
-//        case "":
-//            fallthrough
-//        case "no_split":
-//            return .none
-//        case "distance":
-//            return .distance
-//        case "time":
-//            return .time
-//        default:
-//            return .none
-//        }
-//    }
-//
-//    static func splitTypeNameByValue(_ splitType: EOAGpxSplitType) -> String {
-//        switch splitType {
-//        case .distance:
-//            return "distance"
-//        case .time:
-//            return "time"
-//        case .none:
-//            return "no_split"
-//        default:
-//            return "no_split"
-//        }
-//    }
-    
-    static func lineVisualizationByTypeName(for type: EOAGPX3DLineVisualizationByType) -> String {
-        switch type {
-        case .altitude:
-            return "altitude"
-        case .speed:
-            return "speed"
-        case .heartRate:
-            return "hr"
-        case .bicycleCadence:
-            return "cad"
-        case .bicyclePower:
-            return "power"
-            // FIXME: .temperatureW
-        case .temperatureA: /*, .temperatureW*/ // atemp ,wtemp
-            return "temp_sensor"
-        case .speedSensor:
-            return "speed_sensor"
-        case .fixedHeight:
-            return "fixed_height"
-        case .none:
-            return "none"
-        default:
-            return "none"
-        }
-    }
-    
-    static func lineVisualizationByType(forName name: String) -> EOAGPX3DLineVisualizationByType {
-        switch name {
-        case "altitude":
-            return .altitude
-        case "speed":
-            return .speed
-        case "hr":
-            return .heartRate
-        case "cad":
-            return .bicycleCadence
-        case "power":
-            return .bicyclePower
-        case "temp_sensor":
-            return .temperatureA
-        case "speed_sensor":
-            return .speedSensor
-        case "fixed_height":
-            return .fixedHeight
-        default:
-            return .none
-        }
-    }
-    
-    static func lineVisualizationWallColorTypeName(for type: EOAGPX3DLineVisualizationWallColorType) -> String {
-        switch type {
-        case .solid:
-            return "solid"
-        case .downwardGradient:
-            return "downward_gradient"
-        case .upwardGradient:
-            return "upward_gradient"
-        case .altitude:
-            return "altitude"
-        case .slope:
-            return "slope"
-        case .speed:
-            return "speed"
-        case .none:
-            return "none"
-        default:
-            return "none"
-        }
-    }
-    
-    static func lineVisualizationWallColorType(forName name: String) -> EOAGPX3DLineVisualizationWallColorType {
-        switch name {
-        case "none":
-            return .none
-        case "solid":
-            return .solid
-        case "downward_gradient":
-            return .downwardGradient
-        case "upward_gradient":
-            return .upwardGradient
-        case "altitude":
-            return .altitude
-        case "slope":
-            return .slope
-        case "speed":
-            return .speed
-        default:
-            return .upwardGradient
-        }
-    }
-    
-    static func lineVisualizationPositionTypeName(for type: EOAGPX3DLineVisualizationPositionType) -> String {
-        switch type {
-        case .bottom:
-            return "bottom"
-        case .topBottom:
-            return "top_bottom"
-        case .top:
-            return "top"
-        default:
-            return "top"
-        }
-    }
-    
-    static func lineVisualizationPositionType(for name: String) -> EOAGPX3DLineVisualizationPositionType {
-        switch name {
-        case "bottom":
-            return .bottom
-        case "top_bottom":
-            return .topBottom
-        default:
-            return .top
-        }
     }
 }

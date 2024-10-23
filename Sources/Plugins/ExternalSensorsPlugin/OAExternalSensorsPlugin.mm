@@ -241,49 +241,4 @@ NSString * const OATrackRecordingAnyConnectedDevice = @"any_connected_device_wri
     [OASensorAttributesUtils getAvailableGPXDataSetTypesWithAnalysis:analysis availableTypes:availableTypes];
 }
 
-- (void)onAnalysePoint:(OASGpxTrackAnalysis *)analysis point:(NSObject *)point attribute:(OASPointAttributes *)attribute
-{
-    if ([point isKindOfClass:OASWptPt.class])
-    {
-        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-        numberFormatter.decimalSeparator = @".";
-        for (NSString *tag in OASensorAttributesUtils.sensorGpxTags)
-        {
-            CGFloat value = ([OASPointAttributes.sensorTagTemperatureW isEqualToString:tag] || [OASPointAttributes.sensorTagTemperatureA isEqualToString:tag]) ? NAN : 0;
-            NSNumber *val = nil;
-            BOOL isSpeedSensorTag = [tag isEqualToString:@"speed_sensor"];
-            
-            NSDictionary<NSString *, NSString *> *extensions = [(OASWptPt *) point getExtensionsToRead];
-            NSString *trackpointextension = extensions[isSpeedSensorTag ? @"speed_sensor" : @"trackpointextension"];
-            
-            if (trackpointextension)
-            {
-                if (isSpeedSensorTag)
-                {
-                    val = [numberFormatter numberFromString:trackpointextension];
-                }
-                else
-                {
-// FIXME: subextensions
-//                    for (OAGpxExtension *subextension in trackpointextension.subextensions)
-//                    {
-//                        if ([subextension.name isEqualToString:tag])
-//                        {
-//                            val = [numberFormatter numberFromString:subextension.value];
-//                        }
-//                    }
-                }
-            }
-            
-            value = val ? val.floatValue : value;
-            [attribute setAttributeValueTag:tag value:value];
-            
-            if (![analysis hasDataTag:tag] && [attribute hasValidValueTag:tag] && analysis.totalDistance > 0)
-            {
-                [analysis setHasDataTag:tag hasData:YES];
-            }
-        }
-    }
-}
-
 @end

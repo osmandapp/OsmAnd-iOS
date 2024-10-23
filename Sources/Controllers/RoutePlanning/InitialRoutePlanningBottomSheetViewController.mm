@@ -267,7 +267,8 @@
     }
     else if ([key isEqualToString:@"gpx_route"])
     {
-        OAGPX* track = item[@"track"];
+        // FIXME:
+        OAGPX *track = item[@"track"];
         [self hide:YES];
         [[OARootViewController instance].mapPanel showScrollableHudViewController:
                 [[OARoutePlanningHudViewController alloc] initWithFileName:track.gpxFilePath]];

@@ -552,7 +552,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 {
     OASGpxFile *gpxFile = nil;
     OASelectedGPXHelper *selectedGpxHelper = OASelectedGPXHelper.instance;
-    OASGpxDataItem *gpxDataItem = [[OAGPXDatabase sharedDb] getNewGPXItem:gpxFileName];
+    OASGpxDataItem *gpxDataItem = [[OAGPXDatabase sharedDb] getGPXItem:gpxFileName];
     if (!gpxDataItem)
     {
         gpxDataItem = [[OAGPXDatabase sharedDb] getGPXItemByFileName:gpxFileName];
@@ -732,7 +732,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
                 OASTrackItem *trackItem;
                 if (_fileName.length > 0)
                 {
-                    auto gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:_fileName];
+                    auto gpx = [[OAGPXDatabase sharedDb] getGPXItem:_fileName];
                     trackItem = [[OASTrackItem alloc] initWithFile:gpx.file];
                     trackItem.dataItem = gpx;
                 } else
@@ -1797,7 +1797,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
                     [gpx addRoutePointsPoints:points addRoute:NO];
                     [self onCloseButtonPressed];
                     [targetPointsHelper clearAllPoints:NO];
-                    OASGpxDataItem *track = [OAGPXDatabase.sharedDb getNewGPXItem:gpx.path];
+                    OASGpxDataItem *track = [OAGPXDatabase.sharedDb getGPXItem:gpx.path];
                     [_mapPanel.mapActions enterRoutePlanningModeGivenGpx:gpx path:track.gpxFilePath from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
                 }
             }
@@ -1813,7 +1813,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void) runNavigation:(OASGpxFile *)gpx appMode:(OAApplicationMode *)appMode
 {
     OARoutingHelper *routingHelper = OARoutingHelper.sharedInstance;
-    OASGpxDataItem *track = [OAGPXDatabase.sharedDb getNewGPXItem:gpx.path];
+    OASGpxDataItem *track = [OAGPXDatabase.sharedDb getGPXItem:gpx.path];
     if (routingHelper.isFollowingMode)
     {
         if ([self isFollowTrackMode])

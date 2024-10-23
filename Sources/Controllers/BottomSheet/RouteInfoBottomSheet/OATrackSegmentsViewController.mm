@@ -110,7 +110,7 @@
     NSString * fileName = [self getFileName];
     
     OAGPXDatabase *db = [OAGPXDatabase sharedDb];
-    OASGpxDataItem *gpxData = [db getNewGPXItem:[OAUtilities getGpxShortPath:_gpx.path]];
+    OASGpxDataItem *gpxData = [db getGPXItem:[OAUtilities getGpxShortPath:_gpx.path]];
     
     [data addObject:
      @{

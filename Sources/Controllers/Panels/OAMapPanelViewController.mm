@@ -1509,7 +1509,7 @@ typedef enum
             [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
             [weakSelf.mapViewController showTempGpxTrackFromDocument:gpxFile];
             OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
-            OASGpxDataItem *gpx = [gpxDb getNewGPXItem:path];
+            OASGpxDataItem *gpx = [gpxDb getGPXItem:path];
             if (!gpx)
             {
                 gpx = [gpxDb addGPXFileToDBIfNeeded:path];
@@ -2066,7 +2066,7 @@ typedef enum
     OAAppSettings *settings = [OAAppSettings sharedManager];
     for (NSString *filePath in settings.mapSettingVisibleGpx.get)
     {
-        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:filePath];
+        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:filePath];
         NSString *path = gpx.file.absolutePath;
         if ([[NSFileManager defaultManager] fileExistsAtPath:path])
         {
@@ -3167,7 +3167,7 @@ typedef enum
     }
     else
     {
-        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:gpxFilepath];
+        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:gpxFilepath];
         if (gpx)
         {
             OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFilepath];

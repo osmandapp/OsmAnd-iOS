@@ -98,7 +98,7 @@
             continue;
         }
         NSString *absoluteGpxFilepath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:filePath];
-        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:absoluteGpxFilepath];
+        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:absoluteGpxFilepath];
         NSString __block *path = gpx.file.absolutePath;
 
         if ([[NSFileManager defaultManager] fileExistsAtPath:path] && ![self containsGpxFileWith:path])

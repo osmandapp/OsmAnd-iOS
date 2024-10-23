@@ -413,7 +413,7 @@
    return EOAGPX3DLineVisualizationPositionTypeTop;
 }
 
-- (OASGpxDataItem *_Nullable)getNewGPXItem:(NSString *)filePath
+- (OASGpxDataItem *_Nullable)getGPXItem:(NSString *)filePath
 {
     if (![@"current_track" isEqualToString:filePath] && ![filePath containsString:OsmAndApp.instance.gpxPath]) {
         filePath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:filePath];
@@ -422,7 +422,7 @@
     return [[OASGpxDbHelper shared] getItemFile:file];
 }
 
-- (void)removeNewGpxItem:(OASGpxDataItem *)item withLocalRemove:(BOOL)withLocalRemove
+- (void)removeGpxItem:(OASGpxDataItem *)item withLocalRemove:(BOOL)withLocalRemove
 {
     [[OASGpxDbHelper shared] removeItem:item];
     if (withLocalRemove)

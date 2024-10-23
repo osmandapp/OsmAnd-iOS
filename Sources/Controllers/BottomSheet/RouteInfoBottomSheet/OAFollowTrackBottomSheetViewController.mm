@@ -149,7 +149,7 @@
     
     OAGPXRouteParamsBuilder *params = OARoutingHelper.sharedInstance.getCurrentGPXRoute;
     OAGPXDatabase *db = [OAGPXDatabase sharedDb];
-    OASGpxDataItem *gpxData = [db getNewGPXItem:[OAUtilities getGpxShortPath:fileName]];
+    OASGpxDataItem *gpxData = [db getGPXItem:[OAUtilities getGpxShortPath:fileName]];
     
     NSString *title = [fileName.lastPathComponent stringByDeletingPathExtension];
     BOOL isSegment = _gpx.getNonEmptySegmentsCount > 1 && params != nil && params.selectedSegment != -1;

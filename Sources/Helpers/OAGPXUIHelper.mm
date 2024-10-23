@@ -684,7 +684,7 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
     }
     if (openTrack)
     {
-        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:[newFolderName stringByAppendingPathComponent:newFileName]];
+        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[newFolderName stringByAppendingPathComponent:newFileName]];
         if (gpx && _exportingHostVC)
         {
             [_exportingHostVC dismissViewControllerAnimated:YES completion:^{
@@ -763,27 +763,31 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
     else
     {
         OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
-        OASGpxDataItem *gpx = [gpxDb getNewGPXItem:sourcePath];
+        OASGpxDataItem *gpx = [gpxDb getGPXItem:sourcePath];
         if (!gpx)
         {
             gpx = [gpxDb addGPXFileToDBIfNeeded:sourcePath];
         }
-        OASGpxTrackAnalysis *analysis = [gpx getAnalysis];
-        
-        NSString *nearestCity;
-        if (analysis.locationStart)
+        if (gpx)
         {
-            OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:analysis.locationStart.position];
-            gpx.nearestCity = nearestCityPOI ? nearestCityPOI.nameLocalized : @"";
-            [gpxDb updateDataItem:gpx];
+            OASGpxTrackAnalysis *analysis = [gpx getAnalysis];
+            
+            if (analysis.locationStart)
+            {
+                OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:analysis.locationStart.position];
+                NSString *nearestCityString = nearestCityPOI ? nearestCityPOI.nameLocalized : @"";
+                [[OASGpxDbHelper shared] updateDataItemParameterItem:gpx
+                                                           parameter:OASGpxParameter.nearestCityName
+                                                               value:nearestCityString];
+            }
         }
-        
+
         if ([OAAppSettings.sharedManager.mapSettingVisibleGpx.get containsObject:oldPath])
             [OAAppSettings.sharedManager showGpx:@[newStoringPath]];
     }
     if (openTrack)
     {
-        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:[newFolderName stringByAppendingPathComponent:newFileName]];
+        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[newFolderName stringByAppendingPathComponent:newFileName]];
         if (gpx && _exportingHostVC)
         {
             [_exportingHostVC dismissViewControllerAnimated:YES completion:^{

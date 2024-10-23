@@ -941,7 +941,7 @@
             OATrackMenuViewControllerState *state = (OATrackMenuViewControllerState *) _targetMenuState;
             state.openedFromTrackMenu = NO;
             OAGPXDatabase *db = [OAGPXDatabase sharedDb];
-            auto gpx = [db getNewGPXItem:[
+            auto gpx = [db getGPXItem:[
                 [db getFileDir:self.gpxFileName] stringByAppendingPathComponent:self.gpxFileName.lastPathComponent]];
             
             auto trackItem = [[OASTrackItem alloc] initWithFile:gpx.file];

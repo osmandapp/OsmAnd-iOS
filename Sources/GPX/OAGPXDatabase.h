@@ -123,38 +123,37 @@ typedef NS_ENUM(NSInteger, EOAGPX3DLineVisualizationPositionType) {
 
 @end
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface OAGPXDatabase : NSObject
 
 + (OAGPXDatabase *)sharedDb;
 
 - (BOOL)containsGPXItem:(NSString *)filePath;
-
-
--(NSString *)getFileDir:(NSString *)filePath;
-
-- (void)save;
-
-+ (EOAGpxSplitType) splitTypeByName:(NSString *)splitName;
-+ (NSString *) splitTypeNameByValue:(EOAGpxSplitType)splitType;
-
-+ (NSString *)lineVisualizationByTypeNameForType:(EOAGPX3DLineVisualizationByType)type;
-+ (EOAGPX3DLineVisualizationByType)lineVisualizationByTypeForName:(NSString *)name;
-
-+ (NSString *)lineVisualizationWallColorTypeNameForType:(EOAGPX3DLineVisualizationWallColorType)type;
-+ (EOAGPX3DLineVisualizationWallColorType)lineVisualizationWallColorTypeForName:(NSString *)name;
-
-+ (NSString *)lineVisualizationPositionTypeNameForType:(EOAGPX3DLineVisualizationPositionType)type;
-+ (EOAGPX3DLineVisualizationPositionType)lineVisualizationPositionTypeForName:(NSString *)name;
-
-
 - (OASGpxDataItem *)addGPXFileToDBIfNeeded:(NSString *)filePath;
-- (void)removeNewGpxItem:(OASGpxDataItem *)item withLocalRemove:(BOOL)withLocalRemove;
-- (OASGpxDataItem *_Nullable)getNewGPXItem:(NSString *)filePath;
+- (void)removeGpxItem:(OASGpxDataItem *)item withLocalRemove:(BOOL)withLocalRemove;
+- (OASGpxDataItem *_Nullable)getGPXItem:(NSString *)filePath;
 
 - (void)renameGPX:(OASGpxDataItem *)gpx newFilePath:(NSString *)filePath;
 
 - (BOOL)updateDataItem:(OASGpxDataItem *_Nonnull)item;
 - (NSArray<OASGpxDataItem *> *)getDataItems;
 - (OASGpxDataItem *)getGPXItemByFileName:(NSString *)fileName;
+- (NSString *)getFileDir:(NSString *)filePath;
+
+- (void)save;
+
++ (EOAGpxSplitType)splitTypeByName:(NSString *_Nullable)splitName;
++ (NSString *)splitTypeNameByValue:(EOAGpxSplitType)splitType;
+
++ (NSString *)lineVisualizationByTypeNameForType:(EOAGPX3DLineVisualizationByType)type;
++ (EOAGPX3DLineVisualizationByType)lineVisualizationByTypeForName:(NSString *_Nullable)name;
+
++ (NSString *)lineVisualizationWallColorTypeNameForType:(EOAGPX3DLineVisualizationWallColorType)type;
++ (EOAGPX3DLineVisualizationWallColorType)lineVisualizationWallColorTypeForName:(NSString *_Nullable)name;
+
++ (NSString *)lineVisualizationPositionTypeNameForType:(EOAGPX3DLineVisualizationPositionType)type;
++ (EOAGPX3DLineVisualizationPositionType)lineVisualizationPositionTypeForName:(NSString *_Nullable)name;
 
 @end
+NS_ASSUME_NONNULL_END

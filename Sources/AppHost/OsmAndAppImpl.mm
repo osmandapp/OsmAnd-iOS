@@ -556,8 +556,6 @@
         }
         if (prevVersion < VERSION_4_2)
         {
-            [OAGPXDatabase.sharedDb save];
-
             NSError *error;
             NSArray *inboxFiles = [NSFileManager.defaultManager contentsOfDirectoryAtPath:_inboxPath error:&error];
             if (!error)

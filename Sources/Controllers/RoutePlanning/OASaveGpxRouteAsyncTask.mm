@@ -125,15 +125,14 @@
 {
     OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
     NSString *gpxFilePath = [OAUtilities getGpxShortPath:_outFile];
-    OASGpxDataItem *oldGpx = [gpxDb getNewGPXItem:_outFile];
+    OASGpxDataItem *oldGpx = [gpxDb getGPXItem:_outFile];
     
-    OASGpxDataItem *gpx = [gpxDb getNewGPXItem:gpxFilePath];
+    OASGpxDataItem *gpx = [gpxDb getGPXItem:gpxFilePath];
     if (!gpx)
     {
         gpx = [gpxDb addGPXFileToDBIfNeeded:gpxFilePath];
         OASGpxTrackAnalysis *analysis = [gpx getAnalysis];
         
-        NSString *nearestCity;
         if (analysis.locationStart)
         {
             OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:analysis.locationStart.position];

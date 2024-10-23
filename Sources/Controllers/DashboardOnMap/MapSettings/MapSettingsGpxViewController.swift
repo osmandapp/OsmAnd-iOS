@@ -576,12 +576,13 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: localizedString("shared_string_yes"), style: .default) { [weak self] _ in
             guard let self else { return }
+            guard let dataItem = track.dataItem else { return }
             let isVisible = settings?.mapSettingVisibleGpx.contains(track.gpxFilePath) ?? false
             if isVisible {
                 settings?.hideGpx([track.gpxFilePath])
             }
 
-            self.gpxDB?.removeNewGpxItem(track.dataItem, withLocalRemove: true)
+            self.gpxDB?.removeGpxItem(dataItem, withLocalRemove: true)
             loadGpxTracks()
             loadVisibleTracks()
             loadRecentlyVisibleTracks()
@@ -617,13 +618,9 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     private func loadGpxTracks() {
-        if let gpxDatabase = OAGPXDatabase.sharedDb() {
-            allGpxList = gpxDatabase.getDataItems()
-                .sorted { $0.fileLastUploadedTime > $1.fileLastUploadedTime }
-            isTracksAvailable = !allGpxList.isEmpty
-        } else {
-            isTracksAvailable = false
-        }
+        allGpxList = OAGPXDatabase.sharedDb().getDataItems()
+            .sorted { $0.fileLastUploadedTime > $1.fileLastUploadedTime }
+        isTracksAvailable = !allGpxList.isEmpty
     }
     
     private func loadVisibleTracks() {

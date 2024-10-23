@@ -23,7 +23,6 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OsmAndSharedWrapper.h"
 
-
 #include <OsmAndCore/GpxDocument.h>
 
 @implementation OACarPlayTrackResultListController

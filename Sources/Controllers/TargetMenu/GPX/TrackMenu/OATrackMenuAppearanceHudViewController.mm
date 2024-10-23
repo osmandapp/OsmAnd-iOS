@@ -1415,7 +1415,7 @@ static const NSInteger kColorsSection = 1;
     [self hide:YES duration:.2 onComplete:^{
         if (weakSelf.isNewColorSelected)
             [weakSelf.appearanceCollection selectColor:weakSelf.selectedColorItem];
-      //  [[OAGPXDatabase sharedDb] save];
+
         if (weakSelf.isCurrentTrack)
         {
             [weakSelf.settings.currentTrackWidth set:[weakSelf getGPXWidth]];

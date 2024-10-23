@@ -329,7 +329,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     NSDictionary<NSString *, OASGpxFile *> *activeGpx = helper.activeGpx;
 
     for (NSString *key in activeGpx.allKeys) {
-        OASGpxDataItem *gpx = [dbHelper getNewGPXItem:key];
+        OASGpxDataItem *gpx = [dbHelper getGPXItem:key];
 
         if (gpx) {
             OASGpxFile *doc = activeGpx[key];
@@ -661,7 +661,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             OASGpxTrackAnalysis *trackAnalysis = [self getTrackAnalysis];
             if (_needChartUpdate)
             {
-                OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:[OAUtilities getGpxShortPath:_gpx.path]];
+                OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:_gpx.path]];
                 BOOL calcWithoutGaps = !gpx.joinSegments && (_gpx.tracks.count > 0 && _gpx.tracks.firstObject.generalTrack);
                 [GpxUIHelper refreshLineChartWithChartView:_routeStatsCell.chartView
                                                   analysis:trackAnalysis

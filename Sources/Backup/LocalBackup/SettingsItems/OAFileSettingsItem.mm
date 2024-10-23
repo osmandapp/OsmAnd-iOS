@@ -343,17 +343,22 @@
         {
             
             OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
-            OASGpxDataItem *gpx = [gpxDb getNewGPXItem:destFilePath];
+            OASGpxDataItem *gpx = [gpxDb getGPXItem:destFilePath];
             if (!gpx)
             {
                 gpx = [gpxDb addGPXFileToDBIfNeeded:destFilePath];
-                OASGpxTrackAnalysis *analysis = [gpx getAnalysis];
-                
-                if (analysis.locationStart)
+                if (gpx)
                 {
-                    OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:analysis.locationStart.position];
-                    gpx.nearestCity = nearestCityPOI ? nearestCityPOI.nameLocalized : @"";
-                    [gpxDb updateDataItem:gpx];
+                    OASGpxTrackAnalysis *analysis = [gpx getAnalysis];
+                    
+                    if (analysis.locationStart)
+                    {
+                        OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:analysis.locationStart.position];
+                        NSString *nearestCityString =  nearestCityPOI ? nearestCityPOI.nameLocalized : @"";
+                        [[OASGpxDbHelper shared] updateDataItemParameterItem:gpx
+                                                                   parameter:OASGpxParameter.nearestCityName
+                                                                       value:nearestCityString];
+                    }
                 }
             }
 

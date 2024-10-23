@@ -158,7 +158,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
         {
             OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
             NSString *gpxFilePath = [OAUtilities getGpxShortPath:_docPath];
-            auto gpx = [gpxDb getNewGPXItem:gpxFilePath];
+            auto gpx = [gpxDb getGPXItem:gpxFilePath];
             trackItem = [[OASTrackItem alloc] initWithFile:gpx.file];
             trackItem.dataItem = gpx;
         }

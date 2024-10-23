@@ -2832,7 +2832,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         if (![_gpxDocFileTemp isEqualToString:filePath] || _gpxDocsTemp.count == 0) {
             [_gpxDocsTemp removeAllObjects];
             _gpxDocFileTemp = [filePath copy];
-            OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:filePath];
+            OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:filePath];
             NSString *path = gpx.file.absolutePath;
             
             OASKFile *file = [[OASKFile alloc] initWithFilePath:path];
@@ -2944,7 +2944,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         return;
 
     OASGpxFile *doc = _gpxDocsTemp.firstObject;
-    OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:_gpxDocFileTemp];
+    OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:_gpxDocFileTemp];
     NSString *path = gpx.file.absolutePath;
     if (![[OAAppSettings sharedManager].mapSettingVisibleGpx.get containsObject:_gpxDocFileTemp])
     {
@@ -3121,7 +3121,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             continue;
         }
 
-        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:key];
+        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:key];
         for (OASWptPt *loc in [doc getPointsList]) {
             if ([gpx.hiddenGroups containsObject:loc.category])
                 continue;
@@ -3164,7 +3164,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         NSString *gpxFilePath = [doc.path
                 stringByReplacingOccurrencesOfString:[_app.gpxPath stringByAppendingString:@"/"]
                                           withString:@""];
-        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:gpxFilePath];
+        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:gpxFilePath];
         
         for (OASWptPt *loc in [doc getPointsList]) {
            

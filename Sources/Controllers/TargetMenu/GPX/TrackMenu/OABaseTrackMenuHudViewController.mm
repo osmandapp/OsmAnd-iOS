@@ -253,7 +253,7 @@
         NSString *nearestCityString = nearestCity ? nearestCity.nameLocalized : @"";
 
         OAGPXDatabase *db = [OAGPXDatabase sharedDb];
-        OASGpxDataItem *gpx = [db getNewGPXItem:_gpx.dataItem.gpxFilePath];
+        OASGpxDataItem *gpx = [db getGPXItem:_gpx.dataItem.gpxFilePath];
         if (gpx)
         {
             [[OASGpxDbHelper shared] updateDataItemParameterItem:_gpx.dataItem
@@ -272,7 +272,7 @@
         {
             
             OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
-            OASGpxDataItem *gpx = [gpxDb getNewGPXItem:_gpx.gpxFilePath];
+            OASGpxDataItem *gpx = [gpxDb getGPXItem:_gpx.gpxFilePath];
             if (!gpx)
             {
                 gpx = [gpxDb addGPXFileToDBIfNeeded:_gpx.gpxFilePath];

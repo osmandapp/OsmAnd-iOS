@@ -136,13 +136,12 @@
 - (void)updateGpxParams:(NSString *)filePath
 {
     OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
-    OASGpxDataItem *gpx = [gpxDb getNewGPXItem:self.filePath];
+    OASGpxDataItem *gpx = [gpxDb getGPXItem:self.filePath];
     if (!gpx)
     {
         gpx = [gpxDb addGPXFileToDBIfNeeded:filePath];
         OASGpxTrackAnalysis *analysis = [gpx getAnalysis];
         
-        NSString *nearestCity;
         if (analysis.locationStart)
         {
             OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:analysis.locationStart.position];
@@ -170,7 +169,7 @@
 
 - (void) createGpxAppearanceInfo
 {
-    OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:[OAUtilities getGpxShortPath:self.filePath]];
+    OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.filePath]];
     if (gpx)
         _appearanceInfo = [[OAGpxAppearanceInfo alloc] initWithItem:gpx];
 }

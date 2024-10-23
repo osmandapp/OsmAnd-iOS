@@ -217,7 +217,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
 - (OASGpxDataItem *)getGpxItem:(const QString &)filename
 {
     NSString *filenameNS = filename.toNSString();
-    OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getNewGPXItem:filenameNS];
+    OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:filenameNS];
     return gpx;
 }
 
@@ -1161,7 +1161,7 @@ colorizationScheme:(int)colorizationScheme
     for (NSString *key in _gpxDocs.allKeys) {
         NSString *path = key;
         
-        OASGpxDataItem *gpx = [OAGPXDatabase.sharedDb getNewGPXItem:path];
+        OASGpxDataItem *gpx = [OAGPXDatabase.sharedDb getGPXItem:path];
         
         OASGpxFile *doc = [_gpxDocs objectForKey:key];
         GPXDataItemGPXFileWrapper *dataWrapper = [[GPXDataItemGPXFileWrapper alloc] initWithGpxDataItem:gpx gpxFile:doc];

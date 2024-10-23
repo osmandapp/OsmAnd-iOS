@@ -770,7 +770,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                     if isVisible {
                         self.settings.hideGpx([track.gpxFilePath])
                     }
-                    self.gpxDB.removeNewGpxItem(track, withLocalRemove: true)
+                    self.gpxDB.removeGpxItem(track, withLocalRemove: true)
                 }
                 
                 updateAllFoldersVCData(forceLoad: true)
@@ -1060,12 +1060,14 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                 }
                 updateData()
             } else {
+                guard let dataItem = trackItem.dataItem else { return }
                 let isVisible = settings.mapSettingVisibleGpx.contains(trackItem.gpxFilePath)
                 if isVisible {
                     settings.hideGpx([trackItem.gpxFilePath])
                 }
-                gpxDB.removeNewGpxItem(trackItem.dataItem, withLocalRemove: true)
-                updateAllFoldersVCData(forceLoad: true)            }
+                gpxDB.removeGpxItem(dataItem, withLocalRemove: true)
+                updateAllFoldersVCData(forceLoad: true)
+            }
         })
         alert.addAction(UIAlertAction(title: localizedString("shared_string_no"), style: .cancel))
         present(alert, animated: true)
@@ -1259,7 +1261,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                 let tracksItems: [GpxDataItem] = folderForDelete.getFlattenedTrackItems().compactMap({ $0.dataItem })
                 if !tracksItems.isEmpty {
                     tracksItems.forEach({
-                        gpxDB.removeNewGpxItem($0, withLocalRemove: false)
+                        gpxDB.removeGpxItem($0, withLocalRemove: false)
                         let gpxFilePath = $0.gpxFilePath
                         let isVisible = settings.mapSettingVisibleGpx.contains(gpxFilePath)
                         if isVisible {

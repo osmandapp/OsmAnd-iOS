@@ -182,12 +182,8 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
     }
 
     @objc static func createDescriptionForPalette(_ colorPalette: ColorPalette, isTerrain: Bool) -> String {
-        return colorPalette.colorValues.compactMap { colorValue -> String? in
-            if isTerrain {
-                return GradientUiHelper.formatTerrainTypeValues(colorValue.val)
-            } else {
-                return "\(colorValue.val)"
-            }
+        return colorPalette.colorValues.map {
+            isTerrain ? GradientUiHelper.formatTerrainTypeValues($0.val) : "\($0.val)"
         }.joined(separator: " • ")
     }
 

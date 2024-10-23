@@ -254,8 +254,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
             let section = tableData.createNewSection()
             let itemsToDisplay = isSearchActive ? filteredListItems : allListItems
             for itemName in itemsToDisplay {
-                let isWidth = filterType == .width
-                configureRowForSection(section: section, itemName: itemName, isWidth: isWidth)
+                configureRowForSection(section: section, itemName: itemName, isWidth: filterType == .width)
             }
         case .folder:
             let itemsToDisplay = isSearchActive ? filteredListItems : allListItems

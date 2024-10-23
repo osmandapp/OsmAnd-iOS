@@ -175,6 +175,7 @@
 #import "OAColorsCollectionViewCell.h"
 #import "OATitleIconProgressbarCell.h"
 #import "OAIconsCollectionViewCell.h"
+#import "OARangeSlider.h"
 #import "OATitleDescrDraggableCell.h"
 
 // Views

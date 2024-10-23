@@ -1309,8 +1309,14 @@
 		BBA3AF87197FC4BB0039D991 /* Shipped in Resources */ = {isa = PBXBuildFile; fileRef = BB451D8A18D70B4B005FBE09 /* Shipped */; };
 		BBA3AF97197FC4BB0039D991 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BB451DF318D8F7D7005FBE09 /* Localizable.strings */; };
 		BBA3AFC4197FC4BB0039D991 /* Resources.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB451F1018EB34A5005FBE09 /* Resources.storyboard */; };
+		C50E32822CA3FBDF00EEC41F /* TracksFiltersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E32812CA3FBDF00EEC41F /* TracksFiltersViewController.swift */; };
+		C50E32842CA57DDB00EEC41F /* TracksFilterDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E32832CA57DDB00EEC41F /* TracksFilterDetailsViewController.swift */; };
+		C50E32862CA6879500EEC41F /* OADatePickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50E32852CA6879500EEC41F /* OADatePickerTableViewCell.swift */; };
+		C50E32882CA6884200EEC41F /* OADatePickerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C50E32872CA6884200EEC41F /* OADatePickerTableViewCell.xib */; };
 		C51967AD2C247E9000476E4B /* POITagsDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51967AC2C247E9000476E4B /* POITagsDetailsViewController.swift */; };
 		C51BE6FD2BBC3E7C00B63A1A /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = C51BE6FC2BBC3E7C00B63A1A /* PrivacyInfo.xcprivacy */; };
+		C52776A82CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52776A62CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.swift */; };
+		C52776A92CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C52776A72CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.xib */; };
 		C52E750F2C2BECAC00C45ED0 /* OsmAndFormatterParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52E750E2C2BECAC00C45ED0 /* OsmAndFormatterParams.swift */; };
 		C53920C2291E4E770076D5BB /* ic_custom_van@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C53920C0291E4E770076D5BB /* ic_custom_van@2x.png */; };
 		C53920C3291E4E770076D5BB /* ic_custom_van@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C53920C1291E4E770076D5BB /* ic_custom_van@3x.png */; };
@@ -1354,6 +1360,7 @@
 		C588D1F32992A448001FEDBD /* ic_custom_history_disabled_48@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C588D1F12992A447001FEDBD /* ic_custom_history_disabled_48@3x.png */; };
 		C589BC9F2C610560002769F6 /* OATwoIconsButtonTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C589BC9E2C610560002769F6 /* OATwoIconsButtonTableViewCell.swift */; };
 		C589BCA12C6105F7002769F6 /* OATwoIconsButtonTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C589BCA02C6105F7002769F6 /* OATwoIconsButtonTableViewCell.xib */; };
+		C5A887E42CAD7B8E00DA2979 /* TracksSearchFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5A887E32CAD7B8E00DA2979 /* TracksSearchFilter.swift */; };
 		C5ACFCD52AD59F2200EA92F6 /* list_warnings_tunnel@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5ACFCD42AD59F2200EA92F6 /* list_warnings_tunnel@3x.png */; };
 		C5ACFCD72AD59F6E00EA92F6 /* list_warnings_tunnel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5ACFCD62AD59F6E00EA92F6 /* list_warnings_tunnel@2x.png */; };
 		C5AF90792A25E8A100989A86 /* OAKeyboardHintBar.m in Sources */ = {isa = PBXBuildFile; fileRef = C5AF90782A25E8A100989A86 /* OAKeyboardHintBar.m */; };
@@ -4824,8 +4831,14 @@
 		BBB34EE6179BF2A7004C5567 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
 		BBB3F6AA18A4DEF0001C3175 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		BBBDADB818BCF53500E4A359 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		C50E32812CA3FBDF00EEC41F /* TracksFiltersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksFiltersViewController.swift; sourceTree = "<group>"; };
+		C50E32832CA57DDB00EEC41F /* TracksFilterDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksFilterDetailsViewController.swift; sourceTree = "<group>"; };
+		C50E32852CA6879500EEC41F /* OADatePickerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OADatePickerTableViewCell.swift; sourceTree = "<group>"; };
+		C50E32872CA6884200EEC41F /* OADatePickerTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OADatePickerTableViewCell.xib; sourceTree = "<group>"; };
 		C51967AC2C247E9000476E4B /* POITagsDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POITagsDetailsViewController.swift; sourceTree = "<group>"; };
 		C51BE6FC2BBC3E7C00B63A1A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = Resources/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		C52776A62CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OARangeSliderFilterTableViewCell.swift; sourceTree = "<group>"; };
+		C52776A72CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OARangeSliderFilterTableViewCell.xib; sourceTree = "<group>"; };
 		C52E750E2C2BECAC00C45ED0 /* OsmAndFormatterParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsmAndFormatterParams.swift; sourceTree = "<group>"; };
 		C53920C0291E4E770076D5BB /* ic_custom_van@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_van@2x.png"; path = "Resources/Icons/ic_custom_van@2x.png"; sourceTree = "<group>"; };
 		C53920C1291E4E770076D5BB /* ic_custom_van@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_van@3x.png"; path = "Resources/Icons/ic_custom_van@3x.png"; sourceTree = "<group>"; };
@@ -4962,6 +4975,7 @@
 		C588D1F12992A447001FEDBD /* ic_custom_history_disabled_48@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_history_disabled_48@3x.png"; path = "Resources/Icons/ic_custom_history_disabled_48@3x.png"; sourceTree = "<group>"; };
 		C589BC9E2C610560002769F6 /* OATwoIconsButtonTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OATwoIconsButtonTableViewCell.swift; sourceTree = "<group>"; };
 		C589BCA02C6105F7002769F6 /* OATwoIconsButtonTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OATwoIconsButtonTableViewCell.xib; sourceTree = "<group>"; };
+		C5A887E32CAD7B8E00DA2979 /* TracksSearchFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksSearchFilter.swift; sourceTree = "<group>"; };
 		C5ACFCD42AD59F2200EA92F6 /* list_warnings_tunnel@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "list_warnings_tunnel@3x.png"; path = "Resources/Icons/list_warnings_tunnel@3x.png"; sourceTree = "<group>"; };
 		C5ACFCD62AD59F6E00EA92F6 /* list_warnings_tunnel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "list_warnings_tunnel@2x.png"; path = "Resources/Icons/list_warnings_tunnel@2x.png"; sourceTree = "<group>"; };
 		C5AF90772A25E8A100989A86 /* OAKeyboardHintBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAKeyboardHintBar.h; sourceTree = "<group>"; };
@@ -11597,6 +11611,8 @@
 				B0D61B247F6E55B974404878 /* OATitleSwitchRoundCell.h */,
 				B0D616ED5414E4F939C10BB6 /* OATitleSwitchRoundCell.mm */,
 				32DE2BE32B6D13730025F2B9 /* OATwoButtonsTableViewCell.swift */,
+				C50E32852CA6879500EEC41F /* OADatePickerTableViewCell.swift */,
+				C52776A62CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.swift */,
 				B247455427E6470900C18C3F /* OATwoFilledButtonsTableViewCell.h */,
 				B247455527E6470900C18C3F /* OATwoFilledButtonsTableViewCell.m */,
 				C589BC9E2C610560002769F6 /* OATwoIconsButtonTableViewCell.swift */,
@@ -11622,6 +11638,7 @@
 			isa = PBXGroup;
 			children = (
 				DA5A7C1126C563A200F274C7 /* OAActivityViewWithTitleCell.xib */,
+				C52776A72CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.xib */,
 				DA5A7BBA26C563A100F274C7 /* OABottomSheetHeaderButtonCell.xib */,
 				DA5A7BFC26C563A200F274C7 /* OABottomSheetHeaderCell.xib */,
 				DA5A7BCB26C563A100F274C7 /* OABottomSheetHeaderDescrButtonCell.xib */,
@@ -11729,6 +11746,7 @@
 				DA5A7BF026C563A100F274C7 /* OATitleSliderTableViewCell.xib */,
 				0A832602270BE0E3006B8946 /* OATitleSwitchRoundCell.xib */,
 				3241BC852B611D0500101894 /* OATwoButtonsTableViewCell.xib */,
+				C50E32872CA6884200EEC41F /* OADatePickerTableViewCell.xib */,
 				B247455627E6470A00C18C3F /* OATwoFilledButtonsTableViewCell.xib */,
 				C589BCA02C6105F7002769F6 /* OATwoIconsButtonTableViewCell.xib */,
 				46E9AD9828DC8E8C00CC55F9 /* OAValueTableViewCell.xib */,
@@ -11933,6 +11951,9 @@
 				DA5A7DC626C563A300F274C7 /* OAOsmEditsListViewController.mm */,
 				327D68A42A8F9BA80076D1E0 /* SavedArticlesTabViewController.swift */,
 				325CFBEA2B5052E000090DF2 /* TracksViewController.swift */,
+				C50E32812CA3FBDF00EEC41F /* TracksFiltersViewController.swift */,
+				C50E32832CA57DDB00EEC41F /* TracksFilterDetailsViewController.swift */,
+				C5A887E32CAD7B8E00DA2979 /* TracksSearchFilter.swift */,
 			);
 			path = MyPlaces;
 			sourceTree = "<group>";
@@ -14811,6 +14832,7 @@
 				DA5A827526C563A700F274C7 /* OABottomSheetHeaderDescrButtonCell.xib in Resources */,
 				DAF820CD2369BC5D007003FA /* ic_custom_start_point@2x.png in Resources */,
 				DA5A826226C563A700F274C7 /* OAPointDescCell.xib in Resources */,
+				C50E32882CA6884200EEC41F /* OADatePickerTableViewCell.xib in Resources */,
 				DA2DC41D23B2116300F40D1D /* ic_custom_arrow_down@2x.png in Resources */,
 				C57354502AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.xib in Resources */,
 				8454DA1E1B2F16D700E5A5C5 /* ic_coordinates@2x.png in Resources */,
@@ -15247,6 +15269,7 @@
 				C5879A4B299FBF7A00F53249 /* bg_tts.js in Resources */,
 				844499931AAA1FFA00ACA20D /* bt_bought_addon@2x.png in Resources */,
 				157F3CD724A1F43C000A66F0 /* ic_custom_straight_line@2x.png in Resources */,
+				C52776A92CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.xib in Resources */,
 				DAFE4D3B22169B4D009731CA /* map_osm_note_unresolved@2x.png in Resources */,
 				DA5A826526C563A700F274C7 /* OAQuickActionCell.xib in Resources */,
 				DA83600823438512003374B5 /* ic_small_arrow_up@3x.png in Resources */,
@@ -16108,6 +16131,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C50E32822CA3FBDF00EEC41F /* TracksFiltersViewController.swift in Sources */,
 				46E9AD9228DC894600CC55F9 /* OASimpleTableViewCell.m in Sources */,
 				DA5A830926C563A800F274C7 /* OAIconBackgroundCollectionViewCell.m in Sources */,
 				DA5A831D26C563A800F274C7 /* OACollectionViewCell.mm in Sources */,
@@ -16202,6 +16226,7 @@
 				C546C0072AC2438F00377EDE /* OAOsmNoteViewController.mm in Sources */,
 				32048FC92A26132600AA4B71 /* OsmOAuthView.swift in Sources */,
 				DA5A845826C563A900F274C7 /* OAOverlayMapLayer.mm in Sources */,
+				C50E32842CA57DDB00EEC41F /* TracksFilterDetailsViewController.swift in Sources */,
 				DA5A853E26C563A900F274C7 /* OADayNightHelper.m in Sources */,
 				FAA6505C2ADD42C50020DCEA /* BLEExternalSensorsViewController.swift in Sources */,
 				FA7DCF552AF10ABF0045D136 /* BluetoothDisableView.swift in Sources */,
@@ -17049,7 +17074,9 @@
 				46B619DC29EFE97500950A20 /* OAAltitudeWidget.mm in Sources */,
 				DA5A81C226C563A700F274C7 /* OAPOICategory.m in Sources */,
 				FAA650572ADD42C50020DCEA /* BLEHeartRateDevice.swift in Sources */,
+				C5A887E42CAD7B8E00DA2979 /* TracksSearchFilter.swift in Sources */,
 				DA5A840D26C563A800F274C7 /* OAFavoriteEditingHandler.mm in Sources */,
+				C50E32862CA6879500EEC41F /* OADatePickerTableViewCell.swift in Sources */,
 				DA5A813626C563A700F274C7 /* OAEditPOIData.mm in Sources */,
 				DA5A84F326C563A900F274C7 /* OAMapViewState.m in Sources */,
 				DA5A814326C563A700F274C7 /* OAOsmBugsLocalUtil.mm in Sources */,
@@ -17084,6 +17111,7 @@
 				46CBC9742B962707005CC244 /* GlideAverageWidget.swift in Sources */,
 				DA5A842526C563A800F274C7 /* OATargetHistoryItemViewController.m in Sources */,
 				32464B7E2A6FCC6700DA6980 /* TravelExploreViewController.swift in Sources */,
+				C52776A82CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.swift in Sources */,
 				8A31787527E1D8A800CA8AA4 /* OAMapRendererEnvironment.mm in Sources */,
 				DA4ABF352876ECB300B996EF /* OAAbstractWriter.m in Sources */,
 				464FF36B2B309488001D855E /* SensorAttributesUtils.swift in Sources */,

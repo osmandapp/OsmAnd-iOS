@@ -2543,3 +2543,6 @@
 "of" = "%d de %d";
 "downloaded_bytes" = "%@ de %@";
 "quick_action_need_to_add_item_to_list" = "Afegir com a mínim un element a la llista a la configuració de l\'acció ràpida";
+"rendering_attr_showDirtbikeTrails_description" = "Mostra rutes de motocròs";
+"no_bt_permission" = "No es disposa del permís pel Bluetooth";
+"rendering_attr_showDirtbikeTrails_name" = "Rutes de motocròs";

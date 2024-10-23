@@ -5,7 +5,7 @@
       location = "container:"
       name = "SharedLib">
       <Group
-         location = "group:../android/OsmAnd-shared/src/commonMain"
+         location = "container:../android/OsmAnd-shared/src/commonMain"
          name = "commonMain">
          <Group
             location = "group:kotlin"
@@ -40,6 +40,9 @@
                            location = "group:OBDDataField.kt">
                         </FileRef>
                         <FileRef
+                           location = "group:ODBSimulationSource.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:OBDUtils.kt">
                         </FileRef>
                         <FileRef
@@ -55,13 +58,16 @@
                            location = "group:OBDCommand.kt">
                         </FileRef>
                         <FileRef
+                           location = "group:Obd2Connection.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:OBDFuelTypeFormatter.kt">
                         </FileRef>
                         <FileRef
                            location = "group:OBDResponseListener.kt">
                         </FileRef>
                         <FileRef
-                           location = "group:OBDDataFieldType.kt">
+                           location = "group:OBDResponse.kt">
                         </FileRef>
                      </Group>
                      <FileRef
@@ -207,6 +213,9 @@
                               location = "group:DateTrackFilter.kt">
                            </FileRef>
                            <FileRef
+                              location = "group:TrackFilterSerializer.kt">
+                           </FileRef>
+                           <FileRef
                               location = "group:TextTrackFilter.kt">
                            </FileRef>
                            <FileRef
@@ -217,6 +226,9 @@
                            </FileRef>
                            <FileRef
                               location = "group:TrackFilterType.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:RangeTrackFilterSerializer.kt">
                            </FileRef>
                            <FileRef
                               location = "group:WidthSingleFieldTrackFilterParams.kt">
@@ -430,6 +442,9 @@
                            location = "group:StringIntPair.kt">
                         </FileRef>
                         <FileRef
+                           location = "group:BTDeviceInfo.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:KQuadRect.kt">
                         </FileRef>
                      </Group>
@@ -439,7 +454,7 @@
          </Group>
       </Group>
       <Group
-         location = "group:../android/OsmAnd-shared/src/iosMain"
+         location = "container:../android/OsmAnd-shared/src/iosMain"
          name = "iosMain">
          <Group
             location = "group:kotlin"
@@ -461,6 +476,9 @@
                         </FileRef>
                         <FileRef
                            location = "group:LoggerFactory.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:SensorPointAnalyser.kt">
                         </FileRef>
                         <FileRef
                            location = "group:PlatformUtil.kt">

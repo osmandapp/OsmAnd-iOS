@@ -198,7 +198,6 @@
     if (self)
     {
         _gpx = gpx;
-
         _settings = [OAAppSettings sharedManager];
         _savingHelper = [OASavingTrackHelper sharedInstance];
         _mapPanelViewController = [OARootViewController instance].mapPanel;
@@ -237,6 +236,10 @@
             {
                 OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFullPath];
                 _doc = [OASGpxUtilities.shared loadGpxFileFile:file];
+            }
+            else
+            {
+                _doc = gpx;
             }
         }
     }
@@ -296,8 +299,8 @@
     if (_doc)
     {
         _analysis = !_isCurrentTrack && [_doc getGeneralTrack] && [_doc getGeneralSegment]
-            ? [self getAnalysisFor:[_doc getGeneralSegment]]
-            : [_doc getAnalysisFileTimestamp:0];
+        ? [self getAnalysisFor:[_doc getGeneralSegment]]
+        : [_doc getAnalysisFileTimestamp:0 fromDistance:nil toDistance:nil pointsAnalyzer:OASPlatformUtil.shared.getTrackPointsAnalyser];
     }
     else
     {

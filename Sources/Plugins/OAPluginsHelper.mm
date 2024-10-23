@@ -494,14 +494,6 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     }
 }
 
-+ (void)analysePoint:(OASGpxTrackAnalysis *)analysis point:(NSObject *)point attribute:(OASPointAttributes *)attribute
-{
-    for (OAPlugin *plugin in [self getAvailablePlugins])
-    {
-        [plugin onAnalysePoint:analysis point:point attribute:attribute];
-    }
-}
-
 + (void)getAvailableGPXDataSetTypes:(OASGpxTrackAnalysis *)analysis
                      availableTypes:(NSMutableArray<NSArray<NSNumber *> *> *)availableTypes
 {

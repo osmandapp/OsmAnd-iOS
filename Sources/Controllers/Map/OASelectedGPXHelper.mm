@@ -136,7 +136,7 @@
 }
 
 - (OASGpxFile *)getSelectedGpx:(OASWptPt *)gpxWpt {
-    for (OASGpxFile *gpxFile in _activeGpx) {
+    for (OASGpxFile *gpxFile in _activeGpx.allValues) {
         if ([[gpxFile getPointsList] containsObject:gpxWpt]) {
             return gpxFile;
         }

@@ -651,7 +651,8 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
 {
     double pointElevation = [self getValidElevation:point.ele];
     double elevation = [self getSensorAttribute:point
-                                           type:visualizationType attributes:point.attributes];
+                                           type:visualizationType
+                                     attributes:point.attributes];
     return [self is3DMapsEnabled] && !isnan(elevation)
             ? elevation + pointElevation
             : elevation;
@@ -692,6 +693,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
         {
             return hasAttributes ? attributes.sensorSpeed : [sensorPointAnalyser getPointAttributeWptPt:point key:OASPointAttributes.sensorTagBikePower defaultValue:0] * kSpeedToHeightScale;
         }
+        default: return NAN;
     }
     return 0;
 }

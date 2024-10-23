@@ -56,7 +56,6 @@ static NSString * const OSMAND_URL = @"https://osmand.net";
 + (NSString *) getAbsoulutePluginPathByRegion:(OAWorldRegion *)region;
 + (nullable OABaseWidgetView *)createMapWidget:(OAWidgetType *)widgetType customId:(nullable NSString *)customId appMode:(OAApplicationMode *)appMode widgetParams:(nullable NSDictionary *)widgetParams;
 + (void)attachAdditionalInfoToRecordedTrack:(CLLocation *)location json:(NSMutableData *)json;
-+ (void)analysePoint:(OASGpxTrackAnalysis *)analysis point:(NSObject *)point attribute:(OASPointAttributes *)attribute;
 + (void)getAvailableGPXDataSetTypes:(OASGpxTrackAnalysis *)analysis
                      availableTypes:(NSMutableArray<NSArray<NSNumber *> *> *)availableTypes;
 + (void) fetchOnlinePlugins:(nullable id<OAOnlinePluginsCallback>)callback;

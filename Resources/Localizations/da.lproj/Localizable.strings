@@ -1036,7 +1036,7 @@
 "quick_action_navigation_voice" = "Talevejledning til/fra";
 "quick_action_add_osm_bug" = "Tilføj OSM-bemærkninger";
 "toggle_online_notes" = "Skift visning af OSM-bemærkninger";
-"toggle_local_edits" = "Skift visning af lokale OSM-noter";
+"toggle_local_edits" = "Slå visning af lokale OSM-redigeringer til eller fra";
 "quick_action_add_poi" = "Tilføj IP";
 "quick_action_map_style" = "Kortstil";
 "quick_action_map_source" = "Skift kortkilde";
@@ -3534,3 +3534,4 @@
 "shared_string_format" = "Format";
 "weather_source_ecmwf_title" = "ECMWF";
 "weather_source_GFS_title" = "GFS";
+"ios_release_4_9" = "• Ændret kompasadfærd: et enkelt tryk roterer kortet til nord, mens et dobbelt tryk skifter retning\n• Tilføjet søgefunktionalitet for de mest populære varemærkenavne\n• Forbedret grafudseende: Y-aksens etiketter overlapper ikke længere med grafen\n• Tilføjet samlede sporstatistikker til hver mappes sidefod\n• Grupperede alle tags med oversættelser i et enkelt punkt i kontekstmenuen\n• Rettet et problem, hvor POI-kategorien manglede i kontekstmenuen\n• Rettet et problem med den automatiske registrering af stemmepromptens sprog\n• Rettet nedbrud i bådprofilens ruteparametre\n• CarPlay-forbedringer: løste et problem, hvor den primære navigationswidget ikke blev opdateret efter genberegning af ruten, og rettede størrelsen på pilene i widget'en for næste sving.\n• Introduceret en parameter for korttilstand, der nu følger app-temaet\n• Forbedret brugergrænseflade til valg af placeringsikon, tilføjet muligheder for at deaktivere placeringsradius og synsvinkel\n• Tilføj hurtig handling for at ændre \"Placeringsposition på skærmen\"\n";

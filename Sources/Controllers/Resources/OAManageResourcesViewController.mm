@@ -2863,7 +2863,10 @@ static BOOL _repositoryUpdated = NO;
         }
         else if ([item isKindOfClass:OACustomResourceItem.class])
         {
-            [self showDetailsOfCustomItem:item];
+            if (((OACustomResourceItem *) item).downloadTask != nil)
+                [self onItemClicked:item];
+            else
+                [self showDetailsOfCustomItem:item];
         }
         else if (![item isKindOfClass:[OALocalResourceItem class]])
         {

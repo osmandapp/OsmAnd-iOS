@@ -31,13 +31,14 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     
     @IBOutlet private weak var tableView: UITableView!
     
+    var shouldReload = false
+    
     fileprivate var rootFolder: TrackFolder!
     fileprivate var visibleTracksFolder: TrackFolder!
     fileprivate var currentFolder: TrackFolder!
     
     fileprivate var isRootFolder = true
     fileprivate var isVisibleOnMapFolder = false
-    var shouldReload = false
     fileprivate var currentFolderPath = ""   // in format: "rec/new folder"
     
     fileprivate weak var hostVCDelegate: TrackListUpdatableDelegate?
@@ -203,7 +204,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     
     private func updateAllFoldersVCData(forceLoad: Bool = false) {
         reloadTracks(forceLoad: forceLoad)
-    
+ // FIXME:
 //        if let hostVCDelegate {
 //            hostVCDelegate.updateHostVCWith(rootFolder: rootFolder, visibleTracksFolder: visibleTracksFolder)
 //        }

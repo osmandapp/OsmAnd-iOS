@@ -170,14 +170,10 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     OAAutoObserverProxy* _trackRecordingObserver;
     
     NSString *_gpxDocFileTemp;
-
-    // Temp gpx
-   // QList< std::shared_ptr<const OsmAnd::GpxDocument> > _gpxDocsTemp;
-    // Currently recording gpx
-   // QList< std::shared_ptr<const OsmAnd::GpxDocument> > _gpxDocsRec;
-     NSMutableArray *_gpxDocsTemp;
-     NSMutableArray *_gpxDocsRec;
-
+    
+    NSMutableArray *_gpxDocsTemp;
+    NSMutableArray *_gpxDocsRec;
+    
     OASelectedGPXHelper *_selectedGpxHelper;
     
     BOOL _tempTrackShowing;
@@ -2961,23 +2957,6 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         [[OAAppSettings sharedManager] showGpx:@[gpxDocFileTemp] update:NO];
     }
 }
-
-//- (void) setWptData:(OASearchWptAPI *)wptApi
-//{
-//    NSMutableArray *paths = [NSMutableArray array];
-//    QList< std::shared_ptr<const OsmAnd::GpxDocument> > list;
-//    auto activeGpx = _selectedGpxHelper.activeGpx;
-//    for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
-//    {
-//        if (it.value() == nullptr)
-//            continue;
-//
-//        [paths addObject:it.key().toNSString()];
-//        list << it.value();
-//    }
-//    list << _gpxDocsRec;
-//    [wptApi setWptData:list paths:paths];
-//}
 
 - (void)setWptData:(OASearchWptAPI *)wptApi {
     NSMutableArray *paths = [NSMutableArray array];

@@ -868,8 +868,7 @@
     {
         if (!self.gpx.isShowCurrentTrack)
         {
-            OASGpxTrackAnalysis *aa = self.gpx.dataItem.getAnalysis;
-            self.analysis = aa;
+            self.analysis = self.gpx.dataItem.getAnalysis;;
         }
     }
     [self openAnalysis:self.analysis withTypes:types];
@@ -1038,9 +1037,11 @@
 {
     OASGpxUtilitiesPointsGroup *group = self.doc.pointsGroups[[self isDefaultGroup:groupName] ? @"" : groupName];
     if (group)
+    {
         group.hidden = !show;
-
-    [[OAGPXDatabase sharedDb] save];
+        OASKFile *file = [[OASKFile alloc] initWithFilePath:self.doc.path];
+        [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:self.doc];
+    }
 
     if (_selectedTab == EOATrackMenuHudPointsTab)
     {

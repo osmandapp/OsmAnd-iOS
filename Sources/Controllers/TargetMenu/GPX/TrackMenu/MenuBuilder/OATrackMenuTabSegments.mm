@@ -84,9 +84,7 @@
     }
 
     for (NSInteger index = 0; index < segments.count; index++)
-    {
-       // OASGpxTrackAnalysis *analysis = [OASGpxTrackAnalysis segment:0 seg:segments[index]];
-        
+    {        
         OASGpxTrackAnalysis *analysis = [self getAnalysisFor:segments[index]];
         
         [self generateSegmentSectionData:segments[index]

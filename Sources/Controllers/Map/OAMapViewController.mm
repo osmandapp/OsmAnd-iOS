@@ -3563,7 +3563,12 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
             OASKFile *file = [[OASKFile alloc] initWithFilePath:docPath];
             gpxFile.author = [OAAppVersion getFullVersionWithAppName];
-            [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
+            OASKException *exception = [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
+            if (!exception) {
+                NSLog(@"writeGpxFileFile is true");
+            } else {
+                NSLog(@"writeGpxFileFile is false");
+            }
 
             return YES;
         }

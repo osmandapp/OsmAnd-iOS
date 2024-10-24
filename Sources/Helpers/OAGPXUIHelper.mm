@@ -836,7 +836,8 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
         {
             gpx.gpxTitle = newName;
             gpx.gpxFileName = newFileName;
-            [[OAGPXDatabase sharedDb] updateDataItem:gpx];
+            BOOL result = [[OAGPXDatabase sharedDb] updateDataItem:gpx];
+            NSLog(@"updateDataItem: %@", result ? @"Yes" : @"No");
 
             OASMetadata *metadata;
             if (doc.metadata)
@@ -879,7 +880,12 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
             if (!gpxSaved)
             {
                 OASKFile *file = [[OASKFile alloc] initWithFilePath:newPath];
-                [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:doc];
+                OASKException *exception = [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:doc];
+                if (!exception) {
+                    NSLog(@"writeGpxFileFile result is true");
+                } else {
+                    NSLog(@"writeGpxFileFile result is false");
+                }
             }
             [OASelectedGPXHelper renameVisibleTrack:oldFilePath newPath:newFilePath];
         }

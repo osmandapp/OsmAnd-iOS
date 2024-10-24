@@ -116,18 +116,24 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         importHelper.delegate = self
     }
     
-    internal func deferredLoadTracksFinished(folder: TrackFolder) {
-        debugPrint("function: \(#function)")
-    }
-    
-    internal func loadTracksFinished(folder: TrackFolder) {
-        debugPrint("function: \(#function)")
-        currentFolder = getTrackFolderByPath(currentFolderPath) ?? rootFolder
+    private func onLoadFinished(folder: TrackFolder) {
+        self.rootFolder = folder
+        self.currentFolder = getTrackFolderByPath(currentFolderPath) ?? rootFolder
         onRefreshEnd()
         updateNavigationBarTitle()
         generateData()
         tableView.reloadData()
         setupTableFooter()
+    }
+    
+    internal func deferredLoadTracksFinished(folder: TrackFolder) {
+        debugPrint("function: \(#function)")
+        onLoadFinished(folder: folder)
+    }
+    
+    internal func loadTracksFinished(folder: TrackFolder) {
+        debugPrint("function: \(#function)")
+        onLoadFinished(folder: folder)
     }
     
     func loadTracksProgress(items: KotlinArray<TrackItem>) {
@@ -204,10 +210,10 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     
     private func updateAllFoldersVCData(forceLoad: Bool = false) {
         reloadTracks(forceLoad: forceLoad)
- // FIXME:
-//        if let hostVCDelegate {
-//            hostVCDelegate.updateHostVCWith(rootFolder: rootFolder, visibleTracksFolder: visibleTracksFolder)
-//        }
+
+        if let hostVCDelegate {
+            hostVCDelegate.updateHostVCWith(rootFolder: rootFolder, visibleTracksFolder: visibleTracksFolder)
+        }
     }
     
     private func generateData() {
@@ -1038,7 +1044,6 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                 ? String(newName.dropLast(fileExtension.count))
                 : newName
                 gpxHelper.renameTrack(trackItem.dataItem, newName: newNameToChange, hostVC: self)
-                // FIXME: check reload track list (2 reload)
                 self.updateAllFoldersVCData(forceLoad: true)
             } else {
                 gpxHelper.renameTrack(nil, doc: nil, newName: nil, hostVC: self)

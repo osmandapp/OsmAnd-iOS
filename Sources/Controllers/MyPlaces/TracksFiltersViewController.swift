@@ -358,7 +358,12 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
         if let filter = baseFilters.getFilterByType(filterType) as? ListTrackFilter {
             let selectedNames = filter.selectedItems.compactMap { item -> String? in
                 guard let itemName = item as? String else { return nil }
-                return filter.collectionFilterParams.getItemText(itemName: itemName)
+                if filter is FolderTrackFilter {
+                    let folderName = itemName.components(separatedBy: "/").last ?? itemName
+                    return filter.collectionFilterParams.getItemText(itemName: folderName)
+                } else {
+                    return filter.collectionFilterParams.getItemText(itemName: itemName)
+                }
             }.joined(separator: ", ")
             row.descr = filter.isValid() ? selectedNames : ""
             row.setObj(filter.isValid(), forKey: Self.isValidFilterKey)

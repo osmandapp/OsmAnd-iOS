@@ -12,6 +12,15 @@ protocol TrackFilterConfigurable {
     func configure(with filter: BaseTrackFilter, in controller: TracksFilterDetailsViewController)
 }
 
+struct DisplayFolderItem {
+    let key: String
+    let path: String
+    let displayName: String
+    var subfolders: [DisplayFolderItem] = []
+    let icon: UIImage
+    let iconTintColor: UIColor
+}
+
 class RangeTrackFilterConfigurator: TrackFilterConfigurable {
     func configure(with filter: BaseTrackFilter, in controller: TracksFilterDetailsViewController) {
         controller.rangeFilterType = filter as? RangeTrackFilter<AnyObject>
@@ -50,13 +59,79 @@ class ListTrackFilterConfigurator: TrackFilterConfigurable {
     }
 }
 
+class FolderTrackFilterConfigurator: TrackFilterConfigurable {
+    func configure(with filter: BaseTrackFilter, in controller: TracksFilterDetailsViewController) {
+        controller.listFilterType = filter as? FolderTrackFilter
+        guard let listFilter = controller.listFilterType else { return }
+        var orderedFolders: [DisplayFolderItem] = []
+        
+        func addSubfolder(to folder: inout DisplayFolderItem, with pathComponents: [String], currentPath: String, originalKey: String, displayName: String) {
+            let subfolderPath = currentPath
+            if !folder.subfolders.contains(where: { $0.path == subfolderPath && $0.displayName == displayName }) {
+                let subfolder = createFolderItem(key: originalKey, path: subfolderPath, displayName: displayName, isRoot: false)
+                folder.subfolders.append(subfolder)
+            }
+        }
+        
+        func processSubfolders(for folder: inout DisplayFolderItem, with remainingComponents: [String], currentPath: String, originalKey: String) {
+            guard let subfolderName = remainingComponents.first else { return }
+            let subfolderDisplayName = listFilter.collectionFilterParams.getItemText(itemName: subfolderName)
+            addSubfolder(to: &folder, with: remainingComponents, currentPath: currentPath, originalKey: originalKey, displayName: subfolderDisplayName)
+            let nextComponents = Array(remainingComponents.dropFirst())
+            if !nextComponents.isEmpty {
+                let subfolderPath = currentPath + "/" + subfolderName
+                if let index = folder.subfolders.firstIndex(where: { $0.path == currentPath && $0.displayName == subfolderDisplayName }) {
+                    processSubfolders(for: &folder.subfolders[index], with: nextComponents, currentPath: subfolderPath, originalKey: originalKey)
+                }
+            }
+        }
+        
+        func createFolderItem(key: String, path: String, displayName: String, isRoot: Bool) -> DisplayFolderItem {
+            let icon = isRoot ? UIImage.icCustomFolderOpen : UIImage.icCustomFolder
+            let tintColor = isRoot ? UIColor.iconColorSelected : UIColor.iconColorDefault
+            return DisplayFolderItem(key: key, path: path, displayName: displayName, icon: icon, iconTintColor: tintColor)
+        }
+        
+        for folder in listFilter.allItems.compactMap({ $0 as? String }) {
+            let components = folder.split(separator: "/").map(String.init)
+            let topLevel = components.first ?? ""
+            let subfolderPath = components.dropFirst().joined(separator: "/")
+            if let topLevelIndex = orderedFolders.firstIndex(where: { $0.path == topLevel }) {
+                if !subfolderPath.isEmpty {
+                    processSubfolders(for: &orderedFolders[topLevelIndex], with: Array(components.dropFirst()), currentPath: topLevel, originalKey: folder)
+                }
+            } else {
+                let topLevelFolder = createFolderItem(key: folder, path: topLevel, displayName: listFilter.collectionFilterParams.getItemText(itemName: topLevel), isRoot: true)
+                orderedFolders.append(topLevelFolder)
+                if !subfolderPath.isEmpty {
+                    var newTopLevelFolder = topLevelFolder
+                    processSubfolders(for: &newTopLevelFolder, with: Array(components.dropFirst()), currentPath: topLevel, originalKey: folder)
+                    if let index = orderedFolders.firstIndex(where: { $0.path == topLevel }) {
+                        orderedFolders[index] = newTopLevelFolder
+                    }
+                }
+            }
+        }
+        
+        controller.allFoldersListItems = orderedFolders
+        controller.selectedItems = listFilter.selectedItems.compactMap { $0 as? String }
+        if let emptyIndex = controller.allFoldersListItems.firstIndex(where: { $0.path.isEmpty }), emptyIndex != 0 {
+            let emptyItem = controller.allFoldersListItems.remove(at: emptyIndex)
+            controller.allFoldersListItems.insert(emptyItem, at: 0)
+        }
+    }
+}
+
 final class TracksFilterDetailsViewController: OABaseNavbarViewController {
     private static let fromDateRowKey = "fromDateRowKey"
     private static let toDateRowKey = "toDateRowKey"
+    private static let allFoldersRowKey = "allFoldersRowKey"
+    private static let folderPath = "folderPath"
     
     private var baseFilters: TracksSearchFilter
     private var baseFiltersResult: FilterResults
     private var filteredListItems: [String] = []
+    private var filteredFoldersListItems: [DisplayFolderItem] = []
     private var searchController: UISearchController?
     private var rangeSliderMinValue: Float = 0.0
     private var rangeSliderMaxValue: Float = 0.0
@@ -74,6 +149,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
     var dateCreationFilterType: DateTrackFilter?
     var listFilterType: ListTrackFilter?
     var allListItems: [String] = []
+    var allFoldersListItems: [DisplayFolderItem] = []
     var selectedItems: [String] = []
     var currentMinValue: Float = 0.0
     var currentMaxValue: Float = 0.0
@@ -127,7 +203,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
             .color: ListTrackFilterConfigurator(),
             .width: ListTrackFilterConfigurator(),
             .city: ListTrackFilterConfigurator(),
-            .folder: ListTrackFilterConfigurator()
+            .folder: FolderTrackFilterConfigurator()
         ]
         
         guard let filter = baseFilters.getFilterByType(filterType), let configurator = configurators[filterType] else { return }
@@ -138,6 +214,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
         addCell(OADatePickerTableViewCell.reuseIdentifier)
         addCell(OARangeSliderFilterTableViewCell.reuseIdentifier)
         addCell(OAValueTableViewCell.reuseIdentifier)
+        addCell(OASimpleTableViewCell.reuseIdentifier)
     }
     
     override func viewDidLoad() {
@@ -146,12 +223,12 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onOutsideCellsTapped))
         tapGesture.cancelsTouchesInView = false
         tableView.addGestureRecognizer(tapGesture)
-        
         if filterType == .color || filterType == .width || filterType == .city || filterType == .folder {
             tableView.setEditing(true, animated: false)
             tableView.allowsMultipleSelectionDuringEditing = true
             searchController = UISearchController(searchResultsController: nil)
             searchController?.searchBar.delegate = self
+            searchController?.delegate = self
             searchController?.obscuresBackgroundDuringPresentation = false
             searchController?.searchBar.placeholder = localizedString("shared_string_search")
             searchController?.searchBar.returnKeyType = .go
@@ -257,16 +334,40 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
                 configureRowForSection(section: section, itemName: itemName, isWidth: filterType == .width)
             }
         case .folder:
-            let itemsToDisplay = isSearchActive ? filteredListItems : allListItems
-            let section = tableData.createNewSection()
-            for itemName in itemsToDisplay {
+            let foldersToDisplay = isSearchActive ? filteredFoldersListItems : allFoldersListItems
+            if !isSearchActive {
+                let allFoldersSection = tableData.createNewSection()
+                let allFoldersRow = allFoldersSection.createNewRow()
+                allFoldersRow.cellType = OASimpleTableViewCell.reuseIdentifier
+                allFoldersRow.key = Self.allFoldersRowKey
+                allFoldersRow.title = localizedString("all_folders")
+                allFoldersRow.icon = .icCustomFolderOpen
+                allFoldersRow.iconTintColor = .iconColorSelected
+            }
+            
+            func displayFolder(_ folderItem: DisplayFolderItem, in section: OATableSectionData, isRootFolder: Bool) {
                 let row = section.createNewRow()
                 row.cellType = OAValueTableViewCell.reuseIdentifier
-                row.key = itemName
-                row.title = listFilterType?.collectionFilterParams.getItemText(itemName: itemName)
-                if let tracksCount = listFilterType?.getTracksCountForItem(itemName: itemName) {
+                row.key = folderItem.key
+                row.title = folderItem.displayName
+                row.icon = folderItem.icon
+                row.iconTintColor = folderItem.iconTintColor
+                if let tracksCount = listFilterType?.getTracksCountForItem(itemName: folderItem.key) {
                     row.descr = String(describing: tracksCount)
                 }
+                
+                if !isRootFolder {
+                    row.setObj(folderItem.path, forKey: Self.folderPath)
+                }
+                
+                for subfolder in folderItem.subfolders {
+                    displayFolder(subfolder, in: section, isRootFolder: false)
+                }
+            }
+            
+            for folderItem in foldersToDisplay {
+                let section = tableData.createNewSection()
+                displayFolder(folderItem, in: section, isRootFolder: true)
             }
         default:
             break
@@ -320,12 +421,13 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
             return cell
         } else if item.cellType == OAValueTableViewCell.reuseIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.reuseIdentifier) as! OAValueTableViewCell
-            cell.descriptionVisibility(false)
+            cell.descriptionVisibility(item.obj(forKey: Self.folderPath) != nil)
             cell.leftIconVisibility(item.icon != nil || filterType == .color)
             cell.selectedBackgroundView = UIView()
             cell.selectedBackgroundView?.backgroundColor = UIColor.groupBg
             cell.accessoryType = .none
             cell.titleLabel.text = item.title
+            cell.descriptionLabel.text = item.obj(forKey: Self.folderPath) as? String
             cell.valueLabel.text = item.descr
             cell.leftIconView.image = item.icon
             cell.leftIconView.tintColor = item.iconTintColor
@@ -334,9 +436,23 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
                 cell.leftIconView.backgroundColor = isKeyNotEmpty ? item.iconTintColor : nil
                 cell.leftIconView.layer.cornerRadius = isKeyNotEmpty ? cell.leftIconView.frame.height / 2 : 0
             }
-            let itemsToDisplay = isSearchActive ? filteredListItems : allListItems
             if let key = item.key, selectedItems.contains(key) {
-                if itemsToDisplay.contains(key) {
+                tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
+            } else {
+                tableView.deselectRow(at: indexPath, animated: false)
+            }
+            return cell
+        } else if item.cellType == OASimpleTableViewCell.reuseIdentifier {
+            let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier) as! OASimpleTableViewCell
+            cell.descriptionVisibility(false)
+            cell.selectedBackgroundView = UIView()
+            cell.selectedBackgroundView?.backgroundColor = UIColor.groupBg
+            cell.accessoryType = .none
+            cell.titleLabel.text = item.title
+            cell.leftIconView.image = item.icon
+            cell.leftIconView.tintColor = item.iconTintColor
+            if item.key == Self.allFoldersRowKey {
+                if listFilterType?.isSelectAllItemsSelected == true {
                     tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
                 } else {
                     tableView.deselectRow(at: indexPath, animated: false)
@@ -349,18 +465,42 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
     }
     
     override func onRowSelected(_ indexPath: IndexPath) {
-        let itemsToDisplay = isSearchActive ? filteredListItems : allListItems
-        let itemName = itemsToDisplay[indexPath.row]
-        if !selectedItems.contains(itemName) {
-            selectedItems.append(itemName)
+        guard let tableData else { return }
+        let data = tableData.item(for: indexPath)
+        let previousSelectAllStatus = listFilterType?.isSelectAllItemsSelected == true
+        if data.key == Self.allFoldersRowKey {
+            listFilterType?.isSelectAllItemsSelected = true
+            selectAllFolders()
+        } else if let itemKey = data.key, !selectedItems.contains(itemKey) {
+            selectedItems.append(itemKey)
+        }
+        
+        if !isSearchActive {
+            checkIfAllFoldersSelected()
+        }
+        
+        if previousSelectAllStatus != (listFilterType?.isSelectAllItemsSelected == true) {
+            tableView.reloadData()
         }
     }
     
     override func onRowDeselected(_ indexPath: IndexPath) {
-        let itemsToDisplay = isSearchActive ? filteredListItems : allListItems
-        let itemName = itemsToDisplay[indexPath.row]
-        if let index = selectedItems.firstIndex(of: itemName) {
+        guard let tableData else { return }
+        let data = tableData.item(for: indexPath)
+        let previousSelectAllStatus = listFilterType?.isSelectAllItemsSelected == true
+        if data.key == Self.allFoldersRowKey {
+            listFilterType?.isSelectAllItemsSelected = false
+            deselectAllFolders()
+        } else if let itemKey = data.key, let index = selectedItems.firstIndex(of: itemKey) {
             selectedItems.remove(at: index)
+        }
+        
+        if !isSearchActive {
+            checkIfAllFoldersSelected()
+        }
+        
+        if previousSelectAllStatus != (listFilterType?.isSelectAllItemsSelected == true) {
+            tableView.reloadData()
         }
     }
     
@@ -444,6 +584,51 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
         return .none
     }
     
+    private func updateAllFoldersSelection(add: Bool) {
+        func updateFolderSelection(from folder: DisplayFolderItem, add: Bool) {
+            if add {
+                if !selectedItems.contains(folder.key) {
+                    selectedItems.append(folder.key)
+                }
+            } else {
+                if let index = selectedItems.firstIndex(of: folder.key) {
+                    selectedItems.remove(at: index)
+                }
+            }
+            
+            for subfolder in folder.subfolders {
+                updateFolderSelection(from: subfolder, add: add)
+            }
+        }
+        
+        for folder in allFoldersListItems {
+            updateFolderSelection(from: folder, add: add)
+        }
+    }
+    
+    private func selectAllFolders() {
+        updateAllFoldersSelection(add: true)
+    }
+    
+    private func deselectAllFolders() {
+        updateAllFoldersSelection(add: false)
+    }
+    
+    private func checkIfAllFoldersSelected() {
+        let folderItemsToDisplay = isSearchActive ? filteredFoldersListItems : allFoldersListItems
+        let allFolderKeys = folderItemsToDisplay.flatMap { flattenFolder($0).map { $0.key } }
+        listFilterType?.isSelectAllItemsSelected = allFolderKeys.allSatisfy { selectedItems.contains($0) }
+    }
+    
+    private func flattenFolder(_ folderItem: DisplayFolderItem) -> [DisplayFolderItem] {
+        var result: [DisplayFolderItem] = [folderItem]
+        for subfolder in folderItem.subfolders {
+            result.append(contentsOf: flattenFolder(subfolder))
+        }
+        
+        return result
+    }
+    
     func updateRangeValues() {
         isBinding = true
         if currentMaxValue > currentMinValue {
@@ -489,11 +674,44 @@ extension TracksFilterDetailsViewController: TTRangeSliderDelegate {
     }
 }
 
-extension TracksFilterDetailsViewController: UISearchBarDelegate {
+extension TracksFilterDetailsViewController: UISearchBarDelegate, UISearchControllerDelegate {
+    func willPresentSearchController(_ searchController: UISearchController) {
+        isSearchActive = true
+        filteredListItems = allListItems
+        filteredFoldersListItems = allFoldersListItems
+        generateData()
+        tableView.reloadData()
+    }
+    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        isSearchActive = !searchText.isEmpty
-        filteredListItems = searchText.isEmpty ? allListItems : allListItems.filter { itemName in
-            listFilterType?.collectionFilterParams.getItemText(itemName: itemName).localizedCaseInsensitiveContains(searchText) ?? false
+        if filterType == .folder {
+            func filterFolders(_ folderItems: [DisplayFolderItem], searchText: String) -> [DisplayFolderItem] {
+                var result: [DisplayFolderItem] = []
+                for folder in folderItems {
+                    var folderCopy = folder
+                    var hasMatchingSubfolders = false
+                    let matchingSubfolders = filterFolders(folder.subfolders, searchText: searchText)
+                    if !matchingSubfolders.isEmpty {
+                        folderCopy.subfolders = matchingSubfolders
+                        hasMatchingSubfolders = true
+                    }
+                    
+                    if folder.displayName.localizedCaseInsensitiveContains(searchText) {
+                        folderCopy.subfolders = matchingSubfolders
+                        result.append(folderCopy)
+                    } else if hasMatchingSubfolders {
+                        result.append(contentsOf: matchingSubfolders)
+                    }
+                }
+                
+                return result
+            }
+            
+            filteredFoldersListItems = searchText.isEmpty ? allFoldersListItems : filterFolders(allFoldersListItems, searchText: searchText)
+        } else {
+            filteredListItems = searchText.isEmpty ? allListItems : allListItems.filter { itemName in
+                listFilterType?.collectionFilterParams.getItemText(itemName: itemName).localizedCaseInsensitiveContains(searchText) ?? false
+            }
         }
         
         generateData()

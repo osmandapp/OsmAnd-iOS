@@ -79,10 +79,6 @@
                  openTrack:(BOOL)openTrack
                           gpx:(OASGpxDataItem *)gpx;
 
-- (void)renameTrackNew:(OASGpxDataItem *)gpx
-               newName:(NSString *)newName
-                hostVC:(UIViewController*)hostVC;
-
 + (NSString *)buildTrackSegmentName:(OASGpxFile *)gpxFile
                               track:(OASTrack *)track
                             segment:(OASTrkSegment *)segment;

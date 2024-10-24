@@ -875,8 +875,7 @@
     {
         if (!self.gpx.isShowCurrentTrack)
         {
-            OASGpxTrackAnalysis *aa = self.gpx.dataItem.getAnalysis;
-            self.analysis = aa;
+            self.analysis = self.gpx.dataItem.getAnalysis;;
         }
     }
     [self openAnalysis:self.analysis withTypes:types];
@@ -1045,9 +1044,11 @@
 {
     OASGpxUtilitiesPointsGroup *group = self.doc.pointsGroups[[self isDefaultGroup:groupName] ? @"" : groupName];
     if (group)
+    {
         group.hidden = !show;
-
-    [[OAGPXDatabase sharedDb] save];
+        OASKFile *file = [[OASKFile alloc] initWithFilePath:self.doc.path];
+        [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:self.doc];
+    }
 
     if (_selectedTab == EOATrackMenuHudPointsTab)
     {
@@ -1793,32 +1794,54 @@
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-- (void)showAlertRenameTrack
-{
-    __weak OATrackMenuHudViewController *weakSelf = self;
+- (void)showAlertRenameTrack {
+   
+    NSString *gpxFileName = self.gpx.dataItem.gpxFileName.lastPathComponent;
+    NSString *gpxFileNameWithoutExtension = [gpxFileName stringByDeletingPathExtension];
+    
+    if (gpxFileNameWithoutExtension.length > 0) {
+        __weak __typeof(self) weakSelf = self;
+        NSString *message = [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"gpx_enter_new_name"), gpxFileNameWithoutExtension];
+       
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"rename_track")
+                                                                       message:message
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+            textField.text = gpxFileNameWithoutExtension;
+        }];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
+                                                  style:UIAlertActionStyleCancel
+                                                handler:nil]];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok")
+                                                  style:UIAlertActionStyleDefault
+                                                handler:^(UIAlertAction *_Nonnull action) {
+            UITextField *textField = alert.textFields.firstObject;
+            NSString *newName = [textField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"rename_track")
-                                                                   message:OALocalizedString(@"gpx_enter_new_name \"%@\"", [weakSelf.gpx.dataItem.gpxTitle lastPathComponent])
-                                                            preferredStyle:UIAlertControllerStyleAlert];
-
-    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
-                                              style:UIAlertActionStyleCancel
-                                            handler:nil]];
-
-    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok")
-                                              style:UIAlertActionStyleDefault
-                                            handler:^(UIAlertAction *_Nonnull action) {
-        [weakSelf.gpxUIHelper renameTrack:weakSelf.gpx.dataItem
-                                      doc:weakSelf.doc
-                                  newName:alert.textFields[0].text
-                                   hostVC:weakSelf];
-    }]];
-
-    [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-        textField.text = weakSelf.gpx.dataItem.gpxTitle.lastPathComponent.stringByDeletingPathExtension;
-    }];
-
-    [self presentViewController:alert animated:YES completion:nil];
+            if (newName.length > 0)
+            {
+                NSString *fileExtension = @".gpx";
+                NSString *newNameToChange = newName;
+                if ([newName hasSuffix:fileExtension])
+                {
+                    newNameToChange = [newName substringToIndex:newName.length - fileExtension.length];;
+                }
+               
+                [weakSelf.gpxUIHelper renameTrack:weakSelf.gpx.dataItem
+                                              doc:weakSelf.doc
+                                          newName:newNameToChange
+                                           hostVC:weakSelf];
+            }
+            else
+            {
+                [weakSelf.gpxUIHelper renameTrack:nil
+                                              doc:nil
+                                          newName:nil
+                                           hostVC:weakSelf];
+            }
+        }]];
+        [self presentViewController:alert animated:YES completion:nil];
+    }
 }
 
 - (void) openUploadGpxToOSM

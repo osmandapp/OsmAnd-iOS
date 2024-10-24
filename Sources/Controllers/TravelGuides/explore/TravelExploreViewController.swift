@@ -168,9 +168,9 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                                 gpxRow.descr = item.user
                                 gpxRow.setObj(item, forKey: "article")
                                 
-//                                let analysis = item.getAnalysis()
-//                                let statisticsCells = OATrackMenuHeaderView.generateGpxBlockStatistics(analysis, withoutGaps: false)
-//                                gpxRow.setObj(statisticsCells, forKey: "statistics_cells")
+                                let analysis = item.getAnalysis()
+                                let statisticsCells = OATrackMenuHeaderView.generateGpxBlockStatistics(analysis, withoutGaps: false)
+                                gpxRow.setObj(statisticsCells, forKey: "statistics_cells")
                             }     
                         } else {
                             

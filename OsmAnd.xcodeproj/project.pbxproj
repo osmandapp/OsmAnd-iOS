@@ -441,6 +441,7 @@
 		32B7DC382C762BCC00E5E8BD /* OAColorsPaletteCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32B7DC342C761D1000E5E8BD /* OAColorsPaletteCell.xib */; };
 		32BBDC9B2C0497CF0090D37E /* RouteInfoListItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32BBDC9A2C0497CF0090D37E /* RouteInfoListItemCell.swift */; };
 		32BBDC9C2C049B0C0090D37E /* RouteInfoListItemCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32BBDC962C0493190090D37E /* RouteInfoListItemCell.xib */; };
+		32BC95732CC021CE00FEEAB8 /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32BC95722CC021CE00FEEAB8 /* UIFont+Extension.swift */; };
 		32BD81AC259B5C9B00A54BB5 /* ic_custom_manage_profiles@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32BD81A9259B5C9A00A54BB5 /* ic_custom_manage_profiles@2x.png */; };
 		32BD81B0259B5C9B00A54BB5 /* ic_custom_manage_profiles@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32BD81AB259B5C9B00A54BB5 /* ic_custom_manage_profiles@3x.png */; };
 		32BFF098299137D60023D067 /* OAUploadGPXFilesTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 32BFF097299137D60023D067 /* OAUploadGPXFilesTask.m */; };
@@ -623,7 +624,6 @@
 		46494280286DB36800A44103 /* ic_custom_compass_hidden@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4649427A286DB36700A44103 /* ic_custom_compass_hidden@3x.png */; };
 		46494281286DB36800A44103 /* ic_custom_compass_hidden@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4649427B286DB36700A44103 /* ic_custom_compass_hidden@2x.png */; };
 		46494282286DB36800A44103 /* ic_custom_compass_north@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4649427C286DB36700A44103 /* ic_custom_compass_north@3x.png */; };
-		464BAAA22B0E360600CC06E6 /* PointAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464BAAA12B0E360600CC06E6 /* PointAttributes.swift */; };
 		464BF4A32C04D348000D6908 /* QuickActionSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464BF4A22C04D348000D6908 /* QuickActionSerializer.swift */; };
 		464BF4A52C04F7D6000D6908 /* CompassButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464BF4A42C04F7D6000D6908 /* CompassButtonState.swift */; };
 		464BF4A72C050189000D6908 /* CompassVisibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464BF4A62C050189000D6908 /* CompassVisibility.swift */; };
@@ -3796,6 +3796,7 @@
 		32B7DC362C761D7300E5E8BD /* OAColorsPaletteCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAColorsPaletteCell.m; sourceTree = "<group>"; };
 		32BBDC962C0493190090D37E /* RouteInfoListItemCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RouteInfoListItemCell.xib; sourceTree = "<group>"; };
 		32BBDC9A2C0497CF0090D37E /* RouteInfoListItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoListItemCell.swift; sourceTree = "<group>"; };
+		32BC95722CC021CE00FEEAB8 /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
 		32BD81A9259B5C9A00A54BB5 /* ic_custom_manage_profiles@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_manage_profiles@2x.png"; path = "Resources/Icons/ic_custom_manage_profiles@2x.png"; sourceTree = "<group>"; };
 		32BD81AB259B5C9B00A54BB5 /* ic_custom_manage_profiles@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_manage_profiles@3x.png"; path = "Resources/Icons/ic_custom_manage_profiles@3x.png"; sourceTree = "<group>"; };
 		32BFF097299137D60023D067 /* OAUploadGPXFilesTask.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAUploadGPXFilesTask.m; sourceTree = "<group>"; };
@@ -4004,7 +4005,6 @@
 		4649427A286DB36700A44103 /* ic_custom_compass_hidden@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_hidden@3x.png"; path = "Resources/Icons/ic_custom_compass_hidden@3x.png"; sourceTree = "<group>"; };
 		4649427B286DB36700A44103 /* ic_custom_compass_hidden@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_hidden@2x.png"; path = "Resources/Icons/ic_custom_compass_hidden@2x.png"; sourceTree = "<group>"; };
 		4649427C286DB36700A44103 /* ic_custom_compass_north@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_north@3x.png"; path = "Resources/Icons/ic_custom_compass_north@3x.png"; sourceTree = "<group>"; };
-		464BAAA12B0E360600CC06E6 /* PointAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointAttributes.swift; sourceTree = "<group>"; };
 		464BF4A22C04D348000D6908 /* QuickActionSerializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickActionSerializer.swift; sourceTree = "<group>"; };
 		464BF4A42C04F7D6000D6908 /* CompassButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassButtonState.swift; sourceTree = "<group>"; };
 		464BF4A62C050189000D6908 /* CompassVisibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassVisibility.swift; sourceTree = "<group>"; };
@@ -11096,7 +11096,6 @@
 				DA5A7AB826C563A100F274C7 /* OALoadGpxTask.m */,
 				DA35963329B1EDEA009DF4D6 /* OANetworkRouteSelectionTask.h */,
 				DA35963429B1EDEA009DF4D6 /* OANetworkRouteSelectionTask.mm */,
-				464BAAA12B0E360600CC06E6 /* PointAttributes.swift */,
 				05DACD742C1B0E9A0023FAD9 /* OAXmlStreamReader.h */,
 				05DACD752C1B0E9A0023FAD9 /* OAXmlStreamReader.mm */,
 				05DACD772C1C67470023FAD9 /* OAXmlStreamWriter.h */,
@@ -13412,6 +13411,7 @@
 				FA86F4142AE7C56E00DC3B2B /* UserDefaults+Extension.swift */,
 				FA069C6A2B9F65750007E4DE /* UILabel+Extension.swift */,
 				4609FAA12C5158F100B57F06 /* UIImageView+Extension.swift */,
+				32BC95722CC021CE00FEEAB8 /* UIFont+Extension.swift */,
 			);
 			path = SwiftExtensions;
 			sourceTree = "<group>";
@@ -16728,6 +16728,7 @@
 				DA5A818326C563A700F274C7 /* OASwitchableAction.m in Sources */,
 				DA5A844A26C563A900F274C7 /* OAHudButton.m in Sources */,
 				46FB65BA2A8BBC2000A21850 /* CoordinatesMapCenterWidget.swift in Sources */,
+				32BC95732CC021CE00FEEAB8 /* UIFont+Extension.swift in Sources */,
 				DA5A845526C563A900F274C7 /* OAOsmEditsLayer.mm in Sources */,
 				DA5A815526C563A700F274C7 /* OACarPlayActiveViewController.m in Sources */,
 				FA359EED2ADFC6910001C11D /* WheelDeviceSettings.swift in Sources */,
@@ -17173,7 +17174,6 @@
 				DA5A815026C563A700F274C7 /* OACarPlayAddressSearchController.mm in Sources */,
 				DAA612E527E9E934003317BD /* OAPrepareBackupResult.m in Sources */,
 				DADBE9F22A32085800C0C102 /* CompassVisibilityViewController.swift in Sources */,
-				464BAAA22B0E360600CC06E6 /* PointAttributes.swift in Sources */,
 				46C841312C32F27500E284B0 /* OAShowHideWindAction.m in Sources */,
 				DA5A81B126C563A700F274C7 /* OADownloadTask_AFURLSessionManager.m in Sources */,
 				DA5A837626C563A800F274C7 /* OARouteAvoidSettingsViewController.mm in Sources */,

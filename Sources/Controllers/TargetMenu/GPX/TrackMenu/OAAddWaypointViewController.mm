@@ -61,7 +61,7 @@
     {
         _app = [OsmAndApp instance];
         _gpx = gpx;
-        _isCurrentTrack = gpx.isShowCurrentTrack; //!_gpx || _gpx.gpxFilePath.length == 0 || _gpx.gpxFileName.length == 0;
+        _isCurrentTrack = gpx.isShowCurrentTrack;
         _mapPanelViewController = [OARootViewController instance].mapPanel;
         _contextLayer = _mapPanelViewController.mapViewController.mapLayers.contextMenuLayer;
         _targetMenuState = targetMenuState;

@@ -228,7 +228,6 @@
 //    }
     if (rparams)
     {
-        // OASGpxFile
         OASGpxFile *fl = rparams.file;
         if ([fl hasRtePt])
         {

@@ -81,8 +81,6 @@
 - (void)markTrackForReload:(NSString *)filePath
 {
     [self removeGpxFileWith:filePath];
-//    QString qPath = QString::fromNSString(filePath);
-//    _activeGpx.remove(qPath);
 }
 
 - (BOOL) buildGpxList

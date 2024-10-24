@@ -330,7 +330,7 @@
         {
             float startTime = startPos * 1000;
             float endTime = endPos * 1000;
-           // OASGpxTrackAnalysis *analysis = [OASGpxTrackAnalysis segment:0 seg:segment];
+          
             OASGpxTrackAnalysis *analysis = [self getAnalysisFor:segment];
             for (OASWptPt *p in segment.points)
             {

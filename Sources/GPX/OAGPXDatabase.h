@@ -116,7 +116,6 @@ typedef NS_ENUM(NSInteger, EOAGPX3DLineVisualizationPositionType) {
 
 - (void)removeHiddenGroups:(NSString *)groupName;
 - (void)addHiddenGroups:(NSString *)groupName;
-//- (void)resetAppearanceToOriginal;
 - (void)updateFolderName:(NSString *)newFilePath;
 
 - (BOOL)isTempTrack;

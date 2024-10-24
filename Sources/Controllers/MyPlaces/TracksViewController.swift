@@ -31,13 +31,14 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     
     @IBOutlet private weak var tableView: UITableView!
     
+    var shouldReload = false
+    
     fileprivate var rootFolder: TrackFolder!
     fileprivate var visibleTracksFolder: TrackFolder!
     fileprivate var currentFolder: TrackFolder!
     
     fileprivate var isRootFolder = true
     fileprivate var isVisibleOnMapFolder = false
-    fileprivate var shouldReload = false
     fileprivate var currentFolderPath = ""   // in format: "rec/new folder"
     
     fileprivate weak var hostVCDelegate: TrackListUpdatableDelegate?
@@ -153,6 +154,9 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         setupNavbar()
         setupSearchController()
         if shouldReload {
+            if let hostVCDelegate {
+                hostVCDelegate.updateHostVCWith(rootFolder: rootFolder, visibleTracksFolder: visibleTracksFolder)
+            }
             reloadTracks(forceLoad: true)
             shouldReload = false
         }
@@ -200,9 +204,10 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     
     private func updateAllFoldersVCData(forceLoad: Bool = false) {
         reloadTracks(forceLoad: forceLoad)
-        if let hostVCDelegate {
-            hostVCDelegate.updateHostVCWith(rootFolder: rootFolder, visibleTracksFolder: visibleTracksFolder)
-        }
+ // FIXME:
+//        if let hostVCDelegate {
+//            hostVCDelegate.updateHostVCWith(rootFolder: rootFolder, visibleTracksFolder: visibleTracksFolder)
+//        }
     }
     
     private func generateData() {
@@ -976,7 +981,6 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         }
         guard let trackItem else { return }
         
-
         gpxHelper.openExport(forTrack: trackItem.dataItem, gpxDoc: nil, isCurrentTrack: isCurrentTrack, in: self, hostViewControllerDelegate: self, touchPointArea: touchPointArea)
     }
     
@@ -1017,8 +1021,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             trackItem = TrackItem(gpxFile: gpxFile)
         }
         guard let trackItem else { return }
-        
-        let gpxFilename = trackItem.gpxFileName
+        let gpxFilename = trackItem.gpxFileName.lastPathComponent().deletingPathExtension()
         let message = localizedString("gpx_enter_new_name") + " " + gpxFilename
         let alert = UIAlertController(title: localizedString("rename_track"), message: message, preferredStyle: .alert)
         alert.addTextField { textField in
@@ -1026,9 +1029,19 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         }
         alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .default) { [weak self] _ in
             guard let self else { return }
-            if let newName = alert.textFields?.first?.text {
-                gpxHelper.renameTrackNew(trackItem.dataItem, newName: newName, hostVC: self)
-                updateAllFoldersVCData(forceLoad: true)
+            guard let text = alert.textFields?.first?.text else { return }
+            let newName = text.trimmingCharacters(in: .whitespacesAndNewlines)
+
+            if !newName.isEmpty {
+                let fileExtension = ".gpx"
+                let newNameToChange = newName.hasSuffix(fileExtension)
+                ? String(newName.dropLast(fileExtension.count))
+                : newName
+                gpxHelper.renameTrack(trackItem.dataItem, newName: newNameToChange, hostVC: self)
+                // FIXME: check reload track list (2 reload)
+                self.updateAllFoldersVCData(forceLoad: true)
+            } else {
+                gpxHelper.renameTrack(nil, doc: nil, newName: nil, hostVC: self)
             }
         })
         alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))

@@ -293,7 +293,6 @@
     return analysis;
 }
 
-
 - (void)updateAnalysis
 {
     if (_doc)

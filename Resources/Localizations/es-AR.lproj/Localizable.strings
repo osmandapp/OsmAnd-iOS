@@ -709,7 +709,7 @@
 "sett_arr_map" = "Centro del mapa";
 "navigate_point_format_OLC" = "Código de Ubicación Abierto (OLC)";
 "navigate_point_format_unknown" = "Formato desconocido";
-"navigate_point_northing" = "Al norte";
+"navigate_point_northing" = "Longitud al norte";
 "navigate_point_easting" = "Al este";
 "navigate_point_zone" = "Zona";
 "navigate_point_olc" = "Código de Ubicación Abierto (OLC)";

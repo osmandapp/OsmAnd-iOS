@@ -218,7 +218,7 @@
 
 - (void)updateGpxData:(BOOL)replaceGPX updateDocument:(BOOL)updateDocument
 {
-    if (!_isShown && !_gpx.dataItem.isTempTrack)
+    if (!_isShown && _gpx.dataItem && !_gpx.dataItem.isTempTrack)
         [self changeTrackVisible];
 
     if (updateDocument)
@@ -230,7 +230,7 @@
         }
         else
         {
-            NSString *gpxFullPath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:_gpx.dataItem.gpxFilePath];
+            NSString *gpxFullPath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:_gpx.gpxFilePath];
             OASGpxFile *gpx = [[OASelectedGPXHelper instance] getGpxFileFor:gpxFullPath];
             if (!gpx)
             {
@@ -253,7 +253,7 @@
         NSString *nearestCityString = nearestCity ? nearestCity.nameLocalized : @"";
 
         OAGPXDatabase *db = [OAGPXDatabase sharedDb];
-        OASGpxDataItem *gpx = [db getGPXItem:_gpx.dataItem.gpxFilePath];
+        OASGpxDataItem *gpx = [db getGPXItem:_gpx.gpxFilePath];
         if (gpx)
         {
             [[OASGpxDbHelper shared] updateDataItemParameterItem:_gpx.dataItem
@@ -319,7 +319,7 @@
         }
         else
         {
-            [self.settings hideGpx:@[self.gpx.dataItem.gpxFilePath] update:YES];
+            [self.settings hideGpx:@[self.gpx.gpxFilePath] update:YES];
         }
     }
     else
@@ -331,7 +331,7 @@
         }
         else
         {
-            [self.settings showGpx:@[self.gpx.dataItem.gpxFilePath] update:YES];
+            [self.settings showGpx:@[self.gpx.gpxFilePath] update:YES];
         }
     }
 

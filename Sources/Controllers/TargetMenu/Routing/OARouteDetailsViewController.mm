@@ -829,10 +829,6 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     doc.tracks.firstObject.name = [formatter stringFromDate:[NSDate date]];
     
     OASKFile *filePathToSaveGPX = [[OASKFile alloc] initWithFilePath:path];
-    // FIXME: crash!!! filePathToSaveGPX (/Library/Containers/57D28383-0CA5-477F-994B-B823A5E5A0B1/Data/tmp/_2024-10-10_.gpx)
-    // private fun writeTracks(serializer: XmlSerializer, file: GpxFile, progress: IProgress?) {
-    //     for (segment in track.segments) { -> crash
-    
     // save to disk
     [[OASGpxUtilities shared] writeGpxFileFile:filePathToSaveGPX gpxFile:doc];
     NSURL* url = [NSURL fileURLWithPath:path];

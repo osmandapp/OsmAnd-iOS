@@ -571,8 +571,8 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
                 row.icon = .icCustomTrackLineMedium
             }
             row.iconTintColor = .iconColorDisruptive
-        } else if let itemInt = Int(itemName) {
-            row.iconTintColor = colorFromRGB(itemInt)
+        } else if let itemInt = GpxUtilities.shared.parseColor(colorString: itemName) {
+            row.iconTintColor = colorFromRGB(Int(truncating: itemInt))
         }
     }
     

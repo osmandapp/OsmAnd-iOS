@@ -32,7 +32,7 @@ extension TrackItem {
     }
 
     var gpxFilePath: String {
-        path ?? ""
+        dataItem?.gpxFilePath ?? ""
     }
 
     var creationDate: Date {

@@ -67,7 +67,7 @@
 
 - (long)localModifiedTime
 {
-    return _historyMarkersHelper.getMarkersHistoryLastModifiedTime;
+    return [_historyMarkersHelper getMarkersHistoryLastModifiedTime];
 }
 
 - (void)setLocalModifiedTime:(long)lastModifiedTime
@@ -93,7 +93,9 @@
         }
 
         for (OAHistoryItem *historyItem in self.appliedItems)
+        {
             [_historyMarkersHelper addPoint:historyItem];
+        }
     }
 }
 

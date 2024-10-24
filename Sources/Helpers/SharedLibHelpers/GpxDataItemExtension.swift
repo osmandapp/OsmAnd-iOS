@@ -10,7 +10,6 @@ import OsmAndShared
 
 private var gpxTitleKey: UInt8 = 0
 private var newGpxKey: UInt8 = 0
-private var hiddenGroupsKey: UInt8 = 0
 
 extension Array where Element: GpxDataItem {
     func toTrackItems() -> [TrackItem] { compactMap{ TrackItem(file: $0.file) }}
@@ -321,15 +320,6 @@ extension GpxDataItem {
             objc_setAssociatedObject(self, &newGpxKey, newValue, .OBJC_ASSOCIATION_ASSIGN)
         }
     }
-    
-    var hiddenGroups: Set<String>? {
-        get {
-            objc_getAssociatedObject(self, &hiddenGroupsKey) as? Set<String>
-        }
-        set {
-            objc_setAssociatedObject(self, &hiddenGroupsKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-    }
 }
 
 @objc(OASGpxDataItem)
@@ -350,25 +340,6 @@ extension GpxDataItem {
     func isTempTrack() -> Bool {
         gpxFilePath.hasPrefix("Temp/")
     }
-    // getOrCreateGroup
-    
-//    func removeHiddenGroups(_ groupName: String) {
-//        guard var groups = hiddenGroups else {
-//            hiddenGroups = []
-//            return
-//        }
-//        
-//        groups.remove(groupName)
-//        hiddenGroups = groups
-//    }
-//    
-//    func addHiddenGroups(_ groupName: String) {
-//        if hiddenGroups == nil {
-//            hiddenGroups = [groupName]
-//        } else {
-//            hiddenGroups?.insert(groupName)
-//        }
-//    }
     
     func updateFolderName(newFilePath: String) {
         gpxFileName = (newFilePath as NSString).lastPathComponent

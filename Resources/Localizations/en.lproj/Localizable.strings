@@ -545,6 +545,10 @@
 "only_manually" = "Only manually";
 "instructions_repeat" = "Tap \"Next turn\" widget to repeat instructions";
 
+"download_persian_voice_alert_title" = "Download Persian voice file:";
+"download_persian_voice_alert_descr_ios" = "Settings -> Accessibility -> Spoken Content -> Voices -> Persian -> Dariush";
+"download_persian_voice_alert_descr_macos" = "Settings -> Accessibility -> Spoken Content -> System Voice -> Manage Voices -> Persian -> Dariush";
+
 "guidance_preferences_descr" = "Navigation preferences";
 "routing_preferences_descr" = "Routing preferences";
 "recording_preferences_descr" = "Track recording preferences";

@@ -506,37 +506,38 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
         }
     }
     
-    override func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping @MainActor @Sendable (WKNavigationActionPolicy) -> Void) {
+    override func webView(_ webView: WKWebView,
+                          decidePolicyFor navigationAction: WKNavigationAction) async -> WKNavigationActionPolicy {
         let newUrl = OATravelGuidesHelper.normalizeFileUrl(navigationAction.request.url?.absoluteString) ?? ""
         let isWebPage = newUrl.hasPrefix(PAGE_PREFIX_HTTP) || newUrl.hasPrefix(PAGE_PREFIX_HTTPS)
         let isPhoneNumber = newUrl.hasPrefix("tel:") || newUrl.rangeOfCharacter(from: CharacterSet(charactersIn: "-+()% 0123456789").inverted) == nil
         let isEmail = newUrl.isValidEmail()
         
         if newUrl.hasSuffix("showNavigation") {
-            // Clicked on Breadcrumbs navigation pannel
+            // Clicked on Breadcrumbs navigation panel
             showNavigation()
-            decisionHandler(.cancel)
+            return .cancel
         } else if isPhoneNumber || isEmail {
-            decisionHandler(.allow)
+            return .allow
         } else if newUrl == blankUrl {
             // On open new TravelGuides page via code
-            decisionHandler(.allow)
+            return .allow
         } else if newUrl.contains(WIKIVOYAGE_DOMAIN) && isWebPage {
             TravelGuidesUtils.processWikivoyageDomain(url: newUrl, delegate: self)
-            decisionHandler(.cancel)
+            return .cancel
         } else if newUrl.contains(WIKI_DOMAIN) && isWebPage && article != nil {
             self.webView.addSpinner()
             let defaultCoordinates = CLLocation(latitude: article!.lat, longitude: article!.lon)
             TravelGuidesUtils.processWikipediaDomain(defaultLocation: defaultCoordinates, url: newUrl, delegate: self)
-            decisionHandler(.cancel)
+            return .cancel
         } else if isWebPage {
             OAWikiArticleHelper.warnAboutExternalLoad(newUrl, sourceView: self.webView)
-            decisionHandler(.cancel)
+            return .cancel
         } else if newUrl.contains(PREFIX_GEO) {
             handleGeoUrl(newUrl)
-            decisionHandler(.cancel)
+            return .cancel
         } else {
-            decisionHandler(.allow)
+            return .allow
         }
     }
     

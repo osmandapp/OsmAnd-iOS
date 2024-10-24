@@ -132,7 +132,6 @@
     OAAutoObserverProxy *_headingUpdateObserver;
     NSTimeInterval _lastUpdate;
 
-
     NSString *_exportFileName;
     NSString *_exportFilePath;
 
@@ -146,7 +145,10 @@
     BOOL _wasFirstOpening;
 
     BOOL _isNewRoute;
-    
+
+    OASKQuadRect *_docRect;
+    CLLocationCoordinate2D _docCenter;
+
     NSArray<UIViewController *> *_navControllerHistory;
 }
 
@@ -184,8 +186,13 @@
             if (gpx.isShowCurrentTrack) {
                 self.doc = [OASavingTrackHelper.sharedInstance currentTrack];
             } else {
-                self.doc = [OASGpxUtilities.shared loadGpxFileFile:gpx.dataItem.file];;
+                self.doc = [OASGpxUtilities.shared loadGpxFileFile:gpx.getFile];
             }
+            _docRect = self.doc.getRect;
+            double clat = _docRect.bottom / 2.0 + _docRect.top / 2.0;
+            double clon = _docRect.left / 2.0 + _docRect.right / 2.0;
+            _docCenter = CLLocationCoordinate2DMake(clat, clon);
+
             _reopeningState = (OATrackMenuViewControllerState *) state;
             _isNewRoute = routeKey;
             _routeKey = routeKey ? routeKey : [OARouteKey fromGpx:self.doc.networkRouteKeyTags];
@@ -1495,14 +1502,7 @@
 
 - (CLLocationCoordinate2D)getCenterGpxLocation
 {
-    OASGpxTrackAnalysis *analysis = self.gpx.dataItem.getAnalysis;
-    
-    double clat = analysis.bottom / 2.0 + analysis.top / 2.0;
-    double clon = analysis.left / 2.0 + analysis.right / 2.0;
-    
-    return CLLocationCoordinate2DMake(clat, clon);
-    // FIXME:
-  //  return self.doc.bounds.center;
+    return _docCenter;
 }
 
 - (CLLocationCoordinate2D)getPinLocation

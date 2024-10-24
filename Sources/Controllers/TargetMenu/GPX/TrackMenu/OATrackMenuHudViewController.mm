@@ -800,8 +800,12 @@
 
 - (void)updateGroupsButton
 {
+    int hiddenGroupsCount = 0;
+    for (OASGpxUtilitiesPointsGroup *group in self.doc.pointsGroups.allValues)
+        hiddenGroupsCount += group.hidden ? 1 : 0;
+
     NSInteger groupsCount = [self.doc hasRtePt] ? _waypointSortedGroupNames.count - 1 : _waypointSortedGroupNames.count;
-    [self.groupsButton setTitle:[NSString stringWithFormat:@"%li/%li", groupsCount - self.gpx.dataItem.hiddenGroups.count, groupsCount]
+    [self.groupsButton setTitle:[NSString stringWithFormat:@"%li/%li", groupsCount - hiddenGroupsCount, groupsCount]
                        forState:UIControlStateNormal];
     self.groupsButtonContainerView.hidden = groupsCount == 0;
     self.groupsButton.hidden = groupsCount == 0;
@@ -1026,16 +1030,16 @@
 
 - (BOOL)isWaypointsGroupVisible:(NSString *)groupName
 {
-    return ![self.gpx.dataItem.hiddenGroups containsObject:[self isDefaultGroup:groupName] ? @"" : groupName];
+    OASGpxUtilitiesPointsGroup *group = self.doc.pointsGroups[[self isDefaultGroup:groupName] ? @"" : groupName];
+    return !group || !group.hidden;
 }
 
 - (void)setWaypointsGroupVisible:(NSString *)groupName show:(BOOL)show
 {
-  // FIXME:
-//    if (show)
-//        [self.gpx.dataItem removeHiddenGroups:[self isDefaultGroup:groupName] ? @"" : groupName];
-//    else
-//        [self.gpx.dataItem addHiddenGroups:[self isDefaultGroup:groupName] ? @"" : groupName];
+    OASGpxUtilitiesPointsGroup *group = self.doc.pointsGroups[[self isDefaultGroup:groupName] ? @"" : groupName];
+    if (group)
+        group.hidden = !show;
+
     [[OAGPXDatabase sharedDb] save];
 
     if (_selectedTab == EOATrackMenuHudPointsTab)

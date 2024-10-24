@@ -766,7 +766,6 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
     OAGPXDatabase *gpxDatabase = [OAGPXDatabase sharedDb];
     if (deleteOriginalFile)
     {
-
         doc.path = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
         if (gpx)
         {
@@ -779,11 +778,10 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
     }
     else
     {
-        OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
-        OASGpxDataItem *gpx = [gpxDb getGPXItem:sourcePath];
+        OASGpxDataItem *gpx = [gpxDatabase getGPXItem:sourcePath];
         if (!gpx)
         {
-            gpx = [gpxDb addGPXFileToDBIfNeeded:sourcePath];
+            gpx = [gpxDatabase addGPXFileToDBIfNeeded:sourcePath];
         }
         if (gpx)
         {
@@ -875,16 +873,14 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
             if ([NSFileManager.defaultManager fileExistsAtPath:oldPath])
                 [NSFileManager.defaultManager removeItemAtPath:oldPath error:nil];
 
-            BOOL saveFailed = ![OARootViewController.instance.mapPanel.mapViewController updateMetadata:metadata oldPath:oldPath docPath:newPath];
+            BOOL gpxSaved = [OARootViewController.instance.mapPanel.mapViewController updateMetadata:metadata oldPath:oldPath docPath:newPath];
             doc.path = newPath;
             doc.metadata = metadata;
-
-            if (saveFailed)
+            if (!gpxSaved)
             {
                 OASKFile *file = [[OASKFile alloc] initWithFilePath:newPath];
                 [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:doc];
             }
-
             [OASelectedGPXHelper renameVisibleTrack:oldFilePath newPath:newFilePath];
         }
         else

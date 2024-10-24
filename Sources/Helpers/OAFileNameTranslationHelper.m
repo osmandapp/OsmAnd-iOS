@@ -26,7 +26,7 @@
     if ([nm hasSuffix:@"_tts"] || [nm hasSuffix:@"-tts"])
         nm = [nm substringToIndex:nm.length - 4];
     
-    NSString *name = [[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:nm];
+    NSString *name = [OAUtilities displayNameForLang:nm];
     if (name)
         return [name capitalizedStringWithLocale:[NSLocale currentLocale]];
     else

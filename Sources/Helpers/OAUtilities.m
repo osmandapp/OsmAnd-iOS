@@ -1857,9 +1857,16 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
         return -1;
 }
 
++ (NSString *) displayNameForLang:(NSString *)lang
+{
+    if ([lang isEqualToString:@"hu-formal"] || [lang isEqualToString:@"hu_formal"])
+        return OALocalizedString(@"lang_hu_formal");
+    return [[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:lang];
+}
+
 + (NSString *) translatedLangName:(NSString *)lang
 {
-    NSString *langName = [[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:lang];
+    NSString *langName = [self.class displayNameForLang:lang];
     if (!langName)
         langName = lang;
     return langName;

@@ -320,6 +320,7 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 + (NSString *) preferredLang;
 + (NSString *) currentLang;
 + (NSString *) capitalizeFirstLetter:(NSString *)s;
++ (NSString *) displayNameForLang:(NSString *)lang;
 + (NSString *) translatedLangName:(NSString *)lang;
 + (NSInteger) findFirstNumberEndIndex:(NSString *)value;
 

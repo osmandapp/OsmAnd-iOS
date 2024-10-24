@@ -623,7 +623,7 @@
 - (NSString *)getMapLangValueStr
 {
     NSString *prefLangId = _settings.settingPrefMapLanguage.get;
-    NSString *prefLang = prefLangId.length > 0 ? [[[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:prefLangId] capitalizedStringWithLocale:[NSLocale currentLocale]] : OALocalizedString(@"local_map_names");
+    NSString *prefLang = prefLangId.length > 0 ? [[OAUtilities displayNameForLang:prefLangId] capitalizedStringWithLocale:[NSLocale currentLocale]] : OALocalizedString(@"local_map_names");
     switch (_settings.settingMapLanguage.get)
     {
         case 0: // NativeOnly

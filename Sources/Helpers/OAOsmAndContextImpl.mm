@@ -189,10 +189,12 @@ static NSString * const kGpxImportDir = @"import";
 
 - (void)searchNearestCityNameLatLon:(OASKLatLon *)latLon callback:(void (^)(NSString * _Nonnull))callback
 {
-    @autoreleasepool {
-        OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude)];
-        callback(nearestCityPOI ? nearestCityPOI.name : @"");
-    }
+    // FIXME: crash
+    callback(@"");
+//    @autoreleasepool {
+//        OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude)];
+//        callback(nearestCityPOI ? nearestCityPOI.name : @"");
+//    }
 }
 
 - (id<OASGpxTrackAnalysisTrackPointsAnalyser> _Nullable)getTrackPointsAnalyser

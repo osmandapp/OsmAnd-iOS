@@ -552,10 +552,19 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
 
         alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .default) { [weak self] _ in
             guard let self else { return }
-            if let newName = alert.textFields?.first?.text {
-                gpxHelper?.renameTrackNew(track.dataItem, newName: newName, hostVC: self)
+            guard let text = alert.textFields?.first?.text else { return }
+            let newName = text.trimmingCharacters(in: .whitespacesAndNewlines)
+
+            if !newName.isEmpty {
+                let fileExtension = ".gpx"
+                let newNameToChange = newName.hasSuffix(fileExtension)
+                ? String(newName.dropLast(fileExtension.count))
+                : newName
+                gpxHelper?.renameTrack(track.dataItem, newName: newNameToChange, hostVC: self)
                 updateData()
                 delegate?.onVisibleTracksUpdate()
+            } else {
+                gpxHelper?.renameTrack(nil, doc: nil, newName: nil, hostVC: self)
             }
         })
 

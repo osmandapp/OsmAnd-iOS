@@ -514,6 +514,9 @@
             if ([item.allKeys containsObject:@"colorPalette"]
                 && [item[@"colorPalette"] isKindOfClass:ColorPalette.class])
             {
+                cell.descView.numberOfLines = 1;
+                cell.descView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
+                cell.descView.lineBreakMode = NSLineBreakByTruncatingTail;
                 cell.iconView.layer.cornerRadius = 3;
                 ColorPalette *colorPalette = (ColorPalette *) item[@"colorPalette"];
                 [PaletteCollectionHandler applyGradientTo:cell.iconView
@@ -521,6 +524,9 @@
             }
             else
             {
+                cell.descView.numberOfLines = 0;
+                cell.descView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
+                cell.descView.lineBreakMode = NSLineBreakByWordWrapping;
                 if (item[@"iconColor"])
                 {
                     cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];

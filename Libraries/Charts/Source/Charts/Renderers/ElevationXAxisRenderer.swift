@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class ElevationXAxisRenderer: XAxisRenderer {
+class ElevationXAxisRenderer: XAxisRenderer {
 
     private let chartView: LineChartView
 
@@ -79,12 +79,13 @@ final class ElevationXAxisRenderer: XAxisRenderer {
             let px = isCenteringEnabled ? CGFloat(axis.centeredEntries[i]) : CGFloat(entries[i])
             position = CGPoint(x: px, y: 0)
                 .applying(valueToPixelMatrix)
-
+            let tickX = position.x
+            
             guard viewPortHandler.isInBoundsX(position.x) else { continue }
-
+            
             let label = axis.valueFormatter?.stringForValue(axis.entries[i], axis: axis) ?? ""
             let labelns = label as NSString
-
+            
             if axis.isAvoidFirstLastClippingEnabled {
                 // avoid clipping of the last
                 if i == axis.entryCount - 1 && axis.entryCount > 1 {
@@ -106,7 +107,7 @@ final class ElevationXAxisRenderer: XAxisRenderer {
                     }
                 }
             }
-
+            
             drawLabel(context: context,
                       formattedLabel: label,
                       x: position.x,
@@ -115,6 +116,11 @@ final class ElevationXAxisRenderer: XAxisRenderer {
                       constrainedTo: labelMaxSize,
                       anchor: anchor,
                       angleRadians: labelRotationAngleRadians)
+            
+            context.saveGState()
+            context.setStrokeColor(axis.axisLineColor.cgColor)
+            drawTick(context: context, x: tickX)
+            context.restoreGState()
         }
     }
 

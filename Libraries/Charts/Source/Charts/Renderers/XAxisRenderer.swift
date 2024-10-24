@@ -409,7 +409,16 @@ open class XAxisRenderer: NSObject, AxisRenderer
         context.addLine(to: CGPoint(x: x, y: viewPortHandler.contentBottom))
         context.strokePath()
     }
-    
+
+    @objc open func drawTick(context: CGContext, x: CGFloat) {
+        guard x >= viewPortHandler.offsetLeft && x <= viewPortHandler.chartWidth else { return }
+
+        context.beginPath()
+        context.move(to: CGPoint(x: x, y: viewPortHandler.contentBottom + 3.5))
+        context.addLine(to: CGPoint(x: x, y: viewPortHandler.contentBottom - 3.5))
+        context.strokePath()
+    }
+
     open func renderLimitLines(context: CGContext)
     {
         guard

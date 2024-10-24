@@ -48,8 +48,6 @@ static NSString * const kGpxImportDir = @"import";
         [listener stateChangedChange:[pref getPrefValue]];
 }
 
-
-
 - (void)registerPreferenceName:(NSString *)name defValue:(NSString *)defValue global:(BOOL)global shared:(BOOL)shared __attribute__((swift_name("registerPreference(name:defValue:global:shared:)")))
 {
     OACommonString *pref = [OAAppSettings.sharedManager registerStringPreference:name defValue:defValue];
@@ -189,6 +187,7 @@ static NSString * const kGpxImportDir = @"import";
 
 - (void)searchNearestCityNameLatLon:(OASKLatLon *)latLon callback:(void (^)(NSString * _Nonnull))callback
 {
+    // FIXME: crash
     @autoreleasepool {
         OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude)];
         callback(nearestCityPOI ? nearestCityPOI.name : @"");
@@ -199,7 +198,6 @@ static NSString * const kGpxImportDir = @"import";
 {
     return nil;
 }
-
 
 - (OASSpeedConstants * _Nullable)getSpeedSystem __attribute__((swift_name("getSpeedSystem()")))
 {

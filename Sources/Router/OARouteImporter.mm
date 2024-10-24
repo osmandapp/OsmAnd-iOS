@@ -8,7 +8,6 @@
 
 #import "OARouteImporter.h"
 #import "OAGPXDocumentPrimitives.h"
-//#import "OsmAndSharedWrapper.h"
 
 #include <routeDataResources.h>
 #include <routeSegmentResult.h>
@@ -143,24 +142,44 @@
 - (std::vector<std::shared_ptr<RouteSegmentResult>>) collectRouteSegments:(const std::shared_ptr<RoutingIndex>&)region resources:(std::shared_ptr<RouteDataResources> &)resources segment:(OASTrkSegment *)segment
 {
     std::vector<std::shared_ptr<RouteSegmentResult>> route;
-    // FIXME: C++
-//    for (OASGpxUtilitiesRouteSegment *routeSegment in segment.routeSegments)
-//    {
-//        auto object = std::make_shared<RouteDataObject>(region);
-//        auto segmentResult = std::make_shared<RouteSegmentResult>(object, _leftSide);
-//        // routeSegment.toStringBundle - crash
-//		auto bundle = std::make_shared<RouteDataBundle>(resources, routeSegment.toStringBundle);
-//        try
-//        {
-//            segmentResult->readFromBundle(bundle);
-//            route.push_back(segmentResult);
-//        }
-//        catch (const std::exception &ex)
-//        {
-//            NSLog(@"%s", ex.what());
-//        }
-//    }
+    for (OASGpxUtilitiesRouteSegment *routeSegment in segment.routeSegments)
+    {
+        auto object = std::make_shared<RouteDataObject>(region);
+        auto segmentResult = std::make_shared<RouteSegmentResult>(object, _leftSide);
+        auto bundle = std::make_shared<RouteDataBundle>(resources, [self routeSegmentToStringBundle:routeSegment]);
+        try
+        {
+            segmentResult->readFromBundle(bundle);
+            route.push_back(segmentResult);
+        }
+        catch (const std::exception &ex)
+        {
+            NSLog(@"%s", ex.what());
+        }
+    }
     return route;
+}
+
+- (std::shared_ptr<RouteDataBundle>) routeSegmentToStringBundle:(OASGpxUtilitiesRouteSegment *)routeSegment
+{
+    auto bundle = std::make_shared<RouteDataBundle>();
+    [self addToBundleIfNotNull:"id" value:routeSegment.id bundle:bundle];
+    [self addToBundleIfNotNull:"length" value:routeSegment.length bundle:bundle];
+    [self addToBundleIfNotNull:"startTrkptIdx" value:routeSegment.startTrackPointIndex bundle:bundle];
+    [self addToBundleIfNotNull:"segmentTime" value:routeSegment.segmentTime bundle:bundle];
+    [self addToBundleIfNotNull:"speed" value:routeSegment.speed bundle:bundle];
+    [self addToBundleIfNotNull:"turnType" value:routeSegment.turnType bundle:bundle];
+    [self addToBundleIfNotNull:"turnAngle" value:routeSegment.turnAngle bundle:bundle];
+    [self addToBundleIfNotNull:"types" value:routeSegment.types bundle:bundle];
+    [self addToBundleIfNotNull:"pointTypes" value:routeSegment.pointTypes bundle:bundle];
+    [self addToBundleIfNotNull:"names" value:routeSegment.names bundle:bundle];
+    return bundle;
+}
+
+- (void) addToBundleIfNotNull:(const string&)key value:(NSString *)value bundle:(std::shared_ptr<RouteDataBundle> &)bundle
+{
+    if (value)
+        bundle->put(key, value.UTF8String);
 }
 
 - (void) collectRouteTypes:(const std::shared_ptr<RoutingIndex>&)region segment:(OASTrkSegment *)segment

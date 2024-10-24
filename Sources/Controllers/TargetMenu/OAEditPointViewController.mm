@@ -167,7 +167,6 @@
         _waypoint = gpxWpt;
         self.desc = gpxWpt.point.desc;
         self.address = [gpxWpt.point getAddress];
-        // self.address = [gpxWpt.point getExtensionByKey:ADDRESS_EXTENSION_KEY].value;
         self.groupTitle = [self getGroupTitle]/*gpxWpt.point.type*/;
         [self postInit];
     }

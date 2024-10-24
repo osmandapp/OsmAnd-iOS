@@ -624,7 +624,6 @@
 		46494280286DB36800A44103 /* ic_custom_compass_hidden@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4649427A286DB36700A44103 /* ic_custom_compass_hidden@3x.png */; };
 		46494281286DB36800A44103 /* ic_custom_compass_hidden@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4649427B286DB36700A44103 /* ic_custom_compass_hidden@2x.png */; };
 		46494282286DB36800A44103 /* ic_custom_compass_north@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4649427C286DB36700A44103 /* ic_custom_compass_north@3x.png */; };
-		464BAAA22B0E360600CC06E6 /* PointAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464BAAA12B0E360600CC06E6 /* PointAttributes.swift */; };
 		464BF4A32C04D348000D6908 /* QuickActionSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464BF4A22C04D348000D6908 /* QuickActionSerializer.swift */; };
 		464BF4A52C04F7D6000D6908 /* CompassButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464BF4A42C04F7D6000D6908 /* CompassButtonState.swift */; };
 		464BF4A72C050189000D6908 /* CompassVisibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464BF4A62C050189000D6908 /* CompassVisibility.swift */; };
@@ -4013,7 +4012,6 @@
 		4649427A286DB36700A44103 /* ic_custom_compass_hidden@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_hidden@3x.png"; path = "Resources/Icons/ic_custom_compass_hidden@3x.png"; sourceTree = "<group>"; };
 		4649427B286DB36700A44103 /* ic_custom_compass_hidden@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_hidden@2x.png"; path = "Resources/Icons/ic_custom_compass_hidden@2x.png"; sourceTree = "<group>"; };
 		4649427C286DB36700A44103 /* ic_custom_compass_north@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_north@3x.png"; path = "Resources/Icons/ic_custom_compass_north@3x.png"; sourceTree = "<group>"; };
-		464BAAA12B0E360600CC06E6 /* PointAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointAttributes.swift; sourceTree = "<group>"; };
 		464BF4A22C04D348000D6908 /* QuickActionSerializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickActionSerializer.swift; sourceTree = "<group>"; };
 		464BF4A42C04F7D6000D6908 /* CompassButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassButtonState.swift; sourceTree = "<group>"; };
 		464BF4A62C050189000D6908 /* CompassVisibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassVisibility.swift; sourceTree = "<group>"; };
@@ -11112,7 +11110,6 @@
 				DA5A7AB826C563A100F274C7 /* OALoadGpxTask.m */,
 				DA35963329B1EDEA009DF4D6 /* OANetworkRouteSelectionTask.h */,
 				DA35963429B1EDEA009DF4D6 /* OANetworkRouteSelectionTask.mm */,
-				464BAAA12B0E360600CC06E6 /* PointAttributes.swift */,
 				05DACD742C1B0E9A0023FAD9 /* OAXmlStreamReader.h */,
 				05DACD752C1B0E9A0023FAD9 /* OAXmlStreamReader.mm */,
 				05DACD772C1C67470023FAD9 /* OAXmlStreamWriter.h */,
@@ -17205,7 +17202,6 @@
 				DA5A815026C563A700F274C7 /* OACarPlayAddressSearchController.mm in Sources */,
 				DAA612E527E9E934003317BD /* OAPrepareBackupResult.m in Sources */,
 				DADBE9F22A32085800C0C102 /* CompassVisibilityViewController.swift in Sources */,
-				464BAAA22B0E360600CC06E6 /* PointAttributes.swift in Sources */,
 				46C841312C32F27500E284B0 /* OAShowHideWindAction.m in Sources */,
 				DA5A81B126C563A700F274C7 /* OADownloadTask_AFURLSessionManager.m in Sources */,
 				DA5A837626C563A800F274C7 /* OARouteAvoidSettingsViewController.mm in Sources */,

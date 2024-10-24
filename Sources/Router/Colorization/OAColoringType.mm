@@ -202,11 +202,23 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
     return YES;
 }
 
+- (OASRouteColorizeColorizationType *)toSharedLibColorizationType {
+    if (self == self.class.SPEED)
+        return OASRouteColorizeColorizationType.speed;
+    else if (self == self.class.ALTITUDE)
+        return OASRouteColorizeColorizationType.elevation;
+    else if (self == self.class.SLOPE)
+        return OASRouteColorizeColorizationType.slope;
+    else
+        return OASRouteColorizeColorizationType.none;
+}
+
 - (BOOL) isAvailableForDrawingTrack:(OASGpxFile *)selectedGpxFile attributeName:(NSString *)attributeName
 {
-//    if ([self isGradient]) {
-//        return [[selectedGpxFile getAnalysisFileTimestamp:0] isColorizationTypeAvailable:[self toColorizationType]];
-//    }
+    if ([self isGradient])
+    {
+        return [[selectedGpxFile getAnalysisFileTimestamp:0] isColorizationTypeAvailableColorizationType:[self toSharedLibColorizationType]];
+    }
     
     if ([self isRouteInfoAttribute])
     {

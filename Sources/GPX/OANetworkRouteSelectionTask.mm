@@ -9,6 +9,9 @@
 #import "OANetworkRouteSelectionTask.h"
 #import "OARouteKey.h"
 #import "OsmAndApp.h"
+#import "OsmAndSharedWrapper.h"
+
+#include <QBuffer>
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/NetworkRouteSelector.h>
@@ -52,9 +55,20 @@
         {
             auto gpx = it.value();
             dispatch_async(dispatch_get_main_queue(), ^{
-                // FIXME: c++ doc
-                //  OASGpxFile *doc = [[OASGpxFile alloc] initWithGpxDocument:gpx];
-                // onComplete(doc);
+
+                QByteArray byteArray;
+                QBuffer buffer(&byteArray);
+                buffer.open(QIODevice::WriteOnly);
+                QXmlStreamWriter xmlWriter(&buffer);
+                auto name = gpx->metadata ? gpx->metadata->name : QString();
+                gpx->saveTo(xmlWriter, name);
+                buffer.close();
+                auto xmlString = QString::fromUtf8(byteArray);
+
+                OASOkioBuffer *buf = [[OASOkioBuffer alloc] init];
+                [buf writeUtf8String:xmlString.toNSString()];
+                OASGpxFile *doc = [OASGpxUtilities.shared loadGpxFileSource:buf];
+                onComplete(doc);
             });
         }
         else

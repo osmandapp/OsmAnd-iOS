@@ -45,7 +45,7 @@
     OASGpxFile *gpx = [[OASGpxFile alloc] initWithAuthor:OSMAND_ROUTER_V2];
     OASTrack *track = [[OASTrack alloc] init];
     track.name = _name;
-    track.segments = [[self generateRouteSegment] mutableCopy];
+    track.segments = [NSMutableArray arrayWithObject:[self generateRouteSegment]];
     [gpx.tracks addObject:track];
     if (_points != nil)
     {
@@ -119,41 +119,25 @@
         
         if (loc.altitude > 0)
             pt.ele = loc.altitude;
-        
+
 //        if (loc.horizontalAccuracy)
 //            pt.hdop = loc.horizontalAccuracy;
         
         trkSegment.points = [[trkSegment.points arrayByAddingObject:pt] mutableCopy];
     }
     
-// FIXME: use old document
-//    NSMutableArray<OASGpxUtilitiesRouteSegment *> *routeSegments = [NSMutableArray new];
-//    for (const auto& item : routeItems)
-//    {
-//        [routeSegments addObject:[OASGpxUtilitiesRouteSegment fromStringBundle:item]];
-//    }
-//    trkSegment.routeSegments = routeSegments;
-//    NSMutableArray<OARouteType *> *routeTypes = [NSMutableArray new];
-//    for (const auto& item : typeList)
-//    {
-//        [routeTypes addObject:[OARouteType fromStringBundle:item]];
-//    }
-//    trkSegment.routeTypes = routeTypes;
-//    [trkSegment fillExtensions];
-//    return trkSegment;
-    
-// JAVA code
-//    List<RouteSegment> routeSegments = new ArrayList<>();
-//        for (StringBundle item : routeItems) {
-//            routeSegments.add(RouteSegment.fromStringBundle(item));
-//        }
-//        trkSegment.routeSegments = routeSegments;
-//        List<RouteType> routeTypes = new ArrayList<>();
-//        for (StringBundle item : typeList) {
-//            routeTypes.add(RouteType.fromStringBundle(item));
-//        }
-//        trkSegment.routeTypes = routeTypes;
-//        return trkSegment;
+    NSMutableArray<OASGpxUtilitiesRouteSegment *> *routeSegments = [NSMutableArray new];
+    for (const auto& item : routeItems)
+        [routeSegments addObject:[self.class getRouteSegmentFromStringBundle:item]];
+
+    trkSegment.routeSegments = routeSegments;
+
+    NSMutableArray<OASGpxUtilitiesRouteType *> *routeTypes = [NSMutableArray new];
+    for (const auto& item : typeList)
+        [routeTypes addObject:[self.class getRouteTypefromStringBundle:item]];
+
+    trkSegment.routeTypes = routeTypes;
+    return trkSegment;
 }
 
 - (std::vector<Location>) coordinatesToLocationVector:(NSArray<CLLocation *> *)points
@@ -166,6 +150,30 @@
         res.push_back(loc);
     }
     return res;
+}
+
++ (OASGpxUtilitiesRouteSegment *) getRouteSegmentFromStringBundle:(const std::shared_ptr<RouteDataBundle> &)bundle
+{
+    OASGpxUtilitiesRouteSegment *s = [[OASGpxUtilitiesRouteSegment alloc] init];
+    s.id = [NSString stringWithUTF8String:bundle->getString("id", "").c_str()];
+    s.length = [NSString stringWithUTF8String:bundle->getString("length", "").c_str()];
+    s.startTrackPointIndex = [NSString stringWithUTF8String:bundle->getString("startTrkptIdx", "").c_str()];
+    s.segmentTime = [NSString stringWithUTF8String:bundle->getString("segmentTime", "").c_str()];
+    s.speed = [NSString stringWithUTF8String:bundle->getString("speed", "").c_str()];
+    s.turnType = [NSString stringWithUTF8String:bundle->getString("turnType", "").c_str()];
+    s.turnAngle = [NSString stringWithUTF8String:bundle->getString("turnAngle", "").c_str()];
+    s.types = [NSString stringWithUTF8String:bundle->getString("types", "").c_str()];
+    s.pointTypes = [NSString stringWithUTF8String:bundle->getString("pointTypes", "").c_str()];
+    s.names = [NSString stringWithUTF8String:bundle->getString("names", "").c_str()];
+    return s;
+}
+
++ (OASGpxUtilitiesRouteType *) getRouteTypefromStringBundle:(const std::shared_ptr<RouteDataBundle> &)bundle
+{
+    OASGpxUtilitiesRouteType *t = [[OASGpxUtilitiesRouteType alloc] init];
+    t.tag = [NSString stringWithUTF8String:bundle->getString("t", "").c_str()];
+    t.value = [NSString stringWithUTF8String:bundle->getString("v", "").c_str()];
+    return t;
 }
 
 @end

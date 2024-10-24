@@ -1449,7 +1449,6 @@ colorizationScheme:(int)colorizationScheme
     if (_gpxDocs.allKeys.count > 0)
     {
         NSMutableArray<OASWptPt *> *points = [NSMutableArray array];
-       // QHash<QString, std::shared_ptr<const OsmAnd::GpxDocument> >::iterator it;
         
         for (NSString *key in _gpxDocs.allKeys) {
             OASGpxFile *value = [_gpxDocs objectForKey:key];
@@ -1538,7 +1537,6 @@ colorizationScheme:(int)colorizationScheme
     }
     return (int) (r * self.mapView.displayDensityFactor);
 }
-
 
 - (void) getTracksFromPoint:(CLLocationCoordinate2D)point res:(NSMutableArray<OATargetPoint *> *)res
 {

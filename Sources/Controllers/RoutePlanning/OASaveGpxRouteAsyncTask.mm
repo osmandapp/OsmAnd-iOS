@@ -183,7 +183,6 @@
                 OASTrkSegment *segment = [[OASTrkSegment alloc] init];
                 segment.points = s.points;
                 [track.segments addObject:segment];
-               // [gpx addTrackSegment:segment track:track];
             }
         }
         else

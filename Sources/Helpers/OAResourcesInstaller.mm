@@ -126,7 +126,6 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
 
 + (void)installGpxResource:(NSString *)localPath fileName:(NSString *)fileName
 {
-    //OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:localPath];
     
     OASKFile *file = [[OASKFile alloc] initWithFilePath:localPath];
     OASGpxFile *doc = [OASGpxUtilities.shared loadGpxFileFile:file];

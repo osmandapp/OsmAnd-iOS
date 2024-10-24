@@ -135,18 +135,6 @@ struct RouteDataBundle;
 
 @end
 
-// OABounds
-
-
-//var name: String? = null
-//var desc: String? = null
-//var link: String? = null
-//var keywords: String? = null
-//var time: Long = 0
-//var author: Author? = null
-//var copyright: Copyright? = null
-//var bounds: Bounds? = null
-
 @interface OAMetadata : OAGpxExtensions
 
 @property (nonatomic) NSString *name;

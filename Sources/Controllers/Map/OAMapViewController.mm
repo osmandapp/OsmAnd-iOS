@@ -170,14 +170,10 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     OAAutoObserverProxy* _trackRecordingObserver;
     
     NSString *_gpxDocFileTemp;
-
-    // Temp gpx
-   // QList< std::shared_ptr<const OsmAnd::GpxDocument> > _gpxDocsTemp;
-    // Currently recording gpx
-   // QList< std::shared_ptr<const OsmAnd::GpxDocument> > _gpxDocsRec;
-     NSMutableArray *_gpxDocsTemp;
-     NSMutableArray *_gpxDocsRec;
-
+    
+    NSMutableArray *_gpxDocsTemp;
+    NSMutableArray *_gpxDocsRec;
+    
     OASelectedGPXHelper *_selectedGpxHelper;
     
     BOOL _tempTrackShowing;
@@ -2962,23 +2958,6 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     }
 }
 
-//- (void) setWptData:(OASearchWptAPI *)wptApi
-//{
-//    NSMutableArray *paths = [NSMutableArray array];
-//    QList< std::shared_ptr<const OsmAnd::GpxDocument> > list;
-//    auto activeGpx = _selectedGpxHelper.activeGpx;
-//    for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
-//    {
-//        if (it.value() == nullptr)
-//            continue;
-//
-//        [paths addObject:it.key().toNSString()];
-//        list << it.value();
-//    }
-//    list << _gpxDocsRec;
-//    [wptApi setWptData:list paths:paths];
-//}
-
 - (void)setWptData:(OASearchWptAPI *)wptApi {
     NSMutableArray *paths = [NSMutableArray array];
     NSMutableArray *gpxDocs = [NSMutableArray array];
@@ -3070,23 +3049,16 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
 - (BOOL)findWpt:(CLLocationCoordinate2D)location currentTrackOnly:(BOOL)currentTrackOnly
 {
-    OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
-
     BOOL found = NO;
+
+    OASGpxFile *currentTrack = OASavingTrackHelper.sharedInstance.currentTrack;
     NSMutableSet *groupSet = [NSMutableSet set];
-   
     NSMutableSet<NSString *> *groups = [NSMutableSet set];
-    
-    for (OASWptPt *wptItem in helper.currentTrack.getPointsList)
+    for (OASWptPt *wptItem in currentTrack.getPointsList)
     {
-        OASGpxUtilitiesPointsGroup *group = [[OASavingTrackHelper sharedInstance] currentTrack].pointsGroups[wptItem.category];
+        OASGpxUtilitiesPointsGroup *group = currentTrack.pointsGroups[wptItem.category];
         if (group.isHidden)
-        {
             continue;
-        }
-        // FIXME:
-//        if ([[[OASavingTrackHelper sharedInstance] currentTrack].hiddenGroups containsObject:wptItem.category])
-//            continue;
 
         if (wptItem.category.length > 0)
             [groupSet addObject:wptItem.category];
@@ -3123,13 +3095,12 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
         OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:key];
         for (OASWptPt *loc in [doc getPointsList]) {
-            if ([gpx.hiddenGroups containsObject:loc.category])
+            OASGpxUtilitiesPointsGroup *group = loc.category ? doc.pointsGroups[loc.category] : nil;
+            if (group && group.hidden)
                 continue;
 
-            if (loc.category != nil)
-            {
+            if (loc.category)
                 [groups addObject:loc.category];
-            }
 
             if ([OAUtilities isCoordEqual:loc.position.latitude srcLon:loc.position.longitude destLat:location.latitude destLon:location.longitude])
             {
@@ -3160,25 +3131,15 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     if (_gpxDocsTemp.count != 0)
     {
         OASGpxFile *doc = _gpxDocsTemp.firstObject;
-       
-        NSString *gpxFilePath = [doc.path
-                stringByReplacingOccurrencesOfString:[_app.gpxPath stringByAppendingString:@"/"]
-                                          withString:@""];
-        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:gpxFilePath];
-        
         for (OASWptPt *loc in [doc getPointsList]) {
-           
             NSString *locType = loc.category;
-
-            if ([gpx.hiddenGroups containsObject:locType]) {
+            OASGpxUtilitiesPointsGroup *group = locType ? doc.pointsGroups[locType] : nil;
+            if (group && group.hidden)
                 continue;
-            }
 
-            if (locType != nil)
-            {
+            if (locType)
                 [groups addObject:loc.category];
-            }
-            
+
             if ([OAUtilities isCoordEqual:loc.position.latitude srcLon:loc.position.longitude destLat:location.latitude destLon:location.longitude])
             {
                 self.foundWpt = [[OASWptPt alloc] initWithWptPt:loc];
@@ -3602,7 +3563,12 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
             OASKFile *file = [[OASKFile alloc] initWithFilePath:docPath];
             gpxFile.author = [OAAppVersion getFullVersionWithAppName];
-            [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
+            OASKException *exception = [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
+            if (!exception) {
+                NSLog(@"writeGpxFileFile is true");
+            } else {
+                NSLog(@"writeGpxFileFile is false");
+            }
 
             return YES;
         }

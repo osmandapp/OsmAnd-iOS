@@ -297,7 +297,7 @@
     double totalSpeedSum = 0;
     _points = 0;
 
-    _pointAttributes = [NSMutableArray array];
+   // _pointAttributes = [NSMutableArray array];
     _availableAttributes = [NSMutableSet set];
 
     NSMutableArray<OAElevation *> *elevationData = [NSMutableArray new];
@@ -537,15 +537,15 @@
     _speedData = [NSArray arrayWithArray:speedData];
 }
 
-- (void)addWptAttribute:(OAWptPt *)point attribute:(OAPointAttributes *)attribute
-{
-//    if (![self hasData:OAPointAttributes.pointSpeed] && attribute.speed > 0 && _totalDistance > 0)
-//        [self setTag:OAPointAttributes.pointSpeed hasData:YES];
-//    if (![self hasData:OAPointAttributes.pointElevation] && !isnan(attribute.elevation) && _totalDistance > 0)
-//        [self setTag:OAPointAttributes.pointElevation hasData:YES];
-   // [OAPluginsHelper analysePoint:self point:point attribute:attribute];
-    [_pointAttributes addObject:attribute];
-}
+//- (void)addWptAttribute:(OAWptPt *)point attribute:(OAPointAttributes *)attribute
+//{
+////    if (![self hasData:OAPointAttributes.pointSpeed] && attribute.speed > 0 && _totalDistance > 0)
+////        [self setTag:OAPointAttributes.pointSpeed hasData:YES];
+////    if (![self hasData:OAPointAttributes.pointElevation] && !isnan(attribute.elevation) && _totalDistance > 0)
+////        [self setTag:OAPointAttributes.pointElevation hasData:YES];
+//   // [OAPluginsHelper analysePoint:self point:point attribute:attribute];
+//   // [_pointAttributes addObject:attribute];
+//}
 
 +(void) splitSegment:(OASplitMetric*)metric
      secondaryMetric:(OASplitMetric *)secondaryMetric

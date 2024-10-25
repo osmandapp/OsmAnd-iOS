@@ -68,7 +68,7 @@
         deleteOriginalFile:(BOOL)deleteOriginalFile
                  openTrack:(BOOL)openTrack
                        gpx:(OASGpxDataItem *)gpx
-                        doc:(OASGpxFile *)doc;
+                   gpxFile:(OASGpxFile *)gpxFile;
 
 - (void) renameTrack:(OASGpxDataItem *)gpx newName:(NSString *)newName hostVC:(UIViewController*)hostVC;
 - (void) renameTrack:(OASGpxDataItem *)gpx doc:(OASGpxFile *)doc newName:(NSString *)newName hostVC:(UIViewController*)hostVC;

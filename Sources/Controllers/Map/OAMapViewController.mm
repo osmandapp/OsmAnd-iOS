@@ -3025,9 +3025,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     
     if (_gpxFilesTemp.count != 0)
     {
-        OASGpxFile *doc = _gpxFilesTemp.firstObject;
+        OASGpxFile *gpxFile = _gpxFilesTemp.firstObject;
         
-        for (OASWptPt *loc in doc.getPointsList)
+        for (OASWptPt *loc in gpxFile.getPointsList)
         {
             if ([OAUtilities isCoordEqual:loc.position.latitude srcLon:loc.position.longitude destLat:location.latitude destLon:location.longitude])
             {
@@ -3199,13 +3199,13 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             NSString *path = key;
             if ([path isEqualToString:self.foundWptDocPath])
             {
-                OASGpxFile *doc = value;
-                BOOL removed = [doc deleteWptPtPoint:_foundWpt];
+                OASGpxFile *gpxFile = value;
+                BOOL removed = [gpxFile deleteWptPtPoint:_foundWpt];
                 if (!removed)
                 {
-                      for (NSInteger i = 0; i < doc.getPointsList.count; i++)
+                      for (NSInteger i = 0; i < gpxFile.getPointsList.count; i++)
                       {
-                          OASWptPt *w = doc.getPointsList[i];
+                          OASWptPt *w = gpxFile.getPointsList[i];
                           if ([OAUtilities doublesEqualUpToDigits:5
                                                           source:w.position.latitude
                                                       destination:w.position.latitude] &&
@@ -3213,15 +3213,15 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
                                                           source:w.position.longitude
                                                       destination:w.position.longitude])
                           {
-                              [doc deleteWptPtPoint:w];
+                              [gpxFile deleteWptPtPoint:w];
                               break;
                           }
                       }
                   }
                 
                 OASKFile *file = [[OASKFile alloc] initWithFilePath:self.foundWptDocPath];
-                doc.author = [OAAppVersion getFullVersionWithAppName];
-                [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:doc];
+                gpxFile.author = [OAAppVersion getFullVersionWithAppName];
+                [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
                 
                 // update map
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -3268,14 +3268,14 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             NSString *path = key;
             if ([path isEqualToString:self.foundWptDocPath])
             {
-                OASGpxFile *doc = value;
-                for (NSInteger i = 0; i < doc.getPointsList.count; i++) {
-                    OASWptPt *w = doc.getPointsList[i];
+                OASGpxFile *gpxFile = value;
+                for (NSInteger i = 0; i < gpxFile.getPointsList.count; i++) {
+                    OASWptPt *w = gpxFile.getPointsList[i];
                     if ([OAUtilities doublesEqualUpToDigits:5 source:w.position.latitude destination:self.foundWpt.lat] &&
                         [OAUtilities doublesEqualUpToDigits:5 source:w.position.longitude destination:self.foundWpt.lon])
                     {
                         OASWptPt *w = [[OASWptPt alloc] initWithWptPt:self.foundWpt];
-                        [doc addPointPoint:w];
+                        [gpxFile addPointPoint:w];
                         OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
                         [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[self.foundWpt getColor]]];
                         break;
@@ -3283,8 +3283,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
                 }
                 
                 OASKFile *file = [[OASKFile alloc] initWithFilePath:self.foundWptDocPath];
-                doc.author = [OAAppVersion getFullVersionWithAppName];
-                [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:doc];
+                gpxFile.author = [OAAppVersion getFullVersionWithAppName];
+                [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
 
                 // update map
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -3336,23 +3336,23 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             NSString *path = key;
             if ([path isEqualToString:gpxFileName])
             {
-                OASGpxFile *doc = value;
+                OASGpxFile *gpxFile = value;
                 
                 OASWptPt *w = [[OASWptPt alloc] initWithWptPt:wpt];
-                [doc addPointPoint:w];
+                [gpxFile addPointPoint:w];
                 
                 OAGPXAppearanceCollection *appeacaneCollection = [OAGPXAppearanceCollection sharedInstance];
                 [appeacaneCollection selectColor:[appeacaneCollection getColorItemWithValue:[wpt getColor]]];
                 
                 OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFileName];
-                doc.author = [OAAppVersion getFullVersionWithAppName];
-                [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:doc];
+                gpxFile.author = [OAAppVersion getFullVersionWithAppName];
+                [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
 
                 self.foundWpt = wpt;
                 self.foundWptDocPath = gpxFileName;
                 
                 NSMutableSet *groups = [NSMutableSet set];
-                for (OASWptPt *loc in doc.getPointsList)
+                for (OASWptPt *loc in gpxFile.getPointsList)
                 {
                     if (loc.category != nil)
                     {
@@ -3373,20 +3373,20 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         
         if ([_gpxFilePathTemp isEqualToString:[gpxFileName lastPathComponent]])
         {
-            OASGpxFile *doc = _gpxFilesTemp.firstObject;
+            OASGpxFile *gpxFile = _gpxFilesTemp.firstObject;
             
             OASWptPt *w = [[OASWptPt alloc] initWithWptPt:wpt];
-            [doc addPointPoint:w];
+            [gpxFile addPointPoint:w];
 
             OAGPXAppearanceCollection *appeacaneCollection = [OAGPXAppearanceCollection sharedInstance];
             [appeacaneCollection selectColor:[appeacaneCollection getColorItemWithValue:[wpt getColor]]];
             
             OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFileName];
-            doc.author = [OAAppVersion getFullVersionWithAppName];
-            [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:doc];
+            gpxFile.author = [OAAppVersion getFullVersionWithAppName];
+            [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
             
             NSMutableSet *groups = [NSMutableSet set];
-            for (OASWptPt *loc in doc.getPointsList)
+            for (OASWptPt *loc in gpxFile.getPointsList)
             {
                 if (loc.category != nil)
                 {
@@ -3461,17 +3461,17 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         NSString *path = key;
         if ([path isEqualToString:docPath])
         {
-            OASGpxFile *doc = value;
+            OASGpxFile *gpxFile = value;
 
             for (OAGpxWptItem *item in items)
             {
-                for (OASWptPt *loc in doc.getPointsList)
+                for (OASWptPt *loc in gpxFile.getPointsList)
                 {
                     if ([OAUtilities doublesEqualUpToDigits:5 source:loc.position.latitude destination:item.point.lat] &&
                         [OAUtilities doublesEqualUpToDigits:5 source:loc.position.longitude destination:item.point.lon])
                     {
                         OASWptPt *w = [[OASWptPt alloc] initWithWptPt:item.point];
-                        [doc addPointPoint:w];
+                        [gpxFile addPointPoint:w];
                         
                         OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
                         [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:item.point.getColor]];
@@ -3484,8 +3484,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             if (found)
             {
                 OASKFile *file = [[OASKFile alloc] initWithFilePath:docPath];
-                doc.author = [OAAppVersion getFullVersionWithAppName];
-                [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:doc];
+                gpxFile.author = [OAAppVersion getFullVersionWithAppName];
+                [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
                 
                 // update map
                 if (updateMap)
@@ -3502,18 +3502,18 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     
     if (_gpxFilesTemp.count != 0)
     {
-        OASGpxFile *doc = _gpxFilesTemp.firstObject;
+        OASGpxFile *gpxFile = _gpxFilesTemp.firstObject;
 
         for (OAGpxWptItem *item in items)
         {
-            for (OASWptPt *loc in doc.getPointsList)
+            for (OASWptPt *loc in gpxFile.getPointsList)
             {
                 if ([OAUtilities doublesEqualUpToDigits:5 source:loc.position.latitude destination:item.point.lat] &&
                     [OAUtilities doublesEqualUpToDigits:5 source:loc.position.longitude destination:item.point.lon])
                 {
                     
                     OASWptPt *w = [[OASWptPt alloc] initWithWptPt:item.point];
-                    [doc addPointPoint:w];
+                    [gpxFile addPointPoint:w];
                     
                     OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
                     [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:item.point.getColor]];
@@ -3526,8 +3526,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         if (found)
         {
             OASKFile *file = [[OASKFile alloc] initWithFilePath:docPath];
-            doc.author = [OAAppVersion getFullVersionWithAppName];
-            [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:doc];
+            gpxFile.author = [OAAppVersion getFullVersionWithAppName];
+            [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
             
             // update map
             if (updateMap)
@@ -3620,17 +3620,17 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         NSString *path = key;
         if ([path isEqualToString:docPath])
         {
-            OASGpxFile *doc = value;
+            OASGpxFile *gpxFile = value;
 
             for (OAGpxWptItem *item in items)
             {
-                for (int i = 0; i < doc.getPointsList.count; i++)
+                for (int i = 0; i < gpxFile.getPointsList.count; i++)
                 {
-                    OASWptPt *w = doc.getPointsList[i];
+                    OASWptPt *w = gpxFile.getPointsList[i];
                     if ([OAUtilities doublesEqualUpToDigits:5 source:w.position.latitude destination:item.point.lat] &&
                         [OAUtilities doublesEqualUpToDigits:5 source:w.position.longitude destination:item.point.lon])
                     {
-                        [doc deleteWptPtPoint:w];
+                        [gpxFile deleteWptPtPoint:w];
                         found = YES;
                         break;
                     }
@@ -3641,8 +3641,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             {
                 
                 OASKFile *file = [[OASKFile alloc] initWithFilePath:docPath];
-                doc.author = [OAAppVersion getFullVersionWithAppName];
-                [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:doc];
+                gpxFile.author = [OAAppVersion getFullVersionWithAppName];
+                [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
                 
                 // update map
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -3656,17 +3656,17 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
     if (_gpxFilesTemp.count != 0)
     {
-        OASGpxFile *doc = _gpxFilesTemp.firstObject;
+        OASGpxFile *gpxFile = _gpxFilesTemp.firstObject;
 
         for (OAGpxWptItem *item in items)
         {
-            for (int i = 0; i < doc.getPointsList.count; i++)
+            for (int i = 0; i < gpxFile.getPointsList.count; i++)
             {
-                OASWptPt *w = doc.getPointsList[i];
+                OASWptPt *w = gpxFile.getPointsList[i];
                 if ([OAUtilities doublesEqualUpToDigits:5 source:w.position.latitude destination:item.point.lat] &&
                     [OAUtilities doublesEqualUpToDigits:5 source:w.position.longitude destination:item.point.lon])
                 {
-                    [doc deleteWptPtPoint:w];
+                    [gpxFile deleteWptPtPoint:w];
                     found = YES;
                     break;
                 }
@@ -3676,8 +3676,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         if (found)
         {
             OASKFile *file = [[OASKFile alloc] initWithFilePath:docPath];
-            doc.author = [OAAppVersion getFullVersionWithAppName];
-            [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:doc];
+            gpxFile.author = [OAAppVersion getFullVersionWithAppName];
+            [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
             
             // update map
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -3693,23 +3693,23 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
 - (void) initRendererWithGpxTracks
 {
-    NSMutableDictionary<NSString *, OASGpxFile *> *docs = [NSMutableDictionary dictionary];
+    NSMutableDictionary<NSString *, OASGpxFile *> *gpxFilesDic = [NSMutableDictionary dictionary];
     if (_selectedGpxHelper.activeGpx.allKeys.count > 0 || _gpxFilesTemp.count > 0)
     {
         NSMutableDictionary<NSString *, OASGpxFile *> *activeGpx = [_selectedGpxHelper.activeGpx mutableCopy];
         for (NSString *key in activeGpx.allKeys) {
-            OASGpxFile *doc = activeGpx[key];
-            if (doc)
+            OASGpxFile *gpxFile = activeGpx[key];
+            if (gpxFile)
             {
-                docs[key] = doc;
+                gpxFilesDic[key] = gpxFile;
             }
         }
         if (_gpxFilePathTemp && _gpxFilesTemp.count > 0)
         {
-            docs[_gpxFilePathTemp] = _gpxFilesTemp.firstObject;
+            gpxFilesDic[_gpxFilePathTemp] = _gpxFilesTemp.firstObject;
         }
     }
-    [_mapLayers.gpxMapLayer refreshGpxTracks:docs reset:YES];
+    [_mapLayers.gpxMapLayer refreshGpxTracks:gpxFilesDic reset:YES];
 }
 
 - (void) refreshGpxTracks

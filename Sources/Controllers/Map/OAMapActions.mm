@@ -213,8 +213,8 @@
 {
     OASTrackItem *trackItem = [[OASTrackItem alloc] initWithFile:result.file];
     trackItem.dataItem = result;
-    OASGpxFile *doc = [self getGpxDocumentByGpx:trackItem];
-    [self setGPXRouteParamsWithDocument:doc path:doc.path];
+    OASGpxFile *gpxFile = [self getGpxDocumentByGpx:trackItem];
+    [self setGPXRouteParamsWithDocument:gpxFile path:gpxFile.path];
 }
 
 - (OAApplicationMode *) getRouteMode

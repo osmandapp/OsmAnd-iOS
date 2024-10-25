@@ -67,8 +67,8 @@
 
                 OASOkioBuffer *buf = [[OASOkioBuffer alloc] init];
                 [buf writeUtf8String:xmlString.toNSString()];
-                OASGpxFile *doc = [OASGpxUtilities.shared loadGpxFileSource:buf];
-                onComplete(doc);
+                OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileSource:buf];
+                onComplete(gpxFile);
             });
         }
         else

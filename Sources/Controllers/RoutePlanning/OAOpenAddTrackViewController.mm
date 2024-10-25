@@ -426,18 +426,18 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             }
             
             OASKFile *file = [[OASKFile alloc] initWithFilePath:[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:track.gpxFilePath]];
-            OASGpxFile *doc = [OASGpxUtilities.shared loadGpxFileFile:file];
+            OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
             
-            OAApplicationMode *mode = [self getRouteProfile:doc];
+            OAApplicationMode *mode = [self getRouteProfile:gpxFile];
             if (mode)
             {
                 [OARoutingHelper.sharedInstance setAppMode:mode];
                 [OsmAndApp.instance initVoiceCommandPlayer:mode warningNoneProvider:YES showDialog:NO force:NO];
             }
             
-            if (doc.getNonEmptySegmentsCount > 1)
+            if (gpxFile.getNonEmptySegmentsCount > 1)
             {
-                OATrackSegmentsViewController *trackSegments = [[OATrackSegmentsViewController alloc] initWithFile:doc];
+                OATrackSegmentsViewController *trackSegments = [[OATrackSegmentsViewController alloc] initWithFile:gpxFile];
                 trackSegments.delegate = self;
                 [self.navigationController pushViewController:trackSegments animated:YES];
                 return;

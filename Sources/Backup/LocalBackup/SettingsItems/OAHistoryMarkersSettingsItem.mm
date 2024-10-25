@@ -140,7 +140,7 @@
 
 - (OASGpxFile *) generateGpx:(NSArray<OAHistoryItem *> *)historyItems
 {
-    OASGpxFile *doc = [[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]];
+    OASGpxFile *gpxFile = [[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]];
     
     for (OAHistoryItem *historyItem in historyItems)
     {
@@ -153,9 +153,9 @@
         [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z"];
         exts[@"visited_date"] = [dateFormatter stringFromDate:historyItem.date];
 
-        [doc addPointPoint:wpt];
+        [gpxFile addPointPoint:wpt];
     }
-    return doc;
+    return gpxFile;
 }
 
 @end

@@ -889,12 +889,11 @@
     [self hide:YES duration:.2 onComplete:^{
         OATrackMenuViewControllerState *state = [weakSelf getCurrentStateForAnalyze:types];
         state.openedFromTrackMenu = YES;
-        OASGpxFile *doc = weakSelf.doc;
-        if (!doc)
+        OASGpxFile *gpxFile = weakSelf.doc;
+        if (!gpxFile)
         {
             weakSelf.doc = [OASGpxUtilities.shared loadGpxFileFile:weakSelf.gpx.dataItem.file];
         }
-        
         
         [weakSelf.mapPanelViewController openTargetViewWithRouteDetailsGraph:weakSelf.doc
                                                                    trackItem:weakSelf.gpx
@@ -1909,7 +1908,7 @@
 
 - (void)onFolderSelected:(NSString *)selectedFolderName
 {
-    [_gpxUIHelper copyGPXToNewFolder:selectedFolderName renameToNewName:nil deleteOriginalFile:YES openTrack:NO gpx:self.gpx.dataItem doc:self.doc];
+    [_gpxUIHelper copyGPXToNewFolder:selectedFolderName renameToNewName:nil deleteOriginalFile:YES openTrack:NO gpx:self.gpx.dataItem gpxFile:self.doc];
     [_uiBuilder resetDataInTab:EOATrackMenuHudOverviewTab];
     if (_selectedTab == EOATrackMenuHudActionsTab)
     {
@@ -1955,7 +1954,7 @@
           deleteOriginalFile:NO
                    openTrack:YES
                          gpx:self.gpx.dataItem
-                         doc:self.doc];
+                     gpxFile:self.doc];
 }
 
 #pragma mark - OASegmentSelectionDelegate

@@ -1163,22 +1163,22 @@ colorizationScheme:(int)colorizationScheme
         
         OASGpxDataItem *gpx = [OAGPXDatabase.sharedDb getGPXItem:path];
         
-        OASGpxFile *doc = [_gpxFiles objectForKey:key];
-        GPXDataItemGPXFileWrapper *dataWrapper = [[GPXDataItemGPXFileWrapper alloc] initWithGpxDataItem:gpx gpxFile:doc];
+        OASGpxFile *gpxFile = [_gpxFiles objectForKey:key];
+        GPXDataItemGPXFileWrapper *dataWrapper = [[GPXDataItemGPXFileWrapper alloc] initWithGpxDataItem:gpx gpxFile:gpxFile];
         if ((!gpx && ![path isEqualToString:kCurrentTrack]) || gpx.showStartFinish)
         {
-            if (!doc)
+            if (!gpxFile)
                 continue;
             
             const bool raiseRoutesAboveRelief = gpx.visualization3dByType != EOAGPX3DLineVisualizationByTypeNone;
             
-            NSArray<OASTrack *> *tracks = [doc.tracks copy];
+            NSArray<OASTrack *> *tracks = [gpxFile.tracks copy];
             OsmAnd::LatLon start, finish;
             CLLocationCoordinate2D startLoc, finishLoc;
             float startPointElevation, finishPointElevation;
             if ([self isSensorLineVisualizationType:gpx.visualization3dByType])
             {
-                for (OASTrack *track in doc.tracks)
+                for (OASTrack *track in gpxFile.tracks)
                 {
                     NSArray *segments = [NSArray arrayWithArray:track.segments];
                     for (int i = 0; i < segments.count; i++)
@@ -1324,7 +1324,7 @@ colorizationScheme:(int)colorizationScheme
             }
         }
         if (dataWrapper.splitType != EOAGpxSplitTypeNone)
-            [self processSplitLabels:gpx doc:doc];
+            [self processSplitLabels:gpx doc:gpxFile];
     }
     if (!startFinishPoints.isEmpty())
     {
@@ -1544,14 +1544,14 @@ colorizationScheme:(int)colorizationScheme
     textSize = textSize < 1. ? 1. : textSize;
     int r = [self getDefaultRadiusPoi] * textSize;
     NSMutableDictionary<NSString *, OASGpxFile *> *activeGpx = [OASelectedGPXHelper.instance.activeGpx mutableCopy];
-    OASGpxFile *doc = [OASavingTrackHelper sharedInstance].currentTrack;
-    if (doc)
-        activeGpx[kCurrentTrack] = doc;
+    OASGpxFile *currentTrackGpxFile = [OASavingTrackHelper sharedInstance].currentTrack;
+    if (currentTrackGpxFile)
+        activeGpx[kCurrentTrack] = currentTrackGpxFile;
     
     for (NSString *key in activeGpx.allKeys) {
         OASGpxFile *gpxFile = activeGpx[key];
 
-        BOOL isCurrentTrack = doc && gpxFile == doc;
+        BOOL isCurrentTrack = currentTrackGpxFile && gpxFile == currentTrackGpxFile;
 
         OASGpxFile *document = nil;
         NSString *filePath = isCurrentTrack ? kCurrentTrack : key;
@@ -1562,7 +1562,7 @@ colorizationScheme:(int)colorizationScheme
         else if (gpxFile)
         {
             document = isCurrentTrack
-                    ? doc
+                    ? currentTrackGpxFile
                     : gpxFile;
         }
 
@@ -1846,14 +1846,14 @@ colorizationScheme:(int)colorizationScheme
             item.point.lon = position.longitude;
             item.point.position = position;
 
-            OASGpxFile *doc = [[OASelectedGPXHelper instance] getGpxFileFor:item.docPath];
-            if (doc)
+            OASGpxFile *gpxFile = [[OASelectedGPXHelper instance] getGpxFileFor:item.docPath];
+            if (gpxFile)
             {
                 OASKFile *file = [[OASKFile alloc] initWithFilePath:item.docPath];
-                doc.author = [OAAppVersion getFullVersionWithAppName];
-                [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:doc];
+                gpxFile.author = [OAAppVersion getFullVersionWithAppName];
+                [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
                 
-                NSDictionary<NSString *, OASGpxFile *> *dic = @{ item.docPath : doc };
+                NSDictionary<NSString *, OASGpxFile *> *dic = @{ item.docPath : gpxFile };
                 [self refreshGpxTracks:dic reset:YES];
             }
         }

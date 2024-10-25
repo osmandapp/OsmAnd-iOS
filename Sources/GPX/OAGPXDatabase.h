@@ -48,7 +48,7 @@ typedef NS_ENUM(NSInteger, EOAGPX3DLineVisualizationPositionType) {
 };
 
 @class OASGpxTrackAnalysis;
-@class OASWptPt, OAGPXDocument, OASGpxDataItem;
+@class OASWptPt, OASGpxDataItem;
 
 @interface OAGPX : NSObject
 

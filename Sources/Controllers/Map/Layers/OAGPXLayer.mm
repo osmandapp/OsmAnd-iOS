@@ -76,7 +76,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     QList<OsmAnd::GpxAdditionalIconsProvider::SplitLabel> _splitLabels;
     OASRTMPlugin *_plugin;
     
-    NSMutableDictionary<NSString *, OASGpxFile *> *_gpxDocs;
+    NSMutableDictionary<NSString *, OASGpxFile *> *_gpxFiles;
 }
 
 - (NSString *) layerId
@@ -98,7 +98,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
 
     [self.mapView addKeyedSymbolsProvider:_linesCollection];
-    _gpxDocs = [NSMutableDictionary dictionary];
+    _gpxFiles = [NSMutableDictionary dictionary];
     _cachedTracks = [NSMutableDictionary dictionary];
     _cachedTrackWidth = [NSMutableDictionary dictionary];
     _updatedColorPaletteFiles = [[OAConcurrentDictionary alloc] init];
@@ -120,7 +120,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     [self.mapView removeKeyedSymbolsProvider:_linesCollection];
 
     _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
-    [_gpxDocs removeAllObjects];
+    [_gpxFiles removeAllObjects];
 }
 
 - (BOOL) updateLayer
@@ -167,18 +167,18 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.mapViewController runWithRenderSync:^{
-                [self refreshGpxTracks:_gpxDocs reset:YES];
+                [self refreshGpxTracks:_gpxFiles reset:YES];
             }];
         });
     }
 }
 
-- (void) refreshGpxTracks:(NSDictionary<NSString *, OASGpxFile *> *)gpxDocs reset:(BOOL)reset
+- (void) refreshGpxTracks:(NSDictionary<NSString *, OASGpxFile *> *)gpxFiles reset:(BOOL)reset
 {
     if (reset)
         [self resetLayer];
 
-    _gpxDocs = (NSMutableDictionary *)[gpxDocs mutableCopy];
+    _gpxFiles = (NSMutableDictionary *)[gpxFiles mutableCopy];
     [self refreshCachedTracks];
     [self refreshGpxTracks];
 }
@@ -188,7 +188,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     if (_cachedTracks.count > 0)
     {
         [_cachedTracks.allKeys enumerateObjectsUsingBlock:^(NSString * _Nonnull key, NSUInteger idx, BOOL * _Nonnull stop) {
-            if (![_gpxDocs objectForKey:key])
+            if (![_gpxFiles objectForKey:key])
             {
                 [_cachedTracks removeObjectForKey:key];
                 QString qKey = QString::fromNSString(key);
@@ -198,9 +198,9 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
         }];
     }
     
-    for (NSString *key in _gpxDocs.allKeys)
+    for (NSString *key in _gpxFiles.allKeys)
     {
-        OASGpxFile *gpxFile = _gpxDocs[key];
+        OASGpxFile *gpxFile = _gpxFiles[key];
         if (!gpxFile)
         {
             continue;
@@ -252,7 +252,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
         
         NSMutableDictionary<NSString *, id> *cachedTrack = [NSMutableDictionary dictionary];
         cachedTrack[@"gpx"] = gpx;
-        cachedTrack[@"doc"] = doc;
+        cachedTrack[@"gpxFile"] = doc;
         cachedTrack[@"colorization_scheme"] = @(COLORIZATION_NONE);
         cachedTrack[@"prev_coloring_type"] = dataWrapper.coloringType;
         cachedTrack[@"prev_color_palette"] = dataWrapper.gradientPaletteName.length > 0 ? dataWrapper.gradientPaletteName : PaletteGradientColor.defaultName;
@@ -300,7 +300,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     for (NSMutableDictionary<NSString *, id> *cachedTrack in _cachedTracks.allValues)
     {
         OASGpxDataItem *gpx = cachedTrack[@"gpx"];
-        OASGpxFile *doc = cachedTrack[@"doc"];
+        OASGpxFile *doc = cachedTrack[@"gpxFile"];
         GPXDataItemGPXFileWrapper *dataWrapper = [[GPXDataItemGPXFileWrapper alloc] initWithGpxDataItem:gpx gpxFile:doc];
         if (dataWrapper.visualization3dByType != EOAGPX3DLineVisualizationByTypeNone && [doc hasTrkPtWithElevation:YES])
         {
@@ -311,14 +311,14 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     if (_linesCollection->hasVolumetricSymbols != hasVolumetricSymbols)
         _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>(hasVolumetricSymbols);
 
-    if (_gpxDocs.count > 0)
+    if (_gpxFiles.count > 0)
     {
         int baseOrder = self.baseOrder;
         int lineId = 1;
         
-        for (NSString *key in _gpxDocs.allKeys)
+        for (NSString *key in _gpxFiles.allKeys)
         {
-            OASGpxFile *doc_ = _gpxDocs[key];
+            OASGpxFile *doc_ = _gpxFiles[key];
 
             if (!doc_)
             {
@@ -329,7 +329,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
             BOOL isCurrentTrack = [key isEqualToString:kCurrentTrack];
             NSMutableDictionary<NSString *, id> *cachedTrack = _cachedTracks[key];
             OASGpxDataItem *gpx = cachedTrack[@"gpx"];
-            OASGpxFile *doc = cachedTrack[@"doc"];
+            OASGpxFile *doc = cachedTrack[@"gpxFile"];
             if (!gpx && !doc)
                 continue;
             GPXDataItemGPXFileWrapper *dataWrapper = [[GPXDataItemGPXFileWrapper alloc] initWithGpxDataItem:gpx gpxFile:doc];
@@ -1158,12 +1158,12 @@ colorizationScheme:(int)colorizationScheme
     QList<OsmAnd::PointI> startFinishPoints;
     QList<float> startFinishPointsElevations;
     
-    for (NSString *key in _gpxDocs.allKeys) {
+    for (NSString *key in _gpxFiles.allKeys) {
         NSString *path = key;
         
         OASGpxDataItem *gpx = [OAGPXDatabase.sharedDb getGPXItem:path];
         
-        OASGpxFile *doc = [_gpxDocs objectForKey:key];
+        OASGpxFile *doc = [_gpxFiles objectForKey:key];
         GPXDataItemGPXFileWrapper *dataWrapper = [[GPXDataItemGPXFileWrapper alloc] initWithGpxDataItem:gpx gpxFile:doc];
         if ((!gpx && ![path isEqualToString:kCurrentTrack]) || gpx.showStartFinish)
         {
@@ -1446,12 +1446,12 @@ colorizationScheme:(int)colorizationScheme
         _waypointsMapProvider = nullptr;
     }
 
-    if (_gpxDocs.allKeys.count > 0)
+    if (_gpxFiles.allKeys.count > 0)
     {
         NSMutableArray<OASWptPt *> *points = [NSMutableArray array];
         
-        for (NSString *key in _gpxDocs.allKeys) {
-            OASGpxFile *value = [_gpxDocs objectForKey:key];
+        for (NSString *key in _gpxFiles.allKeys) {
+            OASGpxFile *value = [_gpxFiles objectForKey:key];
             if (!value)
                 continue;
 
@@ -1459,7 +1459,7 @@ colorizationScheme:(int)colorizationScheme
             {
                 NSString *filePath = key;
                 OASGpxFile *gpx = [_cachedTracks.allKeys containsObject:filePath]
-                        ? _cachedTracks[filePath][@"doc"]
+                        ? _cachedTracks[filePath][@"gpxFile"]
                         : key == nil
                 			? OASavingTrackHelper.sharedInstance.currentTrack
                 			: [self getGpxItem:QString::fromNSString(key)];
@@ -1557,7 +1557,7 @@ colorizationScheme:(int)colorizationScheme
         NSString *filePath = isCurrentTrack ? kCurrentTrack : key;
         if ([_cachedTracks.allKeys containsObject:filePath])
         {
-            document = _cachedTracks[filePath][@"doc"];
+            document = _cachedTracks[filePath][@"gpxFile"];
         }
         else if (gpxFile)
         {

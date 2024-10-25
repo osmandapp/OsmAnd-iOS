@@ -193,21 +193,20 @@
     {
         return nil;
     }
-    OASGpxFile *document = nil;
+    OASGpxFile *gpxFile = nil;
     NSDictionary<NSString *, OASGpxFile *> *gpxMap = [[OASelectedGPXHelper instance].activeGpx copy];
     NSString *path = trackItem.dataItem.file.absolutePath;
     if ([gpxMap objectForKey:path])
     {
-        document = gpxMap[path];
-        document.path = path;
+        gpxFile = gpxMap[path];
+        gpxFile.path = path;
     }
     else
     {
         OASKFile *file = [[OASKFile alloc] initWithFilePath:path];
-        OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
-        document = gpxFile;
+        gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
     }
-    return document;
+    return gpxFile;
 }
 
 - (void) setGPXRouteParams:(OASGpxDataItem *)result

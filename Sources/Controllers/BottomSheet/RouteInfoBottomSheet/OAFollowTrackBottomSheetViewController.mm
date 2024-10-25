@@ -522,8 +522,7 @@
 
 - (void)onFileSelected:(NSString *)gpxFilePath
 {
-    OASGpxFile *document = OARoutingHelper.sharedInstance.getCurrentGPXRoute.file;
-    [self setGpxRouteIfNeeded:document];
+    [self setGpxRouteIfNeeded:OARoutingHelper.sharedInstance.getCurrentGPXRoute.file];
     
     [self generateData];
     [self.tableView reloadData];

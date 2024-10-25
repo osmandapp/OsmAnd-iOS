@@ -18,7 +18,7 @@
 @interface OAGpxLoader : NSObject
 
 @property (nonatomic, copy) NSString *path;
-@property (nonatomic) OASGpxFile *document;
+@property (nonatomic) OASGpxFile *gpxFile;
 
 @end
 
@@ -108,9 +108,9 @@
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 OASKFile *file = [[OASKFile alloc] initWithFilePath:path];
                 OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
-                loader.document = gpxFile;
+                loader.gpxFile = gpxFile;
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    _activeGpx[loader.path] = loader.document;
+                    _activeGpx[loader.path] = loader.gpxFile;
                     [[_app updateGpxTracksOnMapObservable] notifyEvent];
                 });
             });

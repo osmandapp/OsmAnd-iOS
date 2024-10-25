@@ -27,11 +27,11 @@ private enum ButtonActionNumberTag: Int {
     case save = 2
 }
 
-final class TracksViewController: OACompoundViewController, UITableViewDelegate, UITableViewDataSource, OATrackSavingHelperUpdatableDelegate, TrackListUpdatableDelegate, OASelectTrackFolderDelegate, OAGPXImportUIHelperDelegate, MapSettingsGpxViewControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate, TrackFolderLoaderTaskLoadTracksListener {
+final class TracksViewController: OACompoundViewController, UITableViewDelegate, UITableViewDataSource, OATrackSavingHelperUpdatableDelegate, TrackListUpdatableDelegate, OASelectTrackFolderDelegate, OAGPXImportUIHelperDelegate, MapSettingsGpxViewControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate {
     
     @IBOutlet private weak var tableView: UITableView!
     
-    var shouldReload = false
+    fileprivate var shouldReload = false
     
     fileprivate var rootFolder: TrackFolder!
     fileprivate var visibleTracksFolder: TrackFolder!
@@ -124,28 +124,6 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         generateData()
         tableView.reloadData()
         setupTableFooter()
-    }
-    
-    internal func deferredLoadTracksFinished(folder: TrackFolder) {
-        debugPrint("function: \(#function)")
-        onLoadFinished(folder: folder)
-    }
-    
-    internal func loadTracksFinished(folder: TrackFolder) {
-        debugPrint("function: \(#function)")
-        onLoadFinished(folder: folder)
-    }
-    
-    func loadTracksProgress(items: KotlinArray<TrackItem>) {
-        debugPrint("function: \(#function)")
-    }
-    
-    func loadTracksStarted() {
-        debugPrint("function: \(#function)")
-    }
-    
-    internal func tracksLoaded(folder: TrackFolder) {
-        debugPrint("function: \(#function)")
     }
     
     // MARK: - Base UI settings
@@ -1803,5 +1781,31 @@ extension TracksViewController {
     
     private func removeRefreshControl() {
         tableView.refreshControl = nil
+    }
+}
+
+// MARK: - TrackFolderLoaderTaskLoadTracksListener
+
+extension TracksViewController: TrackFolderLoaderTaskLoadTracksListener {
+    func loadTracksProgress(items: KotlinArray<TrackItem>) {
+        debugPrint("function: \(#function)")
+    }
+    
+    func loadTracksStarted() {
+        debugPrint("function: \(#function)")
+    }
+    
+    func deferredLoadTracksFinished(folder: TrackFolder) {
+        debugPrint("function: \(#function)")
+        onLoadFinished(folder: folder)
+    }
+    
+    func loadTracksFinished(folder: TrackFolder) {
+        debugPrint("function: \(#function)")
+        onLoadFinished(folder: folder)
+    }
+    
+    func tracksLoaded(folder: TrackFolder) {
+        debugPrint("function: \(#function)")
     }
 }

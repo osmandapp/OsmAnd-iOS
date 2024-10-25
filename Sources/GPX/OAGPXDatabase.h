@@ -133,8 +133,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)removeGpxItem:(OASGpxDataItem *)item withLocalRemove:(BOOL)withLocalRemove;
 - (OASGpxDataItem *_Nullable)getGPXItem:(NSString *)filePath;
 
-- (void)renameGPX:(OASGpxDataItem *)gpx newFilePath:(NSString *)filePath;
-
 - (BOOL)updateDataItem:(OASGpxDataItem *_Nonnull)item;
 - (NSArray<OASGpxDataItem *> *)getDataItems;
 - (OASGpxDataItem *)getGPXItemByFileName:(NSString *)fileName;

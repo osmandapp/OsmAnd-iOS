@@ -68,8 +68,7 @@ final class GradientUiHelper: NSObject {
             default:
                 break
             }
-            let isFirstLastValue = value == axis?.entries.first || value == axis?.entries.last
-            if let axis, axis.entries.count >= 1, isFirstLastValue {
+            if let axis, axis.entries.count >= 1, (value == axis.entries.first || value == axis.entries.last) {
                 return "\(stringValue) \(typeValue)"
             }
             return stringValue
@@ -105,8 +104,7 @@ final class GradientUiHelper: NSObject {
                     break
                 }
             }
-            let isFirstLastValue = value == axis?.entries.first || value == axis?.entries.last
-            if let axis, axis.entries.count >= 1, isFirstLastValue {
+            if let axis, axis.entries.count >= 1, (value == axis.entries.first || value == axis.entries.last) {
                 return "\(stringValue) \(type)"
             }
             return stringValue

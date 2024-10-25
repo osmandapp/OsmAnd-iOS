@@ -1868,9 +1868,12 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)onFileSelected:(NSString *)gpxFileName
 {
     OASGpxFile *gpxFile;
-    if (!gpxFileName) {
+    if (!gpxFileName
+        ) {
         gpxFile = OASavingTrackHelper.sharedInstance.currentTrack;
-    } else {
+    }
+    else
+    {
         gpxFile = [self getGpxFile:gpxFileName];
     }
     OASelectedGPXHelper *selectedGpxHelper = OASelectedGPXHelper.instance;

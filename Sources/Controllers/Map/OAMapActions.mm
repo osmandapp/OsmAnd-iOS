@@ -73,7 +73,7 @@
 
 - (void) enterRoutePlanningModeGivenGpx:(OASTrackItem *)trackItem useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault showDialog:(BOOL)showDialog
 {
-    [self enterRoutePlanningModeGivenGpx:[self getGpxDocumentByGpx:trackItem] path:trackItem.gpxFilePath from:nil fromName:nil useIntermediatePointsByDefault:useIntermediatePointsByDefault showDialog:showDialog];
+    [self enterRoutePlanningModeGivenGpx:[self getGpxFileByTrackItem:trackItem] path:trackItem.gpxFilePath from:nil fromName:nil useIntermediatePointsByDefault:useIntermediatePointsByDefault showDialog:showDialog];
 }
 
 - (void) enterRoutePlanningModeGivenGpx:(OASTrackItem *)gpxFile
@@ -82,7 +82,7 @@
          useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault
                              showDialog:(BOOL)showDialog
 {
-    [self enterRoutePlanningModeGivenGpx:[self getGpxDocumentByGpx:gpxFile] path:gpxFile.gpxFilePath from:from fromName:fromName useIntermediatePointsByDefault:useIntermediatePointsByDefault showDialog:showDialog];
+    [self enterRoutePlanningModeGivenGpx:[self getGpxFileByTrackItem:gpxFile] path:gpxFile.gpxFilePath from:from fromName:fromName useIntermediatePointsByDefault:useIntermediatePointsByDefault showDialog:showDialog];
 }
 
 - (void) enterRoutePlanningModeGivenGpx:(OASGpxFile *)gpxFile path:(NSString *)path from:(CLLocation *)from fromName:(OAPointDescription *)fromName
@@ -187,7 +187,7 @@
     }
 }
 
-- (OASGpxFile *)getGpxDocumentByGpx:(OASTrackItem *)trackItem
+- (OASGpxFile *)getGpxFileByTrackItem:(OASTrackItem *)trackItem
 {
     if (!trackItem)
     {
@@ -213,7 +213,7 @@
 {
     OASTrackItem *trackItem = [[OASTrackItem alloc] initWithFile:result.file];
     trackItem.dataItem = result;
-    OASGpxFile *gpxFile = [self getGpxDocumentByGpx:trackItem];
+    OASGpxFile *gpxFile = [self getGpxFileByTrackItem:trackItem];
     [self setGPXRouteParamsWithDocument:gpxFile path:gpxFile.path];
 }
 

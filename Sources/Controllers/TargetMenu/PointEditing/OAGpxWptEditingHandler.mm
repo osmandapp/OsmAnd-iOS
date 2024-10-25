@@ -207,7 +207,7 @@
     for (OASWptPt *point in _gpxDocument.getPointsList)
     {
         NSString *title = point.category == nil ? @"" : point.category;
-        NSString *color = point.category == nil ? @"" :  UIColorFromRGBA([point getColor]).toHexARGBString;
+        NSString *color = point.category == nil ? @"" : UIColorFromRGBA([point getColor]).toHexARGBString;
         BOOL emptyCategory = title.length == 0;
         if (!emptyCategory)
         {

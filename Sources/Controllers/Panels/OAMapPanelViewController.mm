@@ -1513,7 +1513,6 @@ typedef enum
             if (!gpx)
             {
                 gpx = [gpxDb addGPXFileToDBIfNeeded:path];
-    
             }
 
             OATrackMenuViewControllerState *state = [OATrackMenuViewControllerState withPinLocation:targetPoint.location

@@ -1211,8 +1211,6 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         guard let trackFolder = getTrackFolderByPath(oldName) else { return }
         let oldFolderPath = currentFolderAbsolutePath().appendingPathComponent(oldName)
         let newFolderPath = currentFolderAbsolutePath().appendingPathComponent(newName)
-        // "123/ccc4/test_2.gpx" | "123/ccc4/444/test_123.gpx"
-        let visibleGpx = settings.mapSettingVisibleGpx.get()
         
         if !FileManager.default.fileExists(atPath: newFolderPath) {
             let oldDir = KFile(filePath: oldFolderPath)
@@ -1316,7 +1314,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
    
     private func areAllItemsSelected() -> Bool {
         guard let currentFolder = getTrackFolderByPath(currentFolderPath) else { return false }
-        let allDisplayedTracks = currentFolder.getTrackItems().compactMap({ $0.dataItem })
+        let allDisplayedTracks = currentFolder.getTrackItems().compactMap { $0.dataItem }
         let allDisplayedFolders = currentFolder.getSubFolders()
         let allTracksSelected = allDisplayedTracks.allSatisfy { track in
             if selectedTracks.contains(track) {

@@ -244,10 +244,6 @@ struct RouteDataBundle;
 @property (nonatomic) NSMutableArray<OARouteSegment *> *routeSegments;
 @property (nonatomic) NSMutableArray<OARouteType *> *routeTypes;
 
--(NSArray *) splitByDistance:(double)meters joinSegments:(BOOL)joinSegments;
--(NSArray *) splitByTime:(int)seconds joinSegments:(BOOL)joinSegments;
--(NSArray *) split:(OASplitMetric*)metric secondaryMetric:(OASplitMetric *)secondaryMetric metricLimit:(double)metricLimit joinSegments:(BOOL)joinSegments;
-
 - (BOOL) hasRoute;
 
 - (void) fillExtensions;

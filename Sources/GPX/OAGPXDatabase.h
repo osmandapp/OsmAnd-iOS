@@ -48,7 +48,7 @@ typedef NS_ENUM(NSInteger, EOAGPX3DLineVisualizationPositionType) {
 };
 
 @class OASGpxTrackAnalysis;
-@class OASWptPt, OAGPXDocument, OASGpxDataItem;
+@class OASWptPt, OASGpxDataItem;
 
 @interface OAGPX : NSObject
 
@@ -132,8 +132,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (OASGpxDataItem *)addGPXFileToDBIfNeeded:(NSString *)filePath;
 - (void)removeGpxItem:(OASGpxDataItem *)item withLocalRemove:(BOOL)withLocalRemove;
 - (OASGpxDataItem *_Nullable)getGPXItem:(NSString *)filePath;
-
-- (void)renameGPX:(OASGpxDataItem *)gpx newFilePath:(NSString *)filePath;
 
 - (BOOL)updateDataItem:(OASGpxDataItem *_Nonnull)item;
 - (NSArray<OASGpxDataItem *> *)getDataItems;

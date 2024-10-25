@@ -6,6 +6,8 @@
 //  Copyright © 2024 OsmAnd. All rights reserved.
 //
 
+import OsmAndShared
+
 @objc(OASTrackItem)
 extension TrackItem {
 

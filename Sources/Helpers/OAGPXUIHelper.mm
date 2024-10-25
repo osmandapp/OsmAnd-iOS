@@ -56,7 +56,7 @@
     NSString *_exportFileName;
     NSString *_exportFilePath;
     OASGpxDataItem *_exportingGpx;
-    OASGpxFile *_exportingGpxDoc;
+    OASGpxFile *_exportingGpxFile;
     BOOL _isExportingCurrentTrack;
     UIDocumentInteractionController *_exportController;
     UIViewController __weak *_exportingHostVC;
@@ -582,7 +582,7 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
     _exportingHostVC = hostViewController;
     _exportingHostVCDelegate = hostViewControllerDelegate;
     _exportingGpx = trackItem;
-    _exportingGpxDoc = gpxDoc;
+    _exportingGpxFile = gpxDoc;
     if (isCurrentTrack)
     {
         NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
@@ -599,27 +599,27 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
                                                      _exportFileName];
 
         [OASavingTrackHelper.sharedInstance saveCurrentTrack:_exportFilePath];
-        _exportingGpxDoc = OASavingTrackHelper.sharedInstance.currentTrack;
+        _exportingGpxFile = OASavingTrackHelper.sharedInstance.currentTrack;
     }
     else
     {
         _exportFileName = trackItem.gpxFileName;
         _exportFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:trackItem.gpxFileName];
-        if (!_exportingGpxDoc || ![_exportingGpxDoc isKindOfClass:OASGpxFile.class])
+        if (!_exportingGpxFile || ![_exportingGpxFile isKindOfClass:OASGpxFile.class])
         {
             NSString *absoluteGpxFilepath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:_exportFileName];
             
             OASKFile *file = [[OASKFile alloc] initWithFilePath:absoluteGpxFilepath];
-            _exportingGpxDoc = [OASGpxUtilities.shared loadGpxFileFile:file];
+            _exportingGpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
         }
         else
         {
-            _exportingGpxDoc = gpxDoc;
+            _exportingGpxFile = gpxDoc;
         }
-        [OAGPXUIHelper addAppearanceToGpx:_exportingGpxDoc gpxItem:_exportingGpx];
+        [OAGPXUIHelper addAppearanceToGpx:_exportingGpxFile gpxItem:_exportingGpx];
         
         OASKFile *file = [[OASKFile alloc] initWithFilePath:_exportFilePath];
-        [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:_exportingGpxDoc];
+        [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:_exportingGpxFile];
     }
 
     _exportController = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:_exportFilePath]];
@@ -713,9 +713,9 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
     NSString *gpxFilepath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
     
     OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFilepath];
-    OASGpxFile *doc = [OASGpxUtilities.shared loadGpxFileFile:file];
-    if (doc)
-        [self copyGPXToNewFolder:newFolderName renameToNewName:newFileName deleteOriginalFile:deleteOriginalFile openTrack:openTrack gpx:gpx doc:doc];
+    OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
+    if (gpxFile)
+        [self copyGPXToNewFolder:newFolderName renameToNewName:newFileName deleteOriginalFile:deleteOriginalFile openTrack:openTrack gpx:gpx                     gpxFile:gpxFile];
 }
 
 - (void)copyGPXToNewFolder:(NSString *)newFolderName
@@ -723,7 +723,7 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
         deleteOriginalFile:(BOOL)deleteOriginalFile
                  openTrack:(BOOL)openTrack
                        gpx:(OASGpxDataItem *)gpx
-                       doc:(OASGpxFile *)doc
+                   gpxFile:(OASGpxFile *)gpxFile
 {
     NSString *oldPath = gpx.gpxFilePath;
     NSString *sourcePath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:oldPath];
@@ -766,7 +766,7 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
     OAGPXDatabase *gpxDatabase = [OAGPXDatabase sharedDb];
     if (deleteOriginalFile)
     {
-        doc.path = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
+        gpxFile.path = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
         if (gpx)
         {
             [gpx updateFolderNameWithNewFilePath:newStoringPath];
@@ -905,7 +905,7 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
     _exportFileName = nil;
     _exportFilePath = nil;
     _exportingGpx = nil;
-    _exportingGpxDoc = nil;
+    _exportingGpxFile = nil;
     _exportingHostVC = nil;
     _exportController = nil;
     if (_exportingHostVCDelegate)
@@ -984,7 +984,7 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
           deleteOriginalFile:NO
                    openTrack:YES
                          gpx:_exportingGpx
-                         doc:_exportingGpxDoc];
+                     gpxFile:_exportingGpxFile];
     [self onCloseShareMenu];
 }
 

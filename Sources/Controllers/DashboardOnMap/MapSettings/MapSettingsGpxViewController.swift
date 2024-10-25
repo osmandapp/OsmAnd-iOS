@@ -8,6 +8,7 @@
 
 import UIKit
 import UniformTypeIdentifiers
+import OsmAndShared
 
 private enum TrackSortType {
     case nearest
@@ -629,6 +630,15 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     private func loadGpxTracks() {
         allGpxList = OAGPXDatabase.sharedDb().getDataItems()
             .sorted { $0.fileLastUploadedTime > $1.fileLastUploadedTime }
+        var seenPaths = Set<String>()
+        // TODO: After renaming the track, getDataItems returns a duplicate of the renamed track, even though it saves correctly in the database. For now, we are forming a unique array of tracks
+        let uniqueGpxList = allGpxList.compactMap { item -> GpxDataItem? in
+            guard !seenPaths.contains(item.gpxFilePath) else { return nil }
+            seenPaths.insert(item.gpxFilePath)
+            return item
+        }
+        allGpxList = uniqueGpxList
+        
         isTracksAvailable = !allGpxList.isEmpty
     }
     

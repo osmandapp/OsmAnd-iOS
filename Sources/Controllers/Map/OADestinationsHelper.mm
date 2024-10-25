@@ -387,7 +387,7 @@
 
 - (OASGpxFile *) generateGpx:(NSArray<OADestination *> *)markers completeBackup:(BOOL)completeBackup
 {
-    OASGpxFile *doc = [[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]];
+    OASGpxFile *gpxFile = [[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]];
     for (OADestination *marker in markers)
     {
         OASWptPt *wpt = [[OASWptPt alloc] init];
@@ -411,9 +411,9 @@
 //                wpt.getExtensionsToWrite().put(VISITED_DATE, format.format(new Date(marker.visitedDate)));
 //            }
 //        }
-        [doc addPointPoint:wpt];
+        [gpxFile addPointPoint:wpt];
     }
-    return doc;
+    return gpxFile;
 }
 
 - (int) getFreeColorIndex

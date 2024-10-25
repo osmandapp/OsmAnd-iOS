@@ -822,15 +822,15 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     NSString *path = [NSTemporaryDirectory() stringByAppendingPathComponent:title];
     [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US"]];
     [formatter setDateFormat:@"yyyy-MM-dd_HH-mm_EEE"];
-    OASGpxFile *doc = [OARoutingHelper.sharedInstance generateGPXFileWithRoute:[formatter stringFromDate:[NSDate date]]];
-    if (!doc)
+    OASGpxFile *gpxFile = [OARoutingHelper.sharedInstance generateGPXFileWithRoute:[formatter stringFromDate:[NSDate date]]];
+    if (!gpxFile)
         return;
     
-    doc.tracks.firstObject.name = [formatter stringFromDate:[NSDate date]];
+    gpxFile.tracks.firstObject.name = [formatter stringFromDate:[NSDate date]];
     
     OASKFile *filePathToSaveGPX = [[OASKFile alloc] initWithFilePath:path];
     // save to disk
-    [[OASGpxUtilities shared] writeGpxFileFile:filePathToSaveGPX gpxFile:doc];
+    [[OASGpxUtilities shared] writeGpxFileFile:filePathToSaveGPX gpxFile:gpxFile];
     NSURL* url = [NSURL fileURLWithPath:path];
     
     UIActivityViewController *activityViewController =

@@ -298,14 +298,6 @@
     NSLog(@"[WARNING] is empty save");
 }
 
-// FIXME: FileUtils.java renameGpxFile
-- (void)renameGPX:(OASGpxDataItem *)gpx newFilePath:(NSString *)filePath {
-    
-    OASKFile *newFile = [[OASKFile alloc] initWithFilePath:filePath];
-    [gpx.file renameToToFile:newFile];
-    [[OASGpxDbHelper shared] renameCurrentFile:gpx.file newFile:newFile];
-}
-
 - (NSDictionary *)generateGpxData:(OAGPX *)gpx
 {
     NSMutableDictionary *d = [NSMutableDictionary dictionary];

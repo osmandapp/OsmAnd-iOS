@@ -1507,7 +1507,7 @@ typedef enum
             
             OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFile.path];
             [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
-            [weakSelf.mapViewController showTempGpxTrackFromDocument:gpxFile];
+            [weakSelf.mapViewController showTempGpxTrackFromGpxFile:gpxFile];
             OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
             OASGpxDataItem *gpx = [gpxDb getGPXItem:path];
             if (!gpx)
@@ -3158,12 +3158,12 @@ typedef enum
                                             isCurrentTrack:(BOOL)isCurrentTrack
                                                      state:(OATrackMenuViewControllerState *)state;
 {
-    OASGpxFile *doc = nil;
+    OASGpxFile *gpxFile = nil;
     OASTrackItem *trackItem = nil;
     if (isCurrentTrack)
     {
-        doc = [OASavingTrackHelper.sharedInstance currentTrack];
-        trackItem = [[OASTrackItem alloc] initWithGpxFile:doc];
+        gpxFile = [OASavingTrackHelper.sharedInstance currentTrack];
+        trackItem = [[OASTrackItem alloc] initWithGpxFile:gpxFile];
     }
     else
     {
@@ -3175,14 +3175,14 @@ typedef enum
             trackItem.dataItem = gpx;
         }
     }
-    if (doc)
+    if (gpxFile)
     {
-        OASGpxTrackAnalysis *analysis = !isCurrentTrack && [doc getGeneralTrack] && [doc getGeneralSegment]
-            ? [self getAnalysisFor:doc.getGeneralSegment]
-            : [doc getAnalysisFileTimestamp:0];
+        OASGpxTrackAnalysis *analysis = !isCurrentTrack && [gpxFile getGeneralTrack] && [gpxFile getGeneralSegment]
+            ? [self getAnalysisFor:gpxFile.getGeneralSegment]
+            : [gpxFile getAnalysisFileTimestamp:0];
         state.scrollToSectionIndex = -1;
         state.routeStatistics = @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)];
-        [self openTargetViewWithRouteDetailsGraph:doc trackItem:trackItem analysis:analysis menuControlState:state];
+        [self openTargetViewWithRouteDetailsGraph:gpxFile trackItem:trackItem analysis:analysis menuControlState:state];
     }
 }
 

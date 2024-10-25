@@ -332,11 +332,11 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         OASGpxDataItem *gpx = [dbHelper getGPXItem:key];
 
         if (gpx) {
-            OASGpxFile *doc = activeGpx[key];
+            OASGpxFile *gpxFile = activeGpx[key];
 
-            if (doc && (doc.hasRtePt || doc.hasTrkPt)) {
+            if (gpxFile && (gpxFile.hasRtePt || gpxFile.hasTrkPt)) {
                 [visibleGpx addObject:gpx];
-                [visibleGpxDocs addObject:doc];
+                [visibleGpxDocs addObject:gpxFile];
             }
         }
     }
@@ -352,16 +352,16 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     for (NSInteger i = 0; i < visibleGpx.count; i++)
     {
         OASGpxDataItem *gpx = visibleGpx[i];
-        OASGpxFile *doc = visibleGpxDocs[i];
-        if (gpx && doc)
+        OASGpxFile *gpxFile = visibleGpxDocs[i];
+        if (gpx && gpxFile)
         {
-            doc.path = gpx.file.absolutePath;
+            gpxFile.path = gpx.file.absolutePath;
             [section addObject:@{
                 @"cell" : [OARightIconTableViewCell getCellIdentifier],
                 @"title" : gpx.getNiceTitle,
                 @"descr" : [OAGPXUIHelper getDescription:gpx],
                 @"img" : @"ic_custom_trip",
-                @"item" : doc
+                @"item" : gpxFile
             }];
         }
         

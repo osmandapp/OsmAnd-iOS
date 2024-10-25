@@ -231,7 +231,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     if (![_cachedTracks.allKeys containsObject:filePath] || isCurrentTrack)
     {
         OASGpxDataItem *gpx;
-        OASGpxFile *doc;
+        OASGpxFile *gpxFile;
 
         
         if (isCurrentTrack) {
@@ -242,17 +242,17 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
         
         if (isCurrentTrack)
         {
-            doc = [OASavingTrackHelper sharedInstance].currentTrack;
+            gpxFile = [OASavingTrackHelper sharedInstance].currentTrack;
         }
         else
         {
-            doc = value;
+            gpxFile = value;
         }
-        GPXDataItemGPXFileWrapper *dataWrapper = [[GPXDataItemGPXFileWrapper alloc] initWithGpxDataItem:gpx gpxFile:doc];
+        GPXDataItemGPXFileWrapper *dataWrapper = [[GPXDataItemGPXFileWrapper alloc] initWithGpxDataItem:gpx gpxFile:gpxFile];
         
         NSMutableDictionary<NSString *, id> *cachedTrack = [NSMutableDictionary dictionary];
         cachedTrack[@"gpx"] = gpx;
-        cachedTrack[@"gpxFile"] = doc;
+        cachedTrack[@"gpxFile"] = gpxFile;
         cachedTrack[@"colorization_scheme"] = @(COLORIZATION_NONE);
         cachedTrack[@"prev_coloring_type"] = dataWrapper.coloringType;
         cachedTrack[@"prev_color_palette"] = dataWrapper.gradientPaletteName.length > 0 ? dataWrapper.gradientPaletteName : PaletteGradientColor.defaultName;
@@ -264,7 +264,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
 }
 
 - (void)configureCachedWallColorsFor:(OAColoringType *)type
-                                 doc:(OASGpxFile *)doc
+                                 gpxFile:(OASGpxFile *)gpxFile
                                  key:(QString)key
                             analysis:(OASGpxTrackAnalysis *_Nullable)analysis
                shouldCheckColorCache:(BOOL)shouldCheckColorCache
@@ -283,8 +283,8 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
         if (!palette)
             return;
         OARouteColorize *routeColorize =
-            [[OARouteColorize alloc] initWithGpxFile:doc
-                                            analysis:analysis ?: [doc getAnalysisFileTimestamp:0]
+            [[OARouteColorize alloc] initWithGpxFile:gpxFile
+                                            analysis:analysis ?: [gpxFile getAnalysisFileTimestamp:0]
                                                 type:[type toColorizationType]
                                              palette:palette
                                      maxProfileSpeed:0];
@@ -300,9 +300,9 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     for (NSMutableDictionary<NSString *, id> *cachedTrack in _cachedTracks.allValues)
     {
         OASGpxDataItem *gpx = cachedTrack[@"gpx"];
-        OASGpxFile *doc = cachedTrack[@"gpxFile"];
-        GPXDataItemGPXFileWrapper *dataWrapper = [[GPXDataItemGPXFileWrapper alloc] initWithGpxDataItem:gpx gpxFile:doc];
-        if (dataWrapper.visualization3dByType != EOAGPX3DLineVisualizationByTypeNone && [doc hasTrkPtWithElevation:YES])
+        OASGpxFile *gpxFile = cachedTrack[@"gpxFile"];
+        GPXDataItemGPXFileWrapper *dataWrapper = [[GPXDataItemGPXFileWrapper alloc] initWithGpxDataItem:gpx gpxFile:gpxFile];
+        if (dataWrapper.visualization3dByType != EOAGPX3DLineVisualizationByTypeNone && [gpxFile hasTrkPtWithElevation:YES])
         {
             hasVolumetricSymbols = YES;
             break;
@@ -318,9 +318,9 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
         
         for (NSString *key in _gpxFiles.allKeys)
         {
-            OASGpxFile *doc_ = _gpxFiles[key];
+            OASGpxFile *gpxFile_ = _gpxFiles[key];
 
-            if (!doc_)
+            if (!gpxFile_)
             {
                 continue;
             }
@@ -329,10 +329,10 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
             BOOL isCurrentTrack = [key isEqualToString:kCurrentTrack];
             NSMutableDictionary<NSString *, id> *cachedTrack = _cachedTracks[key];
             OASGpxDataItem *gpx = cachedTrack[@"gpx"];
-            OASGpxFile *doc = cachedTrack[@"gpxFile"];
-            if (!gpx && !doc)
+            OASGpxFile *gpxFile = cachedTrack[@"gpxFile"];
+            if (!gpx && !gpxFile)
                 continue;
-            GPXDataItemGPXFileWrapper *dataWrapper = [[GPXDataItemGPXFileWrapper alloc] initWithGpxDataItem:gpx gpxFile:doc];
+            GPXDataItemGPXFileWrapper *dataWrapper = [[GPXDataItemGPXFileWrapper alloc] initWithGpxDataItem:gpx gpxFile:gpxFile];
             OAColoringType *type = dataWrapper.coloringType.length > 0
                 ? [OAColoringType getNonNullTrackColoringTypeByName:dataWrapper.coloringType]
                 : OAColoringType.TRACK_SOLID;
@@ -382,14 +382,14 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
 
                 if (shouldCalculateColorCache)
                 {
-                    analysis = [doc getAnalysisFileTimestamp:0];
+                    analysis = [gpxFile getAnalysisFileTimestamp:0];
                     ColorPalette *palette =
                         [[ColorPaletteHelper shared] getGradientColorPaletteSync:(ColorizationType) [type toColorizationType]
                                                              gradientPaletteName:cachedTrack[@"prev_color_palette"]];
                     if (!palette)
                         return;
                     OARouteColorize *routeColorize =
-                        [[OARouteColorize alloc] initWithGpxFile:doc
+                        [[OARouteColorize alloc] initWithGpxFile:gpxFile
                                                         analysis:analysis
                                                             type:[type toColorizationType]
                                                          palette:palette
@@ -409,10 +409,10 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                         || [cachedTrack[@"colorization_scheme"] intValue] != COLORIZATION_SOLID
                         || _cachedColors[qKey].isEmpty()))
             {
-                OARouteImporter *routeImporter = [[OARouteImporter alloc] initWithGpxFile:doc];
+                OARouteImporter *routeImporter = [[OARouteImporter alloc] initWithGpxFile:gpxFile];
                 auto segs = [routeImporter importRoute];
                 NSMutableArray<CLLocation *> *locations = [NSMutableArray array];
-                for (OASTrkSegment *seg in [doc getNonEmptyTrkSegmentsRoutesOnly:YES])
+                for (OASTrkSegment *seg in [gpxFile getNonEmptyTrkSegmentsRoutesOnly:YES])
                 {
                     for (OASWptPt *point in seg.points)
                     {
@@ -446,7 +446,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                 {
                     case EOAGPX3DLineVisualizationWallColorTypeAltitude:
                         [self configureCachedWallColorsFor:OAColoringType.ALTITUDE
-                                                       doc:doc
+                                                       gpxFile:gpxFile
                                                        key:qKey
                                                   analysis:analysis
                                      shouldCheckColorCache:[type isAltitude]
@@ -454,7 +454,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                         break;
                     case EOAGPX3DLineVisualizationWallColorTypeSlope:
                         [self configureCachedWallColorsFor:OAColoringType.SLOPE
-                                                       doc:doc
+                                                       gpxFile:gpxFile
                                                        key:qKey
                                                   analysis:analysis
                                      shouldCheckColorCache:[type isSlope]
@@ -462,7 +462,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                         break;
                     case EOAGPX3DLineVisualizationWallColorTypeSpeed:
                         [self configureCachedWallColorsFor:OAColoringType.SPEED
-                                                       doc:doc
+                                                       gpxFile:gpxFile
                                                        key:qKey
                                                   analysis:analysis
                                      shouldCheckColorCache:[type isSpeed]
@@ -475,19 +475,19 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                 cachedTrack[@"prev_wall_coloring_type"] = @(dataWrapper.visualization3dWallColorType);
             }
 
-            if (doc_.hasTrkPt)
+            if (gpxFile_.hasTrkPt)
             {
                 int segStartIndex = 0;
                 QVector<OsmAnd::PointI> points;
                 NSMutableArray *elevations = [NSMutableArray array];
                 QList<OsmAnd::FColorARGB> segmentColors;
                 QList<OsmAnd::FColorARGB> segmentWallColors;
-                NSArray<OASTrack *> *tracks = [doc getTracksIncludeGeneralTrack:NO];
+                NSArray<OASTrack *> *tracks = [gpxFile getTracksIncludeGeneralTrack:NO];
                 if ([self isSensorLineVisualizationType:dataWrapper.visualization3dByType])
                 {
-                    [self processGPXDataElements:doc.tracks withGPX:gpx addToElevations:elevations];
+                    [self processGPXDataElements:gpxFile.tracks withGPX:gpx addToElevations:elevations];
                 }
-                for (OASTrack *track in doc_.tracks)
+                for (OASTrack *track in gpxFile.tracks)
                 {
                     for (OASTrkSegment *seg in track.segments)
                     {
@@ -520,7 +520,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                         }
                         else if ([cachedTrack[@"colorization_scheme"] intValue] == COLORIZATION_NONE && segmentColors.isEmpty() && dataWrapper.color == 0)
                         {
-                            NSInteger trackIndex = [doc_.tracks indexOfObject:track];
+                            NSInteger trackIndex = [gpxFile_.tracks indexOfObject:track];
                             
                             OASTrack *gpxTrack = tracks[trackIndex];
                             OASInt *color = [[OASInt alloc] initWithInt:(int)kDefaultTrackColor];
@@ -532,7 +532,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                         {
                             if (isCurrentTrack)
                             {
-                                [self refreshLine:points gpx:doc baseOrder:baseOrder-- lineId:lineId++ colors:segmentColors segmentWallColors:segmentWallColors colorizationScheme:[cachedTrack[@"colorization_scheme"] intValue] elevations:elevations];
+                                [self refreshLine:points gpx:gpxFile baseOrder:baseOrder-- lineId:lineId++ colors:segmentColors segmentWallColors:segmentWallColors colorizationScheme:[cachedTrack[@"colorization_scheme"] intValue] elevations:elevations];
                             }
                             else
                             {
@@ -549,7 +549,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                 {
                     if (isCurrentTrack)
                     {
-                        [self refreshLine:points gpx:doc baseOrder:baseOrder-- lineId:lineId++ colors:segmentColors segmentWallColors:segmentWallColors colorizationScheme:[cachedTrack[@"colorization_scheme"] intValue] elevations:elevations];
+                        [self refreshLine:points gpx:gpxFile baseOrder:baseOrder-- lineId:lineId++ colors:segmentColors segmentWallColors:segmentWallColors colorizationScheme:[cachedTrack[@"colorization_scheme"] intValue] elevations:elevations];
                     }
                     else
                     {
@@ -557,14 +557,14 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                     }
                 }
             }
-            else if (doc_.hasRtePt)
+            else if (gpxFile_.hasRtePt)
             {
                 NSMutableArray *elevations = [NSMutableArray array];
                 if ([self isSensorLineVisualizationType:dataWrapper.visualization3dByType])
                 {
-                    [self processGPXDataElements:doc.routes withGPX:gpx addToElevations:elevations];
+                    [self processGPXDataElements:gpxFile.routes withGPX:gpx addToElevations:elevations];
                 }
-                for (OASRoute *route in doc_.routes)
+                for (OASRoute *route in gpxFile_.routes)
                 {
                     QVector<OsmAnd::PointI> points;
                     for (OASWptPt *pt in route.points)
@@ -588,7 +588,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                     }
                     if (isCurrentTrack)
                     {
-                        [self refreshLine:points gpx:doc baseOrder:baseOrder-- lineId:lineId++ colors:{} segmentWallColors:{} colorizationScheme:COLORIZATION_NONE elevations:elevations];
+                        [self refreshLine:points gpx:gpxFile baseOrder:baseOrder-- lineId:lineId++ colors:{} segmentWallColors:{} colorizationScheme:COLORIZATION_NONE elevations:elevations];
                     }
                     else
                     {

@@ -169,7 +169,7 @@ static const int BOTTOM_CONSTANT = 1;
 
 - (void) showTempGpxTrack:(NSString *)filePath update:(BOOL)update;
 - (void) showTempGpxTrack:(NSString *)filePath;
-- (void) showTempGpxTrackFromDocument:(OASGpxFile *)doc;
+- (void) showTempGpxTrackFromGpxFile:(OASGpxFile *)doc;
 - (void) hideTempGpxTrack:(BOOL)update;
 - (void) hideTempGpxTrack;
 - (void) keepTempGpxTrackVisible;

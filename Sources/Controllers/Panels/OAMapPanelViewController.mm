@@ -1507,7 +1507,7 @@ typedef enum
             
             OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFile.path];
             [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
-            [weakSelf.mapViewController showTempGpxTrackFromDocument:gpxFile];
+            [weakSelf.mapViewController showTempGpxTrackFromGpxFile:gpxFile];
             OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
             OASGpxDataItem *gpx = [gpxDb getGPXItem:path];
             if (!gpx)

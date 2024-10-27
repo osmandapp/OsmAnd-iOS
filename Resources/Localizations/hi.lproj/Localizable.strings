@@ -156,14 +156,13 @@
 "shared_string_author" = "लेखक";
 "shared_string_keywords" = "कीवर्ड";
 "shared_string_license" = "लाइसेंस";
-
 "rendering_value_small_name" = "छोटा";
 "rendering_value_name_only_name" = "सिर्फ़ नाम";
 "rendering_value_sector4_name" = "सेक्टर ४";
 "rendering_value_sector3_name" = "सेक्टर ३";
 "rendering_value_sector1_name" = "सेक्टर १";
 "rendering_value_sector2_name" = "सेक्टर २";
-"rendering_value_sector5_name" = "सेक्टर ५";;
+"rendering_value_sector5_name" = "सेक्टर ५";
 "avoid_pt_types" = "परिवहन प्रकारों से बचें …";
 "shared_string_speedometer" = "स्पीडोमीटर";
 "custom_buttons" = "कस्टम बटन";
@@ -198,3 +197,4 @@
 "add_button" = "बटन जोड़ें";
 "when_exceeded" = "जब पार हो जाए";
 "custom_map_button_name_present" = "ऐसा बटन पहले से मौजूद है";
+"OsmAnd Maps" = "OsmAnd नक्शे";

@@ -62,7 +62,7 @@
 "address_search_desc" = "Buscar dirección";
 "search_radius" = "Radio de búsqueda";
 "shared_string_target_points" = "Destinos";
-"search_radius_proximity" = "A menos de";
+"search_radius_proximity" = "Dentro de";
 "poi" = "PDI";
 "search_more" = "Buscar más…";
 "day_off_label" = "cerrado";

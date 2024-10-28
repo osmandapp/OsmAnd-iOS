@@ -18,6 +18,8 @@
 #define kButtonHeight 32.0
 #define kDefaultZoomOnShow 16.0f
 
+static NSArray<NSString *> *const kExclusionCoordinatePrefixes = @[@"UTM: ", @"OLC: ", @"MGRS: "];
+
 @interface OACollapsableCoordinatesView () <OAButtonDelegate>
 
 @end
@@ -171,7 +173,17 @@
     {
         OAButton *button = _buttons[_selectedButtonIndex];
         UIPasteboard *pb = [UIPasteboard generalPasteboard];
-        [pb setString:button.titleLabel.text];
+        NSString *textToCopy = button.titleLabel.text;
+        for (NSString *prefix in kExclusionCoordinatePrefixes)
+        {
+            if ([button.titleLabel.text hasPrefix:prefix])
+            {
+                textToCopy = [button.titleLabel.text substringFromIndex:[prefix length]];
+                break;
+            }
+        }
+        
+        [pb setString:textToCopy];
     }
 }
 

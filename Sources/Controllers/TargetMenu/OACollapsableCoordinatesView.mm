@@ -170,7 +170,7 @@ static NSArray<NSString *> *const kExclusionCoordinatePrefixes = @[@"UTM: ", @"O
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender
 {
-    return [sender isKindOfClass:UIMenuController.class] && action == @selector(copy:);
+    return action == @selector(copy:);
 }
 
 - (void)copy:(id)sender

@@ -441,6 +441,7 @@
 		32B7DC382C762BCC00E5E8BD /* OAColorsPaletteCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32B7DC342C761D1000E5E8BD /* OAColorsPaletteCell.xib */; };
 		32BBDC9B2C0497CF0090D37E /* RouteInfoListItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32BBDC9A2C0497CF0090D37E /* RouteInfoListItemCell.swift */; };
 		32BBDC9C2C049B0C0090D37E /* RouteInfoListItemCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32BBDC962C0493190090D37E /* RouteInfoListItemCell.xib */; };
+		32BC95732CC021CE00FEEAB8 /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32BC95722CC021CE00FEEAB8 /* UIFont+Extension.swift */; };
 		32BD81AC259B5C9B00A54BB5 /* ic_custom_manage_profiles@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32BD81A9259B5C9A00A54BB5 /* ic_custom_manage_profiles@2x.png */; };
 		32BD81B0259B5C9B00A54BB5 /* ic_custom_manage_profiles@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32BD81AB259B5C9B00A54BB5 /* ic_custom_manage_profiles@3x.png */; };
 		32BFF098299137D60023D067 /* OAUploadGPXFilesTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 32BFF097299137D60023D067 /* OAUploadGPXFilesTask.m */; };
@@ -3085,8 +3086,6 @@
 		FA4195592AAB55E6007CBBAB /* ShadowTransporentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4195582AAB55E6007CBBAB /* ShadowTransporentView.swift */; };
 		FA44BF3B2A71123D000D2F5F /* ic_banner_close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA44BF2F2A71123B000D2F5F /* ic_banner_close@2x.png */; };
 		FA44BF3C2A71123D000D2F5F /* ic_custom_osmand_start_logo_big@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA44BF302A71123B000D2F5F /* ic_custom_osmand_start_logo_big@3x.png */; };
-		FA44BF3D2A71123D000D2F5F /* ic_payment_label_pro@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA44BF312A71123C000D2F5F /* ic_payment_label_pro@2x.png */; };
-		FA44BF3E2A71123D000D2F5F /* ic_payment_label_pro@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA44BF322A71123C000D2F5F /* ic_payment_label_pro@3x.png */; };
 		FA44BF3F2A71123D000D2F5F /* ic_custom_osmand_start_logo_big@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA44BF332A71123C000D2F5F /* ic_custom_osmand_start_logo_big@2x.png */; };
 		FA44BF402A71123D000D2F5F /* ic_custom_osmand_start@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA44BF342A71123C000D2F5F /* ic_custom_osmand_start@3x.png */; };
 		FA44BF412A71123D000D2F5F /* ic_custom_osmand_start@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA44BF352A71123C000D2F5F /* ic_custom_osmand_start@2x.png */; };
@@ -3794,6 +3793,7 @@
 		32B7DC362C761D7300E5E8BD /* OAColorsPaletteCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAColorsPaletteCell.m; sourceTree = "<group>"; };
 		32BBDC962C0493190090D37E /* RouteInfoListItemCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RouteInfoListItemCell.xib; sourceTree = "<group>"; };
 		32BBDC9A2C0497CF0090D37E /* RouteInfoListItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoListItemCell.swift; sourceTree = "<group>"; };
+		32BC95722CC021CE00FEEAB8 /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
 		32BD81A9259B5C9A00A54BB5 /* ic_custom_manage_profiles@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_manage_profiles@2x.png"; path = "Resources/Icons/ic_custom_manage_profiles@2x.png"; sourceTree = "<group>"; };
 		32BD81AB259B5C9B00A54BB5 /* ic_custom_manage_profiles@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_manage_profiles@3x.png"; path = "Resources/Icons/ic_custom_manage_profiles@3x.png"; sourceTree = "<group>"; };
 		32BFF097299137D60023D067 /* OAUploadGPXFilesTask.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAUploadGPXFilesTask.m; sourceTree = "<group>"; };
@@ -7600,8 +7600,6 @@
 		FA4195582AAB55E6007CBBAB /* ShadowTransporentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowTransporentView.swift; sourceTree = "<group>"; };
 		FA44BF2F2A71123B000D2F5F /* ic_banner_close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_banner_close@2x.png"; path = "Resources/Icons/ic_banner_close@2x.png"; sourceTree = "<group>"; };
 		FA44BF302A71123B000D2F5F /* ic_custom_osmand_start_logo_big@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_osmand_start_logo_big@3x.png"; path = "Resources/Icons/ic_custom_osmand_start_logo_big@3x.png"; sourceTree = "<group>"; };
-		FA44BF312A71123C000D2F5F /* ic_payment_label_pro@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_payment_label_pro@2x.png"; path = "Resources/Icons/ic_payment_label_pro@2x.png"; sourceTree = "<group>"; };
-		FA44BF322A71123C000D2F5F /* ic_payment_label_pro@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_payment_label_pro@3x.png"; path = "Resources/Icons/ic_payment_label_pro@3x.png"; sourceTree = "<group>"; };
 		FA44BF332A71123C000D2F5F /* ic_custom_osmand_start_logo_big@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_osmand_start_logo_big@2x.png"; path = "Resources/Icons/ic_custom_osmand_start_logo_big@2x.png"; sourceTree = "<group>"; };
 		FA44BF342A71123C000D2F5F /* ic_custom_osmand_start@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_osmand_start@3x.png"; path = "Resources/Icons/ic_custom_osmand_start@3x.png"; sourceTree = "<group>"; };
 		FA44BF352A71123C000D2F5F /* ic_custom_osmand_start@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_osmand_start@2x.png"; path = "Resources/Icons/ic_custom_osmand_start@2x.png"; sourceTree = "<group>"; };
@@ -8046,8 +8044,6 @@
 				FA44BF342A71123C000D2F5F /* ic_custom_osmand_start@3x.png */,
 				FA44BF392A71123D000D2F5F /* ic_custom_settings_cloud_colored@2x.png */,
 				FA44BF3A2A71123D000D2F5F /* ic_custom_settings_cloud_colored@3x.png */,
-				FA44BF312A71123C000D2F5F /* ic_payment_label_pro@2x.png */,
-				FA44BF322A71123C000D2F5F /* ic_payment_label_pro@3x.png */,
 				321251422A4B2080006C44BD /* ic_custom_2d@2x.png */,
 				3212513F2A4B207F006C44BD /* ic_custom_2d@3x.png */,
 				3212513D2A4B207E006C44BD /* ic_custom_3d@2x.png */,
@@ -13412,6 +13408,7 @@
 				FA86F4142AE7C56E00DC3B2B /* UserDefaults+Extension.swift */,
 				FA069C6A2B9F65750007E4DE /* UILabel+Extension.swift */,
 				4609FAA12C5158F100B57F06 /* UIImageView+Extension.swift */,
+				32BC95722CC021CE00FEEAB8 /* UIFont+Extension.swift */,
 			);
 			path = SwiftExtensions;
 			sourceTree = "<group>";
@@ -14903,7 +14900,6 @@
 				C54260232AA0F90700E76C00 /* ic_custom_3d_relief@2x.png in Resources */,
 				46C78C0A28BD16A30019FF69 /* OAStorageStateValuesCell.xib in Resources */,
 				84CCE8081B7509A90059A82A /* ic_dialog_edit@3x.png in Resources */,
-				FA44BF3D2A71123D000D2F5F /* ic_payment_label_pro@2x.png in Resources */,
 				8458BB791B0F1E7A00738132 /* ic_description@2x.png in Resources */,
 				0AA396A927597126006A9EC6 /* bg_color_chessboard_pattern@2x.png in Resources */,
 				462545AA28D3688900637964 /* ic_custom_cross_buy_colored_day_big@2x.png in Resources */,
@@ -15343,7 +15339,6 @@
 				0A8D1A1826FBA1750042444C /* ic_small_descent@3x.png in Resources */,
 				46AEDB9B27F4AC15006D90E8 /* ic_custom_thermometer@3x.png in Resources */,
 				3219705925FA0DCE00C3FED6 /* ic_custom_replace@2x.png in Resources */,
-				FA44BF3E2A71123D000D2F5F /* ic_payment_label_pro@3x.png in Resources */,
 				15B4E4B124AB401C00119365 /* ic_custom_length_limit@3x.png in Resources */,
 				0AA2F04727356BC7008EAF35 /* ic_custom_folder_points@2x.png in Resources */,
 				3241BC8B2B613F0D00101894 /* OATwoButtonsTableViewCell.xib in Resources */,
@@ -16713,6 +16708,7 @@
 				DA5A818326C563A700F274C7 /* OASwitchableAction.m in Sources */,
 				DA5A844A26C563A900F274C7 /* OAHudButton.m in Sources */,
 				46FB65BA2A8BBC2000A21850 /* CoordinatesMapCenterWidget.swift in Sources */,
+				32BC95732CC021CE00FEEAB8 /* UIFont+Extension.swift in Sources */,
 				DA5A845526C563A900F274C7 /* OAOsmEditsLayer.mm in Sources */,
 				DA5A815526C563A700F274C7 /* OACarPlayActiveViewController.m in Sources */,
 				FA359EED2ADFC6910001C11D /* WheelDeviceSettings.swift in Sources */,

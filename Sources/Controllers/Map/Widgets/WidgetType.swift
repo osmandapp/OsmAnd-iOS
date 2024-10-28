@@ -57,12 +57,6 @@ class WidgetType: NSObject {
     }
 
     func getGroup() -> WidgetGroup? {
-        if (group == .altitude) {
-            let plugin: OASRTMPlugin? = OAPluginsHelper.getEnabledPlugin(OASRTMPlugin.self) as? OASRTMPlugin
-            if plugin == nil || !(plugin?.is3DMapsEnabled() ?? false) {
-                return nil
-            }
-        }
         return group
     }
 
@@ -73,7 +67,7 @@ class WidgetType: NSObject {
 //        else if (self == AV_NOTES_ON_REQUEST) {
 //            return R.string.av_notes_choose_action_widget_desc;
 //        }
-        return "";
+        return ""
     }
 
     func getSecondaryDescription() -> String? {
@@ -110,7 +104,7 @@ class WidgetType: NSObject {
     }
 
     func isPurchased() -> Bool {
-        if (WidgetType.getProWidgets().contains(where: { $0 == self } )) {
+        if WidgetType.getProWidgets().contains(where: { $0.id == self.id } ) {
             return OAIAPHelper.isOsmAndProAvailable()
         }
         return true
@@ -168,7 +162,7 @@ class WidgetType: NSObject {
     }
 
     static func getProWidgets() -> [WidgetType] {
-        return [.elevationProfile];
+        [.elevationProfile, .altitudeMapCenter];
     }
 
     static func isOriginalWidget(_ id: String) -> Bool {

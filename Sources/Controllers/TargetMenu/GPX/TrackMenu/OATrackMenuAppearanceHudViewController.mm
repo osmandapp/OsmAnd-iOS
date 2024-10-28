@@ -2186,7 +2186,7 @@ static const NSInteger kColorsSection = 1;
         else if ([self isSelectedTypeGradient])
         {
             colorCollectionViewController =
-                [[OAColorCollectionViewController alloc] initWithCollectionType:EOAColorCollectionTypePaletteItems
+                [[OAColorCollectionViewController alloc] initWithCollectionType:EOAColorCollectionTypeColorizationPaletteItems
                                                                           items:_gradientColorsCollection
                                                                    selectedItem:_selectedPaletteColorItem];
         }

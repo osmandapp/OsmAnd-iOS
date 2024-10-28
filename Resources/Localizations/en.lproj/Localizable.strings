@@ -3509,6 +3509,19 @@
 • Fixed names for bearing widgets\n
 • Fixed \"Radius ruler\" visibility in all widget panels\n";
 
+"ios_release_4_9" = "• Modified compass behavior: a single tap rotates the map to North, while a double tap switches the orientation\n
+• Added search functionality for the most popular brand names\n
+• Improved graph appearance: Y-axis labels no longer overlap with the graph\n
+• Added total track statistics to each folder's footer\n
+• Grouped all tags with translations into a single item in the context menu\n
+• Fixed an issue where the POI category was missing from the context menu\n
+• Fixed an issue with the auto-detection of the voice prompt language\n
+• Fixed crash in Boat profile Route parameters\n
+• CarPlay improvements: resolved an issue where the main navigation widget didn't update after route recalculations, and fixed the size of the arrows in the next turn widget\n
+• Introduced a Map mode parameter that now follows the App theme\n
+• Improved UI for selection of location icon, added options to disable location radius and view angle\n
+• Add quick action to change \"Location position on screen\"\n";
+
 "rendering_attr_showTrainRoutes_name" = "Train routes";
 "rendering_attr_showWaterwayTunnels_description" = "Increase visibility for waterway tunnels";
 "rendering_attr_natureReserves_description" = "Show nature reserve, protected areas, and national parks.";

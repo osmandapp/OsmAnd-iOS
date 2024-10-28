@@ -1336,9 +1336,10 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     }
     else if ([tableData.key isEqualToString:@"allColors"])
     {
-        OAColorCollectionViewController *colorCollectionViewController = [[OAColorCollectionViewController alloc] initWithCollectionType:EOAColorCollectionTypePaletteItems
-                                                                                                                                   items:_gradientColorsCollection
-                                                                                                                            selectedItem:_selectedPaletteColorItem];
+        OAColorCollectionViewController *colorCollectionViewController =
+            [[OAColorCollectionViewController alloc] initWithCollectionType:EOAColorCollectionTypeColorizationPaletteItems
+                                                                      items:_gradientColorsCollection
+                                                               selectedItem:_selectedPaletteColorItem];
         colorCollectionViewController.delegate = self;
         [self.navigationController pushViewController:colorCollectionViewController animated:YES];
     }

@@ -3237,7 +3237,7 @@
 "rendering_value_defaultMedium_name" = "Типово (середній)";
 "routing_attr_hazmat_category_usa_9_name" = "Різне";
 "routing_attr_allow_via_ferrata_name" = "Гірський маршрут (Via ferrata)";
-"rendering_attr_showToll_name" = "Показати обмеження плати за проїзд";
+"rendering_attr_showToll_name" = "Показати обмеження по оплаті за проїзд";
 "rendering_attr_lightDetail_name" = "Світлові знаки";
 "routing_attr_hazmat_category_usa_2_name" = "Гази";
 "routing_attr_hazmat_category_usa_1_name" = "Вибухівка";

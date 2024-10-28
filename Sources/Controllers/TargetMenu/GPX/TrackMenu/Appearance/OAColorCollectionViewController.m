@@ -62,7 +62,8 @@
                 _colorItems = [NSMutableArray arrayWithArray:items];
                 _selectedColorItem = selectedItem;
                 break;
-            case EOAColorCollectionTypePaletteItems:
+            case EOAColorCollectionTypeColorizationPaletteItems:
+            case EOAColorCollectionTypeTerrainPaletteItems:
                 _colorsCollection = items;
                 _paletteItems = [[OAConcurrentArray alloc] init];
                 [_paletteItems addObjectsSync:[_colorsCollection getColors:PaletteSortingModeOriginal]];
@@ -85,7 +86,8 @@
 
 - (void)registerNotifications
 {
-    if (_collectionType == EOAColorCollectionTypePaletteItems)
+    if (_collectionType == EOAColorCollectionTypeColorizationPaletteItems
+         || _collectionType == EOAColorCollectionTypeTerrainPaletteItems)
     {
         [self addNotification:ColorsCollection.collectionDeletedNotification
                      selector:@selector(onCollectionDeleted:)];
@@ -105,7 +107,8 @@
             [self.tableView registerNib:[UINib nibWithNibName:[OACollectionSingleLineTableViewCell reuseIdentifier] bundle:nil]
                  forCellReuseIdentifier:[OACollectionSingleLineTableViewCell reuseIdentifier]];
         }
-        case EOAColorCollectionTypePaletteItems:
+        case EOAColorCollectionTypeColorizationPaletteItems:
+        case EOAColorCollectionTypeTerrainPaletteItems:
         {
             [self.tableView registerNib:[UINib nibWithNibName:[OATwoIconsButtonTableViewCell reuseIdentifier] bundle:nil]
                  forCellReuseIdentifier:[OATwoIconsButtonTableViewCell reuseIdentifier]];
@@ -125,7 +128,9 @@
 {
     [super viewDidLoad];
 
-    self.tableView.separatorStyle = _collectionType == EOAColorCollectionTypePaletteItems ? UITableViewCellSeparatorStyleSingleLine : UITableViewCellSeparatorStyleNone;
+    self.tableView.separatorStyle = _collectionType == EOAColorCollectionTypeColorizationPaletteItems || _collectionType == EOAColorCollectionTypeTerrainPaletteItems
+        ? UITableViewCellSeparatorStyleSingleLine
+        : UITableViewCellSeparatorStyleNone;
     self.tableView.backgroundColor = [UIColor colorNamed:_collectionType == EOAColorCollectionTypeColorItems ? ACColorNameGroupBg : ACColorNameViewBg];
 }
 
@@ -133,7 +138,8 @@
 {
     [super viewWillAppear:animated];
     
-    if (_collectionType == EOAColorCollectionTypePaletteItems)
+    if (_collectionType == EOAColorCollectionTypeColorizationPaletteItems
+        || _collectionType == EOAColorCollectionTypeTerrainPaletteItems)
     {
         NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:[_paletteItems indexOfObjectSync:_selectedPaletteItem] inSection:0];
         if (![self.tableView.indexPathsForVisibleRows containsObject:selectedIndexPath])
@@ -325,7 +331,9 @@
         if ([palette isKindOfClass:PaletteGradientColor.class])
         {
             ColorPalette *colorPalette = ((PaletteGradientColor *) palette).colorPalette;
-            cell.descriptionLabel.text = [PaletteCollectionHandler createDescriptionForPalette:colorPalette];
+            cell.descriptionLabel.text = [PaletteCollectionHandler createDescriptionForPalette:colorPalette
+                                                                                     isTerrain:_collectionType == EOAColorCollectionTypeTerrainPaletteItems];
+            cell.descriptionLabel.numberOfLines = 1;
             [PaletteCollectionHandler applyGradientTo:cell.secondLeftIconView
                                                  with:colorPalette];
         }
@@ -598,7 +606,8 @@
                     [_colorCollectionHandler addColor:newIndexPath newItem:duplicatedColorItem];
                 }
                 break;
-            case EOAColorCollectionTypePaletteItems:
+            case EOAColorCollectionTypeColorizationPaletteItems:
+            case EOAColorCollectionTypeTerrainPaletteItems:
             {
                 NSString *colorPaletteFileName = [[_data itemForIndexPath:indexPath] stringForKey:@"fileName"];
                 if (colorPaletteFileName && colorPaletteFileName.length > 0)
@@ -630,7 +639,8 @@
                     [_colorCollectionHandler removeColor:indexPath];
                 }
                 break;
-            case EOAColorCollectionTypePaletteItems:
+            case EOAColorCollectionTypeColorizationPaletteItems:
+            case EOAColorCollectionTypeTerrainPaletteItems:
             {
                 NSString *colorPaletteFileName = [[_data itemForIndexPath:indexPath] stringForKey:@"fileName"];
                 if (colorPaletteFileName && colorPaletteFileName.length > 0)

@@ -448,7 +448,7 @@
 "route_tu" = "Faites demi-tour et continuez";
 "route_head" = "Avancez";
 "arrived_at_intermediate_point" = "Étape intermédiaire atteinte";
-"error_calculating_route" = "Impossible de calculer l\'itinéraire.";
+"error_calculating_route" = "Impossible de calculer l'itinéraire";
 "internet_connection_required_for_online_route" = "Le calcul d\'itinéraire en ligne est sélectionné mais une connexion Internet est indispensable pour qu\'il fonctionne.";
 "sort_by_distance" = "Trier par distance";
 "sort_by_name" = "Trier par nom";
@@ -673,7 +673,7 @@
 "clear_all_intermediates" = "Effacer toutes les étapes";
 "cancel_navigation" = "Arrêter le guidage";
 "transport_nearby_routes_within" = "Lignes à moins de";
-"transport_nearby_routes" = "Situé dans / à moins de";
+"transport_nearby_routes" = "Situé à moins de";
 "shared_string_previous" = "Précédent";
 "show_poi_over_map" = "Afficher la sur-couche points d\'intérêt";
 "search_radius" = "Recherche dans un rayon";

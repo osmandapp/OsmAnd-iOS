@@ -29,6 +29,8 @@
 #define LIVING_SPTREET_MAX_SPEED 15;
 #define DEFAULT_MAX_SPEED 40;
 
+static const float LOCATION_TIMEOUT = 1.5;
+
 @implementation OALocationSimulation
 {
     OsmAndAppInstance _app;
@@ -108,16 +110,14 @@
         OASimulatedLocation *prev = current;
         NSTimeInterval prevTime = !current ? 0 : [current.timestamp timeIntervalSince1970];
         double meters = [self metersToGoInFiveSteps:directions current:current];
+        NSArray<NSNumber *> *triple = [self getSimulationParams:directions useLocationTime:useLocationTime];
         int stopDelayCount = 0;
 
         while (directions.count > 0 && _routeAnimation)
         {
-            NSTimeInterval timeout = time;
-            NSTimeInterval intervalTime = time;
-            CLLocationSpeed speed = -1;
-            CLLocationAccuracy accuracy = -1;
-            CLLocationDirection course = -1;
-            
+            NSTimeInterval timeout = LOCATION_TIMEOUT;
+            NSTimeInterval intervalTime = LOCATION_TIMEOUT;
+
             if (stopDelayCount == 0)
             {
                 if (useLocationTime)
@@ -127,9 +127,14 @@
                     meters = [current distanceFromLocation:prev];
                     if (directions.count > 0)
                     {
-                        timeout = ABS([directions[0].timestamp timeIntervalSince1970] - [current.timestamp timeIntervalSince1970]);
-                        intervalTime = ABS([current.timestamp timeIntervalSince1970] - prevTime);
-                        prevTime = [current.timestamp timeIntervalSince1970];
+                        NSTimeInterval currentTime = [current.timestamp timeIntervalSince1970];
+                        NSTimeInterval nextTime = [directions[0].timestamp timeIntervalSince1970];
+                        if (currentTime != 0 && nextTime != 0)
+                        {
+                            timeout = ABS(nextTime - currentTime);
+                            intervalTime = ABS(currentTime - prevTime);
+                            prevTime = currentTime;
+                        }
                     }
                 }
                 else
@@ -146,41 +151,21 @@
                     current = (OASimulatedLocation *)result[0];
                     meters = ((NSNumber *)result[1]).floatValue;
                 }
-                if (intervalTime != 0)
-                {
-                    speed = (meters / intervalTime * coeff);
-                }
-                if (current.horizontalAccuracy <= 0 || isnan(current.horizontalAccuracy) || (realistic && speed < 10))
-                {
-                    accuracy = 5;
-                }
-
-                if ((prev && [prev distanceFromLocation:current] > 3) || (realistic && speed >= 3))
-                {
-                    course = [OAMapUtils normalizeDegrees360:[prev bearingTo:current]];
-                    if (course > 0)
-                        _lastCourse = course;
-                }
-                else if ([current hasBearing])
-                {
-                    course = current.course;
-                    _lastCourse = course;
-                }
                 
-                if (course < 0)
-                    course = _lastCourse;
+                current = [self setupLocation:triple current:current previous:prev meters:meters intervalTime:intervalTime coeff:coeff realistic:realistic];
             }
             
-            CLLocation *toset = [[CLLocation alloc] initWithCoordinate:current.coordinate altitude:current.altitude horizontalAccuracy:accuracy >= 0 ? accuracy : current.horizontalAccuracy verticalAccuracy:current.verticalAccuracy course:course speed:speed >= 0 ? speed : current.speed timestamp:[NSDate date]];
+            current = [current locationWithTimestamp:[NSDate date]];
+            CLLocation *toSet = current;
             
             if (realistic) {
-                toset = [self addNoise:toset];
+                toSet = [self addNoise:toSet];
             }
             
             if (realistic && current.isTrafficLight && stopDelayCount == 0)
             {
                 stopDelayCount = 5;
-                speed = 0;
+                current = [current locationWithSpeed:0];
                 current = [self removeBearing:current];
             }
             else if (stopDelayCount > 0)
@@ -189,7 +174,7 @@
             }
             
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                [_app.locationServices setLocationFromSimulation:toset];
+                [_app.locationServices setLocationFromSimulation:toSet];
             });
 
             [NSThread sleepForTimeInterval:timeout / coeff];
@@ -201,6 +186,57 @@
     }];
     
     [_routeAnimation start];
+}
+
+- (NSArray<NSNumber *> *)getSimulationParams:(NSMutableArray<OASimulatedLocation *> *)directions useLocationTime:(BOOL)useLocationTime
+{
+    BOOL bearingSimulation = YES;
+    BOOL accuracySimulation = YES;
+    BOOL speedSimulation = YES;
+    if (useLocationTime)
+    {
+        for (OASimulatedLocation *location in directions)
+        {
+            if ([location hasBearing])
+                bearingSimulation = NO;
+            if ([location hasAccuracy])
+                accuracySimulation = NO;
+            if ([location hasSpeed])
+                speedSimulation = NO;
+        }
+    }
+    return @[@(bearingSimulation), @(accuracySimulation), @(speedSimulation)];
+}
+
+- (OASimulatedLocation *)setupLocation:(NSArray<NSNumber *> *)triple current:(OASimulatedLocation *)current previous:(OASimulatedLocation *)previous meters:(float)meters intervalTime:(float)intervalTime coeff:(float)coeff realistic:(BOOL)realistic
+{
+    if (triple.count != 3)
+        return nil;
+    float newSpeed = current.speed;
+    float newAccuracy = current.horizontalAccuracy;
+    float newCource = current.course;
+    
+    float speed = 0;
+    if (intervalTime != 0)
+    {
+        speed = (meters / intervalTime * coeff);
+        if (triple[2].boolValue)
+            newSpeed = speed;
+        if ((![current hasAccuracy] || (realistic && speed < 10)) && triple[1].boolValue)
+            newAccuracy = 5;
+        if (previous && triple[0].boolValue && [previous distanceFromLocation:current] > 3 && (!realistic || speed >= 1))
+            newCource = [OAMapUtils normalizeDegrees360:[previous bearingTo:current]];
+    }
+    
+    if (newCource >= 0)
+        _lastCourse = newCource;
+    else
+        newCource = _lastCourse;
+    
+    current = [current locationWithSpeed:newSpeed];
+    current = [current locationWithCourse:newCource];
+    current = [current locationWithHorizontalAccuracy:newAccuracy];
+    return current;
 }
 
 - (CLLocation *)addNoise:(CLLocation *)location
@@ -378,6 +414,28 @@
     return self;
 }
 
+- (instancetype)initWithCoordinate:(CLLocationCoordinate2D)coordinate
+    altitude:(CLLocationDistance)altitude
+    horizontalAccuracy:(CLLocationAccuracy)hAccuracy
+    verticalAccuracy:(CLLocationAccuracy)vAccuracy
+    course:(CLLocationDirection)course
+    courseAccuracy:(CLLocationDirectionAccuracy)courseAccuracy
+    speed:(CLLocationSpeed)speed
+    timestamp:(NSDate *)timestamp
+    trafficLight:(BOOL)trafficLight
+    highwayType:(NSString *)highwayType
+    speedLimit:(float)speedLimit
+{
+    self = [super initWithCoordinate:coordinate altitude:altitude horizontalAccuracy:hAccuracy verticalAccuracy:vAccuracy course:course speed:speed timestamp:timestamp];
+    if (self)
+    {
+        _trafficLight = trafficLight;
+        _highwayType = highwayType;
+        _speedLimit = speedLimit;
+    }
+    return self;
+}
+
 - (BOOL)isTrafficLight
 {
     return _trafficLight;
@@ -411,6 +469,47 @@
 - (void)setSpeedLimit:(float)speedLimit
 {
     _speedLimit = speedLimit;
+}
+
+- (OASimulatedLocation *) locationWithCoordinate:(CLLocationCoordinate2D)coordinate
+{
+    return [[OASimulatedLocation alloc] initWithCoordinate:coordinate altitude:self.altitude horizontalAccuracy:self.horizontalAccuracy verticalAccuracy:self.verticalAccuracy course:self.course courseAccuracy:self.courseAccuracy speed:self.speed timestamp:self.timestamp trafficLight:_trafficLight highwayType:_highwayType speedLimit:_speedLimit];
+}
+
+- (OASimulatedLocation *) locationWithAltitude:(CLLocationDistance)altitude
+{
+    return [[OASimulatedLocation alloc] initWithCoordinate:self.coordinate altitude:altitude horizontalAccuracy:self.horizontalAccuracy verticalAccuracy:self.verticalAccuracy course:self.course courseAccuracy:self.courseAccuracy speed:self.speed timestamp:self.timestamp trafficLight:_trafficLight highwayType:_highwayType speedLimit:_speedLimit];
+}
+
+- (OASimulatedLocation *) locationWithHorizontalAccuracy:(CLLocationAccuracy)horizontalAccuracy
+{
+    return [[OASimulatedLocation alloc] initWithCoordinate:self.coordinate altitude:self.altitude horizontalAccuracy:horizontalAccuracy verticalAccuracy:self.verticalAccuracy course:self.course courseAccuracy:self.courseAccuracy speed:self.speed timestamp:self.timestamp trafficLight:_trafficLight highwayType:_highwayType speedLimit:_speedLimit];
+}
+
+- (OASimulatedLocation *) locationWithVerticalAccuracy:(CLLocationAccuracy)verticalAccuracy
+{
+    return [[OASimulatedLocation alloc] initWithCoordinate:self.coordinate altitude:self.altitude horizontalAccuracy:self.horizontalAccuracy verticalAccuracy:verticalAccuracy course:self.course courseAccuracy:self.courseAccuracy speed:self.speed timestamp:self.timestamp trafficLight:_trafficLight highwayType:_highwayType speedLimit:_speedLimit];
+}
+
+
+- (OASimulatedLocation *) locationWithCourse:(CLLocationDirection)course
+{
+    return [[OASimulatedLocation alloc] initWithCoordinate:self.coordinate altitude:self.altitude horizontalAccuracy:self.horizontalAccuracy verticalAccuracy:self.verticalAccuracy course:course courseAccuracy:self.courseAccuracy speed:self.speed timestamp:self.timestamp trafficLight:_trafficLight highwayType:_highwayType speedLimit:_speedLimit];
+}
+
+- (OASimulatedLocation *) locationWithCourseAccuracy:(CLLocationDirectionAccuracy)courseAccuracy
+{
+    return [[OASimulatedLocation alloc] initWithCoordinate:self.coordinate altitude:self.altitude horizontalAccuracy:self.horizontalAccuracy verticalAccuracy:self.verticalAccuracy course:self.course courseAccuracy:courseAccuracy speed:self.speed timestamp:self.timestamp trafficLight:_trafficLight highwayType:_highwayType speedLimit:_speedLimit];
+}
+
+- (OASimulatedLocation *) locationWithSpeed:(CLLocationSpeed)speed
+{
+    return [[OASimulatedLocation alloc] initWithCoordinate:self.coordinate altitude:self.altitude horizontalAccuracy:self.horizontalAccuracy verticalAccuracy:self.verticalAccuracy course:self.course courseAccuracy:self.courseAccuracy speed:speed timestamp:self.timestamp trafficLight:_trafficLight highwayType:_highwayType speedLimit:_speedLimit];
+}
+
+- (OASimulatedLocation *) locationWithTimestamp:(NSDate *)timestamp
+{
+    return [[OASimulatedLocation alloc] initWithCoordinate:self.coordinate altitude:self.altitude horizontalAccuracy:self.horizontalAccuracy verticalAccuracy:self.verticalAccuracy course:self.course courseAccuracy:self.courseAccuracy speed:self.speed timestamp:timestamp trafficLight:_trafficLight highwayType:_highwayType speedLimit:_speedLimit];
 }
 
 @end

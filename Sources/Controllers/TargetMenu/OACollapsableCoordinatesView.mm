@@ -61,7 +61,7 @@ static NSArray<NSString *> *const kExclusionCoordinatePrefixes = @[@"UTM: ", @"O
     [super traitCollectionDidChange:previousTraitCollection];
     
     if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
-        [self buildViews];
+        [self updateButton];
 }
 
 -(void) setData:(NSDictionary<NSNumber *,NSString *> *)data
@@ -120,7 +120,13 @@ static NSArray<NSString *> *const kExclusionCoordinatePrefixes = @[@"UTM: ", @"O
 
 - (void) updateButton
 {
-    
+    if (_buttons)
+    {
+        for (OAButton *btn in _buttons)
+        {
+            btn.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
+        }
+    }
 }
 
 - (void) updateLayout:(CGFloat)width

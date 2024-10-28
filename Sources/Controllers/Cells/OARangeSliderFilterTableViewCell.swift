@@ -8,7 +8,7 @@
 
 import UIKit
 
-class OARangeSliderFilterTableViewCell: UITableViewCell {
+final class OARangeSliderFilterTableViewCell: UITableViewCell {
     @IBOutlet weak var minLabel: UILabel!
     @IBOutlet weak var maxLabel: UILabel!
     @IBOutlet weak var minValueLabel: UILabel!
@@ -31,7 +31,7 @@ class OARangeSliderFilterTableViewCell: UITableViewCell {
             rangeSlider.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
         }
         
-        rangeSlider.handleImage = UIImage(named: "ic_control_knob")
+        rangeSlider.handleImage = .icControlKnob
         rangeSlider.handleDiameter = 32
         rangeSlider.selectedHandleDiameterMultiplier = 1.0
     }

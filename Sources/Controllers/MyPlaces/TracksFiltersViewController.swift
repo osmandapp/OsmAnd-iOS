@@ -43,7 +43,7 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.groupingSeparator = " "
-        formatter.locale = Locale(identifier: "en_US")
+        formatter.locale = Locale.current
         return formatter
     }()
     
@@ -127,7 +127,7 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
     }
     
     override func getBottomButtonColorScheme() -> EOABaseButtonColorScheme {
-        baseFilters.getFilteredTrackItems().count > 0 ? .graySimple : .inactive
+        !baseFilters.getFilteredTrackItems().isEmpty ? .graySimple : .inactive
     }
     
     override func generateData() {

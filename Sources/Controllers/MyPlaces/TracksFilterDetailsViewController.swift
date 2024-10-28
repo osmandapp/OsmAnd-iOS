@@ -21,10 +21,9 @@ struct DisplayFolderItem {
     let iconTintColor: UIColor
 }
 
-class RangeTrackFilterConfigurator: TrackFilterConfigurable {
+final class RangeTrackFilterConfigurator: TrackFilterConfigurable {
     func configure(with filter: BaseTrackFilter, in controller: TracksFilterDetailsViewController) {
-        controller.rangeFilterType = filter as? RangeTrackFilter<AnyObject>
-        guard let rangeFilter = controller.rangeFilterType else { return }
+        guard let rangeFilter = filter as? RangeTrackFilter<AnyObject> else { return }
         controller.rangeFilterType = rangeFilter
         controller.currentMinValue = Float(TracksSearchFilter.getDisplayMinValue(filter: rangeFilter))
         controller.currentMaxValue = Float(TracksSearchFilter.getDisplayMaxValue(filter: rangeFilter))
@@ -34,35 +33,33 @@ class RangeTrackFilterConfigurator: TrackFilterConfigurable {
     }
 }
 
-class DateTrackFilterConfigurator: TrackFilterConfigurable {
+final class DateTrackFilterConfigurator: TrackFilterConfigurable {
     func configure(with filter: BaseTrackFilter, in controller: TracksFilterDetailsViewController) {
-        controller.dateCreationFilterType = filter as? DateTrackFilter
-        guard let dateFilter = controller.dateCreationFilterType else { return }
+        guard let dateFilter = filter as? DateTrackFilter else { return }
+        controller.dateCreationFilterType = dateFilter
         controller.dateCreationFromValue = dateFilter.valueFrom
         controller.dateCreationToValue = dateFilter.valueTo
     }
 }
 
-class ListTrackFilterConfigurator: TrackFilterConfigurable {
+final class ListTrackFilterConfigurator: TrackFilterConfigurable {
     func configure(with filter: BaseTrackFilter, in controller: TracksFilterDetailsViewController) {
-        controller.listFilterType = filter as? ListTrackFilter
-        guard let listFilter = controller.listFilterType else { return }
+        guard let listFilter = filter as? ListTrackFilter else { return }
+        controller.listFilterType = listFilter
         controller.allListItems = listFilter.allItems.compactMap { $0 as? String }
-        if let emptyIndex = controller.allListItems.firstIndex(of: "") {
-            if emptyIndex != 0 {
-                let emptyItem = controller.allListItems.remove(at: emptyIndex)
-                controller.allListItems.insert(emptyItem, at: 0)
-            }
+        if let emptyIndex = controller.allListItems.firstIndex(of: ""), emptyIndex != 0 {
+            let emptyItem = controller.allListItems.remove(at: emptyIndex)
+            controller.allListItems.insert(emptyItem, at: 0)
         }
         
         controller.selectedItems = listFilter.selectedItems.compactMap { $0 as? String }
     }
 }
 
-class FolderTrackFilterConfigurator: TrackFilterConfigurable {
+final class FolderTrackFilterConfigurator: TrackFilterConfigurable {
     func configure(with filter: BaseTrackFilter, in controller: TracksFilterDetailsViewController) {
-        controller.listFilterType = filter as? FolderTrackFilter
-        guard let listFilter = controller.listFilterType else { return }
+        guard let listFilter = filter as? FolderTrackFilter else { return }
+        controller.listFilterType = listFilter
         var orderedFolders: [DisplayFolderItem] = []
         
         func addSubfolder(to folder: inout DisplayFolderItem, with pathComponents: [String], currentPath: String, originalKey: String, displayName: String) {
@@ -79,7 +76,7 @@ class FolderTrackFilterConfigurator: TrackFilterConfigurable {
             addSubfolder(to: &folder, with: remainingComponents, currentPath: currentPath, originalKey: originalKey, displayName: subfolderDisplayName)
             let nextComponents = Array(remainingComponents.dropFirst())
             if !nextComponents.isEmpty {
-                let subfolderPath = currentPath + "/" + subfolderName
+                let subfolderPath = currentPath.appendingPathComponent(subfolderName)
                 if let index = folder.subfolders.firstIndex(where: { $0.path == currentPath && $0.displayName == subfolderDisplayName }) {
                     processSubfolders(for: &folder.subfolders[index], with: nextComponents, currentPath: subfolderPath, originalKey: originalKey)
                 }
@@ -87,13 +84,13 @@ class FolderTrackFilterConfigurator: TrackFilterConfigurable {
         }
         
         func createFolderItem(key: String, path: String, displayName: String, isRoot: Bool) -> DisplayFolderItem {
-            let icon = isRoot ? UIImage.icCustomFolderOpen : UIImage.icCustomFolder
-            let tintColor = isRoot ? UIColor.iconColorSelected : UIColor.iconColorDefault
+            let icon: UIImage = isRoot ? .icCustomFolderOpen : .icCustomFolder
+            let tintColor: UIColor = isRoot ? .iconColorSelected : .iconColorDefault
             return DisplayFolderItem(key: key, path: path, displayName: displayName, icon: icon, iconTintColor: tintColor)
         }
         
         for folder in listFilter.allItems.compactMap({ $0 as? String }) {
-            let components = folder.split(separator: "/").map(String.init)
+            let components = URLComponents(string: folder)?.path.split(separator: "/").map(String.init) ?? []
             let topLevel = components.first ?? ""
             let subfolderPath = components.dropFirst().joined(separator: "/")
             if let topLevelIndex = orderedFolders.firstIndex(where: { $0.path == topLevel }) {
@@ -127,6 +124,9 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
     private static let toDateRowKey = "toDateRowKey"
     private static let allFoldersRowKey = "allFoldersRowKey"
     private static let folderPath = "folderPath"
+    private static let thinLine = "thin"
+    private static let mediumLine = "medium"
+    private static let boldLine = "bold"
     
     private var baseFilters: TracksSearchFilter
     private var baseFiltersResult: FilterResults
@@ -163,7 +163,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.groupingSeparator = " "
-        formatter.locale = Locale(identifier: "en_US")
+        formatter.locale = Locale.current
         return formatter
     }()
     
@@ -223,7 +223,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onOutsideCellsTapped))
         tapGesture.cancelsTouchesInView = false
         tableView.addGestureRecognizer(tapGesture)
-        if filterType == .color || filterType == .width || filterType == .city || filterType == .folder {
+        if isListFilterTypeSupported(filterType: filterType) {
             tableView.setEditing(true, animated: false)
             tableView.allowsMultipleSelectionDuringEditing = true
             searchController = UISearchController(searchResultsController: nil)
@@ -305,7 +305,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
     }
     
     override func isNavbarSeparatorVisible() -> Bool {
-        filterType == .color || filterType == .width || filterType == .city || filterType == .folder
+        isListFilterTypeSupported(filterType: filterType)
     }
     
     override func generateData() {
@@ -561,11 +561,11 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
             row.iconTintColor = .iconColorDisabled
         } else if isWidth {
             switch itemName {
-            case "thin":
+            case Self.thinLine:
                 row.icon = .icCustomTrackLineThin
-            case "medium":
+            case Self.mediumLine:
                 row.icon = .icCustomTrackLineMedium
-            case "bold":
+            case Self.boldLine:
                 row.icon = .icCustomTrackLineBold
             default:
                 row.icon = .icCustomTrackLineMedium
@@ -577,11 +577,8 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
     }
     
     private func getMeasureUnitType() -> MeasureUnitType {
-        if let rangeFilterType = rangeFilterType {
-            return rangeFilterType.trackFilterType.measureUnitType
-        }
-        
-        return .none
+        guard let rangeFilterType = rangeFilterType else { return .none }
+        return rangeFilterType.trackFilterType.measureUnitType
     }
     
     private func updateAllFoldersSelection(add: Bool) {
@@ -617,7 +614,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
     private func checkIfAllFoldersSelected() {
         let folderItemsToDisplay = isSearchActive ? filteredFoldersListItems : allFoldersListItems
         let allFolderKeys = folderItemsToDisplay.flatMap { flattenFolder($0).map { $0.key } }
-        listFilterType?.isSelectAllItemsSelected = allFolderKeys.allSatisfy { selectedItems.contains($0) }
+        listFilterType?.isSelectAllItemsSelected = allFolderKeys.allSatisfy(selectedItems.contains)
     }
     
     private func flattenFolder(_ folderItem: DisplayFolderItem) -> [DisplayFolderItem] {
@@ -629,18 +626,64 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
         return result
     }
     
+    private func formatFilterValueText(for value: Float) -> String {
+        let mappedConstant = TracksSearchFilter.mapEOAMetricsConstantToMetricsConstants(OAAppSettings.sharedManager().metricSystem.get())
+        let measureUnitText = getMeasureUnitType().getFilterUnitText(mc: mappedConstant)
+        let formattedNumber = decimalFormatter.string(from: NSNumber(value: value)) ?? ""
+        return "\(formattedNumber) \(measureUnitText)"
+    }
+    
+    private func isListFilterTypeSupported(filterType: TrackFilterType) -> Bool {
+        let supportedFilterTypes: Set<TrackFilterType> = [.color, .width, .city, .folder]
+        return supportedFilterTypes.contains(filterType)
+    }
+    
+    private func resetSearchResults() {
+        filteredFoldersListItems = allFoldersListItems
+        filteredListItems = allListItems
+    }
+    
+    private func applySearchFilter(with searchText: String) {
+        if filterType == .folder {
+            filteredFoldersListItems = filterFolders(allFoldersListItems, searchText: searchText)
+        } else {
+            filteredListItems = allListItems.filter { itemName in
+                listFilterType?.collectionFilterParams.getItemText(itemName: itemName).localizedCaseInsensitiveContains(searchText) ?? false
+            }
+        }
+    }
+    
+    private func filterFolders(_ folderItems: [DisplayFolderItem], searchText: String) -> [DisplayFolderItem] {
+        var result: [DisplayFolderItem] = []
+        for folder in folderItems {
+            var folderCopy = folder
+            let matchingSubfolders = filterFolders(folder.subfolders, searchText: searchText)
+            if !matchingSubfolders.isEmpty {
+                folderCopy.subfolders = matchingSubfolders
+            }
+            
+            if folder.displayName.localizedCaseInsensitiveContains(searchText) {
+                folderCopy.subfolders = matchingSubfolders
+                result.append(folderCopy)
+            } else if !matchingSubfolders.isEmpty {
+                result.append(contentsOf: matchingSubfolders)
+            }
+        }
+        
+        return result
+    }
+    
     func updateRangeValues() {
         isBinding = true
         if currentMaxValue > currentMinValue {
-            rangeSliderMinValue = Float(currentMinValue)
-            rangeSliderMaxValue = Float(currentMaxValue)
-            rangeSliderFromValue = Float(currentValueFrom)
-            rangeSliderToValue = Float(currentValueTo)
+            rangeSliderMinValue = currentMinValue
+            rangeSliderMaxValue = currentMaxValue
+            rangeSliderFromValue = currentValueFrom
+            rangeSliderToValue = currentValueTo
             valueFromInputText = String(describing: Int(currentValueFrom))
             valueToInputText = String(describing: Int(currentValueTo))
-            let mappedConstant = TracksSearchFilter.mapEOAMetricsConstantToMetricsConstants(OAAppSettings.sharedManager().metricSystem.get())
-            minFilterValueText = "\(decimalFormatter.string(from: NSNumber(value: Float(currentMinValue))) ?? "") \(getMeasureUnitType().getFilterUnitText(mc: mappedConstant))"
-            maxFilterValueText = "\(decimalFormatter.string(from: NSNumber(value: Float(currentMaxValue))) ?? "") \(getMeasureUnitType().getFilterUnitText(mc: mappedConstant))"
+            minFilterValueText = formatFilterValueText(for: currentMinValue)
+            maxFilterValueText = formatFilterValueText(for: currentMaxValue)
             isBinding = false
         }
     }
@@ -684,34 +727,10 @@ extension TracksFilterDetailsViewController: UISearchBarDelegate, UISearchContro
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if filterType == .folder {
-            func filterFolders(_ folderItems: [DisplayFolderItem], searchText: String) -> [DisplayFolderItem] {
-                var result: [DisplayFolderItem] = []
-                for folder in folderItems {
-                    var folderCopy = folder
-                    var hasMatchingSubfolders = false
-                    let matchingSubfolders = filterFolders(folder.subfolders, searchText: searchText)
-                    if !matchingSubfolders.isEmpty {
-                        folderCopy.subfolders = matchingSubfolders
-                        hasMatchingSubfolders = true
-                    }
-                    
-                    if folder.displayName.localizedCaseInsensitiveContains(searchText) {
-                        folderCopy.subfolders = matchingSubfolders
-                        result.append(folderCopy)
-                    } else if hasMatchingSubfolders {
-                        result.append(contentsOf: matchingSubfolders)
-                    }
-                }
-                
-                return result
-            }
-            
-            filteredFoldersListItems = searchText.isEmpty ? allFoldersListItems : filterFolders(allFoldersListItems, searchText: searchText)
+        if searchText.isEmpty {
+            resetSearchResults()
         } else {
-            filteredListItems = searchText.isEmpty ? allListItems : allListItems.filter { itemName in
-                listFilterType?.collectionFilterParams.getItemText(itemName: itemName).localizedCaseInsensitiveContains(searchText) ?? false
-            }
+            applySearchFilter(with: searchText)
         }
         
         generateData()

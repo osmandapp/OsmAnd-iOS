@@ -11,11 +11,11 @@ import Foundation
 struct FilterResults {
     var values: [TrackItem] = []
     var count: Int {
-        return values.count
+        values.count
     }
 }
 
-class TracksSearchFilter: FilterChangedListener {
+final class TracksSearchFilter: FilterChangedListener {
     private var trackItems: [TrackItem]
     private var callback: (([TrackItem]) -> Void)?
     private var currentFilters: [BaseTrackFilter] = []
@@ -33,7 +33,7 @@ class TracksSearchFilter: FilterChangedListener {
     private func initFilters() {
         recreateFilters()
         
-        DispatchQueue.global(qos: .background).async {
+        DispatchQueue.global(qos: .utility).async {
             if let dateFilter = self.getFilterByType(.dateCreation) as? DateTrackFilter {
                 let minDate = GpxDbHelper.shared.getTracksMinCreateDate()
                 let now = Date().timeIntervalSince1970 * 1000
@@ -148,25 +148,23 @@ class TracksSearchFilter: FilterChangedListener {
     }
     
     func publishResults(results: FilterResults) {
-        if let callback = callback {
-            callback(results.values)
-        }
+        callback?(results.values)
     }
     
     func getAppliedFiltersCount() -> Int {
-        return getAppliedFilters().count
+        getAppliedFilters().count
     }
     
     func getCurrentFilters() -> [BaseTrackFilter] {
-        return currentFilters
+        currentFilters
     }
     
     func getAppliedFilters() -> [BaseTrackFilter] {
-        return currentFilters.filter { $0.isEnabled() }
+        currentFilters.filter { $0.isEnabled() }
     }
     
     func getNameFilter() -> TextTrackFilter? {
-        return getFilterByType(.name) as? TextTrackFilter
+        getFilterByType(.name) as? TextTrackFilter
     }
     
     func addFiltersChangedListener(_ listener: FilterChangedListener) {
@@ -226,7 +224,7 @@ class TracksSearchFilter: FilterChangedListener {
     }
     
     func getFilteredTrackItems() -> [TrackItem] {
-        return filteredTrackItems
+        filteredTrackItems
     }
     
     func setFilteredTrackItems(_ trackItems: [TrackItem]) {
@@ -238,7 +236,7 @@ class TracksSearchFilter: FilterChangedListener {
     }
     
     func getAllItems() -> [TrackItem] {
-        return trackItems
+        trackItems
     }
     
     func setCurrentFolder(_ currentFolder: TrackFolder) {
@@ -246,7 +244,7 @@ class TracksSearchFilter: FilterChangedListener {
     }
     
     func getFilterSpecificSearchResults() -> [TrackFilterType: [TrackItem]] {
-        return filterSpecificSearchResults
+        filterSpecificSearchResults
     }
 }
 

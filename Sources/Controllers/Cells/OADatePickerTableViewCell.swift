@@ -13,6 +13,6 @@ final class OADatePickerTableViewCell: OASimpleTableViewCell {
     @IBOutlet weak var datePicker: UIDatePicker!
     
     func getDate() -> Date {
-        return datePicker.date
+        datePicker.date
     }
 }

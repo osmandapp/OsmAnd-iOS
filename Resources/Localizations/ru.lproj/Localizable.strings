@@ -1238,7 +1238,7 @@
 "routing_attr_avoid_motorway_name" = "Без автомагистралей";
 "routing_attr_avoid_ice_roads_fords_description" = "Избегать ледовых дорог и бродов.";
 "routing_attr_difficulty_preference_name" = "Предпочтительная сложность";
-"rendering_value_medium_name" = "Средняя";
+"rendering_value_medium_name" = "Средний";
 "rendering_attr_piste_type_connection_name" = "Соединение";
 "routing_attr_avoid_ferry_name" = "Без паромов";
 "rendering_attr_showRoadMaps_name" = "Карты только дорог";

@@ -62,7 +62,7 @@
 "address_search_desc" = "Buscar dirección";
 "search_radius" = "Radio de búsqueda";
 "shared_string_target_points" = "Destinos";
-"search_radius_proximity" = "A menos de";
+"search_radius_proximity" = "Dentro de";
 "poi" = "PDI";
 "search_more" = "Buscar más…";
 "day_off_label" = "cerrado";
@@ -709,8 +709,8 @@
 "sett_arr_map" = "Centro del mapa";
 "navigate_point_format_OLC" = "Código de Ubicación Abierto (OLC)";
 "navigate_point_format_unknown" = "Formato desconocido";
-"navigate_point_northing" = "Al norte";
-"navigate_point_easting" = "Al este";
+"navigate_point_northing" = "Longitud al norte";
+"navigate_point_easting" = "Latitud al este";
 "navigate_point_zone" = "Zona";
 "navigate_point_olc" = "Código de Ubicación Abierto (OLC)";
 "approximate_file_size" = "Tamaño aproximado del archivo";

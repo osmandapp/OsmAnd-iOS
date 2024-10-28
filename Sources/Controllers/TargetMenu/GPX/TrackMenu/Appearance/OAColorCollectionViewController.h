@@ -13,7 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 typedef enum
 {
     EOAColorCollectionTypeColorItems,
-    EOAColorCollectionTypePaletteItems,
+    EOAColorCollectionTypeColorizationPaletteItems,
+    EOAColorCollectionTypeTerrainPaletteItems,
     EOAColorCollectionTypeIconItems, 
     EOAColorCollectionTypeBigIconItems, 
 } EOAColorCollectionType;

@@ -523,28 +523,17 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func getTotalTracksStatistics() -> String {
-        guard let allTracks = getTrackFolderByPath(currentFolderPath)?.getTrackItems() else {
+        guard let folderAnalysis = getTrackFolderByPath(currentFolderPath)?.getFolderAnalysis() else {
             return ""
         }
-        var totalDistance: Float = 0.0
-        var totalUphill: Double = 0.0
-        var totalDownhill: Double = 0.0
-        var totalTime: Int = 0
-        var totalSizeBytes: UInt64 = 0
-        for track in allTracks {
-            // TODO: test on .folderAnalysis
-            guard let trackItem = track.dataItem else { continue }
-            totalDistance += trackItem.totalDistance
-            totalUphill += trackItem.diffElevationUp
-            totalDownhill += trackItem.diffElevationDown
-            totalTime += trackItem.timeSpan
-            if let attributes = try? FileManager.default.attributesOfItem(atPath: trackItem.file.path()),
-               let fileSize = attributes[.size] as? UInt64 {
-                totalSizeBytes += fileSize
-            }
-        }
         
-        var statistics = "\(localizedString("shared_string_gpx_tracks")) – \(currentFolder.totalTracksCount)"
+        let totalDistance = folderAnalysis.totalDistance
+        let totalUphill = folderAnalysis.diffElevationUp
+        let totalDownhill = folderAnalysis.diffElevationDown
+        let totalTime = folderAnalysis.timeSpan
+        let totalSizeBytes = folderAnalysis.fileSize
+        
+        var statistics = "\(localizedString("shared_string_gpx_tracks")) – \(folderAnalysis.tracksCount)"
         if let distance = OAOsmAndFormatter.getFormattedDistance(totalDistance) {
             statistics += ", \(localizedString("shared_string_distance").lowercased()) – \(distance)"
         }
@@ -554,10 +543,10 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         if let downhill = OAOsmAndFormatter.getFormattedAlt(totalDownhill) {
             statistics += ", \(localizedString("map_widget_trip_recording_downhill").lowercased()) – \(downhill)"
         }
-        if let duration = OAOsmAndFormatter.getFormattedTimeInterval(TimeInterval(totalTime / 1000), shortFormat: true) {
+        if let duration = OAOsmAndFormatter.getFormattedTimeInterval(TimeInterval(totalTime), shortFormat: true) {
             statistics += ", \(localizedString("map_widget_trip_recording_duration").lowercased()) – \(duration)."
         }
-        let size = ByteCountFormatter.string(fromByteCount: Int64(totalSizeBytes), countStyle: .file)
+        let size = ByteCountFormatter.string(fromByteCount: totalSizeBytes, countStyle: .file)
         statistics += "\n\n\(localizedString("shared_string_total_size")) – \(size)"
         return statistics
     }

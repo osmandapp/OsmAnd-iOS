@@ -61,7 +61,7 @@ static NSArray<NSString *> *const kExclusionCoordinatePrefixes = @[@"UTM: ", @"O
     [super traitCollectionDidChange:previousTraitCollection];
     
     if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
-        [self updateButton];
+        [self updateButtonBorderColor];
 }
 
 -(void) setData:(NSDictionary<NSNumber *,NSString *> *)data
@@ -118,7 +118,7 @@ static NSArray<NSString *> *const kExclusionCoordinatePrefixes = @[@"UTM: ", @"O
     _buttons = [NSArray arrayWithArray:buttons];
 }
 
-- (void) updateButton
+- (void) updateButtonBorderColor
 {
     if (_buttons)
     {

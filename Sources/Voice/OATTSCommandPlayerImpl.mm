@@ -12,6 +12,8 @@
 #import "OACommandBuilder.h"
 #import "OAVoiceRouter.h"
 #import "OAAppSettings.h"
+#import "OARootViewController.h"
+#import "Localization.h"
 
 #include <JavaScriptCore/JavaScriptCore.h>
 
@@ -83,6 +85,13 @@
     if (systemPreferredVoice) {
         return systemPreferredVoice;
     } else {
+        if ([voiceProvider hasPrefix:@"fa"])
+        {
+            NSString *details = OALocalizedString([OAUtilities isiOSAppOnMac] ? @"download_persian_voice_alert_descr_macos" : @"download_persian_voice_alert_descr_ios");
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [OAUtilities showToast:OALocalizedString(@"download_persian_voice_alert_title") details:details duration:4 inView:OARootViewController.instance.view];
+            });
+        }
         NSLog(@"[OATTSCommandPlayerImpl] Invalid or unsupported locale identifier: %@, using current system language", voiceProvider);
         return [AVSpeechSynthesisVoice voiceWithLanguage:[AVSpeechSynthesisVoice currentLanguageCode]];
     }

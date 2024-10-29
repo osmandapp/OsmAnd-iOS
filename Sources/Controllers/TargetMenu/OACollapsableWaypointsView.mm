@@ -68,7 +68,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     [super traitCollectionDidChange:previousTraitCollection];
     
     if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
-        [self buildViews];
+        [self updateButtonBorderColor];
 }
 
 -(void) setData:(id)data
@@ -176,9 +176,15 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     }
 }
 
-- (void) updateButton
+- (void) updateButtonBorderColor
 {
-    
+    if (_buttons)
+    {
+        for (OAButton *btn in _buttons)
+        {
+            btn.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
+        }
+    }
 }
 
 - (void) updateLayout:(CGFloat)width
@@ -216,7 +222,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender
 {
-    return [sender isKindOfClass:UIMenuController.class] && action == @selector(copy:);
+    return action == @selector(copy:);
 }
 
 - (void)copy:(id)sender

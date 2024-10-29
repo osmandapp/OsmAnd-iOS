@@ -534,7 +534,11 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     private func onTrackDuplicateClicked(track: TrackItem) {
-        gpxHelper?.copyNewGPX(toNewFolder: track.gpxFolderName, renameToNewName: track.gpxFileName, deleteOriginalFile: false, openTrack: false, gpx: track.dataItem)
+        gpxHelper?.copyGPX(toNewFolder: track.gpxFolderName,
+                           renameToNewName: track.gpxFileName,
+                           deleteOriginalFile: false,
+                           openTrack: false,
+                           trackItem: track)
         loadGpxTracks()
         loadVisibleTracks()
         loadRecentlyVisibleTracks()
@@ -630,15 +634,6 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     private func loadGpxTracks() {
         allGpxList = OAGPXDatabase.sharedDb().getDataItems()
             .sorted { $0.fileLastUploadedTime > $1.fileLastUploadedTime }
-        var seenPaths = Set<String>()
-        // TODO: After renaming the track, getDataItems returns a duplicate of the renamed track, even though it saves correctly in the database. For now, we are forming a unique array of tracks
-        let uniqueGpxList = allGpxList.compactMap { item -> GpxDataItem? in
-            guard !seenPaths.contains(item.gpxFilePath) else { return nil }
-            seenPaths.insert(item.gpxFilePath)
-            return item
-        }
-        allGpxList = uniqueGpxList
-        
         isTracksAvailable = !allGpxList.isEmpty
     }
     
@@ -1116,8 +1111,11 @@ extension MapSettingsGpxViewController: OATrackSavingHelperUpdatableDelegate {
 extension MapSettingsGpxViewController: OASelectTrackFolderDelegate {
     func onFolderSelected(_ selectedFolderName: String?) {
         if let selectedFolderName {
-            if selectedTrack != nil {
-                gpxHelper?.copyGPX(toNewFolder: selectedFolderName, renameToNewName: nil, deleteOriginalFile: true, openTrack: false, gpx: selectedTrack)
+            if let selectedTrack {
+                let trackItem = TrackItem(file: selectedTrack.file)
+                trackItem.dataItem = selectedTrack
+                
+                gpxHelper?.copyGPX(toNewFolder: selectedFolderName, renameToNewName: nil, deleteOriginalFile: true, openTrack: false, trackItem: trackItem)
                 updateData()
                 delegate?.onVisibleTracksUpdate()
             }

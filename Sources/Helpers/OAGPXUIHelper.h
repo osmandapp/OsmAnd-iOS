@@ -57,27 +57,22 @@
 
 - (void) openExportForTrack:(OASGpxDataItem *)gpx gpxDoc:(id)gpxDoc isCurrentTrack:(BOOL)isCurrentTrack inViewController:(UIViewController *)hostViewController hostViewControllerDelegate:(id)hostViewControllerDelegate touchPointArea:(CGRect)touchPointArea;
 
-- (void) copyGPXToNewFolder:(NSString *)newFolderName
+- (void)copyGPXToNewFolder:(NSString *)newFolderName
            renameToNewName:(NSString *)newFileName
         deleteOriginalFile:(BOOL)deleteOriginalFile
                  openTrack:(BOOL)openTrack
-                       gpx:(OASGpxDataItem *)gpx;
+                       trackItem:(OASTrackItem *)trackItem;
 
-- (void) copyGPXToNewFolder:(NSString *)newFolderName
+- (void)copyGPXToNewFolder:(NSString *)newFolderName
            renameToNewName:(NSString *)newFileName
         deleteOriginalFile:(BOOL)deleteOriginalFile
                  openTrack:(BOOL)openTrack
-                       gpx:(OASGpxDataItem *)gpx
-                   gpxFile:(OASGpxFile *)gpxFile;
+                 trackItem:(OASTrackItem *)trackItem
+                   gpxFile:(OASGpxFile *)gpxFile
+  updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))updatedTrackItemСallback;
 
 - (void) renameTrack:(OASGpxDataItem *)gpx newName:(NSString *)newName hostVC:(UIViewController*)hostVC;
-- (void) renameTrack:(OASGpxDataItem *)gpx doc:(OASGpxFile *)doc newName:(NSString *)newName hostVC:(UIViewController*)hostVC;
-
-- (void)copyNewGPXToNewFolder:(NSString *)newFolderName
-           renameToNewName:(NSString *)newFileName
-        deleteOriginalFile:(BOOL)deleteOriginalFile
-                 openTrack:(BOOL)openTrack
-                          gpx:(OASGpxDataItem *)gpx;
+- (void) renameTrack:(OASGpxDataItem *)gpx doc:(OASGpxFile *)doc newName:(NSString *)newName hostVC:(UIViewController*)hostVC updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))updatedTrackItemСallback;;
 
 + (NSString *)buildTrackSegmentName:(OASGpxFile *)gpxFile
                               track:(OASTrack *)track

@@ -983,7 +983,11 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     
     private func onTrackDuplicateClicked(track: TrackItem?) {
         guard let track else { return }
-        gpxHelper.copyNewGPX(toNewFolder: currentFolderPath, renameToNewName: track.gpxFileName, deleteOriginalFile: false, openTrack: false, gpx: track.dataItem)
+        gpxHelper.copyGPX(toNewFolder: currentFolderPath,
+                          renameToNewName: track.gpxFileName,
+                          deleteOriginalFile: false,
+                          openTrack: false,
+                          trackItem: track)
         selectedTrack = nil
         updateAllFoldersVCData(forceLoad: true)
     }
@@ -1260,7 +1264,15 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func moveFile(selectedFolderName: String) {
-        gpxHelper.copyNewGPX(toNewFolder: selectedFolderName, renameToNewName: nil, deleteOriginalFile: true, openTrack: false, gpx: selectedTrack)
+        guard let selectedTrack else { return }
+        let trackItem = TrackItem(file: selectedTrack.file)
+        trackItem.dataItem = selectedTrack
+        
+        gpxHelper.copyGPX(toNewFolder: selectedFolderName,
+                          renameToNewName: nil,
+                          deleteOriginalFile: true,
+                          openTrack: false,
+                          trackItem: trackItem)
         updateAllFoldersVCData(forceLoad: true)
     }
     

@@ -1366,7 +1366,8 @@
 
 - (NSString *)getGpxFileSize
 {
-    NSDictionary *fileAttributes = [NSFileManager.defaultManager attributesOfItemAtPath:self.gpx.dataItem .file.absolutePath error:nil];
+    NSString *absolutePath = self.gpx.dataItem.file.absolutePath;
+    NSDictionary *fileAttributes = [NSFileManager.defaultManager attributesOfItemAtPath:absolutePath error:nil];
     return [NSByteCountFormatter stringFromByteCount:fileAttributes.fileSize
                                           countStyle:NSByteCountFormatterCountStyleFile];
 }
@@ -1825,18 +1826,21 @@
                 {
                     newNameToChange = [newName substringToIndex:newName.length - fileExtension.length];;
                 }
-               
+                __weak __typeof(self) weakSelf = self;
                 [weakSelf.gpxUIHelper renameTrack:weakSelf.gpx.dataItem
                                               doc:weakSelf.doc
                                           newName:newNameToChange
-                                           hostVC:weakSelf];
+                                           hostVC:weakSelf updatedTrackItemСallback:^(OASTrackItem *updatedTrackItem) {
+                    weakSelf.gpx = updatedTrackItem;
+                }];
             }
             else
             {
                 [weakSelf.gpxUIHelper renameTrack:nil
                                               doc:nil
                                           newName:nil
-                                           hostVC:weakSelf];
+                                           hostVC:weakSelf
+                         updatedTrackItemСallback:nil];
             }
         }]];
         [self presentViewController:alert animated:YES completion:nil];
@@ -1908,7 +1912,11 @@
 
 - (void)onFolderSelected:(NSString *)selectedFolderName
 {
-    [_gpxUIHelper copyGPXToNewFolder:selectedFolderName renameToNewName:nil deleteOriginalFile:YES openTrack:NO gpx:self.gpx.dataItem gpxFile:self.doc];
+    __weak __typeof(self) weakSelf = self;
+    [_gpxUIHelper copyGPXToNewFolder:selectedFolderName renameToNewName:nil deleteOriginalFile:YES openTrack:NO trackItem:self.gpx gpxFile:self.doc updatedTrackItemСallback:^(OASTrackItem *updatedTrackItem) {
+        weakSelf.gpx = updatedTrackItem;
+    }];
+    
     [_uiBuilder resetDataInTab:EOATrackMenuHudOverviewTab];
     if (_selectedTab == EOATrackMenuHudActionsTab)
     {
@@ -1950,11 +1958,12 @@
                openTrack:(BOOL)openTrack
 {
     [_gpxUIHelper copyGPXToNewFolder:fileName.stringByDeletingLastPathComponent
-             renameToNewName:[fileName.lastPathComponent stringByAppendingPathExtension:@"gpx"]
-          deleteOriginalFile:NO
-                   openTrack:YES
-                         gpx:self.gpx.dataItem
-                     gpxFile:self.doc];
+                     renameToNewName:[fileName.lastPathComponent stringByAppendingPathExtension:@"gpx"]
+                  deleteOriginalFile:NO
+                           openTrack:YES
+                           trackItem:self.gpx
+                             gpxFile:self.doc
+            updatedTrackItemСallback:nil];
 }
 
 #pragma mark - OASegmentSelectionDelegate

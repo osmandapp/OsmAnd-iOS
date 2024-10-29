@@ -30,6 +30,7 @@ final class OsmAndFormatterParams: NSObject {
     
     var forceTrailingZerosInDecimalMainUnit: Bool = defaultForceTrailing
     var extraDecimalPrecision: Int = defaultExtraDecimalPrecision
+    var forcePreciseValue: Bool = false
     var useLowerBound = false
     
     var isUseLowerBound: Bool {
@@ -40,5 +41,13 @@ final class OsmAndFormatterParams: NSObject {
     func setTrailingZerosForMainUnit(_ forceTrailingZeros: Bool) -> OsmAndFormatterParams {
         forceTrailingZerosInDecimalMainUnit = forceTrailingZeros
         return self
+    }
+
+    func updateForcePreciseValue(_ forcePrecise: Bool) {
+        forcePreciseValue = forcePrecise
+    }
+
+    func updateExtraDecimalPrecision(_ precision: Int) {
+        extraDecimalPrecision = precision
     }
 }

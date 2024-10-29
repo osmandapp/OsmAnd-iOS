@@ -271,6 +271,9 @@ extension TracksSearchFilter {
     
     static func getFormattedValue(measureUnitType: MeasureUnitType, value: String) -> FormattedValue {
         let metricsConstants = OAAppSettings.sharedManager().metricSystem.get()
+        let params = OsmAndFormatterParams()
+        params.updateExtraDecimalPrecision(3)
+        params.updateForcePreciseValue(true)
         let formattedString: String?
         switch measureUnitType {
         case .speed:
@@ -278,7 +281,7 @@ extension TracksSearchFilter {
         case .altitude:
             formattedString = OAOsmAndFormatter.getFormattedAlt(Double(value) ?? 0.0, mc: metricsConstants)
         case .distance:
-            formattedString = OAOsmAndFormatter.getFormattedDistance(Float(value) ?? 0.0)
+            formattedString = OAOsmAndFormatter.getFormattedDistance(Float(value) ?? 0.0, with: params)
         case .timeDuration:
             let durationValue = Float(value) ?? 0.0
             return FormattedValue(valueSrc: durationValue / 1000 / 60, value: String(format: "%.2f", durationValue / 1000 / 60), unit: "")
@@ -290,10 +293,13 @@ extension TracksSearchFilter {
         if let formattedString {
             let components = formattedString.components(separatedBy: " ")
             if components.count > 1 {
-                let numberPart = components.dropLast().joined().replacingOccurrences(of: " ", with: "")
-                let valueSrc = Float(numberPart) ?? 0.0
-                let unit = components.last ?? ""
-                return FormattedValue(valueSrc: valueSrc, value: String(format: "%.0f", valueSrc), unit: unit)
+                let numberPart = components.dropLast().joined(separator: "")
+                let formattedNumberPart = numberPart.replacingOccurrences(of: ",", with: ".").replacingOccurrences(of: " ", with: "")
+                if let floatValue = Float(formattedNumberPart) {
+                    let roundedValue = ceil(floatValue)
+                    let unit = components.last ?? ""
+                    return FormattedValue(valueSrc: roundedValue, value: String(format: "%.0f", roundedValue), unit: unit)
+                }
             }
         }
         

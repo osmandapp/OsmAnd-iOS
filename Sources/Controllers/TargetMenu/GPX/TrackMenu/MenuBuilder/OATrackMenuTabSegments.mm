@@ -243,9 +243,11 @@
         {
             if (_routeLineChartHelper)
             {
+                OATrackChartPoints *trackChartPoints = sectionData.values[@"points_value"];
+                trackChartPoints.axisPointsInvalidated = YES;
                 [_routeLineChartHelper refreshHighlightOnMap:NO
                                                    chartView:cell.chartView
-                                            trackChartPoints:sectionData.values[@"points_value"]
+                                            trackChartPoints:trackChartPoints
                                                      segment:sectionData.values[@"segment_value"]];
             }
             if (self.trackMenuDelegate)

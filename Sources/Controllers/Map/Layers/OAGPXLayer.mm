@@ -520,12 +520,22 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                         }
                         else if ([cachedTrack[@"colorization_scheme"] intValue] == COLORIZATION_NONE && segmentColors.isEmpty() && dataWrapper.color == 0)
                         {
-                            NSInteger trackIndex = [gpxFile_.tracks indexOfObject:track];
+                            NSArray<OASTrack *> *tracksCopy_ = [gpxFile_.tracks copy];
+                            NSInteger trackIndex = [tracksCopy_ indexOfObject:track];
+                            NSArray<OASTrack *> *tracksCopy = [tracks copy];
                             
-                            OASTrack *gpxTrack = tracks[trackIndex];
-                            OASInt *color = [[OASInt alloc] initWithInt:(int)kDefaultTrackColor];
-                            const auto colorARGB = [UIColorFromARGB([[gpxTrack getColorDefColor:color] intValue]) toFColorARGB];
-                            segmentColors.push_back(colorARGB);
+                            if (trackIndex != NSNotFound && trackIndex < tracksCopy.count)
+                            {
+                                // TODO: mb use not index? search name?
+                                OASTrack *gpxTrack = tracksCopy[trackIndex];
+                                OASInt *color = [[OASInt alloc] initWithInt:(int)kDefaultTrackColor];
+                                const auto colorARGB = [UIColorFromARGB([[gpxTrack getColorDefColor:color] intValue]) toFColorARGB];
+                                segmentColors.push_back(colorARGB);
+                            }
+                            else
+                            {
+                                NSLog(@"Track not found or index is out of bounds");
+                            }
                         }
                         segStartIndex += seg.points.count;
                         if (!dataWrapper.joinSegments)

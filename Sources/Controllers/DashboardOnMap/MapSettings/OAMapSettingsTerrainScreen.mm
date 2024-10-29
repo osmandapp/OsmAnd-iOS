@@ -20,7 +20,6 @@
 #import "OATextLineViewCell.h"
 #import "OAButtonTableViewCell.h"
 #import "OAImageDescTableViewCell.h"
-#import "OALineChartCell.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
@@ -157,7 +156,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
         [titleSection addRowFromDictionary:@{
             kCellKeyKey: @"gradientLegend",
-            kCellTypeKey : [OALineChartCell getCellIdentifier]
+            kCellTypeKey : GradientChartCell.reuseIdentifier
         }];
         _paletteLegendIndexPath = [NSIndexPath indexPathForRow:[titleSection rowCount] - 1 inSection:[_data sectionCount] - 1];
 
@@ -265,7 +264,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     title = OALocalizedString(@"shared_string_terrain");
 
-    [tblView registerNib:[UINib nibWithNibName:OALineChartCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:OALineChartCell.reuseIdentifier];
+    [tblView registerNib:[UINib nibWithNibName:GradientChartCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:GradientChartCell.reuseIdentifier];
     [tblView registerNib:[UINib nibWithNibName:OAImageDescTableViewCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:OAImageDescTableViewCell.reuseIdentifier];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
@@ -557,15 +556,15 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         cell.descView.text = item.descr;
         return cell;
     }
-    else if ([item.cellType isEqualToString:OALineChartCell.reuseIdentifier])
+    else if ([item.cellType isEqualToString:GradientChartCell.reuseIdentifier])
     {
-        OALineChartCell *cell = (OALineChartCell *) [tableView dequeueReusableCellWithIdentifier:OALineChartCell.reuseIdentifier
-                                                                                         forIndexPath:indexPath];
+        GradientChartCell *cell = (GradientChartCell *) [tableView dequeueReusableCellWithIdentifier:GradientChartCell.reuseIdentifier
+                                                                                        forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.heightConstraint.constant = 68;
-        cell.lineChartView.extraBottomOffset = 13;
+        cell.heightConstraint.constant = 73;
+        cell.chartView.extraBottomOffset = 37;
 
-        [GpxUIHelper setupGradientChartWithChart:cell.lineChartView
+        [GpxUIHelper setupGradientChartWithChart:cell.chartView
                              useGesturesAndScale:NO
                                   xAxisGridColor:[UIColor colorNamed:ACColorNameChartAxisGridLine]
                                      labelsColor:[UIColor colorNamed:ACColorNameChartTextColorAxisX]];
@@ -574,14 +573,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         if (!colorPalette)
             return cell;
 
-        cell.lineChartView.data =
-            [GpxUIHelper buildGradientChartWithChart:cell.lineChartView
+        cell.chartView.data =
+            [GpxUIHelper buildGradientChartWithChart:cell.chartView
                                         colorPalette:colorPalette
                                       valueFormatter:[GradientUiHelper getGradientTypeFormatterForTerrainType:_terrainMode.type
                                                                                                      analysis:nil]];
-
-        [cell.lineChartView setVisibleYRangeWithMinYRange:0 maxYRange: 1 axis:AxisDependencyLeft];
-        [cell.lineChartView notifyDataSetChanged];
+        [cell.chartView notifyDataSetChanged];
+        [cell.chartView setNeedsDisplay];
         return cell;
     }
     return nil;

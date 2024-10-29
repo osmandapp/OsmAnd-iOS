@@ -8,12 +8,12 @@
 
 #import "OABaseEditorViewController.h"
 
-@class OAPointsGroup;
+@class OASGpxUtilitiesPointsGroup;
 
 @interface OAGroupEditorViewController: OABaseEditorViewController
 
-@property(nonatomic, readonly) OAPointsGroup *group;
+@property(nonatomic, readonly) OASGpxUtilitiesPointsGroup *group;
 
-- (instancetype)initWithGroup:(OAPointsGroup *)group;
+- (instancetype)initWithGroup:(OASGpxUtilitiesPointsGroup *)group;
 
 @end

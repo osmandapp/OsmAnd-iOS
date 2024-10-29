@@ -6,16 +6,16 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-@class OAGPXTrackAnalysis, OAGPXDocument;
+@class OASGpxTrackAnalysis, OASGpxFile;
 
 @interface OAGPXDocumentAdapter : NSObject
 
-@property (nonatomic) OAGPXDocument *object;
+@property (nonatomic) OASGpxFile *object;
 @property (nonatomic) NSString *path;
 
-- (OAGPXTrackAnalysis *) getAnalysis:(long)fileTimestamp;
-- (BOOL) hasAltitude;
-- (int) pointsCount;
-- (NSString *) getMetadataValueBy:(NSString *)tag;
+- (OASGpxTrackAnalysis *)getAnalysis:(long)fileTimestamp;
+- (BOOL)hasAltitude;
+- (int)pointsCount;
+- (NSString *)getMetadataValueBy:(NSString *)tag;
 
 @end

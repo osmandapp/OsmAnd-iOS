@@ -9,6 +9,7 @@
 #import "OACompoundIconUtils.h"
 #import "OADefaultFavorite.h"
 #import "OANativeUtilities.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/LatLon.h>
@@ -28,24 +29,14 @@
 
 @implementation OACompoundIconUtils
 
-+ (sk_sp<SkImage>) createCompositeBitmapFromWpt:(const OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> &)point isFullSize:(BOOL)isFullSize scale:(float)scale
++ (sk_sp<SkImage>) createCompositeBitmapFromWpt:(OASWptPt *)point isFullSize:(BOOL)isFullSize scale:(float)scale
 {
-    UIColor* color = nil;
-    NSString *shapeName = nil;
-    NSString *iconName = nil;
-    const auto& values = point->getValues();
-    if (!values.isEmpty())
-    {
-        const auto& it = values.find(QStringLiteral("color"));
-        if (it != values.end())
-            color = [UIColor colorFromString:it.value().toString().toNSString()];
-        const auto& shapeIt = values.find(QStringLiteral("background"));
-        if (shapeIt != values.end())
-            shapeName = shapeIt.value().toString().toNSString();
-        const auto& iconIt = values.find(QStringLiteral("icon"));
-        if (iconIt != values.end())
-            iconName = iconIt.value().toString().toNSString();
-    }
+    int32_t pointColor = point.getColor;
+    NSString *pointBackground = point.getBackgroundType;
+    NSString *pointIcon = point.getIconName;
+    UIColor* color = pointColor != 0 ? UIColorFromARGB(pointColor) : nil;
+    NSString *shapeName = pointBackground;
+    NSString *iconName = pointIcon;
     if (!color)
         color = [OADefaultFavorite getDefaultColor];
     if (!shapeName)

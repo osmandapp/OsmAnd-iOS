@@ -10,9 +10,9 @@
 #import "OASearchCoreFactory.h"
 
 #include <OsmAndCore.h>
-#include <OsmAndCore/GpxDocument.h>
 
 @class OASearchUICore, OASearchResultCollection, OASearchResult, QuadRect;
+@class OASGpxFile;
 
 @interface OASearchFavoritesAPI : OASearchBaseAPI
 
@@ -28,7 +28,7 @@
 
 @interface OASearchWptAPI : OASearchBaseAPI
 
-- (void) setWptData:(QList<std::shared_ptr<const OsmAnd::GpxDocument>>&)geoDocList paths:(NSArray *)paths;
+- (void)setWptData:(NSArray<OASGpxFile *> *)geoDocList paths:(NSArray *)paths;
 
 @end
 

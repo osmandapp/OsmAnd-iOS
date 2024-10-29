@@ -79,7 +79,7 @@
                 (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
                         ? newLocation.course : newHeading;
 
-        OsmAnd::LatLon latLon(waypoint.point.position.latitude, waypoint.point.position.longitude);
+        OsmAnd::LatLon latLon(waypoint.point.lat, waypoint.point.lon);
         const auto &wptPosition31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
         CLLocation *location = [[CLLocation alloc] initWithLatitude:OsmAnd::Utilities::get31LatitudeY(wptPosition31.y)
                                                           longitude:OsmAnd::Utilities::get31LongitudeX(wptPosition31.x)];
@@ -96,10 +96,10 @@
 
         QuadRect *pointRect = [cellData.values.allKeys containsObject:@"quad_rect_value_point_area"]
                 ? cellData.values[@"quad_rect_value_point_area"]
-                : [[QuadRect alloc] initWithLeft:waypoint.point.position.longitude
-                                             top:waypoint.point.position.latitude
-                                           right:waypoint.point.position.longitude
-                                          bottom:waypoint.point.position.latitude];
+                : [[QuadRect alloc] initWithLeft:waypoint.point.lon
+                                             top:waypoint.point.lat
+                                           right:waypoint.point.lon
+                                          bottom:waypoint.point.lat];
 
         cellData.values[@"quad_rect_value_point_area"] = pointRect;
         cellData.values[@"string_value_distance"] = waypoint.distance ? waypoint.distance : [OAOsmAndFormatter getFormattedDistance:0];
@@ -219,10 +219,10 @@
                                                     color:[UIColor colorNamed:ACColorNameIconColorDisabled]],
                 kTableValues: @{
                         @"waypoint": waypoint,
-                        @"quad_rect_value_point_area": [[QuadRect alloc] initWithLeft:waypoint.point.position.longitude
-                                                                                  top:waypoint.point.position.latitude
-                                                                                right:waypoint.point.position.longitude
-                                                                               bottom:waypoint.point.position.latitude]
+                        @"quad_rect_value_point_area": [[QuadRect alloc] initWithLeft:waypoint.point.lon
+                                                                                  top:waypoint.point.lat
+                                                                                right:waypoint.point.lon
+                                                                               bottom:waypoint.point.lat]
                 }
         }];
         [waypointsCells addObject:waypointCellData];

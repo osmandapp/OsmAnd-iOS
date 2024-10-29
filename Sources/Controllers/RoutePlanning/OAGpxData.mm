@@ -7,20 +7,26 @@
 //
 
 #import "OAGpxData.h"
-#import "OAGPXMutableDocument.h"
 #import "OAGPXDocumentPrimitives.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore/GpxDocument.h>
 
 @implementation OAGpxData
 
-- (instancetype) initWithFile:(OAGPXMutableDocument *)gpxFile
+- (instancetype) initWithFile:(OASGpxFile *)gpxFile
 {
     self = [super init];
     if (self) {
         _gpxFile = gpxFile;
-        if (_gpxFile)
-            _rect = _gpxFile.bounds;
+        if (_gpxFile) {
+            auto rect = gpxFile.getRect;
+            OAGpxBounds bounds;
+            bounds.topLeft = CLLocationCoordinate2DMake(rect.top, rect.left);
+            bounds.bottomRight = CLLocationCoordinate2DMake(rect.bottom, rect.right);
+            bounds.center = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
+            _rect = bounds;
+        }
         else
         {
             OAGpxBounds bounds;

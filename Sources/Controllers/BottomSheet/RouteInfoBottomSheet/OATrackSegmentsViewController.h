@@ -8,11 +8,11 @@
 
 #import "OABaseTableViewController.h"
 
-@class OAGPXDocument;
+@class OASGpxFile;
 
 @protocol OASegmentSelectionDelegate <NSObject>
 
-- (void) onSegmentSelected:(NSInteger)position gpx:(OAGPXDocument *)gpx;
+- (void) onSegmentSelected:(NSInteger)position gpx:(OASGpxFile *)gpx;
 
 @end
 
@@ -21,7 +21,7 @@
 @property (nonatomic, weak) id<OASegmentSelectionDelegate> delegate;
 @property (nonatomic, assign) BOOL startNavigationOnSelect;
 
-- (instancetype) initWithFile:(OAGPXDocument *)gpx;
+- (instancetype) initWithFile:(OASGpxFile *)gpx;
 - (instancetype) initWithFilepath:(NSString *)filepath isCurrentTrack:(BOOL)isCurrentTrack;
 
 @end

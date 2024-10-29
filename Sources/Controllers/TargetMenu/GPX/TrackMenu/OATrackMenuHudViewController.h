@@ -10,24 +10,25 @@
 #import "OABaseScrollableHudViewController.h"
 #import "OATargetMenuViewController.h"
 #import "OATrackMenuHudViewControllerConstants.h"
+#import "OsmAndSharedWrapper.h"
 
-@class ElevationChart, OATrack, OATrkSegment, OARouteLineChartHelper, OARouteKey, OAAuthor, OACopyright, OALink, OAMetadata, OATravelArticleIdentifier, OAGpxWptItem, OAGPXTrackAnalysis, OAGPXTableData, OAGPX;
+@class ElevationChart, OASTrack, OASTrkSegment, OARouteLineChartHelper, OARouteKey, OAAuthor, OACopyright, OALink, OASMetadata, OATravelArticleIdentifier, OAGpxWptItem, OAGPXTableData;
 
 @protocol OATrackMenuViewControllerDelegate <NSObject>
 
 @required
 
 - (void)openAnalysis:(NSArray<NSNumber *> *)types;
-- (void)openAnalysis:(OAGPXTrackAnalysis *)analysis
+- (void)openAnalysis:(OASGpxTrackAnalysis *)analysis
             withTypes:(NSArray<NSNumber *> *)types;
-- (OAGPXTrackAnalysis *)getGeneralAnalysis;
+- (OASGpxTrackAnalysis *)getGeneralAnalysis;
 
-- (OATrkSegment *)getGeneralSegment;
-- (NSArray<OATrkSegment *> *)getSegments;
+- (OASTrkSegment *)getGeneralSegment;
+- (NSArray<OASTrkSegment *> *)getSegments;
 - (void)editSegment;
-- (void)deleteAndSaveSegment:(OATrkSegment *)segment;
-- (void)openEditSegmentScreen:(OATrkSegment *)segment
-                     analysis:(OAGPXTrackAnalysis *)analysis;
+- (void)deleteAndSaveSegment:(OASTrkSegment *)segment;
+- (void)openEditSegmentScreen:(OASTrkSegment *)segment
+                     analysis:(OASGpxTrackAnalysis *)analysis;
 
 - (void)refreshLocationServices;
 - (NSMutableDictionary<NSString *, NSMutableArray<OAGpxWptItem *> *> *)getWaypointsData;
@@ -51,15 +52,15 @@
 - (BOOL)isRteGroup:(NSString *)groupName;
 
 - (void)updateChartHighlightValue:(ElevationChart *)chart
-                          segment:(OATrkSegment *)segment;
+                          segment:(OASTrkSegment *)segment;
 - (OARouteLineChartHelper *)getLineChartHelper;
-- (OATrack *)getTrack:(OATrkSegment *)segment;
-- (NSString *)getTrackSegmentTitle:(OATrkSegment *)segment;
+- (OASTrack *)getTrack:(OASTrkSegment *)segment;
+- (NSString *)getTrackSegmentTitle:(OASTrkSegment *)segment;
 - (NSString *)getDirName;
 - (NSString *)getGpxFileSize;
-- (OAAuthor *)getAuthor;
-- (OACopyright *)getCopyright;
-- (OAMetadata *)getMetadata;
+- (OASAuthor *)getAuthor;
+- (OASCopyright *)getCopyright;
+- (OASMetadata *)getMetadata;
 - (NSString *)getKeywords;
 - (NSArray<OALink *> *)getLinks;
 - (NSString *)getCreatedOn;
@@ -121,7 +122,7 @@
 
 @interface OATrackMenuHudViewController : OABaseTrackMenuHudViewController
 
-- (instancetype)initWithGpx:(OAGPX *)gpx tab:(EOATrackMenuHudTab)tab;
-- (instancetype)initWithGpx:(OAGPX *)gpx routeKey:(OARouteKey *)routeKey state:(OATargetMenuViewControllerState *)state;
+- (instancetype)initWithGpx:(OASTrackItem *)gpx tab:(EOATrackMenuHudTab)tab;
+- (instancetype)initWithGpx:(OASTrackItem *)gpx routeKey:(OARouteKey *)routeKey state:(OATargetMenuViewControllerState *)state;
 
 @end

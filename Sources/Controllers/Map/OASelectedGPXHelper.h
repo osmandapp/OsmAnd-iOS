@@ -9,28 +9,31 @@
 #import <Foundation/Foundation.h>
 
 #include <OsmAndCore.h>
-#include <OsmAndCore/GpxDocument.h>
 
-@class OAGPXDocument, OAWptPt;
+NS_ASSUME_NONNULL_BEGIN
+
+@class OASGpxFile, OASWptPt;
 
 @interface OASelectedGPXHelper : NSObject
-
-// Active gpx
-@property (nonatomic, readonly) QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> > activeGpx;
 
 + (OASelectedGPXHelper *)instance;
 
 - (BOOL)buildGpxList;
-- (void) markTrackForReload:(NSString *)filePath;
-- (OAGPXDocument *)getSelectedGpx:(OAWptPt *)gpxWpt;
+- (void)markTrackForReload:(NSString *)filePath;
+- (nullable OASGpxFile *)getSelectedGpx:(OASWptPt *)gpxWpt;
 - (BOOL)isShowingAnyGpxFiles;
-
--(void)clearAllGpxFilesToShow:(BOOL) backupSelection;
--(void)restoreSelectedGpxFiles;
-
-- (NSString *) getSelectedGPXFilePath:(NSString *)fileName;
+- (void)clearAllGpxFilesToShow:(BOOL) backupSelection;
+- (void)restoreSelectedGpxFiles;
+- (nullable NSString *) getSelectedGPXFilePath:(NSString *)fileName;
 
 + (void)renameVisibleTrack:(NSString *)oldPath newPath:(NSString *) newPath;
 
+- (NSDictionary<NSString *, OASGpxFile *> *)activeGpx;
+- (void)removeGpxFileWith:(NSString *)path;
+- (nullable OASGpxFile *)getGpxFileFor:(NSString *)path;
+- (BOOL)containsGpxFileWith:(NSString *)path;
+- (void)addGpxFile:(OASGpxFile *)file for:(NSString *)path;
 
 @end
+
+NS_ASSUME_NONNULL_END

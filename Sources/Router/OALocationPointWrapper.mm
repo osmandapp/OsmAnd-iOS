@@ -88,9 +88,9 @@
     }
     else if (_type == LPW_WAYPOINTS)
     {
-        OAWptPt *wpt = (OAWptPt *) _point;
+        OASWptPt *wpt = (OASWptPt *) _point;
         OAGpxWptItem *wptItem = [[OAGpxWptItem alloc] init];
-        [wptItem setPoint:wpt];
+         [wptItem setPoint:wpt];
         return wptItem.getCompositeIcon;
     }
     else if (_type == LPW_ALARMS)

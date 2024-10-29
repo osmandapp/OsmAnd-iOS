@@ -17,7 +17,6 @@
 #import "OARouteAvoidSettingsViewController.h"
 #import "OAStateChangedListener.h"
 #import "OARoutingHelper.h"
-#import "OAGPXTrackAnalysis.h"
 #import "OANativeUtilities.h"
 #import "OAOsmAndFormatter.h"
 #import "GeneratedAssetSymbols.h"
@@ -117,7 +116,7 @@
         else
         {
             _routeInfoLabel.attributedText = [self.class getFormattedDistTimeString];
-            OAGPXTrackAnalysis *trackAnalysis = self.routingHelper.getTrackAnalysis;
+            OASGpxTrackAnalysis *trackAnalysis = self.routingHelper.getTrackAnalysis;
             if (trackAnalysis)
             {
                 _elevationLabel.text = [OAOsmAndFormatter getFormattedAlt:trackAnalysis.maxElevation];

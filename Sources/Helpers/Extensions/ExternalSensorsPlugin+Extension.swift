@@ -8,15 +8,15 @@
 
 import Foundation
 import DGCharts
+import OsmAndShared
 
 extension OAExternalSensorsPlugin {
-
     @objc override func getOrderedLineDataSet(chart: LineChartView,
-                                              analysis: OAGPXTrackAnalysis,
+                                              analysis: GpxTrackAnalysis,
                                               graphType: GPXDataSetType,
                                               axisType: GPXDataSetAxisType,
                                               calcWithoutGaps: Bool,
                                               useRightAxis: Bool) -> GpxUIHelper.OrderedLineDataSet? {
-        return SensorAttributesUtils.getOrderedLineDataSet(chart: chart, analysis: analysis, graphType: graphType, axisType: axisType, calcWithoutGaps: calcWithoutGaps, useRightAxis: useRightAxis)
+        SensorAttributesUtils.getOrderedLineDataSet(chart: chart, analysis: analysis, graphType: graphType, axisType: axisType, calcWithoutGaps: calcWithoutGaps, useRightAxis: useRightAxis)
     }
 }

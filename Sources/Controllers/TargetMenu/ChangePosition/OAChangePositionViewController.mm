@@ -34,7 +34,6 @@
 #import "OADestinationsHelper.h"
 #import "OASelectedGPXHelper.h"
 #import "OASavingTrackHelper.h"
-#import "OAGPXDocument.h"
 #import "OAPointDescription.h"
 #import "OAFavoriteItem.h"
 

@@ -19,6 +19,7 @@
 #import "OALoadGpxTask.h"
 #import "OATableViewCustomHeaderView.h"
 #import "GeneratedAssetSymbols.h"
+#import "OsmAndSharedWrapper.h"
 
 #define kAddNewFolderSection 0
 #define kFoldersListSection 1
@@ -29,7 +30,6 @@
 
 @implementation OASelectTrackFolderViewController
 {
-    OAGPX *_gpx;
     NSArray<NSArray<NSDictionary *> *> *_data;
     NSString *_selectedFolderName;
     NSString *_excludedSubfolderPath;
@@ -37,7 +37,8 @@
 
 #pragma mark - Initialization
 
-- (instancetype)initWithGPX:(OAGPX *)gpx
+ #warning("deprecated remove after refactoring")
+- (instancetype)initWithGPX:(OASTrackItem *)gpx
 {
     self = [super init];
     if (self)
@@ -49,6 +50,7 @@
     }
     return self;
 }
+
 
 - (instancetype)initWithSelectedFolderName:(NSString *)selectedFolderName;
 {

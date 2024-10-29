@@ -9,26 +9,29 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 #import "OALocationPoint.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/GpxDocument.h>
 
-#define ICON_NAME_EXTENSION @"icon"
-#define BACKGROUND_TYPE_EXTENSION @"background"
-#define COLOR_NAME_EXTENSION @"color"
-#define ADDRESS_EXTENSION @"address"
+#define ICON_NAME_EXTENSION_KEY @"icon"
+#define BACKGROUND_TYPE_EXTENSION_KEY @"background"
+#define COLOR_NAME_EXTENSION_KEY @"color"
+#define ADDRESS_EXTENSION_KEY @"address"
 #define CALENDAR_EXTENSION @"calendar_event"
 #define PICKUP_DATE @"pickup_date"
 #define VISITED_TIME_EXTENSION @"visited_date"
 #define CREATION_TIME_EXTENSION @"creation_date"
 #define PICKUP_DATE_EXTENSION @"pickup_date"
-#define DEFAULT_ICON_NAME @"special_star"
-#define PROFILE_TYPE_EXTENSION @"profile"
-#define GAP_PROFILE_TYPE @"gap"
-#define TRKPT_INDEX_EXTENSION @"trkpt_idx"
+#define DEFAULT_ICON_NAME_KEY @"special_star"
+#define PROFILE_TYPE_EXTENSION_KEY @"profile"
+
 #define PRIVATE_PREFIX @"amenity_"
-#define AMENITY_ORIGIN_EXTENSION @"amenity_origin"
-#define OSM_PREFIX @"osm_tag_"
+#define AMENITY_ORIGIN_EXTENSION_KEY @"amenity_origin"
+#define OSM_PREFIX_KEY @"osm_tag_"
+
+static NSString * const kGapProfileTypeKey = @"gap";
+static NSString * const kTrkptIndexExtension = @"trkpt_idx";
 
 typedef NS_ENUM(NSInteger, EOAGPXColor)
 {
@@ -131,8 +134,6 @@ struct RouteDataBundle;
 @property (nonatomic, copy) NSString *license;
 
 @end
-
-// OABounds
 
 @interface OAMetadata : OAGpxExtensions
 
@@ -243,10 +244,6 @@ struct RouteDataBundle;
 @property (nonatomic) NSMutableArray<OARouteSegment *> *routeSegments;
 @property (nonatomic) NSMutableArray<OARouteType *> *routeTypes;
 
--(NSArray *) splitByDistance:(double)meters joinSegments:(BOOL)joinSegments;
--(NSArray *) splitByTime:(int)seconds joinSegments:(BOOL)joinSegments;
--(NSArray *) split:(OASplitMetric*)metric secondaryMetric:(OASplitMetric *)secondaryMetric metricLimit:(double)metricLimit joinSegments:(BOOL)joinSegments;
-
 - (BOOL) hasRoute;
 
 - (void) fillExtensions;
@@ -286,12 +283,12 @@ struct RouteDataBundle;
 @property (nonatomic, readonly) NSString *name;
 @property (nonatomic) NSString *iconName;
 @property (nonatomic) NSString *backgroundType;
-@property (nonatomic) NSArray<OAWptPt *> *points;
+@property (nonatomic) NSArray<OASWptPt *> *points;
 @property (nonatomic) UIColor *color;
 
 - (instancetype)initWithName:(NSString *)name;
 - (instancetype)initWithName:(NSString *)name iconName:(NSString *)iconName backgroundType:(NSString *)backgroundType color:(UIColor *)color;
-- (instancetype)initWithWptPt:(OAWptPt *)point;
+- (instancetype)initWithWptPt:(OASWptPt *)point;
 - (NSUInteger)hash;
 - (BOOL)isEqual:(id)object;
 - (NSDictionary *)toStringBundle;

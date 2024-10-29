@@ -17,7 +17,6 @@
 #import "OAGpxWptItem.h"
 #import "OAGPXDatabase.h"
 #import "OASavingTrackHelper.h"
-#import "OAGPXMutableDocument.h"
 
 #include <OsmAndCore/Ref.h>
 #include <OsmAndCore/Utilities.h>

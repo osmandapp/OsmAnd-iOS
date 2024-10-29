@@ -51,7 +51,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
 @implementation OAOsmUploadGPXViewConroller
 {
     OAAppSettings *_settings;
-    NSArray<OAGPX *> *_gpxItemsToUpload;
+    NSArray<OASTrackItem *> *_gpxItemsToUpload;
     OATableDataModel *_data;
     NSString *_descriptionText;
     NSString *_tagsText;
@@ -69,7 +69,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
 
 #pragma mark - Initialization
 
-- (instancetype)initWithGPXItems:(NSArray<OAGPX *> *)gpxItemsToUpload
+- (instancetype)initWithGPXItems:(NSArray<OASTrackItem *> *)gpxItemsToUpload
 {
     self = [super init];
     if (self)
@@ -669,12 +669,12 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     });
 }
 
-- (NSArray<OAGPX *> *) getFailedFiles
+- (NSArray<OASTrackItem *> *) getFailedFiles
 {
-    NSMutableArray<OAGPX *> *failledFiles = [NSMutableArray array];
+    NSMutableArray<OASTrackItem *> *failledFiles = [NSMutableArray array];
     for (NSString *fileName in _failedFileNames)
     {
-        for (OAGPX *gpx in _gpxItemsToUpload)
+        for (OASTrackItem *gpx in _gpxItemsToUpload)
         {
             if ([gpx.gpxFileName isEqualToString:fileName])
                 [failledFiles addObject:gpx];

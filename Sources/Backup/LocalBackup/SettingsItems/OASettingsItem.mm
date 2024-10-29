@@ -7,7 +7,6 @@
 //
 
 #import "OASettingsItem.h"
-#import "OAGPXDocument.h"
 #import "OrderedDictionary.h"
 #import "OASettingsHelper.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -231,7 +230,7 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
     return [[OASettingsItemJsonWriter alloc] initWithItem:self];
 }
 
-- (OASettingsItemWriter *) getGpxWriter:(OAGPXDocument *)gpxFile
+- (OASettingsItemWriter *) getGpxWriter:(OASGpxFile *)gpxFile
 {
     return [[OASettingsItemGpxWriter alloc] initWithItem:self gpxDocument:gpxFile];
 }
@@ -382,10 +381,10 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
 
 @implementation OASettingsItemGpxWriter
 {
-    OAGPXDocument *_gpxFile;
+    OASGpxFile *_gpxFile;
 }
 
-- (instancetype) initWithItem:(OASettingsItem *)item gpxDocument:(OAGPXDocument *)gpxFile
+- (instancetype) initWithItem:(OASettingsItem *)item gpxDocument:(OASGpxFile *)gpxFile
 {
     self = [super initWithItem:item];
     if (self) {
@@ -398,7 +397,8 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
 {
     if (_gpxFile)
     {
-        [_gpxFile saveTo:filePath];
+        OASKFile *file = [[OASKFile alloc] initWithFilePath:filePath];
+        [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:_gpxFile];
         return YES;
     }
     return NO;

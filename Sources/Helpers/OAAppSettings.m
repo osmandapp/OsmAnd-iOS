@@ -3639,6 +3639,54 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 @end
 
+
+@implementation OACommonWidgetZoomLevelType
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAWidgetZoomLevelType)defValue
+{
+    OACommonWidgetZoomLevelType *obj = [[OACommonWidgetZoomLevelType alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = (int)defValue;
+    }
+    return obj;
+}
+
+- (EOAWidgetZoomLevelType)get
+{
+    return [super get];
+}
+
+- (void)set:(EOAWidgetZoomLevelType)widgetSizeStyle
+{
+    [super set:(int)widgetSizeStyle];
+}
+
+- (EOAWidgetZoomLevelType)get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void)set:(EOAWidgetZoomLevelType)widgetSizeStyle mode:(OAApplicationMode *)mode
+{
+    [super set:(int)widgetSizeStyle mode:mode];
+}
+
+- (void)resetToDefault
+{
+    EOAWidgetZoomLevelType defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOAWidgetZoomLevelType)((NSNumber *)pDefault).intValue;
+
+    [self set:defaultValue];
+}
+
+@end
+
 @implementation OACommonDayNightMode
 
 @dynamic defValue;
@@ -4843,6 +4891,16 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         return (OACommonWidgetSizeStyle *) [_registeredPreferences objectForKey:key];
     
     OACommonWidgetSizeStyle *p = [OACommonWidgetSizeStyle withKey:key defValue:defValue];
+    [self registerPreference:p forKey:key];
+    return p;
+}
+
+- (OACommonWidgetZoomLevelType *)registerWidgetZoomLevelTypePreference:(NSString *)key defValue:(EOAWidgetZoomLevelType)defValue
+{
+    if ([_registeredPreferences objectForKey:key])
+        return (OACommonWidgetZoomLevelType *) [_registeredPreferences objectForKey:key];
+    
+    OACommonWidgetZoomLevelType *p = [OACommonWidgetZoomLevelType withKey:key defValue:defValue];
     [self registerPreference:p forKey:key];
     return p;
 }

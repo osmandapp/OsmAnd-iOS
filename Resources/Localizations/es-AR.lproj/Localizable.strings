@@ -39,7 +39,7 @@
 "route_stops_before" = "%@ parada(s) anterior(es)";
 "transport_Routes" = "Rutas";
 "transport_nearby_routes_within" = "Rutas a menos de";
-"transport_nearby_routes" = "A menos de";
+"transport_nearby_routes" = "Dentro de";
 "shared_string_control_stop" = "Parar";
 "cancel_navigation" = "Parar navegación";
 "start_navigation" = "Iniciar navegación";

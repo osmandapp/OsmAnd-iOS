@@ -7,13 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
 
 @class OAApplicationMode, OAColoringType, OADownloadMode, OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState;
 
 static NSString * const kNotificationSetProfileSetting = @"kNotificationSetProfileSetting";
 static NSString * const VOICE_PROVIDER_NOT_USE = @"VOICE_PROVIDER_NOT_USE";
 
-static NSString * const settingAppModeKey = @"settingAppModeKey";
 static NSString * const appearanceProfileThemeKey = @"appearanceProfileThemeKey";
 
 static NSString * const mapDensityKey = @"mapDensity";
@@ -25,10 +25,6 @@ static const double kReceiptValidationMinPeriod = 60.0 * 60.0 * 24.0 * 1.0; // 1
 static const double kReceiptValidationMaxPeriod = 60.0 * 60.0 * 24.0 * 30.0; // 30 days
 
 static const double kSimMinSpeed = 5 / 3.6f;
-
-static const NSInteger APPEARANCE_MODE_DAY = 0;
-static const NSInteger APPEARANCE_MODE_NIGHT = 1;
-static const NSInteger APPEARANCE_MODE_AUTO = 2;
 
 static const NSInteger MAP_ARROWS_LOCATION = 0;
 static const NSInteger MAP_ARROWS_MAP_CENTER = 1;
@@ -343,6 +339,8 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 - (instancetype) makeShared;
 - (instancetype) storeLastModifiedTime;
 
+- (NSObject *) getPrefValue;
+- (NSObject *) getPrefValue:(OAApplicationMode *)mode;
 - (NSObject *) getProfileDefaultValue:(OAApplicationMode *)mode;
 - (void) resetModeToDefault:(OAApplicationMode *)mode;
 - (void) resetToDefault;
@@ -697,6 +695,10 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 @end
 
+@interface OACommonDayNightMode : OACommonInteger
+
+@end
+
 @interface OAAppSettings : NSObject
 
 + (OAAppSettings *)sharedManager;
@@ -715,7 +717,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic, readonly) NSArray *rtlLanguages;
 
 
-@property (nonatomic) OACommonInteger *appearanceMode; // 0 - Day; 1 - Night; 2 - Auto
+@property (nonatomic) OACommonDayNightMode *appearanceMode;
 @property (nonatomic) OACommonInteger *appearanceProfileTheme; // 0 - System; 1 - Light; 2 - Dark
 @property (nonatomic) OACommonDouble *mapManuallyRotatingAngle;
 @property (readonly, nonatomic) BOOL nightMode;
@@ -832,6 +834,8 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *use3dIconsByDefault;
 @property (nonatomic) OACommonBoolean *batterySavingMode;
 @property (nonatomic) OACommonInteger *appModeOrder;
+@property (nonatomic) OACommonInteger *viewAngleVisibility;
+@property (nonatomic) OACommonInteger *locationRadiusVisibility;
 
 @property (nonatomic) OACommonDouble *defaultSpeed;
 @property (nonatomic) OACommonDouble *minSpeed;
@@ -1134,6 +1138,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonString *currentTrackWidth;
 @property (nonatomic) OACommonBoolean *currentTrackShowArrows;
 @property (nonatomic) OACommonBoolean *currentTrackShowStartFinish;
+@property (nonatomic) OACommonBoolean *currentTrackIsJoinSegments;
 @property (nonatomic) OACommonDouble *currentTrackVerticalExaggerationScale;
 @property (nonatomic) OACommonInteger *currentTrackElevationMeters;
 @property (nonatomic) OACommonInteger *currentTrackVisualization3dByType;

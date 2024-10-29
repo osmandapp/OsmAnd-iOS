@@ -73,7 +73,7 @@
 
 - (CGFloat) initialHeight
 {
-    int tracksCount = (int)[OAGPXDatabase sharedDb].gpxList.count;
+    int tracksCount = (int)[[OAGPXDatabase sharedDb] getDataItems].count;
     int maxHeight = DeviceScreenHeight / 3 * 2;
     
     int estimatedHeight = kApproximateEmptyMenuHeight + OAUtilities.getBottomMargin;
@@ -110,7 +110,7 @@
     [data addObject:actionSection];
 
     OAGPXDatabase *db = [OAGPXDatabase sharedDb];
-    NSArray *gpxList = [db.gpxList sortedArrayUsingComparator:^NSComparisonResult(OAGPX *obj1, OAGPX *obj2) {
+    NSArray *gpxList = [[db getDataItems] sortedArrayUsingComparator:^NSComparisonResult(OASGpxDataItem *obj1, OASGpxDataItem *obj2) {
         NSDate *time1 = [OAUtilities getFileLastModificationDate:obj1.gpxFilePath];
         NSDate *time2 = [OAUtilities getFileLastModificationDate:obj2.gpxFilePath];
         return [time2 compare:time1];
@@ -126,14 +126,14 @@
             @"key" : @"header"
         }];
 
-        for (OAGPX *gpx in gpxTopList)
+        for (OASGpxDataItem *gpx in gpxTopList)
         {
             [existingTracksSection addObject:@{
                     @"type" : [OAGPXRouteRoundCell getCellIdentifier],
                     @"track" : gpx,
                     @"title" : [gpx getNiceTitle],
                     @"distance" : [OAOsmAndFormatter getFormattedDistance:gpx.totalDistance],
-                    @"time" : [OAOsmAndFormatter getFormattedTimeInterval:gpx.timeSpan shortFormat:YES],
+                    @"time" : [OAOsmAndFormatter getFormattedTimeInterval:gpx.timeSpan / 1000 shortFormat:YES],
                     @"wpt" : [NSString stringWithFormat:@"%d", gpx.wptPoints],
                     @"key" : @"gpx_route"
                 }];
@@ -267,7 +267,7 @@
     }
     else if ([key isEqualToString:@"gpx_route"])
     {
-        OAGPX* track = item[@"track"];
+        OASGpxDataItem *track = item[@"track"];
         [self hide:YES];
         [[OARootViewController instance].mapPanel showScrollableHudViewController:
                 [[OARoutePlanningHudViewController alloc] initWithFileName:track.gpxFilePath]];

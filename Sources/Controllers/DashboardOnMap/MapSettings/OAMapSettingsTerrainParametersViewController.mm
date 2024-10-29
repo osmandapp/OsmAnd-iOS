@@ -17,7 +17,6 @@
 #import "OAValueTableViewCell.h"
 #import "OACollectionSingleLineTableViewCell.h"
 #import "OASimpleTableViewCell.h"
-#import "OALineChartCell.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAColorCollectionViewController.h"
@@ -231,7 +230,7 @@ static const NSInteger kElevationMaxMeters = 2000;
     [self.tableView registerNib:[UINib nibWithNibName:[OACustomPickerTableViewCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OACustomPickerTableViewCell reuseIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[OASimpleTableViewCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OASimpleTableViewCell reuseIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[OACollectionSingleLineTableViewCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OACollectionSingleLineTableViewCell reuseIdentifier]];
-    [self.tableView registerNib:[UINib nibWithNibName:OALineChartCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:OALineChartCell.reuseIdentifier];
+    [self.tableView registerNib:[UINib nibWithNibName:GradientChartCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:GradientChartCell.reuseIdentifier];
 }
 
 #pragma mark - Base setup UI
@@ -345,7 +344,7 @@ static const NSInteger kElevationMaxMeters = 2000;
     {
         [topSection addRowFromDictionary:@{
             kCellKeyKey: @"gradientLegend",
-            kCellTypeKey: [OALineChartCell getCellIdentifier],
+            kCellTypeKey: GradientChartCell.reuseIdentifier,
         }];
         _paletteLegendIndexPath = [NSIndexPath indexPathForRow:[topSection rowCount] - 1 inSection:[_data sectionCount] - 1];
         [topSection addRowFromDictionary:@{
@@ -993,16 +992,17 @@ static const NSInteger kElevationMaxMeters = 2000;
         [cell configureBottomOffset:12];
         return cell;
     }
-    else if ([item.cellType isEqualToString:OALineChartCell.reuseIdentifier])
+    else if ([item.cellType isEqualToString:GradientChartCell.reuseIdentifier])
     {
-        OALineChartCell *cell = (OALineChartCell *) [tableView dequeueReusableCellWithIdentifier:OALineChartCell.reuseIdentifier
-                                                                                         forIndexPath:indexPath];
+        GradientChartCell *cell = (GradientChartCell *) [tableView dequeueReusableCellWithIdentifier:GradientChartCell.reuseIdentifier
+                                                                                        forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.separatorInset = UIEdgeInsetsMake(0, CGFLOAT_MAX, 0, 0);
-        cell.heightConstraint.constant = 75;
-        cell.lineChartView.extraTopOffset = 20;
+        cell.heightConstraint.constant = 80;
+        cell.chartView.extraTopOffset = 20;
+        cell.chartView.extraBottomOffset = 24;
 
-        [GpxUIHelper setupGradientChartWithChart:cell.lineChartView
+        [GpxUIHelper setupGradientChartWithChart:cell.chartView
                              useGesturesAndScale:NO
                                   xAxisGridColor:[UIColor colorNamed:ACColorNameChartAxisGridLine]
                                      labelsColor:[UIColor colorNamed:ACColorNameChartTextColorAxisX]];
@@ -1016,14 +1016,13 @@ static const NSInteger kElevationMaxMeters = 2000;
         if (!colorPalette)
             return cell;
 
-        cell.lineChartView.data =
-            [GpxUIHelper buildGradientChartWithChart:cell.lineChartView
+        cell.chartView.data =
+            [GpxUIHelper buildGradientChartWithChart:cell.chartView
                                         colorPalette:colorPalette
                                       valueFormatter:[GradientUiHelper getGradientTypeFormatter:_gradientColorsCollection.gradientType
                                                                                        analysis:nil]];
-
-        [cell.lineChartView setVisibleYRangeWithMinYRange:0 maxYRange: 1 axis:AxisDependencyLeft];
-        [cell.lineChartView notifyDataSetChanged];
+        [cell.chartView notifyDataSetChanged];
+        [cell.chartView setNeedsDisplay];
         return cell;
     }
     return nil;
@@ -1069,9 +1068,10 @@ static const NSInteger kElevationMaxMeters = 2000;
     }
     else if ([item.key isEqualToString:@"allColors"])
     {
-        OAColorCollectionViewController *colorCollectionViewController = [[OAColorCollectionViewController alloc] initWithCollectionType:EOAColorCollectionTypePaletteItems
-                                                                                                                                   items:_gradientColorsCollection
-                                                                                                                            selectedItem:_currentPaletteColorItem];
+        OAColorCollectionViewController *colorCollectionViewController =
+            [[OAColorCollectionViewController alloc] initWithCollectionType:EOAColorCollectionTypeTerrainPaletteItems
+                                                                      items:_gradientColorsCollection
+                                                               selectedItem:_currentPaletteColorItem];
         colorCollectionViewController.delegate = self;
         [self.navigationController pushViewController:colorCollectionViewController animated:YES];
     }
@@ -1136,7 +1136,7 @@ static const NSInteger kElevationMaxMeters = 2000;
 
 #pragma mark - OACollectionCellDelegate
 
-- (void)onCollectionItemSelected:(NSIndexPath *)indexPath
+- (void)onCollectionItemSelected:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
 {
     _currentPaletteColorItem = [_sortedPaletteColorItems objectAtIndexSync:indexPath.row];;
     _isValueChange = _basePaletteColorItem != _currentPaletteColorItem;
@@ -1154,7 +1154,7 @@ static const NSInteger kElevationMaxMeters = 2000;
 
 - (void)selectPaletteItem:(PaletteColor *)paletteItem
 {
-    [self onCollectionItemSelected:[NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:paletteItem] inSection:0]];
+    [self onCollectionItemSelected:[NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:paletteItem] inSection:0] collectionView:nil];
 }
 
 @end

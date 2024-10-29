@@ -24,7 +24,6 @@
 #import "OAGPXUIHelper.h"
 #import "OARouteColorize.h"
 #import "OARouteColorize+cpp.h"
-#import "OAGPXDocument.h"
 #import "OAMapLayers.h"
 #import "OAMapUtils.h"
 #import "OAApplicationMode.h"
@@ -325,10 +324,12 @@
 
 - (void) drawRouteSegment:(const QVector<OsmAnd::PointI> &)points 
             addToExisting:(BOOL)addToExisting
+                  refresh:(BOOL)refresh
                      sync:(BOOL)sync
 {
     [self drawRouteSegment:points
              addToExisting:addToExisting
+                   refresh:refresh
                     colors:{}
         colorizationScheme:COLORIZATION_NONE
                       sync:sync
@@ -337,6 +338,7 @@
 
 - (void) drawRouteSegment:(const QVector<OsmAnd::PointI> &)points 
             addToExisting:(BOOL)addToExisting
+                  refresh:(BOOL)refresh
                    colors:(const QList<OsmAnd::FColorARGB> &)colors
        colorizationScheme:(int)colorizationScheme
                      sync:(BOOL)sync
@@ -400,6 +402,16 @@
             {
                 [self.mapView addKeyedSymbolsProvider:_collection];
                 [self setVectorLineProvider:_collection sync:sync];
+            }
+        }
+        else if (refresh)
+        {
+            for (auto &line : lines)
+            {
+                line->setPoints(points);
+                line->setStartingDistance(0.0f);
+                if (!colors.empty())
+                    line->setColorizationMapping(colors);
             }
         }
         else
@@ -906,14 +918,14 @@
                 _routeGradientPalette = PaletteGradientColor.defaultName;
             [_updatedColorPaletteFiles removeObjectForKeySync:colorPaletteFile];
             
-            OAGPXDocument *gpx = [OAGPXUIHelper makeGpxFromRoute:route];
+            OASGpxFile *gpx = [OAGPXUIHelper makeGpxFromRoute:route];
             ColorPalette *colorPalette = [[ColorPaletteHelper shared] getGradientColorPaletteSync:(ColorizationType) [routeColoringType toColorizationType]
                                                                               gradientPaletteName:_routeGradientPalette];
             if (!colorPalette)
                 return;
             OARouteColorize *colorizationHelper =
                 [[OARouteColorize alloc] initWithGpxFile:gpx
-                                                analysis:[gpx getAnalysis:0]
+                                                analysis:[gpx getAnalysisFileTimestamp:0]
                                                     type:[routeColoringType toColorizationType]
                                                  palette:colorPalette
                                          maxProfileSpeed:0
@@ -993,7 +1005,12 @@
         if (_colorizationScheme == COLORIZATION_NONE)
         {
             if (!points.isEmpty())
-                [self drawRouteSegment:points addToExisting:NO sync:sync];
+            {
+                [self drawRouteSegment:points
+                         addToExisting:NO
+                               refresh:routeUpdated
+                                  sync:sync];
+            }
             else
                 [self.mapViewController runWithRenderSync:^{ [self resetLayer]; }];
         }
@@ -1008,6 +1025,7 @@
             {
                 [self drawRouteSegment:points
                          addToExisting:NO
+                               refresh:routeUpdated
                                 colors:segmentColors
                     colorizationScheme:_colorizationScheme
                                   sync:sync];
@@ -1059,7 +1077,10 @@
             CLLocation *p = locations[i];
             points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(p.coordinate.latitude, p.coordinate.longitude)));
         }
-        [self drawRouteSegment:points addToExisting:YES sync:sync];
+        [self drawRouteSegment:points
+                 addToExisting:YES
+                       refresh:NO
+                          sync:sync];
     }
 }
 

@@ -17,6 +17,8 @@
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
 #import "OsmAndApp.h"
+#import "OADownloadTask.h"
+#import "Localization.h"
 
 @implementation OAResourceSwiftItem
 
@@ -32,8 +34,16 @@
 
 - (NSString *) title
 {
-    OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
-    return res.title;
+    if ([self.objcResourceItem isKindOfClass:OACustomResourceItem.class])
+    {
+        OACustomResourceItem *res = (OACustomResourceItem *)self.objcResourceItem;
+        return [res getVisibleName];
+    }
+    else
+    {
+        OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
+        return res.title;
+    }
 }
 
 - (NSString *) type
@@ -92,16 +102,22 @@
     }
 }
 
+- (long long) sizePkg
+{
+    OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
+    return res.sizePkg;
+}
+
 - (NSString *) formatedSize
 {
     OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
-    return [NSByteCountFormatter stringFromByteCount:res.size countStyle:NSByteCountFormatterCountStyleFile];
+    return [OAResourcesUISwiftHelper formatSize:res.size addZero:NO];
 }
 
 - (NSString *) formatedSizePkg
 {
     OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
-    return [NSByteCountFormatter stringFromByteCount:res.sizePkg countStyle:NSByteCountFormatterCountStyleFile];
+    return [OAResourcesUISwiftHelper formatSize:res.sizePkg addZero:NO];
 }
 
 - (UIImage *) icon
@@ -119,7 +135,7 @@
 - (BOOL) isInstalled
 {
     OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
-    return [res isInstalled];
+    return [OsmAndApp instance].resourcesManager->isResourceInstalled(res.resourceId);
 }
 
 - (NSString *) resourceId
@@ -143,6 +159,11 @@
 - (id<OADownloadTask>) getDownloadTaskFor:(NSString*)resourceId
 {
     return [[OsmAndApp.instance.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resourceId]] firstObject];
+}
+
+- (BOOL) isOutdatedItem
+{
+    return [self.objcResourceItem isKindOfClass:OAOutdatedResourceItem.class];
 }
 
 @end
@@ -237,6 +258,13 @@
     return swiftResources;
 }
 
++ (OAResourceSwiftItem *) getResourceFromDownloadTask:(id<OADownloadTask>)downloadTask
+{
+    if (downloadTask && downloadTask.resourceItem)
+        return [[OAResourceSwiftItem alloc] initWithItem:downloadTask.resourceItem];
+    return nil;
+}
+
 + (OAResourceItem *) resourceItemByResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> &)resource region:(OAWorldRegion *)region
 {
     OsmAndAppInstance app = OsmAndApp.instance;
@@ -289,8 +317,16 @@
                     onTaskCreated:(OADownloadTaskCallback)onTaskCreated
                     onTaskResumed:(OADownloadTaskCallback)onTaskResumed
 {
-    OARepositoryResourceItem *res = (OARepositoryResourceItem *)item.objcResourceItem;
-    [OAResourcesUIHelper offerDownloadAndInstallOf:res onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+    if ([item.objcResourceItem isKindOfClass:OACustomResourceItem.class])
+    {
+        OACustomResourceItem *res = (OACustomResourceItem *)item.objcResourceItem;
+        [OAResourcesUIHelper startDownloadOfCustomItem:res onTaskCreated:onTaskCreated onTaskResumed:onTaskCreated];
+    }
+    else
+    {
+        OARepositoryResourceItem *res = (OARepositoryResourceItem *)item.objcResourceItem;
+        [OAResourcesUIHelper offerDownloadAndInstallOf:res onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+    }
 }
 
 + (void)offerDownloadAndInstallOf:(OAResourceSwiftItem *)item
@@ -300,6 +336,17 @@
 {
     OARepositoryResourceItem *res = (OARepositoryResourceItem *)item.objcResourceItem;
     [OAResourcesUIHelper offerDownloadAndInstallOf:res onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed completionHandler:completionHandler silent:NO];
+}
+
++ (void)offerDownloadAndUpdateOf:(OAResourceSwiftItem *)item
+                   onTaskCreated:(OADownloadTaskCallback)onTaskCreated
+                   onTaskResumed:(OADownloadTaskCallback)onTaskResumed
+{
+    if ([item isOutdatedItem])
+    {
+        OAOutdatedResourceItem *res = (OAOutdatedResourceItem *)item.objcResourceItem;
+        [OAResourcesUIHelper offerDownloadAndUpdateOf:res onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+    }
 }
 
 + (void) offerCancelDownloadOf:(OAResourceSwiftItem *)item onTaskStop:(OADownloadTaskCallback)onTaskStop completionHandler:(void(^)(UIAlertController *))completionHandler
@@ -367,6 +414,37 @@
 {
     [[OARootViewController instance].mapPanel.mapViewController updatePoiLayer];
     [OAManageResourcesViewController prepareData];
+}
+
++ (BOOL) isInOutdatedResourcesList:(NSString *)resourceId
+{
+    return [OAResourcesUIHelper isInOutdatedResourcesList:resourceId];
+}
+
++ (NSString *) formatSize:(long long)bytes addZero:(BOOL)addZero
+{
+    NSByteCountFormatter *formatter = [[NSByteCountFormatter alloc] init];
+    formatter.zeroPadsFractionDigits = addZero;
+    formatter.countStyle = NSByteCountFormatterCountStyleFile;
+    return [formatter stringFromByteCount:bytes];
+}
+
++ (NSString *) formatedDownloadingProgressString:(long long)wholeSizeBytes progress:(float)progress
+{
+    return [self.class formatedDownloadingProgressString:wholeSizeBytes progress:progress addZero:YES];
+}
+
++ (NSString *) formatedDownloadingProgressString:(long long)wholeSizeBytes progress:(float)progress addZero:(BOOL)addZero
+{
+    return [self.class formatedDownloadingProgressString:wholeSizeBytes progress:progress addZero:addZero combineViaSlash:NO];
+}
+
++ (NSString *) formatedDownloadingProgressString:(long long)wholeSizeBytes progress:(float)progress addZero:(BOOL)addZero combineViaSlash:(BOOL)combineViaSlash
+{
+    NSString *wholeFileSize = [self formatSize:wholeSizeBytes addZero:NO];
+    long long downloadedPartBytes = ((long long) wholeSizeBytes * progress);
+    NSString *downloadedPart = [self formatSize:downloadedPartBytes addZero:addZero];
+    return [NSString stringWithFormat:OALocalizedString(combineViaSlash ? @"ltr_or_rtl_combine_via_slash" : @"downloaded_bytes"), downloadedPart, wholeFileSize];
 }
 
 @end

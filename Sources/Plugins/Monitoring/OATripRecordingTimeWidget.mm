@@ -14,8 +14,6 @@
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OAGPXDatabase.h"
-#import "OAGPXMutableDocument.h"
-#import "OAGPXTrackAnalysis.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OATrackMenuHudViewController.h"
@@ -37,20 +35,17 @@
         self.updateInfoFunction = ^BOOL {
 
             [weakSelf setIcon:@"widget_track_recording_duration"];
-            
-            OAGPXMutableDocument *currentTrack = [[OASavingTrackHelper sharedInstance] currentTrack];
-            OAGPX *gpxFile = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
+            OASGpxFile *currentTrack = [OASavingTrackHelper sharedInstance].currentTrack;
+            BOOL withoutGaps = ![[OAAppSettings sharedManager].currentTrackIsJoinSegments get] &&
+            ((!currentTrack.tracks || currentTrack.tracks.count == 0) || currentTrack.tracks[0].generalTrack);
 
-            BOOL withoutGaps = !gpxFile.joinSegments &&
-            ( (!currentTrack.tracks || currentTrack.tracks.count == 0) || currentTrack.tracks[0].generalTrack);
-
-            OAGPXTrackAnalysis *analysis = [currentTrack getAnalysis:0];
+            OASGpxTrackAnalysis *analysis = [currentTrack getAnalysisFileTimestamp:0];
             long timeSpan =  withoutGaps ? analysis.timeSpanWithoutGaps : analysis.timeSpan;
             
             if (cachedTimeSpan != timeSpan)
             {
                 cachedTimeSpan = timeSpan;
-                NSString *formattedTime = [OAOsmAndFormatter getFormattedDurationShort:timeSpan fullForm:NO];
+                NSString *formattedTime = [OAOsmAndFormatter getFormattedDurationShort:timeSpan / 1000 fullForm:NO];
                 [weakSelf setText:formattedTime subtext:nil];
             }
             return YES;
@@ -59,8 +54,9 @@
         self.onClickFunction = ^(id sender) {
             if (cachedTimeSpan > 0)
             {
-                OAGPX *gpxFile = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
-                [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpxFile selectedTab:EOATrackMenuHudSegmentsTab selectedStatisticsTab:EOATrackMenuHudSegmentsStatisticsOverviewTab openedFromMap:YES];
+                OASGpxFile *gpxFile = [OASavingTrackHelper sharedInstance].currentTrack;
+                OASTrackItem *trackItem = [[OASTrackItem alloc] initWithGpxFile:gpxFile];
+                [[OARootViewController instance].mapPanel openTargetViewWithGPX:trackItem selectedTab:EOATrackMenuHudSegmentsTab selectedStatisticsTab:EOATrackMenuHudSegmentsStatisticsOverviewTab openedFromMap:YES];
             }
         };
         

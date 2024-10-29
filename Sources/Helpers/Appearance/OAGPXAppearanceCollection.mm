@@ -572,7 +572,7 @@
 {
     for (OAColorItem *colorItem in _availableColors)
     {
-        if (colorItem.value == value)
+        if (((int)colorItem.value) == value)
             return colorItem;
     }
 

@@ -7,7 +7,7 @@
 //
 
 @objc protocol DownloadingCellResourceHelperDelegate: AnyObject {
-    func onDownldedResourceInstalled()
+    func onDownloadingCellResourceNeedUpdate()
 }
 
 @objcMembers
@@ -16,6 +16,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     weak var delegate: DownloadingCellResourceHelperDelegate?
     var hostViewController: UIViewController?
     var stopWithAlertMessage = false
+    var showDownloadingBytesInDescription = false
     
     private var resourceItems = [String: OAResourceSwiftItem]()
     private var downloadTaskProgressObserver: OAAutoObserverProxy?
@@ -49,7 +50,15 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     
     override func startDownload(_ resourceId: String) {
         if let resourceItem = getResource(resourceId) {
-            OAResourcesUISwiftHelper.offerDownloadAndInstall(of: resourceItem, onTaskCreated: nil, onTaskResumed: nil)
+            if resourceItem.isOutdatedItem() {
+                OAResourcesUISwiftHelper.offerDownloadAndUpdate(of: resourceItem, onTaskCreated: { [weak self] task in
+                    self?.delegate?.onDownloadingCellResourceNeedUpdate()
+                }, onTaskResumed: nil)
+            } else {
+                OAResourcesUISwiftHelper.offerDownloadAndInstall(of: resourceItem, onTaskCreated: { [weak self] task in
+                    self?.delegate?.onDownloadingCellResourceNeedUpdate()
+                }, onTaskResumed: nil)
+            }
         }
     }
     
@@ -72,7 +81,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     
     override func isInstalled(_ resourceId: String) -> Bool {
         if let resourceItem = getResource(resourceId) {
-            return resourceItem.isInstalled() || super.isInstalled(resourceId)
+            return resourceItem.isInstalled()
         }
         return false
     }
@@ -80,9 +89,16 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     override func isDownloading(_ resourceId: String) -> Bool {
         if let resourceItem = getResource(resourceId) {
             resourceItem.refreshDownloadTask()
-            return resourceItem.downloadTask() != nil && super.isDownloading(resourceId)
+            return resourceItem.downloadTask() != nil
         }
         return false
+    }
+    
+    override func isFinished(_ resourceId: String) -> Bool {
+        let isDownloading = isDownloading(resourceId)
+        let isInstalled = isInstalled(resourceId)
+        let isOutdated = OAResourcesUISwiftHelper.is(inOutdatedResourcesList: resourceId)
+        return !isDownloading && isInstalled && !isOutdated
     }
     
     override func helperHasItemFor(_ resourceId: String) -> Bool {
@@ -121,13 +137,19 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     override func setupCell(_ resourceId: String) -> DownloadingCell? {
         if let resourceItem = getResource(resourceId) {
             resourceItem.refreshDownloadTask()
-            let subtitle = String(format: "%@  •  %@", resourceItem.type(), resourceItem.formatedSizePkg())
+            var subtitle = ""
+            if showDownloadingBytesInDescription {
+                subtitle = String(resourceItem.formatedSizePkg())
+            } else {
+                subtitle = String(format: "%@  •  %@", resourceItem.type(), resourceItem.formatedSizePkg())
+            }
+            
             let title = resourceItem.title()
             let iconName = resourceItem.iconName()
             let isDownloading = isDownloading(resourceId)
             
             // get cell with default settings
-            let cell = super.setupCell(resourceId: resourceId, title: title, isTitleBold: false, desc: subtitle, leftIconName: iconName, rightIconName: getRightIconName(), isDownloading: isDownloading)
+            let cell = super.setupCell(resourceId: resourceId, title: title, isTitleBold: false, desc: subtitle, leftIconName: iconName, rightIconName: getRightIconName(resourceId), isDownloading: isDownloading)
             
             if isDisabled(resourceId) {
                 cell?.titleLabel.textColor = .textColorSecondary
@@ -139,7 +161,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     }
     
     override func onCellClicked(_ resourceId: String) {
-        if !isInstalled(resourceId) || isAlwaysClickable {
+        if !isFinished(resourceId) || isAlwaysClickable {
             if !isDownloading(resourceId) {
                 if !isDisabled(resourceId) {
                     startDownload(resourceId)
@@ -179,7 +201,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     // MARK: - Downloading cell progress observer's methods
     
     @objc private func onDownloadResourceTaskProgressChanged(observer: Any, key: Any, value: Any) {
-        guard let resourceId = getResourceIdFromNotificationKey(key: key, value: value) else { return }
+        guard let resourceId = Self.getResourceIdFromNotificationKey(key: key, value: value) else { return }
         guard let parsedValue = value as? NSNumber else { return }
         let progress = parsedValue.floatValue
         
@@ -191,8 +213,18 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
         }
     }
     
+    override func setCellProgress(resourceId: String, progress: Float, status: ItemStatusType) {
+        super.setCellProgress(resourceId: resourceId, progress: progress, status: status)
+        if showDownloadingBytesInDescription {
+            guard let resourceItem = getResource(resourceId) else { return }
+            guard let cell = getOrCreateCell(resourceId) else { return }
+            guard let subtitle = OAResourcesUISwiftHelper.formatedDownloadingProgressString(resourceItem.sizePkg(), progress: progress) else { return }
+            cell.descriptionLabel.text = subtitle
+        }
+    }
+    
     @objc private func onDownloadResourceTaskFinished(observer: Any, key: Any, value: Any) {
-        guard let resourceId = getResourceIdFromNotificationKey(key: key, value: value) else { return }
+        guard let resourceId = Self.getResourceIdFromNotificationKey(key: key, value: value) else { return }
         var progress: Float = 1
         if let parsedValue = value as? NSNumber {
             progress = parsedValue.floatValue
@@ -222,7 +254,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
                 return
             }
             OAResourcesUISwiftHelper.onDownldedResourceInstalled()
-            self?.delegate?.onDownldedResourceInstalled()
+            self?.delegate?.onDownloadingCellResourceNeedUpdate()
         }
     }
     
@@ -249,7 +281,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
         }
     }
     
-    private func getResourceIdFromNotificationKey(key: Any, value: Any) -> String? {
+    static func getResourceIdFromNotificationKey(key: Any, value: Any) -> String? {
         // When we're creating a cell Contour Lines resource, we don't know which subfile user will download (srtm or srtmf).
         // But we're allready need a "resourceId" key for dictionary at this moment.
         // Anyway, user allowed to download and store only type of Contour Line resource (srtm or srtmf file).

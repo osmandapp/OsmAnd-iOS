@@ -31,7 +31,7 @@
 @property (nonatomic) NSInteger wptPoints;
 @property (nonatomic) CGFloat totalDistance;
 
-- (instancetype) initWithItem:(OAGPX *)dataItem;
+- (instancetype) initWithItem:(OASGpxDataItem *)dataItem;
 - (void) toJson:(id)json;
 
 + (OAGpxAppearanceInfo *) fromJson:(id)json;

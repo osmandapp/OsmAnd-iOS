@@ -199,6 +199,10 @@ final class TerrainMode: NSObject {
         type == .height ? key == Self.altitudeDefaultKey : key == Self.defaultKey
     }
 
+    func isDefaultDuplicatedMode() -> Bool {
+        key.hasPrefix(type == .height ? Self.altitudeDefaultKey : Self.defaultKey + " ")
+    }
+
     func getCacheFileName() -> String {
         type.name + ".cache"
     }

@@ -8,8 +8,6 @@
 
 #import "OATravelGuidesHelper.h"
 #import "OAGPXDocumentPrimitives.h"
-#import "OAGPXMutableDocument.h"
-#import "OAGPXDocument.h"
 #import "OAPOIHelper.h"
 #import "OsmAndApp.h"
 #import "OAAppData.h"
@@ -30,6 +28,7 @@
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OAAppVersion.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Data/Amenity.h>
@@ -126,32 +125,32 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
     [mapPanel showContextMenu:targetPoint];
 }
 
-+ (OAWptPt *) createWptPt:(OAPOI *)amenity lang:(NSString *)lang
++ (OASWptPt *) createWptPt:(OAPOI *)amenity lang:(NSString *)lang
 {
-    OAWptPt *wptPt = [[OAWptPt alloc] init];
+    OASWptPt *wptPt = [[OASWptPt alloc] init];
     wptPt.name = amenity.name;
     wptPt.position = CLLocationCoordinate2DMake(amenity.latitude, amenity.longitude);
     wptPt.desc = amenity.desc;
     
     if ([amenity getSite])
     {
-        OALink *gpxLink = [[OALink alloc] init];
-        gpxLink.url = [[NSURL alloc] initWithString:[amenity getSite]];
-        wptPt.links = @[ gpxLink ];
+        wptPt.link = [amenity getSite];
     }
     
     NSString *color = [amenity getColor];
     OAGPXColor *gpxColor = [OAGPXColor getColorFromName:color];
-    if (gpxColor)
-        [wptPt setColor:gpxColor.color];
+    if (gpxColor) {
+        OASInt *color = [[OASInt alloc] initWithInt:(int)gpxColor.color];
+        [wptPt setColorColor:color];
+    }
     
     if ([amenity gpxIcon])
-        [wptPt setIcon:[amenity gpxIcon]];
+        [wptPt setIconNameIconName:[amenity gpxIcon]];
 
     NSString *category = [amenity getTagSuffix:@"category_"];
     if (category)
     {
-        wptPt.type = [OAUtilities capitalizeFirstLetter:category];
+        wptPt.category = [OAUtilities capitalizeFirstLetter:category];
     }
     for (NSString *key in [amenity getAdditionalInfo].allKeys)
     {
@@ -162,7 +161,9 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
         NSString *amenityValue = [amenity getAdditionalInfo][key];
         if (amenityValue)
         {
-            [wptPt setExtension:key value:amenityValue];
+            auto extension = wptPt.getExtensionsToWrite;
+            extension[key] = amenityValue;
+            wptPt.extensions = extension;
         }
     }
     return wptPt;
@@ -207,10 +208,33 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
     if (!exists)
         [fileManager createDirectoryAtPath:OsmAndApp.instance.gpxTravelPath withIntermediateDirectories:YES attributes:nil error:nil];
     
-    OAGPXDocument *gpx = [article gpxFile].object;
+    OASGpxFile *gpx = [article gpxFile].object;
     NSString *filePath = [OsmAndApp.instance.gpxTravelPath stringByAppendingPathComponent:fileName];
-    [gpx saveTo:filePath];
-    [self buildGpx:filePath title:nil gpxDoc:gpx];
+    
+    OASKFile *filePathToSaveGPX = [[OASKFile alloc] initWithFilePath:filePath];
+    // save to disk
+    OASKException *exception = [[OASGpxUtilities shared] writeGpxFileFile:filePathToSaveGPX gpxFile:gpx];
+    if (!exception)
+    {
+        // save to db
+        OASGpxDataItem *dataItem = [[OAGPXDatabase sharedDb] addGPXFileToDBIfNeeded:filePathToSaveGPX.absolutePath];
+        if (dataItem)
+        {
+            OASGpxTrackAnalysis *analysis = [dataItem getAnalysis];
+            
+            if (analysis.locationStart)
+            {
+                OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:analysis.locationStart.position];
+                NSString *nearestCityString = nearestCityPOI ? nearestCityPOI.nameLocalized : @"";
+                [[OASGpxDbHelper shared] updateDataItemParameterItem:dataItem
+                                                           parameter:OASGpxParameter.nearestCityName
+                                                               value:nearestCityString];
+            }
+        }
+    } else {
+        NSLog(@"[ERROR] -> save gpx");
+    }
+    
     return filePath;
 }
 
@@ -250,7 +274,6 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
             return NO;
         };
         
-        
         OsmAnd::PointI location = OsmAnd::PointI(0, 0);
         OsmAnd::PointI topLeft = OsmAnd::PointI(0, 0);
         OsmAnd::PointI bottomRight = OsmAnd::PointI(INT_MAX, INT_MAX);
@@ -277,22 +300,22 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
         }
     }
     
-    OAGPXMutableDocument *gpxFile = nil;
+    OASGpxFile *gpxFile = nil;
     NSString *description = article.descr;
     NSString *title = [OAUtilities isValidFileName:description] ? description : article.title;
     if (segmentList.size() > 0)
     {
         BOOL hasAltitude = NO;
-        OATrack *track = [[OATrack alloc] init];
-        NSMutableArray<OATrkSegment *> *segments = [NSMutableArray array];
+        OASTrack *track = [[OASTrack alloc] init];
+        NSMutableArray<OASTrkSegment *> *segments = [NSMutableArray array];
         for (const auto& binaryMapObject : segmentList)
         {
-            OATrkSegment *trkSegment = [[OATrkSegment alloc] init];
-            NSMutableArray<OAWptPt *> *points = [NSMutableArray array];
+            OASTrkSegment *trkSegment = [[OASTrkSegment alloc] init];
+            NSMutableArray<OASWptPt *> *points = [NSMutableArray array];
             for (const auto& point : binaryMapObject->points31)
             {
                 const auto latLon = OsmAnd::Utilities::convert31ToLatLon(point);
-                OAWptPt *wptPt = [[OAWptPt alloc] init];
+                OASWptPt *wptPt = [[OASWptPt alloc] init];
                 wptPt.position = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
                 [points addObject:wptPt];
             }
@@ -315,6 +338,7 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
                 hasAltitude = YES;
                 auto heightRes = [OAMapAlgorithms decodeIntHeightArrayGraph:eleGraphValue repeatBits:3];
                 double startEle = startEleValue.toDouble();
+                
                 trkSegment = [OAMapAlgorithms augmentTrkSegmentWithAltitudes:trkSegment decodedSteps:heightRes startEle:startEle];
             }
            
@@ -322,25 +346,24 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
         }
         track.segments = segments;
 
-        gpxFile = [[OAGPXMutableDocument alloc] init];
+        gpxFile = [[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]];
         gpxFile.metadata.time = [NSDate date].timeIntervalSince1970;
+        auto extensions = gpxFile.metadata.getExtensionsToWrite;
         if (title)
-            [gpxFile.metadata setExtension:@"article_title" value:title];
+            extensions[@"article_title"] = title;
         if (article.lang)
-            [gpxFile.metadata setExtension:@"article_lang" value:article.lang];
+            extensions[@"article_lang"] = article.lang;
         if (article.lang)
-            [gpxFile.metadata setExtension:@"desc" value:article.content];
+            extensions[@"desc"] = article.content;
         
         if (article.imageTitle && article.imageTitle.length > 0)
         {
             NSString *link = [OATravelArticle getImageUrlWithImageTitle:article.imageTitle thumbnail:false];
-            OALink *gpxLink = [[OALink alloc] init];
-            gpxLink.url = [[NSURL alloc] initWithString:link];
-            gpxFile.metadata.links = @[ gpxLink ];
+            gpxFile.metadata.link = link;
         }
-
-        [gpxFile addTrack:track];
-        [gpxFile.metadata setExtension:@"ref" value:article.ref];
+        [gpxFile.tracks addObject:track];
+        extensions[@"ref"] = article.ref;
+        gpxFile.metadata.extensions = extensions;
         gpxFile.hasAltitude = hasAltitude;
     }
     
@@ -348,27 +371,28 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
     {
         if (!gpxFile)
         {
-            gpxFile = [[OAGPXMutableDocument alloc] init];
+            gpxFile = [[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]];
             gpxFile.metadata.time = [NSDate date].timeIntervalSince1970;
+            auto extensions = gpxFile.metadata.getExtensionsToWrite;
             if (title)
-                [gpxFile.metadata setExtension:@"article_title" value:title];
+                extensions[@"article_title"] = title;
             if (article.lang)
-                [gpxFile.metadata setExtension:@"article_lang" value:article.lang];
+                extensions[@"article_lang"] = article.lang;
             if (article.lang)
-                [gpxFile.metadata setExtension:@"desc" value:article.content];
+                extensions[@"desc"] = article.content;
+            
+            gpxFile.metadata.extensions = extensions;
+            
             if (article.imageTitle && article.imageTitle.length > 0)
             {
                 NSString *link = [OATravelArticle getImageUrlWithImageTitle:article.imageTitle thumbnail:false];
-                OALink *gpxLink = [[OALink alloc] init];
-                gpxLink.url = [[NSURL alloc] initWithString:link];
-                gpxFile.metadata.links = @[ gpxLink ];
+                gpxFile.metadata.link = link;
             }
         }
         for (OAPOI *wayPoint in pointList)
         {
-            OAWptPt *wpt = [self.class createWptPt:wayPoint lang:article.lang];
-            
-            [gpxFile addWpt:wpt];
+            OASWptPt *wpt = [self.class createWptPt:wayPoint lang:article.lang];
+            [gpxFile addPointPoint:wpt];
         }
     }
     OAGPXDocumentAdapter *gpxAdapter = [[OAGPXDocumentAdapter alloc] init];
@@ -377,18 +401,34 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
     return gpxAdapter;
 }
 
-+ (OAGPX *) buildGpx:(NSString *)path title:(NSString *)title document:(OAGPXDocumentAdapter *)document
++ (OASGpxDataItem *) buildGpx:(NSString *)path title:(NSString *)title document:(OAGPXDocumentAdapter *)document
 {
     return [self buildGpx:path title:title gpxDoc:document.object];
 }
 
-+ (OAGPX *) buildGpx:(NSString *)path title:(NSString *)title gpxDoc:(OAGPXDocument *)gpxDoc
-{
++ (OASGpxDataItem *) buildGpx:(NSString *)path title:(NSString *)title gpxDoc:(OASGpxFile *)gpxDoc
+{    
     OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
-    OAGPX *gpx = [OAGPXDatabase.sharedDb buildGpxItem:path.lastPathComponent path:path title:title desc:gpxDoc.metadata.desc bounds:gpxDoc.bounds document:gpxDoc fetchNearestCity:YES];
-    [gpxDb replaceGpxItem:gpx];
-    [gpxDb save];
+    OASGpxDataItem *gpx = [gpxDb getGPXItem:path];
+    if (!gpx)
+    {
+        gpx = [gpxDb addGPXFileToDBIfNeeded:path];
+        if (gpx)
+        {
+            OASGpxTrackAnalysis *analysis = [gpx getAnalysis];
+            
+            if (analysis.locationStart)
+            {
+                OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:analysis.locationStart.position];
+                NSString *nearestCityString = nearestCityPOI ? nearestCityPOI.nameLocalized : @"";
+                [[OASGpxDbHelper shared] updateDataItemParameterItem:gpx
+                                                           parameter:OASGpxParameter.nearestCityName
+                                                               value:nearestCityString];
+            }
+        }
+    }
     return gpx;
+    
 }
 
 + (NSString *) getSelectedGPXFilePath:(NSString *)fileName

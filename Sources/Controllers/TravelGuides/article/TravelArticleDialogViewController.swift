@@ -9,6 +9,7 @@
 import UIKit
 import WebKit
 import JavaScriptCore
+import OsmAndShared
 
 protocol TravelArticleDialogProtocol : AnyObject {
     func getWebView() -> WKWebView
@@ -103,7 +104,7 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
     var isDownloadNow = false
     
     var gpxFile: OAGPXDocumentAdapter?
-    var gpx: OAGPX?
+    var gpx: GpxDataItem?
     var isGpxReading = false
     
     var bottomView: UIView?
@@ -335,7 +336,9 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
         OAAppSettings.sharedManager().showGpx([file], update: true)
         if let gpx, let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
             let fromTrackMenu = OARootViewController.instance().mapPanel.scrollableHudViewController != nil
-            OARootViewController.instance().mapPanel.openTargetViewWithGPX(fromTracksList: gpx,
+            let trackItem = TrackItem(file: gpx.file)
+            trackItem.dataItem = gpx
+            OARootViewController.instance().mapPanel.openTargetViewWithGPX(fromTracksList: trackItem,
                                                                            navControllerHistory: newCurrentHistory,
                                                                            fromTrackMenu: fromTrackMenu,
                                                                            selectedTab: .pointsTab)
@@ -350,7 +353,7 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
         
         let articleName = article.title ?? localizedString("shared_string_article")
         let message = isSaved ? localizedString("article_removed_from_bookmark") : localizedString("article_added_to_bookmark")
-        OAUtilities.showToast(nil, details: articleName + message , duration: 4, in: self.view)
+        OAUtilities.showToast(nil, details: articleName + message, duration: 4, in: self.view)
     }
     
     func shareArticle() {

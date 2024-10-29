@@ -26,14 +26,14 @@
 
 @implementation OAPointOptionsBottomSheetViewController
 {
-    OAWptPt *_point;
+    OASWptPt *_point;
     NSInteger _pointIndex;
     NSArray<NSArray<NSDictionary *> *> *_data;
     
     OAMeasurementEditingContext *_editingCtx;
 }
 
-- (instancetype) initWithPoint:(OAWptPt *)point index:(NSInteger)pointIndex editingContext:(OAMeasurementEditingContext *)editingContext
+- (instancetype) initWithPoint:(OASWptPt *)point index:(NSInteger)pointIndex editingContext:(OAMeasurementEditingContext *)editingContext
 {
     self = [super init];
     if (self) {
@@ -248,8 +248,8 @@
 {
     NSMutableString *description = [NSMutableString string];
     NSInteger pos = _editingCtx.selectedPointPosition;
-    NSArray<OAWptPt *> *points = [_editingCtx getPoints];
-    OAWptPt *pt = points[pos];
+    NSArray<OASWptPt *> *points = [_editingCtx getPoints];
+    OASWptPt *pt = points[pos];
     NSString *pointDesc = pt.desc;
     if (pointDesc && pointDesc.length > 0)
     {
@@ -264,7 +264,7 @@
         double distance = [self getTrimmedDistance:_editingCtx before:before];
         [description appendString:[OAOsmAndFormatter getFormattedDistance:distance]];
     }
-    double elevation = pt.elevation;
+    double elevation = pt.ele;
     if (!isnan(elevation))
     {
         NSString *altString = [OALocalizedString(@"altitude") substringWithRange:NSMakeRange(0, 1)];
@@ -283,8 +283,8 @@
 
 - (double) getTrimmedDistance:(OAMeasurementEditingContext *)editingCtx before:(BOOL)before
 {
-    NSArray<OAWptPt *> *points = [editingCtx getPoints];
-    NSMutableDictionary<NSArray<OAWptPt *> *, OARoadSegmentData *> *roadSegmentData = editingCtx.roadSegmentData;
+    NSArray<OASWptPt *> *points = [editingCtx getPoints];
+    NSMutableDictionary<NSArray<OASWptPt *> *, OARoadSegmentData *> *roadSegmentData = editingCtx.roadSegmentData;
     NSInteger pointIndex = editingCtx.selectedPointPosition;
     double dist = 0;
     NSInteger startIdx;
@@ -301,12 +301,13 @@
     }
     for (NSInteger i = startIdx; i <= endIdx; i++)
     {
-        OAWptPt *first = points[i - 1];
-        OAWptPt *second = points[i];
-        NSArray<OAWptPt *> *pair = @[first, second];
+        OASWptPt *first = points[i - 1];
+        OASWptPt *second = points[i];
+        NSArray<OASWptPt *> *pair = @[first, second];
         OARoadSegmentData *segment = roadSegmentData[pair];
         BOOL routeSegmentBuilt = segment && segment.distance > 0;
-        dist += routeSegmentBuilt ? segment.distance : [OAMapUtils getDistance:first.position second:second.position];
+       
+        dist += routeSegmentBuilt ? segment.distance : [OAMapUtils getDistance:CLLocationCoordinate2DMake(first.lat, first.lon) second: CLLocationCoordinate2DMake(second.lat, second.lon)];
     }
     return dist;
 }

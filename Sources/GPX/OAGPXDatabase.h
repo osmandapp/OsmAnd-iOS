@@ -47,8 +47,8 @@ typedef NS_ENUM(NSInteger, EOAGPX3DLineVisualizationPositionType) {
     EOAGPX3DLineVisualizationPositionTypeTopBottom,
 };
 
-@class OAGPXTrackAnalysis;
-@class OAWptPt, OAGPXDocument;
+@class OASGpxTrackAnalysis;
+@class OASWptPt, OASGpxDataItem;
 
 @interface OAGPX : NSObject
 
@@ -108,54 +108,49 @@ typedef NS_ENUM(NSInteger, EOAGPX3DLineVisualizationPositionType) {
 @property (nonatomic) NSSet<NSString *> *hiddenGroups;
 
 @property (nonatomic) double   metricEnd;
-@property (nonatomic) OAWptPt *locationStart;
-@property (nonatomic) OAWptPt *locationEnd;
+@property (nonatomic) OASWptPt *locationStart;
+@property (nonatomic) OASWptPt *locationEnd;
 @property (nonatomic) NSString *nearestCity;
 
 - (NSString *)getNiceTitle;
 
 - (void)removeHiddenGroups:(NSString *)groupName;
 - (void)addHiddenGroups:(NSString *)groupName;
-- (void)resetAppearanceToOriginal;
 - (void)updateFolderName:(NSString *)newFilePath;
 
 - (BOOL)isTempTrack;
 
 @end
 
-@interface OAGPXDatabase : NSObject
+NS_ASSUME_NONNULL_BEGIN
 
-@property (nonatomic, readonly) NSArray *gpxList;
+@interface OAGPXDatabase : NSObject
 
 + (OAGPXDatabase *)sharedDb;
 
--(OAGPX *)buildGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document fetchNearestCity:(BOOL)fetchNearestCity;
-- (OAGPX *) buildGpxItem:(NSString *)fileName path:(NSString *)filepath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document fetchNearestCity:(BOOL)fetchNearestCity;
--(OAGPX *)addGpxItem:(NSString *)filePath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document;
--(OAGPX *)getGPXItem:(NSString *)filePath;
--(OAGPX *)getGPXItemByFileName:(NSString *)fileName;
--(void)replaceGpxItem:(OAGPX *)gpx;
--(void)removeGpxItem:(NSString *)filePath;
--(BOOL)containsGPXItem:(NSString *)filePath;
--(BOOL)containsGPXItemByFileName:(NSString *)fileName;
--(BOOL)updateGPXItemPointsCount:(NSString *)filePath pointsCount:(int)pointsCount;
--(BOOL)updateGPXItemColor:(OAGPX *)item color:(int)color;
+- (BOOL)containsGPXItem:(NSString *)filePath;
+- (OASGpxDataItem *)addGPXFileToDBIfNeeded:(NSString *)filePath;
+- (void)removeGpxItem:(OASGpxDataItem *)item withLocalRemove:(BOOL)withLocalRemove;
+- (OASGpxDataItem *_Nullable)getGPXItem:(NSString *)filePath;
 
--(NSString *)getFileDir:(NSString *)filePath;
+- (BOOL)updateDataItem:(OASGpxDataItem *_Nonnull)item;
+- (NSArray<OASGpxDataItem *> *)getDataItems;
+- (OASGpxDataItem *)getGPXItemByFileName:(NSString *)fileName;
+- (NSString *)getFileDir:(NSString *)filePath;
 
-- (void)load;
 - (void)save;
 
-+ (EOAGpxSplitType) splitTypeByName:(NSString *)splitName;
-+ (NSString *) splitTypeNameByValue:(EOAGpxSplitType)splitType;
++ (EOAGpxSplitType)splitTypeByName:(NSString *_Nullable)splitName;
++ (NSString *)splitTypeNameByValue:(EOAGpxSplitType)splitType;
 
 + (NSString *)lineVisualizationByTypeNameForType:(EOAGPX3DLineVisualizationByType)type;
-+ (EOAGPX3DLineVisualizationByType)lineVisualizationByTypeForName:(NSString *)name;
++ (EOAGPX3DLineVisualizationByType)lineVisualizationByTypeForName:(NSString *_Nullable)name;
 
 + (NSString *)lineVisualizationWallColorTypeNameForType:(EOAGPX3DLineVisualizationWallColorType)type;
-+ (EOAGPX3DLineVisualizationWallColorType)lineVisualizationWallColorTypeForName:(NSString *)name;
++ (EOAGPX3DLineVisualizationWallColorType)lineVisualizationWallColorTypeForName:(NSString *_Nullable)name;
 
 + (NSString *)lineVisualizationPositionTypeNameForType:(EOAGPX3DLineVisualizationPositionType)type;
-+ (EOAGPX3DLineVisualizationPositionType)lineVisualizationPositionTypeForName:(NSString *)name;
++ (EOAGPX3DLineVisualizationPositionType)lineVisualizationPositionTypeForName:(NSString *_Nullable)name;
 
 @end
+NS_ASSUME_NONNULL_END

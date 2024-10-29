@@ -373,23 +373,14 @@
 
     if (!isOnlineMapSource)
     {
-        NSString *modeStr;
-        if ([_settings.appearanceMode get] == APPEARANCE_MODE_DAY)
-            modeStr = OALocalizedString(@"day");
-        else if ([_settings.appearanceMode get] == APPEARANCE_MODE_NIGHT)
-            modeStr = OALocalizedString(@"daynight_mode_night");
-        else if ([_settings.appearanceMode get] == APPEARANCE_MODE_AUTO)
-            modeStr = OALocalizedString(@"daynight_mode_auto");
-        else
-            modeStr = OALocalizedString(@"-");
-
+        DayNightMode dayNightMode = (DayNightMode) [_settings.appearanceMode get];
         NSMutableArray *mapStyleSectionData = [NSMutableArray array];
         [mapStyleSectionData addObject:@{
                 @"name": OALocalizedString(@"map_mode"),
-                @"value": modeStr,
+                @"value": [DayNightModeWrapper getTitleForType:dayNightMode],
                 @"image": @"ic_custom_sun",
                 @"type": [OAValueTableViewCell getCellIdentifier],
-                @"key": @"map_mode"
+                @"key": @"mapMode"
         }];
         [mapStyleSectionData addObject:@{
                 @"name": OALocalizedString(@"map_magnifier"),
@@ -632,7 +623,7 @@
 - (NSString *)getMapLangValueStr
 {
     NSString *prefLangId = _settings.settingPrefMapLanguage.get;
-    NSString *prefLang = prefLangId.length > 0 ? [[[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:prefLangId] capitalizedStringWithLocale:[NSLocale currentLocale]] : OALocalizedString(@"local_map_names");
+    NSString *prefLang = prefLangId.length > 0 ? [[OAUtilities displayNameForLang:prefLangId] capitalizedStringWithLocale:[NSLocale currentLocale]] : OALocalizedString(@"local_map_names");
     switch (_settings.settingMapLanguage.get)
     {
         case 0: // NativeOnly
@@ -1177,8 +1168,6 @@
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenMapillaryFilter];
     else if ([item[@"key"] isEqualToString:@"wikipedia_layer"] && !isPromoButton)
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenWikipedia];
-    else if ([item[@"key"] isEqualToString:@"map_mode"])
-        mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenSetting param:settingAppModeKey];
     else if ([item[@"key"] isEqualToString:@"map_magnifier"])
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenSetting param:mapDensityKey];
     else if ([item[@"key"] isEqualToString:@"text_size"])
@@ -1235,6 +1224,14 @@
     
     if ([item[@"key"] isEqualToString:@"tracks"])
         [self.vwController.navigationController pushViewController:[OAMapSettingsGpxViewController new] animated:YES];
+
+    if ([item[@"key"] isEqualToString:@"mapMode"])
+    {
+        [self.vwController hide:YES animated:YES];
+
+        MapSettingsMapModeParametersViewController *vc = [[MapSettingsMapModeParametersViewController alloc] init];
+        [OARootViewController.instance.mapPanel showScrollableHudViewController:vc];
+    }
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

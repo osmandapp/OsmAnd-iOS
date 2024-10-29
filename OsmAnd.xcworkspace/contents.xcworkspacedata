@@ -5,7 +5,7 @@
       location = "container:"
       name = "SharedLib">
       <Group
-         location = "group:../android/OsmAnd-shared/src/commonMain"
+         location = "container:../android/OsmAnd-shared/src/commonMain"
          name = "commonMain">
          <Group
             location = "group:kotlin"
@@ -19,6 +19,60 @@
                   <Group
                      location = "group:shared"
                      name = "shared">
+                     <Group
+                        location = "group:settings"
+                        name = "settings">
+                        <Group
+                           location = "group:enums"
+                           name = "enums">
+                           <FileRef
+                              location = "group:SpeedConstants.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:MetricsConstants.kt">
+                           </FileRef>
+                        </Group>
+                     </Group>
+                     <Group
+                        location = "group:obd"
+                        name = "obd">
+                        <FileRef
+                           location = "group:OBDDataField.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:ODBSimulationSource.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:OBDUtils.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:OBDDataComputer.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:FuelType.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:OBDDispatcher.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:OBDCommand.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:Obd2Connection.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:OBDFuelTypeFormatter.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:OBDResponseListener.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:OBDResponse.kt">
+                        </FileRef>
+                     </Group>
+                     <FileRef
+                        location = "group:KAsyncTask.kt">
+                     </FileRef>
                      <FileRef
                         location = "group:IndexConstants.kt">
                      </FileRef>
@@ -26,7 +80,16 @@
                         location = "group:util"
                         name = "util">
                         <FileRef
+                           location = "group:OsmAndFormatter.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:KAlgorithms.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:KStringMatcher.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:KCollectionUtils.kt">
                         </FileRef>
                         <FileRef
                            location = "group:IProgress.kt">
@@ -59,6 +122,12 @@
                            location = "group:PlatformUtil.kt">
                         </FileRef>
                         <FileRef
+                           location = "group:MultiNameSerializer.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:WikiImagesUtil.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:StringBundle.kt">
                         </FileRef>
                         <FileRef
@@ -72,7 +141,13 @@
                         location = "group:io"
                         name = "io">
                         <FileRef
+                           location = "group:DispatcherProvider.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:KFile.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:NativeFile.kt">
                         </FileRef>
                      </Group>
                      <Group
@@ -92,7 +167,13 @@
                         location = "group:extensions"
                         name = "extensions">
                         <FileRef
+                           location = "group:ListExtensions.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:DoubleExtensions.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:ClockExtensions.kt">
                         </FileRef>
                         <FileRef
                            location = "group:StringExtensions.kt">
@@ -104,6 +185,79 @@
                      <Group
                         location = "group:gpx"
                         name = "gpx">
+                        <Group
+                           location = "group:filters"
+                           name = "filters">
+                           <FileRef
+                              location = "group:FolderSingleFieldTrackFilterParams.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:OtherTrackFilter.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:SingleFieldTrackFilterParams.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:FilterType.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:FilterChangedListener.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:ActivitySingleFieldTrackFilterParams.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:MeasureUnitType.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:DateTrackFilter.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:TrackFilterSerializer.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:TextTrackFilter.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:ListTrackFilter.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:FolderTrackFilter.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:TrackFilterType.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:RangeTrackFilterSerializer.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:WidthSingleFieldTrackFilterParams.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:TrackFiltersConstants.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:OtherTrackParam.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:BaseTrackFilter.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:RangeTrackFilter.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:TrackFiltersHelper.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:TrackFolderAnalysis.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:TrackFilterList.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:ColorSingleFieldTrackFilterParams.kt">
+                           </FileRef>
+                        </Group>
                         <FileRef
                            location = "group:GpxTrackAnalysis.kt">
                         </FileRef>
@@ -111,10 +265,22 @@
                            location = "group:SplitSegment.kt">
                         </FileRef>
                         <FileRef
+                           location = "group:GpxReader.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:ElevationDiffsCalculator.kt">
                         </FileRef>
                         <FileRef
+                           location = "group:GpxHelper.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:PointAttributes.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:RouteActivityHelper.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:GpxDbHelper.kt">
                         </FileRef>
                         <FileRef
                            location = "group:GradientScaleType.kt">
@@ -128,6 +294,19 @@
                         <FileRef
                            location = "group:GpxDirItem.kt">
                         </FileRef>
+                        <Group
+                           location = "group:enums"
+                           name = "enums">
+                           <FileRef
+                              location = "group:Gpx3DLinePositionType.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:Gpx3DVisualizationType.kt">
+                           </FileRef>
+                        </Group>
+                        <FileRef
+                           location = "group:SmartFolderHelper.kt">
+                        </FileRef>
                         <FileRef
                            location = "group:GpxDataItem.kt">
                         </FileRef>
@@ -138,7 +317,13 @@
                            location = "group:primitives"
                            name = "primitives">
                            <FileRef
+                              location = "group:RouteActivity.kt">
+                           </FileRef>
+                           <FileRef
                               location = "group:Bounds.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:RouteActivityGroup.kt">
                            </FileRef>
                            <FileRef
                               location = "group:Metadata.kt">
@@ -178,13 +363,38 @@
                            location = "group:GpxFile.kt">
                         </FileRef>
                         <FileRef
+                           location = "group:TrackItem.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:SmartFolderUpdateListener.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:SplitMetric.kt">
                         </FileRef>
                         <FileRef
                            location = "group:GpxSplitType.kt">
                         </FileRef>
+                        <Group
+                           location = "group:data"
+                           name = "data">
+                           <FileRef
+                              location = "group:SmartFolder.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:ComparableTracksGroup.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:TracksGroup.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:TrackFolder.kt">
+                           </FileRef>
+                        </Group>
                         <FileRef
                            location = "group:DataItem.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:TrackFolderLoaderTask.kt">
                         </FileRef>
                      </Group>
                      <FileRef
@@ -195,6 +405,18 @@
                         name = "api">
                         <FileRef
                            location = "group:SQLiteAPI.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:KStringMatcherMode.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:KStateChangedListener.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:SettingsAPI.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:OsmAndContext.kt">
                         </FileRef>
                      </Group>
                      <Group
@@ -217,6 +439,12 @@
                            location = "group:KLatLon.kt">
                         </FileRef>
                         <FileRef
+                           location = "group:StringIntPair.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:BTDeviceInfo.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:KQuadRect.kt">
                         </FileRef>
                      </Group>
@@ -226,7 +454,7 @@
          </Group>
       </Group>
       <Group
-         location = "group:../android/OsmAnd-shared/src/iosMain"
+         location = "container:../android/OsmAnd-shared/src/iosMain"
          name = "iosMain">
          <Group
             location = "group:kotlin"
@@ -250,7 +478,20 @@
                            location = "group:LoggerFactory.kt">
                         </FileRef>
                         <FileRef
+                           location = "group:SensorPointAnalyser.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:PlatformUtil.kt">
+                        </FileRef>
+                     </Group>
+                     <Group
+                        location = "group:io"
+                        name = "io">
+                        <FileRef
+                           location = "group:DispatcherProvider.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:NativeFile.kt">
                         </FileRef>
                      </Group>
                      <Group

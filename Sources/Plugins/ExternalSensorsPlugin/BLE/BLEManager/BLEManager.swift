@@ -119,7 +119,6 @@ final class BLEManager {
                     case .scanningEndedUnexpectedly:
                         _error = .scanningEndedUnexpectedly
                     default:
-                        // FIXME:
                         fatalError(error.localizedDescription)
                     }
                     failureHandler(_error)

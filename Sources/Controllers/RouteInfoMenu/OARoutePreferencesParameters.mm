@@ -18,7 +18,6 @@
 #import "OARouteProvider.h"
 #import "OAColors.h"
 #import "OAAvoidSpecificRoads.h"
-#import "OAGPXDocument.h"
 #import "OsmAndApp.h"
 #import "OAValueTableViewCell.h"
 #import "OASwitchTableViewCell.h"
@@ -591,6 +590,41 @@
 - (void) switchMusic:(id)sender
 {
     [self setSelected:![self isSelected]];
+}
+
+@end
+
+@implementation OAShowAlongTheRouteItem
+
+- (NSString *) getText
+{
+    return OALocalizedString(@"show_along_the_route");
+}
+
+- (UIImage *) getIcon
+{
+    return [UIImage imageNamed:@"ic_custom_show_along_route"];
+}
+
+- (NSString *) getCellType
+{
+    return [OAValueTableViewCell getCellIdentifier];
+}
+
+- (NSString *) getValue
+{
+    return @"";
+}
+
+- (void)rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
+{
+    if (self.delegate)
+        [self.delegate openShowAlongScreen];
+}
+
+- (BOOL) hasOptions
+{
+    return YES;
 }
 
 @end

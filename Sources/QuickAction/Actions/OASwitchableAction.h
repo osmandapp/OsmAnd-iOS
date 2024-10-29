@@ -8,20 +8,20 @@
 
 #import "OAQuickAction.h"
 
-@interface OASwitchableAction<ObjectType> : OAQuickAction
+@interface OASwitchableAction : OAQuickAction
 
 - (void)executeWithParams:(NSArray<NSString *> *)params;
 
 - (NSString *)getTranslatedItemName:(NSString *)item;
 
-- (NSString *)getTitle:(NSArray<ObjectType> *)filters;
-- (NSString *)getItemName:(ObjectType)item;
+- (NSString *)getTitle:(NSArray *)filters;
+- (NSString *)getItemName:(id)item;
 
 - (NSString *)getAddBtnText;
 - (NSString *)getDescrHint;
 - (NSString *)getDescrTitle;
 
-- (NSArray<ObjectType> *)loadListFromParams;
+- (NSArray *)loadListFromParams;
 
 - (NSString *)getListKey;
 

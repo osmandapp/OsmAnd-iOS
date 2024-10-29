@@ -1300,15 +1300,34 @@ includeHidden:(BOOL)includeHidden
     }
 }
 
++ (BOOL) isInOutdatedResourcesList:(NSString *)resourceId
+{
+    OsmAndAppInstance _app = [OsmAndApp instance];
+    const auto outdatedResources = _app.resourcesManager->getOutdatedInstalledResources();
+    for (const auto& outdatedResource : outdatedResources)
+    {
+        NSString *outdatedResourceId = outdatedResource->id.toNSString();
+        if ([outdatedResourceId isEqualToString:resourceId])
+        {
+            return YES;
+        }
+    }
+    return NO;
+}
+
 + (void) startDownloadOfCustomItem:(OACustomResourceItem *)item
                      onTaskCreated:(OADownloadTaskCallback)onTaskCreated
                      onTaskResumed:(OADownloadTaskCallback)onTaskResumed
 {
     if (item.downloadUrl)
     {
-        NSString *name = item.title;
-        if (item.subfolder && item.subfolder.length > 0)
-            name = [item.subfolder stringByAppendingPathComponent:name];
+        NSString *name = [item getVisibleName];
+        if (!name)
+        {
+            name = item.title;
+            if (item.subfolder && item.subfolder.length > 0)
+                name = [item.subfolder stringByAppendingPathComponent:name];
+        }
 
         if ([item.downloadUrl hasPrefix:@"@"])
         {
@@ -1335,6 +1354,10 @@ includeHidden:(BOOL)includeHidden
                                                                              andKey:[@"resource:" stringByAppendingString:item.resourceId.toNSString()]
                                                                             andName:name
                                                                           andHidden:item.hidden];
+            
+            task.resourceItem = item;
+            task.creationTime = [NSDate now];
+            
             if (onTaskCreated)
                 onTaskCreated(task);
 
@@ -1566,7 +1589,7 @@ includeHidden:(BOOL)includeHidden
     }
     else if (AFNetworkReachabilityManager.sharedManager.isReachableViaWiFi)
     {
-        [self.class startDownloadOf:resourceInRepository resourceName:resourceName onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+        [self.class startDownloadOf:resourceInRepository resourceName:resourceName resourceItem:item onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
     }
     else
     {
@@ -1575,7 +1598,7 @@ includeHidden:(BOOL)includeHidden
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_update") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [self.class startDownloadOf:resourceInRepository resourceName:resourceName onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+            [self.class startDownloadOf:resourceInRepository resourceName:resourceName resourceItem:item onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
         }]];
         [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
     }
@@ -1666,6 +1689,9 @@ includeHidden:(BOOL)includeHidden
             item.downloadTask = task = [app.downloadsManager downloadTaskWithRequest:request andKey:[@"resource:" stringByAppendingString:item.resource->id.toNSString()] andName:name andHidden:item.hidden];
         else
             task = item.downloadTask;
+        
+        item.downloadTask.resourceItem = item;
+        item.downloadTask.creationTime = [NSDate now];
 
         if (onTaskCreated)
             onTaskCreated(task);
@@ -1706,6 +1732,7 @@ includeHidden:(BOOL)includeHidden
 
 + (void) startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource
             resourceName:(NSString *)name
+            resourceItem:(OAResourceItem *)resourceItem
            onTaskCreated:(OADownloadTaskCallback)onTaskCreated
            onTaskResumed:(OADownloadTaskCallback)onTaskResumed
 {
@@ -1724,6 +1751,8 @@ includeHidden:(BOOL)includeHidden
                                                                      andKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]
                                                                     andName:name
                                                                   andHidden:NO];
+    task.resourceItem = resourceItem;
+    task.creationTime = [NSDate now];
 
     if (onTaskCreated)
         onTaskCreated(task);
@@ -1761,6 +1790,11 @@ includeHidden:(BOOL)includeHidden
     {
         OARepositoryResourceItem* item = (OARepositoryResourceItem*)item_;
         resourceName = [self.class titleOfResource:item.resource inRegion:item.worldRegion withRegionName:YES withResourceType:YES];
+    }
+    else if ([item_ isKindOfClass:[OACustomResourceItem class]])
+    {
+        OACustomResourceItem* item = (OACustomResourceItem*)item_;
+        resourceName = [item getVisibleName];
     }
 
     if (!resourceName)

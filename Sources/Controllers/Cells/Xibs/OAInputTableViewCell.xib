@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -14,11 +14,11 @@
         <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="OAInputTableViewCell" id="LxD-NU-PfF" customClass="OAInputTableViewCell">
             <rect key="frame" x="0.0" y="0.0" width="414" height="66"/>
             <autoresizingMask key="autoresizingMask"/>
-            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="LxD-NU-PfF" id="Q2A-uT-p37">
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" tableViewCell="LxD-NU-PfF" id="Q2A-uT-p37">
                 <rect key="frame" x="0.0" y="0.0" width="414" height="66"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2Wq-3b-y6T" userLabel="Content Outside Stack View H">
+                    <stackView opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Wq-3b-y6T" userLabel="Content Outside Stack View H">
                         <rect key="frame" x="20" y="0.0" width="374" height="66"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="Kkk-UD-yxv" userLabel="Content Outside Stack View V">
@@ -140,10 +140,10 @@
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GDl-Q7-rAW" userLabel="Clear Button">
-                                        <rect key="frame" x="6" y="18" width="30" height="30"/>
+                                        <rect key="frame" x="12" y="21" width="24" height="24"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="30" id="ib4-Lr-zFr"/>
-                                            <constraint firstAttribute="height" constant="30" id="kgZ-Lq-1zd"/>
+                                            <constraint firstAttribute="width" constant="24" id="ib4-Lr-zFr"/>
+                                            <constraint firstAttribute="height" constant="24" id="kgZ-Lq-1zd"/>
                                         </constraints>
                                         <color key="tintColor" red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="calibratedRGB"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -156,9 +156,9 @@
                                 <constraints>
                                     <constraint firstItem="GDl-Q7-rAW" firstAttribute="centerY" secondItem="Shn-7v-F63" secondAttribute="centerY" id="77s-EW-VSd"/>
                                     <constraint firstItem="UiA-N1-vfN" firstAttribute="centerX" secondItem="Shn-7v-F63" secondAttribute="centerX" id="CP6-7I-Pjt"/>
-                                    <constraint firstItem="GDl-Q7-rAW" firstAttribute="leading" secondItem="Shn-7v-F63" secondAttribute="leading" constant="6" id="EVw-tE-ZQI"/>
                                     <constraint firstItem="UiA-N1-vfN" firstAttribute="centerY" secondItem="Shn-7v-F63" secondAttribute="centerY" id="FbJ-Zc-Ars"/>
                                     <constraint firstAttribute="width" constant="36" id="Zot-Ef-gTT"/>
+                                    <constraint firstAttribute="trailing" secondItem="GDl-Q7-rAW" secondAttribute="trailing" id="ujF-Y0-V90"/>
                                 </constraints>
                             </view>
                         </subviews>

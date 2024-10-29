@@ -24,7 +24,7 @@
 #define kOutlineWidth 10
 #define kWidthCorrectionValue 4
 
-@class OAGPXDocument, OATrkSegment, OATrackChartPoints;
+@class OASTrkSegment, OATrackChartPoints;
 
 struct RouteSegmentResult;
 

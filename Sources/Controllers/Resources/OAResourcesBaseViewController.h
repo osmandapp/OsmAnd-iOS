@@ -16,8 +16,6 @@
 
 @property (nonatomic, assign) BOOL dataInvalidated;
 
-@property OADownloadProgressView* downloadView;
-
 @property (readonly) NSComparator resourceItemsComparator;
 @property (strong, nonatomic) OAWorldRegion* region;
 
@@ -34,11 +32,10 @@
 - (void) offerDownloadAndInstallOf:(OARepositoryResourceItem *)item;
 - (void) offerDownloadAndUpdateOf:(OAOutdatedResourceItem *)item;
 
-- (void) showDownloadViewForTask:(id<OADownloadTask>)task;
-
 - (void) startDownloadOfItem:(OARepositoryResourceItem*)item;
 - (void) startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource
-            resourceName:(NSString *)name;
+            resourceName:(NSString *)name
+            resourceItem:(OAResourceItem *)resourceItem;
 
 - (void) offerCancelDownloadOf:(OAResourceItem *)item;
 

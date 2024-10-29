@@ -30,6 +30,7 @@
 #import "OAPOIFiltersHelper.h"
 #import "OAFavoriteItem.h"
 #import "OAFavoritesHelper.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore/Data/Address.h>
 #include <OsmAndCore/Data/Street.h>
@@ -197,8 +198,8 @@
         }
         case WPT:
         {
-            OAWptPt *wpt = (OAWptPt *) searchResult.object;
-            return [wpt getIcon];
+            OASWptPt *wpt = (OASWptPt *) searchResult.object;
+            return [wpt getIconName];
         }
 
         default:
@@ -338,6 +339,11 @@
         {
             OAPOI *poi = (OAPOI *) searchResult.object;
             NSString * subType = [poi getSubTypeStr];
+            NSString * city = poi.cityName;
+            if ([city length] > 0)
+            {
+                subType = [subType stringByAppendingFormat:@" • %@", city];
+            }
             return [[self.class getName:searchResult] isEqualToString:subType] ? @"" : subType;
         }
         case LOCATION:

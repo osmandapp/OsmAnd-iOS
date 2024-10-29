@@ -15,7 +15,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OAMapViewController, OAFavoriteItem, OAGpxWptItem, OAGPX, OADestination, OAPointDescription, OAHistoryItem, OAAddress, OARTarg, OAToolbarViewController, OAMapActions, OAMapWidgetRegistry, OAMapHudViewController, OABaseScrollableHudViewController, OAApplicationMode, OAGPXDocument, OAGPXTrackAnalysis, OARoutePlanningHudViewController, OATrackMenuViewControllerState, OAObservable, OARTargetPoint, OATargetMenuViewControllerState, OAPOIUIFilter;
+@class OAMapViewController, OAFavoriteItem, OAGpxWptItem, OASGpxDataItem, OADestination, OAPointDescription, OAHistoryItem, OAAddress, OARTarg, OAToolbarViewController, OAMapActions, OAMapWidgetRegistry, OAMapHudViewController, OABaseScrollableHudViewController, OAApplicationMode, OASGpxFile, OASGpxTrackAnalysis, OARoutePlanningHudViewController, OATrackMenuViewControllerState, OAObservable, OARTargetPoint, OATargetMenuViewControllerState, OAPOIUIFilter, OASGpxDataItem, OASGpxFile, OASTrackItem;
 
 @interface OAMapPanelViewController : UIViewController<OATargetPointViewDelegate>
 
@@ -85,7 +85,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) updateRouteInfo;
 - (void) updateRouteInfoData;
 - (void) updateTargetDescriptionLabel;
-- (void) showWaypoints;
+- (void) showWaypoints:(BOOL)isShowAlong;
 - (void) showRoutePreferences;
 - (void) showConfigureScreen;
 - (void) showConfigureScreen:(OAApplicationMode *)targetMode;
@@ -137,19 +137,19 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu saveState:(BOOL)saveState;
 
 - (void) openRecordingTrackTargetView;
-- (void) openTargetViewWithGPX:(OAGPX *)item;
-- (void) openTargetViewWithGPX:(OAGPX *)item selectedTab:(EOATrackMenuHudTab)selectedTab selectedStatisticsTab:(EOATrackMenuHudSegmentsStatisticsTab)selectedStatisticsTab openedFromMap:(BOOL)openedFromMap;
+- (void) openTargetViewWithGPX:(OASTrackItem *)item;
+- (void) openTargetViewWithGPX:(OASTrackItem *)item selectedTab:(EOATrackMenuHudTab)selectedTab selectedStatisticsTab:(EOATrackMenuHudSegmentsStatisticsTab)selectedStatisticsTab openedFromMap:(BOOL)openedFromMap;
 
-- (void) openTargetViewWithGPX:(OAGPX *)item
+- (void) openTargetViewWithGPX:(OASTrackItem *)item
                   trackHudMode:(EOATrackHudMode)trackHudMode
                          state:(OATrackMenuViewControllerState *)state;
 
-- (void)openTargetViewWithGPX:(OAGPX *)item
-                        items:(nullable NSArray<OAGPX *> *)items
+- (void)openTargetViewWithGPX:(OASTrackItem *)item
+                        items:(nullable NSArray<OASGpxDataItem *> *)items
                  trackHudMode:(EOATrackHudMode)trackHudMode
                         state:(OATrackMenuViewControllerState *)state;
 
-- (void)openTargetViewWithGPXFromTracksList:(OAGPX *)item
+- (void)openTargetViewWithGPXFromTracksList:(OASTrackItem *)item
                        navControllerHistory:(NSArray<UIViewController *> *)navControllerHistory
                               fromTrackMenu:(BOOL)fromTrackMenu
                                 selectedTab:(EOATrackMenuHudTab)selectedTab;
@@ -160,26 +160,30 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) openTargetViewWithRouteTargetSelection:(OATargetPointType)type;
 - (void) openTargetViewWithImpassableRoad:(unsigned long long)roadId pushed:(BOOL)pushed;
 - (void) openTargetViewWithImpassableRoadSelection;
-- (void) openTargetViewWithRouteDetails:(nullable OAGPXDocument *)gpx analysis:(nullable OAGPXTrackAnalysis *)analysis;
-- (void) openTargetViewWithRouteDetailsGraph:(nullable OAGPXDocument *)gpx
-                                    analysis:(nullable OAGPXTrackAnalysis *)analysis
+- (void) openTargetViewWithRouteDetails:(nullable OASGpxFile *)gpx analysis:(nullable OASGpxTrackAnalysis *)analysis;
+- (void) openTargetViewWithRouteDetailsGraph:(nullable OASGpxFile *)gpx
+                                   trackItem:(nullable OASTrackItem *)trackItem
+                                    analysis:(nullable OASGpxTrackAnalysis *)analysis
                             menuControlState:(OATargetMenuViewControllerState *)menuControlState;
-- (void) openTargetViewWithRouteDetailsGraph:(nullable OAGPXDocument *)gpx
-                                    analysis:(nullable OAGPXTrackAnalysis *)analysis
-                            menuControlState:(OATargetMenuViewControllerState *)menuControlState
-                                     isRoute:(BOOL)isRoute;
+
+- (void)openTargetViewWithRouteDetailsGraph:(nullable OASGpxFile *)gpx
+                                  trackItem:(nullable OASTrackItem *)trackItem
+                                   analysis:(OASGpxTrackAnalysis *)analysis
+                           menuControlState:(OATargetMenuViewControllerState *)menuControlState
+                                    isRoute:(BOOL)isRoute;
+
 - (void) openTargetViewFromTracksListWithRouteDetailsGraph:(NSString *)gpxFilepath
                                             isCurrentTrack:(BOOL)isCurrentTrack
                                                      state:(OATrackMenuViewControllerState *)state;
 - (void) openTargetViewWithMovableTarget:(OATargetPoint *)targetPoint;
-- (void) openTargetViewWithNewGpxWptMovableTarget:(OAGPX *)gpx
+- (void) openTargetViewWithNewGpxWptMovableTarget:(OASTrackItem *)gpx
                                  menuControlState:(OATargetMenuViewControllerState *)menuControlState;
 - (void) openTargetViewWithTransportRouteDetails:(NSInteger)routeIndex showFullScreen:(BOOL)showFullScreeen;
 - (void) openTargetViewWithDownloadMapSource:(BOOL)pushed;
 
 - (BOOL) hasGpxActiveTargetType;
 
-- (void) displayGpxOnMap:(OAGPX *)item;
+- (void) displayGpxOnMap:(OASGpxFile *)item;
 
 - (BOOL) goToMyLocationIfInArea:(CLLocationCoordinate2D)topLeft
                     bottomRight:(CLLocationCoordinate2D)bottomRight;
@@ -255,6 +259,15 @@ NS_ASSUME_NONNULL_BEGIN
 // CarPlay
 - (void) setMapViewController:(nullable OAMapViewController *)mapViewController;
 - (void)detachFromCarPlayWindow;
+
+- (void)openNewTargetViewFromTracksListWithRouteDetailsGraph:(OASTrackItem *)trackItem
+                                                       state:(OATrackMenuViewControllerState *)state;
+
+
+- (void)openNewTargetViewWithRouteDetailsGraph:(OASGpxFile *)gpx
+                                    analysis:(OASGpxTrackAnalysis *)analysis
+                            menuControlState:(OATargetMenuViewControllerState *)menuControlState
+                                       isRoute:(BOOL)isRoute;
 
 @end
  

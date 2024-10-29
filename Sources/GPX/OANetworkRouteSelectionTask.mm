@@ -8,8 +8,10 @@
 
 #import "OANetworkRouteSelectionTask.h"
 #import "OARouteKey.h"
-#import "OAGPXDocument.h"
 #import "OsmAndApp.h"
+#import "OsmAndSharedWrapper.h"
+
+#include <QBuffer>
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/NetworkRouteSelector.h>
@@ -33,7 +35,7 @@
     return self;
 }
 
-- (void) execute:(void(^)(OAGPXDocument *gpxFile))onComplete
+- (void) execute:(void(^)(OASGpxFile *gpxFile))onComplete
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         std::shared_ptr<const OsmAnd::IQueryController> ctrl;
@@ -53,8 +55,20 @@
         {
             auto gpx = it.value();
             dispatch_async(dispatch_get_main_queue(), ^{
-                OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxDocument:gpx];
-                onComplete(doc);
+
+                QByteArray byteArray;
+                QBuffer buffer(&byteArray);
+                buffer.open(QIODevice::WriteOnly);
+                QXmlStreamWriter xmlWriter(&buffer);
+                auto name = gpx->metadata ? gpx->metadata->name : QString();
+                gpx->saveTo(xmlWriter, name);
+                buffer.close();
+                auto xmlString = QString::fromUtf8(byteArray);
+
+                OASOkioBuffer *buf = [[OASOkioBuffer alloc] init];
+                [buf writeUtf8String:xmlString.toNSString()];
+                OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileSource:buf];
+                onComplete(gpxFile);
             });
         }
         else

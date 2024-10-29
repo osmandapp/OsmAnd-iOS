@@ -8,9 +8,9 @@
 
 #import "OATravelLocalDataDbHelper.h"
 #import "OsmAndApp.h"
-#import "OAGPXDocument.h"
 #import "OsmAnd_Maps-Swift.h"
 #import <sqlite3.h>
+#import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ArchiveWriter.h>
@@ -77,7 +77,7 @@
     if (!travelBook)
         return;
 
-    OAGPXDocument *gpx = (OAGPXDocument *) article.gpxFile.object;
+    OASGpxFile *gpx = (OASGpxFile *) article.gpxFile.object;
     NSString *tmpFilePath = [_tmpDir stringByAppendingPathComponent:TEMP_GPX_FILE_NAME];
     if (gpx)
     {
@@ -610,10 +610,11 @@
                             if (!stringContent.isEmpty())
                             {
                                 OAGPXDocumentAdapter *adapter = [[OAGPXDocumentAdapter alloc] init];
-                                OAGPXDocument *document = [[OAGPXDocument alloc] init];
-                                QXmlStreamReader xmlReader(stringContent);
-                                [document fetch:OsmAnd::GpxDocument::loadFrom(xmlReader)];
-                                adapter.object = document;
+                                
+                                OASOkioBuffer *buffer = [[OASOkioBuffer alloc] init];
+                                [buffer writeUtf8String:stringContent.toNSString()];
+                                OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileSource:buffer];
+                                adapter.object = gpxFile;
                                 dbArticle.gpxFile = adapter;
                             }
                         }

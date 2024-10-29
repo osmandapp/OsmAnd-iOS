@@ -10,7 +10,6 @@
 #import "OsmAndApp.h"
 #import "Localization.h"
 #import "OAGPXDatabase.h"
-#import "OAGPXDocument.h"
 #import "OsmAndApp.h"
 #import "OAGPXTrackCell.h"
 #import "OASegmentTableViewCell.h"
@@ -149,7 +148,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     NSMutableArray *data = [NSMutableArray new];
     NSMutableArray *existingTracksSection = [NSMutableArray new];
     OAGPXDatabase *db = [OAGPXDatabase sharedDb];
-    NSArray *filteredData = [self filterData:db.gpxList];
+    NSArray *filteredData = [self filterData:[db getDataItems]];
     NSArray *gpxList = [NSMutableArray arrayWithArray:[self sortData:filteredData]];
     
     [existingTracksSection addObject:@{
@@ -182,14 +181,14 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         }];
     }
     
-    for (OAGPX *gpx in gpxList)
+    for (OASGpxDataItem *gpx in gpxList)
     {
         [existingTracksSection addObject:@{
             @"type" : [OAGPXTrackCell getCellIdentifier],
             @"track" : gpx,
             @"title" : [gpx getNiceTitle],
             @"distance" : [OAOsmAndFormatter getFormattedDistance:gpx.totalDistance],
-            @"time" : [OAOsmAndFormatter getFormattedTimeInterval:gpx.timeSpan shortFormat:YES],
+            @"time" : [OAOsmAndFormatter getFormattedTimeInterval:gpx.timeSpan / 1000 shortFormat:YES],
             @"wpt" : [NSString stringWithFormat:@"%d", gpx.wptPoints],
             @"key" : @"gpx_route"
         }];
@@ -231,7 +230,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         if ([selectedFolderName isEqualToString:OALocalizedString(@"shared_string_gpx_tracks")])
             selectedFolderName = @"";
         
-        return [data filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(OAGPX *object, NSDictionary *bindings) {
+        return [data filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(OASGpxDataItem *object, NSDictionary *bindings) {
             return [object.gpxFolderName isEqualToString:selectedFolderName];
         }]];
     }
@@ -239,7 +238,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 
 - (NSArray *)sortData:(NSArray *)data
 {
-    NSArray *sortedData = [data sortedArrayUsingComparator:^NSComparisonResult(OAGPX *obj1, OAGPX *obj2) {
+    NSArray *sortedData = [data sortedArrayUsingComparator:^NSComparisonResult(OASGpxDataItem *obj1, OASGpxDataItem *obj2) {
         switch (_sortingMode) {
             case EOAModifiedDate:
             {
@@ -388,7 +387,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     
-    OAGPX* track = item[@"track"];
+    OASGpxDataItem* track = item[@"track"];
     switch (_screenType) {
         case EOAOpenExistingTrack:
         {
@@ -406,7 +405,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         }
         case EOAAddToATrack:
         {
-            OAGPX* track = item[@"track"];
+            OASGpxDataItem* track = item[@"track"];
             NSString *filename = nil;
             if (track)
                 filename = track.gpxFileName;
@@ -418,24 +417,27 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         }
         case EOAFollowTrack:
         {
-            OAGPX* track = item[@"track"];
+            OASGpxDataItem *track = item[@"track"];
             NSString *filePath = track.gpxFilePath;
-            const auto& activeGpx = OASelectedGPXHelper.instance.activeGpx;
-            if (activeGpx.find(QString::fromNSString(filePath)) == activeGpx.end())
+            NSDictionary<NSString *, OASGpxFile *> *activeGpx = OASelectedGPXHelper.instance.activeGpx;
+            if ([activeGpx.allKeys containsObject:filePath])
+            {
                 [OAAppSettings.sharedManager showGpx:@[filePath]];
+            }
             
-            OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:track.gpxFilePath]];
+            OASKFile *file = [[OASKFile alloc] initWithFilePath:[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:track.gpxFilePath]];
+            OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
             
-            OAApplicationMode *mode = [doc getRouteProfile];
+            OAApplicationMode *mode = [self getRouteProfile:gpxFile];
             if (mode)
             {
                 [OARoutingHelper.sharedInstance setAppMode:mode];
                 [OsmAndApp.instance initVoiceCommandPlayer:mode warningNoneProvider:YES showDialog:NO force:NO];
             }
             
-            if (doc.getNonEmptySegmentsCount > 1)
+            if (gpxFile.getNonEmptySegmentsCount > 1)
             {
-                OATrackSegmentsViewController *trackSegments = [[OATrackSegmentsViewController alloc] initWithFile:doc];
+                OATrackSegmentsViewController *trackSegments = [[OATrackSegmentsViewController alloc] initWithFile:gpxFile];
                 trackSegments.delegate = self;
                 [self.navigationController pushViewController:trackSegments animated:YES];
                 return;
@@ -452,6 +454,18 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             break;
         }
     }
+}
+
+- (OAApplicationMode *)getRouteProfile:(OASGpxFile *)gpxFile
+{
+    NSArray<OASWptPt *> *points = [gpxFile getRoutePoints];
+    if (points && points.count > 0)
+    {
+        OAApplicationMode *mode = [OAApplicationMode valueOfStringKey:[points[0] getProfileType] def:nil];
+        if (mode)
+            return mode;
+    }
+    return nil;
 }
 
 #pragma mark - Aditions
@@ -498,7 +512,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 
 #pragma mark - OASegmentSelectionDelegate
 
-- (void)onSegmentSelected:(NSInteger)position gpx:(OAGPXDocument *)gpx
+- (void)onSegmentSelected:(NSInteger)position gpx:(OASGpxFile *)gpx
 {
     if (self.delegate)
     {

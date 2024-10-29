@@ -65,26 +65,7 @@
 
 - (void) setupView
 {
-    if ([settingKeyName isEqualToString:settingAppModeKey])
-    {
-        title = OALocalizedString(@"map_mode");
-        int mode = [_settings.appearanceMode get];
-        data = @[
-                 @{
-                     @"name" : OALocalizedString(@"daynight_mode_auto"),
-                     @"value" : @"",
-                     @"img" : mode == APPEARANCE_MODE_AUTO ? @"menu_cell_selected.png" : @"" },
-                 @{
-                     @"name" : OALocalizedString(@"day"),
-                     @"value" : @"",
-                     @"img" : mode == APPEARANCE_MODE_DAY ? @"menu_cell_selected.png" : @"" },
-                 @{
-                     @"name" : OALocalizedString(@"daynight_mode_night"),
-                     @"value" : @"",
-                     @"img" : mode == APPEARANCE_MODE_NIGHT ? @"menu_cell_selected.png" : @"" }
-                 ];
-    }
-    else if ([settingKeyName isEqualToString:mapDensityKey])
+    if ([settingKeyName isEqualToString:mapDensityKey])
     {
         title = OALocalizedString(@"map_magnifier");
         double value = [_settings.mapDensity get];
@@ -214,18 +195,7 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([settingKeyName isEqualToString:settingAppModeKey])
-    {
-        int index = (int)indexPath.row;
-        if (index == 1)
-            [_settings.appearanceMode set:APPEARANCE_MODE_DAY];
-        else if (index == 2)
-            [_settings.appearanceMode set:APPEARANCE_MODE_NIGHT];
-        else
-            [_settings.appearanceMode set:APPEARANCE_MODE_AUTO];
-        [[OADayNightHelper instance] forceUpdate];
-    }
-    else if ([settingKeyName isEqualToString:mapDensityKey])
+    if ([settingKeyName isEqualToString:mapDensityKey])
     {
         NSDictionary *item = data[indexPath.row];
         [_settings.mapDensity set:[item[@"val"] doubleValue] mode:_settings.applicationMode.get];

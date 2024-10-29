@@ -585,8 +585,9 @@
 {
     if (_localMapIndexItem)
     {
+        NSString *resourceId = _localMapIndexItem.resourceId.toNSString();
         [OAResourcesUIHelper offerCancelDownloadOf:_localMapIndexItem onTaskStop:^(id<OADownloadTask>  _Nonnull task) {
-            if ([[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""] isEqualToString:_localMapIndexItem.resourceId.toNSString()])
+            if ([[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""] isEqualToString:resourceId])
             {
                 [self.delegate hideProgressBar];
                 _localMapIndexItem = nil;

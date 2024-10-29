@@ -23,7 +23,6 @@
 #import "OASegmentSliderTableViewCell.h"
 #import "OASegmentedControlCell.h"
 #import "OADividerCell.h"
-#import "OALineChartCell.h"
 #import "Localization.h"
 #import "OAColors.h"
 #import "OAOsmAndFormatter.h"
@@ -405,7 +404,7 @@ static const NSInteger kColorsSection = 1;
     [self.tableView registerNib:[UINib nibWithNibName:[OAButtonTableViewCell getCellIdentifier] bundle:nil] forCellReuseIdentifier:[OAButtonTableViewCell getCellIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[OACollectionSingleLineTableViewCell getCellIdentifier] bundle:nil]
          forCellReuseIdentifier:[OACollectionSingleLineTableViewCell getCellIdentifier]];
-    [self.tableView registerNib:[UINib nibWithNibName:OALineChartCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:OALineChartCell.reuseIdentifier];
+    [self.tableView registerNib:[UINib nibWithNibName:GradientChartCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:GradientChartCell.reuseIdentifier];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:[UITableViewCell getCellIdentifier]];
 }
 
@@ -1100,7 +1099,7 @@ static const NSInteger kColorsSection = 1;
 {
     return [OAGPXTableCellData withData:@{
         kTableKey: @"gradientLegend",
-        kCellType: [OALineChartCell getCellIdentifier],
+        kCellType: GradientChartCell.reuseIdentifier
     }];
 }
 
@@ -1681,15 +1680,16 @@ static const NSInteger kColorsSection = 1;
         }
         return [UITableViewCell new];
     }
-    else if ([cellData.type isEqualToString:OALineChartCell.reuseIdentifier])
+    else if ([cellData.type isEqualToString:GradientChartCell.reuseIdentifier])
     {
-        OALineChartCell *cell = (OALineChartCell *) [tableView dequeueReusableCellWithIdentifier:OALineChartCell.reuseIdentifier
-                                                                                         forIndexPath:indexPath];
+        GradientChartCell *cell = (GradientChartCell *) [tableView dequeueReusableCellWithIdentifier:GradientChartCell.reuseIdentifier
+                                                                                        forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.separatorInset = UIEdgeInsetsMake(0, CGFLOAT_MAX, 0, 0);
-        cell.heightConstraint.constant = 55;
+        cell.heightConstraint.constant = 60;
+        cell.chartView.extraBottomOffset = 24;
 
-        [GpxUIHelper setupGradientChartWithChart:cell.lineChartView
+        [GpxUIHelper setupGradientChartWithChart:cell.chartView
                              useGesturesAndScale:NO
                                   xAxisGridColor:[UIColor colorNamed:ACColorNameChartAxisGridLine]
                                      labelsColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
@@ -1703,13 +1703,13 @@ static const NSInteger kColorsSection = 1;
         if (!colorPalette)
             return cell;
 
-        cell.lineChartView.data =
-            [GpxUIHelper buildGradientChartWithChart:cell.lineChartView
+        cell.chartView.data =
+            [GpxUIHelper buildGradientChartWithChart:cell.chartView
                                         colorPalette:colorPalette
                                       valueFormatter:[GradientUiHelper getGradientTypeFormatter:_gradientColorsCollection.gradientType
                                                                                        analysis:self.analysis]];
-        [cell.lineChartView setVisibleYRangeWithMinYRange:0 maxYRange: 1 axis:AxisDependencyLeft];
-        [cell.lineChartView notifyDataSetChanged];
+        [cell.chartView notifyDataSetChanged];
+        [cell.chartView setNeedsDisplay];
         return cell;
     }
 

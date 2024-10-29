@@ -739,6 +739,8 @@
 		46BA4847281C2F3500C04F14 /* ic_custom_poi_brand@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46BA4843281C2F3400C04F14 /* ic_custom_poi_brand@3x.png */; };
 		46BA4848281C2F3500C04F14 /* ic_custom_poi_name@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46BA4844281C2F3400C04F14 /* ic_custom_poi_name@3x.png */; };
 		46BA4849281C2F3500C04F14 /* ic_custom_poi_brand@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46BA4845281C2F3500C04F14 /* ic_custom_poi_brand@2x.png */; };
+		46BCB1602CC2AC6D004E0283 /* GradientChartCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46BCB15F2CC2AC6D004E0283 /* GradientChartCell.swift */; };
+		46BCB1622CC2ACE9004E0283 /* GradientChartCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46BCB1612CC2ACE9004E0283 /* GradientChartCell.xib */; };
 		46BCD1922C2DCA0F008749EC /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 463EFDD92C2C92A300549EF7 /* ColorPalette.swift */; };
 		46BD939B2B763CC8004BC4F5 /* FFCircularProgressView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46BD939A2B763CC8004BC4F5 /* FFCircularProgressView+Extension.swift */; };
 		46BE1FFE2AF0317D005F952E /* ScreenOrientationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46BE1FFD2AF0317D005F952E /* ScreenOrientationHelper.swift */; };
@@ -4139,6 +4141,8 @@
 		46BA4845281C2F3500C04F14 /* ic_custom_poi_brand@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_poi_brand@2x.png"; path = "Resources/Icons/ic_custom_poi_brand@2x.png"; sourceTree = "<group>"; };
 		46BB3677294BE72100155EC8 /* OAEmissionHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAEmissionHelper.h; sourceTree = "<group>"; };
 		46BB3678294BE77200155EC8 /* OAEmissionHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAEmissionHelper.mm; sourceTree = "<group>"; };
+		46BCB15F2CC2AC6D004E0283 /* GradientChartCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientChartCell.swift; sourceTree = "<group>"; };
+		46BCB1612CC2ACE9004E0283 /* GradientChartCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GradientChartCell.xib; sourceTree = "<group>"; };
 		46BD939A2B763CC8004BC4F5 /* FFCircularProgressView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FFCircularProgressView+Extension.swift"; sourceTree = "<group>"; };
 		46BE1FFD2AF0317D005F952E /* ScreenOrientationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenOrientationHelper.swift; sourceTree = "<group>"; };
 		46BF38DB2CA44C090056D2C2 /* TerrainColorSchemeAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerrainColorSchemeAction.swift; sourceTree = "<group>"; };
@@ -11602,6 +11606,7 @@
 				32FF4C2A2C18425900246B36 /* SegmentTableHeaderView.swift */,
 				DA5A7BB626C563A100F274C7 /* Xibs */,
 				468CD3822C809E3400CC3436 /* ElevationChartCell.swift */,
+				46BCB15F2CC2AC6D004E0283 /* GradientChartCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -11728,6 +11733,7 @@
 				FA00B8892B592CF000582CD1 /* SegmentImagesWithRightLabelTableViewCell.xib */,
 				32FF4C252C183A6400246B36 /* SegmentTableHeaderView.xib */,
 				468CD3842C80A06500CC3436 /* ElevationChartCell.xib */,
+				46BCB1612CC2ACE9004E0283 /* GradientChartCell.xib */,
 			);
 			path = Xibs;
 			sourceTree = "<group>";
@@ -15064,6 +15070,7 @@
 				0A31AFC826FBAC39000EE842 /* ic_small_time_end@2x.png in Resources */,
 				DA65834222BBB6FA0095B03D /* ic_custom_success@3x.png in Resources */,
 				DABA3DD322686E72005BB777 /* ic_custom_overflow_menu@2x.png in Resources */,
+				46BCB1622CC2ACE9004E0283 /* GradientChartCell.xib in Resources */,
 				DA5A83C226C563A800F274C7 /* OAFloatingButtonsHudViewController.xib in Resources */,
 				DA5A837A26C563A800F274C7 /* OAAppModeView.xib in Resources */,
 				323BD90E2628850400D255ED /* ic_bg_point_comment_top_small@2x.png in Resources */,
@@ -17216,6 +17223,7 @@
 				DA1A886427FC66DA00A82DF6 /* OABackupDbHelper.m in Sources */,
 				DA5A824E26C563A700F274C7 /* OAMapBehaviorViewController.m in Sources */,
 				32DA38A82BA9C4D500A3AC3C /* CLLocation+Extension.m in Sources */,
+				46BCB1602CC2AC6D004E0283 /* GradientChartCell.swift in Sources */,
 				DA5A83BD26C563A800F274C7 /* OAAddQuickActionViewController.m in Sources */,
 				DA5A81DD26C563A700F274C7 /* OAStreetIntersection.mm in Sources */,
 				DA5A83E226C563A800F274C7 /* OAEditColorViewController.m in Sources */,

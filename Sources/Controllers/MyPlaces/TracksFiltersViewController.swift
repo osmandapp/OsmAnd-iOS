@@ -271,8 +271,7 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
         return nil
     }
     
-    override func onRowSelected(_ indexPath: IndexPath?) {
-        guard let indexPath = indexPath else { return }
+    override func onRowSelected(_ indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
         if let key = item.key, let mapping = filterMappings[key] {
             let filterDetailsVC = TracksFilterDetailsViewController(filterType: mapping.type, baseFilters: baseFilters, baseFiltersResult: baseFiltersResult)
@@ -323,9 +322,9 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
     private func addRangeFilterSections(sectionHeader: String, filters: [(key: String, type: TrackFilterType, title: String)]) {
         let section = tableData.createNewSection()
         section.headerText = localizedString(sectionHeader)
-        filters.forEach { filterInfo in
+        filters.forEach {
             let row = section.createNewRow()
-            configureRangeFilterRow(row: row, filterType: filterInfo.type, title: filterInfo.title, key: filterInfo.key)
+            configureRangeFilterRow(row: row, filterType: $0.type, title: $0.title, key: $0.key)
         }
     }
     
@@ -356,15 +355,18 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
     
     private func updateListFilterRowDescription(forFilterType filterType: TrackFilterType, inRow row: OATableRowData) {
         if let filter = baseFilters.getFilterByType(filterType) as? ListTrackFilter {
-            let selectedNames = filter.selectedItems.compactMap { item -> String? in
-                guard let itemName = item as? String else { return nil }
-                if filter is FolderTrackFilter {
-                    let folderName = itemName.components(separatedBy: "/").last ?? itemName
-                    return filter.collectionFilterParams.getItemText(itemName: folderName)
-                } else {
-                    return filter.collectionFilterParams.getItemText(itemName: itemName)
+            let selectedNames = filter.selectedItems
+                .compactMap { $0 as? String }
+                .map { itemName in
+                    if filter is FolderTrackFilter {
+                        let folderName = itemName.components(separatedBy: "/").last ?? itemName
+                        return filter.collectionFilterParams.getItemText(itemName: folderName)
+                    } else {
+                        return filter.collectionFilterParams.getItemText(itemName: itemName)
+                    }
                 }
-            }.joined(separator: ", ")
+                .joined(separator: ", ")
+            
             row.descr = filter.isValid() ? selectedNames : ""
             row.setObj(filter.isValid(), forKey: Self.isValidFilterKey)
         }

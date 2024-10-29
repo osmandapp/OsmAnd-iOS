@@ -287,8 +287,8 @@ extension TracksSearchFilter {
             return FormattedValue(valueSrc: defaultValue, value: String(format: "%.0f", defaultValue), unit: "")
         }
         
-        if let formattedValue = formattedString {
-            let components = formattedValue.components(separatedBy: " ")
+        if let formattedString {
+            let components = formattedString.components(separatedBy: " ")
             if components.count > 1 {
                 let numberPart = components.dropLast().joined().replacingOccurrences(of: " ", with: "")
                 let valueSrc = Float(numberPart) ?? 0.0

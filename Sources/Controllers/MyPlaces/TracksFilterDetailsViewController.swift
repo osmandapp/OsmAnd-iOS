@@ -93,16 +93,17 @@ final class FolderTrackFilterConfigurator: TrackFilterConfigurable {
             let components = URLComponents(string: folder)?.path.split(separator: "/").map(String.init) ?? []
             let topLevel = components.first ?? ""
             let subfolderPath = components.dropFirst().joined(separator: "/")
+            let remainingComponents = Array(components.dropFirst())
             if let topLevelIndex = orderedFolders.firstIndex(where: { $0.path == topLevel }) {
                 if !subfolderPath.isEmpty {
-                    processSubfolders(for: &orderedFolders[topLevelIndex], with: Array(components.dropFirst()), currentPath: topLevel, originalKey: folder)
+                    processSubfolders(for: &orderedFolders[topLevelIndex], with: remainingComponents, currentPath: topLevel, originalKey: folder)
                 }
             } else {
                 let topLevelFolder = createFolderItem(key: folder, path: topLevel, displayName: listFilter.collectionFilterParams.getItemText(itemName: topLevel), isRoot: true)
                 orderedFolders.append(topLevelFolder)
                 if !subfolderPath.isEmpty {
                     var newTopLevelFolder = topLevelFolder
-                    processSubfolders(for: &newTopLevelFolder, with: Array(components.dropFirst()), currentPath: topLevel, originalKey: folder)
+                    processSubfolders(for: &newTopLevelFolder, with: remainingComponents, currentPath: topLevel, originalKey: folder)
                     if let index = orderedFolders.firstIndex(where: { $0.path == topLevel }) {
                         orderedFolders[index] = newTopLevelFolder
                     }
@@ -128,6 +129,19 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
     private static let mediumLine = "medium"
     private static let boldLine = "bold"
     
+    var rangeFilterType: RangeTrackFilter<AnyObject>?
+    var dateCreationFilterType: DateTrackFilter?
+    var listFilterType: ListTrackFilter?
+    var allListItems: [String] = []
+    var allFoldersListItems: [DisplayFolderItem] = []
+    var selectedItems: [String] = []
+    var currentMinValue: Float = 0.0
+    var currentMaxValue: Float = 0.0
+    var currentValueFrom: Float = 0.0
+    var currentValueTo: Float = 0.0
+    var dateCreationFromValue: Int64?
+    var dateCreationToValue: Int64?
+    
     private var baseFilters: TracksSearchFilter
     private var baseFiltersResult: FilterResults
     private var filteredListItems: [String] = []
@@ -144,19 +158,6 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
     private var isSliderDragging = false
     private var isBinding = false
     private var isSearchActive = false
-    
-    var rangeFilterType: RangeTrackFilter<AnyObject>?
-    var dateCreationFilterType: DateTrackFilter?
-    var listFilterType: ListTrackFilter?
-    var allListItems: [String] = []
-    var allFoldersListItems: [DisplayFolderItem] = []
-    var selectedItems: [String] = []
-    var currentMinValue: Float = 0.0
-    var currentMaxValue: Float = 0.0
-    var currentValueFrom: Float = 0.0
-    var currentValueTo: Float = 0.0
-    var dateCreationFromValue: Int64?
-    var dateCreationToValue: Int64?
     
     private let filterType: TrackFilterType
     private let decimalFormatter: NumberFormatter = {
@@ -571,14 +572,13 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
                 row.icon = .icCustomTrackLineMedium
             }
             row.iconTintColor = .iconColorDisruptive
-        } else if let itemInt = GpxUtilities.shared.parseColor(colorString: itemName) {
-            row.iconTintColor = colorFromRGB(Int(truncating: itemInt))
+        } else if let rgbValue = GpxUtilities.shared.parseColor(colorString: itemName)?.intValue {
+            row.iconTintColor = colorFromRGB(rgbValue)
         }
     }
     
     private func getMeasureUnitType() -> MeasureUnitType {
-        guard let rangeFilterType = rangeFilterType else { return .none }
-        return rangeFilterType.trackFilterType.measureUnitType
+        return rangeFilterType?.trackFilterType.measureUnitType ?? .none
     }
     
     private func updateAllFoldersSelection(add: Bool) {

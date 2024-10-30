@@ -64,7 +64,7 @@
 {
     _prefLangId = _settings.settingPrefMapLanguage.get;
     if (_prefLangId)
-        _prefLang = [[[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:_prefLangId] capitalizedStringWithLocale:[NSLocale currentLocale]];
+        _prefLang = [[OAUtilities displayNameForLang:_prefLangId] capitalizedStringWithLocale:[NSLocale currentLocale]];
     else
         _prefLang = OALocalizedString(@"local_map_names");
     

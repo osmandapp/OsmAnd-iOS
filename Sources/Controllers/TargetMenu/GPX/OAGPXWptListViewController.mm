@@ -26,7 +26,8 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 #import "Localization.h"
-
+#import "OsmAndSharedWrapper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OAGPXWptListViewController () <OAMultiselectableHeaderDelegate>
 {
@@ -68,7 +69,7 @@
 - (void)setPoints:(NSArray *)points
 {
     NSMutableArray *arr = [NSMutableArray array];
-    for (OAWptPt *p in points)
+    for (OASWptPt *p in points)
     {
         OAGpxWptItem *item = [[OAGpxWptItem alloc] init];
         item.point = p;
@@ -105,7 +106,7 @@
     CLLocationDirection newDirection = (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f) ? newLocation.course : newHeading;
     
     [self.unsortedPoints enumerateObjectsUsingBlock:^(OAGpxWptItem* itemData, NSUInteger idx, BOOL *stop) {
-        OsmAnd::LatLon latLon(itemData.point.position.latitude, itemData.point.position.longitude);
+        OsmAnd::LatLon latLon(itemData.point.lat, itemData.point.lon);
         const auto& wptPosition31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
         const auto wptLon = OsmAnd::Utilities::get31LongitudeX(wptPosition31.x);
         const auto wptLat = OsmAnd::Utilities::get31LatitudeY(wptPosition31.y);
@@ -195,8 +196,9 @@
     [_sortedHeaderView setTitleText:[NSString stringWithFormat:@"%@: %d", OALocalizedString(@"gpx_points"), self.unsortedPoints.count]];
 
     NSMutableSet *groups = [NSMutableSet set];
+
     for (OAGpxWptItem *item in self.unsortedPoints)
-        [groups addObject:(item.point.type ? item.point.type : @"")];
+        [groups addObject:(item.point.category ? item.point.category : @"")];
     
     NSMutableArray *groupsArray = [[[groups allObjects]
                                     sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2)
@@ -214,7 +216,7 @@
     
     for (OAGpxWptItem *item in sortedArr)
     {
-        NSString *group = item.point.type;
+        NSString *group = item.point.category;
         NSMutableArray *arr;
         if (group.length > 0)
             arr = [dict objectForKey:group];

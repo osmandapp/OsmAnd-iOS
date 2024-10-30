@@ -17,31 +17,31 @@ final class SensorAttributesUtils: NSObject {
                                                  PointAttributes.sensorTagCadence, PointAttributes.sensorTagBikePower,
                                                  PointAttributes.sensorTagTemperatureW, PointAttributes.sensorTagTemperatureA]
 
-    static func hasHeartRateData(_ analysis: OAGPXTrackAnalysis) -> Bool {
-        analysis.hasData(PointAttributes.sensorTagHeartRate)
+    static func hasHeartRateData(_ analysis: GpxTrackAnalysis) -> Bool {
+        analysis.hasData(tag: PointAttributes.sensorTagHeartRate)
     }
 
-    static func hasSensorSpeedData(_ analysis: OAGPXTrackAnalysis) -> Bool {
-        analysis.hasData(PointAttributes.sensorTagSpeed)
+    static func hasSensorSpeedData(_ analysis: GpxTrackAnalysis) -> Bool {
+        analysis.hasData(tag: PointAttributes.sensorTagSpeed)
     }
 
-    static func hasBikeCadenceData(_ analysis: OAGPXTrackAnalysis) -> Bool {
-        analysis.hasData(PointAttributes.sensorTagCadence)
+    static func hasBikeCadenceData(_ analysis: GpxTrackAnalysis) -> Bool {
+        analysis.hasData(tag: PointAttributes.sensorTagCadence)
     }
 
-    static func hasBikePowerData(_ analysis: OAGPXTrackAnalysis) -> Bool {
-        analysis.hasData(PointAttributes.sensorTagBikePower)
+    static func hasBikePowerData(_ analysis: GpxTrackAnalysis) -> Bool {
+        analysis.hasData(tag: PointAttributes.sensorTagBikePower)
     }
 
-    static func hasTemperatureAData(_ analysis: OAGPXTrackAnalysis) -> Bool {
-        analysis.hasData(PointAttributes.sensorTagTemperatureA)
+    static func hasTemperatureAData(_ analysis: GpxTrackAnalysis) -> Bool {
+        analysis.hasData(tag: PointAttributes.sensorTagTemperatureA)
     }
 
-    static func hasTemperatureWData(_ analysis: OAGPXTrackAnalysis) -> Bool {
-        analysis.hasData(PointAttributes.sensorTagTemperatureW)
+    static func hasTemperatureWData(_ analysis: GpxTrackAnalysis) -> Bool {
+        analysis.hasData(tag: PointAttributes.sensorTagTemperatureW)
     }
 
-    static func getAvailableGPXDataSetTypes(analysis: OAGPXTrackAnalysis, availableTypes: NSMutableArray) {
+    static func getAvailableGPXDataSetTypes(analysis: GpxTrackAnalysis, availableTypes: NSMutableArray) {
         if Self.hasSensorSpeedData(analysis) {
             availableTypes.add([NSNumber(value: GPXDataSetType.sensorSpeed.rawValue)])
         }
@@ -63,7 +63,7 @@ final class SensorAttributesUtils: NSObject {
     }
 
     static func getOrderedLineDataSet(chart: LineChartView,
-                                      analysis: OAGPXTrackAnalysis,
+                                      analysis: GpxTrackAnalysis,
                                       graphType: GPXDataSetType,
                                       axisType: GPXDataSetAxisType,
                                       calcWithoutGaps: Bool,
@@ -87,7 +87,7 @@ final class SensorAttributesUtils: NSObject {
     }
 
     static func createSensorDataSet(chart: LineChartView,
-                                    analysis: OAGPXTrackAnalysis,
+                                    analysis: GpxTrackAnalysis,
                                     graphType: GPXDataSetType,
                                     axisType: GPXDataSetAxisType,
                                     useRightAxis: Bool,

@@ -9,7 +9,7 @@
 import Foundation
 import DGCharts
 
-final class ElevationChartCell : UITableViewCell {
+final class ElevationChartCell: UITableViewCell {
     
     @IBOutlet weak var chartView: ElevationChart!
     @IBOutlet weak var heightConstraint: NSLayoutConstraint!

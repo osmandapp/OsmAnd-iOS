@@ -15,18 +15,18 @@
 #include <vector>
 #include <OsmAndCore/Map/MapPresentationEnvironment.h>
 
-#define ROUTE_INFO_PREFIX @"routeInfo_"
+static NSString *ROUTE_INFO_PREFIX = @"routeInfo_";
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OARouteStatistics, OARouteSegmentAttribute, OAGPXDocument;
+@class OARouteStatistics, OARouteSegmentAttribute, OASGpxFile;
 
 @interface OATrackChartPoints : NSObject
 
 @property (nonatomic) NSArray<CLLocation *> *xAxisPoints;
 @property (nonatomic) CLLocationCoordinate2D highlightedPoint;
 @property (nonatomic) NSInteger segmentColor;
-@property (nonatomic) OAGPXDocument *gpx;
+@property (nonatomic) OASGpxFile *gpx;
 @property (nonatomic) BOOL axisPointsInvalidated;
 
 @end

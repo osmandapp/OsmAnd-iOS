@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class OATravelSearchResult, OAPOI, OATravelArticle, OAGPXDocumentAdapter, OAWptPt, OAGPX, OATravelGpx;
+@class OATravelSearchResult, OAPOI, OATravelArticle, OAGPXDocumentAdapter, OASWptPt, OASGpxDataItem, OATravelGpx;
 
 @interface OAFoundAmenity : NSObject
 
@@ -32,7 +32,7 @@
 
 + (void) showContextMenuWithLatitude:(double)latitude longitude:(double)longitude;
 
-+ (OAWptPt *) createWptPt:(OAPOI *)amenity lang:(NSString *)lang;
++ (OASWptPt *) createWptPt:(OAPOI *)amenity lang:(NSString *)lang;
 
 + (NSArray<NSString *> *) getTravelGuidesObfList;
 
@@ -46,7 +46,7 @@
 
 + (OAGPXDocumentAdapter *) buildGpxFile:(NSArray<NSString *> *)readers article:(OATravelArticle *)article;
 
-+ (OAGPX *) buildGpx:(NSString *)path title:(NSString *)title document:(OAGPXDocumentAdapter *)document;
++ (OASGpxDataItem *) buildGpx:(NSString *)path title:(NSString *)title document:(OAGPXDocumentAdapter *)document;
 
 + (NSString *) getSelectedGPXFilePath:(NSString *)fileName;
 

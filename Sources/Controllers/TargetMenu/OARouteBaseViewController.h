@@ -12,7 +12,7 @@
 
 #define kMapMargin 20.0
 
-@class OARoutingHelper, OAGPXDocument, OATrackChartPoints, OAGPXTrackAnalysis, OARouteStatisticsModeCell, OATrkSegment, OABaseVectorLinesLayer, ElevationChart;
+@class OARoutingHelper, OATrackChartPoints, OASGpxTrackAnalysis, OARouteStatisticsModeCell, OASTrkSegment, OASGpxFile, OABaseVectorLinesLayer, ElevationChart, OASTrackItem;
 
 @protocol OARouteLineChartHelperDelegate
 
@@ -26,31 +26,31 @@
 @property (nonatomic) BOOL isLandscape;
 @property (nonatomic) CGRect screenBBox;
 
-- (instancetype)initWithGpxDoc:(OAGPXDocument *)gpxDoc layer:(OABaseVectorLinesLayer *)layer;
+- (instancetype)initWithGpxDoc:(OASGpxFile *)gpxDoc layer:(OABaseVectorLinesLayer *)layer;
 
 @property (nonatomic, weak) id<OARouteLineChartHelperDelegate> delegate;
 
 - (void)changeChartTypes:(NSArray<NSNumber *> *)types
                   chart:(ElevationChart *)chart
-               analysis:(OAGPXTrackAnalysis *)analysis
+               analysis:(OASGpxTrackAnalysis *)analysis
                modeCell:(OARouteStatisticsModeCell *)statsModeCell;
 
 - (void)refreshHighlightOnMap:(BOOL)forceFit
                     chartView:(ElevationChart *)chartView
              trackChartPoints:(OATrackChartPoints *)trackChartPoints
-                     analysis:(OAGPXTrackAnalysis *)analysis;
+                     analysis:(OASGpxTrackAnalysis *)analysis;
 
 - (void)refreshHighlightOnMap:(BOOL)forceFit
                     chartView:(ElevationChart *)chartView
              trackChartPoints:(OATrackChartPoints *)trackChartPoints
-                      segment:(OATrkSegment *)segment;
+                      segment:(OASTrkSegment *)segment;
 
 - (OATrackChartPoints *)generateTrackChartPoints:(ElevationChart *)chartView
-                                        analysis:(OAGPXTrackAnalysis *)analysis;
+                                        analysis:(OASGpxTrackAnalysis *)analysis;
 
 - (OATrackChartPoints *)generateTrackChartPoints:(ElevationChart *)chartView
                                       startPoint:(CLLocationCoordinate2D)startPoint
-                                        segment:(OATrkSegment *)segment;
+                                        segment:(OASTrkSegment *)segment;
 
 @end
 
@@ -59,14 +59,15 @@
 @property (nonatomic, readonly) OARoutingHelper *routingHelper;
 @property (nonatomic, readonly) OARouteLineChartHelper *routeLineChartHelper;
 
-@property (nonatomic) OAGPXDocument *gpx;
+@property (nonatomic) OASGpxFile *gpx;
+@property (nonatomic) OASTrackItem *trackItem;
 @property (nonatomic) ElevationChart *statisticsChart;
 @property (nonatomic) OATrackChartPoints *trackChartPoints;
-@property (nonatomic) OAGPXTrackAnalysis *analysis;
+@property (nonatomic) OASGpxTrackAnalysis *analysis;
 
 - (instancetype) initWithGpxData:(NSDictionary *)data;
 
-+ (NSAttributedString *) getFormattedElevationString:(OAGPXTrackAnalysis *)analysis;
++ (NSAttributedString *) getFormattedElevationString:(OASGpxTrackAnalysis *)analysis;
 + (NSAttributedString *) getFormattedDistTimeString;
 
 - (void) setupRouteInfo;

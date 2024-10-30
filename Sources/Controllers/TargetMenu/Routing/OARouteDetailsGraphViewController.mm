@@ -13,10 +13,8 @@
 #import "OASizes.h"
 #import "OAStateChangedListener.h"
 #import "OARoutingHelper.h"
-#import "OAGPXTrackAnalysis.h"
 #import "OANativeUtilities.h"
 #import "OsmAndApp.h"
-#import "OAGPXDocument.h"
 #import "OAGPXUIHelper.h"
 #import "OAMapLayers.h"
 #import "OARouteLayer.h"
@@ -83,8 +81,7 @@
                                         topOffset:20
                                      bottomOffset:4
                               useGesturesAndScale:YES];
-    
-    OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.gpx.path]];
+    OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.gpx.path]];
     BOOL calcWithoutGaps = !gpx.joinSegments && (self.gpx.tracks.count > 0 && self.gpx.tracks.firstObject.generalTrack);
     [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.chartView
                                       analysis:self.analysis
@@ -128,7 +125,7 @@
     if (!self.gpx || !self.analysis)
     {
         self.gpx = [OAGPXUIHelper makeGpxFromRoute:self.routingHelper.getRoute];
-        self.analysis = [self.gpx getAnalysis:0];
+        self.analysis = [self.gpx getAnalysisFileTimestamp:0];
     }
     _types = _trackMenuControlState ? _trackMenuControlState.routeStatistics : @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSlope)];
     _lastTranslation = CGPointZero;
@@ -418,10 +415,19 @@
         else
         {
             _trackMenuControlState.openedFromTrackMenu = NO;
+            __weak __typeof(self) weakSelf = self;
             [[OARootViewController instance].mapPanel targetHideMenu:0.3 backButtonClicked:YES onComplete:^{
-                [[OARootViewController instance].mapPanel openTargetViewWithGPX:[[OAGPXDatabase sharedDb] getGPXItem:_trackMenuControlState.gpxFilePath]
-                                                                   trackHudMode:EOATrackMenuHudMode
-                                                                          state:_trackMenuControlState];
+                
+                if (weakSelf.trackItem)
+                {
+                    [[OARootViewController instance].mapPanel openTargetViewWithGPX:weakSelf.trackItem
+                                                                       trackHudMode:EOATrackMenuHudMode
+                                                                              state:_trackMenuControlState];
+                }
+                else
+                {
+                    NSLog(@"trackItem is empty");
+                }
             }];
         }
     }

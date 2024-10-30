@@ -9,22 +9,20 @@
 #import "OABaseVectorLinesLayer.h"
 #import "OAContextMenuProvider.h"
 
-#include <OsmAndCore/GpxDocument.h>
 #include <OsmAndCore/Map/VectorLinesCollection.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 
 #define kCurrentTrack @"current_track"
 
+@class OASGpxFile;
+
 @interface OAGPXLayer : OABaseVectorLinesLayer<OAContextMenuProvider, OAMoveObjectProvider>
 
-@property (nonatomic) QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> > gpxDocs;
 @property (nonatomic) std::shared_ptr<OsmAnd::VectorLinesCollection> linesCollection;
 
-- (void) refreshGpxTracks:(QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> >)gpxDocs reset:(BOOL)reset;
-- (void) refreshGpxWaypoints;
-
-- (CGFloat) getLineWidth:(NSString *)gpxWidth;
-
-- (void) updateCachedGpxItem:(NSString *)filePath;
+- (void)refreshGpxTracks:(NSDictionary<NSString *, OASGpxFile *> *)gpxFiles reset:(BOOL)reset;
+- (void)refreshGpxWaypoints;
+- (CGFloat)getLineWidth:(NSString *)gpxWidth;
+- (void)updateCachedGpxItem:(NSString *)filePath;
 
 @end

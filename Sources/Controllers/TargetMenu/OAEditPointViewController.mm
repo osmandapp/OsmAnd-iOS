@@ -42,7 +42,6 @@
 #import "OAColorsPaletteCell.h"
 #import "OAColorCollectionHandler.h"
 #import "OAColorCollectionViewController.h"
-#import "OAGPXDocument.h"
 #import "OATargetMenuViewController.h"
 #import "MaterialTextFields.h"
 #import "Localization.h"
@@ -167,7 +166,7 @@
         self.name = gpxWpt.point.name;
         _waypoint = gpxWpt;
         self.desc = gpxWpt.point.desc;
-        self.address = [gpxWpt.point getExtensionByKey:ADDRESS_EXTENSION].value;
+        self.address = [gpxWpt.point getAddress];
         self.groupTitle = [self getGroupTitle]/*gpxWpt.point.type*/;
         [self postInit];
     }
@@ -208,7 +207,7 @@
         self.groupTitle = [self getGroupTitle];
 
         _selectedIconCategoryName = @"special";
-        _selectedIconName = DEFAULT_ICON_NAME;
+        _selectedIconName = DEFAULT_ICON_NAME_KEY;
         _selectedBackgroundIndex = 0;
 
         [self postInit];
@@ -444,7 +443,7 @@
     if (_isNewItemAdding && selectedGroup)
         _selectedIconName = selectedGroup.iconName;
     else if (!_selectedIconName || _selectedIconName.length == 0)
-        _selectedIconName = DEFAULT_ICON_NAME;
+        _selectedIconName = DEFAULT_ICON_NAME_KEY;
 
     if (_isNewItemAdding && selectedGroup)
         _selectedIconCategoryName = [self getInitCategory:_selectedIconName];
@@ -856,8 +855,8 @@
         }
         else if (_editPointType == EOAEditPointTypeWaypoint)
         {
-            OAGPXDocument *gpxDocument = [(OAGpxWptEditingHandler *)_pointHandler getGpxDocument];
-            if (gpxDocument.points.count > 0)
+            OASGpxFile *gpxDocument = [(OAGpxWptEditingHandler *)_pointHandler getGpxDocument];
+            if (gpxDocument.getPointsList.count > 0)
                 replaceScreen = [[OAReplaceFavoriteViewController alloc] initWithItemType:EOAReplacePointTypeWaypoint gpxDocument:gpxDocument];
             else
                 return [self showAlertNotFoundReplaceItem];
@@ -941,8 +940,12 @@
             OATrackMenuViewControllerState *state = (OATrackMenuViewControllerState *) _targetMenuState;
             state.openedFromTrackMenu = NO;
             OAGPXDatabase *db = [OAGPXDatabase sharedDb];
-            [[OARootViewController instance].mapPanel openTargetViewWithGPX:[db getGPXItem:[
-                    [db getFileDir:self.gpxFileName] stringByAppendingPathComponent:self.gpxFileName.lastPathComponent]]
+            auto gpx = [db getGPXItem:[
+                [db getFileDir:self.gpxFileName] stringByAppendingPathComponent:self.gpxFileName.lastPathComponent]];
+            
+            auto trackItem = [[OASTrackItem alloc] initWithFile:gpx.file];
+            trackItem.dataItem = gpx;
+            [[OARootViewController instance].mapPanel openTargetViewWithGPX:trackItem
                                                                trackHudMode:EOATrackMenuHudMode
                                                                       state:state];
         }
@@ -1254,10 +1257,10 @@
 
         data.descr = waypointItem.point.desc;
         data.address = [waypointItem.point getAddress];
-        data.color = waypointItem.color ? waypointItem.color : [waypointItem.point getColor];
-        data.backgroundIcon = [waypointItem.point getBackgroundIcon];
-        data.icon = [waypointItem.point getIcon];
-        data.category = waypointItem.point.type;
+        data.color = waypointItem.color ? waypointItem.color : UIColorFromARGB([waypointItem.point getColor]);
+        data.backgroundIcon = [waypointItem.point getBackgroundType];
+        data.icon = [waypointItem.point getIconName];
+        data.category = waypointItem.point.category;
         data.name = waypointItem.point.name;
 
         if (_editPointType == EOAEditPointTypeWaypoint && !_pointHandler.gpxWptDelegate)
@@ -1406,7 +1409,7 @@
         return preselectedIconName;
     else if (_lastUsedIcons && _lastUsedIcons.count > 0)
         return _lastUsedIcons[0];
-    return DEFAULT_ICON_NAME;
+    return DEFAULT_ICON_NAME_KEY;
 }
 
 - (void)addLastUsedIcon:(NSString *)iconName

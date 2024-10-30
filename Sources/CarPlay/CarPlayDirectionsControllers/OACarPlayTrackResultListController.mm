@@ -20,6 +20,8 @@
 #import "OAGPXDatabase.h"
 #import "Localization.h"
 #import <CarPlay/CarPlay.h>
+#import "OsmAnd_Maps-Swift.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore/GpxDocument.h>
 
@@ -77,7 +79,7 @@
     }
 }
 
-- (NSString *)getTrackDescription:(OAGPX *)gpx
+- (NSString *)getTrackDescription:(OASGpxDataItem *)gpx
 {
     NSMutableString *res = [NSMutableString new];
     BOOL needsSeparator = NO;
@@ -90,7 +92,7 @@
     {
         if (needsSeparator)
             [res appendString:@" • "];
-        [res appendString:[OAOsmAndFormatter getFormattedTimeInterval:gpx.timeSpan shortFormat:YES]];
+        [res appendString:[OAOsmAndFormatter getFormattedTimeInterval:gpx.timeSpan / 1000 shortFormat:YES]];
         needsSeparator = YES;
     }
     if (gpx.wptPoints > 0)
@@ -111,16 +113,26 @@
             completionBlock();
         return;
     }
-    const auto& activeGpx = [OASelectedGPXHelper instance].activeGpx;
-    if (activeGpx.find(QString::fromNSString(info.gpx.gpxFilePath)) == activeGpx.end())
-        [OAAppSettings.sharedManager showGpx:@[info.gpx.gpxFilePath]];
+    NSDictionary<NSString *, OASGpxFile *> *activeGpx = [OASelectedGPXHelper instance].activeGpx;
+    
+    NSString *gpxFilePath = info.gpx.gpxFilePath;
+
+    if (![activeGpx objectForKey:gpxFilePath]) {
+        [OAAppSettings.sharedManager showGpx:@[gpxFilePath]];
+    }
     
     [[OARoutingHelper sharedInstance] setAppMode:OAApplicationMode.CAR];
     [[OARootViewController instance].mapPanel.mapActions setGPXRouteParams:info.gpx];
-    CLLocation *loc = [[CLLocation alloc] initWithLatitude:[info.gpx.locationEnd getLatitude]
-                                                 longitude:[info.gpx.locationEnd getLongitude]];
+    OASGpxTrackAnalysis *analysis = info.gpx.getAnalysis;
+   
+    CLLocation *loc = [[CLLocation alloc] initWithLatitude:analysis.locationEnd.getLatitude
+                                                 longitude:analysis.locationEnd.getLongitude];
     [[OATargetPointsHelper sharedInstance] navigateToPoint:loc updateRoute:YES intermediate:-1];
-    [OARootViewController.instance.mapPanel.mapActions enterRoutePlanningModeGivenGpx:info.gpx
+    
+    OASTrackItem *trackItem = [[OASTrackItem alloc] initWithFile:info.gpx.file];
+    trackItem.dataItem = info.gpx;
+    
+    [OARootViewController.instance.mapPanel.mapActions enterRoutePlanningModeGivenGpx:trackItem
                                                                                  from:nil
                                                                              fromName:nil
                                                        useIntermediatePointsByDefault:NO

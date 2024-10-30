@@ -70,23 +70,23 @@
     switch (type)
     {
         case GPXDataSetTypeAltitude:
-            return OAPointAttributes.pointElevation;
+            return OASPointAttributes.pointElevation;
         case GPXDataSetTypeSpeed:
-            return OAPointAttributes.pointSpeed;
+            return OASPointAttributes.pointSpeed;
         case GPXDataSetTypeSlope:
-            return OAPointAttributes.pointElevation;
+            return OASPointAttributes.pointElevation;
         case GPXDataSetTypeSensorSpeed:
-            return OAPointAttributes.sensorTagSpeed;
+            return OASPointAttributes.sensorTagSpeed;
         case GPXDataSetTypeSensorHeartRate:
-            return OAPointAttributes.sensorTagHeartRate;
+            return OASPointAttributes.sensorTagHeartRate;
         case GPXDataSetTypeSensorBikePower:
-            return OAPointAttributes.sensorTagBikePower;
+            return OASPointAttributes.sensorTagBikePower;
         case GPXDataSetTypeSensorBikeCadence:
-            return OAPointAttributes.sensorTagCadence;
+            return OASPointAttributes.sensorTagCadence;
         case GPXDataSetTypeSensorTemperatureA:
-            return OAPointAttributes.sensorTagTemperatureA;
+            return OASPointAttributes.sensorTagTemperatureA;
         case GPXDataSetTypeSensorTemperatureW:
-            return OAPointAttributes.sensorTagTemperatureW;
+            return OASPointAttributes.sensorTagTemperatureW;
         default:
             return @"";
     }

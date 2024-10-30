@@ -10,10 +10,13 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OAUtilities.h"
 #import "OAFavoritesHelper.h"
+#import "OAPOI.h"
+#import "OsmAndSharedWrapper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OAGpxWptItem
 
-+ (instancetype)withGpxWpt:(OAWptPt *)gpxWpt
++ (instancetype)withGpxWpt:(OASWptPt *)gpxWpt
 {
     OAGpxWptItem *gpxWptItem = [[OAGpxWptItem alloc] init];
     if (gpxWptItem)
@@ -23,25 +26,26 @@
     return gpxWptItem;
 }
 
-- (void) setPoint:(OAWptPt *)point
+- (void)setPoint:(OASWptPt *)point
 {
     _point = point;
     [self acquireColor];
 }
 
-- (void) setColor:(UIColor *)color
+- (void)setColor:(UIColor *)color
 {
     _color = color;
     [self applyColor];
 }
 
-- (OAPOI *) getAmenity
+- (OAPOI *)getAmenity
 {
     return [_point getAmenity];
 }
+
 - (void) setAmenity:(OAPOI *)amenity
 {
-    [_point setAmenity:amenity];
+     [_point setAmenity:amenity];
 }
 
 - (NSString *) getAmenityOriginName
@@ -51,20 +55,20 @@
 
 - (void) setAmenityOriginName:(NSString *)originName
 {
-    [_point setAmenityOriginName:originName];
+    [_point setAmenityOriginNameOriginName:originName];
 }
 
 - (void) applyColor
 {
     if (!self.point)
         return;
-    
-    [self.point setColor:[self.color toARGBNumber]];
+    OASInt *color = [[OASInt alloc] initWithInt:[self.color toARGBNumber]];
+    [self.point setColorColor:color];
 }
 
 - (void) acquireColor
 {
-    self.color = [self.point getColor];
+    self.color = UIColorFromRGBA(self.point.getColor);
 }
 
 - (BOOL) isEqual:(id)o
@@ -103,7 +107,9 @@
 
 - (UIImage *) getCompositeIcon
 {
-    return [OAFavoritesHelper getCompositeIcon:_point.getIcon backgroundIcon:_point.getBackgroundIcon color:_point.getColor];
+    NSString *iconName = _point.getIconName ?: @"special_star";
+    NSString *backgroundIconName = _point.getBackgroundType ?: @"circle";
+    return [OAFavoritesHelper getCompositeIcon:iconName backgroundIcon:backgroundIconName color:UIColorFromRGBA([_point getColor])];
 }
 
 @end

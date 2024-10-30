@@ -17,7 +17,7 @@
     BOOL _corrupted;
 }
  
-- (instancetype) initWithGpx:(OAGPX *)gpx name:(NSString *)name
+- (instancetype) initWithGpx:(OASGpxDataItem *)gpx name:(NSString *)name
 {
     self = [super init];
     if (self)

@@ -10,6 +10,7 @@
 #import "OANativeUtilities.h"
 #import "OADefaultFavorite.h"
 #import "OACompoundIconUtils.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/LatLon.h>
@@ -23,7 +24,7 @@
 #include <SkColorFilter.h>
 #include <SkCGUtils.h>
 
-OAWaypointsMapLayerProvider::OAWaypointsMapLayerProvider(const QList<OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>>& wptPtPoints_,
+OAWaypointsMapLayerProvider::OAWaypointsMapLayerProvider(NSArray<OASWptPt *> *wptPoints_,
                                                          const int baseOrder_,
                                                          const QList<OsmAnd::PointI>& hiddenPoints_,
                                                          const bool showCaptions_,
@@ -33,11 +34,11 @@ OAWaypointsMapLayerProvider::OAWaypointsMapLayerProvider(const QList<OsmAnd::Ref
                                                          const float symbolsScaleFactor_)
 
 : IOAMapTiledCollectionProvider(baseOrder_, hiddenPoints_, showCaptions_, captionStyle_, captionTopSpace_, referenceTileSizeOnScreenInPixels_)
-, _wptPtPoints(wptPtPoints_)
+, _wptPoints(wptPoints_)
 , _symbolsScaleFactor(symbolsScaleFactor_)
 {
-    for (const auto& point : _wptPtPoints)
-        _points.push_back(OsmAnd::Utilities::convertLatLonTo31(point->position));
+    for (OASWptPt *point in _wptPoints)
+        _points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(point.lat, point.lon)));
 }
 
 OAWaypointsMapLayerProvider::~OAWaypointsMapLayerProvider()
@@ -51,43 +52,26 @@ OsmAnd::PointI OAWaypointsMapLayerProvider::getPoint31(const int index) const
 
 int OAWaypointsMapLayerProvider::getPointsCount() const
 {
-    return _wptPtPoints.size();
+    return (int)_wptPoints.count;
 }
 
 sk_sp<SkImage> OAWaypointsMapLayerProvider::getImageBitmap(const int index, bool isFullSize /*= true*/)
 {
-    const auto wptPt = _wptPtPoints[index];
+    OASWptPt *wptPt = _wptPoints[index];
     return getBitmapByWaypoint(wptPt, isFullSize);
 }
 
-sk_sp<SkImage> OAWaypointsMapLayerProvider::getBitmapByWaypoint(const OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> &point, bool isFullSize)
+sk_sp<SkImage> OAWaypointsMapLayerProvider::getBitmapByWaypoint(OASWptPt *point, bool isFullSize)
 {
-    UIColor* color = nil;
-    NSString *shapeName = nil;
-    NSString *iconName = nil;
     NSString *size = isFullSize ? @"fill" : @"small";
-    const auto& values = point->getValues();
-    if (!values.isEmpty())
-    {
-        const auto& it = values.find(QStringLiteral("color"));
-        if (it != values.end())
-            color = [UIColor colorFromString:it.value().toString().toNSString()];
-        
-        const auto& shapeIt = values.find(QStringLiteral("background"));
-        if (shapeIt != values.end())
-            shapeName = shapeIt.value().toString().toNSString();
-        
-        if (isFullSize)
-        {
-            const auto& iconIt = values.find(QStringLiteral("icon"));
-            if (iconIt != values.end())
-                iconName = iconIt.value().toString().toNSString();
-        }
-        else
-        {
-            iconName = @"";
-        }
-    }
+
+    int32_t pointColor = point.getColor;
+    NSString *pointBackground = point.getBackgroundType;
+    NSString *pointIcon = point.getIconName;
+    UIColor* color = pointColor != 0 ? UIColorFromARGB(pointColor) : nil;
+    NSString *shapeName = pointBackground;
+    NSString *iconName = isFullSize ? pointIcon : @"";
+
     if (!color)
         color = [OADefaultFavorite getDefaultColor];
     if (!shapeName)
@@ -125,7 +109,7 @@ QString OAWaypointsMapLayerProvider::backgroundImageNameByType(const QString& ty
 
 QString OAWaypointsMapLayerProvider::getCaption(const int index) const
 {
-    return _wptPtPoints[index]->name;
+    return QString::fromNSString(_wptPoints[index].name);
 }
 
 OsmAnd::ZoomLevel OAWaypointsMapLayerProvider::getMinZoom() const

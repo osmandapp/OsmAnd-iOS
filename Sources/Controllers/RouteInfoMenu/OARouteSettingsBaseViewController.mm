@@ -16,7 +16,6 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OARoutingHelper.h"
 #import "OARouteProvider.h"
-#import "OAGPXDocument.h"
 #import "OAApplicationMode.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
@@ -229,7 +228,7 @@
 //    }
     if (rparams)
     {
-        OAGPXDocument *fl = rparams.file;
+        OASGpxFile *fl = rparams.file;
         if ([fl hasRtePt])
         {
             [list addObject:[[OAOtherLocalRoutingParameter alloc] initWithId:use_points_as_intermediates_id text:OALocalizedString(@"use_points_as_intermediates") selected:rparams.useIntermediatePointsRTE]];
@@ -425,7 +424,7 @@
 {
     [self dismissViewControllerAnimated:NO completion:nil];
     OAGPXRouteParamsBuilder *gpxParams = _routingHelper.getCurrentGPXRoute;
-    OAGPXDocument *gpx = gpxParams ? gpxParams.file : nil;
+    OASGpxFile *gpx = gpxParams ? gpxParams.file : nil;
     OAFollowTrackBottomSheetViewController *followTrack = [[OAFollowTrackBottomSheetViewController alloc] initWithFile:gpx];
     
     if (gpx)

@@ -393,7 +393,7 @@
 "shared_string_all" = "Minden";
 "first_usage_greeting" = "Navigáljon és fedezzen fel új helyeket internetkapcsolat nélkül";
 "get_started" = "Kezdj hozzá";
-"first_usage_wizard_desc" = "Engedélyezze az OsmAnd-nek a pozíciója meghatározását, hogy letölthető térképet javasolhasson a régióhoz.";
+"first_usage_wizard_desc" = "Engedélyezze az OsmAnd számára a pozíciója meghatározását, hogy letölthető térképet javasolhasson a régióhoz.";
 "location_not_found" = "Hely nem található";
 "search_my_location" = "Saját pozíció meghatározása";
 "no_inet_connection" = "Nincs internetkapcsolat";
@@ -415,7 +415,7 @@
 "shared_string_select_all" = "Összes kijelölése";
 "create_custom_poi" = "Egyéni szűrő létrehozása";
 "selected_categories" = "Kiválasztott kategóriák";
-"new_filter_desc" = "Kérjük, adja meg az új szűrő nevét, ami hozzá fog adódni a „Kategóriák” fülhöz.";
+"new_filter_desc" = "Adja meg az új szűrő nevét, ami hozzá fog adódni a „Kategóriák” fülhöz.";
 "shared_string_filters" = "Szűrők";
 "edit_filter" = "Szűrő szerkesztése";
 "edit_filter_save_as_menu_item" = "Mentés más néven";
@@ -553,7 +553,7 @@
 "daynight_mode_auto" = "Napkelte/napnyugta";
 "auto_follow_location_enabled" = "Automatikus követés.";
 "unknown_location" = "A jelenlegi helyzet még nem ismert.";
-"animate_routing_route_not_calculated" = "Kérjük, először számítsa ki az útvonalat";
+"animate_routing_route_not_calculated" = "Először számítsa ki az útvonalat";
 "settings_preset" = "Alapértelmezett profil";
 "switch_start_finish" = "Kiindulási és célpont felcserélése";
 "clear_all_intermediates" = "Összes köztes pont törlése";
@@ -622,9 +622,9 @@
 "sort_by_distance" = "Rendezés távolság szerint";
 "sort_by_name" = "Rendezés név szerint";
 "shared_string_close" = "Bezárás";
-"osm_live_enter_email" = "Kérjük, érvényes e-mail-címet adjon meg";
+"osm_live_enter_email" = "Adjon meg egy érvényes e-mail-címet";
 "osm_live_enter_user_name" = "Nyilvános nevet adjon meg";
-"osm_live_ask_for_purchase" = "Először kérjük, vásároljon OsmAnd Live előfizetést";
+"osm_live_ask_for_purchase" = "Először vásároljon OsmAnd Live előfizetést";
 "opening_hours" = "Nyitva tartás";
 "in_app_purchase" = "Alkalmazáson belüli vásárlás";
 "in_app_purchase_desc" = "Egyszeri fizetés";
@@ -1559,7 +1559,7 @@
 "lang_tg" = "tádzsik";
 "lang_hy" = "örmény";
 "gpx_split_interval_none_descr" = "Válassza ki a kívánt felosztási lehetőséget: idő vagy távolság szerint.";
-"osmand_cloud_login_descr" = "Kérjük, írja be a regisztrációhoz használt e-mail-címet. Egy egyszer használatos jelszót küldünk erre.";
+"osmand_cloud_login_descr" = "Írja be a regisztrációhoz használt e-mail-címet. Egy egyszer használatos jelszót küldünk erre.";
 "lang_uk" = "ukrán";
 "cloud_email_already_registered" = "Ez az e-mail-cím már regisztrálva van.";
 "reset_to_original" = "Visszaállítás az eredetire";
@@ -1716,7 +1716,7 @@
 "routing_attr_prefer_horse_routes_description" = "Lovas útvonalak előnyben részesítése";
 "lang_gl" = "galiciai";
 "grey_color_undefined" = "Az adatok nélküli részek szürkék.";
-"make_backup_descr" = "Ezen az eszközön sok változás van, kérjük, készítsen biztonsági mentést ezekről az adatokról, hogy el ne vesszenek.";
+"make_backup_descr" = "Ezen az eszközön sok változás van, készítsen biztonsági mentést ezekről az adatokról, hogy el ne vesszenek.";
 "gpx_split_interval" = "Felosztási intervallum";
 "lang_mn" = "mongol";
 "lang_bpy" = "bisnuprija manipuri";
@@ -1978,7 +1978,7 @@
 "plan_route_folder" = "Mappa";
 "res_zoom_invalid_value" = "A nagyítási értékeknek az 1 - 22 tartományban kell lenniük";
 "res_offlineSQL_URL_warning" = "Nem támogatott ennél a térképtípusnál";
-"srtm_download_single_help_message" = "Kérjük, válassza ki a mértékegységet. A formátum módosításához újra le kell töltenie a fájlt.";
+"srtm_download_single_help_message" = "Válassza ki a mértékegységet. A formátum módosításához újra le kell töltenie a fájlt.";
 "osm_delete_confirmation_descr" = "Törölni szeretné ezt a POI-t?";
 
 // Route planning
@@ -2094,7 +2094,7 @@
 "weather_pressure_hectopascals" = "Hektopascal";
 "shared_string_cloud" = "Felhő";
 "weather_pressure_millimeters_of_mercury" = "Higanymilliméter";
-"select_another_colorization" = "Kérjük, válasszon másik színezéstípust.";
+"select_another_colorization" = "Válasszon másik színezéstípust.";
 "routing_attr_goods_restrictions_name" = "Áruszállítás";
 "free_version_message" = "%@ térképet tölthet le vagy frissíthet.";
 "gpx_selection_segment_title" = "Szakasz";
@@ -2126,7 +2126,7 @@
 "settings_item_read_error" = "Sikertelen olvasás innen: \'%@\'.";
 "shared_string_not_included" = "Nem tartalmazza";
 "shared_string_cross_buy" = "Több platformra érvényes vásárlás";
-"osmand_cloud_create_account_descr" = "Kérjük, adja meg az e-mail címét, ahová küldünk egy ellenőrző kódot, \nés minden adatát összekapcsoljuk vele.";
+"osmand_cloud_create_account_descr" = "Adja meg az e-mail-címét, ahová küldünk egy ellenőrző kódot,\nés minden adatát összekapcsoljuk vele.";
 "empty_purchases_description" = "Ha a vásárlásai nem jelennek meg itt, lépjen kapcsolatba az ügyfélszolgálatunkkal, vagy koppintson erre: „%@”.";
 "routing_attr_motor_type_electric_name" = "Elektromos áram";
 "si_nm_ft" = "Tengeri mérföld/láb";
@@ -2441,7 +2441,7 @@
 "restart_is_required" = "A módosítás alkalmazásához újra kell indítani az alkalmazást.";
 "external_device_details_battery" = "Akkumulátor";
 "gitHub_discussion" = "GitHub vitafórum";
-"verify_account" = "Fiókjának ellenőrzése";
+"verify_account" = "Fiókjának hitelesítése";
 "upload_poi" = "POI feltöltése";
 "no_widgets_descr" = "Adjon hozzá egy vagy több modult a rendelkezésre állók közül.";
 "map_widget_ant_bicycle_dist_desc" = "Megjeleníti a megtett távolságot";
@@ -2662,7 +2662,7 @@
 "map_widget_current_speed" = "Pillanatnyi sebesség";
 "announcement_time_descr" = "A különféle hangutasítások bemondásának időzítése függ az utasítás típusától, az aktuális navigációs sebességtől és az alapértelmezett navigációs sebességtől.";
 "map_widget_altitude_current_location" = "Magasság: jelenlegi hely";
-"verify_account_deletion_descr" = "A törlés előtt ellenőriznünk kell fiókját. \n \nKérjük, adja meg az e-mail címet, amellyel regisztrált. A következő lépéshez egyszeri jelszót küld a rendszer.";
+"verify_account_deletion_descr" = "A törlés előtt hitelesíteni kell a fiókját.\n\nAdja meg az e-mail-címet, amellyel regisztrált. A következő lépéshez egyszeri jelszót küld a rendszer.";
 "disable_vertex_hillshade_3d" = "Vertex domborzatárnyékolás letiltása 3D-ben";
 "angular_measeurement" = "Szögmérés mértékegysége";
 "free_favorites_backup" = "Kedvencek mentése ingyenesen";
@@ -2670,7 +2670,7 @@
 "longest_duration_first" = "Először a leghosszabb időtartam";
 "ant_plus_bluetooth_off" = "A Bluetooth ki van kapcsolva";
 "activity_type_car_name" = "Személyautó";
-"external_sensors_plugin_description" = "Hozzáférés külső érzékelők adataihoz, mint pl pulzusszám, kerékpársebesség, -teljesítmény és pedálfordulatszám. Az eszközének ANT+ vezeték nélküli személyi hálózati protokollon keresztül kell csatlakoznia a megfelelő szenzorokhoz.";
+"external_sensors_plugin_description" = "Hozzáférés külső érzékelők adataihoz, mint pl pulzusszám, kerékpársebesség, -teljesítmény és pedálfordulatszám. Az eszközének ANT+ vezeték nélküli személyi hálózati protokollon keresztül kell kapcsolódnia a megfelelő szenzorokhoz.";
 "help_article_map_tracks_on_map_name" = "Nyomvonalak és útvonalak";
 "shared_string_temperature" = "Hőmérséklet";
 "terrain_3D_maps" = "Domborzati térképek";

@@ -92,8 +92,8 @@ final class FolderTrackFilterConfigurator: TrackFilterConfigurable {
         for folder in listFilter.allItems.compactMap({ $0 as? String }) {
             let components = URLComponents(string: folder)?.path.split(separator: "/").map(String.init) ?? []
             let topLevel = components.first ?? ""
-            let subfolderPath = components.dropFirst().joined(separator: "/")
             let remainingComponents = Array(components.dropFirst())
+            let subfolderPath = remainingComponents.joined(separator: "/")
             if let topLevelIndex = orderedFolders.firstIndex(where: { $0.path == topLevel }) {
                 if !subfolderPath.isEmpty {
                     processSubfolders(for: &orderedFolders[topLevelIndex], with: remainingComponents, currentPath: topLevel, originalKey: folder)

@@ -356,6 +356,8 @@ static NSString * const currentTrackSlopeGradientPaletteKey = @"currentTrackSlop
 static NSString * const currentTrackWidthKey = @"currentTrackWidth";
 static NSString * const currentTrackShowArrowsKey = @"currentTrackShowArrows";
 static NSString * const currentTrackShowStartFinishKey = @"currentTrackShowStartFinish";
+static NSString * const currentTrackIsJoinSegmentsKey = @"currentTrackIsJoinSegments";
+
 static NSString * const currentTrackVerticalExaggerationScaleKey = @"currentTrackVerticalExaggerationScale";
 static NSString * const currentTrackElevationMetersKey = @"currentTrackElevationMeters";
 static NSString * const currentTrackVisualization3dByTypeKey = @"currentTrackVisualization3dByType";
@@ -1358,6 +1360,16 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 - (NSString *)getKey:(OAApplicationMode *)mode
 {
     return self.global ? self.key : [NSString stringWithFormat:@"%@_%@", self.key, mode.stringKey];
+}
+
+- (NSObject *) getPrefValue
+{
+    return [self getValue];
+}
+
+- (NSObject *) getPrefValue:(OAApplicationMode *)mode
+{
+    return [self getValue:mode];
 }
 
 - (NSObject *)getValue
@@ -4568,6 +4580,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         
         _currentTrackShowStartFinish = [[[OACommonBoolean withKey:currentTrackShowStartFinishKey defValue:YES] makeGlobal] makeShared];
         
+        _currentTrackIsJoinSegments = [[[OACommonBoolean withKey:currentTrackIsJoinSegmentsKey defValue:NO] makeGlobal] makeShared];
+        
         _currentTrackVerticalExaggerationScale = [[[OACommonDouble withKey:currentTrackVerticalExaggerationScaleKey defValue:0.25] makeGlobal] makeShared];
         _currentTrackElevationMeters = [[[OACommonInteger withKey:currentTrackElevationMetersKey defValue:kElevationDefMeters] makeGlobal] makeShared];
         _currentTrackVisualization3dByType = [[[OACommonInteger withKey:currentTrackVisualization3dByTypeKey defValue:EOAGPX3DLineVisualizationByTypeNone] makeGlobal] makeShared];
@@ -4588,6 +4602,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [_globalPreferences setObject:_currentTrackWidth forKey:@"current_track_width"];
         [_globalPreferences setObject:_currentTrackShowArrows forKey:@"current_track_show_arrows"];
         [_globalPreferences setObject:_currentTrackShowStartFinish forKey:@"current_track_show_start_finish"];
+        
+        [_globalPreferences setObject:_currentTrackIsJoinSegments forKey:@"current_track_is_join_segments"];
         
         [_globalPreferences setObject:_currentTrackVerticalExaggerationScale forKey:@"current_track_vertical_exaggeration_scale"];
         [_globalPreferences setObject:_currentTrackElevationMeters forKey:@"current_track_elevation_meters"];
@@ -5196,7 +5212,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
     NSMutableArray *arrToDelete = [NSMutableArray array];
     for (NSString *filepath in arr)
     {
-        OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:filepath];
+        NSString *absoluteGpxFilepath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:filepath];
+        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:absoluteGpxFilepath];
         NSString *fileName = filepath.lastPathComponent;
         NSString *filenameWithoutPrefix = nil;
         if ([fileName hasSuffix:@"_osmand_backup"])

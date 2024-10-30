@@ -10,7 +10,7 @@
 
 #define kMinDistanceFor2ndRowAutoSelection 100.0
 
-@class OADestination, OADestinationItem, OAGPXDocument;
+@class OADestination, OADestinationItem, OASGpxFile;
 
 @interface OADestinationsHelper : NSObject
 
@@ -39,7 +39,7 @@
 
 - (void) addHistoryItem:(OADestination *)destination;
 
-- (OAGPXDocument *) generateGpx:(NSArray<OADestination *> *)markers completeBackup:(BOOL)completeBackup;
+- (OASGpxFile *) generateGpx:(NSArray<OADestination *> *)markers completeBackup:(BOOL)completeBackup;
 
 - (long) getMarkersLastModifiedTime;
 - (void) setMarkersLastModifiedTime:(long)lastModified;

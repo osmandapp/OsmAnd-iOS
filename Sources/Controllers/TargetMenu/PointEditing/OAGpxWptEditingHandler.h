@@ -8,7 +8,7 @@
 
 #import "OABasePointEditingHandler.h"
 
-@class OAGpxWptItem, OAGPXDocument, OAPOI;
+@class OAGpxWptItem, OASGpxFile, OAPOI;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -16,7 +16,7 @@ struct CLLocationCoordinate2D;
 
 @interface OAGpxWptEditingHandler : OABasePointEditingHandler
 
-- (OAGPXDocument *)getGpxDocument;
+- (OASGpxFile *)getGpxDocument;
 - (NSArray<NSDictionary<NSString *, NSString *> *> *)getGroups;
 - (NSDictionary<NSString *, NSString *> *)getGroupsWithColors;
 - (NSString *)getAddress;

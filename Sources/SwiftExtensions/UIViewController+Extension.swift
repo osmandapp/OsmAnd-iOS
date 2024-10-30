@@ -70,7 +70,7 @@ extension UIViewController {
 }
 
 extension UINavigationItem {
-    @objc (setRightBarButtonItemsisEnabled:tintColor:)
+    @objc(setRightBarButtonItemsisEnabled:tintColor:)
     func setRightBarButtonItems(isEnabled: Bool, with tintColor: UIColor? = nil) {
         rightBarButtonItems?.forEach {
             if let button = $0.customView as? UIButton {

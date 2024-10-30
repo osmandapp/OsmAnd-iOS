@@ -136,34 +136,34 @@
 
 + (double) checkLatitude:(double) latitude
 {
-    if (latitude >= MIN_LATITUDE && latitude <= MAX_LATITUDE) {
+    if (latitude >= MIN_LATITUDE_KEY && latitude <= MAX_LATITUDE_KEY) {
         return latitude;
     }
     while (latitude < -90 || latitude > 90) {
         if (latitude < 0) {
-            latitude += LATITUDE_TURN;
+            latitude += LATITUDE_TURN_KEY;
         } else {
-            latitude -= LATITUDE_TURN;
+            latitude -= LATITUDE_TURN_KEY;
         }
     }
-    if (latitude < MIN_LATITUDE) {
-        return MIN_LATITUDE;
-    } else if (latitude > MAX_LATITUDE) {
-        return MAX_LATITUDE;
+    if (latitude < MIN_LATITUDE_KEY) {
+        return MIN_LATITUDE_KEY;
+    } else if (latitude > MAX_LATITUDE_KEY) {
+        return MAX_LATITUDE_KEY;
     }
     return latitude;
 }
 
 + (double) checkLongitude:(double) longitude
 {
-    if (longitude >= MIN_LONGITUDE && longitude <= MAX_LONGITUDE) {
+    if (longitude >= MIN_LONGITUDE_KEY && longitude <= MAX_LONGITUDE_KEY) {
         return longitude;
     }
-    while (longitude <= MIN_LONGITUDE || longitude > MAX_LONGITUDE) {
+    while (longitude <= MIN_LONGITUDE_KEY || longitude > MAX_LONGITUDE_KEY) {
         if (longitude < 0) {
-            longitude += LONGITUDE_TURN;
+            longitude += LONGITUDE_TURN_KEY;
         } else {
-            longitude -= LONGITUDE_TURN;
+            longitude -= LONGITUDE_TURN_KEY;
         }
     }
     return longitude;

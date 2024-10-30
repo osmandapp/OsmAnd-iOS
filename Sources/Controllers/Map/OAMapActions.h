@@ -8,28 +8,29 @@
 
 #import <Foundation/Foundation.h>
 
-@class OAPointDescription, OAGPX, OATargetPoint, OAApplicationMode, OAGPXDocument;
+@class OAPointDescription, OATargetPoint, OAApplicationMode;
+@class OASGpxFile, OASGpxDataItem, OASTrackItem;
 
 @interface OAMapActions : NSObject
 
-- (void) enterRoutePlanningMode:(CLLocation *)from fromName:(OAPointDescription *)fromName;
-- (void) enterRoutePlanningMode:(CLLocation *)from fromName:(OAPointDescription *)fromName checkDisplayedGpx:(BOOL)shouldCheck;
-- (void) enterRoutePlanningModeGivenGpx:(OAGPX *)gpxFile useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault showDialog:(BOOL)showDialog;
-- (void) enterRoutePlanningModeGivenGpx:(OAGPX *)gpxFile from:(CLLocation *)from fromName:(OAPointDescription *)fromName
+- (void)enterRoutePlanningMode:(CLLocation *)from fromName:(OAPointDescription *)fromName;
+- (void)enterRoutePlanningMode:(CLLocation *)from fromName:(OAPointDescription *)fromName checkDisplayedGpx:(BOOL)shouldCheck;
+- (void)enterRoutePlanningModeGivenGpx:(OASTrackItem *)gpxFile useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault showDialog:(BOOL)showDialog;
+- (void)enterRoutePlanningModeGivenGpx:(OASTrackItem *)gpxFile from:(CLLocation *)from fromName:(OAPointDescription *)fromName
          useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault showDialog:(BOOL)showDialog;
-- (void) enterRoutePlanningModeGivenGpx:(OAGPXDocument *)gpxFile path:(NSString *)path from:(CLLocation *)from fromName:(OAPointDescription *)fromName
+- (void)enterRoutePlanningModeGivenGpx:(OASGpxFile *)gpxFile path:(NSString *)path from:(CLLocation *)from fromName:(OAPointDescription *)fromName
          useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault showDialog:(BOOL)showDialog;
-- (void) enterRoutePlanningModeGivenGpx:(OAGPXDocument *)gpxFile appMode:(OAApplicationMode *)appMode path:(NSString *)path from:(CLLocation *)from fromName:(OAPointDescription *)fromName
+- (void)enterRoutePlanningModeGivenGpx:(OASGpxFile *)gpxFile appMode:(OAApplicationMode *)appMode path:(NSString *)path from:(CLLocation *)from fromName:(OAPointDescription *)fromName
          useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault showDialog:(BOOL)showDialog;
 
-- (void) setFirstMapMarkerAsTarget;
-- (void) stopNavigationWithoutConfirm;
-- (void) stopNavigationActionConfirm;
+- (void)setFirstMapMarkerAsTarget;
+- (void)stopNavigationWithoutConfirm;
+- (void)stopNavigationActionConfirm;
 
-- (void) setGPXRouteParams:(OAGPX *)result;
-- (void) setGPXRouteParamsWithDocument:(OAGPXDocument *)doc path:(NSString *)path;
+- (void)setGPXRouteParams:(OASGpxDataItem *)result;
+- (void)setGPXRouteParamsWithDocument:(OASGpxFile *)doc path:(NSString *)path;
 
-- (void) navigate:(OATargetPoint *)targetPoint;
-- (OAApplicationMode *) getRouteMode;
+- (void)navigate:(OATargetPoint *)targetPoint;
+- (OAApplicationMode *)getRouteMode;
 
 @end

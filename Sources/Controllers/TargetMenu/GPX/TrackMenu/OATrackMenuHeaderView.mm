@@ -13,11 +13,11 @@
 #import "Localization.h"
 #import "OAOsmAndFormatter.h"
 #import "OALocationServices.h"
-#import "OAGPXTrackAnalysis.h"
 #import "OAWikiArticleHelper.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAGPXUIHelper.h"
 #import "OAButton.h"
+#import "OsmAndSharedWrapper.h"
 
 #define kTitleHeightMax 44.
 #define kTitleHeightMin 30.
@@ -250,13 +250,13 @@
         [self updateConstraints];
 }
 
-- (void)generateGpxBlockStatistics:(OAGPXTrackAnalysis *)analysis
+- (void)generateGpxBlockStatistics:(OASGpxTrackAnalysis *)analysis
                        withoutGaps:(BOOL)withoutGaps
 {
     [self setStatisticsCollection:[self.class generateGpxBlockStatistics:analysis withoutGaps:withoutGaps]];
 }
 
-+ (NSMutableArray<OAGPXTableCellData *> *)generateGpxBlockStatistics:(OAGPXTrackAnalysis *)analysis
++ (NSMutableArray<OAGPXTableCellData *> *)generateGpxBlockStatistics:(OASGpxTrackAnalysis *)analysis
                        withoutGaps:(BOOL)withoutGaps
 {
     NSMutableArray<OAGPXTableCellData *> *statisticCells = [NSMutableArray array];
@@ -330,7 +330,7 @@
             long timeSpan = withoutGaps ? analysis.timeSpanWithoutGaps : analysis.timeSpan;
             [statisticCells addObject:[OAGPXTableCellData withData:@{
                     kTableValues: @{
-                            @"string_value": [OAOsmAndFormatter getFormattedTimeInterval:timeSpan shortFormat:YES],
+                            @"string_value": [OAOsmAndFormatter getFormattedTimeInterval:timeSpan / 1000 shortFormat:YES],
                             @"int_value": @[@(GPXDataSetTypeSpeed)]
                     },
                     kCellTitle: OALocalizedString(@"total_time"),
@@ -343,7 +343,7 @@
             long timeMoving = withoutGaps ? analysis.timeMovingWithoutGaps : analysis.timeMoving;
             [statisticCells addObject:[OAGPXTableCellData withData:@{
                     kTableValues: @{
-                            @"string_value": [OAOsmAndFormatter getFormattedTimeInterval:timeMoving shortFormat:YES],
+                            @"string_value": [OAOsmAndFormatter getFormattedTimeInterval:timeMoving / 1000 shortFormat:YES],
                             @"int_value": @[@(GPXDataSetTypeSpeed)]
                     },
                     kCellTitle: OALocalizedString(@"moving_time"),

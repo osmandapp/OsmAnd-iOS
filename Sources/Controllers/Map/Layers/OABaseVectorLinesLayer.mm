@@ -12,7 +12,6 @@
 #import "OAMapRendererView.h"
 #import "OAUtilities.h"
 #import "OAAutoObserverProxy.h"
-#import "OAGPXDocument.h"
 #import "OARouteStatisticsHelper.h"
 #import "OARouteImporter.h"
 #import "OARouteStatistics.h"

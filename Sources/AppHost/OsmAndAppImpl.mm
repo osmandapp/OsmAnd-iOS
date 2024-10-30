@@ -556,9 +556,6 @@
         }
         if (prevVersion < VERSION_4_2)
         {
-            [OAGPXDatabase.sharedDb save];
-            [OAGPXDatabase.sharedDb load];
-
             NSError *error;
             NSArray *inboxFiles = [NSFileManager.defaultManager contentsOfDirectoryAtPath:_inboxPath error:&error];
             if (!error)
@@ -704,6 +701,7 @@
 
     [[OATargetPointsHelper sharedInstance] removeAllWayPoints:NO clearBackup:NO];
     
+    [[OASGpxDbHelper shared] loadItemsBlocking];
     // Init track recorder
     [OASavingTrackHelper sharedInstance];
     

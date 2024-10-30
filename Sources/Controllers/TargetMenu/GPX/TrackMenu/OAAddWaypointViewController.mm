@@ -37,7 +37,7 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomSeparatorTopConstraint;
 
 @property (nonatomic) OAMapPanelViewController *mapPanelViewController;
-@property (nonatomic) OAGPX *gpx;
+@property (nonatomic) OASTrackItem *gpx;
 @property (nonatomic) OATargetMenuViewControllerState *targetMenuState;
 
 @end
@@ -49,9 +49,11 @@
 
     BOOL _isCurrentTrack;
     OAGpxWptItem *_movedPoint;
+    
+    OASGpxFile *_currentGpx;
 }
 
-- (instancetype)initWithGpx:(OAGPX *)gpx
+- (instancetype)initWithGpx:(OASTrackItem *)gpx
             targetMenuState:(OATargetMenuViewControllerState *)targetMenuState
 {
     self = [super init];
@@ -59,7 +61,7 @@
     {
         _app = [OsmAndApp instance];
         _gpx = gpx;
-        _isCurrentTrack = !_gpx || _gpx.gpxFilePath.length == 0 || _gpx.gpxFileName.length == 0;
+        _isCurrentTrack = gpx.isShowCurrentTrack;
         _mapPanelViewController = [OARootViewController instance].mapPanel;
         _contextLayer = _mapPanelViewController.mapViewController.mapLayers.contextMenuLayer;
         _targetMenuState = targetMenuState;
@@ -70,9 +72,21 @@
 
 - (void)commonInit
 {
-    OAWptPt *movedPoint = [[OAWptPt alloc] init];
+    OASWptPt *movedPoint = [[OASWptPt alloc] init];
     movedPoint.name = OALocalizedString(@"shared_string_waypoint");
-    movedPoint.position = _gpx.bounds.center;
+    if (_gpx.isShowCurrentTrack)
+    {
+        _currentGpx = [OASavingTrackHelper sharedInstance].currentTrack;
+        auto rect = _currentGpx.getRect;
+        movedPoint.position = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);;
+    }
+    else
+    {
+        _currentGpx = [OASGpxUtilities.shared loadGpxFileFile:_gpx.dataItem.file];
+        auto rect = _currentGpx.getRect;
+        movedPoint.position = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
+    }
+ 
     _movedPoint = [OAGpxWptItem withGpxWpt:movedPoint];
 }
 
@@ -85,8 +99,7 @@
 
     if (![OAUtilities isLandscapeIpadAware])
         [OAUtilities setMaskTo:self.contentView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
-
-    [_mapPanelViewController displayGpxOnMap:_gpx];
+    [_mapPanelViewController displayGpxOnMap:_currentGpx];
     if (self.delegate)
         [self.delegate requestHeaderOnlyMode];
 
@@ -222,6 +235,7 @@
         {
             OATrackMenuViewControllerState *state = (OATrackMenuViewControllerState *) weakSelf.targetMenuState;
             state.openedFromTrackMenu = NO;
+
             [weakSelf.mapPanelViewController openTargetViewWithGPX:weakSelf.gpx
                                               trackHudMode:EOATrackMenuHudMode
                                                      state:state];

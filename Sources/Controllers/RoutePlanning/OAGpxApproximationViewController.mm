@@ -38,7 +38,7 @@
     NSDictionary<NSString *, NSArray *> *_data;
 
     OAApplicationMode *_snapToRoadAppMode;
-    NSArray<NSArray<OAWptPt *> *> *_routePoints;
+    NSArray<NSArray<OASWptPt *> *> *_routePoints;
     float _distanceThreshold;
 	
 	OsmAndAppInstance _app;
@@ -49,14 +49,14 @@
     UIProgressView *_progressBarView;
 }
 
-- (instancetype)initWithMode:(OAApplicationMode *)mode routePoints:(NSArray<NSArray<OAWptPt *> *> *)routePoints
+- (instancetype)initWithMode:(OAApplicationMode *)mode routePoints:(NSArray<NSArray<OASWptPt *> *> *)routePoints
 {
     self = [super init];
     if (self)
     {
         _routePoints = routePoints;
 		NSMutableArray<OALocationsHolder *> *locationsHolders = [NSMutableArray array];
-		for (NSArray<OAWptPt *> *points in routePoints)
+		for (NSArray<OASWptPt *> *points in routePoints)
 			 [locationsHolders addObject:[[OALocationsHolder alloc] initWithLocations:points]];
 		_locationsHolders = locationsHolders;
         _distanceThreshold = kApproximationMaxDistance / 2;
@@ -257,7 +257,7 @@
 {
     [self finishProgress];
     NSMutableArray<OAGpxRouteApproximation *> *approximations = [NSMutableArray array];
-    NSMutableArray<NSArray<OAWptPt *> *> *points = [NSMutableArray array];
+    NSMutableArray<NSArray<OASWptPt *> *> *points = [NSMutableArray array];
     for (OALocationsHolder *locationsHolder in _locationsHolders)
 	{
         OAGpxRouteApproximation *approximation = _resultMap[locationsHolder];

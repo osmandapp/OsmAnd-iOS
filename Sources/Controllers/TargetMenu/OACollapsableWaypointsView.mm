@@ -11,7 +11,6 @@
 #import "OsmAndApp.h"
 #import "OAColors.h"
 #import "OAGpxWptItem.h"
-#import "OAGPXDocument.h"
 #import "OAFavoriteItem.h"
 #import "OAFavoritesHelper.h"
 #import "OARootViewController.h"
@@ -48,7 +47,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     EOAWaypointsType _type;
     
     NSString *_docPath;
-    OAWptPt *_currentWpt;
+    OASWptPt *_currentWpt;
     
     OAFavoriteItem *_favorite;
 }
@@ -78,7 +77,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
         OAGpxWptItem *item = (OAGpxWptItem *) data;
         _docPath = item.docPath;
         _currentWpt = item.point;
-        _data = [OARootViewController.instance.mapPanel.mapViewController getPointsOf:_docPath groupName:item.point.type];
+        _data = [OARootViewController.instance.mapPanel.mapViewController getPointsOf:_docPath groupName:item.point.category];
         _type = EOAWaypointGPX;
     }
     else if ([data isKindOfClass:OAFavoriteItem.class])
@@ -123,7 +122,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
         OAButton * btn = nil;
         if (_type == EOAWaypointGPX)
         {
-            btn = [self createButton:((OAWptPt *)_data[i]).name tag:i];
+            btn = [self createButton:((OASWptPt *)_data[i]).name tag:i];
         }
         else if (_type == EOAWaypointFavorite)
         {
@@ -154,20 +153,28 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
     if (_type == EOAWaypointGPX)
     {
-        OAGPX *gpx = nil;
+        OASTrackItem *trackItem = nil;
         if (_docPath)
         {
             OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
             NSString *gpxFilePath = [OAUtilities getGpxShortPath:_docPath];
-            gpx = [gpxDb getGPXItem:gpxFilePath];
+            auto gpx = [gpxDb getGPXItem:gpxFilePath];
+            trackItem = [[OASTrackItem alloc] initWithFile:gpx.file];
+            trackItem.dataItem = gpx;
         }
         else
         {
-            gpx = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
+            OASGpxFile *gpxFile = [OASavingTrackHelper sharedInstance].currentTrack;
+            if (gpxFile)
+            {
+                trackItem = [[OASTrackItem alloc] initWithGpxFile:gpxFile];
+            }
         }
         
-        if (gpx)
-            [mapPanel openTargetViewWithGPX:gpx];
+        if (trackItem)
+        {
+             [mapPanel openTargetViewWithGPX:trackItem];
+        }
     }
     else if (_type == EOAWaypointFavorite)
     {
@@ -257,7 +264,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
                     if (_type == EOAWaypointGPX)
                     {
                         OAGpxWptItem *item = [[OAGpxWptItem alloc] init];
-                        OAWptPt *point = _data[tag];
+                        OASWptPt *point = _data[tag];
                         item.point = point;
                         item.docPath = _docPath;
                         OATargetPoint *targetPoint = [mapPanel.mapViewController.mapLayers.gpxMapLayer getTargetPoint:item];

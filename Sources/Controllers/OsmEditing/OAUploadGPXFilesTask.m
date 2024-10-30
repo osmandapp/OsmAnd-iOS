@@ -11,20 +11,21 @@
 #import "OAOpenStreetMapRemoteUtil.h"
 #import "OAOsmBugsRemoteUtil.h"
 #import "OsmAndApp.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OAUploadGPXFilesTask
 {
     OsmAndAppInstance _app;
     OAOsmEditingPlugin *_plugin;
     id<OAOnUploadFileListener> _listener;
-    NSArray<OAGPX *> *_gpxItemsToUpload;
+    NSArray<OASTrackItem *> *_gpxItemsToUpload;
     NSString *_tags;
     NSString *_visibility;
     NSString *_commonDescription;
     BOOL _interruptUploading;
 }
 
-- (instancetype) initWithPlugin:(OAOsmEditingPlugin *)plugin gpxItemsToUpload:(NSArray<OAGPX *> *)gpxItemsToUpload tags:(NSString *)tags visibility:(NSString *)visibility description:(NSString *)description listener:(id<OAOnUploadFileListener>)listener
+- (instancetype) initWithPlugin:(OAOsmEditingPlugin *)plugin gpxItemsToUpload:(NSArray<OASTrackItem *> *)gpxItemsToUpload tags:(NSString *)tags visibility:(NSString *)visibility description:(NSString *)description listener:(id<OAOnUploadFileListener>)listener
 {
     self = [super init];
     if (self) {
@@ -42,7 +43,7 @@
 - (void) uploadTracks
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        for (OAGPX *track in _gpxItemsToUpload)
+        for (OASTrackItem *track in _gpxItemsToUpload)
         {
             if (_interruptUploading)
                 break;

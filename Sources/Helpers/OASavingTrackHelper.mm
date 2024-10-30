@@ -8,12 +8,10 @@
 
 #import "OASavingTrackHelper.h"
 #import "OALog.h"
-#import "OAGPXMutableDocument.h"
 #import "OAGPXDatabase.h"
 #import "OsmAndApp.h"
 #import "OAAutoObserverProxy.h"
 #import "OAAppSettings.h"
-#import "OAGPXTrackAnalysis.h"
 #import "OACommonTypes.h"
 #import "OARoutingHelper.h"
 #import "OAMonitoringPlugin.h"
@@ -26,6 +24,9 @@
 #import "OAObservable.h"
 #import <sqlite3.h>
 #import <CoreLocation/CoreLocation.h>
+#import "OAAppVersion.h"
+
+#import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -70,7 +71,7 @@
     CLLocationCoordinate2D lastPoint;
 }
 
-@synthesize lastTimeUpdated, points, isRecording, distance, currentTrack, currentTrackIndex;
+@synthesize lastTimeUpdated, points, isRecording, distance, currentTrackIndex;
 
 + (OASavingTrackHelper*)sharedInstance
 {
@@ -84,19 +85,26 @@
 
 - (void)setupCurrentTrack
 {
-    currentTrack = [[OAGPXMutableDocument alloc] init];
-    
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    [currentTrack setWidth:[settings.currentTrackWidth get]];
-    [currentTrack setShowArrows:[settings.currentTrackShowArrows get]];
-    [currentTrack setShowStartFinish:[settings.currentTrackShowStartFinish get]];
-    [currentTrack setVerticalExaggerationScale:[settings.currentTrackVerticalExaggerationScale get]];
-    [currentTrack setElevationMeters:[settings.currentTrackElevationMeters get]];
-    [currentTrack setVisualization3dByType:(EOAGPX3DLineVisualizationByType)[settings.currentTrackVisualization3dByType get]];
-    [currentTrack setVisualization3dWallColorType:(EOAGPX3DLineVisualizationWallColorType)[settings.currentTrackVisualization3dWallColorType get]];
-    [currentTrack setVisualization3dPositionType:(EOAGPX3DLineVisualizationPositionType)[settings.currentTrackVisualization3dPositionType get]];
-    [currentTrack setColor:[settings.currentTrackColor get]];
-    [currentTrack setColoringType:[settings.currentTrackColoringType get].name];
+        
+    _currentTrack = [[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]];
+    _currentTrack.showCurrentTrack = YES;
+    [_currentTrack setWidthWidth:[settings.currentTrackWidth get]];
+    [_currentTrack setShowArrowsShowArrows:[settings.currentTrackWidth get]];
+    [_currentTrack setShowStartFinishShowStartFinish:[settings.currentTrackShowStartFinish get]];
+    // setVerticalExaggerationScale -> setAdditionalExaggerationAdditionalExaggeration (SharedLib)
+    [_currentTrack setAdditionalExaggerationAdditionalExaggeration:[settings.currentTrackVerticalExaggerationScale get]];
+    [_currentTrack setElevationMetersElevation:[settings.currentTrackElevationMeters get]];
+   
+    [_currentTrack set3DVisualizationTypeVisualizationType:[OAGPXDatabase lineVisualizationByTypeNameForType:(EOAGPX3DLineVisualizationByType)[settings.currentTrackVisualization3dByType get]]];
+    
+    [_currentTrack set3DWallColoringTypeTrackWallColoringType:[OAGPXDatabase lineVisualizationWallColorTypeNameForType:(EOAGPX3DLineVisualizationWallColorType)[settings.currentTrackVisualization3dWallColorType get]]];
+    
+    [_currentTrack set3DLinePositionTypeTrackLinePositionType:[OAGPXDatabase lineVisualizationPositionTypeNameForType:(EOAGPX3DLineVisualizationPositionType)[settings.currentTrackVisualization3dPositionType get]]];
+    
+    OASInt *color = [[OASInt alloc] initWithInt:[settings.currentTrackColor get]];
+    [_currentTrack setColorColor:color];
+    [_currentTrack setColoringTypeColoringType:[settings.currentTrackColoringType get].name];
 }
 
 - (instancetype)init
@@ -353,8 +361,8 @@
     lastPoint = kCLLocationCoordinate2DInvalid;
     
     [self setupCurrentTrack];
-    [currentTrack initBounds];
-    currentTrack.modifiedTime = (long)[[NSDate date] timeIntervalSince1970];
+    
+    _currentTrack.modifiedTime = (long)[[NSDate date] timeIntervalSince1970];
     
     [self prepareCurrentTrackForRecording];
 }
@@ -375,11 +383,13 @@
         NSString *fout;
         for (NSString *f in data.allKeys)
         {
+            // .../Documents/GPX/rec/2024-09-30.gpx
             fout = [NSString stringWithFormat:@"%@%@%@.gpx", _app.gpxPath, recordedTrackFolder, f];
-            OAGPXMutableDocument *doc = data[f];
-            if (![doc isEmpty])
+
+            OASGpxFile *gpxFile = data[f];
+            if (![gpxFile isEmpty])
             {
-                OAWptPt *pt = [doc findPointToShow];
+                OASWptPt *pt = [gpxFile findPointToShow];
                 
                 NSDateFormatter *simpleFormat = [[NSDateFormatter alloc] init];
                 [simpleFormat setDateFormat:@"HH-mm_EEE"];
@@ -393,28 +403,43 @@
             }
             
             NSFileManager *fileManager = NSFileManager.defaultManager;
+            // ...Documents/GPX/rec/2024-09-30_14-28_Пн.gpx
             NSString *directory = [fout stringByDeletingLastPathComponent];
             if (![fileManager fileExistsAtPath:directory])
                 [fileManager createDirectoryAtPath:directory withIntermediateDirectories:NO attributes:nil error:nil];
-
+            
             OAAppSettings *settings = [OAAppSettings sharedManager];
-            [doc setWidth:[settings.currentTrackWidth get]];
-            [doc setShowArrows:[settings.currentTrackShowArrows get]];
-            [doc setShowStartFinish:[settings.currentTrackShowStartFinish get]];
-            [doc setVisualization3dByType:(EOAGPX3DLineVisualizationByType)[settings.currentTrackVisualization3dByType get]];
-            [doc setVisualization3dWallColorType:(EOAGPX3DLineVisualizationWallColorType)[settings.currentTrackVisualization3dWallColorType get]];
-            [doc setVisualization3dPositionType:(EOAGPX3DLineVisualizationPositionType)[settings.currentTrackVisualization3dPositionType get]];
             
-            [doc setVerticalExaggerationScale:[settings.currentTrackVerticalExaggerationScale get]];
-            [doc setElevationMeters:[settings.currentTrackElevationMeters get]];
-            [doc setColor:[settings.currentTrackColor get]];
-            [doc setColoringType:[settings.currentTrackColoringType get].name];
-
-            [doc saveTo:fout];
+            [gpxFile setWidthWidth:[settings.currentTrackWidth get]];
+            [gpxFile setShowArrowsShowArrows:[settings.currentTrackWidth get]];
+            [gpxFile setShowStartFinishShowStartFinish:[settings.currentTrackShowStartFinish get]];
+            // setVerticalExaggerationScale -> setAdditionalExaggerationAdditionalExaggeration (SharedLib)
+            [gpxFile setAdditionalExaggerationAdditionalExaggeration:[settings.currentTrackVerticalExaggerationScale get]];
+            [gpxFile setElevationMetersElevation:[settings.currentTrackElevationMeters get]];
+            [gpxFile set3DVisualizationTypeVisualizationType:[OAGPXDatabase lineVisualizationByTypeNameForType:(EOAGPX3DLineVisualizationByType)[settings.currentTrackVisualization3dByType get]]];
             
-            NSString *gpxFilePath = [OAUtilities getGpxShortPath:fout];
-            [[OAGPXDatabase sharedDb] addGpxItem:gpxFilePath title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds document:doc];
-            [[OAGPXDatabase sharedDb] save];
+            [gpxFile set3DWallColoringTypeTrackWallColoringType:[OAGPXDatabase lineVisualizationWallColorTypeNameForType:(EOAGPX3DLineVisualizationWallColorType)[settings.currentTrackVisualization3dWallColorType get]]];
+            
+            [gpxFile set3DVisualizationTypeVisualizationType:[OAGPXDatabase lineVisualizationPositionTypeNameForType:(EOAGPX3DLineVisualizationPositionType)[settings.currentTrackVisualization3dPositionType get]]];
+           
+            OASInt *color = [[OASInt alloc] initWithInt:[settings.currentTrackColor get]];
+            [gpxFile setColorColor:color];
+            [gpxFile setColoringTypeColoringType:[settings.currentTrackColoringType get].name];
+            
+            OASKFile *file = [[OASKFile alloc] initWithFilePath:fout];
+           
+            // save to disk
+            OASKException *exception = [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
+            if (!exception)
+            {
+                if (![[OAGPXDatabase sharedDb] containsGPXItem:file.absolutePath])
+                {
+                    [[OAGPXDatabase sharedDb] addGPXFileToDBIfNeeded:file.absolutePath];
+                }
+                
+            } else {
+                NSLog(@"[ERROR] -> OASavingTrackHelper | save gpx");
+            }
         }
         
         [self clearData];
@@ -427,9 +452,10 @@
 - (BOOL) saveCurrentTrack:(NSString *)fileName
 {
     BOOL __block res = NO;
-    
     dispatch_sync(syncQueue, ^{
-        res = [currentTrack saveTo:fileName];
+        OASKFile *filePathToSaveGPX = [[OASKFile alloc] initWithFilePath:fileName];
+        OASKException *exception = [[OASGpxUtilities shared] writeGpxFileFile:filePathToSaveGPX gpxFile:_currentTrack];
+        res = !exception;
     });
     
     return res;
@@ -452,7 +478,7 @@
         NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
         [fmt setDateFormat:@"yyyy-MM-dd"];
         
-        OAGPXMutableDocument *gpx;
+        OASGpxFile *gpx;
         
         const char *dbpath = [databasePath UTF8String];
         sqlite3_stmt *statement;
@@ -465,38 +491,53 @@
             {
                 while (sqlite3_step(statement) == SQLITE_ROW)
                 {
-                    OAWptPt *wpt = [[OAWptPt alloc] init];
+                    OASWptPt *wpt = [[OASWptPt alloc] init];
+                    
                     double lat = sqlite3_column_double(statement, 0);
                     double lon = sqlite3_column_double(statement, 1);
-                    wpt.position = CLLocationCoordinate2DMake(lat, lon);
+                    
+                    wpt.lat = lat;
+                    wpt.lon = lon;
                     wpt.time = (long)sqlite3_column_double(statement, 2);
+                    
                     if (sqlite3_column_text(statement, 3) != nil)
+                    {
                         wpt.name = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 3)];
+                    }
                     
                     if (sqlite3_column_text(statement, 4) != nil)
-                        [wpt setColor:[[UIColor colorFromString:[[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 4)]] toARGBNumber]];
+                    {
+                        OASInt *color = [[OASInt alloc] initWithInt:[[UIColor colorFromString:[[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 4)]] toARGBNumber]];
+                        [wpt setColorColor:color];
+                    }
                     if (sqlite3_column_text(statement, 5) != nil)
-                        wpt.type = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 5)];
-                    if (sqlite3_column_text(statement, 6) != nil)
+                    {
+                        wpt.category = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 5)];
+                    }
+                    if (sqlite3_column_text(statement, 6) != nil) {
                         wpt.desc = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 6)];
-                    if (sqlite3_column_text(statement, 7) != nil)
-                        [wpt setIcon:[[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 7)]];
-                    if (sqlite3_column_text(statement, 8) != nil)
-                        [wpt setBackgroundIcon:[[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 8)]];
+                    }
+                    if (sqlite3_column_text(statement, 7) != nil) {
+                        [wpt setIconNameIconName:[[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 7)]];
+                    }
+                    if (sqlite3_column_text(statement, 8) != nil) {
+                        [wpt setBackgroundTypeBackType:[[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 8)]];
+                    }
 
                     NSString *date = [fmt stringFromDate:[NSDate dateWithTimeIntervalSince1970:wpt.time]];
                     
-                    if (fillCurrentTrack)
-                        gpx = currentTrack;
-                    else
+                    if (fillCurrentTrack) {
+                        gpx = _currentTrack;
+                    } else {
                         gpx = dataTracks[date];
+                    }
                     
                     if (!gpx)
                     {
-                        gpx  = [[OAGPXMutableDocument alloc] init];
+                        gpx = [[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]];
                         [dataTracks setObject:gpx forKey:date];
                     }
-                    [gpx addWpt:wpt];
+                    [gpx addPointPoint:wpt];
                     
                 }
                 sqlite3_finalize(statement);
@@ -507,7 +548,7 @@
     });
 }
 
-- (void) collectDBTracks:(NSMutableDictionary *)dataTracks fillCurrentTrack:(BOOL)fillCurrentTrack
+- (void)collectDBTracks:(NSMutableDictionary *)dataTracks fillCurrentTrack:(BOOL)fillCurrentTrack
 {
     dispatch_sync(dbQueue, ^{
         
@@ -525,21 +566,22 @@
             {
                 long previousTime = 0;
                 long previousInterval = 0;
-
-                OATrkSegment *segment;
-                OATrack *track;
-                OAGPXMutableDocument *gpx;
+                
+                OASTrkSegment *segment;
+                OASTrack *track;
+                OASGpxFile *gpx;
 
                 while (sqlite3_step(statement) == SQLITE_ROW)
                 {
-                    OAWptPt *pt = [[OAWptPt alloc] init];
+                    OASWptPt *pt = [[OASWptPt alloc] init];
                     double lat = sqlite3_column_double(statement, 0);
                     double lon = sqlite3_column_double(statement, 1);
-                    pt.position = CLLocationCoordinate2DMake(lat, lon);
-                    pt.elevation = sqlite3_column_double(statement, 2);
+                    pt.lat = lat;
+                    pt.lon = lon;
+                    pt.ele = sqlite3_column_double(statement, 2);
                     pt.speed = sqlite3_column_double(statement, 3);
                     double hdop = sqlite3_column_double(statement, 4);
-                    pt.horizontalDilutionOfPrecision = hdop == 0 ? NAN : hdop;
+                    pt.hdop = hdop == 0 ? NAN : hdop;
                     pt.time = (long)sqlite3_column_double(statement, 5);
                     double heading = sqlite3_column_double(statement, 6);
                     pt.heading = heading == kTrackNoHeading ? NAN : heading;
@@ -550,7 +592,7 @@
                         if (pluginsInfo && pluginsInfo.length > 0)
                         {
                             NSDictionary<NSString *, NSString *> *extensions = [self getPluginsExtensions:pluginsInfo];
-                            [self addPluginsExtensions:extensions toPoint:pt];
+                            [OASGpxUtilities.shared assignExtensionWriterWptPt:pt extensions:extensions];
                         }
                     }
 
@@ -560,45 +602,46 @@
                     if (track && !newInterval && (![OAAppSettings sharedManager].autoSplitRecording.get || currentInterval < 6 * 60 || currentInterval < 10 * previousInterval))
                     {
                         // 6 minute - same segment
-                        [gpx addTrackPoint:pt segment:segment];
+                        [segment.points addObject:pt];
+                        
                     }
                     else if (track && [OAAppSettings sharedManager].autoSplitRecording.get && currentInterval < 2 * 60 * 60)
                     {
                         // 2 hour - same track
-                        segment = [[OATrkSegment alloc] init];
+                        segment = [[OASTrkSegment alloc] init];
                         segment.points = [NSMutableArray array];
-                        
-                        [gpx addTrackSegment:segment track:track];
 
                         if (!newInterval)
-                            [gpx addTrackPoint:pt segment:segment];
+                            [segment.points addObject:pt];
+                        
+                        [track.segments addObject:segment];
                     }
                     else
                     {
                         // check if date the same - new track otherwise new file
-                        track = [[OATrack alloc] init];
+                        track = [[OASTrack alloc] init];
                         track.segments = [NSMutableArray array];
 
-                        segment = [[OATrkSegment alloc] init];
+                        segment = [[OASTrkSegment alloc] init];
                         segment.points = [NSMutableArray array];
                         
                         NSString *date = [fmt stringFromDate:[NSDate dateWithTimeIntervalSince1970:pt.time]];
                         
                         if (fillCurrentTrack)
-                            gpx = currentTrack;
+                            gpx = _currentTrack;
                         else
                             gpx = dataTracks[date];
                         
                         if (!gpx)
                         {
-                            gpx  = [[OAGPXMutableDocument alloc] init];
+                            gpx = [[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]];
                             [dataTracks setObject:gpx forKey:date];
                         }
-                        [gpx addTrack:track];
-                        [gpx addTrackSegment:segment track:track];
+                        [gpx.tracks addObject:track];
+                        [track.segments addObject:segment];
                         
                         if (!newInterval)
-                            [gpx addTrackPoint:pt segment:segment];
+                            [segment.points addObject:pt];
 
                     }
                     previousInterval = currentInterval;
@@ -622,7 +665,7 @@
             lastPoint = kCLLocationCoordinate2DInvalid;
             long time = (long)[[NSDate date] timeIntervalSince1970];
             [self doUpdateTrackLat:0.0 lon:0.0 alt:0.0 speed:0.0 hdop:0.0 time:time heading:NAN pluginsInfo:nil];
-            [self addTrackPoint:nil newSegment:YES time:time];
+            [self addTrackPointNew:nil newSegment:YES time:time];
         }
     });
 }
@@ -721,27 +764,6 @@
     return @{};
 }
 
-- (void)addPluginsExtensions:(NSDictionary<NSString *, NSString *> *)extensions toPoint:(OAWptPt *)point
-{
-    if (extensions && extensions.count > 0)
-    {
-        OAGpxExtension *trackPointExtension = [[OAGpxExtension alloc] init];
-        trackPointExtension.prefix = @"gpxtpx";
-        trackPointExtension.name = @"TrackPointExtension";
-        NSMutableArray<OAGpxExtension *> *subextensions = [NSMutableArray array];
-        for (NSString *key in extensions.allKeys)
-        {
-            OAGpxExtension *subextension = [[OAGpxExtension alloc] init];
-            subextension.prefix = @"gpxtpx";
-            subextension.name = key;
-            subextension.value = extensions[key];
-            [subextensions addObject:subextension];
-        }
-        [trackPointExtension setSubextensions:subextensions];
-        [point addExtension:trackPointExtension];
-    }
-}
-
 - (void) insertDataLat:(double)lat
                    lon:(double)lon
                    alt:(double)alt
@@ -767,61 +789,62 @@
     }
     
     lastTimeUpdated = time;
-    
-    OAWptPt *pt = [[OAWptPt alloc] init];
-    pt.position = CLLocationCoordinate2DMake(lat, lon);
-    pt.time = time;
-    pt.elevation = alt;
-    pt.speed = speed;
-    pt.horizontalDilutionOfPrecision = hdop;
-    pt.heading = heading;
 
     NSDictionary<NSString *, NSString *> *extensions = [self getPluginsExtensions:pluginsInfo];
-    [self addPluginsExtensions:extensions toPoint:pt];
-
-    [self addTrackPoint:pt newSegment:newSegment time:time];
+    
+    OASWptPt *ptNew = [[OASWptPt alloc] initWithLat:lat lon:lon time:time ele:alt speed:speed hdop:hdop heading:heading];
+    if (extensions.count > 0)
+    {
+        [OASGpxUtilities.shared assignExtensionWriterWptPt:ptNew extensions:extensions];
+    }
+    [self addTrackPointNew:ptNew newSegment:newSegment time:time];
 }
 
-- (void) addTrackPoint:(OAWptPt *)pt newSegment:(BOOL)newSegment time:(long)time
-{
-    OATrack *track = [currentTrack.tracks firstObject];
+- (void)addTrackPointNew:(OASWptPt *)pt newSegment:(BOOL)newSegment time:(long)time {
+    OASTrack *track = [_currentTrack tracks].firstObject;
+    
     BOOL segmentAdded = NO;
+    
     if (track.segments.count == 0 || newSegment)
     {
-        OATrkSegment *segment = [[OATrkSegment alloc] init];
+        OASTrkSegment *segment = [[OASTrkSegment alloc] init];
         segment.points = [NSMutableArray array];
-        [currentTrack addTrackSegment:segment track:track];
+        [track.segments addObject:segment];
         segmentAdded = YES;
     }
     if (pt != nil)
     {
-        OATrkSegment *lt = [track.segments lastObject];
-        [currentTrack addTrackPoint:pt segment:lt];
+        OASTrkSegment *lt = [track.segments lastObject];
+        [lt.points addObject:pt];
     }
     if (segmentAdded)
-        [currentTrack processPoints];
-    currentTrack.modifiedTime = time;
-}
+    {
+        [_currentTrack processPoints];
+    }
     
-- (void)addWpt:(OAWptPt *)wpt
+    _currentTrack.modifiedTime = time;
+
+}
+
+- (void)addWpt:(OASWptPt *)wpt
 {
     OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-    [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[wpt getColor:0]]];
+    [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[wpt getColor]]];
 
-    [currentTrack addWpt:wpt];
-    currentTrack.modifiedTime = wpt.time;
+    [_currentTrack addPointPoint:wpt];
+    _currentTrack.modifiedTime = wpt.time;
     
     points++;
 
-    [self doAddPointsLat:wpt.position.latitude
-                     lon:wpt.position.longitude
+    [self doAddPointsLat:wpt.lat
+                     lon:wpt.lon
                     time:wpt.time
                     desc:wpt.desc
                     name:wpt.name
-                   color:UIColorFromARGB([wpt getColor:0]).toHexARGBString
-                   group:wpt.type
-                    icon:[wpt getIcon]
-              background:[wpt getBackgroundIcon]];
+                   color:UIColorFromARGB([wpt getColor]).toHexARGBString
+                   group:wpt.category
+                    icon:wpt.getIconName
+              background:[wpt getBackgroundType]];
 }
 
 - (void) doUpdateTrackLat:(double)lat
@@ -899,10 +922,10 @@
     });
 }
 
-- (void) updatePointCoordinates:(OAWptPt *)wpt newLocation:(CLLocationCoordinate2D)newLocation
+- (void)updatePointCoordinates:(OASWptPt *)wpt newLocation:(CLLocationCoordinate2D)newLocation
 {
     dispatch_async(dbQueue, ^{
-        sqlite3_stmt    *statement;
+        sqlite3_stmt *statement;
         
         const char *dbpath = [databasePath UTF8String];
         
@@ -915,12 +938,12 @@
             sqlite3_prepare_v2(tracksDB, update_stmt, -1, &statement, NULL);
             sqlite3_bind_double(statement, 1, newLocation.latitude);
             sqlite3_bind_double(statement, 2, newLocation.longitude);
-            sqlite3_bind_text(statement, 3, [(wpt.desc ? wpt.desc : @"") UTF8String], -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(statement, 4, [(wpt.name ? wpt.name : @"") UTF8String], -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(statement, 5, [UIColorFromRGBA([wpt getColor:0]).toHexARGBString UTF8String], -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(statement, 6, [(wpt.type ? wpt.type : @"") UTF8String], -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(statement, 7, [[wpt getIcon] UTF8String], -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(statement, 8, [[wpt getBackgroundIcon] UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(statement, 3, [(wpt.desc ?: @"") UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(statement, 4, [(wpt.name ?: @"") UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(statement, 5, [UIColorFromRGBA([wpt getColor]).toHexARGBString UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(statement, 6, [(wpt.category ?: @"") UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(statement, 7, [wpt.getIconName UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(statement, 8, [[wpt getBackgroundType] UTF8String], -1, SQLITE_TRANSIENT);
             sqlite3_bind_int64(statement, 9, wpt.time);
             
             int res = sqlite3_step(statement);
@@ -1018,59 +1041,57 @@
     });
 }
 
-- (void)deleteWpt:(OAWptPt *)wpt
+
+- (void)deleteWpt:(OASWptPt *)wpt
 {
-    [currentTrack deleteWpt:wpt];
+    [_currentTrack deleteWptPtPoint:wpt];
     
     points--;
     
-    [self doDeletePointsLat:wpt.position.latitude lon:wpt.position.longitude time:wpt.time];
+    [self doDeletePointsLat:wpt.lat lon:wpt.lon time:wpt.time];
 }
 
 - (void)deleteAllWpts
 {
-    [currentTrack deleteAllWpts];
+    [_currentTrack clearPoints];
     
     points = 0;
     
     [self doDeleteAllPoints];
 }
 
-- (void)saveWpt:(OAWptPt *)wpt
+- (void)saveWpt:(OASWptPt *)wpt
 {
-    [self doUpdatePointsLat:wpt.position.latitude
-                        lon:wpt.position.longitude
+    [self doUpdatePointsLat:wpt.lat
+                        lon:wpt.lon
                        time:wpt.time
                        desc:wpt.desc
                        name:wpt.name
-                      color:UIColorFromARGB([wpt getColor:0]).toHexARGBString
-                      group:wpt.type
-                       icon:[wpt getIcon]
-                 background:[wpt getBackgroundIcon]];
+                      color:UIColorFromARGB([wpt getColor]).toHexARGBString
+                      group:wpt.category
+                       icon:[wpt getIconName]
+                 background:[wpt getBackgroundType]];
 }
 
 - (void) loadGpxFromDatabase
 {
     dispatch_sync(syncQueue, ^{
-        
-        [currentTrack.points removeAllObjects];
-        [currentTrack.tracks removeAllObjects];
+        [_currentTrack clearPoints];
+        [[_currentTrack tracks] removeAllObjects];
         [self collectRecordedData:YES];
-        [currentTrack applyBounds];
-
-        [currentTrack processPoints];
+        [_currentTrack processPoints];
         [self prepareCurrentTrackForRecording];
         
-        OAGPXTrackAnalysis *analysis = [currentTrack getAnalysis:(long)[[NSDate date] timeIntervalSince1970]];
-        distance = analysis.totalDistance;
-        points = analysis.wptPoints;
+        OASGpxTrackAnalysis *analysisNew = [_currentTrack getAnalysisFileTimestamp:[[NSDate date] timeIntervalSince1970]];
+        distance = analysisNew.totalDistance;
+        points = analysisNew.wptPoints;
     });
 }
 
 - (void) prepareCurrentTrackForRecording
 {
-    if (currentTrack.tracks.count == 0)
-        [currentTrack addTrack:[[OATrack alloc] init]];
+    if ([_currentTrack tracks].count == 0)
+        [[_currentTrack tracks] addObject:[[OASTrack alloc] init]];
 }
 
 - (BOOL) saveIfNeeded
@@ -1089,16 +1110,8 @@
 - (void) runSyncBlock:(void (^)(void))block
 {
     dispatch_sync(syncQueue, ^{
-        
         block();
-        
     });
-}
-
-- (OAGPX *)getCurrentGPX
-{
-    [currentTrack applyBounds];
-    return [[OAGPXDatabase sharedDb] buildGpxItem:OALocalizedString(@"shared_string_currently_recording_track") title:currentTrack.metadata.name desc:currentTrack.metadata.desc bounds:currentTrack.bounds document:currentTrack fetchNearestCity:NO];
 }
 
 @end

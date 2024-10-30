@@ -40,11 +40,11 @@ final class GradientUiHelper: NSObject {
         return formattedValue
     }
 
-    static func getGradientTypeFormatterFor(terrainType: TerrainType, analysis: OAGPXTrackAnalysis?) -> AxisValueFormatter {
+    static func getGradientTypeFormatterFor(terrainType: TerrainType, analysis: GpxTrackAnalysis?) -> AxisValueFormatter {
         Self.getGradientTypeFormatter(terrainType, analysis: analysis)
     }
 
-    static func getGradientTypeFormatter(_ gradientType: Any, analysis: OAGPXTrackAnalysis?) -> AxisValueFormatter {
+    static func getGradientTypeFormatter(_ gradientType: Any, analysis: GpxTrackAnalysis?) -> AxisValueFormatter {
         if let terrainType = gradientType as? TerrainType {
             return getTerrainTypeFormatter(terrainType)
         }
@@ -77,7 +77,7 @@ final class GradientUiHelper: NSObject {
         }
     }
 
-    private static func getColorizationTypeFormatter(_ colorizationType: ColorizationType, analysis: OAGPXTrackAnalysis?) -> AxisValueFormatter {
+    private static func getColorizationTypeFormatter(_ colorizationType: ColorizationType, analysis: GpxTrackAnalysis?) -> AxisValueFormatter {
         return AxisValueFormatterLocal { (value, axis) in
             var stringValue = Self.formatValue(value, multiplier: 100)
             var type = "%"

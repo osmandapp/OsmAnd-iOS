@@ -1327,6 +1327,7 @@
 		C546C0042AC242D600377EDE /* OAOsmUploadPOIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C546C0032AC242D600377EDE /* OAOsmUploadPOIViewController.m */; };
 		C546C0072AC2438F00377EDE /* OAOsmNoteViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C546C0062AC2438F00377EDE /* OAOsmNoteViewController.mm */; };
 		C546C00A2AC2446E00377EDE /* OAUploadOsmPOINoteViewProgressController.m in Sources */ = {isa = PBXBuildFile; fileRef = C546C0092AC2446E00377EDE /* OAUploadOsmPOINoteViewProgressController.m */; };
+		C5484DC72CD21F03004C5F27 /* FormattedValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5484DC62CD21F03004C5F27 /* FormattedValue.swift */; };
 		C54D7F8829BF357700E14746 /* OASunriseSunsetWidgetState.m in Sources */ = {isa = PBXBuildFile; fileRef = C54D7F8729BF357700E14746 /* OASunriseSunsetWidgetState.m */; };
 		C556C85329BA0844006794D5 /* OASunriseSunsetWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = C556C85129BA0844006794D5 /* OASunriseSunsetWidget.mm */; };
 		C558A29B29B1355A00E79DDB /* ic_custom_direction_manual_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C558A29529B1355800E79DDB /* ic_custom_direction_manual_night@2x.png */; };
@@ -4849,6 +4850,7 @@
 		C546C0062AC2438F00377EDE /* OAOsmNoteViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOsmNoteViewController.mm; sourceTree = "<group>"; };
 		C546C0082AC2446E00377EDE /* OAUploadOsmPOINoteViewProgressController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAUploadOsmPOINoteViewProgressController.h; sourceTree = "<group>"; };
 		C546C0092AC2446E00377EDE /* OAUploadOsmPOINoteViewProgressController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAUploadOsmPOINoteViewProgressController.m; sourceTree = "<group>"; };
+		C5484DC62CD21F03004C5F27 /* FormattedValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormattedValue.swift; sourceTree = "<group>"; };
 		C54D7F8629BF357700E14746 /* OASunriseSunsetWidgetState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASunriseSunsetWidgetState.h; sourceTree = "<group>"; };
 		C54D7F8729BF357700E14746 /* OASunriseSunsetWidgetState.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OASunriseSunsetWidgetState.m; sourceTree = "<group>"; };
 		C556C85029BA0844006794D5 /* OASunriseSunsetWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASunriseSunsetWidget.h; sourceTree = "<group>"; };
@@ -13106,6 +13108,7 @@
 				323084D726E933EE00D6FC67 /* OAOsmAndFormatter.h */,
 				323084D826E933FE00D6FC67 /* OAOsmAndFormatter.mm */,
 				C52E750E2C2BECAC00C45ED0 /* OsmAndFormatterParams.swift */,
+				C5484DC62CD21F03004C5F27 /* FormattedValue.swift */,
 				DA5A80AD26C563A600F274C7 /* OAOsmAndLiveHelper.h */,
 				DA5A80A326C563A500F274C7 /* OAOsmAndLiveHelper.mm */,
 				DA5A80B926C563A600F274C7 /* OAResourcesInstaller.h */,
@@ -16677,6 +16680,7 @@
 				DA4ABEE72876DA5D00B996EF /* OASettingsItemWriter.m in Sources */,
 				DA5A830626C563A800F274C7 /* OAImagesTableViewCell.m in Sources */,
 				DA5A816426C563A700F274C7 /* OANighttimeAppearance.m in Sources */,
+				C5484DC72CD21F03004C5F27 /* FormattedValue.swift in Sources */,
 				32414F012C454F9D000B4B79 /* OsmBenefitsOAuthView.swift in Sources */,
 				DA5A853626C563A900F274C7 /* OACustomRegion.mm in Sources */,
 				FAE0B7112AFCDAD400C02438 /* BLEPairedSensorsViewController.swift in Sources */,

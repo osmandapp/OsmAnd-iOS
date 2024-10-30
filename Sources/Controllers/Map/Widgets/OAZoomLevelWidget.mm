@@ -40,8 +40,21 @@
             [selfWeak updateInfo];
             return NO;
         };
+        self.onClickFunction = ^(id sender) {
+            [selfWeak onWidgetClicked];
+        };
     }
     return self;
+}
+
+- (void)onWidgetClicked
+{
+    if ([_widgetState.typePreference get] == EOAWidgetZoom)
+        [_widgetState.typePreference set:EOAWidgetMapScale];
+    else
+        [_widgetState.typePreference set:EOAWidgetZoom];
+    [self updateInfo];
+    - (NSString *)getWidgetName {
 }
 
 - (BOOL) updateInfo
@@ -60,39 +73,54 @@
 
 - (OATableDataModel *)getSettingsData:(OAApplicationMode *)appMode
 {
-    OAWidgetType *type = _widgetState.widgetType;
-    
     OATableDataModel *data = [[OATableDataModel alloc] init];
     OATableSectionData *section = [data createNewSection];
     section.headerText = OALocalizedString(@"shared_string_settings");
-    SunPositionMode sunPositionMode = (SunPositionMode)[[_state getSunPositionPreference] get:appMode];
 
-    if (type == OAWidgetType.sunPosition)
-    {
-        OATableRowData *row = section.createNewRow;
-        row.cellType = OAValueTableViewCell.getCellIdentifier;
-        row.key = @"value_pref";
-        row.title = OALocalizedString(@"shared_string_mode");
-        row.descr = OALocalizedString(@"shared_string_mode");
-        [row setObj:_state.getSunPositionPreference forKey:@"pref"];
-        
-        [row setObj:[self getTitleForSunPositionMode:sunPositionMode] forKey:@"value"];
-        [row setObj:self.getPossibleFormatValues forKey:@"possible_values"];
-    }
-    
     OATableRowData *row = section.createNewRow;
     row.cellType = OAValueTableViewCell.getCellIdentifier;
     row.key = @"value_pref";
-    NSString *title = OALocalizedString(type == OAWidgetType.sunPosition ? @"shared_string_format" : @"recording_context_menu_show");
-
+    NSString *title = OALocalizedString(@"shared_string_show");
     row.title = title;
     row.descr = title;
 
-    [row setObj:_state.getPreference forKey:@"pref"];
-    [row setObj:[self getTitle:(EOASunriseSunsetMode)[_state.getPreference get:appMode] sunPositionMode:sunPositionMode] forKey:@"value"];
+    [row setObj:_widgetState.typePreference forKey:@"pref"];
+    [row setObj:[self getTitle:(EOAWidgetZoomLevelType)[_widgetState.typePreference get:appMode]] forKey:@"value"];
     [row setObj:self.getPossibleValues forKey:@"possible_values"];
    
     return data;
+}
+
+- (NSString *)getTitle:(EOAWidgetZoomLevelType)type
+{
+    switch (type)
+    {
+        case EOAWidgetZoom:
+            return OALocalizedString(@"map_widget_zoom_level");
+        case EOAWidgetMapScale:
+            return OALocalizedString(@"map_widget_map_scale");
+        default:
+            return @"";
+    }
+}
+
+- (NSArray<OATableRowData *> *) getPossibleValues
+{
+    NSMutableArray<OATableRowData *> *res = [NSMutableArray array];
+
+    OATableRowData *row = [[OATableRowData alloc] init];
+    row.cellType = OASimpleTableViewCell.getCellIdentifier;
+    [row setObj:@(EOAWidgetZoom) forKey:@"value"];
+    row.title = [self getTitle:EOAWidgetZoom];
+    [res addObject:row];
+
+    row = [[OATableRowData alloc] init];
+    row.cellType = OASimpleTableViewCell.getCellIdentifier;
+    [row setObj:@(EOAWidgetMapScale) forKey:@"value"];
+    row.title = [self getTitle:EOAWidgetMapScale];
+    [res addObject:row];
+
+    return res;
 }
 
 - (void)updateSimpleWidgetInfo

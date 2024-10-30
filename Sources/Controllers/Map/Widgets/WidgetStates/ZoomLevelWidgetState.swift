@@ -9,7 +9,7 @@
 @objcMembers
 final class ZoomLevelWidgetState: OAWidgetState {
     
-    private let typePreference: OACommonWidgetZoomLevelType!
+    private(set) var typePreference: OACommonWidgetZoomLevelType
     private(set) var widgetType: WidgetType
     
     init(customId: String?, widgetType: WidgetType) {
@@ -22,7 +22,7 @@ final class ZoomLevelWidgetState: OAWidgetState {
         if let customId, !customId.isEmpty {
             prefId += "_\(customId)"
         }
-        return OAAppSettings.sharedManager().registerWidgetZoomLevelTypePreference(prefId, defValue: .mapScale).makeProfile()
+        return OAAppSettings.sharedManager().registerWidgetZoomLevelTypePreference(prefId, defValue: .zoom).makeProfile()
     }
     
     override func getMenuTitle() -> String {
@@ -33,10 +33,10 @@ final class ZoomLevelWidgetState: OAWidgetState {
         widgetType.iconName
     }
     
-    override func changeToNextState() {
-        print("changeToNextState")
-        // typePreference.set(!typePreference.get())
-    }
+//    override func changeToNextState() {
+//        print("changeToNextState")
+//        // typePreference.set(!typePreference.get())
+//    }
     
     override func copyPrefs(_ appMode: OAApplicationMode, customId: String?) {
         Self.registerPreference(customId).set(typePreference.get(appMode), mode: appMode)

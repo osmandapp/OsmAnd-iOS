@@ -256,7 +256,7 @@ extension TracksSearchFilter {
     
     static func getDisplayMaxValue(filter: RangeTrackFilter<AnyObject>) -> Int {
         let formattedValue = getFormattedValue(measureUnitType: filter.trackFilterType.measureUnitType, value: filter.ceilMaxValue())
-        return Int(formattedValue.valueSrc)
+        return Int(ceil(formattedValue.valueSrc))
     }
     
     static func getDisplayValueFrom(filter: RangeTrackFilter<AnyObject>) -> Int {
@@ -266,7 +266,7 @@ extension TracksSearchFilter {
     
     static func getDisplayValueTo(filter: RangeTrackFilter<AnyObject>) -> Int {
         let formattedValue = getFormattedValue(measureUnitType: filter.trackFilterType.measureUnitType, value: filter.ceilValueTo())
-        return Int(formattedValue.valueSrc)
+        return Int(ceil(formattedValue.valueSrc))
     }
     
     static func getFormattedValue(measureUnitType: MeasureUnitType, value: String) -> FormattedValue {
@@ -293,13 +293,10 @@ extension TracksSearchFilter {
         if let formattedString {
             let components = formattedString.components(separatedBy: " ")
             if components.count > 1 {
-                let numberPart = components.dropLast().joined(separator: "")
-                let formattedNumberPart = numberPart.replacingOccurrences(of: ",", with: ".").replacingOccurrences(of: " ", with: "")
-                if let floatValue = Float(formattedNumberPart) {
-                    let roundedValue = ceil(floatValue)
-                    let unit = components.last ?? ""
-                    return FormattedValue(valueSrc: roundedValue, value: String(format: "%.0f", roundedValue), unit: unit)
-                }
+                let numberPart = components.dropLast().joined().replacingOccurrences(of: " ", with: "").replacingOccurrences(of: ",", with: ".")
+                let valueSrc = Float(numberPart) ?? 0.0
+                let unit = components.last ?? ""
+                return FormattedValue(valueSrc: valueSrc, value: String(format: "%.0f", valueSrc), unit: unit)
             }
         }
         

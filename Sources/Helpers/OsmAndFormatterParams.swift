@@ -30,7 +30,7 @@ final class OsmAndFormatterParams: NSObject {
     
     var forceTrailingZerosInDecimalMainUnit: Bool = defaultForceTrailing
     var extraDecimalPrecision: Int = defaultExtraDecimalPrecision
-    var forcePreciseValue: Bool = false
+    var forcePreciseValue = false
     var useLowerBound = false
     
     var isUseLowerBound: Bool {

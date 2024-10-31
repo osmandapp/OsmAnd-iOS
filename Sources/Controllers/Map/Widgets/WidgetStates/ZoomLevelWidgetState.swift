@@ -16,15 +16,7 @@ final class ZoomLevelWidgetState: OAWidgetState {
         self.typePreference = Self.registerPreference(customId)
         self.widgetType = widgetType
     }
-    
-    private static func registerPreference(_ customId: String?) -> OACommonWidgetZoomLevelType {
-        var prefId = "zoom_level_type"
-        if let customId, !customId.isEmpty {
-            prefId += "_\(customId)"
-        }
-        return OAAppSettings.sharedManager().registerWidgetZoomLevelTypePreference(prefId, defValue: .zoom).makeProfile()
-    }
-    
+
     override func getMenuTitle() -> String {
         widgetType.title
     }
@@ -32,11 +24,6 @@ final class ZoomLevelWidgetState: OAWidgetState {
     override func getSettingsIconId(_ night: Bool) -> String {
         widgetType.iconName
     }
-    
-//    override func changeToNextState() {
-//        print("changeToNextState")
-//        // typePreference.set(!typePreference.get())
-//    }
     
     override func copyPrefs(_ appMode: OAApplicationMode, customId: String?) {
         Self.registerPreference(customId).set(typePreference.get(appMode), mode: appMode)
@@ -46,22 +33,11 @@ final class ZoomLevelWidgetState: OAWidgetState {
         typePreference.get()
     }
     
-    //    enum ZoomLevelType: Int, CaseIterable {
-    //        case zoom = 0
-    //        case mapScale = 1
-    //
-    //        var titleId: Int {
-    //            switch self {
-    //            case .zoom:
-    //                return R.string.map_widget_zoom_level
-    //            case .mapScale:
-    //                return R.string.map_widget_map_scale
-    //            }
-    //        }
-    //
-    //        func next() -> ZoomLevelType {
-    //            let nextIndex = (self.rawValue + 1) % ZoomLevelType.allCases.count
-    //            return ZoomLevelType(rawValue: nextIndex)!
-    //        }
-    //    }
+    private static func registerPreference(_ customId: String?) -> OACommonWidgetZoomLevelType {
+        var prefId = "zoom_level_type" // zoom_level_typedev_zoom_level__17303691733
+        if let customId, !customId.isEmpty {
+            prefId += "\(customId)"
+        }
+        return OAAppSettings.sharedManager().registerWidgetZoomLevelTypePreference(prefId, defValue: .zoom).makeProfile()
+    }
 }

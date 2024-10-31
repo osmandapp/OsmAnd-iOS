@@ -3654,6 +3654,9 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 @implementation OACommonWidgetZoomLevelType
 
+static NSString *kZoomKey = @"ZOOM";
+static NSString *kMapScaleKey = @"MAP_SCALE";
+
 @dynamic defValue;
 
 + (instancetype) withKey:(NSString *)key defValue:(EOAWidgetZoomLevelType)defValue
@@ -3672,19 +3675,19 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
     return [super get];
 }
 
-- (void)set:(EOAWidgetZoomLevelType)widgetSizeStyle
-{
-    [super set:(int)widgetSizeStyle];
-}
-
 - (EOAWidgetZoomLevelType)get:(OAApplicationMode *)mode
 {
     return [super get:mode];
 }
 
-- (void)set:(EOAWidgetZoomLevelType)widgetSizeStyle mode:(OAApplicationMode *)mode
+- (void)set:(EOAWidgetZoomLevelType)type
 {
-    [super set:(int)widgetSizeStyle mode:mode];
+    [super set:(int)type];
+}
+
+- (void)set:(EOAWidgetZoomLevelType)type mode:(OAApplicationMode *)mode
+{
+    [super set:(int)type mode:mode];
 }
 
 - (void)resetToDefault
@@ -3695,6 +3698,27 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         defaultValue = (EOAWidgetZoomLevelType)((NSNumber *)pDefault).intValue;
 
     [self set:defaultValue];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    if ([strValue isEqualToString:kZoomKey])
+        return [self set:EOAWidgetZoom mode:mode];
+    else if ([strValue isEqualToString:kMapScaleKey])
+        return [self set:EOAWidgetMapScale mode:mode];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    switch ([self get:mode])
+    {
+        case EOAWidgetZoom:
+            return kZoomKey;
+        case EOAWidgetMapScale:
+            return kMapScaleKey;
+        default:
+            return @"";
+    }
 }
 
 @end

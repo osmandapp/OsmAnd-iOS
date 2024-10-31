@@ -708,8 +708,8 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 
 - (EOAWidgetZoomLevelType)get;
 - (EOAWidgetZoomLevelType)get:(OAApplicationMode *)mode;
-- (void)set:(EOAWidgetZoomLevelType)rulerWidgetMode;
-- (void)set:(EOAWidgetZoomLevelType)rulerWidgetMode mode:(OAApplicationMode *)mode;
+- (void)set:(EOAWidgetZoomLevelType)type;
+- (void)set:(EOAWidgetZoomLevelType)type mode:(OAApplicationMode *)mode;
 
 @end
 

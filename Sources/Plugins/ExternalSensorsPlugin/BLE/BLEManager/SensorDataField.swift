@@ -40,7 +40,8 @@ class SensorDataField {
     }
 }
 
-final class FormattedValue {
+@objcMembers
+final class FormattedValue: NSObject {
     let value: String
     let unit: String?
     let valueSrc: Float

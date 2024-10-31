@@ -65,5 +65,10 @@ static const CGFloat FEET_IN_ONE_METER = YARDS_IN_ONE_METER * 3;
 + (NSString *)getFormattedDuration:(NSTimeInterval)seconds;
 + (NSTimeInterval)getStartOfDayForTime:(NSTimeInterval)timestamp;
 + (NSTimeInterval)getStartOfToday;
++ (NSString *)formatValue:(float)value
+                     unit:(NSString *)unit
+      forceTrailingZeroes:(BOOL)forceTrailingZeroes
+      decimalPlacesNumber:(NSInteger)decimalPlacesNumber
+           valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray;
 
 @end

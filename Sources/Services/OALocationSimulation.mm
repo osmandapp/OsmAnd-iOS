@@ -491,7 +491,6 @@ static const float LOCATION_TIMEOUT = 1.5;
     return [[OASimulatedLocation alloc] initWithCoordinate:self.coordinate altitude:self.altitude horizontalAccuracy:self.horizontalAccuracy verticalAccuracy:verticalAccuracy course:self.course courseAccuracy:self.courseAccuracy speed:self.speed timestamp:self.timestamp trafficLight:_trafficLight highwayType:_highwayType speedLimit:_speedLimit];
 }
 
-
 - (OASimulatedLocation *) locationWithCourse:(CLLocationDirection)course
 {
     return [[OASimulatedLocation alloc] initWithCoordinate:self.coordinate altitude:self.altitude horizontalAccuracy:self.horizontalAccuracy verticalAccuracy:self.verticalAccuracy course:course courseAccuracy:self.courseAccuracy speed:self.speed timestamp:self.timestamp trafficLight:_trafficLight highwayType:_highwayType speedLimit:_speedLimit];

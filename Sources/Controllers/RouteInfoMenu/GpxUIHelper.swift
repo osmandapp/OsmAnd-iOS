@@ -8,6 +8,7 @@
 
 import UIKit
 import DGCharts
+import OsmAndShared
 
 @objc enum GPXDataSetType: Int {
     case none, altitude, speed, slope, sensorSpeed, sensorHeartRate, sensorBikePower, sensorBikeCadence, sensorTemperatureA, sensorTemperatureW
@@ -77,7 +78,7 @@ class GpxUIHelper: NSObject {
         }
 
         func stringForValue(_ value: Double, axis: AxisBase?) -> String {
-            let hasUnits = value == axis?.entries.first || axis is YAxis
+            let hasUnits = value == axis?.entries.first || value == axis?.entries.last || axis is YAxis
             if let formatX, formatX.length > 0 {
                 return String(format: formatX, value) + (hasUnits ? (" " + unitsX) : "")
             } else {
@@ -312,7 +313,7 @@ class GpxUIHelper: NSObject {
     }
 
     static func refreshLineChart(chartView: ElevationChart,
-                                 analysis: OAGPXTrackAnalysis,
+                                 analysis: GpxTrackAnalysis,
                                  firstType: GPXDataSetType,
                                  secondType: GPXDataSetType,
                                  axisType: GPXDataSetAxisType,
@@ -329,7 +330,7 @@ class GpxUIHelper: NSObject {
 
     static func refreshBarChart(chartView: HorizontalBarChartView,
                                 statistics: OARouteStatistics,
-                                analysis: OAGPXTrackAnalysis,
+                                analysis: GpxTrackAnalysis,
                                 nightMode: Bool) {
         setupHorizontalGPXChart(chart: chartView,
                                 yLabelsCount: 4,
@@ -454,67 +455,50 @@ class GpxUIHelper: NSObject {
         chart.maxVisibleCount = 10
         chart.minOffset = 0.0
         chart.dragDecelerationEnabled = false
-        chart.drawGridBackgroundEnabled = false
 
         let xAxis = chart.xAxis
         xAxis.drawAxisLineEnabled = true
         xAxis.axisLineWidth = 1.0
-        xAxis.axisLineDashPhase = 0.0
         xAxis.axisLineColor = xAxisGridColor
-        xAxis.drawGridLinesEnabled = false
+        xAxis.drawGridLinesEnabled = true
+        xAxis.gridLineWidth = 1.0
+        xAxis.gridColor = xAxisGridColor
+        xAxis.gridLineDashLengths = [8.0, CGFLOAT_MAX]
+        xAxis.gridLineDashPhase = 0.0
         xAxis.labelPosition = .bottom
         xAxis.labelTextColor = labelsColor
         xAxis.avoidFirstLastClippingEnabled = true
         xAxis.enabled = true
 
-        let leftYAxis = chart.leftAxis
-        leftYAxis.enabled = false
-
-        let rightYAxis = chart.rightAxis
-        rightYAxis.enabled = false
-
-        let legend = chart.legend
-        legend.enabled = false
+        chart.leftAxis.enabled = false
+        chart.rightAxis.enabled = false
+        chart.legend.enabled = false
     }
 
     static func buildGradientChart(chart: LineChartView,
                                    colorPalette: ColorPalette,
                                    valueFormatter: AxisValueFormatter) -> LineChartData {
-        chart.xAxis.valueFormatter = valueFormatter
+        chart.xAxis.enabled = false
 
         let colorValues = colorPalette.colorValues
-        var cgColors = [CGColor]()
+        var colors = [NSUIColor]()
         var entries = [ChartDataEntry]()
 
         for i in 0..<colorValues.count {
-            let clr = colorValues[i].clr
-            cgColors.append(UIColor(argb: clr).cgColor)
+            colors.append(NSUIColor(argb: colorValues[i].clr))
             entries.append(ChartDataEntry(x: colorValues[i].val, y: 0))
         }
 
         let barDataSet = LineChartDataSet(entries: entries, label: "")
+        barDataSet.colors = colors
         barDataSet.highlightColor = .textColorSecondary
-        // [START] Disable circles and lines
-        barDataSet.drawCirclesEnabled = false
-        barDataSet.drawCircleHoleEnabled = false
-        barDataSet.setColor(.clear)
-        // [END] Disable circles and lines
-
-        let step = 1.0 / CGFloat(colorValues.count - 1)
-        var colorLocations = [CGFloat]()
-        for i in 0...colorValues.count - 1 {
-            colorLocations.append(CGFloat(i) * step)
-        }
-        if let gradient = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(),
-                                     colors: cgColors as CFArray,
-                                     locations: colorLocations) {
-            barDataSet.fill = LinearGradientFill(gradient: gradient)
-            barDataSet.fillAlpha = 1.0
-            barDataSet.drawFilledEnabled = true
-        }
-
+        barDataSet.fillAlpha = 1.0
+        barDataSet.drawFilledEnabled = true
+    
         let dataSet = LineChartData(dataSet: barDataSet)
         dataSet.setDrawValues(false)
+        chart.xAxis.valueFormatter = valueFormatter
+
         return dataSet
     }
 
@@ -542,7 +526,7 @@ class GpxUIHelper: NSObject {
     }
 
     static func getDivX(lineChart: LineChartView,
-                        analysis: OAGPXTrackAnalysis,
+                        analysis: GpxTrackAnalysis,
                         axisType: GPXDataSetAxisType,
                         calcWithoutGaps: Bool) -> Double {
         let xAxis: XAxis = lineChart.xAxis
@@ -577,14 +561,15 @@ class GpxUIHelper: NSObject {
         var currentX: Double = 0
 
         for i in 0..<pointAttributes.count {
+            
             let attribute: PointAttributes = pointAttributes[i]
             let stepX: Double = Double(axisType == .time || axisType == .timeOfDay ? attribute.timeDiff : attribute.distance)
             if i == 0 || stepX > 0 {
                 if !(calcWithoutGaps && attribute.firstPoint) {
                     currentX += stepX / divX
                 }
-                if attribute.hasValidValue(for: key) {
-                    let value: Float = attribute.getAttributeValue(for: key) ?? 1
+                if attribute.hasValidValue(tag: key) {
+                    let value: Float = Float(attribute.getAttributeValue(tag: key) ?? 1.0)
                     var currentY: Float = divY.isNaN ? value * Float(mulY) : Float(divY) / value
                     if currentY < 0 || currentY.isInfinite {
                         currentY = 0
@@ -647,7 +632,7 @@ class GpxUIHelper: NSObject {
     }
 
     static func getDataSets(chartView: LineChartView?,
-                            analysis: OAGPXTrackAnalysis?,
+                            analysis: GpxTrackAnalysis?,
                             firstType: GPXDataSetType,
                             secondType: GPXDataSetType,
                             gpxDataSetAxisType: GPXDataSetAxisType,
@@ -713,7 +698,7 @@ class GpxUIHelper: NSObject {
     }
     
     private static func getDataSet(chartView: LineChartView,
-                                   analysis: OAGPXTrackAnalysis,
+                                   analysis: GpxTrackAnalysis,
                                    type: GPXDataSetType,
                                    otherType: GPXDataSetType?,
                                    gpxDataSetAxisType: GPXDataSetAxisType,
@@ -758,7 +743,7 @@ class GpxUIHelper: NSObject {
 
     private static func buildStatisticChart(chartView: HorizontalBarChartView,
                                             routeStatistics: OARouteStatistics,
-                                            analysis: OAGPXTrackAnalysis,
+                                            analysis: GpxTrackAnalysis,
                                             useRightAxis: Bool,
                                             nightMode: Bool) -> BarChartData {
         let xAxis = chartView.xAxis
@@ -801,7 +786,7 @@ class GpxUIHelper: NSObject {
     }
 
     private static func createGPXElevationDataSet(chartView: LineChartView,
-                                                  analysis: OAGPXTrackAnalysis,
+                                                  analysis: GpxTrackAnalysis,
                                                   graphType: GPXDataSetType,
                                                   axisType: GPXDataSetAxisType,
                                                   useRightAxis: Bool,
@@ -847,7 +832,7 @@ class GpxUIHelper: NSObject {
     }
 
     private static func createGPXSlopeDataSet(chartView: LineChartView,
-                                              analysis: OAGPXTrackAnalysis,
+                                              analysis: GpxTrackAnalysis,
                                               graphType: GPXDataSetType,
                                               axisType: GPXDataSetAxisType,
                                               eleValues: [ChartDataEntry]?,
@@ -1062,41 +1047,41 @@ class GpxUIHelper: NSObject {
         return divX
     }
 
-    private static func calculateElevationArray(analysis: OAGPXTrackAnalysis, 
+    private static func calculateElevationArray(analysis: GpxTrackAnalysis, 
                                                 axisType: GPXDataSetAxisType,
                                                 divX: Double,
                                                 convEle: Double,
                                                 useGeneralTrackPoints: Bool,
                                                 calcWithoutGaps: Bool) -> [ChartDataEntry] {
         var values: [ChartDataEntry] = []
-        if analysis.elevationData == nil {
+        if !analysis.hasElevationData() {
             return values
         }
-        let elevationData: [OAElevation] = analysis.elevationData
         var nextX: Double = 0
         var nextY: Double
         var elev: Double
         var prevElevOrig: Double = -80000
         var prevElev: Double = 0
         var i: Int = -1
-        let lastIndex: Int = elevationData.count - 1
+        let lastIndex: Int = analysis.pointAttributes.count - 1
         var lastEntry: ChartDataEntry?
         var lastXSameY: Double = -1
         var hasSameY = false
         var x: Double
-        for e in elevationData {
+        for e in analysis.pointAttributes {
+            guard let e = e as? OsmAndShared.PointAttributes else { continue }
             i += 1
             if axisType == .time || axisType == .timeOfDay {
-                x = Double(e.time)
+                x = Double(e.timeDiff)
             } else {
-                x = e.distance
+                x = Double(e.distance)
             }
             if x >= 0 {
                 if !(calcWithoutGaps && e.firstPoint && lastEntry != nil) {
                     nextX += x / divX
                 }
                 if !e.elevation.isNaN {
-                    elev = e.elevation
+                    elev = Double(e.elevation)
                     if prevElevOrig != -80000 {
                         if elev > prevElevOrig {
                             // elev -= 1
@@ -1118,7 +1103,7 @@ class GpxUIHelper: NSObject {
                     if useGeneralTrackPoints, e.firstPoint, let lastEntry {
                         values.append(ChartDataEntry(x: nextX, y: lastEntry.y))
                     }
-                    prevElevOrig = e.elevation
+                    prevElevOrig = Double(e.elevation)
                     prevElev = elev
                     nextY = elev * convEle
                     lastEntry = ChartDataEntry(x: nextX, y: nextY)
@@ -1132,7 +1117,7 @@ class GpxUIHelper: NSObject {
     }
 
     private static func createGPXSpeedDataSet(chartView: LineChartView,
-                                              analysis: OAGPXTrackAnalysis,
+                                              analysis: GpxTrackAnalysis,
                                               graphType: GPXDataSetType,
                                               axisType: GPXDataSetAxisType,
                                               useRightAxis: Bool,
@@ -1156,8 +1141,12 @@ class GpxUIHelper: NSObject {
         } else {
             yAxis.resetCustomAxisMin()
         }
+        var dateKey = graphType.getDatakey()
+        if case .speed = graphType {
+            dateKey = "point_speed"
+        }
 
-        let values = getPointAttributeValues(key: graphType.getDatakey(),
+        let values = getPointAttributeValues(key: dateKey,
                                              pointAttributes: analysis.pointAttributes as! [PointAttributes],
                                              axisType: axisType,
                                              divX: divX,

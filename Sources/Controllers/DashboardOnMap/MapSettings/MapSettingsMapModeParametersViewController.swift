@@ -37,8 +37,6 @@ final class MapSettingsMapModeParametersViewController: OABaseScrollableHudViewC
     private var tableData = OATableDataModel()
     private var baseMode = DayNightMode(rawValue: OAAppSettings.sharedManager().appearanceMode.get())
     private var currentMode = DayNightMode(rawValue: OAAppSettings.sharedManager().appearanceMode.get())
-    private var nameIndexPath: IndexPath?
-    private var descIndexPath: IndexPath?
 
     init() {
         super.init(nibName: "MapSettingsMapModeParametersViewController", bundle: nil)
@@ -156,9 +154,7 @@ final class MapSettingsMapModeParametersViewController: OABaseScrollableHudViewC
         applyButton.isUserInteractionEnabled = isValueChanged
         resetButton.isEnabled = isValueChanged
 
-        if let descIndexPath, let nameIndexPath {
-            tableView.reloadRows(at: [nameIndexPath, descIndexPath], with: .none)
-        }
+        tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
     }
 
     private func generateData() {
@@ -171,20 +167,27 @@ final class MapSettingsMapModeParametersViewController: OABaseScrollableHudViewC
             kCellKeyKey: "name",
             kCellTypeKey: OASimpleTableViewCell.reuseIdentifier
         ])
-        nameIndexPath = IndexPath(row: Int(section.rowCount()) - 1,
-                                  section: Int(tableData.sectionCount()) - 1)
 
         section.addRow(from: [
             kCellKeyKey: "modes",
-            kCellTypeKey: SegmentImagesWithRightLabelTableViewCell.reuseIdentifier
+            kCellTypeKey: SegmentImagesWithRightLabelTableViewCell.reuseIdentifier,
+            "icons": getImagesFromModes(false),
+            "selectedIcons": getImagesFromModes(true)
         ])
 
         section.addRow(from: [
             kCellKeyKey: "desc",
             kCellTypeKey: OASimpleTableViewCell.reuseIdentifier
         ])
-        descIndexPath = IndexPath(row: Int(section.rowCount()) - 1,
-                                  section: Int(tableData.sectionCount()) - 1)
+    }
+
+    private func getImagesFromModes(_ selected: Bool) -> [UIImage] {
+        DayNightMode.allCases.map({
+            if let image = UIImage(named: selected ? $0.selectedIconName : $0.iconName) {
+                return OAUtilities.resize(image, newSize: CGSize(width: 20, height: 20))
+            }
+            return UIImage()
+        })
     }
 
     @objc private func onApplyButtonPressed() {
@@ -236,11 +239,9 @@ extension MapSettingsMapModeParametersViewController {
             cell.configureTitle(title: nil)
             cell.separatorInset = UIEdgeInsets(top: 0, left: CGFLOAT_MAX, bottom: 0, right: 0)
 
-            let modes = DayNightMode.allCases
-            cell.configureSegmentedControl(icons: modes.map({ $0.iconName }),
+            cell.configureSegmentedControl(icons: item.obj(forKey: "icons") as? [UIImage] ?? [],
                                            selectedSegmentIndex: Int(selectedMode),
-                                           selectedIcons: modes.map({ $0.selectedIconName })
-)
+                                           selectedIcons: item.obj(forKey: "selectedIcons") as? [UIImage] ?? [])
 
             cell.didSelectSegmentIndex = { [weak self] index in
                 guard let self else { return }

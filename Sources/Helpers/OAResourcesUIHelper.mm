@@ -1321,9 +1321,13 @@ includeHidden:(BOOL)includeHidden
 {
     if (item.downloadUrl)
     {
-        NSString *name = item.title;
-        if (item.subfolder && item.subfolder.length > 0)
-            name = [item.subfolder stringByAppendingPathComponent:name];
+        NSString *name = [item getVisibleName];
+        if (!name)
+        {
+            name = item.title;
+            if (item.subfolder && item.subfolder.length > 0)
+                name = [item.subfolder stringByAppendingPathComponent:name];
+        }
 
         if ([item.downloadUrl hasPrefix:@"@"])
         {
@@ -1350,6 +1354,10 @@ includeHidden:(BOOL)includeHidden
                                                                              andKey:[@"resource:" stringByAppendingString:item.resourceId.toNSString()]
                                                                             andName:name
                                                                           andHidden:item.hidden];
+            
+            task.resourceItem = item;
+            task.creationTime = [NSDate now];
+            
             if (onTaskCreated)
                 onTaskCreated(task);
 
@@ -1683,6 +1691,7 @@ includeHidden:(BOOL)includeHidden
             task = item.downloadTask;
         
         item.downloadTask.resourceItem = item;
+        item.downloadTask.creationTime = [NSDate now];
 
         if (onTaskCreated)
             onTaskCreated(task);
@@ -1743,6 +1752,7 @@ includeHidden:(BOOL)includeHidden
                                                                     andName:name
                                                                   andHidden:NO];
     task.resourceItem = resourceItem;
+    task.creationTime = [NSDate now];
 
     if (onTaskCreated)
         onTaskCreated(task);
@@ -1780,6 +1790,11 @@ includeHidden:(BOOL)includeHidden
     {
         OARepositoryResourceItem* item = (OARepositoryResourceItem*)item_;
         resourceName = [self.class titleOfResource:item.resource inRegion:item.worldRegion withRegionName:YES withResourceType:YES];
+    }
+    else if ([item_ isKindOfClass:[OACustomResourceItem class]])
+    {
+        OACustomResourceItem* item = (OACustomResourceItem*)item_;
+        resourceName = [item getVisibleName];
     }
 
     if (!resourceName)

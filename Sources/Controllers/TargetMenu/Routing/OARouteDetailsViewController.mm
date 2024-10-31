@@ -15,9 +15,7 @@
 #import "OAColors.h"
 #import "OAStateChangedListener.h"
 #import "OARoutingHelper.h"
-#import "OAGPXTrackAnalysis.h"
 #import "OARouteInfoCell.h"
-#import "OAGPXDocument.h"
 #import "OAGPXUIHelper.h"
 #import "OAMapLayers.h"
 #import "OARouteStatisticsHelper.h"
@@ -41,6 +39,7 @@
 #import "GeneratedAssetSymbols.h"
 #import "CLLocation+Extension.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OsmAndSharedWrapper.h"
 
 #define kStatsSection 0
 #define kAdditionalRouteDetailsOffset 184.0
@@ -291,7 +290,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
                                      bottomOffset:4
                               useGesturesAndScale:YES];
 
-    OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.gpx.path]];
+    OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.gpx.path]];
     BOOL calcWithoutGaps = !gpx.joinSegments && (self.gpx.tracks.count > 0 && self.gpx.tracks.firstObject.generalTrack);
     [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.chartView
                                       analysis:self.analysis
@@ -393,7 +392,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     if (!self.gpx || !self.analysis)
     {
         self.gpx = [OAGPXUIHelper makeGpxFromRoute:self.routingHelper.getRoute];
-        self.analysis = [self.gpx getAnalysis:0];
+        self.analysis = [self.gpx getAnalysisFileTimestamp:0];
     }
     _types = @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSlope)];
     _lastTranslation = CGPointZero;
@@ -716,9 +715,18 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 
 - (void) openRouteDetailsGraph
 {
-    [[OARootViewController instance].mapPanel openTargetViewWithRouteDetailsGraph:self.gpx
-                                                                         analysis:self.analysis
-                                                                 menuControlState:nil];
+    if (self.trackItem)
+    {
+        [[OARootViewController instance].mapPanel openTargetViewWithRouteDetailsGraph:self.gpx
+                                                                            trackItem:self.trackItem
+                                                                             analysis:self.analysis
+                                                                     menuControlState:nil];
+    }
+    else
+    {
+        [[OARootViewController instance].mapPanel openNewTargetViewWithRouteDetailsGraph:self.gpx analysis:self.analysis menuControlState:nil isRoute:YES];
+    }
+  
 }
 
 - (void) onBarChartTapped:(UITapGestureRecognizer *)recognizer
@@ -814,12 +822,15 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     NSString *path = [NSTemporaryDirectory() stringByAppendingPathComponent:title];
     [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US"]];
     [formatter setDateFormat:@"yyyy-MM-dd_HH-mm_EEE"];
-    OAGPXDocument *doc = [OARoutingHelper.sharedInstance generateGPXFileWithRoute:[formatter stringFromDate:[NSDate date]]];
-    if (!doc)
+    OASGpxFile *gpxFile = [OARoutingHelper.sharedInstance generateGPXFileWithRoute:[formatter stringFromDate:[NSDate date]]];
+    if (!gpxFile)
         return;
     
-    doc.tracks.firstObject.name = [formatter stringFromDate:[NSDate date]];
-    [doc saveTo:path];
+    gpxFile.tracks.firstObject.name = [formatter stringFromDate:[NSDate date]];
+    
+    OASKFile *filePathToSaveGPX = [[OASKFile alloc] initWithFilePath:path];
+    // save to disk
+    [[OASGpxUtilities shared] writeGpxFileFile:filePathToSaveGPX gpxFile:gpxFile];
     NSURL* url = [NSURL fileURLWithPath:path];
     
     UIActivityViewController *activityViewController =

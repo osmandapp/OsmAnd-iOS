@@ -1499,7 +1499,7 @@
 "shared_string_read" = "Skaityti";
 "shared_string_any" = "Bet kurią";
 "map_marker_1st" = "Pirmoji žymė";
-"weather_update_disabled" = "Išjungtas";
+"weather_update_disabled" = "Išjungta";
 "shared_string_move" = "Perkelti";
 "global_settings" = "Globalūs nustatymai";
 "visibility" = "Matomumas";
@@ -1703,3 +1703,4 @@
 "shared_string_local" = "Vietinis";
 "download_wikipedia_maps" = "Vikipedija";
 "of" = "%d iš %d";
+"downloaded_bytes" = "%@ iš %@";

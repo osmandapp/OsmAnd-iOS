@@ -3216,7 +3216,7 @@
 "import_create_track_files" = "يمكنك استيراد أو إنشاء أو تسجيل ملفات المسار باستخدام أوسماند.";
 "help_article_navigation_routing_brouter_name" = "التوجيه عبر";
 "help_article_navigation_setup_gpx_navigation_name" = "التنقل عن طريق المسار";
-"map_settings_topography" = "خرائط الخطوط الكنتورية";
+"map_settings_topography" = "بيانات الخطوط الكنتورية";
 "ask_question_propose_features" = "اطرح سؤالاً واقترح ميزات";
 "shared_string_open_track" = "فتح المسار";
 "help_article_navigation_setup_route_navigation_name" = "تحضير الطريق";
@@ -3333,3 +3333,5 @@
 "shared_string_local" = "على الهاتف";
 "app_mode_osm" = "Osm";
 "of" = "%d من %d";
+"downloaded_bytes" = "%@ من %@";
+"quick_action_need_to_add_item_to_list" = "أضف عنصراً واحداً على الأقل إلى القائمة في إعدادات \"الاختصار السريع\"";

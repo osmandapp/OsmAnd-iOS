@@ -453,7 +453,7 @@
 "external_device_status_connect" = "Kopla til";
 "audionotes_plugin_name" = "Lyd-/videonotat";
 "lang_zh-Hans" = "Kinesisk – forenkla";
-"map_settings_topography" = "Høgdekurver";
+"map_settings_topography" = "Høgdekurvedata";
 "shared_string_bottom" = "Nedst";
 "edit_tilesource_minzoom" = "Minste forstørring";
 "edit_tilesource_maxzoom" = "Maksforstørring";

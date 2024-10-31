@@ -143,3 +143,4 @@
 "activity_type_car_name" = "Машина";
 "shared_string_move" = "Күчерү";
 "activity_type_winter_name" = "Кыш";
+"downloaded_bytes" = "%@ / %@";

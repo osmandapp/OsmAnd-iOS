@@ -1000,7 +1000,7 @@
 "quick_action_navigation_voice" = "Голосовая навигация";
 "quick_action_add_osm_bug" = "Добавить OSM-заметку";
 "quick_action_add_first_intermediate" = "Первый промежуточный пункт";
-"quick_action_auto_zoom" = "Переключатель автомасштаба карты";
+"quick_action_auto_zoom" = "Автомасштаб карты";
 "quick_action_resume_pause_navigation" = "Пауза/возобновление навигации";
 "auto_zoom_on" = "Автоматическое масштабирование вкл";
 "auto_zoom_off" = "Автоматическое масштабирование выкл";
@@ -1238,7 +1238,7 @@
 "routing_attr_avoid_motorway_name" = "Без автомагистралей";
 "routing_attr_avoid_ice_roads_fords_description" = "Избегать ледовых дорог и бродов.";
 "routing_attr_difficulty_preference_name" = "Предпочтительная сложность";
-"rendering_value_medium_name" = "Средняя";
+"rendering_value_medium_name" = "Средний";
 "rendering_attr_piste_type_connection_name" = "Соединение";
 "routing_attr_avoid_ferry_name" = "Без паромов";
 "rendering_attr_showRoadMaps_name" = "Карты только дорог";
@@ -3236,4 +3236,7 @@
 "daynight_mode_day_summary" = "Карта всегда отображается в светлых тонах, идеально подходящих для дневной видимости.";
 "daynight_mode_app_theme_summary" = "Отображение карты соответствует теме приложения: дневной режим для светлой темы и ночной режим для темной темы";
 "of" = "%d из %d";
+"downloaded_bytes" = "%@ из %@";
 "daynight_mode_night_summary" = "Карта всегда отображается в темных тонах, подходящих для ночного времени или условий недостаточной освещенности.";
+"quick_action_terrain_color_scheme" = "Цветовая схема рельефа";
+"quick_action_need_to_add_item_to_list" = "Добавьте хотя бы один элемент в список «Быстрые действия» в настройках";

@@ -49,7 +49,7 @@
 
 #define KEY_MESSAGE @"message"
 
-@interface OAActionConfigurationViewController () <OAEditColorViewControllerDelegate, OAEditGroupViewControllerDelegate, OAAddCategoryDelegate, MGSwipeTableCellDelegate, OAAddMapStyleDelegate, OAAddMapSourceDelegate, OAAddProfileDelegate, MDCMultilineTextInputLayoutDelegate, UITextViewDelegate, OAPoiTypeSelectionDelegate, UIGestureRecognizerDelegate, OAKeyboardHintBarDelegate>
+@interface OAActionConfigurationViewController () <OAEditColorViewControllerDelegate, OAEditGroupViewControllerDelegate, OAAddCategoryDelegate, MGSwipeTableCellDelegate, OAAddMapStyleDelegate, OAAddMapSourceDelegate, OAAddProfileDelegate, MDCMultilineTextInputLayoutDelegate, UITextViewDelegate, OAPoiTypeSelectionDelegate, UIGestureRecognizerDelegate, OAKeyboardHintBarDelegate, ActionAddTerrainColorSchemeDelegate>
 
 @end
 
@@ -508,14 +508,37 @@
         if (cell)
         {
             [cell.textView setText:item[@"title"]];
-            cell.descView.hidden = YES;
-            if (item[@"iconColor"])
+            cell.descView.hidden = ![item.allKeys containsObject:@"desc"];
+            cell.descView.text = [item[@"desc"] stringValue];
+
+            if ([item.allKeys containsObject:@"colorPalette"]
+                && [item[@"colorPalette"] isKindOfClass:ColorPalette.class])
             {
-                cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
-                cell.iconView.tintColor = item[@"iconColor"];
+                cell.descView.numberOfLines = 1;
+                cell.descView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
+                cell.descView.lineBreakMode = NSLineBreakByTruncatingTail;
+                cell.iconView.layer.cornerRadius = 3;
+                ColorPalette *colorPalette = (ColorPalette *) item[@"colorPalette"];
+                [PaletteCollectionHandler applyGradientTo:cell.iconView
+                                                     with:colorPalette];
             }
             else
-                [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
+            {
+                cell.descView.numberOfLines = 0;
+                cell.descView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
+                cell.descView.lineBreakMode = NSLineBreakByWordWrapping;
+                if (item[@"iconColor"])
+                {
+                    cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
+                    cell.iconView.tintColor = item[@"iconColor"];
+                }
+                else
+                {
+                    cell.iconView.image = [UIImage imageNamed:item[@"img"]];
+                    cell.iconView.tintColor = nil;
+                }
+            }
+
             if (cell.iconView.subviews.count > 0)
                 [[cell.iconView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
             cell.delegate = self;
@@ -754,6 +777,14 @@
     [self.navigationController pushViewController:profilesScreen animated:YES];
 }
 
+- (void)addTerrain
+{
+    NSArray *arr = [_action getParams][[_action getListKey]];
+    ActionAddTerrainColorSchemeViewController *viewController = [[ActionAddTerrainColorSchemeViewController alloc] initWithPalettes:arr];
+    viewController.delegate = self;
+    [self showViewController:viewController];
+}
+
 - (NSArray *)getTitles:(NSArray *)items {
     NSMutableArray *titles = [NSMutableArray new];
     for (NSDictionary *item in items)
@@ -767,8 +798,8 @@
 - (NSString *)getOldTitle
 {
     NSString *listKey = [_action getListKey];
-    NSString *params = [_action getParams][listKey];
-    return params ? [_action getTitle:@[params]] : [_action getName];
+    id params = [_action getParams][listKey];
+    return params ? [_action getTitle:params] : [_action getName];
 }
 
 #pragma mark - Selectors
@@ -1027,9 +1058,10 @@
 {
     NSString *nameKey = OALocalizedString(@"shared_string_action_name");
     NSMutableDictionary *actionName = [NSMutableDictionary dictionaryWithDictionary:_data[nameKey].firstObject];
-    NSString *defaultName = [_action getDefaultName];
+    NSString *name = [_action getName];
     
-    if ([actionName[@"title"] isEqualToString:defaultName] || [actionName[@"title"] isEqualToString:oldTitle])
+    if ([actionName[@"title"] isEqualToString:name]
+        || [actionName[@"title"] isEqualToString:oldTitle])
     {
         NSString *newTitle = [_action getTitle:titles];
         [actionName setObject:newTitle forKey:@"title"];
@@ -1155,6 +1187,32 @@
             @"iconColor" : item[@"iconColor"]
         }];
         [titles addObject:item[@"name"]];
+    }
+    [newItems addObject:button];
+    [_data setObject:[NSArray arrayWithArray:newItems] forKey:key];
+    [self renameAction:titles oldTitle:[self getOldTitle]];
+    [self.tableView reloadData];
+}
+
+#pragma mark - ActionAddTerrainColorSchemeDelegate
+
+- (void)onTerrainsSelected:(NSArray<NSDictionary<NSString *, id> *> *)items
+{
+    NSString *key = _data.allKeys.lastObject;
+    NSArray *rows = _data[key];
+    NSDictionary *button = rows.lastObject;
+    NSMutableArray *newItems = [NSMutableArray array];
+    NSMutableArray *titles = [NSMutableArray array];
+    for (NSDictionary *item in items)
+    {
+        [newItems addObject:@{
+            @"type" : [OATitleDescrDraggableCell getCellIdentifier],
+            @"title" : item[@"title"],
+            @"desc" : item[@"desc"],
+            @"colorPalette" : item[@"colorPalette"],
+            @"palette" : item[@"palette"]
+        }];
+        [titles addObject:item[@"title"]];
     }
     [newItems addObject:button];
     [_data setObject:[NSArray arrayWithArray:newItems] forKey:key];

@@ -31,7 +31,6 @@
 #import "OATextLineViewCell.h"
 #import "OARightIconTableViewCell.h"
 #import "OACollectionSingleLineTableViewCell.h"
-#import "OALineChartCell.h"
 #import "OAAutoObserverProxy.h"
 #import "OAColors.h"
 #import "Localization.h"
@@ -415,8 +414,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[OACollectionSingleLineTableViewCell getCellIdentifier] bundle:nil]
          forCellReuseIdentifier:[OACollectionSingleLineTableViewCell getCellIdentifier]];
-
-    [self.tableView registerNib:[UINib nibWithNibName:OALineChartCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:OALineChartCell.reuseIdentifier];
+    [self.tableView registerNib:[UINib nibWithNibName:GradientChartCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:GradientChartCell.reuseIdentifier];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -890,7 +888,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 {
     return [OAGPXTableCellData withData:@{
         kTableKey: @"gradientLegend",
-        kCellType: [OALineChartCell getCellIdentifier]
+        kCellType: GradientChartCell.reuseIdentifier
     }];
 }
 
@@ -1338,9 +1336,10 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     }
     else if ([tableData.key isEqualToString:@"allColors"])
     {
-        OAColorCollectionViewController *colorCollectionViewController = [[OAColorCollectionViewController alloc] initWithCollectionType:EOAColorCollectionTypePaletteItems
-                                                                                                                                   items:_gradientColorsCollection
-                                                                                                                            selectedItem:_selectedPaletteColorItem];
+        OAColorCollectionViewController *colorCollectionViewController =
+            [[OAColorCollectionViewController alloc] initWithCollectionType:EOAColorCollectionTypeColorizationPaletteItems
+                                                                      items:_gradientColorsCollection
+                                                               selectedItem:_selectedPaletteColorItem];
         colorCollectionViewController.delegate = self;
         [self.navigationController pushViewController:colorCollectionViewController animated:YES];
     }
@@ -1675,16 +1674,17 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         }
         return cell;
     }
-    else if ([cellData.type isEqualToString:OALineChartCell.reuseIdentifier])
+    else if ([cellData.type isEqualToString:GradientChartCell.reuseIdentifier])
     {
-        OALineChartCell *cell = (OALineChartCell *) [tableView dequeueReusableCellWithIdentifier:OALineChartCell.reuseIdentifier
-                                                                                         forIndexPath:indexPath];
+        GradientChartCell *cell = (GradientChartCell *) [tableView dequeueReusableCellWithIdentifier:GradientChartCell.reuseIdentifier
+                                                                                        forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.separatorInset = UIEdgeInsetsMake(0, CGFLOAT_MAX, 0, 0);
-        cell.heightConstraint.constant = 70;
-        cell.lineChartView.extraTopOffset = 15;
+        cell.heightConstraint.constant = 75;
+        cell.chartView.extraTopOffset = 15;
+        cell.chartView.extraBottomOffset = 24;
 
-        [GpxUIHelper setupGradientChartWithChart:cell.lineChartView
+        [GpxUIHelper setupGradientChartWithChart:cell.chartView
                              useGesturesAndScale:NO
                                   xAxisGridColor:[UIColor colorNamed:ACColorNameChartAxisGridLine]
                                      labelsColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
@@ -1698,13 +1698,13 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         if (!colorPalette)
             return cell;
 
-        cell.lineChartView.data =
-            [GpxUIHelper buildGradientChartWithChart:cell.lineChartView
+        cell.chartView.data =
+            [GpxUIHelper buildGradientChartWithChart:cell.chartView
                                         colorPalette:colorPalette
                                       valueFormatter:[GradientUiHelper getGradientTypeFormatter:_gradientColorsCollection.gradientType
                                                                                        analysis:nil]];
-        [cell.lineChartView setVisibleYRangeWithMinYRange:0 maxYRange: 1 axis:AxisDependencyLeft];
-        [cell.lineChartView notifyDataSetChanged];
+        [cell.chartView notifyDataSetChanged];
+        [cell.chartView setNeedsDisplay];
         return cell;
     }
 

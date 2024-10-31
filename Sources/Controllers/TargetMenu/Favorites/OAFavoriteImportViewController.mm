@@ -10,13 +10,14 @@
 #import "OAPointTableViewCell.h"
 #import "OAFavoriteItem.h"
 #import "OAFavoritesHelper.h"
-#import "OAGPXDocument.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
 #import "OATableRowData.h"
 #import "OAColors.h"
 #import "Localization.h"
+#import "OsmAndSharedWrapper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = @"OAFavoriteImportViewControllerDidDismissNotification";
 
@@ -24,8 +25,8 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
 {
     NSURL *_url;
     NSMutableArray<NSString *> *_ignoredNames;
-    OAGPXDocument *_gpxFile;
-    OAWptPt *_conflictedItem;
+    OASGpxFile *_gpxFile;
+    OASWptPt *_conflictedItem;
 }
 
 #pragma mark - Initialization
@@ -90,11 +91,11 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
     {
         for (NSString *key in _gpxFile.pointsGroups.allKeys)
         {
-            OAPointsGroup *pointsGroup = _gpxFile.pointsGroups[key];
+            OASGpxUtilitiesPointsGroup *pointsGroup = _gpxFile.pointsGroups[key];
             OATableSectionData *section = [self.tableData createNewSection];
             section.headerText = [OAFavoriteGroup getDisplayName:pointsGroup.name];
             
-            for (OAWptPt *wptPt in pointsGroup.points)
+            for (OASWptPt *wptPt in pointsGroup.points)
             {
                 OATableRowData *row = [section createNewRow];
                 row.cellType = [OAPointTableViewCell getCellIdentifier];
@@ -120,7 +121,7 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
         }
         if (cell)
         {
-            OAWptPt *wptPt = [item objForKey:@"wptPt"];
+            OASWptPt *wptPt = [item objForKey:@"wptPt"];
 
             cell.titleView.text = wptPt.name;
             cell.rightArrow.image = nil;
@@ -134,9 +135,11 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
             cell.directionImageView.image = [UIImage templateImageNamed:@"ic_small_direction"];
             cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
 //            cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
-            cell.titleIcon.image = [OAFavoritesHelper getCompositeIcon:[wptPt getIcon]
-                                                        backgroundIcon:[wptPt getBackgroundIcon]
-                                                                 color:[wptPt getColor]];
+            
+           
+            cell.titleIcon.image = [OAFavoritesHelper getCompositeIcon:[wptPt getIconName]
+                                                        backgroundIcon:[wptPt getBackgroundType]
+                                                                 color: UIColorFromRGBA([wptPt getColor])];
 
         }
         return cell;
@@ -190,11 +193,11 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
     {
         for (NSString *key in _gpxFile.pointsGroups.allKeys)
         {
-            OAPointsGroup *pointGroup = _gpxFile.pointsGroups[key];
-            for (OAWptPt *item in pointGroup.points)
+            OASGpxUtilitiesPointsGroup *pointGroup = _gpxFile.pointsGroups[key];
+            for (OASWptPt *item in pointGroup.points)
             {
                 NSString *importItemName = item.name;
-                NSString *importItemFolder = item.type;
+                NSString *importItemFolder = item.category;
                 NSString *localItemName = [localItem getName];
                 NSString *localItemFolder = [localItem getCategory];
                 
@@ -291,8 +294,8 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
                         {
                             for (NSString *keyGroup in _gpxFile.pointsGroups.allKeys)
                             {
-                                OAPointsGroup *group = _gpxFile.pointsGroups[keyGroup];
-                                for (OAWptPt *wptPt in group.points)
+                                OASGpxUtilitiesPointsGroup *group = _gpxFile.pointsGroups[keyGroup];
+                                for (OASWptPt *wptPt in group.points)
                                 {
                                     for (OAFavoriteItem *localFavortite in favoriteItems)
                                     {

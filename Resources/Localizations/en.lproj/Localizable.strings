@@ -545,6 +545,10 @@
 "only_manually" = "Only manually";
 "instructions_repeat" = "Tap \"Next turn\" widget to repeat instructions";
 
+"download_persian_voice_alert_title" = "Download Persian voice file:";
+"download_persian_voice_alert_descr_ios" = "Settings -> Accessibility -> Spoken Content -> Voices -> Persian -> Dariush";
+"download_persian_voice_alert_descr_macos" = "Settings -> Accessibility -> Spoken Content -> System Voice -> Manage Voices -> Persian -> Dariush";
+
 "guidance_preferences_descr" = "Navigation preferences";
 "routing_preferences_descr" = "Routing preferences";
 "recording_preferences_descr" = "Track recording preferences";
@@ -1402,6 +1406,7 @@
 "ltr_or_rtl_combine_via_of" = "%ld of %ld";
 
 "of" = "%d of %d";
+"downloaded_bytes" = "%@ of %@";
 
 "shared_string_class" = "Class";
 
@@ -2004,6 +2009,8 @@
 "unsupported_action_title" = "Unsupported action (%@)";
 "unsupported_action_descr" = "This quick action in not supported now. This can be fixed in new app versions.";
 "quick_action_toggle_preference" = "A toggle to change preference.";
+"quick_action_terrain_color_scheme" = "Terrain color scheme";
+"quick_action_need_to_add_item_to_list" = "Add at least one item to the list in the \'Quick action\' settings";
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";
@@ -3506,6 +3513,19 @@
 • Fixed names for bearing widgets\n
 • Fixed \"Radius ruler\" visibility in all widget panels\n";
 
+"ios_release_4_9" = "• Modified compass behavior: a single tap rotates the map to North, while a double tap switches the orientation\n
+• Added search functionality for the most popular brand names\n
+• Improved graph appearance: Y-axis labels no longer overlap with the graph\n
+• Added total track statistics to each folder's footer\n
+• Grouped all tags with translations into a single item in the context menu\n
+• Fixed an issue where the POI category was missing from the context menu\n
+• Fixed an issue with the auto-detection of the voice prompt language\n
+• Fixed crash in Boat profile Route parameters\n
+• CarPlay improvements: resolved an issue where the main navigation widget didn't update after route recalculations, and fixed the size of the arrows in the next turn widget\n
+• Introduced a Map mode parameter that now follows the App theme\n
+• Improved UI for selection of location icon, added options to disable location radius and view angle\n
+• Add quick action to change \"Location position on screen\"\n";
+
 "rendering_attr_showTrainRoutes_name" = "Train routes";
 "rendering_attr_showWaterwayTunnels_description" = "Increase visibility for waterway tunnels";
 "rendering_attr_natureReserves_description" = "Show nature reserve, protected areas, and national parks.";
@@ -3896,7 +3916,7 @@
 "daynight_mode_night_summary" = "Always displays the map in a dark theme, suited for nighttime or low-light conditions.";
 "daynight_mode_day_summary" = "Always displays the map in a light theme, ideal for daytime visibility.";
 
-"rendering_attr_showDirtbikeTrails_name" = "Show dirt bike trails";
+"rendering_attr_showDirtbikeTrails_name" = "Dirt bike trails";
 "rendering_attr_showDirtbikeTrails_description" = "Show dirt bike trails";;
 
 ;

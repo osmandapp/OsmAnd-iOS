@@ -981,7 +981,7 @@
 "res_mercator" = "მერკატორის პროექცია";
 "pseudo_mercator_projection" = "ფსევდო მერკატორის პროექცია";
 "sqlite_db_file" = "SQLiteDB ფაილი";
-"one_image_per_tile" = "ერთი გამოსახულების ფაილი ერთი ფილისთვის.";
+"one_image_per_tile" = "ერთი გამოსახულების ფაილი თითოეული ფილისთვის";
 "res_name_warning" = "ფაილის სახელი ცარიელი ვერ იქნება";
 "res_url_warning" = "URL ცარიელი ვერ იქნება";
 "res_offlineSQL_URL_warning" = "მხარდაჭერილი არაა ამ რუკის ტიპისთვის";
@@ -2163,7 +2163,7 @@
 "add_page" = "გვერდის დამატება";
 "shared_string_top" = "ზედა";
 "shared_string_class" = "კლასი";
-"shared_string_bottom" = "ძირი";
+"shared_string_bottom" = "ქვედა";
 "shared_string_millimeters" = "მილიმეტრი";
 "avoid_pt_types" = "ტრანსპორტის ტიპების თავიდან აცილება…";
 "shared_string_item" = "ელემენტი";
@@ -2191,3 +2191,4 @@
 "sett_wunderlinq_ext_input" = "BMW WunderLINQ";
 "ltr_or_rtl_combine_via_space" = "%@-%@";
 "of" = "%d %d-დან";
+"downloaded_bytes" = "%@ %@-დან";

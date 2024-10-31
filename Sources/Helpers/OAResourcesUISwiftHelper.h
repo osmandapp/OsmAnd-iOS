@@ -51,9 +51,9 @@ typedef NS_ENUM(NSInteger, EOAOAResourceSwiftItemType) {
 - (NSString *) title;
 - (NSString *) type;
 - (EOAOAResourceSwiftItemType) resourceType;
+- (long long) sizePkg;
 - (NSString *) formatedSize;
 - (NSString *) formatedSizePkg;
-- (NSString *) formatedDownloadedSizePkg:(float)progress;
 - (UIImage *) icon;
 - (NSString *) iconName;
 - (BOOL) isInstalled;
@@ -111,5 +111,11 @@ typedef NS_ENUM(NSInteger, EOAOAResourceSwiftItemType) {
 + (void) onDownldedResourceInstalled;
 
 + (BOOL) isInOutdatedResourcesList:(NSString *)resourceId;
+
++ (NSString *) formatSize:(long long)bytes addZero:(BOOL)addZero;
+
++ (NSString *) formatedDownloadingProgressString:(long long)wholeSizeBytes progress:(float)progress;
++ (NSString *) formatedDownloadingProgressString:(long long)wholeSizeBytes progress:(float)progress addZero:(BOOL)addZero;
++ (NSString *) formatedDownloadingProgressString:(long long)wholeSizeBytes progress:(float)progress addZero:(BOOL)addZero combineViaSlash:(BOOL)combineViaSlash;
 
 @end

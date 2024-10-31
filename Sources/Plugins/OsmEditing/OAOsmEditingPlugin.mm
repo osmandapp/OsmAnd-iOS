@@ -211,7 +211,7 @@
 - (NSString *) getDescription
 {
     //return OALocalizedString(@"osm_editing_plugin_description");
-    return [NSString stringWithFormat:NSLocalizedString(@"osm_editing_plugin_description", nil), k_docs_plugin_osm];
+    return [NSString stringWithFormat:OALocalizedString(@"osm_editing_plugin_description"), k_docs_plugin_osm];
 }
 
 @end

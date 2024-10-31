@@ -137,7 +137,7 @@ class DownloadingCellBaseHelper: NSObject {
         cell.titleLabel.font = UIFont.preferredFont(forTextStyle: .body)
         cell.leftIconView.tintColor = .iconColorDefault
         cell.rightIconView.tintColor = getRightIconColor()
-        cell.rightIconView.image = UIImage.templateImageNamed(getRightIconName())
+        cell.rightIconView.image = UIImage.templateImageNamed(getRightIconName(resourceId))
         
         if let leftIconName, !leftIconName.isEmpty {
             cell.leftIconVisibility(true)
@@ -163,7 +163,7 @@ class DownloadingCellBaseHelper: NSObject {
         if let desc, !desc.isEmpty {
             cell.descriptionVisibility(true)
             cell.descriptionLabel.text = desc
-            cell.descriptionLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
+            cell.descriptionLabel.font = UIFont.monospacedFont(at: 12, withTextStyle: .body)
             cell.descriptionLabel.textColor = .textColorSecondary
         } else {
             cell.descriptionVisibility(false)
@@ -213,20 +213,20 @@ class DownloadingCellBaseHelper: NSObject {
                 showIcon = true
             }
         } else if rightIconStyle == .showDoneIconAfterDownloading {
-            showIcon = isFinished(resourceId)
+            showIcon = true
         }
         
         if showIcon {
-            cell.rightIconView.image = UIImage.templateImageNamed(getRightIconName())
+            cell.rightIconView.image = UIImage.templateImageNamed(getRightIconName(resourceId))
             cell.rightIconView.tintColor = getRightIconColor()
             cell.rightIconVisibility(true)
         }
     }
     
-    func getRightIconName() -> String {
+    func getRightIconName(_ resourceId: String) -> String {
         if let rightIconName {
             return rightIconName
-        } else if rightIconStyle == .showDoneIconAfterDownloading {
+        } else if rightIconStyle == .showDoneIconAfterDownloading && isFinished(resourceId) {
             return "ic_custom_done"
         }
         return "ic_custom_download"
@@ -292,15 +292,7 @@ class DownloadingCellBaseHelper: NSObject {
             currentStatus = .started
         }
         
-        if currentStatus == .started {
-            if let progressView {
-                progressView.iconPath = UIBezierPath()
-                progressView.progress = 0
-                if !progressView.isSpinning {
-                    progressView.startSpinProgressBackgroundLayer()
-                }
-            }
-        } else if currentStatus == .inProgress {
+        if currentStatus == .started || currentStatus == .inProgress {
             if let progressView {
                 progressView.iconPath = nil
                 if progressView.isSpinning {
@@ -325,7 +317,7 @@ class DownloadingCellBaseHelper: NSObject {
                 // Downloading interupted by user
                 saveStatus(resourceId: resourceId, status: .idle)
             }
-            setupRightIconForIdleCell(cell: cell, rightIconName: getRightIconName(), resourceId: resourceId)
+            setupRightIconForIdleCell(cell: cell, rightIconName: getRightIconName(resourceId), resourceId: resourceId)
         }
     }
     

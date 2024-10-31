@@ -1227,3 +1227,4 @@
 "shared_string_local" = "Տեղական";
 "shared_string_in_name" = "%@";
 "of" = "%d %d ից";
+"downloaded_bytes" = "%@ %@  ից";

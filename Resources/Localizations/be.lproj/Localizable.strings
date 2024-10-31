@@ -2840,3 +2840,5 @@
 "quick_action_toggle_preference" = "Пераключальнік для змены параметраў.";
 "shared_string_local" = "Спампаваныя";
 "of" = "%d з %d";
+"downloaded_bytes" = "%@ з %@";
+"quick_action_need_to_add_item_to_list" = "Дадаць прынамсі адзін элемент у спіс \"Хуткае дзеянне\" у наладах";

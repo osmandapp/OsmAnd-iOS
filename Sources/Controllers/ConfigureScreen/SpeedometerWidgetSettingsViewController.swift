@@ -65,7 +65,7 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController 
             selectSizeRow.cellType = SegmentImagesWithRightLabelTableViewCell.reuseIdentifier
             
             selectSizeRow.title = localizedString("shared_string_size")
-            selectSizeRow.setObj(["ic_custom20_height_s", "ic_custom20_height_m", "ic_custom20_height_l"], forKey: Self.valuesKey)
+            selectSizeRow.setObj([UIImage.icCustom20HeightS, UIImage.icCustom20HeightM, UIImage.icCustom20HeightL], forKey: Self.valuesKey)
             if let size = settings.speedometerSize {
                 selectSizeRow.setObj(size, forKey: Self.widgetSizeKey)
             }
@@ -113,7 +113,7 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController 
         } else if item.cellType == SegmentImagesWithRightLabelTableViewCell.reuseIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: SegmentImagesWithRightLabelTableViewCell.reuseIdentifier) as! SegmentImagesWithRightLabelTableViewCell
             cell.selectionStyle = .none
-            if let icons = item.obj(forKey: Self.valuesKey) as? [String], let sizePref = item.obj(forKey: Self.widgetSizeKey) as? OACommonWidgetSizeStyle {
+            if let icons = item.obj(forKey: Self.valuesKey) as? [UIImage], let sizePref = item.obj(forKey: Self.widgetSizeKey) as? OACommonWidgetSizeStyle {
                 let widgetSizeStyle = sizePref.get()
                 cell.configureSegmentedControl(icons: icons, selectedSegmentIndex: widgetSizeStyle.rawValue)
             }

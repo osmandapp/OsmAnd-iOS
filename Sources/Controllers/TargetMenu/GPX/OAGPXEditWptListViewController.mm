@@ -22,6 +22,8 @@
 #import "OAOsmAndFormatter.h"
 #import "OsmAndApp.h"
 #import "Localization.h"
+#import "OsmAndSharedWrapper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -75,7 +77,7 @@
 - (void)setPoints:(NSArray *)points
 {
     NSMutableArray *arr = [NSMutableArray array];
-    for (OAWptPt *p in points)
+    for (OASWptPt *p in points)
     {
         OAGpxWptItem *item = [[OAGpxWptItem alloc] init];
         item.point = p;
@@ -129,7 +131,7 @@
         CLLocationDirection newDirection = (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f) ? newLocation.course : newHeading;
 
         [self.unsortedPoints enumerateObjectsUsingBlock:^(OAGpxWptItem* itemData, NSUInteger idx, BOOL *stop) {
-            OsmAnd::LatLon latLon(itemData.point.position.latitude, itemData.point.position.longitude);
+            OsmAnd::LatLon latLon(itemData.point.lat, itemData.point.lon);
             const auto& wptPosition31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
             const auto wptLon = OsmAnd::Utilities::get31LongitudeX(wptPosition31.x);
             const auto wptLat = OsmAnd::Utilities::get31LatitudeY(wptPosition31.y);
@@ -308,11 +310,11 @@
             if (item.distance)
                 [distanceStr appendString:item.distance];
 
-            if (item.point.type.length > 0)
+            if (item.point.category.length > 0)
             {
                 if (distanceStr.length > 0)
                     [distanceStr appendString:@", "];
-                [distanceStr appendString:item.point.type];
+                [distanceStr appendString:item.point.category];
             }
             
             [cell.titleView setText:item.point.name];

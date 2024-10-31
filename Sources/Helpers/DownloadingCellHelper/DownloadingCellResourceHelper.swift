@@ -149,7 +149,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
             let isDownloading = isDownloading(resourceId)
             
             // get cell with default settings
-            let cell = super.setupCell(resourceId: resourceId, title: title, isTitleBold: false, desc: subtitle, leftIconName: iconName, rightIconName: getRightIconName(), isDownloading: isDownloading)
+            let cell = super.setupCell(resourceId: resourceId, title: title, isTitleBold: false, desc: subtitle, leftIconName: iconName, rightIconName: getRightIconName(resourceId), isDownloading: isDownloading)
             
             if isDisabled(resourceId) {
                 cell?.titleLabel.textColor = .textColorSecondary
@@ -218,7 +218,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
         if showDownloadingBytesInDescription {
             guard let resourceItem = getResource(resourceId) else { return }
             guard let cell = getOrCreateCell(resourceId) else { return }
-            let subtitle = String(format: localizedString("of"), resourceItem.formatedDownloadedSizePkg(progress), resourceItem.formatedSizePkg())
+            guard let subtitle = OAResourcesUISwiftHelper.formatedDownloadingProgressString(resourceItem.sizePkg(), progress: progress) else { return }
             cell.descriptionLabel.text = subtitle
         }
     }

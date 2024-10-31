@@ -11,11 +11,11 @@
 #import "OAGPXDatabase.h"
 #import "OABackupListeners.h"
 
-@class OAOsmEditingPlugin;
+@class OAOsmEditingPlugin, OASTrackItem;
 
 @interface OAUploadGPXFilesTask : NSObject
 
-- (instancetype) initWithPlugin:(OAOsmEditingPlugin *)plugin gpxItemsToUpload:(NSArray<OAGPX *> *)gpxItemsToUpload tags:(NSString *)tags visibility:(NSString *)visibility description:(NSString *)description listener:(id<OAOnUploadFileListener>)listener;
+- (instancetype) initWithPlugin:(OAOsmEditingPlugin *)plugin gpxItemsToUpload:(NSArray<OASTrackItem *> *)gpxItemsToUpload tags:(NSString *)tags visibility:(NSString *)visibility description:(NSString *)description listener:(id<OAOnUploadFileListener>)listener;
 
 - (void) uploadTracks;
 

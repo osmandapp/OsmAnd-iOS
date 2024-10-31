@@ -1942,7 +1942,6 @@
 "quick_action_navigation_voice" = "Pornire/oprire voce";
 "population_num" = "Populație";
 "shared_string_turn_off" = "Oprește";
-"open_place_reviews_plugin_description" = "Contribuiți la proiectul OpenPlaceReviews, cum ar fi fotografii, recenzii sau linkuri pentru locuri publice, cum ar fi restaurante, hoteluri sau muzee.\n\nGăsiți instrucțiuni despre cum să contribuiți pe site-ul nostru https://osmand.net/docs/user/plugins/openplacereviews .";
 "product_desc_openplacereviews" = "Împărtășește-ți opinia despre locurile publice";
 "open_place_reviews" = "OpenPlaceRecenzii";
 "plugin_mapillary_descr" = "Imagini stradale. Puteți contribui și dumneavoastră. Pentru a vedea datele existente sub forma unui strat de hartă, activați \"Imagini stradale\" în meniul \"Configurare hartă\".";
@@ -3136,7 +3135,7 @@
 "ant_plus_searching_text_description" = "Țineți dispozitivul aproape de senzor. Trebuie să activați senzorul pentru ca OsmAnd să îl poată găsi.";
 "external_device_forget_sensor" = "Uită senzor";
 "external_device_forget_sensor_description" = "Senzorul va fi eliminat din listă. Veți putea să împerecheați din nou acest senzor în orice moment.";
-"external_device_status_connect" = "Conectare";
+"external_device_status_connect" = "Conectați-vă";
 "ant_plus_nothing_found_description" = "Asigurați-vă că: \n– Bluetooth e pornit \n– Senzorul e activ \n– Acest dispozitiv se află lângă senzor";
 "purchases_feature_desc_external_sensors" = "Afișați și înregistrați date de la senzorii externi: viteza bicicletei, puterea exercitată, cadența pedalării și pulsul.";
 "default_appearance_desc" = "Culoarea, pictograma și forma implicite se vor aplica punctelor favorite adăugate în grup.";
@@ -3374,6 +3373,9 @@
 "tracker_item" = "OsmAnd monitor";
 "daynight_mode_night_summary" = "Afișează întotdeauna harta într-o temă întunecată, potrivită pentru timpul nopții sau în condiții de iluminare slabă.";
 "of" = "%d din %d";
+"downloaded_bytes" = "%@ din %@";
 "daynight_mode_app_theme_summary" = "Afișarea hărții se aliniază cu tema generală a aplicației - modul zi pentru o temă luminoasă și modul noapte pentru o temă întunecată";
 "daynight_mode_day_summary" = "Afișează întotdeauna harta într-o temă luminoasă, ideală pentru vizibilitatea în timpul zilei.";
 "daynight_mode_sunrise_sunset_summary" = "Comută automat între temele de zi și de noapte în funcție de orele locale de răsărit și apus.";
+"quick_action_need_to_add_item_to_list" = "Adăugați cel puțin un element la lista din setările \"Acțiune rapidă\"";
+"quick_action_terrain_color_scheme" = "Schema de culori a terenului";

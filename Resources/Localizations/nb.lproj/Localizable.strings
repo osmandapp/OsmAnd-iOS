@@ -315,7 +315,7 @@
 "shared_string_from" = "fra";
 "shared_string_time" = "Tid";
 "time_of_day" = "Tid på dagen";
-"shared_string_distance" = "Avstand";
+"shared_string_distance" = "Distanse";
 "retry" = "Prøv igjen";
 "shared_string_enabled" = "Aktivert";
 "shared_string_reset" = "Tilbakestill";
@@ -1336,7 +1336,7 @@
 "shared_string_import" = "Importer";
 "device_settings" = "Enhetsinnstillinger";
 "do_not_rotate" = "Ikke roter";
-"settings_app_theme" = "Programdrakt";
+"settings_app_theme" = "Drakt";
 "gpx_export_failed" = "Kunne ikke lagre opprettet rute";
 "tracks_on_map" = "Viste spor";
 "shared_string_visible" = "Synlig";
@@ -2666,3 +2666,6 @@
 "map_widget_gps_info" = "GPS-info";
 "osm_id" = "OSM-ID";
 "of" = "%d av %d";
+"downloaded_bytes" = "%@ av %@";
+"quick_action_terrain_color_scheme" = "Terrengfargeskjema";
+"quick_action_need_to_add_item_to_list" = "Legg til minst ett element i listen i hurtighandlingsinnstillingene";

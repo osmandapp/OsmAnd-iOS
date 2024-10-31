@@ -277,6 +277,7 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     _didFinishLaunching = YES;
+   
     if (!_dataFetchQueue)
     {
         // Set the background fetch

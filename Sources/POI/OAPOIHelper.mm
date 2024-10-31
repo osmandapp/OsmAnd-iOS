@@ -398,8 +398,12 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
 - (OAPOIType *) getPoiType:(NSString *)tag value:(NSString *)value
 {
     for (OAPOIType *t in _poiTypes)
+    {
         if ([t.tag isEqualToString:tag] && [t.value isEqualToString:value])
             return t;
+        if ([t.tag isEqualToString:[tag stringByReplacingOccurrencesOfString:@"osmand_" withString:@""]] && [t.value isEqualToString:value])
+            return t;
+    }
     
     return nil;
 }

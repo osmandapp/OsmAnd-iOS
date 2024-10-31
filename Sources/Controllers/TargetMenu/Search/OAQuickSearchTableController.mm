@@ -33,7 +33,6 @@
 #import "OAStreet.h"
 #import "OACity.h"
 #import "OAStreetIntersection.h"
-#import "OAGPXDocument.h"
 #import "OAGpxWptItem.h"
 #import "Localization.h"
 #import "OADistanceDirection.h"
@@ -147,7 +146,7 @@
         OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
         if ([mapVC findWpt:point])
         {
-            OAWptPt *wpt = mapVC.foundWpt;
+            OASWptPt *wpt = mapVC.foundWpt;
             NSArray *foundWptGroups = mapVC.foundWptGroups;
             NSString *foundWptDocPath = mapVC.foundWptDocPath;
             
@@ -390,7 +389,7 @@
             {
                 if (searchResult.wpt)
                 {
-                    OAWptPt *wpt = [OAGPXDocument fetchWpt:std::const_pointer_cast<OsmAnd::GpxDocument::WptPt>(searchResult.wpt)];
+                    OASWptPt *wpt = searchResult.wpt;
                     OAGpxWptItem *wptItem = [[OAGpxWptItem alloc] init];
                     wptItem.point = wpt;
 
@@ -402,7 +401,7 @@
                     {
                         latitude = wpt.position.latitude;
                         longitude = wpt.position.longitude;
-                        pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_WPT typeName:wpt.type name:wpt.name];
+                        pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_WPT typeName:wpt.category name:wpt.name];
                     }
                 }
                 break;
@@ -594,7 +593,7 @@
                     cell.openingHoursView.hidden = YES;
                     cell.timeIcon.hidden = YES;
                     
-                    OAWptPt *wpt = (OAWptPt *) res.object;
+                    OASWptPt *wpt = (OASWptPt *) res.object;
                     OAGpxWptItem *wptItem = [OAGpxWptItem withGpxWpt:wpt];
                     cell.titleIcon.image = [wptItem getCompositeIcon];
                     [self setCellDistanceDirection:cell item:item];

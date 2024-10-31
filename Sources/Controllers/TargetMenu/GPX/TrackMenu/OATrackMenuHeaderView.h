@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "OATrackMenuHudViewControllerConstants.h"
 
-@class OAGPXTrackAnalysis, OAButton, OAFoldersCollectionView, OAGPXTableCellData;
+@class OASGpxTrackAnalysis, OAButton, OAFoldersCollectionView, OAGPXTableCellData;
 
 @protocol OATrackMenuViewControllerDelegate;
 
@@ -57,8 +57,8 @@
                title:(NSString *)title
          nearestCity:(NSString *)nearestCity;
 
-+ (NSMutableArray<OAGPXTableCellData *> *)generateGpxBlockStatistics:(OAGPXTrackAnalysis *)analysis withoutGaps:(BOOL)withoutGaps;
-- (void)generateGpxBlockStatistics:(OAGPXTrackAnalysis *)analysis
++ (NSMutableArray<OAGPXTableCellData *> *)generateGpxBlockStatistics:(OASGpxTrackAnalysis *)analysis withoutGaps:(BOOL)withoutGaps;
+- (void)generateGpxBlockStatistics:(OASGpxTrackAnalysis *)analysis
                        withoutGaps:(BOOL)withoutGaps;
 
 - (void)setDirection:(NSString *)direction;

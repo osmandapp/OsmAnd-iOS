@@ -94,6 +94,17 @@
                                                         andObserve:[OsmAndApp instance].data.weatherChangeObservable];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+
+    if (_weatherChangeObserver)
+    {
+        [_weatherChangeObserver detach];
+        _weatherChangeObserver = nil;
+    }
+}
+
 - (void)onWeatherChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -108,6 +119,9 @@
 
 - (void) updateLayout
 {
+    if (!self.isViewLoaded)
+        return;
+
     CGFloat topY = [OAUtilities getStatusBarHeight];
     CGFloat buttonHeight = 50.0;
     CGFloat width = kDrawerWidth;
@@ -211,7 +225,8 @@
     CGFloat divW = width - 60;
     CGFloat divH = 0.5;
     
-    for (CALayer *item in _menuButtonDivArray) {
+    for (CALayer *item in _menuButtonDivArray)
+    {
         item.frame = CGRectMake(divX, divY, divW, divH);
     }
 }

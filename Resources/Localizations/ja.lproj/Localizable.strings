@@ -927,7 +927,7 @@
 "purchases_feature_desc_wikipedia" = "位置情報に基づいてすべてのWikipedia記事をオフラインで参照できるので、旅行で訪れた場所についてマップをタップするだけで、より詳しく知ることができます。その為には各地域のWikipediaマップファイルを忘れずにダウンロードしてください。";
 "srtm_plugin_name" = "等高線";
 "product_desc_srtm" = "等高線の表示";
-"srtm_plugin_description" = "等高線、起伏、勾配などの地形情報は、地形配置、起伏、航行の可能性などを視覚的に評価するのに役立ちます。地形情報は、勾配の陰影、等高線、勾配の度合いによる色付けでマップに表すことができます。 \n \n基礎となるデータは、SRTM(スペースシャトル立体地形データ)およびASTER(資源探査用将来型センサ)に由来します。 \n \n詳しくは、https://osmand.net/docs/user/plugins/contour-lines をご参照下さい。";
+"srtm_plugin_description" = "等高線、起伏、勾配などの地形情報は、地形配置、起伏、航行の可能性などを視覚的に評価するのに役立ちます。地形情報は、勾配の陰影、等高線、勾配の度合いによる色付けでマップに表すことができます。 \n \n基礎となるデータは、SRTM(スペースシャトル立体地形データ)およびASTER(資源探査用将来型センサ)に由来します。 \n \n詳しくは、https://osmand.net/docs/user/plugins/topography をご参照下さい。";
 "wikivoyage_travel_guide" = "旅行ガイド";
 "start_editing_card_image_text" = "誰でも自由に編集できる世界規模の旅行ガイドです。";
 "wikivoyage_travel_guide_descr" = "インターネットへ接続せずにOsmAnd上で地球上のあらゆる興味深いスポットのガイドを利用することができます。";
@@ -2912,3 +2912,5 @@
 "navigate_point_mgrs" = "MGRS(Military Grid Reference System)";
 "shared_string_off" = "OFF";
 "of" = "全%d中%d";
+"downloaded_bytes" = "%@／%@";
+"quick_action_need_to_add_item_to_list" = "『クイックアクション』のリストに最低ひとつは項目を設定する必要があります";

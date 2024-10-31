@@ -133,7 +133,7 @@
 "general_settings_2" = "Общи настройки";
 "general_settings_descr" = "Настройване на екрана и общите настройки на приложението";
 "routing_settings_descr" = "Настройки за навигацията";
-"auto_zoom_none" = "Без автоматичен зуум";
+"auto_zoom_none" = "Без автоматично мащабиране";
 "auto_zoom_close" = "По-едър план";
 "auto_zoom_far" = "Нормално";
 "auto_zoom_farthest" = "За далечни разстояния";
@@ -772,7 +772,6 @@
 "context_menu_item_edit_waypoint" = "Редактиране на отправна точка от GPX";
 "quick_action_add_parking" = "Добавяне на място за паркиране";
 "parking_place" = "Паркинг място";
-
 "quick_action_map_style" = "Стил на картата";
 "quick_action_map_overlay" = "Променяне на насложената карта";
 "route_add_start_point" = "Добавяне на начална цел";
@@ -1046,7 +1045,7 @@
 "rendering_attr_tracktype_grade5_name" = "Мека";
 "rendering_attr_showSurfaceGrade_name" = "Качество на пътя";
 "rendering_attr_currentTrackColor_name" = "цвят на GPX";
-"rendering_attr_contourLines_description" = "Видими при увеличение (при вкл. добавка):";
+"rendering_attr_contourLines_description" = "Видими при увеличение (при налични контурни лении):";
 "routing_attr_avoid_stairs_description" = "Избягване на стълби";
 "rendering_attr_surface_mud_name" = "Рядка кал";
 "rendering_attr_streetLightingNight_name" = "Показване само през нощта";
@@ -1132,7 +1131,7 @@
 "rendering_value_bicycle_name" = "Велосипед";
 "rendering_value_translucent_lightgreen_name" = "Полупрозрачно светло-зелено";
 "rendering_attr_contourLines_name" = "Показване на контурни линии";
-"rendering_attr_showAccess_name" = "Ограничения за достъп и пътни такси";
+"rendering_attr_showAccess_name" = "Ограничения на достъпа и пътни такси";
 "rendering_attr_surface_dirt_name" = "Кал";
 "routing_attr_driving_style_prefer_unpaved_name" = "Предпочитане на селски пътища";
 "routing_attr_no_new_routing_description" = "За изграждане на маршрути да не се използват алгоритмите, въведени в издание 1.9.";
@@ -1365,7 +1364,7 @@
 "login_open_street_map_org" = "Вход в OpenStreetMap.org";
 "recalc_angle_dialog_descr" = "Допълнителна права между моето местоположение и изчертаният маршрут ще се появи докато маршрутът се преизчислява";
 "benefits_for_contributors_primary_descr" = "Активните сътрудници на OpenStreetMap.org могат да получат право на неограничени почасови обновявания на картата.";
-"offline_edition_descr" = "Винаги ползвай офлайн редактиране";
+"offline_edition_descr" = "Ако е разрешено редактиране без мрежа, промените първо ще се запазят на устройството и ще бъдат изпратени при поискване, в противен случай промените ще бъдат изпращани веднага.";
 "select_backup_data_descr" = "Изберете данни и папки, на които да бъде направено резервно копие.";
 "routing_attr_motor_type_description" = "Изберете вида на горивото на двигателя - необходимо за изчисляване на емисиите на CO2.";
 "routing_attr_hazmat_category_name" = "Категория опасни товари";
@@ -2040,3 +2039,4 @@
 "monthly_subscription" = "Месечен абонамент";
 "annual_subscription" = "Годишен абонамент";
 "quarterly_subscription" = "Тримесечен абонамент";
+"downloaded_bytes" = "%@ от %@";

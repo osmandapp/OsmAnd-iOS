@@ -28,21 +28,23 @@ final class GradientUiHelper: NSObject {
     static let maxAltitudeAddition = 50.0
 
     static func formatTerrainTypeValues(_ value: Double) -> String {
-        let format = value >= 10 ? "#" : "#.#"
         let formatter = NumberFormatter()
-        formatter.positiveFormat = format
-        var formattedValue = formatter.string(from: NSNumber(value: value)) ?? ""
-        if formattedValue.hasSuffix(".0") {
+        formatter.minimumFractionDigits = (value >= 10) ? 0 : 1
+        formatter.maximumFractionDigits = formatter.minimumFractionDigits
+        formatter.numberStyle = .decimal
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        var formattedValue = formatter.string(from: NSNumber(value: value)) ?? "\(value)"
+        if formattedValue.hasSuffix("\(formatter.decimalSeparator ?? ".")0") {
             formattedValue.removeLast(2)
         }
         return formattedValue
     }
 
-    static func getGradientTypeFormatterFor(terrainType: TerrainType, analysis: OAGPXTrackAnalysis?) -> AxisValueFormatter {
+    static func getGradientTypeFormatterFor(terrainType: TerrainType, analysis: GpxTrackAnalysis?) -> AxisValueFormatter {
         Self.getGradientTypeFormatter(terrainType, analysis: analysis)
     }
 
-    static func getGradientTypeFormatter(_ gradientType: Any, analysis: OAGPXTrackAnalysis?) -> AxisValueFormatter {
+    static func getGradientTypeFormatter(_ gradientType: Any, analysis: GpxTrackAnalysis?) -> AxisValueFormatter {
         if let terrainType = gradientType as? TerrainType {
             return getTerrainTypeFormatter(terrainType)
         }
@@ -51,7 +53,6 @@ final class GradientUiHelper: NSObject {
 
     private static func getTerrainTypeFormatter(_ terrainType: TerrainType) -> AxisValueFormatter {
         return AxisValueFormatterLocal { (value, axis) in
-            let shouldShowUnit = axis?.entries.count ?? 0 >= 1 && value == axis?.entries.first
             var stringValue = Self.formatTerrainTypeValues(value)
             var typeValue = ""
             switch terrainType {
@@ -69,13 +70,15 @@ final class GradientUiHelper: NSObject {
             default:
                 break
             }
-            return shouldShowUnit ? "\(stringValue) \(typeValue)" : stringValue
+            if let axis, axis.entries.count >= 1, (value == axis.entries.first || value == axis.entries.last) {
+                return "\(stringValue) \(typeValue)"
+            }
+            return stringValue
         }
     }
 
-    private static func getColorizationTypeFormatter(_ colorizationType: ColorizationType, analysis: OAGPXTrackAnalysis?) -> AxisValueFormatter {
+    private static func getColorizationTypeFormatter(_ colorizationType: ColorizationType, analysis: GpxTrackAnalysis?) -> AxisValueFormatter {
         return AxisValueFormatterLocal { (value, axis) in
-            let shouldShowUnit = axis?.entries.count ?? 0 >= 1 && value == axis?.entries.first
             var stringValue = Self.formatValue(value, multiplier: 100)
             var type = "%"
             if let analysis = analysis {
@@ -103,7 +106,10 @@ final class GradientUiHelper: NSObject {
                     break
                 }
             }
-            return shouldShowUnit ? "\(stringValue) \(type)" : stringValue
+            if let axis, axis.entries.count >= 1, (value == axis.entries.first || value == axis.entries.last) {
+                return "\(stringValue) \(type)"
+            }
+            return stringValue
         }
     }
 

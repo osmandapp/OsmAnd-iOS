@@ -18,6 +18,7 @@
 #import "OAMapViewController.h"
 #import "OsmAndApp.h"
 #import "OADownloadTask.h"
+#import "Localization.h"
 
 @implementation OAResourceSwiftItem
 
@@ -33,8 +34,16 @@
 
 - (NSString *) title
 {
-    OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
-    return res.title;
+    if ([self.objcResourceItem isKindOfClass:OACustomResourceItem.class])
+    {
+        OACustomResourceItem *res = (OACustomResourceItem *)self.objcResourceItem;
+        return [res getVisibleName];
+    }
+    else
+    {
+        OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
+        return res.title;
+    }
 }
 
 - (NSString *) type
@@ -93,23 +102,22 @@
     }
 }
 
+- (long long) sizePkg
+{
+    OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
+    return res.sizePkg;
+}
+
 - (NSString *) formatedSize
 {
     OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
-    return [NSByteCountFormatter stringFromByteCount:res.size countStyle:NSByteCountFormatterCountStyleFile];
+    return [OAResourcesUISwiftHelper formatSize:res.size addZero:NO];
 }
 
 - (NSString *) formatedSizePkg
 {
     OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
-    return [NSByteCountFormatter stringFromByteCount:res.sizePkg countStyle:NSByteCountFormatterCountStyleFile];
-}
-
-- (NSString *) formatedDownloadedSizePkg:(float)progress
-{
-    OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
-    long long downloadedSizePkg = ((long long) res.sizePkg * progress);
-    return [NSByteCountFormatter stringFromByteCount:downloadedSizePkg countStyle:NSByteCountFormatterCountStyleFile];
+    return [OAResourcesUISwiftHelper formatSize:res.sizePkg addZero:NO];
 }
 
 - (UIImage *) icon
@@ -309,8 +317,16 @@
                     onTaskCreated:(OADownloadTaskCallback)onTaskCreated
                     onTaskResumed:(OADownloadTaskCallback)onTaskResumed
 {
-    OARepositoryResourceItem *res = (OARepositoryResourceItem *)item.objcResourceItem;
-    [OAResourcesUIHelper offerDownloadAndInstallOf:res onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+    if ([item.objcResourceItem isKindOfClass:OACustomResourceItem.class])
+    {
+        OACustomResourceItem *res = (OACustomResourceItem *)item.objcResourceItem;
+        [OAResourcesUIHelper startDownloadOfCustomItem:res onTaskCreated:onTaskCreated onTaskResumed:onTaskCreated];
+    }
+    else
+    {
+        OARepositoryResourceItem *res = (OARepositoryResourceItem *)item.objcResourceItem;
+        [OAResourcesUIHelper offerDownloadAndInstallOf:res onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+    }
 }
 
 + (void)offerDownloadAndInstallOf:(OAResourceSwiftItem *)item
@@ -403,6 +419,32 @@
 + (BOOL) isInOutdatedResourcesList:(NSString *)resourceId
 {
     return [OAResourcesUIHelper isInOutdatedResourcesList:resourceId];
+}
+
++ (NSString *) formatSize:(long long)bytes addZero:(BOOL)addZero
+{
+    NSByteCountFormatter *formatter = [[NSByteCountFormatter alloc] init];
+    formatter.zeroPadsFractionDigits = addZero;
+    formatter.countStyle = NSByteCountFormatterCountStyleFile;
+    return [formatter stringFromByteCount:bytes];
+}
+
++ (NSString *) formatedDownloadingProgressString:(long long)wholeSizeBytes progress:(float)progress
+{
+    return [self.class formatedDownloadingProgressString:wholeSizeBytes progress:progress addZero:YES];
+}
+
++ (NSString *) formatedDownloadingProgressString:(long long)wholeSizeBytes progress:(float)progress addZero:(BOOL)addZero
+{
+    return [self.class formatedDownloadingProgressString:wholeSizeBytes progress:progress addZero:addZero combineViaSlash:NO];
+}
+
++ (NSString *) formatedDownloadingProgressString:(long long)wholeSizeBytes progress:(float)progress addZero:(BOOL)addZero combineViaSlash:(BOOL)combineViaSlash
+{
+    NSString *wholeFileSize = [self formatSize:wholeSizeBytes addZero:NO];
+    long long downloadedPartBytes = ((long long) wholeSizeBytes * progress);
+    NSString *downloadedPart = [self formatSize:downloadedPartBytes addZero:addZero];
+    return [NSString stringWithFormat:OALocalizedString(combineViaSlash ? @"ltr_or_rtl_combine_via_slash" : @"downloaded_bytes"), downloadedPart, wholeFileSize];
 }
 
 @end

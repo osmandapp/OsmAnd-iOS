@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
 
 @class OAApplicationMode, OAColoringType, OADownloadMode, OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState;
 
@@ -338,6 +339,8 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 - (instancetype) makeShared;
 - (instancetype) storeLastModifiedTime;
 
+- (NSObject *) getPrefValue;
+- (NSObject *) getPrefValue:(OAApplicationMode *)mode;
 - (NSObject *) getProfileDefaultValue:(OAApplicationMode *)mode;
 - (void) resetModeToDefault:(OAApplicationMode *)mode;
 - (void) resetToDefault;
@@ -1135,6 +1138,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonString *currentTrackWidth;
 @property (nonatomic) OACommonBoolean *currentTrackShowArrows;
 @property (nonatomic) OACommonBoolean *currentTrackShowStartFinish;
+@property (nonatomic) OACommonBoolean *currentTrackIsJoinSegments;
 @property (nonatomic) OACommonDouble *currentTrackVerticalExaggerationScale;
 @property (nonatomic) OACommonInteger *currentTrackElevationMeters;
 @property (nonatomic) OACommonInteger *currentTrackVisualization3dByType;

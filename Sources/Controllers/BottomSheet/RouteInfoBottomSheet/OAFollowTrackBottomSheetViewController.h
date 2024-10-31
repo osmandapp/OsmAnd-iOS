@@ -8,11 +8,11 @@
 
 #import "OABaseBottomSheetViewController.h"
 
-@class OAGPXDocument;
+@class OASGpxFile;
 
 @interface OAFollowTrackBottomSheetViewController : OABaseBottomSheetViewController
 
-- (instancetype) initWithFile:(OAGPXDocument *)gpx;
+- (instancetype) initWithFile:(OASGpxFile *)gpx;
 - (void)presentOpenTrackViewController:(BOOL)animated;
 
 @end

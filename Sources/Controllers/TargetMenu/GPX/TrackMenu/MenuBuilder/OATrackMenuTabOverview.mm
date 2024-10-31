@@ -57,10 +57,10 @@
     BOOL hasArticle = NO;
     if (self.trackMenuDelegate)
     {
-        OAMetadata *metadata = [self.trackMenuDelegate getMetadata];
+        OASMetadata *metadata = [self.trackMenuDelegate getMetadata];
         if (metadata)
         {
-            OAGpxExtension *articleTitleExtension = [metadata getExtensionByKey:@"article_title"];
+            NSString *articleTitleExtension = [metadata getArticleTitle];
             if (articleTitleExtension)
             {
                 OAGPXTableSectionData *wikivoyageSectionData = [OAGPXTableSectionData withData:@{
@@ -71,9 +71,9 @@
                 [self.tableData.subjects addObject:wikivoyageSectionData];
                 
                 OATravelObfHelper *helper = [OATravelObfHelper shared];
-                OAGpxExtension *articleLangExtension = [metadata getExtensionByKey:@"article_lang"];
-                NSString *lang = articleLangExtension ? articleLangExtension.value : @"en";
-                OATravelArticle *article = [helper getArticleByTitle:articleTitleExtension.value lang:lang];
+                NSString *articleLangExtension = [metadata getArticleLang];
+                NSString *lang = articleLangExtension ?: @"en";
+                OATravelArticle *article = [helper getArticleByTitle:articleTitleExtension lang:lang];
                 if (article)
                 {
                     hasArticle = YES;
@@ -455,6 +455,7 @@
                 }];
                 if (hasText)
                     linkCellData.values[@"url"] = link.url.absoluteString;
+                
                 [infoSectionData.subjects addObject:linkCellData];
             }
         }
@@ -465,7 +466,7 @@
 
 - (OAGPXTableSectionData *)generateAuthorSectionData
 {
-    OAAuthor *author = self.trackMenuDelegate ? [self.trackMenuDelegate getAuthor] : nil;
+    OASAuthor *author = self.trackMenuDelegate ? [self.trackMenuDelegate getAuthor] : nil;
     BOOL hasAuthorName = author && author.name.length > 0;
     BOOL hasAuthorEmail = author && author.email.length > 0;
     BOOL hasAuthorLink = author && author.link;
@@ -499,15 +500,15 @@
         }
         if (hasAuthorLink)
         {
-            BOOL hasText = author.link.text && author.link.text.length > 0;
+            BOOL hasText = author.link.length > 0;
             OAGPXTableCellData *linkCellData = [OAGPXTableCellData withData:@{
                     kTableKey: @"link_author",
                     kCellType: [OAValueTableViewCell getCellIdentifier],
                     kCellTitle: OALocalizedString(@"shared_string_link"),
-                    kCellDesc: hasText ? author.link.text : author.link.url.absoluteString
+                    kCellDesc: hasText ? author.link : @""/*author.link.url.absoluteString*/
             }];
             if (hasText)
-                linkCellData.values[@"url"] = author.link.url.absoluteString;
+                linkCellData.values[@"url"] = author.link;
             [authorSectionData.subjects addObject:linkCellData];
         }
         return authorSectionData;
@@ -517,7 +518,7 @@
 
 - (OAGPXTableSectionData *)generateCopyrightSectionData
 {
-    OACopyright *copyright = self.trackMenuDelegate ? [self.trackMenuDelegate getCopyright] : nil;
+    OASCopyright *copyright = self.trackMenuDelegate ? [self.trackMenuDelegate getCopyright] : nil;
     BOOL hasCopyrightAuthor = copyright && copyright.author.length > 0;
     BOOL hasCopyrightLicense = copyright && copyright.license.length > 0;
     if (hasCopyrightAuthor || hasCopyrightLicense)

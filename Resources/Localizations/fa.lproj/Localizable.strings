@@ -1980,3 +1980,5 @@
 "ltr_or_rtl_combine_via_comma" = "%@،‏ %@";
 "app_mode_utv" = "UTV";
 "of" = "%d از %d";
+"downloaded_bytes" = "%@ از %@";
+"quick_action_need_to_add_item_to_list" = "در تنظیمات «کنش فوری» حداقل یک مورد به فهرست اضافه کنید";

@@ -3279,4 +3279,6 @@
 "daynight_mode_night_summary" = "Haritayı devamlı karanlık temada göster, karanlık yada düşük ışık şartlarına uygundur.";
 "daynight_mode_sunrise_sunset_summary" = "Gece ve gündüz teması yerel gün doğumu ve batımına göre otomatik seçilir.";
 "of" = "%d / %d";
+"downloaded_bytes" = "%@ / %@";
 "daynight_mode_day_summary" = "Haritayı devamlı aydınlık temada göster, gündüz görünürlüğü için idealdir.";
+"quick_action_need_to_add_item_to_list" = "\'Hızlı eylem\' ayarlarında listeye en az bir öge ekleyin";

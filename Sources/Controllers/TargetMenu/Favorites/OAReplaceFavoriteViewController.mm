@@ -21,9 +21,9 @@
 #import "OALocationServices.h"
 #import "OAPointTableViewCell.h"
 #import "OASegmentTableViewCell.h"
-#import "OAGPXDocument.h"
 #import "OAOsmAndFormatter.h"
 #import "GeneratedAssetSymbols.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/Utilities.h>
@@ -52,13 +52,13 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     EOASortingMode _sortingMode;
     OAAutoObserverProxy* _locationServicesUpdateObserver;
     NSTimeInterval _lastUpdateTime;
-    OAGPXDocument *_gpxDocument;
+    OASGpxFile *_gpxDocument;
     EOAReplacePointType _replaceItemType;
 }
 
 #pragma mark - Initialization
 
-- (instancetype)initWithItemType:(EOAReplacePointType)replaceItemType gpxDocument:(OAGPXDocument *)gpxDocument
+- (instancetype)initWithItemType:(EOAReplacePointType)replaceItemType gpxDocument:(OASGpxFile *)gpxDocument
 {
     self = [super init];
     if (self)
@@ -80,7 +80,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     else if (_replaceItemType == EOAReplacePointTypeWaypoint)
     {
         NSMutableArray *arr = [NSMutableArray array];
-        for (OAWptPt *point in _gpxDocument.points)
+        for (OASWptPt *point in _gpxDocument.getPointsList)
         {
             OAGpxWptItem *itemData = [[OAGpxWptItem alloc] init];
             itemData.point = point;
@@ -374,7 +374,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 
 - (void)setDistanceAndDirections:(OAGpxWptItem *)itemData
 {
-    OsmAnd::LatLon latLon(itemData.point.position.latitude, itemData.point.position.longitude);
+    OsmAnd::LatLon latLon(itemData.point.lat, itemData.point.lon);
     const auto wptPosition31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
     const auto wptLon = OsmAnd::Utilities::get31LongitudeX(wptPosition31.x);
     const auto wptLat = OsmAnd::Utilities::get31LatitudeY(wptPosition31.y);

@@ -8,14 +8,13 @@
 
 #import "OARouteColorize.h"
 #import "OARouteColorize+cpp.h"
-#import "OAGPXDocument.h"
 #import "OAGPXDocumentPrimitives.h"
-#import "OAGPXTrackAnalysis.h"
 #import "OANode.h"
 #import "OAOsmMapUtils.h"
 #import "OAMapUtils.h"
 #import "OsmAnd_Maps-Swift.h"
 #import <CoreLocation/CoreLocation.h>
+#import "OsmAndSharedWrapper.h"
 
 static CGFloat const defaultBase = 17.2;
 static CGFloat const maxCorrectElevationDistance = 100.0; // in meters
@@ -52,8 +51,8 @@ static CGFloat const minDifferenceSlope = 0.05; //5%
     ColorizationType _colorizationType;
 }
 
-- (instancetype) initWithGpxFile:(OAGPXDocument *)gpxFile
-                        analysis:(OAGPXTrackAnalysis *)analysis
+- (instancetype) initWithGpxFile:(OASGpxFile *)gpxFile
+                        analysis:(OASGpxTrackAnalysis *)analysis
                             type:(NSInteger)colorizaionType
                          palette:(ColorPalette *)palette
                  maxProfileSpeed:(float)maxProfileSpeed
@@ -74,23 +73,25 @@ static CGFloat const minDifferenceSlope = 0.05; //5%
         NSInteger wptIdx = 0;
 
         if (!analysis)
-            analysis = !gpxFile.path || gpxFile.path.length == 0 ? [gpxFile getAnalysis:(long) [NSDate date].timeIntervalSince1970] : [gpxFile getAnalysis:0];
+            analysis = !gpxFile.path || gpxFile.path.length == 0 ? [gpxFile getAnalysisFileTimestamp:(long) [NSDate date].timeIntervalSince1970] : [gpxFile getAnalysisFileTimestamp:0];
 
-        for (OATrack *trk in gpxFile.tracks)
+        for (OASTrack *trk in gpxFile.tracks)
         {
-            for (OATrkSegment *seg in trk.segments)
+            for (OASTrkSegment *seg in trk.segments)
             {
                 if (seg.generalSegment || seg.points.count < 2)
                     continue;
                 
-                for (OAWptPt *pt in seg.points)
+                for (OASWptPt *pt in seg.points)
                 {
                     [latList addObject:@(pt.getLatitude)];
                     [lonList addObject:@(pt.getLongitude)];
-                    if (colorizaionType == ColorizationTypeSpeed)
-                        [values addObject:@(analysis.speedData[wptIdx].speed)];
-                    else
-                        [values addObject:@(analysis.elevationData[wptIdx].elevation)];
+                    
+                    if (colorizaionType == ColorizationTypeSpeed) {
+                        [values addObject:@(analysis.pointAttributes[wptIdx].speed)];
+                    } else {
+                        [values addObject:@(analysis.pointAttributes[wptIdx].elevation)];
+                    }
                     wptIdx++;
                 }
             }
@@ -336,7 +337,7 @@ static CGFloat const minDifferenceSlope = 0.05; //5%
     return result;
 }
 
-+ (double)getMinValue:(ColorizationType)type analysis:(OAGPXTrackAnalysis *)analysis
++ (double)getMinValue:(ColorizationType)type analysis:(OASGpxTrackAnalysis *)analysis
 {
     switch (type)
     {
@@ -351,7 +352,7 @@ static CGFloat const minDifferenceSlope = 0.05; //5%
     }
 }
 
-+ (double)getMaxValue:(ColorizationType)type analysis:(OAGPXTrackAnalysis *)analysis minValue:(double)minValue maxProfileSpeed:(double)maxProfileSpeed
++ (double)getMaxValue:(ColorizationType)type analysis:(OASGpxTrackAnalysis *)analysis minValue:(double)minValue maxProfileSpeed:(double)maxProfileSpeed
 {
     switch (type)
     {
@@ -383,7 +384,7 @@ static CGFloat const minDifferenceSlope = 0.05; //5%
     }
 }
 
-- (void)calculateMinMaxValue:(OAGPXTrackAnalysis *)analysis maxProfileSpeed:(float)maxProfileSpeed
+- (void)calculateMinMaxValue:(OASGpxTrackAnalysis *)analysis maxProfileSpeed:(float)maxProfileSpeed
 {
     [self calculateMinMaxValue];
     // set strict limitations for maxValue

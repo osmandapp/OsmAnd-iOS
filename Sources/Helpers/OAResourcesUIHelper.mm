@@ -1287,17 +1287,7 @@ includeHidden:(BOOL)includeHidden
 
 + (BOOL) checkIfUpdateEnabled:(OAWorldRegion *)region
 {
-    if (region.regionId == nil || [region isInPurchasedArea])
-    {
-        return YES;
-    }
-    else
-    {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"res_updates_exp") preferredStyle:UIAlertControllerStyleAlert];
-        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
-        [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
-        return NO;
-    }
+    return region.regionId == nil || [region isInPurchasedArea];
 }
 
 + (BOOL) isInOutdatedResourcesList:(NSString *)resourceId

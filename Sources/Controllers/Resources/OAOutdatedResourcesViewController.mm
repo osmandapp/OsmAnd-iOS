@@ -369,7 +369,7 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
         for (OAOutdatedResourceItem* item in _resourcesItems)
         {
             const auto repoRes = _app.resourcesManager->getResourceInRepository(item.resourceId);
-            BOOL isFree = repoRes && repoRes->free;
+            BOOL isFree = repoRes && (repoRes->free || repoRes->type == OsmAnd::ResourcesManager::ResourceType::MapRegion);
             BOOL needPurchase = (item.worldRegion.regionId != nil && ![item.worldRegion isInPurchasedArea] && !isFree);
             if (!needPurchaseAny && needPurchase)
                 needPurchaseAny = YES;

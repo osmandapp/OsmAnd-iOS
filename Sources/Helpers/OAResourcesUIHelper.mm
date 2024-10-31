@@ -1573,7 +1573,7 @@ includeHidden:(BOOL)includeHidden
 {
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto resourceInRepository = app.resourcesManager->getResourceInRepository(item.resourceId);
-    BOOL isFree = resourceInRepository && resourceInRepository->free;
+    BOOL isFree = resourceInRepository && (resourceInRepository->free || resourceInRepository->type == OsmAnd::ResourcesManager::ResourceType::MapRegion);
     if (!isFree && ![self.class checkIfUpdateEnabled:item.worldRegion])
         return;
 

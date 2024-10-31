@@ -137,7 +137,8 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
     return res;
 }
 
-- (int)calculateMapScale {
+- (int)calculateMapScale
+{
        UIScreen *screen = [UIScreen mainScreen];
        CGFloat ppi = screen.ppi;
        CGFloat pixWidth = screen.nativeBounds.size.width;
@@ -152,7 +153,9 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
        return (int)(mapScreenWidthInMeters / realScreenWidthInMeters);
 }
 
-- (FormattedValue *)formatMapScale:(int)mapScale {
+
+- (FormattedValue *)formatMapScale:(int)mapScale
+{
     int digitsCount = (int)(log10(mapScale) + 1);
     
     if (digitsCount >= 7)
@@ -205,7 +208,8 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
 - (void)setZoomLevelText:(int)zoomBaseWithOffset
                zoomBase:(int)zoomBase
              zoomFraction:(float)zoomFraction
-             mapDensity:(float)mapDensity {
+             mapDensity:(float)mapDensity
+{
     
     float visualZoom = [OAZoom floatPartToVisual:zoomFraction];
     float targetPixelScale = powf(2.0f, zoomBase - zoomBaseWithOffset);
@@ -223,7 +227,8 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
     [self setText:[NSString stringWithFormat:@"%d", zoomBaseWithOffset] subtext:[NSString stringWithFormat:@"%@%@", sign, formattedOffset]];
 }
 
-- (float)getZoomDeltaFromMapScale:(float)mapScale {
+- (float)getZoomDeltaFromMapScale:(float)mapScale
+{
     double log2Value = log(mapScale) / log(2.0);
     BOOL powerOfTwo = fabs(log2Value - round(log2Value)) < 0.001;
 
@@ -323,7 +328,8 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
     return YES;
 }
 
-- (void)setMapScaleText {
+- (void)setMapScaleText
+{
     int mapScale = [self calculateMapScale];
     FormattedValue *formattedMapScale = [self formatMapScale:mapScale];
     NSString *mapScaleStr = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon_with_space"), @"1", formattedMapScale.value];

@@ -3147,7 +3147,7 @@
 "external_sensors_support" = "Stuðningur við utanáliggjandi skynjara";
 "ant_plus_pair_bluetooth_prompt" = "Þú getur parað Bluetooth LE og ANT+ skynjara við OsmAnd.";
 "ant_plus_nothing_found_text" = "Fann enga skynjara";
-"ant_plus_bluetooth_off_description" = "Kveikja á Bluetooth til að finna og para skynjara.";
+"ant_plus_bluetooth_off_description" = "Kveiktu á Bluetooth til að finna og para skynjara.";
 "external_device_status_connecting" = "Tengist";
 "external_device_any_connected" = "Allt sem er tengt";
 "external_device_menu_forget" = "Gleyma";

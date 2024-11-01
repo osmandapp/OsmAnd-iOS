@@ -826,7 +826,7 @@
 		78AC698E23AB7BE1006C3DDE /* left_menu_configure_screen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78AC698923AB7BE0006C3DDE /* left_menu_configure_screen@2x.png */; };
 		78D57B8B238D2FFD0068CF48 /* ic_custom_hillshade@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78D57B87238D2FFC0068CF48 /* ic_custom_hillshade@2x.png */; };
 		78D57B8D238D2FFD0068CF48 /* ic_custom_hillshade@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78D57B88238D2FFD0068CF48 /* ic_custom_hillshade@3x.png */; };
-		81AE516126298A3600BDF947 /* libGeographicLib_STATIC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 81AE516026298A3600BDF947 /* libGeographicLib_STATIC.a */; };
+		81AE516126298A3600BDF947 /* libGeographicLib_STATIC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 81AE516026298A3600BDF947 /* libGeographicLib_STATIC.a */; settings = {ATTRIBUTES = (Required, ); }; };
 		840C9FB61CF353C500F2F991 /* ic_coordinates_location@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84BA1DCF1CF338E400BF3D96 /* ic_coordinates_location@2x.png */; };
 		840C9FB81CF353C800F2F991 /* ic_coordinates_location@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84BA1DD01CF338E400BF3D96 /* ic_coordinates_location@3x.png */; };
 		8410D068207F48200049DEB2 /* ic_tree_list_dark@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8410D062207F481E0049DEB2 /* ic_tree_list_dark@3x.png */; };
@@ -17663,7 +17663,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang/lib",
+					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang-iphonesimulator/lib",
 					"${PROJECT_DIR}/../binaries/ios.clang${EFFECTIVE_PLATFORM_NAME}/$(CONFIGURATION)",
 					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)",
 				);
@@ -17746,10 +17746,11 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang/lib",
+					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang-iphonesimulator/lib",
 					"${PROJECT_DIR}/../binaries/ios.clang${EFFECTIVE_PLATFORM_NAME}/$(CONFIGURATION)",
 					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)",
 				);
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PLATFORM_DEFINITIONS = "NDEBUG RELEASE OSMAND_TARGET_OS_ios OSMAND_TARGET_CPU_ARCH_fat OSMAND_TARGET_CPU_ARCH_FAMILY_fat OSMAND_COMPILER_FAMILY_clang NOMINMAX OSMAND_CORE_STATIC GLM_SWIZZLE OSMAND_OPENGL_RENDERERS_SUPPORTED OSMAND_OPENGLES2_RENDERER_SUPPORTED SK_BUILD_FOR_IOS SK_USE_CORETEXT XML_STATIC Z_PREFIX";
 				PRODUCT_BUNDLE_IDENTIFIER = net.osmand.maps;
@@ -17784,7 +17785,6 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = LM67P5MQ23;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = LM67P5MQ23;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)",

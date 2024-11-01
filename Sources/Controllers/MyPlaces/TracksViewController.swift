@@ -506,7 +506,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func setupTableFooter() {
-        guard !currentFolder.getTrackItems().isEmpty, !isSearchActive, !tableView.isEditing else {
+        guard folderContainsTracks(currentFolder), !isSearchActive, !tableView.isEditing else {
             tableView.tableFooterView = nil
             return
         }
@@ -529,6 +529,18 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         let navigationController = UINavigationController(rootViewController: TracksFiltersViewController(baseFilters: baseFilters, baseFiltersResult: baseFiltersResult))
         navigationController.modalPresentationStyle = .custom
         present(navigationController, animated: true, completion: nil)
+    }
+    
+    private func folderContainsTracks(_ folder: TrackFolder) -> Bool {
+        if !folder.getTrackItems().isEmpty {
+            return true
+        }
+        
+        for subfolder in folder.getSubFolders() where folderContainsTracks(subfolder) {
+            return true
+        }
+        
+        return false
     }
     
     private func getTotalTracksStatistics() -> String {

@@ -227,7 +227,11 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
     float floatDistance = meters / mainUnitInMeters;
     BOOL forceTrailingZeroes = params.forceTrailingZerosInDecimalMainUnit;
     int decimalPrecision = params.extraDecimalPrecision;
-    if (meters >= 100 * mainUnitInMeters)
+    if (params.forcePreciseValue)
+    {
+        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:decimalPrecision valueUnitArray:valueUnitArray];
+    }
+    else if (meters >= 100 * mainUnitInMeters)
     {
         return [self formatValue:(int) (meters / mainUnitInMeters + 0.5) unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0 valueUnitArray:valueUnitArray];
     }

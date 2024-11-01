@@ -27,7 +27,7 @@ private enum ButtonActionNumberTag: Int {
     case save = 2
 }
 
-final class TracksViewController: OACompoundViewController, UITableViewDelegate, UITableViewDataSource, OATrackSavingHelperUpdatableDelegate, TrackListUpdatableDelegate, OASelectTrackFolderDelegate, OAGPXImportUIHelperDelegate, MapSettingsGpxViewControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate {
+final class TracksViewController: OACompoundViewController, UITableViewDelegate, UITableViewDataSource, OATrackSavingHelperUpdatableDelegate, TrackListUpdatableDelegate, OASelectTrackFolderDelegate, OAGPXImportUIHelperDelegate, MapSettingsGpxViewControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate, FilterChangedListener {
     
     @IBOutlet private weak var tableView: UITableView!
     
@@ -63,10 +63,12 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     private var asyncLoader: TrackFolderLoaderTask?
     
     private var recCell: OATwoButtonsTableViewCell?
+    private var baseFilters: TracksSearchFilter?
+    private var baseFiltersResult: FilterResults?
     private var searchController = UISearchController()
     private var isSearchActive = false
-    private var isFiltered = false
-    private var searchText = ""
+    private var isNameFiltered = false
+    private var isSearchTextFilterChanged = false
     
     private var selectedTrack: GpxDataItem?
     private var selectedFolderPath: String?
@@ -198,13 +200,10 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         tableData.clearAllData()
         let section = tableData.createNewSection()
         if isSearchActive {
-            var allTracks = rootFolder.getFlattenedTrackItems()
-            if isFiltered {
-                allTracks = allTracks.filter { $0.name.containsCaseInsensitive(text: searchText) && $0.dataItem != nil }
+            if var allTracks = baseFiltersResult?.values {
+                allTracks.sort { $0.name.lastPathComponent() < $1.name.lastPathComponent() }
+                allTracks.compactMap { $0.dataItem }.forEach { createRowFor(track: $0, section: section) }
             }
-            
-            allTracks.sort { $0.name.lastPathComponent() < $1.name.lastPathComponent() }
-            allTracks.compactMap { $0.dataItem }.forEach { createRowFor(track: $0, section: section) }
         } else {
             if !tableView.isEditing {
                 if isRootFolder && iapHelper.trackRecording.isActive() {
@@ -495,6 +494,17 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         tableView.tableHeaderView = searchIsActive ? setupHeaderView() : nil
     }
     
+    private func updateFilterButtonTitle() {
+        var baseTitle = localizedString("filter_current_poiButton")
+        if let count = baseFilters?.getAppliedFiltersCount(), count > 0 {
+            baseTitle += " (\(count))"
+        }
+        
+        var currentConfig = filterButton.configuration ?? UIButton.Configuration.plain()
+        currentConfig.title = baseTitle
+        filterButton.configuration = currentConfig
+    }
+    
     private func setupTableFooter() {
         guard !currentFolder.getTrackItems().isEmpty, !isSearchActive, !tableView.isEditing else {
             tableView.tableFooterView = nil
@@ -515,11 +525,10 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     @objc private func filterButtonTapped() {
-        //        if let filterVC = TracksFiltersViewController() {
-        //            filterVC.setInitialFilterText(searchText)
-        //            searchText = ""
-        //            show(filterVC)
-        //        }
+        guard let baseFilters, let baseFiltersResult else { return }
+        let navigationController = UINavigationController(rootViewController: TracksFiltersViewController(baseFilters: baseFilters, baseFiltersResult: baseFiltersResult))
+        navigationController.modalPresentationStyle = .custom
+        present(navigationController, animated: true, completion: nil)
     }
     
     private func getTotalTracksStatistics() -> String {
@@ -589,7 +598,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func updateSearchController() {
-        if isFiltered {
+        if isNameFiltered {
             searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("search_activity"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.textColorTertiary])
             searchController.searchBar.searchTextField.backgroundColor = UIColor.groupBg
             searchController.searchBar.searchTextField.leftView?.tintColor = UIColor.textColorTertiary
@@ -1729,6 +1738,23 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         selectedTrack = nil
     }
     
+    // MARK: - FilterChangedListener
+    
+    func onFilterChanged() {
+        DispatchQueue.main.async {
+            if let baseFilters = self.baseFilters {
+                self.baseFiltersResult?.values = baseFilters.getFilteredTrackItems()
+                self.isSearchTextFilterChanged = true
+                self.searchController.searchBar.text = (baseFilters.getFilterByType(.name) as? TextTrackFilter)?.value
+                self.isNameFiltered = !(self.searchController.searchBar.text?.isEmpty ?? true)
+                self.updateSearchController()
+                self.generateData()
+                self.tableView.reloadData()
+                self.updateFilterButtonTitle()
+            }
+        }
+    }
+    
     // MARK: - OAGPXImportUIHelperDelegate
     
     func updateVCData() {
@@ -1744,19 +1770,27 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     // MARK: - UISearchResultsUpdating
     
     func updateSearchResults(for searchController: UISearchController) {
+        if isSearchTextFilterChanged {
+            isSearchTextFilterChanged = false
+            return
+        }
+        
         if searchController.isActive && searchController.searchBar.searchTextField.text?.length == 0 {
             isSearchActive = true
-            isFiltered = false
+            isNameFiltered = false
+            baseFilters = TracksSearchFilter(trackItems: rootFolder.getFlattenedTrackItems(), currentFolder: nil)
+            baseFilters?.addFiltersChangedListener(self)
         } else if searchController.isActive && !(searchController.searchBar.searchTextField.text ?? "").isEmpty {
             isSearchActive = true
-            isFiltered = true
-            searchText = searchController.searchBar.searchTextField.text ?? ""
+            isNameFiltered = true
+            (baseFilters?.getFilterByType(.name) as? TextTrackFilter)?.value = searchController.searchBar.searchTextField.text ?? ""
         } else {
             isSearchActive = false
-            isFiltered = false
+            isNameFiltered = false
         }
         updateSearchController()
         updateHeaderViewVisibility(searchIsActive: isSearchActive)
+        baseFiltersResult = baseFilters?.performFiltering()
         updateData()
     }
     
@@ -1764,7 +1798,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         isSearchActive = false
-        isFiltered = false
+        isNameFiltered = false
         updateSearchController()
         updateHeaderViewVisibility(searchIsActive: isSearchActive)
     }

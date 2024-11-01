@@ -36,7 +36,10 @@ static OAExportSettingsType * NAVIGATION_HISTORY;
 static OAExportSettingsType * CUSTOM_RENDER_STYLE;
 static OAExportSettingsType * CUSTOM_ROUTING;
 static OAExportSettingsType * MAP_SOURCES;
-static OAExportSettingsType * OFFLINE_MAPS;
+static OAExportSettingsType * STANDARD_MAPS;
+static OAExportSettingsType * WIKI_AND_TRAVEL;
+static OAExportSettingsType * DEPTH_DATA;
+static OAExportSettingsType * TERRAIN_DATA;
 static OAExportSettingsType * TTS_VOICE;
 static OAExportSettingsType * VOICE;
 static OAExportSettingsType * ONLINE_ROUTING_ENGINES;
@@ -92,7 +95,7 @@ static NSArray<OAExportSettingsType *> *allValues;
     else if (subtype == EOASettingsItemFileSubtypeColorPalette)
         return COLOR_DATA;
     else if ([OAFileSettingsItemFileSubtype isMap:subtype])
-        return OFFLINE_MAPS;
+        return STANDARD_MAPS;
 //    else if (subtype == FileSubtype.TTS_VOICE)
 //        return ExportSettingsType.TTS_VOICE;
 //    else if (subtype == FileSubtype.VOICE)
@@ -122,7 +125,10 @@ static NSArray<OAExportSettingsType *> *allValues;
         [res addObject:self.CUSTOM_RENDER_STYLE];
         [res addObject:self.CUSTOM_ROUTING];
         [res addObject:self.MAP_SOURCES];
-        [res addObject:self.OFFLINE_MAPS];
+        [res addObject:self.STANDARD_MAPS];
+        [res addObject:self.WIKI_AND_TRAVEL];
+        [res addObject:self.DEPTH_DATA];
+        [res addObject:self.TERRAIN_DATA];
 //        [res addObject:self.TTS_VOICE];
 //        [res addObject:self.VOICE];
 //        [res addObject:self.ONLINE_ROUTING_ENGINES];
@@ -288,11 +294,32 @@ static NSArray<OAExportSettingsType *> *allValues;
     return MAP_SOURCES;
 }
 
-+ (OAExportSettingsType *)OFFLINE_MAPS
++ (OAExportSettingsType *)STANDARD_MAPS
 {
-    if (!OFFLINE_MAPS)
-        OFFLINE_MAPS = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"offline_maps") name:@"OFFLINE_MAPS" itemName:@"FILE" icon:[UIImage templateImageNamed:@"ic_custom_map"] isAllowedInFreeVersion:NO];
-    return OFFLINE_MAPS;
+    if (!STANDARD_MAPS)
+        STANDARD_MAPS = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"standard_maps") name:@"STANDARD_MAPS" itemName:@"FILE" icon:[UIImage templateImageNamed:@"ic_custom_map"] isAllowedInFreeVersion:NO];
+    return STANDARD_MAPS;
+}
+
++ (OAExportSettingsType *)WIKI_AND_TRAVEL
+{
+    if (!WIKI_AND_TRAVEL)
+        WIKI_AND_TRAVEL = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"wikipedia_and_travel_maps") name:@"WIKI_AND_TRAVEL" itemName:@"FILE" icon:[UIImage templateImageNamed:@"ic_custom_wikipedia"] isAllowedInFreeVersion:NO];
+    return WIKI_AND_TRAVEL;
+}
+
++ (OAExportSettingsType *)DEPTH_DATA
+{
+    if (!DEPTH_DATA)
+        DEPTH_DATA = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"nautical_maps") name:@"DEPTH_DATA" itemName:@"FILE" icon:[UIImage templateImageNamed:@"ic_live_nautical_depth"] isAllowedInFreeVersion:NO];
+    return DEPTH_DATA;
+}
+
++ (OAExportSettingsType *)TERRAIN_DATA
+{
+    if (!TERRAIN_DATA)
+        TERRAIN_DATA = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"topography_maps") name:@"TERRAIN_DATA" itemName:@"FILE" icon:[UIImage templateImageNamed:@"ic_custom_terrain"] isAllowedInFreeVersion:NO];
+    return TERRAIN_DATA;
 }
 
 + (OAExportSettingsType *)TTS_VOICE
@@ -338,7 +365,7 @@ static NSArray<OAExportSettingsType *> *allValues;
 - (BOOL) isResourcesCategory
 {
     return self == self.class.CUSTOM_RENDER_STYLE || self == self.class.CUSTOM_ROUTING || self == self.class.MAP_SOURCES
-    || self == self.class.OFFLINE_MAPS /*|| self == self.class.VOICE || self == self.class.TTS_VOICE || self == self.class.ONLINE_ROUTING_ENGINES*/;
+    || self == self.class.STANDARD_MAPS || self == self.class.WIKI_AND_TRAVEL || self == self.class.DEPTH_DATA ||self == self.class.TERRAIN_DATA /*|| self == self.class.VOICE || self == self.class.TTS_VOICE || self == self.class.ONLINE_ROUTING_ENGINES*/;
 }
 
 - (OAExportSettingsCategory *) getCategory

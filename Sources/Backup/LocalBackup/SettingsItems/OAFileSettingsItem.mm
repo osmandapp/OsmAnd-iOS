@@ -31,6 +31,10 @@
             return @"routing_config";
         case EOASettingsItemFileSubtypeRenderingStyle:
             return @"rendering_style";
+        case EOASettingsItemFileSubtypeNauticalDepth:
+            return @"nautical_depth";
+        case EOASettingsItemFileSubtypeTerrainMap:
+            return @"terrain";  
         case EOASettingsItemFileSubtypeObfMap:
             return @"obf_map";
         case EOASettingsItemFileSubtypeTilesMap:
@@ -64,6 +68,8 @@
         case EOASettingsItemFileSubtypeObfMap:
         case EOASettingsItemFileSubtypeWikiMap:
         case EOASettingsItemFileSubtypeSrtmMap:
+        case EOASettingsItemFileSubtypeNauticalDepth:
+        case EOASettingsItemFileSubtypeTerrainMap:
         case EOASettingsItemFileSubtypeRoadMap:
         case EOASettingsItemFileSubtypeTilesMap:
             return [documentsPath stringByAppendingPathComponent:RESOURCES_DIR];
@@ -129,15 +135,15 @@
             case EOASettingsItemFileSubtypeUnknown:
             case EOASettingsItemFileSubtypeOther:
                 break;
-            case EOASettingsItemFileSubtypeObfMap:
-            {
-                if ([name hasSuffix:BINARY_MAP_INDEX_EXT])
-                    return subtype;
-                break;
-            }
             case EOASettingsItemFileSubtypeSrtmMap:
             {
                 if ([name hasSuffix:BINARY_SRTM_MAP_INDEX_EXT] || [name hasSuffix:BINARY_SRTMF_MAP_INDEX_EXT])
+                    return subtype;
+                break;
+            }
+            case EOASettingsItemFileSubtypeTerrainMap:
+            {
+                if ([name hasSuffix:TIF_EXT])
                     return subtype;
                 break;
             }
@@ -147,15 +153,33 @@
                     return subtype;
                 break;
             }
-            case EOASettingsItemFileSubtypeGpx:
+            case EOASettingsItemFileSubtypeObfMap:
             {
-                if ([name hasSuffix:@".gpx"])
+                if ([name hasSuffix:BINARY_MAP_INDEX_EXT])
                     return subtype;
                 break;
             }
             case EOASettingsItemFileSubtypeVoice:
             {
                 if ([name hasSuffix:@"tts.js"])
+                    return subtype;
+                break;
+            }
+            case EOASettingsItemFileSubtypeNauticalDepth:
+            {
+                if ([name hasSuffix:BINARY_DEPTH_MAP_INDEX_EXT])
+                    return subtype;
+                break;
+            }
+            case EOASettingsItemFileSubtypeColorPalette:
+            {
+                if ([name hasSuffix:TXT_EXT])
+                    return subtype;
+                break;
+            }
+            case EOASettingsItemFileSubtypeGpx:
+            {
+                if ([name hasSuffix:@".gpx"])
                     return subtype;
                 break;
             }
@@ -186,18 +210,6 @@
             case EOASettingsItemFileSubtypeRoadMap:
             {
                 if ([name containsString:@"road"])
-                    return subtype;
-                break;
-            }
-            case EOASettingsItemFileSubtypeNauticalDepth:
-            {
-                if ([name hasSuffix:BINARY_DEPTH_MAP_INDEX_EXT])
-                    return subtype;
-                break;
-            }
-            case EOASettingsItemFileSubtypeColorPalette:
-            {
-                if ([name hasSuffix:TXT_EXT])
                     return subtype;
                 break;
             }

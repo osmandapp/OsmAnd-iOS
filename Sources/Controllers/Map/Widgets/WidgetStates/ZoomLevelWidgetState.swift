@@ -34,7 +34,7 @@ final class ZoomLevelWidgetState: OAWidgetState {
     }
     
     private static func registerPreference(_ customId: String?) -> OACommonWidgetZoomLevelType {
-        var prefId = "zoom_level_type" // zoom_level_typedev_zoom_level__17303691733
+        var prefId = "zoom_level_type"
         if let customId, !customId.isEmpty {
             prefId += "\(customId)"
         }

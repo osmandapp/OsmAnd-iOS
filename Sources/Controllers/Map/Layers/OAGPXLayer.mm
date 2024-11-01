@@ -671,40 +671,40 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
 - (float)getSensorAttribute:(OASWptPt *)point
                        type:(EOAGPX3DLineVisualizationByType)type
                  attributes:(nullable OASPointAttributes *)attributes {
-//    BOOL hasAttributes = attributes != nil;
-//    
-//    OASSensorPointAnalyser *sensorPointAnalyser = [OASSensorPointAnalyser shared];
-//    
-//    switch (type)
-//    {
-//        case EOAGPX3DLineVisualizationByTypeHeartRate:
-//            return hasAttributes ? attributes.heartRate : [sensorPointAnalyser getPointAttributeWptPt:point key:OASPointAttributes.sensorTagHeartRate defaultValue:0];
-//        case EOAGPX3DLineVisualizationByTypeBicycleCadence:
-//            
-//            return hasAttributes ? attributes.bikeCadence : [sensorPointAnalyser getPointAttributeWptPt:point key:OASPointAttributes.sensorTagCadence defaultValue:0];
-//        case EOAGPX3DLineVisualizationByTypeBicyclePower:
-//            return hasAttributes ? attributes.bikePower : [sensorPointAnalyser getPointAttributeWptPt:point key:OASPointAttributes.sensorTagBikePower defaultValue:0];
-//        case EOAGPX3DLineVisualizationByTypeTemperatureA:
-//        case EOAGPX3DLineVisualizationByTypeTemperatureW:
-//        {
-//            float airTemp = hasAttributes ? attributes.airTemperature : [sensorPointAnalyser getPointAttributeWptPt:point key:OASPointAttributes.sensorTagTemperatureA defaultValue:NAN];
-//            if (!isnan(airTemp))
-//            {
-//                return airTemp + kTemperatureToHeightOffset;
-//            }
-//            
-//            float waterTemp = hasAttributes ? attributes.waterTemperature : [sensorPointAnalyser getPointAttributeWptPt:point key:OASPointAttributes.sensorTagTemperatureW defaultValue:NAN];
-//            if (!isnan((waterTemp)))
-//            {
-//                return waterTemp + kTemperatureToHeightOffset;
-//            }
-//        }
-//        case EOAGPX3DLineVisualizationByTypeSpeedSensor:
-//        {
-//            return hasAttributes ? attributes.sensorSpeed : [sensorPointAnalyser getPointAttributeWptPt:point key:OASPointAttributes.sensorTagBikePower defaultValue:0] * kSpeedToHeightScale;
-//        }
-//        default: return NAN;
-//    }
+    BOOL hasAttributes = attributes != nil;
+    
+    OASSensorPointAnalyser *sensorPointAnalyser = [OASSensorPointAnalyser shared];
+    
+    switch (type)
+    {
+        case EOAGPX3DLineVisualizationByTypeHeartRate:
+            return hasAttributes ? attributes.heartRate : [sensorPointAnalyser getPointAttributeWptPt:point key:OASPointAttributes.sensorTagHeartRate defaultValue:0];
+        case EOAGPX3DLineVisualizationByTypeBicycleCadence:
+            
+            return hasAttributes ? attributes.bikeCadence : [sensorPointAnalyser getPointAttributeWptPt:point key:OASPointAttributes.sensorTagCadence defaultValue:0];
+        case EOAGPX3DLineVisualizationByTypeBicyclePower:
+            return hasAttributes ? attributes.bikePower : [sensorPointAnalyser getPointAttributeWptPt:point key:OASPointAttributes.sensorTagBikePower defaultValue:0];
+        case EOAGPX3DLineVisualizationByTypeTemperatureA:
+        case EOAGPX3DLineVisualizationByTypeTemperatureW:
+        {
+            float airTemp = hasAttributes ? attributes.airTemperature : [sensorPointAnalyser getPointAttributeWptPt:point key:OASPointAttributes.sensorTagTemperatureA defaultValue:NAN];
+            if (!isnan(airTemp))
+            {
+                return airTemp + kTemperatureToHeightOffset;
+            }
+            
+            float waterTemp = hasAttributes ? attributes.waterTemperature : [sensorPointAnalyser getPointAttributeWptPt:point key:OASPointAttributes.sensorTagTemperatureW defaultValue:NAN];
+            if (!isnan((waterTemp)))
+            {
+                return waterTemp + kTemperatureToHeightOffset;
+            }
+        }
+        case EOAGPX3DLineVisualizationByTypeSpeedSensor:
+        {
+            return hasAttributes ? attributes.sensorSpeed : [sensorPointAnalyser getPointAttributeWptPt:point key:OASPointAttributes.sensorTagBikePower defaultValue:0] * kSpeedToHeightScale;
+        }
+        default: return NAN;
+    }
     return 0;
 }
 

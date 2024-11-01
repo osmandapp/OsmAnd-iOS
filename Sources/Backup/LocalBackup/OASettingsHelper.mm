@@ -542,8 +542,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             myPlacesItems[type] = obj;
         else if (type.isResourcesCategory)
             resourcesItems[type] = obj;
-        else
-            BOOL stop = YES;
     }];
 
     MutableOrderedDictionary<OAExportSettingsCategory *, OASettingsCategoryItems *> *exportMap = [MutableOrderedDictionary new];

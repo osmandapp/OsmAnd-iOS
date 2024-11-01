@@ -206,8 +206,6 @@ static OASubscriptionState *EXPIRED;
 
 + (BOOL) isPaidVersion
 {
-    return YES;
-    
     return [self isFullVersionPurchased]
             || [self isSubscribedToLiveUpdates]
             || [self isSubscribedToMaps]

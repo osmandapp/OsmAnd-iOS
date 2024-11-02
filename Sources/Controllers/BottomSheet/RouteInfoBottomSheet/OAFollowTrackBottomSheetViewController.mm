@@ -27,7 +27,6 @@
 #import "OAMapPanelViewController.h"
 #import "OAMeasurementEditingContext.h"
 #import "OAGpxData.h"
-#import "OAGpxInfo.h"
 #import "OAGPXUIHelper.h"
 #import "OATargetPointsHelper.h"
 #import "OAMapActions.h"

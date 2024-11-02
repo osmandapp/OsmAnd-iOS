@@ -2000,9 +2000,7 @@
 		DA5A81DD26C563A700F274C7 /* OAStreetIntersection.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AAA26C563A100F274C7 /* OAStreetIntersection.mm */; };
 		DA5A81DE26C563A700F274C7 /* OAStreet.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AAD26C563A100F274C7 /* OAStreet.mm */; };
 		DA5A81DF26C563A700F274C7 /* OAAddress.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AAF26C563A100F274C7 /* OAAddress.mm */; };
-		DA5A81E126C563A700F274C7 /* OAGpxInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AB526C563A100F274C7 /* OAGpxInfo.m */; };
 		DA5A81E326C563A700F274C7 /* OAGPXDocumentPrimitives.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AB726C563A100F274C7 /* OAGPXDocumentPrimitives.mm */; };
-		DA5A81E426C563A700F274C7 /* OALoadGpxTask.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AB826C563A100F274C7 /* OALoadGpxTask.m */; };
 		DA5A81E526C563A700F274C7 /* OAGPXDatabase.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7ABB26C563A100F274C7 /* OAGPXDatabase.mm */; };
 		DA5A81E926C563A700F274C7 /* OAHistoryHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AC826C563A100F274C7 /* OAHistoryHelper.m */; };
 		DA5A81EA26C563A700F274C7 /* OAHistoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AC926C563A100F274C7 /* OAHistoryItem.m */; };
@@ -5934,12 +5932,8 @@
 		DA5A7AAF26C563A100F274C7 /* OAAddress.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAddress.mm; sourceTree = "<group>"; };
 		DA5A7AB026C563A100F274C7 /* OABuilding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OABuilding.h; sourceTree = "<group>"; };
 		DA5A7AB126C563A100F274C7 /* OAAddress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAAddress.h; sourceTree = "<group>"; };
-		DA5A7AB526C563A100F274C7 /* OAGpxInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAGpxInfo.m; sourceTree = "<group>"; };
 		DA5A7AB726C563A100F274C7 /* OAGPXDocumentPrimitives.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXDocumentPrimitives.mm; sourceTree = "<group>"; };
-		DA5A7AB826C563A100F274C7 /* OALoadGpxTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OALoadGpxTask.m; sourceTree = "<group>"; };
-		DA5A7ABA26C563A100F274C7 /* OAGpxInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGpxInfo.h; sourceTree = "<group>"; };
 		DA5A7ABB26C563A100F274C7 /* OAGPXDatabase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXDatabase.mm; sourceTree = "<group>"; };
-		DA5A7ABC26C563A100F274C7 /* OALoadGpxTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OALoadGpxTask.h; sourceTree = "<group>"; };
 		DA5A7ABD26C563A100F274C7 /* OAGPXDocumentPrimitives.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGPXDocumentPrimitives.h; sourceTree = "<group>"; };
 		DA5A7AC026C563A100F274C7 /* OAGPXDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGPXDatabase.h; sourceTree = "<group>"; };
 		DA5A7AC626C563A100F274C7 /* OAHistoryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAHistoryItem.h; sourceTree = "<group>"; };
@@ -11095,10 +11089,6 @@
 				320F71362A86438B0071C0E7 /* OAGPXDocumentAdapter.mm */,
 				DA5A7ABD26C563A100F274C7 /* OAGPXDocumentPrimitives.h */,
 				DA5A7AB726C563A100F274C7 /* OAGPXDocumentPrimitives.mm */,
-				DA5A7ABA26C563A100F274C7 /* OAGpxInfo.h */,
-				DA5A7AB526C563A100F274C7 /* OAGpxInfo.m */,
-				DA5A7ABC26C563A100F274C7 /* OALoadGpxTask.h */,
-				DA5A7AB826C563A100F274C7 /* OALoadGpxTask.m */,
 				DA35963329B1EDEA009DF4D6 /* OANetworkRouteSelectionTask.h */,
 				DA35963429B1EDEA009DF4D6 /* OANetworkRouteSelectionTask.mm */,
 				05DACD742C1B0E9A0023FAD9 /* OAXmlStreamReader.h */,
@@ -16927,7 +16917,6 @@
 				DA653CD9288ACEDF00AB623C /* OATitleIconProgressbarCell.mm in Sources */,
 				DA5A844526C563A900F274C7 /* UIViewController+OARootViewController.m in Sources */,
 				DA5A833626C563A800F274C7 /* OAImagesCollectionViewCell.m in Sources */,
-				DA5A81E426C563A700F274C7 /* OALoadGpxTask.m in Sources */,
 				DA5A854826C563A900F274C7 /* OADebugSettings.mm in Sources */,
 				32ABB6502AEC01C000491E99 /* ImageToStringConverter.swift in Sources */,
 				DA5A818F26C563A700F274C7 /* OAShowHidePoiAction.m in Sources */,
@@ -17273,7 +17262,6 @@
 				DA5A83E226C563A800F274C7 /* OAEditColorViewController.m in Sources */,
 				4665DB6E2C20BBFD00F897EC /* ColorsPaletteUtils.swift in Sources */,
 				DA297C2E2811601F009C248E /* OACompoundIconUtils.mm in Sources */,
-				DA5A81E126C563A700F274C7 /* OAGpxInfo.m in Sources */,
 				46D38A9C29C398E1000AAE0C /* OARoutingDataUtils.mm in Sources */,
 				DA5A836226C563A800F274C7 /* OATitleDescriptionCollapsableCell.m in Sources */,
 				DA5A815826C563A700F274C7 /* OAOsmEditingPlugin.mm in Sources */,

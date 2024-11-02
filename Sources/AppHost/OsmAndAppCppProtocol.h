@@ -14,7 +14,6 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/ResourcesManager.h>
 #include <OsmAndCore/FavoriteLocationsGpxCollection.h>
-#include <OsmAndCore/GpxDocument.h>
 #include <OsmAndCore/Map/MapPresentationEnvironment.h>
 #include <routingConfiguration.h>
 

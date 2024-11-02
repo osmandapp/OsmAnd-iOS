@@ -30,7 +30,6 @@
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
-#include <OsmAndCore/GpxDocument.h>
 
 @implementation OAGPXWptViewController
 {

@@ -2000,7 +2000,7 @@
 		DA5A81DD26C563A700F274C7 /* OAStreetIntersection.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AAA26C563A100F274C7 /* OAStreetIntersection.mm */; };
 		DA5A81DE26C563A700F274C7 /* OAStreet.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AAD26C563A100F274C7 /* OAStreet.mm */; };
 		DA5A81DF26C563A700F274C7 /* OAAddress.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AAF26C563A100F274C7 /* OAAddress.mm */; };
-		DA5A81E326C563A700F274C7 /* OAGPXDocumentPrimitives.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AB726C563A100F274C7 /* OAGPXDocumentPrimitives.mm */; };
+		DA5A81E326C563A700F274C7 /* OAGPXDocumentPrimitives.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AB726C563A100F274C7 /* OAGPXDocumentPrimitives.m */; };
 		DA5A81E526C563A700F274C7 /* OAGPXDatabase.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7ABB26C563A100F274C7 /* OAGPXDatabase.mm */; };
 		DA5A81E926C563A700F274C7 /* OAHistoryHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AC826C563A100F274C7 /* OAHistoryHelper.m */; };
 		DA5A81EA26C563A700F274C7 /* OAHistoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AC926C563A100F274C7 /* OAHistoryItem.m */; };
@@ -5932,7 +5932,7 @@
 		DA5A7AAF26C563A100F274C7 /* OAAddress.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAddress.mm; sourceTree = "<group>"; };
 		DA5A7AB026C563A100F274C7 /* OABuilding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OABuilding.h; sourceTree = "<group>"; };
 		DA5A7AB126C563A100F274C7 /* OAAddress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAAddress.h; sourceTree = "<group>"; };
-		DA5A7AB726C563A100F274C7 /* OAGPXDocumentPrimitives.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXDocumentPrimitives.mm; sourceTree = "<group>"; };
+		DA5A7AB726C563A100F274C7 /* OAGPXDocumentPrimitives.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAGPXDocumentPrimitives.m; sourceTree = "<group>"; };
 		DA5A7ABB26C563A100F274C7 /* OAGPXDatabase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXDatabase.mm; sourceTree = "<group>"; };
 		DA5A7ABD26C563A100F274C7 /* OAGPXDocumentPrimitives.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGPXDocumentPrimitives.h; sourceTree = "<group>"; };
 		DA5A7AC026C563A100F274C7 /* OAGPXDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGPXDatabase.h; sourceTree = "<group>"; };
@@ -11088,7 +11088,7 @@
 				320F71352A8643550071C0E7 /* OAGPXDocumentAdapter.h */,
 				320F71362A86438B0071C0E7 /* OAGPXDocumentAdapter.mm */,
 				DA5A7ABD26C563A100F274C7 /* OAGPXDocumentPrimitives.h */,
-				DA5A7AB726C563A100F274C7 /* OAGPXDocumentPrimitives.mm */,
+				DA5A7AB726C563A100F274C7 /* OAGPXDocumentPrimitives.m */,
 				DA35963329B1EDEA009DF4D6 /* OANetworkRouteSelectionTask.h */,
 				DA35963429B1EDEA009DF4D6 /* OANetworkRouteSelectionTask.mm */,
 				05DACD742C1B0E9A0023FAD9 /* OAXmlStreamReader.h */,
@@ -17153,7 +17153,7 @@
 				DA5A856626C563A900F274C7 /* OALocationsHolder.mm in Sources */,
 				DA5A81EF26C563A700F274C7 /* OAProfileDataUtils.m in Sources */,
 				DA5A839926C563A800F274C7 /* OAPluginPopupViewController.mm in Sources */,
-				DA5A81E326C563A700F274C7 /* OAGPXDocumentPrimitives.mm in Sources */,
+				DA5A81E326C563A700F274C7 /* OAGPXDocumentPrimitives.m in Sources */,
 				FA63F24E2AF3DC550040A0CE /* SensorWidgetDataField.swift in Sources */,
 				DA5A847A26C563A900F274C7 /* OADestinationLineDelegate.m in Sources */,
 				DA7B18DE2A1222AE0029967F /* OACurrentSpeedWidget.mm in Sources */,

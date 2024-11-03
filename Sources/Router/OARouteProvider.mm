@@ -453,7 +453,7 @@
 
 + (CLLocation *) createLocation:(OASWptPt *)pt
 {
-    CLLocation *loc = [[CLLocation alloc] initWithCoordinate:pt.position altitude:isnan(pt.ele) ? 0. : pt.ele horizontalAccuracy:isnan(pt.hdop) ? 0. : pt.hdop verticalAccuracy:0. course:0. speed:pt.speed timestamp:[NSDate dateWithTimeIntervalSince1970:pt.time]];
+    CLLocation *loc = [[CLLocation alloc] initWithCoordinate:pt.position altitude:isnan(pt.ele) ? 0. : pt.ele horizontalAccuracy:isnan(pt.hdop) ? 0. : pt.hdop verticalAccuracy:0. course:0. speed:pt.speed timestamp:[NSDate dateWithTimeIntervalSince1970:pt.time / 1000]];
     return loc;
 }
 

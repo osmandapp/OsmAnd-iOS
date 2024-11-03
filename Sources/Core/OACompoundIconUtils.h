@@ -10,7 +10,6 @@
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/CommonTypes.h>
-#include <OsmAndCore/GpxDocument.h>
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/SkiaUtilities.h>
 

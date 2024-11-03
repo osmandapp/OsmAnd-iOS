@@ -22,7 +22,6 @@
 #import "OAMapButtonsHelper.h"
 #import "OAWikiArticleHelper.h"
 #import "OAGPXDatabase.h"
-#import "OAGpxInfo.h"
 #import "OASizes.h"
 #import "AFNetworkReachabilityManagerWrapper.h"
 #import "OAChoosePlanHelper.h"

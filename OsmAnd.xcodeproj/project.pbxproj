@@ -16008,11 +16008,15 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
+				"$(SRCROOT)/../android/build.gradle",
+				"$(SRCROOT)/../android/OsmAnd-shared/build.gradle.kts",
+				"$(SRCROOT)/../android/OsmAnd-shared/src/",
 			);
 			name = "Compile OsmAnd Shared Library";
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/OsmAndShared.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

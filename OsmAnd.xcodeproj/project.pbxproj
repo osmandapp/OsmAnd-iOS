@@ -13938,12 +13938,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BBA3AFEB197FC4BB0039D991 /* Build configuration list for PBXNativeTarget "OsmAnd Maps" */;
 			buildPhases = (
+				DA8713222994F6760087BC7F /* Download regions.ocbf */,
 				AF14F5BAF310756CC774D687 /* [CP] Check Pods Manifest.lock */,
 				8401FCFC1EE4723B00238915 /* Copy phrases */,
 				053CBFB62B9C907500E8C400 /* Compile OsmAnd Shared Library */,
 				BBA3AF34197FC4BB0039D991 /* Sources */,
 				BBA3AF66197FC4BB0039D991 /* Frameworks */,
-				DA8713222994F6760087BC7F /* Download regions.ocbf */,
 				BBA3AF82197FC4BB0039D991 /* Resources */,
 				FA45668A2AFB839000B07165 /* Run Script: SwiftLint */,
 				DA7F2596231A697300E54F77 /* Embed Frameworks */,
@@ -16042,8 +16042,10 @@
 		};
 		8401FCFC1EE4723B00238915 /* Copy phrases */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			files = (
+			);
+			inputFileListPaths = (
 			);
 			inputPaths = (
 			);
@@ -16078,7 +16080,8 @@
 		};
 		DA8713222994F6760087BC7F /* Download regions.ocbf */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 8;
+			alwaysOutOfDate = 1;
+			buildActionMask = 12;
 			files = (
 			);
 			inputFileListPaths = (
@@ -16090,9 +16093,9 @@
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Download the new version each build (does not fail the buld if there's no Internet)\ncurl -o ${SRCROOT}/Resources/Shipped/regions.ocbf https://creator.osmand.net/basemap/regions.ocbf ||:\n";
+			shellScript = "# Download the new version only if the remote file is newer\ncurl -z ${SRCROOT}/Resources/Shipped/regions.ocbf -o ${SRCROOT}/Resources/Shipped/regions.ocbf https://creator.osmand.net/basemap/regions.ocbf ||:\n";
 		};
 		FA45668A2AFB839000B07165 /* Run Script: SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;

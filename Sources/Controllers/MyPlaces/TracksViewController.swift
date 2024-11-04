@@ -133,6 +133,8 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     override func registerObservers() {
         addObserver(OAAutoObserverProxy(self, withHandler: #selector(onObservedRecordedTrackChanged), andObserve: app.trackRecordingObservable))
         addObserver(OAAutoObserverProxy(self, withHandler: #selector(onObservedRecordedTrackChanged), andObserve: app.trackStartStopRecObservable))
+        
+        addNotification(NSNotification.Name.OAGPXImportDidFinish, selector: #selector(didFinishImport))
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -1153,6 +1155,11 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         }
     }
     
+    @objc private func didFinishImport() {
+        guard view.window != nil else { return }
+        updateAllFoldersVCData(forceLoad: true)
+    }
+    
     // MARK: - Files operations
     
     private func getAbsolutePath(_ relativeFilepath: String) -> String {
@@ -1520,6 +1527,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                 if let vc = MapSettingsGpxViewController() {
                     vc.delegate = self
                     show(vc)
+                    shouldReload = true
                 }
             } else if item.key == tracksFolderKey {
                 if let subfolderPath = item.obj(forKey: pathKey) as? String {

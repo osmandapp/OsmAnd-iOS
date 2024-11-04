@@ -29,6 +29,7 @@
 
 #define kImportFolderName @"import"
 
+NSNotificationName const OAGPXImportDidFinishNotification = @"OAGPXImportDidFinishNotification";
 
 @interface OAGPXImportUIHelper () <UIDocumentPickerDelegate>
 @end
@@ -406,8 +407,18 @@ static UIViewController *parentController;
     _importUrl = nil;
     _newGpxName = nil;
 
-    if (doRefresh && _delegate) {
-        [_delegate updateDelegateVCData];
+    if (doRefresh)
+    {
+        if (_delegate)
+        {
+            [_delegate updateDelegateVCData];
+        }
+        else
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:OAGPXImportDidFinishNotification object:nil userInfo:nil];
+            });
+        }
     }
     return item;
 }

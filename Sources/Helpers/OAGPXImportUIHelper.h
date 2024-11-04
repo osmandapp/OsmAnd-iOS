@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+/// Sent when the GPX file has been fully imported into the app without a configured UI delegate.
+FOUNDATION_EXPORT NSNotificationName _Nonnull const OAGPXImportDidFinishNotification;
+
 @protocol OAGPXImportUIHelperDelegate <NSObject>
 
 - (void) updateDelegateVCData;

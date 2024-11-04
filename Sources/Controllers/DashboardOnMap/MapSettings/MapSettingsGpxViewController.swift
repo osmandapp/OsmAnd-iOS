@@ -146,6 +146,11 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         updateSelectedRows()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        updateContent()
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         if let searchController, searchController.isActive {
@@ -539,12 +544,16 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
                            deleteOriginalFile: false,
                            openTrack: false,
                            trackItem: track)
+        updateContent()
+        updateBottomButtons()
+        delegate?.onVisibleTracksUpdate()
+    }
+    
+    private func updateContent() {
         loadGpxTracks()
         loadVisibleTracks()
         loadRecentlyVisibleTracks()
         updateData()
-        updateBottomButtons()
-        delegate?.onVisibleTracksUpdate()
     }
     
     private func onTrackRenameClicked(track: TrackItem) {

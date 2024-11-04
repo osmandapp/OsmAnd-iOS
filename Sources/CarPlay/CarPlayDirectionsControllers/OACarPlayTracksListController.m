@@ -8,15 +8,21 @@
 
 #import "OACarPlayTracksListController.h"
 #import "OACarPlayTrackResultListController.h"
-#import "OALoadGpxTask.h"
-#import "OAGpxInfo.h"
 #import "OAColors.h"
 #import "Localization.h"
+#import "OsmAndApp.h"
+#import "OsmAndSharedWrapper.h"
+
 #import <CarPlay/CarPlay.h>
+
+@interface OACarPlayTracksListController()<OASTrackFolderLoaderTaskLoadTracksListener>
+
+@end
 
 @implementation OACarPlayTracksListController
 {
     OACarPlayTrackResultListController *_trackResultController;
+    OASTrackFolderLoaderTask *_folderLoaderTask;
 }
 
 - (NSString *)screenTitle
@@ -37,35 +43,44 @@
 
 - (void) populateListWithTracks
 {
-    OALoadGpxTask *task = [[OALoadGpxTask alloc] init];
-    [task execute:^(NSDictionary<NSString *, NSArray<OAGpxInfo *> *>* gpxFolders) {
-        [self updateList:gpxFolders];
+    if (_folderLoaderTask)
+        [_folderLoaderTask cancel];
+
+    OASKFile *file = [[OASKFile alloc] initWithFilePath:OsmAndApp.instance.gpxPath];
+    OASTrackFolder *rootFolder = [[OASTrackFolder alloc] initWithDirFile:file parentFolder:nil];
+    _folderLoaderTask = [[OASTrackFolderLoaderTask alloc] initWithFolder:rootFolder listener:self forceLoad:NO];
+    OASKotlinArray<OASKotlinUnit *> *emptyArray = [OASKotlinArray<OASKotlinUnit *> arrayWithSize:0 init:^OASKotlinUnit *(OASInt *index) {
+        return nil;
     }];
+    [_folderLoaderTask executeParams:emptyArray];
 }
 
-- (void) updateList:(NSDictionary<NSString *, NSArray<OAGpxInfo *> *> *)gpxByFolder
+- (void) updateList:(OASTrackFolder *)rootFolder
 {
-    if (gpxByFolder.count > 0)
+    if (!rootFolder.isEmpty)
     {
         NSMutableArray<CPListItem *> *listItems = [NSMutableArray new];
-        NSMutableArray<OAGpxInfo *> *lastModifiedList = [NSMutableArray new];
-        [gpxByFolder enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSArray<OAGpxInfo *> * _Nonnull obj, BOOL * _Nonnull stop) {
-            NSMutableArray<OAGpxInfo *> *gpxList = [NSMutableArray arrayWithArray:obj];
-            [self sortGpxItems:gpxList];
-            if (gpxList.count > CPListTemplate.maximumItemCount)
-                [gpxList removeObjectsInRange:NSMakeRange(CPListTemplate.maximumItemCount, gpxList.count - CPListTemplate.maximumItemCount)];
-            CPListItem *listItem = [[CPListItem alloc] initWithText:key.capitalizedString
-                                                         detailText:@(gpxList.count).stringValue
+        NSMutableArray<OASTrackItem *> *lastModifiedList = [NSMutableArray new];
+        NSArray<OASTrackFolder *> *trackFolders = [rootFolder.getFlattenedSubFolders arrayByAddingObject:rootFolder];
+        for (OASTrackFolder *folder in trackFolders)
+        {
+            NSMutableArray<OASTrackItem *> *trackItems = [NSMutableArray arrayWithArray:folder.getTrackItems];
+            [self sortGpxItems:trackItems];
+            if (trackItems.count > CPListTemplate.maximumItemCount)
+                [trackItems removeObjectsInRange:NSMakeRange(CPListTemplate.maximumItemCount, trackItems.count - CPListTemplate.maximumItemCount)];
+            NSString *folderName = folder == rootFolder ? OALocalizedString(@"shared_string_gpx_tracks") : folder.getName;
+            CPListItem *listItem = [[CPListItem alloc] initWithText:folderName
+                                                         detailText:@(trackItems.count).stringValue
                                                               image:[UIImage imageNamed:@"ic_custom_folder"]
                                                      accessoryImage:nil
                                                       accessoryType:CPListItemAccessoryTypeDisclosureIndicator];
-            listItem.userInfo = gpxList;
+            listItem.userInfo = trackItems;
             listItem.handler = ^(id <CPSelectableListItem> item, dispatch_block_t completionBlock) {
                 [self onItemSelected:item completionHandler:completionBlock];
             };
             [listItems addObject:listItem];
-            [lastModifiedList addObjectsFromArray:obj];
-        }];
+            [lastModifiedList addObjectsFromArray:trackItems];
+        }
         [listItems sortUsingComparator:^NSComparisonResult(CPListItem *i1, CPListItem *i2) {
             return [i1.text compare:i2.text];
         }];
@@ -96,11 +111,11 @@
     }
 }
 
-- (void)sortGpxItems:(NSMutableArray<OAGpxInfo *> *)gpxItems
+- (void)sortGpxItems:(NSMutableArray<OASTrackItem *> *)trackItems
 {
-    [gpxItems sortUsingComparator:^NSComparisonResult(OAGpxInfo *i1, OAGpxInfo *i2) {
-        NSTimeInterval lastTime1 = [i1 getFileDate].timeIntervalSince1970;
-        NSTimeInterval lastTime2 = [i2 getFileDate].timeIntervalSince1970;
+    [trackItems sortUsingComparator:^NSComparisonResult(OASTrackItem *i1, OASTrackItem *i2) {
+        int64_t lastTime1 = i1.lastModified;
+        int64_t lastTime2 = i2.lastModified;
         return (lastTime1 < lastTime2) ? NSOrderedDescending : ((lastTime1 == lastTime2) ? NSOrderedSame : NSOrderedAscending);
     }];
 }
@@ -108,8 +123,8 @@
 - (void)onItemSelected:(CPListItem * _Nonnull)item completionHandler:(dispatch_block_t)completionBlock
 {
     NSString *folderName = item.text;
-    NSArray<OAGpxInfo *> *gpxList = item.userInfo;
-    if (!gpxList)
+    NSArray<OASTrackItem *> *trackItems = item.userInfo;
+    if (!trackItems)
     {
         if (completionBlock)
             completionBlock();
@@ -117,11 +132,34 @@
     }
     _trackResultController = [[OACarPlayTrackResultListController alloc] initWithInterfaceController:self.interfaceController
                                                                                           folderName:folderName
-                                                                                             gpxList:gpxList];
+                                                                                          trackItems:trackItems];
     [_trackResultController present];
 
     if (completionBlock)
         completionBlock();
+}
+
+#pragma mark - OASTrackFolderLoaderTaskLoadTracksListener
+
+- (void)deferredLoadTracksFinishedFolder:(OASTrackFolder *)folder __attribute__((swift_name("deferredLoadTracksFinished(folder:)")))
+{
+}
+
+- (void)loadTracksFinishedFolder:(OASTrackFolder *)folder __attribute__((swift_name("loadTracksFinished(folder:)")))
+{
+    [self updateList:folder];
+}
+
+- (void)loadTracksProgressItems:(OASKotlinArray<OASTrackItem *> *)items __attribute__((swift_name("loadTracksProgress(items:)")))
+{
+}
+
+- (void)loadTracksStarted __attribute__((swift_name("loadTracksStarted()")))
+{
+}
+
+- (void)tracksLoadedFolder:(OASTrackFolder *)folder __attribute__((swift_name("tracksLoaded(folder:)")))
+{
 }
 
 @end

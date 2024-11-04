@@ -23,7 +23,6 @@
 #import "OAMapActions.h"
 #import "OAMeasurementEditingContext.h"
 #import "OAGpxData.h"
-#import "OAGpxInfo.h"
 #import "OATargetPointsHelper.h"
 #import "OAGPXUIHelper.h"
 #import "OAOsmAndFormatter.h"

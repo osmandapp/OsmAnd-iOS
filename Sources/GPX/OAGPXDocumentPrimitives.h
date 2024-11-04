@@ -11,9 +11,6 @@
 #import "OALocationPoint.h"
 #import "OsmAndSharedWrapper.h"
 
-#include <OsmAndCore.h>
-#include <OsmAndCore/GpxDocument.h>
-
 #define ICON_NAME_EXTENSION_KEY @"icon"
 #define BACKGROUND_TYPE_EXTENSION_KEY @"background"
 #define COLOR_NAME_EXTENSION_KEY @"color"
@@ -61,10 +58,6 @@ typedef NS_ENUM(NSInteger, EOAGPXColor)
     TEAL
 };
 
-@class OAPOI;
-
-struct RouteDataBundle;
-
 @interface OAGPXColor : NSObject
 
 @property (nonatomic) EOAGPXColor type;
@@ -78,219 +71,10 @@ struct RouteDataBundle;
 
 @end
 
-@interface OAGpxExtension : NSObject <NSCopying>
-
-@property (nonatomic) NSString *prefix;
-@property (nonatomic) NSString *name;
-@property (nonatomic) NSString *value;
-@property (nonatomic) NSDictionary *attributes;
-@property (nonatomic) NSArray *subextensions;
-
-@end
-
-@interface OAGpxExtensions : NSObject
-
-@property (nonatomic) NSDictionary *attributes;
-@property (nonatomic) NSString *value;
-@property (nonatomic) NSArray<OAGpxExtension *> *extensions;
-
-- (void) copyExtensions:(OAGpxExtensions *)e;
-- (OAGpxExtension *) getExtensionByKey:(NSString *)key;
-- (void) addExtension:(OAGpxExtension *)e;
-- (void) removeExtension:(OAGpxExtension *)e;
-- (void) setExtension:(NSString *)key value:(NSString *)value;
-
-- (NSArray<OAGpxExtension *> *) fetchExtension:(QList<OsmAnd::Ref<OsmAnd::GpxExtensions::GpxExtension>>)extensions;
-- (void) fetchExtensions:(std::shared_ptr<OsmAnd::GpxExtensions>)extensions;
-
-- (void) fillExtension:(const std::shared_ptr<OsmAnd::GpxExtensions::GpxExtension>&)extension ext:(OAGpxExtension *)e;
-- (void) fillExtensions:(const std::shared_ptr<OsmAnd::GpxExtensions>&)extensions;
-
-- (int) getColor:(int)defColor;
-- (void) setColor:(int)value;
-
-@end
-
-@interface OALink : OAGpxExtensions
+@interface OALink : NSObject <NSCopying>
 
 @property (nonatomic) NSURL *url;
 @property (nonatomic) NSString *text;
 @property (nonatomic) NSString *type;
-
-@end
-
-@interface OAAuthor : OAGpxExtensions
-
-@property (nonatomic, copy) NSString *name;
-@property (nonatomic, copy) NSString *email;
-@property (nonatomic) OALink *link;
-
-@end
-
-@interface OACopyright : OAGpxExtensions
-
-@property (nonatomic, copy) NSString *author;
-@property (nonatomic, copy) NSString *year;
-@property (nonatomic, copy) NSString *license;
-
-@end
-
-@interface OAMetadata : OAGpxExtensions
-
-@property (nonatomic) NSString *name;
-@property (nonatomic) NSString *desc;
-@property (nonatomic) NSArray<OALink *> *links;
-@property (nonatomic, copy) NSString *keywords;
-@property (nonatomic) long time;
-@property (nonatomic) OAAuthor *author;
-@property (nonatomic) OACopyright *copyright;
-
-@end
-
-@interface OAWptPt : OAGpxExtensions<OALocationPoint>
-
-@property (nonatomic, assign) std::shared_ptr<OsmAnd::GpxDocument::WptPt> wpt;
-
-@property (nonatomic) BOOL firstPoint;
-@property (nonatomic) BOOL lastPoint;
-@property (nonatomic) CLLocationCoordinate2D position;
-@property (nonatomic) NSString *name;
-@property (nonatomic) NSString *desc;
-@property (nonatomic) CLLocationDistance elevation;
-@property (nonatomic) long time;
-@property (nonatomic) NSString *comment;
-@property (nonatomic) NSString *type;
-@property (nonatomic) NSArray<OALink *> *links;
-@property (nonatomic) double distance;
-@property (nonatomic) double speed;
-@property (nonatomic) double horizontalDilutionOfPrecision;
-@property (nonatomic) double verticalDilutionOfPrecision;
-@property (nonatomic) double heading;
-
-- (instancetype)initWithWpt:(OAWptPt *)wptPt;
-
-- (NSString *)getIcon;
-- (void)setIcon:(NSString *)iconName;
-- (NSString *)getBackgroundIcon;
-- (void)setBackgroundIcon:(NSString *)backgroundIconName;
-- (NSString *)getAddress;
-
-- (NSString *) getProfileType;
-- (void) setProfileType:(NSString *)profileType;
-- (void) removeProfileType;
-- (BOOL) hasProfile;
-- (BOOL) isGap;
-- (void) setGap;
-
-- (NSInteger) getTrkPtIndex;
-- (void) setTrkPtIndex:(NSInteger)index;
-
-- (OAPOI *) getAmenity;
-- (void) setAmenity:(OAPOI *)amenity;
-
-- (NSString *) getAmenityOriginName;
-- (void) setAmenityOriginName:(NSString *)originName;
-
-@end
-
-@interface OARouteSegment : NSObject
-
-@property (nonatomic) NSString *identifier;
-@property (nonatomic) NSString *length;
-@property (nonatomic) NSString *startTrackPointIndex;
-@property (nonatomic) NSString *segmentTime;
-@property (nonatomic) NSString *speed;
-@property (nonatomic) NSString *turnType;
-@property (nonatomic) NSString *turnAngle;
-@property (nonatomic) NSString *types;
-@property (nonatomic) NSString *pointTypes;
-@property (nonatomic) NSString *names;
-
-+ (OARouteSegment *) fromStringBundle:(const std::shared_ptr<RouteDataBundle> &)bundle;
-- (std::shared_ptr<RouteDataBundle>) toStringBundle;
-
-- (instancetype) initWithDictionary:(NSDictionary<NSString *, NSString *> *)dict;
-- (instancetype) initWithRteSegment:(OsmAnd::Ref<OsmAnd::GpxDocument::RouteSegment> &)seg;
-
-- (NSDictionary<NSString *, NSString *> *) toDictionary;
-
-@end
-
-@interface OARouteType : NSObject
-
-@property (nonatomic) NSString *tag;
-@property (nonatomic) NSString *value;
-
-+ (OARouteType *) fromStringBundle:(const std::shared_ptr<RouteDataBundle> &)bundle;
-- (std::shared_ptr<RouteDataBundle>) toStringBundle;
-
-- (instancetype) initWithDictionary:(NSDictionary<NSString *, NSString *> *)dict;
-- (instancetype) initWithRteType:(OsmAnd::Ref<OsmAnd::GpxDocument::RouteType> &)type;
-
-- (NSDictionary<NSString *, NSString *> *) toDictionary;
-
-@end
-
-@class OASplitMetric;
-
-@interface OATrkSegment : OAGpxExtensions
-
-@property (nonatomic, assign) std::shared_ptr<OsmAnd::GpxDocument::TrkSegment> trkseg;
-@property (nonatomic) BOOL generalSegment;
-
-@property (nonatomic) NSString *name;
-@property (nonatomic) NSArray<OAWptPt *> *points;
-
-@property (nonatomic) NSMutableArray<OARouteSegment *> *routeSegments;
-@property (nonatomic) NSMutableArray<OARouteType *> *routeTypes;
-
-- (BOOL) hasRoute;
-
-- (void) fillExtensions;
-- (void) fillRouteDetails;
-
-@end
-
-@interface OATrack : OAGpxExtensions
-
-@property (nonatomic, assign) std::shared_ptr<OsmAnd::GpxDocument::Track> trk;
-
-@property (nonatomic) NSString *name;
-@property (nonatomic) NSString *desc;
-@property (nonatomic) NSArray<OATrkSegment *> *segments;
-@property (nonatomic) NSString *source;
-@property (nonatomic) int slotNumber;
-@property (nonatomic) BOOL generalTrack;
-
-@end
-
-@interface OARoute : OAGpxExtensions
-
-@property (nonatomic, assign) std::shared_ptr<OsmAnd::GpxDocument::Route> rte;
-
-@property (nonatomic) NSString *name;
-@property (nonatomic) NSString *desc;
-@property (nonatomic) NSArray<OAWptPt *> *points;
-@property (nonatomic) NSString *source;
-@property (nonatomic) int slotNumber;
-
-@end
-
-@interface OAPointsGroup : NSObject
-
-@property (nonatomic, assign) std::shared_ptr<OsmAnd::GpxDocument::PointsGroup> pg;
-
-@property (nonatomic, readonly) NSString *name;
-@property (nonatomic) NSString *iconName;
-@property (nonatomic) NSString *backgroundType;
-@property (nonatomic) NSArray<OASWptPt *> *points;
-@property (nonatomic) UIColor *color;
-
-- (instancetype)initWithName:(NSString *)name;
-- (instancetype)initWithName:(NSString *)name iconName:(NSString *)iconName backgroundType:(NSString *)backgroundType color:(UIColor *)color;
-- (instancetype)initWithWptPt:(OASWptPt *)point;
-- (NSUInteger)hash;
-- (BOOL)isEqual:(id)object;
-- (NSDictionary *)toStringBundle;
 
 @end

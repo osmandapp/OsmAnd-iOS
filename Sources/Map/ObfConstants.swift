@@ -40,7 +40,7 @@ class ObfConstants : NSObject {
     
     static func getOsmObjectId(_ object: OAPOI) -> Int {
         var originalId = -1
-        var obfId = Int(object.obfId) // ? 1127717428621312
+        var obfId = Int(object.obfId)
         if obfId != -1 {
             if object.isRenderedObject {
                 obfId >>= 1

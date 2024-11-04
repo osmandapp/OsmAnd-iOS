@@ -795,18 +795,19 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     }
 
     long long objectId = self.poi.obfId;
-    if (osmEditingEnabled && (objectId > 0 && ((objectId % 2 == AMENITY_ID_RIGHT_SHIFT) || (objectId >> NON_AMENITY_ID_RIGHT_SHIFT) < INT_MAX)))
+    if (osmEditingEnabled && (objectId > 0 && ((objectId % 2 == AMENITY_ID_RIGHT_SHIFT) || (objectId >> NON_AMENITY_ID_RIGHT_SHIFT) < INT_MAX || self.poi.isRenderedObject)))
     {
         OAPOIType *poiType = self.poi.type;
         BOOL isAmenity = poiType && ![poiType isKindOfClass:[OAPOILocationType class]];
 
         long long entityId = objectId >> (isAmenity ? AMENITY_ID_RIGHT_SHIFT : NON_AMENITY_ID_RIGHT_SHIFT);
         BOOL isWay = objectId % 2 == WAY_MODULO_REMAINDER; // check if mapObject is a way
-        NSString *link = isWay ? @"https://www.openstreetmap.org/way/" : @"https://www.openstreetmap.org/node/";
+        
+        NSString * link = [OAObfConstants getOsmUrlForId:self.poi];
         [rows addObject:[[OARowInfo alloc] initWithKey:nil
                                                   icon:[UIImage imageNamed:@"ic_custom_osm_edits"]
                                             textPrefix:nil
-                                                  text:[NSString stringWithFormat:@"%@%llu", link, entityId]
+                                                  text:link
                                              textColor:[UIColor colorNamed:ACColorNameTextColorActive]
                                                 isText:YES
                                              needLinks:YES

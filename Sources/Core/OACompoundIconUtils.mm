@@ -24,7 +24,6 @@
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/CommonTypes.h>
-#include <OsmAndCore/GpxDocument.h>
 #include <OsmAndCore/IFavoriteLocation.h>
 
 @implementation OACompoundIconUtils

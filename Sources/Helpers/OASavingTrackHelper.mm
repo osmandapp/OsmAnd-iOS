@@ -592,7 +592,7 @@
                         if (pluginsInfo && pluginsInfo.length > 0)
                         {
                             NSDictionary<NSString *, NSString *> *extensions = [self getPluginsExtensions:pluginsInfo];
-                            [OASGpxUtilities.shared assignExtensionWriterWptPt:pt extensions:extensions];
+                            [OASGpxUtilities.shared assignExtensionWriterWptPt:pt extensions:extensions regularExtensionsKey:@"plugins"];
                         }
                     }
 
@@ -795,7 +795,7 @@
     OASWptPt *ptNew = [[OASWptPt alloc] initWithLat:lat lon:lon time:time ele:alt speed:speed hdop:hdop heading:heading];
     if (extensions.count > 0)
     {
-        [OASGpxUtilities.shared assignExtensionWriterWptPt:ptNew extensions:extensions];
+        [OASGpxUtilities.shared assignExtensionWriterWptPt:ptNew extensions:extensions regularExtensionsKey:@"plugins"];
     }
     [self addTrackPointNew:ptNew newSegment:newSegment time:time];
 }

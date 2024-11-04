@@ -39,26 +39,3 @@ class SensorDataField {
         return FormattedValue(valueSrc: number, value: value ?? "-", unit: unitNameId);
     }
 }
-
-@objcMembers
-final class FormattedValue: NSObject {
-    let value: String
-    let unit: String?
-    let valueSrc: Float
-    
-    private let separateWithSpace: Bool
-    
-    init(valueSrc: Float, value: String, unit: String?) {
-        self.value = value
-        self.valueSrc = valueSrc
-        self.unit = unit
-        self.separateWithSpace = true
-    }
-    
-    init(valueSrc: Float, value: String, unit: String?, separateWithSpace: Bool) {
-        self.value = value
-        self.valueSrc = valueSrc
-        self.unit = unit
-        self.separateWithSpace = separateWithSpace
-    }
-}

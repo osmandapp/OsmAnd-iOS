@@ -147,8 +147,7 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
 
        double realScreenWidthInMeters = pixWidth / pixelsPerMeter;
 
-       OAMapRendererView *mapRendererView = [OARootViewController instance].mapPanel.mapViewController.mapView;
-       double mapScreenWidthInMeters = mapRendererView.currentPixelsToMetersScaleFactor * pixWidth;
+       double mapScreenWidthInMeters = _rendererView.currentPixelsToMetersScaleFactor * pixWidth;
 
        return (int)(mapScreenWidthInMeters / realScreenWidthInMeters);
 }

@@ -22,7 +22,6 @@
 #import "OAMapButtonsHelper.h"
 #import "OAWikiArticleHelper.h"
 #import "OAGPXDatabase.h"
-#import "OAGpxInfo.h"
 #import "OASizes.h"
 #import "AFNetworkReachabilityManagerWrapper.h"
 #import "OAChoosePlanHelper.h"
@@ -175,6 +174,7 @@
 #import "OAColorsCollectionViewCell.h"
 #import "OATitleIconProgressbarCell.h"
 #import "OAIconsCollectionViewCell.h"
+#import "OARangeSlider.h"
 #import "OATitleDescrDraggableCell.h"
 
 // Views

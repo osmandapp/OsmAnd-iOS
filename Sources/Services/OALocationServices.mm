@@ -635,6 +635,8 @@
 
 - (void) setLocationFromSimulation:(CLLocation *)location
 {
+    _lastHeading = location.course;
+    _lastMagneticHeading = location.course;
     [self setLocation:location];
 }
 

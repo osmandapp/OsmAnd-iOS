@@ -1839,6 +1839,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         return;
     
     OAZoom *zoom = [[OAZoom alloc] initWitZoom:_mapView.zoom minZoom:_mapView.minZoom maxZoom:_mapView.maxZoom];
+    int previousZoom = [zoom getBaseZoom];
     
     if (zoomStep > 0 && ![zoom isZoomInAllowed])
     {
@@ -1866,21 +1867,28 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     
     if (adjustTiltAngle)
     {
-        [self adjustTiltAngle:zoom];
+        [self adjustTiltAngle:zoom previousZoom:previousZoom];
     }
 }
 
-- (void) adjustTiltAngle:(OAZoom *)zoom
+- (void) adjustTiltAngle:(OAZoom *)zoom previousZoom:(int)previousZoom
 {
     int baseZoom = [zoom getBaseZoom];
     if (baseZoom >= kMinZoomLevelToAjustCameraTilt && baseZoom <= kMaxZoomLimit)
     {
-        int angle = 90 - (baseZoom - 2) * 5;
-        if (angle >= kMinAllowedElevationAngle && angle < kDefaultElevationAngle)
+        float previousAngle = _mapView.elevationAngle;
+        int angle = [self getAdjustedTiltAngle:baseZoom];
+        if (baseZoom >= previousZoom || angle >= previousAngle)
         {
             [[OAMapViewTrackingUtilities instance] startTilting:angle timePeriod:kQuickAnimationTime];
         }
     }
+}
+
+- (int) getAdjustedTiltAngle:(int)baseZoom
+{
+    int angle = 90 - (baseZoom - 2) * 5;
+    return MAX(kMinAllowedElevationAngle, MIN(angle, kDefaultElevationAngle));
 }
 
 - (void) animatedPanUp

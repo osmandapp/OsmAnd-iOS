@@ -556,7 +556,7 @@
 "map_markers_other" = "Інші позначки";
 "directions_other" = "Інші напрями";
 "shared_string_turn" = "Поворот";
-"stop_routing_confirm" = "Зупинити навігацію\?";
+"stop_routing_confirm" = "Зупинити навігацію?";
 "cancel_route" = "Відхилити маршрут\?";
 "route_is_too_long_v2" = "Для великих відстаней: Додайте проміжні пункти призначення, якщо протягом 10 хвилин не буде знайдено жодного маршруту.";
 "navigation_over_track" = "Почати навігацію по треку\?";
@@ -1621,7 +1621,7 @@
 "nav_type_osmand" = "OsmAnd (автономний режим)";
 "nav_type_descr" = "Виберіть спосіб обчислення маршруту для цього профілю";
 "quick_action_dir_from_descr" = "Торкніться цієї кнопки, щоб розпочати навігацію з місця в центрі екрана.";
-"board_at" = "Приземлення на";
+"board_at" = "Посадка на";
 "base_profile_descr_boat" = "Корабель, веслування, вітрильний спорт";
 "base_profile_descr_public_transport" = "Види громадського транспорту";
 "base_profile_descr_pedestrian" = "Пересування пішки, піший туризм, біг";

@@ -6,9 +6,8 @@
 //  Copyright © 2024 OsmAnd. All rights reserved.
 //
 
-import Foundation
-
-final class FormattedValue {
+@objcMembers
+final class FormattedValue: NSObject {
     let value: String
     let unit: String?
     let valueSrc: Float

@@ -695,6 +695,25 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 @end
 
+typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
+{
+    EOAWidgetZoom,
+    EOAWidgetMapScale
+};
+
+
+@interface OACommonWidgetZoomLevelType : OACommonInteger
+
++ (instancetype)withKey:(NSString *)key defValue:(EOAWidgetZoomLevelType)defValue;
+
+- (EOAWidgetZoomLevelType)get;
+- (EOAWidgetZoomLevelType)get:(OAApplicationMode *)mode;
+- (void)set:(EOAWidgetZoomLevelType)type;
+- (void)set:(EOAWidgetZoomLevelType)type mode:(OAApplicationMode *)mode;
+
+@end
+
+
 @interface OACommonDayNightMode : OACommonInteger
 
 @end
@@ -1044,6 +1063,8 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 - (OACommonLong *)registerLongPreference:(NSString *)key defValue:(long)defValue;
 - (OACommonDouble *)registerFloatPreference:(NSString *)key defValue:(double)defValue;
 - (OACommonWidgetSizeStyle *)registerWidgetSizeStylePreference:(NSString *)key defValue:(EOAWidgetSizeStyle)defValue;
+
+- (OACommonWidgetZoomLevelType *)registerWidgetZoomLevelTypePreference:(NSString *)key defValue:(EOAWidgetZoomLevelType)defValue;
 - (void)resetPreferencesForProfile:(OAApplicationMode *)mode;
 
 // Direction Appearance

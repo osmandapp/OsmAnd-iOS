@@ -3942,6 +3942,5 @@
 "daynight_mode_day_summary" = "Always displays the map in a light theme, ideal for daytime visibility.";
 
 "rendering_attr_showDirtbikeTrails_name" = "Dirt bike trails";
-"rendering_attr_showDirtbikeTrails_description" = "Show dirt bike trails";;
-
-;
+"rendering_attr_showDirtbikeTrails_description" = "Show dirt bike trails";
+"map_widget_map_scale" = "Map scale";

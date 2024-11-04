@@ -16,6 +16,9 @@
 #define SEPARATOR @"+"
 #define SEPARATOR_POSITION 8
 
+static NSString *kLTRMark = @"\u200e";  // left-to-right mark
+static NSString *kRTLMark = @"\u200f";  // right-to-right mark
+
 @implementation OAParsedOpenLocationCode
 {
     
@@ -103,6 +106,8 @@
 {
     // detect MGRS
     //get rid of all the whitespaces
+    s = [s stringByReplacingOccurrencesOfString:kLTRMark withString:@""];
+    s = [s stringByReplacingOccurrencesOfString:kRTLMark withString:@""];
     NSArray<NSString *> *mgrsSplit = [s componentsSeparatedByString:@" "];
     NSMutableString *mgrsStr = [NSMutableString stringWithString:@""];
     for (NSString *i in mgrsSplit)

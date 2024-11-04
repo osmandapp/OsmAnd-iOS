@@ -3944,3 +3944,6 @@
 "rendering_attr_showDirtbikeTrails_name" = "Dirt bike trails";
 "rendering_attr_showDirtbikeTrails_description" = "Show dirt bike trails";
 "map_widget_map_scale" = "Map scale";
+"transport_stop" = "Stop";
+
+;

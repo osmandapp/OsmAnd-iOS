@@ -772,6 +772,7 @@ static const float kDistanceMeters = 100.0;
 
 - (void)handleSingleTapCompass
 {
+    [[OAAppSettings sharedManager].mapManuallyRotatingAngle set:0];
     [[OAMapViewTrackingUtilities instance] animatedAlignAzimuthToNorth];
 }
 

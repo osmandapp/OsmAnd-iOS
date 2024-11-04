@@ -275,8 +275,7 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
 
 - (BOOL)updateInfo
 {
-    OAMapRendererView *mapView = (OAMapRendererView *) [OARootViewController instance].mapPanel.mapViewController.view;
-    OsmAnd::LatLon centerLatLon = OsmAnd::Utilities::convert31ToLatLon(mapView.target31);
+    OsmAnd::LatLon centerLatLon = OsmAnd::Utilities::convert31ToLatLon(_rendererView.target31);
     
     int x31 = OsmAnd::Utilities::get31TileNumberX(centerLatLon.longitude);
     int y31 = OsmAnd::Utilities::get31TileNumberY(centerLatLon.latitude);
@@ -285,9 +284,9 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
     auto newCenterY = y31 >> ZOOM_OFFSET_FROM_31;
     
     EOAWidgetZoomLevelType newZoomLevelType = [_widgetState getZoomLevelType];
-    OAZoom *zoomObject = [[OAZoom alloc] initWitZoom:mapView.zoom minZoom:mapView.minZoom maxZoom:mapView.maxZoom];
+    OAZoom *zoomObject = [[OAZoom alloc] initWitZoom:_rendererView.zoom minZoom:_rendererView.minZoom maxZoom:_rendererView.maxZoom];
     int baseZoom = [zoomObject getBaseZoom];
-    int newZoom = mapView.zoom;
+    int newZoom = _rendererView.zoom;
     
     float newZoomFloatPart = [zoomObject getZoomFloatPart] + [zoomObject getZoomAnimation];
     float newMapDensity = [[OAAppSettings sharedManager].mapDensity get];

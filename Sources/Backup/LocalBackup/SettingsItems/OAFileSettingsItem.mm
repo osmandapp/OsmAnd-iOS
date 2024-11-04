@@ -155,7 +155,7 @@
             }
             case EOASettingsItemFileSubtypeObfMap:
             {
-                if ([name hasSuffix:BINARY_MAP_INDEX_EXT])
+                if ([name hasSuffix:BINARY_MAP_INDEX_EXT] && ![name hasSuffix:BINARY_TRAVEL_GUIDE_MAP_INDEX_EXT])
                     return subtype;
                 break;
             }
@@ -185,7 +185,7 @@
             }
             case EOASettingsItemFileSubtypeTravel:
             {
-                if ([name hasSuffix:BINARY_WIKIVOYAGE_MAP_INDEX_EXT] && [name.lowercaseString containsString:@"travel"])
+                if ([name hasSuffix:BINARY_TRAVEL_GUIDE_MAP_INDEX_EXT] || ([name hasSuffix:BINARY_WIKIVOYAGE_MAP_INDEX_EXT] && [name.lowercaseString containsString:@"travel"]))
                     return subtype;
                 break;
             }
@@ -227,7 +227,7 @@
 
 + (BOOL) isMap:(EOASettingsItemFileSubtype)type
 {
-    return type == EOASettingsItemFileSubtypeObfMap || type == EOASettingsItemFileSubtypeWikiMap || type == EOASettingsItemFileSubtypeSrtmMap || type == EOASettingsItemFileSubtypeTilesMap || type == EOASettingsItemFileSubtypeRoadMap || type == EOASettingsItemFileSubtypeNauticalDepth;
+    return type == EOASettingsItemFileSubtypeObfMap || type == EOASettingsItemFileSubtypeWikiMap || type == EOASettingsItemFileSubtypeSrtmMap || type == EOASettingsItemFileSubtypeTilesMap || type == EOASettingsItemFileSubtypeRoadMap || type == EOASettingsItemFileSubtypeNauticalDepth || type == EOASettingsItemFileSubtypeTravel;
 }
 
 + (NSString *) getIcon:(EOASettingsItemFileSubtype)subtype

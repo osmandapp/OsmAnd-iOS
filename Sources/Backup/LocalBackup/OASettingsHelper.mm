@@ -831,9 +831,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
                     [routingFilesList addObject:fileItem.filePath];
                 else if (fileItem.subtype == EOASettingsItemFileSubtypeColorPalette)
                     [colorPaletteFilesList addObject:fileItem.filePath];
-                
-                //TODO: why terrain without type?
-                else if (fileItem.subtype == EOASettingsItemFileSubtypeWikiMap || [[fileItem.filePath lowercaseString] hasSuffix:@"travel.obf"])
+                else if (fileItem.subtype == EOASettingsItemFileSubtypeWikiMap || fileItem.subtype == EOASettingsItemFileSubtypeTravel)
                     [wikiFilesList addObject:fileItem];
                 else if (fileItem.subtype == EOASettingsItemFileSubtypeNauticalDepth)
                     [nauticalFilesList addObject:fileItem];

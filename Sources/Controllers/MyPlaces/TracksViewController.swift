@@ -27,7 +27,7 @@ private enum ButtonActionNumberTag: Int {
     case save = 2
 }
 
-final class TracksViewController: OACompoundViewController, UITableViewDelegate, UITableViewDataSource, OATrackSavingHelperUpdatableDelegate, TrackListUpdatableDelegate, OASelectTrackFolderDelegate, OAGPXImportUIHelperDelegate, MapSettingsGpxViewControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate, FilterChangedListener {
+final class TracksViewController: OACompoundViewController, UITableViewDelegate, UITableViewDataSource, OATrackSavingHelperUpdatableDelegate, TrackListUpdatableDelegate, OASelectTrackFolderDelegate, MapSettingsGpxViewControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate, FilterChangedListener {
     
     @IBOutlet private weak var tableView: UITableView!
     
@@ -115,7 +115,6 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         importHelper = OAGPXImportUIHelper()
         super.init(coder: coder)
         importHelper = OAGPXImportUIHelper(hostViewController: self)
-        importHelper.delegate = self
     }
     
     private func onLoadFinished(folder: TrackFolder) {
@@ -133,8 +132,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     override func registerObservers() {
         addObserver(OAAutoObserverProxy(self, withHandler: #selector(onObservedRecordedTrackChanged), andObserve: app.trackRecordingObservable))
         addObserver(OAAutoObserverProxy(self, withHandler: #selector(onObservedRecordedTrackChanged), andObserve: app.trackStartStopRecObservable))
-        
-        addNotification(NSNotification.Name.OAGPXImportDidFinish, selector: #selector(didFinishImport))
+        addNotification(NSNotification.Name.OAGPXImportUIHelperDidFinishImport, selector: #selector(didFinishImport))
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -1761,12 +1759,6 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                 self.updateFilterButtonTitle()
             }
         }
-    }
-    
-    // MARK: - OAGPXImportUIHelperDelegate
-    
-    func updateVCData() {
-        updateAllFoldersVCData(forceLoad: true)
     }
     
     // MARK: - MapSettingsGpxViewControllerDelegate

@@ -116,12 +116,12 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         loadGpxTracks()
         loadVisibleTracks()
         loadRecentlyVisibleTracks()
-        importHelper?.delegate = self
     }
     
     override func registerNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        addNotification(NSNotification.Name.OAGPXImportUIHelperDidFinishImport, selector: #selector(didFinishImport))
     }
     
     override func registerObservers() {
@@ -1015,6 +1015,12 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         importHelper?.onImportClicked()
     }
     
+    @objc private func didFinishImport() {
+        loadGpxTracks()
+        updateData()
+        updateBottomButtons()
+    }
+    
     @objc private func onCellButtonClicked(sender: UIButton) {
         let indexPath: IndexPath = IndexPath(row: sender.tag & 0x3FF, section: sender.tag >> 10)
         let item: OATableRowData = tableData.item(for: indexPath)
@@ -1085,16 +1091,6 @@ extension MapSettingsGpxViewController: UISearchBarDelegate {
         sortTracks()
         updateData()
         updateBottomButtons()
-    }
-}
-
-extension MapSettingsGpxViewController: OAGPXImportUIHelperDelegate {
-    func updateVCData() {
-        DispatchQueue.main.async {
-            self.loadGpxTracks()
-            self.updateData()
-            self.updateBottomButtons()
-        }
     }
 }
 

@@ -29,7 +29,7 @@
 
 #define kImportFolderName @"import"
 
-NSNotificationName const OAGPXImportDidFinishNotification = @"OAGPXImportDidFinishNotification";
+NSNotificationName const OAGPXImportUIHelperDidFinishImportNotification = @"OAGPXImportUIHelperDidFinishImporNotification";
 
 @interface OAGPXImportUIHelper () <UIDocumentPickerDelegate>
 @end
@@ -179,7 +179,7 @@ static UIViewController *parentController;
                 
                 _newGpxName = [newName copy];
 
-                OASGpxDataItem *gpx = [self doImport:YES];
+                OASGpxDataItem *gpx = [self doImport];
                 if (openGpxView)
                 {
                     [self doPush];
@@ -195,7 +195,7 @@ static UIViewController *parentController;
                 _newGpxName = nil;
                 [self removeFromDB];
 
-                OASGpxDataItem *gpx = [self doImport:YES];
+                OASGpxDataItem *gpx = [self doImport];
                 if (openGpxView)
                 {
                     [self doPush];
@@ -297,7 +297,7 @@ static UIViewController *parentController;
     else if ([_importUrl.pathExtension isEqualToString:KMZ_EXT])
         [self handleKmzImport];
     
-    // improt failed
+    // import failed
     if (!_importUrl)
         return;
     
@@ -323,7 +323,7 @@ static UIViewController *parentController;
         }
         else
         {
-            item = [self doImport:YES];
+            item = [self doImport];
         }
     }
     else
@@ -373,7 +373,7 @@ static UIViewController *parentController;
     });
 }
 
-- (OASGpxDataItem *)doImport:(BOOL)doRefresh
+- (OASGpxDataItem *)doImport
 {
     OASGpxDataItem *item;
     NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -407,19 +407,9 @@ static UIViewController *parentController;
     _importUrl = nil;
     _newGpxName = nil;
 
-    if (doRefresh)
-    {
-        if (_delegate)
-        {
-            [_delegate updateDelegateVCData];
-        }
-        else
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [[NSNotificationCenter defaultCenter] postNotificationName:OAGPXImportDidFinishNotification object:nil userInfo:nil];
-            });
-        }
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:OAGPXImportUIHelperDidFinishImportNotification object:nil userInfo:nil];
+    });
     return item;
 }
 
@@ -453,8 +443,6 @@ static UIViewController *parentController;
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self hideProgressHUD];
-        if (_delegate)
-            [_delegate updateDelegateVCData];
     });
 }
 
@@ -473,19 +461,7 @@ static UIViewController *parentController;
         || [ext isEqualToString:KMZ_EXT])
     {
         [self processUrl:url showAlerts:YES openGpxView:NO];
-        if (_delegate)
-            [_delegate updateDelegateVCData];
     }
-}
-
-#pragma mark - NewTracksFetched Notification
-
-- (void) onNewTracksFetched
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (_delegate)
-            [_delegate updateDelegateVCData];
-    });
 }
 
 @end

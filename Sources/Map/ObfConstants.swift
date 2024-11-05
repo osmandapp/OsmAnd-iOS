@@ -10,7 +10,7 @@ import Foundation
 
 @objc(OAObfConstants)
 @objcMembers
-class ObfConstants : NSObject {
+class ObfConstants: NSObject {
     
     static let SHIFT_MULTIPOLYGON_IDS = 43
     static let SHIFT_NON_SPLIT_EXISTING_IDS = 41
@@ -31,11 +31,9 @@ class ObfConstants : NSObject {
     static private let RELATION = "relation"
     
     static func getOsmUrlForId(_ object: OAPOI) -> String {
-        if let type = getOsmEntityType(object) {
-            var osmId = getOsmObjectId(object)
-            return "https://www.openstreetmap.org/" + type + "/" + String(osmId)
-        }
-        return ""
+        guard let type = getOsmEntityType(object) else { return "" }
+        let osmId = getOsmObjectId(object)
+        return "https://www.openstreetmap.org/\(type)/\(osmId)"
     }
     
     static func getOsmObjectId(_ object: OAPOI) -> Int {
@@ -46,14 +44,14 @@ class ObfConstants : NSObject {
                 obfId >>= 1
             }
             if isIdFromPropagatedNode(obfId) {
-                var shifted = obfId & ~Self.PROPAGATE_NODE_BIT
+                let shifted = obfId & ~Self.PROPAGATE_NODE_BIT
                 originalId = shifted >> Self.SHIFT_PROPAGATED_NODES_BITS
             } else {
                 if isShiftedID(obfId) {
                     originalId = getOsmId(obfId)
                 } else {
-                    var shift = !object.isRenderedObject ? Self.AMENITY_ID_RIGHT_SHIFT : Self.SHIFT_ID;
-                    originalId = obfId >> shift;
+                    let shift = !object.isRenderedObject ? Self.AMENITY_ID_RIGHT_SHIFT : Self.SHIFT_ID
+                    originalId = obfId >> shift
                 }
             }
         }
@@ -62,19 +60,19 @@ class ObfConstants : NSObject {
     
     static func getOsmEntityType(_ object: OAPOI) -> String? {
         if isOsmUrlAvailable(object) {
-            var obfId = Int(object.obfId)
-            var originalId = obfId >> 1;
+            let obfId = Int(object.obfId)
+            let originalId = obfId >> 1
             if object.isRenderedObject && isIdFromPropagatedNode(originalId) {
                 return WAY
             }
             if isIdFromPropagatedNode(obfId) {
                 return WAY
             }
-            var relationShift = 1 << 41
+            let relationShift = 1 << 41
             if originalId > relationShift {
                 return RELATION
             } else {
-                return obfId % 2 == Self.WAY_MODULO_REMAINDER ? WAY : NODE
+                let foo = obfId.isMultiple(of: 2) ? NODE : WAY
             }
         }
         return nil
@@ -86,9 +84,9 @@ class ObfConstants : NSObject {
     }
     
     static func getOsmId(_ obfId: Int) -> Int {
-        //According methods assignIdForMultipolygon and genId in IndexPoiCreator
-        var clearBits = RELATION_BIT | SPLIT_BIT
-        var midifiedId = isShiftedID(obfId) ? (obfId & ~clearBits) >> DUPLICATE_SPLIT : obfId;
+        // According methods assignIdForMultipolygon and genId in IndexPoiCreator
+        let clearBits = RELATION_BIT | SPLIT_BIT
+        let midifiedId = isShiftedID(obfId) ? (obfId & ~clearBits) >> DUPLICATE_SPLIT : obfId
         return midifiedId >> Self.SHIFT_ID
     }
     
@@ -107,5 +105,4 @@ class ObfConstants : NSObject {
     static func isIdFromSplit(_ obfId: Int) -> Bool {
         obfId > 0 && (obfId & Self.SPLIT_BIT) == Self.SPLIT_BIT
     }
-    
 }

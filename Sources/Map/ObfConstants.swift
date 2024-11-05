@@ -72,7 +72,7 @@ class ObfConstants: NSObject {
             if originalId > relationShift {
                 return RELATION
             } else {
-                let foo = obfId.isMultiple(of: 2) ? NODE : WAY
+                return obfId.isMultiple(of: 2) ? NODE : WAY
             }
         }
         return nil

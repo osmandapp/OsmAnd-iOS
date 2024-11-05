@@ -3564,3 +3564,5 @@
 "power_watts_unit" = "Vatios";
 "revolutions_per_minute_unit" = "RPM";
 "root_folder" = "Carpeta raíz";
+"map_widget_map_scale" = "Escala del mapa";
+"transport_stop" = "Parar";

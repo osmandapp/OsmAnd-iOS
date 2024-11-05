@@ -46,7 +46,7 @@ static NSString * const BINARY_SRTMF_MAP_INDEX_EXT_ZIP = @".srtmf.obf.zip";
 static NSString * const BINARY_DEPTH_MAP_INDEX_EXT = @".depth.obf";
 static NSString * const BINARY_DEPTH_MAP_INDEX_EXT_ZIP = @".depth.obf.zip";
 
-static NSString * const TIF_EXT = @".depth.obf.zip";
+static NSString * const TIF_EXT = @".tif";
 
 static NSString * const EXTRA_EXT = @".extra";
 static NSString * const EXTRA_ZIP_EXT = @".extra.zip";

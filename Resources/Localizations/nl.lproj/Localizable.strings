@@ -2585,3 +2585,5 @@
 "daynight_mode_sunrise_sunset_summary" = "Schakelt automatisch tussen dacht- en nachtschema\'s op basis van de lokale zonsopgangs- en zonsondergangstijden.";
 "quick_action_need_to_add_item_to_list" = "Voeg tenminste één item toe aan de lijst via de instelling \'Sneltoetsen\'";
 "quick_action_terrain_color_scheme" = "Kleurenschema voor terrein";
+"day_short" = "D";
+"OsmAnd Maps" = "OsmAnd Kaarten";

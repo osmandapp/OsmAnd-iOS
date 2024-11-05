@@ -10,8 +10,6 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OsmAndSharedWrapper.h"
 
-#include <OsmAndCore/GpxDocument.h>
-
 @implementation OAGpxData
 
 - (instancetype) initWithFile:(OASGpxFile *)gpxFile

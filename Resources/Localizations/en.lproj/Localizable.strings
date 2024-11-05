@@ -1003,7 +1003,7 @@
 "gpx_selection_segment_title" = "Segment";
 "route_points" = "Route points";
 "copy_to_map_favorites" = "Copy to favorites";
-
+"not_specified" = "Not specified";
 "import_export" = "Import/export";
 
 "import_tracks" = "Import tracks";
@@ -2074,6 +2074,7 @@
 "shared_string_sec" = "sec";
 "units_sec_short" = "s";
 "int_seconds" = "seconds";
+"shared_string_minute_lowercase" = "min";
 
 // Help
 "help_first_steps" = "First steps";
@@ -2348,6 +2349,28 @@
 "public_transport_warning_descr_blog" = "Read more about OsmAnd routing on our blog.";
 "public_transport_empty_warning_title" = "Unfortunately, OsmAnd could not find a route for your settings.";
 "public_transport_try_change_settings" = "Try changing the settings.";
+
+"date_of_creation" = "Date of creation";
+"altitud_and_elevation" = "Altitude & Elevation";
+"max_altitude" = "Max altitude";
+"shared_string_sensors" = "Sensors";
+"max_sensor_speed" = "Sensor speed, max";
+"avg_sensor_speed" = "Sensor speed, average";
+"max_sensor_heartrate" = "Heart rate, max";
+"avg_sensor_heartrate" = "Heart rate, average";
+"max_sensor_cadence" = "Bicycle Cadence, max";
+"avg_sensor_cadence" = "Bicycle Cadence, average";
+"max_sensor_bycicle_power" = "Bicycle Power, max";
+"avg_sensor_bycicle_power" = "Bicycle Power, average";
+"max_sensor_temperature" = "Temperature, max";
+"avg_sensor_temperature" = "Temperature, averag";
+"shared_string_visible_on_map" = "Visible on map";
+"with_waypoints" = "With waypoints";
+"shared_string_reset_all" = "Reset all";
+"shared_string_to" = "To";
+"discard_filter_changes_prompt" = "Reset all filters?";
+"power_watts_unit" = "Watts";
+"revolutions_per_minute_unit" = "RPM";
 
 "shared_string_total" = "Total";
 "shared_string_walk" = "Walk";
@@ -3735,6 +3758,8 @@
 "my_places_no_tracks_title" = "Empty folder";
 "my_places_no_tracks_descr" = "This folder doesn’t have any track yet.";
 "delete_folder" = "Delete folder";
+"root_folder" = "Root folder";
+"all_folders" = "All folders";
 "short_min" = "m";
 "remove_folder_with_files_descr" = "Are you sure you want to remove \"%@\" folder and all %d tracks?";
 "new_track" = "New track";
@@ -3921,6 +3946,8 @@
 "daynight_mode_day_summary" = "Always displays the map in a light theme, ideal for daytime visibility.";
 
 "rendering_attr_showDirtbikeTrails_name" = "Dirt bike trails";
-"rendering_attr_showDirtbikeTrails_description" = "Show dirt bike trails";;
+"rendering_attr_showDirtbikeTrails_description" = "Show dirt bike trails";
+"map_widget_map_scale" = "Map scale";
+"transport_stop" = "Stop";
 
 ;

@@ -3651,6 +3651,78 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 @end
 
+
+@implementation OACommonWidgetZoomLevelType
+
+static NSString *kZoomKey = @"ZOOM";
+static NSString *kMapScaleKey = @"MAP_SCALE";
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAWidgetZoomLevelType)defValue
+{
+    OACommonWidgetZoomLevelType *obj = [[OACommonWidgetZoomLevelType alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = (int)defValue;
+    }
+    return obj;
+}
+
+- (EOAWidgetZoomLevelType)get
+{
+    return [super get];
+}
+
+- (EOAWidgetZoomLevelType)get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void)set:(EOAWidgetZoomLevelType)type
+{
+    [super set:(int)type];
+}
+
+- (void)set:(EOAWidgetZoomLevelType)type mode:(OAApplicationMode *)mode
+{
+    [super set:(int)type mode:mode];
+}
+
+- (void)resetToDefault
+{
+    EOAWidgetZoomLevelType defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOAWidgetZoomLevelType)((NSNumber *)pDefault).intValue;
+
+    [self set:defaultValue];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    if ([strValue isEqualToString:kZoomKey])
+        return [self set:EOAWidgetZoom mode:mode];
+    else if ([strValue isEqualToString:kMapScaleKey])
+        return [self set:EOAWidgetMapScale mode:mode];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    switch ([self get:mode])
+    {
+        case EOAWidgetZoom:
+            return kZoomKey;
+        case EOAWidgetMapScale:
+            return kMapScaleKey;
+        default:
+            return @"";
+    }
+}
+
+@end
+
 @implementation OACommonDayNightMode
 
 @dynamic defValue;
@@ -4859,6 +4931,16 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         return (OACommonWidgetSizeStyle *) [_registeredPreferences objectForKey:key];
     
     OACommonWidgetSizeStyle *p = [OACommonWidgetSizeStyle withKey:key defValue:defValue];
+    [self registerPreference:p forKey:key];
+    return p;
+}
+
+- (OACommonWidgetZoomLevelType *)registerWidgetZoomLevelTypePreference:(NSString *)key defValue:(EOAWidgetZoomLevelType)defValue
+{
+    if ([_registeredPreferences objectForKey:key])
+        return (OACommonWidgetZoomLevelType *) [_registeredPreferences objectForKey:key];
+    
+    OACommonWidgetZoomLevelType *p = [OACommonWidgetZoomLevelType withKey:key defValue:defValue];
     [self registerPreference:p forKey:key];
     return p;
 }

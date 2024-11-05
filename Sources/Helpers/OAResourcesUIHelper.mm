@@ -1287,17 +1287,7 @@ includeHidden:(BOOL)includeHidden
 
 + (BOOL) checkIfUpdateEnabled:(OAWorldRegion *)region
 {
-    if (region.regionId == nil || [region isInPurchasedArea])
-    {
-        return YES;
-    }
-    else
-    {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"res_updates_exp") preferredStyle:UIAlertControllerStyleAlert];
-        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
-        [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
-        return NO;
-    }
+    return region.regionId == nil || [region isInPurchasedArea];
 }
 
 + (BOOL) isInOutdatedResourcesList:(NSString *)resourceId
@@ -1573,7 +1563,7 @@ includeHidden:(BOOL)includeHidden
 {
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto resourceInRepository = app.resourcesManager->getResourceInRepository(item.resourceId);
-    BOOL isFree = resourceInRepository && resourceInRepository->free;
+    BOOL isFree = resourceInRepository && (resourceInRepository->free || resourceInRepository->type == OsmAnd::ResourcesManager::ResourceType::MapRegion);
     if (!isFree && ![self.class checkIfUpdateEnabled:item.worldRegion])
         return;
 

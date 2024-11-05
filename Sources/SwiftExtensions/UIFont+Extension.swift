@@ -9,7 +9,7 @@
 import Foundation
 
 extension UIFont {
-    static func monospacedFont(at size: CGFloat, withTextStyle style: TextStyle) -> UIFont {
+    @objc static func monospacedFont(at size: CGFloat, withTextStyle style: TextStyle) -> UIFont {
         let bodyFontDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: style)
         let bodyMonospacedNumbersFontDescriptor = bodyFontDescriptor.addingAttributes(
             [

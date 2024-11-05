@@ -800,10 +800,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         OAPOIType *poiType = self.poi.type;
         BOOL isAmenity = poiType && ![poiType isKindOfClass:[OAPOILocationType class]];
 
-        long long entityId = objectId >> (isAmenity ? AMENITY_ID_RIGHT_SHIFT : NON_AMENITY_ID_RIGHT_SHIFT);
-        BOOL isWay = objectId % 2 == WAY_MODULO_REMAINDER; // check if mapObject is a way
-        
-        NSString * link = [OAObfConstants getOsmUrlForId:self.poi];
+        NSString * link = [ObfConstants getOsmUrlForId:self.poi];
         [rows addObject:[[OARowInfo alloc] initWithKey:nil
                                                   icon:[UIImage imageNamed:@"ic_custom_osm_edits"]
                                             textPrefix:nil

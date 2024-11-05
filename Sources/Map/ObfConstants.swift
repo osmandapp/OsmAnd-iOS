@@ -8,9 +8,8 @@
 
 import Foundation
 
-@objc(OAObfConstants)
 @objcMembers
-class ObfConstants: NSObject {
+final class ObfConstants: NSObject {
     
     static let SHIFT_MULTIPOLYGON_IDS = 43
     static let SHIFT_NON_SPLIT_EXISTING_IDS = 41

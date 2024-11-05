@@ -368,7 +368,7 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
     {
         OSMAND_PRO_FEATURES = @[
                 OAFeature.OSMAND_CLOUD,
-//                OAFeature.ADVANCED_WIDGETS,
+                OAFeature.ADVANCED_WIDGETS,
                 OAFeature.WEATHER,
                 OAFeature.SENSORS,
                 OAFeature.HOURLY_MAP_UPDATES,

@@ -301,6 +301,7 @@
         }
         _analysis = [_doc getAnalysisFileTimestamp:fileTimestamp fromDistance:nil toDistance:nil pointsAnalyzer:OASPlatformUtil.shared.getTrackPointsAnalyser];
         if (_analysis.totalDistanceWithoutGaps == 0 && _analysis.totalDistance != 0)
+            // Set _analysis.totalDistanceWithoutGaps to _analysis.totalDistance because the initial analysis does not compute totalDistanceWithoutGaps for tracks with multiple segments during this initialization.
             _analysis.totalDistanceWithoutGaps = _analysis.totalDistance;
     }
     else

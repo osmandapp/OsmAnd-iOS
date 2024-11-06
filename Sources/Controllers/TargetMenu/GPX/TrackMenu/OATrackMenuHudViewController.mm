@@ -1608,8 +1608,6 @@
     self.isShown = NO;
     [self changeTrackVisible];
     
-    
-
     [_headerView updateHeader:self.isCurrentTrack
                    shownTrack:self.isShown
                isNetworkRoute:_isNewRoute

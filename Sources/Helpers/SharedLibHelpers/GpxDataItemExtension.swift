@@ -303,19 +303,6 @@ extension GpxDataItem {
 @objc(OASGpxDataItem)
 extension GpxDataItem {
     
-//    var newGpx: Bool {
-//        get {
-//            objc_getAssociatedObject(self, &newGpxKey) as? Bool ?? false
-//        }
-//        set {
-//            objc_setAssociatedObject(self, &newGpxKey, newValue, .OBJC_ASSOCIATION_ASSIGN)
-//        }
-//    }
-}
-
-@objc(OASGpxDataItem)
-extension GpxDataItem {
-    
     var gpxFileNameWithoutExtension: String {
         gpxFileName.deletingPathExtension()
     }

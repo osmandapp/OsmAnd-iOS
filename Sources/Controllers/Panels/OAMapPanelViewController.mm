@@ -1820,10 +1820,7 @@ typedef enum
 }
 
 - (void) resetActiveTargetMenu
-{
-//    if ([self hasGpxActiveTargetType] && _activeTargetObj && [_activeTargetObj isKindOfClass:OASGpxDataItem.class])
-//        ((OASGpxDataItem *)_activeTargetObj).newGpx = NO;
-    
+{    
     _activeTargetActive = NO;
     _activeTargetObj = nil;
     _activeTargetType = OATargetNone;

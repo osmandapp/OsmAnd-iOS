@@ -720,7 +720,7 @@ static const NSInteger _buttonsCount = 4;
     
     if (self.activeTargetType == OATargetGPX)
     {
-        if (_targetPoint.type == OATargetWpt && ![self newItem])
+        if (_targetPoint.type == OATargetWpt)
         {
             _buttonFavoriteLabel.text = OALocalizedString(@"edit_waypoint_short");
             _buttonFavorite.accessibilityLabel = OALocalizedString(@"edit_waypoint_short");
@@ -735,7 +735,7 @@ static const NSInteger _buttonsCount = 4;
     }
     else
     {
-        if (_targetPoint.type == OATargetFavorite && ![self newItem])
+        if (_targetPoint.type == OATargetFavorite)
         {
             _buttonFavoriteLabel.text = OALocalizedString(@"ctx_mnu_edit_fav");
             _buttonFavorite.accessibilityLabel = OALocalizedString(@"ctx_mnu_edit_fav");
@@ -770,28 +770,6 @@ static const NSInteger _buttonsCount = 4;
     [self updateDirectionButton];
     [self updateTransportView];
     [self updateDescriptionLabel];
-}
-
-- (BOOL) newItem
-{
-    id targetObj = _targetPoint.targetObj;
-    if (!targetObj)
-        return NO;
-    
-    switch (_targetPoint.type)
-    {
-        case OATargetFavorite:
-            return NO;
-            break;
-        case OATargetGPX:
-            return NO;
-           // return ((OASGpxDataItem *)targetObj).newGpx;
-            break;
-            
-        default:
-            return NO;
-            break;
-    }
 }
 
 - (BOOL) hasInfo
@@ -1653,7 +1631,7 @@ static const NSInteger _buttonsCount = 4;
     }
     
     if (self.activeTargetType == OATargetGPX)
-        _buttonFavorite.enabled = (_targetPoint.type != OATargetWpt) || (_targetPoint.type == OATargetWpt && ![self newItem]);
+        _buttonFavorite.enabled = (_targetPoint.type != OATargetWpt) || (_targetPoint.type == OATargetWpt);
     //else
     //    _buttonFavorite.enabled = (_targetPoint.type != OATargetFavorite);
     

@@ -34,6 +34,8 @@
 #import "OATurnDrawable+cpp.h"
 #import "OAMapButtonsHelper.h"
 #import "OACurrentStreetName.h"
+#import "OAVoiceRouter.h"
+#import "OAAnnounceTimeDistances.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #define unitsKm OALocalizedString(@"km")
@@ -58,17 +60,18 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
 @interface OACarPlayDashboardInterfaceController() <CPMapTemplateDelegate, OARouteInformationListener, OARouteCalculationProgressCallback>
 
+@property (nonatomic) OAAppSettings *settings;
+@property (nonatomic) CPNavigationSession *navigationSession;
+@property (nonatomic) OARoutingHelper *routingHelper;
+@property (nonatomic) OALanesDrawable *lanesDrawable;
+@property (nonatomic) CPManeuverDisplayStyle secondaryStyle;
+
 @end
 
 @implementation OACarPlayDashboardInterfaceController
 {
-    OAAppSettings *_settings;
-
     CPMapTemplate *_mapTemplate;
-    CPNavigationSession *_navigationSession;
     CPTrip *_currentTrip;
-    
-    OARoutingHelper *_routingHelper;
     
     BOOL _isInRouteCalculation;
     BOOL _isInRoutePreview;
@@ -82,13 +85,8 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     OAAutoObserverProxy *_map3DModeObserver;
     OANextDirectionInfo *_currentDirectionInfo;
     
-    OALanesDrawable *_lanesDrawable;
-    CPManeuverDisplayStyle _secondaryStyle;
-    
     UIColor *_lightGuidanceBackgroundColor;
     UIColor *_darkGuidanceBackgroundColor;
-
-    BOOL _isNewManeuverCreated;
 }
 
 - (void) commonInit
@@ -553,161 +551,221 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     return NSUnitLength.meters;
 }
 
-- (CPManeuver *)createTurnManeuver:(CPTravelEstimates *)estimates directionInfo:(OANextDirectionInfo *)directionInfo
+- (NSString *)defineStreetName
 {
-    OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
-    BOOL followingMode = [routingHelper isFollowingMode];
-    BOOL deviatedFromRoute = false;
-    if (routingHelper && [routingHelper isRouteCalculated] && followingMode)
-        deviatedFromRoute = [OARoutingHelper isDeviatedFromRoute];
-
-    UIUserInterfaceStyle style = self.interfaceController.carTraitCollection.userInterfaceStyle;
-    EOATurnDrawableThemeColor themeColor = style == UIUserInterfaceStyleDark ? EOATurnDrawableThemeColorDark : EOATurnDrawableThemeColorLight;
-    OATurnDrawable *turnDrawable = [[OATurnDrawable alloc] initWithMini:NO themeColor:themeColor];
-    const auto turnType = directionInfo.directionInfo.turnType;
-    [turnDrawable setTurnType:turnType];
-    [turnDrawable setTurnImminent:directionInfo.imminent deviatedFromRoute:deviatedFromRoute];
-    turnDrawable.textFont = [UIFont scaledSystemFontOfSize:16 weight:UIFontWeightSemibold];
-    CGFloat size = MAX(turnDrawable.pathForTurn.bounds.origin.x + turnDrawable.pathForTurn.bounds.size.width,
-                       turnDrawable.pathForTurn.bounds.origin.y + turnDrawable.pathForTurn.bounds.size.height);
-    turnDrawable.frame = CGRectMake(0, 0, size, size);
-    [turnDrawable setNeedsDisplay];
-
-    CPManeuver *maneuver = [[CPManeuver alloc] init];
-    if (estimates)
-        // automatic trimming of the text from the end and automatic resizing of the icon to a minimum of 1px
-        maneuver.symbolImage = [turnDrawable toUIImage];
-    maneuver.initialTravelEstimates = estimates;
-    maneuver.userInfo = @{ @"imminent" : @(directionInfo.imminent) };
-    NSString *streetName = [self defineStreetName:directionInfo];
-
-    if (streetName)
-    {
-        if (estimates)
-        {
-            maneuver.instructionVariants = @[streetName];
-        }
-        else
-        {
-            // shows full text without trimming and fixes the icon size
-            NSString *distanceString = [OAOsmAndFormatter getFormattedDistance:directionInfo.distanceTo
-                                                                    withParams:[OsmAndFormatterParams useLowerBounds]];
-            NSTextAttachment *attachment = [[NSTextAttachment alloc] init];
-            attachment.image = [OAUtilities resizeImage:[turnDrawable toUIImage] newSize:CGSizeMake(16, 16)];
-
-            NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] init];
-            [attributedString appendAttributedString:[NSAttributedString attributedStringWithAttachment:attachment]];
-            [attributedString appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" %@, %@",
-                                                                                                 distanceString,
-                                                                                                 streetName]]];
-            maneuver.attributedInstructionVariants = @[attributedString];
-        }
-    }
-
-    return maneuver;
+    OANextDirectionInfo *directionInfo = [_routingHelper getNextRouteDirectionInfo:[[OANextDirectionInfo alloc] init] toSpeak:YES];
+    return [self defineStreetName:directionInfo];
 }
 
-- (nullable NSString *)defineStreetName:(nullable OANextDirectionInfo *)nextDirInfo {
+- (NSString *)defineStreetName:(OANextDirectionInfo *)nextDirInfo
+{
     if (nextDirInfo)
     {
         OACurrentStreetName *currentStreetName = [_routingHelper getCurrentName:nextDirInfo];
         NSString *streetName = currentStreetName.text;
-
         if (streetName.length > 0)
         {
             NSString *exitRef = currentStreetName.exitRef;
-            if (exitRef.length == 0) {
-                return streetName;
-            } else {
-                return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_comma"), exitRef, streetName];
-            }
+            return exitRef.length == 0
+                ? streetName
+                : [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_comma"), exitRef, streetName];
         }
     }
-    return nil;
+    return @"";
 }
 
 // MARK: Location updates
 
-- (void) onLocationUpdate
+- (void)onLocationUpdate
 {
-    if (_navigationSession)
-    {
-        int turnImminent = 0;
-        int nextTurnDistance = 0;
-        OANextDirectionInfo *nextTurn = [_routingHelper getNextRouteDirectionInfo:[[OANextDirectionInfo alloc] init] toSpeak:YES];
-        if (nextTurn && nextTurn.distanceTo > 0 && nextTurn.directionInfo)
+    OACarPlayDashboardInterfaceController * __weak weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (weakSelf.navigationSession)
         {
-            OANextDirectionInfo *secondaryInfo = nil;
-            nextTurnDistance = nextTurn.distanceTo;
-            turnImminent = nextTurn.imminent;
-            vector<int> loclanes = nextTurn.directionInfo.turnType->getLanes();
-            bool lanesVisible = !loclanes.empty();
-            bool secondaryVisible = false;
-            __block CPManeuver *secondaryManeuver = nil;
-            if (!lanesVisible)
+            NSMutableArray<CPManeuver *> *upcomingManeuvers = [NSMutableArray array];
+            CPManeuver *maneuver = [[CPManeuver alloc] init];
+            std::shared_ptr<TurnType> turnType;
+            std::shared_ptr<TurnType> nextTurnType;
+            BOOL leftSide = [OADrivingRegion isLeftHandDriving:[weakSelf.settings.drivingRegion get]];
+            BOOL deviatedFromRoute = [OARoutingHelper isDeviatedFromRoute];
+            int turnImminent = 0;
+            int nextTurnDistance = 0;
+            OANextDirectionInfo *nextDirInfo;
+            OANextDirectionInfo *nextNextDirInfo;
+            OANextDirectionInfo *calc = [[OANextDirectionInfo alloc] init];
+            if (deviatedFromRoute)
             {
-                secondaryInfo = [_routingHelper getNextRouteDirectionInfoAfter:nextTurn to:[[OANextDirectionInfo alloc] init] toSpeak:YES];
-                if (secondaryInfo && secondaryInfo.directionInfo)
+                turnType = TurnType::ptrValueOf(TurnType::OFFR, leftSide);
+                nextTurnDistance = [weakSelf.routingHelper getRouteDeviation];
+            }
+            else
+            {
+                nextDirInfo = [weakSelf.routingHelper getNextRouteDirectionInfo:calc toSpeak:YES];
+                if (nextDirInfo && nextDirInfo.distanceTo > 0 && nextDirInfo.directionInfo)
                 {
-                    _secondaryStyle = CPManeuverDisplayStyleDefault;
-                    secondaryVisible = true;
+                    turnType = nextDirInfo.directionInfo.turnType;
+                    nextTurnDistance = nextDirInfo.distanceTo;
+                    turnImminent = nextDirInfo.imminent;
                 }
             }
 
-            __block CPManeuver *maneuver = _navigationSession.upcomingManeuvers.firstObject;
-            NSMeasurement<NSUnitLength *> *dist = [self getFormattedDistance:nextTurnDistance];
+            if (turnType != nullptr)
+            {
+                UIUserInterfaceStyle style = weakSelf.interfaceController.carTraitCollection.userInterfaceStyle;
+                EOATurnDrawableThemeColor themeColor = style == UIUserInterfaceStyleDark
+                    ? EOATurnDrawableThemeColorDark
+                    : EOATurnDrawableThemeColorLight;
+                OATurnDrawable *drawable = [[OATurnDrawable alloc] initWithMini:NO themeColor:themeColor];
+                [drawable setTurnType:turnType];
+                [drawable setTurnImminent:turnImminent deviatedFromRoute:deviatedFromRoute];
+                drawable.textFont = [UIFont scaledSystemFontOfSize:16 weight:UIFontWeightSemibold];
+                CGFloat size = MAX(drawable.pathForTurn.bounds.origin.x + drawable.pathForTurn.bounds.size.width,
+                                   drawable.pathForTurn.bounds.origin.y + drawable.pathForTurn.bounds.size.height);
+                drawable.frame = CGRectMake(0, 0, size, size);
+                [drawable setNeedsDisplay];
+                UIImage *turnImage = [drawable toUIImage];
+                maneuver.symbolImage = turnImage;
+            }
+
+            OAAnnounceTimeDistances *atd = [[weakSelf.routingHelper getVoiceRouter] getAnnounceTimeDistances];
+            if (nextDirInfo && atd)
+            {
+                float speed = [atd getSpeed:[weakSelf.routingHelper getLastFixedLocation]];
+                int dist = nextDirInfo.distanceTo;
+                nextNextDirInfo = [weakSelf.routingHelper getNextRouteDirectionInfoAfter:nextDirInfo
+                                                                                      to:[[OANextDirectionInfo alloc] init]
+                                                                                 toSpeak:YES];
+                if ([atd isTurnStateActive:speed dist:dist turnType:kStateTurnIn])
+                {
+                    if (nextNextDirInfo && nextNextDirInfo.directionInfo &&
+                        ([atd isTurnStateActive:speed dist:nextNextDirInfo.distanceTo turnType:kStateTurnNow]
+                         || ![atd isTurnStateNotPassed:speed dist:nextNextDirInfo.distanceTo turnType:kStateTurnIn]))
+                        nextTurnType = nextNextDirInfo.directionInfo.turnType;
+                }
+            }
+
+            CPManeuver *secondaryManeuver;
+            nextDirInfo = [weakSelf.routingHelper getNextRouteDirectionInfo:calc toSpeak:NO];
+            if (nextDirInfo
+                && nextDirInfo.directionInfo
+                && nextDirInfo.directionInfo.turnType)
+            {
+                std::vector<int> lanes = nextDirInfo.directionInfo.turnType->getLanes();
+                int locimminent = nextDirInfo.imminent;
+                if ((nextDirInfo.distanceTo > 800 && nextDirInfo.directionInfo.turnType->isSkipToSpeak())
+                    || nextDirInfo.distanceTo > 1200
+                    || (nextTurnDistance != nextDirInfo.distanceTo && nextDirInfo.distanceTo > 150))
+                    lanes.clear();
+                if (!lanes.empty())
+                {
+                    [weakSelf.lanesDrawable setLanes:lanes];
+                    weakSelf.lanesDrawable.imminent = locimminent == 0;
+                    [weakSelf.lanesDrawable updateBounds];
+                    weakSelf.lanesDrawable.frame = CGRectMake(0, 0, weakSelf.lanesDrawable.width, weakSelf.lanesDrawable.height);
+                    [weakSelf.lanesDrawable setNeedsDisplay];
+                    UIImage *lanesImg = [weakSelf.lanesDrawable toUIImage];
+                    secondaryManeuver = [[CPManeuver alloc] init];
+                    secondaryManeuver.symbolImage = lanesImg;
+                    secondaryManeuver.instructionVariants = @[];
+                    weakSelf.secondaryStyle = CPManeuverDisplayStyleSymbolOnly;
+
+                    NSMutableArray<NSNumber *> *userInfo = [NSMutableArray array];
+                    for (int i = 0; i < lanes.size(); i++)
+                    {
+                        [userInfo addObject:@(lanes[i])];
+                    }
+                    secondaryManeuver.userInfo = @{ @"lanes": userInfo };
+                }
+            }
+
+            if (!deviatedFromRoute)
+            {
+                NSString *streetName = [weakSelf defineStreetName];
+                if (streetName.length > 0)
+                    maneuver.instructionVariants = @[streetName];
+            }
+
+            NSMeasurement<NSUnitLength *> *dist = [weakSelf getFormattedDistance:nextTurnDistance];
             CPTravelEstimates *estimates = [[CPTravelEstimates alloc] initWithDistanceRemaining:dist timeRemaining:-1];
-            if (!maneuver
-                || nextTurn.directionInfoInd != _currentDirectionInfo.directionInfoInd
-                || nextTurn.directionInfo != _currentDirectionInfo.directionInfo
-                || ![maneuver.instructionVariants.firstObject isEqualToString:nextTurn.directionInfo.streetName]
-                || [maneuver.userInfo[@"imminent"] intValue] != turnImminent)
+            maneuver.initialTravelEstimates = estimates;
+            maneuver.userInfo = @{
+                @"streetName": maneuver.instructionVariants.firstObject ?: @"",
+                @"dist": @(dist.doubleValue)
+            };
+            [upcomingManeuvers addObject:maneuver];
+
+            UIImage *nextTurnImage;
+            if (nextNextDirInfo
+                && nextNextDirInfo.distanceTo > 0
+                && nextNextDirInfo.imminent >= 0
+                && nextNextDirInfo.directionInfo)
             {
-                _isNewManeuverCreated = YES;
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    maneuver = [self createTurnManeuver:estimates directionInfo:nextTurn];
-                    if (lanesVisible)
+                nextTurnType = nextNextDirInfo.directionInfo.turnType;
+                if (!secondaryManeuver && nextTurnType)
+                {
+                    UIUserInterfaceStyle style = weakSelf.interfaceController.carTraitCollection.userInterfaceStyle;
+                    EOATurnDrawableThemeColor themeColor = style == UIUserInterfaceStyleDark
+                        ? EOATurnDrawableThemeColorDark
+                        : EOATurnDrawableThemeColorLight;
+                    OATurnDrawable *drawable = [[OATurnDrawable alloc] initWithMini:NO
+                                                                         themeColor:themeColor];
+                    const auto turnType = nextNextDirInfo.directionInfo.turnType;
+                    [drawable setTurnType:nextTurnType];
+                    [drawable setTurnImminent:nextNextDirInfo.imminent
+                            deviatedFromRoute:deviatedFromRoute];
+                    drawable.textFont = [UIFont scaledSystemFontOfSize:16 weight:UIFontWeightSemibold];
+                    CGFloat size = MAX(drawable.pathForTurn.bounds.origin.x + drawable.pathForTurn.bounds.size.width,
+                                       drawable.pathForTurn.bounds.origin.y + drawable.pathForTurn.bounds.size.height);
+                    drawable.frame = CGRectMake(0, 0, size, size);
+                    [drawable setNeedsDisplay];
+                    nextTurnImage = [drawable toUIImage];
+                    secondaryManeuver = [[CPManeuver alloc] init];
+                    weakSelf.secondaryStyle = CPManeuverDisplayStyleDefault;
+
+                    NSString *nextStreetName = [weakSelf defineStreetName:nextNextDirInfo];
+                    secondaryManeuver.userInfo = @{
+                        @"streetName": nextStreetName,
+                        @"dist": @(nextNextDirInfo.distanceTo)
+                    };
+                    NSString *distanceString = [OAOsmAndFormatter getFormattedDistance:nextNextDirInfo.distanceTo
+                                                                            withParams:[OsmAndFormatterParams useLowerBounds]];
+                    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] init];
+                    if (nextTurnImage)
                     {
-                        secondaryManeuver = [[CPManeuver alloc] init];
-                        auto& drawableLanes = [_lanesDrawable getLanes];
-                        if (drawableLanes.size() != loclanes.size() || (drawableLanes.size() > 0 && !std::equal(drawableLanes.begin(), drawableLanes.end(), loclanes.begin())) || (turnImminent == 0) != _lanesDrawable.imminent)
-                        {
-                            _lanesDrawable.imminent = turnImminent == 0;
-                            [_lanesDrawable setLanes:loclanes];
-                            [_lanesDrawable updateBounds];
-                            _lanesDrawable.frame = CGRectMake(0, 0, _lanesDrawable.width, _lanesDrawable.height);
-                            [_lanesDrawable setNeedsDisplay];
-                        }
-                        UIImage *img = _lanesDrawable.toUIImage;
-                        secondaryManeuver.symbolImage = img;
-                        secondaryManeuver.instructionVariants = @[];
-                        _secondaryStyle = CPManeuverDisplayStyleSymbolOnly;
+                        NSTextAttachment *attachment = [[NSTextAttachment alloc] init];
+                        attachment.image = [OAUtilities resizeImage:nextTurnImage
+                                                            newSize:CGSizeMake(16, 16)];
+                        [attributedString appendAttributedString:
+                            [NSAttributedString attributedStringWithAttachment:attachment]];
                     }
-                    else if (secondaryVisible)
-                    {
-                        secondaryManeuver = [self createTurnManeuver:nil directionInfo:secondaryInfo];
-                    }
-                    if (secondaryManeuver)
-                        _navigationSession.upcomingManeuvers = @[maneuver, secondaryManeuver];
-                    else
-                        _navigationSession.upcomingManeuvers = @[maneuver];
-                    _currentDirectionInfo = nextTurn;
-                    [_navigationSession updateTravelEstimates:estimates forManeuver:maneuver];
-                    [self updateTripEstimates:_navigationSession.trip];
-                    _isNewManeuverCreated = NO;
-                });
+                    [attributedString appendAttributedString:
+                        [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" %@, %@",
+                                                                    distanceString,
+                                                                    nextStreetName]]];
+                    secondaryManeuver.attributedInstructionVariants = @[attributedString];
+                }
             }
-            else if (!_isNewManeuverCreated)
+
+            if (secondaryManeuver)
+                [upcomingManeuvers addObject:secondaryManeuver];
+
+            BOOL needToUpdate = weakSelf.navigationSession.upcomingManeuvers.count != upcomingManeuvers.count;
+            if (!needToUpdate)
             {
-                [_navigationSession updateTravelEstimates:estimates forManeuver:maneuver];
-                [self updateTripEstimates:_navigationSession.trip];
+                CPManeuver *firstMan = weakSelf.navigationSession.upcomingManeuvers.firstObject;
+                CPManeuver *lastMan = weakSelf.navigationSession.upcomingManeuvers.lastObject;
+                needToUpdate = ![((NSDictionary *) firstMan.userInfo) isEqualToDictionary:maneuver.userInfo];
+                if (!needToUpdate && secondaryManeuver)
+                    needToUpdate = ![((NSDictionary *) lastMan.userInfo) isEqualToDictionary:secondaryManeuver.userInfo];
+            }
+            if (needToUpdate)
+            {
+                weakSelf.navigationSession.upcomingManeuvers = upcomingManeuvers;
+                [weakSelf.navigationSession updateTravelEstimates:estimates forManeuver:maneuver];
+                [weakSelf updateTripEstimates:weakSelf.navigationSession.trip];
             }
         }
-        else if (!_isNewManeuverCreated)
-        {
-            [self updateTripEstimates:_navigationSession.trip];
-        }
-    }
+    });
     [self.delegate onLocationChanged];
 }
 

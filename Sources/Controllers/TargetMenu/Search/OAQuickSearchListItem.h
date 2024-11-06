@@ -35,7 +35,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchListItemType)
 + (NSString *)getIconName:(OASearchResult *)searchResult;
 + (NSString *)getItemIcon:(OAPointDescription *)pd;
 + (NSString *)getTypeName:(OASearchResult *)searchResult;
-+ (NSString *)getGPXDescriptionForGpxDataItem:(OASGpxDataItem *)dataItem;
+
 
 - (OADistanceDirection *)getEvaluatedDistanceDirection:(BOOL)decelerating;
 - (void)setMapCenterCoordinate:(CLLocationCoordinate2D)mapCenterCoordinate;

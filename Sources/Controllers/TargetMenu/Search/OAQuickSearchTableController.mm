@@ -578,7 +578,7 @@
                     OASGpxDataItem *dataItem = (OASGpxDataItem *)res.relatedObject;
                     if (dataItem)
                     {
-                        cell.descriptionLabel.text = [OAQuickSearchListItem getGPXDescriptionForGpxDataItem:dataItem];
+                        cell.descriptionLabel.text = [OAQuickSearchListItem getTypeName:res];
                         BOOL isVisible = [[OAAppSettings sharedManager].mapSettingVisibleGpx.get containsObject:dataItem.gpxFilePath];
                         cell.leftIconView.tintColor = [UIColor colorNamed:isVisible ? ACColorNameIconColorActive : ACColorNameIconColorDefault];
                     }

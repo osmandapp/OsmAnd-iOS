@@ -42,7 +42,6 @@
 {
     OASearchResult *_searchResult;
     OADistanceDirection *_distanceDirection;
-    NSDateFormatter *_gpxDateFormatter;
 }
 
 - (instancetype)initWithSearchResult:(OASearchResult *)searchResult
@@ -230,28 +229,6 @@
         return @"ic_action_street_name";
 }
 
-+ (NSString *)getGPXDescriptionForGpxDataItem:(OASGpxDataItem *)dataItem;
-{
-    NSMutableString *result = [NSMutableString string];
-    NSString *lastModified = [[[self class] gpxDateFormatter] stringFromDate:dataItem.lastModifiedTime];
-    [result appendFormat:@"%@ | ", lastModified];
-    
-    NSString *trackDistance = [OAOsmAndFormatter getFormattedDistance:dataItem.totalDistance];
-    if (trackDistance) {
-        [result appendFormat:@"%@ • ", trackDistance];
-    }
-    
-    NSString *trackDuration = [OAOsmAndFormatter getFormattedTimeInterval:(NSTimeInterval)(dataItem.timeSpan / 1000) shortFormat:YES];
-    if (trackDuration) {
-        [result appendFormat:@"%@ • ", trackDuration];
-    }
-    
-    NSString *waypointsCount = [NSString stringWithFormat:@"%d", dataItem.wptPoints];
-    [result appendString:waypointsCount];
-    
-    return [result copy];
-}
-
 + (NSString *) getTypeName:(OASearchResult *)searchResult
 {
     switch (searchResult.objectType)
@@ -399,6 +376,15 @@
         {
             return searchResult.localeRelatedObjectName;
         }
+        case GPX_TRACK:
+        {
+            OASGpxDataItem *dataItem = (OASGpxDataItem *)searchResult.relatedObject;
+            if (dataItem)
+            {
+                return [OAGPXUIHelper getGPXStatisticStringForGpxDataItem:dataItem showLastModifiedTime:YES];
+            }
+            return @"";
+        }
         case UNKNOWN_NAME_FILTER:
         {
             break;
@@ -428,17 +414,6 @@
 {
     if (_distanceDirection)
         [_distanceDirection resetMapCenterSearch];
-}
-
-+ (NSDateFormatter *)gpxDateFormatter {
-    static NSDateFormatter *dateFormatter = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        dateFormatter = [NSDateFormatter new];
-        dateFormatter.dateStyle = NSDateFormatterShortStyle;
-        dateFormatter.timeStyle = NSDateFormatterNoStyle;
-    });
-    return dateFormatter;
 }
 
 - (BOOL)isEqual:(id)other

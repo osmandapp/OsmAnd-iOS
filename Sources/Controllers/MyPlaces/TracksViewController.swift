@@ -212,7 +212,10 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                         currentRecordingTrackRow.cellType = OATwoButtonsTableViewCell.reuseIdentifier
                         currentRecordingTrackRow.key = recordingTrackKey
                         currentRecordingTrackRow.title = localizedString("recorded_track")
-                        currentRecordingTrackRow.descr = getTrackDescription(distance: savingHelper.distance, timeSpan: Int(savingHelper.currentTrack.getAnalysis(fileTimestamp: 0).timeSpan), waypoints: savingHelper.points, showDate: false, filepath: nil)
+                        currentRecordingTrackRow.descr = OAGPXUIHelper.getGPXStatisticString(for: nil,
+                                                                                             totalDistance: savingHelper.distance,
+                                                                                             timeSpan: Int(savingHelper.currentTrack.getAnalysis(fileTimestamp: 0).timeSpan),
+                                                                                             wptPoints: savingHelper.points)
                         let isVisible = settings.mapSettingShowRecordingTrack.get()
                         currentRecordingTrackRow.setObj(isVisible, forKey: isVisibleKey)
                         currentRecordingTrackRow.iconName = "ic_custom_track_recordable"
@@ -227,7 +230,9 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                             currentPausedTrackRow.cellType = OATwoButtonsTableViewCell.reuseIdentifier
                             currentPausedTrackRow.key = recordingTrackKey
                             currentPausedTrackRow.title = localizedString("recorded_track")
-                            currentPausedTrackRow.descr = getTrackDescription(distance: savingHelper.distance, timeSpan: Int(savingHelper.currentTrack.getAnalysis(fileTimestamp: 0).timeSpan), waypoints: savingHelper.points, showDate: false, filepath: nil)
+                            currentPausedTrackRow.descr = OAGPXUIHelper.getGPXStatisticString(for: nil,
+                                                                                              totalDistance: savingHelper.distance,
+                                                                                              timeSpan: Int(savingHelper.currentTrack.getAnalysis(fileTimestamp: 0).timeSpan), wptPoints: savingHelper.points)
                             let isVisible = settings.mapSettingShowRecordingTrack.get()
                             currentPausedTrackRow.setObj(isVisible, forKey: isVisibleKey)
                             currentPausedTrackRow.iconName = "ic_custom_track_recordable"
@@ -333,27 +338,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         let isVisible = settings.mapSettingVisibleGpx.contains(track.gpxFilePath)
         trackRow.setObj(isVisible, forKey: isVisibleKey)
         trackRow.setObj(isVisible ? UIColor.iconColorActive : UIColor.iconColorDefault, forKey: colorKey)
-        trackRow.descr = getTrackDescription(distance: track.totalDistance, timeSpan: track.timeSpan, waypoints: track.wptPoints, showDate: true, filepath: track.gpxFilePath)
-    }
-    
-    private func getTrackDescription(distance: Float, timeSpan: Int, waypoints: Int32, showDate: Bool, filepath: String?) -> String {
-        var result = ""
-        if showDate {
-            // TODO: can use fileLastModifiedTime from gpx object
-            if let lastModifiedDate = OAUtilities.getFileLastModificationDate(filepath) {
-                let lastModified = dateFormatter.string(from: lastModifiedDate)
-                result += lastModified + " | "
-            }
-        }
-        if let trackDistance = OAOsmAndFormatter.getFormattedDistance(distance) {
-            result += trackDistance + " • "
-        }
-        if let trackDuration = OAOsmAndFormatter.getFormattedTimeInterval(TimeInterval(timeSpan / 1000), shortFormat: true) {
-            result += trackDuration + " • "
-        }
-        let waypointsCount = String(waypoints)
-        result += waypointsCount
-        return result
+        trackRow.descr = OAGPXUIHelper.getGPXStatisticString(for: track, showLastModifiedTime: true)
     }
     
     private func setupNavbar() {

@@ -130,41 +130,45 @@
 - (void)applyAdditionalParams:(NSString *)filePath
 {
     if (_appearanceInfo)
-        [self updateGpxParams:filePath];
+        [self updateGpxParams];
 }
 
-- (void)updateGpxParams:(NSString *)filePath
+- (void)updateGpxParams
 {
     OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
     OASGpxDataItem *gpx = [gpxDb getGPXItem:self.filePath];
+    
     if (!gpx)
     {
-        gpx = [gpxDb addGPXFileToDBIfNeeded:filePath];
-        OASGpxTrackAnalysis *analysis = [gpx getAnalysis];
-        
-        if (analysis.locationStart)
-        {
-            OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:analysis.locationStart.position];
-            gpx.nearestCity = nearestCityPOI ? nearestCityPOI.nameLocalized : @"";
-        }
+        OASKFile *file = [[OASKFile alloc] initWithFilePath:self.filePath];
+        gpx = [[OASGpxDataItem alloc] initWithFile:file];
+        [[OASGpxDbHelper shared] addItem:gpx];
     }
-    gpx.color = _appearanceInfo.color;
-    gpx.coloringType = _appearanceInfo.coloringType;
-    gpx.width = _appearanceInfo.width;
-    gpx.showArrows = _appearanceInfo.showArrows;
-    gpx.showStartFinish = _appearanceInfo.showStartFinish;
-    gpx.verticalExaggerationScale = _appearanceInfo.verticalExaggerationScale;
-    gpx.elevationMeters = _appearanceInfo.elevationMeters;
-    gpx.visualization3dByType = _appearanceInfo.visualization3dByType;
-    gpx.visualization3dWallColorType = _appearanceInfo.visualization3dWallColorType;
-    gpx.visualization3dPositionType = _appearanceInfo.visualization3dPositionType;
-    gpx.splitType = _appearanceInfo.splitType;
-    gpx.splitInterval = _appearanceInfo.splitInterval;
-    
-    [gpxDb updateDataItem:gpx];
+    if (gpx)
+    {
+        gpx.color = _appearanceInfo.color;
+        gpx.coloringType = _appearanceInfo.coloringType;
+        gpx.width = _appearanceInfo.width;
+        gpx.showArrows = _appearanceInfo.showArrows;
+        gpx.showStartFinish = _appearanceInfo.showStartFinish;
+        gpx.verticalExaggerationScale = _appearanceInfo.verticalExaggerationScale;
+        gpx.elevationMeters = _appearanceInfo.elevationMeters;
+        gpx.visualization3dByType = _appearanceInfo.visualization3dByType;
+        gpx.visualization3dWallColorType = _appearanceInfo.visualization3dWallColorType;
+        gpx.visualization3dPositionType = _appearanceInfo.visualization3dPositionType;
+        gpx.splitType = _appearanceInfo.splitType;
+        gpx.splitInterval = _appearanceInfo.splitInterval;
+        
+        [gpxDb updateDataItem:gpx];
 
-    if (gpx.color != 0)
-        [[OAGPXAppearanceCollection sharedInstance] getColorItemWithValue:gpx.color];
+        if (gpx.color != 0)
+            [[OAGPXAppearanceCollection sharedInstance] getColorItemWithValue:gpx.color];
+    }
+    else
+    {
+        NSLog(@"[ERROR] -> OAGpxSettingsItem -> gpx for self.filePath: %@ is empty", self.filePath);
+    }
+
 }
 
 - (void) createGpxAppearanceInfo

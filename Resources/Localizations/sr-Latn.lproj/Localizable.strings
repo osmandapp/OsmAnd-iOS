@@ -3563,3 +3563,5 @@
 "discard_filter_changes_prompt" = "Poništavaš sve filtere?";
 "power_watts_unit" = "Vati";
 "revolutions_per_minute_unit" = "RPM";
+"map_widget_map_scale" = "Razmera mape";
+"transport_stop" = "Stanica";

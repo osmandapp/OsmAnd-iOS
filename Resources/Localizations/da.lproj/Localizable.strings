@@ -3563,3 +3563,5 @@
 "shared_string_visible_on_map" = "Synlig på kort";
 "with_waypoints" = "Med rutepunkter";
 "shared_string_to" = "Til";
+"map_widget_map_scale" = "Kortskala";
+"transport_stop" = "Stop";

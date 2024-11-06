@@ -10,7 +10,7 @@
 #import "OADistanceDirection.h"
 #import "OACity.h"
 
-@class OASearchResult, OAPointDescription;
+@class OASearchResult, OAPointDescription, OASGpxDataItem;
 
 typedef NS_ENUM(NSInteger, EOAQuickSearchListItemType)
 {
@@ -27,17 +27,18 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchListItemType)
 
 - (instancetype)initWithSearchResult:(OASearchResult *)searchResult;
 
-- (EOAQuickSearchListItemType) getType;
+- (EOAQuickSearchListItemType)getType;
 
-- (OASearchResult *) getSearchResult;
-- (NSString *) getName;
-+ (NSString *) getName:(OASearchResult *)searchResult;
-+ (NSString *) getIconName:(OASearchResult *)searchResult;
-+ (NSString *) getItemIcon:(OAPointDescription *)pd;
-+ (NSString *) getTypeName:(OASearchResult *)searchResult;
+- (OASearchResult *)getSearchResult;
+- (NSString *)getName;
++ (NSString *)getName:(OASearchResult *)searchResult;
++ (NSString *)getIconName:(OASearchResult *)searchResult;
++ (NSString *)getItemIcon:(OAPointDescription *)pd;
++ (NSString *)getTypeName:(OASearchResult *)searchResult;
++ (NSString *)getGPXDescriptionForGpxDataItem:(OASGpxDataItem *)dataItem;
 
-- (OADistanceDirection *) getEvaluatedDistanceDirection:(BOOL)decelerating;
-- (void) setMapCenterCoordinate:(CLLocationCoordinate2D)mapCenterCoordinate;
-- (void) resetMapCenterSearch;
+- (OADistanceDirection *)getEvaluatedDistanceDirection:(BOOL)decelerating;
+- (void)setMapCenterCoordinate:(CLLocationCoordinate2D)mapCenterCoordinate;
+- (void)resetMapCenterSearch;
 
 @end

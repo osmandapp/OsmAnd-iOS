@@ -506,7 +506,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func setupTableFooter() {
-        guard !currentFolder.getTrackItems().isEmpty, !isSearchActive, !tableView.isEditing else {
+        guard !currentFolder.getFlattenedTrackItems().isEmpty, !isSearchActive, !tableView.isEditing else {
             tableView.tableFooterView = nil
             return
         }

@@ -140,16 +140,18 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
 
 - (BOOL) search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
-    for (OASGpxDataItem *gpxInfo : [[OAGPXDatabase sharedDb] getDataItems])
+    for (OASGpxDataItem *dataItem in OAGPXDatabase.sharedDb.getDataItems)
     {
         OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
         sr.objectType = GPX_TRACK;
-        sr.localeName = gpxInfo.gpxTitle;
-        sr.relatedObject = gpxInfo;
+        sr.localeName = [dataItem gpxFileName];
+        sr.relatedObject = dataItem;
         sr.priority = SEARCH_TRACK_OBJECT_PRIORITY;
         sr.preferredZoom = PREFERRED_GPX_FILE_ZOOM;
         if ([phrase getFullSearchPhrase].length <= 1 && [phrase isNoSelectedType])
+        {
             [resultMatcher publish:sr];
+        }
         else
         {
             OANameStringMatcher *matcher = [[OANameStringMatcher alloc] initWithNamePart:[phrase getFullSearchPhrase] mode:CHECK_CONTAINS];
@@ -309,13 +311,13 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
         }
         else if ([pd isGpxFile])
         {
-            OASGpxDataItem *gpxInfo = [[OAGPXDatabase sharedDb] getGPXItemByFileName:pd.name];
-            if (gpxInfo)
+            OASGpxDataItem *dataItem = [[OAGPXDatabase sharedDb] getGPXItemByFileName:pd.name];
+            if (dataItem)
             {
-                sr.localeName = [gpxInfo gpxFileName];
+                sr.localeName = [dataItem gpxFileName];
                 sr.object = point;
                 sr.objectType = GPX_TRACK;
-                sr.relatedObject = gpxInfo;
+                sr.relatedObject = dataItem;
                 publish = YES;
             }
         }

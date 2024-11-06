@@ -363,16 +363,13 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
 - (void)onUpdateAllBarButtonClicked
 {
     NSMutableArray* resourcesToUpdate = [NSMutableArray array];
-    BOOL needPurchaseAny = NO;
     @synchronized(_dataLock)
     {
         for (OAOutdatedResourceItem* item in _resourcesItems)
         {
             const auto repoRes = _app.resourcesManager->getResourceInRepository(item.resourceId);
-            BOOL isFree = repoRes && repoRes->free;
+            BOOL isFree = repoRes && (repoRes->free || repoRes->type == OsmAnd::ResourcesManager::ResourceType::MapRegion);
             BOOL needPurchase = (item.worldRegion.regionId != nil && ![item.worldRegion isInPurchasedArea] && !isFree);
-            if (!needPurchaseAny && needPurchase)
-                needPurchaseAny = YES;
             
             if (item.downloadTask != nil || needPurchase)
                 continue;
@@ -380,16 +377,9 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
             [resourcesToUpdate addObject:item];
         }
     }
+
     if ([resourcesToUpdate count] == 0)
-    {
-        if (needPurchaseAny)
-        {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"res_updates_exp") preferredStyle:UIAlertControllerStyleAlert];
-            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
-            [self presentViewController:alert animated:YES completion:nil];
-        }
         return;
-    }
 
     if ([resourcesToUpdate count] == 1)
         [self offerDownloadAndUpdateOf:[resourcesToUpdate firstObject]];

@@ -12,7 +12,6 @@
 #import "OsmAndAppCppProtocol.h"
 #import "OsmAndAppPrivateProtocol.h"
 #import "OAAppSettings.h"
-#import "OsmAndCore/GpxDocument.h"
 
 @interface OsmAndAppImpl : NSObject <OsmAndAppProtocol, OsmAndAppCppProtocol, OsmAndAppPrivateProtocol>
 

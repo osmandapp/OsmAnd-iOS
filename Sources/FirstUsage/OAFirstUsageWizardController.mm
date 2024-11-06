@@ -165,7 +165,7 @@ typedef enum
     [_btnDownload setTitle:OALocalizedString(@"shared_string_download") forState:UIControlStateNormal];
 
     // Init progress view
-    [_btnGoToMap setTitle:OALocalizedString(@"show_region_on_map_go") forState:UIControlStateNormal];
+    [self setDownloadingButtonTitle:OALocalizedString(@"show_region_on_map_go")];
     
     _bottomTextView.textContainerInset = UIEdgeInsetsZero;
     _bottomTextView.textContainer.lineFragmentPadding = 0;
@@ -310,6 +310,13 @@ typedef enum
         [self resizeToFitSubviews:_cardView.subviews[0]];
         _heightConstraint.constant = _cardView.subviews[0].frame.size.height;
     }
+}
+
+- (void) setDownloadingButtonTitle:(NSString *)title
+{
+    NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc] initWithString:title];
+    [attributedTitle addAttribute:NSFontAttributeName value:[UIFont monospacedFontAt:15 withTextStyle:UIFontTextStyleBody] range:NSMakeRange(0, attributedTitle.string.length)];
+    [_btnGoToMap setAttributedTitle:attributedTitle forState:UIControlStateNormal];
 }
 
 - (void)showCard:(UIView *)cardView
@@ -525,8 +532,7 @@ typedef enum
                 OARepositoryResourceItem *item = _indexItems[0];
                 _lbMapName1.text = item.title;
                 
-                [_btnGoToMap setTitle:[OALocalizedString(@"downloading") stringByAppendingFormat:@" %@", [NSByteCountFormatter stringFromByteCount:item.sizePkg countStyle:NSByteCountFormatterCountStyleFile]] forState:UIControlStateNormal];
-
+                [self setDownloadingButtonTitle:[OALocalizedString(@"downloading") stringByAppendingFormat:@" %@", [NSByteCountFormatter stringFromByteCount:item.sizePkg countStyle:NSByteCountFormatterCountStyleFile]]];
                 if (_mapDownloadCancelled)
                 {
                     _progress1.hidden = YES;
@@ -901,7 +907,8 @@ typedef enum
             uint64_t size = _indexItems[0].size;
             float progress = [value floatValue];
             NSString *progressStr = [OAResourcesUISwiftHelper formatedDownloadingProgressString:size progress:progress addZero:YES combineViaSlash:YES];
-            [_btnGoToMap setTitle:[OALocalizedString(@"downloading") stringByAppendingFormat:@" %@", progressStr] forState:UIControlStateNormal];
+            [self setDownloadingButtonTitle:[OALocalizedString(@"downloading") stringByAppendingFormat:@" %@", progressStr]];
+            
             [_progress1 setProgress:[value floatValue]];
         }
     });
@@ -919,7 +926,7 @@ typedef enum
         
         if (_indexItems.count > 0)
         {
-            [_btnGoToMap setTitle:OALocalizedString(@"show_region_on_map_go") forState:UIControlStateNormal];
+            [self setDownloadingButtonTitle:OALocalizedString(@"show_region_on_map_go")];
         }
 
         if (task.progressCompleted < 1.0)

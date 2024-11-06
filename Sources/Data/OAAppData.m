@@ -24,6 +24,7 @@
 #import "OADownloadMode.h"
 #import "OAMapViewState.h"
 #import "OARTargetPoint.h"
+#import "OAZoom.h"
 
 #define kLastMapSourceKey @"lastMapSource"
 #define kOverlaySourceKey @"overlayMapSource"
@@ -511,6 +512,9 @@
         _mapLastViewedState.zoom = 3.0f;
     }
     
+    int minValidZoom = [OAZoom getMinValidZoom];
+    if (_mapLastViewedState.zoom < minValidZoom)
+        _mapLastViewedState.zoom = minValidZoom;
 }
 
 - (OAMapSource*) lastMapSource

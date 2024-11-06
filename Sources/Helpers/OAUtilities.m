@@ -2628,6 +2628,11 @@ static const double d180PI = 180.0 / M_PI_2;
 + (NSArray<NSString *> *) getGpxFoldersListSorted:(BOOL)shouldSort shouldAddRootTracksFolder:(BOOL)shouldAddRootTracksFolder
 {
     NSMutableArray<NSString *> *flattenedFilePaths = [self.class getFlattenedFileList:OsmAndApp.instance.gpxPath];
+    return [self.class getGpxFoldersListSorted:flattenedFilePaths shouldSort:shouldSort shouldAddRootTracksFolder:shouldAddRootTracksFolder];
+}
+
++ (NSArray<NSString *> *) getGpxFoldersListSorted:(NSArray<NSString *> *)flattenedFilePaths shouldSort:(BOOL)shouldSort shouldAddRootTracksFolder:(BOOL)shouldAddRootTracksFolder
+{
     NSMutableArray<NSString *> *flattenedRelativeFilePaths = [NSMutableArray array];
     for (NSString *path in flattenedFilePaths)
     {

@@ -2401,6 +2401,7 @@ static const NSInteger _buttonsCount = 4;
     
     [_downloadProgressBar setProgress:0.];
     _downloadProgressLabel.text = OALocalizedString(@"download_pending");
+    _downloadProgressLabel.font = [UIFont monospacedFontAt:15 withTextStyle:UIFontTextStyleBody];
     
     [self doLayoutSubviews:YES];
 }

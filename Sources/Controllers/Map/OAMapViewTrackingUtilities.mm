@@ -325,7 +325,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
         if (location)
         {
             if (_myLocation && ![_myLocation hasBearing])
-                _myLocation = [_myLocation locationWithBearing:_app.locationServices.lastKnownHeading];
+                _myLocation = [_myLocation locationWithCourse:_app.locationServices.lastKnownHeading];
             
             OAAppDelegate *appDelegate = (OAAppDelegate *)[[UIApplication sharedApplication] delegate];
             if ([_settings.drivingRegionAutomatic get] && !_drivingRegionUpdated && ![appDelegate isAppInitializing])

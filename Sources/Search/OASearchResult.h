@@ -14,7 +14,6 @@
 
 #include <OsmAndCore/Data/Amenity.h>
 #include <OsmAndCore/IFavoriteLocation.h>
-#include <OsmAndCore/GpxDocument.h>
 
 // MAX_TYPES_BASE_10 should be > ObjectType.getTypeWeight(objectType) = 5
 #define MAX_TYPES_BASE_10 10

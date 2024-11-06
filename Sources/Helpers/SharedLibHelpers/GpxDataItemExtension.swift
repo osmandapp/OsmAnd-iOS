@@ -8,11 +8,10 @@
 
 import OsmAndShared
 
-private var gpxTitleKey: UInt8 = 0
 private var newGpxKey: UInt8 = 0
 
 extension Array where Element: GpxDataItem {
-    func toTrackItems() -> [TrackItem] { compactMap{ TrackItem(file: $0.file) }}
+    func toTrackItems() -> [TrackItem] { compactMap { TrackItem(file: $0.file) }}
 }
 
 @objc(OASGpxDataItem)
@@ -303,47 +302,26 @@ extension GpxDataItem {
 
 @objc(OASGpxDataItem)
 extension GpxDataItem {
-    var gpxTitle: String? {
-        get {
-            objc_getAssociatedObject(self, &gpxTitleKey) as? String
-        }
-        set {
-            objc_setAssociatedObject(self, &gpxTitleKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-    }
     
-    var newGpx: Bool {
-        get {
-            objc_getAssociatedObject(self, &newGpxKey) as? Bool ?? false
-        }
-        set {
-            objc_setAssociatedObject(self, &newGpxKey, newValue, .OBJC_ASSOCIATION_ASSIGN)
-        }
-    }
+//    var newGpx: Bool {
+//        get {
+//            objc_getAssociatedObject(self, &newGpxKey) as? Bool ?? false
+//        }
+//        set {
+//            objc_setAssociatedObject(self, &newGpxKey, newValue, .OBJC_ASSOCIATION_ASSIGN)
+//        }
+//    }
 }
 
 @objc(OASGpxDataItem)
 extension GpxDataItem {
     
-    func getNiceTitle() -> String {
-        if newGpx {
-            return localizedString("create_new_trip")
-        }
-        
-        if gpxTitle == nil {
-            return (gpxFileName as NSString).lastPathComponent.deletingPathExtension()
-        }
-        
-        return gpxTitle ?? ""
-    }
-    
-    func isTempTrack() -> Bool {
-        gpxFilePath.hasPrefix("Temp/")
+    var gpxFileNameWithoutExtension: String {
+        gpxFileName.deletingPathExtension()
     }
     
     func updateFolderName(newFilePath: String) {
         gpxFileName = (newFilePath as NSString).lastPathComponent
-        gpxTitle = (gpxFileName as NSString).deletingPathExtension
         gpxFolderName = (newFilePath as NSString).deletingLastPathComponent
     }
 }

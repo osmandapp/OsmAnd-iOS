@@ -532,7 +532,7 @@
                    shownTrack:self.isShown
                isNetworkRoute:_isNewRoute
             routeIcon:isRoute ? _reopeningState.trackIcon : [UIImage templateImageNamed:@"ic_custom_trip"]
-                        title:localizedTitle.length > 0 ? localizedTitle : [self.gpx getNiceTitle]
+                        title:localizedTitle.length > 0 ? localizedTitle : self.gpx.gpxFileNameWithoutExtension
                   nearestCity:self.gpx.nearestCity];
 
     [self.scrollableView addSubview:_headerView];
@@ -1256,7 +1256,7 @@
 - (NSString *)getGpxName
 {
     NSString *localizedTitle = _routeKey ? _routeKey.localizedTitle : @"";
-    return localizedTitle.length > 0 ? localizedTitle : [self.gpx getNiceTitle];
+    return localizedTitle.length > 0 ? localizedTitle : self.gpx.gpxFileNameWithoutExtension;
 }
 
 - (NSString *)checkGroupName:(NSString *)groupName
@@ -1607,12 +1607,14 @@
     [self.mapViewController hideTempGpxTrack];
     self.isShown = NO;
     [self changeTrackVisible];
+    
+    
 
     [_headerView updateHeader:self.isCurrentTrack
                    shownTrack:self.isShown
                isNetworkRoute:_isNewRoute
                     routeIcon:_reopeningState.trackIcon
-                        title:[self.gpx getNiceTitle]
+                        title:self.gpx.gpxFileNameWithoutExtension
                   nearestCity:self.gpx.nearestCity];
     [self setupUIBuilder];
     [_uiBuilder setupTabBar:self.tabBarView

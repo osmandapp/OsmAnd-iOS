@@ -784,7 +784,8 @@ static const NSInteger _buttonsCount = 4;
             return NO;
             break;
         case OATargetGPX:
-            return ((OASGpxDataItem *)targetObj).newGpx;
+            return NO;
+           // return ((OASGpxDataItem *)targetObj).newGpx;
             break;
             
         default:

@@ -186,7 +186,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         [existingTracksSection addObject:@{
             @"type" : [OAGPXTrackCell getCellIdentifier],
             @"track" : gpx,
-            @"title" : [gpx getNiceTitle],
+            @"title" : gpx.gpxFileNameWithoutExtension,
             @"distance" : [OAOsmAndFormatter getFormattedDistance:gpx.totalDistance],
             @"time" : [OAOsmAndFormatter getFormattedTimeInterval:gpx.timeSpan / 1000 shortFormat:YES],
             @"wpt" : [NSString stringWithFormat:@"%d", gpx.wptPoints],
@@ -242,14 +242,14 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         switch (_sortingMode) {
             case EOAModifiedDate:
             {
-                NSDate *time1 = [OAUtilities getFileLastModificationDate:obj1.gpxFilePath];
-                NSDate *time2 = [OAUtilities getFileLastModificationDate:obj2.gpxFilePath];
+                NSDate *time1 = obj1.lastModifiedTime;
+                NSDate *time2 = obj2.lastModifiedTime;
                 return [time2 compare:time1];
             }
             case EOANameAscending:
-                return [obj1.gpxTitle compare:obj2.gpxTitle];
+                return [obj1.gpxFileNameWithoutExtension compare:obj2.gpxFileNameWithoutExtension];
             case EOANameDescending:
-                return  [obj2.gpxTitle compare:obj1.gpxTitle];
+                return [obj2.gpxFileNameWithoutExtension compare:obj1.gpxFileNameWithoutExtension];
             default:
                 break;
         }

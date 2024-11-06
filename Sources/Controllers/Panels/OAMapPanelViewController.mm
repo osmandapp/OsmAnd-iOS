@@ -1821,8 +1821,8 @@ typedef enum
 
 - (void) resetActiveTargetMenu
 {
-    if ([self hasGpxActiveTargetType] && _activeTargetObj && [_activeTargetObj isKindOfClass:OASGpxDataItem.class])
-        ((OASGpxDataItem *)_activeTargetObj).newGpx = NO;
+//    if ([self hasGpxActiveTargetType] && _activeTargetObj && [_activeTargetObj isKindOfClass:OASGpxDataItem.class])
+//        ((OASGpxDataItem *)_activeTargetObj).newGpx = NO;
     
     _activeTargetActive = NO;
     _activeTargetObj = nil;
@@ -2922,7 +2922,7 @@ typedef enum
     _activeTargetObj = targetPoint.targetObj;
     _activeViewControllerState = state;
 
-    _formattedTargetName = item.dataItem ? [item.dataItem getNiceTitle] : @"";
+    _formattedTargetName = item.dataItem ? item.dataItem.gpxFileNameWithoutExtension : @"";
     _targetMenuView.isAddressFound = YES;
     _targetMenuView.activeTargetType = _activeTargetType;
     [_targetMenuView setTargetPoint:targetPoint];

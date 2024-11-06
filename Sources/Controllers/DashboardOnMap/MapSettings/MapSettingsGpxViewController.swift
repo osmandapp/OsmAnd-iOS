@@ -245,7 +245,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
                 for gpx in gpxListToShow {
                     let gpxRow = tracksSection.createNewRow()
                     gpxRow.cellType = OASimpleTableViewCell.getIdentifier()
-                    gpxRow.title = gpx.getNiceTitle()
+                    gpxRow.title = gpx.gpxFileNameWithoutExtension
                     gpxRow.setObj(gpx, forKey: "gpx")
                     gpxRow.iconName = "ic_custom_trip"
                     gpxRow.iconTintColor = visibleGpxFilePaths.contains(gpx.gpxFilePath) ? .iconColorActive : .iconColorDisabled
@@ -257,7 +257,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
                 for gpx in recentlyVisibleGpxList {
                     let gpxRow = recentlyVisibleSection.createNewRow()
                     gpxRow.cellType = OASimpleTableViewCell.getIdentifier()
-                    gpxRow.title = gpx.getNiceTitle()
+                    gpxRow.title = gpx.gpxFileNameWithoutExtension
                     gpxRow.setObj(gpx, forKey: "gpx")
                     gpxRow.iconName = "ic_custom_trip"
                     gpxRow.iconTintColor = .iconColorDisabled
@@ -801,9 +801,9 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             case .lastModified:
                 list.sort { $0.lastModifiedTime > $1.lastModifiedTime }
             case .nameAZ:
-                list.sort { $0.getNiceTitle().localizedCaseInsensitiveCompare($1.getNiceTitle()) == .orderedAscending }
+                list.sort { $0.gpxFileNameWithoutExtension.localizedCaseInsensitiveCompare($1.gpxFileNameWithoutExtension) == .orderedAscending }
             case .nameZA:
-                list.sort { $0.getNiceTitle().localizedCaseInsensitiveCompare($1.getNiceTitle()) == .orderedDescending }
+                list.sort { $0.gpxFileNameWithoutExtension.localizedCaseInsensitiveCompare($1.gpxFileNameWithoutExtension) == .orderedDescending }
             case .newestDateFirst:
                 list.sort { $0.creationDate > $1.creationDate }
             case .oldestDateFirst:
@@ -1070,7 +1070,7 @@ extension MapSettingsGpxViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         isSearchFilteringActive = !searchText.isEmpty
         filteredGpxList = searchText.isEmpty ? allGpxList : allGpxList.filter {
-            $0.getNiceTitle().localizedCaseInsensitiveContains(searchText)
+            $0.gpxFileNameWithoutExtension.localizedCaseInsensitiveContains(searchText)
         }
         
         sortTracks()

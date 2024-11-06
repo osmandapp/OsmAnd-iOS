@@ -786,7 +786,7 @@ updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))upd
         NSString *newPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:newFilePath];
         if (![NSFileManager.defaultManager fileExistsAtPath:newPath])
         {
-            gpx.gpxTitle = newName;
+          //  gpx.gpxTitle = newName;
             gpx.gpxFileName = newFileName;
             
             OASKFile *newFile = [[OASKFile alloc] initWithFilePath:newPath];

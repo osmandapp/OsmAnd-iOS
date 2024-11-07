@@ -60,7 +60,7 @@
 "shared_string_target_points" = "Sihtkohad";
 "search_radius_proximity" = "Ulatus";
 "poi" = "HP";
-"day_off_label" = "väljas";
+"day_off_label" = "suletud";
 "open_from" = "Avatud alates";
 "open_till" = "Avatud kuni";
 "will_close_at" = "Suletakse kell";
@@ -99,7 +99,7 @@
 "rotate_map_to_bearing_descr" = "Vali kaardi ekraani orientatsioon.";
 "rotate_map_compass_opt" = "Kompassi suund";
 "rotate_map_bearing_opt" = "Liikumissuund";
-"rotate_map_north_opt" = "Ei pöörle (põhi alati üleval)";
+"rotate_map_north_opt" = "Põhi on alati üleval";
 "driving_region_descr" = "Vali sõidupiirkond: USA, Euroopa, Suurbritannia, Aasia ja midagi muud.";
 "driving_region" = "Sõidupiirkond";
 "shared_string_automatic" = "Automaatne";
@@ -1388,7 +1388,7 @@
 "rendering_value_translucent_orange_name" = "Läbikumav oranž";
 "rendering_attr_piste_difficulty_novice_name" = "Algaja";
 "rendering_attr_surface_paving_stones_name" = "Sillutuskivid";
-"routing_attr_width_name" = "Laiuspiirang";
+"routing_attr_width_name" = "Laius";
 "routing_attr_driving_style_safety_name" = "Eelista kõrvalteid";
 "routing_attr_avoid_borders_description" = "Väldib riigipiiride ületusi";
 "rendering_attr_hikingRoutesOSMC_description" = "Kuva rajad vastavalt OSMC radadele.";
@@ -1401,7 +1401,7 @@
 "rendering_attr_surface_fine_gravel_name" = "Peenkillustik";
 "routing_attr_allow_skating_only_description" = "Rajad, mis on hooldatud vabastiilis või ainult klassikaliseks radadeta uisutamiseks.";
 "rendering_attr_smoothness_impassable_name" = "Läbimatu";
-"routing_attr_height_name" = "Kõrguspiirang";
+"routing_attr_height_name" = "Kõrgus";
 "rendering_attr_tramRoutes_name" = "Trammiliinid";
 "routing_attr_avoid_share_taxi_name" = "Väldi takso jagamist";
 "rendering_attr_depthContours_description" = "Kuva sügavuskontuurid ja -punktid.";
@@ -2641,7 +2641,7 @@
 "ask_question_propose_features" = "Küsi küsimusi ja tee ettepanekuid";
 "detailed_log_file" = "Üksikasjalik logifail";
 "download_install_beta_version" = "Laadi alla ja paigalda OsmAndi beetaversioon";
-"compass_click_desc" = "Vihje: kaardi suuna muutmiseks klõpsa kompassi ikoonil.";
+"compass_click_desc" = "Kaardi suuna muutmiseks topeltklõpsa kompassi ikoonil.";
 "driving_region_uk" = "Suurbritannia ja sarnased riigid";
 "shared_string_uploaded" = "Üleslaaditud";
 "shared_string_contours" = "Kontuurjooned";

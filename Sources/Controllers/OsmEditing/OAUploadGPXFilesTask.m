@@ -50,7 +50,7 @@
         
             NSString *description = _commonDescription;
             if (!description || [description trim].length == 0)
-                description = [track.gpxFileName stringByDeletingPathExtension];
+                description = track.gpxFileNameWithoutExtension;
 
             OAOpenStreetMapRemoteUtil *editsUtil = (OAOpenStreetMapRemoteUtil *)_plugin.getPoiModificationRemoteUtil;
             [editsUtil uploadGPXFile:_tags description:description visibility:_visibility gpxDoc:track listener:_listener];

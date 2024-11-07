@@ -284,6 +284,9 @@ static QuickActionType *TYPE_MY_PLACES;
     [allTypes addObject:[ShowHideFitnessTrailsAction getQuickActionType]];
     [allTypes addObject:[ShowHideRunningRoutesAction getQuickActionType]];
     
+    // interface
+    //[allTypes addObject:LockScreenAction.TYPE];
+    
     // my places
     [allTypes addObject:OAFavoriteAction.TYPE];
     [allTypes addObject:OAGPXAction.TYPE];
@@ -303,6 +306,7 @@ static QuickActionType *TYPE_MY_PLACES;
     // settings
     [allTypes addObject:DisplayPositionAction.type];
     [allTypes addObject:OASwitchProfileAction.TYPE];
+    
 
     NSMutableArray<QuickActionType *> *enabledTypes = [NSMutableArray arrayWithArray:allTypes];
     [OAPluginsHelper registerQuickActionTypesPlugins:allTypes enabledTypes:enabledTypes];

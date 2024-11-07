@@ -129,6 +129,8 @@
             return @"SEARCH_API_REGION_FINISHED";
         case UNKNOWN_NAME_FILTER:
             return @"UNKNOWN_NAME_FILTER";
+        case GPX_TRACK:
+            return @"GPX_TRACK";
             
         default:
             return [NSString stringWithFormat:@"%d", (int)objecType];

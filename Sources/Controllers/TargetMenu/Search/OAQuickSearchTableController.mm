@@ -560,35 +560,45 @@
             case LOCATION:
             case GPX_TRACK:
             {
-                OASimpleTableViewCell* cell;
-                cell = (OASimpleTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
-                if (cell == nil)
+                OASGpxDataItem *dataItem = (OASGpxDataItem *)res.relatedObject;
+                if (dataItem)
                 {
-                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
-                    cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
-                    [cell descriptionVisibility:YES];
+                    OASimpleTableViewCell *cell;
+                    cell = (OASimpleTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+                    if (cell == nil)
+                    {
+                        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+                        cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+                        [cell descriptionVisibility:YES];
+                    }
+                    if (cell)
+                    {
+                        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                        [cell.titleLabel setTextColor:[UIColor colorNamed:ACColorNameTextColorPrimary]];
+                        [cell.titleLabel setText:[item getName]];
+                        cell.leftIconView.image = [UIImage templateImageNamed:@"ic_custom_trip"];
+                        
+                    }
+                    cell.descriptionLabel.text = [OAQuickSearchListItem getTypeName:res];
+                    BOOL isVisible = [[OAAppSettings sharedManager].mapSettingVisibleGpx.get containsObject:dataItem.gpxFilePath];
+                    cell.leftIconView.tintColor = [UIColor colorNamed:isVisible ? ACColorNameIconColorActive : ACColorNameIconColorDefault];
+                    return cell;
                 }
-                if (cell)
+                else
                 {
-                    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-                    [cell.titleLabel setTextColor:[UIColor colorNamed:ACColorNameTextColorPrimary]];
-                    [cell.titleLabel setText:[item getName]];
-                    cell.leftIconView.image = [UIImage templateImageNamed:@"ic_custom_trip"];
-                    
-                    OASGpxDataItem *dataItem = (OASGpxDataItem *)res.relatedObject;
-                    if (dataItem)
+                    OAPointDescCell *cell = [self getPointDescCell];
+                    if (cell)
                     {
-                        cell.descriptionLabel.text = [OAQuickSearchListItem getTypeName:res];
-                        BOOL isVisible = [[OAAppSettings sharedManager].mapSettingVisibleGpx.get containsObject:dataItem.gpxFilePath];
-                        cell.leftIconView.tintColor = [UIColor colorNamed:isVisible ? ACColorNameIconColorActive : ACColorNameIconColorDefault];
+                        [cell.titleView setText:[item getName]];
+                        cell.titleIcon.image = [UIImage templateImageNamed:@"ic_action_world_globe"];
+                        [cell.descView setText:[OAQuickSearchListItem getTypeName:res]];
+                        cell.openingHoursView.hidden = YES;
+                        cell.timeIcon.hidden = YES;
+                        
+                        [self setCellDistanceDirection:cell item:item];
                     }
-                    else
-                    {
-                        cell.descriptionLabel.text = @"";
-                        cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
-                    }
+                    return cell;
                 }
-                return cell;
             }
             case PARTIAL_LOCATION:
             {

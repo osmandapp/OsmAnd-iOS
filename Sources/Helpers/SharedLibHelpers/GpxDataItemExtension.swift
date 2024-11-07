@@ -8,8 +8,6 @@
 
 import OsmAndShared
 
-private var newGpxKey: UInt8 = 0
-
 extension Array where Element: GpxDataItem {
     func toTrackItems() -> [TrackItem] { compactMap { TrackItem(file: $0.file) }}
 }

@@ -1775,7 +1775,7 @@ colorizationScheme:(int)colorizationScheme
         targetPoint.targetObj = [obj isKindOfClass:[OASGpxDataItem class]] ? (OASGpxDataItem *)obj : (OASGpxFile *) obj;
 
         targetPoint.icon = [UIImage imageNamed:@"ic_custom_trip"];
-        targetPoint.title = [obj isKindOfClass:[OASGpxDataItem class]] ? [item getNiceTitle] :  OALocalizedString(@"shared_string_currently_recording_track");
+        targetPoint.title = [obj isKindOfClass:[OASGpxDataItem class]] ? item.gpxFileNameWithoutExtension :  OALocalizedString(@"shared_string_currently_recording_track");
 
         targetPoint.sortIndex = (NSInteger)targetPoint.type;
         targetPoint.values = @{ @"opened_from_map": @YES };

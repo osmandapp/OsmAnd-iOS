@@ -276,8 +276,8 @@ extension TrackItem {
         }
     }
     
-    func getNiceTitle() -> String {
-        dataItem?.getNiceTitle() ?? ""
+    var gpxFileNameWithoutExtension: String {
+        dataItem?.gpxFileNameWithoutExtension ?? ""
     }
     
     func resetAppearanceToOriginal() {

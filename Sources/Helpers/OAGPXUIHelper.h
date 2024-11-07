@@ -78,5 +78,12 @@
                               track:(OASTrack *)track
                             segment:(OASTrkSegment *)segment;
 
++ (NSString *)getGPXStatisticStringForGpxDataItem:(OASGpxDataItem *)dataItem showLastModifiedTime:(BOOL)showLastModifiedTime;
++ (NSString *)getGPXStatisticStringFor:(nullable NSDate *)lastModifiedTime
+                         totalDistance:(float)totalDistance
+                              timeSpan:(NSInteger)timeSpan
+                             wptPoints:(int)wptPoints;
+
+
 @end
 

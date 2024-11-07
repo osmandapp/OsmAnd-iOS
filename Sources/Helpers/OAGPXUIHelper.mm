@@ -692,7 +692,6 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
     {
         if (trackItem.dataItem)
         {
-            [trackItem.dataItem updateFolderNameWithNewFilePath:newStoringPath];
             NSString *newStoringFullPath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:newStoringPath];
             OASKFile *newFile = [[OASKFile alloc] initWithFilePath:newStoringFullPath];
             BOOL result = [trackItem.dataItem.file renameToToFile:newFile];
@@ -786,12 +785,21 @@ updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))upd
         NSString *newPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:newFilePath];
         if (![NSFileManager.defaultManager fileExistsAtPath:newPath])
         {
-            gpx.gpxTitle = newName;
             gpx.gpxFileName = newFileName;
             
             OASKFile *newFile = [[OASKFile alloc] initWithFilePath:newPath];
-            [gpx.file renameToToFile:newFile];
-            [[OASGpxDbHelper shared] renameCurrentFile:gpx.file newFile:newFile];
+            BOOL renameToFileResult = [gpx.file renameToToFile:newFile];
+            if (!renameToFileResult)
+            {
+                NSLog(@"[ERROR] -> OAGPXUIHelper -> renameToFileResult is fail");
+                return;
+            }
+            BOOL renameCurrentFileResult = [[OASGpxDbHelper shared] renameCurrentFile:gpx.file newFile:newFile];
+            if (!renameCurrentFileResult)
+            {
+                NSLog(@"[ERROR] -> OAGPXUIHelper -> renameCurrentFileResult is fail");
+                return;
+            }
             
             OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:newPath];
             if (gpx)
@@ -1003,6 +1011,54 @@ updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))upd
     }
     NSString *trackString = OALocalizedString(@"shared_string_gpx_track");
     return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), trackString, trackName];
+}
+
++ (NSString *)getGPXStatisticStringForGpxDataItem:(OASGpxDataItem *)dataItem showLastModifiedTime:(BOOL)showLastModifiedTime
+{
+    NSDate *lastModifiedTime = showLastModifiedTime ? dataItem.lastModifiedTime : nil;
+    return [[self class] getGPXStatisticStringFor:lastModifiedTime
+                                    totalDistance:dataItem.totalDistance
+                                         timeSpan:dataItem.timeSpan
+                                        wptPoints:dataItem.wptPoints];
+}
+
++ (NSString *)getGPXStatisticStringFor:(nullable NSDate *)lastModifiedTime
+                         totalDistance:(float)totalDistance
+                              timeSpan:(NSInteger)timeSpan
+                             wptPoints:(int)wptPoints
+{
+    NSMutableString *result = [NSMutableString string];
+    if (lastModifiedTime) {
+        NSString *lastModified = [[[self class] gpxDateFormatter] stringFromDate:lastModifiedTime];
+        [result appendFormat:@"%@ | ", lastModified];
+        
+    }
+
+    NSString *trackDistance = [OAOsmAndFormatter getFormattedDistance:totalDistance];
+    if (trackDistance) {
+        [result appendFormat:@"%@ • ", trackDistance];
+    }
+    
+    NSString *trackDuration = [OAOsmAndFormatter getFormattedTimeInterval:(NSTimeInterval)(timeSpan / 1000) shortFormat:YES];
+    if (trackDuration) {
+        [result appendFormat:@"%@ • ", trackDuration];
+    }
+    
+    NSString *waypointsCount = [NSString stringWithFormat:@"%d", wptPoints];
+    [result appendString:waypointsCount];
+    
+    return [result copy];
+}
+
++ (NSDateFormatter *)gpxDateFormatter {
+    static NSDateFormatter *dateFormatter = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        dateFormatter = [NSDateFormatter new];
+        dateFormatter.dateStyle = NSDateFormatterShortStyle;
+        dateFormatter.timeStyle = NSDateFormatterNoStyle;
+    });
+    return dateFormatter;
 }
 
 @end

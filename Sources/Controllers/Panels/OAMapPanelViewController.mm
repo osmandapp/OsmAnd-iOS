@@ -1820,10 +1820,7 @@ typedef enum
 }
 
 - (void) resetActiveTargetMenu
-{
-    if ([self hasGpxActiveTargetType] && _activeTargetObj && [_activeTargetObj isKindOfClass:OASGpxDataItem.class])
-        ((OASGpxDataItem *)_activeTargetObj).newGpx = NO;
-    
+{    
     _activeTargetActive = NO;
     _activeTargetObj = nil;
     _activeTargetType = OATargetNone;
@@ -2799,26 +2796,23 @@ typedef enum
     [self openTargetViewWithGPX:nil];
 }
 
-- (void)openTargetViewWithGPX:(OASGpxDataItem *)item
+- (void)openTargetViewWithGPX:(OASTrackItem *)trackItem
 {
-    OASTrackItem *trackItem;
-    if (item)
-    {
-        trackItem = [[OASTrackItem alloc] initWithFile:item.file];
-        trackItem.dataItem = item;
-    }
-    else
+    OASTrackItem *newTrackItem = trackItem;
+    if (!newTrackItem)
     {
         OASGpxFile *currentTrack = [OASavingTrackHelper.sharedInstance currentTrack];
-        trackItem = [[OASTrackItem alloc] initWithGpxFile:currentTrack];
+        newTrackItem = [[OASTrackItem alloc] initWithGpxFile:currentTrack];
     }
-
-    [self openTargetViewWithGPX:trackItem
-                   trackHudMode:EOATrackMenuHudMode
-                          state:[_activeViewControllerState isKindOfClass:OATrackMenuViewControllerState.class]
-                                  ? _activeViewControllerState
-                               : [OATrackMenuViewControllerState withPinLocation:kCLLocationCoordinate2DInvalid
-                                                                      openedFromMap:NO]];
+    if (newTrackItem)
+    {
+        [self openTargetViewWithGPX:newTrackItem
+                       trackHudMode:EOATrackMenuHudMode
+                              state:[_activeViewControllerState isKindOfClass:OATrackMenuViewControllerState.class]
+                                   ? _activeViewControllerState
+                                   : [OATrackMenuViewControllerState withPinLocation:kCLLocationCoordinate2DInvalid
+                                                                          openedFromMap:NO]];
+    }
 }
 
 - (void)openTargetViewWithGPXFromTracksList:(OASTrackItem *)item
@@ -2922,7 +2916,7 @@ typedef enum
     _activeTargetObj = targetPoint.targetObj;
     _activeViewControllerState = state;
 
-    _formattedTargetName = item.dataItem ? [item.dataItem getNiceTitle] : @"";
+    _formattedTargetName = item.dataItem ? item.dataItem.gpxFileNameWithoutExtension : @"";
     _targetMenuView.isAddressFound = YES;
     _targetMenuView.activeTargetType = _activeTargetType;
     [_targetMenuView setTargetPoint:targetPoint];

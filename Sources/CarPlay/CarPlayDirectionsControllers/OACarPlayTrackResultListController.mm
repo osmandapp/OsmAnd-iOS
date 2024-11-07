@@ -57,7 +57,7 @@
             if (listItems.count >= maximumItemCount)
                 break;
 
-            CPListItem *listItem = [[CPListItem alloc] initWithText:[trackItem getNiceTitle]
+            CPListItem *listItem = [[CPListItem alloc] initWithText:trackItem.gpxFileNameWithoutExtension
                                                          detailText:[self getTrackDescription:trackItem]
                                                               image:[UIImage imageNamed:@"ic_custom_trip"]
                                                      accessoryImage:nil

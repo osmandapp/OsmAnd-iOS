@@ -131,7 +131,7 @@
             [existingTracksSection addObject:@{
                     @"type" : [OAGPXRouteRoundCell getCellIdentifier],
                     @"track" : gpx,
-                    @"title" : [gpx getNiceTitle],
+                    @"title" : gpx.gpxFileNameWithoutExtension,
                     @"distance" : [OAOsmAndFormatter getFormattedDistance:gpx.totalDistance],
                     @"time" : [OAOsmAndFormatter getFormattedTimeInterval:gpx.timeSpan / 1000 shortFormat:YES],
                     @"wpt" : [NSString stringWithFormat:@"%d", gpx.wptPoints],

@@ -2477,7 +2477,7 @@
 "map_source" = "Map-fonto";
 "driving_region_uk" = "Britujo kaj similaj";
 "shared_string_show" = "Montri";
-"rendering_attr_showDirtbikeTrails_name" = "Kursoj por terenaj motorcikloj";
+"rendering_attr_showDirtbikeTrails_name" = "Teren-motorciklaj kursoj";
 "rendering_attr_showDirtbikeTrails_description" = "Montri kursojn por ekstervojaj motorcikloj";
 "view_angle_description" = "Vidigi konus-forman figuron reprezentantan la rigardatan direkton.";
 "resting_position_icon" = "Emblemo dum nemoviĝi";

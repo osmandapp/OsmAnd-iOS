@@ -358,7 +358,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             gpxFile.path = gpx.file.absolutePath;
             [section addObject:@{
                 @"cell" : [OARightIconTableViewCell getCellIdentifier],
-                @"title" : gpx.getNiceTitle,
+                @"title" : gpx.gpxFileNameWithoutExtension,
                 @"descr" : [OAGPXUIHelper getDescription:gpx],
                 @"img" : @"ic_custom_trip",
                 @"item" : gpxFile

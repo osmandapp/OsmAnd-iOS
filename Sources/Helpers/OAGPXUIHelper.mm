@@ -692,7 +692,6 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
     {
         if (trackItem.dataItem)
         {
-            [trackItem.dataItem updateFolderNameWithNewFilePath:newStoringPath];
             NSString *newStoringFullPath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:newStoringPath];
             OASKFile *newFile = [[OASKFile alloc] initWithFilePath:newStoringFullPath];
             BOOL result = [trackItem.dataItem.file renameToToFile:newFile];
@@ -789,8 +788,18 @@ updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))upd
             gpx.gpxFileName = newFileName;
             
             OASKFile *newFile = [[OASKFile alloc] initWithFilePath:newPath];
-            [gpx.file renameToToFile:newFile];
-            [[OASGpxDbHelper shared] renameCurrentFile:gpx.file newFile:newFile];
+            BOOL renameToFileResult = [gpx.file renameToToFile:newFile];
+            if (!renameToFileResult)
+            {
+                NSLog(@"[ERROR] -> OAGPXUIHelper -> renameToFileResult is fail");
+                return;
+            }
+            BOOL renameCurrentFileResult = [[OASGpxDbHelper shared] renameCurrentFile:gpx.file newFile:newFile];
+            if (!renameCurrentFileResult)
+            {
+                NSLog(@"[ERROR] -> OAGPXUIHelper -> renameCurrentFileResult is fail");
+                return;
+            }
             
             OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:newPath];
             if (gpx)

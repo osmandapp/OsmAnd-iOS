@@ -306,9 +306,4 @@ extension GpxDataItem {
     var gpxFileNameWithoutExtension: String {
         gpxFileName.deletingPathExtension()
     }
-    
-    func updateFolderName(newFilePath: String) {
-        gpxFileName = (newFilePath as NSString).lastPathComponent
-        gpxFolderName = (newFilePath as NSString).deletingLastPathComponent
-    }
 }

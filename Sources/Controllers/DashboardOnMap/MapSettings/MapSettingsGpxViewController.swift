@@ -575,7 +575,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
                 ? String(newName.dropLast(fileExtension.count))
                 : newName
                 gpxHelper?.renameTrack(track.dataItem, newName: newNameToChange, hostVC: self)
-                updateData()
+                updateContent()
                 delegate?.onVisibleTracksUpdate()
             } else {
                 gpxHelper?.renameTrack(nil, doc: nil, newName: nil, hostVC: self)
@@ -606,10 +606,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             }
 
             self.gpxDB?.removeGpxItem(dataItem, withLocalRemove: true)
-            loadGpxTracks()
-            loadVisibleTracks()
-            loadRecentlyVisibleTracks()
-            updateData()
+            updateContent()
             delegate?.onVisibleTracksUpdate()
         })
 
@@ -1121,7 +1118,7 @@ extension MapSettingsGpxViewController: OASelectTrackFolderDelegate {
                 trackItem.dataItem = selectedTrack
                 
                 gpxHelper?.copyGPX(toNewFolder: selectedFolderName, renameToNewName: nil, deleteOriginalFile: true, openTrack: false, trackItem: trackItem)
-                updateData()
+                updateContent()
                 delegate?.onVisibleTracksUpdate()
             }
         }

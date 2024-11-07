@@ -2796,26 +2796,23 @@ typedef enum
     [self openTargetViewWithGPX:nil];
 }
 
-- (void)openTargetViewWithGPX:(OASGpxDataItem *)item
+- (void)openTargetViewWithGPX:(OASTrackItem *)trackItem
 {
-    OASTrackItem *trackItem;
-    if (item)
-    {
-        trackItem = [[OASTrackItem alloc] initWithFile:item.file];
-        trackItem.dataItem = item;
-    }
-    else
+    OASTrackItem *newTrackItem = trackItem;
+    if (!newTrackItem)
     {
         OASGpxFile *currentTrack = [OASavingTrackHelper.sharedInstance currentTrack];
-        trackItem = [[OASTrackItem alloc] initWithGpxFile:currentTrack];
+        newTrackItem = [[OASTrackItem alloc] initWithGpxFile:currentTrack];
     }
-
-    [self openTargetViewWithGPX:trackItem
-                   trackHudMode:EOATrackMenuHudMode
-                          state:[_activeViewControllerState isKindOfClass:OATrackMenuViewControllerState.class]
-                                  ? _activeViewControllerState
-                               : [OATrackMenuViewControllerState withPinLocation:kCLLocationCoordinate2DInvalid
-                                                                      openedFromMap:NO]];
+    if (newTrackItem)
+    {
+        [self openTargetViewWithGPX:newTrackItem
+                       trackHudMode:EOATrackMenuHudMode
+                              state:[_activeViewControllerState isKindOfClass:OATrackMenuViewControllerState.class]
+                                   ? _activeViewControllerState
+                                   : [OATrackMenuViewControllerState withPinLocation:kCLLocationCoordinate2DInvalid
+                                                                          openedFromMap:NO]];
+    }
 }
 
 - (void)openTargetViewWithGPXFromTracksList:(OASTrackItem *)item

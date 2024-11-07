@@ -31,6 +31,7 @@
 #import "OAFavoriteItem.h"
 #import "OAFavoritesHelper.h"
 #import "OsmAndSharedWrapper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Data/Address.h>
 #include <OsmAndCore/Data/Street.h>
@@ -374,6 +375,15 @@
         case WPT:
         {
             return searchResult.localeRelatedObjectName;
+        }
+        case GPX_TRACK:
+        {
+            OASGpxDataItem *dataItem = (OASGpxDataItem *)searchResult.relatedObject;
+            if (dataItem)
+            {
+                return [OAGPXUIHelper getGPXStatisticStringForGpxDataItem:dataItem showLastModifiedTime:YES];
+            }
+            return @"";
         }
         case UNKNOWN_NAME_FILTER:
         {

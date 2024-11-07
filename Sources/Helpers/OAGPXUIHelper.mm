@@ -1004,4 +1004,52 @@ updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))upd
     return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), trackString, trackName];
 }
 
++ (NSString *)getGPXStatisticStringForGpxDataItem:(OASGpxDataItem *)dataItem showLastModifiedTime:(BOOL)showLastModifiedTime
+{
+    NSDate *lastModifiedTime = showLastModifiedTime ? dataItem.lastModifiedTime : nil;
+    return [[self class] getGPXStatisticStringFor:lastModifiedTime
+                                    totalDistance:dataItem.totalDistance
+                                         timeSpan:dataItem.timeSpan
+                                        wptPoints:dataItem.wptPoints];
+}
+
++ (NSString *)getGPXStatisticStringFor:(nullable NSDate *)lastModifiedTime
+                         totalDistance:(float)totalDistance
+                              timeSpan:(NSInteger)timeSpan
+                             wptPoints:(int)wptPoints
+{
+    NSMutableString *result = [NSMutableString string];
+    if (lastModifiedTime) {
+        NSString *lastModified = [[[self class] gpxDateFormatter] stringFromDate:lastModifiedTime];
+        [result appendFormat:@"%@ | ", lastModified];
+        
+    }
+
+    NSString *trackDistance = [OAOsmAndFormatter getFormattedDistance:totalDistance];
+    if (trackDistance) {
+        [result appendFormat:@"%@ • ", trackDistance];
+    }
+    
+    NSString *trackDuration = [OAOsmAndFormatter getFormattedTimeInterval:(NSTimeInterval)(timeSpan / 1000) shortFormat:YES];
+    if (trackDuration) {
+        [result appendFormat:@"%@ • ", trackDuration];
+    }
+    
+    NSString *waypointsCount = [NSString stringWithFormat:@"%d", wptPoints];
+    [result appendString:waypointsCount];
+    
+    return [result copy];
+}
+
++ (NSDateFormatter *)gpxDateFormatter {
+    static NSDateFormatter *dateFormatter = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        dateFormatter = [NSDateFormatter new];
+        dateFormatter.dateStyle = NSDateFormatterShortStyle;
+        dateFormatter.timeStyle = NSDateFormatterNoStyle;
+    });
+    return dateFormatter;
+}
+
 @end

@@ -428,6 +428,22 @@
             [[OARootViewController instance].mapPanel updateRouteInfo];
         }
     }
+    else
+    {
+        if (searchResult.objectType == GPX_TRACK)
+        {
+            OASGpxDataItem *dataItem = (OASGpxDataItem *)searchResult.relatedObject;
+            if (dataItem)
+            {
+                auto trackItem = [[OASTrackItem alloc] initWithFile:dataItem.file];
+                trackItem.dataItem = dataItem;
+                [[OARootViewController instance].mapPanel openTargetViewWithGPX:trackItem];
+                
+                if (delegate)
+                    [delegate didShowOnMap:searchResult];
+            }
+        }
+    }
 }
 
 - (OAPointDescCell *) getPointDescCell
@@ -461,7 +477,7 @@
 
 + (OASimpleTableViewCell *) getIconTextDescCell:(NSString *)name tableView:(UITableView *)tableView typeName:(NSString *)typeName icon:(UIImage *)icon
 {
-    OASimpleTableViewCell* cell;
+    OASimpleTableViewCell *cell;
     cell = (OASimpleTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
@@ -544,11 +560,44 @@
             case LOCATION:
             case GPX_TRACK:
             {
-                OAPointDescCell* cell = [self getPointDescCell];
-                if (cell)
+                OASGpxDataItem *dataItem = (OASGpxDataItem *)res.relatedObject;
+                if (dataItem)
                 {
-                    //TODO: add ui for gpx
-                    cell.titleIcon.image = [UIImage templateImageNamed:@"ic_action_world_globe"];
+                    OASimpleTableViewCell *cell;
+                    cell = (OASimpleTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+                    if (cell == nil)
+                    {
+                        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+                        cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+                        [cell descriptionVisibility:YES];
+                    }
+                    if (cell)
+                    {
+                        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                        [cell.titleLabel setTextColor:[UIColor colorNamed:ACColorNameTextColorPrimary]];
+                        [cell.titleLabel setText:[item getName]];
+                        cell.leftIconView.image = [UIImage templateImageNamed:@"ic_custom_trip"];
+                        
+                    }
+                    cell.descriptionLabel.text = [OAQuickSearchListItem getTypeName:res];
+                    BOOL isVisible = [[OAAppSettings sharedManager].mapSettingVisibleGpx.get containsObject:dataItem.gpxFilePath];
+                    cell.leftIconView.tintColor = [UIColor colorNamed:isVisible ? ACColorNameIconColorActive : ACColorNameIconColorDefault];
+                    return cell;
+                }
+                else
+                {
+                    OAPointDescCell *cell = [self getPointDescCell];
+                    if (cell)
+                    {
+                        [cell.titleView setText:[item getName]];
+                        cell.titleIcon.image = [UIImage templateImageNamed:@"ic_action_world_globe"];
+                        [cell.descView setText:[OAQuickSearchListItem getTypeName:res]];
+                        cell.openingHoursView.hidden = YES;
+                        cell.timeIcon.hidden = YES;
+                        
+                        [self setCellDistanceDirection:cell item:item];
+                    }
+                    return cell;
                 }
             }
             case PARTIAL_LOCATION:
@@ -912,6 +961,7 @@
                     || sr.objectType == FAVORITE
                     || sr.objectType == RECENT_OBJ
                     || sr.objectType == WPT
+                    || sr.objectType == GPX_TRACK
                     || sr.objectType == STREET_INTERSECTION)
                 {
                     [self showOnMap:sr searchType:self.searchType delegate:self.delegate];

@@ -735,7 +735,7 @@
 "gpx_ascent" = "Salita";
 "working_days" = "Giorni lavorativi";
 "shared_string_slope" = "Pendenza";
-"download_depth_countours" = "Isobate marine";
+"download_depth_countours" = "linee batimetriche";
 "show_something_on_map" = "Mostra %@ sulla mappa";
 "daily" = "Giornaliero";
 "quick_action_start_stop_nav_descr" = "Premi questo pulsante per avviare o fermare la navigazione.";
@@ -2680,7 +2680,7 @@
 "map_widget_camera_tilt" = "Inclinazione della fotocamera";
 "map_widget_zoom_level" = "Livello di zoom";
 "rotate_map_manual_opt" = "Ruotato manualmente";
-"compass_click_desc" = "Suggerimento: tocca la bussola per cambiare l\'orientamento della mappa.";
+"compass_click_desc" = "Tocca la bussola per cambiare l'orientamento della mappa.";
 "map_widget_camera_distance" = "Elevazione fotocamera";
 "change_language" = "Cambia lingua";
 "icon_group_service" = "Servizi";
@@ -3340,7 +3340,7 @@
 "map_settings_weather_temp_air" = "Temperatura dell'aria";
 "map_settings_weather_temp_water" = "Temperatura dell'acqua";
 "rendering_attr_showDirtbikeTrails_description" = "Mostra percorsi per bici da cross";
-"rendering_attr_showDirtbikeTrails_name" = "Mostra percorsi per moto da cross";
+"rendering_attr_showDirtbikeTrails_name" = "Sentieri per bici da sterrato";
 "resting_navigation_position" = "Posizione di riposo e navigazione";
 "location_radius_description" = "Mostra l\'area circolare che rappresenta la precisione della tua posizione attuale";
 "navigation_position_icon_summary" = "Icona visualizzata durante la navigazione o lo spostamento.";
@@ -3372,3 +3372,6 @@
 "downloaded_bytes" = "%@ di %@";
 "quick_action_need_to_add_item_to_list" = "Aggiungi almeno un oggetto alla lista nelle impostazioni di \'Azione Veloce\'";
 "quick_action_terrain_color_scheme" = "Combinazione di colori del terreno";
+"wikivoyage_offline" = "Wikivoyage non in linea";
+"info_button" = "Info";
+"lang_pnb" = "Pangiabi";

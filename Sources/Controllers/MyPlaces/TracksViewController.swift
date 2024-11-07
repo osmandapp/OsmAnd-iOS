@@ -27,7 +27,7 @@ private enum ButtonActionNumberTag: Int {
     case save = 2
 }
 
-final class TracksViewController: OACompoundViewController, UITableViewDelegate, UITableViewDataSource, OATrackSavingHelperUpdatableDelegate, TrackListUpdatableDelegate, OASelectTrackFolderDelegate, OAGPXImportUIHelperDelegate, MapSettingsGpxViewControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate, FilterChangedListener {
+final class TracksViewController: OACompoundViewController, UITableViewDelegate, UITableViewDataSource, OATrackSavingHelperUpdatableDelegate, TrackListUpdatableDelegate, OASelectTrackFolderDelegate, MapSettingsGpxViewControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate, FilterChangedListener {
     
     @IBOutlet private weak var tableView: UITableView!
     
@@ -115,7 +115,6 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         importHelper = OAGPXImportUIHelper()
         super.init(coder: coder)
         importHelper = OAGPXImportUIHelper(hostViewController: self)
-        importHelper.delegate = self
     }
     
     private func onLoadFinished(folder: TrackFolder) {
@@ -133,6 +132,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     override func registerObservers() {
         addObserver(OAAutoObserverProxy(self, withHandler: #selector(onObservedRecordedTrackChanged), andObserve: app.trackRecordingObservable))
         addObserver(OAAutoObserverProxy(self, withHandler: #selector(onObservedRecordedTrackChanged), andObserve: app.trackStartStopRecObservable))
+        addNotification(NSNotification.Name.OAGPXImportUIHelperDidFinishImport, selector: #selector(didFinishImport))
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -506,7 +506,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func setupTableFooter() {
-        guard !currentFolder.getTrackItems().isEmpty, !isSearchActive, !tableView.isEditing else {
+        guard !currentFolder.getFlattenedTrackItems().isEmpty, !isSearchActive, !tableView.isEditing else {
             tableView.tableFooterView = nil
             return
         }
@@ -1153,6 +1153,11 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         }
     }
     
+    @objc private func didFinishImport() {
+        guard view.window != nil else { return }
+        updateAllFoldersVCData(forceLoad: true)
+    }
+    
     // MARK: - Files operations
     
     private func getAbsolutePath(_ relativeFilepath: String) -> String {
@@ -1520,6 +1525,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                 if let vc = MapSettingsGpxViewController() {
                     vc.delegate = self
                     show(vc)
+                    shouldReload = true
                 }
             } else if item.key == tracksFolderKey {
                 if let subfolderPath = item.obj(forKey: pathKey) as? String {
@@ -1753,12 +1759,6 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                 self.updateFilterButtonTitle()
             }
         }
-    }
-    
-    // MARK: - OAGPXImportUIHelperDelegate
-    
-    func updateVCData() {
-        updateAllFoldersVCData(forceLoad: true)
     }
     
     // MARK: - MapSettingsGpxViewControllerDelegate

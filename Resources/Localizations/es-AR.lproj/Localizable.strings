@@ -2527,7 +2527,7 @@
 "carplay_available_in_sub_plans" = "Compra «OsmAnd Pro» o «Maps+» para usar OsmAnd con CarPlay.";
 "cloud_confirm_delete_type" = "¿Borrar «%@» de OsmAnd Cloud?";
 "shared_string_cross_buy" = "Compra cruzada";
-"purchases_feature_desc_cross_buy" = "Usa las funciones de la suscripción en diferentes plataformas (Android/iOS/web) sin costo adicional.";
+"purchases_feature_desc_cross_buy" = "Usá las funciones de la suscripción en diferentes plataformas (Android/iOS/web) sin costo adicional.";
 "cloud_conflict" = "Conflicto";
 "cloud_recent_changes" = "Cambios";
 "cloud_all_changes_uploaded" = "Todos los cambios cargados";
@@ -2999,7 +2999,7 @@
 "shared_string_ear_lobe" = "Lóbulo de la oreja";
 "wheel_circumference" = "Circunferencia de la rueda";
 "external_device_status_connected" = "Conectado";
-"external_sensors_plugin_description" = "Accede a sensores externos para leer, por ejemplo, el ritmo cardíaco, la velocidad en bicicleta y la potencia o cadencia del pedaleo. Debes conectar tu dispositivo con sensores que admitan el protocolo de red personal inalámbrica ANT+.";
+"external_sensors_plugin_description" = "Accedé a sensores externos para leer, por ejemplo, el ritmo cardíaco, la velocidad en bicicleta y la potencia o cadencia del pedaleo. Debés conectar tu dispositivo con sensores que admitan el protocolo de red personal inalámbrica ANT+.";
 "external_device_characteristic_speed" = "Velocidad";
 "bluetooth_found_title" = "Encontrado: %d";
 "external_sensors_source_of_data" = "Proveedor de datos";

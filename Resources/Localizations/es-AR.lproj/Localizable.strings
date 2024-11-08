@@ -2592,10 +2592,10 @@
 "last_synchronization" = "Última sincronización";
 "cloud_conflict_descr" = "Las versiones en local y en la nube contienen cambios desde la última sincronización.";
 "upload_change" = "Subir cambio";
-"cloud_version_will_be_removed" = "La versión en la nube será quitada";
-"cloud_changes_will_be_dismissed" = "Los cambios en la nube serán descartados";
-"local_file_will_be_restored" = "El archivo local será restaurado";
-"local_changes_will_be_dismissed" = "Los cambios locales serán descartados";
+"cloud_version_will_be_removed" = "Se quitará la versión en la nube";
+"cloud_changes_will_be_dismissed" = "Se descartarán los cambios en la nube";
+"local_file_will_be_restored" = "Se restaurará el archivo local";
+"local_changes_will_be_dismissed" = "Se descartarán los cambios locales";
 "checking_progress" = "Comprobando…";
 "shared_string_uploaded" = "Subido";
 "depth_contours" = "Curvas de profundidad";
@@ -2903,8 +2903,8 @@
 "map_2d_mode_action" = "Modo 2D";
 "map_3d_mode_action" = "Modo 3D";
 "shared_string_hidden" = "Oculto";
-"map_3d_mode_description" = "Pulsa en el mapa con 2 dedos y mueve hacia arriba o abajo para ajustar la inclinación del mapa.";
-"map_3d_mode_hint" = "Mantén pulsado para cambiar la ubicación del botón.";
+"map_3d_mode_description" = "Pulsá en el mapa con 2 dedos y deslizá hacia arriba o abajo para ajustar la inclinación del mapa.";
+"map_3d_mode_hint" = "Mantené pulsado para cambiar la ubicación del botón.";
 "visible_in_3d_mode" = "Visible en el modo 3D";
 "rendering_value_sacScale_description" = "Club Alpino Suizo";
 "rendering_value_caiScale_description" = "Club Alpino Italiano";
@@ -2917,7 +2917,7 @@
 "free_favorites_backup" = "Copia de seguridad gratuita de favoritos";
 "banner_payment_free_backup_settings_title" = "Copia de seguridad gratuita de los ajustes";
 "get_osmand_cloud" = "Obtener OsmAnd Cloud";
-"free_favorites_backup_description" = "Regístrate en OsmAnd Cloud para obtener una copia de seguridad gratuita de los favoritos y ajustes.";
+"free_favorites_backup_description" = "Registrate en OsmAnd Cloud para obtener una copia de seguridad gratuita de los favoritos y ajustes.";
 
 // Widget descriptions
 "coordinates_widget_map_center_desc" = "Muestra las coordenadas geográficas del centro del mapa actual";
@@ -3011,13 +3011,13 @@
 "shared_string_hand" = "Mano";
 "external_device_status_disconnecting" = "Desconectando";
 "external_device_status_disconnect" = "Desconectar";
-"purchases_feature_desc_external_sensors" = "Muestra y graba datos de sensores externos: la velocidad, potencia y cadencia de la bicicleta y el ritmo cardíaco.";
+"purchases_feature_desc_external_sensors" = "Muestra y graba datos de sensores externos: velocidad, potencia y cadencia de la bicicleta y ritmo cardíaco.";
 "external_sensors_support" = "Sensores externos admitidos";
 "shared_string_finger" = "Dedo";
-"ant_plus_bluetooth_off_description" = "Activa los sensores de búsqueda y vinculación de Bluetooth.";
+"ant_plus_bluetooth_off_description" = "Activá los sensores de búsqueda y vinculación del Bluetooth.";
 "map_widget_ant_bicycle_cadence_desc" = "Muestra la velocidad del pedaleo";
 "beats_per_minute_short" = "ppm";
-"ant_plus_pair_bluetooth_prompt" = "Puedes vincular con OsmAnd, sensores «Bluetooth LE» y «ANT+».";
+"ant_plus_pair_bluetooth_prompt" = "Podés vincular con OsmAnd, sensores «Bluetooth LE» y «ANT+».";
 "external_sensors_not_found" = "Sensores no encontrados";
 "external_device_forget_sensor" = "Olvidar sensor";
 "shared_string_foot" = "Pie";
@@ -3051,15 +3051,15 @@
 "ble_search_again" = "Buscar de nuevo";
 "map_widget_ant_bicycle_cadence" = "Cadencia de la bicicleta";
 "context_menu_read_article" = "Leer artículo";
-"external_device_forget_sensor_description" = "El sensor será quitado de la lista. Podrá volver a vincular este sensor en cualquier momento.";
+"external_device_forget_sensor_description" = "El sensor se quitará de la lista. Podrás volver a vincular este sensor en cualquier momento.";
 
 
 //"device_disconnected" = "%1$s desconectado"
 "no_bt_permission" = "El permiso de Bluetooth está bloqueado";
 "shared_string_wrist" = "Muñeca";
-"ant_plus_searching_text_description" = "Acerca el dispositivo al sensor. Debes activar el sensor para que OsmAnd pueda encontrarlo.";
+"ant_plus_searching_text_description" = "Acercá el dispositivo al sensor. Debés activar el sensor para que OsmAnd pueda encontrarlo.";
 "shared_string_chest" = "Pecho";
-"ant_plus_nothing_found_description" = "Asegúrate de que \n- El Bluetooth esté activado \n- El sensor esté activado \n- Este dispositivo se encuentre cerca del sensor";
+"ant_plus_nothing_found_description" = "Asegurate de que \n- El Bluetooth esté activado \n- El sensor esté activado \n- Este dispositivo esté cerca del sensor";
 "bicycle_scd_device_name" = "Dispositivo para «Bicicleta»";
 "shared_string_temperature" = "Temperatura";
 "external_device_unpair_description" = "Conecta el sensor al dispositivo para obtener información.";
@@ -3221,7 +3221,7 @@
 "shared_string_format" = "Formato";
 "manage_subscriptions" = "Gestionar suscripciones.";
 "verify_account" = "Comprobar cuenta";
-"verify_account_deletion_descr" = "Debemos comprobar tu cuenta antes de borrarla. \n \nIngresa el correo electrónico con el cual fue registrado. Se te enviará la contraseña de un solo uso para el siguiente paso.";
+"verify_account_deletion_descr" = "Debemos comprobar tu cuenta antes de borrarla. \n \nIngresá el correo electrónico con el cual fue registrada. Se te enviará la contraseña de un solo uso para el siguiente paso.";
 "osmand_cloud_delete_account_descr" = "¿Borrar la cuenta de OsmAnd Cloud?";
 "osmand_cloud_deletion_account_warning" = "Esta cuenta y todos sus datos serán %@.";
 "osmand_cloud_delete_account_confirmation" = "¿Borrar cuenta\?";
@@ -3229,7 +3229,7 @@
 "action_cant_be_undone" = "Esta acción no puede deshacerse.";
 "osmand_cloud_deletion_all_data_warning" = "Todos los datos de OsmAnd Cloud serán %@. Los datos en el dispositivo se mantienen intactos.";
 "deleting_complete" = "Borrado completo";
-"osmand_cloud_deletion_secondary_devices_warning" = "Los dispositivos secundarios serán desvinculados de OsmAnd Cloud y se perderá acceso a las funciones de pago.";
+"osmand_cloud_deletion_secondary_devices_warning" = "Los dispositivos secundarios se desvincularán de OsmAnd Cloud y se perderá el acceso a las funciones de pago.";
 "osmand_cloud_deleting_account_descr" = "En un momento será borrada tu cuenta con todos los datos de OsmAnd Cloud. \n \nTodos los datos en el dispositivo permanecen intactos.";
 "osmand_cloud_deleted_account_descr" = "Se ha borrado la cuenta con todos los datos de OsmAnd Cloud.";
 "shared_string_deleting" = "Borrando";
@@ -3260,7 +3260,7 @@
 "rendering_attr_showProposed_name" = "Objetos propuestos";
 "rendering_attr_showToll_description" = "Muestra las restricciones de peajes en las rutas";
 "rendering_value_small_name" = "Pequeño";
-"rendering_attr_lightDetail_description" = "Predefinido: nombre de la baliza náutica (carácter de luz.grupo.período), elige información adicional sobre los sectores 1 al 3 o el carácter de luz del sector 1 al 5";
+"rendering_attr_lightDetail_description" = "Predefinido: nombre de la baliza náutica (carácter de luz.grupo.período), elegí información adicional sobre los sectores 1 al 3 o el carácter de luz del sector 1 al 5";
 "routing_attr_hazmat_category_usa_3_name" = "Líquidos inflamables";
 "routing_attr_allow_via_ferrata_name" = "Ruta de montaña (Vía ferrata)";
 "routing_attr_hazmat_category_usa_5_name" = "Agentes oxidantes y peróxidos orgánicos";
@@ -3301,7 +3301,7 @@
 "routing_algorithm_highway_hierarchies" = "Jerarquías viales";
 "auto_zoom_smooth" = "Suave";
 "auto_zoom_discrete" = "Discreto";
-"track_vertical_exaggeration_description" = "Cambiando el valor de la escala, puedes cambiar la altura de la traza 3D.";
+"track_vertical_exaggeration_description" = "Cambiando el valor de la escala, podés cambiar la altura de la traza 3D.";
 "visualization_3d_visualized_by" = "Visualizado por";
 "visualization_3d_wall_color" = "Color del muro";
 "visualization_3d_track_line" = "Línea de la traza";
@@ -3347,7 +3347,7 @@
 "dangerous_goods" = "Mercancías peligrosas";
 "route_recalculation_dist_title" = "Distancia mínima para recalcular la ruta";
 "missing_maps_ignore" = "Usar mapas descargados";
-"missing_maps_ignore_details" = "¿Los mapas descargados cubren tu ruta? Puedes navegar con ellos si conoces la zona.";
+"missing_maps_ignore_details" = "¿Los mapas descargados cubren tu ruta? Podés navegar con ellos si conocés la zona.";
 "ios_release_4_8" = "• Nuevo widget de «Velocímetro» compatible con CarPlay.\n• Se añadieron indicaciones giro a giro a los detalles de la ruta\n• Se ha mejorado la personalización de la pantalla del mapa, añadiendo múltiples botones de «Acción rápida»\n• Se han mejorado las trazas en 3D: nuevas opciones de visualización y coloración\n• Paletas de colores personalizadas para el terreno, las trazas y las rutas\n• Se ha añadido un sistema mejorado de marcado múltiple para las trazas\n• Se ha añadido una variante en 3D, para los iconos de la ubicación\n• Se han ampliado las rutas turísticas en el mapa\n• Meteorología: actualización de la interfaz de usuario y adición de la animación del viento\n• Se añadieron transiciones suaves al hacer zum en el modo 3D\n• Se ha movido la opción «Posición de la ubicación» dentro de «Configurar pantalla»\n• Se ha cambiado la opción «Circunferencia de rueda» en los ajustes del sensor BLE\n• Se ha añadido la alerta de navegación «Límite de velocidad» a una sección independiente\n• Se corrigieron los nombres de widgets del rumbo\n• Se ha corregido la visibilidad de «Regla radial» en todos los paneles de widgets\n";
 "transport_hazmat_title" = "Transporte de materiales peligrosos";
 "data_source" = "Proveedor de datos";
@@ -3403,7 +3403,7 @@
 "rendering_attr_showDirtbikeTrails_description" = "Muestra senderos para motos todoterreno";
 "navigation_position" = "Ubicación al navegar";
 "resting_position_icon" = "Icono de la ubicación al estar en reposo";
-"view_angle_description" = "Muestra la dirección de la vista actual con un área triángular";
+"view_angle_description" = "Muestra la dirección de la vista actual con un área triangular";
 "show_along_the_route" = "Mostrar a lo largo de la ruta";
 "shared_string_all_icons" = "Todos los iconos";
 "view_angle" = "Ángulo de visión";

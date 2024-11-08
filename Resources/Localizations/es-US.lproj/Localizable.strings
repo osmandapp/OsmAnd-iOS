@@ -3406,7 +3406,7 @@
 "location_radius" = "Radio de ubicación";
 "navigation_position" = "Ubicación al navegar";
 "location_radius_description" = "Muestra el área circular que representa la exactitud de la ubicación actual";
-"view_angle_description" = "Muestra la dirección de la vista actual con un área triángular";
+"view_angle_description" = "Muestra la dirección de la vista actual con un área triangular";
 "quick_action_toggle_preference" = "Un botón que cambia las preferencias.";
 "profile_icon" = "Icono del perfil";
 "resting_position_icon" = "Icono de la ubicación al estar en reposo";

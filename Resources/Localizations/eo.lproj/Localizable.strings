@@ -2157,7 +2157,7 @@
 "ant_plus_searching_text_description" = "Tenu la aparaton proksime al la sentilo. Vi devas aktivigi la sentilon, por ke OsmAnd povu trovi ĝin.";
 "about_osmAnd" = "Pri OsmAnd";
 "map_widget_sunrise" = "Sunleviĝo";
-"second_next_turn_widget_desc" = "Montras informojn pri via post-sekva turniĝo kaj aktiviĝos dum alproksimiĝi turniĝon.";
+"second_next_turn_widget_desc" = "Montras informojn pri via postsekva kurbiĝo kaj aktiviĝos dum alproksimiĝi kurbiĝon.";
 "help_article_navigation_setup_route_details_name" = "Detaloj pri kurso";
 "help_article_widgets_markers_name" = "Map-markaj fenestraĵoj";
 "no_travel_guides_data_descr" = "Elŝutu Vikivojaĝajn vojaĝ-gvidilojn por vidigi artikolojn pri tutmondaj lokoj seninterrete.";
@@ -2176,7 +2176,7 @@
 "shared_string_error" = "Eraro";
 "activity_type_offroad_name" = "Ekstervoje";
 "activity_type_hiking_name" = "Marŝado";
-"next_turn_widget_desc" = "Montras informojn pri via sekva turniĝo, bildsimbolon de manovro kaj distancon al la turniĝo.";
+"next_turn_widget_desc" = "Montras informojn pri via sekva kurbiĝo, bildsimbolon de manovro kaj distancon al la kurbiĝo.";
 "start_recording" = "Ekigi registri";
 "help_article_navigation_setup_gpx_navigation_name" = "Navigi laŭ spuro";
 "map_widget_trip_recording_uphill" = "Supreniroj";

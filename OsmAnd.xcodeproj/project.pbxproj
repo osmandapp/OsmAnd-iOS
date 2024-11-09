@@ -1349,6 +1349,7 @@
 		C56FAB5129B226C60096192F /* OACameraDistanceWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = C56FAB4F29B226C60096192F /* OACameraDistanceWidget.mm */; };
 		C56FAB5629B226F10096192F /* OAZoomLevelWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = C56FAB5429B226F10096192F /* OAZoomLevelWidget.mm */; };
 		C56FAB5B29B227130096192F /* OATargetDistanceWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = C56FAB5929B227130096192F /* OATargetDistanceWidget.mm */; };
+		C57245D92CDF3B70004F1F19 /* TracksSortModeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57245D82CDF3B70004F1F19 /* TracksSortModeHelper.swift */; };
 		C573544F2AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C573544D2AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.mm */; };
 		C57354502AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C573544E2AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.xib */; };
 		C5735AF62AFE9CB500638715 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C5735AF42AFE9CB500638715 /* InfoPlist.strings */; };
@@ -4880,6 +4881,7 @@
 		C56FAB5429B226F10096192F /* OAZoomLevelWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAZoomLevelWidget.mm; sourceTree = "<group>"; };
 		C56FAB5829B227130096192F /* OATargetDistanceWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATargetDistanceWidget.h; sourceTree = "<group>"; };
 		C56FAB5929B227130096192F /* OATargetDistanceWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATargetDistanceWidget.mm; sourceTree = "<group>"; };
+		C57245D82CDF3B70004F1F19 /* TracksSortModeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksSortModeHelper.swift; sourceTree = "<group>"; };
 		C573544C2AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMapSettingsTerrainParametersViewController.h; sourceTree = "<group>"; };
 		C573544D2AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapSettingsTerrainParametersViewController.mm; sourceTree = "<group>"; };
 		C573544E2AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAMapSettingsTerrainParametersViewController.xib; sourceTree = "<group>"; };
@@ -11940,6 +11942,7 @@
 				C50E32812CA3FBDF00EEC41F /* TracksFiltersViewController.swift */,
 				C50E32832CA57DDB00EEC41F /* TracksFilterDetailsViewController.swift */,
 				C5A887E32CAD7B8E00DA2979 /* TracksSearchFilter.swift */,
+				C57245D82CDF3B70004F1F19 /* TracksSortModeHelper.swift */,
 			);
 			path = MyPlaces;
 			sourceTree = "<group>";
@@ -17183,6 +17186,7 @@
 				DAD5B4CF288E80EC009CF611 /* OAOperationLog.m in Sources */,
 				46C8412D2C32F23A00E284B0 /* OAShowHideAirPressureAction.m in Sources */,
 				DA5A853826C563A900F274C7 /* OAFavoritesHelper.mm in Sources */,
+				C57245D92CDF3B70004F1F19 /* TracksSortModeHelper.swift in Sources */,
 				DA5A845426C563A900F274C7 /* OARouteLayer.mm in Sources */,
 				DA5A818B26C563A700F274C7 /* OAShowHideLocalOSMChanges.m in Sources */,
 				46BE1FFE2AF0317D005F952E /* ScreenOrientationHelper.swift in Sources */,

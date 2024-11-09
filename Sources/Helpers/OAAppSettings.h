@@ -951,6 +951,8 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @property (nonatomic) OACommonBoolean *showElevationProfileWidget;
 @property (nonatomic) OACommonBoolean *showSlopesOnElevationWidget;
 @property (nonatomic) OACommonStringList *customWidgetKeys;
+@property (nonatomic) OACommonStringList *tracksSortModes;
+@property (nonatomic) OACommonString *searchTracksSortModes;
 
 @property (assign, nonatomic) BOOL simulateNavigation;
 @property (nonatomic) NSString *simulateNavigationMode;
@@ -1037,6 +1039,9 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 - (void) hideGpx:(NSArray<NSString *> *)filePaths;
 - (void) hideGpx:(NSArray<NSString *> *)filePaths update:(BOOL)update;
 - (void) hideRemovedGpx;
+
+- (void)saveTracksSortModes:(NSDictionary<NSString *, NSString *> *)tabsSortModes;
+- (NSDictionary<NSString *, NSString *> *)getTracksSortModes;
 
 - (NSString *) getFormattedTrackInterval:(int)value;
 

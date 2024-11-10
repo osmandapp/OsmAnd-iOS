@@ -88,7 +88,7 @@ static NSArray<OAExportSettingsType *> *allValues;
         return CUSTOM_RENDER_STYLE;
     else if (subtype == EOASettingsItemFileSubtypeRoutingConfig)
         return CUSTOM_ROUTING;
-//    else if (subtype == EOASettingsItemFileSubtypeMultimediaFile)
+//    else if (subtype == EOASettingsItemFileSubtypeMultimediaNotes)
 //        return MULTIMEDIA_NOTES;
     else if (subtype == EOASettingsItemFileSubtypeGpx)
         return TRACKS;

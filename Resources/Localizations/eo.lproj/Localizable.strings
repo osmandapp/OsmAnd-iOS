@@ -106,9 +106,9 @@
 "map_widget_bearing" = "Relativa direkto";
 "map_widget_transparent" = "Travideblaj fenestraĵoj";
 "shared_string_near" = "Proksime";
-"map_widget_next_turn" = "Sekva turniĝo";
-"map_widget_next_turn_small" = "Sekva turniĝeto";
-"map_widget_next_next_turn" = "Post-sekva turniĝo";
+"map_widget_next_turn" = "Sekva kurbiĝo";
+"map_widget_next_turn_small" = "Sekva kurbiĝeto";
+"map_widget_next_next_turn" = "Postsekva kurbiĝo";
 "always_center_position_on_map" = "Vidigi pozicion ĉiam je centro";
 "map_widget_appearance_rem" = "Aliaj elementoj";
 "map_widget_compass" = "Kompaso";
@@ -209,7 +209,7 @@
 "speed_limit_exceed" = "Tolerado de rapidlimo";
 "speed_limit_exceed_message" = "Elekti rango de tolerado de rapidlimo, supre kiu vi ricevos sonajn avertojn.";
 "wake_on_voice" = "Ŝalti ekranon";
-"wake_on_voice_descr" = "Ŝalti aparatan ekranon dum proksimigado al turniĝo.";
+"wake_on_voice_descr" = "Ŝalti aparatan ekranon dum proksimigado al kurbiĝo.";
 "voice_pref_title" = "Voĉo";
 "voice_provider" = "Gvidada voĉo";
 "voice_provider_descr" = "Elekti gvidadan voĉon por navigado.";

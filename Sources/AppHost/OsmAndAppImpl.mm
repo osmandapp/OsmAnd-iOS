@@ -168,7 +168,7 @@
         _dataDir = QDir(QString::fromNSString(_dataPath));
         _documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
         _documentsDir = QDir(QString::fromNSString(_documentsPath));
-        _gpxPath = [_documentsPath stringByAppendingPathComponent:@"GPX"];
+        _gpxPath = [_documentsPath stringByAppendingPathComponent:GPX_DIR];
         _models3dPath = [_documentsPath stringByAppendingPathComponent:MODEL_3D_DIR];
         _inboxPath = [_documentsPath stringByAppendingPathComponent:@"Inbox"];
         _cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];

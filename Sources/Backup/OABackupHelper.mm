@@ -260,7 +260,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     }
     else if (fileSettingsItem.subtype == EOASettingsItemFileSubtypeGpx)
     {
-        fileName = [filePath stringByReplacingOccurrencesOfString:[subtypeFolder stringByAppendingString:@"/"] withString:@""];
+        fileName = [filePath stringByReplacingOccurrencesOfString:[[OsmAndApp.instance.documentsPath stringByAppendingPathComponent:subtypeFolder] stringByAppendingString:@"/"] withString:@""];
     }
     else if ([OAFileSettingsItemFileSubtype isMap:fileSettingsItem.subtype])
     {

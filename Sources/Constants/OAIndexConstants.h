@@ -112,6 +112,8 @@ static NSString * const CLR_PALETTE_DIR = @"color-palette";
 static NSString * const MODEL_3D_DIR = @"models";
 static NSString * const GEOTIFF_SQLITE_CACHE_DIR = @"geotiff_sqlite_cache";
 
+static NSString * const GPX_DIR = @"GPX";
+
 static NSString * const VOICE_PROVIDER_SUFFIX = @"-tts";
 static NSString * const MODEL_NAME_PREFIX = @"model_";
 

@@ -72,19 +72,19 @@
         case EOASettingsItemFileSubtypeTerrainMap:
         case EOASettingsItemFileSubtypeRoadMap:
         case EOASettingsItemFileSubtypeTilesMap:
-            return [documentsPath stringByAppendingPathComponent:RESOURCES_DIR];
+        case EOASettingsItemFileSubtypeTravel:
+            return RESOURCES_DIR;
         case EOASettingsItemFileSubtypeRenderingStyle:
-            return [documentsPath stringByAppendingPathComponent:RENDERERS_DIR];
+            return RENDERERS_DIR;
         case EOASettingsItemFileSubtypeRoutingConfig:
-            return [documentsPath stringByAppendingPathComponent:ROUTING_PROFILES_DIR];
+            return ROUTING_PROFILES_DIR;
         case EOASettingsItemFileSubtypeGpx:
-            return OsmAndApp.instance.gpxPath;
+            return GPX_DIR;
             // unsupported
-//        case EOASettingsItemFileSubtypeTravel:
 //        case EOASettingsItemFileSubtypeVoice:
 //            return [documentsPath stringByAppendingPathComponent:@"Voice"];
         case EOASettingsItemFileSubtypeColorPalette:
-            return [documentsPath stringByAppendingPathComponent:COLOR_PALETTE_DIR];
+            return COLOR_PALETTE_DIR;
         default:
             return @"";
     }
@@ -155,14 +155,24 @@
             }
             case EOASettingsItemFileSubtypeObfMap:
             {
-                if ([name hasSuffix:BINARY_MAP_INDEX_EXT] && ![name hasSuffix:BINARY_TRAVEL_GUIDE_MAP_INDEX_EXT])
+                // android has additions check:
+                // if (name.endsWith(IndexConstants.BINARY_MAP_INDEX_EXT) && !name.contains(File.separator)) {
+                // if ([name hasSuffix:BINARY_MAP_INDEX_EXT] && ![name containsString:@"/"])
+                
+                if ([name hasSuffix:BINARY_MAP_INDEX_EXT] )
                     return subtype;
                 break;
             }
             case EOASettingsItemFileSubtypeVoice:
             {
-                if ([name hasSuffix:@"tts.js"])
+                if ([name hasSuffix:VOICE_PROVIDER_SUFFIX])
                     return subtype;
+                else if ([name hasSuffix:TTSVOICE_INDEX_EXT_JS])
+                {
+                    NSArray<NSString *> *pathComponents = [name componentsSeparatedByString:@"/"];
+                    if (pathComponents.count > 1 && [pathComponents[0] hasSuffix:VOICE_PROVIDER_SUFFIX])
+                        return subtype;
+                }
                 break;
             }
             case EOASettingsItemFileSubtypeNauticalDepth:
@@ -174,42 +184,6 @@
             case EOASettingsItemFileSubtypeColorPalette:
             {
                 if ([name hasSuffix:TXT_EXT])
-                    return subtype;
-                break;
-            }
-            case EOASettingsItemFileSubtypeGpx:
-            {
-                if ([name hasSuffix:GPX_FILE_EXT])
-                    return subtype;
-                break;
-            }
-            case EOASettingsItemFileSubtypeTravel:
-            {
-                if ([name hasSuffix:BINARY_TRAVEL_GUIDE_MAP_INDEX_EXT] || ([name hasSuffix:BINARY_WIKIVOYAGE_MAP_INDEX_EXT] && [name.lowercaseString containsString:@"travel"]))
-                    return subtype;
-                break;
-            }
-            case EOASettingsItemFileSubtypeTilesMap:
-            {
-                if ([name hasSuffix:SQLITE_EXT] || name.pathExtension.length == 0)
-                    return subtype;
-                break;
-            }
-            case EOASettingsItemFileSubtypeRoutingConfig:
-            {
-                if ([name hasSuffix:ROUTING_FILE_EXT] && ![name hasSuffix:RENDERER_INDEX_EXT])
-                    return subtype;
-                break;
-            }
-            case EOASettingsItemFileSubtypeRenderingStyle:
-            {
-                if ([name hasSuffix:RENDERER_INDEX_EXT])
-                    return subtype;
-                break;
-            }
-            case EOASettingsItemFileSubtypeRoadMap:
-            {
-                if ([name containsString:@"road"])
                     return subtype;
                 break;
             }
@@ -297,7 +271,8 @@
         }
             
         self.filePath = filePath;
-        _subtype = [OAFileSettingsItemFileSubtype getSubtypeByFileName:filePath.lastPathComponent];
+        NSString *relativePath = [filePath stringByReplacingOccurrencesOfString:OsmAndApp.instance.documentsPath withString:@""];
+        _subtype = [OAFileSettingsItemFileSubtype getSubtypeByFileName:relativePath];
         if (self.subtype == EOASettingsItemFileSubtypeUnknown)
         {
             if (error)
@@ -337,11 +312,11 @@
             if (![file hasPrefix:@"/"])
                 file = [@"/" stringByAppendingString:file];
             NSString *path = [[file substringFromIndex:1] stringByReplacingOccurrencesOfString:@"tracks/" withString:@""];
-            self.filePath = [[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:path];
+            self.filePath = [OsmAndApp.instance.documentsPath stringByAppendingPathComponent:[[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:path]];
         }
         else
         {
-            self.filePath = [[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:self.name];
+            self.filePath = [OsmAndApp.instance.documentsPath stringByAppendingPathComponent:[[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:self.name]];
         }
     }
     return self;

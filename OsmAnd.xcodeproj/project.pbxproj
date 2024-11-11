@@ -3106,6 +3106,7 @@
 		FA5A21A22A9C7DE100319695 /* CALayer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5A21A12A9C7DE100319695 /* CALayer+Extension.swift */; };
 		FA5A21A82A9E17DB00319695 /* UIPageViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */; };
 		FA5D19E12CC00B1100E01A27 /* GPXDataItemGPXFileWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5D19E02CC00B0E00E01A27 /* GPXDataItemGPXFileWrapper.swift */; };
+		FA5D71E12CE24C570062BC4D /* LockHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5D71E02CE24C4E0062BC4D /* LockHelper.swift */; };
 		FA63F24C2AF3DAA00040A0CE /* SensorDataField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA63F24B2AF3DAA00040A0CE /* SensorDataField.swift */; };
 		FA63F24E2AF3DC550040A0CE /* SensorWidgetDataField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA63F24D2AF3DC550040A0CE /* SensorWidgetDataField.swift */; };
 		FA63F2502AF3DFF60040A0CE /* SensorTextWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA63F24F2AF3DFF60040A0CE /* SensorTextWidget.swift */; };
@@ -7627,6 +7628,7 @@
 		FA5A21A12A9C7DE100319695 /* CALayer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+Extension.swift"; sourceTree = "<group>"; };
 		FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIPageViewController+Extension.swift"; sourceTree = "<group>"; };
 		FA5D19E02CC00B0E00E01A27 /* GPXDataItemGPXFileWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPXDataItemGPXFileWrapper.swift; sourceTree = "<group>"; };
+		FA5D71E02CE24C4E0062BC4D /* LockHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockHelper.swift; sourceTree = "<group>"; };
 		FA6116102C787B7C005C3ABD /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Charts.xcodeproj; sourceTree = "<group>"; };
 		FA63F24B2AF3DAA00040A0CE /* SensorDataField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorDataField.swift; sourceTree = "<group>"; };
 		FA63F24D2AF3DC550040A0CE /* SensorWidgetDataField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorWidgetDataField.swift; sourceTree = "<group>"; };
@@ -11963,8 +11965,7 @@
 				DA5A7DE526C563A300F274C7 /* OAActionConfigurationViewController.mm */,
 				DA5A7DCC26C563A300F274C7 /* OAAddQuickActionViewController.h */,
 				DA5A7DD926C563A300F274C7 /* OAAddQuickActionViewController.m */,
-				DA5A7DD126C563A300F274C7 /* OAFloatingButtonsHudViewController.h */,
-				DA5A7DCE26C563A300F274C7 /* OAFloatingButtonsHudViewController.mm */,
+				FA5D71DD2CE1FB7D0062BC4D /* OAFloatingButtonsHudViewController */,
 				DA5A7DDF26C563A300F274C7 /* OAFloatingButtonsHudViewController.xib */,
 				DA5A7DE226C563A300F274C7 /* OAQuickActionListViewController.h */,
 				DA5A7DD626C563A300F274C7 /* OAQuickActionListViewController.m */,
@@ -13048,6 +13049,7 @@
 		DA5A808E26C563A500F274C7 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				FA5D71E02CE24C4E0062BC4D /* LockHelper.swift */,
 				FA45851C2C946046003A5AD7 /* SharedLibHelpers */,
 				32AB48672C9C50A1005EF1D4 /* DownloadingListHelper */,
 				32D24D1F2BE54A5E000FA504 /* DownloadingCellHelper */,
@@ -13651,6 +13653,15 @@
 				FA4D7F562B03D366003208D7 /* BLEWheelSettingsViewController.swift */,
 			);
 			path = BLEWheelSettings;
+			sourceTree = "<group>";
+		};
+		FA5D71DD2CE1FB7D0062BC4D /* OAFloatingButtonsHudViewController */ = {
+			isa = PBXGroup;
+			children = (
+				DA5A7DD126C563A300F274C7 /* OAFloatingButtonsHudViewController.h */,
+				DA5A7DCE26C563A300F274C7 /* OAFloatingButtonsHudViewController.mm */,
+			);
+			path = OAFloatingButtonsHudViewController;
 			sourceTree = "<group>";
 		};
 		FA6116122C787B7C005C3ABD /* Charts */ = {
@@ -16242,6 +16253,7 @@
 				323F04C02C6556D30058DD78 /* ShowHideHikingRoutesAction.swift in Sources */,
 				DA5A84AE26C563A900F274C7 /* OAHistoryViewController.mm in Sources */,
 				4643322A291D5FE7005AEF12 /* OAMapSettingsNauticalDepthScreen.m in Sources */,
+				FA5D71E12CE24C570062BC4D /* LockHelper.swift in Sources */,
 				DA5A84E826C563A900F274C7 /* OAWaypointsViewController.mm in Sources */,
 				46E9AD9C28DC8F4C00CC55F9 /* OAValueTableViewCell.m in Sources */,
 				DA5A83FE26C563A800F274C7 /* OAQuickSearchListItem.mm in Sources */,

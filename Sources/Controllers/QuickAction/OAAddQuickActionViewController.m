@@ -195,7 +195,7 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
             interfaceRow.cellType = [OASimpleTableViewCell getCellIdentifier];
             interfaceRow.title = OALocalizedString(@"shared_string_interface");
             interfaceRow.iconName = @"ic_custom_ui_customization";
-            interfaceRow.key = [OAMapButtonsHelper TYPE_MAP_INTERACTIONS].name;
+            interfaceRow.key = [OAMapButtonsHelper TYPE_INTERFACE].name;
             
             OATableRowData *myPlacesRow = [section createNewRow];
             myPlacesRow.cellType = [OASimpleTableViewCell getCellIdentifier];

@@ -10,8 +10,15 @@
 
 @class OAObservable;
 
+@protocol OAUserInteractionPassThroughDelegate <NSObject>
+
+- (BOOL)isTouchEventAllowedForView:(UIView *)view;
+
+@end
+
 @interface OAUserInteractionPassThroughView : UIView
 
+@property (nonatomic, weak) id<OAUserInteractionPassThroughDelegate> delegate;
 @property (readonly) OAObservable* didLayoutObservable;
 
 @end

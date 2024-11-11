@@ -8,6 +8,8 @@
 
 #import "OAUserInteractionPassThroughView.h"
 #import "OAObservable.h"
+#import "OAHudButton.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OAUserInteractionPassThroughView
 
@@ -28,15 +30,44 @@
     [_didLayoutObservable notifyEvent];
 }
 
-- (BOOL) pointInside:(CGPoint)point withEvent:(UIEvent *)event
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
-    for (UIView* view in [self subviews])
+    if (LockHelper.shared.isScreenLocked)
     {
-        if (view.userInteractionEnabled && !view.hidden && [view pointInside:[self convertPoint:point toView:view] withEvent:event])
-            return YES;
+        if ([self.delegate respondsToSelector:@selector(isTouchEventAllowedForView:)])
+        {
+            UIView *findView = [self findView:self];
+            if (findView)
+            {
+                CGPoint convertedPoint = [findView convertPoint:point fromView:self];
+                if ([findView pointInside:convertedPoint withEvent:event])
+                    return findView;
+                else
+                    return self;
+            }
+        }
+        return [super hitTest:point withEvent:event];
     }
     
-    return NO;
+    UIView *view = [super hitTest:point withEvent:event];
+    return view == self ? nil : view;
+}
+
+- (UIView *)findView:(UIView *)view
+{
+    BOOL isTouchEventAllowed = [self.delegate isTouchEventAllowedForView:view];
+    if (isTouchEventAllowed)
+        return view;
+    
+    for (UIView *subview in view.subviews)
+    {
+        UIView *foundView = [self findView:subview];
+        if (foundView)
+        {
+            return foundView;
+        }
+    }
+    return nil;
 }
 
 @end

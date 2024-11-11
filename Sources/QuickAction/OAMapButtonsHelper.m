@@ -50,6 +50,7 @@ static QuickActionType *TYPE_CONFIGURE_SCREEN;
 static QuickActionType *TYPE_SETTINGS;
 static QuickActionType *TYPE_MAP_INTERACTIONS;
 static QuickActionType *TYPE_MY_PLACES;
+static QuickActionType *TYPE_INTERFACE;
 
 @implementation OAMapButtonsHelper
 {
@@ -94,6 +95,10 @@ static QuickActionType *TYPE_MY_PLACES;
     TYPE_MY_PLACES = [[[[QuickActionType alloc] initWithId:0 stringId:@""]
                   name:OALocalizedString(@"shared_string_my_places")]
                  category:QuickActionTypeCategoryMyPlaces];
+    
+    TYPE_INTERFACE = [[[[QuickActionType alloc] initWithId:0 stringId:@""]
+                  name:OALocalizedString(@"shared_string_interface")]
+                          category:QuickActionTypeCategoryInterface];
 }
 
 + (OAMapButtonsHelper *)sharedInstance
@@ -109,6 +114,11 @@ static QuickActionType *TYPE_MY_PLACES;
 + (QuickActionType *) TYPE_CREATE_CATEGORY
 {
     return TYPE_CREATE_CATEGORY;
+}
+
++ (QuickActionType *) TYPE_INTERFACE
+{
+    return TYPE_INTERFACE;
 }
 
 + (QuickActionType *) TYPE_CONFIGURE_MAP
@@ -285,7 +295,7 @@ static QuickActionType *TYPE_MY_PLACES;
     [allTypes addObject:[ShowHideRunningRoutesAction getQuickActionType]];
     
     // interface
-    //[allTypes addObject:LockScreenAction.TYPE];
+    [allTypes addObject:LockScreenAction.type];
     
     // my places
     [allTypes addObject:OAFavoriteAction.TYPE];
@@ -381,6 +391,7 @@ static QuickActionType *TYPE_MY_PLACES;
     NSMutableArray<QuickActionType *> *actionTypes = [NSMutableArray new];
     [self filterQuickActions:buttonState filter:TYPE_CREATE_CATEGORY actionTypes:actionTypes];
     [self filterQuickActions:buttonState filter:TYPE_CONFIGURE_MAP actionTypes:actionTypes];
+    [self filterQuickActions:buttonState filter:TYPE_INTERFACE actionTypes:actionTypes];
     [self filterQuickActions:buttonState filter:TYPE_MAP_INTERACTIONS actionTypes:actionTypes];
     [self filterQuickActions:buttonState filter:TYPE_MY_PLACES actionTypes:actionTypes];
     [self filterQuickActions:buttonState filter:TYPE_NAVIGATION actionTypes:actionTypes];

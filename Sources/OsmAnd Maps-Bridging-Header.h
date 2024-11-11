@@ -151,6 +151,7 @@
 #import "OAHistoryViewController.h"
 #import "OAColorCollectionViewController.h"
 #import "OAQuickActionSelectionBottomSheetViewController.h"
+#import "OAFloatingButtonsHudViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"

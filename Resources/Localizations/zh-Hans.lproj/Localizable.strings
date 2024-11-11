@@ -1357,7 +1357,7 @@
 "lang_he" = "希伯来语";
 "lang_new" = "瓦 / 尼泊尔语言";
 "gpx_split_interval" = "分割间隔";
-"track_show_start_finish_icons" = "显示开始和完成图标";
+"track_show_start_finish_icons" = "显示开始和结束图标";
 "lang_yo" = "约鲁巴语";
 "reset_to_original" = "重置为原始状态";
 "lang_bn" = "孟加拉语";

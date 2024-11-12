@@ -29,7 +29,7 @@ final class LockScreenAction: OAQuickAction {
     }
     
     override func getIconResName() -> String {
-        LockHelper.shared.isScreenLocked ? "ic_custom_lock_closed" : "ic_custom_lock_open"
+        LockHelper.shared.isScreenLocked ? "ic_custom_lock_open" : "ic_custom_lock_closed"
     }
     
     override func getText() -> String {

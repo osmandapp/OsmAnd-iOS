@@ -589,12 +589,11 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
         OAHudButton *quickActionButton = (OAHudButton *)view;
         if ([quickActionButton.buttonState isKindOfClass:QuickActionButtonState.class])
         {
-            QuickActionButtonState *buttonState = (QuickActionButtonState *) quickActionButton.buttonState;
+            QuickActionButtonState *buttonState = (QuickActionButtonState *)quickActionButton.buttonState;
             OAQuickAction *quickAction = buttonState.quickActions.firstObject;
             if (quickAction)
             {
-                BOOL result = [quickAction isKindOfClass:[LockScreenAction class]];
-                return result;
+                return [quickAction isKindOfClass:[LockScreenAction class]];
             }
         }
     }

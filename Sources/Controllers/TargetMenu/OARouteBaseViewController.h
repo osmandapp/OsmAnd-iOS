@@ -7,16 +7,14 @@
 //
 
 #import "OATargetMenuViewController.h"
-#import "OACommonTypes.h"
-#import "OAStatisticsSelectionBottomSheetViewController.h"
 
 #define kMapMargin 20.0
 
-@class OARoutingHelper, OATrackChartPoints, OASGpxTrackAnalysis, OARouteStatisticsModeCell, OASTrkSegment, OASGpxFile, OABaseVectorLinesLayer, ElevationChart, OASTrackItem;
+@class OARoutingHelper, OASGpxTrackAnalysis, OARouteStatisticsModeCell, OASGpxFile, OABaseVectorLinesLayer, LineChartView, ElevationChart, OASTrackItem, OASKQuadRect;
 
 @protocol OARouteLineChartHelperDelegate
 
-- (void)centerMapOnBBox:(const OABBox)rect;
+- (void)centerMapOnBBox:(OASKQuadRect *)rect;
 - (void)adjustViewPort:(BOOL)landscape;
 
 @end
@@ -35,22 +33,10 @@
                analysis:(OASGpxTrackAnalysis *)analysis
                modeCell:(OARouteStatisticsModeCell *)statsModeCell;
 
-- (void)refreshHighlightOnMap:(BOOL)forceFit
-                    chartView:(ElevationChart *)chartView
-             trackChartPoints:(OATrackChartPoints *)trackChartPoints
-                     analysis:(OASGpxTrackAnalysis *)analysis;
-
-- (void)refreshHighlightOnMap:(BOOL)forceFit
-                    chartView:(ElevationChart *)chartView
-             trackChartPoints:(OATrackChartPoints *)trackChartPoints
-                      segment:(OASTrkSegment *)segment;
-
-- (OATrackChartPoints *)generateTrackChartPoints:(ElevationChart *)chartView
-                                        analysis:(OASGpxTrackAnalysis *)analysis;
-
-- (OATrackChartPoints *)generateTrackChartPoints:(ElevationChart *)chartView
-                                      startPoint:(CLLocationCoordinate2D)startPoint
-                                        segment:(OASTrkSegment *)segment;
+- (void)refreshChart:(LineChartView *)chart
+       fitTrackOnMap:(BOOL)fitTrackOnMap
+            forceFit:(BOOL)forceFit
+    recalculateXAxis:(BOOL)recalculateXAxis;
 
 @end
 
@@ -62,7 +48,6 @@
 @property (nonatomic) OASGpxFile *gpx;
 @property (nonatomic) OASTrackItem *trackItem;
 @property (nonatomic) ElevationChart *statisticsChart;
-@property (nonatomic) OATrackChartPoints *trackChartPoints;
 @property (nonatomic) OASGpxTrackAnalysis *analysis;
 
 - (instancetype) initWithGpxData:(NSDictionary *)data;

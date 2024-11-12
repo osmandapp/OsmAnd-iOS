@@ -250,21 +250,17 @@
     xAxisMarkerBuilder.setIsAccuracyCircleSupported(false);
     xAxisMarkerBuilder.setBaseOrder(self.pointsOrder - 15);
     xAxisMarkerBuilder.setIsHidden(false);
-    if (trackPoints.axisPointsInvalidated)
+    [self.mapView removeKeyedSymbolsProvider:_currentGraphXAxisPositions];
+    _currentGraphXAxisPositions = std::make_shared<OsmAnd::MapMarkersCollection>();
+
+    for (CLLocation *location in trackPoints.xAxisPoints)
     {
-        [self.mapView removeKeyedSymbolsProvider:_currentGraphXAxisPositions];
-        _currentGraphXAxisPositions = std::make_shared<OsmAnd::MapMarkersCollection>();
-        
-        for (CLLocation *location in trackPoints.xAxisPoints)
-        {
-            if (_xAxisLocationIcon)
-            	xAxisMarkerBuilder.addOnMapSurfaceIcon(_locationIconKey, OsmAnd::SingleSkImage(_xAxisLocationIcon));
-            const auto& marker = xAxisMarkerBuilder.buildAndAddToCollection(_currentGraphXAxisPositions);
-            marker->setPosition(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.coordinate.latitude, location.coordinate.longitude)));
-        }
-        [self.mapView addKeyedSymbolsProvider:_currentGraphXAxisPositions];
-        trackPoints.axisPointsInvalidated = NO;
+        if (_xAxisLocationIcon)
+            xAxisMarkerBuilder.addOnMapSurfaceIcon(_locationIconKey, OsmAnd::SingleSkImage(_xAxisLocationIcon));
+        const auto& marker = xAxisMarkerBuilder.buildAndAddToCollection(_currentGraphXAxisPositions);
+        marker->setPosition(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.coordinate.latitude, location.coordinate.longitude)));
     }
+    [self.mapView addKeyedSymbolsProvider:_currentGraphXAxisPositions];
 }
 
 - (void) hideCurrentStatisticsLocation

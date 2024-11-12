@@ -134,12 +134,7 @@
             kTableValues: @{
                     @"segment_value": segment,
                     @"analysis_value": analysis,
-                    @"mode_value": @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)],
-                    @"points_value": _routeLineChartHelper
-                            ? [_routeLineChartHelper generateTrackChartPoints:cell.chartView
-                                                                   startPoint:startChartPoint
-                                                                      segment:segment]
-                            : [[OATrackChartPoints alloc] init]
+                    @"mode_value": @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)]
             }
     }];
     if (cell)
@@ -243,12 +238,10 @@
         {
             if (_routeLineChartHelper)
             {
-                OATrackChartPoints *trackChartPoints = sectionData.values[@"points_value"];
-                trackChartPoints.axisPointsInvalidated = YES;
-                [_routeLineChartHelper refreshHighlightOnMap:NO
-                                                   chartView:cell.chartView
-                                            trackChartPoints:trackChartPoints
-                                                     segment:sectionData.values[@"segment_value"]];
+                [_routeLineChartHelper refreshChart:cell.chartView
+                                      fitTrackOnMap:YES
+                                           forceFit:YES
+                                   recalculateXAxis:YES];
             }
             if (self.trackMenuDelegate)
             {
@@ -399,15 +392,12 @@
                      entry:(ChartDataEntry *)entry
                  highlight:(ChartHighlight *)highlight
 {
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:chartView.tag & 0x3FF inSection:chartView.tag >> 10];
-    OAGPXTableSectionData *sectionData = self.tableData.subjects[indexPath.section];
-
-    if (_routeLineChartHelper)
+    if (_routeLineChartHelper && [chartView isKindOfClass:LineChartView.class])
     {
-        [_routeLineChartHelper refreshHighlightOnMap:NO
-                                           chartView:(ElevationChart *) chartView
-                                    trackChartPoints:sectionData.values[@"points_value"]
-                                             segment:sectionData.values[@"segment_value"]];
+        [_routeLineChartHelper refreshChart:(LineChartView *) chartView
+                              fitTrackOnMap:YES
+                                   forceFit:NO
+                           recalculateXAxis:NO];
     }
 }
 
@@ -423,8 +413,14 @@
     if (_highlightDrawX != -1)
     {
         ChartHighlight *h = [lineChartView getHighlightByTouchPoint:CGPointMake(_highlightDrawX, 0.)];
-        if (h != nil)
-            [lineChartView highlightValue:h callDelegate:true];
+        if (h)
+        {
+            [lineChartView highlightValue:h callDelegate:YES];
+            [_routeLineChartHelper refreshChart:lineChartView
+                                  fitTrackOnMap:YES
+                                       forceFit:NO
+                               recalculateXAxis:NO];
+        }
     }
 }
 
@@ -484,16 +480,12 @@
                         && (((UITapGestureRecognizer *) recognizer).nsuiNumberOfTapsRequired == 2)))
                 && recognizer.state == UIGestureRecognizerStateEnded)
         {
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:lineChartView.tag & 0x3FF
-                                                        inSection:lineChartView.tag >> 10];
-            OAGPXTableSectionData *sectionData = self.tableData.subjects[indexPath.section];
-
             if (_routeLineChartHelper)
             {
-                [_routeLineChartHelper refreshHighlightOnMap:YES
-                                                   chartView:lineChartView
-                                            trackChartPoints:sectionData.values[@"points_value"]
-                                                     segment:sectionData.values[@"segment_value"]];
+                [_routeLineChartHelper refreshChart:lineChartView
+                                      fitTrackOnMap:YES
+                                           forceFit:NO
+                                   recalculateXAxis:YES];
             }
         }
     }

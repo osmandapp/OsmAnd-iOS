@@ -665,6 +665,7 @@
 		466A01802BFBA9B7008CC50E /* QuickActionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 466A017F2BFBA9B7008CC50E /* QuickActionType.swift */; };
 		466F1993298121FF00E00134 /* img_speed_camera_warning@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 466F1991298121FF00E00134 /* img_speed_camera_warning@2x.png */; };
 		466F1994298121FF00E00134 /* img_speed_camera_warning@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 466F1992298121FF00E00134 /* img_speed_camera_warning@3x.png */; };
+		4671FB902CDE6E3A00446D18 /* GpxUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4671FB8F2CDE6E3A00446D18 /* GpxUtils.swift */; };
 		467C54BE29224CDC005966D3 /* ic_custom_nautical_depth@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 467C54BC29224CDC005966D3 /* ic_custom_nautical_depth@2x.png */; };
 		467C54BF29224CDC005966D3 /* ic_custom_nautical_depth@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 467C54BD29224CDC005966D3 /* ic_custom_nautical_depth@3x.png */; };
 		467D7DC22ADDEAF10037A593 /* OAFavoriteGroupEditorViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 467D7DC12ADDE98C0037A593 /* OAFavoriteGroupEditorViewController.mm */; };
@@ -4061,6 +4062,7 @@
 		466A017F2BFBA9B7008CC50E /* QuickActionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickActionType.swift; sourceTree = "<group>"; };
 		466F1991298121FF00E00134 /* img_speed_camera_warning@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_speed_camera_warning@2x.png"; path = "Resources/Icons/img_speed_camera_warning@2x.png"; sourceTree = "<group>"; };
 		466F1992298121FF00E00134 /* img_speed_camera_warning@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_speed_camera_warning@3x.png"; path = "Resources/Icons/img_speed_camera_warning@3x.png"; sourceTree = "<group>"; };
+		4671FB8F2CDE6E3A00446D18 /* GpxUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GpxUtils.swift; sourceTree = "<group>"; };
 		467C54BC29224CDC005966D3 /* ic_custom_nautical_depth@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_nautical_depth@2x.png"; path = "Resources/Icons/ic_custom_nautical_depth@2x.png"; sourceTree = "<group>"; };
 		467C54BD29224CDC005966D3 /* ic_custom_nautical_depth@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_nautical_depth@3x.png"; path = "Resources/Icons/ic_custom_nautical_depth@3x.png"; sourceTree = "<group>"; };
 		467D7DC02ADDE95B0037A593 /* OAFavoriteGroupEditorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAFavoriteGroupEditorViewController.h; sourceTree = "<group>"; };
@@ -11102,6 +11104,7 @@
 				05DACD802C1EC4340023FAD9 /* OAXmlFactory.h */,
 				05DACD812C1EC4340023FAD9 /* OAXmlFactory.m */,
 				059D31402C66857F00F8B6EF /* GPXInterpolator.swift */,
+				4671FB8F2CDE6E3A00446D18 /* GpxUtils.swift */,
 			);
 			path = GPX;
 			sourceTree = "<group>";
@@ -17146,6 +17149,7 @@
 				DA5A81EA26C563A700F274C7 /* OAHistoryItem.m in Sources */,
 				DA5A84DE26C563A900F274C7 /* OAMapSettingsLanguageScreen.mm in Sources */,
 				DA5A840226C563A800F274C7 /* OASearchToolbarViewController.mm in Sources */,
+				4671FB902CDE6E3A00446D18 /* GpxUtils.swift in Sources */,
 				DA5A847026C563A900F274C7 /* OACompassRulerWidgetState.m in Sources */,
 				DA5A82E626C563A800F274C7 /* OATableViewCustomHeaderView.m in Sources */,
 				DA5A81C926C563A700F274C7 /* OAPointIContainer.mm in Sources */,

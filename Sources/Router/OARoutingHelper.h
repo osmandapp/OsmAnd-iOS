@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "OACommonTypes.h"
 
-@class OAWorldRegion, OAApplicationMode, OARouteCalculationResult, OARouteDirectionInfo, OAGPXRouteParamsBuilder, OAVoiceRouter, OANextDirectionInfo, OASGpxTrackAnalysis, OARouteCalculationParams, OARouteProvider, OARoutingEnvironment, OALocationsHolder, OAGpxRouteApproximation, OAObservable, OACurrentStreetName, OASGpxFile;
+@class OAWorldRegion, OAApplicationMode, OARouteCalculationResult, OARouteDirectionInfo, OAGPXRouteParamsBuilder, OAVoiceRouter, OANextDirectionInfo, OASGpxTrackAnalysis, OARouteCalculationParams, OARouteProvider, OARoutingEnvironment, OAObservable, OACurrentStreetName, OASGpxFile, OASKQuadRect;
 
 @protocol OARouteInformationListener <NSObject>
 
@@ -72,6 +72,7 @@ struct RouteSegmentResult;
 - (OANextDirectionInfo *) getNextRouteDirectionInfoAfter:(OANextDirectionInfo *)previous to:(OANextDirectionInfo *)to toSpeak:(BOOL)toSpeak;
 - (float) getCurrentMaxSpeed;
 - (OACurrentStreetName *) getCurrentName:(OANextDirectionInfo *)next;
++ (OASKQuadRect *)getRect:(OABBox)bbox;
 - (OABBox) getBBox;
 
 - (NSArray<CLLocation *> *) getCurrentCalculatedRoute;

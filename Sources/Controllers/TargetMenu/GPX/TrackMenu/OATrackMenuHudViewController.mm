@@ -1881,7 +1881,7 @@
 
 #pragma mark - OARouteLineChartHelperDelegate
 
-- (void)centerMapOnBBox:(const OABBox)rect
+- (void)centerMapOnBBox:(OASKQuadRect *)rect
 {
     [self.mapPanelViewController displayAreaOnMap:CLLocationCoordinate2DMake(rect.top, rect.left)
                                       bottomRight:CLLocationCoordinate2DMake(rect.bottom, rect.right)

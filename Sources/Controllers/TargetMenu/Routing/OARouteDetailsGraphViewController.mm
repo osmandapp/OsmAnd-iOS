@@ -195,15 +195,10 @@
     _tableView.rowHeight = UITableViewAutomaticDimension;
     _tableView.estimatedRowHeight = 125.;
 
-    if (!self.trackChartPoints)
-    {
-        self.trackChartPoints = [self.routeLineChartHelper generateTrackChartPoints:self.statisticsChart
-                                                                           analysis:self.analysis];
-    }
-    [self.routeLineChartHelper refreshHighlightOnMap:NO
-                                           chartView:self.statisticsChart
-                                    trackChartPoints:self.trackChartPoints
-                                            analysis:self.analysis];
+    [self.routeLineChartHelper refreshChart:self.statisticsChart
+                              fitTrackOnMap:YES
+                                   forceFit:NO
+                           recalculateXAxis:YES];
     [self updateRouteStatisticsGraph];
 }
 
@@ -342,18 +337,14 @@
             _highlightDrawX = -1;
     }
     else if (([recognizer isKindOfClass:UIPinchGestureRecognizer.class] ||
-              ([recognizer isKindOfClass:UITapGestureRecognizer.class] && (((UITapGestureRecognizer *) recognizer).nsuiNumberOfTapsRequired == 2)))
+              ([recognizer isKindOfClass:UITapGestureRecognizer.class]
+               && (((UITapGestureRecognizer *) recognizer).nsuiNumberOfTapsRequired == 2)))
              && recognizer.state == UIGestureRecognizerStateEnded)
     {
-        if (!self.trackChartPoints)
-        {
-            self.trackChartPoints = [self.routeLineChartHelper generateTrackChartPoints:self.statisticsChart
-                                                                               analysis:self.analysis];
-        }
-        [self.routeLineChartHelper refreshHighlightOnMap:YES
-                                               chartView:self.statisticsChart
-                                        trackChartPoints:self.trackChartPoints
-                                                analysis:self.analysis];
+        [self.routeLineChartHelper refreshChart:self.statisticsChart
+                                  fitTrackOnMap:YES
+                                       forceFit:NO
+                               recalculateXAxis:YES];
     }
 }
 
@@ -392,8 +383,14 @@
     if (_highlightDrawX != -1)
     {
         ChartHighlight *h = [self.statisticsChart getHighlightByTouchPoint:CGPointMake(_highlightDrawX, 0.)];
-        if (h != nil)
-            [self.statisticsChart highlightValue:h callDelegate:true];
+        if (h)
+        {
+            [self.statisticsChart highlightValue:h callDelegate:YES];
+            [self.routeLineChartHelper refreshChart:self.statisticsChart
+                                      fitTrackOnMap:YES
+                                           forceFit:NO
+                                   recalculateXAxis:NO];
+        }
     }
 }
 
@@ -483,15 +480,11 @@
 
 - (void)chartValueSelected:(ChartViewBase *)chartView entry:(ChartDataEntry *)entry highlight:(ChartHighlight *)highlight
 {
-    if (!self.trackChartPoints)
-        self.trackChartPoints = [self.routeLineChartHelper generateTrackChartPoints:self.statisticsChart
-                                                                           analysis:self.analysis];
-    [self.routeLineChartHelper refreshHighlightOnMap:NO
-                                           chartView:self.statisticsChart
-                                    trackChartPoints:self.trackChartPoints
-                                            analysis:self.analysis];
+    [self.routeLineChartHelper refreshChart:self.statisticsChart
+                              fitTrackOnMap:YES
+                                   forceFit:NO
+                           recalculateXAxis:NO];
 }
-
 
 #pragma mark - OAStatisticsSelectionDelegate
 

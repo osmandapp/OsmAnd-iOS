@@ -11,6 +11,8 @@
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OACommonTypes.h"
+#import "OAStatisticsSelectionBottomSheetViewController.h"
 #import "OASizes.h"
 #import "OAColors.h"
 #import "OAStateChangedListener.h"
@@ -782,15 +784,10 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
               ([recognizer isKindOfClass:UITapGestureRecognizer.class] && (((UITapGestureRecognizer *) recognizer).nsuiNumberOfTapsRequired == 2)))
              && recognizer.state == UIGestureRecognizerStateEnded)
     {
-        if (!self.trackChartPoints)
-        {
-            self.trackChartPoints = [self.routeLineChartHelper generateTrackChartPoints:self.statisticsChart
-                                                                               analysis:self.analysis];
-        }
-        [self.routeLineChartHelper refreshHighlightOnMap:YES
-                                               chartView:self.statisticsChart
-                                        trackChartPoints:self.trackChartPoints
-                                                analysis:self.analysis];
+        [self.routeLineChartHelper refreshChart:self.statisticsChart
+                                  fitTrackOnMap:YES
+                                       forceFit:NO
+                               recalculateXAxis:YES];
     }
 }
 
@@ -948,16 +945,10 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
             }
         }
     }
-
-    if (!self.trackChartPoints)
-    {
-        self.trackChartPoints = [self.routeLineChartHelper generateTrackChartPoints:self.statisticsChart
-                                                                           analysis:self.analysis];
-    }
-    [self.routeLineChartHelper refreshHighlightOnMap:NO
-                                           chartView:self.statisticsChart
-                                    trackChartPoints:self.trackChartPoints
-                                            analysis:self.analysis];
+    [self.routeLineChartHelper refreshChart:self.statisticsChart
+                              fitTrackOnMap:YES
+                                   forceFit:NO
+                           recalculateXAxis:NO];
 }
 
 - (void)chartScaled:(ChartViewBase *)chartView scaleX:(CGFloat)scaleX scaleY:(CGFloat)scaleY
@@ -972,8 +963,14 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     if (_highlightDrawX != -1)
     {
         ChartHighlight *h = [self.statisticsChart getHighlightByTouchPoint:CGPointMake(_highlightDrawX, 0.)];
-        if (h != nil)
-            [self.statisticsChart highlightValue:h callDelegate:true];
+        if (h)
+        {
+            [self.statisticsChart highlightValue:h callDelegate:YES];
+            [self.routeLineChartHelper refreshChart:self.statisticsChart
+                                      fitTrackOnMap:YES
+                                           forceFit:NO
+                                   recalculateXAxis:NO];
+        }
     }
 }
 

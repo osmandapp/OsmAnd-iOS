@@ -218,6 +218,11 @@ static BOOL _isDeviatedFromRoute = false;
     }
 }
 
++ (OASKQuadRect *)getRect:(OABBox)bbox
+{
+    return [[OASKQuadRect alloc] initWithLeft:bbox.left top:bbox.top right:bbox.right bottom:bbox.bottom];
+}
+
 - (OABBox) getBBox
 {
     double left = DBL_MAX;

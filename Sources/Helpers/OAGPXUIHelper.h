@@ -9,14 +9,15 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-@class OARouteCalculationResult, OAPOI;
-@class OASTrkSegment, OASGpxFile, OASTrack, OASGpxTrackAnalysis, OASGpxDataItem, OASTrackItem;
+@class OARouteCalculationResult, OAPOI, OASTrkSegment, OASGpxFile, OASTrack, OASGpxDataItem, OASTrackItem;
 
 @protocol OATrackSavingHelperUpdatableDelegate <NSObject>
 
 - (void) onNeedUpdateHostData;
 
 @end
+
+NS_ASSUME_NONNULL_BEGIN
 
 @interface OAGpxFileInfo : NSObject
 
@@ -37,42 +38,44 @@
 + (long) getSegmentTime:(OASTrkSegment *)segment;
 + (double) getSegmentDistance:(OASTrkSegment *)segment;
 
-+ (NSArray<OAGpxFileInfo *> *) getSortedGPXFilesInfo:(NSString *)dir selectedGpxList:(NSArray<NSString *> *)selectedGpxList absolutePath:(BOOL)absolutePath;
++ (NSArray<OAGpxFileInfo *> *) getSortedGPXFilesInfo:(nullable NSString *)dir
+                                     selectedGpxList:(nullable NSArray<NSString *> *)selectedGpxList
+                                        absolutePath:(BOOL)absolutePath;
 
 + (void) addAppearanceToGpx:(OASGpxFile *)gpxFile gpxItem:(OASGpxDataItem *)gpxItem;
 
-+ (CLLocationCoordinate2D)getSegmentPointByTime:(OASTrkSegment *)segment
-                                        gpxFile:(OASGpxFile *)gpxFile
-                                           time:(double)time
-                                preciseLocation:(BOOL)preciseLocation
-                                   joinSegments:(BOOL)joinSegments;
-
-+ (CLLocationCoordinate2D)getSegmentPointByDistance:(OASTrkSegment *)segment
-                                            gpxFile:(OASGpxFile *)gpxFile
-                                    distanceToPoint:(double)distanceToPoint
-                                    preciseLocation:(BOOL)preciseLocation
-                                       joinSegments:(BOOL)joinSegments;
-
 + (OAPOI *)searchNearestCity:(CLLocationCoordinate2D)latLon;
 
-- (void) openExportForTrack:(OASGpxDataItem *)gpx gpxDoc:(id)gpxDoc isCurrentTrack:(BOOL)isCurrentTrack inViewController:(UIViewController *)hostViewController hostViewControllerDelegate:(id)hostViewControllerDelegate touchPointArea:(CGRect)touchPointArea;
+- (void) openExportForTrack:(nullable OASGpxDataItem *)gpx
+                     gpxDoc:(nullable id)gpxDoc
+             isCurrentTrack:(BOOL)isCurrentTrack
+           inViewController:(UIViewController *)hostViewController
+ hostViewControllerDelegate:(id)hostViewControllerDelegate
+             touchPointArea:(CGRect)touchPointArea;
 
 - (void)copyGPXToNewFolder:(NSString *)newFolderName
-           renameToNewName:(NSString *)newFileName
+           renameToNewName:(nullable NSString *)newFileName
         deleteOriginalFile:(BOOL)deleteOriginalFile
                  openTrack:(BOOL)openTrack
                        trackItem:(OASTrackItem *)trackItem;
 
 - (void)copyGPXToNewFolder:(NSString *)newFolderName
-           renameToNewName:(NSString *)newFileName
+           renameToNewName:(nullable NSString *)newFileName
         deleteOriginalFile:(BOOL)deleteOriginalFile
                  openTrack:(BOOL)openTrack
                  trackItem:(OASTrackItem *)trackItem
                    gpxFile:(OASGpxFile *)gpxFile
   updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))updatedTrackItemСallback;
 
-- (void) renameTrack:(OASGpxDataItem *)gpx newName:(NSString *)newName hostVC:(UIViewController*)hostVC;
-- (void) renameTrack:(OASGpxDataItem *)gpx doc:(OASGpxFile *)doc newName:(NSString *)newName hostVC:(UIViewController*)hostVC updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))updatedTrackItemСallback;;
+- (void) renameTrack:(nullable OASGpxDataItem *)gpx
+             newName:(NSString *)newName
+              hostVC:(UIViewController*)hostVC;
+
+- (void) renameTrack:(nullable OASGpxDataItem *)gpx
+                 doc:(nullable OASGpxFile *)doc
+             newName:(nullable NSString *)newName
+              hostVC:(UIViewController*)hostVC
+    updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))updatedTrackItemСallback;;
 
 + (NSString *)buildTrackSegmentName:(OASGpxFile *)gpxFile
                               track:(OASTrack *)track
@@ -87,3 +90,4 @@
 
 @end
 
+NS_ASSUME_NONNULL_END

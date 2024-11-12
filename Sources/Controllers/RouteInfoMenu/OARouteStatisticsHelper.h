@@ -27,7 +27,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) CLLocationCoordinate2D highlightedPoint;
 @property (nonatomic) NSInteger segmentColor;
 @property (nonatomic) OASGpxFile *gpx;
-@property (nonatomic) BOOL axisPointsInvalidated;
 
 @end
 

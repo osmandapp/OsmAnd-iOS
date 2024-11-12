@@ -234,7 +234,7 @@
             OASGpxFile *gpx = [[OASelectedGPXHelper instance] getGpxFileFor:gpxFullPath];
             if (!gpx)
             {
-                OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFullPath];
+                OASKFile *file = [[OASKFile alloc] initWithFilePath:_gpx.path];
                 _doc = [OASGpxUtilities.shared loadGpxFileFile:file];
             }
             else

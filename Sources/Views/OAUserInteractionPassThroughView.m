@@ -8,7 +8,6 @@
 
 #import "OAUserInteractionPassThroughView.h"
 #import "OAObservable.h"
-#import "OAHudButton.h"
 #import "OsmAnd_Maps-Swift.h"
 
 @implementation OAUserInteractionPassThroughView

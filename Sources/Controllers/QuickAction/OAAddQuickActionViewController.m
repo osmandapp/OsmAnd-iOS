@@ -175,8 +175,6 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
         // Main screen - groups list
         if (!_isFiltered)
         {
-            
-            
             /*
             OATableRowData *mapInteractionsRow = [section createNewRow];
             mapInteractionsRow.cellType = [OASimpleTableViewCell getCellIdentifier];

@@ -3945,5 +3945,8 @@
 "rendering_attr_showDirtbikeTrails_description" = "Show dirt bike trails";
 "map_widget_map_scale" = "Map scale";
 "transport_stop" = "Stop";
-
-;
+"lock_screen" = "Lock screen";
+"screen_is_locked_by_action_button" = "Touch screen is locked. Tap on button to unlock.";
+"screen_is_unlocked" = "Touch screen is unlocked.";
+"shared_string_interface" = "Interface";
+"lock_screen_description" = "Enables or disables touch screen functionality to prevent accidental taps";

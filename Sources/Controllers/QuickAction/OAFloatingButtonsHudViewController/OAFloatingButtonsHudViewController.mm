@@ -24,6 +24,7 @@
 #import "OAAutoObserverProxy.h"
 #import <AudioToolbox/AudioServices.h>
 #import "OsmAnd_Maps-Swift.h"
+#import "OAUserInteractionPassThroughView.h"
 
 static CGFloat const kHudButtonsOffset = 16.0;
 static CGFloat const kHudQuickActionButtonHeight = 50.0;
@@ -31,7 +32,7 @@ static CGFloat const kHudQuickActionButtonHeight = 50.0;
 static NSInteger const kQuickActionSlashTag = -1;
 static NSInteger const kQuickActionSlashBackgroundTag = -2;
 
-@interface OAFloatingButtonsHudViewController () <OAQuickActionsSheetDelegate>
+@interface OAFloatingButtonsHudViewController () <OAQuickActionsSheetDelegate, OAUserInteractionPassThroughDelegate>
 
 @property (weak, nonatomic) IBOutlet OAHudButton *map3dModeFloatingButton;
 @property (weak, nonatomic) IBOutlet UIImageView *quickActionPin;
@@ -109,6 +110,8 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    ((OAUserInteractionPassThroughView *)self.view).delegate = self;
 
     [self createQuickActionButtons];
 
@@ -576,6 +579,25 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
 - (void)dismissBottomSheet
 {
     [self hideActionsSheetAnimated:nil];
+}
+
+#pragma mark - OAUserInteractionPassThroughDelegate
+
+- (BOOL)isTouchEventAllowedForView:(UIView *)view { 
+    if ([view isKindOfClass:[OAHudButton class]])
+    {
+        OAHudButton *quickActionButton = (OAHudButton *)view;
+        if ([quickActionButton.buttonState isKindOfClass:QuickActionButtonState.class])
+        {
+            QuickActionButtonState *buttonState = (QuickActionButtonState *)quickActionButton.buttonState;
+            OAQuickAction *quickAction = buttonState.quickActions.firstObject;
+            if (quickAction)
+            {
+                return [quickAction isKindOfClass:[LockScreenAction class]];
+            }
+        }
+    }
+    return NO;
 }
 
 @end

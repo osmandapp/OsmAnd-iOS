@@ -16,6 +16,7 @@ enum QuickActionTypeCategory: Int {
     case settings
     case mapInteractions
     case myPlaces
+    case interface
 }
 
 @objcMembers

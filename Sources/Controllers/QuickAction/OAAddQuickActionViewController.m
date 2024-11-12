@@ -189,6 +189,12 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
             configureMapRow.iconName = @"ic_custom_overlay_map";
             configureMapRow.key = [OAMapButtonsHelper TYPE_CONFIGURE_MAP].name;
             
+            OATableRowData *interfaceRow = [section createNewRow];
+            interfaceRow.cellType = [OASimpleTableViewCell getCellIdentifier];
+            interfaceRow.title = OALocalizedString(@"shared_string_interface");
+            interfaceRow.iconName = @"ic_custom_ui_customization";
+            interfaceRow.key = [OAMapButtonsHelper TYPE_INTERFACE].name;
+            
             OATableRowData *myPlacesRow = [section createNewRow];
             myPlacesRow.cellType = [OASimpleTableViewCell getCellIdentifier];
             myPlacesRow.title = OALocalizedString(@"shared_string_my_places");

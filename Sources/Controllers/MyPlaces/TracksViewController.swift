@@ -510,48 +510,6 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         filterButton.configuration = currentConfig
     }
     
-    private func createSortMenu() -> UIMenu {
-        let sortingOptions = UIMenu(options: .displayInline, children: [
-            createAction(for: .nearest),
-            createAction(for: .lastModified)
-        ])
-        let alphabeticalOptions = UIMenu(options: .displayInline, children: [
-            createAction(for: .nameAZ),
-            createAction(for: .nameZA)
-        ])
-        let dateOptions = UIMenu(options: .displayInline, children: [
-            createAction(for: .newestDateFirst),
-            createAction(for: .oldestDateFirst)
-        ])
-        let distanceOptions = UIMenu(options: .displayInline, children: [
-            createAction(for: .longestDistanceFirst),
-            createAction(for: .shortestDistanceFirst)
-        ])
-        let durationOptions = UIMenu(options: .displayInline, children: [
-            createAction(for: .longestDurationFirst),
-            createAction(for: .shorterDurationFirst)
-        ])
-        
-        return UIMenu(title: "", children: [sortingOptions, alphabeticalOptions, dateOptions, distanceOptions, durationOptions])
-    }
-    
-    private func createAction(for sortType: TracksSortMode) -> UIAction {
-        let isCurrentSortType = isSearchActive ? sortType == sortModeForSearch : sortType == sortModeForTracks
-        let actionState: UIMenuElement.State = isCurrentSortType ? .on : .off
-        return UIAction(title: sortType.title, image: sortType.image, state: actionState) { [weak self] _ in
-            guard let self else { return }
-            if self.isSearchActive {
-                self.sortModeForSearch = sortType
-                self.setSearchTracksSortMode(sortType)
-            } else {
-                self.sortModeForTracks = sortType
-                self.setTracksSortMode(sortType)
-            }
-            self.sortButton.setImage(self.isSearchActive ? self.sortModeForSearch.image : self.sortModeForTracks.image, for: .normal)
-            self.updateData()
-        }
-    }
-    
     private func updateSortButtonAndMenu() {
         sortButton.setImage(isSearchActive ? sortModeForSearch.image : sortModeForTracks.image, for: .normal)
         sortButton.menu = createSortMenu()
@@ -1949,5 +1907,49 @@ extension TracksViewController: TrackFolderLoaderTaskLoadTracksListener {
     
     func tracksLoaded(folder: TrackFolder) {
         debugPrint("function: \(#function)")
+    }
+}
+
+extension TracksViewController {
+    private func createSortMenu() -> UIMenu {
+        let sortingOptions = UIMenu(options: .displayInline, children: [
+            createAction(for: .nearest),
+            createAction(for: .lastModified)
+        ])
+        let alphabeticalOptions = UIMenu(options: .displayInline, children: [
+            createAction(for: .nameAZ),
+            createAction(for: .nameZA)
+        ])
+        let dateOptions = UIMenu(options: .displayInline, children: [
+            createAction(for: .newestDateFirst),
+            createAction(for: .oldestDateFirst)
+        ])
+        let distanceOptions = UIMenu(options: .displayInline, children: [
+            createAction(for: .longestDistanceFirst),
+            createAction(for: .shortestDistanceFirst)
+        ])
+        let durationOptions = UIMenu(options: .displayInline, children: [
+            createAction(for: .longestDurationFirst),
+            createAction(for: .shorterDurationFirst)
+        ])
+        
+        return UIMenu(title: "", children: [sortingOptions, alphabeticalOptions, dateOptions, distanceOptions, durationOptions])
+    }
+    
+    private func createAction(for sortType: TracksSortMode) -> UIAction {
+        let isCurrentSortType = isSearchActive ? sortType == sortModeForSearch : sortType == sortModeForTracks
+        let actionState: UIMenuElement.State = isCurrentSortType ? .on : .off
+        return UIAction(title: sortType.title, image: sortType.image, state: actionState) { [weak self] _ in
+            guard let self else { return }
+            if self.isSearchActive {
+                self.sortModeForSearch = sortType
+                self.setSearchTracksSortMode(sortType)
+            } else {
+                self.sortModeForTracks = sortType
+                self.setTracksSortMode(sortType)
+            }
+            self.sortButton.setImage(self.isSearchActive ? self.sortModeForSearch.image : self.sortModeForTracks.image, for: .normal)
+            self.updateData()
+        }
     }
 }

@@ -699,59 +699,6 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         return headerView
     }
     
-    private func createSortMenu() -> UIMenu {
-        let sortingOptions = UIMenu(options: .displayInline, children: [
-            createAction(for: .nearest),
-            createAction(for: .lastModified)
-        ])
-        let alphabeticalOptions = UIMenu(options: .displayInline, children: [
-            createAction(for: .nameAZ),
-            createAction(for: .nameZA)
-        ])
-        let dateOptions = UIMenu(options: .displayInline, children: [
-            createAction(for: .newestDateFirst),
-            createAction(for: .oldestDateFirst)
-        ])
-        let distanceOptions = UIMenu(options: .displayInline, children: [
-            createAction(for: .longestDistanceFirst),
-            createAction(for: .shortestDistanceFirst)
-        ])
-        let durationOptions = UIMenu(options: .displayInline, children: [
-            createAction(for: .longestDurationFirst),
-            createAction(for: .shorterDurationFirst)
-        ])
-        
-        return UIMenu(title: "", children: [sortingOptions, alphabeticalOptions, dateOptions, distanceOptions, durationOptions])
-    }
-    
-    private func createAction(for sortType: TracksSortMode) -> UIAction {
-        let isCurrentSortType: Bool
-        if isSearchActive {
-            isCurrentSortType = sortType == sortModeForSearch
-        } else if isShowingVisibleTracks {
-            isCurrentSortType = sortType == sortModeForVisibleTracks
-        } else {
-            isCurrentSortType = sortType == sortModeForAllTracks
-        }
-        
-        let actionState: UIMenuElement.State = isCurrentSortType ? .on : .off
-        return UIAction(title: sortType.title, image: sortType.image, state: actionState) { [weak self] _ in
-            guard let self else { return }
-            if self.isSearchActive {
-                self.sortModeForSearch = sortType
-            } else if self.isShowingVisibleTracks {
-                self.sortModeForVisibleTracks = sortType
-            } else {
-                self.sortModeForAllTracks = sortType
-            }
-            
-            self.currentSortMode = sortType
-            self.sortButton.setImage(self.currentSortMode.image, for: .normal)
-            self.sortTracks()
-            self.updateData()
-        }
-    }
-    
     private func updateSortButtonAndMenu() {
         sortButton.setImage(currentSortMode.image, for: .normal)
         sortButton.menu = createSortMenu()
@@ -955,5 +902,60 @@ extension MapSettingsGpxViewController: OASelectTrackFolderDelegate {
     
     func onFolderSelectCancelled() {
         selectedTrack = nil
+    }
+}
+
+extension MapSettingsGpxViewController {
+    private func createSortMenu() -> UIMenu {
+        let sortingOptions = UIMenu(options: .displayInline, children: [
+            createAction(for: .nearest),
+            createAction(for: .lastModified)
+        ])
+        let alphabeticalOptions = UIMenu(options: .displayInline, children: [
+            createAction(for: .nameAZ),
+            createAction(for: .nameZA)
+        ])
+        let dateOptions = UIMenu(options: .displayInline, children: [
+            createAction(for: .newestDateFirst),
+            createAction(for: .oldestDateFirst)
+        ])
+        let distanceOptions = UIMenu(options: .displayInline, children: [
+            createAction(for: .longestDistanceFirst),
+            createAction(for: .shortestDistanceFirst)
+        ])
+        let durationOptions = UIMenu(options: .displayInline, children: [
+            createAction(for: .longestDurationFirst),
+            createAction(for: .shorterDurationFirst)
+        ])
+        
+        return UIMenu(title: "", children: [sortingOptions, alphabeticalOptions, dateOptions, distanceOptions, durationOptions])
+    }
+    
+    private func createAction(for sortType: TracksSortMode) -> UIAction {
+        let isCurrentSortType: Bool
+        if isSearchActive {
+            isCurrentSortType = sortType == sortModeForSearch
+        } else if isShowingVisibleTracks {
+            isCurrentSortType = sortType == sortModeForVisibleTracks
+        } else {
+            isCurrentSortType = sortType == sortModeForAllTracks
+        }
+        
+        let actionState: UIMenuElement.State = isCurrentSortType ? .on : .off
+        return UIAction(title: sortType.title, image: sortType.image, state: actionState) { [weak self] _ in
+            guard let self else { return }
+            if self.isSearchActive {
+                self.sortModeForSearch = sortType
+            } else if self.isShowingVisibleTracks {
+                self.sortModeForVisibleTracks = sortType
+            } else {
+                self.sortModeForAllTracks = sortType
+            }
+            
+            self.currentSortMode = sortType
+            self.sortButton.setImage(self.currentSortMode.image, for: .normal)
+            self.sortTracks()
+            self.updateData()
+        }
     }
 }

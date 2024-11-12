@@ -655,7 +655,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         list.sorted { $0 < $1 }
     }
     
-    func updateDistanceAndDirection(_ forceUpdate: Bool) {
+    private func updateDistanceAndDirection(_ forceUpdate: Bool) {
         lock.lock()
         let currentSortMode = isSearchActive ? sortModeForSearch : sortModeForTracks
         guard currentSortMode == .nearest, forceUpdate || Date.now.timeIntervalSince1970 - (lastUpdate ?? 0) >= 0.5 else {

@@ -9,7 +9,7 @@
 import UIKit
 import OsmAndShared
 
-@objc enum TracksSortMode: Int {
+@objc enum TracksSortMode: Int, CaseIterable {
     case nearest
     case lastModified
     case nameAZ
@@ -20,10 +20,6 @@ import OsmAndShared
     case shortestDistanceFirst
     case longestDurationFirst
     case shorterDurationFirst
-    
-    static var allCases: [TracksSortMode] {
-        return [.nearest, .lastModified, .nameAZ, .nameZA, .newestDateFirst, .oldestDateFirst, .longestDistanceFirst, .shortestDistanceFirst, .longestDurationFirst, .shorterDurationFirst]
-    }
     
     var title: String {
         switch self {
@@ -56,17 +52,23 @@ import OsmAndShared
     }
     
     static func getByTitle(_ title: String) -> TracksSortMode {
-        return TracksSortMode.allCases.first(where: { $0.title == title }) ?? .lastModified
+        TracksSortMode.allCases.first(where: { $0.title == title }) ?? .lastModified
     }
 }
 
-@objc class TracksSortModeHelper: NSObject {
+@objc final class TracksSortModeHelper: NSObject {
+    static let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd.MM.yyyy"
+        return formatter
+    }()
+    
     @objc static var defaultSortModeTitle: String {
         return TracksSortMode.lastModified.title
     }
     
     @objc static func title(for mode: TracksSortMode) -> String {
-        return mode.title
+        mode.title
     }
     
     static func sortTracksWithMode(_ tracks: [GpxDataItem], mode: TracksSortMode) -> [GpxDataItem] {
@@ -95,10 +97,8 @@ import OsmAndShared
     }
     
     static func getTrackDescription(track: GpxDataItem, sortMode: TracksSortMode, includeFolderInfo: Bool = false) -> NSAttributedString {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yyyy"
-        let date = dateFormatter.string(from: track.lastModifiedTime)
-        let creationDate = dateFormatter.string(from: track.creationDate)
+        let date = TracksSortModeHelper.dateFormatter.string(from: track.lastModifiedTime)
+        let creationDate = TracksSortModeHelper.dateFormatter.string(from: track.creationDate)
         let distance = OAOsmAndFormatter.getFormattedDistance(track.totalDistance) ?? localizedString("shared_string_not_available")
         let time = OAOsmAndFormatter.getFormattedTimeInterval(TimeInterval(track.timeSpan / 1000), shortFormat: true) ?? localizedString("shared_string_not_available")
         let waypointCount = "\(track.wptPoints)"
@@ -170,15 +170,10 @@ import OsmAndShared
     }
     
     static func distanceToGPX(gpx: GpxDataItem) -> CGFloat {
-        guard let currentLocation = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation else {
-            return CGFloat.greatestFiniteMagnitude
-        }
+        guard let currentLocation = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation else { return CGFloat.greatestFiniteMagnitude }
+        guard let analysis = gpx.getAnalysis(), let start = analysis.getLatLonStart(), CLLocationCoordinate2DIsValid(CLLocationCoordinate2DMake(start.latitude, start.longitude)) else { return CGFloat.greatestFiniteMagnitude }
         
-        if let analysis = gpx.getAnalysis(), let start = analysis.getLatLonStart(), CLLocationCoordinate2DIsValid(CLLocationCoordinate2DMake(start.latitude, start.longitude)) {
-            return OADistanceAndDirectionsUpdater.getDistanceFrom(currentLocation, toDestinationLatitude: start.latitude, destinationLongitude: start.longitude)
-        }
-        
-        return CGFloat.greatestFiniteMagnitude
+        return OADistanceAndDirectionsUpdater.getDistanceFrom(currentLocation, toDestinationLatitude: start.latitude, destinationLongitude: start.longitude)
     }
     
     static func createImageAttributedString(named imageName: String, tintColor: UIColor, defaultAttributes: [NSAttributedString.Key: Any], rotate: Bool = false, rotationAngle: CGFloat = 0) -> NSAttributedString? {

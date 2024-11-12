@@ -50,7 +50,6 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     private let isVisibleKey = "isVisibleKey"
     private let isFullWidthSeparatorKey = "isFullWidthSeparatorKey"
     private let trackSortDescrKey = "trackSortDescrKey"
-    private let lock = NSLock()
     
     private var tableData = OATableDataModel()
     private var asyncLoader: TrackFolderLoaderTask?
@@ -614,10 +613,8 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func updateDistanceAndDirection(_ forceUpdate: Bool) {
-        lock.lock()
         let currentSortMode = isSearchActive ? sortModeForSearch : sortModeForTracks
         guard currentSortMode == .nearest, forceUpdate || Date.now.timeIntervalSince1970 - (lastUpdate ?? 0) >= 0.5 else {
-            lock.unlock()
             return
         }
         
@@ -625,8 +622,6 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         DispatchQueue.main.async {
             self.updateData()
         }
-        
-        lock.unlock()
     }
     
     private func showErrorAlert(_ text: String) {

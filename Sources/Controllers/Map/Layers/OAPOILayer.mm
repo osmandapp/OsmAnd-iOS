@@ -479,6 +479,7 @@
             }
             else
             {
+                poi.isRenderedObject = YES;
                 poi.name = obfMapObject->getCaptionInNativeLanguage().toNSString();
                 NSMutableDictionary *names = [NSMutableDictionary dictionary];
                 NSString *nameLocalized = [OAPOIHelper processLocalizedNames:obfMapObject->getCaptionsInAllLanguages() nativeName:obfMapObject->getCaptionInNativeLanguage() names:names];

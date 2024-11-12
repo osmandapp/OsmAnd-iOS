@@ -22,10 +22,10 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     private var searchController: UISearchController?
     private var segmentedControl: UISegmentedControl?
     private var lastUpdate: TimeInterval?
-    private var currentSortType: TracksSortMode = .lastModified
-    private var sortTypeForAllTracks: TracksSortMode = .lastModified
-    private var sortTypeForVisibleTracks: TracksSortMode = .lastModified
-    private var sortTypeForSearch: TracksSortMode = .nameAZ
+    private var currentSortMode: TracksSortMode = .lastModified
+    private var sortModeForAllTracks: TracksSortMode = .lastModified
+    private var sortModeForVisibleTracks: TracksSortMode = .lastModified
+    private var sortModeForSearch: TracksSortMode = .nameAZ
     private var allGpxList: [GpxDataItem] = []
     private var visibleGpxList: [GpxDataItem] = []
     private var recentlyVisibleGpxList: [GpxDataItem] = []
@@ -247,7 +247,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             cell.selectedBackgroundView?.backgroundColor = UIColor.groupBg
             cell.titleLabel.text = item.title
             if let gpx = item.obj(forKey: "gpx") as? GpxDataItem {
-                cell.descriptionLabel.attributedText = TracksSortModeHelper.getTrackDescription(track: gpx, sortMode: currentSortType, includeFolderInfo: true)
+                cell.descriptionLabel.attributedText = TracksSortModeHelper.getTrackDescription(track: gpx, sortMode: currentSortMode, includeFolderInfo: true)
             }
             
             let iconName = item.iconName ?? "ic_custom_trip"
@@ -727,51 +727,51 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     private func createAction(for sortType: TracksSortMode) -> UIAction {
         let isCurrentSortType: Bool
         if isSearchActive {
-            isCurrentSortType = sortType == sortTypeForSearch
+            isCurrentSortType = sortType == sortModeForSearch
         } else if isShowingVisibleTracks {
-            isCurrentSortType = sortType == sortTypeForVisibleTracks
+            isCurrentSortType = sortType == sortModeForVisibleTracks
         } else {
-            isCurrentSortType = sortType == sortTypeForAllTracks
+            isCurrentSortType = sortType == sortModeForAllTracks
         }
         
         let actionState: UIMenuElement.State = isCurrentSortType ? .on : .off
         return UIAction(title: sortType.title, image: sortType.image, state: actionState) { [weak self] _ in
             guard let self else { return }
             if self.isSearchActive {
-                self.sortTypeForSearch = sortType
+                self.sortModeForSearch = sortType
             } else if self.isShowingVisibleTracks {
-                self.sortTypeForVisibleTracks = sortType
+                self.sortModeForVisibleTracks = sortType
             } else {
-                self.sortTypeForAllTracks = sortType
+                self.sortModeForAllTracks = sortType
             }
             
-            self.currentSortType = sortType
-            self.sortButton.setImage(self.currentSortType.image, for: .normal)
+            self.currentSortMode = sortType
+            self.sortButton.setImage(self.currentSortMode.image, for: .normal)
             self.sortTracks()
             self.updateData()
         }
     }
     
     private func updateSortButtonAndMenu() {
-        sortButton.setImage(currentSortType.image, for: .normal)
+        sortButton.setImage(currentSortMode.image, for: .normal)
         sortButton.menu = createSortMenu()
     }
     
     private func sortTracks() {
         if isSearchActive {
-            filteredGpxList = TracksSortModeHelper.sortTracksWithMode(filteredGpxList, mode: sortTypeForSearch)
+            filteredGpxList = TracksSortModeHelper.sortTracksWithMode(filteredGpxList, mode: sortModeForSearch)
         } else if isShowingVisibleTracks {
-            visibleGpxList = TracksSortModeHelper.sortTracksWithMode(visibleGpxList, mode: sortTypeForVisibleTracks)
-            recentlyVisibleGpxList = TracksSortModeHelper.sortTracksWithMode(recentlyVisibleGpxList, mode: sortTypeForVisibleTracks)
+            visibleGpxList = TracksSortModeHelper.sortTracksWithMode(visibleGpxList, mode: sortModeForVisibleTracks)
+            recentlyVisibleGpxList = TracksSortModeHelper.sortTracksWithMode(recentlyVisibleGpxList, mode: sortModeForVisibleTracks)
         } else {
-            allGpxList = TracksSortModeHelper.sortTracksWithMode(allGpxList, mode: sortTypeForAllTracks)
+            allGpxList = TracksSortModeHelper.sortTracksWithMode(allGpxList, mode: sortModeForAllTracks)
         }
     }
     
     func updateDistanceAndDirection(_ forceUpdate: Bool) {
         lock.lock()
         
-        guard isTracksAvailable, currentSortType == .nearest, forceUpdate 
+        guard isTracksAvailable, currentSortMode == .nearest, forceUpdate
                 || Date.now.timeIntervalSince1970 - (lastUpdate ?? 0) >= 0.5
         else {
             lock.unlock()
@@ -793,7 +793,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     
     @objc private func segmentChanged(_ control: UISegmentedControl) {
         isShowingVisibleTracks = control.selectedSegmentIndex == 0
-        currentSortType = isShowingVisibleTracks ? sortTypeForVisibleTracks : sortTypeForAllTracks
+        currentSortMode = isShowingVisibleTracks ? sortModeForVisibleTracks : sortModeForAllTracks
         updateSortButtonAndMenu()
         sortTracks()
         generateData()
@@ -808,8 +808,8 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         isSearchActive = true
         isShowingVisibleTracks = false
         previousSelectedSegmentIndex = segmentedControl?.selectedSegmentIndex ?? 0
-        currentSortType = .nameAZ
-        sortTypeForSearch = .nameAZ
+        currentSortMode = .nameAZ
+        sortModeForSearch = .nameAZ
         filteredGpxList = allGpxList
         sortTracks()
         DispatchQueue.main.async {
@@ -885,7 +885,7 @@ extension MapSettingsGpxViewController: UISearchBarDelegate {
         isSearchActive = false
         isSearchFilteringActive = false
         filteredGpxList.removeAll()
-        currentSortType = segmentedControl?.selectedSegmentIndex == 0 ? sortTypeForVisibleTracks : sortTypeForAllTracks
+        currentSortMode = segmentedControl?.selectedSegmentIndex == 0 ? sortModeForVisibleTracks : sortModeForAllTracks
         updateNavbar()
         guard let segmentedControl else { return }
         segmentedControl.selectedSegmentIndex = previousSelectedSegmentIndex

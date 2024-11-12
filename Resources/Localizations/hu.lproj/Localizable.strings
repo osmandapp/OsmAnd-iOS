@@ -2849,7 +2849,7 @@
 "weather_source_GFS_description" = "Az amerikai Nemzeti Környezeti Előrejelző Központok adatait felhasználó Globális Előrejelzési Rendszer";
 "weather_data_sources_prompt" = "Az OsmAnd időjárási adatai két forrásból származnak:";
 "weather_source_ecmwf_description" = "Középtávú Időjárás-előrejelzések Európai Központja";
-"map_settings_weather_wind_animation" = "Szél animáció";
+"map_settings_weather_wind_animation" = "Szélanimáció";
 "transport_hazmat_title" = "Veszélyes anyag szállítása";
 "missing_maps_ignore_details" = "Lefedik-e az útvonalat a már letöltött térképek? Navigáljon azokkal, ha ismeri a környéket.";
 "shared_string_app_profile" = "Alkalmazásprofil";

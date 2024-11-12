@@ -477,7 +477,7 @@
 "update_tile" = "Actualizar";
 "download_pending" = "Descarga pendiente";
 "download_suggestion" = "Descarga el mapa detallado de «%@», para ver esta área";
-"move_map_to_select_area" = "Mover el mapa para elegir el área necesaria.";
+"move_map_to_select_area" = "Mueve el mapa para elegir el área necesaria.";
 "number_of_tiles" = "Número de teselas";
 "download_size" = "Tamaño de descarga";
 "preview_of_selected_zoom_levels" = "Vista previa de los niveles de zum elegidos";
@@ -2219,7 +2219,7 @@
 "route_line_use_map_style_color" = "Usa el color predefinido del estilo de mapa (%@).";
 "route_line_use_map_style_width" = "Usa el ancho predefinido del estilo de mapa (%@).";
 "turn_arrows" = "Flechas de giro";
-"turn_arrows_descr" = "Elige si se indican las flechas de giro en la línea de ruta.";
+"turn_arrows_descr" = "Elige si se muestran las flechas de giro en la línea de ruta.";
 "routeInfo_surface_description" = "Proporciona información sobre la superficie física de los caminos y senderos.";
 "routeInfo_winter_ice_road_description" = "Colorea la ruta o el trazado de la vía según la clasificación del camino en invierno.";
 "q_clear_weather_cache" = "¿Vaciar caché de la meteorología?";
@@ -2250,7 +2250,7 @@
 "verify_email_address_descr" = "Código de verificación enviado a «%@». Añádelo en el siguiente campo.";
 "verification_code_placeholder" = "Código";
 "resend_verification_code" = "Reenviar";
-"osmand_cloud_authorize_descr" = "Nunca pierdas tus datos. Haz una copia de seguridad y restaura toda la información fácilmente.";
+"osmand_cloud_authorize_descr" = "Nunca pierdas tus datos. Crea una copia de seguridad y restaura toda la información fácilmente.";
 "cloud_create_account" = "Crear cuenta";
 "register_opr_have_account" = "Ya tengo cuenta";
 "local_backup" = "Copia de seguridad local";
@@ -2265,7 +2265,7 @@
 "cloud_email_not_registered" = "Este correo electrónico no está registrado en OsmAnd Cloud";
 "weather_pressure_hectopascals" = "Hectopascales";
 "weather_pressure_millimeters_of_mercury" = "Milímetros de mercurio";
-"osmand_cloud_login_descr" = "Ingresa el correo electrónico usado para el registro. Enviaremos una contraseña de un solo uso.";
+"osmand_cloud_login_descr" = "Ingresa el correo electrónico usado para el registro. Te enviaremos un código de verificación único.";
 "cloud_email_already_registered" = "Este correo electrónico ya se encuentra registrado.";
 "login_help_email_title" = "OsmAnd Cloud en iOS";
 "register_opr_create_new_account" = "Crear nueva cuenta";
@@ -2279,16 +2279,16 @@
 "set_up_backup" = "Configurar copia de seguridad";
 "backup_now" = "Respaldar ahora";
 "make_backup" = "Crear copia de seguridad";
-"make_backup_descr" = "Hay muchos cambios en este dispositivo, haz una copia de seguridad de estos datos para no perderlos.";
+"make_backup_descr" = "Hay muchos cambios en este dispositivo, crea una copia de seguridad de estos datos para no perderlos.";
 "cloud_conflicts" = "Conflictos";
 "backup_error_size_is_exceeded" = "Tamaño máximo de OsmAnd Cloud excedido (%@)";
 "backup_error_user_is_already_registered" = "Esta dirección de correo electrónico se usa en otra cuenta";
-"backup_error_user_is_not_registered" = "Ningún usuario se encuentra registrado con ese correo electrónico";
+"backup_error_user_is_not_registered" = "Ningún usuario se ha registrado con ese correo electrónico";
 "backup_error_subscription_was_expired" = "Suscripción vencida";
 "rendering_attr_showFunicularRoutes_name" = "Rutas funiculares";
-"backup_error_token_is_not_valid" = "Algo está mal con el ID del dispositivo o la clave proporcionada";
+"backup_error_token_is_not_valid" = "Hay un problema con el ID del dispositivo o la clave proporcionada";
 "rendering_attr_showLightRailRoutes_name" = "Rutas de tren ligero";
-"backup_error_subscription_was_expired_descr" = "La suscripción a «OsmAnd Pro» ha caducado, renuévala para usar la copia de seguridad. Todavía se pueden restaurar los datos de la nube.";
+"backup_error_subscription_was_expired_descr" = "La suscripción a «OsmAnd Pro» ha vencido, renuévala para usar la copia de seguridad. Aún puedes restaurar los datos de la nube.";
 "backup_error_file_not_available" = "Archivo no disponible";
 "rendering_attr_showMonorailRoutes_name" = "Rutas de monorriel";
 "backup_error_no_valid_subscription" = "No hay ninguna suscripción válida";
@@ -2355,7 +2355,7 @@
 "complete_purchase" = "Completar compra";
 "explore_osmnad_plans_to_find_suitable" = "Explora los planes de OsmAnd para encontrar uno adecuado para ti.";
 "purchases_feature_desc_wikivoyage" = "Explora Wikiviajes sin conexión. Artículos divididos por países y regiones y disponibles en todos los idiomas.";
-"purchases_feature_desc_osmand_cloud" = "Obtén OsmAnd Cloud para almacenar en línea todos los datos de OsmAnd. No pierdes los datos al reinstalar. Haz copias de seguridad y restaura toda la información fácilmente.";
+"purchases_feature_desc_osmand_cloud" = "Obtén OsmAnd Cloud para almacenar en línea todos los datos de OsmAnd. No pierdes los datos al reinstalar. Crea copias de seguridad y restaura toda la información fácilmente.";
 "osmand_maps_plus_tagline" = "Obtén funciones ampliadas";
 "wikipedia_and_wikivoyage_offline" = "Wikipedia y Wikiviajes sin conexión";
 "osm_live_subscriptions" = "Suscripciones";
@@ -2482,7 +2482,7 @@
 "backup_delete_all_data" = "Borrar todos mis datos";
 "backup_delete_old_data" = "Quitar versiones antiguas";
 "backup_delete_all_data_or_versions_descr" = "Borra todos los datos en OsmAnd Cloud o sólo el historial de versiones. Los datos locales permanecerán intactos.";
-"logout_from_osmand_cloud_decsr" = "¿Cerrar la sesión\? \nTendrás que volver a iniciar sesión para hacer una copia de seguridad o restaurar los datos.";
+"logout_from_osmand_cloud_decsr" = "¿Cerrar sesión? \nDeberás volver a iniciar sesión para hacer una copia de seguridad o restaurar los datos.";
 "are_you_sure" = "¿Estás seguro?";
 "backup_delete_all_data_warning" = "Se borrarán todos los datos cargados previamente a OsmAnd Cloud, incluyendo el historial de versiones. \n \nNo se podrán recuperar los datos borrados.";
 "backup_delete_all_data_finished" = "Todos los datos han sido borrados con éxito de OsmAnd Cloud.";
@@ -2504,7 +2504,7 @@
 "benefits_for_contributors" = "Beneficios para colaboradores activos de OSM";
 "benefits_for_contributors_primary_descr" = "Los colaboradores activos de OpenStreetMap.org pueden beneficiarse de actualizaciones ilimitadas de los mapas cada hora.";
 "use_login_and_password_description" = "Usa tu correo y contraseña para ingresar en OpenStreetMap.org.";
-"contributions_may_calculate_with_delay" = "El cálculo de las contribuciones puede tomar varias horas.";
+"contributions_may_calculate_with_delay" = "El cálculo de las contribuciones puede tardar varias horas.";
 "map_updates_are_unavailable_yet" = "Las actualizaciones de mapas no están disponibles aún. :-(";
 "shared_string_restoring" = "Restaurar";
 "restoring_from" = "Restaurar de la nube los datos marcados";
@@ -3043,7 +3043,7 @@
 "map_orientation_landscape" = "Horizontal";
 "map_widget_ant_heart_rate_desc" = "Muestra el ritmo cardíaco del usuario durante una determinada actividad en tiempo real";
 "external_device_status_connect" = "Conectar";
-"default_appearance_desc" = "La forma, el color y el icono predefinido serán aplicados a los puntos favoritos añadidos al grupo.";
+"default_appearance_desc" = "La forma, el color y el icono predefinido serán aplicados a los puntos favoritos dentro del grupo.";
 "shared_string_travel" = "Viaje";
 "ant_plus_nothing_found_text" = "Incapaz de encontrar cualquier sensor";
 "sensor_temperature_desc" = "Muestra la temperatura del sensor";
@@ -3406,7 +3406,7 @@
 "location_radius" = "Radio de ubicación";
 "navigation_position" = "Ubicación al navegar";
 "location_radius_description" = "Muestra el área circular que representa la exactitud de la ubicación actual";
-"view_angle_description" = "Muestra la dirección de la vista actual con un área triángular";
+"view_angle_description" = "Muestra la dirección de la vista actual con un área triangular";
 "quick_action_toggle_preference" = "Un botón que cambia las preferencias.";
 "profile_icon" = "Icono del perfil";
 "resting_position_icon" = "Icono de la ubicación al estar en reposo";

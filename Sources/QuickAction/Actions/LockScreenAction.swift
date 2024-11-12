@@ -44,7 +44,7 @@ final class LockScreenAction: OAQuickAction {
         showToast()
     }
     
-    func showToast() {
+    private func showToast() {
         let toastString = LockHelper.shared.isScreenLocked ? "screen_is_locked_by_action_button" : "screen_is_unlocked"
         OAUtilities.showToast(localizedString(toastString), details: nil, duration: 4, in: OARootViewController.instance().view)
     }

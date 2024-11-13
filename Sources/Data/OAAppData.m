@@ -1800,7 +1800,7 @@
 
 - (void) setZoom:(float)newZoom
 {
-    // Stop any rewritings until reading is completed
+    // Sometimes due to the async bugs MapVC can overwrite OAAppData.zoom setting right in time when it is reading. This check force it to wait for completion of downloading.
     if (_isInited && _mapLastViewedState.zoom != -1 && newZoom != 1)
         _mapLastViewedState.zoom = newZoom;
 }

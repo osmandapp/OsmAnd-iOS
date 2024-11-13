@@ -1680,6 +1680,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         case OAMapRendererViewStateEntryZoom:
         {
             [_zoomObservable notifyEventWithKey:nil andValue:[NSNumber numberWithFloat:_mapView.zoom]];
+            
+            // Sometimes due to the async bugs MapVC can overwrite OAAppData.zoom setting right in time when it is reading. This check force it to wait for completion of downloading.
             if (_mapView.isZoomInited)
                 [_app.data setZoom:_mapView.zoom];
 

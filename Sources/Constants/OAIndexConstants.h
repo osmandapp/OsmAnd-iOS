@@ -43,6 +43,8 @@ static NSString * const BINARY_SRTM_MAP_INDEX_EXT_ZIP = @".srtm.obf.zip";
 static NSString * const BINARY_SRTMF_MAP_INDEX_EXT = @".srtmf.obf";
 static NSString * const BINARY_SRTMF_MAP_INDEX_EXT_ZIP = @".srtmf.obf.zip";
 
+static NSString * const BINARY_SRTM_FEET_MAP_INDEX_EXT = @".srtmf.obf";
+
 static NSString * const BINARY_DEPTH_MAP_INDEX_EXT = @".depth.obf";
 static NSString * const BINARY_DEPTH_MAP_INDEX_EXT_ZIP = @".depth.obf.zip";
 
@@ -116,5 +118,10 @@ static NSString * const GPX_DIR = @"GPX";
 
 static NSString * const VOICE_PROVIDER_SUFFIX = @"-tts";
 static NSString * const MODEL_NAME_PREFIX = @"model_";
+
+static NSString * const WEATHER_EXT = @".tifsqlite";
+
+static NSString * const WEATHER_MAP_INDEX_EXT = @".tifsqlite.zip";
+
 
 #endif /* OAIndexConstants_h */

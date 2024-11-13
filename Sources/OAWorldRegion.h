@@ -9,8 +9,22 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-#define kGermanyRegionId @"europe_germany"
-#define kFranceRegionId @"europe_france"
+static NSString *kWorldBasemapRegionId = @"world_basemap";
+static NSString *kWorldBasemapMiniRegionId = @"world_basemap_mini";
+static NSString *kAntarcticaRegionId = @"antarctica";
+static NSString *kAfricaRegionId = @"africa";
+static NSString *kAsiaRegionId = @"asia";
+static NSString *kAustraliaAndOceaniaRegionId = @"australia-oceania-all";
+static NSString *kCentralAmericaRegionId = @"centralamerica";
+static NSString *kEuropeRegionId = @"europe";
+static NSString *kNorthAmericaRegionId = @"northamerica";
+static NSString *kRussiaRegionId = @"russia";
+static NSString *kJapanRegionId = @"japan_asia";
+static NSString *kGermanyRegionId = @"europe_germany";
+static NSString *kFranceRegionId = @"europe_france";
+static NSString *kSouthAmericaRegionId = @"southamerica";
+static NSString *kWorldRegionId = @"world";
+static NSString *kUnitedKingdomRegionId = @"europe_gb";
 
 @class OAProduct, OAPointIContainer, OAResourceGroupItem, QuadRect;
 
@@ -24,6 +38,10 @@
 @property (readonly) NSString* localizedName;
 @property (readonly) NSString* name;
 @property (readonly) NSArray* allNames;
+
+@property (readonly) NSString* regionParentFullName;
+@property (readonly) NSString* regionName;
+@property (readonly) NSString* regionNameEn;
 
 @property (readonly) NSString* regionLeftHandDriving;
 @property (readonly) NSString* regionLang;
@@ -49,6 +67,9 @@
 @property (readonly) NSArray<OAWorldRegion *> *subregions;
 @property (readonly) NSArray<OAWorldRegion *> *flattenedSubregions;
 
+@property (readonly) NSMutableDictionary<NSString *, OAWorldRegion *> *fullNamesToRegionData;
+@property (readonly) NSMutableDictionary<NSString *, NSString *> *downloadNamesToFullNames;
+
 - (instancetype) initWithId:(NSString*)regionId andLocalizedName:(NSString*)localizedName;
 
 - (NSComparisonResult) compare:(OAWorldRegion *)other;
@@ -70,6 +91,7 @@
 - (OAWorldRegion *) getSubregion:(NSString *)regionId;
 - (OAWorldRegion *) getFlattenedSubregion:(NSString *)regionId;
 - (NSArray<OAWorldRegion *> *) getFlattenedSubregions:(NSArray<NSString *> *)regionIds;
+- (NSMutableArray<OAWorldRegion *> *) getSuperRegions;
 - (OAWorldRegion *) getPrimarySuperregion;
 - (OAWorldRegion *) getRegionDataByDownloadName:(NSString *)downloadName;
 - (OAProduct *) getProduct;
@@ -86,5 +108,11 @@
 
 - (BOOL)isContinent;
 - (BOOL)containsPoint:(CLLocation *)location;
+
+- (NSString *) getLocaleName:(NSString *)downloadName includingParent:(BOOL)includingParent;
+- (NSString *) getLocaleName:(NSString *)downloadName includingParent:(BOOL)includingParent reversed:(BOOL)reversed;
+- (NSString *) getLocaleName:(NSString *)downloadName divider:(NSString *)divider includingParent:(BOOL)includingParent reversed:(BOOL)reversed;
+- (NSString *) getLocaleNameByFullName:(NSString *)fullName divider:(NSString *)divider includingParent:(BOOL)includingParent reversed:(BOOL)reversed;
+- (NSString *) getLocaleNameWithParent:(NSMutableArray<OAWorldRegion *> *)superRegions regionName:(NSString *)regionName divider:(NSString *)divider reversed:(BOOL)reversed;
 
 @end

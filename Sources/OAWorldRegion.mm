@@ -66,6 +66,9 @@
         _downloadsIdPrefix = [_worldRegion->downloadName.toNSString() stringByAppendingString:@"."];
         _nativeName = _worldRegion->nativeName.toNSString();
         
+        _regionParentFullName = _worldRegion->parentRegionName.toNSString();
+        _regionName = _worldRegion->regionName.toNSString();
+        
         _regionLeftHandDriving = _worldRegion->regionLeftHandDriving.toNSString();
         _regionLang = _worldRegion->regionLang.toNSString();
         _regionMetric = _worldRegion->regionMetric.toNSString();
@@ -84,6 +87,10 @@
         _regionCenter = CLLocationCoordinate2DMake(region->regionCenter.latitude, region->regionCenter.longitude);
 
         [self setLocalizedNamesFrom:region->localizedNames];
+        
+        const auto citLocalizedName = _worldRegion->localizedNames.constFind(QString("en"));
+        if (citLocalizedName != _worldRegion->localizedNames.cend())
+            _regionNameEn = (*citLocalizedName).toNSString();
         
         if (!_localizedName && _nativeName.length == 0)
         {
@@ -154,6 +161,8 @@
     _superregion = nil;
     _subregions = [[NSMutableArray alloc] init];
     _flattenedSubregions = [[NSMutableArray alloc] init];
+    _fullNamesToRegionData = [NSMutableDictionary new];
+    _downloadNamesToFullNames = [NSMutableDictionary new];
 }
 
 - (void) deinit
@@ -315,6 +324,14 @@
 {
     NSMutableArray<OAWorldRegion *> *flattenedSubregions = (NSMutableArray<OAWorldRegion *> *) _flattenedSubregions;
     [flattenedSubregions addObject:subregion];
+    
+    _fullNamesToRegionData[subregion.regionId] = subregion;    
+    NSString *regionDownloadName = subregion.downloadsIdPrefix;
+    if (regionDownloadName && regionDownloadName.length > 1)
+    {
+        regionDownloadName = [regionDownloadName substringToIndex:regionDownloadName.length - 1];
+        _downloadNamesToFullNames[regionDownloadName] = subregion.regionId;
+    }
 
     if (_superregion != nil)
         [_superregion propagateSubregionToFlattenedHierarchy:subregion];
@@ -779,6 +796,130 @@
         }
         return nil;
     }
+}
+
+- (NSString *) getLocaleName:(NSString *)downloadName includingParent:(BOOL)includingParent
+{
+    return [self getLocaleName:downloadName includingParent:includingParent reversed:NO];
+}
+
+- (NSString *) getLocaleName:(NSString *)downloadName includingParent:(BOOL)includingParent reversed:(BOOL)reversed
+{
+    NSString *divider = reversed ? @", " : @" ";
+    return [self getLocaleName:downloadName divider:divider includingParent:includingParent reversed:reversed];
+}
+
+- (NSString *) getLocaleName:(NSString *)downloadName divider:(NSString *)divider includingParent:(BOOL)includingParent reversed:(BOOL)reversed
+{
+    NSString *lc = [downloadName lowercaseString];
+    
+    if ([_downloadNamesToFullNames.allKeys containsObject:lc])
+    {
+        NSString *fullName = _downloadNamesToFullNames[lc];
+        return [self getLocaleNameByFullName:fullName divider:divider includingParent:includingParent reversed:reversed];
+    }
+    return [downloadName stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+}
+
+- (NSString *) getLocaleNameByFullName:(NSString *)fullName divider:(NSString *)divider includingParent:(BOOL)includingParent reversed:(BOOL)reversed
+{
+    OAWorldRegion *region = _fullNamesToRegionData[fullName];
+    if (!region)
+        return [fullName stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+    
+    NSString *regionName = region.localizedName;
+    if (includingParent && region.superregion)
+    {
+        OAWorldRegion *parent = region.superregion;
+        OAWorldRegion *parentParent = parent.superregion;
+        
+        if (parentParent)
+        {
+            NSString *parentParentId = parentParent.regionId;
+            if ([parentParentId isEqualToString:kWorldRegionId] &&
+                ![parentParentId isEqualToString:kRussiaRegionId])
+            {
+                return regionName;
+            }
+            if ([parentParentId isEqualToString:kRussiaRegionId] ||
+                 [parentParentId isEqualToString:kJapanRegionId])
+            {
+                if (reversed)
+                    return [NSString stringWithFormat:@"%@, %@", regionName, parentParent.localizedName];
+                else
+                    return [NSString stringWithFormat:@"%@ %@", parentParent.localizedName, regionName];
+            }
+        }
+    }
+    
+    NSMutableArray<OAWorldRegion *> *superRegions = [region getSuperRegions];
+    if (superRegions.count > 0)
+    {
+        return [self getLocaleNameWithParent:superRegions regionName:regionName divider:divider reversed:reversed];
+    }
+    return regionName;
+}
+
+- (NSMutableArray<OAWorldRegion *> *) getSuperRegions
+{
+    NSMutableArray<OAWorldRegion *> *regions = [NSMutableArray new];
+    [self collectSuperRegions:regions region:self.superregion];
+    return regions;
+}
+
+- (void) collectSuperRegions:(NSMutableArray<OAWorldRegion *> *)regions region:(OAWorldRegion *)region
+{
+    if (region)
+    {
+        [regions addObject:region];
+        [self collectSuperRegions:regions region:region.superregion];
+    }
+}
+
+- (NSString *) getLocaleNameWithParent:(NSMutableArray<OAWorldRegion *> *)superRegions regionName:(NSString *)regionName divider:(NSString *)divider reversed:(BOOL)reversed
+{
+    NSString *result = @"";
+    NSArray<NSString *> *topRegionsIds = [self getTopRegionsIds];
+    if (reversed)
+    {
+        result = [result stringByAppendingString:regionName];
+        for (OAWorldRegion *region in superRegions)
+        {
+            NSString *regionId = region.regionId;
+            if (([topRegionsIds containsObject:regionId] || [kRussiaRegionId isEqualToString:regionId]) &&
+                (![kWorldRegionId isEqualToString:regionId]))
+            {
+                result = [[result stringByAppendingString:divider] stringByAppendingString:region.localizedName];
+            }
+        }
+    }
+    else
+    {
+        for (OAWorldRegion *region in [[superRegions reverseObjectEnumerator] allObjects])
+        {
+            NSString *regionId = region.regionId;
+            if ((![topRegionsIds containsObject:regionId] || [kRussiaRegionId isEqualToString:regionId]) &&
+                (![kWorldRegionId isEqualToString:regionId] && regionId && regionId.length > 0))
+            {
+                result = [[result stringByAppendingString:region.localizedName] stringByAppendingString:divider];
+            }
+        }
+        result = [result stringByAppendingString:regionName];
+    }
+    return result;
+}
+
+- (NSArray<NSString *> *) getTopRegionsIds
+{
+    return @[kAntarcticaRegionId,
+             kAfricaRegionId,
+             kAsiaRegionId,
+             kCentralAmericaRegionId,
+             kEuropeRegionId,
+             kNorthAmericaRegionId,
+             kRussiaRegionId,
+             kSouthAmericaRegionId,
+             kAustraliaAndOceaniaRegionId];
 }
 
 - (void)findBoundaries

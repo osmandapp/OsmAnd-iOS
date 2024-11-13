@@ -444,30 +444,19 @@
 
 - (NSString *)getPublicName
 {
-    if ([OAFileSettingsItemFileSubtype isMap:_subtype])
+    if ([OAFileSettingsItemFileSubtype isMap:_subtype] ||
+        _subtype == EOASettingsItemFileSubtypeTTSVoice ||
+        _subtype == EOASettingsItemFileSubtypeVoice)
     {
-        return [OAFileNameTranslationHelper getMapName:_filePath.lastPathComponent];
+        return [OAFileNameTranslationHelper getFileNameWithRegion:_filePath.lastPathComponent];
     }
-    else if (_subtype == EOASettingsItemFileSubtypeTTSVoice || _subtype == EOASettingsItemFileSubtypeVoice)
-    {
-        return [OAFileNameTranslationHelper getVoiceName:_filePath.lastPathComponent];
-    }
-    else if (_subtype == EOASettingsItemFileSubtypeRenderingStyle)
-    {
-        NSString *name = [[self.name lastPathComponent] stringByReplacingOccurrencesOfString:@".render.xml" withString:@""];
-        return [OARendererRegistry getMapStyleInfo:name][@"title"];
-    }
-    else if (_subtype == EOASettingsItemFileSubtypeRoutingConfig)
-    {
-        return self.name.lastPathComponent;
-    }
-//    else if (subtype == FileSubtype.MULTIMEDIA_NOTES) {
-//        if (file.exists()) {
-//            return new Recording(file).getName(app, true);
-//        } else {
-//            return Recording.getNameForMultimediaFile(app, file.getName(), getLastModifiedTime());
-//        }
-//    }
+    //    else if (subtype == FileSubtype.MULTIMEDIA_NOTES) {
+    //        if (file.exists()) {
+    //            return new Recording(file).getName(app, true);
+    //        } else {
+    //            return Recording.getNameForMultimediaFile(app, file.getName(), getLastModifiedTime());
+    //        }
+    //    }
     return self.name;
 }
 

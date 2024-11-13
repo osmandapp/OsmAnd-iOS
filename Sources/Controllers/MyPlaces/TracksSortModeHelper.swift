@@ -137,7 +137,7 @@ import OsmAndShared
         let basicDescription = String(format: localizedString("folder_tracks_count"), tracksCount)
         
         if let lastModifiedDate = OAUtilities.getFileLastModificationDate(currentFolderPath.appendingPathComponent(folderName)) {
-            let lastModifiedString = dateFormatter.string(from: lastModifiedDate)
+            let lastModifiedString = TracksSortModeHelper.dateFormatter.string(from: lastModifiedDate)
             return "\(lastModifiedString) • \(basicDescription)"
         }
 

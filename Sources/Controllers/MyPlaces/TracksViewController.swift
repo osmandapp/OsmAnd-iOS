@@ -1367,15 +1367,16 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         if let sortMode = sortModes?[oldName] {
             sortModes?[newName] = sortMode
             sortModes?.removeValue(forKey: oldName)
+            settings.saveTracksSortModes(sortModes)
         }
-        
-        settings.saveTracksSortModes(sortModes)
     }
     
     private func removeSortMode(forFolderName folderName: String) {
         var sortModes = settings.getTracksSortModes()
-        sortModes?.removeValue(forKey: folderName)
-        settings.saveTracksSortModes(sortModes)
+        if let sortMode = sortModes?[folderName] {
+            sortModes?.removeValue(forKey: folderName)
+            settings.saveTracksSortModes(sortModes)
+        }
     }
    
     private func areAllItemsSelected() -> Bool {

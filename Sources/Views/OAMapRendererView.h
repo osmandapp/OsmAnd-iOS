@@ -69,6 +69,8 @@ struct CLLocationCoordinate2D;
 
 @property (nonatomic, readonly, assign) std::shared_ptr<OsmAnd::IMapRenderer> renderer;
 
+@property (nonatomic) BOOL isZoomInited;
+
 - (std::shared_ptr<OsmAnd::IMapLayerProvider>)providerFor:(unsigned int)layer;
 - (void)setProvider:(std::shared_ptr<OsmAnd::IMapLayerProvider>)provider forLayer:(unsigned int)layer;
 - (void)setProviderForced:(std::shared_ptr<OsmAnd::IMapLayerProvider>)provider forLayer:(unsigned int)layer;

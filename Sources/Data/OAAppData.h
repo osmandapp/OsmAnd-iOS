@@ -158,6 +158,11 @@ static const NSInteger kSlopeDefMaxZoom = 16;
 @property (nonatomic) OARTargetPoint *pointToNavigateBackup;
 @property (nonatomic) NSMutableArray<OARTargetPoint *> *intermediatePointsBackup;
 
+@property (nonatomic) BOOL isInited;
+
+- (float) getZoom;
+- (void) setZoom:(float)newZoom;
+
 - (void) postInit;
 
 - (void) clearPointToStart;

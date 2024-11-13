@@ -839,7 +839,7 @@ typedef enum
         point31.x = locationI.x;
         point31.y = locationI.y;
         _app.data.mapLastViewedState.target31 = point31;
-        _app.data.mapLastViewedState.zoom = 13.0;
+        [_app.data setZoom: 13.0];
 
         [self closeWizard];
     }

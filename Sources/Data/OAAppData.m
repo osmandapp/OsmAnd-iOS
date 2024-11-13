@@ -188,6 +188,7 @@
     self = [super init];
     if (self)
     {
+        _isInited = NO;
         [self commonInit];
         [self safeInit];
     }
@@ -1719,6 +1720,7 @@
     defaults.mapLastViewedState.zoom = 1.0f;
     defaults.mapLastViewedState.azimuth = 0.0f;
     defaults.mapLastViewedState.elevationAngle = 90.0f;
+    defaults.isInited = NO;
 
     return defaults;
 }
@@ -1765,6 +1767,10 @@
     self = [super init];
     if (self) {
         [self commonInit];
+        
+        _isInited = NO;
+        _mapLastViewedState.zoom = -1;
+        
         _lastMapSources = [aDecoder decodeObjectForKey:kLastMapSources];
         _mapLastViewedState = [aDecoder decodeObjectForKey:kMapLastViewedState];
         _destinations = [aDecoder decodeObjectForKey:kDestinations];
@@ -1777,9 +1783,26 @@
         _intermediatePointsBackup = [aDecoder decodeObjectForKey:kIntermediatePointsBackup];
         _myLocationToStart = [aDecoder decodeObjectForKey:kMyLocationToStart];
         
+        
         [self safeInit];
+        [self postInit];
+        
+        _isInited = YES;
+        [OsmAndApp.instance.appSettingsLoadedObservable notifyEvent];
     }
     return self;
+}
+
+- (float) getZoom
+{
+    return _mapLastViewedState.zoom;
+}
+
+- (void) setZoom:(float)newZoom
+{
+    // Stop any rewritings until reading completed
+    if (_isInited && _mapLastViewedState.zoom != -1 && newZoom != 1)
+        _mapLastViewedState.zoom = newZoom;
 }
 
 - (void) resetProfileSettingsForMode:(OAApplicationMode *)mode

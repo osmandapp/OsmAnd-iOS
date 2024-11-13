@@ -51,6 +51,7 @@
 @property(nonatomic) OAMapMode prevMapMode;
 @property(readonly) OAObservable* mapModeObservable;
 @property(readonly) OAObservable* applicationModeChangedObservable;
+@property(readonly) OAObservable* appSettingsLoadedObservable;
 
 @property(nonatomic) OAMapViewState* initialURLMapState;
 

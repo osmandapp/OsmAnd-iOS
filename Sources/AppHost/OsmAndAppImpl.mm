@@ -154,6 +154,8 @@
 @synthesize carPlayActive = _carPlayActive;
 @synthesize backgroundStateObservable = _backgroundStateObservable;
 
+@synthesize appSettingsLoadedObservable = _appSettingsLoadedObservable;
+
 - (instancetype) init
 {
     self = [super init];
@@ -430,8 +432,8 @@
     OALog(@"Weather Forecast path: %@", _weatherForecastPath);
 
     // Unpack app data
+    _appSettingsLoadedObservable = [[OAObservable alloc] init];
     _data = [NSKeyedUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:kAppData]];
-    [_data postInit];
 
     settings.simulateNavigation = NO;
     settings.simulateNavigationMode = [OASimulationMode toKey:EOASimulationModePreview];

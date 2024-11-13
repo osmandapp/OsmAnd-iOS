@@ -212,6 +212,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     OAAutoObserverProxy* _stateObserver;
     OAAutoObserverProxy* _settingsObserver;
     OAAutoObserverProxy* _framePreparedObserver;
+    OAAutoObserverProxy* _appSettingsLoadedObserver;
 
     OAAutoObserverProxy* _layersConfigurationObserver;
     
@@ -328,6 +329,10 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     _trackRecordingObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                         withHandler:@selector(onTrackRecordingChanged:withKey:)
                                                          andObserve:_app.trackRecordingObservable];
+    
+    _appSettingsLoadedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                           withHandler:@selector(onAppSettingsLoaded)
+                                                            andObserve:_app.appSettingsLoadedObservable];
 
     _stateObservable = [[OAObservable alloc] init];
     _settingsObservable = [[OAObservable alloc] init];
@@ -526,7 +531,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         _mapView.target31 = OsmAnd::PointI(_app.initialURLMapState.target31.x,
                                            _app.initialURLMapState.target31.y);
         float zoom = _app.initialURLMapState.zoom;
-        _mapView.zoom = qBound(_mapView.minZoom, isnan(zoom) ? 5 : zoom, _mapView.maxZoom);
+        [_mapView setZoom:qBound(_mapView.minZoom, isnan(zoom) ? 5 : zoom, _mapView.maxZoom)];
+        _mapView.isZoomInited = YES;
         float azimuth = _app.initialURLMapState.azimuth;
         _mapView.azimuth = isnan(azimuth) ? 0 : azimuth;
     }
@@ -535,8 +541,14 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         _mapView.target31 = OsmAnd::PointI(_app.data.mapLastViewedState.target31.x,
                                            _app.data.mapLastViewedState.target31.y);
 
-        float zoom = MAX([OAZoom getMinValidZoom], _app.data.mapLastViewedState.zoom);
-        _mapView.zoom = qBound(_mapView.minZoom, isnan(zoom) ? 5 : zoom, _mapView.maxZoom);
+        OAAppDelegate *appDelegate = (OAAppDelegate *)[[UIApplication sharedApplication] delegate];
+        NSLog(@"!!! %f     OAMapVC - getZoom    %f", appDelegate.startTime, [_app.data getZoom]);
+        if (_app.data.isInited)
+        {
+            float zoom = MAX([OAZoom getMinValidZoom], [_app.data getZoom]);
+            [_mapView setZoom:qBound(_mapView.minZoom, isnan(zoom) ? 5 : zoom, _mapView.maxZoom)];
+            _mapView.isZoomInited = YES;
+        }
         float azimuth = _app.data.mapLastViewedState.azimuth;
         _mapView.azimuth = isnan(azimuth) ? 0 : azimuth;
         float elevationAngle = _app.data.mapLastViewedState.elevationAngle;
@@ -1390,7 +1402,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             if (gestureScale < 1 || scale < 0)
                 scale = -scale * (kGestureZoomCoef / _mapView.contentScaleFactor);
 
-            _mapView.zoom = qBound(_mapView.minZoom, (float)(_initialZoomLevelDuringGesture - scale), _mapView.maxZoom);
+            [_mapView setZoom: qBound(_mapView.minZoom, (float)(_initialZoomLevelDuringGesture - scale), _mapView.maxZoom)];
         }
     }
 
@@ -1670,7 +1682,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         case OAMapRendererViewStateEntryZoom:
         {
             [_zoomObservable notifyEventWithKey:nil andValue:[NSNumber numberWithFloat:_mapView.zoom]];
-            _app.data.mapLastViewedState.zoom = _mapView.zoom;
+            if (_mapView.isZoomInited)
+                [_app.data setZoom:_mapView.zoom];
+
             break;
         }
         case OAMapRendererViewStateEntryElevationAngle:
@@ -2064,6 +2078,18 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             [self updateCurrentMapSource];
         });
+    });
+}
+
+- (void) onAppSettingsLoaded
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        OAAppDelegate *appDelegate = (OAAppDelegate *)[[UIApplication sharedApplication] delegate];
+        NSLog(@"!!! %f     OAMapVC - onAppSettingsLoaded setZoom    %f", appDelegate.startTime, [_app.data getZoom]);
+        
+        [self.mapView setZoom:[_app.data getZoom]];
+        self.mapView.isZoomInited = YES;
     });
 }
 

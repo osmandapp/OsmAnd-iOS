@@ -327,7 +327,6 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         folderRow.setObj(folder.relativePath, forKey: pathKey)
         let tracksCount = folder.totalTracksCount
         folderRow.setObj(tracksCount, forKey: tracksCountKey)
-        let descr = String(format: localizedString("folder_tracks_count"), tracksCount)
         folderRow.descr = TracksSortModeHelper.descriptionForFolder(folder: folder, currentFolderPath: currentFolderPath)
     }
     
@@ -524,11 +523,8 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func getSearchTracksSortMode() -> TracksSortMode {
-        if let searchSortModeTitle = settings.searchTracksSortModes.get() {
-            return TracksSortMode.getByTitle(searchSortModeTitle)
-        }
-        
-        return .lastModified
+        guard let searchSortModeTitle = settings.searchTracksSortModes.get() else { return .lastModified }
+        return TracksSortMode.getByTitle(searchSortModeTitle)
     }
     
     private func setupTableFooter() {

@@ -88,21 +88,13 @@ import OsmAndShared
         case .oldestDateFirst:
             return folders.sorted { $0.lastModified() < $1.lastModified() }
         case .longestDistanceFirst:
-            return folders.sorted { folder1, folder2 in
-                folder1.getFolderAnalysis().totalDistance > folder2.getFolderAnalysis().totalDistance
-            }
+            return folders.sorted { $0.getFolderAnalysis().totalDistance > $1.getFolderAnalysis().totalDistance }
         case .shortestDistanceFirst:
-            return folders.sorted { folder1, folder2 in
-                folder1.getFolderAnalysis().totalDistance < folder2.getFolderAnalysis().totalDistance
-            }
+            return folders.sorted { $0.getFolderAnalysis().totalDistance < $1.getFolderAnalysis().totalDistance }
         case .longestDurationFirst:
-            return folders.sorted { folder1, folder2 in
-                folder1.getFolderAnalysis().timeSpan > folder2.getFolderAnalysis().timeSpan
-            }
+            return folders.sorted { $0.getFolderAnalysis().timeSpan > $1.getFolderAnalysis().timeSpan }
         case .shorterDurationFirst:
-            return folders.sorted { folder1, folder2 in
-                folder1.getFolderAnalysis().timeSpan < folder2.getFolderAnalysis().timeSpan
-            }
+            return folders.sorted { $0.getFolderAnalysis().timeSpan < $1.getFolderAnalysis().timeSpan }
         }
     }
     
@@ -135,13 +127,12 @@ import OsmAndShared
         let folderName = folder.getDirName()
         let tracksCount = folder.totalTracksCount
         let basicDescription = String(format: localizedString("folder_tracks_count"), tracksCount)
-        
-        if let lastModifiedDate = OAUtilities.getFileLastModificationDate(currentFolderPath.appendingPathComponent(folderName)) {
-            let lastModifiedString = TracksSortModeHelper.dateFormatter.string(from: lastModifiedDate)
+        let lastModifiedString = TracksSortModeHelper.dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(folder.lastModified() / 1000)))
+        if !lastModifiedString.isEmpty {
             return "\(lastModifiedString) • \(basicDescription)"
+        } else {
+            return basicDescription
         }
-
-        return basicDescription
     }
     
     static func getTrackDescription(track: GpxDataItem, sortMode: TracksSortMode, includeFolderInfo: Bool = false) -> NSAttributedString {

@@ -3565,3 +3565,8 @@
 "shared_string_to" = "Til";
 "map_widget_map_scale" = "Kortskala";
 "transport_stop" = "Stop";
+"screen_is_unlocked" = "Den berøringsfølsomme skærm er låst op.";
+"shared_string_interface" = "Grænseflade";
+"lock_screen_description" = "Aktiverer eller deaktiverer trykfølsom skærmfunktionalitet for at forhindre utilsigtede tryk";
+"lock_screen" = "Lås skærm";
+"screen_is_locked_by_action_button" = "Den berøringsfølsomme skærm er låst. Tryk på knappen for at låse op.";

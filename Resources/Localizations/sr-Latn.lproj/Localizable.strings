@@ -3565,3 +3565,8 @@
 "revolutions_per_minute_unit" = "RPM";
 "map_widget_map_scale" = "Razmera mape";
 "transport_stop" = "Stanica";
+"lock_screen" = "Zaključaj ekran";
+"screen_is_locked_by_action_button" = "Ekran osetljiv na dodir je zaključan. Dodirnite dugme da biste otključali.";
+"screen_is_unlocked" = "Ekran osetljiv na dodir je otključan.";
+"shared_string_interface" = "Interfejs";
+"lock_screen_description" = "Omogućava ili onemogućava funkciju ekrana osetljivog na dodir da spreči slučajne dodire";

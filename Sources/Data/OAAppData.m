@@ -1800,7 +1800,7 @@
 
 - (void) setZoom:(float)newZoom
 {
-    // Stop any rewritings until reading completed
+    // Stop any rewritings until reading is completed
     if (_isInited && _mapLastViewedState.zoom != -1 && newZoom != 1)
         _mapLastViewedState.zoom = newZoom;
 }

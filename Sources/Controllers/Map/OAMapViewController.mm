@@ -541,8 +541,6 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         _mapView.target31 = OsmAnd::PointI(_app.data.mapLastViewedState.target31.x,
                                            _app.data.mapLastViewedState.target31.y);
 
-        OAAppDelegate *appDelegate = (OAAppDelegate *)[[UIApplication sharedApplication] delegate];
-        NSLog(@"!!! %f     OAMapVC - getZoom    %f", appDelegate.startTime, [_app.data getZoom]);
         if (_app.data.isInited)
         {
             float zoom = MAX([OAZoom getMinValidZoom], [_app.data getZoom]);
@@ -2084,10 +2082,6 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) onAppSettingsLoaded
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        
-        OAAppDelegate *appDelegate = (OAAppDelegate *)[[UIApplication sharedApplication] delegate];
-        NSLog(@"!!! %f     OAMapVC - onAppSettingsLoaded setZoom    %f", appDelegate.startTime, [_app.data getZoom]);
-        
         [self.mapView setZoom:[_app.data getZoom]];
         self.mapView.isZoomInited = YES;
     });

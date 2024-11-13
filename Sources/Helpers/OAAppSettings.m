@@ -4829,46 +4829,6 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
     return global ? _globalPreferences : _profilePreferences;
 }
 
-- (NSDictionary<NSString *, NSString *> *)getTracksSortModes
-{
-    return [self getTrackSortModesWithArray:[_tracksSortModes get]];
-}
-
-- (NSDictionary<NSString *, NSString *> *)getTrackSortModesWithArray:(NSArray<NSString *> *)modes
-{
-    NSMutableDictionary<NSString *, NSString *> *sortModes = [NSMutableDictionary dictionary];
-    if (modes != nil && modes.count > 0)
-    {
-        for (NSString *sortMode in modes)
-        {
-            NSArray<NSString *> *parts = [sortMode componentsSeparatedByString:@",,"];
-            if (parts.count == 2)
-                sortModes[parts[0]] = parts[1];
-        }
-    }
-    
-    return [sortModes copy];
-}
-
-- (void)saveTracksSortModes:(NSDictionary<NSString *, NSString *> *)tabsSortModes
-{
-    NSArray<NSString *> *sortModes = [self getPlainSortModesFromDictionary:tabsSortModes];
-    [_tracksSortModes set:sortModes];
-}
-
-- (NSArray<NSString *> *)getPlainSortModesFromDictionary:(NSDictionary<NSString *, NSString *> *)tabsSortModes
-{
-    NSMutableArray<NSString *> *sortTypes = [NSMutableArray array];
-    for (NSString *key in tabsSortModes.allKeys)
-    {
-        NSString *value = tabsSortModes[key];
-        NSString *combined = [NSString stringWithFormat:@"%@,,%@", key, value];
-        [sortTypes addObject:combined];
-    }
-
-    return [sortTypes copy];
-}
-
 - (OACommonPreference *)getGlobalPreference:(NSString *)key
 {
     return [_globalPreferences objectForKey:key];
@@ -5402,6 +5362,45 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
     }
 }
 
+- (NSDictionary<NSString *, NSString *> *)getTracksSortModes
+{
+    return [self getTrackSortModesWithArray:[_tracksSortModes get]];
+}
+
+- (NSDictionary<NSString *, NSString *> *)getTrackSortModesWithArray:(NSArray<NSString *> *)modes
+{
+    NSMutableDictionary<NSString *, NSString *> *sortModes = [NSMutableDictionary dictionary];
+    if (modes != nil && modes.count > 0)
+    {
+        for (NSString *sortMode in modes)
+        {
+            NSArray<NSString *> *parts = [sortMode componentsSeparatedByString:@",,"];
+            if (parts.count == 2)
+                sortModes[parts[0]] = parts[1];
+        }
+    }
+    
+    return [sortModes copy];
+}
+
+- (void)saveTracksSortModes:(NSDictionary<NSString *, NSString *> *)tabsSortModes
+{
+    NSArray<NSString *> *sortModes = [self getPlainSortModesFromDictionary:tabsSortModes];
+    [_tracksSortModes set:sortModes];
+}
+
+- (NSArray<NSString *> *)getPlainSortModesFromDictionary:(NSDictionary<NSString *, NSString *> *)tabsSortModes
+{
+    NSMutableArray<NSString *> *sortTypes = [NSMutableArray array];
+    for (NSString *key in tabsSortModes.allKeys)
+    {
+        NSString *value = tabsSortModes[key];
+        NSString *combined = [NSString stringWithFormat:@"%@,,%@", key, value];
+        [sortTypes addObject:combined];
+    }
+    
+    return [sortTypes copy];
+}
 
 // navigation settings
 - (void) setUseFastRecalculation:(BOOL)useFastRecalculation

@@ -1259,7 +1259,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                 if oldDir.renameTo(toFile: newDir) {
                     trackFolder.setDirFile(dirFile: newDir)
                     trackFolder.resetCachedData()
-                    
+                    renameSortModeKey(from: oldName, to: newName)
                     var files = [KFile]()
 
                     for trackItem in trackFolder.getFlattenedTrackItems() {
@@ -1302,6 +1302,8 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                     })
                 }
             }
+            
+            removeSortMode(forFolderName: folderName)
             // remove folders with tracks
             try FileManager.default.removeItem(atPath: folderPath)
             updateAllFoldersVCData(forceLoad: true)
@@ -1358,6 +1360,22 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         }
     
         updateAllFoldersVCData(forceLoad: true)
+    }
+    
+    private func renameSortModeKey(from oldName: String, to newName: String) {
+        var sortModes = settings.getTracksSortModes()
+        if let sortMode = sortModes?[oldName] {
+            sortModes?[newName] = sortMode
+            sortModes?.removeValue(forKey: oldName)
+        }
+        
+        settings.saveTracksSortModes(sortModes)
+    }
+    
+    private func removeSortMode(forFolderName folderName: String) {
+        var sortModes = settings.getTracksSortModes()
+        sortModes?.removeValue(forKey: folderName)
+        settings.saveTracksSortModes(sortModes)
     }
    
     private func areAllItemsSelected() -> Bool {

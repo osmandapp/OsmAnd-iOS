@@ -57,7 +57,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     private var recCell: OATwoButtonsTableViewCell?
     private var baseFilters: TracksSearchFilter?
     private var baseFiltersResult: FilterResults?
-    private var sortModeForTracks: TracksSortMode = .lastModified
+    private var sortMode: TracksSortMode = .lastModified
     private var sortModeForSearch: TracksSortMode = .lastModified
     private var searchController = UISearchController()
     private var lastUpdate: TimeInterval?
@@ -98,7 +98,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         config.imagePlacement = .leading
         config.baseForegroundColor = .iconColorActive
         let button = UIButton(configuration: config, primaryAction: nil)
-        button.setImage(sortModeForTracks.image, for: .normal)
+        button.setImage(sortMode.image, for: .normal)
         button.menu = createSortMenu()
         button.showsMenuAsPrimaryAction = true
         button.changesSelectionAsPrimaryAction = true
@@ -171,7 +171,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             configureFolders()
         }
         
-        sortModeForTracks = getTracksSortMode()
+        sortMode = getTracksSortMode()
         sortModeForSearch = getSearchTracksSortMode()
         tableView.register(UINib(nibName: OAButtonTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OAButtonTableViewCell.reuseIdentifier)
         tableView.register(UINib(nibName: OATwoButtonsTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OATwoButtonsTableViewCell.reuseIdentifier)
@@ -297,16 +297,13 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                     visibleTracksFolderRow.descr = String(format: localizedString("folder_tracks_count"), settings.mapSettingVisibleGpx.get().count)
                 }
                 
-                var foldersNames: [String] = currentTrackFolder.getSubFolders().compactMap({ $0.getDirName() })
-                foldersNames = sortFolderWithMode(foldersNames, mode: .nameAZ)
-                for folderName in foldersNames {
-                    if let folder = currentTrackFolder.getSubFolders().first(where: { $0.getDirName() == folderName }) {
-                        createRowFor(folder: folder, section: section)
-                    }
+                let sortedFolders = TracksSortModeHelper.sortFoldersWithMode(currentTrackFolder.getSubFolders(), mode: sortMode)
+                for folder in sortedFolders {
+                    createRowFor(folder: folder, section: section)
                 }
                 
                 let gpxItems = currentTrackFolder.getTrackItems().compactMap { $0.dataItem }
-                let sortedTracks = TracksSortModeHelper.sortTracksWithMode(gpxItems, mode: sortModeForTracks)
+                let sortedTracks = TracksSortModeHelper.sortTracksWithMode(gpxItems, mode: sortMode)
                 for trackItem in sortedTracks {
                     createRowFor(track: trackItem, section: section)
                 }
@@ -331,11 +328,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         let tracksCount = folder.totalTracksCount
         folderRow.setObj(tracksCount, forKey: tracksCountKey)
         let descr = String(format: localizedString("folder_tracks_count"), tracksCount)
-        folderRow.descr = descr
-        if let lastModifiedDate = OAUtilities.getFileLastModificationDate(currentFolderPath.appendingPathComponent(folderName)) {
-            let lastModified = dateFormatter.string(from: lastModifiedDate)
-            folderRow.descr = lastModified + " • " + descr
-        }
+        folderRow.descr = TracksSortModeHelper.descriptionForFolder(folder: folder, currentFolderPath: currentFolderPath)
     }
     
     fileprivate func createRowFor(track: GpxDataItem, section: OATableSectionData) {
@@ -347,11 +340,10 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         trackRow.setObj(track.gpxFilePath as Any, forKey: pathKey)
         trackRow.setObj(fileName, forKey: fileNameKey)
         trackRow.iconName = "ic_custom_trip"
-
         let isVisible = settings.mapSettingVisibleGpx.contains(track.gpxFilePath)
         trackRow.setObj(isVisible, forKey: isVisibleKey)
         trackRow.setObj(isVisible ? UIColor.iconColorActive : UIColor.iconColorDefault, forKey: colorKey)
-        trackRow.setObj(TracksSortModeHelper.getTrackDescription(track: track, sortMode: isSearchActive ? sortModeForSearch : sortModeForTracks, includeFolderInfo: false), forKey: trackSortDescrKey)
+        trackRow.setObj(TracksSortModeHelper.getTrackDescription(track: track, sortMode: isSearchActive ? sortModeForSearch : sortMode, includeFolderInfo: false), forKey: trackSortDescrKey)
     }
     
     private func setupNavbar() {
@@ -509,11 +501,6 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         filterButton.configuration = currentConfig
     }
     
-    private func updateSortButtonAndMenu() {
-        sortButton.setImage(isSearchActive ? sortModeForSearch.image : sortModeForTracks.image, for: .normal)
-        sortButton.menu = createSortMenu()
-    }
-    
     private func setTracksSortMode(_ sortMode: TracksSortMode) {
         var sortModes = settings.getTracksSortModes()
         if let folderName = currentFolder?.getDirName() {
@@ -608,12 +595,8 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         toolbarItems = [selectDeselectButton]
     }
     
-    private func sortFolderWithMode(_ list: [String], mode: TracksSortMode) -> [String] {
-        list.sorted { $0 < $1 }
-    }
-    
     private func updateDistanceAndDirection(_ forceUpdate: Bool) {
-        let currentSortMode = isSearchActive ? sortModeForSearch : sortModeForTracks
+        let currentSortMode = isSearchActive ? sortModeForSearch : sortMode
         guard currentSortMode == .nearest, forceUpdate || Date.now.timeIntervalSince1970 - (lastUpdate ?? 0) >= 0.5 else {
             return
         }
@@ -1932,7 +1915,7 @@ extension TracksViewController {
     }
     
     private func createAction(for sortType: TracksSortMode) -> UIAction {
-        let isCurrentSortType = isSearchActive ? sortType == sortModeForSearch : sortType == sortModeForTracks
+        let isCurrentSortType = isSearchActive ? sortType == sortModeForSearch : sortType == sortMode
         let actionState: UIMenuElement.State = isCurrentSortType ? .on : .off
         return UIAction(title: sortType.title, image: sortType.image, state: actionState) { [weak self] _ in
             guard let self else { return }
@@ -1940,11 +1923,16 @@ extension TracksViewController {
                 self.sortModeForSearch = sortType
                 self.setSearchTracksSortMode(sortType)
             } else {
-                self.sortModeForTracks = sortType
+                self.sortMode = sortType
                 self.setTracksSortMode(sortType)
             }
-            self.sortButton.setImage(self.isSearchActive ? self.sortModeForSearch.image : self.sortModeForTracks.image, for: .normal)
+            self.sortButton.setImage(self.isSearchActive ? self.sortModeForSearch.image : self.sortMode.image, for: .normal)
             self.updateData()
         }
+    }
+    
+    private func updateSortButtonAndMenu() {
+        sortButton.setImage(isSearchActive ? sortModeForSearch.image : sortMode.image, for: .normal)
+        sortButton.menu = createSortMenu()
     }
 }

@@ -699,11 +699,6 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         return headerView
     }
     
-    private func updateSortButtonAndMenu() {
-        sortButton.setImage(currentSortMode.image, for: .normal)
-        sortButton.menu = createSortMenu()
-    }
-    
     private func sortTracks() {
         if isSearchActive {
             filteredGpxList = TracksSortModeHelper.sortTracksWithMode(filteredGpxList, mode: sortModeForSearch)
@@ -957,5 +952,10 @@ extension MapSettingsGpxViewController {
             self.sortTracks()
             self.updateData()
         }
+    }
+    
+    private func updateSortButtonAndMenu() {
+        sortButton.setImage(currentSortMode.image, for: .normal)
+        sortButton.menu = createSortMenu()
     }
 }

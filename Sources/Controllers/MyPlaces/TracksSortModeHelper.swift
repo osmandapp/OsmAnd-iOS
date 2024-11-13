@@ -59,16 +59,51 @@ import OsmAndShared
 @objc final class TracksSortModeHelper: NSObject {
     static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "dd.MM.yyyy"
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        formatter.locale = Locale.current
         return formatter
     }()
     
     @objc static var defaultSortModeTitle: String {
-        return TracksSortMode.lastModified.title
+        TracksSortMode.lastModified.title
     }
     
     @objc static func title(for mode: TracksSortMode) -> String {
         mode.title
+    }
+    
+    static func sortFoldersWithMode(_ folders: [TrackFolder], mode: TracksSortMode) -> [TrackFolder] {
+        switch mode {
+        case .nearest:
+            return folders
+        case .lastModified:
+            return folders.sorted { $0.lastModified() > $1.lastModified() }
+        case .nameAZ:
+            return folders.sorted { $0.getDirName().localizedCaseInsensitiveCompare($1.getDirName()) == .orderedAscending }
+        case .nameZA:
+            return folders.sorted { $0.getDirName().localizedCaseInsensitiveCompare($1.getDirName()) == .orderedDescending }
+        case .newestDateFirst:
+            return folders.sorted { $0.lastModified() > $1.lastModified() }
+        case .oldestDateFirst:
+            return folders.sorted { $0.lastModified() < $1.lastModified() }
+        case .longestDistanceFirst:
+            return folders.sorted { folder1, folder2 in
+                folder1.getFolderAnalysis().totalDistance > folder2.getFolderAnalysis().totalDistance
+            }
+        case .shortestDistanceFirst:
+            return folders.sorted { folder1, folder2 in
+                folder1.getFolderAnalysis().totalDistance < folder2.getFolderAnalysis().totalDistance
+            }
+        case .longestDurationFirst:
+            return folders.sorted { folder1, folder2 in
+                folder1.getFolderAnalysis().timeSpan > folder2.getFolderAnalysis().timeSpan
+            }
+        case .shorterDurationFirst:
+            return folders.sorted { folder1, folder2 in
+                folder1.getFolderAnalysis().timeSpan < folder2.getFolderAnalysis().timeSpan
+            }
+        }
     }
     
     static func sortTracksWithMode(_ tracks: [GpxDataItem], mode: TracksSortMode) -> [GpxDataItem] {
@@ -94,6 +129,19 @@ import OsmAndShared
         case .shorterDurationFirst:
             return tracks.sorted { $0.timeSpan < $1.timeSpan }
         }
+    }
+    
+    static func descriptionForFolder(folder: TrackFolder, currentFolderPath: String) -> String {
+        let folderName = folder.getDirName()
+        let tracksCount = folder.totalTracksCount
+        let basicDescription = String(format: localizedString("folder_tracks_count"), tracksCount)
+        
+        if let lastModifiedDate = OAUtilities.getFileLastModificationDate(currentFolderPath.appendingPathComponent(folderName)) {
+            let lastModifiedString = dateFormatter.string(from: lastModifiedDate)
+            return "\(lastModifiedString) • \(basicDescription)"
+        }
+
+        return basicDescription
     }
     
     static func getTrackDescription(track: GpxDataItem, sortMode: TracksSortMode, includeFolderInfo: Bool = false) -> NSAttributedString {

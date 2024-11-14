@@ -118,8 +118,8 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func onLoadFinished(folder: TrackFolder) {
-        self.rootFolder = folder
-        self.currentFolder = getTrackFolderByPath(currentFolderPath) ?? rootFolder
+        rootFolder = folder
+        currentFolder = getTrackFolderByPath(currentFolderPath) ?? rootFolder
         onRefreshEnd()
         updateNavigationBarTitle()
         generateData()
@@ -1717,7 +1717,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         if !FileManager.default.fileExists(atPath: newFolderPath) {
             do {
                 try FileManager.default.createDirectory(atPath: newFolderPath, withIntermediateDirectories: true)
-                updateAllFoldersVCData(forceLoad: true)
+                onFolderSelected(addedFolderName)
             } catch let error {
                 debugPrint(error)
             }

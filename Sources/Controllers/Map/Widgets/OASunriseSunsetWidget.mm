@@ -381,24 +381,18 @@ static const double locationChangeAccuracy = 0.0001;
     return [self getFormattedTime:timeLeft];
 }
 
-- (NSString*) getFormattedTime:(NSTimeInterval)timeInterval
+- (NSString *)getFormattedTime:(NSTimeInterval)timeInterval
 {
-    int hours, minutes, seconds;
-    [OAUtilities getHMS:timeInterval hours:&hours minutes:&minutes seconds:&seconds];
-    
-    NSMutableString *time = [NSMutableString string];
-    NSString *unitStr = OALocalizedString(@"int_hour");
-    if (hours > 0)
-        [time appendFormat:@"%02d:", hours];
-    [time appendFormat:@"%02d", minutes];
-    if (hours == 0)
-    {
-        [time appendFormat:@":%02d", seconds];
-        unitStr = OALocalizedString(@"short_min");
-    }
-    [time appendFormat:@" %@", unitStr];
-    
-    return time;
+    NSString *formattedDuration = [self formatMinutesDuration:timeInterval / 60];
+    return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_space"), formattedDuration, OALocalizedString(@"int_hour")];;
+}
+
+- (NSString *)formatMinutesDuration:(int)minutes
+{
+    int min = minutes % 60;
+    int hours = minutes / 60;
+   
+    return [NSString stringWithFormat:@"%02d:%02d", hours, min];
 }
 
 - (NSString *) formatNextTime:(NSTimeInterval)nextTime

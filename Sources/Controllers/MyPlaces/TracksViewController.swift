@@ -1280,7 +1280,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         
         for i in 0..<visibleGpx.count where visibleGpx[i].hasPrefix(oldPath) {
             let newPathCount = oldPath.count
-            var oldPathString = visibleGpx[i]
+            let oldPathString = visibleGpx[i]
             let modifiedString = newPath + oldPathString.dropFirst(newPathCount)
             visibleGpx[i] = modifiedString
         }

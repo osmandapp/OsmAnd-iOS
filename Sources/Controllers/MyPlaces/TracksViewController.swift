@@ -1249,7 +1249,6 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     
     private func renameFolder(newName: String, oldName: String) {
         guard let trackFolder = getTrackFolderByPath(oldName) else { return }
-        let oldRelativePath = trackFolder.relativePath
         let oldFolderPath = currentFolderAbsolutePath().appendingPathComponent(oldName)
         let newFolderPath = currentFolderAbsolutePath().appendingPathComponent(newName)
         
@@ -1260,8 +1259,6 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                 if oldDir.renameTo(toFile: newDir) {
                     trackFolder.setDirFile(dirFile: newDir)
                     trackFolder.resetCachedData()
-                    let newRelativePath = trackFolder.relativePath
-                    renameSortModeKey(from: oldRelativePath, to: newRelativePath)
                     var files = [KFile]()
 
                     for trackItem in trackFolder.getFlattenedTrackItems() {
@@ -1276,6 +1273,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                             let oldPath = oldFolderPath.removePrefix(gpxPathRemovePrefix)
                             let newPath = newFolderPath.removePrefix(gpxPathRemovePrefix)
                             renameVisibleTracks(oldPath: oldPath, newPath: newPath)
+                            renameSortModeKey(from: oldPath, to: newPath)
                         }
                     }
                     updateAllFoldersVCData(forceLoad: true)
@@ -1371,12 +1369,13 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func renameSortModeKey(from oldBasePath: String, to newBasePath: String) {
-        let sortModes = settings.getTracksSortModes()
+        guard let sortModes = settings.getTracksSortModes() else { return }
         var updatedSortModes = [String: String]()
-        for (key, value) in sortModes ?? [:] {
+        for (key, value) in sortModes {
             if key.hasPrefix(oldBasePath) {
-                let newKey = key.replacingOccurrences(of: oldBasePath, with: newBasePath)
-                updatedSortModes[newKey] = value
+                let newPathCount = oldBasePath.count
+                let modifiedKey = newBasePath + key.dropFirst(newPathCount)
+                updatedSortModes[modifiedKey] = value
             } else {
                 updatedSortModes[key] = value
             }

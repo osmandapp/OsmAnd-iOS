@@ -1330,7 +1330,12 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     private func renameVisibleTracks(oldPath: String, newPath: String) {
         guard var visibleGpx = settings.mapSettingVisibleGpx.get() else { return }
         
-        visibleGpx = visibleGpx.map { filePath in filePath.replacingOccurrences(of: oldPath, with: newPath) }
+        for i in 0..<visibleGpx.count where visibleGpx[i].hasPrefix(oldPath) {
+            let newPathCount = oldPath.count
+            let oldPathString = visibleGpx[i]
+            let modifiedString = newPath + oldPathString.dropFirst(newPathCount)
+            visibleGpx[i] = modifiedString
+        }
         settings.mapSettingVisibleGpx.set(visibleGpx)
     }
     

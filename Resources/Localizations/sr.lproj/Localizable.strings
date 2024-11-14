@@ -3567,3 +3567,8 @@
 "root_folder" = "Рут фолдер";
 "transport_stop" = "Станица";
 "map_widget_map_scale" = "Размера мапе";
+"lock_screen" = "Закључај екран";
+"screen_is_locked_by_action_button" = "Екран осетљив на додир је закључан. Додирните дугме да бисте откључали.";
+"screen_is_unlocked" = "Екран осетљив на додир је откључан.";
+"shared_string_interface" = "Сучеље";
+"lock_screen_description" = "Омогућава или онемогућава функцију екрана осетљивог на додир да спречи случајне додире";

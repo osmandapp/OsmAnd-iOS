@@ -757,10 +757,21 @@ colorizationScheme:(int)colorizationScheme
         {
             // Use black arrows for gradient colorization
             UIColor *color = gpx.coloringType.length != 0 && ![gpx.coloringType isEqualToString:@"solid"] ? UIColor.whiteColor : UIColorFromARGB(gpx.color);
-            builder.setPathIcon(OsmAnd::SingleSkImage([self bitmapForColor:color fileName:@"map_direction_arrow"]))
-                .setSpecialPathIcon(OsmAnd::SingleSkImage([self specialBitmapWithColor:colorARGB]))
-                .setShouldShowArrows(true)
-                .setScreenScale(UIScreen.mainScreen.scale);
+            auto iconBitmap = [self bitmapForColor:color fileName:@"map_direction_arrow"];
+            if (iconBitmap)
+            {
+                builder.setPathIcon(OsmAnd::SingleSkImage(iconBitmap))
+                       .setPathIconStep(iconBitmap->height() * kPathIconStepCoef)
+                       .setShouldShowArrows(true);
+            }
+            auto specialIconBitmap = [self specialBitmapWithColor:colorARGB];
+            if (specialIconBitmap)
+            {
+                builder.setSpecialPathIcon(OsmAnd::SingleSkImage(specialIconBitmap))
+                       .setSpecialPathIconStep(specialIconBitmap->height() * kPathIconStepCoef)
+                       .setShouldShowArrows(true);
+            }
+            builder.setScreenScale(UIScreen.mainScreen.scale);
         }
         
         if (gpx.visualization3dByType != EOAGPX3DLineVisualizationByTypeNone)
@@ -840,10 +851,21 @@ colorizationScheme:(int)colorizationScheme
             {
                 // Use black arrows for gradient colorization
                 UIColor *color = gpx.getColoringType.length != 0 && ![gpx.getColoringType isEqualToString:@"solid"] ? UIColor.whiteColor : UIColorFromARGB([gpx getColorDefColor:nil].intValue);
-                builder.setPathIcon(OsmAnd::SingleSkImage([self bitmapForColor:color fileName:@"map_direction_arrow"]))
-                    .setSpecialPathIcon(OsmAnd::SingleSkImage([self specialBitmapWithColor:colorARGB]))
-                    .setShouldShowArrows(true)
-                    .setScreenScale(UIScreen.mainScreen.scale);
+                auto iconBitmap = [self bitmapForColor:color fileName:@"map_direction_arrow"];
+                if (iconBitmap)
+                {
+                    builder.setPathIcon(OsmAnd::SingleSkImage(iconBitmap))
+                           .setPathIconStep(iconBitmap->height() * kPathIconStepCoef)
+                           .setShouldShowArrows(true);
+                }
+                auto specialIconBitmap = [self specialBitmapWithColor:colorARGB];
+                if (specialIconBitmap)
+                {
+                    builder.setSpecialPathIcon(OsmAnd::SingleSkImage(specialIconBitmap))
+                           .setSpecialPathIconStep(specialIconBitmap->height() * kPathIconStepCoef)
+                           .setShouldShowArrows(true);
+                }
+                builder.setScreenScale(UIScreen.mainScreen.scale);
             }
             
             if ([OAGPXDatabase lineVisualizationByTypeForName:gpx.get3DVisualizationType] != EOAGPX3DLineVisualizationByTypeNone)

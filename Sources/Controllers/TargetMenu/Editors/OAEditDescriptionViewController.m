@@ -196,7 +196,7 @@
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
-    return UIStatusBarStyleLightContent;
+    return [[ThemeManager shared] isLightTheme] ? UIStatusBarStyleDarkContent : UIStatusBarStyleLightContent;
 }
 
 // keyboard notifications register+process

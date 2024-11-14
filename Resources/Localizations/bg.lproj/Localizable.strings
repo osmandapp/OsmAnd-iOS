@@ -2064,3 +2064,8 @@
 "revolutions_per_minute_unit" = "об/мин";
 "max_altitude" = "Максимална надморска височина";
 "max_sensor_speed" = "Сензор скорост, макс";
+"lock_screen" = "Заключване на екрана";
+"screen_is_unlocked" = "Екранът е отключен.";
+"shared_string_interface" = "Интерфейс";
+"screen_is_locked_by_action_button" = "Екранът е заключен. Докоснете бутона, за да го отключите.";
+"lock_screen_description" = "Включване или изключване на екрана, за да бъдат предотвратени нежелани докосвания";

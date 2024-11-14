@@ -417,8 +417,11 @@
         [defaults registerDefaults:defResetRouting];
 
         _data = [OAAppData defaults];
-        [defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:_data]
-                         forKey:kAppData];
+        NSError *error;
+        [defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:_data requiringSecureCoding:NO error:&error] forKey:kAppData];
+        if (error)
+            NSLog(@"error archiving data: %@", error.localizedDescription);
+        
         [defaults setBool:NO forKey:@"hide_all_gpx"];
         [defaults setBool:NO forKey:@"reset_settings"];
         [defaults setBool:NO forKey:@"reset_routing"];
@@ -433,7 +436,17 @@
 
     // Unpack app data
     _appSettingsLoadedObservable = [[OAObservable alloc] init];
-    _data = [NSKeyedUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:kAppData]];
+    
+    NSError *error;
+    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc]
+                                     initForReadingFromData:[[NSUserDefaults standardUserDefaults] dataForKey:kAppData]
+                                     error:&error];
+    [unarchiver setRequiresSecureCoding:NO];
+    
+    _data = [unarchiver decodeObjectForKey:NSKeyedArchiveRootObjectKey];
+    if (error)
+        NSLog(@"error unarchiving data: %@", error.localizedDescription);
+
 
     settings.simulateNavigation = NO;
     settings.simulateNavigationMode = [OASimulationMode toKey:EOASimulationModePreview];
@@ -1174,8 +1187,10 @@
 {
     NSMutableDictionary* initialUserDefaults = [[NSMutableDictionary alloc] init];
 
-    [initialUserDefaults setValue:[NSKeyedArchiver archivedDataWithRootObject:[OAAppData defaults]]
-                           forKey:kAppData];
+    NSError *error;
+    [initialUserDefaults setObject:[NSKeyedArchiver archivedDataWithRootObject:[OAAppData defaults] requiringSecureCoding:NO error:&error] forKey:kAppData];
+    if (error)
+        NSLog(@"error archiving data: %@", error.localizedDescription);
 
     return initialUserDefaults;
 }
@@ -1219,8 +1234,10 @@
     NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
 
     // App data
-    [userDefaults setObject:[NSKeyedArchiver archivedDataWithRootObject:_data]
-                                              forKey:kAppData];
+    NSError *error;
+    [userDefaults setObject:[NSKeyedArchiver archivedDataWithRootObject:_data requiringSecureCoding:NO error:&error] forKey:kAppData];
+    if (error)
+        NSLog(@"error archiving data: %@", error.localizedDescription);
     [userDefaults synchronize];
 }
 

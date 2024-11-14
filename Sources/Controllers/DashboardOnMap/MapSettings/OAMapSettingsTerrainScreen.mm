@@ -336,7 +336,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             [weakSelf terrainTypeChanged];
         }];
 
-        if (_terrainMode == mode)
+        if (_terrainMode.type == mode.type)
         {
             action.state = UIMenuElementStateOn;
 

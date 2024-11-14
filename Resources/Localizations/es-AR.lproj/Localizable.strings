@@ -569,7 +569,7 @@
 "gpx_add_new" = "Añadir nuevo archivo";
 "gpx_overwrite" = "Sobrescribir";
 "gpx_cannot_import" = "No se pudo importar el archivo GPX indicado";
-"gpx_parse_error" = "Se encontraron problemas con un archivo GPX. \n \nContacta con la asistencia de OsmAnd para investigar.";
+"gpx_parse_error" = "Se encontraron problemas con un archivo GPX. \n \nContactá con la asistencia de OsmAnd para investigar.";
 "tracks_on_map" = "Trazas mostradas";
 "gpx_export_title" = "Exportar traza";
 "gpx_export_select_track" = "Elige la traza a exportar";
@@ -1522,7 +1522,7 @@
 "product_desc_wiki" = "Artículos de Wikipedia basados en la ubicación del mapa";
 "purchases_feature_desc_wikipedia" = "Incluye todos los artículos sin conexión de Wikipedia relacionados al lugar, ayudándote a conocer mejor los puntos visitados en el viaje, con simples pulsaciones en el mapa. No olvides descargar los mapas de Wikipedia de las respectivas regiones.";
 "shared_string_all_languages" = "Todos los idiomas";
-"select_wikipedia_article_langs" = "Marca los idiomas de los artículos de Wikipedia en el mapa. Cambia a cualquier idioma disponible mientras lees el artículo.";
+"select_wikipedia_article_langs" = "Marcá los idiomas de los artículos de Wikipedia en el mapa. Cambiá a cualquier idioma disponible mientras leés el artículo.";
 "wiki_menu_download_descr" = "Se necesitan mapas adicionales para ver los puntos de interés de Wikipedia en el mapa.";
 "some_articles_may_not_available_in_lang" = "Es posible que algunos artículos de Wikipedia no estén disponibles en tu idioma.";
 "available_languages" = "Idiomas disponibles";
@@ -1724,7 +1724,7 @@
 "hidden_categories" = "Categorías ocultas";
 "create_custom_categories_list_promo" = "Cambia el orden de la lista y oculta las categorías. Importa o exporta todos los cambios como perfiles.";
 "reset_to_default_category_button_promo" = "«Restablecer al valor predefinido», restablecerá el orden de clasificación al valor predefinido de la instalación.";
-"search_poi_types_descr" = "Combina tipos de PDI de diferentes categorías. Pulsa «Alternar» para marcar todo y el lado izquierdo para elegir una categoría.";
+"search_poi_types_descr" = "Combiná tipos de PDI de diferentes categorías. Pulsá «Alternar» para marcar todo y el lado izquierdo para elegir una categoría.";
 "email_example_hint" = "usuario@ejemplo.com";
 "shared_string_required" = "Obligatorio";
 "login_account" = "Cuenta";
@@ -2113,7 +2113,7 @@
 "height_limit_description" = "Proporciona la altura del vehículo, pueden aplicarse algunas restricciones de ruta para vehículos altos.";
 "lenght_limit_description" = "Proporciona la longitud del vehículo, se pueden aplicar algunas restricciones de rutas para vehículos largos.";
 "width_limit_description" = "Proporciona el ancho del vehículo, pueden aplicarse algunas restricciones de ruta para vehículos anchos.";
-"vessel_height_limit_description" = "Define la altura de la embarcación para evitar puentes bajos. Tener en cuenta que si el puente es móvil, usaremos su altura en estado abierto.";
+"vessel_height_limit_description" = "Definí la altura de la embarcación para evitar puentes bajos. Tené en cuenta que si el puente es móvil, usaremos su altura en estado abierto.";
 "vessel_width_limit_description" = "Define el ancho de la embarcación para evitar puentes estrechos";
 "default_speed_dialog_msg" = "Estima el tiempo de llegada para los tipos de caminos desconocidos, y limita la velocidad para todos los caminos (puede afectar a la ruta)";
 

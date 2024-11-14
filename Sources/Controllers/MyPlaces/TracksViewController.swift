@@ -502,7 +502,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     
     private func setTracksSortMode(_ sortMode: TracksSortMode) {
         var sortModes = settings.getTracksSortModes()
-        if let folderName = currentFolder?.getDirName() {
+        if let folderName = currentFolder?.relativePath {
             sortModes?[folderName] = sortMode.title
         }
         
@@ -515,7 +515,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     
     private func getTracksSortMode() -> TracksSortMode {
         let sortModes = settings.getTracksSortModes()
-        if let folderName = currentFolder?.getDirName(), let sortModeTitle = sortModes?[folderName] {
+        if let folderName = currentFolder?.relativePath, let sortModeTitle = sortModes?[folderName] {
             return TracksSortMode.getByTitle(sortModeTitle)
         }
         
@@ -1249,6 +1249,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     
     private func renameFolder(newName: String, oldName: String) {
         guard let trackFolder = getTrackFolderByPath(oldName) else { return }
+        let oldRelativePath = trackFolder.relativePath
         let oldFolderPath = currentFolderAbsolutePath().appendingPathComponent(oldName)
         let newFolderPath = currentFolderAbsolutePath().appendingPathComponent(newName)
         
@@ -1259,7 +1260,8 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                 if oldDir.renameTo(toFile: newDir) {
                     trackFolder.setDirFile(dirFile: newDir)
                     trackFolder.resetCachedData()
-                    renameSortModeKey(from: oldName, to: newName)
+                    let newRelativePath = trackFolder.relativePath
+                    renameSortModeKey(from: oldRelativePath, to: newRelativePath)
                     var files = [KFile]()
 
                     for trackItem in trackFolder.getFlattenedTrackItems() {
@@ -1301,9 +1303,9 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                         }
                     })
                 }
+                removeSortMode(forFolderPath: folderForDelete.relativePath)
             }
-            
-            removeSortMode(forFolderName: folderName)
+
             // remove folders with tracks
             try FileManager.default.removeItem(atPath: folderPath)
             updateAllFoldersVCData(forceLoad: true)
@@ -1359,24 +1361,33 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             }
         }
     
+        renameSortModeKey(from: folderPathForOpenedContextMenu, to: destinationShortFolderPath)
         updateAllFoldersVCData(forceLoad: true)
     }
     
-    private func renameSortModeKey(from oldName: String, to newName: String) {
-        var sortModes = settings.getTracksSortModes()
-        if let sortMode = sortModes?[oldName] {
-            sortModes?[newName] = sortMode
-            sortModes?.removeValue(forKey: oldName)
-            settings.saveTracksSortModes(sortModes)
+    private func renameSortModeKey(from oldBasePath: String, to newBasePath: String) {
+        let sortModes = settings.getTracksSortModes()
+        var updatedSortModes = [String: String]()
+        for (key, value) in sortModes ?? [:] {
+            if key.hasPrefix(oldBasePath) {
+                let newKey = key.replacingOccurrences(of: oldBasePath, with: newBasePath)
+                updatedSortModes[newKey] = value
+            } else {
+                updatedSortModes[key] = value
+            }
         }
+        
+        settings.saveTracksSortModes(updatedSortModes)
     }
     
-    private func removeSortMode(forFolderName folderName: String) {
-        var sortModes = settings.getTracksSortModes()
-        if let sortMode = sortModes?[folderName] {
-            sortModes?.removeValue(forKey: folderName)
-            settings.saveTracksSortModes(sortModes)
+    private func removeSortMode(forFolderPath folderPath: String) {
+        let sortModes = settings.getTracksSortModes() ?? [:]
+        var updatedSortModes = [String: String]()
+        for (key, value) in sortModes where !key.hasPrefix(folderPath) {
+            updatedSortModes[key] = value
         }
+        
+        settings.saveTracksSortModes(updatedSortModes)
     }
    
     private func areAllItemsSelected() -> Bool {

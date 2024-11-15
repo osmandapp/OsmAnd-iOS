@@ -503,14 +503,13 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func setTracksSortMode(_ sortMode: TracksSortMode, isSortingSubfolders: Bool) {
-        guard let folder = currentFolder else { return }
-        var sortModes = settings.getTracksSortModes()
+        guard let folder = currentFolder, var sortModes = settings.getTracksSortModes() else { return }
         if !isSortingSubfolders {
-            sortModes?[folder.relativePath] = sortMode.title
+            sortModes[folder.relativePath] = sortMode.title
         } else {
             let subFolders = folder.getFlattenedSubFolders()
             for subFolder in subFolders {
-                sortModes?[ subFolder.relativePath] = sortMode.title
+                sortModes[ subFolder.relativePath] = sortMode.title
             }
         }
         

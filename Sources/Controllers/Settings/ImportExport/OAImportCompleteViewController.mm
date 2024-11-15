@@ -171,7 +171,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
             tileSourcesCount += settings.count;
         else if (type == OAExportSettingsType.CUSTOM_RENDER_STYLE)
             renderFilesCount += settings.count;
-        else if (type == OAExportSettingsType.OFFLINE_MAPS)
+        else if (type == OAExportSettingsType.STANDARD_MAPS)
             mapsCount += settings.count;
         else if (type == OAExportSettingsType.CUSTOM_ROUTING)
             routingFilesCount += settings.count;

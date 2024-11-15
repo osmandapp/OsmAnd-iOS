@@ -31,7 +31,10 @@ NS_ASSUME_NONNULL_BEGIN
 + (OAExportSettingsType *) CUSTOM_RENDER_STYLE;
 + (OAExportSettingsType *) CUSTOM_ROUTING;
 + (OAExportSettingsType *) MAP_SOURCES;
-+ (OAExportSettingsType *) OFFLINE_MAPS;
++ (OAExportSettingsType *) STANDARD_MAPS;
++ (OAExportSettingsType *) WIKI_AND_TRAVEL;
++ (OAExportSettingsType *) DEPTH_DATA;
++ (OAExportSettingsType *) TERRAIN_DATA;
 + (OAExportSettingsType *) TTS_VOICE;
 + (OAExportSettingsType *) VOICE;
 + (OAExportSettingsType *) ONLINE_ROUTING_ENGINES;

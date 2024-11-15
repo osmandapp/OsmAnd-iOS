@@ -23,7 +23,7 @@ final class BackupUiUtils: NSObject {
             name = item.getPublicName()
             if let fileItem = item as? OAFileSettingsItem {
                 switch fileItem.subtype {
-                case .subtypeVoiceTTS:
+                case .subtypeTTSVoice:
                     name = String(format: localizedString("ltr_or_rtl_combine_via_space"), name, localizedString("tts_title"))
                 case .subtypeVoice:
                     name = String(format: localizedString("ltr_or_rtl_combine_via_space"), name, localizedString("shared_string_record"))

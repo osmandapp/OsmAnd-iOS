@@ -707,6 +707,8 @@
         return @"ic_custom_hide";
     else if([paramName isEqualToString:TRANSPORT_CATEGORY])
         return @"ic_custom_transport_bus";
+    else if([paramName isEqualToString:DIRTBIKE_ROUTES_ATTR])
+        return @"ic_action_dirt_motorcycle";
 
     return @"";
 }

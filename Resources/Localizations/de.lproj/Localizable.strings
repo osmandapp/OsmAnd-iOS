@@ -3582,3 +3582,8 @@
 "shared_string_to" = "Zu";
 "map_widget_map_scale" = "Maßstab";
 "transport_stop" = "Beenden";
+"lock_screen" = "Bildschirm sperren";
+"screen_is_locked_by_action_button" = "Der Touchscreen ist gesperrt. Tippe zum Entsperren auf die Schaltfläche.";
+"screen_is_unlocked" = "Der Touchscreen ist entsperrt.";
+"shared_string_interface" = "Benutzeroberfläche";
+"lock_screen_description" = "Touchfunktion aktivieren oder deaktivieren, um versehentliche Berührungen zu verhindern";

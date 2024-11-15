@@ -106,15 +106,19 @@
     if (ds && ds.count > 0 && gpxItem)
     {
         OASGpxTrackAnalysis *analysis = [gpxItem getAnalysisFileTimestamp:0];
+        OASWptPt *locStart = [analysis locationStart];
+        OASWptPt *locEnd = [analysis locationEnd];
         for (OASTrack *track in gpxItem.tracks)
         {
             for (OASTrkSegment *segment in track.segments)
             {
                 NSArray<OASWptPt *> *points = segment.points;
                 NSInteger size = points.count;
+                OASWptPt *firstPoint = points.firstObject;
+                OASWptPt *lastPoint = points[size - 1];
                 if (size > 0
-                    && points.firstObject == [analysis locationStart]
-                    && points[size - 1] == [analysis locationEnd])
+                    && firstPoint.lat == locStart.lat && firstPoint.lon == locStart.lon
+                    && lastPoint.lat == locEnd.lat && lastPoint.lon == locEnd.lon)
                     return segment;
             }
         }
@@ -189,9 +193,11 @@
         {
             _chartHighlightPos = highlights[0].x;
         }
+
         location = [self getLocationAtPos:chart pos:_chartHighlightPos];
         if (location)
             [trackChartPoints setHighlightedPoint:location.coordinate];
+        [_layer showCurrentHighlitedLocation:trackChartPoints];
     }
     else
     {
@@ -199,11 +205,13 @@
     }
 
     if (recalculateXAxis)
+    {
         [trackChartPoints setXAxisPoints:[self getXAxisPoints:chart]];
+        [_layer showCurrentStatisticsLocation:trackChartPoints];
+        if (location)
+            [[OARootViewController instance].mapPanel refreshMap];
+    }
 
-    [_layer showCurrentStatisticsLocation:trackChartPoints];
-    if (location)
-        [[OARootViewController instance].mapPanel refreshMap];
     if (fitTrackOnMap)
     {
         [self fitTrackOnMap:chart
@@ -235,33 +243,6 @@
         }
     }
     return _xAxisPoints;
-}
-
-+ (OASTrkSegment *)getSegmentForAnalysis:(OASGpxFile *)gpxDoc analysis:(OASGpxTrackAnalysis *)analysis
-{
-    for (OASTrack *track in gpxDoc.tracks)
-    {
-        for (OASTrkSegment *segment in track.segments)
-        {
-            NSInteger size = segment.points.count;
-            if (size > 0 && [segment.points.firstObject isEqual:analysis.locationStart]
-                    && [segment.points[size - 1] isEqual:analysis.locationEnd])
-                return segment;
-        }
-    }
-    return nil;
-}
-
-- (OASTrkSegment *)getTrackSegment:(LineChartView *)chart analysis:(OASGpxTrackAnalysis *)analysis
-{
-    OASTrkSegment *segment;
-    LineChartData *lineData = chart.lineData;
-    NSArray<id <ChartDataSetProtocol>> *ds = lineData ? lineData.dataSets : [NSArray array];
-
-    if (ds && ds.count > 0)
-        segment = [self.class getSegmentForAnalysis:_gpxDoc analysis:analysis];
-
-    return segment;
 }
 
 - (void)fitTrackOnMap:(LineChartView *)lineChartView

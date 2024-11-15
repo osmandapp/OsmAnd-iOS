@@ -238,14 +238,22 @@
     return locationsIdx == locations.count ? 0 : locationsIdx;
 }
 
-- (void) showCurrentStatisticsLocation:(OATrackChartPoints *)trackPoints
+- (void)showCurrentHighlitedLocation:(OATrackChartPoints *)trackPoints
 {
-    if (_locationMarker && CLLocationCoordinate2DIsValid(trackPoints.highlightedPoint))
+    BOOL hasHighlitedPoint = CLLocationCoordinate2DIsValid(trackPoints.highlightedPoint);
+    if (_locationMarker)
     {
-        _locationMarker->setPosition(OsmAnd::Utilities::convertLatLonTo31(
-                OsmAnd::LatLon(trackPoints.highlightedPoint.latitude, trackPoints.highlightedPoint.longitude)));
-        _locationMarker->setIsHidden(false);
+        if (hasHighlitedPoint)
+        {
+            _locationMarker->setPosition(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(trackPoints.highlightedPoint.latitude,
+                                                                                             trackPoints.highlightedPoint.longitude)));
+        }
+        _locationMarker->setIsHidden(!hasHighlitedPoint);
     }
+}
+
+- (void)showCurrentStatisticsLocation:(OATrackChartPoints *)trackPoints
+{
     OsmAnd::MapMarkerBuilder xAxisMarkerBuilder;
     xAxisMarkerBuilder.setIsAccuracyCircleSupported(false);
     xAxisMarkerBuilder.setBaseOrder(self.pointsOrder - 15);

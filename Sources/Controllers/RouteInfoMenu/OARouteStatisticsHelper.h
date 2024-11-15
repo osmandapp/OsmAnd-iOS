@@ -15,9 +15,9 @@
 #include <vector>
 #include <OsmAndCore/Map/MapPresentationEnvironment.h>
 
-static NSString *ROUTE_INFO_PREFIX = @"routeInfo_";
-
 NS_ASSUME_NONNULL_BEGIN
+
+static NSString *ROUTE_INFO_PREFIX = @"routeInfo_";
 
 @class OARouteStatistics, OARouteSegmentAttribute, OASGpxFile;
 

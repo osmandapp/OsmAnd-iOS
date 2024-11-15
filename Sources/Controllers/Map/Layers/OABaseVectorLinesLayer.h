@@ -40,6 +40,7 @@ struct RouteSegmentResult;
                  segmentResult:(std::vector<std::shared_ptr<RouteSegmentResult>> &)segs
                      locations:(NSArray<CLLocation *> *)locations;
 
+- (void) showCurrentHighlitedLocation:(OATrackChartPoints *)trackPoints;
 - (void) showCurrentStatisticsLocation:(OATrackChartPoints *)trackPoints;
 - (void) hideCurrentStatisticsLocation;
 

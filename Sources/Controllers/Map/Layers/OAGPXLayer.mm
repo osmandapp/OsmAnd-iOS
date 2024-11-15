@@ -1121,7 +1121,7 @@ colorizationScheme:(int)colorizationScheme
                             break;
                     }
                     
-                    const auto pos31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude));
+                    const auto pos31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.lat, pt.lon));
                     QString stringValue;
                     if (splitByDistance)
                         stringValue = QString::fromNSString([OAOsmAndFormatter getFormattedDistance:metricStartValue]);

@@ -99,7 +99,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         config.baseForegroundColor = .iconColorActive
         let button = UIButton(configuration: config, primaryAction: nil)
         button.setImage(sortMode.image, for: .normal)
-        button.menu = createSortMenu()
+        button.menu = createSortMenu(isSortingSubfolders: false)
         button.showsMenuAsPrimaryAction = true
         button.changesSelectionAsPrimaryAction = true
         button.contentHorizontalAlignment = .left
@@ -434,11 +434,13 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             let importAction = UIAction(title: localizedString("shared_string_import"), image: .icCustomImportOutlined) { [weak self] _ in
                 self?.onNavbarImportButtonClicked()
             }
+            let sortSubfoldersActions = createSortMenu(isSortingSubfolders: true)
             
             let selectActionWithDivider = UIMenu(title: "", options: .displayInline, children: [selectAction])
             let addFolderActionWithDivider = UIMenu(title: "", options: .displayInline, children: [addFolderAction])
             let importActionWithDivider = UIMenu(title: "", options: .displayInline, children: [importAction])
-            menuActions.append(contentsOf: [selectActionWithDivider, addFolderActionWithDivider, importActionWithDivider])
+            let sortSubfoldersActionWithDivider = UIMenu(title: "", options: .displayInline, children: [sortSubfoldersActions])
+            menuActions.append(contentsOf: [selectActionWithDivider, addFolderActionWithDivider, importActionWithDivider, sortSubfoldersActionWithDivider])
         } else {
             let showOnMapAction = UIAction(title: localizedString("shared_string_show_on_map"), image: UIImage.icCustomMapPinOutlined) { [weak self] _ in
                 self?.onNavbarShowOnMapButtonClicked()
@@ -500,10 +502,18 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         filterButton.configuration = currentConfig
     }
     
-    private func setTracksSortMode(_ sortMode: TracksSortMode) {
+    private func setTracksSortMode(_ sortMode: TracksSortMode, isSortingSubfolders: Bool) {
         var sortModes = settings.getTracksSortModes()
-        if let folderName = currentFolder?.relativePath {
-            sortModes?[folderName] = sortMode.title
+        if !isSortingSubfolders {
+            if let folderName = currentFolder?.relativePath {
+                sortModes?[folderName] = sortMode.title
+            }
+        } else {
+            let subFolders = currentFolder.getFlattenedSubFolders()
+            for subFolder in subFolders {
+                let subFolderName = subFolder.relativePath
+                sortModes?[subFolderName] = sortMode.title
+            }
         }
         
         settings.saveTracksSortModes(sortModes)
@@ -1919,50 +1929,57 @@ extension TracksViewController: TrackFolderLoaderTaskLoadTracksListener {
 }
 
 extension TracksViewController {
-    private func createSortMenu() -> UIMenu {
+    private func createSortMenu(isSortingSubfolders: Bool) -> UIMenu {
         let sortingOptions = UIMenu(options: .displayInline, children: [
-            createAction(for: .nearest),
-            createAction(for: .lastModified)
+            createAction(for: .nearest, isSortingSubfolders: isSortingSubfolders),
+            createAction(for: .lastModified, isSortingSubfolders: isSortingSubfolders)
         ])
         let alphabeticalOptions = UIMenu(options: .displayInline, children: [
-            createAction(for: .nameAZ),
-            createAction(for: .nameZA)
+            createAction(for: .nameAZ, isSortingSubfolders: isSortingSubfolders),
+            createAction(for: .nameZA, isSortingSubfolders: isSortingSubfolders)
         ])
         let dateOptions = UIMenu(options: .displayInline, children: [
-            createAction(for: .newestDateFirst),
-            createAction(for: .oldestDateFirst)
+            createAction(for: .newestDateFirst, isSortingSubfolders: isSortingSubfolders),
+            createAction(for: .oldestDateFirst, isSortingSubfolders: isSortingSubfolders)
         ])
         let distanceOptions = UIMenu(options: .displayInline, children: [
-            createAction(for: .longestDistanceFirst),
-            createAction(for: .shortestDistanceFirst)
+            createAction(for: .longestDistanceFirst, isSortingSubfolders: isSortingSubfolders),
+            createAction(for: .shortestDistanceFirst, isSortingSubfolders: isSortingSubfolders)
         ])
         let durationOptions = UIMenu(options: .displayInline, children: [
-            createAction(for: .longestDurationFirst),
-            createAction(for: .shorterDurationFirst)
+            createAction(for: .longestDurationFirst, isSortingSubfolders: isSortingSubfolders),
+            createAction(for: .shorterDurationFirst, isSortingSubfolders: isSortingSubfolders)
         ])
         
-        return UIMenu(title: "", children: [sortingOptions, alphabeticalOptions, dateOptions, distanceOptions, durationOptions])
+        return UIMenu(title: isSortingSubfolders ? localizedString("sort_subfolders_tracks") : "", image: isSortingSubfolders ? UIImage.icCustomSortSubfolder : nil, children: [sortingOptions, alphabeticalOptions, dateOptions, distanceOptions, durationOptions])
     }
     
-    private func createAction(for sortType: TracksSortMode) -> UIAction {
+    private func createAction(for sortType: TracksSortMode, isSortingSubfolders: Bool) -> UIAction {
         let isCurrentSortType = isSearchActive ? sortType == sortModeForSearch : sortType == sortMode
         let actionState: UIMenuElement.State = isCurrentSortType ? .on : .off
         return UIAction(title: sortType.title, image: sortType.image, state: actionState) { [weak self] _ in
             guard let self else { return }
             if self.isSearchActive {
-                self.sortModeForSearch = sortType
                 self.setSearchTracksSortMode(sortType)
+                self.sortModeForSearch = getSearchTracksSortMode()
             } else {
-                self.sortMode = sortType
-                self.setTracksSortMode(sortType)
+                self.setTracksSortMode(sortType, isSortingSubfolders: isSortingSubfolders)
+                self.sortMode = getTracksSortMode()
             }
-            self.sortButton.setImage(self.isSearchActive ? self.sortModeForSearch.image : self.sortMode.image, for: .normal)
+            updateSortButtonAndMenu()
+            self.setupNavBarMenuButton()
             self.updateData()
+            if isSortingSubfolders {
+                let sortingFolderName = self.currentFolder.getDirName()
+                let sortingOrderName = localizedString(sortType.title)
+                let message = "\(localizedString("shared_string_subfolders_in")) “\(sortingFolderName)” \(localizedString("shared_string_sorted_by")) “\(sortingOrderName)”"
+                OAUtilities.showToast("", details: message, duration: 4, verticalOffset: 120, in: self.view)
+            }
         }
     }
     
     private func updateSortButtonAndMenu() {
         sortButton.setImage(isSearchActive ? sortModeForSearch.image : sortMode.image, for: .normal)
-        sortButton.menu = createSortMenu()
+        sortButton.menu = createSortMenu(isSortingSubfolders: false)
     }
 }

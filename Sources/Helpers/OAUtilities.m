@@ -2874,6 +2874,11 @@ static const double d180PI = 180.0 / M_PI_2;
 
 + (void)showToast:(NSString *)title details:(NSString *)details duration:(NSTimeInterval)duration inView:(UIView *)view
 {
+    [self showToast:title details:details duration:duration verticalOffset:100 inView:view];
+}
+
++ (void)showToast:(NSString *)title details:(NSString *)details duration:(NSTimeInterval)duration verticalOffset:(CGFloat)verticalOffset inView:(UIView *)view
+{
     dispatch_async(dispatch_get_main_queue(), ^{
         NSArray *allHUDs = [MBProgressHUD allHUDsForView:view];
         for (MBProgressHUD *hudView in allHUDs)
@@ -2885,7 +2890,7 @@ static const double d180PI = 180.0 / M_PI_2;
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
         hud.mode = MBProgressHUDModeText;
         hud.margin = 10.f;
-        hud.yOffset = view.frame.size.height / 2 - 100;
+        hud.yOffset = view.frame.size.height / 2 - verticalOffset;
         hud.cornerRadius = 18.f;
         hud.removeFromSuperViewOnHide = YES;
         hud.userInteractionEnabled = NO;

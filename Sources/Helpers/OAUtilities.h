@@ -404,6 +404,7 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 + (NSString *) buildGeoUrl:(double)latitude longitude:(double)longitude zoom:(int)zoom;
 
 + (void)showToast:(NSString *)title details:(NSString *)details duration:(NSTimeInterval)duration inView:(UIView *)view;
++ (void)showToast:(NSString *)title details:(NSString *)details duration:(NSTimeInterval)duration verticalOffset:(CGFloat)verticalOffset inView:(UIView *)view;
 + (NSString *) formatWarnings:(NSArray<NSString *> *)warnings;
 
 + (NSDate *)getCurrentTimezoneDate:(NSDate *)sourceDate;

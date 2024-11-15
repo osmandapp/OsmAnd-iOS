@@ -1385,7 +1385,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func removeSortMode(forFolderPath folderPath: String) {
-        let sortModes = settings.getTracksSortModes() ?? [:]
+        guard let sortModes = settings.getTracksSortModes() else { return }
         var updatedSortModes = [String: String]()
         for (key, value) in sortModes where !key.hasPrefix(folderPath) {
             updatedSortModes[key] = value

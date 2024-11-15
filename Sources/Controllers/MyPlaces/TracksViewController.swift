@@ -503,16 +503,14 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func setTracksSortMode(_ sortMode: TracksSortMode, isSortingSubfolders: Bool) {
+        guard let folder = currentFolder else { return }
         var sortModes = settings.getTracksSortModes()
         if !isSortingSubfolders {
-            if let folderName = currentFolder?.relativePath {
-                sortModes?[folderName] = sortMode.title
-            }
+            sortModes?[folder.relativePath] = sortMode.title
         } else {
-            let subFolders = currentFolder.getFlattenedSubFolders()
+            let subFolders = folder.getFlattenedSubFolders()
             for subFolder in subFolders {
-                let subFolderName = subFolder.relativePath
-                sortModes?[subFolderName] = sortMode.title
+                sortModes?[ subFolder.relativePath] = sortMode.title
             }
         }
         
@@ -1951,7 +1949,7 @@ extension TracksViewController {
             createAction(for: .shorterDurationFirst, isSortingSubfolders: isSortingSubfolders)
         ])
         
-        return UIMenu(title: isSortingSubfolders ? localizedString("sort_subfolders_tracks") : "", image: isSortingSubfolders ? UIImage.icCustomSortSubfolder : nil, children: [sortingOptions, alphabeticalOptions, dateOptions, distanceOptions, durationOptions])
+        return UIMenu(title: isSortingSubfolders ? localizedString("sort_subfolders_tracks") : "", image: isSortingSubfolders ? .icCustomSortSubfolder : nil, children: [sortingOptions, alphabeticalOptions, dateOptions, distanceOptions, durationOptions])
     }
     
     private func createAction(for sortType: TracksSortMode, isSortingSubfolders: Bool) -> UIAction {

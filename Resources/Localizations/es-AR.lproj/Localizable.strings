@@ -165,7 +165,7 @@
 "map_widget_right" = "Panel derecho";
 "map_widget_left" = "Panel izquierdo";
 "layer_map_appearance" = "Configurar pantalla";
-"edit_profile_screen_options_subtitle" = "Elige las opciones de pantalla para el perfil";
+"edit_profile_screen_options_subtitle" = "Elegí las opciones de pantalla para el perfil";
 "map_markers" = "Marcadores del mapa";
 "markers_history" = "Historial de marcadores";
 "confirm_usage_speed_cameras" = "En muchos países (Alemania, Francia, Italia y otros) el uso de avisos de radares es ilegal. OsmAnd no asume ninguna responsabilidad si usted viola la ley. Pulsa en «sí», sólo si puedes usar esta función.";
@@ -243,7 +243,7 @@
 "auto_zoom_map" = "Zum automático del mapa";
 "auto_zoom_map_descr" = "Nivel de zum según la velocidad (mientras el mapa se sincroniza con la ubicación actual).";
 "snap_to_road" = "Ajustar al camino";
-"snap_to_road_descr" = "El icono de la ubicación actual será ajustado a la ruta de navegación";
+"snap_to_road_descr" = "El ícono de la ubicación actual será ajustado a la ruta de navegación";
 "show_warnings_title" = "Mostrar alertas…";
 "show_warnings_descr" = "Configura advertencias de tráfico (límites de velocidad, paradas forzosas, lomadas, túneles), radares de velocidad, e información de carriles.";
 "speak_title" = "Anunciar…";
@@ -273,7 +273,7 @@
 "recalculate_route" = "Recalcular ruta";
 "recalculate_wrong_dir" = "Recalcular la ruta en caso de dirección inversa";
 "recalculate_route_distance_promo" = "La ruta será recalculada si la distancia a la ubicación actual es mayor que el valor elegido.";
-"select_distance_route_will_recalc" = "Elige la distancia después de la cual la ruta será recalculada.";
+"select_distance_route_will_recalc" = "Elegí la distancia después de la cual la ruta se recalculará.";
 "speed_limit_tolerance_descr" = "Margen de tolerancia sobre el límite de velocidad, en el cual recibirás un aviso de voz.";
 "only_manually" = "Sólo manualmente";
 "instructions_repeat" = "Pulsa el widget «Próximo giro» para repetir las indicaciones";
@@ -463,7 +463,7 @@
 "shared_string_deselect_all" = "Desmarcar todo";
 "shared_string_preparing" = "Preparando";
 "shared_string_max" = "Máx";
-"shared_string_wifi_only" = "Sólo con Wi-Fi";
+"shared_string_wifi_only" = "Solo con Wi-Fi";
 "shared_string_turn_off" = "Apagar";
 "shared_strings_all_regions" = "Todas las regiones";
 "regions" = "Regiones";
@@ -528,7 +528,7 @@
 "add_group" = "Añadir un grupo";
 "add_favorite" = "Añadir favorito";
 "name_and_descr" = "Nombre y descripción";
-"select_group" = "Elegir grupo";
+"select_group" = "Elegí el grupo";
 "shared_string_icon" = "Icono";
 "shared_string_shape" = "Forma";
 "fav_point_dublicate" = "Favorito especificado con nombre duplicado";
@@ -849,7 +849,7 @@
 "export_profile" = "Exportar perfil";
 "shared_string_import" = "Importar";
 "create_profile" = "Crear perfil";
-"select_data_to_import" = "Marca los datos a importar.";
+"select_data_to_import" = "Marcá los datos a importar.";
 "export_profile_select_descr" = "Marca los datos a exportar.";
 "selected_of" = "Marcado - %d/%d";
 "nav_type_hint" = "Tipo de navegación";
@@ -859,7 +859,7 @@
 "custom_plugins" = "Complementos personalizados";
 "extra_maps_menu_group" = "Mapas adicionales";
 "import_duplicates_title" = "Algunos elementos ya existen";
-"import_duplicates_description" = "OsmAnd ya tiene elementos con los mismos nombres que los importados. \n \nElige una acción.";
+"import_duplicates_description" = "OsmAnd ya tiene elementos con los mismos nombres que los importados. \n \nElegí una acción.";
 "keep_both" = "Mantener ambos";
 "keep_both_desc" = "Los elementos serán importados con un prefijo";
 "replace_all" = "Reemplazar todo";
@@ -896,9 +896,9 @@
 "ui_customization" = "Personalizar interfaz de usuario";
 "ui_customization_short_descr" = "Elementos del menú lateral y menú contextual";
 "reorder_profiles" = "Editar la lista de perfiles";
-"profile_alert_need_profile_name_title" = "Ingresa el nombre del perfil";
+"profile_alert_need_profile_name_title" = "Ingresá el nombre del perfil";
 "select_color" = "Elegir el color";
-"select_icon_profile_dialog_title" = "Elegir icono";
+"select_icon_profile_dialog_title" = "Elegir ícono";
 "select_map_icon" = "Icono de la ubicación en reposo";
 "select_navigation_icon" = "Icono de la ubicación mientras se mueve";
 "will_be_show_while_moving" = "Se mostrará al moverse";
@@ -1337,7 +1337,7 @@
 "hide_terrain" = "Ocultar terreno";
 "toggle_contour_lines" = "Mostrar/ocultar líneas de contorno";
 "toggle_hillshade" = "Mostrar/Ocultar terreno";
-"show_from_zoom_level" = "La vista inicia desde el nivel de zum";
+"show_from_zoom_level" = "Mostrar desde el nivel de zum";
 "quick_action_contour_lines_descr" = "Un botón que muestra u oculta las curvas de nivel en el mapa.";
 "hide_contour_lines" = "Ocultar curvas de nivel";
 "enable_contour_lines" = "Activar para ver las curvas de nivel en el mapa";
@@ -1563,7 +1563,7 @@
 "gpx_split_interval_descr" = "Elegí el intervalo de la traza en el que se mostrarán las marcas con la distancia o el tiempo.";
 "gpx_join_gaps" = "Unir espacios";
 "gpx_join_gaps_descr" = "Los huecos entre segmentos se conectarán.";
-"track_show_start_finish_icons" = "Mostrar los iconos de inicio y fin";
+"track_show_start_finish_icons" = "Mostrar los íconos de inicio y fin";
 "reset_to_original" = "Reiniciar al original";
 "route_line_color_elevation_description" = "La línea de la ruta se coloreará en función del perfil de elevación de la ruta.";
 "gpx_split_interval_none_descr" = "Elegí la opción de división deseada: por tiempo o por distancia.";
@@ -1590,9 +1590,9 @@
 "public_transport_ped_route_title" = "La ruta a pie es de aproximadamente %@ y podría ser más rápida que en transporte público";
 "calc_pedestrian_route" = "Calcular ruta a pie";
 "public_transport_warning_title" = "La navegación en transporte público se encuentra actualmente en fase de pruebas beta, se esperan errores e imprecisiones.";
-"public_transport_warning_descr_blog" = "Lea más sobre el cálculo de las rutas de OsmAnd en nuestro blog.";
+"public_transport_warning_descr_blog" = "Leé más sobre el cálculo de las rutas de OsmAnd en nuestro blog.";
 "public_transport_empty_warning_title" = "Por desgracia, OsmAnd no puede encontrar una ruta con esos ajustes.";
-"public_transport_try_change_settings" = "Intenta cambiar los ajustes.";
+"public_transport_try_change_settings" = "Intentá cambiar los ajustes.";
 "shared_string_walk" = "Caminar";
 "board_at" = "Esperar en la parada";
 "exit_at" = "Bajar en";
@@ -1705,7 +1705,7 @@
 "download_wiki_data" = "Descargar datos de Wikipedia para «%@»";
 "open_in_browser_wiki" = "Abrir artículo en línea";
 "explore_wikipedia_offline" = "Explorar Wikipedia sin conexión.";
-"online_webpage_warning" = "La página sólo está disponible en línea. ¿Abrirla en el navegador web?";
+"online_webpage_warning" = "La página solo está disponible en línea. ¿Abrirla en el navegador web?";
 "custom_search" = "Búsqueda personalizada";
 "add_custom_category" = "Añadir categoría personalizada";
 "poi_filter_custom_filter" = "Filtro personal";
@@ -1722,7 +1722,7 @@
 "rearrange_categories" = "Reordenar categorías";
 "visible_categories" = "Categorías visibles";
 "hidden_categories" = "Categorías ocultas";
-"create_custom_categories_list_promo" = "Cambia el orden de la lista y oculta las categorías. Importa o exporta todos los cambios como perfiles.";
+"create_custom_categories_list_promo" = "Cambiá el orden de la lista y ocultá las categorías. Importá o exportá todos los cambios como perfiles.";
 "reset_to_default_category_button_promo" = "«Restablecer al valor predefinido», restablecerá el orden de clasificación al valor predefinido de la instalación.";
 "search_poi_types_descr" = "Combiná tipos de PDI de diferentes categorías. Pulsá «Alternar» para marcar todo y el lado izquierdo para elegir una categoría.";
 "email_example_hint" = "usuario@ejemplo.com";
@@ -1784,8 +1784,8 @@
 "osm_live_payment_renews_annually" = "Renovar anualmente";
 "osm_live_payment_header" = "Frecuencia de pago:";
 "osm_live_payment_contribute_descr" = "Las donaciones ayudan a financiar la cartografía de OSM.";
-"purchase_dialog_title" = "Elegir plan";
-"purchase_dialog_travel_description" = "Comprar uno de los siguientes elementos para recibir la característica de la guía turística sin conexión:";
+"purchase_dialog_title" = "Elegí el plan";
+"purchase_dialog_travel_description" = "Comprá uno de los siguientes elementos para recibir la característica de la guía turística sin conexión:";
 "free_version_message" = "Existen %@ mapas para descargar o actualizar.";
 "get_osmand_live" = "Obtén «OsmAnd Live» para desbloquear todas las características: Actualizaciones diarias de mapas con descargas ilimitadas, todos los complementos gratuitos y de pago, artículos de Wikipedia, Wikiviajes y mucho más.";
 "osm_live_subscription" = "Suscripción de OsmAnd Live";
@@ -1801,7 +1801,7 @@
 "purchase_unlim_title" = "Comprar - %@";
 "in_app_purchase" = "Compras en la aplicación";
 "in_app_purchase_desc" = "Único pago";
-"in_app_purchase_desc_ex" = "Una vez comprado, estará permanentemente disponible para ti.";
+"in_app_purchase_desc_ex" = "Una vez comprado, estará permanentemente disponible para vos.";
 "unlock_all_features" = "Desbloquear todas las características de OsmAnd";
 "subscribe_email_desc" = "¡Suscríbete a nuestra lista de correo electrónico para recibir descuentos de la aplicación y obtener 3 descargas de mapas más!";
 "osm_live_subscribe_btn" = "Suscribirse";
@@ -1866,7 +1866,7 @@
 "rendering_attr_ice_road_name" = "Camino de hielo";
 "rendering_attr_highway_class_track_grade4_name" = "Grado 4";
 "rendering_attr_piste_difficulty_connection_name" = "Conexión";
-"rendering_attr_streetLightingNight_name" = "Mostrar solo de noche";
+"rendering_attr_streetLightingNight_name" = "Mostrar sólo de noche";
 "rendering_attr_piste_difficulty_aerialway_name" = "Vía aérea";
 "routing_attr_freeride_policy_name" = "Fuera de pista";
 "routing_attr_relief_smoothness_factor_more_plains_name" = "Plano (llanura)";
@@ -1949,9 +1949,9 @@
 "rendering_attr_piste_difficulty_undefined_name" = "Indefinido";
 "routing_attr_allow_motorway_name" = "Usar autopistas";
 "rendering_value_black_name" = "Negro";
-"routeInfo_winter_ice_road_name" = "Caminos de invierno y de hielo";
+"routeInfo_winter_ice_road_name" = "Caminos de invierno y hielo";
 "rendering_attr_hideBuildings_name" = "Edificios";
-"routing_attr_max_num_changes_description" = "Especifica el número máximo de transbordos";
+"routing_attr_max_num_changes_description" = "Especificá el número máximo de transbordos";
 "rendering_attr_winter_road_name" = "Camino de invierno";
 "rendering_attr_tramTrainRoutes_name" = "Rutas de tranvía y tren";
 "rendering_attr_smoothness_intermediate_name" = "Intermedio";
@@ -2636,7 +2636,7 @@
 "rendering_attr_seabedDetail_description" = "Información de texto adicional sobre la calificación de la superficie del fondo marino, los tipos de superficie combinados, la categoría y el taxón de la maleza o la hierba marina";
 "rendering_attr_noNatureReserveBoundaries_description" = "Oculta fronteras de reservas naturales,áreas protegidas y parques nacionales.";
 "rendering_attr_showBusRoutes_name" = "Rutas de colectivos";
-"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Visualización esquemática de iconos en zums bajos";
+"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Visualización esquemática de íconos en zums bajos";
 "rendering_attr_OSMMapperAssistantFixme_description" = "Muestra etiquetas que solicitan más atención (fixme)";
 "rendering_attr_showMtbScale_description" = "Muestra los senderos según la escala de MTB.";
 "routing_attr_difficulty_preference_expert_name" = "Experto";
@@ -2766,7 +2766,7 @@
 "map_widget_sunset" = "Atardecer";
 "map_widget_next_sunrise" = "Próximo amanecer";
 "without_permission_my_position_value" = "OsmAnd no tiene permisos de ubicación";
-"press_again_to_change_the_map_orientation" = "Pulsa de nuevo para cambiar la orientación del mapa";
+"press_again_to_change_the_map_orientation" = "Pulsá de nuevo para cambiar la orientación del mapa";
 "app_mode_moped" = "Ciclomotor";
 "speak_route_deviation" = "Anunciar desviación de la ruta";
 "map_widget_trip_recording_uphill" = "Ascenso";
@@ -2975,7 +2975,7 @@
 "download_images_settings_header" = "Los archivos sin conexión de Wikipedia en OsmAnd, no contienen imágenes. Éstos pueden descargarse mientras ves los artículos.";
 "cleared_travel_search_history" = "Historial vacío";
 "cache_size" = "Tamaño de la caché";
-"travel_card_download_descr" = "Descarga las guías turísticas de Wikiviajes para ver artículos sobre sitios alrededor del mundo, sin una conexión a Internet.";
+"travel_card_download_descr" = "Descargá las guías turísticas de Wikiviajes para ver artículos sobre sitios alrededor del mundo, sin una conexión a Internet.";
 "article_added_to_bookmark" = " añadido a destacados.";
 "no_travel_guides_data_title" = "No tienes datos de viajes";
 "shared_string_result" = "Resultado";
@@ -3339,7 +3339,7 @@
 "routing_attr_avoid_cobblestone_description" = "Evita pasar por caminos adoquinados";
 "routing_attr_avoid_cobblestone_name" = "Evitar adoquinado";
 "rendering_value_dark_orange_name" = "Anaranjado oscuro";
-"avoid_pt_types_descr" = "Marca los tipos de transporte público a evitar para la navegación:";
+"avoid_pt_types_descr" = "Marcá los tipos de transporte público a evitar para la navegación:";
 "shared_string_class" = "Clase";
 "avoid_pt_types" = "Evitar tipos de transporte…";
 "dangerous_goods_description" = "En algunos caminos y túneles se prohíbe el transporte de materiales peligrosos.";
@@ -3405,7 +3405,7 @@
 "resting_position_icon" = "Icono de la ubicación al estar en reposo";
 "view_angle_description" = "Muestra la dirección de la vista actual con un área triangular";
 "show_along_the_route" = "Mostrar a lo largo de la ruta";
-"shared_string_all_icons" = "Todos los iconos";
+"shared_string_all_icons" = "Todos los íconos";
 "view_angle" = "Ángulo de visión";
 "navigation_position_icon" = "Icono de la ubicación al navegar";
 "resting_navigation_position" = "Ubicación en reposo y al navegar";

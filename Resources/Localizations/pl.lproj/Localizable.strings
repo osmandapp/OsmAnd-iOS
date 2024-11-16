@@ -1234,7 +1234,7 @@
 "routing_attr_height_description" = "Określa dozwoloną wysokość pojazdu na trasach.";
 "rendering_attr_surface_sett_name" = "Kostka brukowa";
 "routing_attr_max_num_changes_name" = "Liczba zmian";
-"rendering_attr_alpineHiking_name" = "Klasyfikacja trudności";
+"rendering_attr_alpineHiking_name" = "Stopień trudności szlaków turystycznych";
 "rendering_attr_highway_class_street_name" = "Ulica";
 "rendering_attr_hideProposed_name" = "Proponowane obiekty";
 "routing_attr_avoid_share_taxi_name" = "Bez taksówek zbiorowych";
@@ -3205,3 +3205,7 @@
 "daynight_mode_sunrise_sunset_summary" = "Automatycznie przełącza się między motywami dziennym i nocnym w oparciu o lokalne godziny wschodu i zachodu słońca.";
 "daynight_mode_night_summary" = "Zawsze wyświetla mapę w ciemnym motywie, dostosowanym do warunków nocnych lub słabego oświetlenia.";
 "quick_action_need_to_add_item_to_list" = "Dodaj co najmniej jeden element do listy w ustawieniach \"Szybkiej Akcji\"";
+"rendering_value_managerName_name" = "Według nazwy menedżera";
+"rendering_attr_padusHideBoundaries_name" = "Ukryj granice gruntów publicznych";
+"rendering_value_access_name" = "Według typu dostępu";
+"rendering_attr_padusDisplayMode_description" = "Według typu dostępu lub nazwy menedżera";

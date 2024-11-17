@@ -622,8 +622,10 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     if (_subtext.length == 0)
     {
         self.unitView.hidden = YES;
+        self.titleOrEmptyLabel.text = self.widgetSizeStyle == EOAWidgetSizeStyleSmall
+        ? [_contentTitle upperCase]
+        :  @"";
         self.unitOrEmptyLabel.text = @"";
-        self.titleOrEmptyLabel.text = @"";
         _unitOrEmptyLabelWidthConstraint.constant = 0;
     }
     else
@@ -648,24 +650,14 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     if (self.isFullRow)
     {
          _contentStackViewSimpleWidget.spacing = 0;
+        self.valueLabel.textAlignment = NSTextAlignmentCenter;
         if (self.widgetSizeStyle == EOAWidgetSizeStyleSmall)
         {
             _contentStackViewSimpleWidget.spacing = paddingBetweenIconAndValue;
             self.emptyViewRightPlaceholderFullRow.hidden = YES;
-            if (_subtext.length == 0)
-            {
-                self.emptyViewRightPlaceholderFullRow.hidden = !isVisibleIcon;
-                self.valueLabel.textAlignment = NSTextAlignmentCenter;
-            }
-            else
-            {
-                self.emptyViewRightPlaceholderFullRow.hidden = YES;
-                self.valueLabel.textAlignment = NSTextAlignmentNatural;
-            }
         } else {
             _contentStackViewSimpleWidget.spacing = 0;
             self.emptyViewRightPlaceholderFullRow.hidden = !isVisibleIcon;
-            self.valueLabel.textAlignment = NSTextAlignmentCenter;
         }
     }
     else

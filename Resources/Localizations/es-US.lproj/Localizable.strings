@@ -1337,7 +1337,7 @@
 "hide_terrain" = "Ocultar terreno";
 "toggle_contour_lines" = "Mostrar/ocultar líneas de contorno";
 "toggle_hillshade" = "Mostrar/Ocultar terreno";
-"show_from_zoom_level" = "La vista inicia desde el nivel de zum";
+"show_from_zoom_level" = "Mostrar desde el nivel de zum";
 "quick_action_contour_lines_descr" = "Un botón que muestra u oculta las curvas de nivel en el mapa.";
 "hide_contour_lines" = "Ocultar curvas de nivel";
 "enable_contour_lines" = "Activar para ver las curvas de nivel en el mapa";

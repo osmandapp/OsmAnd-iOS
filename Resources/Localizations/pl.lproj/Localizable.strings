@@ -572,7 +572,7 @@
 "res_dmap" = "Mapa szczegółowa";
 "res_cancel_upd_q" = "Zamierzasz anulować aktualizację %@.";
 "res_cancel_inst_q" = "Zamierzasz anulować instalację %@.";
-"created_on" = "Utworzono na";
+"created_on" = "Utworzono";
 "feedback" = "Opinie";
 "menu_about" = "O programie";
 "pickup_car_at" = "Odbierz samochód z parkingu o";

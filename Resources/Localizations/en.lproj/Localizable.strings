@@ -183,6 +183,16 @@
 "help_article_plugins_openplacereviews_name" = "OpenPlaceReviews";
 "help_article_plugins_custom_name" = "Custom package";
 "help_article_troubleshooting_android_auto_name" = "Android Auto";
+"help_article_map_tracks_name" = "Tracks";
+"help_article_map_tracks_track_context_menu_name" = "Track Context Menu";
+"help_article_map_tracks_appearance_name" = "Track Appearance";
+"help_article_map_routes_name" = "Routes";
+"help_article_personal_color_palette_schemes_name" = "Color Schemes";
+"help_article_personal_tracks_manage_tracks_name" = "Manage Tracks";
+"help_article_personal_tracks_smart_folder_name" = "Smart Folder (Filter)";
+"help_article_troubleshooting_resources_name" = "Resources and Customizations";
+"help_article_troubleshooting_video_tutorials_name" = "Video Tutorials and Guides";
+"obd_plugin_name" = "Vehicle Metrics";
 "global_settings" = "Global Settings";
 "shared_string_markers" = "Markers";
 "shared_string_setup_route" = "Setup a route";

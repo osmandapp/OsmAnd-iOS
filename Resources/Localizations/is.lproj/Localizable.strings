@@ -3553,3 +3553,8 @@
 "download_persian_voice_alert_descr_ios" = "Stillingar -> Aukið aðgengi -> Talað efni -> Raddir -> Persneska -> Dariush";
 "download_persian_voice_alert_descr_macos" = "Stillingar -> Aukið aðgengi -> Talað efni -> Rödd kerfis -> Sýsla með raddir -> Persneska -> Dariush";
 "max_sensor_speed" = "Hraði skynjara, hámark";
+"lock_screen" = "Læsa skjá";
+"screen_is_locked_by_action_button" = "Snertiskjárinn er læstur. Ýttu á hnapp til að aflæsa.";
+"lock_screen_description" = "Virkjar eða gerir snertiskjá óvirkan til að koma í veg fyrir óviljandi snertingar";
+"shared_string_interface" = "Viðmót";
+"screen_is_unlocked" = "Snertiskjárinn er ólæstur.";

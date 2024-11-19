@@ -126,9 +126,6 @@
                                       modeCell:nil];
     }
 
-//    CLLocationCoordinate2D startChartPoint = self.trackMenuDelegate && [self.trackMenuDelegate openedFromMap]
-//            ? [self.trackMenuDelegate getPinLocation] : kCLLocationCoordinate2DInvalid;
-
     OAGPXTableSectionData *segmentSectionData = [OAGPXTableSectionData withData:@{
             kTableKey: [NSString stringWithFormat:@"section_%p", (__bridge void *) segment],
             kTableValues: @{

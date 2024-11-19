@@ -887,6 +887,7 @@ extension MapSettingsGpxViewController: OASelectTrackFolderDelegate {
         if let newFolderPath = app?.gpxPath.appendingPathComponent(addedFolderName), !FileManager.default.fileExists(atPath: newFolderPath) {
             do {
                 try FileManager.default.createDirectory(atPath: newFolderPath, withIntermediateDirectories: true)
+                onFolderSelected(addedFolderName)
                 updateData()
                 delegate?.onVisibleTracksUpdate()
             } catch let error {

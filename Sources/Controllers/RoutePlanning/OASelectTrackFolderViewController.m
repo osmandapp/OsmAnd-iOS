@@ -256,14 +256,11 @@
 
 #pragma mark - OAAddTrackFolderDelegate
 
-- (void)onTrackFolderAdded:(NSString *)folderName 
+- (void)onTrackFolderAdded:(NSString *)folderName
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        UIViewController *controllerToDismiss = self.presentingViewController ?: self;
-        [controllerToDismiss dismissViewControllerAnimated:YES completion:^{
-            [_delegate onFolderAdded:folderName];
-        }];
-    });
+    [_delegate onFolderAdded:folderName];
+    UIViewController *controllerToDismiss = self.presentingViewController ?: self;
+    [controllerToDismiss dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - OASTrackFolderLoaderTaskLoadTracksListener

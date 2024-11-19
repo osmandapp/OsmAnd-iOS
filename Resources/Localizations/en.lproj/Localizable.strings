@@ -607,6 +607,9 @@
 "select_tracks_to_display" =  "Select tracks to display them on the map.";
 "show_all_tracks" = "Show all tracks";
 "recently_visible" = "Recently visible %@";
+"sort_subfolders_tracks" = "Sort subfolders";
+"shared_string_subfolders_in" = "Subfolders in";
+"shared_string_sorted_by" = "is sorted by:";
 "shared_string_nearest" = "Nearest";
 "track_sort_az" = "Name A - Z";
 "track_sort_za" = "Name Z - A";

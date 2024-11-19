@@ -225,6 +225,8 @@ static NSString * const showDistanceRulerKey = @"showDistanceRuler";
 static NSString * const showElevationProfileWidgetKey = @"show_elevation_profile_widget";
 static NSString * const showSlopesOnElevationWidget = @"show_slopes_on_elevation_widget";
 static NSString * const customWidgetKeys = @"custom_widgets_keys";
+static NSString * const tracksSortModesKey = @"tracks_tabs_sort_modes";
+static NSString * const searchTracksSortModesKey = @"search_tracks_sort_mode";
 static NSString * const showSpeedometerKey = @"show_speedometer";
 static NSString * const speedometerSizeKey = @"speedometer_size";
 static NSString * const showSpeedLimitWarningKey = @"show_speed_limit_warning";
@@ -4159,6 +4161,12 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
         
         _customWidgetKeys = [OACommonStringList withKey:customWidgetKeys defValue:@[]];
         [_profilePreferences setObject:_customWidgetKeys forKey:customWidgetKeys];
+        
+        _tracksSortModes = [[[OACommonStringList withKey:tracksSortModesKey defValue:@[]] makeGlobal] makeShared];
+        [_globalPreferences setObject:_tracksSortModes forKey:tracksSortModesKey];
+        
+        _searchTracksSortModes = [OACommonString withKey:searchTracksSortModesKey defValue:[TracksSortModeHelper defaultSortModeTitle]];
+        [_globalPreferences setObject:_searchTracksSortModes forKey:searchTracksSortModesKey];
 
         _showArrivalTime = [OACommonBoolean withKey:showArrivalTimeKey defValue:YES];
         _showIntermediateArrivalTime = [OACommonBoolean withKey:showIntermediateArrivalTimeKey defValue:YES];
@@ -5354,6 +5362,45 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
     }
 }
 
+- (NSDictionary<NSString *, NSString *> *)getTracksSortModes
+{
+    return [self getTrackSortModesWithArray:[_tracksSortModes get]];
+}
+
+- (NSDictionary<NSString *, NSString *> *)getTrackSortModesWithArray:(NSArray<NSString *> *)modes
+{
+    NSMutableDictionary<NSString *, NSString *> *sortModes = [NSMutableDictionary dictionary];
+    if (modes != nil && modes.count > 0)
+    {
+        for (NSString *sortMode in modes)
+        {
+            NSArray<NSString *> *parts = [sortMode componentsSeparatedByString:@",,"];
+            if (parts.count == 2)
+                sortModes[parts[0]] = parts[1];
+        }
+    }
+    
+    return [sortModes copy];
+}
+
+- (void)saveTracksSortModes:(NSDictionary<NSString *, NSString *> *)tabsSortModes
+{
+    NSArray<NSString *> *sortModes = [self getPlainSortModesFromDictionary:tabsSortModes];
+    [_tracksSortModes set:sortModes];
+}
+
+- (NSArray<NSString *> *)getPlainSortModesFromDictionary:(NSDictionary<NSString *, NSString *> *)tabsSortModes
+{
+    NSMutableArray<NSString *> *sortTypes = [NSMutableArray array];
+    for (NSString *key in tabsSortModes.allKeys)
+    {
+        NSString *value = tabsSortModes[key];
+        NSString *combined = [NSString stringWithFormat:@"%@,,%@", key, value];
+        [sortTypes addObject:combined];
+    }
+    
+    return [sortTypes copy];
+}
 
 // navigation settings
 - (void) setUseFastRecalculation:(BOOL)useFastRecalculation

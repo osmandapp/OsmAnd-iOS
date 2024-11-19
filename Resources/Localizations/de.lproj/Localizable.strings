@@ -3587,3 +3587,7 @@
 "screen_is_unlocked" = "Der Touchscreen ist entsperrt.";
 "shared_string_interface" = "Benutzeroberfläche";
 "lock_screen_description" = "Touchfunktion aktivieren oder deaktivieren, um versehentliche Berührungen zu verhindern";
+"help_article_map_routes_name" = "Routen";
+"help_article_map_tracks_name" = "Tracks";
+"help_article_map_tracks_track_context_menu_name" = "Track Kontextmenü";
+"help_article_personal_color_palette_schemes_name" = "Farbschemen";

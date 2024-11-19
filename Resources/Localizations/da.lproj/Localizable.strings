@@ -3570,3 +3570,16 @@
 "lock_screen_description" = "Aktiverer eller deaktiverer trykfølsom skærmfunktionalitet for at forhindre utilsigtede tryk";
 "lock_screen" = "Lås skærm";
 "screen_is_locked_by_action_button" = "Den berøringsfølsomme skærm er låst. Tryk på knappen for at låse op.";
+"help_article_map_tracks_name" = "Spor";
+"help_article_map_tracks_track_context_menu_name" = "Kontekstmenu for spor";
+"help_article_map_tracks_appearance_name" = "Udseende på spor";
+"help_article_map_routes_name" = "Ruter";
+"help_article_personal_color_palette_schemes_name" = "Farvesammensætninger";
+"help_article_personal_tracks_manage_tracks_name" = "Administrer spor";
+"help_article_troubleshooting_resources_name" = "Ressourcer og tilpasninger";
+"help_article_troubleshooting_video_tutorials_name" = "Videovejledninger og guides";
+"obd_plugin_name" = "Målinger af køretøj";
+"sort_subfolders_tracks" = "Sorter undermapper";
+"shared_string_subfolders_in" = "Undermapper i";
+"shared_string_sorted_by" = "er sorteret efter:";
+"help_article_personal_tracks_smart_folder_name" = "Smartmappe (filter)";

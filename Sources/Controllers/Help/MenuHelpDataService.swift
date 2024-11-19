@@ -251,11 +251,11 @@ final class MenuHelpDataService: NSObject, XMLParserDelegate {
             return localizedString("plugin_nautical_name")
         case "plugins_contour_lines":
             return localizedString("srtm_plugin_name")
-        case "search":
+        case "search", "web_web_search":
             return localizedString("shared_string_search")
         case "map_legend":
             return localizedString("map_legend")
-        case "map":
+        case "map", "web_web_map":
             return localizedString("shared_string_map")
         case "map_configure_map_menu":
             return localizedString("configure_map")
@@ -281,11 +281,11 @@ final class MenuHelpDataService: NSObject, XMLParserDelegate {
             return localizedString("shared_string_markers")
         case "personal_myplaces":
             return localizedString("shared_string_my_places")
-        case "personal_osmand_cloud":
+        case "personal_osmand_cloud", "web_web_cloud":
             return localizedString("osmand_cloud")
-        case "personal_tracks":
+        case "personal_tracks", "map_tracks_tracks_article":
             return localizedString("shared_string_gpx_tracks")
-        case "plan_route_create_route":
+        case "plan_route_create_route", "web_planner":
             return localizedString("plan_route")
         case "plan_route_travel_guides":
             return localizedString("wikivoyage_travel_guide")
@@ -307,6 +307,16 @@ final class MenuHelpDataService: NSObject, XMLParserDelegate {
             return localizedString("layer_map_appearance")
         case "widgets_quick_action":
             return localizedString("configure_screen_quick_action")
+        case "route_parameters":
+            return localizedString("help_article_navigation_routing_name")
+        case "personal_maps_resources":
+            return localizedString("res_mapsres")
+        case "plugins_topography":
+            return localizedString("srtm_plugin_name")
+        case "plugins_vehicle_metrics":
+            return localizedString("obd_plugin_name")
+        case "web":
+            return localizedString("website")
         default:
             return nil
         }

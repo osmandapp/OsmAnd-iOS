@@ -3572,3 +3572,16 @@
 "screen_is_unlocked" = "Екран осетљив на додир је откључан.";
 "shared_string_interface" = "Сучеље";
 "lock_screen_description" = "Омогућава или онемогућава функцију екрана осетљивог на додир да спречи случајне додире";
+"help_article_map_tracks_name" = "Путање";
+"help_article_map_routes_name" = "Руте";
+"help_article_personal_color_palette_schemes_name" = "Шеме боја";
+"help_article_personal_tracks_manage_tracks_name" = "Управљање путањама";
+"help_article_personal_tracks_smart_folder_name" = "Паметни фолдер (Филтер)";
+"help_article_troubleshooting_video_tutorials_name" = "Видео туторијали и Водичи";
+"obd_plugin_name" = "Метрика возила";
+"shared_string_subfolders_in" = "Подфолдери у";
+"help_article_map_tracks_track_context_menu_name" = "Помоћни мени путање";
+"help_article_map_tracks_appearance_name" = "Изглед путање";
+"help_article_troubleshooting_resources_name" = "Ресурси и Прилагођавања";
+"sort_subfolders_tracks" = "Сортирање подфолдера";
+"shared_string_sorted_by" = "је сортирано по:";

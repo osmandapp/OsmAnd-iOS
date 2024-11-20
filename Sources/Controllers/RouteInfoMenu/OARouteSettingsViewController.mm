@@ -23,7 +23,7 @@
 #import "OASizes.h"
 #import "GeneratedAssetSymbols.h"
 
-@interface OARouteSettingsViewController ()
+@interface OARouteSettingsViewController () <OASettingsDataDelegate>
 
 @end
 
@@ -121,17 +121,30 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OALocalRoutingParameter *param = _data[@(indexPath.section)][indexPath.row];
-    NSString *text = [param getText];
-    //NSString *description = [param getDescription];
-    NSString *value = [param isKindOfClass:OAHazmatRoutingParameter.class]
-            ? OALocalizedString([param isSelected] ? @"shared_string_yes" : @"shared_string_no")
-            : [param getValue];
-    //UIImage *icon = [param getIcon];
-    NSString *type = [param getCellType];
+    id param = _data[@(indexPath.section)][indexPath.row];
+    NSString *cellType, *key, *text, *value;
+    UIImage *icon;
+    UIColor *iconColor;
     OAApplicationMode *appMode = [self.routingHelper getAppMode];
+    if (![param isKindOfClass:OALocalRoutingParameter.class])
+    {
+        cellType = param[cellTypeRouteSettingsKey];
+        key =  param[keyRouteSettingsKey];
+        text = param[titleRouteSettingsKey];
+        value = param[valueRouteSettingsKey];
+        icon = param[iconRouteSettingsKey];
+        iconColor = param[iconTintRouteSettingsKey];
+    }
+    else
+    {
+        cellType = [param getCellType];
+        text = [param getText];
+        value = [param isKindOfClass:OAHazmatRoutingParameter.class] ? OALocalizedString([param isSelected] ? @"shared_string_yes" : @"shared_string_no") : [param getValue];
+        icon = [param isKindOfClass:OAHazmatRoutingParameter.class] ? [param getIcon] : [[param getIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        iconColor = [appMode getProfileColor];
+    }
     
-    if ([type isEqualToString:[OAValueTableViewCell getCellIdentifier]])
+    if ([cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
         OAValueTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
@@ -147,12 +160,12 @@
             [cell.titleLabel setText:text];
             [cell valueVisibility:value || value.length > 0];
             [cell.valueLabel setText:value];
-            cell.leftIconView.image = [param isKindOfClass:OAHazmatRoutingParameter.class] ? [param getIcon] : [[param getIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.leftIconView.tintColor = [appMode getProfileColor];
+            cell.leftIconView.image = icon;
+            cell.leftIconView.tintColor = iconColor;
         }
         return cell;
     }
-    else if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
+    else if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
         OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
@@ -167,11 +180,9 @@
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.switchView setOn:[param isChecked]];
             [param setControlAction:cell.switchView];
-
             cell.titleLabel.text = text;
-            cell.leftIconView.image = [param.getIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.leftIconView.image = [[param getIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.leftIconView.tintColor = [param isChecked] ? [appMode getProfileColor] : [UIColor colorNamed:ACColorNameIconColorDisabled];
-
             BOOL showDivider = [param hasOptions];
             [cell dividerVisibility:showDivider];
             cell.selectionStyle = showDivider ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
@@ -187,9 +198,31 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    OALocalRoutingParameter *param = _data[@(indexPath.section)][indexPath.row];
-    [param rowSelectAction:tableView indexPath:indexPath];
+    id param = _data[@(indexPath.section)][indexPath.row];
+    if (![param isKindOfClass:OALocalRoutingParameter.class])
+    {
+        if ([param[keyRouteSettingsKey] isEqualToString:dangerousGoodsRouteSettingsUsaKey])
+        {
+            OABaseSettingsViewController* settingsViewController = [[RouteParameterHazmatUsa alloc] initWithApplicationMode:[self.routingHelper getAppMode] parameterIds:param[paramsIdsRouteSettingsKey] parameterNames:param[paramsNamesRouteSettingsKey]];
+            if (settingsViewController)
+            {
+                settingsViewController.delegate = self;
+                [self showModalViewController:settingsViewController];
+            }
+        }
+    }
+    else
+    {
+        [param rowSelectAction:tableView indexPath:indexPath];
+    }
+}
+
+#pragma mark - OASettingsDataDelegate
+
+- (void) onSettingsChanged;
+{
+    [self generateData];
+    [self.tableView reloadData];
 }
 
 @end

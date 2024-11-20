@@ -62,7 +62,7 @@ static NSString *iconRouteSettingsKey = @"iconRouteSettingsKey";
 static NSString *iconTintRouteSettingsKey = @"iconTintRouteSettingsKey";
 static NSString *paramsIdsRouteSettingsKey = @"paramsIdsRouteSettingsKey";
 static NSString *paramsNamesRouteSettingsKey = @"paramsNamesRouteSettingsKey";
-static NSString *dangerousGoodsRouteSettingsUsaKey = @"dangerous_goods_usa";
+static NSString *dangerousGoodsRouteSettingsUsaKey = @"dangerousGoodsRouteSettingsUsaKey";
 
 @class OAApplicationMode, OARoutingHelper, OAAppSettings;
 @class OALocalRoutingParameterGroup, OALocalRoutingParameter;

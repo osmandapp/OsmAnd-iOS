@@ -974,7 +974,7 @@
 "angular_units" = "وحدات قياس الزاوي";
 "angular_units_descr" = "تغيير قياس زاوية الازيموث.";
 "show_tunnels" = "الأنفاق";
-"map_magnifier" = "حجم الخريطة";
+"map_magnifier" = "مُكبِّر الخريطة";
 "text_size" = "حجم النص";
 "mapillary" = "مابيلاري";
 "retry" = "أعد المحاولة";

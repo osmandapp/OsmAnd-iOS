@@ -183,19 +183,21 @@
     {
         if ([state isKindOfClass:OATrackMenuViewControllerState.class])
         {
-            if (gpx.isShowCurrentTrack) {
+            if (gpx.isShowCurrentTrack)
                 self.doc = [OASavingTrackHelper.sharedInstance currentTrack];
-            } else {
+            else if (!self.doc)
                 self.doc = [OASGpxUtilities.shared loadGpxFileFile:gpx.getFile];
-            }
             _docRect = self.doc.getRect;
             double clat = _docRect.bottom / 2.0 + _docRect.top / 2.0;
             double clon = _docRect.left / 2.0 + _docRect.right / 2.0;
             _docCenter = CLLocationCoordinate2DMake(clat, clon);
 
             _reopeningState = (OATrackMenuViewControllerState *) state;
-            _isNewRoute = routeKey;
-            _routeKey = routeKey ? routeKey : [OARouteKey fromGpx:self.doc.networkRouteKeyTags];
+            if (routeKey && _reopeningState.routeKey != routeKey)
+                _reopeningState.routeKey = routeKey;
+            _isNewRoute = _reopeningState.routeKey != nil
+                && [[self.doc.path stringByDeletingLastPathComponent].lastPathComponent isEqualToString:@"Temp"];
+            _routeKey = _reopeningState.routeKey ?: [OARouteKey fromGpx:self.doc.networkRouteKeyTags];
             if (_routeKey && !_reopeningState.trackIcon)
             {
                 OANetworkRouteDrawable *drawable = [[OANetworkRouteDrawable alloc] initWithRouteKey:_routeKey];
@@ -268,6 +270,7 @@
 
 - (void) selectTabOnLaunch:(EOATrackMenuHudSegmentsStatisticsTab)selectedStatisticsTab
 {
+    [_uiBuilder runAdditionalActions];
     NSNumber *tabIndex = kOverviewTabIndex;
     if (selectedStatisticsTab == EOATrackMenuHudSegmentsStatisticsOverviewTab)
         tabIndex = kOverviewTabIndex;
@@ -409,7 +412,7 @@
 {
     __weak __typeof(self) weakSelf = self;
     [super hide:YES duration:duration onComplete:^{
-        if (weakSelf.routeKey)
+        if (weakSelf.routeKey && !_pushedNewScreen)
             [weakSelf.mapViewController hideTempGpxTrack];
         [weakSelf stopLocationServices];
         [weakSelf.mapViewController.mapLayers.gpxMapLayer hideCurrentStatisticsLocation];
@@ -871,17 +874,16 @@
 
 - (void)openAnalysis:(NSArray<NSNumber *> *)types
 {
-    if (!self.analysis)
-    {
-        if (!self.gpx.isShowCurrentTrack)
-        {
-            self.analysis = self.gpx.dataItem.getAnalysis;;
-        }
-    }
-    [self openAnalysis:self.analysis withTypes:types];
+    if (!self.analysis && ![self.gpx isShowCurrentTrack])
+        self.analysis = [self.gpx.dataItem getAnalysis];
+    [self openAnalysis:self.analysis
+               segment:[OARouteLineChartHelper getTrackSegment:self.analysis
+                                                       gpxItem:self.doc]
+             withTypes:types];
 }
 
 - (void)openAnalysis:(OASGpxTrackAnalysis *)analysis
+             segment:(OASTrkSegment *)segment
            withTypes:(NSArray<NSNumber *> *)types
 {
     _pushedNewScreen = YES;
@@ -891,13 +893,12 @@
         state.openedFromTrackMenu = YES;
         OASGpxFile *gpxFile = weakSelf.doc;
         if (!gpxFile)
-        {
             weakSelf.doc = [OASGpxUtilities.shared loadGpxFileFile:weakSelf.gpx.dataItem.file];
-        }
         
         [weakSelf.mapPanelViewController openTargetViewWithRouteDetailsGraph:weakSelf.doc
                                                                    trackItem:weakSelf.gpx
                                                                     analysis:analysis
+                                                                     segment:segment
                                                             menuControlState:state
                                                                      isRoute:NO];
     }];
@@ -1537,7 +1538,15 @@
         NSIndexPath *indexPath = [self.tableView indexPathForCell:actionsTabCell];
         touchPointArea = [self.view convertRect:[self.tableView rectForRowAtIndexPath:indexPath] fromView:self.tableView];
     }
-    [_gpxUIHelper openExportForTrack:self.gpx.dataItem gpxDoc:self.doc isCurrentTrack:self.isCurrentTrack inViewController:self hostViewControllerDelegate:nil touchPointArea:touchPointArea];
+    if (self.gpx.dataItem)
+    {
+        [_gpxUIHelper openExportForTrack:self.gpx.dataItem
+                                  gpxDoc:self.doc
+                          isCurrentTrack:[self isCurrentTrack]
+                        inViewController:self
+              hostViewControllerDelegate:nil
+                          touchPointArea:touchPointArea];
+    }
 }
 
 - (void)openNavigation
@@ -1601,6 +1610,12 @@
         }
     }
     self.gpx = [[OASTrackItem alloc] initWithFile:gpx.file];
+    if (self.gpx && !self.gpx.dataItem)
+    {
+        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:self.gpx.path];
+        if (gpx)
+            self.gpx.dataItem = gpx;
+    }
 
     _routeKey = [OARouteKey fromGpx:self.doc.networkRouteKeyTags];
     _isNewRoute = NO;

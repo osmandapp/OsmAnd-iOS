@@ -82,13 +82,22 @@
                                      bottomOffset:4
                               useGesturesAndScale:YES];
     OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.gpx.path]];
-    BOOL calcWithoutGaps = !gpx.joinSegments && (self.gpx.tracks.count > 0 && self.gpx.tracks.firstObject.generalTrack);
+    BOOL withoutGaps = YES;
+    if ([self.gpx isShowCurrentTrack])
+    {
+        withoutGaps = !gpx.joinSegments
+        && (self.gpx.tracks.count == 0 || [self.gpx.tracks.firstObject isGeneralTrack]);
+    }
+    else
+    {
+        withoutGaps = self.gpx.tracks.count > 0 && [self.gpx.tracks.firstObject isGeneralTrack] && gpx.joinSegments;
+    }
     [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.chartView
                                       analysis:self.analysis
                                      firstType:GPXDataSetTypeAltitude
                                     secondType:GPXDataSetTypeSlope
                                       axisType:GPXDataSetAxisTypeDistance
-                               calcWithoutGaps:calcWithoutGaps];
+                               calcWithoutGaps:withoutGaps];
 
     self.statisticsChart = routeStatsCell.chartView;
     for (UIGestureRecognizer *recognizer in self.statisticsChart.gestureRecognizers)
@@ -195,10 +204,15 @@
     _tableView.rowHeight = UITableViewAutomaticDimension;
     _tableView.estimatedRowHeight = 125.;
 
-    [self.routeLineChartHelper refreshChart:self.statisticsChart
-                              fitTrackOnMap:YES
-                                   forceFit:NO
-                           recalculateXAxis:YES];
+    if (self.analysis && self.segment)
+    {
+        [self.routeLineChartHelper refreshChart:self.statisticsChart
+                                  fitTrackOnMap:YES
+                                       forceFit:NO
+                               recalculateXAxis:YES
+                                       analysis:self.analysis
+                                        segment:self.segment];
+    }
     [self updateRouteStatisticsGraph];
 }
 
@@ -341,10 +355,15 @@
                && (((UITapGestureRecognizer *) recognizer).nsuiNumberOfTapsRequired == 2)))
              && recognizer.state == UIGestureRecognizerStateEnded)
     {
-        [self.routeLineChartHelper refreshChart:self.statisticsChart
-                                  fitTrackOnMap:YES
-                                       forceFit:NO
-                               recalculateXAxis:YES];
+        if (self.analysis && self.segment)
+        {
+            [self.routeLineChartHelper refreshChart:self.statisticsChart
+                                      fitTrackOnMap:YES
+                                           forceFit:NO
+                                   recalculateXAxis:YES
+                                           analysis:self.analysis
+                                            segment:self.segment];
+        }
     }
 }
 
@@ -386,10 +405,15 @@
         if (h)
         {
             [self.statisticsChart highlightValue:h callDelegate:YES];
-            [self.routeLineChartHelper refreshChart:self.statisticsChart
-                                      fitTrackOnMap:YES
-                                           forceFit:NO
-                                   recalculateXAxis:NO];
+            if (self.analysis && self.segment)
+            {
+                [self.routeLineChartHelper refreshChart:self.statisticsChart
+                                          fitTrackOnMap:YES
+                                               forceFit:NO
+                                       recalculateXAxis:NO
+                                               analysis:self.analysis
+                                                segment:self.segment];
+            }
         }
     }
 }
@@ -480,10 +504,15 @@
 
 - (void)chartValueSelected:(ChartViewBase *)chartView entry:(ChartDataEntry *)entry highlight:(ChartHighlight *)highlight
 {
-    [self.routeLineChartHelper refreshChart:self.statisticsChart
-                              fitTrackOnMap:YES
-                                   forceFit:NO
-                           recalculateXAxis:NO];
+    if (self.analysis && self.segment)
+    {
+        [self.routeLineChartHelper refreshChart:self.statisticsChart
+                                  fitTrackOnMap:YES
+                                       forceFit:NO
+                               recalculateXAxis:NO
+                                       analysis:self.analysis
+                                        segment:self.segment];
+    }
 }
 
 #pragma mark - OAStatisticsSelectionDelegate

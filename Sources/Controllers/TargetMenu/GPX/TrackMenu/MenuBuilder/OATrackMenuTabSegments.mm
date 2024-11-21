@@ -69,47 +69,36 @@
     if (self.trackMenuDelegate)
     {
         segments = [self.trackMenuDelegate getSegments];
-
         if (!_routeLineChartHelper)
             _routeLineChartHelper = [self.trackMenuDelegate getLineChartHelper];
     }
 
     OASTrkSegment *generalSegment = self.trackMenuDelegate ? [self.trackMenuDelegate getGeneralSegment] : nil;
-    OASGpxTrackAnalysis *generalAnalysis = self.trackMenuDelegate ? [self.trackMenuDelegate getGeneralAnalysis] : nil;
-    if (generalSegment && generalAnalysis)
+    if (generalSegment)
     {
         [self generateSegmentSectionData:generalSegment
-                                analysis:generalAnalysis
+                                analysis:[OARouteLineChartHelper getAnalysisFor:generalSegment]
                                    index:0];
     }
 
     for (NSInteger index = 0; index < segments.count; index++)
     {        
-        OASGpxTrackAnalysis *analysis = [self getAnalysisFor:segments[index]];
-        
-        [self generateSegmentSectionData:segments[index]
-                                analysis:analysis
-                                   index:generalSegment ? index + 1 : index];
+        OASGpxTrackAnalysis *analysis = [OARouteLineChartHelper getAnalysisFor:segments[index]];
+        if (analysis)
+        {
+            [self generateSegmentSectionData:segments[index]
+                                    analysis:analysis
+                                       index:generalSegment ? index + 1 : index];
+        }
     }
 
     self.isGeneratedData = YES;
-}
-
-- (OASGpxTrackAnalysis *)getAnalysisFor:(OASTrkSegment *)segment
-{
-    OASGpxTrackAnalysis *analysis = [[OASGpxTrackAnalysis alloc] init];
-    auto splitSegments = [ArraySplitSegmentConverter toKotlinArrayFrom:@[[[OASSplitSegment alloc] initWithSegment:segment]]];
-    [analysis prepareInformationFileTimeStamp:0 pointsAnalyser:nil splitSegments:splitSegments];
-    return analysis;
 }
 
 - (void)generateSegmentSectionData:(OASTrkSegment *)segment
                           analysis:(OASGpxTrackAnalysis *)analysis
                              index:(NSInteger)index
 {
-    if (!segment)
-        return;
-
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:ElevationChartCell.reuseIdentifier owner:self options:nil];
     ElevationChartCell *cell = (ElevationChartCell *) nib[0];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -233,17 +222,18 @@
         ElevationChartCell *cell = ((ElevationChartCell *) sectionData.values[@"cell_value"]);
         if (cell)
         {
-            if (_routeLineChartHelper)
+            OASGpxTrackAnalysis *analysis = sectionData.values[@"analysis_value"];
+            OASTrkSegment *segment = sectionData.values[@"segment_value"];
+            if (self.trackMenuDelegate)
+                [self.trackMenuDelegate updateChartHighlightValue:cell.chartView segment:segment];
+            if (analysis && segment && _routeLineChartHelper)
             {
                 [_routeLineChartHelper refreshChart:cell.chartView
                                       fitTrackOnMap:YES
                                            forceFit:YES
-                                   recalculateXAxis:YES];
-            }
-            if (self.trackMenuDelegate)
-            {
-                [self.trackMenuDelegate updateChartHighlightValue:cell.chartView
-                                                          segment:sectionData.values[@"segment_value"]];
+                                   recalculateXAxis:YES
+                                           analysis:analysis
+                                            segment:segment];
             }
         }
     }
@@ -391,10 +381,19 @@
 {
     if (_routeLineChartHelper && [chartView isKindOfClass:LineChartView.class])
     {
-        [_routeLineChartHelper refreshChart:(LineChartView *) chartView
-                              fitTrackOnMap:YES
-                                   forceFit:NO
-                           recalculateXAxis:NO];
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:chartView.tag & 0x3FF inSection:chartView.tag >> 10];
+        OAGPXTableSectionData *sectionData = self.tableData.subjects[indexPath.section];
+        OASGpxTrackAnalysis *analysis = sectionData.values[@"analysis_value"];
+        OASTrkSegment *segment = sectionData.values[@"segment_value"];
+        if (analysis && segment)
+        {
+            [_routeLineChartHelper refreshChart:(LineChartView *) chartView
+                                  fitTrackOnMap:YES
+                                       forceFit:NO
+                               recalculateXAxis:NO
+                                       analysis:analysis
+                                        segment:segment];
+        }
     }
 }
 
@@ -413,10 +412,19 @@
         if (h)
         {
             [lineChartView highlightValue:h callDelegate:YES];
-            [_routeLineChartHelper refreshChart:lineChartView
-                                  fitTrackOnMap:YES
-                                       forceFit:NO
-                               recalculateXAxis:NO];
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:lineChartView.tag & 0x3FF inSection:lineChartView.tag >> 10];
+            OAGPXTableSectionData *sectionData = self.tableData.subjects[indexPath.section];
+            OASGpxTrackAnalysis *analysis = sectionData.values[@"analysis_value"];
+            OASTrkSegment *segment = sectionData.values[@"segment_value"];
+            if (analysis && segment)
+            {
+                [_routeLineChartHelper refreshChart:lineChartView
+                                      fitTrackOnMap:YES
+                                           forceFit:NO
+                                   recalculateXAxis:NO
+                                           analysis:analysis
+                                            segment:segment];
+            }
         }
     }
 }
@@ -479,10 +487,19 @@
         {
             if (_routeLineChartHelper)
             {
-                [_routeLineChartHelper refreshChart:lineChartView
-                                      fitTrackOnMap:YES
-                                           forceFit:NO
-                                   recalculateXAxis:YES];
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:lineChartView.tag & 0x3FF inSection:lineChartView.tag >> 10];
+                OAGPXTableSectionData *sectionData = self.tableData.subjects[indexPath.section];
+                OASGpxTrackAnalysis *analysis = sectionData.values[@"analysis_value"];
+                OASTrkSegment *segment = sectionData.values[@"segment_value"];
+                if (analysis && segment)
+                {
+                    [_routeLineChartHelper refreshChart:lineChartView
+                                          fitTrackOnMap:YES
+                                               forceFit:NO
+                                       recalculateXAxis:YES
+                                               analysis:analysis
+                                                segment:segment];
+                }
             }
         }
     }
@@ -605,13 +622,22 @@
         OAGPXTableSectionData *sectionData = [self.tableData getSubject:[@"section_" stringByAppendingString:segmentKey]];
         if (sectionData)
         {
-            NSArray<NSNumber *> *types = sectionData.values[@"mode_value"];
             OASGpxTrackAnalysis *analysis = sectionData.values[@"analysis_value"];
-            BOOL isLeftButtonSelected = [tableData.values[@"is_left_button_selected"] boolValue];
-            if (isLeftButtonSelected)
-                [self.trackMenuDelegate openAnalysis:analysis withTypes:types];
-            else
-                [self.trackMenuDelegate openEditSegmentScreen:sectionData.values[@"segment_value"] analysis:analysis];
+            OASTrkSegment *segment = sectionData.values[@"segment_value"];
+            if (analysis && segment)
+            {
+                if ([tableData.values[@"is_left_button_selected"] boolValue])
+                {
+                    [self.trackMenuDelegate openAnalysis:analysis
+                                                 segment:segment
+                                               withTypes:sectionData.values[@"mode_value"]];
+                }
+                else
+                {
+                    [self.trackMenuDelegate openEditSegmentScreen:segment
+                                                         analysis:analysis];
+                }
+            }
         }
     }
 }

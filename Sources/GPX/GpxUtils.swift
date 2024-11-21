@@ -19,7 +19,7 @@ final class GpxUtils: NSObject {
                                  joinSegments: Bool) -> CLLocation? {
         var point: WptPt?
         if let ds = chart.lineData?.dataSets,
-           let dataSet = ds[0] as? GpxUIHelper.OrderedLineDataSet,
+           let dataSet = ds.first as? GpxUIHelper.OrderedLineDataSet,
            let segment {
             if GpxUIHelper.getDataSetAxisType(dataSet: dataSet) == .time
                 || GpxUIHelper.getDataSetAxisType(dataSet: dataSet) == .timeOfDay {
@@ -66,8 +66,8 @@ final class GpxUtils: NSObject {
                     return point
                 }
 
-                let segmentStartTime = seg.points.count == 0 ? 0 : (seg.points[0] as? WptPt)?.time ?? 0
-                let segmentEndTime = seg.points.count == 0 ? 0 : (seg.points[seg.points.count - 1] as? WptPt)?.time ?? 0
+                let segmentStartTime = seg.points.count == 0 ? 0 : (seg.points.firstObject as? WptPt)?.time ?? 0
+                let segmentEndTime = seg.points.count == 0 ? 0 : (seg.points.lastObject as? WptPt)?.time ?? 0
                 passedSegmentsTime += segmentEndTime - segmentStartTime
             }
         }
@@ -138,7 +138,7 @@ final class GpxUtils: NSObject {
                     }
                 }
                 prevPoint = nil
-                passedSegmentsPointsDistance += (seg.points[seg.points.count - 1] as? WptPt)?.distance ?? 0
+                passedSegmentsPointsDistance += (seg.points.lastObject as? WptPt)?.distance ?? 0
             }
         }
         return nil
@@ -149,7 +149,7 @@ final class GpxUtils: NSObject {
                                               passedSegmentsTime: Int64,
                                               preciseLocation: Bool) -> WptPt? {
         var previousPoint: WptPt?
-        let segmentStartTime = (segment.points[0] as? WptPt)?.time ?? 0
+        let segmentStartTime = (segment.points.firstObject as? WptPt)?.time ?? 0
         for p in segment.points {
             if let currentPoint = p as? WptPt {
                 let totalPassedTime = passedSegmentsTime + currentPoint.time - segmentStartTime

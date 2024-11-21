@@ -50,7 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
                      gpxDoc:(nullable id)gpxDoc
              isCurrentTrack:(BOOL)isCurrentTrack
            inViewController:(UIViewController *)hostViewController
- hostViewControllerDelegate:(id)hostViewControllerDelegate
+ hostViewControllerDelegate:(nullable id)hostViewControllerDelegate
              touchPointArea:(CGRect)touchPointArea;
 
 - (void)copyGPXToNewFolder:(NSString *)newFolderName

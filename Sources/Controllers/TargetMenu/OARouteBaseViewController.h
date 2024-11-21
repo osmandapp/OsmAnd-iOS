@@ -10,7 +10,7 @@
 
 #define kMapMargin 20.0
 
-@class OARoutingHelper, OASGpxTrackAnalysis, OARouteStatisticsModeCell, OASGpxFile, OABaseVectorLinesLayer, LineChartView, ElevationChart, OASTrackItem, OASKQuadRect;
+@class OARoutingHelper, OASGpxTrackAnalysis, OARouteStatisticsModeCell, OASGpxFile, OASTrkSegment, OABaseVectorLinesLayer, LineChartView, ElevationChart, OASTrackItem, OASKQuadRect;
 
 @protocol OARouteLineChartHelperDelegate
 
@@ -28,6 +28,11 @@
 
 @property (nonatomic, weak) id<OARouteLineChartHelperDelegate> delegate;
 
++ (OASTrkSegment *)getTrackSegment:(OASGpxTrackAnalysis *)analysis
+                           gpxItem:(OASGpxFile *)gpxItem;
+
++ (OASGpxTrackAnalysis *)getAnalysisFor:(OASTrkSegment *)segment;
+
 - (void)changeChartTypes:(NSArray<NSNumber *> *)types
                   chart:(ElevationChart *)chart
                analysis:(OASGpxTrackAnalysis *)analysis
@@ -36,7 +41,9 @@
 - (void)refreshChart:(LineChartView *)chart
        fitTrackOnMap:(BOOL)fitTrackOnMap
             forceFit:(BOOL)forceFit
-    recalculateXAxis:(BOOL)recalculateXAxis;
+    recalculateXAxis:(BOOL)recalculateXAxis
+            analysis:(OASGpxTrackAnalysis *)analysis
+             segment:(OASTrkSegment *)segment;
 
 @end
 
@@ -49,6 +56,7 @@
 @property (nonatomic) OASTrackItem *trackItem;
 @property (nonatomic) ElevationChart *statisticsChart;
 @property (nonatomic) OASGpxTrackAnalysis *analysis;
+@property (nonatomic) OASTrkSegment *segment;
 
 - (instancetype) initWithGpxData:(NSDictionary *)data;
 

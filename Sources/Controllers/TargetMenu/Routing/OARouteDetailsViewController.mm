@@ -293,13 +293,22 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
                               useGesturesAndScale:YES];
 
     OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.gpx.path]];
-    BOOL calcWithoutGaps = !gpx.joinSegments && (self.gpx.tracks.count > 0 && self.gpx.tracks.firstObject.generalTrack);
+    BOOL withoutGaps = YES;
+    if ([self.gpx isShowCurrentTrack])
+    {
+        withoutGaps = !gpx.joinSegments
+        && (self.gpx.tracks.count == 0 || [self.gpx.tracks.firstObject isGeneralTrack]);
+    }
+    else
+    {
+        withoutGaps = self.gpx.tracks.count > 0 && [self.gpx.tracks.firstObject isGeneralTrack] && gpx.joinSegments;
+    }
     [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.chartView
                                       analysis:self.analysis
                                      firstType:GPXDataSetTypeAltitude
                                     secondType:GPXDataSetTypeSlope
                                       axisType:GPXDataSetAxisTypeDistance
-                               calcWithoutGaps:calcWithoutGaps];
+                               calcWithoutGaps:withoutGaps];
     
     BOOL hasSlope = routeStatsCell.chartView.lineData.dataSetCount > 1;
     
@@ -722,11 +731,16 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
         [[OARootViewController instance].mapPanel openTargetViewWithRouteDetailsGraph:self.gpx
                                                                             trackItem:self.trackItem
                                                                              analysis:self.analysis
+                                                                              segment:self.segment
                                                                      menuControlState:nil];
     }
     else
     {
-        [[OARootViewController instance].mapPanel openNewTargetViewWithRouteDetailsGraph:self.gpx analysis:self.analysis menuControlState:nil isRoute:YES];
+        [[OARootViewController instance].mapPanel openNewTargetViewWithRouteDetailsGraph:self.gpx
+                                                                                analysis:self.analysis
+                                                                                 segment:self.segment
+                                                                        menuControlState:nil
+                                                                                 isRoute:YES];
     }
   
 }
@@ -784,10 +798,15 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
               ([recognizer isKindOfClass:UITapGestureRecognizer.class] && (((UITapGestureRecognizer *) recognizer).nsuiNumberOfTapsRequired == 2)))
              && recognizer.state == UIGestureRecognizerStateEnded)
     {
-        [self.routeLineChartHelper refreshChart:self.statisticsChart
-                                  fitTrackOnMap:YES
-                                       forceFit:NO
-                               recalculateXAxis:YES];
+        if (self.analysis && self.segment)
+        {
+            [self.routeLineChartHelper refreshChart:self.statisticsChart
+                                      fitTrackOnMap:YES
+                                           forceFit:NO
+                                   recalculateXAxis:YES
+                                           analysis:self.analysis
+                                            segment:self.segment];
+        }
     }
 }
 
@@ -945,10 +964,15 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
             }
         }
     }
-    [self.routeLineChartHelper refreshChart:self.statisticsChart
-                              fitTrackOnMap:YES
-                                   forceFit:NO
-                           recalculateXAxis:NO];
+    if (self.analysis && self.segment)
+    {
+        [self.routeLineChartHelper refreshChart:self.statisticsChart
+                                  fitTrackOnMap:YES
+                                       forceFit:NO
+                               recalculateXAxis:NO
+                                       analysis:self.analysis
+                                        segment:self.segment];
+    }
 }
 
 - (void)chartScaled:(ChartViewBase *)chartView scaleX:(CGFloat)scaleX scaleY:(CGFloat)scaleY
@@ -966,10 +990,15 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
         if (h)
         {
             [self.statisticsChart highlightValue:h callDelegate:YES];
-            [self.routeLineChartHelper refreshChart:self.statisticsChart
-                                      fitTrackOnMap:YES
-                                           forceFit:NO
-                                   recalculateXAxis:NO];
+            if (self.analysis && self.segment)
+            {
+                [self.routeLineChartHelper refreshChart:self.statisticsChart
+                                          fitTrackOnMap:YES
+                                               forceFit:NO
+                                       recalculateXAxis:NO
+                                               analysis:self.analysis
+                                                segment:self.segment];
+            }
         }
     }
 }

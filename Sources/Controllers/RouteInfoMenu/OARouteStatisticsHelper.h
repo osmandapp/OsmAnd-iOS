@@ -27,6 +27,8 @@ static NSString *ROUTE_INFO_PREFIX = @"routeInfo_";
 @property (nonatomic) CLLocationCoordinate2D highlightedPoint;
 @property (nonatomic) NSInteger segmentColor;
 @property (nonatomic) OASGpxFile *gpx;
+@property (nonatomic) CLLocationCoordinate2D start;
+@property (nonatomic) CLLocationCoordinate2D end;
 
 @end
 

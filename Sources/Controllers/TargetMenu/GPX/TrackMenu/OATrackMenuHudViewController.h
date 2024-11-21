@@ -20,6 +20,7 @@
 
 - (void)openAnalysis:(NSArray<NSNumber *> *)types;
 - (void)openAnalysis:(OASGpxTrackAnalysis *)analysis
+             segment:(OASTrkSegment *)segment
             withTypes:(NSArray<NSNumber *> *)types;
 - (OASGpxTrackAnalysis *)getGeneralAnalysis;
 
@@ -104,6 +105,7 @@
 
 @property (nonatomic, assign) EOATrackMenuHudTab lastSelectedTab;
 @property (nonatomic, assign) EOATrackMenuHudSegmentsStatisticsTab selectedStatisticsTab;
+@property (nonatomic, assign) OARouteKey *routeKey;
 @property (nonatomic, assign) NSArray<NSNumber *> *routeStatistics;
 @property (nonatomic) UIImage *trackIcon;
 @property (nonatomic) NSString *gpxFilePath;

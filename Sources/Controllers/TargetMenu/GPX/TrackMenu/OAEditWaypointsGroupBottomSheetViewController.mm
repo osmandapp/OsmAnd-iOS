@@ -341,7 +341,9 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
     }
     else if ([tableData.key isEqualToString:@"analyze_on_map"] && self.trackMenuDelegate)
     {
-        [self.trackMenuDelegate openAnalysis:_analysis withTypes:@[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSlope)]];
+        [self.trackMenuDelegate openAnalysis:_analysis
+                                     segment:self.segment
+                                   withTypes:@[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSlope)]];
     }
     else if ([tableData.key isEqualToString:@"edit"] && self.trackMenuDelegate)
     {

@@ -76,17 +76,13 @@
         if (rs)
         {
             streetName.text = [self.class getRouteSegmentStreetName:rs includeRef:NO];
-            if (streetName.text.length == 0)
+            streetName.shields = [RoadShield createShields:rs->object];
+            if (streetName.text.length == 0 && streetName.shields.count == 0)
             {
                 streetName.text = [self.class getRouteSegmentStreetName:rs includeRef:YES];
-                isSet = streetName.text.length > 0;
             }
-            else
-            {
-                isSet = YES;
-            }
+            isSet = streetName.text.length > 0 || streetName.shields.count > 0;
             streetName.showMarker = YES;
-            streetName.shields = [RoadShield createShields:rs->object];
         }
     }
     // 3. display next road street name if this one empty

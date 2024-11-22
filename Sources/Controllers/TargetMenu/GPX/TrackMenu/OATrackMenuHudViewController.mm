@@ -885,6 +885,9 @@
              segment:(OASTrkSegment *)segment
            withTypes:(NSArray<NSNumber *> *)types
 {
+    if (!self.doc || !self.gpx || !analysis || !segment)
+        return;
+
     _pushedNewScreen = YES;
     __weak __typeof(self) weakSelf = self;
     [self hide:YES duration:.2 onComplete:^{

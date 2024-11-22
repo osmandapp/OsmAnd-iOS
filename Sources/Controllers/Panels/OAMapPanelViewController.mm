@@ -3303,7 +3303,7 @@ typedef enum
     targetPoint.title = _formattedTargetName;
     targetPoint.toolbarNeeded = NO;
 
-    if (gpx && analysis)
+    if (gpx && trackItem && analysis && segment)
     {
         targetPoint.targetObj = @{
             @"gpx": gpx,

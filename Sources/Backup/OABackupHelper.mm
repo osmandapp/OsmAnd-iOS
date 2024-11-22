@@ -54,9 +54,6 @@ static NSString *ACCOUNT_DELETE_URL = [SERVER_URL stringByAppendingString:@"/use
 static NSString *SEND_CODE_URL = [SERVER_URL stringByAppendingString:@"/userdata/send-code"];
 static NSString *CHECK_CODE_URL = [SERVER_URL stringByAppendingString:@"/userdata/auth/confirm-code"];
 
-static NSString *BACKUP_TYPE_PREFIX = @"backup_type_";
-static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
-
 @interface OABackupHelper () <OAOnPrepareBackupListener, NSURLSessionDelegate>
 
 @end
@@ -117,188 +114,14 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     return CHECK_CODE_URL;
 }
 
-+ (BOOL) isTokenValid:(NSString *)token
-{
-    return [token isMatchedByRegex:@"[0-9]+"];
-}
-
-+ (NSArray<OASettingsItem *> *) getItemsForRestore:(OABackupInfo *)info settingsItems:(NSArray<OASettingsItem *> *)settingsItems
-{
-    NSMutableArray<OASettingsItem *> *itemsForRestore = [NSMutableArray array];
-    if (info != nil)
-    {
-        NSDictionary<OARemoteFile *, OASettingsItem *> *restoreItems = [self getRemoteFilesSettingsItems:settingsItems remoteFiles:info.filteredFilesToDownload infoFiles:NO];
-        for (OASettingsItem *restoreItem in restoreItems.allValues)
-        {
-            if ([restoreItem isKindOfClass:OACollectionSettingsItem.class])
-            {
-                OACollectionSettingsItem *settingsItem = (OACollectionSettingsItem *) restoreItem;
-                [settingsItem processDuplicateItems];
-                settingsItem.shouldReplace = YES;
-            }
-            if (restoreItem != nil)
-                [itemsForRestore addObject:restoreItem];
-        }
-    }
-    return itemsForRestore;
-}
-
-+ (NSDictionary<OARemoteFile *, OASettingsItem *> *) getItemsMapForRestore:(OABackupInfo *)info settingsItems:(NSArray<OASettingsItem *> *)settingsItems
-{
-    NSMutableDictionary<OARemoteFile *, OASettingsItem *> *itemsForRestore = [NSMutableDictionary dictionary];
-    if (info != nil)
-    {
-        [itemsForRestore addEntriesFromDictionary:[self getRemoteFilesSettingsItems:settingsItems remoteFiles:info.filteredFilesToDownload infoFiles:NO]];
-    }
-    return itemsForRestore;
-}
-
-+ (NSDictionary<OARemoteFile *, OASettingsItem *> *) getRemoteFilesSettingsItems:(NSArray<OASettingsItem *> *)items
-                                                                            remoteFiles:(NSArray<OARemoteFile *> *)remoteFiles
-                                                                            infoFiles:(BOOL)infoFiles
-{
-    NSMutableDictionary<OARemoteFile *, OASettingsItem *> *res = [NSMutableDictionary dictionary];
-    NSMutableArray<OARemoteFile *> *files = [NSMutableArray arrayWithArray:remoteFiles];
-    for (OASettingsItem *item in items)
-    {
-        NSMutableArray<OARemoteFile *> *processedFiles = [NSMutableArray array];
-        for (OARemoteFile *file in files)
-        {
-            NSString *type = file.type;
-            NSString *name = file.name;
-            if (infoFiles && [name.pathExtension isEqualToString:INFO_EXT])
-                name = [name stringByDeletingPathExtension];
-            
-            if ([self applyItem:item type:type name:name])
-            {
-                res[file] = item;
-                [processedFiles addObject:file];
-            }
-        }
-        [files removeObjectsInArray:processedFiles];
-    }
-    return res;
-}
-
 + (OASettingsItem *) getRestoreItem:(NSArray<OASettingsItem *> *)items remoteFile:(OARemoteFile *)remoteFile
 {
     for (OASettingsItem *item in items)
     {
-        if ([self.class applyItem:item type:remoteFile.type name:remoteFile.name])
+        if ([BackupUtils applyItem:item type:remoteFile.type name:remoteFile.name])
             return item;
     }
     return nil;
-}
-
-+ (BOOL) applyItem:(OASettingsItem *)item type:(NSString *)type name:(NSString *)name
-{
-    NSString *itemFileName = [self getItemFileName:item];
-    NSString *itemTypeName = [OASettingsItemType typeName:item.type];
-    if ([itemTypeName isEqualToString:type])
-    {
-        if ([name isEqualToString:itemFileName])
-        {
-            return YES;
-        }
-        else if ([item isKindOfClass:OAFileSettingsItem.class])
-        {
-            OAFileSettingsItem *fileItem = (OAFileSettingsItem *) item;
-            NSString *subfolder = [OAFileSettingsItemFileSubtype getSubtypeFolderName:fileItem.subtype];
-            if ([name hasPrefix:subfolder] || subfolder.length == 0)
-            {
-                if (fileItem.filePath.pathExtension.length == 0 && ![itemFileName hasSuffix:@"/"])
-                {
-                    return [name hasPrefix:[itemFileName stringByAppendingString:@"/"]];
-                }
-                else
-                {
-                    return [name hasPrefix:itemFileName];
-                }
-            }
-        }
-    }
-    return false;
-}
-
-+ (NSString *) getItemFileName:(OASettingsItem *)item
-{
-    NSString *fileName;
-    if ([item isKindOfClass:OAFileSettingsItem.class])
-    {
-        OAFileSettingsItem *fileItem = (OAFileSettingsItem *) item;
-        fileName = [self getFileItemName:fileItem];
-    }
-    else
-    {
-        fileName = item.fileName;
-        if (fileName.length == 0)
-            fileName = item.defaultFileName;
-    }
-    if (fileName.length > 0 && [fileName characterAtIndex:0] == '/')
-    {
-        fileName = [fileName substringFromIndex:1];
-    }
-    return fileName;
-}
-
-
-+ (NSString *) getFileItemName:(OAFileSettingsItem *)fileSettingsItem
-{
-    return [self getFileItemName:nil fileSettingsItem:fileSettingsItem];
-}
-
-+ (NSString *)getFileItemName:(NSString *)filePath fileSettingsItem:(OAFileSettingsItem *)fileSettingsItem
-{
-    NSString *subtypeFolder = [OAFileSettingsItemFileSubtype getSubtypeFolder:fileSettingsItem.subtype];
-    NSString *fileName;
-    if (!filePath)
-        filePath = fileSettingsItem.filePath;
-    
-    if (subtypeFolder.length == 0)
-    {
-        fileName = filePath.lastPathComponent;
-    }
-    else if (fileSettingsItem.subtype == EOASettingsItemFileSubtypeGpx)
-    {
-        fileName = [filePath stringByReplacingOccurrencesOfString:[subtypeFolder stringByAppendingString:@"/"] withString:@""];
-    }
-    else if ([OAFileSettingsItemFileSubtype isMap:fileSettingsItem.subtype])
-    {
-        fileName = filePath.lastPathComponent;
-    }
-    else
-    {
-        int index = [filePath indexOf:subtypeFolder.lastPathComponent];
-        if (index >= 0)
-            fileName = [filePath substringFromIndex:index];
-        else
-            fileName = filePath.lastPathComponent;
-    }
-    
-    if (fileName.length > 0 && [fileName characterAtIndex:0] == '/')
-        fileName = [fileName substringFromIndex:1];
-    
-    return fileName;
-}
-
-+ (BOOL) isLimitedFilesCollectionItem:(OAFileSettingsItem *)item
-{
-    return item.subtype == EOASettingsItemFileSubtypeVoice;
-}
-
-+ (void) setLastModifiedTime:(NSString *)name
-{
-    [self setLastModifiedTime:name lastModifiedTime:NSDate.date.timeIntervalSince1970];
-}
-
-+ (void) setLastModifiedTime:(NSString *)name lastModifiedTime:(long)lastModifiedTime
-{
-    [OABackupDbHelper.sharedDatabase setLastModifiedTime:name lastModifiedTime:lastModifiedTime];
-}
-
-+ (long) getLastModifiedTime:(NSString *)name
-{
-    return [OABackupDbHelper.sharedDatabase getLastModifiedTime:name];
 }
 
 + (OABackupHelper *)sharedInstance
@@ -401,21 +224,11 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     [_settings.backupAccessToken resetToDefault];
 }
 
-- (OACommonBoolean *) getBackupTypePref:(OAExportSettingsType *)type
-{
-    return [[[OACommonBoolean withKey:[NSString stringWithFormat:@"%@%@", BACKUP_TYPE_PREFIX, type.name] defValue:YES] makeGlobal] makeShared];
-}
-
-- (OACommonBoolean *) getVersionHistoryTypePref:(OAExportSettingsType *)type
-{
-    return [[[OACommonBoolean withKey:[NSString stringWithFormat:@"%@%@", VERSION_HISTORY_PREFIX, type.name] defValue:YES] makeGlobal] makeShared];
-}
-
 - (NSArray<NSString *> *) collectItemFilesForUpload:(OAFileSettingsItem *)item
 {
     NSMutableArray<NSString *> *filesToUpload = [NSMutableArray array];
     OABackupInfo *info = self.backup.backupInfo;
-    if (![self.class isLimitedFilesCollectionItem:item]
+    if (![BackupUtils isLimitedFilesCollectionItem:item]
         && info != nil && (info.filesToUpload.count > 0 || info.filesToMerge.count > 0 || info.filesToDownload.count > 0))
     {
         for (OALocalFile *localFile in info.filesToUpload)
@@ -883,54 +696,6 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
             });
         }
     }
-}
-
-- (BOOL) isObfMapExistsOnServer:(NSString *)name
-{
-    __block BOOL exists = NO;
-    
-    NSMutableDictionary<NSString *, NSString *> *params = [NSMutableDictionary dictionary];
-    params[@"name"] = name;
-    params[@"type"] = @"file";
-    
-    OAOperationLog *operationLog = [[OAOperationLog alloc] initWithOperationName:@"isObfMapExistsOnServer" debug:BACKUP_TYPE_PREFIX];
-    [operationLog startOperation:name];
-    
-    [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/userdata/check-file-on-server" params:params post:NO async:NO onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        int status;
-        NSString *message;
-        NSString *result = data ? [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] : @"";
-        if (((NSHTTPURLResponse *)response).statusCode != 200)
-        {
-            OABackupError *backupError = [[OABackupError alloc] initWithError:result];
-            message = [NSString stringWithFormat:@"Check obf map on server error: %@", backupError.toString];
-            status = STATUS_SERVER_ERROR;
-        }
-        else if (result.length > 0)
-        {
-            NSError *jsonParsingError = nil;
-            NSDictionary *resultJson = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&jsonParsingError];
-            if (!jsonParsingError)
-            {
-                NSString *fileStatus = resultJson[@"status"];
-                exists = [fileStatus isEqualToString:@"present"];
-                status = STATUS_SUCCESS;
-                message = [NSString stringWithFormat:@"%@ exists: %@", name, exists ? @"true" : @"false"];
-            }
-            else
-            {
-                message = @"Check obf map on server error: json parsing";
-                status = STATUS_PARSE_JSON_ERROR;
-            }
-        }
-        else
-        {
-            status = STATUS_EMPTY_RESPONSE_ERROR;
-            message = @"Check obf map on server error: empty response";
-        }
-        [operationLog finishOperation:[NSString stringWithFormat:@"(%d): %@", status, message]];
-    }];
-    return exists;
 }
 
 // MARK: OAOnPrepareBackupListener

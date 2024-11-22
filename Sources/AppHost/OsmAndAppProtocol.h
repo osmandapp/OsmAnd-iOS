@@ -109,6 +109,7 @@
 - (void) checkAndDownloadWeatherForecastsUpdates;
 
 - (void) loadRoutingFiles;
+- (void) rescanUnmanagedStoragePaths;
 
 - (NSString *) favoritesStorageFilename:(NSString *)groupName;
 - (NSString *) getGroupFileName:(NSString *)groupName;

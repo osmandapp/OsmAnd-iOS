@@ -194,7 +194,7 @@
 - (void) continueButtonPressed
 {
     NSString *token = [self getTextFieldValue];
-    if ([OABackupHelper isTokenValid:token])
+    if ([BackupUtils isTokenValid:token])
     {
         if (_sourceType == EOACloudScreenSourceDeleteAccount)
             [_backupHelper checkCode:[[OAAppSettings sharedManager].backupUserEmail get] token:token];

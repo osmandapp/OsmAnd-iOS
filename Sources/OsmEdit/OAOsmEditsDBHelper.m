@@ -15,6 +15,7 @@
 #import "OAWay.h"
 #import "OARelation.h"
 #import "OAOsmPoint.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #import <sqlite3.h>
 
@@ -120,18 +121,26 @@
 
 - (long)getLastModifiedTime
 {
-    long lastModifiedTime = [OABackupHelper getLastModifiedTime:OPENSTREETMAP_DB_LAST_MODIFIED_NAME];
+    long lastModifiedTime = [BackupUtils getLastModifiedTime:OPENSTREETMAP_DB_LAST_MODIFIED_NAME];
     if (lastModifiedTime == 0)
     {
         lastModifiedTime = [self getDBLastModifiedTime];
-        [OABackupHelper setLastModifiedTime:OPENSTREETMAP_DB_LAST_MODIFIED_NAME lastModifiedTime:lastModifiedTime];
+        [BackupUtils setLastModifiedTime:OPENSTREETMAP_DB_LAST_MODIFIED_NAME
+                        lastModifiedTime:lastModifiedTime];
     }
     return lastModifiedTime;
 }
 
 - (void) setLastModifiedTime:(long)lastModified
 {
-    [OABackupHelper setLastModifiedTime:OPENSTREETMAP_DB_LAST_MODIFIED_NAME lastModifiedTime:lastModified];
+    [BackupUtils setLastModifiedTime:OPENSTREETMAP_DB_LAST_MODIFIED_NAME
+                    lastModifiedTime:lastModified];
+}
+
+- (void)updateLastModifiedTime
+{
+    [BackupUtils setLastModifiedTime:OPENSTREETMAP_DB_LAST_MODIFIED_NAME
+                    lastModifiedTime:(long) NSDate.now.timeIntervalSince1970];
 }
 
 - (long) getDBLastModifiedTime
@@ -304,6 +313,8 @@
             sqlite3_finalize(statement);
             
             sqlite3_close(osmEditsDB);
+
+            [self updateLastModifiedTime];
         }
     });
     [self checkOpenstreetmapPoints];
@@ -329,6 +340,8 @@
             sqlite3_step(statement);
             sqlite3_finalize(statement);
             sqlite3_close(osmEditsDB);
+
+            [self updateLastModifiedTime];
         }
     });
     [self checkOpenstreetmapPoints];
@@ -358,6 +371,8 @@
             sqlite3_step(statement);
             sqlite3_finalize(statement);
             sqlite3_close(osmEditsDB);
+
+            [self updateLastModifiedTime];
         }
     });
     [self checkOpenstreetmapPoints];

@@ -25,369 +25,7 @@
 #import <DGCharts/DGCharts-Swift.h>
 #import "OsmAnd_Maps-Swift.h"
 
-@implementation OARouteLineChartHelper
-{
-    OASGpxFile *_gpxDoc;
-    OABaseVectorLinesLayer *_layer;
-    OATrackChartPoints *_trackChartPoints;
-    double _chartHighlightPos;
-    NSArray<CLLocation *> *_xAxisPoints;
-}
-
-- (instancetype)initWithGpxDoc:(OASGpxFile *)gpxDoc layer:(OABaseVectorLinesLayer *)layer
-{
-    self = [super init];
-    if (self)
-    {
-        _gpxDoc = gpxDoc;
-        _layer = layer;
-    }
-    return self;
-}
-
-- (void)changeChartTypes:(NSArray<NSNumber *> *)types
-                  chart:(ElevationChart *)chart
-               analysis:(OASGpxTrackAnalysis *)analysis
-               modeCell:(OARouteStatisticsModeCell *)statsModeCell
-{
-    OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:_gpxDoc.path]];
-    BOOL withoutGaps = YES;
-    if ([_gpxDoc isShowCurrentTrack])
-    {
-        withoutGaps = !gpx.joinSegments
-        && (_gpxDoc.tracks.count == 0 || [_gpxDoc.tracks.firstObject isGeneralTrack]);
-    }
-    else
-    {
-        withoutGaps = _gpxDoc.tracks.count > 0 && [_gpxDoc.tracks.firstObject isGeneralTrack] && gpx.joinSegments;
-    }
-    GPXDataSetType secondType = GPXDataSetTypeNone;
-    if (types.count == 2)
-    {
-        if (types.lastObject.integerValue == GPXDataSetTypeSpeed && ![analysis isSpeedSpecified])
-        {
-            [self changeChartTypes:@[@(GPXDataSetTypeAltitude)]
-                             chart:chart
-                          analysis:analysis
-                          modeCell:statsModeCell];
-        }
-        else
-        {
-            if (statsModeCell)
-            {
-                [statsModeCell.modeButton setTitle:[NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_slash"),
-                                                    [OAGPXDataSetType getTitle:types.firstObject.integerValue],
-                                                    [OAGPXDataSetType getTitle:types.lastObject.integerValue]]
-                                          forState:UIControlStateNormal];
-            }
-            secondType = (GPXDataSetType) types.lastObject.integerValue;
-        }
-    }
-    else
-    {
-        if (statsModeCell)
-        {
-            [statsModeCell.modeButton setTitle:[OAGPXDataSetType getTitle:types.firstObject.integerValue]
-                                      forState:UIControlStateNormal];
-        }
-    }
-    [GpxUIHelper refreshLineChartWithChartView:chart
-                                      analysis:analysis
-                                     firstType:(GPXDataSetType) types.firstObject.integerValue
-                                    secondType:secondType
-                                      axisType:GPXDataSetAxisTypeDistance
-                               calcWithoutGaps:withoutGaps];
-}
-
-- (CLLocation *)getLocationAtPos:(LineChartView *)chart
-                             pos:(float)pos
-                        analysis:(OASGpxTrackAnalysis *)analysis
-                         segment:(OASTrkSegment *)segment
-{
-    OASGpxDataItem *gpx = [OAGPXDatabase.sharedDb getGPXItem:_gpxDoc.path];
-    return [GpxUtils getLocationAtPos:chart
-                              gpxFile:_gpxDoc
-                              segment:segment
-                                  pos:pos
-                         joinSegments:gpx.joinSegments];
-}
-
-+ (OASTrkSegment *)getTrackSegment:(OASGpxTrackAnalysis *)analysis
-                           gpxItem:(OASGpxFile *)gpxItem
-{
-    if (analysis && gpxItem)
-    {
-        OASWptPt *locStart = analysis.locationStart;
-        OASWptPt *locEnd = analysis.locationEnd;
-        for (OASTrack *track in gpxItem.tracks)
-        {
-            for (OASTrkSegment *segment in track.segments)
-            {
-                NSArray<OASWptPt *> *points = segment.points;
-                NSInteger size = points.count;
-                OASWptPt *firstPoint = points.firstObject;
-                OASWptPt *lastPoint = points.lastObject;
-                if (size > 0
-                    && firstPoint.lat == locStart.lat && firstPoint.lon == locStart.lon
-                    && lastPoint.lat == locEnd.lat && lastPoint.lon == locEnd.lon)
-                    return segment;
-            }
-        }
-    }
-    return nil;
-}
-
-+ (OASGpxTrackAnalysis *)getAnalysisFor:(OASTrkSegment *)segment
-{
-    OASGpxTrackAnalysis *analysis = [[OASGpxTrackAnalysis alloc] init];
-    auto splitSegments = [ArraySplitSegmentConverter toKotlinArrayFrom:@[[[OASSplitSegment alloc] initWithSegment:segment]]];
-    [analysis prepareInformationFileTimeStamp:0 pointsAnalyser:nil splitSegments:splitSegments];
-    return analysis;
-}
-
-- (void)refreshChart:(LineChartView *)chart
-       fitTrackOnMap:(BOOL)fitTrackOnMap
-            forceFit:(BOOL)forceFit
-    recalculateXAxis:(BOOL)recalculateXAxis
-            analysis:(OASGpxTrackAnalysis *)analysis
-             segment:(OASTrkSegment *)segment
-{
-    if (!_gpxDoc)
-        return;
-    
-    NSArray<ChartHighlight *> *highlights = chart.highlighted;
-    CLLocation *location;
-    
-    OATrackChartPoints *trackChartPoints = _trackChartPoints;
-    if (!trackChartPoints)
-    {
-        trackChartPoints = [[OATrackChartPoints alloc] init];
-        OASInt *segmentColor = segment != nil
-            ? [segment getColorDefColor:0]
-            : [[OASInt alloc] initWithInt:0];
-        [trackChartPoints setSegmentColor:segmentColor.integerValue];
-        [trackChartPoints setGpx:_gpxDoc];
-        trackChartPoints.start = analysis.locationStart.position;
-        trackChartPoints.end = analysis.locationEnd.position;
-        _trackChartPoints = trackChartPoints;
-    }
-    
-    double minimumVisibleXValue = chart.lowestVisibleX;
-    double maximumVisibleXValue = chart.highestVisibleX;
-    
-    if (highlights && highlights.count > 0)
-    {
-        if (minimumVisibleXValue != 0 && maximumVisibleXValue != 0)
-        {
-            if (highlights[0].x < minimumVisibleXValue)
-            {
-                float difference = (maximumVisibleXValue - minimumVisibleXValue) * .1;
-                _chartHighlightPos = minimumVisibleXValue + difference;
-                [chart highlightValueWithX:minimumVisibleXValue + difference
-                              dataSetIndex:0
-                                 dataIndex:-1];
-            }
-            else if (highlights[0].x > maximumVisibleXValue)
-            {
-                float difference = (maximumVisibleXValue - minimumVisibleXValue) * 0.1f;
-                _chartHighlightPos = maximumVisibleXValue - difference;
-                [chart highlightValueWithX:maximumVisibleXValue - difference
-                              dataSetIndex:0
-                                 dataIndex:-1];
-            }
-            else
-            {
-                _chartHighlightPos = highlights[0].x;
-            }
-        }
-        else
-        {
-            _chartHighlightPos = highlights[0].x;
-        }
-
-        location = [self getLocationAtPos:chart
-                                      pos:_chartHighlightPos
-                                 analysis:analysis
-                                  segment:segment];
-        if (location)
-            [trackChartPoints setHighlightedPoint:location.coordinate];
-        [_layer showCurrentHighlitedLocation:trackChartPoints];
-    }
-    else
-    {
-        _chartHighlightPos = -1;
-    }
-
-    CLLocationCoordinate2D start = [segment isGeneralSegment] ? CLLocationCoordinate2DMake(0, 0) : analysis.locationStart.position;
-    CLLocationCoordinate2D end = [segment isGeneralSegment] ? CLLocationCoordinate2DMake(0, 0) : analysis.locationEnd.position;
-    if (recalculateXAxis
-        || ![OAMapUtils areLatLonEqual:trackChartPoints.start l2:start]
-        || ![OAMapUtils areLatLonEqual:trackChartPoints.end l2:end])
-    {
-        trackChartPoints.start = start;
-        trackChartPoints.end = end;
-
-        [trackChartPoints setXAxisPoints:[self getXAxisPoints:chart
-                                                     analysis:analysis
-                                                      segment:segment]];
-        [_layer showCurrentStatisticsLocation:trackChartPoints];
-        if (location)
-            [[OARootViewController instance].mapPanel refreshMap];
-    }
-
-    if (location && fitTrackOnMap)
-    {
-        [self fitTrackOnMap:chart
-                   location:location.coordinate
-                   forceFit:forceFit
-                   analysis:analysis
-                    segment:segment];
-    }
-}
-
-- (NSArray<CLLocation *> *)getXAxisPoints:(LineChartView *)chart
-                                 analysis:(OASGpxTrackAnalysis *)analysis
-                                  segment:(OASTrkSegment *)segment
-{
-    NSArray<NSNumber *> *entries = chart.xAxis.entries;
-    LineChartData *lineData = chart.lineData;
-    double maxXValue = lineData ? lineData.xMax : -1;
-    if (entries.count >= 2 && lineData)
-    {
-        double interval = [entries[1] doubleValue] - [entries[0] doubleValue];
-        if (interval > 0)
-        {
-            NSMutableArray<CLLocation *> *xAxisPoints = [NSMutableArray array];
-            float currentPointEntry = interval;
-            while (currentPointEntry < maxXValue)
-            {
-                CLLocation *location = [self getLocationAtPos:chart
-                                                          pos:currentPointEntry
-                                                     analysis:analysis
-                                                      segment:segment];
-                if (location)
-                    [xAxisPoints addObject:location];
-                currentPointEntry += interval;
-            }
-            _xAxisPoints = xAxisPoints;
-        }
-    }
-    return _xAxisPoints;
-}
-
-- (void)fitTrackOnMap:(LineChartView *)lineChartView
-             location:(CLLocationCoordinate2D)location
-             forceFit:(BOOL)forceFit
-             analysis:(OASGpxTrackAnalysis *)analysis
-              segment:(OASTrkSegment *)segment
-{
-    OASKQuadRect *rect = [self getRect:lineChartView
-                              startPos:lineChartView.lowestVisibleX
-                                endPos:lineChartView.highestVisibleX
-                              analysis:analysis
-                               segment:segment];
-    OAMapViewController *mapViewController = [OARootViewController instance].mapPanel.mapViewController;
-    if (rect.left != 0 && rect.right != 0)
-    {
-        auto point = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.latitude, location.longitude));
-        CGPoint mapPoint;
-        [mapViewController.mapView convert:&point toScreen:&mapPoint checkOffScreen:YES];
-
-        if (forceFit && self.delegate)
-        {
-            [self.delegate centerMapOnBBox:rect];
-        }
-        else if (CLLocationCoordinate2DIsValid(location) && !CGRectContainsPoint(_screenBBox, mapPoint))
-        {
-            if (!_isLandscape && self.delegate)
-                [self.delegate adjustViewPort:self.isLandscape];
-
-            Point31 pos = [OANativeUtilities convertFromPointI:point];
-            [mapViewController goToPosition:pos animated:YES];
-        }
-    }
-}
-
-- (OASKQuadRect *)getRect:(LineChartView *)chart
-                 startPos:(float)startPos
-                   endPos:(float)endPos
-                 analysis:(OASGpxTrackAnalysis *)analysis
-                  segment:(OASTrkSegment *)segment
-{
-    double left = 0, right = 0;
-    double top = 0, bottom = 0;
-    LineChartData *lineData = chart.lineData;
-    NSArray<id<ChartDataSetProtocol>> *ds = lineData ? lineData.dataSets : [NSArray array];
-    if (ds.count > 0 && _gpxDoc && segment)
-    {
-        id <ChartDataSetProtocol> dataSet = ds.firstObject;
-        GPXDataSetAxisType axisType = [GpxUIHelper getDataSetAxisTypeWithDataSet:dataSet];
-        if (axisType == GPXDataSetAxisTypeTime || axisType == GPXDataSetAxisTypeTimeOfDay)
-        {
-            float startTime = startPos * 1000;
-            float endTime = endPos * 1000;
-            for (OASWptPt *p in segment.points)
-            {
-                if (p.time - analysis.startTime >= startTime && p.time - analysis.startTime <= endTime)
-                {
-                    if (left == 0 && right == 0)
-                    {
-                        left = [p getLongitude];
-                        right = [p getLongitude];
-                        top = [p getLatitude];
-                        bottom = [p getLatitude];
-                    }
-                    else
-                    {
-                        left = min(left, [p getLongitude]);
-                        right = max(right, [p getLongitude]);
-                        top = max(top, [p getLatitude]);
-                        bottom = min(bottom, [p getLatitude]);
-                    }
-                }
-            }
-        }
-        else
-        {
-            double startDistance = startPos * [dataSet getDivX];
-            double endDistance = endPos * [dataSet getDivX];
-            double previousSplitDistance = 0;
-            for (NSInteger i = 0; i < segment.points.count; i++)
-            {
-                OASWptPt *currentPoint = segment.points[i];
-                if (i != 0)
-                {
-                    OASWptPt *previousPoint = segment.points[i - 1];
-                    if (currentPoint.distance < previousPoint.distance)
-                        previousSplitDistance += previousPoint.distance;
-                }
-                if (previousSplitDistance + currentPoint.distance >= startDistance
-                    && previousSplitDistance + currentPoint.distance <= endDistance)
-                {
-                    if (left == 0 && right == 0)
-                    {
-                        left = [currentPoint getLongitude];
-                        right = [currentPoint getLongitude];
-                        top = [currentPoint getLatitude];
-                        bottom = [currentPoint getLatitude];
-                    }
-                    else
-                    {
-                        left = min(left, [currentPoint getLongitude]);
-                        right = max(right, [currentPoint getLongitude]);
-                        top = max(top, [currentPoint getLatitude]);
-                        bottom = min(bottom, [currentPoint getLatitude]);
-                    }
-                }
-            }
-        }
-    }
-    return [[OASKQuadRect alloc] initWithLeft:left top:top right:right bottom:bottom];
-}
-
-@end
-
-@interface OARouteBaseViewController () <OARouteInformationListener, OARouteLineChartHelperDelegate>
+@interface OARouteBaseViewController () <OARouteInformationListener, ChartHelperDelegate>
 
 @end
 
@@ -399,18 +37,14 @@
 - (instancetype) initWithGpxData:(NSDictionary *)data
 {
     self = [super init];
-    
-    if (self) {
-        if (data)
-        {
-            _gpx = data[@"gpx"];
-            _trackItem = data[@"trackItem"];
-            _analysis = data[@"analysis"];
-            _segment = data[@"segment"];
-            OAMapLayers *layers = [OARootViewController instance].mapPanel.mapViewController.mapLayers;
-            _layer = [data[@"route"] boolValue] ? layers.routeMapLayer : layers.gpxMapLayer;
-            
-        }
+    if (self && data)
+    {
+        _gpx = data[@"gpx"];
+        _trackItem = data[@"trackItem"];
+        _analysis = data[@"analysis"];
+        _segment = data[@"segment"];
+        OAMapLayers *layers = [OARootViewController instance].mapPanel.mapViewController.mapLayers;
+        _layer = [data[@"route"] boolValue] ? layers.routeMapLayer : layers.gpxMapLayer;
     }
     return self;
 }
@@ -421,10 +55,10 @@
 
     _routingHelper = [OARoutingHelper sharedInstance];
     [_routingHelper addListener:self];
-    _routeLineChartHelper = [[OARouteLineChartHelper alloc] initWithGpxDoc:_gpx layer:_layer];
-    _routeLineChartHelper.delegate = self;
-    _routeLineChartHelper.isLandscape = [self isLandscapeIPadAware];
-    _routeLineChartHelper.screenBBox = [self getScreenBBox];
+    _trackChartHelper = [[TrackChartHelper alloc] initWithGpxDoc:_gpx];
+    _trackChartHelper.delegate = self;
+    _trackChartHelper.isLandscape = [self isLandscapeIPadAware];
+    _trackChartHelper.screenBBox = [self getScreenBBox];
 }
 
 - (void)onMenuDismissed
@@ -439,8 +73,8 @@
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
 
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        _routeLineChartHelper.isLandscape = [self isLandscapeIPadAware];
-        _routeLineChartHelper.screenBBox = [self getScreenBBox];
+        _trackChartHelper.isLandscape = [self isLandscapeIPadAware];
+        _trackChartHelper.screenBBox = [self getScreenBBox];
     }];
 }
 
@@ -627,9 +261,9 @@
     // override
 }
 
-- (void) adjustViewPort:(BOOL)landscape
+- (BOOL) isLandscapeIPadAware
 {
-    // override
+    return (OAUtilities.isLandscape || OAUtilities.isIPad) && !OAUtilities.isWindowed;
 }
 
 - (void)centerMapOnRoute
@@ -657,6 +291,8 @@
     }
 }
 
+#pragma mark - ChartHelperDelegate
+
 - (void)centerMapOnBBox:(OASKQuadRect *)routeBBox
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
@@ -669,9 +305,19 @@
                       animated:YES];
 }
 
-- (BOOL) isLandscapeIPadAware
+- (void) adjustViewPort:(BOOL)landscape
 {
-    return (OAUtilities.isLandscape || OAUtilities.isIPad) && !OAUtilities.isWindowed;
+    // override
+}
+
+- (void)showCurrentHighlitedLocation:(TrackChartPoints *)trackChartPoints
+{
+    [_layer showCurrentHighlitedLocation:trackChartPoints];
+}
+
+- (void)showCurrentStatisticsLocation:(TrackChartPoints *)trackChartPoints
+{
+    [_layer showCurrentStatisticsLocation:trackChartPoints];
 }
 
 #pragma mark - OARouteInformationListener

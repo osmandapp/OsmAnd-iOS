@@ -662,22 +662,12 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             if (_needChartUpdate)
             {
                 OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:_gpx.path]];
-                BOOL withoutGaps = YES;
-                if ([_gpx isShowCurrentTrack])
-                {
-                    withoutGaps = !gpx.joinSegments
-                    && (_gpx.tracks.count == 0 || [_gpx.tracks.firstObject isGeneralTrack]);
-                }
-                else
-                {
-                    withoutGaps = _gpx.tracks.count > 0 && [_gpx.tracks.firstObject isGeneralTrack] && gpx.joinSegments;
-                }
                 [GpxUIHelper refreshLineChartWithChartView:_routeStatsCell.chartView
                                                   analysis:trackAnalysis
                                                  firstType:GPXDataSetTypeAltitude
                                                 secondType:GPXDataSetTypeSlope
                                                   axisType:GPXDataSetAxisTypeDistance
-                                           calcWithoutGaps:withoutGaps];
+                                           calcWithoutGaps:[GpxUtils calcWithoutGaps:_gpx gpxDataItem:gpx]];
                 _needChartUpdate = NO;
             }
         }

@@ -24,7 +24,7 @@
 #define kOutlineWidth 10
 #define kWidthCorrectionValue 4
 
-@class OASTrkSegment, OATrackChartPoints;
+@class OASTrkSegment, TrackChartPoints;
 
 struct RouteSegmentResult;
 
@@ -40,8 +40,8 @@ struct RouteSegmentResult;
                  segmentResult:(std::vector<std::shared_ptr<RouteSegmentResult>> &)segs
                      locations:(NSArray<CLLocation *> *)locations;
 
-- (void) showCurrentHighlitedLocation:(OATrackChartPoints *)trackPoints;
-- (void) showCurrentStatisticsLocation:(OATrackChartPoints *)trackPoints;
+- (void) showCurrentHighlitedLocation:(TrackChartPoints *)trackPoints;
+- (void) showCurrentStatisticsLocation:(TrackChartPoints *)trackPoints;
 - (void) hideCurrentStatisticsLocation;
 
 @end

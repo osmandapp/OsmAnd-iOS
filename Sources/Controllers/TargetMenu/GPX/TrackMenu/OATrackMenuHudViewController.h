@@ -12,7 +12,7 @@
 #import "OATrackMenuHudViewControllerConstants.h"
 #import "OsmAndSharedWrapper.h"
 
-@class ElevationChart, OASTrack, OASTrkSegment, OARouteLineChartHelper, OARouteKey, OASMetadata, OALink, OATravelArticleIdentifier, OAGpxWptItem, OAGPXTableData;
+@class ElevationChart, TrackChartHelper, OASTrack, OASTrkSegment, OARouteKey, OASMetadata, OALink, OATravelArticleIdentifier, OAGpxWptItem, OAGPXTableData;
 
 @protocol OATrackMenuViewControllerDelegate <NSObject>
 
@@ -54,7 +54,7 @@
 
 - (void)updateChartHighlightValue:(ElevationChart *)chart
                           segment:(OASTrkSegment *)segment;
-- (OARouteLineChartHelper *)getLineChartHelper;
+- (TrackChartHelper *)getLineChartHelper;
 - (OASTrack *)getTrack:(OASTrkSegment *)segment;
 - (NSString *)getTrackSegmentTitle:(OASTrkSegment *)segment;
 - (NSString *)getDirName;

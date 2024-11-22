@@ -16,6 +16,7 @@
 #import "OARouteImporter.h"
 #import "OARouteStatistics.h"
 #import "OARootViewController.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -238,7 +239,7 @@
     return locationsIdx == locations.count ? 0 : locationsIdx;
 }
 
-- (void)showCurrentHighlitedLocation:(OATrackChartPoints *)trackPoints
+- (void)showCurrentHighlitedLocation:(TrackChartPoints *)trackPoints
 {
     BOOL hasHighlitedPoint = CLLocationCoordinate2DIsValid(trackPoints.highlightedPoint);
     if (_locationMarker)
@@ -252,7 +253,7 @@
     }
 }
 
-- (void)showCurrentStatisticsLocation:(OATrackChartPoints *)trackPoints
+- (void)showCurrentStatisticsLocation:(TrackChartPoints *)trackPoints
 {
     OsmAnd::MapMarkerBuilder xAxisMarkerBuilder;
     xAxisMarkerBuilder.setIsAccuracyCircleSupported(false);

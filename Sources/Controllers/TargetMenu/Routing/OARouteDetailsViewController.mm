@@ -11,7 +11,6 @@
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
 #import "OAMapPanelViewController.h"
-#import "OACommonTypes.h"
 #import "OAStatisticsSelectionBottomSheetViewController.h"
 #import "OASizes.h"
 #import "OAColors.h"
@@ -293,22 +292,12 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
                               useGesturesAndScale:YES];
 
     OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.gpx.path]];
-    BOOL withoutGaps = YES;
-    if ([self.gpx isShowCurrentTrack])
-    {
-        withoutGaps = !gpx.joinSegments
-        && (self.gpx.tracks.count == 0 || [self.gpx.tracks.firstObject isGeneralTrack]);
-    }
-    else
-    {
-        withoutGaps = self.gpx.tracks.count > 0 && [self.gpx.tracks.firstObject isGeneralTrack] && gpx.joinSegments;
-    }
     [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.chartView
                                       analysis:self.analysis
                                      firstType:GPXDataSetTypeAltitude
                                     secondType:GPXDataSetTypeSlope
                                       axisType:GPXDataSetAxisTypeDistance
-                               calcWithoutGaps:withoutGaps];
+                               calcWithoutGaps:[GpxUtils calcWithoutGaps:self.gpx gpxDataItem:gpx]];
     
     BOOL hasSlope = routeStatsCell.chartView.lineData.dataSetCount > 1;
     
@@ -800,8 +789,8 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     {
         if (self.analysis && self.segment)
         {
-            [self.routeLineChartHelper refreshChart:self.statisticsChart
-                                      fitTrackOnMap:YES
+            [self.trackChartHelper refreshChart:self.statisticsChart
+                                           fitTrack:YES
                                            forceFit:NO
                                    recalculateXAxis:YES
                                            analysis:self.analysis
@@ -966,8 +955,8 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     }
     if (self.analysis && self.segment)
     {
-        [self.routeLineChartHelper refreshChart:self.statisticsChart
-                                  fitTrackOnMap:YES
+        [self.trackChartHelper refreshChart:self.statisticsChart
+                                       fitTrack:YES
                                        forceFit:NO
                                recalculateXAxis:NO
                                        analysis:self.analysis
@@ -992,8 +981,8 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
             [self.statisticsChart highlightValue:h callDelegate:YES];
             if (self.analysis && self.segment)
             {
-                [self.routeLineChartHelper refreshChart:self.statisticsChart
-                                          fitTrackOnMap:YES
+                [self.trackChartHelper refreshChart:self.statisticsChart
+                                               fitTrack:YES
                                                forceFit:NO
                                        recalculateXAxis:NO
                                                analysis:self.analysis
@@ -1038,10 +1027,10 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     {
         OARouteStatisticsModeCell *statsModeCell = statsSection[0];
         ElevationChartCell *graphCell = statsSection[1];
-        [self.routeLineChartHelper changeChartTypes:_types
+        [self.trackChartHelper changeChartTypes:_types
                                               chart:graphCell.chartView
                                            analysis:self.analysis
-                                           modeCell:statsModeCell];
+                                        statsModeCell:statsModeCell];
     }
 }
 

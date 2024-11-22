@@ -3172,15 +3172,12 @@ typedef enum
     {
         OASTrkSegment *segment = [gpxFile getGeneralSegment];
         OASGpxTrackAnalysis *analysis = !isCurrentTrack && [gpxFile getGeneralTrack] && segment
-            ? [OARouteLineChartHelper getAnalysisFor:segment]
+            ? [TrackChartHelper getAnalysisFor:segment]
             : [gpxFile getAnalysisFileTimestamp:0];
         state.scrollToSectionIndex = -1;
         state.routeStatistics = @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)];
         if (!segment)
-        {
-            segment = [OARouteLineChartHelper getTrackSegment:analysis
-                                                      gpxItem:gpxFile];
-        }
+            segment = [TrackChartHelper getTrackSegment:analysis gpxItem:gpxFile];
         [self openTargetViewWithRouteDetailsGraph:gpxFile
                                         trackItem:trackItem
                                          analysis:analysis
@@ -3208,15 +3205,12 @@ typedef enum
     {
         OASTrkSegment *segment = [gpxFile getGeneralSegment];
         OASGpxTrackAnalysis *analysis = !trackItem.isShowCurrentTrack && [gpxFile getGeneralTrack] && segment
-            ? [OARouteLineChartHelper getAnalysisFor:segment]
+            ? [TrackChartHelper getAnalysisFor:segment]
             : [gpxFile getAnalysisFileTimestamp:0];
         state.scrollToSectionIndex = -1;
         state.routeStatistics = @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)];
         if (!segment)
-        {
-            segment = [OARouteLineChartHelper getTrackSegment:analysis
-                                                      gpxItem:gpxFile];
-        }
+            segment = [TrackChartHelper getTrackSegment:analysis gpxItem:gpxFile];
         [self openTargetViewWithRouteDetailsGraph:gpxFile
                                         trackItem:trackItem
                                          analysis:analysis

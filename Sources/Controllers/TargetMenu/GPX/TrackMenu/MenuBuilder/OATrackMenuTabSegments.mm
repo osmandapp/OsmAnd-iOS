@@ -10,7 +10,6 @@
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
-#import "OARouteBaseViewController.h"
 #import "OAValueTableViewCell.h"
 #import "OAQuadItemsWithTitleDescIconCell.h"
 #import "OASegmentTableViewCell.h"
@@ -32,7 +31,7 @@
 
 @implementation OATrackMenuTabSegments
 {
-    OARouteLineChartHelper *_routeLineChartHelper;
+    TrackChartHelper *_trackChartHelper;
 
     BOOL _hasTranslated;
     CGPoint _lastTranslation;
@@ -69,21 +68,21 @@
     if (self.trackMenuDelegate)
     {
         segments = [self.trackMenuDelegate getSegments];
-        if (!_routeLineChartHelper)
-            _routeLineChartHelper = [self.trackMenuDelegate getLineChartHelper];
+        if (!_trackChartHelper)
+            _trackChartHelper = [self.trackMenuDelegate getLineChartHelper];
     }
 
     OASTrkSegment *generalSegment = self.trackMenuDelegate ? [self.trackMenuDelegate getGeneralSegment] : nil;
     if (generalSegment)
     {
         [self generateSegmentSectionData:generalSegment
-                                analysis:[OARouteLineChartHelper getAnalysisFor:generalSegment]
+                                analysis:[TrackChartHelper getAnalysisFor:generalSegment]
                                    index:0];
     }
 
     for (NSInteger index = 0; index < segments.count; index++)
     {        
-        OASGpxTrackAnalysis *analysis = [OARouteLineChartHelper getAnalysisFor:segments[index]];
+        OASGpxTrackAnalysis *analysis = [TrackChartHelper getAnalysisFor:segments[index]];
         if (analysis)
         {
             [self generateSegmentSectionData:segments[index]
@@ -107,12 +106,12 @@
 
     [GpxUIHelper setupElevationChartWithChartView:cell.chartView];
 
-    if (_routeLineChartHelper)
+    if (_trackChartHelper)
     {
-        [_routeLineChartHelper changeChartTypes:@[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)]
-                                         chart:cell.chartView
-                                      analysis:analysis
-                                      modeCell:nil];
+        [_trackChartHelper changeChartTypes:@[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)]
+                                          chart:cell.chartView
+                                       analysis:analysis
+                                  statsModeCell:nil];
     }
 
     OAGPXTableSectionData *segmentSectionData = [OAGPXTableSectionData withData:@{
@@ -226,10 +225,10 @@
             OASTrkSegment *segment = sectionData.values[@"segment_value"];
             if (self.trackMenuDelegate)
                 [self.trackMenuDelegate updateChartHighlightValue:cell.chartView segment:segment];
-            if (analysis && segment && _routeLineChartHelper)
+            if (analysis && segment && _trackChartHelper)
             {
-                [_routeLineChartHelper refreshChart:cell.chartView
-                                      fitTrackOnMap:YES
+                [_trackChartHelper refreshChart:cell.chartView
+                                           fitTrack:YES
                                            forceFit:YES
                                    recalculateXAxis:YES
                                            analysis:analysis
@@ -379,7 +378,7 @@
                      entry:(ChartDataEntry *)entry
                  highlight:(ChartHighlight *)highlight
 {
-    if (_routeLineChartHelper && [chartView isKindOfClass:LineChartView.class])
+    if (_trackChartHelper && [chartView isKindOfClass:LineChartView.class])
     {
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:chartView.tag & 0x3FF inSection:chartView.tag >> 10];
         OAGPXTableSectionData *sectionData = self.tableData.subjects[indexPath.section];
@@ -387,8 +386,8 @@
         OASTrkSegment *segment = sectionData.values[@"segment_value"];
         if (analysis && segment)
         {
-            [_routeLineChartHelper refreshChart:(LineChartView *) chartView
-                                  fitTrackOnMap:YES
+            [_trackChartHelper refreshChart:(LineChartView *) chartView
+                                       fitTrack:YES
                                        forceFit:NO
                                recalculateXAxis:NO
                                        analysis:analysis
@@ -418,8 +417,8 @@
             OASTrkSegment *segment = sectionData.values[@"segment_value"];
             if (analysis && segment)
             {
-                [_routeLineChartHelper refreshChart:lineChartView
-                                      fitTrackOnMap:YES
+                [_trackChartHelper refreshChart:lineChartView
+                                           fitTrack:YES
                                            forceFit:NO
                                    recalculateXAxis:NO
                                            analysis:analysis
@@ -485,7 +484,7 @@
                         && (((UITapGestureRecognizer *) recognizer).nsuiNumberOfTapsRequired == 2)))
                 && recognizer.state == UIGestureRecognizerStateEnded)
         {
-            if (_routeLineChartHelper)
+            if (_trackChartHelper)
             {
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:lineChartView.tag & 0x3FF inSection:lineChartView.tag >> 10];
                 OAGPXTableSectionData *sectionData = self.tableData.subjects[indexPath.section];
@@ -493,8 +492,8 @@
                 OASTrkSegment *segment = sectionData.values[@"segment_value"];
                 if (analysis && segment)
                 {
-                    [_routeLineChartHelper refreshChart:lineChartView
-                                          fitTrackOnMap:YES
+                    [_trackChartHelper refreshChart:lineChartView
+                                               fitTrack:YES
                                                forceFit:NO
                                        recalculateXAxis:YES
                                                analysis:analysis
@@ -522,15 +521,15 @@
     {
         NSString *segmentKey = [tableData.key stringByReplacingOccurrencesOfString:@"chart_" withString:@""];
         OAGPXTableSectionData *sectionData = [self.tableData getSubject:[@"section_" stringByAppendingString:segmentKey]];
-        if (sectionData && _routeLineChartHelper)
+        if (sectionData && _trackChartHelper)
         {
             ElevationChartCell *cell = ((ElevationChartCell *) sectionData.values[@"cell_value"]);
             if (cell)
             {
-                [_routeLineChartHelper changeChartTypes:sectionData.values[@"mode_value"]
-                                                 chart:cell.chartView
-                                              analysis:sectionData.values[@"analysis_value"]
-                                              modeCell:nil];
+                [_trackChartHelper changeChartTypes:sectionData.values[@"mode_value"]
+                                                  chart:cell.chartView
+                                               analysis:sectionData.values[@"analysis_value"]
+                                          statsModeCell:nil];
             }
         }
     }

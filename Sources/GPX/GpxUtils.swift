@@ -12,6 +12,17 @@ import DGCharts
 @objcMembers
 final class GpxUtils: NSObject {
 
+    static func calcWithoutGaps(_ gpxFile: GpxFile?, gpxDataItem: GpxDataItem?) -> Bool {
+        guard let gpxFile, let gpxDataItem else { return false }
+        let isGeneralTrack = gpxFile.tracks.count > 0
+            && (gpxFile.tracks.firstObject as? Track)?.isGeneralTrack() ?? false
+        if gpxFile.isShowCurrentTrack() {
+            return !gpxDataItem.joinSegments && (gpxFile.tracks.count == 0 || isGeneralTrack)
+        } else {
+            return isGeneralTrack && gpxDataItem.joinSegments
+        }
+    }
+
     static func getLocationAtPos(_ chart: LineChartView,
                                  gpxFile: GpxFile,
                                  segment: TrkSegment?,

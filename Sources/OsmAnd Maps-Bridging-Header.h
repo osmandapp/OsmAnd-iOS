@@ -176,6 +176,7 @@
 #import "OAIconsCollectionViewCell.h"
 #import "OARangeSlider.h"
 #import "OATitleDescrDraggableCell.h"
+#import "OARouteStatisticsModeCell.h"
 
 // Views
 #import "OASegmentedSlider.h"

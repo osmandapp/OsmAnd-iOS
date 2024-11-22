@@ -10,47 +10,12 @@
 
 #define kMapMargin 20.0
 
-@class OARoutingHelper, OASGpxTrackAnalysis, OARouteStatisticsModeCell, OASGpxFile, OASTrkSegment, OABaseVectorLinesLayer, LineChartView, ElevationChart, OASTrackItem, OASKQuadRect;
-
-@protocol OARouteLineChartHelperDelegate
-
-- (void)centerMapOnBBox:(OASKQuadRect *)rect;
-- (void)adjustViewPort:(BOOL)landscape;
-
-@end
-
-@interface OARouteLineChartHelper : NSObject
-
-@property (nonatomic) BOOL isLandscape;
-@property (nonatomic) CGRect screenBBox;
-
-- (instancetype)initWithGpxDoc:(OASGpxFile *)gpxDoc layer:(OABaseVectorLinesLayer *)layer;
-
-@property (nonatomic, weak) id<OARouteLineChartHelperDelegate> delegate;
-
-+ (OASTrkSegment *)getTrackSegment:(OASGpxTrackAnalysis *)analysis
-                           gpxItem:(OASGpxFile *)gpxItem;
-
-+ (OASGpxTrackAnalysis *)getAnalysisFor:(OASTrkSegment *)segment;
-
-- (void)changeChartTypes:(NSArray<NSNumber *> *)types
-                  chart:(ElevationChart *)chart
-               analysis:(OASGpxTrackAnalysis *)analysis
-               modeCell:(OARouteStatisticsModeCell *)statsModeCell;
-
-- (void)refreshChart:(LineChartView *)chart
-       fitTrackOnMap:(BOOL)fitTrackOnMap
-            forceFit:(BOOL)forceFit
-    recalculateXAxis:(BOOL)recalculateXAxis
-            analysis:(OASGpxTrackAnalysis *)analysis
-             segment:(OASTrkSegment *)segment;
-
-@end
+@class OARoutingHelper, OASGpxTrackAnalysis, OARouteStatisticsModeCell, OASGpxFile, OASTrkSegment, OABaseVectorLinesLayer, LineChartView, ElevationChart, TrackChartHelper, OASTrackItem, OASKQuadRect;
 
 @interface OARouteBaseViewController : OATargetMenuViewController
 
 @property (nonatomic, readonly) OARoutingHelper *routingHelper;
-@property (nonatomic, readonly) OARouteLineChartHelper *routeLineChartHelper;
+@property (nonatomic, readonly) TrackChartHelper *trackChartHelper;
 
 @property (nonatomic) OASGpxFile *gpx;
 @property (nonatomic) OASTrackItem *trackItem;

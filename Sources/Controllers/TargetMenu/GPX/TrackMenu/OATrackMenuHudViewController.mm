@@ -17,7 +17,6 @@
 #import "OAEditWaypointsGroupBottomSheetViewController.h"
 #import "OAEditWaypointsGroupOptionsViewController.h"
 #import "OADeleteWaypointsGroupBottomSheetViewController.h"
-#import "OARouteBaseViewController.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
@@ -93,7 +92,7 @@
 
 @end
 
-@interface OATrackMenuHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, SFSafariViewControllerDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuViewControllerDelegate, OASelectTrackFolderDelegate, OAEditWaypointsGroupOptionsDelegate, OAFoldersCellDelegate, OAEditDescriptionViewControllerDelegate, OARouteLineChartHelperDelegate>
+@interface OATrackMenuHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, SFSafariViewControllerDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuViewControllerDelegate, OASelectTrackFolderDelegate, OAEditWaypointsGroupOptionsDelegate, OAFoldersCellDelegate, OAEditDescriptionViewControllerDelegate, ChartHelperDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *statusBarBackgroundView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
@@ -106,7 +105,7 @@
 
 @property (nonatomic) OASTrackItem *gpx;
 @property (nonatomic) BOOL isShown;
-@property (nonatomic) OARouteLineChartHelper *routeLineChartHelper;
+@property (nonatomic) TrackChartHelper *trackChartHelper;
 @property (nonatomic) OATrackMenuHeaderView *headerView;
 @property (nonatomic) OAGPXTableData *tableData;
 @property (nonatomic) EOATrackMenuHudTab selectedTab;
@@ -226,7 +225,7 @@
 - (void)commonInit
 {
     _app = [OsmAndApp instance];
-    _routeLineChartHelper = [self getLineChartHelper];
+    _trackChartHelper = [self getLineChartHelper];
     _gpxUIHelper = [[OAGPXUIHelper alloc] init];
     _imagesCacheHelper = [OATravelGuidesImageCacheHelper sharedDatabase];
 
@@ -363,8 +362,8 @@
                 [weakSelf.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
         }
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        weakSelf.routeLineChartHelper.isLandscape = [weakSelf isLandscape];
-        weakSelf.routeLineChartHelper.screenBBox = CGRectMake(
+        weakSelf.trackChartHelper.isLandscape = [weakSelf isLandscape];
+        weakSelf.trackChartHelper.screenBBox = CGRectMake(
                 [weakSelf isLandscape] ? [weakSelf getLandscapeViewWidth] : 0.,
                 0.,
                 [weakSelf isLandscape] ? DeviceScreenWidth - [weakSelf getLandscapeViewWidth] : DeviceScreenWidth,
@@ -877,8 +876,8 @@
     if (!self.analysis && ![self.gpx isShowCurrentTrack])
         self.analysis = [self.gpx.dataItem getAnalysis];
     [self openAnalysis:self.analysis
-               segment:[OARouteLineChartHelper getTrackSegment:self.analysis
-                                                       gpxItem:self.doc]
+               segment:[TrackChartHelper getTrackSegment:self.analysis
+                                                 gpxItem:self.doc]
              withTypes:types];
 }
 
@@ -1325,20 +1324,20 @@
     }
 }
 
-- (OARouteLineChartHelper *)getLineChartHelper
+- (TrackChartHelper *)getLineChartHelper
 {
-    if (!_routeLineChartHelper)
+    if (!_trackChartHelper)
     {
-        _routeLineChartHelper = [[OARouteLineChartHelper alloc] initWithGpxDoc:self.doc layer:self.mapViewController.mapLayers.gpxMapLayer];
-        _routeLineChartHelper.delegate = self;
-        _routeLineChartHelper.isLandscape = [self isLandscape];
-        _routeLineChartHelper.screenBBox = CGRectMake(
+        _trackChartHelper = [[TrackChartHelper alloc] initWithGpxDoc:self.doc];
+        _trackChartHelper.delegate = self;
+        _trackChartHelper.isLandscape = [self isLandscape];
+        _trackChartHelper.screenBBox = CGRectMake(
                 [self isLandscape] ? [self getLandscapeViewWidth] : 0.,
                 0.,
                 [self isLandscape] ? DeviceScreenWidth - [self getLandscapeViewWidth] : DeviceScreenWidth,
                 [self isLandscape] ? DeviceScreenHeight : DeviceScreenHeight - [self getViewHeight]);
     }
-    return _routeLineChartHelper;
+    return _trackChartHelper;
 }
 
 - (OASTrack *)getTrack:(OASTrkSegment *)segment
@@ -1610,12 +1609,7 @@
         }
     }
     self.gpx = [[OASTrackItem alloc] initWithFile:gpx.file];
-    if (self.gpx && !self.gpx.dataItem)
-    {
-        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:self.gpx.path];
-        if (gpx)
-            self.gpx.dataItem = gpx;
-    }
+    self.gpx.dataItem = [[OAGPXDatabase sharedDb] getGPXItem:self.gpx.path];
 
     _routeKey = [OARouteKey fromGpx:self.doc.networkRouteKeyTags];
     _isNewRoute = NO;
@@ -1894,7 +1888,7 @@
                   withRowAnimation:UITableViewRowAnimationNone];
 }
 
-#pragma mark - OARouteLineChartHelperDelegate
+#pragma mark - ChartHelperDelegate
 
 - (void)centerMapOnBBox:(OASKQuadRect *)rect
 {
@@ -1909,6 +1903,16 @@
 - (void)adjustViewPort:(BOOL)landscape
 {
     [super adjustViewPort:landscape];
+}
+
+- (void)showCurrentHighlitedLocation:(TrackChartPoints *)trackChartPoints
+{
+    [self.mapViewController.mapLayers.gpxMapLayer showCurrentHighlitedLocation:trackChartPoints];
+}
+
+- (void)showCurrentStatisticsLocation:(TrackChartPoints *)trackChartPoints
+{
+    [self.mapViewController.mapLayers.gpxMapLayer showCurrentStatisticsLocation:trackChartPoints];
 }
 
 #pragma mark - Cell action methods

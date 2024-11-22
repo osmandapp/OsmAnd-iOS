@@ -10,7 +10,6 @@
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
 #import "OAMapHudViewController.h"
-#import "OARouteBaseViewController.h"
 #import "OAMapRendererView.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -224,38 +223,22 @@
 
     if (updateDocument)
     {
-        _doc = nil;
         if (_isCurrentTrack)
         {
             _doc = _savingHelper.currentTrack;
         }
         else
         {
-            NSString *gpxFullPath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:_gpx.gpxFilePath];
-            OASGpxFile *gpx = [[OASelectedGPXHelper instance] getGpxFileFor:gpxFullPath];
-            if (!gpx)
-            {
-                OASKFile *file = [[OASKFile alloc] initWithFilePath:_gpx.path];
-                _doc = [OASGpxUtilities.shared loadGpxFileFile:file];
-            }
-            else
-            {
-                _doc = gpx;
-            }
+            _doc = [[OASelectedGPXHelper instance] getGpxFileFor:_gpx.path]
+                ?: [OASGpxUtilities.shared loadGpxFileFile:[[OASKFile alloc] initWithFilePath:_gpx.path]];
         }
     }
-
-    if (_gpx && !_gpx.dataItem)
-    {
-        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:_doc ? _doc.path : _gpx.path];
-        if (gpx)
-            _gpx.dataItem = gpx;
-    }
+    _gpx.dataItem = [[OAGPXDatabase sharedDb] getGPXItem:_doc ? _doc.path : _gpx.path];
 
     [self updateAnalysis];
 
     if (!_isCurrentTrack
-        && _gpx && _gpx.dataItem && _gpx.dataItem.nearestCity.length == 0
+        && _gpx.dataItem && _gpx.dataItem.nearestCity.length == 0
         && _analysis && _analysis.locationStart)
     {
         auto locationStart = _analysis.locationStart;
@@ -291,10 +274,7 @@
     BOOL hasGeneralSegment = !_isCurrentTrack && [_doc getGeneralTrack] && [_doc getGeneralSegment];
     if (hasGeneralSegment)
     {
-        if (_doc)
-            _analysis = [OARouteLineChartHelper getAnalysisFor:[_doc getGeneralSegment]];
-        else
-            _analysis = nil;
+        _analysis = _doc ? [TrackChartHelper getAnalysisFor:[_doc getGeneralSegment]] : nil;
     }
     else
     {

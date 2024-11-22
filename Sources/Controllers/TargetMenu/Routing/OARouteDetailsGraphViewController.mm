@@ -82,22 +82,12 @@
                                      bottomOffset:4
                               useGesturesAndScale:YES];
     OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.gpx.path]];
-    BOOL withoutGaps = YES;
-    if ([self.gpx isShowCurrentTrack])
-    {
-        withoutGaps = !gpx.joinSegments
-        && (self.gpx.tracks.count == 0 || [self.gpx.tracks.firstObject isGeneralTrack]);
-    }
-    else
-    {
-        withoutGaps = self.gpx.tracks.count > 0 && [self.gpx.tracks.firstObject isGeneralTrack] && gpx.joinSegments;
-    }
     [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.chartView
                                       analysis:self.analysis
                                      firstType:GPXDataSetTypeAltitude
                                     secondType:GPXDataSetTypeSlope
                                       axisType:GPXDataSetAxisTypeDistance
-                               calcWithoutGaps:withoutGaps];
+                               calcWithoutGaps:[GpxUtils calcWithoutGaps:self.gpx gpxDataItem:gpx]];
 
     self.statisticsChart = routeStatsCell.chartView;
     for (UIGestureRecognizer *recognizer in self.statisticsChart.gestureRecognizers)
@@ -206,8 +196,8 @@
 
     if (self.analysis && self.segment)
     {
-        [self.routeLineChartHelper refreshChart:self.statisticsChart
-                                  fitTrackOnMap:YES
+        [self.trackChartHelper refreshChart:self.statisticsChart
+                                       fitTrack:YES
                                        forceFit:NO
                                recalculateXAxis:YES
                                        analysis:self.analysis
@@ -357,8 +347,8 @@
     {
         if (self.analysis && self.segment)
         {
-            [self.routeLineChartHelper refreshChart:self.statisticsChart
-                                      fitTrackOnMap:YES
+            [self.trackChartHelper refreshChart:self.statisticsChart
+                                           fitTrack:YES
                                            forceFit:NO
                                    recalculateXAxis:YES
                                            analysis:self.analysis
@@ -407,8 +397,8 @@
             [self.statisticsChart highlightValue:h callDelegate:YES];
             if (self.analysis && self.segment)
             {
-                [self.routeLineChartHelper refreshChart:self.statisticsChart
-                                          fitTrackOnMap:YES
+                [self.trackChartHelper refreshChart:self.statisticsChart
+                                               fitTrack:YES
                                                forceFit:NO
                                        recalculateXAxis:NO
                                                analysis:self.analysis
@@ -506,8 +496,8 @@
 {
     if (self.analysis && self.segment)
     {
-        [self.routeLineChartHelper refreshChart:self.statisticsChart
-                                  fitTrackOnMap:YES
+        [self.trackChartHelper refreshChart:self.statisticsChart
+                                       fitTrack:YES
                                        forceFit:NO
                                recalculateXAxis:NO
                                        analysis:self.analysis
@@ -530,10 +520,10 @@
         OARouteStatisticsModeCell *statsModeCell = _data[0];
         ElevationChartCell *graphCell = _data[1];
 
-        [self.routeLineChartHelper changeChartTypes:_types
+        [self.trackChartHelper changeChartTypes:_types
                                               chart:graphCell.chartView
                                            analysis:self.analysis
-                                           modeCell:statsModeCell];
+                                      statsModeCell:statsModeCell];
     }
 }
 

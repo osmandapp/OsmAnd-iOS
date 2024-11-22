@@ -7,11 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <CoreLocation/CoreLocation.h>
 
 #include "binaryRead.h"
 #include "routeSegmentResult.h"
-
 #include <vector>
 #include <OsmAndCore/Map/MapPresentationEnvironment.h>
 
@@ -19,18 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 static NSString *ROUTE_INFO_PREFIX = @"routeInfo_";
 
-@class OARouteStatistics, OARouteSegmentAttribute, OASGpxFile;
-
-@interface OATrackChartPoints : NSObject
-
-@property (nonatomic) NSArray<CLLocation *> *xAxisPoints;
-@property (nonatomic) CLLocationCoordinate2D highlightedPoint;
-@property (nonatomic) NSInteger segmentColor;
-@property (nonatomic) OASGpxFile *gpx;
-@property (nonatomic) CLLocationCoordinate2D start;
-@property (nonatomic) CLLocationCoordinate2D end;
-
-@end
+@class OARouteStatistics, OARouteSegmentAttribute;
 
 @interface OARouteSegmentWithIncline : NSObject
 

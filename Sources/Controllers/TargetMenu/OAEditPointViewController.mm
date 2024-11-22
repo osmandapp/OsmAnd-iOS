@@ -757,7 +757,7 @@
     }
     else if ([cellType isEqualToString:[OAColorsPaletteCell getCellIdentifier]])
     {
-        OAColorsPaletteCell *cell = _colorsPaletteCell;//[self.tableView dequeueReusableCellWithIdentifier:[OAColorsPaletteCell getCellIdentifier]];
+        OAColorsPaletteCell *cell = _colorsPaletteCell;
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAColorsPaletteCell getCellIdentifier] owner:self options:nil];

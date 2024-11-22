@@ -139,7 +139,7 @@
         item[@"distance"] = [OAOsmAndFormatter getFormattedDistance:segmentDist];
         
         if (segmentTime != 1)
-            item[@"time"] = [OAOsmAndFormatter getFormattedTimeInterval:segmentTime shortFormat:YES];
+            item[@"time"] = [OAOsmAndFormatter getFormattedTimeInterval:segmentTime / 1000 shortFormat:YES];
         
         [data addObject:item];
         idx++;
@@ -270,7 +270,6 @@
                                                                   fromName:nil
                                             useIntermediatePointsByDefault:YES
                                                                 showDialog:YES];
-    
     [self dismissViewController];
 }
 

@@ -2477,7 +2477,7 @@
 "weather_generates_new_forecast_description" = "OsmAnd genera un nuevo pronóstico cada 6 horas. Cuanto más cerca de la fecha actual, más preciso será.";
 "loading_purchase_information" = "Cargando datos de compra";
 "contact_support_description" = "Si tienes alguna duda, ponte en contacto con nosotros en %@.";
-"contact_support" = "Contacto con soporte";
+"contact_support" = "Contactar con soporte";
 "shared_string_not_included" = "No incluido";
 "shared_string_logout" = "Cerrar sesión";
 "select_backup_data_descr" = "Marcá los datos y carpetas para la copia de seguridad.";

@@ -26,6 +26,7 @@
 #import "OANetworkRouteDrawable.h"
 #import "OAPluginsHelper.h"
 #import "OAAppSettings.h"
+#import "OsmAndSharedWrapper.h"
 
 #include "OACoreResourcesAmenityIconProvider.h"
 #include <OsmAndCore/Data/Amenity.h>
@@ -39,6 +40,8 @@
 
 #define kPoiSearchRadius 50
 #define kTrackSearchDelta 40
+
+const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 
 @implementation OAPOILayer
 {
@@ -464,10 +467,15 @@
             const auto& obfsDataInterface = self.app.resourcesManager->obfsCollection->obtainDataInterface();
             
             auto point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(point.latitude, point.longitude));
+            const auto tags = obfMapObject->getResolvedAttributes();
+            if (tags.contains(TAG_POI_LAT_LON))
+            {
+                const LatLon l = [self parsePoiLatLon:tags[TAG_POI_LAT_LON]];
+                point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(l.lat, l.lon));
+            }
             auto bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(kPoiSearchRadius, point31);
             BOOL amenityFound = obfsDataInterface->findAmenityByObfMapObject(obfMapObject, &amenity, &bbox31);
             
-            const auto tags = obfMapObject->getResolvedAttributes();
             
             bool isRoute = !OsmAnd::NetworkRouteKey::getRouteKeys(tags).isEmpty();
             if (isRoute)
@@ -532,6 +540,12 @@
         if (![found containsObject:targetPoint])
             [found addObject:targetPoint];
     }
+}
+
+- (LatLon) parsePoiLatLon:(QString)value
+{
+    OASKGeoParsedPoint * p = [OASKMapUtils.shared decodeShortLinkStringS:value.toNSString()];
+    return LatLon(p.getLatitude, p.getLongitude);
 }
 
 @end

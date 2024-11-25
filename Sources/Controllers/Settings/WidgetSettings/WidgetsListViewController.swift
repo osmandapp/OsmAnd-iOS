@@ -69,19 +69,6 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
     override func registerNotifications() {
         addNotification(NSNotification.Name(kWidgetVisibilityChangedMotification), selector: #selector(onWidgetStateChanged))
         addNotification(NSNotification.Name(Self.kWidgetAddedNotification), selector: #selector(onWidgetAdded(notification:)))
-        addNotification(.SimpleWidgetStyleUpdated, selector: #selector(onSimpleWidgetStyleUpdated))
-    }
-    
-    @objc private func onSimpleWidgetStyleUpdated(notification: Notification) {
-        guard let widgetInfo = notification.object as? MapWidgetInfo,
-              let widget = widgetInfo.widget as? OATextInfoWidget else { return }
-        guard let rows = getRowsInPageFor(key: widgetInfo.key) else { return }
-        
-        rows.lazy
-            .compactMap { $0.widget as? OATextInfoWidget }
-            .forEach { 
-                $0.updateWith(style: widget.widgetSizeStyle, appMode: selectedAppMode)
-            }
     }
     
     // MARK: - Base setup UI
@@ -773,10 +760,6 @@ extension WidgetsListViewController {
             }
         }
         return nil
-    }
-    
-    private func getRowsInPageFor(key: String) -> [MapWidgetInfo]? {
-        getPagesWithMapWidgetInfo().first { $0.contains { $0.key == key } }
     }
     
     private func getPagesWithMapWidgetInfo() -> [[MapWidgetInfo]] {

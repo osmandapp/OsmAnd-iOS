@@ -8,10 +8,6 @@
 
 import Foundation
 
-extension Notification.Name {
-    static let SimpleWidgetStyleUpdated = NSNotification.Name("SimpleWidgetStyleUpdated")
-}
-
 @objc(OAWidgetConfigurationViewController)
 @objcMembers
 class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStateDelegate {
@@ -202,9 +198,7 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                     widgetConfigurationParams?["widgetSizeStyle"] = index
                 }
                 if item.string(forKey: "behaviour") == "simpleWidget" {
-                    NotificationCenter.default.post(name: .SimpleWidgetStyleUpdated,
-                                                    object: widgetInfo,
-                                                    userInfo: nil)
+                    updateWidgetStyleForRow(with: widgetInfo)
                     OARootViewController.instance().mapPanel.recreateControls()
                 }
             }
@@ -330,11 +324,6 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
         }
     }
     
-    private func onWidgetDeleted() {
-        let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
-        widgetRegistry.enableDisableWidget(for: selectedAppMode, widgetInfo: widgetInfo, enabled: NSNumber(value: false), recreateControls: true)
-    }
-    
     func onWidgetStateChanged() {
         isFirstGenerateData = false
         if widgetInfo.key == WidgetType.markersTopBar.id || widgetInfo.key.hasPrefix(WidgetType.markersTopBar.id + MapWidgetInfo.DELIMITER) {
@@ -345,6 +334,26 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
         generateData()
         onWidgetStateChangedAction?()
         tableView.reloadData()
+    }
+    
+    private func onWidgetDeleted() {
+        let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
+        widgetRegistry.enableDisableWidget(for: selectedAppMode, widgetInfo: widgetInfo, enabled: NSNumber(value: false), recreateControls: true)
+    }
+    
+    private func updateWidgetStyleForRow(with mapWidgetInfo: MapWidgetInfo) {
+        let enabledWidgetsFilter = Int(KWidgetModeAvailable | kWidgetModeEnabled | kWidgetModeMatchingPanels)
+        guard let pagedWidgets = widgetRegistry.getPagedWidgets(forPanel: selectedAppMode,
+                                                                panel: widgetPanel,
+                                                                filterModes: enabledWidgetsFilter),
+              let widget = widgetInfo.widget as? OATextInfoWidget else {
+            return
+        }
+        pagedWidgets
+            .compactMap { $0.array as? [MapWidgetInfo] }
+            .first { $0.contains { $0.key == mapWidgetInfo.key } }?
+            .compactMap { $0.widget as? OATextInfoWidget }
+            .forEach { $0.updateWith(style: widget.widgetSizeStyle, appMode: selectedAppMode) }
     }
 }
 

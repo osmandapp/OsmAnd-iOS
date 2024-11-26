@@ -144,6 +144,8 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
     override func onTopButtonPressed() {
         let vc = WidgetGroupListViewController()
         vc.widgetPanel = widgetPanel
+        vc.addToNext = nil
+        vc.selectedWidget = nil
         show(vc)
     }
     

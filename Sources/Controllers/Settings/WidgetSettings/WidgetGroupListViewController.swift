@@ -21,6 +21,8 @@ class WidgetGroupListViewController: OABaseNavbarViewController, UISearchBarDele
     lazy private var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
     
     var widgetPanel: WidgetsPanel!
+    var addToNext: Bool?
+    var selectedWidget: String?
     
     override func generateData() {
         filteredSection = OATableSectionData()
@@ -324,6 +326,8 @@ extension WidgetGroupListViewController {
             let vc = WidgetGroupItemsViewController()
             vc.widgetPanel = widgetPanel
             vc.widgetGroup = widgetGroup
+            vc.addToNext = addToNext
+            vc.selectedWidget = selectedWidget
             show(vc)
         } else if let widgetType = item.obj(forKey: "widget_type") as? WidgetType {
             guard let vc = WidgetConfigurationViewController(),
@@ -341,6 +345,8 @@ extension WidgetGroupListViewController {
                     vc.selectedAppMode = OAAppSettings.sharedManager().applicationMode.get()
                     vc.widgetInfo = widgetInfo
                     vc.widgetPanel = widgetPanel
+                    vc.addToNext = addToNext
+                    vc.selectedWidget = selectedWidget
                     vc.createNew = true
                     show(vc)
                 } else if widgetType == .altitudeMapCenter {

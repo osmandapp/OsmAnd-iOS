@@ -202,3 +202,9 @@ class MapWidgetInfo: NSObject, Comparable {
         return key
     }
 }
+
+//extension MapWidgetInfo {
+//    static func ==(lhs: MapWidgetInfo, rhs: MapWidgetInfo) -> Bool {
+//        return lhs.key == rhs.key && lhs.pageIndex == rhs.pageIndex && lhs.widgetPanel == rhs.widgetPanel
+//    }
+//}

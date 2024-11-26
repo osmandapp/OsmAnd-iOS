@@ -14,6 +14,8 @@ class WidgetGroupItemsViewController: OABaseNavbarViewController {
     
     var widgetGroup: WidgetGroup!
     var widgetPanel: WidgetsPanel!
+    var addToNext: Bool?
+    var selectedWidget: String?
     
     lazy private var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
     
@@ -67,6 +69,8 @@ class WidgetGroupItemsViewController: OABaseNavbarViewController {
                     vc.selectedAppMode = OAAppSettings.sharedManager().applicationMode.get()
                     vc.widgetInfo = widgetInfo
                     vc.widgetPanel = widgetPanel
+                    vc.addToNext = addToNext
+                    vc.selectedWidget = selectedWidget
                     vc.createNew = true
                     show(vc)
                 } else if widgetType == .altitudeMapCenter {

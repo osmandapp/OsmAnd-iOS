@@ -6,8 +6,198 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-final class WidgetUtils {
+extension WidgetUtils {
+    static func createNewWidgets(widgetsIds: [String],
+                                 panel: WidgetsPanel,
+                                 appMode: OAApplicationMode,
+                                 widgetParams: [String: Any]?,
+                                 recreateControls: Bool = true) {
+        createNewWidgets(widgetsIds: widgetsIds,
+                         panel: panel,
+                         appMode: appMode,
+                         recreateControls: recreateControls,
+                         selectedWidget: nil,
+                         widgetParams: widgetParams,
+                         addToNext: nil)
+    }
+    
+    static func createNewWidgets(widgetsIds: [String],
+                                 panel: WidgetsPanel,
+                                 appMode: OAApplicationMode,
+                                 recreateControls: Bool = true,
+                                 selectedWidget: String?,
+                                 widgetParams: [String: Any]?,
+                                 addToNext: Bool?) {
+        let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
+        let widgetsFactory = MapWidgetsFactory()
 
+        for widgetId in widgetsIds {
+            if let widgetInfo = createWidget(widgetId: widgetId,
+                                             panel: panel,
+                                             widgetsFactory: widgetsFactory,
+                                             selectedAppMode: appMode,
+                                             widgetParams: widgetParams) {
+                if let addToNext, let selectedWidget {
+                    addWidgetToSpecificPlace(with: widgetInfo,
+                                             widgetsPanel: panel,
+                                             selectedAppMode: appMode,
+                                             selectedWidget: selectedWidget,
+                                             addToNext: addToNext)
+                } else {
+                    addWidgetToEnd(with: widgetInfo, widgetsPanel: panel, selectedAppMode: appMode)
+                }
+                widgetRegistry.enableDisableWidget(for: appMode, widgetInfo: widgetInfo, enabled: true, recreateControls: false)
+            }
+        }
+        widgetRegistry.reorderWidgets()
+        OARootViewController.instance().mapPanel.recreateControls()
+    }
+    
+    private static func addWidgetToEnd(with targetWidget: MapWidgetInfo,
+                                       widgetsPanel: WidgetsPanel,
+                                       selectedAppMode: OAApplicationMode) {
+
+        let settings = OAAppSettings.sharedManager()
+        let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
+      //  var pagedOrder: [Int: [String]] = [:]
+        var pagedOrder = MutableOrderedDictionary<AnyObject, AnyObject>()
+
+      //  let data = MutableOrderedDictionary<Int, [String]>() = [:]
+                
+        var enabledWidgets = widgetRegistry.getWidgetsForPanel(selectedAppMode, filterModes: Int(kWidgetModeEnabled | kWidgetModeMatchingPanels), panels: [widgetsPanel])
+        
+        widgetRegistry.getWidgetsFor(targetWidget.widgetPanel).remove(targetWidget)
+        
+        targetWidget.widgetPanel = widgetsPanel
+        
+        for widget in enabledWidgets! {
+            guard let widgetItem = widget as? MapWidgetInfo else {
+                continue
+            }
+            let page = widgetItem.pageIndex
+            var orders: [String] = pagedOrder.object(at: page) as? AnyObject as! [String]
+            orders.append(widgetItem.key)
+            pagedOrder[page] = orders
+        }
+        
+        if pagedOrder.isEmpty {
+            targetWidget.pageIndex = 0
+            targetWidget.priority = 0
+            widgetRegistry.getWidgetsFor(targetWidget.widgetPanel).add(targetWidget)
+            
+            var flatOrder: [[String]] = []
+            flatOrder.append([targetWidget.key])
+            widgetsPanel.setWidgetsOrder(pagedOrder: flatOrder, appMode: selectedAppMode)
+        } else {
+            let pages = Array(pagedOrder.keys)
+            var orders = Array(pagedOrder.values)
+            var lastPageOrder = orders.last ?? []
+            
+//            if widgetsPanel.isPanelVertical {
+//                var newPage: [String] = [targetWidget.key]
+//                orders.append(newPage)
+//                targetWidget.pageIndex = getNewNextPageIndex(pages: pages) + 1
+//                targetWidget.priority = 0
+//            } else {
+                lastPageOrder.append(targetWidget.key)
+                
+                if lastPageOrder.count > 1 {
+                    let previousLastWidgetId = lastPageOrder[lastPageOrder.count - 2]
+                   
+                    if let previousLastVisibleWidgetInfo = widgetRegistry.getWidgetInfo(byId: previousLastWidgetId) {
+                        targetWidget.pageIndex = previousLastVisibleWidgetInfo.pageIndex
+                        targetWidget.priority = previousLastVisibleWidgetInfo.priority + 1
+                    } else {
+                        targetWidget.pageIndex = pages.last ?? 0
+                        targetWidget.priority = lastPageOrder.count - 1
+                    }
+                } else {
+                    targetWidget.pageIndex = pages.last ?? 0
+                    targetWidget.priority = 0
+                }
+            //}
+            
+            widgetRegistry.getWidgetsFor(widgetsPanel).add(targetWidget)
+            widgetsPanel.setWidgetsOrder(pagedOrder: orders, appMode: selectedAppMode)
+        }
+    }
+    
+    private static func addWidgetToSpecificPlace(with targetWidget: MapWidgetInfo,
+                                                 widgetsPanel: WidgetsPanel,
+                                                 selectedAppMode: OAApplicationMode,
+                                                 selectedWidget: String,
+                                                 addToNext: Bool) {
+        let settings = OAAppSettings.sharedManager()
+        let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
+        var pagedOrder = [Int: [String]]()
+        
+        var enabledWidgets = widgetRegistry.getWidgetsForPanel(selectedAppMode, filterModes: Int(kWidgetModeEnabled | kWidgetModeMatchingPanels), panels: [widgetsPanel])
+        
+        widgetRegistry.getWidgetsFor(targetWidget.widgetPanel).remove(targetWidget)
+        targetWidget.widgetPanel = widgetsPanel
+
+        for widget in enabledWidgets! {
+            guard let widgetItem = widget as? MapWidgetInfo else {
+                continue
+            }
+            let page = widgetItem.pageIndex
+            var orders = pagedOrder[page] ?? []
+            orders.append(widgetItem.key)
+            pagedOrder[page] = orders
+        }
+
+        if pagedOrder.isEmpty {
+            targetWidget.pageIndex = 0
+            targetWidget.priority = 0
+            widgetRegistry.getWidgetsFor(widgetsPanel).add(targetWidget)
+
+            var flatOrder = [[String]]()
+            flatOrder.append([targetWidget.key])
+            widgetsPanel.setWidgetsOrder(pagedOrder: flatOrder, appMode: selectedAppMode)
+        } else {
+            var orders = Array(pagedOrder.values)
+            var insertPage = 0
+            var insertOrder = 0
+
+            for (pageIndex, widgetPage) in orders.enumerated() {
+                for (orderIndex, widgetId) in widgetPage.enumerated() where widgetId == selectedWidget {
+                    insertPage = pageIndex
+                    insertOrder = orderIndex
+                }
+            }
+
+            var pageToAddWidget = orders[insertPage]
+            if addToNext {
+                insertOrder += 1
+            }
+            pageToAddWidget.insert(targetWidget.key, at: insertOrder)
+
+            for (index, widgetId) in pageToAddWidget.enumerated() {
+                if let widgetInfo = widgetRegistry.getWidgetInfo(byId: widgetId) {
+                    widgetInfo.pageIndex = insertPage
+                    widgetInfo.priority = index
+                } else if widgetId == targetWidget.key {
+                    targetWidget.pageIndex = insertPage
+                    targetWidget.priority = index
+                }
+            }
+
+            orders.insert(pageToAddWidget, at: insertPage)
+            widgetRegistry.getWidgetsFor(widgetsPanel).add(targetWidget)
+            widgetsPanel.setWidgetsOrder(pagedOrder: orders, appMode: selectedAppMode)
+        }
+    }
+    
+    private static func getNewNextPageIndex(pages: [Int]) -> Int {
+        guard let maxPage = pages.max() else {
+            return 0
+        }
+        return maxPage
+    }
+}
+
+final class WidgetUtils {
+    
     static func reorderWidgets(orderedWidgetPages: [[String]],
                                panel: WidgetsPanel,
                                selectedAppMode: OAApplicationMode,
@@ -142,5 +332,4 @@ final class WidgetUtils {
                                            enabled: NSNumber(value: true),
                                            recreateControls: false)
     }
-
 }

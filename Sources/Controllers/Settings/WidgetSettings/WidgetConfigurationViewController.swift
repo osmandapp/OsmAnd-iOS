@@ -21,6 +21,8 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
     var widgetConfigurationParams: [String: Any]?
     var isFirstGenerateData = true
     var onWidgetStateChangedAction: (() -> Void)?
+    var addToNext: Bool?
+    var selectedWidget: String?
     
     lazy private var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
     
@@ -30,6 +32,10 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
         tableView.setContentOffset(CGPoint(x: 0, y: 1), animated: false)
         if isCreateNewAndSimilarAlreadyExist || (createNew && !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "")) {
             widgetConfigurationParams = ["selectedAppMode": selectedAppMode!]
+            // NOTE:
+//            if let addToNext {
+//                widgetConfigurationParams!["addToNext"] = addToNext
+//            }
         }
     }
 
@@ -393,21 +399,35 @@ extension WidgetConfigurationViewController {
     }
     
     override func onBottomButtonPressed() {
-        NotificationCenter.default.post(name: NSNotification.Name(WidgetsListViewController.kWidgetAddedNotification),
-                                        object: widgetInfo,
-                                        userInfo: widgetConfigurationParams)
-        if let viewControllers = navigationController?.viewControllers {
-            for viewController in viewControllers {
-                if let targetViewController = viewController as? WidgetsListViewController {
-                    navigationController?.popToViewController(targetViewController, animated: true)
-                    break
-                }
-            }
+        WidgetUtils.createNewWidgets(widgetsIds: [widgetInfo.key],
+                                     panel: widgetPanel,
+                                     appMode: selectedAppMode,
+                                     recreateControls: true,
+                                     selectedWidget: selectedWidget,
+                                     widgetParams: widgetConfigurationParams,
+                                     addToNext: addToNext)
+        
+//        if let addToNext, let selectedWidget {
+//            WidgetUtils.createNewWidgets(widgetsIds: [widgetInfo.key],
+//                                         panel: widgetPanel,
+//                                         appMode: selectedAppMode,
+//                                         recreateControls: true,
+//                                         selectedWidget: selectedWidget,
+//                                         widgetParams: widgetConfigurationParams,
+//                                         addToNext: addToNext)
+//        }
+//        NotificationCenter.default.post(name: NSNotification.Name(WidgetsListViewController.kWidgetAddedNotification),
+//                                        object: widgetInfo,
+//                                        userInfo: widgetConfigurationParams)
+        
+        if let targetViewController = navigationController?.viewControllers.first(where: { $0 is WidgetsListViewController }) {
+            navigationController?.popToViewController(targetViewController, animated: true)
+        } else {
+            navigationController?.dismiss(animated: true)
         }
     }
 
     override func getBottomButtonTitleAttr() -> NSAttributedString! {
-        
         guard createNew else { return nil }
         // Create the attributed string with the desired text and attributes
         let text = "  " + localizedString("add_widget")
@@ -440,5 +460,4 @@ extension WidgetConfigurationViewController {
         
         return attributedString
     }
-    
 }

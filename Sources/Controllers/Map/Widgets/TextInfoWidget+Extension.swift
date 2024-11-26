@@ -36,32 +36,31 @@ extension OATextInfoWidget {
         }
         
         func configureMenu() -> UIMenu? {
-            let isPanelVertical = getPanel()?.isPanelVertical ?? false
-            let addGroup = UIMenu(options: .displayInline, children: [
-                createAction(for: isPanelVertical ? .addItemRight : .addItemAbove ),
-                createAction(for: isPanelVertical ? .addItemLeft : .addItemBelow )
-            ])
-            let settingsGroup = UIMenu(options: .displayInline, children: [
-                createAction(for: .settings)
-            ])
-            let deleteGroup = UIMenu(options: .displayInline, children: [
-                createAction(for: .delete)
-            ])
-            return UIMenu(title: "", children: [addGroup, settingsGroup, deleteGroup])
+            if let widgetInfo = getInfo() ?? OAMapWidgetRegistry.sharedInstance().getWidgetInfo(byId: widgetType?.id ?? "") {
+                let isPanelVertical = widgetInfo.widgetPanel.isPanelVertical
+                let addGroup = UIMenu(options: .displayInline, children: [
+                    createAction(for: isPanelVertical ? .addItemLeft : .addItemAbove, selectedWidget: widgetInfo.key),
+                    createAction(for: isPanelVertical ? .addItemRight : .addItemBelow, selectedWidget: widgetInfo.key)
+                ])
+                let settingsGroup = UIMenu(options: .displayInline, children: [
+                    createAction(for: .settings, selectedWidget: widgetInfo.key)
+                ])
+                let deleteGroup = UIMenu(options: .displayInline, children: [
+                    createAction(for: .delete, selectedWidget: widgetInfo.key)
+                ])
+                return UIMenu(title: "", children: [addGroup, settingsGroup, deleteGroup])
+            }
+            return nil
         }
         
-        func createAction(for menuItem: ContextWidgetMenu) -> UIAction {
+        func createAction(for menuItem: ContextWidgetMenu, selectedWidget: String) -> UIAction {
             return UIAction(title: localizedString(menuItem.title), image: menuItem.image) { [weak self] _ in
                 guard let self else { return }
                 switch menuItem {
-                case .addItemRight:
-                    print("addItemRight")
-                case .addItemLeft:
-                    print("addItemLeft")
-                case .addItemAbove:
-                    print("addItemAbove")
-                case .addItemBelow:
-                    print("addItemBelow")
+                case .addItemRight, .addItemBelow:
+                    showAddWidgetController(addToNext: true, selectedWidget: selectedWidget)
+                case .addItemLeft, .addItemAbove:
+                    showAddWidgetController(addToNext: false, selectedWidget: selectedWidget)
                 case .settings:
                     showWidgetConfiguration()
                 case .delete:
@@ -70,6 +69,16 @@ extension OATextInfoWidget {
             }
         }
         return configureMenu()
+    }
+    
+    private func showAddWidgetController(addToNext: Bool, selectedWidget: String) {
+        if let widgetInfo = getInfo() ?? OAMapWidgetRegistry.sharedInstance().getWidgetInfo(byId: widgetType?.id ?? "") {
+            let vc = WidgetGroupListViewController()
+            vc.widgetPanel = widgetInfo.widgetPanel
+            vc.addToNext = addToNext
+            vc.selectedWidget = selectedWidget
+            OARootViewController.instance().navigationController?.present(UINavigationController(rootViewController: vc), animated: true)
+        }
     }
     
     private func showWidgetConfiguration() {
@@ -83,7 +92,6 @@ extension OATextInfoWidget {
         }
     }
 
-    
     private func showDeleteWidgetAlert() {
         let alert = UIAlertController(title: localizedString("delete_widget"),
                                       message: localizedString("delete_widget_description"),

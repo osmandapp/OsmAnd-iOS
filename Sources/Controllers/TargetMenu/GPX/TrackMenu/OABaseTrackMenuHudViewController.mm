@@ -194,10 +194,16 @@
 
 - (instancetype)initWithGpx:(OASTrackItem *)gpx
 {
+    return [self initWithGpx:gpx analysis:nil];
+}
+
+- (instancetype)initWithGpx:(OASTrackItem *)gpx analysis:(OASGpxTrackAnalysis *)analysis
+{
     self = [self initWithNibName:[self getNibName] bundle:nil];
     if (self)
     {
         _gpx = gpx;
+        _analysis = analysis;
         _settings = [OAAppSettings sharedManager];
         _savingHelper = [OASavingTrackHelper sharedInstance];
         _mapPanelViewController = [OARootViewController instance].mapPanel;
@@ -235,7 +241,8 @@
     }
     _gpx.dataItem = [[OAGPXDatabase sharedDb] getGPXItem:_doc ? _doc.path : _gpx.path];
 
-    [self updateAnalysis];
+    if (!_analysis)
+        [self updateAnalysis];
 
     if (!_isCurrentTrack
         && _gpx.dataItem && _gpx.dataItem.nearestCity.length == 0

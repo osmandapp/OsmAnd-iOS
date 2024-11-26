@@ -175,9 +175,9 @@
     return self;
 }
 
-- (instancetype)initWithGpx:(OASTrackItem *)gpx routeKey:(OARouteKey *)routeKey state:(OATargetMenuViewControllerState *)state
+- (instancetype)initWithGpx:(OASTrackItem *)gpx routeKey:(OARouteKey *)routeKey state:(OATargetMenuViewControllerState *)state analysis:(OASGpxTrackAnalysis *)analysis
 {
-    self = [super initWithGpx:gpx];
+    self = [super initWithGpx:gpx analysis:analysis];
     if (self)
     {
         if ([state isKindOfClass:OATrackMenuViewControllerState.class])
@@ -1522,7 +1522,7 @@
         state.openedFromTrackMenu = YES;
         [weakSelf.mapPanelViewController openTargetViewWithGPX:weakSelf.gpx
                                               trackHudMode:EOATrackAppearanceHudMode
-                                                     state:state];
+                                                         state:state analysis:self.analysis];
     }];
 }
 

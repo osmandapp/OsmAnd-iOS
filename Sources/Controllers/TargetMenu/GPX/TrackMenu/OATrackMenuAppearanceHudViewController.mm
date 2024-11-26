@@ -147,8 +147,8 @@ static const NSInteger kColorsSection = 1;
     LeftIconRightStackTitleDescriptionButtonView *_trackView3DEmptyView;
 }
 
-- (instancetype)initWithGpx:(OASTrackItem *)gpx state:(OATrackMenuViewControllerState *)state {
-    self = [super initWithGpx:gpx];
+- (instancetype)initWithGpx:(OASTrackItem *)gpx state:(OATrackMenuViewControllerState *)state analysis:(OASGpxTrackAnalysis *)analysis {
+    self = [super initWithGpx:gpx analysis:analysis];
     if (self)
     {
         _reopeningTrackMenuState = state;
@@ -1376,8 +1376,9 @@ static const NSInteger kColorsSection = 1;
                 {
                     weakSelf.reopeningTrackMenuState.openedFromTrackMenu = NO;
                     [weakSelf.mapPanelViewController openTargetViewWithGPX:weakSelf.gpx
-                                                          trackHudMode:EOATrackMenuHudMode
-                                                                 state:weakSelf.reopeningTrackMenuState];
+                                                              trackHudMode:EOATrackMenuHudMode
+                                                                     state:weakSelf.reopeningTrackMenuState
+                                                                  analysis:weakSelf.analysis];
                 }
             }
         }

@@ -462,7 +462,8 @@ static NSString *enabledRouteSettingsKey = @"enabled";
     OARouteParameterValuesViewController *paramController = [[OARouteParameterValuesViewController alloc] initWithRoutingParameter:parameter
                                                                                                                     appMode:[[OARoutingHelper sharedInstance] getAppMode]];
     paramController.delegate = self;
-    [self presentViewController:paramController animated:YES completion:nil];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:paramController];
+    [self presentViewController:navigationController animated:YES completion:nil];
 }
 
 - (void) selectVoiceGuidance:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath

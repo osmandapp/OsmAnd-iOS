@@ -139,7 +139,7 @@
     {
         cellType = [param getCellType];
         text = [param getText];
-        value = [param isKindOfClass:OAHazmatRoutingParameter.class] ? OALocalizedString([param isSelected] ? @"shared_string_yes" : @"shared_string_no") : [param getValue];
+        value = [param isKindOfClass:OAHazmatRoutingParameter.class] ? ([param isSelected] ? [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_comma"), OALocalizedString(@"shared_string_yes"), [param getValue]] : OALocalizedString(@"shared_string_no")) : [param getValue];
         icon = [param isKindOfClass:OAHazmatRoutingParameter.class] ? [param getIcon] : [[param getIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         iconColor = [appMode getProfileColor];
     }

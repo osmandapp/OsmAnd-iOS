@@ -1,12 +1,12 @@
 //
-//  OAPoiUiFilterSettingsItem.mm
+//  OAPoiUiFiltersSettingsItem.mm
 //  OsmAnd
 //
 //  Created by Anna Bibyk on 19.11.2020.
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OAPoiUiFilterSettingsItem.h"
+#import "OAPoiUiFiltersSettingsItem.h"
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
 #import "OAPOIHelper.h"
@@ -16,14 +16,14 @@
 #import "OAPOIType.h"
 #import "Localization.h"
 
-#define kNAME_KEY @"name"
-#define kFILTER_ID_KEY @"filterId"
-#define kACCEPTED_TYPES_KEY @"acceptedTypes"
-#define kFILTER_BY_NAME @"filterByName"
+static NSString * const kNAME_KEY = @"name";
+static NSString * const kFILTER_ID_KEY = @"filterId";
+static NSString * const kACCEPTED_TYPES_KEY = @"acceptedTypes";
+static NSString * const kFILTER_BY_NAME = @"filterByName";
 
-#define APPROXIMATE_POI_UI_FILTER_SIZE_BYTES 500
+static const NSInteger APPROXIMATE_POI_UI_FILTER_SIZE_BYTES = 500;
 
-@interface OAPoiUiFilterSettingsItem()
+@interface OAPoiUiFiltersSettingsItem()
 
 @property (nonatomic) NSMutableArray<OAPOIUIFilter *> *items;
 @property (nonatomic) NSMutableArray<OAPOIUIFilter *> *appliedItems;
@@ -31,7 +31,7 @@
 
 @end
 
-@implementation OAPoiUiFilterSettingsItem
+@implementation OAPoiUiFiltersSettingsItem
 {
     OAPOIHelper *_helper;
     OAPOIFiltersHelper *_filtersHelper;
@@ -113,7 +113,8 @@
 
 - (void)deleteItem:(OAPOIUIFilter *)item
 {
-    [_filtersHelper removePoiFilter:item];
+    // android method is empty
+    //[_filtersHelper removePoiFilter:item];
 }
 
 - (BOOL) shouldReadOnCollecting
@@ -160,7 +161,8 @@
         }
 
         OAPOIUIFilter *filter = [[OAPOIUIFilter alloc] initWithName:name filterId:filterId acceptedTypes:acceptedTypesDone];
-        [filter setFilterByName:filterByName];
+        if (filterByName)
+            [filter setFilterByName:filterByName];
         [self.items addObject:filter];
     }
 }
@@ -175,6 +177,8 @@
             NSMutableDictionary *jsonObject = [NSMutableDictionary dictionary];
             jsonObject[kNAME_KEY] = filter.name;
             jsonObject[kFILTER_ID_KEY] = filter.filterId;
+            jsonObject[kFILTER_BY_NAME] = filter.filterByName;
+            
             NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *acceptedTypes = [filter getAcceptedTypes];
             NSMutableDictionary<NSString *, NSArray *> *acceptedTypesDictionary = [NSMutableDictionary dictionary];
             for(OAPOICategory *category in acceptedTypes)
@@ -193,7 +197,6 @@
             NSData *acceptedTypesData = [NSJSONSerialization dataWithJSONObject:acceptedTypesDictionary options:0 error:nil];
             NSString *acceptedTypesValue = [[NSString alloc] initWithData:acceptedTypesData encoding:NSUTF8StringEncoding];
             jsonObject[kACCEPTED_TYPES_KEY] = acceptedTypesValue;
-            jsonObject[kFILTER_BY_NAME] = filter.filterByName;
             [jsonArray addObject:jsonObject];
         }
         json[@"items"] = jsonArray;

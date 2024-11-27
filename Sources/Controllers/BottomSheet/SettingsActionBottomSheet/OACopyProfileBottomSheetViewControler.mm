@@ -190,7 +190,7 @@
     [self copyMapWidgetRegistryPreference];
     
     if ([_targetAppMode isCustomProfile])
-        [_targetAppMode setParent: [_sourceAppMode isCustomProfile] ? _sourceAppMode.parent : _sourceAppMode];
+        [_targetAppMode setParentAppMode: [_sourceAppMode isCustomProfile] ? [_sourceAppMode getParent] : _sourceAppMode];
     [_targetAppMode setIconName:_sourceAppMode.getIconName];
     [_targetAppMode setRoutingProfile:_sourceAppMode.getRoutingProfile];
     [_targetAppMode setRouterService:_sourceAppMode.getRouterService];

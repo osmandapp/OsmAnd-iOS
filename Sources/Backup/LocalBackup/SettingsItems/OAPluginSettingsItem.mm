@@ -13,7 +13,7 @@
 #import "OASuggestedDownloadsItem.h"
 #import "OAPluginsHelper.h"
 
-#define APPROXIMATE_PLUGIN_SIZE_BYTES 1024
+static const NSInteger APPROXIMATE_PLUGIN_SIZE_BYTES = 1024;
 
 @implementation OAPluginSettingsItem
 {

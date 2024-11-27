@@ -23,7 +23,7 @@
 #import "OASettingsItem.h"
 #import "OAAvoidRoadsSettingsItem.h"
 #import "OAMapSourcesSettingsItem.h"
-#import "OAPoiUiFilterSettingsItem.h"
+#import "OAPoiUiFiltersSettingsItem.h"
 #import "OAQuickActionsSettingsItem.h"
 #import "OAResourcesSettingsItem.h"
 #import "OAFileSettingsItem.h"
@@ -39,18 +39,20 @@
 #import "OADestination.h"
 #import "OAGpxSettingsItem.h"
 #import "OASearchHistorySettingsItem.h"
+#import "OANavigationHistorySettingsItem.h"
 #import "OADownloadsItem.h"
 #import "OAResourcesSettingsItem.h"
 #import "OASuggestedDownloadsItem.h"
 #import "OAExportAsyncTask.h"
 #import "OAApplicationMode.h"
+#import "OANetworkSettingsHelper.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
 
 #define kTmpProfileFolder @"tmpProfileData"
 
-@interface OAImportItemsAsyncTask()
+@interface OAImportFileItemsTask()
 
 @property (nonatomic) NSString *file;
 @property (nonatomic) NSArray<OASettingsItem *> *items;
@@ -118,6 +120,9 @@
         
         QString filename = archiveItem.name;
         OASettingsItem *item = nil;
+        NSString *fileName = archiveItem.name.toNSString();
+        NSString *tmpFileName = [_tmpFilesDir stringByAppendingString:[@"/" stringByAppendingString:fileName]];
+        
         for (OASettingsItem *settingsItem in items)
         {
             if ([settingsItem applyFileName:filename.toNSString()])
@@ -127,14 +132,12 @@
             }
         }
         
-        if (item && ((collecting && item.shouldReadOnCollecting) || (!collecting && !item.shouldReadOnCollecting)))
+        if (item && ((collecting && item.shouldReadOnCollecting) || (item && !collecting && !item.shouldReadOnCollecting)))
         {
             OASettingsItemReader *reader = item.getReader;
             NSError *err = nil;
             if (reader)
             {
-                NSString *fileName = archiveItem.name.toNSString();
-                NSString *tmpFileName = [_tmpFilesDir stringByAppendingString:[@"/" stringByAppendingString:fileName]];
                 BOOL isDir = [fileName hasSuffix:@"/"];
                 if (isDir)
                 {
@@ -161,9 +164,10 @@
                     }
                 }
                 [reader readFromFile:tmpFileName error:&err];
-                [item applyAdditionalParams:tmpFileName];
             }
             
+            [item applyAdditionalParams:tmpFileName reader:reader];
+                        
             if (err)
                 [item.warnings addObject:[NSString stringWithFormat:OALocalizedString(@"err_profile_import"), item.name]];
         }
@@ -270,9 +274,9 @@
     NSMutableDictionary<NSString *, NSMutableArray<OASettingsItem *> *> *pluginItems = [NSMutableDictionary new];
     for (NSDictionary* itemJSON in itemsJson)
     {
-        //TODO: Remove after complete implementation of the classes
-        if (![itemJSON[@"type"] isEqualToString:@"DATA"])
-        {
+//        //TODO: Remove after complete implementation of the classes
+//        if (![itemJSON[@"type"] isEqualToString:@"DATA"])
+//        {
             OASettingsItem *item = [self createItem:itemJSON];
             if (!item)
                 continue;
@@ -292,7 +296,7 @@
                     pluginItems[pluginId] = items;
                 }
             }
-        }
+//        }
     }
     if ([_items count] == 0)
     {
@@ -354,7 +358,6 @@
         return nil;
     
     NSError *error;
-    // TODO: import other item types later and clean up
     switch (type)
     {
         case EOASettingsItemTypeGlobal:
@@ -372,11 +375,14 @@
         case EOASettingsItemTypeFile:
             item = [[OAFileSettingsItem alloc] initWithJson:json error:&error];
             break;
+        case EOASettingsItemTypeResources:
+            item = [[OAResourcesSettingsItem alloc] initWithJson:json error:&error];
+            break;
         case EOASettingsItemTypeQuickActions:
             item = [[OAQuickActionsSettingsItem alloc] initWithJson:json error:&error];
             break;
         case EOASettingsItemTypePoiUIFilters:
-            item = [[OAPoiUiFilterSettingsItem alloc] initWithJson:json error:&error];
+            item = [[OAPoiUiFiltersSettingsItem alloc] initWithJson:json error:&error];
             break;
         case EOASettingsItemTypeMapSources:
             item = [[OAMapSourcesSettingsItem alloc] initWithJson:json error:&error];
@@ -387,8 +393,8 @@
         case EOASettingsItemTypeSuggestedDownloads:
             item = [[OASuggestedDownloadsItem alloc] initWithJson:json error:&error];
             break;
-        case EOASettingsItemTypeFavorites:
-            item = [[OAFavoritesSettingsItem alloc] initWithJson:json error:&error];
+        case EOASettingsItemTypeDownloads:
+            item = [[OADownloadsItem alloc] initWithJson:json error:&error];
             break;
         case EOASettingsItemTypeOsmNotes:
             item = [[OAOsmNotesSettingsItem alloc] initWithJson:json error:&error];
@@ -396,27 +402,34 @@
         case EOASettingsItemTypeOsmEdits:
             item = [[OAOsmEditsSettingsItem alloc] initWithJson:json error:&error];
             break;
+        case EOASettingsItemTypeFavorites:
+            item = [[OAFavoritesSettingsItem alloc] initWithJson:json error:&error];
+            break;
         case EOASettingsItemTypeActiveMarkers:
             item = [[OAMarkersSettingsItem alloc] initWithJson:json error:&error];
             break;
         case EOASettingsItemTypeHistoryMarkers:
             item = [[OAHistoryMarkersSettingsItem alloc] initWithJson:json error:&error];
             break;
-        case EOASettingsItemTypeGpx:
-            item = [[OAGpxSettingsItem alloc] initWithJson:json error:&error];
-            break;
         case EOASettingsItemTypeSearchHistory:
             item = [[OASearchHistorySettingsItem alloc] initWithJson:json error:&error];
             break;
         case EOASettingsItemTypeNavigationHistory:
-            item = [[OASearchHistorySettingsItem alloc] initWithJson:json error:&error fromNavigation:YES];
+            item = [[OANavigationHistorySettingsItem alloc] initWithJson:json error:&error];
             break;
-        case EOASettingsItemTypeDownloads:
-            item = [[OADownloadsItem alloc] initWithJson:json error:&error];
+        case EOASettingsItemTypeGpx:
+            item = [[OAGpxSettingsItem alloc] initWithJson:json error:&error];
             break;
-        case EOASettingsItemTypeResources:
-            item = [[OAResourcesSettingsItem alloc] initWithJson:json error:&error];
+            
+        /*
+        case ONLINE_ROUTING_ENGINES:
+            item = new OnlineRoutingSettingsItem(app, json);
             break;
+        case ITINERARY_GROUPS:
+            item = new ItinerarySettingsItem(app, json);
+            break;
+        */
+        
         default:
             item = nil;
             break;
@@ -429,9 +442,9 @@
 
 @end
 
-#pragma mark - OAImportAsyncTask
+#pragma mark - OAImportFileTask
 
-@interface OAImportAsyncTask()
+@interface OAImportFileTask()
 
 @property (nonatomic) NSString *filePath;
 @property (nonatomic) NSString *latestChanges;
@@ -443,7 +456,7 @@
 
 @end
 
-@implementation OAImportAsyncTask
+@implementation OAImportFileTask
 {
     BOOL _importDone;
     OASettingsHelper *_settingsHelper;
@@ -516,7 +529,7 @@
 
 - (void) onPreExecute
 {
-    OAImportAsyncTask* importTask = _settingsHelper.importTask;
+    OAImportFileTask* importTask = _settingsHelper.importTask;
     if (importTask != nil && ![importTask isImportDone] && (self.delegate || self.onImportComplete))
     {
         if (self.delegate)
@@ -532,6 +545,7 @@
 {
     switch (_importType) {
         case EOAImportTypeCollect:
+        case EOAImportTypeCollectAndRead:
             @try {
                 return [_importer collectItems:_filePath];
             } @catch (NSException *exception) {
@@ -542,6 +556,12 @@
             _duplicates = [self getDuplicatesData:_selectedItems];
             return _selectedItems;
         case EOAImportTypeImport:
+        case EOAImportTypeImportForceRead:
+            if (_items != nil && _items.count > 0)
+            {
+                for (OASettingsItem *item in _items)
+                    [item apply];
+            }
             return _items;
     }
     return nil;
@@ -571,9 +591,7 @@
         case EOAImportTypeImport:
             if (items != nil && items.count > 0)
             {
-                for (OASettingsItem *item in items)
-                    [item apply];
-                OAImportItemsAsyncTask *task = [[OAImportItemsAsyncTask alloc] initWithFile:_filePath items:_items];
+                OAImportFileItemsTask *task = [[OAImportFileItemsTask alloc] initWithFile:_filePath items:_items];
                 task.delegate = _delegate;
                 task.onImportComplete = self.onImportComplete;
                 [task execute];
@@ -645,9 +663,9 @@
 
 @end
 
-#pragma mark - OAImportItemsAsyncTask
+#pragma mark - OAImportFileItemsTask
 
-@implementation OAImportItemsAsyncTask
+@implementation OAImportFileItemsTask
 {
     OASettingsHelper *_settingsHelper;
     OASettingsImporter *_importer;
@@ -682,6 +700,7 @@
     NSString *tempDir = [[OsmAndApp instance].documentsPath stringByAppendingPathComponent:@"backup"];
     [NSFileManager.defaultManager createDirectoryAtPath:tempDir withIntermediateDirectories:YES attributes:nil error:nil];
 
+    //TODO: android doesn't have this code here
     for (OASettingsItem *item in _items)
     {
         if ([item isKindOfClass:OAProfileSettingsItem.class])
@@ -735,6 +754,8 @@
 - (void) onPostExecute:(BOOL)success
 {
     [self updateDataIfNeeded];
+    
+    //helper.finishImport(listener, success, items, needRestart);
     
     if (_delegate)
         [_delegate onSettingsImportFinished:success items:_items];

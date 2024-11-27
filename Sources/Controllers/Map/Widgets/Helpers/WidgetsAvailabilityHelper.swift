@@ -115,7 +115,7 @@ class WidgetsAvailabilityHelper: NSObject {
         }
         for mode in OAApplicationMode.allPossibleValues() {
             // add derived modes
-            if let parent = mode.parent, set.contains(parent) {
+            if let parent = mode.getParent(), set.contains(parent) {
                 set.insert(mode)
             }
         }

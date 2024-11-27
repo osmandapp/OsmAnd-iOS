@@ -94,7 +94,7 @@
 
 - (void)postInit
 {
-    OAImportAsyncTask *importTask = _settingsHelper.importTask;
+    OAImportFileTask *importTask = _settingsHelper.importTask;
     if (!importTask)
     {
         if (!_settingsItems)
@@ -617,7 +617,7 @@
 {
     if (succeed)
     {
-        OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:[OASettingsHelper getSettingsToOperate:items importComplete:YES addEmptyItems:NO] fileName:[_file lastPathComponent]];
+        OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:[OASettingsHelper collectSettingsToOperate:items importComplete:YES addEmptyItems:NO] fileName:[_file lastPathComponent]];
         [self showViewController:importCompleteVC];
         _settingsHelper.importTask = nil;
     }

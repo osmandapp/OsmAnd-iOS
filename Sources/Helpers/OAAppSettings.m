@@ -1314,6 +1314,9 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 @end
 
 @implementation OACommonPreference
+{
+    BOOL _cache;
+}
 
 @synthesize global=_global, shared=_shared;
 
@@ -1331,6 +1334,12 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 - (instancetype)makeGlobal
 {
     _global = YES;
+    return self;
+}
+
+- (instancetype)cache
+{
+    _cache = YES;
     return self;
 }
 
@@ -1429,6 +1438,11 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetProfileSetting object:self];
 }
 
+- (BOOL) isSet
+{
+    return [self getValue] != nil;
+}
+
 - (BOOL) isSetForMode:(OAApplicationMode *)mode
 {
     return [self getValue:mode] != nil;
@@ -1505,7 +1519,7 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
     }
     if (mode)
     {
-        OAApplicationMode *pt = mode.parent;
+        OAApplicationMode *pt = [mode getParent];
         if (pt)
             return [self getProfileDefaultValue:pt];
     }
@@ -1525,6 +1539,26 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 - (void)copyValueFromAppMode:(OAApplicationMode *)sourceAppMode targetAppMode:(OAApplicationMode *)targetAppMode
 {
     [self setValue:[self getValue:sourceAppMode] mode:targetAppMode];
+}
+
+- (void) readFromJson:(NSDictionary<NSString *, NSString *> *)json appMode:(OAApplicationMode *)appMode
+{
+    if (appMode)
+    {
+        NSString *modeValue = json[self.key];
+        [self setValue:[self parseString:modeValue] mode:appMode];
+    }
+    else if (_global)
+    {
+        NSString *globalValue = json[self.key];
+        [self setValue:[self parseString:globalValue]];
+    }
+}
+
+- (id) parseString:(NSString *)s
+{
+    // override
+    return nil;
 }
 
 @end
@@ -1618,6 +1652,11 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
     return [self get:mode].stringKey;
 }
 
+- (id) parseString:(NSString *)s
+{
+    return [OAApplicationMode valueOfStringKey:s def:nil];
+}
+
 @end
 
 @interface OACommonBoolean ()
@@ -1688,6 +1727,11 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 - (NSString *)toStringValue:(OAApplicationMode *)mode
 {
     return [self get:mode] ? @"true" : @"false";
+}
+
+- (id) parseString:(NSString *)s
+{
+    return @([[s lowercaseString] isEqualToString:@"true"]);
 }
 
 @end
@@ -1766,6 +1810,11 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
     return [NSString stringWithFormat:@"%d", [self get:mode]];
 }
 
+- (id) parseString:(NSString *)s
+{
+    return @([s integerValue]);
+}
+
 @end
 
 @interface OACommonLong ()
@@ -1829,6 +1878,11 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 - (NSString *)toStringValue:(OAApplicationMode *)mode
 {
     return [NSString stringWithFormat:@"%li", [self get:mode]];
+}
+
+- (id) parseString:(NSString *)s
+{
+    return @([s longLongValue]);
 }
 
 @end
@@ -1896,6 +1950,11 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
     return [self get:mode];
 }
 
+- (id) parseString:(NSString *)s
+{
+    return s;
+}
+
 @end
 
 @interface OACommonDouble ()
@@ -1959,6 +2018,11 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 - (NSString *)toStringValue:(OAApplicationMode *)mode
 {
     return [NSString stringWithFormat:@"%.1f", [self get:mode]];
+}
+
+- (id) parseString:(NSString *)s
+{
+    return @([s floatValue]);
 }
 
 @end
@@ -4031,16 +4095,16 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
         // profile setting
         _appModeBeanPrefsIds = [[NSUserDefaults standardUserDefaults] objectForKey:appModeBeanPrefsIdsKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:appModeBeanPrefsIdsKey] :
         @[
-            @"app_mode_icon_color",
-            @"custom_icon_color",
-            @"user_profile_name",
-            @"parent_app_mode",
-            @"routing_profile",
-            @"route_service",
-            @"navigation_icon",
-            @"location_icon",
-            @"app_mode_order",
-            @"app_mode_icon_res_name"
+            ICON_COLOR,
+            CUSTOM_ICON_COLOR,
+            ICON_RES_NAME,
+            PARENT_APP_MODE,
+            ROUTING_PROFILE,
+            ROUTE_SERVICE,
+            USER_PROFILE_NAME,
+            LOCATION_ICON,
+            NAVIGATION_ICON,
+            APP_MODE_ORDER
         ];
 
         _defaultApplicationMode = [[[OACommonAppMode withKey:defaultApplicationModeKey defValue:OAApplicationMode.DEFAULT] makeGlobal] makeShared];
@@ -4816,6 +4880,16 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
     return self;
 }
 
+- (BOOL) isRendererPreference:(NSString *)key
+{
+    return [key hasPrefix:RENDERER_PREFERENCE_PREFIX];
+}
+
+- (BOOL) isRoutingPreference:(NSString *)key
+{
+    return [key hasPrefix:ROUTING_PREFERENCE_PREFIX];
+}
+
 - (NSMapTable<NSString *, OACommonPreference *> *)getPreferences:(BOOL)global
 {
     return global ? _globalPreferences : _profilePreferences;
@@ -4972,6 +5046,38 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
 
     [OAAppData.defaults resetProfileSettingsForMode:mode];
     [NSNotificationCenter.defaultCenter postNotificationName:kWidgetVisibilityChangedMotification object:nil];
+}
+
+- (void) copyProfilePreferences:(OAApplicationMode *)modeFrom modeTo:(OAApplicationMode *)modeTo
+{
+    [self copyProfilePreferences:modeFrom modeTo:modeTo profilePreferences:[[_registeredPreferences dictionaryRepresentation] allValues]];
+}
+
+- (void) copyProfilePreferences:(OAApplicationMode *)modeFrom modeTo:(OAApplicationMode *)modeTo profilePreferences:(NSArray<OACommonPreference *> *)profilePreferences
+{
+    for (OACommonPreference *pref in profilePreferences)
+    {
+        
+        if ([self prefCanBeCopiedOrReset:pref] && ![USER_PROFILE_NAME isEqualToString:pref.key])
+        {
+            if ([PARENT_APP_MODE isEqualToString:pref.key])
+            {
+                
+                if (modeTo.isCustomProfile)
+                    [modeTo setParentAppMode:modeFrom.isCustomProfile ? [modeFrom getParent] : modeFrom];
+            }
+            else
+            {
+                id copiedValue = [pref getValue:modeFrom];
+                [pref setValue:copiedValue mode:modeTo];
+            }
+        }
+    }
+}
+
+- (BOOL) prefCanBeCopiedOrReset:(OACommonPreference *)pref
+{
+    return !pref.global && ![APP_MODE_ORDER isEqualToString:pref.key] && ![APP_MODE_VERSION isEqualToString:pref.key];
 }
 
 // Common Settings

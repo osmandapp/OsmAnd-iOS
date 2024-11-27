@@ -82,18 +82,26 @@
 
 - (BOOL) applyFileName:(NSString *)fileName
 {
-    NSString *itemFileName = self.fileName;
+   
     if ([fileName hasSuffix:@"/"])
-        fileName = [fileName substringToIndex:fileName.length - 1];
+        return NO;
     
-    if ([fileName isEqualToString:itemFileName])
+    NSString *itemFileName = self.fileName;
+    if (itemFileName && [itemFileName hasSuffix:@"/"])
     {
-        self.filePath = [[self getPluginPath] stringByAppendingPathComponent:fileName];
-        return YES;
+        if ([fileName hasPrefix:itemFileName])
+        {
+            self.filePath = [[self getPluginPath] stringByAppendingPathComponent:fileName];
+            return YES;
+        }
+        else
+        {
+            return NO;
+        }
     }
     else
     {
-        return NO;
+        return [super applyFileName:fileName];
     }
 }
 

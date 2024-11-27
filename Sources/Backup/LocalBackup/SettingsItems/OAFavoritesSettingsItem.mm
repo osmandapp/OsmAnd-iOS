@@ -62,7 +62,7 @@
     OsmAndAppInstance app = OsmAndApp.instance;
     OAFavoriteGroup *singleGroup = [self getSingleGroup];
     NSString *groupName = singleGroup ? singleGroup.name : nil;
-    return groupName.length > 0
+    return ![groupName isEmpty]
             ? [NSString stringWithFormat:@"%@%@%@", app.favoritesFilePrefix, app.favoritesGroupNameSeparator, groupName]
             : app.favoritesFilePrefix;
 }
@@ -73,11 +73,11 @@
     OAFavoriteGroup *singleGroup = [self getSingleGroup];
     NSString *groupName = singleGroup ? singleGroup.name : nil;
     NSString *fileName = self.fileName;
-    if (groupName.length > 0)
+    if (![groupName isEmpty])
     {
         return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_space"), OALocalizedString(@"favorites_item"), groupName];
     }
-    else if (fileName.length > 0)
+    else if (![fileName isEmpty])
     {
         groupName = [[[app getGroupName:fileName] stringByReplacingOccurrencesOfString:app.favoritesFilePrefix withString:@""] stringByReplacingOccurrencesOfString:GPX_FILE_EXT withString:@""];
         if ([groupName hasPrefix:app.favoritesGroupNameSeparator])
@@ -231,6 +231,7 @@
 - (void)deleteItem:(OAFavoriteGroup *)item
 {
     [OAFavoritesHelper deleteFavoriteGroups:@[item] andFavoritesItems:nil];
+    [OAFavoritesHelper saveCurrentPointsIntoFile];
 }
 
 - (BOOL) shouldReadOnCollecting

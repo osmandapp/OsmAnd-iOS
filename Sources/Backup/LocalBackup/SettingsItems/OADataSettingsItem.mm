@@ -50,6 +50,11 @@
     return @".dat";
 }
 
+- (NSUInteger) getSize
+{
+    return _data ? _data.length : 0;
+}
+
 - (void) readFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
 {
     NSError *readError;

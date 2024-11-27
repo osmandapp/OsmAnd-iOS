@@ -49,7 +49,7 @@
 #import "OASettingsItem.h"
 #import "OAAvoidRoadsSettingsItem.h"
 #import "OAMapSourcesSettingsItem.h"
-#import "OAPoiUiFilterSettingsItem.h"
+#import "OAPoiUiFiltersSettingsItem.h"
 #import "OAQuickActionsSettingsItem.h"
 #import "OAResourcesSettingsItem.h"
 #import "OAFileSettingsItem.h"
@@ -65,6 +65,7 @@
 #import "OADestination.h"
 #import "OAGpxSettingsItem.h"
 #import "OASearchHistorySettingsItem.h"
+#import "OANavigationHistorySettingsItem.h"
 #import "OATileSource.h"
 #import "OAPluginsHelper.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -140,7 +141,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
                  version:(NSInteger)version
               onComplete:(void(^)(BOOL succeed, NSArray<OASettingsItem *> *items))onComplete
 {
-    OAImportAsyncTask *task = [[OAImportAsyncTask alloc] initWithFile:settingsFile latestChanges:latestChanges version:version];
+    OAImportFileTask *task = [[OAImportFileTask alloc] initWithFile:settingsFile latestChanges:latestChanges version:version];
     [task executeWithCompletionBlock:onComplete];
 }
 
@@ -157,7 +158,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         [OARootViewController.instance.navigationController pushViewController:incomingURLViewController animated:YES];
         _importDataVC = incomingURLViewController;
     }
-    OAImportAsyncTask *task = [[OAImportAsyncTask alloc] initWithFile:settingsFile latestChanges:latestChanges version:version];
+    OAImportFileTask *task = [[OAImportFileTask alloc] initWithFile:settingsFile latestChanges:latestChanges version:version];
     task.delegate = delegate;
     [task executeWithCompletionBlock:onComplete];
 }
@@ -169,14 +170,14 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (void) checkDuplicates:(NSString *)settingsFile items:(NSArray<OASettingsItem *> *)items selectedItems:(NSArray<OASettingsItem *> *)selectedItems delegate:(id<OASettingsImportExportDelegate>)delegate
 {
-    OAImportAsyncTask *task = [[OAImportAsyncTask alloc] initWithFile:settingsFile items:items selectedItems:selectedItems];
+    OAImportFileTask *task = [[OAImportFileTask alloc] initWithFile:settingsFile items:items selectedItems:selectedItems];
     task.delegate = delegate;
     [task execute];
 }
 
 - (void) checkDuplicates:(NSString *)settingsFile items:(NSArray<OASettingsItem *> *)items selectedItems:(NSArray<OASettingsItem *> *)selectedItems onComplete:(OAOnDuplicatesChecked)onComplete
 {
-    OAImportAsyncTask *task = [[OAImportAsyncTask alloc] initWithFile:settingsFile items:items selectedItems:selectedItems];
+    OAImportFileTask *task = [[OAImportFileTask alloc] initWithFile:settingsFile items:items selectedItems:selectedItems];
     task.onDuplicatesChecked = onComplete;
     [task execute];
 }
@@ -188,14 +189,14 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (void) importSettings:(NSString *)settingsFile items:(NSArray<OASettingsItem*> *)items latestChanges:(NSString *)latestChanges version:(NSInteger)version delegate:(id<OASettingsImportExportDelegate>)delegate
 {
-    OAImportAsyncTask *task = [[OAImportAsyncTask alloc] initWithFile:settingsFile items:items latestChanges:latestChanges version:version];
+    OAImportFileTask *task = [[OAImportFileTask alloc] initWithFile:settingsFile items:items latestChanges:latestChanges version:version];
     task.delegate = delegate;
     [task execute];
 }
 
 - (void) importSettings:(NSString *)settingsFile items:(NSArray<OASettingsItem*> *)items latestChanges:(NSString *)latestChanges version:(NSInteger)version onComplete:(OAOnImportComplete)onComplete
 {
-    OAImportAsyncTask *task = [[OAImportAsyncTask alloc] initWithFile:settingsFile items:items latestChanges:latestChanges version:version];
+    OAImportFileTask *task = [[OAImportFileTask alloc] initWithFile:settingsFile items:items latestChanges:latestChanges version:version];
     task.onImportComplete = onComplete;
     [task execute];
 }
@@ -517,18 +518,23 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     return resourcesItems;
 }
 
-+ (NSDictionary<OAExportSettingsCategory *, OASettingsCategoryItems *> *)getSettingsToOperateByCategory:(NSArray<OASettingsItem *> *)items
++ (NSDictionary<OAExportSettingsCategory *, OASettingsCategoryItems *> *)categorizeSettingsToOperate:(NSArray<OASettingsItem *> *)items
                                                                                          importComplete:(BOOL)importComplete
                                                                                           addEmptyItems:(BOOL)addEmptyItems
 {
-    NSDictionary<OAExportSettingsType *, NSArray *> *settingsToOperate = [self getSettingsToOperate:items
+    
+    // TODO:refactor getSettingsToOperate -> collectSettingsToOperate
+    //Map<ExportType, List<?>> settingsToOperate = collectSettingsToOperate(items, importComplete, addEmptyItems);
+            
+    
+    NSDictionary<OAExportSettingsType *, NSArray *> *settingsToOperate = [self collectSettingsToOperate:items
                                                                                      importComplete:importComplete
                                                                                       addEmptyItems:addEmptyItems];
 
-    return [self getSettingsToOperateByCategory:settingsToOperate addEmptyItems:addEmptyItems];
+    return [self categorizeSettingsToOperate:settingsToOperate addEmptyItems:addEmptyItems];
 }
 
-+ (NSDictionary<OAExportSettingsCategory *, OASettingsCategoryItems *> *)getSettingsToOperateByCategory:(NSDictionary<OAExportSettingsType *, NSArray *> *)settingsToOperate
++ (NSDictionary<OAExportSettingsCategory *, OASettingsCategoryItems *> *)categorizeSettingsToOperate:(NSDictionary<OAExportSettingsType *, NSArray *> *)settingsToOperate
                                                                                           addEmptyItems:(BOOL)addEmptyItems
 {
     MutableOrderedDictionary<OAExportSettingsType *, NSArray *> *settingsItems = [MutableOrderedDictionary new];
@@ -572,12 +578,12 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     return nil;
 }
  
-- (OAPoiUiFilterSettingsItem *) getBasePoiUiFiltersSettingsItem:(NSArray<OASettingsItem *> *)settingsItems
+- (OAPoiUiFiltersSettingsItem *) getBasePoiUiFiltersSettingsItem:(NSArray<OASettingsItem *> *)settingsItems
 {
     for (OASettingsItem * settingsItem in settingsItems)
     {
         if (settingsItem.type == EOASettingsItemTypePoiUIFilters)
-            return (OAPoiUiFilterSettingsItem *)settingsItem;
+            return (OAPoiUiFiltersSettingsItem *)settingsItem;
     }
     return nil;
 }
@@ -755,8 +761,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     }
     if (poiUIFilters.count > 0)
     {
-        OAPoiUiFilterSettingsItem *baseItem = [self getBaseItem:EOASettingsItemTypePoiUIFilters clazz:OAPoiUiFilterSettingsItem.class settingsItems:settingsItems];
-        [result addObject:[[OAPoiUiFilterSettingsItem alloc] initWithItems:poiUIFilters baseItem:baseItem]];
+        OAPoiUiFiltersSettingsItem *baseItem = [self getBaseItem:EOASettingsItemTypePoiUIFilters clazz:OAPoiUiFiltersSettingsItem.class settingsItems:settingsItems];
+        [result addObject:[[OAPoiUiFiltersSettingsItem alloc] initWithItems:poiUIFilters baseItem:baseItem]];
     }
     if (osmNotesPointList.count > 0)
     {
@@ -782,12 +788,12 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     }
     if (navigationHistoryItems.count > 0)
     {
-        [result addObject:[[OASearchHistorySettingsItem alloc] initWithItems:navigationHistoryItems fromNavigation:YES]];
+        [result addObject:[[OANavigationHistorySettingsItem alloc] initWithItems:navigationHistoryItems]];
     }
     return result;
 }
 
-+ (NSDictionary<OAExportSettingsType *, NSArray *> *)getSettingsToOperate:(NSArray<OASettingsItem *> *)settingsItems
++ (NSDictionary<OAExportSettingsType *, NSArray *> *)collectSettingsToOperate:(NSArray<OASettingsItem *> *)settingsItems
                                                            importComplete:(BOOL)importComplete
                                                             addEmptyItems:(BOOL)addEmptyItems
 {
@@ -854,7 +860,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             }
             case EOASettingsItemTypePoiUIFilters:
             {
-                OAPoiUiFilterSettingsItem *poiUiFilterItem = (OAPoiUiFilterSettingsItem *) item;
+                OAPoiUiFiltersSettingsItem *poiUiFilterItem = (OAPoiUiFiltersSettingsItem *) item;
                 if (importComplete)
                     [poiUIFilters addObjectsFromArray:poiUiFilterItem.appliedItems];
                 else
@@ -929,7 +935,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             }
             case EOASettingsItemTypeNavigationHistory:
             {
-                OASearchHistorySettingsItem *navigationHistorySettingsItem = (OASearchHistorySettingsItem *) item;
+                OANavigationHistorySettingsItem *navigationHistorySettingsItem = (OANavigationHistorySettingsItem *) item;
                 [navigationHistoryEntries addObjectsFromArray:navigationHistorySettingsItem.items];
                 break;
             }

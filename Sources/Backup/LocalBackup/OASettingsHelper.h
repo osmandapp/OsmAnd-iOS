@@ -16,7 +16,7 @@
 
 static const NSInteger kVersion = 3;
 
-@class OAImportAsyncTask, OAExportAsyncTask, OASettingsItem;
+@class OAImportFileTask, OAExportAsyncTask, OASettingsItem;
 
 @protocol OASettingsImportExportDelegate <NSObject>
 
@@ -78,19 +78,19 @@ typedef NS_ENUM(NSInteger, EOAImportType) {
 
 @interface OASettingsHelper : NSObject
 
-@property (nonatomic) OAImportAsyncTask* importTask;
+@property (nonatomic) OAImportFileTask* importTask;
 @property (nonatomic) NSMutableDictionary<NSString*, OAExportAsyncTask*>* exportTasks;
 
 + (OASettingsHelper *) sharedInstance;
 
-+ (NSDictionary<OAExportSettingsCategory *, OASettingsCategoryItems *> *)getSettingsToOperateByCategory:(NSArray<OASettingsItem *> *)items
++ (NSDictionary<OAExportSettingsCategory *, OASettingsCategoryItems *> *)categorizeSettingsToOperate:(NSArray<OASettingsItem *> *)items
                                                                                          importComplete:(BOOL)importComplete
                                                                                           addEmptyItems:(BOOL)addEmptyItems;
 
-+ (NSDictionary<OAExportSettingsCategory *, OASettingsCategoryItems *> *)getSettingsToOperateByCategory:(NSDictionary<OAExportSettingsType *, NSArray *> *)settingsToOperate
++ (NSDictionary<OAExportSettingsCategory *, OASettingsCategoryItems *> *)categorizeSettingsToOperate:(NSDictionary<OAExportSettingsType *, NSArray *> *)settingsToOperate
                                                                                           addEmptyItems:(BOOL)addEmptyItems;
 
-+ (NSDictionary<OAExportSettingsType *, NSArray *> *)getSettingsToOperate:(NSArray<OASettingsItem *> *)settingsItems
++ (NSDictionary<OAExportSettingsType *, NSArray *> *)collectSettingsToOperate:(NSArray<OASettingsItem *> *)settingsItems
                                                            importComplete:(BOOL)importComplete
                                                             addEmptyItems:(BOOL)addEmptyItems;
 

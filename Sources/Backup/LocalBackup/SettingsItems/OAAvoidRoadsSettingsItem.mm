@@ -16,7 +16,7 @@
 #import "OAApplicationMode.h"
 #import "Localization.h"
 
-#define APPROXIMATE_AVOID_ROAD_SIZE_BYTES 185
+static const NSInteger APPROXIMATE_AVOID_ROAD_SIZE_BYTES = 185;
 
 @interface OAAvoidRoadsSettingsItem()
 
@@ -132,12 +132,13 @@
     {
         double latitude = [object[@"latitude"] doubleValue];
         double longitude = [object[@"longitude"] doubleValue];
+        double direction = [object[@"direction"] doubleValue];
         NSString *name = object[@"name"];
         NSString *appModeKey = object[@"appModeKey"];
         unsigned long long roadId = [object[@"roadId"] unsignedLongLongValue];
         OAAvoidRoadInfo *roadInfo = [[OAAvoidRoadInfo alloc] init];
         roadInfo.roadId = roadId;
-        roadInfo.location = [[CLLocation alloc] initWithLatitude:latitude longitude:longitude];
+        roadInfo.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(latitude, longitude) altitude:0 horizontalAccuracy:0 verticalAccuracy:0 course:direction speed:0 timestamp:[NSDate now]];
         roadInfo.name = name;
         if ([OAApplicationMode valueOfStringKey:appModeKey def:nil])
             roadInfo.appModeKey = appModeKey;
@@ -161,6 +162,8 @@
             jsonObject[@"name"] = avoidRoad.name;
             jsonObject[@"appModeKey"] = avoidRoad.appModeKey;
             jsonObject[@"roadId"] = @(avoidRoad.roadId);
+            if (!isnan(avoidRoad.location.course))
+                jsonObject[@"direction"] = @(avoidRoad.location.course);
             [jsonArray addObject:jsonObject];
         }
         json[@"items"] = jsonArray;

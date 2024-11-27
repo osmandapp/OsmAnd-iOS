@@ -17,7 +17,7 @@
 
 #include <OsmAndCore/ArchiveWriter.h>
 
-#define kTmpProfileFolder @"tmpProfileData"
+static NSString * const kTmpProfileFolder = @"tmpProfileData";
 
 #pragma mark - OASettingsExporter
 

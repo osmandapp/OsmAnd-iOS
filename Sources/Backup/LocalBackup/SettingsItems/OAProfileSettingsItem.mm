@@ -22,11 +22,12 @@
 #import "OAPluginsHelper.h"
 #import "OAMapSource.h"
 #import "OAAppData.h"
+#import "OACustomPlugin.h"
 #import "OsmAnd_Maps-Swift.h"
 
 @implementation OAProfileSettingsItem
 {
-    NSDictionary *_additionalPrefs;
+    NSMutableDictionary *_additionalPrefs;
     NSSet<NSString *> *_appModeBeanPrefsIds;
     OAApplicationModeBuilder *_builder;
 }
@@ -68,7 +69,7 @@
 
 - (BOOL) exists
 {
-    return [OAApplicationMode valueOfStringKey:_appMode.stringKey def:nil] != nil;
+    return [OAApplicationMode valueOfStringKey:[self name] def:nil] != nil;
 }
 
 - (void)remove
@@ -101,13 +102,16 @@
 
 - (void) readItemsFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
 {
-    _additionalPrefs = json[@"prefs"];
+    _additionalPrefs = [NSMutableDictionary dictionaryWithDictionary:json[@"prefs"]];
 }
 
 - (long)getEstimatedSize
 {
     return OAAppSettings.sharedManager.getRegisteredPreferences.count * APPROXIMATE_PREFERENCE_SIZE_BYTES;
 }
+
+
+//TODO: delete?
 
 - (void) applyRendererPreferences:(NSDictionary<NSString *, NSString *> *)prefs
 {
@@ -145,6 +149,8 @@
     }];
 }
 
+//TODO: delete?
+
 - (void) applyRoutingPreferences:(NSDictionary<NSString *,NSString *> *)prefs
 {
     const auto router = [OsmAndApp.instance getRouter:self.appMode];
@@ -169,26 +175,86 @@
     }];
 }
 
+
+
+
+// TODO: test new version
+
+- (void) readPreferenceFromJson:(OACommonPreference *)preference json:(NSDictionary<NSString *, NSString *> *)json
+{
+    if (![_appModeBeanPrefsIds containsObject:preference.key])
+    {
+        [preference readFromJson:json appMode:_appMode];
+    }
+}
+
+// TODO: test new version
+
+- (void) readPreferencesFromJson:(NSDictionary<NSString *, NSString *> *)json
+{
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    
+    [json enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+        
+        OACommonPreference *p = [settings getPreferenceByKey:key];
+        if (!p)
+        {
+            if ([settings isRoutingPreference:key])
+                p = [settings registerStringPreference:key defValue:@""];
+        }
+        if (p)
+        {
+            [self readPreferenceFromJson:p json:json];
+            if ([settings isRoutingPreference:p.key])
+            {
+                if ([p.key hasSuffix:kRouteParamShortWay])
+                {
+                    BOOL newNalue = [[settings getCustomRoutingBooleanProperty:kRouteParamShortWay defaultValue:NO] get:_appMode];
+                    [settings.fastRouteMode set:!newNalue mode:_appMode];
+                }
+            }
+        }
+        else
+        {
+            NSLog(@"No preference while importing settings: %@", key);
+        }
+    }];
+    
+    [settings setLastProfileModifiedTime:[self lastModifiedTime] mode:_appMode];
+}
+
+
+
+
+// TODO: delete old version?
+/*
 - (void)readPreferenceFromJson:(NSString *)key value:(NSString *)value
 {
+    OsmAndAppInstance app = OsmAndApp.instance;
     OAAppSettings *settings = OAAppSettings.sharedManager;
     if (!_appModeBeanPrefsIds)
         _appModeBeanPrefsIds = [NSSet setWithArray:settings.appModeBeanPrefsIds];
     
     if (![_appModeBeanPrefsIds containsObject:key])
     {
-        OsmAndAppInstance app = OsmAndApp.instance;
-        OACommonPreference *setting = [settings getPreferenceByKey:key];
-        if (setting)
+        OACommonPreference *p = [settings getPreferenceByKey:key];
+        if (!p)
         {
+            if ([settings isRoutingPreference:key])
+                p = [settings registerStringPreference:key defValue:@""];
+        }
+        
+        if (p)
+        {
+            // TODO: copy to new method?
             if ([key isEqualToString:@"voice_provider"])
             {
-                [setting setValueFromString:[value stringByReplacingOccurrencesOfString:@"-tts" withString:@""] appMode:_appMode];
+                [p setValueFromString:[value stringByReplacingOccurrencesOfString:@"-tts" withString:@""] appMode:_appMode];
                 [[OsmAndApp instance] initVoiceCommandPlayer:_appMode warningNoneProvider:NO showDialog:NO force:NO];
             }
-            else if (!setting.global)
+            else if (!p.global)
             {
-                [setting setValueFromString:value appMode:_appMode];
+                [p setValueFromString:value appMode:_appMode];
                 if ([key isEqualToString:@"voice_mute"])
                     [OARoutingHelper.sharedInstance.getVoiceRouter setMute:[OAAppSettings.sharedManager.voiceMute get:_appMode]];
                 else if ([key isEqualToString:@"map_info_controls"])
@@ -216,6 +282,7 @@
         }
     }
 }
+ */
 
 - (void) renameProfile
 {
@@ -226,7 +293,6 @@
         if (appMode != nil)
         {
             _modeBean.userProfileName = _appMode.toHumanString;
-            _modeBean.parent = _appMode.stringKey;
         }
     }
     int number = 0;
@@ -254,14 +320,17 @@
             OAApplicationModeBuilder *builder = [OAApplicationMode createCustomMode:parent stringKey:_modeBean.stringKey];
             [builder setIconResName:_modeBean.iconName];
             [builder setUserProfileName:_modeBean.userProfileName];
-            [builder setDerivedProfile:_modeBean.derivedProfile];
             [builder setRoutingProfile:_modeBean.routingProfile];
             [builder setRouteService:_modeBean.routeService];
             [builder setIconColor:_modeBean.iconColor];
-            [builder setCustomIconColor:_modeBean.customIconColor];
             [builder setLocationIcon:_modeBean.locIcon];
             [builder setNavigationIcon:_modeBean.navIcon];
-            //        app.getSettings().copyPreferencesFromProfile(parent, builder.getApplicationMode());
+            
+            // TODO: don't exists in android. compare? delete?
+            // [builder setDerivedProfile:_modeBean.derivedProfile];
+            // [builder setCustomIconColor:_modeBean.customIconColor];
+            
+            [OAAppSettings.sharedManager copyProfilePreferences:parent modeTo:builder.am];
             _appMode = [OAApplicationMode saveProfile:builder];
         }
         else if (!self.shouldReplace && [self exists])
@@ -289,58 +358,62 @@
     return YES;
 }
 
-//public void applyAdditionalPrefs() {
-//    if (additionalPrefsJson != null) {
-//        updatePluginResPrefs();
-//
-//        SettingsItemReader reader = getReader();
-//        if (reader instanceof OsmandSettingsItemReader) {
-//            ((OsmandSettingsItemReader) reader).readPreferencesFromJson(additionalPrefsJson);
-//        }
-//    }
-//}
-//
-//private void updatePluginResPrefs() {
-//    String pluginId = getPluginId();
-//    if (Algorithms.isEmpty(pluginId)) {
-//        return;
-//    }
-//    OsmandPlugin plugin = OsmandPlugin.getPlugin(pluginId);
-//    if (plugin instanceof CustomOsmandPlugin) {
-//        CustomOsmandPlugin customPlugin = (CustomOsmandPlugin) plugin;
-//        String resDirPath = IndexConstants.PLUGINS_DIR + pluginId + "/" + customPlugin.getResourceDirName();
-//
-//        for (Iterator<String> it = additionalPrefsJson.keys(); it.hasNext(); ) {
-//            try {
-//                String prefId = it.next();
-//                Object value = additionalPrefsJson.get(prefId);
-//                if (value instanceof JSONObject) {
-//                    JSONObject jsonObject = (JSONObject) value;
-//                    for (Iterator<String> iterator = jsonObject.keys(); iterator.hasNext(); ) {
-//                        String key = iterator.next();
-//                        Object val = jsonObject.get(key);
-//                        if (val instanceof String) {
-//                            val = checkPluginResPath((String) val, resDirPath);
-//                        }
-//                        jsonObject.put(key, val);
-//                    }
-//                } else if (value instanceof String) {
-//                    value = checkPluginResPath((String) value, resDirPath);
-//                    additionalPrefsJson.put(prefId, value);
-//                }
-//            } catch (JSONException e) {
-//                LOG.error(e);
-//            }
-//        }
-//    }
-//}
-//
-//private String checkPluginResPath(String path, String resDirPath) {
-//    if (path.startsWith("@")) {
-//        return resDirPath + "/" + path.substring(1);
-//    }
-//    return path;
-//}
+- (void) applyAdditionalParams:(NSString *)filePath reader:(OASettingsItemReader *)reader
+{
+    if (_additionalPrefs)
+    {
+        [self updatePluginResPrefs];
+        if ([reader isKindOfClass:OAOsmandSettingsJsonReader.class])
+        {
+            [self readPreferencesFromJson:_additionalPrefs];
+        }
+    }
+}
+
+- (void) updatePluginResPrefs
+{
+    NSString *pluginId = [self pluginId];
+    if ([pluginId isEmpty])
+        return;
+    
+    OAPlugin *plugin = [OAPluginsHelper getPluginById:pluginId];
+    if ([plugin isKindOfClass:OACustomPlugin.class])
+    {
+        OACustomPlugin *customPlugin = (OACustomPlugin *)plugin;
+        NSString *resDirPath = [NSString stringWithFormat:@"%@/%@/%@", PLUGINS_DIR, pluginId, [customPlugin resourceDirName]];
+        
+        for (NSString *prefId in _additionalPrefs.allKeys)
+        {
+            id value = _additionalPrefs[prefId];
+            if ([value isKindOfClass:NSDictionary.class])
+            {
+                NSDictionary *jsonObject = ((NSDictionary *)value);
+                for (NSString *key in jsonObject.allKeys)
+                {
+                    id val = jsonObject[key];
+                    if ([val isKindOfClass:NSString.class])
+                    {
+                        val = [self checkPluginResPath:((NSString *)val) resDirPath:resDirPath];
+                    }
+                    _additionalPrefs[key] = val;
+                }
+            }
+            else if ([value isKindOfClass:NSString.class])
+            {
+                value = [self checkPluginResPath:((NSString *)value) resDirPath:resDirPath];
+                _additionalPrefs[prefId] = value;
+            }
+        }
+    }
+}
+
+- (NSString *) checkPluginResPath:(NSString *)path resDirPath:(NSString *)resDirPath
+{
+    if ([path hasPrefix:@"@"])
+        return [NSString stringWithFormat:@"%@/%@",resDirPath, [path substringFromIndex:1]];
+    
+    return path;
+}
 
 - (void) writeToJson:(id)json
 {
@@ -420,12 +493,25 @@
 
 - (OASettingsItemReader *) getReader
 {
-    return [[OASettingsItemJsonReader alloc] initWithItem:self];
+    return [[OAProfileSettingsJsonReader alloc] initWithItem:self];
 }
 
 - (OASettingsItemWriter *) getWriter
 {
-    return [[OASettingsItemJsonWriter alloc] initWithItem:self];
+    return [[OAProfileSettingsJsonWriter alloc] initWithItem:self];
 }
+
+@end
+
+
+#pragma mark - OAProfileSettingsJsonReader
+
+@implementation OAProfileSettingsJsonReader
+
+@end
+
+#pragma mark - OAProfileSettingsJsonWriter
+
+@implementation OAProfileSettingsJsonWriter
 
 @end

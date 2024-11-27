@@ -14,12 +14,13 @@
 #import "OAResourcesUIHelper.h"
 #import "OAMapStyleSettings.h"
 #import "OATileSource.h"
+#import "OAIndexConstants.h"
 #import "Localization.h"
 
 #include <OsmAndCore/ResourcesManager.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
 
-#define APPROXIMATE_MAP_SOURCES_SIZE_BYTES 450
+static const NSInteger APPROXIMATE_MAP_SOURCES_SIZE_BYTES = 450;
 
 @interface OAMapSourcesSettingsItem()
 
@@ -83,7 +84,7 @@
         NSString *filePath = nil;
         if (source.isSql)
         {
-            filePath = [OAMapCreatorHelper.sharedInstance.filesDir stringByAppendingPathComponent:[source.name stringByAppendingPathExtension:@"sqlitedb"]];
+            filePath = [OAMapCreatorHelper.sharedInstance.filesDir stringByAppendingPathComponent:[source.name stringByAppendingPathExtension:SQLITE_EXT]];
         }
         else
         {
@@ -111,7 +112,7 @@
         NSString *filePath = nil;
         if (source.isSql)
         {
-            filePath = [OAMapCreatorHelper.sharedInstance.filesDir stringByAppendingPathComponent:[source.name stringByAppendingPathExtension:@"sqlitedb"]];
+            filePath = [OAMapCreatorHelper.sharedInstance.filesDir stringByAppendingPathComponent:[source.name stringByAppendingPathExtension:SQLITE_EXT]];
         }
         else
         {
@@ -133,7 +134,7 @@
 - (void) apply
 {
     NSArray<OATileSource *> *newItems = [self getNewItems];
-    if (newItems.count > 0 || self.duplicateItems.count > 0)
+    if (![newItems isEmpty] || ![self.duplicateItems isEmpty])
     {
         OsmAndAppInstance app = [OsmAndApp instance];
         self.appliedItems = [NSMutableArray arrayWithArray:newItems];

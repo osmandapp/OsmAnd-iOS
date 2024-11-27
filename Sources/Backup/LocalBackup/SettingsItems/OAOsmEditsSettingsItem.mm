@@ -18,17 +18,7 @@
 #import "OAOpenStreetMapPoint.h"
 #import "OsmAndApp.h"
 
-#define kID_KEY @"id"
-#define kTEXT_KEY @"text"
-#define kLAT_KEY @"lat"
-#define kLON_KEY @"lon"
-#define kACTION_KEY @"action"
-#define kCOMMENT_KEY @"comment"
-#define kTYPE_KEY @"type"
-#define kTAGS_KEY @"tags"
-#define kENTITY_KEY @"entity"
-
-#define APPROXIMATE_OSM_EDIT_SIZE_BYTES 500
+static const NSInteger APPROXIMATE_OSM_EDIT_SIZE_BYTES = 500;
 
 @interface OAOsmEditsSettingsItem()
 
@@ -97,7 +87,8 @@
 
 - (void)deleteItem:(OAOpenStreetMapPoint *)item
 {
-    [[OAOsmEditsDBHelper sharedDatabase] deletePOI:item];
+    // android method is empty
+    // [[OAOsmEditsDBHelper sharedDatabase] deletePOI:item];
 }
 
 - (BOOL)shouldShowDuplicates

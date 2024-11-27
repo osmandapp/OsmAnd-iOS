@@ -66,7 +66,6 @@
 
 + (NSString *) getSubtypeFolder:(EOASettingsItemFileSubtype)subtype
 {
-    NSString *documentsPath = OsmAndApp.instance.documentsPath;
     switch (subtype)
     {
         case EOASettingsItemFileSubtypeUnknown:
@@ -106,6 +105,8 @@
             return @"";
     }
 }
+
+//TODO: delete? use getSubtypeFolder instead?
 
 + (NSString *) getSubtypeFolderName:(EOASettingsItemFileSubtype)subtype
 {
@@ -476,10 +477,18 @@
     NSFileManager *fileManager = [NSFileManager defaultManager];
     int number = 0;
     NSString *prefix;
-    if ([filePath hasSuffix:BINARY_WIKI_MAP_INDEX_EXT])
+    
+    BOOL isDir = NO;
+    [fileManager fileExistsAtPath:filePath isDirectory:&isDir];
+    
+    if (isDir)
+        prefix = filePath;
+    else if ([filePath hasSuffix:BINARY_WIKI_MAP_INDEX_EXT])
         prefix = [filePath substringToIndex:[filePath lastIndexOf:BINARY_WIKI_MAP_INDEX_EXT]];
     else if ([filePath hasSuffix:BINARY_SRTM_MAP_INDEX_EXT])
         prefix = [filePath substringToIndex:[filePath lastIndexOf:BINARY_SRTM_MAP_INDEX_EXT]];
+    else if ([filePath hasSuffix:BINARY_SRTM_FEET_MAP_INDEX_EXT])
+        prefix = [filePath substringToIndex:[filePath lastIndexOf:BINARY_SRTM_FEET_MAP_INDEX_EXT]];
     else if ([filePath hasSuffix:BINARY_ROAD_MAP_INDEX_EXT])
         prefix = [filePath substringToIndex:[filePath lastIndexOf:BINARY_ROAD_MAP_INDEX_EXT]];
     else if ([filePath containsString:@"."])
@@ -532,17 +541,18 @@
     NSString *fileName = json[@"file"];
     if (![fileName hasPrefix:@"/"])
         fileName = [@"/" stringByAppendingString:fileName];
+    
     if (!_subtype)
     {
         NSString *subtypeStr = json[@"subtype"];
-        if (subtypeStr.length > 0)
+        if (![subtypeStr isEmpty])
             _subtype = [OAFileSettingsItemFileSubtype getSubtypeByName:subtypeStr];
-        else if (fileName.length > 0)
+        else if (![fileName isEmpty])
             _subtype = [OAFileSettingsItemFileSubtype getSubtypeByFileName:fileName];
         else
             _subtype = EOASettingsItemFileSubtypeUnknown;
     }
-    if (fileName.length > 0)
+    if (![fileName isEmpty])
     {
         if (self.subtype == EOASettingsItemFileSubtypeOther)
             self.name = fileName;
@@ -570,7 +580,21 @@
 
 - (BOOL) needMd5Digest
 {
-    return _subtype == EOASettingsItemFileSubtypeVoice || _subtype == EOASettingsItemFileSubtypeTTSVoice;
+    return _subtype == EOASettingsItemFileSubtypeVoice || 
+        _subtype == EOASettingsItemFileSubtypeTTSVoice ||
+        _subtype == EOASettingsItemFileSubtypeGpx;
+}
+
+- (NSUInteger) getSize
+{
+    if (_filePath)
+    {
+        NSError *error;
+        NSUInteger fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:_filePath error:&error] fileSize];
+        if (!error)
+            return fileSize;
+    }
+    return 0;
 }
 
 @end

@@ -2380,7 +2380,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
                 OAApplicationMode *am = settings.applicationMode.get;
                 NSString *appMode = am.stringKey;
                 newSettings[QString::fromLatin1("appMode")] = QString([appMode UTF8String]);
-                NSString *baseMode = am.parent && am.parent.stringKey.length > 0 ? am.parent.stringKey : am.stringKey;
+                NSString *baseMode = [am getParent] && [am getParent].stringKey.length > 0 ? [am getParent].stringKey : am.stringKey;
                 newSettings[QString::fromLatin1("baseAppMode")] = QString([baseMode UTF8String]);
                                 
                 if (settings.nightMode)

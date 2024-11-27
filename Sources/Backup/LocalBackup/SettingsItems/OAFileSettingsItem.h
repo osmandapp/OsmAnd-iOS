@@ -59,6 +59,7 @@ typedef NS_ENUM(NSInteger, EOASettingsItemFileSubtype) {
 - (NSString *) getPluginPath;
 - (void) installItem:(NSString *)destFilePath;
 - (NSString *) getIconName;
+- (NSUInteger) getSize;
 
 - (BOOL) needMd5Digest;
 

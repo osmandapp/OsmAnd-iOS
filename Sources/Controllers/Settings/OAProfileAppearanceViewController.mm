@@ -227,7 +227,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
 - (void) setupAppProfileObjectFromAppMode:(OAApplicationMode *) baseModeForNewProfile
 {
     _profile.stringKey = baseModeForNewProfile.stringKey;
-    _profile.parent = baseModeForNewProfile.parent;
+    _profile.parent = [baseModeForNewProfile getParent];
     _profile.name = baseModeForNewProfile.toHumanString;
     _profile.color = baseModeForNewProfile.getIconColor;
     _profile.customColor = baseModeForNewProfile.getCustomIconColor;
@@ -622,7 +622,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     {
         OAApplicationMode *mode = [OAApplicationMode valueOfStringKey:_changedProfile.stringKey
                                                                  def:[[OAApplicationMode alloc] initWithName:@"" stringKey:_changedProfile.stringKey]];
-        [mode setParent:_changedProfile.parent];
+        [mode setParentAppMode:_changedProfile.parent];
         [mode setIconName:_changedProfile.iconName];
         [mode setUserProfileName:[_changedProfile.name trim]];
         [mode setRoutingProfile:_changedProfile.routingProfile];

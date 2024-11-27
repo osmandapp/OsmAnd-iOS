@@ -54,7 +54,7 @@
 
 - (NSArray*) processDuplicateItems
 {
-    if (_items.count > 0)
+    if (![_items isEmpty])
     {
         for (id item in _items)
             if ([self isDuplicate:item])
@@ -113,7 +113,7 @@
 - (void)remove
 {
     [super remove];
-    if (_items.count > 0)
+    if (![_items isEmpty])
     {
         for (id item in _items)
         {

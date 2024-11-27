@@ -13,6 +13,29 @@
 #import "OAGPXAppearanceCollection.h"
 #import "OsmAnd_Maps-Swift.h"
 
+@interface OAGpxLoadCallback : NSObject <OASGpxDbHelperGpxDataItemCallback>
+
+@property (nonatomic, weak) OAGpxSettingsItem *host;
+
+@end
+
+
+@implementation OAGpxLoadCallback
+
+- (BOOL)isCancelled
+{
+    return NO;
+}
+
+- (void)onGpxDataItemReadyItem:(nonnull OASGpxDataItem *)item
+{
+    if (_host)
+        [_host updateGpxParams:item];
+}
+
+@end
+
+
 @interface OAGpxSettingsItem()
 
 @end
@@ -67,7 +90,7 @@
 
 - (NSString *)getPublicName
 {
-    return [self.filePath.lastPathComponent stringByDeletingPathExtension];
+    return [OASGpxHelper.shared getGpxTitleName:self.filePath];
 }
 
 - (void)remove
@@ -127,12 +150,83 @@
     return [[OAFileSettingsItemWriter alloc] initWithItem:self];
 }
 
-- (void)applyAdditionalParams:(NSString *)filePath
+
+
+//TODO: new
+
+//TODO: implement
+
+- (void) applyAdditionalParams:(NSString *)filePath reader:(OASettingsItemReader *)reader
 {
     if (_appearanceInfo)
-        [self updateGpxParams:filePath];
+    {
+        NSString *savedFile = nil;
+        if ([reader isKindOfClass:OAFileSettingsItemReader.class])
+        {
+            savedFile = filePath;
+            //savedFile = ((FileSettingsItemReader) reader).getSavedFile();
+        }
+        if (savedFile)
+        {
+            OASKFile *kSavedFile = [[OASKFile alloc] initWithFilePath:savedFile];
+            OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
+            BOOL readItem = [[OASGpxDbHelper shared] hasGpxDataItemFile:kSavedFile];
+            OASGpxDataItem *dataItem = nil;
+            if (!readItem)
+            {
+                OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:kSavedFile];
+                if (!gpxFile.error)
+                {
+                    OASGpxTrackAnalysis *trackAnalysis = [gpxFile getAnalysisFileTimestamp:gpxFile.modifiedTime];
+                    
+                    dataItem = [[OASGpxDataItem alloc] initWithFile:kSavedFile];
+                    [dataItem setAnalysisAnalysis:trackAnalysis];
+                    [dataItem readGpxParamsGpxFile:gpxFile];
+                    
+                    readItem = ![[OASGpxDbHelper shared] addItem:dataItem];
+                }
+            }
+            if (readItem)
+            {
+                OAGpxLoadCallback *callback = [[OAGpxLoadCallback alloc] init];
+                callback.host = self;
+                dataItem = [[OASGpxDbHelper shared] getItemFile:kSavedFile callback:callback];
+            }
+            if (dataItem)
+            {
+                [self updateGpxParams:dataItem];
+            }
+        }
+    }
 }
 
+// TODO: New - check
+
+- (void)updateGpxParams:(OASGpxDataItem *)dataItem
+{
+    [dataItem setColor:_appearanceInfo.color];
+    [dataItem setWidth:_appearanceInfo.width];
+    [dataItem setShowArrows:_appearanceInfo.showArrows];
+    [dataItem setShowStartFinish:_appearanceInfo.showStartFinish];
+    [OAGPXDatabase splitTypeNameByValue:_appearanceInfo.splitType];
+    [dataItem setSplitInterval:_appearanceInfo.splitInterval];
+    [dataItem setColoringType:_appearanceInfo.coloringType];
+    [dataItem setGradientPaletteName:_appearanceInfo.gradientPaletteName];
+    [[OASGpxDbHelper shared] updateDataItemItem:dataItem];
+}
+
+// TODO: Old - delete
+
+//- (void) applyAdditionalParams:(NSString *)filePath reader:(OASettingsItemReader *)reader
+//{
+//    if (_appearanceInfo)
+//        [self updateGpxParams:filePath];
+//}
+
+
+// TODO: Old - delete
+
+/*
 - (void)updateGpxParams:(NSString *)filePath
 {
     OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
@@ -166,6 +260,7 @@
     if (gpx.color != 0)
         [[OAGPXAppearanceCollection sharedInstance] getColorItemWithValue:gpx.color];
 }
+ */
 
 - (void) createGpxAppearanceInfo
 {

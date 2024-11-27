@@ -56,7 +56,7 @@
     OASettingsItem *item = reader.item;
     NSError *err = nil;
     [reader readFromFile:tempFilePath error:&err];
-    [item applyAdditionalParams:tempFilePath];
+    [item applyAdditionalParams:tempFilePath reader:reader];
     if (err)
         NSLog(@"Error reading downloaded item: %@", tempFilePath);
 }
@@ -293,7 +293,8 @@
             }
             
         }
-        [item applyAdditionalParams:tempFilePath];
+        [item applyAdditionalParams:tempFilePath reader:reader];
+        
     }
     @catch (NSException *exception)
     {

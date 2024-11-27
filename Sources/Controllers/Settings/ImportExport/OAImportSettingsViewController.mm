@@ -46,7 +46,7 @@
 
 - (void)postInit
 {
-    OAImportAsyncTask *importTask = _settingsHelper.importTask;
+    OAImportFileTask *importTask = _settingsHelper.importTask;
     if (!_isNewItems && importTask && _settingsItems)
     {
         if (!_file)
@@ -71,7 +71,7 @@
 
     if (_settingsItems)
     {
-        self.itemsMap = [OASettingsHelper getSettingsToOperateByCategory:_settingsItems importComplete:NO addEmptyItems:NO];
+        self.itemsMap = [OASettingsHelper categorizeSettingsToOperate:_settingsItems importComplete:NO addEmptyItems:NO];
         self.itemTypes = self.itemsMap.allKeys;
     }
 }
@@ -94,7 +94,7 @@
 
 - (NSString *)getTitle
 {
-    OAImportAsyncTask *importTask = _settingsHelper.importTask;
+    OAImportFileTask *importTask = _settingsHelper.importTask;
     EOAImportType importTaskType = _isNewItems || [_settingsHelper.importTask isImportDone] ? EOAImportTypeCollect : [importTask getImportType];
     if (importTaskType == EOAImportTypeCheckDuplicates)
         return OALocalizedString(@"shared_string_preparing");
@@ -106,7 +106,7 @@
 
 - (NSString *)getTableHeaderDescription
 {
-    OAImportAsyncTask *importTask = _settingsHelper.importTask;
+    OAImportFileTask *importTask = _settingsHelper.importTask;
     EOAImportType importTaskType = _isNewItems || [_settingsHelper.importTask isImportDone] ? EOAImportTypeCollect : [importTask getImportType];
     if (importTaskType == EOAImportTypeCheckDuplicates)
         return [NSString stringWithFormat:OALocalizedString(@"checking_for_duplicate_description"), _file.lastPathComponent];
@@ -180,7 +180,7 @@
     if (succeed)
     {
         [self.tableView reloadData];
-        OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:[OASettingsHelper getSettingsToOperate:items importComplete:YES addEmptyItems:NO] fileName:_file.lastPathComponent];
+        OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:[OASettingsHelper collectSettingsToOperate:items importComplete:YES addEmptyItems:NO] fileName:_file.lastPathComponent];
         [self showViewController:importCompleteVC];
         [OAUtilities denyAccessToFile:_file removeFromInbox:YES];
     }

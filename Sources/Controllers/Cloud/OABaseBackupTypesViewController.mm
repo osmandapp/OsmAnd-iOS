@@ -323,7 +323,7 @@
         }
         settingsToOperate[type] = filesByType;
     }
-    return [OASettingsHelper getSettingsToOperateByCategory:settingsToOperate addEmptyItems:YES];
+    return [OASettingsHelper categorizeSettingsToOperate:settingsToOperate addEmptyItems:YES];
 }
 
 - (NSArray *)getItemsForType:(OAExportSettingsType *)type

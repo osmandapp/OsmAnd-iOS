@@ -10,10 +10,11 @@
 #import "OAHistoryHelper.h"
 #import "Localization.h"
 #import "OAAppVersion.h"
+#import "OAPointDescription.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OsmAndSharedWrapper.h"
 
-#define APPROXIMATE_HISTORY_MARKER_SIZE_BYTES 380
+static const NSInteger APPROXIMATE_HISTORY_MARKER_SIZE_BYTES = 380;
 
 @interface OAHistoryMarkersSettingsItem()
 
@@ -54,7 +55,7 @@
 
 - (NSString *)defaultFileExtension
 {
-    return @".gpx";
+    return GPX_FILE_EXT;
 }
 
 - (BOOL)shouldReadOnCollecting
@@ -65,6 +66,16 @@
 - (BOOL)shouldShowDuplicates
 {
     return NO;
+}
+
+- (BOOL)shouldReplace
+{
+    return self.shouldReplace;
+}
+
+- (void)setShouldReplace:(BOOL)shouldReplace
+{
+    self.self.shouldReplace = shouldReplace;
 }
 
 - (long)localModifiedTime
@@ -80,18 +91,18 @@
 - (void) apply
 {
     NSArray<OAHistoryItem *> *newItems = [self getNewItems];
-    if (newItems.count > 0 || self.duplicateItems.count > 0)
+    if (![newItems isEmpty] || ![self.duplicateItems isEmpty])
     {
         self.appliedItems = [NSMutableArray arrayWithArray:newItems];
 
         for (OAHistoryItem *duplicate in self.duplicateItems)
         {
-            OAHistoryItem *original = [_historyMarkersHelper getPointByName:duplicate.name fromNavigation:NO];
-            if (original)
+            if ([self shouldReplace])
             {
-                [self.appliedItems removeObject:original];
-                [self.appliedItems addObject:duplicate];
+                OAHistoryItem *existingMarker = [_historyMarkersHelper getPointByName:duplicate.name fromNavigation:NO];
+                [_historyMarkersHelper removePoint:existingMarker];
             }
+            [self.appliedItems addObject:[self shouldReplace] ? duplicate : [self renameItem:duplicate]];
         }
 
         for (OAHistoryItem *historyItem in self.appliedItems)
@@ -119,6 +130,34 @@
 
 - (OAHistoryItem *)renameItem:(OAHistoryItem *)item
 {
+    int number = 0;
+    while (YES)
+    {
+        number++;
+        NSString *name = [NSString stringWithFormat:@"%@ %d", [item name], number];
+        OAPointDescription *description = [[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION name:name];
+        
+        OAHistoryItem *renamedMarker = [[OAHistoryItem alloc] initWithPointDescription:description];
+        renamedMarker.name = name;
+        renamedMarker.latitude = item.latitude;
+        renamedMarker.longitude = item.longitude;
+        
+        if (![self isDuplicate:renamedMarker])
+        {
+            renamedMarker.hType = item.hType;
+            renamedMarker.date = item.date;
+            
+            /*
+            //android has extra fields
+            renamedMarker.history = true;
+            renamedMarker.selected = item.selected;
+            renamedMarker.visitedDate = item.visitedDate;
+            renamedMarker.creationDate = item.creationDate;
+            */
+            
+            return renamedMarker;
+        }
+    }
     return item;
 }
 

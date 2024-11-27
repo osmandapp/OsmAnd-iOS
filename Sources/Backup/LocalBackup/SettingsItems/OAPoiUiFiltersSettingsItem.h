@@ -1,5 +1,5 @@
 //
-//  OAPoiUiFilterSettingsItem.h
+//  OAPoiUiFiltersSettingsItem.h
 //  OsmAnd Maps
 //
 //  Created by Anna Bibyk on 19.11.2020.
@@ -9,6 +9,6 @@
 #import "OACollectionSettingsItem.h"
 #import "OAPOIUIFilter.h"
 
-@interface OAPoiUiFilterSettingsItem : OACollectionSettingsItem<OAPOIUIFilter *>
+@interface OAPoiUiFiltersSettingsItem : OACollectionSettingsItem<OAPOIUIFilter *>
 
 @end

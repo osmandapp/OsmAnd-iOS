@@ -26,7 +26,7 @@
 @property (nonatomic) NSString *stringKey;
 @property (nonatomic) NSString *variantKey;
 
-@property (nonatomic) OAApplicationMode *parent;
+@property (nonatomic) OAApplicationMode *parentAppMode;
 
 @end
 
@@ -197,7 +197,7 @@ static int PROFILE_TRUCK = 1000;
     OAAppSettings *settings = OAAppSettings.sharedManager;
     OAApplicationMode *m = [[OAApplicationMode alloc] initWithName:@"" stringKey:key];
 //    m.name = [settings.userProfileName get:m];
-    m.parent = [self valueOfStringKey:[settings.parentAppMode get:m] def:nil];
+    m.parentAppMode = [self valueOfStringKey:[settings.parentAppMode get:m] def:nil];
     return m;
 }
 
@@ -277,7 +277,7 @@ static int PROFILE_TRUCK = 1000;
 {
     NSMutableArray<OAApplicationMode *> *list = [NSMutableArray array];
     for (OAApplicationMode *a in _values)
-        if (a == am || a.parent == am)
+        if (a == am || [a getParent] == am)
             [list addObject:a];
 
     return list;
@@ -291,7 +291,7 @@ static int PROFILE_TRUCK = 1000;
         @"iconColor" : self.getIconColorName,
         @"customIconColor" : @([self getColorToExport]),
         @"iconName" : self.getIconName,
-        @"parent" : self.parent ? self.parent.stringKey : @"",
+        @"parent" : [self getParent] ? [self getParent].stringKey : @"",
         @"routeService" : self.getRouterServiceName,
         @"derivedProfile" : self.getDerivedProfile,
         @"routingProfile" : self.getRoutingProfile,
@@ -361,13 +361,16 @@ static int PROFILE_TRUCK = 1000;
 
 - (OAApplicationMode *) getParent
 {
-    return _parent ? _parent : [OAApplicationMode buildApplicationModeByKey:[OAAppSettings.sharedManager.parentAppMode get:self]];
+    return _parentAppMode;
 }
 
-- (void) setParent:(OAApplicationMode *)parent
+- (void) setParentAppMode:(OAApplicationMode *)parentAppMode
 {
-    _parent = parent;
-    [OAAppSettings.sharedManager.parentAppMode set:parent.stringKey mode:self];
+    if ([self isCustomProfile])
+    {
+        _parentAppMode = parentAppMode;
+        [OAAppSettings.sharedManager.parentAppMode set:parentAppMode.stringKey mode:self];
+    }
 }
 
 - (UIImage *) getIcon
@@ -621,9 +624,9 @@ static int PROFILE_TRUCK = 1000;
 {
     // We can't set parent profiles directly in initialize() method. Because it creates infinity loop on app initialisation:
     // OAAppSetttings.init() -> OAApplicationMode.init() -> OAAppSetttings.init() -> OAApplicationMode...
-    [_TRUCK setParent:_CAR];
-    [_MOTORCYCLE setParent:_CAR];
-    [_MOPED setParent:_BICYCLE];
+    [_TRUCK setParentAppMode:_CAR];
+    [_MOTORCYCLE setParentAppMode:_CAR];
+    [_MOPED setParentAppMode:_BICYCLE];
 }
 
 + (void) initModesParams
@@ -718,7 +721,7 @@ static int PROFILE_TRUCK = 1000;
     OAApplicationMode *mode = [OAApplicationMode valueOfStringKey:builder.am.stringKey def:nil];
     if (mode != nil)
     {
-        [mode setParent:builder.am.parent];
+        [mode setParentAppMode:[builder.am getParent]];
         [mode setUserProfileName:builder.userProfileName];
         [mode setIconName:builder.iconResName];
         [mode setRoutingProfile:builder.routingProfile];
@@ -829,7 +832,7 @@ static int PROFILE_TRUCK = 1000;
 
 - (BOOL) isDerivedRoutingFrom:(OAApplicationMode *)mode
 {
-    return self == mode || _parent == mode;
+    return self == mode || _parentAppMode == mode;
 }
 
 // returns modifiable ! Set<ApplicationMode> to exclude non-wanted derived
@@ -844,7 +847,7 @@ static int PROFILE_TRUCK = 1000;
     for (OAApplicationMode *m in _values)
     {
         // add derived modes
-        if ([set containsObject:m.parent])
+        if ([set containsObject:[m getParent]])
             [set addObject:m];
     }
     [_widgetsVisibilityMap setObject:set forKey:widgetId];
@@ -876,7 +879,7 @@ static int PROFILE_TRUCK = 1000;
     for (OAApplicationMode *m in _values)
     {
         // add derived modes
-        if ([set containsObject:m.parent])
+        if ([set containsObject:[m getParent]])
             [set addObject:m];
     }
         
@@ -904,7 +907,7 @@ static int PROFILE_TRUCK = 1000;
 {
     OAApplicationModeBuilder *builder = [[OAApplicationModeBuilder alloc] init];
     builder.am = [[OAApplicationMode alloc] initWithName:@"" stringKey:stringKey];
-    builder.am.parent = parent;
+    [builder.am setParentAppMode:parent];
     return builder;
 }
 
@@ -1004,9 +1007,9 @@ static int PROFILE_TRUCK = 1000;
 
 - (OAApplicationMode *) customReg
 {
-    OAApplicationMode *parent = _am.parent;
+    OAApplicationMode *parent = [_am getParent];
     
-    [_am setParent:parent];
+    [_am setParentAppMode:parent];
     [_am setUserProfileName:_userProfileName];
     [_am setIconName:_iconResName];
     [_am setDerivedProfile:_derivedProfile];

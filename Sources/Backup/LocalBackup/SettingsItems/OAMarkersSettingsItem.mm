@@ -11,11 +11,12 @@
 #import "OADestinationsHelper.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
+#import "OAIndexConstants.h"
 #import "Localization.h"
 #import "OsmAndSharedWrapper.h"
 
 
-#define APPROXIMATE_MARKER_SIZE_BYTES 240
+static const NSInteger APPROXIMATE_MARKER_SIZE_BYTES = 240;
 
 @interface OAMarkersSettingsItem()
 
@@ -65,7 +66,7 @@
 
 - (NSString *) defaultFileExtension
 {
-    return @".gpx";
+    return GPX_FILE_EXT;
 }
 
 - (NSString *)getPublicName

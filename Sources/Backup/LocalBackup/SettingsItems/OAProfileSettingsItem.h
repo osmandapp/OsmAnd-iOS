@@ -18,3 +18,11 @@
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode;
 
 @end
+
+@interface OAProfileSettingsJsonReader : OAOsmandSettingsJsonReader
+
+@end
+
+@interface OAProfileSettingsJsonWriter : OASettingsItemJsonWriter
+
+@end

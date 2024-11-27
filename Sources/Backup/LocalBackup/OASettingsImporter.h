@@ -33,9 +33,9 @@ typedef void(^ OAOnDuplicatesChecked)(NSArray<OASettingsItem *> *duplicates, NSA
 
 @end
 
-#pragma mark - OAImportAsyncTask
+#pragma mark - OAImportFileTask
 
-@interface OAImportAsyncTask : NSObject
+@interface OAImportFileTask : NSObject
 
 @property (nonatomic, weak) id<OASettingsImportExportDelegate> delegate;
 @property (nonatomic, copy) OAOnImportComplete onImportComplete;
@@ -57,9 +57,9 @@ typedef void(^ OAOnDuplicatesChecked)(NSArray<OASettingsItem *> *duplicates, NSA
 
 @end
 
-#pragma mark - OAImportItemsAsyncTask
+#pragma mark - OAImportFileItemsTask
 
-@interface OAImportItemsAsyncTask : NSObject
+@interface OAImportFileItemsTask : NSObject
 
 - (instancetype) initWithFile:(NSString *)file items:(NSArray<OASettingsItem *> *)items;
 - (void) execute;

@@ -12,7 +12,7 @@
 #import "OACustomPlugin.h"
 #import "Localization.h"
 
-#define APPROXIMATE_SUGGESTED_DOWNLOAD_SIZE_BYTES 120
+static NSInteger APPROXIMATE_SUGGESTED_DOWNLOAD_SIZE_BYTES = 120;
 
 @implementation OASuggestedDownloadsItem
 
@@ -41,7 +41,7 @@
 
 - (NSString *)getPublicName
 {
-    return OALocalizedString(@"Suggested maps");
+    return OALocalizedString(@"suggested_maps");
 }
 
 - (long)getEstimatedSize

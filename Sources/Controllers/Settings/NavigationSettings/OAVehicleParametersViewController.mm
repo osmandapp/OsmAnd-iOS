@@ -63,7 +63,7 @@
     auto router = [OsmAndApp.instance getRouter:self.appMode];
     _otherParameters.clear();
     NSString *appModeRoutingProfile = self.appMode.getRoutingProfile;
-    NSString *parentAppModeRoutingProfile = self.appMode.parent.getRoutingProfile;
+    NSString *parentAppModeRoutingProfile = [self.appMode getParent].getRoutingProfile;
     BOOL isPublicTransport = [appModeRoutingProfile isEqualToString:OAApplicationMode.PUBLIC_TRANSPORT.stringKey];
     
     if (isPublicTransport)

@@ -6,16 +6,13 @@
 //  Copyright © 2021 OsmAnd. All rights reserved.
 //
 
-#import "OACollectionSettingsItem.h"
+#import "OAHistorySettingsItem.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @class OAHistoryItem;
 
-@interface OASearchHistorySettingsItem : OACollectionSettingsItem<OAHistoryItem *>
-
-- (instancetype) initWithItems:(NSArray<OAHistoryItem *> *)items fromNavigation:(BOOL)fromNavigation;
-- (instancetype _Nullable) initWithJson:(id)json error:(NSError * _Nullable *)error fromNavigation:(BOOL)fromNavigation;
+@interface OASearchHistorySettingsItem : OAHistorySettingsItem
 
 @end
 

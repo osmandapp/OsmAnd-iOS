@@ -61,6 +61,21 @@ static const NSInteger LAYER_TRANSPARENCY_SEEKBAR_MODE_OFF = 2;
 static const NSInteger LAYER_TRANSPARENCY_SEEKBAR_MODE_UNDEFINED = 3;
 static const NSInteger LAYER_TRANSPARENCY_SEEKBAR_MODE_ALL = 4;
 
+static NSString * const ICON_COLOR = @"app_mode_icon_color";
+static NSString * const CUSTOM_ICON_COLOR = @"custom_icon_color";
+static NSString * const ICON_RES_NAME = @"app_mode_icon_res_name";
+static NSString * const PARENT_APP_MODE = @"parent_app_mode";
+static NSString * const ROUTING_PROFILE = @"routing_profile";
+static NSString * const ROUTE_SERVICE = @"route_service";
+static NSString * const USER_PROFILE_NAME = @"user_profile_name";
+static NSString * const LOCATION_ICON = @"location_icon";
+static NSString * const NAVIGATION_ICON = @"navigation_icon";
+static NSString * const APP_MODE_ORDER = @"app_mode_order";
+static NSString * const APP_MODE_VERSION = @"app_mode_version";
+
+static NSString * const RENDERER_PREFERENCE_PREFIX = @"nrenderer_";
+static NSString * const ROUTING_PREFERENCE_PREFIX = @"prouting_";
+
 typedef NS_ENUM(NSInteger, EOAWidgetSizeStyle)
 {
     EOAWidgetSizeStyleSmall = 0,
@@ -334,6 +349,7 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 @property (nonatomic, assign) BOOL lastModifiedTimeStored;
 @property (nonatomic) long lastModifiedTime;
 
+- (instancetype) cache;
 - (instancetype) makeGlobal;
 - (instancetype) makeProfile;
 - (instancetype) makeShared;
@@ -348,7 +364,11 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 - (NSString *) toStringValue:(OAApplicationMode *)mode;
 - (void) copyValueFromAppMode:(OAApplicationMode *)sourceAppMode targetAppMode:(OAApplicationMode *)targetAppMode;
 
+- (BOOL) isSet;
 - (BOOL) isSetForMode:(OAApplicationMode *)mode;
+
+- (void) readFromJson:(NSDictionary<NSString *, NSString *> *)json appMode:(OAApplicationMode *)appMode;
+- (id) parseString:(NSString *)s;
 
 @end
 
@@ -1016,6 +1036,9 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 // Custom plugins
 @property (nonatomic) NSString *customPluginsJson;
 
+- (BOOL) isRendererPreference:(NSString *)key;
+- (BOOL) isRoutingPreference:(NSString *)key;
+
 - (void) setApplicationModePref:(OAApplicationMode *)applicationMode;
 - (void) setApplicationModePref:(OAApplicationMode *)applicationMode markAsLastUsed:(BOOL)markAsLastUsed;
 
@@ -1066,6 +1089,9 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 
 - (OACommonWidgetZoomLevelType *)registerWidgetZoomLevelTypePreference:(NSString *)key defValue:(EOAWidgetZoomLevelType)defValue;
 - (void)resetPreferencesForProfile:(OAApplicationMode *)mode;
+
+- (void) copyProfilePreferences:(OAApplicationMode *)modeFrom modeTo:(OAApplicationMode *)modeTo;
+- (void) copyProfilePreferences:(OAApplicationMode *)modeFrom modeTo:(OAApplicationMode *)modeTo profilePreferences:(NSArray<OACommonPreference *> *)profilePreferences;
 
 // Direction Appearance
 

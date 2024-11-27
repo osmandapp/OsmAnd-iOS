@@ -16,6 +16,7 @@
 
 - (instancetype) initWithName:(NSString *)name;
 - (instancetype) initWithData:(NSData *)data name:(NSString *)name;
+- (NSUInteger) getSize;
 
 @end
 

@@ -13,6 +13,7 @@
 
 @property (nonatomic) NSString *width;
 //public GradientScaleType scaleType;
+@property (nonatomic) NSString *gradientPaletteName;
 @property (nonatomic) NSInteger color;
 @property (nonatomic) NSString *coloringType;
 @property (nonatomic) NSInteger gradientSpeedColor;

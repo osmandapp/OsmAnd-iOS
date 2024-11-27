@@ -12,6 +12,6 @@
 
 @end
 
-@interface OAGlobalSettingsItemReader : OASettingsItemReader<OAGlobalSettingsItem *>
+@interface OAGlobalSettingsItemReader : OAOsmandSettingsJsonReader
 
 @end

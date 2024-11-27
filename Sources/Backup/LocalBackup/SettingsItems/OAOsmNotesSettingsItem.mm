@@ -7,20 +7,16 @@
 //
 
 #import "OAOsmNotesSettingsItem.h"
+#import "OAOsmEditsSettingsItem.h"
 #import "Localization.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAOsmBugsDBHelper.h"
 #import "OAOsmNotePoint.h"
+#import "OAEntity.h"
 #import "OsmAndApp.h"
 #import "OAObservable.h"
 
-#define kTEXT_KEY @"text"
-#define kLAT_KEY @"lat"
-#define kLON_KEY @"lon"
-#define kAUTHOR_KEY @"author"
-#define kACTION_KEY @"action"
-
-#define APPROXIMATE_OSM_NOTE_SIZE_BYTES 250
+static const NSInteger APPROXIMATE_OSM_NOTE_SIZE_BYTES = 250;
 
 @interface OAOsmNotesSettingsItem()
 
@@ -59,7 +55,7 @@
 - (void) apply
 {
     NSArray<OAOsmNotePoint *>*newItems = [self getNewItems];
-    if (newItems.count > 0 || [self duplicateItems].count > 0)
+    if (![newItems isEmpty] || ![[self duplicateItems] isEmpty])
     {
         self.appliedItems = [NSMutableArray arrayWithArray:newItems];
         OAOsmBugsDBHelper *db = [OAOsmBugsDBHelper sharedDatabase];
@@ -93,7 +89,8 @@
 
 - (void)deleteItem:(OAOsmNotePoint *)item
 {
-    [[OAOsmBugsDBHelper sharedDatabase] deleteAllBugModifications:item];
+    // android method is empty
+    // [[OAOsmBugsDBHelper sharedDatabase] deleteAllBugModifications:item];
 }
 
 - (NSString *) name
@@ -137,6 +134,18 @@
         NSString *author = object[kAUTHOR_KEY];
         author = author != nil ? author : @"";
         NSString *action = object[kACTION_KEY];
+        
+        // in android here can be created OamNode or OsmWay. But in ios we don't have OsmWay class at all.
+        /*
+        if (entityJson.get(TYPE_KEY).equals(Entity.EntityType.NODE.name())) {
+            entity = new Node(lat, lon, id);
+        } else {
+            entity = new Way(id);
+            entity.setLatitude(lat);
+            entity.setLongitude(lon);
+        }
+         */
+        
         OAOsmNotePoint *point = [[OAOsmNotePoint alloc] init];
         [point setId:MIN(-2, minId - idOffset)];
         [point setText:text];
@@ -167,11 +176,26 @@
         for (OAOsmNotePoint *point in self.items)
         {
             NSMutableDictionary *jsonObject = [NSMutableDictionary dictionary];
-            jsonObject[kTEXT_KEY] = [point getText];
+            jsonObject[kID_KEY] = @([point getId]);
+            jsonObject[kNAME_KEY] = [point getName];
             jsonObject[kLAT_KEY] = @([point getLatitude]);
             jsonObject[kLON_KEY] = @([point getLongitude]);
-            jsonObject[kAUTHOR_KEY] = [point getAuthor];
+            
+            jsonObject[kTYPE_KEY] = [OAEntity stringType:NODE];
+            //jsonEntity.put(TYPE_KEY, Entity.EntityType.valueOf(point.getEntity()));
+            
+            //JSONObject jsonTags = new JSONObject(point.getEntity().getTags());
+            //jsonEntity.put(TAGS_KEY, jsonTags);
+            //jsonPoint.put(COMMENT_KEY, point.getComment());
+            
             jsonObject[kACTION_KEY] = [OAOsmPoint getStringAction][@([point getAction])];
+            
+            //jsonPoint.put(ENTITY_KEY, jsonEntity);
+            
+            //android don't have these wtrings
+            jsonObject[kTEXT_KEY] = [point getText];
+            jsonObject[kAUTHOR_KEY] = [point getAuthor];
+            
             [jsonArray addObject:jsonObject];
         }
         json[@"items"] = jsonArray;

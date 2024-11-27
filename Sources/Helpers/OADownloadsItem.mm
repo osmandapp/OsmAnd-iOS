@@ -12,7 +12,7 @@
 #import "OACustomPlugin.h"
 #import "Localization.h"
 
-#define APPROXIMATE_DOWNLOAD_ITEM_SIZE_BYTES 2048
+static NSInteger APPROXIMATE_DOWNLOAD_ITEM_SIZE_BYTES = 2048;
 
 @implementation OADownloadsItem
 
@@ -45,7 +45,8 @@
     {
         for (OAWorldRegion *region in self.items)
         {
-            [jsonArray addObject:((OACustomRegion *) region).toJson];
+            if ([region isKindOfClass:OACustomRegion.class])
+                [jsonArray addObject:((OACustomRegion *) region).toJson];
         }
         json[@"items"] = jsonArray;
     }

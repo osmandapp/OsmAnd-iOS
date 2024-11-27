@@ -18,27 +18,30 @@ typedef NS_ENUM(NSInteger, EOASettingsItemType) {
     EOASettingsItemTypeData,
     EOASettingsItemTypeFile,
     EOASettingsItemTypeResources,
+    EOASettingsItemTypeGpx,
     EOASettingsItemTypeQuickActions,
     EOASettingsItemTypePoiUIFilters,
     EOASettingsItemTypeMapSources,
     EOASettingsItemTypeAvoidRoads,
     EOASettingsItemTypeSuggestedDownloads,
-    EOASettingsItemTypeFavorites,
+    EOASettingsItemTypeDownloads,
     EOASettingsItemTypeOsmNotes,
     EOASettingsItemTypeOsmEdits,
+    EOASettingsItemTypeFavorites,
     EOASettingsItemTypeActiveMarkers,
     EOASettingsItemTypeHistoryMarkers,
-    EOASettingsItemTypeGpx,
     EOASettingsItemTypeSearchHistory,
-    EOASettingsItemTypeNavigationHistory,
-    EOASettingsItemTypeDownloads,
-    EOASettingsItemTypeColorPalette
+    EOASettingsItemTypeNavigationHistory
+    
+//    EOASettingsItemTypeOnlineRoutingEngines,
+//    EOASettingsItemTypeInteraryGroups,
 };
 
 @interface OASettingsItemType : NSObject
 
 + (NSString * _Nullable) typeName:(EOASettingsItemType)type;
 + (EOASettingsItemType) parseType:(NSString *)typeName;
++ (EOASettingsItemType) fromName:(NSString *)name;
 
 @end
 

@@ -998,8 +998,8 @@
 - (std::shared_ptr<GeneralRouter>) getRouter:(std::shared_ptr<RoutingConfigurationBuilder> &)builder mode:(OAApplicationMode *)am
 {
     auto router = builder->getRouter([am.getRoutingProfile UTF8String]);
-    if (!router && am.parent)
-        router = builder->getRouter([am.parent.stringKey UTF8String]);
+    if (!router && [am getParent])
+        router = builder->getRouter([[am getParent].stringKey UTF8String]);
     return router;
 }
 

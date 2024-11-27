@@ -38,7 +38,7 @@
 
 @property (nonatomic) NSString *descr;
 
-@property (nonatomic, readonly) OAApplicationMode *parent;
+//@property (nonatomic, readonly) OAApplicationMode *parentAppMode;
 
 + (OAApplicationModeBuilder *) fromModeBean:(OAApplicationModeBean *)modeBean;
 
@@ -90,7 +90,8 @@
 
 - (NSString *) toHumanString;
 
-- (void) setParent:(OAApplicationMode *)parent;
+- (OAApplicationMode *) getParent;
+- (void) setParentAppMode:(OAApplicationMode *)parent;
 - (UIImage *) getIcon;
 - (NSString *) getIconName;
 - (void) setIconName:(NSString *)iconName;

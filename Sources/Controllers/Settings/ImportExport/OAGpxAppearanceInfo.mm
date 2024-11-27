@@ -32,6 +32,7 @@
         _visualization3dPositionType = dataItem.visualization3dPositionType;
         _splitType = dataItem.splitType;
         _splitInterval = dataItem.splitInterval;
+        _gradientPaletteName = dataItem.gradientPaletteName;
 //        _scaleType = dataItem.scaleType;
 //        _gradientSpeedColor = dataItem.getGradientSpeedColor;
 //        _gradientSlopeColor = dataItem.getGradientSlopeColor;
@@ -48,6 +49,7 @@
 {
     json[@"color"] = [UIColorFromARGB(_color) toHexARGBString];;
     json[@"coloring_type"] = _coloringType;
+    json[@"color_palette"] = _gradientPaletteName;
     json[@"width"] = _width;
     json[@"show_arrows"] = _showArrows ? @"true" : @"false";
     json[@"show_start_finish"] = _showStartFinish ? @"true" : @"false";
@@ -80,6 +82,7 @@
     else
         gpxAppearanceInfo.color = [UIColor toNumberFromString:nil];
     gpxAppearanceInfo.coloringType = json[@"coloring_type"];
+    gpxAppearanceInfo.gradientPaletteName = json[@"color_palette"];
     gpxAppearanceInfo.width = json[@"width"];
     gpxAppearanceInfo.showArrows = [json[@"show_arrows"] boolValue];
     gpxAppearanceInfo.showStartFinish = [json[@"show_start_finish"] boolValue];

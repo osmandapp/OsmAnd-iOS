@@ -19,7 +19,7 @@
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 
-#define APPROXIMATE_QUICK_ACTION_SIZE_BYTES 135
+static const NSInteger APPROXIMATE_QUICK_ACTION_SIZE_BYTES = 135;
 
 @implementation OAQuickActionsSettingsItem
 {
@@ -98,7 +98,7 @@
     [_mapButtonsHelper addQuickActionButtonState:_buttonState];
 }
 
-- (long)getEstimatedItemSize:(id)item
+- (long)getEstimatedSize
 {
     return _buttonState.quickActions.count * APPROXIMATE_QUICK_ACTION_SIZE_BYTES;
 }
@@ -141,6 +141,22 @@
             [_buttonState setEnabled:[object[@"enabled"] isKindOfClass:NSNumber.class]
                 ? [object[@"enabled"] boolValue]
                 : [object[@"enabled"] isEqualToString:@"true"] ? YES : NO];
+            
+            NSString *iconName = object[@"icon"];
+            if (![iconName isEmpty])
+                [_buttonState.iconPref set:iconName];
+            
+            int size = object[@"size"] ? [object[@"size"] intValue] : -1;
+            if (size > 0)
+                [_buttonState.sizePref set:size];
+            
+            int cornerRadius = object[@"corner_radius"] ? [object[@"corner_radius"] intValue] : -1;
+            if (cornerRadius > 0)
+                [_buttonState.cornerRadiusPref set:cornerRadius];
+            
+            int opacity = object[@"opacity"] ? [object[@"opacity"] intValue] : -1;
+            if (opacity > 0)
+                [_buttonState.opacityPref set:opacity];
         }
         else
         {
@@ -239,13 +255,23 @@
     jsonObject[@"id"] = _buttonState.id;
     jsonObject[@"name"] = [_buttonState hasCustomName] ? [_buttonState getName] : @"";
     jsonObject[@"enabled"] = [_buttonState isEnabled] ? @"true" : @"false";
+    
+    if ([_buttonState.iconPref isSet])
+        json[@"icon"] = [_buttonState.iconPref get];
+    if ([_buttonState.sizePref isSet])
+        json[@"size"] = @([_buttonState.sizePref get]);
+    if ([_buttonState.cornerRadiusPref isSet])
+        json[@"corner_radius"] = @([_buttonState.cornerRadiusPref get]);
+    if ([_buttonState.opacityPref isSet])
+        json[@"opacity"] = @([_buttonState.opacityPref get]);
+    
     json[@"buttonState"] = jsonObject;
 }
 
 - (void)writeItemsToJson:(id)json
 {
     NSMutableArray *jsonArray = [NSMutableArray array];
-    if (_buttonState.quickActions.count > 0)
+    if (![_buttonState.quickActions isEmpty])
     {
         for (OAQuickAction *action in _buttonState.quickActions)
         {

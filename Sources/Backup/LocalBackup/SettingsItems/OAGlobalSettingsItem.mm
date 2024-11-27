@@ -32,11 +32,16 @@ static NSDictionary<NSString *, NSString *> *_pluginIdMapping;
         @"osmand.srtm.paid": kInAppId_Addon_Srtm,
         @"osmand.wikipedia": kInAppId_Addon_Wiki,
         @"osmand.weather": kInAppId_Addon_Weather,
-        @"osmand.sensor": kInAppId_Addon_External_Sensors
-        //        @"osmand.antplus"
-        //        @"osmand.accessibility":
-        //        @"osmand.rastermaps"
+        
+        //TODO: android doesn't have this line. External_Sensors plugin uses "osmand.antplus" key instead. Check it
+        //@"osmand.sensor": kInAppId_Addon_External_Sensors
+        @"osmand.antplus": kInAppId_Addon_External_Sensors
+        
         //        @"osmand.audionotes":
+        //        @"osmand.rastermaps"
+        //        @"osmand.accessibility":
+        //        @"osmand.antplus"
+        //        @"osmand.vehicle.metrics"
     };
 }
 
@@ -54,7 +59,7 @@ static NSDictionary<NSString *, NSString *> *_pluginIdMapping;
 
 - (NSString *)getPublicName
 {
-    return OALocalizedString(@"general_settings_2");
+    return OALocalizedString(@"global_settings");
 }
 
 - (BOOL)exists
@@ -87,6 +92,46 @@ static NSDictionary<NSString *, NSString *> *_pluginIdMapping;
     return self.getJsonWriter;
 }
 
+
+
+
+//TODO: new
+
+- (void)readPreferenceFromJson:(OACommonPreference *)preference json:(NSDictionary<NSString *,NSString *> *)json
+{
+    if (([preference isKindOfClass:OACommonPreference.class] && preference.shared) ||
+        [preference.key isEqualToString:OAAppSettings.sharedManager.applicationMode.key])
+    {
+        [preference readFromJson:json appMode:nil];
+    }
+}
+
+//TODO: new
+
+- (void)readPreferencesFromJson:(NSDictionary<NSString *,NSString *> *)json
+{
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    for (NSString *key in json.allKeys)
+    {
+        OACommonPreference *p = [settings getPreferenceByKey:key];
+        if (p)
+        {
+            [self readPreferenceFromJson:p json:json];
+        }
+        else
+        {
+            NSLog(@"No preference while importing settings: %@", key);
+        }
+    }
+    [OAAppSettings.sharedManager setLastGlobalModifiedTime:[self lastModifiedTime]];
+}
+
+
+
+
+//TODO: old. delete?
+
+/*
 - (void) readPreferenceFromJson:(NSString *)key value:(NSString *)value
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
@@ -131,6 +176,8 @@ static NSDictionary<NSString *, NSString *> *_pluginIdMapping;
     if ([settings getGlobalPreference:key].shared)
         [settings setGlobalPreference:value key:key];
 }
+*/
+
 
 // MARK: OASettingsItemWriter
 
@@ -173,57 +220,55 @@ static NSDictionary<NSString *, NSString *> *_pluginIdMapping;
 
 @end
 
-// MARK: OASettingsItemReader
-
 #pragma mark - OAGlobalSettingsItemReader
 
 @implementation OAGlobalSettingsItemReader
 
-- (BOOL) readFromFile:(NSString *)filePath error:(NSError * _Nullable *)error
-{
-    if (self.item.read)
-    {
-        if (error)
-            *error = [NSError errorWithDomain:kSettingsItemErrorDomain code:kSettingsItemErrorCodeAlreadyRead userInfo:nil];
-
-        return NO;
-    }
-
-    NSError *readError;
-    NSData *data = [NSData dataWithContentsOfFile:filePath options:NSDataReadingMappedIfSafe error:&readError];
-    if (readError)
-    {
-        if (error)
-            *error = readError;
-
-        return NO;
-    }
-    if (data.length == 0)
-    {
-        if (error)
-            *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeEmptyJson userInfo:nil];
-
-        return NO;
-    }
-
-    NSError *jsonError;
-    id json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&jsonError];
-    if (jsonError)
-    {
-        if (error)
-            *error = jsonError;
-
-        return NO;
-    }
-
-    NSDictionary<NSString *, NSString *> *settings = (NSDictionary *) json;
-
-    [settings enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-        [self.item readPreferenceFromJson:key value:obj];
-    }];
-
-    self.item.read = YES;
-    return YES;
-}
+//- (BOOL) readFromFile:(NSString *)filePath error:(NSError * _Nullable *)error
+//{
+//    if (self.item.read)
+//    {
+//        if (error)
+//            *error = [NSError errorWithDomain:kSettingsItemErrorDomain code:kSettingsItemErrorCodeAlreadyRead userInfo:nil];
+//
+//        return NO;
+//    }
+//
+//    NSError *readError;
+//    NSData *data = [NSData dataWithContentsOfFile:filePath options:NSDataReadingMappedIfSafe error:&readError];
+//    if (readError)
+//    {
+//        if (error)
+//            *error = readError;
+//
+//        return NO;
+//    }
+//    if (data.length == 0)
+//    {
+//        if (error)
+//            *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeEmptyJson userInfo:nil];
+//
+//        return NO;
+//    }
+//
+//    NSError *jsonError;
+//    id json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&jsonError];
+//    if (jsonError)
+//    {
+//        if (error)
+//            *error = jsonError;
+//
+//        return NO;
+//    }
+//
+//    NSDictionary<NSString *, NSString *> *settings = (NSDictionary *) json;
+//
+//    [settings enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+//        [self.item readPreferenceFromJson:key value:obj];
+//    }];
+//
+//    self.item.read = YES;
+//    return YES;
+//}
 
 @end

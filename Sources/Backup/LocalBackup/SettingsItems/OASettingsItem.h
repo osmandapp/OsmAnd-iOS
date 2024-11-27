@@ -13,12 +13,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-#define APPROXIMATE_PREFERENCE_SIZE_BYTES 60
+static const NSInteger APPROXIMATE_PREFERENCE_SIZE_BYTES = 60;
 
 FOUNDATION_EXTERN NSString *const kSettingsItemErrorDomain;
 FOUNDATION_EXTERN NSInteger const kSettingsItemErrorCodeAlreadyRead;
 
-@class OASGpxFile;
+@class OASGpxFile, OACommonPreference;
 
 @interface OASettingsItem : NSObject
 
@@ -44,7 +44,7 @@ FOUNDATION_EXTERN NSInteger const kSettingsItemErrorCodeAlreadyRead;
 - (BOOL) exists;
 - (void) apply;
 - (void) remove;
-- (void) applyAdditionalParams:(NSString *)filePath;
+- (void) applyAdditionalParams:(NSString *)filePath reader:(OASettingsItemReader *)reader;
 - (BOOL) applyFileName:(NSString *)fileName;
 + (EOASettingsItemType) parseItemType:(id)json error:(NSError * _Nullable *)error;
 - (long) getEstimatedSize;
@@ -57,18 +57,33 @@ FOUNDATION_EXTERN NSInteger const kSettingsItemErrorCodeAlreadyRead;
 - (void) writeToJson:(id)json;
 - (void) readItemsFromJson:(id)json error:(NSError * _Nullable *)error;
 - (void) writeItemsToJson:(id)json;
-- (void) readPreferenceFromJson:(NSString *)key value:(NSString *)value;
-- (void) applyRendererPreferences:(NSDictionary<NSString *, NSString *> *)prefs;
-- (void) applyRoutingPreferences:(NSDictionary<NSString *,NSString *> *)prefs;
+
+//TODO: delete?
+//- (void) readPreferenceFromJson:(NSString *)key value:(NSString *)value;
+
+//- (void) applyRendererPreferences:(NSDictionary<NSString *, NSString *> *)prefs;
+//- (void) applyRoutingPreferences:(NSDictionary<NSString *,NSString *> *)prefs;
+
+//TODO: new
+- (void) readPreferenceFromJson:(OACommonPreference *)preference json:(NSDictionary<NSString *, NSString *> *)json;
+- (void) readPreferencesFromJson:(NSDictionary<NSString *, NSString *> *)json;
+
+
 - (OASettingsItemReader *) getJsonReader;
 - (OASettingsItemWriter *) getJsonWriter;
 - (OASettingsItemWriter *) getGpxWriter:(OASGpxFile *)gpxFile;
 
 @end
 
-@interface OASettingsItemJsonReader : OASettingsItemReader<OASettingsItem *>
+@interface OAOsmandSettingsJsonReader : OASettingsItemReader<OASettingsItem *>
 
 @end
+
+//TODO: delete?
+
+//@interface OASettingsItemJsonReader : OAOsmandSettingsJsonReader
+//
+//@end
 
 @interface OASettingsItemJsonWriter : OASettingsItemWriter<OASettingsItem *>
 

@@ -16,7 +16,7 @@
 #import "OAIndexConstants.h"
 #import "OAResourcesUIHelper.h"
 #import "OAProfileSettingsItem.h"
-#import "OAPoiUiFilterSettingsItem.h"
+#import "OAPoiUiFiltersSettingsItem.h"
 #import "OASettingsItem.h"
 #import "OAPluginSettingsItem.h"
 #import "OAQuickActionsSettingsItem.h"
@@ -295,9 +295,9 @@
                             }
                         }
                     }
-                    else if ([item isKindOfClass:OAPoiUiFilterSettingsItem.class])
+                    else if ([item isKindOfClass:OAPoiUiFiltersSettingsItem.class])
                     {
-                        OAPoiUiFilterSettingsItem *poiUiFiltersSettingsItem = (OAPoiUiFilterSettingsItem *) item;
+                        OAPoiUiFiltersSettingsItem *poiUiFiltersSettingsItem = (OAPoiUiFiltersSettingsItem *) item;
                         NSArray<OAPOIUIFilter *> *poiUIFilters = poiUiFiltersSettingsItem.items;
                         OAPOIFiltersHelper *poiHelper = OAPOIFiltersHelper.sharedInstance;
                         for (OAPOIUIFilter *filter in poiUIFilters)

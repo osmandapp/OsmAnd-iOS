@@ -94,7 +94,13 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
 
 - (long)localModifiedTime
 {
+    //override;
     return 0;
+}
+
+- (void)setLocalModifiedTime:(long)localModifiedTime
+{
+    //override;
 }
 
 - (long)lastModifiedTime
@@ -126,28 +132,28 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
     // not implemented
 }
 
+
+
 - (void) remove
 {
     // not implemented
 }
 
-- (void) applyAdditionalParams:(NSString *)filePath
+- (void) applyAdditionalParams:(NSString *)filePath reader:(OASettingsItemReader *)reader
 {
     // not implemented
 }
 
 + (EOASettingsItemType) parseItemType:(id)json error:(NSError * _Nullable *)error
 {
-    NSString *typeStr = json[@"type"];
-    if (!typeStr)
+    NSString *typeName = json[@"type"];
+    if (!typeName)
     {
         *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeNoTypeField userInfo:nil];
         return EOASettingsItemTypeUnknown;
     }
-    if ([typeStr isEqualToString:@"QUICK_ACTION"])
-        typeStr = @"QUICK_ACTIONS";
     
-    EOASettingsItemType type = [OASettingsItemType parseType:typeStr];
+    EOASettingsItemType type = [OASettingsItemType fromName:typeName];
     if (type == EOASettingsItemTypeUnknown)
     {
         if (error)
@@ -195,20 +201,36 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
     // override
 }
 
-- (void) readPreferenceFromJson:(NSString *)key value:(NSString *)value
+//TODO: test new versions
+
+- (void) readPreferenceFromJson:(OACommonPreference *)preference json:(NSDictionary<NSString *, NSString *> *)json
 {
     // override
 }
 
-- (void) applyRendererPreferences:(NSDictionary<NSString *, NSString *> *)prefs
+- (void) readPreferencesFromJson:(NSDictionary<NSString *, NSString *> *)json
 {
     // override
 }
 
-- (void) applyRoutingPreferences:(NSDictionary<NSString *, NSString *> *)prefs
-{
-    // override
-}
+
+////TODO: delete old versions
+//- (void) readPreferenceFromJson:(NSString *)key value:(NSString *)value
+//{
+//    // override
+//}
+
+//- (void) applyRendererPreferences:(NSDictionary<NSString *, NSString *> *)prefs
+//{
+//    // override
+//}
+
+//- (void) applyRoutingPreferences:(NSDictionary<NSString *, NSString *> *)prefs
+//{
+//    // override
+//}
+
+
 
 - (long) getEstimatedSize
 {
@@ -274,9 +296,9 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
 
 @end
 
-#pragma mark - OASettingsItemJsonReader
+#pragma mark - OAOsmandSettingsJsonReader
 
-@implementation OASettingsItemJsonReader
+@implementation OAOsmandSettingsJsonReader
 
 - (BOOL) readFromFile:(NSString *)filePath error:(NSError * _Nullable *)error
 {
@@ -320,25 +342,116 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
         settings = [[OAMigrationManager shared] changeJsonMigrationToV2:json];
     else
         settings = json;
-
-    NSMutableDictionary<NSString *, NSString *> *rendererSettings = [NSMutableDictionary new];
-    NSMutableDictionary<NSString *, NSString *> *routingSettings = [NSMutableDictionary new];
-    [settings enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-        if ([key hasPrefix:@"nrenderer_"] || [key isEqualToString:@"displayed_transport_settings"])
-            [rendererSettings setObject:obj forKey:key];
-        else if ([key hasPrefix:@"prouting_"])
-            [routingSettings setObject:obj forKey:key];
-        else
-            [self.item readPreferenceFromJson:key value:obj];
-    }];
-    [self.item applyRendererPreferences:rendererSettings];
-    [self.item applyRoutingPreferences:routingSettings];
+    
+    //TODO: new from android - test
+    [self.item readPreferencesFromJson:settings];
 
     self.item.read = YES;
     return YES;
 }
 
+//- (void) readPreferenceFromJson:(OACommonPreference *)preference json:(NSDictionary<NSString *, NSString *> *)json
+//{
+//    // override
+//}
+//
+//- (void) readPreferencesFromJson:(NSDictionary<NSString *, NSString *> *)json
+//{
+//    // override
+//}
+
 @end
+
+
+//TODO: delete ?
+
+//#pragma mark - OASettingsItemJsonReader
+//
+//@implementation OASettingsItemJsonReader
+//
+//- (void) readPreferencesFromJson:(NSDictionary<NSString *, NSString *> *)json
+//{
+//    // override
+//}
+
+//- (BOOL) readFromFile:(NSString *)filePath error:(NSError * _Nullable *)error
+//{
+//    if (self.item.read)
+//    {
+//        if (error)
+//            *error = [NSError errorWithDomain:kSettingsItemErrorDomain code:kSettingsItemErrorCodeAlreadyRead userInfo:nil];
+//
+//        return NO;
+//    }
+//
+//    NSError *readError;
+//    NSData *data = [NSData dataWithContentsOfFile:filePath options:NSDataReadingMappedIfSafe error:&readError];
+//    if (readError)
+//    {
+//        if (error)
+//            *error = readError;
+//        
+//        return NO;
+//    }
+//    if (data.length == 0)
+//    {
+//        if (error)
+//            *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeEmptyJson userInfo:nil];
+//        
+//        return NO;
+//    }
+//    
+//    NSError *jsonError;
+//    id json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&jsonError];
+//    if (jsonError)
+//    {
+//        if (error)
+//            *error = jsonError;
+//        
+//        return NO;
+//    }
+//
+//    NSDictionary<NSString *, NSString *> *settings;
+//    if ([[OASettingsHelper sharedInstance] getCurrentBackupVersion] == OAMigrationManager.importExportVersionMigration1)
+//        settings = [[OAMigrationManager shared] changeJsonMigrationToV2:json];
+//    else
+//        settings = json;
+//    
+//    //---
+//    
+//    //TODO: new from android
+//    [self.item readPreferencesFromJson:settings];
+//
+//    //---
+//    
+//    //TODO: old. delete?
+//    
+//    NSMutableDictionary<NSString *, NSString *> *rendererSettings = [NSMutableDictionary new];
+//    NSMutableDictionary<NSString *, NSString *> *routingSettings = [NSMutableDictionary new];
+//
+//    OAAppSettings *_appSettings = OAAppSettings.sharedManager;
+//    [settings enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+//        
+//        //TODO: don't have this checks in android
+//        
+//        if ([_appSettings isRendererPreference:key] || [key isEqualToString:@"displayed_transport_settings"])
+//            [rendererSettings setObject:obj forKey:key];
+//        else if ([_appSettings isRoutingPreference:key])
+//            [routingSettings setObject:obj forKey:key];
+//        else
+//            [self.item readPreferenceFromJson:key value:obj];
+//    }];
+//    
+////    [self.item applyRendererPreferences:rendererSettings];
+////    [self.item applyRoutingPreferences:routingSettings];
+//    
+//    //---
+//
+//    self.item.read = YES;
+//    return YES;
+//}
+//
+//@end
 
 #pragma mark - OASettingsItemJsonWriter
 

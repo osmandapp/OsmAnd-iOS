@@ -13,7 +13,6 @@ import SafariServices
 @objcMembers
 class WidgetsListViewController: OABaseNavbarSubviewViewController {
     
-    static let kWidgetAddedNotification = "onWidgetAdded"
     private static let enabledWidgetsFilter = Int(KWidgetModeAvailable | kWidgetModeEnabled | kWidgetModeMatchingPanels)
     
     private let kPageKey = "page_"
@@ -68,7 +67,6 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
     
     override func registerNotifications() {
         addNotification(NSNotification.Name(kWidgetVisibilityChangedMotification), selector: #selector(onWidgetStateChanged))
-        addNotification(NSNotification.Name(Self.kWidgetAddedNotification), selector: #selector(onWidgetAdded(notification:)))
     }
     
     // MARK: - Base setup UI
@@ -168,10 +166,7 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
         OAUtilities.showToast("", details: String(format: localizedString("complex_widget_alert"), arguments: [widgetTitle]), duration: 4, in: view)
     }
     
-    @objc private func onWidgetAdded(notification: NSNotification) {
-        guard let newWidget = notification.object as? MapWidgetInfo else {
-            return
-        }
+    func addWidget(newWidget: MapWidgetInfo, params: [String: Any]?) {
         let lastSection = tableData.sectionCount() - 1
         let lastSectionData = tableData.sectionData(for: lastSection)
         var createNewSection: Bool = false
@@ -197,7 +192,7 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
                 self?.updateBottomButtons()
             }
         } else {
-            if var userInfo = notification.userInfo as? [String: Any] {
+            if var userInfo = params {
                 if let widgetStyleForRow {
                     userInfo["widgetSizeStyle"] = widgetStyleForRow.rawValue
                 }

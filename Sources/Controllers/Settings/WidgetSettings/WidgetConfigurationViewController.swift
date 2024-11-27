@@ -32,10 +32,6 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
         tableView.setContentOffset(CGPoint(x: 0, y: 1), animated: false)
         if isCreateNewAndSimilarAlreadyExist || (createNew && !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "")) {
             widgetConfigurationParams = ["selectedAppMode": selectedAppMode!]
-            // NOTE:
-//            if let addToNext {
-//                widgetConfigurationParams!["addToNext"] = addToNext
-//            }
         }
     }
 
@@ -203,7 +199,7 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                 if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "") {
                     widgetConfigurationParams?["widgetSizeStyle"] = index
                 }
-                if item.string(forKey: "behaviour") == "simpleWidget" {
+                if item.string(forKey: "behaviour") == "simpleWidget", !createNew {
                     updateWidgetStyleForRow(with: widgetInfo)
                     OARootViewController.instance().mapPanel.recreateControls()
                 }
@@ -359,7 +355,9 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
             .compactMap { $0.array as? [MapWidgetInfo] }
             .first { $0.contains { $0.key == mapWidgetInfo.key } }?
             .compactMap { $0.widget as? OATextInfoWidget }
-            .forEach { $0.updateWith(style: widget.widgetSizeStyle, appMode: selectedAppMode) }
+            .forEach {
+                $0.updateWith(style: widget.widgetSizeStyle, appMode: selectedAppMode)
+            }
     }
 }
 
@@ -399,31 +397,24 @@ extension WidgetConfigurationViewController {
     }
     
     override func onBottomButtonPressed() {
-        WidgetUtils.createNewWidgets(widgetsIds: [widgetInfo.key],
-                                     panel: widgetPanel,
-                                     appMode: selectedAppMode,
-                                     recreateControls: true,
-                                     selectedWidget: selectedWidget,
-                                     widgetParams: widgetConfigurationParams,
-                                     addToNext: addToNext)
-        
-//        if let addToNext, let selectedWidget {
-//            WidgetUtils.createNewWidgets(widgetsIds: [widgetInfo.key],
-//                                         panel: widgetPanel,
-//                                         appMode: selectedAppMode,
-//                                         recreateControls: true,
-//                                         selectedWidget: selectedWidget,
-//                                         widgetParams: widgetConfigurationParams,
-//                                         addToNext: addToNext)
-//        }
-//        NotificationCenter.default.post(name: NSNotification.Name(WidgetsListViewController.kWidgetAddedNotification),
-//                                        object: widgetInfo,
-//                                        userInfo: widgetConfigurationParams)
-        
-        if let targetViewController = navigationController?.viewControllers.first(where: { $0 is WidgetsListViewController }) {
-            navigationController?.popToViewController(targetViewController, animated: true)
+        guard let navigationController else { return }
+        if let targetViewController = navigationController.viewControllers.first(where: { $0 is WidgetsListViewController }) as? WidgetsListViewController {
+            targetViewController.addWidget(newWidget: widgetInfo, params: widgetConfigurationParams)
+            navigationController.popToViewController(targetViewController, animated: true)
         } else {
-            navigationController?.dismiss(animated: true)
+            if let addToNext, let selectedWidget {
+                let newWidgetsInfos = WidgetUtils.createNewWidgets(widgetsIds: [widgetInfo.key],
+                                                                   panel: widgetPanel,
+                                                                   appMode: selectedAppMode,
+                                                                   recreateControls: true,
+                                                                   selectedWidget: selectedWidget,
+                                                                   widgetParams: widgetConfigurationParams,
+                                                                   addToNext: addToNext)
+                if let info = newWidgetsInfos.first, info.widgetPanel.isPanelVertical {
+                    updateWidgetStyleForRow(with: info)
+                }
+            }
+            navigationController.dismiss(animated: true)
         }
     }
 

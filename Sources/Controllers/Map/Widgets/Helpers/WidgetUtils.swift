@@ -11,7 +11,7 @@ extension WidgetUtils {
                                  panel: WidgetsPanel,
                                  appMode: OAApplicationMode,
                                  widgetParams: [String: Any]?,
-                                 recreateControls: Bool = true) {
+                                 recreateControls: Bool = true) -> [MapWidgetInfo] {
         createNewWidgets(widgetsIds: widgetsIds,
                          panel: panel,
                          appMode: appMode,
@@ -27,10 +27,11 @@ extension WidgetUtils {
                                  recreateControls: Bool = true,
                                  selectedWidget: String?,
                                  widgetParams: [String: Any]?,
-                                 addToNext: Bool?) {
+                                 addToNext: Bool?) -> [MapWidgetInfo] {
         let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
         let widgetsFactory = MapWidgetsFactory()
 
+        var resultWidgetsInfos = [MapWidgetInfo]()
         for widgetId in widgetsIds {
             if let widgetInfo = createWidget(widgetId: widgetId,
                                              panel: panel,
@@ -46,25 +47,21 @@ extension WidgetUtils {
                 } else {
                     addWidgetToEnd(with: widgetInfo, widgetsPanel: panel, selectedAppMode: appMode)
                 }
+                resultWidgetsInfos.append(widgetInfo)
                 widgetRegistry.enableDisableWidget(for: appMode, widgetInfo: widgetInfo, enabled: true, recreateControls: false)
             }
         }
         widgetRegistry.reorderWidgets()
         OARootViewController.instance().mapPanel.recreateControls()
+        return resultWidgetsInfos
     }
     
     private static func addWidgetToEnd(with targetWidget: MapWidgetInfo,
                                        widgetsPanel: WidgetsPanel,
                                        selectedAppMode: OAApplicationMode) {
-
-        let settings = OAAppSettings.sharedManager()
         let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
-      //  var pagedOrder: [Int: [String]] = [:]
-        var pagedOrder = MutableOrderedDictionary<AnyObject, AnyObject>()
-
-      //  let data = MutableOrderedDictionary<Int, [String]>() = [:]
-                
-        var enabledWidgets = widgetRegistry.getWidgetsForPanel(selectedAppMode, filterModes: Int(kWidgetModeEnabled | kWidgetModeMatchingPanels), panels: [widgetsPanel])
+        var pagedOrder: [Int: [String]] = [:]
+        let enabledWidgets = widgetRegistry.getWidgetsForPanel(selectedAppMode, filterModes: Int(kWidgetModeEnabled | kWidgetModeMatchingPanels), panels: [widgetsPanel])
         
         widgetRegistry.getWidgetsFor(targetWidget.widgetPanel).remove(targetWidget)
         
@@ -75,7 +72,7 @@ extension WidgetUtils {
                 continue
             }
             let page = widgetItem.pageIndex
-            var orders: [String] = pagedOrder.object(at: page) as? AnyObject as! [String]
+            var orders = pagedOrder[page, default: []]
             orders.append(widgetItem.key)
             pagedOrder[page] = orders
         }
@@ -89,16 +86,19 @@ extension WidgetUtils {
             flatOrder.append([targetWidget.key])
             widgetsPanel.setWidgetsOrder(pagedOrder: flatOrder, appMode: selectedAppMode)
         } else {
-            let pages = Array(pagedOrder.keys)
-            var orders = Array(pagedOrder.values)
+            let sortedPagedOrder = pagedOrder.sorted { $0.key < $1.key }
+
+            let pages = sortedPagedOrder.map { $0.key }
+            var orders = sortedPagedOrder.map { $0.value }
+            
             var lastPageOrder = orders.last ?? []
             
-//            if widgetsPanel.isPanelVertical {
-//                var newPage: [String] = [targetWidget.key]
-//                orders.append(newPage)
-//                targetWidget.pageIndex = getNewNextPageIndex(pages: pages) + 1
-//                targetWidget.priority = 0
-//            } else {
+            if widgetsPanel.isPanelVertical, WidgetType.isComplexWidget(targetWidget.key) || (lastPageOrder.count == 1 && WidgetType.isComplexWidget(lastPageOrder.first ?? "")) {
+                let newPage: [String] = [targetWidget.key]
+                orders.append(newPage)
+                targetWidget.pageIndex = getNewNextPageIndex(pages: pages) + 1
+                targetWidget.priority = 0
+            } else {
                 lastPageOrder.append(targetWidget.key)
                 
                 if lastPageOrder.count > 1 {
@@ -115,8 +115,8 @@ extension WidgetUtils {
                     targetWidget.pageIndex = pages.last ?? 0
                     targetWidget.priority = 0
                 }
-            //}
-            
+                orders[orders.count - 1] = lastPageOrder
+            }
             widgetRegistry.getWidgetsFor(widgetsPanel).add(targetWidget)
             widgetsPanel.setWidgetsOrder(pagedOrder: orders, appMode: selectedAppMode)
         }
@@ -127,21 +127,21 @@ extension WidgetUtils {
                                                  selectedAppMode: OAApplicationMode,
                                                  selectedWidget: String,
                                                  addToNext: Bool) {
-        let settings = OAAppSettings.sharedManager()
         let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
         var pagedOrder = [Int: [String]]()
         
-        var enabledWidgets = widgetRegistry.getWidgetsForPanel(selectedAppMode, filterModes: Int(kWidgetModeEnabled | kWidgetModeMatchingPanels), panels: [widgetsPanel])
+        let enabledWidgets = widgetRegistry.getWidgetsForPanel(selectedAppMode, filterModes: Int(kWidgetModeEnabled | kWidgetModeMatchingPanels), panels: [widgetsPanel])
+        let sortedWidgets = (enabledWidgets!.array as! [MapWidgetInfo]).sorted { $0.priority < $1.priority }
         
         widgetRegistry.getWidgetsFor(targetWidget.widgetPanel).remove(targetWidget)
         targetWidget.widgetPanel = widgetsPanel
 
-        for widget in enabledWidgets! {
+        for widget in sortedWidgets {
             guard let widgetItem = widget as? MapWidgetInfo else {
                 continue
             }
             let page = widgetItem.pageIndex
-            var orders = pagedOrder[page] ?? []
+            var orders = pagedOrder[page, default: []]
             orders.append(widgetItem.key)
             pagedOrder[page] = orders
         }
@@ -155,7 +155,8 @@ extension WidgetUtils {
             flatOrder.append([targetWidget.key])
             widgetsPanel.setWidgetsOrder(pagedOrder: flatOrder, appMode: selectedAppMode)
         } else {
-            var orders = Array(pagedOrder.values)
+            let sortedPagedOrder = pagedOrder.sorted { $0.key < $1.key }
+            var orders = sortedPagedOrder.map { $0.value }
             var insertPage = 0
             var insertOrder = 0
 
@@ -181,8 +182,8 @@ extension WidgetUtils {
                     targetWidget.priority = index
                 }
             }
+            orders[insertPage] = pageToAddWidget
 
-            orders.insert(pageToAddWidget, at: insertPage)
             widgetRegistry.getWidgetsFor(widgetsPanel).add(targetWidget)
             widgetsPanel.setWidgetsOrder(pagedOrder: orders, appMode: selectedAppMode)
         }

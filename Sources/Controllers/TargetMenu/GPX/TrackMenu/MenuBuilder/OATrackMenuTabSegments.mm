@@ -227,6 +227,7 @@
                 [self.trackMenuDelegate updateChartHighlightValue:cell.chartView segment:segment];
             if (analysis && segment && _trackChartHelper)
             {
+                [_trackChartHelper updateTrackChartPointsWithInvalidate:YES];
                 [_trackChartHelper refreshChart:cell.chartView
                                            fitTrack:YES
                                            forceFit:YES

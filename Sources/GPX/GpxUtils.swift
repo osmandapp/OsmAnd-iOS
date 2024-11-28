@@ -17,7 +17,7 @@ final class GpxUtils: NSObject {
         let isGeneralTrack = gpxFile.tracks.count > 0
             && (gpxFile.tracks.firstObject as? Track)?.isGeneralTrack() ?? false
         if gpxFile.isShowCurrentTrack() {
-            return !gpxDataItem.joinSegments && (gpxFile.tracks.count == 0 || isGeneralTrack)
+            return !OAAppSettings.sharedManager().currentTrackIsJoinSegments.get() && (gpxFile.tracks.count == 0 || isGeneralTrack)
         } else {
             return isGeneralTrack && gpxDataItem.joinSegments
         }
@@ -153,6 +153,10 @@ final class GpxUtils: NSObject {
             }
         }
         return nil
+    }
+    
+    static func getRect(from bbox: OABBox) -> KQuadRect {
+        KQuadRect(left: bbox.left, top: bbox.top, right: bbox.right, bottom: bbox.bottom)
     }
 
     private static func getSegmentPointByTime(_ segment: TrkSegment,

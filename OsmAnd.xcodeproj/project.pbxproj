@@ -477,6 +477,7 @@
 		32EAF9FF2AE15A3C00646807 /* AFNetworkReachabilityManagerWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 32EAF9FE2AE15A3C00646807 /* AFNetworkReachabilityManagerWrapper.m */; };
 		32EAFA012AE17F3100646807 /* TravelGuidesSettingsDownloadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32EAFA002AE17F3100646807 /* TravelGuidesSettingsDownloadViewController.swift */; };
 		32EB3DF12AC325780018D9B8 /* OATravelLocalDataDbHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32EB3DF02AC325780018D9B8 /* OATravelLocalDataDbHelper.mm */; };
+		32F184A32CF8CC78002396E1 /* OALogWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F184A22CF8CC2C002396E1 /* OALogWrapper.swift */; };
 		32F6225D29A7AE080069EE04 /* OAAmenityExtendedNameFilter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 320EADAB29A77AAB002F9883 /* OAAmenityExtendedNameFilter.mm */; };
 		32FE7AA72B65138800F82728 /* OAGPXImportUIHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32FE7AA62B65138800F82728 /* OAGPXImportUIHelper.mm */; };
 		32FF4C292C183B1D00246B36 /* SegmentTableHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32FF4C252C183A6400246B36 /* SegmentTableHeaderView.xib */; };
@@ -3857,6 +3858,7 @@
 		32EB3DEF2AC3256B0018D9B8 /* OATravelLocalDataDbHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATravelLocalDataDbHelper.h; sourceTree = "<group>"; };
 		32EB3DF02AC325780018D9B8 /* OATravelLocalDataDbHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATravelLocalDataDbHelper.mm; sourceTree = "<group>"; };
 		32ECBEAD2657AD7F005D33BD /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Localizable.strings; sourceTree = "<group>"; };
+		32F184A22CF8CC2C002396E1 /* OALogWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OALogWrapper.swift; sourceTree = "<group>"; };
 		32FE7AA52B65136D00F82728 /* OAGPXImportUIHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGPXImportUIHelper.h; sourceTree = "<group>"; };
 		32FE7AA62B65138800F82728 /* OAGPXImportUIHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXImportUIHelper.mm; sourceTree = "<group>"; };
 		32FF4C252C183A6400246B36 /* SegmentTableHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SegmentTableHeaderView.xib; sourceTree = "<group>"; };
@@ -10719,6 +10721,7 @@
 				DA5A79BF26C563A000F274C7 /* main.m */,
 				DA5A79BB26C563A000F274C7 /* OALog.h */,
 				DA5A79C226C563A000F274C7 /* OALog.mm */,
+				32F184A22CF8CC2C002396E1 /* OALogWrapper.swift */,
 				DA5A79B726C563A000F274C7 /* OsmAndApp.h */,
 				DA5A79C026C563A000F274C7 /* OsmAndApp.mm */,
 				DA5A79B926C563A000F274C7 /* OsmAndAppCppProtocol.h */,
@@ -16773,6 +16776,7 @@
 				DA5A818326C563A700F274C7 /* OASwitchableAction.m in Sources */,
 				DA5A844A26C563A900F274C7 /* OAHudButton.m in Sources */,
 				46FB65BA2A8BBC2000A21850 /* CoordinatesMapCenterWidget.swift in Sources */,
+				32F184A32CF8CC78002396E1 /* OALogWrapper.swift in Sources */,
 				32BC95732CC021CE00FEEAB8 /* UIFont+Extension.swift in Sources */,
 				DA5A845526C563A900F274C7 /* OAOsmEditsLayer.mm in Sources */,
 				DA5A815526C563A700F274C7 /* OACarPlayActiveViewController.m in Sources */,

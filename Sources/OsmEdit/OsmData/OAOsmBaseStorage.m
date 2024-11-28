@@ -14,6 +14,7 @@
 #import "OAEntityInfo.h"
 #import "OrderedDictionary.h"
 #import "OAEntityInfo.h"
+#import "OALog.h"
 
 // called from libxml functions
 @interface OAOsmBaseStorage (LibXMLParserMethods)
@@ -278,7 +279,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
         else
         {
             // this situation could be logged as unhandled
-            NSLog(@"%@", @"Bad entity type from OSC request");
+            OALog(@"%@", @"Bad entity type from OSC request");
         }
         
         if (_currentParsedEntity)

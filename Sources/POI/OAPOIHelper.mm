@@ -24,6 +24,7 @@
 #import "OAResultMatcher.h"
 #import "Localization.h"
 #import "OANativeUtilities.h"
+#import "OALog.h"
 
 #include <OsmAndCore/CommonTypes.h>
 #include <OsmAndCore/Data/DataCommonTypes.h>
@@ -127,7 +128,7 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
 {
     OAPOICategory *pc = [self getPoiCategoryByName:@"user_defined_other"];
     if (!pc)
-        NSLog(@"!!! 'user_defined_other' category not found");
+        OALog(@"!!! 'user_defined_other' category not found");
 
     _otherPoiCategory = pc;
 }
@@ -198,7 +199,7 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
         
         if (!_phrases)
         {
-            NSLog(@"ERROR: Not found phrases translation file at path: %@", [NSString stringWithFormat:@"phrases/%@/phrases.xml", fullLanguageCode]);
+            OALog(@"ERROR: Not found phrases translation file at path: %@", [NSString stringWithFormat:@"phrases/%@/phrases.xml", fullLanguageCode]);
             NSString *primaryLanguageCode = [OAUtilities currentLang];
             _phrases = [self loadPhraseFileForLanguage:primaryLanguageCode];
         }

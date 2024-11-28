@@ -9,6 +9,7 @@
 #import "OASharedUtil.h"
 #import "OsmAndApp.h"
 #import "OAXmlFactory.h"
+#import "OALog.h"
 #import "OAOsmAndContextImpl.h"
 #import <OsmAndShared/OsmAndShared.h>
 
@@ -23,17 +24,17 @@
 // Temporary test code
 + (void) testGpxReadWrite:(NSString *)inputFile outputFile:(NSString *)outputFile
 {
-    NSLog(@"GPX TEST - READ");
+    OALog(@"GPX TEST - READ");
 
     OASKFile *file = [[OASKFile alloc] initWithFilePath:inputFile];
     OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
 
-    NSLog(@"GPX TEST - WRITE");
+    OALog(@"GPX TEST - WRITE");
 
     file = [[OASKFile alloc] initWithFilePath:outputFile];
     [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
 
-    NSLog(@"GPX TEST - DONE");
+    OALog(@"GPX TEST - DONE");
 }
 
 

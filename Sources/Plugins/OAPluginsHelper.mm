@@ -35,6 +35,7 @@
 #import "OAAppVersion.h"
 #import "OAOnlinePlugin.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OALog.h"
 
 @implementation OAPluginsHelper
 
@@ -163,7 +164,7 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     }
     @catch (NSException *e)
     {
-        NSLog(@"Plugin initialization failed %@ reason=%@", [plugin getId], e.reason);
+        OALog(@"Plugin initialization failed %@ reason=%@", [plugin getId], e.reason);
     }
 }
 

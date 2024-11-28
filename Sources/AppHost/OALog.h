@@ -18,4 +18,7 @@ extern "C"
 #endif
 
 @interface OALogger : NSObject
+
++ (void) log:(NSString *)format withArguments:(va_list)arguments;
+
 @end

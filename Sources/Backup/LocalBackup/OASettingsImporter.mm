@@ -44,6 +44,7 @@
 #import "OASuggestedDownloadsItem.h"
 #import "OAExportAsyncTask.h"
 #import "OAApplicationMode.h"
+#import "OALog.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -98,7 +99,7 @@
         items = [self getItemsFromJson:file];
     else if ([items count] == 0)
     {
-        NSLog(@"No items");
+        OALog(@"No items");
         return nil;
     }
 
@@ -107,7 +108,7 @@
     const auto archiveItems = archive.getItems(&ok, false);
     if (!ok)
     {
-        NSLog(@"Error reading zip file");
+        OALog(@"Error reading zip file");
         return items;
     }
 
@@ -146,7 +147,7 @@
                         {
                             if (!archive.extractItemToFile(archiveItem.name, QString::fromNSString([_tmpFilesDir stringByAppendingPathComponent:itemName])))
                             {
-                                NSLog(@"Error processing directory item");
+                                OALog(@"Error processing directory item");
                                 continue;
                             }
                         }
@@ -156,7 +157,7 @@
                 {
                     if (!archive.extractItemToFile(archiveItem.name, QString::fromNSString(tmpFileName)))
                     {
-                        NSLog(@"Error processing items");
+                        OALog(@"Error processing items");
                         continue;
                     }
                 }
@@ -184,7 +185,7 @@
     const auto archiveItems = archive.getItems(&ok, false);
     if (!ok)
     {
-        NSLog(@"Error reading zip file");
+        OALog(@"Error reading zip file");
         return items;
     }
 
@@ -199,7 +200,7 @@
             if (itemsJsonData.isEmpty())
             {
                 [fileManager removeItemAtPath:_tmpFilesDir error:nil];
-                NSLog(@"Error reading or empty items.json");
+                OALog(@"Error reading or empty items.json");
                 return items;
             }
             OASettingsItemsFactory *factory = [[OASettingsItemsFactory alloc] initWithJSONData:itemsJsonData.toRawNSData()];
@@ -262,7 +263,7 @@
     NSInteger version = json[@"version"] ? [json[@"version"] integerValue] : kVersion;
     if (version > kVersion)
     {
-        NSLog(@"Error: unsupported version");
+        OALog(@"Error: unsupported version");
         return;
     }
     [[OASettingsHelper sharedInstance] setCurrentBackupVersion:version];
@@ -296,7 +297,7 @@
     }
     if ([_items count] == 0)
     {
-        NSLog(@"No items");
+        OALog(@"No items");
         return;
     }
     for (OASettingsItem *item in _items)
@@ -323,7 +324,7 @@
     NSDictionary *json = [NSJSONSerialization JSONObjectWithData:jsonUtf8Data options:kNilOptions error:&jsonError];
     if (jsonError)
     {
-        NSLog(@"Error reading json");
+        OALog(@"Error reading json");
         return;
     }
 
@@ -535,7 +536,7 @@
             @try {
                 return [_importer collectItems:_filePath];
             } @catch (NSException *exception) {
-                NSLog(@"Failed to collect items from: %@ %@", _filePath, exception);
+                OALog(@"Failed to collect items from: %@ %@", _filePath, exception);
             }
             break;
         case EOAImportTypeCheckDuplicates:

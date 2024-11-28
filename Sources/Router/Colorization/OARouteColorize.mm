@@ -15,6 +15,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import <CoreLocation/CoreLocation.h>
 #import "OsmAndSharedWrapper.h"
+#import "OALog.h"
 
 static CGFloat const defaultBase = 17.2;
 static CGFloat const maxCorrectElevationDistance = 100.0; // in meters
@@ -59,7 +60,7 @@ static CGFloat const minDifferenceSlope = 0.05; //5%
 {
     if (!gpxFile.hasTrkPt)
     {
-        NSLog(@"GPX file is not consist of track points");
+        OALog(@"GPX file is not consist of track points");
         return nil;
     }
     self = [super init];
@@ -145,7 +146,7 @@ static CGFloat const minDifferenceSlope = 0.05; //5%
     
     NSMutableArray<NSNumber *> *slopes = [NSMutableArray arrayWithCapacity:elevations.count];
     if (_latitudes.count != _longitudes.count || _latitudes.count != elevations.count) {
-        NSLog(@"Sizes of arrays latitudes, longitudes and values are not match");
+        OALog(@"Sizes of arrays latitudes, longitudes and values are not match");
         return slopes;
     }
     
@@ -320,7 +321,7 @@ static CGFloat const minDifferenceSlope = 0.05; //5%
         double diff = distances[closestMaxIndex].doubleValue - distances[closestMaxIndex - 1].doubleValue;
         double coef = (maxDist - distances[closestMaxIndex - 1].doubleValue) / diff;
         if (coef > 1 || coef < 0)
-            NSLog(@"Coefficient fo max must be 0..1 , coef=%f", coef);
+            OALog(@"Coefficient fo max must be 0..1 , coef=%f", coef);
 
         result[1] = @((1 - coef) * elevations[closestMaxIndex - 1].doubleValue + coef * elevations[closestMaxIndex].doubleValue);
     }
@@ -329,11 +330,11 @@ static CGFloat const minDifferenceSlope = 0.05; //5%
         double diff = distances[closestMinIndex + 1].doubleValue - distances[closestMinIndex].doubleValue;
         double coef = (minDist - distances[closestMinIndex].doubleValue) / diff;
         if (coef > 1 || coef < 0)
-            NSLog(@"Coefficient for min must be 0..1 , coef=%f", coef);
+            OALog(@"Coefficient for min must be 0..1 , coef=%f", coef);
         result[0] = @((1 - coef) * elevations[closestMinIndex].doubleValue + coef * elevations[closestMinIndex + 1].doubleValue);
     }
     if (isnan(result[0].doubleValue) || isnan(result[1].doubleValue))
-        NSLog(@"Elevations weren't calculated");
+        OALog(@"Elevations weren't calculated");
     return result;
 }
 

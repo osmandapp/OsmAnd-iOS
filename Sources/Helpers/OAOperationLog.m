@@ -7,6 +7,7 @@
 //
 
 #import "OAOperationLog.h"
+#import "OALog.h"
 
 @implementation OAOperationLog
 {
@@ -92,14 +93,14 @@
 {
     if (_debug || forceLog)
     {
-        NSLog(@"%@", [NSString stringWithFormat:@"%@ %@", _operationName, message.length > 0 ? message : @""]);
+        OALog(@"%@", [NSString stringWithFormat:@"%@ %@", _operationName, message.length > 0 ? message : @""]);
     }
 }
 
 - (void) logImpl:(NSString *)message forceLog:(BOOL)forceLog
 {
     if (_debug || forceLog)
-        NSLog(@"%@", message);
+        OALog(@"%@", message);
 }
 
 @end

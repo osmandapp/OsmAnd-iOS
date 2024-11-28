@@ -17,6 +17,7 @@
 #import "OAObservable.h"
 #import "OAAppSettings.h"
 #import "OAProducts.h"
+#import "OALog.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
 NSString *const OAIAPProductsRequestSucceedNotification = @"OAIAPProductsRequestSucceedNotification";
@@ -175,7 +176,7 @@ static OASubscriptionState *EXPIRED;
         [[NSUserDefaults standardUserDefaults] setInteger:kFreeMapsAvailableTotal forKey:@"freeMapsAvailable"];
     }
 
-    NSLog(@"Free maps available: %d", freeMaps);
+    OALog(@"Free maps available: %d", freeMaps);
     return freeMaps;
 }
 
@@ -188,7 +189,7 @@ static OASubscriptionState *EXPIRED;
     [[NSUserDefaults standardUserDefaults] setInteger:--freeMaps forKey:@"freeMapsAvailable"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-    NSLog(@"Free maps left: %d", freeMaps);
+    OALog(@"Free maps left: %d", freeMaps);
 }
 
 + (void) increaseFreeMapsCount:(int)count
@@ -201,7 +202,7 @@ static OASubscriptionState *EXPIRED;
     [[NSUserDefaults standardUserDefaults] setInteger:freeMaps forKey:@"freeMapsAvailable"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-    NSLog(@"Free maps left: %d", freeMaps);
+    OALog(@"Free maps left: %d", freeMaps);
 }
 
 + (BOOL) isPaidVersion
@@ -679,7 +680,7 @@ static OASubscriptionState *EXPIRED;
 
 - (void) buyProduct:(OAProduct *)product
 {
-    NSLog(@"Buying %@...", product.productIdentifier);
+    OALog(@"Buying %@...", product.productIdentifier);
     
     // test - emulate purchasing
     if (TEST_LOCAL_PURCHASE)
@@ -763,7 +764,7 @@ static OASubscriptionState *EXPIRED;
                          if (map)
                          {
                              NSString *userId = [map objectForKey:@"userid"];
-                             NSLog(@"UserId = %@", userId);
+                             OALog(@"UserId = %@", userId);
                              if (userId.length > 0)
                              {
                                  [self applyUserPreferences:map];
@@ -819,7 +820,7 @@ static OASubscriptionState *EXPIRED;
 
 - (void) launchPurchase:(OASubscription *)subscription
 {
-    NSLog(@"Launching purchase flow for live updates subscription");
+    OALog(@"Launching purchase flow for live updates subscription");
     OAPaymentDiscount *paymentDiscount = nil;
     if (_settings.eligibleForSubscriptionOffer && subscription.discounts.count > 0)
     {
@@ -861,7 +862,7 @@ static OASubscriptionState *EXPIRED;
 
 - (void) productsRequest:(SKProductsRequest *)request didReceiveResponse:(SKProductsResponse *)response
 {
-    NSLog(@"Loaded list of products...");
+    OALog(@"Loaded list of products...");
     _productsRequest = nil;
     BOOL isPaidVersion = [self.class isPaidVersion];
     BOOL isOsmAndProAvailable = [self.class isOsmAndProAvailable];
@@ -870,7 +871,7 @@ static OASubscriptionState *EXPIRED;
     {
         if (skProduct)
         {
-            NSLog(@"Found product: %@ %@ %0.2f",
+            OALog(@"Found product: %@ %@ %0.2f",
                   skProduct.productIdentifier,
                   skProduct.localizedTitle,
                   skProduct.price.floatValue);
@@ -1055,17 +1056,17 @@ static OASubscriptionState *EXPIRED;
 {
     if (request == _productsRequest)
     {
-        NSLog(@"Products request did finish OK");
+        OALog(@"Products request did finish OK");
     }
     else if (request == _receiptRequest)
     {
-        NSLog(@"Receipt request did finish OK");
+        OALog(@"Receipt request did finish OK");
         _receiptRequest = nil;
         [self getActiveProducts:_activeProductsCompletionHandler];
     }
     else
     {
-        NSLog(@"SKRequest did finish OK");
+        OALog(@"SKRequest did finish OK");
     }
 }
 
@@ -1079,7 +1080,7 @@ static OASubscriptionState *EXPIRED;
     else
         requestName = @"Unknown";
 
-    NSLog(@"%@ request did fail with error: %@", requestName, error.localizedDescription);
+    OALog(@"%@ request did fail with error: %@", requestName, error.localizedDescription);
     
     if (request == _productsRequest)
     {
@@ -1181,11 +1182,11 @@ static OASubscriptionState *EXPIRED;
             {
                 if (![self productsLoaded])
                 {
-                    NSLog(@"Cannot completeTransaction - %@. Products are not loaded yet.", transaction.payment.productIdentifier);
+                    OALog(@"Cannot completeTransaction - %@. Products are not loaded yet.", transaction.payment.productIdentifier);
                 }
                 else
                 {
-                    NSLog(@"completeTransaction - %@", transaction.payment.productIdentifier);
+                    OALog(@"completeTransaction - %@", transaction.payment.productIdentifier);
                     NSString *productId = transaction.payment.productIdentifier;
                     NSString *transactionId = transaction.originalTransaction ? transaction.originalTransaction.transactionIdentifier : transaction.transactionIdentifier;
                     [self provideContentForProductIdentifier:productId transactionId:transactionId];
@@ -1206,11 +1207,11 @@ static OASubscriptionState *EXPIRED;
             {
                 if (![self productsLoaded])
                 {
-                    NSLog(@"Cannot restoreTransaction - %@. Products are not loaded yet.", transaction.originalTransaction.payment.productIdentifier);
+                    OALog(@"Cannot restoreTransaction - %@. Products are not loaded yet.", transaction.originalTransaction.payment.productIdentifier);
                 }
                 else
                 {
-                    NSLog(@"restoreTransaction - %@", transaction.originalTransaction.payment.productIdentifier);
+                    OALog(@"restoreTransaction - %@", transaction.originalTransaction.payment.productIdentifier);
                 }
             }
             [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
@@ -1221,7 +1222,7 @@ static OASubscriptionState *EXPIRED;
 - (void) deferredTransaction:(SKPaymentTransaction *)transaction
 {
     @synchronized (self) {
-        NSLog(@"Transaction deferred state: %@", transaction.payment.productIdentifier);
+        OALog(@"Transaction deferred state: %@", transaction.payment.productIdentifier);
         [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseDeferredNotification object:transaction.payment.productIdentifier userInfo:nil];
     }
 }
@@ -1234,11 +1235,11 @@ static OASubscriptionState *EXPIRED;
             if (transaction.payment && transaction.payment.productIdentifier)
             {
                 NSString *productIdentifier = transaction.payment.productIdentifier;
-                NSLog(@"failedTransaction - %@", productIdentifier);
+                OALog(@"failedTransaction - %@", productIdentifier);
                 [self logTransactionType:@"failed" productIdentifier:productIdentifier];
                 if (transaction.error && transaction.error.code != SKErrorPaymentCancelled)
                 {
-                    NSLog(@"Transaction error: %@", transaction.error.localizedDescription);
+                    OALog(@"Transaction error: %@", transaction.error.localizedDescription);
                     [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:productIdentifier userInfo:@{@"error" : [NSString stringWithFormat:@"failedTransaction %@ - %@", productIdentifier, transaction.error.localizedDescription]}];
                 }
                 else
@@ -1357,7 +1358,7 @@ static OASubscriptionState *EXPIRED;
     OAProduct *product = [self product:productIdentifier];
     if (product)
     {
-        NSLog(@"%@ product purchased.", product.localizedTitle);
+        OALog(@"%@ product purchased.", product.localizedTitle);
 
         // test - emulate purchase
         if (TEST_LOCAL_PURCHASE)
@@ -1407,7 +1408,7 @@ static OASubscriptionState *EXPIRED;
             NSData *receipt = [self getLocalReceipt];
             if (!receipt || !transactionId)
             {
-                NSLog(@"Error: No local receipt or transaction");
+                OALog(@"Error: No local receipt or transaction");
                 NSMutableString *errorText = [NSMutableString string];
                 if (!receipt)
                     [errorText appendString:@" (no receipt)"];
@@ -1451,7 +1452,7 @@ static OASubscriptionState *EXPIRED;
                      {
                          @try
                          {
-                             NSLog([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+                             OALog([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
                              NSMutableDictionary *map = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
                              if (map)
                              {
@@ -1465,7 +1466,7 @@ static OASubscriptionState *EXPIRED;
                                  else
                                  {
                                      errorStr = [NSString stringWithFormat:@"Purchase subscription failed: %@ (userId=%@ response=%@)", [map objectForKey:@"error"], _settings.billingUserId.get, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
-                                     NSLog(errorStr);
+                                     OALog(errorStr);
                                  }
                              }
                          }
@@ -1550,7 +1551,7 @@ static OASubscriptionState *EXPIRED;
     if (!receipt || _restoringPurchases)
     {
         if (!_restoringPurchases)
-            NSLog(@"No local receipt. Requesting new one...");
+            OALog(@"No local receipt. Requesting new one...");
         _restoringPurchases = NO;
         _activeProductsCompletionHandler = onComplete;
         _receiptRequest = [[SKReceiptRefreshRequest alloc] initWithReceiptProperties:nil];
@@ -1576,7 +1577,7 @@ static OASubscriptionState *EXPIRED;
              {
                  @try
                  {
-                     NSLog([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+                     OALog([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
                      NSMutableDictionary *map = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
                      if (map)
                      {
@@ -1721,7 +1722,7 @@ static OASubscriptionState *EXPIRED;
              {
                  @try
                  {
-                     NSLog([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+                     OALog([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
                      NSMutableDictionary *map = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
                      if (map)
                      {
@@ -1907,7 +1908,7 @@ static OASubscriptionState *EXPIRED;
                 }
                 else
                 {
-                    NSLog(@"Subscription validation json error");
+                    OALog(@"Subscription validation json error");
                 }
             }
             alreadyFinished = YES;

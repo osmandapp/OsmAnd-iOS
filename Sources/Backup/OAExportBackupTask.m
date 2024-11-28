@@ -17,6 +17,7 @@
 #import "OAPrepareBackupResult.h"
 #import "OARemoteFile.h"
 #import "OAConcurrentCollections.h"
+#import "OALog.h"
 
 @interface OAExportBackupTask () <OANetworkExportProgressListener>
 
@@ -92,7 +93,7 @@
     }
     @catch (NSException *e)
     {
-        NSLog(@"Failed to backup items: %@", e.reason);
+        OALog(@"Failed to backup items: %@", e.reason);
         error = e.reason;
     }
     return error;

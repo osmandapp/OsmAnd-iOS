@@ -12,6 +12,7 @@
 #import "OsmAndApp.h"
 #import "OAFileImportHelper.h"
 #import "Localization.h"
+#import "OALog.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -125,7 +126,7 @@ typedef NS_ENUM(NSInteger, EOAXmlFileType) {
             default:
             {
                 [OAUtilities denyAccessToFile:destPath removeFromInbox:YES];
-                NSLog(@"Could not import: %@", destPath);
+                OALog(@"Could not import: %@", destPath);
             }
         }
     }

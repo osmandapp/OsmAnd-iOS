@@ -2319,7 +2319,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
             _obfMapObjectsProvider.reset(new OsmAnd::ObfMapObjectsProvider(_app.resourcesManager->obfsCollection));
 
-            NSLog(@"%@", [OAUtilities currentLang]);
+            OALog(@"%@", [OAUtilities currentLang]);
             
             OsmAnd::MapPresentationEnvironment::LanguagePreference langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
             
@@ -2478,7 +2478,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             
             _obfMapObjectsProvider.reset(new OsmAnd::ObfMapObjectsProvider(_app.resourcesManager->obfsCollection));
             
-            NSLog(@"%@", [OAUtilities currentLang]);
+            OALog(@"%@", [OAUtilities currentLang]);
             
             OsmAnd::MapPresentationEnvironment::LanguagePreference langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
             
@@ -3573,9 +3573,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             gpxFile.author = [OAAppVersion getFullVersionWithAppName];
             OASKException *exception = [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
             if (!exception) {
-                NSLog(@"writeGpxFileFile is true");
+                OALog(@"writeGpxFileFile is true");
             } else {
-                NSLog(@"writeGpxFileFile is false");
+                OALog(@"writeGpxFileFile is false");
             }
 
             return YES;

@@ -12,6 +12,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OAObservable.h"
 #import "OADownloadTask.h"
+#import "OALog.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
 @implementation OAFetchBackgroundDataOperation
@@ -58,11 +59,11 @@
 
 - (void) performUpdatesCheck
 {
-    NSLog(@"OAFetchBackgroundDataOperation start");
+    OALog(@"OAFetchBackgroundDataOperation start");
 
     [_app checkAndDownloadOsmAndLiveUpdates:NO];
 
-    NSLog(@"OAFetchBackgroundDataOperation LiveUpdates checked");
+    OALog(@"OAFetchBackgroundDataOperation LiveUpdates checked");
 
     OADownloadsManager *downloadManager = _app.downloadsManager;
     BOOL hasNetworkConnection = NO;
@@ -73,46 +74,46 @@
         hasNetworkConnection = AFNetworkReachabilityManager.sharedManager.isReachable;
         hasTasks = [downloadManager numberOfDownloadTasksWithKeySuffix:@".live.obf"] > 0;
 
-        NSLog(@"OAFetchBackgroundDataOperation processing live tasks %d", [downloadManager numberOfDownloadTasksWithKeySuffix:@".live.obf"]);
+        OALog(@"OAFetchBackgroundDataOperation processing live tasks %d", [downloadManager numberOfDownloadTasksWithKeySuffix:@".live.obf"]);
 
     } while (hasNetworkConnection && hasTasks && !self.cancelled);
 
     if (self.cancelled && hasTasks)
     {
-        NSLog(@"OAFetchBackgroundDataOperation LiveUpdates cancel tasks %d", [downloadManager numberOfDownloadTasksWithKeySuffix:@".live.obf"]);
+        OALog(@"OAFetchBackgroundDataOperation LiveUpdates cancel tasks %d", [downloadManager numberOfDownloadTasksWithKeySuffix:@".live.obf"]);
         NSArray *tasks = [downloadManager downloadTasksWithKeySuffix:@".live.obf"];
         for (id<OADownloadTask> task in tasks)
             [task cancel];
     }
 
-    NSLog(@"OAFetchBackgroundDataOperation LiveUpdates done");
+    OALog(@"OAFetchBackgroundDataOperation LiveUpdates done");
 
     if (!self.cancelled && hasNetworkConnection)
     {
         [_app checkAndDownloadWeatherForecastsUpdates];
-        NSLog(@"OAFetchBackgroundDataOperation ForecastsUpdates checked");
+        OALog(@"OAFetchBackgroundDataOperation ForecastsUpdates checked");
         do {
             [NSThread sleepForTimeInterval:0.5];
 
             hasNetworkConnection = AFNetworkReachabilityManager.sharedManager.isReachable;
             hasTasks = [downloadManager numberOfDownloadTasksWithKeySuffix:@"tifsqlite"] > 0;
 
-            NSLog(@"OAFetchBackgroundDataOperation processing forecasts tasks %d", [downloadManager numberOfDownloadTasksWithKeySuffix:@"tifsqlite"]);
+            OALog(@"OAFetchBackgroundDataOperation processing forecasts tasks %d", [downloadManager numberOfDownloadTasksWithKeySuffix:@"tifsqlite"]);
 
         } while (hasNetworkConnection && hasTasks && !self.cancelled);
 
         if (self.cancelled && hasTasks)
         {
-            NSLog(@"OAFetchBackgroundDataOperation ForecastsUpdates cancel tasks %d", [downloadManager numberOfDownloadTasksWithKeySuffix:@"tifsqlite"]);
+            OALog(@"OAFetchBackgroundDataOperation ForecastsUpdates cancel tasks %d", [downloadManager numberOfDownloadTasksWithKeySuffix:@"tifsqlite"]);
             NSArray *tasks = [downloadManager downloadTasksWithKeySuffix:@"tifsqlite"];
             for (id<OADownloadTask> task in tasks)
                 [task cancel];
         }
 
-        NSLog(@"OAFetchBackgroundDataOperation ForecastsUpdates done");
+        OALog(@"OAFetchBackgroundDataOperation ForecastsUpdates done");
     }
 
-    NSLog(@"OAFetchBackgroundDataOperation finish");
+    OALog(@"OAFetchBackgroundDataOperation finish");
 }
 
 @end

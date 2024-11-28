@@ -7,6 +7,7 @@
 //
 
 #import "OABackupDbHelper.h"
+#import "OALog.h"
 
 #import <sqlite3.h>
 
@@ -146,7 +147,7 @@
                 
                 if (sqlite3_exec(backupFilesDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
                 {
-                    NSLog(@"Failed to create table: %@", [NSString stringWithCString:errMsg encoding:NSUTF8StringEncoding]);
+                    OALog(@"Failed to create table: %@", [NSString stringWithCString:errMsg encoding:NSUTF8StringEncoding]);
                 }
                 if (errMsg != NULL) sqlite3_free(errMsg);
                 
@@ -154,7 +155,7 @@
                 const char *create_index = [NSString stringWithFormat:@"CREATE INDEX IF NOT EXISTS %@ ON %@ (%@, %@)", UPLOADED_FILES_INDEX_TYPE_NAME, UPLOADED_FILES_TABLE_NAME, UPLOADED_FILE_COL_TYPE, UPLOADED_FILE_COL_NAME].UTF8String;
                 if (sqlite3_exec(backupFilesDB, create_index, NULL, NULL, &idxErrMsg) != SQLITE_OK)
                 {
-                    NSLog(@"Failed to create index: %@", [NSString stringWithCString:idxErrMsg encoding:NSUTF8StringEncoding]);
+                    OALog(@"Failed to create index: %@", [NSString stringWithCString:idxErrMsg encoding:NSUTF8StringEncoding]);
                 }
                 if (idxErrMsg != NULL) sqlite3_free(idxErrMsg);
                 
@@ -163,7 +164,7 @@
                 
                 if (sqlite3_exec(backupFilesDB, modified_sql_stmt, NULL, NULL, &modifiederrMsg) != SQLITE_OK)
                 {
-                    NSLog(@"Failed to create table: %@", [NSString stringWithCString:modifiederrMsg encoding:NSUTF8StringEncoding]);
+                    OALog(@"Failed to create table: %@", [NSString stringWithCString:modifiederrMsg encoding:NSUTF8StringEncoding]);
                 }
                 if (modifiederrMsg != NULL) sqlite3_free(modifiederrMsg);
                 

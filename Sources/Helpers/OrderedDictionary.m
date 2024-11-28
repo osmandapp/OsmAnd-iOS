@@ -31,6 +31,7 @@
 //
 
 #import "OrderedDictionary.h"
+#import "OALog.h"
 
 
 #pragma GCC diagnostic ignored "-Wobjc-missing-property-synthesis"
@@ -55,28 +56,28 @@
 
 + (instancetype)dictionaryWithContentsOfFile:(__unused NSString *)path
 {
-    NSLog(@"OrderedDictionary does not support loading from a plist file. Use NSKeyedArchiver instead.");
+    OALog(@"OrderedDictionary does not support loading from a plist file. Use NSKeyedArchiver instead.");
     [self doesNotRecognizeSelector:_cmd];
     return nil;
 }
 
 + (instancetype)dictionaryWithContentsOfURL:(__unused NSURL *)url
 {
-    NSLog(@"OrderedDictionary does not support loading from a plist file. Use NSKeyedArchiver instead.");
+    OALog(@"OrderedDictionary does not support loading from a plist file. Use NSKeyedArchiver instead.");
     [self doesNotRecognizeSelector:_cmd];
     return nil;
 }
 
 - (instancetype)initWithContentsOfFile:(__unused NSString *)path
 {
-    NSLog(@"OrderedDictionary does not support loading from a plist file. Use NSKeyedArchiver instead.");
+    OALog(@"OrderedDictionary does not support loading from a plist file. Use NSKeyedArchiver instead.");
     [self doesNotRecognizeSelector:_cmd];
     return nil;
 }
 
 - (instancetype)initWithContentsOfURL:(__unused NSURL *)url
 {
-    NSLog(@"OrderedDictionary does not support loading from a plist file. Use NSKeyedArchiver instead.");
+    OALog(@"OrderedDictionary does not support loading from a plist file. Use NSKeyedArchiver instead.");
     [self doesNotRecognizeSelector:_cmd];
     return nil;
 }

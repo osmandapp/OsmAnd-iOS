@@ -20,6 +20,7 @@
 #import "OARemoteFile.h"
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
+#import "OALog.h"
 
 #include <OsmAndCore/ResourcesManager.h>
 
@@ -156,7 +157,7 @@
     }
     @catch (NSException *e)
     {
-        NSLog(@"Backup generation error: %@", e.reason);
+        OALog(@"Backup generation error: %@", e.reason);
     }
 }
 

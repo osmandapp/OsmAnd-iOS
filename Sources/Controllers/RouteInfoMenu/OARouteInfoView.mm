@@ -68,6 +68,7 @@
 #import "OARequiredMapsResourceViewController.h"
 #import "OAResourcesUIHelper.h"
 #import "OsmAndSharedWrapper.h"
+#import "OALog.h"
 
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
@@ -1997,7 +1998,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     }
     else
     {
-        NSLog(@"showRequiredMapsResourceViewController _missingMaps or _mapsToUpdate is empty");
+        OALog(@"showRequiredMapsResourceViewController _missingMaps or _mapsToUpdate is empty");
     }
 }
 

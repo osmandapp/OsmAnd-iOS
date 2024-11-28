@@ -36,6 +36,7 @@
 #import "OAShowHideMapillaryAction.h"
 #import "OAPluginsHelper.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OALog.h"
 
 static NSString * const kType = @"type";
 static NSString * const kName = @"name";
@@ -360,7 +361,7 @@ static QuickActionType *TYPE_INTERFACE;
                 }
                 @catch (NSException *e)
                 {
-                    NSLog(@"%@", e.reason);
+                    OALog(@"%@", e.reason);
                 }
             }
         }

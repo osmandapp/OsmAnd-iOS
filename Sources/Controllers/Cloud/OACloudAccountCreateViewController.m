@@ -16,6 +16,7 @@
 #import "OAInputTableViewCell.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+#import "OALog.h"
 
 @interface OACloudAccountCreateViewController () <OAOnRegisterUserListener, OAOnRegisterDeviceListener>
 
@@ -204,7 +205,7 @@
         }
         _continuePressed = NO;
         [self updateScreen];
-        NSLog(@"Backup error: %@", error.getLocalizedError);
+        OALog(@"Backup error: %@", error.getLocalizedError);
     }
 }
 
@@ -221,7 +222,7 @@
         else
         {
             self.errorMessage = error != nil ? error.getLocalizedError : message;
-            NSLog(@"%@", message);
+            OALog(@"%@", message);
             _continuePressed = NO;
             [self updateScreen];
         }

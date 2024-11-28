@@ -37,4 +37,12 @@ extern "C"
 #endif
 
 @implementation OALogger
+
+// for using OALog() from swift
++ (void) log:(NSString *)format withArguments:(va_list)args;
+{
+    NSString *logString = [[NSString alloc] initWithFormat:format arguments:args];
+    OALog(@"%@", logString);
+}
+
 @end

@@ -29,6 +29,7 @@
 #import "CLLocation+Extension.h"
 #import "OsmAndSharedWrapper.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OALog.h"
 
 #include <precalculatedRouteDirection.h>
 #include <routePlannerFrontEnd.h>
@@ -703,7 +704,7 @@
     long memoryLimit = (0.1 * ([NSProcessInfo processInfo].physicalMemory / mb));
     // make visible
     long memoryTotal = (long) ([NSProcessInfo processInfo].physicalMemory / mb);
-    NSLog(@"Use %ld MB of %ld MB, free memory: %ld MB", memoryLimit, memoryTotal, (long)(freeMemory / mb));
+    OALog(@"Use %ld MB of %ld MB, free memory: %ld MB", memoryLimit, memoryTotal, (long)(freeMemory / mb));
     
     string routingProfile = derivedProfile == "default" ? params.mode.getRoutingProfile.UTF8String : derivedProfile;
     auto cf = config->build(routingProfile, params.start.course >= 0.0 ? params.start.course / 180.0 * M_PI : NO_DIRECTION, memoryLimit, paramsR);
@@ -1666,7 +1667,7 @@
     if (params.start && params.end)
     {
 //        params.calculationProgress->routeCalculationStartTime = time;
-        NSLog(@"Start finding route from %@ to %@ using %@", params.start, params.end, [OARouteService getName:(EOARouteService)params.mode.getRouterService]);
+        OALog(@"Start finding route from %@ to %@ using %@", params.start, params.end, [OARouteService getName:(EOARouteService)params.mode.getRouterService]);
         try
         {
             OARouteCalculationResult *res = nil;
@@ -1713,14 +1714,14 @@
 
             if (res)
             {
-                NSLog(@"Finding route contained %d points for %.3f s", (int)[res getImmutableAllLocations].count, [[NSDate date] timeIntervalSince1970] - time);
+                OALog(@"Finding route contained %d points for %.3f s", (int)[res getImmutableAllLocations].count, [[NSDate date] timeIntervalSince1970] - time);
             }
 
             return res;
         }
         catch (NSException *e)
         {
-            NSLog(@"Failed to find route %@", e.reason);
+            OALog(@"Failed to find route %@", e.reason);
         }
     }
     return [[OARouteCalculationResult alloc] initWithErrorMessage:nil];

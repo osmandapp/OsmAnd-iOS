@@ -25,6 +25,7 @@
 #import "OAAppData.h"
 #import "OAApplicationMode.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OALog.h"
 
 #include <OsmAndCore/Map/VectorLineBuilder.h>
 #include <OsmAndCore/Map/MapMarker.h>
@@ -585,7 +586,7 @@
         BOOL success = [self fillRouteInfoAttributeArrays:points distances:distances angles:angles colors:colors];
         if (!success)
         {
-            NSLog(@"Failed to draw attribute coloring for appearance");
+            OALog(@"Failed to draw attribute coloring for appearance");
             _colorizationScheme = COLORIZATION_NONE;
         }
     }

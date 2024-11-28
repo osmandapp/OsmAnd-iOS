@@ -26,6 +26,7 @@
 #import "OASavingTrackHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAAppVersion.h"
+#import "OALog.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -721,7 +722,7 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
         [[NSFileManager defaultManager] copyItemAtPath:sourcePath toPath:destinationPath error:&err];
         if (err)
         {
-            NSLog(@"copyItemAtPath: %@ toPath: %@ ", sourcePath, destinationPath);
+            OALog(@"copyItemAtPath: %@ toPath: %@ ", sourcePath, destinationPath);
             return;
         }
         
@@ -791,13 +792,13 @@ updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))upd
             BOOL renameToFileResult = [gpx.file renameToToFile:newFile];
             if (!renameToFileResult)
             {
-                NSLog(@"[ERROR] -> OAGPXUIHelper -> renameToFileResult is fail");
+                OALog(@"[ERROR] -> OAGPXUIHelper -> renameToFileResult is fail");
                 return;
             }
             BOOL renameCurrentFileResult = [[OASGpxDbHelper shared] renameCurrentFile:gpx.file newFile:newFile];
             if (!renameCurrentFileResult)
             {
-                NSLog(@"[ERROR] -> OAGPXUIHelper -> renameCurrentFileResult is fail");
+                OALog(@"[ERROR] -> OAGPXUIHelper -> renameCurrentFileResult is fail");
                 return;
             }
             
@@ -852,9 +853,9 @@ updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))upd
                 OASKFile *file = [[OASKFile alloc] initWithFilePath:newPath];
                 OASKException *exception = [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:doc];
                 if (!exception) {
-                    NSLog(@"writeGpxFileFile result is true");
+                    OALog(@"writeGpxFileFile result is true");
                 } else {
-                    NSLog(@"writeGpxFileFile result is false");
+                    OALog(@"writeGpxFileFile result is false");
                 }
             }
             [OASelectedGPXHelper renameVisibleTrack:oldFilePath newPath:newFilePath];

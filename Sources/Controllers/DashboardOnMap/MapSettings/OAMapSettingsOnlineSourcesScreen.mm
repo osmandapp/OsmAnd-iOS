@@ -15,6 +15,7 @@
 #import "OASimpleTableViewCell.h"
 #import "OAMapSource.h"
 #import "OAAppData.h"
+#import "OALog.h"
 
 #include <QSet>
 #include <OsmAndCore/Map/IOnlineTileSources.h>
@@ -123,7 +124,7 @@ typedef enum
         }
         else
         {
-            NSLog(@"Failed to download online tile resources list.");
+            OALog(@"Failed to download online tile resources list.");
         }
     });
 }

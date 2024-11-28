@@ -28,7 +28,7 @@
         NSError *error = nil;
         [fileManager copyItemAtPath:cachedPathBundle toPath:cachedPathLib error:&error];
         if (error)
-            NSLog(@"Error copying file: %@ to %@ - %@", cachedPathBundle, cachedPathLib, [error localizedDescription]);
+            OALog(@"Error copying file: %@ to %@ - %@", cachedPathBundle, cachedPathLib, [error localizedDescription]);
     }
 
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
@@ -63,9 +63,9 @@
     }
     @catch (NSException * e)
     {
-        NSLog(@"Error parsing last modified date: %@ - %@", lastModifiedString, [e description]);
+        OALog(@"Error parsing last modified date: %@ - %@", lastModifiedString, [e description]);
     }
-    NSLog(@"lastModifiedServer: %@", lastModifiedServer);
+    OALog(@"lastModifiedServer: %@", lastModifiedServer);
     
     NSDate *lastModifiedLocal = nil;
     NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -74,7 +74,7 @@
         NSError *error = nil;
         NSDictionary *fileAttributes = [fileManager attributesOfItemAtPath:cachedPathLib error:&error];
         if (error)
-            NSLog(@"Error reading file attributes for: %@ - %@", cachedPathLib, [error localizedDescription]);
+            OALog(@"Error reading file attributes for: %@ - %@", cachedPathLib, [error localizedDescription]);
 
         lastModifiedLocal = [fileAttributes fileModificationDate];
         OALog(@"lastModifiedLocal : %@", lastModifiedLocal);
@@ -107,7 +107,7 @@
                     OALog(@"File modification date updated");
 
                 if (error)
-                    NSLog(@"Error setting file attributes for: %@ - %@", cachedPathLib, [error localizedDescription]);
+                    OALog(@"Error setting file attributes for: %@ - %@", cachedPathLib, [error localizedDescription]);
             }
         }
     }  
@@ -131,13 +131,13 @@
         NSError *error = nil;
         NSDictionary *fileAttributes = [fileManager attributesOfItemAtPath:cachedPathBundle error:&error];
         if (error)
-            NSLog(@"Error reading file attributes for: %@ - %@", cachedPathBundle, [error localizedDescription]);
+            OALog(@"Error reading file attributes for: %@ - %@", cachedPathBundle, [error localizedDescription]);
         
         lastModifiedBundle = [fileAttributes fileModificationDate];
 
         fileAttributes = [fileManager attributesOfItemAtPath:cachedPathLib error:&error];
         if (error)
-            NSLog(@"Error reading file attributes for: %@ - %@", cachedPathLib, [error localizedDescription]);
+            OALog(@"Error reading file attributes for: %@ - %@", cachedPathLib, [error localizedDescription]);
         
         lastModifiedLocal = [fileAttributes fileModificationDate];
 

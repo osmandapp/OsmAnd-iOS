@@ -19,6 +19,7 @@
 #import "OAAppData.h"
 #import "OASharedUtil.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OALog.h"
 
 #define kDbName @"gpx.db"
 #define GPX_EXT @"gpx"
@@ -274,26 +275,26 @@
 
             BOOL success = [[OASGpxDbHelper shared] addItem:dataItem];
             NSString *status = success ? @"SUCCESS" : @"ERROR";
-            NSLog(@"[%@] added to db | %@", status, dataItem.file.path);
+            OALog(@"[%@] added to db | %@", status, dataItem.file.path);
             // app.getSmartFolderHelper().addTrackItemToSmartFolder(new TrackItem(SharedUtil.kFile(file)));
 
             return dataItem;
         }
         else
         {
-            NSLog(@"[ERROR] loadGpxFileFile: %@ | %@", file.path, gpxFile.error.message);
+            OALog(@"[ERROR] loadGpxFileFile: %@ | %@", file.path, gpxFile.error.message);
         }
     }
     else
     {
-        NSLog(@"[INFO] file: %@ | already exist", file.path);
+        OALog(@"[INFO] file: %@ | already exist", file.path);
     }
     return nil;
 }
 
 - (void)save
 {
-    NSLog(@"[WARNING] is empty save");
+    OALog(@"[WARNING] is empty save");
 }
 
 @end

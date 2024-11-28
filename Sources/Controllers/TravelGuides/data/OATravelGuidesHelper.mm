@@ -26,6 +26,7 @@
 #import "OAMapLayers.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OALog.h"
 #import "OAMapViewController.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAAppVersion.h"
@@ -232,7 +233,7 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
             }
         }
     } else {
-        NSLog(@"[ERROR] -> save gpx");
+        OALog(@"[ERROR] -> save gpx");
     }
     
     return filePath;

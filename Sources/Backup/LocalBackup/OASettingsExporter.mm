@@ -14,6 +14,7 @@
 #import "OsmAndApp.h"
 #import "OARootViewController.h"
 #import "OAExportAsyncTask.h"
+#import "OALog.h"
 
 #include <OsmAndCore/ArchiveWriter.h>
 
@@ -83,7 +84,7 @@
     if (!ok)
     {
         NSString *message = [NSString stringWithFormat:@"Archive creation failed: %@", file];
-        NSLog(@"%@", message);
+        OALog(@"%@", message);
         NSMutableDictionary* details = [NSMutableDictionary dictionary];
         [details setValue:message forKey:NSLocalizedDescriptionKey];
         *error = [NSError errorWithDomain:@"SettingsExporter" code:0 userInfo:details];

@@ -11,6 +11,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import <sqlite3.h>
 #import "OsmAndSharedWrapper.h"
+#import "OALog.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ArchiveWriter.h>
@@ -85,7 +86,7 @@
         NSError *error;
         [NSFileManager.defaultManager copyItemAtPath:gpxPath toPath:tmpFilePath error:&error];
         if (error)
-            NSLog(@"Error copying file: %@ to %@ - %@", gpxPath, tmpFilePath, [error localizedDescription]);
+            OALog(@"Error copying file: %@ to %@ - %@", gpxPath, tmpFilePath, [error localizedDescription]);
     }
     
     OsmAnd::ArchiveWriter archiveWriter;
@@ -317,14 +318,14 @@
             char *errMsg;
             if (sqlite3_exec(_dbInstance, [[self.class HISTORY_TABLE_CREATE] UTF8String], NULL, NULL, &errMsg) != SQLITE_OK)
             {
-                NSLog(@"Failed to create table: %@", [NSString stringWithCString:errMsg encoding:NSUTF8StringEncoding]);
+                OALog(@"Failed to create table: %@", [NSString stringWithCString:errMsg encoding:NSUTF8StringEncoding]);
             }
             if (errMsg != NULL) sqlite3_free(errMsg);
             
             //create empty Bookmarks table
             if (sqlite3_exec(_dbInstance, [[self.class BOOKMARKS_TABLE_CREATE] UTF8String], NULL, NULL, &errMsg) != SQLITE_OK)
             {
-                NSLog(@"Failed to create table: %@", [NSString stringWithCString:errMsg encoding:NSUTF8StringEncoding]);
+                OALog(@"Failed to create table: %@", [NSString stringWithCString:errMsg encoding:NSUTF8StringEncoding]);
             }
             if (errMsg != NULL) sqlite3_free(errMsg);
             
@@ -332,7 +333,7 @@
             const char *sql_stmt = [[NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (%@ integer)", VERSION_TABLE_NAME, VERSION_COL] UTF8String];
             if (sqlite3_exec(_dbInstance, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
             {
-                NSLog(@"Failed to create table: %@", [NSString stringWithCString:errMsg encoding:NSUTF8StringEncoding]);
+                OALog(@"Failed to create table: %@", [NSString stringWithCString:errMsg encoding:NSUTF8StringEncoding]);
             }
             if (errMsg != NULL) sqlite3_free(errMsg);
             
@@ -356,7 +357,7 @@
                 char *errMsg;
                 if (sqlite3_exec(_dbInstance, [[NSString stringWithFormat:@"ALTER TABLE %@ ADD %@ TEXT", HISTORY_TABLE_NAME, HISTORY_COL_IMAGE_TITLE] UTF8String], NULL, NULL, &errMsg) != SQLITE_OK)
                 {
-                    NSLog(@"Failed to migrate to 9 version Travel Guides table: %@", [NSString stringWithCString:errMsg encoding:NSUTF8StringEncoding]);
+                    OALog(@"Failed to migrate to 9 version Travel Guides table: %@", [NSString stringWithCString:errMsg encoding:NSUTF8StringEncoding]);
                     isError = YES;
                 }
                 if (errMsg != NULL) sqlite3_free(errMsg);

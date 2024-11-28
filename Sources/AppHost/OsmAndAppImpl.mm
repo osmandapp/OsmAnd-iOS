@@ -244,15 +244,25 @@
     if (![manager fileExistsAtPath:logsPath])
         [manager createDirectoryAtPath:logsPath withIntermediateDirectories:NO attributes:nil error:nil];
     NSArray<NSString *> *files = [manager contentsOfDirectoryAtPath:logsPath error:nil];
+    
+    files = [[[files sortedArrayUsingComparator:^NSComparisonResult(NSString *filename1, NSString *filename2) {
+        return [filename1 compare:filename2];
+    }] reverseObjectEnumerator] allObjects];
+    
     for (NSInteger i = 0; i < files.count; i++)
     {
         if (i > kMaxLogFiles)
            [manager removeItemAtPath:[logsPath stringByAppendingPathComponent:files[i]] error:nil];
     }
+    
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"MMM dd, yyyy HH:mm"];
+    [formatter setDateFormat:@"MMM dd, yyyy HH:mm:ss"];
     NSString *destPath = [[logsPath stringByAppendingPathComponent:[formatter stringFromDate:NSDate.date]] stringByAppendingPathExtension:@"log"];
+    
+    freopen([destPath fileSystemRepresentation], "a+", stdin);
+    freopen([destPath fileSystemRepresentation], "a+", stdout);
     freopen([destPath fileSystemRepresentation], "a+", stderr);
+    
 #endif
 }
 
@@ -324,23 +334,23 @@
     {
         if (_initializedCore)
         {
-            NSLog(@"OsmAndApp Core already initialized. Finish.");
+            OALog(@"OsmAndApp Core already initialized. Finish.");
             return YES;
         }
 
         @try
         {
             // Initialize OsmAnd Core
-            NSLog(@"OsmAndApp InitializeCore start");
+            OALog(@"OsmAndApp InitializeCore start");
             const std::shared_ptr<CoreResourcesFromBundleProvider> coreResourcesFromBundleProvider(new CoreResourcesFromBundleProvider());
             OsmAnd::InitializeCore(coreResourcesFromBundleProvider);
             _initializedCore = YES;
-            NSLog(@"OsmAndApp InitializeCore finish");
+            OALog(@"OsmAndApp InitializeCore finish");
             return YES;
         }
         @catch (NSException *e)
         {
-            NSLog(@"Failed to InitializeCore. Reason: %@", e.reason);
+            OALog(@"Failed to InitializeCore. Reason: %@", e.reason);
             return NO;
         }
     }
@@ -356,7 +366,7 @@
         }
         @catch (NSException *e)
         {
-            NSLog(@"Failed to initialize OsmAndApp. Reason: %@", e.reason);
+            OALog(@"Failed to initialize OsmAndApp. Reason: %@", e.reason);
             return NO;
         }
     }
@@ -364,10 +374,10 @@
 
 - (BOOL) initializeImpl
 {
-    NSLog(@"OsmAndApp initialize start (%@)", [NSThread isMainThread] ? @"Main thread" : @"Background thread");
+    OALog(@"OsmAndApp initialize start (%@)", [NSThread isMainThread] ? @"Main thread" : @"Background thread");
     if (_initialized)
     {
-        NSLog(@"OsmAndApp already initialized. Finish.");
+        OALog(@"OsmAndApp already initialized. Finish.");
         return YES;
     }
 
@@ -599,7 +609,7 @@
         NSError *error = nil;
         [[NSFileManager defaultManager] copyItemAtPath:ocbfPathBundle toPath:ocbfPathLib error:&error];
         if (error)
-            NSLog(@"Error copying file: %@ to %@ - %@", ocbfPathBundle, ocbfPathLib, [error localizedDescription]);
+            OALog(@"Error copying file: %@ to %@ - %@", ocbfPathBundle, ocbfPathLib, [error localizedDescription]);
     }
     [self applyExcludedFromBackup:ocbfPathLib];
 
@@ -613,12 +623,12 @@
         [[NSFileManager defaultManager] createDirectoryAtPath:[NSHomeDirectory() stringByAppendingString:@"/Library/Application Support/proj"]
                                   withIntermediateDirectories:YES attributes:nil error:&errorDir];
         if (errorDir)
-            NSLog(@"Error creating dir for proj: %@", [errorDir localizedDescription]);
+            OALog(@"Error creating dir for proj: %@", [errorDir localizedDescription]);
 
         NSError *error = nil;
         [[NSFileManager defaultManager] copyItemAtPath:projDbPathBundle toPath:projDbPathLib error:&error];
         if (error)
-            NSLog(@"Error copying file: %@ to %@ - %@", projDbPathBundle, projDbPathLib, [error localizedDescription]);
+            OALog(@"Error copying file: %@ to %@ - %@", projDbPathBundle, projDbPathLib, [error localizedDescription]);
 
     }
     [self applyExcludedFromBackup:projDbPathLib];
@@ -741,7 +751,7 @@
         return NO;
 
     _initialized = YES;
-    NSLog(@"OsmAndApp initialize finish");
+    OALog(@"OsmAndApp initialize finish");
     return YES;
 }
 
@@ -885,7 +895,7 @@
     {
         NSString *pathToCache = [self.cachePath stringByAppendingPathComponent:folderName];
         BOOL success = [manager removeItemAtPath:pathToCache error:nil];
-        NSLog(@"Removing tiles at path: %@ %@", pathToCache, success ? @"successful" : @"failed - No such directory");
+        OALog(@"Removing tiles at path: %@ %@", pathToCache, success ? @"successful" : @"failed - No such directory");
     }
 }
 
@@ -909,7 +919,7 @@
     {
         float te = [[NSDate date] timeIntervalSince1970];
         if (te - tm > 30)
-            NSLog(@"Defalt routing config init took %f ms", (te - tm));
+            OALog(@"Defalt routing config init took %f ms", (te - tm));
     }
 }
 
@@ -1071,12 +1081,12 @@
 
     @synchronized (self)
     {
-        NSLog(@"Prepare checkAndDownloadOsmAndLiveUpdates start");
+        OALog(@"Prepare checkAndDownloadOsmAndLiveUpdates start");
         QList<std::shared_ptr<const OsmAnd::IncrementalChangesManager::IncrementalUpdate> > updates;
         for (const auto& localResource : _resourcesManager->getLocalResources())
             [OAOsmAndLiveHelper downloadUpdatesForRegion:QString(localResource->id).remove(QStringLiteral(".obf")) resourcesManager:_resourcesManager checkUpdatesAsync:checkUpdatesAsync];
 
-        NSLog(@"Prepare checkAndDownloadOsmAndLiveUpdates finish");
+        OALog(@"Prepare checkAndDownloadOsmAndLiveUpdates finish");
     }
 }
 
@@ -1087,11 +1097,11 @@
 
     @synchronized (self)
     {
-        NSLog(@"Prepare checkAndDownloadWeatherForecastsUpdates start");
+        OALog(@"Prepare checkAndDownloadWeatherForecastsUpdates start");
         OAWeatherHelper *weatherHelper = [OAWeatherHelper sharedInstance];
         NSArray<NSString *> *regionIds = [weatherHelper getRegionIdsForDownloadedWeatherForecast];
         [weatherHelper checkAndDownloadForecastsByRegionIds:regionIds];
-        NSLog(@"Prepare checkAndDownloadWeatherForecastsUpdates finish");
+        OALog(@"Prepare checkAndDownloadWeatherForecastsUpdates finish");
     }
 }
 

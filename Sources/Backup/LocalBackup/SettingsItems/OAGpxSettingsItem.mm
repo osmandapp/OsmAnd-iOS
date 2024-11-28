@@ -12,6 +12,7 @@
 #import "OsmAndApp.h"
 #import "OAGPXAppearanceCollection.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OALog.h"
 
 @interface OAGpxSettingsItem()
 
@@ -166,7 +167,7 @@
     }
     else
     {
-        NSLog(@"[ERROR] -> OAGpxSettingsItem -> gpx for self.filePath: %@ is empty", self.filePath);
+        OALog(@"[ERROR] -> OAGpxSettingsItem -> gpx for self.filePath: %@ is empty", self.filePath);
     }
 
 }

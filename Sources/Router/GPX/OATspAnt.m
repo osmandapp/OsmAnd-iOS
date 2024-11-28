@@ -7,6 +7,7 @@
 //
 
 #import "OATspAnt.h"
+#import "OALog.h"
 
 // Algorithm parameters:
 // original amount of trail
@@ -64,7 +65,7 @@ static int maxIterations = 500;
 
 - (void)visitTown:(int)town
 {
-    //NSLog(@"town = %d", town);
+    //OALog(@"town = %d", town);
 
     self.tour[*_currentIndex + 1] = [NSNumber numberWithInt:town];
     self.visited[town] = @YES;
@@ -392,8 +393,8 @@ double bitsToDouble(uint64_t bitPattern)
         iteration++;
     }
     // Subtract n because we added one to edges on load
-    NSLog(@"Best tour length: %f", bestTourLength - n * 0.1);
-    NSLog(@"Best tour: %@", [self tourToString:bestTour]);
+    OALog(@"Best tour length: %f", bestTourLength - n * 0.1);
+    OALog(@"Best tour: %@", [self tourToString:bestTour]);
     return [self alignAnswer:[bestTour copy]];
 }
 
@@ -456,7 +457,7 @@ double bitsToDouble(uint64_t bitPattern)
     }
     [mixStr appendString:@"]"];
     
-    NSLog(@"%@", mixStr);
+    OALog(@"%@", mixStr);
     
     //		ans = new TspHeldKarp().readInput(sh, true).solve();
     CLLocation *end = farest;
@@ -501,14 +502,14 @@ double bitsToDouble(uint64_t bitPattern)
     for (int i = 0; i < ans.count; i++)
         [log appendFormat:@"%d ", order[i]];
     
-    NSLog(@"%@", log);
+    OALog(@"%@", log);
     
     log = [NSMutableString string];
     [log appendString:@"Result dist: "];
     for (int i = 1; i < ans.count - 1; i++)
         [log appendFormat:@"%f ", dist[i]];
     
-    NSLog(@"%@", log);
+    OALog(@"%@", log);
 }
 
 @end

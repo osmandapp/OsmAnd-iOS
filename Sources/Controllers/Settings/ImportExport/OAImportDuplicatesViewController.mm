@@ -35,6 +35,7 @@
 #import "OAPOIHelper.h"
 #import "OASizes.h"
 #import "GeneratedAssetSymbols.h"
+#import "OALog.h"
 
 @interface OAHeaderType : NSObject
 
@@ -232,7 +233,7 @@
                         } catch (NSException *e)
                         {
                             routingProfile = [routingProfileValue capitalizedString];
-                            NSLog(@"Error trying to get routing resource for %@ \n %@ %@", routingProfileValue, e.name, e.reason);
+                            OALog(@"Error trying to get routing resource for %@ \n %@ %@", routingProfileValue, e.name, e.reason);
                         }
                     }
                     if (routingProfile.length == 0)

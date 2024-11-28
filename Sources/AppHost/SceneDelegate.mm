@@ -71,16 +71,16 @@
     self = [super init];
     if (self)
     {
-        NSLog(@"SceneDelegate initialized");
+        OALog(@"SceneDelegate initialized");
     }
     return self;
 }
 - (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions
 {
-    NSLog(@"SceneDelegate willConnectToSession");
+    OALog(@"SceneDelegate willConnectToSession");
     _windowScene = (UIWindowScene *)scene;
     if (!_windowScene) {
-        NSLog(@"SceneDelegate _windowScene in nil");
+        OALog(@"SceneDelegate _windowScene in nil");
         return;
     }
     
@@ -143,7 +143,7 @@
     NSDictionary *info = notification.userInfo;
     if (info[@"event"]) {
         NSNumber *num = info[@"event"];
-        NSLog(@"launchUpdateStateNotification: %@", num);
+        OALog(@"launchUpdateStateNotification: %@", num);
         [self configureSceneState:(AppLaunchEvent)num.intValue];
     }
 }
@@ -152,16 +152,16 @@
 {
     switch (event) {
         case AppLaunchEventStart:
-            NSLog(@"AppLaunchEventStart");
+            OALog(@"AppLaunchEventStart");
             _window.rootViewController = [OALaunchScreenViewController new];
             [_window makeKeyAndVisible];
             break;
         case AppLaunchEventFirstLaunch:
-            NSLog(@"AppLaunchEventFirstLaunch");
+            OALog(@"AppLaunchEventFirstLaunch");
             [_rootViewController.navigationController pushViewController:[OAFirstUsageWizardController new] animated:NO];
             break;
         case AppLaunchEventRestoreSession:
-            NSLog(@"AppLaunchEventRestoreSession");
+            OALog(@"AppLaunchEventRestoreSession");
             _rootViewController = [OARootViewController new];
             if ([self appDelegate].rootViewController == nil)
                 [self appDelegate].rootViewController = _rootViewController;
@@ -170,7 +170,7 @@
             [_window makeKeyAndVisible];
             break;
         case AppLaunchEventSetupRoot:
-            NSLog(@"AppLaunchEventSetupRoot");
+            OALog(@"AppLaunchEventSetupRoot");
             [self configureLaunchEventSetupRootState];
             break;
         default:

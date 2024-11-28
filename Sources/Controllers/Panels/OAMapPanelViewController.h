@@ -143,11 +143,6 @@ NS_ASSUME_NONNULL_BEGIN
                   trackHudMode:(EOATrackHudMode)trackHudMode
                          state:(OATrackMenuViewControllerState *)state;
 
-- (void)openTargetViewWithGPX:(OASTrackItem *)item
-                        items:(nullable NSArray<OASGpxDataItem *> *)items
-                 trackHudMode:(EOATrackHudMode)trackHudMode
-                        state:(OATrackMenuViewControllerState *)state;
-
 - (void)openTargetViewWithGPXFromTracksList:(OASTrackItem *)item
                        navControllerHistory:(NSArray<UIViewController *> *)navControllerHistory
                               fromTrackMenu:(BOOL)fromTrackMenu
@@ -160,6 +155,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) openTargetViewWithImpassableRoad:(unsigned long long)roadId pushed:(BOOL)pushed;
 - (void) openTargetViewWithImpassableRoadSelection;
 - (void) openTargetViewWithRouteDetails:(nullable OASGpxFile *)gpx analysis:(nullable OASGpxTrackAnalysis *)analysis;
+- (void)openTargetViewWithGPX:(nullable OASTrackItem *)item trackHudMode:(EOATrackHudMode)trackHudMode state:(OATrackMenuViewControllerState *)state analysis:(nullable OASGpxTrackAnalysis *)analysis;
 - (void) openTargetViewWithRouteDetailsGraph:(nullable OASGpxFile *)gpx
                                    trackItem:(nullable OASTrackItem *)trackItem
                                     analysis:(nullable OASGpxTrackAnalysis *)analysis

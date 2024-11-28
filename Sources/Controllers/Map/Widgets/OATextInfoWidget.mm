@@ -967,7 +967,8 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
 
 - (OAMapWidgetInfo *)getWidgetInfo
 {
-    return [[OAMapWidgetRegistry sharedInstance] getWidgetInfoById:_customId];
+    NSString *widgetId = _customId ?: self.widgetType.id;
+    return [[OAMapWidgetRegistry sharedInstance] getWidgetInfoById:widgetId];
 }
 
 - (OACommonWidgetSizeStyle *)registerWidgetSizePref:(NSString *)customId

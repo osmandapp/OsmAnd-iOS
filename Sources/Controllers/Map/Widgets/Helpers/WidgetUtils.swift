@@ -7,19 +7,6 @@
 //
 
 extension WidgetUtils {
-    static func createNewWidgets(widgetsIds: [String],
-                                 panel: WidgetsPanel,
-                                 appMode: OAApplicationMode,
-                                 widgetParams: [String: Any]?,
-                                 recreateControls: Bool = true) -> [MapWidgetInfo] {
-        createNewWidgets(widgetsIds: widgetsIds,
-                         panel: panel,
-                         appMode: appMode,
-                         recreateControls: recreateControls,
-                         selectedWidget: nil,
-                         widgetParams: widgetParams,
-                         addToNext: nil)
-    }
     
     static func createNewWidgets(widgetsIds: [String],
                                  panel: WidgetsPanel,
@@ -30,7 +17,7 @@ extension WidgetUtils {
                                  addToNext: Bool?) -> [MapWidgetInfo] {
         let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
         let widgetsFactory = MapWidgetsFactory()
-
+        
         var resultWidgetsInfos = [MapWidgetInfo]()
         for widgetId in widgetsIds {
             if let widgetInfo = createWidget(widgetId: widgetId,
@@ -67,7 +54,9 @@ extension WidgetUtils {
         
         targetWidget.widgetPanel = widgetsPanel
         
-        for widget in enabledWidgets! {
+        let sortedWidgets = (enabledWidgets!.array as! [MapWidgetInfo]).sorted { $0.priority < $1.priority }
+        
+        for widget in sortedWidgets {
             guard let widgetItem = widget as? MapWidgetInfo else {
                 continue
             }
@@ -87,7 +76,7 @@ extension WidgetUtils {
             widgetsPanel.setWidgetsOrder(pagedOrder: flatOrder, appMode: selectedAppMode)
         } else {
             let sortedPagedOrder = pagedOrder.sorted { $0.key < $1.key }
-
+            
             let pages = sortedPagedOrder.map { $0.key }
             var orders = sortedPagedOrder.map { $0.value }
             
@@ -103,7 +92,7 @@ extension WidgetUtils {
                 
                 if lastPageOrder.count > 1 {
                     let previousLastWidgetId = lastPageOrder[lastPageOrder.count - 2]
-                   
+                    
                     if let previousLastVisibleWidgetInfo = widgetRegistry.getWidgetInfo(byId: previousLastWidgetId) {
                         targetWidget.pageIndex = previousLastVisibleWidgetInfo.pageIndex
                         targetWidget.priority = previousLastVisibleWidgetInfo.priority + 1
@@ -135,7 +124,7 @@ extension WidgetUtils {
         
         widgetRegistry.getWidgetsFor(targetWidget.widgetPanel).remove(targetWidget)
         targetWidget.widgetPanel = widgetsPanel
-
+        
         for widget in sortedWidgets {
             guard let widgetItem = widget as? MapWidgetInfo else {
                 continue
@@ -145,12 +134,12 @@ extension WidgetUtils {
             orders.append(widgetItem.key)
             pagedOrder[page] = orders
         }
-
+        
         if pagedOrder.isEmpty {
             targetWidget.pageIndex = 0
             targetWidget.priority = 0
             widgetRegistry.getWidgetsFor(widgetsPanel).add(targetWidget)
-
+            
             var flatOrder = [[String]]()
             flatOrder.append([targetWidget.key])
             widgetsPanel.setWidgetsOrder(pagedOrder: flatOrder, appMode: selectedAppMode)
@@ -159,20 +148,20 @@ extension WidgetUtils {
             var orders = sortedPagedOrder.map { $0.value }
             var insertPage = 0
             var insertOrder = 0
-
+            
             for (pageIndex, widgetPage) in orders.enumerated() {
                 for (orderIndex, widgetId) in widgetPage.enumerated() where widgetId == selectedWidget {
                     insertPage = pageIndex
                     insertOrder = orderIndex
                 }
             }
-
+            
             var pageToAddWidget = orders[insertPage]
             if addToNext {
                 insertOrder += 1
             }
             pageToAddWidget.insert(targetWidget.key, at: insertOrder)
-
+            
             for (index, widgetId) in pageToAddWidget.enumerated() {
                 if let widgetInfo = widgetRegistry.getWidgetInfo(byId: widgetId) {
                     widgetInfo.pageIndex = insertPage
@@ -183,17 +172,14 @@ extension WidgetUtils {
                 }
             }
             orders[insertPage] = pageToAddWidget
-
+            
             widgetRegistry.getWidgetsFor(widgetsPanel).add(targetWidget)
             widgetsPanel.setWidgetsOrder(pagedOrder: orders, appMode: selectedAppMode)
         }
     }
     
     private static func getNewNextPageIndex(pages: [Int]) -> Int {
-        guard let maxPage = pages.max() else {
-            return 0
-        }
-        return maxPage
+        pages.max() ?? 0
     }
 }
 
@@ -204,43 +190,43 @@ final class WidgetUtils {
                                selectedAppMode: OAApplicationMode,
                                widgetParams: [String: Any]? = nil) {
         let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
-
+        
         let enabledWidgets: [String] = orderedWidgetPages.flatMap { $0 }
         removeUnusedWidgets(enabledWidgets: enabledWidgets, panel: panel, appMode: selectedAppMode, widgetRegistry: widgetRegistry)
-
+        
         let newOrders = createNewOrders(enabledWidgets: enabledWidgets,
                                         orderedWidgetPages: orderedWidgetPages,
                                         panel: panel,
                                         appMode: selectedAppMode,
                                         widgetRegistry: widgetRegistry,
                                         widgetParams: widgetParams)
-
+        
         panel.setWidgetsOrder(pagedOrder: newOrders, appMode: selectedAppMode)
         widgetRegistry.reorderWidgets()
         OARootViewController.instance().mapPanel.recreateControls()
     }
-
+    
     private static func removeUnusedWidgets(enabledWidgets: [String],
                                             panel: WidgetsPanel,
                                             appMode: OAApplicationMode,
                                             widgetRegistry: OAMapWidgetRegistry) {
         let filter = kWidgetModeEnabled | kWidgetModeMatchingPanels
         let currentWidgetInfos: NSMutableOrderedSet = widgetRegistry.getWidgetsForPanel(appMode,
-                                                                             filterModes: Int(filter),
-                                                                             panels: [panel])
+                                                                                        filterModes: Int(filter),
+                                                                                        panels: [panel])
         let widgetsToDelete: [MapWidgetInfo] = (currentWidgetInfos.array as! [MapWidgetInfo]).filter { !enabledWidgets.contains($0.key) }
         if !widgetsToDelete.isEmpty {
             let widgets: NSMutableOrderedSet = widgetRegistry.getWidgetsFor(panel)
             for widgetInfo in widgetsToDelete where widgets.contains(widgetInfo) {
-                    widgets.remove(widgetInfo)
-                    widgetRegistry.enableDisableWidget(for: appMode,
-                                                       widgetInfo: widgetInfo,
-                                                       enabled: NSNumber(value: false),
-                                                       recreateControls: false)
+                widgets.remove(widgetInfo)
+                widgetRegistry.enableDisableWidget(for: appMode,
+                                                   widgetInfo: widgetInfo,
+                                                   enabled: NSNumber(value: false),
+                                                   recreateControls: false)
             }
         }
     }
-
+    
     private static func createNewOrders(enabledWidgets: [String],
                                         orderedWidgetPages: [[String]],
                                         panel: WidgetsPanel,
@@ -265,7 +251,7 @@ final class WidgetUtils {
         }
         return newOrders
     }
-
+    
     private static func buildNewWidgetsList(enabledWidgets: [String],
                                             panel: WidgetsPanel,
                                             appMode: OAApplicationMode,
@@ -295,7 +281,7 @@ final class WidgetUtils {
         }
         return newWidgetsList
     }
-
+    
     private static func createWidget(widgetId: String,
                                      panel: WidgetsPanel,
                                      widgetsFactory: MapWidgetsFactory,
@@ -315,7 +301,7 @@ final class WidgetUtils {
                                               widgetType: widgetType,
                                               panel: panel)
     }
-
+    
     static func updateWidgetParams(with mapWidgetInfo: MapWidgetInfo,
                                    newOrder: [String],
                                    newOrders: [[String]],

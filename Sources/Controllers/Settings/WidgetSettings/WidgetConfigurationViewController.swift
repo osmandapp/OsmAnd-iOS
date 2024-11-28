@@ -355,9 +355,7 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
             .compactMap { $0.array as? [MapWidgetInfo] }
             .first { $0.contains { $0.key == mapWidgetInfo.key } }?
             .compactMap { $0.widget as? OATextInfoWidget }
-            .forEach {
-                $0.updateWith(style: widget.widgetSizeStyle, appMode: selectedAppMode)
-            }
+            .forEach { $0.updateWith(style: widget.widgetSizeStyle, appMode: selectedAppMode) }
     }
 }
 
@@ -374,6 +372,12 @@ extension WidgetConfigurationViewController {
     
     override func isNavbarSeparatorVisible() -> Bool {
         false
+    }
+    
+    override func getLeftNavbarButtonTitle() -> String! {
+        navigationController?.viewControllers.count == 1
+        ? localizedString("shared_string_cancel")
+        : nil
     }
     
     override func getTableHeaderDescriptionAttr() -> NSAttributedString! {

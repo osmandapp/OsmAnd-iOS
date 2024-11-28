@@ -62,17 +62,18 @@ class WidgetGroupItemsViewController: OABaseNavbarViewController {
     override func onRowSelected(_ indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
         if let widgetInfo = item.obj(forKey: "widget_info") as? MapWidgetInfo {
-            let vc = WidgetConfigurationViewController()!
-            
             if let widgetType = item.obj(forKey: "widget_type") as? WidgetType {
                 if widgetType.isPurchased() {
+                    guard let vc = WidgetConfigurationViewController() else {
+                        return
+                    }
                     vc.selectedAppMode = OAAppSettings.sharedManager().applicationMode.get()
                     vc.widgetInfo = widgetInfo
                     vc.widgetPanel = widgetPanel
                     vc.addToNext = addToNext
                     vc.selectedWidget = selectedWidget
                     vc.createNew = true
-                    show(vc)
+                    navigationController?.pushViewController(vc, animated: true)
                 } else if widgetType == .altitudeMapCenter {
                     if let navigationController {
                         OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.advanced_WIDGETS(), navController: navigationController)
@@ -105,9 +106,7 @@ extension WidgetGroupItemsViewController {
         attrStr.addAttribute(.font, value: font, range: NSRange(location: 0, length: attrStr.length))
 
         // Set color attribute
-        let color = UIColor.buttonBgColorDisruptive
         attrStr.addAttribute(.foregroundColor, value: UIColor.textColorSecondary, range: NSRange(location: 0, length: attrStr.length))
         return attrStr
     }
-    
 }

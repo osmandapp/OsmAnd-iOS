@@ -328,7 +328,7 @@ extension WidgetGroupListViewController {
             vc.widgetGroup = widgetGroup
             vc.addToNext = addToNext
             vc.selectedWidget = selectedWidget
-            show(vc)
+            navigationController?.pushViewController(vc, animated: true)
         } else if let widgetType = item.obj(forKey: "widget_type") as? WidgetType {
             guard let vc = WidgetConfigurationViewController(),
                   let widgetInfo = widgetRegistry.getWidgetInfo(for: widgetType) else {
@@ -348,7 +348,7 @@ extension WidgetGroupListViewController {
                     vc.addToNext = addToNext
                     vc.selectedWidget = selectedWidget
                     vc.createNew = true
-                    show(vc)
+                    navigationController?.pushViewController(vc, animated: true)
                 } else if widgetType == .altitudeMapCenter {
                     if let navigationController {
                         OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.advanced_WIDGETS(), navController: navigationController)

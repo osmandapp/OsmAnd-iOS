@@ -36,21 +36,21 @@ extension OATextInfoWidget {
         }
         
         func configureMenu() -> UIMenu? {
-            if let widgetInfo = getInfo() ?? OAMapWidgetRegistry.sharedInstance().getWidgetInfo(byId: widgetType?.id ?? "") {
-                let isPanelVertical = widgetInfo.widgetPanel.isPanelVertical
-                let addGroup = UIMenu(options: .displayInline, children: [
-                    createAction(for: isPanelVertical ? .addItemLeft : .addItemAbove, selectedWidget: widgetInfo.key),
-                    createAction(for: isPanelVertical ? .addItemRight : .addItemBelow, selectedWidget: widgetInfo.key)
-                ])
-                let settingsGroup = UIMenu(options: .displayInline, children: [
-                    createAction(for: .settings, selectedWidget: widgetInfo.key)
-                ])
-                let deleteGroup = UIMenu(options: .displayInline, children: [
-                    createAction(for: .delete, selectedWidget: widgetInfo.key)
-                ])
-                return UIMenu(title: "", children: [addGroup, settingsGroup, deleteGroup])
+            guard let widgetInfo = getInfo() else {
+                return nil
             }
-            return nil
+            let isPanelVertical = widgetInfo.widgetPanel.isPanelVertical
+            let addGroup = UIMenu(options: .displayInline, children: [
+                createAction(for: isPanelVertical ? .addItemLeft : .addItemAbove, selectedWidget: widgetInfo.key),
+                createAction(for: isPanelVertical ? .addItemRight : .addItemBelow, selectedWidget: widgetInfo.key)
+            ])
+            let settingsGroup = UIMenu(options: .displayInline, children: [
+                createAction(for: .settings, selectedWidget: widgetInfo.key)
+            ])
+            let deleteGroup = UIMenu(options: .displayInline, children: [
+                createAction(for: .delete, selectedWidget: widgetInfo.key)
+            ])
+            return UIMenu(title: "", children: [addGroup, settingsGroup, deleteGroup])
         }
         
         func createAction(for menuItem: ContextWidgetMenu, selectedWidget: String) -> UIAction {
@@ -72,24 +72,23 @@ extension OATextInfoWidget {
     }
     
     private func showAddWidgetController(addToNext: Bool, selectedWidget: String) {
-        if let widgetInfo = getInfo() ?? OAMapWidgetRegistry.sharedInstance().getWidgetInfo(byId: widgetType?.id ?? "") {
-            let vc = WidgetGroupListViewController()
-            vc.widgetPanel = widgetInfo.widgetPanel
-            vc.addToNext = addToNext
-            vc.selectedWidget = selectedWidget
-            OARootViewController.instance().navigationController?.present(UINavigationController(rootViewController: vc), animated: true)
-        }
+        guard let widgetInfo = getInfo() else { return }
+        
+        let vc = WidgetGroupListViewController()
+        vc.widgetPanel = widgetInfo.widgetPanel
+        vc.addToNext = addToNext
+        vc.selectedWidget = selectedWidget
+        OARootViewController.instance().navigationController?.present(UINavigationController(rootViewController: vc), animated: true)
     }
     
     private func showWidgetConfiguration() {
-        //   let widgetId = customId != null ? customId : widgetType.id;
-        if let vc = WidgetConfigurationViewController(),
-           let widgetInfo = getInfo() ?? OAMapWidgetRegistry.sharedInstance().getWidgetInfo(byId: widgetType?.id ?? "") {
-            vc.selectedAppMode = OAAppSettings.sharedManager().applicationMode.get()
-            vc.widgetInfo = widgetInfo
-            vc.widgetPanel = widgetInfo.widgetPanel
-            OARootViewController.instance().navigationController?.present(UINavigationController(rootViewController: vc), animated: true)
-        }
+        guard let widgetInfo = getInfo(),
+        let vc = WidgetConfigurationViewController() else { return }
+        
+        vc.selectedAppMode = OAAppSettings.sharedManager().applicationMode.get()
+        vc.widgetInfo = widgetInfo
+        vc.widgetPanel = widgetInfo.widgetPanel
+        OARootViewController.instance().navigationController?.present(UINavigationController(rootViewController: vc), animated: true)
     }
 
     private func showDeleteWidgetAlert() {

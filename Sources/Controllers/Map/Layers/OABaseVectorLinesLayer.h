@@ -23,6 +23,7 @@
 #define kOutlineColor OsmAnd::ColorARGB(150, 0, 0, 0)
 #define kOutlineWidth 10
 #define kWidthCorrectionValue 4
+#define kPathIconStepCoef 4.0f
 
 @class OASTrkSegment, TrackChartPoints;
 

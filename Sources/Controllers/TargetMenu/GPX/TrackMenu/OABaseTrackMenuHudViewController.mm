@@ -239,7 +239,6 @@
                 ?: [OASGpxUtilities.shared loadGpxFileFile:[[OASKFile alloc] initWithFilePath:_gpx.path]];
         }
     }
-    _gpx.dataItem = [[OAGPXDatabase sharedDb] getGPXItem:_doc ? _doc.path : _gpx.path];
 
     if (!_analysis)
         [self updateAnalysis];

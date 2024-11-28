@@ -25,6 +25,7 @@ final class TrackChartPoints: NSObject {
     var gpx: GpxFile?
     var start = kCLLocationCoordinate2DInvalid
     var end = kCLLocationCoordinate2DInvalid
+    var axisPointsInvalidated = false
 }
 
 @objcMembers
@@ -295,6 +296,14 @@ final class TrackChartHelper: NSObject {
             }
         }
         return KQuadRect(left: left, top: top, right: right, bottom: bottom)
+    }
+    
+    func updateTrackChartPoints(invalidate: Bool) {
+        if trackChartPoints == nil {
+            trackChartPoints = TrackChartPoints()
+        }
+
+        trackChartPoints?.axisPointsInvalidated = invalidate
     }
 
     private func getLocationAtPos(_ chart: LineChartView,

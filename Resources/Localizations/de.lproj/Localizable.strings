@@ -3582,3 +3582,16 @@
 "shared_string_to" = "Zu";
 "map_widget_map_scale" = "Maßstab";
 "transport_stop" = "Beenden";
+"lock_screen" = "Bildschirm sperren";
+"screen_is_locked_by_action_button" = "Der Touchscreen ist gesperrt. Tippe zum Entsperren auf die Schaltfläche.";
+"screen_is_unlocked" = "Der Touchscreen ist entsperrt.";
+"shared_string_interface" = "Benutzeroberfläche";
+"lock_screen_description" = "Touchfunktion aktivieren oder deaktivieren, um versehentliche Berührungen zu verhindern";
+"help_article_map_routes_name" = "Routen";
+"help_article_map_tracks_name" = "Tracks";
+"help_article_map_tracks_track_context_menu_name" = "Track Kontextmenü";
+"help_article_personal_color_palette_schemes_name" = "Farbschemen";
+"sort_subfolders_tracks" = "Unterordner sortieren";
+"shared_string_subfolders_in" = "Unterordner in";
+"obd_plugin_name" = "Fahrzeugdaten";
+"shared_string_sorted_by" = "sortiert nach:";

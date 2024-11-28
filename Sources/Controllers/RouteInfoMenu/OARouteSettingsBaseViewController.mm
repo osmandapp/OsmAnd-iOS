@@ -26,11 +26,16 @@
 #import "OARouteParameterValuesViewController.h"
 #import "GeneratedAssetSymbols.h"
 
+static NSString *enabledRouteSettingsKey = @"enabled";
+
 @interface OARouteSettingsBaseViewController () <OARoutePreferencesParametersDelegate, OASettingsDataDelegate, OARouteLineAppearanceViewControllerDelegate>
 
 @end
 
 @implementation OARouteSettingsBaseViewController
+{
+    vector<RoutingParameter> _hazmatCategoryUSAParameters;
+}
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -118,6 +123,7 @@
     
     auto params = rm->getParameters(string(am.getDerivedProfile.UTF8String));
     vector<RoutingParameter> reliefFactorParameters;
+    _hazmatCategoryUSAParameters.clear();
     for (auto it = params.begin(); it != params.end(); ++it)
     {
         auto& r = it->second;
@@ -154,12 +160,17 @@
                 OALocalNonAvoidParameter *rp = [[OALocalNonAvoidParameter alloc] initWithAppMode:am];
                 if ([[NSString stringWithUTF8String:r.id.c_str()] isEqualToString:kRouteParamGoodsRestrictions])
                     continue;
+                if ([[NSString stringWithUTF8String:r.id.c_str()] containsString:kRouteParamHazmatCategory])
+                {
+                    _hazmatCategoryUSAParameters.push_back(r);
+                    continue;
+                }
                 rp.routingParameter = r;
                 rp.delegate = self;
                 [list addObject:rp];
             }
         }
-        else if ([[NSString stringWithUTF8String:r.id.c_str()] isEqualToString:kRouteParamHazmatCategory])
+        else if ([[NSString stringWithUTF8String:r.id.c_str()] isEqualToString:kRouteParamHazmatCategory] && [_settings.drivingRegion get:am] != DR_US)
         {
             OAHazmatRoutingParameter *hazmatCategory = [[OAHazmatRoutingParameter alloc] initWithAppMode:[self.routingHelper getAppMode]];
             hazmatCategory.routingParameter = r;
@@ -268,6 +279,7 @@
     NSMutableArray *list = [NSMutableArray array];
     NSInteger section = 0;
     BOOL isPublicTransport = [am isDerivedRoutingFrom:OAApplicationMode.PUBLIC_TRANSPORT];
+    BOOL isTruckTransport = [am isDerivedRoutingFrom:OAApplicationMode.TRUCK];
     
     OAMuteSoundRoutingParameter *muteSoundRoutingParameter = [[OAMuteSoundRoutingParameter alloc] initWithAppMode:am];
     muteSoundRoutingParameter.delegate = self;
@@ -287,6 +299,9 @@
         [list addObject:showAlongTheRouteItem];
         
         [list addObjectsFromArray:[self getNonAvoidRoutingParameters:am]];
+        
+        if (isTruckTransport && [_settings.drivingRegion get:am] == DR_US)
+            [list addObject:[self createHazmatInfoForApplicationMode:am]];
         
         OAConsiderLimitationsParameter *considerLimitations = [[OAConsiderLimitationsParameter alloc] initWithAppMode:am];
         considerLimitations.delegate = self;
@@ -332,6 +347,84 @@
     return [NSDictionary dictionaryWithDictionary:model];
 }
 
+- (NSDictionary *) createHazmatInfoForApplicationMode:(OAApplicationMode *)am
+{
+    NSArray<NSArray<NSString *> *> *fetchedParams = [self getHazmatUsaParamsIdsWithAppMode:am];
+    NSMutableArray<NSString *> *paramsIds = [NSMutableArray arrayWithArray:fetchedParams[0]];
+    NSMutableArray<NSString *> *paramsNames = [NSMutableArray arrayWithArray:fetchedParams[1]];
+    NSMutableArray<NSString *> *enabledParamsIds = [NSMutableArray arrayWithArray:fetchedParams[2]];
+    BOOL enabled = enabledParamsIds.count > 0;
+    UIImage *icon = [UIImage templateImageNamed:enabled ? @"ic_custom_placard_hazard" : @"ic_custom_placard_hazard_off"];
+    UIColor *tint = [UIColor colorNamed:enabled ? ACColorNameIconColorDisruptive : ACColorNameIconColorDisabled];
+    NSDictionary *hazmatInfo = @{
+        cellTypeRouteSettingsKey : [OAValueTableViewCell getCellIdentifier],
+        keyRouteSettingsKey : dangerousGoodsRouteSettingsUsaKey,
+        titleRouteSettingsKey : OALocalizedString(@"dangerous_goods"),
+        valueRouteSettingsKey : [self getHazmatUsaDescription:enabledParamsIds],
+        iconRouteSettingsKey : icon,
+        iconTintRouteSettingsKey : tint,
+        paramsIdsRouteSettingsKey : paramsIds,
+        paramsNamesRouteSettingsKey : paramsNames
+    };
+    
+    return hazmatInfo;
+}
+
+- (NSArray<NSArray<NSString *> *> *) getHazmatUsaParamsIdsWithAppMode:(OAApplicationMode *)am
+{
+    NSMutableArray<NSArray<NSString *> *> *params = [NSMutableArray array];
+    NSMutableArray<NSString *> *paramsIds = [NSMutableArray array];
+    NSMutableArray<NSString *> *paramsNames = [NSMutableArray array];
+    NSMutableArray<NSString *> *enabledParamsIds = [NSMutableArray array];
+    for (NSInteger i = 0; i < _hazmatCategoryUSAParameters.size(); i++)
+    {
+        RoutingParameter& parameter = _hazmatCategoryUSAParameters[i];
+        NSString *paramId = [NSString stringWithUTF8String:parameter.id.c_str()];
+        NSString *name = [OAUtilities getRoutingStringPropertyName:paramId defaultName:[NSString stringWithUTF8String:parameter.name.c_str()]];
+        OACommonBoolean *pref = [_settings getCustomRoutingBooleanProperty:paramId defaultValue:parameter.defaultBoolean];
+        NSString *enabled = [pref get:am] ? enabledRouteSettingsKey : @"";
+        [params addObject:@[paramId, name, enabled]];
+    }
+    
+    [params sortUsingComparator:^NSComparisonResult(NSArray<NSString *> * _Nonnull obj1, NSArray<NSString *> *  _Nonnull obj2) {
+        return [obj1[0] compare:obj2[0]];
+    }];
+    
+    for (NSArray<NSString *> *param in params)
+    {
+        [paramsIds addObject:param[0]];
+        [paramsNames addObject:param[1]];
+        if ([param[2] isEqualToString:enabledRouteSettingsKey])
+            [enabledParamsIds addObject:param[0]];
+    }
+
+    return @[paramsIds, paramsNames, enabledParamsIds];
+}
+
+- (NSString *) getHazmatUsaDescription:(NSArray<NSString *> *)paramsIds
+{
+    if (paramsIds.count == 0)
+        return OALocalizedString(@"shared_string_no");
+    
+    NSString *result = @"";
+    for (int i = 0; i < paramsIds.count; i++)
+    {
+        NSString *paramsId = paramsIds[i];
+        int hazmatClass = [self getHazmatUsaClass:paramsId];
+        if (i > 0)
+            result = [result stringByAppendingString:@", "];
+        result = [result stringByAppendingString:[NSString stringWithFormat:@"%d", hazmatClass]];
+    }
+    
+    result = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), OALocalizedString(@"shared_string_class"), result];
+    return result;
+}
+
+- (int) getHazmatUsaClass:(NSString *)paramsId
+{
+    return [[paramsId stringByReplacingOccurrencesOfString:kRouteParamHazmatCategoryUsaPrefix withString:@""] intValue];
+}
+
 - (void) setupView
 {
 }
@@ -369,7 +462,8 @@
     OARouteParameterValuesViewController *paramController = [[OARouteParameterValuesViewController alloc] initWithRoutingParameter:parameter
                                                                                                                     appMode:[[OARoutingHelper sharedInstance] getAppMode]];
     paramController.delegate = self;
-    [self presentViewController:paramController animated:YES completion:nil];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:paramController];
+    [self presentViewController:navigationController animated:YES completion:nil];
 }
 
 - (void) selectVoiceGuidance:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath

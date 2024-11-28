@@ -20,6 +20,7 @@ final class MigrationManager: NSObject {
         case migrationChangeQuickActionIds1Key
         case migrationLocationNavigationIconsKey
         case migrationChangeTerrainIds1Key
+        case migrationTerrainModeDefaultPreferences
     }
 
     static let shared = MigrationManager()
@@ -69,6 +70,10 @@ final class MigrationManager: NSObject {
             if !defaults.bool(forKey: MigrationKey.migrationChangeTerrainIds1Key.rawValue) {
                 changeTerrainSettingsMigration1()
                 defaults.set(true, forKey: MigrationKey.migrationChangeTerrainIds1Key.rawValue)
+            }
+            if !defaults.bool(forKey: MigrationKey.migrationTerrainModeDefaultPreferences.rawValue) {
+                migrateTerrainModeDefaultPreferences()
+                defaults.set(true, forKey: MigrationKey.migrationTerrainModeDefaultPreferences.rawValue)
             }
         }
     }
@@ -357,7 +362,7 @@ final class MigrationManager: NSObject {
                     default:
                         settings.navigationIcon.set(OALocationIcon.movement_DEFAULT().name(), mode: appMode)
                     }
-                }                    
+                }
             }
         }
     }
@@ -462,6 +467,31 @@ final class MigrationManager: NSObject {
                     if let oldSlopeAlpha {
                         terrainMode?.setTransparency(Int32(oldSlopeAlpha.get(appMode) / 0.01), mode: appMode)
                     }
+                }
+            }
+        }
+    }
+
+    private func migrateTerrainModeDefaultPreferences() {
+        guard let settings = OAAppSettings.sharedManager(),
+              let oldDefaultMinZoomPref = OACommonInteger.withKey(TerrainMode.defaultKey + "_min_zoom", defValue: 0),
+              let oldDefaultMaxZoomPref = OACommonInteger.withKey(TerrainMode.defaultKey + "_max_zoom", defValue: 0),
+              let oldDefaultTransparencyPref = OACommonInteger.withKey(TerrainMode.defaultKey + "_transparency", defValue: 0) else {
+            return
+        }
+
+        for mode in OAApplicationMode.allPossibleValues() {
+            let oldMinZoom = oldDefaultMinZoomPref.get(mode)
+            let oldMaxZoom = oldDefaultMaxZoomPref.get(mode)
+            let oldTransparencyZoom = oldDefaultTransparencyPref.get(mode)
+            for terrainMode in TerrainMode.values where terrainMode.isDefaultMode() && terrainMode.type != .height {
+                if oldDefaultMinZoomPref.isSet(for: mode),
+                   oldDefaultMaxZoomPref.isSet(for: mode) {
+                    terrainMode.setZoomValues(minZoom: oldMinZoom,
+                                              maxZoom: oldMaxZoom)
+                }
+                if oldDefaultTransparencyPref.isSet(for: mode) {
+                    terrainMode.setTransparency(oldTransparencyZoom)
                 }
             }
         }

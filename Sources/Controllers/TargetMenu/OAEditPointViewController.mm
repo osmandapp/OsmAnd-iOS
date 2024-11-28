@@ -105,7 +105,6 @@
     NSInteger _appearenceSectionIndex;
     NSInteger _poiIconRowIndex;
     NSInteger _colorLabelRowIndex;
-    NSInteger _colorRowIndex;
     NSInteger _allColorsRowIndex;
     NSInteger _shapeRowIndex;
     NSIndexPath *_replaceIndexPath;
@@ -126,6 +125,7 @@
     NSIndexPath *_editColorIndexPath;
     BOOL _isNewColorSelected;
     BOOL _needToScrollToSelectedColor;
+    OAColorsPaletteCell *_colorsPaletteCell;
 
     UILabel *_subtitle;
     CGFloat _originalSubviewHeight;
@@ -228,7 +228,7 @@
     _selectCategoryCardsRowIndex = -1;
     _appearenceSectionIndex = -1;
     _poiIconRowIndex = -1;
-    _colorRowIndex = -1;
+    _allColorsRowIndex = -1;
     _shapeRowIndex = -1;
     _scrollCellsState = [[OACollectionViewCellState alloc] init];
     _floatingTextFieldControllers = [NSMutableArray array];
@@ -757,7 +757,7 @@
     }
     else if ([cellType isEqualToString:[OAColorsPaletteCell getCellIdentifier]])
     {
-        OAColorsPaletteCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAColorsPaletteCell getCellIdentifier]];
+        OAColorsPaletteCell *cell = _colorsPaletteCell;
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAColorsPaletteCell getCellIdentifier] owner:self options:nil];
@@ -767,10 +767,7 @@
             [cell setCollectionHandler:_colorCollectionHandler];
             _colorCollectionHandler.hostVCOpenColorPickerButton = cell.rightActionButton;
             cell.hostVC = self;
-            NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:_selectedColorItem] inSection:0];
-            if (selectedIndexPath.row == NSNotFound)
-                selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:[_appearanceCollection getDefaultPointColorItem]] inSection:0];
-            [_colorCollectionHandler setSelectedIndexPath:selectedIndexPath];
+            _colorsPaletteCell = cell;
         }
         if (cell)
         {
@@ -778,6 +775,10 @@
             [cell.bottomButton setTitle:item[@"descr"] forState:UIControlStateNormal];
             [cell.rightActionButton setImage:[UIImage templateImageNamed:@"ic_custom_add"] forState:UIControlStateNormal];
             cell.rightActionButton.tag = indexPath.section << 10 | indexPath.row;
+            NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:_selectedColorItem] inSection:0];
+            if (selectedIndexPath.row == NSNotFound)
+                selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:[_appearanceCollection getDefaultPointColorItem]] inSection:0];
+            [_colorCollectionHandler setSelectedIndexPath:selectedIndexPath];
             [cell.collectionView reloadData];
             [cell layoutIfNeeded];
             
@@ -1518,7 +1519,7 @@
     _needToScrollToSelectedColor = YES;
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_selectCategoryLabelRowIndex inSection:_selectCategorySectionIndex],
                                              [NSIndexPath indexPathForRow:_poiIconRowIndex inSection:_appearenceSectionIndex],
-                                             [NSIndexPath indexPathForRow:_colorRowIndex inSection:_appearenceSectionIndex],
+                                             [NSIndexPath indexPathForRow:_allColorsRowIndex inSection:_appearenceSectionIndex],
                                              [NSIndexPath indexPathForRow:_shapeRowIndex inSection:_appearenceSectionIndex]]
                           withRowAnimation:UITableViewRowAnimationNone];
 }

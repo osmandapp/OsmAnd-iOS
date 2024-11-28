@@ -72,7 +72,6 @@ struct RouteSegmentResult;
 - (OANextDirectionInfo *) getNextRouteDirectionInfoAfter:(OANextDirectionInfo *)previous to:(OANextDirectionInfo *)to toSpeak:(BOOL)toSpeak;
 - (float) getCurrentMaxSpeed;
 - (OACurrentStreetName *) getCurrentName:(OANextDirectionInfo *)next;
-+ (OASKQuadRect *)getRect:(OABBox)bbox;
 - (OABBox) getBBox;
 
 - (NSArray<CLLocation *> *) getCurrentCalculatedRoute;

@@ -383,11 +383,23 @@
                     || _routeLineColor == kDefaultRouteLineDayColor
                     || _routeLineColor == kDefaultRouteLineNightColor;
 
+            auto iconBitmap = [self bitmapForColor:hasStyleColor ? UIColor.whiteColor : color
+                        fileName:@"map_direction_arrow"];
+            if (iconBitmap)
+            {
+                builder.setPathIcon(OsmAnd::SingleSkImage(iconBitmap))
+                       .setPathIconStep(iconBitmap->height() * kPathIconStepCoef)
+                       .setShouldShowArrows(true);
+            }
+            auto specialIconBitmap = [self specialBitmapWithColor:lineColor];
+            if (specialIconBitmap)
+            {
+                builder.setSpecialPathIcon(OsmAnd::SingleSkImage(specialIconBitmap))
+                       .setSpecialPathIconStep(specialIconBitmap->height() * kPathIconStepCoef)
+                       .setShouldShowArrows(true);
+            }
+
             builder.setFillColor(lineColor)
-                   .setPathIcon(OsmAnd::SingleSkImage([self bitmapForColor:hasStyleColor ? UIColor.whiteColor : color
-                                            fileName:@"map_direction_arrow"]))
-                   .setSpecialPathIcon(OsmAnd::SingleSkImage([self specialBitmapWithColor:lineColor]))
-                   .setShouldShowArrows(true)
                    .setScreenScale(UIScreen.mainScreen.scale);
 
             if (!colors.empty())

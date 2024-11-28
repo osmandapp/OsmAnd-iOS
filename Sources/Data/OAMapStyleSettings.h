@@ -12,6 +12,7 @@ static NSString * const HORSE_ROUTES_ATTR = @"horseRoutes";
 static NSString * const PISTE_ROUTES_ATTR = @"pisteRoutes";
 static NSString * const ALPINE_HIKING_ATTR = @"alpineHiking";
 static NSString * const SHOW_CYCLE_ROUTES_ATTR = @"showCycleRoutes";
+static NSString * const DIRTBIKE_ROUTES_ATTR = @"showDirtbikeTrails";
 static NSString * const WHITE_WATER_SPORTS_ATTR = @"whiteWaterSports";
 static NSString * const HIKING_ROUTES_OSMC_ATTR = @"hikingRoutesOSMC";
 static NSString * const CYCLE_NODE_NETWORK_ROUTES_ATTR = @"showCycleNodeNetworkRoutes";

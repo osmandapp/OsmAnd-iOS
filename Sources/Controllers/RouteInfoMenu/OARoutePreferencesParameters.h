@@ -51,9 +51,18 @@ static NSString *kRouteParamVehicleMotorType = @"motor_type";
 static NSString *kRouteParamVehicleMaxAxleLoad = @"maxaxleload";
 static NSString *kRouteParamVehicleWeightRating = @"weightrating";
 
-
 static NSString *kDefaultNumericValue = @"0.0";
 static NSString *kDefaultSymbolicValue = @"-";
+
+static NSString *cellTypeRouteSettingsKey = @"cellTypeRouteSettingsKey";
+static NSString *keyRouteSettingsKey = @"keyRouteSettingsKey";
+static NSString *titleRouteSettingsKey = @"titleRouteSettingsKey";
+static NSString *valueRouteSettingsKey = @"valueRouteSettingsKey";
+static NSString *iconRouteSettingsKey = @"iconRouteSettingsKey";
+static NSString *iconTintRouteSettingsKey = @"iconTintRouteSettingsKey";
+static NSString *paramsIdsRouteSettingsKey = @"paramsIdsRouteSettingsKey";
+static NSString *paramsNamesRouteSettingsKey = @"paramsNamesRouteSettingsKey";
+static NSString *dangerousGoodsRouteSettingsUsaKey = @"dangerousGoodsRouteSettingsUsaKey";
 
 @class OAApplicationMode, OARoutingHelper, OAAppSettings;
 @class OALocalRoutingParameterGroup, OALocalRoutingParameter;

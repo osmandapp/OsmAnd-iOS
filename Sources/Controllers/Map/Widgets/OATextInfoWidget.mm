@@ -16,11 +16,12 @@
 #import "GeneratedAssetSymbols.h"
 #import "OASegmentTableViewCell.h"
 
-#define textHeight 22
-#define imageSide 30
-#define minTextWidth 64
-#define fullTextWidth 90
-#define minWidgetHeight 34
+static const CGFloat textHeight = 22.0;
+static const CGFloat imageSide = 30.0;
+static const CGFloat minTextWidth = 64.0;
+static const CGFloat fullTextWidth = 90.0;
+static const CGFloat minWidgetHeight = 34.0;
+static const CGFloat unitOrEmptyLabelSmallModeWidth = 130;
 
 static NSString * _Nonnull const kShowIconPref = @"simple_widget_show_icon";
 static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
@@ -52,6 +53,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     OACommonBoolean *_showIconPref;
     OAApplicationMode *_appMode;
     NSLayoutConstraint *_unitOrEmptyLabelWidthConstraint;
+    NSLayoutConstraint *_unitOrEmptyLabelWidthSmallModeConstraint;
     UIStackView *_contentStackViewSimpleWidget;
     UIStackView *_contentUnitStackViewSimpleWidget;
     NSLayoutConstraint *_verticalStackViewSimpleWidgetTopConstraint;
@@ -181,8 +183,8 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     ]];
     
     [NSLayoutConstraint activateConstraints:@[
-        [_imageView.heightAnchor constraintEqualToConstant:30],
-        [_imageView.widthAnchor constraintEqualToConstant:30],
+        [_imageView.heightAnchor constraintEqualToConstant:imageSide],
+        [_imageView.widthAnchor constraintEqualToConstant:imageSide],
     ]];
 }
 
@@ -292,8 +294,8 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     self.iconWidgetView.translatesAutoresizingMaskIntoConstraints = NO;
     [_contentStackViewSimpleWidget addArrangedSubview:self.iconWidgetView];
     [NSLayoutConstraint activateConstraints:@[
-        [self.iconWidgetView.heightAnchor constraintGreaterThanOrEqualToConstant:30],
-        [self.iconWidgetView.widthAnchor constraintEqualToConstant:30]
+        [self.iconWidgetView.heightAnchor constraintGreaterThanOrEqualToConstant:imageSide],
+        [self.iconWidgetView.widthAnchor constraintEqualToConstant:imageSide]
     ]];
     
     _imageView = [UIImageView new];
@@ -308,8 +310,8 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     _imageView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.iconWidgetView addSubview:_imageView];
     [NSLayoutConstraint activateConstraints:@[
-        [_imageView.heightAnchor constraintEqualToConstant:30],
-        [_imageView.widthAnchor constraintEqualToConstant:30],
+        [_imageView.heightAnchor constraintEqualToConstant:imageSide],
+        [_imageView.widthAnchor constraintEqualToConstant:imageSide],
         [_imageView.centerXAnchor constraintEqualToAnchor:self.iconWidgetView.centerXAnchor],
         [_imageView.centerYAnchor constraintEqualToAnchor:self.iconWidgetView.centerYAnchor]
     ]];
@@ -364,6 +366,9 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     _unitOrEmptyLabelWidthConstraint = [_contentUnitStackViewSimpleWidget.widthAnchor constraintGreaterThanOrEqualToConstant:15];
     _unitOrEmptyLabelWidthConstraint.active = YES;
     
+    _unitOrEmptyLabelWidthSmallModeConstraint = [_contentUnitStackViewSimpleWidget.widthAnchor constraintEqualToConstant:unitOrEmptyLabelSmallModeWidth];
+    _unitOrEmptyLabelWidthSmallModeConstraint.active = NO;
+    
     self.emptyViewRightPlaceholderFullRow = [UIView new];
     self.emptyViewRightPlaceholderFullRow.translatesAutoresizingMaskIntoConstraints = NO;
     self.emptyViewRightPlaceholderFullRow.hidden = YES;
@@ -371,7 +376,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     
     [NSLayoutConstraint activateConstraints:@[
         [self.emptyViewRightPlaceholderFullRow.widthAnchor constraintEqualToAnchor:_imageView.widthAnchor],
-        [self.emptyViewRightPlaceholderFullRow.heightAnchor constraintGreaterThanOrEqualToConstant:30]
+        [self.emptyViewRightPlaceholderFullRow.heightAnchor constraintGreaterThanOrEqualToConstant:imageSide]
     ]];
 
     _shadowButton = [[UIButton alloc] initWithFrame:CGRectZero];
@@ -615,15 +620,23 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     if (_appMode && _showIconPref)
     {
         isVisibleIcon = [_showIconPref get:_appMode];
-        self.iconWidgetView.hidden = !isVisibleIcon;
+        _imageView.hidden = !isVisibleIcon;
+        
+        if (self.isFullRow && self.widgetSizeStyle == EOAWidgetSizeStyleSmall)
+            self.iconWidgetView.hidden = NO;
+        else
+            self.iconWidgetView.hidden = !isVisibleIcon;
+        
         _contentStackViewSimpleWidget.spacing = 0;
     }
     _shadowButton.accessibilityValue = [self combine:_text subtext:_subtext];
     if (_subtext.length == 0)
     {
         self.unitView.hidden = YES;
+        self.titleOrEmptyLabel.text = self.widgetSizeStyle == EOAWidgetSizeStyleSmall
+        ? [_contentTitle upperCase]
+        :  @"";
         self.unitOrEmptyLabel.text = @"";
-        self.titleOrEmptyLabel.text = @"";
         _unitOrEmptyLabelWidthConstraint.constant = 0;
     }
     else
@@ -647,25 +660,16 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     
     if (self.isFullRow)
     {
-         _contentStackViewSimpleWidget.spacing = 0;
+        _contentStackViewSimpleWidget.spacing = 0;
+        self.valueLabel.textAlignment = NSTextAlignmentCenter;
         if (self.widgetSizeStyle == EOAWidgetSizeStyleSmall)
         {
-            _contentStackViewSimpleWidget.spacing = paddingBetweenIconAndValue;
+            _contentStackViewSimpleWidget.spacing = unitOrEmptyLabelSmallModeWidth - imageSide + paddingBetweenIconAndValue;
+            _unitOrEmptyLabelWidthConstraint.active = NO;
+            _unitOrEmptyLabelWidthSmallModeConstraint.active = YES;
             self.emptyViewRightPlaceholderFullRow.hidden = YES;
-            if (_subtext.length == 0)
-            {
-                self.emptyViewRightPlaceholderFullRow.hidden = !isVisibleIcon;
-                self.valueLabel.textAlignment = NSTextAlignmentCenter;
-            }
-            else
-            {
-                self.emptyViewRightPlaceholderFullRow.hidden = YES;
-                self.valueLabel.textAlignment = NSTextAlignmentNatural;
-            }
         } else {
-            _contentStackViewSimpleWidget.spacing = 0;
             self.emptyViewRightPlaceholderFullRow.hidden = !isVisibleIcon;
-            self.valueLabel.textAlignment = NSTextAlignmentCenter;
         }
     }
     else

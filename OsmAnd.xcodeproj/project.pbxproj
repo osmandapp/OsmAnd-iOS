@@ -1352,6 +1352,7 @@
 		C56FAB5129B226C60096192F /* OACameraDistanceWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = C56FAB4F29B226C60096192F /* OACameraDistanceWidget.mm */; };
 		C56FAB5629B226F10096192F /* OAZoomLevelWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = C56FAB5429B226F10096192F /* OAZoomLevelWidget.mm */; };
 		C56FAB5B29B227130096192F /* OATargetDistanceWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = C56FAB5929B227130096192F /* OATargetDistanceWidget.mm */; };
+		C57245D92CDF3B70004F1F19 /* TracksSortModeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57245D82CDF3B70004F1F19 /* TracksSortModeHelper.swift */; };
 		C573544F2AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C573544D2AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.mm */; };
 		C57354502AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C573544E2AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.xib */; };
 		C5735AF62AFE9CB500638715 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C5735AF42AFE9CB500638715 /* InfoPlist.strings */; };
@@ -3109,6 +3110,7 @@
 		FA5A21A22A9C7DE100319695 /* CALayer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5A21A12A9C7DE100319695 /* CALayer+Extension.swift */; };
 		FA5A21A82A9E17DB00319695 /* UIPageViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */; };
 		FA5D19E12CC00B1100E01A27 /* GPXDataItemGPXFileWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5D19E02CC00B0E00E01A27 /* GPXDataItemGPXFileWrapper.swift */; };
+		FA5D71E12CE24C570062BC4D /* LockHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5D71E02CE24C4E0062BC4D /* LockHelper.swift */; };
 		FA63F24C2AF3DAA00040A0CE /* SensorDataField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA63F24B2AF3DAA00040A0CE /* SensorDataField.swift */; };
 		FA63F24E2AF3DC550040A0CE /* SensorWidgetDataField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA63F24D2AF3DC550040A0CE /* SensorWidgetDataField.swift */; };
 		FA63F2502AF3DFF60040A0CE /* SensorTextWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA63F24F2AF3DFF60040A0CE /* SensorTextWidget.swift */; };
@@ -3133,6 +3135,7 @@
 		FA86F4182AE7C5EA00DC3B2B /* UserDefaultsKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA86F4172AE7C5EA00DC3B2B /* UserDefaultsKey.swift */; };
 		FA86F41A2AE7CB8D00DC3B2B /* BLEBikeSCDDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA86F4192AE7CB8D00DC3B2B /* BLEBikeSCDDevice.swift */; };
 		FA86F41C2AE7CE0100DC3B2B /* BLEBikeSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA86F41B2AE7CE0100DC3B2B /* BLEBikeSensor.swift */; };
+		FA882EF22CDCFE98001F3814 /* LockScreenAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA882EF12CDCFE98001F3814 /* LockScreenAction.swift */; };
 		FA9628E22AFCFB57004B7DEF /* SectionHeaderFooterButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA9628E12AFCFB57004B7DEF /* SectionHeaderFooterButton.xib */; };
 		FA9628E42AFCFCE1004B7DEF /* SectionHeaderFooterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9628E32AFCFCE1004B7DEF /* SectionHeaderFooterButton.swift */; };
 		FA9628E62AFD2F2E004B7DEF /* BLETemperatureSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9628E52AFD2F2E004B7DEF /* BLETemperatureSensor.swift */; };
@@ -4886,6 +4889,7 @@
 		C56FAB5429B226F10096192F /* OAZoomLevelWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAZoomLevelWidget.mm; sourceTree = "<group>"; };
 		C56FAB5829B227130096192F /* OATargetDistanceWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATargetDistanceWidget.h; sourceTree = "<group>"; };
 		C56FAB5929B227130096192F /* OATargetDistanceWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATargetDistanceWidget.mm; sourceTree = "<group>"; };
+		C57245D82CDF3B70004F1F19 /* TracksSortModeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksSortModeHelper.swift; sourceTree = "<group>"; };
 		C573544C2AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMapSettingsTerrainParametersViewController.h; sourceTree = "<group>"; };
 		C573544D2AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapSettingsTerrainParametersViewController.mm; sourceTree = "<group>"; };
 		C573544E2AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAMapSettingsTerrainParametersViewController.xib; sourceTree = "<group>"; };
@@ -7632,6 +7636,7 @@
 		FA5A21A12A9C7DE100319695 /* CALayer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+Extension.swift"; sourceTree = "<group>"; };
 		FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIPageViewController+Extension.swift"; sourceTree = "<group>"; };
 		FA5D19E02CC00B0E00E01A27 /* GPXDataItemGPXFileWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPXDataItemGPXFileWrapper.swift; sourceTree = "<group>"; };
+		FA5D71E02CE24C4E0062BC4D /* LockHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockHelper.swift; sourceTree = "<group>"; };
 		FA6116102C787B7C005C3ABD /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Charts.xcodeproj; sourceTree = "<group>"; };
 		FA63F24B2AF3DAA00040A0CE /* SensorDataField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorDataField.swift; sourceTree = "<group>"; };
 		FA63F24D2AF3DC550040A0CE /* SensorWidgetDataField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorWidgetDataField.swift; sourceTree = "<group>"; };
@@ -7658,6 +7663,7 @@
 		FA86F4172AE7C5EA00DC3B2B /* UserDefaultsKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsKey.swift; sourceTree = "<group>"; };
 		FA86F4192AE7CB8D00DC3B2B /* BLEBikeSCDDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEBikeSCDDevice.swift; sourceTree = "<group>"; };
 		FA86F41B2AE7CE0100DC3B2B /* BLEBikeSensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEBikeSensor.swift; sourceTree = "<group>"; };
+		FA882EF12CDCFE98001F3814 /* LockScreenAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockScreenAction.swift; sourceTree = "<group>"; };
 		FA9628E12AFCFB57004B7DEF /* SectionHeaderFooterButton.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SectionHeaderFooterButton.xib; sourceTree = "<group>"; };
 		FA9628E32AFCFCE1004B7DEF /* SectionHeaderFooterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderFooterButton.swift; sourceTree = "<group>"; };
 		FA9628E52AFD2F2E004B7DEF /* BLETemperatureSensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLETemperatureSensor.swift; sourceTree = "<group>"; };
@@ -10879,6 +10885,7 @@
 				323F04C72C6577340058DD78 /* ShowHideWhitewaterSportsAction.swift */,
 				46132FAF2C904D1A00C9F364 /* DisplayPositionAction.swift */,
 				46BF38DB2CA44C090056D2C2 /* TerrainColorSchemeAction.swift */,
+				FA882EF12CDCFE98001F3814 /* LockScreenAction.swift */,
 			);
 			path = Actions;
 			sourceTree = "<group>";
@@ -11949,6 +11956,7 @@
 				C50E32812CA3FBDF00EEC41F /* TracksFiltersViewController.swift */,
 				C50E32832CA57DDB00EEC41F /* TracksFilterDetailsViewController.swift */,
 				C5A887E32CAD7B8E00DA2979 /* TracksSearchFilter.swift */,
+				C57245D82CDF3B70004F1F19 /* TracksSortModeHelper.swift */,
 			);
 			path = MyPlaces;
 			sourceTree = "<group>";
@@ -11969,8 +11977,7 @@
 				DA5A7DE526C563A300F274C7 /* OAActionConfigurationViewController.mm */,
 				DA5A7DCC26C563A300F274C7 /* OAAddQuickActionViewController.h */,
 				DA5A7DD926C563A300F274C7 /* OAAddQuickActionViewController.m */,
-				DA5A7DD126C563A300F274C7 /* OAFloatingButtonsHudViewController.h */,
-				DA5A7DCE26C563A300F274C7 /* OAFloatingButtonsHudViewController.mm */,
+				FA5D71DD2CE1FB7D0062BC4D /* OAFloatingButtonsHudViewController */,
 				DA5A7DDF26C563A300F274C7 /* OAFloatingButtonsHudViewController.xib */,
 				DA5A7DE226C563A300F274C7 /* OAQuickActionListViewController.h */,
 				DA5A7DD626C563A300F274C7 /* OAQuickActionListViewController.m */,
@@ -13054,6 +13061,7 @@
 		DA5A808E26C563A500F274C7 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				FA5D71E02CE24C4E0062BC4D /* LockHelper.swift */,
 				FA45851C2C946046003A5AD7 /* SharedLibHelpers */,
 				32AB48672C9C50A1005EF1D4 /* DownloadingListHelper */,
 				32D24D1F2BE54A5E000FA504 /* DownloadingCellHelper */,
@@ -13657,6 +13665,15 @@
 				FA4D7F562B03D366003208D7 /* BLEWheelSettingsViewController.swift */,
 			);
 			path = BLEWheelSettings;
+			sourceTree = "<group>";
+		};
+		FA5D71DD2CE1FB7D0062BC4D /* OAFloatingButtonsHudViewController */ = {
+			isa = PBXGroup;
+			children = (
+				DA5A7DD126C563A300F274C7 /* OAFloatingButtonsHudViewController.h */,
+				DA5A7DCE26C563A300F274C7 /* OAFloatingButtonsHudViewController.mm */,
+			);
+			path = OAFloatingButtonsHudViewController;
 			sourceTree = "<group>";
 		};
 		FA6116122C787B7C005C3ABD /* Charts */ = {
@@ -16248,6 +16265,7 @@
 				323F04C02C6556D30058DD78 /* ShowHideHikingRoutesAction.swift in Sources */,
 				DA5A84AE26C563A900F274C7 /* OAHistoryViewController.mm in Sources */,
 				4643322A291D5FE7005AEF12 /* OAMapSettingsNauticalDepthScreen.m in Sources */,
+				FA5D71E12CE24C570062BC4D /* LockHelper.swift in Sources */,
 				DA5A84E826C563A900F274C7 /* OAWaypointsViewController.mm in Sources */,
 				46E9AD9C28DC8F4C00CC55F9 /* OAValueTableViewCell.m in Sources */,
 				DA5A83FE26C563A800F274C7 /* OAQuickSearchListItem.mm in Sources */,
@@ -16927,6 +16945,7 @@
 				DA5A84A826C563A900F274C7 /* OASnapTrackWarningViewController.mm in Sources */,
 				DA4ABF182876DA6800B996EF /* OAHistoryMarkersSettingsItem.mm in Sources */,
 				DA5A83CB26C563A800F274C7 /* OACollapsableView.m in Sources */,
+				FA882EF22CDCFE98001F3814 /* LockScreenAction.swift in Sources */,
 				DA5A82F426C563A800F274C7 /* OASearchMoreCell.m in Sources */,
 				DA5A81BA26C563A700F274C7 /* OAPOIHistoryType.mm in Sources */,
 				C5B4AE5C2B1F480C0019F357 /* HelpDetailsViewController.swift in Sources */,
@@ -17195,6 +17214,7 @@
 				DAD5B4CF288E80EC009CF611 /* OAOperationLog.m in Sources */,
 				46C8412D2C32F23A00E284B0 /* OAShowHideAirPressureAction.m in Sources */,
 				DA5A853826C563A900F274C7 /* OAFavoritesHelper.mm in Sources */,
+				C57245D92CDF3B70004F1F19 /* TracksSortModeHelper.swift in Sources */,
 				DA5A845426C563A900F274C7 /* OARouteLayer.mm in Sources */,
 				DA5A818B26C563A700F274C7 /* OAShowHideLocalOSMChanges.m in Sources */,
 				46BE1FFE2AF0317D005F952E /* ScreenOrientationHelper.swift in Sources */,

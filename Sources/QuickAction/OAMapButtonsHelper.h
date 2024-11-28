@@ -26,6 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (QuickActionType *)TYPE_SETTINGS;
 + (QuickActionType *)TYPE_MAP_INTERACTIONS;
 + (QuickActionType *)TYPE_MY_PLACES;
++ (QuickActionType *)TYPE_INTERFACE;
 
 
 - (Map3DButtonState *)getMap3DButtonState;

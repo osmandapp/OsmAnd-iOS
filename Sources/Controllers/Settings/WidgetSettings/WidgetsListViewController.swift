@@ -194,10 +194,11 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
                 createNewSection = WidgetType.isComplexWidget(lastWidget?.key ?? "")
             }
         }
+        var widgetStyleForRow: EOAWidgetSizeStyle?
         if createNewSection {
             createWidgetItems(NSOrderedSet(object: newWidget), Int(tableData.sectionCount()))
         } else {
-            updateWidgetStyleForRowsInLastPage(newWidget, lastSectionData)
+            widgetStyleForRow = updateWidgetStyleForRowsInLastPage(newWidget, lastSectionData)
             createWidgetItem(newWidget, lastSectionData)
             configureWidgetsSeparator()
         }
@@ -207,7 +208,10 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
                 self?.updateBottomButtons()
             }
         } else {
-            if let userInfo = notification.userInfo as? [String: Any] {
+            if var userInfo = notification.userInfo as? [String: Any] {
+                if let widgetStyleForRow {
+                    userInfo["widgetSizeStyle"] = widgetStyleForRow.rawValue
+                }
                 reorderWidgets(with: userInfo)
             } else {
                 reorderWidgets()
@@ -741,12 +745,12 @@ extension WidgetsListViewController {
     }
     
     private func updateWidgetStyleForRowsInLastPage(_ newWidget: MapWidgetInfo,
-                                                    _ sectionData: OATableSectionData) {
+                                                    _ sectionData: OATableSectionData) -> EOAWidgetSizeStyle? {
         let addWidgetSizeStyle = (newWidget.widget as? OATextInfoWidget)?.widgetSizeStyle ?? .medium
         
         let lastWidgetInRow = sectionData.getRow(sectionData.rowCount() - 1)
         guard let simpleWidget = (lastWidgetInRow.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo)?.widget as? OATextInfoWidget else {
-            return
+            return nil
         }
         
         if simpleWidget.widgetSizeStyle != addWidgetSizeStyle {
@@ -765,8 +769,10 @@ extension WidgetsListViewController {
             } else {
                 // Apply row style for the added widget
                 (newWidget.widget as? OATextInfoWidget)?.updateWith(style: simpleWidget.widgetSizeStyle, appMode: selectedAppMode)
+                return simpleWidget.widgetSizeStyle
             }
         }
+        return nil
     }
     
     private func getRowsInPageFor(key: String) -> [MapWidgetInfo]? {

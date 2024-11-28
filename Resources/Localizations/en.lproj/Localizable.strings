@@ -183,6 +183,16 @@
 "help_article_plugins_openplacereviews_name" = "OpenPlaceReviews";
 "help_article_plugins_custom_name" = "Custom package";
 "help_article_troubleshooting_android_auto_name" = "Android Auto";
+"help_article_map_tracks_name" = "Tracks";
+"help_article_map_tracks_track_context_menu_name" = "Track Context Menu";
+"help_article_map_tracks_appearance_name" = "Track Appearance";
+"help_article_map_routes_name" = "Routes";
+"help_article_personal_color_palette_schemes_name" = "Color Schemes";
+"help_article_personal_tracks_manage_tracks_name" = "Manage Tracks";
+"help_article_personal_tracks_smart_folder_name" = "Smart Folder (Filter)";
+"help_article_troubleshooting_resources_name" = "Resources and Customizations";
+"help_article_troubleshooting_video_tutorials_name" = "Video Tutorials and Guides";
+"obd_plugin_name" = "Vehicle Metrics";
 "global_settings" = "Global Settings";
 "shared_string_markers" = "Markers";
 "shared_string_setup_route" = "Setup a route";
@@ -607,6 +617,9 @@
 "select_tracks_to_display" =  "Select tracks to display them on the map.";
 "show_all_tracks" = "Show all tracks";
 "recently_visible" = "Recently visible %@";
+"sort_subfolders_tracks" = "Sort subfolders";
+"shared_string_subfolders_in" = "Subfolders in";
+"shared_string_sorted_by" = "is sorted by:";
 "shared_string_nearest" = "Nearest";
 "track_sort_az" = "Name A - Z";
 "track_sort_za" = "Name Z - A";
@@ -3945,5 +3958,8 @@
 "rendering_attr_showDirtbikeTrails_description" = "Show dirt bike trails";
 "map_widget_map_scale" = "Map scale";
 "transport_stop" = "Stop";
-
-;
+"lock_screen" = "Lock screen";
+"screen_is_locked_by_action_button" = "Touch screen is locked. Tap on button to unlock.";
+"screen_is_unlocked" = "Touch screen is unlocked.";
+"shared_string_interface" = "Interface";
+"lock_screen_description" = "Enables or disables touch screen functionality to prevent accidental taps";

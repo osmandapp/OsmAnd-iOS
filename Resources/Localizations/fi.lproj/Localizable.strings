@@ -2244,3 +2244,8 @@
 "location_radius" = "Sijaintikehä";
 "of" = "%d / %d";
 "downloaded_bytes" = "%@ / %@";
+"weather_temperature_fahrenheit" = "Fahrenheit";
+"weather_temperature_celsius" = "Celsius";
+"external_sensors_not_found" = "Antureita ei löydy";
+"ant_plus_nothing_found_description" = "Varmista että:\n- Bluetooth on päällä\n- Anturi on aktivoitu\n- Tämä laite on anturin lähellä";
+"shared_string_visible_on_map" = "Näkyvissä kartalla";

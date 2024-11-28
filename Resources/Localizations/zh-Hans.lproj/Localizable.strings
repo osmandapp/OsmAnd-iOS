@@ -2554,3 +2554,7 @@
 "downloaded_bytes" = "%@ 中的 %@";
 "quick_action_terrain_color_scheme" = "地形配色方案";
 "quick_action_need_to_add_item_to_list" = "在“快捷操作”设置中将至少一个项目添加到列表中";
+"add_row" = "添加行";
+"shared_string_author" = "作者";
+"shared_string_license" = "许可协议";
+"shared_string_link" = "链接";

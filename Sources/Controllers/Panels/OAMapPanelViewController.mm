@@ -1511,14 +1511,14 @@ typedef enum
             OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
             OASGpxDataItem *gpx = [gpxDb getGPXItem:path];
             if (!gpx)
-            {
                 gpx = [gpxDb addGPXFileToDBIfNeeded:path];
-            }
+            OASTrackItem *trackItem = [[OASTrackItem alloc] initWithFile:file];
+            trackItem.dataItem = gpx;
 
             OATrackMenuViewControllerState *state = [OATrackMenuViewControllerState withPinLocation:targetPoint.location
                                                                                       openedFromMap:YES];
             state.trackIcon = targetPoint.icon;
-            [weakSelf openTargetViewWithGPX:[[OASTrackItem alloc] initWithFile:file]
+            [weakSelf openTargetViewWithGPX:trackItem
                                       items:nil
                                routeKey:targetPoint.targetObj
                            trackHudMode:EOATrackMenuHudMode

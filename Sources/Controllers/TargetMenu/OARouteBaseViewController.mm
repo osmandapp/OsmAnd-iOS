@@ -271,7 +271,7 @@
     NSString *error = [_routingHelper getLastRouteCalcError];
     if ([_routingHelper isRouteCalculated] && !error && ![_routingHelper isPublicTransportMode])
     {
-        OASKQuadRect *rect = [OARoutingHelper getRect:[_routingHelper getBBox]];
+        OASKQuadRect *rect = [GpxUtils getRectFrom:[_routingHelper getBBox]];
         if ([_routingHelper isRoutePlanningMode] && rect.left != DBL_MAX)
             [self centerMapOnBBox:rect];
         else
@@ -283,7 +283,7 @@
         if (![transportHelper isRouteBeingCalculated]
             && [transportHelper getRoutes].size() > 0
             && transportHelper.currentRoute != -1)
-            [self centerMapOnBBox:[OARoutingHelper getRect:[transportHelper getBBox]]];
+            [self centerMapOnBBox:[GpxUtils getRectFrom:[transportHelper getBBox]]];
     }
     else
     {

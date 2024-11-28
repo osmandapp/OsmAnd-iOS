@@ -196,6 +196,7 @@
 
     if (self.analysis && self.segment)
     {
+        [self.trackChartHelper updateTrackChartPointsWithInvalidate:YES];
         [self.trackChartHelper refreshChart:self.statisticsChart
                                        fitTrack:YES
                                        forceFit:NO

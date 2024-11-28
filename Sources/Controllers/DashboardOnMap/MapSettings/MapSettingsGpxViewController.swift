@@ -307,7 +307,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         trackItem.dataItem = gpx
         
         let menuProvider: UIContextMenuActionProvider = { _ in
-            let openAction = UIAction(title: localizedString("shared_string_open"), image: UIImage.icCustomOverview) { [weak self] _ in
+            let openAction = UIAction(title: localizedString("shared_string_open_track"), image: UIImage.icCustomOverview) { [weak self] _ in
                 self?.onTrackOpenClicked(track: trackItem)
             }
             let appearenceAction = UIAction(title: localizedString("shared_string_appearance"), image: UIImage.icCustomAppearanceOutlined) { [weak self] _ in

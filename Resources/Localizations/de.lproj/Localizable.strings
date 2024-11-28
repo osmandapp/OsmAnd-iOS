@@ -3591,3 +3591,7 @@
 "help_article_map_tracks_name" = "Tracks";
 "help_article_map_tracks_track_context_menu_name" = "Track Kontextmenü";
 "help_article_personal_color_palette_schemes_name" = "Farbschemen";
+"sort_subfolders_tracks" = "Unterordner sortieren";
+"shared_string_subfolders_in" = "Unterordner in";
+"obd_plugin_name" = "Fahrzeugdaten";
+"shared_string_sorted_by" = "sortiert nach:";

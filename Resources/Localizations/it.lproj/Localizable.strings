@@ -3545,3 +3545,15 @@
 "navigate_point_format_OLC" = "Open Location Code (OLC)";
 "lang_an" = "Aragonese";
 "all_folders" = "Tutte le cartelle";
+"help_article_map_tracks_name" = "Tracce";
+"help_article_map_tracks_track_context_menu_name" = "Menù contestuale della traccia";
+"help_article_personal_tracks_manage_tracks_name" = "Gestisci le tracce";
+"download_persian_voice_alert_descr_ios" = "Impostazioni -> Accessibilità -> Contenuto parlato -> Voci -> Persiano -> Dariush";
+"download_persian_voice_alert_descr_macos" = "Impostazioni -> Accessibilità -> Contenuto parlato -> Voce di sistema -> Gestisci voci -> Persiano -> Dariush";
+"help_article_map_tracks_appearance_name" = "Aspetto della traccia";
+"help_article_map_routes_name" = "Percorsi";
+"help_article_troubleshooting_resources_name" = "Risorse e personalizzazioni";
+"help_article_troubleshooting_video_tutorials_name" = "Video tutorial e guide";
+"sort_subfolders_tracks" = "Ordina le sottocartelle";
+"shared_string_subfolders_in" = "Sottocartelle in";
+"shared_string_sorted_by" = "è ordinato per:";

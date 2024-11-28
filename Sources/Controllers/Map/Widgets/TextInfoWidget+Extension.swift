@@ -96,13 +96,12 @@ extension OATextInfoWidget {
                                       message: localizedString("delete_widget_description"),
                                       preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: localizedString("shared_string_delete"), style: .destructive) { [weak self] _ in
-            guard let self else { return }
-            if let widgetInfo = getInfo() ?? OAMapWidgetRegistry.sharedInstance().getWidgetInfo(byId: widgetType?.id ?? "") {
-                let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
-                widgetRegistry.enableDisableWidget(for: OAAppSettings.sharedManager().applicationMode.get(), widgetInfo: widgetInfo, enabled: NSNumber(value: false), recreateControls: true)
-            }
+            guard let self,
+                  let widgetInfo = getInfo() else { return }
+            let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
+            widgetRegistry.enableDisableWidget(for: OAAppSettings.sharedManager().applicationMode.get(), widgetInfo: widgetInfo, enabled: false, recreateControls: true)
         })
-        alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))        
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
         OARootViewController.instance().navigationController?.present(alert, animated: true)
     }
 }

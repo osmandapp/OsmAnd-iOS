@@ -340,7 +340,7 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
     
     private func onWidgetDeleted() {
         let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
-        widgetRegistry.enableDisableWidget(for: selectedAppMode, widgetInfo: widgetInfo, enabled: NSNumber(value: false), recreateControls: true)
+        widgetRegistry.enableDisableWidget(for: selectedAppMode, widgetInfo: widgetInfo, enabled: false, recreateControls: true)
     }
     
     private func updateWidgetStyleForRow(with mapWidgetInfo: MapWidgetInfo) {
@@ -402,7 +402,8 @@ extension WidgetConfigurationViewController {
     
     override func onBottomButtonPressed() {
         guard let navigationController else { return }
-        if let targetViewController = navigationController.viewControllers.first(where: { $0 is WidgetsListViewController }) as? WidgetsListViewController {
+        
+        if let targetViewController = navigationController.viewControllers.compactMap({ $0 as? WidgetsListViewController }).first {
             targetViewController.addWidget(newWidget: widgetInfo, params: widgetConfigurationParams)
             navigationController.popToViewController(targetViewController, animated: true)
         } else {
@@ -410,7 +411,6 @@ extension WidgetConfigurationViewController {
                 let newWidgetsInfos = WidgetUtils.createNewWidgets(widgetsIds: [widgetInfo.key],
                                                                    panel: widgetPanel,
                                                                    appMode: selectedAppMode,
-                                                                   recreateControls: true,
                                                                    selectedWidget: selectedWidget,
                                                                    widgetParams: widgetConfigurationParams,
                                                                    addToNext: addToNext)

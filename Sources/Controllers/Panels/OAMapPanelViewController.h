@@ -15,7 +15,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OAMapViewController, OAFavoriteItem, OAGpxWptItem, OASGpxDataItem, OADestination, OAPointDescription, OAHistoryItem, OAAddress, OARTarg, OAToolbarViewController, OAMapActions, OAMapWidgetRegistry, OAMapHudViewController, OABaseScrollableHudViewController, OAApplicationMode, OASGpxFile, OASGpxTrackAnalysis, OARoutePlanningHudViewController, OATrackMenuViewControllerState, OAObservable, OARTargetPoint, OATargetMenuViewControllerState, OAPOIUIFilter, OASGpxDataItem, OASGpxFile, OASTrackItem;
+@class OAMapViewController, OAFavoriteItem, OAGpxWptItem, OASGpxDataItem, OADestination, OAPointDescription, OAHistoryItem, OAAddress, OARTarg, OAToolbarViewController, OAMapActions, OAMapWidgetRegistry, OAMapHudViewController, OABaseScrollableHudViewController, OAApplicationMode, OASGpxFile, OASGpxTrackAnalysis, OARoutePlanningHudViewController, OATrackMenuViewControllerState, OAObservable, OARTargetPoint, OATargetMenuViewControllerState, OAPOIUIFilter, OASGpxDataItem, OASGpxFile, OASTrackItem, OASTrkSegment;
 
 @interface OAMapPanelViewController : UIViewController<OATargetPointViewDelegate>
 
@@ -76,7 +76,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL) isTargetMultiMenuViewVisible;
 - (void) closeDashboardLastScreen;
 - (void) mapSettingsButtonClick:(id)sender;
-- (void) mapSettingsButtonClick:(id)sender mode:(OAApplicationMode *)targetMode;
+- (void) mapSettingsButtonClick:(id)sender mode:(nullable OAApplicationMode *)targetMode;
 - (void) searchButtonClick:(id)sender;
 - (void) showRouteInfo;
 - (void) showRouteInfo:(BOOL)fullMenu;
@@ -88,7 +88,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) showWaypoints:(BOOL)isShowAlong;
 - (void) showRoutePreferences;
 - (void) showConfigureScreen;
-- (void) showConfigureScreen:(OAApplicationMode *)targetMode;
+- (void) showConfigureScreen:(nullable OAApplicationMode *)targetMode;
 - (void) showMapStylesScreen;
 - (void) showWeatherLayersScreen;
 - (void) showTravelGuides;
@@ -107,7 +107,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (CGFloat) getTargetContainerWidth;
 
 - (BOOL) isTopControlsVisible;
-- (void) targetUpdateControlsLayout:(UIStatusBarStyle)customStatusBarStyle;
 - (void) updateToolbar;
 - (void) updateOverlayUnderlayView;
 - (BOOL) isOverlayUnderlayViewVisible;
@@ -137,7 +136,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu saveState:(BOOL)saveState;
 
 - (void) openRecordingTrackTargetView;
-- (void) openTargetViewWithGPX:(OASTrackItem *)item;
+- (void) openTargetViewWithGPX:(nullable OASTrackItem *)item;
 - (void) openTargetViewWithGPX:(OASTrackItem *)item selectedTab:(EOATrackMenuHudTab)selectedTab selectedStatisticsTab:(EOATrackMenuHudSegmentsStatisticsTab)selectedStatisticsTab openedFromMap:(BOOL)openedFromMap;
 
 - (void) openTargetViewWithGPX:(OASTrackItem *)item
@@ -164,11 +163,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) openTargetViewWithRouteDetailsGraph:(nullable OASGpxFile *)gpx
                                    trackItem:(nullable OASTrackItem *)trackItem
                                     analysis:(nullable OASGpxTrackAnalysis *)analysis
-                            menuControlState:(OATargetMenuViewControllerState *)menuControlState;
+                                     segment:(OASTrkSegment *)segment
+                            menuControlState:(nullable OATargetMenuViewControllerState *)menuControlState;
 
 - (void)openTargetViewWithRouteDetailsGraph:(nullable OASGpxFile *)gpx
                                   trackItem:(nullable OASTrackItem *)trackItem
                                    analysis:(OASGpxTrackAnalysis *)analysis
+                                    segment:(OASTrkSegment *)segment
                            menuControlState:(OATargetMenuViewControllerState *)menuControlState
                                     isRoute:(BOOL)isRoute;
 
@@ -266,7 +267,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)openNewTargetViewWithRouteDetailsGraph:(OASGpxFile *)gpx
                                     analysis:(OASGpxTrackAnalysis *)analysis
-                            menuControlState:(OATargetMenuViewControllerState *)menuControlState
+                                       segment:(OASTrkSegment *)segment
+                            menuControlState:(nullable OATargetMenuViewControllerState *)menuControlState
                                        isRoute:(BOOL)isRoute;
 
 @end

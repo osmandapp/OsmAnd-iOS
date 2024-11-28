@@ -223,43 +223,29 @@
 
     if (updateDocument)
     {
-        _doc = nil;
         if (_isCurrentTrack)
         {
             _doc = _savingHelper.currentTrack;
         }
         else
         {
-            NSString *gpxFullPath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:_gpx.gpxFilePath];
-            OASGpxFile *gpx = [[OASelectedGPXHelper instance] getGpxFileFor:gpxFullPath];
-            if (!gpx)
-            {
-                OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFullPath];
-                _doc = [OASGpxUtilities.shared loadGpxFileFile:file];
-            }
-            else
-            {
-                _doc = gpx;
-            }
+            _doc = [[OASelectedGPXHelper instance] getGpxFileFor:_gpx.path]
+                ?: [OASGpxUtilities.shared loadGpxFileFile:[[OASKFile alloc] initWithFilePath:_gpx.path]];
         }
     }
+
     [self updateAnalysis];
 
-    if (!_isCurrentTrack && _gpx && _gpx.dataItem.nearestCity.length == 0 && _analysis && _analysis.locationStart)
+    if (!_isCurrentTrack
+        && _gpx.dataItem && _gpx.dataItem.nearestCity.length == 0
+        && _analysis && _analysis.locationStart)
     {
         auto locationStart = _analysis.locationStart;
-        
         OAPOI *nearestCity = [OAGPXUIHelper searchNearestCity:CLLocationCoordinate2DMake(locationStart.lat, locationStart.lon)];
         NSString *nearestCityString = nearestCity ? nearestCity.nameLocalized : @"";
-
-        OAGPXDatabase *db = [OAGPXDatabase sharedDb];
-        OASGpxDataItem *gpx = [db getGPXItem:_gpx.gpxFilePath];
-        if (gpx)
-        {
-            [[OASGpxDbHelper shared] updateDataItemParameterItem:_gpx.dataItem
-                                                       parameter:OASGpxParameter.nearestCityName
-                                                           value:nearestCityString];
-        }
+        [[OASGpxDbHelper shared] updateDataItemParameterItem:_gpx.dataItem
+                                                   parameter:OASGpxParameter.nearestCityName
+                                                       value:nearestCityString];
     }
 
     if (replaceGPX)
@@ -270,40 +256,34 @@
         }
         else if (_doc)
         {
-            
             OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
-            OASGpxDataItem *gpx = [gpxDb getGPXItem:_gpx.gpxFilePath];
+            OASGpxDataItem *gpx = [gpxDb getGPXItem:_doc.path];
             if (!gpx)
-            {
-                gpx = [gpxDb addGPXFileToDBIfNeeded:_gpx.gpxFilePath];
-            }
-            gpx.nearestCity = _gpx.nearestCity;
+                gpx = [gpxDb addGPXFileToDBIfNeeded:_doc.path];
+            if (!gpx.nearestCity)
+                gpx.nearestCity = _gpx.nearestCity;
             [gpxDb updateDataItem:gpx];
             _gpx = [[OASTrackItem alloc] initWithFile:gpx.file];
         }
     }
 }
 
-
-- (OASGpxTrackAnalysis *)getAnalysisFor:(OASTrkSegment *)segment
-{
-    OASGpxTrackAnalysis *analysis = [[OASGpxTrackAnalysis alloc] init];
-    auto splitSegments = [ArraySplitSegmentConverter toKotlinArrayFrom:@[[[OASSplitSegment alloc] initWithSegment:segment]]];
-    [analysis prepareInformationFileTimeStamp:0 pointsAnalyser:nil splitSegments:splitSegments];
-    return analysis;
-}
-
 - (void)updateAnalysis
 {
-    if (_doc)
+    BOOL hasGeneralSegment = !_isCurrentTrack && [_doc getGeneralTrack] && [_doc getGeneralSegment];
+    if (hasGeneralSegment)
     {
-        _analysis = !_isCurrentTrack && [_doc getGeneralTrack] && [_doc getGeneralSegment]
-        ? [self getAnalysisFor:[_doc getGeneralSegment]]
-        : [_doc getAnalysisFileTimestamp:0 fromDistance:nil toDistance:nil pointsAnalyzer:OASPlatformUtil.shared.getTrackPointsAnalyser];
+        _analysis = _doc ? [TrackChartHelper getAnalysisFor:[_doc getGeneralSegment]] : nil;
     }
     else
     {
-        _analysis = nil;
+        OASGpxTrackAnalysis *analysis = _gpx && _gpx.dataItem ? [_gpx.dataItem getAnalysis] : nil;
+        _analysis = _doc
+            ? [_doc getAnalysisFileTimestamp:0
+                                fromDistance:nil
+                                  toDistance:nil
+                              pointsAnalyzer:[OASPlatformUtil.shared getTrackPointsAnalyser]]
+            : analysis;
     }
 }
 

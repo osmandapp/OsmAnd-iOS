@@ -12,7 +12,7 @@
 #import "OATrackMenuHudViewControllerConstants.h"
 #import "OsmAndSharedWrapper.h"
 
-@class ElevationChart, OASTrack, OASTrkSegment, OARouteLineChartHelper, OARouteKey, OASMetadata, OALink, OATravelArticleIdentifier, OAGpxWptItem, OAGPXTableData;
+@class ElevationChart, TrackChartHelper, OASTrack, OASTrkSegment, OARouteKey, OASMetadata, OALink, OATravelArticleIdentifier, OAGpxWptItem, OAGPXTableData;
 
 @protocol OATrackMenuViewControllerDelegate <NSObject>
 
@@ -20,6 +20,7 @@
 
 - (void)openAnalysis:(NSArray<NSNumber *> *)types;
 - (void)openAnalysis:(OASGpxTrackAnalysis *)analysis
+             segment:(OASTrkSegment *)segment
             withTypes:(NSArray<NSNumber *> *)types;
 - (OASGpxTrackAnalysis *)getGeneralAnalysis;
 
@@ -53,7 +54,7 @@
 
 - (void)updateChartHighlightValue:(ElevationChart *)chart
                           segment:(OASTrkSegment *)segment;
-- (OARouteLineChartHelper *)getLineChartHelper;
+- (TrackChartHelper *)getLineChartHelper;
 - (OASTrack *)getTrack:(OASTrkSegment *)segment;
 - (NSString *)getTrackSegmentTitle:(OASTrkSegment *)segment;
 - (NSString *)getDirName;
@@ -104,6 +105,7 @@
 
 @property (nonatomic, assign) EOATrackMenuHudTab lastSelectedTab;
 @property (nonatomic, assign) EOATrackMenuHudSegmentsStatisticsTab selectedStatisticsTab;
+@property (nonatomic, assign) OARouteKey *routeKey;
 @property (nonatomic, assign) NSArray<NSNumber *> *routeStatistics;
 @property (nonatomic) UIImage *trackIcon;
 @property (nonatomic) NSString *gpxFilePath;

@@ -11,6 +11,7 @@
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OAStatisticsSelectionBottomSheetViewController.h"
 #import "OASizes.h"
 #import "OAColors.h"
 #import "OAStateChangedListener.h"
@@ -291,13 +292,12 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
                               useGesturesAndScale:YES];
 
     OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.gpx.path]];
-    BOOL calcWithoutGaps = !gpx.joinSegments && (self.gpx.tracks.count > 0 && self.gpx.tracks.firstObject.generalTrack);
     [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.chartView
                                       analysis:self.analysis
                                      firstType:GPXDataSetTypeAltitude
                                     secondType:GPXDataSetTypeSlope
                                       axisType:GPXDataSetAxisTypeDistance
-                               calcWithoutGaps:calcWithoutGaps];
+                               calcWithoutGaps:[GpxUtils calcWithoutGaps:self.gpx gpxDataItem:gpx]];
     
     BOOL hasSlope = routeStatsCell.chartView.lineData.dataSetCount > 1;
     
@@ -720,11 +720,16 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
         [[OARootViewController instance].mapPanel openTargetViewWithRouteDetailsGraph:self.gpx
                                                                             trackItem:self.trackItem
                                                                              analysis:self.analysis
+                                                                              segment:self.segment
                                                                      menuControlState:nil];
     }
     else
     {
-        [[OARootViewController instance].mapPanel openNewTargetViewWithRouteDetailsGraph:self.gpx analysis:self.analysis menuControlState:nil isRoute:YES];
+        [[OARootViewController instance].mapPanel openNewTargetViewWithRouteDetailsGraph:self.gpx
+                                                                                analysis:self.analysis
+                                                                                 segment:self.segment
+                                                                        menuControlState:nil
+                                                                                 isRoute:YES];
     }
   
 }
@@ -782,15 +787,15 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
               ([recognizer isKindOfClass:UITapGestureRecognizer.class] && (((UITapGestureRecognizer *) recognizer).nsuiNumberOfTapsRequired == 2)))
              && recognizer.state == UIGestureRecognizerStateEnded)
     {
-        if (!self.trackChartPoints)
+        if (self.analysis && self.segment)
         {
-            self.trackChartPoints = [self.routeLineChartHelper generateTrackChartPoints:self.statisticsChart
-                                                                               analysis:self.analysis];
+            [self.trackChartHelper refreshChart:self.statisticsChart
+                                           fitTrack:YES
+                                           forceFit:NO
+                                   recalculateXAxis:YES
+                                           analysis:self.analysis
+                                            segment:self.segment];
         }
-        [self.routeLineChartHelper refreshHighlightOnMap:YES
-                                               chartView:self.statisticsChart
-                                        trackChartPoints:self.trackChartPoints
-                                                analysis:self.analysis];
     }
 }
 
@@ -948,16 +953,15 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
             }
         }
     }
-
-    if (!self.trackChartPoints)
+    if (self.analysis && self.segment)
     {
-        self.trackChartPoints = [self.routeLineChartHelper generateTrackChartPoints:self.statisticsChart
-                                                                           analysis:self.analysis];
+        [self.trackChartHelper refreshChart:self.statisticsChart
+                                       fitTrack:YES
+                                       forceFit:NO
+                               recalculateXAxis:NO
+                                       analysis:self.analysis
+                                        segment:self.segment];
     }
-    [self.routeLineChartHelper refreshHighlightOnMap:NO
-                                           chartView:self.statisticsChart
-                                    trackChartPoints:self.trackChartPoints
-                                            analysis:self.analysis];
 }
 
 - (void)chartScaled:(ChartViewBase *)chartView scaleX:(CGFloat)scaleX scaleY:(CGFloat)scaleY
@@ -972,8 +976,19 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     if (_highlightDrawX != -1)
     {
         ChartHighlight *h = [self.statisticsChart getHighlightByTouchPoint:CGPointMake(_highlightDrawX, 0.)];
-        if (h != nil)
-            [self.statisticsChart highlightValue:h callDelegate:true];
+        if (h)
+        {
+            [self.statisticsChart highlightValue:h callDelegate:YES];
+            if (self.analysis && self.segment)
+            {
+                [self.trackChartHelper refreshChart:self.statisticsChart
+                                               fitTrack:YES
+                                               forceFit:NO
+                                       recalculateXAxis:NO
+                                               analysis:self.analysis
+                                                segment:self.segment];
+            }
+        }
     }
 }
 
@@ -1012,10 +1027,10 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     {
         OARouteStatisticsModeCell *statsModeCell = statsSection[0];
         ElevationChartCell *graphCell = statsSection[1];
-        [self.routeLineChartHelper changeChartTypes:_types
+        [self.trackChartHelper changeChartTypes:_types
                                               chart:graphCell.chartView
                                            analysis:self.analysis
-                                           modeCell:statsModeCell];
+                                        statsModeCell:statsModeCell];
     }
 }
 

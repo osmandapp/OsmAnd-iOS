@@ -168,6 +168,10 @@ class GpxUIHelper: NSObject {
             fatalError("init() has not been implemented")
         }
 
+        override func getDivX() -> Double {
+            divX
+        }
+
         func getDataSetType() -> GPXDataSetType {
             dataSetType
         }

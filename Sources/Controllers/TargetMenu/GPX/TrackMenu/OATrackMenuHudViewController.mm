@@ -17,7 +17,6 @@
 #import "OAEditWaypointsGroupBottomSheetViewController.h"
 #import "OAEditWaypointsGroupOptionsViewController.h"
 #import "OADeleteWaypointsGroupBottomSheetViewController.h"
-#import "OARouteBaseViewController.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
@@ -93,7 +92,7 @@
 
 @end
 
-@interface OATrackMenuHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, SFSafariViewControllerDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuViewControllerDelegate, OASelectTrackFolderDelegate, OAEditWaypointsGroupOptionsDelegate, OAFoldersCellDelegate, OAEditDescriptionViewControllerDelegate, OARouteLineChartHelperDelegate>
+@interface OATrackMenuHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, SFSafariViewControllerDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuViewControllerDelegate, OASelectTrackFolderDelegate, OAEditWaypointsGroupOptionsDelegate, OAFoldersCellDelegate, OAEditDescriptionViewControllerDelegate, ChartHelperDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *statusBarBackgroundView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
@@ -106,7 +105,7 @@
 
 @property (nonatomic) OASTrackItem *gpx;
 @property (nonatomic) BOOL isShown;
-@property (nonatomic) OARouteLineChartHelper *routeLineChartHelper;
+@property (nonatomic) TrackChartHelper *trackChartHelper;
 @property (nonatomic) OATrackMenuHeaderView *headerView;
 @property (nonatomic) OAGPXTableData *tableData;
 @property (nonatomic) EOATrackMenuHudTab selectedTab;
@@ -183,19 +182,21 @@
     {
         if ([state isKindOfClass:OATrackMenuViewControllerState.class])
         {
-            if (gpx.isShowCurrentTrack) {
+            if (gpx.isShowCurrentTrack)
                 self.doc = [OASavingTrackHelper.sharedInstance currentTrack];
-            } else {
+            else if (!self.doc)
                 self.doc = [OASGpxUtilities.shared loadGpxFileFile:gpx.getFile];
-            }
             _docRect = self.doc.getRect;
             double clat = _docRect.bottom / 2.0 + _docRect.top / 2.0;
             double clon = _docRect.left / 2.0 + _docRect.right / 2.0;
             _docCenter = CLLocationCoordinate2DMake(clat, clon);
 
             _reopeningState = (OATrackMenuViewControllerState *) state;
-            _isNewRoute = routeKey;
-            _routeKey = routeKey ? routeKey : [OARouteKey fromGpx:self.doc.networkRouteKeyTags];
+            if (routeKey && _reopeningState.routeKey != routeKey)
+                _reopeningState.routeKey = routeKey;
+            _isNewRoute = _reopeningState.routeKey != nil
+                && [[self.doc.path stringByDeletingLastPathComponent].lastPathComponent isEqualToString:@"Temp"];
+            _routeKey = _reopeningState.routeKey ?: [OARouteKey fromGpx:self.doc.networkRouteKeyTags];
             if (_routeKey && !_reopeningState.trackIcon)
             {
                 OANetworkRouteDrawable *drawable = [[OANetworkRouteDrawable alloc] initWithRouteKey:_routeKey];
@@ -224,7 +225,7 @@
 - (void)commonInit
 {
     _app = [OsmAndApp instance];
-    _routeLineChartHelper = [self getLineChartHelper];
+    _trackChartHelper = [self getLineChartHelper];
     _gpxUIHelper = [[OAGPXUIHelper alloc] init];
     _imagesCacheHelper = [OATravelGuidesImageCacheHelper sharedDatabase];
 
@@ -268,6 +269,7 @@
 
 - (void) selectTabOnLaunch:(EOATrackMenuHudSegmentsStatisticsTab)selectedStatisticsTab
 {
+    [_uiBuilder runAdditionalActions];
     NSNumber *tabIndex = kOverviewTabIndex;
     if (selectedStatisticsTab == EOATrackMenuHudSegmentsStatisticsOverviewTab)
         tabIndex = kOverviewTabIndex;
@@ -360,8 +362,8 @@
                 [weakSelf.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
         }
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        weakSelf.routeLineChartHelper.isLandscape = [weakSelf isLandscape];
-        weakSelf.routeLineChartHelper.screenBBox = CGRectMake(
+        weakSelf.trackChartHelper.isLandscape = [weakSelf isLandscape];
+        weakSelf.trackChartHelper.screenBBox = CGRectMake(
                 [weakSelf isLandscape] ? [weakSelf getLandscapeViewWidth] : 0.,
                 0.,
                 [weakSelf isLandscape] ? DeviceScreenWidth - [weakSelf getLandscapeViewWidth] : DeviceScreenWidth,
@@ -409,7 +411,7 @@
 {
     __weak __typeof(self) weakSelf = self;
     [super hide:YES duration:duration onComplete:^{
-        if (weakSelf.routeKey)
+        if (weakSelf.routeKey && !_pushedNewScreen)
             [weakSelf.mapViewController hideTempGpxTrack];
         [weakSelf stopLocationServices];
         [weakSelf.mapViewController.mapLayers.gpxMapLayer hideCurrentStatisticsLocation];
@@ -871,19 +873,21 @@
 
 - (void)openAnalysis:(NSArray<NSNumber *> *)types
 {
-    if (!self.analysis)
-    {
-        if (!self.gpx.isShowCurrentTrack)
-        {
-            self.analysis = self.gpx.dataItem.getAnalysis;;
-        }
-    }
-    [self openAnalysis:self.analysis withTypes:types];
+    if (!self.analysis && ![self.gpx isShowCurrentTrack])
+        self.analysis = [self.gpx.dataItem getAnalysis];
+    [self openAnalysis:self.analysis
+               segment:[TrackChartHelper getTrackSegment:self.analysis
+                                                 gpxItem:self.doc]
+             withTypes:types];
 }
 
 - (void)openAnalysis:(OASGpxTrackAnalysis *)analysis
+             segment:(OASTrkSegment *)segment
            withTypes:(NSArray<NSNumber *> *)types
 {
+    if (!self.doc || !self.gpx || !analysis || !segment)
+        return;
+
     _pushedNewScreen = YES;
     __weak __typeof(self) weakSelf = self;
     [self hide:YES duration:.2 onComplete:^{
@@ -891,13 +895,12 @@
         state.openedFromTrackMenu = YES;
         OASGpxFile *gpxFile = weakSelf.doc;
         if (!gpxFile)
-        {
             weakSelf.doc = [OASGpxUtilities.shared loadGpxFileFile:weakSelf.gpx.dataItem.file];
-        }
         
         [weakSelf.mapPanelViewController openTargetViewWithRouteDetailsGraph:weakSelf.doc
                                                                    trackItem:weakSelf.gpx
                                                                     analysis:analysis
+                                                                     segment:segment
                                                             menuControlState:state
                                                                      isRoute:NO];
     }];
@@ -1324,20 +1327,20 @@
     }
 }
 
-- (OARouteLineChartHelper *)getLineChartHelper
+- (TrackChartHelper *)getLineChartHelper
 {
-    if (!_routeLineChartHelper)
+    if (!_trackChartHelper)
     {
-        _routeLineChartHelper = [[OARouteLineChartHelper alloc] initWithGpxDoc:self.doc layer:self.mapViewController.mapLayers.gpxMapLayer];
-        _routeLineChartHelper.delegate = self;
-        _routeLineChartHelper.isLandscape = [self isLandscape];
-        _routeLineChartHelper.screenBBox = CGRectMake(
+        _trackChartHelper = [[TrackChartHelper alloc] initWithGpxDoc:self.doc];
+        _trackChartHelper.delegate = self;
+        _trackChartHelper.isLandscape = [self isLandscape];
+        _trackChartHelper.screenBBox = CGRectMake(
                 [self isLandscape] ? [self getLandscapeViewWidth] : 0.,
                 0.,
                 [self isLandscape] ? DeviceScreenWidth - [self getLandscapeViewWidth] : DeviceScreenWidth,
                 [self isLandscape] ? DeviceScreenHeight : DeviceScreenHeight - [self getViewHeight]);
     }
-    return _routeLineChartHelper;
+    return _trackChartHelper;
 }
 
 - (OASTrack *)getTrack:(OASTrkSegment *)segment
@@ -1537,7 +1540,15 @@
         NSIndexPath *indexPath = [self.tableView indexPathForCell:actionsTabCell];
         touchPointArea = [self.view convertRect:[self.tableView rectForRowAtIndexPath:indexPath] fromView:self.tableView];
     }
-    [_gpxUIHelper openExportForTrack:self.gpx.dataItem gpxDoc:self.doc isCurrentTrack:self.isCurrentTrack inViewController:self hostViewControllerDelegate:nil touchPointArea:touchPointArea];
+    if (self.gpx.dataItem)
+    {
+        [_gpxUIHelper openExportForTrack:self.gpx.dataItem
+                                  gpxDoc:self.doc
+                          isCurrentTrack:[self isCurrentTrack]
+                        inViewController:self
+              hostViewControllerDelegate:nil
+                          touchPointArea:touchPointArea];
+    }
 }
 
 - (void)openNavigation
@@ -1601,6 +1612,7 @@
         }
     }
     self.gpx = [[OASTrackItem alloc] initWithFile:gpx.file];
+    self.gpx.dataItem = [[OAGPXDatabase sharedDb] getGPXItem:self.gpx.path];
 
     _routeKey = [OARouteKey fromGpx:self.doc.networkRouteKeyTags];
     _isNewRoute = NO;
@@ -1879,9 +1891,9 @@
                   withRowAnimation:UITableViewRowAnimationNone];
 }
 
-#pragma mark - OARouteLineChartHelperDelegate
+#pragma mark - ChartHelperDelegate
 
-- (void)centerMapOnBBox:(const OABBox)rect
+- (void)centerMapOnBBox:(OASKQuadRect *)rect
 {
     [self.mapPanelViewController displayAreaOnMap:CLLocationCoordinate2DMake(rect.top, rect.left)
                                       bottomRight:CLLocationCoordinate2DMake(rect.bottom, rect.right)
@@ -1894,6 +1906,16 @@
 - (void)adjustViewPort:(BOOL)landscape
 {
     [super adjustViewPort:landscape];
+}
+
+- (void)showCurrentHighlitedLocation:(TrackChartPoints *)trackChartPoints
+{
+    [self.mapViewController.mapLayers.gpxMapLayer showCurrentHighlitedLocation:trackChartPoints];
+}
+
+- (void)showCurrentStatisticsLocation:(TrackChartPoints *)trackChartPoints
+{
+    [self.mapViewController.mapLayers.gpxMapLayer showCurrentStatisticsLocation:trackChartPoints];
 }
 
 #pragma mark - Cell action methods

@@ -16,6 +16,7 @@
 #import "OARouteImporter.h"
 #import "OARouteStatistics.h"
 #import "OARootViewController.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -238,14 +239,22 @@
     return locationsIdx == locations.count ? 0 : locationsIdx;
 }
 
-- (void) showCurrentStatisticsLocation:(OATrackChartPoints *)trackPoints
+- (void)showCurrentHighlitedLocation:(TrackChartPoints *)trackPoints
 {
-    if (_locationMarker && CLLocationCoordinate2DIsValid(trackPoints.highlightedPoint))
+    BOOL hasHighlitedPoint = CLLocationCoordinate2DIsValid(trackPoints.highlightedPoint);
+    if (_locationMarker)
     {
-        _locationMarker->setPosition(OsmAnd::Utilities::convertLatLonTo31(
-                OsmAnd::LatLon(trackPoints.highlightedPoint.latitude, trackPoints.highlightedPoint.longitude)));
-        _locationMarker->setIsHidden(false);
+        if (hasHighlitedPoint)
+        {
+            _locationMarker->setPosition(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(trackPoints.highlightedPoint.latitude,
+                                                                                             trackPoints.highlightedPoint.longitude)));
+        }
+        _locationMarker->setIsHidden(!hasHighlitedPoint);
     }
+}
+
+- (void)showCurrentStatisticsLocation:(TrackChartPoints *)trackPoints
+{
     OsmAnd::MapMarkerBuilder xAxisMarkerBuilder;
     xAxisMarkerBuilder.setIsAccuracyCircleSupported(false);
     xAxisMarkerBuilder.setBaseOrder(self.pointsOrder - 15);
@@ -258,12 +267,12 @@
         for (CLLocation *location in trackPoints.xAxisPoints)
         {
             if (_xAxisLocationIcon)
-            	xAxisMarkerBuilder.addOnMapSurfaceIcon(_locationIconKey, OsmAnd::SingleSkImage(_xAxisLocationIcon));
+                xAxisMarkerBuilder.addOnMapSurfaceIcon(_locationIconKey, OsmAnd::SingleSkImage(_xAxisLocationIcon));
             const auto& marker = xAxisMarkerBuilder.buildAndAddToCollection(_currentGraphXAxisPositions);
             marker->setPosition(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.coordinate.latitude, location.coordinate.longitude)));
         }
         [self.mapView addKeyedSymbolsProvider:_currentGraphXAxisPositions];
-        trackPoints.axisPointsInvalidated = NO;
+        trackPoints.axisPointsInvalidated = false;
     }
 }
 

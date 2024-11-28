@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "OACommonTypes.h"
 
-@class OAWorldRegion, OAApplicationMode, OARouteCalculationResult, OARouteDirectionInfo, OAGPXRouteParamsBuilder, OAVoiceRouter, OANextDirectionInfo, OASGpxTrackAnalysis, OARouteCalculationParams, OARouteProvider, OARoutingEnvironment, OALocationsHolder, OAGpxRouteApproximation, OAObservable, OACurrentStreetName, OASGpxFile;
+@class OAWorldRegion, OAApplicationMode, OARouteCalculationResult, OARouteDirectionInfo, OAGPXRouteParamsBuilder, OAVoiceRouter, OANextDirectionInfo, OASGpxTrackAnalysis, OARouteCalculationParams, OARouteProvider, OARoutingEnvironment, OAObservable, OACurrentStreetName, OASGpxFile, OASKQuadRect;
 
 @protocol OARouteInformationListener <NSObject>
 

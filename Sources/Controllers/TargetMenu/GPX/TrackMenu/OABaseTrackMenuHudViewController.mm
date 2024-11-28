@@ -284,22 +284,25 @@
     }
 }
 
-
-- (OASGpxTrackAnalysis *)getAnalysisFor:(OASTrkSegment *)segment
-{
-    OASGpxTrackAnalysis *analysis = [[OASGpxTrackAnalysis alloc] init];
-    auto splitSegments = [ArraySplitSegmentConverter toKotlinArrayFrom:@[[[OASSplitSegment alloc] initWithSegment:segment]]];
-    [analysis prepareInformationFileTimeStamp:0 pointsAnalyser:nil splitSegments:splitSegments];
-    return analysis;
-}
-
 - (void)updateAnalysis
 {
     if (_doc)
     {
-        _analysis = !_isCurrentTrack && [_doc getGeneralTrack] && [_doc getGeneralSegment]
-        ? [self getAnalysisFor:[_doc getGeneralSegment]]
-        : [_doc getAnalysisFileTimestamp:0 fromDistance:nil toDistance:nil pointsAnalyzer:OASPlatformUtil.shared.getTrackPointsAnalyser];
+        NSString *gpxFilePath = _doc.path;
+        NSTimeInterval fileTimestamp;
+        if (gpxFilePath.length == 0)
+        {
+            fileTimestamp = [[NSDate date] timeIntervalSince1970] * 1000;
+        }
+        else
+        {
+            OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFilePath];
+            fileTimestamp = file.lastModified;
+        }
+        _analysis = [_doc getAnalysisFileTimestamp:fileTimestamp fromDistance:nil toDistance:nil pointsAnalyzer:OASPlatformUtil.shared.getTrackPointsAnalyser];
+        if (_analysis.totalDistanceWithoutGaps == 0 && _analysis.totalDistance != 0)
+            // Set _analysis.totalDistanceWithoutGaps to _analysis.totalDistance because the initial analysis does not compute totalDistanceWithoutGaps for tracks with multiple segments during this initialization.
+            _analysis.totalDistanceWithoutGaps = _analysis.totalDistance;
     }
     else
     {

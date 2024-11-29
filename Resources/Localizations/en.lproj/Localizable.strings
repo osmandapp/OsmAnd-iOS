@@ -3963,3 +3963,10 @@
 "screen_is_unlocked" = "Touch screen is unlocked.";
 "shared_string_interface" = "Interface";
 "lock_screen_description" = "Enables or disables touch screen functionality to prevent accidental taps";
+
+"add_widget_below" = "Add widget below";
+"add_widget_above" = "Add widget above";
+"add_widget_to_the_right" = "Add widget to the right";
+"add_widget_to_the_left" = "Add widget to the left";
+"delete_widget" = "Delete widget?";
+"delete_widget_description" = "This widget will be deleted. You can restore it later in Configure Screen.";

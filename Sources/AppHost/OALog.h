@@ -21,4 +21,8 @@ extern "C"
 
 + (void) log:(NSString *)format withArguments:(va_list)arguments;
 
++ (NSString *) getFormattedTimestamp;
++ (NSString *) getFormattedTimestampByDate:(NSDate *)date;
++ (NSString *) getFormattedThread:(NSThread *)thread;
+
 @end

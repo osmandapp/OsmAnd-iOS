@@ -13,7 +13,6 @@ import SafariServices
 @objcMembers
 class WidgetsListViewController: OABaseNavbarSubviewViewController {
     
-    static let kWidgetAddedNotification = "onWidgetAdded"
     private static let enabledWidgetsFilter = Int(KWidgetModeAvailable | kWidgetModeEnabled | kWidgetModeMatchingPanels)
     
     private let kPageKey = "page_"
@@ -68,20 +67,6 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
     
     override func registerNotifications() {
         addNotification(NSNotification.Name(kWidgetVisibilityChangedMotification), selector: #selector(onWidgetStateChanged))
-        addNotification(NSNotification.Name(Self.kWidgetAddedNotification), selector: #selector(onWidgetAdded(notification:)))
-        addNotification(.SimpleWidgetStyleUpdated, selector: #selector(onSimpleWidgetStyleUpdated))
-    }
-    
-    @objc private func onSimpleWidgetStyleUpdated(notification: Notification) {
-        guard let widgetInfo = notification.object as? MapWidgetInfo,
-              let widget = widgetInfo.widget as? OATextInfoWidget else { return }
-        guard let rows = getRowsInPageFor(key: widgetInfo.key) else { return }
-        
-        rows.lazy
-            .compactMap { $0.widget as? OATextInfoWidget }
-            .forEach { 
-                $0.updateWith(style: widget.widgetSizeStyle, appMode: selectedAppMode)
-            }
     }
     
     // MARK: - Base setup UI
@@ -157,6 +142,8 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
     override func onTopButtonPressed() {
         let vc = WidgetGroupListViewController()
         vc.widgetPanel = widgetPanel
+        vc.addToNext = nil
+        vc.selectedWidget = nil
         show(vc)
     }
     
@@ -179,10 +166,7 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
         OAUtilities.showToast("", details: String(format: localizedString("complex_widget_alert"), arguments: [widgetTitle]), duration: 4, in: view)
     }
     
-    @objc private func onWidgetAdded(notification: NSNotification) {
-        guard let newWidget = notification.object as? MapWidgetInfo else {
-            return
-        }
+    func addWidget(newWidget: MapWidgetInfo, params: [String: Any]?) {
         let lastSection = tableData.sectionCount() - 1
         let lastSectionData = tableData.sectionData(for: lastSection)
         var createNewSection: Bool = false
@@ -208,7 +192,7 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
                 self?.updateBottomButtons()
             }
         } else {
-            if var userInfo = notification.userInfo as? [String: Any] {
+            if var userInfo = params {
                 if let widgetStyleForRow {
                     userInfo["widgetSizeStyle"] = widgetStyleForRow.rawValue
                 }
@@ -773,10 +757,6 @@ extension WidgetsListViewController {
             }
         }
         return nil
-    }
-    
-    private func getRowsInPageFor(key: String) -> [MapWidgetInfo]? {
-        getPagesWithMapWidgetInfo().first { $0.contains { $0.key == key } }
     }
     
     private func getPagesWithMapWidgetInfo() -> [[MapWidgetInfo]] {

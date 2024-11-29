@@ -8,10 +8,6 @@
 
 import Foundation
 
-extension Notification.Name {
-    static let SimpleWidgetStyleUpdated = NSNotification.Name("SimpleWidgetStyleUpdated")
-}
-
 @objc(OAWidgetConfigurationViewController)
 @objcMembers
 class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStateDelegate {
@@ -25,6 +21,8 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
     var widgetConfigurationParams: [String: Any]?
     var isFirstGenerateData = true
     var onWidgetStateChangedAction: (() -> Void)?
+    var addToNext: Bool?
+    var selectedWidget: String?
     
     lazy private var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
     
@@ -201,10 +199,8 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                 if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "") {
                     widgetConfigurationParams?["widgetSizeStyle"] = index
                 }
-                if item.string(forKey: "behaviour") == "simpleWidget" {
-                    NotificationCenter.default.post(name: .SimpleWidgetStyleUpdated,
-                                                    object: widgetInfo,
-                                                    userInfo: nil)
+                if item.string(forKey: "behaviour") == "simpleWidget", !createNew {
+                    updateWidgetStyleForRow(with: widgetInfo)
                     OARootViewController.instance().mapPanel.recreateControls()
                 }
             }
@@ -330,11 +326,6 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
         }
     }
     
-    private func onWidgetDeleted() {
-        let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
-        widgetRegistry.enableDisableWidget(for: selectedAppMode, widgetInfo: widgetInfo, enabled: NSNumber(value: false), recreateControls: true)
-    }
-    
     func onWidgetStateChanged() {
         isFirstGenerateData = false
         if widgetInfo.key == WidgetType.markersTopBar.id || widgetInfo.key.hasPrefix(WidgetType.markersTopBar.id + MapWidgetInfo.DELIMITER) {
@@ -345,6 +336,26 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
         generateData()
         onWidgetStateChangedAction?()
         tableView.reloadData()
+    }
+    
+    private func onWidgetDeleted() {
+        let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
+        widgetRegistry.enableDisableWidget(for: selectedAppMode, widgetInfo: widgetInfo, enabled: false, recreateControls: true)
+    }
+    
+    private func updateWidgetStyleForRow(with mapWidgetInfo: MapWidgetInfo) {
+        let enabledWidgetsFilter = Int(KWidgetModeAvailable | kWidgetModeEnabled | kWidgetModeMatchingPanels)
+        guard let pagedWidgets = widgetRegistry.getPagedWidgets(forPanel: selectedAppMode,
+                                                                panel: widgetPanel,
+                                                                filterModes: enabledWidgetsFilter),
+              let widget = widgetInfo.widget as? OATextInfoWidget else {
+            return
+        }
+        pagedWidgets
+            .compactMap { $0.array as? [MapWidgetInfo] }
+            .first { $0.contains { $0.key == mapWidgetInfo.key } }?
+            .compactMap { $0.widget as? OATextInfoWidget }
+            .forEach { $0.updateWith(style: widget.widgetSizeStyle, appMode: selectedAppMode) }
     }
 }
 
@@ -361,6 +372,12 @@ extension WidgetConfigurationViewController {
     
     override func isNavbarSeparatorVisible() -> Bool {
         false
+    }
+    
+    override func getLeftNavbarButtonTitle() -> String! {
+        navigationController?.viewControllers.count == 1
+        ? localizedString("shared_string_cancel")
+        : nil
     }
     
     override func getTableHeaderDescriptionAttr() -> NSAttributedString! {
@@ -384,21 +401,28 @@ extension WidgetConfigurationViewController {
     }
     
     override func onBottomButtonPressed() {
-        NotificationCenter.default.post(name: NSNotification.Name(WidgetsListViewController.kWidgetAddedNotification),
-                                        object: widgetInfo,
-                                        userInfo: widgetConfigurationParams)
-        if let viewControllers = navigationController?.viewControllers {
-            for viewController in viewControllers {
-                if let targetViewController = viewController as? WidgetsListViewController {
-                    navigationController?.popToViewController(targetViewController, animated: true)
-                    break
+        guard let navigationController else { return }
+        
+        if let targetViewController = navigationController.viewControllers.compactMap({ $0 as? WidgetsListViewController }).first {
+            targetViewController.addWidget(newWidget: widgetInfo, params: widgetConfigurationParams)
+            navigationController.popToViewController(targetViewController, animated: true)
+        } else {
+            if let addToNext, let selectedWidget {
+                let newWidgetsInfos = WidgetUtils.createNewWidgets(widgetsIds: [widgetInfo.key],
+                                                                   panel: widgetPanel,
+                                                                   appMode: selectedAppMode,
+                                                                   selectedWidget: selectedWidget,
+                                                                   widgetParams: widgetConfigurationParams,
+                                                                   addToNext: addToNext)
+                if let info = newWidgetsInfos.first, info.widgetPanel.isPanelVertical {
+                    updateWidgetStyleForRow(with: info)
                 }
             }
+            navigationController.dismiss(animated: true)
         }
     }
 
     override func getBottomButtonTitleAttr() -> NSAttributedString! {
-        
         guard createNew else { return nil }
         // Create the attributed string with the desired text and attributes
         let text = "  " + localizedString("add_widget")
@@ -431,5 +455,4 @@ extension WidgetConfigurationViewController {
         
         return attributedString
     }
-    
 }

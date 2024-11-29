@@ -80,9 +80,9 @@ import OsmAndShared
         case .lastModified:
             return folders.sorted { $0.lastModified() > $1.lastModified() }
         case .nameAZ:
-            return folders.sorted { $0.getDirName().localizedCaseInsensitiveCompare($1.getDirName()) == .orderedAscending }
+            return folders.sorted { $0.getDirName(includingSubdirs: false).localizedCaseInsensitiveCompare($1.getDirName(includingSubdirs: false)) == .orderedAscending }
         case .nameZA:
-            return folders.sorted { $0.getDirName().localizedCaseInsensitiveCompare($1.getDirName()) == .orderedDescending }
+            return folders.sorted { $0.getDirName(includingSubdirs: false).localizedCaseInsensitiveCompare($1.getDirName(includingSubdirs: false)) == .orderedDescending }
         case .newestDateFirst:
             return folders.sorted { $0.lastModified() > $1.lastModified() }
         case .oldestDateFirst:
@@ -124,7 +124,7 @@ import OsmAndShared
     }
     
     static func descriptionForFolder(folder: TrackFolder, currentFolderPath: String) -> String {
-        let folderName = folder.getDirName()
+        let folderName = folder.getDirName(includingSubdirs: false)
         let tracksCount = folder.totalTracksCount
         let basicDescription = String(format: localizedString("folder_tracks_count"), tracksCount)
         let lastModifiedString = TracksSortModeHelper.dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(folder.lastModified() / 1000)))

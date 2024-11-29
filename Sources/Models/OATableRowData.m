@@ -176,6 +176,11 @@
     return _data[key];
 }
 
+- (void)removeObjectForKey:(nonnull NSString *)key
+{
+   [_data removeObjectForKey:key];
+}
+
 - (NSString *) stringForKey:(nonnull NSString *)key
 {
     return [_data[key] stringValue];

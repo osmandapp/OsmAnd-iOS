@@ -11,7 +11,7 @@ final class WidgetUtils {
     static func reorderWidgets(orderedWidgetPages: [[String]],
                                panel: WidgetsPanel,
                                selectedAppMode: OAApplicationMode,
-                               widgetParams: [String: Any]? = nil) {
+                               widgetParamsArray: [[String: Any]]? = nil) {
         let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
         
         let enabledWidgets: [String] = orderedWidgetPages.flatMap { $0 }
@@ -22,7 +22,7 @@ final class WidgetUtils {
                                         panel: panel,
                                         appMode: selectedAppMode,
                                         widgetRegistry: widgetRegistry,
-                                        widgetParams: widgetParams)
+                                        widgetParamsArray: widgetParamsArray)
         
         panel.setWidgetsOrder(pagedOrder: newOrders, appMode: selectedAppMode)
         widgetRegistry.reorderWidgets()
@@ -55,8 +55,8 @@ final class WidgetUtils {
                                         panel: WidgetsPanel,
                                         appMode: OAApplicationMode,
                                         widgetRegistry: OAMapWidgetRegistry,
-                                        widgetParams: [String: Any]? = nil) -> [[String]] {
-        let newWidgetsList: NSMutableArray = buildNewWidgetsList(enabledWidgets: enabledWidgets, panel: panel, appMode: appMode, widgetRegistry: widgetRegistry, widgetParams: widgetParams)
+                                        widgetParamsArray: [[String: Any]]? = nil) -> [[String]] {
+        let newWidgetsList: NSMutableArray = buildNewWidgetsList(enabledWidgets: enabledWidgets, panel: panel, appMode: appMode, widgetRegistry: widgetRegistry, widgetParamsArray: widgetParamsArray)
         var newOrders = [[String]]()
         for page in orderedWidgetPages {
             var newOrder: [String] = []
@@ -79,18 +79,29 @@ final class WidgetUtils {
                                             panel: WidgetsPanel,
                                             appMode: OAApplicationMode,
                                             widgetRegistry: OAMapWidgetRegistry,
-                                            widgetParams: [String: Any]? = nil) -> NSMutableArray {
+                                            widgetParamsArray: [[String: Any]]? = nil) -> NSMutableArray {
         let newWidgetsList = NSMutableArray()
         let widgetsFactory = MapWidgetsFactory()
+        var widgetParamsArrayLocal = widgetParamsArray
         if !enabledWidgets.isEmpty {
             let currentWidgetIds = NSMutableArray(array: widgetRegistry.getWidgetsFor(panel).compactMap { ($0 as! MapWidgetInfo).key })
             for widgetInfoId in enabledWidgets {
                 if !currentWidgetIds.contains(widgetInfoId) {
+                    var params: [String: Any]?
+                    if widgetParamsArrayLocal != nil {
+                        if let index = widgetParamsArrayLocal?.firstIndex(where: {
+                            guard let id = $0["id"] as? String else { return false }
+                            return id == widgetInfoId
+                        }) {
+                            params = widgetParamsArrayLocal?.remove(at: index)
+                        }
+                    }
+                    
                     if let newMapWidgetInfo = createWidget(widgetId: widgetInfoId,
                                                            panel: panel,
                                                            widgetsFactory: widgetsFactory,
                                                            selectedAppMode: appMode,
-                                                           widgetParams: widgetParams) {
+                                                           widgetParams: params) {
                         newWidgetsList.add(newMapWidgetInfo)
                         currentWidgetIds.remove(widgetInfoId)
                     }

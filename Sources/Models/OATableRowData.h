@@ -53,6 +53,7 @@ typedef NS_ENUM(NSInteger, EOATableRowType) {
 
 - (void) setObj:(id)data forKey:(NSString *)key;
 - (nullable id) objForKey:(NSString *)key;
+- (void)removeObjectForKey:(nonnull NSString *)key;
 
 - (nullable NSString *) stringForKey:(NSString *)key;
 - (NSInteger) integerForKey:(NSString *)key;

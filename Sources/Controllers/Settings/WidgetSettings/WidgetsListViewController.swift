@@ -11,7 +11,7 @@ import SafariServices
 
 @objc(OAWidgetsListViewController)
 @objcMembers
-class WidgetsListViewController: OABaseNavbarSubviewViewController {
+final class WidgetsListViewController: OABaseNavbarSubviewViewController {
     
     private static let enabledWidgetsFilter = Int(KWidgetModeAvailable | kWidgetModeEnabled | kWidgetModeMatchingPanels)
     
@@ -20,10 +20,11 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
     private let kNoWidgetsKey = "noWidgets"
     private let kWidgetsInfoKey = "widget_info"
     private let kIsLastWidgetInSection = "isLastWidgetInSection"
+    private let kWidgetAddParamsKey = "widget_add_params"
+    
+    private let panels = WidgetsPanel.values
     
     private var editingComplexWidget: MapWidgetInfo?
-    
-    let panels = WidgetsPanel.values
     
     private var widgetPanel: WidgetsPanel! {
         didSet {
@@ -178,25 +179,33 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
                 createNewSection = WidgetType.isComplexWidget(lastWidget?.key ?? "")
             }
         }
+        
+        var widgetParametersForAddition: [String: Any]?
         var widgetStyleForRow: EOAWidgetSizeStyle?
+        
         if createNewSection {
-            createWidgetItems(NSOrderedSet(object: newWidget), Int(tableData.sectionCount()))
+            createWidgetItems(NSOrderedSet(object: newWidget), Int(tableData.sectionCount()), params: params)
         } else {
             widgetStyleForRow = updateWidgetStyleForRowsInLastPage(newWidget, lastSectionData)
-            createWidgetItem(newWidget, lastSectionData)
+            if var params {
+                params["id"] = newWidget.key
+                if let widgetStyleForRow, !editMode {
+                    params["widgetSizeStyle"] = widgetStyleForRow.rawValue
+                }
+                widgetParametersForAddition = params
+            }
+            createWidgetItem(newWidget, lastSectionData, params: widgetParametersForAddition)
             configureWidgetsSeparator()
         }
+        
         if editMode {
             DispatchQueue.main.async { [weak self] in
                 self?.tableView.reloadData()
                 self?.updateBottomButtons()
             }
         } else {
-            if var userInfo = params {
-                if let widgetStyleForRow {
-                    userInfo["widgetSizeStyle"] = widgetStyleForRow.rawValue
-                }
-                reorderWidgets(with: userInfo)
+            if let widgetParametersForAddition {
+                reorderWidgets(with: [widgetParametersForAddition])
             } else {
                 reorderWidgets()
             }
@@ -220,9 +229,10 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
     
     // MARK: - Additions
     
-    private func reorderWidgets(with widgetParams: [String: Any]? = nil) {
+    private func reorderWidgets(with widgetParamsArray: [[String: Any]]? = nil) {
         var orders = [[String]]()
         var currPage = [String]()
+        var addWidgetsParamsArray = widgetParamsArray
         for i in 0..<tableData.sectionData(for: 0).rowCount() {
             let rowData = tableData.sectionData(for: 0).getRow(i)
             
@@ -234,13 +244,20 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
             if let row = rowData.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo {
                 currPage.append(row.key)
             }
+            if editMode, let params = rowData.obj(forKey: kWidgetAddParamsKey) as? [String: Any] {
+                if addWidgetsParamsArray == nil {
+                    addWidgetsParamsArray = [[String: Any]]()
+                }
+                addWidgetsParamsArray?.append(params)
+                rowData.removeObject(forKey: kWidgetAddParamsKey)
+            }
         }
         orders.append(currPage)
         
         WidgetUtils.reorderWidgets(orderedWidgetPages: orders,
                                    panel: widgetPanel,
                                    selectedAppMode: selectedAppMode,
-                                   widgetParams: widgetParams)
+                                   widgetParamsArray: widgetParamsArray ?? addWidgetsParamsArray)
     }
 }
 
@@ -487,13 +504,13 @@ extension WidgetsListViewController {
             tableData.clearAllData()
             tableData.createNewSection()
             for i in 0..<pagedWidgets.count {
-                createWidgetItems(pagedWidgets[i], i)
+                createWidgetItems(pagedWidgets[i], i, params: nil)
             }
             configureWidgetsSeparator()
         }
     }
     
-    private func createWidgetItems(_ widgets: NSOrderedSet, _ pageIndex: Int) {
+    private func createWidgetItems(_ widgets: NSOrderedSet, _ pageIndex: Int, params: [String: Any]?) {
         let section = tableData.sectionData(for: 0)
         let row = section.createNewRow()
         row.key = kPageKey
@@ -502,11 +519,11 @@ extension WidgetsListViewController {
         
         let sortedWidgets = (widgets.array as! [MapWidgetInfo]).sorted { $0.priority < $1.priority }
         for widget in sortedWidgets {
-            createWidgetItem(widget, section)
+            createWidgetItem(widget, section, params: params)
         }
     }
     
-    private func createWidgetItem(_ widget: MapWidgetInfo, _ section: OATableSectionData) {
+    private func createWidgetItem(_ widget: MapWidgetInfo, _ section: OATableSectionData, params: [String: Any]?) {
         if section.rowCount() > 0 && section.getRow(0).key != kPageKey {
             section.addRow(OATableRowData(), position: 0)
             let row = section.getRow(0)
@@ -516,6 +533,9 @@ extension WidgetsListViewController {
         
         let row = section.createNewRow()
         row.setObj(widget, forKey: kWidgetsInfoKey)
+        if let params {
+            row.setObj(params, forKey: kWidgetAddParamsKey)
+        }
         if widget.widget.widgetType == .sunPosition,
            let sunPositionWidgetState = widget.getWidgetState() as? OASunriseSunsetWidgetState {
             row.iconName = sunPositionWidgetState.getWidgetIconName()

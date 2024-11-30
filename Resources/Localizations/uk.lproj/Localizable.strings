@@ -3587,3 +3587,9 @@
 "max_sensor_cadence" = "Каденція велосипеда, макс";
 "avg_sensor_cadence" = "Каденція велосипеда, середня";
 "shared_string_minute_lowercase" = "хв";
+"add_widget_to_the_left" = "Додати віджет ліворуч";
+"delete_widget" = "Видалити віджет?";
+"add_widget_to_the_right" = "Додайте віджет праворуч";
+"delete_widget_description" = "Цей віджет буде видалено. Ви можете відновити його пізніше на екрані налаштування.";
+"add_widget_below" = "Додайте віджет нижче";
+"add_widget_above" = "Додайте віджет вище";

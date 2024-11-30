@@ -3584,3 +3584,9 @@
 "help_article_map_tracks_name" = "Pistas";
 "help_article_personal_color_palette_schemes_name" = "Esquemas de colores";
 "obd_plugin_name" = "Métricas del panel de control";
+"add_widget_above" = "Añadir widget arriba";
+"add_widget_to_the_right" = "Añadir widget a la derecha";
+"delete_widget" = "¿Eliminar widget ?";
+"delete_widget_description" = "Este widget se eliminará. Puedes restaurarlo más tarde en la pantalla Configurar.";
+"add_widget_below" = "Añade un widget a continuación";
+"add_widget_to_the_left" = "Añadir widget a la izquierda";

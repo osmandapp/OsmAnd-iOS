@@ -3593,3 +3593,9 @@
 "help_article_troubleshooting_resources_name" = "Recursos y personalizaciones";
 "sort_subfolders_tracks" = "Ordenar subcarpetas";
 "shared_string_sorted_by" = "ordenada por:";
+"delete_widget_description" = "Este widget se borrará. Podés restaurarlo luego en «Configurar pantalla».";
+"add_widget_above" = "Agregar widget encima";
+"add_widget_to_the_left" = "Agregar widget a la izquierda";
+"delete_widget" = "¿Borrar widget?";
+"add_widget_below" = "Agregar widget debajo";
+"add_widget_to_the_right" = "Agregar widget a la derecha";

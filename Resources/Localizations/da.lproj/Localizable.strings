@@ -3583,3 +3583,9 @@
 "shared_string_subfolders_in" = "Undermapper i";
 "shared_string_sorted_by" = "er sorteret efter:";
 "help_article_personal_tracks_smart_folder_name" = "Smartmappe (filter)";
+"add_widget_to_the_right" = "Tilføj modul til højre";
+"delete_widget" = "Slet modul?";
+"add_widget_below" = "Tilføj modul nedenfor";
+"add_widget_to_the_left" = "Tilføj modul til venstre";
+"delete_widget_description" = "Dette modul bliver slettet. Du kan gendanne det senere i Konfigurer skærm.";
+"add_widget_above" = "Tilføj modul ovenfor";

@@ -82,8 +82,6 @@
 #define VERSION_4_4_1 4.41
 #define VERSION_4_7_4 4.74
 
-#define kMaxLogFiles 3
-
 #define kAppData @"app_data"
 #define kSubfolderPlaceholder @"_%_"
 #define kBuildVersion @"buildVersion"
@@ -187,7 +185,7 @@
         _legacyFavoritesFilePrefix = @"favourites";
 
         [self buildFolders];
-        [self createLogFile];
+        [OALogger createLogFileIfNeeded];
 
         [self initOpeningHoursParser];
 
@@ -232,38 +230,6 @@
         if (![fileManager createDirectoryAtPath:path withIntermediateDirectories:NO attributes:nil error:&error])
             OALog(@"Error creating folder \"%@\": %@", path, error.localizedFailureReason);
     }
-}
-
-- (void) createLogFile
-{
-#if DEBUG
-    return;
-#else
-    NSFileManager *manager = NSFileManager.defaultManager;
-    NSString *logsPath = [_documentsPath stringByAppendingPathComponent:@"Logs"];
-    if (![manager fileExistsAtPath:logsPath])
-        [manager createDirectoryAtPath:logsPath withIntermediateDirectories:NO attributes:nil error:nil];
-    NSArray<NSString *> *files = [manager contentsOfDirectoryAtPath:logsPath error:nil];
-    
-    files = [[[files sortedArrayUsingComparator:^NSComparisonResult(NSString *filename1, NSString *filename2) {
-        return [filename1 compare:filename2];
-    }] reverseObjectEnumerator] allObjects];
-    
-    for (NSInteger i = 0; i < files.count; i++)
-    {
-        if (i > kMaxLogFiles)
-           [manager removeItemAtPath:[logsPath stringByAppendingPathComponent:files[i]] error:nil];
-    }
-    
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"MMM dd, yyyy HH:mm:ss"];
-    NSString *destPath = [[logsPath stringByAppendingPathComponent:[formatter stringFromDate:NSDate.date]] stringByAppendingPathExtension:@"log"];
-    
-    freopen([destPath fileSystemRepresentation], "a+", stdin);
-    freopen([destPath fileSystemRepresentation], "a+", stdout);
-    freopen([destPath fileSystemRepresentation], "a+", stderr);
-    
-#endif
 }
 
 - (void) initOpeningHoursParser

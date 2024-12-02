@@ -82,9 +82,9 @@ final class WidgetUtils {
                                             widgetParamsArray: [[String: Any]]? = nil) -> NSMutableArray {
         let newWidgetsList = NSMutableArray()
         let widgetsFactory = MapWidgetsFactory()
-        var widgetParamsArrayLocal = widgetParamsArray
         if !enabledWidgets.isEmpty {
             let currentWidgetIds = NSMutableArray(array: widgetRegistry.getWidgetsFor(panel).compactMap { ($0 as! MapWidgetInfo).key })
+            var widgetParamsArrayLocal = widgetParamsArray
             for widgetInfoId in enabledWidgets {
                 if !currentWidgetIds.contains(widgetInfoId) {
                     var params: [String: Any]?

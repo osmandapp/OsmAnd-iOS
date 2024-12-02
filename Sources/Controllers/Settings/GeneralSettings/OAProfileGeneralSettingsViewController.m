@@ -22,6 +22,10 @@
 {
     NSArray<NSArray *> *_data;
     OAAppSettings *_settings;
+    int _sectionAppearance;
+    int _sectionUnitsAndFormats;
+    int _sectionOther;
+    int _sectionAnimateMyPosition;
 }
 
 #pragma mark - Initialization
@@ -29,6 +33,10 @@
 - (void)commonInit
 {
     _settings = [OAAppSettings sharedManager];
+    _sectionAppearance = -1;
+    _sectionUnitsAndFormats = -1;
+    _sectionOther = -1;
+    _sectionAnimateMyPosition = -1;
 }
 
 #pragma mark - UIViewController
@@ -306,19 +314,40 @@
         @"key" : @"externalImputDevice",
     }];
     [tableData addObject:appearanceArr];
+    _sectionAppearance = (int) tableData.count - 1;
     [tableData addObject:unitsAndFormatsArr];
+    _sectionUnitsAndFormats = (int) tableData.count - 1;
     [tableData addObject:otherArr];
+    _sectionOther = (int) tableData.count - 1;
+    [tableData addObject:@[@{
+        @"type" : [OASwitchTableViewCell getCellIdentifier],
+        @"title" : OALocalizedString(@"animate_my_location"),
+        @"isOn": [_settings.animateMyLocation get:self.appMode] ? @(YES) : @(NO),
+        @"key" : @"animateMyLocation",
+    }]];
+    _sectionAnimateMyPosition = (int) tableData.count - 1;
+
     _data = [NSArray arrayWithArray:tableData];
 }
 
 - (NSString *)getTitleForHeader:(NSInteger)section
 {
-    if (section == 0)
+    if (section == _sectionAppearance)
         return OALocalizedString(@"shared_string_appearance");
-    else if (section == 1)
+    else if (section == _sectionUnitsAndFormats)
         return OALocalizedString(@"units_and_formats");
-    else
+    else if (section == _sectionOther)
         return OALocalizedString(@"other_location");
+    else
+        return @"";
+}
+
+- (NSString *)getTitleForFooter:(NSInteger)section
+{
+    if (section == _sectionAnimateMyPosition)
+        return OALocalizedString(@"animate_my_location_descr");
+    else
+        return @"";
 }
 
 - (NSInteger)rowsCount:(NSInteger)section
@@ -336,16 +365,12 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASwitchTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
-            cell.separatorInset = UIEdgeInsetsMake(0., kPaddingToLeftOfContentWithIcon, 0., 0.);
-            cell.leftIconView.tintColor = UIColorFromRGB(color_icon_inactive);
         }
         if (cell)
         {
             cell.titleLabel.text = item[@"title"];
-
-            cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
-            cell.leftIconView.tintColor = [item[@"isOn"] boolValue] ? self.appMode.getProfileColor : UIColorFromRGB(color_icon_inactive);
 
             cell.switchView.on = [item[@"isOn"] boolValue];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
@@ -441,12 +466,9 @@
         UISwitch *sw = (UISwitch *) sender;
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10];
         NSDictionary *item = _data[indexPath.section][indexPath.row];
-        NSString *name = item[@"name"];
-        if (name)
-        {
-            [self generateData];
-            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
-        }
+        NSString *key = item[@"key"];
+        if ([key isEqualToString:@"animateMyLocation"])
+            [_settings.animateMyLocation set:sw.isOn mode:self.appMode];
     }
 }
 

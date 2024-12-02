@@ -19,7 +19,7 @@
 static const BOOL useShortFormat = NO;
 
 /// overwrite to YES to write log file in debug device. (while device is diconnected from XCode).
-/// warning: if you connect device back to XCode, in this mode all logs printed in file will not appear in XCode console (because that's how freopen() works)
+/// warning: set to YES only for diconnected device debugging time. if you connect device back to XCode, in this mode all logs printed in file will not appear in XCode console (because that's how freopen() works)
 static BOOL shouldWriteToLogFileInDubug = NO;
 
 /// overwrite to YES to stop deleting old log files in debug device.

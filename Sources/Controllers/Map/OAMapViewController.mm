@@ -79,7 +79,6 @@
 #import "Localization.h"
 #import "OsmAndSharedWrapper.h"
 
-
 //#include "OAMapMarkersCollection.h"
 #include "OASQLiteTileSourceMapLayerProvider.h"
 #include "OAWebClient.h"
@@ -3950,6 +3949,41 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     QList<float> heights;
     _geoTiffCollection->calculateHeights(OsmAnd::ZoomLevel14, _mapView.elevationDataTileSize, points, heights);
     return heights;
+}
+
+- (void)fitTrackOnMap:(LineChartView *)lineChartView
+             startPos:(double)startPos
+               endPos:(double)endPos
+             location:(CLLocationCoordinate2D)location
+             forceFit:(BOOL)forceFit
+             analysis:(OASGpxTrackAnalysis *)analysis
+              segment:(OASTrkSegment *)segment
+     trackChartHelper:(TrackChartHelper *)trackChartHelper
+{
+    OASKQuadRect *rect = [trackChartHelper getRect:lineChartView
+                                          startPos:startPos
+                                            endPos:endPos
+                                          analysis:analysis
+                                           segment:segment];
+    if (rect.left != 0 && rect.right != 0)
+    {
+        auto point = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.latitude, location.longitude));
+        CGPoint mapPoint;
+        [self.mapView convert:&point toScreen:&mapPoint checkOffScreen:YES];
+
+        if (forceFit && trackChartHelper.delegate)
+        {
+            [trackChartHelper.delegate centerMapOnBBox:rect];
+        }
+        else if (CLLocationCoordinate2DIsValid(location)
+                 && !CGRectContainsPoint(trackChartHelper.screenBBox, mapPoint))
+        {
+            if (!trackChartHelper.isLandscape && trackChartHelper.delegate)
+                [trackChartHelper.delegate adjustViewPort:trackChartHelper.isLandscape];
+            [self goToPosition:[OANativeUtilities convertFromPointI:point]
+                      animated:YES];
+        }
+    }
 }
 
 @end

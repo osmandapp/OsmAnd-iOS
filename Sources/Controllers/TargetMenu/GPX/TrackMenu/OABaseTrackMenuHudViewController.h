@@ -102,6 +102,7 @@ typedef NS_ENUM(NSUInteger, EOATrackHudMode)
 @property (weak, nonatomic, readonly) OAMapViewController *mapViewController;
 
 - (instancetype)initWithGpx:(OASTrackItem *)gpx;
+- (instancetype)initWithGpx:(OASTrackItem *)gpx analysis:(OASGpxTrackAnalysis *)analysis;
 
 - (void)updateGpxData:(BOOL)replaceGPX updateDocument:(BOOL)updateDocument;
 - (void)updateAnalysis;

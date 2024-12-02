@@ -25,7 +25,7 @@
 #define kWidthCorrectionValue 4
 #define kPathIconStepCoef 4.0f
 
-@class OASTrkSegment, OATrackChartPoints;
+@class OASTrkSegment, TrackChartPoints;
 
 struct RouteSegmentResult;
 
@@ -41,7 +41,8 @@ struct RouteSegmentResult;
                  segmentResult:(std::vector<std::shared_ptr<RouteSegmentResult>> &)segs
                      locations:(NSArray<CLLocation *> *)locations;
 
-- (void) showCurrentStatisticsLocation:(OATrackChartPoints *)trackPoints;
+- (void) showCurrentHighlitedLocation:(TrackChartPoints *)trackPoints;
+- (void) showCurrentStatisticsLocation:(TrackChartPoints *)trackPoints;
 - (void) hideCurrentStatisticsLocation;
 
 @end

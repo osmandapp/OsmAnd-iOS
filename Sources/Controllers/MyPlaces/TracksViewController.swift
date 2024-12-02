@@ -318,7 +318,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     
     fileprivate func createRowFor(folder: TrackFolder, section: OATableSectionData) {
         let folderRow = section.createNewRow()
-        let folderName = folder.getDirName()
+        let folderName = folder.getDirName(includingSubdirs: false)
         folderRow.cellType = OASimpleTableViewCell.reuseIdentifier
         folderRow.key = tracksFolderKey
         folderRow.title = folderName
@@ -390,7 +390,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func updateNavigationBarTitle() {
-        var title: String = currentFolder.getDirName()
+        var title: String = currentFolder.getDirName(includingSubdirs: false)
         if tableView.isEditing {
             let totalSelectedTracks = selectedTracks.count
             let totalSelectedFolders = selectedFolders.count
@@ -399,7 +399,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                 title = localizedString("select_items")
             } else {
                 let tracksInSelectedFolders = selectedFolders.reduce(0) { result, folderName -> Int in
-                    if let folder = currentFolder.getFlattenedSubFolders().first(where: { $0.getDirName() == folderName }) {
+                    if let folder = currentFolder.getFlattenedSubFolders().first(where: { $0.getDirName(includingSubdirs: false) == folderName }) {
                         return result + Int(folder.totalTracksCount)
                     }
                     return result
@@ -736,7 +736,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         if hasSelectedItems() {
             var allExportFilePaths: [String] = []
             for folderName in selectedFolders {
-                if let folder = currentFolder.getSubFolders().first(where: { $0.getDirName() == folderName }) {
+                if let folder = currentFolder.getSubFolders().first(where: { $0.getDirName(includingSubdirs: false) == folderName }) {
                     let allTracksFilePaths = folder.getTrackItems()
                         .compactMap({ $0.gpxFilePath })
                         .map { OsmAndApp.swiftInstance().gpxPath.appendingPathComponent($0)
@@ -759,7 +759,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             var allTracks: [GpxDataItem] = []
             allTracks.append(contentsOf: selectedTracks)
             for folderName in selectedFolders {
-                if let folder = currentFolder.getSubFolders().first(where: { $0.getDirName() == folderName }) {
+                if let folder = currentFolder.getSubFolders().first(where: { $0.getDirName(includingSubdirs: false) == folderName }) {
                     let tracks = folder.getTrackItems().compactMap({ $0.dataItem })
                     allTracks.append(contentsOf: tracks)
                 }
@@ -776,7 +776,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     @objc private func onNavbarDeleteButtonClicked() {
         if hasSelectedItems() {
             let tracksInSelectedFolders = selectedFolders.reduce(0) { (result, folderName) -> Int in
-                if let folder = currentFolder.getFlattenedSubFolders().first(where: { $0.getDirName() == folderName }) {
+                if let folder = currentFolder.getFlattenedSubFolders().first(where: { $0.getDirName(includingSubdirs: false) == folderName }) {
                     return result + Int(folder.totalTracksCount)
                 }
                 return result
@@ -835,7 +835,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         } else {
             guard let currentFolder = getTrackFolderByPath(currentFolderPath) else { return }
             let allFolders = currentFolder.getSubFolders()
-            selectedFolders = allFolders.map { $0.getDirName() }
+            selectedFolders = allFolders.map { $0.getDirName(includingSubdirs: false) }
             selectedTracks = currentFolder.getTrackItems().compactMap({ $0.dataItem }).filter { track in
                 !selectedFolders.contains(where: { folderName in
                     track.gpxFilePath.contains(folderName)
@@ -877,7 +877,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func onFolderExportButtonClicked(_ selectedFolderName: String) {
-        guard let selectedFolder = currentFolder.getSubFolders().first(where: { $0.getDirName() == selectedFolderName }) else { return }
+        guard let selectedFolder = currentFolder.getSubFolders().first(where: { $0.getDirName(includingSubdirs: false) == selectedFolderName }) else { return }
         let exportFilePaths = selectedFolder.getTrackItems().compactMap({ $0.path })
         let state = OATrackMenuViewControllerState()
         state.openedFromTracksList = true
@@ -1296,7 +1296,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     private func deleteFolder(_ folderName: String) {
         let folderPath = currentFolderAbsolutePath().appendingPathComponent(folderName)
         do {
-            if let folderForDelete = currentFolder.getSubFolders().first(where: { $0.getDirName() == folderName }) {
+            if let folderForDelete = currentFolder.getSubFolders().first(where: { $0.getDirName(includingSubdirs: false) == folderName }) {
                 let tracksItems: [GpxDataItem] = folderForDelete.getFlattenedTrackItems().compactMap({ $0.dataItem })
                 if !tracksItems.isEmpty {
                     tracksItems.forEach({
@@ -1967,7 +1967,7 @@ extension TracksViewController {
             self.setupNavBarMenuButton()
             self.updateData()
             if isSortingSubfolders {
-                let sortingFolderName = self.currentFolder.getDirName()
+                let sortingFolderName = self.currentFolder.getDirName(includingSubdirs: false)
                 let sortingOrderName = localizedString(sortType.title)
                 let message = "\(localizedString("shared_string_subfolders_in")) “\(sortingFolderName)” \(localizedString("shared_string_sorted_by")) “\(sortingOrderName)”"
                 OAUtilities.showToast("", details: message, duration: 4, verticalOffset: 120, in: self.view)

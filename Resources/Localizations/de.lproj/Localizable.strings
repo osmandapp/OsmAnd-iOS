@@ -3595,3 +3595,14 @@
 "shared_string_subfolders_in" = "Unterordner in";
 "obd_plugin_name" = "Fahrzeugdaten";
 "shared_string_sorted_by" = "sortiert nach:";
+"add_widget_below" = "Widget unten hinzufügen";
+"add_widget_above" = "Widget oben hinzufügen";
+"add_widget_to_the_left" = "Widget links hinzufügen";
+"delete_widget" = "Widget löschen?";
+"add_widget_to_the_right" = "Widget rechts hinzufügen";
+"delete_widget_description" = "Dieses Widget wird gelöscht. Es kann im Menü „Konfigurieren“ wiederhergestellt werden.";
+"help_article_map_tracks_appearance_name" = "Track-Darstellung";
+"help_article_personal_tracks_manage_tracks_name" = "Tracks verwalten";
+"help_article_personal_tracks_smart_folder_name" = "Intelligenter Ordner (Filter)";
+"help_article_troubleshooting_resources_name" = "Hilfsmittel und Anpassungen";
+"help_article_troubleshooting_video_tutorials_name" = "Video-Tutorials und Anleitungen";

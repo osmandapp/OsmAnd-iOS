@@ -3564,3 +3564,9 @@
 "shared_string_sorted_by" = "setříděno podle:";
 "shared_string_interface" = "Rozhraní";
 "lock_screen_description" = "Zapne nebo vypne funkce dotykové obrazovky, aby se zabránilo nechtěným klepnutím";
+"add_widget_below" = "Přidat nástroj dolů";
+"add_widget_above" = "Přidat nástroj nahoru";
+"add_widget_to_the_right" = "Přidat nástroj vpravo";
+"add_widget_to_the_left" = "Přidat nástroj vlevo";
+"delete_widget" = "Odstranit nástroj?";
+"delete_widget_description" = "Tento nástroj bude odstraněn. Můžete jej obnovit později v Nastavení obrazovky.";

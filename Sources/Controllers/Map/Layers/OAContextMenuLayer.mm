@@ -28,6 +28,7 @@
 #import "OAUtilities.h"
 #import "OAPointDescription.h"
 #import "OATransportStopsBaseController.h"
+#import "OAMapRendererEnvironment.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
@@ -378,6 +379,28 @@
     OsmAnd::AreaI area(OsmAnd::PointI(touchPoint.x - delta, touchPoint.y - delta), OsmAnd::PointI(touchPoint.x + delta, touchPoint.y + delta));
 
     const auto& symbolInfos = [mapView getSymbolsIn:area strict:NO];
+    OAMapRendererEnvironment * menv = [mapViewController mapRendererEnv];
+    OsmAnd::PointI p(OsmAnd::Utilities::get31TileNumberX(lon), OsmAnd::Utilities::get31TileNumberY(lat));
+    QList<std::shared_ptr<const OsmAnd::MapObject>> polygons = menv.mapPrimitivesProvider->retreivePolygons(p, mapView.zoomLevel);
+    
+    for (const auto & mapObj : polygons)
+    {
+        QString s = "";
+        for (auto i = mapObj->captions.begin(); i != mapObj->captions.end(); ++i)
+        {
+            QString c = i.value();
+            if (!c.isEmpty()) {
+                s.append(c + " ");
+            }
+        }
+        QHash<QString, QString> tags = mapObj->getResolvedAttributes();
+        for (auto i = tags.begin(); i != tags.end(); ++i)
+        {
+            s.append(i.key() + ":" + i.value() + " ");
+        }
+        OsmAnd::LogPrintf(OsmAnd::LogSeverityLevel::Info, "POLYGON: %s", qPrintable(s));
+    }
+       
     NSString *roadTitle = [[OAReverseGeocoder instance] lookupAddressAtLat:lat lon:lon];
 
     if (!_pointLayers)

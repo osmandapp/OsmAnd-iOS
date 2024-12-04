@@ -101,11 +101,13 @@
 {
     NSString *gpxPath = [self.filePath stringByReplacingOccurrencesOfString:OsmAndApp.instance.documentsPath withString:@""];
 
-    if ([gpxPath hasPrefix:@"/GPX"]) {
+    if ([gpxPath hasPrefix:@"/GPX"])
+    {
         gpxPath = [@"/tracks" stringByAppendingString:[gpxPath substringFromIndex:4]];
     }
     
-    if ([gpxPath isEqualToString:self.fileName]) {
+    if ([gpxPath isEqualToString:self.fileName])
+    {
         return self.fileName;
     }
 

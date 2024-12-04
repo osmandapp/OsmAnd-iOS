@@ -234,6 +234,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
             searchController?.searchBar.placeholder = localizedString("shared_string_search")
             searchController?.searchBar.returnKeyType = .go
             navigationItem.searchController = searchController
+            navigationItem.hidesSearchBarWhenScrolling = false
             definesPresentationContext = true
         }
     }
@@ -353,8 +354,13 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
                 row.title = folderItem.displayName
                 row.icon = folderItem.icon
                 row.iconTintColor = folderItem.iconTintColor
-                if let tracksCount = listFilterType?.getTracksCountForItem(itemName: folderItem.key) {
-                    row.descr = String(describing: tracksCount)
+                let folderTracks = TracksSearchFilter.getTrackFolderByPath(folderItem.key)?.getTrackItems()
+                let filteredTracks = baseFilters.getFilteredTrackItems()
+                let matchingTracksCount = folderTracks?.filter { trackItem in
+                    filteredTracks.contains(where: { $0.path == trackItem.path })
+                }.count
+                if let totalTracksCount = folderTracks?.count, let matchingTracksCount = matchingTracksCount {
+                    row.descr = "\(matchingTracksCount)/\(totalTracksCount)"
                 }
                 
                 if !isRootFolder {
@@ -403,10 +409,8 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
             cell.maxTextField.delegate = self
             cell.minTextField.tag = .min
             cell.maxTextField.tag = .max
-            cell.minTextField.returnKeyType = .go
-            cell.maxTextField.returnKeyType = .go
-            cell.minTextField.enablesReturnKeyAutomatically = true
-            cell.maxTextField.enablesReturnKeyAutomatically = true
+            cell.minTextField.keyboardType = .numberPad
+            cell.maxTextField.keyboardType = .numberPad
             cell.minTextField.text = valueFromInputText
             cell.maxTextField.text = valueToInputText
             cell.minValueLabel.text = minFilterValueText
@@ -506,6 +510,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
     }
     
     override func onRightNavbarButtonPressed() {
+        view.endEditing(true)
         switch filterType {
         case .length, .duration, .timeInMotion, .averageSpeed, .maxSpeed, .averageAltitude, .maxAltitude, .uphill, .downhill, .maxSensorSpeed, .averageSensorSpeed, .maxSensorHeartRate, .averageSensorHeartRate, .maxSensorCadence, .averageSensorCadence, .maxSensorBicyclePower, .averageSensorBicyclePower, .maxSensorTemperature, .averageSensorTemperature:
             rangeFilterType?.setValueFrom(from: String(Int(currentValueFrom)), updateListeners_: false)
@@ -776,10 +781,5 @@ extension TracksFilterDetailsViewController: UITextFieldDelegate {
         default:
             break
         }
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
     }
 }

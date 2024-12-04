@@ -249,8 +249,10 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
             cell.descriptionVisibility(false)
             if let isValid = item.obj(forKey: Self.isValidFilterKey) as? Bool, isValid {
                 cell.selectionStyle = .default
+                cell.titleLabel.textColor = .textColorPrimary
             } else {
                 cell.selectionStyle = .none
+                cell.titleLabel.textColor = .textColorSecondary
             }
             cell.accessoryType = .disclosureIndicator
             cell.titleLabel.text = item.title

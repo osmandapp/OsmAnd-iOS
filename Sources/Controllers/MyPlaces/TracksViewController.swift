@@ -491,14 +491,17 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         filterButton.isHidden = !searchIsActive
     }
     
-    private func updateFilterButtonTitle() {
+    private func updateFilterButton() {
         var baseTitle = localizedString("filter_current_poiButton")
+        var baseIcon: UIImage = .icCustomFilter
         if let count = baseFilters?.getAppliedFiltersCount(), count > 0 {
             baseTitle += " (\(count))"
+            baseIcon = .icCustomFilterFilled
         }
         
         var currentConfig = filterButton.configuration ?? UIButton.Configuration.plain()
         currentConfig.title = baseTitle
+        filterButton.setImage(baseIcon, for: .normal)
         filterButton.configuration = currentConfig
     }
     
@@ -1626,7 +1629,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                 }
             } else if item.key == trackKey {
                 if let trackPath = item.obj(forKey: pathKey) as? String,
-                   let track = currentFolder.getTrackItems().first(where: { $0.gpxFilePath == trackPath }),
+                   let track = currentFolder.getFlattenedTrackItems().first(where: { $0.gpxFilePath == trackPath }),
                    let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
                     OARootViewController.instance().mapPanel.openTargetViewWithGPX(fromTracksList: track,
                                                                                    navControllerHistory: newCurrentHistory,
@@ -1836,7 +1839,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                 self.updateSearchController()
                 self.generateData()
                 self.tableView.reloadData()
-                self.updateFilterButtonTitle()
+                self.updateFilterButton()
             }
         }
     }
@@ -1860,6 +1863,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             isNameFiltered = false
             baseFilters = TracksSearchFilter(trackItems: rootFolder.getFlattenedTrackItems(), currentFolder: nil)
             baseFilters?.addFiltersChangedListener(self)
+            TracksSearchFilter.setRootFolder(rootFolder)
         } else if searchController.isActive && !(searchController.searchBar.searchTextField.text ?? "").isEmpty {
             isSearchActive = true
             isNameFiltered = true

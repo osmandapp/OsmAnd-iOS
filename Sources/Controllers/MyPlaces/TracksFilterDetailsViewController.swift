@@ -354,12 +354,12 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
                 row.title = folderItem.displayName
                 row.icon = folderItem.icon
                 row.iconTintColor = folderItem.iconTintColor
-                let folderTracks = TracksSearchFilter.getTrackFolderByPath(folderItem.key)?.getTrackItems()
-                let filteredTracks = baseFilters.getFilteredTrackItems()
-                let matchingTracksCount = folderTracks?.filter { trackItem in
-                    filteredTracks.contains(where: { $0.path == trackItem.path })
-                }.count
-                if let totalTracksCount = folderTracks?.count, let matchingTracksCount = matchingTracksCount {
+                if let folderTracks = TracksSearchFilter.getTrackFolderByPath(folderItem.key)?.getTrackItems() {
+                    let filteredTracks = baseFilters.getFilteredTrackItems()
+                    let matchingTracksCount = folderTracks.filter { trackItem in
+                        filteredTracks.contains(where: { $0.path == trackItem.path })
+                    }.count
+                    let totalTracksCount = folderTracks.count
                     row.descr = "\(matchingTracksCount)/\(totalTracksCount)"
                 }
                 

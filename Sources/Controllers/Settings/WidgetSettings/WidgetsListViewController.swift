@@ -184,7 +184,10 @@ final class WidgetsListViewController: OABaseNavbarSubviewViewController {
         var widgetStyleForRow: EOAWidgetSizeStyle?
         
         if createNewSection {
-            createWidgetItems(NSOrderedSet(object: newWidget), Int(tableData.sectionCount()), params: params)
+            var updatedParams = params
+            updatedParams?["id"] = newWidget.key
+            widgetParametersForAddition = updatedParams
+            createWidgetItems(NSOrderedSet(object: newWidget), Int(tableData.sectionCount()), params: widgetParametersForAddition)
         } else {
             widgetStyleForRow = updateWidgetStyleForRowsInLastPage(newWidget, lastSectionData)
             if var params {

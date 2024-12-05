@@ -23,7 +23,7 @@
 "auto_follow_location_enabled" = "Automatsko centriranje karte je uključeno.";
 "unknown_location" = "Položaj nije poznat";
 "animate_routing_route_not_calculated" = "Molimo vas, prvo izračunajte rutu";
-"settings_preset" = "Korisnički profil";
+"settings_preset" = "Standardni profil";
 "settings_preset_descr" = "Odaberite korisnički profil s već prilagođenim kartama i navigacijskim postavkama.";
 "unit_of_length" = "Jedinice duljine";
 "unit_of_length_descr" = "Promijeni jedinicu mjerenja duljine.";
@@ -342,7 +342,7 @@
 "lang_sk" = "Slovački";
 "lang_sl" = "Slovenski";
 "lang_sq" = "Albanski";
-"lang_sr" = "Srpski";
+"lang_sr" = "Srpski (ćirilica)";
 "lang_sv" = "Švedski";
 "lang_sw" = "Svahili";
 "lang_ta" = "Tamilski";
@@ -418,10 +418,8 @@
 
 
 "vector_data" = "Offline vektorske karte";
-
 "configure_map" = "Konfiguracija karte";
 "parking_place" = "Parkirno mjesto";
-
 "favorite_home_category" = "Doma";
 "map_widget_parking" = "Parkiralište";
 "gpx_tags_txt" = "Oznake";
@@ -739,3 +737,18 @@
 "download_srtm_maps" = "Obrisi linija";
 "shared_string_show" = "Prikaži";
 "shared_string_local" = "Lokalno";
+"ltr_or_rtl_combine_via_dash" = "%@ – %@";
+"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"shared_string_restoring" = "Obnavljanje";
+"lang_sr_latn" = "Srpski (latinica)";
+"ltr_or_rtl_combine_via_comma" = "%@, %@";
+"downloaded_bytes" = "%@ od %@";
+"of" = "%d od %d";
+"ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
+"ltr_or_rtl_combine_via_of" = "%ld od %ld";
+"configure_screen_quick_action" = "Brza radnja";
+"restoring_from" = "Obnavljanje odabranih podataka iz oblaka";
+"ltr_or_rtl_combine_via_or" = "%@ ili %@";
+"ltr_or_rtl_combine_via_space" = "%@ %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
+"lang_sr-Latn" = "Srpski (latinica)";

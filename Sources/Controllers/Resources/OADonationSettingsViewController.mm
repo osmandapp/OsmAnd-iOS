@@ -19,6 +19,7 @@
 #import "OAWorldRegion.h"
 #import "OAIAPHelper.h"
 #import "OANetworkUtilities.h"
+#import "OALog.h"
 #import <MBProgressHUD.h>
 
 #include <OsmAndCore/WorldRegions.h>
@@ -564,7 +565,7 @@
                                 if (![map objectForKey:@"error"])
                                 {
                                     NSString *userId = [map objectForKey:@"userid"];
-                                    NSLog(@"UserId = %@", userId);
+                                    OALog(@"UserId = %@", userId);
                                     if (userId.length > 0)
                                     {
                                         [_settings.billingUserId set:userId];

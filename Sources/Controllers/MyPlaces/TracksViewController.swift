@@ -1289,7 +1289,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                     updateAllFoldersVCData(forceLoad: true)
                 }
             } else {
-                NSLog("renameFolder -> parentFile is empty")
+                OALog("renameFolder -> parentFile is empty")
             }
         } else {
             showErrorAlert(localizedString("folder_already_exsists"))

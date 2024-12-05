@@ -16,6 +16,7 @@
 #import "OAPOI.h"
 #import "OAAbstractCard.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OALog.h"
 
 typedef NS_ENUM(NSInteger, EOAWikiImageType) {
     EOAWikiImageTypeWikimedia = 0,
@@ -175,22 +176,22 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *ca
                     }
                     catch(NSException *e)
                     {
-                        NSLog(@"OsmandApi photos json serialising error: %@", e.reason);
+                        OALog(@"OsmandApi photos json serialising error: %@", e.reason);
                     }
                 }
                 else
                 {
-                    NSLog(@"OsmandApi photos error parsing json: %@", error);
+                    OALog(@"OsmandApi photos error parsing json: %@", error);
                 }
             }
             else
             {
-                NSLog(@"OsmandApi photos error: %@", error);
+                OALog(@"OsmandApi photos error: %@", error);
             }
         }
         else
         {
-            NSLog(@"Error retrieving OsmandApi photos: %@", error);
+            OALog(@"Error retrieving OsmandApi photos: %@", error);
         }
         [self runCallback:cards];
     }] resume];
@@ -291,22 +292,22 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *ca
                     }
                     catch(NSException *e)
                     {
-                        NSLog(@"Wikidata photos json serialising error: %@", e.reason);
+                        OALog(@"Wikidata photos json serialising error: %@", e.reason);
                     }
                 }
                 else
                 {
-                    NSLog(@"Wikidata photos error parsing json: %@", error);
+                    OALog(@"Wikidata photos error parsing json: %@", error);
                 }
             }
             else
             {
-                NSLog(@"Wikidata photos error: %@", error);
+                OALog(@"Wikidata photos error: %@", error);
             }
         }
         else
         {
-            NSLog(@"Error retrieving Wikidata photos: %@", error);
+            OALog(@"Error retrieving Wikidata photos: %@", error);
         }
         dispatch_async(dispatch_get_main_queue(), ^{
             [self readyToAddWithType:EOAWikiImageTypeWikidata cards:cards];
@@ -365,22 +366,22 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *ca
                     }
                     catch(NSException *e)
                     {
-                        NSLog(@"Wikimedia photos json serialising error: %@", e.reason);
+                        OALog(@"Wikimedia photos json serialising error: %@", e.reason);
                     }
                 }
                 else
                 {
-                    NSLog(@"Wikimedia photos error parsing json: %@", error);
+                    OALog(@"Wikimedia photos error parsing json: %@", error);
                 }
             }
             else
             {
-                NSLog(@"Wikimedia photos error: %@", error);
+                OALog(@"Wikimedia photos error: %@", error);
             }
         }
         else
         {
-            NSLog(@"Error retrieving Wikimedia photos: %@", error);
+            OALog(@"Error retrieving Wikimedia photos: %@", error);
         }
         if (ready)
         {

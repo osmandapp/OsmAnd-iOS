@@ -11,6 +11,7 @@
 #import "OABackupHelper.h"
 #import "OAPrepareBackupResult.h"
 #import "OASettingsItem.h"
+#import "OALog.h"
 
 @implementation OAImportBackupItemsTask
 {
@@ -57,7 +58,7 @@
         [_importer importItems:_items remoteFiles:remoteFiles forceReadData:_foreceReadData restoreDeleted:_restoreDeleted];
         return YES;
     } @catch (NSException *exception) {
-        NSLog(@"Failed to import items from backup");
+        OALog(@"Failed to import items from backup");
     }
     return NO;
 }

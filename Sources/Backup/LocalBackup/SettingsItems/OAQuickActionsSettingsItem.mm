@@ -18,6 +18,7 @@
 #import "OAShowHidePoiAction.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OALog.h"
 
 #define APPROXIMATE_QUICK_ACTION_SIZE_BYTES 135
 
@@ -168,7 +169,7 @@
         }
         @catch (NSException *e)
         {
-            NSLog(@"Failed to read quick action items: %@", e.reason);
+            OALog(@"Failed to read quick action items: %@", e.reason);
             return;
         }
     }

@@ -25,6 +25,7 @@
 #import "OAFavoritesSettingsItem.h"
 #import "OAPluginsHelper.h"
 #import "OsmAndSharedWrapper.h"
+#import "OALog.h"
 
 #import <EventKit/EventKit.h>
 #import "OsmAnd_Maps-Swift.h"
@@ -64,7 +65,7 @@ static NSOperationQueue *_favQueue;
         NSError *error = nil;
         [[NSFileManager defaultManager] moveItemAtPath:oldfFavoritesFilename toPath:favoritesLegacyFilename error:&error];
         if (error)
-            NSLog(@"Error moving file: %@ to %@ - %@", oldfFavoritesFilename, favoritesLegacyFilename, [error localizedDescription]);
+            OALog(@"Error moving file: %@ to %@ - %@", oldfFavoritesFilename, favoritesLegacyFilename, [error localizedDescription]);
     }
 
     // Move legacy favorites backup folder to new location
@@ -74,7 +75,7 @@ static NSOperationQueue *_favQueue;
         NSError *error = nil;
         [[NSFileManager defaultManager] moveItemAtPath:oldFavoritesBackupPath toPath:app.favoritesBackupPath error:&error];
         if (error)
-            NSLog(@"Error moving dir: %@ to %@ - %@", oldFavoritesBackupPath, app.favoritesBackupPath, [error localizedDescription]);
+            OALog(@"Error moving dir: %@ to %@ - %@", oldFavoritesBackupPath, app.favoritesBackupPath, [error localizedDescription]);
     }
 
     BOOL legacyFavoritesExists = [[NSFileManager defaultManager] fileExistsAtPath:favoritesLegacyFilename];
@@ -708,7 +709,7 @@ static NSOperationQueue *_favQueue;
         archiveWriter.createArchive(&ok, backupFile, filesList, basePath);
     }
     if (!ok)
-        NSLog(@"ERROR: Favorites backup failed");
+        OALog(@"ERROR: Favorites backup failed");
 
     [self.class clearOldBackups:[self.class getBackupFiles] maxCount:BACKUP_MAX_COUNT];
 }
@@ -1080,7 +1081,7 @@ static NSOperationQueue *_favQueue;
             EKEvent *event = [eventStore eventWithIdentifier:plugin.getEventIdentifier];
             NSError *error;
             if (![eventStore removeEvent:event span:EKSpanFutureEvents error:&error])
-                NSLog(@"%@", [error localizedDescription]);
+                OALog(@"%@", [error localizedDescription]);
             else
                 [plugin setEventIdentifier:nil];
         }

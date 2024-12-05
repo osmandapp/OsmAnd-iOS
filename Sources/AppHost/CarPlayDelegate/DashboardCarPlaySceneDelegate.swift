@@ -8,13 +8,13 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
     private var isForegroundScene = false
     
     func sceneWillEnterForeground(_ scene: UIScene) {
-        NSLog("[CarPlay] DashboardCarPlaySceneDelegate sceneWillEnterForeground")
+        OALog("[CarPlay] DashboardCarPlaySceneDelegate sceneWillEnterForeground")
         isForegroundScene = true
         configureScene()
     }
     
     func sceneWillResignActive(_ scene: UIScene) {
-        NSLog("[CarPlay] DashboardCarPlaySceneDelegate sceneWillResignActive")
+        OALog("[CarPlay] DashboardCarPlaySceneDelegate sceneWillResignActive")
         NotificationCenter.default.removeObserver(self)
         isForegroundScene = false
         mapVC?.isCarPlayDashboardActive = false
@@ -68,13 +68,13 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
     }
     
     @objc private func appInitEventConfigureScene(notification: Notification) {
-        NSLog("[CarPlay] DashboardCarPlaySceneDelegate appInitEventConfigureScene")
+        OALog("[CarPlay] DashboardCarPlaySceneDelegate appInitEventConfigureScene")
         guard let userInfo = notification.userInfo,
               let item = userInfo["event"] as? Int,
               let event = AppLaunchEvent(rawValue: item) else { return }
         if case .setupRoot = event {
             guard isForegroundScene else { return }
-            NSLog("[CarPlay] DashboardCarPlaySceneDelegate appInitEventConfigureScene success")
+            OALog("[CarPlay] DashboardCarPlaySceneDelegate appInitEventConfigureScene success")
             configureScene()
         }
     }
@@ -83,7 +83,7 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
 extension DashboardCarPlaySceneDelegate: CPTemplateApplicationDashboardSceneDelegate {
     
     func templateApplicationDashboardScene(_ templateApplicationDashboardScene: CPTemplateApplicationDashboardScene, didConnect dashboardController: CPDashboardController, to window: UIWindow) {
-        NSLog("[CarPlay] DashboardCarPlaySceneDelegate didConnect")
+        OALog("[CarPlay] DashboardCarPlaySceneDelegate didConnect")
         self.window = window
         dashboardController.shortcutButtons = [
             CPDashboardButton(titleVariants: [localizedString("shared_string_navigation")], subtitleVariants: [""], image: UIImage(named: "ic_carplay_navigation")!, handler: { _ in
@@ -97,7 +97,7 @@ extension DashboardCarPlaySceneDelegate: CPTemplateApplicationDashboardSceneDele
     }
     
     func templateApplicationDashboardScene(_ templateApplicationDashboardScene: CPTemplateApplicationDashboardScene, didDisconnect dashboardController: CPDashboardController, from window: UIWindow) {
-        NSLog("[CarPlay] DashboardCarPlaySceneDelegate didDisconnect")
+//        OALog("[CarPlay] DashboardCarPlaySceneDelegate didDisconnect")
         dashboardVC?.detachFromCarPlayWindow()
         mapVC = nil
         self.window = nil

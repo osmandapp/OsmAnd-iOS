@@ -9,6 +9,7 @@
 #import "OAReverseGeocoder.h"
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
+#import "OALog.h"
 
 #include <OsmAndCore/Search/ReverseGeocoder.h>
 #include <OsmAndCore/RoadLocator.h>
@@ -86,7 +87,7 @@
 
 - (void) testAddressSearch:(NSString *)query lat:(double)lat lon:(double)lon
 {
-    NSLog(@"\n--- Start search: %@ ---", query);
+    OALog(@"\n--- Start search: %@ ---", query);
     
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
@@ -121,10 +122,10 @@
             name = res.address->getName(lang, transliterate).toNSString();
         }
         OsmAnd::LatLon pos = OsmAnd::Utilities::convert31ToLatLon(res.address->position31);
-        NSLog(@">> %@ (%f km)", name, OsmAnd::Utilities::distance(lon, lat, pos.longitude, pos.latitude) / 1000);
+        OALog(@">> %@ (%f km)", name, OsmAnd::Utilities::distance(lon, lat, pos.longitude, pos.latitude) / 1000);
     }
     
-    NSLog(@"+++ Finish search +++\n");
+    OALog(@"+++ Finish search +++\n");
 }
 
 @end

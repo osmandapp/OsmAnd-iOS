@@ -145,7 +145,7 @@
 
 - (void)cancelDownloadTasks
 {
-    NSLog(@"Cancel all download tasks");
+    OALog(@"Cancel all download tasks");
     @synchronized(_tasksSync)
     {
         [_tasks enumerateKeysAndObjectsUsingBlock:^(id key_, id obj_, BOOL *stop) {
@@ -158,7 +158,7 @@
 
 - (void)pauseDownloadTasks
 {
-    NSLog(@"Suspend all download tasks");
+    OALog(@"Suspend all download tasks");
     @synchronized(_tasksSync)
     {
         [_tasks enumerateKeysAndObjectsUsingBlock:^(id key_, id obj_, BOOL *stop) {
@@ -490,13 +490,13 @@
         // Start background task if not started yet
         if (_backgroundDownloadTask == UIBackgroundTaskInvalid)
         {
-            NSLog(@"Begin background download task");
+            OALog(@"Begin background download task");
             _backgroundDownloadTask = [[UIApplication sharedApplication] beginBackgroundTaskWithName:@"DownloadManagerBackgroundTask" expirationHandler:^{
-                NSLog(@"Background download expired");
+                OALog(@"Background download expired");
                 [self pauseDownloadTasks];
                 if (_backgroundDownloadTask != UIBackgroundTaskInvalid)
                 {
-                    NSLog(@"End background download task (time expired)");
+                    OALog(@"End background download task (time expired)");
                     [[UIApplication sharedApplication] endBackgroundTask:_backgroundDownloadTask];
                     _backgroundDownloadTask = UIBackgroundTaskInvalid;
 
@@ -561,7 +561,7 @@
         // When the all task are done, end the background task
         if (_tasks.count == 0 && _backgroundDownloadTask != UIBackgroundTaskInvalid)
         {
-            NSLog(@"End background download task (all downloads complete");
+            OALog(@"End background download task (all downloads complete");
             [[UIApplication sharedApplication] endBackgroundTask:_backgroundDownloadTask];
             _backgroundDownloadTask = UIBackgroundTaskInvalid;
         }

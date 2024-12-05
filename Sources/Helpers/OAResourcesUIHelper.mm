@@ -920,7 +920,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     NSURL *url = [NSURL URLWithString:urlString];
     NSURLRequest* request = [NSURLRequest requestWithURL:url];
 
-    NSLog(@"%@", url);
+    OALog(@"%@", url);
 
     id<OADownloadTask> task = [[OsmAndApp instance].downloadsManager downloadTaskWithRequest:request
                                                                                       andKey:[@"resource:" stringByAppendingString:resourceId]
@@ -1337,7 +1337,7 @@ includeHidden:(BOOL)includeHidden
             NSURL *url = [NSURL URLWithString:item.downloadUrl];
             NSURLRequest *request = [NSURLRequest requestWithURL:url];
 
-            NSLog(@"%@", url);
+            OALog(@"%@", url);
 
             OsmAndAppInstance app = [OsmAndApp instance];
             id<OADownloadTask> task = [app.downloadsManager downloadTaskWithRequest:request
@@ -1630,7 +1630,7 @@ includeHidden:(BOOL)includeHidden
         NSURL *url = [NSURL URLWithString:urlString];
         NSURLRequest *request = [NSURLRequest requestWithURL:url];
 
-        NSLog(@"%@", url);
+        OALog(@"%@", url);
         NSString* name = [self.class titleOfResourceType:item.resourceType
                                                 inRegion:item.worldRegion
                                           withRegionName:YES
@@ -1666,7 +1666,7 @@ includeHidden:(BOOL)includeHidden
         NSURL *url = [NSURL URLWithString:urlString];
         NSURLRequest *request = [NSURLRequest requestWithURL:url];
 
-        NSLog(@"%@", url);
+        OALog(@"%@", url);
 
         NSString* name = [self.class titleOfResource:item.resource
                                             inRegion:item.worldRegion
@@ -1734,7 +1734,7 @@ includeHidden:(BOOL)includeHidden
     NSURL *url = [NSURL URLWithString:urlString];
     NSURLRequest* request = [NSURLRequest requestWithURL:url];
 
-    NSLog(@"%@", url);
+    OALog(@"%@", url);
 
     OsmAndAppInstance app = [OsmAndApp instance];
     id<OADownloadTask> task = [app.downloadsManager downloadTaskWithRequest:request
@@ -2350,7 +2350,7 @@ includeHidden:(BOOL)includeHidden
 + (void)onlineCalculateRequestWithRouteCalculationResult:(OARouteCalculationResult *)routeCalculationResult
                                               completion:(LocationArrayCallback)completion
 {
-    NSLog(@"onlineCalculateRequestStartPoint start");
+    OALog(@"onlineCalculateRequestStartPoint start");
     NSURLSession *session = [NSURLSession sharedSession];
     
     NSString *routeUrlString = @"https://maptile.osmand.net/routing/route";
@@ -2373,10 +2373,10 @@ includeHidden:(BOOL)includeHidden
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     NSURLSessionDataTask *task = [session dataTaskWithRequest:request
                                             completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        NSLog(@"onlineCalculateRequestStartPoint finish");
+        OALog(@"onlineCalculateRequestStartPoint finish");
         if (error)
         {
-            NSLog(@"Error: %@", error);
+            OALog(@"Error: %@", error);
             if (completion)
             {
                 completion(nil, [NSError errorWithDomain:@"OnlineCalculateRequestErrorDomain" code:1 userInfo:@{NSLocalizedDescriptionKey: error.localizedDescription}]);
@@ -2393,7 +2393,7 @@ includeHidden:(BOOL)includeHidden
                     {
                         @try
                         {
-                            NSLog(@"Response: %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+                            OALog(@"Response: %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
                             NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
                             NSArray *features = json[@"features"];
                             NSMutableArray *locationArray = [NSMutableArray array];
@@ -2415,7 +2415,7 @@ includeHidden:(BOOL)includeHidden
                                     }
                                 }
                             }
-                            NSLog(@"Coordinates array: %@", locationArray);
+                            OALog(@"Coordinates array: %@", locationArray);
                             if (completion)
                             {
                                 completion([locationArray copy], nil);
@@ -2423,28 +2423,28 @@ includeHidden:(BOOL)includeHidden
                         }
                         @catch (NSException *e)
                         {
-                            NSLog(@"NSException: %@", e.reason);
+                            OALog(@"NSException: %@", e.reason);
                             if (completion)
                             {
                                 completion(nil, [NSError errorWithDomain:@"OnlineCalculateRequestErrorDomain" code:2 userInfo:@{NSLocalizedDescriptionKey: e.reason}]);
                             }
                         }
                     } else {
-                        NSLog(@"Error: No data received");
+                        OALog(@"Error: No data received");
                         if (completion)
                         {
                             completion(nil, [NSError errorWithDomain:@"OnlineCalculateRequestErrorDomain" code:3 userInfo:@{NSLocalizedDescriptionKey: @"Error: No data received"}]);
                         }
                     }
                 } else {
-                    NSLog(@"Error: Unexpected HTTP status code: %ld", (long)httpResponse.statusCode);
+                    OALog(@"Error: Unexpected HTTP status code: %ld", (long)httpResponse.statusCode);
                     if (completion)
                     {
                         completion(nil, [NSError errorWithDomain:@"OnlineCalculateRequestErrorDomain" code:4 userInfo:@{NSLocalizedDescriptionKey: @"Error: Unexpected HTTP status code"}]);
                     }
                 }
             } else {
-                NSLog(@"Error: Unexpected response type");
+                OALog(@"Error: Unexpected response type");
                 if (completion)
                 {
                     completion(nil, [NSError errorWithDomain:@"OnlineCalculateRequestErrorDomain" code:5 userInfo:@{NSLocalizedDescriptionKey: @"Error: Unexpected response type"}]);

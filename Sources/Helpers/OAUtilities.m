@@ -15,6 +15,7 @@
 #import "OrderedDictionary.h"
 #import "OAFileNameTranslationHelper.h"
 #import "OAOsmAndFormatter.h"
+#import "OALog.h"
 #import "OAColors.h"
 #import "OASvgHelper.h"
 #import <UIKit/UIDevice.h>
@@ -2720,7 +2721,7 @@ static const double d180PI = 180.0 / M_PI_2;
             return [[NSMutableAttributedString alloc] initWithData:[modifiedFontHtml dataUsingEncoding:NSUTF8StringEncoding] options:@{NSDocumentTypeDocumentAttribute:NSHTMLTextDocumentType, NSCharacterEncodingDocumentAttribute:@(NSUTF8StringEncoding)} documentAttributes:nil error:nil];
         }
     } @catch (NSException *exception) {
-        NSLog(@"Failed to attributedStringFromHtmlString from: %@ %@", html, exception);
+        OALog(@"Failed to attributedStringFromHtmlString from: %@ %@", html, exception);
         return [[NSAttributedString alloc] initWithString:@""];
     }
 }
@@ -2773,7 +2774,7 @@ static const double d180PI = 180.0 / M_PI_2;
     vm_statistics_data_t vm_stat;
     if (host_statistics(host_port, HOST_VM_INFO, (host_info_t)&vm_stat, &host_size) != KERN_SUCCESS)
     {
-        NSLog(@"Failed to fetch vm statistics");
+        OALog(@"Failed to fetch vm statistics");
         return 0;
     }
     /* Stats in bytes */

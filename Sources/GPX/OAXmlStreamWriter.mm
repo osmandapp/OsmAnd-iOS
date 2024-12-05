@@ -7,6 +7,7 @@
 //
 
 #import "OAXmlStreamWriter.h"
+#import "OALog.h"
 #include <QFile>
 #include <QBuffer>
 #include <QString>
@@ -210,7 +211,7 @@ NSString * const OAXmlStreamWriterErrorDomain = @"OAXmlStreamWriterError";
                                maxLength:length - totalBytesWritten error:nil];
             if (bytesWritten == -1)
             {
-                NSLog(@"Error writing to output stream");
+                OALog(@"Error writing to output stream");
                 break;
             }
             totalBytesWritten += bytesWritten;
@@ -229,7 +230,7 @@ NSString * const OAXmlStreamWriterErrorDomain = @"OAXmlStreamWriterError";
         }
         else
         {
-            NSLog(@"Could not write all data to output stream");
+            OALog(@"Could not write all data to output stream");
             return NO;
         }
     }

@@ -13,6 +13,7 @@
 #import "OASettingsItemWriter.h"
 #import "OAFileSettingsItem.h"
 #import "OrderedDictionary.h"
+#import "OALog.h"
 
 #include <OsmAndCore/ArchiveWriter.h>
 
@@ -81,7 +82,7 @@
     }
     if (error != nil)
     {
-        NSLog(@"OANetworkWriter error: %@", error);
+        OALog(@"OANetworkWriter error: %@", error);
         @throw [NSException exceptionWithName:@"IOException" reason:error userInfo:nil];
     }
 }

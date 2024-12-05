@@ -36,6 +36,7 @@
 #import "OAConcurrentCollections.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OsmAndSharedWrapper.h"
+#import "OALog.h"
 
 #include <OsmAndCore/LatLon.h>
 #include <OsmAndCore/Map/VectorLineBuilder.h>
@@ -534,7 +535,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                             }
                             else
                             {
-                                NSLog(@"Track not found or index is out of bounds");
+                                OALog(@"Track not found or index is out of bounds");
                             }
                         }
                         segStartIndex += seg.points.count;

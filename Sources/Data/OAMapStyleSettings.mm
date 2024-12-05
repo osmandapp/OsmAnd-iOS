@@ -13,6 +13,7 @@
 #import "OAMapSource.h"
 #import "OAAppData.h"
 #import "OAObservable.h"
+#import "OALog.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/IMapStylesCollection.h>
@@ -155,7 +156,7 @@
     {
         NSString *name = resolvedMapStyle->getStringById(p->getNameId()).toNSString();
 
-        //NSLog(@"name = %@ title = %@ decs = %@ category = %@", name, p->getTitle().toNSString(), p->getDescription().toNSString(), p->getCategory().toNSString());
+        //OALog(@"name = %@ title = %@ decs = %@ category = %@", name, p->getTitle().toNSString(), p->getDescription().toNSString(), p->getCategory().toNSString());
 
         if ([name isEqualToString:@"appMode"] ||
             [name isEqualToString:@"baseAppMode"] ||

@@ -12,6 +12,7 @@
 #import "OAPrepareBackupResult.h"
 #import "OANetworkSettingsHelper.h"
 #import "Localization.h"
+#import "OALog.h"
 
 @interface OABackupTaskType ()
 
@@ -172,7 +173,7 @@ static OABackupTaskType *GENERATE_BACKUP_INFO;
         {
             [self onError:message];
         }
-        NSLog(@"Collect remote files error: %@", e.reason);
+        OALog(@"Collect remote files error: %@", e.reason);
     }
 }
 

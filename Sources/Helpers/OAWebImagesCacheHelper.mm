@@ -10,6 +10,7 @@
 #import "OAWebImagesCacheHelper.h"
 #import "OADownloadMode.h"
 #import "OsmAndApp.h"
+#import "OALog.h"
 
 #import <sqlite3.h>
 #import "OsmAnd_Maps-Swift.h"
@@ -217,7 +218,7 @@
             char *errMsg;
             if (sqlite3_exec(_database, [@"CREATE TABLE IF NOT EXISTS images (key TEXT, image_base64_data TEXT, timestamp INTEGER);" UTF8String], NULL, NULL, &errMsg) != SQLITE_OK)
             {
-                NSLog(@"Failed to create table: %@", [NSString stringWithCString:errMsg encoding:NSUTF8StringEncoding]);
+                OALog(@"Failed to create table: %@", [NSString stringWithCString:errMsg encoding:NSUTF8StringEncoding]);
             }
             if (errMsg != NULL) sqlite3_free(errMsg);
             sqlite3_close(_database);

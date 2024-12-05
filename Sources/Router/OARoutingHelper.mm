@@ -37,6 +37,7 @@
 #import <OsmAndCore/Utilities.h>
 #import "OsmAndSharedWrapper.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OALog.h"
 
 #include <routeSegmentResult.h>
 
@@ -453,7 +454,7 @@ static BOOL _isDeviatedFromRoute = false;
         {
             if (newDist < dist)
             {
-                NSLog(@"Processed by distance : (new) %f (old) %f", newDist, dist);
+                OALog(@"Processed by distance : (new) %f (old) %f", newDist, dist);
                 processed = true;
             }
         }
@@ -463,7 +464,7 @@ static BOOL _isDeviatedFromRoute = false;
             if (dist > posTolerance)
             {
                 processed = true;
-                NSLog(@"Processed by distance : %f %f", newDist, dist);
+                OALog(@"Processed by distance : %f %f", newDist, dist);
             }
             else
             {
@@ -482,7 +483,7 @@ static BOOL _isDeviatedFromRoute = false;
                     double diffToNext = ABS(degreesDiff(bearingMotion, bearingRouteNext));
                     if (diff > diffToNext)
                     {
-                        NSLog(@"Processed point bearing deltas : %f %f", diff, diffToNext);
+                        OALog(@"Processed point bearing deltas : %f %f", diff, diffToNext);
                         processed = true;
                     }
                 }
@@ -712,7 +713,7 @@ static BOOL _isDeviatedFromRoute = false;
                 }
                 if (distOrth > allowableDeviation)
                 {
-                    NSLog(@"Recalculate route, because correlation  : %f", distOrth);
+                    OALog(@"Recalculate route, because correlation  : %f", distOrth);
                     _isDeviatedFromRoute = true;
                     calculateRoute = ![_settings.disableOffrouteRecalc get];
                 }
@@ -725,7 +726,7 @@ static BOOL _isDeviatedFromRoute = false;
             if (allowableDeviation > 0 && wrongMovementDirection && !isStraight
                 && ([currentLocation distanceFromLocation:routeNodes[currentRoute]] > allowableDeviation) && ![_settings.disableWrongDirectionRecalc get])
             {
-                NSLog(@"Recalculate route, because wrong movement direction: %f", [currentLocation distanceFromLocation:routeNodes[currentRoute]]);
+                OALog(@"Recalculate route, because wrong movement direction: %f", [currentLocation distanceFromLocation:routeNodes[currentRoute]]);
                 _isDeviatedFromRoute = true;
                 calculateRoute = true;
             }

@@ -17,6 +17,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OAAppVersion.h"
 #import "GeneratedAssetSymbols.h"
+#import "OALog.h"
 
 static NSString * const kLinkInternalType = @"internal_link";
 static NSString * const kLinkExternalType = @"ext_link";
@@ -242,7 +243,7 @@ static NSString * const kLinkExternalType = @"ext_link";
     [_helpDataManager loadAndParseJsonFrom:kPopularArticlesAndTelegramChats for:HelperDataItemsPopularArticles completion:^(NSArray *articles, NSError *error) {
         if (error)
         {
-            NSLog(OALocalizedString(@"osm_failed_uploads"));
+            OALog(OALocalizedString(@"osm_failed_uploads"));
         }
         else if (articles)
         {
@@ -258,7 +259,7 @@ static NSString * const kLinkExternalType = @"ext_link";
     [_helpDataManager loadAndParseJsonFrom:kPopularArticlesAndTelegramChats for:HelperDataItemsSiteArticles completion:^(NSArray *articles, NSError *error) {
         if (error)
         {
-            NSLog(@"Error loading articles: %@", error.localizedDescription);
+            OALog(@"Error loading articles: %@", error.localizedDescription);
         } 
         else if (articles)
         {

@@ -12,6 +12,7 @@
 #import "OARoutingHelper.h"
 #import "OARouteProvider.h"
 #import "OAWorldRegion.h"
+#import "OALog.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <binaryRead.h>
@@ -225,7 +226,7 @@ static const double DISTANCE_SKIP = 10000;
     self.mapsToUpdate = [self convert:[mapsToUpdate copy]];
     self.potentiallyUsedMaps = [self convert:[usedMaps copy]];
     
-    NSLog(@"Check missing maps %lu points %.2f sec", [pointsToCheck count], ([NSDate timeIntervalSinceReferenceDate] - tm));
+    OALog(@"Check missing maps %lu points %.2f sec", [pointsToCheck count], ([NSDate timeIntervalSinceReferenceDate] - tm));
     
     return YES;
 }

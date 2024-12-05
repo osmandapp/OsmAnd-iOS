@@ -99,6 +99,18 @@
 
 - (NSString *)fileNameWithFolder
 {
+    NSString *gpxPath = [self.filePath stringByReplacingOccurrencesOfString:OsmAndApp.instance.documentsPath withString:@""];
+
+    if ([gpxPath hasPrefix:@"/GPX"])
+    {
+        gpxPath = [@"/tracks" stringByAppendingString:[gpxPath substringFromIndex:4]];
+    }
+    
+    if ([gpxPath isEqualToString:self.fileName])
+    {
+        return self.fileName;
+    }
+
     NSString *folderName = @"";
     NSArray<NSString *> *pathComponents = self.filePath.pathComponents;
     if (pathComponents.count > 1)

@@ -1750,9 +1750,35 @@
     }
     else
     {
-        SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:url]];
-        [self presentViewController:safariViewController animated:YES completion:nil];
+        [self openSafariWith:url];
     }
+}
+
+
+- (void)openSafariWith:(NSString *)link
+{
+    if (link.length == 0)
+    {
+        NSLog(@"Error: Empty link provided.");
+        return;
+    }
+    
+    NSURL *url = [NSURL URLWithString:link];
+    if (!url)
+    {
+        NSLog(@"Error: Invalid URL provided: %@", link);
+        return;
+    }
+    
+    NSString *scheme = [url.scheme lowercaseString];
+    if (![scheme hasPrefix:@"http"])
+    {
+        NSString *appendedLink = [@"http://" stringByAppendingString:link];
+        url = [NSURL URLWithString:appendedLink];
+    }
+    
+    SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:url];
+    [self presentViewController:safariViewController animated:YES completion:nil];
 }
 
 - (NSArray<CLLocation *> *)collectTrackPoints

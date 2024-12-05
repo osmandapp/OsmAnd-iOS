@@ -71,7 +71,7 @@
                                                          error:error];
     if (!*error)
         [jsonData writeToFile:path atomically:YES];
-    if(_exportItemsFiles)
+    if (_exportItemsFiles)
     {
         [self writeItemsFiles:paths];
     }

@@ -315,30 +315,26 @@ static UIViewController *parentController;
         ? newLocation.course
         : newHeading;
 
-        [self.sortedFavoriteItems enumerateObjectsUsingBlock:^(OAFavoriteItem* itemData, NSUInteger idx, BOOL *stop) {
+        [_isFiltered ? _filteredItems : self.sortedFavoriteItems enumerateObjectsUsingBlock:^(OAFavoriteItem* itemData, NSUInteger idx, BOOL *stop) {
             const auto& favoritePosition31 = itemData.favorite->getPosition31();
             const auto favoriteLon = OsmAnd::Utilities::get31LongitudeX(favoritePosition31.x);
             const auto favoriteLat = OsmAnd::Utilities::get31LatitudeY(favoritePosition31.y);
-
             const auto distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
                                                                 newLocation.coordinate.latitude,
                                                                 favoriteLon, favoriteLat);
-
-
 
             itemData.distance = [OAOsmAndFormatter getFormattedDistance:distance];
             itemData.distanceMeters = distance;
             CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:favoriteLat longitude:favoriteLon]];
             itemData.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
-
          }];
 
-        if (self.sortingType == 1 && [self.sortedFavoriteItems count] > 0)
+        if (self.sortingType == 1 && [_isFiltered ? _filteredItems : self.sortedFavoriteItems count] > 0)
         {
-            NSArray *sortedArray = [self.sortedFavoriteItems sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2){
+            NSArray *sortedArray = [_isFiltered ? _filteredItems : self.sortedFavoriteItems sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2){
                 return obj1.distanceMeters > obj2.distanceMeters ? NSOrderedDescending : obj1.distanceMeters < obj2.distanceMeters ? NSOrderedAscending : NSOrderedSame;
             }];
-            [self.sortedFavoriteItems setArray:sortedArray];
+            [_isFiltered ? _filteredItems : self.sortedFavoriteItems setArray:sortedArray];
         }
 
         if (_decelerating)
@@ -366,7 +362,7 @@ static UIViewController *parentController;
                 if (_directionButton.tag == 1)
                 {
                     if (i.section == 0)
-                        item = [self.sortedFavoriteItems objectAtIndex:i.row];
+                        item = [_isFiltered ? _filteredItems : self.sortedFavoriteItems objectAtIndex:i.row];
                 }
                 else
                 {

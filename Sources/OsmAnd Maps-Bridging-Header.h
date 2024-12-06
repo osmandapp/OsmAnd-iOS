@@ -66,6 +66,7 @@
 #import "OALocationIcon.h"
 #import "OrderedDictionary.h"
 #import "OAMapActions.h"
+#import "OAPOIHelper.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"

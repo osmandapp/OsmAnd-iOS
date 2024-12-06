@@ -17,6 +17,7 @@
 #import "OAPOIUIFilter.h"
 #import "OAAmenityExtendedNameFilter.h"
 #import "OAPOIHelper.h"
+#import "OAPOIHelper+cpp.h"
 #import "OATargetPoint.h"
 #import "OAReverseGeocoder.h"
 #import "Localization.h"

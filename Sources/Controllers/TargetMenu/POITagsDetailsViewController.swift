@@ -64,6 +64,19 @@ final class POITagsDetailsViewController: OABaseNavbarViewController {
     private func extractHeader(from title: String, withKey key: String) -> String {
         if key.hasPrefix("name:") {
             return getTitle()
+        } else if key.hasPrefix("within:") {
+            
+            // TODO: sync with android. Or send here already translated strings.
+            let components = key.components(separatedBy: ":")
+            if components.count >= 2 {
+                let polygonValue = components[2]
+                if let localizedTag = OAPOIHelper.sharedInstance().getPhraseByName(polygonValue) {
+                    return localizedTag.capitalized
+                }
+                return polygonValue
+            }
+            return title
+            
         } else {
             let endIndex = title.firstIndex(of: "(") ?? title.endIndex
             return String(title[..<endIndex]).trimmingCharacters(in: .whitespaces)
@@ -80,6 +93,19 @@ final class POITagsDetailsViewController: OABaseNavbarViewController {
                 }
                 return languageCode
             }
+        } else if key.hasPrefix("within:") {
+            
+            // TODO: sync with android. Or send here already translated strings.
+            let components = key.components(separatedBy: ":")
+            if components.count > 1 {
+                let polygonTag = components[1]
+                if let localizedTag = OAPOIHelper.sharedInstance().getPhraseByName(polygonTag) {
+                    return localizedTag.capitalized
+                }
+                return polygonTag
+            }
+            return ""
+            
         }
         
         guard let start = title.firstIndex(of: "("),

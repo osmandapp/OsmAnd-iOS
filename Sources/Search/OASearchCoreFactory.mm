@@ -23,6 +23,7 @@
 #import "OAPOIFilter.h"
 #import "OAPOICategory.h"
 #import "OAPOIHelper.h"
+#import "OAPOIHelper+cpp.h"
 #import "OAPOIUIFilter.h"
 #import "OACustomSearchPoiFilter.h"
 #import "OAPOI.h"

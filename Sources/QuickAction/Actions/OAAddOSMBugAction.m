@@ -16,6 +16,9 @@
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 
+#import "OALog.h"
+#include <OsmAndCore/Utilities.h>
+
 static NSString * const kMessage = @"message";
 
 static QuickActionType *TYPE;
@@ -41,6 +44,59 @@ static QuickActionType *TYPE;
 
 - (void)execute
 {
+    //TODO: do not commit!
+    
+    OALog(@"!!! Debug action");
+    
+    OAMapViewController *mapVc = OARootViewController.instance.mapPanel.mapViewController;
+    [mapVc foo];
+
+    
+//    QVector<OsmAnd::PointI> points;
+//    points.push_back( OsmAnd::PointI(1255718528, 724253184) );
+//    points.push_back( OsmAnd::PointI(1255717888, 724255968) );
+//    points.push_back( OsmAnd::PointI(1255719520, 724256352) );
+//    points.push_back( OsmAnd::PointI(1255719776, 724255232) );
+//    points.push_back( OsmAnd::PointI(1255719296, 724255136) );
+//    points.push_back( OsmAnd::PointI(1255719680, 724253472) );
+//    points.push_back( OsmAnd::PointI(1255718528, 724253184) );
+//    points.push_back( OsmAnd::PointI(0, 0) );
+    
+    
+    
+    
+//    [0]    OsmAnd::Point<int>
+//    x    int    1255718528
+//    y    int    724253184
+//    [1]    OsmAnd::Point<int>
+//    x    int    1255717888
+//    y    int    724255968
+//    [2]    OsmAnd::Point<int>
+//    x    int    1255719520
+//    y    int    724256352
+//    [3]    OsmAnd::Point<int>
+//    x    int    1255719776
+//    y    int    724255232
+//    [4]    OsmAnd::Point<int>
+//    x    int    1255719296
+//    y    int    724255136
+//    [5]    OsmAnd::Point<int>
+//    x    int    1255719680
+//    y    int    724253472
+//    [6]    OsmAnd::Point<int>
+//    x    int    1255718528
+//    y    int    724253184
+
+    
+    
+    //    OsmAnd::PointI a = OsmAnd::PointI(0, 0);
+    
+    
+//    QVector<OsmAnd::PointI> points;
+//    points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(destination.latitude, destination.longitude)));
+//    points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(currLoc.coordinate.latitude, currLoc.coordinate.longitude)));
+    
+    /*
     OAOsmEditingPlugin *plugin = (OAOsmEditingPlugin *) [OAPluginsHelper getEnabledPlugin:OAOsmEditingPlugin.class];
     if (plugin)
     {
@@ -50,6 +106,7 @@ static QuickActionType *TYPE;
         else
             [plugin openOsmNote:latLon.coordinate.latitude longitude:latLon.coordinate.longitude message:self.getParams[kMessage] autoFill:![self.getParams[kDialog] boolValue]];
     }
+     */
 }
 
 - (OrderedDictionary *)getUIModel

@@ -16,6 +16,7 @@
 #import "OAEditDescriptionViewController.h"
 #import "Localization.h"
 #import "OAPOIHelper.h"
+#import "OAPOIHelper+cpp.h"
 #import "OAPOI.h"
 #import "OAPOIType.h"
 #import "OALocationServices.h"
@@ -51,6 +52,12 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
+#import "OAMapRendererEnvironment.h"
+#import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
+#import "OAMapRendererView.h"
+#import "OrderedDictionary.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -62,6 +69,8 @@ static NSString *kSkypeLink = @"skype:%@";
 static NSString *kMailLink = @"mailto:%@";
 static NSString *kInstagramLink = @"https://www.instagram.com/%@";
 static NSString *kFacebookLink = @"https://www.facebook.com/%@";
+
+static NSString *WITHIN_POLYGONS_ROW_KEY = @"within_polygons";
 
 // HTML for ViewPort
 static NSString *const kViewPortHtml = @"<header><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'></header>";
@@ -199,7 +208,9 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
     {
         [_rows addObjectsFromArray:self.additionalRows];
     }
-
+    
+    [self buildWithinRow];
+    
     if ([self showNearestWiki] && !OAIAPHelper.sharedInstance.wiki.disabled && [OAPluginsHelper getEnabledPlugin:OAWikipediaPlugin.class])
         [self buildRowsPoi:YES];
 
@@ -220,6 +231,92 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
 
     _calculatedWidth = 0;
     [self contentHeight:self.tableView.bounds.size.width];
+}
+
+- (void)buildWithinRow
+{
+    OAMapViewController *mapViewController = OARootViewController.instance.mapPanel.mapViewController;
+    OAMapRendererView *mapView = (OAMapRendererView *) mapViewController.view;
+    OAMapRendererEnvironment * menv = [mapViewController mapRendererEnv];
+    OsmAnd::PointI p(OsmAnd::Utilities::get31TileNumberX(self.location.longitude), OsmAnd::Utilities::get31TileNumberY(self.location.latitude));
+    QList<std::shared_ptr<const OsmAnd::MapObject>> polygons = menv.mapPrimitivesProvider->retreivePolygons(p, mapView.zoomLevel);
+
+    NSString *rowSummary = @"";
+    NSMutableArray *detailsArray = [NSMutableArray array];
+    NSString *title = OALocalizedString(@"transport_nearby_routes");
+    
+    NSMutableArray<NSString *> *names = [NSMutableArray new];
+
+    if (polygons.size() > 0)
+    {
+        for (const auto & mapObj : polygons)
+        {
+            [names addObject:[[OAPOIHelper sharedInstance] getTranslatedType:mapObj]];
+        }
+        
+        rowSummary = [self getMenuObjectsNamesByComma:names];
+        detailsArray = [self getWithinCollapsableContent:names];
+        
+        OARowInfo *row = [[OARowInfo alloc] initWithKey:WITHIN_POLYGONS_ROW_KEY
+                                        icon:[UIImage templateImageNamed:@"ic_custom_pin_location"]
+                                  textPrefix:title
+                                        text:rowSummary
+                                   textColor:nil
+                                      isText:YES
+                                   needLinks:YES
+                                       order:0
+                                    typeName:WITHIN_POLYGONS_ROW_KEY
+                               isPhoneNumber:NO
+                                       isUrl:NO];
+        
+        [row setDetailsArray:detailsArray];
+        row.collapsable = NO;
+        row.collapsed = YES;
+        row.collapsableView = nil;
+        [_rows addObject:row];
+    }
+}
+
+- (NSMutableArray<NSDictionary<NSString *, NSString *> *> *) getWithinCollapsableContent:(NSArray<NSString *> *)menuObjects
+{
+    NSMutableArray<NSDictionary<NSString *, NSString *> *> *array = [NSMutableArray new];
+    NSString *sectionHeader = OALocalizedString(@"transport_nearby_routes");
+    
+    for (NSString *title in menuObjects)
+    {
+        NSString *rowTextPrefix;
+        NSString *rowText;
+        if ([title containsString:@":"])
+        {
+            int firstCommaIndex = [title indexOf:@":"];
+            rowTextPrefix = [title substringToIndex:firstCommaIndex];
+            rowText = [[[title substringFromIndex:firstCommaIndex + 1] trim] capitalizedString];
+        }
+        else
+        {
+            
+            // TODO: implement?
+            // rowTextPrefix = MenuObjectUtils.getSecondLineText(menuObject);
+            rowText = title;
+        }
+        
+        [array addObject:@{
+            @"key": [NSString stringWithFormat:@"within:%@:%@", rowTextPrefix, rowText],
+            @"value": rowText,
+            @"localizedTitle": sectionHeader
+        }];
+    }
+    return array;
+}
+
+- (NSString *) getMenuObjectsNamesByComma:(NSArray<NSString *> *)menuObjects
+{
+    NSString *names = @"";
+    for (NSString *title in menuObjects)
+        names = [NSString stringWithFormat:@"%@%@, ", names, title];
+    if ([names hasSuffix:@", "])
+        names = [names substringToIndex:names.length - 2];
+    return names;
 }
 
 - (void)buildRowsPoi:(BOOL)isWiki

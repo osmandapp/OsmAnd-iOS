@@ -791,3 +791,5 @@
 "shared_string_contours" = "Konture";
 "allow_3D_view" = "2,5D prikaz";
 "map_settings_weather_temp_water" = "Temperatura vode";
+"transport_stop" = "Stanica";
+"shared_string_travel" = "Putovanje";

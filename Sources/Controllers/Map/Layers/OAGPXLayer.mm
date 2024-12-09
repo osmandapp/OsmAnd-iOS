@@ -522,12 +522,10 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                         {
                             NSArray<OASTrack *> *tracksCopy_ = [gpxFile_.tracks copy];
                             NSInteger trackIndex = [tracksCopy_ indexOfObject:track];
-                            NSArray<OASTrack *> *tracksCopy = [tracks copy];
                             
-                            if (trackIndex != NSNotFound && trackIndex < tracksCopy.count)
+                            if (trackIndex != NSNotFound)
                             {
-                                // TODO: mb use not index? search name?
-                                OASTrack *gpxTrack = tracksCopy[trackIndex];
+                                OASTrack *gpxTrack = track;
                                 OASInt *color = [[OASInt alloc] initWithInt:(int)kDefaultTrackColor];
                                 const auto colorARGB = [UIColorFromARGB([[gpxTrack getColorDefColor:color] intValue]) toFColorARGB];
                                 segmentColors.push_back(colorARGB);

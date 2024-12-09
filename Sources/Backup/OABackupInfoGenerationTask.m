@@ -15,7 +15,7 @@
 #import "OACollectionSettingsItem.h"
 #import "OABackupHelper.h"
 #import "OAOperationLog.h"
-
+#import "OsmAnd_Maps-Swift.h"
 @implementation OABackupInfoGenerationTask
 {
     NSDictionary<NSString *, OALocalFile *> *_localFiles;
@@ -53,6 +53,7 @@
 
 - (OABackupInfo *) doInBackground
 {
+    LocalFileHashHelper *hashHelper = [LocalFileHashHelper shared];
     OABackupInfo *info = [[OABackupInfo alloc] init];
     /*
      operationLog.log("=== localFiles ===");
@@ -85,11 +86,12 @@
         {
             BOOL fileChangedLocally = localFile.localModifiedTime > (localFile.uploadTime / 1000);
             BOOL fileChangedRemotely = remoteFile.updatetimems > localFile.uploadTime;
+            BOOL needToUpload = [hashHelper isHashUpdated:localFile];
             if (fileChangedRemotely && fileChangedLocally)
             {
                 [info.filesToMerge addObject:@[localFile, remoteFile]];
             }
-            else if (fileChangedLocally)
+            else if (fileChangedLocally && needToUpload)
             {
                 [info.filesToUpload addObject:localFile];
             }
@@ -124,13 +126,15 @@
     for (OALocalFile *localFile in _localFiles.allValues)
     {
         OAExportSettingsType *exportType = localFile.item != nil
-        ? [OAExportSettingsType findBySettingsItem:localFile.item] : nil;
+            ? [OAExportSettingsType findBySettingsItem:localFile.item]
+            : nil;
         if (exportType == nil || ![OAExportSettingsType isTypeEnabled:exportType])
             continue;
         
         BOOL hasRemoteFile = _uniqueRemoteFiles[localFile.getTypeFileName] != nil;
         BOOL fileToDelete = [info.localFilesToDelete containsObject:localFile];
-        if (!hasRemoteFile && !fileToDelete)
+        BOOL needToUpload = [hashHelper isHashUpdated:localFile];
+        if (!hasRemoteFile && !fileToDelete && needToUpload)
         {
             BOOL isEmpty = [localFile.item isKindOfClass:OACollectionSettingsItem.class] && ((OACollectionSettingsItem *) localFile.item).isEmpty;
             if (!isEmpty)

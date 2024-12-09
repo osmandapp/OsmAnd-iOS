@@ -4123,8 +4123,27 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
         [_profilePreferences setObject:_locationIcon forKey:@"location_icon"];
 
         _appModeOrder = [OACommonInteger withKey:appModeOrderKey defValue:0];
+        NSArray *modes = @[
+            OAApplicationMode.DEFAULT,
+            OAApplicationMode.CAR,
+            OAApplicationMode.BICYCLE,
+            OAApplicationMode.PEDESTRIAN,
+            OAApplicationMode.TRUCK,
+            OAApplicationMode.MOTORCYCLE,
+            OAApplicationMode.MOPED,
+            OAApplicationMode.PUBLIC_TRANSPORT,
+            OAApplicationMode.TRAIN,
+            OAApplicationMode.BOAT,
+            OAApplicationMode.AIRCRAFT,
+            OAApplicationMode.SKI,
+            OAApplicationMode.HORSE
+        ];
+        for (NSInteger i = 0; i < modes.count; i++)
+        {
+            [_appModeOrder setModeDefaultValue:@(i) mode:modes[i]];
+        }
         [_profilePreferences setObject:_appModeOrder forKey:@"app_mode_order"];
-        
+
         _viewAngleVisibility = [[[OACommonInteger withKey:viewAngleVisibilityKey defValue:[MarkerDisplayOptionWrapper resting]] makeProfile] makeShared];
         _locationRadiusVisibility = [[[OACommonInteger withKey:locationRadiusVisibilityKey defValue:[MarkerDisplayOptionWrapper restingNavigation]] makeProfile] makeShared];
         [_profilePreferences setObject:_viewAngleVisibility forKey:@"view_angle_visibility"];

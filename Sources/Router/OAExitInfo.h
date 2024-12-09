@@ -15,4 +15,6 @@
 @property (nonatomic) NSString* ref;
 @property (nonatomic) NSString* exitStreetName;
 
+- (BOOL) isEmpty;
+
 @end

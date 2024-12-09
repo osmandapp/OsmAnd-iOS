@@ -669,7 +669,7 @@ std::string preferredLanguage;
         if (includeDest == YES) {
             result[@"toRef"] = [self getSpeakablePointName:next.ref];
             result[@"toStreetName"] = [self getSpeakablePointName:next.streetName];
-            result[@"toDest"] = [self getSpeakablePointName:next.destinationName];
+            result[@"toDest"] = [self getSpeakablePointName:[next getDestinationRefAndName]];
         } else {
             result[@"toRef"] = [self getSpeakablePointName:next.ref];
             result[@"toStreetName"] = [self getSpeakablePointName:next.streetName];
@@ -705,7 +705,7 @@ std::string preferredLanguage;
         return result;
     
     result[@"toRef"] = [self getNonNilString:[self getSpeakablePointName:exitInfo.ref]];
-    NSString *destination = [self getSpeakablePointName:[self cutLongDestination:routeInfo.destinationName]];
+    NSString *destination = [self getSpeakablePointName:[self cutLongDestination:[routeInfo getDestinationRefAndName]]];
     result[@"toDest"] = [self getNonNilString:destination];
     result[@"toStreetName"] = @"";
     return result;

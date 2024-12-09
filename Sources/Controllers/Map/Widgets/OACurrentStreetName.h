@@ -26,8 +26,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL showMarker; // turn type has priority over showMarker
 @property (nonatomic) NSArray<RoadShield *> *shields;
 @property (nonatomic) NSString *exitRef;
+@property (nonatomic, assign) BOOL isSet;
 
 + (OACurrentStreetName *) getCurrentName:(OANextDirectionInfo *)n;
+- (instancetype)initWithStreetName:(OANextDirectionInfo *)info useDestination:(BOOL)useDestination;
 
 @end
 
@@ -40,6 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithRDO:(std::shared_ptr<RouteDataObject>)rdo tag:(NSString *)tag value:(NSString *)value;
 + (NSArray<RoadShield *> *)createShields:(std::shared_ptr<RouteDataObject>)rdo;
++ (NSArray<RoadShield *> *)createDestination:(std::shared_ptr<RouteDataObject>)rdo destRef:(NSString *)destRef;
 
 @end
 

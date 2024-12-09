@@ -3720,7 +3720,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     [_mapLayers.gpxMapLayer refreshGpxTracks:gpxFilesDic reset:YES];
 }
 
-- (void) refreshGpxTracks
+- (void)refreshGpxTracks
 {
     @synchronized(_rendererSync)
     {

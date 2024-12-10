@@ -548,6 +548,23 @@
         }
     }
     
+    //Change several shields to one
+    if (streetName.shields.count > 1)
+    {
+        NSMutableArray<RoadShield *> *oneShield = [NSMutableArray arrayWithObject:streetName.shields.firstObject];
+        NSMutableString * other = [streetName.text mutableCopy];
+        for (int i = 1; i < 4 && i < streetName.shields.count; i++)
+        {
+            RoadShield *shield = [streetName.shields objectAtIndex:i];
+            if (other.length == 0)
+                [other appendString:shield.value];
+            else
+                [other appendString:[NSString stringWithFormat:@", %@", shield.value]];
+        }
+        streetName.text = other;
+        streetName.shields = oneShield;
+    }
+    
     _shadowButton.accessibilityLabel =  OALocalizedString(@"map_widget_top_text");
     _shadowButton.accessibilityValue = streetName.text;
     

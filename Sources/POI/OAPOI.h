@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "OAMapObject.h"
 
 #define URL_TAG @"url"
 #define WEBSITE_TAG @"website"
@@ -56,33 +57,35 @@
 
 @end
 
-@interface OAPOI : NSObject
+//@interface OAPOI : NSObject
+@interface OAPOI : OAMapObject
 
-@property (nonatomic) unsigned long long obfId;
-@property (nonatomic) NSString *name;
+//@property (nonatomic) unsigned long long obfId;
+//@property (nonatomic) NSString *name;
 @property (nonatomic) OAPOIType *type;
 @property (nonatomic) NSString *subType;
-@property (nonatomic) NSString *nameLocalized;
+//@property (nonatomic) NSString *nameLocalized;
 @property (nonatomic, assign) BOOL hasOpeningHours;
 @property (nonatomic) NSString *openingHours;
 @property (nonatomic) NSString *desc;
 @property (nonatomic) BOOL isPlace;
 @property (nonatomic) NSString *buildingNumber;
 
-@property (nonatomic, assign) double latitude;
-@property (nonatomic, assign) double longitude;
+//@property (nonatomic, assign) double latitude;
+//@property (nonatomic, assign) double longitude;
 @property (nonatomic, assign) double distanceMeters;
 @property (nonatomic) NSString *distance;
 @property (nonatomic, assign) double direction;
 
 @property (nonatomic) NSDictionary *values;
-@property (nonatomic) NSDictionary *localizedNames;
+//@property (nonatomic) NSDictionary *localizedNames;
 @property (nonatomic) NSDictionary *localizedContent;
 
 @property (nonatomic) OAPOIRoutePoint *routePoint;
 @property (nonatomic) NSString *mapIconName;
 @property (nonatomic) NSString *cityName;
 
+//TODO: delete!
 @property (nonatomic, assign) BOOL isRenderedObject;
 
 - (UIImage *)icon;
@@ -117,5 +120,14 @@
 - (NSDictionary<NSString *, NSString *> *) toTagValue:(NSString *)privatePrefix osmPrefix:(NSString *)osmPrefix;
 + (OAPOI *) fromTagValue:(NSDictionary<NSString *, NSString *> *)map privatePrefix:(NSString *)privatePrefix osmPrefix:(NSString *)osmPrefix;
 - (NSString *)getTagSuffix:(NSString *)tagPrefix;
+
+
+
+// TODO: delete afted test ?
+@property (nonatomic) NSDictionary<NSString *, NSString *> *tags;
+@property (nonatomic) BOOL isPolygon;
+@property (nonatomic) NSMutableArray<NSNumber *> *x;
+@property (nonatomic) NSMutableArray<NSNumber *> *y;
+- (void) addLocation:(int)x y:(int)y;
 
 @end

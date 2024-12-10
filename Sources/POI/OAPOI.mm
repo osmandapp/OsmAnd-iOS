@@ -164,36 +164,36 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
         NSString *nm;
         if ([lang isEqualToString:@"en"])
         {
-            nm = _localizedNames[@"en"];
+            nm = self.localizedNames[@"en"];
             if (!nm || nm.length == 0)
-                nm = OsmAnd::ICU::transliterateToLatin(QString::fromNSString(_name)).toNSString();
+                nm = OsmAnd::ICU::transliterateToLatin(QString::fromNSString(self.name)).toNSString();
             return nm;
         }
-        nm = _localizedNames[lang];
+        nm = self.localizedNames[lang];
         if (transliterate)
             nm = OsmAnd::ICU::transliterateToLatin(QString::fromNSString(nm)).toNSString();
         return nm;
     }
-    return _name;
+    return self.name;
 }
 
 - (NSDictionary<NSString *, NSString *> *)getNamesMap:(BOOL)includeEn
 {
-    if ((!includeEn || !_name || _name.length == 0) && (!_localizedNames || _localizedNames.count == 0))
+    if ((!includeEn || !self.name || self.name.length == 0) && (!self.localizedNames || self.localizedNames.count == 0))
     {
         return [NSDictionary dictionary];
     }
     else
     {
         NSMutableDictionary *mp = [NSMutableDictionary dictionary];
-        if (_localizedNames || _localizedNames.count != 0)
+        if (self.localizedNames || self.localizedNames.count != 0)
         {
-            for (NSString *key in _localizedNames.allKeys)
-                mp[key] = _localizedNames[key];
+            for (NSString *key in self.localizedNames.allKeys)
+                mp[key] = self.localizedNames[key];
         }
         
-        if (includeEn && !_name && _name.length > 0)
-            mp[@"en"] = _name;
+        if (includeEn && !self.name && self.name.length > 0)
+            mp[@"en"] = self.name;
         
         return mp;
     }
@@ -547,6 +547,21 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     }
     return amenity;
 }
+
+
+// TODO: delete afted test ?
+- (void) addLocation:(int)x y:(int)y
+{
+    if (!_x)
+        _x = [NSMutableArray new];
+    if (!_y)
+        _y = [NSMutableArray new];
+    
+    [_x addObject:@(x)];
+    [_y addObject:@(y)];
+}
+
+
 
 - (BOOL) isEqual:(id)o
 {

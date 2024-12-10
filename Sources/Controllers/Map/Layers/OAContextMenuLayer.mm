@@ -28,6 +28,7 @@
 #import "OAUtilities.h"
 #import "OAPointDescription.h"
 #import "OATransportStopsBaseController.h"
+#import "OAMapRendererEnvironment.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
@@ -360,6 +361,17 @@
     return nil;
 }
 
+
+
+//public boolean showContextMenu(PointF point, RotatedTileBox tileBox, boolean showUnknownLocation) {
+//    if (menu == null || mAddGpxPointBottomSheetHelper == null) {
+//        return false;
+//    }
+//    MapSelectionResult selectionResult = selectionHelper.selectObjectsFromMap(point, tileBox, showUnknownLocation);
+//    //...
+//}
+
+
 - (NSArray<OATargetPoint *> *) selectObjectsForContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation
 {
     OAMapRendererView *mapView = self.mapView;
@@ -584,6 +596,41 @@
     return found;
 }
 
+//public List<RenderedObject> retrievePolygonsAroundMapObject(PointI point, Object mapObject, ZoomLevel zoomLevel) {
+//    List<RenderedObject> rendPolygons = retrievePolygonsAroundPoint(point, zoomLevel, false);
+//    List<LatLon> objectPolygon = null;
+//    if (mapObject instanceof Amenity am) {
+//        objectPolygon = am.getPolygon();
+//    }
+//    if (mapObject instanceof RenderedObject ro) {
+//        objectPolygon = ro.getPolygon();
+//    }
+//    List<RenderedObject> res = new ArrayList<>();
+//    if (objectPolygon != null) {
+//        for (RenderedObject r : rendPolygons) {
+//            if (Algorithms.isFirstPolygonInsideSecond(objectPolygon, r.getPolygon())) {
+//                res.add(r);
+//            }
+//        }
+//    } else {
+//        res = rendPolygons;
+//    }
+//    return res;
+//}
+
+- (void) retrievePolygonsAroundMapObject:(double)lat lon:(double)lon
+{
+    OAMapViewController *mapViewController = OARootViewController.instance.mapPanel.mapViewController;
+    OAMapRendererView *mapView = (OAMapRendererView *) mapViewController.view;
+    OAMapRendererEnvironment * menv = [mapViewController mapRendererEnv];
+    OsmAnd::PointI p(OsmAnd::Utilities::get31TileNumberX(lon), OsmAnd::Utilities::get31TileNumberY(lat));
+    QList<std::shared_ptr<const OsmAnd::MapObject>> polygons = menv.mapPrimitivesProvider->retreivePolygons(p, mapView.zoomLevel);
+    
+    //
+    
+    
+}
+
 - (OATargetPoint *) getUnknownTargetPoint:(double)latitude longitude:(double)longitude
 {
     NSString *addressString = nil;
@@ -638,7 +685,7 @@
 
 - (void) showContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation forceHide:(BOOL)forceHide
 {
-    NSArray<OATargetPoint *> *selectedObjects = [self selectObjectsForContextMenu:touchPoint showUnknownLocation:showUnknownLocation];
+    NSArray<OATargetPoint *> *selectedObjects = [self selectObjectsForContextMenu:touchPoint showUnknownLocation:showUnknownLocation]; //selectObjectsFromMap
     if (selectedObjects.count > 0)
     {
         [OsmAndApp instance].mapMode = OAMapModeFree;

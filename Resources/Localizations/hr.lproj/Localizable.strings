@@ -822,3 +822,8 @@
 "shared_string_custom" = "Prilagođeno";
 "shared_string_discard" = "Odbaci";
 "routing_attr_avoid_subway_name" = "Bez podzemne željeznice";
+"shared_string_cancelled" = "Prekinuto";
+"shared_string_paused" = "Pauzirano";
+"last_seven_days" = "Zadnjih 7 dana";
+"on_hold" = "Na čekanju";
+"attribute" = "Svojstvo";

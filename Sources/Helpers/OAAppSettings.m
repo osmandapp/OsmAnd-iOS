@@ -4955,20 +4955,10 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
 
 - (void)resetPreferencesForProfile:(OAApplicationMode *)mode
 {
-    for (OACommonPreference *value in [_profilePreferences objectEnumerator].allObjects)//todo
-    {
-        [value resetModeToDefault:mode];
-    }
-
-    for (OACommonBoolean *value in [_customBooleanRoutingProps objectEnumerator].allObjects)
-    {
-        [value resetModeToDefault:mode];
-    }
-
-    for (OACommonString *value in [_customRoutingProps objectEnumerator].allObjects)
-    {
-        [value resetModeToDefault:mode];
-    }
+    [self resetProfilePreferences:mode profilePreferences:[_profilePreferences objectEnumerator].allObjects];
+    [self resetProfilePreferences:mode profilePreferences:[_registeredPreferences objectEnumerator].allObjects];
+    [self resetProfilePreferences:mode profilePreferences:[_customBooleanRoutingProps objectEnumerator].allObjects];
+    [self resetProfilePreferences:mode profilePreferences:[_customRoutingProps objectEnumerator].allObjects];
 
     if (!mode.isCustomProfile)
     {
@@ -4980,6 +4970,21 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
 
     [OAAppData.defaults resetProfileSettingsForMode:mode];
     [NSNotificationCenter.defaultCenter postNotificationName:kWidgetVisibilityChangedMotification object:nil];
+}
+
+- (void)resetProfilePreferences:(OAApplicationMode *)mode
+             profilePreferences:(NSArray<OACommonPreference *> *)profilePreferences
+{
+    for (OACommonPreference *pref in profilePreferences)
+    {
+        if ([self prefCanBeCopiedOrReset:pref])
+            [pref resetModeToDefault:mode];
+    }
+}
+
+- (BOOL)prefCanBeCopiedOrReset:(OACommonPreference *)pref
+{
+    return !pref.global && ![_appModeOrder.key isEqualToString:pref.key];
 }
 
 // Common Settings

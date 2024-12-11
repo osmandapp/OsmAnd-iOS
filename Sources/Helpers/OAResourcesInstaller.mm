@@ -397,6 +397,7 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                 {
                     // Handle custom resources
                     BOOL failed = [self.class installCustomResource:localPath resourceId:nsResourceId fileName:task.name hidden:task.hidden];
+                    
                     if (failed)
                     {
                         task.installResourceRetry++;

@@ -222,6 +222,21 @@
 @synthesize name = _name;
 @synthesize hidden = _hidden;
 
+//- (NSString *) name
+//{
+//    return _name;
+//}
+//
+//- (void) setName:(NSString *)name
+//{
+//    _name = name;
+//}
+
+- (NSString *) title
+{
+    return _title ? _title : _name;
+}
+
 - (OADownloadTaskState)state
 {
     switch (_task.state)

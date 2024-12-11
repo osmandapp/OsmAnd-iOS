@@ -193,11 +193,6 @@
 
 - (void) initProviders:(NSDate *)date band:(OsmAnd::BandIndex)band
 {
-    if (!self.mapViewController.mapRendererEnv || !self.mapViewController.mapRendererEnv.mapPrimitiviser)
-    {
-        // it is reloading mapRendererEnv right now. skip for this frame.
-        return;
-    }
     [self deinitProviders];
     
     OAMapRendererEnvironment *env = self.mapViewController.mapRendererEnv;

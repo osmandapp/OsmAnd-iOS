@@ -36,14 +36,11 @@ final class GlideAverageWidget: GlideBaseWidget {
                 setContentTitle(contentTitle)
             }
             if let icon = getWidgetIcon() {
-                setContentTitle(icon)
+                setIcon(icon)
             }
         }
         if let contentTitle = getWidgetName() {
             setContentTitle(contentTitle)
-        }
-        if let icon = getWidgetIcon() {
-            setContentTitle(icon)
         }
     }
 

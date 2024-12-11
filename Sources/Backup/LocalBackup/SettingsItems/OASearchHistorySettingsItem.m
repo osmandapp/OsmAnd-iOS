@@ -97,12 +97,12 @@
 
 - (long)localModifiedTime
 {
-    return _searchHistoryHelper.getMarkersHistoryLastModifiedTime;
+    return [_searchHistoryHelper getHistoryLastModifiedTime];
 }
 
 - (void)setLocalModifiedTime:(long)lastModifiedTime
 {
-    [_searchHistoryHelper setMarkersHistoryLastModifiedTime:lastModifiedTime];
+    [_searchHistoryHelper setHistoryLastModifiedTime:lastModifiedTime];
 }
 
 - (void)apply

@@ -284,13 +284,12 @@
     }
     else
     {
-        OASGpxTrackAnalysis *analysis = _gpx && _gpx.dataItem ? [_gpx.dataItem getAnalysis] : nil;
         _analysis = _doc
             ? [_doc getAnalysisFileTimestamp:0
                                 fromDistance:nil
                                   toDistance:nil
                               pointsAnalyzer:[OASPlatformUtil.shared getTrackPointsAnalyser]]
-            : analysis;
+            : _gpx && _gpx.dataItem ? [_gpx.dataItem getAnalysis] : nil;
     }
 }
 

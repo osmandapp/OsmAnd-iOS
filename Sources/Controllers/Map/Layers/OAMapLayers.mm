@@ -173,9 +173,11 @@
 
 - (void) updateWeatherLayers
 {
-    [_weatherLayerLow updateWeatherLayer];
-    [_weatherLayerHigh updateWeatherLayer];
-    [_weatherContourLayer updateLayer];
+    [_mapViewController runWithRenderSync:^{
+        [_weatherLayerLow updateWeatherLayer];
+        [_weatherLayerHigh updateWeatherLayer];
+        [_weatherContourLayer updateLayer];
+    }];
 }
 
 - (void) addLayer:(OAMapLayer *)layer

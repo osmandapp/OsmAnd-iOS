@@ -618,7 +618,10 @@ typedef enum {
 
 - (void) onSettingsChanged
 {
-    [self refreshMarkersCollection];
+    __weak OAMyPositionLayer *weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf refreshMarkersCollection];
+    });
 }
 
 - (void) onAvailableAppModesChanged

@@ -17,7 +17,7 @@
 
 #include <OsmAndCore/ArchiveWriter.h>
 
-#define kTmpProfileFolder @"tmpProfileData"
+#define kTmpProfileFolder @"tmpProfileDataExport"
 
 #pragma mark - OASettingsExporter
 
@@ -44,7 +44,8 @@
         
         _app = OsmAndApp.instance;
 
-        _tmpFilesDir = [NSTemporaryDirectory() stringByAppendingPathComponent:kTmpProfileFolder];
+        NSString *dirName = [[[NSUUID UUID] UUIDString] stringByReplacingOccurrencesOfString:@"-" withString:@""];
+        _tmpFilesDir = [[NSTemporaryDirectory() stringByAppendingPathComponent:kTmpProfileFolder] stringByAppendingPathComponent:dirName];
     }
     return self;
 }

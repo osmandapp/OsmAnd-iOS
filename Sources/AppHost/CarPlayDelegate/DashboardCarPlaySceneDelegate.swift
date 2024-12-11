@@ -97,7 +97,7 @@ extension DashboardCarPlaySceneDelegate: CPTemplateApplicationDashboardSceneDele
     }
     
     func templateApplicationDashboardScene(_ templateApplicationDashboardScene: CPTemplateApplicationDashboardScene, didDisconnect dashboardController: CPDashboardController, from window: UIWindow) {
-//        OALog("[CarPlay] DashboardCarPlaySceneDelegate didDisconnect")
+        OALog("[CarPlay] DashboardCarPlaySceneDelegate didDisconnect")
         dashboardVC?.detachFromCarPlayWindow()
         mapVC = nil
         self.window = nil

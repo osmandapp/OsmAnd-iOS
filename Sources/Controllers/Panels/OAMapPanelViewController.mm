@@ -4088,7 +4088,6 @@ typedef enum
 
 - (void) updateProgress:(int)progress
 {
-    //OALog(@"Route calculation in progress: %d", progress);
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.hudViewController onRoutingProgressChanged:progress];
     });

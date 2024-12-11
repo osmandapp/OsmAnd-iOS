@@ -156,8 +156,6 @@
     {
         NSString *name = resolvedMapStyle->getStringById(p->getNameId()).toNSString();
 
-        //OALog(@"name = %@ title = %@ decs = %@ category = %@", name, p->getTitle().toNSString(), p->getDescription().toNSString(), p->getCategory().toNSString());
-
         if ([name isEqualToString:@"appMode"] ||
             [name isEqualToString:@"baseAppMode"] ||
             [name isEqualToString:@"engine_v1"])

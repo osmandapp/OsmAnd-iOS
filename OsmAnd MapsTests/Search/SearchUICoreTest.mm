@@ -18,7 +18,6 @@
 #import "OASearchResultMatcher.h"
 #import "OAAtomicInteger.h"
 #import "OAUtilities.h"
-#import "OALog.h"
 #import "OAObjectType.h"
 #import "OsmAndApp.h"
 
@@ -68,12 +67,12 @@ static BOOL TEST_EXTRA_RESULTS = YES;
     for (NSString *path in _filePaths)
         [self testSearchCase:path];
 
-    OALog(@"Search tests done");
+    NSLog(@"Search tests done");
 }
 
 - (void) testSearchCase:(NSString *)path
 {
-    OALog(@"Testing case: %@", path.lastPathComponent);
+    NSLog(@"Testing case: %@", path.lastPathComponent);
 
     NSString *jsonFile = path;
     NSString *obfFile = [[path stringByDeletingPathExtension] stringByAppendingPathExtension:@"obf"];
@@ -217,11 +216,11 @@ static BOOL TEST_EXTRA_RESULTS = YES;
                 XCTAssertEqualObjects(expected, present);
                 if (![expected isEqualToString:present])
                 {
-                    OALog(@"Phrase: %@", [phrase toString]);
-                    OALog(@"Mismatch for '%@' != '%@'. Result: ", expected, present);
+                    NSLog(@"Phrase: %@", [phrase toString]);
+                    NSLog(@"Mismatch for '%@' != '%@'. Result: ", expected, present);
                     for (OASearchResult *r : searchResults)
                     {
-                        OALog(@"\t\"%@\",", [self formatResult:NO res:r phrase:phrase]);
+                        NSLog(@"\t\"%@\",", [self formatResult:NO res:r phrase:phrase]);
                     }
                     passed = NO;
                     break;
@@ -229,7 +228,7 @@ static BOOL TEST_EXTRA_RESULTS = YES;
             }
             
         }
-        OALog(@"Test phrase: %@ done (%@)", [phrase toString], passed ? @"PASSED" : @"FAILED");
+        NSLog(@"Test phrase: %@ done (%@)", [phrase toString], passed ? @"PASSED" : @"FAILED");
     }
     // Do not use this map for future searches
     //[OsmAndApp.instance removeTestResource:obfFile];

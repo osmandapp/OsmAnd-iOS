@@ -143,7 +143,7 @@ extern "C"
 + (NSString *) getFormattedTimestampByDate:(NSDate *)date
 {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss.SSSS"];
     return [dateFormatter stringFromDate:date];
 }
 
@@ -167,8 +167,6 @@ extern "C"
     switch (quality) {
         case NSQualityOfServiceUserInteractive:
             return @"";
-            //most common format. don't write
-            //return @"Interactive";
         case NSQualityOfServiceUserInitiated:
             return @"  Initiated";
         case NSQualityOfServiceUtility:

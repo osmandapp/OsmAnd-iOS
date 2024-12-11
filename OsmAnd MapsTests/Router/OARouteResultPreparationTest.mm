@@ -9,7 +9,6 @@
 #import <XCTest/XCTest.h>
 #import "OARouteProvider.h"
 #import "OARouteCalculationParams.h"
-#import "OALog.h"
 #import "OsmAndApp.h"
 #import "OAUtilities.h"
 #import <CoreLocation/CoreLocation.h>
@@ -73,7 +72,7 @@
 
 - (void) testLanes:(NSDictionary *)testCase
 {
-    OALog(@"Testing: %@", testCase[@"testName"]);
+    NSLog(@"Testing: %@", testCase[@"testName"]);
     CLLocation *start = [[CLLocation alloc] initWithLatitude:[testCase[@"startPoint"][@"latitude"] doubleValue] longitude:[testCase[@"startPoint"][@"longitude"] doubleValue]];
     CLLocation *end = [[CLLocation alloc] initWithLatitude:[testCase[@"endPoint"][@"latitude"] doubleValue] longitude:[testCase[@"endPoint"][@"longitude"] doubleValue]];
     int startX = get31TileNumberX(start.coordinate.longitude);
@@ -107,17 +106,17 @@
                     if ([@"skipToSpeak" isEqualToString:expectedResult])
                     {
                         XCTAssertTrue(skipToSpeak);
-                        OALog(@"Test case %@ failed", testCase[@"testName"]);
+                        NSLog(@"Test case %@ failed", testCase[@"testName"]);
                     } else if (![expectedResult isEqualToString:turnLanes] &&
                        ![expectedResult isEqualToString:lanes] &&
                        ![expectedResult isEqualToString:turn])
                     {
                         XCTAssertEqualObjects(expectedResult, turnLanes, @"Segment %ld", segmentId);
-                        OALog(@"Test case %@ failed", testCase[@"testName"]);
+                        NSLog(@"Test case %@ failed", testCase[@"testName"]);
                     }
                 }
                 
-                OALog(@"segmentId: %ld description: %@", segmentId, name);
+                NSLog(@"segmentId: %ld description: %@", segmentId, name);
             }
             prevSegment = i;
         }
@@ -154,7 +153,7 @@
     {
         float te = [[NSDate date] timeIntervalSince1970];
         if (te - tm > 30)
-            OALog(@"Defalt routing config init took %f ms", (te - tm));
+            NSLog(@"Defalt routing config init took %f ms", (te - tm));
     }
 }
 

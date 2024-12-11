@@ -9,7 +9,6 @@
 #import "OAOsmBugsDBHelper.h"
 #import "OABackupHelper.h"
 
-
 #import "OALog.h"
 #import "OAOsmNotePoint.h"
 #import "OAOsmPoint.h"

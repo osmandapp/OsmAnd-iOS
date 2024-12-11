@@ -167,6 +167,9 @@ final class GlideAverageWidget: GlideBaseWidget {
                     setText("-", subtext: "")
                 }
             }
+            if let icon = getWidgetIcon() {
+                setIcon(icon)
+            }
             forceUpdate = false
         }
         return true

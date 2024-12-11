@@ -20,6 +20,7 @@ class GlideBaseWidget: OASimpleWidget {
     init(_ widgetType: WidgetType, customId: String?, appMode: OAApplicationMode, widgetParams: ([String: Any])? = nil) {
         super.init(type: widgetType)
         setText("-", subtext: "")
+        setIconFor(widgetType)
         configurePrefs(withId: customId, appMode: appMode, widgetParams: widgetParams)
     }
 

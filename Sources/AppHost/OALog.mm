@@ -85,6 +85,8 @@ extern "C"
 
 @implementation OALogger
 
+static NSDateFormatter *_dateFormatter;
+
 // wrapper for using OALog() from swift
 + (void) log:(NSString *)format withArguments:(va_list)args;
 {
@@ -127,9 +129,8 @@ extern "C"
         }
     }
     
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"MMM dd, yyyy HH:mm:ss"];
-    NSString *destPath = [[logsPath stringByAppendingPathComponent:[formatter stringFromDate:NSDate.date]] stringByAppendingPathExtension:@"log"];
+    [[self dateFormatter] setDateFormat:@"MMM dd, yyyy HH:mm:ss"];
+    NSString *destPath = [[logsPath stringByAppendingPathComponent:[[self dateFormatter] stringFromDate:NSDate.date]] stringByAppendingPathExtension:@"log"];
     
     freopen([destPath fileSystemRepresentation], "a+", stdout);
     freopen([destPath fileSystemRepresentation], "a+", stderr);
@@ -142,9 +143,15 @@ extern "C"
 
 + (NSString *) getFormattedTimestampByDate:(NSDate *)date
 {
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss.SSSS"];
-    return [dateFormatter stringFromDate:date];
+    [[self dateFormatter] setDateFormat:@"yyyy-MM-dd HH:mm:ss.SSSS"];
+    return [[self dateFormatter] stringFromDate:date];
+}
+
++ (NSDateFormatter *)dateFormatter
+{
+    if (!_dateFormatter)
+        _dateFormatter = [[NSDateFormatter alloc] init];
+    return _dateFormatter;
 }
 
 + (NSString *) getFormattedThread:(NSThread *)thread

@@ -4955,10 +4955,16 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
 
 - (void)resetPreferencesForProfile:(OAApplicationMode *)mode
 {
-    [self resetProfilePreferences:mode profilePreferences:[_profilePreferences objectEnumerator].allObjects];
-    [self resetProfilePreferences:mode profilePreferences:[_registeredPreferences objectEnumerator].allObjects];
-    [self resetProfilePreferences:mode profilePreferences:[_customBooleanRoutingProps objectEnumerator].allObjects];
-    [self resetProfilePreferences:mode profilePreferences:[_customRoutingProps objectEnumerator].allObjects];
+    NSArray<NSMapTable<NSString *, OACommonPreference *> *> *preferencesCollections = @[
+        _profilePreferences,
+        _registeredPreferences,
+        _customBooleanRoutingProps,
+        _customRoutingProps
+    ];
+    for (NSMapTable<NSString *, OACommonPreference *> *item in preferencesCollections)
+    {
+        [self resetProfilePreferences:mode profilePreferences:[item objectEnumerator].allObjects];
+    }
 
     if (!mode.isCustomProfile)
     {

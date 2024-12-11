@@ -23,6 +23,7 @@
 #import "OAAppData.h"
 #import "OAAutoObserverProxy.h"
 #import "GeneratedAssetSymbols.h"
+#import "OALog.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #import "OASwitchTableViewCell.h"
@@ -334,7 +335,7 @@
             @"type" : kEnableDescrCell,
             @"title" : text
         }];
-        NSLog([NSString stringWithFormat:@"%.1f", [OAUtilities calculateTextBounds:text width:width font:[UIFont preferredFontForTextStyle:UIFontTextStyleBody]].height]);
+        OALog([NSString stringWithFormat:@"%.1f", [OAUtilities calculateTextBounds:text width:width font:[UIFont preferredFontForTextStyle:UIFontTextStyleBody]].height]);
         _menuHeight += [OAUtilities calculateTextBounds:text width:width font:[UIFont preferredFontForTextStyle:UIFontTextStyleBody]].height + kTextLineCellFixedHeight;
     }
     

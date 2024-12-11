@@ -14,6 +14,7 @@
 #import "OAKml2Gpx.h"
 #import "OAIndexConstants.h"
 #import "Localization.h"
+#import "OALog.h"
 #import "OAGPXAppearanceCollection.h"
 #import <MBProgressHUD.h>
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
@@ -264,7 +265,7 @@ static UIViewController *parentController;
             {
                 [gpxStr writeToFile:finalFilePath atomically:YES encoding:NSUTF8StringEncoding error:&err];
                 if (err)
-                    NSLog(@"Error creating gpx file");
+                    OALog(@"Error creating gpx file");
 
                 [OAUtilities denyAccessToFile:_importUrl.path removeFromInbox:YES];
 
@@ -433,7 +434,7 @@ static UIViewController *parentController;
         [[OAGPXDatabase sharedDb] removeGpxItem:item withLocalRemove:YES];
     } else
     {
-        NSLog(@"[OAGPXImportUIHelper] -> [ERROR] -> removeFromDB");
+        OALog(@"[OAGPXImportUIHelper] -> [ERROR] -> removeFromDB");
     }
 }
 

@@ -29,6 +29,7 @@
 #import "OARouteStatisticsModeCell.h"
 #import "OAStatisticsSelectionBottomSheetViewController.h"
 #import "OAGPXDatabase.h"
+#import "OALog.h"
 #import "GeneratedAssetSymbols.h"
 #import <DGCharts/DGCharts-Swift.h>
 
@@ -438,7 +439,7 @@
                 }
                 else
                 {
-                    NSLog(@"trackItem is empty");
+                    OALog(@"trackItem is empty");
                 }
             }];
         }

@@ -169,7 +169,7 @@
             andStoredAt:(NSURL*)targetPath
               withError:(NSError*)error
 {
-    //NSLog(@"onCompletedWith response=%@ targetPath=%@ error=%d (%@)", response, targetPath, error.code, error.description);
+    //OALog(@"onCompletedWith response=%@ targetPath=%@ error=%d (%@)", response, targetPath, error.code, error.description);
 
     [_owner notifyTaskDeactivated:self];
     

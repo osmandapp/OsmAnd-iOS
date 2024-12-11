@@ -14,6 +14,7 @@
 #import <MBProgressHUD.h>
 #import "OASettingsItem.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OALog.h"
 
 @interface OAOnlinePlugin()
 
@@ -106,7 +107,7 @@
 {
     if (_osfUrl.length == 0) 
     {
-        NSLog(@"Cannot install online plugin. OSF url is empty for %@", self.getId);
+        OALog(@"Cannot install online plugin. OSF url is empty for %@", self.getId);
         return;
     }
 

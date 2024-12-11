@@ -30,6 +30,7 @@
 #import "OAUtilities.h"
 #import "OAAppVersion.h"
 #import "OAResourcesUISwiftHelper.h"
+#import "OALog.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -405,7 +406,7 @@ typedef enum
                 if (!isDownloading)
                     [self configureSearchLocationState];
                 else
-                    NSLog(@"resource: %@ is downloading", resourceId);
+                    OALog(@"resource: %@ is downloading", resourceId);
             }
             else
             {

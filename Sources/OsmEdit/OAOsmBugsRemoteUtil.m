@@ -10,6 +10,7 @@
 #import "OAOsmNotePoint.h"
 #import "OAOsmBugResult.h"
 #import "OAAppSettings.h"
+#import "OALog.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #define GET @"GET"
@@ -68,7 +69,7 @@ static const NSString* USERS_API_BASE_URL = @"https://api.openstreetmap.org/api/
 
 -(OAOsmBugResult *) editingPOI:(NSString *)url requestMethod:(NSString *)requestMethod userOperation:(NSString *)userOperation anonymous:(BOOL) anonymous
 {
-    NSLog(@"Sending request: %@", url);
+    OALog(@"Sending request: %@", url);
     NSURL *urlObj = [[NSURL alloc] initWithString:url];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:urlObj
                                                            cachePolicy:NSURLRequestReloadIgnoringLocalCacheData

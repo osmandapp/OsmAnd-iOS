@@ -163,7 +163,7 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
     if (!ok)
     {
         [NSFileManager.defaultManager removeItemAtPath:localPath error:nil];
-        NSLog(@"Failed to install custom obf from the archive");
+        OALog(@"Failed to install custom obf from the archive");
         failed = YES;
     }
     
@@ -180,7 +180,7 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
     if (!obfArchiveItem.isValid())
     {
         [NSFileManager.defaultManager removeItemAtPath:localPath error:nil];
-        NSLog(@"Custom obf in the archive is not valid");
+        OALog(@"Custom obf in the archive is not valid");
         failed = YES;
     }
     NSString *defaultPath = [OsmAndApp.instance.documentsPath stringByAppendingPathComponent:fileName].stringByDeletingPathExtension;
@@ -192,7 +192,7 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
     if (!archive.extractItemToFile(obfArchiveItem.name, pathToFile))
     {
         [NSFileManager.defaultManager removeItemAtPath:localPath error:nil];
-        NSLog(@"Failed to extract custom obf from the archive");
+        OALog(@"Failed to extract custom obf from the archive");
         failed = YES;
     }
     else if (hidden && [NSFileManager.defaultManager fileExistsAtPath:defaultPath])
@@ -230,7 +230,7 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
         if (!ok)
         {
             [NSFileManager.defaultManager removeItemAtPath:localPath error:nil];
-            NSLog(@"Failed to install custom resource from the archive");
+            OALog(@"Failed to install custom resource from the archive");
             return YES;
         }
         for (const auto& archiveItem : constOf(archiveItems))
@@ -244,7 +244,7 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
         if (!targetArchiveItem.isValid())
         {
             [NSFileManager.defaultManager removeItemAtPath:localPath error:nil];
-            NSLog(@"Custom resource file in the archive is not valid");
+            OALog(@"Custom resource file in the archive is not valid");
             return YES;
         }
         unzippedFilePath = [localPath stringByDeletingPathExtension];
@@ -253,7 +253,7 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
         if (!archive.extractItemToFile(targetArchiveItem.name, pathToFile))
         {
             [NSFileManager.defaultManager removeItemAtPath:localPath error:nil];
-            NSLog(@"Failed to extract custom resource from the archive");
+            OALog(@"Failed to extract custom resource from the archive");
             return YES;
         }
         resourceId = [resourceId stringByDeletingPathExtension];
@@ -367,7 +367,7 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                                     }
                                 }
 
-                                //NSLog(@"found name=%@ bbox=(%f,%f)(%f,%f)", foundRegion.name, foundRegion.bboxTopLeft.latitude, foundRegion.bboxTopLeft.longitude, foundRegion.bboxBottomRight.latitude, foundRegion.bboxBottomRight.longitude);
+                                //OALog(@"found name=%@ bbox=(%f,%f)(%f,%f)", foundRegion.name, foundRegion.bboxTopLeft.latitude, foundRegion.bboxTopLeft.longitude, foundRegion.bboxBottomRight.latitude, foundRegion.bboxBottomRight.longitude);
 
                                 if (foundRegion && foundRegion.superregion && resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
                                 {

@@ -8,6 +8,7 @@
 
 #import "OAExportAsyncTask.h"
 #import "OASettingsExporter.h"
+#import "OALog.h"
 
 @interface OAExportAsyncTask()
 
@@ -54,7 +55,7 @@
     [_exporter exportSettings:_filePath error:&exportError];
     if (exportError)
     {
-        NSLog(@"Failed to export items to: %@ %@", _filePath, exportError);
+        OALog(@"Failed to export items to: %@ %@", _filePath, exportError);
         return NO;
     }
     return YES;

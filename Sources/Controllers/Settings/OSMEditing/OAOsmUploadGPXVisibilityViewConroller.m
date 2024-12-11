@@ -14,6 +14,7 @@
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+#import "OALog.h"
 
 @implementation OAOsmUploadGPXVisibilityViewConroller
 {
@@ -173,7 +174,7 @@
 
 - (void) onVisibilityChanged:(EOAOsmUploadGPXVisibility)visibility
 {
-    NSLog(@"onVisibilityChanged");
+    OALog(@"onVisibilityChanged");
     _selectedVisibility = visibility;
     [self generateData];
     [self.tableView reloadData];

@@ -32,6 +32,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
+#import "OALog.h"
 
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
@@ -120,7 +121,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
 {
     if (!info && CREATE != action && [util isKindOfClass:OAOpenStreetMapRemoteUtil.class])
     {
-        NSLog(@"Entity info was not loaded");
+        OALog(@"Entity info was not loaded");
         return;
     }
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{

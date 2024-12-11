@@ -34,6 +34,7 @@
 #import "OABackupListeners.h"
 #import "OAPrepareBackupTask.h"
 #import "OAURLSessionProgress.h"
+#import "OALog.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #define kUpdateIdOperation @"Update order id"
@@ -347,7 +348,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     OASubscription *purchasedSubscription = iapHelper.getAnyPurchasedOsmAndProSubscription;
     if (purchasedSubscription)
     {
-        NSLog(@"Found purchased subscription: %@", [purchasedSubscription getOrderId]);
+        OALog(@"Found purchased subscription: %@", [purchasedSubscription getOrderId]);
         return [purchasedSubscription getOrderId];
     }
     return nil;
@@ -850,7 +851,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
         }
         else
         {
-            NSLog(@"Cannot obtain updatetime after upload. Server response: %@", [[NSString alloc] initWithData:resp encoding:NSUTF8StringEncoding]);
+            OALog(@"Cannot obtain updatetime after upload. Server response: %@", [[NSString alloc] initWithData:resp encoding:NSUTF8StringEncoding]);
         }
     }
     if (error == nil && [status isEqualToString:@"ok"])

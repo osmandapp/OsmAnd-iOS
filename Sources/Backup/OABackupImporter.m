@@ -21,6 +21,7 @@
 #import "OACollectionSettingsItem.h"
 #import "OAOperationLog.h"
 #import "OAAtomicInteger.h"
+#import "OALog.h"
 #import "Localization.h"
 
 @interface OAItemFileDownloadTask : NSOperation
@@ -57,7 +58,7 @@
     [reader readFromFile:tempFilePath error:&err];
     [item applyAdditionalParams:tempFilePath];
     if (err)
-        NSLog(@"Error reading downloaded item: %@", tempFilePath);
+        OALog(@"Error reading downloaded item: %@", tempFilePath);
 }
 
 @end
@@ -192,7 +193,7 @@
             }
         }];
     } @catch (NSException *e) {
-        NSLog(@"Failed to collect items for backup");
+        OALog(@"Failed to collect items for backup");
     }
     [operationLog finishOperation];
     if (error.length > 0)
@@ -297,7 +298,7 @@
     @catch (NSException *exception)
     {
         [item.warnings addObject:[NSString stringWithFormat:OALocalizedString(@"settings_item_read_error"), item.name]];
-        NSLog(@"Error reading item data: %@ %@", item.name, exception.reason);
+        OALog(@"Error reading item data: %@ %@", item.name, exception.reason);
     }
 }
 
@@ -555,7 +556,7 @@
                 if (json && ! jsonErr)
                     [itemsJson addObject:json];
                 else
-                    NSLog(@"generateItemsJson error: filePath:%@ %@", filePath, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+                    OALog(@"generateItemsJson error: filePath:%@ %@", filePath, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
             }
             else
             {

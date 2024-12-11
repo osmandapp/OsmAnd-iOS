@@ -77,7 +77,7 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
     self = [super init];
     if (self)
     {
-        NSLog(@"AppDelegate initialized");
+        OALog(@"AppDelegate initialized");
         initializeQueue = dispatch_queue_create("OAAppDelegateInitializeQueue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_CONCURRENT, QOS_CLASS_USER_INTERACTIVE, 0));
     }
     return self;
@@ -105,7 +105,7 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 
     [self configureAppLaunchEvent:AppLaunchEventStart];
 
-    NSLog(@"OAAppDelegate initialize start");
+    OALog(@"OAAppDelegate initialize start");
 
     // Configure device
     UIDevice* device = [UIDevice currentDevice];
@@ -133,19 +133,19 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
     
     dispatch_async(initializeQueue, ^{
         
-        NSLog(@"OAAppDelegate beginBackgroundTask");
+        OALog(@"OAAppDelegate beginBackgroundTask");
 
         // Initialize OsmAnd core
         if (![_app initializeCore])
         {
-            NSLog(@"OAAppDelegate failed to initialize core");
+            OALog(@"OAAppDelegate failed to initialize core");
             return;
         }
 
         // Initialize application in background
         if (![_app initialize])
         {
-            NSLog(@"OAAppDelegate failed to initialize app");
+            OALog(@"OAAppDelegate failed to initialize app");
             return;
         }
 
@@ -199,14 +199,14 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
             [[UIApplication sharedApplication] endBackgroundTask:_appInitTask];
             _appInitTask = UIBackgroundTaskInvalid;
 
-            NSLog(@"OAAppDelegate endBackgroundTask");
+            OALog(@"OAAppDelegate endBackgroundTask");
             
             // Check for updates every hour when the app is in the foreground
             [self initCheckUpdatesTimer];
         });
     });
     
-    NSLog(@"OAAppDelegate initialize finish");
+    OALog(@"OAAppDelegate initialize finish");
     return YES;
 }
 
@@ -284,14 +284,14 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
         _dataFetchQueue = [[NSOperationQueue alloc] init];
         @try
         {
-            NSLog(@"BGTaskScheduler registerForTaskWithIdentifier");
+            OALog(@"BGTaskScheduler registerForTaskWithIdentifier");
             [BGTaskScheduler.sharedScheduler registerForTaskWithIdentifier:kFetchDataUpdatesId usingQueue:nil launchHandler:^(__kindof BGTask * _Nonnull task) {
                 [self handleBackgroundDataFetch:(BGProcessingTask *)task];
             }];
         }
         @catch (NSException *e)
         {
-            NSLog(@"Failed to schedule background fetch. Reason: %@", e.reason);
+            OALog(@"Failed to schedule background fetch. Reason: %@", e.reason);
         }
     }
 
@@ -322,14 +322,14 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
     request.earliestBeginDate = [NSDate dateWithTimeIntervalSinceNow:kCheckUpdatesInterval];
     @try
     {
-        NSLog(@"BGTaskScheduler submitTaskRequest");
+        OALog(@"BGTaskScheduler submitTaskRequest");
         NSError *error = nil;
         // e -l objc -- (void)[[BGTaskScheduler sharedScheduler] _simulateLaunchForTaskWithIdentifier:@"net.osmand.fetchDataUpdates"]
         [BGTaskScheduler.sharedScheduler submitTaskRequest:request error:&error];
         if (error)
-            NSLog(@"Could not schedule app refresh: %@", error.description);
+            OALog(@"Could not schedule app refresh: %@", error.description);
     } @catch (NSException *e) {
-        NSLog(@"Could not schedule app refresh: %@", e.reason);
+        OALog(@"Could not schedule app refresh: %@", e.reason);
     }
 }
 
@@ -340,14 +340,14 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 
 - (void)applicationWillResignActive
 {
-    NSLog(@"OAAppDelegate applicationWillResignActive %d", _appInitDone);
+    OALog(@"OAAppDelegate applicationWillResignActive %d", _appInitDone);
     if (_appInitDone)
         [_app onApplicationWillResignActive];
 }
 
 - (void)applicationDidEnterBackground
 {
-    NSLog(@"OAAppDelegate applicationDidEnterBackground %d", _appInitDone);
+    OALog(@"OAAppDelegate applicationDidEnterBackground %d", _appInitDone);
     [self invalidateIfNeededCheckUpdatesTimer];
     if (_appInitDone)
         [_app onApplicationDidEnterBackground];
@@ -358,7 +358,7 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 
 - (void)applicationWillEnterForeground
 {
-    NSLog(@"OAAppDelegate applicationWillEnterForeground %d", _appInitDone);
+    OALog(@"OAAppDelegate applicationWillEnterForeground %d", _appInitDone);
     if (_appInitDone)
     {
         [_app onApplicationWillEnterForeground];
@@ -369,7 +369,7 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
             id<OADownloadTask> nextTask = [_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks objectAtIndex:0]];
             if (nextTask)
             {
-                NSLog(@"Resume suspended download %@", nextTask.key);
+                OALog(@"Resume suspended download %@", nextTask.key);
                 [nextTask resume];
             }
         }
@@ -378,7 +378,7 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 
 - (void)applicationDidBecomeActive
 {
-    NSLog(@"OAAppDelegate applicationDidBecomeActive %d", _appInitDone);
+    OALog(@"OAAppDelegate applicationDidBecomeActive %d", _appInitDone);
     if (_appInitDone)
     {
         [self initCheckUpdatesTimer];
@@ -394,7 +394,7 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-    NSLog(@"OAAppDelegate applicationWillTerminate");
+    OALog(@"OAAppDelegate applicationWillTerminate");
     [_app shutdown];
     OAMapViewController *mapVc = OARootViewController.instance.mapPanel.mapViewController;
     [mapVc onApplicationDestroyed];
@@ -409,17 +409,17 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
 {
-    NSLog(@"OAAppDelegate applicationDidReceiveMemoryWarning");
+    OALog(@"OAAppDelegate applicationDidReceiveMemoryWarning");
 }
 
 - (void)applicationProtectedDataWillBecomeUnavailable:(UIApplication *)application
 {
-    NSLog(@"OAAppDelegate applicationProtectedDataWillBecomeUnavailable");
+    OALog(@"OAAppDelegate applicationProtectedDataWillBecomeUnavailable");
 }
 
 - (void)applicationProtectedDataDidBecomeAvailable:(UIApplication *)application
 {
-    NSLog(@"OAAppDelegate applicationProtectedDataDidBecomeAvailable");
+    OALog(@"OAAppDelegate applicationProtectedDataDidBecomeAvailable");
 }
 
 #pragma mark - UISceneSession Lifecycle

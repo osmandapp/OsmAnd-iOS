@@ -20,6 +20,7 @@
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OAWikiLanguagesWebViewContoller.h"
+#import "OALog.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -193,7 +194,7 @@
         }
         @catch (NSException *exception)
         {
-            NSLog(@"%@", [exception reason]);
+            OALog(@"%@", [exception reason]);
         }
     }
     return regionsByLocation;

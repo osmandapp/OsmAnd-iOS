@@ -218,29 +218,29 @@ public struct OpenLocationCodeArea {
 /// // Encode a location with default code length.
 /// NSString *code = [OLCConverter encodeLatitude:37.421908
 ///                                     longitude:-122.084681];
-/// NSLog(@"Open Location Code: %@", code);
-/// 
+/// OALog(@"Open Location Code: %@", code);
+///
 /// // Encode a location with specific code length.
 /// NSString *code10Digit = [OLCConverter encodeLatitude:37.421908
 ///                                            longitude:-122.084681
 ///                                           codeLength:10];
-/// NSLog(@"Open Location Code: %@", code10Digit);
-/// 
+/// OALog(@"Open Location Code: %@", code10Digit);
+///
 /// // Decode a full code:
 /// OLCArea *coord = [OLCConverter decode:@"849VCWC8+Q48"];
-/// NSLog(@"Center is %.6f, %.6f", coord.latitudeCenter, coord.longitudeCenter);
-/// 
+/// OALog(@"Center is %.6f, %.6f", coord.latitudeCenter, coord.longitudeCenter);
+///
 /// // Attempt to trim the first characters from a code:
 /// NSString *shortCode = [OLCConverter shortenCode:@"849VCWC8+Q48"
 ///                                        latitude:37.4
 ///                                       longitude:-122.0];
-/// NSLog(@"Short Code: %@", shortCode);
-/// 
+/// OALog(@"Short Code: %@", shortCode);
+///
 /// // Recover the full code from a short code:
 /// NSString *recoveredCode = [OLCConverter recoverNearestWithShortcode:@"CWC8+Q48"
 ///                                                   referenceLatitude:37.4
 ///                                                  referenceLongitude:-122.1];
-/// NSLog(@"Recovered Full Code: %@", recoveredCode);
+/// OALog(@"Recovered Full Code: %@", recoveredCode);
 /// ```
 ///
 public class OpenLocationCode {

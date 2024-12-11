@@ -8,6 +8,7 @@
 
 #import "OARouteImporter.h"
 #import "OAGPXDocumentPrimitives.h"
+#import "OALog.h"
 
 #include <routeDataResources.h>
 #include <routeSegmentResult.h>
@@ -154,7 +155,7 @@
         }
         catch (const std::exception &ex)
         {
-            NSLog(@"%s", ex.what());
+            OALog(@"%s", ex.what());
         }
     }
     return route;

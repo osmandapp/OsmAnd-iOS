@@ -185,49 +185,49 @@
                 const char *sql_stmt = [[NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ text", POINT_NAME, POINT_COL_COLOR] UTF8String];
                 if (sqlite3_exec(tracksDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
                 {
-                    NSLog(@"Failed to add column - %@, for table - %@ | error: %s", POINT_COL_COLOR, POINT_NAME, errMsg);
+                    OALog(@"Failed to add column - %@, for table - %@ | error: %s", POINT_COL_COLOR, POINT_NAME, errMsg);
                 }
                 if (errMsg != NULL) sqlite3_free(errMsg);
 
                 sql_stmt = [[NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ text", POINT_NAME, POINT_COL_CATEGORY] UTF8String];
                 if (sqlite3_exec(tracksDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
                 {
-                    NSLog(@"Failed to add column - %@, for table - %@ | error: %s", POINT_COL_CATEGORY, POINT_NAME, errMsg);
+                    OALog(@"Failed to add column - %@, for table - %@ | error: %s", POINT_COL_CATEGORY, POINT_NAME, errMsg);
                 }
                 if (errMsg != NULL) sqlite3_free(errMsg);
 
                 sql_stmt = [[NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ text", POINT_NAME, POINT_COL_DESCRIPTION] UTF8String];
                 if (sqlite3_exec(tracksDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
                 {
-                    NSLog(@"Failed to add column - %@, for table - %@ | error: %s", POINT_COL_DESCRIPTION, POINT_NAME, errMsg);
+                    OALog(@"Failed to add column - %@, for table - %@ | error: %s", POINT_COL_DESCRIPTION, POINT_NAME, errMsg);
                 }
                 if (errMsg != NULL) sqlite3_free(errMsg);
 
                 sql_stmt = [[NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ text", POINT_NAME, POINT_COL_ICON] UTF8String];
                 if (sqlite3_exec(tracksDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
                 {
-                    NSLog(@"Failed to add column - %@, for table - %@ | error: %s", POINT_COL_ICON, POINT_NAME, errMsg);
+                    OALog(@"Failed to add column - %@, for table - %@ | error: %s", POINT_COL_ICON, POINT_NAME, errMsg);
                 }
                 if (errMsg != NULL) sqlite3_free(errMsg);
 
                 sql_stmt = [[NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ text", POINT_NAME, POINT_COL_BACKGROUND] UTF8String];
                 if (sqlite3_exec(tracksDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
                 {
-                    NSLog(@"Failed to add column - %@, for table - %@ | error: %s", POINT_COL_BACKGROUND, POINT_NAME, errMsg);
+                    OALog(@"Failed to add column - %@, for table - %@ | error: %s", POINT_COL_BACKGROUND, POINT_NAME, errMsg);
                 }
                 if (errMsg != NULL) sqlite3_free(errMsg);
 
                 sql_stmt = [[NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ double", TRACK_NAME, TRACK_COL_HEADING] UTF8String];
                 if (sqlite3_exec(tracksDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
                 {
-                    NSLog(@"Failed to add column - %@, for table - %@ | error: %s", TRACK_COL_HEADING, TRACK_NAME, errMsg);
+                    OALog(@"Failed to add column - %@, for table - %@ | error: %s", TRACK_COL_HEADING, TRACK_NAME, errMsg);
                 }
                 if (errMsg != NULL) sqlite3_free(errMsg);
 
                 sql_stmt = [[NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ text", TRACK_NAME, TRACK_COL_PLUGINS_INFO] UTF8String];
                 if (sqlite3_exec(tracksDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
                 {
-                    NSLog(@"Failed to add column - %@, for table - %@ | error: %s", TRACK_COL_PLUGINS_INFO, TRACK_NAME, errMsg);
+                    OALog(@"Failed to add column - %@, for table - %@ | error: %s", TRACK_COL_PLUGINS_INFO, TRACK_NAME, errMsg);
                 }
                 if (errMsg != NULL) sqlite3_free(errMsg);
 
@@ -438,7 +438,7 @@
                 }
                 
             } else {
-                NSLog(@"[ERROR] -> OASavingTrackHelper | save gpx");
+                OALog(@"[ERROR] -> OASavingTrackHelper | save gpx");
             }
         }
         
@@ -948,7 +948,7 @@
             
             int res = sqlite3_step(statement);
             if (res != SQLITE_OK && res != SQLITE_DONE)
-                NSLog(@"updatePointCoordinates failed: sqlite3_step=%d", res);
+                OALog(@"updatePointCoordinates failed: sqlite3_step=%d", res);
 
             sqlite3_finalize(statement);
             
@@ -988,7 +988,7 @@
 
             int res = sqlite3_step(statement);
             if (res != SQLITE_OK && res != SQLITE_DONE)
-                NSLog(@"doUpdatePointsLat failed: sqlite3_step=%d", res);
+                OALog(@"doUpdatePointsLat failed: sqlite3_step=%d", res);
 
             sqlite3_finalize(statement);
             

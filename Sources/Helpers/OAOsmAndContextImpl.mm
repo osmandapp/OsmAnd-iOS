@@ -13,6 +13,7 @@
 #import "OASelectedGpxHelper.h"
 #import "OAGPXUIHelper.h"
 #import "OAPOI.h"
+#import "OALog.h"
 
 static NSString * const kGpxRecDir = @"rec";
 static NSString * const kGpxImportDir = @"import";
@@ -177,10 +178,10 @@ static NSString * const kGpxImportDir = @"import";
         if (fileContents) {
             return fileContents;
         } else {
-            NSLog(@"Error reading file %@: %@", filePath, [error localizedDescription]);
+            OALog(@"Error reading file %@: %@", filePath, [error localizedDescription]);
         }
     } else {
-        NSLog(@"File %@ not found in the bundle", name);
+        OALog(@"File %@ not found in the bundle", name);
     }
     return nil;
 }

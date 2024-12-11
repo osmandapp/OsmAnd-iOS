@@ -15,6 +15,7 @@
 #import "OAInputTableViewCell.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+#import "OALog.h"
 
 #define VERIFICATION_CODE_EXPIRATION_TIME_MIN (10 * 60)
 
@@ -205,7 +206,7 @@
     {
         self.errorMessage = OALocalizedString(@"backup_error_invalid_token");
         [self updateScreen];
-        NSLog(@"Token is not valid");
+        OALog(@"Token is not valid");
     }
 }
 

@@ -19,6 +19,7 @@
 #import "OAImportBackupItemsTask.h"
 #import "OASettingsImporter.h"
 #import "OABackupInfo.h"
+#import "OALog.h"
 
 @implementation OAItemProgressInfo
 
@@ -167,7 +168,7 @@
             if (json && !jsonErr)
                 [itemsJson addObject:json];
             else
-                NSLog(@"importBackupTask error: filePath:%@ %@", filePath, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+                OALog(@"importBackupTask error: filePath:%@ %@", filePath, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
         }
         else
         {
@@ -199,7 +200,7 @@
             }
             @catch (NSException *e)
             {
-                NSLog(@"Failed to collect items for backup: %@", e.reason);
+                OALog(@"Failed to collect items for backup: %@", e.reason);
             }
             return nil;
         }
@@ -224,7 +225,7 @@
                 }
                 @catch (NSException *e)
                 {
-                    NSLog(@"Failed to recollect items for backup import: %@", e.reason);
+                    OALog(@"Failed to recollect items for backup import: %@", e.reason);
                     return nil;
                 }
             }

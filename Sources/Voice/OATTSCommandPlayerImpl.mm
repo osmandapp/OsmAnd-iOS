@@ -14,6 +14,7 @@
 #import "OAAppSettings.h"
 #import "OARootViewController.h"
 #import "Localization.h"
+#import "OALog.h"
 
 #include <JavaScriptCore/JavaScriptCore.h>
 
@@ -92,7 +93,7 @@
                 [OAUtilities showToast:OALocalizedString(@"download_persian_voice_alert_title") details:details duration:4 inView:OARootViewController.instance.view];
             });
         }
-        NSLog(@"[OATTSCommandPlayerImpl] Invalid or unsupported locale identifier: %@, using current system language", voiceProvider);
+        OALog(@"[OATTSCommandPlayerImpl] Invalid or unsupported locale identifier: %@, using current system language", voiceProvider);
         return [AVSpeechSynthesisVoice voiceWithLanguage:[AVSpeechSynthesisVoice currentLanguageCode]];
     }
 }

@@ -13,6 +13,7 @@
 #import "SunriseSunset.h"
 #import "OALocationServices.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OALog.h"
 
 @implementation OADayNightHelper
 {
@@ -99,7 +100,7 @@
     if (_lastNightMode != nightMode)
     {
         _lastNightMode = nightMode;
-        NSLog(@"Sunrise/sunset setting to day: %@", nightMode ? @"NO" : @"YES");
+        OALog(@"Sunrise/sunset setting to day: %@", nightMode ? @"NO" : @"YES");
         if (!_firstCall)
             [[[OsmAndApp instance] dayNightModeObservable] notifyEvent];
     }

@@ -18,6 +18,7 @@
 #import "QuadRect.h"
 #import "OARouteProvider.h"
 #import "OARootViewController.h"
+#import "OALog.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <transportRoutingObjects.h>
@@ -836,7 +837,7 @@
         {
             [listener newRouteIsCalculated:YES];
         }
-        NSLog(@"Public transport routes calculated: %ld", res.size());
+        OALog(@"Public transport routes calculated: %ld", res.size());
     });
 }
 
@@ -886,7 +887,7 @@
 
 - (void) showMessage:(NSString *)msg
 {
-    NSLog(@"Public Transport error: %@", msg);
+    OALog(@"Public Transport error: %@", msg);
 }
 
 

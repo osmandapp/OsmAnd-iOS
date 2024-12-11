@@ -17,6 +17,7 @@
 #import "OAOSMSettings.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+#import "OALog.h"
 
 #include <ctime>
 
@@ -275,7 +276,7 @@ static const NSInteger timeSectionIndex = 1;
 -(void)updateRuleTime
 {
     const auto rule = std::dynamic_pointer_cast<OpeningHoursParser::BasicOpeningHourRule>(_currentRule);
-    NSLog(@"startMinutes: %d", [self dateToMinutes:_startDate]);
+    OALog(@"startMinutes: %d", [self dateToMinutes:_startDate]);
     rule->setStartTime([self dateToMinutes:_startDate]);
     rule->setEndTime([self dateToMinutes:_endDate]);
 }

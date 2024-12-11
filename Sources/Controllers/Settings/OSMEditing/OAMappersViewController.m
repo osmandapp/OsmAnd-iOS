@@ -16,6 +16,7 @@
 #import "Localization.h"
 #import <SafariServices/SafariServices.h>
 #import "GeneratedAssetSymbols.h"
+#import "OALog.h"
 
 #define USER_CHANGES_URL @"https://osmand.net/changesets/user-changes"
 #define CONTRIBUTIONS_URL @"https://www.openstreetmap.org/user/"
@@ -381,7 +382,7 @@
                 }
                 @catch (NSException *e)
                 {
-                    NSLog(e.reason);
+                    OALog(e.reason);
                 }
             }
         }

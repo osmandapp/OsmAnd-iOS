@@ -58,6 +58,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 #import "OsmAndSharedWrapper.h"
+#import "OALog.h"
 
 #define kHeaderSectionHeigh 60.0
 
@@ -835,12 +836,12 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         }
         else
         {
-            NSLog(@"An error occured while saving route planning track for navigation");
+            OALog(@"An error occured while saving route planning track for navigation");
         }
     }
     else
     {
-        NSLog(@"An error occured while saving route planning track for navigation: no route to save");
+        OALog(@"An error occured while saving route planning track for navigation: no route to save");
     }
 }
 
@@ -1748,7 +1749,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     if (_editingContext.getPointsCount > 0)
         [self showAddToTrackDialog];
 //    else
-//        NSLog(@"No points to add");
+//        OALog(@"No points to add");
 //        Toast.makeText(mapActivity, getString(R.string.none_point_error), Toast.LENGTH_SHORT).show();
 }
 
@@ -1850,7 +1851,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     }
     else
     {
-        NSLog(@"Can't reverse one point");
+        OALog(@"Can't reverse one point");
     }
 }
 

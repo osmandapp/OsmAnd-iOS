@@ -20,6 +20,7 @@
 #import "OAMapLayers.h"
 #import "OAColors.h"
 #import "OAOsmAndFormatter.h"
+#import "OALog.h"
 
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 
@@ -297,7 +298,7 @@
                 }
                 else
                 {
-                    NSLog(@"Faliled to create OADestinationsLineWidget image for colorName: %@", colorName);
+                    OALog(@"Faliled to create OADestinationsLineWidget image for colorName: %@", colorName);
                 }
             }
             CGContextRestoreGState(ctx);

@@ -2210,7 +2210,7 @@ typedef enum
         }
         else
         {
-            NSLog(@"targetGoToGPX wrong cast");
+            OALog(@"targetGoToGPX wrong cast");
         }
     }
     else
@@ -4088,7 +4088,6 @@ typedef enum
 
 - (void) updateProgress:(int)progress
 {
-    //NSLog(@"Route calculation in progress: %d", progress);
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.hudViewController onRoutingProgressChanged:progress];
     });
@@ -4096,7 +4095,7 @@ typedef enum
 
 - (void) finish
 {
-    NSLog(@"Route calculation finished");
+    OALog(@"Route calculation finished");
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.hudViewController onRoutingProgressFinished];
     });

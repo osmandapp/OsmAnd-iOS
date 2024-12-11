@@ -23,6 +23,7 @@
 #import "OAPOIBaseType.h"
 #import "OAStreet.h"
 #import "OAResultMatcher.h"
+#import "OALog.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -529,7 +530,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
         OASearchResultCollection *collection = [[OASearchResultCollection alloc] initWithPhrase:sphrase];
         [collection addSearchResults:[rm getRequestResults] resortAll:resortAll removeDuplicates:removeDuplicates];
 
-        NSLog(@">> Shallow Search phrase %@ %d", [_phrase toString], (int)([rm getRequestResults].count));
+        OALog(@">> Shallow Search phrase %@ %d", [_phrase toString], (int)([rm getRequestResults].count));
 
         return collection;
     }
@@ -653,7 +654,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
     _searchActive = YES;
     OASearchPhrase *phrase = [_phrase generateNewPhrase:text settings:_searchSettings];
     _phrase = phrase;
-    NSLog(@"> Search phrase %@", [_phrase toString]);
+    OALog(@"> Search phrase %@", [_phrase toString]);
     
     dispatch_async(_taskQueue, ^{
         @try
@@ -706,7 +707,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
             {
                 OASearchResultCollection *collection = [[OASearchResultCollection alloc] initWithPhrase:phrase];
                 [collection addSearchResults:[rm getRequestResults] resortAll:YES removeDuplicates:YES];
-                NSLog(@">> Search phrase %@ %d", [phrase toString], (int)([rm getRequestResults].count));
+                OALog(@">> Search phrase %@ %d", [phrase toString], (int)([rm getRequestResults].count));
                 _currentSearchResult = collection;
                 [rm searchFinished:phrase];
                 if (_onResultsComplete)
@@ -715,7 +716,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
         }
         @catch (NSException *e)
         {
-            NSLog(@"OASearchUICore.search error %@", e);
+            OALog(@"OASearchUICore.search error %@", e);
         }
         @finally
         {
@@ -810,7 +811,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
         }
         catch (NSException *e)
         {
-            NSLog(@"OASearchUICore.searchInBackground error %@", e);
+            OALog(@"OASearchUICore.searchInBackground error %@", e);
         }
 
         if ([api isSearchDone:phrase])

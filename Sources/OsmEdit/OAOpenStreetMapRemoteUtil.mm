@@ -28,6 +28,7 @@
 #import "OANetworkUtilities.h"
 #import "OAURLSessionProgress.h"
 #import "OAGPXDatabase.h"
+#import "OALog.h"
 #import "OsmAndApp.h"
 #import "OsmAnd_Maps-Swift.h"
 
@@ -118,7 +119,7 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
 
 -(NSString *)sendRequest:(NSString *)url requestMethod:(NSString *)requestMethod requestBody:(NSString *)requestBody userOperation:(NSString *)userOperation doAuthenticate:(BOOL)doAuthenticate
 {
-    NSLog(@"Sending request: %@", url);
+    OALog(@"Sending request: %@", url);
     NSURL *urlObj = [[NSURL alloc] initWithString:url];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:urlObj
                                                                              cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
@@ -284,7 +285,7 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
         NSString *response = [self sendRequest:[NSString stringWithFormat:@"%@%@%ld%@", BASE_URL, @"api/0.6/changeset/", _changeSetId, @"/close"]
                                 requestMethod:@"PUT" requestBody:@"" userOperation:OALocalizedString(@"closing_changeset")
                                 doAuthenticate:YES];
-        NSLog(@"Response: %@", response);
+        OALog(@"Response: %@", response);
         _changeSetId = NO_CHANGESET_ID;
     }
 }
@@ -327,7 +328,7 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
     NSString *res = [self sendRequest:[NSString stringWithFormat:@"%@%@%ld%@", BASE_URL, @"api/0.6/changeset/", _changeSetId, @"/upload"]
                        requestMethod:@"POST" requestBody:xmlString userOperation:OALocalizedString(@"commiting_node")
                       doAuthenticate:YES];
-    NSLog(@"Response: %@", res);
+    OALog(@"Response: %@", res);
     if (res) {
         if (CREATE == action) {
             long long newId = [entity getId];

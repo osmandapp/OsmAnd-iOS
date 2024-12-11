@@ -10,6 +10,7 @@
 #import "OAMapInfoController.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+#import "OALog.h"
 
 @implementation OABaseWidgetView
 {
@@ -186,7 +187,7 @@
 
 - (void)updateSimpleLayout
 {
-    NSLog(@"call base updateSimpleLayout");
+    OALog(@"call base updateSimpleLayout");
 }
 
 - (void)showBottomSeparator:(BOOL)show

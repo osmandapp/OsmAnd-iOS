@@ -9,6 +9,7 @@
 #import "OASettingsItemReader.h"
 #import "OASettingsHelper.h"
 #import "OASettingsItem.h"
+#import "OALog.h"
 
 @interface OASettingsItemReader<__covariant ObjectType : OASettingsItem *>()
 
@@ -67,7 +68,7 @@
     [self.item readFromJson:json error:&parsingError];
     if (parsingError)
     {
-        NSLog(@"Json parsing error");
+        OALog(@"Json parsing error");
         return NO;
     }
 

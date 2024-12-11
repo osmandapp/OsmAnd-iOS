@@ -69,6 +69,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import <DGCharts/DGCharts-Swift.h>
 #import "OsmAndSharedWrapper.h"
+#import "OALog.h"
 
 #define kGpxDescriptionImageHeight 149
 #define kOverviewTabIndex @0
@@ -1597,7 +1598,7 @@
         gpx = [gpxDb addGPXFileToDBIfNeeded:path];
         if (!gpx)
         {
-            NSLog(@"[ERROR] saveNetworkRoute");
+            OALog(@"[ERROR] saveNetworkRoute");
             return;
         }
         OASGpxTrackAnalysis *analysis = [gpx getAnalysis];

@@ -10,6 +10,7 @@
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+#import "OALog.h"
 
 @implementation OAFreeMemoryView
 {
@@ -105,7 +106,7 @@
         deviceMemoryCapacity = [fileSystemSizeInBytes unsignedLongLongValue];
         if (deviceMemoryCapacity <= 0)
         {
-            NSLog(@"Error obtaining dvice memory capacity");
+            OALog(@"Error obtaining dvice memory capacity");
             deviceMemoryCapacity = 1;
         }
         
@@ -122,7 +123,7 @@
     }
     else
     {
-        NSLog(@"Error Obtaining File System Info: Domain = %@, Code = %ld", [error domain], (long)[error code]);
+        OALog(@"Error Obtaining File System Info: Domain = %@, Code = %ld", [error domain], (long)[error code]);
     }
 
     unsigned long long docSize = [OAUtilities folderSize:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]];
@@ -140,7 +141,7 @@
     double sum = _sysVal + _appVal + _freeVal;
     if (sum > 1.5 || sum <= 0)
     {
-        NSLog(@"Incorrect storage calculation (total:%llu, system:%llu, free:%llu, doc:%llu)", capValue, systemValue, availValue, docValue);
+        OALog(@"Incorrect storage calculation (total:%llu, system:%llu, free:%llu, doc:%llu)", capValue, systemValue, availValue, docValue);
         _sysVal = 0;
         _appVal = 0;
         _freeVal = 1;

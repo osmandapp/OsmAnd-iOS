@@ -382,6 +382,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     _shadowButton = [[UIButton alloc] initWithFrame:CGRectZero];
     _shadowButton.translatesAutoresizingMaskIntoConstraints = NO;
     [_shadowButton addTarget:self action:@selector(onWidgetClicked:) forControlEvents:UIControlEventTouchUpInside];
+    _shadowButton.menu = [self configureContextWidgetMenu];
     [self addSubview:_shadowButton];
     
     [NSLayoutConstraint activateConstraints:@[
@@ -735,6 +736,10 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
         _textView.attributedText = string;
         _shadowButton.accessibilityValue = string.string;
         
+        if (!_shadowButton.menu)
+        {
+            _shadowButton.menu = [self configureContextWidgetMenu];
+        }
     }
     [self refreshLayout];
 }
@@ -956,8 +961,14 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
 
 - (OAWidgetsPanel *)getWidgetPanel
 {
-    OAMapWidgetInfo *widgetInfo = [[OAMapWidgetRegistry sharedInstance] getWidgetInfoById:_customId];
+    OAMapWidgetInfo *widgetInfo = [self getWidgetInfo];
     return widgetInfo.widgetPanel;
+}
+
+- (OAMapWidgetInfo *)getWidgetInfo
+{
+    NSString *widgetId = _customId ?: self.widgetType.id;
+    return [[OAMapWidgetRegistry sharedInstance] getWidgetInfoById:widgetId];
 }
 
 - (OACommonWidgetSizeStyle *)registerWidgetSizePref:(NSString *)customId

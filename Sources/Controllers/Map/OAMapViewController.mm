@@ -79,7 +79,6 @@
 #import "Localization.h"
 #import "OsmAndSharedWrapper.h"
 
-
 //#include "OAMapMarkersCollection.h"
 #include "OASQLiteTileSourceMapLayerProvider.h"
 #include "OAWebClient.h"
@@ -469,13 +468,42 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     _mapView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _contentScaleFactor = [[UIScreen mainScreen] scale];
     _mapView.contentScaleFactor = _contentScaleFactor;
+
+    // Tell view to create context
+    _mapView.displayDensityFactor = self.displayDensityFactor;
+    [_mapView createContext];
+
+    // Adjust map-view target, zoom, azimuth and elevation angle to match last viewed
+    if (_app.initialURLMapState)
+    {
+        _mapView.target31 = OsmAnd::PointI(_app.initialURLMapState.target31.x,
+                                           _app.initialURLMapState.target31.y);
+        float zoom = _app.initialURLMapState.zoom;
+        _mapView.zoom = qBound(_mapView.minZoom, isnan(zoom) ? 5 : zoom, _mapView.maxZoom);
+        float azimuth = _app.initialURLMapState.azimuth;
+        _mapView.azimuth = isnan(azimuth) ? 0 : azimuth;
+    }
+    else
+    {
+        _mapView.target31 = OsmAnd::PointI(_app.data.mapLastViewedState.target31.x,
+                                           _app.data.mapLastViewedState.target31.y);
+
+        float zoom = MAX([OAZoom getMinValidZoom], _app.data.mapLastViewedState.zoom);
+        _mapView.zoom = qBound(_mapView.minZoom, isnan(zoom) ? 5 : zoom, _mapView.maxZoom);
+        float azimuth = _app.data.mapLastViewedState.azimuth;
+        _mapView.azimuth = isnan(azimuth) ? 0 : azimuth;
+        float elevationAngle = _app.data.mapLastViewedState.elevationAngle;
+        _mapView.elevationAngle = isnan(elevationAngle) ? kDefaultElevationAngle : elevationAngle;
+        _map3DModeElevationAngle = kDefaultElevationAngle;
+    }
+
     [_stateObserver observe:_mapView.stateObservable];
     [_settingsObserver observe:_mapView.settingsObservable];
     [_framePreparedObserver observe:_mapView.framePreparedObservable];
     _mapView.rendererDelegate = self;
-    
+
     self.mapViewLoaded = YES;
-    
+
     // Create map layers
     [_mapLayers createLayers];
 }
@@ -515,34 +543,6 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-
-    // Tell view to create context
-    _mapView.displayDensityFactor = self.displayDensityFactor;
-    [_mapView createContext];
-    
-    // Adjust map-view target, zoom, azimuth and elevation angle to match last viewed
-    if (_app.initialURLMapState)
-    {
-        _mapView.target31 = OsmAnd::PointI(_app.initialURLMapState.target31.x,
-                                           _app.initialURLMapState.target31.y);
-        float zoom = _app.initialURLMapState.zoom;
-        _mapView.zoom = qBound(_mapView.minZoom, isnan(zoom) ? 5 : zoom, _mapView.maxZoom);
-        float azimuth = _app.initialURLMapState.azimuth;
-        _mapView.azimuth = isnan(azimuth) ? 0 : azimuth;
-    }
-    else
-    {
-        _mapView.target31 = OsmAnd::PointI(_app.data.mapLastViewedState.target31.x,
-                                           _app.data.mapLastViewedState.target31.y);
-
-        float zoom = MAX([OAZoom getMinValidZoom], _app.data.mapLastViewedState.zoom);
-        _mapView.zoom = qBound(_mapView.minZoom, isnan(zoom) ? 5 : zoom, _mapView.maxZoom);
-        float azimuth = _app.data.mapLastViewedState.azimuth;
-        _mapView.azimuth = isnan(azimuth) ? 0 : azimuth;
-        float elevationAngle = _app.data.mapLastViewedState.elevationAngle;
-        _mapView.elevationAngle = isnan(elevationAngle) ? kDefaultElevationAngle : elevationAngle;
-        _map3DModeElevationAngle = kDefaultElevationAngle;
-    }
     
     // Mark that map source is no longer valid
     _mapSourceInvalidated = YES;
@@ -3720,7 +3720,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     [_mapLayers.gpxMapLayer refreshGpxTracks:gpxFilesDic reset:YES];
 }
 
-- (void) refreshGpxTracks
+- (void)refreshGpxTracks
 {
     @synchronized(_rendererSync)
     {
@@ -3950,6 +3950,41 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     QList<float> heights;
     _geoTiffCollection->calculateHeights(OsmAnd::ZoomLevel14, _mapView.elevationDataTileSize, points, heights);
     return heights;
+}
+
+- (void)fitTrackOnMap:(LineChartView *)lineChartView
+             startPos:(double)startPos
+               endPos:(double)endPos
+             location:(CLLocationCoordinate2D)location
+             forceFit:(BOOL)forceFit
+             analysis:(OASGpxTrackAnalysis *)analysis
+              segment:(OASTrkSegment *)segment
+     trackChartHelper:(TrackChartHelper *)trackChartHelper
+{
+    OASKQuadRect *rect = [trackChartHelper getRect:lineChartView
+                                          startPos:startPos
+                                            endPos:endPos
+                                          analysis:analysis
+                                           segment:segment];
+    if (rect.left != 0 && rect.right != 0)
+    {
+        auto point = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.latitude, location.longitude));
+        CGPoint mapPoint;
+        [self.mapView convert:&point toScreen:&mapPoint checkOffScreen:YES];
+
+        if (forceFit && trackChartHelper.delegate)
+        {
+            [trackChartHelper.delegate centerMapOnBBox:rect];
+        }
+        else if (CLLocationCoordinate2DIsValid(location)
+                 && !CGRectContainsPoint(trackChartHelper.screenBBox, mapPoint))
+        {
+            if (!trackChartHelper.isLandscape && trackChartHelper.delegate)
+                [trackChartHelper.delegate adjustViewPort:trackChartHelper.isLandscape];
+            [self goToPosition:[OANativeUtilities convertFromPointI:point]
+                      animated:YES];
+        }
+    }
 }
 
 @end

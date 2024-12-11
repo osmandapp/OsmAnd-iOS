@@ -83,13 +83,12 @@
                                      bottomOffset:4
                               useGesturesAndScale:YES];
     OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.gpx.path]];
-    BOOL calcWithoutGaps = !gpx.joinSegments && (self.gpx.tracks.count > 0 && self.gpx.tracks.firstObject.generalTrack);
     [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.chartView
                                       analysis:self.analysis
                                      firstType:GPXDataSetTypeAltitude
                                     secondType:GPXDataSetTypeSlope
                                       axisType:GPXDataSetAxisTypeDistance
-                               calcWithoutGaps:calcWithoutGaps];
+                               calcWithoutGaps:[GpxUtils calcWithoutGaps:self.gpx gpxDataItem:gpx]];
 
     self.statisticsChart = routeStatsCell.chartView;
     for (UIGestureRecognizer *recognizer in self.statisticsChart.gestureRecognizers)
@@ -196,15 +195,16 @@
     _tableView.rowHeight = UITableViewAutomaticDimension;
     _tableView.estimatedRowHeight = 125.;
 
-    if (!self.trackChartPoints)
+    if (self.analysis && self.segment)
     {
-        self.trackChartPoints = [self.routeLineChartHelper generateTrackChartPoints:self.statisticsChart
-                                                                           analysis:self.analysis];
+        [self.trackChartHelper updateTrackChartPointsWithInvalidate:YES];
+        [self.trackChartHelper refreshChart:self.statisticsChart
+                                       fitTrack:YES
+                                       forceFit:NO
+                               recalculateXAxis:YES
+                                       analysis:self.analysis
+                                        segment:self.segment];
     }
-    [self.routeLineChartHelper refreshHighlightOnMap:NO
-                                           chartView:self.statisticsChart
-                                    trackChartPoints:self.trackChartPoints
-                                            analysis:self.analysis];
     [self updateRouteStatisticsGraph];
 }
 
@@ -343,18 +343,19 @@
             _highlightDrawX = -1;
     }
     else if (([recognizer isKindOfClass:UIPinchGestureRecognizer.class] ||
-              ([recognizer isKindOfClass:UITapGestureRecognizer.class] && (((UITapGestureRecognizer *) recognizer).nsuiNumberOfTapsRequired == 2)))
+              ([recognizer isKindOfClass:UITapGestureRecognizer.class]
+               && (((UITapGestureRecognizer *) recognizer).nsuiNumberOfTapsRequired == 2)))
              && recognizer.state == UIGestureRecognizerStateEnded)
     {
-        if (!self.trackChartPoints)
+        if (self.analysis && self.segment)
         {
-            self.trackChartPoints = [self.routeLineChartHelper generateTrackChartPoints:self.statisticsChart
-                                                                               analysis:self.analysis];
+            [self.trackChartHelper refreshChart:self.statisticsChart
+                                           fitTrack:YES
+                                           forceFit:NO
+                                   recalculateXAxis:YES
+                                           analysis:self.analysis
+                                            segment:self.segment];
         }
-        [self.routeLineChartHelper refreshHighlightOnMap:YES
-                                               chartView:self.statisticsChart
-                                        trackChartPoints:self.trackChartPoints
-                                                analysis:self.analysis];
     }
 }
 
@@ -393,8 +394,19 @@
     if (_highlightDrawX != -1)
     {
         ChartHighlight *h = [self.statisticsChart getHighlightByTouchPoint:CGPointMake(_highlightDrawX, 0.)];
-        if (h != nil)
-            [self.statisticsChart highlightValue:h callDelegate:true];
+        if (h)
+        {
+            [self.statisticsChart highlightValue:h callDelegate:YES];
+            if (self.analysis && self.segment)
+            {
+                [self.trackChartHelper refreshChart:self.statisticsChart
+                                               fitTrack:YES
+                                               forceFit:NO
+                                       recalculateXAxis:NO
+                                               analysis:self.analysis
+                                                segment:self.segment];
+            }
+        }
     }
 }
 
@@ -484,15 +496,16 @@
 
 - (void)chartValueSelected:(ChartViewBase *)chartView entry:(ChartDataEntry *)entry highlight:(ChartHighlight *)highlight
 {
-    if (!self.trackChartPoints)
-        self.trackChartPoints = [self.routeLineChartHelper generateTrackChartPoints:self.statisticsChart
-                                                                           analysis:self.analysis];
-    [self.routeLineChartHelper refreshHighlightOnMap:NO
-                                           chartView:self.statisticsChart
-                                    trackChartPoints:self.trackChartPoints
-                                            analysis:self.analysis];
+    if (self.analysis && self.segment)
+    {
+        [self.trackChartHelper refreshChart:self.statisticsChart
+                                       fitTrack:YES
+                                       forceFit:NO
+                               recalculateXAxis:NO
+                                       analysis:self.analysis
+                                        segment:self.segment];
+    }
 }
-
 
 #pragma mark - OAStatisticsSelectionDelegate
 
@@ -509,10 +522,10 @@
         OARouteStatisticsModeCell *statsModeCell = _data[0];
         ElevationChartCell *graphCell = _data[1];
 
-        [self.routeLineChartHelper changeChartTypes:_types
+        [self.trackChartHelper changeChartTypes:_types
                                               chart:graphCell.chartView
                                            analysis:self.analysis
-                                           modeCell:statsModeCell];
+                                      statsModeCell:statsModeCell];
     }
 }
 

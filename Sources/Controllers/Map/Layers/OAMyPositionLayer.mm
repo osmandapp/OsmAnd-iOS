@@ -703,7 +703,8 @@ typedef enum {
                            OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
 
     float animationDuration = 0;
-    if (OAAppSettings.sharedManager.animateMyLocation.get && prevLocation && ![OAMapViewTrackingUtilities isSmallSpeedForAnimation:_lastLocation])
+    if (OAAppSettings.sharedManager.animateMyLocation.get && prevLocation
+        && ![OAMapUtils areLatLonEqual:newLocation.coordinate l2:prevLocation.coordinate])
     {
         animationDuration = [newLocation.timestamp timeIntervalSinceDate:prevLocation.timestamp];
         if (animationDuration > 5)
@@ -711,7 +712,7 @@ typedef enum {
     }
 
     [self updateCollectionLocation:c newLocation:newLocation newTarget31:newTarget31 newHeading:newHeading animationDuration:animationDuration visible:YES];
-
+    _currentMarkerState = c.currentMarkerState;
     for (OAMarkerCollection *mc in _modeMarkers.objectEnumerator)
         if (mc != c)
             [self updateCollectionLocation:mc newLocation:newLocation newTarget31:newTarget31 newHeading:newHeading animationDuration:0 visible:NO];

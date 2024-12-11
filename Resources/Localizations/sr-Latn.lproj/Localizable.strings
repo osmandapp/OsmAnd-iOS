@@ -3583,3 +3583,9 @@
 "shared_string_subfolders_in" = "Podfolderi u";
 "help_article_map_tracks_name" = "Putanje";
 "shared_string_sorted_by" = "je sortirano po:";
+"add_widget_below" = "Dodaj widžet ispod";
+"add_widget_to_the_right" = "Dodaj widžet desno";
+"add_widget_to_the_left" = "Dodaj widžet levo";
+"delete_widget" = "Brišeš vidžet?";
+"delete_widget_description" = "Ovaj widžet će biti izbrisan. Možeš ga vratiti kasnije u podešavanjima ekrana.";
+"add_widget_above" = "Dodaj widžet iznad";

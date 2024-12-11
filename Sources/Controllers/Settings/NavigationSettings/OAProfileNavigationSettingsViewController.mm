@@ -115,11 +115,7 @@
     }];
     [tableData addObject:navigationArr];
     [tableData addObject:otherArr];
-    [tableData addObject:@[@{
-        @"type" : [OASwitchTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"animate_my_location")
-    }]];
-    
+
     _data = [NSArray arrayWithArray:tableData];
 }
 
@@ -142,8 +138,6 @@
     {
         case 1:
             return OALocalizedString(@"change_map_behavior");
-        case 2:
-            return OALocalizedString(@"animate_my_location_descr");
         default:
             return @"";
     }
@@ -196,27 +190,7 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
-    {
-        OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *) nib[0];
-            [cell leftIconVisibility:NO];
-            [cell descriptionVisibility:NO];
-        }
-        if (cell)
-        {
-            cell.titleLabel.text = item[@"title"];
-
-            cell.switchView.on = [_settings.animateMyLocation get:self.appMode];
-            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
-            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
-            [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
-        }
-        return cell;
-    }
+    
     return nil;
 }
 
@@ -268,13 +242,6 @@
             [self showViewController:settingsViewController];
         }
     }
-}
-
-#pragma mark - Selectors
-
-- (void)applyParameter:(UISwitch *)sender
-{
-    [_settings.animateMyLocation set:sender.isOn mode:self.appMode];
 }
 
 #pragma mark - OASettingsDataDelegate

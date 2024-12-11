@@ -245,7 +245,7 @@
 "sett_pref_lang" = "Bevorzugte Sprache";
 "sett_lang_show_local" = "Lokale Namen anzeigen";
 "prch_nau_q1" = "Bitte schalten Sie den \"Nautischen\" Stil in den Karteneinstellungen ein und installieren Sie die weltweite Basiskarte Seemarken.";
-"prch_nau_q3" = "Du kannst es später installieren über die Karten & Ressourcen.";
+"prch_nau_q3" = "Du kannst es später installieren über die Karten und Ressourcen.";
 "pickup_car" = "Zum Auto gehen";
 "cannot_add_marker" = "Kann den Parkplatz nicht hinzufügen";
 "cannot_add_marker_desc" = "Bitte mindestens eine Richtung entfernen und nochmal versuchen";
@@ -1928,7 +1928,7 @@
 "shared_string_enable" = "Aktivieren";
 "search_poi_types_descr" = "Kombinieren Sie POI-Typen aus verschiedenen Kategorien. Tippen Sie auf den Schalter, um alle auszuwählen, tippen Sie auf die linke Seite zur Kategorieauswahl.";
 "add_custom_category" = "Benutzerdefinierte Kategorie hinzufügen";
-"ios_release_4_0" = "• Neu! Bildschirm \"Favorit hinzufügen\" mit Optionen zur Auswahl von benutzerdefiniertem Symbol, Farbe und Form\n• Neues \"Koordinaten-Widget\" mit den Koordinaten des aktuellen Standorts hinzugefügt\n• Es wurde die Möglichkeit zugefügt, benutzerdefinierte Plugins zu importieren\n• Die Import/Export-Funktionalität wurde erheblich erweitert\n• Entfernung durch Antippen aus dem Radius-Lineal in eine separate Option verschoben\n• Fehler beseitigt, der dazu führte, dass die CarPlay-App einfriert, wenn der iPhone-Bildschirm ausgeschaltet ist\n• Der Plugin-Bildschirm wurde aus dem Menü Karten & Ressourcen in das Hauptmenü verschoben\n• Finnische Sprachversion hinzugefügt\n• Bedienoberfläche im Querformat für den \"Route planen\"-Bildschirm korrigiert\n• Unterstützung für benutzerdefinierte Routing- und Rendering-Dateien zugefügt\n• Die Leistung der Marker-Richtungslinie wurde korrigiert\n• Problem beim Importieren von GPX-Dateien mit Großbuchstaben-Erweiterungen behoben\n• Es gab ein Problem mit dem Menü \"Track folgen\", welches nun behoben ist\n• Der Import von OBF-Dateien wurde korrigiert\n";
+"ios_release_4_0" = "• Neu! Bildschirm \"Favorit hinzufügen\" mit Optionen zur Auswahl von benutzerdefiniertem Symbol, Farbe und Form\n• Neues \"Koordinaten-Widget\" mit den Koordinaten des aktuellen Standorts hinzugefügt\n• Es wurde die Möglichkeit zugefügt, benutzerdefinierte Plugins zu importieren\n• Die Import/Export-Funktionalität wurde erheblich erweitert\n• Entfernung durch Antippen aus dem Radius-Lineal in eine separate Option verschoben\n• Fehler beseitigt, der dazu führte, dass die CarPlay-App einfriert, wenn der iPhone-Bildschirm ausgeschaltet ist\n• Der Plugin-Bildschirm wurde aus dem Menü Karten und Ressourcen in das Hauptmenü verschoben\n• Finnische Sprachversion hinzugefügt\n• Bedienoberfläche im Querformat für den \"Route planen\"-Bildschirm korrigiert\n• Unterstützung für benutzerdefinierte Routing- und Rendering-Dateien zugefügt\n• Die Leistung der Marker-Richtungslinie wurde korrigiert\n• Problem beim Importieren von GPX-Dateien mit Großbuchstaben-Erweiterungen behoben\n• Es gab ein Problem mit dem Menü \"Track folgen\", welches nun behoben ist\n• Der Import von OBF-Dateien wurde korrigiert\n";
 "approximate_file_size" = "Ungefähre Dateigröße";
 "gpx_upload_private_visibility_descr" = "„Privat“ bedeutet, dass der Track nicht in öffentlichen Verzeichnissen auftaucht, aber seine Trackpunkte in nicht chronologischer Reihenfolge über die öffentliche GPS-API ohne Zeitstempel verfügbar sind.";
 "gpx_upload_identifiable_visibility_descr" = "„Identifizierbar“ bedeutet, dass der Track in Ihren GPS-Tracks und in öffentlichen GPS-Trackverzeichnissen angezeigt wird, d. h., andere Benutzer können den Track herunterladen und mit Ihrem Benutzernamen verknüpfen. Öffentliche, mit Zeitstempel versehene Trackpunkt-Daten von der GPS-API, die über die Trackpunkt-API bereitgestellt werden, verweisen auf Ihre ursprüngliche Trackseite.";
@@ -3595,3 +3595,14 @@
 "shared_string_subfolders_in" = "Unterordner in";
 "obd_plugin_name" = "Fahrzeugdaten";
 "shared_string_sorted_by" = "sortiert nach:";
+"add_widget_below" = "Widget unten hinzufügen";
+"add_widget_above" = "Widget oben hinzufügen";
+"add_widget_to_the_left" = "Widget links hinzufügen";
+"delete_widget" = "Widget löschen?";
+"add_widget_to_the_right" = "Widget rechts hinzufügen";
+"delete_widget_description" = "Dieses Widget wird gelöscht. Es kann im Menü „Konfigurieren“ wiederhergestellt werden.";
+"help_article_map_tracks_appearance_name" = "Track-Darstellung";
+"help_article_personal_tracks_manage_tracks_name" = "Tracks verwalten";
+"help_article_personal_tracks_smart_folder_name" = "Intelligenter Ordner (Filter)";
+"help_article_troubleshooting_resources_name" = "Hilfsmittel und Anpassungen";
+"help_article_troubleshooting_video_tutorials_name" = "Video-Tutorials und Anleitungen";

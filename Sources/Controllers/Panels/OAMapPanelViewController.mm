@@ -1480,7 +1480,8 @@ typedef enum
                                routeKey:nil
                            trackHudMode:EOATrackMenuHudMode
                                   state:[OATrackMenuViewControllerState withPinLocation:targetPoint.location
-                                                                          openedFromMap:[targetPoint.values[@"opened_from_map"] boolValue]]];
+                                                                          openedFromMap:[targetPoint.values[@"opened_from_map"] boolValue]]
+                               analysis:nil];
         }
     }
     else if (targetPoint.type == OATargetNetworkGPX)
@@ -1511,18 +1512,19 @@ typedef enum
             OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
             OASGpxDataItem *gpx = [gpxDb getGPXItem:path];
             if (!gpx)
-            {
                 gpx = [gpxDb addGPXFileToDBIfNeeded:path];
-            }
+            OASTrackItem *trackItem = [[OASTrackItem alloc] initWithFile:file];
+            trackItem.dataItem = gpx;
 
             OATrackMenuViewControllerState *state = [OATrackMenuViewControllerState withPinLocation:targetPoint.location
                                                                                       openedFromMap:YES];
             state.trackIcon = targetPoint.icon;
-            [weakSelf openTargetViewWithGPX:[[OASTrackItem alloc] initWithFile:file]
+            [weakSelf openTargetViewWithGPX:trackItem
                                       items:nil
                                routeKey:targetPoint.targetObj
                            trackHudMode:EOATrackMenuHudMode
-                                  state:state];
+                                      state:state
+                                   analysis:nil];
         }];
     }
     else
@@ -2842,40 +2844,23 @@ typedef enum
                  trackHudMode:(EOATrackHudMode)trackHudMode
                         state:(OATrackMenuViewControllerState *)state;
 {
-    [self openTargetViewWithGPX:item items:nil routeKey:nil trackHudMode:trackHudMode state:state];
+    [self openTargetViewWithGPX:item items:nil routeKey:nil trackHudMode:trackHudMode state:state analysis:nil];
 }
 
 - (void)openTargetViewWithGPX:(OASTrackItem *)item
-                        items:(NSArray<OASGpxDataItem *> *)items
                  trackHudMode:(EOATrackHudMode)trackHudMode
-                        state:(OATrackMenuViewControllerState *)state;
+                        state:(OATrackMenuViewControllerState *)state
+                     analysis:(OASGpxTrackAnalysis *)analysis;
 {
-    [self openTargetViewWithGPX:item items:items routeKey:nil trackHudMode:trackHudMode state:state];
-}
-
-- (void)openTargetViewWithNewGPX:(OASTrackItem *)item
-                        items:(NSArray<OASGpxDataItem *> *)items
-                     routeKey:(OARouteKey *)routeKey
-                 trackHudMode:(EOATrackHudMode)trackHudMode
-                        state:(OATrackMenuViewControllerState *)state;
-{
-    if (_scrollableHudViewController)
-    {
-        [_scrollableHudViewController hide:YES duration:0.2 onComplete:^{
-            if (!state.openedFromTrackMenu)
-                state.navControllerHistory = nil;
-            [self doShowGpxItem:item items:items routeKey:routeKey state:state trackHudMode:trackHudMode];
-        }];
-        return;
-    }
-    [self doShowGpxItem:item items:items routeKey:routeKey state:state trackHudMode:trackHudMode];
+    [self openTargetViewWithGPX:item items:nil routeKey:nil trackHudMode:trackHudMode state:state analysis:analysis];
 }
 
 - (void)openTargetViewWithGPX:(OASTrackItem *)item
                         items:(NSArray<OASGpxDataItem *> *)items
                      routeKey:(OARouteKey *)routeKey
                  trackHudMode:(EOATrackHudMode)trackHudMode
-                        state:(OATrackMenuViewControllerState *)state;
+                        state:(OATrackMenuViewControllerState *)state
+                     analysis:(OASGpxTrackAnalysis *)analysis;
 {
     if (_scrollableHudViewController)
     {
@@ -2883,11 +2868,11 @@ typedef enum
             if (!state.openedFromTrackMenu)
                 state.navControllerHistory = nil;
 
-            [self doShowGpxItem:item items:items routeKey:routeKey state:state trackHudMode:trackHudMode];
+            [self doShowGpxItem:item items:items routeKey:routeKey state:state trackHudMode:trackHudMode analysis:analysis];
         }];
         return;
     }
-    [self doShowGpxItem:item items:items routeKey:routeKey state:state trackHudMode:trackHudMode];
+    [self doShowGpxItem:item items:items routeKey:routeKey state:state trackHudMode:trackHudMode analysis:analysis];
 }
 
 - (void)doShowGpxItem:(OASTrackItem *)item
@@ -2895,6 +2880,7 @@ typedef enum
              routeKey:(OARouteKey *)routeKey
                 state:(OATrackMenuViewControllerState *)state
          trackHudMode:(EOATrackHudMode)trackHudMode
+             analysis:(OASGpxTrackAnalysis *)analysis
 {
     BOOL showCurrentTrack = item.isShowCurrentTrack;
 
@@ -2934,9 +2920,9 @@ typedef enum
         case EOATrackAppearanceHudMode:
         {
             trackMenuHudViewController = items
-            	? [[OATrackMenuAppearanceHudViewController alloc] initWithGpx:item tracks:items state:state]
-            	: [[OATrackMenuAppearanceHudViewController alloc] initWithGpx:item state:state];
-
+            ? [[OATrackMenuAppearanceHudViewController alloc] initWithGpx:item tracks:items state:state]
+            : [[OATrackMenuAppearanceHudViewController alloc] initWithGpx:item state:state analysis:analysis];
+            
             auto rect = trackMenuHudViewController.doc ? trackMenuHudViewController.doc.getRect : nil;
             targetLocation = rect && rect.left != 0 ? CLLocationCoordinate2DMake(rect.centerY, rect.centerX) : defaultLocation;
             targetPoint.location = targetLocation;
@@ -2947,7 +2933,7 @@ typedef enum
         }
         default:
         {
-            trackMenuHudViewController = [[OATrackMenuHudViewController alloc] initWithGpx:item routeKey:routeKey state:state];
+            trackMenuHudViewController = [[OATrackMenuHudViewController alloc] initWithGpx:item routeKey:routeKey state:state analysis:analysis];
             auto rect = trackMenuHudViewController.doc ? trackMenuHudViewController.doc.getRect : nil;
             targetLocation = rect && rect.left != 0 ? CLLocationCoordinate2DMake(rect.centerY, rect.centerX) : defaultLocation;
             targetPoint.location = targetLocation;
@@ -3170,21 +3156,20 @@ typedef enum
     }
     if (gpxFile)
     {
-        OASGpxTrackAnalysis *analysis = !isCurrentTrack && [gpxFile getGeneralTrack] && [gpxFile getGeneralSegment]
-            ? [self getAnalysisFor:gpxFile.getGeneralSegment]
+        OASTrkSegment *segment = [gpxFile getGeneralSegment];
+        OASGpxTrackAnalysis *analysis = !isCurrentTrack && [gpxFile getGeneralTrack] && segment
+            ? [TrackChartHelper getAnalysisFor:segment]
             : [gpxFile getAnalysisFileTimestamp:0];
         state.scrollToSectionIndex = -1;
         state.routeStatistics = @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)];
-        [self openTargetViewWithRouteDetailsGraph:gpxFile trackItem:trackItem analysis:analysis menuControlState:state];
+        if (!segment)
+            segment = [TrackChartHelper getTrackSegment:analysis gpxItem:gpxFile];
+        [self openTargetViewWithRouteDetailsGraph:gpxFile
+                                        trackItem:trackItem
+                                         analysis:analysis
+                                          segment:segment
+                                 menuControlState:state];
     }
-}
-
-- (OASGpxTrackAnalysis *)getAnalysisFor:(OASTrkSegment *)segment
-{
-    OASGpxTrackAnalysis *analysis = [[OASGpxTrackAnalysis alloc] init];
-    auto splitSegments = [ArraySplitSegmentConverter toKotlinArrayFrom:@[[[OASSplitSegment alloc] initWithSegment:segment]]];
-    [analysis prepareInformationFileTimeStamp:0 pointsAnalyser:nil splitSegments:splitSegments];
-    return analysis;
 }
 
 - (void)openNewTargetViewFromTracksListWithRouteDetailsGraph:(OASTrackItem *)trackItem
@@ -3204,17 +3189,25 @@ typedef enum
     
     if (gpxFile)
     {
-        OASGpxTrackAnalysis *analysis = !trackItem.isShowCurrentTrack && [gpxFile getGeneralTrack] && [gpxFile getGeneralSegment]
-            ? [self getAnalysisFor:gpxFile.getGeneralSegment]
+        OASTrkSegment *segment = [gpxFile getGeneralSegment];
+        OASGpxTrackAnalysis *analysis = !trackItem.isShowCurrentTrack && [gpxFile getGeneralTrack] && segment
+            ? [TrackChartHelper getAnalysisFor:segment]
             : [gpxFile getAnalysisFileTimestamp:0];
         state.scrollToSectionIndex = -1;
         state.routeStatistics = @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)];
-        [self openTargetViewWithRouteDetailsGraph:gpxFile trackItem:trackItem analysis:analysis menuControlState:state];
+        if (!segment)
+            segment = [TrackChartHelper getTrackSegment:analysis gpxItem:gpxFile];
+        [self openTargetViewWithRouteDetailsGraph:gpxFile
+                                        trackItem:trackItem
+                                         analysis:analysis
+                                          segment:segment
+                                 menuControlState:state];
     }
 }
 
 - (void)openNewTargetViewWithRouteDetailsGraph:(OASGpxFile *)gpx
                                     analysis:(OASGpxTrackAnalysis *)analysis
+                                       segment:(OASTrkSegment *)segment
                             menuControlState:(OATargetMenuViewControllerState *)menuControlState
                                      isRoute:(BOOL)isRoute
 {
@@ -3232,10 +3225,19 @@ typedef enum
     targetPoint.title = _formattedTargetName;
     targetPoint.toolbarNeeded = NO;
     
-    if (gpx && analysis)
-        targetPoint.targetObj = @{@"gpx" : gpx, @"analysis" : analysis, @"route" : @(isRoute)};
+    if (gpx && analysis && segment)
+    {
+        targetPoint.targetObj = @{
+            @"gpx": gpx,
+            @"analysis": analysis,
+            @"segment": segment,
+            @"route": @(isRoute)
+        };
+    }
     else
+    {
         targetPoint.targetObj = nil;
+    }
     
     _activeTargetType = targetPoint.type;
     _activeTargetObj = targetPoint.targetObj;
@@ -3255,14 +3257,21 @@ typedef enum
 - (void) openTargetViewWithRouteDetailsGraph:(OASGpxFile *)gpx
                                    trackItem:(OASTrackItem *)trackItem
                                     analysis:(OASGpxTrackAnalysis *)analysis
+                                     segment:(OASTrkSegment *)segment
                             menuControlState:(OATargetMenuViewControllerState *)menuControlState
 {
-    [self openTargetViewWithRouteDetailsGraph:gpx trackItem:trackItem analysis:analysis menuControlState:menuControlState isRoute:YES];
+    [self openTargetViewWithRouteDetailsGraph:gpx
+                                    trackItem:trackItem
+                                     analysis:analysis
+                                      segment:segment
+                             menuControlState:menuControlState
+                                      isRoute:YES];
 }
 
 - (void)openTargetViewWithRouteDetailsGraph:(OASGpxFile *)gpx
                                   trackItem:(OASTrackItem *)trackItem
                                    analysis:(OASGpxTrackAnalysis *)analysis
+                                    segment:(OASTrkSegment *)segment
                            menuControlState:(OATargetMenuViewControllerState *)menuControlState
                                     isRoute:(BOOL)isRoute
 {
@@ -3280,13 +3289,20 @@ typedef enum
     targetPoint.title = _formattedTargetName;
     targetPoint.toolbarNeeded = NO;
 
-    if (gpx && analysis)
-        targetPoint.targetObj = @{@"gpx" : gpx,
-                                  @"trackItem" : trackItem,
-                                  @"analysis" : analysis,
-                                  @"route" : @(isRoute)};
+    if (gpx && trackItem && analysis && segment)
+    {
+        targetPoint.targetObj = @{
+            @"gpx": gpx,
+            @"trackItem": trackItem,
+            @"analysis": analysis,
+            @"segment": segment,
+            @"route": @(isRoute)
+        };
+    }
     else
+    {
         targetPoint.targetObj = nil;
+    }
     
     _activeTargetType = targetPoint.type;
     _activeTargetObj = targetPoint.targetObj;

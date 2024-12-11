@@ -13,7 +13,7 @@
 #include <routeSegment.h>
 #include <routeSegmentResult.h>
 
-@class OAGpxRouteApproximation;
+@class OAGpxRouteApproximation, OALocationsHolder;
 
 @interface OARoutingHelper(cpp)
 

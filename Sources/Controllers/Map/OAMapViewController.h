@@ -54,8 +54,7 @@ static const int BOTTOM_CONSTANT = 1;
 
 @protocol OAMapRendererViewProtocol;
 
-@class OASWptPt, OASMetadata, OASGpxFile, OASearchWptAPI, OAMapRendererView, OAMapLayers, OAWorldRegion, OAMapRendererEnvironment, OAMapPresentationEnvironment, OAObservable;
-
+@class OASWptPt, OASMetadata, OASGpxFile, OASearchWptAPI, OAMapRendererView, OAMapLayers, OAWorldRegion, OAMapRendererEnvironment, OAMapPresentationEnvironment, OAObservable, LineChartView, TrackChartHelper, OASGpxTrackAnalysis, OASTrkSegment;
 
 @interface OAMapViewController : UIViewController <UIGestureRecognizerDelegate>
 
@@ -210,6 +209,15 @@ static const int BOTTOM_CONSTANT = 1;
 
 - (void)getAltitudeForMapCenter:(void (^)(float height))callback;
 - (void)getAltitudeForLatLon:(CLLocationCoordinate2D)latLon callback:(void (^)(float height))callback;
+
+- (void)fitTrackOnMap:(LineChartView *)lineChartView
+             startPos:(double)startPos
+               endPos:(double)endPos
+             location:(CLLocationCoordinate2D)location
+             forceFit:(BOOL)forceFit
+             analysis:(OASGpxTrackAnalysis *)analysis
+              segment:(nullable OASTrkSegment *)segment
+     trackChartHelper:(TrackChartHelper *)trackChartHelper;
 
 @end
 

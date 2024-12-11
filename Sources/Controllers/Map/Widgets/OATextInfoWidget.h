@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #define UPDATE_INTERVAL_MILLIS 1000
 
-@class OAWidgetType, OutlineLabel, OACommonWidgetSizeStyle, OAWidgetsPanel, OATextState;
+@class OAWidgetType, OutlineLabel, OACommonWidgetSizeStyle, OAWidgetsPanel, OATextState, OAMapWidgetInfo;
 
 @interface OATextInfoWidget : OABaseWidgetView
 
@@ -87,6 +87,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)refreshLayout;
 - (nullable OAApplicationMode *)getAppMode;
 - (nullable OAWidgetsPanel *)getWidgetPanel;
+- (nullable OAMapWidgetInfo *)getWidgetInfo;
 
 @end
 

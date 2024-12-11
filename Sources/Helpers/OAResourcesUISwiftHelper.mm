@@ -134,8 +134,16 @@
 
 - (BOOL) isInstalled
 {
-    OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
-    return [OsmAndApp instance].resourcesManager->isResourceInstalled(res.resourceId);
+    if ([self.objcResourceItem isKindOfClass:OACustomResourceItem.class])
+    {
+        OACustomResourceItem *customResource = self.objcResourceItem;
+        return [customResource isInstalled];
+    }
+    else
+    {
+        OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
+        return [OsmAndApp instance].resourcesManager->isResourceInstalled(res.resourceId);
+    }
 }
 
 - (NSString *) resourceId

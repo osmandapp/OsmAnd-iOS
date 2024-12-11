@@ -1253,8 +1253,8 @@ static const float kDistanceMeters = 100.0;
             [self.view insertSubview:self.downloadView aboveSubview:self.searchButton];
         }
         
-        if (![_downloadView.titleView.text isEqualToString:task.name])
-            [_downloadView setTitle: task.name];
+        if (![_downloadView.titleView.text isEqualToString:task.title])
+            [_downloadView setTitle: task.title];
         
         [self.downloadView setProgress:[value floatValue]];
         

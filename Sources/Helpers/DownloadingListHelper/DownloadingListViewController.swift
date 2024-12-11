@@ -58,7 +58,7 @@ final class DownloadingListViewController: OABaseNavbarViewController, Downloadi
             if let resourceItem = OAResourcesUISwiftHelper.getResourceFrom(task) {
                 let row = section.createNewRow()
                 row.cellType = DownloadingCell.reuseIdentifier
-                row.title = task.name
+                row.title = task.title
                 let resourceId = task.key.replacingOccurrences(of: "resource:", with: "")
                 row.setObj(resourceId, forKey: "resourceId")
                 row.setObj(resourceItem, forKey: "item")

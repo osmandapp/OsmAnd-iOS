@@ -173,9 +173,9 @@
 
 - (void) updateWeatherLayers
 {
+    [_weatherLayerLow updateWeatherLayer];
+    [_weatherLayerHigh updateWeatherLayer];
     [_mapViewController runWithRenderSync:^{
-        [_weatherLayerLow updateWeatherLayer];
-        [_weatherLayerHigh updateWeatherLayer];
         [_weatherContourLayer updateLayer];
     }];
 }

@@ -3381,3 +3381,5 @@
 "quick_action_terrain_color_scheme" = "Schema de culori a terenului";
 "year_short" = "Yr";
 "shared_string_control_stop" = "Stop";
+"poi" = "POI";
+"help_article_navigation_auto_car_name" = "Sistemul Android Auto";

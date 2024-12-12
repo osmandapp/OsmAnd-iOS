@@ -29,6 +29,7 @@ typedef NS_ENUM(NSInteger, OADownloadTaskState) {
 @property(readonly) NSString* targetPath;
 @property(readonly) NSString* key;
 @property(readonly) NSString* name;
+@property(nonatomic) NSString* title;
 @property(readonly) BOOL hidden;
 @property(readonly) NSTimeInterval downloadTime;
 @property(readonly) CGFloat fileSize; // in MB

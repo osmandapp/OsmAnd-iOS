@@ -1311,13 +1311,13 @@ includeHidden:(BOOL)includeHidden
 {
     if (item.downloadUrl)
     {
-        NSString *name = [item getVisibleName];
-        if (!name)
-        {
-            name = item.title;
-            if (item.subfolder && item.subfolder.length > 0)
-                name = [item.subfolder stringByAppendingPathComponent:name];
-        }
+        NSString *fileName = item.title;
+        if (item.subfolder && item.subfolder.length > 0)
+            fileName = [item.subfolder stringByAppendingPathComponent:fileName];
+        
+        NSString *taskTitle = [item getVisibleName];
+        if (!taskTitle)
+            taskTitle = fileName;
 
         if ([item.downloadUrl hasPrefix:@"@"])
         {
@@ -1326,7 +1326,7 @@ includeHidden:(BOOL)includeHidden
             if (pluginPath.length > 0 && relPath.length > 0)
             {
                 NSString *srcFilePath = [pluginPath stringByAppendingPathComponent:relPath];
-                BOOL failed = [OAResourcesInstaller installCustomResource:srcFilePath resourceId:srcFilePath.lastPathComponent fileName:name hidden:item.hidden];
+                BOOL failed = [OAResourcesInstaller installCustomResource:srcFilePath resourceId:srcFilePath.lastPathComponent fileName:fileName hidden:item.hidden];
                 if (!failed)
                     [OsmAndApp.instance.localResourcesChangedObservable notifyEvent];
             }
@@ -1342,9 +1342,10 @@ includeHidden:(BOOL)includeHidden
             OsmAndAppInstance app = [OsmAndApp instance];
             id<OADownloadTask> task = [app.downloadsManager downloadTaskWithRequest:request
                                                                              andKey:[@"resource:" stringByAppendingString:item.resourceId.toNSString()]
-                                                                            andName:name
+                                                                            andName:fileName
                                                                           andHidden:item.hidden];
             
+            task.title = taskTitle;
             task.resourceItem = item;
             task.creationTime = [NSDate now];
             

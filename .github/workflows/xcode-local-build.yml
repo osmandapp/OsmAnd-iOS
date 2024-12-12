@@ -10,7 +10,7 @@ on:
       buildversion:
         description: 'Consequent Build Number (Testflight)'
         required: true
-        default: 'x'
+        default: '49xx'
       releaseversion:
         description: 'Release Version'
         required: true
@@ -121,7 +121,7 @@ jobs:
             -sdk iphoneos
             -configuration AppStoreDistribution
             -archivePath OsmAndMaps.xcarchive
-            CURRENT_PROJECT_VERSION="${RELEASE_IOS_VERSION//./}.${BUILD_IOS_VERSION}"
+            CURRENT_PROJECT_VERSION="${BUILD_IOS_VERSION}"
             MARKETING_VERSION="${RELEASE_IOS_VERSION}"
             archive | xcpretty'
     - name: Zip iOS archive

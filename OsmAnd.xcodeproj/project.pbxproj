@@ -3103,6 +3103,7 @@
 		FA44BF5B2A72A91C000D2F5F /* CarPlaySceneDelegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA44BF582A72A91C000D2F5F /* CarPlaySceneDelegates.swift */; };
 		FA44BF5C2A72A91C000D2F5F /* DashboardCarPlaySceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA44BF592A72A91C000D2F5F /* DashboardCarPlaySceneDelegate.swift */; };
 		FA44BF692A72F810000D2F5F /* SceneDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA44BF672A72F810000D2F5F /* SceneDelegate.mm */; };
+		FA44F8E22D0B215900334FDB /* GpxLoadOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA44F8E12D0B215900334FDB /* GpxLoadOperation.swift */; };
 		FA45851E2C9474A3003A5AD7 /* GpxDataItemExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA45851D2C9474A3003A5AD7 /* GpxDataItemExtension.swift */; };
 		FA4768B32A66E73000D533E8 /* FreeBackupBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4768B22A66E73000D533E8 /* FreeBackupBanner.swift */; };
 		FA4768B52A67B86400D533E8 /* FreeBackupBanner.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4768B42A67B86400D533E8 /* FreeBackupBanner.xib */; };
@@ -7629,6 +7630,7 @@
 		FA44BF592A72A91C000D2F5F /* DashboardCarPlaySceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashboardCarPlaySceneDelegate.swift; sourceTree = "<group>"; };
 		FA44BF672A72F810000D2F5F /* SceneDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SceneDelegate.mm; sourceTree = "<group>"; };
 		FA44BF682A72F810000D2F5F /* SceneDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
+		FA44F8E12D0B215900334FDB /* GpxLoadOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GpxLoadOperation.swift; sourceTree = "<group>"; };
 		FA45851D2C9474A3003A5AD7 /* GpxDataItemExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GpxDataItemExtension.swift; sourceTree = "<group>"; };
 		FA4768B22A66E73000D533E8 /* FreeBackupBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeBackupBanner.swift; sourceTree = "<group>"; };
 		FA4768B42A67B86400D533E8 /* FreeBackupBanner.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FreeBackupBanner.xib; sourceTree = "<group>"; };
@@ -11118,6 +11120,7 @@
 				05DACD812C1EC4340023FAD9 /* OAXmlFactory.m */,
 				059D31402C66857F00F8B6EF /* GPXInterpolator.swift */,
 				4671FB8F2CDE6E3A00446D18 /* GpxUtils.swift */,
+				FA44F8E12D0B215900334FDB /* GpxLoadOperation.swift */,
 			);
 			path = GPX;
 			sourceTree = "<group>";
@@ -16722,6 +16725,7 @@
 				32414F012C454F9D000B4B79 /* OsmBenefitsOAuthView.swift in Sources */,
 				DA5A853626C563A900F274C7 /* OACustomRegion.mm in Sources */,
 				FAE0B7112AFCDAD400C02438 /* BLEPairedSensorsViewController.swift in Sources */,
+				FA44F8E22D0B215900334FDB /* GpxLoadOperation.swift in Sources */,
 				DA5A814C26C563A700F274C7 /* OACarPlayCategoryResultListController.mm in Sources */,
 				DA5A84F526C563A900F274C7 /* OADistanceDirection.mm in Sources */,
 				DA5A812C26C563A700F274C7 /* OAWaypointsMapLayerProvider.mm in Sources */,

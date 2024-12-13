@@ -1837,24 +1837,27 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 {
     if (!self.mapViewLoaded)
         return;
-    
+
     OAZoom *zoom = [[OAZoom alloc] initWitZoom:_mapView.zoom minZoom:_mapView.minZoom maxZoom:_mapView.maxZoom];
     int previousZoom = [zoom getBaseZoom];
-    
-    if (zoomStep > 0 && ![zoom isZoomInAllowed])
+
+    // Get base zoom delta
+    float zoomDelta = [self currentZoomInDelta] + [self currentZoomOutDelta];
+    float newZoomStep = zoomStep + zoomDelta;
+    if (newZoomStep > 0 && ![zoom isZoomInAllowed])
     {
         [OAUtilities showToast:nil details:OALocalizedString(@"edit_tilesource_maxzoom") duration:4 inView:self.view];
         return;
     }
-    else if (zoomStep < 0 && ![zoom isZoomOutAllowed])
+    else if (newZoomStep < 0 && ![zoom isZoomOutAllowed])
     {
         [OAUtilities showToast:nil details:OALocalizedString(@"edit_tilesource_minzoom") duration:4 inView:self.view];
         return;
     }
     
-    float nextZoomStep = [zoom getValidZoomStep:zoomStep];
+    float nextZoomStep = [zoom getValidZoomStep:newZoomStep];
     [zoom changeZoom:nextZoomStep];
-    
+
     _mapView.mapAnimator->pause();
     _mapView.mapAnimator->cancelAllAnimations();
     

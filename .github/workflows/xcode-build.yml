@@ -45,7 +45,7 @@ jobs:
     - name: Checkout ios
       uses: actions/checkout@v4
       with:
-        ref: refs/heads/master
+        ref: refs/heads/r4.9
         repository: osmandapp/OsmAnd-iOS
         path: ios
     - name: Checkout android

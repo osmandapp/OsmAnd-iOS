@@ -60,15 +60,13 @@
     if (entry)
     {
         OASubscriptionStateHolder *stateHolder = entry.lastObject;
+        
         [_settings.proSubscriptionOrigin set:(int) stateHolder.origin];
-        if (stateHolder.origin != EOASubscriptionOriginUndefined && stateHolder.origin != EOASubscriptionOriginIOS)
-        {
-            [_settings.backupPurchaseState set:stateHolder.state];
-            [_settings.backupPurchaseStartTime set:stateHolder.startTime];
-            [_settings.backupPurchaseExpireTime set:stateHolder.expireTime];
-            [_settings.proSubscriptionDuration set:(int)stateHolder.duration];
-            return stateHolder.state.isActive;
-        }
+        [_settings.backupPurchaseState set:stateHolder.state];
+        [_settings.backupPurchaseStartTime set:stateHolder.startTime];
+        [_settings.backupPurchaseExpireTime set:stateHolder.expireTime];
+        [_settings.proSubscriptionDuration set:(int)stateHolder.duration];
+        return stateHolder.state.isActive;
     }
     return NO;
 }

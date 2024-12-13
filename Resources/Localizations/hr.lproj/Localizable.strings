@@ -299,7 +299,7 @@
 "lang_el" = "Grčki";
 "lang_en" = "Engleski";
 "lang_es" = "Španjolski";
-"lang_es_ar" = "Argentinsko španjolski";
+"lang_es_ar" = "Španjolski (Argentina)";
 "lang_et" = "Estonski";
 "lang_eu" = "Baskijski";
 "lang_fa" = "Perzijski";
@@ -352,9 +352,9 @@
 "lang_uk" = "Ukrajinski";
 "lang_vi" = "Vijetnamski";
 "lang_zh" = "Kineski";
-"lang_zh_cn" = "Pojednostavljeni Kineski";
+"lang_zh_cn" = "Kineski (Pojednostavljeni)";
 "lang_zh_hk" = "Kineski (Hong Kong)";
-"lang_zh_tw" = "Tradicionalni kineski";
+"lang_zh_tw" = "Kineski (Tradicionalni)";
 "shared_string_import" = "Uvezi";
 "select_data_to_import" = "Odaberite podatke koje želite uvesti.";
 "shared_string_nothing_selected" = "Ništa nije odabrano";
@@ -684,7 +684,7 @@
 "shared_string_angle" = "Kut";
 "auth_failed" = "Autorizacija nije uspjela";
 "shared_string_undefined" = "Nedefinirano";
-"lang_zh-Hant" = "Tradicionalni kineski";
+"lang_zh-Hant" = "Kineski (Tradicionalni)";
 "external_sensors_plugin_name" = "Vanjski senzor";
 "shared_string_light" = "Svijetla";
 "restart_is_required" = "Kako bi se u potpunosti primijenile promjene, potrebno je ponovno pokrenuti aplikaciju.";
@@ -694,7 +694,7 @@
 "shared_string_result" = "Rezultat";
 "activity_type_walking_name" = "Pješačenje";
 "map_screen_orientation" = "Orijentacija zaslona";
-"lang_zh-Hans" = "Pojednostavljeni Kineski";
+"lang_zh-Hans" = "Kineski (Pojednostavljeni)";
 "download_file" = "Preuzmi datoteku";
 "shared_string_read" = "Pročitajte";
 "shared_string_bookmark" = "oznaka";
@@ -827,3 +827,15 @@
 "last_seven_days" = "Zadnjih 7 dana";
 "on_hold" = "Na čekanju";
 "attribute" = "Svojstvo";
+"export_profile" = "Izvezi profil";
+"create_profile" = "Stvori profil";
+"sett_lang_show_local" = "Prikaži lokalna imena";
+"shared_string_maps" = "Karte";
+"select_map_source" = "Odaberi izvor karte";
+"select_map_style" = "Odaberi stil karte";
+"available_map_sources" = "Dostupni izvori karte";
+"purchases" = "Kupovine";
+"select_manually" = "Odaberi ručno";
+"available_map_styles" = "Dostupni stilovi karte";
+"avoid_by_type" = "Izbjegni prema vrsti";
+"selected_of" = "Odabrano – %d/%d";

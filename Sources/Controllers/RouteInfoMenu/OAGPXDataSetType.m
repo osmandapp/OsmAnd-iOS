@@ -48,7 +48,7 @@
         case GPXDataSetTypeSpeed:
             return @"ic_action_speed";
         case GPXDataSetTypeSlope:
-            return @"ic_custom_ascent";
+            return ACImageNameIcCustomAscent;
         case GPXDataSetTypeSensorSpeed:
             return @"ic_custom_sensor_speed_outlined";
         case GPXDataSetTypeSensorHeartRate:

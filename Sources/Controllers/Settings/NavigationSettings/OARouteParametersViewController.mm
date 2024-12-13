@@ -153,7 +153,7 @@ static NSString *foregroundImageKey = @"foregroundImage";
     else if ([parameterName isEqualToString:kRouteParamAllowMotorway])
         return isSelected ? @"ic_custom_motorways" : @"ic_custom_avoid_motorways";
     else if ([parameterName isEqualToString:kRouteParamHeightObstacles])
-        return @"ic_custom_ascent";
+        return ACImageNameIcCustomAscent;
     return @"ic_custom_alert";
 }
 

@@ -438,7 +438,7 @@ static NSString *enabledRouteSettingsKey = @"enabled";
 
 - (void) setCancelButtonAsImage
 {
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_chevron"].imageFlippedForRightToLeftLayoutDirection style:UIBarButtonItemStylePlain target:self action:@selector(onLeftNavbarButtonPressed)];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:ACImageNameIcNavbarChevron].imageFlippedForRightToLeftLayoutDirection style:UIBarButtonItemStylePlain target:self action:@selector(onLeftNavbarButtonPressed)];
     [self.navigationController.navigationBar.topItem setLeftBarButtonItem:backButton animated:YES];
 }
 

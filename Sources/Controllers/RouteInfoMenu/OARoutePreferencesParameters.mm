@@ -306,7 +306,7 @@
     else if ([id isEqualToString:kRouteParamAllowMotorway])
         name = isChecked ? @"ic_custom_motorways" : @"ic_custom_avoid_motorways";
     else if ([id isEqualToString:kRouteParamHeightObstacles])
-        name = @"ic_custom_ascent";
+        name = ACImageNameIcCustomAscent;
     return name;
 }
 

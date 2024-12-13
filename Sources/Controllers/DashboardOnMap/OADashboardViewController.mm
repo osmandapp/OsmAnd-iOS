@@ -450,7 +450,7 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     
     [self updateNavbarBackground];
 
-    [self.backButton setImage:[UIImage imageNamed:@"ic_navbar_chevron"].imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
+    [self.backButton setImage:[UIImage imageNamed:ACImageNameIcNavbarChevron].imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
 
     _okButton.hidden = YES;
     

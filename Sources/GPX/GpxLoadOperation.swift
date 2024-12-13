@@ -34,10 +34,11 @@ final class GpxLoadOperation: Operation, @unchecked Sendable {
     
     private func checkIfCancelled() -> Bool {
         guard !isCancelled else {
-            cancelledHandler?(filePath)
+            DispatchQueue.main.async {
+                self.cancelledHandler?(self.filePath)
+            }
             return true
         }
         return false
     }
 }
-

@@ -167,7 +167,7 @@ static UIViewController *parentController;
                 _newGpxName = [newName copy];
 
                 OASGpxDataItem *gpx = [self doImport];
-                if (openGpxView)
+                if (gpx && openGpxView)
                 {
                     [self doPush];
                     auto trackItem = [[OASTrackItem alloc] initWithFile:gpx.file];

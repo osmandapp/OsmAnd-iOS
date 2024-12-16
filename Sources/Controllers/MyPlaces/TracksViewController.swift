@@ -331,6 +331,15 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     
     fileprivate func createRowFor(track: GpxDataItem, section: OATableSectionData) {
         let trackRow = section.createNewRow()
+    
+        if let trackItem = currentFolder.getFlattenedTrackItems().first(where: { $0.gpxFilePath == track.gpxFilePath }) {
+            if let file = trackItem.getFile() {
+                let gpxFile = GpxUtilities.shared.loadGpxFile(file: file)
+                let analysis = gpxFile.getAnalysis(fileTimestamp: Int64(track.creationDate.timeIntervalSince1970))
+                track.setAnalysis(analysis: analysis)
+            }
+        }
+        
         let fileName = track.gpxFileName
         trackRow.cellType = OASimpleTableViewCell.reuseIdentifier
         trackRow.key = trackKey

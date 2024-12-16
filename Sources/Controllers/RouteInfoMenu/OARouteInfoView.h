@@ -18,7 +18,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *goButton;
 @property (weak, nonatomic) IBOutlet UIView *contentContainer;
 @property (weak, nonatomic) IBOutlet UIView *statusBarBackgroundView;
-@property (nonatomic) BOOL selectFromMapTouch;
 
 + (int) getDirectionInfo;
 + (BOOL) isVisible;

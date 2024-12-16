@@ -821,12 +821,6 @@ typedef enum
     [self closeRouteInfo:YES onComplete:nil];
 }
 
-- (void)closeRouteInfoByTappingOnMap
-{
-    self.routeInfoView.selectFromMapTouch = YES;
-    [self closeRouteInfo];
-}
-
 - (void) closeRouteInfo:(BOOL)topControlsVisibility onComplete:(void (^)(void))onComplete
 {
     [self closeRouteInfoWithTopControlsVisibility:topControlsVisibility bottomsControlHeight:@0 onComplete:onComplete];
@@ -1080,8 +1074,8 @@ typedef enum
     [self.routeInfoView show:YES fullMenu:fullMenu onComplete:^{
         self.sidePanelController.recognizesPanGesture = NO;
     }];
-
-    [self createShadowButton:@selector(closeRouteInfoByTappingOnMap) withLongPressEvent:nil topView:_routeInfoView];
+    
+    [self createShadowButton:@selector(closeRouteInfo) withLongPressEvent:nil topView:_routeInfoView];
 }
 
 - (void) updateRouteInfo

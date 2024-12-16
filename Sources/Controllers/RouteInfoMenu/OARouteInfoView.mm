@@ -1216,9 +1216,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     if (_switched)
         [mapPanel switchToRouteFollowingLayout];
     
-    if (!_closePressed && !self.selectFromMapTouch && ![_pointsHelper getPointToNavigate] && ![self isSelectingTargetOnMap] && !_optionsMenuSelected)
+    if (!_closePressed && ![_pointsHelper getPointToNavigate] && ![self isSelectingTargetOnMap] && !_optionsMenuSelected)
         [mapPanel.mapActions stopNavigationWithoutConfirm];
-    self.selectFromMapTouch = NO;
 
     [[OARootViewController instance].keyCommandUpdateObserver handleObservedEventFrom:nil withKey:kCommandNavigationScreenClose];
     _closePressed = NO;

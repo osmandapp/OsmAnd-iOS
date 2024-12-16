@@ -13,7 +13,7 @@
 
 @interface OAModel3dWrapper(cpp)
 
-- (instancetype)initWith:(std::shared_ptr<const OsmAnd::Model3D>)model;
+- (instancetype _Nullable)initWith:(std::shared_ptr<const OsmAnd::Model3D>)model;
 - (std::shared_ptr<const OsmAnd::Model3D>) model;
 
 @end

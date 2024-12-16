@@ -163,7 +163,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
     self.navigationController.navigationBar.tintColor = [UIColor colorNamed:ACColorNameNavBarTextColorPrimary];
     self.navigationController.navigationBar.prefersLargeTitles = NO;
     
-    _backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] style:UIBarButtonItemStylePlain target:self action:@selector(onBackPressed)];
+    _backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:ACImageNameIcNavbarChevron] style:UIBarButtonItemStylePlain target:self action:@selector(onBackPressed)];
     [self.navigationController.navigationBar.topItem setLeftBarButtonItem:_backButton animated:YES];
     
     self.segmentContainerView.backgroundColor = [self.navigationController.navigationBar.scrollEdgeAppearance.backgroundColor colorWithAlphaComponent:1.];

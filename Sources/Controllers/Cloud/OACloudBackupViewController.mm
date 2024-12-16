@@ -611,7 +611,7 @@
                 cell.accessoryType = UITableViewCellAccessoryNone;
                 cell.button.configuration = nil;
                 BOOL collapsed = item.rowType == EOATableRowTypeCollapsable && ((OATableCollapsableRowData *) item).collapsed;
-                [cell.button setImage:[UIImage templateImageNamed:collapsed ? @"ic_custom_arrow_right" : @"ic_custom_arrow_down"].imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
+                [cell.button setImage:[UIImage templateImageNamed:collapsed ? @"ic_custom_arrow_right" : ACImageNameIcCustomArrowDown].imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
                 [cell.button addTarget:self action:@selector(onCollapseButtonPressed) forControlEvents:UIControlEventTouchUpInside];
             }
             else if ([item.key isEqualToString:@"onTrashPressed"])

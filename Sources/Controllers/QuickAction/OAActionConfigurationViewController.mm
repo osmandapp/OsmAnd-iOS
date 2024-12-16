@@ -150,7 +150,7 @@
 
 - (UIImage *)getCustomIconForLeftNavbarButton
 {
-    return [UIImage templateImageNamed:@"ic_navbar_chevron"];
+    return [UIImage templateImageNamed:ACImageNameIcNavbarChevron];
 }
 
 - (NSString *)getTableHeaderDescription

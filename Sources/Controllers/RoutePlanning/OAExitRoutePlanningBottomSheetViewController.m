@@ -55,7 +55,8 @@
     self.buttonsSectionDividerView.backgroundColor = UIColor.clearColor;;
 
     [self.rightButton removeFromSuperview];
-    [self.leftIconView setImage:[UIImage imageNamed:@"ic_custom_routes"]];
+    self.leftIconView.image = [UIImage imageNamed:ACImageNameIcCustomRoutes];
+    self.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
     
     self.exitButton.layer.cornerRadius = 9.;
     self.saveButton.layer.cornerRadius = 9.;

@@ -128,14 +128,10 @@ class DestinationsListViewController: OABaseButtonsViewController {
                         .foregroundColor: colorFromRGB(Int(color_text_footer)) ?? .gray
                     ]
                     let descriptionAttr = NSMutableAttributedString(string: " " + descriptionStr, attributes: attributes)
-                    var directionImage = UIImage(named: "icon_favorite_direction")
-                    if directionImage != nil {
-                        directionImage = OAUtilities.resize(directionImage, newSize:CGSize(width: 11, height: 11))
-                        directionImage = directionImage?.rotate(radians: destinationItem.direction)
-                        if let directionImage {
-                            descriptionAttr.attachImage(image: directionImage)
-                        }
-                    }
+                    var directionImage = UIImage.iconFavoriteDirection
+                    directionImage = OAUtilities.resize(directionImage, newSize:CGSize(width: 11, height: 11))
+                    directionImage = directionImage.rotate(radians: destinationItem.direction)
+                    descriptionAttr.attachImage(image: directionImage)
                     cell.descriptionLabel.attributedText = descriptionAttr
                 } else {
                     cell.descriptionVisibility(false)

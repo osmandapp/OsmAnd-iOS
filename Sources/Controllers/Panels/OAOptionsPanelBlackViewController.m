@@ -362,7 +362,7 @@
     [_menuButtonSettings setImage:[UIImage templateImageNamed:@"left_menu_icon_settings.png"] forState:UIControlStateNormal];
     [_menuButtonHelp setImage:[UIImage templateImageNamed:@"left_menu_icon_about.png"] forState:UIControlStateNormal];
     [_menuButtonNavigation setImage:[UIImage templateImageNamed:@"left_menu_icon_navigation.png"] forState:UIControlStateNormal];
-    [_menuButtonPlanRoute setImage:[UIImage templateImageNamed:@"ic_custom_routes.png"] forState:UIControlStateNormal];
+    [_menuButtonPlanRoute setImage:[UIImage templateImageNamed:ACImageNameIcCustomRoutes] forState:UIControlStateNormal];
     [_menuButtonWeather setImage:[UIImage templateImageNamed:@"ic_custom_umbrella.png"] forState:UIControlStateNormal];
     [_menuButtonPlugins setImage:[UIImage templateImageNamed:@"left_menu_icon_plugins"] forState:UIControlStateNormal];
     [_menuButtonTravelGuides setImage:[UIImage templateImageNamed:@"ic_custom_backpack"] forState:UIControlStateNormal];

@@ -64,7 +64,8 @@
     self.tableView.tableHeaderView.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
     
     [self.rightButton removeFromSuperview];
-    [self.leftIconView setImage:[UIImage imageNamed:@"ic_custom_routes"]];
+    self.leftIconView.image = [UIImage imageNamed:ACImageNameIcCustomRoutes];
+    self.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
 }
 
 - (void) applyLocalization

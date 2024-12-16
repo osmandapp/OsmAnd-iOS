@@ -124,6 +124,7 @@
 #define kMaxRoadDistanceInMeters 1000
 #define kMaxZoom 22.0f
 
+static NSString *topIndexBrandPrefix = @"top_index_brand";
 static int MAX_ZOOM_OUT_STEPS = 2;
 
 typedef enum
@@ -1202,7 +1203,7 @@ typedef enum
         else if ([object isKindOfClass:[OAPOIUIFilter class]])
         {
             OAPOIUIFilter *filter = (OAPOIUIFilter *) object;
-            filterByName = [filter.filterId isEqualToString:BY_NAME_FILTER_ID];
+            filterByName = [filter.filterId isEqualToString:BY_NAME_FILTER_ID] || [filter.filterId hasPrefix:topIndexBrandPrefix];
             objectLocalizedName = filterByName ? filter.filterByName : filter.name;
             phrase = [searchUICore resetPhrase];
         }

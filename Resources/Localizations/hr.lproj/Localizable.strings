@@ -616,7 +616,7 @@
 "rendering_value_defaultTranslucentCyan_name" = "Zadana (svijetlo plava)";
 "rendering_attr_hideHouseNumbers_name" = "Sakrij kućne brojeve";
 "rendering_value_translucent_red_name" = "Prozirna crvena";
-"rendering_attr_transportStops_name" = "Stanice javnog prijevoza";
+"rendering_attr_transportStops_name" = "Stanice prijevoza";
 "routing_attr_avoid_toll_description" = "Izbjegavati ceste s naplatom cestarine";
 "rendering_attr_noPolygons_name" = "Sakrij poligone";
 "routing_attr_weight_description" = "Odredi dozvoljenu težinu vozila na putovima.";
@@ -839,3 +839,10 @@
 "available_map_styles" = "Dostupni stilovi karte";
 "avoid_by_type" = "Izbjegni prema vrsti";
 "selected_of" = "Odabrano – %d/%d";
+"base_profile_descr_public_transport" = "Vrste javnog prijevoza";
+"toggle_public_transport" = "Prikaži/Sakrij javni prijevoz";
+"shared_string_interface" = "Sučelje";
+"public_transport_hide" = "Sakrij javni prijevoz";
+"public_transport_show" = "Prikaži javni prijevoz";
+"quick_action_transport_descr" = "Gumb za prikazivanje ili skrivanje javnog prijevoza na karti.";
+"transport_hazmat_yes_desc" = "Odaberi odgovarajuću kategoriju.";

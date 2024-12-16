@@ -76,6 +76,12 @@
     
     const auto parser = OsmAnd::ObjParser(objFilePath, mtlFilePath);
     std::shared_ptr<const OsmAnd::Model3D> model = parser.parse();
+    if (!model)
+    {
+        NSLog(@"[ERROR] -> OALoad3dModelTask -> failed to parse model from mtlFilePath: %@ | objFilePath: %@", mtlFilePath.toNSString(), objFilePath.toNSString());
+        return nil;
+    }
+    
     return [[OAModel3dWrapper alloc] initWith:model];
 }
 

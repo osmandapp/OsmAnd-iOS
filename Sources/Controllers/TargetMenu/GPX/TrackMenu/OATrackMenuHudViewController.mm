@@ -2039,6 +2039,7 @@
 
     [self.mapPanelViewController.mapActions stopNavigationWithoutConfirm];
 
+    _pushedNewScreen = YES;
     [self.mapPanelViewController.mapActions enterRoutePlanningModeGivenGpx:self.doc
                                                                       path:self.gpx.gpxFilePath
                                                                       from:nil

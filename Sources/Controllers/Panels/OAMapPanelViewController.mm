@@ -1746,7 +1746,8 @@ typedef enum
     self.shadowButton = [[UIButton alloc] initWithFrame:[self shadowButtonRect]];
     [_shadowButton setBackgroundColor:[UIColor colorWithWhite:0.3 alpha:0]];
     [_shadowButton addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
-    if (withLongPressEvent) {
+    if (withLongPressEvent)
+    {
         _shadowLongPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:withLongPressEvent];
         [_shadowButton addGestureRecognizer:_shadowLongPress];
     }
@@ -1759,7 +1760,8 @@ typedef enum
     if (_shadowButton)
     {
         [_shadowButton removeFromSuperview];
-        if (_shadowLongPress) {
+        if (_shadowLongPress)
+        {
             [_shadowButton removeGestureRecognizer:_shadowLongPress];
             _shadowLongPress = nil;
         }
@@ -1925,7 +1927,7 @@ typedef enum
 {
     [_mapActions enterRoutePlanningMode:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude
                                                                    longitude:targetPoint.location.longitude]
-                               fromName:targetPoint.pointDescription checkDisplayedGpx:NO];
+                               fromName:targetPoint.pointDescription];
 }
 
 - (OAPOI *) getTargetPointPoi

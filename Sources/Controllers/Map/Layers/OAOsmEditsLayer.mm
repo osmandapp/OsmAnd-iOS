@@ -179,7 +179,7 @@
                 if (isNew)
                 {
                     bitmap = [OACompoundIconUtils createCompositeIconWithcolor:UIColorFromARGB(color_osm_edit)
-                                                                     shapeName:@"circle"
+                                                                     shapeName:DEFAULT_ICON_SHAPE_KEY
                                                                       iconName:type.name
                                                                     isFullSize:YES
                                                                           icon:type.icon
@@ -193,7 +193,7 @@
         if (!bitmap)
         {
             bitmap = [OACompoundIconUtils createCompositeIconWithcolor:UIColorFromARGB(color_osm_edit) 
-                                                             shapeName:@"circle"
+                                                             shapeName:DEFAULT_ICON_SHAPE_KEY
                                                               iconName:@"ic_custom_poi"
                                                             isFullSize:YES
                                                                   icon:[UIImage imageNamed:@"ic_custom_poi"]
@@ -370,7 +370,7 @@
 - (void)getOsmNoteBitmap:(sk_sp<SkImage> &)bitmap
 {
     UIImage *img = [UIImage mapSvgImageNamed:@"mx_special_information"];
-    bitmap = [OACompoundIconUtils createCompositeIconWithcolor:UIColorFromARGB(color_osm_edit) shapeName:@"circle" iconName:@"special_information" isFullSize:YES icon:img scale:_textSize];
+    bitmap = [OACompoundIconUtils createCompositeIconWithcolor:UIColorFromARGB(color_osm_edit) shapeName:DEFAULT_ICON_SHAPE_KEY iconName:@"special_information" isFullSize:YES icon:img scale:_textSize];
 }
 
 - (UIImage *) getPointIcon:(id)point

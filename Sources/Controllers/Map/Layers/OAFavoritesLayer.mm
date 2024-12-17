@@ -166,11 +166,11 @@
 
     UIImage *shadowImage = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"ic_bg_point_%@_bottom", background]];
     if (!shadowImage)
-        shadowImage = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"circle"] color:color];
+        shadowImage = [OAUtilities tintImageWithColor:[UIImage imageNamed:DEFAULT_ICON_SHAPE_KEY] color:color];
     
     UIImage *colorFilledImage = [OAUtilities tintImageWithColor:[UIImage imageNamed:[NSString stringWithFormat:@"ic_bg_point_%@_center", background]] color:color];
     if (!colorFilledImage)
-        colorFilledImage = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"circle"] color:color];
+        colorFilledImage = [OAUtilities tintImageWithColor:[UIImage imageNamed:DEFAULT_ICON_SHAPE_KEY] color:color];
     
     UIImage *innerImage = [OAUtilities tintImageWithColor:[OATargetInfoViewController getIcon:icon size:innerImageCenterRect.size] color:UIColor.whiteColor];
     if (!innerImage)

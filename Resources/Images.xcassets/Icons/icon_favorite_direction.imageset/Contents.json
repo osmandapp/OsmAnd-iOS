@@ -1,18 +1,8 @@
 {
   "images" : [
     {
-      "idiom" : "universal",
-      "scale" : "1x"
-    },
-    {
-      "filename" : "icon_favorite_direction@2x.png",
-      "idiom" : "universal",
-      "scale" : "2x"
-    },
-    {
-      "filename" : "icon_favorite_direction@3x.png",
-      "idiom" : "universal",
-      "scale" : "3x"
+      "filename" : "icon_favorite_direction.svg",
+      "idiom" : "universal"
     }
   ],
   "info" : {
@@ -20,6 +10,7 @@
     "version" : 1
   },
   "properties" : {
+    "preserves-vector-representation" : true,
     "template-rendering-intent" : "template"
   }
 }

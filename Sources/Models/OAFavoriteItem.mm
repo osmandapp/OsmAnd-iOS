@@ -388,7 +388,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     if (!self.favorite->getIcon().isNull())
         _icon = self.favorite->getIcon().toNSString();
     else
-        _icon = @"special_star";
+        _icon = DEFAULT_ICON_NAME_KEY;
     return _icon;
 }
 
@@ -411,7 +411,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
             return _backgroundIcon;
         }
     }
-    _backgroundIcon = @"circle";
+    _backgroundIcon = DEFAULT_ICON_SHAPE_KEY;
     return _backgroundIcon;
 }
 

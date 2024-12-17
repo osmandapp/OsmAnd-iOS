@@ -1908,7 +1908,7 @@ colorizationScheme:(int)colorizationScheme
         return [OAFavoritesLayer getImageWithColor:point.color background:point.point.getBackgroundType icon:[@"mx_" stringByAppendingString:point.point.getIconName]];
     }
     OAFavoriteColor *def = [OADefaultFavorite nearestFavColor:OADefaultFavorite.builtinColors.firstObject];
-    return [OAFavoritesLayer getImageWithColor:def.color background:@"circle" icon:[@"mx_" stringByAppendingString:DEFAULT_ICON_NAME_KEY]];
+    return [OAFavoritesLayer getImageWithColor:def.color background:DEFAULT_ICON_SHAPE_KEY icon:[@"mx_" stringByAppendingString:DEFAULT_ICON_NAME_KEY]];
 }
 
 - (void) setPointVisibility:(id)object hidden:(BOOL)hidden

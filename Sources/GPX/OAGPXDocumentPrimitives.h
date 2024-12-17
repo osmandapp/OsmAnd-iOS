@@ -21,6 +21,7 @@
 #define CREATION_TIME_EXTENSION @"creation_date"
 #define PICKUP_DATE_EXTENSION @"pickup_date"
 #define DEFAULT_ICON_NAME_KEY @"special_star"
+#define DEFAULT_ICON_SHAPE_KEY @"circle"
 #define PROFILE_TYPE_EXTENSION_KEY @"profile"
 
 #define PRIVATE_PREFIX @"amenity_"

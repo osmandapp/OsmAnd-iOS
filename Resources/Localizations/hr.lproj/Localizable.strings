@@ -846,3 +846,9 @@
 "public_transport_show" = "Prikaži javni prijevoz";
 "quick_action_transport_descr" = "Gumb za prikazivanje ili skrivanje javnog prijevoza na karti.";
 "transport_hazmat_yes_desc" = "Odaberi odgovarajuću kategoriju.";
+"key_hint_zoom_in" = "Uvećaj";
+"sett_pref_lang" = "Preferirani jezik";
+"sett_generic_ext_input" = "Tipkovnica";
+"key_hint_zoom_out" = "Umanji";
+"shared_string_street_intersection" = "Raskrižje ulica";
+"send_anonymous_data" = "Šalji anonimne podatke";

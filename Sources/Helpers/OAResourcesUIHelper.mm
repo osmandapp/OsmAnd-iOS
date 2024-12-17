@@ -1347,7 +1347,6 @@ includeHidden:(BOOL)includeHidden
             
             task.title = taskTitle;
             task.resourceItem = item;
-            task.creationTime = [NSDate now];
             
             if (onTaskCreated)
                 onTaskCreated(task);
@@ -1682,7 +1681,6 @@ includeHidden:(BOOL)includeHidden
             task = item.downloadTask;
         
         item.downloadTask.resourceItem = item;
-        item.downloadTask.creationTime = [NSDate now];
 
         if (onTaskCreated)
             onTaskCreated(task);
@@ -1743,7 +1741,6 @@ includeHidden:(BOOL)includeHidden
                                                                     andName:name
                                                                   andHidden:NO];
     task.resourceItem = resourceItem;
-    task.creationTime = [NSDate now];
 
     if (onTaskCreated)
         onTaskCreated(task);

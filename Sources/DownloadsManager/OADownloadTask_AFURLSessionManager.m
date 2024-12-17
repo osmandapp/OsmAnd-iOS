@@ -48,6 +48,8 @@
                                    [self onCompletedWith:response andStoredAt:filePath withError:error];
                                }];
         
+        _creationTime = [NSDate now];
+        
         _progress = progress;
         [_progress addObserver:self
                    forKeyPath:NSStringFromSelector(@selector(fractionCompleted))
@@ -74,6 +76,7 @@
         _key = [key copy];
         _name = [name copy];
         _hidden = hidden;
+        _creationTime = [NSDate now];
 
         NSProgress* progress;
         NSURLSessionDownloadTask* task = [manager downloadTaskWithResumeData:resumeData

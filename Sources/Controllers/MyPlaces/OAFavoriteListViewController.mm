@@ -1230,7 +1230,7 @@ static UIViewController *parentController;
 
         if (groupData.isOpen)
         {
-            cell.arrowImage.image = [UIImage templateImageNamed:@"ic_custom_arrow_down"];
+            cell.arrowImage.image = [UIImage templateImageNamed:ACImageNameIcCustomArrowDown];
         }
         else
         {

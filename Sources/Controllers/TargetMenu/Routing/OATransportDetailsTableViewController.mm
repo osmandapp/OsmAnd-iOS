@@ -566,7 +566,7 @@
         if (cell)
         {
             [cell.iconView setImage:
-             [UIImage templateImageNamed:([item[@"collapsed"] boolValue] ? @"ic_custom_arrow_down" : @"ic_custom_arrow_up")]];
+             [UIImage templateImageNamed:([item[@"collapsed"] boolValue] ? ACImageNameIcCustomArrowDown : @"ic_custom_arrow_up")]];
             cell.iconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             
             cell.descView.text = item[@"descr"];

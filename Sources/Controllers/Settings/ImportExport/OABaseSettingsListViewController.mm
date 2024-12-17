@@ -229,7 +229,7 @@
                 }
                 else
                 {
-                    cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_down"].imageFlippedForRightToLeftLayoutDirection;
+                    cell.rightIconView.image = [UIImage templateImageNamed:ACImageNameIcCustomArrowDown].imageFlippedForRightToLeftLayoutDirection;
                     if ([cell isDirectionRTL])
                         [cell.rightIconView setImage:cell.rightIconView.image.imageFlippedForRightToLeftLayoutDirection];
                 }

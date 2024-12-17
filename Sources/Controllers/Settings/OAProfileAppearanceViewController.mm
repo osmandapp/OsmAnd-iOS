@@ -266,7 +266,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    [self.cancelButton setImage:[UIImage rtlImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
+    [self.cancelButton setImage:[UIImage rtlImageNamed:ACImageNameIcNavbarChevron] forState:UIControlStateNormal];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;

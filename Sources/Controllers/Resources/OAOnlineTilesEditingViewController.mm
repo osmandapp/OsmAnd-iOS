@@ -214,7 +214,7 @@
 
 - (UIImage *)getCustomIconForLeftNavbarButton
 {
-    return [UIImage templateImageNamed:@"ic_navbar_chevron"].imageFlippedForRightToLeftLayoutDirection;
+    return [UIImage templateImageNamed:ACImageNameIcNavbarChevron].imageFlippedForRightToLeftLayoutDirection;
 }
 
 - (EOABaseNavbarColorScheme)getNavbarColorScheme

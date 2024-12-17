@@ -10,6 +10,7 @@
 #import "OsmAndApp.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 static QuickActionType *TYPE;
 
@@ -35,7 +36,7 @@ static QuickActionType *TYPE;
                                                   cl:self.class]
                name:OALocalizedString(@"shared_string_terrain")]
               nameAction:OALocalizedString(@"quick_action_verb_show_hide")]
-              iconName:@"ic_custom_hillshade"]
+              iconName:ACImageNameIcCustomHillshade]
              category:QuickActionTypeCategoryConfigureMap]
             nonEditable];
 }
@@ -47,7 +48,7 @@ static QuickActionType *TYPE;
 
 - (NSString *)getIconResName
 {
-    return @"ic_custom_hillshade";
+    return ACImageNameIcCustomHillshade;
 }
 
 - (NSString *)getActionText

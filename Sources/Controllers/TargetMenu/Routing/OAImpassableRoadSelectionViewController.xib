@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_5" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -44,7 +44,7 @@
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Avoid roads" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000001192092896" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="U3D-Z8-K0Z">
-                                    <rect key="frame" x="49" y="34.666666666666664" width="316" height="20.333333333333336"/>
+                                    <rect key="frame" x="49" y="26.666666666666671" width="316" height="24.333333333333329"/>
                                     <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                     <color key="textColor" name="textColorPrimary"/>
                                     <nil key="highlightedColor"/>
@@ -56,13 +56,13 @@
                             </constraints>
                         </view>
                         <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="42a-aj-Np6">
-                            <rect key="frame" x="16" y="27.666666666666671" width="30" height="30"/>
+                            <rect key="frame" x="16" y="23.666666666666671" width="30" height="30"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="30" id="Wpi-Li-GCh"/>
                                 <constraint firstAttribute="height" constant="30" id="m3U-yA-7tf"/>
                             </constraints>
                             <color key="tintColor" name="iconColorActive"/>
-                            <state key="normal" image="ic_navbar_chevron.png">
+                            <state key="normal" image="ic_navbar_chevron">
                                 <color key="titleColor" name="navBarTextColorPrimary"/>
                             </state>
                             <connections>
@@ -70,7 +70,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="jdG-1m-7Mk">
-                            <rect key="frame" x="356" y="27.666666666666671" width="42" height="33"/>
+                            <rect key="frame" x="356" y="19.666666666666671" width="42" height="37"/>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                             <color key="tintColor" name="iconColorActive"/>
                             <state key="normal" title="Done"/>
@@ -79,7 +79,7 @@
                             </connections>
                         </button>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="102 km • 1 h 17 m (17:47)" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ak0-z7-Qn5">
-                            <rect key="frame" x="16" y="65.666666666666671" width="382" height="20.333333333333329"/>
+                            <rect key="frame" x="16" y="61.666666666666664" width="382" height="24.333333333333336"/>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                             <color key="textColor" name="textColorPrimary"/>
                             <nil key="highlightedColor"/>
@@ -201,7 +201,7 @@
     <resources>
         <image name="ic_custom_clear_list" width="16" height="16"/>
         <image name="ic_custom_plus" width="16" height="16"/>
-        <image name="ic_navbar_chevron.png" width="28" height="28"/>
+        <image name="ic_navbar_chevron" width="28" height="28"/>
         <image name="ic_small_arrow_down" width="16" height="16"/>
         <image name="ic_small_arrow_up" width="16" height="16"/>
         <namedColor name="buttonBgColorPrimary">

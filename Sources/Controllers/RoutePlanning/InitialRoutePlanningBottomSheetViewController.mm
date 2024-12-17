@@ -57,7 +57,8 @@
     _separatorHeight = 1.0 / [UIScreen mainScreen].scale;
     
     [self.rightButton removeFromSuperview];
-    [self.leftIconView setImage:[UIImage imageNamed:@"ic_custom_routes"]];
+    self.leftIconView.image = [UIImage imageNamed:ACImageNameIcCustomRoutes];
+    self.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle

@@ -371,9 +371,10 @@
         _waypointImage.image = [pnt getImage:NO];
         
         NSString *descr = @"";
-        OASWptPt *wpt = (OASWptPt *)pnt.point;
-        if (wpt)
+        
+        if (pnt && [pnt.point isKindOfClass:[OASWptPt class]])
         {
+            OASWptPt *wpt = (OASWptPt *)pnt.point;
             OAPointDescription *pd = [[OAPointDescription alloc] initWithType:POINT_TYPE_WPT name:wpt.name];
             if (pd.name && pd.name.length > 0)
                 descr = pd.name;

@@ -30,7 +30,7 @@
 @implementation OAOsmUploadPOIViewController
 {
     OATableDataModel *_data;
-    NSArray *_osmPoints;
+    NSArray<OAOsmPoint *> *_osmPoints;
     
     OAUploadOsmPOINoteViewProgressController *_progressController;
     
@@ -87,11 +87,16 @@
         [OAOsmOAuthHelper showOAuthScreenWithHostVC:self];
 }
 
+- (BOOL) isDeletePoiAction
+{
+    return _osmPoints.count > 0 && _osmPoints[0].getAction == DELETE;
+}
+
 #pragma mark - Base UI
 
 - (NSString *)getTitle
 {
-    return OALocalizedString(@"upload_poi");
+    return OALocalizedString([self isDeletePoiAction] ? @"poi_remove_title" : @"upload_poi");
 }
 
 - (NSString *)getLeftNavbarButtonTitle
@@ -101,7 +106,7 @@
 
 - (NSString *)getBottomButtonTitle
 {
-    return OALocalizedString(@"shared_string_upload");
+    return OALocalizedString([self isDeletePoiAction] ? @"shared_string_delete" : @"shared_string_upload");
 }
 
 - (EOABaseButtonColorScheme)getBottomButtonColorScheme

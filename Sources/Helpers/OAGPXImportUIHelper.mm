@@ -183,7 +183,7 @@ static UIViewController *parentController;
                 [self removeFromDB];
 
                 OASGpxDataItem *gpx = [self doImport];
-                if (openGpxView)
+                if (openGpxView && gpx)
                 {
                     [self doPush];
                     auto trackItem = [[OASTrackItem alloc] initWithFile:gpx.file];

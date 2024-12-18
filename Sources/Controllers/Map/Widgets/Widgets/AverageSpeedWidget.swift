@@ -36,17 +36,8 @@ final class AverageSpeedWidget: OASimpleWidget {
         
         self.customId = customId
         configurePrefs(withId: customId, appMode: appMode, widgetParams: widgetParams)
-        measuredIntervalPref = Self.registerMeasuredIntervalPref(customId)
-        skipStopsPref = Self.registerSkipStopsPref(customId)
-        
-        if let widgetParams, let mode = widgetParams["selectedAppMode"] as? OAApplicationMode {
-            if let param = widgetParams[Self.MEASURED_INTERVAL_PREF_ID] as? String, let interval = Int(param)  {
-                measuredIntervalPref.set(interval, mode: mode)
-            }
-            if let skipStop = widgetParams[Self.SKIP_STOPS_PREF_ID] as? Bool {
-                skipStopsPref.set(skipStop, mode: mode)
-            }
-        }
+        measuredIntervalPref = Self.registerMeasuredIntervalPref(customId, widgetParams: widgetParams)
+        skipStopsPref = Self.registerSkipStopsPref(customId, widgetParams: widgetParams)
     }
     
     override init(frame: CGRect) {
@@ -152,17 +143,31 @@ final class AverageSpeedWidget: OASimpleWidget {
         Self.registerSkipStopsPref(customId).set(skipStopsPref.get(appMode), mode: appMode)
     }
     
-    static func registerMeasuredIntervalPref(_ customId: String?) -> OACommonLong {
+    static func registerMeasuredIntervalPref(_ customId: String?, widgetParams: ([String: Any])? = nil) -> OACommonLong {
         let settings = OAAppSettings.sharedManager()!
         let prefId = customId == nil || customId!.isEmpty
         ? Self.MEASURED_INTERVAL_PREF_ID
         : Self.MEASURED_INTERVAL_PREF_ID + customId!
-        return settings.registerLongPreference(prefId, defValue: OAAverageSpeedComputer.default_INTERVAL_MILLIS())
+        
+        var defValue = OAAverageSpeedComputer.default_INTERVAL_MILLIS()
+        
+        if let string = widgetParams?[Self.MEASURED_INTERVAL_PREF_ID] as? String, let widgetValue = Int(string) {
+            defValue = widgetValue
+        }
+           
+        return settings.registerLongPreference(prefId, defValue: defValue)
     }
     
-    static func registerSkipStopsPref(_ customId: String?) -> OACommonBoolean {
+    static func registerSkipStopsPref(_ customId: String?, widgetParams: ([String: Any])? = nil) -> OACommonBoolean {
         let settings = OAAppSettings.sharedManager()!
         let prefId = customId == nil || customId!.isEmpty ? Self.SKIP_STOPS_PREF_ID : Self.SKIP_STOPS_PREF_ID + customId!
-        return settings.registerBooleanPreference(prefId, defValue: true)
+        
+        var defValue = true
+        
+        if let widgetValue = widgetParams?[Self.SKIP_STOPS_PREF_ID] as? Bool {
+            defValue = widgetValue
+        }
+        
+        return settings.registerBooleanPreference(prefId, defValue: defValue)
     }
 }

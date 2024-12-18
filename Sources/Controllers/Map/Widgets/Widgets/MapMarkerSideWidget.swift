@@ -52,7 +52,7 @@ class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
     }
     
     override init(frame: CGRect) {
-        let widgetState = MapMarkerSideWidgetState(customId: "", firstMarker: true)
+        let widgetState = MapMarkerSideWidgetState(customId: "", firstMarker: true, widgetParams: nil)
         self.widgetState = widgetState
         self.markerModePref = widgetState.mapMarkerModePref
         self.averageSpeedIntervalPref = widgetState.averageSpeedIntervalPref
@@ -281,5 +281,4 @@ class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
         }
         return ""
     }
-
 }

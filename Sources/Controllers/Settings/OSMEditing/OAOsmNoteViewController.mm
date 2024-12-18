@@ -77,6 +77,16 @@
     [self addNotification:OAOsmOAuthHelper.notificationKey selector:@selector(onAccountInformationUpdated)];
 }
 
+#pragma mark - UIViewController
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    if (!_isAuthorised && _isOAuthAllowed)
+        [OAOsmOAuthHelper showOAuthScreenWithHostVC:self];
+}
+
 #pragma mark - Base UI
 
 - (NSString *)getTitle
@@ -145,7 +155,7 @@
         if (!_uploadAnonymously)
         {
             OATableRowData *accountCell = [accountSection createNewRow];
-            if (_isAuthorised)
+            if (_isOAuthAllowed)
             {
                 [accountCell setCellType:[OASimpleTableViewCell getCellIdentifier]];
                 [accountCell setTitle: _isAuthorised ? [OAOsmOAuthHelper getUserDisplayName] : OALocalizedString(@"login_open_street_map_org")];

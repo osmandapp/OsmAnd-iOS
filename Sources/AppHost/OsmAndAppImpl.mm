@@ -698,8 +698,8 @@
     _appearanceChangeObservable = [[OAObservable alloc] init];
     
     [OAMapStyleSettings sharedInstance];
-
-    [[OATargetPointsHelper sharedInstance] removeAllWayPoints:NO clearBackup:NO];
+    
+    [[OATargetPointsHelper sharedInstance] removeAllWayPoints:NO clearBackup:!(OsmAndApp.instance.data.pointToStart && OsmAndApp.instance.data.pointToNavigate)];
     
     [[OASGpxDbHelper shared] loadItemsBlocking];
     // Init track recorder
@@ -1345,7 +1345,9 @@
     [routingHelper setRoutePlanningMode:false];
     OAAppSettings* settings = [OAAppSettings sharedManager];
     settings.lastRoutingApplicationMode = settings.applicationMode.get;
-    [targetPointsHelper removeAllWayPoints:NO clearBackup:NO];
+    
+    [targetPointsHelper removeAllWayPoints:NO clearBackup:OsmAndApp.instance.data.pointToStart && OsmAndApp.instance.data.pointToNavigate];
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         OAApplicationMode *carPlayMode = [settings.isCarPlayModeDefault get] ? OAApplicationMode.getFirstAvailableNavigationMode : [OAAppSettings.sharedManager.carPlayMode get];
         OAApplicationMode *defaultAppMode = [settings.useLastApplicationModeByDefault get] ?

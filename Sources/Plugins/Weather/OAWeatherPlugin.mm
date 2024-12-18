@@ -204,6 +204,8 @@
     int64_t timestamp = timestampSec * 1000;
     OAMapViewController *mapViewController = [OARootViewController instance].mapPanel.mapViewController;
     
+    mapViewController.mapLayers.weatherDate = time;
+    
     if (mapViewController.mapLayers.weatherLayerLow)
         [mapViewController.mapLayers.weatherLayerLow setDateTime:timestamp goForward:forAnimation resetPeriod:resetPeriod];
 

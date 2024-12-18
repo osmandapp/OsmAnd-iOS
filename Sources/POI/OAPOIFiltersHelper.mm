@@ -26,6 +26,7 @@
 #import "OAWikipediaPlugin.h"
 #import "OAPluginsHelper.h"
 #import "OAObservable.h"
+#import "OsmAnd_Maps-Swift.h"
 
 static NSString* const UDF_CAR_AID = @"car_aid";
 static NSString* const UDF_FOR_TOURISTS = @"for_tourists";
@@ -182,6 +183,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
             }
             
             sqlite3_close(filtersDB);
+            [self updateLastModifiedTime];
         }
     });
     return YES;
@@ -358,6 +360,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
             sqlite3_finalize(statement);
             
             sqlite3_close(filtersDB);
+            [self updateLastModifiedTime];
         }
     });
     return YES;
@@ -365,18 +368,26 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
 
 - (long)getLastModifiedTime
 {
-    long lastModifiedTime = [OABackupHelper getLastModifiedTime:FILTERS_LAST_MODIFIED_NAME];
+    long lastModifiedTime = [BackupUtils getLastModifiedTime:FILTERS_LAST_MODIFIED_NAME];
     if (lastModifiedTime == 0)
     {
         lastModifiedTime = [self getDBLastModifiedTime];
-        [OABackupHelper setLastModifiedTime:FILTERS_LAST_MODIFIED_NAME lastModifiedTime:lastModifiedTime];
+        [BackupUtils setLastModifiedTime:FILTERS_LAST_MODIFIED_NAME
+                        lastModifiedTime:lastModifiedTime];
     }
     return lastModifiedTime;
 }
 
-- (void) setLastModifiedTime:(long)lastModified
+- (void)setLastModifiedTime:(long)lastModified
 {
-    [OABackupHelper setLastModifiedTime:FILTERS_LAST_MODIFIED_NAME lastModifiedTime:lastModified];
+    [BackupUtils setLastModifiedTime:FILTERS_LAST_MODIFIED_NAME
+                    lastModifiedTime:lastModified];
+}
+
+- (void)updateLastModifiedTime
+{
+    [BackupUtils setLastModifiedTime:FILTERS_LAST_MODIFIED_NAME
+                    lastModifiedTime:(long) NSDate.now.timeIntervalSince1970];
 }
 
 - (long) getDBLastModifiedTime

@@ -10,7 +10,7 @@ import UIKit
 
 @objc(OAMapMarkerSideWidgetState)
 @objcMembers
-class MapMarkerSideWidgetState: OAWidgetState {
+final class MapMarkerSideWidgetState: OAWidgetState {
     static let availableIntervals: [Int: String] = getAvailableIntervals()
     
     let settings = OAAppSettings.sharedManager()!
@@ -21,36 +21,78 @@ class MapMarkerSideWidgetState: OAWidgetState {
     
     var customId: String?
     
-    init(customId: String?, firstMarker: Bool) {
+    init(customId: String?, firstMarker: Bool, widgetParams: ([String: Any])?) {
         self.customId = customId
         self.firstMarker = firstMarker
-        self.mapMarkerModePref = MapMarkerSideWidgetState.registerModePref(customId, settings: settings, firstMarker: firstMarker)
-        self.markerClickBehaviourPref = MapMarkerSideWidgetState.registerMarkerClickBehaviourPref(customId, settings: settings, firstMarker: firstMarker)
-        self.averageSpeedIntervalPref = MapMarkerSideWidgetState.registerAverageSpeedIntervalPref(customId, settings: settings, firstMarker: firstMarker)
+        self.mapMarkerModePref = MapMarkerSideWidgetState.registerModePref(customId,
+                                                                           settings: settings,
+                                                                           firstMarker: firstMarker,
+                                                                           widgetParams: widgetParams)
+        self.markerClickBehaviourPref = MapMarkerSideWidgetState.registerMarkerClickBehaviourPref(customId,
+                                                                                                  settings: settings,
+                                                                                                  firstMarker: firstMarker,
+                                                                                                  widgetParams: widgetParams)
+        self.averageSpeedIntervalPref = MapMarkerSideWidgetState.registerAverageSpeedIntervalPref(customId,
+                                                                                                  settings: settings,
+                                                                                                  firstMarker: firstMarker,
+                                                                                                  widgetParams: widgetParams)
     }
     
-    private static func registerModePref(_ customId: String?, settings: OAAppSettings, firstMarker: Bool) -> OACommonString {
+    private static func registerModePref(_ customId: String?,
+                                         settings: OAAppSettings,
+                                         firstMarker: Bool,
+                                         widgetParams: ([String: Any])?) -> OACommonString {
         var prefId = firstMarker ? "first_map_marker_mode" : "second_map_marker_mode"
+        let prefIdKey = prefId
         if let customId, !customId.isEmpty {
             prefId += customId
         }
-        return settings.registerStringPreference(prefId, defValue: SideMarkerMode.distance.name)
+        
+        var defValue = SideMarkerMode.distance.name
+        
+        if let widgetValue = widgetParams?[prefIdKey] as? String {
+            defValue = widgetValue
+        }
+        
+        return settings.registerStringPreference(prefId, defValue: defValue)
     }
     
-    private static func registerAverageSpeedIntervalPref(_ customId: String?, settings: OAAppSettings, firstMarker: Bool) -> OACommonLong {
+    private static func registerAverageSpeedIntervalPref(_ customId: String?,
+                                                         settings: OAAppSettings,
+                                                         firstMarker: Bool,
+                                                         widgetParams: ([String: Any])?) -> OACommonLong {
         var prefId = firstMarker ? "first_map_marker_interval" : "second_map_marker_interval"
+        let prefIdKey = prefId
         if let customId, !customId.isEmpty {
             prefId += customId
         }
-        return settings.registerLongPreference(prefId, defValue: OAAverageSpeedComputer.default_INTERVAL_MILLIS())
+        
+        var defValue = OAAverageSpeedComputer.default_INTERVAL_MILLIS()
+        
+        if let string = widgetParams?[prefIdKey] as? String, let widgetValue = Int(string) {
+            defValue = widgetValue
+        }
+           
+        return settings.registerLongPreference(prefId, defValue: defValue)
     }
     
-    private static func registerMarkerClickBehaviourPref(_ customId: String?, settings: OAAppSettings, firstMarker: Bool) -> OACommonString {
+    private static func registerMarkerClickBehaviourPref(_ customId: String?,
+                                                         settings: OAAppSettings,
+                                                         firstMarker: Bool,
+                                                         widgetParams: ([String: Any])?) -> OACommonString {
         var prefId = firstMarker ? "first_map_marker_click_behaviour" : "second_map_marker_click_behaviour"
+        let prefIdKey = prefId
         if let customId, !customId.isEmpty {
             prefId += customId
         }
-        return settings.registerStringPreference(prefId, defValue: MarkerClickBehaviour.switchMode.name)
+        
+        var defValue = MarkerClickBehaviour.switchMode.name
+        
+        if let widgetValue = widgetParams?[prefIdKey] as? String {
+            defValue = widgetValue
+        }
+        
+        return settings.registerStringPreference(prefId, defValue: defValue)
     }
     
     override func getMenuTitle() -> String! {
@@ -69,8 +111,8 @@ class MapMarkerSideWidgetState: OAWidgetState {
     }
     
     override func copyPrefs(_ appMode: OAApplicationMode!, customId: String!) {
-        let _ = MapMarkerSideWidgetState.registerModePref(customId, settings: settings, firstMarker: firstMarker)
-        let _ = MapMarkerSideWidgetState.registerAverageSpeedIntervalPref(customId, settings: settings, firstMarker: firstMarker)
+        let _ = MapMarkerSideWidgetState.registerModePref(customId, settings: settings, firstMarker: firstMarker, widgetParams: nil)
+        let _ = MapMarkerSideWidgetState.registerAverageSpeedIntervalPref(customId, settings: settings, firstMarker: firstMarker, widgetParams: nil)
     }
     
     func isFirstMarker() -> Bool {

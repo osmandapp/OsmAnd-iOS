@@ -17,9 +17,9 @@ final class GlideTargetWidgetState: OAWidgetState {
     private let widgetType: WidgetType
     private let preference: OACommonBoolean
 
-    init(_ customId: String?) {
+    init(_ customId: String?, widgetParams: ([String: Any])? = nil) {
         widgetType = .glideTarget
-        preference = Self.registerPreference(customId)
+        preference = Self.registerPreference(customId, widgetParams: widgetParams)
     }
 
     func getPreference() -> OACommonBoolean {
@@ -42,11 +42,18 @@ final class GlideTargetWidgetState: OAWidgetState {
         Self.registerPreference(customId).set(preference.get(appMode), mode: appMode)
     }
 
-    private static func registerPreference(_ customId: String?) -> OACommonBoolean {
+    private static func registerPreference(_ customId: String?, widgetParams: ([String: Any])? = nil) -> OACommonBoolean {
         var prefId = Self.prefBaseId
         if let customId, !customId.isEmpty {
             prefId += "_\(customId)"
         }
-        return OAAppSettings.sharedManager().registerBooleanPreference(prefId, defValue: false).makeProfile()
+        
+        var defValue = false
+        
+        if let string = widgetParams?[Self.prefBaseId] as? String, let widgetValue = Bool(string) {
+            defValue = widgetValue
+        }
+        
+        return OAAppSettings.sharedManager().registerBooleanPreference(prefId, defValue: defValue).makeProfile()
     }
 }

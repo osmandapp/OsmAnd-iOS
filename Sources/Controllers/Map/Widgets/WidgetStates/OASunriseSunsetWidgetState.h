@@ -18,7 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL lastIsDayTime;
 
 - (instancetype)initWithWidgetType:(OAWidgetType *)widgetType
-                                   customId:(nullable NSString *)customId;
+                          customId:(nullable NSString *)customId
+                      widgetParams:(nullable NSDictionary *)widgetParams;
 
 - (OAWidgetType *)getWidgetType;
 - (NSString *)getWidgetIconName;

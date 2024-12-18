@@ -10,7 +10,7 @@ import Foundation
 
 @objc(OAWidgetParameterViewController)
 @objcMembers
-class WidgetParameterViewController: OABaseNavbarViewController {
+final class WidgetParameterViewController: OABaseNavbarViewController {
     
     var screenTitle: String!
     var appMode: OAApplicationMode!
@@ -18,6 +18,7 @@ class WidgetParameterViewController: OABaseNavbarViewController {
     var pref: OACommonPreference?
     var widgetConfigurationSelectedValue: String?
     var onWidgetConfigurationParamsAction: ((String?) -> Void)? = nil
+    var onWidgetChangeParamsAction: (([String: Any]) -> Void)?
 
     //MARK: - Base UI
 
@@ -111,6 +112,7 @@ class WidgetParameterViewController: OABaseNavbarViewController {
             let val = stringValue(from: item.obj(forKey: "value"))
             if let pref {
                 pref.setValueFrom(val, appMode: appMode)
+                onWidgetChangeParamsAction?([pref.key: val])
             } else {
                 widgetConfigurationSelectedValue = val
             }
@@ -119,7 +121,7 @@ class WidgetParameterViewController: OABaseNavbarViewController {
         }
     }
 
-    //MARK: - Additions
+    // MARK: - Additions
 
     private func stringValue(from value: Any?) -> String {
         if let stringValue = value as? String {
@@ -145,6 +147,7 @@ class WidgetParameterViewController: OABaseNavbarViewController {
                 let val = stringValue(from: sortedValues[cell.sliderView.selectedMark].key)
                 if let pref {
                     pref.setValueFrom(val, appMode: appMode)
+                    onWidgetChangeParamsAction?([pref.key: val])
                 } else {
                     widgetConfigurationSelectedValue = val
                     onWidgetConfigurationParamsAction?(val)

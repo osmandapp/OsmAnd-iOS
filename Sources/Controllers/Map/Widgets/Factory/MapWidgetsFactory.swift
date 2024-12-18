@@ -9,14 +9,14 @@
 import Foundation
 
 @objc(OAMapWidgetsFactory)
-class MapWidgetsFactory: NSObject {
+final class MapWidgetsFactory: NSObject {
     
     func createMapWidget(widgetType: WidgetType, widgetParams: [String: Any]? = nil) -> OABaseWidgetView? {
-        return createMapWidget(customId: nil, widgetType: widgetType, widgetParams: widgetParams)
+        createMapWidget(customId: nil, widgetType: widgetType, widgetParams: widgetParams)
     }
     
     func createMapWidget(customId: String?, widgetType: WidgetType, widgetParams: [String: Any]? = nil) -> OABaseWidgetView? {
-        return createMapWidgetImpl(customId: customId, widgetType: widgetType, widgetParams: widgetParams)
+        createMapWidgetImpl(customId: customId, widgetType: widgetType, widgetParams: widgetParams)
     }
     
     private func createMapWidgetImpl(customId: String?, widgetType: WidgetType, widgetParams: ([String: Any])? = nil) -> OABaseWidgetView? {
@@ -53,16 +53,16 @@ class MapWidgetsFactory: NSObject {
         case .intermediateDestination:
             return DistanceToIntermediateDestinationWidget(customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .timeToIntermediate:
-            let state = TimeToNavigationPointWidgetState(customId: customId, intermediate: true)
+            let state = TimeToNavigationPointWidgetState(customId: customId, intermediate: true, widgetParams: widgetParams)
             return TimeToNavigationPointWidget(widgetState: state, appMode: appMode, widgetParams: widgetParams)
         case .timeToDestination:
-            let widgetState = TimeToNavigationPointWidgetState(customId: customId, intermediate: false)
+            let widgetState = TimeToNavigationPointWidgetState(customId: customId, intermediate: false, widgetParams: widgetParams)
             return TimeToNavigationPointWidget(widgetState: widgetState, appMode: appMode, widgetParams: widgetParams)
         case .sideMarker1:
-            let firstMarkerState = MapMarkerSideWidgetState(customId: customId, firstMarker: true)
+            let firstMarkerState = MapMarkerSideWidgetState(customId: customId, firstMarker: true, widgetParams: widgetParams)
             return MapMarkerSideWidget(widgetState: firstMarkerState, appMode: appMode, widgetParams: widgetParams)
         case .sideMarker2:
-            let secondMarkerState = MapMarkerSideWidgetState(customId: customId, firstMarker: false)
+            let secondMarkerState = MapMarkerSideWidgetState(customId: customId, firstMarker: false, widgetParams: widgetParams)
             return MapMarkerSideWidget(widgetState: secondMarkerState, appMode: appMode, widgetParams: widgetParams)
         case .relativeBearing:
             return OABearingWidget(bearingType: .relative, customId: customId, appMode: appMode, widgetParams: widgetParams)
@@ -95,19 +95,19 @@ class MapWidgetsFactory: NSObject {
         case .radiusRuler:
             return RulerDistanceWidget(customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .sunrise:
-            let sunriseState = OASunriseSunsetWidgetState(widgetType: .sunrise, customId: customId)
+            let sunriseState = OASunriseSunsetWidgetState(widgetType: .sunrise, customId: customId, widgetParams: widgetParams)
             return OASunriseSunsetWidget(state: sunriseState, appMode: appMode, widgetParams: widgetParams)
         case .sunset:
-            let sunsetState = OASunriseSunsetWidgetState(widgetType: .sunset, customId: customId)
+            let sunsetState = OASunriseSunsetWidgetState(widgetType: .sunset, customId: customId, widgetParams: widgetParams)
             return OASunriseSunsetWidget(state: sunsetState, appMode: appMode, widgetParams: widgetParams)
         case .sunPosition:
-            let sunPositiontState = OASunriseSunsetWidgetState(widgetType: .sunPosition, customId: customId)
-            return OASunriseSunsetWidget(state: sunPositiontState, appMode: appMode, widgetParams: widgetParams)
+            let sunPositionState = OASunriseSunsetWidgetState(widgetType: .sunPosition, customId: customId, widgetParams: widgetParams)
+            return OASunriseSunsetWidget(state: sunPositionState, appMode: appMode, widgetParams: widgetParams)
         case .glideTarget:
-            let glideWidgetState = GlideTargetWidgetState(customId)
+            let glideWidgetState = GlideTargetWidgetState(customId, widgetParams: widgetParams)
             return GlideTargetWidget(with: glideWidgetState, customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .glideAverage:
-            let glideWidgetState = GlideAverageWidgetState(customId)
+            let glideWidgetState = GlideAverageWidgetState(customId, widgetParams: widgetParams)
             return GlideAverageWidget(with: glideWidgetState, customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .elevationProfile:
             return /*ElevationProfileWidget(mapActivity: mapActivity)*/nil

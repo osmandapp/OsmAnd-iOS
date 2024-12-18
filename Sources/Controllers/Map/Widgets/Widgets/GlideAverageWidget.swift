@@ -24,7 +24,7 @@ final class GlideAverageWidget: GlideBaseWidget {
     init(with widgetState: GlideAverageWidgetState, customId: String?, appMode: OAApplicationMode, widgetParams: ([String: Any])? = nil) {
         super.init(WidgetType.glideAverage, customId: customId, appMode: appMode, widgetParams: widgetParams)
         self.widgetState = widgetState
-        measuredIntervalPref = Self.registerMeasuredIntervalPref(customId)
+        measuredIntervalPref = Self.registerMeasuredIntervalPref(customId, widgetParams: widgetParams)
         updateInfo()
         onClickFunction = { [weak self] _ in
             guard let self else { return }
@@ -175,14 +175,21 @@ final class GlideAverageWidget: GlideBaseWidget {
         Self.registerMeasuredIntervalPref(customId).set(measuredIntervalPref?.get(appMode) ?? AverageValueComputer.defaultIntervalMillis, mode: appMode)
     }
 
-    private static func registerMeasuredIntervalPref(_ customId: String?) -> OACommonLong {
+    private static func registerMeasuredIntervalPref(_ customId: String?, widgetParams: ([String: Any])? = nil) -> OACommonLong {
         var prefId: String
         if let customId, !customId.isEmpty {
             prefId = Self.measuredIntervalPrefID + customId
         } else {
             prefId = Self.measuredIntervalPrefID
         }
-        return OAAppSettings.sharedManager().registerLongPreference(prefId, defValue: Int(AverageValueComputer.defaultIntervalMillis))
+        
+        var defValue = Int(AverageValueComputer.defaultIntervalMillis)
+        
+        if let string = widgetParams?[Self.measuredIntervalPrefID] as? String, let widgetValue = Int(string) {
+            defValue = widgetValue
+        }
+    
+        return OAAppSettings.sharedManager().registerLongPreference(prefId, defValue: defValue)
     }
 
     func isInVerticalSpeedState() -> Bool {

@@ -51,7 +51,6 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     NSLayoutConstraint *_leadingTextAnchor;
     NSString *_customId;
     OACommonBoolean *_showIconPref;
-    OAApplicationMode *_appMode;
     NSLayoutConstraint *_unitOrEmptyLabelWidthConstraint;
     NSLayoutConstraint *_unitOrEmptyLabelWidthSmallModeConstraint;
     UIStackView *_contentStackViewSimpleWidget;
@@ -618,9 +617,9 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     _verticalStackViewSimpleWidgetBottomConstraint.constant = -([OAWidgetSizeStyleObjWrapper getBottomPaddingWithType:self.widgetSizeStyle]);
 
     BOOL isVisibleIcon = false;
-    if (_appMode && _showIconPref)
+    if (_showIconPref)
     {
-        isVisibleIcon = [_showIconPref get:_appMode];
+        isVisibleIcon = [_showIconPref get:[[OAAppSettings sharedManager].applicationMode get]];
         _imageView.hidden = !isVisibleIcon;
         
         if (self.isFullRow && self.widgetSizeStyle == EOAWidgetSizeStyleSmall)
@@ -936,7 +935,6 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
 
 - (void)configurePrefsWithId:(NSString *)id appMode:(OAApplicationMode *)appMode widgetParams:(NSDictionary * _Nullable)widgetParams
 {
-    _appMode = appMode;
     _customId = id;
     _showIconPref = [self registerShowIconPref:id];
     self.widgetSizePref = [self registerWidgetSizePref:id];
@@ -985,11 +983,6 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     if (customId && customId.length > 0)
         prefId = [prefId stringByAppendingString:customId];
     return [[OAAppSettings sharedManager] registerBooleanPreference:prefId defValue:YES];
-}
-
-- (OAApplicationMode *)getAppMode
-{
-    return _appMode;
 }
 
 @end

@@ -21,6 +21,7 @@
 #import "OAMapWidgetRegistry.h"
 #import "OAPluginsHelper.h"
 #import "OAMapSource.h"
+#import "OAColoringType.h"
 #import "OAAppData.h"
 #import "OsmAnd_Maps-Swift.h"
 
@@ -217,10 +218,120 @@ static NSDictionary *platformCompatibilityKeysDictionary = @{
         }
         else
         {
-            [app.data setSettingValue:value forKey:key mode:_appMode];
+            if (![app.data setSettingValue:value forKey:key mode:_appMode])
+            {
+                [self setStringValue:value
+                              forKey:[NSString stringWithFormat:@"%@_%@", key, _appMode.stringKey]];
+            }
         }
     }
 }
+
+- (void)setStringValue:(NSString *)strValue
+                forKey:(NSString *)key
+{
+    if (strValue.length == 0)
+        return;
+
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if ([strValue caseInsensitiveCompare:@"true"] == NSOrderedSame)
+    {
+        [defaults setObject:@(YES) forKey:key];
+    }
+    else if ([strValue caseInsensitiveCompare:@"false"] == NSOrderedSame)
+    {
+        [defaults setObject:@(NO) forKey:key];
+    }
+    else if ([self isNumber:strValue])
+    {
+        NSNumber *number = [self numberFromString:strValue];
+        [defaults setObject:number forKey:key];
+    }
+    else if ([self isArrayOfArrayOfStrings:strValue])
+    {
+        NSMutableArray<NSArray<NSString *> *> *nestedArray = [NSMutableArray array];
+        NSArray<NSString *> *subarrays = [strValue componentsSeparatedByString:@";"];
+        for (NSString *subStr in subarrays)
+        {
+            if (subStr.length > 0)
+                [nestedArray addObject:[subStr componentsSeparatedByString:@","]];
+        }
+        [defaults setObject:nestedArray forKey:key];
+    }
+    else if ([self isArrayOfStrings:strValue])
+    {
+        NSArray<NSString *> *array = [strValue componentsSeparatedByString:@","];
+        [defaults setObject:array forKey:key];
+    }
+    else
+    {
+        NSNumber *enumVaue = [self getEnumValue:strValue key:key];
+        [defaults setObject:enumVaue ?: strValue forKey:key];
+    }
+
+    [defaults synchronize];
+}
+
+- (BOOL)isNumber:(NSString *)value
+{
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    formatter.numberStyle = NSNumberFormatterDecimalStyle;
+    return [formatter numberFromString:value] != nil;
+}
+
+- (NSNumber *)numberFromString:(NSString *)value
+{
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    formatter.numberStyle = NSNumberFormatterDecimalStyle;
+    return [formatter numberFromString:value];
+}
+
+- (NSNumber *)getEnumValue:(NSString *)value key:(NSString *)key
+{
+    NSDictionary<NSString *, NSArray<id> *> *keyWithValues = @{
+        @"routeColoringType": [OAColoringType getRouteColoringTypes],
+        @"currentTrackColoringType": [OAColoringType getTrackColoringTypes],
+        @"wikipediaImagesDownloadMode": [OADownloadMode getDownloadModes],
+        @"travelGuidesImagesDownloadMode": [OADownloadMode getDownloadModes]
+    };
+    for (Class enumClass in OAAppSettings.commonEnumClasses)
+    {
+        NSArray<id> *values;
+        for (NSString *keyValues in keyWithValues)
+        {
+            if ([key hasPrefix:keyValues])
+            {
+                values = keyWithValues[keyValues];
+                break;
+            }
+        }
+        NSDictionary<NSString *, NSNumber *> *stringsValues = [enumClass getStringsValues:values];
+        NSNumber *result = stringsValues[value];
+        if (result)
+            return result;
+    }
+    return nil;
+}
+
+- (BOOL)isArrayOfStrings:(NSString *)value
+{
+    return [value containsString:@","];
+}
+
+- (BOOL)isArrayOfArrayOfStrings:(NSString *)value
+{
+    if (![value containsString:@";"])
+        return NO;
+
+    NSArray<NSString *> *subarrays = [value componentsSeparatedByString:@";"];
+    for (NSString *subStr in subarrays)
+    {
+        if (subStr.length > 0 && ![subStr containsString:@","])
+            return NO;
+    }
+    return YES;
+}
+
 
 - (void) renameProfile
 {

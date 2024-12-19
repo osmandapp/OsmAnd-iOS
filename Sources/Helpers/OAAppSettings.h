@@ -382,6 +382,7 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 - (int) get:(OAApplicationMode *)mode;
 - (void) set:(int)integer;
 - (void) set:(int)integer mode:(OAApplicationMode *)mode;
+- (int) fromStringValue:(NSString *)value;
 
 @end
 
@@ -485,7 +486,14 @@ typedef NS_ENUM(NSInteger, EOASpeedLimitWarningState)
     EOASpeedLimitWarningStateWhenExceeded
 };
 
-@interface OACommonSpeedLimitWarningState : OACommonInteger
+@interface OACommonEnum : OACommonInteger
+
++ (NSDictionary<NSString *, NSNumber *> *)getStringsValues;
++ (NSDictionary<NSString *, NSNumber *> *)getStringsValues:(NSArray<id> *)values;
+
+@end
+
+@interface OACommonSpeedLimitWarningState : OACommonEnum
 
 + (instancetype) withKey:(NSString *)key defValue:(EOASpeedLimitWarningState)defValue;
 
@@ -499,7 +507,7 @@ typedef NS_ENUM(NSInteger, EOASpeedLimitWarningState)
 
 @end
 
-@interface OACommonAutoZoomMap : OACommonInteger
+@interface OACommonAutoZoomMap : OACommonEnum
 
 + (instancetype) withKey:(NSString *)key defValue:(EOAAutoZoomMap)defValue;
 
@@ -510,7 +518,7 @@ typedef NS_ENUM(NSInteger, EOASpeedLimitWarningState)
 
 @end
 
-@interface OACommonSpeedConstant : OACommonInteger
+@interface OACommonSpeedConstant : OACommonEnum
 
 + (instancetype) withKey:(NSString *)key defValue:(EOASpeedConstant)defValue;
 
@@ -521,7 +529,7 @@ typedef NS_ENUM(NSInteger, EOASpeedLimitWarningState)
 
 @end
 
-@interface OACommonAngularConstant : OACommonInteger
+@interface OACommonAngularConstant : OACommonEnum
 
 + (instancetype) withKey:(NSString *)key defValue:(EOAAngularConstant)defValue;
 
@@ -538,7 +546,7 @@ typedef NS_ENUM(NSInteger, EOAActiveMarkerConstant)
     TWO_ACTIVE_MARKERS
 };
 
-@interface OACommonActiveMarkerConstant : OACommonInteger
+@interface OACommonActiveMarkerConstant : OACommonEnum
 
 + (instancetype) withKey:(NSString *)key defValue:(EOAActiveMarkerConstant)defValue;
 
@@ -549,7 +557,7 @@ typedef NS_ENUM(NSInteger, EOAActiveMarkerConstant)
 
 @end
 
-@interface OACommonDrivingRegion : OACommonInteger
+@interface OACommonDrivingRegion : OACommonEnum
 
 + (instancetype) withKey:(NSString *)key defValue:(EOADrivingRegion)defValue;
 
@@ -560,7 +568,7 @@ typedef NS_ENUM(NSInteger, EOAActiveMarkerConstant)
 
 @end
 
-@interface OACommonMetricSystem : OACommonInteger
+@interface OACommonMetricSystem : OACommonEnum
 
 + (instancetype) withKey:(NSString *)key defValue:(EOAMetricsConstant)defValue;
 
@@ -578,7 +586,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
     RULER_MODE_NO_CIRCLES
 };
 
-@interface OACommonRulerWidgetMode : OACommonInteger
+@interface OACommonRulerWidgetMode : OACommonEnum
 
 + (instancetype) withKey:(NSString *)key defValue:(EOARulerWidgetMode)defValue;
 
@@ -591,7 +599,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 
 @end
 
-@interface OACommonWikiArticleShowImages : OACommonInteger
+@interface OACommonWikiArticleShowImages : OACommonEnum
 
 + (instancetype) withKey:(NSString *)key defValue:(EOAWikiArticleShowConstant)defValue;
 
@@ -612,7 +620,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
     EOARateUsStateDislikedOrIgnoredAgain
 };
 
-@interface OACommonRateUsState : OACommonInteger
+@interface OACommonRateUsState : OACommonEnum
 
 + (instancetype) withKey:(NSString *)key defValue:(EOARateUsState)defValue;
 
@@ -623,18 +631,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 @end
 
-@interface OACommonGradientScaleType : OACommonInteger
-
-+ (instancetype) withKey:(NSString *)key defValue:(EOAGradientScaleType)defValue;
-
-- (EOAGradientScaleType) get;
-- (EOAGradientScaleType) get:(OAApplicationMode *)mode;
-- (void) set:(EOAGradientScaleType)gradientScaleType;
-- (void) set:(EOAGradientScaleType)gradientScaleType mode:(OAApplicationMode *)mode;
-
-@end
-
-@interface OACommonUploadVisibility : OACommonInteger
+@interface OACommonUploadVisibility : OACommonEnum
 
 + (instancetype) withKey:(NSString *)key defValue:(EOAUploadVisibility)defValue;
 
@@ -645,7 +642,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 @end
 
-@interface OACommonCoordinateInputFormats : OACommonInteger
+@interface OACommonCoordinateInputFormats : OACommonEnum
 
 + (instancetype) withKey:(NSString *)key defValue:(EOACoordinateInputFormats)defValue;
 
@@ -656,7 +653,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 @end
 
-@interface OACommonDownloadMode : OACommonInteger
+@interface OACommonDownloadMode : OACommonEnum
 
 @property (nonatomic) NSArray<OADownloadMode *> *values;
 
@@ -670,7 +667,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 @end
 
-@interface OACommonColoringType : OACommonInteger
+@interface OACommonColoringType : OACommonEnum
 
 @property (nonatomic) NSArray<OAColoringType *> *values;
 
@@ -684,7 +681,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 @end
 
-@interface OACommonWidgetSizeStyle : OACommonInteger
+@interface OACommonWidgetSizeStyle : OACommonEnum
 
 + (instancetype) withKey:(NSString *)key defValue:(EOAWidgetSizeStyle)defValue;
 
@@ -702,7 +699,7 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 };
 
 
-@interface OACommonWidgetZoomLevelType : OACommonInteger
+@interface OACommonWidgetZoomLevelType : OACommonEnum
 
 + (instancetype)withKey:(NSString *)key defValue:(EOAWidgetZoomLevelType)defValue;
 
@@ -714,13 +711,16 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @end
 
 
-@interface OACommonDayNightMode : OACommonInteger
+@interface OACommonDayNightMode : OACommonEnum
 
 @end
 
 @interface OAAppSettings : NSObject
 
 + (OAAppSettings *)sharedManager;
+
++ (NSArray<Class> *)commonEnumClasses;
+
 @property (assign, nonatomic) BOOL settingShowMapRulet;
 
 @property (nonatomic) OACommonInteger *settingMapLanguage;

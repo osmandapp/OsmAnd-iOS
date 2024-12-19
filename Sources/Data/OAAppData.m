@@ -194,34 +194,41 @@
     return self;
 }
 
-- (void) setSettingValue:(NSString *)value forKey:(NSString *)key mode:(OAApplicationMode *)mode
+- (BOOL) setSettingValue:(NSString *)value forKey:(NSString *)key mode:(OAApplicationMode *)mode
 {
     @synchronized (_lock)
     {
         if ([key isEqualToString:@"vertical_exaggeration_scale"])
         {
             [_verticalExaggerationScaleProfile set:[value doubleValue] mode:mode];
+            return YES;
         }
         else if ([key isEqualToString:@"show_mapillary"])
         {
             [_mapillaryProfile setValueFromString:value appMode:mode];
+            return YES;
         }
         else if ([key isEqualToString:@"global_wikipedia_poi_enabled"])
         {
             [_wikipediaGlobalProfile setValueFromString:value appMode:mode];
+            return YES;
         }
         else if ([key isEqualToString:@"wikipedia_poi_enabled_languages"])
         {
             [_wikipediaLanguagesProfile setValueFromString:value appMode:mode];
+            return YES;
         }
         else if ([key isEqualToString:@"wikipedia_images_download_mode"])
         {
             [_wikipediaImagesDownloadModeProfile setValueFromString:value appMode:mode];
+            return YES;
         }
         else if ([key isEqualToString:@"travelGuidesImagesDownloadMode"])
         {
             [_travelGuidesImagesDownloadModeProfile setValueFromString:value appMode:mode];
+            return YES;
         }
+        return NO;
     }
 }
 
@@ -321,8 +328,8 @@
     _weatherWindToolbarUnitProfile = [OACommonUnit withKey:kWeatherWindToolbarUnitKey defValue:[OAWeatherBand getDefaultBandUnit:WEATHER_BAND_WIND_SPEED]];
     _weatherWindUnitAutoProfile = [OACommonBoolean withKey:kWeatherWindUnitAutoKey defValue:YES];
     _weatherWindToolbarUnitAutoProfile = [OACommonBoolean withKey:kWeatherWindToolbarUnitAutoKey defValue:YES];
-    _weatherWindAlphaProfile = [OACommonDouble withKey:kWeatherWindToolbarAlphaKey defValue:0.6];
-    _weatherWindToolbarAlphaProfile = [OACommonDouble withKey:kWeatherWindAlphaKey defValue:0.6];
+    _weatherWindAlphaProfile = [OACommonDouble withKey:kWeatherWindAlphaKey defValue:0.6];
+    _weatherWindToolbarAlphaProfile = [OACommonDouble withKey:kWeatherWindToolbarAlphaKey defValue:0.6];
     _weatherCloudProfile = [OACommonBoolean withKey:kWeatherCloudKey defValue:NO];
     _weatherCloudToolbarProfile = [OACommonBoolean withKey:kWeatherCloudToolbarKey defValue:NO];
     _weatherCloudUnitProfile = [OACommonUnit withKey:kWeatherCloudUnitKey defValue:[OAWeatherBand getDefaultBandUnit:WEATHER_BAND_CLOUD]];

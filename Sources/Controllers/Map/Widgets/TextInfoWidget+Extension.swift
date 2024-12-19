@@ -108,10 +108,8 @@ extension OATextInfoWidget {
 
 extension OATextInfoWidget {
     @objc var widgetSizeStyle: EOAWidgetSizeStyle {
-        guard widgetSizePref != nil else {
-            return .medium
-        }
-        return widgetSizePref?.get(OAAppSettings.sharedManager().applicationMode.get()!) ?? .medium
+        guard let widgetSizePref else { return .medium }
+        return widgetSizePref.get()
     }
     
     func updateWith(style: EOAWidgetSizeStyle, appMode: OAApplicationMode) {

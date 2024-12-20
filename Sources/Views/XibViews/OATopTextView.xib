@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -215,6 +215,7 @@
                 <outlet property="exitRefTextContainer" destination="3ov-dr-SOd" id="yHV-0g-beC"/>
                 <outlet property="exitRefTextContainerWidthConstraint" destination="c2u-Jf-ukc" id="xpu-nB-UGX"/>
                 <outlet property="shieldIcon" destination="Z8c-N6-WrV" id="AtL-uY-5pa"/>
+                <outlet property="stackViewLeadingConstraint" destination="wqD-d3-ul6" id="fYy-2t-Lqb"/>
                 <outlet property="turnView" destination="7DR-I9-K8G" id="0nc-tE-Svh"/>
                 <outlet property="waypointButtonMore" destination="6Px-uI-aHL" id="sPB-gq-CHR"/>
                 <outlet property="waypointButtonRemove" destination="hXh-NU-GkP" id="iG5-5x-aCQ"/>

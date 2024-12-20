@@ -852,3 +852,4 @@
 "key_hint_zoom_out" = "Umanji";
 "shared_string_street_intersection" = "Raskrižje ulica";
 "send_anonymous_data" = "Šalji anonimne podatke";
+"avoid_transport_type" = "Izbjegni vrste prijevoza";

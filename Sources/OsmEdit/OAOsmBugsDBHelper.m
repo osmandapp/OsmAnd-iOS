@@ -8,10 +8,10 @@
 
 #import "OAOsmBugsDBHelper.h"
 #import "OABackupHelper.h"
-
 #import "OALog.h"
 #import "OAOsmNotePoint.h"
 #import "OAOsmPoint.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #import <sqlite3.h>
 
@@ -115,18 +115,26 @@
 
 - (long)getLastModifiedTime
 {
-    long lastModifiedTime = [OABackupHelper getLastModifiedTime:OSMBUGS_DB_LAST_MODIFIED_NAME];
+    long lastModifiedTime = [BackupUtils getLastModifiedTime:OSMBUGS_DB_LAST_MODIFIED_NAME];
     if (lastModifiedTime == 0)
     {
         lastModifiedTime = [self getDBLastModifiedTime];
-        [OABackupHelper setLastModifiedTime:OSMBUGS_DB_LAST_MODIFIED_NAME lastModifiedTime:lastModifiedTime];
+        [BackupUtils setLastModifiedTime:OSMBUGS_DB_LAST_MODIFIED_NAME
+                        lastModifiedTime:lastModifiedTime];
     }
     return lastModifiedTime;
 }
 
-- (void) setLastModifiedTime:(long)lastModified
+- (void)setLastModifiedTime:(long)lastModified
 {
-    [OABackupHelper setLastModifiedTime:OSMBUGS_DB_LAST_MODIFIED_NAME lastModifiedTime:lastModified];
+    [BackupUtils setLastModifiedTime:OSMBUGS_DB_LAST_MODIFIED_NAME
+                    lastModifiedTime:lastModified];
+}
+
+- (void)updateLastModifiedTime
+{
+    [BackupUtils setLastModifiedTime:OSMBUGS_DB_LAST_MODIFIED_NAME
+                    lastModifiedTime:(long) NSDate.now.timeIntervalSince1970];
 }
 
 - (long) getDBLastModifiedTime
@@ -213,6 +221,7 @@
             sqlite3_step(statement);
             sqlite3_finalize(statement);
             sqlite3_close(osmBugsDB);
+            [self updateLastModifiedTime];
         }
     });
     [self checkOsmBugsPoints];
@@ -242,6 +251,7 @@
             sqlite3_step(statement);
             sqlite3_finalize(statement);
             sqlite3_close(osmBugsDB);
+            [self updateLastModifiedTime];
         }
     });
     [self checkOsmBugsPoints];
@@ -274,6 +284,7 @@
             sqlite3_step(statement);
             sqlite3_finalize(statement);
             sqlite3_close(osmBugsDB);
+            [self updateLastModifiedTime];
         }
     });
     [self checkOsmBugsPoints];
@@ -299,6 +310,7 @@
             sqlite3_step(statement);
             sqlite3_finalize(statement);
             sqlite3_close(osmBugsDB);
+            [self updateLastModifiedTime];
         }
     });
     [self checkOsmBugsPoints];

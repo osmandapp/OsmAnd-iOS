@@ -39,7 +39,7 @@
             if (cachedElevationDiff != elevationDiff)
             {
                 cachedElevationDiff = elevationDiff;
-                EOAMetricsConstant metricsConstants = [[OAAppSettings sharedManager].metricSystem get];
+                EOAMetricsConstant metricsConstants = (EOAMetricsConstant) [[OAAppSettings sharedManager].metricSystem get];
                 NSMutableArray *valueUnitArray = [NSMutableArray array];
                 [OAOsmAndFormatter getFormattedAlt:elevationDiff mc:metricsConstants valueUnitArray:valueUnitArray];
                 NSDictionary<NSString *, NSString *> *result = [weakSelf getValueAndUnitWithArray:valueUnitArray];

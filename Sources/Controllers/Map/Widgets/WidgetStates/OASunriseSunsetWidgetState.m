@@ -19,7 +19,7 @@
     OAWidgetType *_widgetType;
     OAAppSettings *_settings;
     OACommonInteger *_preference;
-    OACommonInteger *_sunPositionPreference;
+    OACommonSunPositionMode *_sunPositionPreference;
 }
 
 - (instancetype)initWithWidgetType:(OAWidgetType *)widgetType
@@ -42,7 +42,8 @@
     return _widgetType;
 }
 
-- (OACommonInteger *)getSunPositionPreference {
+- (OACommonSunPositionMode *)getSunPositionPreference
+{
     return _sunPositionPreference;
 }
 
@@ -64,7 +65,8 @@
     }
 }
 
-- (NSString *)getWidgetIconName {
+- (NSString *)getWidgetIconName
+{
     SunPositionMode sunPositionMode = (SunPositionMode)[_sunPositionPreference get];
     
     NSString *sunsetStringId = @"widget_sunset";
@@ -138,36 +140,31 @@
     [[self registerPreference:customId] set:[_preference get:appMode] mode:appMode];
 }
 
-- (NSString *)getPrefId {
-    NSString *prefId;
+- (NSString *)getPrefId
+{
     if (_widgetType == OAWidgetType.sunset)
-    {
-        prefId = @"show_sunset_info";
-    } else if (_widgetType == OAWidgetType.sunrise)
-    {
-        prefId = @"show_sunrise_info";
-    } else if (_widgetType == OAWidgetType.sunPosition)
-    {
-        prefId = @"show_sun_position_info";
-    }
-    return prefId;
+        return @"show_sunset_info";
+    else if (_widgetType == OAWidgetType.sunrise)
+        return @"show_sunrise_info";
+    return @"show_sun_position_info";
 }
 
-- (OACommonInteger *)registerPreference:(NSString *)customId
+- (OACommonBoolean *)registerPreference:(NSString *)customId
 {
     NSString *prefId = [self getPrefId];
     if (customId && customId.length > 0)
         prefId = [prefId stringByAppendingString:customId];
 
-    return [[_settings registerIntPreference:prefId defValue:EOASunriseSunsetTimeLeft] makeProfile];
+    return [[_settings registerBooleanPreference:prefId defValue:YES] makeProfile];
 }
 
-- (OACommonInteger *)registerSunPositionPreference:(NSString *)customId {
+- (OACommonSunPositionMode *)registerSunPositionPreference:(NSString *)customId
+{
     NSString *prefId = @"sun_position_widget_mode";
     if (customId && customId.length > 0)
         prefId = [prefId stringByAppendingString:customId];
 
-    return [[_settings registerIntPreference:prefId defValue:SunPositionModeSunPositionMode] makeProfile];
+    return [[_settings registerSunPositionModePreference:prefId defValue:SunPositionModeSunPositionMode] makeProfile];
 }
 
 

@@ -115,15 +115,14 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController 
             cell.selectionStyle = .none
             if let icons = item.obj(forKey: Self.valuesKey) as? [UIImage], let sizePref = item.obj(forKey: Self.widgetSizeKey) as? OACommonWidgetSizeStyle {
                 let widgetSizeStyle = sizePref.get()
-                cell.configureSegmentedControl(icons: icons, selectedSegmentIndex: widgetSizeStyle.rawValue)
+                cell.configureSegmentedControl(icons: icons, selectedSegmentIndex: Int(widgetSizeStyle))
             }
             if let title = item.string(forKey: "title") {
                 cell.configureTitle(title: title)
             }
             cell.didSelectSegmentIndex = { [weak self] index in
                 guard let self, let sizePref = item.obj(forKey: Self.widgetSizeKey) as? OACommonWidgetSizeStyle else { return }
-                let widgetSizeStyle = EOAWidgetSizeStyle(rawValue: index) ?? .medium
-                sizePref.set(widgetSizeStyle, mode: settings.applicationMode.get())
+                sizePref.set(Int32(index), mode: settings.applicationMode.get())
                 if let speedometerView {
                     speedometerView.configure()
                     speedometerPreviewHeightConstraint?.constant = speedometerView.getCurrentSpeedViewMaxHeightWidth()

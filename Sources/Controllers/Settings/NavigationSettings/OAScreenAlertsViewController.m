@@ -224,7 +224,7 @@
 
 - (NSString *)getSpeedLimitIcon
 {
-    EOADrivingRegion drivingRegion = [_settings.drivingRegion get:[_settings.applicationMode get]];
+    EOADrivingRegion drivingRegion = (EOADrivingRegion) [_settings.drivingRegion get:[_settings.applicationMode get]];
     
     if (drivingRegion == DR_US)
         return @"list_warnings_speed_limit_us";

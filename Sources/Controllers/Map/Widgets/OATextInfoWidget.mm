@@ -51,7 +51,6 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     NSLayoutConstraint *_leadingTextAnchor;
     NSString *_customId;
     OACommonBoolean *_showIconPref;
-    OAApplicationMode *_appMode;
     NSLayoutConstraint *_unitOrEmptyLabelWidthConstraint;
     NSLayoutConstraint *_unitOrEmptyLabelWidthSmallModeConstraint;
     UIStackView *_contentStackViewSimpleWidget;
@@ -618,9 +617,9 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     _verticalStackViewSimpleWidgetBottomConstraint.constant = -([OAWidgetSizeStyleObjWrapper getBottomPaddingWithType:self.widgetSizeStyle]);
 
     BOOL isVisibleIcon = false;
-    if (_appMode && _showIconPref)
+    if (_showIconPref)
     {
-        isVisibleIcon = [_showIconPref get:_appMode];
+        isVisibleIcon = [_showIconPref get:[[OAAppSettings sharedManager].applicationMode get]];
         _imageView.hidden = !isVisibleIcon;
         
         if (self.isFullRow && self.widgetSizeStyle == EOAWidgetSizeStyleSmall)
@@ -823,13 +822,13 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     
     if ([self isMetricSystemDepended])
     {
-        int metricSystem = (int)[[OAAppSettings sharedManager].metricSystem get];
+        int metricSystem = [[OAAppSettings sharedManager].metricSystem get];
         res |= _cachedMetricSystem != metricSystem;
         _cachedMetricSystem = metricSystem;
     }
     if ([self isAngularUnitsDepended])
     {
-        int angularUnits = (int)[[OAAppSettings sharedManager].angularUnits get];
+        int angularUnits = [[OAAppSettings sharedManager].angularUnits get];
         res |= _cachedAngularUnits != angularUnits;
         _cachedAngularUnits = angularUnits;
     }
@@ -936,7 +935,6 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
 
 - (void)configurePrefsWithId:(NSString *)id appMode:(OAApplicationMode *)appMode widgetParams:(NSDictionary * _Nullable)widgetParams
 {
-    _appMode = appMode;
     _customId = id;
     _showIconPref = [self registerShowIconPref:id];
     self.widgetSizePref = [self registerWidgetSizePref:id];
@@ -948,7 +946,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
         {
             NSNumber *widgetSizeStyle = widgetParams[@"widgetSizeStyle"];
             if (widgetSizeStyle)
-                [self.widgetSizePref set:(EOAWidgetSizeStyle) [widgetSizeStyle integerValue] mode:selectedAppMode];
+                [self.widgetSizePref set:[widgetSizeStyle integerValue] mode:selectedAppMode];
             NSNumber *isVisibleIconNumber = widgetParams[@"isVisibleIcon"];
             if (isVisibleIconNumber)
             {
@@ -985,11 +983,6 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     if (customId && customId.length > 0)
         prefId = [prefId stringByAppendingString:customId];
     return [[OAAppSettings sharedManager] registerBooleanPreference:prefId defValue:YES];
-}
-
-- (OAApplicationMode *)getAppMode
-{
-    return _appMode;
 }
 
 @end

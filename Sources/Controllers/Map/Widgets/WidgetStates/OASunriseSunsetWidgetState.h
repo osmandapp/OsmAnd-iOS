@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OACommonInteger, OAWidgetType;
+@class OACommonInteger, OAWidgetType, OACommonSunPositionMode;
 
 @interface OASunriseSunsetWidgetState : OAWidgetState
 
@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (OAWidgetType *)getWidgetType;
 - (NSString *)getWidgetIconName;
 - (OACommonInteger *)getPreference;
-- (OACommonInteger *)getSunPositionPreference;
+- (OACommonSunPositionMode *)getSunPositionPreference;
 
 @end
 

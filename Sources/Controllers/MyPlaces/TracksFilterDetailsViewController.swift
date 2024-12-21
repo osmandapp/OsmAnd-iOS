@@ -632,7 +632,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
     }
     
     private func formatFilterValueText(for value: Float) -> String {
-        let mappedConstant = TracksSearchFilter.mapEOAMetricsConstantToMetricsConstants(OAAppSettings.sharedManager().metricSystem.get())
+        let mappedConstant = TracksSearchFilter.mapEOAMetricsConstantToMetricsConstants(EOAMetricsConstant(rawValue: Int(OAAppSettings.sharedManager().metricSystem.get()))!)
         let measureUnitText = getMeasureUnitType().getFilterUnitText(mc: mappedConstant)
         let formattedNumber = decimalFormatter.string(from: NSNumber(value: value)) ?? ""
         return "\(formattedNumber) \(measureUnitText)"

@@ -30,7 +30,7 @@ final class ZoomLevelWidgetState: OAWidgetState {
     }
     
     func getZoomLevelType() -> EOAWidgetZoomLevelType {
-        typePreference.get()
+        EOAWidgetZoomLevelType(rawValue: Int(typePreference.get()))!
     }
     
     private static func registerPreference(_ customId: String?) -> OACommonWidgetZoomLevelType {
@@ -38,6 +38,6 @@ final class ZoomLevelWidgetState: OAWidgetState {
         if let customId, !customId.isEmpty {
             prefId += "\(customId)"
         }
-        return OAAppSettings.sharedManager().registerWidgetZoomLevelTypePreference(prefId, defValue: .zoom).makeProfile()
+        return OAAppSettings.sharedManager().registerWidgetZoomLevelTypePreference(prefId, defValue: Int32(EOAWidgetZoomLevelType.zoom.rawValue)).makeProfile()
     }
 }

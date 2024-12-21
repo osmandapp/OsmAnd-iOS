@@ -190,9 +190,9 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
                let pref = item.obj(forKey: "prefSegment") as? OACommonWidgetSizeStyle {
                 let widgetSizeStyle = pref.get(selectedAppMode)
                 if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "") {
-                    widgetConfigurationParams?["widgetSizeStyle"] = widgetSizeStyle.rawValue
+                    widgetConfigurationParams?["widgetSizeStyle"] = widgetSizeStyle
                 }
-                cell.configureSegmentedControl(icons: icons, selectedSegmentIndex: widgetSizeStyle.rawValue)
+                cell.configureSegmentedControl(icons: icons, selectedSegmentIndex: Int(widgetSizeStyle))
             }
             if let title = item.string(forKey: "title") {
                 cell.configureTitle(title: title)
@@ -200,7 +200,7 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
             cell.didSelectSegmentIndex = { [weak self] index in
                 guard let self,
                       let pref = item.obj(forKey: "prefSegment") as? OACommonWidgetSizeStyle else { return }
-                pref.set(EOAWidgetSizeStyle(rawValue: index) ?? .medium, mode: selectedAppMode)
+                pref.set(Int32(index), mode: selectedAppMode)
                 if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "") {
                     widgetConfigurationParams?["widgetSizeStyle"] = index
                 }

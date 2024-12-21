@@ -69,7 +69,7 @@
     };
     rulerControl.onClickFunction = ^(id sender) {
         OAAppSettings *settings = [OAAppSettings sharedManager];
-        EOARulerWidgetMode mode = settings.rulerMode.get;
+        EOARulerWidgetMode mode = (EOARulerWidgetMode) [settings.rulerMode get];
         if (mode == RULER_MODE_DARK)
             [settings.rulerMode set:RULER_MODE_LIGHT];
         else if (mode == RULER_MODE_LIGHT)

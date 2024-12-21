@@ -38,7 +38,7 @@
 
 - (NSString *)speedLimitText
 {
-    EOASpeedConstant speedFormat = [_settings.speedSystem get];
+    EOASpeedConstant speedFormat = (EOASpeedConstant) [_settings.speedSystem get];
     BOOL whenExceeded = [_settings.showSpeedLimitWarning get] == EOASpeedLimitWarningStateWhenExceeded;
     
     OAAlarmInfo *alarm = [_wh getSpeedLimitAlarm:speedFormat whenExceeded:whenExceeded];

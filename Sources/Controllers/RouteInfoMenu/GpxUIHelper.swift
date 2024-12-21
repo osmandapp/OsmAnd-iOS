@@ -510,16 +510,16 @@ class GpxUIHelper: NSObject {
         if graphType == GPXDataSetType.speed || graphType == GPXDataSetType.sensorSpeed {
             var mulSpeed: Double = Double.nan
             var divSpeed: Double = Double.nan
-            let speedConstants: EOASpeedConstant = OAAppSettings.sharedManager().speedSystem.get()
-            if speedConstants == EOASpeedConstant.KILOMETERS_PER_HOUR {
+            let speedConstants = EOASpeedConstant(rawValue: Int(OAAppSettings.sharedManager().speedSystem.get()))!
+            if speedConstants == .KILOMETERS_PER_HOUR {
                 mulSpeed = 3.6
-            } else if speedConstants == EOASpeedConstant.MILES_PER_HOUR {
+            } else if speedConstants == .MILES_PER_HOUR {
                 mulSpeed = 3.6 * GpxUIHelper.metersInKilometer / GpxUIHelper.metersInOneMile
-            } else if speedConstants == EOASpeedConstant.NAUTICALMILES_PER_HOUR {
+            } else if speedConstants == .NAUTICALMILES_PER_HOUR {
                 mulSpeed = 3.6 * GpxUIHelper.metersInKilometer / GpxUIHelper.metersInOneNauticalmile
-            } else if speedConstants == EOASpeedConstant.MINUTES_PER_KILOMETER {
+            } else if speedConstants == .MINUTES_PER_KILOMETER {
                 divSpeed = GpxUIHelper.metersInKilometer / 60.0
-            } else if speedConstants == EOASpeedConstant.MINUTES_PER_MILE {
+            } else if speedConstants == .MINUTES_PER_MILE {
                 divSpeed = GpxUIHelper.metersInOneMile / 60.0
             } else {
                 mulSpeed = 1
@@ -796,7 +796,7 @@ class GpxUIHelper: NSObject {
                                                   useRightAxis: Bool,
                                                   drawFilled: Bool,
                                                   calcWithoutGaps: Bool) -> OrderedLineDataSet {
-        let useFeet: Bool = OAMetricsConstant.shouldUseFeet(OAAppSettings.sharedManager().metricSystem.get())
+        let useFeet: Bool = OAMetricsConstant.shouldUseFeet(EOAMetricsConstant(rawValue: Int(OAAppSettings.sharedManager().metricSystem.get()))!)
         let convEle: Double = useFeet ? 3.28084 : 1.0
         let divX: Double = getDivX(lineChart: chartView,
                                    analysis: analysis,
@@ -846,8 +846,8 @@ class GpxUIHelper: NSObject {
         if axisType == GPXDataSetAxisType.time || axisType == GPXDataSetAxisType.timeOfDay {
             return nil
         }
-        let mc: EOAMetricsConstant = OAAppSettings.sharedManager().metricSystem.get()
-        let useFeet: Bool = (mc == EOAMetricsConstant.MILES_AND_FEET) || (mc == EOAMetricsConstant.MILES_AND_YARDS) || (mc == EOAMetricsConstant.NAUTICAL_MILES_AND_FEET)
+        let mc = OAAppSettings.sharedManager().metricSystem.get()
+        let useFeet: Bool = (mc == EOAMetricsConstant.MILES_AND_FEET.rawValue) || (mc == EOAMetricsConstant.MILES_AND_YARDS.rawValue) || (mc == EOAMetricsConstant.NAUTICAL_MILES_AND_FEET.rawValue)
         let convEle: Double = useFeet ? 3.28084 : 1.0
         let totalDistance: Double = calcWithoutGaps
         	? Double(analysis.totalDistanceWithoutGaps)
@@ -989,7 +989,7 @@ class GpxUIHelper: NSObject {
 
     private static func setupAxisDistance(axisBase: AxisBase, meters: Double) -> Double {
         let settings: OAAppSettings = OAAppSettings.sharedManager()
-        let mc: EOAMetricsConstant = settings.metricSystem.get()
+        let mc = EOAMetricsConstant(rawValue: Int(settings.metricSystem.get()))!
         var divX: Double = 0
 
         let format1 = "%.0f"

@@ -1645,7 +1645,7 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 + (instancetype) withKey:(NSString *)key defValue:(BOOL)defValue
 {
-    OACommonBoolean *obj = [[OACommonBoolean alloc] init];
+    OACommonBoolean *obj = [[self alloc] init];
     if (obj)
     {
         obj.key = key;
@@ -1717,7 +1717,7 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 + (instancetype) withKey:(NSString *)key defValue:(int)defValue
 {
-    OACommonInteger *obj = [[OACommonInteger alloc] init];
+    OACommonInteger *obj = [[self alloc] init];
     if (obj)
     {
         obj.key = key;
@@ -1800,7 +1800,7 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 + (instancetype) withKey:(NSString *)key defValue:(long)defValue
 {
-    OACommonLong *obj = [[OACommonLong alloc] init];
+    OACommonLong *obj = [[self alloc] init];
     if (obj)
     {
         obj.key = key;
@@ -1865,7 +1865,7 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 + (instancetype) withKey:(NSString *)key defValue:(NSString *)defValue
 {
-    OACommonString *obj = [[OACommonString alloc] init];
+    OACommonString *obj = [[self alloc] init];
     if (obj)
     {
         obj.key = key;
@@ -1930,7 +1930,7 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 + (instancetype) withKey:(NSString *)key defValue:(double)defValue
 {
-    OACommonDouble *obj = [[OACommonDouble alloc] init];
+    OACommonDouble *obj = [[self alloc] init];
     if (obj)
     {
         obj.key = key;
@@ -1995,7 +1995,7 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 + (instancetype) withKey:(NSString *)key defValue:(NSArray<NSString *> *)defValue
 {
-    OACommonStringList *obj = [[OACommonStringList alloc] init];
+    OACommonStringList *obj = [[self alloc] init];
     if (obj)
     {
         obj.key = key;
@@ -2085,7 +2085,7 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 + (instancetype) withKey:(NSString *)key defValue:(NSArray<NSArray<NSString *> *> *)defValue
 {
-    OACommonListOfStringList *obj = [[OACommonListOfStringList alloc] init];
+    OACommonListOfStringList *obj = [[self alloc] init];
     if (obj)
     {
         obj.key = key;
@@ -2162,7 +2162,7 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 + (instancetype) withKey:(NSString *)key defValue:(OASubscriptionState *)defValue
 {
-    OACommonSubscriptionState *obj = [[OACommonSubscriptionState alloc] init];
+    OACommonSubscriptionState *obj = [[self alloc] init];
     if (obj)
     {
         obj.key = key;
@@ -2215,7 +2215,7 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 + (instancetype) withKey:(NSString *)key defValue:(OAMapSource *)defValue
 {
-    OACommonMapSource *obj = [[OACommonMapSource alloc] init];
+    OACommonMapSource *obj = [[self alloc] init];
     if (obj)
     {
         obj.key = key;
@@ -2262,15 +2262,32 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 + (NSDictionary<NSString *, NSNumber *> *)getStrings;
 + (NSDictionary<NSString *, NSNumber *> *)getStrings:(NSArray<id> *)values;
 + (int)getIndexOf:(id)type values:(NSArray<id> *)values;
-+ (NSString *)getKeyForValue:(NSNumber *)value
-                    defValue:(NSString *)defValue;
-+ (NSString *)getKeyForValue:(NSNumber *)value
-                    defValue:(NSString *)defValue
-                      values:(NSArray<id> *)values;
 
 @end
 
+static NSMutableArray<Class<OAEnumClassProtocol>> *enumClasses;
+
 @implementation OACommonEnum
+
++ (NSArray<Class<OAEnumClassProtocol>> *)enumClasses
+{
+    return enumClasses;
+}
+
++ (void)load
+{
+    enumClasses = [NSMutableArray array];
+}
+
++ (NSMutableDictionary<Class, NSDictionary<NSString *, NSNumber *> *> *)classSpecificValues
+{
+    static NSMutableDictionary<Class, NSDictionary<NSString *, NSNumber *> *> *classValues;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        classValues = [NSMutableDictionary dictionary];
+    });
+    return classValues;
+}
 
 + (NSDictionary<NSString *, NSNumber *> *)getStringsValues
 {
@@ -2279,11 +2296,13 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 + (NSDictionary<NSString *, NSNumber *> *)getStringsValues:(NSArray<id> *)values
 {
-    static NSDictionary<NSString *, NSNumber *> *stringsValues = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
+    NSMutableDictionary<Class, NSDictionary<NSString *, NSNumber *> *> *classValues = [self classSpecificValues];
+    NSDictionary<NSString *, NSNumber *> *stringsValues = classValues[self];
+    if (!stringsValues)
+    {
         stringsValues = [self getStrings:values];
-    });
+        classValues[(id<NSCopying>)self] = stringsValues;
+    }
     return stringsValues;
 }
 
@@ -2328,58 +2347,20 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 @dynamic defValue;
 
-static NSString *kStateAlwaysKey = @"ALWAYS";
-static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
-
-+ (instancetype) withKey:(NSString *)key defValue:(EOASpeedLimitWarningState)defValue
++ (void)load
 {
-    OACommonSpeedLimitWarningState *obj = [[OACommonSpeedLimitWarningState alloc] init];
-    if (obj)
-    {
-        obj.key = key;
-        obj.defValue = defValue;
-    }
-    return obj;
-}
-
-- (EOASpeedLimitWarningState) get
-{
-    return [super get];
-}
-
-- (EOASpeedLimitWarningState) get:(OAApplicationMode *)mode
-{
-    return [super get:mode];
-}
-
-- (void) set:(EOASpeedLimitWarningState)value
-{
-    [super set:(int)value];
-}
-
-- (void) set:(EOASpeedLimitWarningState)value mode:(OAApplicationMode *)mode
-{
-    [super set:(int)value mode:mode];
+    [enumClasses addObject:self.class];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
 {
-    return [self.class getKeyForValue:@([self get:mode]) defValue:kWhenExceededKey];
+    return [self.class getKeyForValue:@([self get:mode]) defValue:@"WHAN_EXCEEDED"];
 }
 
 - (int)fromStringValue:(NSString *)value
 {
-    return [self.class getStringsValues][value].intValue ?: EOASpeedLimitWarningStateWhenExceeded;
-}
-
-- (void) resetToDefault
-{
-    EOASpeedLimitWarningState defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
-    if (pDefault)
-        defaultValue = (EOASpeedLimitWarningState)((NSNumber *)pDefault).intValue;
-
-    [self set:defaultValue];
+    NSNumber *nValue = [self.class getStringsValues][value];
+    return nValue ? nValue.intValue : EOASpeedLimitWarningStateWhenExceeded;
 }
 
 - (NSString *) toHumanString
@@ -2408,8 +2389,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 + (NSDictionary<NSString *, NSNumber *> *)getStrings
 {
     return @{
-        kStateAlwaysKey: @(EOASpeedLimitWarningStateAlways),
-        kWhenExceededKey: @(EOASpeedLimitWarningStateWhenExceeded)
+        @"ALWAYS": @(EOASpeedLimitWarningStateAlways),
+        @"WHAN_EXCEEDED": @(EOASpeedLimitWarningStateWhenExceeded)
     };
 }
 
@@ -2419,35 +2400,9 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 @dynamic defValue;
 
-+ (instancetype) withKey:(NSString *)key defValue:(EOAAutoZoomMap)defValue
++ (void)load
 {
-    OACommonAutoZoomMap *obj = [[OACommonAutoZoomMap alloc] init];
-    if (obj)
-    {
-        obj.key = key;
-        obj.defValue = defValue;
-    }
-    return obj;
-}
-
-- (EOAAutoZoomMap) get
-{
-    return [super get];
-}
-
-- (EOAAutoZoomMap) get:(OAApplicationMode *)mode
-{
-    return [super get:mode];
-}
-
-- (void) set:(EOAAutoZoomMap)autoZoomMap
-{
-    [super set:autoZoomMap];
-}
-
-- (void) set:(EOAAutoZoomMap)autoZoomMap mode:(OAApplicationMode *)mode
-{
-    [super set:autoZoomMap mode:mode];
+    [enumClasses addObject:self.class];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -2457,17 +2412,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (int)fromStringValue:(NSString *)value
 {
-    return [self.class getStringsValues][value].intValue ?: AUTO_ZOOM_MAP_FAR;
-}
-
-- (void) resetToDefault
-{
-    EOAAutoZoomMap defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
-    if (pDefault)
-        defaultValue = (EOAAutoZoomMap)((NSNumber *)pDefault).intValue;
-
-    [self set:defaultValue];
+    NSNumber *nValue = [self.class getStringsValues][value];
+    return nValue ? nValue.intValue : AUTO_ZOOM_MAP_FAR;
 }
 
 + (NSDictionary<NSString *, NSNumber *> *)getStrings
@@ -2485,35 +2431,9 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 @dynamic defValue;
 
-+ (instancetype) withKey:(NSString *)key defValue:(EOASpeedConstant)defValue
++ (void)load
 {
-    OACommonSpeedConstant *obj = [[OACommonSpeedConstant alloc] init];
-    if (obj)
-    {
-        obj.key = key;
-        obj.defValue = defValue;
-    }
-    return obj;
-}
-
-- (EOASpeedConstant) get
-{
-    return [super get];
-}
-
-- (EOASpeedConstant) get:(OAApplicationMode *)mode
-{
-    return [super get:mode];
-}
-
-- (void) set:(EOASpeedConstant)speedConstant
-{
-    [super set:speedConstant];
-}
-
-- (void) set:(EOASpeedConstant)speedConstant mode:(OAApplicationMode *)mode
-{
-    [super set:speedConstant mode:mode];
+    [enumClasses addObject:self.class];
 }
 
 - (NSObject *)getProfileDefaultValue:(OAApplicationMode *)mode
@@ -2544,17 +2464,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (int)fromStringValue:(NSString *)value
 {
-    return [self.class getStringsValues][value].intValue ?: KILOMETERS_PER_HOUR;
-}
-
-- (void) resetToDefault
-{
-    EOASpeedConstant defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
-    if (pDefault)
-        defaultValue = (EOASpeedConstant)((NSNumber *)pDefault).intValue;
-
-    [self set:defaultValue];
+    NSNumber *nValue = [self.class getStringsValues][value];
+    return nValue ? nValue.intValue : KILOMETERS_PER_HOUR;
 }
 
 + (NSDictionary<NSString *, NSNumber *> *)getStrings
@@ -2575,35 +2486,9 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 @dynamic defValue;
 
-+ (instancetype) withKey:(NSString *)key defValue:(EOAAngularConstant)defValue
++ (void)load
 {
-    OACommonAngularConstant *obj = [[OACommonAngularConstant alloc] init];
-    if (obj)
-    {
-        obj.key = key;
-        obj.defValue = defValue;
-    }
-    return obj;
-}
-
-- (EOAAngularConstant) get
-{
-    return [super get];
-}
-
-- (EOAAngularConstant) get:(OAApplicationMode *)mode
-{
-    return [super get:mode];
-}
-
-- (void) set:(EOAAngularConstant)angularConstant
-{
-    [super set:angularConstant];
-}
-
-- (void) set:(EOAAngularConstant)angularConstant mode:(OAApplicationMode *)mode
-{
-    [super set:angularConstant mode:mode];
+    [enumClasses addObject:self.class];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -2613,17 +2498,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (int)fromStringValue:(NSString *)value
 {
-    return [self.class getStringsValues][value].intValue ?: DEGREES;
-}
-
-- (void) resetToDefault
-{
-    EOAAngularConstant defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
-    if (pDefault)
-        defaultValue = (EOAAngularConstant)((NSNumber *)pDefault).intValue;
-
-    [self set:defaultValue];
+    NSNumber *nValue = [self.class getStringsValues][value];
+    return nValue ? nValue.intValue : DEGREES;
 }
 
 + (NSDictionary<NSString *, NSNumber *> *)getStrings
@@ -2641,35 +2517,9 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 @dynamic defValue;
 
-+ (instancetype) withKey:(NSString *)key defValue:(EOAActiveMarkerConstant)defValue
++ (void)load
 {
-    OACommonActiveMarkerConstant *obj = [[OACommonActiveMarkerConstant alloc] init];
-    if (obj)
-    {
-        obj.key = key;
-        obj.defValue = defValue;
-    }
-    return obj;
-}
-
-- (EOAActiveMarkerConstant) get
-{
-    return [super get];
-}
-
-- (EOAActiveMarkerConstant) get:(OAApplicationMode *)mode
-{
-    return [super get:mode];
-}
-
-- (void) set:(EOAActiveMarkerConstant)activeMarkerConstant
-{
-    [super set:activeMarkerConstant];
-}
-
-- (void) set:(EOAActiveMarkerConstant)activeMarkerConstant mode:(OAApplicationMode *)mode
-{
-    [super set:activeMarkerConstant mode:mode];
+    [enumClasses addObject:self.class];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -2679,17 +2529,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (int)fromStringValue:(NSString *)value
 {
-    return [self.class getStringsValues][value].intValue ?: ONE_ACTIVE_MARKER;
-}
-
-- (void) resetToDefault
-{
-    EOAActiveMarkerConstant defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
-    if (pDefault)
-        defaultValue = (EOAActiveMarkerConstant)((NSNumber *)pDefault).intValue;
-
-    [self set:defaultValue];
+    NSNumber *nValue = [self.class getStringsValues][value];
+    return nValue ? nValue.intValue : ONE_ACTIVE_MARKER;
 }
 
 + (NSDictionary<NSString *, NSNumber *> *)getStrings
@@ -2706,33 +2547,12 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 @dynamic defValue;
 
-+ (instancetype) withKey:(NSString *)key defValue:(EOADrivingRegion)defValue
++ (void)load
 {
-    OACommonDrivingRegion *obj = [[OACommonDrivingRegion alloc] init];
-    if (obj)
-    {
-        obj.key = key;
-        obj.defValue = defValue;
-    }
-    return obj;
+    [enumClasses addObject:self.class];
 }
 
-- (EOADrivingRegion) get
-{
-    return [super get];
-}
-
-- (EOADrivingRegion) get:(OAApplicationMode *)mode
-{
-    return [super get:mode];
-}
-
-- (void) set:(EOADrivingRegion)drivingRegionConstant
-{
-    [super set:drivingRegionConstant];
-}
-
-- (void) set:(EOADrivingRegion)drivingRegionConstant mode:(OAApplicationMode *)mode
+- (void) set:(int)drivingRegionConstant mode:(OAApplicationMode *)mode
 {
     [super set:drivingRegionConstant mode:mode];
     if (![[OAAppSettings sharedManager].metricSystemChangedManually get:mode])
@@ -2746,17 +2566,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (int)fromStringValue:(NSString *)value
 {
-    return [self.class getStringsValues][value].intValue ?: DR_EUROPE_ASIA;
-}
-
-- (void) resetToDefault
-{
-    EOADrivingRegion defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
-    if (pDefault)
-        defaultValue = (EOADrivingRegion)((NSNumber *)pDefault).intValue;
-
-    [self set:defaultValue];
+    NSNumber *nValue = [self.class getStringsValues][value];
+    return nValue ? nValue.intValue : DR_EUROPE_ASIA;
 }
 
 + (NSDictionary<NSString *, NSNumber *> *)getStrings
@@ -2778,35 +2589,9 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 @dynamic defValue;
 
-+ (instancetype) withKey:(NSString *)key defValue:(EOAMetricsConstant)defValue
++ (void)load
 {
-    OACommonMetricSystem *obj = [[OACommonMetricSystem alloc] init];
-    if (obj)
-    {
-        obj.key = key;
-        obj.defValue = defValue;
-    }
-    return obj;
-}
-
-- (EOAMetricsConstant) get
-{
-    return [super get];
-}
-
-- (EOAMetricsConstant) get:(OAApplicationMode *)mode
-{
-    return [super get:mode];
-}
-
-- (void) set:(EOAMetricsConstant)metricsConstant
-{
-    [super set:metricsConstant];
-}
-
-- (void) set:(EOAMetricsConstant)metricsConstant mode:(OAApplicationMode *)mode
-{
-    [super set:metricsConstant mode:mode];
+    [enumClasses addObject:self.class];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -2816,17 +2601,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (int)fromStringValue:(NSString *)value
 {
-    return [self.class getStringsValues][value].intValue ?: KILOMETERS_AND_METERS;
-}
-
-- (void) resetToDefault
-{
-    EOAMetricsConstant defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
-    if (pDefault)
-        defaultValue = (EOAMetricsConstant)((NSNumber *)pDefault).intValue;
-
-    [self set:defaultValue];
+    NSNumber *nValue = [self.class getStringsValues][value];
+    return nValue ? nValue.intValue : KILOMETERS_AND_METERS;
 }
 
 + (NSDictionary<NSString *, NSNumber *> *)getStrings
@@ -2847,35 +2623,9 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 @dynamic defValue;
 
-+ (instancetype) withKey:(NSString *)key defValue:(EOARulerWidgetMode)defValue
++ (void)load
 {
-    OACommonRulerWidgetMode *obj = [[OACommonRulerWidgetMode alloc] init];
-    if (obj)
-    {
-        obj.key = key;
-        obj.defValue = defValue;
-    }
-    return obj;
-}
-
-- (EOARulerWidgetMode) get
-{
-    return [super get];
-}
-
-- (void) set:(EOARulerWidgetMode)rulerWidgetMode
-{
-    [super set:rulerWidgetMode];
-}
-
-- (EOARulerWidgetMode) get:(OAApplicationMode *)mode
-{
-    return [super get:mode];
-}
-
-- (void) set:(EOARulerWidgetMode)rulerWidgetMode mode:(OAApplicationMode *)mode
-{
-    [super set:rulerWidgetMode mode:mode];
+    [enumClasses addObject:self.class];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -2885,17 +2635,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (int)fromStringValue:(NSString *)value
 {
-    return [self.class getStringsValues][value].intValue ?: RULER_MODE_DARK;
-}
-
-- (void) resetToDefault
-{
-    EOARulerWidgetMode defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
-    if (pDefault)
-        defaultValue = (EOARulerWidgetMode)((NSNumber *)pDefault).intValue;
-
-    [self set:defaultValue];
+    NSNumber *nValue = [self.class getStringsValues][value];
+    return nValue ? nValue.intValue : RULER_MODE_DARK;
 }
 
 + (NSDictionary<NSString *, NSNumber *> *)getStrings
@@ -2913,35 +2654,9 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 @dynamic defValue;
 
-+ (instancetype) withKey:(NSString *)key defValue:(EOAWikiArticleShowConstant)defValue
++ (void)load
 {
-    OACommonWikiArticleShowImages *obj = [[OACommonWikiArticleShowImages alloc] init];
-    if (obj)
-    {
-        obj.key = key;
-        obj.defValue = defValue;
-    }
-    return obj;
-}
-
-- (EOAWikiArticleShowConstant) get
-{
-    return [super get];
-}
-
-- (void) set:(EOAWikiArticleShowConstant)wikiArticleShow
-{
-    [super set:wikiArticleShow];
-}
-
-- (EOAWikiArticleShowConstant) get:(OAApplicationMode *)mode
-{
-    return [super get:mode];
-}
-
-- (void) set:(EOAWikiArticleShowConstant)wikiArticleShow mode:(OAApplicationMode *)mode
-{
-    [super set:wikiArticleShow mode:mode];
+    [enumClasses addObject:self.class];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -2951,17 +2666,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (int)fromStringValue:(NSString *)value
 {
-    return [self.class getStringsValues][value].intValue ?: EOAWikiArticleShowConstantOff;
-}
-
-- (void) resetToDefault
-{
-    EOAWikiArticleShowConstant defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
-    if (pDefault)
-        defaultValue = (EOAWikiArticleShowConstant)((NSNumber *)pDefault).intValue;
-
-    [self set:defaultValue];
+    NSNumber *nValue = [self.class getStringsValues][value];
+    return nValue ? nValue.intValue : EOAWikiArticleShowConstantOff;
 }
 
 + (NSDictionary<NSString *, NSNumber *> *)getStrings
@@ -2979,35 +2685,9 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 @dynamic defValue;
 
-+ (instancetype) withKey:(NSString *)key defValue:(EOARateUsState)defValue
++ (void)load
 {
-    OACommonRateUsState *obj = [[OACommonRateUsState alloc] init];
-    if (obj)
-    {
-        obj.key = key;
-        obj.defValue = defValue;
-    }
-    return obj;
-}
-
-- (EOARateUsState) get
-{
-    return [super get];
-}
-
-- (void) set:(EOARateUsState)rateUsState
-{
-    [super set:rateUsState];
-}
-
-- (EOARateUsState) get:(OAApplicationMode *)mode
-{
-    return [super get:mode];
-}
-
-- (void) set:(EOARateUsState)rateUsState mode:(OAApplicationMode *)mode
-{
-    [super set:rateUsState mode:mode];
+    [enumClasses addObject:self.class];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -3017,17 +2697,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (int)fromStringValue:(NSString *)value
 {
-    return [self.class getStringsValues][value].intValue ?: EOARateUsStateInitialState;
-}
-
-- (void) resetToDefault
-{
-    EOARateUsState defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
-    if (pDefault)
-        defaultValue = (EOARateUsState)((NSNumber *)pDefault).intValue;
-
-    [self set:defaultValue];
+    NSNumber *nValue = [self.class getStringsValues][value];
+    return nValue ? nValue.intValue : EOARateUsStateInitialState;
 }
 
 + (NSDictionary<NSString *, NSNumber *> *)getStrings
@@ -3048,35 +2719,9 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 @dynamic defValue;
 
-+ (instancetype) withKey:(NSString *)key defValue:(EOAUploadVisibility)defValue
++ (void)load
 {
-    OACommonUploadVisibility *obj = [[OACommonUploadVisibility alloc] init];
-    if (obj)
-    {
-        obj.key = key;
-        obj.defValue = defValue;
-    }
-    return obj;
-}
-
-- (EOAUploadVisibility) get
-{
-    return [super get];
-}
-
-- (void) set:(EOAUploadVisibility)gradientScaleType
-{
-    [super set:gradientScaleType];
-}
-
-- (EOAUploadVisibility) get:(OAApplicationMode *)mode
-{
-    return [super get:mode];
-}
-
-- (void) set:(EOAUploadVisibility)gradientScaleType mode:(OAApplicationMode *)mode
-{
-    [super set:gradientScaleType mode:mode];
+    [enumClasses addObject:self.class];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -3086,17 +2731,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (int)fromStringValue:(NSString *)value
 {
-    return [self.class getStringsValues][value].intValue ?: EOAUploadVisibilityPublic;
-}
-
-- (void) resetToDefault
-{
-    EOAUploadVisibility defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
-    if (pDefault)
-        defaultValue = (EOAUploadVisibility)((NSNumber *)pDefault).intValue;
-
-    [self set:defaultValue];
+    NSNumber *nValue = [self.class getStringsValues][value];
+    return nValue ? nValue.intValue : EOAUploadVisibilityPublic;
 }
 
 + (NSDictionary<NSString *, NSNumber *> *)getStrings
@@ -3115,35 +2751,9 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 @dynamic defValue;
 
-+ (instancetype) withKey:(NSString *)key defValue:(EOACoordinateInputFormats)defValue
++ (void)load
 {
-    OACommonCoordinateInputFormats *obj = [[OACommonCoordinateInputFormats alloc] init];
-    if (obj)
-    {
-        obj.key = key;
-        obj.defValue = defValue;
-    }
-    return obj;
-}
-
-- (EOACoordinateInputFormats) get
-{
-    return [super get];
-}
-
-- (void) set:(EOACoordinateInputFormats)coordinateInputFormats
-{
-    [super set:coordinateInputFormats];
-}
-
-- (EOACoordinateInputFormats) get:(OAApplicationMode *)mode
-{
-    return [super get:mode];
-}
-
-- (void) set:(EOACoordinateInputFormats)coordinateInputFormats mode:(OAApplicationMode *)mode
-{
-    [super set:coordinateInputFormats mode:mode];
+    [enumClasses addObject:self.class];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -3153,17 +2763,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (int)fromStringValue:(NSString *)value
 {
-    return [self.class getStringsValues][value].intValue ?: EOACoordinateInputFormatsDdMmMmm;
-}
-
-- (void) resetToDefault
-{
-    EOACoordinateInputFormats defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
-    if (pDefault)
-        defaultValue = (EOACoordinateInputFormats)((NSNumber *)pDefault).intValue;
-
-    [self set:defaultValue];
+    NSNumber *nValue = [self.class getStringsValues][value];
+    return nValue ? nValue.intValue : EOACoordinateInputFormatsDdMmMmm;
 }
 
 + (NSDictionary<NSString *, NSNumber *> *)getStrings
@@ -3186,9 +2787,14 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 @dynamic defValue;
 
++ (void)load
+{
+    [enumClasses addObject:self.class];
+}
+
 + (instancetype) withKey:(NSString *)key defValue:(OADownloadMode *)defValue
 {
-    OACommonDownloadMode *obj = [[OACommonDownloadMode alloc] init];
+    OACommonDownloadMode *obj = [[self alloc] init];
     if (obj)
     {
         obj.key = key;
@@ -3200,7 +2806,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 + (instancetype) withKey:(NSString *)key defValue:(OADownloadMode *)defValue values:(NSArray<OADownloadMode *> *)values
 {
-    OACommonDownloadMode *obj = [[OACommonDownloadMode alloc] init];
+    OACommonDownloadMode *obj = [[self alloc] init];
     if (obj)
     {
         obj.key = key;
@@ -3242,7 +2848,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (int)fromStringValue:(NSString *)value
 {
-    return [self.class getStringsValues:self.values][value].intValue ?: [self getIndexOf:OADownloadMode.ANY_NETWORK];
+    NSNumber *nValue = [self.class getStringsValues:self.values][value];
+    return nValue ? nValue.intValue : [self getIndexOf:OADownloadMode.ANY_NETWORK];
 }
 
 - (int)getIndexOf:(OADownloadMode *)type
@@ -3274,9 +2881,14 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 @dynamic defValue;
 
++ (void)load
+{
+    [enumClasses addObject:self.class];
+}
+
 + (instancetype) withKey:(NSString *)key defValue:(OAColoringType *)defValue
 {
-    OACommonColoringType *obj = [[OACommonColoringType alloc] init];
+    OACommonColoringType *obj = [[self alloc] init];
     if (obj)
     {
         obj.key = key;
@@ -3288,7 +2900,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 + (instancetype) withKey:(NSString *)key defValue:(OAColoringType *)defValue values:(NSArray<OAColoringType *> *)values
 {
-    OACommonColoringType *obj = [[OACommonColoringType alloc] init];
+    OACommonColoringType *obj = [[self alloc] init];
     if (obj)
     {
         obj.key = key;
@@ -3330,7 +2942,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (int)fromStringValue:(NSString *)value
 {
-    return [self.class getStringsValues:self.values][value].intValue ?: [self getIndexOf:OAColoringType.DEFAULT];
+    NSNumber *nValue = [self.class getStringsValues:self.values][value];
+    return nValue ? nValue.intValue : [self getIndexOf:OAColoringType.DEFAULT];
 }
 
 - (int)getIndexOf:(OAColoringType *)type
@@ -3370,7 +2983,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 + (instancetype) withKey:(NSString *)key defValue:(NSUnit *)defValue
 {
-    OACommonUnit *obj = [[OACommonUnit alloc] init];
+    OACommonUnit *obj = [[self alloc] init];
     if (obj)
     {
         obj.key = key;
@@ -3481,35 +3094,9 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 @dynamic defValue;
 
-+ (instancetype) withKey:(NSString *)key defValue:(EOAWidgetSizeStyle)defValue
++ (void)load
 {
-    OACommonWidgetSizeStyle *obj = [[OACommonWidgetSizeStyle alloc] init];
-    if (obj)
-    {
-        obj.key = key;
-        obj.defValue = defValue;
-    }
-    return obj;
-}
-
-- (EOAWidgetSizeStyle) get
-{
-    return [super get];
-}
-
-- (void) set:(EOAWidgetSizeStyle)widgetSizeStyle
-{
-    [super set:widgetSizeStyle];
-}
-
-- (EOAWidgetSizeStyle) get:(OAApplicationMode *)mode
-{
-    return [super get:mode];
-}
-
-- (void) set:(EOAWidgetSizeStyle)widgetSizeStyle mode:(OAApplicationMode *)mode
-{
-    [super set:widgetSizeStyle mode:mode];
+    [enumClasses addObject:self.class];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -3519,17 +3106,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (int)fromStringValue:(NSString *)value
 {
-    return [self.class getStringsValues][value].intValue ?: EOAWidgetSizeStyleMedium;
-}
-
-- (void) resetToDefault
-{
-    EOAWidgetSizeStyle defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
-    if (pDefault)
-        defaultValue = (EOAWidgetSizeStyle) ((NSNumber *) pDefault).intValue;
-
-    [self set:defaultValue];
+    NSNumber *nValue = [self.class getStringsValues][value];
+    return nValue ? nValue.intValue : EOAWidgetSizeStyleMedium;
 }
 
 + (NSDictionary<NSString *, NSNumber *> *)getStrings
@@ -3543,70 +3121,31 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 @end
 
-
 @implementation OACommonWidgetZoomLevelType
-
-static NSString *kZoomKey = @"ZOOM";
-static NSString *kMapScaleKey = @"MAP_SCALE";
 
 @dynamic defValue;
 
-+ (instancetype) withKey:(NSString *)key defValue:(EOAWidgetZoomLevelType)defValue
++ (void)load
 {
-    OACommonWidgetZoomLevelType *obj = [[OACommonWidgetZoomLevelType alloc] init];
-    if (obj)
-    {
-        obj.key = key;
-        obj.defValue = (int)defValue;
-    }
-    return obj;
-}
-
-- (EOAWidgetZoomLevelType)get
-{
-    return [super get];
-}
-
-- (EOAWidgetZoomLevelType)get:(OAApplicationMode *)mode
-{
-    return [super get:mode];
-}
-
-- (void)set:(EOAWidgetZoomLevelType)type
-{
-    [super set:(int)type];
-}
-
-- (void)set:(EOAWidgetZoomLevelType)type mode:(OAApplicationMode *)mode
-{
-    [super set:(int)type mode:mode];
+    [enumClasses addObject:self.class];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
 {
-    return [self.class getKeyForValue:@([self get:mode]) defValue:kZoomKey];
+    return [self.class getKeyForValue:@([self get:mode]) defValue:@"ZOOM"];
 }
 
 - (int)fromStringValue:(NSString *)value
 {
-    return [self.class getStringsValues][value].intValue ?: EOAWidgetZoom;
-}
-
-- (void)resetToDefault
-{
-    EOAWidgetZoomLevelType defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
-    if (pDefault)
-        defaultValue = (EOAWidgetZoomLevelType)((NSNumber *)pDefault).intValue;
-
-    [self set:defaultValue];
+    NSNumber *nValue = [self.class getStringsValues][value];
+    return nValue ? nValue.intValue : EOAWidgetZoom;
 }
 
 + (NSDictionary<NSString *, NSNumber *> *)getStrings
 {
     return @{
-        kZoomKey: @(EOAWidgetZoom),
-        kMapScaleKey: @(EOAWidgetMapScale)
+        @"ZOOM": @(EOAWidgetZoom),
+        @"MAP_SCALE": @(EOAWidgetMapScale)
     };
 }
 
@@ -3616,35 +3155,9 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
 
 @dynamic defValue;
 
-+ (instancetype)withKey:(NSString *)key defValue:(int)defValue
++ (void)load
 {
-    OACommonDayNightMode *obj = [[OACommonDayNightMode alloc] init];
-    if (obj)
-    {
-        obj.key = key;
-        obj.defValue = defValue;
-    }
-    return obj;
-}
-
-- (int)get
-{
-    return [super get];
-}
-
-- (void)set:(int)dayNightMode
-{
-    [super set:dayNightMode];
-}
-
-- (int)get:(OAApplicationMode *)mode
-{
-    return [super get:mode];
-}
-
-- (void)set:(int)dayNightMode mode:(OAApplicationMode *)mode
-{
-    [super set:dayNightMode mode:mode];
+    [enumClasses addObject:self.class];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -3654,17 +3167,8 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
 
 - (int)fromStringValue:(NSString *)value
 {
-    return [self.class getStringsValues][value].intValue ?: DayNightModeDay;
-}
-
-- (void)resetToDefault
-{
-    DayNightMode defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
-    if (pDefault)
-        defaultValue = (DayNightMode) ((NSNumber *) pDefault).intValue;
-
-    [self set:defaultValue];
+    NSNumber *nValue = [self.class getStringsValues][value];
+    return nValue ? nValue.intValue : DayNightModeDay;
 }
 
 + (NSDictionary<NSString *, NSNumber *> *)getStrings
@@ -3674,6 +3178,99 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
         @"NIGHT": @(DayNightModeNight),
         @"APP_THEME": @(DayNightModeAppTheme),
         @"AUTO": @(DayNightModeAuto)
+    };
+}
+
+@end
+
+@implementation OACommonSunPositionMode
+
+@dynamic defValue;
+
++ (void)load
+{
+    [enumClasses addObject:self.class];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    return [self.class getKeyForValue:@([self get:mode]) defValue:@"SUN_POSITION_MODE"];
+}
+
+- (int)fromStringValue:(NSString *)value
+{
+    NSNumber *nValue = [self.class getStringsValues][value];
+    return nValue ? nValue.intValue : SunPositionModeSunPositionMode;
+}
+
++ (NSDictionary<NSString *, NSNumber *> *)getStrings
+{
+    return @{
+        @"SUN_POSITION_MODE": @(SunPositionModeSunPositionMode),
+        @"SUNSET_MODE": @(SunPositionModeSunsetMode),
+        @"SUNRISE_MODE": @(SunPositionModeSunriseMode)
+    };
+}
+
+@end
+
+@implementation OACommonCompassVisibility
+
+@dynamic defValue;
+
++ (void)load
+{
+    [enumClasses addObject:self.class];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    return [self.class getKeyForValue:@([self get:mode]) defValue:@"ALWAYS_VISIBLE"];
+}
+
+- (int)fromStringValue:(NSString *)value
+{
+    NSNumber *nValue = [self.class getStringsValues][value];
+    return nValue ? nValue.intValue : CompassVisibilityAlwaysVisible;
+}
+
++ (NSDictionary<NSString *, NSNumber *> *)getStrings
+{
+    return @{
+        @"ALWAYS_VISIBLE": @(CompassVisibilityAlwaysVisible),
+        @"ALWAYS_HIDDEN": @(CompassVisibilityAlwaysHidden),
+        @"VISIBLE_IF_MAP_ROTATED": @(CompassVisibilityVisibleIfMapRotated)
+    };
+}
+
+@end
+
+@implementation OACommonMap3DModeVisibility
+
+@dynamic defValue;
+
++ (void)load
+{
+    [enumClasses addObject:self.class];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    return [self.class getKeyForValue:@([self get:mode]) defValue:@"VISIBLE"];
+}
+
+- (int)fromStringValue:(NSString *)value
+{
+    NSNumber *nValue = [self.class getStringsValues][value];
+    return nValue ? nValue.intValue : Map3DModeVisibilityVisible;
+}
+
++ (NSDictionary<NSString *, NSNumber *> *)getStrings
+{
+    return @{
+        @"HIDDEN": @(Map3DModeVisibilityHidden),
+        @"VISIBLE": @(Map3DModeVisibilityVisible),
+        @"VISIBLE_IN_3D_MODE": @(Map3DModeVisibilityVisibleIn3DMode)
     };
 }
 
@@ -3706,34 +3303,6 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
         _sharedManager = [[OAAppSettings alloc] init];
     });
     return _sharedManager;
-}
-
-+ (NSArray<Class> *)commonEnumClasses
-{
-    static NSArray<Class> *classes = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        classes = @[
-            OACommonSpeedLimitWarningState.class,
-            OACommonAutoZoomMap.class,
-            OACommonSpeedConstant.class,
-            OACommonAngularConstant.class,
-            OACommonActiveMarkerConstant.class,
-            OACommonDrivingRegion.class,
-            OACommonMetricSystem.class,
-            OACommonRulerWidgetMode.class,
-            OACommonWikiArticleShowImages.class,
-            OACommonRateUsState.class,
-            OACommonUploadVisibility.class,
-            OACommonCoordinateInputFormats.class,
-            OACommonDownloadMode.class,
-            OACommonColoringType.class,
-            OACommonWidgetSizeStyle.class,
-            OACommonWidgetZoomLevelType.class,
-            OACommonDayNightMode.class
-        ];
-    });
-    return classes;
 }
 
 - (instancetype) init
@@ -4841,7 +4410,7 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
     return p;
 }
 
-- (OACommonWidgetSizeStyle *)registerWidgetSizeStylePreference:(NSString *)key defValue:(EOAWidgetSizeStyle)defValue
+- (OACommonWidgetSizeStyle *)registerWidgetSizeStylePreference:(NSString *)key defValue:(int)defValue
 {
     if ([_registeredPreferences objectForKey:key])
         return (OACommonWidgetSizeStyle *) [_registeredPreferences objectForKey:key];
@@ -4851,12 +4420,42 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
     return p;
 }
 
-- (OACommonWidgetZoomLevelType *)registerWidgetZoomLevelTypePreference:(NSString *)key defValue:(EOAWidgetZoomLevelType)defValue
+- (OACommonWidgetZoomLevelType *)registerWidgetZoomLevelTypePreference:(NSString *)key defValue:(int)defValue
 {
     if ([_registeredPreferences objectForKey:key])
         return (OACommonWidgetZoomLevelType *) [_registeredPreferences objectForKey:key];
     
     OACommonWidgetZoomLevelType *p = [OACommonWidgetZoomLevelType withKey:key defValue:defValue];
+    [self registerPreference:p forKey:key];
+    return p;
+}
+
+- (OACommonSunPositionMode *)registerSunPositionModePreference:(NSString *)key defValue:(int)defValue
+{
+    if ([_registeredPreferences objectForKey:key])
+        return (OACommonSunPositionMode *) [_registeredPreferences objectForKey:key];
+    
+    OACommonSunPositionMode *p = [OACommonSunPositionMode withKey:key defValue:defValue];
+    [self registerPreference:p forKey:key];
+    return p;
+}
+
+- (OACommonCompassVisibility *)registerCompassVisibilityPreference:(NSString *)key defValue:(int)defValue
+{
+    if ([_registeredPreferences objectForKey:key])
+        return (OACommonCompassVisibility *) [_registeredPreferences objectForKey:key];
+    
+    OACommonCompassVisibility *p = [OACommonCompassVisibility withKey:key defValue:defValue];
+    [self registerPreference:p forKey:key];
+    return p;
+}
+
+- (OACommonMap3DModeVisibility *)registerMap3DModeVisibilityPreference:(NSString *)key defValue:(int)defValue
+{
+    if ([_registeredPreferences objectForKey:key])
+        return (OACommonMap3DModeVisibility *) [_registeredPreferences objectForKey:key];
+    
+    OACommonMap3DModeVisibility *p = [OACommonMap3DModeVisibility withKey:key defValue:defValue];
     [self registerPreference:p forKey:key];
     return p;
 }

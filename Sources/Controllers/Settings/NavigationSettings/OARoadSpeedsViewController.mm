@@ -52,7 +52,7 @@
 - (void)postInit
 {
     auto router = [OsmAndApp.instance getRouter:self.appMode];
-    _units = [OASpeedConstant toShortString:[_settings.speedSystem get:self.appMode]];
+    _units = [OASpeedConstant toShortString:(EOASpeedConstant) [_settings.speedSystem get:self.appMode]];
     switch ([_settings.speedSystem get:self.appMode])
     {
         case MILES_PER_HOUR:

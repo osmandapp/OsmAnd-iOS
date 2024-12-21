@@ -168,7 +168,7 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
         bearing -= 360;
     
     int azimuth = (int) round(bearing);
-    EOAAngularConstant angularConstant = [[OAAppSettings sharedManager].angularUnits get];
+    EOAAngularConstant angularConstant = (EOAAngularConstant) [[OAAppSettings sharedManager].angularUnits get];
     switch (angularConstant)
     {
         case DEGREES360:
@@ -201,7 +201,7 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
 + (NSString *)getFormattedDistance:(float)meters withParams:(OsmAndFormatterParams *)params valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    EOAMetricsConstant mc = [settings.metricSystem get];
+    EOAMetricsConstant mc = (EOAMetricsConstant) [settings.metricSystem get];
     
     NSString *mainUnitStr;
     float mainUnitInMeters;
@@ -356,7 +356,7 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
 + (NSString *) getFormattedAlt:(double)alt
 {
     OAAppSettings* settings = [OAAppSettings sharedManager];
-    EOAMetricsConstant mc = [settings.metricSystem get];
+    EOAMetricsConstant mc = (EOAMetricsConstant) [settings.metricSystem get];
     return [self getFormattedAlt:alt mc:mc];
 }
 
@@ -382,7 +382,7 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
 + (NSString *)getFormattedSpeed:(float)metersperseconds
 {
     return [self getFormattedSpeed:metersperseconds
-                       speedSystem:[[OAAppSettings sharedManager].speedSystem get]];
+                       speedSystem:(EOASpeedConstant) [[OAAppSettings sharedManager].speedSystem get]];
 }
 
 + (NSString *)getFormattedSpeed:(float)metersperseconds
@@ -397,7 +397,7 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
 + (NSString *)getFormattedSpeed:(float)metersperseconds valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray
 {
     return [self getFormattedSpeed:metersperseconds
-                       speedSystem:[[OAAppSettings sharedManager].speedSystem get]
+                       speedSystem:(EOASpeedConstant) [[OAAppSettings sharedManager].speedSystem get]
                              drive:NO
                     valueUnitArray:valueUnitArray];
 }
@@ -525,7 +525,7 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
 + (double) calculateRoundedDist:(double)baseMetersDist
 {
     OAAppSettings* settings = [OAAppSettings sharedManager];
-    EOAMetricsConstant mc = [settings.metricSystem get];
+    EOAMetricsConstant mc = (EOAMetricsConstant) [settings.metricSystem get];
     double mainUnitInMeter = 1;
     double metersInSecondUnit = METERS_IN_KILOMETER;
     if (mc == MILES_AND_FEET)

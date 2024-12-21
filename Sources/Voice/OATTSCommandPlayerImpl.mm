@@ -100,7 +100,7 @@
 - (OACommandBuilder *)newCommandBuilder {
     OACommandBuilder *commandBuilder = [[OACommandBuilder alloc] initWithCommandPlayer:self jsContext:context];
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    [commandBuilder setParameters:[OAMetricsConstant toTTSString:[settings.metricSystem get]] mode:YES];
+    [commandBuilder setParameters:[OAMetricsConstant toTTSString:(EOAMetricsConstant) [settings.metricSystem get]] mode:YES];
     return commandBuilder;
 }
 

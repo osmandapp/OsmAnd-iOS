@@ -274,7 +274,7 @@
             _recalculateCountInInterval = 0;
         }
         OAApplicationMode *mode = _routingHelper.getAppMode;
-        params.leftSide = [OADrivingRegion isLeftHandDriving:[_settings.drivingRegion get:mode]];
+        params.leftSide = [OADrivingRegion isLeftHandDriving:(EOADrivingRegion) [_settings.drivingRegion get:mode]];
         params.fast = [_settings.fastRouteMode get:mode];
         params.mode = mode;
         BOOL updateProgress = NO;

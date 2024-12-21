@@ -224,9 +224,9 @@ final class MigrationManager: NSObject {
                             if hasCustomSuffix {
                                 newPrefKey = newPrefKey.appending(newCustomWidgetId)
                             }
-                            let newPref: OACommonWidgetSizeStyle = settings.registerWidgetSizeStylePreference(newPrefKey, defValue: .medium)
+                            let newPref: OACommonWidgetSizeStyle = settings.registerWidgetSizeStylePreference(newPrefKey, defValue: Int32(EOAWidgetSizeStyle.medium.rawValue))
                             if sizeStylePref != EOAWidgetSizeStyle.medium.rawValue {
-                                newPref.set(EOAWidgetSizeStyle(rawValue: sizeStylePref) ?? .medium, mode: appMode)
+                                newPref.set(Int32(sizeStylePref), mode: appMode)
                             }
                         }
                     }

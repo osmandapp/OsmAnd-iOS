@@ -346,7 +346,7 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
             }
         default:
             if let filter = baseFilters.getFilterByType(filterType) as? RangeTrackFilter<AnyObject> {
-                let mappedConstant = TracksSearchFilter.mapEOAMetricsConstantToMetricsConstants(OAAppSettings.sharedManager().metricSystem.get())
+                let mappedConstant = TracksSearchFilter.mapEOAMetricsConstantToMetricsConstants(EOAMetricsConstant(rawValue: Int(OAAppSettings.sharedManager().metricSystem.get()))!)
                 let minValue = Float(TracksSearchFilter.getDisplayValueFrom(filter: filter))
                 let maxValue = Float(TracksSearchFilter.getDisplayValueTo(filter: filter))
                 row.descr = filter.isValid() ? "\(decimalFormatter.string(from: NSNumber(value: minValue)) ?? "") - \(decimalFormatter.string(from: NSNumber(value: maxValue)) ?? "") \(filter.trackFilterType.measureUnitType.getFilterUnitText(mc: mappedConstant))" : ""

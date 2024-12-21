@@ -113,7 +113,7 @@ const static float kFocusPixelRatioY = 1.0 / 3.0;
     if (isnan(filteredSpeed))
         return nil;
     
-    EOAAutoZoomMap autoZoomScale = [_settings.autoZoomMapScale get];
+    EOAAutoZoomMap autoZoomScale = (EOAAutoZoomMap) [_settings.autoZoomMapScale get];
     
     OsmAnd::LatLon myLocationLatLon = OsmAnd::LatLon(myLocation.coordinate.latitude, myLocation.coordinate.longitude);
     OsmAnd::PointI myLocation31 = [OANativeUtilities getPoint31FromLatLon:myLocationLatLon];
@@ -159,7 +159,7 @@ const static float kFocusPixelRatioY = 1.0 / 3.0;
 - (OAComplexZoom *) calculateRawZoomBySpeedForChart:(OAMapRendererView *)mapRenderer currentZoom:(float)currentZoom lat:(double)lat lon:(double)lon rotation:(float)rotation speed:(float)speed
 {
     OsmAnd::MapRendererState state = mapRenderer.renderer->getState();
-    EOAAutoZoomMap autoZoomScale = [_settings.autoZoomMapScale get];
+    EOAAutoZoomMap autoZoomScale = (EOAAutoZoomMap) [_settings.autoZoomMapScale get];
     
     OsmAnd::PointI fixedLocation31 = [OANativeUtilities getPoint31FromLatLon:lat lon:lon];
     

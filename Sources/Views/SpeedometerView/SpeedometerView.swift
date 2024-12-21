@@ -55,7 +55,7 @@ final class SpeedometerView: OATextInfoWidget {
     
     var isDrivingRegionNAM: Bool {
         let drivingRegion = settings.drivingRegion.get()
-        return drivingRegion == EOADrivingRegion.DR_US || drivingRegion == EOADrivingRegion.DR_CANADA
+        return drivingRegion == EOADrivingRegion.DR_US.rawValue || drivingRegion == EOADrivingRegion.DR_CANADA.rawValue
     }
     
     private lazy var speedViewWrapper = SpeedLimitWrapper()
@@ -95,7 +95,7 @@ final class SpeedometerView: OATextInfoWidget {
     }
     
     func configure() {
-        sizeStyle = settings.speedometerSize.get()
+        sizeStyle = EOAWidgetSizeStyle(rawValue: Int(settings.speedometerSize.get()))!
        
         updateComponents()
 

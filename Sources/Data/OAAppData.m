@@ -93,7 +93,7 @@
 #define kWeatherSourceKey @"weatherSource"
 #define kWeatherWindAnimationKey @"weatherWindAnimation"
 #define kWeatherWindToolbarAnimationKey @"weatherWindToolbarAnimation"
-#define kWeatherWindAnimationWindUnitKey @"weatherWindAnimationUnit"
+#define kWeatherWindAnimationUnitKey @"weatherWindAnimationUnit"
 #define kWeatherWindAnimationToolbarAlphaKey @"weatherWindAnimationToolbarAlpha"
 #define kWeatherWindAnimationUnitAutoKey @"weatherWindAnimationUnitAuto"
 
@@ -177,7 +177,7 @@
     OACommonBoolean *_weatherWindAnimationProfile;
     OACommonBoolean *_weatherWindAnimationToolbarProfile;
     OACommonUnit *_weatherWindAnimationUnitProfile;
-    OACommonDouble *_weatherWindAnimationAlphaProfile;
+    OACommonDouble *_weatherWindAnimationToolbarAlphaProfile;
     OACommonBoolean *_weatherWindAnimationUnitAutoProfile;
 }
 
@@ -223,9 +223,139 @@
             [_wikipediaImagesDownloadModeProfile setValueFromString:value appMode:mode];
             return YES;
         }
-        else if ([key isEqualToString:@"travelGuidesImagesDownloadMode"])
+        else if ([key isEqualToString:kTravelGuidesImagesDownloadModeKey])
         {
             [_travelGuidesImagesDownloadModeProfile setValueFromString:value appMode:mode];
+            return YES;
+        }
+        else if ([key isEqualToString:kWeatherPrecipUnitKey])
+        {
+            [_weatherPrecipUnitProfile setValueFromString:value appMode:mode];
+            return YES;
+        }
+        else if ([key isEqualToString:kWeatherSourceKey])
+        {
+            [_weatherSourceProfile setValueFromString:value appMode:mode];
+            return YES;
+        }
+        else if ([key isEqualToString:kWeatherTempKey])
+        {
+            [_weatherTempProfile setValueFromString:value appMode:mode];
+            return YES;
+        }
+        else if ([key isEqualToString:kWeatherPressureKey])
+        {
+            [_weatherPressureProfile setValueFromString:value appMode:mode];
+            return YES;
+        }
+        else if ([key isEqualToString:kWeatherWindKey])
+        {
+            [_weatherWindProfile setValueFromString:value appMode:mode];
+            return YES;
+        }
+        else if ([key isEqualToString:kWeatherWindAnimationKey])
+        {
+            [_weatherWindAnimationProfile setValueFromString:value appMode:mode];
+            return YES;
+        }
+        else if ([key isEqualToString:kWeatherCloudKey])
+        {
+            [_weatherCloudProfile setValueFromString:value appMode:mode];
+            return YES;
+        }
+        else if ([key isEqualToString:kWeatherPrecipKey])
+        {
+            [_weatherPrecipProfile setValueFromString:value appMode:mode];
+            return YES;
+        }
+        else if ([key isEqualToString:kWeatherTempUnitKey])
+        {
+            [_weatherTempUnitProfile setValueFromString:value appMode:mode];
+            return YES;
+        }
+        else if ([key isEqualToString:kWeatherPressureUnitKey])
+        {
+            [_weatherPressureUnitProfile setValueFromString:value appMode:mode];
+            return YES;
+        }
+        else if ([key isEqualToString:kWeatherWindUnitKey])
+        {
+            [_weatherWindUnitProfile setValueFromString:value appMode:mode];
+            return YES;
+        }
+        else if ([key isEqualToString:kWeatherWindAnimationUnitKey])
+        {
+            [_weatherWindAnimationUnitProfile setValueFromString:value appMode:mode];
+            return YES;
+        }
+        else if ([key isEqualToString:kWeatherCloudUnitKey])
+        {
+            [_weatherCloudUnitProfile setValueFromString:value appMode:mode];
+            return YES;
+        }
+        else if ([key isEqualToString:kWeatherPrecipUnitKey])
+        {
+            [_weatherPrecipUnitProfile setValueFromString:value appMode:mode];
+            return YES;
+        }
+        else if ([key isEqualToString:kWeatherTempAlphaKey])
+        {
+            [_weatherTempAlphaProfile setValueFromString:value appMode:mode];
+            return YES;
+        }
+        else if ([key isEqualToString:kWeatherPressureAlphaKey])
+        {
+            [_weatherPressureAlphaProfile setValueFromString:value appMode:mode];
+            return YES;
+        }
+        else if ([key isEqualToString:kWeatherWindToolbarAlphaKey])
+        {
+            [_weatherWindToolbarAlphaProfile setValueFromString:value appMode:mode];
+            return YES;
+        }
+        else if ([key isEqualToString:kWeatherWindAnimationToolbarAlphaKey])
+        {
+            [_weatherWindAnimationToolbarAlphaProfile setValueFromString:value appMode:mode];
+            return YES;
+        }
+        else if ([key isEqualToString:kWeatherCloudAlphaKey])
+        {
+            [_weatherCloudAlphaProfile setValueFromString:value appMode:mode];
+            return YES;
+        }
+        else if ([key isEqualToString:kWeatherPrecipAlphaKey])
+        {
+            [_weatherPrecipAlphaProfile setValueFromString:value appMode:mode];
+            return YES;
+        }
+        else if ([key isEqualToString:kWeatherTempUnitAutoKey])
+        {
+            [_weatherTempUnitAutoProfile setValueFromString:value appMode:mode];
+            return YES;
+        }
+        else if ([key isEqualToString:kWeatherPressureUnitAutoKey])
+        {
+            [_weatherPressureUnitAutoProfile setValueFromString:value appMode:mode];
+            return YES;
+        }
+        else if ([key isEqualToString:kWeatherWindUnitAutoKey])
+        {
+            [_weatherWindUnitAutoProfile setValueFromString:value appMode:mode];
+            return YES;
+        }
+        else if ([key isEqualToString:kWeatherWindAnimationUnitAutoKey])
+        {
+            [_weatherWindAnimationUnitAutoProfile setValueFromString:value appMode:mode];
+            return YES;
+        }
+        else if ([key isEqualToString:kWeatherCloudUnitAutoKey])
+        {
+            [_weatherCloudUnitAutoProfile setValueFromString:value appMode:mode];
+            return YES;
+        }
+        else if ([key isEqualToString:kWeatherPrecipUnitAutoKey])
+        {
+            [_weatherPrecipUnitAutoProfile setValueFromString:value appMode:mode];
             return YES;
         }
         return NO;
@@ -241,7 +371,32 @@
         prefs[@"global_wikipedia_poi_enabled"] = [_wikipediaGlobalProfile toStringValue:mode];
         prefs[@"wikipedia_poi_enabled_languages"] = [_wikipediaLanguagesProfile toStringValue:mode];
         prefs[@"wikipedia_images_download_mode"] = [_wikipediaImagesDownloadModeProfile toStringValue:mode];
-        prefs[@"travelGuidesImagesDownloadMode"] = [_travelGuidesImagesDownloadModeProfile toStringValue:mode];
+        prefs[kTravelGuidesImagesDownloadModeKey] = [_travelGuidesImagesDownloadModeProfile toStringValue:mode];
+        prefs[kWeatherSourceKey] = [_weatherSourceProfile toStringValue:mode];
+        prefs[kWeatherTempKey] = [_weatherTempProfile toStringValue:mode];
+        prefs[kWeatherPressureKey] = [_weatherPressureProfile toStringValue:mode];
+        prefs[kWeatherWindKey] = [_weatherWindProfile toStringValue:mode];
+        prefs[kWeatherWindAnimationKey] = [_weatherWindAnimationProfile toStringValue:mode];
+        prefs[kWeatherCloudKey] = [_weatherCloudProfile toStringValue:mode];
+        prefs[kWeatherPrecipKey] = [_weatherPrecipProfile toStringValue:mode];
+        prefs[kWeatherTempUnitKey] = [_weatherTempUnitProfile toStringValue:mode];
+        prefs[kWeatherPressureUnitKey] = [_weatherPressureUnitProfile toStringValue:mode];
+        prefs[kWeatherWindUnitKey] = [_weatherWindUnitProfile toStringValue:mode];
+        prefs[kWeatherWindAnimationUnitKey] = [_weatherWindAnimationUnitProfile toStringValue:mode];
+        prefs[kWeatherCloudUnitKey] = [_weatherCloudUnitProfile toStringValue:mode];
+        prefs[kWeatherPrecipUnitKey] = [_weatherPrecipUnitProfile toStringValue:mode];
+        prefs[kWeatherTempAlphaKey] = [_weatherTempAlphaProfile toStringValue:mode];
+        prefs[kWeatherPressureAlphaKey] = [_weatherPressureAlphaProfile toStringValue:mode];
+        prefs[kWeatherWindToolbarAlphaKey] = [_weatherWindToolbarAlphaProfile toStringValue:mode];
+        prefs[kWeatherWindAnimationToolbarAlphaKey] = [_weatherWindAnimationToolbarAlphaProfile toStringValue:mode];
+        prefs[kWeatherCloudAlphaKey] = [_weatherCloudAlphaProfile toStringValue:mode];
+        prefs[kWeatherPrecipAlphaKey] = [_weatherPrecipAlphaProfile toStringValue:mode];
+        prefs[kWeatherTempUnitAutoKey] = [_weatherTempUnitAutoProfile toStringValue:mode];
+        prefs[kWeatherPressureUnitAutoKey] = [_weatherPressureUnitAutoProfile toStringValue:mode];
+        prefs[kWeatherWindUnitAutoKey] = [_weatherWindUnitAutoProfile toStringValue:mode];
+        prefs[kWeatherWindAnimationUnitAutoKey] = [_weatherWindAnimationUnitAutoProfile toStringValue:mode];
+        prefs[kWeatherCloudUnitAutoKey] = [_weatherCloudUnitAutoProfile toStringValue:mode];
+        prefs[kWeatherPrecipUnitAutoKey] = [_weatherPrecipUnitAutoProfile toStringValue:mode];
     }
 }
 
@@ -341,8 +496,8 @@
     _weatherSourceProfile = [OACommonString withKey:kWeatherSourceKey defValue:[WeatherSourceObjWrapper getSettingValueForType:getDefaultSource]];
     _weatherWindAnimationProfile = [OACommonBoolean withKey:kWeatherWindAnimationKey defValue:NO];
     _weatherWindAnimationToolbarProfile = [OACommonBoolean withKey:kWeatherWindToolbarAnimationKey defValue:NO];
-    _weatherWindAnimationUnitProfile = [OACommonUnit withKey:kWeatherWindAnimationWindUnitKey defValue:[OAWeatherBand getDefaultBandUnit:WEATHER_BAND_WIND_ANIMATION]];
-    _weatherWindAnimationAlphaProfile = [OACommonDouble withKey:kWeatherWindAnimationToolbarAlphaKey defValue:0.6];
+    _weatherWindAnimationUnitProfile = [OACommonUnit withKey:kWeatherWindAnimationUnitKey defValue:[OAWeatherBand getDefaultBandUnit:WEATHER_BAND_WIND_ANIMATION]];
+    _weatherWindAnimationToolbarAlphaProfile = [OACommonDouble withKey:kWeatherWindAnimationToolbarAlphaKey defValue:0.6];
     
     _weatherWindAnimationUnitAutoProfile = [OACommonBoolean withKey:kWeatherWindAnimationUnitAutoKey defValue:YES];
     
@@ -439,7 +594,7 @@
     [_registeredPreferences setObject:_weatherWindAnimationProfile forKey:@"weather_wind_animation"];
     [_registeredPreferences setObject:_weatherWindAnimationToolbarProfile forKey:@"weather_wind_animation_toolbar"];
     [_registeredPreferences setObject:_weatherWindAnimationUnitProfile forKey:@"show_weather_wind_animation_unit"];
-    [_registeredPreferences setObject:_weatherWindAnimationAlphaProfile forKey:@"weather_wind_animation_alpha"];
+    [_registeredPreferences setObject:_weatherWindAnimationToolbarAlphaProfile forKey:@"weather_wind_animation_alpha"];
     [_registeredPreferences setObject:_weatherWindAnimationUnitAutoProfile forKey:@"weather_wind_animation_unit_auto"];
 }
 
@@ -939,7 +1094,7 @@
 {
     @synchronized (_lock)
     {
-        return [_weatherWindAnimationAlphaProfile get];
+        return [_weatherWindAnimationToolbarAlphaProfile get];
     }
 }
 
@@ -947,7 +1102,7 @@
 {
     @synchronized(_lock)
     {
-        [_weatherWindAnimationAlphaProfile set:weatherWindAnimationAlpha];
+        [_weatherWindAnimationToolbarAlphaProfile set:weatherWindAnimationAlpha];
         [_weatherWindAnimationAlphaChangeObservable notifyEventWithKey:@(WEATHER_BAND_WIND_ANIMATION) andValue:@(self.weatherWindAnimationAlpha)];
     }
 }
@@ -1230,7 +1385,7 @@
         [_weatherWindAnimationProfile resetToDefault];
         [_weatherWindAnimationToolbarProfile resetToDefault];
         [_weatherWindAnimationUnitProfile resetToDefault];
-        [_weatherWindAnimationAlphaProfile resetToDefault];
+        [_weatherWindAnimationToolbarAlphaProfile resetToDefault];
         [_weatherWindAnimationUnitAutoProfile resetToDefault];
         
         [_weatherPrecipProfile resetToDefault];
@@ -1868,7 +2023,7 @@
     [_weatherWindAnimationProfile set:[_weatherWindAnimationProfile get:sourceMode] mode:targetMode];
     [_weatherWindAnimationToolbarProfile set:[_weatherWindAnimationToolbarProfile get:sourceMode] mode:targetMode];
     [_weatherWindAnimationUnitProfile set:[_weatherWindAnimationUnitProfile get:sourceMode] mode:targetMode];
-    [_weatherWindAnimationAlphaProfile set:[_weatherWindAnimationAlphaProfile get:sourceMode] mode:targetMode];
+    [_weatherWindAnimationToolbarAlphaProfile set:[_weatherWindAnimationToolbarAlphaProfile get:sourceMode] mode:targetMode];
     [_weatherWindAnimationUnitAutoProfile set:[_weatherWindAnimationUnitAutoProfile get:sourceMode] mode:targetMode];
     
 }

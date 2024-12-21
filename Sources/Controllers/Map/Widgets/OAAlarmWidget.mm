@@ -138,7 +138,7 @@
         OAAlarmInfo *alarm;
         if([_rh isFollowingMode] && ![OARoutingHelper isDeviatedFromRoute] && ![_rh getCurrentGPXRoute])
         {
-            alarm = [_wh getMostImportantAlarm:[_settings.speedSystem get] showCameras:cams];
+            alarm = [_wh getMostImportantAlarm:(EOASpeedConstant) [_settings.speedSystem get] showCameras:cams];
         }
         else
         {
@@ -146,12 +146,12 @@
             const auto ro = [_currentPositionHelper getLastKnownRouteSegment:loc];
             if (loc && ro)
             {
-                alarm = [_wh calculateMostImportantAlarm:ro loc:loc mc:[_settings.metricSystem get] sc:[_settings.speedSystem get] showCameras:cams];
+                alarm = [_wh calculateMostImportantAlarm:ro loc:loc mc:(EOAMetricsConstant) [_settings.metricSystem get] sc:(EOASpeedConstant) [_settings.speedSystem get] showCameras:cams];
             }
         }
         if (alarm)
         {
-            EOADrivingRegion region = [_settings.drivingRegion get];
+            EOADrivingRegion region = (EOADrivingRegion) [_settings.drivingRegion get];
             BOOL americanSigns = [OADrivingRegion isAmericanSigns:region];
             BOOL isCanadianRegion = region == DR_CANADA;
 
@@ -163,7 +163,7 @@
                 if (isCanadianRegion)
                 {
                     locImgId = @"warnings_speed_limit_ca";
-                    bottomText = [OASpeedConstant toShortString:[_settings.speedSystem get]];
+                    bottomText = [OASpeedConstant toShortString:(EOASpeedConstant) [_settings.speedSystem get]];
                 }
                 else if (americanSigns)
                 {

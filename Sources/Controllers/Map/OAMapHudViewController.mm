@@ -815,8 +815,8 @@ static const float kDistanceMeters = 100.0;
     if (obj)
     {
         OAMapButtonsHelper *mapButtonsHelper = [OAMapButtonsHelper sharedInstance];
-        OACommonInteger *compassButtonState = [mapButtonsHelper getCompassButtonState].visibilityPref;
-        OACommonInteger *map3DButtonState = [mapButtonsHelper getMap3DButtonState].visibilityPref;
+        OACommonCompassVisibility *compassButtonState = [mapButtonsHelper getCompassButtonState].visibilityPref;
+        OACommonMap3DModeVisibility *map3DButtonState = [mapButtonsHelper getMap3DButtonState].visibilityPref;
 
         BOOL isQuickAction = NO;
         for (QuickActionButtonState *buttonState in [mapButtonsHelper getButtonsStates])

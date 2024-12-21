@@ -30,6 +30,15 @@ static NSDictionary *platformCompatibilityKeysDictionary = @{
     @"widget_bottom_panel_order": @"bottom_widget_panel_order"
 };
 
+static NSArray<NSString *> *excludeKeys = @[
+    @"drawer_items_default",
+    @"context_menu_items",
+    @"collapsed_configure_map_categories",
+    @"trip_recording_Y_axis",
+    @"drawer_items",
+    @"configure_map_items"
+];
+
 @implementation OAProfileSettingsItem
 {
     NSDictionary *_additionalPrefs;
@@ -196,7 +205,9 @@ static NSDictionary *platformCompatibilityKeysDictionary = @{
             {
                 [setting setValueFromString:value appMode:_appMode];
                 if ([key isEqualToString:@"voice_mute"])
+                {
                     [OARoutingHelper.sharedInstance.getVoiceRouter setMute:[OAAppSettings.sharedManager.voiceMute get:_appMode]];
+                }
                 else if ([key isEqualToString:@"map_info_controls"])
                 {
                     NSMutableSet<NSString *> *enabledWidgets = [NSMutableSet set];
@@ -219,35 +230,47 @@ static NSDictionary *platformCompatibilityKeysDictionary = @{
         else
         {
             if (![app.data setSettingValue:value forKey:key mode:_appMode])
-            {
-                [self setStringValue:value
-                              forKey:[NSString stringWithFormat:@"%@_%@", key, _appMode.stringKey]];
-            }
+                [self setStringValue:value forKey:key mode:_appMode];
         }
     }
 }
 
-- (void)setStringValue:(NSString *)strValue
-                forKey:(NSString *)key
+- (void)setStringValue:(NSString *)strValue forKey:(NSString *)key mode:(OAApplicationMode *)mode
 {
-    if (strValue.length == 0)
+    if (strValue.length == 0 || [excludeKeys containsObject:key])
         return;
 
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *modeKey = [NSString stringWithFormat:@"%@_%@", key, mode.stringKey];
+    NSUserDefaults *defaults = NSUserDefaults.standardUserDefaults;
+
     if ([strValue caseInsensitiveCompare:@"true"] == NSOrderedSame)
     {
-        [defaults setObject:@(YES) forKey:key];
+        [defaults setObject:@(YES) forKey:modeKey];
+        return;
     }
     else if ([strValue caseInsensitiveCompare:@"false"] == NSOrderedSame)
     {
-        [defaults setObject:@(NO) forKey:key];
+        [defaults setObject:@(NO) forKey:modeKey];
+        return;
     }
-    else if ([self isNumber:strValue])
+
+    NSScanner *scanner = [NSScanner scannerWithString:strValue];
+    NSInteger intValue;
+    if ([scanner scanInteger:&intValue] && [scanner isAtEnd])
     {
-        NSNumber *number = [self numberFromString:strValue];
-        [defaults setObject:number forKey:key];
+        [defaults setObject:@(intValue) forKey:modeKey];
+        return;
     }
-    else if ([self isArrayOfArrayOfStrings:strValue])
+
+    scanner = [NSScanner scannerWithString:strValue];
+    double doubleValue;
+    if ([scanner scanDouble:&doubleValue] && [scanner isAtEnd])
+    {
+        [defaults setObject:@(doubleValue) forKey:modeKey];
+        return;
+    }
+
+    if ([strValue containsString:@";"])
     {
         NSMutableArray<NSArray<NSString *> *> *nestedArray = [NSMutableArray array];
         NSArray<NSString *> *subarrays = [strValue componentsSeparatedByString:@";"];
@@ -256,57 +279,35 @@ static NSDictionary *platformCompatibilityKeysDictionary = @{
             if (subStr.length > 0)
                 [nestedArray addObject:[subStr componentsSeparatedByString:@","]];
         }
-        [defaults setObject:nestedArray forKey:key];
+        [defaults setObject:nestedArray forKey:modeKey];
+        return;
     }
-    else if ([self isArrayOfStrings:strValue])
+
+    if ([strValue containsString:@","])
     {
         NSArray<NSString *> *array = [strValue componentsSeparatedByString:@","];
-        [defaults setObject:array forKey:key];
-    }
-    else
-    {
-        NSNumber *enumVaue = [self getEnumValue:strValue key:key];
-        [defaults setObject:enumVaue ?: strValue forKey:key];
+        [defaults setObject:array forKey:modeKey];
+        return;
     }
 
-    [defaults synchronize];
-}
-
-- (BOOL)isNumber:(NSString *)value
-{
-    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-    formatter.numberStyle = NSNumberFormatterDecimalStyle;
-    return [formatter numberFromString:value] != nil;
-}
-
-- (NSNumber *)numberFromString:(NSString *)value
-{
-    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-    formatter.numberStyle = NSNumberFormatterDecimalStyle;
-    return [formatter numberFromString:value];
+    NSNumber *enumVaue = [self getEnumValue:strValue key:key];
+    [defaults setObject:enumVaue ?: strValue forKey:modeKey];
 }
 
 - (NSNumber *)getEnumValue:(NSString *)value key:(NSString *)key
 {
-    NSDictionary<NSString *, NSArray<id> *> *keyWithValues = @{
-        @"routeColoringType": [OAColoringType getRouteColoringTypes],
-        @"currentTrackColoringType": [OAColoringType getTrackColoringTypes],
-        @"wikipediaImagesDownloadMode": [OADownloadMode getDownloadModes],
-        @"travelGuidesImagesDownloadMode": [OADownloadMode getDownloadModes]
-    };
-    for (Class enumClass in OAAppSettings.commonEnumClasses)
+    NSArray<id> *values;
+    if ([key isEqualToString:@"routeColoringType"])
+        values = [OAColoringType getRouteColoringTypes];
+    if ([key isEqualToString:@"currentTrackColoringType"])
+        values = [OAColoringType getTrackColoringTypes];
+    if ([key isEqualToString:@"wikipediaImagesDownloadMode"]
+        || [key isEqualToString:@"travelGuidesImagesDownloadMode"])
+        values = [OADownloadMode getDownloadModes];
+
+    for (Class<OAEnumClassProtocol> enumClass in OACommonEnum.enumClasses)
     {
-        NSArray<id> *values;
-        for (NSString *keyValues in keyWithValues)
-        {
-            if ([key hasPrefix:keyValues])
-            {
-                values = keyWithValues[keyValues];
-                break;
-            }
-        }
-        NSDictionary<NSString *, NSNumber *> *stringsValues = [enumClass getStringsValues:values];
-        NSNumber *result = stringsValues[value];
+        NSNumber *result = [enumClass getStringsValues:values][value];
         if (result)
             return result;
     }

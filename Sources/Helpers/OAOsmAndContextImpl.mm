@@ -201,7 +201,7 @@ static NSString * const kGpxImportDir = @"import";
 
 - (OASSpeedConstants * _Nullable)getSpeedSystem __attribute__((swift_name("getSpeedSystem()")))
 {
-    EOASpeedConstant speedSystem = OAAppSettings.sharedManager.speedSystem.get;
+    EOASpeedConstant speedSystem = (EOASpeedConstant) [OAAppSettings.sharedManager.speedSystem get];
     switch (speedSystem)
     {
         case KILOMETERS_PER_HOUR: return OASSpeedConstants.kilometersPerHour;
@@ -220,7 +220,7 @@ static NSString * const kGpxImportDir = @"import";
 
 - (OASMetricsConstants * _Nullable)getMetricSystem __attribute__((swift_name("getMetricSystem()")))
 {
-    EOAMetricsConstant metricSystem = OAAppSettings.sharedManager.metricSystem.get;
+    EOAMetricsConstant metricSystem = (EOAMetricsConstant) OAAppSettings.sharedManager.metricSystem.get;
     switch (metricSystem)
     {
         case KILOMETERS_AND_METERS: return OASMetricsConstants.kilometersAndMeters;

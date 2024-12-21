@@ -822,13 +822,13 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     
     if ([self isMetricSystemDepended])
     {
-        int metricSystem = (int)[[OAAppSettings sharedManager].metricSystem get];
+        int metricSystem = [[OAAppSettings sharedManager].metricSystem get];
         res |= _cachedMetricSystem != metricSystem;
         _cachedMetricSystem = metricSystem;
     }
     if ([self isAngularUnitsDepended])
     {
-        int angularUnits = (int)[[OAAppSettings sharedManager].angularUnits get];
+        int angularUnits = [[OAAppSettings sharedManager].angularUnits get];
         res |= _cachedAngularUnits != angularUnits;
         _cachedAngularUnits = angularUnits;
     }
@@ -946,7 +946,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
         {
             NSNumber *widgetSizeStyle = widgetParams[@"widgetSizeStyle"];
             if (widgetSizeStyle)
-                [self.widgetSizePref set:(EOAWidgetSizeStyle) [widgetSizeStyle integerValue] mode:selectedAppMode];
+                [self.widgetSizePref set:[widgetSizeStyle integerValue] mode:selectedAppMode];
             NSNumber *isVisibleIconNumber = widgetParams[@"isVisibleIcon"];
             if (isVisibleIconNumber)
             {

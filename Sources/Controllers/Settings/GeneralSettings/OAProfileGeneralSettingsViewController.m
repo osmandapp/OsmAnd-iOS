@@ -129,7 +129,7 @@
     if ([_settings.drivingRegionAutomatic get:self.appMode])
         drivingRegionValue = OALocalizedString(@"shared_string_automatic");
     else
-        drivingRegionValue = [OADrivingRegion getName:[_settings.drivingRegion get:self.appMode]];
+        drivingRegionValue = [OADrivingRegion getName:(EOADrivingRegion) [_settings.drivingRegion get:self.appMode]];
     
     NSString* metricSystemValue;
     switch ([_settings.metricSystem get:self.appMode]) {

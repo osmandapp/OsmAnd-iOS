@@ -88,10 +88,10 @@ final class SpeedometerSpeedView: UIView {
     
     private func isUpdateNeeded() -> Bool {
         var res = false
-        if let metricSystem: EOAMetricsConstant = OAAppSettings.sharedManager()?.metricSystem.get() {
-            res = cachedMetricSystem != metricSystem.rawValue
+        if let metricSystem = OAAppSettings.sharedManager()?.metricSystem.get() {
+            res = cachedMetricSystem != metricSystem
             if res {
-                cachedMetricSystem = metricSystem.rawValue
+                cachedMetricSystem = Int(metricSystem)
             }
         }
         return res

@@ -21,13 +21,13 @@ class RulerDistanceWidget: OATextInfoWidget {
         setIconFor(.radiusRuler)
         onClickFunction = { [weak self] _ in
             let settings = OAAppSettings.sharedManager()!
-            let mode = settings.rulerMode.get()
+            let mode = EOARulerWidgetMode(rawValue: Int(settings.rulerMode.get()))!
             if mode == .RULER_MODE_DARK {
-                settings.rulerMode.set(.RULER_MODE_LIGHT)
+                settings.rulerMode.set(Int32(EOARulerWidgetMode.RULER_MODE_LIGHT.rawValue))
             } else if mode == .RULER_MODE_LIGHT {
-                settings.rulerMode.set(.RULER_MODE_NO_CIRCLES)
+                settings.rulerMode.set(Int32(EOARulerWidgetMode.RULER_MODE_NO_CIRCLES.rawValue))
             } else if mode == .RULER_MODE_NO_CIRCLES {
-                settings.rulerMode.set(.RULER_MODE_DARK)
+                settings.rulerMode.set(Int32(EOARulerWidgetMode.RULER_MODE_DARK.rawValue))
             }
             self?.onRulerUpdate()
         }
@@ -68,7 +68,7 @@ class RulerDistanceWidget: OATextInfoWidget {
     }
 
     @objc private func onRulerUpdate() {
-        if OAAppSettings.sharedManager().rulerMode.get() == .RULER_MODE_NO_CIRCLES {
+        if OAAppSettings.sharedManager().rulerMode.get() == EOARulerWidgetMode.RULER_MODE_NO_CIRCLES.rawValue {
             setIcon("widget_hidden")
         } else {
             setIconFor(.radiusRuler)
@@ -87,10 +87,10 @@ class RulerDistanceWidget: OATextInfoWidget {
         settingRow.cellType = OAValueTableViewCell.getIdentifier()
         settingRow.key = "value_pref"
         settingRow.title = localizedString("distance_circles")
-        settingRow.iconName = pref.get(appMode) == .RULER_MODE_NO_CIRCLES ? "ic_action_ruler_circle_hide" : "ic_action_ruler_circle"
+        settingRow.iconName = pref.get(appMode) == EOARulerWidgetMode.RULER_MODE_NO_CIRCLES.rawValue ? "ic_action_ruler_circle_hide" : "ic_action_ruler_circle"
         settingRow.descr = localizedString("ruler_circles")
         settingRow.setObj(pref, forKey: "pref")
-        settingRow.setObj(getModeTitle(pref.get(appMode)), forKey: "value")
+        settingRow.setObj(getModeTitle(Int(pref.get(appMode))), forKey: "value")
         settingRow.setObj(getPossibleValues(), forKey: "possible_values")
         
         let compassRow = section.createNewRow()
@@ -106,31 +106,31 @@ class RulerDistanceWidget: OATextInfoWidget {
     private func getPossibleValues() -> [OATableRowData] {
         let darkRow = OATableRowData()
         darkRow.cellType = OASimpleTableViewCell.getIdentifier()
-        darkRow.setObj(OACommonRulerWidgetMode.rulerWidgetMode(toString: .RULER_MODE_DARK)!, forKey: "value")
-        darkRow.title = getModeTitle(.RULER_MODE_DARK)
+        darkRow.setObj(OACommonRulerWidgetMode.getKeyForValue(NSNumber(value: EOARulerWidgetMode.RULER_MODE_DARK.rawValue), defValue: "")!, forKey: "value")
+        darkRow.title = getModeTitle(EOARulerWidgetMode.RULER_MODE_DARK.rawValue)
         
         let lightRow = OATableRowData()
         lightRow.cellType = OASimpleTableViewCell.getIdentifier()
-        lightRow.setObj(OACommonRulerWidgetMode.rulerWidgetMode(toString: .RULER_MODE_LIGHT)!, forKey: "value")
-        lightRow.title = getModeTitle(.RULER_MODE_LIGHT)
+        lightRow.setObj(OACommonRulerWidgetMode.getKeyForValue(NSNumber(value: EOARulerWidgetMode.RULER_MODE_LIGHT.rawValue), defValue: "")!, forKey: "value")
+        lightRow.title = getModeTitle(EOARulerWidgetMode.RULER_MODE_LIGHT.rawValue)
         
         let disabledRow = OATableRowData()
         disabledRow.cellType = OASimpleTableViewCell.getIdentifier()
-        disabledRow.setObj(OACommonRulerWidgetMode.rulerWidgetMode(toString: .RULER_MODE_NO_CIRCLES)!, forKey: "value")
-        disabledRow.title = getModeTitle(.RULER_MODE_NO_CIRCLES)
+        disabledRow.setObj(OACommonRulerWidgetMode.getKeyForValue(NSNumber(value: EOARulerWidgetMode.RULER_MODE_NO_CIRCLES.rawValue), defValue: "")!, forKey: "value")
+        disabledRow.title = getModeTitle(EOARulerWidgetMode.RULER_MODE_NO_CIRCLES.rawValue)
         
         return [darkRow, lightRow, disabledRow]
     }
     
-    private func getModeTitle(_ mode: EOARulerWidgetMode) -> String {
-        switch mode {
+    private func getModeTitle(_ mode: Int) -> String {
+        switch EOARulerWidgetMode(rawValue: mode) {
         case .RULER_MODE_DARK:
             return localizedString("shared_string_dark")
         case .RULER_MODE_LIGHT:
             return localizedString("shared_string_light")
         case .RULER_MODE_NO_CIRCLES:
             return localizedString("shared_string_hide")
-        @unknown default:
+        default:
             fatalError()
         }
     }

@@ -764,7 +764,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
                 // decrease a bit
                 zdelta += 1;
             }
-            double targetZoom = MIN(_mapView.zoom + zdelta, [OAAutoZoomMap getMaxZoom:[_settings.autoZoomMapScale get]]);
+            double targetZoom = MIN(_mapView.zoom + zdelta, [OAAutoZoomMap getMaxZoom:(EOAAutoZoomMap) [_settings.autoZoomMapScale get]]);
             int threshold = [_settings.autoFollowRoute get];
             if (now - _lastTimeAutoZooming > 4.5 && (now - _lastTimeAutoZooming > threshold || !_isUserZoomed))
             {
@@ -790,7 +790,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
     if (speed < 83.f / 3.6)
         time = 60.f;
     
-    time /= [OAAutoZoomMap getCoefficient:[_settings.autoZoomMapScale get]];
+    time /= [OAAutoZoomMap getCoefficient:(EOAAutoZoomMap) [_settings.autoZoomMapScale get]];
     double distToSee = speed * time;
     float zoomDelta = (float) (log(visibleDist / distToSee) / log(2.0f));
     // check if 17, 18 is correct?

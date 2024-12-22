@@ -3002,7 +3002,7 @@
 "help_article_start_with_name" = "Începuturile cu OsmAnd";
 "help_article_start_with_first_steps_name" = "Primii pași";
 "help_article_start_with_main_menu_name" = "Meniul principal";
-"help_article_troubleshooting_maps_data_name" = "Hărți și date";
+"help_article_troubleshooting_maps_data_name" = "Hărți & Date";
 "help_article_troubleshooting_track_recording_issues_name" = "Înregistrări GPS";
 "help_article_widgets_name" = "Widgeturi hartă";
 "help_article_widgets_info_widgets_name" = "Widgeturi informaționale";
@@ -3384,3 +3384,9 @@
 "poi" = "POI";
 "help_article_navigation_auto_car_name" = "Sistemul Android Auto";
 "help_article_navigation_car_play_name" = "CarPlay";
+"help_article_plugins_openplacereviews_name" = "OpenPlaceReview-uri";
+"help_article_troubleshooting_android_auto_name" = "Auto Android";
+"help_article_troubleshooting_general_name" = "Generală";
+"help_article_navigation_routing_brouter_name" = "BRuter";
+"help_article_map_tracks_name" = "Trasee";
+"help_article_map_tracks_track_context_menu_name" = "Meniul contextual al traseului";

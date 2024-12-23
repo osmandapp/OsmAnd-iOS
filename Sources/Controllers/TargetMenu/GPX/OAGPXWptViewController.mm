@@ -98,12 +98,12 @@
         [self buildCommentRow:rows comment:self.wpt.point.comment];
     }
     
-    if (self.wpt.point.link.length > 0)
+    if (self.wpt.point.link && self.wpt.point.link.href && self.wpt.point.link.href.length > 0)
     {
         [rows addObject:[[OARowInfo alloc] initWithKey:nil
                                                   icon:[OATargetInfoViewController getIcon:@"mx_website"]
                                             textPrefix:nil
-                                                  text:self.wpt.point.link
+                                                  text:self.wpt.point.link.href
                                              textColor:UIColorFromRGB(kHyperlinkColor)
                                                 isText:NO
                                              needLinks:YES

@@ -469,7 +469,7 @@
     OASAuthor *author = self.trackMenuDelegate ? [self.trackMenuDelegate getAuthor] : nil;
     BOOL hasAuthorName = author && author.name.length > 0;
     BOOL hasAuthorEmail = author && author.email.length > 0;
-    BOOL hasAuthorLink = author && author.link;
+    BOOL hasAuthorLink = author && author.link && author.link.href;
     if (hasAuthorName || hasAuthorEmail || hasAuthorLink)
     {
         OAGPXTableSectionData *authorSectionData = [OAGPXTableSectionData withData:@{
@@ -500,15 +500,15 @@
         }
         if (hasAuthorLink)
         {
-            BOOL hasText = author.link.length > 0;
+            BOOL hasText = author.link.href.length > 0;
             OAGPXTableCellData *linkCellData = [OAGPXTableCellData withData:@{
                     kTableKey: @"link_author",
                     kCellType: [OAValueTableViewCell getCellIdentifier],
                     kCellTitle: OALocalizedString(@"shared_string_link"),
-                    kCellDesc: hasText ? author.link : @""/*author.link.url.absoluteString*/
+                    kCellDesc: hasText ? author.link.href : @""/*author.link.url.absoluteString*/
             }];
             if (hasText)
-                linkCellData.values[@"url"] = author.link;
+                linkCellData.values[@"url"] = author.link.href;
             [authorSectionData.subjects addObject:linkCellData];
         }
         return authorSectionData;

@@ -3390,3 +3390,11 @@
 "help_article_navigation_routing_brouter_name" = "BRuter";
 "help_article_map_tracks_name" = "Trasee";
 "help_article_map_tracks_track_context_menu_name" = "Meniul contextual al traseului";
+"help_article_personal_import_export_name" = "Import / Export";
+"help_article_map_tracks_appearance_name" = "Apariția pistei";
+"help_article_map_routes_name" = "Rute";
+"help_article_personal_tracks_manage_tracks_name" = "Gestionați piesele";
+"help_article_personal_tracks_smart_folder_name" = "Dosar inteligent (filtru)";
+"help_article_troubleshooting_resources_name" = "Resurse și personalizări";
+"help_article_troubleshooting_video_tutorials_name" = "Tutoriale și ghiduri video";
+"obd_plugin_name" = "Parametrii vehiculului";

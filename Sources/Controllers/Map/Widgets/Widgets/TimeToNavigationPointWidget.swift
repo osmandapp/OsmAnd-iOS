@@ -40,7 +40,7 @@ class TimeToNavigationPointWidget: OASimpleWidget {
     }
     
     override init(frame: CGRect) {
-        self.widgetState = TimeToNavigationPointWidgetState(customId: "", intermediate: true)
+        self.widgetState = TimeToNavigationPointWidgetState(customId: "", intermediate: true, widgetParams: nil)
         self.arrivalTimeOtherwiseTimeToGoPref = widgetState!.getPreference()
         self.cachedArrivalTimeOtherwiseTimeToGo = arrivalTimeOtherwiseTimeToGoPref.get()
         self.cachedLeftSeconds = 0
@@ -165,7 +165,7 @@ class TimeToNavigationPointWidget: OASimpleWidget {
     }
     
     private func getCurrentState() -> TimeToNavigationPointState {
-        return TimeToNavigationPointState.getState(intermediate: widgetState!.isIntermediate(), arrivalOtherwiseTimeToGo: arrivalTimeOtherwiseTimeToGoPref.get())
+        TimeToNavigationPointState.getState(intermediate: widgetState!.isIntermediate(), arrivalOtherwiseTimeToGo: arrivalTimeOtherwiseTimeToGoPref.get())
     }
 }
 

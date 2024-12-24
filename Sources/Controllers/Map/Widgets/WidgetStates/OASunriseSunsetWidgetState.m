@@ -23,7 +23,8 @@
 }
 
 - (instancetype)initWithWidgetType:(OAWidgetType *)widgetType
-                                   customId:(NSString *)customId;
+                          customId:(NSString *)customId
+                      widgetParams:(NSDictionary *)widgetParams;
 {
     self = [super init];
     if (self)
@@ -31,8 +32,8 @@
         self.customId = customId;
         _widgetType = widgetType;
         _settings = [OAAppSettings sharedManager];
-        _preference = [self registerPreference:customId];
-        _sunPositionPreference = [self registerSunPositionPreference:customId];
+        _preference = [self registerPreference:customId widgetParams:widgetParams];
+        _sunPositionPreference = [self registerSunPositionPreference:customId widgetParams:widgetParams];
     }
     return self;
 }
@@ -135,7 +136,7 @@
 
 - (void) copyPrefs:(OAApplicationMode *)appMode customId:(NSString *)customId
 {
-    [[self registerPreference:customId] set:[_preference get:appMode] mode:appMode];
+    [[self registerPreference:customId widgetParams:nil] set:[_preference get:appMode] mode:appMode];
 }
 
 - (NSString *)getPrefId {
@@ -153,21 +154,39 @@
     return prefId;
 }
 
-- (OACommonInteger *)registerPreference:(NSString *)customId
+- (OACommonInteger *)registerPreference:(NSString *)customId widgetParams:(nullable NSDictionary *)widgetParams
 {
     NSString *prefId = [self getPrefId];
     if (customId && customId.length > 0)
         prefId = [prefId stringByAppendingString:customId];
-
-    return [[_settings registerIntPreference:prefId defValue:EOASunriseSunsetTimeLeft] makeProfile];
+    
+    int defValue = EOASunriseSunsetTimeLeft;
+    
+    if (widgetParams)
+    {
+        NSNumber *widgetValue = widgetParams[[self getPrefId]];
+        if (widgetValue)
+            defValue = widgetValue.intValue;
+    }
+    
+    return [[_settings registerIntPreference:prefId defValue:defValue] makeProfile];
 }
 
-- (OACommonInteger *)registerSunPositionPreference:(NSString *)customId {
+- (OACommonInteger *)registerSunPositionPreference:(NSString *)customId widgetParams:(nullable NSDictionary *)widgetParams {
     NSString *prefId = @"sun_position_widget_mode";
     if (customId && customId.length > 0)
         prefId = [prefId stringByAppendingString:customId];
+    
+    int defValue = SunPositionModeSunPositionMode;
+    
+    if (widgetParams)
+    {
+        NSNumber *widgetValue = widgetParams[@"sun_position_widget_mode"];
+        if (widgetValue)
+            defValue = widgetValue.intValue;
+    }
 
-    return [[_settings registerIntPreference:prefId defValue:SunPositionModeSunPositionMode] makeProfile];
+    return [[_settings registerIntPreference:prefId defValue:defValue] makeProfile];
 }
 
 

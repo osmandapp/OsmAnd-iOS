@@ -152,7 +152,6 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
        return (int)(mapScreenWidthInMeters / realScreenWidthInMeters);
 }
 
-
 - (FormattedValue *)formatMapScale:(int)mapScale
 {
     int digitsCount = (int)(log10(mapScale) + 1);

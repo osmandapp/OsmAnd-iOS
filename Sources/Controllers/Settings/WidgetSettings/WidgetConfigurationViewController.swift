@@ -264,6 +264,11 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
                     }
                 } else {
                     vc.pref = item.obj(forKey: "pref") as? OACommonPreference
+                    vc.onWidgetChangeParamsAction = { [weak self] params in
+                        guard let self,
+                              let result = params.first else { return }
+                        widgetConfigurationParams?[result.key] = result.value
+                    }
                 }
                 
                 showMediumSheetViewController(vc, isLargeAvailable: false)
@@ -358,6 +363,7 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
         } else {
             let pref = data.obj(forKey: "pref") as! OACommonBoolean
             pref.set(sw.isOn, mode: selectedAppMode)
+            widgetConfigurationParams?[pref.key] = sw.isOn
         }
         if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "") {
             widgetConfigurationParams?["isVisibleIcon"] = sw.isOn

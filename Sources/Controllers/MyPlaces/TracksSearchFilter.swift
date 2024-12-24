@@ -240,6 +240,17 @@ final class TracksSearchFilter: FilterChangedListener {
         trackItems
     }
     
+    func updateFilteredTracks(newTracks: [TrackItem]) {
+        let newTracksDict = Dictionary(uniqueKeysWithValues: newTracks.map { ($0.dataItem?.gpxFilePath ?? "", $0) })
+        trackItems = trackItems.compactMap { existingTrack in
+            let filePath = existingTrack.dataItem?.gpxFilePath ?? ""
+            return newTracksDict[filePath] ?? (newTracksDict.keys.contains(filePath) ? existingTrack : nil)
+        }
+
+        let existingFilePaths = Set(trackItems.map { $0.dataItem?.gpxFilePath ?? "" })
+        trackItems.append(contentsOf: newTracks.filter { !existingFilePaths.contains($0.dataItem?.gpxFilePath ?? "") })
+    }
+    
     func setCurrentFolder(_ currentFolder: TrackFolder) {
         self.currentFolder = currentFolder
     }

@@ -1777,8 +1777,8 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             var track = getTrackFolderByPath(currentFolderPath)?
                 .getTrackItems()
                 .first(where: { $0.gpxFileName == selectedTrackFilename })
-            if track == nil && isSearchActive {
-                let gpx = item.obj(forKey: trackObjectKey) as! GpxDataItem
+            if track == nil, isSearchActive,
+               let gpx = item.obj(forKey: trackObjectKey) as? GpxDataItem {
                 track = TrackItem(file: gpx.file)
                 track?.dataItem = gpx
             }

@@ -61,6 +61,7 @@
     NSMutableDictionary <NSString *, OAResourceItem *> *_cachedResources;
     
     OAAutoObserverProxy *_weatherSizeCalculatedObserver;
+    OAAutoObserverProxy *_downloadTaskCompletedObserver;
 }
 
 - (instancetype)init
@@ -99,6 +100,10 @@
             [[OAAutoObserverProxy alloc] initWith:self
                                       withHandler:@selector(onWeatherSizeCalculated:withKey:andValue:)
                                        andObserve:_weatherHelper.weatherSizeCalculatedObserver];
+
+    _downloadTaskCompletedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                               withHandler:@selector(onDownloadTaskFinished:withKey:andValue:)
+                                                                andObserve:_app.downloadsManager.completedObservable];
 }
 
 - (void)viewDidLoad
@@ -327,7 +332,7 @@
                     auto task = [self getDownloadTaskFor:resourceId];
                     NSString *title = [OAWeatherHelper checkAndGetRegionName:region];
                     offlineForecastData[@"title"] = title;
-                    offlineForecastData[@"description"] = task && task.state == OADownloadTaskStateRunning
+                    offlineForecastData[@"description"] = task && (task.state == OADownloadTaskStateRunning || task.state == OADownloadTaskStatePaused)
                             ? [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_download_update")
                                                               attributes:@{
                                                                       NSFontAttributeName: [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote],
@@ -1293,6 +1298,39 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self setupView];
         [self.tableView reloadData];
+    });
+}
+
+- (void)onDownloadTaskFinished:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
+{
+    id<OADownloadTask> task = key;
+    
+    // Skip all downloads that are not resources
+    if (![task.key hasPrefix:@"resource:"])
+        return;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        for (NSInteger i = 0; i < _data.count; i++)
+        {
+            NSDictionary *section = _data[i];
+            if ([section[@"key"] isEqualToString:@"status_section"])
+            {
+                NSMutableArray *statusCells = (NSMutableArray *) section[@"cells"];
+                for (NSInteger j = 0; j < statusCells.count; j++)
+                {
+                    NSDictionary *cell = statusCells[j];
+                    NSString *resourceId = cell[@"resourceId"];
+                    if ([task.key isEqualToString:[@"resource:" stringByAppendingString:resourceId]])
+                    {
+                        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:j inSection:i];
+                        NSString *regionId = [OAWeatherHelper checkAndGetRegionId:((OAWorldRegion *) cell[@"region"])];
+                        statusCells[indexPath.row][@"description"] = [OAWeatherHelper getStatusInfoDescription:regionId];
+                        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                        return;
+                    }
+                }
+            }
+        }
     });
 }
 

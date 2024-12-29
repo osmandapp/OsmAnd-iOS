@@ -97,8 +97,7 @@ class DownloadingCellBaseHelper: NSObject {
     func allResourceIds() -> [String] {
         Array(statuses.keys)
     }
-    
-    
+
     // MARK: - Cell setup methods
     
     func getOrCreateCell(_ resourceId: String) -> DownloadingCell? {
@@ -125,8 +124,6 @@ class DownloadingCellBaseHelper: NSObject {
     
     // Override in subclass
     func setupCell(resourceId: String, title: String?, isTitleBold: Bool, desc: String?, leftIconName: String?, rightIconName: String?, isDownloading: Bool) -> DownloadingCell? {
-        
-        guard let hostTableView else { return nil }
         var cell = cells[resourceId]
         if cell == nil {
             let nib = Bundle.main.loadNibNamed(DownloadingCell.reuseIdentifier, owner: self, options: nil)

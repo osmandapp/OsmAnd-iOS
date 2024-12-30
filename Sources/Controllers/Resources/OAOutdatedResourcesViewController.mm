@@ -589,12 +589,16 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
 
 #pragma mark - DownloadingCellResourceHelperDelegate
 
-- (void)onDownloadingCellResourceNeedUpdate
+- (void)onDownloadingCellResourceNeedUpdate:(id<OADownloadTask>)task
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateContent];
         [self.tableView reloadData];
     });
+}
+
+- (void)onStopDownload:(OAResourceSwiftItem *)resourceItem
+{
 }
 
 @end

@@ -247,7 +247,7 @@
 {
     long timestamp = self.wpt.point.time;
     if (timestamp > 0)
-        return [NSDate dateWithTimeIntervalSince1970:timestamp];
+        return [NSDate dateWithTimeIntervalSince1970:timestamp / 1000.0];
     else
         return nil;
 }

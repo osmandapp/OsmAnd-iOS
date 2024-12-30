@@ -59,7 +59,7 @@
         p.name = formattedLocation;
         p.lat = location.latitude;
         p.lon = location.longitude;
-        p.time = (long)[[NSDate date] timeIntervalSince1970];
+        p.time = (long)([[NSDate date] timeIntervalSince1970] * 1000.0);
         OASInt *colorToSave = [[OASInt alloc] initWithInt:[color toARGBNumber]];
         
         [p setColorColor:colorToSave];

@@ -482,12 +482,12 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                 NSMutableArray *elevations = [NSMutableArray array];
                 QList<OsmAnd::FColorARGB> segmentColors;
                 QList<OsmAnd::FColorARGB> segmentWallColors;
-                NSArray<OASTrack *> *tracks = [gpxFile getTracksIncludeGeneralTrack:NO];
+                NSArray<OASTrack *> *tracksWithoutGeneralTrack = [gpxFile getTracksIncludeGeneralTrack:NO];
                 if ([self isSensorLineVisualizationType:dataWrapper.visualization3dByType])
                 {
                     [self processGPXDataElements:gpxFile.tracks withGPX:gpx addToElevations:elevations];
                 }
-                for (OASTrack *track in gpxFile.tracks)
+                for (OASTrack *track in tracksWithoutGeneralTrack)
                 {
                     for (OASTrkSegment *seg in track.segments)
                     {

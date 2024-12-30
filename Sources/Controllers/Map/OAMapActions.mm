@@ -197,17 +197,33 @@
     }
     OASGpxFile *gpxFile = nil;
     NSDictionary<NSString *, OASGpxFile *> *gpxMap = [[OASelectedGPXHelper instance].activeGpx copy];
-    NSString *path = trackItem.dataItem.file.absolutePath;
-    if ([gpxMap objectForKey:path])
+    
+    if ([trackItem isShowCurrentTrack])
     {
-        gpxFile = gpxMap[path];
-        gpxFile.path = path;
+        gpxFile = [OASavingTrackHelper.sharedInstance currentTrack];
     }
     else
     {
-        OASKFile *file = [[OASKFile alloc] initWithFilePath:path];
-        gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
+        OASGpxDataItem *dataItem = trackItem.dataItem;
+        if (dataItem)
+        {
+            NSString *path = dataItem.file.absolutePath;
+            if ([gpxMap objectForKey:path])
+            {
+                gpxFile = gpxMap[path];
+                gpxFile.path = path;
+            }
+            else
+            {
+                if (path.length > 0)
+                {
+                    OASKFile *file = [[OASKFile alloc] initWithFilePath:path];
+                    gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
+                }
+            }
+        }
     }
+
     return gpxFile;
 }
 

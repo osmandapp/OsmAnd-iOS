@@ -1470,22 +1470,9 @@ static BOOL _repositoryUpdated = NO;
     {
         __weak __typeof(self) weakSelf = self;
         dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf reloadWeatherForecastRow];
+            if (weakSelf.tableView)
+                [weakSelf.tableView reloadData];
         });
-    }
-}
-
-- (void)reloadWeatherForecastRow {
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:_weatherForecastRow inSection:_regionMapSection];
-    
-    NSInteger rowsInSection = [self.tableView numberOfRowsInSection:_regionMapSection];
-    if (indexPath.row < rowsInSection)
-    {
-        [self.tableView beginUpdates];
-        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-        [self.tableView endUpdates];
-    } else {
-        NSLog(@"reloadWeatherForecastRow -> Invalid row index for row %ld in section %ld", indexPath.row, _regionMapSection);
     }
 }
 
@@ -3352,9 +3339,13 @@ static BOOL _repositoryUpdated = NO;
 
 #pragma mark - DownloadingCellResourceHelperDelegate
 
-- (void)onDownloadingCellResourceNeedUpdate
+- (void)onDownloadingCellResourceNeedUpdate:(id<OADownloadTask>)task
 {
     [self updateContent];
+}
+
+- (void)onStopDownload:(OAResourceSwiftItem *)resourceItem
+{
 }
 
 @end

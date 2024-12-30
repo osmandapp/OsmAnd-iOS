@@ -2081,3 +2081,9 @@
 "help_article_map_tracks_track_context_menu_name" = "Контекстуално меню на трасе";
 "help_article_troubleshooting_resources_name" = "Ресурси и настройки";
 "sort_subfolders_tracks" = "Сортиране на вложени папки";
+"shared_string_precise" = "Точно";
+"cloud_item_restored" = "%@ е възстановено в облака.";
+"shared_string_round_up" = "Закръглено";
+"track_appearance_3D_visualization" = "Триизмерна визуализация";
+"distance_during_navigation_footer" = "Изберете как информацията за разстоянието да бъде показана в приспособленията (разстояние до точка, следващ завой, пътни платна).\n\nИзберете „Точно“ за точни числа или „Закръглено“ за по-добра четимост.";
+"action_cannot_be_undone" = "Действието е необратимо.";

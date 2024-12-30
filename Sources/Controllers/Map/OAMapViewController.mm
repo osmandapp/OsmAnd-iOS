@@ -3115,7 +3115,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
             if ([OAUtilities isCoordEqual:loc.position.latitude srcLon:loc.position.longitude destLat:location.latitude destLon:location.longitude])
             {
-                self.foundWpt = [[OASWptPt alloc] initWithWptPt:loc];
+                self.foundWpt = loc ? [[OASWptPt alloc] initWithWptPt:loc] : [[OASWptPt alloc] init];
                 self.foundWptDocPath = key;
                 
                 found = YES;
@@ -3153,7 +3153,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
             if ([OAUtilities isCoordEqual:loc.position.latitude srcLon:loc.position.longitude destLat:location.latitude destLon:location.longitude])
             {
-                self.foundWpt = [[OASWptPt alloc] initWithWptPt:loc];
+                self.foundWpt = loc ? [[OASWptPt alloc] initWithWptPt:loc] : [[OASWptPt alloc] init];
                 self.foundWptDocPath = _gpxFilePathTemp;
                 
                 found = YES;
@@ -3285,7 +3285,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
                     if ([OAUtilities doublesEqualUpToDigits:5 source:w.position.latitude destination:self.foundWpt.lat] &&
                         [OAUtilities doublesEqualUpToDigits:5 source:w.position.longitude destination:self.foundWpt.lon])
                     {
-                        OASWptPt *w = [[OASWptPt alloc] initWithWptPt:self.foundWpt];
+                        OASWptPt *w = self.foundWpt ? [[OASWptPt alloc] initWithWptPt:self.foundWpt] : [[OASWptPt alloc] init];
                         [gpxFile addPointPoint:w];
                         OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
                         [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[self.foundWpt getColor]]];
@@ -3349,7 +3349,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             {
                 OASGpxFile *gpxFile = value;
                 
-                OASWptPt *w = [[OASWptPt alloc] initWithWptPt:wpt];
+                OASWptPt *w = wpt ? [[OASWptPt alloc] initWithWptPt:wpt] : [[OASWptPt alloc] init];
                 [gpxFile addPointPoint:w];
                 
                 OAGPXAppearanceCollection *appeacaneCollection = [OAGPXAppearanceCollection sharedInstance];
@@ -3386,7 +3386,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         {
             OASGpxFile *gpxFile = _gpxFilesTemp.firstObject;
             
-            OASWptPt *w = [[OASWptPt alloc] initWithWptPt:wpt];
+            OASWptPt *w = wpt ? [[OASWptPt alloc] initWithWptPt:wpt] : [[OASWptPt alloc] init];
             [gpxFile addPointPoint:w];
 
             OAGPXAppearanceCollection *appeacaneCollection = [OAGPXAppearanceCollection sharedInstance];

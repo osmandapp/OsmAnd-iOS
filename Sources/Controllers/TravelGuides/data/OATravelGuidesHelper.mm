@@ -347,7 +347,7 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
         track.segments = segments;
 
         gpxFile = [[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]];
-        gpxFile.metadata.time = [NSDate date].timeIntervalSince1970;
+        gpxFile.metadata.time = (long)([NSDate date].timeIntervalSince1970 * 1000.0);
         auto extensions = gpxFile.metadata.getExtensionsToWrite;
         if (title)
             extensions[@"article_title"] = title;
@@ -372,7 +372,7 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
         if (!gpxFile)
         {
             gpxFile = [[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]];
-            gpxFile.metadata.time = [NSDate date].timeIntervalSince1970;
+            gpxFile.metadata.time = (long)([NSDate date].timeIntervalSince1970 * 1000.0);
             auto extensions = gpxFile.metadata.getExtensionsToWrite;
             if (title)
                 extensions[@"article_title"] = title;

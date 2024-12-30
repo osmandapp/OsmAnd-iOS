@@ -243,9 +243,9 @@
 
 }
     
-- (long)getLastTrackPointTime
+- (double)getLastTrackPointTime
 {
-    long __block res = 0;
+    double __block res = 0.0;
     dispatch_sync(dbQueue, ^{
         
         const char *dbpath = [databasePath UTF8String];
@@ -260,7 +260,7 @@
             {
                 while (sqlite3_step(statement) == SQLITE_ROW)
                 {
-                    res = (long)sqlite3_column_double(statement, 0);
+                    res = sqlite3_column_double(statement, 0);
                     break;
                 }
                 sqlite3_finalize(statement);
@@ -362,8 +362,8 @@
     
     [self setupCurrentTrack];
     
-    _currentTrack.modifiedTime = (long)[[NSDate date] timeIntervalSince1970];
-    
+    _currentTrack.modifiedTime = (long)([[NSDate date] timeIntervalSince1970] * 1000.0);
+
     [self prepareCurrentTrackForRecording];
 }
 
@@ -394,7 +394,7 @@
                 NSDateFormatter *simpleFormat = [[NSDateFormatter alloc] init];
                 [simpleFormat setDateFormat:@"HH-mm_EEE"];
                 
-                NSString *fileName = [NSString stringWithFormat:@"%@_%@", f, [simpleFormat stringFromDate:[NSDate dateWithTimeIntervalSince1970:pt.time]]];
+                NSString *fileName = [NSString stringWithFormat:@"%@_%@", f, [simpleFormat stringFromDate:[NSDate dateWithTimeIntervalSince1970:pt.time / 1000.0]]];
                 fout = [NSString stringWithFormat:@"%@%@%@.gpx", _app.gpxPath, recordedTrackFolder, fileName];
                 int ind = 1;
                 while ([fileManager fileExistsAtPath:fout]) {
@@ -498,8 +498,8 @@
                     
                     wpt.lat = lat;
                     wpt.lon = lon;
-                    wpt.time = (long)sqlite3_column_double(statement, 2);
-                    
+                    wpt.time = (long)(sqlite3_column_double(statement, 2) * 1000.0);
+
                     if (sqlite3_column_text(statement, 3) != nil)
                     {
                         wpt.name = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 3)];
@@ -524,8 +524,8 @@
                         [wpt setBackgroundTypeBackType:[[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 8)]];
                     }
 
-                    NSString *date = [fmt stringFromDate:[NSDate dateWithTimeIntervalSince1970:wpt.time]];
-                    
+                    NSString *date = [fmt stringFromDate:[NSDate dateWithTimeIntervalSince1970:wpt.time / 1000.0]];
+
                     if (fillCurrentTrack) {
                         gpx = _currentTrack;
                     } else {
@@ -582,7 +582,7 @@
                     pt.speed = sqlite3_column_double(statement, 3);
                     double hdop = sqlite3_column_double(statement, 4);
                     pt.hdop = hdop == 0 ? NAN : hdop;
-                    pt.time = (long)sqlite3_column_double(statement, 5);
+                    pt.time = (long)(sqlite3_column_double(statement, 5) * 1000.0);
                     double heading = sqlite3_column_double(statement, 6);
                     pt.heading = heading == kTrackNoHeading ? NAN : heading;
                     const unsigned char *pluginsInfoChar = sqlite3_column_text(statement, 7);
@@ -625,7 +625,7 @@
                         segment = [[OASTrkSegment alloc] init];
                         segment.points = [NSMutableArray array];
                         
-                        NSString *date = [fmt stringFromDate:[NSDate dateWithTimeIntervalSince1970:pt.time]];
+                        NSString *date = [fmt stringFromDate:[NSDate dateWithTimeIntervalSince1970:pt.time / 1000.0]];
                         
                         if (fillCurrentTrack)
                             gpx = _currentTrack;
@@ -769,7 +769,7 @@
                    alt:(double)alt
                  speed:(double)speed
                   hdop:(double)hdop
-                  time:(long)time
+                  time:(double)time
                heading:(double)heading
            pluginsInfo:(NSString *)pluginsInfo
 {
@@ -792,7 +792,7 @@
 
     NSDictionary<NSString *, NSString *> *extensions = [self getPluginsExtensions:pluginsInfo];
     
-    OASWptPt *ptNew = [[OASWptPt alloc] initWithLat:lat lon:lon time:time ele:alt speed:speed hdop:hdop heading:heading];
+    OASWptPt *ptNew = [[OASWptPt alloc] initWithLat:lat lon:lon time:time * 1000.0 ele:alt speed:speed hdop:hdop heading:heading];
     if (extensions.count > 0)
     {
         [OASGpxUtilities.shared assignExtensionWriterWptPt:ptNew extensions:extensions regularExtensionsKey:@"plugins"];
@@ -800,7 +800,7 @@
     [self addTrackPointNew:ptNew newSegment:newSegment time:time];
 }
 
-- (void)addTrackPointNew:(OASWptPt *)pt newSegment:(BOOL)newSegment time:(long)time {
+- (void)addTrackPointNew:(OASWptPt *)pt newSegment:(BOOL)newSegment time:(double)time {
     OASTrack *track = [_currentTrack tracks].firstObject;
     
     BOOL segmentAdded = NO;
@@ -822,7 +822,7 @@
         [_currentTrack processPoints];
     }
     
-    _currentTrack.modifiedTime = time;
+    _currentTrack.modifiedTime = time * 1000.0;
 
 }
 
@@ -852,7 +852,7 @@
                       alt:(double)alt
                     speed:(double)speed
                      hdop:(double)hdop
-                     time:(long)time
+                     time:(double)time
                   heading:(double)heading
               pluginsInfo:(NSString *)pluginsInfo
 {

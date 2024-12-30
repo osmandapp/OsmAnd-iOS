@@ -155,17 +155,17 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     return self;
 }
 
-- (instancetype)initWithLat:(double)lat lon:(double)lon name:(NSString *)name category:(NSString *)category altitude:(double)altitude timestamp:(int)timestamp
+- (instancetype)initWithLat:(double)lat lon:(double)lon name:(NSString *)name category:(NSString *)category altitude:(double)altitude timestamp:(long)timestamp
 {
     self = [super init];
     if (self) {
-        _favorite = [self createFavoritePointWithLat:lat lon:lon altitude:altitude timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp] name:name description:nil address:nil category:category iconName:nil backgroundIconName:nil color:nil visible:YES];
-        
+        _favorite = [self createFavoritePointWithLat:lat lon:lon altitude:altitude timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp / 1000.0] name:name description:nil address:nil category:category iconName:nil backgroundIconName:nil color:nil visible:YES];
+
         if (!name)
             [self setName:name];
         
         if (timestamp > 0)
-            [self setTimestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
+            [self setTimestamp:[NSDate dateWithTimeIntervalSince1970:timestamp / 1000.0]];
         else
             [self setTimestamp:[NSDate date]];
         
@@ -670,7 +670,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     if (self.getAltitude > 0)
         pt.ele = self.getAltitude;
 
-    pt.time = self.getTimestamp ? self.getTimestamp.timeIntervalSince1970 : 0;
+    pt.time = (long)(self.getTimestamp ? self.getTimestamp.timeIntervalSince1970 * 1000.0 : 0.0);
 
     OASMutableDictionary *exts = pt.getExtensionsToWrite;
     if (!self.isVisible)

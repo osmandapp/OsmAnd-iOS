@@ -495,6 +495,10 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
 
         for (NSString *key in map.allKeys)
         {
+            if (!key || key.length == 0)
+            {
+                 continue;
+            }
             if ([key hasPrefix:privatePrefix])
             {
                 NSString *shortKey = [key stringByReplacingOccurrencesOfString:privatePrefix withString:@""];
@@ -520,7 +524,10 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
             else if ([key hasPrefix:osmPrefix])
             {
                 NSString *shortKey = [key stringByReplacingOccurrencesOfString:osmPrefix withString:@""];
-                additionalInfo[shortKey] = map[key];
+                if (shortKey.length > 0)
+                {
+                    additionalInfo[shortKey] = map[key];
+                }
             }
             else
             {

@@ -23,11 +23,15 @@ extension WptPt {
     
     func getAmenity() -> OAPOI? {
         let extensionsToRead = getExtensionsToRead()
-        guard extensionsToRead.count > 0 else {
+        let validExtensions = extensionsToRead.filter { key, value in
+            key.count > 0 && value.count > 0
+        }
+        
+        guard validExtensions.count > 0 else {
             return nil
         }
         
-        return OAPOI.fromTagValue(extensionsToRead, privatePrefix: "amenity_", osmPrefix: "osm_tag_")
+        return OAPOI.fromTagValue(validExtensions, privatePrefix: "amenity_", osmPrefix: "osm_tag_")
     }
     
     func setAmenity(_ amenity: OAPOI?) {

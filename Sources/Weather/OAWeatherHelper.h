@@ -80,7 +80,6 @@ typedef NS_ENUM(NSInteger, EOAWeatherAutoUpdate)
 
 - (NSInteger)getProgressDestination:(NSString *)regionId;
 
-- (OAResourceItem *)generateResourceItem:(OAWorldRegion *)region;
 + (NSAttributedString *)getStatusInfoDescription:(NSString *)regionId;
 + (NSString *)getAccuracyDescription:(NSString *)regionId;
 + (NSString *)getUpdatesDateFormat:(NSString *)regionId next:(BOOL)next;

@@ -471,7 +471,7 @@
 
 #pragma mark - DownloadingCellResourceHelperDelegate
 
-- (void)onDownloadingCellResourceNeedUpdate
+- (void)onDownloadingCellResourceNeedUpdate:(id<OADownloadTask>)task
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!self.isViewLoaded)
@@ -482,6 +482,10 @@
         if (self.delegate)
             [self.delegate onUpdateForecast];
     });
+}
+
+- (void)onStopDownload:(OAResourceSwiftItem *)resourceItem
+{
 }
 
 #pragma mark - OAWeatherCacheSettingsDelegate

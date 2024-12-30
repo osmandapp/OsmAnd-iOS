@@ -3339,9 +3339,13 @@ static BOOL _repositoryUpdated = NO;
 
 #pragma mark - DownloadingCellResourceHelperDelegate
 
-- (void)onDownloadingCellResourceNeedUpdate
+- (void)onDownloadingCellResourceNeedUpdate:(id<OADownloadTask>)task
 {
     [self updateContent];
+}
+
+- (void)onStopDownload:(OAResourceSwiftItem *)resourceItem
+{
 }
 
 @end

@@ -1638,12 +1638,17 @@ includeHidden:(BOOL)includeHidden
         OsmAndAppInstance app = [OsmAndApp instance];
         id<OADownloadTask> task;
         if (!item.downloadTask)
+        {
             item.downloadTask = task = [app.downloadsManager downloadTaskWithRequest:request
-                                                                              andKey:[@"resource:" stringByAppendingString:[NSString stringWithFormat:@"%@%@", [item.worldRegion.downloadsIdPrefix lowerCase], @"tifsqlite"]] 
+                                                                              andKey:[@"resource:" stringByAppendingString:[NSString stringWithFormat:@"%@%@", [item.worldRegion.downloadsIdPrefix lowerCase], @"tifsqlite"]]
                                                                              andName:name
                                                                            andHidden:item.hidden];
+        }
         else
+        {
             task = item.downloadTask;
+        }
+        item.downloadTask.resourceItem = item;
 
         if (onTaskCreated)
             onTaskCreated(task);

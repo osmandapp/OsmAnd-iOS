@@ -1468,10 +1468,24 @@ static BOOL _repositoryUpdated = NO;
 {
     if (item.resourceType == OsmAndResourceType::WeatherForecast && self.region == item.worldRegion)
     {
+        __weak __typeof(self) weakSelf = self;
         dispatch_async(dispatch_get_main_queue(), ^{
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:_weatherForecastRow inSection:_regionMapSection];
-            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+            [weakSelf reloadWeatherForecastRow];
         });
+    }
+}
+
+- (void)reloadWeatherForecastRow {
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:_weatherForecastRow inSection:_regionMapSection];
+    
+    NSInteger rowsInSection = [self.tableView numberOfRowsInSection:_regionMapSection];
+    if (indexPath.row < rowsInSection)
+    {
+        [self.tableView beginUpdates];
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView endUpdates];
+    } else {
+        NSLog(@"reloadWeatherForecastRow -> Invalid row index for row %ld in section %ld", indexPath.row, _regionMapSection);
     }
 }
 

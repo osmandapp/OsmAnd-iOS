@@ -2361,7 +2361,7 @@
 
 "date_of_creation" = "Date of creation";
 "altitud_and_elevation" = "Altitude & Elevation";
-"max_altitude" = "Max altitude";
+"max_altitude" = "Max. altitude";
 "shared_string_sensors" = "Sensors";
 "max_sensor_speed" = "Sensor speed, max";
 "avg_sensor_speed" = "Sensor speed, average";

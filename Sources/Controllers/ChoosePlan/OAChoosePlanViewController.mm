@@ -238,7 +238,7 @@
     _buttonPrivacyPolicy.labelTitle.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 
     [self.buttonNavigationBack setTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
-    [self.buttonNavigationBack setImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
+    [self.buttonNavigationBack setImage:[UIImage templateImageNamed:ACImageNameIcNavbarChevron] forState:UIControlStateNormal];
     [self.buttonNavigationRestore setTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
     UIImage *image = [UIImage templateImageNamed:_type == EOAChoosePlan ? @"ic_custom_reset" : @"ic_navbar_help"];
     [self.buttonNavigationRestore setImage:image

@@ -426,10 +426,10 @@
             else if (fileItem.subtype == EOASettingsItemFileSubtypeVoice)
                 name = [NSString stringWithFormat:@"%@ (%@)", name, OALocalizedString(@"shared_string_recorded")];
         }
-        else if (!name)
-        {
-            name = OALocalizedString(@"res_unknown");
-        }
+    }
+    if (!name)
+    {
+        name = OALocalizedString(@"res_unknown");
     }
 
     long timeMs = 0;

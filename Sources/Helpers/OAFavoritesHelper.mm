@@ -1089,6 +1089,13 @@ static NSOperationQueue *_favQueue;
 
 + (UIImage *) getCompositeIcon:(NSString *)icon backgroundIcon:(NSString *)backgroundIcon color:(UIColor *)color
 {
+    if (!icon)
+        icon = DEFAULT_ICON_NAME_KEY;
+    if (!backgroundIcon)
+        backgroundIcon = DEFAULT_ICON_SHAPE_KEY;
+    if (!color)
+        color = [OADefaultFavorite getDefaultColor];
+    
     UIImage *resultImg;
     NSString *backgrounfIconName = [@"bg_point_" stringByAppendingString:backgroundIcon];
     UIImage *backgroundImg = [UIImage imageNamed:backgrounfIconName];

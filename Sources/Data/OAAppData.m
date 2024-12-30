@@ -1614,6 +1614,7 @@
 
 - (BOOL) restorePointToStart
 {
+    _pointToStart = _pointToStartBackup;
     return (_pointToStartBackup != nil);
 }
 

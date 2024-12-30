@@ -61,14 +61,11 @@
 
 - (void) enterRoutePlanningMode:(CLLocation *)from fromName:(OAPointDescription *)fromName
 {
-    [self enterRoutePlanningMode:from fromName:fromName checkDisplayedGpx:YES];
-}
-
-- (void) enterRoutePlanningMode:(CLLocation *)from fromName:(OAPointDescription *)fromName checkDisplayedGpx:(BOOL)shouldCheck
-{
-    BOOL useIntermediatePointsByDefault = true;
-    
-    [self enterRoutePlanningModeGivenGpx:nil from:from fromName:fromName useIntermediatePointsByDefault:useIntermediatePointsByDefault showDialog:YES];
+    [self enterRoutePlanningModeGivenGpx:nil
+                                    from:from
+                                fromName:fromName
+          useIntermediatePointsByDefault:YES
+                              showDialog:YES];
 }
 
 - (void) enterRoutePlanningModeGivenGpx:(OASTrackItem *)trackItem useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault showDialog:(BOOL)showDialog
@@ -103,8 +100,13 @@
     return nil;
 }
 
-- (void) enterRoutePlanningModeGivenGpx:(OASGpxFile *)gpxFile appMode:(OAApplicationMode *)appMode path:(NSString *)path from:(CLLocation *)from fromName:(OAPointDescription *)fromName
-         useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault showDialog:(BOOL)showDialog
+- (void) enterRoutePlanningModeGivenGpx:(OASGpxFile *)gpxFile
+                                appMode:(OAApplicationMode *)appMode
+                                   path:(NSString *)path
+                                   from:(CLLocation *)from
+                               fromName:(OAPointDescription *)fromName
+         useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault
+                             showDialog:(BOOL)showDialog
 {
     [_settings.useIntermediatePointsNavigation set:useIntermediatePointsByDefault];
     OATargetPointsHelper *targets = [OATargetPointsHelper sharedInstance];

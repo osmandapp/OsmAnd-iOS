@@ -10,6 +10,7 @@
 #import "OABasicEditingViewController.h"
 #import "OAAdvancedEditingViewController.h"
 #import "OAUploadOsmPointsAsyncTask.h"
+#import "OAOsmUploadPOIViewController.h"
 #import "OASizes.h"
 #import "OAEditPOIData.h"
 #import "OAEntity.h"
@@ -163,7 +164,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
     self.navigationController.navigationBar.tintColor = [UIColor colorNamed:ACColorNameNavBarTextColorPrimary];
     self.navigationController.navigationBar.prefersLargeTitles = NO;
     
-    _backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] style:UIBarButtonItemStylePlain target:self action:@selector(onBackPressed)];
+    _backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:ACImageNameIcNavbarChevron] style:UIBarButtonItemStylePlain target:self action:@selector(onBackPressed)];
     [self.navigationController.navigationBar.topItem setLeftBarButtonItem:_backButton animated:YES];
     
     self.segmentContainerView.backgroundColor = [self.navigationController.navigationBar.scrollEdgeAppearance.backgroundColor colorWithAlphaComponent:1.];
@@ -277,12 +278,15 @@ typedef NS_ENUM(NSInteger, EditingTab)
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_delete_confirmation_descr") preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [OAOsmEditingViewController commitEntity:DELETE entity:_editPoiData.getEntity entityInfo:[_editingUtil getEntityInfo:_editPoiData.getEntity.getId] comment:@"" shouldClose:NO editingUtil:_editingUtil changedTags:nil callback:^(OAEntity * entity){
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.navigationController popViewControllerAnimated:YES];
-                [[OARootViewController instance].mapPanel targetHide];
-            });
-        }];
+        
+        OAOpenStreetMapPoint *p = [[OAOpenStreetMapPoint alloc] init];
+        [p setEntity:_editPoiData.getEntity];
+        [p setAction:DELETE];
+        [p setComment:@""];
+        
+        OAOsmUploadPOIViewController *dialog = [[OAOsmUploadPOIViewController alloc] initWithPOIItems:@[p]];
+        dialog.delegate = self.delegate;
+        [OARootViewController.instance.navigationController pushViewController:dialog animated:YES];
     }]];
     [self presentViewController:alert animated:YES completion:nil];
     
@@ -449,8 +453,10 @@ typedef NS_ENUM(NSInteger, EditingTab)
         [p setEntity:entity];
         [p setAction:action];
         [p setComment:comment];
-        OAUploadOsmPointsAsyncTask *uploadTask  = [[OAUploadOsmPointsAsyncTask alloc] initWithPlugin:(OAOsmEditingPlugin *)[OAPluginsHelper getPlugin:OAOsmEditingPlugin.class] points:@[p] closeChangeset:closeChangeset anonymous:NO comment:comment];
-        [uploadTask uploadPoints];
+        
+        OAOsmUploadPOIViewController *dialog = [[OAOsmUploadPOIViewController alloc] initWithPOIItems:@[p]];
+        dialog.delegate = editingDelegate;
+        [OARootViewController.instance.navigationController pushViewController:dialog animated:YES];
     }
 }
 

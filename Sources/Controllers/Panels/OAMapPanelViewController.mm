@@ -124,6 +124,7 @@
 #define kMaxRoadDistanceInMeters 1000
 #define kMaxZoom 22.0f
 
+static NSString *topIndexBrandPrefix = @"top_index_brand";
 static int MAX_ZOOM_OUT_STEPS = 2;
 
 typedef enum
@@ -1202,7 +1203,7 @@ typedef enum
         else if ([object isKindOfClass:[OAPOIUIFilter class]])
         {
             OAPOIUIFilter *filter = (OAPOIUIFilter *) object;
-            filterByName = [filter.filterId isEqualToString:BY_NAME_FILTER_ID];
+            filterByName = [filter.filterId isEqualToString:BY_NAME_FILTER_ID] || [filter.filterId hasPrefix:topIndexBrandPrefix];
             objectLocalizedName = filterByName ? filter.filterByName : filter.name;
             phrase = [searchUICore resetPhrase];
         }
@@ -1745,7 +1746,8 @@ typedef enum
     self.shadowButton = [[UIButton alloc] initWithFrame:[self shadowButtonRect]];
     [_shadowButton setBackgroundColor:[UIColor colorWithWhite:0.3 alpha:0]];
     [_shadowButton addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
-    if (withLongPressEvent) {
+    if (withLongPressEvent)
+    {
         _shadowLongPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:withLongPressEvent];
         [_shadowButton addGestureRecognizer:_shadowLongPress];
     }
@@ -1758,7 +1760,8 @@ typedef enum
     if (_shadowButton)
     {
         [_shadowButton removeFromSuperview];
-        if (_shadowLongPress) {
+        if (_shadowLongPress)
+        {
             [_shadowButton removeGestureRecognizer:_shadowLongPress];
             _shadowLongPress = nil;
         }
@@ -1924,7 +1927,7 @@ typedef enum
 {
     [_mapActions enterRoutePlanningMode:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude
                                                                    longitude:targetPoint.location.longitude]
-                               fromName:targetPoint.pointDescription checkDisplayedGpx:NO];
+                               fromName:targetPoint.pointDescription];
 }
 
 - (OAPOI *) getTargetPointPoi

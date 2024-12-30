@@ -12,6 +12,7 @@
 #import "OAColors.h"
 #import "OASwitchTableViewCell.h"
 #import "OATitleSliderTableViewCell.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kOABottomSheetWidth 320.
 #define kOABottomSheetWidthIPad (DeviceScreenWidth / 2)
@@ -89,7 +90,8 @@
     self.buttonsView.layoutMargins = UIEdgeInsetsMake(0, 20, 0, 20);
     self.buttonsSectionDividerView.backgroundColor = UIColor.clearColor;;
 
-    [self.leftIconView setImage:[UIImage imageNamed:@"ic_custom_routes"]];
+    self.leftIconView.image = [UIImage imageNamed:ACImageNameIcCustomRoutes];
+    self.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
     
     self.exitButton.layer.cornerRadius = 9.;
     self.saveButton.layer.cornerRadius = 9.;

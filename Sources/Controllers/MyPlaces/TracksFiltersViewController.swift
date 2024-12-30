@@ -107,7 +107,7 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
     }
     
     override func getLeftNavbarButtonTitle() -> String? {
-        localizedString("shared_string_cancel")
+        localizedString("shared_string_close")
     }
     
     override func getBottomAxisMode() -> NSLayoutConstraint.Axis {

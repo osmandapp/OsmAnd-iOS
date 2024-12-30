@@ -62,6 +62,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *waypointButtonRemove;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *exitRefTextContainerWidthConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *stackViewLeadingConstraint;
 
 @end
 
@@ -101,6 +102,9 @@
     UIButton *_shadowButton;
     UIButton *_shadowWaypointButton;
 }
+
+static int stackViewLeadingDefaultValue = 2;
+static int stackViewLeadingToRefViewPadding = 16;
 
 - (instancetype) init
 {
@@ -220,6 +224,8 @@
         _shieldIcon.frame = shieldFrame;
     }
     CGRect exitRefFrame = _exitRefTextContainer.frame;
+    
+    self.stackViewLeadingConstraint.constant = stackViewLeadingDefaultValue;
     if (showExit)
     {
         CGSize size = [OAUtilities calculateTextBounds:_exitRefText.text width:w font:[UIFont systemFontOfSize:17 weight:UIFontWeightSemibold]];
@@ -231,6 +237,8 @@
             self.exitRefTextContainerWidthConstraint.constant = size.width;
         else
             self.exitRefTextContainerWidthConstraint.constant = 40;
+        
+        self.stackViewLeadingConstraint.constant = self.exitRefTextContainerWidthConstraint.constant + stackViewLeadingToRefViewPadding;
     }
     
     CGFloat margin = _turnView.subviews.count > 0 ? 4 + _turnView.bounds.size.width + 2 : 2;
@@ -371,9 +379,10 @@
         _waypointImage.image = [pnt getImage:NO];
         
         NSString *descr = @"";
-        OASWptPt *wpt = (OASWptPt *)pnt.point;
-        if (wpt)
+        
+        if (pnt && [pnt.point isKindOfClass:[OASWptPt class]])
         {
+            OASWptPt *wpt = (OASWptPt *)pnt.point;
             OAPointDescription *pd = [[OAPointDescription alloc] initWithType:POINT_TYPE_WPT name:wpt.name];
             if (pd.name && pd.name.length > 0)
                 descr = pd.name;

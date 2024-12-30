@@ -24,6 +24,7 @@
 #import "OAAnnounceTimeDistances.h"
 #import "OARoutingHelper+cpp.h"
 #import <AudioToolbox/AudioToolbox.h>
+#import "OsmAndSharedWrapper.h"
 
 #include <routeSegmentResult.h>
 
@@ -970,7 +971,21 @@ std::string preferredLanguage;
         {
             text = [text stringByAppendingString:@", "];
         }
-        text = [text stringByAppendingString:[OAPointDescription getSimpleName:point.point]];
+        
+        if (point && [point.point isKindOfClass:[OASWptPt class]])
+        {
+            OASWptPt *wptPt = (OASWptPt *)point.point;
+            OAPointDescription *pd = [[OAPointDescription alloc] initWithType:POINT_TYPE_WPT name:wptPt.name];
+            NSString *simpleName = [pd getSimpleName:YES];
+            if (simpleName)
+                text = [text stringByAppendingString:simpleName];
+        }
+        else
+        {
+            NSString *simpleName = [OAPointDescription getSimpleName:point.point];
+            if (simpleName)
+                text = [text stringByAppendingString:simpleName];
+        }
     }
     return text;
 }

@@ -241,7 +241,7 @@
 {
     const auto latLon = OsmAnd::Utilities::convert31ToLatLon(self.mapViewController.mapView.target31);
     
-    OASWptPt *point = [[OASWptPt alloc] initWithWptPt:_editingCtx.originalPointToMove];
+    OASWptPt *point = _editingCtx.originalPointToMove ? [[OASWptPt alloc] initWithWptPt:_editingCtx.originalPointToMove] : [[OASWptPt alloc] init];
     point.lat = latLon.latitude;
     point.lon = latLon.longitude;
     [point doCopyExtensionsE:_editingCtx.originalPointToMove];

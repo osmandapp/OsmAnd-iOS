@@ -83,7 +83,7 @@ class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
     
     override func updateInfo() -> Bool {
         let routingHelper = OARoutingHelper.sharedInstance()!
-        guard let marker = getMarker(), !routingHelper.isRoutePlanningMode(), routingHelper.isFollowingMode() else {
+        guard let marker = getMarker() else {
             cachedMeters = 0
             lastUpdatedTime = 0
             setText(nil, subtext: nil)

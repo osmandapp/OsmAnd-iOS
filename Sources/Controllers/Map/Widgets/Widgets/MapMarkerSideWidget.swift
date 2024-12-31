@@ -83,7 +83,7 @@ class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
     
     override func updateInfo() -> Bool {
         let routingHelper = OARoutingHelper.sharedInstance()!
-        guard let marker = getMarker(), !routingHelper.isRoutePlanningMode(), !routingHelper.isFollowingMode() else {
+        guard let marker = getMarker(), !routingHelper.isRoutePlanningMode(), routingHelper.isFollowingMode() else {
             cachedMeters = 0
             lastUpdatedTime = 0
             setText(nil, subtext: nil)
@@ -140,8 +140,24 @@ class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
         }
         
         let estimatedLeftSeconds = Int(Double(distance) / Double(averageSpeed))
-        let estimatedArrivalTime = currentTime + TimeInterval(estimatedLeftSeconds)
-        setTimeText(estimatedArrivalTime)
+        updateArrivalTime(estimatedLeftSeconds)
+    }
+
+    private func updateArrivalTime(_ leftSeconds: Int) -> Bool {
+        let toFindTime = Date().timeIntervalSince1970 + TimeInterval(leftSeconds)
+        let dateFormatter = DateFormatter()
+        let toFindDate = Date(timeIntervalSince1970: toFindTime)
+        if !OAUtilities.is12HourTimeFormat() {
+            dateFormatter.dateFormat = "HH:mm"
+            setText(dateFormatter.string(from: toFindDate), subtext: nil)
+        } else {
+            dateFormatter.dateFormat = "h:mm"
+            let timeStr = dateFormatter.string(from: toFindDate)
+            dateFormatter.dateFormat = "a"
+            let aStr = dateFormatter.string(from: toFindDate)
+            setText(timeStr, subtext: aStr)
+        }
+        return true
     }
     
     private func updateIconIfNeeded(marker: OADestination, newMode: SideMarkerMode, modeChanged: Bool) {

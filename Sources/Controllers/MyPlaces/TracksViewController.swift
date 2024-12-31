@@ -186,9 +186,12 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+        if let asyncLoader {
+            asyncLoader.cancel()
+        }
         tabBarController?.navigationItem.searchController = nil
         navigationItem.searchController = nil
+        super.viewWillDisappear(animated)
     }
     
     private func reloadTracks(forceLoad: Bool = false) {

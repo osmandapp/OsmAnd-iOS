@@ -3547,7 +3547,7 @@
 "all_folders" = "Svi folderi";
 "not_specified" = "Nije naznačeno";
 "shared_string_minute_lowercase" = "min";
-"max_altitude" = "Maksimalna nadmorska visina";
+"max_altitude" = "Maks. nadmorska visina";
 "shared_string_sensors" = "Senzori";
 "max_sensor_speed" = "Brzina senzora, maksimalna";
 "avg_sensor_speed" = "Brzina senzora, srednja";

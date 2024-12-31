@@ -2089,3 +2089,4 @@
 "action_cannot_be_undone" = "Действието е необратимо.";
 "external_input_device" = "Външни устройства за въвеждане";
 "animate_my_location_descr" = "Плавно преместване на картата при движение";
+"toggle_day_night" = "Превключване дневен/нощен режим";

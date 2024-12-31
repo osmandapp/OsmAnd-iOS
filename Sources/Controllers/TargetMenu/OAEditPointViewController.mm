@@ -460,7 +460,7 @@
     _backgroundIcons = [NSArray arrayWithArray:tempBackgroundIcons];
 
     _selectedBackgroundIndex = [_backgroundIconNames indexOfObject:_isNewItemAdding && selectedGroup ? selectedGroup.backgroundType : [_pointHandler getBackgroundIcon]];
-    if (_selectedBackgroundIndex == -1)
+    if (_selectedBackgroundIndex == -1 || _selectedBackgroundIndex >= _backgroundIconNames.count)
         _selectedBackgroundIndex = 0;
 }
 

@@ -21,8 +21,8 @@
 "day_night_info" = "Informacije dan/noć";
 "daynight_mode_auto" = "Izlazak/zalazak sunca";
 "auto_follow_location_enabled" = "Automatsko centriranje karte je uključeno.";
-"unknown_location" = "Položaj nije poznat";
-"animate_routing_route_not_calculated" = "Molimo vas, prvo izračunajte rutu";
+"unknown_location" = "Pozicija još nije poznata.";
+"animate_routing_route_not_calculated" = "Najprije izračunajte rutu";
 "settings_preset" = "Standardni profil";
 "settings_preset_descr" = "Odaberite korisnički profil s već prilagođenim kartama i navigacijskim postavkama.";
 "unit_of_length" = "Jedinice duljine";
@@ -380,7 +380,7 @@
 "add_point_before" = "Add points before";
 "add_point_after" = "Add points after";
 "delete_point" = "Izbriši točku";
-"shared_string_gpx_track" = "Trag";
+"shared_string_gpx_track" = "Staza";
 
 // Resources
 "download_tab_local" = "Lokalno";
@@ -588,10 +588,10 @@
 "rendering_attr_hideBuildings_name" = "Sakrij zgrade";
 "rendering_attr_tramTrainRoutes_name" = "Tramvajske i željezničke rute";
 "rendering_attr_hideWaterPolygons_name" = "Sakrij vode";
-"rendering_value_walkingRoutesOSMC_name" = "Bojanje prema OSMC";
-"routing_attr_avoid_unpaved_description" = "Izbjegavati neasfaltirane ceste";
-"routing_attr_prefer_motorway_description" = "Preferiram autoceste";
-"routing_attr_avoid_ferries_name" = "Izbjegavati trajekte";
+"rendering_value_walkingRoutesOSMC_name" = "OSMC";
+"routing_attr_avoid_unpaved_description" = "Izbjegava neasfaltirane ceste";
+"routing_attr_prefer_motorway_description" = "Preferiraj autoceste";
+"routing_attr_avoid_ferries_name" = "Bez trajekata";
 "rendering_value_disabled_name" = "Onemogućeno";
 "rendering_value_green_name" = "Zelena";
 "rendering_attr_noAdminboundaries_description" = "Prikrivanje prikaza regionalnih granica (admin razine 5-9).";
@@ -599,7 +599,7 @@
 "rendering_value_translucent_lightgreen_name" = "Prozirna svjetlozelena";
 "rendering_attr_showAccess_name" = "Prikaži ograničenja pristupa";
 "routing_attr_no_new_routing_description" = "Nemoj koristiti pravila usmjeravanje uvedena u v1.9.";
-"routing_attr_prefer_motorway_name" = "Preferiram autoceste";
+"routing_attr_prefer_motorway_name" = "Preferiraj autoceste";
 "rendering_value_translucent_lightblue_name" = "Prozirna svijetlo plava";
 "routing_attr_weight_name" = "Ograničenje težine";
 "rendering_attr_noAdminboundaries_name" = "Sakrij granice";
@@ -660,7 +660,7 @@
 "grey_color_undefined" = "Dijelovi bez podataka su sivi.";
 "white_color_undefined" = "Dijelovi bez podataka su bijeli.";
 "shared_string_refresh" = "Osvježi";
-"shared_string_delete_all" = "Izbrisati sve";
+"shared_string_delete_all" = "Izbriši sve";
 "shared_string_status" = "Stanje";
 "altitude_ascent" = "Uzbrdica";
 "data_settings" = "Podaci";
@@ -853,3 +853,26 @@
 "shared_string_street_intersection" = "Raskrižje ulica";
 "send_anonymous_data" = "Šalji anonimne podatke";
 "avoid_transport_type" = "Izbjegni vrste prijevoza";
+"route_simulation" = "Simulacija rute";
+"shared_string_includes" = "Uključuje";
+"shared_string_learn_more" = "Saznaj više";
+"shared_string_open_street_map" = "OpenStreetMap";
+"compass_always_visible" = "Uvijek vidljivo";
+"free_account" = "Besplatni račun";
+"shared_string_clear_offline_cache" = "Isprazni offline predmemoriju";
+"shared_string_countries" = "Zemlje";
+"routing_attr_avoid_stairs_name" = "Bez stepenica";
+"rendering_attr_highway_class_track_name" = "Staza";
+"rendering_attr_surface_sand_name" = "Pijesak";
+"shared_string_capacity" = "Kapacitet";
+"map_3d_mode_action" = "3D modus";
+"visible_in_3d_mode" = "Vidljivo u 3D modusu";
+"shared_string_clear_online_cache" = "Isprazni online predmemoriju";
+"weather_online_cache" = "Online predmemorija";
+"shared_string_total_size" = "Ukupna veličina";
+"map_2d_mode_action" = "2D modus";
+"rendering_attr_highway_class_cycleway_name" = "Biciklistička staza";
+"routing_attr_prefer_unpaved_description" = "Preferiraj neasfaltirane ceste.";
+"compass_always_hidden" = "Uvijek skriveno";
+"shared_string_purchased" = "Kupljeno";
+"shared_string_hidden" = "Skriveno";

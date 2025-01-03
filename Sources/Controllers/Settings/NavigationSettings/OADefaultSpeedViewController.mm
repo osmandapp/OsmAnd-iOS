@@ -48,7 +48,7 @@
 - (void)postInit
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    _units = [OASpeedConstant toShortString:[settings.speedSystem get:self.appMode]];
+    _units = [OASpeedConstant toShortString:(EOASpeedConstant) [settings.speedSystem get:self.appMode]];
     switch ([settings.speedSystem get:self.appMode])
     {
         case MILES_PER_HOUR:

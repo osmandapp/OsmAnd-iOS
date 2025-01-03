@@ -586,7 +586,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
             CPManeuver *maneuver = [[CPManeuver alloc] init];
             std::shared_ptr<TurnType> turnType;
             std::shared_ptr<TurnType> nextTurnType;
-            BOOL leftSide = [OADrivingRegion isLeftHandDriving:[weakSelf.settings.drivingRegion get]];
+            BOOL leftSide = [OADrivingRegion isLeftHandDriving:(EOADrivingRegion) [weakSelf.settings.drivingRegion get]];
             BOOL deviatedFromRoute = [OARoutingHelper isDeviatedFromRoute];
             int turnImminent = 0;
             int nextTurnDistance = 0;

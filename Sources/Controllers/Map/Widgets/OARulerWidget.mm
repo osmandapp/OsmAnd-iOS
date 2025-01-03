@@ -161,7 +161,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
     _mapDensity = _settings.mapDensity;
     _cachedMapDensity = [_mapDensity get];
-    _cacheMetricSystem = [_settings.metricSystem get];
+    _cacheMetricSystem = (EOAMetricsConstant) [_settings.metricSystem get];
     _cacheDistances = [NSMutableArray new];
     _cachedCenter = CGPointMake(0, 0);
     
@@ -248,7 +248,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     {
         [self updateStyles];
 
-        EOARulerWidgetMode mode = _settings.rulerMode.get;
+        EOARulerWidgetMode mode = (EOARulerWidgetMode) _settings.rulerMode.get;
         BOOL showCompass = _settings.showCompassControlRuler.get && [_mapViewController getMapZoom] > SHOW_COMPASS_MIN_ZOOM;
 
         if (mode == RULER_MODE_DARK || mode == RULER_MODE_LIGHT )
@@ -319,8 +319,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
         }
     }
     
-    EOAMetricsConstant currentMetricSystem = [_settings.metricSystem get];
-    _cacheMetricSystem = currentMetricSystem;
+    _cacheMetricSystem = (EOAMetricsConstant) [_settings.metricSystem get];
     _cachedMapZoom = _mapViewController.mapView.zoom;
     _cacheIntZoom = int(_mapViewController.getMapZoom);
     _cachedCenter31 = [self getCenter31];
@@ -862,7 +861,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
             }
             _firstUpdate = NO;
         }
-        _cachedRulerMode = _settings.rulerMode.get;
+        _cachedRulerMode = (EOARulerWidgetMode) [_settings.rulerMode get];
     }
     [self updateVisibility:visible];
     return YES;

@@ -254,7 +254,7 @@
             if (deviatedFromRoute)
             {
                 turnImminent = 0;
-                turnType = TurnType::ptrValueOf(TurnType::OFFR, [OADrivingRegion isLeftHandDriving:[settings.drivingRegion get]]);
+                turnType = TurnType::ptrValueOf(TurnType::OFFR, [OADrivingRegion isLeftHandDriving:(EOADrivingRegion) [settings.drivingRegion get]]);
                 [self setDeviatePath:(int) [routingHelper getRouteDeviation]];
             }
             else

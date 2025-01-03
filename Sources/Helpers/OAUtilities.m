@@ -1000,48 +1000,55 @@ static NSInteger const kMap3DModeButtonTag = -990;
 
 @implementation NSUnit (util)
 
++ (BOOL)isEqualToUnit:(NSUnit *)unit unitStr:(NSString *)unitStr formatter:(NSMeasurementFormatter *)formatter
+{
+    return [unitStr isEqualToString:unit.symbol]
+        || [unitStr isEqualToString:[formatter stringFromUnit:unit]]
+        || [unitStr isEqualToString:[[formatter stringFromMeasurement:[[NSMeasurement alloc] initWithDoubleValue:0 unit:unit]] substringFromIndex:2]];
+}
+
 + (NSUnit *) unitFromString:(NSString *)unitStr
 {
     NSMeasurementFormatter *formatter = [NSMeasurementFormatter new];
     formatter.locale = NSLocale.autoupdatingCurrentLocale;
+    formatter.unitOptions = NSMeasurementFormatterUnitOptionsProvidedUnit;
 
-    if ([unitStr isEqualToString:NSUnitCloud.percent.symbol]
-            || [unitStr isEqualToString:[formatter stringFromUnit:NSUnitCloud.percent]])
+    if ([self isEqualToUnit:NSUnitCloud.percent unitStr:unitStr formatter:formatter]
+            || [unitStr caseInsensitiveCompare:@"percent"] == NSOrderedSame)
         return NSUnitCloud.percent;
-    if ([unitStr isEqualToString:NSUnitTemperature.celsius.symbol]
-            || [unitStr isEqualToString:[formatter stringFromUnit:NSUnitTemperature.celsius]])
+    if ([self isEqualToUnit:NSUnitTemperature.celsius unitStr:unitStr formatter:formatter]
+        || [unitStr caseInsensitiveCompare:@"celsius"] == NSOrderedSame)
         return NSUnitTemperature.celsius;
-    if ([unitStr isEqualToString:NSUnitTemperature.fahrenheit.symbol]
-            || [unitStr isEqualToString:[formatter stringFromUnit:NSUnitTemperature.fahrenheit]])
+    if ([self isEqualToUnit:NSUnitTemperature.fahrenheit unitStr:unitStr formatter:formatter]
+            || [unitStr caseInsensitiveCompare:@"fahrenheit"] == NSOrderedSame)
         return NSUnitTemperature.fahrenheit;
-    if ([unitStr isEqualToString:NSUnitPressure.hectopascals.symbol]
-            || [unitStr isEqualToString:[formatter stringFromUnit:NSUnitPressure.hectopascals]])
+    if ([self isEqualToUnit:NSUnitPressure.hectopascals unitStr:unitStr formatter:formatter]
+            || [unitStr caseInsensitiveCompare:@"hectopascals"] == NSOrderedSame)
         return NSUnitPressure.hectopascals;
-    if ([unitStr isEqualToString:NSUnitPressure.millimetersOfMercury.symbol]
-            || [unitStr isEqualToString:[formatter stringFromUnit:NSUnitPressure.millimetersOfMercury]])
+    if ([self isEqualToUnit:NSUnitPressure.millimetersOfMercury unitStr:unitStr formatter:formatter]
+            || [unitStr caseInsensitiveCompare:@"millimeters_of_mercury"] == NSOrderedSame)
         return NSUnitPressure.millimetersOfMercury;
-    if ([unitStr isEqualToString:NSUnitPressure.inchesOfMercury.symbol]
-            || [unitStr isEqualToString:[formatter stringFromUnit:NSUnitPressure.inchesOfMercury]])
+    if ([self isEqualToUnit:NSUnitPressure.inchesOfMercury unitStr:unitStr formatter:formatter]
+            || [unitStr caseInsensitiveCompare:@"inches_of_mercury"] == NSOrderedSame)
         return NSUnitPressure.inchesOfMercury;
-    if ([unitStr isEqualToString:NSUnitSpeed.metersPerSecond.symbol]
-            || [unitStr isEqualToString:[formatter stringFromUnit:NSUnitSpeed.metersPerSecond]])
+    if ([self isEqualToUnit:NSUnitSpeed.metersPerSecond unitStr:unitStr formatter:formatter]
+            || [unitStr caseInsensitiveCompare:@"meters_per_second"] == NSOrderedSame)
         return NSUnitSpeed.metersPerSecond;
-    if ([unitStr isEqualToString:NSUnitSpeed.kilometersPerHour.symbol]
-            || [unitStr isEqualToString:[formatter stringFromUnit:NSUnitSpeed.kilometersPerHour]])
+    if ([self isEqualToUnit:NSUnitSpeed.kilometersPerHour unitStr:unitStr formatter:formatter]
+            || [unitStr caseInsensitiveCompare:@"kilometers_per_hour"] == NSOrderedSame)
         return NSUnitSpeed.kilometersPerHour;
-    if ([unitStr isEqualToString:NSUnitSpeed.milesPerHour.symbol]
-            || [unitStr isEqualToString:[formatter stringFromUnit:NSUnitSpeed.milesPerHour]])
+    if ([self isEqualToUnit:NSUnitSpeed.milesPerHour unitStr:unitStr formatter:formatter]
+            || [unitStr caseInsensitiveCompare:@"miles_per_hour"] == NSOrderedSame)
         return NSUnitSpeed.milesPerHour;
-    if ([unitStr isEqualToString:NSUnitSpeed.knots.symbol]
-            || [unitStr isEqualToString:[formatter stringFromUnit:NSUnitSpeed.knots]])
+    if ([self isEqualToUnit:NSUnitSpeed.knots unitStr:unitStr formatter:formatter]
+            || [unitStr caseInsensitiveCompare:@"knots"] == NSOrderedSame)
         return NSUnitSpeed.knots;
-    if ([unitStr isEqualToString:NSUnitLength.millimeters.symbol]
-            || [unitStr isEqualToString:[formatter stringFromUnit:NSUnitLength.millimeters]])
+    if ([self isEqualToUnit:NSUnitLength.millimeters unitStr:unitStr formatter:formatter]
+            || [unitStr caseInsensitiveCompare:@"milimeters"] == NSOrderedSame)
         return NSUnitLength.millimeters;
-    if ([unitStr isEqualToString:NSUnitLength.inches.symbol]
-            || [unitStr isEqualToString:[formatter stringFromUnit:NSUnitLength.inches]])
+    if ([self isEqualToUnit:NSUnitLength.inches unitStr:unitStr formatter:formatter]
+            || [unitStr caseInsensitiveCompare:@"inches"] == NSOrderedSame)
         return NSUnitLength.inches;
-
     return nil;
 }
 
@@ -1069,10 +1076,11 @@ static NSInteger const kMap3DModeButtonTag = -990;
     NSMeasurementFormatter *formatter = [NSMeasurementFormatter new];
     formatter.locale = NSLocale.autoupdatingCurrentLocale;
     formatter.unitStyle = NSFormattingUnitStyleMedium;
+    formatter.unitOptions = NSMeasurementFormatterUnitOptionsProvidedUnit;
     NSString *formatted = [formatter stringFromMeasurement:[[NSMeasurement alloc] initWithDoubleValue:0 unit:NSUnitTemperature.celsius]];
     NSString *symbol = [formatted substringFromIndex:2];
     NSUnitTemperature *unit = (NSUnitTemperature *) [NSUnit unitFromString:symbol];
-    return unit ? unit : NSUnitTemperature.celsius;
+    return unit ?: NSUnitTemperature.celsius;
 }
 
 - (NSString *)name
@@ -1101,10 +1109,11 @@ static NSInteger const kMap3DModeButtonTag = -990;
 {
     NSMeasurementFormatter *formatter = [NSMeasurementFormatter new];
     formatter.locale = NSLocale.autoupdatingCurrentLocale;
+    formatter.unitOptions = NSMeasurementFormatterUnitOptionsProvidedUnit;
     NSString *formatted = [formatter stringFromMeasurement:[[NSMeasurement alloc] initWithDoubleValue:0 unit:NSUnitSpeed.metersPerSecond]];
     NSString *symbol = [formatted substringFromIndex:2];
     NSUnitSpeed *unit = (NSUnitSpeed *) [NSUnit unitFromString:symbol];
-    return unit ? unit : NSUnitSpeed.metersPerSecond;
+    return unit ?: NSUnitSpeed.metersPerSecond;
 }
 
 - (NSString *)name
@@ -1128,10 +1137,11 @@ static NSInteger const kMap3DModeButtonTag = -990;
 {
     NSMeasurementFormatter *formatter = [NSMeasurementFormatter new];
     formatter.locale = NSLocale.autoupdatingCurrentLocale;
+    formatter.unitOptions = NSMeasurementFormatterUnitOptionsProvidedUnit;
     NSString *formatted = [formatter stringFromMeasurement:[[NSMeasurement alloc] initWithDoubleValue:0 unit:NSUnitPressure.millimetersOfMercury]];
     NSString *symbol = [formatted substringFromIndex:2];
     NSUnitPressure *unit = (NSUnitPressure *) [NSUnit unitFromString:symbol];
-    return unit ? unit : NSUnitPressure.millimetersOfMercury;
+    return unit ?: NSUnitPressure.millimetersOfMercury;
 }
 
 - (NSString *)name
@@ -1153,10 +1163,11 @@ static NSInteger const kMap3DModeButtonTag = -990;
 {
     NSMeasurementFormatter *formatter = [NSMeasurementFormatter new];
     formatter.locale = NSLocale.autoupdatingCurrentLocale;
+    formatter.unitOptions = NSMeasurementFormatterUnitOptionsProvidedUnit;
     NSString *formatted = [formatter stringFromMeasurement:[[NSMeasurement alloc] initWithDoubleValue:0 unit:NSUnitLength.millimeters]];
     NSString *symbol = [formatted substringFromIndex:2];
     NSUnitLength *unit = (NSUnitLength *) [NSUnit unitFromString:symbol];
-    return unit ? unit : NSUnitLength.millimeters;
+    return unit ?: NSUnitLength.millimeters;
 }
 
 - (NSString *)name

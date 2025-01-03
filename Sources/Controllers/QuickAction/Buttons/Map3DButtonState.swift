@@ -13,13 +13,13 @@ final class Map3DButtonState: MapButtonState {
 
     static let map3DHudId = "map_3d"
 
-    let visibilityPref: OACommonInteger
+    let visibilityPref: OACommonMap3DModeVisibility
     let fabMarginPref: FabMarginPreference
     var elevationAngle = kDefaultElevationAngle
 
     init() {
         fabMarginPref = FabMarginPreference("map_3d_mode_margin")
-        visibilityPref = OAAppSettings.sharedManager().registerIntPreference("map_3d_mode_visibility", defValue: Map3DModeVisibility.visible.rawValue)
+        visibilityPref = OAAppSettings.sharedManager().registerMap3DModeVisibilityPreference("map_3d_mode_visibility", defValue: Map3DModeVisibility.visible.rawValue)
         super.init(withId: Self.map3DHudId)
     }
 

@@ -59,7 +59,7 @@ final class GradientUiHelper: NSObject {
             case .slope:
                 typeValue = "°"
             case .height:
-                if let formattedValue = OAOsmAndFormatter.getFormattedAlt(value, mc: OAAppSettings.sharedManager().metricSystem.get()) {
+                if let formattedValue = OAOsmAndFormatter.getFormattedAlt(value, mc: EOAMetricsConstant(rawValue: Int(OAAppSettings.sharedManager().metricSystem.get()))!) {
                     if let lastSpaceIndex = formattedValue.lastIndex(of: " ") {
                         stringValue = String(formattedValue[..<lastSpaceIndex])
                         typeValue = String(formattedValue[formattedValue.index(after: lastSpaceIndex)...])
@@ -85,7 +85,7 @@ final class GradientUiHelper: NSObject {
                 switch colorizationType {
                 case .speed:
                     if analysis.maxSpeed != 0 {
-                        type = OASpeedConstant.toShortString(OAAppSettings.sharedManager().speedSystem.get())
+                        type = OASpeedConstant.toShortString(EOASpeedConstant(rawValue: Int(OAAppSettings.sharedManager().speedSystem.get()))!)
                         stringValue = Self.formatValue(value, multiplier: analysis.maxSpeed)
                     }
                 case .elevation:
@@ -93,7 +93,7 @@ final class GradientUiHelper: NSObject {
                     let maxElevation = analysis.maxElevation + maxAltitudeAddition
                     if minElevation != 99999.0 && maxElevation != -100.0 {
                         let calculatedValue = value == 0 ? minElevation : minElevation + (value * (maxElevation - minElevation))
-                        if let formattedValue = OAOsmAndFormatter.getFormattedAlt(calculatedValue, mc: OAAppSettings.sharedManager().metricSystem.get()) {
+                        if let formattedValue = OAOsmAndFormatter.getFormattedAlt(calculatedValue, mc: EOAMetricsConstant(rawValue: Int(OAAppSettings.sharedManager().metricSystem.get()))!) {
                             if let lastSpaceIndex = formattedValue.lastIndex(of: " ") {
                                 stringValue = String(formattedValue[..<lastSpaceIndex])
                                 type = String(formattedValue[formattedValue.index(after: lastSpaceIndex)...])

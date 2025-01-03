@@ -13,7 +13,7 @@ final class SpeedLimitWarningViewController: OABaseNavbarViewController {
     weak var delegate: WidgetStateDelegate?
     
     override func generateData() {
-        let isAlwaysRowSelected = OAAppSettings.sharedManager().showSpeedLimitWarning.get() == .always
+        let isAlwaysRowSelected = OAAppSettings.sharedManager().showSpeedLimitWarning.get() == EOASpeedLimitWarningState.always.rawValue
         
         let section = tableData.createNewSection()
         
@@ -56,7 +56,7 @@ final class SpeedLimitWarningViewController: OABaseNavbarViewController {
     }
     
     override func onRowSelected(_ indexPath: IndexPath!) {
-        OAAppSettings.sharedManager().showSpeedLimitWarning.set(indexPath.row == 0 ? .always : .whenExceeded)
+        OAAppSettings.sharedManager().showSpeedLimitWarning.set(Int32((indexPath.row == 0 ? EOASpeedLimitWarningState.always : EOASpeedLimitWarningState.whenExceeded).rawValue))
         delegate?.onWidgetStateChanged()
         dismiss()
     }

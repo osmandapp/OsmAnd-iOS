@@ -1071,7 +1071,7 @@ static BOOL _isDeviatedFromRoute = false;
 + (void) applyApplicationSettings:(OARouteCalculationParams *) params  appMode:(OAApplicationMode *) mode
 {
     OAAppSettings *settings = OAAppSettings.sharedManager;
-    params.leftSide = [OADrivingRegion isLeftHandDriving:[settings.drivingRegion get:mode]];
+    params.leftSide = [OADrivingRegion isLeftHandDriving:(EOADrivingRegion) [settings.drivingRegion get:mode]];
     params.fast = [settings.fastRouteMode get:mode];
 }
 
@@ -1093,7 +1093,7 @@ static BOOL _isDeviatedFromRoute = false;
     }
     else if ([mode getRouterService] == STRAIGHT)
     {
-        EOAMetricsConstant mc = [[OAAppSettings sharedManager].metricSystem get:mode];
+        EOAMetricsConstant mc = (EOAMetricsConstant) [[OAAppSettings sharedManager].metricSystem get:mode];
         if (mc == KILOMETERS_AND_METERS || mc == MILES_AND_METERS)
         {
             return 500.;

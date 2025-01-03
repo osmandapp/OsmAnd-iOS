@@ -552,7 +552,7 @@
 "shared_string_unexpected_error" = "Došlo je do neočekivane pogreške";
 "shared_string_io_error" = "I/O pogreška";
 "routing_attr_height_description" = "Odredi visinu vozila koja je dozvoljena na putovima.";
-"routing_attr_avoid_toll_name" = "Izbjegavati ceste s naplatom cestarine";
+"routing_attr_avoid_toll_name" = "Izbjegni ceste sa cestarinom";
 "rendering_attr_appMode_description" = "Optimizirate kartu za";
 "rendering_attr_showRoadMaps_name" = "Samo cestovne karte";
 "routing_attr_avoid_ferries_description" = "Izbjegavati trajekte";

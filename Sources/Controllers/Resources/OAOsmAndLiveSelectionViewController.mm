@@ -122,6 +122,9 @@ static const NSInteger groupCount = 1;
 
 -(void) updateNow
 {
+    [OAOsmAndLiveHelper setPreferenceEnabledForLocalIndex:_regionNameNSString value:_isLiveUpdatesEnabled];
+    [OAOsmAndLiveHelper setPreferenceWifiForLocalIndex:_regionNameNSString value:_isWifiUpdatesOnly];
+    [OAOsmAndLiveHelper setPreferenceFrequencyForLocalIndex:_regionNameNSString value:_updatingFrequency];
     [OAOsmAndLiveHelper downloadUpdatesForRegion:_regionName resourcesManager:_app.resourcesManager checkUpdatesAsync:YES];
 }
 
@@ -351,7 +354,7 @@ static const NSInteger groupCount = 1;
         if (cell)
         {
             [cell.titleLabel setText: item[@"title"]];
-            cell.accessoryType = _updatingFrequency == ELiveUpdateFrequencyDaily ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+            cell.accessoryType = _updatingFrequency == indexPath.row ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
         }
         return cell;
     }
@@ -408,8 +411,6 @@ static const NSInteger groupCount = 1;
     [OAOsmAndLiveHelper setPreferenceEnabledForLocalIndex:_regionNameNSString value:_isLiveUpdatesEnabled];
     [OAOsmAndLiveHelper setPreferenceWifiForLocalIndex:_regionNameNSString value:_isWifiUpdatesOnly];
     [OAOsmAndLiveHelper setPreferenceFrequencyForLocalIndex:_regionNameNSString value:_updatingFrequency];
-    
-    NSString *regionNameStr = _regionName.toNSString();
     if (_isLiveUpdatesEnabled)
     {
         [OAOsmAndLiveHelper downloadUpdatesForRegion:_regionName resourcesManager:_app.resourcesManager checkUpdatesAsync:YES];

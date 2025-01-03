@@ -20,6 +20,7 @@
 #import "OAConcurrentCollections.h"
 #import "OARemoteFile.h"
 #import "OAOperationLog.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define MAX_LIGHT_ITEM_SIZE 10 * 1024 * 1024
 
@@ -167,11 +168,13 @@
         _executor.maxConcurrentOperationCount = 10;
         [_executor addOperations:lightTasks waitUntilFinished:YES];
         for (OAItemWriterTask *task in lightTasks)
+        {
             if (task.error)
             {
                 [log finishOperation];
                 @throw [NSException exceptionWithName:@"IOException" reason:task.error userInfo:nil];
             }
+        }
     }
     if (heavyTasks.count > 0)
     {
@@ -179,12 +182,15 @@
         _executor.maxConcurrentOperationCount = 1;
         [_executor addOperations:heavyTasks waitUntilFinished:YES];
         for (OAItemWriterTask *task in heavyTasks)
+        {
             if (task.error)
             {
                 [log finishOperation];
                 @throw [NSException exceptionWithName:@"IOException" reason:task.error userInfo:nil];
             }
+        }
     }
+    [[LocalFileHashHelper shared] saveHashes];
     [log finishOperation];
 }
 
@@ -260,7 +266,7 @@
         if (_listener)
         {
             int p = [dataProgress addAndGet:(APPROXIMATE_FILE_SIZE_BYTES / 1024)];
-            NSString *fileName = [OABackupHelper getItemFileName:item];
+            NSString *fileName = [BackupUtils getItemFileName:item];
             [_listener itemExportDone:[OASettingsItemType typeName:item.type] fileName:fileName];
             [_listener updateGeneralProgress:itemsProgress.countSync uploadedKb:(NSInteger)p];
         }
@@ -278,7 +284,7 @@
 {
     NSString *type = [OASettingsItemType typeName:item.type];
     OAExportSettingsType *exportType = [OAExportSettingsType findBySettingsItem:item];
-    if (exportType != nil && ![_backupHelper getVersionHistoryTypePref:exportType].get)
+    if (exportType != nil && ![BackupUtils getVersionHistoryTypePref:exportType].get)
     {
         OARemoteFile *remoteFile = [_backupHelper.backup getRemoteFile:type fileName:fileName];
         if (remoteFile != nil)

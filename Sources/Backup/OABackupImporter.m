@@ -22,6 +22,7 @@
 #import "OAOperationLog.h"
 #import "OAAtomicInteger.h"
 #import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OAItemFileDownloadTask : NSOperation
 
@@ -176,7 +177,7 @@
             {
                 if (settingsItems)
                 {
-                    NSDictionary<OARemoteFile *, OASettingsItem *> *items = [OABackupHelper getRemoteFilesSettingsItems:settingsItems remoteFiles:remoteFiles infoFiles:YES];
+                    NSDictionary<OARemoteFile *, OASettingsItem *> *items = [BackupUtils getRemoteFilesSettingsItems:settingsItems remoteFiles:remoteFiles infoFiles:YES];
                     remoteFiles = items.allKeys;
                 }
                 result.remoteFiles = remoteFiles;
@@ -272,17 +273,8 @@
                     [item apply];
                 }
 
-                [_backupHelper updateFileUploadTime:remoteFile.type fileName:remoteFile.name uploadTime:remoteFile.updatetimems];
-                
-                if ([item isKindOfClass:OAFileSettingsItem.class])
-                {
-                    NSString *itemFileName = [OABackupHelper getItemFileName:item];
-                    if (itemFileName.pathExtension.length == 0)
-                    {
-                        [_backupHelper updateFileUploadTime:[OASettingsItemType typeName:item.type] fileName:itemFileName
-                                                uploadTime:remoteFile.updatetimems];
-                    }
-                }
+                [self updateFileM5Digest:remoteFile item:item];
+                [self updateFileUploadTime:remoteFile item:item];
             }
             if ([NSFileManager.defaultManager fileExistsAtPath:tempFilePath])
                 [NSFileManager.defaultManager removeItemAtPath:tempFilePath error:nil];
@@ -298,6 +290,48 @@
     {
         [item.warnings addObject:[NSString stringWithFormat:OALocalizedString(@"settings_item_read_error"), item.name]];
         NSLog(@"Error reading item data: %@ %@", item.name, exception.reason);
+    }
+}
+
+- (void)updateFileM5Digest:(OARemoteFile *)remoteFile item:(OASettingsItem *)item
+{
+    if (![item isKindOfClass:OAFileSettingsItem.class])
+        return;
+
+    OAFileSettingsItem *settingsItem = (OAFileSettingsItem *) item;
+    if ([settingsItem needMd5Digest])
+    {
+        OABackupDbHelper *dbHelper = [OABackupDbHelper sharedDatabase];
+        OAUploadedFileInfo *fileInfo = [dbHelper getUploadedFileInfo:remoteFile.type name:remoteFile.name];
+        NSString *lastMd5 = fileInfo != nil ? fileInfo.md5Digest : nil;
+        if (lastMd5 && lastMd5.length > 0 && settingsItem.filePath && [NSFileManager.defaultManager fileExistsAtPath:settingsItem.filePath])
+        {
+            NSString *md5Digest = [OAUtilities fileMD5:settingsItem.filePath];
+            if (md5Digest.length > 0)
+            {
+                [_backupHelper updateFileMd5Digest:[OASettingsItemType typeName:item.type]
+                                          fileName:remoteFile.name
+                                            md5Hex:md5Digest];
+            }
+        }
+    }
+}
+
+- (void)updateFileUploadTime:(OARemoteFile *)remoteFile item:(OASettingsItem *)item
+{
+    long time = remoteFile.updatetimems;
+    [_backupHelper updateFileUploadTime:remoteFile.type
+                               fileName:remoteFile.name
+                             uploadTime:time];
+    if ([item isKindOfClass:OAFileSettingsItem.class])
+    {
+        NSString *itemFileName = [BackupUtils getFileItemName:(OAFileSettingsItem *) item];
+        if (itemFileName.pathExtension.length == 0)
+        {
+            [_backupHelper updateFileUploadTime:[OASettingsItemType typeName:item.type]
+                                       fileName:itemFileName
+                                     uploadTime:time];
+        }
     }
 }
 

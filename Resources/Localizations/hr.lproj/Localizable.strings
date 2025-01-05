@@ -120,9 +120,9 @@
 "cancel_route" = "Odbaci rutu?";
 "navigation_over_track" = "Počnite navigaciju uz stazu?";
 "use_displayed_track_for_navigation" = "Želite li koristiti prikazan zapis za vašu navigaciju?";
-"shared_string_select_on_map" = "Odaberite na karti";
-"shared_string_my_location" = "Moja lokacija";
-"route_descr_select_destination" = "Odaberite Odredište";
+"shared_string_select_on_map" = "Odaberi na karti";
+"shared_string_my_location" = "Moja pozicija";
+"route_descr_select_destination" = "Postavi odredište";
 "route_to" = "Do:";
 "route_via" = "Preko:";
 "route_from" = "Od:";
@@ -130,7 +130,7 @@
 "internet_connection_required_for_online_route" = "Online navigacija je odabrana, ali internet veza nije dostupna.";
 "empty_route_calculated" = "Pogreška: Izračunata ruta je prazna";
 "destination_point" = "Odredište %@";
-"intermediate_point" = "Točka %@";
+"intermediate_point" = "Međuodredište %@";
 "arrived_at_intermediate_point" = "Stigli ste na međutočku";
 "starting_point_too_far" = "Polazna točka je predaleko od najbliže ceste.";
 "ending_point_too_far" = "Krajnja točka je predaleko od najbliže ceste.";
@@ -698,7 +698,7 @@
 "download_file" = "Preuzmi datoteku";
 "shared_string_read" = "Pročitajte";
 "shared_string_bookmark" = "oznaka";
-"map_settings_topography" = "Obrisi linija";
+"map_settings_topography" = "Izohipse";
 "shared_string_uploading" = "Prenošenje";
 "network" = "Mreža";
 "general_settings" = "Opće postavke";
@@ -894,3 +894,15 @@
 "import_from_docs" = "Uvezi iz dokumenata";
 "app_mode_taxi" = "Taxi";
 "app_mode_skiing" = "Skijanje";
+"roads" = "Ceste";
+"swap_points" = "Zamijeni početak i odredište";
+"rendering_attr_surface_gravel_name" = "Šljunak";
+"rendering_attr_smoothness_horrible_name" = "Užasno";
+"add_as" = "Dodaj kao";
+"rendering_attr_smoothness_impassable_name" = "Neprohodno";
+"my_location" = "Moja pozicija";
+"shared_string_speed" = "Brzina";
+"lat" = "Širina";
+"lon" = "Duljina";
+"all_categories" = "Sve kategorije";
+"shared_string_ellipsis" = "…";

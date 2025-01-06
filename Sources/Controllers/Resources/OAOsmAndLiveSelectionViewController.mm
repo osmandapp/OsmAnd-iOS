@@ -232,6 +232,7 @@ static const NSInteger groupCount = 1;
              @{
                @"name" : @"hourly_freq",
                @"title" : OALocalizedString(@"hourly"),
+               @"frequency" : @(ELiveUpdateFrequencyHourly),
                @"type" : [OASimpleTableViewCell getCellIdentifier] }
              ];
             
@@ -239,6 +240,7 @@ static const NSInteger groupCount = 1;
              @{
                @"name" : @"daily_freq",
                @"title" : OALocalizedString(@"daily"),
+               @"frequency" : @(ELiveUpdateFrequencyDaily),
                @"type" : [OASimpleTableViewCell getCellIdentifier] }
              ];
             
@@ -246,6 +248,7 @@ static const NSInteger groupCount = 1;
              @{
                @"name" : @"weekly_freq",
                @"title" : OALocalizedString(@"weekly"),
+               @"frequency" : @(ELiveUpdateFrequencyWeekly),
                @"type" : [OASimpleTableViewCell getCellIdentifier] }
              ];
             
@@ -354,7 +357,7 @@ static const NSInteger groupCount = 1;
         if (cell)
         {
             [cell.titleLabel setText: item[@"title"]];
-            cell.accessoryType = _updatingFrequency == indexPath.row ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+            cell.accessoryType = (_updatingFrequency == [item[@"frequency"] integerValue]) ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
         }
         return cell;
     }

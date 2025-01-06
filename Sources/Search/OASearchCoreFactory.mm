@@ -988,6 +988,7 @@
         if (nmAdditional != nil)
             [self addAditonals:nmAdditional results:results type:c];
     }
+    MutableOrderedDictionary<NSString *, OAPoiTypeResult *> *additionals = [MutableOrderedDictionary new];
     [_translatedNames enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, OAPOIType * _Nonnull pt, BOOL * _Nonnull stop) {
         if (![pt.category isEqual:_types.otherMapCategory] && !pt.isReference)
         {
@@ -995,9 +996,10 @@
             if(res != nil)
                 results[res.pt.name] = res;
             if (nmAdditional != nil)
-                [self addAditonals:nmAdditional results:results type:pt];
+                [self addAditonals:nmAdditional results:additionals type:pt];
         }
     }];
+    [results addEntriesFromDictionary:additionals]; // results ordered by: top, categories, types, additional
     return results;
 }
 

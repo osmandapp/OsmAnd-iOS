@@ -122,10 +122,8 @@ static const NSInteger groupCount = 1;
 
 -(void) updateNow
 {
-    [OAOsmAndLiveHelper setPreferenceEnabledForLocalIndex:_regionNameNSString value:_isLiveUpdatesEnabled];
-    [OAOsmAndLiveHelper setPreferenceWifiForLocalIndex:_regionNameNSString value:_isWifiUpdatesOnly];
-    [OAOsmAndLiveHelper setPreferenceFrequencyForLocalIndex:_regionNameNSString value:_updatingFrequency];
-    [OAOsmAndLiveHelper downloadUpdatesForRegion:_regionName resourcesManager:_app.resourcesManager checkUpdatesAsync:YES];
+    if (_isLiveUpdatesEnabled)
+        [OAOsmAndLiveHelper downloadUpdatesForRegion:_regionName resourcesManager:_app.resourcesManager checkUpdatesAsync:YES forceUpdate:YES];
 }
 
 - (void) didReceiveMemoryWarning
@@ -416,7 +414,7 @@ static const NSInteger groupCount = 1;
     [OAOsmAndLiveHelper setPreferenceFrequencyForLocalIndex:_regionNameNSString value:_updatingFrequency];
     if (_isLiveUpdatesEnabled)
     {
-        [OAOsmAndLiveHelper downloadUpdatesForRegion:_regionName resourcesManager:_app.resourcesManager checkUpdatesAsync:YES];
+        [OAOsmAndLiveHelper downloadUpdatesForRegion:_regionName resourcesManager:_app.resourcesManager checkUpdatesAsync:YES forceUpdate:NO];
     }
     else
     {

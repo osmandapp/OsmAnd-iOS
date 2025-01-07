@@ -385,6 +385,7 @@ typedef enum {
     OALocationServices *_locationProvider;
     
     NSMapTable<OAApplicationMode *, OAMarkerCollection *> *_modeMarkers;
+    OAApplicationMode *_lastMarkersUpdatedMode;
     CLLocation *_lastLocation;
     CLLocationDirection _lastHeading;
     CLLocationDirection _lastCourse;
@@ -462,12 +463,14 @@ typedef enum {
                 
         if (navigationModel)
         {
-            [navigationModel setMainColor:iconColor];
+            if (mode == currentMode)
+                [navigationModel setMainColor:iconColor];
             navigationModelCpp = [navigationModel model];
         }
         if (locationModel)
         {
-            [locationModel setMainColor:iconColor];
+            if (mode == currentMode)
+                [locationModel setMainColor:iconColor];
             locationModelCpp = [locationModel model];
         }
         
@@ -543,6 +546,8 @@ typedef enum {
         [self updateMode:c];
         [_modeMarkers setObject:c forKey:mode];
     }
+    
+    _lastMarkersUpdatedMode = currentMode;
 }
 
 - (NSString *) layerId
@@ -601,6 +606,10 @@ typedef enum {
     if (_textScaleFactor != textScaleFactor)
     {
         _textScaleFactor = textScaleFactor;
+        [self refreshMarkersCollection];
+    }
+    if (_lastMarkersUpdatedMode != [OAAppSettings sharedManager].applicationMode.get)
+    {
         [self refreshMarkersCollection];
     }
 

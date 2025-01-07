@@ -58,6 +58,8 @@
     OATableDataModel *_data;
     NSIndexPath *_lastBackupIndexPath;
     NSInteger _itemsSection;
+    float _syncProgress;
+    NSIndexPath *_syncProgressCell;
     
     OANetworkSettingsHelper *_settingsHelper;
     OABackupHelper *_backupHelper;
@@ -88,6 +90,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    _syncProgress = 0;
     [self setupDownloadingCellHelper];
     self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0.001, 0.001)];
@@ -176,22 +180,24 @@
 
 - (void)generateData
 {
+    _syncProgressCell = nil;
+    _syncProgress = 0;
     _itemsSection = -1;
     _data = [[OATableDataModel alloc] init];
     OATableSectionData *statusSection = [OATableSectionData sectionData];
     NSString *backupTime = _backupHelper.isBackupPreparing ?
         OALocalizedString(@"checking_progress")
         : [OAOsmAndFormatter getFormattedPassedTime:OAAppSettings.sharedManager.backupLastUploadedTime.get def:OALocalizedString(@"shared_string_never")]; [OAOsmAndFormatter getFormattedPassedTime:OAAppSettings.sharedManager.backupLastUploadedTime.get def:OALocalizedString(@"shared_string_never")];
+    [_data addSection:statusSection];
     if ([_settingsHelper isBackupSyncing])
     {
         OATableRowData *progressCell = [OATableRowData rowData];
         [progressCell setCellType:[OATitleIconProgressbarCell getCellIdentifier]];
         [progressCell setKey:@"backupProgress"];
-        [progressCell setTitle:[OALocalizedString(@"syncing_progress") stringByAppendingString:[NSString stringWithFormat:@"%i%%", 0]]];
         [progressCell setIconName:@"ic_custom_cloud_upload"];
         [progressCell setIconTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
-        [progressCell setObj:@(0.) forKey:@"progress"];
         [statusSection addRow:progressCell];
+        _syncProgressCell = [NSIndexPath indexPathForRow:[statusSection rowCount] - 1 inSection:[_data sectionCount] - 1];
     }
     else
     {
@@ -205,7 +211,6 @@
             kCellIconTint: @(status.iconColor)
         }];
     }
-    [_data addSection:statusSection];
     _lastBackupIndexPath = [NSIndexPath indexPathForRow:statusSection.rowCount - 1 inSection:_data.sectionCount - 1];
     
     OATableSectionData *itemsSection = [OATableSectionData sectionData];
@@ -683,11 +688,10 @@
         }
         if (cell)
         {
-            cell.textView.text = item.title;
+            [cell.progressBar setProgress:_syncProgress animated:NO];
+            cell.textView.text = [OALocalizedString(@"syncing_progress") stringByAppendingString:@((int) (_syncProgress * 100)).stringValue];
             cell.imageView.image = [UIImage templateImageNamed:item.iconName];
             cell.imageView.tintColor = item.iconTintColor;
-
-            [cell.progressBar setProgress:[[item objForKey:@"progress"] floatValue] animated:NO];
         }
         return cell;
     }
@@ -792,18 +796,22 @@
 - (void)onBackupProgressUpdate:(NSNotification *)notification
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        float value = [notification.userInfo[@"progress"] floatValue];
-        NSIndexPath *progressIdxPath = [NSIndexPath indexPathForRow:0 inSection:0];
-        OATableRowData *row = [_data itemForIndexPath:progressIdxPath];
-        if (row && [row.key isEqualToString:@"backupProgress"])
+        float value = roundf([notification.userInfo[@"progress"] floatValue] * 100) / 100.0;
+        if (fabs(_syncProgress - value) >= 0.01)
         {
-            [row setObj:@(value) forKey:@"progress"];
-            [row setTitle:[OALocalizedString(@"syncing_progress") stringByAppendingString:[NSString stringWithFormat:@"%i%%", (int) (value * 100)]]];
-            OATitleIconProgressbarCell *cell = (OATitleIconProgressbarCell *) [self.tableView cellForRowAtIndexPath:progressIdxPath];
-            if (cell)
+            _syncProgress = value;
+            if (_syncProgressCell)
             {
-                cell.progressBar.progress = value;
-                cell.textView.text = row.title;
+                OATableRowData *row = [_data itemForIndexPath:_syncProgressCell];
+                if (row && [row.key isEqualToString:@"backupProgress"])
+                {
+                    OATitleIconProgressbarCell *cell = (OATitleIconProgressbarCell *) [self.tableView cellForRowAtIndexPath:_syncProgressCell];
+                    if (cell)
+                    {
+                        [cell.progressBar setProgress:_syncProgress animated:NO];
+                        cell.textView.text = [OALocalizedString(@"syncing_progress") stringByAppendingString:@((int) (_syncProgress * 100)).stringValue];
+                    }
+                }
             }
         }
     });

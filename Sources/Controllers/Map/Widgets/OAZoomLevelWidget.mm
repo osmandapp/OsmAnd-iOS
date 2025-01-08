@@ -86,6 +86,8 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
 }
 
 - (OATableDataModel *)getSettingsData:(OAApplicationMode *)appMode
+            widgetConfigurationParams:(NSDictionary<NSString *,id> * _Nullable)widgetConfigurationParams
+                             isCreate:(BOOL)isCreate
 {
     OATableDataModel *data = [[OATableDataModel alloc] init];
     OATableSectionData *section = [data createNewSection];

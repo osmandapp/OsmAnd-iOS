@@ -61,7 +61,9 @@ final class SensorTextWidget: OASimpleWidget {
         true
     }
     
-    override func getSettingsData(_ appMode: OAApplicationMode) -> OATableDataModel? {
+    override func getSettingsData(_ appMode: OAApplicationMode,
+                                  widgetConfigurationParams: [String : Any]?,
+                                  isCreate: Bool) -> OATableDataModel? {
         let data = OATableDataModel()
         let section = data.createNewSection()
         section.headerText = localizedString("shared_string_settings")

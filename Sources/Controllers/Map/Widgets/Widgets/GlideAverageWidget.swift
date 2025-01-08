@@ -58,7 +58,9 @@ final class GlideAverageWidget: GlideBaseWidget {
         widgetState
     }
 
-    override func getSettingsData(_ appMode: OAApplicationMode) -> OATableDataModel? {
+    override func getSettingsData(_ appMode: OAApplicationMode,
+                                  widgetConfigurationParams: [String: Any]?,
+                                  isCreate: Bool) -> OATableDataModel? {
         let data = OATableDataModel()
         let section = data.createNewSection()
         section.headerText = localizedString("shared_string_settings")
@@ -69,7 +71,19 @@ final class GlideAverageWidget: GlideBaseWidget {
             settingRow.key = "value_pref"
             settingRow.title = localizedString("shared_string_mode")
             settingRow.setObj(preference, forKey: "pref")
-            settingRow.setObj(getWidgetName() ?? localizedString("average_glide_ratio"), forKey: "value")
+            
+            var currentValue = (widgetState?.getPreference().defValue ?? false) ? "average_vertical_speed" : "average_glide_ratio"
+
+            if let string = widgetConfigurationParams?[GlideAverageWidgetState.prefBaseId] as? String,
+               let widgetValue = Bool(string) {
+                settingRow.setObj(localizedString(widgetValue ? "average_vertical_speed" : "average_glide_ratio"), forKey: "value")
+            } else {
+                if !isCreate {
+                    currentValue = preference.get(appMode) ? "average_vertical_speed" : "average_glide_ratio"
+                }
+                settingRow.setObj(localizedString(currentValue), forKey: "value")
+            }
+            
             settingRow.setObj(getPossibleValues(preference), forKey: "possible_values")
             settingRow.setObj(localizedString("time_to_navigation_point_widget_settings_desc"), forKey: "footer")
         }
@@ -80,7 +94,21 @@ final class GlideAverageWidget: GlideBaseWidget {
             settingRow.key = "value_pref"
             settingRow.title = localizedString("shared_string_interval")
             settingRow.setObj(measuredIntervalPref, forKey: "pref")
-            settingRow.setObj(Self.getIntervalTitle(measuredIntervalPref.get(appMode)), forKey: "value")
+            
+            var currentValue = Int(AverageValueComputer.defaultIntervalMillis)
+        
+            if let widgetConfigurationParams,
+               let key = widgetConfigurationParams.keys.first(where: { $0.hasPrefix(Self.measuredIntervalPrefID) }),
+               let value = widgetConfigurationParams[key] as? String,
+               let widgetValue = Int(value) {
+                currentValue = widgetValue
+            } else {
+                if !isCreate {
+                    currentValue = measuredIntervalPref.get(appMode)
+                }
+            }
+            
+            settingRow.setObj(Self.getIntervalTitle(currentValue), forKey: "value")
             settingRow.setObj(getPossibleValues(measuredIntervalPref), forKey: "possible_values")
             settingRow.setObj(localizedString("average_glide_time_interval_desc"), forKey: "footer")
         }
@@ -183,13 +211,11 @@ final class GlideAverageWidget: GlideBaseWidget {
             prefId = Self.measuredIntervalPrefID
         }
         
-        var defValue = Int(AverageValueComputer.defaultIntervalMillis)
-        
+        let preference = OAAppSettings.sharedManager().registerLongPreference(prefId, defValue: Int(AverageValueComputer.defaultIntervalMillis))!
         if let string = widgetParams?[Self.measuredIntervalPrefID] as? String, let widgetValue = Int(string) {
-            defValue = widgetValue
+            preference.set(widgetValue)
         }
-    
-        return OAAppSettings.sharedManager().registerLongPreference(prefId, defValue: defValue)
+        return preference
     }
 
     func isInVerticalSpeedState() -> Bool {

@@ -12,7 +12,7 @@ import Foundation
 @objcMembers
 final class GlideTargetWidgetState: OAWidgetState {
 
-    private static let prefBaseId = "glide_widget_show_target_altitude"
+    static let prefBaseId = "glide_widget_show_target_altitude"
 
     private let widgetType: WidgetType
     private let preference: OACommonBoolean
@@ -48,12 +48,10 @@ final class GlideTargetWidgetState: OAWidgetState {
             prefId += "_\(customId)"
         }
         
-        var defValue = false
-        
+        let preference = OAAppSettings.sharedManager().registerBooleanPreference(prefId, defValue: false).makeProfile()!
         if let string = widgetParams?[Self.prefBaseId] as? String, let widgetValue = Bool(string) {
-            defValue = widgetValue
+            preference.set(widgetValue)
         }
-        
-        return OAAppSettings.sharedManager().registerBooleanPreference(prefId, defValue: defValue).makeProfile()
+        return preference
     }
 }

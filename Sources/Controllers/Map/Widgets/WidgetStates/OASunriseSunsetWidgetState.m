@@ -160,16 +160,15 @@
     if (customId && customId.length > 0)
         prefId = [prefId stringByAppendingString:customId];
     
-    int defValue = EOASunriseSunsetTimeLeft;
+    OACommonInteger *preference = [[[OAAppSettings sharedManager] registerIntPreference:prefId defValue:EOASunriseSunsetTimeLeft] makeProfile];
     
     if (widgetParams)
     {
         NSNumber *widgetValue = widgetParams[[self getPrefId]];
         if (widgetValue)
-            defValue = widgetValue.intValue;
+            [preference set:widgetValue.intValue];
     }
-    
-    return [[_settings registerIntPreference:prefId defValue:defValue] makeProfile];
+    return preference;
 }
 
 - (OACommonInteger *)registerSunPositionPreference:(NSString *)customId widgetParams:(nullable NSDictionary *)widgetParams {
@@ -177,17 +176,15 @@
     if (customId && customId.length > 0)
         prefId = [prefId stringByAppendingString:customId];
     
-    int defValue = SunPositionModeSunPositionMode;
-    
+    OACommonInteger *preference = [[[OAAppSettings sharedManager] registerIntPreference:prefId defValue:SunPositionModeSunPositionMode] makeProfile];
+      
     if (widgetParams)
     {
         NSNumber *widgetValue = widgetParams[@"sun_position_widget_mode"];
         if (widgetValue)
-            defValue = widgetValue.intValue;
+            [preference set:widgetValue.intValue];
     }
-
-    return [[_settings registerIntPreference:prefId defValue:defValue] makeProfile];
+    return preference;
 }
-
 
 @end

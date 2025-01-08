@@ -1624,7 +1624,7 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 @interface OACommonBoolean ()
 
-@property (nonatomic) BOOL defValue;
+@property (nonatomic, readwrite) BOOL defValue;
 
 @end
 
@@ -1772,7 +1772,7 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 @interface OACommonLong ()
 
-@property (nonatomic) long defValue;
+@property (nonatomic, readwrite) long defValue;
 
 @end
 
@@ -3583,9 +3583,11 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 @end
 
-@implementation OACommonWidgetSizeStyle
+@interface OACommonWidgetSizeStyle()
+@property (nonatomic, readwrite) EOAWidgetSizeStyle defValue;
+@end
 
-@dynamic defValue;
+@implementation OACommonWidgetSizeStyle
 
 + (instancetype) withKey:(NSString *)key defValue:(EOAWidgetSizeStyle)defValue
 {

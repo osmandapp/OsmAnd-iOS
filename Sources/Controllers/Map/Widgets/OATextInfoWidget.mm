@@ -948,7 +948,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
         {
             NSNumber *widgetSizeStyle = widgetParams[@"widgetSizeStyle"];
             if (widgetSizeStyle)
-                [self.widgetSizePref set:(EOAWidgetSizeStyle) [widgetSizeStyle integerValue] mode:selectedAppMode];
+                [self.widgetSizePref set:(EOAWidgetSizeStyle)[widgetSizeStyle integerValue] mode:selectedAppMode];
             NSNumber *isVisibleIconNumber = widgetParams[@"isVisibleIcon"];
             if (isVisibleIconNumber)
             {

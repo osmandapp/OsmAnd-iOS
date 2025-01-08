@@ -271,6 +271,7 @@
 }
 
 - (OATableDataModel *)getSettingsData:(OAApplicationMode *)appMode
+            widgetConfigurationParams:(NSDictionary<NSString *,id> * _Nullable)widgetConfigurationParams isCreate:(BOOL)isCreate
 {
     OACommonActiveMarkerConstant *pref = _settings.activeMarkers;
     OATableDataModel *data = [OATableDataModel model];

@@ -143,6 +143,8 @@ static const double locationChangeAccuracy = 0.0001;
 }
 
 - (OATableDataModel *)getSettingsData:(OAApplicationMode *)appMode
+            widgetConfigurationParams:(NSDictionary<NSString *,id> * _Nullable)widgetConfigurationParams
+                             isCreate:(BOOL)isCreate
 {
     OAWidgetType *type = [_state getWidgetType];
     

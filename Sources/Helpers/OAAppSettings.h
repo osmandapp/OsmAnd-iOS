@@ -365,6 +365,8 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 
 @interface OACommonBoolean : OACommonPreference
 
+@property (nonatomic, readonly) BOOL defValue;
+
 + (instancetype) withKey:(NSString *)key defValue:(BOOL)defValue;
 
 - (BOOL) get;
@@ -386,6 +388,8 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 @end
 
 @interface OACommonLong : OACommonPreference
+
+@property (nonatomic, readonly) long defValue;
 
 + (instancetype) withKey:(NSString *)key defValue:(long)defValue;
 
@@ -685,6 +689,8 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @end
 
 @interface OACommonWidgetSizeStyle : OACommonInteger
+
+@property (nonatomic, readonly) EOAWidgetSizeStyle defValue;
 
 + (instancetype) withKey:(NSString *)key defValue:(EOAWidgetSizeStyle)defValue;
 

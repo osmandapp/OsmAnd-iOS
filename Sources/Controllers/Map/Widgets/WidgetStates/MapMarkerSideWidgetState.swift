@@ -48,13 +48,11 @@ final class MapMarkerSideWidgetState: OAWidgetState {
             prefId += customId
         }
         
-        var defValue = SideMarkerMode.distance.name
-        
+        let preference = settings.registerStringPreference(prefId, defValue: SideMarkerMode.distance.name)!
         if let widgetValue = widgetParams?[prefIdKey] as? String {
-            defValue = widgetValue
+            preference.set(widgetValue)
         }
-        
-        return settings.registerStringPreference(prefId, defValue: defValue)
+        return preference
     }
     
     private static func registerAverageSpeedIntervalPref(_ customId: String?,
@@ -67,13 +65,11 @@ final class MapMarkerSideWidgetState: OAWidgetState {
             prefId += customId
         }
         
-        var defValue = OAAverageSpeedComputer.default_INTERVAL_MILLIS()
-        
+        let preference = settings.registerLongPreference(prefId, defValue:  OAAverageSpeedComputer.default_INTERVAL_MILLIS())!
         if let string = widgetParams?[prefIdKey] as? String, let widgetValue = Int(string) {
-            defValue = widgetValue
+            preference.set(widgetValue)
         }
-           
-        return settings.registerLongPreference(prefId, defValue: defValue)
+        return preference
     }
     
     private static func registerMarkerClickBehaviourPref(_ customId: String?,
@@ -86,13 +82,11 @@ final class MapMarkerSideWidgetState: OAWidgetState {
             prefId += customId
         }
         
-        var defValue = MarkerClickBehaviour.switchMode.name
-        
+        let preference = settings.registerStringPreference(prefId, defValue: MarkerClickBehaviour.switchMode.name)!
         if let widgetValue = widgetParams?[prefIdKey] as? String {
-            defValue = widgetValue
+            preference.set(widgetValue)
         }
-        
-        return settings.registerStringPreference(prefId, defValue: defValue)
+        return preference
     }
     
     override func getMenuTitle() -> String! {

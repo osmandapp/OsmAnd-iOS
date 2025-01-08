@@ -53,7 +53,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) copySettings:(OAApplicationMode *)appMode customId:(nullable NSString *)customId;
 - (nullable OAWidgetState *) getWidgetState;
 - (BOOL)isExternal;
-- (nullable OATableDataModel *)getSettingsData:(OAApplicationMode *)appMode;
+
+- (OATableDataModel *_Nullable)getSettingsData:(OAApplicationMode *)appMode
+                     widgetConfigurationParams:(NSDictionary<NSString *, id> *_Nullable)widgetConfigurationParams
+                                      isCreate:(BOOL)isCreate;
 - (nullable OATableDataModel *)getSettingsDataForSimpleWidget:(OAApplicationMode *)appMode;
 
 - (void)showBottomSeparator:(BOOL)show;

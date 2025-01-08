@@ -21,7 +21,7 @@ final class AverageSpeedWidget: OASimpleWidget {
     
     private var measuredIntervalPref: OACommonLong
     private var skipStopsPref: OACommonBoolean
-    private var customId: String? = nil
+    private var customId: String?
 
     private var lastUpdateTime = 0
 
@@ -36,8 +36,8 @@ final class AverageSpeedWidget: OASimpleWidget {
         
         self.customId = customId
         configurePrefs(withId: customId, appMode: appMode, widgetParams: widgetParams)
-        measuredIntervalPref = Self.registerMeasuredIntervalPref(customId, widgetParams: widgetParams)
-        skipStopsPref = Self.registerSkipStopsPref(customId, widgetParams: widgetParams)
+        measuredIntervalPref = Self.registerMeasuredIntervalPref(customId, appMode: appMode, widgetParams: widgetParams)
+        skipStopsPref = Self.registerSkipStopsPref(customId, appMode: appMode, widgetParams: widgetParams)
     }
     
     override init(frame: CGRect) {
@@ -59,7 +59,7 @@ final class AverageSpeedWidget: OASimpleWidget {
     }
     
     func shouldSkipStops(_ appMode: OAApplicationMode) -> Bool {
-        return skipStopsPref.get(appMode)
+        skipStopsPref.get(appMode)
     }
     
     func setShouldSkipStops(_ appMode: OAApplicationMode, skipStops: Bool) {
@@ -68,15 +68,17 @@ final class AverageSpeedWidget: OASimpleWidget {
     
     override func updateInfo() -> Bool {
         let time = Int(Date.now.timeIntervalSince1970 * 1000)
-        if (isUpdateNeeded() || time - lastUpdateTime > Self.UPDATE_INTERVAL_MILLIS) {
+        if isUpdateNeeded() || time - lastUpdateTime > Self.UPDATE_INTERVAL_MILLIS {
             lastUpdateTime = time
             updateAverageSpeed()
             return true
         }
         return false
     }
-
-    override func getSettingsData(_ appMode: OAApplicationMode) -> OATableDataModel? {
+    
+    override func getSettingsData(_ appMode: OAApplicationMode,
+                                  widgetConfigurationParams: [String: Any]?,
+                                  isCreate: Bool) -> OATableDataModel? {
         let data = OATableDataModel()
         let section = data.createNewSection()
         section.headerText = localizedString("shared_string_settings")
@@ -86,8 +88,21 @@ final class AverageSpeedWidget: OASimpleWidget {
         settingRow.key = "value_pref"
         settingRow.title = localizedString("shared_string_interval")
         settingRow.setObj(measuredIntervalPref, forKey: "pref")
-        settingRow.setObj(Self.getIntervalTitle(measuredIntervalPref.get(appMode)), forKey: "value")
-        settingRow.setObj(getPossibleValues(measuredIntervalPref), forKey: "possible_values")
+        
+        var currentValue = OAAverageSpeedComputer.default_INTERVAL_MILLIS()
+        if let widgetConfigurationParams,
+           let key = widgetConfigurationParams.keys.first(where: { $0.hasPrefix(Self.MEASURED_INTERVAL_PREF_ID) }),
+           let value = widgetConfigurationParams[key] as? String,
+           let widgetValue = Int(value) {
+            currentValue = widgetValue
+        } else {
+            if !isCreate {
+                currentValue = measuredIntervalPref.get(appMode)
+            }
+        }
+        settingRow.setObj(Self.getIntervalTitle(currentValue), forKey: "value")
+        
+        settingRow.setObj(getPossibleValues(), forKey: "possible_values")
         settingRow.setObj(localizedString("average_speed_time_interval_desc"), forKey: "footer")
 
         let compassRow = section.createNewRow()
@@ -98,7 +113,7 @@ final class AverageSpeedWidget: OASimpleWidget {
         return data
     }
 
-    private func getPossibleValues(_ pref: OACommonPreference) -> [OATableRowData] {
+    private func getPossibleValues() -> [OATableRowData] {
         var rows = [OATableRowData]()
         let valuesRow = OATableRowData()
         valuesRow.key = "values"
@@ -110,11 +125,11 @@ final class AverageSpeedWidget: OASimpleWidget {
     }
 
     static func getIntervalTitle(_ intervalValue: Int) -> String {
-        return availableIntervals[intervalValue] ?? "-"
+        availableIntervals[intervalValue] ?? "-"
     }
 
     private static func getAvailableIntervals() -> [Int: String] {
-        var intervals =  [Int: String]()
+        var intervals = [Int: String]()
         for intervalNum in OAAverageSpeedComputer.measured_INTERVALS() {
             let interval = intervalNum.intValue
             let seconds = interval < 60 * 1000
@@ -130,7 +145,7 @@ final class AverageSpeedWidget: OASimpleWidget {
         let measuredInterval = measuredIntervalPref.get()
         let skipLowSpeed = skipStopsPref.get()
         let averageSpeed = averageSpeedComputer.getAverageSpeed(measuredInterval, skipLowSpeed: skipLowSpeed)
-        if (averageSpeed.isNaN) {
+        if averageSpeed.isNaN {
             setText(Self.DASH, subtext: nil)
         } else {
             let formattedAverageSpeed = OAOsmAndFormatter.getFormattedSpeed(averageSpeed).components(separatedBy: " ")
@@ -143,31 +158,33 @@ final class AverageSpeedWidget: OASimpleWidget {
         Self.registerSkipStopsPref(customId).set(skipStopsPref.get(appMode), mode: appMode)
     }
     
-    static func registerMeasuredIntervalPref(_ customId: String?, widgetParams: ([String: Any])? = nil) -> OACommonLong {
+    static func registerMeasuredIntervalPref(_ customId: String?,
+                                             appMode: OAApplicationMode? = nil,
+                                             widgetParams: ([String: Any])? = nil) -> OACommonLong {
         let settings = OAAppSettings.sharedManager()!
         let prefId = customId == nil || customId!.isEmpty
         ? Self.MEASURED_INTERVAL_PREF_ID
         : Self.MEASURED_INTERVAL_PREF_ID + customId!
         
-        var defValue = OAAverageSpeedComputer.default_INTERVAL_MILLIS()
-        
-        if let string = widgetParams?[Self.MEASURED_INTERVAL_PREF_ID] as? String, let widgetValue = Int(string) {
-            defValue = widgetValue
+        let preference = settings.registerLongPreference(prefId, defValue: OAAverageSpeedComputer.default_INTERVAL_MILLIS())!
+        if let appMode {
+            if let string = widgetParams?[Self.MEASURED_INTERVAL_PREF_ID] as? String, let widgetValue = Int(string) {
+                preference.set(widgetValue, mode: appMode)
+            }
         }
-           
-        return settings.registerLongPreference(prefId, defValue: defValue)
+        return preference
     }
     
-    static func registerSkipStopsPref(_ customId: String?, widgetParams: ([String: Any])? = nil) -> OACommonBoolean {
+    static func registerSkipStopsPref(_ customId: String?, appMode: OAApplicationMode? = nil, widgetParams: ([String: Any])? = nil) -> OACommonBoolean {
         let settings = OAAppSettings.sharedManager()!
         let prefId = customId == nil || customId!.isEmpty ? Self.SKIP_STOPS_PREF_ID : Self.SKIP_STOPS_PREF_ID + customId!
         
-        var defValue = true
-        
-        if let widgetValue = widgetParams?[Self.SKIP_STOPS_PREF_ID] as? Bool {
-            defValue = widgetValue
+        let preference = settings.registerBooleanPreference(prefId, defValue: true)!
+        if let appMode {
+            if let widgetValue = widgetParams?[Self.SKIP_STOPS_PREF_ID] as? Bool {
+                preference.set(widgetValue, mode: appMode)
+            }
         }
-        
-        return settings.registerBooleanPreference(prefId, defValue: defValue)
+        return preference
     }
 }

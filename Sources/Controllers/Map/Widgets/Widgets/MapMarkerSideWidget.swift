@@ -184,20 +184,22 @@ class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
     private func getMarker() -> OADestination? {
         let destinatoins = mapMarkersHelper.sortedDestinationsWithoutParking()
         if let markers = destinatoins, !markers.isEmpty {
-            if (widgetState.isFirstMarker()) {
+            if widgetState.isFirstMarker() {
                 return markers[0]
-            } else if (markers.count > 1) {
+            } else if markers.count > 1 {
                 return markers[1]
             }
         }
-        return nil;
+        return nil
     }
     
     override func isMetricSystemDepended() -> Bool {
-        return true
+        true
     }
 
-    override func getSettingsData(_ appMode: OAApplicationMode) -> OATableDataModel? {
+    override func getSettingsData(_ appMode: OAApplicationMode,
+                                  widgetConfigurationParams: [String: Any]?,
+                                  isCreate: Bool) -> OATableDataModel? {
         let data = OATableDataModel()
         let section = data.createNewSection()
         section.headerText = localizedString("shared_string_settings")

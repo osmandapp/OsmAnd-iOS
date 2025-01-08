@@ -12,7 +12,7 @@ import Foundation
 @objcMembers
 final class GlideAverageWidgetState: OAWidgetState {
 
-    private static let prefBaseId = "glide_widget_show_average_vertical_speed"
+    static let prefBaseId = "glide_widget_show_average_vertical_speed"
 
     private let widgetType: WidgetType
     private let preference: OACommonBoolean
@@ -48,12 +48,10 @@ final class GlideAverageWidgetState: OAWidgetState {
             prefId += "_\(customId)"
         }
         
-        var defValue = false
-        
+        let preference = OAAppSettings.sharedManager().registerBooleanPreference(prefId, defValue: false)!
         if let string = widgetParams?[Self.prefBaseId] as? String, let widgetValue = Bool(string) {
-            defValue = widgetValue
+            preference.set(widgetValue)
         }
-
-        return OAAppSettings.sharedManager().registerBooleanPreference(prefId, defValue: defValue)
+        return preference
     }
 }

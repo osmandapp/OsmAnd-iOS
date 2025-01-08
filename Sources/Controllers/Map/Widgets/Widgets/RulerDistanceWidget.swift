@@ -76,7 +76,9 @@ class RulerDistanceWidget: OATextInfoWidget {
         OARootViewController.instance().mapPanel.hudViewController?.mapInfoController.updateRuler()
     }
 
-    override func getSettingsData(_ appMode: OAApplicationMode) -> OATableDataModel? {
+    override func getSettingsData(_ appMode: OAApplicationMode,
+                                  widgetConfigurationParams: [String: Any]?,
+                                  isCreate: Bool) -> OATableDataModel? {
         let settings = OAAppSettings.sharedManager()!
         let pref = settings.rulerMode!
         let data = OATableDataModel()
@@ -134,5 +136,4 @@ class RulerDistanceWidget: OATextInfoWidget {
             fatalError()
         }
     }
-    
 }

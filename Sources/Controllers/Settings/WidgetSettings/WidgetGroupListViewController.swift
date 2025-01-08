@@ -12,17 +12,17 @@ import Foundation
 @objcMembers
 class WidgetGroupListViewController: OABaseNavbarViewController, UISearchBarDelegate {
     
-    private var searchController: UISearchController!
-    private var isFiltered = false
-    
-    private var filteredSection: OATableSectionData!
-    
-    private static let enabledWidgetsFilter = Int(KWidgetModeAvailable | kWidgetModeEnabled | kWidgetModeMatchingPanels)
-    lazy private var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
-    
     var widgetPanel: WidgetsPanel!
     var addToNext: Bool?
     var selectedWidget: String?
+    
+    private static let enabledWidgetsFilter = Int(KWidgetModeAvailable | kWidgetModeEnabled | kWidgetModeMatchingPanels)
+    
+    private var searchController: UISearchController!
+    private var isFiltered = false
+    private var filteredSection: OATableSectionData!
+    
+    private lazy var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
     
     override func generateData() {
         filteredSection = OATableSectionData()

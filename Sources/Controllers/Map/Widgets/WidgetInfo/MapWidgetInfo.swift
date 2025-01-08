@@ -120,8 +120,8 @@ class MapWidgetInfo: NSObject, Comparable {
         return WidgetsAvailabilityHelper.isWidgetVisibleByDefault(widgetId: key, appMode: appMode)
     }
     
-    func getSettingsData(_ appMode: OAApplicationMode) -> OATableDataModel? {
-        widget.getSettingsData(appMode)
+    func getSettingsData(_ appMode: OAApplicationMode, _ widgetConfigurationParams: [String: Any]?, isCreate: Bool) -> OATableDataModel? {
+        widget.getSettingsData(appMode, widgetConfigurationParams: widgetConfigurationParams, isCreate: isCreate)
     }
     
     func getSettingsDataForSimpleWidget(_ appMode: OAApplicationMode) -> OATableDataModel? {

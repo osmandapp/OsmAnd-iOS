@@ -21,6 +21,7 @@
 #import "OAMapWidgetRegistry.h"
 #import "OAPluginsHelper.h"
 #import "OAMapSource.h"
+#import "OAColoringType.h"
 #import "OAAppData.h"
 #import "OsmAnd_Maps-Swift.h"
 
@@ -28,6 +29,15 @@ static NSDictionary *platformCompatibilityKeysDictionary = @{
     @"widget_top_panel_order": @"top_widget_panel_order",
     @"widget_bottom_panel_order": @"bottom_widget_panel_order"
 };
+
+static NSArray<NSString *> *excludeKeys = @[
+    @"drawer_items_default",
+    @"context_menu_items",
+    @"collapsed_configure_map_categories",
+    @"trip_recording_Y_axis",
+    @"drawer_items",
+    @"configure_map_items"
+];
 
 @implementation OAProfileSettingsItem
 {
@@ -195,7 +205,9 @@ static NSDictionary *platformCompatibilityKeysDictionary = @{
             {
                 [setting setValueFromString:value appMode:_appMode];
                 if ([key isEqualToString:@"voice_mute"])
+                {
                     [OARoutingHelper.sharedInstance.getVoiceRouter setMute:[OAAppSettings.sharedManager.voiceMute get:_appMode]];
+                }
                 else if ([key isEqualToString:@"map_info_controls"])
                 {
                     NSMutableSet<NSString *> *enabledWidgets = [NSMutableSet set];
@@ -217,10 +229,110 @@ static NSDictionary *platformCompatibilityKeysDictionary = @{
         }
         else
         {
-            [app.data setSettingValue:value forKey:key mode:_appMode];
+            if (![app.data setSettingValue:value forKey:key mode:_appMode])
+                [self setStringValue:value forKey:key mode:_appMode];
         }
     }
 }
+
+- (void)setStringValue:(NSString *)strValue forKey:(NSString *)key mode:(OAApplicationMode *)mode
+{
+    if (strValue.length == 0 || [excludeKeys containsObject:key])
+        return;
+
+    NSString *modeKey = [NSString stringWithFormat:@"%@_%@", key, mode.stringKey];
+    NSUserDefaults *defaults = NSUserDefaults.standardUserDefaults;
+
+    if ([strValue caseInsensitiveCompare:@"true"] == NSOrderedSame)
+    {
+        [defaults setObject:@(YES) forKey:modeKey];
+        return;
+    }
+    else if ([strValue caseInsensitiveCompare:@"false"] == NSOrderedSame)
+    {
+        [defaults setObject:@(NO) forKey:modeKey];
+        return;
+    }
+
+    NSScanner *scanner = [NSScanner scannerWithString:strValue];
+    NSInteger intValue;
+    if ([scanner scanInteger:&intValue] && [scanner isAtEnd])
+    {
+        [defaults setObject:@(intValue) forKey:modeKey];
+        return;
+    }
+
+    scanner = [NSScanner scannerWithString:strValue];
+    double doubleValue;
+    if ([scanner scanDouble:&doubleValue] && [scanner isAtEnd])
+    {
+        [defaults setObject:@(doubleValue) forKey:modeKey];
+        return;
+    }
+
+    if ([strValue containsString:@";"])
+    {
+        NSMutableArray<NSArray<NSString *> *> *nestedArray = [NSMutableArray array];
+        NSArray<NSString *> *subarrays = [strValue componentsSeparatedByString:@";"];
+        for (NSString *subStr in subarrays)
+        {
+            if (subStr.length > 0)
+                [nestedArray addObject:[subStr componentsSeparatedByString:@","]];
+        }
+        [defaults setObject:nestedArray forKey:modeKey];
+        return;
+    }
+
+    if ([strValue containsString:@","])
+    {
+        NSArray<NSString *> *array = [strValue componentsSeparatedByString:@","];
+        [defaults setObject:array forKey:modeKey];
+        return;
+    }
+
+    NSNumber *enumVaue = [self getEnumValue:strValue key:key];
+    [defaults setObject:enumVaue ?: strValue forKey:modeKey];
+}
+
+- (NSNumber *)getEnumValue:(NSString *)value key:(NSString *)key
+{
+    NSArray<id> *values;
+    if ([key isEqualToString:@"routeColoringType"])
+        values = [OAColoringType getRouteColoringTypes];
+    if ([key isEqualToString:@"currentTrackColoringType"])
+        values = [OAColoringType getTrackColoringTypes];
+    if ([key isEqualToString:@"wikipediaImagesDownloadMode"]
+        || [key isEqualToString:@"travelGuidesImagesDownloadMode"])
+        values = [OADownloadMode getDownloadModes];
+
+    for (Class<OAEnumClassProtocol> enumClass in OACommonEnum.enumClasses)
+    {
+        NSNumber *result = [enumClass getStringsValues:values][value];
+        if (result)
+            return result;
+    }
+    return nil;
+}
+
+- (BOOL)isArrayOfStrings:(NSString *)value
+{
+    return [value containsString:@","];
+}
+
+- (BOOL)isArrayOfArrayOfStrings:(NSString *)value
+{
+    if (![value containsString:@";"])
+        return NO;
+
+    NSArray<NSString *> *subarrays = [value componentsSeparatedByString:@";"];
+    for (NSString *subStr in subarrays)
+    {
+        if (subStr.length > 0 && ![subStr containsString:@","])
+            return NO;
+    }
+    return YES;
+}
+
 
 - (void) renameProfile
 {

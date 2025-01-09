@@ -39,7 +39,7 @@ final class SpeedLimitView: UIView {
         
         if isPreview {
             updateWith(value: previewValueDefault)
-            isHidden = OAAppSettings.sharedManager().showSpeedLimitWarning.get() == .whenExceeded
+            isHidden = OAAppSettings.sharedManager().showSpeedLimitWarning.get() == EOASpeedLimitWarningState.whenExceeded.rawValue
         }
     }
     

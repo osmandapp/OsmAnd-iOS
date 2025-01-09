@@ -283,7 +283,7 @@ extension TracksSearchFilter {
     }
     
     static func getFormattedValue(measureUnitType: MeasureUnitType, value: String) -> FormattedValue {
-        let metricsConstants = OAAppSettings.sharedManager().metricSystem.get()
+        let metricsConstants = EOAMetricsConstant(rawValue: Int(OAAppSettings.sharedManager().metricSystem.get()))!
         let params = OsmAndFormatterParams()
         params.updateExtraDecimalPrecision(3)
         params.updateForcePreciseValue(true)

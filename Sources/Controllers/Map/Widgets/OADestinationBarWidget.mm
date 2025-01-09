@@ -289,7 +289,7 @@
     return data;
 }
 
-- (NSString *)getTitle:(EOAActiveMarkerConstant)amc
+- (NSString *)getTitle:(int)amc
 {
     switch (amc)
     {
@@ -310,7 +310,7 @@
         OATableRowData *row = [[OATableRowData alloc] init];
         row.cellType = OASimpleTableViewCell.getCellIdentifier;
         [row setObj:@(i) forKey:@"value"];
-        row.title = [self getTitle:(EOAActiveMarkerConstant) i];
+        row.title = [self getTitle:i];
         [res addObject:row];
     }
     return res;

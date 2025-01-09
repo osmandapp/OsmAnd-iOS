@@ -13,7 +13,7 @@ final class CompassButtonState: MapButtonState {
 
     static let compassHudId = "compass"
 
-    let visibilityPref: OACommonInteger
+    let visibilityPref: OACommonCompassVisibility
 
     init() {
         visibilityPref = Self.createVisibilityPref()
@@ -40,12 +40,7 @@ final class CompassButtonState: MapButtonState {
         CompassVisibility(rawValue: visibilityPref.get(mode))!
     }
 
-    private static func createVisibilityPref() -> OACommonInteger {
-        let settings = OAAppSettings.sharedManager()!
-        guard let preference = settings.getPreferenceByKey("compass_visibility") as? OACommonInteger else {
-            let defaultValue = CompassVisibility.alwaysVisible.rawValue
-            return settings.registerIntPreference("compass_visibility", defValue: defaultValue).makeProfile()
-        }
-        return preference
+    private static func createVisibilityPref() -> OACommonCompassVisibility {
+        return OAAppSettings.sharedManager()!.registerCompassVisibilityPreference("compass_visibility", defValue: CompassVisibility.alwaysVisible.rawValue).makeProfile()
     }
 }

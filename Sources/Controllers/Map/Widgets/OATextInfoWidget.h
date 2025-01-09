@@ -85,7 +85,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)configurePrefsWithId:(nullable NSString *)id appMode:(OAApplicationMode *)appMode widgetParams:(nullable NSDictionary *)widgetParams;
 - (void)configureSimpleLayout;
 - (void)refreshLayout;
-- (nullable OAApplicationMode *)getAppMode;
 - (nullable OAWidgetsPanel *)getWidgetPanel;
 - (nullable OAMapWidgetInfo *)getWidgetInfo;
 

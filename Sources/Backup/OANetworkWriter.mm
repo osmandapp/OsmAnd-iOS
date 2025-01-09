@@ -124,7 +124,7 @@
             {
                 _item = item;
                 _isDirListener = NO;
-                return [_backupHelper uploadFile:fileName type:[OASettingsItemType typeName:item.type] data:[NSData dataWithContentsOfFile:filePath.toNSString() options:NSDataReadingMappedAlways error:NULL] size:-1 lastModifiedTime:item.lastModifiedTime * 1000 listener:self];
+                return [_backupHelper uploadFile:fileName type:[OASettingsItemType typeName:item.type] data:[NSData dataWithContentsOfFile:filePath.toNSString() options:NSDataReadingMappedAlways error:NULL] size:-1 lastModifiedTime:item.lastModifiedTime listener:self];
             }
         }
         return nil;
@@ -177,7 +177,7 @@
                 size = attrs.fileSize / 1024;
             }
         }
-        return [_backupHelper uploadFile:fileName type:type data:data size:(int) size lastModifiedTime:(item.lastModifiedTime * 1000) listener:self];
+        return [_backupHelper uploadFile:fileName type:type data:data size:(int) size lastModifiedTime:item.lastModifiedTime listener:self];
     }
 }
 
@@ -229,11 +229,13 @@
 
 // MARK: OAOnUploadFileListener
 
-- (BOOL)isUploadCancelled {
+- (BOOL)isUploadCancelled
+{
     return self.isCancelled;
 }
 
-- (void)onFileUploadDone:(NSString *)type fileName:(NSString *)fileName uploadTime:(long)uploadTime error:(NSString *)error {
+- (void)onFileUploadDone:(NSString *)type fileName:(NSString *)fileName uploadTime:(long)uploadTime error:(NSString *)error
+{
     if ([_item isKindOfClass:OAFileSettingsItem.class])
     {
         OAFileSettingsItem *fileItem = (OAFileSettingsItem *) _item;
@@ -253,12 +255,14 @@
     }
 }
 
-- (void)onFileUploadProgress:(NSString *)type fileName:(NSString *)fileName progress:(NSInteger)progress deltaWork:(NSInteger)deltaWork {
+- (void)onFileUploadProgress:(NSString *)type fileName:(NSString *)fileName progress:(NSInteger)progress deltaWork:(NSInteger)deltaWork
+{
     if (_listener != nil)
         [_listener onItemUploadProgress:_item fileName:fileName progress:progress deltaWork:deltaWork];
 }
 
-- (void)onFileUploadStarted:(NSString *)type fileName:(NSString *)fileName work:(NSInteger)work {
+- (void)onFileUploadStarted:(NSString *)type fileName:(NSString *)fileName work:(NSInteger)work
+{
     if (_isDirListener)
     {
         _uploadStarted = YES;

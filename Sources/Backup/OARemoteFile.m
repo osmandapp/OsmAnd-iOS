@@ -79,15 +79,15 @@
     
     OARemoteFile *that = (OARemoteFile *) object;
     return _identifier == that.identifier &&
-    _userid == that.userid &&
-    _deviceid == that.deviceid &&
-    _filesize == that.filesize &&
-    _updatetimems == that.updatetimems &&
-    _clienttimems == that.clienttimems &&
-    [_type isEqualToString:that.type] &&
-    [_name isEqualToString:that.name] &&
-    [_updatetime isEqual:that.updatetime] &&
-    [_clienttime isEqual:that.clienttime];
+        _userid == that.userid &&
+        _deviceid == that.deviceid &&
+        _filesize == that.filesize &&
+        _updatetimems == that.updatetimems &&
+        _clienttimems == that.clienttimems &&
+        [_type isEqualToString:that.type] &&
+        [_name isEqualToString:that.name] &&
+        [_updatetime isEqual:that.updatetime] &&
+        [_clienttime isEqual:that.clienttime];
 }
 
 - (NSUInteger) hash

@@ -84,12 +84,12 @@ static NSDictionary *platformCompatibilityKeysDictionary = @{
 
 - (long)localModifiedTime
 {
-    return [OAAppSettings.sharedManager getLastProfileSettingsModifiedTime:_appMode];
+    return [OAAppSettings.sharedManager getLastProfileSettingsModifiedTime:_appMode] * 1000;
 }
 
 - (void)setLocalModifiedTime:(long)localModifiedTime
 {
-    [OAAppSettings.sharedManager setLastProfileModifiedTime:localModifiedTime mode:_appMode];
+    [OAAppSettings.sharedManager setLastProfileModifiedTime:localModifiedTime / 1000 mode:_appMode];
 }
 
 - (void)readFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error

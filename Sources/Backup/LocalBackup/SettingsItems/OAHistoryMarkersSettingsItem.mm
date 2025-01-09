@@ -69,7 +69,7 @@
 
 - (long)localModifiedTime
 {
-    return _historyMarkersHelper.getMarkersHistoryLastModifiedTime;
+    return [_historyMarkersHelper getMarkersHistoryLastModifiedTime];
 }
 
 - (void)setLocalModifiedTime:(long)lastModifiedTime

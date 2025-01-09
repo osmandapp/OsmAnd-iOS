@@ -395,7 +395,7 @@
         NSError *err = nil;
         NSDictionary *attrs = [manager attributesOfItemAtPath:self.filePath error:&err];
         if (!err)
-            return attrs.fileModificationDate.timeIntervalSince1970;
+            return attrs.fileModificationDate.timeIntervalSince1970 * 1000;
     }
     return 0;
 }
@@ -405,7 +405,7 @@
     NSFileManager *manager = NSFileManager.defaultManager;
     if ([manager fileExistsAtPath:self.filePath])
     {
-        [manager setAttributes:@{ NSFileModificationDate : [NSDate dateWithTimeIntervalSince1970:localModifiedTime] } ofItemAtPath:self.filePath error:nil];
+        [manager setAttributes:@{ NSFileModificationDate : [NSDate dateWithTimeIntervalSince1970:localModifiedTime / 1000] } ofItemAtPath:self.filePath error:nil];
     }
 }
 

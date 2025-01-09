@@ -379,9 +379,9 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
         throw [NSException exceptionWithName:@"UserNotRegisteredException" reason:@"User is not registered" userInfo:nil];
 }
 
-- (void) updateFileUploadTime:(NSString *)type fileName:(NSString *)fileName uploadTime:(long)updateTime
+- (void) updateFileUploadTime:(NSString *)type fileName:(NSString *)fileName uploadTime:(long)uploadTime
 {
-    [_dbHelper updateFileUploadTime:type name:fileName updateTime:updateTime];
+    [_dbHelper updateFileUploadTime:type name:fileName updateTime:uploadTime];
 }
 
 - (void) updateFileMd5Digest:(NSString *)type fileName:(NSString *)fileName md5Hex:(NSString *)md5Hex

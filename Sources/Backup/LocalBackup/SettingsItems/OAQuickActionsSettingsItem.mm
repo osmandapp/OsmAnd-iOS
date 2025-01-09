@@ -67,12 +67,12 @@
 
 - (long)localModifiedTime
 {
-    return [_buttonState getLastModifiedTime];
+    return [_buttonState getLastModifiedTime] * 1000;
 }
 
 - (void)setLocalModifiedTime:(long)localModifiedTime
 {
-    [_buttonState setLastModifiedTime:localModifiedTime];
+    [_buttonState setLastModifiedTime:localModifiedTime / 1000];
 }
 
 - (BOOL)exists

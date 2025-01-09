@@ -83,7 +83,7 @@
         OALocalFile *localFile = _localFiles[remoteFile.getTypeNamePath];
         if (localFile != nil)
         {
-            BOOL fileChangedLocally = localFile.localModifiedTime > (localFile.uploadTime / 1000);
+            BOOL fileChangedLocally = localFile.localModifiedTime > localFile.uploadTime;
             BOOL fileChangedRemotely = remoteFile.updatetimems > localFile.uploadTime;
             if (fileChangedRemotely && fileChangedLocally)
             {

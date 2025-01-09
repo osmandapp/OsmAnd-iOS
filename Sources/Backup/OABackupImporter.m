@@ -243,8 +243,8 @@
     if (!restoreDeleted)
     {
         [remoteFileItems enumerateKeysAndObjectsUsingBlock:^(OARemoteFile * _Nonnull key, OASettingsItem * _Nonnull obj, BOOL * _Nonnull stop) {
-            obj.localModifiedTime = key.clienttimems / 1000;
-            obj.lastModifiedTime = key.clienttimems / 1000;
+            obj.localModifiedTime = key.clienttimems;
+            obj.lastModifiedTime = key.clienttimems;
         }];
     }
 
@@ -272,17 +272,8 @@
                     [item apply];
                 }
 
-                [_backupHelper updateFileUploadTime:remoteFile.type fileName:remoteFile.name uploadTime:remoteFile.updatetimems];
-                
-                if ([item isKindOfClass:OAFileSettingsItem.class])
-                {
-                    NSString *itemFileName = [OABackupHelper getItemFileName:item];
-                    if (itemFileName.pathExtension.length == 0)
-                    {
-                        [_backupHelper updateFileUploadTime:[OASettingsItemType typeName:item.type] fileName:itemFileName
-                                                uploadTime:remoteFile.updatetimems];
-                    }
-                }
+                [self updateFileMd5Digest:remoteFile item:item];
+                [self updateFileUploadTime:remoteFile item:item];
             }
             if ([NSFileManager.defaultManager fileExistsAtPath:tempFilePath])
                 [NSFileManager.defaultManager removeItemAtPath:tempFilePath error:nil];
@@ -301,6 +292,49 @@
     }
 }
 
+- (void)updateFileMd5Digest:(OARemoteFile *)remoteFile item:(OASettingsItem *)item
+{
+    if (![item isKindOfClass:OAFileSettingsItem.class])
+        return;
+
+    OAFileSettingsItem *settingsItem = (OAFileSettingsItem *) item;
+    if ([settingsItem needMd5Digest])
+    {
+        OABackupDbHelper *dbHelper = [OABackupDbHelper sharedDatabase];
+        OAUploadedFileInfo *fileInfo = [dbHelper getUploadedFileInfo:remoteFile.type name:remoteFile.name];
+        NSString *lastMd5 = fileInfo != nil ? fileInfo.md5Digest : nil;
+        if (!lastMd5 || lastMd5.length == 0)
+        {
+            NSString *md5Digest = [OAUtilities fileMD5:settingsItem.filePath];
+            if (md5Digest.length > 0)
+            {
+                [_backupHelper updateFileMd5Digest:[OASettingsItemType typeName:item.type]
+                                          fileName:remoteFile.name
+                                            md5Hex:md5Digest];
+            }
+        }
+    }
+}
+
+- (void)updateFileUploadTime:(OARemoteFile *)remoteFile item:(OASettingsItem *)item
+{
+    long time = remoteFile.updatetimems;
+    [_backupHelper updateFileUploadTime:remoteFile.type fileName:remoteFile.name uploadTime:time];
+    if ([item isKindOfClass:OAFileSettingsItem.class])
+    {
+        NSFileManager *fileManager = NSFileManager.defaultManager;
+        BOOL isDir = NO;
+        NSString *itemFileName = [OABackupHelper getFileItemName:(OAFileSettingsItem *) item];
+        [fileManager fileExistsAtPath:itemFileName isDirectory:&isDir];
+        if (isDir)
+        {
+            [_backupHelper updateFileUploadTime:[OASettingsItemType typeName:item.type]
+                                       fileName:itemFileName
+                                     uploadTime:time];
+        }
+    }
+}
+
 - (NSArray<OASettingsItem *> *) getRemoteItems:(NSArray<OARemoteFile *> *)remoteFiles readItems:(BOOL)readItems restoreDeleted:(BOOL)restoreDeleted
 {
     if (remoteFiles.count == 0)
@@ -314,7 +348,8 @@
         json[@"items"] = itemsJson;
 
         NSMutableArray<OARemoteFile *> *uniqueRemoteFiles = [NSMutableArray array];
-        [self collectUniqueRemoteFiles:remoteFiles uniqueRemoteFiles:uniqueRemoteFiles];
+        NSMutableDictionary<NSString *, OARemoteFile *> *deletedRemoteFilesMap = [NSMutableDictionary dictionary];
+        [self collectUniqueRemoteFiles:remoteFiles uniqueRemoteFiles:uniqueRemoteFiles deletedRemoteFilesMap:deletedRemoteFilesMap];
         [operationLog log:@"build uniqueRemoteFiles"];
 
         NSMutableSet<NSString *> *remoteInfoNames = [NSMutableSet set];
@@ -326,7 +361,8 @@
                     remoteItemFilesMap:remoteItemFilesMap
                     remoteInfoFilesMap:remoteInfoFilesMap
                        remoteInfoNames:remoteInfoNames
-                       remoteInfoFiles:remoteInfoFiles readItems:readItems];
+                       remoteInfoFiles:remoteInfoFiles
+                             readItems:readItems];
         [operationLog log:@"build maps"];
 
         NSMutableArray<OARemoteFile *> *noInfoRemoteItemFiles = [NSMutableArray array];
@@ -334,21 +370,21 @@
         
         [operationLog log:@"build noInfoRemoteItemFiles"];
 
-        if (readItems)
-            [self generateItemsJsonByDictionary:itemsJson remoteInfoFiles:remoteInfoFilesMap noInfoRemoteItemFiles:noInfoRemoteItemFiles];
-        else
-            [self generateItemsJson:itemsJson remoteInfoFiles:remoteInfoFiles noInfoRemoteItemFiles:noInfoRemoteItemFiles];
-        
+        if (readItems || remoteInfoFilesMap.count > 0)
+            [self generateItemsJson:itemsJson remoteInfoFilesMap:remoteInfoFilesMap remoteInfoFiles:remoteInfoFiles];
+        if (!readItems)
+            [self generateItemsJson:itemsJson remoteInfoFiles:remoteInfoFiles];
+        [self addRemoteFilesToJson:itemsJson noInfoRemoteItemFiles:noInfoRemoteItemFiles];
         [operationLog log:@"generateItemsJson"];
 
         OASettingsItemsFactory *itemsFactory = [[OASettingsItemsFactory alloc] initWithParsedJSON:json];
-        
         [operationLog log:@"create setting items"];
-        NSArray<OASettingsItem *> *settingsItemList = itemsFactory.getItems;
+        NSArray<OASettingsItem *> *settingsItemList = [itemsFactory getItems];
         if (settingsItemList.count == 0)
             return @[];
         
         [self updateFilesInfo:remoteItemFilesMap settingsItemList:settingsItemList restoreDeleted:restoreDeleted];
+        [self updateFilesInfo:deletedRemoteFilesMap settingsItemList:settingsItemList restoreDeleted:restoreDeleted];
         [items addObjectsFromArray:settingsItemList];
         [operationLog log:@"updateFilesInfo"];
         [operationLog finishOperation];
@@ -361,28 +397,33 @@
 }
 
 - (void)collectUniqueRemoteFiles:(NSArray<OARemoteFile *> *)remoteFiles
-                  uniqueRemoteFiles:(NSMutableArray<OARemoteFile *> *)uniqueRemoteFiles {
+               uniqueRemoteFiles:(NSMutableArray<OARemoteFile *> *)uniqueRemoteFiles
+           deletedRemoteFilesMap:(NSMutableDictionary<NSString *, OARemoteFile *> *)deletedRemoteFiles
+{
     NSMutableSet<NSString *> *uniqueFileIds = [[NSMutableSet alloc] init];
     for (OARemoteFile *file in remoteFiles)
     {
-        if (![file isDeleted])
+        NSString *fileId = [file getTypeNamePath];
+        if ([file isDeleted])
         {
-            NSString *fileId = [file getTypeNamePath];
-            if (![uniqueFileIds containsObject:fileId])
-            {
-                [uniqueFileIds addObject:fileId];
-                [uniqueRemoteFiles addObject:file];
-            }
+            NSString *fileName = [file getTypeNamePath];
+            if (![fileName hasSuffix:OABackupHelper.INFO_EXT] && !deletedRemoteFiles[fileName])
+                deletedRemoteFiles[fileName] = file;
+        }
+        else if (![uniqueFileIds containsObject:fileId])
+        {
+            [uniqueFileIds addObject:fileId];
+            [uniqueRemoteFiles addObject:file];
         }
     }
 }
 
 - (void)processUniqueRemoteFiles:(NSArray<OARemoteFile *> *)uniqueRemoteFiles
-                    remoteItemFilesMap:(NSMutableDictionary<NSString *, OARemoteFile *> *)remoteItemFilesMap
-                    remoteInfoFilesMap:(NSMutableDictionary<NSString *, OARemoteFile *> *)remoteInfoFilesMap
-                       remoteInfoNames:(NSMutableSet<NSString *> *)remoteInfoNames
-                     remoteInfoFiles:(NSMutableArray<OARemoteFile *> *)remoteInfoFiles
-                           readItems:(BOOL)readItems
+              remoteItemFilesMap:(NSMutableDictionary<NSString *, OARemoteFile *> *)remoteItemFilesMap
+              remoteInfoFilesMap:(NSMutableDictionary<NSString *, OARemoteFile *> *)remoteInfoFilesMap
+                 remoteInfoNames:(NSMutableSet<NSString *> *)remoteInfoNames
+                 remoteInfoFiles:(NSMutableArray<OARemoteFile *> *)remoteInfoFiles
+                       readItems:(BOOL)readItems
 {
     NSDictionary<NSString *, OAUploadedFileInfo *> *infoMap = [OABackupDbHelper.sharedDatabase getUploadedFileInfoMap];
     OABackupInfo *backupInfo = _backupHelper.backup.backupInfo;
@@ -404,7 +445,8 @@
             }
             OAUploadedFileInfo *fileInfo = infoMap[[NSString stringWithFormat:@"%@___%@", remoteFile.type, origFileName]];
             long uploadTime = fileInfo != nil ? fileInfo.uploadTime : 0;
-            if (readItems && (uploadTime != remoteFile.updatetimems || delete))
+            if ([self shouldDownloadOnCollecting:remoteFile defValue:readItems]
+                && (uploadTime != remoteFile.updatetimems || delete))
                 remoteInfoFilesMap[[_tmpFilesDir stringByAppendingPathComponent:fileName]] = remoteFile;
             
             NSString *itemFileName = [fileName stringByDeletingPathExtension];
@@ -416,6 +458,12 @@
             remoteItemFilesMap[fileName] = remoteFile;
         }
     }
+}
+
+- (BOOL)shouldDownloadOnCollecting:(OARemoteFile *)remoteFile defValue:(BOOL)defValue
+{
+    NSString *type = remoteFile.type;
+    return defValue || [type isEqualToString:[OASettingsItemType typeName:EOASettingsItemTypeQuickActions]];
 }
 
 - (void)collectNoInfoRemoteItemFiles:(NSMutableArray<OARemoteFile *> *)noInfoRemoteItemFiles
@@ -449,13 +497,16 @@
         NSArray<OARemoteFile *> *foundRemoteFiles = [self getItemRemoteFiles:settingsItem remoteFiles:remoteFilesMap];
         for (OARemoteFile *remoteFile in foundRemoteFiles)
         {
-            if (!restoreDeleted)
-                settingsItem.lastModifiedTime = remoteFile.clienttimems / 1000;
             remoteFile.item = settingsItem;
-            if ([settingsItem isKindOfClass:OAFileSettingsItem.class])
+            if (![remoteFile isDeleted])
             {
-                OAFileSettingsItem *fileSettingsItem = (OAFileSettingsItem *) settingsItem;
-                fileSettingsItem.size = remoteFile.filesize;
+                if (!restoreDeleted)
+                    settingsItem.lastModifiedTime = remoteFile.clienttimems;
+                if ([settingsItem isKindOfClass:OAFileSettingsItem.class])
+                {
+                    OAFileSettingsItem *fileSettingsItem = (OAFileSettingsItem *) settingsItem;
+                    fileSettingsItem.size = remoteFile.filesize;
+                }
             }
         }
     }
@@ -497,7 +548,6 @@
 
 - (void) generateItemsJson:(NSMutableArray *)itemsJson
            remoteInfoFiles:(NSArray<OARemoteFile *> *)remoteInfoFiles
-     noInfoRemoteItemFiles:(NSArray<OARemoteFile *> *)noInfoRemoteItemFiles
 {
     for (OARemoteFile *remoteFile in remoteInfoFiles)
     {
@@ -526,17 +576,17 @@
         itemJson[@"file"] = fileName;
         [itemsJson addObject:itemJson];
     }
-    [self addRemoteFilesToJson:itemsJson noInfoRemoteItemFiles:noInfoRemoteItemFiles];
 }
 
-- (void) generateItemsJsonByDictionary:(NSMutableArray *)itemsJson
-           remoteInfoFiles:(NSDictionary<NSString *, OARemoteFile *> *)remoteInfoFiles
-     noInfoRemoteItemFiles:(NSArray<OARemoteFile *> *)noInfoRemoteItemFiles
+- (void) generateItemsJson:(NSMutableArray *)itemsJson
+        remoteInfoFilesMap:(NSDictionary<NSString *, OARemoteFile *> *)remoteInfoFilesMap
+           remoteInfoFiles:(NSMutableArray<OARemoteFile *> *)remoteInfoFiles
 {
     NSMutableArray<OAFileDownloadTask *> *tasks = [NSMutableArray array];
     __weak OABackupImporter *weakSelf = self;
-    [remoteInfoFiles enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, OARemoteFile * _Nonnull obj, BOOL * _Nonnull stop) {
-        [tasks addObject:[[OAFileDownloadTask alloc] initWithFilePath:key remoteFile:obj onDownloadFileListener:weakSelf]];
+    [remoteInfoFilesMap enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, OARemoteFile * _Nonnull remoteFile, BOOL * _Nonnull stop) {
+        [tasks addObject:[[OAFileDownloadTask alloc] initWithFilePath:key remoteFile:remoteFile onDownloadFileListener:weakSelf]];
+        [remoteInfoFiles removeObject:remoteFile];
     }];
     
     [_queue addOperations:tasks waitUntilFinished:YES];
@@ -544,7 +594,7 @@
     BOOL hasDownloadErrors = [self hasDownloadErrors:tasks];
     if (!hasDownloadErrors)
     {
-        for (NSString *filePath in remoteInfoFiles.allKeys)
+        for (NSString *filePath in remoteInfoFilesMap.allKeys)
         {
             NSError *err = nil;
             NSData *data = [NSData dataWithContentsOfFile:filePath options:NSDataReadingMappedIfSafe error:&err];
@@ -567,12 +617,11 @@
     {
         @throw [NSException exceptionWithName:@"IOException" reason:@"Error downloading items info" userInfo:nil];
     }
-    [self addRemoteFilesToJson:itemsJson noInfoRemoteItemFiles:noInfoRemoteItemFiles];
 }
 
 - (void) addRemoteFilesToJson:(NSMutableArray *)itemsJson noInfoRemoteItemFiles:(NSArray<OARemoteFile *> *)noInfoRemoteItemFiles
 {
-    NSMutableSet<NSString *> *fileItems = [NSMutableSet set];
+//    NSMutableSet<NSString *> *fileItems = [NSMutableSet set];
     for (OARemoteFile *remoteFile in noInfoRemoteItemFiles)
     {
         NSString *type = remoteFile.type;

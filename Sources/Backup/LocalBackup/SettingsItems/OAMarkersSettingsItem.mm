@@ -75,12 +75,12 @@
 
 - (long)localModifiedTime
 {
-    return [_destinationsHelper getMarkersLastModifiedTime];
+    return [_destinationsHelper getMarkersLastModifiedTime] * 1000;
 }
 
 - (void)setLocalModifiedTime:(long)localModifiedTime
 {
-    [_destinationsHelper setMarkersLastModifiedTime:localModifiedTime];
+    [_destinationsHelper setMarkersLastModifiedTime:localModifiedTime / 1000];
 }
 
 - (void) apply

@@ -176,15 +176,6 @@
     }
 }
 
-- (void)updateFileUploadTime:(OAPrepareBackupResult *)backup backupHelper:(OABackupHelper *)backupHelper fileName:(NSString *)fileName item:(OASettingsItem *)item {
-    if (fileName)
-    {
-        OARemoteFile *remoteFile = [backup getRemoteFile:[OASettingsItemType typeName:item.type] fileName:fileName];
-        if (remoteFile)
-            [backupHelper updateFileUploadTime:remoteFile.type fileName:remoteFile.name uploadTime:remoteFile.clienttimems];
-    }
-}
-
 - (NSArray<OASettingsItem *> *) doInBackground
 {
     switch (_importType) {

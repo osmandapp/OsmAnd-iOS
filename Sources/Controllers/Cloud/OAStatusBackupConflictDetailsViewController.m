@@ -160,8 +160,8 @@
     else if (self.delegate)
     {
         long timeMs = _recentChangesType == EOARecentChangesLocal || _recentChangesType == EOARecentChangesConflicts
-        ? _localFile.localModifiedTime * 1000
-        : _recentChangesType == EOARecentChangesRemote && deleteOperation ? _localFile.uploadTime : _remoteFile.updatetimems;
+            ? _localFile.localModifiedTime
+            : _recentChangesType == EOARecentChangesRemote && deleteOperation ? _localFile.uploadTime : _remoteFile.updatetimems;
         NSString *summary = OALocalizedString(deleteOperation && _recentChangesType != EOARecentChangesLocal ? @"poi_remove_success" : @"shared_string_modified");
         [itemInfoRow setDescr:[self.delegate generateTimeString:timeMs summary:summary]];
     }
@@ -313,9 +313,9 @@
         if (deleteOperation)
         {
             description = _recentChangesType == EOARecentChangesLocal
-            ? OALocalizedString(@"cloud_version_will_be_removed")
-            : [self.delegate generateTimeString:_localFile.localModifiedTime * 1000
-                                        summary:OALocalizedString(@"shared_string_modified")];
+                ? OALocalizedString(@"cloud_version_will_be_removed")
+                : [self.delegate generateTimeString:_localFile.localModifiedTime
+                                            summary:OALocalizedString(@"shared_string_modified")];
         }
         else if (!_localFile)
         {
@@ -323,7 +323,7 @@
         }
         else
         {
-            description = [self.delegate generateTimeString:_localFile.item.localModifiedTime * 1000
+            description = [self.delegate generateTimeString:_localFile.item.localModifiedTime
                                                     summary:OALocalizedString(@"shared_string_modified")];
             if (_recentChangesType == EOARecentChangesRemote)
             {

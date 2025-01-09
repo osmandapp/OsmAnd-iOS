@@ -21,7 +21,7 @@ final class TrashItem: NSObject {
     }
 
     var time: Int {
-        deletedFile.updatetimems / 1000
+        deletedFile.updatetimems
     }
 
     var name: String {
@@ -34,7 +34,7 @@ final class TrashItem: NSObject {
 
     var descr: String {
         let deleted = localizedString("shared_string_deleted")
-        let formattedTime = BackupUiUtils.formatPassedTime(time: time, longPattern: "MMM d, HH:mm", shortPattern: "HH:mm", def: "")
+        let formattedTime = BackupUiUtils.formatPassedTime(time: time / 1000, longPattern: "MMM d, HH:mm", shortPattern: "HH:mm", def: "")
         return String(format: localizedString("ltr_or_rtl_combine_via_colon"), deleted, formattedTime)
     }
 

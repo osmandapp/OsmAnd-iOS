@@ -107,7 +107,11 @@
                                 {
                                     fileName = f.lastPathComponent;
                                     NSDictionary *attrs = [fileManager attributesOfItemAtPath:f error:nil];
-                                    [self createLocalFile:result item:item fileName:fileName filePath:f lastModified:attrs.fileModificationDate.timeIntervalSince1970];
+                                    [self createLocalFile:result
+                                                     item:item
+                                                 fileName:fileName
+                                                 filePath:f
+                                             lastModified:attrs.fileModificationDate.timeIntervalSince1970 * 1000];
                                 }
                             }
                         }
@@ -119,18 +123,30 @@
                     if ([filePath.pathExtension.lowerCase isEqualToString:@"sqlitedb"])
                     {
                         NSDictionary *attrs = [fileManager attributesOfItemAtPath:filePath error:nil];
-                        [self createLocalFile:result item:item fileName:fileName filePath:filePath lastModified:attrs.fileModificationDate.timeIntervalSince1970];
+                        [self createLocalFile:result
+                                         item:item
+                                     fileName:fileName
+                                     filePath:filePath
+                                 lastModified:attrs.fileModificationDate.timeIntervalSince1970 * 1000];
                     }
                 }
                 else
                 {
                     NSDictionary *attrs = [fileManager attributesOfItemAtPath:filePath error:nil];
-                    [self createLocalFile:result item:item fileName:fileName filePath:filePath lastModified:attrs.fileModificationDate.timeIntervalSince1970];
+                    [self createLocalFile:result
+                                     item:item
+                                 fileName:fileName
+                                 filePath:filePath
+                             lastModified:attrs.fileModificationDate.timeIntervalSince1970 * 1000];
                 }
             }
             else
             {
-                [self createLocalFile:result item:item fileName:fileName filePath:nil lastModified:item.lastModifiedTime];
+                [self createLocalFile:result
+                                 item:item
+                             fileName:fileName
+                             filePath:nil
+                         lastModified:item.lastModifiedTime];
             }
         }
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -160,9 +176,9 @@
             localFile.uploadTime = fileInfo.uploadTime;
             NSString *lastMd5 = fileInfo.md5Digest;
             BOOL needM5Digest = [item isKindOfClass:OAFileSettingsItem.class]
-            && ((OAFileSettingsItem *) item).needMd5Digest
-            && localFile.uploadTime < lastModifiedTime
-            && lastMd5.length > 0;
+                && ((OAFileSettingsItem *) item).needMd5Digest
+                && localFile.uploadTime < lastModifiedTime
+                && lastMd5.length > 0;
             if (needM5Digest && filePath && [NSFileManager.defaultManager fileExistsAtPath:filePath])
             {
                 NSString *md5 = [OAUtilities fileMD5:filePath];

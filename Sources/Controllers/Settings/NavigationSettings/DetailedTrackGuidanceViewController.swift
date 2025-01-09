@@ -75,11 +75,13 @@ final class DetailedTrackGuidanceViewController: OABaseSettingsViewController {
         alwaysRow.title = localizedString("shared_string_always")
         alwaysRow.iconName = "ic_checkmark_default"
         alwaysRow.setObj(changedTrackGuidance == .automatic, forKey: "selected")
-        let thresholdSection = tableData.createNewSection()
-        let thresholdSliderRow = thresholdSection.createNewRow()
-        thresholdSliderRow.cellType = OATitleSliderRoundCell.reuseIdentifier
-        thresholdSliderRow.key = Self.thresholdSliderRowKey
-        thresholdSliderRow.title = localizedString("threshold_distance")
+        if changedTrackGuidance == .automatic {
+            let thresholdSection = tableData.createNewSection()
+            let thresholdSliderRow = thresholdSection.createNewRow()
+            thresholdSliderRow.cellType = OATitleSliderRoundCell.reuseIdentifier
+            thresholdSliderRow.key = Self.thresholdSliderRowKey
+            thresholdSliderRow.title = localizedString("threshold_distance")
+        }
     }
     
     override func getRow(_ indexPath: IndexPath?) -> UITableViewCell? {
@@ -120,7 +122,7 @@ final class DetailedTrackGuidanceViewController: OABaseSettingsViewController {
         let item = tableData.item(for: indexPath)
         changedTrackGuidance = item.key == Self.askRowKey ? .manual : .automatic
         generateData()
-        tableView.reloadSections(IndexSet(integer: 1), with: .automatic)
+        tableView.reloadData()
     }
     
     override func onRightNavbarButtonPressed() {

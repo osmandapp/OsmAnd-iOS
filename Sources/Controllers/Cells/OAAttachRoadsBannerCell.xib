@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="OAIconsPaletteCell" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="OAAttachRoadsBannerCell" rowHeight="134" id="AUO-jE-YkS" userLabel="OAAttachRoadsBannerCell" customClass="OAAttachRoadsBannerCell">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="134"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" tableViewCell="AUO-jE-YkS" id="LPo-N6-OKj">
+                <rect key="frame" x="0.0" y="0.0" width="393" height="134"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FeZ-s4-GyW" userLabel="Content Container">
+                        <rect key="frame" x="14" y="4" width="365" height="120"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tVP-fK-wFN">
+                                <rect key="frame" x="20" y="0.0" width="345" height="84"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="84" id="A0K-4s-vBb"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" name="textColorPrimary"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aSo-S2-hLf" userLabel="Separator View">
+                                <rect key="frame" x="20" y="84" width="345" height="1"/>
+                                <color key="backgroundColor" name="customSeparator"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="8zK-LO-MKb"/>
+                                </constraints>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fPM-ea-e5K">
+                                <rect key="frame" x="20" y="85" width="345" height="48"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="48" id="Y19-if-hrE"/>
+                                </constraints>
+                                <color key="tintColor" name="textColorActive"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Button" titleAlignment="leading">
+                                    <directionalEdgeInsets key="contentInsets" top="0.0" leading="0.0" bottom="0.0" trailing="0.0"/>
+                                </buttonConfiguration>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" name="groupBg"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="aSo-S2-hLf" secondAttribute="trailing" id="4dN-Pc-8K3"/>
+                            <constraint firstAttribute="trailing" secondItem="tVP-fK-wFN" secondAttribute="trailing" id="A5b-Kp-Vri"/>
+                            <constraint firstItem="fPM-ea-e5K" firstAttribute="leading" secondItem="FeZ-s4-GyW" secondAttribute="leading" constant="20" symbolic="YES" id="ASP-fI-bgp"/>
+                            <constraint firstItem="aSo-S2-hLf" firstAttribute="top" secondItem="tVP-fK-wFN" secondAttribute="bottom" id="DXk-gz-wub"/>
+                            <constraint firstItem="fPM-ea-e5K" firstAttribute="top" secondItem="aSo-S2-hLf" secondAttribute="bottom" id="JMC-w9-wZ4"/>
+                            <constraint firstAttribute="trailing" secondItem="fPM-ea-e5K" secondAttribute="trailing" id="QIg-R1-ofo"/>
+                            <constraint firstItem="tVP-fK-wFN" firstAttribute="top" secondItem="FeZ-s4-GyW" secondAttribute="top" id="Vme-bs-5yU"/>
+                            <constraint firstAttribute="bottom" secondItem="fPM-ea-e5K" secondAttribute="bottom" priority="999" id="c9y-Im-FwC"/>
+                            <constraint firstItem="tVP-fK-wFN" firstAttribute="leading" secondItem="FeZ-s4-GyW" secondAttribute="leading" constant="20" symbolic="YES" id="gMp-9i-m8f"/>
+                            <constraint firstItem="aSo-S2-hLf" firstAttribute="leading" secondItem="FeZ-s4-GyW" secondAttribute="leading" constant="20" symbolic="YES" id="nE0-yw-Cwa"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <color key="backgroundColor" name="groupBg"/>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="FeZ-s4-GyW" secondAttribute="bottom" constant="10" id="CyQ-03-amJ"/>
+                    <constraint firstAttribute="trailing" secondItem="FeZ-s4-GyW" secondAttribute="trailing" constant="14" id="RAR-DG-ic2"/>
+                    <constraint firstItem="FeZ-s4-GyW" firstAttribute="leading" secondItem="LPo-N6-OKj" secondAttribute="leading" constant="14" id="ZGs-ru-5GT"/>
+                    <constraint firstItem="FeZ-s4-GyW" firstAttribute="top" secondItem="LPo-N6-OKj" secondAttribute="top" constant="4" id="cDY-o3-VnU"/>
+                </constraints>
+            </tableViewCellContentView>
+            <color key="backgroundColor" name="groupBg"/>
+            <connections>
+                <outlet property="button" destination="fPM-ea-e5K" id="NzM-yH-ld6"/>
+                <outlet property="contentContainer" destination="FeZ-s4-GyW" id="IcR-cn-ncc"/>
+                <outlet property="contentView" destination="LPo-N6-OKj" id="K24-JP-eEg"/>
+                <outlet property="label" destination="tVP-fK-wFN" id="arl-Z8-Y08"/>
+            </connections>
+            <point key="canvasLocation" x="67.938931297709928" y="-2.8169014084507045"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <namedColor name="customSeparator">
+            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="groupBg">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColorActive">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColorPrimary">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

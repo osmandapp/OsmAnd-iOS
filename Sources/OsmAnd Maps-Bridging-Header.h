@@ -179,6 +179,7 @@
 #import "OATitleDescrDraggableCell.h"
 #import "OARouteStatisticsModeCell.h"
 #import "OADeviceScreenTableViewCell.h"
+#import "OATitleSliderRoundCell.h"
 
 // Views
 #import "OASegmentedSlider.h"

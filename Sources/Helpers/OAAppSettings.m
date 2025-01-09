@@ -260,7 +260,8 @@ static NSString * const cycleRoutesParameterKey = @"cycleRoutesParameter";
 static NSString * const mountainBikeRoutesParameterKey = @"mountainBikeRoutesParameter";
 static NSString * const mapManuallyRotatingAngleKey = @"mapManuallyRotatingAngle";
 static NSString * const mapScreenOrientationKey = @"mapScreenOrientation";
-
+static NSString * const detailedTrackGuidanceKey = @"detailed_track_guidance";
+static NSString * const gpxApproximationDistanceKey = @"gpx_approximation_distance";
 static NSString * const activeMarkerKey = @"activeMarkerKey";
 static NSString * const mapDistanceIndicationVisabilityKey = @"mapDistanceIndicationVisabilityKey";
 static NSString * const mapDistanceIndicationKey = @"mapDistanceIndicationKey";
@@ -4803,6 +4804,12 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
         
         _mapScreenOrientation = [OACommonInteger withKey:mapScreenOrientationKey defValue:EOAScreenOrientationSystem];
         [_profilePreferences setObject:_mapScreenOrientation forKey:@"map_screen_orientation"];
+        
+        _detailedTrackGuidance = [[OACommonInteger withKey:detailedTrackGuidanceKey defValue:EOATrackApproximationManual] makeShared];
+        [_profilePreferences setObject:_detailedTrackGuidance forKey:@"detailed_track_guidance"];
+        
+        _gpxApproximationDistance = [[OACommonInteger withKey:gpxApproximationDistanceKey defValue:50] makeShared];
+        [_profilePreferences setObject:_gpxApproximationDistance forKey:@"gpx_approximation_distance"];
         
         _useOldRouting = [[[OACommonBoolean withKey:useOldRoutingKey defValue:NO] makeGlobal] makeShared];
         [_globalPreferences setObject:_useOldRouting forKey:@"use_old_routing"];

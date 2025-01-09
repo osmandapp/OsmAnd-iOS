@@ -323,6 +323,7 @@ static BOOL _isDeviatedFromRoute = false;
     {
         OARouteCalculationResult *previousRoute = _route;
         [self clearCurrentRoute:finalLocation newIntermediatePoints:intermediatePoints];
+        [OARoutingHelperUtils updateDrivingRegionIfNeeded:currentLocation force:NO];
         // to update route
         [self setCurrentLocation:currentLocation returnUpdatedLocation:NO previousRoute:previousRoute targetPointsChanged:YES];
     }

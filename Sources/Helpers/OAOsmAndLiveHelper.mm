@@ -130,14 +130,14 @@
     }
 }
 
-+ (void)downloadUpdatesForRegion:(QString)regionName resourcesManager:(std::shared_ptr<OsmAnd::ResourcesManager>) resourcesManager checkUpdatesAsync:(BOOL)checkUpdatesAsync
++ (void)downloadUpdatesForRegion:(QString)regionName resourcesManager:(std::shared_ptr<OsmAnd::ResourcesManager>) resourcesManager checkUpdatesAsync:(BOOL)checkUpdatesAsync forceUpdate:(BOOL)forceUpdate
 {
     if (![OAAppSettings sharedManager].settingOsmAndLiveEnabled.get || ![OAIAPHelper isSubscribedToLiveUpdates])
         return;
     
     void (^downloadUpdatesBlock)(void) = ^{
         NSString *regionNameStr = regionName.toNSString();
-        if ([OAOsmAndLiveHelper getPreferenceEnabledForLocalIndex:regionNameStr])
+        if (forceUpdate || [OAOsmAndLiveHelper getPreferenceEnabledForLocalIndex:regionNameStr])
         {
             AFNetworkReachabilityStatus status = AFNetworkReachabilityManager.sharedManager.networkReachabilityStatus;
             BOOL downloadOnlyViaWiFi = [OAOsmAndLiveHelper getPreferenceWifiForLocalIndex:regionNameStr];
@@ -149,7 +149,7 @@
             NSDate *lastUpdateDate = [NSDate dateWithTimeIntervalSince1970:updateTime];
             int seconds = -[lastUpdateDate timeIntervalSinceNow];
             int secondsRequired = updateFrequency == ELiveUpdateFrequencyHourly ? kLiveUpdateFrequencyHour : updateFrequency == ELiveUpdateFrequencyDaily ? kLiveUpdateFrequencyDay : kLiveUpdateFrequencyWeek;
-            if (seconds > secondsRequired || updateTime == -1.0)
+            if (seconds > secondsRequired || updateTime == -1.0 || forceUpdate)
             {
                 const auto& lst = resourcesManager->changesManager->getUpdatesByMonth(regionName);
                 for (const auto& res : lst->getItemsForUpdate())

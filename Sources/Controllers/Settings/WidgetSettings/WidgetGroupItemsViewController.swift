@@ -27,7 +27,15 @@ class WidgetGroupItemsViewController: OABaseNavbarViewController {
             guard let widgetInfo else { continue }
             let row = section.createNewRow()
             row.cellType = OASimpleTableViewCell.getIdentifier()
-            row.title = widget == .sunPosition ? widgetInfo.getStateIndependentTitle() : widgetInfo.getTitle()
+            var title = widgetInfo.getTitle()
+            switch widget {
+            case .sunPosition:
+                title = widgetInfo.getStateIndependentTitle()
+            case .sideMarker1, .sideMarker2:
+                title = widgetInfo.getWidgetDefaultTitle()
+            default: break
+            }
+            row.title = title
             row.iconName = widgetInfo.widget.widgetType?.iconName
             row.setObj(widgetInfo, forKey: "widget_info")
             row.setObj(widget, forKey: "widget_type")

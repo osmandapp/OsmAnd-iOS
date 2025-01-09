@@ -346,6 +346,7 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 - (void) resetToDefault;
 - (void) setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode;
 - (NSString *) toStringValue:(OAApplicationMode *)mode;
+- (NSString *)toStringFromValue:(id)value;
 - (void) copyValueFromAppMode:(OAApplicationMode *)sourceAppMode targetAppMode:(OAApplicationMode *)targetAppMode;
 
 - (BOOL) isSetForMode:(OAApplicationMode *)mode;
@@ -378,6 +379,8 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 
 @interface OACommonInteger : OACommonPreference
 
+@property (nonatomic, readonly) int defValue;
+
 + (instancetype) withKey:(NSString *)key defValue:(int)defValue;
 
 - (int) get;
@@ -401,6 +404,8 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 @end
 
 @interface OACommonString : OACommonPreference
+
+@property (nonatomic, readonly) NSString *defValue;
 
 + (instancetype) withKey:(NSString *)key defValue:(NSString *)defValue;
 
@@ -690,7 +695,8 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 @interface OACommonWidgetSizeStyle : OACommonInteger
 
-@property (nonatomic, readonly) EOAWidgetSizeStyle defValue;
+// FIXME: use int
+//@property (nonatomic, readonly) EOAWidgetSizeStyle defValue;
 
 + (instancetype) withKey:(NSString *)key defValue:(EOAWidgetSizeStyle)defValue;
 
@@ -709,6 +715,8 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 
 
 @interface OACommonWidgetZoomLevelType : OACommonInteger
+
+//@property (nonatomic, readonly) EOAWidgetZoomLevelType defValue;
 
 + (instancetype)withKey:(NSString *)key defValue:(EOAWidgetZoomLevelType)defValue;
 

@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable NSString *) getMenuTitle;
 - (nullable NSString *) getWidgetTitle;
+- (nullable NSString *) getWidgetDefaultTitle;
 - (nullable NSString *) getMenuDescription;
 - (nullable NSString *) getMenuIconId;
 - (nullable NSString *) getMenuItemId;

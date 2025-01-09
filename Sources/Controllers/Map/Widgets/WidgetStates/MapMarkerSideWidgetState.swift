@@ -89,6 +89,13 @@ final class MapMarkerSideWidgetState: OAWidgetState {
         return preference
     }
     
+    override func getWidgetDefaultTitle() -> String? {
+        let widgetType = firstMarker ? WidgetType.sideMarker1 : WidgetType.sideMarker2
+        let title = widgetType.title
+        let subtitle = SideMarkerMode.markerModeByName(mapMarkerModePref.defValue)!.title
+        return String(format: localizedString("ltr_or_rtl_combine_via_colon"), title, subtitle)
+    }
+    
     override func getMenuTitle() -> String! {
         let widgetType = firstMarker ? WidgetType.sideMarker1 : WidgetType.sideMarker2
         let title = widgetType.title

@@ -1524,6 +1524,13 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
     return @"";
 }
 
+- (NSString *)toStringFromValue:(id)value
+{
+    NSAssert(NO, @"toStringFromValue method is not implemented");
+    return @"";
+}
+
+
 - (void)copyValueFromAppMode:(OAApplicationMode *)sourceAppMode targetAppMode:(OAApplicationMode *)targetAppMode
 {
     [self setValue:[self getValue:sourceAppMode] mode:targetAppMode];
@@ -1696,7 +1703,7 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 @interface OACommonInteger ()
 
-@property (nonatomic) int defValue;
+@property (nonatomic, readwrite) int defValue;
 
 @end
 
@@ -1837,7 +1844,7 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 @interface OACommonString ()
 
-@property (nonatomic) NSString *defValue;
+@property (nonatomic, readwrite) NSString *defValue;
 
 @end
 
@@ -2641,6 +2648,25 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 - (NSString *)toStringValue:(OAApplicationMode *)mode
 {
     switch ([self get:mode])
+    {
+        case ONE_ACTIVE_MARKER:
+            return @"1";
+        case TWO_ACTIVE_MARKERS:
+            return @"2";
+        default:
+            return @"1";
+    }
+}
+
+- (NSString *)toStringFromValue:(id)value
+{
+    if (![value isKindOfClass:[NSNumber class]]) {
+        return @"";
+    }
+    
+    EOAActiveMarkerConstant type = [value integerValue];
+    
+    switch (type)
     {
         case ONE_ACTIVE_MARKER:
             return @"1";
@@ -3583,11 +3609,13 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 @end
 
-@interface OACommonWidgetSizeStyle()
-@property (nonatomic, readwrite) EOAWidgetSizeStyle defValue;
-@end
+//@interface OACommonWidgetSizeStyle()
+//@property (nonatomic, readwrite) EOAWidgetSizeStyle defValue;
+//@end
 
 @implementation OACommonWidgetSizeStyle
+// FIXME: ?
+@dynamic defValue;
 
 + (instancetype) withKey:(NSString *)key defValue:(EOAWidgetSizeStyle)defValue
 {
@@ -3655,6 +3683,10 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 @end
 
+//@interface OACommonWidgetZoomLevelType()
+//@property (nonatomic, readwrite) EOAWidgetZoomLevelType defValue;
+//@end
+
 
 @implementation OACommonWidgetZoomLevelType
 
@@ -3715,6 +3747,25 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
 - (NSString *)toStringValue:(OAApplicationMode *)mode
 {
     switch ([self get:mode])
+    {
+        case EOAWidgetZoom:
+            return kZoomKey;
+        case EOAWidgetMapScale:
+            return kMapScaleKey;
+        default:
+            return @"";
+    }
+}
+
+- (NSString *)toStringFromValue:(id)value
+{
+    if (![value isKindOfClass:[NSNumber class]]) {
+        return @"";
+    }
+    
+    EOAWidgetZoomLevelType type = [value integerValue];
+    
+    switch (type)
     {
         case EOAWidgetZoom:
             return kZoomKey;

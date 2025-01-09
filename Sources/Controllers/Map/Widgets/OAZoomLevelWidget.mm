@@ -101,7 +101,21 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
     row.descr = title;
 
     [row setObj:_widgetState.typePreference forKey:@"pref"];
-    [row setObj:[self getTitle:(EOAWidgetZoomLevelType)[_widgetState.typePreference get:appMode]] forKey:@"value"];
+    
+    EOAWidgetZoomLevelType currentValue = (EOAWidgetZoomLevelType)_widgetState.typePreference.defValue;
+    
+    if ([widgetConfigurationParams objectForKey:ZoomLevelWidgetState.zoomLevelType] && [widgetConfigurationParams[ZoomLevelWidgetState.zoomLevelType] isEqualToString:@"MAP_SCALE"] )
+    {
+        currentValue = EOAWidgetMapScale;
+    }
+    else
+    {
+        if (!isCreate)
+            currentValue = (EOAWidgetZoomLevelType)[_widgetState.typePreference get:appMode];
+    }
+    
+    [row setObj:[self getTitle:currentValue] forKey:@"value"];
+
     [row setObj:self.getPossibleValues forKey:@"possible_values"];
    
     return data;

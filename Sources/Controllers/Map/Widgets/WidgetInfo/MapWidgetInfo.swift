@@ -79,31 +79,35 @@ class MapWidgetInfo: NSObject, Comparable {
     }
     
     func getWidgetType() -> WidgetType? {
-        return widget.widgetType
+        widget.widgetType
     }
     
     func isExternal() -> Bool {
-        return widget.isExternal()
+        widget.isExternal()
     }
     
     func getTitle() -> String {
-        return getMessage()
+        getMessage()
     }
     
     func getStateIndependentTitle() -> String {
-        return message
+        message
     }
     
     func getMessage() -> String {
-        return widgetState?.getMenuTitle() ?? message
+        widgetState?.getMenuTitle() ?? message
     }
     
     func getWidgetTitle() -> String {
         widgetState?.getWidgetTitle() ?? getMessage()
     }
     
+    func getWidgetDefaultTitle() -> String {
+        widgetState?.getWidgetDefaultTitle() ?? ""
+    }
+    
     func getExternalProviderPackage() -> String? {
-        return nil
+        nil
     }
     
     func getUpdatedPanel() -> WidgetsPanel {

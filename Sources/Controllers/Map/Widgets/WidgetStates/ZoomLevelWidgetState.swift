@@ -8,7 +8,7 @@
 
 @objcMembers
 final class ZoomLevelWidgetState: OAWidgetState {
-    private static let zoomLevelType = "zoom_level_type"
+    static let zoomLevelType = "zoom_level_type"
     
     private(set) var typePreference: OACommonWidgetZoomLevelType
     private(set) var widgetType: WidgetType

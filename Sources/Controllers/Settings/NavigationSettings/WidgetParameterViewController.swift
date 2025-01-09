@@ -72,6 +72,15 @@ final class WidgetParameterViewController: OABaseNavbarViewController {
                             } else {
                                 if let currentPref = pref as? OACommonBoolean {
                                     selectedVal = currentPref.defValue.description
+                                } else if let currentPref = pref as? OACommonInteger {
+                                    if type(of: pref) == OACommonInteger.self {
+                                        selectedVal = String(currentPref.defValue)
+                                    } else {
+                                        // enum settings
+                                        selectedVal = pref.toString(fromValue: currentPref.defValue)
+                                    }
+                                } else if let currentPref = pref as? OACommonString {
+                                    selectedVal = currentPref.defValue
                                 } else {
                                     fatalError("You need implement currentPref as? ")
                                 }
@@ -127,7 +136,7 @@ final class WidgetParameterViewController: OABaseNavbarViewController {
         return nil
     }
 
-    override func onRowSelected(_ indexPath: IndexPath!) {
+    override func onRowSelected(_ indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
         if item.cellType != OASegmentSliderTableViewCell.getIdentifier() {
             let val = stringValue(from: item.obj(forKey: "value"))

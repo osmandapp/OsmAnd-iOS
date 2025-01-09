@@ -151,7 +151,10 @@ static const double locationChangeAccuracy = 0.0001;
     OATableDataModel *data = [[OATableDataModel alloc] init];
     OATableSectionData *section = [data createNewSection];
     section.headerText = OALocalizedString(@"shared_string_settings");
-    SunPositionMode sunPositionMode = (SunPositionMode)[[_state getSunPositionPreference] get:appMode];
+    
+    SunPositionMode currentValue = type == OAWidgetType.sunPosition
+    ? (SunPositionMode)[_state getSunPositionPreference].defValue
+    : (SunPositionMode)[[_state getSunPositionPreference] get:appMode];
 
     if (type == OAWidgetType.sunPosition)
     {
@@ -162,7 +165,22 @@ static const double locationChangeAccuracy = 0.0001;
         row.descr = OALocalizedString(@"shared_string_mode");
         [row setObj:_state.getSunPositionPreference forKey:@"pref"];
         
-        [row setObj:[self getTitleForSunPositionMode:sunPositionMode] forKey:@"value"];
+        if (widgetConfigurationParams)
+        {
+            NSString *key = [self findKeyWithPrefixInParams:widgetConfigurationParams prefix:@"sun_position_widget_mode"];
+            if (key != nil)
+            {
+                NSNumber *widgetValue = widgetConfigurationParams[key];
+                if (widgetValue != nil)
+                    currentValue = (SunPositionMode)widgetValue.intValue;
+            }
+        }
+        else
+        {
+            if (!isCreate)
+                currentValue = (SunPositionMode)[[_state getSunPositionPreference] get:appMode];
+        }
+        [row setObj:[self getTitleForSunPositionMode:currentValue] forKey:@"value"];
         [row setObj:self.getPossibleFormatValues forKey:@"possible_values"];
     }
     
@@ -175,10 +193,43 @@ static const double locationChangeAccuracy = 0.0001;
     row.descr = title;
 
     [row setObj:_state.getPreference forKey:@"pref"];
-    [row setObj:[self getTitle:(EOASunriseSunsetMode)[_state.getPreference get:appMode] sunPositionMode:sunPositionMode] forKey:@"value"];
-    [row setObj:self.getPossibleValues forKey:@"possible_values"];
+    
+    EOASunriseSunsetMode currentSunriseSunsetMode = (EOASunriseSunsetMode)_state.getPreference.defValue;
+    
+    if (widgetConfigurationParams)
+    {
+        NSString *key = [self findKeyWithPrefixInParams:widgetConfigurationParams prefix:[_state getPrefId]];
+        if (key != nil)
+        {
+            NSNumber *widgetValue = widgetConfigurationParams[key];
+            if (widgetValue != nil)
+            {
+                currentSunriseSunsetMode = (EOASunriseSunsetMode)widgetValue.intValue;
+            }
+        }
+    }
+    else
+    {
+        if (!isCreate)
+            currentSunriseSunsetMode = (EOASunriseSunsetMode)[_state.getPreference get:appMode];
+    }
+    
+    [row setObj:[self getTitle:currentSunriseSunsetMode sunPositionMode:currentValue] forKey:@"value"];
+    [row setObj:[self getPossibleValuesWithSunPositionMode:currentValue] forKey:@"possible_values"];
    
     return data;
+}
+
+- (NSString *)findKeyWithPrefixInParams:(NSDictionary *)widgetConfigurationParams prefix:(NSString *)prefix
+{
+    for (NSString *paramKey in widgetConfigurationParams)
+    {
+        if ([paramKey hasPrefix:prefix])
+        {
+            return paramKey;
+        }
+    }
+    return nil;
 }
 
 - (NSArray<OATableRowData *> *)getPossibleFormatValues
@@ -203,11 +254,10 @@ static const double locationChangeAccuracy = 0.0001;
     return res;
 }
 
-- (NSArray<OATableRowData *> *) getPossibleValues
+- (NSArray<OATableRowData *> *) getPossibleValuesWithSunPositionMode:(SunPositionMode)sunPositionMode
 {
     NSMutableArray<OATableRowData *> *res = [NSMutableArray array];
-    SunPositionMode sunPositionMode = (SunPositionMode)[[_state getSunPositionPreference] get];
-
+    
     OATableRowData *row = [[OATableRowData alloc] init];
     row.cellType = OASimpleTableViewCell.getCellIdentifier;
     [row setObj:@(EOASunriseSunsetTimeLeft) forKey:@"value"];

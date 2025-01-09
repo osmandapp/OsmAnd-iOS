@@ -169,7 +169,7 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
                        let style = EOAWidgetSizeStyle(rawValue: rawValue) {
                         widgetSizeStyle = style
                     } else {
-                        widgetSizeStyle = EOAWidgetSizeStyle(rawValue: pref.defValue.rawValue) ?? .medium
+                        widgetSizeStyle = EOAWidgetSizeStyle(rawValue: Int(pref.defValue)) ?? .medium
                     }
                 }
                 
@@ -336,7 +336,13 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
 extension WidgetConfigurationViewController {
     
     override func getTitle() -> String! {
-        widgetInfo.getTitle()
+        if createNew {
+            let widgetType = widgetInfo.widget.widgetType
+            if widgetType == .sideMarker1 || widgetType == .sideMarker2 {
+                return widgetInfo.getWidgetDefaultTitle()
+            }
+        }
+        return widgetInfo.getTitle()
     }
     
     override func getNavbarStyle() -> EOABaseNavbarStyle {

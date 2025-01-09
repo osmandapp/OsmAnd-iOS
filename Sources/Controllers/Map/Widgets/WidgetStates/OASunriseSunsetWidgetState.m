@@ -176,7 +176,20 @@
     if (customId && customId.length > 0)
         prefId = [prefId stringByAppendingString:customId];
     
-    OACommonInteger *preference = [[[OAAppSettings sharedManager] registerIntPreference:prefId defValue:SunPositionModeSunPositionMode] makeProfile];
+    // day_night_mode_sunset | day_night_mode_sunrise | day_night_mode_sun_position
+    SunPositionMode sunPositionMode = SunPositionModeSunPositionMode;
+    if (widgetParams)
+    {
+        NSString *widgetValue = widgetParams[@"id"];
+        if ([widgetValue isEqualToString:@"day_night_mode_sunset"])
+        {
+            sunPositionMode = SunPositionModeSunsetMode;
+        }
+        else if ([widgetValue isEqualToString:@"day_night_mode_sunrise"]) {
+            sunPositionMode = SunPositionModeSunriseMode;
+        }
+    }
+    OACommonInteger *preference = [[[OAAppSettings sharedManager] registerIntPreference:prefId defValue:(int)sunPositionMode] makeProfile];
       
     if (widgetParams)
     {

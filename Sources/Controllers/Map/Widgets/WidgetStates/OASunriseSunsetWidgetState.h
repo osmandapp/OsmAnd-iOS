@@ -25,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)getWidgetIconName;
 - (OACommonInteger *)getPreference;
 - (OACommonInteger *)getSunPositionPreference;
+- (NSString *)getPrefId;
 
 @end
 

@@ -114,7 +114,7 @@ static inline BOOL backupDebugLogs()
          lastModifiedTime:(long)lastModifiedTime
                  listener:(id<OAOnUploadFileListener>)listener;
 
-- (void) updateFileUploadTime:(NSString *)type fileName:(NSString *)fileName uploadTime:(long)updateTime;
+- (void) updateFileUploadTime:(NSString *)type fileName:(NSString *)fileName uploadTime:(long)uploadTime;
 - (void) updateFileMd5Digest:(NSString *)type fileName:(NSString *)fileName md5Hex:(NSString *)md5Hex;
 - (void) updateBackupUploadTime;
 

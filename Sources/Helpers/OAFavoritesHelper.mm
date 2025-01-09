@@ -340,7 +340,7 @@ static NSOperationQueue *_favQueue;
     }
     if (res)
     {
-        _favoritesCollection->addFavoriteLocations(favoriteLocations, sortAndSave);
+        _favoritesCollection->addFavoriteLocations(favoriteLocations, true);
         [[OAAppSettings sharedManager] setShowFavorites:YES];
         if (sortAndSave)
         {
@@ -539,6 +539,11 @@ static NSOperationQueue *_favQueue;
 
 + (void) saveCurrentPointsIntoFile
 {
+    [self saveCurrentPointsIntoFile:YES];
+}
+
++ (void) saveCurrentPointsIntoFile:(BOOL)async
+{
     [_favQueue cancelAllOperations];
 
     __block NSArray<OAFavoriteGroup *> *favoriteGroups = [[NSArray alloc] initWithArray:_favoriteGroups copyItems:YES];
@@ -588,7 +593,7 @@ static NSOperationQueue *_favQueue;
         [self backup];
     }];
 
-    [_favQueue addOperation:operation];
+    [_favQueue addOperations:@[operation] waitUntilFinished:!async];
 }
 
 + (NSArray<OAFavoriteItem *> *)getPointsFromGroups:(NSArray<OAFavoriteGroup *> *)groups

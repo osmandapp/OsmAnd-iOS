@@ -49,6 +49,7 @@
 + (BOOL) editFavorite:(OAFavoriteItem *)item lat:(double)lat lon:(double)lon;
 + (BOOL) editFavorite:(OAFavoriteItem *)item lat:(double)lat lon:(double)lon description:(NSString *)description;
 + (void) saveCurrentPointsIntoFile;
++ (void) saveCurrentPointsIntoFile:(BOOL)async;
 
 + (void)updateGroup:(OAFavoriteGroup *)group
             newName:(NSString *)newName
@@ -87,6 +88,7 @@
 
 + (NSDictionary<NSString *, NSString *> *) checkDuplicates:(OAFavoriteItem *)point;
 + (void) sortAll;
++ (void) loadFavorites;
 + (void) recalculateCachedFavPoints;
 
 + (NSArray<NSString *> *) getFlatBackgroundIconNamesList;

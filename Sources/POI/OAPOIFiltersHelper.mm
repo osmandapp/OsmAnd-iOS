@@ -371,12 +371,12 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
         lastModifiedTime = [self getDBLastModifiedTime];
         [OABackupHelper setLastModifiedTime:FILTERS_LAST_MODIFIED_NAME lastModifiedTime:lastModifiedTime];
     }
-    return lastModifiedTime;
+    return lastModifiedTime * 1000;
 }
 
 - (void) setLastModifiedTime:(long)lastModified
 {
-    [OABackupHelper setLastModifiedTime:FILTERS_LAST_MODIFIED_NAME lastModifiedTime:lastModified];
+    [OABackupHelper setLastModifiedTime:FILTERS_LAST_MODIFIED_NAME lastModifiedTime:lastModified / 1000];
 }
 
 - (long) getDBLastModifiedTime

@@ -126,12 +126,12 @@
         lastModifiedTime = [self getDBLastModifiedTime];
         [OABackupHelper setLastModifiedTime:OPENSTREETMAP_DB_LAST_MODIFIED_NAME lastModifiedTime:lastModifiedTime];
     }
-    return lastModifiedTime;
+    return lastModifiedTime * 1000;
 }
 
 - (void) setLastModifiedTime:(long)lastModified
 {
-    [OABackupHelper setLastModifiedTime:OPENSTREETMAP_DB_LAST_MODIFIED_NAME lastModifiedTime:lastModified];
+    [OABackupHelper setLastModifiedTime:OPENSTREETMAP_DB_LAST_MODIFIED_NAME lastModifiedTime:lastModified / 1000];
 }
 
 - (long) getDBLastModifiedTime

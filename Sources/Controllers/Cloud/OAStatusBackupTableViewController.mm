@@ -414,7 +414,7 @@
         if (!settingsItem)
             settingsItem = localFile.item;
     }
-
+    
     NSString *name = @"";
     if ([settingsItem isKindOfClass:OAProfileSettingsItem.class])
     {
@@ -436,13 +436,13 @@
     {
         name = OALocalizedString(@"res_unknown");
     }
-
+    
     long timeMs = 0;
     if (_tableType == EOARecentChangesLocal && operation == EOABackupSyncOperationDelete)
         timeMs = remoteFile.clienttimems;
-    else if (_tableType == EOARecentChangesLocal || _tableType == EOARecentChangesConflicts)
-        timeMs = localFile.localModifiedTime * 1000;
-    else if (operation == EOABackupSyncOperationDelete)
+    else if (_tableType == EOARecentChangesLocal)
+        timeMs = localFile.localModifiedTime;
+    else if (_tableType == EOARecentChangesConflicts || operation == EOABackupSyncOperationDelete)
         timeMs = localFile.uploadTime;
     else
         timeMs = remoteFile.updatetimems;

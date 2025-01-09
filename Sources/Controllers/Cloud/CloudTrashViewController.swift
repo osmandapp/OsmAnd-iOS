@@ -148,7 +148,7 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
             })
 
             for item in items {
-                let time: Int = item.time
+                let time: Int = item.time / 1000
                 let name = dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(time))).capitalized
                 var group: TrashGroup? = groups[name]
                 if group == nil {

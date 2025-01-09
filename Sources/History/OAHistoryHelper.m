@@ -42,7 +42,7 @@
 
 - (long) getMarkersHistoryLastModifiedTime
 {
-    return _db.getMarkersHistoryLastModifiedTime;
+    return [_db getMarkersHistoryLastModifiedTime];
 }
 
 - (void) setMarkersHistoryLastModifiedTime:(long)lastModified

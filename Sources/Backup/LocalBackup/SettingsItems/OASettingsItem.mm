@@ -108,7 +108,7 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
 
 - (void)setLastModifiedTime:(long)lastModifiedTime
 {
-    _lastModifiedTime = lastModifiedTime;
+    _lastModifiedTime = lastModifiedTime / 1000;
 }
 
 - (BOOL) applyFileName:(NSString *)fileName

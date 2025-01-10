@@ -140,6 +140,11 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
                 [itemsForRestore addObject:restoreItem];
         }
     }
+    [itemsForRestore sortUsingComparator:^NSComparisonResult(OASettingsItem *item1, OASettingsItem *item2) {
+        long time1 = item1.lastModifiedTime;
+        long time2 = item2.lastModifiedTime;
+        return time1 < time2 ? NSOrderedDescending : time1 > time2 ? NSOrderedAscending : NSOrderedSame;
+    }];
     return itemsForRestore;
 }
 
@@ -147,9 +152,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 {
     NSMutableDictionary<OARemoteFile *, OASettingsItem *> *itemsForRestore = [NSMutableDictionary dictionary];
     if (info != nil)
-    {
         [itemsForRestore addEntriesFromDictionary:[self getRemoteFilesSettingsItems:settingsItems remoteFiles:info.filteredFilesToDownload infoFiles:NO]];
-    }
     return itemsForRestore;
 }
 
@@ -207,13 +210,9 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
             if ([name hasPrefix:subfolder] || subfolder.length == 0)
             {
                 if (fileItem.filePath.pathExtension.length == 0 && ![itemFileName hasSuffix:@"/"])
-                {
                     return [name hasPrefix:[itemFileName stringByAppendingString:@"/"]];
-                }
                 else
-                {
                     return [name hasPrefix:itemFileName];
-                }
             }
         }
     }
@@ -235,9 +234,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
             fileName = item.defaultFileName;
     }
     if (fileName.length > 0 && [fileName characterAtIndex:0] == '/')
-    {
         fileName = [fileName substringFromIndex:1];
-    }
     return fileName;
 }
 
@@ -437,9 +434,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
             {
                 NSString *fileName = remoteFile.item.fileName;
                 if (fileName != nil && [item applyFileName:fileName])
-                {
                     [filesToUpload addObject:((OAFileSettingsItem *) remoteFile.item).filePath];
-                }
             }
         }
     }
@@ -489,9 +484,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 {
     NSString *orderId = [self getOrderId];
     if (orderId.length == 0)
-    {
         return;
-    }
     NSMutableDictionary<NSString *, NSString *> *params = [NSMutableDictionary dictionary];
     params[@"email"] = [self getEmail];
     params[@"orderid"] = orderId;
@@ -661,9 +654,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
             NSString *mapId = flItem.fileName.lowerCase;
             const auto res = _app.resourcesManager->getResourceInRepository(QString::fromNSString(mapId));
             if (res)
-            {
                 sz = res->size / 1024;
-            }
         }
     }
     return sz;
@@ -854,13 +845,9 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
         }
     }
     if (error == nil && [status isEqualToString:@"ok"])
-    {
         [self updateFileUploadTime:type fileName:fileName uploadTime:uploadTime];
-    }
     if (listener != nil)
-    {
         [listener onFileUploadDone:type fileName:fileName uploadTime:uploadTime error:error];
-    }
     [operationLog finishOperation:[NSString stringWithFormat:@"%@ %@ %@", type, fileName, (error ? [NSString stringWithFormat:@"Error: %@", [[OABackupError alloc] initWithError:error].getLocalizedError] : @"OK")]];
     return error;
 }
@@ -938,14 +925,18 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 - (void)onBackupPreparing
 {
     for (id<OAOnPrepareBackupListener> listener in _prepareBackupListeners)
+    {
         [listener onBackupPreparing];
+    }
 }
 
 - (void)onBackupPrepared:(OAPrepareBackupResult *)backupResult
 {
     _prepareBackupTask = nil;
     for (id<OAOnPrepareBackupListener> listener in _prepareBackupListeners)
+    {
         [listener onBackupPrepared:backupResult];
+    }
 }
 
 @end

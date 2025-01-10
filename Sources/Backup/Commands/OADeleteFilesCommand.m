@@ -28,7 +28,9 @@
 {
     [super onPreExecute];
     for (id<OAOnDeleteFilesListener> listener in [self getListeners])
+    {
         [listener onFilesDeleteStarted:_remoteFiles];
+    }
 }
 
 - (void) doInBackground

@@ -31,7 +31,6 @@
 {
     NSString *_key;
     OABackupHelper *_backupHelper;
-    NSArray<OASettingsItem *> *_settingsItems;
     NSInteger _maxProgress;
     NSInteger _importProgress;
     NSInteger _exportProgress;
@@ -45,18 +44,17 @@
 - (instancetype)initWithKey:(NSString *)key operation:(EOABackupSyncOperationType)operation
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _key = key;
         _operation = operation;
         _singleOperation = operation != EOABackupSyncOperationSync;
-        _backupHelper = OABackupHelper.sharedInstance;
-        if (!_singleOperation)
-        	[_backupHelper addPrepareBackupListener:self];
-
         _importProgress = 0;
         _exportProgress = 0;
         _maxProgress = 0;
         _cancelled = NO;
+        _backupHelper = OABackupHelper.sharedInstance;
+        [_backupHelper addPrepareBackupListener:self];
     }
     return self;
 }
@@ -76,16 +74,21 @@
     OAPrepareBackupResult *backup = _backupHelper.backup;
     OABackupInfo *info = backup.backupInfo;
     
-    _settingsItems = [OABackupHelper getItemsForRestore:info settingsItems:backup.settingsItems];
+    NSArray<OASettingsItem *> *settingsItems = [OABackupHelper getItemsForRestore:info settingsItems:backup.settingsItems];
+
     if (_operation != EOABackupSyncOperationDownload)
         _maxProgress += ([self calculateExportMaxProgress] / 1024);
     if (_operation != EOABackupSyncOperationUpload)
         _maxProgress += [OAImportBackupTask calculateMaxProgress];
     
     [NSNotificationCenter.defaultCenter postNotificationName:kBackupSyncStartedNotification object:nil];
-    if (_settingsItems.count > 0 && _operation != EOABackupSyncOperationUpload)
+    if (settingsItems.count > 0 && _operation != EOABackupSyncOperationUpload)
     {
-        [OANetworkSettingsHelper.sharedInstance importSettings:kRestoreItemsKey items:_settingsItems filesType:EOARemoteFilesTypeUnique forceReadData:YES listener:self];
+        [OANetworkSettingsHelper.sharedInstance importSettings:kRestoreItemsKey
+                                                         items:settingsItems
+                                                     filesType:EOARemoteFilesTypeUnique
+                                                 forceReadData:YES
+                                                      listener:self];
     }
     else if (_operation != EOABackupSyncOperationDownload)
     {
@@ -100,7 +103,7 @@
 - (void)execute
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        if (!_backupHelper.isBackupPreparing)
+        if (![_backupHelper isBackupPreparing])
             [self startSync];
     });
 }
@@ -146,13 +149,9 @@
         NSArray<OASettingsItem *> *itemsToDelete = info.itemsToDelete;
         NSArray<OASettingsItem *> *localItemsToDelete = info.localItemsToDelete;
         if (itemsToUpload.count > 0 || itemsToDelete.count > 0 || localItemsToDelete.count > 0)
-        {
             [OANetworkSettingsHelper.sharedInstance exportSettings:kBackupItemsKey items:itemsToUpload itemsToDelete:itemsToDelete localItemsToDelete:localItemsToDelete listener:self];
-        }
         else
-        {
             [self onSyncFinished:nil];
-        }
     }
     @catch (NSException *e)
     {
@@ -170,9 +169,7 @@
         {
             OAExportSettingsType *exportType = [OAExportSettingsType findBySettingsItem:item];
             if (exportType && [_backupHelper getVersionHistoryTypePref:exportType].get)
-            {
                 [oldItemsToDelete addObject:item];
-            }
         }
         return [OAExportBackupTask getEstimatedItemsSize:info.itemsToUpload itemsToDelete:info.itemsToDelete localItemsToDelete:info.localItemsToDelete oldItemsToDelete:oldItemsToDelete];
     }
@@ -187,8 +184,8 @@
     [NSNotificationCenter.defaultCenter postNotificationName:kBackupSyncStartedNotification object:nil];
 }
 
-- (void)onBackupPreparing {
-    
+- (void)onBackupPreparing
+{
 }
 
 // MARK: OAImportListener
@@ -278,7 +275,8 @@
     [NSNotificationCenter.defaultCenter  postNotificationName:kBackupItemStartedNotification object:nil userInfo:@{@"type": type, @"name": fileName, @"work": @(work)}];
 }
 
-- (void)onBackupExportStarted {
+- (void)onBackupExportStarted
+{
 }
 
 @end

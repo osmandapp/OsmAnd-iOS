@@ -81,7 +81,8 @@
 - (instancetype)initWithFilePath:(NSString *)filePath remoteFile:(OARemoteFile *)remoteFile onDownloadFileListener:(id<OAOnDownloadFileListener>)onDownloadFileListener
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _filePath = filePath;
         _remoteFile = remoteFile;
         _onDownloadFileListener = onDownloadFileListener;
@@ -117,7 +118,8 @@
 - (instancetype) initWithRemoteFile:(OARemoteFile *)remoteFile item:(OASettingsItem *)item importer:(OABackupImporter *)importer forceReadData:(BOOL)forceReadData
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _remoteFile = remoteFile;
         _item = item;
         _forceReadData = forceReadData;
@@ -150,7 +152,8 @@
 - (instancetype) initWithListener:(id<OANetworkImportProgressListener>)listener
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _listener = listener;
         _backupHelper = OABackupHelper.sharedInstance;
         _queue = [[NSOperationQueue alloc] init];
@@ -170,7 +173,8 @@
     __block NSString *error = nil;
     OAOperationLog *operationLog = [[OAOperationLog alloc] initWithOperationName:@"collectRemoteItems" debug:BACKUP_DEBUG_LOGS];
     [operationLog startOperation];
-    @try {
+    @try
+    {
         [_backupHelper downloadFileList:^(NSInteger status, NSString * _Nonnull message, NSArray<OARemoteFile *> * _Nonnull remoteFiles) {
             if (status == STATUS_SUCCESS)
             {
@@ -180,9 +184,12 @@
                     remoteFiles = items.allKeys;
                 }
                 result.remoteFiles = remoteFiles;
-                @try {
+                @try
+                {
                     result.items = [self getRemoteItems:remoteFiles readItems:readItems restoreDeleted:restoreDeleted];
-                } @catch (NSException *e) {
+                }
+                @catch (NSException *e)
+                {
                     error = e.reason;
                 }
             }
@@ -191,7 +198,9 @@
                 error = message;
             }
         }];
-    } @catch (NSException *e) {
+    }
+    @catch (NSException *e)
+    {
         NSLog(@"Failed to collect items for backup");
     }
     [operationLog finishOperation];
@@ -256,7 +265,8 @@
     OASettingsItemReader *reader = item.getReader;
     NSString *fileName = remoteFile.getTypeNamePath;
     NSString *tempFilePath = [_tmpFilesDir stringByAppendingPathComponent:fileName];
-    @try {
+    @try
+    {
         if (reader)
         {
             NSString *errorStr = [_backupHelper downloadFile:tempFilePath remoteFile:remoteFile listener:self];
@@ -340,7 +350,8 @@
     if (remoteFiles.count == 0)
         return @[];
     NSMutableArray<OASettingsItem *> *items = [NSMutableArray array];
-    @try {
+    @try
+    {
         OAOperationLog *operationLog = [[OAOperationLog alloc] initWithOperationName:@"getRemoteItems" debug:BACKUP_DEBUG_LOGS];
         [operationLog startOperation];
         NSMutableDictionary *json = [NSMutableDictionary dictionary];
@@ -541,7 +552,9 @@
             }
         }];
         for (NSString *key in toDelete)
+        {
             [remoteFiles removeObjectForKey:key];
+        }
     }
     return res;
 }
@@ -669,11 +682,13 @@
 
 // MARK: OAOnDownloadFileListener
 
-- (BOOL)isDownloadCancelled {
+- (BOOL)isDownloadCancelled
+{
     return self.cancelled;
 }
 
-- (void)onFileDownloadDone:(NSString *)type fileName:(NSString *)fileName error:(NSString *)error {
+- (void)onFileDownloadDone:(NSString *)type fileName:(NSString *)fileName error:(NSString *)error
+{
     [_itemsProgress addAndGet:1];
     if (_listener)
     {

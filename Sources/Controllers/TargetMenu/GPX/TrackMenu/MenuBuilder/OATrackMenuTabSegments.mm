@@ -253,8 +253,9 @@
     {
         if (types.firstObject.integerValue == GPXDataSetTypeAltitude && types.lastObject.integerValue == GPXDataSetTypeSpeed)
         {
+            BOOL hasExptationTime = analysis.expectedRouteDuration > 0;
             titles[@"top_left_title_string_value"] = OALocalizedString(@"shared_string_distance");
-            titles[@"top_right_title_string_value"] = OALocalizedString(@"shared_string_time_span");
+            titles[@"top_right_title_string_value"] = OALocalizedString(hasExptationTime ? @"shared_string_estimated_time_span": @"shared_string_time_span");
             titles[@"bottom_left_title_string_value"] = OALocalizedString(@"shared_string_start_time");
             titles[@"bottom_right_title_string_value"] = OALocalizedString(@"shared_string_end_time");
             
@@ -267,9 +268,16 @@
                                                                   !joinSegments && track && track.generalTrack
                                                                   ? analysis.totalDistanceWithoutGaps : analysis.totalDistance];
             
-            descriptions[@"top_right_description_string_value"] = [OAOsmAndFormatter getFormattedTimeInterval:
-                                                                   !joinSegments && track && track.generalTrack
-                                                                   ? analysis.timeSpanWithoutGaps / 1000 : analysis.timeSpan / 1000 shortFormat:YES];
+            if (hasExptationTime)
+            {
+                descriptions[@"top_right_description_string_value"] = [OAOsmAndFormatter getFormattedTimeInterval:analysis.expectedRouteDuration / 1000 shortFormat:YES];
+            }
+            else
+            {
+                descriptions[@"top_right_description_string_value"] = [OAOsmAndFormatter getFormattedTimeInterval:
+                                                                       !joinSegments && track && track.generalTrack
+                                                                       ? analysis.timeSpanWithoutGaps / 1000 : analysis.timeSpan / 1000 shortFormat:YES];
+            }
             
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
             [dateFormatter setDateFormat:@"HH:mm, MM-dd-yy"];

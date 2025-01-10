@@ -1074,7 +1074,7 @@
         NSLog(@"Prepare checkAndDownloadOsmAndLiveUpdates start");
         QList<std::shared_ptr<const OsmAnd::IncrementalChangesManager::IncrementalUpdate> > updates;
         for (const auto& localResource : _resourcesManager->getLocalResources())
-            [OAOsmAndLiveHelper downloadUpdatesForRegion:QString(localResource->id).remove(QStringLiteral(".obf")) resourcesManager:_resourcesManager checkUpdatesAsync:checkUpdatesAsync];
+            [OAOsmAndLiveHelper downloadUpdatesForRegion:QString(localResource->id).remove(QStringLiteral(".obf")) resourcesManager:_resourcesManager checkUpdatesAsync:checkUpdatesAsync forceUpdate:NO];
 
         NSLog(@"Prepare checkAndDownloadOsmAndLiveUpdates finish");
     }

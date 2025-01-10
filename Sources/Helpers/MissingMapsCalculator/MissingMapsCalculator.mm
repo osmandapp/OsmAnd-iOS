@@ -133,9 +133,13 @@ static const double DISTANCE_SKIP = 10000;
     {
         if (p.hhEditions == nil)
         {
-            if ([p.regions count] > 0)
+            for (NSString * r in p.regions)
             {
-                [mapsToDownload addObject:[p.regions objectAtIndex:0]];
+                if (![self isRoadOnlyMap:r])
+                {
+                    [mapsToDownload addObject:r];
+                    break;
+                }
             }
         }
         else if (checkHHEditions)
@@ -413,6 +417,18 @@ pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
     msg = [NSString stringWithFormat:@"To calculate the route maps %@", msg];
     
     return msg;
+}
+
+- (BOOL) isRoadOnlyMap:(NSString *)regionName
+{
+    if (_or != nil)
+    {
+        OAWorldRegion * wr = [_or getRegionDataByDownloadName:regionName];
+        if (wr != nil)
+        {
+            return ![wr regionMap] && [wr regionRoads];
+        }
+    }
 }
 
 @end

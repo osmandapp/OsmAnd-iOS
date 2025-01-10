@@ -2338,7 +2338,7 @@
 "checking_progress" = "Controllo…";
 "last_two_month_total" = "Ultimi due mesi in totale";
 "product_desc_africa_short" = "Mappe della regione africana";
-"select_wikipedia_article_langs" = "Seleziona i linguaggi in cui gli articoli di Wikipedia appariranno sulla mappa. Puoi cambiare fra tutte le lingue disponibili mentre leggi l\'articolo.";
+"select_wikipedia_article_langs" = "Seleziona i linguaggi in cui gli articoli di Wikipedia appariranno sulla mappa. Puoi cambiare fra tutte le lingue disponibili mentre leggi l'articolo.";
 "depth_contours" = "Isobate";
 "gpx_join_gaps_descr" = "Gli spazi tra i segmenti saranno collegati.";
 "slope_grey_color_descr" = "Il colore grigio viene utilizzato quando la pendenza non è definita.";
@@ -2476,7 +2476,7 @@
 "weather_remove_forecast_description" = "Sei sicuro di voler rimuovere le previsioni per %@";
 "backup_pause_all" = "Metti tutto in pausa";
 "purchases_feature_weather" = "Previsioni orarie 24 ore su 24 con 7 giorni di anticipo colorate sulla mappa";
-"you_can_get_feature_as_part_of_pattern" = "Ottieni“%@” come parte del piano %@ . Confronto:";
+"you_can_get_feature_as_part_of_pattern" = "Ottieni “%@” come parte del piano %@ . Confronto:";
 "benefits_for_contributors_secondary_descr" = "Accedi a OpenStreetMap per controllare se sei idoneo per gli aggiornamenti mensili e orari illimitati delle mappe.";
 "use_login_and_password" = "Utilizza il nome utente e password";
 "benefits_for_contributors_primary_descr" = "I contributori attivi di OpenStreetMap.org potrebbero essere idonei gli aggiornamenti mensili e orari illimitati delle mappe.";
@@ -2517,7 +2517,7 @@
 "subscription_cancel_description" = "Annulla in qualsiasi momento nell'AppStore.";
 "osm_live_payment_subscription_management_aid" = "Il pagamento verrà addebitato sul tuo account ID Apple alla conferma dell'acquisto.\n\nL'abbonamento si rinnova automaticamente a meno che non venga annullato almeno 24 ore prima della fine del periodo corrente. Il tuo account verrà addebitato per il rinnovo entro 24 ore prima della fine del periodo corrente.\n\nPuoi gestire e annullare i tuoi abbonamenti accedendo alle impostazioni del tuo account sull'App Store dopo l'acquisto";
 "contact_support_description" = "Se hai delle domande, per favore contattaci al %@.";
-"empty_purchases_description" = "Se l\'acquisto non viene visualizzato qui, premi su \"%@\" o contatta il supporto.";
+"empty_purchases_description" = "Se l'acquisto non viene visualizzato qui, premi su \"%@\" o contatta il supporto.";
 "subscription_banner_osmand_pro_title" = "Ricevi aggiornamenti di mappe orarie, giornaliere o settimanali con OsmAnd Pro.";
 "weather_clear_offline_cache" = "Questo cancellerà tutta la cache per il riquadro meteo offline.";
 "weather_accuracy_forecast_description" = "Le previsioni offline sono disponibili fino al: %@.\nPrecisione: %@, oraria. %@ ogni 3 ore.";

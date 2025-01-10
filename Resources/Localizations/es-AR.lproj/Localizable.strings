@@ -83,7 +83,7 @@
 "simulate_your_location" = "Simular tu ubicación";
 "simulate_navigation" = "Simular navegación";
 "simulate_routing_descr" = "Simular la ubicación usando una ruta calculada";
-"select_avoid_descr" = "Marca los caminos a evitar durante la navegación. Puedes marcar una carretera en el mapa o elegir un tipo de la siguiente lista.";
+"select_avoid_descr" = "Marcá los caminos a evitar durante la navegación. Podés marcar una carretera en el mapa o elegir un tipo de la siguiente lista.";
 "no_active_route" = "Sin ruta activa";
 "day_night_info_description" = "Amanecer: %@ \nAtardecer: %@";
 "day_night_info" = "Información diurna/nocturna";
@@ -100,7 +100,7 @@
 "unit_of_length" = "Unidades de longitud";
 "unit_of_length_descr" = "Cambia las unidades de distancia o longitud.";
 "coords_format" = "Formato de coordenadas";
-"coords_format_descr_quick_search" = "Puedes cambiar el formato de las coordenadas del perfil en los ajustes generales";
+"coords_format_descr_quick_search" = "Podés cambiar el formato de las coordenadas del perfil en los ajustes generales";
 "coordinates" = "Coordenadas";
 "coords_format_descr" = "Formato de las coordenadas geográficas.";
 "do_not_show_discount_desc" = "Oculta los descuentos de la aplicación y los mensajes especiales de eventos locales.";
@@ -135,7 +135,7 @@
 "logging_min_speed_descr" = "Filtro: no registrar por debajo de la velocidad definida";
 "auto_split_recording_title" = "División automática de grabaciones en intervalos";
 "auto_split_gap_descr" = "Comenzar un nuevo segmento después de un intervalo de 6 minutos, una nueva traza después de un intervalo de 2 horas, o un nuevo archivo después de un intervalo de tiempo más largo";
-"trip_rec_actions_descr" = "Puedes encontrar todas las trazas grabadas en %@";
+"trip_rec_actions_descr" = "Podés encontrar todas las trazas grabadas en %@";
 "reset_plugin_to_default" = "Restablecer complemento a valores predefinidos";
 "map_widget_magnetic_bearing" = "Rumbo magnético";
 "map_widget_bearing" = "Rumbo relativo";
@@ -2721,7 +2721,7 @@
 "free_downloads" = "Descargas gratuitas";
 "restart_is_required" = "Debes reiniciar para aplicar los cambios.";
 "restart_is_required_title" = "Es necesario reiniciar";
-"history_actions_footer_text" = "Puedes exportar el historial a un archivo. Puedes borrar todas las entradas del historial registradas hasta el momento.";
+"history_actions_footer_text" = "Podés exportar el historial a un archivo. Podés borrar todas las entradas del historial registradas hasta el momento.";
 "history_clear_alert_title" = "Borrar todo el historial";
 "search_history_disabled" = "El historial de búsqueda está desactivado";
 "delete_history_items" = "¿Borrar %@ elementos del historial\?";

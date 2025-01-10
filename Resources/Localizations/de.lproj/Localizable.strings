@@ -3561,7 +3561,7 @@
 "not_specified" = "Nicht spezifiziert";
 "date_of_creation" = "Erstellungsdatum";
 "altitud_and_elevation" = "Höhe & Anstieg";
-"max_altitude" = "Maximale Höhe";
+"max_altitude" = "Max. Höhe";
 "shared_string_sensors" = "Sensoren";
 "max_sensor_speed" = "Sensorgeschwindigkeit, maximal";
 "avg_sensor_speed" = "Sensorgeschwindigkeit, durchschnittlich";

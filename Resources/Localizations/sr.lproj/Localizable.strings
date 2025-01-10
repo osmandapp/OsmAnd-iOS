@@ -3550,7 +3550,7 @@
 "max_sensor_temperature" = "Температура, макс";
 "all_folders" = "Сви фолдери";
 "not_specified" = "Није назначено";
-"max_altitude" = "Максимална алтитуда";
+"max_altitude" = "Макс. алтитуда";
 "shared_string_sensors" = "Сензори";
 "max_sensor_speed" = "Сензор брзине, макс";
 "max_sensor_heartrate" = "Број откуцаја срца, макс";

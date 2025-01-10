@@ -1836,7 +1836,7 @@
 "plan_route_split_after" = "Tükelda pärast";
 "plan_route_split_before" = "Tükelda enne";
 "gpx_already_exsists" = "Selle nimega fail on juba olemas";
-"empty_filename" = "Faili nimi puudub";
+"empty_filename" = "Failinimi puudub";
 "gpx_saved_successfully" = "GPX fail salvestati asukohta %@";
 "plan_route_exit_message" = "Kas oled kindel, et soovid väljuda Marsruudi kavandajast salvestamata? Kaotad kõik muudatused.";
 "sort_last_modified" = "Viimati muudetud";

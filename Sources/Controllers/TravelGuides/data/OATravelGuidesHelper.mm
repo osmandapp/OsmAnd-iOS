@@ -134,7 +134,7 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
     
     if ([amenity getSite])
     {
-        wptPt.link = [amenity getSite];
+        wptPt.link = [[OASLink alloc] initWithHref:[amenity getSite]];
     }
     
     NSString *color = [amenity getColor];
@@ -359,7 +359,7 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
         if (article.imageTitle && article.imageTitle.length > 0)
         {
             NSString *link = [OATravelArticle getImageUrlWithImageTitle:article.imageTitle thumbnail:false];
-            gpxFile.metadata.link = link;
+            gpxFile.metadata.link = [[OASLink alloc] initWithHref:link];
         }
         [gpxFile.tracks addObject:track];
         extensions[@"ref"] = article.ref;
@@ -386,7 +386,7 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
             if (article.imageTitle && article.imageTitle.length > 0)
             {
                 NSString *link = [OATravelArticle getImageUrlWithImageTitle:article.imageTitle thumbnail:false];
-                gpxFile.metadata.link = link;
+                gpxFile.metadata.link = [[OASLink alloc] initWithHref:link];
             }
         }
         for (OAPOI *wayPoint in pointList)

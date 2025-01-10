@@ -110,6 +110,7 @@
     if (_locations == nil || _locations.count == 0)
         return trkSegment;
     
+    NSMutableArray<OASWptPt *> *newPoints = [NSMutableArray arrayWithCapacity:_locations.count];
     for (NSInteger i = 0; i < _locations.count; i++)
     {
         CLLocation *loc = _locations[i];
@@ -119,12 +120,10 @@
         
         if (loc.altitude > 0)
             pt.ele = loc.altitude;
-
-//        if (loc.horizontalAccuracy)
-//            pt.hdop = loc.horizontalAccuracy;
         
-        trkSegment.points = [[trkSegment.points arrayByAddingObject:pt] mutableCopy];
+        [newPoints addObject:pt];
     }
+    trkSegment.points = newPoints;
     
     NSMutableArray<OASGpxUtilitiesRouteSegment *> *routeSegments = [NSMutableArray new];
     for (const auto& item : routeItems)

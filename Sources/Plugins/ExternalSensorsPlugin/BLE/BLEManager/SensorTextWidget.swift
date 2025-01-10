@@ -120,7 +120,7 @@ final class SensorTextWidget: OASimpleWidget {
             if let field, let formattedValue = field.getFormattedValue() {
                 if cachedValue != formattedValue.value {
                     cachedValue = formattedValue.value
-                    print("externalDeviceId: \(externalDeviceId) | value: \(formattedValue.value)")
+                    print("externalDeviceId: \(String(describing: externalDeviceId)) | value: \(formattedValue.value)")
                     if formattedValue.value != "0" {
                         setText(formattedValue.value, subtext: formattedValue.unit)
                     } else {

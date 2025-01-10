@@ -41,7 +41,6 @@ class TimeToNavigationPointWidgetState: OAWidgetState {
     
     func getPrefValue(widgetConfigurationParams: [String: Any]?,
                       isCreate: Bool) -> String {
-        
         var currentValue = arrivalTimeOrTimeToGo.defValue
         if let widgetConfigurationParams,
            let key = widgetConfigurationParams.keys.first(where: { $0.hasPrefix("showArrivalTime") || $0.hasPrefix("showIntermediateArrivalTime") }),

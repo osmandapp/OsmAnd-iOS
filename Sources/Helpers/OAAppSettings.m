@@ -2917,6 +2917,16 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
     return [self.class rulerWidgetModeToString:[self get:mode]];
 }
 
+- (NSString *)toStringFromValue:(id)value
+{
+    if (![value isKindOfClass:[NSNumber class]]) {
+        return @"";
+    }
+    
+    EOARulerWidgetMode mode = [value integerValue];
+    return [self.class rulerWidgetModeToString:mode];
+}
+
 - (void) resetToDefault
 {
     EOARulerWidgetMode defaultValue = self.defValue;

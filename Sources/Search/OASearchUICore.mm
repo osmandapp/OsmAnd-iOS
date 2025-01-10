@@ -23,7 +23,6 @@
 #import "OAPOIBaseType.h"
 #import "OAStreet.h"
 #import "OAResultMatcher.h"
-#import "OATopIndexFilter.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>

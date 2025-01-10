@@ -716,8 +716,6 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 
 @interface OACommonWidgetZoomLevelType : OACommonInteger
 
-//@property (nonatomic, readonly) EOAWidgetZoomLevelType defValue;
-
 + (instancetype)withKey:(NSString *)key defValue:(EOAWidgetZoomLevelType)defValue;
 
 - (EOAWidgetZoomLevelType)get;

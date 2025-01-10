@@ -6,11 +6,7 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-import Foundation
-
-@objc(OATimeToNavigationPointWidget)
-@objcMembers
-class TimeToNavigationPointWidget: OASimpleWidget {
+final class TimeToNavigationPointWidget: OASimpleWidget {
     private static let UPDATE_INTERVAL_SECONDS: Int64 = 30
     
     private let routingHelper: OARoutingHelper = OARoutingHelper.sharedInstance()!
@@ -34,8 +30,9 @@ class TimeToNavigationPointWidget: OASimpleWidget {
         updateIcons()
         updateContentTitle()
         onClickFunction = { [weak self] _ in
-            self?.widgetState!.changeToNextState()
-            _ = self?.updateInfo()
+            guard let self else { return }
+            widgetState.changeToNextState()
+            _ = updateInfo()
         }
     }
     
@@ -52,15 +49,15 @@ class TimeToNavigationPointWidget: OASimpleWidget {
     }
     
     func isIntermediate() -> Bool {
-        return widgetState!.isIntermediate()
+        widgetState!.isIntermediate()
     }
     
     func getPreference() -> OACommonBoolean {
-        return arrivalTimeOtherwiseTimeToGoPref
+        arrivalTimeOtherwiseTimeToGoPref
     }
     
     override func getWidgetState() -> OAWidgetState? {
-        return widgetState
+        widgetState
     }
     
     override func getSettingsData(_ appMode: OAApplicationMode,
@@ -74,7 +71,8 @@ class TimeToNavigationPointWidget: OASimpleWidget {
         settingRow.key = "value_pref"
         settingRow.title = widgetType!.title
         settingRow.setObj(arrivalTimeOtherwiseTimeToGoPref, forKey: "pref")
-        settingRow.setObj(widgetState!.getPrefValue(), forKey: "value")
+        settingRow.setObj(widgetState!.getPrefValue(widgetConfigurationParams: widgetConfigurationParams, isCreate: isCreate), forKey: "value")
+        
         settingRow.setObj(getPossibleValues(), forKey: "possible_values")
         return data
     }

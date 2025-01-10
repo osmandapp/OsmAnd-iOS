@@ -73,13 +73,7 @@ final class MapWidgetsFactory: NSObject {
         case .currentSpeed:
             return OACurrentSpeedWidget(customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .averageSpeed:
-            if let widgetParams {
-                return AverageSpeedWidget(customId: customId,
-                                          appMode: appMode,
-                                          widgetParams: widgetParams)
-            } else {
-                return AverageSpeedWidget(customId: customId, appMode: appMode)
-            }
+            return AverageSpeedWidget(customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .maxSpeed:
             return OAMaxSpeedWidget(customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .altitudeMyLocation:

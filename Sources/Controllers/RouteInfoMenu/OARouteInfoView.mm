@@ -68,6 +68,10 @@
 #import "OARequiredMapsResourceViewController.h"
 #import "OAResourcesUIHelper.h"
 #import "OsmAndSharedWrapper.h"
+#import "OAAttachRoadsBannerCell.h"
+#import "OASnapTrackWarningViewController.h"
+#import "OAGpxData.h"
+#import "OAMeasurementEditingContext.h"
 
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
@@ -647,6 +651,15 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             [section addObject:@{
                 @"cell" : kCellReuseIdentifier
             }];
+            if ([self isGpxTrackFollowingMode] && [_settings.detailedTrackGuidance get:[_routingHelper getAppMode]] == EOATrackApproximationManual)
+            {
+                [section addObject:@{
+                    @"cell" : [OAAttachRoadsBannerCell getCellIdentifier],
+                    @"title" : OALocalizedString(@"attach_roads_descr"),
+                    @"buttonTitle" : OALocalizedString(@"attach_to_the_roads"),
+                    @"key" : @"attach_roads"
+                }];
+            }
             [section addObject:@{
                 @"cell" : [OAFilledButtonCell getCellIdentifier],
                 @"title" : OALocalizedString(@"shared_string_details"),
@@ -1029,6 +1042,20 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (void) openRouteDetails
 {
     [[OARootViewController instance].mapPanel openTargetViewWithRouteDetails:_gpx analysis:_trackAnalysis];
+}
+
+- (void) openAttachToTheRoadsScreen
+{
+    if (_gpx)
+    {
+        OAGpxData *gpxData = [[OAGpxData alloc] initWithFile:_gpx];
+        OAMeasurementEditingContext *editingContext = [[OAMeasurementEditingContext alloc] init];
+        editingContext.gpxData = gpxData;
+        editingContext.appMode = OARoutingHelper.sharedInstance.getAppMode;
+        editingContext.selectedSegment = OAAppSettings.sharedManager.gpxRouteSegment.get;
+        [[OARootViewController instance].mapPanel closeRouteInfo];
+        [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithEditingContext:editingContext followTrackMode:YES showSnapWarning:YES]];
+    }
 }
 
 - (void) calcPedestrianRoute
@@ -1521,6 +1548,27 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     else if ([item[@"cell"] isEqualToString:kCellReuseIdentifier])
     {
         return _routeStatsCell;
+    }
+    else if ([item[@"cell"] isEqualToString:[OAAttachRoadsBannerCell getCellIdentifier]])
+    {
+        OAAttachRoadsBannerCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAAttachRoadsBannerCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAAttachRoadsBannerCell getCellIdentifier] owner:self options:nil];
+            cell = (OAAttachRoadsBannerCell *)[nib objectAtIndex:0];
+        }
+        if (cell)
+        {
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.contentContainer.layer.cornerRadius = 6;
+            cell.contentContainer.layer.borderWidth = 1;
+            cell.contentContainer.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
+            cell.label.text = item[@"title"];
+            [cell.button setTitle:item[@"buttonTitle"] forState:UIControlStateNormal];
+            [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.button addTarget:self action:@selector(openAttachToTheRoadsScreen) forControlEvents:UIControlEventTouchUpInside];
+        }
+        return cell;
     }
     else if ([item[@"cell"] isEqualToString:[OAFilledButtonCell getCellIdentifier]])
     {

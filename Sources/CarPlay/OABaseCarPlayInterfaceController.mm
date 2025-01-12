@@ -37,7 +37,7 @@
     // override
 }
 
-- (void) startNavigationGivenLocation:(CLLocation *)loc historyName:(OAPointDescription *)historyName
+- (void) startNavigationGivenLocation:(CLLocation *)loc historyName:(nullable OAPointDescription *)historyName
 {
     if (loc)
     {

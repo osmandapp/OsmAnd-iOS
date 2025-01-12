@@ -2712,7 +2712,7 @@
 "last_seven_days" = "Ultimele 7 zile";
 "confirm_history_item_delete" = "Sunteți sigur că doriți să ștergeți (%ld) elemente din istoric?";
 "rotate_map_manual_opt" = "Rotită manual";
-"compass_click_desc" = "Indicație: Atingeți butonul busolă pentru a comuta modul de orientare a hărții.";
+"compass_click_desc" = "Atingeți de două ori butonul busolă pentru a comuta modul de orientare a hărții.";
 "map_markers_history" = "Istoricul marcajelor de hartă";
 "history_clear_alert_title" = "Ștergeți tot istoricul";
 "history_clear_alert_message" = "Sunteți sigur că doriți să ștergeți toate elementele din istoric?";

@@ -3970,3 +3970,4 @@
 "add_widget_to_the_left" = "Add widget to the left";
 "delete_widget" = "Delete widget?";
 "delete_widget_description" = "This widget will be deleted. You can restore it later in Configure Screen.";
+"reset_average_speed" = "Reset average speed";

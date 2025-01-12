@@ -307,6 +307,12 @@ static long BIGGEST_MEASURED_INTERVAL;
     return NAN;
 }
 
+- (void)reset {
+    [_locations removeAllObjects]; // Clear the location data
+    _previousLocation = nil;
+    _previousTime = 0;
+}
+
 - (float)calculateNonUniformSpeed:(long)measuredInterval skipLowSpeed:(BOOL)skipLowSpeed
 {
     long intervalStart = [[NSDate date] timeIntervalSince1970] * 1000 - measuredInterval;

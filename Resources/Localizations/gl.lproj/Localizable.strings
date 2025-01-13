@@ -404,7 +404,7 @@
 "plugin_nautical_name" = "Vista do mapa náutico";
 "plugin_nautical_descr" = "Este plugin enriquece a aplicación de mapas de navegación OsmAnd para que amose tamén mapas náuticos para viaxes en barco e outros tipos de deportes acuáticos.  \n  \nUnha extensión dos mapas especial para o OsmAnd fornece tódalas marcaxes náuticas e símbolos das cartas para a navegación en augas interiores e de cabotaxe. A descrición de cada marcaxe da navegación fornece os detalles precisos para identificala, así coma o seu significado (categoría, forma, cor, secuencia, referencia, etc.).  \n  \nPara voltar a un dos estilos do mapa convencionais do OsmAnd, sinxelamente hai que desactivar este plugin de novo ou mudar o \"Estilo do mapa\" en \"Configurar o mapa\" coma se desexe.";
 "osmand_parking_plugin_name" = "Posición de aparcamento";
-"osmand_parking_plugin_description" = "Rexistra onde foi aparcado o automóbil, incluíndo canto tempo falta.  \n Tanto a localización coma o tempo do aparcamento amósanse no menú principal e nun trebello sobre o mapa. Pódese engadir unha alarma de lembranza ó calendario do Android.";
+"osmand_parking_plugin_description" = "Rexistra onde foi aparcado o automóbil, incluíndo canto tempo falta. \n Tanto a localización coma o tempo do aparcamento amósanse no menú principal e nun trebello sobre o mapa. Pódese engadir unha alarma de lembranza ó calendario do Android.";
 "plugin_ski_name" = "Vista dos mapas de esquí";
 "plugin_ski_descr" = "Este plugin para o OsmAnd pon ó teu acade detalles sobre pistas do esquí de baixada, de travesía, roteiros do esquí alpino, teleféricos e refachos a nivel mundial. As rotas e pistas amósanse polo código de cor en función da súa dificuldade e representados cun estilo do mapa especial \"Inverno\" que o asemella a unha paisaxe invernal nevada. \n  \nActivando esta vista, muda o estilo do mapa a «Inverno e esquí», amosando as características do terreo en condicións invernais. Esta vista pódese revertir desactivando de novo eiquí ou mudando o \"Estilo do mapa\" en \"Configurar mapa\" cando o desexes.";
 "record_plugin_name" = "Gravación de viaxes";
@@ -799,7 +799,7 @@
 "rendering_attr_surface_asphalt_name" = "Asfalto";
 "routing_attr_max_num_changes_description" = "Escolle o número máximo de transbordos";
 "rendering_attr_piste_type_skitour_name" = "Esquí de travesía";
-"rendering_attr_showAccess_name" = "Amosar restricións do acceso e portaxes ou peaxes";
+"rendering_attr_showAccess_name" = "Amosar as restricións de acceso";
 "rendering_attr_piste_difficulty_advanced_name" = "Avanzado";
 "routing_attr_avoid_ferries_name" = "Sen ferris";
 "rendering_value_white_name" = "Branco";
@@ -1557,7 +1557,7 @@
 "add_point_after" = "Engadir punto despois";
 "only_selected_segment_recalc" = "Só o segmento marcado será recalculado empregando o perfil escollido.";
 "quick_action_navigation_voice_off" = "Activar a voz";
-"osm_editing_plugin_description" = "Fai contribucións no OSM, como o crear ou modificar obxectos PDI, abrir ou comentar notas do OSM e contribuír con ficheiros de pistas GPX gravados no OsmAnd, fornecendo o teu nome de usuario e contrasinal. O OpenStreetMap.org é un proxecto de cartografado de dominio público, global, ceibe e impulsado pola comunidade.";
+"osm_editing_plugin_description" = "Faga achegas a OpenStreetMap, unha comunidade global que mantén un mapa completo do mundo e ofrece datos de código aberto actualizados a todos os usuarios.\n\nPode atopar instrucións sobre como editar o mapa no noso sitio web %@.";
 "quick_action_auto_zoom" = "Activar ou desactivar achegamento automático do mapa";
 "weather_plugin_description" = "Proporciona \n- a predición meteorolóxica das 24 horas e 7 días con 5 capas \n- complementos baseados na localización \n- as isolíneas da temperatura/presión \n \nA predición meteorolóxica e proporcionada polo Global Forecast System (GFS, %@).";
 "privacy_and_security" = "Privacidade e seguranza";
@@ -1724,3 +1724,15 @@
 "downloaded_bytes" = "%@ de %@";
 "quick_action_terrain_color_scheme" = "Esquema de cores do terreo";
 "quick_action_need_to_add_item_to_list" = "Engadir polo menos un elemento á listaxe nos axustes de \'Acción rápida\'";
+"add_widget_to_the_left" = "Engadir complemento á esquerda";
+"add_widget_below" = "Engadir complemento abaixo";
+"shared_string_to" = "A";
+"transport_stop" = "Finalizar";
+"delete_widget" = "Eliminar complemento?";
+"lock_screen_description" = "Activa ou desactiva a funcionalidade da pantalla táctil para evitar toques accidentais";
+"help_article_map_routes_name" = "Rutas";
+"add_widget_to_the_right" = "Engadir complemento á dereita";
+"max_altitude" = "Altitude máxima";
+"help_article_map_tracks_name" = "Pistas";
+"discard_filter_changes_prompt" = "¿Estás seguro de que queres restablecer todos os filtros?";
+"add_widget_above" = "Engadir complemento enriba";

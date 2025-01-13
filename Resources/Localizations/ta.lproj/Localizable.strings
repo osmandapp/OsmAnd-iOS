@@ -201,7 +201,7 @@
 "shared_string_my_places" = "என் இடங்கள்";
 "shared_string_rename" = "மறுபெயரிடு";
 "update_existing" = "மாற்றவும்";
-"replace_favorite_confirmation" = "%@ விருப்பத்தை நிச்சயமாக மாற்ற விரும்புகிறீர்களா \?";
+"replace_favorite_confirmation" = "%@ விருப்பத்தை நிச்சயமாக மாற்ற விரும்புகிறீர்களா ?";
 "fav_points_not_exist" = "பிடித்த புள்ளிகள் இல்லை";
 "add_group" = "ஒரு குழுவைச் சேர்க்கவும்";
 "fav_point_dublicate" = "பிடித்த புள்ளி பெயர் நகல்";
@@ -685,7 +685,7 @@
 "saved_articles" = "புத்தகக்குறியிட்ட கட்டுரை";
 "image_cache" = "புகைப்படம் மறைவிடம்";
 "map_marker_2nd" = "இரண்டாவது வரைபடம் மார்க்கர்";
-"weather_update_disabled" = "முடக்கியது";
+"weather_update_disabled" = "முடக்கப்பட்டது";
 "shared_string_travel_guides" = "பயண வழிகாட்டிகள்";
 "context_menu_read_article" = "கட்டுரை வாசிக்க";
 "edit_tilesource_minzoom" = "குறைந்தபட்ச ஜூம்";
@@ -700,3 +700,5 @@
 "default_price_currency_format" = "%.2f %@ \n";
 "of" = "%d இல் %d";
 "downloaded_bytes" = "%@ இல் %@";
+"transport_stop" = "நிறுத்து";
+"shared_string_minute_lowercase" = "மணிதுளி";

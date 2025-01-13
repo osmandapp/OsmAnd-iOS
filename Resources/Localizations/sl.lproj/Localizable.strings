@@ -1298,7 +1298,7 @@
 "copied_to_clipboard" = "Vsebina je kopirana v odložišče";
 "shared_string_enable" = "Omogoči";
 "plan_route_split_before" = "Razdeli pred";
-"replace_favorite_confirmation" = "Zamenjati priljubljeno točko »%@«\?";
+"replace_favorite_confirmation" = "Zamenjati priljubljeno točko »%@«?";
 "icon_group_emergency" = "Pomoč v sili";
 "icon_group_transport" = "Javni prevozi";
 "transport" = "Prevoz";
@@ -2332,7 +2332,7 @@
 "coordinates_format" = "Zapis koordinat";
 "developer_widgets" = "Gradniki za razvijalce";
 "bluetooth_found_title" = "Najdeno: %d";
-"external_device_status_connect" = "Poveži";
+"external_device_status_connect" = "Poveži se";
 "press_again_to_change_the_map_orientation" = "Pritisnite znova, da spremenite usmerjenost zemljevida";
 "purchases_feature_relief_3d_description" = "Imej in opazuj maketo svoje soseske ali cele celine.";
 "external_device_details_information" = "Podrobnosti";
@@ -2443,3 +2443,7 @@
 "of" = "%d od %d";
 "downloaded_bytes" = "%@ od %@";
 "quick_action_need_to_add_item_to_list" = "Dodaj vsaj en element na seznam v nastavitvah »Hitrih dejanj«";
+"shared_string_visible_on_map" = "Vidno na zemljevidu";
+"shared_string_to" = "Za";
+"transport_stop" = "Končaj";
+"power_watts_unit" = "Vatov";

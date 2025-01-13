@@ -2011,3 +2011,6 @@
 "of" = "%d o %d";
 "downloaded_bytes" = "%@ o %@";
 "quick_action_need_to_add_item_to_list" = "Ychwanegwch o leiaf un eitem i\'r rhestr yng ngosodiadau \'Gweithred gyflym\'";
+"shared_string_minute_lowercase" = "mun";
+"transport_stop" = "Stopio";
+"shared_string_to" = "I";

@@ -1746,7 +1746,7 @@
 "gpx_upload_public_visibility_descr" = "\"Public\" vòu dire que la traça se visualiza publicament dins vòstrei traças GPS, dins lei listas publicas de traças GPS amb seis informacions temporalas en forma grassa. Lei donadas fornidas per l\'API menan pas a vòstra pagina de traças. Leis informacions temporalas dei ponchs de traça son pas disponibles per l\'API GPS publica, e lei ponchs de la traça son pas ordenats segon lo temps.";
 "gpx_upload_identifiable_visibility_descr" = "\"Identificable\" vòu dire que la traça se visualiza publicament dins vòstrei traças GPS e sus la lista publica de traças GPS, valent a dire, que leis autreis utilizators la podràn teledescargar en forma grassa e l\'associar amb vòstre nom d\'utilizator. Lei donadas temporalas e lei ponchs de la traça servits per l’API GPS faràn referéncia a la pagina de vòstra traça originala.";
 "lang_ku" = "Kurd";
-"gpx_upload_trackable_visibility_descr" = "« Traçable » vòu dire que la traça pareisse pas dins ges de lista publica, mai solament lei ponchs intermediaris e son informacion temporala (que se pòdon pas associar directament amb vos) per lei teledescargaments de l\'API GPS publica.";
+"gpx_upload_trackable_visibility_descr" = "« Traçable » vòu dire que la traça pareisse pas dins ges de lista publica, mai solament lei ponchs intermediaris e son informacion temporala (que se pòdon pas associar directament amb vos) per lei teledescargaments de l\'API GPS publica.";
 "lang_az" = "Azerbaijanés";
 "do_not_rotate" = "Ges de rotacion";
 "navigate_point_zone" = "Airau";
@@ -2718,3 +2718,4 @@
 "show_along_the_route" = "Mostrar l\'itinerari tot de lòng";
 "quick_action_toggle_preference" = "Una bascula per cambiar de preferéncias.";
 "shared_string_local" = "Installat en locau";
+"transport_stop" = "Arrèst";

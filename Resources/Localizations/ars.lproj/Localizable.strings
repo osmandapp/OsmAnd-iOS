@@ -3216,7 +3216,7 @@
 "import_create_track_files" = "يمكنك استيراد أو إنشاء أو تسجيل ملفات المسار باستخدام أوسماند.";
 "help_article_navigation_routing_brouter_name" = "التوجيه عبر";
 "help_article_navigation_setup_gpx_navigation_name" = "التنقل عن طريق المسار";
-"map_settings_topography" = "بيانات الخطوط الكنتورية";
+"map_settings_topography" = "خرائط الخطوط الكنتورية";
 "ask_question_propose_features" = "اطرح سؤالاً واقترح ميزات";
 "shared_string_open_track" = "فتح المسار";
 "help_article_navigation_setup_route_navigation_name" = "تحضير الطريق";
@@ -3335,3 +3335,17 @@
 "of" = "%d من %d";
 "downloaded_bytes" = "%@ من %@";
 "quick_action_need_to_add_item_to_list" = "أضف عنصراً واحداً على الأقل إلى القائمة في إعدادات \"الاختصار السريع\"";
+"not_specified" = "غير محدد";
+"root_folder" = "المجلد الرئيسي";
+"all_folders" = "كل المجلدات";
+"date_of_creation" = "تاريخ الإنشاء";
+"discard_filter_changes_prompt" = "هل أنت متأكد من أنك تريد إعادة ضبط جميع الفلاتر الى الوضع الافتراضي؟";
+"shared_string_minute_lowercase" = "د";
+"power_watts_unit" = "واتس";
+"shared_string_reset_all" = "إعادة ضبط الجميع للافتراضي";
+"shared_string_visible_on_map" = "مرئي على الخريطة";
+"shared_string_to" = "إلى";
+"max_altitude" = "أقصى ارتفاع";
+"with_waypoints" = "مع نقاط الطريق";
+"transport_stop" = "إيقاف";
+"revolutions_per_minute_unit" = ".RPM";

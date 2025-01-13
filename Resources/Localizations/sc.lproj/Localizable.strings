@@ -2990,3 +2990,5 @@
 "of" = "%d de %d";
 "downloaded_bytes" = "%@ de %@";
 "quick_action_need_to_add_item_to_list" = "Annanghe a su mancu un\'elementu a sa lista in sas impostatziones pro sas atziones lestras";
+"shared_string_to" = "A";
+"transport_stop" = "Firmada";

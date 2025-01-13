@@ -354,7 +354,7 @@
 "favorite_group_name" = "Qrup adı";
 "shared_string_rename" = "Yenidən adlandır";
 "update_existing" = "Əvəz et";
-"replace_favorite_confirmation" = "“%@” Favoriti əvəz edilsin\?";
+"replace_favorite_confirmation" = "“%@” Favoriti əvəz edilsin?";
 "fav_points_not_exist" = "Favorit nöqtələr yoxdur";
 "add_group" = "Qrup əlavə et";
 "select_group" = "Qrup seçin";
@@ -559,7 +559,7 @@
 "shared_string_finish" = "Bitir";
 "copy_from_other_profile" = "Başqa profildən kopyala";
 "profile_alert_delete_title" = "Profili sil";
-"profile_alert_delete_msg" = "“%@” profili silinsin\?";
+"profile_alert_delete_msg" = "“%@” profili silinsin?";
 "select_base_profile_dialog_message" = "Xüsusi profilinizi standart proqram profillərindən birinə əsaslandırın, bu, vidcetlərin standart görünüşü, sürət və məsafə vahidləri kimi əsas quraşdırmanı müəyyən edir. Bunlar, genişləndirilə bilən xüsusi profillərin nümunələri ilə birlikdə standart proqram profilləridir:";
 "profile_type_custom_string" = "Xüsusi profil";
 "new_profile" = "Yeni profil";
@@ -1512,3 +1512,6 @@
 "of" = "%d / %d";
 "downloaded_bytes" = "%@-dən %@";
 "quick_action_need_to_add_item_to_list" = "“Sürətli fəaliyyət” parametrlərində siyahıya ən azı bir element əlavə edin";
+"shared_string_to" = "Bu tarixədək:";
+"transport_stop" = "Dayanacaq";
+"shared_string_minute_lowercase" = "dəq";

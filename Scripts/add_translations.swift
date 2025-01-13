@@ -16,7 +16,7 @@ let DEBUG = false
 let LOGGING = false
 
 ///For debug set here your Osmand repositories path
-let OSMAND_REPOSITORIES_PATH = "/Users/nnngrach/Projects/Coding/OsmAnd/"
+let OSMAND_REPOSITORIES_PATH = "../" // /Users/nnngrach/Projects/Coding/OsmAnd/
 
 ///For quick debugging you can write interesting key only in this var.
 let DEBUG_STOP_KEY = "empty_purchases_description"
@@ -182,7 +182,7 @@ class Main {
 
         let path = getOsmandRepositoriesPath()
         if !DEBUG {
-            updateGitRepositories(path)
+            // updateGitRepositories(path)
             copyPhrasesFiles(path)
         }
         
@@ -388,7 +388,7 @@ class IOSWriter {
         
         for language in languageDict {
             print("\nparsing dictionaries for lang: " + language.key)
-            var iosDict = IOSReader.parseTranslationFile(language: language.key)
+            let iosDict = IOSReader.parseTranslationFile(language: language.key)
             let androidDict = AndroidReader.parseTranslationFile(language: language.key)
             parsedIosDicts[language.key] = iosDict
             parsedAndroidDicts[language.key] = androidDict

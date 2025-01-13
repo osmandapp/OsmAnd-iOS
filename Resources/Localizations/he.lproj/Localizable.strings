@@ -427,7 +427,7 @@
 "favorite_group_name" = "שם הקבוצה";
 "shared_string_rename" = "שינוי שם";
 "update_existing" = "החלפה";
-"replace_favorite_confirmation" = "להחליף את המועדף „%@”\?";
+"replace_favorite_confirmation" = "להחליף את המועדף „%@”?";
 "fav_points_not_exist" = "לא קיימות נקודות מועדפות";
 "add_group" = "הוספת קבוצה";
 "select_group" = "בחירת קבוצה";
@@ -1017,7 +1017,7 @@
 
 //inapps
 "plugin_nautical_name" = "תצוגת מפה ימית";
-"plugin_nautical_descr" = "תוסף זה מעשיר את המפה ואת הניווט של יישומון OsmAnd ומאפשר לייצר מפות ימיות לחתירה, הפלגה וסוגים נוספים של ספורט ימי.  \n \nתוסף מפה מיוחד ל־OsmAnd יספק את כל סימוני הניווט הימיים והסימנים הימיים המוסכמים, לניווט במקווי מים פנימיים לרבות ניווט באזורים הקרובים לחוף. התיאור של כל סימון ניווט מספק את הפרטים הנדרשים כדי לזהות אותם ואת המשמעות שלהם (קטגוריה, צורה, צבע, רצף, הפניה וכו׳).  \n \nכדי לחזור לאחד מסגנונות המפה הרגילים של OsmAnd עליך פשוט להשבית את התוסף הזה שוב או לשנות את ‚סגנון המפה’ תחת ‚הגדרות המפה’ לפי הצורך.";
+"plugin_nautical_descr" = "תוסף זה מעשיר את המפה ואת הניווט של יישומון OsmAnd ומאפשר לייצר מפות ימיות לחתירה, הפלגה וסוגים נוספים של ספורט ימי. \n \nתוסף מפה מיוחד ל־OsmAnd יספק את כל סימוני הניווט הימיים והסימנים הימיים המוסכמים, לניווט במקווי מים פנימיים לרבות ניווט באזורים הקרובים לחוף. התיאור של כל סימון ניווט מספק את הפרטים הנדרשים כדי לזהות אותם ואת המשמעות שלהם (קטגוריה, צורה, צבע, רצף, הפניה וכו׳). \n \nכדי לחזור לאחד מסגנונות המפה הרגילים של OsmAnd עליך פשוט להשבית את התוסף הזה שוב או לשנות את ‚סגנון המפה’ תחת ‚הגדרות המפה’ לפי הצורך.";
 "osmand_parking_plugin_name" = "מיקום החנייה";
 "osmand_parking_plugin_description" = "מאפשר לך לשמור איפה רכבך חנה וכמה זמן נותר לחנייה. \n המיקום והשעה מופיעים בלוח הבקרה וגם בחלונית מפה. ניתן להוסיף התראה ליומן של Android.";
 "plugin_ski_name" = "תצוגת מפת סקי";
@@ -1025,7 +1025,7 @@
 "record_plugin_name" = "הקלטת מסלול";
 "record_plugin_description" = "תוסף זה מפעיל את התכונה להקלטת ולשמירת המסלולים שלך על ידי נגיעה באופן ידני בווידג׳ט רישום ה־GPX במפה, או גם לערוך רישום של כל נתיבי הניווט שלך לקובץ GPX. \n  \nניתן לשתף נתיבים מוקלטים עם חבריך או להשתמש בהם כתרומה ל־OSM. אתלטים יכולים להשתמש במסלולים מוקלטים כדי לעקוב אחר האימונים שלהם. ניתן לבצע ניתוח מסלול בסיסי ישירות ב־OsmAnd, כמו זמני הקפה, מהירות ממוצעת וכו׳, כמו כן, ניתן לנתח את המסלולים בשלב מאוחר יותר על ידי כלי ניתוח מיוחדים מגורמי צד־שלישי.";
 "osm_editing_plugin_name" = "עריכה של OpenStreetMap";
-"osm_editing_plugin_description" = "ניתן לתרום ל־OSM למשל על ידי שינוי פריטי נקודות עניין ב־OSM או ליצור הערות OSM ולתרום קובצי הקלטות GPX ל־OsmAnd על ידי ציון שם המשתמש והססמה שלך. OpenStreetMap.org הוא מיזם מיפוי גלובלי, בהנהגה קהילתית לרווחת הציבור.";
+"osm_editing_plugin_description" = "אפשר לתרום ל־OpenStreetMap קהילה בינלאומית שמתחזקת מפה מפורטת של העולם ומספקת נתונים עדכניים בקוד פתוח לכל המשתמשים.\n\nאפשר למצוא הנחיות איך לערוך את המפה באתר שלנו %@.";
 "plugin_mapillary_descr" = "תמונות ברמת הרחוב לכולם. להכיר מקומות, לשתף פעולה ולצלם את העולם.";
 "download_wikipedia_maps" = "ויקיפדיה";
 "purchases_feature_desc_wikipedia" = "קריאה בוויקיפדיה ללא אינטרנט. ערכים, בחלוקה למדינות ולמחוזות, זמינים בכל השפות.";
@@ -1364,7 +1364,7 @@
 "rendering_value_bicycle_name" = "אופניים";
 "rendering_value_translucent_lightgreen_name" = "ירוק בהיר שקוף למחצה";
 "rendering_attr_contourLines_name" = "הצגת קווי מתאר";
-"rendering_attr_showAccess_name" = "הצגת הגבלות גישה ועמלות";
+"rendering_attr_showAccess_name" = "הצגת הגבלות גישה";
 "rendering_attr_surface_dirt_name" = "עפר";
 "routing_attr_piste_type_skitour_name" = "טיול סקי";
 "routing_attr_driving_style_prefer_unpaved_name" = "להעדיף דרכים לא סלולות";
@@ -2091,7 +2091,7 @@
 "my_data" = "הנתונים שלי";
 "route_maneuvers" = "מעקפים";
 "map_widget_trip_recording_downhill" = "במורד ההר";
-"map_settings_topography" = "קווי מתאר";
+"map_settings_topography" = "מפות SRTM";
 "activity_type_walking_name" = "הליכה";
 "map_markers_bar_widget_desc" = "בווידג׳ט הסרגל העליון אפשר לראות את המרחק ואת הכיוון לסמן מהמיקום הנוכחי. אפשר להגדיר כדי לראות סמן או שניים מובילים בווידג׳ט.";
 "download_file" = "הורדת קובץ";
@@ -2244,3 +2244,12 @@
 "downloaded_bytes" = "%@ מתוך %@";
 "battery_saving_mode" = "מצב חסכון בסוללה";
 "quick_action_need_to_add_item_to_list" = "יש להוסיף לפחות פריט אחד לרשימה בהגדרות ה‚פעולה המהירה’";
+"revolutions_per_minute_unit" = "סל״ד";
+"shared_string_to" = "עד";
+"reset_average_speed" = "איפוס המהירות הממוצעת";
+"shared_string_minute_lowercase" = "דק׳";
+"transport_stop" = "עצירה";
+"map_widget_map_scale" = "קנה מידה של מפה";
+"wheel_circumference" = "היקף גלגל";
+"shared_string_maximum" = "מרבי";
+"sort_subfolders_tracks" = "מיון תת־תיקיות";

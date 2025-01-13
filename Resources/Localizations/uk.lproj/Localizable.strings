@@ -3557,7 +3557,6 @@
 "delete_widget_description" = "Цей віджет буде видалено. Ви можете відновити його пізніше у Налаштуваннях екрана.";
 "add_widget_below" = "Додати віджет знизу";
 "add_widget_above" = "Додати віджет зверху";
-
 "rendering_attr_showClimbingRoutes_description" = "Показати маршрути сходження";
 "rendering_attr_showClimbingRoutes_name" = "Скелелазні маршрути";
 "reset_average_speed" = "Скинути середню швидкість";

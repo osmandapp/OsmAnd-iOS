@@ -2646,15 +2646,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
 {
-    switch ([self get:mode])
-    {
-        case ONE_ACTIVE_MARKER:
-            return @"1";
-        case TWO_ACTIVE_MARKERS:
-            return @"2";
-        default:
-            return @"1";
-    }
+    EOAActiveMarkerConstant type = [self get:mode];
+    return [self toStringFromValue:@(type)];
 }
 
 - (NSString *)toStringFromValue:(id)value
@@ -3745,15 +3738,8 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
 {
-    switch ([self get:mode])
-    {
-        case EOAWidgetZoom:
-            return kZoomKey;
-        case EOAWidgetMapScale:
-            return kMapScaleKey;
-        default:
-            return @"";
-    }
+    EOAWidgetZoomLevelType type = [self get:mode];
+    return [self toStringFromValue:@(type)];
 }
 
 - (NSString *)toStringFromValue:(id)value

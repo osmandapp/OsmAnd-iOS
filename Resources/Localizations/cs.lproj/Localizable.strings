@@ -3453,7 +3453,6 @@
 "add_widget_to_the_left" = "Přidat widget vlevo";
 "delete_widget" = "Smazat widget?";
 "delete_widget_description" = "Tento widget bude odstraněn. Později jej můžete obnovit v okně Konfigurace.";
-
 "rendering_attr_showClimbingRoutes_description" = "Zobrazit lezecké trasy";
 "rendering_attr_showClimbingRoutes_name" = "Lezecké trasy";
 "reset_average_speed" = "Reset průměrné rychlosti";

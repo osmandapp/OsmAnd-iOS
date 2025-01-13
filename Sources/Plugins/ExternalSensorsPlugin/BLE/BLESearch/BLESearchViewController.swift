@@ -84,7 +84,7 @@ final class BLESearchViewController: OABaseNavbarViewController {
         initTableData()
     }
     
-    // MARK: - Life cicle
+    // MARK: - Life Cycle
     
     override func getTitle() -> String! {
         localizedString("ant_plus_searching")

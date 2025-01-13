@@ -16,6 +16,11 @@
     return nil;
 }
 
+- (NSString *)getWidgetDefaultTitle
+{
+    return nil;
+}
+
 - (NSString *)getWidgetTitle
 {
     return nil;

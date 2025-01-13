@@ -3599,3 +3599,4 @@
 "delete_widget" = "¿Borrar widget?";
 "add_widget_below" = "Agregar widget debajo";
 "add_widget_to_the_right" = "Agregar widget a la derecha";
+"reset_average_speed" = "Reiniciar la velocidad promedio";

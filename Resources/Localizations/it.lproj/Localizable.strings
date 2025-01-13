@@ -3572,3 +3572,4 @@
 "obd_plugin_name" = "Misure del veicolo";
 "avg_sensor_cadence" = "Cadenza della pedalata, media";
 "with_waypoints" = "Con punti intermedi";
+"reset_average_speed" = "Resetta la velocità media";

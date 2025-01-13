@@ -47,20 +47,8 @@ var duplicatesCount = 0
 let iosEnglishKey = "en"
 let androidEnglishKey = ""
 
-/// For quick debug just comment out all unnecessary languages. Like this
-/*
-let languageDict = [
-    //"af" : "af",
-    //"an" : "an",
-    "ar" : "ar",
-    //"ars" : "ars",
-    //"ast" : "ast",
-    // ...
-]
-*/
 
-
-let languageDict = [
+var languageDict = [
     "af" : "af",                // Afrikaans
     "an" : "an",                // Dutch
     "ar" : "ar",                // Arabic
@@ -141,8 +129,15 @@ let languageDict = [
     "uz-Cyrl" : "uz",           // Uzbek (Cyrillic)
     "vi" : "vi",                // Vietnamese
     "zh-Hans" : "zh-rCN",       // Chinese Simplified
-    "zh-Hant" : "zh-rTW",       // Chinese Traditional
+    "zh-Hant" : "zh-rTW",       // Chinese Traditional   
 ]
+
+/// For quick debug just comment out all unnecessary languages. Like this
+// languageDict = [
+//     "ru" : "ru",                // Russian
+//     "uk" : "uk",                // Ukrainian
+// ]
+
 
 let removeLatinOnlyStringsForLanguages = [
     "ar",
@@ -456,6 +451,34 @@ class IOSWriter {
         }
         return false
     }
+
+    static func isTrashString(key: String, currentValue: String?, newValue: String?, language: String, iosEnglishDict: [String: String]) -> Bool {
+        // Remove strings identical to the same string in english file - trash duplicates.
+        if let englishValue = iosEnglishDict[key], language != iosEnglishKey {
+            // Check new value
+            if let newValue, newValue == englishValue {
+                return true
+            }
+            // Check current value
+            let trimmedEnglishValue = englishValue.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
+            if currentValue == trimmedEnglishValue {
+                return true
+            }
+        }
+
+        // Filter the same value in several translations
+        if let currentValue = currentValue, isDuplicatedValueInSeveralLanguages(key, currentValue) { 
+            return true
+        }
+        if let newValue, isDuplicatedValueInSeveralLanguages(key, newValue) {
+            return true
+        }
+        // For non-latin languages (Korean, Arabic, etc) just remove every english-only string. It's usually just a duplicate like "GPX", "GPS", etc
+        if DEBUG_DELETE_ALL_LATIN_ONLY_STRINGS_FROM_NONLATIN_LANGS && removeLatinOnlyStringsForLanguages.contains(language) && isStringEnglishOnly(newValue ?? "") { // Assuming newValue should be used here
+            return true
+        }
+        return false
+    }
     
     static func makeNewDict(language: String, iosDict: [String : String], androidDict: [String : String], iosEnglishDict: [String : String]) {
         let androidDict = IOSReader.replacePlaceholders(androidDict: androidDict)
@@ -513,6 +536,7 @@ class IOSWriter {
         if DEBUG {
             print("Updating lines '\(language)' at \(DateFormatter.localizedString(from: Date(), dateStyle: .medium, timeStyle: .medium))")
         }
+        var updatedStringsCount = 0;
         if existingLinesDict.count > 0 || newLinesDict.count > 0 {
             let filePath = Main.getOsmandRepositoriesPath().path + "/ios/Resources/Localizations/" + language + ".lproj/Localizable.strings"
             let fileURL = URL(fileURLWithPath: filePath)
@@ -558,89 +582,39 @@ class IOSWriter {
                             key = components[0].trimmingCharacters(in: CharacterSet(charactersIn: "\""))
                             currentValue = iosDict[key] ?? ""
                         }
-                        
-                        if !key.isEmpty {
-                            if DEBUG && key == DEBUG_STOP_KEY {
-                                if LOGGING {
-                                    print("#### DEBUG_STOP_KEY #### ")
-                                }
-                            }
-                            
-                            keyOccurrences[key, default: 0] += 1
-                            if keyOccurrences[key]! > 1 {
-                                print("Duplicate key ! \(string) ")
-                            } else {
-                                var newString = string
-                                let newValue = existingLinesDict[key]
-                                if let newValue, let updatedString = replaceValueText(newValue: filterUnsafeChars(newValue), inFullString: string)  {
-                                    newString = updatedString
-                                }
-                                
-                                // Filtering accendentally added old english lines
-                                var isTrashString = false
-                                
-                                // Remove strings identical to the same string in english file - trash duplicates.
-                                if let englishValue = iosEnglishDict[key] {
-                                    if language != iosEnglishKey && !isTrashString {
-                                        
-                                        // Check new value
-                                        if let newValue, newValue == englishValue {
-                                            isTrashString = true
-                                        }
-                                        // Check current value
-                                        let trimmedEnglishValue = englishValue.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
-                                        if currentValue == trimmedEnglishValue {
-                                            isTrashString = true
-                                        } else {
-                                            if DEBUG && key == DEBUG_STOP_KEY {
-                                                if LOGGING {
-                                                    print("#### DEBUG_STOP_KEY #### ")
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                                
-                                // Filter the same value in several translations
-                                if isDuplicatedValueInSeveralLanguages(key, currentValue) {
-                                    isTrashString = true
-                                }
-                                if let newValue, isDuplicatedValueInSeveralLanguages(key, newValue) {
-                                    isTrashString = true
-                                }
-
-                                
-                                // For non-latin languages (Korean, Arabic, etc) just remove every english-only string. It's usuallu just a duplicate like "GPX", "GPS", etc
-                                if DEBUG_DELETE_ALL_LATIN_ONLY_STRINGS_FROM_NONLATIN_LANGS && removeLatinOnlyStringsForLanguages.contains(language) && isStringEnglishOnly(newString) {
-                                    isTrashString = true
-                                }
-                                
-                                
-                                // add updated string if it's ok
-                                if !isTrashString {
-                                    if !DEBUG_STOP_UPDATING_TRANSLATIONS {
-                                        updatedStrings.append(newString);
-                                    } else {
-                                        // delete trash strings. don't change or update any another strings
-                                        updatedStrings.append(string);
-                                    }
-                                }
-                            }
-                            //if let updstedString = replaceValueText(newValue: filterUnsafeChars(elem.value), inFullString: strings[i] )
-                            // if ind % 1000 == 0 {
-                            //     print("Index \(ind) \(key) \(string) ")
-                            // }
-                            
-                            //return keyOccurrences[key]! == 1
-                        } else if string.trimmingCharacters(in: .whitespaces) == "" {
+                        if key.isEmpty {                            
                             // keep empty lines in the same order
+                            if string.trimmingCharacters(in: .whitespaces) != "" {
+                                print("Missing key \(string) ") 
+                            }
                             updatedStrings.append(string)
-                        } else {
-                            print("Missing key \(string) ")
-                            updatedStrings.append(string)
+                            continue
                         }
-                    }
-                    
+                                                
+                        keyOccurrences[key, default: 0] += 1
+                        if keyOccurrences[key]! > 1 {
+                            print("Duplicate key ! \(string) ")
+                        } else {
+                            var newString = string
+                            let newValue = existingLinesDict[key]
+                            if let newValue, let updatedString = replaceValueText(newValue: filterUnsafeChars(newValue), inFullString: string)  {
+                                if updatedString != newString {
+                                    updatedStringsCount += 1
+                                    print("Duplicate key ! \(updatedString) = \(newString) ")
+                                }
+                                newString = updatedString
+                            }
+                            let isTrashString = self.isTrashString(key: key, currentValue: currentValue, newValue: newValue, language: language, iosEnglishDict: iosEnglishDict)
+                            if !isTrashString {
+                                if !DEBUG_STOP_UPDATING_TRANSLATIONS {
+                                    updatedStrings.append(newString);
+                                } else {
+                                    // delete trash strings. don't change or update any another strings
+                                    updatedStrings.append(string);
+                                }
+                            }
+                        } 
+                    }    
                 }
                 
                 // new translations adding
@@ -669,7 +643,7 @@ class IOSWriter {
                 print ("error reading file: \(error)")
             }
         }
-        print(language, "added: ", newLinesDict.count, "   updated: ", existingLinesDict.count, "   deleted duplicates: ", duplicatesCount)
+        print(language, "added: ", newLinesDict.count, "   updated: ", updatedStringsCount, "   deleted duplicates: ", duplicatesCount)
     }
     
     

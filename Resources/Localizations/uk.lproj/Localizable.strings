@@ -1702,7 +1702,7 @@
 "allow_3D_view" = "2.5D вигляд";
 "do_not_rotate" = "Не обертати";
 "light_theme" = "Світла";
-"settings_app_theme" = "Тема";
+"settings_app_theme" = "Тема застосунку";
 "shared_string_meters" = "метри";
 "shared_string_tones" = "тонни";
 "accessibility_announce" = "Оголошення";
@@ -3098,7 +3098,7 @@
 "map_orientation_landscape" = "Горизонтально";
 "map_widget_ant_heart_rate_desc" = "Показує пульс користувача під час певної активності в режимі реального часу";
 "gitHub_discussion" = "Обговорення GitHub";
-"external_device_status_connect" = "З’єднатись";
+"external_device_status_connect" = "Підʼєднати";
 "default_appearance_desc" = "Типовий колір, піктограма та форма застосовуватимуться до доданих точок у групі закладок.";
 "shared_string_result" = "Результат";
 "no_travel_guides_data_descr" = "Завантажте путівники Вікімандрів, щоб переглянути статті про місця в усьому світі без підключення до Інтернету.";

@@ -3444,7 +3444,6 @@
 "shared_string_reset_all" = "Redefinir tudo";
 "shared_string_to" = "Para";
 "discard_filter_changes_prompt" = "Redefinir todos os filtros?";
-
 "rendering_attr_showClimbingRoutes_name" = "Rotas de escalada";
 "map_widget_map_scale" = "Escala do mapa";
 "transport_stop" = "Parada";

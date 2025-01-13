@@ -3589,3 +3589,4 @@
 "delete_widget" = "Brišeš vidžet?";
 "delete_widget_description" = "Ovaj widžet će biti izbrisan. Možeš ga vratiti kasnije u podešavanjima ekrana.";
 "add_widget_above" = "Dodaj widžet iznad";
+"reset_average_speed" = "Resetuj prosečnu brzinu";

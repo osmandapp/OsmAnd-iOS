@@ -3485,7 +3485,6 @@
 "delete_widget_description" = "Este widget se eliminará. Puedes restaurarlo más tarde en la pantalla Configurar.";
 "add_widget_below" = "Añadir widget a continuación";
 "add_widget_to_the_left" = "Añadir widget a la izquierda";
-
 "rendering_attr_showClimbingRoutes_name" = "Vías de escalada";
 "rendering_attr_showClimbingRoutes_description" = "Mostrar vías de escalada";
 "reset_average_speed" = "Restablecer velocidad media";

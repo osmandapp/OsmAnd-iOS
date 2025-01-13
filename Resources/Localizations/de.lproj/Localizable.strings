@@ -3448,19 +3448,5 @@
 "help_article_troubleshooting_video_tutorials_name" = "Video-Tutorials und Anleitungen";
 
 "rendering_attr_showClimbingRoutes_description" = "Kletterrouten anzeigen";
-"rendering_attr_showClimbingRoutes_name" = "Kletterrouten";;
-"reset_average_speed" = "Durchschnittliche Geschwindigkeit zurücksetzen";
-
-"routing_attr_motor_type_lpg_name" = "LPG";
-"rendering_value_walkingRoutesOSMC_name" = "OSMC";
-"rendering_attr_hideText_name" = "Text";
-"routing_attr_motor_type_hybrid_name" = "Hybrid";
-"rendering_attr_surface_sand_name" = "Sand";
-"routing_attr_motor_type_gas_name" = "CNG";
-"rendering_attr_surface_asphalt_name" = "Asphalt";
-"rendering_attr_piste_type_downhill_name" = "Downhill";
-"rendering_value_orange_name" = "Orange";
-"rendering_attr_piste_type_skitour_name" = "Skitour";
-"routing_attr_motor_type_diesel_name" = "Diesel";
-"rendering_attr_piste_difficulty_freeride_name" = "Freeride";;
+"rendering_attr_showClimbingRoutes_name" = "Kletterrouten";
 "reset_average_speed" = "Durchschnittliche Geschwindigkeit zurücksetzen";

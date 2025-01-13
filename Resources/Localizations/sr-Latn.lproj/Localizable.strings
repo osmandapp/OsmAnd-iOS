@@ -3507,11 +3507,5 @@
 "add_widget_above" = "Dodaj widžet iznad";
 
 "rendering_attr_showClimbingRoutes_name" = "Staze za penjanje";
-"rendering_attr_showClimbingRoutes_description" = "Prikazati staze za penjanje";;
-"reset_average_speed" = "Poništi prosečnu brzinu";
-
-"rendering_value_sacScale_name" = "SAC";
-"rendering_value_walkingRoutesOSMC_name" = "OSMC";
-"rendering_value_caiScale_name" = "CAI";
-"rendering_attr_surface_metal_name" = "Metal";;
+"rendering_attr_showClimbingRoutes_description" = "Prikazati staze za penjanje";
 "reset_average_speed" = "Poništi prosečnu brzinu";

@@ -3408,18 +3408,5 @@
 "ios_release_4_9" = "- Comportement modifié de la boussole : une simple pression fait pivoter la carte vers le nord, tandis qu'une double pression change l'orientation\n- Ajout d'une fonctionnalité de recherche pour les marques les plus populaires\n- Amélioration de l'apparence du graphique : Les étiquettes de l'axe Y ne se chevauchent plus avec le graphique\n- Ajout de statistiques totales sur les pistes dans le pied de page de chaque dossier\n- Regroupement de toutes les étiquettes avec traductions en un seul élément dans le menu contextuel\n- Correction d'un problème où la catégorie POI était absente du menu contextuel\n- Correction d'un problème avec l'auto-détection de la langue de l'invite vocale\n- Correction d'un crash dans les paramètres de l'itinéraire du profil bateau\n- Améliorations CarPlay : Résolution d'un problème où le widget de navigation principal ne se mettait pas à jour après le recalcul de l'itinéraire, et correction de la taille des flèches dans le widget du prochain virage\n- Introduction d'un paramètre de mode Carte qui suit maintenant le thème de l'application\n- Amélioration de l'interface utilisateur pour la sélection de l'icône de localisation, ajout d'options pour désactiver le rayon de localisation et l'angle de vue\n- Ajout d'une action rapide pour changer la \"Position de la localisation sur l'écran\"\n";
 
 "rendering_attr_showClimbingRoutes_name" = "Voies d\'escalade";
-"rendering_attr_showClimbingRoutes_description" = "Afficher les voies d\'escalade";;
-"reset_average_speed" = "Effacer la vitesse moyenne";
-
-"rendering_value_walkingRoutesOSMC_name" = "OSMC";
-"rendering_attr_smoothness_horrible_name" = "Horrible";
-"rendering_attr_horse_scale_impossible_name" = "Impossible";
-"rendering_attr_piste_difficulty_freeride_name" = "Freeride";
-"rendering_value_orange_name" = "Orange";
-"rendering_value_caiScale_name" = "CAI";
-"rendering_attr_piste_difficulty_expert_name" = "Expert";
-"rendering_attr_smoothness_excellent_name" = "Excellent";
-"routing_attr_difficulty_preference_expert_name" = "Expert";
-"rendering_attr_highway_class_service_name" = "Service";
-"routeInfo_surface_name" = "Surface";;
+"rendering_attr_showClimbingRoutes_description" = "Afficher les voies d\'escalade";
 "reset_average_speed" = "Effacer la vitesse moyenne";

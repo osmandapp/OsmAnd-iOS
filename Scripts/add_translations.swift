@@ -137,7 +137,7 @@ var languageDict = [
 
 /// For quick debug just comment out all unnecessary languages. Like this
 // languageDict = [
-//     "uk" : "uk",                // Ukrainian
+//     "el" : "el",                // Greek
 // ]
 
 
@@ -618,7 +618,9 @@ class IOSWriter {
                 // new translations adding
                 if !DEBUG_STOP_UPDATING_TRANSLATIONS {
                     for elem in newLinesDict {
-                        updatedStrings.append("\"" + elem.key + "\" = \"" + filterUnsafeChars(elem.value) + "\"")
+                        if keyOccurrences[elem.key]! < 1 {
+                            updatedStrings.append("\"" + elem.key + "\" = \"" + filterUnsafeChars(elem.value) + "\"")
+                        }
                     }
                 }
                 

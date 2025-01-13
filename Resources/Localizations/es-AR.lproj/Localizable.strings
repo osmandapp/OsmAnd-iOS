@@ -3484,18 +3484,5 @@
 "add_widget_to_the_right" = "Agregar widget a la derecha";
 
 "rendering_attr_showClimbingRoutes_name" = "Rutas de escalada";
-"rendering_attr_showClimbingRoutes_description" = "Mostrar rutas de escalada";;
-"reset_average_speed" = "Reiniciar la velocidad promedio";
-
-"rendering_attr_surface_metal_name" = "Metal";
-"rendering_value_sector5_name" = "Sector 5";
-"rendering_value_sacScale_name" = "SAC";
-"routing_attr_hazmat_category_usa_2_name" = "Gases";
-"rendering_value_sector2_name" = "Sector 2";
-"rendering_attr_smoothness_horrible_name" = "Horrible";
-"rendering_value_sector3_name" = "Sector 3";
-"rendering_value_sector4_name" = "Sector 4";
-"rendering_value_walkingRoutesOSMC_name" = "OSMC";
-"rendering_value_sector1_name" = "Sector 1";
-"rendering_value_caiScale_name" = "CAI";;
+"rendering_attr_showClimbingRoutes_description" = "Mostrar rutas de escalada";
 "reset_average_speed" = "Reiniciar la velocidad promedio";

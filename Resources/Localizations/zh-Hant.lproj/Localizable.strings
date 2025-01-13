@@ -3526,10 +3526,5 @@
 "delete_widget_description" = "這個小工具將被刪除。您稍後可以在組態畫面中將其還原。";
 
 "rendering_attr_showClimbingRoutes_description" = "顯示攀登路線";
-"rendering_attr_showClimbingRoutes_name" = "攀登路線";;
-"reset_average_speed" = "重設平均速率";
-
-"rendering_value_sacScale_name" = "SAC";
-"rendering_value_caiScale_name" = "CAI";
-"rendering_value_walkingRoutesOSMC_name" = "OSMC";;
+"rendering_attr_showClimbingRoutes_name" = "攀登路線";
 "reset_average_speed" = "重設平均速率";

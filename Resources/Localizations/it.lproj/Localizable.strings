@@ -3436,15 +3436,6 @@
 "with_waypoints" = "Con punti intermedi";
 
 "rendering_attr_showClimbingRoutes_name" = "Percorsi arrampicata";
-"rendering_attr_showClimbingRoutes_description" = "Mostra i percorsi per l\'arrampicata";;
+"rendering_attr_showClimbingRoutes_description" = "Mostra i percorsi per l\'arrampicata";
 "reset_average_speed" = "Azzeramento velocità media";
-
-"rendering_attr_piste_difficulty_freeride_name" = "Freeride";
-"rendering_attr_piste_type_downhill_name" = "Downhill";
-"rendering_value_caiScale_name" = "CAI";
-"rendering_value_sacScale_name" = "SAC";
-"rendering_value_walkingRoutesOSMC_name" = "OSMC";
-"routing_attr_motor_type_diesel_name" = "Diesel";;
 "transport_stop" = "Ferma";
-"transport_stop" = "Ferma";
-"reset_average_speed" = "Azzeramento velocità media";

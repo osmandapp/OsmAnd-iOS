@@ -706,7 +706,6 @@
 "profile_type_base_string" = "Profil dasar";
 "selected_profile" = "Profil yang dipilih";
 "application_profiles" = "Profil aplikasi";
-"import_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";
 "new_plugin_added" = "Plugin baru ditambahkan";
 "reset_to_default" = "Atur ulang ke default";
 "checking_for_duplicate_description" = "OsmAnd periksa %@ untuk duplikat dengan item yang ada di aplikasi. \n \nMungkin perlu beberapa waktu.";

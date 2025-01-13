@@ -3445,7 +3445,7 @@
 "shared_string_to" = "Para";
 "discard_filter_changes_prompt" = "Redefinir todos os filtros?";
 
-"rendering_attr_showClimbingRoutes_name" = "Rotas de escalada";;
+"rendering_attr_showClimbingRoutes_name" = "Rotas de escalada";
 "map_widget_map_scale" = "Escala do mapa";
 "transport_stop" = "Parada";
 "delete_widget_description" = "Esse widget será excluído. Você poderá restaurá-lo posteriormente na tela Configurar.";
@@ -3464,28 +3464,3 @@
 "add_widget_to_the_right" = "Adicionar widget à direita";
 "reset_average_speed" = "Redefinir velocidade média";
 "obd_plugin_name" = "Métricas de veículos";
-
-"rendering_value_sacScale_name" = "SAC";
-"rendering_attr_surface_metal_name" = "Metal";
-"routing_attr_motor_type_diesel_name" = "Diesel";
-"rendering_value_caiScale_name" = "CAI";
-"routing_attr_hazmat_category_usa_2_name" = "Gases";
-"rendering_value_walkingRoutesOSMC_name" = "OSMC";;
-"add_widget_to_the_right" = "Adicionar widget à direita";
-"lock_screen" = "Bloqueio de tela";
-"map_widget_map_scale" = "Escala do mapa";
-"sort_subfolders_tracks" = "Classificar subpastas";
-"reset_average_speed" = "Redefinir velocidade média";
-"add_widget_above" = "Adicionar widget acima";
-"add_widget_to_the_left" = "Adicionar widget à esquerda";
-"delete_widget" = "Excluir widget?";
-"add_widget_below" = "Adicione widget abaixo";
-"transport_stop" = "Parar";
-"obd_plugin_name" = "Métricas de veículos";
-"help_article_map_routes_name" = "Rotas";
-"help_article_personal_color_palette_schemes_name" = "Esquemas de cores";
-"help_article_map_tracks_name" = "Trilhas";
-"lock_screen_description" = "Ativa ou desativa a funcionalidade da tela sensível ao toque para evitar toques acidentais";
-"screen_is_locked_by_action_button" = "A tela sensível ao toque está bloqueada. Toque no botão para desbloquear.";
-"screen_is_unlocked" = "A tela sensível ao toque está desbloqueada.";
-"delete_widget_description" = "Esse widget será excluído. Você poderá restaurá-lo posteriormente na tela Configurar.";

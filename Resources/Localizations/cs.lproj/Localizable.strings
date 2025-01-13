@@ -3455,17 +3455,6 @@
 "delete_widget_description" = "Tento widget bude odstraněn. Později jej můžete obnovit v okně Konfigurace.";
 
 "rendering_attr_showClimbingRoutes_description" = "Zobrazit lezecké trasy";
-"rendering_attr_showClimbingRoutes_name" = "Lezecké trasy";;
+"rendering_attr_showClimbingRoutes_name" = "Lezecké trasy";
 "reset_average_speed" = "Reset průměrné rychlosti";
-
-"rendering_attr_piste_difficulty_expert_name" = "Expert";
-"rendering_attr_hideText_name" = "Text";
-"routing_attr_motor_type_lpg_name" = "LPG";
-"routing_attr_motor_type_gas_name" = "CNG";
-"rendering_value_walkingRoutesOSMC_name" = "OSMC";
-"rendering_value_caiScale_name" = "CAI";
-"routing_attr_difficulty_preference_expert_name" = "Expert";
-"rendering_value_sacScale_name" = "SAC";;
 "transport_stop" = "Zastávka";
-"reset_average_speed" = "Reset průměrné rychlosti";
-"transport_stop" = "Zastavit";

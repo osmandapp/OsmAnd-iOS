@@ -713,7 +713,6 @@
 "profile_type_base_string" = "Ĉefa profilo";
 "selected_profile" = "Elektita profilo";
 "application_profiles" = "Profiloj de aplikaĵo";
-"import_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";
 "new_plugin_added" = "Aldonis novan kromprogramon";
 "reset_to_default" = "Restarigi implicitajn";
 "checking_for_duplicate_description" = "Kontrolado de %@ pri duplikatoj kontraŭ la ekzistaj elementoj en la aplikaĵo. \n \nPovas okupi iom da tempo.";

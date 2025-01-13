@@ -2869,7 +2869,7 @@
 "external_device_status_disconnect" = "Prekid veze";
 "shared_string_delete_item" = "Obriši stavku";
 "shared_string_is_deleted" = "%@ je obrisan.";
-"map_settings_topography" = "Konturne linije";
+"map_settings_topography" = "Izohipse";
 "map_settings_clear_geo_cache" = "Očisti geo pločice";
 "weather_precip_enable_descr" = "Omogućite da vidite sloj padavina na mapi.";
 "screen_settings_weather_toolbar" = "Vremenska traka sa alatkama";
@@ -3480,7 +3480,7 @@
 "discard_filter_changes_prompt" = "Poništavaš sve filtere?";
 "power_watts_unit" = "Vati";
 "map_widget_map_scale" = "Razmera mape";
-"transport_stop" = "Zaustaviti";
+"transport_stop" = "Zaustavi";
 "lock_screen" = "Zaključaj ekran";
 "screen_is_locked_by_action_button" = "Ekran osetljiv na dodir je zaključan. Dodirnite dugme da biste otključali.";
 "screen_is_unlocked" = "Ekran osetljiv na dodir je otključan.";

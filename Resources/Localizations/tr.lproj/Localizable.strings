@@ -3288,7 +3288,7 @@
 "avg_sensor_temperature" = "Sıcaklık, ortalama";
 "max_sensor_bycicle_power" = "Bisiklet Gücü, en yüksek";
 "all_folders" = "Tüm klasörler";
-"transport_stop" = "Dur";
+"transport_stop" = "Durdur";
 "avg_sensor_bycicle_power" = "Bisiklet Gücü, ortalama";
 "max_altitude" = "En yüksek rakım";
 "avg_sensor_heartrate" = "Kalp atış hızı, ortalama";

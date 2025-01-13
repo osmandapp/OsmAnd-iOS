@@ -2546,7 +2546,7 @@
 "quick_action_get_info" = "取得資訊";
 "quick_action_dialog" = "對話框";
 "units_of_speed" = "速度單位";
-"settings_app_theme" = "應用程式佈景主題";
+"settings_app_theme" = "應用程式主題";
 "map_settings_available_srtm_maps_descr" = "需要額外的地圖才能在地圖上檢視地形陰影";
 "res_url_warning" = "URL 不能為空";
 "toggle_day_night" = "切換日/夜模式";
@@ -3465,7 +3465,7 @@
 "route_your_destination_is_on_right" = "你的目的地在右側";
 "route_your_destination_is_on_ahead" = "你的目的地在正前方";
 "map_widget_map_scale" = "地圖尺度";
-"transport_stop" = "停止";
+"transport_stop" = "中止";
 "my_places_no_tracks_descr_root" = "你可以用OsmAnd匯入、新增或是錄製軌跡。";
 "my_places_no_tracks_title_root" = "你沒有軌跡檔案";
 "upload_to_osm_short" = "上傳到OSM";

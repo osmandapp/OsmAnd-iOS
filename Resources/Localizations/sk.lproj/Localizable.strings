@@ -2773,7 +2773,7 @@
 "shared_string_always" = "Vždy";
 "shared_string_class" = "Trieda";
 "shared_string_top_bottom" = "Hore a dole";
-"shared_string_bottom" = "Dole";
+"shared_string_bottom" = "Spodok";
 "route_recalculation_dist_title" = "Minimálna vzdialenosť pre prepočítanie trasy";
 "missing_or_outdated_maps_title" = "Chýbajúce alebo zastaralé mapy";
 "wall_height" = "Výška steny";

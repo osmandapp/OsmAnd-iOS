@@ -2248,7 +2248,7 @@
 "shared_string_to" = "עד";
 "reset_average_speed" = "איפוס המהירות הממוצעת";
 "shared_string_minute_lowercase" = "דק׳";
-"transport_stop" = "תחנה";
+"transport_stop" = "עצירה";
 "map_widget_map_scale" = "קנה מידה של מפה";
 "wheel_circumference" = "היקף גלגל";
 "shared_string_maximum" = "מרבי";

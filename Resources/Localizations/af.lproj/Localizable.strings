@@ -407,9 +407,9 @@
 
 "rendering_attr_hideWaterPolygons_description" = "Water";;
 "transport_stop" = "Haltes";
+"city_type_city" = "Stad";
+"app_mode_bicycle" = "Fiets";
+"search_address_street" = "Straat";
+"transport_stop" = "Haltes";
 "lang_en" = "Engels";
 "app_mode_pedestrian" = "Voetganger";
-"app_mode_bicycle" = "Fiets";
-"transport_stop" = "Haltes";
-"city_type_city" = "Stad";
-"search_address_street" = "Straat";

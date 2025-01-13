@@ -2530,7 +2530,7 @@
 "max_sensor_bycicle_power" = "Povumo de biciklado (maksimuma)";
 "avg_sensor_speed" = "Rapido (laŭ sentilo, mezuma)";
 "shared_string_maximum" = "Maksimumo";
-"transport_stop" = "Ĉesigi";
+"transport_stop" = "Haltigi";
 "shared_string_interface" = "Fasado";
 "delete_widget_description" = "Tiu ĉi fenestraĵo estos forigita. Vi povas restarigi ĝin per la menuo “Agordi ekranon”.";
 "shared_string_to" = "al";

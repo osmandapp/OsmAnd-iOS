@@ -373,7 +373,7 @@
 "shared_string_from" = "lähtien";
 "shared_string_time" = "Aika";
 "time_of_day" = "Vuorokaudenaika";
-"shared_string_distance" = "Matka";
+"shared_string_distance" = "Etäisyys";
 "retry" = "Yritä uudelleen";
 "shared_string_enabled" = "Käytössä";
 "shared_string_reset" = "Resetoi";
@@ -492,7 +492,7 @@
 "add_online_source" = "Lisää verkkolähde";
 "srtm_color_scheme" = "Värimaailma";
 "shared_string_appearance" = "Ulkoasu";
-"settings_app_theme" = "Sovelluksen teema";
+"settings_app_theme" = "Sovellusteema";
 "light_theme" = "Vaalea";
 "do_not_rotate" = "Älä kierrä";
 "allow_3D_view" = "2.5D-näkymä";

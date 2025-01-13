@@ -315,7 +315,7 @@
 "shared_string_from" = "fra";
 "shared_string_time" = "Tid";
 "time_of_day" = "Tid på dagen";
-"shared_string_distance" = "Distanse";
+"shared_string_distance" = "Avstand";
 "retry" = "Prøv igjen";
 "shared_string_enabled" = "Aktivert";
 "shared_string_reset" = "Tilbakestill";

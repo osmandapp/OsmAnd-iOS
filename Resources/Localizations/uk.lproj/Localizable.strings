@@ -3098,7 +3098,7 @@
 "map_orientation_landscape" = "Горизонтально";
 "map_widget_ant_heart_rate_desc" = "Показує пульс користувача під час певної активності в режимі реального часу";
 "gitHub_discussion" = "Обговорення GitHub";
-"external_device_status_connect" = "Підʼєднати";
+"external_device_status_connect" = "З’єднатись";
 "default_appearance_desc" = "Типовий колір, піктограма та форма застосовуватимуться до доданих точок у групі закладок.";
 "shared_string_result" = "Результат";
 "no_travel_guides_data_descr" = "Завантажте путівники Вікімандрів, щоб переглянути статті про місця в усьому світі без підключення до Інтернету.";

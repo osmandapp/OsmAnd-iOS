@@ -3433,7 +3433,7 @@
 "download_persian_voice_alert_title" = "Descargar archivo de voz Persa:";
 "download_persian_voice_alert_descr_ios" = "Ajustes -> Accesibilidad -> Contenido hablado -> Voces -> Persia -> Dariush";
 "download_persian_voice_alert_descr_macos" = "Ajustes -> Accesibilidad -> Contenido hablado -> Sistema de voz -> Gestionar voces -> Persia -> Dariush";
-"transport_stop" = "Parada";
+"transport_stop" = "Parar";
 "not_specified" = "Sin especificar";
 "shared_string_sensors" = "Sensores";
 "max_sensor_speed" = "Sensor de velocidad, max";

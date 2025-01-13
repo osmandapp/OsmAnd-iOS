@@ -2932,7 +2932,7 @@
 "cache_cleared" = "Кеш очишћен";
 "hide_map_center" = "Сакриј координате: мапа у центру";
 "shared_string_location_unknown" = "Локација непозната";
-"map_settings_topography" = "Контурне линије";
+"map_settings_topography" = "Изохипсе";
 "test_heightmap" = "Тест висинска мапа";
 "upload_poi" = "Отпреми тачку занимања";
 "simulate_location_track_select_descr" = "Одаберите путању као извор за померање локације.";

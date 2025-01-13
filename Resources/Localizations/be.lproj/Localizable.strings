@@ -2570,7 +2570,7 @@
 "map_widget_time_to_intermediate" = "Час для прамежкавага пункта";
 "announcement_time_passing" = "Пры праходжанні";
 "map_widget_sunset_desc" = "Паказвае час заходу сонца або час, які застаўся да заходу сонца.";
-"external_device_status_connect" = "Злучыць";
+"external_device_status_connect" = "Злучэнне";
 "map_widget_distance_to_intermediate" = "Адлегласць да прамежкавага пункта";
 "reset_all_settings_desc" = "Вы ўпэўнены, што хочаце скінуць усе налады да прадвызначаных\?";
 "shared_string_contents" = "Змест";

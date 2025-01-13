@@ -3468,4 +3468,4 @@
 "rendering_value_sacScale_name" = "SAC";;
 "transport_stop" = "Zastávka";
 "reset_average_speed" = "Reset průměrné rychlosti";
-"transport_stop" = "Zastávka";
+"transport_stop" = "Zastavit";

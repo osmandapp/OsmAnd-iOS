@@ -1523,7 +1523,7 @@
 "allow_3D_view" = "Vista 2.5D";
 "do_not_rotate" = "Non ruotare";
 "light_theme" = "Chiaro";
-"settings_app_theme" = "Tema dell\'applicazione";
+"settings_app_theme" = "Tema dell\'app";
 "map_settings_available_srtm_maps_descr" = "Sono necessarie mappe aggiuntive per visualizzare Hillshade sulla mappa";
 "map_settings_line_density_slowdown_warning" = "Un'elevata densità di linea può rallentare il rendering della mappa";
 "map_settings_contour_zoom_level_descr" = "Selezionare il livello di zoom, da cui verranno visualizzate le curve di livello";
@@ -2917,7 +2917,7 @@
 "article_added_to_bookmark" = " aggiunto ai segnalibri.";
 "map_orientation_landscape" = "Orizzontale";
 "weather_update_over_any_network" = "Con qualsiasi rete";
-"external_device_status_connect" = "Collegare";
+"external_device_status_connect" = "Connetti";
 "shared_string_result" = "Risultato";
 "no_travel_guides_data_descr" = "Scarica le guide di viaggio Wikivoyage per visualizzare articoli su luoghi di tutto il mondo senza una connessione a Internet.";
 "shared_string_travel" = "Viaggio";
@@ -3446,5 +3446,5 @@
 "rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "routing_attr_motor_type_diesel_name" = "Diesel";;
 "transport_stop" = "Ferma";
-"reset_average_speed" = "Azzeramento velocità media";
 "transport_stop" = "Ferma";
+"reset_average_speed" = "Azzeramento velocità media";

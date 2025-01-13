@@ -3460,7 +3460,7 @@
 "power_watts_unit" = "Vatios";
 "root_folder" = "Carpeta raíz";
 "map_widget_map_scale" = "Escala del mapa";
-"transport_stop" = "Parada";
+"transport_stop" = "Parar";
 "screen_is_unlocked" = "La pantalla táctil está desbloqueada.";
 "shared_string_interface" = "Interfaz";
 "lock_screen_description" = "Activa o desactiva la pantalla táctil para evitar toques accidentales";

@@ -2967,7 +2967,7 @@
 "no_travel_guides_data_title" = "Du har ikke rejsedata";
 "map_orientation_landscape" = "Landskab";
 "map_widget_ant_heart_rate_desc" = "Viser brugerens puls under en given aktivitet i realtid";
-"external_device_status_connect" = "Forbind";
+"external_device_status_connect" = "Tilslut";
 "default_appearance_desc" = "Standard farve, ikon og form vil gælde for de tilføjede favoritpunkter i gruppen.";
 "shared_string_result" = "Resultat";
 "no_travel_guides_data_descr" = "Download Wikivoyage-rejseguider for at se artikler om steder rundt om i verden uden forbindelse til internettet.";
@@ -3435,5 +3435,5 @@
 "rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "rendering_value_orange_name" = "Orange";;
 "transport_stop" = "Stoppested";
-"reset_average_speed" = "Nulstil gennemsnitshastighed";
 "transport_stop" = "Stoppested";
+"reset_average_speed" = "Nulstil gennemsnitshastighed";

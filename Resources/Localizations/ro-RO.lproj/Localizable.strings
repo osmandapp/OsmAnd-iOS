@@ -1206,7 +1206,7 @@
 "units_of_speed" = "Unități de viteză";
 "allow_3D_view" = "Vedere 2.5D";
 "do_not_rotate" = "Nu rotiți";
-"settings_app_theme" = "Tema aplicației";
+"settings_app_theme" = "Temă aplicație";
 "map_settings_available_srtm_maps_descr" = "Hărți suplimentare sunt necesare pentru a vedea Hillshade pe hartă";
 "map_settings_line_density_slowdown_warning" = "Densitatea mare a liniilor poate încetini redarea hărților";
 "map_settings_contour_zoom_level_descr" = "Selectați nivelul de zoom, de la care vor fi afișate curbele (izolinii)";
@@ -2897,7 +2897,7 @@
 "weather_updates_manual" = "Prognoza meteo trebuie actualizată manual.";
 "click_on_widget" = "Atingeți widgetul";
 "purchases_feature_relief_3d_description" = "Dețineți și observați macheta la scară a cartierului dumneavoastră sau a întregului continent.";
-"weather_update_disabled" = "Dezactivată";
+"weather_update_disabled" = "Inactiv";
 "unsaved_changes_will_be_lost_discard" = "Modificările nesalvate vor fi pierdute. Doriți să renunțați la ele?";
 "terrain_3D_maps" = "Hărți de teren";
 "weather_update_parameters_wifi" = "Prognoza meteo va fi actualizată doar când este disponibilă o rețea Wi-Fi.";
@@ -2963,7 +2963,7 @@
 "troubleshooting" = "Deparare";
 "about_osmAnd" = "Despre OsmAnd";
 "shared_string_data_type" = "Tip date";
-"map_settings_topography" = "Curbe de nivel";
+"map_settings_topography" = "Linii de contur";
 "shared_string_discard_changes" = "Anulați modificările";
 "setup" = "Configurează";
 "gitHub_discussion" = "Discuții pe GitHub";

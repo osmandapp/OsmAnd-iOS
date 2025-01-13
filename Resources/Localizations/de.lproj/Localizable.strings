@@ -3422,7 +3422,7 @@
 "revolutions_per_minute_unit" = "Drehzahl";
 "shared_string_to" = "Zu";
 "map_widget_map_scale" = "Maßstab";
-"transport_stop" = "Haltestelle";
+"transport_stop" = "Beenden";
 "lock_screen" = "Bildschirm sperren";
 "screen_is_locked_by_action_button" = "Der Touchscreen ist gesperrt. Tippen Sie zum Entsperren auf die Schaltfläche.";
 "screen_is_unlocked" = "Der Touchscreen ist entsperrt.";

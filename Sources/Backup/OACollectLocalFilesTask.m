@@ -18,6 +18,7 @@
 #import "OAAppSettings.h"
 #import "OASettingsHelper.h"
 #import "OAOperationLog.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OACollectLocalFilesTask
 {
@@ -52,7 +53,7 @@
         [_operationLog log:@"getLocalItems"];
         for (OASettingsItem *item in localItems)
         {
-            NSString *fileName = [OABackupHelper getItemFileName:item];
+            NSString *fileName = [BackupUtils getItemFileName:item];
             if ([item isKindOfClass:OAFileSettingsItem.class])
             {
                 OAFileSettingsItem *fileItem = (OAFileSettingsItem *) item;
@@ -196,14 +197,19 @@
 
 - (NSArray<OASettingsItem *> *) getLocalItems
 {
-    NSMutableArray<OAExportSettingsType *> *types = [NSMutableArray arrayWithArray:[OAExportSettingsType getEnabledTypes]];
-    NSMutableArray<OAExportSettingsType *> *toDelete = [NSMutableArray array];
-    for (OAExportSettingsType *type in types)
-    {
-        if (![OABackupHelper.sharedInstance getBackupTypePref:type].get)
-            [toDelete addObject:type];
-    }
+    NSArray<OAExportSettingsType *> *types = [self getEnabledExportTypes];
     return [OASettingsHelper.sharedInstance getFilteredSettingsItems:types addProfiles:YES doExport:YES];
+}
+
+- (NSArray<OAExportSettingsType *> *)getEnabledExportTypes
+{
+    NSMutableArray<OAExportSettingsType *> *result = [NSMutableArray array];
+    for (OAExportSettingsType *exportType in [OAExportSettingsType getEnabledTypes])
+    {
+        if ([[BackupUtils getBackupTypePref:exportType] get])
+            [result addObject:exportType];
+    }
+    return result;
 }
 
 - (void) publishProgress:(OALocalFile *)localFile

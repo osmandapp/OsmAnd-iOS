@@ -20,6 +20,7 @@
 #import "OAConcurrentCollections.h"
 #import "OARemoteFile.h"
 #import "OAOperationLog.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define MAX_LIGHT_ITEM_SIZE 10 * 1024 * 1024
 
@@ -74,7 +75,7 @@
 {
     OABackupHelper *_backupHelper;
     NSMutableArray<OASettingsItem *> *_itemsToDelete;
-    NSMutableArray<OASettingsItem *> *_localItemsToDelete;
+    NSMutableArray<OASettingsItem *> *_itemsToLocalDelete;
     NSMutableArray<OASettingsItem *> *_oldItemsToDelete;
     NSOperationQueue *_executor;
     __weak id<OANetworkExportProgressListener> _listener;
@@ -91,7 +92,7 @@
     if (self)
     {
         _itemsToDelete = [NSMutableArray array];
-        _localItemsToDelete = [NSMutableArray array];
+        _itemsToLocalDelete = [NSMutableArray array];
         _oldFilesToDelete = [[OAConcurrentArray alloc] init];
         _backupHelper = OABackupHelper.sharedInstance;
         _listener = listener;
@@ -106,7 +107,7 @@
 
 - (NSArray<OASettingsItem *> *)getLocalItemsToDelete
 {
-    return _localItemsToDelete;
+    return _itemsToLocalDelete;
 }
 
 - (NSArray<OASettingsItem *> *)getOldItemsToDelete
@@ -121,7 +122,7 @@
 
 - (void) addLocalItemToDelete:(OASettingsItem *)item
 {
-    [_localItemsToDelete addObject:item];
+    [_itemsToLocalDelete addObject:item];
 }
 
 - (void) addOldItemToDelete:(OASettingsItem *)item
@@ -246,15 +247,15 @@
 
 - (void) deleteLocalFiles:(OAConcurrentSet *)itemsProgress dataProgress:(OAAtomicInteger *)dataProgress
 {
-    NSArray<OASettingsItem *> *localItemsToDelete = _localItemsToDelete;
-    for (OASettingsItem *item in localItemsToDelete)
+    NSArray<OASettingsItem *> *itemsToLocalDelete = _itemsToLocalDelete;
+    for (OASettingsItem *item in itemsToLocalDelete)
     {
         [item remove];
         [itemsProgress addObjectSync:item];
         if (_listener)
         {
             int p = [dataProgress addAndGet:(APPROXIMATE_FILE_SIZE_BYTES / 1024)];
-            NSString *fileName = [OABackupHelper getItemFileName:item];
+            NSString *fileName = [BackupUtils getItemFileName:item];
             [_listener itemExportDone:[OASettingsItemType typeName:item.type] fileName:fileName];
             [_listener updateGeneralProgress:itemsProgress.countSync uploadedKb:(NSInteger)p];
         }
@@ -272,7 +273,7 @@
 {
     NSString *type = [OASettingsItemType typeName:item.type];
     OAExportSettingsType *exportType = [OAExportSettingsType findBySettingsItem:item];
-    if (exportType != nil && ![_backupHelper getVersionHistoryTypePref:exportType].get)
+    if (exportType != nil && ![[BackupUtils getVersionHistoryTypePref:exportType] get])
     {
         OARemoteFile *remoteFile = [_backupHelper.backup getRemoteFile:type fileName:fileName];
         if (remoteFile != nil)

@@ -35,7 +35,7 @@ static inline BOOL backupDebugLogs()
     return BACKUP_DEBUG_LOGS;
 }
 
-@class OAExportSettingsType, OACommonBoolean, OAPrepareBackupResult, OABackupListeners, OASettingsItem, OAFileSettingsItem, OALocalFile, OARemoteFile, OABackupInfo;
+@class OAExportSettingsType, OAPrepareBackupResult, OABackupListeners, OAFileSettingsItem, OALocalFile, OARemoteFile, OABackupInfo;
 
 @protocol OAOnPrepareBackupListener;
 @protocol OAOnDeleteFilesListener;
@@ -62,17 +62,6 @@ static inline BOOL backupDebugLogs()
 + (NSString *) CHECK_CODE_URL;
 
 + (OABackupHelper *)sharedInstance;
-
-+ (NSString *) getItemFileName:(OASettingsItem *)item;
-+ (NSString *) getFileItemName:(OAFileSettingsItem *)fileSettingsItem;
-+ (NSString *)getFileItemName:(NSString *)filePath fileSettingsItem:(OAFileSettingsItem *)fileSettingsItem;
-
-+ (void) setLastModifiedTime:(NSString *)name;
-+ (void) setLastModifiedTime:(NSString *)name lastModifiedTime:(long)lastModifiedTime;
-+ (long) getLastModifiedTime:(NSString *)name;
-
-- (OACommonBoolean *) getBackupTypePref:(OAExportSettingsType *)type;
-- (OACommonBoolean *) getVersionHistoryTypePref:(OAExportSettingsType *)type;
 
 - (NSString *) getOrderId;
 - (NSString *) getIosId;
@@ -127,17 +116,6 @@ static inline BOOL backupDebugLogs()
 - (BOOL) isBackupPreparing;
 - (NSDictionary<NSString *, OALocalFile *> *)getPreparedLocalFiles;
 
-- (BOOL) isObfMapExistsOnServer:(NSString *)name;
-
 - (NSInteger) calculateFileSize:(OARemoteFile *)remoteFile;
-
-+ (BOOL) isTokenValid:(NSString *)token;
-
-+ (BOOL) applyItem:(OASettingsItem *)item type:(NSString *)type name:(NSString *)name;
-+ (NSArray<OASettingsItem *> *) getItemsForRestore:(OABackupInfo *)info settingsItems:(NSArray<OASettingsItem *> *)settingsItems;
-+ (NSDictionary<OARemoteFile *, OASettingsItem *> *) getItemsMapForRestore:(OABackupInfo *)info settingsItems:(NSArray<OASettingsItem *> *)settingsItems;
-+ (NSDictionary<OARemoteFile *, OASettingsItem *> *) getRemoteFilesSettingsItems:(NSArray<OASettingsItem *> *)items
-                                                                     remoteFiles:(NSArray<OARemoteFile *> *)remoteFiles
-                                                                       infoFiles:(BOOL)infoFiles;
 
 @end

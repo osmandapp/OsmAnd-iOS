@@ -978,6 +978,11 @@
     });
 }
 
+- (void)rescanUnmanagedStoragePaths
+{
+    _resourcesManager->rescanUnmanagedStoragePaths();
+}
+
 - (MAP_STR_STR) getDefaultAttributes
 {
     MAP_STR_STR defaultAttributes;

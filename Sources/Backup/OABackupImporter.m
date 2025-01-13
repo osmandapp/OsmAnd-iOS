@@ -22,6 +22,7 @@
 #import "OAOperationLog.h"
 #import "OAAtomicInteger.h"
 #import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OAItemFileDownloadTask : NSOperation
 
@@ -180,7 +181,7 @@
             {
                 if (settingsItems)
                 {
-                    NSDictionary<OARemoteFile *, OASettingsItem *> *items = [OABackupHelper getRemoteFilesSettingsItems:settingsItems remoteFiles:remoteFiles infoFiles:YES];
+                    NSDictionary<OARemoteFile *, OASettingsItem *> *items = [BackupUtils getRemoteFilesSettingsItems:settingsItems remoteFiles:remoteFiles infoFiles:YES];
                     remoteFiles = items.allKeys;
                 }
                 result.remoteFiles = remoteFiles;
@@ -334,7 +335,7 @@
     {
         NSFileManager *fileManager = NSFileManager.defaultManager;
         BOOL isDir = NO;
-        NSString *itemFileName = [OABackupHelper getFileItemName:(OAFileSettingsItem *) item];
+        NSString *itemFileName = [BackupUtils getFileItemName:(OAFileSettingsItem *) item];
         [fileManager fileExistsAtPath:itemFileName isDirectory:&isDir];
         if (isDir)
         {

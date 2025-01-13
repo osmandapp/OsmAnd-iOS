@@ -1,12 +1,12 @@
 //
-//  OABackupInfoGenerationTask.m
+//  OAGenerateBackupInfoTask.m
 //  OsmAnd Maps
 //
 //  Created by Paul on 24.06.2022.
 //  Copyright © 2022 OsmAnd. All rights reserved.
 //
 
-#import "OABackupInfoGenerationTask.h"
+#import "OAGenerateBackupInfoTask.h"
 #import "OABackupInfo.h"
 #import "OAExportSettingsType.h"
 #import "OARemoteFile.h"
@@ -16,7 +16,7 @@
 #import "OABackupHelper.h"
 #import "OAOperationLog.h"
 
-@implementation OABackupInfoGenerationTask
+@implementation OAGenerateBackupInfoTask
 {
     NSDictionary<NSString *, OALocalFile *> *_localFiles;
     NSDictionary<NSString *, OARemoteFile *> *_uniqueRemoteFiles;
@@ -32,7 +32,8 @@
                          onComplete:(void(^)(OABackupInfo *backupInfo, NSString *error))onComplete
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _localFiles = localFiles;
         _uniqueRemoteFiles = uniqueRemoteFiles;
         _deletedRemoteFiles = deletedRemoteFiles;
@@ -77,9 +78,7 @@
     {
         OAExportSettingsType *exportType = [OAExportSettingsType findByRemoteFile:remoteFile];
         if (exportType == nil || ![OAExportSettingsType isTypeEnabled:exportType] || remoteFile.isRecordedVoiceFile)
-        {
             continue;
-        }
         OALocalFile *localFile = _localFiles[remoteFile.getTypeNamePath];
         if (localFile != nil)
         {
@@ -96,13 +95,9 @@
             else if (fileChangedRemotely)
             {
                 if (remoteFile.isDeleted)
-                {
                     [info.localFilesToDelete addObject:localFile];
-                }
                 else
-                {
                     [info.filesToDownload addObject:remoteFile];
-                }
             }
         }
         else if (!remoteFile.isDeleted)
@@ -124,7 +119,8 @@
     for (OALocalFile *localFile in _localFiles.allValues)
     {
         OAExportSettingsType *exportType = localFile.item != nil
-        ? [OAExportSettingsType findBySettingsItem:localFile.item] : nil;
+            ? [OAExportSettingsType findBySettingsItem:localFile.item]
+            : nil;
         if (exportType == nil || ![OAExportSettingsType isTypeEnabled:exportType])
             continue;
         
@@ -178,7 +174,7 @@
 
 - (void) onPostExecute:(OABackupInfo *)backupInfo
 {
-//    operationLog.finishOperation(backupInfo.toString());
+    [_operationLog finishOperation:[backupInfo toString]];
     __block NSString *subscriptionError = nil;
     [[OABackupHelper sharedInstance] checkSubscriptions:^(NSInteger status, NSString *message, NSString *error) {
         if (error)

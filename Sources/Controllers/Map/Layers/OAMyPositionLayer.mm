@@ -631,14 +631,14 @@ typedef enum {
     }];
 }
 
-- (void) refreshCurrentAppModeMarkerCollection
+- (void) refreshMarkersCollectionForMode:(OAApplicationMode *)mode
 {
-    __weak OAMyPositionLayer *weakSelf = self;
-    OAApplicationMode *currentMode = [OAAppSettings sharedManager].applicationMode.get;
-    OAMarkerCollection *c = [_modeMarkers objectForKey:currentMode];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [weakSelf generateMarkerCollectionFor:currentMode baseOrder:c.baseOrder];
-    });
+    [self.mapViewController runWithRenderSync:^{
+        [self invalidateMarkersCollectionForMode:mode];
+        OAMarkerCollection *c = [_modeMarkers objectForKey:mode];
+        [self generateMarkerCollectionFor:mode baseOrder:c.baseOrder];
+        [self updateMyLocationCourseProvider];
+    }];
 }
 
 - (void) onSettingsChanged
@@ -651,7 +651,11 @@ typedef enum {
 
 - (void) onAppModeChanged
 {
-    [self refreshCurrentAppModeMarkerCollection];
+    __weak OAMyPositionLayer *weakSelf = self;
+    OAApplicationMode *currentMode = [OAAppSettings sharedManager].applicationMode.get;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf refreshMarkersCollectionForMode:currentMode];
+    });
 }
 
 - (void) onAvailableAppModesChanged
@@ -666,10 +670,15 @@ typedef enum {
 {
     for (OAApplicationMode *mode in _modeMarkers.keyEnumerator)
     {
-        OAMarkerCollection *c = [_modeMarkers objectForKey:mode];
-        [c hideMarkers];
-        [self.mapView removeKeyedSymbolsProvider:c.markerCollection];
+        [self invalidateMarkersCollectionForMode:mode];
     }
+}
+
+- (void) invalidateMarkersCollectionForMode:(OAApplicationMode *)mode
+{
+    OAMarkerCollection *c = [_modeMarkers objectForKey:mode];
+    [c hideMarkers];
+    [self.mapView removeKeyedSymbolsProvider:c.markerCollection];
 }
 
 - (void) updateMyLocationCourseProvider

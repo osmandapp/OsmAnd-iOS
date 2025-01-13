@@ -71,13 +71,12 @@ final class GlideAverageWidget: GlideBaseWidget {
             settingRow.key = "value_pref"
             settingRow.title = localizedString("shared_string_mode")
             settingRow.setObj(preference, forKey: "pref")
-            
-            var currentValue = (widgetState?.getPreference().defValue ?? false) ? "average_vertical_speed" : "average_glide_ratio"
 
             if let string = widgetConfigurationParams?[GlideAverageWidgetState.prefBaseId] as? String,
                let widgetValue = Bool(string) {
                 settingRow.setObj(localizedString(widgetValue ? "average_vertical_speed" : "average_glide_ratio"), forKey: "value")
             } else {
+                var currentValue = (widgetState?.getPreference().defValue ?? false) ? "average_vertical_speed" : "average_glide_ratio"
                 if !isCreate {
                     currentValue = preference.get(appMode) ? "average_vertical_speed" : "average_glide_ratio"
                 }

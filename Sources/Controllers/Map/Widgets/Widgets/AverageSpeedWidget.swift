@@ -165,10 +165,8 @@ final class AverageSpeedWidget: OASimpleWidget {
         : Self.MEASURED_INTERVAL_PREF_ID + customId!
         
         let preference = settings.registerLongPreference(prefId, defValue: OAAverageSpeedComputer.default_INTERVAL_MILLIS())!
-        if let appMode {
-            if let string = widgetParams?[Self.MEASURED_INTERVAL_PREF_ID] as? String, let widgetValue = Int(string) {
-                preference.set(widgetValue, mode: appMode)
-            }
+        if let appMode, let string = widgetParams?[Self.MEASURED_INTERVAL_PREF_ID] as? String, let widgetValue = Int(string) {
+            preference.set(widgetValue, mode: appMode)
         }
         return preference
     }
@@ -178,10 +176,8 @@ final class AverageSpeedWidget: OASimpleWidget {
         let prefId = customId == nil || customId!.isEmpty ? Self.SKIP_STOPS_PREF_ID : Self.SKIP_STOPS_PREF_ID + customId!
         
         let preference = settings.registerBooleanPreference(prefId, defValue: true)!
-        if let appMode {
-            if let widgetValue = widgetParams?[Self.SKIP_STOPS_PREF_ID] as? Bool {
-                preference.set(widgetValue, mode: appMode)
-            }
+        if let appMode, let widgetValue = widgetParams?[Self.SKIP_STOPS_PREF_ID] as? Bool {
+            preference.set(widgetValue, mode: appMode)
         }
         return preference
     }

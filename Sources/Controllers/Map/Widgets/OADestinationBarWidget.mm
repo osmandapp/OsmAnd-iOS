@@ -288,10 +288,13 @@
     EOAActiveMarkerConstant currentValue = (EOAActiveMarkerConstant)pref.defValue;
     
     NSNumber *activeMarkerKey = widgetConfigurationParams[@"activeMarkerKey"];
-    if (activeMarkerKey) {
+    if (activeMarkerKey)
+    {
         currentValue = (EOAActiveMarkerConstant)[activeMarkerKey intValue];
         [pref set:currentValue mode:appMode];
-    } else if (!isCreate) {
+    }
+    else if (!isCreate)
+    {
         currentValue = [pref get:appMode];
     }
     

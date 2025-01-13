@@ -34,7 +34,6 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
     float _cachedMapDensity;
     int _cachedCenterX;
     int _cachedCenterY;
-    NSString *_customIdString;
 }
 
 - (instancetype)initWithСustomId:(NSString *)customId
@@ -45,7 +44,6 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
     self = [super initWithType:OAWidgetType.devZoomLevel];
     if (self)
     {
-        _customIdString = customId;
         _widgetState = widgetState;
         [self configurePrefsWithId:customId appMode:appMode widgetParams:widgetParams];
         _rendererView = [OARootViewController instance].mapPanel.mapViewController.mapView;
@@ -103,8 +101,6 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
     row.descr = title;
 
     [row setObj:_widgetState.typePreference forKey:@"pref"];
-    NSString *tt = _customIdString;
-    NSLog(@"custom id string: %@", tt);
     
     EOAWidgetZoomLevelType currentValue = (EOAWidgetZoomLevelType)_widgetState.typePreference.defValue;
     

@@ -202,9 +202,7 @@ static const double locationChangeAccuracy = 0.0001;
         {
             NSNumber *widgetValue = widgetConfigurationParams[key];
             if (widgetValue != nil)
-            {
                 currentSunriseSunsetMode = (EOASunriseSunsetMode)widgetValue.intValue;
-            }
         }
     }
     else if (!isCreate)

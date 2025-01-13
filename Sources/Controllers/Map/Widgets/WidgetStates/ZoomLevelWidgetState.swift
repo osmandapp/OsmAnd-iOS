@@ -38,7 +38,7 @@ final class ZoomLevelWidgetState: OAWidgetState {
         var prefId = Self.zoomLevelType
         if let customId, !customId.isEmpty {
             prefId += "\(customId)"
-        } // dev_zoom_level__1736511193492 | zoom_level_typedev_zoom_level__1736511193492
+        }
         if prefId.contains("dev_zoom_level__1736511193492") {
             print("ttttt")
         }

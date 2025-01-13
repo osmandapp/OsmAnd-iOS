@@ -76,11 +76,11 @@ final class GlideTargetWidget: GlideBaseWidget {
             settingRow.title = localizedString("shared_string_mode")
             settingRow.setObj(preference, forKey: "pref")
             
-            var currentValue = preference.defValue ? "target_elevation" : "glide_ratio_to_target"
             if let string = widgetConfigurationParams?[GlideTargetWidgetState.prefBaseId] as? String,
                let widgetValue = Bool(string) {
                 settingRow.setObj(localizedString(widgetValue ? "target_elevation" : "glide_ratio_to_target"), forKey: "value")
             } else {
+                var currentValue = preference.defValue ? "target_elevation" : "glide_ratio_to_target"
                 if !isCreate {
                     currentValue = preference.get(appMode) ? "target_elevation" : "glide_ratio_to_target"
                 }

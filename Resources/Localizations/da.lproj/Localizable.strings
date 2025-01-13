@@ -3417,7 +3417,6 @@
 "add_widget_to_the_left" = "Tilføj modul til venstre";
 "delete_widget_description" = "Dette modul bliver slettet. Du kan gendanne det senere i Konfigurer skærm.";
 "add_widget_above" = "Tilføj modul ovenfor";
-
 "rendering_attr_showClimbingRoutes_name" = "Klatreruter";
 "rendering_attr_showClimbingRoutes_description" = "Vis klatreruter";
 "reset_average_speed" = "Nulstil gennemsnitshastighed";

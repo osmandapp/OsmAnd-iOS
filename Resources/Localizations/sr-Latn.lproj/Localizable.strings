@@ -3505,7 +3505,6 @@
 "delete_widget" = "Brišeš vidžet?";
 "delete_widget_description" = "Ovaj widžet će biti izbrisan. Možeš ga vratiti kasnije u podešavanjima ekrana.";
 "add_widget_above" = "Dodaj widžet iznad";
-
 "rendering_attr_showClimbingRoutes_name" = "Staze za penjanje";
 "rendering_attr_showClimbingRoutes_description" = "Prikazati staze za penjanje";
 "reset_average_speed" = "Poništi prosečnu brzinu";

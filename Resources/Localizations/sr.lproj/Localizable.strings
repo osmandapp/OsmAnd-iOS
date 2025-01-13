@@ -3561,7 +3561,6 @@
 "add_widget_to_the_left" = "Додај справицу лево";
 "delete_widget" = "Обрисати справицу?";
 "delete_widget_description" = "Ова ће справица бити обрисана. Можете је повратити касније у поставкама приказа.";
-
 "rendering_attr_showClimbingRoutes_name" = "Стазе за пењање";
 "rendering_attr_showClimbingRoutes_description" = "Приказати стазе за пењање";
 "reset_average_speed" = "Поништи просечну брзину";

@@ -137,7 +137,7 @@ var languageDict = [
 
 /// For quick debug just comment out all unnecessary languages. Like this
 // languageDict = [
-//     "el" : "el",                // Greek
+//     "ast" : "ast",                // Greek
 // ]
 
 

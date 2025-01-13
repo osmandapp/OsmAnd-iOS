@@ -3434,7 +3434,6 @@
 "obd_plugin_name" = "Misure del veicolo";
 "avg_sensor_cadence" = "Cadenza della pedalata, media";
 "with_waypoints" = "Con punti intermedi";
-
 "rendering_attr_showClimbingRoutes_name" = "Percorsi arrampicata";
 "rendering_attr_showClimbingRoutes_description" = "Mostra i percorsi per l\'arrampicata";
 "reset_average_speed" = "Azzeramento velocità media";

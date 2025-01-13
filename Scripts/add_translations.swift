@@ -195,17 +195,16 @@ class Main {
     
     
     static func getOsmandRepositoriesPath() -> URL {
-        print("RUN: Main.getOsmandRepositoriesPath() \n")
         var path: URL? = nil
         if (DEBUG) {
             path = URL(fileURLWithPath: DEBUG_OSMAND_REPOSITORIES_PATH, isDirectory: true)
+            print("INFO: osmandRepositoriesFolder: ", path!, "\n")
         } else {
             // ..OsmAnd/ios/Scripts/add_translations.swift
             let scriptFilePath = URL(fileURLWithPath: CommandLine.arguments[0], isDirectory: false)
             // ..OsmAnd/
             path = scriptFilePath.deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
         }
-        print("INFO: osmandRepositoriesFolder: ", path!, "\n")
         return path!
     }
     
@@ -228,7 +227,7 @@ class Main {
     static private func copyPhrasesFiles(_ osmandRepositoriesFolder: URL) {
         //Don't commit this changes by script to avoid merge conflicts.
         //Do a manual commit of Resources repo on new app version build.
-        print("RUN: Main.copyPhrasesFiles() \n")
+        print("CopyPhrasesFiles ----  \n")
         System.changeDir(osmandRepositoriesFolder.appendingPathComponent("resources/poi").path)
         System.runShell("./copy_phrases.sh")
     }
@@ -236,7 +235,7 @@ class Main {
     
     static private func addRoutingParametersIfNeeded(_ arguments: [String], _ osmandRepositoriesFolder: URL) {
         guard !DEBUG_STOP_UPDATING_TRANSLATIONS else { return }
-        print("RUN: Main.addRoutingParametersIfNeeded() \n")
+        print("AddRoutingParametersIfNeeded ----  \n")
         System.changeDir(osmandRepositoriesFolder.appendingPathComponent("ios/").path)
         //if (arguments.count == 2) && (arguments[1] == "-routing") || DEBUG {
             RoutingParamsHelper.addRoutingParams()
@@ -245,7 +244,7 @@ class Main {
     
     
     static private func updateTranslations(_ osmandRepositoriesFolder: URL) {
-        print("RUN: Main.updateTranslations() \n")
+        print("UpdateTranslations ----- \n")
         System.changeDir(osmandRepositoriesFolder.appendingPathComponent("ios/").path)
         IOSWriter.addTranslations()
     }
@@ -269,7 +268,6 @@ class Main {
 class Initialiser {
     
     static func initUpdatingTranslationKeyLists(_ osmandRepositoriesFolder: URL) {
-        print("RUN: initUpdatingTranslationKeyLists() \n")
         System.changeDir(osmandRepositoriesFolder.appendingPathComponent("ios/").path)
         
         iosEnglishDict = IOSReader.parseTranslationFile(language: iosEnglishKey)
@@ -379,7 +377,7 @@ class IOSWriter {
     
     static func addTranslations() {
         
-        print("\nTRANSLATING: English at \(DateFormatter.localizedString(from: Date(), dateStyle: .medium, timeStyle: .medium))\n")
+        print("TRANSLATING: English at \(DateFormatter.localizedString(from: Date(), dateStyle: .medium, timeStyle: .medium))")
         IOSWriter.makeNewDict(language: iosEnglishKey, iosDict: iosEnglishDict, androidDict: androidEnglishDict, iosEnglishDict: [:])
         
         duplicatesValues = [:]
@@ -387,7 +385,7 @@ class IOSWriter {
         var parsedAndroidDicts: [String: [String : String]] = [:]
         
         for language in languageDict {
-            print("\nparsing dictionaries for lang: " + language.key)
+            print("parsing dictionaries for lang: " + language.key)
             let iosDict = IOSReader.parseTranslationFile(language: language.key)
             let androidDict = AndroidReader.parseTranslationFile(language: language.key)
             parsedIosDicts[language.key] = iosDict
@@ -420,7 +418,7 @@ class IOSWriter {
         }
         
         for language in languageDict {
-            print("\nTranslating: \(language.key) at \(DateFormatter.localizedString(from: Date(), dateStyle: .medium, timeStyle: .medium))\n")
+            print("\nTranslating: \(language.key) at \(DateFormatter.localizedString(from: Date(), dateStyle: .medium, timeStyle: .medium))")
             guard let iosDict = parsedIosDicts[language.key] else { continue }
             guard let androidDict = parsedAndroidDicts[language.key] else { continue }
             IOSWriter.makeNewDict(language: language.key, iosDict: iosDict, androidDict: androidDict, iosEnglishDict: iosEnglishDict)
@@ -461,7 +459,9 @@ class IOSWriter {
     
     static func makeNewDict(language: String, iosDict: [String : String], androidDict: [String : String], iosEnglishDict: [String : String]) {
         let androidDict = IOSReader.replacePlaceholders(androidDict: androidDict)
-        print("Making dictionary '\(language)' at \(DateFormatter.localizedString(from: Date(), dateStyle: .medium, timeStyle: .medium))")
+        if DEBUG {
+            print("Making dictionary '\(language)' at \(DateFormatter.localizedString(from: Date(), dateStyle: .medium, timeStyle: .medium))")
+        }
                 
 
         var newLinesDict: [String:String] = [:]
@@ -510,7 +510,9 @@ class IOSWriter {
             }
         }
 
-        print("Updating lines '\(language)' at \(DateFormatter.localizedString(from: Date(), dateStyle: .medium, timeStyle: .medium))")
+        if DEBUG {
+            print("Updating lines '\(language)' at \(DateFormatter.localizedString(from: Date(), dateStyle: .medium, timeStyle: .medium))")
+        }
         if existingLinesDict.count > 0 || newLinesDict.count > 0 {
             let filePath = Main.getOsmandRepositoriesPath().path + "/ios/Resources/Localizations/" + language + ".lproj/Localizable.strings"
             let fileURL = URL(fileURLWithPath: filePath)

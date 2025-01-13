@@ -253,9 +253,9 @@
     {
         if (types.firstObject.integerValue == GPXDataSetTypeAltitude && types.lastObject.integerValue == GPXDataSetTypeSpeed)
         {
-            BOOL hasExptationTime = analysis.expectedRouteDuration > 0;
+            BOOL hasExpectedDuration = analysis.expectedRouteDuration > 0;
             titles[@"top_left_title_string_value"] = OALocalizedString(@"shared_string_distance");
-            titles[@"top_right_title_string_value"] = OALocalizedString(hasExptationTime ? @"shared_string_estimated_time_span": @"shared_string_time_span");
+            titles[@"top_right_title_string_value"] = OALocalizedString(hasExpectedDuration ? @"shared_string_estimated_time_span": @"shared_string_time_span");
             titles[@"bottom_left_title_string_value"] = OALocalizedString(@"shared_string_start_time");
             titles[@"bottom_right_title_string_value"] = OALocalizedString(@"shared_string_end_time");
             
@@ -268,7 +268,7 @@
                                                                   !joinSegments && track && track.generalTrack
                                                                   ? analysis.totalDistanceWithoutGaps : analysis.totalDistance];
             
-            if (hasExptationTime)
+            if (hasExpectedDuration)
             {
                 descriptions[@"top_right_description_string_value"] = [OAOsmAndFormatter getFormattedTimeInterval:analysis.expectedRouteDuration / 1000 shortFormat:YES];
             }

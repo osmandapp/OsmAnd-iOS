@@ -344,7 +344,7 @@
      completionHandler:(void (^)(void))completionHandler
 {
     if (item != _searchingItem && item != _emptyItem)
-        [self onItemSelected:item completionHandler:nil]; // TODO is it correct ?
+        [self onItemSelected:item completionHandler:nil];
     completionHandler();
 }
 

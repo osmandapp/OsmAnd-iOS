@@ -16,7 +16,7 @@ let DEBUG = false
 let LOGGING = false
 
 ///For debug set here your Osmand repositories path
-let OSMAND_REPOSITORIES_PATH = "../" // /Users/nnngrach/Projects/Coding/OsmAnd/
+let DEBUG_OSMAND_REPOSITORIES_PATH = "/Users/nnngrach/Projects/Coding/OsmAnd/"
 
 ///For quick debugging you can write interesting key only in this var.
 let DEBUG_STOP_KEY = "empty_purchases_description"
@@ -197,7 +197,7 @@ class Main {
     static func getOsmandRepositoriesPath() -> URL {
         var path: URL? = nil
         if (DEBUG) {
-            path = URL(fileURLWithPath: OSMAND_REPOSITORIES_PATH, isDirectory: true)
+            path = URL(fileURLWithPath: DEBUG_OSMAND_REPOSITORIES_PATH, isDirectory: true)
             print("INFO: osmandRepositoriesFolder: ", path!, "\n")
         } else {
             // ..OsmAnd/ios/Scripts/add_translations.swift
@@ -514,9 +514,10 @@ class IOSWriter {
             print("Updating lines '\(language)' at \(DateFormatter.localizedString(from: Date(), dateStyle: .medium, timeStyle: .medium))")
         }
         if existingLinesDict.count > 0 || newLinesDict.count > 0 {
-            let fileURL = URL(fileURLWithPath: Main.getOsmandRepositoriesPath().path + "/ios/Resources/Localizations/" + language + ".lproj/Localizable.strings")
+            let filePath = Main.getOsmandRepositoriesPath().path + "/ios/Resources/Localizations/" + language + ".lproj/Localizable.strings"
+            let fileURL = URL(fileURLWithPath: filePath)
             do {
-                let fileContent = try String(contentsOf: fileURL)
+                let fileContent = try String(contentsOfFile: filePath, encoding: .utf8)
                 let strings = fileContent.components(separatedBy: ";\n")
                 var processedStrings = [String]()
                 // split by comments lines
@@ -830,12 +831,12 @@ class RoutingParamsHelper {
         var routeDict: [String:String] = [:]
         var addedStringsArray: [String] = []
         
-        let url = URL(fileURLWithPath: Main.getOsmandRepositoriesPath().path + "/ios/Resources/Localizations/" + language + ".lproj/Localizable.strings")
+        let url = URL(fileURLWithPath: "./Resources/Localizations/" + language + ".lproj/Localizable.strings")
         let path = url.path
         
         var str: String = ""
         do {
-            str = try String(contentsOfFile: path)
+            str = try String(contentsOfFile: path, encoding: .utf8)
         } catch {
             return
         }

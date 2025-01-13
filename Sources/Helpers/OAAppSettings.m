@@ -2660,9 +2660,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (NSString *)toStringFromValue:(id)value
 {
-    if (![value isKindOfClass:[NSNumber class]]) {
+    if (![value isKindOfClass:[NSNumber class]])
         return @"";
-    }
     
     EOAActiveMarkerConstant type = [value integerValue];
     
@@ -2919,9 +2918,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (NSString *)toStringFromValue:(id)value
 {
-    if (![value isKindOfClass:[NSNumber class]]) {
+    if (![value isKindOfClass:[NSNumber class]])
         return @"";
-    }
     
     EOARulerWidgetMode mode = [value integerValue];
     return [self.class rulerWidgetModeToString:mode];
@@ -3619,12 +3617,9 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 @end
 
-//@interface OACommonWidgetSizeStyle()
-//@property (nonatomic, readwrite) EOAWidgetSizeStyle defValue;
-//@end
 
 @implementation OACommonWidgetSizeStyle
-// FIXME: ?
+
 @dynamic defValue;
 
 + (instancetype) withKey:(NSString *)key defValue:(EOAWidgetSizeStyle)defValue
@@ -3692,11 +3687,6 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 }
 
 @end
-
-//@interface OACommonWidgetZoomLevelType()
-//@property (nonatomic, readwrite) EOAWidgetZoomLevelType defValue;
-//@end
-
 
 @implementation OACommonWidgetZoomLevelType
 
@@ -3769,9 +3759,8 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
 
 - (NSString *)toStringFromValue:(id)value
 {
-    if (![value isKindOfClass:[NSNumber class]]) {
+    if (![value isKindOfClass:[NSNumber class]])
         return @"";
-    }
     
     EOAWidgetZoomLevelType type = [value integerValue];
     

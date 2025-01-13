@@ -287,15 +287,12 @@
     
     EOAActiveMarkerConstant currentValue = (EOAActiveMarkerConstant)pref.defValue;
     
-    if ([widgetConfigurationParams objectForKey:@"activeMarkerKey"])
-    {
-        currentValue = (EOAActiveMarkerConstant)[widgetConfigurationParams[@"activeMarkerKey"] intValue];
+    NSNumber *activeMarkerKey = widgetConfigurationParams[@"activeMarkerKey"];
+    if (activeMarkerKey) {
+        currentValue = (EOAActiveMarkerConstant)[activeMarkerKey intValue];
         [pref set:currentValue mode:appMode];
-    }
-    else
-    {
-        if (!isCreate)
-            currentValue = [pref get:appMode];
+    } else if (!isCreate) {
+        currentValue = [pref get:appMode];
     }
     
     [settingRow setObj:[self getTitle:currentValue] forKey: @"value"];

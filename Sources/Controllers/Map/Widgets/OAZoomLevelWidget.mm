@@ -112,10 +112,9 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
     {
         currentValue = EOAWidgetMapScale;
     }
-    else
+    else if (!isCreate)
     {
-        if (!isCreate)
-            currentValue = (EOAWidgetZoomLevelType)[_widgetState.typePreference get:appMode];
+        currentValue = (EOAWidgetZoomLevelType)[_widgetState.typePreference get:appMode];
     }
     
     [row setObj:[self getTitle:currentValue] forKey:@"value"];

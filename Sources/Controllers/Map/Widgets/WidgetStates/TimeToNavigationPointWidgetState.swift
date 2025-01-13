@@ -47,10 +47,8 @@ class TimeToNavigationPointWidgetState: OAWidgetState {
            let value = widgetConfigurationParams[key] as? String,
            let widgetValue = Bool(value) {
             currentValue = widgetValue
-        } else {
-            if !isCreate {
-                currentValue = arrivalTimeOrTimeToGo.get()
-            }
+        } else if !isCreate {
+            currentValue = arrivalTimeOrTimeToGo.get()
         }
         
         return TimeToNavigationPointState.getState(intermediate: intermediate, arrivalOtherwiseTimeToGo: currentValue).title

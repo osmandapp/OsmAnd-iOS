@@ -95,10 +95,8 @@ final class AverageSpeedWidget: OASimpleWidget {
            let value = widgetConfigurationParams[key] as? String,
            let widgetValue = Int(value) {
             currentValue = widgetValue
-        } else {
-            if !isCreate {
-                currentValue = measuredIntervalPref.get(appMode)
-            }
+        } else if !isCreate {
+            currentValue = measuredIntervalPref.get(appMode)
         }
         settingRow.setObj(Self.getIntervalTitle(currentValue), forKey: "value")
         

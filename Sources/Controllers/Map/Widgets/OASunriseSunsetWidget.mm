@@ -175,10 +175,9 @@ static const double locationChangeAccuracy = 0.0001;
                     currentValue = (SunPositionMode)widgetValue.intValue;
             }
         }
-        else
+        else if (!isCreate)
         {
-            if (!isCreate)
-                currentValue = (SunPositionMode)[[_state getSunPositionPreference] get:appMode];
+            currentValue = (SunPositionMode)[[_state getSunPositionPreference] get:appMode];
         }
         [row setObj:[self getTitleForSunPositionMode:currentValue] forKey:@"value"];
         [row setObj:self.getPossibleFormatValues forKey:@"possible_values"];
@@ -208,10 +207,9 @@ static const double locationChangeAccuracy = 0.0001;
             }
         }
     }
-    else
+    else if (!isCreate)
     {
-        if (!isCreate)
-            currentSunriseSunsetMode = (EOASunriseSunsetMode)[_state.getPreference get:appMode];
+        currentSunriseSunsetMode = (EOASunriseSunsetMode)[_state.getPreference get:appMode];
     }
     
     [row setObj:[self getTitle:currentSunriseSunsetMode sunPositionMode:currentValue] forKey:@"value"];

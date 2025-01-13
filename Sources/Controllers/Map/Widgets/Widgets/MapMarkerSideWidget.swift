@@ -289,10 +289,8 @@ final class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
                let key = widgetConfigurationParams.keys.first(where: { $0.hasPrefix(prefStr.key) }),
                let value = widgetConfigurationParams[key] as? String {
                 currentValue = value
-            } else {
-                if !isCreate {
-                    currentValue = prefStr.get(appMode)
-                }
+            } else if !isCreate{
+                currentValue = prefStr.get(appMode)
             }
             if prefStr.key == "first_map_marker_mode" || prefStr.key == "second_map_marker_mode" {
                 return SideMarkerMode.markerModeByName(currentValue)?.title ?? ""
@@ -308,10 +306,8 @@ final class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
                    let value = widgetConfigurationParams[key] as? String,
                    let widgetValue = Int(value) {
                     currentValue = widgetValue
-                } else {
-                    if !isCreate {
-                        currentValue = prefLong.get(appMode)
-                    }
+                } else if  !isCreate {
+                    currentValue = prefLong.get(appMode)
                 }
                 
                 return MapMarkerSideWidgetState.availableIntervals[currentValue] ?? ""

@@ -695,9 +695,6 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 @interface OACommonWidgetSizeStyle : OACommonInteger
 
-// FIXME: use int
-//@property (nonatomic, readonly) EOAWidgetSizeStyle defValue;
-
 + (instancetype) withKey:(NSString *)key defValue:(EOAWidgetSizeStyle)defValue;
 
 - (EOAWidgetSizeStyle) get;

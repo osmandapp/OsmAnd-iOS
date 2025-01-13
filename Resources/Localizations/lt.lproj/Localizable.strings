@@ -1499,7 +1499,7 @@
 "shared_string_read" = "Skaityti";
 "shared_string_any" = "Bet kurią";
 "map_marker_1st" = "Pirmoji žymė";
-"weather_update_disabled" = "Išjungtas";
+"weather_update_disabled" = "Išjungta";
 "shared_string_move" = "Perkelti";
 "global_settings" = "Globalūs nustatymai";
 "visibility" = "Matomumas";
@@ -1528,7 +1528,7 @@
 "map_orientation_default" = "Kaip ir įrenginys";
 "route_info" = "Maršruto informacija";
 "shared_string_dark" = "Tamsi";
-"map_settings_topography" = "Kontūrinės linijos";
+"map_settings_topography" = "SRTM žemėlapiai";
 "activity_type_offroad_name" = "Bekelė";
 "shared_string_explore" = "Tyrinėti";
 "lang_zh-Hans" = "Kinų (supaprastinta)";
@@ -1721,7 +1721,7 @@
 "root_folder" = "Pagrindinis aplankas";
 "date_of_creation" = "Sukūrimo data";
 "max_sensor_heartrate" = "Širdies ritmas, max";
-"transport_stop" = "Stotelė";
+"transport_stop" = "Nutraukti";
 "map_widget_map_scale" = "Žemėlapio mastelis";
 "not_specified" = "Nenurodyta";
 "add_widget_to_the_left" = "Pridėti valdiklį į kairę";

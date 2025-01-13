@@ -3303,7 +3303,7 @@
 "visualization_3d_track_line" = "Linha da trilha";
 "fixed_height" = "Altura fixa";
 "shared_string_top" = "Topo";
-"shared_string_bottom" = "Base";
+"shared_string_bottom" = "Em baixo";
 "shared_string_top_bottom" = "Topo e base";
 "track_3d_empty_view_title" = "Visualização da trilha 3D";
 "display_position_automatic_descr" = "Depende da orientação do mapa: a parte inferior para orientação do movimento, o centro para todo o resto.";
@@ -3464,3 +3464,28 @@
 "add_widget_to_the_right" = "Adicionar widget à direita";
 "reset_average_speed" = "Redefinir velocidade média";
 "obd_plugin_name" = "Métricas de veículos";
+
+"rendering_value_sacScale_name" = "SAC";
+"rendering_attr_surface_metal_name" = "Metal";
+"routing_attr_motor_type_diesel_name" = "Diesel";
+"rendering_value_caiScale_name" = "CAI";
+"routing_attr_hazmat_category_usa_2_name" = "Gases";
+"rendering_value_walkingRoutesOSMC_name" = "OSMC";;
+"add_widget_to_the_right" = "Adicionar widget à direita";
+"delete_widget_description" = "Esse widget será excluído. Você poderá restaurá-lo posteriormente na tela Configurar.";
+"obd_plugin_name" = "Métricas de veículos";
+"help_article_map_routes_name" = "Rotas";
+"add_widget_above" = "Adicionar widget acima";
+"transport_stop" = "Parar";
+"screen_is_unlocked" = "A tela sensível ao toque está desbloqueada.";
+"add_widget_to_the_left" = "Adicionar widget à esquerda";
+"lock_screen" = "Bloqueio de tela";
+"delete_widget" = "Excluir widget?";
+"help_article_personal_color_palette_schemes_name" = "Esquemas de cores";
+"add_widget_below" = "Adicione widget abaixo";
+"map_widget_map_scale" = "Escala do mapa";
+"reset_average_speed" = "Redefinir velocidade média";
+"screen_is_locked_by_action_button" = "A tela sensível ao toque está bloqueada. Toque no botão para desbloquear.";
+"lock_screen_description" = "Ativa ou desativa a funcionalidade da tela sensível ao toque para evitar toques acidentais";
+"help_article_map_tracks_name" = "Trilhas";
+"sort_subfolders_tracks" = "Classificar subpastas";

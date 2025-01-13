@@ -1484,7 +1484,7 @@
 "units_of_speed" = "Jednotky rychlosti";
 "allow_3D_view" = "2.5D zobrazení";
 "do_not_rotate" = "Neotáčet";
-"settings_app_theme" = "Motiv aplikace";
+"settings_app_theme" = "Vzhled aplikace";
 "map_settings_available_srtm_maps_descr" = "Pro zobrazení stínování kopců jsou potřeba další mapy";
 "map_settings_line_density_slowdown_warning" = "Vysoká hustota čar může zpomalit vykreslování mapy";
 "map_settings_contour_zoom_level_descr" = "Zvolte úroveň přiblížení, od které budou zobrazeny vrstevnice";
@@ -3457,3 +3457,15 @@
 "rendering_attr_showClimbingRoutes_description" = "Zobrazit lezecké trasy";
 "rendering_attr_showClimbingRoutes_name" = "Lezecké trasy";;
 "reset_average_speed" = "Reset průměrné rychlosti";
+
+"rendering_attr_piste_difficulty_expert_name" = "Expert";
+"rendering_attr_hideText_name" = "Text";
+"routing_attr_motor_type_lpg_name" = "LPG";
+"routing_attr_motor_type_gas_name" = "CNG";
+"rendering_value_walkingRoutesOSMC_name" = "OSMC";
+"rendering_value_caiScale_name" = "CAI";
+"routing_attr_difficulty_preference_expert_name" = "Expert";
+"rendering_value_sacScale_name" = "SAC";;
+"transport_stop" = "Zastávka";
+"reset_average_speed" = "Reset průměrné rychlosti";
+"transport_stop" = "Zastávka";

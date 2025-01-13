@@ -1681,7 +1681,7 @@
 "shared_string_email" = "Correo electrónico";
 "shared_string_account_add" = "Añadir cuenta";
 "settings_item_read_error" = "No se pudo leer desde «%@».";
-"settings_app_theme" = "Tema de la aplicación";
+"settings_app_theme" = "Tema";
 "send_anonymous_data" = "Enviar datos anónimos";
 "only_selected_segment_recalc" = "Sólo el segmento marcado será recalculado usando el perfil elegido.";
 "select_application_profile" = "Elegir perfil de la aplicación";
@@ -3460,7 +3460,7 @@
 "power_watts_unit" = "Vatios";
 "root_folder" = "Carpeta raíz";
 "map_widget_map_scale" = "Escala del mapa";
-"transport_stop" = "Parar";
+"transport_stop" = "Parada";
 "screen_is_unlocked" = "La pantalla táctil está desbloqueada.";
 "shared_string_interface" = "Interfaz";
 "lock_screen_description" = "Activa o desactiva la pantalla táctil para evitar toques accidentales";
@@ -3488,4 +3488,17 @@
 
 "rendering_attr_showClimbingRoutes_name" = "Vías de escalada";
 "rendering_attr_showClimbingRoutes_description" = "Mostrar vías de escalada";;
+"reset_average_speed" = "Restablecer velocidad media";
+
+"rendering_attr_smoothness_horrible_name" = "Horrible";
+"rendering_value_sector2_name" = "Sector 2";
+"rendering_value_caiScale_name" = "CAI";
+"rendering_value_walkingRoutesOSMC_name" = "OSMC";
+"rendering_value_sacScale_name" = "SAC";
+"rendering_value_sector1_name" = "Sector 1";
+"rendering_value_sector4_name" = "Sector 4";
+"rendering_value_sector3_name" = "Sector 3";
+"rendering_attr_surface_metal_name" = "Metal";
+"rendering_value_sector5_name" = "Sector 5";
+"routing_attr_hazmat_category_usa_2_name" = "Gases";;
 "reset_average_speed" = "Restablecer velocidad media";

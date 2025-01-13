@@ -2897,7 +2897,7 @@
 "weather_updates_manual" = "Prognoza meteo trebuie actualizată manual.";
 "click_on_widget" = "Atingeți widgetul";
 "purchases_feature_relief_3d_description" = "Dețineți și observați macheta la scară a cartierului dumneavoastră sau a întregului continent.";
-"weather_update_disabled" = "Inactiv";
+"weather_update_disabled" = "Dezactivată";
 "unsaved_changes_will_be_lost_discard" = "Modificările nesalvate vor fi pierdute. Doriți să renunțați la ele?";
 "terrain_3D_maps" = "Hărți de teren";
 "weather_update_parameters_wifi" = "Prognoza meteo va fi actualizată doar când este disponibilă o rețea Wi-Fi.";
@@ -2963,7 +2963,7 @@
 "troubleshooting" = "Deparare";
 "about_osmAnd" = "Despre OsmAnd";
 "shared_string_data_type" = "Tip date";
-"map_settings_topography" = "Linii de contur";
+"map_settings_topography" = "Curbe de nivel";
 "shared_string_discard_changes" = "Anulați modificările";
 "setup" = "Configurează";
 "gitHub_discussion" = "Discuții pe GitHub";
@@ -3135,7 +3135,7 @@
 "ant_plus_searching_text_description" = "Țineți dispozitivul aproape de senzor. Trebuie să activați senzorul pentru ca OsmAnd să îl poată găsi.";
 "external_device_forget_sensor" = "Uită senzor";
 "external_device_forget_sensor_description" = "Senzorul va fi eliminat din listă. Veți putea să împerecheați din nou acest senzor în orice moment.";
-"external_device_status_connect" = "Conectare";
+"external_device_status_connect" = "Conectați-vă";
 "ant_plus_nothing_found_description" = "Asigurați-vă că: \n– Bluetooth e pornit \n– Senzorul e activ \n– Acest dispozitiv se află lângă senzor";
 "purchases_feature_desc_external_sensors" = "Afișați și înregistrați date de la senzorii externi: viteza bicicletei, puterea exercitată, cadența pedalării și pulsul.";
 "default_appearance_desc" = "Culoarea, pictograma și forma implicite se vor aplica punctelor favorite adăugate în grup.";
@@ -3399,7 +3399,7 @@
 "map_widget_map_scale" = "Scara hărții";
 "add_widget_to_the_left" = "Adăugă widget la stânga";
 "max_sensor_speed" = "Viteză senzor, maxim";
-"transport_stop" = "Oprește";
+"transport_stop" = "Stație";
 "max_altitude" = "Altitudine maximă";
 "screen_is_locked_by_action_button" = "Ecranul tactil este blocat. Atingeți butonul pentru a debloca.";
 "reset_average_speed" = "Resetarea vitezei medii";

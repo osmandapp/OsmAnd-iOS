@@ -3468,7 +3468,7 @@
 "revolutions_per_minute_unit" = "SN/MÍN";
 "root_folder" = "Rótarmappa";
 "all_folders" = "Allar möppur";
-"transport_stop" = "Biðstöð";
+"transport_stop" = "Stöðva";
 "download_persian_voice_alert_title" = "Sækja persneska raddskrá:";
 "download_persian_voice_alert_descr_ios" = "Stillingar -> Aukið aðgengi -> Talað efni -> Raddir -> Persneska -> Dariush";
 "download_persian_voice_alert_descr_macos" = "Stillingar -> Aukið aðgengi -> Talað efni -> Rödd kerfis -> Sýsla með raddir -> Persneska -> Dariush";

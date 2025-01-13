@@ -3410,3 +3410,16 @@
 "rendering_attr_showClimbingRoutes_name" = "Voies d\'escalade";
 "rendering_attr_showClimbingRoutes_description" = "Afficher les voies d\'escalade";;
 "reset_average_speed" = "Effacer la vitesse moyenne";
+
+"rendering_value_walkingRoutesOSMC_name" = "OSMC";
+"rendering_attr_smoothness_horrible_name" = "Horrible";
+"rendering_attr_horse_scale_impossible_name" = "Impossible";
+"rendering_attr_piste_difficulty_freeride_name" = "Freeride";
+"rendering_value_orange_name" = "Orange";
+"rendering_value_caiScale_name" = "CAI";
+"rendering_attr_piste_difficulty_expert_name" = "Expert";
+"rendering_attr_smoothness_excellent_name" = "Excellent";
+"routing_attr_difficulty_preference_expert_name" = "Expert";
+"rendering_attr_highway_class_service_name" = "Service";
+"routeInfo_surface_name" = "Surface";;
+"reset_average_speed" = "Effacer la vitesse moyenne";

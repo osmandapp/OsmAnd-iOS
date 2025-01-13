@@ -2850,7 +2850,7 @@
 "shared_string_deleted" = "Удалено";
 "longest_duration_first" = "Сначала более продолжительные";
 "temperature_widget_desc" = "Виджет показывает температуру для текущего центра карты.";
-"external_device_status_connect" = "Соединение";
+"external_device_status_connect" = "Подключить";
 "no_widgets_here_yet" = "Виджеты не добавлены";
 "help_article_start_with_main_menu_name" = "Главное меню";
 "osmand_cloud_deletion_secondary_devices_warning" = "Вторичные устройства будут отключены от OsmAnd Cloud и потеряют доступ к платным функциям.";
@@ -3272,7 +3272,7 @@
 "not_specified" = "Не указано";
 "with_waypoints" = "С путевыми точками";
 "max_sensor_temperature" = "Температура, макс.";
-"transport_stop" = "Стоп";
+"transport_stop" = "Отменить";
 "obd_plugin_name" = "Показатели ТС";
 "lock_screen_description" = "Включение/отключение сенсорного экрана для предотвращения случайных нажатий";
 "help_article_map_tracks_name" = "Треки";

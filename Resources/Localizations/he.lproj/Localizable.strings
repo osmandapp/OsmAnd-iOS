@@ -2091,7 +2091,7 @@
 "my_data" = "הנתונים שלי";
 "route_maneuvers" = "מעקפים";
 "map_widget_trip_recording_downhill" = "במורד ההר";
-"map_settings_topography" = "מפות SRTM";
+"map_settings_topography" = "קווי מתאר";
 "activity_type_walking_name" = "הליכה";
 "map_markers_bar_widget_desc" = "בווידג׳ט הסרגל העליון אפשר לראות את המרחק ואת הכיוון לסמן מהמיקום הנוכחי. אפשר להגדיר כדי לראות סמן או שניים מובילים בווידג׳ט.";
 "download_file" = "הורדת קובץ";
@@ -2248,7 +2248,7 @@
 "shared_string_to" = "עד";
 "reset_average_speed" = "איפוס המהירות הממוצעת";
 "shared_string_minute_lowercase" = "דק׳";
-"transport_stop" = "עצירה";
+"transport_stop" = "תחנה";
 "map_widget_map_scale" = "קנה מידה של מפה";
 "wheel_circumference" = "היקף גלגל";
 "shared_string_maximum" = "מרבי";

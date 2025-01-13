@@ -637,7 +637,7 @@
 "poi_context_menu_modify" = "اصلاح POI";
 "mapillary_menu_title_pano" = "فقط نمایش عکس‌های ۳۶۰ درجه";
 "phone" = "تلفن";
-"shared_string_distance" = "مسافت";
+"shared_string_distance" = "فاصله";
 "nautical_maps" = "نقشه‌های دریایی";
 "offline_edition" = "ویرایش آفلاین";
 "use_osm_live_routing" = "مسیریابی با OsmAnd Live";
@@ -1985,7 +1985,7 @@
 "avg_sensor_speed" = "سرعت حسگر، میانگین";
 "sort_subfolders_tracks" = "مرتب کردن زیر‌ پوشه ها";
 "avg_sensor_heartrate" = "ضربان قلب، میانگین";
-"transport_stop" = "ایستگاه";
+"transport_stop" = "توقف";
 "max_sensor_speed" = "سرعت حسگر، نهایت";
 "max_sensor_heartrate" = "ضربان قلب، حداکثر";
 "avg_sensor_bycicle_power" = "قدرت دوچرخه ، میانگین";

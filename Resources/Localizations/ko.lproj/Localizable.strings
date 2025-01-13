@@ -2428,7 +2428,7 @@
 "activity_type_water_name" = "물";
 "popular_destinations" = "인기 있는 목적지";
 "terrain_3D_maps" = "지형 지도";
-"weather_update_disabled" = "사용 안 함";
+"weather_update_disabled" = "비활성화됨";
 "manage_subscriptions" = "구독을 관리합니다.";
 "contact_support_description" = "질문이 있으시면 %@로 문의하십시오.";
 "verify_email_address_descr" = "%@로 전송되는 검증 코드. 아래 필드에 입력하십시오.";

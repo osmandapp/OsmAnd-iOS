@@ -3422,7 +3422,7 @@
 "revolutions_per_minute_unit" = "Drehzahl";
 "shared_string_to" = "Zu";
 "map_widget_map_scale" = "Maßstab";
-"transport_stop" = "Beenden";
+"transport_stop" = "Haltestelle";
 "lock_screen" = "Bildschirm sperren";
 "screen_is_locked_by_action_button" = "Der Touchscreen ist gesperrt. Tippen Sie zum Entsperren auf die Schaltfläche.";
 "screen_is_unlocked" = "Der Touchscreen ist entsperrt.";
@@ -3449,4 +3449,18 @@
 
 "rendering_attr_showClimbingRoutes_description" = "Kletterrouten anzeigen";
 "rendering_attr_showClimbingRoutes_name" = "Kletterrouten";;
+"reset_average_speed" = "Durchschnittliche Geschwindigkeit zurücksetzen";
+
+"routing_attr_motor_type_lpg_name" = "LPG";
+"rendering_value_walkingRoutesOSMC_name" = "OSMC";
+"rendering_attr_hideText_name" = "Text";
+"routing_attr_motor_type_hybrid_name" = "Hybrid";
+"rendering_attr_surface_sand_name" = "Sand";
+"routing_attr_motor_type_gas_name" = "CNG";
+"rendering_attr_surface_asphalt_name" = "Asphalt";
+"rendering_attr_piste_type_downhill_name" = "Downhill";
+"rendering_value_orange_name" = "Orange";
+"rendering_attr_piste_type_skitour_name" = "Skitour";
+"routing_attr_motor_type_diesel_name" = "Diesel";
+"rendering_attr_piste_difficulty_freeride_name" = "Freeride";;
 "reset_average_speed" = "Durchschnittliche Geschwindigkeit zurücksetzen";

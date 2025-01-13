@@ -3223,7 +3223,7 @@
 "restore_from_trash" = "從回收桶還原";
 "external_device_blood_pressure" = "血壓";
 "osmand_cloud_deletion_account_warning" = "您的帳號與所有帳號詳細資訊都將會 %@";
-"external_device_status_connect" = "連接";
+"external_device_status_connect" = "連結";
 "shared_string_wrist" = "手腕";
 "external_device_characteristic_speed" = "速度";
 "longest_duration_first" = "最長時間優先";
@@ -3297,7 +3297,7 @@
 "step_by_step" = "按步驟";
 "add_button" = "新增按鈕";
 "shared_string_always" = "總是";
-"shared_string_bottom" = "底部";
+"shared_string_bottom" = "下面";
 "auto_zoom" = "自動縮放";
 "track_3d_empty_view_description" = "以互動式 3D 方式探索軌跡！在地圖上直接視覺化高度、速度等。";
 "shared_string_millimeters" = "公釐";
@@ -3465,7 +3465,7 @@
 "route_your_destination_is_on_right" = "你的目的地在右側";
 "route_your_destination_is_on_ahead" = "你的目的地在正前方";
 "map_widget_map_scale" = "地圖尺度";
-"transport_stop" = "中止";
+"transport_stop" = "停止";
 "my_places_no_tracks_descr_root" = "你可以用OsmAnd匯入、新增或是錄製軌跡。";
 "my_places_no_tracks_title_root" = "你沒有軌跡檔案";
 "upload_to_osm_short" = "上傳到OSM";
@@ -3527,4 +3527,9 @@
 
 "rendering_attr_showClimbingRoutes_description" = "顯示攀登路線";
 "rendering_attr_showClimbingRoutes_name" = "攀登路線";;
+"reset_average_speed" = "重設平均速率";
+
+"rendering_value_sacScale_name" = "SAC";
+"rendering_value_caiScale_name" = "CAI";
+"rendering_value_walkingRoutesOSMC_name" = "OSMC";;
 "reset_average_speed" = "重設平均速率";

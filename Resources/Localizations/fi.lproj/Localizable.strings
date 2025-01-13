@@ -2251,7 +2251,7 @@
 "discard_filter_changes_prompt" = "Alustetaanko kaikki suodattimet?";
 "not_specified" = "Määrittelemätön";
 "shared_string_to" = "Minne";
-"transport_stop" = "Pysähdys";
+"transport_stop" = "Lopeta";
 "all_folders" = "Kaikki kansiot";
 "avg_sensor_temperature" = "Keskilämpötila";
 "max_sensor_temperature" = "Maksimilämpötila";

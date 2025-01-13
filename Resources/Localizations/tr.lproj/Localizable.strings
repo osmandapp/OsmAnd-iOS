@@ -1669,7 +1669,7 @@
 "allow_3D_view" = "2.5B görünüm";
 "do_not_rotate" = "Döndürme";
 "light_theme" = "Açık";
-"settings_app_theme" = "Uygulama gövdesi";
+"settings_app_theme" = "Uygulama teması";
 "shared_string_meters" = "metre";
 "shared_string_tones" = "ton";
 "accessibility_announce" = "Duyuru";
@@ -3288,7 +3288,7 @@
 "avg_sensor_temperature" = "Sıcaklık, ortalama";
 "max_sensor_bycicle_power" = "Bisiklet Gücü, en yüksek";
 "all_folders" = "Tüm klasörler";
-"transport_stop" = "Durak";
+"transport_stop" = "Dur";
 "avg_sensor_bycicle_power" = "Bisiklet Gücü, ortalama";
 "max_altitude" = "En yüksek rakım";
 "avg_sensor_heartrate" = "Kalp atış hızı, ortalama";

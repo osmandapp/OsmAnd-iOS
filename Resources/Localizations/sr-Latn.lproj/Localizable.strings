@@ -678,7 +678,7 @@
 "shared_string_appearance" = "Izgled";
 "map_settings_line_density_slowdown_warning" = "Velika gustina linija može usporiti prikazivanje mape";
 "map_settings_available_srtm_maps_descr" = "Dodatne mape su potrebne da biste videli senke brda na mapi";
-"settings_app_theme" = "Tema aplikacije";
+"settings_app_theme" = "Kolor šema";
 "light_theme" = "Svetla";
 "do_not_rotate" = "Ne rotiraj";
 "allow_3D_view" = "2.5D prikaz";
@@ -3329,7 +3329,7 @@
 "fixed_height" = "Fiksna visina";
 "downward_gradient" = "Gradijent na dole";
 "shared_string_top" = "Vrh";
-"shared_string_bottom" = "Dno";
+"shared_string_bottom" = "Na dnu";
 "track_3d_empty_view_description" = "Istraži stazu u interaktivnom 3D! Vizualiziraj visinu, brzinu i još toga direktno na mapi.";
 "shared_string_millimeters" = "Milimetri";
 "display_position_automatic_descr" = "Zavisi od orijentacije mape: dno za smer kretanja, centar za sve ostalo.";
@@ -3480,7 +3480,7 @@
 "discard_filter_changes_prompt" = "Poništavaš sve filtere?";
 "power_watts_unit" = "Vati";
 "map_widget_map_scale" = "Razmera mape";
-"transport_stop" = "Stanica";
+"transport_stop" = "Zaustaviti";
 "lock_screen" = "Zaključaj ekran";
 "screen_is_locked_by_action_button" = "Ekran osetljiv na dodir je zaključan. Dodirnite dugme da biste otključali.";
 "screen_is_unlocked" = "Ekran osetljiv na dodir je otključan.";
@@ -3508,4 +3508,10 @@
 
 "rendering_attr_showClimbingRoutes_name" = "Staze za penjanje";
 "rendering_attr_showClimbingRoutes_description" = "Prikazati staze za penjanje";;
+"reset_average_speed" = "Poništi prosečnu brzinu";
+
+"rendering_value_sacScale_name" = "SAC";
+"rendering_value_walkingRoutesOSMC_name" = "OSMC";
+"rendering_value_caiScale_name" = "CAI";
+"rendering_attr_surface_metal_name" = "Metal";;
 "reset_average_speed" = "Poništi prosečnu brzinu";

@@ -2367,7 +2367,7 @@
 "display_position_automatic_descr" = "Afhankelijk van de Kaartoriëntatie: \"Onderaan\" voor de kaartoriëntatie \"Bewegingsrichting\" en in het \"Midden\" voor alle andere gevallen.";
 "visualization_3d_visualized_by" = "Weergegeven door";
 "dangerous_goods" = "Gevaarlijke goederen";
-"shared_string_bottom" = "Onderaan";
+"shared_string_bottom" = "Onderkant";
 "in_case_of_reverse_direction" = "In geval van een omgekeerde richting";
 "shared_string_development" = "Ontwikkeling";
 "edit_tilesource_maxzoom" = "Max zoomniveau";
@@ -2597,7 +2597,7 @@
 "sort_subfolders_tracks" = "Mappen sorteren";
 "power_watts_unit" = "Watt";
 "max_sensor_temperature" = "Temperatuur, maximaal";
-"transport_stop" = "Halte";
+"transport_stop" = "Stoppen";
 "avg_sensor_bycicle_power" = "Fietsvermogen, gemiddeld";
 "date_of_creation" = "Aanmaakdatum";
 "max_sensor_heartrate" = "Hartslag, maximaal";

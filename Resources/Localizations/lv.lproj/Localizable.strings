@@ -1472,5 +1472,5 @@
 "of" = "%d no %d";
 "downloaded_bytes" = "%@ no %@";
 "quick_action_need_to_add_item_to_list" = "Ir nepieciešams pievienot vismaz vienu vienību sarakstā \"Ātrās darbības\" iestatījumos";
-"transport_stop" = "Izslēgt";
+"transport_stop" = "Apturēt";
 "shared_string_to" = "Līdz";

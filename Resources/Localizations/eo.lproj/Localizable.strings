@@ -2402,7 +2402,7 @@
 "dangerous_goods_description" = "Sur kelkaj vojoj kaj tuneloj transporto de danĝeraj materialoj estas malpermesata.";
 "shared_string_item" = "Elemento";
 "step_by_step" = "Turno-post-turno";
-"shared_string_bottom" = "Sube";
+"shared_string_bottom" = "malsupro";
 "display_position_automatic_descr" = "Dependas de map-orientiĝo: sube por “Direkto de movado” kaj centre por ĉiuj aliaj.";
 "visualization_3d_track_line" = "Linio de spuro";
 "visualization_3d_visualized_by" = "Vidigi per";
@@ -2530,7 +2530,7 @@
 "max_sensor_bycicle_power" = "Povumo de biciklado (maksimuma)";
 "avg_sensor_speed" = "Rapido (laŭ sentilo, mezuma)";
 "shared_string_maximum" = "Maksimumo";
-"transport_stop" = "Haltigi";
+"transport_stop" = "Ĉesigi";
 "shared_string_interface" = "Fasado";
 "delete_widget_description" = "Tiu ĉi fenestraĵo estos forigita. Vi povas restarigi ĝin per la menuo “Agordi ekranon”.";
 "shared_string_to" = "al";

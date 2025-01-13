@@ -3496,7 +3496,7 @@
 "root_folder" = "Коренева папка";
 "all_folders" = "Всі папки";
 "map_widget_map_scale" = "Масштаб карти";
-"transport_stop" = "Зупинка";
+"transport_stop" = "Зупинити";
 "carplay" = "Автомобільні ігри";
 "shared_string_open_street_map" = "Завантажити OpenStreetMap";
 "product_title_pro" = "Осмейд Про";
@@ -3560,4 +3560,9 @@
 
 "rendering_attr_showClimbingRoutes_description" = "Показати маршрути сходження";
 "rendering_attr_showClimbingRoutes_name" = "Скелелазні маршрути";;
+"reset_average_speed" = "Скинути середню швидкість";
+
+"rendering_value_walkingRoutesOSMC_name" = "OSMC";
+"rendering_value_sacScale_name" = "SAC";
+"rendering_value_caiScale_name" = "CAI";;
 "reset_average_speed" = "Скинути середню швидкість";

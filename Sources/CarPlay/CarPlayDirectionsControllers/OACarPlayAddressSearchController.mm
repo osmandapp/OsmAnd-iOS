@@ -24,6 +24,7 @@
 #import "OASearchResult.h"
 #import "OAStreet.h"
 #import "OASearchPhrase.h"
+#import "OASearchWord.h"
 #import <CarPlay/CarPlay.h>
 
 #include <OsmAndCore/Utilities.h>
@@ -153,8 +154,14 @@
     if (res && [res getCurrentSearchResults].count > 0)
     {
         NSArray<OASearchResult *> *searchResultItems = [res getCurrentSearchResults];
+        OASearchWord* lastWord = res.phrase.getLastSelectedWord;
+        NSInteger inc = 1;
+        if (lastWord.getType == EOAObjectType::STREET)
+        {
+            inc = searchResultItems.count / maximumItemCount;
+        }
         __weak __typeof(self) weakSelf = self;
-        for (NSInteger i = 0; i < searchResultItems.count; i++)
+        for (NSInteger i = 0; i < searchResultItems.count; i+= inc)
         {
             if (cpItems.count >= maximumItemCount)
                 break;
@@ -162,10 +169,9 @@
             OASearchResult *sr = searchResultItems[i];
             OAQuickSearchListItem *qsItem = [[OAQuickSearchListItem alloc] initWithSearchResult:sr];
             CPListItem *cpItem = [[CPListItem alloc] initWithText:qsItem.getName
-                                                       detailText:[self generateDescription:qsItem]
-                                                            image:[UIImage mapSvgImageNamed:[OAQuickSearchListItem getIconName:sr]]
-                                                   accessoryImage:nil
-                                                    accessoryType:CPListItemAccessoryTypeDisclosureIndicator];
+                    detailText:[self generateDescription:qsItem]
+                    image:[UIImage mapSvgImageNamed:[OAQuickSearchListItem getIconName:sr]]
+                    accessoryImage:nil accessoryType:CPListItemAccessoryTypeDisclosureIndicator];
             cpItem.userInfo = @(i);
             cpItem.handler = ^(id <CPSelectableListItem> item, dispatch_block_t completionBlock) {
                 [weakSelf onItemSelected:item completionHandler:completionHandler];

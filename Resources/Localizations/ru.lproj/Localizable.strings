@@ -3272,7 +3272,7 @@
 "not_specified" = "Не указано";
 "with_waypoints" = "С путевыми точками";
 "max_sensor_temperature" = "Температура, макс.";
-"transport_stop" = "Стоп";
+"transport_stop" = "Остановка";
 "obd_plugin_name" = "Показатели ТС";
 "lock_screen_description" = "Включение/отключение сенсорного экрана для предотвращения случайных нажатий";
 "help_article_map_tracks_name" = "Треки";

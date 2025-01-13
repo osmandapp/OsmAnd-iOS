@@ -24,6 +24,9 @@ let DEBUG_STOP_KEY = "empty_purchases_description"
 ///For turning off updating translations. In this mode scrip will only delete trash strings
 let DEBUG_STOP_UPDATING_TRANSLATIONS = false
 
+// same translation are guessed (lots of errors - false positives "stop" != "stop" in some translations!)
+let IOS_GUESS_KEYS_FROM_ANDROID_VALUES = false
+
 ///Start really slow finding process. Deletes all strings with equals keys and values.
 ///Usialy there are duplicates like "map_locale" = "Map Language";
 ///But sometimes it cal delete correct loalization like "shared_string_done" = "Готово"; for ru, bel, uk languages.
@@ -134,7 +137,6 @@ var languageDict = [
 
 /// For quick debug just comment out all unnecessary languages. Like this
 // languageDict = [
-//     "ru" : "ru",                // Russian
 //     "uk" : "uk",                // Ukrainian
 // ]
 
@@ -288,9 +290,8 @@ class Initialiser {
             }
             if let androidTranslationValue = androidDict[iosTranslation.key] {
                 commonTranslations[iosTranslation.key] = iosTranslation.value
-                 Main.pringDebugLog(prefix: "FOUND", iosKey: iosTranslation.key, iosValue: iosTranslation.value, androidKey: iosTranslation.key, androidValue: androidTranslationValue)
-            }
-            else {
+                Main.pringDebugLog(prefix: "FOUND", iosKey: iosTranslation.key, iosValue: iosTranslation.value, androidKey: iosTranslation.key, androidValue: androidTranslationValue)
+            } else if IOS_GUESS_KEYS_FROM_ANDROID_VALUES {
                 /// iosKey != androidKey.
                 /// find androidKey where iosEnValue == androidEnValue
                 var keys: [String] = []
@@ -514,12 +515,7 @@ class IOSWriter {
         }
         
         for elem in commonValuesDict {
-            if DEBUG && elem.key == DEBUG_STOP_KEY {
-                if LOGGING {
-                    print("#### DEBUG_STOP_KEY #### ")
-                }
-            }
-            if let androidKey = AndroidReader.dictContainsKeys(androidDict: androidDict, keys: elem.value) {
+            if let androidKey = AndroidReader.dictContainsKeys(androidDict: androidDict, keys: [elem.key]) {
                 guard let androidValue = androidDict[androidKey] else { continue }
                 guard isValueCorrect(value: androidValue) else { continue }
                 guard !isEnglishDuplicateInLocalFile(language, elem.key, androidValue) else { continue }
@@ -596,13 +592,15 @@ class IOSWriter {
                             print("Duplicate key ! \(string) ")
                         } else {
                             var newString = string
-                            let newValue = existingLinesDict[key]
-                            if let newValue, let updatedString = replaceValueText(newValue: filterUnsafeChars(newValue), inFullString: string)  {
-                                if updatedString != newString {
+                            var newValue = currentValue
+                            let androidValue = existingLinesDict[key]
+                            if let androidValue, let updatedString = replaceValueText(newValue: filterUnsafeChars(androidValue), inFullString: string)  {
+                                if updatedString != string {
                                     updatedStringsCount += 1
-                                    print("Duplicate key ! \(updatedString) = \(newString) ")
+                                    newValue = androidValue
+                                    newString = updatedString
+                                    print("Update key ! \(string)  \(currentValue) -> \(androidValue)?? ")
                                 }
-                                newString = updatedString
                             }
                             let isTrashString = self.isTrashString(key: key, currentValue: currentValue, newValue: newValue, language: language, iosEnglishDict: iosEnglishDict)
                             if !isTrashString {

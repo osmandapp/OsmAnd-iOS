@@ -547,7 +547,6 @@
 "shared_string_updates_size" = "Updates size";
 "shared_string_updates_frequency" = "Updates frequency";
 "shared_string_not_included" = "Not included";
-
 "shared_string_progress" = "Progress";
 "shared_string_leave" = "Leave";
 "shared_string_delete_data" = "Delete data";
@@ -1408,7 +1407,6 @@
 "quick_action_map_underlay_title" = "Map underlays";
 "vector_data" = "Offline vector maps";
 "quick_action_map_source_action" = "Add map source";
-
 "quick_action_map_styles" = "Map styles";
 "quick_action_new_action" = "Add action";
 "unsupported_items" = "Unsupported items";
@@ -1442,7 +1440,6 @@
 "quick_action_add_parking" = "Add parking place";
 "parking_place" = "Parking place";
 "quick_action_navigation_voice" = "Voice on/off";
-
 "toggle_online_notes" = "Toggle OSM notes";
 "toggle_local_edits" = "Toggle local OSM edits";
 "quick_action_add_poi" = "Add POI";
@@ -2323,7 +2320,6 @@
 "rendering_value_defaultTranslucentCyan_name" = "Default (translucent cyan)";
 "rendering_attr_hideHouseNumbers_name" = "House numbers";
 "rendering_value_translucent_red_name" = "Translucent red";
-
 "rendering_attr_transportStops_name" = "Transport stops";
 "rendering_value_walkingRoutesOSMCNodes_name" = "Node networks";
 "rendering_attr_piste_difficulty_expert_name" = "Expert";

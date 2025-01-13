@@ -50,6 +50,16 @@
     [_db setMarkersHistoryLastModifiedTime:lastModified];
 }
 
+- (long)getHistoryLastModifiedTime
+{
+    return [_db getHistoryLastModifiedTime];
+}
+
+- (void)setHistoryLastModifiedTime:(long)lastModified
+{
+    [_db setHistoryLastModifiedTime:lastModified];
+}
+
 - (void)addPoint:(OAHistoryItem *)item
 {
     [_db addPoint:item];
@@ -58,15 +68,16 @@
 
 - (void)removePoint:(OAHistoryItem *)item
 {
-    [_db deletePoint:item.hId];
+    [_db deletePoint:item];
     [_historyPointRemoveObservable notifyEventWithKey:item];
 }
 
 - (void)removePoints:(NSArray *)items
 {
     for (OAHistoryItem *item in items)
-        [_db deletePoint:item.hId];
-    
+    {
+        [_db deletePoint:item];
+    }
     [_historyPointsRemoveObservable notifyEventWithKey:items];
 }
 

@@ -15,7 +15,8 @@
 - (instancetype) initWithError:(NSString *)error
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _error = error;
         [self parseError:error];
     }

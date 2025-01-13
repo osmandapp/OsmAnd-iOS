@@ -271,7 +271,7 @@
             case EOABackupSyncOperationDownload:
             {
                 if (remoteFile && remoteFile.item)
-                    [syncTask downloadRemoteVersion:remoteFile.item filesType:filesType shouldReplace:shouldReplace restoreDeleted:restoreDeleted];
+                    [syncTask downloadItem:remoteFile.item type:filesType shouldReplace:shouldReplace restoreDeleted:restoreDeleted];
                 break;
             }
             default:

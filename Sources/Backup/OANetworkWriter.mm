@@ -13,6 +13,7 @@
 #import "OASettingsItemWriter.h"
 #import "OAFileSettingsItem.h"
 #import "OrderedDictionary.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/ArchiveWriter.h>
 
@@ -40,7 +41,8 @@
 - (instancetype)initWithListener:(id<OAOnUploadItemListener>)listener
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _listener = listener;
         _backupHelper = OABackupHelper.sharedInstance;
         _tmpDir = [NSTemporaryDirectory() stringByAppendingPathComponent:@"backup_upload"];
@@ -57,11 +59,12 @@
 - (void)write:(OASettingsItem *)item
 {
     NSString *error = nil;
-    NSString *fileName = [OABackupHelper getItemFileName:item];
+    NSString *fileName = [BackupUtils getItemFileName:item];
     OASettingsItemWriter *itemWriter = item.getWriter;
     if (itemWriter != nil)
     {
-        @try {
+        @try
+        {
             error = [self uploadEntry:itemWriter fileName:fileName];
             if (error == nil)
                 error = [self uploadItemInfo:item fileName:[fileName stringByAppendingPathExtension:OABackupHelper.INFO_EXT]];
@@ -76,9 +79,7 @@
         error = [self uploadItemInfo:item fileName:[fileName stringByAppendingPathExtension:OABackupHelper.INFO_EXT]];
     }
     if (_listener != nil)
-    {
         [_listener onItemUploadDone:item fileName:fileName error:error];
-    }
     if (error != nil)
     {
         NSLog(@"OANetworkWriter error: %@", error);
@@ -139,7 +140,8 @@
                     fileName:(NSString *)fileName
                     listener:(id<OAOnUploadFileListener>)listener
 {
-    if ([self isCancelled]) {
+    if ([self isCancelled])
+    {
         @throw [NSException exceptionWithName:@"InterruptedIOException" reason:@"Network upload was cancelled" userInfo:nil];
     }
     else
@@ -185,12 +187,7 @@
 {
     OASettingsItem *item = itemWriter.item;
     if ([item isKindOfClass:OAFileSettingsItem.class])
-    {
-        if ([OAFileSettingsItemFileSubtype isMap:((OAFileSettingsItem *) item).subtype])
-        {
-            return [_backupHelper isObfMapExistsOnServer:fileName];
-        }
-    }
+        return [BackupUtils isDefaultObfMap:(OAFileSettingsItem *) item fileName:fileName];
     return false;
 }
 
@@ -219,7 +216,7 @@
     for (NSString *file in filesToUpload)
     {
         item.filePath = file;
-        NSString *name = [OABackupHelper getFileItemName:file fileSettingsItem:item];
+        NSString *name = [BackupUtils getFileItemName:file fileSettingsItem:item];
         NSString *error = [self uploadItemFile:itemWriter fileName:name listener:self];
         if (error != nil)
             return error;
@@ -239,20 +236,14 @@
     if ([_item isKindOfClass:OAFileSettingsItem.class])
     {
         OAFileSettingsItem *fileItem = (OAFileSettingsItem *) _item;
-        NSString *itemFileName = [OABackupHelper getFileItemName:fileItem];
+        NSString *itemFileName = [BackupUtils getFileItemName:fileItem];
         if (itemFileName.pathExtension.length == 0)
-        {
             [_backupHelper updateFileUploadTime:[OASettingsItemType typeName:_item.type] fileName:itemFileName uploadTime:uploadTime];
-        }
         if (fileItem.needMd5Digest && fileItem.md5Digest.length > 0)
-        {
             [_backupHelper updateFileMd5Digest:[OASettingsItemType typeName:_item.type] fileName:itemFileName md5Hex:fileItem.md5Digest];
-        }
     }
     if (_listener != nil)
-    {
         [_listener onItemFileUploadDone:_item fileName:fileName uploadTime:uploadTime error:error];
-    }
 }
 
 - (void)onFileUploadProgress:(NSString *)type fileName:(NSString *)fileName progress:(NSInteger)progress deltaWork:(NSInteger)deltaWork

@@ -238,7 +238,7 @@
             }
             if (filesByName.count > 0)
             {
-                NSDictionary<OARemoteFile *, OASettingsItem *> *downloadItems = [OABackupHelper getItemsMapForRestore:info settingsItems:_backupHelper.backup.settingsItems];
+                NSDictionary<OARemoteFile *, OASettingsItem *> *downloadItems = [BackupUtils getItemsMapForRestore:info settingsItems:_backupHelper.backup.settingsItems];
                 for (OARemoteFile *remoteFile in downloadItems.allKeys)
                 {
                     NSString *key = [remoteFile getTypeNamePath];
@@ -258,7 +258,7 @@
         }
         else if (_tableType == EOARecentChangesRemote)
         {
-            NSDictionary<OARemoteFile *, OASettingsItem *> *downloadItems = [OABackupHelper getItemsMapForRestore:info settingsItems:_backupHelper.backup.settingsItems];
+            NSDictionary<OARemoteFile *, OASettingsItem *> *downloadItems = [BackupUtils getItemsMapForRestore:info settingsItems:_backupHelper.backup.settingsItems];
             for (OARemoteFile *remoteFile in downloadItems.allKeys)
             {
                 NSString *key = [remoteFile getTypeNamePath];
@@ -300,12 +300,14 @@
                 BOOL deleted = [it.lastObject[@"deleted"] boolValue];
                 EOABackupSyncOperationType operation = deleted ? EOABackupSyncOperationDelete
                     : _tableType == EOARecentChangesLocal ? EOABackupSyncOperationUpload : EOABackupSyncOperationDownload;
-                [itemsSection addRow:[self rowFromKey:it.firstObject
-                                             mainTint:deleted ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled]
+                OATableRowData *rowData = [self rowFromKey:it.firstObject
+                                                  mainTint:deleted ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled]
                                         secondaryColorName:deleted ? ACColorNameIconColorDisruptive : ACColorNameIconColorActive
-                                            operation:operation
-                                            localFile:it.lastObject[@"localFile"]
-                                           remoteFile:it.lastObject[@"remoteFile"]]];
+                                                 operation:operation
+                                                 localFile:it.lastObject[@"localFile"]
+                                                remoteFile:it.lastObject[@"remoteFile"]];
+                if (rowData)
+                    [itemsSection addRow:rowData];
             }
         }];
     }
@@ -314,9 +316,11 @@
         for (NSArray *items in info.filteredFilesToMerge)
         {
             NSString *key = [((OALocalFile *) items.firstObject) getTypeFileName];
-            [itemsSection addRow:[self rowFromConflictItems:key
-                                                  localFile:items.firstObject
-                                                 remoteFile:items.lastObject]];
+            OATableRowData *rowData = [self rowFromConflictItems:key
+                                                       localFile:items.firstObject
+                                                      remoteFile:items.lastObject];
+            if (rowData)
+                [itemsSection addRow:rowData];
         }
     }
 
@@ -345,7 +349,7 @@
     switch (_tableType)
     {
         case EOARecentChangesRemote:
-            return [OABackupHelper getItemsMapForRestore:_backupHelper.backup.backupInfo settingsItems:_backupHelper.backup.settingsItems].count > 0;
+            return [BackupUtils getItemsMapForRestore:_backupHelper.backup.backupInfo settingsItems:_backupHelper.backup.settingsItems].count > 0;
         case EOARecentChangesLocal:
             return _backupHelper.backup.backupInfo.filteredFilesToDelete.count + _backupHelper.backup.backupInfo.filteredFilesToUpload.count > 0;
         default:
@@ -379,6 +383,9 @@
                                      operation:EOABackupSyncOperationNone
                                      localFile:localFile
                                     remoteFile:remoteFile];
+    if (!rowData)
+        return nil;
+
     NSString *conflictStr = [OALocalizedString(@"cloud_conflict") stringByAppendingString:@". "];
     NSMutableAttributedString *attributedDescr = [[NSMutableAttributedString alloc] initWithString:[conflictStr stringByAppendingString:rowData.descr]];
     [attributedDescr addAttributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:13 weight:UIFontWeightMedium],
@@ -414,6 +421,8 @@
         if (!settingsItem)
             settingsItem = localFile.item;
     }
+    if (!settingsItem)
+        return nil;
     
     NSString *name = @"";
     if ([settingsItem isKindOfClass:OAProfileSettingsItem.class])

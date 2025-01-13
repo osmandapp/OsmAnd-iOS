@@ -17,6 +17,7 @@
 #import "OAPrepareBackupResult.h"
 #import "OARemoteFile.h"
 #import "OAConcurrentCollections.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OAExportBackupTask () <OANetworkExportProgressListener>
 
@@ -45,13 +46,12 @@
         _listener = listener;
         _exporter = [[OABackupExporter alloc] initWithListener:self];
         _itemsProgress = [[OAConcurrentDictionary alloc] init];
-        OABackupHelper *backupHelper = OABackupHelper.sharedInstance;
         for (OASettingsItem *item in items)
         {
             [_exporter addSettingsItem:item];
             
             OAExportSettingsType *exportType = [OAExportSettingsType findBySettingsItem:item];
-            if (exportType && ![[backupHelper getVersionHistoryTypePref:exportType] get])
+            if (exportType && ![[BackupUtils getVersionHistoryTypePref:exportType] get])
                 [_exporter addOldItemToDelete:item];
         }
         for (OASettingsItem *item in itemsToDelete)

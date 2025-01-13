@@ -17,6 +17,7 @@
 #import "OAObservable.h"
 #import "OAAppSettings.h"
 #import "OAProducts.h"
+#import "OAExportSettingsType.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
 NSString *const OAIAPProductsRequestSucceedNotification = @"OAIAPProductsRequestSucceedNotification";
@@ -245,6 +246,16 @@ static OASubscriptionState *EXPIRED;
     return [self isSubscribedCrossPlatform]
             || [self isSubscribedToOsmAndPro];
 //#endif
+}
+
++ (BOOL)isExportTypeAvailable:(OAExportSettingsType *)exportType
+{
+    return [self isBackupAvailable] || [exportType isAvailableInFreeVersion];
+}
+
++ (BOOL)isBackupAvailable
+{
+    return [self isOsmAndProAvailable];
 }
 
 + (long) getInstallTime

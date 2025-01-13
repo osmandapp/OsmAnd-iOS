@@ -39,17 +39,9 @@ final class ZoomLevelWidgetState: OAWidgetState {
         if let customId, !customId.isEmpty {
             prefId += "\(customId)"
         }
-        if prefId.contains("dev_zoom_level__1736511193492") {
-            print("ttttt")
-        }
         let preference = OAAppSettings.sharedManager().registerWidgetZoomLevelTypePreference(prefId, defValue: .zoom).makeProfile()!
-        if prefId.contains("dev_zoom_level__1736511193492") {
-            preference.get()
-        }
         if let string = widgetParams?[Self.zoomLevelType] as? String, string == "MAP_SCALE" {
-            print("bbbb")
             preference.set(.mapScale)
-            preference.get().rawValue
         }
         return preference
     }

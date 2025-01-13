@@ -1530,7 +1530,6 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
     return @"";
 }
 
-
 - (void)copyValueFromAppMode:(OAApplicationMode *)sourceAppMode targetAppMode:(OAApplicationMode *)targetAppMode
 {
     [self setValue:[self getValue:sourceAppMode] mode:targetAppMode];

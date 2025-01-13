@@ -70,4 +70,23 @@
     return key;
 }
 
+- (BOOL)isEqual:(id)object {
+    if (self == object)
+    {
+        return YES;
+    }
+    if (!object || ![object isKindOfClass:[OATopIndexFilter class]])
+    {
+        return NO;
+    }
+    OATopIndexFilter *other = (OATopIndexFilter *)object;
+    return [self.tag isEqualToString:other.tag] &&
+           [self.value isEqualToString:other.value];
+}
+
+- (NSUInteger)hash
+{
+    return self.tag.hash ^ self.value.hash;
+}
+
 @end

@@ -455,7 +455,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
     }
     else if (r1.object && r2.object)
     {
-        return r1.object == r2.object;
+        return [r1.object isEqual:r2.object];
     }
     return false;
 }

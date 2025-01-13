@@ -637,7 +637,7 @@ typedef enum {
         [self invalidateMarkersCollectionForMode:mode];
         OAMarkerCollection *c = [_modeMarkers objectForKey:mode];
         [self generateMarkerCollectionFor:mode baseOrder:c.baseOrder];
-        [self updateMyLocationCourseProvider];
+        [self updateMarkersCollectionProviderForMode:mode];
     }];
 }
 
@@ -686,27 +686,29 @@ typedef enum {
     if (!_initDone)
         return;
     
+    for (OAApplicationMode *mode in _modeMarkers.keyEnumerator)
+    {
+        [self updateMarkersCollectionProviderForMode:mode];
+    }
+}
+
+- (void) updateMarkersCollectionProviderForMode:(OAApplicationMode *)mode
+{
     [self.mapViewController runWithRenderSync:^{
     
         OAApplicationMode *currentMode = [OAAppSettings sharedManager].applicationMode.get;
-        OAMarkerCollection *currentMarkerCollection;
         
-        for (OAApplicationMode *mode in _modeMarkers.keyEnumerator)
+        OAMarkerCollection *c = [_modeMarkers objectForKey:mode];
+        if (mode == currentMode)
         {
-            OAMarkerCollection *c = [_modeMarkers objectForKey:mode];
-            if (mode == currentMode)
-            {
-                currentMarkerCollection = c;
-            }
-            else
-            {
-                [c hideMarkers];
-                [self.mapView removeKeyedSymbolsProvider:c.markerCollection];
-            }
+            [self updateLocation:currentMode];
+            [self.mapView addKeyedSymbolsProvider:c.markerCollection];
         }
-        
-        [self updateLocation:currentMode];
-        [self.mapView addKeyedSymbolsProvider:currentMarkerCollection.markerCollection];
+        else
+        {
+            [c hideMarkers];
+            [self.mapView removeKeyedSymbolsProvider:c.markerCollection];
+        }
     }];
 }
 

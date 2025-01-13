@@ -66,6 +66,8 @@ typedef enum {
 @property (nonatomic, assign) std::shared_ptr<OsmAnd::MapMarker> courseMarkerNight;
 @property (nonatomic) OsmAnd::MapMarker::OnSurfaceIconKey courseMainIconKeyNight;
 
+@property (nonatomic) int baseOrder;
+
 - (instancetype) initWithMapView:(OAMapRendererView *)mapView;
 
 - (void) hideMarkers;
@@ -385,7 +387,6 @@ typedef enum {
     OALocationServices *_locationProvider;
     
     NSMapTable<OAApplicationMode *, OAMarkerCollection *> *_modeMarkers;
-    NSMutableDictionary<NSString *, NSNumber *> *_markersOrders;
     CLLocation *_lastLocation;
     CLLocationDirection _lastHeading;
     CLLocationDirection _lastCourse;
@@ -411,7 +412,6 @@ typedef enum {
     for (OAApplicationMode *mode in modes)
     {
         int order = baseOrder--;
-        _markersOrders[mode.name] = @(order);
         [self generateMarkerCollectionFor:mode baseOrder:order];
     }
 }
@@ -419,6 +419,7 @@ typedef enum {
 - (void) generateMarkerCollectionFor:(OAApplicationMode *)mode baseOrder:(int)baseOrder
 {
     OAMarkerCollection *c = [[OAMarkerCollection alloc] initWithMapView:self.mapView];
+    c.baseOrder = baseOrder;
 
     c.markerCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
     c.markerCollection->setPriority(std::numeric_limits<int64_t>::max());
@@ -563,7 +564,6 @@ typedef enum {
 - (void) initLayer
 {
     _lastCourse = -1.0;
-    _markersOrders = [NSMutableDictionary new];
     
     _mapViewTrackingUtilities = [OAMapViewTrackingUtilities instance];
     _locationProvider = OsmAndApp.instance.locationServices;
@@ -634,19 +634,19 @@ typedef enum {
 - (void) refreshCurrentAppModeMarkerCollection
 {
     __weak OAMyPositionLayer *weakSelf = self;
+    OAApplicationMode *currentMode = [OAAppSettings sharedManager].applicationMode.get;
+    OAMarkerCollection *c = [_modeMarkers objectForKey:currentMode];
     dispatch_async(dispatch_get_main_queue(), ^{
-        OAApplicationMode *currentMode = [OAAppSettings sharedManager].applicationMode.get;
-        NSNumber *order = _markersOrders[currentMode.name];
-        if (order)
-        {
-            [weakSelf generateMarkerCollectionFor:currentMode baseOrder:[order intValue]];
-        }
+        [weakSelf generateMarkerCollectionFor:currentMode baseOrder:c.baseOrder];
     });
 }
 
 - (void) onSettingsChanged
 {
-    [self refreshMarkersCollection];
+    __weak OAMyPositionLayer *weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf refreshMarkersCollection];
+    });
 }
 
 - (void) onAppModeChanged

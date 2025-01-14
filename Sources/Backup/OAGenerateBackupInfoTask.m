@@ -20,6 +20,7 @@
 {
     NSDictionary<NSString *, OALocalFile *> *_localFiles;
     NSDictionary<NSString *, OARemoteFile *> *_uniqueRemoteFiles;
+    NSDictionary<NSString *, OARemoteFile *> *_uniqueRemoteFilesWithDecomposedNames;
     NSDictionary<NSString *, OARemoteFile *> *_deletedRemoteFiles;
     void (^_onComplete)(OABackupInfo *backupInfo, NSString *error);
     
@@ -36,6 +37,12 @@
     {
         _localFiles = localFiles;
         _uniqueRemoteFiles = uniqueRemoteFiles;
+        NSMutableDictionary<NSString *, OARemoteFile *>* localMap = [NSMutableDictionary dictionaryWithCapacity:_uniqueRemoteFiles.count];
+        for (NSString *originalKey in _uniqueRemoteFiles) {
+            NSString *decomposedKey = [originalKey decomposedStringWithCanonicalMapping];
+            localMap[decomposedKey] = _uniqueRemoteFiles[originalKey];
+        }
+        _uniqueRemoteFilesWithDecomposedNames = localMap;
         _deletedRemoteFiles = deletedRemoteFiles;
         _onComplete = onComplete;
         _operationLog = [[OAOperationLog alloc] initWithOperationName:@"generateBackupInfo" debug:BACKUP_DEBUG_LOGS logThreshold:0.2];
@@ -79,7 +86,8 @@
         OAExportSettingsType *exportType = [OAExportSettingsType findByRemoteFile:remoteFile];
         if (exportType == nil || ![OAExportSettingsType isTypeEnabled:exportType] || remoteFile.isRecordedVoiceFile)
             continue;
-        OALocalFile *localFile = _localFiles[remoteFile.getTypeNamePath];
+        NSString* decomposedRemoteName = remoteFile.getTypeNamePath.decomposedStringWithCanonicalMapping;
+        OALocalFile *localFile = _localFiles[decomposedRemoteName];
         if (localFile != nil)
         {
             BOOL fileChangedLocally = localFile.localModifiedTime > localFile.uploadTime;
@@ -116,6 +124,8 @@
             }
         }
     }
+    
+    
     for (OALocalFile *localFile in _localFiles.allValues)
     {
         OAExportSettingsType *exportType = localFile.item != nil
@@ -123,8 +133,7 @@
             : nil;
         if (exportType == nil || ![OAExportSettingsType isTypeEnabled:exportType])
             continue;
-        
-        BOOL hasRemoteFile = _uniqueRemoteFiles[localFile.getTypeFileName] != nil;
+        BOOL hasRemoteFile = _uniqueRemoteFilesWithDecomposedNames[localFile.getTypeFileName] != nil;
         BOOL fileToDelete = [info.localFilesToDelete containsObject:localFile];
         if (!hasRemoteFile && !fileToDelete)
         {

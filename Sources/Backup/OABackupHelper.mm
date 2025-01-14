@@ -53,6 +53,8 @@ static NSString *DELETE_FILE_VERSION_URL = [SERVER_URL stringByAppendingString:@
 static NSString *ACCOUNT_DELETE_URL = [SERVER_URL stringByAppendingString:@"/userdata/delete-account"];
 static NSString *SEND_CODE_URL = [SERVER_URL stringByAppendingString:@"/userdata/send-code"];
 static NSString *CHECK_CODE_URL = [SERVER_URL stringByAppendingString:@"/userdata/auth/confirm-code"];
+static NSCharacterSet* URL_PATH_CHARACTER_SET;
+
 
 @interface OABackupHelper () <OAOnPrepareBackupListener, NSURLSessionDelegate>
 
@@ -118,7 +120,7 @@ static NSString *CHECK_CODE_URL = [SERVER_URL stringByAppendingString:@"/userdat
 {
     for (OASettingsItem *item in items)
     {
-        if ([self.class applyItem:item type:remoteFile.type name:remoteFile.name])
+        if ([BackupUtils applyItem:item type:remoteFile.type name:remoteFile.name])
             return item;
     }
     return nil;
@@ -137,6 +139,9 @@ static NSString *CHECK_CODE_URL = [SERVER_URL stringByAppendingString:@"/userdat
 - (instancetype)init
 {
     self = [super init];
+    NSMutableCharacterSet *mutableSet = [NSCharacterSet.URLQueryAllowedCharacterSet mutableCopy];
+    [mutableSet removeCharactersInString:@";/?:@&=+$, "];
+    URL_PATH_CHARACTER_SET = [mutableSet copy];
     if (self)
     {
         _app = [OsmAndApp instance];
@@ -228,7 +233,7 @@ static NSString *CHECK_CODE_URL = [SERVER_URL stringByAppendingString:@"/userdat
 {
     NSMutableArray<NSString *> *filesToUpload = [NSMutableArray array];
     OABackupInfo *info = self.backup.backupInfo;
-    if (![self.class isLimitedFilesCollectionItem:item]
+    if (![BackupUtils isLimitedFilesCollectionItem:item]
         && info != nil && (info.filesToUpload.count > 0 || info.filesToMerge.count > 0 || info.filesToDownload.count > 0))
     {
         for (OALocalFile *localFile in info.filesToUpload)
@@ -498,7 +503,8 @@ static NSString *CHECK_CODE_URL = [SERVER_URL stringByAppendingString:@"/userdat
     NSMutableString *builder = [NSMutableString stringWithString:DOWNLOAD_FILE_URL];
     __block BOOL firstParam = YES;
     [params enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-        [builder appendString:[NSString stringWithFormat:@"%@%@=%@", firstParam ? @"?" : @"&", key, [obj stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]]];
+        NSString* encodedValue = [obj stringByAddingPercentEncodingWithAllowedCharacters:URL_PATH_CHARACTER_SET];
+        [builder appendString:[NSString stringWithFormat:@"%@%@=%@", firstParam ? @"?" : @"&", key, encodedValue]];
         firstParam = NO;
     }];
     

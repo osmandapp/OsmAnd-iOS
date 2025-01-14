@@ -651,7 +651,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             [section addObject:@{
                 @"cell" : kCellReuseIdentifier
             }];
-            if ([self isGpxTrackFollowingMode] && [_settings.detailedTrackGuidance get:[_routingHelper getAppMode]] == EOATrackApproximationManual)
+            if ([self shouldShowAttachRoadsOption])
             {
                 [section addObject:@{
                     @"cell" : [OAAttachRoadsBannerCell getCellIdentifier],
@@ -749,6 +749,12 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (BOOL) isGpxTrackFollowingMode
 {
     return _routingHelper.getCurrentGPXRoute != nil;
+}
+
+- (BOOL)shouldShowAttachRoadsOption
+{
+    OASGpxFile *gpx = _routingHelper.getCurrentGPXRoute.file;
+    return gpx && !gpx.hasRtePt && !gpx.hasRoute && [self isGpxTrackFollowingMode] && [_settings.detailedTrackGuidance get:[_routingHelper getAppMode]] == EOATrackApproximationManual;
 }
 
 - (NSAttributedString *) getFirstLineDescrAttributed:(SHARED_PTR<TransportRouteResult>)res

@@ -233,7 +233,7 @@ static NSCharacterSet* URL_PATH_CHARACTER_SET;
 {
     NSMutableArray<NSString *> *filesToUpload = [NSMutableArray array];
     OABackupInfo *info = self.backup.backupInfo;
-    if (![self.class isLimitedFilesCollectionItem:item]
+    if (![BackupUtils isLimitedFilesCollectionItem:item]
         && info != nil && (info.filesToUpload.count > 0 || info.filesToMerge.count > 0 || info.filesToDownload.count > 0))
     {
         for (OALocalFile *localFile in info.filesToUpload)

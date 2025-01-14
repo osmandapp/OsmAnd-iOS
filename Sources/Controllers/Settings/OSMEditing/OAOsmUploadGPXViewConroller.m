@@ -665,7 +665,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
         [_failedFileNames addObject:fileName];
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self setProgress: 100 fileName:fileName];
+        [self setProgress:100 fileName:fileName];
     });
 }
 

@@ -45,12 +45,12 @@
 
 - (long)localModifiedTime
 {
-    return _specificRoads.getLastModifiedTime;
+    return [_specificRoads getLastModifiedTime] * 1000;
 }
 
 - (void)setLocalModifiedTime:(long)localModifiedTime
 {
-    [_specificRoads setLastModifiedTime:localModifiedTime];
+    [_specificRoads setLastModifiedTime:localModifiedTime / 1000];
 }
 
 - (EOASettingsItemType) type

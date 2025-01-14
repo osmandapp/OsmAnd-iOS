@@ -248,7 +248,7 @@ typedef enum : NSUInteger {
     OACloudAccountVerificationViewController *verificationVC = [[OACloudAccountVerificationViewController alloc] initWithEmail:OAAppSettings.sharedManager.backupUserEmail.get sourceType:EOACloudScreenSourceTypeSignIn];
     [self.navigationController pushViewController:verificationVC animated:NO];
     
-    if ([OABackupHelper isTokenValid:tokenParam])
+    if ([BackupUtils isTokenValid:tokenParam])
     {
         [OABackupHelper.sharedInstance registerDevice:tokenParam];
     }

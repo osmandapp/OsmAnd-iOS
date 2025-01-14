@@ -3508,3 +3508,4 @@
 "rendering_attr_showClimbingRoutes_name" = "Staze za penjanje";
 "rendering_attr_showClimbingRoutes_description" = "Prikazati staze za penjanje";
 "reset_average_speed" = "Poništi prosečnu brzinu";
+"day_short" = "D";

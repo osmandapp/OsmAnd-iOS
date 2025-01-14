@@ -794,6 +794,7 @@
 "time_of_day" = "Time of day";
 "shared_string_distance" = "Distance";
 "shared_string_time_span" = "Time span";
+"shared_string_estimated_time_span" = "Estimated time span";
 "shared_string_start_time" = "Start time";
 "shared_string_end_time" = "End time";
 "shared_string_time_moving" = "Time moving";
@@ -2372,7 +2373,7 @@
 "max_sensor_bycicle_power" = "Bicycle Power, max";
 "avg_sensor_bycicle_power" = "Bicycle Power, average";
 "max_sensor_temperature" = "Temperature, max";
-"avg_sensor_temperature" = "Temperature, averag";
+"avg_sensor_temperature" = "Temperature, average";
 "shared_string_visible_on_map" = "Visible on map";
 "with_waypoints" = "With waypoints";
 "shared_string_reset_all" = "Reset all";
@@ -2885,7 +2886,7 @@
 "rendering_value_bicycle_name" = "Bicycle";
 "rendering_value_translucent_lightgreen_name" = "Translucent light green";
 "rendering_attr_contourLines_name" = "Show contour lines";
-"rendering_attr_showAccess_name" = "Show access and toll restrictions";
+"rendering_attr_showAccess_name" = "Show access restrictions";
 "rendering_attr_surface_dirt_name" = "Dirt";
 "routing_attr_piste_type_skitour_name" = "Ski touring";
 "routing_attr_driving_style_prefer_unpaved_name" = "Prefer unpaved roads";
@@ -3970,3 +3971,7 @@
 "add_widget_to_the_left" = "Add widget to the left";
 "delete_widget" = "Delete widget?";
 "delete_widget_description" = "This widget will be deleted. You can restore it later in Configure Screen.";
+"reset_average_speed" = "Reset average speed";
+
+"rendering_attr_showClimbingRoutes_description" = "Show climbing routes";
+"rendering_attr_showClimbingRoutes_name" = "Climbing routes";

@@ -889,7 +889,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         if (self.currentState == EOADraggableMenuStateInitial)
         {
             [self goExpanded];
-            [button setImage:[UIImage templateImageNamed:@"ic_custom_arrow_down"] forState:UIControlStateNormal];
+            [button setImage:[UIImage templateImageNamed:ACImageNameIcCustomArrowDown] forState:UIControlStateNormal];
         }
         else
         {

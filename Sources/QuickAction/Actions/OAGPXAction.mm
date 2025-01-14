@@ -110,7 +110,7 @@ static QuickActionType *TYPE;
     p.lat = lat;
     p.lon = lon;
     p.category = groupName;
-    p.time = (long)[[NSDate date] timeIntervalSince1970];
+    p.time = (long)([[NSDate date] timeIntervalSince1970] * 1000.0);
     wpt.point = p;
     wpt.color = color;
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;

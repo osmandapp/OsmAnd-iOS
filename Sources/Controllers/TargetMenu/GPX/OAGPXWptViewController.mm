@@ -98,12 +98,12 @@
         [self buildCommentRow:rows comment:self.wpt.point.comment];
     }
     
-    if (self.wpt.point.link.length > 0)
+    if (self.wpt.point.link && self.wpt.point.link.href && self.wpt.point.link.href.length > 0)
     {
         [rows addObject:[[OARowInfo alloc] initWithKey:nil
                                                   icon:[OATargetInfoViewController getIcon:@"mx_website"]
                                             textPrefix:nil
-                                                  text:self.wpt.point.link
+                                                  text:self.wpt.point.link.href
                                              textColor:UIColorFromRGB(kHyperlinkColor)
                                                 isText:NO
                                              needLinks:YES
@@ -247,7 +247,7 @@
 {
     long timestamp = self.wpt.point.time;
     if (timestamp > 0)
-        return [NSDate dateWithTimeIntervalSince1970:timestamp];
+        return [NSDate dateWithTimeIntervalSince1970:timestamp / 1000.0];
     else
         return nil;
 }
@@ -257,9 +257,12 @@
     OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.wpt.docPath]];
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     [mapPanel targetHideMenu:0 backButtonClicked:YES onComplete:^{
-        auto trackItem = [[OASTrackItem alloc] initWithFile:gpx.file];
-        trackItem.dataItem = gpx;
-        [mapPanel openTargetViewWithGPX:trackItem selectedTab:EOATrackMenuHudOverviewTab selectedStatisticsTab:EOATrackMenuHudSegmentsStatisticsOverviewTab openedFromMap:YES];
+        if (gpx)
+        {
+            auto trackItem = [[OASTrackItem alloc] initWithFile:gpx.file];
+            trackItem.dataItem = gpx;
+            [mapPanel openTargetViewWithGPX:trackItem selectedTab:EOATrackMenuHudOverviewTab selectedStatisticsTab:EOATrackMenuHudSegmentsStatisticsOverviewTab openedFromMap:YES];
+        }
     }];
 }
 

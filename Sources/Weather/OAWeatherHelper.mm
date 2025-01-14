@@ -99,9 +99,10 @@
 {
     QList<OsmAnd::BandIndex> res;
     for (OAWeatherBand *band in _bands)
+    {
         if ([band isBandVisible])
             res << band.bandIndex;
-    
+    }
     return res;
 }
 
@@ -119,8 +120,9 @@
             NSArray<NSNumber *> *levelsList = contourLevels[zoomNum];
             QList<double> levels;
             for (NSNumber *level in levelsList)
+            {
                 levels << level.doubleValue;
-            
+            }
             contourLevelsMap.insert((OsmAnd::ZoomLevel)zoomNum.intValue, levels);
         }
 
@@ -236,7 +238,8 @@
     else
     {
         const auto& resource = _app.resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
-        if (resource) {
+        if (resource)
+        {
             OARepositoryResourceItem* item = [[OARepositoryResourceItem alloc] init];
             item.resourceId = resource->id;
             item.resourceType = resource->type;
@@ -347,8 +350,10 @@
         {
             const auto downloadsIdPrefix = QString::fromNSString(region.downloadsIdPrefix);
             for (const auto& localResource : localResources)
+            {
                 if (localResource->type == OsmAndResourceType::WeatherForecast && localResource->id.toLower().startsWith(downloadsIdPrefix))
                     [regionIds addObject:region.regionId];
+            }
         }
     }
     return regionIds;
@@ -359,11 +364,13 @@
     uint64_t size = 0;
     const auto& localResources = [OsmAndApp instance].resourcesManager->getLocalResources();
     for (const auto& localResource : localResources)
+    {
         if (localResource->type == OsmAndResourceType::WeatherForecast)
         {
             const auto& repositoryResource = _app.resourcesManager->getResourceInRepository(localResource->id);
             size += repositoryResource != nil ? repositoryResource->size : localResource->size;
         }
+    }
 
     return size;
 }
@@ -560,40 +567,6 @@
     });
 }
 
-- (OAResourceItem *)generateResourceItem:(OAWorldRegion *)region
-{
-    NSString *regionId = [self.class checkAndGetRegionId:region];
-    BOOL isEntireWorld = [regionId isEqualToString:kWeatherEntireWorldRegionId];
-    OAResourceItem *item;
-    auto state = [self getDownloadTaskFor:[region.downloadsIdPrefix stringByAppendingString:@"tifsqlite"]].state;
-    if (state == OADownloadTaskStateRunning || state != OADownloadTaskStateFinished)
-    {
-        item = [[OARepositoryResourceItem alloc] init];
-        NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
-        calendar.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
-        item.date = [calendar startOfDayForDate:[NSDate date]];
-    }
-    else
-    {
-        if ([self isDownloadedWeatherForecastForRegionId:regionId])
-            item = [[OALocalResourceItem alloc] init];
-        else
-            item = [[OAOutdatedResourceItem alloc] init];
-
-        item.date = [NSDate dateWithTimeIntervalSince1970:[self.class getPreferenceLastUpdate:regionId]];
-    }
-    if (item)
-    {
-        item.resourceId = QString::fromNSString([regionId stringByAppendingString:@"_weather_forecast"]);
-        item.resourceType = OsmAndResourceType::WeatherForecast;
-        item.title = isEntireWorld ? OALocalizedString(@"weather_forecast_entire_world") : OALocalizedString(@"weather_forecast");
-        item.size = [self getOfflineForecastSize:region forUpdate:NO];
-        item.sizePkg = [self getOfflineForecastSize:region forUpdate:YES];
-        item.worldRegion = region;
-    }
-    return item;
-}
-
 + (NSAttributedString *)getStatusInfoDescription:(NSString *)regionId
 {
     NSMutableAttributedString *attributedDescription = [NSMutableAttributedString new];
@@ -757,7 +730,8 @@
     else
     {   // compatibility with old api
         BOOL isWIFI = [self getPreferenceWifi:regionId];
-        if (isWIFI) {
+        if (isWIFI)
+        {
             [[self class] setPreferenceWeatherAutoUpdate:regionId value:EOAWeatherAutoUpdateOverWIFIOnly];
             return EOAWeatherAutoUpdateOverWIFIOnly;
         }
@@ -778,7 +752,8 @@
 + (NSString *)getPreferenceWeatherAutoUpdateString:(EOAWeatherAutoUpdate)value
 {
     NSString *result = OALocalizedString(@"weather_update_disabled");
-    switch (value) {
+    switch (value)
+    {
         case EOAWeatherAutoUpdateOverWIFIOnly:
             result = OALocalizedString(@"weather_update_over_wifi_only");
             break;

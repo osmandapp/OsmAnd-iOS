@@ -24,6 +24,11 @@
 #import "OAAppData.h"
 #import "OsmAnd_Maps-Swift.h"
 
+static NSDictionary *platformCompatibilityKeysDictionary = @{
+    @"widget_top_panel_order": @"top_widget_panel_order",
+    @"widget_bottom_panel_order": @"bottom_widget_panel_order"
+};
+
 @implementation OAProfileSettingsItem
 {
     NSDictionary *_additionalPrefs;
@@ -348,6 +353,21 @@
     json[@"appMode"] = [_appMode toJson];
 }
 
+// Due to different configuration keys in iOS and Android, they need to be standardized. This has been done on our side.
+// For internal use, we use the keys 'widget_top_panel_order' from platformCompatibilityKeysDictionary for exporting as @"top_widget_panel_order", etc."
+- (BOOL)updateJSONWithPlatformCompatibilityKeys:(NSMutableDictionary *)json
+                                   key:(NSString *)key
+                                  value:(NSString *)value
+{
+    NSString *newKey = platformCompatibilityKeysDictionary[key];
+    if (newKey)
+    {
+        json[newKey] = value;
+        return YES;
+    }
+    return NO;
+}
+
 - (void)writeItemsToJson:(id)json
 {
     OAAppSettings *settings = OAAppSettings.sharedManager;
@@ -364,10 +384,12 @@
             NSString *stringValue = [setting toStringValue:self.appMode];
             if (stringValue)
             {
-                if (([setting.key isEqualToString:@"voice_provider"] || [key isEqualToString:@"voice_provider"]) && ![stringValue hasSuffix:@"-tts"])
-                    json[key] = [stringValue stringByAppendingString:@"-tts"];
-                else
+                if (![self updateJSONWithPlatformCompatibilityKeys:json key:key value:stringValue]) {
+                    if (([key isEqualToString:@"voice_provider"] || [setting.key isEqualToString:@"voice_provider"]) && ![stringValue hasSuffix:@"-tts"]) {
+                        stringValue = [stringValue stringByAppendingString:@"-tts"];
+                    }
                     json[key] = stringValue;
+                }
             }
         }
     }

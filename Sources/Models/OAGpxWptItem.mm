@@ -107,8 +107,8 @@
 
 - (UIImage *) getCompositeIcon
 {
-    NSString *iconName = _point.getIconName ?: @"special_star";
-    NSString *backgroundIconName = _point.getBackgroundType ?: @"circle";
+    NSString *iconName = _point.getIconName ?: DEFAULT_ICON_NAME_KEY;
+    NSString *backgroundIconName = _point.getBackgroundType ?: DEFAULT_ICON_SHAPE_KEY;
     return [OAFavoritesHelper getCompositeIcon:iconName backgroundIcon:backgroundIconName color:UIColorFromRGBA([_point getColor])];
 }
 

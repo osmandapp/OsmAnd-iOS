@@ -137,17 +137,30 @@
 
     UIEdgeInsets insets = _window.safeAreaInsets;
 
-    CGFloat w = self.view.frame.size.width;
     CGFloat h = self.view.frame.size.height;
-
-    CGFloat widthOffset = MAX(insets.right, insets.left) / w;
     CGFloat heightOffset = insets.top / h;
 
     BOOL isLeftSideDriving = [self isLeftSideDriving];
-    if (_isInNavigationMode)
-        [_mapVc setViewportForCarPlayScaleX:isLeftSideDriving ? 1.5 : 0.5 y:kViewportBottomScale];
+    
+    BOOL isRoutePlanning = [OARoutingHelper sharedInstance].isRoutePlanningMode;
+    EOAPositionPlacement placement = (EOAPositionPlacement) [[OAAppSettings sharedManager].positionPlacementOnMap get];
+    double y;
+    if (placement == EOAPositionPlacementAuto)
+        y = ([[OAAppSettings sharedManager].rotateMap get] == ROTATE_MAP_BEARING && !isRoutePlanning ? 1.5 : 1.0);
     else
-        [_mapVc setViewportForCarPlayScaleX:isLeftSideDriving ? 1.0 + widthOffset : 1.0 - widthOffset y:1.0 + heightOffset];
+        y = (placement == EOAPositionPlacementCenter || isRoutePlanning ? 1.0 : 1.5);
+    
+    if (_isInNavigationMode)
+    {
+        [_mapVc setViewportForCarPlayScaleX:isLeftSideDriving ? 1.5 : 0.5 y:y + heightOffset];
+    }
+    else
+    {
+        CGFloat w = self.view.frame.size.width;
+        CGFloat widthOffset = MAX(insets.right, insets.left) / w;
+        
+        [_mapVc setViewportForCarPlayScaleX:isLeftSideDriving ? 1.0 + widthOffset : 1.0 - widthOffset y:y + heightOffset];
+    }
 }
 
 - (void)setupAlarmSpeedometerStackView
@@ -219,6 +232,7 @@
         [_mapVc.view removeFromSuperview];
         
         _mapVc.isCarPlayActive = YES;
+        [_mapVc.mapView setTopOffsetOfViewSize:0 bottomOffset:0];
         [self addChildViewController:_mapVc];
         [self.view addSubview:_mapVc.view];
         _mapVc.view.frame = self.view.frame;
@@ -245,6 +259,7 @@
         _mapVc.view.frame = mapPanel.view.frame;
         _mapVc.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [_mapVc.mapView resumeRendering];
+        [mapPanel.hudViewController.mapInfoController updateLayout];
         OAAppSettings * settings = [OAAppSettings sharedManager];
         if (![settings.batterySavingMode get])
             [_mapVc.mapView restoreFrameRefreshRate];

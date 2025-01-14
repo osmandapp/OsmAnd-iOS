@@ -215,7 +215,6 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
         addCell(OADatePickerTableViewCell.reuseIdentifier)
         addCell(OARangeSliderFilterTableViewCell.reuseIdentifier)
         addCell(OAValueTableViewCell.reuseIdentifier)
-        addCell(OASimpleTableViewCell.reuseIdentifier)
     }
     
     override func viewDidLoad() {
@@ -234,6 +233,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
             searchController?.searchBar.placeholder = localizedString("shared_string_search")
             searchController?.searchBar.returnKeyType = .go
             navigationItem.searchController = searchController
+            navigationItem.hidesSearchBarWhenScrolling = false
             definesPresentationContext = true
         }
     }
@@ -339,11 +339,19 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
             if !isSearchActive {
                 let allFoldersSection = tableData.createNewSection()
                 let allFoldersRow = allFoldersSection.createNewRow()
-                allFoldersRow.cellType = OASimpleTableViewCell.reuseIdentifier
+                allFoldersRow.cellType = OAValueTableViewCell.reuseIdentifier
                 allFoldersRow.key = Self.allFoldersRowKey
                 allFoldersRow.title = localizedString("all_folders")
                 allFoldersRow.icon = .icCustomFolderOpen
                 allFoldersRow.iconTintColor = .iconColorSelected
+                if let folderTracks = TracksSearchFilter.getTrackFolderByPath("")?.getFlattenedTrackItems() {
+                    let filteredTracks = baseFilters.getFilteredTrackItems()
+                    let matchingTracksCount = folderTracks.filter { trackItem in
+                        filteredTracks.contains(where: { $0.path == trackItem.path })
+                    }.count
+                    let totalTracksCount = folderTracks.count
+                    allFoldersRow.descr = "\(matchingTracksCount)/\(totalTracksCount)"
+                }
             }
             
             func displayFolder(_ folderItem: DisplayFolderItem, in section: OATableSectionData, isRootFolder: Bool) {
@@ -353,8 +361,13 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
                 row.title = folderItem.displayName
                 row.icon = folderItem.icon
                 row.iconTintColor = folderItem.iconTintColor
-                if let tracksCount = listFilterType?.getTracksCountForItem(itemName: folderItem.key) {
-                    row.descr = String(describing: tracksCount)
+                if let folderTracks = TracksSearchFilter.getTrackFolderByPath(folderItem.key)?.getTrackItems() {
+                    let filteredTracks = baseFilters.getFilteredTrackItems()
+                    let matchingTracksCount = folderTracks.filter { trackItem in
+                        filteredTracks.contains(where: { $0.path == trackItem.path })
+                    }.count
+                    let totalTracksCount = folderTracks.count
+                    row.descr = "\(matchingTracksCount)/\(totalTracksCount)"
                 }
                 
                 if !isRootFolder {
@@ -403,10 +416,8 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
             cell.maxTextField.delegate = self
             cell.minTextField.tag = .min
             cell.maxTextField.tag = .max
-            cell.minTextField.returnKeyType = .go
-            cell.maxTextField.returnKeyType = .go
-            cell.minTextField.enablesReturnKeyAutomatically = true
-            cell.maxTextField.enablesReturnKeyAutomatically = true
+            cell.minTextField.keyboardType = .numberPad
+            cell.maxTextField.keyboardType = .numberPad
             cell.minTextField.text = valueFromInputText
             cell.maxTextField.text = valueToInputText
             cell.minValueLabel.text = minFilterValueText
@@ -437,27 +448,10 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
                 cell.leftIconView.backgroundColor = isKeyNotEmpty ? item.iconTintColor : nil
                 cell.leftIconView.layer.cornerRadius = isKeyNotEmpty ? cell.leftIconView.frame.height / 2 : 0
             }
-            if let key = item.key, selectedItems.contains(key) {
+            if let key = item.key, (selectedItems.contains(key) || (key == Self.allFoldersRowKey && listFilterType?.isSelectAllItemsSelected == true)) {
                 tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
             } else {
                 tableView.deselectRow(at: indexPath, animated: false)
-            }
-            return cell
-        } else if item.cellType == OASimpleTableViewCell.reuseIdentifier {
-            let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier) as! OASimpleTableViewCell
-            cell.descriptionVisibility(false)
-            cell.selectedBackgroundView = UIView()
-            cell.selectedBackgroundView?.backgroundColor = UIColor.groupBg
-            cell.accessoryType = .none
-            cell.titleLabel.text = item.title
-            cell.leftIconView.image = item.icon
-            cell.leftIconView.tintColor = item.iconTintColor
-            if item.key == Self.allFoldersRowKey {
-                if listFilterType?.isSelectAllItemsSelected == true {
-                    tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
-                } else {
-                    tableView.deselectRow(at: indexPath, animated: false)
-                }
             }
             return cell
         }
@@ -506,6 +500,12 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
     }
     
     override func onRightNavbarButtonPressed() {
+        view.endEditing(true)
+        if isSearchActive {
+            searchController?.isActive = false
+            isSearchActive = false
+        }
+        
         switch filterType {
         case .length, .duration, .timeInMotion, .averageSpeed, .maxSpeed, .averageAltitude, .maxAltitude, .uphill, .downhill, .maxSensorSpeed, .averageSensorSpeed, .maxSensorHeartRate, .averageSensorHeartRate, .maxSensorCadence, .averageSensorCadence, .maxSensorBicyclePower, .averageSensorBicyclePower, .maxSensorTemperature, .averageSensorTemperature:
             rangeFilterType?.setValueFrom(from: String(Int(currentValueFrom)), updateListeners_: false)
@@ -691,6 +691,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
 
 extension TracksFilterDetailsViewController: TTRangeSliderDelegate {
     func didStartTouches(in sender: TTRangeSlider) {
+        view.endEditing(true)
         isSliderDragging = true
     }
     
@@ -758,6 +759,31 @@ extension TracksFilterDetailsViewController: UITextFieldDelegate {
         }
     }
     
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let currentText = textField.text ?? ""
+        let newText = (currentText as NSString).replacingCharacters(in: range, with: string)
+        if newText.count > 6 {
+            return false
+        }
+
+        if let newValue = Int(newText), !newText.isEmpty {
+            if textField.tag == .min && newValue < Int(currentValueTo) {
+                currentValueFrom = Float(newValue)
+            } else if textField.tag == .max && newValue > Int(currentValueFrom) {
+                currentValueTo = Float(newValue)
+            } else {
+                return true
+            }
+            
+            if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? OARangeSliderFilterTableViewCell {
+                cell.rangeSlider.selectedMinimum = currentValueFrom
+                cell.rangeSlider.selectedMaximum = currentValueTo
+            }
+        }
+        
+        return true
+    }
+    
     func textFieldDidEndEditing(_ textField: UITextField) {
         guard let text = textField.text, !text.isEmpty, let newValue = Float(text) else { return }
         switch textField.tag {
@@ -776,10 +802,5 @@ extension TracksFilterDetailsViewController: UITextFieldDelegate {
         default:
             break
         }
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
     }
 }

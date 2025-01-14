@@ -128,6 +128,10 @@ class MapWidgetInfo: NSObject, Comparable {
         widget.getSettingsData(forSimpleWidget: appMode)
     }
     
+    func handleRowSelected(_ item: OATableRowData, viewController: WidgetConfigurationViewController) -> Bool {
+        return widget.handleRowSelected(item, viewController: viewController)
+    }
+    
     func enableDisable(appMode: OAApplicationMode, enabled: NSNumber?) {
         var widgetsVisibility: [String] = getWidgetsVisibility(appMode)
         widgetsVisibility.removeAll(where: { $0 == key })

@@ -49,7 +49,7 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
                     ? OAApplicationMode.getFirstAvailableNavigation()
                     : settings.carPlayMode.get()
                 settings.setApplicationModePref(carPlayMode, markAsLastUsed: false)
-
+                
                 let isRoutePlanning = OARoutingHelper.sharedInstance().isRoutePlanningMode()
                 let placement = settings.positionPlacementOnMap.get()
                 var y: Double
@@ -58,8 +58,7 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
                 } else {
                     y = placement == EOAPositionPlacement.center.rawValue || isRoutePlanning ? 1.0 : 1.5
                 }
-                let heightOffset = 1 - (window.frame.height / mapVC.view.frame.height)
-                mapVC.setViewportForCarPlayScaleX(1.0, y: y - heightOffset)
+                mapVC.setViewportForCarPlayScaleX(1.0, y: y)
             }
         } else {
             // if the scene becomes active (sceneWillEnterForeground) before setting the root view controller

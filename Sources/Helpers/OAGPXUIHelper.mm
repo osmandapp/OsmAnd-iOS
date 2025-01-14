@@ -86,7 +86,7 @@
             }
             if (pts.count == 0)
             {
-                point.time = (long) [[NSDate date] timeIntervalSince1970];
+                point.time = (long) ([[NSDate date] timeIntervalSince1970] * 1000.0);
             }
             else
             {
@@ -676,7 +676,7 @@ updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))upd
                         }
                     }
                 }
-                metadata.time = time == 0 ? (long) [[NSDate date] timeIntervalSince1970] : time;
+                metadata.time = time == 0 ? (long) ([[NSDate date] timeIntervalSince1970] * 1000.0) : time;
             }
 
             if (doc.author && [doc.author containsString:@"OsmAnd"])

@@ -16,6 +16,7 @@ struct FilterResults {
 }
 
 final class TracksSearchFilter: FilterChangedListener {
+    static var rootFolder: TrackFolder?
     private var trackItems: [TrackItem]
     private var callback: (([TrackItem]) -> Void)?
     private var currentFilters: [BaseTrackFilter] = []
@@ -239,6 +240,17 @@ final class TracksSearchFilter: FilterChangedListener {
         trackItems
     }
     
+    func updateFilteredTracks(newTracks: [TrackItem]) {
+        let newTracksDict = Dictionary(uniqueKeysWithValues: newTracks.map { ($0.dataItem?.gpxFilePath ?? "", $0) })
+        trackItems = trackItems.compactMap { existingTrack in
+            let filePath = existingTrack.dataItem?.gpxFilePath ?? ""
+            return newTracksDict[filePath] ?? (newTracksDict.keys.contains(filePath) ? existingTrack : nil)
+        }
+
+        let existingFilePaths = Set(trackItems.map { $0.dataItem?.gpxFilePath ?? "" })
+        trackItems.append(contentsOf: newTracks.filter { !existingFilePaths.contains($0.dataItem?.gpxFilePath ?? "") })
+    }
+    
     func setCurrentFolder(_ currentFolder: TrackFolder) {
         self.currentFolder = currentFolder
     }
@@ -265,7 +277,8 @@ extension TracksSearchFilter {
     }
     
     static func getDisplayValueTo(filter: RangeTrackFilter<AnyObject>) -> Int {
-        let formattedValue = getFormattedValue(measureUnitType: filter.trackFilterType.measureUnitType, value: filter.ceilValueTo())
+        let valueToUse = filter.ceilValueTo() == filter.ceilMaxValue() ? filter.ceilValueTo() : String(describing: filter.valueTo)
+        let formattedValue = getFormattedValue(measureUnitType: filter.trackFilterType.measureUnitType, value: valueToUse)
         return Int(ceil(formattedValue.valueSrc))
     }
     
@@ -320,5 +333,14 @@ extension TracksSearchFilter {
         @unknown default:
             return .kilometersAndMeters
         }
+    }
+    
+    static func setRootFolder(_ folder: TrackFolder) {
+        rootFolder = folder
+    }
+    
+    static func getTrackFolderByPath(_ path: String) -> TrackFolder? {
+        guard !path.isEmpty, let rootFolder = TracksSearchFilter.rootFolder else { return TracksSearchFilter.rootFolder }
+        return rootFolder.getFlattenedSubFolders().first(where: { $0.getDirFile().path().hasSuffix(path) }) ?? rootFolder
     }
 }

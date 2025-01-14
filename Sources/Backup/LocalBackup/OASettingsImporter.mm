@@ -48,7 +48,7 @@
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
 
-#define kTmpProfileFolder @"tmpProfileData"
+#define kTmpProfileFolder @"tmpProfileDataImport"
 
 @interface OAImportItemsAsyncTask()
 

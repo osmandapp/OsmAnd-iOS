@@ -25,6 +25,11 @@ static QuickActionType *TYPE;
     return [super initWithActionType:self.class.TYPE];
 }
 
+- (void)commonInit
+{
+    _settings = [OAAppSettings sharedManager];
+}
+
 + (void)initialize
 {
     TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsNavVoiceActionId

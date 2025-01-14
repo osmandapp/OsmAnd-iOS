@@ -2058,7 +2058,7 @@
 "wikivoyage_download_pics" = "სურათების გადმოწერა";
 "route_info" = "ინფორმაცია გზის შესახებ";
 "shared_string_markers" = "სანიშნები";
-"map_settings_topography" = "კონტურული ხაზები";
+"map_settings_topography" = "კოტურული ხაზების მონაცემები";
 "shared_string_uploading" = "ატვირთვა";
 "activity_type_racing_name" = "მანქანით";
 "external_device_status_connect" = "დაკავშირება";
@@ -2192,3 +2192,8 @@
 "ltr_or_rtl_combine_via_space" = "%@-%@";
 "of" = "%d %d-დან";
 "downloaded_bytes" = "%@ %@-დან";
+"shared_string_to" = "-მდე";
+"transport_stop" = "შეწყვეტა";
+"power_watts_unit" = "ვატი";
+"shared_string_minute_lowercase" = "წთ";
+"revolutions_per_minute_unit" = "ბრ/წთ";

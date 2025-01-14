@@ -61,7 +61,7 @@ final class DownloadingListHelper: NSObject, DownloadingCellResourceHelperDelega
         var title = localizedString("downloading") + ": "
         let tasks = getDownloadingTasks()
         if let downloadingTask = tasks.first(where: { $0.state == .running }) {
-            title += downloadingTask.name
+            title += downloadingTask.title
         }
         cell.textView.text = title
         
@@ -100,11 +100,11 @@ final class DownloadingListHelper: NSObject, DownloadingCellResourceHelperDelega
     }
     
     private func updateProgreesBar(animated: Bool) {
-        if let allDownloadingsCell {
+        if allDownloadingsCell != nil {
             DispatchQueue.main.async { [weak self] in
                 guard let self else { return }
                 let newProgress = Float(self.calculateAllDownloadingsCellProgress())
-                self.allDownloadingsCell?.progressBar.setProgress(newProgress , animated: animated)
+                self.allDownloadingsCell?.progressBar.setProgress(newProgress, animated: animated)
                 
                 let newDownloadingsCount = self.getDownloadingTasks().count
                 if newDownloadingsCount != self.downloadTaskCount {
@@ -117,7 +117,11 @@ final class DownloadingListHelper: NSObject, DownloadingCellResourceHelperDelega
     
     // MARK: - DownloadingCellResourceHelperDelegate
    
-    func onDownloadingCellResourceNeedUpdate() {
-        hostDelegate?.onDownloadingCellResourceNeedUpdate()
+    func onDownloadingCellResourceNeedUpdate(_ task: OADownloadTask?) {
+        hostDelegate?.onDownloadingCellResourceNeedUpdate(task)
+    }
+
+    func onStopDownload(_ resourceItem: OAResourceSwiftItem) {
+        hostDelegate?.onStopDownload(resourceItem)
     }
 }

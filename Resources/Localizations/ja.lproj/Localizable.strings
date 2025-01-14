@@ -2914,3 +2914,15 @@
 "of" = "全%d中%d";
 "downloaded_bytes" = "%@／%@";
 "quick_action_need_to_add_item_to_list" = "『クイックアクション』のリストに最低ひとつは項目を設定する必要があります";
+"with_waypoints" = "経由地点を含む";
+"all_folders" = "すべてのフォルダ";
+"shared_string_minute_lowercase" = "分";
+"shared_string_reset_all" = "全てリセット";
+"not_specified" = "指定しない";
+"discard_filter_changes_prompt" = "すべてのフィルターをリセットしてもよろしいですか？";
+"shared_string_to" = "この日付以前";
+"transport_stop" = "乗り場";
+"root_folder" = "ルートフォルダ";
+"max_altitude" = "最大高度";
+"date_of_creation" = "作成日";
+"shared_string_visible_on_map" = "地図で表示";

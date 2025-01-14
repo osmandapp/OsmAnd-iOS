@@ -183,7 +183,7 @@
         if (cell)
         {
             cell.titleLabel.text = item.title;
-            cell.rightIconView.image = [UIImage templateImageNamed:((OATableCollapsableRowData *) item).collapsed ? @"ic_custom_arrow_right" : @"ic_custom_arrow_down"];
+            cell.rightIconView.image = [UIImage templateImageNamed:((OATableCollapsableRowData *) item).collapsed ? @"ic_custom_arrow_right" : ACImageNameIcCustomArrowDown];
         }
         return cell;
     }

@@ -11,27 +11,29 @@ import UIKit
 final class DownloadingListViewController: OABaseNavbarViewController, DownloadingCellResourceHelperDelegate {
     
     weak var delegate: DownloadingCellResourceHelperDelegate?
-    
+
     private var downloadingListHelper: DownloadingListHelper?
     private var downloadingCellResourceHelper: DownloadingCellResourceHelper?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupDownloadingCellHelper()
-        generateData()
     }
-    
-    override func getTitle() -> String! {
+
+    override func refreshOnAppear() -> Bool {
+        true
+    }
+
+    override func getTitle() -> String {
         localizedString("downloading")
     }
-    
+
     override func getLeftNavbarButtonTitle() -> String {
         localizedString("shared_string_close")
     }
-    
+
     func setupDownloadingCellHelper() {
         downloadingListHelper = DownloadingListHelper()
-        
         downloadingCellResourceHelper = DownloadingCellResourceHelper()
         downloadingCellResourceHelper?.hostViewController = self
         downloadingCellResourceHelper?.setHostTableView(self.tableView)
@@ -42,14 +44,14 @@ final class DownloadingListViewController: OABaseNavbarViewController, Downloadi
         downloadingCellResourceHelper?.rightIconColor = .iconColorActive
         downloadingCellResourceHelper?.showDownloadingBytesInDescription = true
     }
-    
+
     private func fetchResources() {
         DispatchQueue.main.async { [weak self] in
             self?.downloadingCellResourceHelper?.cleanCellCache()
             self?.tableView.reloadData()
         }
     }
-    
+
     override func generateData() {
         guard let tasks = downloadingListHelper?.getDownloadingTasks() else { return }
         
@@ -58,14 +60,14 @@ final class DownloadingListViewController: OABaseNavbarViewController, Downloadi
             if let resourceItem = OAResourcesUISwiftHelper.getResourceFrom(task) {
                 let row = section.createNewRow()
                 row.cellType = DownloadingCell.reuseIdentifier
-                row.title = task.name
+                row.title = task.title
                 let resourceId = task.key.replacingOccurrences(of: "resource:", with: "")
                 row.setObj(resourceId, forKey: "resourceId")
                 row.setObj(resourceItem, forKey: "item")
             }
         }
     }
-    
+
     override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
         let item = tableData.item(for: indexPath)
         if item.cellType == DownloadingCell.reuseIdentifier {
@@ -87,7 +89,7 @@ final class DownloadingListViewController: OABaseNavbarViewController, Downloadi
         }
         return nil
     }
-    
+
     override func onRowSelected(_ indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
         if item.cellType == DownloadingCell.reuseIdentifier {
@@ -95,11 +97,15 @@ final class DownloadingListViewController: OABaseNavbarViewController, Downloadi
             downloadingCellResourceHelper?.onCellClicked(resourceId)
         }
     }
-    
+
     // MARK: - DownloadingCellResourceHelperDelegate
-   
-    func onDownloadingCellResourceNeedUpdate() {
+
+    func onDownloadingCellResourceNeedUpdate(_ task: OADownloadTask?) {
         fetchResources()
-        delegate?.onDownloadingCellResourceNeedUpdate()
+        delegate?.onDownloadingCellResourceNeedUpdate(task)
+    }
+
+    func onStopDownload(_ resourceItem: OAResourceSwiftItem) {
+        delegate?.onStopDownload(resourceItem)
     }
 }

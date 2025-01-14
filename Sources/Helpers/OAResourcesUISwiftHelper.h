@@ -60,6 +60,7 @@ typedef NS_ENUM(NSInteger, EOAOAResourceSwiftItemType) {
 - (id<OADownloadTask>) downloadTask;
 - (void) refreshDownloadTask;
 - (BOOL) isOutdatedItem;
+- (OAWorldRegion *) worldRegion;
 
 @end
 
@@ -118,4 +119,8 @@ typedef NS_ENUM(NSInteger, EOAOAResourceSwiftItemType) {
 + (NSString *) formatedDownloadingProgressString:(long long)wholeSizeBytes progress:(float)progress addZero:(BOOL)addZero;
 + (NSString *) formatedDownloadingProgressString:(long long)wholeSizeBytes progress:(float)progress addZero:(BOOL)addZero combineViaSlash:(BOOL)combineViaSlash;
 
++ (NSString *)titleOfResourceType:(EOAOAResourceSwiftItemType)type
+                         inRegion:(OAWorldRegion *)region
+                   withRegionName:(BOOL)includeRegionName
+                 withResourceType:(BOOL)includeResourceType;
 @end

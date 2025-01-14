@@ -139,7 +139,8 @@ import OsmAndShared
         let date = TracksSortModeHelper.dateFormatter.string(from: track.lastModifiedTime)
         let creationDate = TracksSortModeHelper.dateFormatter.string(from: track.creationDate)
         let distance = OAOsmAndFormatter.getFormattedDistance(track.totalDistance) ?? localizedString("shared_string_not_available")
-        let time = OAOsmAndFormatter.getFormattedTimeInterval(TimeInterval(track.timeSpan / 1000), shortFormat: true) ?? localizedString("shared_string_not_available")
+        let duration = track.getAnalysis()?.getDurationInSeconds() ?? 0
+        let time = OAOsmAndFormatter.getFormattedTimeInterval(TimeInterval(duration), shortFormat: true) ?? localizedString("shared_string_not_available")
         let waypointCount = "\(track.wptPoints)"
         let fullString = NSMutableAttributedString()
         let defaultAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .footnote), .foregroundColor: UIColor.textColorSecondary]

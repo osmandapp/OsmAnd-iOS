@@ -8,6 +8,8 @@
 #import "OAMapPanelViewController.h"
 #import "OAMapRendererView.h"
 #import "OARootViewController.h"
+#import "OAMapHudViewController.h"
+#import "OAMapInfoController.h"
 
 @interface OACarPlayMapDashboardViewController ()
 
@@ -34,7 +36,7 @@
         [_mapVc.mapView suspendRendering];
         [_mapVc removeFromParentViewController];
         [_mapVc.view removeFromSuperview];
-        
+        [_mapVc.mapView setTopOffsetOfViewSize:0 bottomOffset:0];
         [self addChildViewController:_mapVc];
         [self.view addSubview:_mapVc.view];
         _mapVc.view.frame = self.view.frame;
@@ -60,6 +62,7 @@
         _mapVc.view.frame = mapPanel.view.frame;
         _mapVc.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [_mapVc.mapView resumeRendering];
+        [mapPanel.hudViewController.mapInfoController updateLayout];
     }
 }
 

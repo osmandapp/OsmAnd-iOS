@@ -87,6 +87,7 @@ typedef NS_ENUM(NSInteger, EOABaseNavbarStyle)
 - (void)addCell:(NSString *)cellIdentifier;
 - (void)generateData;
 - (BOOL)hideFirstHeader;
+- (BOOL)refreshOnAppear;
 - (NSString *)getTitleForHeader:(NSInteger)section;
 - (NSString *)getTitleForFooter:(NSInteger)section;
 - (NSInteger)rowsCount:(NSInteger)section;

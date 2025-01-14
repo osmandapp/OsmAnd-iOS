@@ -363,11 +363,15 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
 
 #pragma mark - DownloadingCellResourceHelperDelegate
 
-- (void)onDownloadingCellResourceNeedUpdate
+- (void)onDownloadingCellResourceNeedUpdate:(id<OADownloadTask>)task
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateResources];
     });
+}
+
+- (void)onStopDownload:(OAResourceSwiftItem *)resourceItem
+{
 }
 
 #pragma mark - OAWikipediaScreenDelegate

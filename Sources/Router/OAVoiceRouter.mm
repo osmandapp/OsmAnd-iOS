@@ -24,6 +24,7 @@
 #import "OAAnnounceTimeDistances.h"
 #import "OARoutingHelper+cpp.h"
 #import <AudioToolbox/AudioToolbox.h>
+#import "OsmAndSharedWrapper.h"
 
 #include <routeSegmentResult.h>
 
@@ -669,7 +670,7 @@ std::string preferredLanguage;
         if (includeDest == YES) {
             result[@"toRef"] = [self getSpeakablePointName:next.ref];
             result[@"toStreetName"] = [self getSpeakablePointName:next.streetName];
-            result[@"toDest"] = [self getSpeakablePointName:next.destinationName];
+            result[@"toDest"] = [self getSpeakablePointName:[next getDestinationRefAndName]];
         } else {
             result[@"toRef"] = [self getSpeakablePointName:next.ref];
             result[@"toStreetName"] = [self getSpeakablePointName:next.streetName];
@@ -705,7 +706,7 @@ std::string preferredLanguage;
         return result;
     
     result[@"toRef"] = [self getNonNilString:[self getSpeakablePointName:exitInfo.ref]];
-    NSString *destination = [self getSpeakablePointName:[self cutLongDestination:routeInfo.destinationName]];
+    NSString *destination = [self getSpeakablePointName:[self cutLongDestination:[routeInfo getDestinationRefAndName]]];
     result[@"toDest"] = [self getNonNilString:destination];
     result[@"toStreetName"] = @"";
     return result;
@@ -970,7 +971,21 @@ std::string preferredLanguage;
         {
             text = [text stringByAppendingString:@", "];
         }
-        text = [text stringByAppendingString:[OAPointDescription getSimpleName:point.point]];
+        
+        if (point && [point.point isKindOfClass:[OASWptPt class]])
+        {
+            OASWptPt *wptPt = (OASWptPt *)point.point;
+            OAPointDescription *pd = [[OAPointDescription alloc] initWithType:POINT_TYPE_WPT name:wptPt.name];
+            NSString *simpleName = [pd getSimpleName:YES];
+            if (simpleName)
+                text = [text stringByAppendingString:simpleName];
+        }
+        else
+        {
+            NSString *simpleName = [OAPointDescription getSimpleName:point.point];
+            if (simpleName)
+                text = [text stringByAppendingString:simpleName];
+        }
     }
     return text;
 }

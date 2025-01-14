@@ -22,7 +22,7 @@ API_AVAILABLE(ios(12.0))
 
 - (void) present;
 
-- (void) startNavigationGivenLocation:(CLLocation *)loc historyName:(OAPointDescription *)historyName;
+- (void) startNavigationGivenLocation:(CLLocation *)loc historyName:(nullable OAPointDescription *)historyName;
 
 - (NSArray<CPListSection *> *) generateSingleItemSectionWithTitle:(NSString *)title;
 

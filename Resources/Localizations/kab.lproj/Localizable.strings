@@ -807,3 +807,6 @@
 "shared_string_local" = "Adigan";
 "of" = "%d ɣef %d";
 "downloaded_bytes" = "%@ ɣef %@";
+"shared_string_minute_lowercase" = "tas";
+"transport_stop" = "Seḥbes";
+"shared_string_to" = "I";

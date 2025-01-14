@@ -2003,3 +2003,5 @@
 "of" = "%d od %d";
 "downloaded_bytes" = "%@ od %@";
 "quick_action_need_to_add_item_to_list" = "Dodadete barem edna stavka na spisokot vo postavkite za „Brzo dejstvo“";
+"transport_stop" = "Zapri";
+"shared_string_to" = "Vo";

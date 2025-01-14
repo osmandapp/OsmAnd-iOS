@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -17,14 +17,14 @@
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
             <subviews>
                 <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="unR-Ml-tWu" userLabel="Left Button">
-                    <rect key="frame" x="0.0" y="2.5" width="80" height="44.5"/>
+                    <rect key="frame" x="0.0" y="-1.5" width="80" height="48.5"/>
                     <accessibility key="accessibilityConfiguration" identifier="topBarNavigation_backBtn"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="80" id="FWN-OJ-XcZ"/>
                     </constraints>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                     <color key="tintColor" name="buttonBgColorPrimary"/>
-                    <state key="normal" title="Back" image="ic_navbar_chevron.png">
+                    <state key="normal" title="Back" image="ic_navbar_chevron">
                         <color key="titleColor" name="iconColorActive"/>
                     </state>
                     <state key="disabled">
@@ -41,13 +41,13 @@
                     </connections>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="250" text="Weather" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="shB-5G-YQw">
-                    <rect key="frame" x="80" y="14.5" width="300" height="20.5"/>
+                    <rect key="frame" x="80" y="10.5" width="300" height="24.5"/>
                     <accessibility key="accessibilityConfiguration" identifier="topBarNavigation_titleLbl"/>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QFB-fL-7aq" userLabel="RightButton">
-                    <rect key="frame" x="415" y="2.5" width="40" height="44.5"/>
+                    <rect key="frame" x="415" y="-1.5" width="40" height="48.5"/>
                     <accessibility key="accessibilityConfiguration" identifier="topBarNavigation_checkmarkBtn"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="40" id="PxP-dL-U1J"/>
@@ -86,7 +86,7 @@
         </view>
     </objects>
     <resources>
-        <image name="ic_navbar_chevron.png" width="28" height="28"/>
+        <image name="ic_navbar_chevron" width="28" height="28"/>
         <image name="ic_navbar_settings.png" width="28" height="28"/>
         <namedColor name="buttonBgColorPrimary">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

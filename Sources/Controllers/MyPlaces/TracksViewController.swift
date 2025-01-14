@@ -40,6 +40,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     private let recordingTrackKey = "recordingTrackKey"
     private let tracksCountKey = "tracksCountKey"
     private let pathKey = "pathKey"
+    private let trackObjectKey = "trackObjectKey"
     private let fileNameKey = "filenameKey"
     private let colorKey = "colorKey"
     private let buttonTitleKey = "buttonTitleKey"
@@ -63,7 +64,9 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     private var lastUpdate: TimeInterval?
     private var isSearchActive = false
     private var isNameFiltered = false
+    private var isFiltersInitialized = false
     private var isSearchTextFilterChanged = false
+    private var isSelectionModeInSearch = false
     
     private var selectedTrack: GpxDataItem?
     private var selectedFolderPath: String?
@@ -130,9 +133,8 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         currentFolder = getTrackFolderByPath(currentFolderPath) ?? rootFolder
         onRefreshEnd()
         updateNavigationBarTitle()
-        generateData()
-        tableView.reloadData()
-        setupTableFooter()
+        updateSearchResultsWithFilteredTracks()
+        updateData()
     }
     
     // MARK: - Base UI settings
@@ -149,7 +151,6 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupNavbar()
-        setupSearchController()
         tableView.tableHeaderView = setupHeaderView()
         filterButton.isHidden = true
         if shouldReload {
@@ -179,9 +180,18 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         tableView.register(UINib(nibName: OALargeImageTitleDescrTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OALargeImageTitleDescrTableViewCell.reuseIdentifier)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        setupSearchController()
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+        if let asyncLoader {
+            asyncLoader.cancel()
+        }
+        tabBarController?.navigationItem.searchController = nil
         navigationItem.searchController = nil
+        super.viewWillDisappear(animated)
     }
     
     private func reloadTracks(forceLoad: Bool = false) {
@@ -211,10 +221,16 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         }
     }
     
+    private func updateSearchResultsWithFilteredTracks() {
+        guard isSearchActive else { return }
+        baseFilters?.updateFilteredTracks(newTracks: rootFolder.getFlattenedTrackItems())
+        baseFiltersResult = baseFilters?.performFiltering()
+    }
+    
     private func generateData() {
         tableData.clearAllData()
         let section = tableData.createNewSection()
-        if isSearchActive {
+        if isSearchActive || isSelectionModeInSearch {
             if let allTracks = baseFiltersResult?.values {
                 let gpxItems = allTracks.compactMap { $0.dataItem }
                 let sortedTracks = TracksSortModeHelper.sortTracksWithMode(gpxItems, mode: sortModeForSearch)
@@ -336,13 +352,14 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         trackRow.cellType = OASimpleTableViewCell.reuseIdentifier
         trackRow.key = trackKey
         trackRow.title = fileName.lastPathComponent().deletingPathExtension()
+        trackRow.setObj(track, forKey: trackObjectKey)
         trackRow.setObj(track.gpxFilePath as Any, forKey: pathKey)
         trackRow.setObj(fileName, forKey: fileNameKey)
         trackRow.iconName = "ic_custom_trip"
         let isVisible = settings.mapSettingVisibleGpx.contains(track.gpxFilePath)
         trackRow.setObj(isVisible, forKey: isVisibleKey)
         trackRow.setObj(isVisible ? UIColor.iconColorActive : UIColor.iconColorDefault, forKey: colorKey)
-        trackRow.setObj(TracksSortModeHelper.getTrackDescription(track: track, sortMode: isSearchActive ? sortModeForSearch : sortMode, includeFolderInfo: false), forKey: trackSortDescrKey)
+        trackRow.setObj(TracksSortModeHelper.getTrackDescription(track: track, sortMode: isSearchActive || isSelectionModeInSearch ? sortModeForSearch : sortMode, includeFolderInfo: false), forKey: trackSortDescrKey)
     }
     
     private func setupNavbar() {
@@ -491,14 +508,17 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         filterButton.isHidden = !searchIsActive
     }
     
-    private func updateFilterButtonTitle() {
+    private func updateFilterButton() {
         var baseTitle = localizedString("filter_current_poiButton")
+        var baseIcon: UIImage = .icCustomFilter
         if let count = baseFilters?.getAppliedFiltersCount(), count > 0 {
             baseTitle += " (\(count))"
+            baseIcon = .icCustomFilterFilled
         }
         
         var currentConfig = filterButton.configuration ?? UIButton.Configuration.plain()
         currentConfig.title = baseTitle
+        filterButton.setImage(baseIcon, for: .normal)
         filterButton.configuration = currentConfig
     }
     
@@ -590,8 +610,9 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func configureToolbar() {
-        let buttonTitle = localizedString(areAllItemsSelected() ? "shared_string_deselect_all" : "shared_string_select_all")
-        let selectDeselectButton = UIBarButtonItem(title: buttonTitle, style: .plain, target: self, action: #selector(onSelectDeselectAllButtonClicked))
+        let buttonTitle = localizedString(isSearchActive ? "shared_string_select" : (areAllItemsSelected() ? "shared_string_deselect_all" : "shared_string_select_all"))
+        let actionSelector = isSearchActive ? #selector(onSelectToolbarButtonClicked) : #selector(onSelectDeselectAllButtonClicked)
+        let selectDeselectButton = UIBarButtonItem(title: buttonTitle, style: .plain, target: self, action: actionSelector)
         let attributes: [NSAttributedString.Key: Any] = [.foregroundColor: UIColor.iconColorActive]
         selectDeselectButton.setTitleTextAttributes(attributes, for: .normal)
         tabBarController?.toolbarItems = [selectDeselectButton]
@@ -599,7 +620,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func updateDistanceAndDirection(_ forceUpdate: Bool) {
-        let currentSortMode = isSearchActive ? sortModeForSearch : sortMode
+        let currentSortMode = isSearchActive || isSelectionModeInSearch ? sortModeForSearch : sortMode
         guard currentSortMode == .nearest, forceUpdate || Date.now.timeIntervalSince1970 - (lastUpdate ?? 0) >= 0.5 else {
             return
         }
@@ -679,9 +700,13 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         tableView.allowsMultipleSelectionDuringEditing = true
         updateData()
         setupNavbar()
-        tabBarController?.tabBar.isHidden = true
-        tabBarController?.navigationController?.setToolbarHidden(false, animated: true)
-        navigationController?.setToolbarHidden(false, animated: true)
+        updateNavigationBarTitle()
+        if !isSelectionModeInSearch {
+            tabBarController?.tabBar.isHidden = true
+            tabBarController?.navigationController?.setToolbarHidden(false, animated: true)
+            navigationController?.setToolbarHidden(false, animated: true)
+        }
+
         configureToolbar()
     }
     
@@ -715,7 +740,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             
             for folderName in selectedFolders {
                 if let folder = currentFolder.getSubFolders().first(where: { $0.getName() == folderName }) {
-                    let folderTracksToShow = folder.getTrackItems()
+                    let folderTracksToShow = folder.getFlattenedTrackItems()
                         .compactMap {
                         settings.mapSettingVisibleGpx.contains($0.gpxFilePath) ? nil : $0.gpxFilePath
                     }
@@ -737,7 +762,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             var allExportFilePaths: [String] = []
             for folderName in selectedFolders {
                 if let folder = currentFolder.getSubFolders().first(where: { $0.getDirName(includingSubdirs: false) == folderName }) {
-                    let allTracksFilePaths = folder.getTrackItems()
+                    let allTracksFilePaths = folder.getFlattenedTrackItems()
                         .compactMap({ $0.gpxFilePath })
                         .map { OsmAndApp.swiftInstance().gpxPath.appendingPathComponent($0)
                     }
@@ -760,7 +785,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             allTracks.append(contentsOf: selectedTracks)
             for folderName in selectedFolders {
                 if let folder = currentFolder.getSubFolders().first(where: { $0.getDirName(includingSubdirs: false) == folderName }) {
-                    let tracks = folder.getTrackItems().compactMap({ $0.dataItem })
+                    let tracks = folder.getFlattenedTrackItems().compactMap({ $0.dataItem })
                     allTracks.append(contentsOf: tracks)
                 }
             }
@@ -817,8 +842,11 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         addRefreshControl()
         tableView.setEditing(false, animated: true)
         tableView.allowsMultipleSelectionDuringEditing = false
+        isSelectionModeInSearch = false
+        updateSortButtonAndMenu()
         updateData()
         setupNavbar()
+        updateNavigationBarTitle()
         setupSearchController()
         tabBarController?.navigationController?.setToolbarHidden(true, animated: true)
         navigationController?.setToolbarHidden(true, animated: true)
@@ -826,24 +854,40 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     @objc private func onSelectDeselectAllButtonClicked() {
-        if areAllItemsSelected() {
-            selectedTracks.removeAll()
-            selectedFolders.removeAll()
-            for row in 0..<tableView.numberOfRows(inSection: 0) {
-                tableView.deselectRow(at: IndexPath(row: row, section: 0), animated: true)
+        if isSelectionModeInSearch {
+            if areAllItemsSelected() {
+                selectedTracks.removeAll()
+                for row in 0..<tableView.numberOfRows(inSection: 0) {
+                    tableView.deselectRow(at: IndexPath(row: row, section: 0), animated: true)
+                }
+            } else {
+                if let allTracks = baseFiltersResult?.values {
+                    selectedTracks = allTracks.compactMap { $0.dataItem }
+                    for row in 0..<tableView.numberOfRows(inSection: 0) {
+                        tableView.selectRow(at: IndexPath(row: row, section: 0), animated: true, scrollPosition: .none)
+                    }
+                }
             }
         } else {
-            guard let currentFolder = getTrackFolderByPath(currentFolderPath) else { return }
-            let allFolders = currentFolder.getSubFolders()
-            selectedFolders = allFolders.map { $0.getDirName(includingSubdirs: false) }
-            selectedTracks = currentFolder.getTrackItems().compactMap({ $0.dataItem }).filter { track in
-                !selectedFolders.contains(where: { folderName in
-                    track.gpxFilePath.contains(folderName)
-                })
-            }
-            
-            for row in 0..<tableView.numberOfRows(inSection: 0) {
-                tableView.selectRow(at: IndexPath(row: row, section: 0), animated: true, scrollPosition: .none)
+            if areAllItemsSelected() {
+                selectedTracks.removeAll()
+                selectedFolders.removeAll()
+                for row in 0..<tableView.numberOfRows(inSection: 0) {
+                    tableView.deselectRow(at: IndexPath(row: row, section: 0), animated: true)
+                }
+            } else {
+                guard let currentFolder = getTrackFolderByPath(currentFolderPath) else { return }
+                let allFolders = currentFolder.getSubFolders()
+                selectedFolders = allFolders.map { $0.getDirName(includingSubdirs: false) }
+                selectedTracks = currentFolder.getTrackItems().compactMap({ $0.dataItem }).filter { track in
+                    !selectedFolders.contains(where: { folderName in
+                        track.gpxFilePath.contains(folderName)
+                    })
+                }
+                
+                for row in 0..<tableView.numberOfRows(inSection: 0) {
+                    tableView.selectRow(at: IndexPath(row: row, section: 0), animated: true, scrollPosition: .none)
+                }
             }
         }
         
@@ -851,6 +895,12 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         configureToolbar()
     }
     
+    @objc private func onSelectToolbarButtonClicked() {
+        isSelectionModeInSearch = true
+        searchController.isActive = false
+        onNavbarSelectButtonClicked()
+    }
+
     // MARK: - Folders Actions
     
     private func onFolderDetailsButtonClicked() {
@@ -966,15 +1016,17 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             let absolutePath = getAbsolutePath(trackItem.gpxFilePath)
             if let vc = OATrackSegmentsViewController(filepath: absolutePath, isCurrentTrack: isCurrentTrack) {
                 vc.startNavigationOnSelect = true
-                rootVC.present(vc, animated: true)
+                navigationController?.setNavigationBarHidden(true, animated: false)
                 navigationController?.popToRootViewController(animated: true)
+                rootVC.present(vc, animated: true)
             }
         } else {
             if routingHelper.isFollowingMode() {
                 rootVC.mapPanel.mapActions.stopNavigationActionConfirm()
             }
-            rootVC.mapPanel.mapActions.enterRoutePlanningMode(givenGpx: trackItem, useIntermediatePointsByDefault: true, showDialog: true)
+            navigationController?.setNavigationBarHidden(true, animated: false)
             navigationController?.popToRootViewController(animated: true)
+            rootVC.mapPanel.mapActions.enterRoutePlanningMode(givenGpx: trackItem, useIntermediatePointsByDefault: true, showDialog: true)
         }
         shouldReload = true
     }
@@ -1032,7 +1084,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     
     private func onTrackDuplicateClicked(track: TrackItem?) {
         guard let track else { return }
-        gpxHelper.copyGPX(toNewFolder: currentFolderPath,
+        gpxHelper.copyGPX(toNewFolder: isSearchActive ? track.gpxFolderName : currentFolderPath,
                           renameToNewName: track.gpxFileName,
                           deleteOriginalFile: false,
                           openTrack: false,
@@ -1402,26 +1454,33 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
    
     private func areAllItemsSelected() -> Bool {
-        guard let currentFolder = getTrackFolderByPath(currentFolderPath) else { return false }
-        let allDisplayedTracks = currentFolder.getTrackItems().compactMap { $0.dataItem }
-        let allDisplayedFolders = currentFolder.getSubFolders()
-        let allTracksSelected = allDisplayedTracks.allSatisfy { track in
-            if selectedTracks.contains(track) {
-                return true
+        if isSelectionModeInSearch {
+            if let allTracks = baseFiltersResult?.values {
+                return allTracks.compactMap { $0.dataItem }.allSatisfy { selectedTracks.contains($0) }
+            }
+            return false
+        } else {
+            guard let currentFolder = getTrackFolderByPath(currentFolderPath) else { return false }
+            let allDisplayedTracks = currentFolder.getTrackItems().compactMap { $0.dataItem }
+            let allDisplayedFolders = currentFolder.getSubFolders()
+            let allTracksSelected = allDisplayedTracks.allSatisfy { track in
+                if selectedTracks.contains(track) {
+                    return true
+                }
+                
+                return selectedFolders.contains { folderName -> Bool in
+                    let folderPath = currentFolder.relativePath.appendingPathComponent(folderName)
+                    let trackPath = track.gpxFilePath.deletingLastPathComponent()
+                    return trackPath.hasPrefix(folderPath)
+                }
             }
             
-            return selectedFolders.contains { folderName -> Bool in
-                let folderPath = currentFolder.relativePath.appendingPathComponent(folderName)
-                let trackPath = track.gpxFilePath.deletingLastPathComponent()
-                return trackPath.hasPrefix(folderPath)
+            let allFoldersSelected = allDisplayedFolders.allSatisfy { folder in
+                selectedFolders.contains(folder.relativePath.lastPathComponent())
             }
+            
+            return allTracksSelected && allFoldersSelected
         }
-        
-        let allFoldersSelected = allDisplayedFolders.allSatisfy { folder in
-            selectedFolders.contains(folder.relativePath.lastPathComponent())
-        }
-        
-        return allTracksSelected && allFoldersSelected
     }
     
     private func hasSelectedItems() -> Bool {
@@ -1587,7 +1646,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         if tableView.isEditing {
             if item.key == trackKey {
                 if let trackPath = item.obj(forKey: pathKey) as? String,
-                   let track = rootFolder.getTrackItems().compactMap({ $0.dataItem }).first(where: { $0.gpxFilePath == trackPath }) {
+                   let track = rootFolder.getFlattenedTrackItems().compactMap({ $0.dataItem }).first(where: { $0.gpxFilePath == trackPath }) {
                     if !selectedTracks.contains(track) {
                         selectedTracks.append(track)
                     }
@@ -1626,7 +1685,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                 }
             } else if item.key == trackKey {
                 if let trackPath = item.obj(forKey: pathKey) as? String,
-                   let track = currentFolder.getTrackItems().first(where: { $0.gpxFilePath == trackPath }),
+                   let track = rootFolder.getFlattenedTrackItems().first(where: { $0.gpxFilePath == trackPath }),
                    let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
                     OARootViewController.instance().mapPanel.openTargetViewWithGPX(fromTracksList: track,
                                                                                    navControllerHistory: newCurrentHistory,
@@ -1649,7 +1708,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         if tableView.isEditing {
             if item.key == trackKey {
                 if let trackPath = item.obj(forKey: pathKey) as? String,
-                   let track = currentFolder.getTrackItems().compactMap({ $0.dataItem }).first(where: { $0.gpxFilePath == trackPath }),
+                   let track = rootFolder.getFlattenedTrackItems().compactMap({ $0.dataItem }).first(where: { $0.gpxFilePath == trackPath }),
                    let index = selectedTracks.firstIndex(of: track) {
                     selectedTracks.remove(at: index)
                 }
@@ -1718,10 +1777,14 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             let isTrackVisible = item.bool(forKey: isVisibleKey)
             let selectedTrackPath = item.string(forKey: self.pathKey) ?? ""
             let selectedTrackFilename = item.string(forKey: self.fileNameKey) ?? ""
-            
-            let track = getTrackFolderByPath(currentFolderPath)?
+            var track = getTrackFolderByPath(currentFolderPath)?
                 .getTrackItems()
                 .first(where: { $0.gpxFileName == selectedTrackFilename })
+            if track == nil, isSearchActive,
+               let gpx = item.obj(forKey: trackObjectKey) as? GpxDataItem {
+                track = TrackItem(file: gpx.file)
+                track?.dataItem = gpx
+            }
             
             let menuProvider: UIContextMenuActionProvider = { _ in
                 
@@ -1836,7 +1899,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                 self.updateSearchController()
                 self.generateData()
                 self.tableView.reloadData()
-                self.updateFilterButtonTitle()
+                self.updateFilterButton()
             }
         }
     }
@@ -1855,19 +1918,31 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             return
         }
         
-        if searchController.isActive && searchController.searchBar.searchTextField.text?.length == 0 {
-            isSearchActive = true
-            isNameFiltered = false
-            baseFilters = TracksSearchFilter(trackItems: rootFolder.getFlattenedTrackItems(), currentFolder: nil)
-            baseFilters?.addFiltersChangedListener(self)
-        } else if searchController.isActive && !(searchController.searchBar.searchTextField.text ?? "").isEmpty {
-            isSearchActive = true
-            isNameFiltered = true
+        if searchController.isActive {
+            if !isFiltersInitialized && (searchController.searchBar.searchTextField.text?.isEmpty ?? true) {
+                isSearchActive = true
+                isNameFiltered = false
+                tabBarController?.tabBar.isHidden = true
+                tabBarController?.navigationController?.setToolbarHidden(false, animated: true)
+                navigationController?.setToolbarHidden(false, animated: true)
+                configureToolbar()
+                baseFilters = TracksSearchFilter(trackItems: rootFolder.getFlattenedTrackItems(), currentFolder: nil)
+                baseFilters?.addFiltersChangedListener(self)
+                TracksSearchFilter.setRootFolder(rootFolder)
+                isFiltersInitialized = true
+            } else if !(searchController.searchBar.searchTextField.text ?? "").isEmpty {
+                isSearchActive = true
+                isNameFiltered = true
+            } else {
+                isNameFiltered = false
+            }
             (baseFilters?.getFilterByType(.name) as? TextTrackFilter)?.value = searchController.searchBar.searchTextField.text ?? ""
         } else {
             isSearchActive = false
             isNameFiltered = false
+            isFiltersInitialized = false
         }
+        
         updateSearchController()
         updateFilterButtonVisibility(searchIsActive: isSearchActive)
         baseFiltersResult = baseFilters?.performFiltering()
@@ -1880,6 +1955,10 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         isSearchActive = false
         isNameFiltered = false
+        isFiltersInitialized = false
+        tabBarController?.navigationController?.setToolbarHidden(true, animated: true)
+        navigationController?.setToolbarHidden(true, animated: true)
+        tabBarController?.tabBar.isHidden = false
         updateSearchController()
         updateFilterButtonVisibility(searchIsActive: isSearchActive)
         updateSortButtonAndMenu()
@@ -1952,11 +2031,11 @@ extension TracksViewController {
     }
     
     private func createAction(for sortType: TracksSortMode, isSortingSubfolders: Bool) -> UIAction {
-        let isCurrentSortType = isSearchActive ? sortType == sortModeForSearch : sortType == sortMode
+        let isCurrentSortType = isSearchActive || isSelectionModeInSearch ? sortType == sortModeForSearch : sortType == sortMode
         let actionState: UIMenuElement.State = isCurrentSortType ? .on : .off
         return UIAction(title: sortType.title, image: sortType.image, state: actionState) { [weak self] _ in
             guard let self else { return }
-            if self.isSearchActive {
+            if self.isSearchActive || self.isSelectionModeInSearch {
                 self.setSearchTracksSortMode(sortType)
                 self.sortModeForSearch = getSearchTracksSortMode()
             } else {
@@ -1976,7 +2055,7 @@ extension TracksViewController {
     }
     
     private func updateSortButtonAndMenu() {
-        sortButton.setImage(isSearchActive ? sortModeForSearch.image : sortMode.image, for: .normal)
+        sortButton.setImage(isSearchActive || isSelectionModeInSearch ? sortModeForSearch.image : sortMode.image, for: .normal)
         sortButton.menu = createSortMenu(isSortingSubfolders: false)
     }
 }

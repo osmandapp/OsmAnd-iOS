@@ -326,7 +326,7 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                         [[OAWeatherHelper sharedInstance] setupDownloadStateFinished:match regionId:match.regionId];
                     }
 
-                    [[NSNotificationCenter defaultCenter] postNotificationName:OAResourceInstalledNotification object:nsResourceId userInfo:nil];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:OAResourceInstalledNotification object:task userInfo:nil];
 
                     // Set NSURLIsExcludedFromBackupKey for installed resource
                     if (const auto resource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::LocalResource>(_app.resourcesManager->getResource(resourceId)))
@@ -410,6 +410,15 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                             return;
                         }
                     }
+                }
+            }
+            else
+            {
+                if (nsResourceId && [[nsResourceId lowercaseString] hasSuffix:@".tifsqlite"])
+                {
+                    OAWorldRegion *match = [OAResourcesUIHelper findRegionOrAnySubregionOf:_app.worldRegion
+                                                                      thatContainsResource:QString([nsResourceId UTF8String])];
+                    [[OAWeatherHelper sharedInstance] setupDownloadStateFinished:match regionId:match.regionId];
                 }
             }
 

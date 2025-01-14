@@ -690,7 +690,9 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
             maneuver.initialTravelEstimates = estimates;
             maneuver.userInfo = @{
                 @"streetName": maneuver.instructionVariants.firstObject ?: @"",
-                @"dist": @(dist.doubleValue)
+                @"turnType": turnType ? [NSString stringWithUTF8String:turnType->toString().c_str()] : @"",
+                @"turnImminent": turnType ? @(turnImminent) : @(-1),
+                @"deviatedFromRoute": turnType ? @(deviatedFromRoute) : @(NO),
             };
             [upcomingManeuvers addObject:maneuver];
 
@@ -725,7 +727,6 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                     NSString *nextStreetName = [weakSelf defineStreetName:nextNextDirInfo];
                     secondaryManeuver.userInfo = @{
                         @"streetName": nextStreetName,
-                        @"dist": @(nextNextDirInfo.distanceTo)
                     };
                     NSString *distanceString = [OAOsmAndFormatter getFormattedDistance:nextNextDirInfo.distanceTo
                                                                             withParams:[OsmAndFormatterParams useLowerBounds]];
@@ -738,10 +739,16 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                         [attributedString appendAttributedString:
                             [NSAttributedString attributedStringWithAttachment:attachment]];
                     }
-                    [attributedString appendAttributedString:
-                        [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" %@, %@",
-                                                                    distanceString,
-                                                                    nextStreetName]]];
+                    if (nextStreetName.length > 0)
+                        [attributedString appendAttributedString:
+                         [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" %@, %@",
+                                                                     distanceString,
+                                                                     nextStreetName]]];
+                    else
+                        [attributedString appendAttributedString:
+                         [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" %@",
+                                                                     distanceString]]];
+
                     secondaryManeuver.attributedInstructionVariants = @[attributedString];
                 }
             }
@@ -762,8 +769,12 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
             {
                 weakSelf.navigationSession.upcomingManeuvers = upcomingManeuvers;
                 [weakSelf.navigationSession updateTravelEstimates:estimates forManeuver:maneuver];
-                [weakSelf updateTripEstimates:weakSelf.navigationSession.trip];
             }
+            else if (weakSelf.navigationSession.upcomingManeuvers.count > 0)
+            {
+                [weakSelf.navigationSession updateTravelEstimates:estimates forManeuver:weakSelf.navigationSession.upcomingManeuvers.firstObject];
+            }
+            [weakSelf updateTripEstimates:weakSelf.navigationSession.trip];
         }
     });
     [self.delegate onLocationChanged];

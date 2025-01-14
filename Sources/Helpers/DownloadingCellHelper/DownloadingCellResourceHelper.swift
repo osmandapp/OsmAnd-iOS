@@ -7,7 +7,8 @@
 //
 
 @objc protocol DownloadingCellResourceHelperDelegate: AnyObject {
-    func onDownloadingCellResourceNeedUpdate()
+    func onDownloadingCellResourceNeedUpdate(_ task: OADownloadTask?)
+    func onStopDownload(_ resourceItem: OAResourceSwiftItem)
 }
 
 @objcMembers
@@ -52,11 +53,11 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
         if let resourceItem = getResource(resourceId) {
             if resourceItem.isOutdatedItem() {
                 OAResourcesUISwiftHelper.offerDownloadAndUpdate(of: resourceItem, onTaskCreated: { [weak self] task in
-                    self?.delegate?.onDownloadingCellResourceNeedUpdate()
+                    self?.delegate?.onDownloadingCellResourceNeedUpdate(task)
                 }, onTaskResumed: nil)
             } else {
                 OAResourcesUISwiftHelper.offerDownloadAndInstall(of: resourceItem, onTaskCreated: { [weak self] task in
-                    self?.delegate?.onDownloadingCellResourceNeedUpdate()
+                    self?.delegate?.onDownloadingCellResourceNeedUpdate(task)
                 }, onTaskResumed: nil)
             }
         }
@@ -65,11 +66,15 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     override func stopDownload(_ resourceId: String) {
         if stopWithAlertMessage {
             if let resourceItem = getResource(resourceId) {
-                OAResourcesUISwiftHelper.offerCancelDownload(of: resourceItem, onTaskStop: nil) { [weak self] alert in
-                    if let alert {
-                        self?.hostViewController?.present(alert, animated: true)
+                OAResourcesUISwiftHelper.offerCancelDownload(of: resourceItem, onTaskStop: { [weak self] _ in
+                    self?.delegate?.onStopDownload(resourceItem)
+                }, completionHandler: { [weak self] alert in
+                    DispatchQueue.main.async { [weak self] in
+                        if let alert {
+                            self?.hostViewController?.present(alert, animated: true)
+                        }
                     }
-                }
+                })
             }
         } else {
             // Stop immediately
@@ -143,8 +148,14 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
             } else {
                 subtitle = String(format: "%@  •  %@", resourceItem.type(), resourceItem.formatedSizePkg())
             }
-            
-            let title = resourceItem.title()
+
+            var title = resourceItem.title() ?? ""
+            if title.isEmpty {
+                title = OAResourcesUISwiftHelper.title(ofResourceType: resourceItem.resourceType(),
+                                                       in: resourceItem.worldRegion(),
+                                                       withRegionName: true,
+                                                       withResourceType: true)
+            }
             let iconName = resourceItem.iconName()
             let isDownloading = isDownloading(resourceId)
             
@@ -254,7 +265,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
                 return
             }
             OAResourcesUISwiftHelper.onDownldedResourceInstalled()
-            self?.delegate?.onDownloadingCellResourceNeedUpdate()
+            self?.delegate?.onDownloadingCellResourceNeedUpdate(nil)
         }
     }
     

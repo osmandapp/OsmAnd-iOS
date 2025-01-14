@@ -702,11 +702,17 @@
         cell.leftIcon.image = [p getImage:NO];
         
         NSString *descr;
-        OAPointDescription *pd = [point getPointDescription];
-        if (pd.name.length == 0)
-            descr = pd.typeName;
-        else
-            descr = pd.name;
+        
+        if (point && [point isKindOfClass:[OASWptPt class]])
+        {
+            OASWptPt *wpt = (OASWptPt *)point;
+            OAPointDescription *pd = [[OAPointDescription alloc] initWithType:POINT_TYPE_WPT name:wpt.name];
+            if (pd.name && pd.name.length > 0)
+                descr = pd.name;
+            else if (pd.typeName && pd.typeName.length > 0)
+                descr = pd.typeName;
+        }
+
         
         cell.titleLabel.text = descr;
         

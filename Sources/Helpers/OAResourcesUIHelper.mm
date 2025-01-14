@@ -1311,13 +1311,13 @@ includeHidden:(BOOL)includeHidden
 {
     if (item.downloadUrl)
     {
-        NSString *name = [item getVisibleName];
-        if (!name)
-        {
-            name = item.title;
-            if (item.subfolder && item.subfolder.length > 0)
-                name = [item.subfolder stringByAppendingPathComponent:name];
-        }
+        NSString *fileName = item.title;
+        if (item.subfolder && item.subfolder.length > 0)
+            fileName = [item.subfolder stringByAppendingPathComponent:fileName];
+        
+        NSString *taskTitle = [item getVisibleName];
+        if (!taskTitle)
+            taskTitle = fileName;
 
         if ([item.downloadUrl hasPrefix:@"@"])
         {
@@ -1326,7 +1326,7 @@ includeHidden:(BOOL)includeHidden
             if (pluginPath.length > 0 && relPath.length > 0)
             {
                 NSString *srcFilePath = [pluginPath stringByAppendingPathComponent:relPath];
-                BOOL failed = [OAResourcesInstaller installCustomResource:srcFilePath resourceId:srcFilePath.lastPathComponent fileName:name hidden:item.hidden];
+                BOOL failed = [OAResourcesInstaller installCustomResource:srcFilePath resourceId:srcFilePath.lastPathComponent fileName:fileName hidden:item.hidden];
                 if (!failed)
                     [OsmAndApp.instance.localResourcesChangedObservable notifyEvent];
             }
@@ -1342,11 +1342,11 @@ includeHidden:(BOOL)includeHidden
             OsmAndAppInstance app = [OsmAndApp instance];
             id<OADownloadTask> task = [app.downloadsManager downloadTaskWithRequest:request
                                                                              andKey:[@"resource:" stringByAppendingString:item.resourceId.toNSString()]
-                                                                            andName:name
+                                                                            andName:fileName
                                                                           andHidden:item.hidden];
             
+            task.title = taskTitle;
             task.resourceItem = item;
-            task.creationTime = [NSDate now];
             
             if (onTaskCreated)
                 onTaskCreated(task);
@@ -1638,12 +1638,17 @@ includeHidden:(BOOL)includeHidden
         OsmAndAppInstance app = [OsmAndApp instance];
         id<OADownloadTask> task;
         if (!item.downloadTask)
+        {
             item.downloadTask = task = [app.downloadsManager downloadTaskWithRequest:request
-                                                                              andKey:[@"resource:" stringByAppendingString:[NSString stringWithFormat:@"%@%@", [item.worldRegion.downloadsIdPrefix lowerCase], @"tifsqlite"]] 
+                                                                              andKey:[@"resource:" stringByAppendingString:[NSString stringWithFormat:@"%@%@", [item.worldRegion.downloadsIdPrefix lowerCase], @"tifsqlite"]]
                                                                              andName:name
                                                                            andHidden:item.hidden];
+        }
         else
+        {
             task = item.downloadTask;
+        }
+        item.downloadTask.resourceItem = item;
 
         if (onTaskCreated)
             onTaskCreated(task);
@@ -1681,7 +1686,6 @@ includeHidden:(BOOL)includeHidden
             task = item.downloadTask;
         
         item.downloadTask.resourceItem = item;
-        item.downloadTask.creationTime = [NSDate now];
 
         if (onTaskCreated)
             onTaskCreated(task);
@@ -1742,7 +1746,6 @@ includeHidden:(BOOL)includeHidden
                                                                     andName:name
                                                                   andHidden:NO];
     task.resourceItem = resourceItem;
-    task.creationTime = [NSDate now];
 
     if (onTaskCreated)
         onTaskCreated(task);

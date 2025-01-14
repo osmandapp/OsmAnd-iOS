@@ -42,7 +42,7 @@
         OASWptPt *point = _oldPoints[i];
         OASWptPt *prevPoint = i > 0 ? _oldPoints[i - 1] : nil;
         
-        OASWptPt *newPoint = [[OASWptPt alloc] initWithWptPt:point];
+        OASWptPt *newPoint = point ? [[OASWptPt alloc] initWithWptPt:point] : [[OASWptPt alloc] init];
         if (prevPoint != nil)
         {
             NSString *profileType = prevPoint.getProfileType;

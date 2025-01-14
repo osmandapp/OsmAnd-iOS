@@ -75,6 +75,34 @@ final class AverageSpeedWidget: OASimpleWidget {
         skipStopsPref.set(skipStops, mode: appMode)
     }
     
+    func reset() {
+        // Reset the average speed computer
+        averageSpeedComputer.reset()
+
+        // Update the widget to reflect the reset value
+        updateAverageSpeed()
+    }
+    
+    override func configureContextMenu(addGroup: UIMenu, settingsGroup: UIMenu, deleteGroup: UIMenu) -> UIMenu {
+        let resetAction = UIAction(title: localizedString("reset_average_speed"), image:  UIImage(named: "ic_custom_reset")) { [weak self] _ in
+            self?.reset()
+        }
+        // Create a mutable copy of the children
+        var updatedChildren = settingsGroup.children
+        updatedChildren.insert(resetAction, at: 0)
+        let updatedSettingsGroup = settingsGroup.replacingChildren(updatedChildren)
+        return UIMenu(title: "", children: [addGroup, updatedSettingsGroup, deleteGroup])
+    }
+    
+    override func handleRowSelected(_ item: OATableRowData, viewController: WidgetConfigurationViewController) -> Bool {
+        if (item.key == "reset_avg_speed") {
+            reset()
+            viewController.dismiss()
+            return true
+        }
+        return false
+    }
+    
     override func updateInfo() -> Bool {
         let time = Int(Date.now.timeIntervalSince1970 * 1000)
         if (isUpdateNeeded() || time - lastUpdateTime > Self.UPDATE_INTERVAL_MILLIS) {
@@ -103,7 +131,11 @@ final class AverageSpeedWidget: OASimpleWidget {
         compassRow.cellType = OASwitchTableViewCell.getIdentifier()
         compassRow.title = localizedString("average_speed_skip_stops")
         compassRow.setObj(skipStopsPref, forKey: "pref")
-
+        
+        let resetAverageSpeedRow = section.createNewRow()
+        resetAverageSpeedRow.cellType = OASimpleTableViewCell.getIdentifier()
+        resetAverageSpeedRow.key = "reset_avg_speed"
+        resetAverageSpeedRow.title = localizedString("reset_average_speed")
         return data
     }
 

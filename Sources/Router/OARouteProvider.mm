@@ -237,8 +237,8 @@
             {
                 for (OASWptPt *pt in rte.points)
                 {
-                    CLLocation *loc = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(pt.position.latitude, pt.position.longitude) altitude:pt.ele horizontalAccuracy:pt.hdop verticalAccuracy:0 course:0 speed:pt.speed timestamp:[NSDate dateWithTimeIntervalSince1970:pt.time]];
-                    
+                    CLLocation *loc = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(pt.position.latitude, pt.position.longitude) altitude:pt.ele horizontalAccuracy:pt.hdop verticalAccuracy:0 course:0 speed:pt.speed timestamp:[NSDate dateWithTimeIntervalSince1970:pt.time / 1000.0]];
+
                     [points addObject:loc];
                 }
             }
@@ -453,7 +453,7 @@
 
 + (CLLocation *) createLocation:(OASWptPt *)pt
 {
-    CLLocation *loc = [[CLLocation alloc] initWithCoordinate:pt.position altitude:isnan(pt.ele) ? 0. : pt.ele horizontalAccuracy:isnan(pt.hdop) ? 0. : pt.hdop verticalAccuracy:0. course:0. speed:pt.speed timestamp:[NSDate dateWithTimeIntervalSince1970:pt.time / 1000]];
+    CLLocation *loc = [[CLLocation alloc] initWithCoordinate:pt.position altitude:isnan(pt.ele) ? 0. : pt.ele horizontalAccuracy:isnan(pt.hdop) ? 0. : pt.hdop verticalAccuracy:0. course:0. speed:pt.speed timestamp:[NSDate dateWithTimeIntervalSince1970:pt.time / 1000.0]];
     return loc;
 }
 
@@ -472,7 +472,7 @@
     {
         for (OASWptPt *pt in gpxFile.getPointsList)
         {
-            CLLocation *loc = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(pt.position.latitude, pt.position.longitude) altitude:pt.ele horizontalAccuracy:pt.hdop verticalAccuracy:0 course:0 speed:pt.speed timestamp:[NSDate dateWithTimeIntervalSince1970:pt.time]];
+            CLLocation *loc = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(pt.position.latitude, pt.position.longitude) altitude:pt.ele horizontalAccuracy:pt.hdop verticalAccuracy:0 course:0 speed:pt.speed timestamp:[NSDate dateWithTimeIntervalSince1970:pt.time / 1000.0]];
             
             [res addObject:loc];
         }

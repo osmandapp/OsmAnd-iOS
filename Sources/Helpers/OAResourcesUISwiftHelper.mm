@@ -134,8 +134,16 @@
 
 - (BOOL) isInstalled
 {
-    OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
-    return [OsmAndApp instance].resourcesManager->isResourceInstalled(res.resourceId);
+    if ([self.objcResourceItem isKindOfClass:OACustomResourceItem.class])
+    {
+        OACustomResourceItem *customResource = self.objcResourceItem;
+        return [customResource isInstalled];
+    }
+    else
+    {
+        OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
+        return [OsmAndApp instance].resourcesManager->isResourceInstalled(res.resourceId);
+    }
 }
 
 - (NSString *) resourceId
@@ -164,6 +172,12 @@
 - (BOOL) isOutdatedItem
 {
     return [self.objcResourceItem isKindOfClass:OAOutdatedResourceItem.class];
+}
+
+- (OAWorldRegion *) worldRegion
+{
+    OAResourceItem *res = (OAResourceItem *) self.objcResourceItem;
+    return res.worldRegion;
 }
 
 @end
@@ -445,6 +459,17 @@
     long long downloadedPartBytes = ((long long) wholeSizeBytes * progress);
     NSString *downloadedPart = [self formatSize:downloadedPartBytes addZero:addZero];
     return [NSString stringWithFormat:OALocalizedString(combineViaSlash ? @"ltr_or_rtl_combine_via_slash" : @"downloaded_bytes"), downloadedPart, wholeFileSize];
+}
+
++ (NSString *)titleOfResourceType:(EOAOAResourceSwiftItemType)type
+                         inRegion:(OAWorldRegion *)region
+                   withRegionName:(BOOL)includeRegionName
+                 withResourceType:(BOOL)includeResourceType
+{
+    return [OAResourcesUIHelper titleOfResourceType:(OsmAndResourceType) type
+                                           inRegion:region
+                                     withRegionName:includeRegionName
+                                   withResourceType:includeResourceType];
 }
 
 @end

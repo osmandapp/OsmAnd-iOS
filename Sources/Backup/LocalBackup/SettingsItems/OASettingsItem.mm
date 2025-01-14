@@ -316,10 +316,7 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
     }
 
     NSDictionary<NSString *, NSString *> *settings;
-    if ([[OASettingsHelper sharedInstance] getCurrentBackupVersion] == OAMigrationManager.importExportVersionMigration1)
-        settings = [[OAMigrationManager shared] changeJsonMigrationToV2:json];
-    else
-        settings = json;
+    settings = [[OAMigrationManager shared] changeJsonMigrationToV2:json];
 
     NSMutableDictionary<NSString *, NSString *> *rendererSettings = [NSMutableDictionary new];
     NSMutableDictionary<NSString *, NSString *> *routingSettings = [NSMutableDictionary new];

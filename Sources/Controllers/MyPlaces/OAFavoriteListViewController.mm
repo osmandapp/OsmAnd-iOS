@@ -315,30 +315,26 @@ static UIViewController *parentController;
         ? newLocation.course
         : newHeading;
 
-        [self.sortedFavoriteItems enumerateObjectsUsingBlock:^(OAFavoriteItem* itemData, NSUInteger idx, BOOL *stop) {
+        [_isFiltered ? _filteredItems : self.sortedFavoriteItems enumerateObjectsUsingBlock:^(OAFavoriteItem* itemData, NSUInteger idx, BOOL *stop) {
             const auto& favoritePosition31 = itemData.favorite->getPosition31();
             const auto favoriteLon = OsmAnd::Utilities::get31LongitudeX(favoritePosition31.x);
             const auto favoriteLat = OsmAnd::Utilities::get31LatitudeY(favoritePosition31.y);
-
             const auto distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
                                                                 newLocation.coordinate.latitude,
                                                                 favoriteLon, favoriteLat);
-
-
 
             itemData.distance = [OAOsmAndFormatter getFormattedDistance:distance];
             itemData.distanceMeters = distance;
             CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:favoriteLat longitude:favoriteLon]];
             itemData.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
-
          }];
 
-        if (self.sortingType == 1 && [self.sortedFavoriteItems count] > 0)
+        if (self.sortingType == 1 && [_isFiltered ? _filteredItems : self.sortedFavoriteItems count] > 0)
         {
-            NSArray *sortedArray = [self.sortedFavoriteItems sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2){
+            NSArray *sortedArray = [_isFiltered ? _filteredItems : self.sortedFavoriteItems sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2){
                 return obj1.distanceMeters > obj2.distanceMeters ? NSOrderedDescending : obj1.distanceMeters < obj2.distanceMeters ? NSOrderedAscending : NSOrderedSame;
             }];
-            [self.sortedFavoriteItems setArray:sortedArray];
+            [_isFiltered ? _filteredItems : self.sortedFavoriteItems setArray:sortedArray];
         }
 
         if (_decelerating)
@@ -353,20 +349,22 @@ static UIViewController *parentController;
     if ([self.favoriteTableView isEditing])
         return;
 
+    __weak __typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
+        __strong __typeof(self) strongSelf = weakSelf;
+        if (!strongSelf) return;
 
-        [self.favoriteTableView beginUpdates];
-        NSArray *visibleIndexPaths = [self.favoriteTableView indexPathsForVisibleRows];
+        NSArray *visibleIndexPaths = [strongSelf.favoriteTableView indexPathsForVisibleRows];
         for (NSIndexPath *i in visibleIndexPaths)
         {
-            UITableViewCell *cell = [self.favoriteTableView cellForRowAtIndexPath:i];
+            UITableViewCell *cell = [strongSelf.favoriteTableView cellForRowAtIndexPath:i];
             if ([cell isKindOfClass:[OAPointTableViewCell class]])
             {
                 OAFavoriteItem* item;
                 if (_directionButton.tag == 1)
                 {
                     if (i.section == 0)
-                        item = [self.sortedFavoriteItems objectAtIndex:i.row];
+                        item = [_isFiltered ? _filteredItems : strongSelf.sortedFavoriteItems objectAtIndex:i.row];
                 }
                 else
                 {
@@ -384,18 +382,21 @@ static UIViewController *parentController;
                     OAPointTableViewCell *c = (OAPointTableViewCell *)cell;
 
                     [c.titleView setText:[item getDisplayName]];
-                    c = [self setupPoiIconForCell:c withFavaoriteItem:item];
+                    c = [strongSelf setupPoiIconForCell:c withFavaoriteItem:item];
 
                     [c.distanceView setText:item.distance];
                     c.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
                 }
             }
         }
-        [self.favoriteTableView endUpdates];
-
-        //NSArray *visibleIndexPaths = [self.favoriteTableView indexPathsForVisibleRows];
-        //[self.favoriteTableView reloadRowsAtIndexPaths:visibleIndexPaths withRowAnimation:UITableViewRowAnimationNone];
-
+        
+        [strongSelf.favoriteTableView beginUpdates];
+        NSArray<NSIndexPath *> *freshIndexPathsForVisibleRows = [strongSelf.favoriteTableView indexPathsForVisibleRows];
+        if (freshIndexPathsForVisibleRows.count > 0)
+        {
+            [strongSelf.favoriteTableView reloadRowsAtIndexPaths:freshIndexPathsForVisibleRows withRowAnimation:UITableViewRowAnimationNone];
+        }
+        [strongSelf.favoriteTableView endUpdates];
     });
 }
 
@@ -1234,7 +1235,7 @@ static UIViewController *parentController;
 
         if (groupData.isOpen)
         {
-            cell.arrowImage.image = [UIImage templateImageNamed:@"ic_custom_arrow_down"];
+            cell.arrowImage.image = [UIImage templateImageNamed:ACImageNameIcCustomArrowDown];
         }
         else
         {

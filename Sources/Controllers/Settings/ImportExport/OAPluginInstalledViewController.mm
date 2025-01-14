@@ -559,7 +559,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
 
 #pragma mark - DownloadingCellResourceHelperDelegate
 
-- (void) onDownloadingCellResourceNeedUpdate
+- (void) onDownloadingCellResourceNeedUpdate:(id<OADownloadTask>)task
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self setupView];
@@ -567,6 +567,10 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
         [_downloadingCellMultipleResourceHelper cleanCellCache];
         [self.tableView reloadData];
     });
+}
+
+- (void)onStopDownload:(OAResourceSwiftItem *)resourceItem
+{
 }
 
 @end

@@ -71,9 +71,10 @@
 #define kBarActionViewHeight 44.0
 #define kTabsHeight 40.0
 #define kBottomViewHeight 57.0
-
 #define kCancelButtonY 5.0
 #define kLeftImageButtonY -2.0
+
+static NSString *topIndexBrandPrefix = @"top_index_brand";
 
 typedef NS_ENUM(NSInteger, QuickSearchTab)
 {
@@ -722,9 +723,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         _searchToolbarViewController.searchDelegate = self;
     }
     [_searchToolbarViewController setFilter:filter];
-    _searchToolbarViewController.toolbarTitle =
-            filter && ![filter.filterId isEqualToString:BY_NAME_FILTER_ID]
-                    ? filter.name : [_textField.text trim];
+    _searchToolbarViewController.toolbarTitle = (filter && ![filter.filterId isEqualToString:BY_NAME_FILTER_ID]) ? ([filter.filterId hasPrefix:topIndexBrandPrefix] ? filter.filterByName : filter.name) : [_textField.text trim];
     [[OARootViewController instance].mapPanel showToolbar:_searchToolbarViewController];
 }
 

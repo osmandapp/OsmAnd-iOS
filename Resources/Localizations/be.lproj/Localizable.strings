@@ -1823,7 +1823,7 @@
 "shared_string_icon" = "Значок";
 "searching" = "Пошук…";
 "shared_string_square" = "Квадрат";
-"replace_favorite_confirmation" = "Вы сапраўды хочаце замяніць улюбёную мясціну %@\?";
+"replace_favorite_confirmation" = "Вы сапраўды хочаце замяніць улюбёную мясціну %@?";
 "icon_group_symbols" = "Сімвалы";
 "access_default_color" = "Прадвызначаны колер";
 "favorite_group_name" = "Назва групы";
@@ -2570,7 +2570,7 @@
 "map_widget_time_to_intermediate" = "Час для прамежкавага пункта";
 "announcement_time_passing" = "Пры праходжанні";
 "map_widget_sunset_desc" = "Паказвае час заходу сонца або час, які застаўся да заходу сонца.";
-"external_device_status_connect" = "Злучыць";
+"external_device_status_connect" = "Злучэнне";
 "map_widget_distance_to_intermediate" = "Адлегласць да прамежкавага пункта";
 "reset_all_settings_desc" = "Вы ўпэўнены, што хочаце скінуць усе налады да прадвызначаных\?";
 "shared_string_contents" = "Змест";
@@ -2842,3 +2842,9 @@
 "of" = "%d з %d";
 "downloaded_bytes" = "%@ з %@";
 "quick_action_need_to_add_item_to_list" = "Дадаць прынамсі адзін элемент у спіс \"Хуткае дзеянне\" у наладах";
+"shared_string_to" = "Да";
+"power_watts_unit" = "Ваты";
+"transport_stop" = "Прыпынак";
+"shared_string_minute_lowercase" = "хв";
+"revolutions_per_minute_unit" = "аб/хв";
+"sort_subfolders_tracks" = "Сартаваць укладзеныя папкі";

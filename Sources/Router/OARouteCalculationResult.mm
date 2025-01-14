@@ -1448,7 +1448,8 @@
                 BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
                 
                 info.streetName = [NSString stringWithUTF8String:current->getStreetName(locale, transliterate, list, routeInd).c_str()];
-                info.destinationName = [NSString stringWithUTF8String:current->getDestinationName(locale, transliterate, list, routeInd).c_str()];
+                info.destinationName = [NSString stringWithUTF8String:current->getDestinationName(locale, transliterate, list, routeInd, false).c_str()];
+                info.destinationRef = [NSString stringWithUTF8String:current->object->getDestinationRef(current->isForwardDirection()).c_str()];
                 
                 std::shared_ptr<RouteDataObject> rdoWithShield = nullptr;
                 std::shared_ptr<RouteDataObject> rdoWithoutShield = nullptr;
@@ -1461,7 +1462,7 @@
                     exitInfo.ref = exitInfo.ref.length > 0 ? exitInfo.ref : nil;
                     exitInfo.exitStreetName = exitInfo.exitStreetName.length > 0 ? exitInfo.ref : nil;
                     info.exitInfo = exitInfo;
-                    if (routeInd > 0 && (exitInfo.ref || exitInfo.exitStreetName))
+                    if (![exitInfo isEmpty] && info.destinationRef == nil && routeInd > 0)
                     {
                         // set ref and road name (or shield icon) from previous segment because exit point is not consist of highway ref
                         std::shared_ptr<RouteSegmentResult> previous;
@@ -1498,7 +1499,7 @@
                 }
             }
             
-            NSString *description = [[NSString stringWithFormat:@"%@ %@", [self.class toString:turn shortName:false], [OARoutingHelperUtils formatStreetName:info.streetName ref:info.ref destination:info.destinationName towards:OALocalizedString(@"towards")]] trim];
+            NSString *description = [[NSString stringWithFormat:@"%@ %@", [self.class toString:turn shortName:false], [OARoutingHelperUtils formatStreetName:info.streetName ref:info.ref destination:[info getDestinationRefAndName] towards:OALocalizedString(@"towards")]] trim];
                         
             if (s->object->pointNames.size() > s->getStartPointIndex())
             {

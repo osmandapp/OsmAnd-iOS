@@ -122,7 +122,8 @@ static const NSInteger groupCount = 1;
 
 -(void) updateNow
 {
-    [OAOsmAndLiveHelper downloadUpdatesForRegion:_regionName resourcesManager:_app.resourcesManager checkUpdatesAsync:YES];
+    if (_isLiveUpdatesEnabled)
+        [OAOsmAndLiveHelper downloadUpdatesForRegion:_regionName resourcesManager:_app.resourcesManager checkUpdatesAsync:YES forceUpdate:YES];
 }
 
 - (void) didReceiveMemoryWarning
@@ -229,6 +230,7 @@ static const NSInteger groupCount = 1;
              @{
                @"name" : @"hourly_freq",
                @"title" : OALocalizedString(@"hourly"),
+               @"frequency" : @(ELiveUpdateFrequencyHourly),
                @"type" : [OASimpleTableViewCell getCellIdentifier] }
              ];
             
@@ -236,6 +238,7 @@ static const NSInteger groupCount = 1;
              @{
                @"name" : @"daily_freq",
                @"title" : OALocalizedString(@"daily"),
+               @"frequency" : @(ELiveUpdateFrequencyDaily),
                @"type" : [OASimpleTableViewCell getCellIdentifier] }
              ];
             
@@ -243,6 +246,7 @@ static const NSInteger groupCount = 1;
              @{
                @"name" : @"weekly_freq",
                @"title" : OALocalizedString(@"weekly"),
+               @"frequency" : @(ELiveUpdateFrequencyWeekly),
                @"type" : [OASimpleTableViewCell getCellIdentifier] }
              ];
             
@@ -351,7 +355,7 @@ static const NSInteger groupCount = 1;
         if (cell)
         {
             [cell.titleLabel setText: item[@"title"]];
-            cell.accessoryType = _updatingFrequency == ELiveUpdateFrequencyDaily ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+            cell.accessoryType = (_updatingFrequency == [item[@"frequency"] integerValue]) ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
         }
         return cell;
     }
@@ -408,11 +412,9 @@ static const NSInteger groupCount = 1;
     [OAOsmAndLiveHelper setPreferenceEnabledForLocalIndex:_regionNameNSString value:_isLiveUpdatesEnabled];
     [OAOsmAndLiveHelper setPreferenceWifiForLocalIndex:_regionNameNSString value:_isWifiUpdatesOnly];
     [OAOsmAndLiveHelper setPreferenceFrequencyForLocalIndex:_regionNameNSString value:_updatingFrequency];
-    
-    NSString *regionNameStr = _regionName.toNSString();
     if (_isLiveUpdatesEnabled)
     {
-        [OAOsmAndLiveHelper downloadUpdatesForRegion:_regionName resourcesManager:_app.resourcesManager checkUpdatesAsync:YES];
+        [OAOsmAndLiveHelper downloadUpdatesForRegion:_regionName resourcesManager:_app.resourcesManager checkUpdatesAsync:YES forceUpdate:NO];
     }
     else
     {

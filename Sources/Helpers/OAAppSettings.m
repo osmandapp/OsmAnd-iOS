@@ -3888,10 +3888,10 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
         [_globalPreferences setObject:_settingUseAnalytics forKey:@"use_analytics"];
         [_globalPreferences setObject:_showDownloadMapDialog forKey:@"show_download_map_dialog"];
         
-        _animateMyLocation = [OACommonBoolean withKey:animateMyLocationKey defValue:YES];
-        _doNotUseAnimations = [OACommonBoolean withKey:doNotUseAnimationsKey defValue:NO];
+        _animateMyLocation = [[OACommonBoolean withKey:animateMyLocationKey defValue:YES] makeProfile];
+        _doNotUseAnimations = [[OACommonBoolean withKey:doNotUseAnimationsKey defValue:NO] makeProfile];
         [_profilePreferences setObject:_animateMyLocation forKey:@"animate_my_location"];
-        [_profilePreferences setObject:_animateMyLocation forKey:@"do_not_use_animations"];
+        [_profilePreferences setObject:_doNotUseAnimations forKey:@"do_not_use_animations"];
         
         _liveUpdatesPurchased = [[OACommonBoolean withKey:liveUpdatesPurchasedKey defValue:NO] makeGlobal];
         _settingOsmAndLiveEnabled = [[[OACommonBoolean withKey:settingOsmAndLiveEnabledKey defValue:NO] makeGlobal] makeShared];
@@ -4955,19 +4955,15 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
 
 - (void)resetPreferencesForProfile:(OAApplicationMode *)mode
 {
-    for (OACommonPreference *value in [_profilePreferences objectEnumerator].allObjects)//todo
+    NSArray<NSMapTable<NSString *, OACommonPreference *> *> *preferencesCollections = @[
+        _profilePreferences,
+        _registeredPreferences,
+        _customBooleanRoutingProps,
+        _customRoutingProps
+    ];
+    for (NSMapTable<NSString *, OACommonPreference *> *item in preferencesCollections)
     {
-        [value resetModeToDefault:mode];
-    }
-
-    for (OACommonBoolean *value in [_customBooleanRoutingProps objectEnumerator].allObjects)
-    {
-        [value resetModeToDefault:mode];
-    }
-
-    for (OACommonString *value in [_customRoutingProps objectEnumerator].allObjects)
-    {
-        [value resetModeToDefault:mode];
+        [self resetProfilePreferences:mode profilePreferences:[item objectEnumerator].allObjects];
     }
 
     if (!mode.isCustomProfile)
@@ -4980,6 +4976,21 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
 
     [OAAppData.defaults resetProfileSettingsForMode:mode];
     [NSNotificationCenter.defaultCenter postNotificationName:kWidgetVisibilityChangedMotification object:nil];
+}
+
+- (void)resetProfilePreferences:(OAApplicationMode *)mode
+             profilePreferences:(NSArray<OACommonPreference *> *)profilePreferences
+{
+    for (OACommonPreference *pref in profilePreferences)
+    {
+        if ([self prefCanBeCopiedOrReset:pref])
+            [pref resetModeToDefault:mode];
+    }
+}
+
+- (BOOL)prefCanBeCopiedOrReset:(OACommonPreference *)pref
+{
+    return !pref.global && ![_appModeOrder.key isEqualToString:pref.key];
 }
 
 // Common Settings

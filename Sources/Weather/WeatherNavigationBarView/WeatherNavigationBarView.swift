@@ -2,7 +2,7 @@
 final class WeatherNavigationBarView: UIView {
     @IBOutlet private weak var leftButton: UIButton! {
         didSet {
-            leftButton.setImage(UIImage.templateImageNamed("ic_navbar_chevron"), for: .normal)
+            leftButton.setImage(UIImage.icNavbarChevron, for: .normal)
             leftButton.tintColor = .iconColorActive
         }
     }

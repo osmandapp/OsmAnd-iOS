@@ -17,8 +17,41 @@
 #import "OAAnnounceTimeDistances.h"
 
 #include "routeSegmentResult.h"
+#include <OsmAndCore/Utilities.h>
 
 @implementation OACurrentStreetName
+
+- (instancetype)initWithStreetName:(OANextDirectionInfo *)info useDestination:(BOOL)useDestination
+{
+    NSString *nm = info.directionInfo.streetName;
+    NSString *rf = info.directionInfo.ref;
+    NSString *dn = info.directionInfo.destinationName;
+    NSString *dnRef = info.directionInfo.destinationRef;
+    _isSet = !(nm.length == 0 && rf.length == 0 && dn.length == 0);
+    if (useDestination)
+    {
+        _shields = [RoadShield createDestination:info.directionInfo.routeDataObject destRef:dnRef];
+    }
+    else
+    {
+        _shields = [RoadShield createShields:info.directionInfo.routeDataObject];
+    }
+    _text = [OARoutingHelperUtils formatStreetName:nm ref:rf destination:dn towards:@"" shields:_shields];
+    _turnType = info.directionInfo.turnType;
+    if (!_turnType)
+        _turnType = TurnType::ptrValueOf(TurnType::C, false);
+    if (info.directionInfo.exitInfo != nil)
+    {
+        // don't display name of exit street name
+        _exitRef = info.directionInfo.exitInfo.ref;
+        if (!_isSet && info.directionInfo.destinationName.length > 0)
+        {
+            _text = info.directionInfo.destinationName;
+            _isSet = YES;
+        }
+    }
+    return self;
+}
 
 + (NSString *) getRouteSegmentStreetName:(std::shared_ptr<RouteSegmentResult> &)rs includeRef:(BOOL)includeRef
 {
@@ -38,7 +71,7 @@
 + (OACurrentStreetName *) getCurrentName:(OANextDirectionInfo *)n
 {
     OARoutingHelper *routingHelper = OARoutingHelper.sharedInstance;
-    OACurrentStreetName *streetName = [[OACurrentStreetName alloc] init];
+    OACurrentStreetName *streetName;
     CLLocation *l = routingHelper.getLastFixedLocation;
     OAAnnounceTimeDistances *adt = [[routingHelper getVoiceRouter] getAnnounceTimeDistances];
     BOOL isSet = false;
@@ -49,29 +82,13 @@
     if (n.distanceTo > 0 && n.directionInfo && !n.directionInfo.turnType->isSkipToSpeak() &&
         [adt isTurnStateActive:[adt getSpeed:l] dist:n.distanceTo * 1.3 turnType:kStatePrepareTurn])
     {
-        NSString *nm = n.directionInfo.streetName;
-        NSString *rf = n.directionInfo.ref;
-        NSString *dn = n.directionInfo.destinationName;
-        isSet = !(nm.length == 0 && rf.length == 0 && dn.length == 0);
-        streetName.shields = [RoadShield createShields:n.directionInfo.routeDataObject];
-        streetName.text = [OARoutingHelperUtils formatStreetName:nm ref:rf destination:dn towards:@"»" shields:streetName.shields];
-        streetName.turnType = n.directionInfo.turnType;
-        if (!streetName.turnType)
-            streetName.turnType = TurnType::ptrValueOf(TurnType::C, false);
-        if (n.directionInfo.exitInfo != nil)
-        {
-            // don't display name of exit street name
-            streetName.exitRef = n.directionInfo.exitInfo.ref;
-            if (!isSet && n.directionInfo.destinationName.length > 0)
-            {
-                streetName.text = n.directionInfo.destinationName;
-                isSet = YES;
-            }
-        }
+        streetName = [[OACurrentStreetName alloc] initWithStreetName:n useDestination:YES];
+        isSet = streetName.isSet;
     }
     // 2. display current road street name
     if (!isSet)
     {
+        streetName = [[OACurrentStreetName alloc] init];
         auto rs = routingHelper.getCurrentSegmentResult;
         if (rs)
         {
@@ -169,6 +186,49 @@
     }
     
     return [shields copy];
+}
+
++ (NSArray<RoadShield *> *)createDestination:(std::shared_ptr<RouteDataObject>)rdo destRef:(NSString *)destRef {
+    NSMutableArray<RoadShield *> * shields = [[self createShields:rdo] mutableCopy];
+    if (rdo && destRef.length > 0 && shields.count > 0)
+    {
+        QString refs = OsmAnd::Utilities::splitAndClearRepeats(QString::fromNSString(destRef), ";");
+        NSArray<NSString *> *split = [refs.toNSString() componentsSeparatedByString:@";"];
+        
+        NSMutableDictionary<NSString *, RoadShield *> *map = [NSMutableDictionary dictionary];
+        NSString *tag = nil;
+        NSString *additional = [NSMutableString string];
+
+        for (RoadShield *s in shields)
+        {
+            map[s.value] = s;
+            if ([split containsObject:s.value])
+            {
+                tag = s.tag;
+            }
+            additional = s.additional;
+        }
+
+        [shields removeAllObjects];
+        if (tag == nil)
+        {
+            return shields;
+        }
+        
+        for (NSString *s in split)
+        {
+            RoadShield *shield = map[s];
+            if (shield == nil)
+            {
+                shield = [[RoadShield alloc] initWithRDO:rdo tag:tag value:s];
+                shield.additional = additional;
+            }
+            [shields addObject:shield];
+            [map removeObjectForKey:s];
+        }
+        [shields addObjectsFromArray:map.allValues];
+    }
+    return shields;
 }
 
 - (BOOL)isEqual:(id)object {

@@ -482,12 +482,12 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                 NSMutableArray *elevations = [NSMutableArray array];
                 QList<OsmAnd::FColorARGB> segmentColors;
                 QList<OsmAnd::FColorARGB> segmentWallColors;
-                NSArray<OASTrack *> *tracks = [gpxFile getTracksIncludeGeneralTrack:NO];
+                NSArray<OASTrack *> *tracksWithoutGeneralTrack = [gpxFile getTracksIncludeGeneralTrack:NO];
                 if ([self isSensorLineVisualizationType:dataWrapper.visualization3dByType])
                 {
                     [self processGPXDataElements:gpxFile.tracks withGPX:gpx addToElevations:elevations];
                 }
-                for (OASTrack *track in gpxFile.tracks)
+                for (OASTrack *track in tracksWithoutGeneralTrack)
                 {
                     for (OASTrkSegment *seg in track.segments)
                     {
@@ -522,12 +522,10 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                         {
                             NSArray<OASTrack *> *tracksCopy_ = [gpxFile_.tracks copy];
                             NSInteger trackIndex = [tracksCopy_ indexOfObject:track];
-                            NSArray<OASTrack *> *tracksCopy = [tracks copy];
                             
-                            if (trackIndex != NSNotFound && trackIndex < tracksCopy.count)
+                            if (trackIndex != NSNotFound)
                             {
-                                // TODO: mb use not index? search name?
-                                OASTrack *gpxTrack = tracksCopy[trackIndex];
+                                OASTrack *gpxTrack = track;
                                 OASInt *color = [[OASInt alloc] initWithInt:(int)kDefaultTrackColor];
                                 const auto colorARGB = [UIColorFromARGB([[gpxTrack getColorDefColor:color] intValue]) toFColorARGB];
                                 segmentColors.push_back(colorARGB);
@@ -1910,7 +1908,7 @@ colorizationScheme:(int)colorizationScheme
         return [OAFavoritesLayer getImageWithColor:point.color background:point.point.getBackgroundType icon:[@"mx_" stringByAppendingString:point.point.getIconName]];
     }
     OAFavoriteColor *def = [OADefaultFavorite nearestFavColor:OADefaultFavorite.builtinColors.firstObject];
-    return [OAFavoritesLayer getImageWithColor:def.color background:@"circle" icon:[@"mx_" stringByAppendingString:DEFAULT_ICON_NAME_KEY]];
+    return [OAFavoritesLayer getImageWithColor:def.color background:DEFAULT_ICON_SHAPE_KEY icon:[@"mx_" stringByAppendingString:DEFAULT_ICON_NAME_KEY]];
 }
 
 - (void) setPointVisibility:(id)object hidden:(BOOL)hidden

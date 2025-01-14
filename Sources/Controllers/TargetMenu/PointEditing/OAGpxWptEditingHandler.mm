@@ -59,7 +59,7 @@
         p.name = formattedLocation;
         p.lat = location.latitude;
         p.lon = location.longitude;
-        p.time = (long)[[NSDate date] timeIntervalSince1970];
+        p.time = (long)([[NSDate date] timeIntervalSince1970] * 1000.0);
         OASInt *colorToSave = [[OASInt alloc] initWithInt:[color toARGBNumber]];
         
         [p setColorColor:colorToSave];
@@ -71,7 +71,7 @@
             _iconName = poiIconName;
         
         [p setIconNameIconName:_iconName];
-        [p setBackgroundTypeBackType:@"circle"];
+        [p setBackgroundTypeBackType:DEFAULT_ICON_SHAPE_KEY];
         [p setAddressAddress:address];
         NSDictionary<NSString *, NSString *> *extensions = [poi toTagValue:PRIVATE_PREFIX osmPrefix:OSM_PREFIX_KEY];
         [[p getExtensionsToWrite] addEntriesFromDictionary:extensions];

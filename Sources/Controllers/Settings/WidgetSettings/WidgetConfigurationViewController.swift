@@ -10,7 +10,7 @@ import Foundation
 
 @objc(OAWidgetConfigurationViewController)
 @objcMembers
-class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStateDelegate {
+final class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStateDelegate {
     
     var widgetInfo: MapWidgetInfo!
     var widgetPanel: WidgetsPanel!
@@ -26,6 +26,10 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
     
     lazy private var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
     
+    var isCreateNewAndSimilarAlreadyExist: Bool {
+        createNew && similarAlreadyExist
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -33,8 +37,9 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
         if isCreateNewAndSimilarAlreadyExist || (createNew && !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "")) {
             widgetConfigurationParams = ["selectedAppMode": selectedAppMode!]
         }
+        configureNavigationButtons()
     }
-
+    
     override func registerCells() {
         addCell(SegmentImagesWithRightLabelTableViewCell.reuseIdentifier)
     }
@@ -209,43 +214,11 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
         return outCell
     }
     
-    var isCreateNewAndSimilarAlreadyExist: Bool {
-        createNew && similarAlreadyExist
-    }
-    
-    @objc func onSwitchClick(_ sender: Any) -> Bool {
-        guard let sw = sender as? UISwitch else {
-            return false
-        }
-        
-        let indexPath = IndexPath(row: sw.tag & 0x3FF, section: sw.tag >> 10)
-        let data = tableData!.item(for: indexPath)
-        
-        if isCreateNewAndSimilarAlreadyExist {
-            if widgetKey == WidgetType.averageSpeed.id {
-                widgetConfigurationParams?[AverageSpeedWidget.SKIP_STOPS_PREF_ID] = sw.isOn
-            } else {
-                fatalError("You need implement value handler for widgetKey")
-            }
-        } else {
-            let pref = data.obj(forKey: "pref") as! OACommonBoolean
-            pref.set(sw.isOn, mode: selectedAppMode)
-        }
-        if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "") {
-            widgetConfigurationParams?["isVisibleIcon"] = sw.isOn
-        }
-        if let cell = self.tableView.cellForRow(at: indexPath) as? OASwitchTableViewCell, !cell.leftIconView.isHidden {
-            UIView.animate(withDuration: 0.2) {
-                cell.leftIconView.image = UIImage.templateImageNamed(sw.isOn ? data.iconName : data.string(forKey: "hide_icon"))
-                cell.leftIconView.tintColor = sw.isOn ? self.selectedAppMode.getProfileColor() : UIColor.iconColorDisabled
-            }
-        }
-        
-        return false
-    }
-    
     override func onRowSelected(_ indexPath: IndexPath!) {
         let item = tableData.item(for: indexPath)
+        if (widgetInfo.handleRowSelected(item, viewController: self)) {
+            return
+        }
         if item.key == "delete_widget_key" {
             onWidgetDeleted()
             dismiss()
@@ -338,6 +311,19 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
         tableView.reloadData()
     }
     
+    private func configureNavigationButtons() {
+        if navigationController?.viewControllers.count == 1 {
+            navigationItem.setLeftBarButton(nil, animated: false)
+            navigationItem.setRightBarButton(UIBarButtonItem(title: localizedString("shared_string_done"),
+                                                             style: .plain,
+                                                             target: self,
+                                                             action: #selector(onRightNavbarButtonPressed)),
+                                             animated: false)
+        } else {
+            navigationItem.setRightBarButton(nil, animated: false)
+        }
+    }
+    
     private func onWidgetDeleted() {
         let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
         widgetRegistry.enableDisableWidget(for: selectedAppMode, widgetInfo: widgetInfo, enabled: false, recreateControls: true)
@@ -357,6 +343,37 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
             .compactMap { $0.widget as? OATextInfoWidget }
             .forEach { $0.updateWith(style: widget.widgetSizeStyle, appMode: selectedAppMode) }
     }
+    
+    @objc private func onSwitchClick(_ sender: Any) -> Bool {
+        guard let sw = sender as? UISwitch else {
+            return false
+        }
+        
+        let indexPath = IndexPath(row: sw.tag & 0x3FF, section: sw.tag >> 10)
+        let data = tableData!.item(for: indexPath)
+        
+        if isCreateNewAndSimilarAlreadyExist {
+            if widgetKey == WidgetType.averageSpeed.id {
+                widgetConfigurationParams?[AverageSpeedWidget.SKIP_STOPS_PREF_ID] = sw.isOn
+            } else {
+                fatalError("You need implement value handler for widgetKey")
+            }
+        } else {
+            let pref = data.obj(forKey: "pref") as! OACommonBoolean
+            pref.set(sw.isOn, mode: selectedAppMode)
+        }
+        if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "") {
+            widgetConfigurationParams?["isVisibleIcon"] = sw.isOn
+        }
+        if let cell = self.tableView.cellForRow(at: indexPath) as? OASwitchTableViewCell, !cell.leftIconView.isHidden {
+            UIView.animate(withDuration: 0.2) {
+                cell.leftIconView.image = UIImage.templateImageNamed(sw.isOn ? data.iconName : data.string(forKey: "hide_icon"))
+                cell.leftIconView.tintColor = sw.isOn ? self.selectedAppMode.getProfileColor() : UIColor.iconColorDisabled
+            }
+        }
+        
+        return false
+    }
 }
 
 // MARK: Appearance
@@ -372,12 +389,6 @@ extension WidgetConfigurationViewController {
     
     override func isNavbarSeparatorVisible() -> Bool {
         false
-    }
-    
-    override func getLeftNavbarButtonTitle() -> String! {
-        navigationController?.viewControllers.count == 1
-        ? localizedString("shared_string_cancel")
-        : nil
     }
     
     override func getTableHeaderDescriptionAttr() -> NSAttributedString! {

@@ -42,11 +42,6 @@
     return SEARCH_TOOLBAR_PRIORITY;
 }
 
--(UIColor *)getStatusBarColor
-{
-    return [UIColor whiteColor];
-}
-
 - (void)updateFrame:(BOOL)animated
 {
     self.view.frame = CGRectMake(

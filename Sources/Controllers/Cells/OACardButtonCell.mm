@@ -21,19 +21,21 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
+    [self.contentView layoutIfNeeded];
 
     CGFloat horizontalInset = 12.;
-    
     CGFloat buttonTitleWidth = [OAUtilities calculateTextBounds:self.buttonView.titleLabel.attributedText
-                                                          width:self.buttonView.frame.size.width - horizontalInset * 2 - self.buttonView.imageView.frame.size.width].width;
-    CGFloat imagePadding = self.buttonView.frame.size.width - (horizontalInset * 2 + buttonTitleWidth + 30.);
+        width:self.buttonView.frame.size.width - horizontalInset * 2 - self.buttonView.imageView.frame.size.width].width;
+    CGFloat imagePadding = self.buttonView.bounds.size.width -
+            self.buttonView.imageView.bounds.size.width
+            - (horizontalInset * 2 + buttonTitleWidth);
+    
     
     UIButtonConfiguration *configuration = self.buttonView.configuration;
     configuration.titleAlignment = UIButtonConfigurationTitleAlignmentLeading;
     configuration.imagePlacement = NSDirectionalRectEdgeTrailing;
     configuration.contentInsets = NSDirectionalEdgeInsetsMake(0., horizontalInset, 0., horizontalInset);
     configuration.imagePadding = imagePadding;
-    
     self.buttonView.configuration = configuration;
 }
 

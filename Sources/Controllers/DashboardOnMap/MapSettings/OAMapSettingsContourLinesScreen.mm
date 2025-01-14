@@ -795,7 +795,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 #pragma mark - DownloadingCellResourceHelperDelegate
 
-- (void)onDownloadingCellResourceNeedUpdate
+- (void)onDownloadingCellResourceNeedUpdate:(id<OADownloadTask>)task
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self fetchResources];
@@ -803,6 +803,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         [_downloadingCellResourceHelper cleanCellCache];
         [self.tblView reloadData];
     });
+}
+
+- (void)onStopDownload:(OAResourceSwiftItem *)resourceItem
+{
 }
 
 @end

@@ -71,6 +71,11 @@
     _separatorBottomView.backgroundColor = _separatorRightView.backgroundColor = color;
 }
 
+- (BOOL)handleRowSelected:(OATableRowData *)item viewController:(WidgetConfigurationViewController *)viewController {
+    return NO;
+}
+
+
 - (void)replaceHeightConstraintWithRelation:(NSLayoutRelation)relation constant:(CGFloat)constant priority:(UILayoutPriority)priority
 {
     if (_heightConstraint)

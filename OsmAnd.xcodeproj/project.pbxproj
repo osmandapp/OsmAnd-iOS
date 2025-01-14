@@ -1366,6 +1366,7 @@
 		C5A466BE2D2E6B41008E0C87 /* OAImageHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C5A466BD2D2E6B41008E0C87 /* OAImageHeaderCell.xib */; };
 		C5A466C82D2FCA87008E0C87 /* OAAttachRoadsBannerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C5A466C62D2FCA87008E0C87 /* OAAttachRoadsBannerCell.m */; };
 		C5A466C92D2FCA87008E0C87 /* OAAttachRoadsBannerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C5A466C72D2FCA87008E0C87 /* OAAttachRoadsBannerCell.xib */; };
+		C5A466CE2D356B68008E0C87 /* OAGpxApproximationHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = C5A466CD2D356B68008E0C87 /* OAGpxApproximationHelper.mm */; };
 		C5A887E42CAD7B8E00DA2979 /* TracksSearchFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5A887E32CAD7B8E00DA2979 /* TracksSearchFilter.swift */; };
 		C5ACFCD52AD59F2200EA92F6 /* list_warnings_tunnel@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5ACFCD42AD59F2200EA92F6 /* list_warnings_tunnel@3x.png */; };
 		C5ACFCD72AD59F6E00EA92F6 /* list_warnings_tunnel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5ACFCD62AD59F6E00EA92F6 /* list_warnings_tunnel@2x.png */; };
@@ -4978,6 +4979,8 @@
 		C5A466C52D2FCA87008E0C87 /* OAAttachRoadsBannerCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAttachRoadsBannerCell.h; sourceTree = "<group>"; };
 		C5A466C62D2FCA87008E0C87 /* OAAttachRoadsBannerCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAAttachRoadsBannerCell.m; sourceTree = "<group>"; };
 		C5A466C72D2FCA87008E0C87 /* OAAttachRoadsBannerCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAAttachRoadsBannerCell.xib; sourceTree = "<group>"; };
+		C5A466CC2D356B68008E0C87 /* OAGpxApproximationHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGpxApproximationHelper.h; sourceTree = "<group>"; };
+		C5A466CD2D356B68008E0C87 /* OAGpxApproximationHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGpxApproximationHelper.mm; sourceTree = "<group>"; };
 		C5A887E32CAD7B8E00DA2979 /* TracksSearchFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksSearchFilter.swift; sourceTree = "<group>"; };
 		C5ACFCD42AD59F2200EA92F6 /* list_warnings_tunnel@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "list_warnings_tunnel@3x.png"; path = "Resources/Icons/list_warnings_tunnel@3x.png"; sourceTree = "<group>"; };
 		C5ACFCD62AD59F6E00EA92F6 /* list_warnings_tunnel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "list_warnings_tunnel@2x.png"; path = "Resources/Icons/list_warnings_tunnel@2x.png"; sourceTree = "<group>"; };
@@ -12560,6 +12563,8 @@
 				DA5A7F6B26C563A500F274C7 /* OAExitRoutePlanningBottomSheetViewController.m */,
 				DA5A7F5A26C563A400F274C7 /* OAGpxApproximationViewController.h */,
 				DA5A7F6326C563A400F274C7 /* OAGpxApproximationViewController.mm */,
+				C5A466CC2D356B68008E0C87 /* OAGpxApproximationHelper.h */,
+				C5A466CD2D356B68008E0C87 /* OAGpxApproximationHelper.mm */,
 				DA5A7F5526C563A400F274C7 /* OAGpxData.h */,
 				DA5A7F6A26C563A500F274C7 /* OAGpxData.mm */,
 				DA5A7F5026C563A400F274C7 /* OAInfoBottomView.h */,
@@ -16748,6 +16753,7 @@
 				FA00B8802B4EB66800582CD1 /* WidgetSizeStyle.swift in Sources */,
 				DA5A82E726C563A800F274C7 /* OAGPXRecTableViewCell.m in Sources */,
 				462F13EC283FD0D400B73795 /* OAOsmLiveFeaturesCardView.m in Sources */,
+				C5A466CE2D356B68008E0C87 /* OAGpxApproximationHelper.mm in Sources */,
 				46FB65B92A8BBC2000A21850 /* CoordinatesBaseWidget.swift in Sources */,
 				467D7DC22ADDEAF10037A593 /* OAFavoriteGroupEditorViewController.mm in Sources */,
 				DA5A82E326C563A800F274C7 /* OATargetInfoCollapsableCoordinatesViewCell.m in Sources */,

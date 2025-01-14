@@ -834,7 +834,9 @@ static const float kDistanceMeters = 100.0;
                 [self updateCompassButton];
             });
         }
-        else if (obj == _settings.transparentMapTheme)
+        else if (obj == _settings.transparentMapTheme ||
+                 _settings.profileIconColor ||
+                 _settings.profileCustomIconColor)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self updateColors];

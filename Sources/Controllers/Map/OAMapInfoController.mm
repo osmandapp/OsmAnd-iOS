@@ -700,6 +700,11 @@
     [self recreateControls:YES];
 }
 
+- (void)updateWidgetsInfo
+{
+    [_mapWidgetRegistry updateWidgetsInfo:[[OAAppSettings sharedManager].applicationMode get]];
+}
+
 - (void) recreateControls:(BOOL)registerWidgets
 {
     if (registerWidgets)
@@ -740,7 +745,7 @@
     self.speedometerTopConstraint.active = YES;
     [_speedometerView configure];
 
-    [_mapWidgetRegistry updateWidgetsInfo:[[OAAppSettings sharedManager].applicationMode get]];
+    [self updateWidgetsInfo];
 
     [self recreateWidgetsPanel:_topPanelController panel:OAWidgetsPanel.topPanel appMode:appMode];
     [self recreateWidgetsPanel:_bottomPanelController panel:OAWidgetsPanel.bottomPanel appMode:appMode];

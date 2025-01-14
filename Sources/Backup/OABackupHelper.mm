@@ -228,7 +228,7 @@ static NSString *CHECK_CODE_URL = [SERVER_URL stringByAppendingString:@"/userdat
 {
     NSMutableArray<NSString *> *filesToUpload = [NSMutableArray array];
     OABackupInfo *info = self.backup.backupInfo;
-    if (![self.class isLimitedFilesCollectionItem:item]
+    if (![BackupUtils isLimitedFilesCollectionItem:item]
         && info != nil && (info.filesToUpload.count > 0 || info.filesToMerge.count > 0 || info.filesToDownload.count > 0))
     {
         for (OALocalFile *localFile in info.filesToUpload)

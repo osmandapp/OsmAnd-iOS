@@ -42,7 +42,6 @@
 #import "OAImportBackupTask.h"
 #import "OAExportBackupTask.h"
 #import "OALocalFile.h"
-#import "OATableViewCustomHeaderView.h"
 #import "OASizes.h"
 #import "OAResourcesUIHelper.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -96,7 +95,6 @@
     self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0.001, 0.001)];
     [self generateData];
-    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -215,12 +213,15 @@
     
     OATableSectionData *itemsSection = [OATableSectionData sectionData];
     OABackupInfo *info = _backupHelper.backup.backupInfo;
+    NSString *header = @"";
 
     if (_tableType == EOARecentChangesLocal || _tableType == EOARecentChangesRemote)
     {
         NSMutableDictionary<NSString *, NSMutableDictionary *> *filesByName =  [NSMutableDictionary dictionary];
         if (_tableType == EOARecentChangesLocal)
         {
+            header = OALocalizedString(@"cloud_recent_changes");
+
             NSArray<OALocalFile *> *localFiles = info.filteredFilesToUpload;
             for (OALocalFile *localFile in localFiles)
             {
@@ -258,6 +259,8 @@
         }
         else if (_tableType == EOARecentChangesRemote)
         {
+            header = OALocalizedString(@"download_tab_updates");
+
             NSDictionary<OARemoteFile *, OASettingsItem *> *downloadItems = [BackupUtils getItemsMapForRestore:info settingsItems:_backupHelper.backup.settingsItems];
             for (OARemoteFile *remoteFile in downloadItems.allKeys)
             {
@@ -313,6 +316,8 @@
     }
     else if (_tableType == EOARecentChangesConflicts)
     {
+        header = OALocalizedString(@"download_tab_conflicts");
+
         for (NSArray *items in info.filteredFilesToMerge)
         {
             NSString *key = [((OALocalFile *) items.firstObject) getTypeFileName];
@@ -334,14 +339,20 @@
             kCellIconNameKey: @"ic_action_cloud_smile_face_colored"
         }];
     }
+    else
+    {
+        itemsSection.headerText = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_dash"),
+                                   header,
+                                   @([itemsSection rowCount]).stringValue];
+    }
 
     if (![_backupHelper isBackupPreparing])
     {
         _itemsSection = _data.sectionCount;
         [_data addSection:itemsSection];
     }
-    if (_itemsSection != -1 && _tableType == EOARecentChangesConflicts && itemsSection.rowCount > 1)
-        [_data sectionDataForIndex:_itemsSection].headerText = OALocalizedString(@"backup_conflicts_descr");
+    if (_tableType == EOARecentChangesConflicts && itemsSection.rowCount > 1)
+        statusSection.footerText = OALocalizedString(@"backup_conflicts_descr");
 }
 
 - (BOOL) hasItems
@@ -587,6 +598,16 @@
     return [_data rowCount:section];
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return [_data sectionDataForIndex:section].headerText;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+{
+    return [_data sectionDataForIndex:section].footerText;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OATableRowData *item = [_data itemForIndexPath:indexPath];
@@ -708,38 +729,6 @@
 }
 
 // MARK: UITableViewDelegate
-
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    OATableViewCustomHeaderView *customHeader = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
-    NSString *header = [_data sectionDataForIndex:section].headerText;
-    if (header && section == _itemsSection && _tableType == EOARecentChangesConflicts)
-    {
-        customHeader.label.text = header;
-        customHeader.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
-        [customHeader setYOffset:2.];
-        return customHeader;
-    }
-    return nil;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    NSString *header = [_data sectionDataForIndex:section].headerText;
-    if (section == _itemsSection)
-    {
-        if (header && _tableType == EOARecentChangesConflicts)
-        {
-            return [OATableViewCustomHeaderView getHeight:header
-                                                    width:tableView.bounds.size.width
-                                                  xOffset:kPaddingOnSideOfContent
-                                                  yOffset:2.
-                                                     font:[UIFont preferredFontForTextStyle:UIFontTextStyleFootnote]] + 15.;
-        }
-        return kHeaderHeightDefault;
-    }
-    return 0.001;
-}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

@@ -3432,3 +3432,5 @@
 "max_sensor_cadence" = "Cadență bicicletă, maxim";
 "not_specified" = "Nespecificat";
 "with_waypoints" = "Cu puncte intermediare";
+"year_short" = "An";
+"shared_string_control_stop" = "Stop";

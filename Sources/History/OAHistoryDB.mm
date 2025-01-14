@@ -476,7 +476,7 @@
 - (void)setMarkersHistoryLastModifiedTime:(long)lastModified
 {
     [BackupUtils setLastModifiedTime:MARKERS_HISTORY_LAST_MODIFIED_NAME
-                    lastModifiedTime:lastModified];
+                    lastModifiedTime:lastModified / 1000];
 }
 
 - (void)updateMarkersHistoryLastModifiedTime
@@ -510,7 +510,7 @@
         lastModifiedTime = [self getDBLastModifiedTime];
         [BackupUtils setLastModifiedTime:key lastModifiedTime:lastModifiedTime];
     }
-    return lastModifiedTime;
+    return lastModifiedTime * 1000;
 }
 
 - (long) getDBLastModifiedTime

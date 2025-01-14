@@ -739,15 +739,15 @@
     OAStatusBackupViewController *statusBackupViewController = nil;
     if ([item.key isEqualToString:@"local_changes"] || [item.key isEqualToString:@"backupProgress"] || item.rowType == EOATableRowTypeCollapsable)
     {
-        statusBackupViewController = [[OAStatusBackupViewController alloc] initWithType:EOARecentChangesLocal];
+        statusBackupViewController = [[OAStatusBackupViewController alloc] initWithType:EOARecentChangesLocal syncProgress:_syncProgress];
     }
     else if ([item.key isEqualToString:@"remote_updates"])
     {
-        statusBackupViewController = [[OAStatusBackupViewController alloc] initWithType:EOARecentChangesRemote];
+        statusBackupViewController = [[OAStatusBackupViewController alloc] initWithType:EOARecentChangesRemote syncProgress:_syncProgress];
     }
     else if ([item.key isEqualToString:@"conflicts"])
     {
-        statusBackupViewController = [[OAStatusBackupViewController alloc] initWithType:EOARecentChangesConflicts];
+        statusBackupViewController = [[OAStatusBackupViewController alloc] initWithType:EOARecentChangesConflicts syncProgress:_syncProgress];
     }
     else if ([item.key isEqualToString:@"onTrashPressed"])
     {

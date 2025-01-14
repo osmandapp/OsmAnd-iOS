@@ -66,12 +66,13 @@
     DownloadingCellCloudHelper *_downloadingCellCloudHelper;
 }
 
-- (instancetype)initWithTableType:(EOARecentChangesType)type
+- (instancetype)initWithTableType:(EOARecentChangesType)type syncProgress:(float)syncProgress
 {
     self = [super initWithStyle:UITableViewStyleGrouped];
     if (self)
     {
         _tableType = type;
+        _syncProgress = syncProgress;
         _settingsHelper = [OANetworkSettingsHelper sharedInstance];
         _backupHelper = [OABackupHelper sharedInstance];
         [self setupNotificationListeners];
@@ -91,7 +92,6 @@
 {
     [super viewDidLoad];
 
-    _syncProgress = 0;
     [self setupDownloadingCellHelper];
     self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0.001, 0.001)];
@@ -140,6 +140,7 @@
 
 - (void)updateData
 {
+    _syncProgress = 0;
     [self generateData];
     [_downloadingCellCloudHelper cleanCellCache];
     [self.tableView reloadData];
@@ -181,7 +182,6 @@
 - (void)generateData
 {
     _syncProgressCell = nil;
-    _syncProgress = 0;
     _itemsSection = -1;
     _data = [[OATableDataModel alloc] init];
     OATableSectionData *statusSection = [OATableSectionData sectionData];

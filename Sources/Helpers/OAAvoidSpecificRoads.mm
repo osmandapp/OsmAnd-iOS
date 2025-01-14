@@ -299,7 +299,7 @@
 
 - (long) getLastModifiedTime
 {
-    return _lastModifiedTime.get;
+    return [_lastModifiedTime get];
 }
 
 - (void) setLastModifiedTime:(long)lastModifiedTime

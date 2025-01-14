@@ -72,7 +72,8 @@
     OABackupStatus *_status;
     NSString *_error;
     
-    OATitleIconProgressbarCell *_backupProgressCell;
+    float _syncProgress;
+    NSIndexPath *_syncProgressCell;
     NSInteger _itemsSection;
     
     UIBarButtonItem *_settingsButton;
@@ -81,7 +82,8 @@
 - (instancetype) initWithSourceType:(EOACloudScreenSourceType)type
 {
     self = [self init];
-    if (self) {
+    if (self)
+    {
         _sourceType = type;
     }
     return self;
@@ -90,7 +92,8 @@
 - (instancetype)init
 {
     self = [super initWithNibName:@"OACloudBackupViewController" bundle:nil];
-    if (self) {
+    if (self)
+    {
         _sourceType = EOACloudScreenSourceTypeDirect;
     }
     return self;
@@ -108,7 +111,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
     self.navigationItem.title = OALocalizedString(@"osmand_cloud");
     [self setupNotificationListeners];
     [OAIAPHelper.sharedInstance checkBackupPurchase];
@@ -191,6 +194,8 @@
 
 - (void)generateData
 {
+    _syncProgressCell = nil;
+    _syncProgress = 0;
     _data = [[OATableDataModel alloc] init];
     
     if (!_status)
@@ -257,13 +262,14 @@
 
         if (_settingsHelper.isBackupSyncing)
         {
-            _backupProgressCell = [self getProgressBarCell];
             NSDictionary *backupProgressCell = @{
-                kCellTypeKey: OATitleIconProgressbarCell.getCellIdentifier,
-                kCellKeyKey: @"backup_progress",
-                @"cell": _backupProgressCell
+                kCellTypeKey: [OATitleIconProgressbarCell getCellIdentifier],
+                kCellKeyKey: @"backupProgress",
+                kCellIconNameKey: @"ic_custom_cloud_upload",
+                kCellIconTintColor: [UIColor colorNamed:ACColorNameIconColorActive]
             };
             [backupRows addRowFromDictionary:backupProgressCell];
+            _syncProgressCell = [NSIndexPath indexPathForRow:[backupRows rowCount] - 1 inSection:[_data sectionCount] - 1];
         }
         else
         {
@@ -290,7 +296,7 @@
                 kCellKeyKey: @"remote_updates",
                 kCellTitleKey: OALocalizedString(@"download_tab_updates"),
                 kCellIconNameKey: @"ic_custom_cloud",
-                @"value": @([OABackupHelper getItemsMapForRestore:_info settingsItems:_backup.settingsItems].count)
+                @"value": @([BackupUtils getItemsMapForRestore:_info settingsItems:_backup.settingsItems].count + _info.filteredLocalFilesToDelete.count)
             }];
             [collapsableRow addDependentRow:updatesRow];
             OATableRowData *conflictsRow = [[OATableRowData alloc] initWithData:@{
@@ -398,21 +404,6 @@
     }
 }
 
-- (OATitleIconProgressbarCell *) getProgressBarCell
-{
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleIconProgressbarCell getCellIdentifier] owner:self options:nil];
-    OATitleIconProgressbarCell *resultCell = (OATitleIconProgressbarCell *)[nib objectAtIndex:0];
-    [resultCell.progressBar setProgress:0.0 animated:NO];
-    [resultCell.progressBar setProgressTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
-    resultCell.textView.text = [OALocalizedString(@"syncing_progress") stringByAppendingString:[NSString stringWithFormat:@"%i%%", 0]];
-    resultCell.textView.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
-    resultCell.imgView.image = [UIImage templateImageNamed:@"ic_custom_cloud_upload"];
-    resultCell.imgView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
-    resultCell.selectionStyle = UITableViewCellSelectionStyleNone;
-    resultCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    return resultCell;
-}
-
 - (BOOL) shouldShowSyncButton
 {
     return _info.filteredFilesToDelete.count > 0 || _info.filteredFilesToDownload.count > 0 || _info.filteredFilesToUpload.count > 0;
@@ -425,7 +416,7 @@
     if (isSyncButton)
     {
         BOOL hasInfo = _info != nil;
-        BOOL noChanges = _status == OABackupStatus.MAKE_BACKUP && (!hasInfo || (_info.filteredFilesToUpload.count == 0 && _info.filteredFilesToDelete.count == 0 && _info.filteredLocalFilesToDelete.count == 0 && [OABackupHelper getItemsMapForRestore:_info settingsItems:_backup.settingsItems].count == 0));
+        BOOL noChanges = _status == OABackupStatus.MAKE_BACKUP && (!hasInfo || (_info.filteredFilesToUpload.count == 0 && _info.filteredFilesToDelete.count == 0 && _info.filteredLocalFilesToDelete.count == 0 && [BackupUtils getItemsMapForRestore:_info settingsItems:_backup.settingsItems].count == 0));
         actionButtonDisabled = noChanges || _backupHelper.isBackupPreparing || _settingsHelper.isBackupSyncing;
     }
     return actionButtonDisabled;
@@ -451,7 +442,9 @@
     collapsableRow.collapsed = !collapsableRow.collapsed;
     NSMutableArray<NSIndexPath *> *rowIndexes = [NSMutableArray array];
     for (NSInteger i = 1; i <= collapsableRow.dependentRowsCount; i++)
+    {
         [rowIndexes addObject:[NSIndexPath indexPathForRow:(indexPath.row + i) inSection:indexPath.section]];
+    }
     
     [self.tblView performBatchUpdates:^{
         [self.tblView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -716,9 +709,24 @@
         }
         return cell;
     }
-    else if ([cellId isEqualToString:OATitleIconProgressbarCell.getCellIdentifier])
+    else if ([cellId isEqualToString:[OATitleIconProgressbarCell getCellIdentifier]])
     {
-        return [item objForKey:@"cell"];
+        OATitleIconProgressbarCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATitleIconProgressbarCell getCellIdentifier]];
+        if (!cell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleIconProgressbarCell getCellIdentifier] owner:self options:nil];
+            cell = (OATitleIconProgressbarCell *) nib[0];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            [cell.progressBar setProgressTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
+        }
+        if (cell)
+        {
+            [cell.progressBar setProgress:_syncProgress animated:NO];
+            cell.textView.text = [OALocalizedString(@"syncing_progress") stringByAppendingString:@((int) (_syncProgress * 100)).stringValue];
+            cell.imageView.image = [UIImage templateImageNamed:item.iconName];
+            cell.imageView.tintColor = item.iconTintColor;
+        }
+        return cell;
     }
     return nil;
 }
@@ -729,17 +737,17 @@
 {
     OATableRowData *item = [_data itemForIndexPath:indexPath];
     OAStatusBackupViewController *statusBackupViewController = nil;
-    if ([item.key isEqualToString:@"local_changes"] || [item.key isEqualToString:@"backup_progress"] || item.rowType == EOATableRowTypeCollapsable)
+    if ([item.key isEqualToString:@"local_changes"] || [item.key isEqualToString:@"backupProgress"] || item.rowType == EOATableRowTypeCollapsable)
     {
-        statusBackupViewController = [[OAStatusBackupViewController alloc] initWithType:EOARecentChangesLocal];
+        statusBackupViewController = [[OAStatusBackupViewController alloc] initWithType:EOARecentChangesLocal syncProgress:_syncProgress];
     }
     else if ([item.key isEqualToString:@"remote_updates"])
     {
-        statusBackupViewController = [[OAStatusBackupViewController alloc] initWithType:EOARecentChangesRemote];
+        statusBackupViewController = [[OAStatusBackupViewController alloc] initWithType:EOARecentChangesRemote syncProgress:_syncProgress];
     }
     else if ([item.key isEqualToString:@"conflicts"])
     {
-        statusBackupViewController = [[OAStatusBackupViewController alloc] initWithType:EOARecentChangesConflicts];
+        statusBackupViewController = [[OAStatusBackupViewController alloc] initWithType:EOARecentChangesConflicts syncProgress:_syncProgress];
     }
     else if ([item.key isEqualToString:@"onTrashPressed"])
     {
@@ -834,11 +842,23 @@
 - (void)onBackupProgressUpdate:(NSNotification *)notification
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        float value = [notification.userInfo[@"progress"] floatValue];
-        if (_backupProgressCell)
+        float value = roundf([notification.userInfo[@"progress"] floatValue] * 100) / 100.0;
+        if (fabs(_syncProgress - value) >= 0.01)
         {
-            _backupProgressCell.progressBar.progress = value;
-            _backupProgressCell.textView.text = [OALocalizedString(@"syncing_progress") stringByAppendingString:[NSString stringWithFormat:@"%i%%", (int) (value * 100)]];
+            _syncProgress = value;
+            if (_syncProgressCell)
+            {
+                OATableRowData *row = [_data itemForIndexPath:_syncProgressCell];
+                if (row && [row.key isEqualToString:@"backupProgress"])
+                {
+                    OATitleIconProgressbarCell *cell = (OATitleIconProgressbarCell *) [self.tblView cellForRowAtIndexPath:_syncProgressCell];
+                    if (cell)
+                    {
+                        [cell.progressBar setProgress:_syncProgress animated:NO];
+                        cell.textView.text = [OALocalizedString(@"syncing_progress") stringByAppendingString:@((int) (_syncProgress * 100)).stringValue];
+                    }
+                }
+            }
         }
     });
 }

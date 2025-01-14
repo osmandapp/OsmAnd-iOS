@@ -30,7 +30,8 @@
 - (instancetype) initWithType:(NSString *)type name:(NSString *)name
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _name = name;
         _type = type;
         _uploadTime = 0;
@@ -42,7 +43,8 @@
 - (instancetype) initWithType:(NSString *)type name:(NSString *)name uploadTime:(long)uploadTime
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _name = name;
         _type = type;
         _uploadTime = uploadTime;
@@ -54,7 +56,8 @@
 - (instancetype) initWithType:(NSString *)type name:(NSString *)name md5Digest:(NSString *)md5Digest
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _name = name;
         _type = type;
         _md5Digest = md5Digest;
@@ -65,7 +68,8 @@
 - (instancetype) initWithType:(NSString *)type name:(NSString *)name uploadTime:(long)uploadTime md5Digest:(NSString *)md5Digest
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _name = name;
         _type = type;
         _uploadTime = uploadTime;
@@ -114,8 +118,8 @@
 - (instancetype)init
 {
     self = [super init];
-    if (self) {
-        
+    if (self)
+    {
         NSString *dir = [NSHomeDirectory() stringByAppendingString:@"/Library/BackupDatabase/"];
         _dbFilePath = [dir stringByAppendingString:kCloudDbName];
         
@@ -145,27 +149,24 @@
                 const char *sql_stmt = [[NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (%@ text, %@ text, %@ bigint, %@ text)", UPLOADED_FILES_TABLE_NAME, UPLOADED_FILE_COL_TYPE, UPLOADED_FILE_COL_NAME, UPLOADED_FILE_COL_UPLOAD_TIME, UPLOADED_FILE_COL_MD5_DIGEST] UTF8String];
                 
                 if (sqlite3_exec(backupFilesDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
-                {
                     NSLog(@"Failed to create table: %@", [NSString stringWithCString:errMsg encoding:NSUTF8StringEncoding]);
-                }
-                if (errMsg != NULL) sqlite3_free(errMsg);
+                if (errMsg != NULL)
+                    sqlite3_free(errMsg);
                 
                 char *idxErrMsg;
                 const char *create_index = [NSString stringWithFormat:@"CREATE INDEX IF NOT EXISTS %@ ON %@ (%@, %@)", UPLOADED_FILES_INDEX_TYPE_NAME, UPLOADED_FILES_TABLE_NAME, UPLOADED_FILE_COL_TYPE, UPLOADED_FILE_COL_NAME].UTF8String;
                 if (sqlite3_exec(backupFilesDB, create_index, NULL, NULL, &idxErrMsg) != SQLITE_OK)
-                {
                     NSLog(@"Failed to create index: %@", [NSString stringWithCString:idxErrMsg encoding:NSUTF8StringEncoding]);
-                }
-                if (idxErrMsg != NULL) sqlite3_free(idxErrMsg);
+                if (idxErrMsg != NULL)
+                    sqlite3_free(idxErrMsg);
                 
                 char *modifiederrMsg;
                 const char *modified_sql_stmt = [[NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (%@ text, %@ bigint)", LAST_MODIFIED_TABLE_NAME, LAST_MODIFIED_COL_NAME, LAST_MODIFIED_COL_MODIFIED_TIME] UTF8String];
                 
                 if (sqlite3_exec(backupFilesDB, modified_sql_stmt, NULL, NULL, &modifiederrMsg) != SQLITE_OK)
-                {
                     NSLog(@"Failed to create table: %@", [NSString stringWithCString:modifiederrMsg encoding:NSUTF8StringEncoding]);
-                }
-                if (modifiederrMsg != NULL) sqlite3_free(modifiederrMsg);
+                if (modifiederrMsg != NULL)
+                    sqlite3_free(modifiederrMsg);
                 
                 sqlite3_close(backupFilesDB);
             }

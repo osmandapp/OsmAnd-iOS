@@ -18,6 +18,7 @@
 #import "OAAppSettings.h"
 #import "OASettingsHelper.h"
 #import "OAOperationLog.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OACollectLocalFilesTask
 {
@@ -52,7 +53,7 @@
         [_operationLog log:@"getLocalItems"];
         for (OASettingsItem *item in localItems)
         {
-            NSString *fileName = [OABackupHelper getItemFileName:item];
+            NSString *fileName = [BackupUtils getItemFileName:item];
             if ([item isKindOfClass:OAFileSettingsItem.class])
             {
                 OAFileSettingsItem *fileItem = (OAFileSettingsItem *) item;
@@ -107,7 +108,11 @@
                                 {
                                     fileName = f.lastPathComponent;
                                     NSDictionary *attrs = [fileManager attributesOfItemAtPath:f error:nil];
-                                    [self createLocalFile:result item:item fileName:fileName filePath:f lastModified:attrs.fileModificationDate.timeIntervalSince1970];
+                                    [self createLocalFile:result
+                                                     item:item
+                                                 fileName:fileName
+                                                 filePath:f
+                                             lastModified:attrs.fileModificationDate.timeIntervalSince1970 * 1000];
                                 }
                             }
                         }
@@ -119,18 +124,30 @@
                     if ([filePath.pathExtension.lowerCase isEqualToString:@"sqlitedb"])
                     {
                         NSDictionary *attrs = [fileManager attributesOfItemAtPath:filePath error:nil];
-                        [self createLocalFile:result item:item fileName:fileName filePath:filePath lastModified:attrs.fileModificationDate.timeIntervalSince1970];
+                        [self createLocalFile:result
+                                         item:item
+                                     fileName:fileName
+                                     filePath:filePath
+                                 lastModified:attrs.fileModificationDate.timeIntervalSince1970 * 1000];
                     }
                 }
                 else
                 {
                     NSDictionary *attrs = [fileManager attributesOfItemAtPath:filePath error:nil];
-                    [self createLocalFile:result item:item fileName:fileName filePath:filePath lastModified:attrs.fileModificationDate.timeIntervalSince1970];
+                    [self createLocalFile:result
+                                     item:item
+                                 fileName:fileName
+                                 filePath:filePath
+                             lastModified:attrs.fileModificationDate.timeIntervalSince1970 * 1000];
                 }
             }
             else
             {
-                [self createLocalFile:result item:item fileName:fileName filePath:nil lastModified:item.lastModifiedTime];
+                [self createLocalFile:result
+                                 item:item
+                             fileName:fileName
+                             filePath:nil
+                         lastModified:item.lastModifiedTime];
             }
         }
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -160,9 +177,9 @@
             localFile.uploadTime = fileInfo.uploadTime;
             NSString *lastMd5 = fileInfo.md5Digest;
             BOOL needM5Digest = [item isKindOfClass:OAFileSettingsItem.class]
-            && ((OAFileSettingsItem *) item).needMd5Digest
-            && localFile.uploadTime < lastModifiedTime
-            && lastMd5.length > 0;
+                && ((OAFileSettingsItem *) item).needMd5Digest
+                && localFile.uploadTime < lastModifiedTime
+                && lastMd5.length > 0;
             if (needM5Digest && filePath && [NSFileManager.defaultManager fileExistsAtPath:filePath])
             {
                 NSString *md5 = [OAUtilities fileMD5:filePath];
@@ -180,14 +197,19 @@
 
 - (NSArray<OASettingsItem *> *) getLocalItems
 {
-    NSMutableArray<OAExportSettingsType *> *types = [NSMutableArray arrayWithArray:[OAExportSettingsType getEnabledTypes]];
-    NSMutableArray<OAExportSettingsType *> *toDelete = [NSMutableArray array];
-    for (OAExportSettingsType *type in types)
-    {
-        if (![OABackupHelper.sharedInstance getBackupTypePref:type].get)
-            [toDelete addObject:type];
-    }
+    NSArray<OAExportSettingsType *> *types = [self getEnabledExportTypes];
     return [OASettingsHelper.sharedInstance getFilteredSettingsItems:types addProfiles:YES doExport:YES];
+}
+
+- (NSArray<OAExportSettingsType *> *)getEnabledExportTypes
+{
+    NSMutableArray<OAExportSettingsType *> *result = [NSMutableArray array];
+    for (OAExportSettingsType *exportType in [OAExportSettingsType getEnabledTypes])
+    {
+        if ([[BackupUtils getBackupTypePref:exportType] get])
+            [result addObject:exportType];
+    }
+    return result;
 }
 
 - (void) publishProgress:(OALocalFile *)localFile

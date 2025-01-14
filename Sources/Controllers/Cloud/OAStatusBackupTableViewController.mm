@@ -42,7 +42,6 @@
 #import "OAImportBackupTask.h"
 #import "OAExportBackupTask.h"
 #import "OALocalFile.h"
-#import "OATableViewCustomHeaderView.h"
 #import "OASizes.h"
 #import "OAResourcesUIHelper.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -58,18 +57,21 @@
     OATableDataModel *_data;
     NSIndexPath *_lastBackupIndexPath;
     NSInteger _itemsSection;
+    float _syncProgress;
+    NSIndexPath *_syncProgressCell;
     
     OANetworkSettingsHelper *_settingsHelper;
     OABackupHelper *_backupHelper;
     DownloadingCellCloudHelper *_downloadingCellCloudHelper;
 }
 
-- (instancetype)initWithTableType:(EOARecentChangesType)type
+- (instancetype)initWithTableType:(EOARecentChangesType)type syncProgress:(float)syncProgress
 {
     self = [super initWithStyle:UITableViewStyleGrouped];
     if (self)
     {
         _tableType = type;
+        _syncProgress = syncProgress;
         _settingsHelper = [OANetworkSettingsHelper sharedInstance];
         _backupHelper = [OABackupHelper sharedInstance];
         [self setupNotificationListeners];
@@ -88,11 +90,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
     [self setupDownloadingCellHelper];
     self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0.001, 0.001)];
     [self generateData];
-    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -136,6 +138,7 @@
 
 - (void)updateData
 {
+    _syncProgress = 0;
     [self generateData];
     [_downloadingCellCloudHelper cleanCellCache];
     [self.tableView reloadData];
@@ -176,22 +179,23 @@
 
 - (void)generateData
 {
+    _syncProgressCell = nil;
     _itemsSection = -1;
     _data = [[OATableDataModel alloc] init];
     OATableSectionData *statusSection = [OATableSectionData sectionData];
     NSString *backupTime = _backupHelper.isBackupPreparing ?
         OALocalizedString(@"checking_progress")
         : [OAOsmAndFormatter getFormattedPassedTime:OAAppSettings.sharedManager.backupLastUploadedTime.get def:OALocalizedString(@"shared_string_never")]; [OAOsmAndFormatter getFormattedPassedTime:OAAppSettings.sharedManager.backupLastUploadedTime.get def:OALocalizedString(@"shared_string_never")];
+    [_data addSection:statusSection];
     if ([_settingsHelper isBackupSyncing])
     {
         OATableRowData *progressCell = [OATableRowData rowData];
         [progressCell setCellType:[OATitleIconProgressbarCell getCellIdentifier]];
         [progressCell setKey:@"backupProgress"];
-        [progressCell setTitle:[OALocalizedString(@"syncing_progress") stringByAppendingString:[NSString stringWithFormat:@"%i%%", 0]]];
         [progressCell setIconName:@"ic_custom_cloud_upload"];
         [progressCell setIconTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
-        [progressCell setObj:@(0.) forKey:@"progress"];
         [statusSection addRow:progressCell];
+        _syncProgressCell = [NSIndexPath indexPathForRow:[statusSection rowCount] - 1 inSection:[_data sectionCount] - 1];
     }
     else
     {
@@ -205,17 +209,19 @@
             kCellIconTint: @(status.iconColor)
         }];
     }
-    [_data addSection:statusSection];
     _lastBackupIndexPath = [NSIndexPath indexPathForRow:statusSection.rowCount - 1 inSection:_data.sectionCount - 1];
     
     OATableSectionData *itemsSection = [OATableSectionData sectionData];
     OABackupInfo *info = _backupHelper.backup.backupInfo;
+    NSString *header = @"";
 
     if (_tableType == EOARecentChangesLocal || _tableType == EOARecentChangesRemote)
     {
         NSMutableDictionary<NSString *, NSMutableDictionary *> *filesByName =  [NSMutableDictionary dictionary];
         if (_tableType == EOARecentChangesLocal)
         {
+            header = OALocalizedString(@"cloud_recent_changes");
+
             NSArray<OALocalFile *> *localFiles = info.filteredFilesToUpload;
             for (OALocalFile *localFile in localFiles)
             {
@@ -233,7 +239,7 @@
             }
             if (filesByName.count > 0)
             {
-                NSDictionary<OARemoteFile *, OASettingsItem *> *downloadItems = [OABackupHelper getItemsMapForRestore:info settingsItems:_backupHelper.backup.settingsItems];
+                NSDictionary<OARemoteFile *, OASettingsItem *> *downloadItems = [BackupUtils getItemsMapForRestore:info settingsItems:_backupHelper.backup.settingsItems];
                 for (OARemoteFile *remoteFile in downloadItems.allKeys)
                 {
                     NSString *key = [remoteFile getTypeNamePath];
@@ -253,7 +259,9 @@
         }
         else if (_tableType == EOARecentChangesRemote)
         {
-            NSDictionary<OARemoteFile *, OASettingsItem *> *downloadItems = [OABackupHelper getItemsMapForRestore:info settingsItems:_backupHelper.backup.settingsItems];
+            header = OALocalizedString(@"download_tab_updates");
+
+            NSDictionary<OARemoteFile *, OASettingsItem *> *downloadItems = [BackupUtils getItemsMapForRestore:info settingsItems:_backupHelper.backup.settingsItems];
             for (OARemoteFile *remoteFile in downloadItems.allKeys)
             {
                 NSString *key = [remoteFile getTypeNamePath];
@@ -295,23 +303,29 @@
                 BOOL deleted = [it.lastObject[@"deleted"] boolValue];
                 EOABackupSyncOperationType operation = deleted ? EOABackupSyncOperationDelete
                     : _tableType == EOARecentChangesLocal ? EOABackupSyncOperationUpload : EOABackupSyncOperationDownload;
-                [itemsSection addRow:[self rowFromKey:it.firstObject
-                                             mainTint:deleted ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled]
+                OATableRowData *rowData = [self rowFromKey:it.firstObject
+                                                  mainTint:deleted ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled]
                                         secondaryColorName:deleted ? ACColorNameIconColorDisruptive : ACColorNameIconColorActive
-                                            operation:operation
-                                            localFile:it.lastObject[@"localFile"]
-                                           remoteFile:it.lastObject[@"remoteFile"]]];
+                                                 operation:operation
+                                                 localFile:it.lastObject[@"localFile"]
+                                                remoteFile:it.lastObject[@"remoteFile"]];
+                if (rowData)
+                    [itemsSection addRow:rowData];
             }
         }];
     }
     else if (_tableType == EOARecentChangesConflicts)
     {
+        header = OALocalizedString(@"download_tab_conflicts");
+
         for (NSArray *items in info.filteredFilesToMerge)
         {
             NSString *key = [((OALocalFile *) items.firstObject) getTypeFileName];
-            [itemsSection addRow:[self rowFromConflictItems:key
-                                                  localFile:items.firstObject
-                                                 remoteFile:items.lastObject]];
+            OATableRowData *rowData = [self rowFromConflictItems:key
+                                                       localFile:items.firstObject
+                                                      remoteFile:items.lastObject];
+            if (rowData)
+                [itemsSection addRow:rowData];
         }
     }
 
@@ -325,14 +339,20 @@
             kCellIconNameKey: @"ic_action_cloud_smile_face_colored"
         }];
     }
+    else
+    {
+        itemsSection.headerText = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_dash"),
+                                   header,
+                                   @([itemsSection rowCount]).stringValue];
+    }
 
     if (![_backupHelper isBackupPreparing])
     {
         _itemsSection = _data.sectionCount;
         [_data addSection:itemsSection];
     }
-    if (_itemsSection != -1 && _tableType == EOARecentChangesConflicts && itemsSection.rowCount > 1)
-        [_data sectionDataForIndex:_itemsSection].headerText = OALocalizedString(@"backup_conflicts_descr");
+    if (_tableType == EOARecentChangesConflicts && itemsSection.rowCount > 1)
+        statusSection.footerText = OALocalizedString(@"backup_conflicts_descr");
 }
 
 - (BOOL) hasItems
@@ -340,7 +360,7 @@
     switch (_tableType)
     {
         case EOARecentChangesRemote:
-            return [OABackupHelper getItemsMapForRestore:_backupHelper.backup.backupInfo settingsItems:_backupHelper.backup.settingsItems].count > 0;
+            return [BackupUtils getItemsMapForRestore:_backupHelper.backup.backupInfo settingsItems:_backupHelper.backup.settingsItems].count > 0;
         case EOARecentChangesLocal:
             return _backupHelper.backup.backupInfo.filteredFilesToDelete.count + _backupHelper.backup.backupInfo.filteredFilesToUpload.count > 0;
         default:
@@ -374,6 +394,9 @@
                                      operation:EOABackupSyncOperationNone
                                      localFile:localFile
                                     remoteFile:remoteFile];
+    if (!rowData)
+        return nil;
+
     NSString *conflictStr = [OALocalizedString(@"cloud_conflict") stringByAppendingString:@". "];
     NSMutableAttributedString *attributedDescr = [[NSMutableAttributedString alloc] initWithString:[conflictStr stringByAppendingString:rowData.descr]];
     [attributedDescr addAttributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:13 weight:UIFontWeightMedium],
@@ -409,7 +432,9 @@
         if (!settingsItem)
             settingsItem = localFile.item;
     }
-
+    if (!settingsItem)
+        return nil;
+    
     NSString *name = @"";
     if ([settingsItem isKindOfClass:OAProfileSettingsItem.class])
     {
@@ -431,13 +456,13 @@
     {
         name = OALocalizedString(@"res_unknown");
     }
-
+    
     long timeMs = 0;
     if (_tableType == EOARecentChangesLocal && operation == EOABackupSyncOperationDelete)
         timeMs = remoteFile.clienttimems;
-    else if (_tableType == EOARecentChangesLocal || _tableType == EOARecentChangesConflicts)
-        timeMs = localFile.localModifiedTime * 1000;
-    else if (operation == EOABackupSyncOperationDelete)
+    else if (_tableType == EOARecentChangesLocal)
+        timeMs = localFile.localModifiedTime;
+    else if (_tableType == EOARecentChangesConflicts || operation == EOABackupSyncOperationDelete)
         timeMs = localFile.uploadTime;
     else
         timeMs = remoteFile.updatetimems;
@@ -573,6 +598,16 @@
     return [_data rowCount:section];
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return [_data sectionDataForIndex:section].headerText;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+{
+    return [_data sectionDataForIndex:section].footerText;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OATableRowData *item = [_data itemForIndexPath:indexPath];
@@ -683,11 +718,10 @@
         }
         if (cell)
         {
-            cell.textView.text = item.title;
+            [cell.progressBar setProgress:_syncProgress animated:NO];
+            cell.textView.text = [OALocalizedString(@"syncing_progress") stringByAppendingString:@((int) (_syncProgress * 100)).stringValue];
             cell.imageView.image = [UIImage templateImageNamed:item.iconName];
             cell.imageView.tintColor = item.iconTintColor;
-
-            [cell.progressBar setProgress:[[item objForKey:@"progress"] floatValue] animated:NO];
         }
         return cell;
     }
@@ -695,38 +729,6 @@
 }
 
 // MARK: UITableViewDelegate
-
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    OATableViewCustomHeaderView *customHeader = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
-    NSString *header = [_data sectionDataForIndex:section].headerText;
-    if (header && section == _itemsSection && _tableType == EOARecentChangesConflicts)
-    {
-        customHeader.label.text = header;
-        customHeader.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
-        [customHeader setYOffset:2.];
-        return customHeader;
-    }
-    return nil;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    NSString *header = [_data sectionDataForIndex:section].headerText;
-    if (section == _itemsSection)
-    {
-        if (header && _tableType == EOARecentChangesConflicts)
-        {
-            return [OATableViewCustomHeaderView getHeight:header
-                                                    width:tableView.bounds.size.width
-                                                  xOffset:kPaddingOnSideOfContent
-                                                  yOffset:2.
-                                                     font:[UIFont preferredFontForTextStyle:UIFontTextStyleFootnote]] + 15.;
-        }
-        return kHeaderHeightDefault;
-    }
-    return 0.001;
-}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -792,18 +794,22 @@
 - (void)onBackupProgressUpdate:(NSNotification *)notification
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        float value = [notification.userInfo[@"progress"] floatValue];
-        NSIndexPath *progressIdxPath = [NSIndexPath indexPathForRow:0 inSection:0];
-        OATableRowData *row = [_data itemForIndexPath:progressIdxPath];
-        if (row && [row.key isEqualToString:@"backupProgress"])
+        float value = roundf([notification.userInfo[@"progress"] floatValue] * 100) / 100.0;
+        if (fabs(_syncProgress - value) >= 0.01)
         {
-            [row setObj:@(value) forKey:@"progress"];
-            [row setTitle:[OALocalizedString(@"syncing_progress") stringByAppendingString:[NSString stringWithFormat:@"%i%%", (int) (value * 100)]]];
-            OATitleIconProgressbarCell *cell = (OATitleIconProgressbarCell *) [self.tableView cellForRowAtIndexPath:progressIdxPath];
-            if (cell)
+            _syncProgress = value;
+            if (_syncProgressCell)
             {
-                cell.progressBar.progress = value;
-                cell.textView.text = row.title;
+                OATableRowData *row = [_data itemForIndexPath:_syncProgressCell];
+                if (row && [row.key isEqualToString:@"backupProgress"])
+                {
+                    OATitleIconProgressbarCell *cell = (OATitleIconProgressbarCell *) [self.tableView cellForRowAtIndexPath:_syncProgressCell];
+                    if (cell)
+                    {
+                        [cell.progressBar setProgress:_syncProgress animated:NO];
+                        cell.textView.text = [OALocalizedString(@"syncing_progress") stringByAppendingString:@((int) (_syncProgress * 100)).stringValue];
+                    }
+                }
             }
         }
     });

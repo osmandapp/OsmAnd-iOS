@@ -1616,6 +1616,7 @@
 "res_world_map" = "World map";
 "shared_string_world" = "World";
 "download_tab_updates" = "Updates";
+"download_tab_conflicts" = "Unresolved";
 "res_worldwide" = "Worldwide";
 "res_region_map" = "Region map";
 "res_updates_avail" = "Updates available";

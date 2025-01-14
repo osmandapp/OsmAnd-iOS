@@ -81,7 +81,7 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
         super.init(coder: coder)
     }
     
-    // MARK: - Life Circle
+    // MARK: - Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -88,6 +88,9 @@ extension OATextInfoWidget {
         vc.selectedAppMode = OAAppSettings.sharedManager().applicationMode.get()
         vc.widgetInfo = widgetInfo
         vc.widgetPanel = widgetInfo.widgetPanel
+        vc.onWidgetStateChangedAction = {
+            OARootViewController.instance().mapPanel.hudViewController?.mapInfoController.updateWidgetsInfo()
+        }
         OARootViewController.instance().navigationController?.present(UINavigationController(rootViewController: vc), animated: true)
     }
 

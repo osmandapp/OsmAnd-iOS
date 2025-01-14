@@ -6,10 +6,6 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-import Foundation
-
-@objc(OAWidgetConfigurationViewController)
-@objcMembers
 final class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStateDelegate {
     
     var widgetInfo: MapWidgetInfo!
@@ -24,18 +20,22 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
     var addToNext: Bool?
     var selectedWidget: String?
     
-    lazy private var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
-    
     var isCreateNewAndSimilarAlreadyExist: Bool {
         createNew && similarAlreadyExist
     }
+    
+    private lazy var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         tableView.setContentOffset(CGPoint(x: 0, y: 1), animated: false)
-        if isCreateNewAndSimilarAlreadyExist || (createNew && !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "")) {
-            widgetConfigurationParams = ["selectedAppMode": selectedAppMode!]
+        if createNew && !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "") {
+            if let selectedAppMode {
+                widgetConfigurationParams = ["selectedAppMode": selectedAppMode]
+            }
+        } else {
+            widgetConfigurationParams = [:]
         }
         configureNavigationButtons()
     }
@@ -55,7 +55,7 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
             }
         }
         
-        if let settingsData = widgetInfo.getSettingsData(selectedAppMode) {
+        if let settingsData = widgetInfo.getSettingsData(selectedAppMode, widgetConfigurationParams, isCreate: createNew) {
             for i in 0 ..< settingsData.sectionCount() {
                 tableData.addSection(settingsData.sectionData(for: i))
             }
@@ -97,25 +97,27 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
                 cell?.descriptionVisibility(false)
             }
             if let cell {
-                let pref = item.obj(forKey: "pref") as? OACommonBoolean
                 let hasIcon = item.iconName != nil
                 cell.titleLabel.text = item.title
                 cell.switchView.removeTarget(nil, action: nil, for: .allEvents)
-                var selected = pref?.get(selectedAppMode) ?? false
-                if isCreateNewAndSimilarAlreadyExist {
-                    if widgetKey == WidgetType.averageSpeed.id {
-                        if isFirstGenerateData {
-                            widgetConfigurationParams?[AverageSpeedWidget.SKIP_STOPS_PREF_ID] = selected
-                        } else {
-                            selected = widgetConfigurationParams?[AverageSpeedWidget.SKIP_STOPS_PREF_ID] as? Bool ?? false
-                        }
+                var selected = false
+                if let pref = item.obj(forKey: "pref") as? OACommonBoolean {
+                    if !createNew {
+                        selected = pref.get(selectedAppMode)
                     } else {
-                        fatalError("You need implement value handler for widgetKey")
+                        if let prefKey = pref.key,
+                           let value = widgetConfigurationParams?[prefKey] as? Bool {
+                            selected = value
+                        } else {
+                            selected = pref.defValue
+                        }
+                    }
+                    
+                    if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? ""), pref.key.hasPrefix("simple_widget_show_icon") {
+                        widgetConfigurationParams?["isVisibleIcon"] = selected
                     }
                 }
-                if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "") {
-                    widgetConfigurationParams?["isVisibleIcon"] = selected
-                }
+
                 cell.switchView.isOn = selected
                 cell.leftIconVisibility(hasIcon)
                 cell.leftIconView.image = UIImage.templateImageNamed(selected ? item.iconName : item.string(forKey: "hide_icon"))
@@ -142,38 +144,8 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
                 } else {
                     cell.descriptionVisibility(false)
                 }
-                if isCreateNewAndSimilarAlreadyExist {
-                    var value: String
-                    if isFirstGenerateData {
-                        guard let pref = item.obj(forKey: "pref") as? OACommonPreference,
-                              let prefLong = pref as? OACommonLong else {
-                            return nil
-                        }
-                        let param = String(prefLong.get(selectedAppMode))
-                        value = item.string(forKey: "value")!
-                        if widgetKey == WidgetType.averageSpeed.id {
-                            widgetConfigurationParams?[AverageSpeedWidget.MEASURED_INTERVAL_PREF_ID] = param
-                        } else if widgetKey == WidgetType.glideAverage.id {
-                            widgetConfigurationParams?[GlideAverageWidget.measuredIntervalPrefID] = param
-                        } else {
-                            fatalError("You need implement value handler for widgetKey")
-                        }
-                    } else {
-                        var _value = ""
-                        if widgetKey == WidgetType.averageSpeed.id {
-                            _value = widgetConfigurationParams?[AverageSpeedWidget.MEASURED_INTERVAL_PREF_ID] as? String ?? "0"
-                            value = AverageSpeedWidget.getIntervalTitle(Int(_value)!)
-                        } else if widgetKey == WidgetType.glideAverage.id {
-                            _value = widgetConfigurationParams?[GlideAverageWidget.measuredIntervalPrefID] as? String ?? "0"
-                            value = GlideAverageWidget.getIntervalTitle(Int(_value)!)
-                        } else {
-                            fatalError("You need implement value handler for widgetKey")
-                        }
-                    }
-                    cell.valueLabel.text = value
-                } else {
-                    cell.valueLabel.text = item.string(forKey: "value")
-                }
+                cell.valueLabel.text = item.string(forKey: "value")
+                
                 if let iconName = item.iconName, !iconName.isEmpty {
                     cell.leftIconVisibility(true)
                     cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
@@ -188,19 +160,35 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
             cell.selectionStyle = .none
             if let icons = item.obj(forKey: "values") as? [UIImage],
                let pref = item.obj(forKey: "prefSegment") as? OACommonWidgetSizeStyle {
-                let widgetSizeStyle = pref.get(selectedAppMode)
+                var widgetSizeStyle: EOAWidgetSizeStyle = .medium
+                if !createNew {
+                    widgetSizeStyle = pref.get(selectedAppMode)
+                } else {
+                    if let prefKey = pref.key,
+                       let rawValue = widgetConfigurationParams?["widgetSizeStyle"] as? Int,
+                       let style = EOAWidgetSizeStyle(rawValue: rawValue) {
+                        widgetSizeStyle = style
+                    } else {
+                        widgetSizeStyle = EOAWidgetSizeStyle(rawValue: Int(pref.defValue)) ?? .medium
+                    }
+                }
+                
                 if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "") {
                     widgetConfigurationParams?["widgetSizeStyle"] = widgetSizeStyle.rawValue
                 }
                 cell.configureSegmentedControl(icons: icons, selectedSegmentIndex: widgetSizeStyle.rawValue)
             }
+            
             if let title = item.string(forKey: "title") {
                 cell.configureTitle(title: title)
             }
             cell.didSelectSegmentIndex = { [weak self] index in
                 guard let self,
                       let pref = item.obj(forKey: "prefSegment") as? OACommonWidgetSizeStyle else { return }
-                pref.set(EOAWidgetSizeStyle(rawValue: index) ?? .medium, mode: selectedAppMode)
+                if !createNew {
+                    pref.set(EOAWidgetSizeStyle(rawValue: index) ?? .medium, mode: selectedAppMode)
+                }
+              
                 if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "") {
                     widgetConfigurationParams?["widgetSizeStyle"] = index
                 }
@@ -224,48 +212,23 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
             if let possibleValues {
                 let vc = WidgetParameterViewController()
                 vc.delegate = self
+                vc.isCreateNew = createNew
                 let section = vc.tableData.createNewSection()
                 section.addRows(possibleValues)
                 section.footerText = (item.obj(forKey: "footer") as? String) ?? ""
                 vc.appMode = selectedAppMode
                 vc.screenTitle = item.descr ?? item.title
-                if isCreateNewAndSimilarAlreadyExist {
-                    guard let pref = item.obj(forKey: "pref") as? OACommonPreference,
-                          let prefLong = pref as? OACommonLong else {
-                        return
-                    }
-                    var value: Int?
-                    if isFirstGenerateData {
-                        value = Int(prefLong.get(selectedAppMode))
-                        if widgetKey == WidgetType.averageSpeed.id {
-                            widgetConfigurationParams?[AverageSpeedWidget.MEASURED_INTERVAL_PREF_ID] = String(value ?? 0)
-                        } else if widgetKey == WidgetType.glideAverage.id {
-                            widgetConfigurationParams?[GlideAverageWidget.measuredIntervalPrefID] = String(value ?? 0)
-                        } else {
-                            fatalError("You need implement value handler for widgetKey")
-                        }
-                    }
-                    if widgetKey == WidgetType.averageSpeed.id {
-                        vc.widgetConfigurationSelectedValue = widgetConfigurationParams?[AverageSpeedWidget.MEASURED_INTERVAL_PREF_ID] as? String ?? ""
-                    } else if widgetKey == WidgetType.glideAverage.id {
-                        vc.widgetConfigurationSelectedValue = widgetConfigurationParams?[GlideAverageWidget.measuredIntervalPrefID] as? String ?? ""
-                    } else {
-                        fatalError("You need implement value handler for widgetKey")
-                    }
-                    vc.onWidgetConfigurationParamsAction = { [weak self] result in
-                        guard let self else { return }
-                        if widgetKey == WidgetType.averageSpeed.id {
-                            widgetConfigurationParams?[AverageSpeedWidget.MEASURED_INTERVAL_PREF_ID] = result ?? ""
-                        } else if widgetKey == WidgetType.glideAverage.id {
-                            widgetConfigurationParams?[GlideAverageWidget.measuredIntervalPrefID] = result ?? ""
-                        } else {
-                            fatalError("You need implement value handler for widgetKey")
-                        }
-                    }
+                vc.pref = item.obj(forKey: "pref") as? OACommonPreference
+                if let widgetConfigurationParams, let pref = vc.pref, let value = widgetConfigurationParams[pref.key] {
+                    vc.widgetConfigurationParams = [pref.key: value]
                 } else {
-                    vc.pref = item.obj(forKey: "pref") as? OACommonPreference
+                    vc.widgetConfigurationParams = [:]
                 }
-                
+                vc.onWidgetChangeParamsAction = { [weak self] params in
+                    guard let self,
+                          let result = params.first else { return }
+                    widgetConfigurationParams?[result.key] = result.value
+                }
                 showMediumSheetViewController(vc, isLargeAvailable: false)
             }
         } else if item.key == "external_sensor_key" {
@@ -279,16 +242,16 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
                 }
                 controller.onSelectDeviceAction = { [weak self] device in
                     guard let self else { return }
-                    if isCreateNewAndSimilarAlreadyExist {
+                    if createNew {
                         // Pairing widget with selected device
                         widgetConfigurationParams?[SensorTextWidget.externalDeviceIdConst] = device.id
                     }
-                    self.generateData()
+                    generateData()
                     tableView.reloadData()
                 }
                 controller.onSelectCommonOptionsAction = { [weak self] in
                     guard let self else { return }
-                    self.generateData()
+                    generateData()
                     tableView.reloadData()
                 }
                 navigationController?.pushViewController(controller, animated: true)
@@ -349,20 +312,16 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
         let indexPath = IndexPath(row: sw.tag & 0x3FF, section: sw.tag >> 10)
         let data = tableData!.item(for: indexPath)
         
-        if isCreateNewAndSimilarAlreadyExist {
-            if widgetKey == WidgetType.averageSpeed.id {
-                widgetConfigurationParams?[AverageSpeedWidget.SKIP_STOPS_PREF_ID] = sw.isOn
-            } else {
-                fatalError("You need implement value handler for widgetKey")
-            }
-        } else {
-            let pref = data.obj(forKey: "pref") as! OACommonBoolean
+        let pref = data.obj(forKey: "pref") as! OACommonBoolean
+        if !createNew {
             pref.set(sw.isOn, mode: selectedAppMode)
         }
-        if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "") {
+        widgetConfigurationParams?[pref.key] = sw.isOn
+        
+        if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? ""), pref.key.hasPrefix("simple_widget_show_icon") {
             widgetConfigurationParams?["isVisibleIcon"] = sw.isOn
         }
-        if let cell = self.tableView.cellForRow(at: indexPath) as? OASwitchTableViewCell, !cell.leftIconView.isHidden {
+        if let cell = tableView.cellForRow(at: indexPath) as? OASwitchTableViewCell, !cell.leftIconView.isHidden {
             UIView.animate(withDuration: 0.2) {
                 cell.leftIconView.image = UIImage.templateImageNamed(sw.isOn ? data.iconName : data.string(forKey: "hide_icon"))
                 cell.leftIconView.tintColor = sw.isOn ? self.selectedAppMode.getProfileColor() : UIColor.iconColorDisabled
@@ -377,7 +336,13 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
 extension WidgetConfigurationViewController {
     
     override func getTitle() -> String! {
-        widgetInfo.getTitle()
+        if createNew {
+            let widgetType = widgetInfo.widget.widgetType
+            if widgetType == .sideMarker1 || widgetType == .sideMarker2 {
+                return widgetInfo.getWidgetDefaultTitle()
+            }
+        }
+        return widgetInfo.getTitle()
     }
     
     override func getNavbarStyle() -> EOABaseNavbarStyle {

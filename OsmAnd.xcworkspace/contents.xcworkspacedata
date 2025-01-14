@@ -40,10 +40,13 @@
                            location = "group:OBDDataField.kt">
                         </FileRef>
                         <FileRef
-                           location = "group:ODBSimulationSource.kt">
+                           location = "group:OBDUtils.kt">
                         </FileRef>
                         <FileRef
-                           location = "group:OBDUtils.kt">
+                           location = "group:OBDConnector.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:OBDSimulationSource.kt">
                         </FileRef>
                         <FileRef
                            location = "group:OBDDataComputer.kt">
@@ -84,6 +87,9 @@
                         </FileRef>
                         <FileRef
                            location = "group:KAlgorithms.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:KGeoParsedPoint.kt">
                         </FileRef>
                         <FileRef
                            location = "group:KStringMatcher.kt">

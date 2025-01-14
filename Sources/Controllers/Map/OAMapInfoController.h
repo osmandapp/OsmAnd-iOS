@@ -59,6 +59,8 @@
 
 - (void) updateRuler;
 
+- (void)updateWidgetsInfo;
+
 - (void)updateLayout;
 - (void)viewWillTransition:(CGSize)size;
 - (void)updateSpeedometer;

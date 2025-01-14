@@ -86,6 +86,8 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
 }
 
 - (OATableDataModel *)getSettingsData:(OAApplicationMode *)appMode
+            widgetConfigurationParams:(NSDictionary<NSString *,id> * _Nullable)widgetConfigurationParams
+                             isCreate:(BOOL)isCreate
 {
     OATableDataModel *data = [[OATableDataModel alloc] init];
     OATableSectionData *section = [data createNewSection];
@@ -99,7 +101,20 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
     row.descr = title;
 
     [row setObj:_widgetState.typePreference forKey:@"pref"];
-    [row setObj:[self getTitle:(EOAWidgetZoomLevelType)[_widgetState.typePreference get:appMode]] forKey:@"value"];
+    
+    EOAWidgetZoomLevelType currentValue = (EOAWidgetZoomLevelType)_widgetState.typePreference.defValue;
+    
+    if ([widgetConfigurationParams objectForKey:ZoomLevelWidgetState.zoomLevelType] && [widgetConfigurationParams[ZoomLevelWidgetState.zoomLevelType] isEqualToString:@"MAP_SCALE"] )
+    {
+        currentValue = EOAWidgetMapScale;
+    }
+    else if (!isCreate)
+    {
+        currentValue = (EOAWidgetZoomLevelType)[_widgetState.typePreference get:appMode];
+    }
+    
+    [row setObj:[self getTitle:currentValue] forKey:@"value"];
+
     [row setObj:self.getPossibleValues forKey:@"possible_values"];
    
     return data;
@@ -151,7 +166,6 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
 
        return (int)(mapScreenWidthInMeters / realScreenWidthInMeters);
 }
-
 
 - (FormattedValue *)formatMapScale:(int)mapScale
 {

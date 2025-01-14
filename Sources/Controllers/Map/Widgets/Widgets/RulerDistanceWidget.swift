@@ -5,22 +5,23 @@
 //  Created by Paul on 20.06.2023.
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
-import Foundation
 
 @objcMembers
-class RulerDistanceWidget: OATextInfoWidget {
+final class RulerDistanceWidget: OATextInfoWidget {
 
     let updateRulerObservable = OAObservable()
+    
+    private let settings = OAAppSettings.sharedManager()!
     private var updateRulerObserver: OAAutoObserverProxy?
     
     init(customId: String?, appMode: OAApplicationMode, widgetParams: ([String: Any])? = nil) {
         super.init(type: .radiusRuler)
         updateRulerObserver = OAAutoObserverProxy(self,
-                                                       withHandler: #selector(onRulerUpdate),
-                                                       andObserve: self.updateRulerObservable)
+                                                  withHandler: #selector(onRulerUpdate),
+                                                  andObserve: updateRulerObservable)
         setIconFor(.radiusRuler)
         onClickFunction = { [weak self] _ in
-            let settings = OAAppSettings.sharedManager()!
+            guard let self else { return }
             let mode = settings.rulerMode.get()
             if mode == .RULER_MODE_DARK {
                 settings.rulerMode.set(.RULER_MODE_LIGHT)
@@ -29,16 +30,17 @@ class RulerDistanceWidget: OATextInfoWidget {
             } else if mode == .RULER_MODE_NO_CIRCLES {
                 settings.rulerMode.set(.RULER_MODE_DARK)
             }
-            self?.onRulerUpdate()
+            onRulerUpdate()
         }
         configurePrefs(withId: customId, appMode: appMode, widgetParams: widgetParams)
+        applySettingsWith(params: widgetParams, appMode: appMode)
     }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         updateRulerObserver = OAAutoObserverProxy(self,
-                                                       withHandler: #selector(onRulerUpdate),
-                                                       andObserve: updateRulerObservable)
+                                                  withHandler: #selector(onRulerUpdate),
+                                                  andObserve: updateRulerObservable)
     }
 
     required init?(coder: NSCoder) {
@@ -67,17 +69,9 @@ class RulerDistanceWidget: OATextInfoWidget {
         return true
     }
 
-    @objc private func onRulerUpdate() {
-        if OAAppSettings.sharedManager().rulerMode.get() == .RULER_MODE_NO_CIRCLES {
-            setIcon("widget_hidden")
-        } else {
-            setIconFor(.radiusRuler)
-        }
-        OARootViewController.instance().mapPanel.hudViewController?.mapInfoController.updateRuler()
-    }
-
-    override func getSettingsData(_ appMode: OAApplicationMode) -> OATableDataModel? {
-        let settings = OAAppSettings.sharedManager()!
+    override func getSettingsData(_ appMode: OAApplicationMode,
+                                  widgetConfigurationParams: [String: Any]?,
+                                  isCreate: Bool) -> OATableDataModel? {
         let pref = settings.rulerMode!
         let data = OATableDataModel()
         let section = data.createNewSection()
@@ -90,7 +84,19 @@ class RulerDistanceWidget: OATextInfoWidget {
         settingRow.iconName = pref.get(appMode) == .RULER_MODE_NO_CIRCLES ? "ic_action_ruler_circle_hide" : "ic_action_ruler_circle"
         settingRow.descr = localizedString("ruler_circles")
         settingRow.setObj(pref, forKey: "pref")
-        settingRow.setObj(getModeTitle(pref.get(appMode)), forKey: "value")
+        
+        if var currentValue = EOARulerWidgetMode(rawValue: Int(pref.defValue)) {
+            if let widgetConfigurationParams,
+               let key = widgetConfigurationParams.keys.first(where: { $0.hasPrefix("rulerMode") }),
+               let value = widgetConfigurationParams[key] as? String {
+                currentValue = getModeFrom(value: value, appMode: appMode)
+            } else {
+                if !isCreate {
+                    currentValue = pref.get(appMode)
+                }
+            }
+            settingRow.setObj(getModeTitle(currentValue), forKey: "value")
+        }
         settingRow.setObj(getPossibleValues(), forKey: "possible_values")
         
         let compassRow = section.createNewRow()
@@ -101,6 +107,21 @@ class RulerDistanceWidget: OATextInfoWidget {
         compassRow.setObj(settings.showCompassControlRuler!, forKey: "pref")
         
         return data
+    }
+    
+    private func applySettingsWith(params: ([String: Any])?, appMode: OAApplicationMode) {
+        guard let params else { return }
+        
+        if let value = params["rulerMode"] as? String {
+            settings.rulerMode.set(getModeFrom(value: value, appMode: appMode), mode: appMode)
+        } else {
+            settings.rulerMode.resetToDefault()
+        }
+        if let value = params["showCompassRuler"] as? Bool {
+            settings.showCompassControlRuler.set(value, mode: appMode)
+        } else {
+            settings.showCompassControlRuler.resetToDefault()
+        }
     }
     
     private func getPossibleValues() -> [OATableRowData] {
@@ -122,6 +143,15 @@ class RulerDistanceWidget: OATextInfoWidget {
         return [darkRow, lightRow, disabledRow]
     }
     
+    private func getModeFrom(value: String, appMode: OAApplicationMode) -> EOARulerWidgetMode {
+        switch value {
+        case "FIRST": .RULER_MODE_DARK
+        case "SECOND": .RULER_MODE_LIGHT
+        case "EMPTY": .RULER_MODE_NO_CIRCLES
+        default: fatalError("Unexpected value: \(value)")
+        }
+    }
+    
     private func getModeTitle(_ mode: EOARulerWidgetMode) -> String {
         switch mode {
         case .RULER_MODE_DARK:
@@ -131,8 +161,16 @@ class RulerDistanceWidget: OATextInfoWidget {
         case .RULER_MODE_NO_CIRCLES:
             return localizedString("shared_string_hide")
         @unknown default:
-            fatalError()
+            fatalError("getModeTitle unknown mode")
         }
     }
     
+    @objc private func onRulerUpdate() {
+        if OAAppSettings.sharedManager().rulerMode.get() == .RULER_MODE_NO_CIRCLES {
+            setIcon("widget_hidden")
+        } else {
+            setIconFor(.radiusRuler)
+        }
+        OARootViewController.instance().mapPanel.hudViewController?.mapInfoController.updateRuler()
+    }
 }

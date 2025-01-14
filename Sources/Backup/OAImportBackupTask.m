@@ -344,8 +344,6 @@
 - (void)itemExportDone:(nonnull NSString *)type fileName:(nonnull NSString *)fileName
 {
     [self onProgressUpdate:[[OAItemProgressInfo alloc] initWithType:type fileName:fileName progress:0 work:0 finished:YES]];
-    if ([self isCancelled])
-        _importer.cancelled = YES;
 }
 
 - (void)itemExportStarted:(nonnull NSString *)type fileName:(nonnull NSString *)fileName work:(NSInteger)work
@@ -360,6 +358,8 @@
 
 - (void)updateGeneralProgress:(NSInteger)downloadedItems uploadedKb:(NSInteger)uploadedKb
 {
+    if ([self isCancelled])
+        _importer.cancelled = YES;
     _generalProgress = uploadedKb;
     [_importListener onImportProgressUpdate:_generalProgress uploadedKb:uploadedKb];
 }

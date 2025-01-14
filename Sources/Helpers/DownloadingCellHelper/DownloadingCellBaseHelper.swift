@@ -111,8 +111,6 @@ class DownloadingCellBaseHelper: NSObject {
         if cell == nil {
             cell = setupCell(resourceId)
             cells[resourceId] = cell
-        } else if !isDownloading(resourceId) {
-            cell = setupCell(resourceId)
         }
         return cell
     }

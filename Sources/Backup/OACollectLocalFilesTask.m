@@ -172,9 +172,8 @@
     if (_infos != nil)
     {
         OAUploadedFileInfo *fileInfo = _infos[[NSString stringWithFormat:@"%@___%@", [OASettingsItemType typeName:item.type], fileName]];
-        if (!fileInfo) {
+        if (!fileInfo)
             fileInfo = _infos[[NSString stringWithFormat:@"%@___%@", [OASettingsItemType typeName:item.type], fileName.precomposedStringWithCanonicalMapping]];
-        }
         if (fileInfo)
         {
             localFile.uploadTime = fileInfo.uploadTime;

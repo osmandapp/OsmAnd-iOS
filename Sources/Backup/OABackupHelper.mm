@@ -120,7 +120,7 @@ static NSCharacterSet* URL_PATH_CHARACTER_SET;
 {
     for (OASettingsItem *item in items)
     {
-        if ([self.class applyItem:item type:remoteFile.type name:remoteFile.name])
+        if ([BackupUtils applyItem:item type:remoteFile.type name:remoteFile.name])
             return item;
     }
     return nil;

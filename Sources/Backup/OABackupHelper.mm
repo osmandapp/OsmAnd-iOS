@@ -118,7 +118,7 @@ static NSString *CHECK_CODE_URL = [SERVER_URL stringByAppendingString:@"/userdat
 {
     for (OASettingsItem *item in items)
     {
-        if ([self.class applyItem:item type:remoteFile.type name:remoteFile.name])
+        if ([BackupUtils applyItem:item type:remoteFile.type name:remoteFile.name])
             return item;
     }
     return nil;

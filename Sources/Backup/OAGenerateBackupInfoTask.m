@@ -38,7 +38,8 @@
         _localFiles = localFiles;
         _uniqueRemoteFiles = uniqueRemoteFiles;
         NSMutableDictionary<NSString *, OARemoteFile *>* localMap = [NSMutableDictionary dictionaryWithCapacity:_uniqueRemoteFiles.count];
-        for (NSString *originalKey in _uniqueRemoteFiles) {
+        for (NSString *originalKey in _uniqueRemoteFiles)
+        {
             NSString *decomposedKey = [originalKey decomposedStringWithCanonicalMapping];
             localMap[decomposedKey] = _uniqueRemoteFiles[originalKey];
         }
@@ -124,8 +125,7 @@
             }
         }
     }
-    
-    
+
     for (OALocalFile *localFile in _localFiles.allValues)
     {
         OAExportSettingsType *exportType = localFile.item != nil

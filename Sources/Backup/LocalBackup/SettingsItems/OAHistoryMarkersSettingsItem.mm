@@ -93,9 +93,10 @@
                 [self.appliedItems addObject:duplicate];
             }
         }
-
+        long original = [self localModifiedTime];
         for (OAHistoryItem *historyItem in self.appliedItems)
-            [_historyMarkersHelper addPoint:historyItem];
+            [_historyMarkersHelper addPoint:historyItem ];
+        [self setLocalModifiedTime:original];
     }
 }
 

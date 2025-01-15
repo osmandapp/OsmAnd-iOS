@@ -314,7 +314,7 @@
     if (_listener)
     {
         [_listener updateItemProgress:[OASettingsItemType typeName:item.type] fileName:fileName progress:progress];
-        [_listener updateGeneralProgress:_itemsProgress.countSync uploadedKb:p/1024];
+        [_listener updateGeneralProgress:_itemsProgress.countSync uploadedKb:p];
     }
 }
 

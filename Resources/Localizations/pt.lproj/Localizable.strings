@@ -3487,3 +3487,4 @@
 "screen_is_unlocked" = "O ecrã tátil está desbloqueado.";
 "reset_average_speed" = "Repor velocidade média";
 "screen_is_locked_by_action_button" = "O ecrã tátil está bloqueado. Toque no botão para desbloquear.";
+"cloud_sync_progress" = "A sincronizar…%@";

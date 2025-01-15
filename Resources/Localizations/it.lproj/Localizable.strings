@@ -3438,3 +3438,4 @@
 "rendering_attr_showClimbingRoutes_description" = "Mostra i percorsi per l\'arrampicata";
 "reset_average_speed" = "Azzeramento velocità media";
 "transport_stop" = "Ferma";
+"cloud_sync_progress" = "Sincronizza...%@";

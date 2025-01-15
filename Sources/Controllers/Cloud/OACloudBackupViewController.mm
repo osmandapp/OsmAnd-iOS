@@ -722,7 +722,9 @@
         if (cell)
         {
             [cell.progressBar setProgress:_syncProgress animated:NO];
-            cell.textView.text = [OALocalizedString(@"syncing_progress") stringByAppendingString:@((int) (_syncProgress * 100)).stringValue];
+
+            NSString* percent = [NSString stringWithFormat:@"%d%%", (int)(_syncProgress * 100)];
+            cell.textView.text = [NSString stringWithFormat:OALocalizedString(@"cloud_sync_progress"), percent];
             cell.imageView.image = [UIImage templateImageNamed:item.iconName];
             cell.imageView.tintColor = item.iconTintColor;
         }
@@ -855,7 +857,8 @@
                     if (cell)
                     {
                         [cell.progressBar setProgress:_syncProgress animated:NO];
-                        cell.textView.text = [OALocalizedString(@"syncing_progress") stringByAppendingString:@((int) (_syncProgress * 100)).stringValue];
+                        NSString* percent = [NSString stringWithFormat:@"%d%%", (int)(_syncProgress * 100)];
+                        cell.textView.text = [NSString stringWithFormat:OALocalizedString(@"cloud_sync_progress"), percent];
                     }
                 }
             }

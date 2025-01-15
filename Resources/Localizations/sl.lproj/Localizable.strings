@@ -2447,3 +2447,4 @@
 "shared_string_to" = "Za";
 "transport_stop" = "Postaja";
 "power_watts_unit" = "Vatov";
+"cloud_sync_progress" = "Sinhronizacija … %@";

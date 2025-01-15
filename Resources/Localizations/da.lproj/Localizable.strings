@@ -3421,3 +3421,4 @@
 "rendering_attr_showClimbingRoutes_description" = "Vis klatreruter";
 "reset_average_speed" = "Nulstil gennemsnitshastighed";
 "transport_stop" = "Stoppested";
+"cloud_sync_progress" = "Synkroniserer...%@";

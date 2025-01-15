@@ -2253,3 +2253,4 @@
 "wheel_circumference" = "היקף גלגל";
 "shared_string_maximum" = "מרבי";
 "sort_subfolders_tracks" = "מיון תת־תיקיות";
+"cloud_sync_progress" = "מתבצע סנכרון…%@";

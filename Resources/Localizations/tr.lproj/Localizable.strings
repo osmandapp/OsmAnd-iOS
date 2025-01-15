@@ -3304,3 +3304,4 @@
 "shared_string_visible_on_map" = "Haritada görünür";
 "discard_filter_changes_prompt" = "Tüm süzgeçler sıfırlansın mı?";
 "max_sensor_temperature" = "Sıcaklık, en yüksek";
+"cloud_sync_progress" = "Eşzamanla…%@";

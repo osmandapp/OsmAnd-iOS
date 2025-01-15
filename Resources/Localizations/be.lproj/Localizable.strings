@@ -2848,3 +2848,5 @@
 "shared_string_minute_lowercase" = "хв";
 "revolutions_per_minute_unit" = "аб/хв";
 "sort_subfolders_tracks" = "Сартаваць укладзеныя папкі";
+"rendering_attr_showClimbingRoutes_name" = "Маршруты для ўздыму";
+"rendering_attr_showClimbingRoutes_description" = "Паказаць маршруты для ўздыму";

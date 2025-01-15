@@ -2548,3 +2548,4 @@
 "not_specified" = "Neprecizigita";
 "help_article_map_routes_name" = "Kursoj";
 "reset_average_speed" = "Nuligi mezuman rapidon";
+"cloud_sync_progress" = "Samtempigado…%@";

@@ -3434,3 +3434,4 @@
 "with_waypoints" = "Cu puncte intermediare";
 "year_short" = "An";
 "shared_string_control_stop" = "Stop";
+"cloud_sync_progress" = "Se sincronizează…%@";

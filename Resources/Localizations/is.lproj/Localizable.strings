@@ -3579,3 +3579,5 @@
 "ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
 "routing_algorithm_a" = "A*";
 "share_geo" = "geo:";
+"rendering_attr_showClimbingRoutes_name" = "Klifurleiðir";
+"cloud_sync_progress" = "Samstilli…%@";

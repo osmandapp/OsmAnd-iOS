@@ -220,9 +220,6 @@
        forceReadData:(BOOL)forceReadData
       restoreDeleted:(BOOL)restoreDeleted
 {
-    _dataProgress = [[OAAtomicInteger alloc] initWithInteger:0];
-    _downloadedDataProgress = [[OAAtomicInteger alloc] initWithInteger:0];
-    _itemsProgress = [[OAAtomicInteger alloc] initWithInteger:0];
     if (items.count == 0)
         @throw [NSException exceptionWithName:@"IllegalArgumentException" reason:@"No setting items" userInfo:nil];
 

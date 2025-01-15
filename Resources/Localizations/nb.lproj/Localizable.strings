@@ -2698,3 +2698,4 @@
 "add_widget_to_the_right" = "Legg til miniprogram til høyre";
 "add_widget_above" = "Legg til miniprogram ovenfor";
 "date_of_creation" = "Opprettelsesdato";
+"cloud_sync_progress" = "Synkroniserer…%@";

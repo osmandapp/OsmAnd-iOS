@@ -3473,3 +3473,4 @@
 "add_widget_below" = "Añadir widget debajo";
 "lock_screen" = "Bloquear pantalla";
 "add_widget_above" = "Añadir widget encima";
+"cloud_sync_progress" = "Sincronizando... %@";

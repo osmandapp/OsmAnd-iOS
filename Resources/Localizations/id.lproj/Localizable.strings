@@ -2514,3 +2514,4 @@
 "max_sensor_speed" = "Kecepatan sensor, maks";
 "with_waypoints" = "Dengan titik jalur";
 "transport_stop" = "Berhenti";
+"cloud_sync_progress" = "Menyinkronkan…%@";

@@ -2609,3 +2609,4 @@
 "lock_screen" = "Bloca la pantalla";
 "screen_is_unlocked" = "La pantalla tàctil està desblocada.";
 "add_widget_to_the_left" = "Afegeix el giny a l\'esquerra";
+"cloud_sync_progress" = "Sincronitza...%@";

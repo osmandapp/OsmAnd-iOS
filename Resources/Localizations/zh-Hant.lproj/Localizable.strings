@@ -3574,3 +3574,4 @@
 "help_article_navigation_car_play_name" = "CarPlay";
 "app_mode_ufo" = "UFO";
 "app_mode_osm" = "OSM";
+"cloud_sync_progress" = "同步……%@";

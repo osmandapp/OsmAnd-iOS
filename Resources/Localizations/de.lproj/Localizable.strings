@@ -3475,3 +3475,4 @@
 "arrival_distance_factor_normally" = "Normal";
 "routing_settings" = "Navigation";
 "help_article_map_tracks_name" = "Tracks";
+"cloud_sync_progress" = "Synchronisieren … %@";

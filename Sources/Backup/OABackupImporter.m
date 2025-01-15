@@ -146,6 +146,7 @@
     NSOperationQueue *_queue;
     
     OAAtomicInteger *_dataProgress;
+    OAAtomicInteger *_downloadedDataProgress;
     OAAtomicInteger *_itemsProgress;
     NSString *_tmpFilesDir;
 }
@@ -162,6 +163,9 @@
 
         _tmpFilesDir = NSTemporaryDirectory();
         _tmpFilesDir = [_tmpFilesDir stringByAppendingPathComponent:@"backupTmp"];
+        _dataProgress = [[OAAtomicInteger alloc] initWithInteger:0];
+        _downloadedDataProgress = [[OAAtomicInteger alloc] initWithInteger:0];
+        _itemsProgress = [[OAAtomicInteger alloc] initWithInteger:0];
     }
     return self;
 }
@@ -217,6 +221,7 @@
       restoreDeleted:(BOOL)restoreDeleted
 {
     _dataProgress = [[OAAtomicInteger alloc] initWithInteger:0];
+    _downloadedDataProgress = [[OAAtomicInteger alloc] initWithInteger:0];
     _itemsProgress = [[OAAtomicInteger alloc] initWithInteger:0];
     if (items.count == 0)
         @throw [NSException exceptionWithName:@"IllegalArgumentException" reason:@"No setting items" userInfo:nil];
@@ -688,19 +693,22 @@
     return self.cancelled;
 }
 
-- (void)onFileDownloadDone:(NSString *)type fileName:(NSString *)fileName error:(NSString *)error
+- (void)onFileDownloadDone:(NSString *)type fileName:(NSString *)fileName estSize:(NSInteger) estSize error:(NSString *)error
 {
     [_itemsProgress addAndGet:1];
+    [_downloadedDataProgress addAndGet:estSize];
+    [_dataProgress set:0];
     if (_listener)
     {
         [_listener itemExportDone:type fileName:fileName];
-        [_listener updateGeneralProgress:_itemsProgress.get uploadedKb:_dataProgress.get];
+        [_listener updateGeneralProgress:_itemsProgress.get uploadedKb:
+         _downloadedDataProgress.get];
     }
 }
 
 - (void)onFileDownloadProgress:(NSString *)type fileName:(NSString *)fileName progress:(NSInteger)progress deltaWork:(NSInteger)deltaWork itemFileName:(NSString *)itemFileName
 {
-    NSInteger p = [_dataProgress addAndGet:(int) deltaWork];
+    NSInteger p = [_dataProgress addAndGet:(int) deltaWork] + [_downloadedDataProgress get];
     if (_listener)
     {
         [_listener updateItemProgress:type fileName:fileName progress:(int)progress];

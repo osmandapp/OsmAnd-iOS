@@ -397,6 +397,7 @@
         _data = [OAAppData defaults];
         [defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:_data]
                          forKey:kAppData];
+        
         [defaults setBool:NO forKey:@"hide_all_gpx"];
         [defaults setBool:NO forKey:@"reset_settings"];
         [defaults setBool:NO forKey:@"reset_routing"];
@@ -567,9 +568,8 @@
 
     BOOL rescan = [BundledAssets.shared migrateResourcesToDocumentsIfNeededWithDataPath:_dataPath documentsPath:_documentsPath
                 versionChanged: currentVersion != prevVersion || _firstLaunch];
-    if (rescan) {
+    if (rescan)
         _resourcesManager->rescanUnmanagedStoragePaths(true);
-    }
 
     // Copy regions.ocbf to Documents/Resources if needed
     NSString *ocbfPathBundle = [[NSBundle mainBundle] pathForResource:@"regions" ofType:@"ocbf"];

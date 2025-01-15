@@ -319,7 +319,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             if ([file.pathExtension isEqualToString:@"txt"]) {
                 NSString *key = [COLOR_PALETTE_DIR stringByAppendingPathComponent:file];
                 NSDictionary *assetsMap = BundledAssets.shared.assets; // Access the assets map
-                Asset *asset = assetsMap[key];
+                BundledAsset *asset = assetsMap[key];
                 if(asset) {
                     NSString *filePath = [colorPaletteFolder stringByAppendingPathComponent:file];
                     NSDictionary *attributes = [fileManager attributesOfItemAtPath:filePath error:nil];

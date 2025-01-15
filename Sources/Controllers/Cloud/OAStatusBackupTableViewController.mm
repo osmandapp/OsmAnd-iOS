@@ -51,6 +51,26 @@
 
 @end
 
+@interface OAStatusBackupItem : NSObject
+
+@property (nonatomic, assign) BOOL deleted;
+@property (nonatomic, strong) NSString *key;
+@property (nonatomic, strong) NSString *name;
+@property (nonatomic, strong) OALocalFile *localFile;
+@property (nonatomic, strong) OARemoteFile *remoteFile;
+- (instancetype)initWithKey:(NSString *)key;
+@end
+
+@implementation OAStatusBackupItem
+- (instancetype)initWithKey:(NSString *)key
+{
+    self = [super init];
+    self.key = key;
+    return self;
+}
+
+@end
+
 @implementation OAStatusBackupTableViewController
 {
     EOARecentChangesType _tableType;
@@ -144,37 +164,33 @@
     [self.tableView reloadData];
 }
 
-- (NSMutableDictionary<NSString *,NSMutableArray<NSArray *> *> *)sortFilesByType:(NSMutableDictionary<NSString *,NSMutableDictionary *> *)filesByName
+- (NSMutableArray<OAStatusBackupItem *> *)sortFilesByType:(NSMutableDictionary<NSString *,OAStatusBackupItem *> *)filesByName
 {
-    NSMutableDictionary<NSString *, NSMutableArray<NSArray *> *> *filesByType = [NSMutableDictionary dictionary];
-    [filesByName enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSMutableDictionary * _Nonnull obj, BOOL * _Nonnull stop) {
-        OALocalFile *l = obj[@"localFile"];
-        OARemoteFile *r = obj[@"remoteFile"];
-        OASettingsItem *item = l ? l.item : r.item;
+    NSMutableArray<OAStatusBackupItem *> * res = [NSMutableArray array];
+    for (OAStatusBackupItem *it in filesByName.allValues)
+    {
+        OASettingsItem *item = it.localFile ? it.localFile.item : it.remoteFile.item;
         NSString *type = [OASettingsItemType typeName:item.type];
         if ([item isKindOfClass:OAFileSettingsItem.class])
         {
             OAFileSettingsItem *flItem = (OAFileSettingsItem *)item;
             type = [OAFileSettingsItemFileSubtype getSubtypeName:flItem.subtype];
         }
-        if (type)
-        {
-            NSMutableArray<NSArray *> *arr = filesByType[type];
-            if (!arr)
-            {
-                arr = [NSMutableArray array];
-                filesByType[type] = arr;
-            }
-            [arr addObject:@[key, obj]];
+        NSString *visibleName = item.name;
+        if ([item isKindOfClass:OAProfileSettingsItem.class]) {
+            visibleName = [((OAProfileSettingsItem *) item).appMode toHumanString];
+        } else {
+            visibleName = [item getPublicName];
         }
+        it.name = [type stringByAppendingPathComponent:visibleName];
+        [res addObject:it];
+    };
+    
+    [res sortUsingComparator:^NSComparisonResult(OAStatusBackupItem * _Nonnull obj1, OAStatusBackupItem * _Nonnull obj2) {
+        return [obj1.name compare:obj2.name];
     }];
-    for (NSMutableArray<NSArray *> *arr in filesByType.allValues)
-    {
-        [arr sortUsingComparator:^NSComparisonResult(NSArray * _Nonnull obj1, NSArray * _Nonnull obj2) {
-            return [[obj1.firstObject stringValue].lastPathComponent compare:[obj2.firstObject stringValue].lastPathComponent];
-        }];
-    }
-    return filesByType;
+    
+    return res;
 }
 
 - (void)generateData
@@ -217,7 +233,7 @@
 
     if (_tableType == EOARecentChangesLocal || _tableType == EOARecentChangesRemote)
     {
-        NSMutableDictionary<NSString *, NSMutableDictionary *> *filesByName =  [NSMutableDictionary dictionary];
+        NSMutableDictionary<NSString *, OAStatusBackupItem* > *filesByName =  [NSMutableDictionary dictionary];
         if (_tableType == EOARecentChangesLocal)
         {
             header = OALocalizedString(@"cloud_recent_changes");
@@ -226,16 +242,16 @@
             for (OALocalFile *localFile in localFiles)
             {
                 NSString *key = [localFile getTypeFileName];
-                filesByName[key] = [NSMutableDictionary dictionary];
-                filesByName[key][@"localFile"] = localFile;
+                filesByName[key] = [[OAStatusBackupItem alloc] initWithKey:key];
+                filesByName[key].localFile = localFile;
             }
             NSArray<OARemoteFile *> *deletedFiles = info.filteredFilesToDelete;
             for (OARemoteFile *deletedFile in deletedFiles)
             {
                 NSString *key = [deletedFile getTypeNamePath];
-                filesByName[key] = [NSMutableDictionary dictionary];
-                filesByName[key][@"deleted"] = @(YES);
-                filesByName[key][@"remoteFile"] = deletedFile;
+                filesByName[key] = [[OAStatusBackupItem alloc] initWithKey:key];
+                filesByName[key].deleted = @(YES);
+                filesByName[key].remoteFile = deletedFile;
             }
             if (filesByName.count > 0)
             {
@@ -243,16 +259,16 @@
                 for (OARemoteFile *remoteFile in downloadItems.allKeys)
                 {
                     NSString *key = [remoteFile getTypeNamePath];
-                    if ([filesByName.allKeys containsObject:key] && ![filesByName[key].allKeys containsObject:@"remoteFile"])
-                        filesByName[key][@"remoteFile"] = remoteFile;
+                    if ([filesByName.allKeys containsObject:key] && !filesByName[key].remoteFile)
+                        filesByName[key].remoteFile = remoteFile;
                 }
                 for (NSString *key in filesByName.allKeys)
                 {
-                    if (![filesByName[key].allKeys containsObject:@"remoteFile"])
+                    if (!filesByName[key].remoteFile)
                     {
                         OARemoteFile *remoteFile = _backupHelper.backup.remoteFiles[key];
                         if (remoteFile)
-                            filesByName[key][@"remoteFile"] = remoteFile;
+                            filesByName[key].remoteFile = remoteFile;
                     }
                 }
             }
@@ -265,16 +281,16 @@
             for (OARemoteFile *remoteFile in downloadItems.allKeys)
             {
                 NSString *key = [remoteFile getTypeNamePath];
-                filesByName[key] = [NSMutableDictionary dictionary];
-                filesByName[key][@"remoteFile"] = remoteFile;
+                filesByName[key] = [[OAStatusBackupItem alloc] initWithKey:key];
+                filesByName[key].remoteFile = remoteFile;
             }
             NSArray<OALocalFile *> *deletedFiles = info.localFilesToDelete;
             for (OALocalFile *deletedFile in deletedFiles)
             {
                 NSString *key = [deletedFile getTypeFileName];
-                filesByName[key] = [NSMutableDictionary dictionary];
-                filesByName[key][@"deleted"] = @(YES);
-                filesByName[key][@"localFile"] = deletedFile;
+                filesByName[key] = [[OAStatusBackupItem alloc] initWithKey:key];
+                filesByName[key].deleted = @(YES);
+                filesByName[key].localFile = deletedFile;
             }
             if (filesByName.count > 0)
             {
@@ -282,37 +298,35 @@
                 for (OALocalFile *localFile in localFiles)
                 {
                     NSString *key = [localFile getTypeFileName];
-                    if ([filesByName.allKeys containsObject:key] && ![filesByName[key].allKeys containsObject:@"localFile"])
-                        filesByName[key][@"localFile"] = localFile;
+                    if ([filesByName.allKeys containsObject:key] && !filesByName[key].localFile)
+                        filesByName[key].localFile = localFile;
                 }
                 for (NSString *key in filesByName.allKeys)
                 {
-                    if (![filesByName[key].allKeys containsObject:@"localFile"])
+                    if (!filesByName[key].localFile)
                     {
                         OALocalFile *localFile = _backupHelper.backup.localFiles[key];
                         if (localFile)
-                            filesByName[key][@"localFile"] = localFile;
+                            filesByName[key].localFile = localFile;
                     }
                 }
             }
         }
-        NSMutableDictionary<NSString *,NSMutableArray<NSArray *> *> * filesByType = [self sortFilesByType:filesByName];
-        [filesByType enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSMutableArray<NSArray *> * _Nonnull obj, BOOL * _Nonnull stop) {
-            for (NSArray *it in obj)
-            {
-                BOOL deleted = [it.lastObject[@"deleted"] boolValue];
-                EOABackupSyncOperationType operation = deleted ? EOABackupSyncOperationDelete
-                    : _tableType == EOARecentChangesLocal ? EOABackupSyncOperationUpload : EOABackupSyncOperationDownload;
-                OATableRowData *rowData = [self rowFromKey:it.firstObject
-                                                  mainTint:deleted ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled]
-                                        secondaryColorName:deleted ? ACColorNameIconColorDisruptive : ACColorNameIconColorActive
-                                                 operation:operation
-                                                 localFile:it.lastObject[@"localFile"]
-                                                remoteFile:it.lastObject[@"remoteFile"]];
-                if (rowData)
-                    [itemsSection addRow:rowData];
-            }
-        }];
+        NSMutableArray<OAStatusBackupItem *> * sortedFiles = [self sortFilesByType:filesByName];
+        for (OAStatusBackupItem *it in sortedFiles)
+        {
+            EOABackupSyncOperationType operation = it.deleted ? EOABackupSyncOperationDelete
+            : _tableType == EOARecentChangesLocal ? EOABackupSyncOperationUpload : EOABackupSyncOperationDownload;
+            OATableRowData *rowData = [self rowFromKey:it.key
+                                              mainTint:it.deleted ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled]
+                                    secondaryColorName:it.deleted ? ACColorNameIconColorDisruptive : ACColorNameIconColorActive
+                                             operation:operation
+                                             localFile:it.localFile
+                                            remoteFile:it.remoteFile];
+            if (rowData)
+                [itemsSection addRow:rowData];
+        }
+        
     }
     else if (_tableType == EOARecentChangesConflicts)
     {

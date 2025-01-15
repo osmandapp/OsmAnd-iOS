@@ -7,6 +7,7 @@
 //
 
 #import "OABackupHelper.h"
+#import "OAExportBackupTask.h"
 #import "OsmAndApp.h"
 #import "OAExportSettingsType.h"
 #import "OASettingsItem.h"
@@ -116,15 +117,6 @@ static NSCharacterSet* URL_PATH_CHARACTER_SET;
     return CHECK_CODE_URL;
 }
 
-+ (OASettingsItem *) getRestoreItem:(NSArray<OASettingsItem *> *)items remoteFile:(OARemoteFile *)remoteFile
-{
-    for (OASettingsItem *item in items)
-    {
-        if ([BackupUtils applyItem:item type:remoteFile.type name:remoteFile.name])
-            return item;
-    }
-    return nil;
-}
 
 + (OABackupHelper *)sharedInstance
 {
@@ -466,7 +458,7 @@ static NSCharacterSet* URL_PATH_CHARACTER_SET;
 
 - (NSInteger)calculateFileSize:(OARemoteFile *)remoteFile
 {
-    NSInteger sz = remoteFile.filesize / 1024;
+    NSInteger sz = remoteFile.filesize;
     if (remoteFile.item.type == EOASettingsItemTypeFile)
     {
         OAFileSettingsItem *flItem = (OAFileSettingsItem *) remoteFile.item;
@@ -475,10 +467,13 @@ static NSCharacterSet* URL_PATH_CHARACTER_SET;
             NSString *mapId = flItem.fileName.lowerCase;
             const auto res = _app.resourcesManager->getResourceInRepository(QString::fromNSString(mapId));
             if (res)
-                sz = res->size / 1024;
+                sz = res->size;
         }
     }
-    return sz;
+    if (sz < APPROXIMATE_FILE_SIZE_BYTES) {
+        sz = APPROXIMATE_FILE_SIZE_BYTES; // take into account 100 KB overhead for small file
+    }
+    return sz / 1024;
 }
 
 - (NSString *)downloadFile:(NSString *)filePath
@@ -558,7 +553,7 @@ static NSCharacterSet* URL_PATH_CHARACTER_SET;
 //    progress.startWork((int) (remoteFile.getFilesize() / 1024));
     
     if (listener)
-        [listener onFileDownloadDone:type fileName:fileName error:error];
+        [listener onFileDownloadDone:type fileName:fileName estSize:sz error:error];
     [operationLog finishOperation];
     return error;
 }

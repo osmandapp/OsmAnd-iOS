@@ -7,6 +7,7 @@
 //
 
 #import "OAMapSource.h"
+#import "OAIndexConstants.h"
 
 @implementation OAMapSource
 
@@ -132,7 +133,8 @@
 
 + (OAMapSource *) getOsmAndOnlineTilesMapSource
 {
-    return [[OAMapSource alloc] initWithResource:@"online_tiles" andVariant:@"OsmAnd (online tiles)" name:@"OsmAnd (online tiles)"];
+    return [[OAMapSource alloc] initWithResource:@"online_tiles" andVariant:
+            ONLINE_TILES_DIR name:ONLINE_TILES_DIR];
 }
 
 #pragma mark - NSCoding

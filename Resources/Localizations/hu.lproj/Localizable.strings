@@ -2965,3 +2965,4 @@
 "obd_plugin_name" = "Járműmetrika";
 "reset_average_speed" = "Átlagsebesség nullázása";
 "avg_sensor_cadence" = "Pedálfordulat, átlag";
+"cloud_sync_progress" = "Szinkronizálás...%@";

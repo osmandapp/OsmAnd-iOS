@@ -3603,3 +3603,4 @@
 "rendering_value_sector5_name" = "Sector 5";
 "shared_string_local" = "Local";
 "shared_string_error" = "Error";
+"cloud_sync_progress" = "Sincronizando... %@";

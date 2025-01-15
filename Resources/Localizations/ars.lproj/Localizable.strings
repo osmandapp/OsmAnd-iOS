@@ -3349,3 +3349,4 @@
 "with_waypoints" = "مع نقاط الطريق";
 "transport_stop" = "إيقاف";
 "revolutions_per_minute_unit" = ".RPM";
+"cloud_sync_progress" = "مزامنه... %@";

@@ -2507,3 +2507,4 @@
 "not_specified" = "Zehaztu gabe";
 "shared_string_interface" = "Interfazea";
 "max_sensor_heartrate" = "Bihotz-taupadak, altuena";
+"cloud_sync_progress" = "Sinkronizatzen…%@";

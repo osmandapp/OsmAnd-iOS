@@ -3241,3 +3241,4 @@
 "delete_widget_description" = "Ten widżet zostanie usunięty. Można go później przywrócić na ekranie konfiguracji.";
 "screen_is_locked_by_action_button" = "Ekran dotykowy jest zablokowany. Naciśnij przycisk, aby odblokować.";
 "power_watts_unit" = "Waty";
+"cloud_sync_progress" = "Synchronizacja…%@";

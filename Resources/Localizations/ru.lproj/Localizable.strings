@@ -3285,3 +3285,4 @@
 "screen_is_locked_by_action_button" = "Сенсорный экран заблокирован. Нажмите кнопку для разблокировки.";
 "help_article_map_routes_name" = "Маршруты";
 "avg_sensor_speed" = "Скорость, средняя";
+"cloud_sync_progress" = "Синхронизация… %@";

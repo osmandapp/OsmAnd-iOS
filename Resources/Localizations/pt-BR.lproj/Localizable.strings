@@ -3463,3 +3463,4 @@
 "add_widget_to_the_right" = "Adicionar widget à direita";
 "reset_average_speed" = "Redefinir velocidade média";
 "obd_plugin_name" = "Métricas de veículos";
+"cloud_sync_progress" = "A sincronizar…%@";

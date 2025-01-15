@@ -133,7 +133,7 @@
     NSInteger maxProgress = 0;
     OABackupHelper *backupHelper = OABackupHelper.sharedInstance;
     OAPrepareBackupResult *backup = backupHelper.backup;
-    for (OARemoteFile *file in backup.backupInfo.filesToDownload)
+    for (OARemoteFile *file in backup.backupInfo.filteredFilesToDownload)
     {
         maxProgress += [backupHelper calculateFileSize:file];
     }

@@ -29,6 +29,7 @@
 #import "OAPointDescription.h"
 #import "OATransportStopsBaseController.h"
 #import "OAMapRendererEnvironment.h"
+#import "OAColors.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
@@ -39,6 +40,7 @@
 #include <OsmAndCore/ObfDataInterface.h>
 #include <OsmAndCore/Map/BillboardRasterMapSymbol.h>
 #include <OsmAndCore/SingleSkImage.h>
+#include <OsmAndCore/Map/VectorLineBuilder.h>
 
 @interface OAContextMenuLayer () <CAAnimationDelegate>
 @end
@@ -48,6 +50,8 @@
     // Context pin marker
     std::shared_ptr<OsmAnd::MapMarkersCollection> _contextPinMarkersCollection;
     std::shared_ptr<OsmAnd::MapMarker> _contextPinMarker;
+    
+    std::shared_ptr<OsmAnd::VectorLinesCollection> _outlineCollection;
     
     UIImageView *_animatedPin;
     BOOL _animationDone;
@@ -84,6 +88,8 @@
     .setPinIconVerticalAlignment(OsmAnd::MapMarker::Top)
     .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
     .buildAndAddToCollection(_contextPinMarkersCollection);
+    
+    _outlineCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
 
     _initDone = YES;
 
@@ -799,6 +805,30 @@
             }
         }
     }
+}
+
+- (void) highlightPolygon:(QVector<OsmAnd::PointI>)points;
+{
+    [self.mapViewController runWithRenderSync:^{
+        OsmAnd::VectorLineBuilder builder;
+        builder.setPoints(points)
+        .setIsHidden(false)
+        .setLineId(1)
+        .setLineWidth(2 * kWidthCorrectionValue * [[UIScreen mainScreen] scale])
+        .setFillColor(OsmAnd::ColorARGB(color_osmand_orange_argb))
+        .setApproximationEnabled(false)
+        .setBaseOrder(self.baseOrder);
+        builder.buildAndAddToCollection(_outlineCollection);
+        [self.mapView addKeyedSymbolsProvider:_outlineCollection];
+    }];
+}
+
+- (void) hideRegionHighlight
+{
+    [self.mapViewController runWithRenderSync:^{
+        [self.mapView removeKeyedSymbolsProvider:_outlineCollection];
+        _outlineCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
+    }];
 }
 
 #pragma  mark - CAAnimationDelegate

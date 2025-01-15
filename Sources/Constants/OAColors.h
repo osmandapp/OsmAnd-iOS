@@ -20,6 +20,8 @@
 #define color_myloc_distance 0x0080FF
 #define color_osmand_orange 0xff8f00
 
+#define color_osmand_orange_argb 0xffff8f00
+
 #define color_map_widget_stroke_argb 0x4c000000
 #define color_widgettext_shadow_night_argb 0xdc262626
 #define color_widgettext_shadow_day_argb 0xffffffff

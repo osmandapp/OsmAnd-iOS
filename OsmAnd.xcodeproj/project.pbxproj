@@ -774,7 +774,7 @@
 		46C841432C32F3DD00E284B0 /* OANavVoiceAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 46C841422C32F3DD00E284B0 /* OANavVoiceAction.m */; };
 		46C841452C32F3F400E284B0 /* OAParkingAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 46C841442C32F3F400E284B0 /* OAParkingAction.m */; };
 		46C841472C32F41A00E284B0 /* OAShowHideTransportLinesAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 46C841462C32F41A00E284B0 /* OAShowHideTransportLinesAction.m */; };
-		46C841492C32F44A00E284B0 /* OAAddOSMBugAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 46C841482C32F44A00E284B0 /* OAAddOSMBugAction.m */; };
+		46C841492C32F44A00E284B0 /* OAAddOSMBugAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = 46C841482C32F44A00E284B0 /* OAAddOSMBugAction.mm */; };
 		46CBC9722B96126C005CC244 /* GlideBaseWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46CBC9712B96126C005CC244 /* GlideBaseWidget.swift */; };
 		46CBC9742B962707005CC244 /* GlideAverageWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46CBC9732B962707005CC244 /* GlideAverageWidget.swift */; };
 		46CBC9762B962B8B005CC244 /* AverageValueComputer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46CBC9752B962B8B005CC244 /* AverageValueComputer.swift */; };
@@ -4182,7 +4182,7 @@
 		46C841422C32F3DD00E284B0 /* OANavVoiceAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OANavVoiceAction.m; sourceTree = "<group>"; };
 		46C841442C32F3F400E284B0 /* OAParkingAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAParkingAction.m; sourceTree = "<group>"; };
 		46C841462C32F41A00E284B0 /* OAShowHideTransportLinesAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAShowHideTransportLinesAction.m; sourceTree = "<group>"; };
-		46C841482C32F44A00E284B0 /* OAAddOSMBugAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAAddOSMBugAction.m; sourceTree = "<group>"; };
+		46C841482C32F44A00E284B0 /* OAAddOSMBugAction.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAddOSMBugAction.mm; sourceTree = "<group>"; };
 		46CBC9712B96126C005CC244 /* GlideBaseWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlideBaseWidget.swift; sourceTree = "<group>"; };
 		46CBC9732B962707005CC244 /* GlideAverageWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlideAverageWidget.swift; sourceTree = "<group>"; };
 		46CBC9752B962B8B005CC244 /* AverageValueComputer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AverageValueComputer.swift; sourceTree = "<group>"; };
@@ -10758,7 +10758,7 @@
 			children = (
 				323F04BD2C6532EF0058DD78 /* BaseRouteQuickAction.swift */,
 				DA5A79FF26C563A000F274C7 /* OAAddOSMBugAction.h */,
-				46C841482C32F44A00E284B0 /* OAAddOSMBugAction.m */,
+				46C841482C32F44A00E284B0 /* OAAddOSMBugAction.mm */,
 				DA5A79EF26C563A000F274C7 /* OAAddPOIAction.h */,
 				DA5A7A1B26C563A000F274C7 /* OAAddPOIAction.mm */,
 				DA5A79EA26C563A000F274C7 /* OAContourLinesAction.h */,
@@ -17341,7 +17341,7 @@
 				CA4EDE42AAD38F5BB5B4C6B1 /* OASegmentedSlider.mm in Sources */,
 				CA4EDD247D185CBEF97908BE /* OAWeatherToolbarHandlers.mm in Sources */,
 				CA4ED053363110BD3446216F /* OASubscriptionBannerCardView.mm in Sources */,
-				46C841492C32F44A00E284B0 /* OAAddOSMBugAction.m in Sources */,
+				46C841492C32F44A00E284B0 /* OAAddOSMBugAction.mm in Sources */,
 				FAC5D4312BFC7F5200E9E658 /* SpeedLimitView.swift in Sources */,
 				CA4ED672AF26061C16E48A61 /* OACompassModeWidgetState.mm in Sources */,
 				46A8FD33297D985700AF9C0C /* OAUninstallSpeedCamerasViewController.mm in Sources */,

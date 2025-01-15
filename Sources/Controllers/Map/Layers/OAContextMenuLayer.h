@@ -38,4 +38,7 @@
 - (OATargetPoint *) getTargetPoint:(id)obj;
 - (OATargetPoint *) getTargetPointCpp:(const void *)obj;
 
+- (void) highlightPolygon:(QVector<OsmAnd::PointI>)points;
+- (void) hideRegionHighlight;
+
 @end

@@ -53,7 +53,7 @@
 
 - (void) commonInit
 {
-    _logThreshold = 0.1; // 100 ms by default
+    _logThreshold = 0.3; // 300 ms by default
     _startTime = NSDate.date.timeIntervalSince1970;
 }
 

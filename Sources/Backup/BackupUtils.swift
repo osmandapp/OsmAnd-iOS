@@ -63,23 +63,44 @@ final class BackupUtils: NSObject {
                                             infoFiles: Bool) -> [OARemoteFile: OASettingsItem] {
         var res = [OARemoteFile: OASettingsItem]()
         var files = remoteFiles
+        var settingsItemMap = [String: OASettingsItem]()
+        var subtypeFolders = [OAFileSettingsItem]()
+        let DELIMETER = "___"
         for item in items {
-            var processedFiles = [OARemoteFile]()
-            for file in files {
-                var name = file.name as NSString
-                if infoFiles && name.pathExtension == OABackupHelper.info_EXT() {
-                    name = name.deletingPathExtension as NSString
-                }
-
-                if applyItem(item, type: file.type, name: name) {
-                    if file.item == nil {
-                        file.item = item
-                    }
-                    res[file] = item
-                    processedFiles.append(file)
+            let itemFileName = getItemFileName(item)
+            settingsItemMap[(OASettingsItemType.typeName(item.type) ?? "") + DELIMETER + itemFileName] = item
+            if let fileItem = item as? OAFileSettingsItem {
+                let subtypeFolder = OAFileSettingsItemFileSubtype.getFolderName(fileItem.subtype)
+                var isDir: ObjCBool = false
+                FileManager.default.fileExists(atPath: fileItem.filePath, isDirectory: &isDir)
+                if !subtypeFolder.isEmpty && isDir.boolValue {
+                    subtypeFolders.append(fileItem)
                 }
             }
-            files.removeAll { processedFiles.contains($0) }
+        }
+        for file in files {
+            var name = file.name as NSString
+            if infoFiles && name.pathExtension == OABackupHelper.info_EXT() {
+                name = name.deletingPathExtension as NSString
+            }
+            
+            if let item = settingsItemMap[file.type + DELIMETER + (name as String)] {
+                res[file] = item
+            } else {
+                for fileItem in subtypeFolders {
+                    let itemFileName = getItemFileName(fileItem)
+                    var found = false
+                    if !itemFileName.hasSuffix("/") {
+                        found = name.hasPrefix(itemFileName + "/")
+                    } else {
+                        found = name.hasPrefix(itemFileName)
+                    }
+                    if found {
+                        res[file] = fileItem
+                        break
+                    }
+                }
+            }
         }
         return res
     }
@@ -92,27 +113,6 @@ final class BackupUtils: NSObject {
         OACommonBoolean.withKey("\(versionHistoryPrefix)\(type.name)", defValue: true).makeGlobal().makeShared()
     }
 
-    static func applyItem(_ item: OASettingsItem, type: String, name: NSString) -> Bool {
-        let itemFileName = getItemFileName(item)
-        let itemTypeName = OASettingsItemType.typeName(item.type)
-        if itemTypeName == type {
-            if name.isEqual(to: itemFileName) {
-                return true
-            } else if let fileItem = item as? OAFileSettingsItem {
-                let subtypeFolder = OAFileSettingsItemFileSubtype.getFolderName(fileItem.subtype)
-                if name.hasPrefix(subtypeFolder) || subtypeFolder.isEmpty {
-                    var isDir: ObjCBool = false
-                    FileManager.default.fileExists(atPath: fileItem.filePath, isDirectory: &isDir)
-                    if isDir.boolValue, !itemFileName.hasSuffix("/") {
-                        return name.hasPrefix("\(itemFileName)/")
-                    } else {
-                        return name.hasPrefix(itemFileName)
-                    }
-                }
-            }
-        }
-        return false
-    }
 
     static func getItemFileName(_ item: OASettingsItem) -> String {
         var fileName: String

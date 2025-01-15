@@ -828,6 +828,8 @@
 		78AC698C23AB7BE1006C3DDE /* left_menu_configure_screen@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78AC698823AB7BDF006C3DDE /* left_menu_configure_screen@3x.png */; };
 		78AC698E23AB7BE1006C3DDE /* left_menu_configure_screen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78AC698923AB7BE0006C3DDE /* left_menu_configure_screen@2x.png */; };
 		81AE516126298A3600BDF947 /* libGeographicLib_STATIC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 81AE516026298A3600BDF947 /* libGeographicLib_STATIC.a */; };
+		81E0C9432D37DE5B00BC7D85 /* bundled_assets.json in Resources */ = {isa = PBXBuildFile; fileRef = 81E0C9422D37DE5A00BC7D85 /* bundled_assets.json */; };
+		81E0C9462D37DFCD00BC7D85 /* OABundledAsetts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E0C9452D37DFC700BC7D85 /* OABundledAsetts.swift */; };
 		840C9FB61CF353C500F2F991 /* ic_coordinates_location@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84BA1DCF1CF338E400BF3D96 /* ic_coordinates_location@2x.png */; };
 		840C9FB81CF353C800F2F991 /* ic_coordinates_location@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84BA1DD01CF338E400BF3D96 /* ic_coordinates_location@3x.png */; };
 		8410D068207F48200049DEB2 /* ic_tree_list_dark@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8410D062207F481E0049DEB2 /* ic_tree_list_dark@3x.png */; };
@@ -4248,6 +4250,8 @@
 		78AC698823AB7BDF006C3DDE /* left_menu_configure_screen@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "left_menu_configure_screen@3x.png"; path = "Resources/Icons/left_menu_configure_screen@3x.png"; sourceTree = "<group>"; };
 		78AC698923AB7BE0006C3DDE /* left_menu_configure_screen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "left_menu_configure_screen@2x.png"; path = "Resources/Icons/left_menu_configure_screen@2x.png"; sourceTree = "<group>"; };
 		81AE516026298A3600BDF947 /* libGeographicLib_STATIC.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libGeographicLib_STATIC.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		81E0C9422D37DE5A00BC7D85 /* bundled_assets.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = bundled_assets.json; path = ../resources/bundled_assets.json; sourceTree = "<group>"; };
+		81E0C9452D37DFC700BC7D85 /* OABundledAsetts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OABundledAsetts.swift; sourceTree = "<group>"; };
 		8401FCF61EE46B7F00238915 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8401FCF71EE46C2600238915 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		8401FCF81EE46C3100238915 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -9913,6 +9917,7 @@
 				C51BE6FC2BBC3E7C00B63A1A /* PrivacyInfo.xcprivacy */,
 				C5735AF42AFE9CB500638715 /* InfoPlist.strings */,
 				BB451DF318D8F7D7005FBE09 /* Localizable.strings */,
+				81E0C9422D37DE5A00BC7D85 /* bundled_assets.json */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -12874,6 +12879,7 @@
 		DA5A802F26C563A500F274C7 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				81E0C9452D37DFC700BC7D85 /* OABundledAsetts.swift */,
 				DA5A803226C563A500F274C7 /* Coordinates */,
 				DA5A803726C563A500F274C7 /* OAAppData.h */,
 				DA5A803E26C563A500F274C7 /* OAAppData.m */,
@@ -14115,6 +14121,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				81E0C9432D37DE5B00BC7D85 /* bundled_assets.json in Resources */,
 				32309A4426989180005751F5 /* ic_custom_map_zoom_in@3x.png in Resources */,
 				32B50ADF26BBE3C7002E6C92 /* ic_custom_map_location_follow@3x.png in Resources */,
 				84F3A9631B4ECF2700D16EBC /* ic_trip_visitedpoint@3x.png in Resources */,
@@ -17155,6 +17162,7 @@
 				46548DAA2BF7794F00B0D3C0 /* DefaultMapButtonsViewController.swift in Sources */,
 				DA5A847B26C563A900F274C7 /* OATurnDrawable.mm in Sources */,
 				FAF6C89F2AD014C900A3ED94 /* ThemeManager.swift in Sources */,
+				81E0C9462D37DFCD00BC7D85 /* OABundledAsetts.swift in Sources */,
 				DAD5B4CF288E80EC009CF611 /* OAOperationLog.m in Sources */,
 				46C8412D2C32F23A00E284B0 /* OAShowHideAirPressureAction.m in Sources */,
 				DA5A853826C563A900F274C7 /* OAFavoritesHelper.mm in Sources */,

@@ -14,6 +14,7 @@
 @interface OAHistoryDB : NSObject
 
 - (void)addPoint:(OAHistoryItem *)item;
+- (void)importBackupPoints:(NSArray<OAHistoryItem *> *)items;
 - (void)deletePoint:(OAHistoryItem *)item;
 
 - (OAHistoryItem *)getPointByName:(NSString *)name fromNavigation:(BOOL)fromNavigation;

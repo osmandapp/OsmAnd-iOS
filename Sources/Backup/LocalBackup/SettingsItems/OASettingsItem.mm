@@ -113,7 +113,8 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
 
 - (BOOL) applyFileName:(NSString *)fileName
 {
-    return self.fileName && ([self.fileName hasSuffix:fileName] || [fileName hasPrefix:[self.fileName stringByAppendingString:@"/"]]);
+    return self.fileName && ([self.fileName isEqualToString: fileName] ||
+                             [fileName hasPrefix:[self.fileName stringByAppendingString:@"/"]]);
 }
 
 - (BOOL) exists

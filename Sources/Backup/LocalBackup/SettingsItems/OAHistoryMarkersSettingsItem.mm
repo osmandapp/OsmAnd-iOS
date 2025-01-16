@@ -93,9 +93,7 @@
                 [self.appliedItems addObject:duplicate];
             }
         }
-
-        for (OAHistoryItem *historyItem in self.appliedItems)
-            [_historyMarkersHelper addPoint:historyItem];
+        [_historyMarkersHelper importBackupPoints: self.appliedItems];
     }
 }
 
@@ -179,6 +177,7 @@
 
     if (gpxFile)
     {
+        // TODO
         for (OASWptPt *wpt in gpxFile.getPointsList)
         {
             OAHistoryItem *historyItem = [[OAHistoryItem alloc] init];

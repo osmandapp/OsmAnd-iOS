@@ -105,10 +105,6 @@
     
 }
 
-- (BOOL) applyFileName:(NSString *)fileName
-{
-    return self.fileName ? ((![fileName isEqualToString:@"history_markers.gpx"] && [fileName hasSuffix:self.fileName]) || [fileName hasPrefix:[self.fileName stringByAppendingString:@"/"]] || [fileName isEqualToString:self.fileName]) : NO;
-}
 
 - (BOOL) isDuplicate:(OADestination *)mapMarker
 {

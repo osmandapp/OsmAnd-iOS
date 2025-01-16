@@ -119,7 +119,7 @@ static NSDictionary *platformCompatibilityKeysDictionary = @{
     OsmAndAppInstance app = [OsmAndApp instance];
     OAAppData *appData = app.data;
     NSString *renderer = [[OAAppSettings sharedManager].renderer get:_appMode];
-    if ([renderer isEqualToString:@"OsmAnd (online tiles)"])
+    if ([renderer isEqualToString:ONLINE_TILES_DIR])
         return;
     NSDictionary *mapStyleInfo = [OARendererRegistry getMapStyleInfo:renderer];
 

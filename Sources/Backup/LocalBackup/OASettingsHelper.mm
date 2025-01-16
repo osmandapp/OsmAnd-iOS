@@ -7,6 +7,7 @@
 //
 
 #import "OsmAnd_Maps-Swift.h"
+#import "OAMapSource.h"
 #import "OAIndexConstants.h"
 #import "OASettingsHelper.h"
 #import "OASettingsItem.h"
@@ -462,7 +463,9 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         {
             OAOnlineTilesResourceItem *tileSource = (OAOnlineTilesResourceItem *) res;
             OATileSource *source = [OATileSource tileSourceFromOnlineSource:tileSource.onlineTileSource];
-            [tileSources addObject:source];
+            if (![source.name isEqualToString: ONLINE_TILES_DIR]) {
+                [tileSources addObject:source];
+            }
         }
         else if ([res isKindOfClass:OASqliteDbResourceItem.class])
         {

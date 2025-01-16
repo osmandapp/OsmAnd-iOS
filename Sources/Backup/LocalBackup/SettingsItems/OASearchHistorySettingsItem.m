@@ -123,12 +123,7 @@
             }
         }
         // TODO: Sync search history with Android and replace existing items in history!
-        long original = [self localModifiedTime];
-//        [_searchHistoryHelper addItemsToHistory:self.appliedItems];
-        for (OAHistoryItem *item in self.appliedItems)
-             [_searchHistoryHelper addPoint:item];
-        
-        [self setLocalModifiedTime:original];
+        [_searchHistoryHelper importBackupPoints:self.appliedItems];
     }
 }
 

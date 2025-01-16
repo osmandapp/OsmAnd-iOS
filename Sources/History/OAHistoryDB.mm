@@ -131,8 +131,19 @@
            ((int64_t)(longitude * 100000)) +
            (int64_t)[[name dataUsingEncoding:NSUTF8StringEncoding] crc32];
 }
+- (void)importBackupPoints:(NSArray<OAHistoryItem *> *)items
+{
+    for(OAHistoryItem * it: items) {
+        [self addPoint:it updateLastTime: NO];
+    }
+}
 
 - (void)addPoint:(OAHistoryItem *)item
+{
+    [self addPoint: item updateLastTime: YES];
+}
+
+- (void)addPoint:(OAHistoryItem *)item updateLastTime: (BOOL) updateLastTime
 {
     int64_t hHash = item.hHash > 0 ? item.hHash : [self getRowHash:item.latitude longitude:item.longitude name:item.name];
     dispatch_async(dbQueue, ^{
@@ -183,10 +194,12 @@
 
             sqlite3_close(historyDB);
 
-            if (item.hType == OAHistoryTypeDirection)
-                [self updateMarkersHistoryLastModifiedTime];
-            else
-                [self updateHistoryLastModifiedTime];
+            if (updateLastTime) {
+                if (item.hType == OAHistoryTypeDirection)
+                    [self updateMarkersHistoryLastModifiedTime];
+                else
+                    [self updateHistoryLastModifiedTime];
+            }
         }
     });
 }

@@ -35,6 +35,7 @@
 - (NSArray<OAHistoryItem *> *)getPointsFromNavigation:(int)limit;
 - (NSInteger)getPointsCountFromNavigation;
 - (OAHistoryItem *)getPointByName:(NSString *)name fromNavigation:(BOOL)fromNavigation;
+- (void)importBackupPoints:(NSArray<OAHistoryItem *> *)items;
 
 - (long)getMarkersHistoryLastModifiedTime;
 - (void)setMarkersHistoryLastModifiedTime:(long)lastModified;

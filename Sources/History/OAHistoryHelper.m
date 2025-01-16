@@ -66,6 +66,16 @@
     [_historyPointAddObservable notifyEventWithKey:item];
 }
 
+
+- (void)importBackupPoints:(NSArray<OAHistoryItem *> *)items
+{
+    [_db importBackupPoints:items];
+    for(OAHistoryItem *item in items)
+    {
+        [_historyPointAddObservable notifyEventWithKey:item];
+    }
+}
+
 - (void)removePoint:(OAHistoryItem *)item
 {
     [_db deletePoint:item];

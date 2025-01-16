@@ -26,7 +26,6 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     
     override init() {
         super.init()
-        resourceItems = [String: OAResourceSwiftItem]()
         downloadTaskProgressObserver = OAAutoObserverProxy(self, withHandler: #selector(onDownloadResourceTaskProgressChanged), andObserve: OsmAndApp.swiftInstance().downloadsManager.progressCompletedObservable)
         downloadTaskCompletedObserver = OAAutoObserverProxy(self, withHandler: #selector(onDownloadResourceTaskFinished), andObserve: OsmAndApp.swiftInstance().downloadsManager.completedObservable)
         localResourcesChangedObserver = OAAutoObserverProxy(self, withHandler: #selector(onLocalResourcesChanged), andObserve: OsmAndApp.swiftInstance().localResourcesChangedObservable)
@@ -139,7 +138,12 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     
     // MARK: - Cell setup methods
     
-    override func setupCell(_ resourceId: String) -> DownloadingCell? {
+    override func setupCell(_ resourceId: String,
+                            title: String?,
+                            isTitleBold: Bool,
+                            desc: Any?,
+                            leftIcon: Any?,
+                            isDownloading: Bool) -> DownloadingCell? {
         if let resourceItem = getResource(resourceId) {
             resourceItem.refreshDownloadTask()
             var subtitle = ""
@@ -157,10 +161,15 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
                                                        withResourceType: true)
             }
             let iconName = resourceItem.iconName()
-            let isDownloading = isDownloading(resourceId)
+            let isDownloading = self.isDownloading(resourceId)
             
             // get cell with default settings
-            let cell = super.setupCell(resourceId: resourceId, title: title, isTitleBold: false, desc: subtitle, leftIconName: iconName, rightIconName: getRightIconName(resourceId), isDownloading: isDownloading)
+            let cell = super.setupCell(resourceId,
+                                       title: title,
+                                       isTitleBold: false,
+                                       desc: subtitle,
+                                       leftIcon: iconName,
+                                       isDownloading: isDownloading)
             
             if isDisabled(resourceId) {
                 cell?.titleLabel.textColor = .textColorSecondary
@@ -186,6 +195,10 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     }
     
     func getOrCreateCell(_ resourceId: String, swiftResourceItem: OAResourceSwiftItem?) -> DownloadingCell? {
+        getOrCreateCell(resourceId, swiftResourceItem: swiftResourceItem, title: nil, desc: nil)
+    }
+
+    func getOrCreateCell(_ resourceId: String, swiftResourceItem: OAResourceSwiftItem?, title: String?, desc: Any?) -> DownloadingCell? {
         if let swiftResourceItem, swiftResourceItem.objcResourceItem != nil {
             if getResource(resourceId) == nil {
                 saveResource(resource: swiftResourceItem, resourceId: resourceId)
@@ -193,7 +206,11 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
             if swiftResourceItem.downloadTask() != nil {
                 saveStatus(resourceId: resourceId, status: .inProgress)
             }
-            return super.getOrCreateCell(resourceId)
+            return super.getOrCreateCell(resourceId,
+                                         title: title,
+                                         desc: desc,
+                                         leftIcon: swiftResourceItem.icon(),
+                                         isDownloading: isDownloading(resourceId))
         }
         return nil
     }
@@ -228,9 +245,8 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
         super.setCellProgress(resourceId: resourceId, progress: progress, status: status)
         if showDownloadingBytesInDescription {
             guard let resourceItem = getResource(resourceId) else { return }
-            guard let cell = getOrCreateCell(resourceId) else { return }
             guard let subtitle = OAResourcesUISwiftHelper.formatedDownloadingProgressString(resourceItem.sizePkg(), progress: progress) else { return }
-            cell.descriptionLabel.text = subtitle
+            updateDesc(resourceId, cell: nil, desc: subtitle)
         }
     }
     
@@ -242,17 +258,14 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
         } else if let task = key as? OADownloadTask {
             progress = task.progressCompleted
         }
-        
-        if helperHasItemFor(resourceId) {
-            DispatchQueue.main.async { [weak self] in
 
-                self?.setCellProgress(resourceId: resourceId, progress: progress, status: .finished)
-                
-                // Start next downloading if needed
-                if let tasks = OsmAndApp.swiftInstance().downloadsManager.keysOfDownloadTasks(), !tasks.isEmpty {
-                    if let nextTask = OsmAndApp.swiftInstance().downloadsManager.firstDownloadTasks(withKey: tasks[0] as? String) {
-                        nextTask.resume()
-                    }
+        DispatchQueue.main.async { [weak self] in
+            self?.setCellProgress(resourceId: resourceId, progress: progress, status: .finished)
+
+            // Start next downloading if needed
+            if let tasks = OsmAndApp.swiftInstance().downloadsManager.keysOfDownloadTasks(), !tasks.isEmpty {
+                if let nextTask = OsmAndApp.swiftInstance().downloadsManager.firstDownloadTasks(withKey: tasks[0] as? String) {
+                    nextTask.resume()
                 }
             }
         }

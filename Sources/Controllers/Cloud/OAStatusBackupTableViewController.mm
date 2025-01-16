@@ -137,10 +137,9 @@
     __weak OAStatusBackupTableViewController *weakSelf = self;
     _downloadingCellCloudHelper = [[DownloadingCellCloudHelper alloc] init];
     [_downloadingCellCloudHelper setHostTableView:weakSelf.tableView];
-    _downloadingCellCloudHelper.rightIconStyle = DownloadingCellRightIconTypeShowShevronBeforeDownloading;
     if (_tableType == EOARecentChangesConflicts)
     {
-        _downloadingCellCloudHelper.rightIconStyle = DownloadingCellRightIconTypeShowIconAndShevronAlways;
+        _downloadingCellCloudHelper.rightIconStyle = DownloadingCellRightIconTypeShowIconAndShevronBeforeDownloading;
         _downloadingCellCloudHelper.rightIconName = @"ic_custom_alert";
         _downloadingCellCloudHelper.rightIconColor = [UIColor colorNamed:ACColorNameIconColorDisruptive];
     }
@@ -318,15 +317,12 @@
             EOABackupSyncOperationType operation = it.deleted ? EOABackupSyncOperationDelete
             : _tableType == EOARecentChangesLocal ? EOABackupSyncOperationUpload : EOABackupSyncOperationDownload;
             OATableRowData *rowData = [self rowFromKey:it.key
-                                              mainTint:it.deleted ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled]
-                                    secondaryColorName:it.deleted ? ACColorNameIconColorDisruptive : ACColorNameIconColorActive
                                              operation:operation
                                              localFile:it.localFile
                                             remoteFile:it.remoteFile];
             if (rowData)
                 [itemsSection addRow:rowData];
         }
-        
     }
     else if (_tableType == EOARecentChangesConflicts)
     {
@@ -403,8 +399,6 @@
                               remoteFile:(OARemoteFile *)remoteFile
 {
     OATableRowData *rowData = [self rowFromKey:key
-                                      mainTint:[UIColor colorNamed:ACColorNameIconColorDisabled]
-                            secondaryColorName:ACColorNameIconColorDefault
                                      operation:EOABackupSyncOperationNone
                                      localFile:localFile
                                     remoteFile:remoteFile];
@@ -420,15 +414,11 @@
                                       NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorSecondary] }
                              range:[attributedDescr.string rangeOfString:rowData.descr]];
     [rowData setObj:attributedDescr forKey:@"descrAttr"];
-    [rowData setObj:@"ic_custom_alert" forKey:@"secondaryIconConflict"];
-    [rowData setObj:ACColorNameIconColorDisruptive forKey:@"secondaryIconColorName"];
     [rowData setIconTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
     return rowData;
 }
 
 - (OATableRowData *)rowFromKey:(NSString *)key
-                      mainTint:(UIColor *)mainTint
-                 secondaryColorName:(NSString *)secondaryColorName
                      operation:(EOABackupSyncOperationType)operation
                      localFile:(OALocalFile *)localFile
                     remoteFile:(OARemoteFile *)remoteFile
@@ -505,8 +495,6 @@
         kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],
         kCellTitleKey: name,
         kCellDescrKey: description,
-        kCellIconTintColor: mainTint,
-        @"secondaryIconColorName": secondaryColorName,
         @"operation": @(operation),
         @"fileName": fileName,
         @"settingsItem": settingsItem
@@ -649,46 +637,11 @@
         OASettingsItem *settingsItem = [item objForKey:@"settingsItem"];
         NSString *type = [OASettingsItemType typeName:settingsItem.type];
         NSString *resourceId = [_downloadingCellCloudHelper getResourceIdWithTypeName:type filename:[item stringForKey:@"fileName"]];
-        DownloadingCell *cell = [_downloadingCellCloudHelper getOrCreateCell:resourceId];
-        if (cell)
-        {
-            BOOL hasConflict = (EOABackupSyncOperationType) [item integerForKey:@"operation"] == EOABackupSyncOperationNone;
-            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingToLeftOfContentWithIcon, 0., 0.);
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-
-            NSString *description = item.descr;
-            NSAttributedString *descriptionAttributed = [item objForKey:@"descrAttr"];
-            [cell descriptionVisibility:description != nil || descriptionAttributed != nil];
-            if (descriptionAttributed)
-            {
-                cell.descriptionLabel.text = nil;
-                cell.descriptionLabel.attributedText = descriptionAttributed;
-            }
-            else
-            {
-                cell.descriptionLabel.attributedText = nil;
-                cell.descriptionLabel.text = description;
-            }
-
-            cell.titleLabel.text = item.title;
-            [cell leftIconVisibility:YES];
-            cell.leftIconView.image = [[item objForKey:@"icon"] imageFlippedForRightToLeftLayoutDirection];
-            cell.leftIconView.tintColor = item.iconTintColor;
-
-            NSString *secondaryIconName = hasConflict ? [item stringForKey:@"secondaryIconConflict"] : item.secondaryIconName;
-            if (secondaryIconName.length > 0)
-            {
-                cell.rightIconView.image = [UIImage templateImageNamed:secondaryIconName];
-                cell.rightIconView.tintColor = [UIColor colorNamed:[item stringForKey:@"secondaryIconColorName"]];
-                [cell rightIconVisibility:YES];
-            }
-            else
-            {
-                cell.rightIconView.image = nil;
-                [cell rightIconVisibility:NO];
-            }
-        }
-        return cell;
+        return [_downloadingCellCloudHelper getOrCreateCell:resourceId
+                                                      title:item.title
+                                                       desc:[item objForKey:@"descrAttr"] ?: item.descr
+                                                   leftIcon:[[item objForKey:@"icon"] imageFlippedForRightToLeftLayoutDirection]
+                                              isDownloading:[_downloadingCellCloudHelper isDownloading:resourceId]];
     }
     else if ([item.cellType isEqualToString:[OALargeImageTitleDescrTableViewCell getCellIdentifier]])
     {

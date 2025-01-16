@@ -496,10 +496,7 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
     else if (indexPath.section == _availableMapsSection)
     {
         OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:_resourcesItems[indexPath.row]];
-        DownloadingCell *cell = [_downloadingCellResourceHelper getOrCreateCell:mapItem.resourceId swiftResourceItem:mapItem];
-        cell.titleLabel.text = title;
-        cell.descriptionLabel.text = description;
-        return cell;
+        return [_downloadingCellResourceHelper getOrCreateCell:mapItem.resourceId swiftResourceItem:mapItem title:title desc:description];
     }
     return nil;
 }

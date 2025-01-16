@@ -375,9 +375,8 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
         
         if item.cellType == "kDownloadCellKey" {
             if let resource = getSwiftResourceByIndex(indexPath: indexPath) {
-                outCell = downloadingCellResourceHelper.getOrCreateCell(resource.resourceId(), swiftResourceItem: resource)
+                outCell = downloadingCellResourceHelper.getOrCreateCell(resource.resourceId(), swiftResourceItem: resource, title: nil, desc: "")
             }
-            
         } else if item.cellType == OAFilledButtonCell.getIdentifier() {
             var cell = tableView.dequeueReusableCell(withIdentifier: OAFilledButtonCell.getIdentifier()) as? OAFilledButtonCell
             if cell == nil {

@@ -74,7 +74,7 @@ final class DownloadingListViewController: OABaseNavbarViewController, Downloadi
             if let downloadingCellResourceHelper {
                 let resourceId = item.string(forKey: "resourceId") ?? ""
                 let resource = item.obj(forKey: "item") as? OAResourceSwiftItem
-                let cell = downloadingCellResourceHelper.getOrCreateCell(resourceId, swiftResourceItem: resource)
+                let cell = downloadingCellResourceHelper.getOrCreateCell(resourceId, swiftResourceItem: resource, title: item.title, desc: "")
                 if downloadingCellResourceHelper.isFinished(resourceId) {
                     cell?.leftIconView.tintColor = .iconColorActive
                     cell?.rightIconView.image = UIImage.templateImageNamed(downloadingCellResourceHelper.rightIconName)

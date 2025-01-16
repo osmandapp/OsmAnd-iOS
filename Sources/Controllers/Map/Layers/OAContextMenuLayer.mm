@@ -817,7 +817,7 @@
             .setLineWidth(2 * kWidthCorrectionValue * [[UIScreen mainScreen] scale])
             .setFillColor(OsmAnd::ColorARGB(color_osmand_orange_argb))
             .setApproximationEnabled(false)
-            .setBaseOrder(self.baseOrder);
+            .setBaseOrder(self.pointsOrder + 1);
         builder.buildAndAddToCollection(_outlineCollection);
         [self.mapView addKeyedSymbolsProvider:_outlineCollection];
     }];

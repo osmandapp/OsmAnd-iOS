@@ -445,7 +445,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         
         targetPoint.type = OATargetLocation;
         
-        targetPoint.location = CLLocationCoordinate2DMake(renderedObject.latitude, renderedObject.longitude);
+        targetPoint.location = CLLocationCoordinate2DMake(renderedObject.labelLatLon.latitude, renderedObject.labelLatLon.longitude);
         targetPoint.title = renderedObject.nameLocalized;
 //        targetPoint.icon = [poi.type icon];
         

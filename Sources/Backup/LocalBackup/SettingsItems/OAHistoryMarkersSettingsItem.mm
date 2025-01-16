@@ -177,7 +177,6 @@
 
     if (gpxFile)
     {
-        // TODO
         for (OASWptPt *wpt in gpxFile.getPointsList)
         {
             OAHistoryItem *historyItem = [[OAHistoryItem alloc] init];
@@ -194,8 +193,6 @@
                     historyItem.date = [dateFormatter dateFromString:extensions[key]];
                 }
             }
-            [[OAHistoryHelper sharedInstance] addPoint:historyItem];
-
             [self.item.items addObject:historyItem];
         }
     }

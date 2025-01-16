@@ -8,6 +8,9 @@
 
 #import "OAMapObject.h"
 
+#include <OsmAndCore.h>
+#include <OsmAndCore/PointsAndAreas.h>
+
 @interface OARenderedObject : OAMapObject
 
 @property (nonatomic) NSDictionary<NSString *, NSString *> *tags;
@@ -32,5 +35,7 @@
 
 - (BOOL) isText;
 - (void) addLocation:(int)x y:(int)y;
+
+- (QVector<OsmAnd::PointI>) points;
 
 @end

@@ -812,12 +812,12 @@
     [self.mapViewController runWithRenderSync:^{
         OsmAnd::VectorLineBuilder builder;
         builder.setPoints(points)
-        .setIsHidden(false)
-        .setLineId(1)
-        .setLineWidth(2 * kWidthCorrectionValue * [[UIScreen mainScreen] scale])
-        .setFillColor(OsmAnd::ColorARGB(color_osmand_orange_argb))
-        .setApproximationEnabled(false)
-        .setBaseOrder(self.baseOrder);
+            .setIsHidden(false)
+            .setLineId(1)
+            .setLineWidth(2 * kWidthCorrectionValue * [[UIScreen mainScreen] scale])
+            .setFillColor(OsmAnd::ColorARGB(color_osmand_orange_argb))
+            .setApproximationEnabled(false)
+            .setBaseOrder(self.baseOrder);
         builder.buildAndAddToCollection(_outlineCollection);
         [self.mapView addKeyedSymbolsProvider:_outlineCollection];
     }];

@@ -31,4 +31,14 @@
     [_y addObject:@(y)];
 }
 
+- (QVector<OsmAnd::PointI>) points
+{
+    QVector<OsmAnd::PointI> points;
+    for (int i = 0; i < _x.count; i++)
+    {
+        points.push_back( OsmAnd::PointI(_x[i].intValue, _y[i].intValue) );
+    }
+    return points;
+}
+
 @end

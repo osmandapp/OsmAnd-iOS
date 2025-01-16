@@ -112,6 +112,7 @@
 #import <MBProgressHUD.h>
 #import "OsmAnd_Maps-Swift.h"
 #import "OsmAndSharedWrapper.h"
+#import "OARenderedObject.h"
 
 #include <OsmAndCore/NetworkRouteContext.h>
 #include <OsmAndCore/CachingRoadLocator.h>
@@ -1409,13 +1410,19 @@ typedef enum
     }
     else
     {
-        [_mapViewController hideRegionHighlight];
+        [_mapViewController hidePolygonHighlight];
     }
     // show context marker on map
     [_mapViewController showContextPinMarker:targetPoint.location.latitude longitude:targetPoint.location.longitude animated:YES];
     
     [self applyTargetPoint:targetPoint];
     [_targetMenuView setTargetPoint:targetPoint];
+    
+    if ([targetPoint.targetObj isKindOfClass:OARenderedObject.class])
+    {
+        OARenderedObject *obj = targetPoint.targetObj;
+        [_mapViewController.mapLayers.contextMenuLayer highlightPolygon:[obj points]];
+    }
 
     [self showTargetPointMenu:saveState showFullMenu:NO onComplete:^{
         

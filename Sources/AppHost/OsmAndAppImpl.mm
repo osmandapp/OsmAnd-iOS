@@ -194,7 +194,9 @@
 
         // First of all, initialize user defaults
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        _firstLaunch = [defaults objectForKey:kAppData] == nil;
+
+        _firstLaunch = [[NSUserDefaults standardUserDefaults] integerForKey:kAppExecCounter] == 1;
+        
         [defaults registerDefaults:[self inflateInitialUserDefaults]];
         NSDictionary *defHideAllGPX = [NSDictionary dictionaryWithObject:@"NO" forKey:@"hide_all_gpx"];
         [defaults registerDefaults:defHideAllGPX];
@@ -410,7 +412,7 @@
     OALog(@"Cache path: %@", _cachePath);
     OALog(@"Weather Forecast path: %@", _weatherForecastPath);
 
-    // Unpack app data
+    // Unpack app data    
     _data = [NSKeyedUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:kAppData]];
     [_data postInit];
 

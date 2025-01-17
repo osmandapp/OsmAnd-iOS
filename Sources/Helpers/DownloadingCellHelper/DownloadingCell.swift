@@ -6,8 +6,6 @@
 //  Copyright © 2024 OsmAnd. All rights reserved.
 //
 
-import Foundation
-
-final class DownloadingCell : OARightIconTableViewCell {
-    
+final class DownloadingCell: OARightIconTableViewCell {
+    @objc var onDownloadFinishedAction: ((String) -> Void)?
 }

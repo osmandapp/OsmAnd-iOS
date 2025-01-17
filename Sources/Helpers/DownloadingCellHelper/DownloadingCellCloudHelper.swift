@@ -59,13 +59,16 @@ final class DownloadingCellCloudHelper: DownloadingCellBaseHelper  {
     @objc private func onBackupProgressItemFinished(notification: NSNotification) {
         guard let type = notification.userInfo?["type"] as? String,
               let name = notification.userInfo?["name"] as? String else { return }
+        
         let resourceId = getResourceId(typeName: type, filename: name)
         DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            if self.helperHasItemFor(resourceId) {
-                self.setCellProgress(resourceId: resourceId, progress: 1, status: .finished)
-                let cell = self.getOrCreateCell(resourceId)
-                cell?.leftIconView.tintColor = .iconColorActive
+            guard let self,
+                  helperHasItemFor(resourceId) else { return }
+            
+            setCellProgress(resourceId: resourceId, progress: 1, status: .finished)
+            if let cell = getOrCreateCell(resourceId) {
+                cell.leftIconView.tintColor = .iconColorActive
+                cell.onDownloadFinishedAction?(resourceId)
             }
         }
     }

@@ -40,7 +40,12 @@
 
 - (OAPOI *)getAmenity
 {
-    return [_point getAmenity];
+    NSDictionary<NSString *, NSString *> *extensions = [_point getExtensionsToRead];
+    if (extensions.count > 0)
+    {
+        return [OAPOI fromTagValue:extensions privatePrefix:@"amenity_" osmPrefix:@"osm_tag_"];
+    }
+    return nil;
 }
 
 - (void) setAmenity:(OAPOI *)amenity

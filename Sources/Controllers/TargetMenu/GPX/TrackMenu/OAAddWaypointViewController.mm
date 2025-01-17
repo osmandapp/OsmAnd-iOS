@@ -82,7 +82,12 @@
     }
     else
     {
+        if (!_gpx.dataItem)
+        {
+            _gpx.dataItem = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:_gpx.path]];
+        }
         _currentGpx = [OASGpxUtilities.shared loadGpxFileFile:_gpx.dataItem.file];
+        
         auto rect = _currentGpx.getRect;
         movedPoint.position = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
     }

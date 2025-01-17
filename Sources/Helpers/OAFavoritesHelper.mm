@@ -792,7 +792,6 @@ static NSOperationQueue *_favQueue;
     NSFileManager *manager = [NSFileManager defaultManager];
     NSArray<NSString *> *files = [manager contentsOfDirectoryAtPath:favoritesPath error:nil];
 
-    // acquire modification dates
     NSMutableArray<NSString *> *result = [NSMutableArray arrayWithCapacity:files.count];
     for (NSString* file in files)
         if ([file hasSuffix:GPX_FILE_EXT])
@@ -1163,16 +1162,35 @@ static NSOperationQueue *_favQueue;
     return self;
 }
 
+- (BOOL)isEqual:(id)object {
+    if (self == object) {
+        return YES;
+    }
+
+    if (![object isKindOfClass:[OAFavoriteGroup class]]) {
+        return NO;
+    }
+
+    OAFavoriteGroup *otherGroup = (OAFavoriteGroup *)object;
+    return ([self.name isEqualToString:otherGroup.name] &&
+            [self.color isEqual:otherGroup.color] &&
+            self.isVisible == otherGroup.isVisible &&
+            [self.iconName isEqualToString:otherGroup.iconName] &&
+            [self.backgroundType isEqualToString:otherGroup.backgroundType] &&
+            [self.points isEqualToArray:otherGroup.points]);
+}
+
+
 - (instancetype)initWithPoint:(OAFavoriteItem *)point
 {
     self = [self init];
     if (self)
     {
         _name = [point getCategory];
-        _color = [point getColor];
+        _color = [point getInternalColor];
         _isVisible = [point isVisible];
-        _iconName = [point getIcon];
-        _backgroundType = [point getBackgroundIcon];
+        _iconName = [point getInternalIcon];
+        _backgroundType = [point getInternalBackgroundIcon];
     }
     return self;
 }
@@ -1209,7 +1227,7 @@ static NSOperationQueue *_favQueue;
 
 - (UIColor *) color
 {
-    if ([_color toRGBNumber] != 0)
+    if (_color != nil && [_color toRGBNumber] != 0)
         return [UIColor colorRGB:_color equalToColorRGB:UIColor.whiteColor] ? [OADefaultFavorite getDefaultColor] : _color;
     else
         return [OADefaultFavorite getDefaultColor];
@@ -1251,7 +1269,7 @@ static NSOperationQueue *_favQueue;
 
 - (OASGpxUtilitiesPointsGroup *)toPointsGroup
 {
-    OASGpxUtilitiesPointsGroup *pointsGroup = [[OASGpxUtilitiesPointsGroup alloc] initWithName:_name iconName:_iconName backgroundType:_backgroundType color:_color.toARGBNumber];
+    OASGpxUtilitiesPointsGroup *pointsGroup = [[OASGpxUtilitiesPointsGroup alloc] initWithName:_name iconName:_iconName backgroundType:_backgroundType color:[self color].toARGBNumber];
     pointsGroup.hidden = !_isVisible;
     NSMutableArray<OASWptPt *> *points = [NSMutableArray array];
     for (OAFavoriteItem *point in _points)

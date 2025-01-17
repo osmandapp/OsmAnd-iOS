@@ -63,11 +63,14 @@
 - (void) setAddress:(NSString *)address;
 
 - (NSString *) getIcon;
+- (NSString *) getInternalIcon;
 - (void) setIcon:(NSString *)icon;
 
 - (NSString *) getBackgroundIcon;
+- (NSString *) getInternalBackgroundIcon;
 - (void) setBackgroundIcon:(NSString *)backgroundIcon;
 
+- (UIColor *) getInternalColor;
 - (UIColor *) getColor;
 - (void) setColor:(UIColor *)color;
 
@@ -103,5 +106,6 @@
 + (OAFavoriteItem *)fromWpt:(OASWptPt *)pt category:(NSString *)category;
 
 - (UIImage *) getCompositeIcon;
+- (BOOL)isEqual:(id)object;
 
 @end

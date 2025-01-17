@@ -131,5 +131,6 @@
 + (NSString *) convertDisplayNameToGroupIdName:(NSString *)name;
 - (OASGpxUtilitiesPointsGroup *)toPointsGroup;
 + (OAFavoriteGroup *)fromPointsGroup:(OASGpxUtilitiesPointsGroup *)pointsGroup;
+- (BOOL)isEqual:(id)object;
 
 @end

@@ -380,6 +380,13 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     _address = nil;
 }
 
+- (NSString *) getInternalIcon
+{
+    if (!self.favorite->getIcon().isNull())
+        return self.favorite->getIcon().toNSString();
+    return nil;
+}
+
 - (NSString *) getIcon
 {
     if (_icon)
@@ -396,6 +403,13 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 {
     self.favorite->setIcon(QString::fromNSString(icon));
     _icon = nil;
+}
+
+- (NSString *) getInternalBackgroundIcon
+{
+    if (!self.favorite->getBackground().isNull())
+        return self.favorite->getBackground().toNSString();
+    return nil;
 }
 
 - (NSString *) getBackgroundIcon
@@ -419,6 +433,16 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 {
     self.favorite->setBackground(QString::fromNSString(backgroundIcon));
     _backgroundIcon = nil;
+}
+
+- (UIColor *) getInternalColor
+{
+    const auto color = self.favorite->getColor();
+    if (color.argb != 0)
+    {
+        _color = [UIColor colorWithRed:color.r/255.0 green:color.g/255.0 blue:color.b/255.0 alpha:color.a/255.0];
+    }
+    return nil;
 }
 
 - (UIColor *) getColor

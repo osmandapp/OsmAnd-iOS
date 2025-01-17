@@ -312,6 +312,7 @@
                 }
             }
         }
+
         NSMutableArray<OAStatusBackupItem *> * sortedFiles = [self sortFilesByType:filesByName];
         for (OAStatusBackupItem *it in sortedFiles)
         {
@@ -655,6 +656,16 @@
             BOOL hasConflict = (EOABackupSyncOperationType) [item integerForKey:@"operation"] == EOABackupSyncOperationNone;
             cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingToLeftOfContentWithIcon, 0., 0.);
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.onDownloadFinishedAction = ^(NSString *downloadFinishedResourceId) {
+                if ([downloadFinishedResourceId isEqualToString:resourceId])
+                {
+                    EOABackupSyncOperationType operationType = (EOABackupSyncOperationType)[item integerForKey:@"operation"];
+                    if (operationType == EOABackupSyncOperationDownload || operationType == EOABackupSyncOperationUpload)
+                    {
+                        [item setIconTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
+                    }
+                }
+            };
 
             NSString *description = item.descr;
             NSAttributedString *descriptionAttributed = [item objForKey:@"descrAttr"];

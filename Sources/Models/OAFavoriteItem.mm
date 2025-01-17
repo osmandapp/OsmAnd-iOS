@@ -722,7 +722,12 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     [fp setDescription:pt.desc];
     [fp setComment:pt.comment];
     [fp setAmenityOriginName:pt.getAmenityOriginName];
-    [fp setAmenity:[pt getAmenity]];
+    NSDictionary<NSString *, NSString *> *extensions = [pt getExtensionsToRead];
+    if (extensions.count > 0)
+    {
+        OAPOI *amenity = [OAPOI fromTagValue:extensions privatePrefix:@"amenity_" osmPrefix:@"osm_tag_"];
+        [fp setAmenity:amenity];
+    }
     
     // TODO: sync with Android
 

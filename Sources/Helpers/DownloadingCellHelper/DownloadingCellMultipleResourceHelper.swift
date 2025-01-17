@@ -70,7 +70,7 @@ final class DownloadingCellMultipleResourceHelper: DownloadingCellResourceHelper
     
     // MARK: - Cell setup methods
     
-    override func getOrCreateCell(_ resourceId: String, swiftResourceItem: OAResourceSwiftItem?) -> DownloadingCell? {
+    override func getOrCreateCell(_ resourceId: String, swiftResourceItem: OAResourceSwiftItem?, title: String?, desc: Any?) -> DownloadingCell? {
         guard let multipleItem = swiftResourceItem as? OAMultipleResourceSwiftItem else { return nil }
         for subitem in multipleItem.items() {
             subitem.refreshDownloadTask()
@@ -85,7 +85,7 @@ final class DownloadingCellMultipleResourceHelper: DownloadingCellResourceHelper
                 saveStatus(resourceId: resourceId, status: .inProgress)
             }
         }
-        return super.getOrCreateCell(resourceId)
+        return super.getOrCreateCell(resourceId, swiftResourceItem: swiftResourceItem, title: title, desc: desc)
     }
     
     override func onCellClicked(_ resourceId: String) {

@@ -2670,23 +2670,15 @@ static BOOL _repositoryUpdated = NO;
     if ([item_ isKindOfClass:OAMultipleResourceItem.class] && ([self.region hasGroupItems] || ((OAResourceItem *) item_).resourceType == OsmAndResourceType::SrtmMapRegion))
     {
         OAMultipleResourceItem *item = (OAMultipleResourceItem *) item_;
-        UIColor *color = [UIColor colorNamed:ACColorNameIconColorDisabled];
-        NSArray<OAResourceItem *> *items = [self.region hasGroupItems] ? [self.region.groupItem getItems:item.resourceType] : item.items;
         NSString *resourceId = [item getResourceId];
         OAMultipleResourceSwiftItem *mapItem = [[OAMultipleResourceSwiftItem alloc] initWithItem:item];
-        DownloadingCell *downloadingCell = [_downloadingCellMultipleResourceHelper getOrCreateCell:resourceId swiftResourceItem:mapItem];
-        downloadingCell.titleLabel.text = title;
-        downloadingCell.descriptionLabel.text = subtitle;
-        return downloadingCell;
+        return [_downloadingCellMultipleResourceHelper getOrCreateCell:resourceId swiftResourceItem:mapItem title:title desc:subtitle];
     }
     else if ([item_ isKindOfClass:OAResourceItem.class] || [item_ isKindOfClass:OASearchResult.class])
     {
         OAResourceItem *item = (OAResourceItem *) ([item_ isKindOfClass:OASearchResult.class] ? ((OASearchResult *) item_).relatedObject : item_);
         OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:item];
-        DownloadingCell *downloadingCell = [_downloadingCellResourceHelper getOrCreateCell:mapItem.resourceId swiftResourceItem:mapItem];
-        downloadingCell.titleLabel.text = title;
-        downloadingCell.descriptionLabel.text = subtitle;
-        return downloadingCell;
+        return [_downloadingCellResourceHelper getOrCreateCell:mapItem.resourceId swiftResourceItem:mapItem title:title desc:subtitle];
     }
     else
     {

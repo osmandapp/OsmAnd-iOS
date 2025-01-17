@@ -13,7 +13,15 @@ import UIKit
 }
 
 @objc enum DownloadingCellRightIconType: Int {
-    case hideIconAfterDownloading, showIconAlways, showShevronAlways, showIconAndShevronAlways, showShevronBeforeDownloading, showShevronAfterDownloading, showInfoAndShevronAfterDownloading, showDoneIconAfterDownloading
+    case hideIconAfterDownloading,
+         showIconAlways,
+         showShevronAlways,
+         showIconAndShevronAlways,
+         showIconAndShevronBeforeDownloading,
+         showShevronBeforeDownloading,
+         showShevronAfterDownloading,
+         showInfoAndShevronAfterDownloading,
+         showDoneIconAfterDownloading
 }
 
 @objcMembers
@@ -101,52 +109,128 @@ class DownloadingCellBaseHelper: NSObject {
     // MARK: - Cell setup methods
     
     func getOrCreateCell(_ resourceId: String) -> DownloadingCell? {
+        getOrCreateCell(resourceId,
+                        title: "",
+                        desc: nil,
+                        leftIcon: nil,
+                        isDownloading: false)
+    }
+
+    func getOrCreateCell(_ resourceId: String,
+                         title: String?,
+                         desc: Any?,
+                         leftIcon: Any?,
+                         isDownloading: Bool) -> DownloadingCell? {
         if statuses[resourceId] == nil {
             statuses[resourceId] = .idle
         }
         if progresses[resourceId] == nil {
             progresses[resourceId] = 0
         }
-        var cell = cells[resourceId]
-        if cell == nil {
-            cell = setupCell(resourceId)
-            cells[resourceId] = cell
+        guard let cell = cells[resourceId] else {
+            let newCell = setupCell(resourceId,
+                                    title: title,
+                                    isTitleBold: false,
+                                    desc: desc,
+                                    leftIcon: leftIcon,
+                                    isDownloading: isDownloading)
+            cells[resourceId] = newCell
+            return newCell
+        }
+        let status = getStatus(resourceId: resourceId)
+        if status != .idle {
+            updateDesc(resourceId, cell: cell, desc: desc)
+            updateLeftIcon(resourceId, cell: cell, leftIcon: leftIcon)
+            updateRightIcon(resourceId, cell: cell, isDownloading: isDownloading)
         }
         return cell
     }
-    
-    // Override in subclass
-    func setupCell(_ resourceId: String) -> DownloadingCell? {
-        setupCell(resourceId: resourceId, title: "", isTitleBold: false, desc: nil, leftIconName: nil, rightIconName: nil, isDownloading: false)
+
+    func updateLeftIcon(_ resourceId: String,
+                        cell: DownloadingCell,
+                        leftIcon: Any?) {
+        if let leftIcon {
+            cell.leftIconVisibility(true)
+            if let leftIconName = leftIcon as? String {
+                cell.leftIconView.image = UIImage.templateImageNamed(leftIconName)
+            } else if let leftIconImage = leftIcon as? UIImage {
+                cell.leftIconView.image = leftIconImage
+            }
+            updateLeftIconColor(resourceId, cell: cell, color: nil)
+        } else {
+            cell.leftIconVisibility(false)
+        }
     }
-    
+
+    func updateLeftIconColor(_ resourceId: String,
+                             cell: DownloadingCell?,
+                             color: UIColor?) {
+        var downloadingCell = cell
+        if downloadingCell == nil {
+            downloadingCell = cells[resourceId]
+        }
+        guard let downloadingCell else { return }
+        if let color {
+            downloadingCell.leftIconView.tintColor = color
+        } else if isInstalled(resourceId) && isDownloadedLeftIconRecolored {
+            downloadingCell.leftIconView.tintColor = leftIconColor != nil ? leftIconColor : .iconColorActive
+        } else {
+            downloadingCell.leftIconView.tintColor = .iconColorDefault
+        }
+    }
+
+    func updateRightIcon(_ resourceId: String,
+                         cell: DownloadingCell,
+                         isDownloading: Bool) {
+        if isDownloading {
+            cell.rightIconVisibility(false)
+            cells[resourceId] = cell
+            refreshCellProgress(resourceId)
+        } else {
+            setupRightIconForIdleCell(cell: cell, resourceId: resourceId)
+        }
+    }
+
+    func updateDesc(_ resourceId: String,
+                    cell: DownloadingCell?,
+                    desc: Any?) {
+        var downloadingCell = cell
+        if downloadingCell == nil {
+            downloadingCell = cells[resourceId]
+        }
+        guard let downloadingCell else { return }
+        if let desc {
+            downloadingCell.descriptionVisibility(true)
+            if let descStr = desc as? String, !descStr.isEmpty {
+                downloadingCell.descriptionLabel.attributedText = nil
+                downloadingCell.descriptionLabel.text = descStr
+                downloadingCell.descriptionLabel.font = UIFont.monospacedFont(at: 12, withTextStyle: .body)
+                downloadingCell.descriptionLabel.textColor = .textColorSecondary
+            } else if let descAttr = desc as? NSAttributedString, descAttr.length > 0 {
+                downloadingCell.descriptionLabel.text = nil
+                downloadingCell.descriptionLabel.attributedText = descAttr
+            }
+        } else {
+            downloadingCell.descriptionVisibility(false)
+        }
+    }
+
     // Override in subclass
-    func setupCell(resourceId: String, title: String?, isTitleBold: Bool, desc: String?, leftIconName: String?, rightIconName: String?, isDownloading: Bool) -> DownloadingCell? {
+    func setupCell(_ resourceId: String,
+                   title: String?,
+                   isTitleBold: Bool,
+                   desc: Any?,
+                   leftIcon: Any?,
+                   isDownloading: Bool) -> DownloadingCell? {
         var cell = cells[resourceId]
         if cell == nil {
             let nib = Bundle.main.loadNibNamed(DownloadingCell.reuseIdentifier, owner: self, options: nil)
             cell = nib?.first as? DownloadingCell
         }
         guard let cell else { return nil }
-        
+
+        cell.titleLabel.text = title
         cell.titleLabel.font = UIFont.preferredFont(forTextStyle: .body)
-        cell.leftIconView.tintColor = .iconColorDefault
-        cell.rightIconView.tintColor = getRightIconColor()
-        cell.rightIconView.image = UIImage.templateImageNamed(getRightIconName(resourceId))
-        
-        if let leftIconName, !leftIconName.isEmpty {
-            cell.leftIconVisibility(true)
-            cell.leftIconView.image = UIImage.templateImageNamed(leftIconName)
-            if isInstalled(resourceId) && isDownloadedLeftIconRecolored {
-                cell.leftIconView.tintColor = leftIconColor != nil ? leftIconColor : .iconColorActive
-            } else {
-                cell.leftIconView.tintColor = .iconColorDefault
-            }
-        } else {
-            cell.leftIconVisibility(false)
-        }
-        
-        cell.titleLabel.text = title != nil ? title : ""
         if isTitleBold || isBoldTitleStyle {
             cell.titleLabel.font = UIFont.scaledSystemFont(ofSize: 17, weight: .medium)
             cell.titleLabel.textColor = .textColorActive
@@ -154,28 +238,15 @@ class DownloadingCellBaseHelper: NSObject {
             cell.titleLabel.font = UIFont.preferredFont(forTextStyle: .body)
             cell.titleLabel.textColor = .textColorPrimary
         }
-        
-        if let desc, !desc.isEmpty {
-            cell.descriptionVisibility(true)
-            cell.descriptionLabel.text = desc
-            cell.descriptionLabel.font = UIFont.monospacedFont(at: 12, withTextStyle: .body)
-            cell.descriptionLabel.textColor = .textColorSecondary
-        } else {
-            cell.descriptionVisibility(false)
-        }
-        
-        if isDownloading {
-            cell.rightIconVisibility(false)
-            cells[resourceId] = cell
-            refreshCellProgress(resourceId)
-        } else {
-            setupRightIconForIdleCell(cell: cell, rightIconName: rightIconName, resourceId: resourceId)
-        }
+
+        updateDesc(resourceId, cell: cell, desc: desc)
+        updateLeftIcon(resourceId, cell: cell, leftIcon: leftIcon)
+        updateRightIcon(resourceId, cell: cell, isDownloading: isDownloading)
+
         return cell
     }
     
-    private func setupRightIconForIdleCell(cell: DownloadingCell, rightIconName: String?, resourceId: String) {
-        
+    private func setupRightIconForIdleCell(cell: DownloadingCell, resourceId: String) {
         var showIcon = false
         cell.accessoryView = nil
         cell.accessoryType = .none
@@ -190,10 +261,14 @@ class DownloadingCellBaseHelper: NSObject {
         } else if rightIconStyle == .showIconAndShevronAlways {
             cell.accessoryType = .disclosureIndicator
             showIcon = true
-        } else if rightIconStyle == .showShevronBeforeDownloading {
+        } else if rightIconStyle == .showIconAndShevronBeforeDownloading {
             if !isInstalled(resourceId) {
                 cell.accessoryType = .disclosureIndicator
                 showIcon = true
+            }
+        } else if rightIconStyle == .showShevronBeforeDownloading {
+            if !isInstalled(resourceId) {
+                cell.accessoryType = .disclosureIndicator
             }
         } else if rightIconStyle == .showShevronAfterDownloading {
             if isInstalled(resourceId) {
@@ -267,10 +342,7 @@ class DownloadingCellBaseHelper: NSObject {
         setCellProgress(resourceId: resourceId, progress: progress, status: status)
     }
     
-    func setCellProgress(resourceId: String, progress: Float, status: ItemStatusType) {
-        
-        guard helperHasItemFor(resourceId) else { return }
-        
+    func setCellProgress(resourceId: String, progress: Float, status: ItemStatusType) {        
         saveStatus(resourceId: resourceId, status: status)
         saveProgress(resourceId: resourceId, progress: progress)
         var currentStatus = status
@@ -312,7 +384,7 @@ class DownloadingCellBaseHelper: NSObject {
                 // Downloading interupted by user
                 saveStatus(resourceId: resourceId, status: .idle)
             }
-            setupRightIconForIdleCell(cell: cell, rightIconName: getRightIconName(resourceId), resourceId: resourceId)
+            setupRightIconForIdleCell(cell: cell, resourceId: resourceId)
         }
     }
     

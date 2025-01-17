@@ -928,12 +928,9 @@
     else if ([item[@"type"] isEqualToString:@"downloading_cell"])
     {
         OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:item[@"resource"]];
-        DownloadingCell *cell = [_downloadingCellResourceHelper getOrCreateCell:item[@"resourceId"] swiftResourceItem:mapItem];
+        DownloadingCell *cell = [_downloadingCellResourceHelper getOrCreateCell:item[@"resourceId"] swiftResourceItem:mapItem title:item[@"title"] desc:item[@"description"]];
         [cell leftIconVisibility:NO];
         [cell rightIconVisibility:NO];
-        [cell descriptionVisibility:YES];
-        cell.titleLabel.text = item[@"title"];
-        cell.descriptionLabel.attributedText = item[@"description"];
         return cell;
     }
     else if ([item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])

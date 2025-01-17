@@ -9,7 +9,7 @@
 import Foundation
 
 @objcMembers
-final class DownloadingCellCloudHelper: DownloadingCellBaseHelper  {
+final class DownloadingCellCloudHelper: DownloadingCellBaseHelper {
     
     override init() {
         super.init()
@@ -61,12 +61,8 @@ final class DownloadingCellCloudHelper: DownloadingCellBaseHelper  {
               let name = notification.userInfo?["name"] as? String else { return }
         let resourceId = getResourceId(typeName: type, filename: name)
         DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            if self.helperHasItemFor(resourceId) {
-                self.setCellProgress(resourceId: resourceId, progress: 1, status: .finished)
-                let cell = self.getOrCreateCell(resourceId)
-                cell?.leftIconView.tintColor = .iconColorActive
-            }
+            self?.setCellProgress(resourceId: resourceId, progress: 1, status: .finished)
+            self?.updateLeftIconColor(resourceId, cell: nil, color: .iconColorActive)
         }
     }
 }

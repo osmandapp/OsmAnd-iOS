@@ -19,6 +19,7 @@
 #import "OAImportBackupItemsTask.h"
 #import "OASettingsImporter.h"
 #import "OABackupInfo.h"
+#import "OAConcurrentCollections.h"
 
 @implementation OAItemProgressInfo
 
@@ -55,7 +56,7 @@
     NSArray<OARemoteFile *> *_remoteFiles;
     
     NSString *_key;
-    NSMutableDictionary<NSString *, OAItemProgressInfo *> *_itemsProgress;
+    OAConcurrentDictionary<NSString *, OAItemProgressInfo *> *_itemsProgress;
 }
 
 - (instancetype) initWithKey:(NSString *)key
@@ -124,7 +125,7 @@
 {
     _helper = OANetworkSettingsHelper.sharedInstance;
     _importer = [[OABackupImporter alloc] initWithListener:self];
-    _itemsProgress = [NSMutableDictionary dictionary];
+    _itemsProgress = [[OAConcurrentDictionary alloc] init];
     _maxProgress = [self.class calculateMaxProgress];
 }
 
@@ -142,7 +143,7 @@
 
 - (OAItemProgressInfo *) getItemProgressInfo:(NSString *)type fileName:(NSString *)fileName
 {
-    return _itemsProgress[[type stringByAppendingString:fileName]];
+    return [_itemsProgress objectForKeySync:[type stringByAppendingString:fileName]];
 }
 
 - (void)main
@@ -328,7 +329,7 @@
         if (prevInfo)
             info.work = prevInfo.work;
         
-        _itemsProgress[[info.type stringByAppendingString:info.fileName]] = info;
+        [_itemsProgress setObjectSync:info forKey:[info.type stringByAppendingString:info.fileName]];
         
         if (info.finished)
             [_importListener onImportItemFinished:info.type fileName:info.fileName];

@@ -68,7 +68,6 @@
 #import "OARequiredMapsResourceViewController.h"
 #import "OAResourcesUIHelper.h"
 #import "OsmAndSharedWrapper.h"
-#import "OAAttachRoadsBannerCell.h"
 #import "OASnapTrackWarningViewController.h"
 #import "OAGpxData.h"
 #import "OAMeasurementEditingContext.h"

@@ -113,6 +113,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OsmAndSharedWrapper.h"
 #import "OARenderedObject.h"
+#import "OARenderedObject+cpp.h"
 
 #include <OsmAndCore/NetworkRouteContext.h>
 #include <OsmAndCore/CachingRoadLocator.h>

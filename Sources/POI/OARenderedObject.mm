@@ -7,6 +7,7 @@
 //
 
 #import "OARenderedObject.h"
+#import "OARenderedObject+cpp.h"
 
 @implementation OARenderedObject
 

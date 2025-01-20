@@ -12,6 +12,8 @@
 #import "OAAppSettings.h"
 #import "OAPOIHelper.h"
 #import "OAGPXDocumentPrimitives.h"
+#import "OARenderedObject.h"
+#import "OARenderedObject+cpp.h"
 
 #include <OsmAndCore/ICU.h>
 
@@ -561,6 +563,11 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     [_y addObject:@(y)];
 }
 
+- (void) setXYPoints:(OARenderedObject *)renderedObject
+{
+    _x = renderedObject.x;
+    _y = renderedObject.y;
+}
 
 
 - (BOOL) isEqual:(id)o

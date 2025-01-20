@@ -163,7 +163,7 @@
             
         case OATargetLocation:
         {
-            controller = [[OAPOIViewController alloc] initWithRenderedObject:targetPoint.targetObj];
+            controller = [[RenderedObjectViewController alloc] initWithRenderedObject:targetPoint.targetObj];
             break;
         }
             

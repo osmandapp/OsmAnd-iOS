@@ -46,7 +46,7 @@
 #define ROUTE_TRACK @"route_track"
 #define ROUTE_TRACK_POINT @"route_track_point"
 
-@class OAPOIType;
+@class OAPOIType, OARenderedObject;
 
 @interface OAPOIRoutePoint : NSObject
 
@@ -129,5 +129,7 @@
 @property (nonatomic) NSMutableArray<NSNumber *> *x;
 @property (nonatomic) NSMutableArray<NSNumber *> *y;
 - (void) addLocation:(int)x y:(int)y;
+
+- (void) setXYPoints:(OARenderedObject *)renderedObject;
 
 @end

@@ -13,6 +13,5 @@
 @interface OAPOIViewController : OATransportStopsBaseController
 
 - (id) initWithPOI:(OAPOI *)poi;
-- (id) initWithRenderedObject:(OARenderedObject *)obj;
 
 @end

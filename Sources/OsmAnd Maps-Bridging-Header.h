@@ -67,6 +67,8 @@
 #import "OrderedDictionary.h"
 #import "OAMapActions.h"
 #import "OAPOIHelper.h"
+#import "OARenderedObject.h"
+#import "OAPOIType.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"
@@ -153,6 +155,7 @@
 #import "OAColorCollectionViewController.h"
 #import "OAQuickActionSelectionBottomSheetViewController.h"
 #import "OAFloatingButtonsHudViewController.h"
+#import "OAPOIViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"

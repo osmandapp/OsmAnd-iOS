@@ -3575,3 +3575,4 @@
 "shared_string_open_street_map" = "OpenStreetMap";
 "km_h" = "km/h";
 "cloud_sync_progress" = "Synchronizace...%@";
+"download_tab_conflicts" = "Nevyřešené";

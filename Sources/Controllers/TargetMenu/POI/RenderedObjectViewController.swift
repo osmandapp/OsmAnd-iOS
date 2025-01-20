@@ -99,8 +99,15 @@ final class RenderedObjectViewController: OAPOIViewController {
     }
     
     override func getTypeStr() -> String {
-        //super.getTypeStr()
-        ""
+        if renderedObject.isPolygon {
+            return getTranslatedType(renderedObject: renderedObject)
+        }
+        return super.getTypeStr()
+    }
+    
+    // TODO: rewrite from objc from OAPOIHelper
+    private func getTranslatedType(renderedObject: OARenderedObject) -> String {
+        return ""
     }
     
     override func getIcon() -> UIImage {

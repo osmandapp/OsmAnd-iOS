@@ -1700,6 +1700,9 @@ static const NSInteger _buttonsCount = 4;
             NSMutableAttributedString *attributedStr = [[NSMutableAttributedString alloc] init];
             if (_targetPoint.titleAddress.length > 0 && ![_targetPoint.title hasPrefix:_targetPoint.titleAddress])
             {
+                if (!typeStr || typeStr.length == 0)
+                    typeStr = [self.customController getCommonTypeStr];
+                
                 if (typeStr.length > 0)
                 {
                     NSMutableAttributedString *typeAttrStr = [[NSMutableAttributedString alloc] initWithString:[typeStr stringByAppendingString:@": "]];

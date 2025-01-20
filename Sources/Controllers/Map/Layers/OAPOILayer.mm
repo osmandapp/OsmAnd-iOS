@@ -550,7 +550,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
                 
                 
                 
-                //TODO: implenent
+                //TODO: extract to OARenderedObject(obfMapObject:mapObj) ?
             
                 OARenderedObject *renderedObject = [OARenderedObject new];
                 renderedObject.obfId = obfMapObject->id;

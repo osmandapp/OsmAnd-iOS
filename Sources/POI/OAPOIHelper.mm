@@ -383,6 +383,8 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
     return [self getSynonymsByName:type.name];
 }
 
+
+//TODO: extract to RenderedObjectViewController.swift
 - (NSString *) getTranslatedType:(std::shared_ptr<const OsmAnd::MapObject>)renderedObject
 {
     OAPOIType *pt;

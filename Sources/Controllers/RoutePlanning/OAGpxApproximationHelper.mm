@@ -7,6 +7,9 @@
 //
 
 #import "OAGpxApproximationHelper.h"
+#import "OAMeasurementEditingContext.h"
+#import "OAGpxRouteApproximation.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OAGpxApproximationHelper () <OAGpxApproximationProgressDelegate>
 
@@ -127,6 +130,77 @@
     
     if (self.delegate)
         [self.delegate didFinishAllApproximationsWithResults:approximations points:points];
+}
+
+- (OASGpxFile *)approximateGpxSync:(OASGpxFile *)gpxFile params:(OAGpxApproximator *)params
+{
+    OAMeasurementEditingContext *context = [self createEditingContext:gpxFile params:params];
+    NSArray *pair = [self calculateGpxApproximationSync];
+    OASGpxFile *approximatedGpx = [self createApproximatedGpx:context params:params approximations:pair.firstObject points:pair.lastObject];
+    if (approximatedGpx != nil && [approximatedGpx isAttachedToRoads])
+        return approximatedGpx;
+    
+    return gpxFile;
+}
+
+- (NSArray *)calculateGpxApproximationSync
+{
+    for (OALocationsHolder *holder in _locationsHolders)
+    {
+        OAGpxApproximator *approximator = [self getNewGpxApproximator:holder];
+        if (approximator)
+        {
+            [approximator calculateGpxApproximationSync:[[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OAGpxRouteApproximation *__autoreleasing *approximation) {
+                if (approximation && *approximation)
+                    _resultMap[holder] = *approximation;
+                return YES;
+            } cancelledFunc:^BOOL {
+                return NO;
+            }]];
+        }
+    }
+    
+    return [self processApproximationResults];
+}
+
+- (NSArray *)processApproximationResults
+{
+    NSMutableArray<OAGpxRouteApproximation *> *approximations = [NSMutableArray array];
+    NSMutableArray<NSArray<OASWptPt *> *> *points = [NSMutableArray array];
+    for (OALocationsHolder *holder in _locationsHolders)
+    {
+        OAGpxRouteApproximation *approximation = _resultMap[holder];
+        if (approximation)
+        {
+            [approximations addObject:approximation];
+            [points addObject:holder.getWptPtList];
+        }
+    }
+    
+    return @[approximations, points];
+}
+
+- (OASGpxFile *)createApproximatedGpx:(OAMeasurementEditingContext *)context params:(OAGpxApproximator *)params approximations:(NSArray<OAGpxRouteApproximation *> *)approximations points:(NSArray<NSArray<OASWptPt *> *> *)points
+{
+    for (NSUInteger i = 0; i < [approximations count]; i++)
+    {
+        OAGpxRouteApproximation *approximation = [approximations objectAtIndex:i];
+        NSArray<OASWptPt *> *segment = [points objectAtIndex:i];
+        [context setPoints:approximation originalPoints:segment mode:_appMode];
+    }
+    
+    return [context exportGpx:context.gpxData.gpxFile.path.lastPathComponent.stringByDeletingPathExtension];
+}
+
+- (OAMeasurementEditingContext *)createEditingContext:(OASGpxFile *)gpxFile params:(OAGpxApproximator *)params
+{
+    OAMeasurementEditingContext *editingContext = [[OAMeasurementEditingContext alloc] init];
+    editingContext.gpxData = [[OAGpxData alloc] initWithFile:gpxFile];
+    editingContext.appMode = params.mode;
+    [editingContext addPoints];
+    [params setTrackPoints:[editingContext getPointsSegments:YES route:YES]];
+    _locationsHolders = params.locationsHolders;
+    return editingContext;
 }
 
 // MARK: OAGpxApproximationProgressDelegate

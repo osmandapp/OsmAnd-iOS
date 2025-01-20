@@ -9,6 +9,8 @@
 @objcMembers
 final class RenderedObjectViewController: OAPOIViewController {
     
+    private var renderedObject: OARenderedObject!
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -20,6 +22,7 @@ final class RenderedObjectViewController: OAPOIViewController {
     init(renderedObject: OARenderedObject) {
         let poi = Self.getSyntheticAmenity(renderedObject: renderedObject)
         super.init(poi: poi)
+        self.renderedObject = renderedObject
     }
     
     private static func getSyntheticAmenity(renderedObject: OARenderedObject) -> OAPOI {
@@ -95,4 +98,35 @@ final class RenderedObjectViewController: OAPOIViewController {
         return poi
     }
     
+    override func getTypeStr() -> String {
+        //super.getTypeStr()
+        ""
+    }
+    
+    override func getIcon() -> UIImage {
+        if let iconRes = getIconRes() {
+            return UIImage.templateImageNamed(iconRes)
+        } else {
+            return UIImage.templateImageNamed("ic_action_street_name")
+        }
+    }
+    
+    private func getIconRes() -> String? {
+        if renderedObject.isPolygon {
+            for e in renderedObject.tags {
+                if let pt = OAPOIHelper.sharedInstance().getPoiType(byKey: e.value) {
+                    return pt.iconName()
+                }
+            }
+        }
+        return getActualContent()
+    }
+    
+    private func getActualContent() -> String? {
+        let content = renderedObject.iconRes
+        if content == "osmand_steps" {
+            return "highway_steps"
+        }
+        return content
+    }
 }

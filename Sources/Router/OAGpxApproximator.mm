@@ -172,6 +172,14 @@
 	}
 }
 
+- (void) setTrackPoints:(NSArray<NSArray<OASWptPt *> *> *)points
+{
+    NSMutableArray<OALocationsHolder *> *locationsHolders = [NSMutableArray array];
+    for (NSArray<OASWptPt *> *segment in points)
+        [locationsHolders addObject:[[OALocationsHolder alloc] initWithLocations:segment]];
+    _locationsHolders = locationsHolders;
+}
+
 - (BOOL) isCancelled
 {
 	return _gctx != nullptr && _gctx->ctx->progress->isCancelled();
@@ -194,6 +202,18 @@
 	OAApproximationTask *task = [[OAApproximationTask alloc] initWithApproximator:self env:_env gctx:_gctx points:self.getPoints resultMatcher:resultMatcher];
 	task.previousTask = _approximationTask;
 	[task start];
+}
+
+- (void) calculateGpxApproximationSync:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher
+{
+    @try {
+        auto gctx = [self getNewGpxApproximationContext];
+        std::vector<SHARED_PTR<GpxPoint>> points = [self getPoints];
+        [_routingHelper calculateGpxApproximation:_env gctx:gctx points:points resultMatcher:resultMatcher];
+    } @catch (NSException *exception) {
+        [resultMatcher publish:nil];
+        NSLog(@"Error: %@", exception.reason);
+    }
 }
 
 - (void) startProgress

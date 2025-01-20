@@ -3594,3 +3594,4 @@
 "int_hour" = "h";
 "weather_source_GFS_title" = "GFS";
 "cloud_sync_progress" = "Sinhronizacija…%@";
+"info_button" = "Info";

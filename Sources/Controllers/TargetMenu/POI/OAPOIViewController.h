@@ -8,10 +8,11 @@
 
 #import "OATransportStopsBaseController.h"
 
-@class OAPOI;
+@class OAPOI, OARenderedObject;
 
 @interface OAPOIViewController : OATransportStopsBaseController
 
 - (id) initWithPOI:(OAPOI *)poi;
+- (id) initWithRenderedObject:(OARenderedObject *)obj;
 
 @end

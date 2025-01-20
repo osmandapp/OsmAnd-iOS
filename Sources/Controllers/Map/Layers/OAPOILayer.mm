@@ -39,6 +39,7 @@
 #include <OsmAndCore/ObfDataInterface.h>
 #include <OsmAndCore/NetworkRouteContext.h>
 #include <OsmAndCore/NetworkRouteSelector.h>
+#include <OsmAndCore/Map/BillboardRasterMapSymbol.h>
 
 #define kPoiSearchRadius 50
 #define kTrackSearchDelta 40
@@ -561,6 +562,18 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
                 double lat = OsmAnd::Utilities::get31LatitudeY(obfMapObject->getLabelCoordinateY());
                 double lon = OsmAnd::Utilities::get31LongitudeX(obfMapObject->getLabelCoordinateX());
                 [renderedObject setLabelLatLon:CLLocationCoordinate2DMake(lat, lon)];
+                
+                if (symbolInfo->mapSymbol->contentClass == OsmAnd::RasterMapSymbol::ContentClass::Caption)
+                {
+                    if (const auto billboardRasterMapSymbol = std::static_pointer_cast<const OsmAnd::BillboardRasterMapSymbol>(symbolInfo->mapSymbol))
+                        renderedObject.name = billboardRasterMapSymbol->content.toNSString();
+                }
+                
+                if (symbolInfo->mapSymbol->contentClass == OsmAnd::RasterMapSymbol::ContentClass::Icon)
+                {
+                    if (const auto billboardRasterMapSymbol = std::static_pointer_cast<const OsmAnd::BillboardRasterMapSymbol>(symbolInfo->mapSymbol))
+                        renderedObject.iconRes = billboardRasterMapSymbol->content.toNSString();
+                }
                 
                 // diffs with android
                 NSMutableDictionary *names = [NSMutableDictionary dictionary];

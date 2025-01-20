@@ -155,8 +155,15 @@
         }
             
         case OATargetPOI:
+        
         {
             controller = [[OAPOIViewController alloc] initWithPOI:targetPoint.targetObj];
+            break;
+        }
+            
+        case OATargetLocation:
+        {
+            controller = [[OAPOIViewController alloc] initWithRenderedObject:targetPoint.targetObj];
             break;
         }
             

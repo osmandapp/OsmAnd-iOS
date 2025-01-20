@@ -1351,7 +1351,7 @@ typedef enum
     }
     else if (validPoints.count == 1)
     {
-        [self showContextMenu:validPoints[0]];
+        [self showContextMenu:validPoints[0]]; // test here
     }
     else
     {
@@ -2305,6 +2305,7 @@ typedef enum
         case OATargetTransportRoute:
         case OATargetTurn:
         case OATargetMyLocation:
+        case OATargetLocation:
         {
             if (controller)
                 [self.targetMenuView doInit:showFullMenu];

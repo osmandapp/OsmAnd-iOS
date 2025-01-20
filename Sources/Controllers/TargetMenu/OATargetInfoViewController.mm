@@ -202,14 +202,14 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
     
     [self appdendDetailsButtonRow:_rows];
     
+    [self buildWithinRow];
+    
     [self buildRows:_rows];
 
     if (self.additionalRows)
     {
         [_rows addObjectsFromArray:self.additionalRows];
     }
-    
-    [self buildWithinRow];
     
     if ([self showNearestWiki] && !OAIAPHelper.sharedInstance.wiki.disabled && [OAPluginsHelper getEnabledPlugin:OAWikipediaPlugin.class])
         [self buildRowsPoi:YES];
@@ -264,7 +264,7 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
                                    textColor:nil
                                       isText:YES
                                    needLinks:YES
-                                       order:0
+                                       order:-1
                                     typeName:WITHIN_POLYGONS_ROW_KEY
                                isPhoneNumber:NO
                                        isUrl:NO];

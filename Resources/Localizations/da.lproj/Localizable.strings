@@ -3422,3 +3422,13 @@
 "reset_average_speed" = "Nulstil gennemsnitshastighed";
 "transport_stop" = "Stoppested";
 "cloud_sync_progress" = "Synkroniserer...%@";
+"start_navigation" = "Start navigation";
+"cancel_navigation" = "Stop navigation";
+"day_short" = "D";
+"help_article_navigation_car_play_name" = "CarPlay";
+"info_button" = "Info";
+"help_article_troubleshooting_android_auto_name" = "Android Auto";
+"shared_string_control_stop" = "Stop";
+"start_point" = "Start";
+"help_article_navigation_auto_car_name" = "Android Auto";
+"help_article_navigation_routing_brouter_name" = "BRouter";

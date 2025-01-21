@@ -4,7 +4,7 @@
 "shared_string_control_stop" = "Zaustavi";
 "cancel_navigation" = "Zaustavi navigaciju";
 "intermediate_items_sort_by_distance" = "Poredaj od vrata do vrata";
-"new_destination_point_dialog" = "Već ste postavili odrediše.";
+"new_destination_point_dialog" = "Već ste postavili odrediše:";
 "replace_destination_point" = "Promjenite odredište";
 "keep_and_add_destination_point" = "Dodaj kao odredišnu točku";
 "add_as_first_destination_point" = "Dodaj kao prvo međuodredište";
@@ -117,7 +117,7 @@
 "sort_by_name" = "Poredaj po nazivu";
 "by_name" = "Po imenu";
 "stop_routing_confirm" = "Jeste li sigurni da želite zaustaviti navigaciju?";
-"cancel_route" = "Odbaci rutu";
+"cancel_route" = "Odbaciti rutu?";
 "navigation_over_track" = "Počnite navigaciju uz stazu?";
 "use_displayed_track_for_navigation" = "Želite li koristiti prikazan zapis za vašu navigaciju?";
 "shared_string_select_on_map" = "Odaberite na karti";
@@ -717,7 +717,7 @@
 "shared_string_travel_guides" = "Turistički vodiči";
 "popular_destinations" = "Popularna odredišta";
 "wikivoyage_download_pics" = "Preuzmite slike";
-"shared_string_format" = "Format:";
+"shared_string_format" = "Format";
 "activity_type_motorbike_name" = "Motocikl";
 "shared_string_accessibility" = "Pristupačnost";
 "activity_type_cycling_name" = "Biciklistika";
@@ -1013,3 +1013,12 @@
 "start_editing_card_image_text" = "Besplatni svjetski turistički vodič koji svatko može urediti.";
 "select_icon_profile_dialog_title" = "Odaberi ikonu";
 "feedback" = "Povratne informacije";
+"shared_string_options" = "Opcije";
+"map_widget_sun_position" = "Pozicija sunca";
+"verify_account" = "Potvrdi tvoj račun";
+"manage_subscriptions" = "Upravljaj pretplatama.";
+"deleting_complete" = "Brisanje je završeno";
+"delete_account" = "Izbriši račun";
+"start_navigation" = "Pokreni navigaciju";
+"shared_string_next_event" = "Sljedeći događaj";
+"map_widget_sun_position_desc" = "Prikazuje vrijeme do izlaska ili zalaska sunca.";

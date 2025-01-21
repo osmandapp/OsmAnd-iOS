@@ -346,6 +346,7 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 - (void) resetToDefault;
 - (void) setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode;
 - (NSString *) toStringValue:(OAApplicationMode *)mode;
+- (NSString *)toStringFromValue:(id)value;
 - (void) copyValueFromAppMode:(OAApplicationMode *)sourceAppMode targetAppMode:(OAApplicationMode *)targetAppMode;
 
 - (BOOL) isSetForMode:(OAApplicationMode *)mode;
@@ -365,6 +366,8 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 
 @interface OACommonBoolean : OACommonPreference
 
+@property (nonatomic, readonly) BOOL defValue;
+
 + (instancetype) withKey:(NSString *)key defValue:(BOOL)defValue;
 
 - (BOOL) get;
@@ -375,6 +378,8 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 @end
 
 @interface OACommonInteger : OACommonPreference
+
+@property (nonatomic, readonly) int defValue;
 
 + (instancetype) withKey:(NSString *)key defValue:(int)defValue;
 
@@ -387,6 +392,8 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 
 @interface OACommonLong : OACommonPreference
 
+@property (nonatomic, readonly) long defValue;
+
 + (instancetype) withKey:(NSString *)key defValue:(long)defValue;
 
 - (long) get;
@@ -397,6 +404,8 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 @end
 
 @interface OACommonString : OACommonPreference
+
+@property (nonatomic, readonly) NSString *defValue;
 
 + (instancetype) withKey:(NSString *)key defValue:(NSString *)defValue;
 

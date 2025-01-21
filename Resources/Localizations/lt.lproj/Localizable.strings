@@ -1116,7 +1116,7 @@
 "rendering_attr_showLez_name" = "Rodyti mažos taršos zonas";
 "rendering_value_green_name" = "Žalia";
 "rendering_attr_surface_unpaved_name" = "Negrįstas";
-"rendering_attr_noAdminboundaries_description" = "Neberodyti regionų ribų (administratoriaus 5-9 lygiai).";
+"rendering_attr_noAdminboundaries_description" = "Neberodyti regionų ribų (administratoriaus 5–9 lygiai).";
 "rendering_value_bicycle_name" = "Dviratis";
 "rendering_value_translucent_lightgreen_name" = "Permatoma šviesiai žalia";
 "rendering_attr_contourLines_name" = "Rodyti kontūrų linijas";
@@ -1726,3 +1726,4 @@
 "not_specified" = "Nenurodyta";
 "add_widget_to_the_left" = "Pridėti valdiklį į kairę";
 "help_article_map_routes_name" = "Maršrutai";
+"cloud_sync_progress" = "Sinch…%@";

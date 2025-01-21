@@ -1317,28 +1317,30 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     if (cell)
     {
         cell.titleLabel.text = [NSString stringWithFormat:OALocalizedString(@"point_num"), indexPath.row + 1];
-
-        OASWptPt *point1 = _editingContext.getPoints[indexPath.row];
-        CLLocation *location1 = [[CLLocation alloc] initWithLatitude:point1.getLatitude longitude:point1.getLongitude];
-        if (indexPath.row == 0)
+        if (indexPath.row < _editingContext.getPointsCount)
         {
-            CLLocation *currentLocation = _app.locationServices.lastKnownLocation;
-            if (currentLocation)
+            OASWptPt *point1 = _editingContext.getPoints[indexPath.row];
+            CLLocation *location1 = [[CLLocation alloc] initWithLatitude:point1.getLatitude longitude:point1.getLongitude];
+            if (indexPath.row == 0)
             {
-                double azimuth = [location1 bearingTo:currentLocation];
-                cell.descriptionLabel.text = [NSString stringWithFormat:@"%@ • %@ • %@", OALocalizedString(@"shared_string_control_start"), [OAOsmAndFormatter getFormattedDistance:[location1 distanceFromLocation:currentLocation]], [OAOsmAndFormatter getFormattedAzimuth:azimuth]];
+                CLLocation *currentLocation = _app.locationServices.lastKnownLocation;
+                if (currentLocation)
+                {
+                    double azimuth = [location1 bearingTo:currentLocation];
+                    cell.descriptionLabel.text = [NSString stringWithFormat:@"%@ • %@ • %@", OALocalizedString(@"shared_string_control_start"), [OAOsmAndFormatter getFormattedDistance:[location1 distanceFromLocation:currentLocation]], [OAOsmAndFormatter getFormattedAzimuth:azimuth]];
+                }
+                else
+                {
+                    cell.descriptionLabel.text = OALocalizedString(@"shared_string_control_start");
+                }
             }
             else
             {
-                cell.descriptionLabel.text = OALocalizedString(@"shared_string_control_start");
+                OASWptPt *point2 = indexPath.row == 0 && _editingContext.getPointsCount > 1 ? _editingContext.getPoints[indexPath.row + 1] : _editingContext.getPoints[indexPath.row - 1];
+                CLLocation *location2 = [[CLLocation alloc] initWithLatitude:point2.getLatitude longitude:point2.getLongitude];
+                double azimuth = [location1 bearingTo:location2];
+                cell.descriptionLabel.text = [NSString stringWithFormat:@"%@ • %@", [OAOsmAndFormatter getFormattedDistance:[location1 distanceFromLocation:location2]], [OAOsmAndFormatter getFormattedAzimuth:azimuth]];
             }
-        }
-        else
-        {
-            OASWptPt *point2 = indexPath.row == 0 && _editingContext.getPointsCount > 1 ? _editingContext.getPoints[indexPath.row + 1] : _editingContext.getPoints[indexPath.row - 1];
-            CLLocation *location2 = [[CLLocation alloc] initWithLatitude:point2.getLatitude longitude:point2.getLongitude];
-            double azimuth = [location1 bearingTo:location2];
-            cell.descriptionLabel.text = [NSString stringWithFormat:@"%@ • %@", [OAOsmAndFormatter getFormattedDistance:[location1 distanceFromLocation:location2]], [OAOsmAndFormatter getFormattedAzimuth:azimuth]];
         }
     }
     return cell;

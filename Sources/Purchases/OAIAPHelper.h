@@ -10,7 +10,7 @@
 
 #define kFreeMapsAvailableTotal 7
 
-@class OAProduct, OASubscription, OASubscriptionList, OAFunctionalAddon;
+@class OAProduct, OASubscription, OASubscriptionList, OAFunctionalAddon, OAExportSettingsType;
 
 UIKIT_EXTERN NSString *const OAIAPProductsRequestSucceedNotification;
 UIKIT_EXTERN NSString *const OAIAPProductsRequestFailedNotification;
@@ -157,6 +157,8 @@ typedef NS_ENUM(NSInteger, EOASubscriptionDuration) {
 + (BOOL) isSubscribedCrossPlatform;
 + (BOOL) isSubscribedToMapperUpdates;
 + (BOOL) isOsmAndProAvailable;
++ (BOOL) isExportTypeAvailable:(OAExportSettingsType *)exportType;
++ (BOOL) isBackupAvailable;
 
 + (BOOL) isFullVersionPurchased;
 + (BOOL) isDepthContoursPurchased;

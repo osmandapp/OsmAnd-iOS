@@ -1953,7 +1953,7 @@ typedef enum
     else if ([self.targetMenuView.targetPoint.targetObj isKindOfClass:OAGpxWptItem.class])
     {
         OAGpxWptItem *wptItem = self.targetMenuView.targetPoint.targetObj;
-        poi = [wptItem.point getAmenity];
+        poi = [wptItem getAmenity];
     }
     return poi;
 }

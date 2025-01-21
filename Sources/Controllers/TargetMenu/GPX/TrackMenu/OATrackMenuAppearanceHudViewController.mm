@@ -360,7 +360,7 @@ static const NSInteger kColorsSection = 1;
 - (NSString *)getGPXWidth
 {
     return self.isCurrentTrack
-    ? [self.doc getWidthDefWidth:nil]
+    ? [self.doc getWidthDefaultWidth:nil]
     : self.gpx.width;
 }
 

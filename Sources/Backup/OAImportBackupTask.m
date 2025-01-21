@@ -19,6 +19,7 @@
 #import "OAImportBackupItemsTask.h"
 #import "OASettingsImporter.h"
 #import "OABackupInfo.h"
+#import "OAConcurrentCollections.h"
 
 @implementation OAItemProgressInfo
 
@@ -55,7 +56,7 @@
     NSArray<OARemoteFile *> *_remoteFiles;
     
     NSString *_key;
-    NSMutableDictionary<NSString *, OAItemProgressInfo *> *_itemsProgress;
+    OAConcurrentDictionary<NSString *, OAItemProgressInfo *> *_itemsProgress;
 }
 
 - (instancetype) initWithKey:(NSString *)key
@@ -124,7 +125,7 @@
 {
     _helper = OANetworkSettingsHelper.sharedInstance;
     _importer = [[OABackupImporter alloc] initWithListener:self];
-    _itemsProgress = [NSMutableDictionary dictionary];
+    _itemsProgress = [[OAConcurrentDictionary alloc] init];
     _maxProgress = [self.class calculateMaxProgress];
 }
 
@@ -133,14 +134,16 @@
     NSInteger maxProgress = 0;
     OABackupHelper *backupHelper = OABackupHelper.sharedInstance;
     OAPrepareBackupResult *backup = backupHelper.backup;
-    for (OARemoteFile *file in backup.backupInfo.filesToDownload)
+    for (OARemoteFile *file in backup.backupInfo.filteredFilesToDownload)
+    {
         maxProgress += [backupHelper calculateFileSize:file];
+    }
     return maxProgress;
 }
 
 - (OAItemProgressInfo *) getItemProgressInfo:(NSString *)type fileName:(NSString *)fileName
 {
-    return _itemsProgress[[type stringByAppendingString:fileName]];
+    return [_itemsProgress objectForKeySync:[type stringByAppendingString:fileName]];
 }
 
 - (void)main
@@ -176,18 +179,10 @@
     }
 }
 
-- (void)updateFileUploadTime:(OAPrepareBackupResult *)backup backupHelper:(OABackupHelper *)backupHelper fileName:(NSString *)fileName item:(OASettingsItem *)item {
-    if (fileName)
-    {
-        OARemoteFile *remoteFile = [backup getRemoteFile:[OASettingsItemType typeName:item.type] fileName:fileName];
-        if (remoteFile)
-            [backupHelper updateFileUploadTime:remoteFile.type fileName:remoteFile.name uploadTime:remoteFile.clienttimems];
-    }
-}
-
 - (NSArray<OASettingsItem *> *) doInBackground
 {
-    switch (_importType) {
+    switch (_importType)
+    {
         case EOAImportTypeCollect:
         case EOAImportTypeCollectAndRead:
         {
@@ -282,7 +277,8 @@
                 
                 [OABackupHelper.sharedInstance.executor addOperation:task];
             }
-            else {
+            else
+            {
                 [_helper.importAsyncTasks removeObjectForKey:_key];
                 [_helper finishImport:_importListener success:NO items:@[]];
             }
@@ -333,35 +329,38 @@
         if (prevInfo)
             info.work = prevInfo.work;
         
-        _itemsProgress[[info.type stringByAppendingString:info.fileName]] = info;
+        [_itemsProgress setObjectSync:info forKey:[info.type stringByAppendingString:info.fileName]];
         
         if (info.finished)
             [_importListener onImportItemFinished:info.type fileName:info.fileName];
         else if (info.value == 0)
-            [_importListener onImportItemStarted:info.type fileName:info.fileName work:info.work];
+            [_importListener onImportItemStarted:info.type fileName:info.fileName work:(int) info.work];
         else
-            [_importListener onImportItemProgress:info.type fileName:info.fileName value:info.value];
+            [_importListener onImportItemProgress:info.type fileName:info.fileName value:(int) info.value];
     }
 }
 
 // MARK: OANetworkImportProgressListener
 
-- (void)itemExportDone:(nonnull NSString *)type fileName:(nonnull NSString *)fileName {
+- (void)itemExportDone:(nonnull NSString *)type fileName:(nonnull NSString *)fileName
+{
     [self onProgressUpdate:[[OAItemProgressInfo alloc] initWithType:type fileName:fileName progress:0 work:0 finished:YES]];
-    if ([self isCancelled])
-        _importer.cancelled = YES;
 }
 
-- (void)itemExportStarted:(nonnull NSString *)type fileName:(nonnull NSString *)fileName work:(NSInteger)work {
+- (void)itemExportStarted:(nonnull NSString *)type fileName:(nonnull NSString *)fileName work:(NSInteger)work
+{
     [self onProgressUpdate:[[OAItemProgressInfo alloc] initWithType:type fileName:fileName progress:0 work:work finished:NO]];
 }
 
-- (void)updateItemProgress:(nonnull NSString *)type fileName:(nonnull NSString *)fileName progress:(NSInteger)progress {
+- (void)updateItemProgress:(nonnull NSString *)type fileName:(nonnull NSString *)fileName progress:(NSInteger)progress
+{
     [self onProgressUpdate:[[OAItemProgressInfo alloc] initWithType:type fileName:fileName progress:progress work:0 finished:NO]];
 }
 
 - (void)updateGeneralProgress:(NSInteger)downloadedItems uploadedKb:(NSInteger)uploadedKb
 {
+    if ([self isCancelled])
+        _importer.cancelled = YES;
     _generalProgress = uploadedKb;
     [_importListener onImportProgressUpdate:_generalProgress uploadedKb:uploadedKb];
 }

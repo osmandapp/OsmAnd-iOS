@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 OsmAnd. All rights reserved.
 //
 
+#import "OsmAnd_Maps-Swift.h"
 #import "OsmAndAppImpl.h"
 #import <UIKit/UIKit.h>
 #import "OsmAndApp.h"
@@ -193,7 +194,9 @@
 
         // First of all, initialize user defaults
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        _firstLaunch = [defaults objectForKey:kAppData] == nil;
+
+        _firstLaunch = [[NSUserDefaults standardUserDefaults] integerForKey:kAppExecCounter] == 1;
+        
         [defaults registerDefaults:[self inflateInitialUserDefaults]];
         NSDictionary *defHideAllGPX = [NSDictionary dictionaryWithObject:@"NO" forKey:@"hide_all_gpx"];
         [defaults registerDefaults:defHideAllGPX];
@@ -297,27 +300,6 @@
     OpeningHoursParser::runTestAmPmArabic();
 }
 
-- (void) migrateResourcesToDocumentsIfNeeded
-{
-    BOOL movedRes = [self moveContentsOfDirectory:[_dataPath stringByAppendingPathComponent:RESOURCES_DIR]
-                                           toDest:[_documentsPath stringByAppendingPathComponent:RESOURCES_DIR]
-                               removeOriginalFile:YES];
-    BOOL movedSqlite = [self moveContentsOfDirectory:[_dataPath stringByAppendingPathComponent:MAP_CREATOR_DIR] 
-                                              toDest:[_documentsPath stringByAppendingPathComponent:MAP_CREATOR_DIR]
-                                  removeOriginalFile:YES];
-    if (movedRes)
-        [self migrateMapNames:[_documentsPath stringByAppendingPathComponent:RESOURCES_DIR]];
-    if (movedRes || movedSqlite)
-        _resourcesManager->rescanUnmanagedStoragePaths(true);
-
-    [self moveContentsOfDirectory:[[NSBundle mainBundle] pathForResource:CLR_PALETTE_DIR ofType:nil]
-                           toDest:_colorsPalettePath
-               removeOriginalFile:NO];
-    [self moveContentsOfDirectory:[[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:MODEL_3D_DIR]
-                           toDest:[_documentsPath stringByAppendingPathComponent:MODEL_3D_DIR]
-               removeOriginalFile:NO];
-}
-
 - (BOOL) initializeCore
 {
     @synchronized (self)
@@ -417,6 +399,7 @@
         _data = [OAAppData defaults];
         [defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:_data]
                          forKey:kAppData];
+        
         [defaults setBool:NO forKey:@"hide_all_gpx"];
         [defaults setBool:NO forKey:@"reset_settings"];
         [defaults setBool:NO forKey:@"reset_routing"];
@@ -429,7 +412,7 @@
     OALog(@"Cache path: %@", _cachePath);
     OALog(@"Weather Forecast path: %@", _weatherForecastPath);
 
-    // Unpack app data
+    // Unpack app data    
     _data = [NSKeyedUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:kAppData]];
     [_data postInit];
 
@@ -585,7 +568,10 @@
     if (_terminating)
         return NO;
 
-    [self migrateResourcesToDocumentsIfNeeded];
+    BOOL rescan = [BundledAssets.shared migrateResourcesToDocumentsIfNeededWithDataPath:_dataPath documentsPath:_documentsPath
+                versionChanged: currentVersion != prevVersion || _firstLaunch];
+    if (rescan)
+        _resourcesManager->rescanUnmanagedStoragePaths(true);
 
     // Copy regions.ocbf to Documents/Resources if needed
     NSString *ocbfPathBundle = [[NSBundle mainBundle] pathForResource:@"regions" ofType:@"ocbf"];
@@ -745,102 +731,6 @@
     return YES;
 }
 
-- (BOOL) moveContentsOfDirectory:(NSString *)src
-                          toDest:(NSString *)dest
-              removeOriginalFile:(BOOL)remove
-{
-    NSFileManager *fm = [NSFileManager defaultManager];
-    if (![fm fileExistsAtPath:src])
-        return NO;
-    if (![fm fileExistsAtPath:dest])
-        [fm createDirectoryAtPath:dest withIntermediateDirectories:YES attributes:nil error:nil];
-
-    NSArray *files = [fm contentsOfDirectoryAtPath:src error:nil];
-    BOOL tryAgain = NO;
-    for (NSString *file in files)
-    {
-        if ([fm fileExistsAtPath:[dest stringByAppendingPathComponent:file]])
-            continue;
-        NSError *err = nil;
-        if (remove)
-        {
-            [fm moveItemAtPath:[src stringByAppendingPathComponent:file]
-                        toPath:[dest stringByAppendingPathComponent:file]
-                         error:&err];
-        }
-        else
-        {
-            [fm copyItemAtPath:[src stringByAppendingPathComponent:file]
-                        toPath:[dest stringByAppendingPathComponent:file]
-                         error:&err];
-        }
-        if (err)
-            tryAgain = YES;
-    }
-    if (remove && !tryAgain)
-        [fm removeItemAtPath:src error:nil];
-    return YES;
-}
-
-- (void) migrateMapNames:(NSString *)path
-{
-    NSFileManager *fm = [NSFileManager defaultManager];
-    BOOL isDirectory = NO;
-    [fm fileExistsAtPath:path isDirectory:&isDirectory];
-    if (!isDirectory)
-        return;
-
-    NSArray *files = [fm contentsOfDirectoryAtPath:path error:nil];
-
-    for (NSString *file in files)
-    {
-        NSString *oldPath = [path stringByAppendingPathComponent:file];
-        BOOL isDir = NO;
-        [fm fileExistsAtPath:oldPath isDirectory:&isDir];
-        if (isDir)
-            [self migrateMapNames:oldPath];
-        else
-        {
-            NSString *newPath = [path stringByAppendingPathComponent:[self generateCorrectFileName:file]];
-            if (![newPath isEqualToString:oldPath])
-            {
-                [fm moveItemAtPath:oldPath
-                            toPath:newPath
-                             error:nil];
-            }
-        }
-    }
-}
-
-- (NSString *) generateCorrectFileName:(NSString *)path
-{
-    NSString *fileName = path.lastPathComponent;
-    if ([fileName hasSuffix:@".map.obf"])
-    {
-        fileName = [OAUtilities capitalizeFirstLetter:[fileName stringByReplacingOccurrencesOfString:@".map.obf" withString:@".obf"]];
-    }
-    else if ([fileName.pathExtension isEqualToString:@"obf"])
-    {
-        fileName = [OAUtilities capitalizeFirstLetter:fileName];
-    }
-    else if ([fileName.pathExtension isEqualToString:@"sqlitedb"])
-    {
-        if ([fileName hasSuffix:@".hillshade.sqlitedb"])
-        {
-            fileName = [fileName stringByReplacingOccurrencesOfString:@".hillshade.sqlitedb" withString:@".sqlitedb"];
-            fileName = [fileName stringByReplacingOccurrencesOfString:@"_" withString:@" "];
-            fileName = [NSString stringWithFormat:@"Hillshade %@", [OAUtilities capitalizeFirstLetter:fileName]];
-        }
-        else if ([fileName hasSuffix:@".slope.sqlitedb"])
-        {
-            fileName = [fileName stringByReplacingOccurrencesOfString:@".slope.sqlitedb" withString:@".sqlitedb"];
-            fileName = [fileName stringByReplacingOccurrencesOfString:@"_" withString:@" "];
-            fileName = [NSString stringWithFormat:@"Slope %@", [OAUtilities capitalizeFirstLetter:fileName]];
-        }
-    }
-    return [path.stringByDeletingLastPathComponent stringByAppendingPathComponent:fileName];
-}
-
 - (NSString *) generateIndexesUrl
 {
     NSMutableString *res = [NSMutableString stringWithFormat:@"https://download.osmand.net/get_indexes?gzip&osmandver=%@", OAAppVersion.getVersionForUrl];
@@ -976,6 +866,11 @@
         }
         _customRoutingConfigs = customConfigs;
     });
+}
+
+- (void)rescanUnmanagedStoragePaths
+{
+    _resourcesManager->rescanUnmanagedStoragePaths();
 }
 
 - (MAP_STR_STR) getDefaultAttributes

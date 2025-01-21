@@ -2610,3 +2610,4 @@
 "shared_string_visible_on_map" = "Zichtbaar op de kaart";
 "root_folder" = "Hoofdmap";
 "avg_sensor_heartrate" = "Hartslag, gemiddeld";
+"cloud_sync_progress" = "Synchroniseren... %@";

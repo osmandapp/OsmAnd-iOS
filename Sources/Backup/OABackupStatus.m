@@ -33,7 +33,8 @@ static OABackupStatus *ERROR;
                            iconColor:(NSInteger)iconColor
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _statusTitle = statusTitle;
         _statusIconName = statusIconName;
         _warningIconName = warningIconName;
@@ -143,20 +144,14 @@ static OABackupStatus *ERROR;
         NSInteger errorCode = error.code;
         if (errorCode == SERVER_ERROR_CODE_SUBSCRIPTION_WAS_EXPIRED_OR_NOT_PRESENT
             || errorCode == STATUS_NO_ORDER_ID_ERROR)
-        {
             return OABackupStatus.SUBSCRIPTION_EXPIRED;
-        }
     }
     if (info != nil)
     {
         if (info.filteredFilesToMerge.count > 0)
-        {
             return OABackupStatus.CONFLICTS;
-        }
-        else if (info.itemsToUpload.count > 0 || info.itemsToDelete.count > 0 || info.localItemsToDelete.count > 0)
-        {
+        else if (info.itemsToUpload.count > 0 || info.itemsToDelete.count > 0 || info.itemsToLocalDelete.count > 0)
             return OABackupStatus.MAKE_BACKUP;
-        }
     }
     else if (!AFNetworkReachabilityManager.sharedManager.isReachable)
     {

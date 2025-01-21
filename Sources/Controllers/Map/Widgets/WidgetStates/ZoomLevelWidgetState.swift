@@ -8,12 +8,13 @@
 
 @objcMembers
 final class ZoomLevelWidgetState: OAWidgetState {
+    static let zoomLevelType = "zoom_level_type"
     
     private(set) var typePreference: OACommonWidgetZoomLevelType
     private(set) var widgetType: WidgetType
     
-    init(customId: String?, widgetType: WidgetType) {
-        self.typePreference = Self.registerPreference(customId)
+    init(customId: String?, widgetType: WidgetType, widgetParams: ([String: Any])? = nil) {
+        self.typePreference = Self.registerPreference(customId, widgetParams: widgetParams)
         self.widgetType = widgetType
     }
 
@@ -33,11 +34,15 @@ final class ZoomLevelWidgetState: OAWidgetState {
         typePreference.get()
     }
     
-    private static func registerPreference(_ customId: String?) -> OACommonWidgetZoomLevelType {
-        var prefId = "zoom_level_type"
+    private static func registerPreference(_ customId: String?, widgetParams: ([String: Any])? = nil) -> OACommonWidgetZoomLevelType {
+        var prefId = Self.zoomLevelType
         if let customId, !customId.isEmpty {
             prefId += "\(customId)"
         }
-        return OAAppSettings.sharedManager().registerWidgetZoomLevelTypePreference(prefId, defValue: .zoom).makeProfile()
+        let preference = OAAppSettings.sharedManager().registerWidgetZoomLevelTypePreference(prefId, defValue: .zoom).makeProfile()!
+        if let string = widgetParams?[Self.zoomLevelType] as? String, string == "MAP_SCALE" {
+            preference.set(.mapScale)
+        }
+        return preference
     }
 }

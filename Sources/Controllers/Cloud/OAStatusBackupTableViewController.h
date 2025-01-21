@@ -30,7 +30,7 @@ typedef NS_ENUM(NSInteger, EOARecentChangesType)
 
 @interface OAStatusBackupTableViewController : UITableViewController
 
-- (instancetype)initWithTableType:(EOARecentChangesType)type;
+- (instancetype)initWithTableType:(EOARecentChangesType)type syncProgress:(float)syncProgress;
 
 - (BOOL) hasItems;
 

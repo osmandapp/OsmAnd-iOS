@@ -2611,3 +2611,4 @@
 "transport_stop" = "停止";
 "navigation_position_icon_summary" = "在导航或移动时显示的图标。";
 "max_sensor_bycicle_power" = "自行车最大功率";
+"cloud_sync_progress" = "同步……%@";

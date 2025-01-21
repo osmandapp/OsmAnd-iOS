@@ -3553,3 +3553,4 @@
 "add_widget_below" = "إضافة ويدجت أدنى";
 "obd_plugin_name" = "مقاييس المركبات";
 "add_widget_above" = "إضافة ويدجت أعلى";
+"cloud_sync_progress" = "مزامنه... %@";

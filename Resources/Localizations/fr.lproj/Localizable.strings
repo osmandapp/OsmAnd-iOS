@@ -3409,3 +3409,4 @@
 "rendering_attr_showClimbingRoutes_name" = "Voies d\'escalade";
 "rendering_attr_showClimbingRoutes_description" = "Afficher les voies d\'escalade";
 "reset_average_speed" = "Effacer la vitesse moyenne";
+"cloud_sync_progress" = "Synchronisation…%@";

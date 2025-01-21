@@ -30,7 +30,8 @@
                    restoreDeleted:(BOOL)restoreDeleted
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _importer = importer;
         _items = items;
         _filesType = filesType;
@@ -51,13 +52,16 @@
 
 - (BOOL) doInBackground
 {
-    @try {
+    @try
+    {
         OAPrepareBackupResult *backup = [OABackupHelper sharedInstance].backup;
         NSArray<OARemoteFile *> *remoteFiles = [backup getRemoteFiles:_filesType].allValues;
         [_importer importItems:_items remoteFiles:remoteFiles forceReadData:_foreceReadData restoreDeleted:_restoreDeleted];
-        return YES;
-    } @catch (NSException *exception) {
-        NSLog(@"Failed to import items from backup");
+        return _importer.cancelled;
+    }
+    @catch (NSException *exception)
+    {
+        NSLog(@"Failed to import items from backup: %@", exception.reason);
     }
     return NO;
 }

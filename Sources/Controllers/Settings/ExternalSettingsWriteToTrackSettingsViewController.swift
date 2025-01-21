@@ -33,7 +33,7 @@ final class ExternalSettingsWriteToTrackSettingsViewController: OABaseNavbarView
                                                object: nil)
     }
     
-    // MARK: - Life circle
+    // MARK: - Life Cycle
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

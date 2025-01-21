@@ -3595,3 +3595,5 @@
 "login_footer_email_part" = "support@osmand.net";
 "shared_string_millimeters_short" = "mm";
 "short_min" = "m";
+"download_tab_conflicts" = "Неразрешено";
+"cloud_sync_progress" = "Усклади…%@";

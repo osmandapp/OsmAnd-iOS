@@ -106,11 +106,12 @@ static NSString * const PLUGINS_DIR = @"Plugins";
 static NSString * const FAVORITES_INDEX_DIR = @"favorites";
 static NSString * const FAVORITES_BACKUP_DIR = @"favorites_backup";
 static NSString * const COLOR_PALETTE_DIR = @"color-palette";
-static NSString * const CLR_PALETTE_DIR = @"color-palette";
 static NSString * const MODEL_3D_DIR = @"models";
 static NSString * const GEOTIFF_SQLITE_CACHE_DIR = @"geotiff_sqlite_cache";
 
 static NSString * const VOICE_PROVIDER_SUFFIX = @"-tts";
 static NSString * const MODEL_NAME_PREFIX = @"model_";
+
+static NSString * const ONLINE_TILES_DIR = @"OsmAnd (online tiles)";
 
 #endif /* OAIndexConstants_h */

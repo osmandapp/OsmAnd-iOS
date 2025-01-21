@@ -6,11 +6,7 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-import Foundation
-
-@objc(OATimeToNavigationPointWidget)
-@objcMembers
-class TimeToNavigationPointWidget: OASimpleWidget {
+final class TimeToNavigationPointWidget: OASimpleWidget {
     private static let UPDATE_INTERVAL_SECONDS: Int64 = 30
     
     private let routingHelper: OARoutingHelper = OARoutingHelper.sharedInstance()!
@@ -34,13 +30,14 @@ class TimeToNavigationPointWidget: OASimpleWidget {
         updateIcons()
         updateContentTitle()
         onClickFunction = { [weak self] _ in
-            self?.widgetState!.changeToNextState()
-            _ = self?.updateInfo()
+            guard let self else { return }
+            widgetState.changeToNextState()
+            _ = updateInfo()
         }
     }
     
     override init(frame: CGRect) {
-        self.widgetState = TimeToNavigationPointWidgetState(customId: "", intermediate: true)
+        self.widgetState = TimeToNavigationPointWidgetState(customId: "", intermediate: true, widgetParams: nil)
         self.arrivalTimeOtherwiseTimeToGoPref = widgetState!.getPreference()
         self.cachedArrivalTimeOtherwiseTimeToGo = arrivalTimeOtherwiseTimeToGoPref.get()
         self.cachedLeftSeconds = 0
@@ -52,18 +49,20 @@ class TimeToNavigationPointWidget: OASimpleWidget {
     }
     
     func isIntermediate() -> Bool {
-        return widgetState!.isIntermediate()
+        widgetState!.isIntermediate()
     }
     
     func getPreference() -> OACommonBoolean {
-        return arrivalTimeOtherwiseTimeToGoPref
+        arrivalTimeOtherwiseTimeToGoPref
     }
     
     override func getWidgetState() -> OAWidgetState? {
-        return widgetState
+        widgetState
     }
     
-    override func getSettingsData(_ appMode: OAApplicationMode) -> OATableDataModel? {
+    override func getSettingsData(_ appMode: OAApplicationMode,
+                                  widgetConfigurationParams: [String: Any]?,
+                                  isCreate: Bool) -> OATableDataModel? {
         let data = OATableDataModel()
         let section = data.createNewSection()
         section.headerText = localizedString("shared_string_settings")
@@ -72,7 +71,8 @@ class TimeToNavigationPointWidget: OASimpleWidget {
         settingRow.key = "value_pref"
         settingRow.title = widgetType!.title
         settingRow.setObj(arrivalTimeOtherwiseTimeToGoPref, forKey: "pref")
-        settingRow.setObj(widgetState!.getPrefValue(), forKey: "value")
+        settingRow.setObj(widgetState!.getPrefValue(widgetConfigurationParams: widgetConfigurationParams, isCreate: isCreate), forKey: "value")
+        
         settingRow.setObj(getPossibleValues(), forKey: "possible_values")
         return data
     }
@@ -165,7 +165,7 @@ class TimeToNavigationPointWidget: OASimpleWidget {
     }
     
     private func getCurrentState() -> TimeToNavigationPointState {
-        return TimeToNavigationPointState.getState(intermediate: widgetState!.isIntermediate(), arrivalOtherwiseTimeToGo: arrivalTimeOtherwiseTimeToGoPref.get())
+        TimeToNavigationPointState.getState(intermediate: widgetState!.isIntermediate(), arrivalOtherwiseTimeToGo: arrivalTimeOtherwiseTimeToGoPref.get())
     }
 }
 

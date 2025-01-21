@@ -57,7 +57,7 @@
 
 - (long)localModifiedTime
 {
-    return [OAOsmEditsDBHelper sharedDatabase].getLastModifiedTime;
+    return [[OAOsmEditsDBHelper sharedDatabase] getLastModifiedTime];
 }
 
 - (void)setLocalModifiedTime:(long)localModifiedTime

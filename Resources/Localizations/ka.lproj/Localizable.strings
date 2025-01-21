@@ -2197,3 +2197,4 @@
 "power_watts_unit" = "ვატი";
 "shared_string_minute_lowercase" = "წთ";
 "revolutions_per_minute_unit" = "ბრ/წთ";
+"cloud_sync_progress" = "სინქრონიზაცია…%@";

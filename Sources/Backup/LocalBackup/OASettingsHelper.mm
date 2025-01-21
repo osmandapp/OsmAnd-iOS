@@ -6,6 +6,9 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
+#import "OsmAnd_Maps-Swift.h"
+#import "OAMapSource.h"
+#import "OAIndexConstants.h"
 #import "OASettingsHelper.h"
 #import "OASettingsItem.h"
 #import "OASettingsImporter.h"
@@ -314,8 +317,23 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         NSMutableArray<NSString *> *items = [NSMutableArray array];
         for (NSString *file in files)
         {
-            if ([file.pathExtension isEqualToString:@"txt"])
+            if ([file.pathExtension isEqualToString:@"txt"]) {
+                NSString *key = [COLOR_PALETTE_DIR stringByAppendingPathComponent:file];
+                NSDictionary *assetsMap = BundledAssets.shared.assets; // Access the assets map
+                BundledAsset *asset = assetsMap[key];
+                if(asset) {
+                    NSString *filePath = [colorPaletteFolder stringByAppendingPathComponent:file];
+                    NSDictionary *attributes = [fileManager attributesOfItemAtPath:filePath error:nil];
+                    NSDate *lastModifiedDate = attributes[NSFileModificationDate];
+                    if (lastModifiedDate) {
+                        NSTimeInterval lastModifiedTimestamp = [lastModifiedDate timeIntervalSince1970];
+                        if (lastModifiedTimestamp <= asset.version.doubleValue) {
+                            continue;
+                        }
+                    }
+                }
                 [items addObject:[colorPaletteFolder stringByAppendingPathComponent:file]];
+            }
         }
         
         if (items.count > 0)
@@ -445,7 +463,9 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         {
             OAOnlineTilesResourceItem *tileSource = (OAOnlineTilesResourceItem *) res;
             OATileSource *source = [OATileSource tileSourceFromOnlineSource:tileSource.onlineTileSource];
-            [tileSources addObject:source];
+            if (![source.name isEqualToString: ONLINE_TILES_DIR]) {
+                [tileSources addObject:source];
+            }
         }
         else if ([res isKindOfClass:OASqliteDbResourceItem.class])
         {

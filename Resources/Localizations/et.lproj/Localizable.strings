@@ -2756,3 +2756,6 @@
 "add_widget_above" = "Lisa vidin ülespoole";
 "add_widget_below" = "Lisa vidin allapoole";
 "map_widget_map_scale" = "Kaardi mõõtkava";
+"rendering_attr_showClimbingRoutes_name" = "Ronimismarsruudid";
+"rendering_attr_showClimbingRoutes_description" = "Näita ronimismarsruute";
+"obd_plugin_name" = "Sõiduki andmed";

@@ -3362,3 +3362,4 @@
 "screen_is_locked_by_action_button" = "Pekskärmen är låst. Tryck på knappen för att låsa upp.";
 "help_article_personal_color_palette_schemes_name" = "Färgscheman";
 "reset_average_speed" = "Nollställ medelhastighet";
+"cloud_sync_progress" = "Synkar…%@";

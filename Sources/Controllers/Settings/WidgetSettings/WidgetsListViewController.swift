@@ -52,8 +52,8 @@ final class WidgetsListViewController: OABaseNavbarSubviewViewController {
         }
     }
     
-    lazy private var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
-    lazy private var widgetsSettingsHelper = WidgetsSettingsHelper(appMode: selectedAppMode)
+    private lazy var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
+    private lazy var widgetsSettingsHelper = WidgetsSettingsHelper(appMode: selectedAppMode)
     
     // MARK: - Initialization
     

@@ -145,16 +145,18 @@
         [widgetState copyPrefs:appMode customId:customId];
 }
 
-- (OAWidgetState *) getWidgetState {
+- (OAWidgetState *)getWidgetState {
     return nil;
 }
 
-- (BOOL) isExternal
+- (BOOL)isExternal
 {
     return self.widgetType == nil;
 }
 
-- (OATableDataModel *)getSettingsData:(OAApplicationMode *)appMode
+- (OATableDataModel *_Nullable)getSettingsData:(OAApplicationMode *)appMode
+                     widgetConfigurationParams:(NSDictionary<NSString *, id> *_Nullable)widgetConfigurationParams
+                                      isCreate:(BOOL)isCreate
 {
     return nil;
 }

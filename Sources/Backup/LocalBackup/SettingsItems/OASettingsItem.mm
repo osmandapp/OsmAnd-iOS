@@ -108,12 +108,21 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
 
 - (void)setLastModifiedTime:(long)lastModifiedTime
 {
-    _lastModifiedTime = lastModifiedTime;
+    _lastModifiedTime = lastModifiedTime / 1000;
 }
 
 - (BOOL) applyFileName:(NSString *)fileName
 {
-    return self.fileName && ([self.fileName hasSuffix:fileName] || [fileName hasPrefix:[self.fileName stringByAppendingString:@"/"]]);
+    if (self.fileName) {
+        NSString* fName = self.fileName;
+        if([fName hasPrefix:@"/"]) {
+            fName = [fName substringFromIndex:1];
+        }
+        return [fName isEqualToString: fileName] ||
+        [fileName hasPrefix:[fName stringByAppendingString:@"/"]];
+        
+    }
+    return NO;
 }
 
 - (BOOL) exists

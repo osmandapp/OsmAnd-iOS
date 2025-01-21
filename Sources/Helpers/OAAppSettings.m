@@ -1524,6 +1524,12 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
     return @"";
 }
 
+- (NSString *)toStringFromValue:(id)value
+{
+    NSAssert(NO, @"toStringFromValue method is not implemented");
+    return @"";
+}
+
 - (void)copyValueFromAppMode:(OAApplicationMode *)sourceAppMode targetAppMode:(OAApplicationMode *)targetAppMode
 {
     [self setValue:[self getValue:sourceAppMode] mode:targetAppMode];
@@ -1624,7 +1630,7 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 @interface OACommonBoolean ()
 
-@property (nonatomic) BOOL defValue;
+@property (nonatomic, readwrite) BOOL defValue;
 
 @end
 
@@ -1696,7 +1702,7 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 @interface OACommonInteger ()
 
-@property (nonatomic) int defValue;
+@property (nonatomic, readwrite) int defValue;
 
 @end
 
@@ -1772,7 +1778,7 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 @interface OACommonLong ()
 
-@property (nonatomic) long defValue;
+@property (nonatomic, readwrite) long defValue;
 
 @end
 
@@ -1837,7 +1843,7 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 @interface OACommonString ()
 
-@property (nonatomic) NSString *defValue;
+@property (nonatomic, readwrite) NSString *defValue;
 
 @end
 
@@ -2640,7 +2646,18 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
 {
-    switch ([self get:mode])
+    EOAActiveMarkerConstant type = [self get:mode];
+    return [self toStringFromValue:@(type)];
+}
+
+- (NSString *)toStringFromValue:(id)value
+{
+    if (![value isKindOfClass:[NSNumber class]])
+        return @"";
+    
+    EOAActiveMarkerConstant type = [value integerValue];
+    
+    switch (type)
     {
         case ONE_ACTIVE_MARKER:
             return @"1";
@@ -2889,6 +2906,15 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 - (NSString *)toStringValue:(OAApplicationMode *)mode
 {
     return [self.class rulerWidgetModeToString:[self get:mode]];
+}
+
+- (NSString *)toStringFromValue:(id)value
+{
+    if (![value isKindOfClass:[NSNumber class]])
+        return @"";
+    
+    EOARulerWidgetMode mode = [value integerValue];
+    return [self.class rulerWidgetModeToString:mode];
 }
 
 - (void) resetToDefault
@@ -3583,6 +3609,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 @end
 
+
 @implementation OACommonWidgetSizeStyle
 
 @dynamic defValue;
@@ -3653,7 +3680,6 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 @end
 
-
 @implementation OACommonWidgetZoomLevelType
 
 static NSString *kZoomKey = @"ZOOM";
@@ -3712,7 +3738,18 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
 {
-    switch ([self get:mode])
+    EOAWidgetZoomLevelType type = [self get:mode];
+    return [self toStringFromValue:@(type)];
+}
+
+- (NSString *)toStringFromValue:(id)value
+{
+    if (![value isKindOfClass:[NSNumber class]])
+        return @"";
+    
+    EOAWidgetZoomLevelType type = [value integerValue];
+    
+    switch (type)
     {
         case EOAWidgetZoom:
             return kZoomKey;
@@ -4123,6 +4160,25 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
         [_profilePreferences setObject:_locationIcon forKey:@"location_icon"];
 
         _appModeOrder = [OACommonInteger withKey:appModeOrderKey defValue:0];
+        NSArray *modes = @[
+            OAApplicationMode.DEFAULT,
+            OAApplicationMode.CAR,
+            OAApplicationMode.BICYCLE,
+            OAApplicationMode.PEDESTRIAN,
+            OAApplicationMode.TRUCK,
+            OAApplicationMode.MOTORCYCLE,
+            OAApplicationMode.MOPED,
+            OAApplicationMode.PUBLIC_TRANSPORT,
+            OAApplicationMode.TRAIN,
+            OAApplicationMode.BOAT,
+            OAApplicationMode.AIRCRAFT,
+            OAApplicationMode.SKI,
+            OAApplicationMode.HORSE
+        ];
+        for (NSInteger i = 0; i < modes.count; i++)
+        {
+            [_appModeOrder setModeDefaultValue:@(i) mode:modes[i]];
+        }
         [_profilePreferences setObject:_appModeOrder forKey:@"app_mode_order"];
         
         _viewAngleVisibility = [[[OACommonInteger withKey:viewAngleVisibilityKey defValue:[MarkerDisplayOptionWrapper resting]] makeProfile] makeShared];

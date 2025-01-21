@@ -1616,6 +1616,7 @@
 "res_world_map" = "World map";
 "shared_string_world" = "World";
 "download_tab_updates" = "Updates";
+"download_tab_conflicts" = "Unresolved";
 "res_worldwide" = "Worldwide";
 "res_region_map" = "Region map";
 "res_updates_avail" = "Updates available";
@@ -2471,7 +2472,7 @@
 "restore_purchases" = "Restore purchases";
 "restore_backup_descr" = "Restore data on the device unsing online backups";
 "backup_restore_data" = "Restore data";
-"syncing_progress" = "Syncing...";
+"cloud_sync_progress" = "Sync… %@";
 
 "no_statistics" = "No statistics";
 

@@ -2614,3 +2614,4 @@
 "discard_filter_changes_prompt" = "모든 필터를 재설정 하시겠습니까?";
 "power_watts_unit" = "와트";
 "max_sensor_speed" = "감지기 속도, 최대";
+"cloud_sync_progress" = "동기화 ...%@";

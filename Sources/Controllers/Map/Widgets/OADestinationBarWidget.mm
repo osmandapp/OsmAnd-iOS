@@ -271,6 +271,7 @@
 }
 
 - (OATableDataModel *)getSettingsData:(OAApplicationMode *)appMode
+            widgetConfigurationParams:(NSDictionary<NSString *,id> * _Nullable)widgetConfigurationParams isCreate:(BOOL)isCreate
 {
     OACommonActiveMarkerConstant *pref = _settings.activeMarkers;
     OATableDataModel *data = [OATableDataModel model];
@@ -283,7 +284,21 @@
     settingRow.key = @"value_pref";
     settingRow.title = OALocalizedString(@"active_markers");
     [settingRow setObj:pref forKey:@"pref"];
-    [settingRow setObj:[self getTitle:[pref get:appMode]] forKey: @"value"];
+    
+    EOAActiveMarkerConstant currentValue = (EOAActiveMarkerConstant)pref.defValue;
+    
+    NSNumber *activeMarkerKey = widgetConfigurationParams[@"activeMarkerKey"];
+    if (activeMarkerKey)
+    {
+        currentValue = (EOAActiveMarkerConstant)[activeMarkerKey intValue];
+        [pref set:currentValue mode:appMode];
+    }
+    else if (!isCreate)
+    {
+        currentValue = [pref get:appMode];
+    }
+    
+    [settingRow setObj:[self getTitle:currentValue] forKey: @"value"];
     [settingRow setObj:[self getPossibleValues] forKey: @"possible_values"];
 
     return data;

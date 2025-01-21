@@ -48,7 +48,7 @@
 
 - (long)localModifiedTime
 {
-    return [OAOsmBugsDBHelper sharedDatabase].getLastModifiedTime;
+    return [[OAOsmBugsDBHelper sharedDatabase] getLastModifiedTime];
 }
 
 - (void)setLocalModifiedTime:(long)localModifiedTime

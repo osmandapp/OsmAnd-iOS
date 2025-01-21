@@ -713,7 +713,7 @@
 "logging_interval_navigation_descr" = "Wählen Sie das Aufzeichnungsintervall für die Trackaufzeichnung während der Navigation aus";
 "monitoring_min_distance" = "Minimale Verschiebung";
 "logging_min_distance_descr" = "Filter: minimale Entfernung zum Aufzeichnen eines neuen Punktes";
-"monitoring_min_accuracy" = "Minimale Genauigkeit";
+"monitoring_min_accuracy" = "Mindestgenauigkeit";
 "logging_min_accuracy_descr" = "Filter: keine Aufzeichnung bis die Genauigkeit erreicht ist";
 "monitoring_min_speed" = "Mindestgeschwindigkeit";
 "logging_min_speed_descr" = "Filter: keine Aufzeichnung unter der ausgewählten Geschwindigkeit";
@@ -3475,3 +3475,4 @@
 "arrival_distance_factor_normally" = "Normal";
 "routing_settings" = "Navigation";
 "help_article_map_tracks_name" = "Tracks";
+"cloud_sync_progress" = "Synchronisieren … %@";

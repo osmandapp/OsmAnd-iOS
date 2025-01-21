@@ -12,14 +12,14 @@ import Foundation
 @objcMembers
 final class GlideAverageWidgetState: OAWidgetState {
 
-    private static let prefBaseId = "glide_widget_show_average_vertical_speed"
+    static let prefBaseId = "glide_widget_show_average_vertical_speed"
 
     private let widgetType: WidgetType
     private let preference: OACommonBoolean
 
-    init(_ customId: String?) {
+    init(_ customId: String?, widgetParams: ([String: Any])? = nil) {
         widgetType = .glideAverage
-        preference = Self.registerPreference(customId)
+        preference = Self.registerPreference(customId, widgetParams: widgetParams)
     }
 
     func getPreference() -> OACommonBoolean {
@@ -42,11 +42,16 @@ final class GlideAverageWidgetState: OAWidgetState {
         Self.registerPreference(customId).set(preference.get(appMode), mode: appMode)
     }
 
-    private static func registerPreference(_ customId: String?) -> OACommonBoolean {
+    private static func registerPreference(_ customId: String?, widgetParams: ([String: Any])? = nil) -> OACommonBoolean {
         var prefId = Self.prefBaseId
         if let customId, !customId.isEmpty {
             prefId += "_\(customId)"
         }
-        return OAAppSettings.sharedManager().registerBooleanPreference(prefId, defValue: false)
+        
+        let preference = OAAppSettings.sharedManager().registerBooleanPreference(prefId, defValue: false)!
+        if let string = widgetParams?[Self.prefBaseId] as? String, let widgetValue = Bool(string) {
+            preference.set(widgetValue)
+        }
+        return preference
     }
 }

@@ -1524,3 +1524,4 @@
 "shared_string_interface" = "Giao diện";
 "srtm_plugin_name" = "Địa hình";
 "rendering_attr_hideProposed_name" = "Các đối tượng được đề xuất";
+"cloud_sync_progress" = "Đồng bộ...%@";

@@ -3560,3 +3560,4 @@
 "rendering_attr_showClimbingRoutes_description" = "Показати маршрути сходження";
 "rendering_attr_showClimbingRoutes_name" = "Скелелазні маршрути";
 "reset_average_speed" = "Скинути середню швидкість";
+"cloud_sync_progress" = "Синхронізація…%@";

@@ -8,13 +8,9 @@
 
 #import <CocoaSecurity.h>
 #import "OAWikiImageHelper.h"
-#import "OAImageCard.h"
-#import "OAWikiImageCard.h"
 #import "OATargetInfoViewController.h"
-#import "OANoImagesCard.h"
 #import "OACollapsableCardsView.h"
 #import "OAPOI.h"
-#import "OAAbstractCard.h"
 #import "OsmAnd_Maps-Swift.h"
 
 typedef NS_ENUM(NSInteger, EOAWikiImageType) {
@@ -28,7 +24,7 @@ static NSString * const kWikipediaShortLink = @".wikipedia.org/wiki/";
 
 @interface OAWikiImageHelper ()
 
-typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *cards);
+typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *cards);
 @property OAWikiImageHelperOtherImages addOtherImagesFunction;
 
 @end
@@ -36,7 +32,7 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *ca
 @implementation OAWikiImageHelper
 {
     NSMutableArray<NSNumber *> *_cardTypesReady;
-    NSMutableArray<OAWikiImage *> *_foundImages;
+    NSMutableArray<WikiImage *> *_foundImages;
 }
 
 + (OAWikiImageHelper *)sharedInstance
@@ -49,13 +45,13 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *ca
     return _sharedInstance;
 }
 
-- (void)sendNearbyWikiImagesRequest:(OARowInfo *)nearbyImagesRowInfo targetObj:(id)targetObj addOtherImagesOnComplete:(void (^)(NSMutableArray <OAAbstractCard *> *cards))addOtherImagesOnComplete;
+- (void)sendNearbyWikiImagesRequest:(OARowInfo *)nearbyImagesRowInfo targetObj:(id)targetObj addOtherImagesOnComplete:(void (^)(NSMutableArray <AbstractCard *> *cards))addOtherImagesOnComplete;
 {
     if (!nearbyImagesRowInfo)
         return;
 
     _addOtherImagesFunction = addOtherImagesOnComplete;
-    NSMutableArray <OAAbstractCard *> *cards = [NSMutableArray new];
+    NSMutableArray <AbstractCard *> *cards = [NSMutableArray new];
 
     if ([targetObj isKindOfClass:OAPOI.class])
     {
@@ -71,8 +67,8 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *ca
             if ([wikimediaCommons hasPrefix:WIKIMEDIA_FILE])
             {
                 NSString *imageFileName = [wikimediaCommons stringByReplacingOccurrencesOfString:WIKIMEDIA_FILE withString:@""];
-                OAWikiImage *wikiImage = [self getWikiImage:imageFileName];
-                OAWikiImageCard *card = [[OAWikiImageCard alloc] initWithWikiImage:wikiImage type:@"wikimedia-photo"];
+                WikiImage *wikiImage = [self getWikiImage:imageFileName];
+                WikiImageCard *card = [[WikiImageCard alloc] initWithWikiImage:wikiImage type:@"wikimedia-photo"];
                 if (card)
                     [cards addObject:card];
             }
@@ -148,7 +144,7 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *ca
     }
 }
 
-- (void)addOsmandAPIImageList:(NSString *)url cards:(NSMutableArray<OAAbstractCard *> *)cards
+- (void)addOsmandAPIImageList:(NSString *)url cards:(NSMutableArray<AbstractCard *> *)cards
 {
     NSURL *urlObj = [NSURL URLWithString:url];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
@@ -164,10 +160,10 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *ca
                         NSArray<NSString *> *images = jsonDict[@"features"];
                         for (NSString *image in images)
                         {
-                            OAWikiImage *wikiImage = [self getOsmandApiWikiImage:image];
+                            WikiImage *wikiImage = [self getOsmandApiWikiImage:image];
                             if (wikiImage)
                             {
-                                OAWikiImageCard *card = [[OAWikiImageCard alloc] initWithWikiImage:wikiImage type:@"wikimedia-photo"];
+                                WikiImageCard *card = [[WikiImageCard alloc] initWithWikiImage:wikiImage type:@"wikimedia-photo"];
                                 if (card)
                                     [cards addObject:card];
                             }
@@ -196,20 +192,20 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *ca
     }] resume];
 }
 
-- (OAWikiImage *)getOsmandApiWikiImage:(NSString *)imageUrl
+- (WikiImage *)getOsmandApiWikiImage:(NSString *)imageUrl
 {
     NSString *url = [imageUrl stringByRemovingPercentEncoding];
     NSString *imageHiResUrl = [url stringByReplacingOccurrencesOfString:@" " withString:@"_"];
     NSString *imageFileName = url.lastPathComponent;
     NSString *imageName = imageFileName.stringByDeletingPathExtension;
     NSString *imageStubUrl = [NSString stringWithFormat:@"%@%@%i", imageHiResUrl, @"?width=", THUMB_SIZE];
-    return [[OAWikiImage alloc] initWithWikiMediaTag:imageFileName
+    return [[WikiImage alloc] initWithWikiMediaTag:imageFileName
                                            imageName:imageName
                                         imageStubUrl:imageStubUrl
                                        imageHiResUrl:imageHiResUrl];
 }
 
-- (OAWikiImage *)getWikiImage:(NSString *)imageFileName
+- (WikiImage *)getWikiImage:(NSString *)imageFileName
 {
     NSString *imageName = [imageFileName stringByRemovingPercentEncoding];
     imageFileName = [imageName stringByReplacingOccurrencesOfString:@" " withString:@"_"];
@@ -224,10 +220,10 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *ca
     NSString *imageHiResUrl = [NSString stringWithFormat:@"%@%@", IMAGE_BASE_URL, urlSafeFileName];
     NSString *imageStubUrl = [NSString stringWithFormat:@"%@%@%@%i", IMAGE_BASE_URL, urlSafeFileName, WIKIMEDIA_WIDTH, THUMB_SIZE];
 
-    return [[OAWikiImage alloc] initWithWikiMediaTag:urlSafeFileName imageName:imageName imageStubUrl:imageStubUrl imageHiResUrl:imageHiResUrl];
+    return [[WikiImage alloc] initWithWikiMediaTag:urlSafeFileName imageName:imageName imageStubUrl:imageStubUrl imageHiResUrl:imageHiResUrl];
 }
 
-- (void)runCallback:(NSMutableArray<OAAbstractCard *> *)cards
+- (void)runCallback:(NSMutableArray<AbstractCard *> *)cards
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         if (_addOtherImagesFunction)
@@ -240,7 +236,7 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *ca
 // USE_OSMAND_WIKI_API == NO
 //
 
-- (void)readyToAddWithType:(EOAWikiImageType)type cards:(NSMutableArray<OAAbstractCard *> *)cards
+- (void)readyToAddWithType:(EOAWikiImageType)type cards:(NSMutableArray<AbstractCard *> *)cards
 {
     [_cardTypesReady addObject:@(type)];
     if (_cardTypesReady.count == cardTypes.count && _addOtherImagesFunction)
@@ -248,14 +244,14 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *ca
         if (_foundImages.count > 0)
         {
             NSMutableSet<NSString *> *filteredImages = [NSMutableSet setWithArray:[_foundImages valueForKey:@"imageStubUrl"]];
-            for (OAWikiImage *image in _foundImages)
+            for (WikiImage *image in _foundImages)
             {
                 if (filteredImages.count == 0)
                     break;
                 if ([filteredImages containsObject:image.imageStubUrl])
                 {
                     [filteredImages removeObject:image.imageStubUrl];
-                    OAWikiImageCard *card = [[OAWikiImageCard alloc] initWithWikiImage:image type:@"wikimedia-photo"];
+                    WikiImageCard *card = [[WikiImageCard alloc] initWithWikiImage:image type:@"wikimedia-photo"];
                     if (card)
                         [cards addObject:card];
                 }
@@ -267,7 +263,7 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *ca
     }
 }
 
-- (void)addWikidataImageCards:(NSString *)wikidataId cards:(NSMutableArray<OAAbstractCard *> *)cards
+- (void)addWikidataImageCards:(NSString *)wikidataId cards:(NSMutableArray<AbstractCard *> *)cards
 {
     NSString *safeWikidataTagContent = [wikidataId stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     NSURL *urlObj = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@%@", WIKIDATA_API_ENDPOINT, WIKIDATA_ACTION, safeWikidataTagContent, FORMAT_JSON]];
@@ -315,7 +311,7 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *ca
 }
 
 - (void)addWikimediaCardsFromCategory:(NSString *)categoryName
-                                cards:(NSMutableArray<OAAbstractCard *> *)cards
+                                cards:(NSMutableArray<AbstractCard *> *)cards
                                 depth:(NSInteger)depth
                              prepared:(BOOL)prepared
 {

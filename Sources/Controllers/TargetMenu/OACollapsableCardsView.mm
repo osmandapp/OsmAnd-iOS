@@ -12,12 +12,9 @@
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
-#import "OAAbstractCard.h"
-#import "OAImageCard.h"
-#import "OANoImagesCard.h"
-#import "OAMapillaryContributeCard.h"
 #import "OAAppSettings.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAMapillaryImageCardWrapper.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -25,7 +22,7 @@
 
 static NSArray<NSString *> *nibNames;
 
-@interface OACollapsableCardsView () <UICollectionViewDataSource, UICollectionViewDelegate, OAAbstractCardDelegate>
+@interface OACollapsableCardsView () <UICollectionViewDataSource, UICollectionViewDelegate, AbstractCardDelegate>
 
 @end
 
@@ -39,7 +36,7 @@ static NSArray<NSString *> *nibNames;
     self = [super initWithFrame:frame];
     if (self)
     {
-        nibNames = @[[OAImageCard getCellNibId], [OANoImagesCard getCellNibId], [OAMapillaryContributeCard getCellNibId]];
+        nibNames = @[[ImageCard getCellNibId], [NoImagesCard getCellNibId], [MapillaryContributeCard getCellNibId]];
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
         layout.itemSize = CGSizeMake(270, 160);
@@ -107,11 +104,11 @@ static NSArray<NSString *> *nibNames;
     [self updateLayout:width];
 }
 
-- (void) setCards:(NSArray<OAAbstractCard *> *)cards
+- (void) setCards:(NSArray<AbstractCard *> *)cards
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         _cards = cards;
-        for (OAAbstractCard *card in cards)
+        for (AbstractCard *card in cards)
             card.delegate = self;
         
         [self buildViews];
@@ -128,18 +125,12 @@ static NSArray<NSString *> *nibNames;
 
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
-    OAAbstractCard *card = _cards[indexPath.row];
-    
+    AbstractCard *card = _cards[indexPath.row];
     NSString *reuseIdentifier = [card.class getCellNibId];
     
     UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
-    if (cell == nil)
-    {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reuseIdentifier owner:self options:nil];
-        cell = [nib objectAtIndex:0];
-    }
     if (cell && !self.collapsed)
-        [card build:cell];
+        [card buildIn:cell];
     
     return cell;
 }
@@ -159,12 +150,21 @@ static NSArray<NSString *> *nibNames;
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
-    [_cards[indexPath.row] onCardPressed:[OARootViewController instance].mapPanel];
+    AbstractCard *card = _cards[indexPath.row];
+//    if ([card isKindOfClass:[MapillaryImageCard class]])
+//    {
+//        MapillaryImageCard *mapillaryImageCard = (MapillaryImageCard *)card;
+//        [OAMapillaryImageCardWrapper onCardPressed:[OARootViewController instance].mapPanel latitude:mapillaryImageCard.latitude longitude:mapillaryImageCard.longitude ca:mapillaryImageCard.ca key:mapillaryImageCard.key];
+//    }
+//    else
+//    {
+        [card onCardPressed:[OARootViewController instance].mapPanel];
+ //   }
 }
 
-#pragma mark - OAAbstractCardDelegate
+#pragma mark - AbstractCardDelegate
 
-- (void) requestCardReload:(OAAbstractCard *)card
+- (void) requestCardReload:(AbstractCard *)card
 {
     [card update];
     NSInteger row = [_cards indexOfObject:card];

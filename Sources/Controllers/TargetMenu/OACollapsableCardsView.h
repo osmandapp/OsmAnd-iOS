@@ -15,7 +15,7 @@
 #define TYPE_WIKIMEDIA_PHOTO @"wikimedia-photo"
 #define TYPE_WIKIDATA_PHOTO @"wikidata-photo"
 
-@class OAAbstractCard;
+@class AbstractCard;
 
 @protocol OACollapsableCardViewDelegate <NSObject>
 
@@ -28,8 +28,8 @@
 @interface OACollapsableCardsView : OACollapsableView
 
 @property (nonatomic) id<OACollapsableCardViewDelegate> delegate;
-@property (nonatomic, readonly) NSArray<OAAbstractCard *> *cards;
+@property (nonatomic, readonly) NSArray<AbstractCard *> *cards;
 
-- (void) setCards:(NSArray<OAAbstractCard *> *)cards;
+- (void) setCards:(NSArray<AbstractCard *> *)cards;
 
 @end

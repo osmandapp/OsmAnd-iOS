@@ -90,17 +90,24 @@ extension UIView {
     }
 }
 
-extension UITableViewCell {
+extension UIView {
     @objc static var reuseIdentifier: String {
         String(describing: self)
     }
 }
 
-extension UICollectionViewCell {
-    @objc static var reuseIdentifier: String {
-        String(describing: self)
-    }
-}
+
+//extension UITableViewCell {
+//    @objc static var reuseIdentifier: String {
+//        String(describing: self)
+//    }
+//}
+//
+//extension UICollectionViewCell {
+//    @objc static var reuseIdentifier: String {
+//        String(describing: self)
+//    }
+//}
 
 extension UIView {
     class func fromNib<T: UIView>() -> T {

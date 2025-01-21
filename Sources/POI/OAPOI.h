@@ -125,7 +125,6 @@
 
 // TODO: delete afted test ?
 @property (nonatomic) NSDictionary<NSString *, NSString *> *tags;
-@property (nonatomic) BOOL isPolygon;
 @property (nonatomic) NSMutableArray<NSNumber *> *x;
 @property (nonatomic) NSMutableArray<NSNumber *> *y;
 - (void) addLocation:(int)x y:(int)y;

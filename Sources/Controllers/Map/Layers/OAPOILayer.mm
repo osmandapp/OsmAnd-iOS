@@ -29,6 +29,8 @@
 #import "OAPluginsHelper.h"
 #import "OAAppSettings.h"
 #import "OsmAndSharedWrapper.h"
+#import "OARenderedObject.h"
+#import "OARenderedObject+cpp.h"
 
 #include "OACoreResourcesAmenityIconProvider.h"
 #include <OsmAndCore/Data/Amenity.h>
@@ -443,22 +445,14 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     {
         OARenderedObject *renderedObject = (OARenderedObject *)obj;
         OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
-        
         targetPoint.type = OATargetLocation;
-        
         targetPoint.location = CLLocationCoordinate2DMake(renderedObject.labelLatLon.latitude, renderedObject.labelLatLon.longitude);
         targetPoint.title = renderedObject.nameLocalized;
-//        targetPoint.icon = [poi.type icon];
-        
         targetPoint.values = renderedObject.tags;
         targetPoint.localizedNames = renderedObject.localizedNames;
-//        targetPoint.localizedContent = poi.localizedContent;
         targetPoint.obfId = renderedObject.obfId;
-        
-//        targetPoint.sortIndex = (NSInteger)targetPoint.type;
-        
         targetPoint.targetObj = renderedObject;
-        
+        targetPoint.sortIndex = (NSInteger)targetPoint.type;
         return targetPoint;
     }
     return nil;
@@ -512,98 +506,11 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
             }
             else
             {
-                /*
-                 
-                poi.isRenderedObject = YES;
-                poi.name = obfMapObject->getCaptionInNativeLanguage().toNSString();
-                NSMutableDictionary *names = [NSMutableDictionary dictionary];
-                NSString *nameLocalized = [OAPOIHelper processLocalizedNames:obfMapObject->getCaptionsInAllLanguages() nativeName:obfMapObject->getCaptionInNativeLanguage() names:names];
-                if (nameLocalized.length > 0)
-                    poi.name = nameLocalized;
-                poi.nameLocalized = poi.name;
-                poi.localizedNames = names;
-                poi.obfId = obfMapObject->id;
-                 
-                */
-                
-                //--- new fields - delete afted test ??
-                
-                /*
-                 
-                for (const OsmAnd::PointI pointI : obfMapObject->points31)
-                {
-                    [poi addLocation:pointI.x y:pointI.y];
-                }
-                if (poi.x.count > 1)
-                    poi.isPolygon = YES;
-                
-                NSMutableDictionary<NSString *, NSString *> *parsedTags = [NSMutableDictionary new];
-                for (auto i = tags.begin(); i != tags.end(); ++i)
-                {
-                    NSString *key = i.key().toNSString();
-                    NSString *value = i.value().toNSString();
-                    parsedTags[key] = value;
-                }
-                poi.tags = parsedTags;
-                 
-                */
-                
-                
-                
-                //TODO: extract to OARenderedObject(obfMapObject:mapObj) ?
-            
-                OARenderedObject *renderedObject = [OARenderedObject new];
-                renderedObject.obfId = obfMapObject->id;
-                
-                for (const OsmAnd::PointI pointI : obfMapObject->points31)
-                {
-                    [renderedObject addLocation:pointI.x y:pointI.y];
-                }
-                double lat = OsmAnd::Utilities::get31LatitudeY(obfMapObject->getLabelCoordinateY());
-                double lon = OsmAnd::Utilities::get31LongitudeX(obfMapObject->getLabelCoordinateX());
-                [renderedObject setLabelLatLon:CLLocationCoordinate2DMake(lat, lon)];
-                
-                if (symbolInfo->mapSymbol->contentClass == OsmAnd::RasterMapSymbol::ContentClass::Caption)
-                {
-                    if (const auto billboardRasterMapSymbol = std::static_pointer_cast<const OsmAnd::BillboardRasterMapSymbol>(symbolInfo->mapSymbol))
-                        renderedObject.name = billboardRasterMapSymbol->content.toNSString();
-                }
-                
-                if (symbolInfo->mapSymbol->contentClass == OsmAnd::RasterMapSymbol::ContentClass::Icon)
-                {
-                    if (const auto billboardRasterMapSymbol = std::static_pointer_cast<const OsmAnd::BillboardRasterMapSymbol>(symbolInfo->mapSymbol))
-                        renderedObject.iconRes = billboardRasterMapSymbol->content.toNSString();
-                }
-                
-                // diffs with android
-                NSMutableDictionary *names = [NSMutableDictionary dictionary];
-                NSString *nameLocalized = [OAPOIHelper processLocalizedNames:obfMapObject->getCaptionsInAllLanguages() nativeName:obfMapObject->getCaptionInNativeLanguage() names:names];
-                if (nameLocalized.length > 0)
-                    renderedObject.name = nameLocalized;
-                renderedObject.nameLocalized = renderedObject.name;
-                renderedObject.localizedNames = names;
-                
-                NSMutableDictionary<NSString *, NSString *> *parsedTags = [NSMutableDictionary new];
-                for (auto i = tags.begin(); i != tags.end(); ++i)
-                {
-                    NSString *key = i.key().toNSString();
-                    NSString *value = i.value().toNSString();
-                    parsedTags[key] = value;
-                }
-                renderedObject.tags = parsedTags;
-                
-                //renderedObject.setIconRes(rasterMapSymbol.getContent());
-                
-                // ?
+                OARenderedObject *renderedObject = [OARenderedObject parse:mapObject symbolInfo:symbolInfo];
                 OATargetPoint *targetPoint = [self getTargetPoint:renderedObject];
                 if (![found containsObject:targetPoint])
                     [found addObject:targetPoint];
-                 
-                 //OAPOIType *poiType = [poiHelper getPoiType:rule.tag.toNSString() value:rule.value.toNSString()];
-                
                 return;
-                
-                
             }
             if (!poi.type)
             {

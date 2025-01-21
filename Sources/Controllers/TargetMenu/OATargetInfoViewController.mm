@@ -58,6 +58,8 @@
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OrderedDictionary.h"
+#import "OARenderedObject.h"
+#import "OARenderedObject+cpp.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -251,7 +253,8 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
     {
         for (const auto & mapObj : polygons)
         {
-            [names addObject:[[OAPOIHelper sharedInstance] getTranslatedType:mapObj]];
+            OARenderedObject *renderedObject = [OARenderedObject parse:mapObj symbolInfo:nullptr];
+            [names addObject:[RenderedObjectViewController getTranslatedTypeWithRenderedObject:renderedObject]];
         }
         
         rowSummary = [self getMenuObjectsNamesByComma:names];

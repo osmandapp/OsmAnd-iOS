@@ -98,21 +98,79 @@ final class RenderedObjectViewController: OAPOIViewController {
         return poi
     }
     
-    override func getTypeStr() -> String {
+    override func getTypeStr() -> String? {
         if renderedObject.isPolygon {
-            return getTranslatedType(renderedObject: renderedObject)
+            return Self.getTranslatedType(renderedObject: renderedObject)
         }
         return super.getTypeStr()
     }
     
     // TODO: rewrite from objc from OAPOIHelper
-    private func getTranslatedType(renderedObject: OARenderedObject) -> String {
-        return ""
+    public static func getTranslatedType(renderedObject: OARenderedObject) -> String? {
+        var pt: OAPOIType?
+        var otherPt: OAPOIType?
+        var translated: String?
+        var firstTag: String?
+        var separate: String?
+        var single: String?
+        
+        for item in renderedObject.tags {
+            if item.key.hasPrefix("name") {
+                continue
+            }
+            if item.value.isEmpty && otherPt == nil {
+                otherPt = OAPOIHelper.sharedInstance().getPoiType(byKey: item.key)
+            }
+            pt = OAPOIHelper.sharedInstance().getPoiType(byKey: item.key + "_" + item.value)
+            if let pt {
+                break
+            }
+            firstTag = (firstTag == nil || firstTag!.isEmpty) ? item.key + ": " + item.value : firstTag
+            if !item.value.isEmpty {
+                let t = OAPOIHelper.sharedInstance().getTranslation(item.key + "_" + item.value)
+                if let t, translated == nil && !t.isEmpty {
+                    translated = t
+                }
+                let t1 = OAPOIHelper.sharedInstance().getTranslation(item.key)
+                let t2 = OAPOIHelper.sharedInstance().getTranslation(item.value)
+                if let t1, let t2, separate == nil {
+                    separate = t1 + ": " + t2.lowercased()
+                }
+                if let t2, single == nil && item.value != "yes" && item.value != "no" {
+                    single = t2
+                }
+                if item.key == "amenity" {
+                    translated = t2
+                }
+            }
+        }
+        if let pt {
+            //TODO: implement
+            //return pt.getTranslation();
+        }
+        if let translated {
+            return translated
+        }
+        if let otherPt {
+            //TODO: implement
+            //return otherPt.getTranslation();
+        }
+        if let separate {
+            return separate
+        }
+        if let single {
+            return single
+        }
+        return firstTag
     }
     
-    override func getIcon() -> UIImage {
+    override func getIcon() -> UIImage? {
         if let iconRes = getIconRes() {
-            return UIImage.templateImageNamed(iconRes)
+            if let icon = UIImage(named: iconRes) {
+                return icon
+            } else {
+                return UIImage.mapSvgImageNamed("mx_" + iconRes)
+            }
         } else {
             return UIImage.templateImageNamed("ic_action_street_name")
         }

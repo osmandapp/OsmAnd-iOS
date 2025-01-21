@@ -3604,3 +3604,4 @@
 "shared_string_local" = "Local";
 "shared_string_error" = "Error";
 "cloud_sync_progress" = "Sincronizando... %@";
+"download_tab_conflicts" = "Sin resolver";

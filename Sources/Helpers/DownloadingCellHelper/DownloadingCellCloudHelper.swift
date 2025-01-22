@@ -9,7 +9,7 @@
 import Foundation
 
 @objcMembers
-final class DownloadingCellCloudHelper: DownloadingCellBaseHelper  {
+final class DownloadingCellCloudHelper: DownloadingCellBaseHelper {
     
     override init() {
         super.init()
@@ -35,9 +35,9 @@ final class DownloadingCellCloudHelper: DownloadingCellBaseHelper  {
               let name = notification.userInfo?["name"] as? String else { return }
         let resourceId = getResourceId(typeName: type, filename: name)
         DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            if self.helperHasItemFor(resourceId) {
-                self.setCellProgress(resourceId: resourceId, progress: 0, status: .started)
+            guard let self else { return }
+            if helperHasItemFor(resourceId) {
+                setCellProgress(resourceId: resourceId, progress: 0, status: .started)
             }
         }
     }
@@ -49,9 +49,9 @@ final class DownloadingCellCloudHelper: DownloadingCellBaseHelper  {
         let resourceId = getResourceId(typeName: type, filename: name)
         let progress = value / 100
         DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            if self.helperHasItemFor(resourceId) {
-                self.setCellProgress(resourceId: resourceId, progress: progress, status: .inProgress)
+            guard let self else { return }
+            if helperHasItemFor(resourceId) {
+                setCellProgress(resourceId: resourceId, progress: progress, status: .inProgress)
             }
         }
     }
@@ -61,6 +61,7 @@ final class DownloadingCellCloudHelper: DownloadingCellBaseHelper  {
               let name = notification.userInfo?["name"] as? String else { return }
         
         let resourceId = getResourceId(typeName: type, filename: name)
+    
         DispatchQueue.main.async { [weak self] in
             guard let self,
                   helperHasItemFor(resourceId) else { return }
@@ -68,7 +69,6 @@ final class DownloadingCellCloudHelper: DownloadingCellBaseHelper  {
             setCellProgress(resourceId: resourceId, progress: 1, status: .finished)
             if let cell = getOrCreateCell(resourceId) {
                 cell.leftIconView.tintColor = .iconColorActive
-                cell.onDownloadFinishedAction?(resourceId)
             }
         }
     }

@@ -396,11 +396,10 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 
 #pragma mark - OAContextMenuProvider
 
-- (OATargetPoint *) getTargetPoint:(id)obj
+- (OATargetPoint *) getTargetPoint:(OAPOI *)poi renderedObject:(OARenderedObject *)renderedObject
 {
-    if ([obj isKindOfClass:[OAPOI class]])
+    if (!renderedObject)
     {
-        OAPOI *poi = (OAPOI *)obj;
         OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
         if (poi.type)
         {
@@ -441,15 +440,14 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         targetPoint.sortIndex = (NSInteger)targetPoint.type;
         return targetPoint;
     }
-    else if ([obj isKindOfClass:[OARenderedObject class]])
+    else
     {
-        OARenderedObject *renderedObject = (OARenderedObject *)obj;
         OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
         targetPoint.type = OATargetLocation;
         targetPoint.location = CLLocationCoordinate2DMake(renderedObject.labelLatLon.latitude, renderedObject.labelLatLon.longitude);
-        targetPoint.title = renderedObject.nameLocalized;
+        targetPoint.title = renderedObject.nameLocalized.length > 0 ? renderedObject.nameLocalized : poi.nameLocalized;
+        targetPoint.localizedNames = renderedObject.localizedNames.count > 0 ? renderedObject.localizedNames : poi.localizedNames;
         targetPoint.values = renderedObject.tags;
-        targetPoint.localizedNames = renderedObject.localizedNames;
         targetPoint.obfId = renderedObject.obfId;
         targetPoint.targetObj = renderedObject;
         targetPoint.sortIndex = (NSInteger)targetPoint.type;
@@ -468,6 +466,8 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup* objSymbolGroup = dynamic_cast<OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup*>(symbolInfo->mapSymbol->groupPtr);
     OsmAnd::AmenitySymbolsProvider::AmenitySymbolsGroup* amenitySymbolGroup = dynamic_cast<OsmAnd::AmenitySymbolsProvider::AmenitySymbolsGroup*>(symbolInfo->mapSymbol->groupPtr);
     OAPOIHelper *poiHelper = [OAPOIHelper sharedInstance];
+    
+    OARenderedObject *renderedObject;
     
     OAPOI *poi = [[OAPOI alloc] init];
     poi.latitude = point.latitude;
@@ -506,11 +506,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
             }
             else
             {
-                OARenderedObject *renderedObject = [OARenderedObject parse:mapObject symbolInfo:symbolInfo];
-                OATargetPoint *targetPoint = [self getTargetPoint:renderedObject];
-                if (![found containsObject:targetPoint])
-                    [found addObject:targetPoint];
-                return;
+                renderedObject = [OARenderedObject parse:mapObject symbolInfo:symbolInfo];
             }
             if (!poi.type)
             {
@@ -551,7 +547,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     }
     if (poi.type || poi.buildingNumber || unknownLocation)
     {
-        OATargetPoint *targetPoint = [self getTargetPoint:poi];
+        OATargetPoint *targetPoint = [self getTargetPoint:poi renderedObject:renderedObject];
         if (![found containsObject:targetPoint])
             [found addObject:targetPoint];
     }

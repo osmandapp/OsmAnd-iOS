@@ -10,4 +10,21 @@
 
 @implementation OAMapObject
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _x = [NSMutableArray new];
+        _y = [NSMutableArray new];
+    }
+    return self;
+}
+
+- (void) addLocation:(int)x y:(int)y
+{
+    [_x addObject:@(x)];
+    [_y addObject:@(y)];
+}
+
+
 @end

@@ -15,8 +15,8 @@
 @property (nonatomic) CLLocationCoordinate2D bboxTopLeft;
 @property (nonatomic) CLLocationCoordinate2D bboxBottomRight;
 
-@property (nonatomic) NSMutableArray<NSNumber *> *x;
-@property (nonatomic) NSMutableArray<NSNumber *> *y;
+//@property (nonatomic) NSMutableArray<NSNumber *> *x;
+//@property (nonatomic) NSMutableArray<NSNumber *> *y;
 
 @property (nonatomic) NSString *iconRes;
 @property (nonatomic) NSInteger order;

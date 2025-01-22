@@ -32,4 +32,8 @@
 //- (NSArray<NSString *> *)getNames:(NSString *)tag defTag:(NSString *)defTag;
 //- (NSDictionary<NSString *, NSString *> *)getNamesMap:(BOOL)includeEn;
 
+@property (nonatomic) NSMutableArray<NSNumber *> *x;
+@property (nonatomic) NSMutableArray<NSNumber *> *y;
+- (void) addLocation:(int)x y:(int)y;
+
 @end

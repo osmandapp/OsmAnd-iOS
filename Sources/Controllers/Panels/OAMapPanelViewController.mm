@@ -1419,10 +1419,14 @@ typedef enum
     [self applyTargetPoint:targetPoint];
     [_targetMenuView setTargetPoint:targetPoint];
     
-    if ([targetPoint.targetObj isKindOfClass:OARenderedObject.class])
+    if ([targetPoint.targetObj isKindOfClass:OAMapObject.class])
     {
-        OARenderedObject *obj = targetPoint.targetObj;
-        [_mapViewController.mapLayers.contextMenuLayer highlightPolygon:[obj points]];
+        OAMapObject *obj = targetPoint.targetObj;
+        QVector<OsmAnd::PointI> points;
+        for (int i = 0; i < obj.x.count; i++)
+            points.push_back( OsmAnd::PointI(obj.x[i].intValue, obj.y[i].intValue) );
+        
+        [_mapViewController.mapLayers.contextMenuLayer highlightPolygon:points];
     }
 
     [self showTargetPointMenu:saveState showFullMenu:NO onComplete:^{

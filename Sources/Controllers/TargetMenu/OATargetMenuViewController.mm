@@ -155,7 +155,6 @@
         }
             
         case OATargetPOI:
-        
         {
             controller = [[OAPOIViewController alloc] initWithPOI:targetPoint.targetObj];
             break;

@@ -286,7 +286,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     return [[s lowercaseStringWithLocale:[NSLocale currentLocale]] hasPrefix:[str lowercaseStringWithLocale:[NSLocale currentLocale]]];
 }
 
-- (void) processAmenity:(std::shared_ptr<const OsmAnd::Amenity>)amenity poi:(OAPOI *)poi
+- (void) processAmenity:(std::shared_ptr<const OsmAnd::Amenity>)amenity mapObject:(std::shared_ptr<const OsmAnd::MapObject>)mapObject poi:(OAPOI *)poi
 {
     const auto& decodedCategories = amenity->getDecodedCategories();
     if (!decodedCategories.isEmpty())
@@ -315,6 +315,14 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     
     const auto decodedValues = amenity->getDecodedValues();
     [self processAmenityFields:poi decodedValues:decodedValues];
+    
+    if (const auto& obfMapObject = std::dynamic_pointer_cast<const OsmAnd::ObfMapObject>(mapObject))
+    {
+        for (const OsmAnd::PointI pointI : obfMapObject->points31)
+        {
+            [poi addLocation:pointI.x y:pointI.y];
+        }
+    }
 }
 
 - (void) processAmenityFields:(OAPOI *)poi decodedValues:(const QList<OsmAnd::Amenity::DecodedValue>)decodedValues
@@ -396,6 +404,14 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 
 #pragma mark - OAContextMenuProvider
 
+- (OATargetPoint *) getTargetPoint:(id)obj
+{
+    if ([obj isKindOfClass:OAPOI.class])
+        return [self getTargetPoint:obj renderedObject:nil];
+    else
+        return [self getTargetPoint:nil renderedObject:obj];
+}
+
 - (OATargetPoint *) getTargetPoint:(OAPOI *)poi renderedObject:(OARenderedObject *)renderedObject
 {
     if (!renderedObject)
@@ -445,12 +461,15 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
         targetPoint.type = OATargetLocation;
         targetPoint.location = CLLocationCoordinate2DMake(renderedObject.labelLatLon.latitude, renderedObject.labelLatLon.longitude);
-        targetPoint.title = renderedObject.nameLocalized.length > 0 ? renderedObject.nameLocalized : poi.nameLocalized;
-        targetPoint.localizedNames = renderedObject.localizedNames.count > 0 ? renderedObject.localizedNames : poi.localizedNames;
         targetPoint.values = renderedObject.tags;
         targetPoint.obfId = renderedObject.obfId;
         targetPoint.targetObj = renderedObject;
         targetPoint.sortIndex = (NSInteger)targetPoint.type;
+        if (poi)
+        {
+            targetPoint.title = targetPoint.title.length > 0 ? targetPoint.title : poi.nameLocalized;
+            targetPoint.localizedNames = targetPoint.localizedNames.count > 0 ? targetPoint.localizedNames : poi.localizedNames;
+        }
         return targetPoint;
     }
     return nil;
@@ -465,6 +484,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 {
     OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup* objSymbolGroup = dynamic_cast<OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup*>(symbolInfo->mapSymbol->groupPtr);
     OsmAnd::AmenitySymbolsProvider::AmenitySymbolsGroup* amenitySymbolGroup = dynamic_cast<OsmAnd::AmenitySymbolsProvider::AmenitySymbolsGroup*>(symbolInfo->mapSymbol->groupPtr);
+    const std::shared_ptr<const OsmAnd::MapObject> mapObject = objSymbolGroup->mapObject;
     OAPOIHelper *poiHelper = [OAPOIHelper sharedInstance];
     
     OARenderedObject *renderedObject;
@@ -475,11 +495,10 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     if (amenitySymbolGroup != nullptr)
     {
         const auto amenity = amenitySymbolGroup->amenity;
-        [self processAmenity:amenity poi:poi];
+        [self processAmenity:amenity mapObject:mapObject poi:poi];
     }
     else if (objSymbolGroup != nullptr && objSymbolGroup->mapObject != nullptr)
     {
-        const std::shared_ptr<const OsmAnd::MapObject> mapObject = objSymbolGroup->mapObject;
         if (const auto& obfMapObject = std::dynamic_pointer_cast<const OsmAnd::ObfMapObject>(objSymbolGroup->mapObject))
         {
             std::shared_ptr<const OsmAnd::Amenity> amenity;
@@ -502,7 +521,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
             
             if (amenityFound)
             {
-                [self processAmenity:amenity poi:poi];
+                [self processAmenity:amenity mapObject:objSymbolGroup->mapObject poi:poi];
             }
             else
             {

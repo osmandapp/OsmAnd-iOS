@@ -13,8 +13,6 @@
 
 @interface OARenderedObject(cpp)
 
-- (QVector<OsmAnd::PointI>) points;
-
 + (OARenderedObject *) parse:(std::shared_ptr<const OsmAnd::MapObject>)mapObject symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo;
 
 @end

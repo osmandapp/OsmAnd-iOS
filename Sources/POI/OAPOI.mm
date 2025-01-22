@@ -550,25 +550,11 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     return amenity;
 }
 
-
-// TODO: delete afted test ?
-- (void) addLocation:(int)x y:(int)y
-{
-    if (!_x)
-        _x = [NSMutableArray new];
-    if (!_y)
-        _y = [NSMutableArray new];
-    
-    [_x addObject:@(x)];
-    [_y addObject:@(y)];
-}
-
 - (void) setXYPoints:(OARenderedObject *)renderedObject
 {
-    _x = renderedObject.x;
-    _y = renderedObject.y;
+    self.x = renderedObject.x;
+    self.y = renderedObject.y;
 }
-
 
 - (BOOL) isEqual:(id)o
 {

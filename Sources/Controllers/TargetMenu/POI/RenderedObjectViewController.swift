@@ -105,7 +105,6 @@ final class RenderedObjectViewController: OAPOIViewController {
         return super.getTypeStr()
     }
     
-    // TODO: rewrite from objc from OAPOIHelper
     public static func getTranslatedType(renderedObject: OARenderedObject) -> String? {
         var pt: OAPOIType?
         var otherPt: OAPOIType?

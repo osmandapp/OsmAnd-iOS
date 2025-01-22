@@ -125,9 +125,9 @@
 
 // TODO: delete afted test ?
 @property (nonatomic) NSDictionary<NSString *, NSString *> *tags;
-@property (nonatomic) NSMutableArray<NSNumber *> *x;
-@property (nonatomic) NSMutableArray<NSNumber *> *y;
-- (void) addLocation:(int)x y:(int)y;
+//@property (nonatomic) NSMutableArray<NSNumber *> *x;
+//@property (nonatomic) NSMutableArray<NSNumber *> *y;
+//- (void) addLocation:(int)x y:(int)y;
 
 - (void) setXYPoints:(OARenderedObject *)renderedObject;
 

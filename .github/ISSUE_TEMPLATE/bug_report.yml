@@ -46,14 +46,13 @@ body:
                 If possible you may also provide [Crash-Logs](https://osmand.net/docs/user/troubleshooting/crash-logs/),
                 but be warned that **crash logs may contain sensitive information** you may not want to share publicly!
             value: |
-                **WARNING** Crash-Logs **MAY** contain information you deem sensitive.
-                Review this **CAREFULLY** before posting your issue!
+                Warning: Logs may contain information you deem sensitive.
+                Review this carefully before posting your issue!
                 
                 ```
                 OsmAnd Version:
-                Android version:
+                iOS version:
                 Device model:
-                Crash-Logs: ?
                 ```
         validations:
             required: true

@@ -3363,3 +3363,10 @@
 "help_article_personal_color_palette_schemes_name" = "Färgscheman";
 "reset_average_speed" = "Nollställ medelhastighet";
 "cloud_sync_progress" = "Synkar…%@";
+"help_article_navigation_auto_car_name" = "Android Auto";
+"help_article_navigation_car_play_name" = "CarPlay";
+"help_article_navigation_routing_brouter_name" = "BRouter";
+"start_point" = "Start";
+"help_article_troubleshooting_android_auto_name" = "Android Auto";
+"info_button" = "Info";
+"help_article_plugins_openplacereviews_name" = "OpenPlaceReviews";

@@ -3581,3 +3581,4 @@
 "share_geo" = "geo:";
 "rendering_attr_showClimbingRoutes_name" = "Klifurleiðir";
 "cloud_sync_progress" = "Samstilli…%@";
+"rendering_attr_showClimbingRoutes_description" = "Sýna klifurleiðir";

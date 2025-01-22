@@ -123,8 +123,9 @@
 #define commonInit _(commonInit)
 #define deinit _(deinit)
 
-#define kMaxRoadDistanceInMeters 1000
-#define kMaxZoom 22.0f
+static float kDefaultZoomOnShow = 16.0;
+static int kMaxRoadDistanceInMeters = 1000;
+static float kMaxZoom = 22.0f;
 
 static NSString *topIndexBrandPrefix = @"top_index_brand";
 static int MAX_ZOOM_OUT_STEPS = 2;
@@ -1544,6 +1545,19 @@ typedef enum
     {
         [self showContextMenu:targetPoint saveState:YES preferredZoom:PREFERRED_FAVORITE_ZOOM];
     }
+}
+
+- (void) goToMapObject:(OAMapObject *)mapObject;
+{
+    const OsmAnd::LatLon latLon(mapObject.latitude, mapObject.longitude);
+    OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
+    Point31 pos = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
+    [mapVC goToPosition:pos andZoom:kDefaultZoomOnShow animated:YES];
+    [mapVC showContextPinMarker:mapObject.latitude longitude:mapObject.longitude animated:NO];
+    
+    OATargetPoint *targetPoint = [mapVC.mapLayers.poiLayer getTargetPoint:mapObject];
+    targetPoint.centerMap = YES;
+    [[OARootViewController instance].mapPanel showContextMenu:targetPoint];
 }
 
 - (void) updateContextMenu:(OATargetPoint *)targetPoint

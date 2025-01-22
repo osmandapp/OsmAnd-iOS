@@ -25,7 +25,7 @@ final class RenderedObjectViewController: OAPOIViewController {
         self.renderedObject = renderedObject
     }
     
-    private static func getSyntheticAmenity(renderedObject: OARenderedObject) -> OAPOI {
+    static func getSyntheticAmenity(renderedObject: OARenderedObject) -> OAPOI {
         let poi = OAPOI()
         poi.type = OAPOIHelper.sharedInstance().getDefaultOtherCategoryType()
         poi.subType = ""

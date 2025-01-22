@@ -39,16 +39,17 @@ final class POITagsDetailsViewController: OABaseNavbarViewController {
     
     override func generateData() {
         tableData.clearAllData()
-        var sections = [String: [(tag: (key: String, value: String, descr: String), header: String)]]()
+        var sections = [String: [(tag: (key: String, value: String, descr: String, renderedObject: OARenderedObject?), header: String)]]()
         for tagDict in tags {
             guard let tagKey = tagDict["key"] as? String,
                   let localizedTitle = tagDict["localizedTitle"] as? String,
                   let value = tagDict["value"] as? String else { continue }
+            let renderedObject = tagDict["renderedObject"] as? OARenderedObject
             
             let baseKey = String(tagKey.split(separator: ":").first ?? "")
             let description = extractDescription(from: localizedTitle, withKey: tagKey)
             let header = extractHeader(from: localizedTitle, withKey: tagKey)
-            sections[baseKey, default: []].append((tag: (key: tagKey, value: value, descr: description), header: header))
+            sections[baseKey, default: []].append((tag: (key: tagKey, value: value, descr: description, renderedObject: renderedObject), header: header))
         }
         
         for (baseKey, tagsWithHeaders) in sections {
@@ -121,22 +122,33 @@ final class POITagsDetailsViewController: OABaseNavbarViewController {
         return String(title[title.index(after: start)..<end]).capitalized
     }
     
-    private func configureRow(_ row: OATableRowData, with tag: (key: String, value: String, descr: String)) {
+    private func configureRow(_ row: OATableRowData, with tag: (key: String, value: String, descr: String, renderedObject: OARenderedObject?)) {
         row.cellType = OASimpleTableViewCell.reuseIdentifier
         row.key = tag.key
         row.title = tag.value
         row.descr = tag.descr
+        row.setObj(tag.renderedObject, forKey: "renderedObject")
     }
     
     override func getRow(_ indexPath: IndexPath?) -> UITableViewCell? {
         guard let indexPath else { return nil }
         let item = tableData.item(for: indexPath)
         let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier, for: indexPath) as! OASimpleTableViewCell
-        cell.selectionStyle = .none
+        cell.selectionStyle = item.obj(forKey: "renderedObject") != nil ? .default : .none
         cell.leftIconVisibility(false)
         cell.descriptionVisibility(!(item.descr?.isEmpty ?? true))
         cell.titleLabel.text = item.title
         cell.descriptionLabel.text = item.descr
         return cell
+    }
+    
+    override func onRowSelected(_ indexPath: IndexPath!) {
+        guard let indexPath else { return }
+        let item = tableData.item(for: indexPath)
+        if let renderedObject = item.obj(forKey: "renderedObject") as? OARenderedObject {
+            dismiss()
+//            OARootViewController.instance().mapPanel.hideContextMenu()
+            OARootViewController.instance().mapPanel.go(to: renderedObject)
+        }
     }
 }

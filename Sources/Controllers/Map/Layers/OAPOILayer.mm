@@ -31,6 +31,7 @@
 #import "OsmAndSharedWrapper.h"
 #import "OARenderedObject.h"
 #import "OARenderedObject+cpp.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include "OACoreResourcesAmenityIconProvider.h"
 #include <OsmAndCore/Data/Amenity.h>
@@ -465,8 +466,16 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         targetPoint.obfId = renderedObject.obfId;
         targetPoint.targetObj = renderedObject;
         targetPoint.sortIndex = (NSInteger)targetPoint.type;
+        
+        if (!poi)
+            poi = [RenderedObjectViewController getSyntheticAmenityWithRenderedObject:renderedObject];
         if (poi)
         {
+            if (poi.name.length == 0)
+                poi.name = poi.type.name;
+            if (poi.nameLocalized.length == 0)
+                poi.nameLocalized = poi.type.nameLocalized;
+            
             targetPoint.title = targetPoint.title.length > 0 ? targetPoint.title : poi.nameLocalized;
             targetPoint.localizedNames = targetPoint.localizedNames.count > 0 ? targetPoint.localizedNames : poi.localizedNames;
         }

@@ -248,17 +248,24 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
     NSString *title = OALocalizedString(@"transport_nearby_routes");
     
     NSMutableArray<NSString *> *names = [NSMutableArray new];
+    NSMutableArray<OARenderedObject *> *renderedObjects = [NSMutableArray new];
 
     if (polygons.size() > 0)
     {
+        OAMapObject *contextMenuObj = [self getTargetObj];
         for (const auto & mapObj : polygons)
         {
             OARenderedObject *renderedObject = [OARenderedObject parse:mapObj symbolInfo:nullptr];
-            [names addObject:[RenderedObjectViewController getTranslatedTypeWithRenderedObject:renderedObject]];
+            if (renderedObject.obfId != contextMenuObj.obfId) {
+                [renderedObjects addObject:renderedObject];
+                [names addObject:[RenderedObjectViewController getTranslatedTypeWithRenderedObject:renderedObject]];
+            }
         }
+        if (names.count == 0)
+            return;
         
         rowSummary = [self getMenuObjectsNamesByComma:names];
-        detailsArray = [self getWithinCollapsableContent:names];
+        detailsArray = [self getWithinCollapsableContent:names renderedObjects:renderedObjects];
         
         OARowInfo *row = [[OARowInfo alloc] initWithKey:WITHIN_POLYGONS_ROW_KEY
                                         icon:[UIImage templateImageNamed:@"ic_custom_pin_location"]
@@ -280,13 +287,16 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
     }
 }
 
-- (NSMutableArray<NSDictionary<NSString *, NSString *> *> *) getWithinCollapsableContent:(NSArray<NSString *> *)menuObjects
+- (NSMutableArray<NSDictionary<NSString *, NSString *> *> *) getWithinCollapsableContent:(NSArray<NSString *> *)menuObjects renderedObjects:(NSMutableArray<OARenderedObject *> *)renderedObjects
 {
     NSMutableArray<NSDictionary<NSString *, NSString *> *> *array = [NSMutableArray new];
     NSString *sectionHeader = OALocalizedString(@"transport_nearby_routes");
     
-    for (NSString *title in menuObjects)
+    for (int i = 0; i < menuObjects.count; i++)
     {
+        NSString *title = menuObjects[i];
+        OARenderedObject *renderedObject = renderedObjects[i];
+        
         NSString *rowTextPrefix;
         NSString *rowText;
         if ([title containsString:@":"])
@@ -306,7 +316,8 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
         [array addObject:@{
             @"key": [NSString stringWithFormat:@"within:%@:%@", rowTextPrefix, rowText],
             @"value": rowText,
-            @"localizedTitle": sectionHeader
+            @"localizedTitle": sectionHeader,
+            @"renderedObject": renderedObject
         }];
     }
     return array;

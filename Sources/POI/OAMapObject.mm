@@ -7,8 +7,12 @@
 //
 
 #import "OAMapObject.h"
+#import "OAMapObject+cpp.h"
 
 @implementation OAMapObject
+{
+    NSMutableDictionary<NSString *, NSString *> *_localizedNames;
+}
 
 - (instancetype)init
 {
@@ -16,6 +20,7 @@
     if (self) {
         _x = [NSMutableArray new];
         _y = [NSMutableArray new];
+        _localizedNames = [NSMutableDictionary new];
     }
     return self;
 }
@@ -26,5 +31,34 @@
     [_y addObject:@(y)];
 }
 
+- (void) setName:(NSString *)lang name:(NSString *)name
+{
+    if (!lang || lang.length == 0)
+    {
+        self.name = name;
+    }
+    else if ([lang isEqualToString:@"en"])
+    {
+        self.enName = name;
+    }
+    else
+    {
+        if (!_localizedNames)
+            _localizedNames = [NSMutableDictionary new];
+        _localizedNames[lang] = name;
+    }
+}
+
+- (QVector< OsmAnd::LatLon >) getPolygon
+{
+    QVector<OsmAnd::LatLon> res;
+    if (!_x)
+        return res;
+    for (int i = 0; i < _x.count; i++)
+    {
+        res.push_back(OsmAnd::LatLon(OsmAnd::Utilities::get31LatitudeY(_y[i].intValue), OsmAnd::Utilities::get31LongitudeX(_x[i].intValue)));
+    }
+    return res;
+}
 
 @end

@@ -16,6 +16,23 @@
 
 @implementation OARenderedObject
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _tags = [MutableOrderedDictionary new];
+    }
+    return self;
+}
+
+- (void) setBBox:(int)left top:(int)top right:(int)right bottom:(int)bottom
+{
+    _bboxLeft = left;
+    _bboxTop = top;
+    _bboxRight = right;
+    _bboxBottom = bottom;
+}
+
 
 - (BOOL) isText
 {
@@ -62,7 +79,7 @@
         renderedObject.nameLocalized = renderedObject.name;
         renderedObject.localizedNames = names;
         
-        NSMutableDictionary<NSString *, NSString *> *parsedTags = [NSMutableDictionary new];
+        MutableOrderedDictionary<NSString *, NSString *> *parsedTags = [MutableOrderedDictionary new];
         const auto tags = obfMapObject->getResolvedAttributes();
         for (auto i = tags.begin(); i != tags.end(); ++i)
         {

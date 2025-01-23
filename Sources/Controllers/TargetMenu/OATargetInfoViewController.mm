@@ -57,6 +57,7 @@
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
+#import "OAMapLayers.h"
 #import "OrderedDictionary.h"
 #import "OARenderedObject.h"
 #import "OARenderedObject+cpp.h"
@@ -238,34 +239,22 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
 - (void)buildWithinRow
 {
     OAMapViewController *mapViewController = OARootViewController.instance.mapPanel.mapViewController;
-    OAMapRendererView *mapView = (OAMapRendererView *) mapViewController.view;
-    OAMapRendererEnvironment * menv = [mapViewController mapRendererEnv];
-    OsmAnd::PointI p(OsmAnd::Utilities::get31TileNumberX(self.location.longitude), OsmAnd::Utilities::get31TileNumberY(self.location.latitude));
-    QList<std::shared_ptr<const OsmAnd::MapObject>> polygons = menv.mapPrimitivesProvider->retreivePolygons(p, mapView.zoomLevel);
-
-    NSString *rowSummary = @"";
-    NSMutableArray *detailsArray = [NSMutableArray array];
-    NSString *title = OALocalizedString(@"transport_nearby_routes");
-    
-    NSMutableArray<NSString *> *names = [NSMutableArray new];
-    NSMutableArray<OARenderedObject *> *renderedObjects = [NSMutableArray new];
-
-    if (polygons.size() > 0)
+    NSArray<OARenderedObject *> *polygons = [mapViewController.mapLayers.contextMenuLayer retrievePolygonsAroundMapObject:self.location.latitude lon:self.location.longitude mapObject:[self getTargetObj]];
+    if (polygons.count > 0)
     {
-        OAMapObject *contextMenuObj = [self getTargetObj];
-        for (const auto & mapObj : polygons)
-        {
-            OARenderedObject *renderedObject = [OARenderedObject parse:mapObj symbolInfo:nullptr];
-            if (renderedObject.obfId != contextMenuObj.obfId) {
-                [renderedObjects addObject:renderedObject];
-                [names addObject:[RenderedObjectViewController getTranslatedTypeWithRenderedObject:renderedObject]];
-            }
-        }
+        NSString *rowSummary = @"";
+        NSMutableArray *detailsArray = [NSMutableArray array];
+        NSString *title = OALocalizedString(@"transport_nearby_routes");
+        
+        NSMutableArray<NSString *> *names = [NSMutableArray new];
+        for (OARenderedObject *polygon in polygons)
+            [names addObject:[RenderedObjectViewController getTranslatedTypeWithRenderedObject:polygon]];
+        
         if (names.count == 0)
             return;
         
         rowSummary = [self getMenuObjectsNamesByComma:names];
-        detailsArray = [self getWithinCollapsableContent:names renderedObjects:renderedObjects];
+        detailsArray = [self getWithinCollapsableContent:names renderedObjects:polygons];
         
         OARowInfo *row = [[OARowInfo alloc] initWithKey:WITHIN_POLYGONS_ROW_KEY
                                         icon:[UIImage templateImageNamed:@"ic_custom_pin_location"]
@@ -287,7 +276,7 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
     }
 }
 
-- (NSMutableArray<NSDictionary<NSString *, NSString *> *> *) getWithinCollapsableContent:(NSArray<NSString *> *)menuObjects renderedObjects:(NSMutableArray<OARenderedObject *> *)renderedObjects
+- (NSMutableArray<NSDictionary<NSString *, NSString *> *> *) getWithinCollapsableContent:(NSArray<NSString *> *)menuObjects renderedObjects:(NSArray<OARenderedObject *> *)renderedObjects
 {
     NSMutableArray<NSDictionary<NSString *, NSString *> *> *array = [NSMutableArray new];
     NSString *sectionHeader = OALocalizedString(@"transport_nearby_routes");
@@ -307,9 +296,9 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
         }
         else
         {
-            
-            // TODO: implement?
+            // TODO: sync with android?
             // rowTextPrefix = MenuObjectUtils.getSecondLineText(menuObject);
+            rowTextPrefix = renderedObject.nameLocalized ?: @"";
             rowText = title;
         }
         

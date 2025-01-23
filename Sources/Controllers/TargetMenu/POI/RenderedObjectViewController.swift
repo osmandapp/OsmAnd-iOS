@@ -37,8 +37,8 @@ final class RenderedObjectViewController: OAPOIViewController {
         var localizedNames = [String: String]()
         
         for e in renderedObject.tags {
-            let tag = e.key
-            let value = e.value
+            guard let tag = e.key as? String, let value = e.value as? String else { continue }
+            
             if tag == "name" {
                 poi.name = value
                 continue
@@ -114,31 +114,33 @@ final class RenderedObjectViewController: OAPOIViewController {
         var single: String?
         
         for item in renderedObject.tags {
-            if item.key.hasPrefix("name") {
+            guard let key = item.key as? String, let value = item.value as? String else { continue }
+            
+            if key.hasPrefix("name") {
                 continue
             }
-            if item.value.isEmpty && otherPt == nil {
-                otherPt = OAPOIHelper.sharedInstance().getPoiType(byKey: item.key)
+            if value.isEmpty && otherPt == nil {
+                otherPt = OAPOIHelper.sharedInstance().getPoiType(byKey: key)
             }
-            pt = OAPOIHelper.sharedInstance().getPoiType(byKey: item.key + "_" + item.value)
+            pt = OAPOIHelper.sharedInstance().getPoiType(byKey: key + "_" + value)
             if let pt {
                 break
             }
-            firstTag = (firstTag == nil || firstTag!.isEmpty) ? item.key + ": " + item.value : firstTag
-            if !item.value.isEmpty {
-                let t = OAPOIHelper.sharedInstance().getTranslation(item.key + "_" + item.value)
+            firstTag = (firstTag == nil || firstTag!.isEmpty) ? key + ": " + value : firstTag
+            if !value.isEmpty {
+                let t = OAPOIHelper.sharedInstance().getTranslation(key + "_" + value)
                 if let t, translated == nil && !t.isEmpty {
                     translated = t
                 }
-                let t1 = OAPOIHelper.sharedInstance().getTranslation(item.key)
-                let t2 = OAPOIHelper.sharedInstance().getTranslation(item.value)
+                let t1 = OAPOIHelper.sharedInstance().getTranslation(key)
+                let t2 = OAPOIHelper.sharedInstance().getTranslation(value)
                 if let t1, let t2, separate == nil {
                     separate = t1 + ": " + t2.lowercased()
                 }
-                if let t2, single == nil && item.value != "yes" && item.value != "no" {
+                if let t2, single == nil && value != "yes" && value != "no" {
                     single = t2
                 }
-                if item.key == "amenity" {
+                if key == "amenity" {
                     translated = t2
                 }
             }
@@ -178,7 +180,9 @@ final class RenderedObjectViewController: OAPOIViewController {
     private func getIconRes() -> String? {
         if renderedObject.isPolygon {
             for e in renderedObject.tags {
-                if let pt = OAPOIHelper.sharedInstance().getPoiType(byKey: e.value) {
+                guard let value = e.value as? String else { continue }
+                
+                if let pt = OAPOIHelper.sharedInstance().getPoiType(byKey: value) {
                     return pt.iconName()
                 }
             }

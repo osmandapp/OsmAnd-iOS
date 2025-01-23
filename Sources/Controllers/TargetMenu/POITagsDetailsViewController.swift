@@ -69,7 +69,7 @@ final class POITagsDetailsViewController: OABaseNavbarViewController {
             
             // TODO: sync with android. Or send here already translated strings.
             let components = key.components(separatedBy: ":")
-            if components.count >= 2 {
+            if components.count > 2 {
                 let polygonValue = components[2]
                 if let localizedTag = OAPOIHelper.sharedInstance().getPhraseByName(polygonValue) {
                     return localizedTag.capitalized
@@ -147,7 +147,6 @@ final class POITagsDetailsViewController: OABaseNavbarViewController {
         let item = tableData.item(for: indexPath)
         if let renderedObject = item.obj(forKey: "renderedObject") as? OARenderedObject {
             dismiss()
-//            OARootViewController.instance().mapPanel.hideContextMenu()
             OARootViewController.instance().mapPanel.go(to: renderedObject)
         }
     }

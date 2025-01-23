@@ -7,16 +7,22 @@
 //
 
 #import "OAMapObject.h"
+#import "OrderedDictionary.h"
 
 @interface OARenderedObject : OAMapObject
 
-@property (nonatomic) NSDictionary<NSString *, NSString *> *tags;
+@property (nonatomic) OrderedDictionary<NSString *, NSString *> *tags;
 
-@property (nonatomic) CLLocationCoordinate2D bboxTopLeft;
-@property (nonatomic) CLLocationCoordinate2D bboxBottomRight;
+//@property (nonatomic) CLLocationCoordinate2D bboxTopLeft;
+//@property (nonatomic) CLLocationCoordinate2D bboxBottomRight;
 
 //@property (nonatomic) NSMutableArray<NSNumber *> *x;
 //@property (nonatomic) NSMutableArray<NSNumber *> *y;
+
+@property (nonatomic) NSInteger bboxLeft;
+@property (nonatomic) NSInteger bboxTop;
+@property (nonatomic) NSInteger bboxRight;
+@property (nonatomic) NSInteger bboxBottom;
 
 @property (nonatomic) NSString *iconRes;
 @property (nonatomic) NSInteger order;
@@ -30,7 +36,7 @@
 
 @property (nonatomic) BOOL isPolygon;
 
+- (void) setBBox:(int)left top:(int)top right:(int)right bottom:(int)bottom;
 - (BOOL) isText;
-- (void) addLocation:(int)x y:(int)y;
 
 @end

@@ -74,8 +74,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) setAngularUnitsDepended:(BOOL)newValue;
 - (BOOL) isExplicitlyVisible;
 - (void) setExplicitlyVisible:(BOOL)explicitlyVisible;
-- (void)updateIcon;
-- (void)setNightMode:(BOOL)night;
+- (void) updateIcon;
+- (void) setNightMode:(BOOL)night;
 
 - (void)updateTextWitState:(OATextState *)state;
 

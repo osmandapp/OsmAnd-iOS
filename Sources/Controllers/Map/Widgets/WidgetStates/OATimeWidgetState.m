@@ -45,7 +45,7 @@
 
 - (NSArray<NSString *> *) getMenuTitles
 {
-    return @[ @"access_arrival_time", @"map_widget_time" ];
+    return @[@"access_arrival_time", @"map_widget_time"];
 }
 
 - (NSArray<NSString *> *) getMenuIconIds

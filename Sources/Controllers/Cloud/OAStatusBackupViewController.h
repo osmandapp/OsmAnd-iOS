@@ -11,6 +11,6 @@
 
 @interface OAStatusBackupViewController : OACompoundViewController
 
-- (instancetype) initWithType:(EOARecentChangesType)type;
+- (instancetype) initWithType:(EOARecentChangesType)type syncProgress:(float)syncProgress;
 
 @end

@@ -435,7 +435,7 @@
     
     if ([vc isKindOfClass:OACloudAccountVerificationViewController.class])
     {
-        if ([OABackupHelper isTokenValid:tokenParam])
+        if ([BackupUtils isTokenValid:tokenParam])
         {
             [OABackupHelper.sharedInstance registerDevice:tokenParam];
         }

@@ -69,7 +69,7 @@
 
 - (long)localModifiedTime
 {
-    return _historyMarkersHelper.getMarkersHistoryLastModifiedTime;
+    return [_historyMarkersHelper getMarkersHistoryLastModifiedTime];
 }
 
 - (void)setLocalModifiedTime:(long)lastModifiedTime
@@ -93,9 +93,7 @@
                 [self.appliedItems addObject:duplicate];
             }
         }
-
-        for (OAHistoryItem *historyItem in self.appliedItems)
-            [_historyMarkersHelper addPoint:historyItem];
+        [_historyMarkersHelper importBackupPoints: self.appliedItems];
     }
 }
 
@@ -195,8 +193,6 @@
                     historyItem.date = [dateFormatter dateFromString:extensions[key]];
                 }
             }
-            [[OAHistoryHelper sharedInstance] addPoint:historyItem];
-
             [self.item.items addObject:historyItem];
         }
     }

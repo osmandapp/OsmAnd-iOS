@@ -41,7 +41,7 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
         initTableData()
     }
     
-    // MARK: - Life circle
+    // MARK: - Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()

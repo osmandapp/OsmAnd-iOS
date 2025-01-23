@@ -367,7 +367,9 @@ static int PROFILE_TRUCK = 1000;
 - (void) setParent:(OAApplicationMode *)parent
 {
     _parent = parent;
-    [OAAppSettings.sharedManager.parentAppMode set:parent.stringKey mode:self];
+    if (_parent != nil && ![[OAAppSettings.sharedManager.parentAppMode get:self] isEqualToString:parent.stringKey]) {
+        [OAAppSettings.sharedManager.parentAppMode set:parent.stringKey mode:self];
+    }
 }
 
 - (UIImage *) getIcon

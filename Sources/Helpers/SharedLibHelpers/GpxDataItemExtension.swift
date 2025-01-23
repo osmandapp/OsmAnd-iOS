@@ -108,6 +108,15 @@ extension GpxDataItem {
         }
     }
     
+    var expectedRouteDuration: Int {
+        get {
+            getParameter(parameter: .expectedDuration) as? Int ?? 0
+        }
+        set {
+            setParameter(parameter: .expectedDuration, value: KotlinInt(integerLiteral: newValue))
+        }
+    }
+    
     var wptPoints: Int32 {
         get {
             getParameter(parameter: .wptPoints) as? Int32 ?? 0

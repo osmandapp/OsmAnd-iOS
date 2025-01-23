@@ -64,12 +64,12 @@ static NSDictionary<NSString *, NSString *> *_pluginIdMapping;
 
 - (long)localModifiedTime
 {
-    return [OAAppSettings.sharedManager getLastGloblalSettingsModifiedTime];
+    return [OAAppSettings.sharedManager getLastGloblalSettingsModifiedTime] * 1000;
 }
 
 - (void)setLocalModifiedTime:(long)localModifiedTime
 {
-    [OAAppSettings.sharedManager setLastGlobalModifiedTime:localModifiedTime];
+    [OAAppSettings.sharedManager setLastGlobalModifiedTime:localModifiedTime / 1000];
 }
 
 - (long)getEstimatedSize

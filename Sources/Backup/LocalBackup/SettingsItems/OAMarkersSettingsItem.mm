@@ -75,12 +75,12 @@
 
 - (long)localModifiedTime
 {
-    return [_destinationsHelper getMarkersLastModifiedTime];
+    return [_destinationsHelper getMarkersLastModifiedTime] * 1000;
 }
 
 - (void)setLocalModifiedTime:(long)localModifiedTime
 {
-    [_destinationsHelper setMarkersLastModifiedTime:localModifiedTime];
+    [_destinationsHelper setMarkersLastModifiedTime:localModifiedTime / 1000];
 }
 
 - (void) apply
@@ -105,10 +105,6 @@
     
 }
 
-- (BOOL) applyFileName:(NSString *)fileName
-{
-    return self.fileName ? ((![fileName isEqualToString:@"history_markers.gpx"] && [fileName hasSuffix:self.fileName]) || [fileName hasPrefix:[self.fileName stringByAppendingString:@"/"]] || [fileName isEqualToString:self.fileName]) : NO;
-}
 
 - (BOOL) isDuplicate:(OADestination *)mapMarker
 {

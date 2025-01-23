@@ -10,7 +10,7 @@
 
 @class OALocalFile, OARemoteFile, OABackupInfo;
 
-@interface OABackupInfoGenerationTask : NSOperation
+@interface OAGenerateBackupInfoTask : NSOperation
 
 - (instancetype) initWithLocalFiles:(NSDictionary<NSString *, OALocalFile *> *)localFiles
                   uniqueRemoteFiles:(NSDictionary<NSString *, OARemoteFile *> *)uniqueRemoteFiles

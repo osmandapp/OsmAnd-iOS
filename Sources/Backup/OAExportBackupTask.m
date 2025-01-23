@@ -17,6 +17,7 @@
 #import "OAPrepareBackupResult.h"
 #import "OARemoteFile.h"
 #import "OAConcurrentCollections.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OAExportBackupTask () <OANetworkExportProgressListener>
 
@@ -45,16 +46,13 @@
         _listener = listener;
         _exporter = [[OABackupExporter alloc] initWithListener:self];
         _itemsProgress = [[OAConcurrentDictionary alloc] init];
-        OABackupHelper *backupHelper = OABackupHelper.sharedInstance;
         for (OASettingsItem *item in items)
         {
             [_exporter addSettingsItem:item];
             
             OAExportSettingsType *exportType = [OAExportSettingsType findBySettingsItem:item];
-            if (exportType && [backupHelper getVersionHistoryTypePref:exportType].get)
-            {
+            if (exportType && ![[BackupUtils getVersionHistoryTypePref:exportType] get])
                 [_exporter addOldItemToDelete:item];
-            }
         }
         for (OASettingsItem *item in itemsToDelete)
         {
@@ -87,7 +85,8 @@
     [self publishProgress:@(itemsSize / 1024) isUploadedKb:NO];
     
     NSString *error = nil;
-    @try {
+    @try
+    {
         [_exporter export];
     }
     @catch (NSException *e)
@@ -116,7 +115,9 @@
                 NSDictionary *attrs = [fileManager attributesOfItemAtPath:file error:nil];
                 size += attrs.fileSize + APPROXIMATE_FILE_SIZE_BYTES;
             }
-        } else {
+        }
+        else
+        {
             size += [item getEstimatedSize] + APPROXIMATE_FILE_SIZE_BYTES;
         }
     }
@@ -128,9 +129,7 @@
             for (OASettingsItem *item in itemsToDelete)
             {
                 if ([item isEqual:remoteFile.item])
-                {
                     size += APPROXIMATE_FILE_SIZE_BYTES;
-                }
             }
         }
         for (OARemoteFile *remoteFile in remoteFilesMap.allValues)
@@ -142,13 +141,9 @@
                 {
                     NSString *itemFileName = item.fileName;
                     if (itemFileName != nil && [itemFileName hasPrefix:@"/"])
-                    {
                         itemFileName = [itemFileName substringFromIndex:1];
-                    }
                     if ([itemFileName isEqualToString:remoteFileItem.fileName])
-                    {
                         size += APPROXIMATE_FILE_SIZE_BYTES;
-                    }
                 }
             }
         }
@@ -160,9 +155,7 @@
                 for (OASettingsItem *item in localItemsToDelete)
                 {
                     if ([item isEqual:localFile.item])
-                    {
                         size += APPROXIMATE_FILE_SIZE_BYTES;
-                    }
                 }
             }
         }
@@ -225,24 +218,29 @@
 
 // MARK: OANetworkExportProgressListener
 
-- (void)itemExportDone:(nonnull NSString *)type fileName:(nonnull NSString *)fileName {
+- (void)itemExportDone:(nonnull NSString *)type fileName:(nonnull NSString *)fileName
+{
     [self publishProgress:[[OAItemProgressInfo alloc] initWithType:type fileName:fileName progress:0 work:0 finished:YES] isUploadedKb:NO];
 }
 
-- (void)itemExportStarted:(nonnull NSString *)type fileName:(nonnull NSString *)fileName work:(NSInteger)work {
+- (void)itemExportStarted:(nonnull NSString *)type fileName:(nonnull NSString *)fileName work:(NSInteger)work
+{
     [self publishProgress:[[OAItemProgressInfo alloc] initWithType:type fileName:fileName progress:0 work:work finished:NO] isUploadedKb:NO];
 }
 
-- (void)networkExportDone:(nonnull NSDictionary<NSString *,NSString *> *)errors {
+- (void)networkExportDone:(nonnull NSDictionary<NSString *,NSString *> *)errors
+{
 }
 
-- (void)updateGeneralProgress:(NSInteger)uploadedItems uploadedKb:(NSInteger)uploadedKb {
+- (void)updateGeneralProgress:(NSInteger)uploadedItems uploadedKb:(NSInteger)uploadedKb
+{
     if (self.isCancelled)
         [_exporter cancel];
     [self publishProgress:@(uploadedKb) isUploadedKb:YES];
 }
 
-- (void)updateItemProgress:(nonnull NSString *)type fileName:(nonnull NSString *)fileName progress:(NSInteger)progress {
+- (void)updateItemProgress:(nonnull NSString *)type fileName:(nonnull NSString *)fileName progress:(NSInteger)progress
+{
     [self publishProgress:[[OAItemProgressInfo alloc] initWithType:type fileName:fileName progress:progress work:0 finished:NO] isUploadedKb:NO];
 }
 

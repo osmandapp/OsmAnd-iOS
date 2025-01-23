@@ -110,7 +110,7 @@
     {
         NSError *err = nil;
         NSDictionary *attrs = [manager attributesOfItemAtPath:groupFilePath error:&err];
-        return !err ? attrs.fileModificationDate.timeIntervalSince1970 : 0;
+        return !err ? (attrs.fileModificationDate.timeIntervalSince1970 * 1000) : 0;
     }
     
     NSString *favPath = OsmAndApp.instance.favoritesLegacyStorageFilename;
@@ -119,7 +119,7 @@
         NSError *err = nil;
         NSDictionary *attrs = [manager attributesOfItemAtPath:favPath error:&err];
         if (!err)
-            return attrs.fileModificationDate.timeIntervalSince1970;
+            return attrs.fileModificationDate.timeIntervalSince1970 * 1000;
     }
     return 0;
 }
@@ -131,13 +131,13 @@
     NSFileManager *manager = NSFileManager.defaultManager;
     if (groupFilePath && [manager fileExistsAtPath:groupFilePath])
     {
-        [manager setAttributes:@{ NSFileModificationDate : [NSDate dateWithTimeIntervalSince1970:localModifiedTime] } ofItemAtPath:groupFilePath error:nil];
+        [manager setAttributes:@{ NSFileModificationDate : [NSDate dateWithTimeIntervalSince1970:localModifiedTime / 1000] } ofItemAtPath:groupFilePath error:nil];
     }
     else
     {
         NSString *favPath = OsmAndApp.instance.favoritesLegacyStorageFilename;
         if ([manager fileExistsAtPath:favPath])
-            [manager setAttributes:@{ NSFileModificationDate : [NSDate dateWithTimeIntervalSince1970:localModifiedTime] } ofItemAtPath:favPath error:nil];
+            [manager setAttributes:@{ NSFileModificationDate : [NSDate dateWithTimeIntervalSince1970:localModifiedTime / 1000] } ofItemAtPath:favPath error:nil];
     }
 }
 
@@ -182,9 +182,12 @@
             {
                 [OAFavoritesHelper addFavorites:group.points
                                   lookupAddress:NO
-                                    sortAndSave:group == self.appliedItems.lastObject
+                                    sortAndSave:NO
                                     pointsGroup:[group toPointsGroup]];
             }
+            [OAFavoritesHelper sortAll];
+            [OAFavoritesHelper saveCurrentPointsIntoFile:NO];
+            [OAFavoritesHelper loadFavorites];
         }
     }
 }

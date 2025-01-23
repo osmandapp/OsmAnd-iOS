@@ -66,6 +66,8 @@
 #import "OALocationIcon.h"
 #import "OrderedDictionary.h"
 #import "OAMapActions.h"
+#import "OAPOIFiltersHelper.h"
+#import "OARendererRegistry.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"
@@ -217,6 +219,9 @@
 #import "OARemoteFile.h"
 #import "OAOperationLog.h"
 #import "OANetworkUtilities.h"
+#import "OABackupDbHelper.h"
+#import "OACollectionSettingsItem.h"
+#import "OAPoiUiFilterSettingsItem.h"
 
 // Quick actions
 #import "OAQuickAction.h"

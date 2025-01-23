@@ -295,7 +295,7 @@ extension TrackItem {
             color = gpx.getColor(defColor: 0)?.intValue ?? 0
             coloringType = gpx.getColoringType() ?? ""
             gradientPaletteName = gpx.getGradientColorPalette()
-            width = gpx.getWidth(defWidth: nil) ?? ""
+            width = gpx.getWidth(defaultWidth: nil) ?? ""
             showArrows = gpx.isShowArrows()
             showStartFinish = gpx.isShowStartFinish()
             verticalExaggerationScale = Double(gpx.getAdditionalExaggeration())

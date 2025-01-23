@@ -112,3 +112,4 @@
 // instruction:
 //https://github.com/osmandapp/OsmAnd-Issues/blob/master/Adding%20release%20information%20to%20IOS.md
 "map_widget_gps_info" = "GPS status";
+"transport_stop" = "stani";

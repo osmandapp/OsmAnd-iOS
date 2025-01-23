@@ -147,6 +147,8 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
         if (!_mapViewController || ![_mapViewController isViewLoaded])
             return;
         
+        [self resetDrivingRegionUpdate];
+        
         _startChangingMapModeTime = CACurrentMediaTime();
         
         CLLocation* newLocation = _app.locationServices.lastKnownLocation;

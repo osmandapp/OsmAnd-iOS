@@ -1298,7 +1298,7 @@
 "copied_to_clipboard" = "Vsebina je kopirana v odložišče";
 "shared_string_enable" = "Omogoči";
 "plan_route_split_before" = "Razdeli pred";
-"replace_favorite_confirmation" = "Zamenjati priljubljeno točko »%@«\?";
+"replace_favorite_confirmation" = "Zamenjati priljubljeno točko »%@«?";
 "icon_group_emergency" = "Pomoč v sili";
 "icon_group_transport" = "Javni prevozi";
 "transport" = "Prevoz";
@@ -2443,3 +2443,8 @@
 "of" = "%d od %d";
 "downloaded_bytes" = "%@ od %@";
 "quick_action_need_to_add_item_to_list" = "Dodaj vsaj en element na seznam v nastavitvah »Hitrih dejanj«";
+"shared_string_visible_on_map" = "Vidno na zemljevidu";
+"shared_string_to" = "Za";
+"transport_stop" = "Postaja";
+"power_watts_unit" = "Vatov";
+"cloud_sync_progress" = "Sinhronizacija … %@";

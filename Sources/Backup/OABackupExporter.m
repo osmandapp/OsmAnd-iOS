@@ -20,6 +20,7 @@
 #import "OAConcurrentCollections.h"
 #import "OARemoteFile.h"
 #import "OAOperationLog.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define MAX_LIGHT_ITEM_SIZE 10 * 1024 * 1024
 
@@ -74,7 +75,7 @@
 {
     OABackupHelper *_backupHelper;
     NSMutableArray<OASettingsItem *> *_itemsToDelete;
-    NSMutableArray<OASettingsItem *> *_localItemsToDelete;
+    NSMutableArray<OASettingsItem *> *_itemsToLocalDelete;
     NSMutableArray<OASettingsItem *> *_oldItemsToDelete;
     NSOperationQueue *_executor;
     __weak id<OANetworkExportProgressListener> _listener;
@@ -88,9 +89,10 @@
 - (instancetype) initWithListener:(id<OANetworkExportProgressListener>)listener
 {
     self = [super initWithListener:nil];
-    if (self) {
+    if (self)
+    {
         _itemsToDelete = [NSMutableArray array];
-        _localItemsToDelete = [NSMutableArray array];
+        _itemsToLocalDelete = [NSMutableArray array];
         _oldFilesToDelete = [[OAConcurrentArray alloc] init];
         _backupHelper = OABackupHelper.sharedInstance;
         _listener = listener;
@@ -105,7 +107,7 @@
 
 - (NSArray<OASettingsItem *> *)getLocalItemsToDelete
 {
-    return _localItemsToDelete;
+    return _itemsToLocalDelete;
 }
 
 - (NSArray<OASettingsItem *> *)getOldItemsToDelete
@@ -120,7 +122,7 @@
 
 - (void) addLocalItemToDelete:(OASettingsItem *)item
 {
-    [_localItemsToDelete addObject:item];
+    [_itemsToLocalDelete addObject:item];
 }
 
 - (void) addOldItemToDelete:(OASettingsItem *)item
@@ -144,22 +146,16 @@
             subscriptionError = error;
     }];
     if (subscriptionError.length > 0)
-    {
         @throw [NSException exceptionWithName:@"IOException" reason:subscriptionError userInfo:nil];
-    }
     
     NSMutableArray<OAItemWriterTask *> *lightTasks = [NSMutableArray array];
     NSMutableArray<OAItemWriterTask *> *heavyTasks = [NSMutableArray array];
     for (OASettingsItem *item in self.getItems)
     {
         if (item.getEstimatedSize > MAX_LIGHT_ITEM_SIZE)
-        {
             [heavyTasks addObject:[[OAItemWriterTask alloc] initWithWriter:writer item:item]];
-        }
         else
-        {
             [lightTasks addObject:[[OAItemWriterTask alloc] initWithWriter:writer item:item]];
-        }
     }
     if (lightTasks.count > 0)
     {
@@ -167,11 +163,13 @@
         _executor.maxConcurrentOperationCount = 10;
         [_executor addOperations:lightTasks waitUntilFinished:YES];
         for (OAItemWriterTask *task in lightTasks)
+        {
             if (task.error)
             {
                 [log finishOperation];
                 @throw [NSException exceptionWithName:@"IOException" reason:task.error userInfo:nil];
             }
+        }
     }
     if (heavyTasks.count > 0)
     {
@@ -179,11 +177,13 @@
         _executor.maxConcurrentOperationCount = 1;
         [_executor addOperations:heavyTasks waitUntilFinished:YES];
         for (OAItemWriterTask *task in heavyTasks)
+        {
             if (task.error)
             {
                 [log finishOperation];
                 @throw [NSException exceptionWithName:@"IOException" reason:task.error userInfo:nil];
             }
+        }
     }
     [log finishOperation];
 }
@@ -219,15 +219,11 @@
                 for (OASettingsItem *item in itemsToDelete)
                 {
                     if ([item isEqual:remoteFile.item])
-                    {
                         [remoteFiles addObject:remoteFile];
-                    }
                 }
             }
             if (remoteFiles.count > 0)
-            {
                 [_backupHelper deleteFilesSync:remoteFiles byVersion:NO listener:listener];
-            }
         }
     }
     @catch (NSException *e)
@@ -238,11 +234,10 @@
 
 - (void) deleteOldFiles:(id<OAOnDeleteFilesListener>)listener
 {
-    @try {
+    @try
+    {
         if (_oldFilesToDelete.countSync > 0)
-        {
             [_backupHelper deleteFilesSync:_oldFilesToDelete.asArray byVersion:YES listener:listener];
-        }
     }
     @catch (NSException *e)
     {
@@ -252,15 +247,15 @@
 
 - (void) deleteLocalFiles:(OAConcurrentSet *)itemsProgress dataProgress:(OAAtomicInteger *)dataProgress
 {
-    NSArray<OASettingsItem *> *localItemsToDelete = _localItemsToDelete;
-    for (OASettingsItem *item in localItemsToDelete)
+    NSArray<OASettingsItem *> *itemsToLocalDelete = _itemsToLocalDelete;
+    for (OASettingsItem *item in itemsToLocalDelete)
     {
         [item remove];
         [itemsProgress addObjectSync:item];
         if (_listener)
         {
             int p = [dataProgress addAndGet:(APPROXIMATE_FILE_SIZE_BYTES / 1024)];
-            NSString *fileName = [OABackupHelper getItemFileName:item];
+            NSString *fileName = [BackupUtils getItemFileName:item];
             [_listener itemExportDone:[OASettingsItemType typeName:item.type] fileName:fileName];
             [_listener updateGeneralProgress:itemsProgress.countSync uploadedKb:(NSInteger)p];
         }
@@ -278,7 +273,7 @@
 {
     NSString *type = [OASettingsItemType typeName:item.type];
     OAExportSettingsType *exportType = [OAExportSettingsType findBySettingsItem:item];
-    if (exportType != nil && ![_backupHelper getVersionHistoryTypePref:exportType].get)
+    if (exportType != nil && ![[BackupUtils getVersionHistoryTypePref:exportType] get])
     {
         OARemoteFile *remoteFile = [_backupHelper.backup getRemoteFile:type fileName:fileName];
         if (remoteFile != nil)
@@ -288,29 +283,23 @@
 
 // MARK: OAOnUploadItemListener
 
-- (void)onItemFileUploadDone:(nonnull OASettingsItem *)item fileName:(nonnull NSString *)fileName uploadTime:(long)uploadTime error:(nonnull NSString *)error {
+- (void)onItemFileUploadDone:(nonnull OASettingsItem *)item fileName:(nonnull NSString *)fileName uploadTime:(long)uploadTime error:(nonnull NSString *)error
+{
     NSString *type = [OASettingsItemType typeName:item.type];
     if (error.length > 0)
-    {
         [_errors setObjectSync:error forKey:[NSString stringWithFormat:@"%@/%@", type, fileName]];
-    }
     else
-    {
         [self markOldFileForDeletion:item fileName:fileName];
-    }
     int p = [_dataProgress addAndGet:(APPROXIMATE_FILE_SIZE_BYTES / 1024)];
     if (_listener != nil)
-    {
         [_listener updateGeneralProgress:_itemsProgress.countSync uploadedKb:(NSInteger)p];
-    }
 }
 
-- (void)onItemUploadDone:(nonnull OASettingsItem *)item fileName:(nonnull NSString *)fileName error:(nonnull NSString *)error {
+- (void)onItemUploadDone:(nonnull OASettingsItem *)item fileName:(nonnull NSString *)fileName error:(nonnull NSString *)error
+{
     NSString *type = [OASettingsItemType typeName:item.type];
     if (error.length > 0)
-    {
         [_errors setObjectSync:error forKey:[NSString stringWithFormat:@"%@/%@", type, fileName]];
-    }
     [_itemsProgress addObjectSync:item];
     if (_listener)
     {
@@ -319,7 +308,8 @@
     }
 }
 
-- (void)onItemUploadProgress:(nonnull OASettingsItem *)item fileName:(nonnull NSString *)fileName progress:(NSInteger)progress deltaWork:(NSInteger)deltaWork {
+- (void)onItemUploadProgress:(nonnull OASettingsItem *)item fileName:(nonnull NSString *)fileName progress:(NSInteger)progress deltaWork:(NSInteger)deltaWork
+{
     NSInteger p = [_dataProgress addAndGet:(int) deltaWork];
     if (_listener)
     {
@@ -328,7 +318,8 @@
     }
 }
 
-- (void)onItemUploadStarted:(nonnull OASettingsItem *)item fileName:(nonnull NSString *)fileName work:(NSInteger)work {
+- (void)onItemUploadStarted:(nonnull OASettingsItem *)item fileName:(nonnull NSString *)fileName work:(NSInteger)work
+{
     if (_listener)
         [_listener itemExportStarted:[OASettingsItemType typeName:item.type] fileName:fileName work:work];
 }
@@ -336,7 +327,8 @@
 
 // MARK: OAOnDeleteFilesListener
 
-- (void)onFileDeleteProgress:(OARemoteFile *)file progress:(NSInteger)progress {
+- (void)onFileDeleteProgress:(OARemoteFile *)file progress:(NSInteger)progress
+{
     int p = [_dataProgress addAndGet:(APPROXIMATE_FILE_SIZE_BYTES / 1024)];
     [_itemsProgress addObjectSync:file];
     if (_listener != nil)
@@ -346,13 +338,16 @@
     }
 }
 
-- (void)onFilesDeleteDone:(NSDictionary<OARemoteFile *,NSString *> *)errors {
+- (void)onFilesDeleteDone:(NSDictionary<OARemoteFile *,NSString *> *)errors
+{
 }
 
-- (void)onFilesDeleteError:(NSInteger)status message:(NSString *)message {
+- (void)onFilesDeleteError:(NSInteger)status message:(NSString *)message
+{
 }
 
-- (void)onFilesDeleteStarted:(NSArray<OARemoteFile *> *)files {
+- (void)onFilesDeleteStarted:(NSArray<OARemoteFile *> *)files
+{
 }
 
 @end

@@ -858,20 +858,20 @@
 - (OARenderedObject *)createRenderedObjectForPolygon:(std::shared_ptr<const OsmAnd::MapObject>)mapObject order:(int)order
 {
     OARenderedObject *renderedObject = [OARenderedObject new];
-    QHash<QString, QString> tags = mapObject->getResolvedAttributes();
-    QList<QString> tagsKeys = tags.keys();
+    QList<QPair<QString, QString>> tags = mapObject->getResolvedAttributesListPairs();
     
     MutableOrderedDictionary<NSString *, NSString *> *parsedTags = [MutableOrderedDictionary new];
-    for (int i = 0; i < tagsKeys.size(); i++)
+    for (int i = 0; i < tags.size(); i++)
     {
-        NSString *key = tagsKeys[i].toNSString();
-        NSString *value = tags[tagsKeys[i]].toNSString();
-        if ([key isEqualToString:@"osmand_change"] && [value isEqualToString:@"delete"])
-        {
-            return nil;
-        }
-        if (key && value)
-            parsedTags[key] = value;
+      QPair<QString, QString> tagPair = tags[i];
+      NSString *key = tagPair.first.toNSString();
+      NSString *value = tagPair.second.toNSString();
+      if ([key isEqualToString:@"osmand_change"] && [value isEqualToString:@"delete"])
+      {
+        return nil;
+      }
+      if (key && value)
+        parsedTags[key] = value;
     }
     renderedObject.tags = parsedTags;
     

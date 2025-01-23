@@ -1,5 +1,5 @@
 //
-//  OAImageHeaderCell.swift
+//  ImageHeaderCell.swift
 //  OsmAnd Maps
 //
 //  Created by Dmitry Svetlichny on 08.01.2025.
@@ -8,10 +8,6 @@
 
 import UIKit
 
-final class OAImageHeaderCell: UITableViewCell {
+final class ImageHeaderCell: UITableViewCell {
     @IBOutlet weak var backgroundImageView: UIImageView!
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
 }

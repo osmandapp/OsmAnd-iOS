@@ -20,7 +20,7 @@ final class DetailedTrackGuidanceViewController: OABaseSettingsViewController {
     private var distanceThreshold: Int = 50
     
     override func registerCells() {
-        addCell(OAImageHeaderCell.reuseIdentifier)
+        addCell(ImageHeaderCell.reuseIdentifier)
         addCell(OASimpleTableViewCell.reuseIdentifier)
         addCell(OATitleSliderRoundCell.reuseIdentifier)
     }
@@ -59,7 +59,7 @@ final class DetailedTrackGuidanceViewController: OABaseSettingsViewController {
         let detailedTrackImgSection = tableData.createNewSection()
         detailedTrackImgSection.footerText = localizedString("detailed_track_guidance_description")
         let imgRow = detailedTrackImgSection.createNewRow()
-        imgRow.cellType = OAImageHeaderCell.reuseIdentifier
+        imgRow.cellType = ImageHeaderCell.reuseIdentifier
         imgRow.key = Self.imgRowKey
         imgRow.iconName = "img_detailed_track_guidance"
         let detailedTrackSettingsSection = tableData.createNewSection()
@@ -87,8 +87,8 @@ final class DetailedTrackGuidanceViewController: OABaseSettingsViewController {
     override func getRow(_ indexPath: IndexPath?) -> UITableViewCell? {
         guard let indexPath else { return nil }
         let item = tableData.item(for: indexPath)
-        if item.cellType == OAImageHeaderCell.reuseIdentifier {
-            let cell = tableView.dequeueReusableCell(withIdentifier: OAImageHeaderCell.reuseIdentifier) as! OAImageHeaderCell
+        if item.cellType == ImageHeaderCell.reuseIdentifier {
+            let cell = tableView.dequeueReusableCell(withIdentifier: ImageHeaderCell.reuseIdentifier) as! ImageHeaderCell
             cell.selectionStyle = .none
             cell.backgroundImageView.image = UIImage(named: item.iconName ?? "")
             cell.backgroundImageView.layer.cornerRadius = 4

@@ -943,9 +943,9 @@
 "product_desc_asia_short" = "Aasia piirkondade kaardid";
 "download_wikipedia_maps" = "Vikipeedia";
 "product_desc_wiki" = "Asukohapõhised Vikipeedia artiklid kaardil";
-"purchases_feature_desc_wikipedia" = "Sirvi Vikipeediat võrguühenduseta. Artiklid on jaotatud riikide ja piirkondade kaupa ning saadaval kõigis keeltes.";
+"purchases_feature_desc_wikipedia" = "Tagab asukohaga seotud Vikipeedia andmed vallasrežiimis ning võimaldab sul mugavalt uurida lisateavet antud objekti ja tema lähiümbruse kohta. Ära unusta sind huvitava piirkonna Vikipeedia andmeid alla laadida.";
 "srtm_plugin_name" = "Topograafia";
-"product_desc_srtm" = "Kuva kõrgusjooned";
+"product_desc_srtm" = "Maapinna kuju visualiseerimine";
 "srtm_plugin_description" = "See laiendus pakub nii kõrgusjoonte ülekatte kui ka (reljeefse) künkavarjutuse kihi, mida kuvatakse OsmAnd standardkaartidel. Seda funktsionaalsust hindavad sportlased, matkajad, rändajad ja kõik teised, kes on huvitatud kontuurjoontest, maastiku reljeefstruktuurist ning nõlvade toonimisest. \n \nAndmed pärinevad SRTM (süstiku radari topograafiamissioon) ja ASTER (täiustatud kosmose termilise kiirguse ja peegelduse radiomeeter) andmekogudest. \n \nLisateave: %@.";
 "wikivoyage_travel_guide" = "Reisijuhid";
 "start_editing_card_image_text" = "Tasuta ülemaailmne kõigi poolt täiendatav reisijuht.";
@@ -976,9 +976,9 @@
 "from_location" = "eemal";
 "show_alt_in_drive" = "Kuva kõrgus sõidurežiimis";
 "shared_string_get" = "Hangi";
-"srtm_plugin_disabled" = "Kõrgusjooned keelatud";
-"prch_wiki_info" = "Vikipeedia lisa võimaldab tasuta limiidi piires vikipeedia teavet nende kaartide kohta, millele sul on õigus, ostetud või alla laaditud kaartide piires.";
-"prch_srtm_info" = "Kõrgusjoonte lisa tekitab kõrgusjooned kaartidel, mille jaoks sul on õigus, oled ostnud või alla laadinud tasuta allalaadimiste piires.";
+"srtm_plugin_disabled" = "Topograafia on keelatud";
+"prch_wiki_info" = "Vikipeedia lisamoodul võimaldab tasuta limiidi piires vikipeedia teavet nende kaartide kohta, millele sul on õigus, ostetud või alla laaditud kaartide piires.";
+"prch_srtm_info" = "Topograafia lisamoodul tagab kõrgusjoonte kuvamise kaartidel, mille jaoks sul on õigus, oled ostnud või alla laadinud tasuta allalaadimiste piires.";
 "shared_string_open" = "Ava";
 "time_closed" = "Suletud";
 "time_will_open" = "Avatakse";
@@ -1015,8 +1015,8 @@
 "plugin_popup_wiki_desc" = "Vikipeedia lisa kasutamise alustamiseks, palun laadi esmalt alla Vikipeedia andmed piirkonna kohta";
 "plugin_popup_wiki_ask" = "Vikipeedia andmete allalaadimiseks on vajalik lülitada sisse lisa: <b>Vikipeedia</b>";
 "plugin_popup_srtm_title" = "Laadi alla kõrgusjooned";
-"plugin_popup_srtm_desc" = "Kõrgusjoonte funktsiooni kasutamise alustamiseks laadi kõigepealt alla piirkonna kõrgusjooned";
-"plugin_popup_srtm_ask" = "Kõrgusjoonte alla laadimiseks on vaja sisse lülitada lisa: <b>Kõrgusjooned</b>";
+"plugin_popup_srtm_desc" = "Topograafia funktsioonaalsuse kasutamise alustamiseks laadi kõigepealt alla piirkonna kõrgusjooned";
+"plugin_popup_srtm_ask" = "Kõrgusjoonte alla laadimiseks on vaja sisse lülitada lisamoodul: <b>Topograafia</b>";
 "plugin_popup_nautical_title" = "Laadi alla merekaardid";
 "plugin_popup_nautical_desc" = "Palun laadi kõigepealt alla merekaardid.\nSeejärel mine <b>Kaardi seaded</b> > <b>Kaardi liik</b> ja lülita sisse <b>Merenduslik</b> stiil";
 "plugin_popup_trip_planning_ask" = "Reisi planeerimiseks tuleb sisse lülitada lisa: <b>Reisi planeerimine</b>";
@@ -1050,7 +1050,7 @@
 "hist_select_remove" = "Palun vali eemaldatavad ajaloo kirjed";
 "hist_remove_q" = "Kas soovid eemaldada ajaloo kirjed?";
 "gpx_edit_mode" = "Muutmisrežiim";
-"go_to_map" = "Kuva kaart";
+"go_to_map" = "Näita kaarti";
 "device_memory" = "Seadme mälu";
 "free" = "Vaba %@";
 "first_usage_greeting" = "Hangi juhiseid ja avasta uusi kohti ilma internetiühenduseta";
@@ -1494,7 +1494,7 @@
 "global_settings_descr" = "Mõjutavad kogu rakendust.";
 "osmand_settings" = "OsmAndi seadistused";
 "device_settings" = "Seadme sätted";
-"units_and_formats" = "Ühikud ja formaadid";
+"units_and_formats" = "Ühikud ja vormingud";
 "product_desc_antarctica" = "Piiramatud Antarktise kaartide allalaadimised";
 "allow_3d" = "Luba pseudo 3D-vaade (2.5D)";
 "only_manually" = "Ainult käsitsi";
@@ -2167,7 +2167,7 @@
 "parked_at" = "pargitud";
 "plugin_popup_weather_title" = "Lülita ilm sisse";
 "plugin_popup_weather_ask" = "Palun luba ilma pistikprogramm";
-"product_desc_weather" = "24h tunnipõhine prognoos ja 7 päeva prognoos iga 3 tunni järel";
+"product_desc_weather" = "Järgmise 7 päeva tunnipõhine ilmaennustus kaardil";
 "measurement_units" = "Mõõtühikud";
 "weather_pressure_hectopascals" = "hektopaskalit";
 "weather_pressure_millimeters_of_mercury" = "mm/Hg";

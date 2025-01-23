@@ -2763,3 +2763,4 @@
 "screen_is_locked_by_action_button" = "Puuteekraan on lukus. Lukustuse eemaldamiseks puuduta.";
 "lock_screen" = "Lukustusvaade";
 "lock_screen_description" = "Juhuslike puudutuste vältimiseks lülitab puuteekraani funktsionaalsuses sisse/välja";
+"battery_saving_mode" = "Akusäästmise režiim";

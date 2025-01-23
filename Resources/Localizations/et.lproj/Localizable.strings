@@ -2131,14 +2131,14 @@
 "lang_vo" = "Volapüki";
 "lang_sr" = "Serbia (kirillitsa)";
 "lang_sw" = "Suahiili";
-"lang_an" = "Aragoni";
+"lang_an" = "aragoni";
 "lang_sr_latn" = "Serbia (ladina)";
 "lang_sv" = "Rootsi";
 "lang_ta" = "Tamili";
 "lang_uz" = "Usbeki";
 "lang_vi" = "Vietnami";
 "lang_bar" = "Baieri";
-"lang_ba" = "Baškiiri";
+"lang_ba" = "Bbaškiiri";
 "lang_be_by" = "Valgevene (ladina)";
 "lang_als" = "Albaania (Toski)";
 "lang_be" = "Valgevene";
@@ -2764,3 +2764,4 @@
 "lock_screen" = "Lukustusvaade";
 "lock_screen_description" = "Juhuslike puudutuste vältimiseks lülitab puuteekraani funktsionaalsuses sisse/välja";
 "battery_saving_mode" = "Akusäästmise režiim";
+"rendering_value_defaultMedium_name" = "Vaikimisi (keskmine)";

@@ -2759,3 +2759,4 @@
 "rendering_attr_showClimbingRoutes_name" = "Ronimismarsruudid";
 "rendering_attr_showClimbingRoutes_description" = "Näita ronimismarsruute";
 "obd_plugin_name" = "Sõiduki andmed";
+"screen_is_unlocked" = "Puuteekraan pole lukus.";

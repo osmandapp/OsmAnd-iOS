@@ -653,7 +653,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             if ([self shouldShowAttachRoadsOption])
             {
                 [section addObject:@{
-                    @"cell" : [OAAttachRoadsBannerCell getCellIdentifier],
+                    @"cell" : [AttachRoadsBannerCell getCellIdentifier],
                     @"title" : OALocalizedString(@"attach_roads_descr"),
                     @"buttonTitle" : OALocalizedString(@"attach_to_the_roads"),
                     @"key" : @"attach_roads"
@@ -1554,13 +1554,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     {
         return _routeStatsCell;
     }
-    else if ([item[@"cell"] isEqualToString:[OAAttachRoadsBannerCell getCellIdentifier]])
+    else if ([item[@"cell"] isEqualToString:[AttachRoadsBannerCell getCellIdentifier]])
     {
-        OAAttachRoadsBannerCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAAttachRoadsBannerCell getCellIdentifier]];
+        AttachRoadsBannerCell* cell = [tableView dequeueReusableCellWithIdentifier:[AttachRoadsBannerCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAAttachRoadsBannerCell getCellIdentifier] owner:self options:nil];
-            cell = (OAAttachRoadsBannerCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[AttachRoadsBannerCell getCellIdentifier] owner:self options:nil];
+            cell = (AttachRoadsBannerCell *)[nib objectAtIndex:0];
         }
         if (cell)
         {

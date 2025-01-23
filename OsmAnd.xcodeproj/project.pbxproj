@@ -1353,8 +1353,8 @@
 		C573544F2AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C573544D2AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.mm */; };
 		C57354502AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C573544E2AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.xib */; };
 		C5735AF62AFE9CB500638715 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C5735AF42AFE9CB500638715 /* InfoPlist.strings */; };
-		C57E26F32D3D663F00A8A3D5 /* OAAttachRoadsBannerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57E26F12D3D663F00A8A3D5 /* OAAttachRoadsBannerCell.swift */; };
-		C57E26F42D3D663F00A8A3D5 /* OAAttachRoadsBannerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C57E26F22D3D663F00A8A3D5 /* OAAttachRoadsBannerCell.xib */; };
+		C57E26F32D3D663F00A8A3D5 /* AttachRoadsBannerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57E26F12D3D663F00A8A3D5 /* AttachRoadsBannerCell.swift */; };
+		C57E26F42D3D663F00A8A3D5 /* AttachRoadsBannerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C57E26F22D3D663F00A8A3D5 /* AttachRoadsBannerCell.xib */; };
 		C5879A49299FB96300F53249 /* uk_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = C5879A48299FB96300F53249 /* uk_tts.js */; };
 		C5879A4B299FBF7A00F53249 /* bg_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = C5879A4A299FBF7900F53249 /* bg_tts.js */; };
 		C5879A4D299FC24700F53249 /* id_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = C5879A4C299FC24700F53249 /* id_tts.js */; };
@@ -4966,8 +4966,8 @@
 		C5735B452AFE9D8700638715 /* uz-Cyrl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uz-Cyrl"; path = "Resources/Localizations/uz-Cyrl.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		C5735B462AFE9D8800638715 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = Resources/Localizations/vi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C5735B472AFE9D8900638715 /* cy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cy; path = Resources/Localizations/cy.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		C57E26F12D3D663F00A8A3D5 /* OAAttachRoadsBannerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAAttachRoadsBannerCell.swift; sourceTree = "<group>"; };
-		C57E26F22D3D663F00A8A3D5 /* OAAttachRoadsBannerCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAAttachRoadsBannerCell.xib; sourceTree = "<group>"; };
+		C57E26F12D3D663F00A8A3D5 /* AttachRoadsBannerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachRoadsBannerCell.swift; sourceTree = "<group>"; };
+		C57E26F22D3D663F00A8A3D5 /* AttachRoadsBannerCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AttachRoadsBannerCell.xib; sourceTree = "<group>"; };
 		C5879A48299FB96300F53249 /* uk_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = uk_tts.js; path = ../resources/voice/uk/uk_tts.js; sourceTree = "<group>"; };
 		C5879A4A299FBF7900F53249 /* bg_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = bg_tts.js; path = ../resources/voice/bg/bg_tts.js; sourceTree = "<group>"; };
 		C5879A4C299FC24700F53249 /* id_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = id_tts.js; path = ../resources/voice/id/id_tts.js; sourceTree = "<group>"; };
@@ -11414,8 +11414,8 @@
 				DA5A7C9A26C563A200F274C7 /* OAEmptySearchCell.m */,
 				DA5A7CB226C563A200F274C7 /* OAFilledButtonCell.h */,
 				DA5A7BAD26C563A100F274C7 /* OAFilledButtonCell.mm */,
-				C57E26F12D3D663F00A8A3D5 /* OAAttachRoadsBannerCell.swift */,
-				C57E26F22D3D663F00A8A3D5 /* OAAttachRoadsBannerCell.xib */,
+				C57E26F12D3D663F00A8A3D5 /* AttachRoadsBannerCell.swift */,
+				C57E26F22D3D663F00A8A3D5 /* AttachRoadsBannerCell.xib */,
 				DA5A7C5B26C563A200F274C7 /* OAFolderCardCollectionViewCell.h */,
 				DA5A7CEF26C563A200F274C7 /* OAFolderCardCollectionViewCell.m */,
 				DA5A7D3526C563A300F274C7 /* OAFolderCardsCell.h */,
@@ -14270,7 +14270,7 @@
 				46453B45283524E5001F9A3A /* ic_custom_wikipedia_download_colored_big@3x.png in Resources */,
 				DA1340E2243DC5A80039D214 /* map_action_motorcycle_dark@2x.png in Resources */,
 				844E07DA1E42319700EFC525 /* ic_action_intersection@3x.png in Resources */,
-				C57E26F42D3D663F00A8A3D5 /* OAAttachRoadsBannerCell.xib in Resources */,
+				C57E26F42D3D663F00A8A3D5 /* AttachRoadsBannerCell.xib in Resources */,
 				DA2EC7E329FFB76A00ECEB37 /* ic_custom_screen_side_top@2x.png in Resources */,
 				DA5A82E026C563A800F274C7 /* OAIconTitleIconRoundCell.xib in Resources */,
 				DA0D1645281BEEF500CEEF58 /* map_turn_sharp_right_dark@3x.png in Resources */,
@@ -17310,7 +17310,7 @@
 				DA9901B32918F14700A3C732 /* OASyncBackupTask.mm in Sources */,
 				B0D6159DC886AF2419676731 /* OATitleSwitchRoundCell.mm in Sources */,
 				B0D610BD70EF0179933FD55C /* OAAddWaypointViewController.mm in Sources */,
-				C57E26F32D3D663F00A8A3D5 /* OAAttachRoadsBannerCell.swift in Sources */,
+				C57E26F32D3D663F00A8A3D5 /* AttachRoadsBannerCell.swift in Sources */,
 				465749102B68129B0006046B /* BackupUiUtils.swift in Sources */,
 				B0D61A10E033AC2150A5354F /* OADeleteWaypointsViewController.mm in Sources */,
 				B0D610E5238BE2C6D15D23EC /* OAPointWithRegionTableViewCell.mm in Sources */,

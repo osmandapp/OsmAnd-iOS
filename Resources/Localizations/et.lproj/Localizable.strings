@@ -1902,7 +1902,7 @@
 "access_default_color" = "Vaikevärv";
 "custom_osmand_plugin" = "Kohandatud OsmAnd pistik";
 "coordinates" = "Koordinaadid";
-"shared_string_enable" = "Luba";
+"shared_string_enable" = "Võta kasutusele";
 "shared_string_circle" = "Ring";
 "extra_maps_menu_group" = "Täiendavad kaardid";
 "favorite_places_category" = "Kohad";
@@ -2897,3 +2897,4 @@
 "remove_folder_with_files_descr" = "Kas sa oled kindel, et soovid kustutada kausta „%@“ ja kõik %d rada?";
 "getting_list_required_maps" = "Laadime vajalike kaartide loendit...";
 "shared_string_analysis" = "Analüüs";
+"ant_plus_nothing_found_description" = "Palun kontrolli, et:\n– Bluetooth on sisse lülitatud\n– andur on töös\n– see nutiseade on anduri lähedal";

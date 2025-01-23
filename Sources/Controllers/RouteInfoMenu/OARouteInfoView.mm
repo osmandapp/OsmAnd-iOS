@@ -750,10 +750,10 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     return _routingHelper.getCurrentGPXRoute != nil;
 }
 
-- (BOOL)shouldShowAttachRoadsOption
+- (BOOL) shouldShowAttachRoadsOption
 {
     OASGpxFile *gpx = _routingHelper.getCurrentGPXRoute.file;
-    return gpx && !gpx.hasRtePt && !gpx.hasRoute && [self isGpxTrackFollowingMode] && [_settings.detailedTrackGuidance get:[_routingHelper getAppMode]] == EOATrackApproximationManual;
+    return gpx && ![gpx isAttachedToRoads] && [self isGpxTrackFollowingMode] && [_settings.detailedTrackGuidance get:[_routingHelper getAppMode]] == EOATrackApproximationManual;
 }
 
 - (NSAttributedString *) getFirstLineDescrAttributed:(SHARED_PTR<TransportRouteResult>)res
@@ -1561,13 +1561,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[AttachRoadsBannerCell getCellIdentifier] owner:self options:nil];
             cell = (AttachRoadsBannerCell *)[nib objectAtIndex:0];
-        }
-        if (cell)
-        {
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.contentContainer.layer.cornerRadius = 6;
             cell.contentContainer.layer.borderWidth = 1;
             cell.contentContainer.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
+        }
+        if (cell)
+        {
             cell.label.text = item[@"title"];
             [cell.button setTitle:item[@"buttonTitle"] forState:UIControlStateNormal];
             [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];

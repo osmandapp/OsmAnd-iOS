@@ -7,9 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "OAGpxApproximator.h"
-#import "OALocationsHolder.h"
-#import "OAApplicationMode.h"
+
+@class OAApplicationMode, OAGpxApproximator, OAGpxRouteApproximation, OALocationsHolder, OASGpxFile, OASWptPt;
 
 @protocol OAGpxApproximationHelperDelegate <NSObject>
 

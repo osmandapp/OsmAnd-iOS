@@ -71,7 +71,7 @@ struct RouteSegmentResult;
 @property (nonatomic) BOOL useIntermediatePointsRTE;
 @property (nonatomic) BOOL connectPointsStraightly;
 @property (nonatomic) BOOL reverse;
-@property (nonatomic) OASGpxFile *file;
+@property (nonatomic) OASGpxFile *gpxFile;
 @property (nonatomic) OAGpxApproximator *gpxApproximator;
 @property (nonatomic) NSArray<id<OALocationPoint>> *wpt;
 @property (nonatomic, readonly) NSArray<CLLocation *> *segmentEndPoints;

@@ -15,6 +15,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAGpxApproximationHelper.h"
+#import "OALocationsHolder.h"
 
 #define kThresholdSection @"thresholdSection"
 #define kProfilesSection @"profilesSection"

@@ -78,7 +78,7 @@ typedef NS_ENUM(NSInteger, EOAScreenOrientation)
 typedef NS_ENUM(NSInteger, EOATrackApproximationType)
 {
     EOATrackApproximationManual = 0,
-    EOATrackApproximationAutomatic= 1
+    EOATrackApproximationAutomatic = 1
 };
 
 typedef NS_ENUM(NSInteger, EOAPositionPlacement)

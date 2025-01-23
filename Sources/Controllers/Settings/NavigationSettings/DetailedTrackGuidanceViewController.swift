@@ -8,7 +8,6 @@
 
 import UIKit
 
-@objc(DetailedTrackGuidanceViewController)
 @objcMembers
 final class DetailedTrackGuidanceViewController: OABaseSettingsViewController {
     private static let imgRowKey = "imgRowKey"
@@ -18,6 +17,7 @@ final class DetailedTrackGuidanceViewController: OABaseSettingsViewController {
     
     private var changedTrackGuidance: EOATrackApproximationType?
     private var distanceThreshold: Int = 50
+    private var isSettingsChanged = false
     
     override func registerCells() {
         addCell(ImageHeaderCell.reuseIdentifier)
@@ -56,26 +56,33 @@ final class DetailedTrackGuidanceViewController: OABaseSettingsViewController {
     
     override func generateData() {
         tableData.clearAllData()
+        let isAutomatic = changedTrackGuidance == .automatic
+
         let detailedTrackImgSection = tableData.createNewSection()
         detailedTrackImgSection.footerText = localizedString("detailed_track_guidance_description")
+
         let imgRow = detailedTrackImgSection.createNewRow()
         imgRow.cellType = ImageHeaderCell.reuseIdentifier
         imgRow.key = Self.imgRowKey
         imgRow.iconName = "img_detailed_track_guidance"
+
         let detailedTrackSettingsSection = tableData.createNewSection()
+
         let askRow = detailedTrackSettingsSection.createNewRow()
         askRow.cellType = OASimpleTableViewCell.reuseIdentifier
         askRow.key = Self.askRowKey
         askRow.title = localizedString("ask_every_time")
         askRow.iconName = "ic_checkmark_default"
         askRow.setObj(changedTrackGuidance == .manual, forKey: "selected")
+
         let alwaysRow = detailedTrackSettingsSection.createNewRow()
         alwaysRow.cellType = OASimpleTableViewCell.reuseIdentifier
         alwaysRow.key = Self.alwaysRowKey
         alwaysRow.title = localizedString("shared_string_always")
         alwaysRow.iconName = "ic_checkmark_default"
-        alwaysRow.setObj(changedTrackGuidance == .automatic, forKey: "selected")
-        if changedTrackGuidance == .automatic {
+        alwaysRow.setObj(isAutomatic, forKey: "selected")
+
+        if isAutomatic {
             let thresholdSection = tableData.createNewSection()
             let thresholdSliderRow = thresholdSection.createNewRow()
             thresholdSliderRow.cellType = OATitleSliderRoundCell.reuseIdentifier
@@ -120,18 +127,25 @@ final class DetailedTrackGuidanceViewController: OABaseSettingsViewController {
     override func onRowSelected(_ indexPath: IndexPath) {
         guard let tableData else { return }
         let item = tableData.item(for: indexPath)
-        changedTrackGuidance = item.key == Self.askRowKey ? .manual : .automatic
-        generateData()
-        tableView.reloadData()
+        let newTrackGuidance: EOATrackApproximationType = item.key == Self.askRowKey ? .manual : .automatic
+        if newTrackGuidance != changedTrackGuidance {
+            changedTrackGuidance = newTrackGuidance
+            isSettingsChanged = true
+            generateData()
+            tableView.reloadData()
+        }
     }
     
     override func onRightNavbarButtonPressed() {
-        if let trackGuidance = changedTrackGuidance {
-            OAAppSettings.sharedManager().detailedTrackGuidance.set(Int32(trackGuidance.rawValue), mode: appMode)
+        if isSettingsChanged {
+            if let changedTrackGuidance {
+                OAAppSettings.sharedManager().detailedTrackGuidance.set(Int32(changedTrackGuidance.rawValue), mode: appMode)
+            }
+
+            OAAppSettings.sharedManager().gpxApproximationDistance.set(Int32(distanceThreshold), mode: self.appMode)
+            delegate.onSettingsChanged()
         }
         
-        OAAppSettings.sharedManager().gpxApproximationDistance.set(Int32(distanceThreshold), mode: self.appMode)
-        delegate.onSettingsChanged()
         super.onLeftNavbarButtonPressed()
     }
     
@@ -139,8 +153,12 @@ final class DetailedTrackGuidanceViewController: OABaseSettingsViewController {
         let indexPath = IndexPath(row: sender.tag & 0x3FF, section: sender.tag >> 10)
         if let cell = tableView.cellForRow(at: indexPath) as? OATitleSliderRoundCell {
             cell.sliderView = sender
-            distanceThreshold = Int(cell.sliderView.value)
-            cell.valueLabel.text = OAOsmAndFormatter.getFormattedDistance(Float(distanceThreshold))
+            let newDistanceThreshold = Int(sender.value)
+            if newDistanceThreshold != distanceThreshold {
+                distanceThreshold = newDistanceThreshold
+                isSettingsChanged = true
+                cell.valueLabel.text = OAOsmAndFormatter.getFormattedDistance(Float(distanceThreshold))
+            }
         }
     }
 }

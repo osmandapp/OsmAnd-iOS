@@ -10,6 +10,9 @@
 #import "OAMeasurementEditingContext.h"
 #import "OAGpxRouteApproximation.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OAGpxApproximator.h"
+#import "OALocationsHolder.h"
+#import "OAApplicationMode.h"
 
 @interface OAGpxApproximationHelper () <OAGpxApproximationProgressDelegate>
 

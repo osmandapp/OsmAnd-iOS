@@ -80,5 +80,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)lineVisualizationPositionTypeNameForType:(EOAGPX3DLineVisualizationPositionType)type;
 + (EOAGPX3DLineVisualizationPositionType)lineVisualizationPositionTypeForName:(NSString *_Nullable)name;
 
+- (nullable OASGpxDataItem *)addGPXFileToDBIfNeeded:(NSString *)filePath
+                                           callback:(void(^_Nullable)(OASGpxDataItem * _Nullable dataItem))callback;
+
 @end
 NS_ASSUME_NONNULL_END

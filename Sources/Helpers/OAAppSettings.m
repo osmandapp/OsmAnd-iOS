@@ -263,7 +263,6 @@ static NSString * const mapScreenOrientationKey = @"mapScreenOrientation";
 
 static NSString * const activeMarkerKey = @"activeMarkerKey";
 static NSString * const mapDistanceIndicationVisabilityKey = @"mapDistanceIndicationVisabilityKey";
-static NSString * const mapDistanceIndicationKey = @"mapDistanceIndicationKey";
 static NSString * const mapArrowsOnMapKey = @"mapArrowsOnMapKey";
 static NSString * const mapDirectionLinesKey = @"mapDirectionLinesKey";
 
@@ -1426,7 +1425,7 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
     }
     if (self.lastModifiedTimeStored)
        [self setLastModifiedTime:NSDate.date.timeIntervalSince1970];
-
+    
     [[NSUserDefaults standardUserDefaults] setObject:value forKey:[self getKey:mode]];
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetProfileSetting object:self];
 }

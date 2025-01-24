@@ -369,10 +369,17 @@ static UIViewController *parentController;
     NSString *gpxPath = _newGpxName
         ? [_importGpxPath stringByAppendingPathComponent:_newGpxName]
         : [_importGpxPath stringByAppendingPathComponent:[self getCorrectedFilename:[_importUrl.path lastPathComponent]]];
-    [fileManager copyItemAtPath:_importUrl.path
-                         toPath:gpxPath
-                          error:nil];
+    
+    NSError *copyError = nil;
+    BOOL copySuccess = [fileManager copyItemAtPath:_importUrl.path toPath:gpxPath error:&copyError];
+    if (!copySuccess)
+    {
+        NSLog(@"Failed to copy file: %@", copyError.localizedDescription);
+        return nil;
+    }
+    
     OASGpxDataItem *item = [[OAGPXDatabase sharedDb] addGPXFileToDBIfNeeded:gpxPath];
+    
     if (item.color != 0)
         [[OAGPXAppearanceCollection sharedInstance] getColorItemWithValue:item.color];
 

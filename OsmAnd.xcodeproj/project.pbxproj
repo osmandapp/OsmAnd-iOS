@@ -3119,6 +3119,7 @@
 		FA7DCF572AF11A7D0045D136 /* BluetoothDisableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA7DCF562AF11A7D0045D136 /* BluetoothDisableView.xib */; };
 		FA83EAA62BF6538B00DBF321 /* SpeedometerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA83EAA42BF6538B00DBF321 /* SpeedometerView.xib */; };
 		FA83EAA72BF6538B00DBF321 /* SpeedometerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA83EAA52BF6538B00DBF321 /* SpeedometerView.swift */; };
+		FA8516F02D42946D00B321C6 /* GpxDataItemHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8516EF2D42946D00B321C6 /* GpxDataItemHandler.swift */; };
 		FA86F4152AE7C56E00DC3B2B /* UserDefaults+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA86F4142AE7C56E00DC3B2B /* UserDefaults+Extension.swift */; };
 		FA86F4182AE7C5EA00DC3B2B /* UserDefaultsKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA86F4172AE7C5EA00DC3B2B /* UserDefaultsKey.swift */; };
 		FA86F41A2AE7CB8D00DC3B2B /* BLEBikeSCDDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA86F4192AE7CB8D00DC3B2B /* BLEBikeSCDDevice.swift */; };
@@ -7635,6 +7636,7 @@
 		FA7DCF562AF11A7D0045D136 /* BluetoothDisableView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BluetoothDisableView.xib; sourceTree = "<group>"; };
 		FA83EAA42BF6538B00DBF321 /* SpeedometerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SpeedometerView.xib; sourceTree = "<group>"; };
 		FA83EAA52BF6538B00DBF321 /* SpeedometerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeedometerView.swift; sourceTree = "<group>"; };
+		FA8516EF2D42946D00B321C6 /* GpxDataItemHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GpxDataItemHandler.swift; sourceTree = "<group>"; };
 		FA86F4142AE7C56E00DC3B2B /* UserDefaults+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extension.swift"; sourceTree = "<group>"; };
 		FA86F4172AE7C5EA00DC3B2B /* UserDefaultsKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsKey.swift; sourceTree = "<group>"; };
 		FA86F4192AE7CB8D00DC3B2B /* BLEBikeSCDDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEBikeSCDDevice.swift; sourceTree = "<group>"; };
@@ -11062,6 +11064,7 @@
 		DA5A7AB226C563A100F274C7 /* GPX */ = {
 			isa = PBXGroup;
 			children = (
+				FA8516EF2D42946D00B321C6 /* GpxDataItemHandler.swift */,
 				4695B25E2CF0A5CB003FB38A /* TrackChartHelper.swift */,
 				DA5A7AC026C563A100F274C7 /* OAGPXDatabase.h */,
 				DA5A7ABB26C563A100F274C7 /* OAGPXDatabase.mm */,
@@ -16503,6 +16506,7 @@
 				DA5A82FE26C563A800F274C7 /* OATextInputFloatingCell.mm in Sources */,
 				DA5A825F26C563A700F274C7 /* OAActivityViewWithTitleCell.m in Sources */,
 				DA5A840826C563A800F274C7 /* OAMyLocationViewController.mm in Sources */,
+				FA8516F02D42946D00B321C6 /* GpxDataItemHandler.swift in Sources */,
 				FA6439E72B04D70A00331006 /* CyclingCharacteristic.swift in Sources */,
 				DA5A84E626C563A900F274C7 /* OAWaypointsRadiusScreen.mm in Sources */,
 				DA5A813326C563A700F274C7 /* OATerrainMapLayerProvider.mm in Sources */,

@@ -105,6 +105,7 @@
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onBackupFinished:) name:kBackupSyncFinishedNotification object:nil];
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onBackupStarted) name:kBackupSyncStartedNotification object:nil];
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onBackupProgressUpdate:) name:kBackupProgressUpdateNotification object:nil];
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onBackupProgressItemFinished:) name:kBackupItemFinishedNotification object:nil];
 }
 
 - (void)viewDidLoad
@@ -132,11 +133,44 @@
         [_downloadingCellCloudHelper cleanCellCache];
 }
 
+- (void)markItemAsInstaled:(NSString *)downloadFinishedResourceId
+{
+    if ([_data sectionCount] <= 1)
+        return;
+
+    OATableSectionData *section = [_data sectionDataForIndex:1];
+
+    for (NSInteger i = 0; i < section.rowCount; i++)
+    {
+        OATableRowData *row = [section getRow:i];
+        
+        if (![self shouldMarkRowForOperation:row])
+            continue;
+        
+        OASettingsItem *settingsItem = [row objForKey:@"settingsItem"];
+        NSString *type = [OASettingsItemType typeName:settingsItem.type];
+        NSString *fileName = [row stringForKey:@"fileName"];
+        NSString *resourceId = [_downloadingCellCloudHelper getResourceIdWithTypeName:type filename:fileName];
+        if ([downloadFinishedResourceId isEqualToString:resourceId])
+        {
+            [row setIconTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
+        }
+    }
+}
+
+- (BOOL)shouldMarkRowForOperation:(OATableRowData *)row {
+    EOABackupSyncOperationType operationType = (EOABackupSyncOperationType)[row integerForKey:@"operation"];
+    return (operationType == EOABackupSyncOperationDownload
+            || operationType == EOABackupSyncOperationUpload
+            || operationType == EOABackupSyncOperationSync);
+}
+
 - (void) setupDownloadingCellHelper
 {
-    __weak OAStatusBackupTableViewController *weakSelf = self;
+    __weak __typeof(self) weakSelf = self;
     _downloadingCellCloudHelper = [[DownloadingCellCloudHelper alloc] init];
     [_downloadingCellCloudHelper setHostTableView:weakSelf.tableView];
+
     _downloadingCellCloudHelper.rightIconStyle = DownloadingCellRightIconTypeShowShevronBeforeDownloading;
     if (_tableType == EOARecentChangesConflicts)
     {
@@ -656,16 +690,6 @@
             BOOL hasConflict = (EOABackupSyncOperationType) [item integerForKey:@"operation"] == EOABackupSyncOperationNone;
             cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingToLeftOfContentWithIcon, 0., 0.);
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            cell.onDownloadFinishedAction = ^(NSString *downloadFinishedResourceId) {
-                if ([downloadFinishedResourceId isEqualToString:resourceId])
-                {
-                    EOABackupSyncOperationType operationType = (EOABackupSyncOperationType)[item integerForKey:@"operation"];
-                    if (operationType == EOABackupSyncOperationDownload || operationType == EOABackupSyncOperationUpload)
-                    {
-                        [item setIconTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
-                    }
-                }
-            };
 
             NSString *description = item.descr;
             NSAttributedString *descriptionAttributed = [item objForKey:@"descrAttr"];
@@ -802,6 +826,19 @@
 
 - (void)onBackupPreparing
 {
+}
+
+- (void)onBackupProgressItemFinished:(NSNotification *)notification
+{
+    NSDictionary *userInfo = notification.userInfo;
+    NSString *type = userInfo[@"type"];
+    NSString *name = userInfo[@"name"];
+    
+    if (!type || !name)
+        return;
+    
+    NSString *resourceId = [type stringByAppendingString:name];
+    [self markItemAsInstaled:resourceId];
 }
 
 // MARK: Sync callbacks

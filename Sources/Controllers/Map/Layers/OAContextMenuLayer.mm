@@ -804,16 +804,18 @@
 - (NSArray<OARenderedObject *> *) retrievePolygonsAroundMapObject:(OsmAnd::PointI)point mapObject:(OAMapObject *)mapObject zoomLevel:(OsmAnd::ZoomLevel)zoomLevel
 {
     NSArray<OARenderedObject *> *rendPolygons = [self retrievePolygonsAroundPoint:point zoomLevel:zoomLevel];
-    QVector<OsmAnd::LatLon> objectPolygon = [mapObject getPolygon];
-    
     NSMutableArray<OARenderedObject *> *res = [NSMutableArray new];
-    if (objectPolygon.size() > 0)
+    if (mapObject)
     {
-        for (OARenderedObject *r in rendPolygons)
+        QVector<OsmAnd::LatLon> objectPolygon = [mapObject getPolygon];
+        if (objectPolygon.size() > 0)
         {
-            if ([OAAlgorithms isFirstPolygonInsideSecond:objectPolygon secondPolygon:[r getPolygon]])
+            for (OARenderedObject *r in rendPolygons)
             {
-                [res addObject:r];
+                if ([OAAlgorithms isFirstPolygonInsideSecond:objectPolygon secondPolygon:[r getPolygon]])
+                {
+                    [res addObject:r];
+                }
             }
         }
     }

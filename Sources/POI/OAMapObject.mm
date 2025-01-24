@@ -39,14 +39,22 @@
     }
     else if ([lang isEqualToString:@"en"])
     {
-        self.enName = name;
+        [self setEnName:name];
     }
     else
     {
-        if (!_localizedNames)
-            _localizedNames = [NSMutableDictionary new];
         _localizedNames[lang] = name;
     }
+}
+
+- (NSString *) enName
+{
+    return _localizedNames[@"en"];
+}
+
+- (void)setEnName:(NSString *)enName
+{
+    _localizedNames[@"en"] = enName;
 }
 
 - (QVector< OsmAnd::LatLon >) getPolygon

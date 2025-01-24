@@ -13,12 +13,6 @@
 
 @property (nonatomic) OrderedDictionary<NSString *, NSString *> *tags;
 
-//@property (nonatomic) CLLocationCoordinate2D bboxTopLeft;
-//@property (nonatomic) CLLocationCoordinate2D bboxBottomRight;
-
-//@property (nonatomic) NSMutableArray<NSNumber *> *x;
-//@property (nonatomic) NSMutableArray<NSNumber *> *y;
-
 @property (nonatomic) NSInteger bboxLeft;
 @property (nonatomic) NSInteger bboxTop;
 @property (nonatomic) NSInteger bboxRight;

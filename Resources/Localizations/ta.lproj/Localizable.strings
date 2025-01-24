@@ -572,7 +572,7 @@
 // Release Notes
 // instruction:
 //https://github.com/osmandapp/OsmAnd-Issues/blob/master/Adding%20release%20information%20to%20IOS.md
-"altitude" = "உயரம்";
+"altitude" = "குத்துயரம்";
 "osm_live_subscriptions" = "சந்தாக்கள் \n";
 "osm_live_banner_desc" = "வரம்பற்ற வரைபட பதிவிறக்கங்களைப் பெறுக, மேலும் ஒரு மாதத்திற்கு ஒருமுறை விட மேம்படுத்துங்கள்: வாராந்திர, தினசரி அல்லது மணிநேரம்.";
 "toast_empty_name_error" = "பெயரிடப்படாத இடம்";

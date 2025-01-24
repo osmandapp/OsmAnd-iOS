@@ -33,7 +33,7 @@
 "info_button" = "தகவல்";
 "simulate_your_location" = "உங்கள் நிலையை பிம்பபடுத்தவும்";
 "animate_routing_route_not_calculated" = "முதலில் பாதை கணக்கிடவும்";
-"unit_of_length" = "நீளம் அலகுகள்";
+"unit_of_length" = "நீளத்தின் அலகுகள்";
 "unit_of_length_descr" = "என்ன தூரம் அளவிடப்படுகிறது என்பதை மாற்றவும்.";
 "coords_format" = "ஒருங்கிணைப்பு வடிவம்";
 "coords_format_descr" = "புவியியல் ஒருங்கிணைப்புகளுக்கான வடிவமைப்பு.";

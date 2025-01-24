@@ -27,6 +27,7 @@
 @property UIView *rightBorder;
 
 @property UIVisualEffectView *blurView;
+@property UIBlurEffectStyle lastBlurEffectStyle;
 
 @end
 
@@ -37,6 +38,7 @@
     self = [super initWithFrame:frame];
     if (self)
     {
+        self.lastBlurEffectStyle = -1;
         [UIView animateWithDuration:kAnimationDuration animations:^{
             // Add a bottomBorder.
             self.bottomBorder = [[UIView alloc] init];
@@ -128,7 +130,7 @@
 
 - (void) updateColors
 {
-    if([OAAppSettings sharedManager].nightMode)
+    if ([OAAppSettings sharedManager].nightMode)
         [self setNight];
     else
         [self setDay];
@@ -136,14 +138,18 @@
 
 - (void)setupRulerBlurView:(UIBlurEffectStyle)effect
 {
-    [self.blurView removeFromSuperview];
-    UIBlurEffect *blur = [UIBlurEffect effectWithStyle:effect];
-    UIVibrancyEffect *vibrancy = [UIVibrancyEffect effectForBlurEffect:blur];
-    UIVisualEffectView *vibrancyView = [[UIVisualEffectView alloc] initWithEffect:vibrancy];
-    self.blurView = [[UIVisualEffectView alloc] initWithEffect:blur];
-    self.blurView.layer.masksToBounds = YES;
-    [self.blurView.contentView addSubview:vibrancyView];
-    [self insertSubview:self.blurView atIndex:0];
+    if (self.lastBlurEffectStyle != effect)
+    {
+        self.lastBlurEffectStyle = effect;
+        [self.blurView removeFromSuperview];
+        UIBlurEffect *blur = [UIBlurEffect effectWithStyle:effect];
+        UIVibrancyEffect *vibrancy = [UIVibrancyEffect effectForBlurEffect:blur];
+        UIVisualEffectView *vibrancyView = [[UIVisualEffectView alloc] initWithEffect:vibrancy];
+        self.blurView = [[UIVisualEffectView alloc] initWithEffect:blur];
+        self.blurView.layer.masksToBounds = YES;
+        [self.blurView.contentView addSubview:vibrancyView];
+        [self insertSubview:self.blurView atIndex:0];
+    }
 }
 
 - (void) setDay

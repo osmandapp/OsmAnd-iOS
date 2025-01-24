@@ -8,7 +8,6 @@
 
 import UIKit
 
-@objc(AttachRoadsBannerCell)
 @objcMembers
 final class AttachRoadsBannerCell: UITableViewCell {
     @IBOutlet weak var contentContainer: UIView!

@@ -206,6 +206,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:ElevationChartCell.reuseIdentifier owner:self options:nil];
     _routeStatsCell = (ElevationChartCell *)[nib objectAtIndex:0];
     _routeStatsCell.heightConstraint.constant = 90;
+    [_tableView registerNib:[UINib nibWithNibName:AttachRoadsBannerCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:AttachRoadsBannerCell.reuseIdentifier];
 
     [GpxUIHelper setupElevationChartWithChartView:_routeStatsCell.chartView
                                         topOffset:10
@@ -653,7 +654,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             if ([self shouldShowAttachRoadsOption])
             {
                 [section addObject:@{
-                    @"cell" : [AttachRoadsBannerCell getCellIdentifier],
+                    @"cell" : AttachRoadsBannerCell.reuseIdentifier,
                     @"title" : OALocalizedString(@"attach_roads_descr"),
                     @"buttonTitle" : OALocalizedString(@"attach_to_the_roads"),
                     @"key" : @"attach_roads"
@@ -1554,25 +1555,17 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     {
         return _routeStatsCell;
     }
-    else if ([item[@"cell"] isEqualToString:[AttachRoadsBannerCell getCellIdentifier]])
+    else if ([item[@"cell"] isEqualToString:AttachRoadsBannerCell.reuseIdentifier])
     {
-        AttachRoadsBannerCell* cell = [tableView dequeueReusableCellWithIdentifier:[AttachRoadsBannerCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[AttachRoadsBannerCell getCellIdentifier] owner:self options:nil];
-            cell = (AttachRoadsBannerCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.contentContainer.layer.cornerRadius = 6;
-            cell.contentContainer.layer.borderWidth = 1;
-            cell.contentContainer.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
-        }
-        if (cell)
-        {
-            cell.label.text = item[@"title"];
-            [cell.button setTitle:item[@"buttonTitle"] forState:UIControlStateNormal];
-            [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-            [cell.button addTarget:self action:@selector(openAttachToTheRoadsScreen) forControlEvents:UIControlEventTouchUpInside];
-        }
+        AttachRoadsBannerCell *cell = [self.tableView dequeueReusableCellWithIdentifier:AttachRoadsBannerCell.reuseIdentifier];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.contentContainer.layer.cornerRadius = 6;
+        cell.contentContainer.layer.borderWidth = 1;
+        cell.contentContainer.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
+        cell.label.text = item[@"title"];
+        [cell.button setTitle:item[@"buttonTitle"] forState:UIControlStateNormal];
+        [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+        [cell.button addTarget:self action:@selector(openAttachToTheRoadsScreen) forControlEvents:UIControlEventTouchUpInside];
         return cell;
     }
     else if ([item[@"cell"] isEqualToString:[OAFilledButtonCell getCellIdentifier]])

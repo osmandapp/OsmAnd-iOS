@@ -33,7 +33,7 @@
 "info_button" = "தகவல்";
 "simulate_your_location" = "உங்கள் நிலையை பிம்பபடுத்தவும்";
 "animate_routing_route_not_calculated" = "முதலில் பாதை கணக்கிடவும்";
-"unit_of_length" = "நீளம் அலகுகள்";
+"unit_of_length" = "நீளத்தின் அலகுகள்";
 "unit_of_length_descr" = "என்ன தூரம் அளவிடப்படுகிறது என்பதை மாற்றவும்.";
 "coords_format" = "ஒருங்கிணைப்பு வடிவம்";
 "coords_format_descr" = "புவியியல் ஒருங்கிணைப்புகளுக்கான வடிவமைப்பு.";
@@ -154,21 +154,21 @@
 "driving_region_canada" = "கனடா";
 "driving_region_europe_asia" = "ஐரோப்பா, ஆசியா, இலத்தீன் அமெரிக்கா, மற்றும் ஒத்த";
 "driving_region_australia" = "ஆஸ்திரேலியா";
-"si_mi_feet" = "மைல்கள் / அடி";
-"si_mi_yard" = "மைல்கள் / கெஜம்";
-"si_mi_meters" = "மைல்கள் / மீட்டர்";
-"si_km_m" = "கிலோமீட்டர்கள் / மீட்டர்";
+"si_mi_feet" = "மைல்கள்/அடி";
+"si_mi_yard" = "மைல்கள்/கெசம்";
+"si_mi_meters" = "மைல்கள்/மீட்டர்";
+"si_km_m" = "கிலோமீட்டர்/மீட்டர்";
 "coords_search" = "ஒருங்கிணைப்பு தேடல்கள்";
 "search_poi_category_hint" = "அனைத்தையும் தேட இங்கு தட்டச்சு செய்";
 
 // Shared Strings
 "shared_string_enable" = "இயக்கு";
 "shared_string_disable" = "முடக்கு";
-"shared_string_apply" = "விண்ணப்பிக்கவும்";
-"shared_string_select" = "தேர்வு";
-"shared_string_ok" = "எற்க்கிறேன்";
-"shared_string_cancel" = "மறுக்கிறேன் \n";
-"shared_string_exit" = "வெளியேற";
+"shared_string_apply" = "இடு";
+"shared_string_select" = "தேர்ந்தெடு";
+"shared_string_ok" = "சரி";
+"shared_string_cancel" = "ரத்துசெய்";
+"shared_string_exit" = "வெளியேறு";
 "shared_string_close" = "மூடு";
 "shared_string_no" = "இல்லை";
 "shared_string_yes" = "ஆம்";
@@ -177,11 +177,11 @@
 "shared_string_delete" = "அழி";
 "shared_string_remove" = "அகற்று";
 "shared_string_dismiss" = "ரத்து செய்";
-"shared_string_add" = "சேரு";
+"shared_string_add" = "கூட்டு";
 "shared_string_or" = "அல்லது";
 "shared_string_and" = "மற்றும்";
 "shared_string_edit" = "தொகுப்பு";
-"shared_string_all" = "அனைத்து";
+"shared_string_all" = "அனைத்தும்";
 "shared_string_from" = "இருந்து";
 "shared_string_distance" = "தூரம்";
 "retry" = "மீண்டும் முயற்சிக்கவும்";
@@ -189,7 +189,7 @@
 "shared_string_reset" = "மீட்டமைக்க";
 "shared_string_read_more" = "மேலும் வாசிக்க";
 "shared_string_on" = "இயக்கு";
-"shared_string_off" = "நிறுத்து";
+"shared_string_off" = "அணை";
 "shared_string_copy" = "நகல்";
 "shared_string_deselect_all" = "அனைத்து தெரிவுகளையும் நிராகரி";
 "shared_string_none" = "யாரும்";
@@ -212,7 +212,7 @@
 // Shapes
 
 // POI
-"shared_string_hide" = "மறைக்க";
+"shared_string_hide" = "மறை";
 
 // My Places
 "favorites_item" = "பிடித்தவைகள்";
@@ -222,7 +222,7 @@
 "plugin_distance_point" = "புள்ளி";
 "shared_string_waypoint" = "பாதைப்புள்ளி";
 "shared_string_waypoints" = "பாதை புள்ளிகளின்";
-"shared_string_export" = "இறக்குமதி";
+"shared_string_export" = "ஏற்றுமதி";
 "gpx_selection_segment_title" = "பிரிவு";
 "route_points" = "பாதை புள்ளிகள்";
 "shared_string_control_start" = "இயக்கு";
@@ -378,11 +378,11 @@
 "osmand_parking_time_left" = "இடது";
 "osmand_parking_overdue" = "தாமதம்";
 // Units
-"mile" = "மைல்";
-"yard" = "யார்டு";
+"mile" = "மி";
+"yard" = "yd";
 "foot" = "அடி";
-"km_h" = "கிமீ / மணி";
-"mile_per_hour" = "மைல்";
+"km_h" = "கிமீ/மணி";
+"mile_per_hour" = "எம்.பி.எச்";
 "int_hour" = "மணி";
 "int_min" = "மணிதுளி";
 
@@ -397,7 +397,7 @@
 // Alerts
 
 // Context menu
-"shared_string_share" = "பகிர்";
+"shared_string_share" = "பங்கு";
 "map_marker" = "வரைபட குறிப்பான்கள்";
 
 // Location Services
@@ -572,7 +572,7 @@
 // Release Notes
 // instruction:
 //https://github.com/osmandapp/OsmAnd-Issues/blob/master/Adding%20release%20information%20to%20IOS.md
-"altitude" = "உயரம்";
+"altitude" = "குத்துயரம்";
 "osm_live_subscriptions" = "சந்தாக்கள் \n";
 "osm_live_banner_desc" = "வரம்பற்ற வரைபட பதிவிறக்கங்களைப் பெறுக, மேலும் ஒரு மாதத்திற்கு ஒருமுறை விட மேம்படுத்துங்கள்: வாராந்திர, தினசரி அல்லது மணிநேரம்.";
 "toast_empty_name_error" = "பெயரிடப்படாத இடம்";
@@ -582,7 +582,7 @@
 "shared_string_selected" = "தேர்ந்தெடுக்கப்பட்ட";
 "offline_edition_descr" = "எப்போதும் ஆஃப்லைன் பதிப்பித்தலை பயன்படுத்தவும்.";
 "shared_string_recorded" = "பதிவு";
-"shared_string_status" = "நிலைமை";
+"shared_string_status" = "நிலை";
 "shared_string_added" = "சேர்க்கப்பட்டது";
 "recording_delete_confirm" = "இந்த உருப்படியை நீக்கவா\?";
 "download_wikipedia_data" = "விக்கிபீடியா கட்டுரையை பதிவிறக்கவும்";
@@ -709,3 +709,25 @@
 "quick_action_map_overlay" = "மேலடுக்கு";
 "quick_action_map_underlay" = "அண்டர்லே";
 "shared_string_transparency" = "வெளிப்படைத்தன்மை";
+"shared_string_error" = "பிழை";
+"units_and_formats" = "அலகுகள் மற்றும் வடிவங்கள்";
+"shared_string_appearance" = "தோற்றம்";
+"shared_string_update" = "புதுப்பிப்பு";
+"average_altitude" = "சராசரி உயரம்";
+"shared_string_name" = "பெயர்";
+"by_name" = "பெயரால்";
+"shared_string_install" = "நிறுவவும்";
+"shared_string_back" = "பின்";
+"shared_string_logout" = "விடுபதிகை";
+"shared_string_continue" = "தொடரவும்";
+"nm" = "என்.எம்.ஐ.";
+"min_mile" = "n/m";
+"min_km" = "நிமிடம்/கி.மீ.";
+"m_s" = "எம்/கள்";
+"si_kmh" = "ஒரு மணி நேரத்திற்கு கிலோமீட்டர்";
+"si_mph" = "ஒரு மணி நேரத்திற்கு மைல்கள்";
+"si_m_s" = "நொடிக்கு மீட்டர்";
+"si_min_km" = "ஒரு கிலோமீட்டருக்கு நிமிடங்கள்";
+"si_min_m" = "ஒரு மைலுக்கு நிமிடங்கள்";
+"si_nm" = "கடல் மைல்கள்";
+"rendering_attr_showClimbingRoutes_name" = "ஏறும் வழிகள்";

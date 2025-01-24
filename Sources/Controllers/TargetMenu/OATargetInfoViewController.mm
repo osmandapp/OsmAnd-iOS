@@ -16,6 +16,7 @@
 #import "OAEditDescriptionViewController.h"
 #import "Localization.h"
 #import "OAPOIHelper.h"
+#import "OAPOIHelper+cpp.h"
 #import "OAPOI.h"
 #import "OAPOIType.h"
 #import "OALocationServices.h"
@@ -51,6 +52,15 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
+#import "OAMapRendererEnvironment.h"
+#import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
+#import "OAMapRendererView.h"
+#import "OAMapLayers.h"
+#import "OrderedDictionary.h"
+#import "OARenderedObject.h"
+#import "OARenderedObject+cpp.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -62,6 +72,8 @@ static NSString *kSkypeLink = @"skype:%@";
 static NSString *kMailLink = @"mailto:%@";
 static NSString *kInstagramLink = @"https://www.instagram.com/%@";
 static NSString *kFacebookLink = @"https://www.facebook.com/%@";
+
+static NSString *WITHIN_POLYGONS_ROW_KEY = @"within_polygons";
 
 // HTML for ViewPort
 static NSString *const kViewPortHtml = @"<header><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'></header>";
@@ -193,13 +205,15 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
     
     [self appdendDetailsButtonRow:_rows];
     
+    [self buildWithinRow];
+    
     [self buildRows:_rows];
 
     if (self.additionalRows)
     {
         [_rows addObjectsFromArray:self.additionalRows];
     }
-
+    
     if ([self showNearestWiki] && !OAIAPHelper.sharedInstance.wiki.disabled && [OAPluginsHelper getEnabledPlugin:OAWikipediaPlugin.class])
         [self buildRowsPoi:YES];
 
@@ -220,6 +234,103 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
 
     _calculatedWidth = 0;
     [self contentHeight:self.tableView.bounds.size.width];
+}
+
+- (void)buildWithinRow
+{
+    OAMapViewController *mapViewController = OARootViewController.instance.mapPanel.mapViewController;
+    NSArray<OARenderedObject *> *polygons = [mapViewController.mapLayers.contextMenuLayer retrievePolygonsAroundMapObject:self.location.latitude lon:self.location.longitude mapObject:[self getTargetObj]];
+    
+    polygons = [polygons sortedArrayUsingComparator:^NSComparisonResult(OARenderedObject *obj1, OARenderedObject *obj2) {
+        long area1 = [obj1 estimatedArea];
+        long area2 = [obj2 estimatedArea];
+        if (area1 > area2)
+            return NSOrderedAscending;
+        else if (area1 < area2)
+            return NSOrderedDescending;
+        return NSOrderedSame;
+    }];
+    
+    if (polygons.count > 0)
+    {
+        NSString *rowSummary = @"";
+        NSMutableArray *detailsArray = [NSMutableArray array];
+        NSString *title = OALocalizedString(@"transport_nearby_routes");
+        
+        NSMutableArray<NSString *> *names = [NSMutableArray new];
+        for (OARenderedObject *polygon in polygons)
+            [names addObject:[RenderedObjectViewController getTranslatedTypeWithRenderedObject:polygon]];
+        
+        if (names.count == 0)
+            return;
+        
+        rowSummary = [self getMenuObjectsNamesByComma:names];
+        detailsArray = [self getWithinCollapsableContent:names renderedObjects:polygons];
+        
+        OARowInfo *row = [[OARowInfo alloc] initWithKey:WITHIN_POLYGONS_ROW_KEY
+                                        icon:[UIImage templateImageNamed:@"ic_custom_pin_location"]
+                                  textPrefix:title
+                                        text:rowSummary
+                                   textColor:nil
+                                      isText:YES
+                                   needLinks:YES
+                                       order:-1
+                                    typeName:WITHIN_POLYGONS_ROW_KEY
+                               isPhoneNumber:NO
+                                       isUrl:NO];
+        
+        [row setDetailsArray:detailsArray];
+        row.collapsable = NO;
+        row.collapsed = YES;
+        row.collapsableView = nil;
+        [_rows addObject:row];
+    }
+}
+
+- (NSMutableArray<NSDictionary<NSString *, NSString *> *> *) getWithinCollapsableContent:(NSArray<NSString *> *)menuObjects renderedObjects:(NSArray<OARenderedObject *> *)renderedObjects
+{
+    NSMutableArray<NSDictionary<NSString *, NSString *> *> *array = [NSMutableArray new];
+    NSString *sectionHeader = OALocalizedString(@"transport_nearby_routes");
+    
+    for (int i = 0; i < menuObjects.count; i++)
+    {
+        NSString *title = menuObjects[i];
+        OARenderedObject *renderedObject = renderedObjects[i];
+        
+        NSString *rowTextPrefix;
+        NSString *rowText;
+        if ([title containsString:@":"])
+        {
+            int firstCommaIndex = [title indexOf:@":"];
+            rowTextPrefix = [title substringToIndex:firstCommaIndex];
+            rowText = [[[title substringFromIndex:firstCommaIndex + 1] trim] capitalizedString];
+        }
+        else
+        {
+            // in android:
+            // rowTextPrefix = MenuObjectUtils.getSecondLineText(menuObject);
+            rowTextPrefix = renderedObject.nameLocalized ?: @"";
+            rowText = title;
+        }
+        
+        [array addObject:@{
+            @"key": [NSString stringWithFormat:@"within:%@:%@", rowTextPrefix, rowText],
+            @"value": rowText,
+            @"localizedTitle": sectionHeader,
+            @"renderedObject": renderedObject
+        }];
+    }
+    return array;
+}
+
+- (NSString *) getMenuObjectsNamesByComma:(NSArray<NSString *> *)menuObjects
+{
+    NSString *names = @"";
+    for (NSString *title in menuObjects)
+        names = [NSString stringWithFormat:@"%@%@, ", names, title];
+    if ([names hasSuffix:@", "])
+        names = [names substringToIndex:names.length - 2];
+    return names;
 }
 
 - (void)buildRowsPoi:(BOOL)isWiki

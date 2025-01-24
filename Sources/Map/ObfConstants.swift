@@ -35,11 +35,11 @@ final class ObfConstants: NSObject {
         return "https://www.openstreetmap.org/\(type)/\(osmId)"
     }
     
-    static func getOsmObjectId(_ object: OAPOI) -> Int {
+    static func getOsmObjectId(_ object: OAMapObject) -> Int {
         var originalId = -1
         var obfId = Int(object.obfId)
         if obfId != -1 {
-            if object.isRenderedObject {
+            if isRenderedObject(object) {
                 obfId >>= 1
             }
             if isIdFromPropagatedNode(obfId) {
@@ -49,7 +49,7 @@ final class ObfConstants: NSObject {
                 if isShiftedID(obfId) {
                     originalId = getOsmId(obfId)
                 } else {
-                    let shift = !object.isRenderedObject ? Self.AMENITY_ID_RIGHT_SHIFT : Self.SHIFT_ID
+                    let shift = !isRenderedObject(object) ? Self.AMENITY_ID_RIGHT_SHIFT : Self.SHIFT_ID
                     originalId = obfId >> shift
                 }
             }
@@ -57,11 +57,11 @@ final class ObfConstants: NSObject {
         return originalId
     }
     
-    static func getOsmEntityType(_ object: OAPOI) -> String? {
+    static func getOsmEntityType(_ object: OAMapObject) -> String? {
         if isOsmUrlAvailable(object) {
             let obfId = Int(object.obfId)
             let originalId = obfId >> 1
-            if object.isRenderedObject && isIdFromPropagatedNode(originalId) {
+            if isRenderedObject(object) && isIdFromPropagatedNode(originalId) {
                 return WAY
             }
             if isIdFromPropagatedNode(obfId) {
@@ -77,7 +77,7 @@ final class ObfConstants: NSObject {
         return nil
     }
     
-    static func isOsmUrlAvailable(_ object: OAPOI) -> Bool {
+    static func isOsmUrlAvailable(_ object: OAMapObject) -> Bool {
         let obfId = Int(object.obfId)
         return obfId > 0
     }
@@ -103,5 +103,14 @@ final class ObfConstants: NSObject {
     
     static func isIdFromSplit(_ obfId: Int) -> Bool {
         obfId > 0 && (obfId & Self.SPLIT_BIT) == Self.SPLIT_BIT
+    }
+    
+    static func isRenderedObject(_ object: OAMapObject) -> Bool {
+        if let renderedObject = object as? OARenderedObject {
+            return true
+        } else if let poi = object as? OAPOI {
+            return poi.isRenderedObject
+        }
+        return false
     }
 }

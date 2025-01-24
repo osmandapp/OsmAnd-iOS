@@ -10,7 +10,7 @@
 
 #include <OsmAndCore/Map/MapMarker.h>
 
-@class OATargetPoint;
+@class OATargetPoint, OAMapObject, OARenderedObject;
 
 @protocol OAChangePositionModeDelegate <NSObject>
 
@@ -37,5 +37,10 @@
 
 - (OATargetPoint *) getTargetPoint:(id)obj;
 - (OATargetPoint *) getTargetPointCpp:(const void *)obj;
+
+- (void) highlightPolygon:(QVector<OsmAnd::PointI>)points;
+- (void) hideRegionHighlight;
+
+- (NSArray<OARenderedObject *> *) retrievePolygonsAroundMapObject:(double)lat lon:(double)lon mapObject:(OAMapObject *)mapObject;
 
 @end

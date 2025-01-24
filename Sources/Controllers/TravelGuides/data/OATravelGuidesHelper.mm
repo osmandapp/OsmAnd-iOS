@@ -9,6 +9,7 @@
 #import "OATravelGuidesHelper.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAPOIHelper.h"
+#import "OAPOIHelper+cpp.h"
 #import "OsmAndApp.h"
 #import "OAAppData.h"
 #import "OAPOI.h"

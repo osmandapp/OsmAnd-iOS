@@ -65,6 +65,9 @@
         else
             _iconView.image = _targetPoint.icon;
         
+        if ([_targetPoint.targetObj isKindOfClass:OARenderedObject.class])
+            _iconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
+        
         NSString *t;
         if (_targetPoint.titleSecond)
         {

@@ -20,6 +20,8 @@
 #import "QuadRect.h"
 #import "Weather/OAWeatherHelper.h"
 #import "OsmAndApp.h"
+#import "OAAlgorithms.h"
+#import "OAAlgorithms+cpp.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/WorldRegion.h>
@@ -241,9 +243,22 @@
     return res;
 }
 
-- (QVector<OsmAnd::PointI>)getPoints31
+- (QVector<OsmAnd::PointI>) getPoints31
 {
     return _worldRegion->polygon;
+}
+
+- (QVector<OsmAnd::LatLon>) getPointsLatLon
+{
+    QVector<OsmAnd::LatLon> res;
+    if (_worldRegion && !_worldRegion->polygon.isEmpty())
+    {
+        for (OsmAnd::PointI pointI : _worldRegion->polygon)
+        {
+            res.push_back(OsmAnd::Utilities::convert31ToLatLon(pointI));
+        }
+    }
+    return res;
 }
 
 + (int) ray_intersect_x:(int) x y:(int) y middleY:(int) middleY prevX:(int) prevX prevY:(int) prevY
@@ -904,20 +919,23 @@
 
 - (BOOL)containsRegion:(OAWorldRegion *)another
 {
+    QVector<OsmAnd::LatLon> polygon = [self getPointsLatLon];
+    QVector<OsmAnd::LatLon> anotherPolygon = [another getPointsLatLon];
+    
     // Firstly check rectangles for greater efficiency
     if (![self containsBoundingBox:another.boundingBox])
         return NO;
 
     // Secondly check whole polygons
-    if (![self containsPolygon:[another getPoints31]])
+    if (![self containsPolygon:anotherPolygon])
         return NO;
 
     // Finally check inner point
-    OsmAnd::PointI point = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(another.regionCenter.latitude, another.regionCenter.longitude));
-    BOOL isInnerPoint = [self.class isPointInsidePolygon:point polygon:[another getPoints31]];
+    OsmAnd::LatLon point = OsmAnd::LatLon(another.regionCenter.latitude, another.regionCenter.longitude);
+    BOOL isInnerPoint = [OAAlgorithms isPointInsidePolygon:point polygon:anotherPolygon];
     if (isInnerPoint)
     {
-        return [self.class isPointInsidePolygon:point polygon:[self getPoints31]];
+        return [OAAlgorithms isPointInsidePolygon:point polygon:polygon];
     }
     else
     {
@@ -932,46 +950,11 @@
     return _boundingBox && rectangle && [_boundingBox contains:rectangle];
 }
 
-- (BOOL)containsPolygon:(QVector<OsmAnd::PointI>)another
+- (BOOL)containsPolygon:(QVector<OsmAnd::LatLon>)another
 {
-    return (!_worldRegion->polygon.isEmpty() && !another.isEmpty()) &&
-            [self.class isFirstPolygonInsideSecond:another secondPolygon:_worldRegion->polygon];
-}
-
-+ (BOOL)isFirstPolygonInsideSecond:(QVector< OsmAnd::PointI >)firstPolygon secondPolygon:(QVector<OsmAnd::PointI>)secondPolygon
-{
-    for (OsmAnd::PointI pointI : firstPolygon)
-    {
-        if (![self.class isPointInsidePolygon:pointI polygon:secondPolygon])
-        {
-            // if at least one point is not inside the boundary, return false
-            return NO;
-        }
-    }
-    return YES;
-}
-
-+ (BOOL)isPointInsidePolygon:(OsmAnd::PointI)point polygon:(QVector<OsmAnd::PointI>)polygon
-{
-    double px = point.x;
-    double py = point.y;
-    BOOL oddNodes = NO;
-
-    for (int i = 0, j = polygon.size() - 1; i < polygon.size(); j = i++)
-    {
-        double x1 = polygon.at(i).x;
-        double y1 = polygon.at(i).y;
-        double x2 = polygon.at(j).x;
-        double y2 = polygon.at(j).y;
-        if (((y1 < py && y2 >= py)
-                || (y2 < py && y1 >= py))
-                && (x1 <= px || x2 <= px))
-        {
-            if (x1 + (py - y1) / (y2 - y1) * (x2 - x1) < px)
-                oddNodes = !oddNodes;
-        }
-    }
-    return oddNodes;
+    QVector<OsmAnd::LatLon> polygon = [self getPointsLatLon];
+    return (!polygon.isEmpty() && !another.isEmpty()) &&
+        [OAAlgorithms isFirstPolygonInsideSecond:another secondPolygon:polygon];
 }
 
 - (BOOL)isContinent
@@ -987,8 +970,9 @@
 
 - (BOOL)containsPoint:(CLLocation *)location
 {
-    OsmAnd::PointI point = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.coordinate.latitude, location.coordinate.longitude));
-    return !_worldRegion->polygon.isEmpty() && [self.class isPointInsidePolygon:point polygon:_worldRegion->polygon];
+    OsmAnd::LatLon point = OsmAnd::LatLon(location.coordinate.latitude, location.coordinate.longitude);
+    QVector<OsmAnd::LatLon> polygon = [self getPointsLatLon];
+    return !polygon.isEmpty() && [OAAlgorithms isPointInsidePolygon:point polygon:polygon];
 }
 
 @end

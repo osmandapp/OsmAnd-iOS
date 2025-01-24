@@ -3443,3 +3443,10 @@
 "help_article_navigation_car_play_name" = "CarPlay";
 "help_article_personal_import_export_name" = "Import / Export";
 "arrival_distance_factor_normally" = "Normală";
+"monitoring_control_start" = "REC";
+"download_persian_voice_alert_descr_macos" = "Setări -> Accesibilitate -> Conținut vorbit -> Voce sistem -> Gestionați vocile -> Persană -> Dariush";
+"poi_operator" = "Operator";
+"general_settings" = "Generală";
+"tts_title" = "TTS";
+"download_persian_voice_alert_descr_ios" = "Setări -> Accesibilitate -> Conținut vorbit -> Voci -> Persană -> Dariush";
+"shared_string_subfolders_in" = "Subfoldere în";

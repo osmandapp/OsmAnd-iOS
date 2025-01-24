@@ -15,7 +15,6 @@
 - (void)didStartProgress;
 - (void)didApproximationStarted;
 - (void)didUpdateProgress:(NSInteger)progress;
-- (void)didFinishProgress;
 - (void)didFinishAllApproximationsWithResults:(NSArray<OAGpxRouteApproximation *> *)approximations points:(NSArray<NSArray<OASWptPt *> *> *)points;
 
 @end

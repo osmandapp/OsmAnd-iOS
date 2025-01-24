@@ -150,14 +150,6 @@
     });
 }
 
-- (void)didFinishProgress
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (_progressBarView)
-            _progressBarView.hidden = YES;
-    });
-}
-
 - (void)didUpdateProgress:(NSInteger)progress
 {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -177,6 +169,11 @@
 
 - (void)didFinishAllApproximationsWithResults:(NSArray<OAGpxRouteApproximation *> *)approximations points:(NSArray<NSArray<OASWptPt *> *> *)points
 {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (_progressBarView)
+            _progressBarView.hidden = YES;
+    });
+
     if (self.delegate)
         [self.delegate onGpxApproximationDone:approximations pointsList:points mode:_snapToRoadAppMode];
     [self setApplyButtonEnabled:approximations.count > 0];

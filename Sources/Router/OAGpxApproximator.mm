@@ -218,14 +218,14 @@
 
 - (void) startProgress
 {
-	if (self.progressDelegate)
-		[self.progressDelegate start:self];
+    if ([self.progressDelegate respondsToSelector:@selector(start:)])
+        [self.progressDelegate start:self];
 }
 
 - (void) finishProgress
 {
-	if (self.progressDelegate != nil)
-		[self.progressDelegate finish:self];
+    if ([self.progressDelegate respondsToSelector:@selector(finish:)])
+        [self.progressDelegate finish:self];
 }
 
 - (void) updateProgress:(SHARED_PTR<GpxRouteApproximation>)gctx
@@ -242,8 +242,8 @@
 			if (_approximationTask != nil && calculationProgress != nullptr && !calculationProgress->isCancelled())
 			{
 				float pr = calculationProgress->getLinearProgress();
-				if (self.progressDelegate)
-					[self.progressDelegate updateProgress:self progress:(int)pr];
+                if ([self.progressDelegate respondsToSelector:@selector(updateProgress:progress:)])
+                    [self.progressDelegate updateProgress:self progress:(int)pr];
 				if (_gctx == gctx)
 					[self updateProgress:gctx];
 			}

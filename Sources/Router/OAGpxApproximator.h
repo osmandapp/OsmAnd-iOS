@@ -16,8 +16,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class OAApplicationMode, OAGpxApproximator, OALocationsHolder;
 
-@protocol OAGpxApproximationProgressDelegate
+@protocol OAGpxApproximationProgressDelegate <NSObject>
 
+@optional
 - (void) start:(OAGpxApproximator *)approximator;
 - (void) updateProgress:(OAGpxApproximator *)approximator progress:(NSInteger)progress;
 - (void) finish:(OAGpxApproximator *)approximator;

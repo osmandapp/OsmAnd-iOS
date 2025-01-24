@@ -116,9 +116,6 @@
 
 - (void)onApproximationFinished
 {
-    if (self.delegate)
-        [self.delegate didFinishProgress];
-    
     NSMutableArray<OAGpxRouteApproximation *> *approximations = [NSMutableArray array];
     NSMutableArray<NSArray<OASWptPt *> *> *points = [NSMutableArray array];
     for (OALocationsHolder *locationsHolder in _locationsHolders)
@@ -208,10 +205,6 @@
 
 // MARK: OAGpxApproximationProgressDelegate
 
-- (void)start:(OAGpxApproximator *)approximator
-{
-}
-
 - (void)updateProgress:(OAGpxApproximator *)approximator progress:(NSInteger)progress
 {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -223,10 +216,6 @@
                 [self.delegate didUpdateProgress:(int)p];
         }
     });
-}
-
-- (void)finish:(OAGpxApproximator *)approximator
-{
 }
 
 @end

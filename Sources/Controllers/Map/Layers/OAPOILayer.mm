@@ -497,7 +497,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 {
     OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup* objSymbolGroup = dynamic_cast<OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup*>(symbolInfo->mapSymbol->groupPtr);
     OsmAnd::AmenitySymbolsProvider::AmenitySymbolsGroup* amenitySymbolGroup = dynamic_cast<OsmAnd::AmenitySymbolsProvider::AmenitySymbolsGroup*>(symbolInfo->mapSymbol->groupPtr);
-    const std::shared_ptr<const OsmAnd::MapObject> mapObject = objSymbolGroup->mapObject;
+    const std::shared_ptr<const OsmAnd::MapObject> mapObject = objSymbolGroup != nullptr ? objSymbolGroup->mapObject : nullptr;
     OAPOIHelper *poiHelper = [OAPOIHelper sharedInstance];
     
     OARenderedObject *renderedObject;

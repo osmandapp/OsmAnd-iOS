@@ -94,6 +94,13 @@
             *error = readError;
         return;
     }
+    // NOTE: example
+    /*
+     {
+     file = "tracks/3041434.gpx";
+     type = GPX;
+     }
+     */
     _appearanceInfo = [OAGpxAppearanceInfo fromJson:json];
 }
 
@@ -147,15 +154,32 @@
 
 - (void)updateGpxParams
 {
-    OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
-    OASGpxDataItem *gpx = [gpxDb getGPXItem:self.filePath];
-    
-    if (!gpx)
+    OASKFile *file = [[OASKFile alloc] initWithFilePath:self.filePath];
+    OASGpxDbHelper *gpxDbHelper = [OASGpxDbHelper shared];
+    BOOL readItem = [gpxDbHelper hasGpxDataItemFile:file];
+    OASGpxDataItem *dataItem = nil;
+    if (!readItem)
     {
-        OASKFile *file = [[OASKFile alloc] initWithFilePath:self.filePath];
-        gpx = [[OASGpxDataItem alloc] initWithFile:file];
-        [[OASGpxDbHelper shared] addItem:gpx];
+        dataItem = [[OASGpxDataItem alloc] initWithFile:file];
+        readItem = ![gpxDbHelper addItem:dataItem];
     }
+    if (readItem)
+    {
+        __weak __typeof(self) weakSelf = self;
+        GpxDataItemHandler *handler = [GpxDataItemHandler new];
+        handler.onGpxDataItemReady = ^(OASGpxDataItem *item) {
+            [weakSelf updateParamsForGpxDataItem:item];
+        };
+        dataItem = [gpxDbHelper getItemFile:file callback:handler];
+    }
+    if (dataItem)
+    {
+        [self updateParamsForGpxDataItem:dataItem];
+    }
+}
+
+- (void)updateParamsForGpxDataItem:(OASGpxDataItem *)gpx
+{
     if (gpx)
     {
         gpx.color = _appearanceInfo.color;
@@ -171,8 +195,7 @@
         gpx.splitType = _appearanceInfo.splitType;
         gpx.splitInterval = _appearanceInfo.splitInterval;
         
-        [gpxDb updateDataItem:gpx];
-
+        [[OAGPXDatabase sharedDb] updateDataItem:gpx];
         if (gpx.color != 0)
             [[OAGPXAppearanceCollection sharedInstance] getColorItemWithValue:gpx.color];
     }
@@ -180,14 +203,26 @@
     {
         NSLog(@"[ERROR] -> OAGpxSettingsItem -> gpx for self.filePath: %@ is empty", self.filePath);
     }
-
 }
 
-- (void) createGpxAppearanceInfo
+- (void)configureGpxAppearanceInfo:(OASGpxDataItem *)dataItem
 {
-    OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.filePath]];
-    if (gpx)
-        _appearanceInfo = [[OAGpxAppearanceInfo alloc] initWithItem:gpx];
+    if (dataItem)
+        _appearanceInfo = [[OAGpxAppearanceInfo alloc] initWithItem:dataItem];
+}
+
+- (void)createGpxAppearanceInfo
+{
+    GpxDataItemHandler *handler = [GpxDataItemHandler new];
+    __weak __typeof(self) weakSelf = self;
+    handler.onGpxDataItemReady = ^(OASGpxDataItem *item) {
+        [weakSelf configureGpxAppearanceInfo:item];
+    };
+    OASKFile *file = [[OASKFile alloc] initWithFilePath:self.filePath];
+    OASGpxDataItem *dataItem = [[OASGpxDbHelper shared] getItemFile:file callback:handler];
+    
+    if (dataItem)
+        _appearanceInfo = [[OAGpxAppearanceInfo alloc] initWithItem:dataItem];
 }
 
 

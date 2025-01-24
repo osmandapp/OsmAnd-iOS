@@ -283,7 +283,7 @@
             *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeUnknownFilePath userInfo:nil];
             return nil;
         }
-            
+        
         self.filePath = filePath;
         _subtype = [OAFileSettingsItemFileSubtype getSubtypeByFileName:filePath.lastPathComponent];
         if (self.subtype == EOASettingsItemFileSubtypeUnknown)
@@ -339,36 +339,12 @@
 {
     switch (_subtype)
     {
-        case EOASettingsItemFileSubtypeGpx:
-        {
-            
-            OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
-            OASGpxDataItem *gpx = [gpxDb getGPXItem:destFilePath];
-            if (!gpx)
-            {
-                gpx = [gpxDb addGPXFileToDBIfNeeded:destFilePath];
-                if (gpx)
-                {
-                    OASGpxTrackAnalysis *analysis = [gpx getAnalysis];
-                    
-                    if (analysis.locationStart)
-                    {
-                        OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:analysis.locationStart.position];
-                        NSString *nearestCityString =  nearestCityPOI ? nearestCityPOI.nameLocalized : @"";
-                        [[OASGpxDbHelper shared] updateDataItemParameterItem:gpx
-                                                                   parameter:OASGpxParameter.nearestCityName
-                                                                       value:nearestCityString];
-                    }
-                }
-            }
-
-            NSDictionary<NSString *, OASGpxFile *> *activeGpx = OASelectedGPXHelper.instance.activeGpx;
-            NSString *gpxFilePath = gpx.gpxFilePath;
-            if ([activeGpx.allKeys containsObject:gpxFilePath])
-            {
-                [OAAppSettings.sharedManager showGpx:@[gpxFilePath]];
-            }
-
+        case EOASettingsItemFileSubtypeGpx: {
+            OASGpxDbHelper *gpxDbHelper = [OASGpxDbHelper shared];
+         
+            OASKFile *file = [[OASKFile alloc] initWithFilePath:destFilePath];
+            if (![gpxDbHelper hasGpxDataItemFile:file])
+                [gpxDbHelper addItem:[[OASGpxDataItem alloc] initWithFile:file]];
             break;
         }
         case EOASettingsItemFileSubtypeRenderingStyle:

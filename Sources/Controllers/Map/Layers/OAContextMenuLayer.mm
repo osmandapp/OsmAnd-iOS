@@ -374,17 +374,6 @@
     return nil;
 }
 
-
-
-//public boolean showContextMenu(PointF point, RotatedTileBox tileBox, boolean showUnknownLocation) {
-//    if (menu == null || mAddGpxPointBottomSheetHelper == null) {
-//        return false;
-//    }
-//    MapSelectionResult selectionResult = selectionHelper.selectObjectsFromMap(point, tileBox, showUnknownLocation);
-//    //...
-//}
-
-
 - (NSArray<OATargetPoint *> *) selectObjectsForContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation
 {
     OAMapRendererView *mapView = self.mapView;
@@ -663,7 +652,7 @@
 
 - (void) showContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation forceHide:(BOOL)forceHide
 {
-    NSArray<OATargetPoint *> *selectedObjects = [self selectObjectsForContextMenu:touchPoint showUnknownLocation:showUnknownLocation]; //selectObjectsFromMap
+    NSArray<OATargetPoint *> *selectedObjects = [self selectObjectsForContextMenu:touchPoint showUnknownLocation:showUnknownLocation];
     if (selectedObjects.count > 0)
     {
         [OsmAndApp instance].mapMode = OAMapModeFree;

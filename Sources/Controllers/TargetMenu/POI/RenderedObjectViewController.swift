@@ -146,15 +146,13 @@ final class RenderedObjectViewController: OAPOIViewController {
             }
         }
         if let pt {
-            //TODO: implement
-            //return pt.getTranslation();
+            return pt.nameLocalized;
         }
         if let translated {
             return translated
         }
         if let otherPt {
-            //TODO: implement
-            //return otherPt.getTranslation();
+            return otherPt.nameLocalized;
         }
         if let separate {
             return separate

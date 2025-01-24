@@ -296,7 +296,7 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
         }
         else
         {
-            // TODO: sync with android?
+            // in android:
             // rowTextPrefix = MenuObjectUtils.getSecondLineText(menuObject);
             rowTextPrefix = renderedObject.nameLocalized ?: @"";
             rowText = title;

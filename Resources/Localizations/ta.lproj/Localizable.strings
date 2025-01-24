@@ -164,7 +164,7 @@
 // Shared Strings
 "shared_string_enable" = "இயக்கு";
 "shared_string_disable" = "முடக்கு";
-"shared_string_apply" = "விண்ணப்பிக்கவும்";
+"shared_string_apply" = "இடு";
 "shared_string_select" = "தேர்வு";
 "shared_string_ok" = "எற்க்கிறேன்";
 "shared_string_cancel" = "மறுக்கிறேன் \n";

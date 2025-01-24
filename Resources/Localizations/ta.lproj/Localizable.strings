@@ -730,3 +730,4 @@
 "si_min_km" = "ஒரு கிலோமீட்டருக்கு நிமிடங்கள்";
 "si_min_m" = "ஒரு மைலுக்கு நிமிடங்கள்";
 "si_nm" = "கடல் மைல்கள்";
+"rendering_attr_showClimbingRoutes_name" = "ஏறும் வழிகள்";

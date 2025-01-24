@@ -93,4 +93,9 @@
     return renderedObject;
 }
 
+- (long) estimatedArea
+{
+    return abs(_bboxRight - _bboxLeft) * abs(_bboxTop - _bboxBottom);
+}
+
 @end

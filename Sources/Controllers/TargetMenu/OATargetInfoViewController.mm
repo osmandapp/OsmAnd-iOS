@@ -240,6 +240,17 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
 {
     OAMapViewController *mapViewController = OARootViewController.instance.mapPanel.mapViewController;
     NSArray<OARenderedObject *> *polygons = [mapViewController.mapLayers.contextMenuLayer retrievePolygonsAroundMapObject:self.location.latitude lon:self.location.longitude mapObject:[self getTargetObj]];
+    
+    polygons = [polygons sortedArrayUsingComparator:^NSComparisonResult(OARenderedObject *obj1, OARenderedObject *obj2) {
+        long area1 = [obj1 estimatedArea];
+        long area2 = [obj2 estimatedArea];
+        if (area1 > area2)
+            return NSOrderedAscending;
+        else if (area1 < area2)
+            return NSOrderedDescending;
+        return NSOrderedSame;
+    }];
+    
     if (polygons.count > 0)
     {
         NSString *rowSummary = @"";

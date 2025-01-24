@@ -32,5 +32,6 @@
 
 - (void) setBBox:(int)left top:(int)top right:(int)right bottom:(int)bottom;
 - (BOOL) isText;
+- (long) estimatedArea;
 
 @end

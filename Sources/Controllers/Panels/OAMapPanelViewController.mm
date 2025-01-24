@@ -1353,7 +1353,7 @@ typedef enum
     }
     else if (validPoints.count == 1)
     {
-        [self showContextMenu:validPoints[0]]; // test here
+        [self showContextMenu:validPoints[0]];
     }
     else
     {

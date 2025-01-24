@@ -166,7 +166,11 @@ final class RenderedObjectViewController: OAPOIViewController {
     }
     
     override func getIcon() -> UIImage? {
-        if let iconRes = getIconRes() {
+        return Self.getIcon(renderedObject: renderedObject)
+    }
+        
+    static func getIcon(renderedObject: OARenderedObject) -> UIImage? {
+        if let iconRes = getIconRes(renderedObject) {
             if let icon = UIImage(named: iconRes) {
                 return icon
             } else {
@@ -177,7 +181,7 @@ final class RenderedObjectViewController: OAPOIViewController {
         }
     }
     
-    private func getIconRes() -> String? {
+    private static func getIconRes(_ renderedObject: OARenderedObject) -> String? {
         if renderedObject.isPolygon {
             for e in renderedObject.tags {
                 guard let value = e.value as? String else { continue }
@@ -187,10 +191,10 @@ final class RenderedObjectViewController: OAPOIViewController {
                 }
             }
         }
-        return getActualContent()
+        return getActualContent(renderedObject)
     }
     
-    private func getActualContent() -> String? {
+    private static func getActualContent(_ renderedObject: OARenderedObject) -> String? {
         let content = renderedObject.iconRes
         if content == "osmand_steps" {
             return "highway_steps"

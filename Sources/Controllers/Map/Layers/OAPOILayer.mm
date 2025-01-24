@@ -473,11 +473,15 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         {
             if (!poi.name || poi.name.length == 0)
                 poi.name = (renderedObject.name && renderedObject.name.length > 0) ? renderedObject.name : poi.type.name;
+            
             if (poi.nameLocalized.length == 0)
                 poi.nameLocalized = (renderedObject.nameLocalized && renderedObject.nameLocalized.length > 0) ? renderedObject.nameLocalized : poi.type.nameLocalized;
             
             targetPoint.title = targetPoint.title.length > 0 ? targetPoint.title : poi.nameLocalized;
             targetPoint.localizedNames = targetPoint.localizedNames.count > 0 ? targetPoint.localizedNames : poi.localizedNames;
+            
+            targetPoint.icon = [RenderedObjectViewController getIconWithRenderedObject:renderedObject];
+            
         }
         return targetPoint;
     }

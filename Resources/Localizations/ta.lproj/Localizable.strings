@@ -222,7 +222,7 @@
 "plugin_distance_point" = "புள்ளி";
 "shared_string_waypoint" = "பாதைப்புள்ளி";
 "shared_string_waypoints" = "பாதை புள்ளிகளின்";
-"shared_string_export" = "இறக்குமதி";
+"shared_string_export" = "ஏற்றுமதி";
 "gpx_selection_segment_title" = "பிரிவு";
 "route_points" = "பாதை புள்ளிகள்";
 "shared_string_control_start" = "இயக்கு";

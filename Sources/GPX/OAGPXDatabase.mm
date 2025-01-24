@@ -253,42 +253,42 @@
     return [[OASGpxDbHelper shared] hasGpxDataItemFile:[[OASKFile alloc] initWithFilePath:filePath]];
 }
 
+- (OASGpxDataItem *)addGPXFileToDBIfNeeded:(NSString *)filePath {
+    return [self addGPXFileToDBIfNeeded:filePath callback:nil];
+}
+
 - (OASGpxDataItem *)addGPXFileToDBIfNeeded:(NSString *)filePath
+                                  callback:(void(^)(OASGpxDataItem *dataItem))callback
 {
-    if (![@"current_track" isEqualToString:filePath] && ![filePath containsString:OsmAndApp.instance.gpxPath]) {
-        filePath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:filePath];
-    }
-    
-    OASKFile *file = [[OASKFile alloc] initWithFilePath:filePath];
-    
-    OASGpxDataItem *dataItem = [[OASGpxDbHelper shared] getItemFile:file];
-    if (!dataItem)
-    {
-        OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
-        if (!gpxFile.error)
+    @synchronized (self) {
+        if (![@"current_track" isEqualToString:filePath] && ![filePath containsString:OsmAndApp.instance.gpxPath])
+            filePath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:filePath];
+        
+        OASKFile *file = [[OASKFile alloc] initWithFilePath:filePath];
+        OASGpxDbHelper *gpxDbHelper = [OASGpxDbHelper shared];
+        BOOL readItem = [gpxDbHelper hasGpxDataItemFile:file];
+        OASGpxDataItem *dataItem = nil;
+        if (!readItem)
         {
-            OASGpxTrackAnalysis *trackAnalysis = [gpxFile getAnalysisFileTimestamp:gpxFile.modifiedTime];
             dataItem = [[OASGpxDataItem alloc] initWithFile:file];
-            [dataItem setAnalysisAnalysis:trackAnalysis];
-            [dataItem readGpxParamsGpxFile:gpxFile];
-
-            BOOL success = [[OASGpxDbHelper shared] addItem:dataItem];
-            NSString *status = success ? @"SUCCESS" : @"ERROR";
-            NSLog(@"[%@] added to db | %@", status, dataItem.file.path);
-            // app.getSmartFolderHelper().addTrackItemToSmartFolder(new TrackItem(SharedUtil.kFile(file)));
-
-            return dataItem;
+            readItem = ![gpxDbHelper addItem:dataItem];
         }
-        else
+        if (readItem)
         {
-            NSLog(@"[ERROR] loadGpxFileFile: %@ | %@", file.path, gpxFile.error.message);
+            GpxDataItemHandler *handler = nil;
+            if (callback)
+            {
+                handler = [GpxDataItemHandler new];
+                handler.onGpxDataItemReady = ^(OASGpxDataItem *item) {
+                    if (callback)
+                        callback(item);
+                };
+            }
+            
+            dataItem = [gpxDbHelper getItemFile:file callback:handler];
         }
+        return dataItem;
     }
-    else
-    {
-        NSLog(@"[INFO] file: %@ | already exist", file.path);
-    }
-    return nil;
 }
 
 - (void)save

@@ -16,6 +16,8 @@ class GpxDataItemHandler: NSObject, GpxDbHelperGpxDataItemCallback {
     }
     
     func onGpxDataItemReady(item: GpxDataItem) {
-        onGpxDataItemReady?(item)
+        DispatchQueue.main.async {
+            self.onGpxDataItemReady?(item)
+        }
     }
 }

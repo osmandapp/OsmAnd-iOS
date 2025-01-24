@@ -378,7 +378,7 @@
 "osmand_parking_time_left" = "இடது";
 "osmand_parking_overdue" = "தாமதம்";
 // Units
-"mile" = "மைல்";
+"mile" = "மி";
 "yard" = "yd";
 "foot" = "அடி";
 "km_h" = "கிமீ / மணி";

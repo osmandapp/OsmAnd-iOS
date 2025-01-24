@@ -66,8 +66,6 @@ final class POITagsDetailsViewController: OABaseNavbarViewController {
         if key.hasPrefix("name:") {
             return getTitle()
         } else if key.hasPrefix("within:") {
-            
-            // TODO: sync with android. Or send here already translated strings.
             let components = key.components(separatedBy: ":")
             if components.count > 2 {
                 let polygonValue = components[2]
@@ -95,8 +93,6 @@ final class POITagsDetailsViewController: OABaseNavbarViewController {
                 return languageCode
             }
         } else if key.hasPrefix("within:") {
-            
-            // TODO: sync with android. Or send here already translated strings.
             let components = key.components(separatedBy: ":")
             if components.count > 1 {
                 let polygonTag = components[1]

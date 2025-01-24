@@ -582,7 +582,7 @@
 "shared_string_selected" = "தேர்ந்தெடுக்கப்பட்ட";
 "offline_edition_descr" = "எப்போதும் ஆஃப்லைன் பதிப்பித்தலை பயன்படுத்தவும்.";
 "shared_string_recorded" = "பதிவு";
-"shared_string_status" = "நிலைமை";
+"shared_string_status" = "நிலை";
 "shared_string_added" = "சேர்க்கப்பட்டது";
 "recording_delete_confirm" = "இந்த உருப்படியை நீக்கவா\?";
 "download_wikipedia_data" = "விக்கிபீடியா கட்டுரையை பதிவிறக்கவும்";

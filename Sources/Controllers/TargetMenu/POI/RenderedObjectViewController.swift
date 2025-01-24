@@ -95,6 +95,7 @@ final class RenderedObjectViewController: OAPOIViewController {
         poi.latitude = renderedObject.labelLatLon.latitude
         poi.longitude = renderedObject.labelLatLon.longitude
         poi.setXYPoints(renderedObject)
+        poi.name = poi.name != nil && poi.name.length > 0 ? poi.name : renderedObject.name;
         
         return poi
     }

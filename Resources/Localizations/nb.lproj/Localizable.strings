@@ -830,7 +830,7 @@
 "routing_attr_weight_description" = "Angi tillatt vektgrense for kjøretøy på ruter.";
 "routing_attr_allow_classic_only_description" = "Ruter forberedt for kun klassisk, uten skøytemuligheter. Dette inkluderer ruter forberedt av en mindre snøskuter med løsere løype og spor laget manuelt av skigåere.";
 "rendering_value_default_name" = "Standard";
-"rendering_attr_showAccess_name" = "Vis adgangsrestriksjoner og veiavgifter";
+"rendering_attr_showAccess_name" = "Vis adgangsrestriksjoner";
 "rendering_attr_smoothness_excellent_name" = "Utmerket";
 "routing_attr_driving_style_speed_name" = "Kortere ruter";
 "rendering_attr_alpineHiking_name" = "Vanskelighetsgrad for fotturveier";

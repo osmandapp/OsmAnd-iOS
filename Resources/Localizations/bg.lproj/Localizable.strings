@@ -2144,3 +2144,4 @@
 "missing_maps_ignore" = "Използване на изтеглените карти";
 "time_will_open" = "Ще отвори след";
 "cloud_sync_progress" = "Синхронизиране…%@";
+"rendering_attr_showClimbingRoutes_name" = "Маршрути за скално катерене";

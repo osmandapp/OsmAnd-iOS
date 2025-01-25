@@ -2706,3 +2706,4 @@
 "max_sensor_cadence" = "Sykkelkadens, maks.";
 "avg_sensor_cadence" = "Sykkelkadens, gjennomsnitt";
 "avg_sensor_speed" = "Sensorhastighet, gjennomsnitt";
+"target_elevation" = "Målhøyde";

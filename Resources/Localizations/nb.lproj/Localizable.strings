@@ -2700,3 +2700,4 @@
 "date_of_creation" = "Opprettelsesdato";
 "cloud_sync_progress" = "Synkroniserer…%@";
 "rendering_attr_showClimbingRoutes_name" = "Klatreruter";
+"rendering_attr_showClimbingRoutes_description" = "Vis klatreruter";

@@ -143,23 +143,19 @@
 
 - (void)didStartProgress
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (_progressBarView)
-            _progressBarView.progress = 0;
-        _progressBarView.hidden = NO;
-    });
+    if (_progressBarView)
+        _progressBarView.progress = 0;
+    _progressBarView.hidden = NO;
 }
 
 - (void)didUpdateProgress:(NSInteger)progress
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (_progressBarView)
-        {
-            if (_progressBarView.hidden)
-                _progressBarView.hidden = NO;
-            _progressBarView.progress = progress;
-        }
-    });
+    if (_progressBarView)
+    {
+        if (_progressBarView.hidden)
+            _progressBarView.hidden = NO;
+        _progressBarView.progress = progress;
+    }
 }
 
 - (void)didApproximationStarted
@@ -169,11 +165,9 @@
 
 - (void)didFinishAllApproximationsWithResults:(NSArray<OAGpxRouteApproximation *> *)approximations points:(NSArray<NSArray<OASWptPt *> *> *)points
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (_progressBarView)
-            _progressBarView.hidden = YES;
-    });
-
+    if (_progressBarView)
+        _progressBarView.hidden = YES;
+    
     if (self.delegate)
         [self.delegate onGpxApproximationDone:approximations pointsList:points mode:_snapToRoadAppMode];
     [self setApplyButtonEnabled:approximations.count > 0];

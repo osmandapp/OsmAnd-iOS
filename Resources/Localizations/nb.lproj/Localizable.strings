@@ -2699,3 +2699,4 @@
 "add_widget_above" = "Legg til miniprogram ovenfor";
 "date_of_creation" = "Opprettelsesdato";
 "cloud_sync_progress" = "Synkroniserer…%@";
+"rendering_attr_showClimbingRoutes_name" = "Klatreruter";

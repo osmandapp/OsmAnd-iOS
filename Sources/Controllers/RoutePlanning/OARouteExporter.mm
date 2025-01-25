@@ -60,14 +60,13 @@
 + (OASGpxFile *)exportRoute:(NSString *)name
                 trkSegments:(NSArray<OASTrkSegment *> *)trkSegments
                      points:(NSArray<OASWptPt *> *)points
+                routePoints:(NSArray<NSArray<OASWptPt *> *> *)routePoints
 {
     OASGpxFile *gpx = [[OASGpxFile alloc] initWithAuthor:OSMAND_ROUTER_V2];
     OASTrack *track = [[OASTrack alloc] init];
     track.name = name;
     [gpx.tracks addObject:track];
-
-    for (OASTrkSegment *seg in trkSegments)
-        [track.segments addObject:seg];
+    [track.segments addObjectsFromArray:trkSegments];
     if (points != nil)
     {
         for (OASWptPt *pt in points)
@@ -75,6 +74,14 @@
             [gpx addPointPoint:pt];
         }
     }
+    if (routePoints != nil)
+    {
+        for (NSArray<OASWptPt *> *wptPts in routePoints)
+        {
+            [gpx addRoutePointsPoints:wptPts addRoute:YES];
+        }
+    }
+    
     return gpx;
 }
 

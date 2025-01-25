@@ -172,6 +172,14 @@
 	}
 }
 
+- (void) setTrackPoints:(NSArray<NSArray<OASWptPt *> *> *)points
+{
+    NSMutableArray<OALocationsHolder *> *locationsHolders = [NSMutableArray array];
+    for (NSArray<OASWptPt *> *segment in points)
+        [locationsHolders addObject:[[OALocationsHolder alloc] initWithLocations:segment]];
+    _locationsHolders = locationsHolders;
+}
+
 - (BOOL) isCancelled
 {
 	return _gctx != nullptr && _gctx->ctx->progress->isCancelled();
@@ -196,16 +204,28 @@
 	[task start];
 }
 
+- (void) calculateGpxApproximationSync:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher
+{
+    @try {
+        auto gctx = [self getNewGpxApproximationContext];
+        std::vector<SHARED_PTR<GpxPoint>> points = [self getPoints];
+        [_routingHelper calculateGpxApproximation:_env gctx:gctx points:points resultMatcher:resultMatcher];
+    } @catch (NSException *exception) {
+        [resultMatcher publish:nil];
+        NSLog(@"Error: %@", exception.reason);
+    }
+}
+
 - (void) startProgress
 {
-	if (self.progressDelegate)
-		[self.progressDelegate start:self];
+    if ([self.progressDelegate respondsToSelector:@selector(start:)])
+        [self.progressDelegate start:self];
 }
 
 - (void) finishProgress
 {
-	if (self.progressDelegate != nil)
-		[self.progressDelegate finish:self];
+    if ([self.progressDelegate respondsToSelector:@selector(finish:)])
+        [self.progressDelegate finish:self];
 }
 
 - (void) updateProgress:(SHARED_PTR<GpxRouteApproximation>)gctx
@@ -222,8 +242,8 @@
 			if (_approximationTask != nil && calculationProgress != nullptr && !calculationProgress->isCancelled())
 			{
 				float pr = calculationProgress->getLinearProgress();
-				if (self.progressDelegate)
-					[self.progressDelegate updateProgress:self progress:(int)pr];
+                if ([self.progressDelegate respondsToSelector:@selector(updateProgress:progress:)])
+                    [self.progressDelegate updateProgress:self progress:(int)pr];
 				if (_gctx == gctx)
 					[self updateProgress:gctx];
 			}

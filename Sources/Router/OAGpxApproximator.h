@@ -7,6 +7,8 @@
 //
 
 #import "OAResultMatcher.h"
+#import "OAGPXDatabase.h"
+#import "OAGpxData.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -14,8 +16,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class OAApplicationMode, OAGpxApproximator, OALocationsHolder;
 
-@protocol OAGpxApproximationProgressDelegate
+@protocol OAGpxApproximationProgressDelegate <NSObject>
 
+@optional
 - (void) start:(OAGpxApproximator *)approximator;
 - (void) updateProgress:(OAGpxApproximator *)approximator progress:(NSInteger)progress;
 - (void) finish:(OAGpxApproximator *)approximator;
@@ -27,6 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) OAApplicationMode *mode;
 @property (nonatomic, assign) double pointApproximation;
 @property (nonatomic, readonly) OALocationsHolder *locationsHolder;
+@property (nonatomic) NSMutableArray<OALocationsHolder *> *locationsHolders;
 
 @property (nonatomic, weak) id<OAGpxApproximationProgressDelegate> progressDelegate;
 
@@ -34,7 +38,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype) initWithApplicationMode:(OAApplicationMode *)mode pointApproximation:(double)pointApproximation locationsHolder:(OALocationsHolder *)locationsHolder;
 
 - (void) calculateGpxApproximation:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher;
-
+- (void) calculateGpxApproximationSync:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher;
+- (void) setTrackPoints:(NSArray<NSArray<OASWptPt *> *> *)points;
 - (BOOL) isCancelled;
 - (void) cancelApproximation;
 

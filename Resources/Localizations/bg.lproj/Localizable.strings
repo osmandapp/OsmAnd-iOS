@@ -2095,7 +2095,7 @@
 "rendering_attr_showToll_description" = "Показване на ограничените с пътна такса пътища";
 "rendering_attr_whiteWaterSports_name" = "Водни спортове";
 "quick_action_map_source_action" = "Добавяне източник на карти";
-"height_legend_description" = "За визуализиране на релефа се използват цветни карти на надморската височина.";
+"height_legend_description" = "За изобразяване на релефа се използват цветни карти на надморската височина.";
 "restore_from_trash" = "Възстановяване от кошчето";
 "animate_my_location" = "Анимиране на моето местоположение";
 "missing_maps_ignore_details" = "Изтеглените карти покриват маршрута? Използвайте тях, ако познавате района.";

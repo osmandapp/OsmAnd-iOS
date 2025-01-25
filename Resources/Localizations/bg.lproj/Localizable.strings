@@ -2145,3 +2145,4 @@
 "time_will_open" = "Ще отвори след";
 "cloud_sync_progress" = "Синхронизиране…%@";
 "rendering_attr_showClimbingRoutes_name" = "Маршрути за скално катерене";
+"rendering_attr_showClimbingRoutes_description" = "Показване на маршрути за скално катерене";

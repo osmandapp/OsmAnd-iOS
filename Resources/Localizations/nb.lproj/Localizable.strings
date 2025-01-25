@@ -1452,7 +1452,7 @@
 "gpx_upload_public_visibility_descr" = "«Offentlig» betyr at sporet vises offentlig i dine GPS-spor og i offentlige GPS-sporingsoppføringer, og i den offentlige spor-listen med tidsstempler i rå form. Data servert via API-et viser ikke til sporsiden din. Tidsstempler fra sporingspunkter er ikke tilgjengelig gjennom det offentlige GPS-API-et, og sporingspunkter sorteres ikke kronologisk.";
 "app_restart_required" = "Programomstart kreves for å bruke noen innstillinger.";
 "welmode_download_maps" = "Kartnedlasting";
-"plugin_mapillary_descr" = "Foto på gatenivå for alle. Oppdag plasser, samarbeid, fang inn verden.";
+"plugin_mapillary_descr" = "Bildevisning på gatenivå. Du kan også bidra selv. For å se de eksisterende data som et kartlag, slå på \"Bilder på gatenivå\" i menyen \"Kartinnstilling\".";
 "explore_wikipedia_offline" = "Utforsk frakoblet Wikipedia.";
 "navigate_point_northing" = "Nordverdi";
 "suggested_maps" = "Foreslåtte kart";

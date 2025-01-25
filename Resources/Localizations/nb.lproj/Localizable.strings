@@ -2702,3 +2702,4 @@
 "rendering_attr_showClimbingRoutes_name" = "Klatreruter";
 "rendering_attr_showClimbingRoutes_description" = "Vis klatreruter";
 "max_sensor_heartrate" = "Puls, maks.";
+"avg_sensor_heartrate" = "Puls, gjennomsnitt";

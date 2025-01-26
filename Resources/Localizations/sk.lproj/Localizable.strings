@@ -2923,3 +2923,4 @@
 "add_widget_below" = "Pridať nástroj pod";
 "obd_plugin_name" = "Merania vozidla";
 "cloud_sync_progress" = "Synchronizuje sa…%@";
+"info_button" = "Info";

@@ -3467,3 +3467,17 @@
 "import_export" = "Import/export";
 "shared_string_max" = "Max";
 "shared_string_legal" = "Legală";
+"shared_string_ellipsis" = "…";
+"download_tab_local" = "Locală";
+"navigate_point_format_UTM" = "UTM";
+"navigate_point_mgrs" = "MGRS";
+"driving_region_canada" = "Canada";
+"driving_region_australia" = "Australia";
+"navigate_point_format_DMS" = "DDD MM SS.S";
+"ltr_or_rtl_combine_via_comma" = "%@, %@";
+"ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
+"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"driving_region_india" = "India";
+"shared_string_sorted_by" = "este sortat de:";
+"plan_route_folder" = "Folder";
+"ltr_or_rtl_combine_via_dash" = "%@ — %@";

@@ -3450,3 +3450,11 @@
 "routing_settings" = "Navigation";
 "shared_string_navigation" = "Navigation";
 "send_log" = "Send log";
+"shared_string_control_start" = "Start";
+"shared_string_min" = "Min";
+"shared_string_estimated_time_span" = "Anslået tidsrum";
+"shared_string_open_street_map" = "OpenStreetMap";
+"shared_string_cache" = "Cache";
+"shared_string_ok" = "OK";
+"shared_string_buy_for" = "for";
+"shared_string_interval" = "Interval";

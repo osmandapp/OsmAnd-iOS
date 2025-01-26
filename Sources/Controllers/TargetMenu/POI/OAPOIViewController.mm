@@ -71,30 +71,35 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     self = [self init];
     if (self)
     {
-        self.poi = poi;
-        if (poi.hasOpeningHours)
-            _openingHoursInfo = OpeningHoursParser::getInfo([poi.openingHours UTF8String]);
-        
-        if ([poi.type.category.name isEqualToString:@"transportation"])
-        {
-            BOOL showTransportStops = NO;
-            OAPOIFilter *f = [poi.type.category getPoiFilterByName:@"public_transport"];
-            if (f)
-            {
-                for (OAPOIType *t in f.poiTypes)
-                {
-                    if ([t.name isEqualToString:poi.type.name])
-                    {
-                        showTransportStops = YES;
-                        break;
-                    }
-                }
-            }
-            if (showTransportStops)
-                [self processTransportStop];
-        }
+        [self setup:poi];
     }
     return self;
+}
+
+- (void) setup:(OAPOI *)poi
+{
+    self.poi = poi;
+    if (poi.hasOpeningHours)
+        _openingHoursInfo = OpeningHoursParser::getInfo([poi.openingHours UTF8String]);
+    
+    if ([poi.type.category.name isEqualToString:@"transportation"])
+    {
+        BOOL showTransportStops = NO;
+        OAPOIFilter *f = [poi.type.category getPoiFilterByName:@"public_transport"];
+        if (f)
+        {
+            for (OAPOIType *t in f.poiTypes)
+            {
+                if ([t.name isEqualToString:poi.type.name])
+                {
+                    showTransportStops = YES;
+                    break;
+                }
+            }
+        }
+        if (showTransportStops)
+            [self processTransportStop];
+    }
 }
 
 - (void) viewDidLoad

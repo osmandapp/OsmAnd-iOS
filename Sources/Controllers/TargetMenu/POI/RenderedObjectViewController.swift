@@ -25,6 +25,26 @@ final class RenderedObjectViewController: OAPOIViewController {
         self.renderedObject = renderedObject
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        Task {
+            do {
+                if let foundPoi = try await searchAmenity() {
+                    setup(foundPoi)
+                    rebuildRows()
+                    tableView.reloadData()
+                }
+            } catch {
+                print("Poi finding error: \(error)")
+            }
+        }
+    }
+    
+    private func searchAmenity() async throws -> OAPOI? {
+        OAPOIHelper.findPOI(byOsmId: ObfConstants.getOsmObjectId(renderedObject), lat: poi.latitude, lon: poi.longitude)
+    }
+    
     static func getSyntheticAmenity(renderedObject: OARenderedObject) -> OAPOI {
         let poi = OAPOI()
         poi.isRenderedObject = true
@@ -148,7 +168,7 @@ final class RenderedObjectViewController: OAPOIViewController {
             }
         }
         if let pt {
-            return pt.nameLocalized;
+            return pt.nameLocalized
         }
         if let translated {
             return translated

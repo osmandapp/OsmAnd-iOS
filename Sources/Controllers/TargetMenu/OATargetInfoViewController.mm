@@ -552,10 +552,18 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
             const auto bottom = OsmAnd::Utilities::get31LatitudeY(rect.bottom());
             const auto right = OsmAnd::Utilities::get31LongitudeX(rect.right());
             amenities = [[filter searchAmenities:top left:left bottom:bottom right:right zoom:-1 matcher:nil] mutableCopy];
-            [amenities removeObject:poi];
             radius *= kNearbyPoiSearchFactory;
         }
-        amenities = [[OAMapUtils sortPOI:amenities lat:self.location.latitude lon:self.location.longitude] mutableCopy];
+    
+        NSMutableArray<OAPOI *> *filterdAmenities = [NSMutableArray new];
+        NSInteger osmObfId = [ObfConstants getOsmObjectId:poi];
+        for (OAPOI *amenity in amenities)
+        {
+            if ([ObfConstants getOsmObjectId:amenity] != osmObfId)
+                [filterdAmenities addObject:amenity];
+        }
+
+        amenities = [[OAMapUtils sortPOI:filterdAmenities lat:self.location.latitude lon:self.location.longitude] mutableCopy];
     }
     _nearestPoi = amenities.count > 0 ? [NSArray arrayWithArray:[amenities subarrayWithRange:NSMakeRange(0, MIN(kNearbyPoiMaxCount, amenities.count))]] : [NSArray new];
 }

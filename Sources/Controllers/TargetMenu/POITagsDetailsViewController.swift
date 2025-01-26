@@ -46,8 +46,6 @@ final class POITagsDetailsViewController: OABaseNavbarViewController {
                   let value = tagDict["value"] as? String else { continue }
             let renderedObject = tagDict["renderedObject"] as? OARenderedObject
             
-            //UIImage *icon = [RenderedObjectViewController getIconWithRenderedObject:renderedObject];
-            
             let baseKey = String(tagKey.split(separator: ":").first ?? "")
             let description = extractDescription(from: localizedTitle, withKey: tagKey)
             let header = extractHeader(from: localizedTitle, withKey: tagKey)
@@ -134,7 +132,7 @@ final class POITagsDetailsViewController: OABaseNavbarViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier, for: indexPath) as! OASimpleTableViewCell
         if let renderedObject = item.obj(forKey: "renderedObject") as? OARenderedObject {
             cell.selectionStyle = .default
-            cell.leftIconView.tintColor = .iconColorDefault
+            cell.leftIconView.tintColor = .iconColorSelected
             cell.leftIconView.image = RenderedObjectViewController.getIcon(renderedObject: renderedObject)
             cell.leftIconVisibility(true)
         } else {

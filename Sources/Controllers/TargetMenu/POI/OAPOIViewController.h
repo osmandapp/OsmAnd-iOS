@@ -14,4 +14,6 @@
 
 - (id) initWithPOI:(OAPOI *)poi;
 
+- (void) setup:(OAPOI *)poi;
+
 @end

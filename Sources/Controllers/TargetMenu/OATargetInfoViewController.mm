@@ -253,19 +253,21 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
     
     if (polygons.count > 0)
     {
-        NSString *rowSummary = @"";
-        NSMutableArray *detailsArray = [NSMutableArray array];
         NSString *title = OALocalizedString(@"transport_nearby_routes");
         
         NSMutableArray<NSString *> *names = [NSMutableArray new];
         for (OARenderedObject *polygon in polygons)
-            [names addObject:[RenderedObjectViewController getTranslatedTypeWithRenderedObject:polygon]];
+        {
+            OAPOI *syntheticAmenity = [RenderedObjectViewController getSyntheticAmenityWithRenderedObject:polygon];
+            NSString *name = syntheticAmenity.nameLocalized;
+            name = name && name.length > 0 ? name : syntheticAmenity.name;
+            name = name && name.length > 0 ? name : [syntheticAmenity.type nameLocalized];
+            name = name && name.length > 0 ? name : [RenderedObjectViewController getTranslatedTypeWithRenderedObject:polygon];
+            [names addObject:name];
+        }
+        NSString *rowSummary = [self getMenuObjectsNamesByComma:names];
         
-        if (names.count == 0)
-            return;
-        
-        rowSummary = [self getMenuObjectsNamesByComma:names];
-        detailsArray = [self getWithinCollapsableContent:names renderedObjects:polygons];
+        NSMutableArray *detailsArray = [self getWithinCollapsableContent:polygons];
         
         OARowInfo *row = [[OARowInfo alloc] initWithKey:WITHIN_POLYGONS_ROW_KEY
                                         icon:[UIImage templateImageNamed:@"ic_custom_pin_location"]
@@ -287,35 +289,42 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
     }
 }
 
-- (NSMutableArray<NSDictionary<NSString *, NSString *> *> *) getWithinCollapsableContent:(NSArray<NSString *> *)menuObjects renderedObjects:(NSArray<OARenderedObject *> *)renderedObjects
+- (NSMutableArray<NSDictionary<NSString *, NSString *> *> *) getWithinCollapsableContent:(NSArray<OARenderedObject *> *)renderedObjects
 {
     NSMutableArray<NSDictionary<NSString *, NSString *> *> *array = [NSMutableArray new];
     NSString *sectionHeader = OALocalizedString(@"transport_nearby_routes");
     
-    for (int i = 0; i < menuObjects.count; i++)
+    for (int i = 0; i < renderedObjects.count; i++)
     {
-        NSString *title = menuObjects[i];
         OARenderedObject *renderedObject = renderedObjects[i];
+        OAPOI *syntheticAmenity = [RenderedObjectViewController getSyntheticAmenityWithRenderedObject:renderedObject];
+        NSString *key;
+        NSString *value;
         
-        NSString *rowTextPrefix;
-        NSString *rowText;
-        if ([title containsString:@":"])
+        NSString *translatedType = [RenderedObjectViewController getTranslatedTypeWithRenderedObject:renderedObject];
+        if ([translatedType containsString:@":"])
         {
-            int firstCommaIndex = [title indexOf:@":"];
-            rowTextPrefix = [title substringToIndex:firstCommaIndex];
-            rowText = [[[title substringFromIndex:firstCommaIndex + 1] trim] capitalizedString];
+            int firstCommaIndex = [translatedType indexOf:@":"];
+            key = [translatedType substringToIndex:firstCommaIndex];
+            value = [[[translatedType substringFromIndex:firstCommaIndex + 1] trim] capitalizedString];
         }
         else
         {
             // in android:
             // rowTextPrefix = MenuObjectUtils.getSecondLineText(menuObject);
-            rowTextPrefix = renderedObject.nameLocalized ?: @"";
-            rowText = title;
+            key = syntheticAmenity.type.nameLocalized;
+            value = syntheticAmenity.nameLocalized;
+            value = value && value.length > 0 ? value : syntheticAmenity.name;
+            if (!value || value.length == 0)
+            {
+                value = key;
+                key = @"";
+            }
         }
         
         [array addObject:@{
-            @"key": [NSString stringWithFormat:@"within:%@:%@", rowTextPrefix, rowText],
-            @"value": rowText,
+            @"key": [NSString stringWithFormat:@"within:%@:%@", key, value],
+            @"value": value,
             @"localizedTitle": sectionHeader,
             @"renderedObject": renderedObject
         }];

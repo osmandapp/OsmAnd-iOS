@@ -174,7 +174,7 @@ final class RenderedObjectViewController: OAPOIViewController {
             if let icon = UIImage(named: iconRes) {
                 return icon
             } else {
-                return UIImage.mapSvgImageNamed("mx_" + iconRes)
+                return UIImage.mapSvgImageNamed(iconRes)
             }
         } else {
             return UIImage.templateImageNamed("ic_action_street_name")

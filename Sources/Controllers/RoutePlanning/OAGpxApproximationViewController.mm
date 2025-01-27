@@ -165,8 +165,10 @@
 
 - (void)didFinishAllApproximationsWithResults:(NSArray<OAGpxRouteApproximation *> *)approximations points:(NSArray<NSArray<OASWptPt *> *> *)points
 {
-    if (_progressBarView)
-        _progressBarView.hidden = YES;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (_progressBarView)
+            _progressBarView.hidden = YES;
+    });
     
     if (self.delegate)
         [self.delegate onGpxApproximationDone:approximations pointsList:points mode:_snapToRoadAppMode];

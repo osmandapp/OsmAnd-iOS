@@ -196,16 +196,30 @@
 	[task start];
 }
 
+- (void) calculateGpxApproximationSync:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher
+{
+    @try {
+        auto gctx = [self getNewGpxApproximationContext];
+        std::vector<SHARED_PTR<GpxPoint>> points = [self getPoints];
+        [_routingHelper calculateGpxApproximation:_env gctx:gctx points:points resultMatcher:resultMatcher];
+    } @catch (NSException *exception) {
+        [resultMatcher publish:nil];
+        NSLog(@"Error: %@", exception.reason);
+    }
+}
+
 - (void) startProgress
 {
-	if (self.progressDelegate)
-		[self.progressDelegate start:self];
+    // UI Thread +
+    if ([self.progressDelegate respondsToSelector:@selector(start:)])
+        [self.progressDelegate start:self];
 }
 
 - (void) finishProgress
 {
-	if (self.progressDelegate != nil)
-		[self.progressDelegate finish:self];
+    // + UI Thread
+    if ([self.progressDelegate respondsToSelector:@selector(finish:)])
+        [self.progressDelegate finish:self];
 }
 
 - (void) updateProgress:(SHARED_PTR<GpxRouteApproximation>)gctx
@@ -215,6 +229,7 @@
 		double delayInSeconds = 0.3;
 		dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
 		dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            // + UI Thread
 			const auto calculationProgress = _gctx->ctx->progress;
 			if (_approximationTask && _gctx == gctx)
 				[self finishProgress];
@@ -222,8 +237,8 @@
 			if (_approximationTask != nil && calculationProgress != nullptr && !calculationProgress->isCancelled())
 			{
 				float pr = calculationProgress->getLinearProgress();
-				if (self.progressDelegate)
-					[self.progressDelegate updateProgress:self progress:(int)pr];
+                if ([self.progressDelegate respondsToSelector:@selector(updateProgress:progress:)])
+                    [self.progressDelegate updateProgress:self progress:(int)pr];
 				if (_gctx == gctx)
 					[self updateProgress:gctx];
 			}

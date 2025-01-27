@@ -2986,3 +2986,4 @@
 "shared_string_deleting_complete" = "Kustutamine lõppes";
 "compass_always_hidden" = "Alati peidetud";
 "discard_filter_changes_prompt" = "Kas nullime kõik filtrid?";
+"max_altitude" = "Maksimaalne kõrgus";

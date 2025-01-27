@@ -2988,3 +2988,4 @@
 "discard_filter_changes_prompt" = "Kas nullime kõik filtrid?";
 "max_altitude" = "Maksimaalne kõrgus";
 "sensor_temperature_desc" = "Näitab temperatuuri sensori aluselt";
+"date_of_creation" = "Loomise kuupäev";

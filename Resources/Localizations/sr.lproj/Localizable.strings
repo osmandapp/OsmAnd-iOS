@@ -3597,3 +3597,4 @@
 "short_min" = "m";
 "download_tab_conflicts" = "Неразрешено";
 "cloud_sync_progress" = "Усклади…%@";
+"battery_widget_level_privacy_ios_desc" = "Из разлога приватности иОС-а, виџет може да прикаже ниво батерије само у корацима од 5%, као што су 35%, 60% или 85%";

@@ -258,12 +258,12 @@
 
 - (void)onBackupExportItemProgress:(NSString *)type fileName:(NSString *)fileName value:(NSInteger)value
 {
-    [NSNotificationCenter.defaultCenter  postNotificationName:kBackupItemProgressNotification object:nil userInfo:@{@"type": type, @"name": fileName, @"value": @(value)}];
+    [NSNotificationCenter.defaultCenter postNotificationName:kBackupItemProgressNotification object:nil userInfo:@{@"type": type, @"name": fileName, @"value": @(value)}];
 }
 
 - (void)onBackupExportItemStarted:(NSString *)type fileName:(NSString *)fileName work:(NSInteger)work
 {
-    [NSNotificationCenter.defaultCenter  postNotificationName:kBackupItemStartedNotification object:nil userInfo:@{@"type": type, @"name": fileName, @"work": @(work)}];
+    [NSNotificationCenter.defaultCenter postNotificationName:kBackupItemStartedNotification object:nil userInfo:@{@"type": type, @"name": fileName, @"work": @(work)}];
 }
 
 - (void)onBackupExportStarted

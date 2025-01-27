@@ -240,22 +240,28 @@ static int PROFILE_TRUCK = 1000;
                                                   withHandler:@selector(onAvailableAppModesChanged)
                                                    andObserve:[OsmAndApp instance].availableAppModesChangedObservable];
         }
-        _cachedFilteredValues = [NSMutableArray array];
+        @synchronized (_cachedFilteredValues) {
+            _cachedFilteredValues = [NSMutableArray array];
+        }
         _cachedAvailableApplicationModes = available;
         for (OAApplicationMode *v in _values)
         {
-            if ([available containsString:[v.stringKey stringByAppendingString:@","]] || v == _DEFAULT)
-                [_cachedFilteredValues addObject:v];
+            if ([available containsString:[v.stringKey stringByAppendingString:@","]] || v == _DEFAULT) {
+                @synchronized (_cachedFilteredValues) {
+                    [_cachedFilteredValues addObject:v];
+                }
+            }
         }
     }
     return [NSArray arrayWithArray:_cachedFilteredValues];
+
 }
 
 + (void) onAvailableAppModesChanged
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
+    @synchronized (_cachedFilteredValues) {
         _cachedFilteredValues = [NSMutableArray array];
-    });
+    }
 }
 
 + (OAApplicationMode *) getFirstAvailableNavigationMode
@@ -672,10 +678,11 @@ static int PROFILE_TRUCK = 1000;
     [_defaultValues sortUsingComparator:^NSComparisonResult(OAApplicationMode *obj1, OAApplicationMode *obj2) {
         return [self compareModes:obj1 obj2:obj2];
     }];
-    [_cachedFilteredValues sortUsingComparator:^NSComparisonResult(OAApplicationMode *obj1, OAApplicationMode *obj2) {
-        return [self compareModes:obj1 obj2:obj2];
-    }];
-
+    @synchronized (_cachedFilteredValues) {
+        [_cachedFilteredValues sortUsingComparator:^NSComparisonResult(OAApplicationMode *obj1, OAApplicationMode *obj2) {
+            return [self compareModes:obj1 obj2:obj2];
+        }];
+    }
     [self updateAppModesOrder];
 }
 
@@ -761,7 +768,9 @@ static int PROFILE_TRUCK = 1000;
     OAAppSettings *settings = OAAppSettings.sharedManager;
     if ([modes containsObject:settings.applicationMode.get])
         [settings setApplicationModePref:_DEFAULT];
-    [_cachedFilteredValues removeObjectsInArray:modes];
+    @synchronized (_cachedFilteredValues) {
+        [_cachedFilteredValues removeObjectsInArray:modes];
+    }
     [self saveCustomAppModesToSettings];
     
     for (OAApplicationMode *mode in modes) {

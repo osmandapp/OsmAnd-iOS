@@ -837,3 +837,4 @@
 "weather_update_disabled" = "Desactivóse";
 "of" = "%d de %d";
 "downloaded_bytes" = "%@ de %@";
+"transport_stop" = "Parar";

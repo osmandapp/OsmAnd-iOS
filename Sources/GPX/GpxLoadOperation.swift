@@ -28,13 +28,14 @@ final class GpxLoadOperation: Operation, @unchecked Sendable {
                 self.completeHandler?(self.filePath, gpxFile)
             }
         } else {
-            debugPrint("[ERROR] GpxLoadOperation -> gpxFile is nil: \(filePath)")
+            NSLog("[ERROR] GpxLoadOperation -> gpxFile is nil: \(filePath)")
         }
     }
     
     private func checkIfCancelled() -> Bool {
         guard !isCancelled else {
             DispatchQueue.main.async {
+                NSLog("[WARNING] loadGpxFileFile is cancelled: \(self.filePath)")
                 self.cancelledHandler?(self.filePath)
             }
             return true

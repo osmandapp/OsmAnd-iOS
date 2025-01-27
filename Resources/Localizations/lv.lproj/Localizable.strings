@@ -837,7 +837,7 @@
 
 //inapps
 "plugin_nautical_name" = "Jūras kartes";
-"plugin_nautical_descr" = "\"Spraudnis papildina OsmaAnd kartes ar jūras kartēm kuģošanai, ūdenslēpošanai un citiem ūdens sporta veidiem. \n \nSpeciāls kartes papildinājums rāda navigācijas ceļus, zīmes un simbolus uz ūdens un iekšzemē krastu tuvumā. Katra navigācijas zīme ir aprakstīta, lai to varētu viegli indentificēt un ir dots skaidrojums par tās nozīmi (kategorija, izmēri, krāsa, secība, atsauces, u.t.t.). \n \nLai atgrieztos uz OsmAnd standarta kartēm, deaktivizējiet spraudni vai nomainiet karti galvenajā izvēlnē - kartes attēlošana. \"";
+"plugin_nautical_descr" = "\"Spraudnis papildina OsmaAnd kartes ar jūras kartēm kuģošanai, ūdenslēpošanai un citiem ūdens sporta veidiem.\n\n\n\nSpeciāls kartes papildinājums rāda navigācijas ceļus, zīmes un simbolus uz ūdens un iekšzemē krastu tuvumā. Katra navigācijas zīme ir aprakstīta, lai to varētu viegli indentificēt un ir dots skaidrojums par tās nozīmi (kategorija, izmēri, krāsa, secība, atsauces, u.t.t.).\n\n\n\nLai atgrieztos uz OsmAnd standarta kartēm, deaktivizējiet spraudni vai nomainiet karti galvenajā izvēlnē - kartes attēlošana. \"";
 "osmand_parking_plugin_name" = "Stāvvieta";
 "osmand_parking_plugin_description" = "Viegli pamanāms logrīks uz kartes norāda jūsu auto stāvvietu un atlikušo laiku (ja ir uzlikts laika limits). Vietas koordinātes un laiks redzami arī atsevišķā sadaļā Manā Izvēlnē. Ir iespējams pievienot laika atgādinātāju Android kalendārā.";
 "plugin_ski_name" = "Slēpošanas kartes";
@@ -1432,7 +1432,7 @@
 "map_marker_1st" = "Pirmais marķieris";
 "context_menu_read_article" = "Lasīt rakstu";
 "shared_string_travel_guides" = "Ceļojumu gids";
-"speed_cameras_legal_descr" = "\"Dažās valstīs un reģionos brīdinājumi par ātruma kamerām ir aizliegti ar likumu. \n \nIzdariet izvēli, balstoties uz likuma prasībām jūs valstī.. \n \nIzvēlieties %@ un jūs saņemsiet brīdinājumus  par ātruma kamerām. \n \nIzvēlieties %@. Visi dati par ātruma kamerām: paziņojumi, brīdinājumi, POIs tiks izdzēsti līdz atkārtotai OsmAnd instalācijai.\"";
+"speed_cameras_legal_descr" = "\"Dažās valstīs un reģionos brīdinājumi par ātruma kamerām ir aizliegti ar likumu.\n\n\n\nIzdariet izvēli, balstoties uz likuma prasībām jūs valstī..\n\n\n\nIzvēlieties %@ un jūs saņemsiet brīdinājumus  par ātruma kamerām.\n\n\n\nIzvēlieties %@. Visi dati par ātruma kamerām: paziņojumi, brīdinājumi, POIs tiks izdzēsti līdz atkārtotai OsmAnd instalācijai.\"";
 "upload_poi" = "Augšupielādēt POI";
 "angular_measeurement_descr" = "Mainīt azimuta mērvienības.";
 "weather_update_disabled" = "Izslēgts";
@@ -1472,3 +1472,5 @@
 "of" = "%d no %d";
 "downloaded_bytes" = "%@ no %@";
 "quick_action_need_to_add_item_to_list" = "Ir nepieciešams pievienot vismaz vienu vienību sarakstā \"Ātrās darbības\" iestatījumos";
+"transport_stop" = "Pietura";
+"shared_string_to" = "Līdz";

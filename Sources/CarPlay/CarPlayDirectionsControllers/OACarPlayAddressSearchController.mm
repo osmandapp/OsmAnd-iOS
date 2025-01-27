@@ -22,6 +22,9 @@
 #import "OAMapRendererView.h"
 #import "OAResultMatcher.h"
 #import "OASearchResult.h"
+#import "OAStreet.h"
+#import "OASearchPhrase.h"
+#import "OASearchWord.h"
 #import <CarPlay/CarPlay.h>
 
 #include <OsmAndCore/Utilities.h>
@@ -46,6 +49,14 @@
     NSString *_currentSearchPhrase;
     BOOL _cancelPrev;
     BOOL _searching;
+}
+
+- (void)onStreetSelected:(OASearchResult *)street completionHandler:(void (^)(NSArray<CPListItem *> *searchResults))completionHandler {
+    [_searchUICore selectSearchResult:street];
+    _currentSearchPhrase =  [[_searchUICore getPhrase] getText:YES];
+    _cpItems = @[];
+    [_resultsListTemplate updateSections:@[[[CPListSection alloc] initWithItems:_cpItems]]];
+    [self runSearch:completionHandler];
 }
 
 - (void) commonInit
@@ -112,7 +123,7 @@
     [self.interfaceController pushTemplate:_searchTemplate animated:YES completion:nil];
 }
 
-- (void)onItemSelected:(CPListItem * _Nonnull)item
+- (void)onItemSelected:(CPListItem * _Nonnull)item completionHandler:(void (^)(NSArray<CPListItem *> *searchResults))completionHandler
 {
     NSNumber *indexNum = item.userInfo;
     if (!indexNum || _searchItems.count == 0 || indexNum.integerValue >= _searchItems.count)
@@ -120,9 +131,14 @@
     
     NSInteger index = indexNum.integerValue;
     OAQuickSearchListItem *searchItem = _searchItems[index];
-    CLLocation *loc = searchItem.getSearchResult.location;
-    [self startNavigationGivenLocation:loc historyName:nil];
-    [self.interfaceController popToRootTemplateAnimated:YES completion:nil];
+    if (searchItem.getSearchResult.objectType == EOAObjectType::STREET && completionHandler) {
+        // OAStreet *str = (OAStreet *)searchItem.getSearchResult.object;
+        [self onStreetSelected:searchItem.getSearchResult completionHandler:completionHandler];
+    } else {
+        CLLocation *loc = searchItem.getSearchResult.location;
+        [self startNavigationGivenLocation:loc historyName:nil];
+        [self.interfaceController popToRootTemplateAnimated:YES completion:nil];
+    }
 }
 
 - (void) updateSearchResult:(OASearchResultCollection *)res
@@ -138,8 +154,14 @@
     if (res && [res getCurrentSearchResults].count > 0)
     {
         NSArray<OASearchResult *> *searchResultItems = [res getCurrentSearchResults];
+        OASearchWord* lastWord = res.phrase.getLastSelectedWord;
+        NSInteger inc = 1;
+        if (lastWord.getType == EOAObjectType::STREET)
+        {
+            inc = searchResultItems.count / maximumItemCount;
+        }
         __weak __typeof(self) weakSelf = self;
-        for (NSInteger i = 0; i < searchResultItems.count; i++)
+        for (NSInteger i = 0; i < searchResultItems.count; i+= inc)
         {
             if (cpItems.count >= maximumItemCount)
                 break;
@@ -147,13 +169,12 @@
             OASearchResult *sr = searchResultItems[i];
             OAQuickSearchListItem *qsItem = [[OAQuickSearchListItem alloc] initWithSearchResult:sr];
             CPListItem *cpItem = [[CPListItem alloc] initWithText:qsItem.getName
-                                                       detailText:[self generateDescription:qsItem]
-                                                            image:[UIImage mapSvgImageNamed:[OAQuickSearchListItem getIconName:sr]]
-                                                   accessoryImage:nil
-                                                    accessoryType:CPListItemAccessoryTypeDisclosureIndicator];
+                    detailText:[self generateDescription:qsItem]
+                    image:[UIImage mapSvgImageNamed:[OAQuickSearchListItem getIconName:sr]]
+                    accessoryImage:nil accessoryType:CPListItemAccessoryTypeDisclosureIndicator];
             cpItem.userInfo = @(i);
             cpItem.handler = ^(id <CPSelectableListItem> item, dispatch_block_t completionBlock) {
-                [weakSelf onItemSelected:item];
+                [weakSelf onItemSelected:item completionHandler:completionHandler];
                 if (completionBlock)
                     completionBlock();
             };
@@ -323,7 +344,7 @@
      completionHandler:(void (^)(void))completionHandler
 {
     if (item != _searchingItem && item != _emptyItem)
-        [self onItemSelected:item];
+        [self onItemSelected:item completionHandler:nil];
     completionHandler();
 }
 

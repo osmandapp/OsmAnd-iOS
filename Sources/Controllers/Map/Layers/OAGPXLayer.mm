@@ -811,14 +811,14 @@ colorizationScheme:(int)colorizationScheme
     {
         
         CGFloat lineWidth;
-        if (_cachedTrackWidth[[gpx getWidthDefWidth:nil]])
+        if (_cachedTrackWidth[[gpx getWidthDefaultWidth:nil]])
         {
-            lineWidth = _cachedTrackWidth[[gpx getWidthDefWidth:nil]].floatValue;
+            lineWidth = _cachedTrackWidth[[gpx getWidthDefaultWidth:nil]].floatValue;
         }
         else
         {
-            lineWidth = [self getLineWidth:[gpx getWidthDefWidth:nil]];
-            _cachedTrackWidth[[gpx getWidthDefWidth:nil]] = @(lineWidth);
+            lineWidth = [self getLineWidth:[gpx getWidthDefaultWidth:nil]];
+            _cachedTrackWidth[[gpx getWidthDefaultWidth:nil]] = @(lineWidth);
         }
 
         OsmAnd::FColorARGB colorARGB;

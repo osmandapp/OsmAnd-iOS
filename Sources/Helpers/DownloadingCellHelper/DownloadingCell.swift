@@ -7,5 +7,4 @@
 //
 
 final class DownloadingCell: OARightIconTableViewCell {
-    @objc var onDownloadFinishedAction: ((String) -> Void)?
 }

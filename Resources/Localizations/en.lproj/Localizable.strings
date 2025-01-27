@@ -308,6 +308,7 @@
 "radius_rules_widget_desc" = "The radius-ruler tool displays distance circles around a selected point on the map.";
 "current_time_widget_desc" = "Shows the current time as taken from your device.";
 "battery_widget_desc" = "Shows the battery level of your device.";
+"battery_widget_level_privacy_ios_desc" = "Due to iOS privacy reasons, the widget can only display the battery level in 5% steps, such as 35%, 60%, or 85%";
 "gps_info_widget_desc" = "Shows the number of satellites currently visible and used.";
 "altitude_widget_desc" = "Shows the height above sea level of current geolocation.";
 "max_speed_widget_desc" = "Displays the speed limit for the currently driven road.";
@@ -2363,7 +2364,7 @@
 
 "date_of_creation" = "Date of creation";
 "altitud_and_elevation" = "Altitude & Elevation";
-"max_altitude" = "Max. altitude";
+"max_altitude" = "Max altitude";
 "shared_string_sensors" = "Sensors";
 "max_sensor_speed" = "Sensor speed, max";
 "avg_sensor_speed" = "Sensor speed, average";
@@ -2374,7 +2375,7 @@
 "max_sensor_bycicle_power" = "Bicycle Power, max";
 "avg_sensor_bycicle_power" = "Bicycle Power, average";
 "max_sensor_temperature" = "Temperature, max";
-"avg_sensor_temperature" = "Temperature, averag";
+"avg_sensor_temperature" = "Temperature, average";
 "shared_string_visible_on_map" = "Visible on map";
 "with_waypoints" = "With waypoints";
 "shared_string_reset_all" = "Reset all";
@@ -2472,7 +2473,7 @@
 "restore_purchases" = "Restore purchases";
 "restore_backup_descr" = "Restore data on the device unsing online backups";
 "backup_restore_data" = "Restore data";
-"syncing_progress" = "Syncing...";
+"cloud_sync_progress" = "Sync… %@";
 
 "no_statistics" = "No statistics";
 
@@ -2887,7 +2888,7 @@
 "rendering_value_bicycle_name" = "Bicycle";
 "rendering_value_translucent_lightgreen_name" = "Translucent light green";
 "rendering_attr_contourLines_name" = "Show contour lines";
-"rendering_attr_showAccess_name" = "Show access and toll restrictions";
+"rendering_attr_showAccess_name" = "Show access restrictions";
 "rendering_attr_surface_dirt_name" = "Dirt";
 "routing_attr_piste_type_skitour_name" = "Ski touring";
 "routing_attr_driving_style_prefer_unpaved_name" = "Prefer unpaved roads";
@@ -3972,3 +3973,7 @@
 "add_widget_to_the_left" = "Add widget to the left";
 "delete_widget" = "Delete widget?";
 "delete_widget_description" = "This widget will be deleted. You can restore it later in Configure Screen.";
+"reset_average_speed" = "Reset average speed";
+
+"rendering_attr_showClimbingRoutes_description" = "Show climbing routes";
+"rendering_attr_showClimbingRoutes_name" = "Climbing routes";

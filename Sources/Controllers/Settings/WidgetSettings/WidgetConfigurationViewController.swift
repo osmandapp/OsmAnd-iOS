@@ -204,6 +204,9 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
     
     override func onRowSelected(_ indexPath: IndexPath!) {
         let item = tableData.item(for: indexPath)
+        if (widgetInfo.handleRowSelected(item, viewController: self)) {
+            return
+        }
         if item.key == "delete_widget_key" {
             onWidgetDeleted()
             dismiss()

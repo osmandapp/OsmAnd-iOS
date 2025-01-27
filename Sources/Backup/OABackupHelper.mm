@@ -470,10 +470,7 @@ static NSCharacterSet* URL_PATH_CHARACTER_SET;
                 sz = res->size;
         }
     }
-    if (sz < APPROXIMATE_FILE_SIZE_BYTES) {
-        sz = APPROXIMATE_FILE_SIZE_BYTES; // take into account 100 KB overhead for small file
-    }
-    return sz / 1024;
+    return (sz + APPROXIMATE_FILE_SIZE_BYTES) / 1024;
 }
 
 - (NSString *)downloadFile:(NSString *)filePath
@@ -515,42 +512,7 @@ static NSCharacterSet* URL_PATH_CHARACTER_SET;
     bool sucseess = [OANetworkUtilities downloadFile:filePath url:builder progress:progress];
     if (!sucseess)
         error = [NSString stringWithFormat:@"Could not download remote file:%@", fileName];
-    
-//    IProgress progress = new AbstractProgress() {
-//
-//        private int work = 0;
-//        private int progress = 0;
-//        private int deltaProgress = 0;
-//
-//        @Override
-//        public void startWork(int work) {
-//            if (listener != null) {
-//                this.work = work > 0 ? work : 1;
-//                listener.onFileDownloadStarted(type, fileName, work);
-//            }
-//        }
-//
-//        @Override
-//        public void progress(int deltaWork) {
-//            if (listener != null) {
-//                deltaProgress += deltaWork;
-//                if ((deltaProgress > (work / 100)) || ((progress + deltaProgress) >= work)) {
-//                    progress += deltaProgress;
-//                    listener.onFileDownloadProgress(type, fileName, progress, deltaProgress);
-//                    deltaProgress = 0;
-//                }
-//            }
-//        }
-//
-//        @Override
-//        public boolean isInterrupted() {
-//            if (listener != null) {
-//                return listener.isDownloadCancelled();
-//            }
-//            return super.isInterrupted();
-//        }
-//    };
-//    progress.startWork((int) (remoteFile.getFilesize() / 1024));
+
     
     if (listener)
         [listener onFileDownloadDone:type fileName:fileName estSize:sz error:error];

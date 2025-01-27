@@ -1397,10 +1397,10 @@
 
 - (NSArray<OALink *> *)getLinks
 {
-    if (self.doc.metadata.link.length > 0)
+    if (self.doc.metadata.link && self.doc.metadata.link.href && self.doc.metadata.link.href.length > 0)
     {
         OALink *link = [OALink new];
-        link.url = [NSURL URLWithString:self.doc.metadata.link];
+        link.url = [NSURL URLWithString:self.doc.metadata.link.href];
         return @[link];
     }
     return @[];
@@ -1464,10 +1464,9 @@
 
 - (NSString *)getMetadataImageLink
 {
-    NSString *link = self.doc.metadata.link;
-    
-    if (link.length > 0)
+    if (self.doc.metadata.link && self.doc.metadata.link.href && self.doc.metadata.link.href.length > 0)
     {
+		NSString *link = self.doc.metadata.link.href;
         NSString *lowerCaseLink = [link lowerCase];
         if ([lowerCaseLink containsString:@".jpg"] ||
             [lowerCaseLink containsString:@".jpeg"] ||

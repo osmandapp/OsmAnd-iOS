@@ -360,7 +360,6 @@
 "quick_action_map_styles" = "Kartowe stile";
 "configure_map" = "Napohlad karty";
 "select_map_marker" = "Chorhojčku wubrać";
-
 "quick_action_map_style" = "Stil karty změnić";
 "quick_action_map_source" = "Kartowežórło změnić";
 "quick_action_map_underlay" = "Kartowu podłohu změnić";
@@ -1100,3 +1099,8 @@
 "show_along_the_route" = "Podłu dróhi pokazać";
 "shared_string_local" = "Składowane";
 "download_wikipedia_maps" = "Wikipedija";
+"shared_string_minute_lowercase" = "mjeńš";
+"all_folders" = "Wšě rjadowaki";
+"sort_subfolders_tracks" = "Podrjadowaki sortěrować";
+"shared_string_to" = "Do";
+"transport_stop" = "Zastanišćo";

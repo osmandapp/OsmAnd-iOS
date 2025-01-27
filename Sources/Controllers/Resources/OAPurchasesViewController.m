@@ -364,7 +364,7 @@ static BOOL _purchasesUpdated;
                                 range:NSMakeRange(0, buttonTitle.string.length)];
             [cell.buttonView setAttributedTitle:buttonTitle forState:UIControlStateNormal];
 
-            [cell.buttonView setImage:[UIImage templateImageNamed:[item stringForKey:@"button_icon_name"]] forState:UIControlStateNormal];
+            [cell.buttonView setImage:[UIImage templateImageNamed:[item stringForKey:@"button_icon_name"]].imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
             cell.buttonView.tintColor = [item objForKey:@"button_icon_color"];
 
             cell.buttonView.tag = indexPath.section << 10 | indexPath.row;

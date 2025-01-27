@@ -7,6 +7,12 @@
 //
 
 extension OATextInfoWidget {
+    
+    @objc
+    func configureContextMenu(addGroup: UIMenu, settingsGroup: UIMenu, deleteGroup: UIMenu) -> UIMenu {
+        return UIMenu(title: "", children: [addGroup, settingsGroup, deleteGroup]);
+    }
+    
     @objc
     func configureContextWidgetMenu() -> UIMenu? {
         enum ContextWidgetMenu {
@@ -50,7 +56,7 @@ extension OATextInfoWidget {
             let deleteGroup = UIMenu(options: .displayInline, children: [
                 createAction(for: .delete, selectedWidget: widgetInfo.key)
             ])
-            return UIMenu(title: "", children: [addGroup, settingsGroup, deleteGroup])
+            return configureContextMenu(addGroup: addGroup, settingsGroup: settingsGroup, deleteGroup: deleteGroup)
         }
         
         func createAction(for menuItem: ContextWidgetMenu, selectedWidget: String) -> UIAction {

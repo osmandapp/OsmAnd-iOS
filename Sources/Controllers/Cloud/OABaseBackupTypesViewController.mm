@@ -272,8 +272,8 @@
     else
         [_selectedItems removeObjectForKey:type];
 
-    if (!selected && items.count > 0)
-        [self showClearTypeScreen:type view:view];
+//    if (!selected && items.count > 0)
+//        [self showClearTypeScreen:type view:view];
 
     if (_selectedIndexPath)
         [self.tableView reloadRowsAtIndexPaths:@[_selectedIndexPath] withRowAnimation:UITableViewRowAnimationNone];

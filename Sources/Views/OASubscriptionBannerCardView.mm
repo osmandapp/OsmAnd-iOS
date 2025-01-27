@@ -98,7 +98,7 @@
             self.buttonView.backgroundColor = UIColorFromRGB(color_banner_button);
             self.buttonView.tintColor = UIColorFromRGB(color_primary_purple);
             [self.buttonView setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
-            [self.buttonView setImage:[UIImage templateImageNamed:@"ic_custom_arrow_forward"]
+            [self.buttonView setImage:[UIImage templateImageNamed:@"ic_custom_arrow_forward"].imageFlippedForRightToLeftLayoutDirection
                              forState:UIControlStateNormal];
             break;
         }
@@ -113,7 +113,7 @@
             self.buttonView.backgroundColor = UIColorFromRGB(color_banner_button);
             self.buttonView.tintColor = UIColorFromRGB(color_primary_purple);
             [self.buttonView setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
-            [self.buttonView setImage:[UIImage templateImageNamed:@"ic_custom_arrow_forward"]
+            [self.buttonView setImage:[UIImage templateImageNamed:@"ic_custom_arrow_forward"].imageFlippedForRightToLeftLayoutDirection
                              forState:UIControlStateNormal];
             break;
         }

@@ -34,10 +34,11 @@
 
 #define ZOOM_TO_SHOW_MAP_NAMES 6
 #define ZOOM_AFTER_BASEMAP 12
-#define ZOOM_TO_SHOW_BORDERS_ST 4
-#define ZOOM_TO_SHOW_BORDERS 7
 #define ZOOM_TO_SHOW_SELECTION_ST 3
 #define ZOOM_TO_SHOW_SELECTION 8
+
+const static OsmAnd::ZoomLevel MIN_ZOOM_TO_SHOW = OsmAnd::ZoomLevel3;
+const static OsmAnd::ZoomLevel MAX_ZOOM_TO_SHOW = OsmAnd::ZoomLevel7;
 
 @implementation OADownloadMapObject
 
@@ -78,14 +79,14 @@
     _weatherToolbarStateChangeObservable = [[OAAutoObserverProxy alloc] initWith:self
                                                                      withHandler:@selector(onWeatherToolbarStateChanged)
                                                                       andObserve:[OARootViewController instance].mapPanel.weatherToolbarStateChangeObservable];
-    _collection = std::make_shared<OsmAnd::PolygonsCollection>();
-    _selectedCollection = std::make_shared<OsmAnd::PolygonsCollection>();
+    _collection = [self createPolygonCollection];
+    _selectedCollection = [self createPolygonCollection];
     _initDone = YES;
     
     [self.mapView addKeyedSymbolsProvider:_collection];
 }
 
-- (void)deinitLayer
+- (void) deinitLayer
 {
     [super deinitLayer];
     if (_localResourcesChangedObserver)
@@ -103,8 +104,13 @@
 - (void) resetLayer
 {
     [self.mapView removeKeyedSymbolsProvider:_collection];
-    _collection = std::make_shared<OsmAnd::PolygonsCollection>();
-    _selectedCollection = std::make_shared<OsmAnd::PolygonsCollection>();
+    _collection = [self createPolygonCollection];
+    _selectedCollection = [self createPolygonCollection];
+}
+
+- (std::shared_ptr<OsmAnd::PolygonsCollection>) createPolygonCollection
+{
+    return std::make_shared<OsmAnd::PolygonsCollection>(MIN_ZOOM_TO_SHOW, MAX_ZOOM_TO_SHOW);
 }
 
 - (BOOL) updateLayer
@@ -148,7 +154,7 @@
         {
             [self.mapViewController runWithRenderSync:^{
                 [self.mapView removeKeyedSymbolsProvider:_collection];
-                _collection = std::make_shared<OsmAnd::PolygonsCollection>();
+                _collection = [self createPolygonCollection];
                 BOOL hasPoints = NO;
                 for (OAWorldRegion *r in mapRegions)
                 {
@@ -222,7 +228,7 @@
 {
     [self.mapViewController runWithRenderSync:^{
         [self.mapView removeKeyedSymbolsProvider:_selectedCollection];
-        _selectedCollection = std::make_shared<OsmAnd::PolygonsCollection>();
+        _selectedCollection = [self createPolygonCollection];
     }];
 }
 

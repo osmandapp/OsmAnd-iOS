@@ -3481,3 +3481,7 @@
 "shared_string_sorted_by" = "este sortat de:";
 "plan_route_folder" = "Folder";
 "ltr_or_rtl_combine_via_dash" = "%@ — %@";
+"navigate_point_olc_short" = "OLC";
+"battery_widget_level_privacy_ios_desc" = "Din motive de confidențialitate iOS, widget-ul poate afișa nivelul bateriei doar în pași de 5%, cum ar fi 35%, 60% sau 85%";
+"lang_eo" = "Esperanto";
+"lang_ceb" = "limba cebuano";

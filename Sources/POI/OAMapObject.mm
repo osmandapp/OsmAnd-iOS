@@ -31,7 +31,7 @@
     [_y addObject:@(y)];
 }
 
-- (void) setName:(NSString *)lang name:(NSString *)name
+- (void) setName:(NSString * _Nullable)lang name:(NSString * _Nonnull)name
 {
     if (!lang || lang.length == 0)
     {

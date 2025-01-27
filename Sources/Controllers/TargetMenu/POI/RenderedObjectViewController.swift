@@ -27,13 +27,18 @@ final class RenderedObjectViewController: OAPOIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        updateUIAfterAmenitySearch()
+    }
+    
+    private func updateUIAfterAmenitySearch() {
         Task {
             do {
-                if let foundPoi = try await searchAmenity() {
-                    setup(foundPoi)
-                    rebuildRows()
-                    tableView.reloadData()
+                if let foundAmenity = try await searchAmenity() {
+                    await MainActor.run {
+                        setup(foundAmenity)
+                        rebuildRows()
+                        tableView.reloadData()
+                    }
                 }
             } catch {
                 print("Poi finding error: \(error)")
@@ -127,7 +132,7 @@ final class RenderedObjectViewController: OAPOIViewController {
         return super.getTypeStr()
     }
     
-    public static func getTranslatedType(renderedObject: OARenderedObject) -> String? {
+    static func getTranslatedType(renderedObject: OARenderedObject) -> String? {
         var pt: OAPOIType?
         var otherPt: OAPOIType?
         var translated: String?

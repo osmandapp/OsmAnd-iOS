@@ -106,7 +106,7 @@ final class ObfConstants: NSObject {
     }
     
     static func isRenderedObject(_ object: OAMapObject) -> Bool {
-        if let renderedObject = object as? OARenderedObject {
+        if object is OARenderedObject {
             return true
         } else if let poi = object as? OAPOI {
             return poi.isRenderedObject

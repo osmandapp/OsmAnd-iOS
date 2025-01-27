@@ -794,8 +794,7 @@
 
 - (NSArray<OARenderedObject *> *) retrievePolygonsAroundMapObject:(double)lat lon:(double)lon mapObject:(OAMapObject *)mapObject
 {
-    OAMapViewController *mapViewController = OARootViewController.instance.mapPanel.mapViewController;
-    OAMapRendererView *mapView = (OAMapRendererView *) mapViewController.view;
+    OAMapRendererView *mapView = (OAMapRendererView *)OARootViewController.instance.mapPanel.mapViewController.mapView;
     OsmAnd::ZoomLevel zoomLevel = mapView.zoomLevel;
     OsmAnd::PointI point(OsmAnd::Utilities::get31TileNumberX(lon), OsmAnd::Utilities::get31TileNumberY(lat));
     return [self retrievePolygonsAroundMapObject:point mapObject:mapObject zoomLevel:zoomLevel];
@@ -831,9 +830,9 @@
     NSMutableArray<OARenderedObject *> *res = [NSMutableArray new];
     
     OAMapViewController *mapViewController = OARootViewController.instance.mapPanel.mapViewController;
-    OAMapRendererEnvironment * menv = [mapViewController mapRendererEnv];
+    OAMapRendererEnvironment *menv = [mapViewController mapRendererEnv];
     QList<std::shared_ptr<const OsmAnd::MapObject>> polygons = menv.mapPrimitivesProvider->retreivePolygons(point, zoomLevel);
-    if (polygons.size() > 0)
+    if (!polygons.isEmpty())
     {
         for (int i = 0; i < polygons.size(); i++)
         {
@@ -911,12 +910,8 @@
         }
         else
         {
-            for (NSString *key in renderedObject.localizedNames.allKeys)
-            {
-                NSString *value = renderedObject.localizedNames[key];
-                renderedObject.name = value;
-                break;
-            }
+            if (renderedObject.localizedNames.count > 0)
+                renderedObject.name = renderedObject.localizedNames.allValues.firstObject;
         }
     }
     

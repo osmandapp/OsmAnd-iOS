@@ -1550,7 +1550,7 @@ typedef enum
 - (void) goToMapObject:(OAMapObject *)mapObject;
 {
     const OsmAnd::LatLon latLon(mapObject.latitude, mapObject.longitude);
-    OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
+    OAMapViewController *mapVC = [OARootViewController instance].mapPanel.mapViewController;
     Point31 pos = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
     [mapVC goToPosition:pos andZoom:kDefaultZoomOnShow animated:YES];
     [mapVC showContextPinMarker:mapObject.latitude longitude:mapObject.longitude animated:NO];

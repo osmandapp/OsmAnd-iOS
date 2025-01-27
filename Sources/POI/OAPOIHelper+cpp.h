@@ -10,6 +10,8 @@
 #include <OsmAndCore/Data/Amenity.h>
 #include <OsmAndCore/Data/MapObject.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface OAPOIHelper(cpp)
 
 @property (nonatomic) OsmAnd::PointI myLocation;
@@ -31,3 +33,5 @@
 + (void) processDecodedValues:(const QList<OsmAnd::Amenity::DecodedValue> &)decodedValues content:(NSMutableDictionary *)content values:(NSMutableDictionary *)values;
 
 @end
+
+NS_ASSUME_NONNULL_END

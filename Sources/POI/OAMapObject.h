@@ -23,6 +23,6 @@
 @property (nonatomic) NSMutableArray<NSNumber *> *y;
 
 - (void) addLocation:(int)x y:(int)y;
-- (void) setName:(NSString *)lang name:(NSString *)name;
+- (void) setName:(NSString * _Nullable)lang name:(NSString * _Nonnull)name;
 
 @end

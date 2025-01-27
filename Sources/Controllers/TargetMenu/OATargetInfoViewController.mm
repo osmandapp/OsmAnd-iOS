@@ -259,11 +259,7 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
         for (OARenderedObject *polygon in polygons)
         {
             OAPOI *syntheticAmenity = [RenderedObjectViewController getSyntheticAmenityWithRenderedObject:polygon];
-            NSString *name = syntheticAmenity.nameLocalized;
-            name = name && name.length > 0 ? name : syntheticAmenity.name;
-            name = name && name.length > 0 ? name : [syntheticAmenity.type nameLocalized];
-            name = name && name.length > 0 ? name : [RenderedObjectViewController getTranslatedTypeWithRenderedObject:polygon];
-            [names addObject:name];
+            [names addObject:[self getFirstNonEmptyNameForAmenity:syntheticAmenity withRenderedObject:polygon]];
         }
         NSString *rowSummary = [self getMenuObjectsNamesByComma:names];
         
@@ -289,6 +285,19 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
     }
 }
 
+- (NSString *)getFirstNonEmptyNameForAmenity:(OAPOI *)syntheticAmenity withRenderedObject:(OARenderedObject *)polygon
+{
+    if (syntheticAmenity.nameLocalized.length > 0)
+        return syntheticAmenity.nameLocalized;
+    else if (syntheticAmenity.name.length > 0)
+        return syntheticAmenity.name;
+    else if (syntheticAmenity.type.nameLocalized.length > 0)
+        return syntheticAmenity.type.nameLocalized;
+    else if (polygon)
+        return [RenderedObjectViewController getTranslatedTypeWithRenderedObject:polygon];
+    return @"";
+}
+
 - (NSMutableArray<NSDictionary<NSString *, NSString *> *> *) getWithinCollapsableContent:(NSArray<OARenderedObject *> *)renderedObjects
 {
     NSMutableArray<NSDictionary<NSString *, NSString *> *> *array = [NSMutableArray new];
@@ -310,12 +319,9 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
         }
         else
         {
-            // in android:
-            // rowTextPrefix = MenuObjectUtils.getSecondLineText(menuObject);
             key = syntheticAmenity.type.nameLocalized;
-            value = syntheticAmenity.nameLocalized;
-            value = value && value.length > 0 ? value : syntheticAmenity.name;
-            if (!value || value.length == 0)
+            value = [self getFirstNonEmptyNameForAmenity:syntheticAmenity withRenderedObject:nil];
+            if (value.length == 0)
             {
                 value = key;
                 key = @"";
@@ -334,12 +340,7 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
 
 - (NSString *) getMenuObjectsNamesByComma:(NSArray<NSString *> *)menuObjects
 {
-    NSString *names = @"";
-    for (NSString *title in menuObjects)
-        names = [NSString stringWithFormat:@"%@%@, ", names, title];
-    if ([names hasSuffix:@", "])
-        names = [names substringToIndex:names.length - 2];
-    return names;
+    return menuObjects.count == 0 ? @"" : [menuObjects componentsJoinedByString:@", "];
 }
 
 - (void)buildRowsPoi:(BOOL)isWiki

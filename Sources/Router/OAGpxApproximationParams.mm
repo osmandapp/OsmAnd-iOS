@@ -36,26 +36,16 @@
     _locationsHolders = locationsHolders;
 }
 
-- (BOOL)updateAppMode:(OAApplicationMode *)newAppMode
+- (void)setAppMode:(OAApplicationMode *)newAppMode
 {
-    if (newAppMode != nil && _appMode != newAppMode)
-    {
+    if (newAppMode && _appMode != newAppMode)
         _appMode = newAppMode;
-        return YES;
-    }
-    
-    return NO;
 }
 
-- (BOOL)updateDistanceThreshold:(int)newThreshold
+- (void)setDistanceThreshold:(int)newThreshold
 {
     if (_distanceThreshold != newThreshold)
-    {
         _distanceThreshold = newThreshold;
-        return YES;
-    }
-    
-    return NO;
 }
 
 - (OAApplicationMode *)getAppMode

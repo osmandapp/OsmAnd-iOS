@@ -17,8 +17,8 @@
 @property (nonatomic, strong) NSMutableArray<OALocationsHolder *> *locationsHolders;
 
 - (void)setTrackPoints:(NSArray<NSArray<OASWptPt *> *> *)points;
-- (BOOL)updateAppMode:(OAApplicationMode *)appMode;
-- (BOOL)updateDistanceThreshold:(int)newThreshold;
+- (void)setAppMode:(OAApplicationMode *)newAppMode;
+- (void)setDistanceThreshold:(int)newThreshold;
 - (OAApplicationMode *)getAppMode;
 - (int)getDistanceThreshold;
 - (NSArray<OALocationsHolder *> *)getLocationsHolders;

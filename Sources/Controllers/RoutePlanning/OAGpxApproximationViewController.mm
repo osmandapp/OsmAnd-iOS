@@ -165,10 +165,8 @@
 
 - (void)didFinishAllApproximationsWithResults:(NSArray<OAGpxRouteApproximation *> *)approximations points:(NSArray<NSArray<OASWptPt *> *> *)points
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (_progressBarView)
-            _progressBarView.hidden = YES;
-    });
+    if (_progressBarView)
+        _progressBarView.hidden = YES;
     
     if (self.delegate)
         [self.delegate onGpxApproximationDone:approximations pointsList:points mode:_snapToRoadAppMode];
@@ -177,10 +175,8 @@
 
 - (void) setApplyButtonEnabled:(BOOL)enabled
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        self.rightButton.userInteractionEnabled = enabled;
-        self.rightButton.backgroundColor = enabled ? [UIColor colorNamed:ACColorNameButtonBgColorPrimary] : [UIColor colorNamed:ACColorNameButtonBgColorSecondary];
-    });
+    self.rightButton.userInteractionEnabled = enabled;
+    self.rightButton.backgroundColor = enabled ? [UIColor colorNamed:ACColorNameButtonBgColorPrimary] : [UIColor colorNamed:ACColorNameButtonBgColorSecondary];
 }
 
 // MARK: Selectors

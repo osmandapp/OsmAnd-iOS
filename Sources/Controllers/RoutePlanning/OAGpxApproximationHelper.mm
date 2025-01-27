@@ -56,6 +56,7 @@
 
 - (BOOL)calculateGpxApproximation:(BOOL)newCalculation
 {
+    // UI Thread+
     if (newCalculation)
     {
         if (_gpxApproximator != nil)
@@ -100,10 +101,12 @@
 
 - (void) approximateGpx:(OAGpxApproximator *)gpxApproximator
 {
+    // UI Thread+
     if (self.delegate)
         [self.delegate didApproximationStarted];
     
     [gpxApproximator calculateGpxApproximation:[[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OAGpxRouteApproximation *__autoreleasing *object) {
+        // wait for first result as final
         if (!gpxApproximator.isCancelled)
         {
             if (*object)
@@ -131,8 +134,11 @@
         }
     }
     
-    if (self.delegate)
-        [self.delegate didFinishAllApproximationsWithResults:approximations points:points];
+    if (self.delegate) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.delegate didFinishAllApproximationsWithResults:approximations points:points];
+        });
+    }
 }
 
 - (OASGpxFile *)approximateGpxSync:(OASGpxFile *)gpxFile params:(OAGpxApproximationParams *)params
@@ -210,15 +216,14 @@
 
 - (void)updateProgress:(OAGpxApproximator *)approximator progress:(NSInteger)progress
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (approximator == _gpxApproximator)
-        {
-            float partSize = 100. / _locationsHolders.count;
-            float p = _resultMap.count * partSize + (progress / 100.) * partSize;
-            if (self.delegate)
-                [self.delegate didUpdateProgress:(int)p];
-        }
-    });
+    // UI Thread+
+    if (approximator == _gpxApproximator)
+    {
+        float partSize = 100. / _locationsHolders.count;
+        float p = _resultMap.count * partSize + (progress / 100.) * partSize;
+        if (self.delegate)
+            [self.delegate didUpdateProgress:(int)p];
+    }
 }
 
 @end

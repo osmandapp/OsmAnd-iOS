@@ -3576,3 +3576,4 @@
 "km_h" = "km/h";
 "cloud_sync_progress" = "Synchronizace...%@";
 "download_tab_conflicts" = "Nevyřešené";
+"battery_widget_level_privacy_ios_desc" = "Z důvodu ochrany soukromí v systému iOS může widget zobrazovat úroveň nabití baterie pouze v 5% krocích, například 35 %, 60 % nebo 85 %";

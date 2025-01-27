@@ -3599,3 +3599,4 @@
 "mapillary_item" = "OsmAnd + Mapillary";
 "navigate_point_olc_short" = "OLC";
 "osm_id" = "OSM ID";
+"battery_widget_level_privacy_ios_desc" = "З міркувань конфіденційності iOS віджет може відображати рівень заряду акумулятора лише з кроком у 5%, наприклад 35%, 60% або 85%";

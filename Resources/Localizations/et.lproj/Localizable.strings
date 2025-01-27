@@ -1468,7 +1468,7 @@
 "app_mode_campervan" = "Laagribuss (RV)";
 "open_in_browser_wiki" = "Ava artikkel veebis";
 "app_mode_helicopter" = "Helikopter";
-"shared_string_zoom_levels" = "Suurendus";
+"shared_string_zoom_levels" = "Suumitasemed";
 "shared_string_appearance" = "Välimus";
 "app_mode_shuttle_bus" = "Liinibuss";
 "app_mode_wagon" = "Vagun";

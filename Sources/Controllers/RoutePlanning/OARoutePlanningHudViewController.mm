@@ -1960,20 +1960,18 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void)onGpxApproximationDone:(NSArray<OAGpxRouteApproximation *> *)gpxApproximations pointsList:(NSArray<NSArray<OASWptPt *> *> *)pointsList mode:(OAApplicationMode *)mode
 {
-	dispatch_async(dispatch_get_main_queue(), ^{
-		if (_layer)
-		{
-			BOOL approximationMode = _editingContext.approximationMode;
-			_editingContext.approximationMode = YES;
-			OAApplyGpxApproximationCommand *command = [[OAApplyGpxApproximationCommand alloc] initWithLayer:_layer approximations:gpxApproximations segmentPointsList:pointsList appMode:mode];
-			if (!approximationMode || ![_editingContext.commandManager update:command])
-			{
-				[_editingContext.commandManager execute:command];
-			}
-			[self goMinimized];
-			[self setupModeButton];
-		}
-	});
+    if (_layer)
+    {
+        BOOL approximationMode = _editingContext.approximationMode;
+        _editingContext.approximationMode = YES;
+        OAApplyGpxApproximationCommand *command = [[OAApplyGpxApproximationCommand alloc] initWithLayer:_layer approximations:gpxApproximations segmentPointsList:pointsList appMode:mode];
+        if (!approximationMode || ![_editingContext.commandManager update:command])
+        {
+            [_editingContext.commandManager execute:command];
+        }
+        [self goMinimized];
+        [self setupModeButton];
+    }
 }
 
 @end

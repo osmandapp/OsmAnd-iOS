@@ -499,6 +499,10 @@
 "screen_alerts" = "Screen alerts";
 "vehicle_parameters" = "Vehicle parameters";
 "map_during_navigation" = "Map during navigation";
+"detailed_track_guidance" = "Detailed track guidance";
+"detailed_track_guidance_description" = "OsmAnd will match your track to nearby roads for enhanced turn-by-turn guidance.";
+"ask_every_time" = "Ask every time";
+"attach_roads_descr" = "Attach your track to roads to get detailed route information with turn instructions and road attributes.";
 "change_map_behavior" = "Change map behavior during navigation";
 "nav_type_descr" = "Select how to calculate a route for this profile";
 "nav_type_osmand" = "OsmAnd (offline routing)";

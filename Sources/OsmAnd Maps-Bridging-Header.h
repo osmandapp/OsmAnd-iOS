@@ -180,6 +180,8 @@
 #import "OARangeSlider.h"
 #import "OATitleDescrDraggableCell.h"
 #import "OARouteStatisticsModeCell.h"
+#import "OADeviceScreenTableViewCell.h"
+#import "OATitleSliderRoundCell.h"
 
 
 // Views

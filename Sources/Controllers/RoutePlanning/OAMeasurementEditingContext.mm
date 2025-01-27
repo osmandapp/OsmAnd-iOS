@@ -1110,7 +1110,11 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     if (_before.points.count == 0)
         return nil;
     
-    return [OARouteExporter exportRoute:gpxName trkSegments:[self getRouteSegments] points:nil];
+    NSArray<OASWptPt *> *points = nil;
+    if (_gpxData != nil && _gpxData.gpxFile != nil)
+        points = [_gpxData.gpxFile getPointsList];
+    
+    return [OARouteExporter exportRoute:gpxName trkSegments:[self getRouteSegments] points:points routePoints:[self getRoutePoints]];
 }
 
 - (NSArray<OASTrkSegment *> *) getRouteSegments

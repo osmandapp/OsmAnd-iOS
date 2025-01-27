@@ -32,12 +32,17 @@ final class BatteryWidget: OASimpleWidget {
             let level = UIDevice.current.batteryLevel
             let status = UIDevice.current.batteryState
             var charging = false
-            // NOTE: for the isiOSAppOnMac, the batteryLevel always returns as 0.00999999977
-            if level == -1 || status == .unknown || OAUtilities.isiOSAppOnMac() {
+
+            if level == -1 || status == .unknown {
                 setText("?", subtext: nil)
             } else {
                 charging = status == .charging || status == .full
-                setText("\(Int(level * 100))%", subtext: nil)
+                // NOTE: for the isiOSAppOnMac, the batteryLevel always returns as 0.00999999977
+                if OAUtilities.isiOSAppOnMac() {
+                    setText("?", subtext: nil)
+                } else {
+                    setText("\(Int(level * 100))%", subtext: nil)
+                }
             }
             setIcons(charging: charging)
         }

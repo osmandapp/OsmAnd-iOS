@@ -308,6 +308,7 @@
 "radius_rules_widget_desc" = "The radius-ruler tool displays distance circles around a selected point on the map.";
 "current_time_widget_desc" = "Shows the current time as taken from your device.";
 "battery_widget_desc" = "Shows the battery level of your device.";
+"battery_widget_level_privacy_ios_desc" = "Due to iOS privacy reasons, the widget can only display the battery level in 5% steps, such as 35%, 60%, or 85%";
 "gps_info_widget_desc" = "Shows the number of satellites currently visible and used.";
 "altitude_widget_desc" = "Shows the height above sea level of current geolocation.";
 "max_speed_widget_desc" = "Displays the speed limit for the currently driven road.";

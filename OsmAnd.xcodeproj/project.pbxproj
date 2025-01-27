@@ -1338,6 +1338,7 @@
 		C558A29E29B1355A00E79DDB /* ic_custom_direction_manual@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C558A29829B1355900E79DDB /* ic_custom_direction_manual@3x.png */; };
 		C558A29F29B1355A00E79DDB /* ic_custom_direction_manual_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C558A29929B1355900E79DDB /* ic_custom_direction_manual_day@2x.png */; };
 		C558A2A029B1355A00E79DDB /* ic_custom_direction_manual_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C558A29A29B1355A00E79DDB /* ic_custom_direction_manual_day@3x.png */; };
+		C558DC462D453B1F007C0230 /* OAGpxApproximationParams.mm in Sources */ = {isa = PBXBuildFile; fileRef = C558DC452D453B1F007C0230 /* OAGpxApproximationParams.mm */; };
 		C5693B802A9DD1F7007EA552 /* ic_custom_3d_relief_colored_day_big@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5693B7C2A9DD1F5007EA552 /* ic_custom_3d_relief_colored_day_big@3x.png */; };
 		C5693B812A9DD1F7007EA552 /* ic_custom_3d_relief_colored_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5693B7D2A9DD1F6007EA552 /* ic_custom_3d_relief_colored_day@3x.png */; };
 		C5693B822A9DD1F7007EA552 /* ic_custom_3d_relief_colored_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5693B7E2A9DD1F6007EA552 /* ic_custom_3d_relief_colored_day@2x.png */; };
@@ -4865,6 +4866,8 @@
 		C558A29829B1355900E79DDB /* ic_custom_direction_manual@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_direction_manual@3x.png"; path = "Resources/Icons/ic_custom_direction_manual@3x.png"; sourceTree = "<group>"; };
 		C558A29929B1355900E79DDB /* ic_custom_direction_manual_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_direction_manual_day@2x.png"; path = "Resources/Icons/ic_custom_direction_manual_day@2x.png"; sourceTree = "<group>"; };
 		C558A29A29B1355A00E79DDB /* ic_custom_direction_manual_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_direction_manual_day@3x.png"; path = "Resources/Icons/ic_custom_direction_manual_day@3x.png"; sourceTree = "<group>"; };
+		C558DC442D453B1F007C0230 /* OAGpxApproximationParams.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGpxApproximationParams.h; sourceTree = "<group>"; };
+		C558DC452D453B1F007C0230 /* OAGpxApproximationParams.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGpxApproximationParams.mm; sourceTree = "<group>"; };
 		C5693B7C2A9DD1F5007EA552 /* ic_custom_3d_relief_colored_day_big@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_3d_relief_colored_day_big@3x.png"; path = "Resources/Icons/ic_custom_3d_relief_colored_day_big@3x.png"; sourceTree = "<group>"; };
 		C5693B7D2A9DD1F6007EA552 /* ic_custom_3d_relief_colored_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_3d_relief_colored_day@3x.png"; path = "Resources/Icons/ic_custom_3d_relief_colored_day@3x.png"; sourceTree = "<group>"; };
 		C5693B7E2A9DD1F6007EA552 /* ic_custom_3d_relief_colored_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_3d_relief_colored_day@2x.png"; path = "Resources/Icons/ic_custom_3d_relief_colored_day@2x.png"; sourceTree = "<group>"; };
@@ -13220,6 +13223,8 @@
 				DA5A810526C563A600F274C7 /* OAExitInfo.m */,
 				DA5A810426C563A600F274C7 /* OAGpxApproximator.h */,
 				DA5A810326C563A600F274C7 /* OAGpxApproximator.mm */,
+				C558DC442D453B1F007C0230 /* OAGpxApproximationParams.h */,
+				C558DC452D453B1F007C0230 /* OAGpxApproximationParams.mm */,
 				DA5A810926C563A600F274C7 /* OAGpxRouteApproximation.h */,
 				DA5A810026C563A600F274C7 /* OAGpxRouteApproximation.mm */,
 				DA5A80FD26C563A600F274C7 /* OALocationPointWrapper.h */,
@@ -16479,6 +16484,7 @@
 				DA5A84A126C563A900F274C7 /* OAApplyGpxApproximationCommand.mm in Sources */,
 				DA5A841626C563A800F274C7 /* OAGPXWptViewController.mm in Sources */,
 				C546C00A2AC2446E00377EDE /* OAUploadOsmPOINoteViewProgressController.m in Sources */,
+				C558DC462D453B1F007C0230 /* OAGpxApproximationParams.mm in Sources */,
 				C5EB72C42BD12F4D00C50C23 /* RouteParameterDevelopmentViewController.swift in Sources */,
 				DA5A830026C563A800F274C7 /* OAPublicTransportRouteShieldCell.m in Sources */,
 				FA83EAA72BF6538B00DBF321 /* SpeedometerView.swift in Sources */,

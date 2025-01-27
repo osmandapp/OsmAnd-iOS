@@ -170,7 +170,7 @@
 {
     _gpxFile = builder.file;
     _reverse = builder.reverse;
-    _gpxApproximator = builder.gpxApproximator;
+    _approximationParams = builder.approximationParams;
     self.passWholeRoute = builder.passWholeRoute;
     self.useIntermediatePointsRTE = builder.useIntermediatePointsRTE;
     self.connectPointsStraightly = builder.connectPointsStraightly;
@@ -308,7 +308,7 @@
         _connectPointsStraightly = params.connectPointsStraightly;
         _useIntermediatePointsRTE = params.useIntermediatePointsRTE;
         _selectedSegment = OAAppSettings.sharedManager.gpxRouteSegment.get;
-        _gpxApproximator = params.gpxApproximator;
+        _approximationParams = params.approximationParams;
         [[OARoutingHelper sharedInstance] setGpxParams:self];
     }
     return self;
@@ -342,9 +342,9 @@
     return [NSArray arrayWithArray:locationList];
 }
 
-- (void) setGpxApproximator:(OAGpxApproximator *)gpxApproximator
+- (void)setApproximationParams:(OAGpxApproximationParams *)approximationParams
 {
-    _gpxApproximator = gpxApproximator;
+    _approximationParams = approximationParams;
 }
 
 @end
@@ -1756,11 +1756,11 @@
 {
     if (params.gpxRoute != nil)
     {
-        OAGpxApproximator *gpxApproximator = params.gpxRoute.gpxApproximator;
-        if (gpxApproximator != nil && ![params.gpxRoute.gpxFile isAttachedToRoads])
+        OAGpxApproximationParams *approximationParams = params.gpxRoute.approximationParams;
+        if (approximationParams != nil && ![params.gpxRoute.gpxFile isAttachedToRoads])
         {
-            OAGpxApproximationHelper *approximationHelper = [[OAGpxApproximationHelper alloc] initWithLocations:gpxApproximator.locationsHolders initialAppMode:[[OARoutingHelper sharedInstance] getAppMode] initialThreshold:[[OAAppSettings sharedManager].gpxApproximationDistance get:[[OARoutingHelper sharedInstance] getAppMode]]];
-            OASGpxFile *gpx = [approximationHelper approximateGpxSync:params.gpxRoute.gpxFile params:gpxApproximator];
+            OAGpxApproximationHelper *approximationHelper = [[OAGpxApproximationHelper alloc] initWithLocations:approximationParams.locationsHolders initialAppMode:[[OARoutingHelper sharedInstance] getAppMode] initialThreshold:[[OAAppSettings sharedManager].gpxApproximationDistance get:[[OARoutingHelper sharedInstance] getAppMode]]];
+            OASGpxFile *gpx = [approximationHelper approximateGpxSync:params.gpxRoute.gpxFile params:approximationParams];
             if (![gpx error] && [gpx isAttachedToRoads])
                 params.gpxRoute = [[[OAGPXRouteParamsBuilder alloc] initWithFile:gpx params:params.gpxRoute] build:params.end];
         }

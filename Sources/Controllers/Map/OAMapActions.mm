@@ -32,6 +32,7 @@
 #import "OAAppData.h"
 #import "OAAddWaypointBottomSheetViewController.h"
 #import "OAUninstallSpeedCamerasViewController.h"
+#import "OAGpxApproximationParams.h"
 #import "OsmAndSharedWrapper.h"
 #import "OsmAnd_Maps-Swift.h"
 
@@ -168,10 +169,10 @@
         OAApplicationMode *appMode = [_routingHelper getAppMode];
         if (![doc isAttachedToRoads] && [_settings.detailedTrackGuidance get:appMode] == EOATrackApproximationAutomatic)
         {
-            OAGpxApproximator *approximator = [[OAGpxApproximator alloc] init];
-            [approximator setMode:appMode];
-            approximator.pointApproximation = [_settings.gpxApproximationDistance get:[_routingHelper getAppMode]];
-            [params setGpxApproximator:approximator];
+            OAGpxApproximationParams *approximationParams = [[OAGpxApproximationParams alloc] init];
+            [approximationParams setAppMode:appMode];
+            [approximationParams setDistanceThreshold:[_settings.gpxApproximationDistance get:[_routingHelper getAppMode]]];
+            [params setApproximationParams:approximationParams];
         }
         
         NSArray<CLLocation *> *ps = [params getPoints];

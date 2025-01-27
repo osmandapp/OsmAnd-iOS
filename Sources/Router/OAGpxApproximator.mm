@@ -172,14 +172,6 @@
 	}
 }
 
-- (void) setTrackPoints:(NSArray<NSArray<OASWptPt *> *> *)points
-{
-    NSMutableArray<OALocationsHolder *> *locationsHolders = [NSMutableArray array];
-    for (NSArray<OASWptPt *> *segment in points)
-        [locationsHolders addObject:[[OALocationsHolder alloc] initWithLocations:segment]];
-    _locationsHolders = locationsHolders;
-}
-
 - (BOOL) isCancelled
 {
 	return _gctx != nullptr && _gctx->ctx->progress->isCancelled();

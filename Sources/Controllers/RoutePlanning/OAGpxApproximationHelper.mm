@@ -13,6 +13,9 @@
 #import "OAGpxApproximator.h"
 #import "OALocationsHolder.h"
 #import "OAApplicationMode.h"
+#import "OAGpxApproximationParams.h"
+#import "OAGPXDatabase.h"
+#import "OAGpxData.h"
 
 @interface OAGpxApproximationHelper () <OAGpxApproximationProgressDelegate>
 
@@ -132,7 +135,7 @@
         [self.delegate didFinishAllApproximationsWithResults:approximations points:points];
 }
 
-- (OASGpxFile *)approximateGpxSync:(OASGpxFile *)gpxFile params:(OAGpxApproximator *)params
+- (OASGpxFile *)approximateGpxSync:(OASGpxFile *)gpxFile params:(OAGpxApproximationParams *)params
 {
     OAMeasurementEditingContext *context = [self createEditingContext:gpxFile params:params];
     NSArray *pair = [self calculateGpxApproximationSync];
@@ -180,7 +183,7 @@
     return @[approximations, points];
 }
 
-- (OASGpxFile *)createApproximatedGpx:(OAMeasurementEditingContext *)context params:(OAGpxApproximator *)params approximations:(NSArray<OAGpxRouteApproximation *> *)approximations points:(NSArray<NSArray<OASWptPt *> *> *)points
+- (OASGpxFile *)createApproximatedGpx:(OAMeasurementEditingContext *)context params:(OAGpxApproximationParams *)params approximations:(NSArray<OAGpxRouteApproximation *> *)approximations points:(NSArray<NSArray<OASWptPt *> *> *)points
 {
     for (NSUInteger i = 0; i < [approximations count]; i++)
     {
@@ -192,11 +195,11 @@
     return [context exportGpx:context.gpxData.gpxFile.path.lastPathComponent.stringByDeletingPathExtension];
 }
 
-- (OAMeasurementEditingContext *)createEditingContext:(OASGpxFile *)gpxFile params:(OAGpxApproximator *)params
+- (OAMeasurementEditingContext *)createEditingContext:(OASGpxFile *)gpxFile params:(OAGpxApproximationParams *)params
 {
     OAMeasurementEditingContext *editingContext = [[OAMeasurementEditingContext alloc] init];
     editingContext.gpxData = [[OAGpxData alloc] initWithFile:gpxFile];
-    editingContext.appMode = params.mode;
+    editingContext.appMode = [params getAppMode];
     [editingContext addPoints];
     [params setTrackPoints:[editingContext getPointsSegments:YES route:YES]];
     _locationsHolders = params.locationsHolders;

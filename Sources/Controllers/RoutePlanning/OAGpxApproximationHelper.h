@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class OAApplicationMode, OAGpxApproximator, OAGpxRouteApproximation, OALocationsHolder, OASGpxFile, OASWptPt;
+@class OAApplicationMode, OAGpxApproximationParams, OAGpxRouteApproximation, OALocationsHolder, OASGpxFile, OASWptPt;
 
 @protocol OAGpxApproximationHelperDelegate <NSObject>
 
@@ -26,7 +26,7 @@
 - (instancetype)initWithLocations:(NSArray<OALocationsHolder *> *)locations initialAppMode:(OAApplicationMode *)appMode initialThreshold:(float)threshold;
 
 - (BOOL)calculateGpxApproximation:(BOOL)newCalculation;
-- (OASGpxFile *)approximateGpxSync:(OASGpxFile *)gpxFile params:(OAGpxApproximator *)params;
+- (OASGpxFile *)approximateGpxSync:(OASGpxFile *)gpxFile params:(OAGpxApproximationParams *)params;
 - (void)updateAppMode:(OAApplicationMode *)appMode;
 - (void)updateDistanceThreshold:(float)threshold;
 

@@ -18,7 +18,7 @@
 #import "OAResultMatcher.h"
 #import "OALocationSimulation.h"
 #import "MissingMapsCalculator.h"
-#import "OAGpxApproximator.h"
+#import "OAGpxApproximationParams.h"
 
 #include <OsmAndCore.h>
 
@@ -72,7 +72,7 @@ struct RouteSegmentResult;
 @property (nonatomic) BOOL connectPointsStraightly;
 @property (nonatomic) BOOL reverse;
 @property (nonatomic) OASGpxFile *gpxFile;
-@property (nonatomic) OAGpxApproximator *gpxApproximator;
+@property (nonatomic) OAGpxApproximationParams *approximationParams;
 @property (nonatomic) NSArray<id<OALocationPoint>> *wpt;
 @property (nonatomic, readonly) NSArray<CLLocation *> *segmentEndPoints;
 @property (nonatomic) std::vector<std::shared_ptr<RouteSegmentResult>> route;
@@ -94,7 +94,7 @@ struct RouteSegmentResult;
 @property (nonatomic) BOOL useIntermediatePointsRTE;
 @property (nonatomic) BOOL connectPointsStraightly;
 @property (nonatomic) NSInteger selectedSegment;
-@property (nonatomic) OAGpxApproximator *gpxApproximator;
+@property (nonatomic) OAGpxApproximationParams *approximationParams;
 
 - (instancetype)initWithDoc:(OASGpxFile *)document;
 - (instancetype)initWithFile:(OASGpxFile *)gpxFile params:(OAGPXRouteParams *)params;
@@ -102,7 +102,7 @@ struct RouteSegmentResult;
 - (OAGPXRouteParams *) build:(CLLocation *)start;
 - (NSArray<CLLocation *> *) getPoints;
 - (NSArray<OASimulatedLocation *> *)getSimulatedLocations;
-- (void)setGpxApproximator:(OAGpxApproximator *)gpxApproximator;
+- (void)setApproximationParams:(OAGpxApproximationParams *)approximationParams;
 
 @end
 

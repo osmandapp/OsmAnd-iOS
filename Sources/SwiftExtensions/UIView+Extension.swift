@@ -96,19 +96,6 @@ extension UIView {
     }
 }
 
-
-//extension UITableViewCell {
-//    @objc static var reuseIdentifier: String {
-//        String(describing: self)
-//    }
-//}
-//
-//extension UICollectionViewCell {
-//    @objc static var reuseIdentifier: String {
-//        String(describing: self)
-//    }
-//}
-
 extension UIView {
     class func fromNib<T: UIView>() -> T {
         Bundle(for: T.self).loadNibNamed(String(describing: T.self), owner: nil, options: nil)![0] as! T

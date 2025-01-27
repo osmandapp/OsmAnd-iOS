@@ -181,10 +181,12 @@
 #import "OATitleDescrDraggableCell.h"
 #import "OARouteStatisticsModeCell.h"
 
+
 // Views
 #import "OASegmentedSlider.h"
 #import "OATurnDrawable.h"
 #import "OAHudButton.h"
+#import "OACollapsableView.h"
 
 // Apple
 #import <SafariServices/SafariServices.h>

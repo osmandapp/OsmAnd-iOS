@@ -37,7 +37,7 @@ final class MapillaryContributeCard: AbstractCard {
         OAMapillaryPlugin.installOrOpenMapillary()
     }
 
-    static override func getCellNibId() -> String {
+    override class func getCellNibId() -> String {
         MapillaryContributeCell.reuseIdentifier
     }
 }

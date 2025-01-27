@@ -24,7 +24,6 @@
 #import "OACollapsableNearestPoiWikiView.h"
 #import "OATransportStopRoute.h"
 #import "OACollapsableTransportStopRoutesView.h"
-#import "OACollapsableCardsView.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OAPointDescription.h"
 #import "OACollapsableCoordinatesView.h"
@@ -46,6 +45,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
+#import "OACollapsableView.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -58,6 +58,14 @@ static NSString *kMailLink = @"mailto:%@";
 static NSString *kInstagramLink = @"https://www.instagram.com/%@";
 static NSString *kFacebookLink = @"https://www.facebook.com/%@";
 
+NSString * const TYPE_MAPILLARY_PHOTO = @"mapillary-photo";
+NSString * const TYPE_MAPILLARY_CONTRIBUTE = @"mapillary-contribute";
+NSString * const TYPE_MAPILLARY_EMPTY = @"mapillary-empty";
+NSString * const TYPE_URL_PHOTO = @"url-photo";
+NSString * const TYPE_WIKIMEDIA_PHOTO = @"wikimedia-photo";
+NSString * const TYPE_WIKIDATA_PHOTO = @"wikidata-photo";
+
+
 // HTML for ViewPort
 static NSString *const kViewPortHtml = @"<header><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'></header>";
 
@@ -67,7 +75,7 @@ static const NSInteger kNearbyPoiMinRadius = 250;
 static const NSInteger kNearbyPoiMaxRadius = 1000;
 static const NSInteger kNearbyPoiSearchFactory = 2;
 
-@interface OATargetInfoViewController() <OACollapsableCardViewDelegate, OAEditDescriptionViewControllerDelegate>
+@interface OATargetInfoViewController() <CollapsableCardViewDelegate, OAEditDescriptionViewControllerDelegate>
 
 @property (nonatomic) BOOL wikiCardsReady;
 
@@ -602,7 +610,7 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
             [self removeDuplicatesFromCards:cards];
 
         if (nearbyImagesRowInfo)
-            [((OACollapsableCardsView *) nearbyImagesRowInfo.collapsableView) setCards:cards];
+            [((CollapsableCardsView *) nearbyImagesRowInfo.collapsableView) setCards:cards];
         
         _otherCardsReady = _wikiCardsReady = NO;
     }
@@ -660,12 +668,12 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
 
     OARowInfo *nearbyImagesRowInfo = [[OARowInfo alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_photo"] textPrefix:nil text:OALocalizedString(@"mapil_images_nearby") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
 
-    OACollapsableCardsView *cardView = [[OACollapsableCardsView alloc] init];
+    CollapsableCardsView *cardView = [[CollapsableCardsView alloc] init];
     cardView.delegate = self;
     nearbyImagesRowInfo.collapsable = YES;
     nearbyImagesRowInfo.collapsed = [OAAppSettings sharedManager].onlinePhotosRowCollapsed.get;
     nearbyImagesRowInfo.collapsableView = cardView;
-    nearbyImagesRowInfo.collapsableView.frame = CGRectMake([OAUtilities getLeftMargin], 0, 320, 100);
+    nearbyImagesRowInfo.collapsableView.frame = CGRectMake([OAUtilities getLeftMargin], 0, 320, 224);
     [_rows addObject:nearbyImagesRowInfo];
     
     _nearbyImagesRowInfo = nearbyImagesRowInfo;
@@ -1045,7 +1053,7 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
     _wikiCardsReady = NO;
     if (_nearbyImagesRowInfo)
     {
-        OACollapsableCardsView *cardsView = (OACollapsableCardsView *) _nearbyImagesRowInfo.collapsableView;
+        CollapsableCardsView *cardsView = (CollapsableCardsView *) _nearbyImagesRowInfo.collapsableView;
         [cardsView setCards:@[[[ImageCard alloc] initWithData:@{@"key": @"loading"}]]];
     }
 

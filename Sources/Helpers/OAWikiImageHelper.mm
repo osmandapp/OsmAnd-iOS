@@ -9,13 +9,12 @@
 #import <CocoaSecurity.h>
 #import "OAWikiImageHelper.h"
 #import "OATargetInfoViewController.h"
-#import "OACollapsableCardsView.h"
 #import "OAPOI.h"
 #import "OsmAnd_Maps-Swift.h"
 
 typedef NS_ENUM(NSInteger, EOAWikiImageType) {
     EOAWikiImageTypeWikimedia = 0,
-    EOAWikiImageTypeWikidata,
+    EOAWikiImageTypeWikidata
 };
 
 static NSArray<NSNumber *> *cardTypes = @[@(EOAWikiImageTypeWikimedia), @(EOAWikiImageTypeWikidata)];

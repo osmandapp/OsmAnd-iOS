@@ -27,7 +27,7 @@ final class BackupUtils: NSObject {
     }
 
     static func isTokenValid(_ token: String) -> Bool {
-        token.range(of: "^[0-9]+$", options: .regularExpression) != nil
+        token.range(of: "^[a-zA-Z0-9]+$", options: .regularExpression) != nil
     }
 
     static func getItemsForRestore(_ info: OABackupInfo?,

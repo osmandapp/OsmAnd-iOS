@@ -3977,3 +3977,5 @@
 
 "rendering_attr_showClimbingRoutes_description" = "Show climbing routes";
 "rendering_attr_showClimbingRoutes_name" = "Climbing routes";
+
+"shared_string_view_all" = "View all";

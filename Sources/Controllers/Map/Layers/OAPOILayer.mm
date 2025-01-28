@@ -43,6 +43,7 @@
 #include <OsmAndCore/NetworkRouteContext.h>
 #include <OsmAndCore/NetworkRouteSelector.h>
 #include <OsmAndCore/Map/BillboardRasterMapSymbol.h>
+#include <OsmAndCore/Map/IOnPathMapSymbol.h>
 
 #define kPoiSearchRadius 50
 #define kTrackSearchDelta 40
@@ -495,6 +496,10 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 
 - (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
 {
+    auto onPathSymbol = std::dynamic_pointer_cast<const OsmAnd::IOnPathMapSymbol>(symbolInfo->mapSymbol);
+    if (onPathSymbol != nullptr)
+        return;
+    
     OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup* objSymbolGroup = dynamic_cast<OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup*>(symbolInfo->mapSymbol->groupPtr);
     OsmAnd::AmenitySymbolsProvider::AmenitySymbolsGroup* amenitySymbolGroup = dynamic_cast<OsmAnd::AmenitySymbolsProvider::AmenitySymbolsGroup*>(symbolInfo->mapSymbol->groupPtr);
     const std::shared_ptr<const OsmAnd::MapObject> mapObject = objSymbolGroup != nullptr ? objSymbolGroup->mapObject : nullptr;

@@ -69,4 +69,16 @@
     return res;
 }
 
+- (QVector< OsmAnd::PointI >) getPointsPolygon
+{
+    QVector<OsmAnd::PointI> res;
+    if (!_x)
+        return res;
+    for (int i = 0; i < _x.count; i++)
+    {
+        res.push_back(OsmAnd::PointI(_y[i].intValue, _x[i].intValue));
+    }
+    return res;
+}
+
 @end

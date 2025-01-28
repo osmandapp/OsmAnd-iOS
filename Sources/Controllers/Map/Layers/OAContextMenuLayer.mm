@@ -810,12 +810,12 @@
         return res;
     
     NSArray<OARenderedObject *> *rendPolygons = [self retrievePolygonsAroundPoint:point zoomLevel:zoomLevel];
-    QVector<OsmAnd::LatLon> objectPolygon = [mapObject getPolygon];
+    QVector<OsmAnd::PointI> objectPolygon = [mapObject getPointsPolygon];
     if (objectPolygon.size() > 0)
     {
         for (OARenderedObject *r in rendPolygons)
         {
-            if ([OAMapUtils isFirstPolygonInsideSecond:objectPolygon secondPolygon:[r getPolygon]])
+            if ([OAMapUtils isFirstPolygonInsideSecond:objectPolygon secondPolygon:[r getPointsPolygon]])
             {
                 [res addObject:r];
             }

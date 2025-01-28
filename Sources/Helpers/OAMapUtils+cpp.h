@@ -12,7 +12,7 @@
 
 @interface OAMapUtils(cpp)
 
-+ (BOOL)isFirstPolygonInsideSecond:(QVector< OsmAnd::LatLon >)firstPolygon secondPolygon:(QVector<OsmAnd::LatLon>)secondPolygon;
-+ (BOOL)isPointInsidePolygon:(OsmAnd::LatLon)point polygon:(QVector<OsmAnd::LatLon>)polygon;
++ (BOOL)isFirstPolygonInsideSecond:(QVector< OsmAnd::PointI >)firstPolygon secondPolygon:(QVector<OsmAnd::PointI>)secondPolygon;
++ (BOOL)isPointInsidePolygon:(OsmAnd::PointI)point polygon:(QVector<OsmAnd::PointI>)polygon;
 
 @end

@@ -396,9 +396,9 @@
     return latEqual && lonEqual;
 }
 
-+ (BOOL)isFirstPolygonInsideSecond:(QVector< OsmAnd::LatLon >)firstPolygon secondPolygon:(QVector<OsmAnd::LatLon>)secondPolygon
++ (BOOL)isFirstPolygonInsideSecond:(QVector< OsmAnd::PointI >)firstPolygon secondPolygon:(QVector<OsmAnd::PointI>)secondPolygon
 {
-    for (OsmAnd::LatLon pointI : firstPolygon)
+    for (OsmAnd::PointI pointI : firstPolygon)
     {
         if (![self.class isPointInsidePolygon:pointI polygon:secondPolygon])
         {
@@ -409,18 +409,18 @@
     return YES;
 }
 
-+ (BOOL)isPointInsidePolygon:(OsmAnd::LatLon)point polygon:(QVector<OsmAnd::LatLon>)polygon
++ (BOOL)isPointInsidePolygon:(OsmAnd::PointI)point polygon:(QVector<OsmAnd::PointI>)polygon
 {
-    double px = point.longitude;
-    double py = point.latitude;
+    double px = point.x;
+    double py = point.y;
     BOOL oddNodes = NO;
 
     for (int i = 0, j = polygon.size() - 1; i < polygon.size(); j = i++)
     {
-        double x1 = polygon.at(i).longitude;
-        double y1 = polygon.at(i).latitude;
-        double x2 = polygon.at(j).longitude;
-        double y2 = polygon.at(j).latitude;
+        double x1 = polygon.at(i).x;
+        double y1 = polygon.at(i).y;
+        double x2 = polygon.at(j).x;
+        double y2 = polygon.at(j).y;
         if (((y1 < py && y2 >= py)
                 || (y2 < py && y1 >= py))
                 && (x1 <= px || x2 <= px))

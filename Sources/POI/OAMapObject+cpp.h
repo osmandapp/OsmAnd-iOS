@@ -13,5 +13,6 @@
 @interface OAMapObject(cpp)
 
 - (QVector< OsmAnd::LatLon >) getPolygon;
+- (QVector< OsmAnd::PointI >) getPointsPolygon;
 
 @end

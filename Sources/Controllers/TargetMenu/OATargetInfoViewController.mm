@@ -291,11 +291,10 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
         return syntheticAmenity.nameLocalized;
     else if (syntheticAmenity.name.length > 0)
         return syntheticAmenity.name;
-    else if (syntheticAmenity.type.nameLocalized.length > 0)
-        return syntheticAmenity.type.nameLocalized;
     else if (polygon)
         return [RenderedObjectViewController getTranslatedTypeWithRenderedObject:polygon];
-    return @"";
+    else
+        return [syntheticAmenity getSubTypeStr];
 }
 
 - (NSMutableArray<NSDictionary<NSString *, NSString *> *> *) getWithinCollapsableContent:(NSArray<OARenderedObject *> *)renderedObjects

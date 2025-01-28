@@ -377,7 +377,6 @@
 		32672A0B2AAF3E9300D46608 /* GpxTravelCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32672A082AAF374600D46608 /* GpxTravelCell.xib */; };
 		326B770A29D9CA6400FB23DF /* OATripRecordingTimeWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = 326B770929D9CA6400FB23DF /* OATripRecordingTimeWidget.mm */; };
 		326C0BA02A5D531700CC8BC5 /* GeomagnetismObjCBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326C0B9F2A5D531700CC8BC5 /* GeomagnetismObjCBridge.swift */; };
-		326C470D2D42399B0045A2D3 /* OAAlgorithms.mm in Sources */ = {isa = PBXBuildFile; fileRef = 326C470C2D4239970045A2D3 /* OAAlgorithms.mm */; };
 		3271171D2B9B27340082C2EA /* OATransportStopAggregated.m in Sources */ = {isa = PBXBuildFile; fileRef = 3271171C2B9B18D70082C2EA /* OATransportStopAggregated.m */; };
 		32725F3B2B7E6B2300995806 /* OAAutoZoomBySpeedHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32725F3A2B7E6B2300995806 /* OAAutoZoomBySpeedHelper.mm */; };
 		32725F3E2B7E7B1500995806 /* OAZoom.m in Sources */ = {isa = PBXBuildFile; fileRef = 32725F3D2B7E7B1500995806 /* OAZoom.m */; };
@@ -3540,6 +3539,7 @@
 		321251432A4B2080006C44BD /* ic_custom_3d@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_3d@3x.png"; path = "Resources/Icons/ic_custom_3d@3x.png"; sourceTree = "<group>"; };
 		3216E9522BA097BD0087D0EF /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		32190FD72D4909850006E91C /* RenderedObjectHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderedObjectHelper.swift; sourceTree = "<group>"; };
+		32190FD92D490B460006E91C /* OAMapUtils+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OAMapUtils+cpp.h"; sourceTree = "<group>"; };
 		3219704A25FA0C6100C3FED6 /* poi_categories.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = poi_categories.json; path = ../resources/poi/poi_categories.json; sourceTree = "<group>"; };
 		3219705025FA0DCC00C3FED6 /* bg_point_square@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_point_square@2x.png"; path = "Resources/Icons/bg_point_square@2x.png"; sourceTree = "<group>"; };
 		3219705125FA0DCC00C3FED6 /* ic_custom_replace@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_replace@2x.png"; path = "Resources/Icons/ic_custom_replace@2x.png"; sourceTree = "<group>"; };
@@ -3689,9 +3689,6 @@
 		326B770829D9CA5200FB23DF /* OATripRecordingTimeWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATripRecordingTimeWidget.h; sourceTree = "<group>"; };
 		326B770929D9CA6400FB23DF /* OATripRecordingTimeWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATripRecordingTimeWidget.mm; sourceTree = "<group>"; };
 		326C0B9F2A5D531700CC8BC5 /* GeomagnetismObjCBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeomagnetismObjCBridge.swift; sourceTree = "<group>"; };
-		326C470B2D42396B0045A2D3 /* OAAlgorithms.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAlgorithms.h; sourceTree = "<group>"; };
-		326C470C2D4239970045A2D3 /* OAAlgorithms.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAlgorithms.mm; sourceTree = "<group>"; };
-		326C470E2D423A5D0045A2D3 /* OAAlgorithms+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OAAlgorithms+cpp.h"; sourceTree = "<group>"; };
 		326C470F2D423D4A0045A2D3 /* OAMapObject+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OAMapObject+cpp.h"; sourceTree = "<group>"; };
 		3271171B2B9B18A40082C2EA /* OATransportStopAggregated.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATransportStopAggregated.h; sourceTree = "<group>"; };
 		3271171C2B9B18D70082C2EA /* OATransportStopAggregated.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OATransportStopAggregated.m; sourceTree = "<group>"; };
@@ -13051,9 +13048,6 @@
 			isa = PBXGroup;
 			children = (
 				FA5D71E02CE24C4E0062BC4D /* LockHelper.swift */,
-				326C470B2D42396B0045A2D3 /* OAAlgorithms.h */,
-				326C470E2D423A5D0045A2D3 /* OAAlgorithms+cpp.h */,
-				326C470C2D4239970045A2D3 /* OAAlgorithms.mm */,
 				FA45851C2C946046003A5AD7 /* SharedLibHelpers */,
 				32AB48672C9C50A1005EF1D4 /* DownloadingListHelper */,
 				32D24D1F2BE54A5E000FA504 /* DownloadingCellHelper */,
@@ -13106,6 +13100,7 @@
 				3274BDAB2AB486EF00AC5E34 /* OAMapAlgorithms.h */,
 				3274BDAC2AB486FD00AC5E34 /* OAMapAlgorithms.mm */,
 				DA5A80AB26C563A600F274C7 /* OAMapUtils.h */,
+				32190FD92D490B460006E91C /* OAMapUtils+cpp.h */,
 				DA5A80E126C563A600F274C7 /* OAMapUtils.mm */,
 				DA5A80D526C563A600F274C7 /* OANativeUtilities.h */,
 				DA5A80C626C563A600F274C7 /* OANativeUtilities.mm */,
@@ -17399,7 +17394,6 @@
 				CA4ED5DCCC5120883E58A623 /* OABaseBackupTypesViewController.mm in Sources */,
 				CA4ED127365B6FCBDC4E739E /* OABackupTypesViewController.mm in Sources */,
 				CA4EDDEA04A2683B2A8447AA /* OAManageStorageViewController.mm in Sources */,
-				326C470D2D42399B0045A2D3 /* OAAlgorithms.mm in Sources */,
 				46BCD1922C2DCA0F008749EC /* ColorPalette.swift in Sources */,
 				CA4EDD1F67ADE2175D901873 /* OAManageTypeViewController.mm in Sources */,
 				FA740D3A2A7C006900BD12DC /* OAAppDelegate.mm in Sources */,

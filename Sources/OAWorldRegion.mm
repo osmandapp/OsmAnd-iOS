@@ -20,8 +20,7 @@
 #import "QuadRect.h"
 #import "Weather/OAWeatherHelper.h"
 #import "OsmAndApp.h"
-#import "OAAlgorithms.h"
-#import "OAAlgorithms+cpp.h"
+#import "OAMapUtils+cpp.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/WorldRegion.h>

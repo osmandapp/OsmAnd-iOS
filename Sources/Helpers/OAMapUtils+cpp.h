@@ -1,16 +1,16 @@
 //
-//  OAAlgorithms+cpp.h
+//  OAMapUtils+cpp.h
 //  OsmAnd
 //
-//  Created by Max Kojin on 23/01/25.
+//  Created by Max Kojin on 28/01/25.
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-#import "OAAlgorithms.h"
+#import "OAMapUtils.h"
 
 #include <OsmAndCore/Utilities.h>
 
-@interface OAAlgorithms(cpp)
+@interface OAMapUtils(cpp)
 
 + (BOOL)isFirstPolygonInsideSecond:(QVector< OsmAnd::LatLon >)firstPolygon secondPolygon:(QVector<OsmAnd::LatLon>)secondPolygon;
 + (BOOL)isPointInsidePolygon:(OsmAnd::LatLon)point polygon:(QVector<OsmAnd::LatLon>)polygon;

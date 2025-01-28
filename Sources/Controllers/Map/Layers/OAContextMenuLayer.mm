@@ -34,8 +34,7 @@
 #import "OATransportStopsBaseController.h"
 #import "OAMapRendererEnvironment.h"
 #import "OAColors.h"
-#import "OAAlgorithms.h"
-#import "OAAlgorithms+cpp.h"
+#import "OAMapUtils+cpp.h"
 #import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore/Utilities.h>
@@ -815,7 +814,7 @@
         {
             for (OARenderedObject *r in rendPolygons)
             {
-                if ([OAAlgorithms isFirstPolygonInsideSecond:objectPolygon secondPolygon:[r getPolygon]])
+                if ([OAMapUtils isFirstPolygonInsideSecond:objectPolygon secondPolygon:[r getPolygon]])
                 {
                     [res addObject:r];
                 }

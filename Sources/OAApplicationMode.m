@@ -312,7 +312,7 @@ static int PROFILE_TRUCK = 1000;
     int customColor = [self getCustomIconColor];
     if (customColor == -1)
     {
-        UIColor *color = UIColorFromRGB([self getIconColor]);
+        UIColor *color = UIColorFromARGB([self getIconColor]);
         return [color toARGBNumber];
     }
     return customColor;
@@ -588,7 +588,7 @@ static int PROFILE_TRUCK = 1000;
     int customProfileColor = [self getCustomIconColor];
     if (customProfileColor != -1)
         return UIColorFromARGB(customProfileColor);
-    return UIColorFromRGB([self getIconColor]);
+    return UIColorFromARGB([self getIconColor]);
 }
 
 - (int) getOrder
@@ -1006,7 +1006,7 @@ static int PROFILE_TRUCK = 1000;
 {
     if (_customIconColor != -1)
         return UIColorFromARGB(_customIconColor);
-    return UIColorFromRGB(_iconColor);
+    return UIColorFromARGB(_iconColor);
 }
 
 @end

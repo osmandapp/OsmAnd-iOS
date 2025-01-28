@@ -374,7 +374,7 @@
 
             UIColor *color = _routeLineColor == kDefaultRouteLineDayColor || _routeLineColor == kDefaultRouteLineNightColor
                     ? UIColorFromARGB(_routeLineColor)
-                    : UIColorFromRGB(_routeLineColor);
+                    : UIColorFromARGB(_routeLineColor);
 
             OsmAnd::ColorARGB lineColor = [color toFColorARGB];
 

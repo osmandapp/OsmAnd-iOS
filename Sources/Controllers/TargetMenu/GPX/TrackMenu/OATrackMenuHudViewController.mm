@@ -1028,7 +1028,7 @@
     if (groupName && groupName.length > 0 && [self getWaypointsCount:groupName] > 0)
     {
         OAGpxWptItem *waypoint = _waypointGroups[groupName].firstObject;
-        groupColor = waypoint.color ?: UIColorFromRGBA([waypoint.point getColor]);
+        groupColor = waypoint.color ?: UIColorFromARGB([waypoint.point getColor]);
     }
     if (!groupColor)
         groupColor = [OADefaultFavorite getDefaultColor];
@@ -1166,7 +1166,7 @@
             {
                 for (OAGpxWptItem *existWaypoint in existWaypoints)
                 {
-                    existWaypoint.color = UIColorFromRGB([self getWaypointsGroupColor:groupName]);
+                    existWaypoint.color = UIColorFromARGB([self getWaypointsGroupColor:groupName]);
                     if (self.isCurrentTrack)
                     {
                         OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];

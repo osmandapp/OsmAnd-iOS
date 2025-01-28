@@ -134,6 +134,11 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     return self.poi;
 }
 
+- (OAMapObject *) mapObject
+{
+    return self.poi;
+}
+
 - (BOOL) showNearestWiki
 {
     return YES;
@@ -800,13 +805,9 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         [rows addObject:desc];
     }
 
-    long long objectId = self.poi.obfId;
-    if (osmEditingEnabled && (objectId > 0 && ((objectId % 2 == AMENITY_ID_RIGHT_SHIFT) || (objectId >> NON_AMENITY_ID_RIGHT_SHIFT) < INT_MAX || self.poi.isRenderedObject)))
+    NSString *link = [ObfConstants getOsmUrlForId:[self mapObject]];
+    if (link.length > 0)
     {
-        OAPOIType *poiType = self.poi.type;
-        BOOL isAmenity = poiType && ![poiType isKindOfClass:[OAPOILocationType class]];
-
-        NSString * link = [ObfConstants getOsmUrlForId:self.poi];
         [rows addObject:[[OARowInfo alloc] initWithKey:nil
                                                   icon:[UIImage imageNamed:@"ic_custom_osm_edits"]
                                             textPrefix:nil

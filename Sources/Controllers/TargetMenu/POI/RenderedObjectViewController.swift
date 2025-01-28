@@ -25,6 +25,10 @@ final class RenderedObjectViewController: OAPOIViewController {
         self.renderedObject = renderedObject
     }
     
+    override func mapObject() -> OAMapObject! {
+        renderedObject
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         updateUIAfterAmenitySearch()
@@ -52,7 +56,6 @@ final class RenderedObjectViewController: OAPOIViewController {
     
     static func getSyntheticAmenity(renderedObject: OARenderedObject) -> OAPOI {
         let poi = OAPOI()
-        poi.isRenderedObject = true
         poi.type = OAPOIHelper.sharedInstance().getDefaultOtherCategoryType()
         poi.subType = ""
         

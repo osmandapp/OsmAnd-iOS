@@ -78,8 +78,6 @@
 @property (nonatomic) NSString *mapIconName;
 @property (nonatomic) NSString *cityName;
 
-@property (nonatomic) BOOL isRenderedObject;
-
 - (UIImage *)icon;
 - (NSString *)iconName;
 - (NSString *)gpxIcon;

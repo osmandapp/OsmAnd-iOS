@@ -29,7 +29,7 @@ final class ObfConstants: NSObject {
     static private let WAY = "way"
     static private let RELATION = "relation"
     
-    static func getOsmUrlForId(_ object: OAPOI) -> String {
+    static func getOsmUrlForId(_ object: OAMapObject) -> String {
         guard let type = getOsmEntityType(object) else { return "" }
         let osmId = getOsmObjectId(object)
         return "https://www.openstreetmap.org/\(type)/\(osmId)"
@@ -39,7 +39,7 @@ final class ObfConstants: NSObject {
         var originalId = -1
         var obfId = Int(object.obfId)
         if obfId != -1 {
-            if isRenderedObject(object) {
+            if object is OARenderedObject {
                 obfId >>= 1
             }
             if isIdFromPropagatedNode(obfId) {
@@ -49,7 +49,7 @@ final class ObfConstants: NSObject {
                 if isShiftedID(obfId) {
                     originalId = getOsmId(obfId)
                 } else {
-                    let shift = !isRenderedObject(object) ? Self.AMENITY_ID_RIGHT_SHIFT : Self.SHIFT_ID
+                    let shift = object is OAPOI ? Self.AMENITY_ID_RIGHT_SHIFT : Self.SHIFT_ID
                     originalId = obfId >> shift
                 }
             }
@@ -61,7 +61,7 @@ final class ObfConstants: NSObject {
         if isOsmUrlAvailable(object) {
             let obfId = Int(object.obfId)
             let originalId = obfId >> 1
-            if isRenderedObject(object) && isIdFromPropagatedNode(originalId) {
+            if object is OARenderedObject && isIdFromPropagatedNode(originalId) {
                 return WAY
             }
             if isIdFromPropagatedNode(obfId) {
@@ -103,14 +103,5 @@ final class ObfConstants: NSObject {
     
     static func isIdFromSplit(_ obfId: Int) -> Bool {
         obfId > 0 && (obfId & Self.SPLIT_BIT) == Self.SPLIT_BIT
-    }
-    
-    static func isRenderedObject(_ object: OAMapObject) -> Bool {
-        if object is OARenderedObject {
-            return true
-        } else if let poi = object as? OAPOI {
-            return poi.isRenderedObject
-        }
-        return false
     }
 }

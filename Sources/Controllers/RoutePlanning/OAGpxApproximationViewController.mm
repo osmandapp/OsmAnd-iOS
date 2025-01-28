@@ -63,7 +63,7 @@
     
     _approximationHelper = [[OAGpxApproximationHelper alloc] initWithLocations:_locationsHolders initialAppMode:_snapToRoadAppMode initialThreshold:_distanceThreshold];
     _approximationHelper.delegate = self;
-    [_approximationHelper calculateGpxApproximation:YES];
+    [_approximationHelper calculateGpxApproximationAsync];
     
     _progressBarView = [[UIProgressView alloc] init];
     _progressBarView.hidden = YES;
@@ -186,7 +186,7 @@
     UISlider *slider = sender;
     _distanceThreshold = slider.value;
     [_approximationHelper updateDistanceThreshold:_distanceThreshold];
-    [_approximationHelper calculateGpxApproximation:YES];
+    [_approximationHelper calculateGpxApproximationAsync];
     OATitleSliderRoundCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
     cell.valueLabel.text = [OAOsmAndFormatter getFormattedDistance:_distanceThreshold];
 }
@@ -285,7 +285,7 @@
         _snapToRoadAppMode = item[@"profile"];
         [_approximationHelper updateAppMode:_snapToRoadAppMode];
         [tableView reloadData];
-        [_approximationHelper calculateGpxApproximation:YES];
+        [_approximationHelper calculateGpxApproximationAsync];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

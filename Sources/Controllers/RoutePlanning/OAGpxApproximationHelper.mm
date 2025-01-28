@@ -111,9 +111,12 @@
             return NO;
         }]];
     } else {
-        NSArray *pair = [self processApproximationResults:approximateResult];
-        if (self.delegate)
-            [self.delegate didFinishAllApproximationsWithResults:pair.firstObject points:pair.lastObject];
+        if (approximateResult.count > 0)
+        {
+            NSArray *pair = [self processApproximationResults:approximateResult];
+            if (self.delegate)
+                [self.delegate didFinishAllApproximationsWithResults:pair.firstObject points:pair.lastObject];
+        }
     }
 }
 
@@ -145,7 +148,7 @@
         }
     }
     
-    return  [self processApproximationResults:_resultMap];
+    return [self processApproximationResults:_resultMap];
 }
 
 - (NSArray *)processApproximationResults:(NSDictionary<OALocationsHolder *, OAGpxRouteApproximation *> *)approximateResult

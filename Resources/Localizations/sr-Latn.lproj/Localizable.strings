@@ -3596,3 +3596,7 @@
 "cloud_sync_progress" = "Sinhronizacija…%@";
 "info_button" = "Info";
 "battery_widget_level_privacy_ios_desc" = "Iz razloga privatnosti iOS-a, vidžet može da prikaže nivo baterije samo u koracima od 5%, kao što su 35%, 60% ili 85%";
+"detailed_track_guidance" = "Detaljan vodič trasom";
+"ask_every_time" = "Pitati svaki put";
+"attach_roads_descr" = "Pričvrstite svoju stazu na puteve da biste dobili detaljne informacije o ruti sa uputstvima za skretanje i atributima puta.";
+"detailed_track_guidance_description" = "OsmAnd će uskladiti vašu stazu sa obližnjim putevima za poboljšano navođenje skretanje po skretanje.";

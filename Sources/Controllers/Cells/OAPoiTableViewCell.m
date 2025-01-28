@@ -293,7 +293,7 @@
             cell.backView.layer.borderWidth = 2;
             cell.backView.layer.borderColor = [UIColor colorNamed:ACColorNameIconColorActive].CGColor;
             cell.iconImageView.tintColor = [UIColor colorNamed:ACColorNameButtonTextColorPrimary];
-            cell.iconView.backgroundColor = UIColorFromRGB(_currentColor);
+            cell.iconView.backgroundColor = UIColorFromARGB(_currentColor);
         }
         else
         {

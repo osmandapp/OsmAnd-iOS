@@ -196,7 +196,7 @@
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
             [cell.button setBackgroundColor:cellData.tintColor];
-            [cell.button setTitleColor:UIColorFromRGB([cellData.values[@"title_color_value_integer"] intValue])
+            [cell.button setTitleColor:UIColorFromARGB([cellData.values[@"title_color_value_integer"] intValue])
                               forState:UIControlStateNormal];
             [cell.button setTitle:cellData.title forState:UIControlStateNormal];
             cell.button.layer.cornerRadius = 9.;

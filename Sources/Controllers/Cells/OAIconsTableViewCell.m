@@ -56,8 +56,8 @@
     if (indexPath.row == _currentIcon)
     {
         cell.backView.layer.borderWidth = 2;
-        cell.backView.layer.borderColor = UIColorFromRGB(_currentColor).CGColor;
-        cell.iconImageView.tintColor = UIColorFromRGB(_currentColor);
+        cell.backView.layer.borderColor = UIColorFromARGB(_currentColor).CGColor;
+        cell.iconImageView.tintColor = UIColorFromARGB(_currentColor);
     }
     else
     {

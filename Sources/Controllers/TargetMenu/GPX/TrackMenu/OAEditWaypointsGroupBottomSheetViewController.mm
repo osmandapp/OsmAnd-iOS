@@ -265,7 +265,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
 - (void)updateColor
 {
     _groupColor = self.trackMenuDelegate
-            ? UIColorFromRGB([self.trackMenuDelegate getWaypointsGroupColor:_groupName])
+            ? UIColorFromARGB([self.trackMenuDelegate getWaypointsGroupColor:_groupName])
             : [OADefaultFavorite getDefaultColor];
 }
 

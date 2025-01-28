@@ -1166,7 +1166,7 @@
             {
                 for (OAGpxWptItem *existWaypoint in existWaypoints)
                 {
-                    existWaypoint.color = UIColorFromRGB([self getWaypointsGroupColor:groupName]);
+                    existWaypoint.color = UIColorFromARGB([self getWaypointsGroupColor:groupName]);
                     if (self.isCurrentTrack)
                     {
                         OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];

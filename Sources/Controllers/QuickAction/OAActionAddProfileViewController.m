@@ -105,7 +105,7 @@
         cell.titleLabel.text = item.name;
         cell.descriptionLabel.text = item.descr;
         cell.leftIconView.image = [UIImage templateImageNamed:item.iconName].imageFlippedForRightToLeftLayoutDirection;
-        cell.leftIconView.tintColor = UIColorFromRGB(item.iconColor);
+        cell.leftIconView.tintColor = UIColorFromARGB(item.iconColor);
         if ([_initialValues containsObject:item.stringKey])
         {
             [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
@@ -124,7 +124,7 @@
     for (NSIndexPath *path in selectedItems)
     {
         OAProfileDataObject *profile = _data[path.row];
-        [arr addObject:@{@"name" : profile.name, @"stringKey" : profile.stringKey, @"img" : profile.iconName, @"iconColor" : UIColorFromRGB(profile.iconColor) }];
+        [arr addObject:@{@"name" : profile.name, @"stringKey" : profile.stringKey, @"img" : profile.iconName, @"iconColor" : UIColorFromARGB(profile.iconColor) }];
     }
     if (self.delegate)
         [self.delegate onProfileSelected:[NSArray arrayWithArray:arr]];

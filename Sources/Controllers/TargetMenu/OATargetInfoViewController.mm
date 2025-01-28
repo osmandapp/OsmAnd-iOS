@@ -259,7 +259,7 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
         for (OARenderedObject *polygon in polygons)
         {
             OAPOI *syntheticAmenity = [RenderedObjectHelper getSyntheticAmenityWithRenderedObject:polygon];
-            [names addObject:[self getFirstNonEmptyNameForAmenity:syntheticAmenity withRenderedObject:polygon]];
+            [names addObject:[[RenderedObjectHelper getFirstNonEmptyNameFor:syntheticAmenity withRenderedObject:polygon] capitalizedString]];
         }
         NSString *rowSummary = [self getMenuObjectsNamesByComma:names];
         
@@ -285,18 +285,6 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
     }
 }
 
-- (NSString *)getFirstNonEmptyNameForAmenity:(OAPOI *)syntheticAmenity withRenderedObject:(OARenderedObject *)polygon
-{
-    if (syntheticAmenity.nameLocalized.length > 0)
-        return syntheticAmenity.nameLocalized;
-    else if (syntheticAmenity.name.length > 0)
-        return syntheticAmenity.name;
-    else if (polygon)
-        return [RenderedObjectHelper getTranslatedTypeWithRenderedObject:polygon];
-    else
-        return [syntheticAmenity getSubTypeStr];
-}
-
 - (NSMutableArray<NSDictionary<NSString *, NSString *> *> *) getWithinCollapsableContent:(NSArray<OARenderedObject *> *)renderedObjects
 {
     NSMutableArray<NSDictionary<NSString *, NSString *> *> *array = [NSMutableArray new];
@@ -319,7 +307,7 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
         else
         {
             key = syntheticAmenity.type.nameLocalized;
-            value = [self getFirstNonEmptyNameForAmenity:syntheticAmenity withRenderedObject:nil];
+            value = [RenderedObjectHelper getFirstNonEmptyNameFor:syntheticAmenity withRenderedObject:nil];
             if (value.length == 0)
             {
                 value = key;

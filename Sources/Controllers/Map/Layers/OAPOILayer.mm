@@ -472,13 +472,9 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
             poi = [RenderedObjectHelper getSyntheticAmenityWithRenderedObject:renderedObject];
         if (poi)
         {
-            if (!poi.name || poi.name.length == 0)
-                poi.name = (renderedObject.name && renderedObject.name.length > 0) ? renderedObject.name : poi.type.name;
+            if (!targetPoint || targetPoint.title.length == 0)
+                targetPoint.title = [RenderedObjectHelper getFirstNonEmptyNameFor:poi withRenderedObject:renderedObject];
             
-            if (poi.nameLocalized.length == 0)
-                poi.nameLocalized = (renderedObject.nameLocalized && renderedObject.nameLocalized.length > 0) ? renderedObject.nameLocalized : poi.type.nameLocalized;
-            
-            targetPoint.title = targetPoint.title.length > 0 ? targetPoint.title : poi.nameLocalized;
             targetPoint.localizedNames = targetPoint.localizedNames.count > 0 ? targetPoint.localizedNames : poi.localizedNames;
             
             targetPoint.icon = [RenderedObjectHelper getIconWithRenderedObject:renderedObject];
@@ -544,6 +540,10 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
             else
             {
                 renderedObject = [OARenderedObject parse:mapObject symbolInfo:symbolInfo];
+                if (renderedObject.name && renderedObject.name.length > 0)
+                    poi.name = renderedObject.name;
+                if (renderedObject.nameLocalized && renderedObject.nameLocalized.length > 0)
+                    poi.nameLocalized = renderedObject.nameLocalized;
             }
             if (!poi.type)
             {

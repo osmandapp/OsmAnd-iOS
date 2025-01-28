@@ -9,6 +9,18 @@
 @objcMembers
 final class RenderedObjectHelper: NSObject {
     
+    static func getFirstNonEmptyName(for syntheticAmenity: OAPOI, withRenderedObject polygon: OARenderedObject?) -> String {
+        if let nameLocalized = syntheticAmenity.nameLocalized, !nameLocalized.isEmpty {
+            return nameLocalized
+        } else if let name = syntheticAmenity.name, !name.isEmpty {
+            return name
+        } else if let polygon = polygon {
+            return RenderedObjectHelper.getTranslatedType(renderedObject: polygon) ?? ""
+        } else {
+            return syntheticAmenity.getSubTypeStr()
+        }
+    }
+    
     static func getSyntheticAmenity(renderedObject: OARenderedObject) -> OAPOI {
         let poi = OAPOI()
         poi.type = OAPOIHelper.sharedInstance().getDefaultOtherCategoryType()

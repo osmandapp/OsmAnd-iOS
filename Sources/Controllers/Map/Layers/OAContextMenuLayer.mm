@@ -770,7 +770,11 @@
 
 - (void) highlightPolygon:(QVector<OsmAnd::PointI>)points;
 {
+    if (_outlineCollection != nullptr)
+        [self hideRegionHighlight];
+
     [self.mapViewController runWithRenderSync:^{
+        _outlineCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
         OsmAnd::VectorLineBuilder builder;
         builder.setPoints(points)
             .setIsHidden(false)
@@ -788,7 +792,7 @@
 {
     [self.mapViewController runWithRenderSync:^{
         [self.mapView removeKeyedSymbolsProvider:_outlineCollection];
-        _outlineCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
+        _outlineCollection = nullptr;
     }];
 }
 

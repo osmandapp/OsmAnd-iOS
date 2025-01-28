@@ -113,11 +113,7 @@
     } else {
         NSArray *pair = [self processApproximationResults:approximateResult];
         if (self.delegate)
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.delegate didFinishAllApproximationsWithResults:pair.firstObject points:pair.lastObject];
-            });
-        }
+            [self.delegate didFinishAllApproximationsWithResults:pair.firstObject points:pair.lastObject];
     }
 }
 

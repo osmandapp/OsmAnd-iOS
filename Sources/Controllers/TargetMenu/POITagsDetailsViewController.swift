@@ -133,7 +133,7 @@ final class POITagsDetailsViewController: OABaseNavbarViewController {
         if let renderedObject = item.obj(forKey: "renderedObject") as? OARenderedObject {
             cell.selectionStyle = .default
             cell.leftIconView.tintColor = .iconColorSelected
-            cell.leftIconView.image = RenderedObjectViewController.getIcon(renderedObject: renderedObject)
+            cell.leftIconView.image = RenderedObjectHelper.getIcon(renderedObject: renderedObject)
             cell.leftIconVisibility(true)
         } else {
             cell.selectionStyle = .none

@@ -258,7 +258,7 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
         NSMutableArray<NSString *> *names = [NSMutableArray new];
         for (OARenderedObject *polygon in polygons)
         {
-            OAPOI *syntheticAmenity = [RenderedObjectViewController getSyntheticAmenityWithRenderedObject:polygon];
+            OAPOI *syntheticAmenity = [RenderedObjectHelper getSyntheticAmenityWithRenderedObject:polygon];
             [names addObject:[self getFirstNonEmptyNameForAmenity:syntheticAmenity withRenderedObject:polygon]];
         }
         NSString *rowSummary = [self getMenuObjectsNamesByComma:names];
@@ -292,7 +292,7 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
     else if (syntheticAmenity.name.length > 0)
         return syntheticAmenity.name;
     else if (polygon)
-        return [RenderedObjectViewController getTranslatedTypeWithRenderedObject:polygon];
+        return [RenderedObjectHelper getTranslatedTypeWithRenderedObject:polygon];
     else
         return [syntheticAmenity getSubTypeStr];
 }
@@ -305,11 +305,11 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
     for (int i = 0; i < renderedObjects.count; i++)
     {
         OARenderedObject *renderedObject = renderedObjects[i];
-        OAPOI *syntheticAmenity = [RenderedObjectViewController getSyntheticAmenityWithRenderedObject:renderedObject];
+        OAPOI *syntheticAmenity = [RenderedObjectHelper getSyntheticAmenityWithRenderedObject:renderedObject];
         NSString *key;
         NSString *value;
         
-        NSString *translatedType = [RenderedObjectViewController getTranslatedTypeWithRenderedObject:renderedObject];
+        NSString *translatedType = [RenderedObjectHelper getTranslatedTypeWithRenderedObject:renderedObject];
         if ([translatedType containsString:@":"])
         {
             int firstCommaIndex = [translatedType indexOf:@":"];

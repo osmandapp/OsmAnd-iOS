@@ -468,7 +468,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         targetPoint.sortIndex = (NSInteger)targetPoint.type;
         
         if (!poi)
-            poi = [RenderedObjectViewController getSyntheticAmenityWithRenderedObject:renderedObject];
+            poi = [RenderedObjectHelper getSyntheticAmenityWithRenderedObject:renderedObject];
         if (poi)
         {
             if (!poi.name || poi.name.length == 0)
@@ -480,7 +480,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
             targetPoint.title = targetPoint.title.length > 0 ? targetPoint.title : poi.nameLocalized;
             targetPoint.localizedNames = targetPoint.localizedNames.count > 0 ? targetPoint.localizedNames : poi.localizedNames;
             
-            targetPoint.icon = [RenderedObjectViewController getIconWithRenderedObject:renderedObject];
+            targetPoint.icon = [RenderedObjectHelper getIconWithRenderedObject:renderedObject];
             
         }
         return targetPoint;

@@ -1422,10 +1422,13 @@ typedef enum
     
     if ([targetPoint.targetObj isKindOfClass:OAMapObject.class])
     {
-        OAMapObject *obj = targetPoint.targetObj;
         QVector<OsmAnd::PointI> points;
-        for (int i = 0; i < obj.x.count; i++)
-            points.push_back( OsmAnd::PointI(obj.x[i].intValue, obj.y[i].intValue) );
+        OAMapObject *obj = targetPoint.targetObj;
+        if (obj.x && obj.x.count > 0)
+        {
+            for (int i = 0; i < obj.x.count; i++)
+                points.push_back( OsmAnd::PointI(obj.x[i].intValue, obj.y[i].intValue) );
+        }
         
         [_mapViewController.mapLayers.contextMenuLayer highlightPolygon:points];
     }

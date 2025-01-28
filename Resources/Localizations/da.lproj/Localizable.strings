@@ -3596,3 +3596,7 @@
 "wikipedia_offline" = "Wikipedia offline";
 "product_title_pro" = "OsmAnd Pro";
 "battery_widget_level_privacy_ios_desc" = "På grund af OS' beskyttelse af personlige oplysninger kan modulet kun vise batteriniveauet i trin på 5 %, f.eks. 35 %, 60 % eller 85 %";
+"detailed_track_guidance" = "Detaljeret sporvejledning";
+"attach_roads_descr" = "Fastgør dit spor til veje for at få detaljerede ruteoplysninger med svinginstruktioner og vejegenskaber.";
+"detailed_track_guidance_description" = "OsmAnd vil matche dit spor med nærliggende veje for at forbedre sving-for-sving-vejledningen.";
+"ask_every_time" = "Spørg hver gang";

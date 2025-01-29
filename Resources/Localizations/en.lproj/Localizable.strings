@@ -3983,3 +3983,7 @@
 "rendering_attr_showClimbingRoutes_name" = "Climbing routes";
 
 "shared_string_view_all" = "View all";
+"no_internet_descr" = "Please check your connection and try again.";
+"no_photos_available" = "No photos available";
+"no_photos_available_descr" = "No user photos have been added to this location yet";
+"mapillary_action_descr" = "Share your street-level view via Mapillary.";

@@ -317,7 +317,7 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
             rowHeight = MAX(bounds.height, 28.0) + 11.0 + 11.0;
             row.height = rowHeight;
             row.moreText = fullBounds.height > bounds.height;
-        }
+        } // FIXME:
         if (row.collapsable)
             [row.collapsableView adjustHeightForWidth:width];
     }
@@ -604,13 +604,22 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
     if (_otherCardsReady && _wikiCardsReady)
     {
         // TODO: logic no internet connection
-        if (cards.count == 0)
-            [cards addObject:[[NoImagesCard alloc] init]];
-        else if (cards.count > 1)
-            [self removeDuplicatesFromCards:cards];
-
+        
+        if (!AFNetworkReachabilityManager.sharedManager.isReachable)
+        {
+            [cards removeAllObjects];
+            [cards addObject:[NoInternetCard new]];
+        }
+        else
+        {
+            if (cards.count == 0)
+                [cards addObject:[[NoImagesCard alloc] init]];
+            else if (cards.count > 1)
+                [self removeDuplicatesFromCards:cards];
+        }
+        
         if (nearbyImagesRowInfo)
-            [((CollapsableCardsView *) nearbyImagesRowInfo.collapsableView) setCards:cards];
+            [((CollapsableCardsView *)nearbyImagesRowInfo.collapsableView) setCards:cards];
         
         _otherCardsReady = _wikiCardsReady = NO;
     }
@@ -663,8 +672,8 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
 
 - (void) addNearbyImagesIfNeeded
 {
-    if (!AFNetworkReachabilityManager.sharedManager.isReachable)
-        return;
+//    if (!AFNetworkReachabilityManager.sharedManager.isReachable)
+//        return;
 
     OARowInfo *nearbyImagesRowInfo = [[OARowInfo alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_photo"] textPrefix:nil text:OALocalizedString(@"mapil_images_nearby") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
 
@@ -673,7 +682,7 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
     nearbyImagesRowInfo.collapsable = YES;
     nearbyImagesRowInfo.collapsed = [OAAppSettings sharedManager].onlinePhotosRowCollapsed.get;
     nearbyImagesRowInfo.collapsableView = cardView;
-    nearbyImagesRowInfo.collapsableView.frame = CGRectMake([OAUtilities getLeftMargin], 0, 320, 224);
+    nearbyImagesRowInfo.collapsableView.frame = CGRectMake([OAUtilities getLeftMargin], 0, self.view.frame.size.width, 284);
     [_rows addObject:nearbyImagesRowInfo];
     
     _nearbyImagesRowInfo = nearbyImagesRowInfo;
@@ -1048,20 +1057,36 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
 
 #pragma mark - OACollapsableCardViewDelegate
 
+- (void)onRecalculateHeight {
+    [self.tableView reloadData];
+}
+
 - (void)onViewExpanded
 {
     _wikiCardsReady = NO;
     if (_nearbyImagesRowInfo)
     {
+        __weak __typeof(self) weakSelf = self;
         CollapsableCardsView *cardsView = (CollapsableCardsView *) _nearbyImagesRowInfo.collapsableView;
-        [cardsView setCards:@[[[ImageCard alloc] initWithData:@{@"key": @"loading"}]]];
+        if (AFNetworkReachabilityManager.sharedManager.isReachable) {
+            [cardsView setCards:@[[[ImageCard alloc] initWithData:@{@"key": @"loading"}]]];
+            
+            [[OAWikiImageHelper sharedInstance] sendNearbyWikiImagesRequest:_nearbyImagesRowInfo targetObj:self.getTargetObj addOtherImagesOnComplete:^(NSMutableArray <AbstractCard *> *cards) {
+                weakSelf.wikiCardsReady = YES;
+                [weakSelf sendNearbyOtherImagesRequest:cards];
+            }];
+        } else {
+            NoInternetCard *noInternetCard = [NoInternetCard new];
+            noInternetCard.onTryAgainAction = ^{
+                if (AFNetworkReachabilityManager.sharedManager.isReachable)
+                {
+                    [weakSelf onViewExpanded];
+                }
+               
+            };
+            [cardsView setCards:@[noInternetCard]];
+        }
     }
-
-    __weak OATargetInfoViewController *selfWeak = self;
-    [[OAWikiImageHelper sharedInstance] sendNearbyWikiImagesRequest:_nearbyImagesRowInfo targetObj:self.getTargetObj addOtherImagesOnComplete:^(NSMutableArray <AbstractCard *> *cards) {
-        selfWeak.wikiCardsReady = YES;
-        [selfWeak sendNearbyOtherImagesRequest:cards];
-    }];
 }
 
 #pragma mark - OAEditDescriptionViewControllerDelegate

@@ -3089,6 +3089,10 @@
 		FA45851E2C9474A3003A5AD7 /* GpxDataItemExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA45851D2C9474A3003A5AD7 /* GpxDataItemExtension.swift */; };
 		FA4768B32A66E73000D533E8 /* FreeBackupBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4768B22A66E73000D533E8 /* FreeBackupBanner.swift */; };
 		FA4768B52A67B86400D533E8 /* FreeBackupBanner.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4768B42A67B86400D533E8 /* FreeBackupBanner.xib */; };
+		FA4C56FF2D48E84500438A5C /* NoInternetCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4C56FE2D48E84200438A5C /* NoInternetCard.swift */; };
+		FA4C57012D48E8C800438A5C /* NoInternetCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4C57002D48E8C600438A5C /* NoInternetCardCell.swift */; };
+		FA4C57032D48E92F00438A5C /* NoInternetCardCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4C57022D48E92F00438A5C /* NoInternetCardCell.xib */; };
+		FA4C57052D491EB900438A5C /* CardsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4C57042D491EB900438A5C /* CardsViewController.swift */; };
 		FA4D7F572B03D366003208D7 /* BLEWheelSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4D7F562B03D366003208D7 /* BLEWheelSettingsViewController.swift */; };
 		FA5A21A22A9C7DE100319695 /* CALayer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5A21A12A9C7DE100319695 /* CALayer+Extension.swift */; };
 		FA5A21A82A9E17DB00319695 /* UIPageViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */; };
@@ -7603,6 +7607,10 @@
 		FA45851D2C9474A3003A5AD7 /* GpxDataItemExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GpxDataItemExtension.swift; sourceTree = "<group>"; };
 		FA4768B22A66E73000D533E8 /* FreeBackupBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeBackupBanner.swift; sourceTree = "<group>"; };
 		FA4768B42A67B86400D533E8 /* FreeBackupBanner.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FreeBackupBanner.xib; sourceTree = "<group>"; };
+		FA4C56FE2D48E84200438A5C /* NoInternetCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoInternetCard.swift; sourceTree = "<group>"; };
+		FA4C57002D48E8C600438A5C /* NoInternetCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoInternetCardCell.swift; sourceTree = "<group>"; };
+		FA4C57022D48E92F00438A5C /* NoInternetCardCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NoInternetCardCell.xib; sourceTree = "<group>"; };
+		FA4C57042D491EB900438A5C /* CardsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsViewController.swift; sourceTree = "<group>"; };
 		FA4D7F562B03D366003208D7 /* BLEWheelSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEWheelSettingsViewController.swift; sourceTree = "<group>"; };
 		FA5A21A12A9C7DE100319695 /* CALayer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+Extension.swift"; sourceTree = "<group>"; };
 		FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIPageViewController+Extension.swift"; sourceTree = "<group>"; };
@@ -10670,6 +10678,8 @@
 		DA5A79A726C563A000F274C7 /* Cards */ = {
 			isa = PBXGroup;
 			children = (
+				FA4C57002D48E8C600438A5C /* NoInternetCardCell.swift */,
+				FA4C56FE2D48E84200438A5C /* NoInternetCard.swift */,
 				FA64087C2D3E8B96005FD12D /* MapillaryContributeCell.swift */,
 				FA64087A2D3E88C0005FD12D /* MapillaryContributeCard.swift */,
 				FA6408782D3E845A005FD12D /* ImageCardCell.swift */,
@@ -10679,6 +10689,7 @@
 				FA64086C2D3E6FAF005FD12D /* AbstractCards.swift */,
 				FA6408702D3E7EB9005FD12D /* NoImagesCard.swift */,
 				FA64086E2D3E7D88005FD12D /* ImageCard.swift */,
+				FA4C57022D48E92F00438A5C /* NoInternetCardCell.xib */,
 			);
 			path = Cards;
 			sourceTree = "<group>";
@@ -11965,6 +11976,7 @@
 		DA5A7DE626C563A300F274C7 /* TargetMenu */ = {
 			isa = PBXGroup;
 			children = (
+				FA4C57042D491EB900438A5C /* CardsViewController.swift */,
 				FAE3A5772D47BCA700E97159 /* OACollapsableView.h */,
 				FAE3A5782D47BCA700E97159 /* OACollapsableView.m */,
 				FAE3A5752D47B36F00E97159 /* CollapsableView.swift */,
@@ -15103,6 +15115,7 @@
 				DABA3DD322686E72005BB777 /* ic_custom_overflow_menu@2x.png in Resources */,
 				46BCB1622CC2ACE9004E0283 /* GradientChartCell.xib in Resources */,
 				DA5A83C226C563A800F274C7 /* OAFloatingButtonsHudViewController.xib in Resources */,
+				FA4C57032D48E92F00438A5C /* NoInternetCardCell.xib in Resources */,
 				DA5A837A26C563A800F274C7 /* OAAppModeView.xib in Resources */,
 				323BD90E2628850400D255ED /* ic_bg_point_comment_top_small@2x.png in Resources */,
 				DA5A843326C563A800F274C7 /* OARouteDetailsViewController.xib in Resources */,
@@ -16262,6 +16275,7 @@
 				DA8DC3962A0CE32E006C116B /* TimeToNavigationPointWidget.swift in Sources */,
 				DA5A813526C563A700F274C7 /* OAOsmBugsDBHelper.m in Sources */,
 				DA5A847926C563A900F274C7 /* OARulerWidget.mm in Sources */,
+				FA4C56FF2D48E84500438A5C /* NoInternetCard.swift in Sources */,
 				DA5A843D26C563A800F274C7 /* OACollapsableNearestPoiWikiView.mm in Sources */,
 				DA5A817B26C563A700F274C7 /* OAFavoriteAction.mm in Sources */,
 				DA5A834426C563A800F274C7 /* OATitleDescriptionIconRoundCell.m in Sources */,
@@ -16726,6 +16740,7 @@
 				FA204E982B19E2B7008AF3D2 /* BLERunningSCDDevice.swift in Sources */,
 				DAA61CBF2A02789D00AFF65D /* MapWidgetInfo.swift in Sources */,
 				DA5A817426C563A700F274C7 /* OAGpxWptItem.mm in Sources */,
+				FA4C57052D491EB900438A5C /* CardsViewController.swift in Sources */,
 				32D253AF27F336C100324717 /* OABaseCloudBackupViewController.m in Sources */,
 				DA5A81C026C563A700F274C7 /* OASearchByNameFilter.mm in Sources */,
 				DA5A834C26C563A800F274C7 /* OAWebViewCell.m in Sources */,
@@ -16837,6 +16852,7 @@
 				DA5A833926C563A800F274C7 /* OAFoldersCell.m in Sources */,
 				3234101A28889D1B00E90FBA /* OARowInfo.m in Sources */,
 				DAA61CB72A0102EC00AFF65D /* MapMarkerSideWidgetState.swift in Sources */,
+				FA4C57012D48E8C800438A5C /* NoInternetCardCell.swift in Sources */,
 				DA5A838826C563A800F274C7 /* OAPurchasesViewController.m in Sources */,
 				32B7DC372C761D7400E5E8BD /* OAColorsPaletteCell.m in Sources */,
 				32725F3B2B7E6B2300995806 /* OAAutoZoomBySpeedHelper.mm in Sources */,

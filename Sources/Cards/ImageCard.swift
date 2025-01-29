@@ -10,7 +10,6 @@ import UIKit
 
 @objcMembers
 class ImageCard: AbstractCard {
-    
     var type: String
     var latitude: Double
     var longitude: Double

@@ -862,7 +862,7 @@ static NSOperationQueue *_favQueue;
 {
     if (favoriteGroup && pointsGroup)
     {
-        favoriteGroup.color = UIColorFromARGB(pointsGroup.color) ;
+        favoriteGroup.color = UIColorFromRGB(pointsGroup.color) ;
         favoriteGroup.iconName = pointsGroup.iconName;
         favoriteGroup.backgroundType = pointsGroup.backgroundType;
     }
@@ -1283,7 +1283,7 @@ static NSOperationQueue *_favQueue;
 {
     OAFavoriteGroup *favoriteGroup = [[OAFavoriteGroup alloc] init];
     favoriteGroup.name = pointsGroup.name;
-    favoriteGroup.color = UIColorFromARGB(pointsGroup.color);
+    favoriteGroup.color = UIColorFromRGB(pointsGroup.color);
     favoriteGroup.iconName = pointsGroup.iconName;
     favoriteGroup.backgroundType = pointsGroup.backgroundType;
     for (OASWptPt *point in pointsGroup.points)

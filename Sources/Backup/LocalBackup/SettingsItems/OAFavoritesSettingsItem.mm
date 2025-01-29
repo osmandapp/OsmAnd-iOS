@@ -317,7 +317,7 @@
     OASGpxUtilitiesPointsGroup *pointsGroup = gpxFile.pointsGroups[favoriteGroup.name];
     if (pointsGroup)
     {
-        favoriteGroup.color = UIColorFromARGB(pointsGroup.color);
+        favoriteGroup.color = UIColorFromRGB(pointsGroup.color);
         favoriteGroup.iconName = pointsGroup.iconName;
         favoriteGroup.backgroundType = pointsGroup.backgroundType;
     }

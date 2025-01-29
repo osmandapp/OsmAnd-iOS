@@ -118,7 +118,7 @@
         [scanner setScanLocation:1];
         unsigned int res = 0;
         [scanner scanHexInt:&res];
-        region.headerColor = UIColorFromARGB(res);
+        region.headerColor = UIColorFromRGB(res);
     }
     else
     {

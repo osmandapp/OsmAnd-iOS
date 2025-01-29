@@ -54,7 +54,7 @@
         self.originalName = _group.name;
         self.editName = _group.name;
         self.editIconName = _group.iconName;
-        self.editColor = UIColorFromARGB(_group.color);
+        self.editColor = UIColorFromRGB(_group.color);
         self.editBackgroundIconName = _group.backgroundType;
     }
 

@@ -205,10 +205,10 @@
                     kCellType: [OASwitchTableViewCell getCellIdentifier],
                     kCellTitle: groupName,
                     kCellLeftIcon: [UIImage templateImageNamed:visible ? @"ic_custom_folder" : @"ic_custom_folder_hidden"],
-                    kCellTintColor: visible ? UIColorFromARGB(color) : [UIColor colorNamed:ACColorNameIconColorDisabled],
+                    kCellTintColor: visible ? UIColorFromRGB(color) : [UIColor colorNamed:ACColorNameIconColorDisabled],
                     kTableValues: @{
                         @"visible": @(visible),
-                        @"color": UIColorFromARGB(color)
+                        @"color": UIColorFromRGB(color)
                     }
                 }];
                 [_tableData.subjects addObject:groupCellData];

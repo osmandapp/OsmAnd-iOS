@@ -79,10 +79,10 @@
             cell.colorView.layer.borderWidth = 0;
         }
 
-        UIColor *aColor = UIColorFromARGB(color);
+        UIColor *aColor = UIColorFromRGB(color);
         cell.colorView.backgroundColor = aColor;
         cell.backgroundImageView.image = [UIImage templateImageNamed:@"bg_color_chessboard_pattern"];
-        cell.backgroundImageView.tintColor = UIColorFromARGB(color);
+        cell.backgroundImageView.tintColor = UIColorFromRGB(color);
 
         if (indexPath.row == _currentColor)
         {

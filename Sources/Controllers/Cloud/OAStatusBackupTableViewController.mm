@@ -675,7 +675,7 @@
             cell.titleLabel.text = item.title;
             cell.descriptionLabel.text = item.descr;
             cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
-            cell.leftIconView.tintColor = UIColorFromARGB(item.iconTint);
+            cell.leftIconView.tintColor = UIColorFromRGB(item.iconTint);
         }
         return cell;
     }

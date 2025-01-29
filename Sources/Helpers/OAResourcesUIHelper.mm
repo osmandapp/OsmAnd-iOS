@@ -266,6 +266,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             [self.class toValue:OsmAndResourceType::RoadMapRegion],
             [self.class toValue:OsmAndResourceType::SrtmMapRegion],
             [self.class toValue:OsmAndResourceType::WikiMapRegion],
+            [self.class toValue:OsmAndResourceType::GeoTiffRegion],
+            [self.class toValue:OsmAndResourceType::HeightmapRegionLegacy],
             [self.class toValue:OsmAndResourceType::WeatherForecast]
     ];
 }

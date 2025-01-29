@@ -474,7 +474,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
                     {
                         [res appendString:SEPARATOR];
                     }
-                    [res appendString:poiType.name];
+                    [res appendString:poiType.value ? poiType.value : poiType.name];
                 }
                 result[categoryName] = res;
             }
@@ -528,8 +528,9 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
             else
             {
                 NSString *shortKey = [key componentsSeparatedByString:@":"].lastObject;
+                NSString *trimmedKey = [key stringByReplacingOccurrencesOfString:COLLAPSABLE_PREFIX withString:@""];
                 if (![HIDDEN_EXTENSIONS containsObject:shortKey] && ![HIDDEN_EXTENSIONS containsObject:key] && map[key].length > 0)
-                    additionalInfo[key] = map[key];
+                    additionalInfo[trimmedKey] = map[key];
             }
         }
         if (!type)

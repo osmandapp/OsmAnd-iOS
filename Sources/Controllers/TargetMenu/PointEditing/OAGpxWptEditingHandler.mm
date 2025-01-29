@@ -75,7 +75,10 @@
         [p setAddressAddress:address];
         NSDictionary<NSString *, NSString *> *extensions = [poi toTagValue:PRIVATE_PREFIX osmPrefix:OSM_PREFIX_KEY];
         [[p getExtensionsToWrite] addEntriesFromDictionary:extensions];
-        [p setAmenityOriginNameOriginName:poi.toStringEn];
+        
+        NSString *originName = poi.toStringEn;
+        if (originName.length > 0)
+            [p setAmenityOriginNameOriginName:originName];
 
         wpt.color = color;
         wpt.point = p;

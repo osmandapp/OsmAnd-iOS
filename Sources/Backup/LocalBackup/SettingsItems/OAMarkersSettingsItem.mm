@@ -201,7 +201,7 @@
         {
             OADestination *dest = [[OADestination alloc] initWithDesc:wpt.name latitude:wpt.getLatitude longitude:wpt.getLongitude];
             int color = [wpt getColor];
-            dest.color = color != 0 ? UIColorFromARGB(color) : UIColorFromRGB(marker_pin_color_blue);
+            dest.color = color != 0 ? UIColorFromRGBA(color) : UIColorFromRGB(marker_pin_color_blue);
             dest.markerResourceName = [self getResourceName:[dest.color.toHexString upperCase]];
             NSDictionary<NSString *, NSString *> *extensions = [wpt getExtensionsToRead];
             for (NSString *key in extensions.allKeys)

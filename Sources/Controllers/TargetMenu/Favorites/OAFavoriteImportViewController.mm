@@ -139,7 +139,7 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
            
             cell.titleIcon.image = [OAFavoritesHelper getCompositeIcon:[wptPt getIconName]
                                                         backgroundIcon:[wptPt getBackgroundType]
-                                                                 color: UIColorFromARGB([wptPt getColor])];
+                                                                 color: UIColorFromRGBA([wptPt getColor])];
 
         }
         return cell;

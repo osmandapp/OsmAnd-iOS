@@ -73,7 +73,7 @@
 
 - (void) acquireColor
 {
-    self.color = UIColorFromRGBA(self.point.getColor);
+    self.color = UIColorFromARGB(self.point.getColor);
 }
 
 - (BOOL) isEqual:(id)o
@@ -114,7 +114,7 @@
 {
     NSString *iconName = _point.getIconName ?: DEFAULT_ICON_NAME_KEY;
     NSString *backgroundIconName = _point.getBackgroundType ?: DEFAULT_ICON_SHAPE_KEY;
-    return [OAFavoritesHelper getCompositeIcon:iconName backgroundIcon:backgroundIconName color:UIColorFromRGBA([_point getColor])];
+    return [OAFavoritesHelper getCompositeIcon:iconName backgroundIcon:backgroundIconName color:UIColorFromARGB([_point getColor])];
 }
 
 @end

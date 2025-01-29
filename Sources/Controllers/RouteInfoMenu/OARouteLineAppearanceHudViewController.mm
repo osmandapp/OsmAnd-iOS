@@ -1191,8 +1191,8 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 {
     if ([tableData.key isEqualToString:@"cell_color_map_style"] && [_selectedType.coloringType isCustomColor])
     {
-        UIColor *customColorDay = UIColorFromARGB([_previewRouteLineInfo getCustomColor:NO]);
-        UIColor *customColorNight = UIColorFromARGB([_previewRouteLineInfo getCustomColor:YES]);
+        UIColor *customColorDay = UIColorFromRGB([_previewRouteLineInfo getCustomColor:NO]);
+        UIColor *customColorNight = UIColorFromRGB([_previewRouteLineInfo getCustomColor:YES]);
         UIColor *defaultColorDay = UIColorFromRGB(kDefaultRouteLineDayColor);
         UIColor *defaultColorNight = UIColorFromRGB(kDefaultRouteLineNightColor);
         if ([customColorDay isEqual:defaultColorDay] || [customColorNight isEqual:defaultColorNight])

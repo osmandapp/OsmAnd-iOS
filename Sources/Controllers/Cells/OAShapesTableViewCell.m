@@ -74,7 +74,7 @@
             cell.backgroundImageView.hidden = NO;
             cell.backgroundImageView.image = [UIImage templateImageNamed:_contourIconNames[indexPath.row]];
             cell.backgroundImageView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
-            cell.iconImageView.tintColor = UIColorFromARGB(_currentColor);
+            cell.iconImageView.tintColor = UIColorFromRGB(_currentColor);
         }
         else
         {

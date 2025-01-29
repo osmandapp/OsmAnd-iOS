@@ -630,7 +630,7 @@
             if (item.iconTintColor)
                 leftIconTintColor = item.iconTintColor;
             else if (item.iconTint != -1)
-                leftIconTintColor = UIColorFromARGB(item.iconTint);
+                leftIconTintColor = UIColorFromRGB(item.iconTint);
             else
                 leftIconTintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             cell.leftIconView.tintColor = leftIconTintColor;
@@ -661,7 +661,7 @@
                 NSInteger color = item.iconTint;
                 if (color != -1)
                 {
-                    cell.rightIconView.tintColor = UIColorFromARGB(color);
+                    cell.rightIconView.tintColor = UIColorFromRGB(color);
                     cell.rightIconView.image = [UIImage templateImageNamed:item.iconName];
                 }
                 else

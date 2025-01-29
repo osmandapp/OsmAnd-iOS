@@ -51,7 +51,7 @@
     if (indexPath.row == _selectedIndex)
     {
         cell.backView.layer.borderWidth = 2;
-        cell.backView.layer.borderColor = UIColorFromARGB(_currentColor).CGColor;
+        cell.backView.layer.borderColor = UIColorFromRGB(_currentColor).CGColor;
     }
     else
     {

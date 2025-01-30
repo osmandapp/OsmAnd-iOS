@@ -21,8 +21,6 @@ final class RenderedObjectViewController: OAPOIViewController {
     
     init(renderedObject: OARenderedObject) {
         let poi = RenderedObjectHelper.getSyntheticAmenity(renderedObject: renderedObject)
-        poi.obfId >>= 1;
-        
         super.init(poi: poi)
         self.renderedObject = renderedObject
     }

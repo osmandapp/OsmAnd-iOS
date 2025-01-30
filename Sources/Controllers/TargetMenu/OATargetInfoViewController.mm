@@ -238,6 +238,9 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
 
 - (void)buildWithinRow
 {
+    if (![[self getTargetObj] isKindOfClass:OAMapObject.class])
+        return;
+    
     OAMapViewController *mapViewController = OARootViewController.instance.mapPanel.mapViewController;
     NSArray<OARenderedObject *> *polygons = [mapViewController.mapLayers.contextMenuLayer retrievePolygonsAroundMapObject:self.location.latitude lon:self.location.longitude mapObject:[self getTargetObj]];
     

@@ -60,7 +60,10 @@
         [_favorite setIcon:_iconName];
         [_favorite setColor:favCol.color];
         [_favorite setAmenity:poi];
-        [_favorite setAmenityOriginName:poi.toStringEn];
+        
+        NSString *originName = poi.toStringEn;
+        if (originName.length > 0)
+            [_favorite setAmenityOriginName:originName];
     }
     return self;
 }

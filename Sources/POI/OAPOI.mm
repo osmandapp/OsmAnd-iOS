@@ -391,7 +391,10 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     NSString *nameEn = self.localizedNames[@"en"] ? self.localizedNames[@"en"] : @"";
     NSString *type = self.type.category.name ? self.type.category.name : @"";
     NSString *subType = self.type.name ? self.type.name : @"";
-    return [NSString stringWithFormat:@"Amenity:%@: %@:%@", nameEn, type, subType];
+    if (nameEn.length == 0 && type.length == 0 && subType.length == 0)
+        return @"";
+    else
+        return [NSString stringWithFormat:@"Amenity:%@: %@:%@", nameEn, type, subType];
 }
 
 - (NSDictionary<NSString *, NSString *> *) toTagValue:(NSString *)privatePrefix osmPrefix:(NSString *)osmPrefix
@@ -473,7 +476,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
                     {
                         [res appendString:SEPARATOR];
                     }
-                    [res appendString:poiType.name];
+                    [res appendString:poiType.value ?: poiType.name];
                 }
                 result[categoryName] = res;
             }
@@ -527,8 +530,9 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
             else
             {
                 NSString *shortKey = [key componentsSeparatedByString:@":"].lastObject;
+                NSString *trimmedKey = [key stringByReplacingOccurrencesOfString:COLLAPSABLE_PREFIX withString:@""];
                 if (![HIDDEN_EXTENSIONS containsObject:shortKey] && ![HIDDEN_EXTENSIONS containsObject:key] && map[key].length > 0)
-                    additionalInfo[key] = map[key];
+                    additionalInfo[trimmedKey] = map[key];
             }
         }
         if (!type)

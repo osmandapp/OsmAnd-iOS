@@ -64,7 +64,9 @@
 
 - (void) acquireOriginObject
 {
-    _originObject = [OAPOIHelper findPOIByOriginName:_wpt.getAmenityOriginName lat:_wpt.point.getLatitude lon:_wpt.point.getLongitude];
+    NSString *originName = _wpt.getAmenityOriginName;
+    if (originName && originName.length > 0)
+        _originObject = [OAPOIHelper findPOIByOriginName:originName lat:_wpt.point.getLatitude lon:_wpt.point.getLongitude];
     if (!_originObject)
         _originObject = [_wpt getAmenity];
 }

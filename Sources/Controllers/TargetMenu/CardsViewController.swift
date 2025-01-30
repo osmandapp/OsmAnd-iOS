@@ -14,16 +14,18 @@ final class CardsViewController: UIView, UICollectionViewDelegate {
         case bigPhoto, smallPhoto, mapillaryBanner, noInternet, noPhotos
     }
     
-    var didChanggeHeightAction: ((Section, Float) -> Void)?
+    var contentType: CollapsableCardsType = .onlinePhoto
+    var didChangeHeightAction: ((Section, Float) -> Void)?
     
     var cards: [AbstractCard] = [] {
         didSet {
             applySnapshot()
         }
     }
-    
+    // swiftlint:disable superfluous_disable_command trailing_newline
     private var dataSource: DataSource!
     private var collectionView: UICollectionView!
+    // swiftlint:enable superfluous_disable_command trailing_newline
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -38,6 +40,12 @@ final class CardsViewController: UIView, UICollectionViewDelegate {
     
     func reloadData() {
         applySnapshot()
+    }
+    
+    func showSpinner(show: Bool) {
+        DispatchQueue.main.async { [weak self] in
+            self?.collectionView.showActivityIndicator(show: show)
+        }
     }
     
     private func createLayout() -> UICollectionViewLayout {
@@ -114,12 +122,12 @@ final class CardsViewController: UIView, UICollectionViewDelegate {
         }
         
         dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
-        didChanggeHeightAction?(section, contentHeight)
+        didChangeHeightAction?(section, contentHeight)
     }
     
     private func makeDataSource() -> DataSource {
         let source = DataSource(collectionView: collectionView) { [weak self] collectionView, indexPath, _ -> UICollectionViewCell in
-            guard let self else { return  UICollectionViewCell() }
+            guard let self else { return UICollectionViewCell() }
             let section = dataSource.snapshot().sectionIdentifiers[indexPath.section]
             switch section {
             case .noInternet:
@@ -139,14 +147,14 @@ final class CardsViewController: UIView, UICollectionViewDelegate {
                 guard let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: MapillaryContributeCell.reuseIdentifier,
                     for: indexPath) as? MapillaryContributeCell else { fatalError("Cannot create new cell MapillaryContributeCell") }
+                collectionView.isScrollEnabled = true
                 return cell
             case .noPhotos:
                 guard let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: NoImagesCell.reuseIdentifier,
                     for: indexPath) as? NoImagesCell else { fatalError("Cannot create new cell NoImagesCell") }
                 collectionView.isScrollEnabled = false
-                // TODO: true | false
-                cell.showAddPhotosButton(true)
+                cell.showAddPhotosButton(contentType == .mapilary)
                 return cell
             }
             
@@ -156,7 +164,7 @@ final class CardsViewController: UIView, UICollectionViewDelegate {
     }
 }
 
-private extension NSCollectionLayoutSection {
+fileprivate extension NSCollectionLayoutSection {
     static func emptySection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                               heightDimension: .fractionalHeight(1.0))
@@ -224,7 +232,7 @@ private extension NSCollectionLayoutSection {
     }
 }
 
-extension CardsViewController {
+fileprivate extension CardsViewController {
     var isNoInternetState: Bool {
         cards.contains { $0 is NoInternetCard }
     }
@@ -245,5 +253,21 @@ extension CardsViewController {
             return 156.0
         }
         return cell.height()
+    }
+}
+
+fileprivate extension UICollectionView {
+    func showActivityIndicator(show: Bool) {
+        if show {
+            let indicator = UIActivityIndicatorView(style: .large)
+            indicator.hidesWhenStopped = true
+            backgroundView = indicator
+            indicator.startAnimating()
+        } else {
+            if let indicator = backgroundView as? UIActivityIndicatorView {
+                indicator.stopAnimating()
+                indicator.removeFromSuperview()
+            }
+        }
     }
 }

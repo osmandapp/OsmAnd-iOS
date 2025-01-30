@@ -19,11 +19,9 @@ final class MapillaryContributeCell: UICollectionViewCell {
             
             let image = addPhotosButton.imageView?.image?.withTintColor(.white)
             addPhotosButton.setImage(image, for: .normal)
-            // FIXME:
-//            var configuration = addPhotosButton.configuration
-//            configuration?.imagePadding = 12
-//            configuration?.contentInsets = .init(top: 0, leading: 10, bottom: 0, trailing: 20)
-//            addPhotosButton.configuration = configuration
+            var configuration = addPhotosButton.configuration
+            configuration?.imagePadding = 12
+            addPhotosButton.configuration = configuration
         }
     }
     

@@ -1011,6 +1011,7 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 // Mapillary
 @property (nonatomic) OACommonBoolean *showMapillary;
 @property (nonatomic) OACommonBoolean *onlinePhotosRowCollapsed;
+@property (nonatomic) OACommonBoolean *mapillaryPhotosRowCollapsed;
 @property (nonatomic) OACommonBoolean *mapillaryFirstDialogShown;
 
 @property (nonatomic) OACommonBoolean *useMapillaryFilter;

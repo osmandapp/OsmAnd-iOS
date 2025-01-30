@@ -44,7 +44,9 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
     return _sharedInstance;
 }
 
-- (void)sendNearbyWikiImagesRequest:(OARowInfo *)nearbyImagesRowInfo targetObj:(id)targetObj addOtherImagesOnComplete:(void (^)(NSMutableArray <AbstractCard *> *cards))addOtherImagesOnComplete;
+- (void)sendNearbyWikiImagesRequest:(OARowInfo *)nearbyImagesRowInfo
+                          targetObj:(id)targetObj
+           addOtherImagesOnComplete:(void (^)(NSMutableArray <AbstractCard *> *cards))addOtherImagesOnComplete;
 {
     if (!nearbyImagesRowInfo)
         return;

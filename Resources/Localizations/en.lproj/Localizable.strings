@@ -3987,3 +3987,8 @@
 "no_photos_available" = "No photos available";
 "no_photos_available_descr" = "No user photos have been added to this location yet";
 "mapillary_action_descr" = "Share your street-level view via Mapillary.";
+"online_photos" = "Online photos";
+"street_level_imagery" = "Street-level imagery";
+"wikimedia" = "Wikimedia";
+"open_in_browser" = "Open in browser";
+"shared_string_source" = "Source";

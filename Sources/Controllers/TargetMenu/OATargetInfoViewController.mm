@@ -91,7 +91,9 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
     BOOL _hasOsmWiki;
     CGFloat _calculatedWidth;
     
-    OARowInfo *_nearbyImagesRowInfo;
+    OARowInfo *_onlinePhotoCardsRowInfo;
+    OARowInfo *_mapillaryCardsRowInfo;
+
     BOOL _otherCardsReady;
 }
 
@@ -220,6 +222,9 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
 
     [self buildCoordinateRows:rows];
     [self addNearbyImagesIfNeeded];
+    [self addMapillaryCardsRowInfoIfNeeded];
+    
+    [self startLoadingImages];
 
     _calculatedWidth = 0;
     [self contentHeight:self.tableView.bounds.size.width];
@@ -317,7 +322,7 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
             rowHeight = MAX(bounds.height, 28.0) + 11.0 + 11.0;
             row.height = rowHeight;
             row.moreText = fullBounds.height > bounds.height;
-        } // FIXME:
+        }
         if (row.collapsable)
             [row.collapsableView adjustHeightForWidth:width];
     }
@@ -470,7 +475,7 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
 
 - (void)sendNearbyOtherImagesRequest:(NSMutableArray <AbstractCard *> *)cards
 {
-    if (!_nearbyImagesRowInfo)
+    if (!_onlinePhotoCardsRowInfo)
         return;
 
     NSString *openPlaceReviewsTagContent = nil;
@@ -485,7 +490,7 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
     }
     
     _otherCardsReady = NO;
-    [self addOtherCards:imageTagContent mapillary:mapillaryTagContent cards:cards rowInfo:_nearbyImagesRowInfo];
+    [self addOtherCards:imageTagContent mapillary:mapillaryTagContent cards:cards rowInfo:_onlinePhotoCardsRowInfo];
 }
 
 - (void)getCard:(NSDictionary *)feature
@@ -617,9 +622,19 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
             else if (cards.count > 1)
                 [self removeDuplicatesFromCards:cards];
         }
-        
+        // After forming the list of cards, fill the collection
         if (nearbyImagesRowInfo)
-            [((CollapsableCardsView *)nearbyImagesRowInfo.collapsableView) setCards:cards];
+        {
+            CollapsableCardsView *collapsableView = (CollapsableCardsView *)nearbyImagesRowInfo.collapsableView;
+            collapsableView.isLoading = NO;
+            [collapsableView setCards:[CardFilter getAvailableContentForOnlinePhotosSection:cards]];
+        }
+        if (_mapillaryCardsRowInfo)
+        {
+            CollapsableCardsView *collapsableView = (CollapsableCardsView *)_mapillaryCardsRowInfo.collapsableView;
+            collapsableView.isLoading = NO;
+            [collapsableView setCards:[CardFilter getAvailableContentForMapillaryPhotosSection:cards]];
+        }
         
         _otherCardsReady = _wikiCardsReady = NO;
     }
@@ -670,22 +685,49 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
         [cards addObject:mapilaryContributeCard];
 }
 
-- (void) addNearbyImagesIfNeeded
+- (void)addNearbyImagesIfNeeded
 {
-//    if (!AFNetworkReachabilityManager.sharedManager.isReachable)
-//        return;
+    OARowInfo *nearbyImagesRowInfo = [[OARowInfo alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_photo"] textPrefix:nil text:OALocalizedString(@"online_photos") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
 
-    OARowInfo *nearbyImagesRowInfo = [[OARowInfo alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_photo"] textPrefix:nil text:OALocalizedString(@"mapil_images_nearby") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
-
-    CollapsableCardsView *cardView = [[CollapsableCardsView alloc] init];
+    CollapsableCardsView *cardView = [CollapsableCardsView new];
+    cardView.contentType = CollapsableCardsTypeOnlinePhoto;
     cardView.delegate = self;
     nearbyImagesRowInfo.collapsable = YES;
     nearbyImagesRowInfo.collapsed = [OAAppSettings sharedManager].onlinePhotosRowCollapsed.get;
     nearbyImagesRowInfo.collapsableView = cardView;
-    nearbyImagesRowInfo.collapsableView.frame = CGRectMake([OAUtilities getLeftMargin], 0, self.view.frame.size.width, 284);
+    nearbyImagesRowInfo.collapsableView.frame = CGRectMake([OAUtilities getLeftMargin], 0, self.view.frame.size.width, 170);
     [_rows addObject:nearbyImagesRowInfo];
     
-    _nearbyImagesRowInfo = nearbyImagesRowInfo;
+    _onlinePhotoCardsRowInfo = nearbyImagesRowInfo;
+}
+
+- (void)addMapillaryCardsRowInfoIfNeeded
+{
+    OAMapillaryPlugin *plagin = (OAMapillaryPlugin *) [OAPluginsHelper getPlugin:OAMapillaryPlugin.class];
+    if ([plagin isEnabled])
+    {
+        OARowInfo *mapillaryCardsRowInfo = [[OARowInfo alloc] initWithKey:nil
+                                                                     icon:[UIImage imageNamed:@"ic_custom_photo_street"]
+                                                               textPrefix:nil
+                                                                     text:OALocalizedString(@"street_level_imagery")
+                                                                textColor:nil
+                                                                   isText:NO
+                                                                needLinks:NO
+                                                                    order:0
+                                                                 typeName:@""
+                                                            isPhoneNumber:NO isUrl:NO];
+
+        CollapsableCardsView *cardView = [CollapsableCardsView new];
+        cardView.contentType = CollapsableCardsTypeMapilary;
+        cardView.delegate = self;
+        mapillaryCardsRowInfo.collapsable = YES;
+        mapillaryCardsRowInfo.collapsed = [OAAppSettings sharedManager].mapillaryPhotosRowCollapsed.get;
+        mapillaryCardsRowInfo.collapsableView = cardView;
+        mapillaryCardsRowInfo.collapsableView.frame = CGRectMake([OAUtilities getLeftMargin], 0, self.view.frame.size.width, 170);
+        [_rows addObject:mapillaryCardsRowInfo];
+        
+        _mapillaryCardsRowInfo = mapillaryCardsRowInfo;
+    }
 }
 
 - (void)showPOITagsDetails:(OARowInfo *)info
@@ -1061,32 +1103,71 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
     [self.tableView reloadData];
 }
 
-- (void)onViewExpanded
+- (void)startLoadingImages
 {
     _wikiCardsReady = NO;
-    if (_nearbyImagesRowInfo)
+    CollapsableCardsView *onlinePhotoCardsView = (CollapsableCardsView *)_onlinePhotoCardsRowInfo.collapsableView;
+    CollapsableCardsView *mapillaryCardsView;
+    if (_mapillaryCardsRowInfo)
     {
-        __weak __typeof(self) weakSelf = self;
-        CollapsableCardsView *cardsView = (CollapsableCardsView *) _nearbyImagesRowInfo.collapsableView;
-        if (AFNetworkReachabilityManager.sharedManager.isReachable) {
-            [cardsView setCards:@[[[ImageCard alloc] initWithData:@{@"key": @"loading"}]]];
-            
-            [[OAWikiImageHelper sharedInstance] sendNearbyWikiImagesRequest:_nearbyImagesRowInfo targetObj:self.getTargetObj addOtherImagesOnComplete:^(NSMutableArray <AbstractCard *> *cards) {
-                weakSelf.wikiCardsReady = YES;
-                [weakSelf sendNearbyOtherImagesRequest:cards];
-            }];
-        } else {
-            NoInternetCard *noInternetCard = [NoInternetCard new];
-            noInternetCard.onTryAgainAction = ^{
-                if (AFNetworkReachabilityManager.sharedManager.isReachable)
-                {
-                    [weakSelf onViewExpanded];
-                }
-               
-            };
-            [cardsView setCards:@[noInternetCard]];
+        mapillaryCardsView =  (CollapsableCardsView *)_mapillaryCardsRowInfo.collapsableView;
+    }
+    
+    __weak __typeof(self) weakSelf = self;
+    if (AFNetworkReachabilityManager.sharedManager.isReachable) {
+//        ImageCard *loadingModel = [[ImageCard alloc] initWithData:@{@"key": @"loading"}];
+//        [onlinePhotoCardsView setCards:@[loadingModel]];
+//        if (_mapillaryCardsView)
+//        {
+//            [_mapillaryCardsView setCards:@[loadingModel]];
+//        }
+        onlinePhotoCardsView.isLoading = YES;
+        mapillaryCardsView.isLoading = YES;
+        [[OAWikiImageHelper sharedInstance] sendNearbyWikiImagesRequest:_onlinePhotoCardsRowInfo targetObj:self.getTargetObj addOtherImagesOnComplete:^(NSMutableArray <AbstractCard *> *cards) {
+            weakSelf.wikiCardsReady = YES;
+            [weakSelf sendNearbyOtherImagesRequest:cards];
+        }];
+    } else {
+        NoInternetCard *noInternetCard = [NoInternetCard new];
+        noInternetCard.onTryAgainAction = ^{
+            if (AFNetworkReachabilityManager.sharedManager.isReachable)
+            {
+                [weakSelf startLoadingImages];
+            }
+        };
+        [onlinePhotoCardsView setCards:@[noInternetCard]];
+        if (mapillaryCardsView)
+        {
+            [mapillaryCardsView setCards:@[noInternetCard]];
         }
     }
+}
+
+- (void)onViewExpanded
+{
+//    _wikiCardsReady = NO;
+//    if (_onlinePhotoCardsRowInfo)
+//    {
+//        __weak __typeof(self) weakSelf = self;
+//        CollapsableCardsView *cardsView = (CollapsableCardsView *) _onlinePhotoCardsRowInfo.collapsableView;
+//        if (AFNetworkReachabilityManager.sharedManager.isReachable) {
+//            [cardsView setCards:@[[[ImageCard alloc] initWithData:@{@"key": @"loading"}]]];
+//            
+//            [[OAWikiImageHelper sharedInstance] sendNearbyWikiImagesRequest:_onlinePhotoCardsRowInfo targetObj:self.getTargetObj addOtherImagesOnComplete:^(NSMutableArray <AbstractCard *> *cards) {
+//                weakSelf.wikiCardsReady = YES;
+//                [weakSelf sendNearbyOtherImagesRequest:cards];
+//            }];
+//        } else {
+//            NoInternetCard *noInternetCard = [NoInternetCard new];
+//            noInternetCard.onTryAgainAction = ^{
+//                if (AFNetworkReachabilityManager.sharedManager.isReachable)
+//                {
+//                    [weakSelf onViewExpanded];
+//                }
+//            };
+//            [cardsView setCards:@[noInternetCard]];
+//        }
+//    }
 }
 
 #pragma mark - OAEditDescriptionViewControllerDelegate

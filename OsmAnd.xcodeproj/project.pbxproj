@@ -3182,7 +3182,6 @@
 		FAE0B7112AFCDAD400C02438 /* BLEPairedSensorsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE0B7102AFCDAD400C02438 /* BLEPairedSensorsViewController.swift */; };
 		FAE0B7132AFCDC6B00C02438 /* BLEPairedSensors.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAE0B7122AFCDC6B00C02438 /* BLEPairedSensors.storyboard */; };
 		FAE0B7162AFCEF4D00C02438 /* СhoicePairedDeviceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE0B7152AFCEF4D00C02438 /* СhoicePairedDeviceTableViewCell.swift */; };
-		FAE3A5762D47B36F00E97159 /* CollapsableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE3A5752D47B36F00E97159 /* CollapsableView.swift */; };
 		FAE3A5792D47BCA700E97159 /* OACollapsableView.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE3A5782D47BCA700E97159 /* OACollapsableView.m */; };
 		FAE446C42CCFC82700598BE3 /* ZoomLevelWidgetState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE446C32CCFC82400598BE3 /* ZoomLevelWidgetState.swift */; };
 		FAE446D62CD3C10900598BE3 /* UIScreen+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE446D52CD3C10300598BE3 /* UIScreen+Extension.swift */; };
@@ -7704,7 +7703,6 @@
 		FAE0B7102AFCDAD400C02438 /* BLEPairedSensorsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEPairedSensorsViewController.swift; sourceTree = "<group>"; };
 		FAE0B7122AFCDC6B00C02438 /* BLEPairedSensors.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = BLEPairedSensors.storyboard; sourceTree = "<group>"; };
 		FAE0B7152AFCEF4D00C02438 /* СhoicePairedDeviceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "СhoicePairedDeviceTableViewCell.swift"; sourceTree = "<group>"; };
-		FAE3A5752D47B36F00E97159 /* CollapsableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollapsableView.swift; sourceTree = "<group>"; };
 		FAE3A5772D47BCA700E97159 /* OACollapsableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACollapsableView.h; sourceTree = "<group>"; };
 		FAE3A5782D47BCA700E97159 /* OACollapsableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OACollapsableView.m; sourceTree = "<group>"; };
 		FAE446C32CCFC82400598BE3 /* ZoomLevelWidgetState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomLevelWidgetState.swift; sourceTree = "<group>"; };
@@ -11979,7 +11977,6 @@
 				FA4C57042D491EB900438A5C /* CardsViewController.swift */,
 				FAE3A5772D47BCA700E97159 /* OACollapsableView.h */,
 				FAE3A5782D47BCA700E97159 /* OACollapsableView.m */,
-				FAE3A5752D47B36F00E97159 /* CollapsableView.swift */,
 				FA64086A2D3E6EA5005FD12D /* CollapsableCardsView.swift */,
 				DA5A7E6726C563A400F274C7 /* Address */,
 				DA5A7EAA26C563A400F274C7 /* ChangePosition */,
@@ -16961,7 +16958,6 @@
 				DA5A845926C563A900F274C7 /* OAMeasurementToolLayer.mm in Sources */,
 				DA5A837126C563A800F274C7 /* OARoutingInfoCell.mm in Sources */,
 				DA653CD9288ACEDF00AB623C /* OATitleIconProgressbarCell.mm in Sources */,
-				FAE3A5762D47B36F00E97159 /* CollapsableView.swift in Sources */,
 				DA5A844526C563A900F274C7 /* UIViewController+OARootViewController.m in Sources */,
 				DA5A833626C563A800F274C7 /* OAImagesCollectionViewCell.m in Sources */,
 				DA5A854826C563A900F274C7 /* OADebugSettings.mm in Sources */,

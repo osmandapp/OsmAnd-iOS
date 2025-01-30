@@ -12,22 +12,51 @@ protocol CollapsableCardViewDelegate: AnyObject {
     @objc func onRecalculateHeight()
 }
 
+@objc enum CollapsableCardsType: Int {
+     case onlinePhoto, mapilary
+ }
+
 @objcMembers
 final class CollapsableCardsView: OACollapsableView {
+    var contentType: CollapsableCardsType = .onlinePhoto
+    
     weak var delegate: CollapsableCardViewDelegate?
     
-    private var cardsViewController: CardsViewController!
-    private var viewAllButton: UIButton?
-    private var heightConstraint: NSLayoutConstraint?
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    var isLoading = false {
+        didSet {
+            updateSpinner()
+        }
     }
     
+    override var collapsed: Bool {
+        didSet {
+            switch contentType {
+            case .onlinePhoto:
+                OAAppSettings.sharedManager().onlinePhotosRowCollapsed.set(collapsed)
+            case .mapilary:
+                OAAppSettings.sharedManager().mapillaryPhotosRowCollapsed.set(collapsed)
+            }
+            if !collapsed, let delegate {
+                delegate.onViewExpanded()
+            }
+        }
+    }
+    
+    private let bottomContentHeight: Float = 68.0
+    
+    // swiftlint:disable force_unwrapping
+    private var cardsViewController: CardsViewController!
+    // swiftlint:enable force_unwrapping
+    private var viewAllButton: UIButton?
+    private var exploreButton: UIButton?
+    private var heightConstraint: NSLayoutConstraint?
+    
+    // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         cardsViewController = CardsViewController(frame: .zero)
+        cardsViewController.contentType = contentType
         cardsViewController.translatesAutoresizingMaskIntoConstraints = false
         addSubview(cardsViewController)
         
@@ -40,35 +69,35 @@ final class CollapsableCardsView: OACollapsableView {
         heightConstraint = cardsViewController.heightAnchor.constraint(equalToConstant: 170)
         heightConstraint?.isActive = true
 
-        cardsViewController.didChanggeHeightAction = { [weak self] section, height in
-            guard let self else { return }
+        cardsViewController.didChangeHeightAction = { [weak self, weak cardsViewController] section, height in
+            guard let self, let cardsViewController else { return }
+            var newHeiht = height
             switch section {
-            case .noInternet, .noPhotos:
-                if heightConstraint?.constant != CGFloat(height) {
-                    heightConstraint?.constant = CGFloat(height)
-                    if let superview = cardsViewController.superview {
-                       var frame = superview.frame
-                        frame.size.height = CGFloat(height)
-                        superview.frame = frame
-                        delegate?.onRecalculateHeight()
-    //                    superview.setNeedsLayout()
-    //                    superview.layoutIfNeeded()
-                    }
+            case .bigPhoto, .smallPhoto, .mapillaryBanner:
+                switch contentType {
+                case .onlinePhoto where cardsViewController.cards.hasOnlyOnlinePhotosContent:
+                    newHeiht += bottomContentHeight
+                case .mapilary where cardsViewController.cards.hasOnlyMapillaryPhotosContent:
+                    newHeiht += bottomContentHeight
+                default: break
                 }
-            default:
-                return
+            default: break
+            }
+            
+            if heightConstraint?.constant != CGFloat(newHeiht) {
+                heightConstraint?.constant = CGFloat(newHeiht)
+                if let superview = cardsViewController.superview {
+                   var frame = superview.frame
+                    frame.size.height = CGFloat(newHeiht)
+                    superview.frame = frame
+                    delegate?.onRecalculateHeight()
+                }
             }
         }
     }
     
-    override var collapsed: Bool {
-        didSet {
-            OAAppSettings.sharedManager().onlinePhotosRowCollapsed.set(collapsed)
-            
-            if !collapsed, let delegate {
-                delegate.onViewExpanded()
-            }
-        }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -77,11 +106,11 @@ final class CollapsableCardsView: OACollapsableView {
         cardsViewController.reloadData()
     }
     
-    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        guard !collapsed else { return }
-        
-        cardsViewController.reloadData()
-    }
+//    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+//      //  guard !collapsed else { return }
+//        
+//        //cardsViewController.reloadData()
+//    }
     
     override func adjustHeight(forWidth width: CGFloat) {
         updateLayout(width: width)
@@ -95,12 +124,33 @@ final class CollapsableCardsView: OACollapsableView {
             for card in cards {
                 card.delegate = self
             }
-            
-            if cardsViewController.hasPhoto {
-                // TODO: wiki || mapillary
-                addViewAllButtonIfNeeded()
+            configereBottomButton(with: cards)
+        }
+    }
+    
+    private func updateSpinner() {
+        cardsViewController.showSpinner(show: isLoading)
+    }
+    
+    private func configereBottomButton(with cards: [AbstractCard]) {
+        guard !cards.isEmpty else { return }
+        
+        switch contentType {
+        case .onlinePhoto:
+            if cards.hasOnlyOnlinePhotosContent {
+                viewAllButton = UIButton(type: .system, primaryAction: UIAction(title: localizedString("shared_string_view_all"), handler: { _ in
+                    // TODO:
+                    print("viewAllButton tapped view all!")
+                }))
+                addButtonIfNeeded(button: viewAllButton!)
             }
-           // cardsViewController.reloadData()
+        case .mapilary:
+            if cards.hasOnlyMapillaryPhotosContent {
+                exploreButton = UIButton(type: .system, primaryAction: UIAction(title: localizedString("shared_string_explore"), handler: { _ in
+                    OAMapillaryPlugin.installOrOpenMapillary()
+                }))
+                addButtonIfNeeded(button: exploreButton!)
+            }
         }
     }
     
@@ -108,31 +158,31 @@ final class CollapsableCardsView: OACollapsableView {
         var rect = cardsViewController.frame
         rect.size.width = width
         cardsViewController.frame = rect
+        
+        if let superview = cardsViewController.superview {
+           var frame = superview.frame
+            frame.size.width = CGFloat(width)
+            superview.frame = frame
+        }
     }
     
-    private func addViewAllButtonIfNeeded() {
-        guard viewAllButton == nil else { return }
-        viewAllButton = UIButton(type: .system, primaryAction: UIAction(title: localizedString("shared_string_view_all"), handler: { _ in
-            print("Button tapped view all!")
-        }))
-        guard let viewAllButton else { return }
-        
+    private func addButtonIfNeeded(button: UIButton) {
         var config = UIButton.Configuration.filled()
         config.baseBackgroundColor = .buttonBgColorTertiary
         config.baseForegroundColor = .buttonTextColorSecondary
         config.background.cornerRadius = 9
         config.cornerStyle = .fixed
         config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16)
-        viewAllButton.configuration = config
+        button.configuration = config
         
-        viewAllButton.translatesAutoresizingMaskIntoConstraints = false
+        button.translatesAutoresizingMaskIntoConstraints = false
         
-        addSubview(viewAllButton)
+        addSubview(button)
         
         NSLayoutConstraint.activate([
-            viewAllButton.heightAnchor.constraint(equalToConstant: 44),
-            viewAllButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-            viewAllButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -12)
+            button.heightAnchor.constraint(equalToConstant: 44),
+            button.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            button.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -12)
         ])
     }
 }

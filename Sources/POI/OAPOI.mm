@@ -474,7 +474,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
                     {
                         [res appendString:SEPARATOR];
                     }
-                    [res appendString:poiType.value ? poiType.value : poiType.name];
+                    [res appendString:poiType.value ?: poiType.name];
                 }
                 result[categoryName] = res;
             }

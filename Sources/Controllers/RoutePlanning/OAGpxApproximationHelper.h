@@ -25,7 +25,7 @@
 
 - (instancetype)initWithLocations:(NSArray<OALocationsHolder *> *)locations initialAppMode:(OAApplicationMode *)appMode initialThreshold:(float)threshold;
 
-- (BOOL)calculateGpxApproximation:(BOOL)newCalculation;
+- (void)calculateGpxApproximationAsync;
 - (OASGpxFile *)approximateGpxSync:(OASGpxFile *)gpxFile params:(OAGpxApproximationParams *)params;
 - (void)updateAppMode:(OAApplicationMode *)appMode;
 - (void)updateDistanceThreshold:(float)threshold;

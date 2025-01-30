@@ -396,4 +396,40 @@
     return latEqual && lonEqual;
 }
 
++ (BOOL)isFirstPolygonInsideSecond:(QVector< OsmAnd::PointI >)firstPolygon secondPolygon:(QVector<OsmAnd::PointI>)secondPolygon
+{
+    for (OsmAnd::PointI pointI : firstPolygon)
+    {
+        if (![self.class isPointInsidePolygon:pointI polygon:secondPolygon])
+        {
+            // if at least one point is not inside the boundary, return false
+            return NO;
+        }
+    }
+    return YES;
+}
+
++ (BOOL)isPointInsidePolygon:(OsmAnd::PointI)point polygon:(QVector<OsmAnd::PointI>)polygon
+{
+    double px = point.x;
+    double py = point.y;
+    BOOL oddNodes = NO;
+
+    for (int i = 0, j = polygon.size() - 1; i < polygon.size(); j = i++)
+    {
+        double x1 = polygon.at(i).x;
+        double y1 = polygon.at(i).y;
+        double x2 = polygon.at(j).x;
+        double y2 = polygon.at(j).y;
+        if (((y1 < py && y2 >= py)
+                || (y2 < py && y1 >= py))
+                && (x1 <= px || x2 <= px))
+        {
+            if (x1 + (py - y1) / (y2 - y1) * (x2 - x1) < px)
+                oddNodes = !oddNodes;
+        }
+    }
+    return oddNodes;
+}
+
 @end

@@ -15,8 +15,10 @@
 #import "OAPOILocationType.h"
 #import "OAPOIMyLocationType.h"
 #import "OAPOIUIFilter.h"
+#import "OARenderedObject.h"
 #import "OAAmenityExtendedNameFilter.h"
 #import "OAPOIHelper.h"
+#import "OAPOIHelper+cpp.h"
 #import "OATargetPoint.h"
 #import "OAReverseGeocoder.h"
 #import "Localization.h"
@@ -27,6 +29,9 @@
 #import "OAPluginsHelper.h"
 #import "OAAppSettings.h"
 #import "OsmAndSharedWrapper.h"
+#import "OARenderedObject.h"
+#import "OARenderedObject+cpp.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include "OACoreResourcesAmenityIconProvider.h"
 #include <OsmAndCore/Data/Amenity.h>
@@ -37,6 +42,8 @@
 #include <OsmAndCore/ObfDataInterface.h>
 #include <OsmAndCore/NetworkRouteContext.h>
 #include <OsmAndCore/NetworkRouteSelector.h>
+#include <OsmAndCore/Map/BillboardRasterMapSymbol.h>
+#include <OsmAndCore/Map/IOnPathMapSymbol.h>
 
 #define kPoiSearchRadius 50
 #define kTrackSearchDelta 40
@@ -281,7 +288,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     return [[s lowercaseStringWithLocale:[NSLocale currentLocale]] hasPrefix:[str lowercaseStringWithLocale:[NSLocale currentLocale]]];
 }
 
-- (void) processAmenity:(std::shared_ptr<const OsmAnd::Amenity>)amenity poi:(OAPOI *)poi
+- (void) processAmenity:(std::shared_ptr<const OsmAnd::Amenity>)amenity mapObject:(std::shared_ptr<const OsmAnd::MapObject>)mapObject poi:(OAPOI *)poi
 {
     const auto& decodedCategories = amenity->getDecodedCategories();
     if (!decodedCategories.isEmpty())
@@ -310,6 +317,14 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     
     const auto decodedValues = amenity->getDecodedValues();
     [self processAmenityFields:poi decodedValues:decodedValues];
+    
+    if (const auto& obfMapObject = std::dynamic_pointer_cast<const OsmAnd::ObfMapObject>(mapObject))
+    {
+        for (const OsmAnd::PointI pointI : obfMapObject->points31)
+        {
+            [poi addLocation:pointI.x y:pointI.y];
+        }
+    }
 }
 
 - (void) processAmenityFields:(OAPOI *)poi decodedValues:(const QList<OsmAnd::Amenity::DecodedValue>)decodedValues
@@ -393,9 +408,16 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 
 - (OATargetPoint *) getTargetPoint:(id)obj
 {
-    if ([obj isKindOfClass:[OAPOI class]])
+    if ([obj isKindOfClass:OAPOI.class])
+        return [self getTargetPoint:obj renderedObject:nil];
+    else
+        return [self getTargetPoint:nil renderedObject:obj];
+}
+
+- (OATargetPoint *) getTargetPoint:(OAPOI *)poi renderedObject:(OARenderedObject *)renderedObject
+{
+    if (!renderedObject)
     {
-        OAPOI *poi = (OAPOI *)obj;
         OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
         if (poi.type)
         {
@@ -436,6 +458,30 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         targetPoint.sortIndex = (NSInteger)targetPoint.type;
         return targetPoint;
     }
+    else
+    {
+        OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+        targetPoint.type = OATargetLocation;
+        targetPoint.location = CLLocationCoordinate2DMake(renderedObject.labelLatLon.latitude, renderedObject.labelLatLon.longitude);
+        targetPoint.values = renderedObject.tags;
+        targetPoint.obfId = renderedObject.obfId;
+        targetPoint.targetObj = renderedObject;
+        targetPoint.sortIndex = (NSInteger)targetPoint.type;
+        
+        if (!poi)
+            poi = [RenderedObjectHelper getSyntheticAmenityWithRenderedObject:renderedObject];
+        if (poi)
+        {
+            if (!targetPoint || targetPoint.title.length == 0)
+                targetPoint.title = [RenderedObjectHelper getFirstNonEmptyNameFor:poi withRenderedObject:renderedObject];
+            
+            targetPoint.localizedNames = targetPoint.localizedNames.count > 0 ? targetPoint.localizedNames : poi.localizedNames;
+            
+            targetPoint.icon = [RenderedObjectHelper getIconWithRenderedObject:renderedObject];
+            
+        }
+        return targetPoint;
+    }
     return nil;
 }
 
@@ -446,9 +492,16 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 
 - (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
 {
+    auto onPathSymbol = std::dynamic_pointer_cast<const OsmAnd::IOnPathMapSymbol>(symbolInfo->mapSymbol);
+    if (onPathSymbol != nullptr)
+        return;
+    
     OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup* objSymbolGroup = dynamic_cast<OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup*>(symbolInfo->mapSymbol->groupPtr);
     OsmAnd::AmenitySymbolsProvider::AmenitySymbolsGroup* amenitySymbolGroup = dynamic_cast<OsmAnd::AmenitySymbolsProvider::AmenitySymbolsGroup*>(symbolInfo->mapSymbol->groupPtr);
+    const std::shared_ptr<const OsmAnd::MapObject> mapObject = objSymbolGroup != nullptr ? objSymbolGroup->mapObject : nullptr;
     OAPOIHelper *poiHelper = [OAPOIHelper sharedInstance];
+    
+    OARenderedObject *renderedObject;
     
     OAPOI *poi = [[OAPOI alloc] init];
     poi.latitude = point.latitude;
@@ -456,11 +509,10 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     if (amenitySymbolGroup != nullptr)
     {
         const auto amenity = amenitySymbolGroup->amenity;
-        [self processAmenity:amenity poi:poi];
+        [self processAmenity:amenity mapObject:mapObject poi:poi];
     }
     else if (objSymbolGroup != nullptr && objSymbolGroup->mapObject != nullptr)
     {
-        const std::shared_ptr<const OsmAnd::MapObject> mapObject = objSymbolGroup->mapObject;
         if (const auto& obfMapObject = std::dynamic_pointer_cast<const OsmAnd::ObfMapObject>(objSymbolGroup->mapObject))
         {
             std::shared_ptr<const OsmAnd::Amenity> amenity;
@@ -483,19 +535,15 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
             
             if (amenityFound)
             {
-                [self processAmenity:amenity poi:poi];
+                [self processAmenity:amenity mapObject:objSymbolGroup->mapObject poi:poi];
             }
             else
             {
-                poi.isRenderedObject = YES;
-                poi.name = obfMapObject->getCaptionInNativeLanguage().toNSString();
-                NSMutableDictionary *names = [NSMutableDictionary dictionary];
-                NSString *nameLocalized = [OAPOIHelper processLocalizedNames:obfMapObject->getCaptionsInAllLanguages() nativeName:obfMapObject->getCaptionInNativeLanguage() names:names];
-                if (nameLocalized.length > 0)
-                    poi.name = nameLocalized;
-                poi.nameLocalized = poi.name;
-                poi.localizedNames = names;
-                poi.obfId = obfMapObject->id;
+                renderedObject = [OARenderedObject parse:mapObject symbolInfo:symbolInfo];
+                if (renderedObject.name && renderedObject.name.length > 0)
+                    poi.name = renderedObject.name;
+                if (renderedObject.nameLocalized && renderedObject.nameLocalized.length > 0)
+                    poi.nameLocalized = renderedObject.nameLocalized;
             }
             if (!poi.type)
             {
@@ -536,7 +584,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     }
     if (poi.type || poi.buildingNumber || unknownLocation)
     {
-        OATargetPoint *targetPoint = [self getTargetPoint:poi];
+        OATargetPoint *targetPoint = [self getTargetPoint:poi renderedObject:renderedObject];
         if (![found containsObject:targetPoint])
             [found addObject:targetPoint];
     }

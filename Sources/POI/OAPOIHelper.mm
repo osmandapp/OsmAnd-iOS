@@ -7,6 +7,7 @@
 //
 
 #import "OAPOIHelper.h"
+#import "OAPOIHelper+cpp.h"
 #import "OAPOI.h"
 #import "OAPOIBaseType.h"
 #import "OAPOIType.h"
@@ -24,6 +25,7 @@
 #import "OAResultMatcher.h"
 #import "Localization.h"
 #import "OANativeUtilities.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/CommonTypes.h>
 #include <OsmAndCore/Data/DataCommonTypes.h>
@@ -308,10 +310,15 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
 
 - (NSString *) getPhraseByName:(NSString *)name
 {
+    return [self getPhraseByName:name withDefatultValue:YES];
+}
+
+- (NSString *) getPhraseByName:(NSString *)name withDefatultValue:(BOOL)withDefatultValue
+{
     NSString *phrase = [_phrases objectForKey:[NSString stringWithFormat:@"poi_%@", [name stringByReplacingOccurrencesOfString:@":" withString:@"_"]]];
     if (!phrase)
     {
-        return [[name capitalizedString] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+        return withDefatultValue ? [[name capitalizedString] stringByReplacingOccurrencesOfString:@"_" withString:@" "] : nil;
     }
     else
     {
@@ -375,6 +382,20 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
         return [self getSynonyms:type.baseLangType];
     
     return [self getSynonymsByName:type.name];
+}
+
+- (NSString *) getTranslation:(NSString *)keyName
+{
+    NSString *val = [_phrases objectForKey:[NSString stringWithFormat:@"poi_%@", keyName]];
+    if (val)
+    {
+        int i = [val indexOf:@";"];
+        if (i > 0) {
+            return [val substringToIndex:i];
+        }
+        return val;
+    }
+    return nil;
 }
 
 - (void) sortPoiCategories
@@ -768,7 +789,7 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
         
         while (true)
         {
-            searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(_radius, _myLocation);
+            searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(_radius, self.myLocation);
             
             const auto search = std::shared_ptr<const OsmAnd::AmenitiesInAreaSearch>(new OsmAnd::AmenitiesInAreaSearch(obfsCollection));
             search->performSearch(*searchCriteria,
@@ -846,7 +867,7 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
         
         while (true)
         {
-            searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(_radius, _myLocation);
+            searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(_radius, self.myLocation);
             
             const auto search = std::shared_ptr<const OsmAnd::AmenitiesInAreaSearch>(new OsmAnd::AmenitiesInAreaSearch(obfsCollection));
             search->performSearch(*searchCriteria,
@@ -908,6 +929,45 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
 
     return nil;
 }
+
++ (OAPOI *) findPOIByOsmId:(NSInteger)osmId lat:(double)lat lon:(double)lon
+{
+    OsmAndAppInstance app = [OsmAndApp instance];
+    const auto& obfsCollection = app.resourcesManager->obfsCollection;
+    
+    std::shared_ptr<const OsmAnd::IQueryController> ctrl;
+    bool cancel = false;
+    ctrl.reset(new OsmAnd::FunctorQueryController([&cancel]
+                                                  (const OsmAnd::FunctorQueryController* const controller)
+                                                  {
+                                                      return cancel;
+                                                  }));
+    
+    const std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>(new OsmAnd::AmenitiesInAreaSearch::Criteria);
+    
+
+    OsmAnd::LatLon latLon(lat, lon);
+    const auto location = OsmAnd::Utilities::convertLatLonTo31(latLon);
+    searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(15, location);
+    
+    const auto search = std::shared_ptr<const OsmAnd::AmenitiesInAreaSearch>(new OsmAnd::AmenitiesInAreaSearch(obfsCollection));
+    OAPOI *res = nil;
+    search->performSearch(*searchCriteria,
+                          [&osmId, &res, &cancel]
+                          (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
+                          {
+                                OAPOI *poi = [OAPOIHelper parsePOI:resultEntry];
+                                if (poi && osmId == [ObfConstants getOsmObjectId:poi])
+                                {
+                                    res = poi;
+                                    cancel = true;
+                                }
+                          },
+                          ctrl);
+    
+    return res;
+}
+
 
 + (OAPOI *) findPOIByOriginName:(NSString *)originName lat:(double)lat lon:(double)lon
 {
@@ -1120,7 +1180,7 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
                                             const auto &am = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
 
                                             OAPOI *poi = [OAPOIHelper parsePOI:resultEntry withValues:YES withContent:YES];
-                                            poi.distanceMeters = OsmAnd::Utilities::squareDistance31(_myLocation, am->position31);
+                                            poi.distanceMeters = OsmAnd::Utilities::squareDistance31(self.myLocation, am->position31);
                                             
                                             if (publish)
                                             {
@@ -1565,7 +1625,7 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
     if (poi)
     {
         const auto amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
-        poi.distanceMeters = OsmAnd::Utilities::squareDistance31(_myLocation, amenity->position31);
+        poi.distanceMeters = OsmAnd::Utilities::squareDistance31(self.myLocation, amenity->position31);
         
         _limitCounter--;
         
@@ -1579,7 +1639,7 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
     if (poi)
     {
         const auto amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
-        poi.distanceMeters = OsmAnd::Utilities::squareDistance31(_myLocation, amenity->position31);
+        poi.distanceMeters = OsmAnd::Utilities::squareDistance31(self.myLocation, amenity->position31);
         
         _limitCounter--;
         

@@ -112,6 +112,8 @@
 #import <MBProgressHUD.h>
 #import "OsmAnd_Maps-Swift.h"
 #import "OsmAndSharedWrapper.h"
+#import "OARenderedObject.h"
+#import "OARenderedObject+cpp.h"
 
 #include <OsmAndCore/NetworkRouteContext.h>
 #include <OsmAndCore/CachingRoadLocator.h>
@@ -121,8 +123,9 @@
 #define commonInit _(commonInit)
 #define deinit _(deinit)
 
-#define kMaxRoadDistanceInMeters 1000
-#define kMaxZoom 22.0f
+static float kDefaultZoomOnShow = 16.0;
+static int kMaxRoadDistanceInMeters = 1000;
+static float kMaxZoom = 22.0f;
 
 static NSString *topIndexBrandPrefix = @"top_index_brand";
 static int MAX_ZOOM_OUT_STEPS = 2;
@@ -1409,13 +1412,26 @@ typedef enum
     }
     else
     {
-        [_mapViewController hideRegionHighlight];
+        [_mapViewController hidePolygonHighlight];
     }
     // show context marker on map
     [_mapViewController showContextPinMarker:targetPoint.location.latitude longitude:targetPoint.location.longitude animated:YES];
     
     [self applyTargetPoint:targetPoint];
     [_targetMenuView setTargetPoint:targetPoint];
+    
+    if ([targetPoint.targetObj isKindOfClass:OAMapObject.class])
+    {
+        QVector<OsmAnd::PointI> points;
+        OAMapObject *obj = targetPoint.targetObj;
+        if (obj.x && obj.x.count > 0)
+        {
+            for (int i = 0; i < obj.x.count; i++)
+                points.push_back( OsmAnd::PointI(obj.x[i].intValue, obj.y[i].intValue) );
+        }
+        
+        [_mapViewController.mapLayers.contextMenuLayer highlightPolygon:points];
+    }
 
     [self showTargetPointMenu:saveState showFullMenu:NO onComplete:^{
         
@@ -1532,6 +1548,19 @@ typedef enum
     {
         [self showContextMenu:targetPoint saveState:YES preferredZoom:PREFERRED_FAVORITE_ZOOM];
     }
+}
+
+- (void) goToMapObject:(OAMapObject *)mapObject;
+{
+    const OsmAnd::LatLon latLon(mapObject.latitude, mapObject.longitude);
+    OAMapViewController *mapVC = [OARootViewController instance].mapPanel.mapViewController;
+    Point31 pos = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
+    [mapVC goToPosition:pos andZoom:kDefaultZoomOnShow animated:YES];
+    [mapVC showContextPinMarker:mapObject.latitude longitude:mapObject.longitude animated:NO];
+    
+    OATargetPoint *targetPoint = [mapVC.mapLayers.poiLayer getTargetPoint:mapObject];
+    targetPoint.centerMap = YES;
+    [[OARootViewController instance].mapPanel showContextMenu:targetPoint];
 }
 
 - (void) updateContextMenu:(OATargetPoint *)targetPoint
@@ -2298,6 +2327,7 @@ typedef enum
         case OATargetTransportRoute:
         case OATargetTurn:
         case OATargetMyLocation:
+        case OATargetLocation:
         {
             if (controller)
                 [self.targetMenuView doInit:showFullMenu];

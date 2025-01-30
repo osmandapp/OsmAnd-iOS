@@ -160,6 +160,12 @@
             break;
         }
             
+        case OATargetLocation:
+        {
+            controller = [[RenderedObjectViewController alloc] initWithRenderedObject:targetPoint.targetObj];
+            break;
+        }
+            
         case OATargetAddress:
         {
             controller = [[OATargetAddressViewController alloc] initWithAddress:targetPoint.targetObj];

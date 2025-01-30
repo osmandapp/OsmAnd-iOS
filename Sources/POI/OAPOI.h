@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "OAMapObject.h"
 
 #define URL_TAG @"url"
 #define WEBSITE_TAG @"website"
@@ -45,7 +46,7 @@
 #define ROUTE_TRACK @"route_track"
 #define ROUTE_TRACK_POINT @"route_track_point"
 
-@class OAPOIType;
+@class OAPOIType, OARenderedObject;
 
 @interface OAPOIRoutePoint : NSObject
 
@@ -56,34 +57,26 @@
 
 @end
 
-@interface OAPOI : NSObject
+@interface OAPOI : OAMapObject
 
-@property (nonatomic) unsigned long long obfId;
-@property (nonatomic) NSString *name;
 @property (nonatomic) OAPOIType *type;
 @property (nonatomic) NSString *subType;
-@property (nonatomic) NSString *nameLocalized;
 @property (nonatomic, assign) BOOL hasOpeningHours;
 @property (nonatomic) NSString *openingHours;
 @property (nonatomic) NSString *desc;
 @property (nonatomic) BOOL isPlace;
 @property (nonatomic) NSString *buildingNumber;
 
-@property (nonatomic, assign) double latitude;
-@property (nonatomic, assign) double longitude;
 @property (nonatomic, assign) double distanceMeters;
 @property (nonatomic) NSString *distance;
 @property (nonatomic, assign) double direction;
 
 @property (nonatomic) NSDictionary *values;
-@property (nonatomic) NSDictionary *localizedNames;
 @property (nonatomic) NSDictionary *localizedContent;
 
 @property (nonatomic) OAPOIRoutePoint *routePoint;
 @property (nonatomic) NSString *mapIconName;
 @property (nonatomic) NSString *cityName;
-
-@property (nonatomic, assign) BOOL isRenderedObject;
 
 - (UIImage *)icon;
 - (NSString *)iconName;
@@ -117,5 +110,7 @@
 - (NSDictionary<NSString *, NSString *> *) toTagValue:(NSString *)privatePrefix osmPrefix:(NSString *)osmPrefix;
 + (OAPOI *) fromTagValue:(NSDictionary<NSString *, NSString *> *)map privatePrefix:(NSString *)privatePrefix osmPrefix:(NSString *)osmPrefix;
 - (NSString *)getTagSuffix:(NSString *)tagPrefix;
+
+- (void) setXYPoints:(OARenderedObject *)renderedObject;
 
 @end

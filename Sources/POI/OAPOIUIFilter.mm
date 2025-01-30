@@ -12,6 +12,7 @@
 #import "OAPOICategory.h"
 #import "OAPOIType.h"
 #import "OAPOIHelper.h"
+#import "OAPOIHelper+cpp.h"
 #import "OsmAndApp.h"
 #import "Localization.h"
 #import "OAPOIFiltersHelper.h"

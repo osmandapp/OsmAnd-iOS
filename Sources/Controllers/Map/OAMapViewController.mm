@@ -1988,17 +1988,17 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) hideContextPinMarker
 {
     [_mapLayers.contextMenuLayer hideContextPinMarker];
-    [_mapLayers.downloadedRegionsLayer hideRegionHighlight];
+    [self hidePolygonHighlight];
 }
 
 - (void) highlightRegion:(OAWorldRegion *)region
 {
     [_mapLayers.downloadedRegionsLayer highlightRegion:region];
 }
-
-- (void) hideRegionHighlight
+- (void) hidePolygonHighlight
 {
     [_mapLayers.downloadedRegionsLayer hideRegionHighlight];
+    [_mapLayers.contextMenuLayer hideRegionHighlight];
 }
 
 - (float) currentZoomOutDelta

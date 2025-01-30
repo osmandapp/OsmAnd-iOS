@@ -805,7 +805,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         [rows addObject:desc];
     }
 
-    NSString *link = [ObfConstants getOsmUrlForId:[self mapObject]];
+    NSString *link = [self getOsmUrl];
     if (link.length > 0)
     {
         [rows addObject:[[OARowInfo alloc] initWithKey:nil
@@ -820,6 +820,11 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                                          isPhoneNumber:NO
                                                  isUrl:YES]];
     }
+}
+
+- (NSString *) getOsmUrl
+{
+    return [ObfConstants getOsmUrlForId:self.poi];
 }
 
 - (void)configureRowValue:(id)value

@@ -15,6 +15,6 @@
 - (id) initWithPOI:(OAPOI *)poi;
 
 - (void) setup:(OAPOI *)poi;
-- (OAMapObject *) mapObject;
+- (NSString *) getOsmUrl;
 
 @end

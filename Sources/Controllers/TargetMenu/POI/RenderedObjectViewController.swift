@@ -21,12 +21,10 @@ final class RenderedObjectViewController: OAPOIViewController {
     
     init(renderedObject: OARenderedObject) {
         let poi = RenderedObjectHelper.getSyntheticAmenity(renderedObject: renderedObject)
+        poi.obfId >>= 1;
+        
         super.init(poi: poi)
         self.renderedObject = renderedObject
-    }
-    
-    override func mapObject() -> OAMapObject! {
-        renderedObject
     }
     
     override func viewDidLoad() {
@@ -63,5 +61,9 @@ final class RenderedObjectViewController: OAPOIViewController {
     
     override func getIcon() -> UIImage? {
         return RenderedObjectHelper.getIcon(renderedObject: renderedObject)
+    }
+    
+    override func getOsmUrl() -> String! {
+        ObfConstants.getOsmUrlForId(renderedObject)
     }
 }

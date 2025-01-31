@@ -1186,7 +1186,7 @@
 "rendering_value_yellow_name" = "Жълта";
 "routing_attr_allow_private_description" = "Разрешава достъпа до частни територии.";
 "rendering_attr_alpineHiking_description" = "Класификация на сложност на маршрути.";
-"rendering_attr_pisteRoutes_name" = "Ски писти";
+"rendering_attr_pisteRoutes_name" = "Ски маршрути";
 "rendering_attr_noPolygons_description" = "Показване само на контури, без оцветяване.";
 "routing_attr_avoid_shuttle_train_description" = "Избягване ползването на трансферни влакове";
 "rendering_value_highContrastRoads_name" = "Контрастни пътища";

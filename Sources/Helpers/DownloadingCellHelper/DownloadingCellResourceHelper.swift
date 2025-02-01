@@ -86,7 +86,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     
     override func isInstalled(_ resourceId: String) -> Bool {
         if let resourceItem = getResource(resourceId) {
-            return resourceItem.isInstalled()
+            return resourceItem.isInstalled() || super.isInstalled(resourceId)
         }
         return false
     }
@@ -156,17 +156,23 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
                                                        withRegionName: true,
                                                        withResourceType: true)
             }
-            let iconName = resourceItem.iconName()
             let isDownloading = isDownloading(resourceId)
             
             // get cell with default settings
-            let cell = super.setupCell(resourceId: resourceId, title: title, isTitleBold: false, desc: subtitle, leftIconName: iconName, rightIconName: getRightIconName(resourceId), isDownloading: isDownloading)
+            let cell = super.setupCell(resourceId: resourceId, title: title, isTitleBold: false, desc: subtitle, leftIconName: getLeftIconName(resourceId), rightIconName: getRightIconName(resourceId), isDownloading: isDownloading)
             
             if isDisabled(resourceId) {
                 cell?.titleLabel.textColor = .textColorSecondary
                 cell?.rightIconVisibility(false)
             }
             return cell
+        }
+        return nil
+    }
+    
+    override func getLeftIconName(_ resourceId: String) -> String? {
+        if let resourceItem = getResource(resourceId) {
+            return resourceItem.iconName()
         }
         return nil
     }

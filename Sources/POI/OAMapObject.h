@@ -10,7 +10,7 @@
 
 @interface OAMapObject : NSObject
 
-@property (nonatomic) unsigned long long obfId;
+@property (nonatomic) long long obfId;
 
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSString *enName;

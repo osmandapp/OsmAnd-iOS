@@ -101,7 +101,7 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 - (BOOL) breakSearch;
 - (BOOL) isNameTag:(NSString *)tag;
 
-+ (OAPOI *) findPOIByOsmId:(NSInteger)osmId lat:(double)lat lon:(double)lon;
++ (OAPOI *) findPOIByOsmId:(long long)osmId lat:(double)lat lon:(double)lon;
 + (OAPOI *) findPOIByName:(NSString *)name lat:(double)lat lon:(double)lon;
 + (OAPOI *) findPOIByOriginName:(NSString *)originName lat:(double)lat lon:(double)lon;
 

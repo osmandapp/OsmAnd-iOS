@@ -930,7 +930,7 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
     return nil;
 }
 
-+ (OAPOI *) findPOIByOsmId:(NSInteger)osmId lat:(double)lat lon:(double)lon
++ (OAPOI *) findPOIByOsmId:(long long)osmId lat:(double)lat lon:(double)lon
 {
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto& obfsCollection = app.resourcesManager->obfsCollection;

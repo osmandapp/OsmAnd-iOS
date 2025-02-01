@@ -519,7 +519,7 @@ static NSString *kRTLMark = @"\u200f";  // right-to-right mark
 {
     static const int DIGITS_BEFORE_COMMA = 1, DIGITS_AFTER_COMMA = 3;
     for (int i = DIGITS_BEFORE_COMMA, first = -1; i < ll.length - DIGITS_AFTER_COMMA; i++) {
-        if ([ll characterAtIndex:i] == ',') {
+        if (ll.length > i && [ll characterAtIndex:i] == ',') {
             int before = 0, after = 0;
             for (int j = i - 1; j >= i - DIGITS_BEFORE_COMMA && j >= 0; j--) {
                 if (j >= 0 && j < ll.length && [[NSCharacterSet decimalDigitCharacterSet] characterIsMember:[ll characterAtIndex:j]]) {

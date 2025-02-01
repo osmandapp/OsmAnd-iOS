@@ -3981,3 +3981,21 @@
 
 "rendering_attr_showClimbingRoutes_description" = "Show climbing routes";
 "rendering_attr_showClimbingRoutes_name" = "Climbing routes";
+
+"auto_25_chars_route_kl" = "Keep left";
+"auto_25_chars_route_kr" = "Keep right";
+"auto_25_chars_route_tr" = "Turn right";
+"auto_25_chars_route_tshr" = "Turn sharply right";
+"auto_25_chars_route_tslr" = "Turn slightly right";
+"auto_25_chars_route_tl" = "Turn left";
+"auto_25_chars_route_tshl" = "Turn sharply left";
+"auto_25_chars_route_tsll" = "Turn slightly left";
+"auto_25_chars_route_tu" = "Make U-turn";
+"auto_25_chars_route_tl_kl" = "Turn left and keep left";
+"auto_25_chars_route_tl_kr" = "Turn left and keep right";
+"auto_25_chars_route_tr_kl" = "Turn right and keep left";
+"auto_25_chars_route_tr_kr" = "Turn right and keep right";
+"auto_25_chars_route_tu_kl" = "Make U-turn and keep left";
+"auto_25_chars_route_tu_kr" = "Make U-turn and keep right";
+"auto_25_chars_route_roundabout_kl" = "Take the %d exit and keep left";
+"auto_25_chars_route_roundabout_kr" = "Take the %d exit and keep right";

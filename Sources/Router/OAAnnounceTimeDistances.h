@@ -21,6 +21,8 @@
 
 @interface OAAnnounceTimeDistances : NSObject
 
+@property (nonatomic, readonly) OAApplicationMode *appMode;
+
 - (instancetype)initWithAppMode:(OAApplicationMode *)appMode;
 
 - (void)setArrivalDistances:(float)arrivalDistanceFactor;
@@ -31,5 +33,6 @@
 - (float)getOffRouteDistance;
 - (int)calcDistanceWithoutDelay:(float)speed dist:(int)dist;
 - (NSAttributedString *)getIntervalsDescription;
+- (BOOL)tooFarToDisplayLanes:(BOOL)isTurnSkipToSpeak distanceTo:(int)distanceTo;
 
 @end

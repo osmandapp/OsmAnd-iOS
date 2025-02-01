@@ -65,6 +65,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 @property (nonatomic) OARoutingHelper *routingHelper;
 @property (nonatomic) OALanesDrawable *lanesDrawable;
 @property (nonatomic) CPManeuverDisplayStyle secondaryStyle;
+@property (nonatomic) OAAnnounceTimeDistances *timeDistances;
 
 @end
 
@@ -561,7 +562,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 {
     if (nextDirInfo)
     {
-        OACurrentStreetName *currentStreetName = [_routingHelper getCurrentName:nextDirInfo];
+        OACurrentStreetName *currentStreetName = [[OACurrentStreetName alloc] initWithStreetName:nextDirInfo];
         NSString *streetName = currentStreetName.text;
         if (streetName.length > 0)
         {
@@ -601,7 +602,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
             else
             {
                 nextDirInfo = [weakSelf.routingHelper getNextRouteDirectionInfo:calc toSpeak:YES];
-                if (nextDirInfo && nextDirInfo.distanceTo > 0 && nextDirInfo.directionInfo)
+                if (nextDirInfo && nextDirInfo.distanceTo >= 0 && nextDirInfo.directionInfo)
                 {
                     turnType = nextDirInfo.directionInfo.turnType;
                     nextTurnDistance = nextDirInfo.distanceTo;
@@ -609,7 +610,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                 }
             }
 
-            if (turnType != nullptr)
+            if (turnType)
             {
                 UIUserInterfaceStyle style = weakSelf.interfaceController.carTraitCollection.userInterfaceStyle;
                 EOATurnDrawableThemeColor themeColor = style == UIUserInterfaceStyleDark
@@ -627,35 +628,33 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                 maneuver.symbolImage = turnImage;
             }
 
-            OAAnnounceTimeDistances *atd = [[weakSelf.routingHelper getVoiceRouter] getAnnounceTimeDistances];
+            OAAnnounceTimeDistances *atd = weakSelf.routingHelper.getVoiceRouter.getAnnounceTimeDistances;
             if (nextDirInfo && atd)
             {
                 float speed = [atd getSpeed:[weakSelf.routingHelper getLastFixedLocation]];
                 int dist = nextDirInfo.distanceTo;
-                nextNextDirInfo = [weakSelf.routingHelper getNextRouteDirectionInfoAfter:nextDirInfo
-                                                                                      to:[[OANextDirectionInfo alloc] init]
-                                                                                 toSpeak:YES];
-                if ([atd isTurnStateActive:speed dist:dist turnType:kStateTurnIn])
-                {
-                    if (nextNextDirInfo && nextNextDirInfo.directionInfo &&
-                        ([atd isTurnStateActive:speed dist:nextNextDirInfo.distanceTo turnType:kStateTurnNow]
-                         || ![atd isTurnStateNotPassed:speed dist:nextNextDirInfo.distanceTo turnType:kStateTurnIn]))
-                        nextTurnType = nextNextDirInfo.directionInfo.turnType;
-                }
+                nextNextDirInfo = [weakSelf.routingHelper getNextRouteDirectionInfoAfter:nextDirInfo to:[[OANextDirectionInfo alloc] init] toSpeak:YES];
+                nextTurnType = [weakSelf getNextTurnType:atd info:nextNextDirInfo speed:speed distance:dist];
             }
+
+            maneuver.instructionVariants = @[
+                [weakSelf getNextTurnDescription:nextDirInfo turnType:turnType nextTurnType:nextTurnType]
+            ];
 
             CPManeuver *secondaryManeuver;
             nextDirInfo = [weakSelf.routingHelper getNextRouteDirectionInfo:calc toSpeak:NO];
-            if (nextDirInfo
-                && nextDirInfo.directionInfo
-                && nextDirInfo.directionInfo.turnType)
+            if (nextDirInfo && nextDirInfo.directionInfo && nextDirInfo.directionInfo.turnType)
             {
-                std::vector<int> lanes = nextDirInfo.directionInfo.turnType->getLanes();
+                auto lanes = nextDirInfo.directionInfo.turnType->getLanes();
                 int locimminent = nextDirInfo.imminent;
-                if ((nextDirInfo.distanceTo > 800 && nextDirInfo.directionInfo.turnType->isSkipToSpeak())
-                    || nextDirInfo.distanceTo > 1200
-                    || (nextTurnDistance != nextDirInfo.distanceTo && nextDirInfo.distanceTo > 150))
+                if (!weakSelf.timeDistances || weakSelf.timeDistances.appMode != [weakSelf.routingHelper getAppMode])
+                    weakSelf.timeDistances = [[OAAnnounceTimeDistances alloc] initWithAppMode:[weakSelf.routingHelper getAppMode]];
+                            
+                // Do not show too far
+                // (nextTurnDistance != nextDirInfo.distanceTo && nextDirInfo.distanceTo > 150))
+                if (nextDirInfo.directionInfo.turnType == nullptr || [weakSelf.timeDistances tooFarToDisplayLanes:nextDirInfo.directionInfo.turnType->isSkipToSpeak() distanceTo:nextDirInfo.distanceTo])
                     lanes.clear();
+
                 if (!lanes.empty())
                 {
                     [weakSelf.lanesDrawable setLanes:lanes];
@@ -682,11 +681,14 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
             {
                 NSString *streetName = [weakSelf defineStreetName];
                 if (streetName.length > 0)
-                    maneuver.instructionVariants = @[streetName];
+                    weakSelf.navigationSession.currentRoadNameVariants = @[streetName];
+                else
+                    weakSelf.navigationSession.currentRoadNameVariants = @[];
             }
 
             NSMeasurement<NSUnitLength *> *dist = [weakSelf getFormattedDistance:nextTurnDistance];
-            CPTravelEstimates *estimates = [[CPTravelEstimates alloc] initWithDistanceRemaining:dist timeRemaining:-1];
+            long leftTurnTimeSec = [weakSelf.routingHelper getLeftTimeNextTurn];
+            CPTravelEstimates *estimates = [[CPTravelEstimates alloc] initWithDistanceRemaining:dist timeRemaining:leftTurnTimeSec];
             maneuver.initialTravelEstimates = estimates;
             maneuver.userInfo = @{
                 @"streetName": maneuver.instructionVariants.firstObject ?: @"",
@@ -697,10 +699,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
             [upcomingManeuvers addObject:maneuver];
 
             UIImage *nextTurnImage;
-            if (nextNextDirInfo
-                && nextNextDirInfo.distanceTo > 0
-                && nextNextDirInfo.imminent >= 0
-                && nextNextDirInfo.directionInfo)
+            if (nextNextDirInfo && nextNextDirInfo.distanceTo > 0 && nextNextDirInfo.imminent >= 0 && nextNextDirInfo.directionInfo)
             {
                 nextTurnType = nextNextDirInfo.directionInfo.turnType;
                 if (!secondaryManeuver && nextTurnType)
@@ -711,7 +710,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                         : EOATurnDrawableThemeColorLight;
                     OATurnDrawable *drawable = [[OATurnDrawable alloc] initWithMini:NO
                                                                          themeColor:themeColor];
-                    const auto turnType = nextNextDirInfo.directionInfo.turnType;
+                    const auto& turnType = nextNextDirInfo.directionInfo.turnType;
                     [drawable setTurnType:nextTurnType];
                     [drawable setTurnImminent:nextNextDirInfo.imminent
                             deviatedFromRoute:deviatedFromRoute];
@@ -724,10 +723,19 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                     secondaryManeuver = [[CPManeuver alloc] init];
                     weakSelf.secondaryStyle = CPManeuverDisplayStyleDefault;
 
-                    NSString *nextStreetName = [weakSelf defineStreetName:nextNextDirInfo];
+                    std::shared_ptr<TurnType> nextNextTurnType;
+                    OAAnnounceTimeDistances *atd = weakSelf.routingHelper.getVoiceRouter.getAnnounceTimeDistances;
+                    if (atd)
+                    {
+                        float speed = [atd getSpeed:[weakSelf.routingHelper getLastFixedLocation]];
+                        OANextDirectionInfo *info = [weakSelf.routingHelper getNextRouteDirectionInfoAfter:nextNextDirInfo to:[[OANextDirectionInfo alloc] init] toSpeak:YES];
+                        nextNextTurnType = [weakSelf getNextTurnType:atd info:info speed:speed distance:nextNextDirInfo.distanceTo];
+                    }
+                    NSString *nextStreetName = [weakSelf getSecondNextTurnDescription:nextNextDirInfo turnType:nextTurnType nextTurnType:nextNextTurnType];
                     secondaryManeuver.userInfo = @{
                         @"streetName": nextStreetName,
                     };
+
                     NSString *distanceString = [OAOsmAndFormatter getFormattedDistance:nextNextDirInfo.distanceTo
                                                                             withParams:[OsmAndFormatterParams useLowerBounds]];
                     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] init];
@@ -741,8 +749,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                     }
                     if (nextStreetName.length > 0)
                         [attributedString appendAttributedString:
-                         [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" %@, %@",
-                                                                     distanceString,
+                         [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" %@",
                                                                      nextStreetName]]];
                     else
                         [attributedString appendAttributedString:
@@ -778,6 +785,126 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
         }
     });
     [self.delegate onLocationChanged];
+}
+
+- (std::shared_ptr<TurnType>) getNextTurnType:(OAAnnounceTimeDistances *)atd info:(OANextDirectionInfo *)info speed:(float)speed distance:(int)distance
+{
+    if ([atd isTurnStateActive:speed dist:distance turnType:kStateTurnIn])
+    {
+        if (info && info.directionInfo &&
+            ([atd isTurnStateActive:speed dist:info.distanceTo turnType:kStateTurnNow]
+             || ![atd isTurnStateNotPassed:speed dist:info.distanceTo turnType:kStateTurnIn]))
+            return info.directionInfo.turnType;
+    }
+    return nullptr;
+}
+
+- (BOOL) shouldKeepLeft:(const std::shared_ptr<TurnType>&)type
+{
+    return type && TurnType::isLeftTurn(type->getValue());
+}
+
+- (BOOL) shouldKeepRight:(const std::shared_ptr<TurnType>&)type
+{
+    return type && TurnType::isRightTurn(type->getValue());
+}
+
+- (NSString *) nextTurnsToString:(const std::shared_ptr<TurnType>&)type nextTurnType:(const std::shared_ptr<TurnType>&)nextTurnType
+{
+    if (type->isRoundAbout())
+    {
+        if ([self shouldKeepLeft:nextTurnType])
+            return [NSString stringWithFormat:OALocalizedString(@"auto_25_chars_route_roundabout_kl"), type->getExitOut()];
+        else if ([self shouldKeepRight:nextTurnType])
+            return [NSString stringWithFormat:OALocalizedString(@"auto_25_chars_route_roundabout_kr"), type->getExitOut()];
+        else
+            return [NSString stringWithFormat:OALocalizedString(@"route_roundabout_exit"), type->getExitOut()];
+    }
+    else if (type->getValue() == TurnType::TU || type->getValue() == TurnType::TRU)
+    {
+        if ([self shouldKeepLeft:nextTurnType])
+            return OALocalizedString(@"auto_25_chars_route_tu_kl");
+        else if ([self shouldKeepRight:nextTurnType])
+            return OALocalizedString(@"auto_25_chars_route_tu_kr");
+        else
+            return OALocalizedString(@"auto_25_chars_route_tu");
+    }
+    else if (type->getValue() == TurnType::C)
+    {
+        return OALocalizedString(@"route_head");
+    }
+    else if (type->getValue() == TurnType::TSLL)
+    {
+        return OALocalizedString(@"auto_25_chars_route_tsll");
+    }
+    else if (type->getValue() == TurnType::TL)
+    {
+        if ([self shouldKeepLeft:nextTurnType])
+            return OALocalizedString(@"auto_25_chars_route_tl_kl");
+        else if ([self shouldKeepRight:nextTurnType])
+            return OALocalizedString(@"auto_25_chars_route_tl_kr");
+        else
+            return OALocalizedString(@"auto_25_chars_route_tl");
+    }
+    else if (type->getValue() == TurnType::TSHL)
+    {
+        return OALocalizedString(@"auto_25_chars_route_tshl");
+    }
+    else if (type->getValue() == TurnType::TSLR)
+    {
+        return OALocalizedString(@"auto_25_chars_route_tslr");
+    }
+    else if (type->getValue() == TurnType::TR)
+    {
+        if ([self shouldKeepLeft:nextTurnType])
+            return OALocalizedString(@"auto_25_chars_route_tr_kl");
+        else if ([self shouldKeepRight:nextTurnType])
+            return OALocalizedString(@"auto_25_chars_route_tr_kr");
+        else
+            return OALocalizedString(@"auto_25_chars_route_tr");
+    }
+    else if (type->getValue() == TurnType::TSHR)
+    {
+        return OALocalizedString(@"auto_25_chars_route_tshr");
+    }
+    else if (type->getValue() == TurnType::KL)
+    {
+        return OALocalizedString(@"auto_25_chars_route_kl");
+    }
+    else if (type->getValue() == TurnType::KR)
+    {
+        return OALocalizedString(@"auto_25_chars_route_kr");
+    }
+    return @"";
+}
+
+- (NSString *) getNextTurnDescription:(OANextDirectionInfo *)info turnType:(const std::shared_ptr<TurnType>&)turnType nextTurnType:(const std::shared_ptr<TurnType>&)nextTurnType
+{
+    NSString *description = [self getTurnDescription:info];
+    NSString *turnName = turnType ? [self nextTurnsToString:turnType nextTurnType:nextTurnType] : @"";
+
+    if (turnType && turnType->isRoundAbout() && description.length > 0)
+        return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_comma"), turnName, description];
+    
+    return description.length > 0 ? description : turnName;
+}
+
+- (NSString *) getSecondNextTurnDescription:(OANextDirectionInfo *)info turnType:(const std::shared_ptr<TurnType>&)turnType nextTurnType:(const std::shared_ptr<TurnType>&)nextTurnType
+{
+    NSString *description = [self getTurnDescription:info];
+    NSString *distance = [OAOsmAndFormatter getFormattedDistance:info.distanceTo withParams:OsmAndFormatterParams.useLowerBounds];
+
+    if (description.length == 0)
+        description = turnType ? [self nextTurnsToString:turnType nextTurnType:nextTurnType] : nil;
+    
+    return description.length == 0 ? distance : [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_comma"), distance, description];
+}
+
+- (NSString *) getTurnDescription:(OANextDirectionInfo *)info
+{
+    NSString *name = [self defineStreetName:info];
+    NSString *ref = info && info.directionInfo ? info.directionInfo.ref : @"";
+    return name.length > 0 ? name : ref;
 }
 
 // MARK: OACarPlayMapViewDelegate

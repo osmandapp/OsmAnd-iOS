@@ -21,6 +21,9 @@
 // We can research if a flexible value like min(12, x * gps-hdop) has advantages over a constant (x could be 2 or so).
 #define kPositioningTolerance 12
 
+const static int LANES_MAX_METERS_NOT_SPOKEN_TURN = 800;
+const static int LANES_MAX_METERS_SPOKEN_TURN = 1200;
+
 @implementation OAAnnounceTimeDistances
 {
     // Default speed to have comfortable announcements (m/s)
@@ -51,6 +54,7 @@
     self = [super init];
     if (self)
     {
+        _appMode = appMode;
         _defaultSpeed = 10;
         OAAppSettings *settings = [OAAppSettings sharedManager];
         _locationProvider = [OsmAndApp instance].locationServices;
@@ -331,6 +335,12 @@
     [self appendTurnDesc:builder name:passing dist:_shortPntAnnounceRadius meter:meter second:second];
 
     return builder;
+}
+
+- (BOOL)tooFarToDisplayLanes:(BOOL)isTurnSkipToSpeak distanceTo:(int)distanceTo
+{
+    return ((distanceTo > LANES_MAX_METERS_NOT_SPOKEN_TURN && isTurnSkipToSpeak)
+            || distanceTo > LANES_MAX_METERS_SPOKEN_TURN);
 }
 
 @end

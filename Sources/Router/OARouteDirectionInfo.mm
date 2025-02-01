@@ -67,7 +67,8 @@
     return (long) round(self.distance / self.averageSpeed);
 }
 
-- (NSString *)getDestinationRefAndName {
+- (NSString *)getDestinationRefAndName
+{
     NSMutableArray *destinations = [NSMutableArray array];
 
     if (self.destinationRef.length > 0)

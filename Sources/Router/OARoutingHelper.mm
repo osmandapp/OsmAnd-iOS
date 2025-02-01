@@ -811,7 +811,7 @@ static BOOL _isDeviatedFromRoute = false;
 - (OACurrentStreetName *) getCurrentName:(OANextDirectionInfo *)next
 {
     @synchronized (self) {
-        return [OACurrentStreetName getCurrentName:next];
+        return [[OACurrentStreetName alloc] initWithStreetName:self info:next];
     }
 }
 
@@ -854,6 +854,11 @@ static BOOL _isDeviatedFromRoute = false;
 - (long) getLeftTime
 {
     return [_route getLeftTime:_lastFixedLocation];
+}
+
+- (long) getLeftTimeNextTurn
+{
+    return [_route getLeftTimeToNextTurn:_lastFixedLocation];
 }
 
 - (long) getLeftTimeNextIntermediate

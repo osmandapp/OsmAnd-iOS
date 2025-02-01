@@ -3582,3 +3582,5 @@
 "rendering_attr_showClimbingRoutes_name" = "Klifurleiðir";
 "cloud_sync_progress" = "Samstilli…%@";
 "rendering_attr_showClimbingRoutes_description" = "Sýna klifurleiðir";
+"ask_every_time" = "Spyrja í hvert skipti";
+"download_tab_conflicts" = "Óleyst";

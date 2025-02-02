@@ -105,6 +105,7 @@ const static OsmAnd::ZoomLevel MAX_ZOOM_TO_SHOW = OsmAnd::ZoomLevel7;
 {
     [self.mapView removeKeyedSymbolsProvider:_collection];
     _collection = [self createPolygonCollection];
+    [self.mapView removeKeyedSymbolsProvider:_selectedCollection];
     _selectedCollection = [self createPolygonCollection];
 }
 

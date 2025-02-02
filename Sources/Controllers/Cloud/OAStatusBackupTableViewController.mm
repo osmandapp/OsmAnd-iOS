@@ -689,7 +689,7 @@
         NSString *type = [OASettingsItemType typeName:settingsItem.type];
         NSString *resourceId = [_downloadingCellCloudHelper getResourceIdWithTypeName:type filename:[item stringForKey:@"fileName"]];
         DownloadingCell *cell = [_downloadingCellCloudHelper getOrCreateCell:resourceId];
-        [_downloadingCellCloudHelper saveResourceWithResource:[item objForKey:@"iconName"] resourceId:resourceId];
+        [_downloadingCellCloudHelper saveResourceIconWithIconName:[item objForKey:@"iconName"] resourceId:resourceId];
         
         if (cell)
         {

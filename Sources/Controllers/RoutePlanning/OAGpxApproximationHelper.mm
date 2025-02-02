@@ -23,7 +23,6 @@
 
 @implementation OAGpxApproximationHelper
 {
-    NSMutableDictionary<OALocationsHolder *, OAGpxRouteApproximation *> *_resultMap;
     NSArray<OALocationsHolder *> *_locationsHolders;
     OAGpxApproximator *_currentApproximator;
     OAApplicationMode *_appMode;
@@ -36,7 +35,6 @@
     if (self)
     {
         _locationsHolders = [locations copy];
-        _resultMap = [[NSMutableDictionary alloc] init];
         _appMode = appMode;
         _distanceThreshold = threshold;
     }
@@ -73,11 +71,12 @@
             [approximateList addObject:approximate];
     }
     
+    NSMutableDictionary<OALocationsHolder *, OAGpxRouteApproximation *> *approximateResult = [[NSMutableDictionary alloc] init];
     if (self.delegate)
         [self.delegate didApproximationStarted];
     
     @try {
-        [self approximateMultipleGpxAsync:approximateList withResult:_resultMap];
+        [self approximateMultipleGpxAsync:approximateList withResult:approximateResult];
     } @catch (NSException *exception) {
         NSLog(@"Error: %@, %@", exception.name, exception.reason);
     }
@@ -133,6 +132,7 @@
 
 - (NSArray *)calculateGpxApproximationSync
 {
+    NSMutableDictionary<OALocationsHolder *, OAGpxRouteApproximation *> *approximateResult = [[NSMutableDictionary alloc] init];
     for (OALocationsHolder *holder in _locationsHolders)
     {
         OAGpxApproximator *approximator = [self getNewGpxApproximator:holder];
@@ -140,7 +140,7 @@
         {
             [approximator calculateGpxApproximationSync:[[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OAGpxRouteApproximation *__autoreleasing *approximation) {
                 if (approximation && *approximation)
-                    _resultMap[holder] = *approximation;
+                    approximateResult[holder] = *approximation;
                 return YES;
             } cancelledFunc:^BOOL {
                 return NO;
@@ -148,7 +148,7 @@
         }
     }
     
-    return [self processApproximationResults:_resultMap];
+    return [self processApproximationResults:approximateResult];
 }
 
 - (NSArray *)processApproximationResults:(NSDictionary<OALocationsHolder *, OAGpxRouteApproximation *> *)approximateResult
@@ -198,10 +198,8 @@
     // UI Thread+
     if (approximator == _currentApproximator)
     {
-        float partSize = 100. / _locationsHolders.count;
-        float p = _resultMap.count * partSize + (progress / 100.) * partSize;
         if (self.delegate)
-            [self.delegate didUpdateProgress:(int)p];
+            [self.delegate didUpdateProgress:progress];
     }
 }
 

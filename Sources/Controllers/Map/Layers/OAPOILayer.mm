@@ -537,7 +537,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
             {
                 [self processAmenity:amenity mapObject:objSymbolGroup->mapObject poi:poi];
             }
-            else
+            else if (!isRoute)
             {
                 renderedObject = [OARenderedObject parse:mapObject symbolInfo:symbolInfo];
                 if (renderedObject.name && renderedObject.name.length > 0)
@@ -545,6 +545,11 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
                 if (renderedObject.nameLocalized && renderedObject.nameLocalized.length > 0)
                     poi.nameLocalized = renderedObject.nameLocalized;
             }
+            else if (!unknownLocation)
+            {
+                return;
+            }
+
             if (!poi.type)
             {
                 for (const auto& ruleId : mapObject->attributeIds)
@@ -582,12 +587,10 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
             }
         }
     }
-    if (poi.type || poi.buildingNumber || unknownLocation)
-    {
-        OATargetPoint *targetPoint = [self getTargetPoint:poi renderedObject:renderedObject];
-        if (![found containsObject:targetPoint])
-            [found addObject:targetPoint];
-    }
+
+    OATargetPoint *targetPoint = [self getTargetPoint:poi renderedObject:renderedObject];
+    if (![found containsObject:targetPoint])
+        [found addObject:targetPoint];
 }
 
 - (LatLon) parsePoiLatLon:(QString)value

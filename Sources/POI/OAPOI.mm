@@ -379,7 +379,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
         }
         if (typeStr.length == 0)
         {
-            typeStr = [NSMutableString stringWithString:[_subType lowercaseString]];
+            typeStr = [NSMutableString stringWithString:[OAUtilities capitalizeFirstLetter:[_subType lowercaseString]]];
             [typeStr replaceOccurrencesOfString:@"_" withString:@" " options:0 range:NSMakeRange(0, [typeStr length])];
         }
     }

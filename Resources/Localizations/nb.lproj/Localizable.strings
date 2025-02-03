@@ -609,7 +609,7 @@
 "plugin_nautical_name" = "Sjøkartvisning";
 "plugin_nautical_descr" = "Beriker kartet ditt med informasjon om seilingsruter, navigasjonslys, nautiske faresoner, soner med seilings- og anløpsrestriksjoner etc. For å bruke, last ned de respektive sjøkartene og aktiver \"Sjøkart\"-stilen under \"Kartinnstilling\". \n \nMer lesing på %@.";
 "osmand_parking_plugin_name" = "Parkeringsposisjon";
-"osmand_parking_plugin_description" = "Parkeringsplass-tillegget lar deg registrere hvor bilen din er parkert og hvor mye parkeringstid som gjenstår (hvis det er en tidsbegrensning). \nBåde parkeringsplass og tid er synlige på dashbordet i OsmAnd såvel som i et miniprogram på kartet. En alarm kan legges til Android-kalenderen som en påminnelse.";
+"osmand_parking_plugin_description" = "Marker hvor bilen din er parkert, og varsle kalenderen din når parkeringstiden utløper. For å plassere markøren, velg et sted på kartet, gå til \"Handlinger\" og trykk på \"Legg til parkering\".";
 "plugin_ski_name" = "Skikartvisning";
 "plugin_ski_descr" = "Designet til å navigere i vintersportsområder: Se skibakker, skiheiser og langrennsløyper, og med fargede linjer som indikerer vanskelighetsgrader. For å bruke, aktiver dette tillegget og gå også til \"Kartinnstilling\" og velg kartstilen \"Vinter og ski\".";
 "record_plugin_name" = "Turopptak";

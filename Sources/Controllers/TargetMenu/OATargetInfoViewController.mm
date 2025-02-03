@@ -609,31 +609,32 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
     if (_otherCardsReady && _wikiCardsReady)
     {
         // TODO: logic no internet connection
-        
-        if (!AFNetworkReachabilityManager.sharedManager.isReachable)
-        {
-            [cards removeAllObjects];
-            [cards addObject:[NoInternetCard new]];
-        }
-        else
-        {
+        NSLog(@"mapillaryCards Before: %lu", cards.count);
+//        if (!AFNetworkReachabilityManager.sharedManager.isReachable)
+//        {
+//            [cards removeAllObjects];
+//            [cards addObject:[NoInternetCard new]];
+//        }
+//        else
+//        {
             if (cards.count == 0)
                 [cards addObject:[[NoImagesCard alloc] init]];
             else if (cards.count > 1)
                 [self removeDuplicatesFromCards:cards];
-        }
+      //  }
+        NSLog(@"mapillaryCards After: %lu", cards.count);
         // After forming the list of cards, fill the collection
         if (nearbyImagesRowInfo)
         {
             CollapsableCardsView *collapsableView = (CollapsableCardsView *)nearbyImagesRowInfo.collapsableView;
             collapsableView.isLoading = NO;
-            [collapsableView setCards:[CardFilter getAvailableContentForOnlinePhotosSection:cards]];
+            [collapsableView setCards:cards];
         }
         if (_mapillaryCardsRowInfo)
         {
             CollapsableCardsView *collapsableView = (CollapsableCardsView *)_mapillaryCardsRowInfo.collapsableView;
             collapsableView.isLoading = NO;
-            [collapsableView setCards:[CardFilter getAvailableContentForMapillaryPhotosSection:cards]];
+            [collapsableView setCards:cards];
         }
         
         _otherCardsReady = _wikiCardsReady = NO;

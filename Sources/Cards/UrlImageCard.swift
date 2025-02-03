@@ -9,11 +9,11 @@
 @objcMembers
 final class UrlImageCard: ImageCard {
     
-    override func onCardPressed(_ mapPanel: OAMapPanelViewController) {
-        let cardUrl = getSuitableUrl()
-        if let viewController = OAWebViewController(urlAndTitle: cardUrl,
-                                                    title: mapPanel.getCurrentTargetPoint()?.title) {
-            mapPanel.navigationController?.pushViewController(viewController, animated: true)
-        }
-    }
+//    override func onCardPressed(_ mapPanel: OAMapPanelViewController) {
+//        let cardUrl = getSuitableUrl()
+//        if let viewController = OAWebViewController(urlAndTitle: cardUrl,
+//                                                    title: mapPanel.getCurrentTargetPoint()?.title) {
+//            mapPanel.navigationController?.pushViewController(viewController, animated: true)
+//        }
+//    }
 }

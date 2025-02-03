@@ -6,26 +6,26 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-final class CardsViewController: UIView, UICollectionViewDelegate {
-    private typealias DataSource = UICollectionViewDiffableDataSource<Section, Int>
-    private typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Int>
+final class EmptyStateCard: AbstractCard { }
+
+final class CardsViewController: UIView {
+    private typealias DataSource = UICollectionViewDiffableDataSource<Section, AbstractCard>
+    private typealias Snapshot = NSDiffableDataSourceSnapshot<Section, AbstractCard>
     
     enum Section: Int {
         case bigPhoto, smallPhoto, mapillaryBanner, noInternet, noPhotos
     }
     
     var contentType: CollapsableCardsType = .onlinePhoto
-    var didChangeHeightAction: ((Section, Float) -> Void)?
-    
-    var cards: [AbstractCard] = [] {
+    var сardsFilter: CardsFilter! {
         didSet {
             applySnapshot()
         }
     }
-    // swiftlint:disable superfluous_disable_command trailing_newline
+    var didChangeHeightAction: ((Section, Float) -> Void)?
+    
     private var dataSource: DataSource!
     private var collectionView: UICollectionView!
-    // swiftlint:enable superfluous_disable_command trailing_newline
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -44,7 +44,11 @@ final class CardsViewController: UIView, UICollectionViewDelegate {
     
     func showSpinner(show: Bool) {
         DispatchQueue.main.async { [weak self] in
-            self?.collectionView.showActivityIndicator(show: show)
+            guard let self else { return }
+            if show {
+                clearDataSource()
+            }
+            collectionView.showActivityIndicator(show: show)
         }
     }
     
@@ -97,36 +101,81 @@ final class CardsViewController: UIView, UICollectionViewDelegate {
         ])
     }
     
+    private func clearDataSource() {
+        dataSource.apply(Snapshot(), animatingDifferences: false)
+    }
+    
+    private func configureContentInset(isEmpty: Bool) {
+        collectionView.contentInset = isEmpty ? .zero : .init(top: 0, left: 20, bottom: 0, right: 20)
+    }
+    
     private func applySnapshot(animatingDifferences: Bool = false) {
         var snapshot = Snapshot()
         var section: Section = .bigPhoto
-        if isNoInternetState {
+        if let noInternetCard = сardsFilter.noInternetCard {
+            collectionView.isScrollEnabled = false
+            configureContentInset(isEmpty: true)
             snapshot.appendSections([.noInternet])
-            snapshot.appendItems([0])
+            snapshot.appendItems([noInternetCard])
             section = .noInternet
-        } else if cards.isEmpty {
-            snapshot.appendSections([.noPhotos])
-            snapshot.appendItems([0])
-            section = .noPhotos
         } else {
             // Content sections
-            //
-            
-            //
-            
-            if hasMapillaryBanner {
-                snapshot.appendSections([.mapillaryBanner])
-                snapshot.appendItems([0])
-                section = .mapillaryBanner
+            configureContentInset(isEmpty: false)
+            switch contentType {
+            case .onlinePhoto:
+                let onlinePhotoCards = сardsFilter.onlinePhotosSection
+                if !onlinePhotoCards.isEmpty {
+                    collectionView.isScrollEnabled = true
+                    snapshot.appendSections([.bigPhoto])
+                    snapshot.appendItems([onlinePhotoCards[0]])
+                    section = .bigPhoto
+                    if onlinePhotoCards.count > 1 {
+                        let smallPhotos = Array(onlinePhotoCards.dropFirst())
+                        snapshot.appendSections([.smallPhoto])
+                        snapshot.appendItems(smallPhotos)
+                    }
+                } else {
+                    collectionView.isScrollEnabled = false
+                    configureContentInset(isEmpty: true)
+                    snapshot.appendSections([.noPhotos])
+                    snapshot.appendItems([EmptyStateCard()])
+                    section = .noPhotos
+                }
+            case .mapilary:
+                let mapillaryCards = сardsFilter.mapillaryImageCards
+                print("mapillaryCards: \(mapillaryCards.count)")
+                if !mapillaryCards.isEmpty {
+                    collectionView.isScrollEnabled = true
+                    snapshot.appendSections([.bigPhoto])
+                    snapshot.appendItems([mapillaryCards[0]])
+                    section = .bigPhoto
+                    if mapillaryCards.count > 1 {
+                        let smallPhotos = Array(mapillaryCards.dropFirst())
+                        snapshot.appendSections([.smallPhoto])
+                        snapshot.appendItems(smallPhotos)
+                    }
+                    if сardsFilter.hasMapillaryBanner {
+                        snapshot.appendSections([.mapillaryBanner])
+                        snapshot.appendItems([EmptyStateCard()])
+                        section = .mapillaryBanner
+                    }
+                } else {
+                    collectionView.isScrollEnabled = false
+                    configureContentInset(isEmpty: true)
+                    snapshot.appendSections([.noPhotos])
+                    snapshot.appendItems([EmptyStateCard()])
+                    section = .noPhotos
+                }
             }
         }
-        
-        dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
-        didChangeHeightAction?(section, contentHeight)
+        dataSource.applySnapshotUsingReloadData(snapshot) { [weak self] in
+            guard let self else { return }
+            didChangeHeightAction?(section, contentHeight)
+        }
     }
     
     private func makeDataSource() -> DataSource {
-        let source = DataSource(collectionView: collectionView) { [weak self] collectionView, indexPath, _ -> UICollectionViewCell in
+        let source = DataSource(collectionView: collectionView) { [weak self] collectionView, indexPath, item -> UICollectionViewCell in
             guard let self else { return UICollectionViewCell() }
             let section = dataSource.snapshot().sectionIdentifiers[indexPath.section]
             switch section {
@@ -134,35 +183,45 @@ final class CardsViewController: UIView, UICollectionViewDelegate {
                 guard let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: NoInternetCardCell.reuseIdentifier,
                     for: indexPath) as? NoInternetCardCell else { fatalError("Cannot create new cell NoInternetCardCell") }
-                collectionView.isScrollEnabled = false
-                if let item = cards[indexPath.row] as? NoInternetCard {
+                if let item = item as? NoInternetCard {
                     cell.configure(item: item)
                 }
                 return cell
-            case .bigPhoto:
-                fatalError("bigPhoto")
-            case .smallPhoto:
-                fatalError("smallPhoto")
+            case .bigPhoto, .smallPhoto:
+                guard let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: ImageCardCell.reuseIdentifier,
+                    for: indexPath) as? ImageCardCell else { fatalError("Cannot create new cell ImageCardCell") }
+                if let item = item as? ImageCard {
+                    cell.configure(item: item, showLogo: section == .bigPhoto)
+                }
+                return cell
             case .mapillaryBanner:
                 guard let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: MapillaryContributeCell.reuseIdentifier,
                     for: indexPath) as? MapillaryContributeCell else { fatalError("Cannot create new cell MapillaryContributeCell") }
-                collectionView.isScrollEnabled = true
                 return cell
             case .noPhotos:
                 guard let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: NoImagesCell.reuseIdentifier,
                     for: indexPath) as? NoImagesCell else { fatalError("Cannot create new cell NoImagesCell") }
-                collectionView.isScrollEnabled = false
                 cell.showAddPhotosButton(contentType == .mapilary)
                 return cell
             }
-            
-            return UICollectionViewCell()
         }
         return source
     }
 }
+
+// MARK: - UICollectionViewDelegate
+
+extension CardsViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let card = dataSource.itemIdentifier(for: indexPath) else { return }
+        card.onCardPressed(OARootViewController.instance().mapPanel)
+    }
+}
+
+// MARK: - NSCollectionLayoutSection
 
 fileprivate extension NSCollectionLayoutSection {
     static func emptySection() -> NSCollectionLayoutSection {
@@ -232,22 +291,9 @@ fileprivate extension NSCollectionLayoutSection {
     }
 }
 
+// MARK: - ContentHeight
+
 fileprivate extension CardsViewController {
-    var isNoInternetState: Bool {
-        cards.contains { $0 is NoInternetCard }
-    }
-    
-    var hasPhoto: Bool {
-        cards.contains {
-            guard let item = $0 as? ImageCard else { return false }
-            return item.key.isEmpty
-        }
-    }
-    
-    var hasMapillaryBanner: Bool {
-        cards.contains { $0 is MapillaryContributeCard }
-    }
-    
     var contentHeight: Float {
         guard let cell = collectionView.visibleCells.compactMap({ $0 as? CellHeightDelegate }).first else {
             return 156.0
@@ -255,6 +301,8 @@ fileprivate extension CardsViewController {
         return cell.height()
     }
 }
+
+// MARK: - UICollectionView
 
 fileprivate extension UICollectionView {
     func showActivityIndicator(show: Bool) {

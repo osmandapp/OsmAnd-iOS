@@ -23,12 +23,6 @@ class ImageCard: AbstractCard {
     var imageHiresUrl: String
     var externalLink: Bool
     var topIcon: String
-
-    var image: UIImage?
-    
-    private var collectionCell: ImageCardCell?
-    private var downloaded = false
-    private var downloading = false
     
     // Initializer
     init(data: [String: Any]) {
@@ -62,79 +56,15 @@ class ImageCard: AbstractCard {
         }
     }
     
-    // Download Image method
-    func downloadImage() {
-        if imageUrl.isEmpty { return }
-        
-        if downloading || downloaded { return }
-        
-        downloading = true
-        guard let imgURL = URL(string: imageUrl) else { return }
-        let session = URLSession(configuration: .default)
-        
-        session.dataTask(with: imgURL) { [weak self] data, response, error in
-            guard let self else { return }
-            
-            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200, let data = data {
-                self.image = UIImage(data: data)
-            }
-            
-            DispatchQueue.main.async {
-                self.delegate?.requestCardReload(self)
-            }
-            
-            self.downloaded = true
-            self.downloading = false
-        }.resume()
-    }
-    
     // Get suitable URL (high res or regular)
     func getSuitableUrl() -> String {
         !imageHiresUrl.isEmpty ? imageHiresUrl : imageUrl
     }
     
-    // Build UI Cell
-    override func build(in cell: UICollectionViewCell) {
-        if let oaCell = cell as? ImageCardCell {
-            collectionCell = oaCell
-        }
-        super.build(in: cell)
-    }
-    
-    // Update Card View
-    override func update() {
-        guard let cell = collectionCell else { return }
-        
-        cell.loadingIndicatorView.isHidden = true
-        
-        if let image = self.image {
-            cell.imageView.isHidden = false
-            cell.imageView.image = image
-            cell.urlTextView.isHidden = true
-            cell.loadingIndicatorView.isHidden = true
-            cell.loadingIndicatorView.stopAnimating()
-        } else {
-            cell.imageView.image = nil
-            if !downloaded {
-                cell.loadingIndicatorView.startAnimating()
-                cell.loadingIndicatorView.isHidden = false
-                downloadImage()
-            } else {
-                cell.imageView.isHidden = true
-                cell.urlTextView.isHidden = false
-                cell.urlTextView.text = imageUrl
-                cell.loadingIndicatorView.isHidden = true
-                cell.loadingIndicatorView.stopAnimating()
-            }
-        }
-        
-        cell.usernameLabel.text = userName
-        
-        if !topIcon.isEmpty {
-            cell.logoView.image = UIImage(named: topIcon)
-        } else {
-            cell.logoView.image = nil
-        }
+    override func onCardPressed(_ mapPanel: OAMapPanelViewController) {
+        debugPrint("open gallery")
+//        guard let viewController = OAWebViewController(urlAndTitle: urlWithCommonAttributions, title: title) else { return }
+//        mapPanel.navigationController?.pushViewController(viewController, animated: true)
     }
     
     // Static method to get the cell Nib identifier

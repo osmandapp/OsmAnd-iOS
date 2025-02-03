@@ -18,9 +18,13 @@ protocol CollapsableCardViewDelegate: AnyObject {
 
 @objcMembers
 final class CollapsableCardsView: OACollapsableView {
-    var contentType: CollapsableCardsType = .onlinePhoto
-    
     weak var delegate: CollapsableCardViewDelegate?
+    
+    var contentType: CollapsableCardsType = .onlinePhoto {
+        didSet {
+            cardsViewController.contentType = contentType
+        }
+    }
     
     var isLoading = false {
         didSet {
@@ -44,9 +48,8 @@ final class CollapsableCardsView: OACollapsableView {
     
     private let bottomContentHeight: Float = 68.0
     
-    // swiftlint:disable force_unwrapping
     private var cardsViewController: CardsViewController!
-    // swiftlint:enable force_unwrapping
+    private var сardsFilter: CardsFilter!
     private var viewAllButton: UIButton?
     private var exploreButton: UIButton?
     private var heightConstraint: NSLayoutConstraint?
@@ -56,7 +59,6 @@ final class CollapsableCardsView: OACollapsableView {
         super.init(frame: frame)
         
         cardsViewController = CardsViewController(frame: .zero)
-        cardsViewController.contentType = contentType
         cardsViewController.translatesAutoresizingMaskIntoConstraints = false
         addSubview(cardsViewController)
         
@@ -75,9 +77,9 @@ final class CollapsableCardsView: OACollapsableView {
             switch section {
             case .bigPhoto, .smallPhoto, .mapillaryBanner:
                 switch contentType {
-                case .onlinePhoto where cardsViewController.cards.hasOnlyOnlinePhotosContent:
+                case .onlinePhoto where сardsFilter.hasOnlyOnlinePhotosContent:
                     newHeiht += bottomContentHeight
-                case .mapilary where cardsViewController.cards.hasOnlyMapillaryPhotosContent:
+                case .mapilary where сardsFilter.hasOnlyMapillaryPhotosContent:
                     newHeiht += bottomContentHeight
                 default: break
                 }
@@ -100,18 +102,6 @@ final class CollapsableCardsView: OACollapsableView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        guard !collapsed else { return }
-        
-        cardsViewController.reloadData()
-    }
-    
-//    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-//      //  guard !collapsed else { return }
-//        
-//        //cardsViewController.reloadData()
-//    }
-    
     override func adjustHeight(forWidth width: CGFloat) {
         updateLayout(width: width)
     }
@@ -120,11 +110,9 @@ final class CollapsableCardsView: OACollapsableView {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
             
-            cardsViewController.cards = cards
-            for card in cards {
-                card.delegate = self
-            }
-            configereBottomButton(with: cards)
+            сardsFilter = CardsFilter(cards: cards)
+            cardsViewController.сardsFilter = сardsFilter
+            configereBottomButton()
         }
     }
     
@@ -132,12 +120,12 @@ final class CollapsableCardsView: OACollapsableView {
         cardsViewController.showSpinner(show: isLoading)
     }
     
-    private func configereBottomButton(with cards: [AbstractCard]) {
-        guard !cards.isEmpty else { return }
+    private func configereBottomButton() {
+        guard !сardsFilter.cardsIsEmpty else { return }
         
         switch contentType {
         case .onlinePhoto:
-            if cards.hasOnlyOnlinePhotosContent {
+            if сardsFilter.hasOnlyOnlinePhotosContent {
                 viewAllButton = UIButton(type: .system, primaryAction: UIAction(title: localizedString("shared_string_view_all"), handler: { _ in
                     // TODO:
                     print("viewAllButton tapped view all!")
@@ -145,7 +133,7 @@ final class CollapsableCardsView: OACollapsableView {
                 addButtonIfNeeded(button: viewAllButton!)
             }
         case .mapilary:
-            if cards.hasOnlyMapillaryPhotosContent {
+            if сardsFilter.hasOnlyMapillaryPhotosContent {
                 exploreButton = UIButton(type: .system, primaryAction: UIAction(title: localizedString("shared_string_explore"), handler: { _ in
                     OAMapillaryPlugin.installOrOpenMapillary()
                 }))
@@ -184,45 +172,5 @@ final class CollapsableCardsView: OACollapsableView {
             button.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             button.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -12)
         ])
-    }
-}
-
-// MARK: - UICollectionViewDelegate | UICollectionViewDataSource
-//extension CollapsableCardsView: UICollectionViewDelegate, UICollectionViewDataSource {
-//    func numberOfSections(in collectionView: UICollectionView) -> Int {
-//        1
-//    }
-//    
-//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        cards.count
-//    }
-//    
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        let card = cards[indexPath.row]
-//        let reuseIdentifier = type(of: card).getCellNibId()
-//        
-//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
-//        if !collapsed {
-//            card.build(in: cell)
-//        }
-//        
-//        return cell
-//    }
-//    
-//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        collectionView.deselectItem(at: indexPath, animated: true)
-//        cards[indexPath.row].onCardPressed(OARootViewController.instance().mapPanel)
-//    }
-//}
-
-// MARK: - AbstractCardDelegate
-extension CollapsableCardsView: AbstractCardDelegate {
-    func requestCardReload(_ card: AbstractCard) {
-        print("")
-//        card.update()
-//        if let row = cards.firstIndex(of: card) {
-//            let path = IndexPath(row: row, section: 0)
-//           // cardCollection.reloadItems(at: [path])
-//        }
     }
 }

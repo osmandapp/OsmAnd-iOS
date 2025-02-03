@@ -6,7 +6,6 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-
 import UIKit
 
 let WIKIMEDIA_COMMONS_URL = "https://commons.wikimedia.org/wiki/"
@@ -30,7 +29,6 @@ final class WikiImage: NSObject {
     }
 }
 
-
 final class WikiImageCard: ImageCard {
     private var urlWithCommonAttributions: String
 
@@ -47,8 +45,8 @@ final class WikiImageCard: ImageCard {
     }
 
     
-    override func onCardPressed(_ mapPanel: OAMapPanelViewController) {
-        guard let viewController = OAWebViewController(urlAndTitle: urlWithCommonAttributions, title: title) else { return }
-        mapPanel.navigationController?.pushViewController(viewController, animated: true)
-    }
+//    override func onCardPressed(_ mapPanel: OAMapPanelViewController) {
+//        guard let viewController = OAWebViewController(urlAndTitle: urlWithCommonAttributions, title: title) else { return }
+//        mapPanel.navigationController?.pushViewController(viewController, animated: true)
+//    }
 }

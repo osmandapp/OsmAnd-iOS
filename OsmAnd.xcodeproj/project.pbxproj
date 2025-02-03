@@ -3094,6 +3094,7 @@
 		FA4C57032D48E92F00438A5C /* NoInternetCardCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4C57022D48E92F00438A5C /* NoInternetCardCell.xib */; };
 		FA4C57052D491EB900438A5C /* CardsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4C57042D491EB900438A5C /* CardsViewController.swift */; };
 		FA4D7F572B03D366003208D7 /* BLEWheelSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4D7F562B03D366003208D7 /* BLEWheelSettingsViewController.swift */; };
+		FA52B0732D4D237D0001B693 /* CardsFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA52B0722D4D237D0001B693 /* CardsFilter.swift */; };
 		FA5A21A22A9C7DE100319695 /* CALayer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5A21A12A9C7DE100319695 /* CALayer+Extension.swift */; };
 		FA5A21A82A9E17DB00319695 /* UIPageViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */; };
 		FA5D19E12CC00B1100E01A27 /* GPXDataItemGPXFileWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5D19E02CC00B0E00E01A27 /* GPXDataItemGPXFileWrapper.swift */; };
@@ -7611,6 +7612,7 @@
 		FA4C57022D48E92F00438A5C /* NoInternetCardCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NoInternetCardCell.xib; sourceTree = "<group>"; };
 		FA4C57042D491EB900438A5C /* CardsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsViewController.swift; sourceTree = "<group>"; };
 		FA4D7F562B03D366003208D7 /* BLEWheelSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEWheelSettingsViewController.swift; sourceTree = "<group>"; };
+		FA52B0722D4D237D0001B693 /* CardsFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsFilter.swift; sourceTree = "<group>"; };
 		FA5A21A12A9C7DE100319695 /* CALayer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+Extension.swift"; sourceTree = "<group>"; };
 		FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIPageViewController+Extension.swift"; sourceTree = "<group>"; };
 		FA5D19E02CC00B0E00E01A27 /* GPXDataItemGPXFileWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPXDataItemGPXFileWrapper.swift; sourceTree = "<group>"; };
@@ -10676,6 +10678,7 @@
 		DA5A79A726C563A000F274C7 /* Cards */ = {
 			isa = PBXGroup;
 			children = (
+				FA52B0722D4D237D0001B693 /* CardsFilter.swift */,
 				FA4C57002D48E8C600438A5C /* NoInternetCardCell.swift */,
 				FA4C56FE2D48E84200438A5C /* NoInternetCard.swift */,
 				FA64087C2D3E8B96005FD12D /* MapillaryContributeCell.swift */,
@@ -16612,6 +16615,7 @@
 				DA5A83B426C563A800F274C7 /* OAOsmEditsListViewController.mm in Sources */,
 				FA00B8862B5928F900582CD1 /* SegmentImagesWithRightLabelTableViewCell.swift in Sources */,
 				FAE6E8642C2A9BC600907FBE /* WeatherLayerSettingsViewController.swift in Sources */,
+				FA52B0732D4D237D0001B693 /* CardsFilter.swift in Sources */,
 				FA4768B32A66E73000D533E8 /* FreeBackupBanner.swift in Sources */,
 				DA5A81AF26C563A700F274C7 /* OASearchCoreFactory.mm in Sources */,
 				FA45851E2C9474A3003A5AD7 /* GpxDataItemExtension.swift in Sources */,

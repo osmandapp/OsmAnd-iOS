@@ -44,6 +44,7 @@ final class NoImagesCell: UICollectionViewCell {
 
 extension NoImagesCell: CellHeightDelegate {
     func height() -> Float {
+        contentStackView.layoutIfNeeded()
         let contentHeight = Float(contentStackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height)
         
         return contentHeight + topBottomPadding

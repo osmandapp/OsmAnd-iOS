@@ -8,15 +8,8 @@
 
 import UIKit
 
-@objc
-public protocol AbstractCardDelegate: AnyObject {
-    @objc func requestCardReload(_ card: AbstractCard)
-}
-
 @objcMembers
-public class AbstractCard: NSObject {
-    
-    weak var delegate: AbstractCardDelegate?
+class AbstractCard: NSObject {
 
     class func getCellNibId() -> String {
         ""

@@ -7,7 +7,7 @@
 //
 
 @objc
-public protocol CellHeightDelegate: AnyObject {
+protocol CellHeightDelegate: AnyObject {
     @objc func height() -> Float
 }
 
@@ -24,19 +24,20 @@ final class NoInternetCardCell: UICollectionViewCell {
     }
     @IBOutlet private weak var contentStackView: UIStackView!
     
-    private var item: NoInternetCard!
+    private var item: NoInternetCard?
     
     func configure(item: NoInternetCard) {
         self.item = item
     }
     
     @IBAction private func onButtonPressed(_ sender: Any) {
-        self.item.onTryAgainAction?()
+        self.item?.onTryAgainAction?()
     }
 }
 
 extension NoInternetCardCell: CellHeightDelegate {
     func height() -> Float {
-        Float(contentStackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height + 60 + 44)
+        contentStackView.layoutIfNeeded()
+        return Float(contentStackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height + 60 + 44)
     }
 }

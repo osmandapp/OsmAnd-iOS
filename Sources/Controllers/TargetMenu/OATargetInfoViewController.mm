@@ -248,9 +248,9 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
         long area1 = [obj1 estimatedArea];
         long area2 = [obj2 estimatedArea];
         if (area1 > area2)
-            return NSOrderedAscending;
-        else if (area1 < area2)
             return NSOrderedDescending;
+        else if (area1 < area2)
+            return NSOrderedAscending;
         return NSOrderedSame;
     }];
     

@@ -3581,3 +3581,5 @@
 "ask_every_time" = "Pokaždé se ptejte";
 "attach_roads_descr" = "Připojte svou trasu k silnicím a získejte podrobné informace o trase s pokyny pro odbočení a atributy silnice.";
 "detailed_track_guidance_description" = "OsmAnd přizpůsobí vaši stopu blízkým silnicím pro vylepšené navádění krok za krokem.";
+"auto_25_chars_route_kr" = "Držte se vpravo";
+"auto_25_chars_route_kl" = "Držte se vlevo";

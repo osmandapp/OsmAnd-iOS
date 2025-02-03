@@ -101,9 +101,11 @@
         [gpxApproximator calculateGpxApproximation:[[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OAGpxRouteApproximation *__autoreleasing *approxPtr) {
             OAGpxRouteApproximation *strongApprox = (approxPtr && *approxPtr) ? *approxPtr : nil;
             dispatch_async(dispatch_get_main_queue(), ^{
-                if (!gpxApproximator.isCancelled && strongApprox)
+                if (!gpxApproximator.isCancelled)
+                {
                     approximateResult[gpxApproximator.locationsHolder] = strongApprox;
-                [self approximateMultipleGpxAsync:approximationsToDo withResult:approximateResult];
+                    [self approximateMultipleGpxAsync:approximationsToDo withResult:approximateResult];
+                }
             });
             return YES;
         } cancelledFunc:^BOOL {

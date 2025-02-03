@@ -3,17 +3,17 @@
 "shared_string_previous" = "முன்னே";
 "shared_string_next" = "அடுத்து";
 "route_stops_before" = "%@ முன்பு நிறுத்தப்படும்";
-"transport_Routes" = "வழித்தடங்கள்";
+"transport_Routes" = "வழிகள்";
 "transport_nearby_routes_within" = "அருகிலுள்ள வழிகள்";
 "transport_nearby_routes" = "அதற்குள்";
 "shared_string_control_stop" = "நிறுத்து";
 "cancel_navigation" = "வழிநடத்துதலை நிறுத்தவும்";
 "intermediate_items_sort_by_distance" = "கதவை க்கு கதவை வரிசைப்படுத்த";
-"switch_start_finish" = "தலைகீழ் தொடக்க புள்ளி மற்றும் இலக்கு";
+"switch_start_finish" = "தொடக்கம் மற்றும் இலக்கை மாற்றுக";
 "clear_all_intermediates" = "அனைத்து இடைநிலை புள்ளிகளையும் அழிக்கவும்";
 "shared_string_options" = "விருப்பங்கள்";
 "shared_string_current" = "தற்போதைய";
-"make_as_start_point" = "இதை தொடக்கமாக மாற்றுக";
+"make_as_start_point" = "இதை புறப்படும் புள்ளியாக மாற்றவும்";
 "keep_and_add_destination_point" = "அடுத்தடுத்த இலக்காக சேர்க்கவும்";
 "subsequent_dest_description" = "இலக்கை நகர்த்தி அதை உருவாக்கவும்";
 "first_intermediate_dest_description" = "ஆரம்ப நிறுத்தத்தை சேர்க்கிறது";
@@ -37,7 +37,7 @@
 "unit_of_length_descr" = "என்ன தூரம் அளவிடப்படுகிறது என்பதை மாற்றவும்.";
 "coords_format" = "ஒருங்கிணைப்பு வடிவம்";
 "coords_format_descr" = "புவியியல் ஒருங்கிணைப்புகளுக்கான வடிவமைப்பு.";
-"driving_region_descr" = "உந்துதலையை தேர்ந்தெடுக்கவும்: அமெரிக்கா, ஐரோப்பா, இங்கிலாந்து, ஆசியா மற்றும் பலர்.";
+"driving_region_descr" = "ஓட்டுநர் பிராந்தியத்தைத் தேர்ந்தெடுக்கவும்: அமெரிக்கா, ஐரோப்பா, இங்கிலாந்து, ஆசியா மற்றும் பிற.";
 "driving_region" = "வாகனம் ஓட்டும் இடம்";
 
 // Track recording settings
@@ -78,7 +78,7 @@
 // Route info
 "shared_string_never" = "ஒருபோதும்";
 "confirm_every_run" = "எப்போதும் கேள் \n";
-"general_settings_2" = "பொதுவான அமைப்புகள்";
+"general_settings_2" = "பொது அமைப்புகள்";
 "auto_zoom_none" = "ஆட்டோ பெரிதாக்கவில்லை";
 "auto_zoom_close" = "மூடுவதற்கு";
 "auto_zoom_far" = "நடுப்பகுதியில்";
@@ -88,15 +88,15 @@
 "arrival_distance_factor_late" = "தாமதம்";
 "arrival_distance_factor_at_last" = "மிகவும் தாமதமாக";
 "prefer_in_routing_title" = "போக்குவரத்தை விரும்புகிறேன் …";
-"prefer_in_routing_descr" = "மின்னோடி பாதைகளை விரும்புங்கள்.";
+"prefer_in_routing_descr" = "மோட்டார் வாகனங்களை விரும்புங்கள்.";
 "speak_title" = "அறிவிக்கவும் …";
-"speak_descr" = "தெரு பெயர்கள், போக்குவரத்து எச்சரிக்கைகள் (கட்டாயமாக நிறுத்தங்கள், வேகம் புடைப்புகள்), வேக கேமரா எச்சரிக்கை, வேக வரம்புகள் ஆகியவற்றை அறிவிக்க கட்டமைக்கவும்.";
+"speak_descr" = "தெரு பெயர்கள், போக்குவரத்து எச்சரிக்கைகள் (கட்டாய நிறுத்தங்கள், வேக புடைப்புகள்), வேக கேமரா எச்சரிக்கைகள் மற்றும் வேக வரம்புகள் பற்றிய அறிவிப்பை அமைக்கவும்.";
 "arrival_distance" = "வருகை அறிவிப்பு";
 "arrival_distance_descr" = "வருகையை அறிவிக்க எவ்வளவு விரைவில் விரும்புகிறீர்கள்\?";
 "speed_limit_exceed" = "வேக வரம்பு சகிப்புத்தன்மை";
-"speed_limit_exceed_message" = "வேகம் வரம்பு சகிப்புத்தன்மை விளிம்புகளைத் தேர்ந்தெடுங்கள், மேலே நீங்கள் ஒரு குரல் எச்சரிக்கையைப் பெறுவீர்கள்.";
+"speed_limit_exceed_message" = "வேக வரம்பு சகிப்புத்தன்மை விளிம்பைத் தேர்வுசெய்க, அதற்கு மேலே நீங்கள் குரல் எச்சரிக்கையைப் பெறுவீர்கள்.";
 "wake_on_voice" = "திரையை இயக்கு";
-"wake_on_voice_descr" = "ஒரு திருப்பத்தை நெருங்கும் போது சாதனத் திரை (முடக்கப்பட்டால்) இயக்கவும்.";
+"wake_on_voice_descr" = "சாதனத்தை திரையில் (அனைத்து இருந்தால்) ஒரு திருப்பத்தை நெருங்கும் போது இயக்கவும்.";
 "voice_pref_title" = "குரல்";
 "voice_provider" = "குரல் வழிகாட்டுதல்";
 "voice_provider_descr" = "வழிசெலுத்தல் க்கான குரல் வழிகாட்டியைத் தேர்ந்தெடுக்கவும்.";
@@ -115,29 +115,29 @@
 "app_mode_aircraft" = "விமான";
 "gpx_option_calculate_first_last_segment" = "முதல் மற்றும் கடைசி பாதை பிரிவிற்கு OsmAnd வழியை கணக்கிடுங்கள்";
 "gpx_option_from_start_point" = "முழு பாதையில் செல்க";
-"gpx_option_reverse_route" = "ஜிபிஎக்ஸ் திசையை பின்னோக்கு";
+"gpx_option_reverse_route" = "தலைகீழ் தட திசை";
 "use_points_as_intermediates" = "புள்ளிகளுக்கு இடையில் வழியைக் கணக்கிடுங்கள்";
 "calculate_osmand_route_without_internet" = "OsmAnd பாதை பிரிவின் ஆஃப்லைன் கணக்கீடு";
 "routing_settings_2" = "வழிதட அமைப்புகள்";
 "impassable_road" = "சாலைகள் தவிர்க்கவும் …";
-"impassable_road_desc" = "வழிசெலுத்தலின் போது நீங்கள் தவிர்க்க விரும்பும் சாலைகளைத் தேர்ந்தெடுக்கவும்.";
+"impassable_road_desc" = "வழிசெலுத்தலின் போது தவிர்க்க விரும்பும் சாலைகளைத் தேர்ந்தெடுக்கவும்.";
 "shared_string_do_not_use" = "பயண்படுத்தாதே";
 "shared_string_sound" = "ஒலி";
 "sort_by_distance" = "தூரம் மூலம் வரிசைப்படுத்த";
 "sort_by_name" = "பெயர் மூலம் வரிசைப்படுத்து";
 "sort_by" = "வரிசைப்படுத்து";
 "map_markers_other" = "மற்ற குறிப்பான்கள்";
-"stop_routing_confirm" = "வழிநடத்துதலை நீங்கள் நிச்சயமாக நிறுத்த வேண்டுமா\?";
-"cancel_route" = "பாதை அகற்றவும்";
-"route_is_too_long_v2" = "10 நிமிடங்களுக்குள் இந்த நீண்ட வழிக்கான பாதை கண்டுபிடிக்கப்படவில்லை எனில் இடைநிலை இடங்களைச் சேர்க்கவும்.";
+"stop_routing_confirm" = "வழிசெலுத்தலை நிறுத்தவா?";
+"cancel_route" = "வழியை நிராகரிக்கவா?";
+"route_is_too_long_v2" = "நீண்ட தூரத்திற்கு: 10 நிமிடங்களுக்குள் எந்த வழியும் காணப்படாவிட்டால் இடைநிலை இடங்களைச் சேர்க்கவும்.";
 "use_displayed_track_for_navigation" = "வழிசெலுத்தலுக்கான டிராக்கைப் பயன்படுத்தவும்\?";
 "shared_string_select_on_map" = "வரைபடத்தில் தேர்ந்தெடுக்கவும்";
 "shared_string_my_location" = "என் நிலை";
-"route_descr_select_destination" = "இலக்கு தேர்ந்தெடு";
+"route_descr_select_destination" = "இலக்கை அமைக்கவும்";
 "route_to" = "பெறுநர்:";
 "route_via" = "வழியாக:";
 "route_from" = "இருந்து:";
-"internet_connection_required_for_online_route" = "ஆன்லைன் வழிசெலுத்தல் சேவையைத் தேர்ந்தெடுத்தது, ஆனால் நீங்கள் இணையத்துடன் இணைக்கப்படவில்லை.";
+"internet_connection_required_for_online_route" = "நிகழ்நிலை வழிசெலுத்தல் ஆஃப்லைனில் வேலை செய்யாது.";
 "destination_point" = "இலக்கு %@";
 "towards" = "நோக்கி";
 "no_address_found" = "முகவரி இல்லை";
@@ -145,14 +145,14 @@
 "traffic_warning_border_control" = "எல்லை கட்டுப்பாடு";
 "traffic_warning_payment" = "கட்டண சாவடி";
 "traffic_warning_stop" = "நிறுத்தல் குறி";
-"traffic_warning_calming" = "போக்குவரத்து அமைதி";
+"traffic_warning_calming" = "போக்குவரத்து அமைதியானது";
 "traffic_warning_speed_camera" = "வேக கேமரா";
 "traffic_warning" = "போக்குவரத்து எச்சரிக்கை";
 "tunnel_warning" = "சுரங்கப்பாதை முன் நோக்கி உள்ளது";
 "driving_region_japan" = "ஜப்பான்";
 "driving_region_us" = "ஐக்கிய மாநிலங்கள்";
 "driving_region_canada" = "கனடா";
-"driving_region_europe_asia" = "ஐரோப்பா, ஆசியா, இலத்தீன் அமெரிக்கா, மற்றும் ஒத்த";
+"driving_region_europe_asia" = "ஐரோப்பா, ஆசியா, லத்தீன் அமெரிக்கா மற்றும் ஒத்த";
 "driving_region_australia" = "ஆஸ்திரேலியா";
 "si_mi_feet" = "மைல்கள் / அடி";
 "si_mi_yard" = "மைல்கள் / கெஜம்";
@@ -204,7 +204,7 @@
 "replace_favorite_confirmation" = "%@ விருப்பத்தை நிச்சயமாக மாற்ற விரும்புகிறீர்களா ?";
 "fav_points_not_exist" = "பிடித்த புள்ளிகள் இல்லை";
 "add_group" = "ஒரு குழுவைச் சேர்க்கவும்";
-"fav_point_dublicate" = "பிடித்த புள்ளி பெயர் நகல்";
+"fav_point_dublicate" = "நகல் பிடித்த பெயர் குறிப்பிடப்பட்டுள்ளது";
 "fav_point_dublicate_message" = "குறிப்பிடப்பட்ட ஏற்கனவே பிடித்த பெயரில், பிரதி எடுக்காமல் %@ க்கு மாற்றப்பட்டது.";
 "fav_point_emoticons_message" = "பிடித்த பெயரை ஒரு கோப்பில் எமோடிகானுடன் சரியாக சரம் சேமிப்பதில் விருப்பமான பெயர் %@ க்கு மாற்றப்பட்டது.";
 "access_default_color" = "இயல்புநிலை நிறம்";
@@ -215,7 +215,7 @@
 "shared_string_hide" = "மறைக்க";
 
 // My Places
-"favorites_item" = "பிடித்தவைகள்";
+"favorites_item" = "பிடித்தவை";
 "shared_string_gpx_tracks" = "தடங்கள்";
 
 // GPX
@@ -236,7 +236,7 @@
 
 // Map settings
 "shared_string_map" = "வரைபடம்";
-"layer_amenity_label" = "POI ஓவர்லே லேபிள்கள்";
+"layer_amenity_label" = "புள்ளி லேபிள்கள் (POI, பிடித்தவை)";
 "shared_string_show_on_map" = "வரைபடாத்தில் காட்டு";
 "map_mode" = "வரைபட பயன்முறை";
 "map_magnifier" = "வரைபடத்தின் உருப்பெருக்கம்";
@@ -245,7 +245,7 @@
 "map_transparency" = "அடிப்படை வரைபடத்தின் வெளிப்படைத்தன்மை";
 
 // Intro
-"next_proceed" = "அடுத்து";
+"next_proceed" = "அடுத்தது";
 // Settings
 "recording_context_menu_show" = "காண்பி";
 "translit_names" = "பெயரிடும் பெயர்கள்";
@@ -295,8 +295,8 @@
 "lang_sc" = "சாடினியன்";
 "lang_sk" = "ஸ்லோவாக்";
 "lang_sl" = "ஸ்லோவேனியன்";
-"lang_sr" = "செர்பியன்";
-"lang_sr_latn" = "செர்பியன் (லத்தின்)";
+"lang_sr" = "செர்பிய (சிரிலிக்)";
+"lang_sr_latn" = "செர்பிய (லத்தீன்)";
 "lang_sv" = "ஸ்வீடிஷ்";
 "lang_sw" = "சுவாஹிலி";
 "lang_tr" = "துருக்கிய";
@@ -310,15 +310,15 @@
 "avoid_road" = "சாலை தவிர்க்கவும்";
 "shared_string_settings" = "அமைப்புகள்";
 "shared_string_finish" = "முடி";
-"application_profiles" = "பயன்பாட்டு விவரங்கள்";
+"application_profiles" = "பயன்பாட்டு சுயவிவரங்கள்";
 
 // Purchases
 "shared_string_download" = "பதிவிறக்கு";
 
 // Route planning
-"plan_route" = "பாதையை திட்டமிடு";
+"plan_route" = "ஒரு வழியைத் திட்டமிடுங்கள்";
 "coord_input_add_point" = "புள்ளியே சேர்க்க";
-"profile_alert_need_save_title" = "மாற்றங்களை சேமியுங்கள்";
+"profile_alert_need_save_title" = "மாற்றங்களைச் சேமிக்கவும்";
 "move_point" = "நகரும் புள்ளி";
 "add_point_before" = "முன் புள்ளி சேர்க்கவும்";
 "add_point_after" = "பிறகு புள்ளியைச் சேர்க்கவும்";
@@ -334,7 +334,7 @@
 "shared_string_details" = "விவரங்கள்";
 "shared_string_type" = "வகை";
 "edit_tilesource_url_to_load" = "URL ஐ";
-"edit_tilesource_elliptic_tile" = "எலிபிக் மெர்கேட்டர்";
+"edit_tilesource_elliptic_tile" = "நீள்வட்ட மெர்கேட்டர் ப்ரொசெக்சன்";
 "welmode_download_maps" = "வரைபடத்தை பதிவிறக்கு";
 
 // Menu
@@ -345,9 +345,9 @@
 "closing_changeset" = "மாற்றம் தொகுப்பை மூடுக…";
 "loading_poi_obj" = "POI ஐ ஏற்றுகிறது …";
 "exit_without_saving" = "சேமிக்காமல் வெளியேறு\?";
-"poi_remove_success" = "அழிக்கப்பட்டது";
+"poi_remove_success" = "நீக்கப்பட்டது";
 "offline_edition" = "ஆஃப்லைன் பதிப்பித்தல்";
-"map_widget_top_text" = "தெருவின் பெயர்";
+"map_widget_top_text" = "தெரு பெயர்";
 "phone" = "தொலைபேசி";
 "website" = "இணையதளம்";
 "osm_edit_modified_poi" = "மாற்றப்பட்ட OSM POI";
@@ -371,8 +371,8 @@
 "gpx_tags_txt" = "குறிச்சொற்கள்";
 "add_waypoint" = "வழிப்பொருள் சேர்க்க";
 "no_waypoints_found" = "எந்த வழியையும் காணவில்லை";
-"shared_string_commit" = "உறுதியளித்து";
-"osb_comment_dialog_message" = "குறுஞ்செய்தி";
+"shared_string_commit" = "கமிட்";
+"osb_comment_dialog_message" = "செய்தி";
 "shared_string_actions" = "செயல்கள்";
 "parking_place_limited" = "நிறுத்தி வைக்க வரையறுத்த நேரம்";
 "osmand_parking_time_left" = "இடது";
@@ -384,7 +384,7 @@
 "km_h" = "கிமீ / மணி";
 "mile_per_hour" = "மைல்";
 "int_hour" = "மணி";
-"int_min" = "மணிதுளி";
+"int_min" = "மணித்துளி.";
 
 // Help
 "other_location" = "மற்ற";
@@ -436,12 +436,12 @@
 "shared_string_not_selected" = "தேர்ந்தெடுக்கப்படவில்லை";
 "osm_live_active" = "செயலில்";
 "shared_string_total" = "மொத்தம்";
-"moving_time" = "நகரும் நேரம்";
+"moving_time" = "இயக்கத்தில் நேரம்";
 "shared_string_show_all" = "அனைத்தையும் காட்டு";
 "parked_at" = "நிறுத்தப்பட்ட இடம்";
 "context_menu_item_directions_from" = "\"திசைகள் இருந்து \"";
 "move_marker_bottom_sheet_title" = "மார்க்கர் நிலையை மாற்ற வரைபடத்தை நகர்த்தவும்";
-"plugins_menu_group" = "கூடுதல்";
+"plugins_menu_group" = "செருகுநிரல்கள்";
 "shared_string_restore" = "மீட்டெடு";
 "local_map_names" = "உள்ளூர் பெயர்கள்";
 "today" = "இன்று";
@@ -475,7 +475,7 @@
 "edit_filter_save_as_menu_item" = "சேமி";
 "delete_filter" = "வடிப்பான் நீக்கு";
 "save_filter" = "வடிகட்டி சேமி";
-"edit_filter_delete_dialog_title" = "தேர்ந்தெடுக்கப்பட்ட வடிப்பான் நீக்கவா\?";
+"edit_filter_delete_dialog_title" = "இந்த வடிப்பானை நீக்கவா?";
 "apply_filters" = "வடிப்பான்களை விண்ணப்பிக்கவும்";
 "filter_poi_hint" = "பெயர் வைத்து வடிகட்டு";
 "opening_hours" = "தொடக்க நேரம்";
@@ -487,18 +487,18 @@
 "shared_string_deselect" = "தேர்வுநீக்கும்";
 "download_wiki_region_placeholder" = "இந்த பகுதி";
 "osm_live_plan_pricing" = "திட்டம் & விலை";
-"osm_live_payment_monthly_title" = "\"மாத தவணை \"";
-"osm_live_payment_3_months_title" = "3 மாதங்களுக்கு ஒருமுறை செலுத்துங்கள்";
-"osm_live_payment_annual_title" = "ஒரு வருடத்திற்கு ஒரு முறை செலுத்துங்கள்";
+"osm_live_payment_monthly_title" = "மாதாந்திர";
+"osm_live_payment_3_months_title" = "ஒவ்வொரு மூன்று மாதங்களுக்கும்";
+"osm_live_payment_annual_title" = "ஆண்டுதோறும்";
 "osm_live_payment_month_cost_descr" = "%@ / மாதம்";
 "osm_live_payment_month_cost_descr_ex" = "%.2f%@ / மாதம்";
 "osm_live_payment_discount_descr" = "சேமிக்க %@";
-"osm_live_payment_current_subscription" = "உங்கள் தற்போதைய சந்தா";
+"osm_live_payment_current_subscription" = "தற்போதைய சந்தா";
 "osm_live_payment_renews_monthly" = "மாதாந்திர புதுப்பிப்பு";
 "osm_live_payment_renews_quarterly" = "காலாண்டு புதுப்பிப்பு";
 "osm_live_payment_renews_annually" = "வருடாந்திர புதுப்பிப்பு";
-"osm_live_payment_header" = "\"உங்களுக்கு உரிய  கட்டண காலத்தை தேர்ந்தெடுக்கவும்:\"";
-"osm_live_payment_contribute_descr" = "வருவாயின் ஒரு பகுதி OpenStreetMap பங்களிப்பாளர்களுக்கு செல்கிறது.";
+"osm_live_payment_header" = "கட்டண இடைவெளி:";
+"osm_live_payment_contribute_descr" = "நன்கொடைகள் OSM வரைபடத்திற்கு நிதியளிக்க உதவுகின்றன.";
 "purchase_dialog_title" = "திட்டத்தைத் தேர்வுசெய்க";
 "purchase_dialog_travel_description" = "ஆஃப்லைன் பயண வழிகாட்டி செயல்பாடுகளைப் பெறுவதற்கு பின்வரும் ஒன்றை வாங்கவும்:";
 "get_osmand_live" = "வரம்பற்ற பதிவிறக்கங்கள், அனைத்து பணம் மற்றும் இலவச கூடுதல், விக்கிபீடியா, விக்கிவோயேஜ், தினசரி வரைபடத்தை மேம்படுத்தல்கள் மற்றும் பல அம்சங்கள் திறக்க பெற OsmAndLive பெறவும்.";
@@ -507,9 +507,9 @@
 "unlimited_downloads" = "வரம்பற்ற பதிவிறக்கங்கள்";
 "wikipedia_offline" = "விக்கிப்பீடியா இணையாநிலை";
 "contour_lines_hillshade_maps" = "விளிம்பு கோடுகள்&மலைநிழல் வரைபடங்கள்";
-"monthly_map_updates" = "வரைபட புதுப்பிப்புகள்: 1 எல்லா மாதமும்2";
+"monthly_map_updates" = "மாதாந்திர வரைபட புதுப்பிப்புகள்";
 "daily_map_updates" = "வரைபட புதுப்பிப்புகள்:1 எல்லா \nமணிநேரமும் 2";
-"donation_to_osm" = "OpenStreetMap சமூகத்திற்கு நன்கொடை";
+"donation_to_osm" = "OSM சமூகத்திற்கு நன்கொடை";
 "purchase_unlim_title" = "வாங்க -%@";
 "in_app_purchase" = "செயலியுள் வாங்குதல்";
 "in_app_purchase_desc" = "ஒரு முறை பணம் செலுத்துதல்";
@@ -518,54 +518,54 @@
 "osm_live_subscribe_btn" = "பதிவு";
 "shared_string_email_address" = "மின்னஞ்சல் முகவரி";
 "osm_live_enter_email" = "சரியான மின்னஞ்சல் முகவரியை உள்ளிடவும்";
-"osm_live_enter_user_name" = "பொது பெயர் உள்ளிடுக";
+"osm_live_enter_user_name" = "தயவுசெய்து ஒரு பொது பெயரை உள்ளிடவும்";
 "shared_string_unexpected_error" = "எதிர்பாராத பிழை";
-"osm_live_payment_desc" = "மாதத்திற்கு சந்தா கட்டணம் விதிக்கப்படுகிறது. எந்த நேரத்திலும் Google Play இல் ரத்துசெய்.";
+"osm_live_payment_desc" = "தேர்ந்தெடுக்கப்பட்ட காலத்திற்கு சந்தா வசூலிக்கப்படுகிறது. எந்த நேரத்திலும் Google Play இல் அதை ரத்துசெய்.";
 "osm_live_ask_for_purchase" = "முதலாவதாக OsmAnd இன் சந்தாவை வாங்கவும்";
 "shared_string_io_error" = "உள்ளீடு/வெளியீடு பிழை";
 "osm_live_hide_user_name" = "அறிக்கையில் என் பெயரை காட்டாதே";
 "routing_attr_height_description" = "வாகன உயரத்தை பாதைகளில் அனுமதிக்கப்படுவதைக் குறிப்பிடவும்.";
-"routing_attr_avoid_toll_name" = "கட்டண சாலைகள் தவிர்க்கவும்";
-"rendering_attr_hikingRoutesOSMC_name" = "அதிகப்படியான குறியீட்டு மேலடுக்கு";
+"routing_attr_avoid_toll_name" = "கட்டண சாலைகள் இல்லை";
+"rendering_attr_hikingRoutesOSMC_name" = "ஐக்கிங் வழிகள்";
 "rendering_attr_showRoadMaps_name" = "சாலைகள் மட்டுமே வரைபடங்கள்";
-"routing_attr_avoid_ferries_description" = "படகுகள் தவிர்க்கவும்";
+"routing_attr_avoid_ferries_description" = "படகுகளைத் தவிர்க்கிறது";
 "rendering_value_fine_name" = "சரி";
 "rendering_value_light_brown_name" = "இளம் பழுப்பு நிறம்";
-"rendering_attr_showMtbRoutes_name" = "MTB பாதைகளைக் காண்பி";
+"rendering_attr_showMtbRoutes_name" = "மலை பைக் வழிகள்";
 "rendering_attr_showSurfaceGrade_name" = "சாலை தரம் காட்டு";
-"routing_attr_avoid_stairs_description" = "மாடிப்படிகளைத் தவிர்க்கவும்";
+"routing_attr_avoid_stairs_description" = "படிக்கட்டுகளைத் தவிர்க்கிறது";
 "rendering_attr_horseRoutes_name" = "குதிரை வழிகள்";
 "rendering_attr_shareTaxiRoutes_name" = "\"டாக்ஸி பாதைகளில் பகிர் \"";
 "rendering_attr_surfaceIntegrity_name" = "சாலை மேற்பரப்பு ஒருமைப்பாடு";
 "rendering_attr_coloredBuildings_name" = "வண்ண வகை குறியீடு கட்டிடங்கள்";
-"rendering_attr_showRoadMaps_description" = "சாலைகள் மட்டுமே வரைபடங்களைக் காண்பிக்கும் போது தேர்ந்தெடுங்கள்:";
+"rendering_attr_showRoadMaps_description" = "சாலைகள் மட்டுமே வரைபடங்களைக் காண்பிக்கும்போது தேர்வுசெய்க:";
 "rendering_attr_hideOverground_name" = "நிலப்பரப்பு பொருட்கள்";
-"routing_attr_avoid_borders_name" = "எல்லை கடத்தல் தவிர்க்கவும்";
-"rendering_value_walkingRoutesScopeOSMC_name" = "வலைகட்டமைபின் இனைப்பின் படி வண்ணமிடு";
+"routing_attr_avoid_borders_name" = "எல்லைக் கடப்புகள் இல்லை";
+"rendering_value_walkingRoutesScopeOSMC_name" = "பிணையம் இணைப்பு";
 "rendering_attr_hideText_name" = "உரை";
-"routing_attr_avoid_motorway_description" = "மோட்டார் வாகனங்களைத் தவிர்க்கவும்";
-"routing_attr_avoid_motorway_name" = "மோட்டார் வாகனங்களைத் தவிர்க்கவும்";
+"routing_attr_avoid_motorway_description" = "மின்னோடி பாதைகளைத் தவிர்க்கிறது";
+"routing_attr_avoid_motorway_name" = "மின்னோடி பாதைகள் இல்லை";
 "rendering_attr_hideWoodScrubs_name" = "மரம் மற்றும் புதர்க்காடுகள்";
 "rendering_attr_hideNonVehicleHighways_name" = "வாகன-அல்லாத நெடுஞ்சாலைகள்";
 "rendering_attr_hikingRoutesOSMC_description" = "OSMC தடங்களின் படி பாதைகளை வழங்கவும்.";
 "rendering_value_car_name" = "கார்";
-"routing_attr_avoid_unpaved_name" = "நீக்கப்பட்ட சாலைகள் தவிர்க்கவும்";
+"routing_attr_avoid_unpaved_name" = "செப்பனிடப்படாத சாலைகள் இல்லை";
 "rendering_attr_lessDetailed_name" = "கொஞ்சம் விவரங்கள்";
-"routing_attr_avoid_borders_description" = "தேசிய எல்லைகளை கடக்க வேண்டாம்";
+"routing_attr_avoid_borders_description" = "தேசிய எல்லைகளைக் கடப்பதைத் தவிர்க்கிறது";
 "rendering_attr_moreDetailed_name" = "கூடுதல் தகவல்கள்";
 "rendering_attr_hideBuildings_name" = "கட்டிடங்கள்";
-"routing_attr_avoid_stairs_name" = "மாடிப்படிகளைத் தவிர்க்கவும்";
-"routing_attr_avoid_unpaved_description" = "நீக்கப்பட்ட சாலைகள் தவிர்க்கவும்.";
+"routing_attr_avoid_stairs_name" = "படிக்கட்டுகள் இல்லை";
+"routing_attr_avoid_unpaved_description" = "செப்பனிடப்படாத சாலைகளைத் தவிர்க்கிறது";
 "routing_attr_prefer_motorway_description" = "மோட்டார் வாகனங்களை விரும்புங்கள்";
-"routing_attr_avoid_ferries_name" = "படகுகள் தவிர்க்கவும்";
+"routing_attr_avoid_ferries_name" = "படகுகள் இல்லை";
 "rendering_value_disabled_name" = "முடக்கியது";
 "osm_notes" = "OSM குறிப்புகள்";
 
 
 //Icon categories
-"icon_group_emergency" = "அவசர";
+"icon_group_emergency" = "அவசரநிலை";
 "icon_group_sport" = "விளையாட்டு";
-"icon_group_nautical" = "கடலோடிகளுக்குரிய";
+"icon_group_nautical" = "கடல்";
 "icon_group_education" = "கல்வி";
 "app_mode_default" = "வரைபடத்தை உலாவுக";
 
@@ -574,13 +574,13 @@
 //https://github.com/osmandapp/OsmAnd-Issues/blob/master/Adding%20release%20information%20to%20IOS.md
 "altitude" = "உயரம்";
 "osm_live_subscriptions" = "சந்தாக்கள் \n";
-"osm_live_banner_desc" = "வரம்பற்ற வரைபட பதிவிறக்கங்களைப் பெறுக, மேலும் ஒரு மாதத்திற்கு ஒருமுறை விட மேம்படுத்துங்கள்: வாராந்திர, தினசரி அல்லது மணிநேரம்.";
+"osm_live_banner_desc" = "வரம்பற்ற வரைபட பதிவிறக்கங்களைப் பெறுங்கள், வாராந்திர, நாள்தோறும் அல்லது மணிநேர புதுப்பிப்புகளைச் சேர்ப்பது.";
 "toast_empty_name_error" = "பெயரிடப்படாத இடம்";
 "shared_string_delete_all" = "அனைத்தையும் நீக்கு";
 "download_all" = "அனைத்தையும் பதிவிறக்கு";
 "shared_string_refresh" = "புதுப்பி";
 "shared_string_selected" = "தேர்ந்தெடுக்கப்பட்ட";
-"offline_edition_descr" = "எப்போதும் ஆஃப்லைன் பதிப்பித்தலை பயன்படுத்தவும்.";
+"offline_edition_descr" = "இணைப்பில்லாத திருத்துதல் இயக்கப்பட்டிருந்தால், மாற்றங்கள் முதலில் உள்நாட்டில் சேமிக்கப்பட்டு கோரிக்கையால் பதிவேற்றப்படும், இல்லையெனில் மாற்றங்கள் உடனடியாக பதிவேற்றப்படும்.";
 "shared_string_recorded" = "பதிவு";
 "shared_string_status" = "நிலைமை";
 "shared_string_added" = "சேர்க்கப்பட்டது";
@@ -628,7 +628,7 @@
 "rendering_attr_noAdminboundaries_name" = "எல்லைகள்";
 "rendering_attr_hideIcons_name" = "POI சின்னங்கள்";
 "routing_attr_weight_description" = "அனுமதிக்கப்பட்ட வாகனம் எடை வரம்பை வழிகளில் குறிக்கவும்.";
-"rendering_value_pedestrian_name" = "பாதசாரிகள்";
+"rendering_value_pedestrian_name" = "காலில்";
 "rendering_value_bold_name" = "போல்ட்";
 "rendering_attr_busRoutes_name" = "பேருந்து வழித்தடங்கள்";
 "rendering_value_dark_brown_name" = "இருண்ட பழுப்பு";
@@ -648,14 +648,14 @@
 "rendering_attr_showSurfaces_name" = "சாலை மேற்பரப்பு காட்டு";
 
 
-"rendering_attr_showCycleRoutes_name" = "சுழற்சி வழிகளைக் காண்பி";
+"rendering_attr_showCycleRoutes_name" = "சுழற்சி வழிகள்";
 "routing_attr_prefer_motorway_name" = "மோட்டார் வாகனங்களை விரும்புங்கள்";
 "rendering_attr_trolleybusRoutes_name" = "ட்ரோலிபஸ் பாதை";
 "rendering_attr_hideUnderground_name" = "நிலத்தடி பொருட்கள்";
 "rendering_value_bicycle_name" = "மிதிவண்டி";
 "routing_attr_weight_name" = "எடை";
 "popular_destinations" = "பிரபலமான இடங்களுக்கு";
-"angular_measeurement" = "கோண அளவீடு அலகுகள்";
+"angular_measeurement" = "கோண அலகு";
 "shared_string_bookmark" = "அடையாளக்குறி";
 "lang_sr-Latn" = "செர்பியன் (லத்தின்)";
 "wiki_article_search_text" = "குறிப்பிட்ட விக்கிபீடியா கட்டுரை தேடப்பட்டு வருகிறது";
@@ -953,7 +953,7 @@
 "relative_bearing_widget_desc" = "உங்கள் முன்னோக்கி இயக்கம் திசைக்கும் இலக்கு புள்ளிக்கும் இடையிலான கோணத்தைக் காட்டுகிறது.";
 "second_marker_widget_desc" = "இரண்டாவது வரைபட குறிப்பானுக்கு எஞ்சியிருக்கும் தூரத்தை அல்லது மதிப்பிடப்பட்ட நேரத்தைக் காட்ட நீங்கள் விட்செட்டை உள்ளமைக்கலாம்.";
 "first_marker_widget_desc" = "முதல் வரைபட குறிப்பானுக்கு எஞ்சியிருக்கும் வருகையின் தூரம் அல்லது மதிப்பிடப்பட்ட நேரத்தைக் காட்ட நீங்கள் விட்செட்டை உள்ளமைக்கலாம்.";
-"plugin_mapillary_descr" = "தெரு-நிலை காட்சிகளின் படங்கள். நீங்களே பங்களிக்கலாம். தற்போதுள்ள தரவை வரைபட அடுக்காகக் காண, \"உள்ளமைக்கவும் வரைபடம்\" பட்டியலில் \"தெரு-நிலை படங்களை\" இயக்கவும்.";
+"plugin_mapillary_descr" = "தெரு-நிலை காட்சிகளின் படங்கள். நீங்களே பங்களிக்கலாம். தற்போதுள்ள தரவை வரைபட அடுக்காகக் காண, \"வரைபடம் உள்ளமை\" பட்டியலில் \"தெரு-நிலை படங்களை\" இயக்கவும்.";
 "distance_to_intermediate_widget_desc" = "விட்செட் முதல் இடைநிலை புள்ளிக்கு எஞ்சியிருக்கும் தூரத்தைக் காட்டுகிறது. இடைநிலை புள்ளிகள் நிறைவேற்றப்பட்டதும், தூரம் அடுத்த இடைநிலை புள்ளிக்கு புதுப்பிக்கப்படும்.";
 "second_next_turn_widget_desc" = "விட்செட் உங்கள் இரண்டாவது அடுத்த திருப்பத்தைப் பற்றிய தகவல்களைக் காட்டுகிறது, இது நெருங்கும் தூரத்திற்குள் திரும்பினால் இயக்கப்பட்டது.";
 "next_turn_widget_desc" = "விட்செட் உங்கள் அடுத்த திருப்பத்தைப் பற்றிய தகவல்களை சூழ்ச்சி மற்றும் அதற்கான தூரத்துடன் காட்டுகிறது.";
@@ -981,7 +981,7 @@
 "add_page" = "பக்கத்தைச் சேர்க்கவும்";
 "shared_string_switch_mode" = "சுவிட்ச் பயன்முறை";
 "go_to_marker_location" = "மார்க்கர் இருப்பிடத்திற்குச் செல்லவும்";
-"map_markers_desc" = "MAP குறிப்பான்கள் பட்டியலில் முதல் இரண்டு குறிப்பான்களுக்கான தூரம் அல்லது மதிப்பிடப்பட்ட நேரம் (ETA) விட்செட் காட்டுகிறது.";
+"map_markers_desc" = "MAP குறிப்பான்கள் பட்டியலில் முதல் இரண்டு குறிப்பான்களுக்கான தூரம் அல்லது மதிப்பிடப்பட்ட நேரத்தை (ETA) விட்செட் காட்டுகிறது.";
 "osmand_development_plugin_description" = "OSMand ஐ சோதிக்கவும் பிழைத்திருத்தவும் செயல்பாட்டை வழங்குகிறது: வழிசெலுத்தல் வழிகளை உருவகப்படுத்துதல், திரை வழங்குதல், காசோலை செயல்திறன் போன்றவற்றை கண்காணிக்கவும். சாதாரண பயன்பாட்டு பயன்பாட்டிற்கு இந்த சொருகி தேவையில்லை.";
 "product_desc_antarctica" = "அண்டார்டிகாவிற்கான வரம்பற்ற வரைபட பதிவிறக்கங்கள்";
 "product_desc_asia" = "ஆசியாவிற்கான வரம்பற்ற வரைபட பதிவிறக்கங்கள்";
@@ -1592,7 +1592,7 @@
 "routing_attr_hazmat_category_description" = "அபாயகரமான பொருட்கள் வகை / அச்மத் அணுகல் அனுமதிகளைக் கவனியுங்கள்";
 "rendering_attr_seabedDetail_name" = "கடற்பரப்பு விவரம்";
 "routing_attr_driving_style_description" = "குறுகிய, வேகமான அல்லது பாதுகாப்பான வழியைப் பெற ஓட்டுநர் நோக்கத்தைத் தேர்ந்தெடுக்கவும்";
-"rendering_attr_weatherPrecipitationContours_name" = "மழைப்பொழிவு தனிமைப்படுத்தல்கள்";
+"rendering_attr_weatherPrecipitationContours_name" = "மழைப்பொழிவு தனிமைப்படுத்திகள்";
 "rendering_attr_weatherPressureContours_name" = "அழுத்தம் தனிமைப்படுத்தல்கள்";
 "routing_attr_difficulty_preference_intermediate_name" = "இடைநிலை";
 "rendering_attr_horse_scale_demanding_name" = "கோரிக்கை";
@@ -1693,7 +1693,7 @@
 "osmand_cloud_deletion_all_data_warning" = "OSMand கிளவுட்டிலிருந்து வரும் அனைத்து தரவும் %@ஆக இருக்கும். சாதனத்தில் தரவு தீண்டப்படாமல் உள்ளது.";
 "osmand_cloud_deletion_account_warning" = "உங்கள் கணக்கு மற்றும் அனைத்து கணக்கு விவரங்களும் %@ ஆக இருக்கும்";
 "osmand_cloud_deletion_secondary_devices_warning" = "இரண்டாம் நிலை சாதனங்கள் ஒச்மண்ட் கிளவுட்டில் இருந்து உள்நுழைந்து கட்டண அம்சங்களுக்கான அணுகலை இழக்கும்.";
-"osmand_cloud_deletion_subscriptions_warning" = "இது உங்கள் OSMAND PRO சந்தாவை ரத்து செய்யாது.";
+"osmand_cloud_deletion_subscriptions_warning" = "இது உங்கள் OSMand Pro சந்தாவை ரத்து செய்யாது.";
 "osmand_cloud_deleting_account_descr" = "சில தருணங்களில் உங்கள் தரவு மற்றும் கணக்கு அனைத்தும் ஒச்மண்ட் கிளவுட்டிலிருந்து நீக்கப்படும்.\n\n சாதனத்தில் உள்ள அனைத்து தரவுகளும் தீண்டத்தகாதவை.";
 "osmand_cloud_deleted_account_descr" = "கணக்கு மற்றும் அனைத்து தரவுகளும் ஒச்மண்ட் கிளவுட்டிலிருந்து நீக்கப்பட்டன.";
 "average_vertical_speed" = "சராசரி செங்குத்து விரைவு";
@@ -1741,7 +1741,7 @@
 "delete_widget_description" = "இந்த விட்செட் நீக்கப்படும். நீங்கள் அதை உள்ளமைக்க திரையில் பின்னர் மீட்டெடுக்கலாம்.";
 "lang_jv" = "சாவானீச்";
 "select_another_track" = "மற்றொரு பாதையைத் தேர்ந்தெடுக்கவும்";
-"av_notes_video_widget_desc" = "விட்செட்டைத் தட்டுவது ஒரு வீடியோவைப் பதிவுசெய்ய உங்களை அனுமதிக்கிறது.";
+"av_notes_video_widget_desc" = "விட்செட்டைத் தட்டினால் வீடியோவைப் பதிவுசெய்க உங்களை அனுமதிக்கிறது.";
 "battery_widget_desc" = "உங்கள் சாதனத்தின் பேட்டரி அளவைக் காட்டுகிறது.";
 "time_to_go_desc" = "உங்கள் இலக்கை அடைய தேவையான நிமிடங்கள் அல்லது மணிநேரங்களில் நேரம்.";
 "precipitation_widget_desc" = "தற்போதைய வரைபட மையத்திற்கான மழைப்பொழிவைக் காட்டுகிறது.";
@@ -2230,7 +2230,7 @@
 "shared_string_weather" = "வானிலை";
 "shared_string_contours" = "வரையறைகள்";
 "units_of_speed" = "வேகத்தின் அலகுகள்";
-"osmand_settings" = "Osmand அமைப்புகள்";
+"osmand_settings" = "ஒச்மண்ட் அமைப்புகள்";
 "sett_deg_min" = "டிகிரி மற்றும் நிமிடங்கள்";
 "navigate_point_format_UTM" = "UTM";
 "navigate_point_olc_short" = "OLC";
@@ -2242,7 +2242,7 @@
 "res_search_world" = "உலகளவில் தேடுங்கள்";
 "remove_cache" = "தற்காலிக சேமிப்பை அகற்று";
 "rendering_value_category_name" = "வகை";
-"no_purchases" = "உங்களிடம் எந்த கொள்முதல் இல்லை";
+"no_purchases" = "உங்களிடம் கொள்முதல் இல்லை";
 "verify_email_address_descr" = "சரிபார்ப்பு குறியீடு %@க்கு அனுப்பப்பட்டது. தயவுசெய்து கீழே உள்ள புலத்தில் உள்ளிடவும்.";
 "compass_visible_if_map_rotated" = "வரைபடம் சுழற்றப்பட்டால் தெரியும்";
 "sign_in_with_open_street_map" = "OpenStreetMap உடன் உள்நுழைக";
@@ -2767,7 +2767,7 @@
 "quick_action_add_actions_descr" = "வரைபடத்திலிருந்து அவற்றை விரைவாக அணுக செயல்களைச் சேர்க்கவும்.";
 "toggle_hillshade" = "நிலப்பரப்பைக் காட்டவும்/மறைக்கவும்";
 "shared_string_add_profile" = "சுயவிவரத்தைச் சேர்க்கவும்";
-"quick_action_switch_profile_descr" = "செயல் பொத்தானை தேர்ந்தெடுக்கப்பட்ட சுயவிவரங்களுக்கு இடையில் மாறுகிறது.";
+"quick_action_switch_profile_descr" = "தேர்ந்தெடுக்கப்பட்ட சுயவிவரங்களுக்கு இடையில் செயல் பொத்தான் மாறுகிறது.";
 "profile_type_user_string" = "பயனர் சுயவிவரம்";
 "add_parking" = "பார்க்கிங் நிலையாக சேர்க்கவும்";
 "poi_context_menu_modify" = "பின்னர் மாற்றவும்";
@@ -3188,7 +3188,7 @@
 "backup_error_subscription_was_expired_descr" = "உங்கள் OSMand Pro சந்தா காலாவதியாகிறது, காப்புப்பிரதியைப் பயன்படுத்த புதுப்பிக்கவும். மேகத்திலிருந்து தரவை நீங்கள் இன்னும் மீட்டெடுக்கலாம்.";
 "backup_error_subscription_was_expired" = "காலாவதியான சந்தா";
 "promo_subscription" = "விளம்பர சந்தா";
-"walking_route_osmc_description" = "அவற்றின் தனிப்பட்ட உள்ளக வண்ணத்தால் வண்ண வழிகள் (ஓபன்ச்ட்ரீட்மேப்பில் இருந்தால்) மற்றும் வகை (சர்வதேச, பிராந்திய, உள்ளூர்).";
+"walking_route_osmc_description" = "அவற்றின் தனிப்பட்ட உள்ளக வண்ணத்தின் வண்ண வழிகள் (ஓபன்ச்ட்ரீட்மேப்பில் இருந்தால்) மற்றும் வகை (சர்வதேச, பிராந்திய, உள்ளூர்).";
 "rendering_value_walkingRoutesOSMCNodes_description" = "வண்ண வழிகள் அவற்றின் முனை பிணையம் வகை (சர்வதேச, பிராந்திய, உள்ளூர்) படி.";
 "rendering_value_walkingRoutesOSMC_description" = "அவற்றின் தனிப்பட்ட உள்ளக வண்ணத்திற்கு ஏற்ப வண்ண வழிகள் (ஓபன்ச்ட்ரீட்மேப்பில் இருந்தால்) மற்றும் ஐக்கிங் கவச அடையாளம்.";
 "osmand_cloud" = "ஒச்மண்ட் முகில்";
@@ -3312,7 +3312,7 @@
 "fav_colors" = "நிறங்கள்";
 "fav_enter_new_name" = "விருப்பத்திற்கு புதிய பெயரை உள்ளிடவும்";
 "quick_action_poi_list" = "POI பட்டியல்";
-"gpx_upload_private_visibility_descr" = "\"தனியார்\" என்பது எந்தவொரு பொது பட்டியல்களிலும் சுவடு காண்பிக்கப்படாது, ஆனால் அதிலிருந்து தடமறியும் வரிசையில் தடமறியும் வரிசையில் பொது சி.பி.எச் பநிஇ மூலம் நேர முத்திரைகள் இல்லாமல் கிடைக்கின்றன.";
+"gpx_upload_private_visibility_descr" = "\"தனியார்\" என்பது எந்தவொரு பொது பட்டியல்களிலும் சுவடு காட்டப்படவில்லை, ஆனால் அதிலிருந்து தடமறியும் வரிசையில் தடமறியும் வரிசையில் பொது சி.பி.எச் பநிஇ மூலம் நேர முத்திரைகள் இல்லாமல் கிடைக்கின்றன.";
 "test_heightmap" = "சோதனை உயரம்";
 "generate_slope_from_3d_maps" = "3D வரைபடங்களிலிருந்து சாய்வு ராச்டர் வரைபடங்களை உருவாக்குங்கள்";
 "fav_show" = "பிடித்தவைகளைக் காட்டு";
@@ -3347,7 +3347,7 @@
 "help_article_troubleshooting_android_auto_name" = "ஆண்ட்ராய்டு ஆட்டோ";
 "global_settings" = "உலகளாவிய அமைப்புகள்";
 "developer_widgets" = "உருவாக்குபவர் விட்செட்டுகள்";
-"navigation_points_desc" = "தூரம், வருகை அல்லது மீதமுள்ள நேரம், அடுத்த திருப்பங்கள், தாங்குதல், தற்போதைய/அடுத்த தெரு பெயர், லேன் செய்தி, அதிகபட்ச விரைவு, விழிப்பூட்டல்கள், POIS, வழிப்பாதைகள் போன்ற தகவல்களைக் காண்பிக்க வழிசெலுத்தலின் போது ஊடுருவல் விட்செட்டுகள் இயக்கப்பட்டுள்ளன.";
+"navigation_points_desc" = "தூரம், வருகை அல்லது மீதமுள்ள நேரம், அடுத்த திருப்பங்கள், தாங்குதல், நடப்பு/அடுத்த தெரு பெயர், லேன் செய்தி, அதிகபட்ச விரைவு, விழிப்பூட்டல்களை நெருங்கும் விழிப்பூட்டல்கள், POIS, வழிப்பாதைகள் போன்ற தகவல்களைக் காண்பிக்க வழிசெலுத்தலின் போது ஊடுருவல் விட்செட்டுகள் இயக்கப்பட்டுள்ளன.";
 "auto_zoom_map" = "ஆட்டோ சூம் வரைபடம்";
 "change_language" = "மொழியை மாற்றவும்";
 "rendering_attr_surface_grass_paver_name" = "புல் பேவர்";
@@ -3572,7 +3572,7 @@
 "rendering_attr_currentTrackWidth_description" = "சிபிஎக்ச் அகலம்";
 "rendering_attr_piste_type_sleigh_name" = "பனியில் சறுக்கி ஓடும் வண்டி";
 "rendering_attr_surface_stone_name" = "கல்";
-"height_limit_description" = "உங்கள் வாகன உயரத்தை வழங்கவும், சில பாதை கட்டுப்பாடுகள் உயர் வாகனங்களுக்கு விண்ணப்பிக்கலாம்.";
+"height_limit_description" = "உங்கள் வாகன உயரத்தை வழங்கவும், சில பாதை கட்டுப்பாடுகள் உயர் வாகனங்களுக்கு பொருந்தும்.";
 "lenght_limit_description" = "உங்கள் வாகன நீளத்தை வழங்கவும், சில வழித்தடக் கட்டுப்பாடுகள் நீண்ட வாகனங்களுக்கு பயன்படுத்தப்படலாம்.";
 "shared_string_update_required" = "புதுப்பிப்பு தேவை";
 "ft_s" = "ft/s";
@@ -3609,3 +3609,6 @@
 "not_specified" = "குறிப்பிடப்படவில்லை";
 "gpx_descent" = "இறக்கம்";
 "cloud_sync_progress" = "ஒத்திசைவு… %@";
+"ask_every_time" = "ஒவ்வொரு முறையும் கேளுங்கள்";
+"detailed_track_guidance" = "விரிவான தட வழிகாட்டுதல்";
+"detailed_track_guidance_description" = "மேம்பட்ட திருப்புமுனை வழிகாட்டுதலுக்காக ஓச்மண்ட் உங்கள் பாதையை அருகிலுள்ள சாலைகளுடன் பொருத்தும்.";

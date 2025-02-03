@@ -260,14 +260,14 @@
         }
         
         OAApplicationMode *mode = _routingHelper.getAppMode;
-        if (!gpxRoute.approximationParams && ![gpxRoute.file isAttachedToRoads] && [_settings.detailedTrackGuidance get:mode] == EOATrackApproximationAutomatic)
+        if (gpxRoute && !gpxRoute.approximationParams && ![gpxRoute.file isAttachedToRoads] && [_settings.detailedTrackGuidance get:mode] == EOATrackApproximationAutomatic)
         {
             OAGpxApproximationParams *approximationParams = [[OAGpxApproximationParams alloc] init];
             [approximationParams setAppMode:mode];
             [approximationParams setDistanceThreshold:[_settings.gpxApproximationDistance get:[_routingHelper getAppMode]]];
             [gpxRoute setApproximationParams:approximationParams];
         }
-        else if (gpxRoute.approximationParams && [_settings.detailedTrackGuidance get:mode] == EOATrackApproximationManual)
+        else if (gpxRoute && gpxRoute.approximationParams && [_settings.detailedTrackGuidance get:mode] == EOATrackApproximationManual)
         {
             [gpxRoute setApproximationParams:nil];
         }

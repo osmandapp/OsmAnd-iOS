@@ -230,13 +230,13 @@
 		dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
 		dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
             // + UI Thread
-			const auto calculationProgress = _gctx->ctx->progress;
-			if (_approximationTask && _gctx == gctx)
+			const auto calculationProgress = gctx->ctx->progress;
+			if (!_approximationTask && _gctx == gctx)
 				[self finishProgress];
 			
 			if (_approximationTask != nil && calculationProgress != nullptr && !calculationProgress->isCancelled())
 			{
-				float pr = calculationProgress->getLinearProgress();
+				float pr = calculationProgress->getApproximationProgress();
                 if ([self.progressDelegate respondsToSelector:@selector(updateProgress:progress:)])
                     [self.progressDelegate updateProgress:self progress:(int)pr];
 				if (_gctx == gctx)

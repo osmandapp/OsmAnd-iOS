@@ -37,6 +37,7 @@
 #include <OsmAndCore/ObfDataInterface.h>
 
 #define WIKI_LINK @".wikipedia.org/w"
+#define US_MAPS_RECREATION_AREA @"us_maps_recreation_area"
 
 static const NSInteger AMENITY_ID_RIGHT_SHIFT = 1;
 static const NSInteger NON_AMENITY_ID_RIGHT_SHIFT = 7;
@@ -587,6 +588,14 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                     collectedPoiTypes[catKey] = list;
                 }
                 [list addObject:poiType];
+            }
+            else if ([convertedKey hasPrefix:US_MAPS_RECREATION_AREA])
+            {
+                NSString *translatedUsMapsKey = [_poiHelper getTranslation:convertedKey];
+                if (translatedUsMapsKey.length > 0)
+                    textPrefix = translatedUsMapsKey;
+                else
+                    textPrefix = [OAUtilities capitalizeFirstLetter:convertedKey];
             }
             else
             {

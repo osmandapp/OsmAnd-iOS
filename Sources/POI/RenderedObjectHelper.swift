@@ -90,7 +90,7 @@ final class RenderedObjectHelper: NSObject {
         poi.latitude = renderedObject.labelLatLon.latitude
         poi.longitude = renderedObject.labelLatLon.longitude
         poi.setXYPoints(renderedObject)
-        poi.name = poi.name != nil && poi.name.length > 0 ? poi.name : renderedObject.name;
+        poi.name = poi.name != nil && poi.name.length > 0 ? poi.name : renderedObject.name
         
         return poi
     }
@@ -113,7 +113,7 @@ final class RenderedObjectHelper: NSObject {
                 otherPt = OAPOIHelper.sharedInstance().getPoiType(byKey: key)
             }
             pt = OAPOIHelper.sharedInstance().getPoiType(byKey: key + "_" + value)
-            if let pt {
+            if pt != nil {
                 break
             }
             firstTag = (firstTag == nil || firstTag!.isEmpty) ? key + ": " + value : firstTag
@@ -142,7 +142,7 @@ final class RenderedObjectHelper: NSObject {
             return translated
         }
         if let otherPt {
-            return otherPt.nameLocalized;
+            return otherPt.nameLocalized
         }
         if let separate {
             return separate
@@ -157,12 +157,11 @@ final class RenderedObjectHelper: NSObject {
         if let iconRes = getIconRes(renderedObject) {
             if let icon = UIImage(named: iconRes) {
                 return icon
-            } else {
-                return UIImage.mapSvgImageNamed(iconRes)
+            } else if let icon = UIImage.mapSvgImageNamed(iconRes) {
+                return icon
             }
-        } else {
-            return UIImage.templateImageNamed("ic_action_street_name")
         }
+        return UIImage.templateImageNamed("ic_action_street_name")
     }
     
     private static func getIconRes(_ renderedObject: OARenderedObject) -> String? {
@@ -179,10 +178,12 @@ final class RenderedObjectHelper: NSObject {
     }
     
     private static func getActualContent(_ renderedObject: OARenderedObject) -> String? {
-        let content = renderedObject.iconRes
-        if content == "osmand_steps" {
-            return "highway_steps"
+        if let content = renderedObject.iconRes {
+            if content == "osmand_steps" {
+                return "mx_highway_steps"
+            }
+            return "mx_" + content
         }
-        return content
+        return nil
     }
 }

@@ -161,7 +161,7 @@ final class RenderedObjectHelper: NSObject {
                 return icon
             }
         }
-        return UIImage.templateImageNamed("ic_action_street_name")
+        return OAUtilities.image(withTintColor: .iconColorSelected.light, image: UIImage(named: "ic_action_street_name"))
     }
     
     private static func getIconRes(_ renderedObject: OARenderedObject) -> String? {

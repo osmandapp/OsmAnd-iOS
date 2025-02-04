@@ -3,9 +3,9 @@
 @implementation OAArabicNormalizer
 
 static NSRegularExpression *diacriticRegex;
-static NSString *const arabicDigits = @"٠١٢٣٤٥٦٧٨٩";
-static NSString *const digitsReplacement = @"0123456789";
-static NSString *const kashida = @"\u0640";
+static NSString *const kArabicDigits = @"٠١٢٣٤٥٦٧٨٩";
+static NSString *const kDigitsReplacement = @"0123456789";
+static NSString *const kKashida = @"\u0640";
 
 + (void)initialize {
     NSError *error = nil;
@@ -48,7 +48,7 @@ static NSString *const kashida = @"\u0640";
                                                   withTemplate:@""] mutableCopy];
     
     // Remove Kashida
-    [result replaceOccurrencesOfString:kashida
+    [result replaceOccurrencesOfString:kKashida
                             withString:@""
                                options:0
                                  range:NSMakeRange(0, result.length)];
@@ -57,7 +57,7 @@ static NSString *const kashida = @"\u0640";
 }
 
 + (NSString *)replaceDigits:(NSString *)text {
-    if (text == nil) {
+    if (text == nil || text.length == 0) {
         return nil;
     }
     
@@ -67,9 +67,9 @@ static NSString *const kashida = @"\u0640";
     }
     
     NSMutableString *mutableText = [text mutableCopy];
-    for (NSUInteger i = 0; i < arabicDigits.length; i++) {
-        unichar arabicDigit = [arabicDigits characterAtIndex:i];
-        NSString *replacement = [NSString stringWithFormat:@"%c", [digitsReplacement characterAtIndex:i]];
+    for (NSUInteger i = 0; i < kArabicDigits.length; i++) {
+        unichar arabicDigit = [kArabicDigits characterAtIndex:i];
+        NSString *replacement = [NSString stringWithFormat:@"%c", [kDigitsReplacement characterAtIndex:i]];
         NSString *arabicDigitStr = [NSString stringWithFormat:@"%C", arabicDigit];
         
         [mutableText replaceOccurrencesOfString:arabicDigitStr

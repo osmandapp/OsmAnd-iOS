@@ -76,13 +76,13 @@
     if (generalSegment)
     {
         [self generateSegmentSectionData:generalSegment
-                                analysis:[TrackChartHelper getAnalysisFor:generalSegment]
+                                analysis:[TrackChartHelper getAnalysisFor:generalSegment joinSegments:self.trackMenuDelegate.isJoinSegments]
                                    index:0];
     }
 
     for (NSInteger index = 0; index < segments.count; index++)
     {        
-        OASGpxTrackAnalysis *analysis = [TrackChartHelper getAnalysisFor:segments[index]];
+        OASGpxTrackAnalysis *analysis = [TrackChartHelper getAnalysisFor:segments[index] joinSegments:self.trackMenuDelegate.isJoinSegments];
         if (analysis)
         {
             [self generateSegmentSectionData:segments[index]

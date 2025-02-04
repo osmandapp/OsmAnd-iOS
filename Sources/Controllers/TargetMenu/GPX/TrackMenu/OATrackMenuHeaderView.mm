@@ -264,7 +264,7 @@
     {
         if (analysis.totalDistance != 0)
         {
-            float totalDistance = withoutGaps ? analysis.totalDistanceWithoutGaps : analysis.totalDistance;
+            float totalDistance = analysis.totalDistance;
             [statisticCells addObject:[OAGPXTableCellData withData:@{
                     kTableValues: @{
                             @"string_value": [OAOsmAndFormatter getFormattedDistance:totalDistance],

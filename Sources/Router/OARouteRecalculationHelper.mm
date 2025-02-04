@@ -260,7 +260,7 @@
         }
         
         OAApplicationMode *mode = _routingHelper.getAppMode;
-        if (gpxRoute && !gpxRoute.approximationParams && ![gpxRoute.file isAttachedToRoads] && [_settings.detailedTrackGuidance get:mode] == EOATrackApproximationAutomatic)
+        if (gpxRoute && (!gpxRoute.approximationParams || [gpxRoute.approximationParams getAppMode] != mode) && [_settings.detailedTrackGuidance get:mode] == EOATrackApproximationAutomatic)
         {
             OAGpxApproximationParams *approximationParams = [[OAGpxApproximationParams alloc] init];
             [approximationParams setAppMode:mode];

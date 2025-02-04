@@ -3464,3 +3464,4 @@
 "reset_average_speed" = "Redefinir velocidade média";
 "obd_plugin_name" = "Métricas de veículos";
 "cloud_sync_progress" = "A sincronizar…%@";
+"rendering_attr_showClimbingRoutes_description" = "Mostrar rotas de escalada";

@@ -608,20 +608,11 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
 {
     if (_otherCardsReady && _wikiCardsReady)
     {
-        // TODO: logic no internet connection
         NSLog(@"mapillaryCards Before: %lu", cards.count);
-//        if (!AFNetworkReachabilityManager.sharedManager.isReachable)
-//        {
-//            [cards removeAllObjects];
-//            [cards addObject:[NoInternetCard new]];
-//        }
-//        else
-//        {
-            if (cards.count == 0)
-                [cards addObject:[[NoImagesCard alloc] init]];
-            else if (cards.count > 1)
-                [self removeDuplicatesFromCards:cards];
-      //  }
+        if (cards.count == 0)
+            [cards addObject:[[NoImagesCard alloc] init]];
+        else if (cards.count > 1)
+            [self removeDuplicatesFromCards:cards];
         NSLog(@"mapillaryCards After: %lu", cards.count);
         // After forming the list of cards, fill the collection
         if (nearbyImagesRowInfo)
@@ -656,6 +647,8 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
             [mapilaryCards addObject:card];
         else if ([card isKindOfClass:MapillaryContributeCard.class])
             mapilaryContributeCard = (MapillaryContributeCard *)card;
+        else if ([card isKindOfClass:UrlImageCard.class])
+            [openPlaceCards addObject:card];
     }
     if (wikimediaCards.count > 0)
     {
@@ -664,19 +657,7 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
             NSString *second = [(WikiImageCard *)b imageHiresUrl];
             return [first compare:second];
         }];
-
-        [wikimediaCards removeAllObjects];
-        [wikimediaCards addObject:sortedWikimediaCards.firstObject];
-        WikiImageCard *previousCard = sortedWikimediaCards.firstObject;
-        for (int i = 1; i < sortedWikimediaCards.count; i++)
-        {
-            WikiImageCard *card = sortedWikimediaCards[i];
-            if (![card.imageHiresUrl isEqualToString:previousCard.imageHiresUrl])
-            {
-                [wikimediaCards addObject:card];
-                previousCard = card;
-            }
-        }
+        wikimediaCards = [sortedWikimediaCards copy];
     }
     [cards removeAllObjects];
     [cards addObjectsFromArray:openPlaceCards];
@@ -1116,13 +1097,13 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
     
     __weak __typeof(self) weakSelf = self;
     if (AFNetworkReachabilityManager.sharedManager.isReachable) {
-//        ImageCard *loadingModel = [[ImageCard alloc] initWithData:@{@"key": @"loading"}];
-//        [onlinePhotoCardsView setCards:@[loadingModel]];
-//        if (_mapillaryCardsView)
-//        {
-//            [_mapillaryCardsView setCards:@[loadingModel]];
-//        }
         onlinePhotoCardsView.isLoading = YES;
+        if ([self.getTargetObj isKindOfClass:OAPOI.class])
+        {
+            OAPOI *poi = self.getTargetObj;
+            onlinePhotoCardsView.title = poi.nameLocalized;
+        }
+       
         mapillaryCardsView.isLoading = YES;
         [[OAWikiImageHelper sharedInstance] sendNearbyWikiImagesRequest:_onlinePhotoCardsRowInfo targetObj:self.getTargetObj addOtherImagesOnComplete:^(NSMutableArray <AbstractCard *> *cards) {
             weakSelf.wikiCardsReady = YES;

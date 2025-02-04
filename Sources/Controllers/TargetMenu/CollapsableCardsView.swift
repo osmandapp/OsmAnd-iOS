@@ -20,6 +20,8 @@ protocol CollapsableCardViewDelegate: AnyObject {
 final class CollapsableCardsView: OACollapsableView {
     weak var delegate: CollapsableCardViewDelegate?
     
+    var title: String = ""
+    
     var contentType: CollapsableCardsType = .onlinePhoto {
         didSet {
             cardsViewController.contentType = contentType
@@ -50,8 +52,7 @@ final class CollapsableCardsView: OACollapsableView {
     
     private var cardsViewController: CardsViewController!
     private var сardsFilter: CardsFilter!
-    private var viewAllButton: UIButton?
-    private var exploreButton: UIButton?
+    private var bottomButton: UIButton?
     private var heightConstraint: NSLayoutConstraint?
     
     // MARK: - Init
@@ -112,7 +113,7 @@ final class CollapsableCardsView: OACollapsableView {
             
             сardsFilter = CardsFilter(cards: cards)
             cardsViewController.сardsFilter = сardsFilter
-            configereBottomButton()
+            configureBottomButton()
         }
     }
     
@@ -120,25 +121,33 @@ final class CollapsableCardsView: OACollapsableView {
         cardsViewController.showSpinner(show: isLoading)
     }
     
-    private func configereBottomButton() {
+    private func configureBottomButton() {
         guard !сardsFilter.cardsIsEmpty else { return }
         
         switch contentType {
-        case .onlinePhoto:
-            if сardsFilter.hasOnlyOnlinePhotosContent {
-                viewAllButton = UIButton(type: .system, primaryAction: UIAction(title: localizedString("shared_string_view_all"), handler: { _ in
-                    // TODO:
-                    print("viewAllButton tapped view all!")
-                }))
-                addButtonIfNeeded(button: viewAllButton!)
+        case .onlinePhoto where сardsFilter.hasOnlyOnlinePhotosContent:
+            setupButtomButton(title: localizedString("shared_string_view_all")) { [weak self, weak сardsFilter] _ in
+                guard let self,
+                      let сardsFilter,
+                      let navigationController = OARootViewController.instance()?.navigationController else { return }
+                
+                let controller = GalleryGridViewController()
+                controller.cards = сardsFilter.onlinePhotosSection
+                controller.titleString = title
+                navigationController.pushViewController(controller, animated: true)
             }
-        case .mapilary:
-            if сardsFilter.hasOnlyMapillaryPhotosContent {
-                exploreButton = UIButton(type: .system, primaryAction: UIAction(title: localizedString("shared_string_explore"), handler: { _ in
-                    OAMapillaryPlugin.installOrOpenMapillary()
-                }))
-                addButtonIfNeeded(button: exploreButton!)
+        case .mapilary where сardsFilter.hasOnlyMapillaryPhotosContent:
+            setupButtomButton(title: localizedString("shared_string_explore")) { _ in
+                OAMapillaryPlugin.installOrOpenMapillary()
             }
+        default: break
+        }
+    }
+    
+    private func setupButtomButton(title: String, action: @escaping (UIAction) -> Void) {
+        bottomButton = UIButton(type: .system, primaryAction: UIAction(title: title, handler: action))
+        if let button = bottomButton {
+            addButtonIfNeeded(button: button)
         }
     }
     

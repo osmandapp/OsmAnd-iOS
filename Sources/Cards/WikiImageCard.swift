@@ -16,8 +16,10 @@ final class WikiImage: NSObject {
     let imageName: String
     let imageStubUrl: String
     let imageHiResUrl: String
+    let wikiMediaTag: String
 
     init(wikiMediaTag: String, imageName: String, imageStubUrl: String, imageHiResUrl: String) {
+        self.wikiMediaTag = wikiMediaTag
         self.imageName = imageName
         self.imageStubUrl = imageStubUrl
         self.imageHiResUrl = imageHiResUrl
@@ -25,12 +27,12 @@ final class WikiImage: NSObject {
     }
 
     func getUrlWithCommonAttributions() -> String {
-        "\(WIKIMEDIA_COMMONS_URL)\(WIKIMEDIA_FILE)\(imageName)"
+        "\(WIKIMEDIA_COMMONS_URL)\(WIKIMEDIA_FILE)\(wikiMediaTag)"
     }
 }
 
 final class WikiImageCard: ImageCard {
-    private var urlWithCommonAttributions: String
+    private(set) var urlWithCommonAttributions: String
 
     init(wikiImage: WikiImage, type: String) {
         self.urlWithCommonAttributions = wikiImage.getUrlWithCommonAttributions()
@@ -44,9 +46,8 @@ final class WikiImageCard: ImageCard {
         self.url = self.imageUrl
     }
 
-    
-//    override func onCardPressed(_ mapPanel: OAMapPanelViewController) {
-//        guard let viewController = OAWebViewController(urlAndTitle: urlWithCommonAttributions, title: title) else { return }
-//        mapPanel.navigationController?.pushViewController(viewController, animated: true)
-//    }
+    func opneURL(_ mapPanel: OAMapPanelViewController) {
+        guard let viewController = OAWebViewController(urlAndTitle: urlWithCommonAttributions, title: title) else { return }
+        mapPanel.navigationController?.pushViewController(viewController, animated: true)
+    }
 }

@@ -3137,6 +3137,7 @@
 		FA86F41A2AE7CB8D00DC3B2B /* BLEBikeSCDDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA86F4192AE7CB8D00DC3B2B /* BLEBikeSCDDevice.swift */; };
 		FA86F41C2AE7CE0100DC3B2B /* BLEBikeSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA86F41B2AE7CE0100DC3B2B /* BLEBikeSensor.swift */; };
 		FA882EF22CDCFE98001F3814 /* LockScreenAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA882EF12CDCFE98001F3814 /* LockScreenAction.swift */; };
+		FA9217072D50C9640074E958 /* GalleryGridViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9217062D50C9640074E958 /* GalleryGridViewController.swift */; };
 		FA9628E22AFCFB57004B7DEF /* SectionHeaderFooterButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA9628E12AFCFB57004B7DEF /* SectionHeaderFooterButton.xib */; };
 		FA9628E42AFCFCE1004B7DEF /* SectionHeaderFooterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9628E32AFCFCE1004B7DEF /* SectionHeaderFooterButton.swift */; };
 		FA9628E62AFD2F2E004B7DEF /* BLETemperatureSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9628E52AFD2F2E004B7DEF /* BLETemperatureSensor.swift */; };
@@ -7658,6 +7659,7 @@
 		FA86F4192AE7CB8D00DC3B2B /* BLEBikeSCDDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEBikeSCDDevice.swift; sourceTree = "<group>"; };
 		FA86F41B2AE7CE0100DC3B2B /* BLEBikeSensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEBikeSensor.swift; sourceTree = "<group>"; };
 		FA882EF12CDCFE98001F3814 /* LockScreenAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockScreenAction.swift; sourceTree = "<group>"; };
+		FA9217062D50C9640074E958 /* GalleryGridViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryGridViewController.swift; sourceTree = "<group>"; };
 		FA9628E12AFCFB57004B7DEF /* SectionHeaderFooterButton.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SectionHeaderFooterButton.xib; sourceTree = "<group>"; };
 		FA9628E32AFCFCE1004B7DEF /* SectionHeaderFooterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderFooterButton.swift; sourceTree = "<group>"; };
 		FA9628E52AFD2F2E004B7DEF /* BLETemperatureSensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLETemperatureSensor.swift; sourceTree = "<group>"; };
@@ -10691,6 +10693,7 @@
 				FA6408702D3E7EB9005FD12D /* NoImagesCard.swift */,
 				FA64086E2D3E7D88005FD12D /* ImageCard.swift */,
 				FA4C57022D48E92F00438A5C /* NoInternetCardCell.xib */,
+				FA9217062D50C9640074E958 /* GalleryGridViewController.swift */,
 			);
 			path = Cards;
 			sourceTree = "<group>";
@@ -16041,10 +16044,12 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources.sh",
 				"${PODS_ROOT}/FormatterKit/FormatterKit/FormatterKit.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/Kingfisher/Kingfisher.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FormatterKit.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Kingfisher.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -16551,6 +16556,7 @@
 				DAABE4EE2A1657AF00569F71 /* Color+INT.swift in Sources */,
 				DA5A850C26C563A900F274C7 /* OASubscribeEmailView.m in Sources */,
 				DA8DC3922A0CD9A3006C116B /* DistanceToIntermediateDestinationWidget.swift in Sources */,
+				FA9217072D50C9640074E958 /* GalleryGridViewController.swift in Sources */,
 				326B770A29D9CA6400FB23DF /* OATripRecordingTimeWidget.mm in Sources */,
 				DAAC0EBD2801807200867D35 /* OAImportBackupTask.m in Sources */,
 				DA5A830226C563A800F274C7 /* OADeviceScreenTableViewCell.m in Sources */,

@@ -3992,3 +3992,6 @@
 "wikimedia" = "Wikimedia";
 "open_in_browser" = "Open in browser";
 "shared_string_source" = "Source";
+"shared_string_items" = "Items";
+"download_failed" = "Download Failed";
+"download_successful" = "Download Successful";

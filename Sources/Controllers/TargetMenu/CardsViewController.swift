@@ -263,7 +263,6 @@ fileprivate extension NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(smallCellWidth),
                                               heightDimension: .absolute(smallCellWidth))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        let spacing: CGFloat = 12
         item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
         
         let groupSize = NSCollectionLayoutSize(
@@ -275,6 +274,7 @@ fileprivate extension NSCollectionLayoutSection {
             subitem: item, count: 2
         )
         
+        let spacing: CGFloat = 12
         group.interItemSpacing = .fixed(spacing)
         
         let horizontalGroup = NSCollectionLayoutGroup.horizontal(

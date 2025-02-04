@@ -103,6 +103,11 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
                 ? [NSString stringWithFormat:@"%@%@%@", OSMAND_API_ENDPOINT, @"wiki=", wikiTitle]
                 : [url stringByAppendingFormat:@"&%@%@", @"wiki=", wikiTitle];
         }
+        
+//        if ([keys containsObject:WIKIDATA_TAG])
+//        {
+//            url = [url stringByAppendingFormat:@"&addMetaData=true"];
+//        }
 
         if (USE_OSMAND_WIKI_API)
         {

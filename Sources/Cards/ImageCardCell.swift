@@ -6,10 +6,9 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-import UIKit
+import Kingfisher
 
 final class ImageCardCell: UICollectionViewCell {
-
     @IBOutlet private weak var imageView: UIImageView!
     @IBOutlet private weak var usernameLabel: UILabel!
     @IBOutlet private weak var usernameLabelShadow: UIView!
@@ -17,11 +16,14 @@ final class ImageCardCell: UICollectionViewCell {
     @IBOutlet private weak var loadingIndicatorView: UIActivityIndicatorView!
     @IBOutlet private weak var urlTextView: UILabel!
     
+    var isBigPhoto = false
+    
     private var item: ImageCard!
     
     func configure(item: ImageCard, showLogo: Bool) {
         self.item = item
         logoView.isHidden = !showLogo
+        isBigPhoto = showLogo
         
         if showLogo {
             if !item.topIcon.isEmpty {
@@ -35,21 +37,19 @@ final class ImageCardCell: UICollectionViewCell {
     }
     
     func downloadImage() {
-        guard let item else { return }
+        guard !item.imageUrl.isEmpty,
+              let url = URL(string: item.imageUrl) else { return }
         
-        if item.imageUrl.isEmpty { return }
+        let height = isBigPhoto ? 156 : 72
         
-        guard let imgURL = URL(string:  item.imageUrl) else { return }
-        let session = URLSession(configuration: .default)
-        
-        session.dataTask(with: imgURL) { [weak self] data, response, error in
-            guard let self else { return }
-            
-            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200, let data {
-                DispatchQueue.main.async {
-                    self.imageView.image = UIImage(data: data)
-                }
-            }
-        }.resume()
+        imageView.kf.indicatorType = .activity
+        imageView.kf.setImage(
+            with: url,
+            placeholder: nil,
+            options: [
+                .processor(DownsamplingImageProcessor(size: .init(width: height, height: height))),
+                .scaleFactor(UIScreen.main.scale),
+                .cacheOriginalImage
+            ])
     }
 }

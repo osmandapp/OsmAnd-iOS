@@ -305,7 +305,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         let gpx = item.obj(forKey: "gpx") as! GpxDataItem
         let trackItem = TrackItem(file: gpx.file)
         trackItem.dataItem = gpx
-        
+        // FIXME: [weak]
         let menuProvider: UIContextMenuActionProvider = { _ in
             let openAction = UIAction(title: localizedString("shared_string_open_track"), image: UIImage.icCustomOverview) { [weak self] _ in
                 self?.onTrackOpenClicked(track: trackItem)

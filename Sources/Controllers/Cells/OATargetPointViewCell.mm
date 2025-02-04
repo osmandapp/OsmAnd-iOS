@@ -24,12 +24,16 @@
 #import "OARouteKey.h"
 
 @implementation OATargetPointViewCell
+{
+    BOOL _cachedIsLightTheme;
+}
 
 - (void)awakeFromNib
 {
     [super awakeFromNib];
     // Initialization code
     self.descriptionView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
+    _cachedIsLightTheme = [ThemeManager shared].isLightTheme;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -37,6 +41,16 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    if (_cachedIsLightTheme != [ThemeManager shared].isLightTheme)
+    {
+        [self applyTargetPoint];
+        _cachedIsLightTheme = [ThemeManager shared].isLightTheme;
+    }
 }
 
 -(void)setTargetPoint:(OATargetPoint *)targetPoint
@@ -65,8 +79,8 @@
         else
             _iconView.image = _targetPoint.icon;
         
-        if ([_targetPoint.targetObj isKindOfClass:OARenderedObject.class])
-            _iconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
+        if ([_targetPoint.targetObj isKindOfClass:OAMapObject.class])
+            _iconView.image = [OAUtilities imageWithTintColor:[UIColor colorNamed:ACColorNameIconColorSelected] image:_iconView.image];
         
         NSString *t;
         if (_targetPoint.titleSecond)

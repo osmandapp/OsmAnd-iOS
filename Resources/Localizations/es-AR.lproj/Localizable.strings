@@ -415,7 +415,7 @@
 "shared_string_back" = "Atrás";
 "shared_string_ok" = "Aceptar";
 "shared_string_cancel" = "Cancelar";
-"shared_string_exit" = "Salida";
+"shared_string_exit" = "Salir";
 "shared_string_close" = "Cerrar";
 "shared_string_yes" = "Sí";
 "shared_string_save" = "Guardar";
@@ -3605,3 +3605,8 @@
 "shared_string_error" = "Error";
 "cloud_sync_progress" = "Sincronizando... %@";
 "download_tab_conflicts" = "Sin resolver";
+"battery_widget_level_privacy_ios_desc" = "Debido a razones de privacidad de iOS, el widget sólo puede mostrar el nivel de batería en los niveles del 5%, 35%, 60% o 85%";
+"ask_every_time" = "Preguntar siempre";
+"attach_roads_descr" = "Aproxima la traza a los caminos obteniendo información detallada de la ruta con indicaciones de giro y atributos de los caminos.";
+"detailed_track_guidance_description" = "OsmAnd hará coincidir la traza con los caminos cercanos para mejorar la navegación giro a giro.";
+"detailed_track_guidance" = "Guía detallada de la traza";

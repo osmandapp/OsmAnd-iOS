@@ -66,8 +66,12 @@
 #import "OALocationIcon.h"
 #import "OrderedDictionary.h"
 #import "OAMapActions.h"
+#import "OAPOIHelper.h"
+#import "OARenderedObject.h"
+#import "OAPOIType.h"
 #import "OAPOIFiltersHelper.h"
 #import "OARendererRegistry.h"
+#import "OAMapObject.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"
@@ -154,6 +158,7 @@
 #import "OAColorCollectionViewController.h"
 #import "OAQuickActionSelectionBottomSheetViewController.h"
 #import "OAFloatingButtonsHudViewController.h"
+#import "OAPOIViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"

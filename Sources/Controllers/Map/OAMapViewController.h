@@ -162,7 +162,7 @@ static const int BOTTOM_CONSTANT = 1;
 - (void) hideContextPinMarker;
 
 - (void) highlightRegion:(OAWorldRegion *)region;
-- (void) hideRegionHighlight;
+- (void) hidePolygonHighlight;
 
 - (BOOL) simulateContextMenuPress:(UIGestureRecognizer *)recognizer;
 

@@ -233,23 +233,21 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     {
         [result addObject:@{
             @"type" : [OAInputTableViewCell getCellIdentifier],
-            @"title" : OALocalizedString(@"navigate_point_northing"),
-            @"value" : _northingStr,
-            @"tag" : @(EOAQuickSearchCoordinatesTextFieldNorthing),
+            @"title" : OALocalizedString(@"navigate_point_zone"),
+            @"value" : _zoneStr,
+            @"tag" : @(EOAQuickSearchCoordinatesTextFieldZone),
         }];
-        
         [result addObject:@{
             @"type" : [OAInputTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"navigate_point_easting"),
             @"value" : _eastingStr,
             @"tag" : @(EOAQuickSearchCoordinatesTextFieldEasting),
         }];
-        
         [result addObject:@{
             @"type" : [OAInputTableViewCell getCellIdentifier],
-            @"title" : OALocalizedString(@"navigate_point_zone"),
-            @"value" : _zoneStr,
-            @"tag" : @(EOAQuickSearchCoordinatesTextFieldZone),
+            @"title" : OALocalizedString(@"navigate_point_northing"),
+            @"value" : _northingStr,
+            @"tag" : @(EOAQuickSearchCoordinatesTextFieldNorthing),
         }];
     }
     else if (_currentFormat == MAP_GEO_MGRS_FORMAT)

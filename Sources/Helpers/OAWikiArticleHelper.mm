@@ -13,6 +13,7 @@
 #import "OsmAndApp.h"
 #import "OAManageResourcesViewController.h"
 #import "OAPOIHelper.h"
+#import "OAPOIHelper+cpp.h"
 #import "OAPOI.h"
 #import "OAWikiWebViewController.h"
 #import "OARootViewController.h"

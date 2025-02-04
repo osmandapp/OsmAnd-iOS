@@ -2254,3 +2254,4 @@
 "shared_string_maximum" = "מרבי";
 "sort_subfolders_tracks" = "מיון תת־תיקיות";
 "cloud_sync_progress" = "מתבצע סנכרון…%@";
+"rendering_attr_showClimbingRoutes_description" = "הצגת מסלולי טיפוס";

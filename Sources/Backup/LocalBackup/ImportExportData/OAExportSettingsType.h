@@ -47,6 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSString *name;
 @property (nonatomic, readonly) NSString *itemName;
 @property (nonatomic, readonly) NSString *title;
+@property (nonatomic, readonly) NSString *iconName;
 @property (nonatomic, readonly) UIImage *icon;
 @property (nonatomic, readonly) BOOL isAvailableInFreeVersion;
 

@@ -12,6 +12,8 @@
 #import "OAAppSettings.h"
 #import "OAPOIHelper.h"
 #import "OAGPXDocumentPrimitives.h"
+#import "OARenderedObject.h"
+#import "OARenderedObject+cpp.h"
 
 #include <OsmAndCore/ICU.h>
 
@@ -164,36 +166,36 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
         NSString *nm;
         if ([lang isEqualToString:@"en"])
         {
-            nm = _localizedNames[@"en"];
+            nm = self.localizedNames[@"en"];
             if (!nm || nm.length == 0)
-                nm = OsmAnd::ICU::transliterateToLatin(QString::fromNSString(_name)).toNSString();
+                nm = OsmAnd::ICU::transliterateToLatin(QString::fromNSString(self.name)).toNSString();
             return nm;
         }
-        nm = _localizedNames[lang];
+        nm = self.localizedNames[lang];
         if (transliterate)
             nm = OsmAnd::ICU::transliterateToLatin(QString::fromNSString(nm)).toNSString();
         return nm;
     }
-    return _name;
+    return self.name;
 }
 
 - (NSDictionary<NSString *, NSString *> *)getNamesMap:(BOOL)includeEn
 {
-    if ((!includeEn || !_name || _name.length == 0) && (!_localizedNames || _localizedNames.count == 0))
+    if ((!includeEn || !self.name || self.name.length == 0) && (!self.localizedNames || self.localizedNames.count == 0))
     {
         return [NSDictionary dictionary];
     }
     else
     {
         NSMutableDictionary *mp = [NSMutableDictionary dictionary];
-        if (_localizedNames || _localizedNames.count != 0)
+        if (self.localizedNames || self.localizedNames.count != 0)
         {
-            for (NSString *key in _localizedNames.allKeys)
-                mp[key] = _localizedNames[key];
+            for (NSString *key in self.localizedNames.allKeys)
+                mp[key] = self.localizedNames[key];
         }
         
-        if (includeEn && !_name && _name.length > 0)
-            mp[@"en"] = _name;
+        if (includeEn && !self.name && self.name.length > 0)
+            mp[@"en"] = self.name;
         
         return mp;
     }
@@ -377,7 +379,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
         }
         if (typeStr.length == 0)
         {
-            typeStr = [NSMutableString stringWithString:[_subType lowercaseString]];
+            typeStr = [NSMutableString stringWithString:[OAUtilities capitalizeFirstLetter:[_subType lowercaseString]]];
             [typeStr replaceOccurrencesOfString:@"_" withString:@" " options:0 range:NSMakeRange(0, [typeStr length])];
         }
     }
@@ -389,7 +391,10 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     NSString *nameEn = self.localizedNames[@"en"] ? self.localizedNames[@"en"] : @"";
     NSString *type = self.type.category.name ? self.type.category.name : @"";
     NSString *subType = self.type.name ? self.type.name : @"";
-    return [NSString stringWithFormat:@"Amenity:%@: %@:%@", nameEn, type, subType];
+    if (nameEn.length == 0 && type.length == 0 && subType.length == 0)
+        return @"";
+    else
+        return [NSString stringWithFormat:@"Amenity:%@: %@:%@", nameEn, type, subType];
 }
 
 - (NSDictionary<NSString *, NSString *> *) toTagValue:(NSString *)privatePrefix osmPrefix:(NSString *)osmPrefix
@@ -471,7 +476,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
                     {
                         [res appendString:SEPARATOR];
                     }
-                    [res appendString:poiType.name];
+                    [res appendString:poiType.value ?: poiType.name];
                 }
                 result[categoryName] = res;
             }
@@ -525,8 +530,9 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
             else
             {
                 NSString *shortKey = [key componentsSeparatedByString:@":"].lastObject;
+                NSString *trimmedKey = [key stringByReplacingOccurrencesOfString:COLLAPSABLE_PREFIX withString:@""];
                 if (![HIDDEN_EXTENSIONS containsObject:shortKey] && ![HIDDEN_EXTENSIONS containsObject:key] && map[key].length > 0)
-                    additionalInfo[key] = map[key];
+                    additionalInfo[trimmedKey] = map[key];
             }
         }
         if (!type)
@@ -546,6 +552,12 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
         }
     }
     return amenity;
+}
+
+- (void) setXYPoints:(OARenderedObject *)renderedObject
+{
+    self.x = renderedObject.x;
+    self.y = renderedObject.y;
 }
 
 - (BOOL) isEqual:(id)o

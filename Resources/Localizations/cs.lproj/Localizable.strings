@@ -3576,3 +3576,10 @@
 "km_h" = "km/h";
 "cloud_sync_progress" = "Synchronizace...%@";
 "download_tab_conflicts" = "Nevyřešené";
+"battery_widget_level_privacy_ios_desc" = "Z důvodu ochrany soukromí v systému iOS může widget zobrazovat úroveň nabití baterie pouze v 5% krocích, například 35 %, 60 % nebo 85 %";
+"detailed_track_guidance" = "Podrobné pokyny ke stopě";
+"ask_every_time" = "Pokaždé se ptejte";
+"attach_roads_descr" = "Připojte svou trasu k silnicím a získejte podrobné informace o trase s pokyny pro odbočení a atributy silnice.";
+"detailed_track_guidance_description" = "OsmAnd přizpůsobí vaši stopu blízkým silnicím pro vylepšené navádění krok za krokem.";
+"auto_25_chars_route_kr" = "Držte se vpravo";
+"auto_25_chars_route_kl" = "Držte se vlevo";

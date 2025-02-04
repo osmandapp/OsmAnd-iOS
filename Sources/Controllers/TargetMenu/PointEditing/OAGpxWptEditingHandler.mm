@@ -75,7 +75,10 @@
         [p setAddressAddress:address];
         NSDictionary<NSString *, NSString *> *extensions = [poi toTagValue:PRIVATE_PREFIX osmPrefix:OSM_PREFIX_KEY];
         [[p getExtensionsToWrite] addEntriesFromDictionary:extensions];
-        [p setAmenityOriginNameOriginName:poi.toStringEn];
+        
+        NSString *originName = poi.toStringEn;
+        if (originName.length > 0)
+            [p setAmenityOriginNameOriginName:originName];
 
         wpt.color = color;
         wpt.point = p;
@@ -124,7 +127,7 @@
         NSMutableDictionary<NSString *, NSString *> *categories = [NSMutableDictionary new];
         NSString *title = point.category == nil ? @"" : point.category;
         categories[@"title"] = title;
-        NSString *color = point.category == nil ? @"" : UIColorFromRGBA([point getColor]).toHexARGBString;
+        NSString *color = point.category == nil ? @"" : UIColorFromARGB([point getColor]).toHexARGBString;
         NSString *count = @"1";
         categories[@"count"] = count;
 
@@ -207,7 +210,7 @@
     for (OASWptPt *point in _gpxDocument.getPointsList)
     {
         NSString *title = point.category == nil ? @"" : point.category;
-        NSString *color = point.category == nil ? @"" : UIColorFromRGBA([point getColor]).toHexARGBString;
+        NSString *color = point.category == nil ? @"" : UIColorFromARGB([point getColor]).toHexARGBString;
         BOOL emptyCategory = title.length == 0;
         if (!emptyCategory)
         {

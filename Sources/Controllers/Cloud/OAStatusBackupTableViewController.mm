@@ -599,12 +599,16 @@
         OAProfileSettingsItem *profileItem = (OAProfileSettingsItem *) item;
         OAApplicationMode *mode = profileItem.appMode;
         [rowData setObj:[UIImage templateImageNamed:[mode getIconName]] forKey:@"icon"];
+        [rowData setObj:[mode getIconName] forKey:@"iconName"];
     }
     else
     {
         OAExportSettingsType *type = [OAExportSettingsType findBySettingsItem:item];
         if (type != nil)
+        {
             [rowData setObj:type.icon forKey:@"icon"];
+            [rowData setObj:type.iconName forKey:@"iconName"];
+        }
     }
 }
 
@@ -685,6 +689,8 @@
         NSString *type = [OASettingsItemType typeName:settingsItem.type];
         NSString *resourceId = [_downloadingCellCloudHelper getResourceIdWithTypeName:type filename:[item stringForKey:@"fileName"]];
         DownloadingCell *cell = [_downloadingCellCloudHelper getOrCreateCell:resourceId];
+        [_downloadingCellCloudHelper saveResourceIconWithIconName:[item objForKey:@"iconName"] resourceId:resourceId];
+        
         if (cell)
         {
             BOOL hasConflict = (EOABackupSyncOperationType) [item integerForKey:@"operation"] == EOABackupSyncOperationNone;

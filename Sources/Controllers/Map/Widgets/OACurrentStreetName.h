@@ -6,7 +6,7 @@
 //  Copyright © 2022 OsmAnd. All rights reserved.
 //
 // OsmAnd/OsmAnd/src/net/osmand/plus/routing/CurrentStreetName.java
-// git revision 1a8946454169a3aa6eb8e7c6e9a9ea7aa7e13b9f
+// git revision 1873992309cd40ba8f866437113632624b81069c
 
 #import <Foundation/Foundation.h>
 
@@ -17,7 +17,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OANextDirectionInfo, RoadShield;
+@class OANextDirectionInfo, RoadShield, OARoutingHelper;
 
 @interface OACurrentStreetName : NSObject
 
@@ -26,10 +26,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL showMarker; // turn type has priority over showMarker
 @property (nonatomic) NSArray<RoadShield *> *shields;
 @property (nonatomic) NSString *exitRef;
-@property (nonatomic, assign) BOOL isSet;
+@property (nonatomic, readonly) BOOL useDestination;
 
-+ (OACurrentStreetName *) getCurrentName:(OANextDirectionInfo *)n;
+- (instancetype)initWithStreetName:(OANextDirectionInfo *)info;
 - (instancetype)initWithStreetName:(OANextDirectionInfo *)info useDestination:(BOOL)useDestination;
+- (instancetype)initWithStreetName:(OARoutingHelper *)routingHelper info:(OANextDirectionInfo *)info;
 
 @end
 

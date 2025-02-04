@@ -128,7 +128,7 @@
             waypointsSectionData.values[@"tint_color"] = [waypointsSectionData.values[@"is_hidden"] boolValue]
                     ? [UIColor colorNamed:ACColorNameIconColorDisabled]
                     : self.trackMenuDelegate
-                            ? UIColorFromRGB([self.trackMenuDelegate getWaypointsGroupColor:groupName])
+                            ? UIColorFromARGB([self.trackMenuDelegate getWaypointsGroupColor:groupName])
                             : [OADefaultFavorite getDefaultColor];
             [self.tableData.subjects addObject:waypointsSectionData];
 
@@ -293,7 +293,7 @@
             sectionData.values[@"tint_color"] = [sectionData.values[@"is_hidden"] boolValue]
                     ? [UIColor colorNamed:ACColorNameIconColorDisabled]
                     : self.trackMenuDelegate
-                            ? UIColorFromRGB([self.trackMenuDelegate getWaypointsGroupColor:cellData.title])
+                            ? UIColorFromARGB([self.trackMenuDelegate getWaypointsGroupColor:cellData.title])
                             : [OADefaultFavorite getDefaultColor];
 
             [cellData setData:@{

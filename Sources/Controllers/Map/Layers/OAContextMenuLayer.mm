@@ -19,15 +19,23 @@
 #import "OAReverseGeocoder.h"
 #import "Localization.h"
 #import "OAPOILocationType.h"
+#import "OAMapObject+cpp.h"
 #import "OAPOI.h"
+#import "OARenderedObject.h"
+#import "OARenderedObject+cpp.h"
 #import "OAPOIType.h"
 #import "OAPOICategory.h"
 #import "OAPOIFilter.h"
 #import "OAPOIHelper.h"
+#import "OAPOIHelper+cpp.h"
 #import "OATransportStop.h"
 #import "OAUtilities.h"
 #import "OAPointDescription.h"
 #import "OATransportStopsBaseController.h"
+#import "OAMapRendererEnvironment.h"
+#import "OAColors.h"
+#import "OAMapUtils+cpp.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
@@ -38,6 +46,7 @@
 #include <OsmAndCore/ObfDataInterface.h>
 #include <OsmAndCore/Map/BillboardRasterMapSymbol.h>
 #include <OsmAndCore/SingleSkImage.h>
+#include <OsmAndCore/Map/VectorLineBuilder.h>
 
 @interface OAContextMenuLayer () <CAAnimationDelegate>
 @end
@@ -47,6 +56,8 @@
     // Context pin marker
     std::shared_ptr<OsmAnd::MapMarkersCollection> _contextPinMarkersCollection;
     std::shared_ptr<OsmAnd::MapMarker> _contextPinMarker;
+    
+    std::shared_ptr<OsmAnd::VectorLinesCollection> _outlineCollection;
     
     UIImageView *_animatedPin;
     BOOL _animationDone;
@@ -83,6 +94,8 @@
     .setPinIconVerticalAlignment(OsmAnd::MapMarker::Top)
     .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
     .buildAndAddToCollection(_contextPinMarkersCollection);
+    
+    _outlineCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
 
     _initDone = YES;
 
@@ -752,6 +765,165 @@
             }
         }
     }
+}
+
+- (void) highlightPolygon:(QVector<OsmAnd::PointI>)points;
+{
+    if (_outlineCollection != nullptr)
+        [self hideRegionHighlight];
+
+    [self.mapViewController runWithRenderSync:^{
+        _outlineCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
+        OsmAnd::VectorLineBuilder builder;
+        builder.setPoints(points)
+            .setIsHidden(false)
+            .setLineId(1)
+            .setLineWidth(2 * kWidthCorrectionValue * [[UIScreen mainScreen] scale])
+            .setFillColor(OsmAnd::ColorARGB(color_osmand_orange_argb))
+            .setApproximationEnabled(false)
+            .setBaseOrder(self.pointsOrder + 1);
+        builder.buildAndAddToCollection(_outlineCollection);
+        [self.mapView addKeyedSymbolsProvider:_outlineCollection];
+    }];
+}
+
+- (void) hideRegionHighlight
+{
+    [self.mapViewController runWithRenderSync:^{
+        [self.mapView removeKeyedSymbolsProvider:_outlineCollection];
+        _outlineCollection = nullptr;
+    }];
+}
+
+- (NSArray<OARenderedObject *> *) retrievePolygonsAroundMapObject:(double)lat lon:(double)lon mapObject:(OAMapObject *)mapObject
+{
+    OAMapRendererView *mapView = (OAMapRendererView *)OARootViewController.instance.mapPanel.mapViewController.mapView;
+    OsmAnd::ZoomLevel zoomLevel = mapView.zoomLevel;
+    OsmAnd::PointI point(OsmAnd::Utilities::get31TileNumberX(lon), OsmAnd::Utilities::get31TileNumberY(lat));
+    return [self retrievePolygonsAroundMapObject:point mapObject:mapObject zoomLevel:zoomLevel];
+}
+
+- (NSArray<OARenderedObject *> *) retrievePolygonsAroundMapObject:(OsmAnd::PointI)point mapObject:(OAMapObject *)mapObject zoomLevel:(OsmAnd::ZoomLevel)zoomLevel
+{
+    NSMutableArray<OARenderedObject *> *res = [NSMutableArray new];
+    if (!mapObject)
+        return res;
+    
+    NSArray<OARenderedObject *> *rendPolygons = [self retrievePolygonsAroundPoint:point zoomLevel:zoomLevel];
+    QVector<OsmAnd::PointI> objectPolygon = [mapObject getPointsPolygon];
+    if (objectPolygon.size() > 0)
+    {
+        for (OARenderedObject *r in rendPolygons)
+        {
+            if ([OAMapUtils isFirstPolygonInsideSecond:objectPolygon secondPolygon:[r getPointsPolygon]])
+            {
+                [res addObject:r];
+            }
+        }
+    }
+    else
+    {
+        [res addObjectsFromArray:rendPolygons];
+    }
+    return res;
+}
+
+- (NSArray<OARenderedObject *> *) retrievePolygonsAroundPoint:(OsmAnd::PointI)point zoomLevel:(OsmAnd::ZoomLevel)zoomLevel
+{
+    NSMutableArray<OARenderedObject *> *res = [NSMutableArray new];
+    
+    OAMapViewController *mapViewController = OARootViewController.instance.mapPanel.mapViewController;
+    OAMapRendererEnvironment *menv = [mapViewController mapRendererEnv];
+    QList<std::shared_ptr<const OsmAnd::MapObject>> polygons = menv.mapPrimitivesProvider->retreivePolygons(point, zoomLevel);
+    if (!polygons.isEmpty())
+    {
+        for (int i = 0; i < polygons.size(); i++)
+        {
+            std::shared_ptr<const OsmAnd::MapObject> polygon = polygons[i];
+            OARenderedObject *renderedObject = [self createRenderedObjectForPolygon:polygon order:i];
+            if (renderedObject)
+                [res addObject:renderedObject];
+        }
+    }
+    return res;
+}
+
+- (OARenderedObject *)createRenderedObjectForPolygon:(std::shared_ptr<const OsmAnd::MapObject>)mapObject order:(int)order
+{
+    OARenderedObject *renderedObject = [OARenderedObject new];
+    QList<QPair<QString, QString>> tags = mapObject->getResolvedAttributesListPairs();
+    
+    MutableOrderedDictionary<NSString *, NSString *> *parsedTags = [MutableOrderedDictionary new];
+    for (int i = 0; i < tags.size(); i++)
+    {
+      QPair<QString, QString> tagPair = tags[i];
+      NSString *key = tagPair.first.toNSString();
+      NSString *value = tagPair.second.toNSString();
+      if ([key isEqualToString:@"osmand_change"] && [value isEqualToString:@"delete"])
+      {
+        return nil;
+      }
+      if (key && value)
+        parsedTags[key] = value;
+    }
+    renderedObject.tags = parsedTags;
+    
+    QHash<QString, QString> names = mapObject->getCaptionsInAllLanguages();
+    QList<QString> namesKeys = names.keys();
+    for (int i = 0; i < namesKeys.size(); i++)
+    {
+        NSString *key = namesKeys[i].toNSString();
+        NSString *value = names[namesKeys[i]].toNSString();
+        if ([key isEqualToString:@"osmand_change"] && [value isEqualToString:@"delete"])
+        {
+            return nil;
+        }
+        [renderedObject setName:key name:value];
+    }
+
+    QVector<OsmAnd::PointI> points31 = mapObject->points31;
+    OASKQuadRect *rect = [OASKQuadRect new];
+    for (int i = 0; i < points31.size(); i++)
+    {
+        OsmAnd::PointI p = points31[i];
+        [renderedObject addLocation:p.x y:p.y];
+        [rect expandLeft:p.x top:p.y right:p.x bottom:p.y];
+    }
+    [renderedObject setBBox:rect.left top:rect.top right:rect.right bottom:rect.bottom];
+    
+    const auto& obfMapObject = std::dynamic_pointer_cast<const OsmAnd::ObfMapObject>(mapObject);
+    if (obfMapObject)
+    {
+        renderedObject.obfId = obfMapObject->id;
+    }
+    renderedObject.isPolygon = YES;
+    renderedObject.order = order;
+    renderedObject.labelX = mapObject->getLabelCoordinateX();
+    renderedObject.labelY = mapObject->getLabelCoordinateY();
+    double lat = OsmAnd::Utilities::get31LatitudeY(renderedObject.labelY);
+    double lon = OsmAnd::Utilities::get31LongitudeX(renderedObject.labelX);
+    [renderedObject setLabelLatLon:CLLocationCoordinate2DMake(lat, lon)];
+    
+    if (!renderedObject.name || renderedObject.name.length == 0)
+    {
+        QString captionInNativeLanguage = mapObject->getCaptionInNativeLanguage();
+        if (!captionInNativeLanguage.isEmpty())
+        {
+            renderedObject.name = captionInNativeLanguage.toNSString();
+        }
+        else
+        {
+            if (renderedObject.localizedNames.count > 0)
+                renderedObject.name = renderedObject.localizedNames.allValues.firstObject;
+        }
+    }
+    
+    NSMutableDictionary *localizedNames = [NSMutableDictionary dictionary];
+    renderedObject.nameLocalized = [OAPOIHelper processLocalizedNames:obfMapObject->getCaptionsInAllLanguages() nativeName:obfMapObject->getCaptionInNativeLanguage() names:localizedNames];
+    if (!renderedObject.nameLocalized || renderedObject.nameLocalized.length == 0)
+        renderedObject.nameLocalized = renderedObject.name;
+    
+    return renderedObject;
 }
 
 #pragma  mark - CAAnimationDelegate

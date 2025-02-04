@@ -1468,7 +1468,7 @@
 "app_mode_campervan" = "Laagribuss (RV)";
 "open_in_browser_wiki" = "Ava artikkel veebis";
 "app_mode_helicopter" = "Helikopter";
-"shared_string_zoom_levels" = "Suurendus";
+"shared_string_zoom_levels" = "Suumitasemed";
 "shared_string_appearance" = "Välimus";
 "app_mode_shuttle_bus" = "Liinibuss";
 "app_mode_wagon" = "Vagun";
@@ -1641,7 +1641,7 @@
 "shared_string_legend" = "Tingmärgid";
 "map_settings_add_maps_slopes" = "Nõlvade kuvamiseks on vaja täiendavaid kaarte.";
 "map_settings_add_maps_hillshade" = "Kõrgusreljeefi kuvamiseks on vaja täiendavaid kaarte.";
-"move_map_to_select_area" = "Soovitud ala valimiseks liiguta kaarti.";
+"move_map_to_select_area" = "Vajaliku ala valimiseks nihuta kaarti.";
 "preview_of_selected_zoom_levels" = "Valitud suumitasemete eelvaade";
 "download_size" = "Allalaaditava faili suurus";
 "number_of_tiles" = "Paanide arv";
@@ -2156,7 +2156,7 @@
 "lang_os" = "osseedi";
 "connect_rp" = "Ühenda teekonnapunktid";
 "route_points" = "Teekonnapunktid";
-"icon_group_industrial" = "Tööstuslik";
+"icon_group_industrial" = "Tööstus";
 "icon_group_education" = "Haridus";
 "map_settings_clear_geo_cache" = "Tühjenda geopaanid";
 "shared_string_weather" = "Ilmateade";
@@ -2989,3 +2989,9 @@
 "max_altitude" = "Maksimaalne kõrgus";
 "sensor_temperature_desc" = "Näitab temperatuuri sensori aluselt";
 "date_of_creation" = "Loomise kuupäev";
+"rendering_attr_OSMMapperAssistantFixme_name" = "„Vajab parandamist“ sildid";
+"rendering_attr_OSMMapperAssistantFixme_description" = "Näita „Vajab parandamist“ silte";
+"rendering_attr_showFitnessTrails_name" = "Fitnessirajad";
+"rendering_attr_showFitnessTrails_description" = "Näita fitnessiradu";
+"rendering_attr_showRunningRoutes_name" = "Jooksurajad";
+"rendering_attr_showRunningRoutes_description" = "Näita jooksuradu";

@@ -21,39 +21,76 @@
 
 @implementation OACurrentStreetName
 
-- (instancetype)initWithStreetName:(OANextDirectionInfo *)info useDestination:(BOOL)useDestination
+- (instancetype)initWithStreetName:(OANextDirectionInfo *)info
 {
-    NSString *nm = info.directionInfo.streetName;
-    NSString *rf = info.directionInfo.ref;
-    NSString *dn = info.directionInfo.destinationName;
-    NSString *dnRef = info.directionInfo.destinationRef;
-    _isSet = !(nm.length == 0 && rf.length == 0 && dn.length == 0);
-    if (useDestination)
+    self = [super init];
+    if (self)
     {
-        _shields = [RoadShield createDestination:info.directionInfo.routeDataObject destRef:dnRef];
-    }
-    else
-    {
-        _shields = [RoadShield createShields:info.directionInfo.routeDataObject];
-    }
-    _text = [OARoutingHelperUtils formatStreetName:nm ref:rf destination:dn towards:@"" shields:_shields];
-    _turnType = info.directionInfo.turnType;
-    if (!_turnType)
-        _turnType = TurnType::ptrValueOf(TurnType::C, false);
-    if (info.directionInfo.exitInfo != nil)
-    {
-        // don't display name of exit street name
-        _exitRef = info.directionInfo.exitInfo.ref;
-        if (!_isSet && info.directionInfo.destinationName.length > 0)
-        {
-            _text = info.directionInfo.destinationName;
-            _isSet = YES;
-        }
+        [self setupStreetName:info];
     }
     return self;
 }
 
-+ (NSString *) getRouteSegmentStreetName:(std::shared_ptr<RouteSegmentResult> &)rs includeRef:(BOOL)includeRef
+- (instancetype)initWithStreetName:(OANextDirectionInfo *)info useDestination:(BOOL)useDestination
+{
+    self = [super init];
+    if (self)
+    {
+        _useDestination = useDestination;
+        [self setupStreetName:info];
+    }
+    return self;
+}
+
+- (instancetype)initWithStreetName:(OARoutingHelper *)routingHelper info:(OANextDirectionInfo *)info
+{
+    self = [super init];
+    if (self)
+    {
+        [self setupCurrentName:routingHelper info:info];
+    }
+    return self;
+}
+
+- (BOOL)setupStreetName:(OANextDirectionInfo *)info
+{
+    BOOL isSet = NO;
+    if (info.directionInfo && !info.directionInfo.turnType->isSkipToSpeak()) {
+        NSString *name = info.directionInfo.streetName;
+        NSString *ref = info.directionInfo.ref;
+        NSString *destinationName = info.directionInfo.destinationName;
+        isSet = !(name.length == 0 && ref.length == 0 && destinationName.length == 0);
+
+        const auto& dataObject = info.directionInfo.routeDataObject;
+        if (_useDestination)
+            _shields = [RoadShield createDestination:info.directionInfo.routeDataObject destRef:info.directionInfo.destinationRef];
+        else
+            _shields = [RoadShield createShields:info.directionInfo.routeDataObject];
+        
+        if (_shields.count == 0)
+            destinationName = [info.directionInfo getDestinationRefAndName];
+        
+        _text = [OARoutingHelperUtils formatStreetName:name ref:ref destination:destinationName towards:@"" shields:_shields];
+        _turnType = info.directionInfo.turnType;
+        if (!_turnType)
+            _turnType = TurnType::ptrValueOf(TurnType::C, false);
+        
+        OAExitInfo *exitInfo = info.directionInfo.exitInfo;
+        if (exitInfo)
+        {
+            // don't display name of exit street name
+            _exitRef = exitInfo.ref;
+            if (!isSet && info.directionInfo.destinationName.length > 0)
+            {
+                _text = info.directionInfo.destinationName;
+                isSet = YES;
+            }
+        }
+    }
+    return isSet;
+}
+
++ (NSString *) getRouteSegmentStreetName:(OARoutingHelper *)routingHelper rs:(const std::shared_ptr<RouteSegmentResult> &)rs includeRef:(BOOL)includeRef
 {
     OAAppSettings *settings = OAAppSettings.sharedManager;
     NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
@@ -68,55 +105,46 @@
     return [OARoutingHelperUtils formatStreetName:nm ref:includeRef ? rf : nil destination:dn towards:@"»"];
 }
 
-+ (OACurrentStreetName *) getCurrentName:(OANextDirectionInfo *)n
+- (void) setupCurrentName:(OARoutingHelper *)routingHelper info:(OANextDirectionInfo *)info
 {
-    OARoutingHelper *routingHelper = OARoutingHelper.sharedInstance;
-    OACurrentStreetName *streetName;
-    CLLocation *l = routingHelper.getLastFixedLocation;
-    OAAnnounceTimeDistances *adt = [[routingHelper getVoiceRouter] getAnnounceTimeDistances];
-    BOOL isSet = false;
-    float speed = 0;
-    if (l && l.speed >=0)
-        speed = l.speed;
+    CLLocation *l = [routingHelper getLastFixedLocation];
+    OAAnnounceTimeDistances *adt = routingHelper.getVoiceRouter.getAnnounceTimeDistances;
+    BOOL isSet = NO;
     // 1. turn is imminent
-    if (n.distanceTo > 0 && n.directionInfo && !n.directionInfo.turnType->isSkipToSpeak() &&
-        [adt isTurnStateActive:[adt getSpeed:l] dist:n.distanceTo * 1.3 turnType:kStatePrepareTurn])
+    if (info.distanceTo > 0 && [adt isTurnStateActive:[adt getSpeed:l] dist:info.distanceTo * 1.3 turnType:kStatePrepareTurn])
     {
-        streetName = [[OACurrentStreetName alloc] initWithStreetName:n useDestination:YES];
-        isSet = streetName.isSet;
+        _useDestination = YES;
+        isSet = [self setupStreetName:info];
     }
     // 2. display current road street name
     if (!isSet)
     {
-        streetName = [[OACurrentStreetName alloc] init];
-        auto rs = routingHelper.getCurrentSegmentResult;
+        _useDestination = NO;
+        const auto& rs = routingHelper.getCurrentSegmentResult;
         if (rs)
         {
-            streetName.text = [self.class getRouteSegmentStreetName:rs includeRef:NO];
-            streetName.shields = [RoadShield createShields:rs->object];
-            if (streetName.text.length == 0 && streetName.shields.count == 0)
-            {
-                streetName.text = [self.class getRouteSegmentStreetName:rs includeRef:YES];
-            }
-            isSet = streetName.text.length > 0 || streetName.shields.count > 0;
-            streetName.showMarker = YES;
+            _text = [self.class getRouteSegmentStreetName:routingHelper rs:rs includeRef:NO];
+            _showMarker = YES;
+            _shields = [RoadShield createShields:rs->object];
+            if (_text.length == 0 && _shields.count == 0)
+                _text = [self.class getRouteSegmentStreetName:routingHelper rs:rs includeRef:YES];
+            
+            isSet = _text.length > 0 || _shields.count > 0;
         }
     }
     // 3. display next road street name if this one empty
     if (!isSet)
     {
-        auto rs = routingHelper.getNextStreetSegmentResult;
+        const auto& rs = routingHelper.getNextStreetSegmentResult;
         if (rs)
         {
-            streetName.text = [self.class getRouteSegmentStreetName:rs includeRef:NO];
-            streetName.turnType = TurnType::ptrValueOf(TurnType::C, false);
-            streetName.shields = [RoadShield createShields:rs->object];
+            _text = [self.class getRouteSegmentStreetName:routingHelper rs:rs includeRef:NO];
+            _turnType = TurnType::ptrValueOf(TurnType::C, false);
+            _shields = [RoadShield createShields:rs->object];
         }
     }
-    if (streetName.turnType)
-        streetName.showMarker = YES;
-    
-    return streetName;
+    if (!_turnType)
+        _showMarker = YES;
 }
 
 - (BOOL)isEqual:(id)object
@@ -137,6 +165,7 @@
         return NO;
     if (self.exitRef && otherName.exitRef && ![self.exitRef isEqualToString:otherName.exitRef])
         return NO;
+    
     return YES;
 }
 
@@ -154,9 +183,11 @@
 
 @implementation RoadShield
 
-- (instancetype)initWithRDO:(std::shared_ptr<RouteDataObject>)rdo tag:(NSString *)tag value:(NSString *)value {
+- (instancetype)initWithRDO:(std::shared_ptr<RouteDataObject>)rdo tag:(NSString *)tag value:(NSString *)value
+{
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _rdo = rdo;
         _tag = [tag copy];
         _value = [value copy];
@@ -164,19 +195,21 @@
     return self;
 }
 
-+ (NSArray<RoadShield *> *)createShields:(std::shared_ptr<RouteDataObject>)rdo {
++ (NSArray<RoadShield *> *)createShields:(std::shared_ptr<RouteDataObject>)rdo
+{
     NSMutableArray<RoadShield *> *shields = [NSMutableArray array];
     NSMutableString *additional = [NSMutableString string];
     
     if (rdo && !rdo->namesIds.empty()) {
         for (NSInteger i = 0; i < rdo->namesIds.size(); i++) {
             NSString *tag = [NSString stringWithUTF8String:rdo->region->quickGetEncodingRule(rdo->namesIds[i].first).getTag().c_str()];
-
             NSString *val = [NSString stringWithUTF8String:rdo->names[rdo->namesIds[i].first].c_str()];
             if (![tag hasSuffix:@"_ref"] && ![tag hasPrefix:@"route_road"])
             {
                 [additional appendFormat:@"%@=%@;", tag, val];
-            } else if ([tag hasPrefix:@"route_road"] && [tag hasSuffix:@"_ref"]) {
+            }
+            else if ([tag hasPrefix:@"route_road"] && [tag hasSuffix:@"_ref"])
+            {
                 RoadShield *shield = [[RoadShield alloc] initWithRDO:rdo tag:tag value:val];
                 [shields addObject:shield];
             }
@@ -188,7 +221,8 @@
     return [shields copy];
 }
 
-+ (NSArray<RoadShield *> *)createDestination:(std::shared_ptr<RouteDataObject>)rdo destRef:(NSString *)destRef {
++ (NSArray<RoadShield *> *)createDestination:(std::shared_ptr<RouteDataObject>)rdo destRef:(NSString *)destRef
+{
     NSMutableArray<RoadShield *> * shields = [[self createShields:rdo] mutableCopy];
     if (rdo && destRef.length > 0 && shields.count > 0)
     {
@@ -203,17 +237,14 @@
         {
             map[s.value] = s;
             if ([split containsObject:s.value])
-            {
                 tag = s.tag;
-            }
+
             additional = s.additional;
         }
 
         [shields removeAllObjects];
         if (tag == nil)
-        {
             return shields;
-        }
         
         for (NSString *s in split)
         {
@@ -231,14 +262,13 @@
     return shields;
 }
 
-- (BOOL)isEqual:(id)object {
-    if (self == object) {
+- (BOOL)isEqual:(id)object
+{
+    if (self == object)
         return YES;
-    }
     
-    if (![object isKindOfClass:self.class]) {
+    if (![object isKindOfClass:self.class])
         return NO;
-    }
     
     RoadShield *shield = (RoadShield *)object;
     
@@ -251,7 +281,7 @@
     NSUInteger result = [self.tag hash];
     result = 31 * result + [self.value hash];
     result = 31 * result + (self.rdo ? self.rdo->id : 0);
-
     return result;
 }
+
 @end

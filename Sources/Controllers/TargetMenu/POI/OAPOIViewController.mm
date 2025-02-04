@@ -31,12 +31,14 @@
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
 #import "OACollapsableLabelView.h"
+#import "OARenderedObject.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Search/TransportStopsInAreaSearch.h>
 #include <OsmAndCore/ObfDataInterface.h>
 
 #define WIKI_LINK @".wikipedia.org/w"
+#define US_MAPS_RECREATION_AREA @"us_maps_recreation_area"
 
 static const NSInteger AMENITY_ID_RIGHT_SHIFT = 1;
 static const NSInteger NON_AMENITY_ID_RIGHT_SHIFT = 7;
@@ -71,30 +73,35 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     self = [self init];
     if (self)
     {
-        self.poi = poi;
-        if (poi.hasOpeningHours)
-            _openingHoursInfo = OpeningHoursParser::getInfo([poi.openingHours UTF8String]);
-        
-        if ([poi.type.category.name isEqualToString:@"transportation"])
-        {
-            BOOL showTransportStops = NO;
-            OAPOIFilter *f = [poi.type.category getPoiFilterByName:@"public_transport"];
-            if (f)
-            {
-                for (OAPOIType *t in f.poiTypes)
-                {
-                    if ([t.name isEqualToString:poi.type.name])
-                    {
-                        showTransportStops = YES;
-                        break;
-                    }
-                }
-            }
-            if (showTransportStops)
-                [self processTransportStop];
-        }
+        [self setup:poi];
     }
     return self;
+}
+
+- (void) setup:(OAPOI *)poi
+{
+    self.poi = poi;
+    if (poi.hasOpeningHours)
+        _openingHoursInfo = OpeningHoursParser::getInfo([poi.openingHours UTF8String]);
+    
+    if ([poi.type.category.name isEqualToString:@"transportation"])
+    {
+        BOOL showTransportStops = NO;
+        OAPOIFilter *f = [poi.type.category getPoiFilterByName:@"public_transport"];
+        if (f)
+        {
+            for (OAPOIType *t in f.poiTypes)
+            {
+                if ([t.name isEqualToString:poi.type.name])
+                {
+                    showTransportStops = YES;
+                    break;
+                }
+            }
+        }
+        if (showTransportStops)
+            [self processTransportStop];
+    }
 }
 
 - (void) viewDidLoad
@@ -125,6 +132,11 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 }
 
 - (id) getTargetObj
+{
+    return self.poi;
+}
+
+- (OAMapObject *) mapObject
 {
     return self.poi;
 }
@@ -578,6 +590,14 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                 }
                 [list addObject:poiType];
             }
+            else if ([convertedKey hasPrefix:US_MAPS_RECREATION_AREA])
+            {
+                NSString *translatedUsMapsKey = [_poiHelper getTranslation:convertedKey];
+                if (translatedUsMapsKey.length > 0)
+                    textPrefix = translatedUsMapsKey;
+                else
+                    textPrefix = [OAUtilities capitalizeFirstLetter:convertedKey];
+            }
             else
             {
                 textPrefix = convertedKey.capitalizedString;
@@ -795,13 +815,9 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         [rows addObject:desc];
     }
 
-    long long objectId = self.poi.obfId;
-    if (osmEditingEnabled && (objectId > 0 && ((objectId % 2 == AMENITY_ID_RIGHT_SHIFT) || (objectId >> NON_AMENITY_ID_RIGHT_SHIFT) < INT_MAX || self.poi.isRenderedObject)))
+    NSString *link = [self getOsmUrl];
+    if (link.length > 0)
     {
-        OAPOIType *poiType = self.poi.type;
-        BOOL isAmenity = poiType && ![poiType isKindOfClass:[OAPOILocationType class]];
-
-        NSString * link = [ObfConstants getOsmUrlForId:self.poi];
         [rows addObject:[[OARowInfo alloc] initWithKey:nil
                                                   icon:[UIImage imageNamed:@"ic_custom_osm_edits"]
                                             textPrefix:nil
@@ -814,6 +830,11 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                                          isPhoneNumber:NO
                                                  isUrl:YES]];
     }
+}
+
+- (NSString *) getOsmUrl
+{
+    return [ObfConstants getOsmUrlForId:self.poi];
 }
 
 - (void)configureRowValue:(id)value

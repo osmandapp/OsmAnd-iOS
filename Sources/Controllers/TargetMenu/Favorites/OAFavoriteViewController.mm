@@ -55,7 +55,9 @@
 
 - (void) acquireOriginObject
 {
-    _originObject = [OAPOIHelper findPOIByOriginName:_favorite.getAmenityOriginName lat:_favorite.getLatitude lon:_favorite.getLongitude];
+    NSString *originName = _favorite.getAmenityOriginName;
+    if (originName && originName.length > 0)
+        _originObject = [OAPOIHelper findPOIByOriginName:_favorite.getAmenityOriginName lat:_favorite.getLatitude lon:_favorite.getLongitude];
     if (!_originObject)
         _originObject = [_favorite getAmenity];
 }

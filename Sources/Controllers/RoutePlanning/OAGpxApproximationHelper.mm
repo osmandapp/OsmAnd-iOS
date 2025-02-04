@@ -23,9 +23,8 @@
 
 @implementation OAGpxApproximationHelper
 {
-    NSMutableDictionary<OALocationsHolder *, OAGpxRouteApproximation *> *_resultMap;
     NSArray<OALocationsHolder *> *_locationsHolders;
-    OAGpxApproximator *_gpxApproximator;
+    OAGpxApproximator *_currentApproximator;
     OAApplicationMode *_appMode;
     float _distanceThreshold;
 }
@@ -36,7 +35,6 @@
     if (self)
     {
         _locationsHolders = [locations copy];
-        _resultMap = [[NSMutableDictionary alloc] init];
         _appMode = appMode;
         _distanceThreshold = threshold;
     }
@@ -54,90 +52,72 @@
     _distanceThreshold = threshold;
 }
 
-- (BOOL)calculateGpxApproximation:(BOOL)newCalculation
+- (void)calculateGpxApproximationAsync
 {
-    // UI Thread+
-    if (newCalculation)
+    if (_currentApproximator != nil)
     {
-        if (_gpxApproximator != nil)
-        {
-            [_gpxApproximator cancelApproximation];
-            _gpxApproximator = nil;
-        }
-        
-        [_resultMap removeAllObjects];
-        if (self.delegate)
-            [self.delegate didStartProgress];
+        [_currentApproximator cancelApproximation];
+        _currentApproximator = nil;
     }
     
-    OAGpxApproximator *gpxApproximator = nil;
+    if (self.delegate)
+        [self.delegate didStartProgress];
+    
+    NSMutableArray<OAGpxApproximator *> *approximateList = [NSMutableArray array];
     for (OALocationsHolder *locationsHolder in _locationsHolders)
     {
-        if (!_resultMap[locationsHolder])
-        {
-            gpxApproximator = [self getNewGpxApproximator:locationsHolder];
-            break;
-        }
+        OAGpxApproximator *approximate = [self getNewGpxApproximator:locationsHolder];
+        if (approximate != nil)
+            [approximateList addObject:approximate];
     }
     
-    if (gpxApproximator != nil)
-    {
-        _gpxApproximator = gpxApproximator;
-        _gpxApproximator.mode = _appMode;
-        _gpxApproximator.pointApproximation = _distanceThreshold;
-        [self approximateGpx:_gpxApproximator];
-        return YES;
-    }
+    NSMutableDictionary<OALocationsHolder *, OAGpxRouteApproximation *> *approximateResult = [[NSMutableDictionary alloc] init];
+    if (self.delegate)
+        [self.delegate didApproximationStarted];
     
-    return NO;
+    @try {
+        [self approximateMultipleGpxAsync:approximateList withResult:approximateResult];
+    } @catch (NSException *exception) {
+        NSLog(@"Error: %@, %@", exception.name, exception.reason);
+    }
 }
 
 - (OAGpxApproximator *)getNewGpxApproximator:(OALocationsHolder *)locationsHolder
 {
     OAGpxApproximator *gpxApproximator = [[OAGpxApproximator alloc] initWithApplicationMode:_appMode pointApproximation:_distanceThreshold locationsHolder:locationsHolder];
     gpxApproximator.progressDelegate = self;
+    [gpxApproximator setMode:_appMode];
+    [gpxApproximator setPointApproximation:_distanceThreshold];
     return gpxApproximator;
 }
 
-- (void) approximateGpx:(OAGpxApproximator *)gpxApproximator
+- (void)approximateMultipleGpxAsync:(NSMutableArray<OAGpxApproximator *> *)approximationsToDo withResult:(NSMutableDictionary<OALocationsHolder *, OAGpxRouteApproximation *> *)approximateResult
 {
-    // UI Thread+
-    if (self.delegate)
-        [self.delegate didApproximationStarted];
-    
-    [gpxApproximator calculateGpxApproximation:[[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OAGpxRouteApproximation *__autoreleasing *object) {
-        // wait for first result as final
-        if (!gpxApproximator.isCancelled)
-        {
-            if (*object)
-                _resultMap[gpxApproximator.locationsHolder] = *object;
-            if (![self calculateGpxApproximation:NO])
-                [self onApproximationFinished];
-        }
-        return YES;
-    } cancelledFunc:^BOOL {
-        return NO;
-    }]];
-}
-
-- (void)onApproximationFinished
-{
-    NSMutableArray<OAGpxRouteApproximation *> *approximations = [NSMutableArray array];
-    NSMutableArray<NSArray<OASWptPt *> *> *points = [NSMutableArray array];
-    for (OALocationsHolder *locationsHolder in _locationsHolders)
+    if (approximationsToDo.count > 0)
     {
-        OAGpxRouteApproximation *approximation = _resultMap[locationsHolder];
-        if (approximation != nil)
+        OAGpxApproximator *gpxApproximator = approximationsToDo.firstObject;
+        [approximationsToDo removeObjectAtIndex:0];
+        _currentApproximator = gpxApproximator;
+        [gpxApproximator calculateGpxApproximation:[[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OAGpxRouteApproximation *__autoreleasing *approxPtr) {
+            OAGpxRouteApproximation *strongApprox = (approxPtr && *approxPtr) ? *approxPtr : nil;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (!gpxApproximator.isCancelled)
+                {
+                    approximateResult[gpxApproximator.locationsHolder] = strongApprox;
+                    [self approximateMultipleGpxAsync:approximationsToDo withResult:approximateResult];
+                }
+            });
+            return YES;
+        } cancelledFunc:^BOOL {
+            return NO;
+        }]];
+    } else {
+        if (approximateResult.count > 0)
         {
-            [approximations addObject:approximation];
-            [points addObject:locationsHolder.getWptPtList];
+            NSArray *pair = [self processApproximationResults:approximateResult];
+            if (self.delegate)
+                [self.delegate didFinishAllApproximationsWithResults:pair.firstObject points:pair.lastObject];
         }
-    }
-    
-    if (self.delegate) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.delegate didFinishAllApproximationsWithResults:approximations points:points];
-        });
     }
 }
 
@@ -154,6 +134,7 @@
 
 - (NSArray *)calculateGpxApproximationSync
 {
+    NSMutableDictionary<OALocationsHolder *, OAGpxRouteApproximation *> *approximateResult = [[NSMutableDictionary alloc] init];
     for (OALocationsHolder *holder in _locationsHolders)
     {
         OAGpxApproximator *approximator = [self getNewGpxApproximator:holder];
@@ -161,7 +142,7 @@
         {
             [approximator calculateGpxApproximationSync:[[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OAGpxRouteApproximation *__autoreleasing *approximation) {
                 if (approximation && *approximation)
-                    _resultMap[holder] = *approximation;
+                    approximateResult[holder] = *approximation;
                 return YES;
             } cancelledFunc:^BOOL {
                 return NO;
@@ -169,16 +150,16 @@
         }
     }
     
-    return [self processApproximationResults];
+    return [self processApproximationResults:approximateResult];
 }
 
-- (NSArray *)processApproximationResults
+- (NSArray *)processApproximationResults:(NSDictionary<OALocationsHolder *, OAGpxRouteApproximation *> *)approximateResult
 {
     NSMutableArray<OAGpxRouteApproximation *> *approximations = [NSMutableArray array];
     NSMutableArray<NSArray<OASWptPt *> *> *points = [NSMutableArray array];
     for (OALocationsHolder *holder in _locationsHolders)
     {
-        OAGpxRouteApproximation *approximation = _resultMap[holder];
+        OAGpxRouteApproximation *approximation = approximateResult[holder];
         if (approximation)
         {
             [approximations addObject:approximation];
@@ -217,12 +198,10 @@
 - (void)updateProgress:(OAGpxApproximator *)approximator progress:(NSInteger)progress
 {
     // UI Thread+
-    if (approximator == _gpxApproximator)
+    if (approximator == _currentApproximator)
     {
-        float partSize = 100. / _locationsHolders.count;
-        float p = _resultMap.count * partSize + (progress / 100.) * partSize;
         if (self.delegate)
-            [self.delegate didUpdateProgress:(int)p];
+            [self.delegate didUpdateProgress:progress];
     }
 }
 

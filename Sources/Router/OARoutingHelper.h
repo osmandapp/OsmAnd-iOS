@@ -81,6 +81,7 @@ struct RouteSegmentResult;
 - (int) getLeftDistance;
 - (int) getLeftDistanceNextIntermediate;
 - (long) getLeftTime;
+- (long) getLeftTimeNextTurn;
 - (long) getLeftTimeNextIntermediate;
 - (NSArray<OARouteDirectionInfo *> *) getRouteDirections;
 - (CLLocation *) getLocationFromRouteDirection:(OARouteDirectionInfo *)i;

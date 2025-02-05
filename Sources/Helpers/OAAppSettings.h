@@ -982,6 +982,9 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @property (nonatomic) OACommonStringList *poiFiltersOrder;
 @property (nonatomic) OACommonStringList *inactivePoiFilters;
 
+@property (nonatomic) OACommonInteger *contextGallerySpanGridCount;
+@property (nonatomic) OACommonInteger *contextGallerySpanGridCountLandscape;
+
 // Widgets
 
 @property (nonatomic) OACommonListOfStringList *leftWidgetPanelOrder;

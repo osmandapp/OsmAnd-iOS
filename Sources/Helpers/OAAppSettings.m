@@ -435,6 +435,9 @@ static NSString * const lastUUIDChangeTimestampKey = @"lastUUIDChangeTimestamp";
 
 static NSString * const kShowHeightmapsKey = @"showHeightmaps";
 
+static NSString * const kContextGallerySpanGridCountKey = @"contextGallerySpanGridCount";
+static NSString * const kContextGallerySpanGridCountLandscapeKey = @"contextGallerySpanGridCountLandscape";
+
 // Widgets
 static NSString * const leftWidgetPanelOrderKey = @"left_widget_panel_order";
 static NSString * const rightWidgetPanelOrderKey = @"right_widget_panel_order";
@@ -4237,6 +4240,12 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
 
         _positionPlacementOnMap = [OACommonInteger withKey:positionPlacementOnMapKey defValue:EOAPositionPlacementAuto];
         [_profilePreferences setObject:_positionPlacementOnMap forKey:@"position_placement_on_map"];
+        
+        _contextGallerySpanGridCount = [[OACommonInteger withKey:kContextGallerySpanGridCountKey defValue:3] makeProfile];
+        [_profilePreferences setObject:_contextGallerySpanGridCount forKey:@"context_gallery_span_grid_count"];
+        
+        _contextGallerySpanGridCountLandscape = [[OACommonInteger withKey:kContextGallerySpanGridCountLandscapeKey defValue:7] makeProfile];
+        [_profilePreferences setObject:_contextGallerySpanGridCountLandscape forKey:@"context_gallery_span_grid_count_landscape"];
 
         _rotateMap = [OACommonInteger withKey:rotateMapKey defValue:ROTATE_MAP_MANUAL];
         [_rotateMap setModeDefaultValue:@(ROTATE_MAP_BEARING) mode:[OAApplicationMode CAR]];

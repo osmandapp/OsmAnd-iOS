@@ -67,4 +67,19 @@ class WikiAlgorithms : NSObject {
     static func isUrl(_ value: String) -> Bool {
         return value.lowercased().hasPrefix("http://") || value.lowercased().hasPrefix("https://")
     }
+
+    static func formatWikiDate(_ date: String?) -> String {
+        guard let date, !date.isEmpty else {
+            return ""
+        }
+
+        let cleanDate = date.hasPrefix("+") ? String(date.dropFirst()) : date
+        let isoFormatter = ISO8601DateFormatter()
+        
+        if let dateTime = isoFormatter.date(from: cleanDate) {
+            return DateFormatter.dateStyleMedium.string(from: dateTime)
+        }
+        
+        return date
+    }
 }

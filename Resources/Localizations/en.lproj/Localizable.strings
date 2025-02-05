@@ -4013,3 +4013,5 @@
 "auto_25_chars_route_tu_kr" = "Make U-turn and keep right";
 "auto_25_chars_route_roundabout_kl" = "Take the %d exit and keep left";
 "auto_25_chars_route_roundabout_kr" = "Take the %d exit and keep right";
+
+"shared_string_date" = "Date";

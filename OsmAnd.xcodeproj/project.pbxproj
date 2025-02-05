@@ -3143,6 +3143,9 @@
 		FA86F41C2AE7CE0100DC3B2B /* BLEBikeSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA86F41B2AE7CE0100DC3B2B /* BLEBikeSensor.swift */; };
 		FA882EF22CDCFE98001F3814 /* LockScreenAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA882EF12CDCFE98001F3814 /* LockScreenAction.swift */; };
 		FA9217072D50C9640074E958 /* GalleryGridViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9217062D50C9640074E958 /* GalleryGridViewController.swift */; };
+		FA92170E2D52544F0074E958 /* GalleryGridDatailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA92170D2D5254420074E958 /* GalleryGridDatailsViewController.swift */; };
+		FA9217102D525D600074E958 /* GalaryContextMenuProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA92170F2D525D600074E958 /* GalaryContextMenuProvider.swift */; };
+		FA9217122D5277310074E958 /* DateFormatter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9217112D5277310074E958 /* DateFormatter+Extension.swift */; };
 		FA9628E22AFCFB57004B7DEF /* SectionHeaderFooterButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA9628E12AFCFB57004B7DEF /* SectionHeaderFooterButton.xib */; };
 		FA9628E42AFCFCE1004B7DEF /* SectionHeaderFooterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9628E32AFCFCE1004B7DEF /* SectionHeaderFooterButton.swift */; };
 		FA9628E62AFD2F2E004B7DEF /* BLETemperatureSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9628E52AFD2F2E004B7DEF /* BLETemperatureSensor.swift */; };
@@ -7676,6 +7679,9 @@
 		FA86F41B2AE7CE0100DC3B2B /* BLEBikeSensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEBikeSensor.swift; sourceTree = "<group>"; };
 		FA882EF12CDCFE98001F3814 /* LockScreenAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockScreenAction.swift; sourceTree = "<group>"; };
 		FA9217062D50C9640074E958 /* GalleryGridViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryGridViewController.swift; sourceTree = "<group>"; };
+		FA92170D2D5254420074E958 /* GalleryGridDatailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryGridDatailsViewController.swift; sourceTree = "<group>"; };
+		FA92170F2D525D600074E958 /* GalaryContextMenuProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalaryContextMenuProvider.swift; sourceTree = "<group>"; };
+		FA9217112D5277310074E958 /* DateFormatter+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Extension.swift"; sourceTree = "<group>"; };
 		FA9628E12AFCFB57004B7DEF /* SectionHeaderFooterButton.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SectionHeaderFooterButton.xib; sourceTree = "<group>"; };
 		FA9628E32AFCFCE1004B7DEF /* SectionHeaderFooterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderFooterButton.swift; sourceTree = "<group>"; };
 		FA9628E52AFD2F2E004B7DEF /* BLETemperatureSensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLETemperatureSensor.swift; sourceTree = "<group>"; };
@@ -10696,6 +10702,8 @@
 		DA5A79A726C563A000F274C7 /* Cards */ = {
 			isa = PBXGroup;
 			children = (
+				FA92170F2D525D600074E958 /* GalaryContextMenuProvider.swift */,
+				FA92170D2D5254420074E958 /* GalleryGridDatailsViewController.swift */,
 				FA52B0722D4D237D0001B693 /* CardsFilter.swift */,
 				FA4C57002D48E8C600438A5C /* NoInternetCardCell.swift */,
 				FA4C56FE2D48E84200438A5C /* NoInternetCard.swift */,
@@ -13441,6 +13449,7 @@
 		DAABE4EC2A16578A00569F71 /* SwiftExtensions */ = {
 			isa = PBXGroup;
 			children = (
+				FA9217112D5277310074E958 /* DateFormatter+Extension.swift */,
 				FAE446D52CD3C10300598BE3 /* UIScreen+Extension.swift */,
 				FA5A21A12A9C7DE100319695 /* CALayer+Extension.swift */,
 				DAABE4ED2A1657AF00569F71 /* Color+INT.swift */,
@@ -16528,6 +16537,7 @@
 				DA5A835526C563A800F274C7 /* OAGPXTrackCell.m in Sources */,
 				DA5A844926C563A900F274C7 /* OADiscountToolbarViewController.mm in Sources */,
 				DA5A84A926C563A900F274C7 /* OAAddTrackFolderViewController.m in Sources */,
+				FA92170E2D52544F0074E958 /* GalleryGridDatailsViewController.swift in Sources */,
 				DA5A846426C563A900F274C7 /* OATerrainMapLayer.mm in Sources */,
 				DA5A830D26C563A800F274C7 /* OATargetInfoCollapsableViewCell.m in Sources */,
 				C589BC9F2C610560002769F6 /* OATwoIconsButtonTableViewCell.swift in Sources */,
@@ -16974,6 +16984,7 @@
 				DA5A844F26C563A900F274C7 /* OAUnderlayMapLayer.mm in Sources */,
 				DA45B2402A2F47200055055A /* Extensions.swift in Sources */,
 				46C49509291E57DA005A9D70 /* OANauticalDepthParametersViewController.m in Sources */,
+				FA9217122D5277310074E958 /* DateFormatter+Extension.swift in Sources */,
 				DA69ED5F2A385DA6001022C7 /* WidgetPageViewController.swift in Sources */,
 				DA5A83CF26C563A800F274C7 /* OATransportStopViewController.mm in Sources */,
 				DA5A839026C563A800F274C7 /* OAOsmAndLiveSelectionViewController.mm in Sources */,
@@ -16987,6 +16998,7 @@
 				FA882EF22CDCFE98001F3814 /* LockScreenAction.swift in Sources */,
 				DA5A82F426C563A800F274C7 /* OASearchMoreCell.m in Sources */,
 				DA5A81BA26C563A700F274C7 /* OAPOIHistoryType.mm in Sources */,
+				FA9217102D525D600074E958 /* GalaryContextMenuProvider.swift in Sources */,
 				C5B4AE5C2B1F480C0019F357 /* HelpDetailsViewController.swift in Sources */,
 				46E8FFC729ED759000DB1EFE /* UINavigationController+keyCommands.m in Sources */,
 				DA5A844E26C563A900F274C7 /* OATransportStopsLayer.mm in Sources */,

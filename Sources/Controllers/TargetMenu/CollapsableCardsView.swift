@@ -8,7 +8,6 @@
 
 @objc
 protocol CollapsableCardViewDelegate: AnyObject {
-    @objc func onViewExpanded()
     @objc func onRecalculateHeight()
 }
 
@@ -41,9 +40,6 @@ final class CollapsableCardsView: OACollapsableView {
                 OAAppSettings.sharedManager().onlinePhotosRowCollapsed.set(collapsed)
             case .mapilary:
                 OAAppSettings.sharedManager().mapillaryPhotosRowCollapsed.set(collapsed)
-            }
-            if !collapsed, let delegate {
-                delegate.onViewExpanded()
             }
         }
     }

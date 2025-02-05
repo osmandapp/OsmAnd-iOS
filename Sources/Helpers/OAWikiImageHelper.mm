@@ -102,6 +102,8 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
             url = url.length == 0
                 ? [NSString stringWithFormat:@"%@%@%@", OSMAND_API_ENDPOINT, @"wiki=", wikiTitle]
                 : [url stringByAppendingFormat:@"&%@%@", @"wiki=", wikiTitle];
+            
+            url = [url stringByAppendingFormat:@"&addMetaData=true"];
         }
         
 //        if ([keys containsObject:WIKIDATA_TAG])
@@ -163,15 +165,20 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
                 if (!error && jsonDict)
                 {
                     try {
-                        NSArray<NSString *> *images = jsonDict[@"features"];
-                        for (NSString *image in images)
+                        // jsonDict[@"features"] ?:
+                        NSArray<NSString *> *images = jsonDict[@"features-v2"];
+                        for (NSDictionary<NSString *, NSString *> *dic in images)
                         {
-                            WikiImage *wikiImage = [self getOsmandApiWikiImage:image];
-                            if (wikiImage)
+                            if (dic[@"image"])
                             {
-                                WikiImageCard *card = [[WikiImageCard alloc] initWithWikiImage:wikiImage type:@"wikimedia-photo"];
-                                if (card)
-                                    [cards addObject:card];
+                                WikiImage *wikiImage = [self getOsmandApiWikiImage:dic[@"image"]];
+                                [wikiImage parceMetaDataWith:dic];
+                                if (wikiImage)
+                                {
+                                    WikiImageCard *card = [[WikiImageCard alloc] initWithWikiImage:wikiImage type:@"wikimedia-photo"];
+                                    if (card)
+                                        [cards addObject:card];
+                                }
                             }
                         }
                     }

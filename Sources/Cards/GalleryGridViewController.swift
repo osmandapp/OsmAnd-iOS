@@ -47,12 +47,9 @@ final class GalleryGridViewController: OABaseNavbarViewController {
     }
     
     private func createCompositionalLayout() -> UICollectionViewLayout {
-        let columns: Int
-        if UIDevice.current.orientation.isLandscape {
-            columns = 7
-        } else {
-            columns = 3
-        }
+        let columns = UIDevice.current.orientation.isLandscape
+        ? OAAppSettings.sharedManager().contextGallerySpanGridCountLandscape.get()
+        : OAAppSettings.sharedManager().contextGallerySpanGridCount.get()
         
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0 / CGFloat(columns)), heightDimension: .fractionalHeight(1.0))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -116,7 +113,8 @@ extension GalleryGridViewController: UICollectionViewDelegate {
     private func contextMenuInteraction(with card: AbstractCard) -> UIContextMenuConfiguration? {
         let actionProvider: UIContextMenuActionProvider = { [weak self] _ in
             let detailsAction = UIAction(title: localizedString("shared_string_details"), image: UIImage.icCustomInfoOutlined) { _ in
-                print("detailsAction")
+                guard let self else { return }
+                GalaryContextMenuProvider.openDetailsController(card: card, rootController: self)
             }
             detailsAction.accessibilityLabel = localizedString("shared_string_details")
             let openInBrowserAction = UIAction(title: localizedString("open_in_browser"), image: UIImage.icCustomExternalLink) { _ in
@@ -124,82 +122,22 @@ extension GalleryGridViewController: UICollectionViewDelegate {
                     item.opneURL(OARootViewController.instance().mapPanel)
                 } else {
                     guard let item = card as? ImageCard else { return }
-                    self?.openURLIfValid(urlString: item.imageUrl)
+                    GalaryContextMenuProvider.openURLIfValid(urlString: item.imageUrl)
                 }
             }
             openInBrowserAction.accessibilityLabel = localizedString("open_in_browser")
             let firsrSection = UIMenu(title: "", options: .displayInline, children: [detailsAction, openInBrowserAction ])
             let downloadAction = UIAction(title: localizedString("shared_string_download"), image: UIImage.icCustomDownload) { _ in
+                guard let self else { return }
                 guard let item = card as? ImageCard,
                       !item.imageUrl.isEmpty else { return }
-                self?.downloadImageAndSaveToDocumentsDownload(urlString: item.imageUrl)
+                GalaryContextMenuProvider.downloadImageAndSaveToDocumentsDownload(urlString: item.imageUrl, view: self.view)
             }
             downloadAction.accessibilityLabel = localizedString("shared_string_download")
             let secondSection = UIMenu(title: "", options: .displayInline, children: [downloadAction])
             return UIMenu(title: "", image: nil, children: [firsrSection, secondSection])
         }
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: actionProvider)
-    }
-    
-    private func openURLIfValid(urlString: String?) {
-        guard let urlString, !urlString.isEmpty,
-              let url = URL(string: urlString),
-              UIApplication.shared.canOpenURL(url) else { return }
-        
-        UIApplication.shared.open(url)
-    }
-
-    private func downloadImageAndSaveToDocumentsDownload(urlString: String) {
-        guard let url = URL(string: urlString) else {
-            NSLog("Invalid URL.")
-            return
-        }
-        
-        // Download the image data from the URL
-        URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
-            guard let self else { return }
-            guard let data, error == nil else {
-                NSLog("Error downloading data: \(error?.localizedDescription ?? "Unknown error")")
-                return
-            }
-            
-            // Get the path to the Documents folder
-            let fileManager = FileManager.default
-            guard let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
-                NSLog("Could not get Documents directory.")
-                return
-            }
-            
-            // Create a "Download" subdirectory inside Documents
-            let downloadDirectory = documentsDirectory.appendingPathComponent("Download")
-            
-            // Create the "Download" directory if it doesn't exist
-            if !fileManager.fileExists(atPath: downloadDirectory.path) {
-                do {
-                    try fileManager.createDirectory(at: downloadDirectory, withIntermediateDirectories: true, attributes: nil)
-                    NSLog("Download directory created at: \(downloadDirectory.path)")
-                } catch {
-                    NSLog("Error creating Download directory: \(error.localizedDescription)")
-                    return
-                }
-            }
-            
-            // Create the full file URL in the "Download" folder
-            let fileURL = downloadDirectory.appendingPathComponent(url.lastPathComponent)
-            do {
-                // Save the image data as a file in the "Download" folder
-                try data.write(to: fileURL)
-                DispatchQueue.main.async {
-                    OAUtilities.showToast(localizedString("download_successful"), details: nil, duration: 4, in: self.view)
-                }
-                NSLog("File successfully saved at: \(fileURL.path)")
-            } catch {
-                DispatchQueue.main.async {
-                    OAUtilities.showToast(localizedString("download_failed"), details: nil, duration: 4, in: self.view)
-                }
-                NSLog("Error saving file: \(error.localizedDescription)")
-            }
-        }.resume()
     }
 }
 

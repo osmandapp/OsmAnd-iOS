@@ -1210,7 +1210,7 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
     CollapsableCardsView *mapillaryCardsView;
     if (_mapillaryCardsRowInfo)
     {
-        mapillaryCardsView =  (CollapsableCardsView *)_mapillaryCardsRowInfo.collapsableView;
+        mapillaryCardsView = (CollapsableCardsView *)_mapillaryCardsRowInfo.collapsableView;
     }
     
     __weak __typeof(self) weakSelf = self;
@@ -1241,33 +1241,6 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
             [mapillaryCardsView setCards:@[noInternetCard]];
         }
     }
-}
-
-- (void)onViewExpanded
-{
-//    _wikiCardsReady = NO;
-//    if (_onlinePhotoCardsRowInfo)
-//    {
-//        __weak __typeof(self) weakSelf = self;
-//        CollapsableCardsView *cardsView = (CollapsableCardsView *) _onlinePhotoCardsRowInfo.collapsableView;
-//        if (AFNetworkReachabilityManager.sharedManager.isReachable) {
-//            [cardsView setCards:@[[[ImageCard alloc] initWithData:@{@"key": @"loading"}]]];
-//            
-//            [[OAWikiImageHelper sharedInstance] sendNearbyWikiImagesRequest:_onlinePhotoCardsRowInfo targetObj:self.getTargetObj addOtherImagesOnComplete:^(NSMutableArray <AbstractCard *> *cards) {
-//                weakSelf.wikiCardsReady = YES;
-//                [weakSelf sendNearbyOtherImagesRequest:cards];
-//            }];
-//        } else {
-//            NoInternetCard *noInternetCard = [NoInternetCard new];
-//            noInternetCard.onTryAgainAction = ^{
-//                if (AFNetworkReachabilityManager.sharedManager.isReachable)
-//                {
-//                    [weakSelf onViewExpanded];
-//                }
-//            };
-//            [cardsView setCards:@[noInternetCard]];
-//        }
-//    }
 }
 
 #pragma mark - OAEditDescriptionViewControllerDelegate

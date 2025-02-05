@@ -17,6 +17,9 @@ final class WikiImage: NSObject {
     let imageStubUrl: String
     let imageHiResUrl: String
     let wikiMediaTag: String
+    
+    var mediaId: Int = -1
+    var metadata: Metadata?
 
     init(wikiMediaTag: String, imageName: String, imageStubUrl: String, imageHiResUrl: String) {
         self.wikiMediaTag = wikiMediaTag
@@ -29,25 +32,61 @@ final class WikiImage: NSObject {
     func getUrlWithCommonAttributions() -> String {
         "\(WIKIMEDIA_COMMONS_URL)\(WIKIMEDIA_FILE)\(wikiMediaTag)"
     }
+    
+    func parceMetaData(with dic: [String: Any]) {
+        self.metadata = Metadata()
+        
+        if let date = dic["date"] as? String {
+            metadata?.date = date
+        }
+        if let author = dic["author"] as? String {
+            metadata?.author = author
+        }
+        if let license = dic["license"] as? String {
+            metadata?.license = license
+        }
+        if let mediaId = dic["mediaId"] as? Int {
+            self.mediaId = mediaId
+        }
+    }
 }
 
 final class WikiImageCard: ImageCard {
     private(set) var urlWithCommonAttributions: String
+    var metadata: Metadata?
+    var wikiImage: WikiImage?
 
     init(wikiImage: WikiImage, type: String) {
         self.urlWithCommonAttributions = wikiImage.getUrlWithCommonAttributions()
         super.init(data: [:])
-        
+        self.wikiImage = wikiImage
         self.type = type
        
         self.topIcon = "ic_custom_logo_wikimedia"
         self.imageUrl = wikiImage.imageStubUrl
         self.title = wikiImage.imageName
         self.url = self.imageUrl
+        self.metadata = wikiImage.metadata
     }
 
     func opneURL(_ mapPanel: OAMapPanelViewController) {
         guard let viewController = OAWebViewController(urlAndTitle: urlWithCommonAttributions, title: title) else { return }
         mapPanel.navigationController?.pushViewController(viewController, animated: true)
     }
+}
+
+struct Metadata {
+    var date: String?
+    var author: String?
+    var license: String?
+    var description: String?
+    
+    
+    var isEmpty: Bool {
+        [date, author, license, description].allSatisfy { $0 == nil }
+    }
+    
+//    var isEmpty: Bool {
+//        date != nil && author != nil && license != nil && description != nil
+//    }
 }

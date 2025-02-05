@@ -2163,3 +2163,5 @@
 "auto_25_chars_route_tl_kl" = "Завийте наляво и дръжте ляво";
 "auto_25_chars_route_tl_kr" = "Завийте наляво и дръжте дясно";
 "auto_25_chars_route_tu_kl" = "Направете обратен завой и дръжте ляво";
+"routing_attr_avoid_cobblestone_name" = "Без калдъръм";
+"routing_attr_avoid_cobblestone_description" = "Без калдъръм";

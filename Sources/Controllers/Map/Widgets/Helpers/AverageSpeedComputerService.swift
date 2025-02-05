@@ -28,7 +28,7 @@ final class AverageSpeedComputerService: NSObject {
         computersById.removeValue(forKey: customId)
     }
     
-    func updateLocationForAll(_ location: CLLocation) {
+    func updateLocation(_ location: CLLocation) {
         for comp in computersById.values {
             comp.update(location)
         }

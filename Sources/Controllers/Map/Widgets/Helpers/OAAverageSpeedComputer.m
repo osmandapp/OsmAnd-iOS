@@ -167,16 +167,6 @@ static long BIGGEST_MEASURED_INTERVAL;
     return DEFAULT_INTERVAL_MILLIS;
 }
 
-+ (instancetype) sharedInstance
-{
-    static dispatch_once_t once;
-    static OAAverageSpeedComputer* sharedInstance;
-    dispatch_once(&once, ^{
-        sharedInstance = [[self alloc] init];
-    });
-    return sharedInstance;
-}
-
 - (instancetype)init
 {
     self = [super init];

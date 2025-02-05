@@ -48,13 +48,11 @@ static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSWi
 + (BOOL) cmatches:(NSString *)fullName part:(NSString *)part mode:(StringMatcherMode)mode
 {
     if ([OAArabicNormalizer isSpecialArabic:fullName]) {
-        NSString *normalized = [OAArabicNormalizer normalize:fullName];
-        fullName = normalized == nil ? fullName : normalized;
+        fullName = [OAArabicNormalizer normalize:fullName] ?: fullName;
     }
 
     if ([OAArabicNormalizer isSpecialArabic:part]) {
-        NSString *normalized = [OAArabicNormalizer normalize:part];
-        part = normalized == nil ? part : normalized;
+        part = [OAArabicNormalizer normalize:part] ?: part;
     }
     switch (mode)
     {

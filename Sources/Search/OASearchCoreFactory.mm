@@ -480,8 +480,7 @@
     {
         NSString *wordToSearch = [phrase getUnknownWordToSearch];
         if ([OAArabicNormalizer isSpecialArabic:wordToSearch]) {
-            NSString *normalized = [OAArabicNormalizer normalize:wordToSearch];
-            wordToSearch = normalized == nil ? wordToSearch : normalized;
+            wordToSearch = [OAArabicNormalizer normalize:wordToSearch] ?: wordToSearch;
         }
 
         if (wordToSearch.length == 0)
@@ -728,8 +727,7 @@
 
     NSString *searchWord = [phrase getUnknownWordToSearch];
     if ([OAArabicNormalizer isSpecialArabic:searchWord]) {
-        NSString *normalized = [OAArabicNormalizer normalize:searchWord];
-        searchWord = normalized == nil ? searchWord : normalized;
+        searchWord = [OAArabicNormalizer normalize:searchWord] ?: searchWord;
     }
     OANameStringMatcher *nm = [phrase getMainUnknownNameStringMatcher];
     

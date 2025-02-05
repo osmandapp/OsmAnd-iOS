@@ -3172,6 +3172,7 @@ typedef enum
 {
     OASGpxFile *gpxFile = nil;
     OASTrackItem *trackItem = nil;
+    BOOL joinSegments = NO;
     if (isCurrentTrack)
     {
         gpxFile = [OASavingTrackHelper.sharedInstance currentTrack];
@@ -3185,13 +3186,14 @@ typedef enum
             OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFilepath];
             trackItem = [[OASTrackItem alloc] initWithFile:file];
             trackItem.dataItem = gpx;
+            joinSegments = trackItem.joinSegments;
         }
     }
     if (gpxFile)
     {
         OASTrkSegment *segment = [gpxFile getGeneralSegment];
         OASGpxTrackAnalysis *analysis = !isCurrentTrack && [gpxFile getGeneralTrack] && segment
-            ? [TrackChartHelper getAnalysisFor:segment]
+            ? [TrackChartHelper getAnalysisFor:segment joinSegments:joinSegments]
             : [gpxFile getAnalysisFileTimestamp:0];
         state.scrollToSectionIndex = -1;
         state.routeStatistics = @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)];
@@ -3209,7 +3211,6 @@ typedef enum
                                                      state:(OATrackMenuViewControllerState *)state;
 {
     OASGpxFile *gpxFile;
-    
     if (trackItem.isShowCurrentTrack)
     {
         gpxFile = [OASavingTrackHelper.sharedInstance currentTrack];
@@ -3224,7 +3225,7 @@ typedef enum
     {
         OASTrkSegment *segment = [gpxFile getGeneralSegment];
         OASGpxTrackAnalysis *analysis = !trackItem.isShowCurrentTrack && [gpxFile getGeneralTrack] && segment
-            ? [TrackChartHelper getAnalysisFor:segment]
+            ? [TrackChartHelper getAnalysisFor:segment joinSegments:trackItem.joinSegments]
             : [gpxFile getAnalysisFileTimestamp:0];
         state.scrollToSectionIndex = -1;
         state.routeStatistics = @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)];

@@ -271,16 +271,18 @@
                 gpx.nearestCity = _gpx.nearestCity;
             [gpxDb updateDataItem:gpx];
             _gpx = [[OASTrackItem alloc] initWithFile:gpx.file];
+            _gpx.dataItem = gpx;
         }
     }
 }
 
 - (void)updateAnalysis
 {
-    BOOL hasGeneralSegment = !_isCurrentTrack && [_doc getGeneralTrack] && [_doc getGeneralSegment];
+    BOOL hasGeneralSegment = !_isCurrentTrack && _doc && [_doc getGeneralTrack] && [_doc getGeneralSegment];
     if (hasGeneralSegment)
     {
-        _analysis = _doc ? [TrackChartHelper getAnalysisFor:[_doc getGeneralSegment]] : nil;
+        BOOL joinSegments = _gpx.dataItem.joinSegments;
+        _analysis = _doc ? [TrackChartHelper getAnalysisFor:[_doc getGeneralSegment] joinSegments:joinSegments] : nil;
     }
     else
     {

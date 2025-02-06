@@ -88,6 +88,15 @@ final class DownloadingCellMultipleResourceHelper: DownloadingCellResourceHelper
         return super.getOrCreateCell(resourceId)
     }
     
+    override func getDefaultRightIconName(_ resourceId: String) -> String {
+        guard let resource = super.getResource(resourceId) as? OAMultipleResourceSwiftItem, let items = resource.items(), !items.isEmpty else {
+            return super.getDefaultRightIconName(resourceId)
+        }
+        
+        let setItems = Set(items.map { $0.resourceId().replacingOccurrences(of: "srtmf", with: "srtm") })
+        return setItems.count > 1 ? "ic_custom_multi_download" : super.getDefaultRightIconName(resourceId)
+    }
+    
     override func onCellClicked(_ resourceId: String) {
         guard let multipleItem = super.getResource(resourceId) as? OAMultipleResourceSwiftItem else { return }
         

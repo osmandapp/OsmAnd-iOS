@@ -589,17 +589,13 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                 }
                 [list addObject:poiType];
             }
-            else if ([convertedKey hasPrefix:US_MAPS_RECREATION_AREA])
-            {
-                NSString *translatedUsMapsKey = [_poiHelper getTranslation:convertedKey];
-                if (translatedUsMapsKey.length > 0)
-                    textPrefix = translatedUsMapsKey;
-                else
-                    textPrefix = [OAUtilities capitalizeFirstLetter:convertedKey];
-            }
             else
             {
-                textPrefix = convertedKey.capitalizedString;
+                NSString *translatedKey = [_poiHelper getTranslation:convertedKey];
+                if (translatedKey.length > 0)
+                    textPrefix = translatedKey;
+                else
+                    textPrefix = [OAUtilities capitalizeFirstLetter:convertedKey];
             }
         }
 

@@ -69,8 +69,9 @@ final class TrackChartHelper: NSObject {
         return nil
     }
 
-    static func getAnalysisFor(_ segment: TrkSegment) -> GpxTrackAnalysis {
+    static func getAnalysisFor(_ segment: TrkSegment, joinSegments: Bool) -> GpxTrackAnalysis {
         let analysis = GpxTrackAnalysis()
+        analysis.joinSegments = joinSegments
         let splitSegments = ArraySplitSegmentConverter.toKotlinArray(from: [SplitSegment(segment: segment)])
         analysis.prepareInformation(fileTimeStamp: 0,
                                     pointsAnalyser: nil,

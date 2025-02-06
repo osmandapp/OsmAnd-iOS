@@ -21,7 +21,7 @@
 #import "OARootViewController.h"
 #import "OAResourcesUIHelper.h"
 #import "OACurrentPositionHelper.h"
-
+#import "OsmAndSharedWrapper.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
 #define RECALCULATE_THRESHOLD_COUNT_CAUSING_FULL_RECALCULATE 3
@@ -258,6 +258,19 @@
         {
             _recalculateCountInInterval ++;
         }
+        
+        OAApplicationMode *mode = _routingHelper.getAppMode;
+        if (gpxRoute && (!gpxRoute.approximationParams || [gpxRoute.approximationParams getAppMode] != mode) && [_settings.detailedTrackGuidance get:mode] == EOATrackApproximationAutomatic)
+        {
+            OAGpxApproximationParams *approximationParams = [[OAGpxApproximationParams alloc] init];
+            [approximationParams setAppMode:mode];
+            [approximationParams setDistanceThreshold:[_settings.gpxApproximationDistance get:[_routingHelper getAppMode]]];
+            [gpxRoute setApproximationParams:approximationParams];
+        }
+        else if (gpxRoute && gpxRoute.approximationParams && [_settings.detailedTrackGuidance get:mode] == EOATrackApproximationManual)
+        {
+            [gpxRoute setApproximationParams:nil];
+        }
 
         OARouteCalculationParams *params = [[OARouteCalculationParams alloc] init];
         params.start = start;
@@ -273,7 +286,7 @@
         {
             _recalculateCountInInterval = 0;
         }
-        OAApplicationMode *mode = _routingHelper.getAppMode;
+
         params.leftSide = [OADrivingRegion isLeftHandDriving:[_settings.drivingRegion get:mode]];
         params.fast = [_settings.fastRouteMode get:mode];
         params.mode = mode;

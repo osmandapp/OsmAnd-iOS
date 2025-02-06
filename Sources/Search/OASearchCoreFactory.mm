@@ -39,6 +39,7 @@
 #import "OATopIndexFilter.h"
 #import "OACollatorStringMatcher.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAArabicNormalizer.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IObfsCollection.h>
@@ -479,6 +480,10 @@
     if ([phrase getRadiusLevel] > 1 || [phrase getUnknownWordToSearch].length > 3 || [phrase hasMoreThanOneUnknownSearchWord] || [phrase isSearchTypeAllowed:POSTCODE exclusive:YES])
     {
         NSString *wordToSearch = [phrase getUnknownWordToSearch];
+        if ([OAArabicNormalizer isSpecialArabic:wordToSearch]) {
+            wordToSearch = [OAArabicNormalizer normalize:wordToSearch] ?: wordToSearch;
+        }
+
         if (wordToSearch.length == 0)
             return;
 
@@ -722,6 +727,9 @@
     NSMutableSet<NSString *> *ids = [NSMutableSet new];
 
     NSString *searchWord = [phrase getUnknownWordToSearch];
+    if ([OAArabicNormalizer isSpecialArabic:searchWord]) {
+        searchWord = [OAArabicNormalizer normalize:searchWord] ?: searchWord;
+    }
     OANameStringMatcher *nm = [phrase getMainUnknownNameStringMatcher];
     
     QuadRect *bbox = [phrase getFileId] != nil ? [phrase getRadiusBBox31ToSearch:BBOX_RADIUS_POI_IN_CITY] : [phrase getRadiusBBox31ToSearch:BBOX_RADIUS_INSIDE];

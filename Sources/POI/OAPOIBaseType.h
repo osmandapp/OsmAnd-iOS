@@ -42,7 +42,7 @@
 +(NSMutableSet<NSString *> *)nullSet;
 +(BOOL)isNullSet:(NSMutableSet<NSString *> *)set;
 
-- (UIImage *)icon;
+- (OAColoredImage *)icon;
 - (NSString *)iconName;
 
 @end

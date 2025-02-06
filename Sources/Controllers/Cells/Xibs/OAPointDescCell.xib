@@ -21,14 +21,14 @@
                         <rect key="frame" x="16" y="0.0" width="272" height="68"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_favorite_direction" translatesAutoresizingMaskIntoConstraints="NO" id="Fh0-qX-kCt">
-                                <rect key="frame" x="46" y="48.5" width="10" height="10"/>
+                                <rect key="frame" x="46" y="50" width="10" height="10"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="10" id="E8l-fq-rIw"/>
                                     <constraint firstAttribute="width" constant="10" id="GUN-0Z-nqK"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i56-bD-Brz">
-                                <rect key="frame" x="64" y="44" width="33" height="19"/>
+                                <rect key="frame" x="64" y="47" width="33" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="16" id="nHu-Ft-uKQ"/>
                                 </constraints>
@@ -37,7 +37,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Place" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FpT-Mz-o9v">
-                                <rect key="frame" x="46" y="2" width="35.5" height="42"/>
+                                <rect key="frame" x="46" y="2" width="35.5" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="uJc-KQ-FGS"/>
                                 </constraints>
@@ -45,7 +45,7 @@
                                 <color key="textColor" name="textColorPrimary"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="YCJ-00-gnu">
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="YCJ-00-gnu" customClass="OAColoredImageView">
                                 <rect key="frame" x="0.0" y="19" width="30" height="30"/>
                                 <color key="tintColor" name="iconColorSelected"/>
                                 <constraints>
@@ -54,7 +54,7 @@
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Label" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5F1-dQ-ckE">
-                                <rect key="frame" x="86.5" y="8" width="185.5" height="30"/>
+                                <rect key="frame" x="86.5" y="8" width="185.5" height="33"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="mlW-mo-Qnr"/>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="vSq-ga-ia7"/>
@@ -64,7 +64,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Su-Mo 07:00-22:00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IIy-sY-CST">
-                                <rect key="frame" x="151" y="38" width="121" height="31"/>
+                                <rect key="frame" x="151" y="41" width="121" height="28"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="16" id="hUK-Yl-a4p"/>
                                 </constraints>
@@ -73,7 +73,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView hidden="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_small_time.png" translatesAutoresizingMaskIntoConstraints="NO" id="1Cf-n5-MS3">
-                                <rect key="frame" x="136" y="47.5" width="12" height="12"/>
+                                <rect key="frame" x="136" y="49" width="12" height="12"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="12" id="DSN-GK-WSC"/>
                                     <constraint firstAttribute="width" constant="12" id="p88-Bl-qmX"/>

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 #import <UIKit/UIKit.h>
+#import "OAColoredImage.h"
 
 //RGB color macro
 #define UIColorFromRGB(rgbValue) [UIColor \
@@ -84,9 +85,9 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 + (UIImage *) templateImageNamed:(NSString *)imageName;
 + (UIImage *) rtlImageNamed:(NSString *)imageName;
 + (UIImage *) svgImageNamed:(NSString *)path;
-+ (UIImage *) mapSvgImageNamed:(NSString *)name;
-+ (UIImage *) mapSvgImageNamed:(NSString *)name scale:(float)scale;
-+ (UIImage *) mapSvgImageNamed:(NSString *)name width:(float)width height:(float)height;
++ (OAColoredImage *) mapSvgImageNamed:(NSString *)name;
++ (OAColoredImage *) mapSvgImageNamed:(NSString *)name scale:(float)scale;
++ (OAColoredImage *) mapSvgImageNamed:(NSString *)name width:(float)width height:(float)height;
 
 @end
 
@@ -277,7 +278,7 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 + (NSArray<NSString *> *) arrayOfMeterValues:(NSArray<NSNumber *> *) values;
 + (NSArray<NSString *> *) arrayOfSpeedValues:(NSArray<NSNumber *> *) values;
 
-+ (UIImage *) getMxIcon:(NSString *)name;
++ (OAColoredImage *) getMxIcon:(NSString *)name;
 + (UIImage *) resizeImage:(UIImage *)image newSize:(CGSize)newSize;
 + (BOOL) hasMapImage:(NSString *)resId;
 + (void) layoutComplexButton:(UIButton*)button;

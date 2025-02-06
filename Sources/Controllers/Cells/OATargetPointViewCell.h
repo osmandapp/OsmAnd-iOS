@@ -12,7 +12,7 @@
 
 @interface OATargetPointViewCell : UITableViewCell
 
-@property (weak, nonatomic) IBOutlet UIImageView *iconView;
+@property (weak, nonatomic) IBOutlet OAColoredImageView *iconView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionView;
 

@@ -46,11 +46,8 @@
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
 {
     [super traitCollectionDidChange:previousTraitCollection];
-    if (_cachedIsLightTheme != [ThemeManager shared].isLightTheme)
-    {
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
         [self applyTargetPoint];
-        _cachedIsLightTheme = [ThemeManager shared].isLightTheme;
-    }
 }
 
 -(void)setTargetPoint:(OATargetPoint *)targetPoint
@@ -78,9 +75,6 @@
             _iconView.image = ((OATransportStop *)_targetPoint.targetObj).poi.icon;
         else
             _iconView.image = _targetPoint.icon;
-        
-        if ([_targetPoint.targetObj isKindOfClass:OAMapObject.class])
-            _iconView.image = [OAUtilities imageWithTintColor:[UIColor colorNamed:ACColorNameIconColorSelected] image:_iconView.image];
         
         NSString *t;
         if (_targetPoint.titleSecond)

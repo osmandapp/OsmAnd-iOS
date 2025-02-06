@@ -34,9 +34,9 @@
     return self;
 }
 
-- (UIImage *) icon
+- (OAColoredImage *) icon
 {
-    UIImage *img = [super icon];
+    OAColoredImage *img = [super icon];
     if (!img)
     {
         img = [UIImage mapSvgImageNamed:[self iconName]];

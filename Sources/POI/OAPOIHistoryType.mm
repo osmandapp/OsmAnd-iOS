@@ -8,12 +8,14 @@
 
 #import "OAPOIHistoryType.h"
 #import "OAUtilities.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OAPOIHistoryType
 
-- (UIImage *)icon
+- (OAColoredImage *)icon
 {
-    return (self.hType == OAHistoryTypeParking ? [UIImage imageNamed:@"ic_parking_pin_small"] : [UIImage imageNamed:@"ic_map_pin_small"]);
+    NSString *name = self.hType == OAHistoryTypeParking ? @"ic_parking_pin_small" : @"ic_map_pin_small";
+    return [[OAColoredImage alloc] initWithName:name color:[UIColor colorNamed:ACColorNameIconColorSelected]];
 }
 
 @end

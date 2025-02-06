@@ -152,6 +152,15 @@ typedef enum : NSUInteger {
     }
 }
 
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+    {
+        [[OsmAndApp instance].appearanceChangeObservable notifyEvent];
+    }
+}
+
 - (BOOL) prefersStatusBarHidden
 {
     return NO;

@@ -7,12 +7,13 @@
 //
 
 #import "OAPOIMyLocationType.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OAPOIMyLocationType
 
-- (UIImage *)icon
+- (OAColoredImage *)icon
 {
-    return [UIImage imageNamed:@"ic_action_location_color.png"];
+    return [[OAColoredImage alloc] initWithName:@"ic_action_location_color.png" color:[UIColor colorNamed:ACColorNameIconColorSelected]];
 }
 
 @end

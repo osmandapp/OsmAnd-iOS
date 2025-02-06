@@ -38,6 +38,7 @@
 #import "OAResultMatcher.h"
 #import "OATopIndexFilter.h"
 #import "OACollatorStringMatcher.h"
+#import "GeneratedAssetSymbols.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IObfsCollection.h>
@@ -115,7 +116,7 @@
 
 - (UIImage *)icon
 {
-    return [UIImage imageNamed:@"ic_custom_search"];
+    return [[OAColoredImage alloc] initWithName:@"ic_custom_search" color:[UIColor colorNamed:ACColorNameIconColorSelected]];
 }
 
 - (NSString *)iconName

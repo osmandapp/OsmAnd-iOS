@@ -231,6 +231,7 @@
 		320F71342A863A8E0071C0E7 /* TravelGpx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F71332A863A8E0071C0E7 /* TravelGpx.swift */; };
 		320F71372A86438B0071C0E7 /* OAGPXDocumentAdapter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 320F71362A86438B0071C0E7 /* OAGPXDocumentAdapter.mm */; };
 		320F713F2A867D930071C0E7 /* TravelSearchHistoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F713E2A867D930071C0E7 /* TravelSearchHistoryItem.swift */; };
+		321104E42D5499C200ED9480 /* OAColoredImage.mm in Sources */ = {isa = PBXBuildFile; fileRef = 321104E32D5499BC00ED9480 /* OAColoredImage.mm */; };
 		321126FF2800710800ED8D52 /* OAExternalTimeFormatter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 321126FE2800710800ED8D52 /* OAExternalTimeFormatter.mm */; };
 		32119B3D28477142005E1E0C /* OAOsmandDevelopmentPlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32119B3C28477142005E1E0C /* OAOsmandDevelopmentPlugin.mm */; };
 		32119B40284776CF005E1E0C /* ic_custom_laptop@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32119B3E284776CF005E1E0C /* ic_custom_laptop@3x.png */; };
@@ -3498,6 +3499,8 @@
 		320F71352A8643550071C0E7 /* OAGPXDocumentAdapter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGPXDocumentAdapter.h; sourceTree = "<group>"; };
 		320F71362A86438B0071C0E7 /* OAGPXDocumentAdapter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXDocumentAdapter.mm; sourceTree = "<group>"; };
 		320F713E2A867D930071C0E7 /* TravelSearchHistoryItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelSearchHistoryItem.swift; sourceTree = "<group>"; };
+		321104E22D5499B500ED9480 /* OAColoredImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAColoredImage.h; sourceTree = "<group>"; };
+		321104E32D5499BC00ED9480 /* OAColoredImage.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAColoredImage.mm; sourceTree = "<group>"; };
 		321126FD280070F500ED8D52 /* OAExternalTimeFormatter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAExternalTimeFormatter.h; sourceTree = "<group>"; };
 		321126FE2800710800ED8D52 /* OAExternalTimeFormatter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAExternalTimeFormatter.mm; sourceTree = "<group>"; };
 		3211355E2753FB500050242B /* ast */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ast; path = ast.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -10893,6 +10896,8 @@
 				DA5A7A2226C563A000F274C7 /* OAWorldRegion+Protected.h */,
 				46E8FFC529ED749800DB1EFE /* UINavigationController+keyCommands.h */,
 				46E8FFC629ED756000DB1EFE /* UINavigationController+keyCommands.m */,
+				321104E22D5499B500ED9480 /* OAColoredImage.h */,
+				321104E32D5499BC00ED9480 /* OAColoredImage.mm */,
 				3216E9522BA097BD0087D0EF /* StringExtensions.swift */,
 			);
 			path = Extensions;
@@ -17282,6 +17287,7 @@
 				4635DDE82A02A7DE00D36203 /* ColorItem.swift in Sources */,
 				DA346374287C157300C18214 /* OAConcurrentCollections.m in Sources */,
 				466A01802BFBA9B7008CC50E /* QuickActionType.swift in Sources */,
+				321104E42D5499C200ED9480 /* OAColoredImage.mm in Sources */,
 				DA377DE027BBBB19004B4EBD /* OAMapPresentationEnvironment.mm in Sources */,
 				DABC7F1F27B65C36005C76E2 /* OACurrentStreetName.mm in Sources */,
 				DA775B8D27E618070081B9C1 /* OABackupInfo.mm in Sources */,

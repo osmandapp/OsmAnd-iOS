@@ -192,6 +192,7 @@
 #import "OASegmentedSlider.h"
 #import "OATurnDrawable.h"
 #import "OAHudButton.h"
+#import "OAColoredImage.h"
 
 // Apple
 #import <SafariServices/SafariServices.h>

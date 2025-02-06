@@ -53,7 +53,7 @@ static NSMutableSet<NSString *> *nullTypeSetInstance;
     return _nameSynonyms;
 }
 
-- (UIImage *)icon
+- (OAColoredImage *)icon
 {
     return [UIImage mapSvgImageNamed:[NSString stringWithFormat:@"mx_%@", self.name]];
 }

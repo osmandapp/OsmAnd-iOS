@@ -11,7 +11,7 @@
 
 @interface OAPointDescCell : UITableViewCell
 
-@property (weak, nonatomic) IBOutlet UIImageView *titleIcon;
+@property (weak, nonatomic) IBOutlet OAColoredImageView *titleIcon;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UILabel *descView;
 @property (weak, nonatomic) IBOutlet UILabel *openingHoursView;

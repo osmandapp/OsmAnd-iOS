@@ -43,7 +43,7 @@
 - (void) showOnMap:(OASearchResult *)searchResult searchType:(OAQuickSearchType)searchType delegate:(id<OAQuickSearchTableDelegate>)delegate;
 
 + (void) showHistoryItemOnMap:(OAHistoryItem *)item lang:(NSString *)lang transliterate:(BOOL)transliterate preferredZoom:(float)preferredZoom;
-+ (OASimpleTableViewCell *) getIconTextDescCell:(NSString *)name tableView:(UITableView *)tableView typeName:(NSString *)typeName icon:(UIImage *)icon;
++ (OASimpleTableViewCell *) getIconTextDescCell:(NSString *)name tableView:(UITableView *)tableView typeName:(NSString *)typeName icon:(OAColoredImage *)icon;
 + (NSString *) applySynonyms:(OASearchResult *)res;
 
 @end

@@ -28,7 +28,7 @@ typedef NS_ENUM(NSInteger, EOATableViewCellContentStyle) {
 
 @property (weak, nonatomic) IBOutlet UIButton *leftEditButton;
 @property (weak, nonatomic) IBOutlet UIView *topContentSpaceView;
-@property (weak, nonatomic) IBOutlet UIImageView *leftIconView;
+@property (weak, nonatomic) IBOutlet OAColoredImageView *leftIconView;
 @property (weak, nonatomic) IBOutlet UIStackView *textStackView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;

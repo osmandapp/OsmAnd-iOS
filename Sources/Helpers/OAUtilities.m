@@ -205,32 +205,38 @@ static NSInteger const kMap3DModeButtonTag = -990;
     return [OASvgHelper imageNamed:path];
 }
 
-+ (UIImage *) mapSvgImageNamed:(NSString *)name
++ (OAColoredImage *) mapSvgImageNamed:(NSString *)name
 {
     UIImage *img = [OASvgHelper mapImageNamed:name];
     if (img)
+    {
         img = [OAUtilities imageWithTintColor:[UIColor colorNamed:ACColorNameIconColorSelected] image:img];
-
-    return img;
+        return [[OAColoredImage alloc] initWithImage:img color:[UIColor colorNamed:ACColorNameIconColorSelected]];
+    }
+    return nil;
 }
 
-+ (UIImage *) mapSvgImageNamed:(NSString *)name scale:(float)scale
++ (OAColoredImage *) mapSvgImageNamed:(NSString *)name scale:(float)scale
 {
     UIImage *img = [OASvgHelper mapImageNamed:name scale:scale];
     if (img)
+    {
         img = [OAUtilities imageWithTintColor:[UIColor colorNamed:ACColorNameIconColorSelected] image:img];
-
-    return img;
+        return [[OAColoredImage alloc] initWithImage:img color:[UIColor colorNamed:ACColorNameIconColorSelected]];
+    }
+    return nil;
 }
 
-+ (UIImage *) mapSvgImageNamed:(NSString *)name width:(float)width height:(float)height
++ (OAColoredImage *) mapSvgImageNamed:(NSString *)name width:(float)width height:(float)height
 {
     CGFloat scale = [[UIScreen mainScreen] scale];
     UIImage *img = [OASvgHelper mapImageFromSvgResource:name width:width * scale height:height * scale];
     if (img)
+    {
         img = [OAUtilities imageWithTintColor:[UIColor colorNamed:ACColorNameIconColorSelected] image:img];
-
-    return img;
+        return [[OAColoredImage alloc] initWithImage:img color:[UIColor colorNamed:ACColorNameIconColorSelected]];
+    }
+    return nil;
 }
 
 @end
@@ -1918,7 +1924,7 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
     }];
 }
 
-+ (UIImage *) getMxIcon:(NSString *)name
++ (OAColoredImage *) getMxIcon:(NSString *)name
 {
     NSString *fullIconName = name;
     if (![fullIconName hasPrefix:@"mx_"])

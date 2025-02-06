@@ -475,7 +475,7 @@
     }
 }
 
-+ (OASimpleTableViewCell *) getIconTextDescCell:(NSString *)name tableView:(UITableView *)tableView typeName:(NSString *)typeName icon:(UIImage *)icon
++ (OASimpleTableViewCell *) getIconTextDescCell:(NSString *)name tableView:(UITableView *)tableView typeName:(NSString *)typeName icon:(OAColoredImage *)icon
 {
     OASimpleTableViewCell *cell;
     cell = (OASimpleTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
@@ -497,8 +497,10 @@
             [cell.descriptionLabel setText:typeName];
             [cell descriptionVisibility:YES];
         }
-        [cell.leftIconView setImage:icon];
-        cell.leftIconView.image = [cell.leftIconView.image imageFlippedForRightToLeftLayoutDirection];
+        UIColor *color = icon.color;
+        OAColoredImage *flippedImage = [icon imageFlippedForRightToLeftLayoutDirection];
+        flippedImage.color = color;
+        cell.leftIconView.image = flippedImage;
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     return cell;
@@ -735,7 +737,7 @@
                 {
                     NSString *name = [item getName];
                     NSString *typeName = [OAQuickSearchTableController applySynonyms:res];
-                    UIImage *icon = [((OAPOIBaseType *)res.object) icon];
+                    OAColoredImage *icon = [((OAPOIBaseType *)res.object) icon];
                     
                     OASimpleTableViewCell *cell = [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tableView typeName:typeName icon:icon];
                     return cell;
@@ -744,7 +746,8 @@
                 {
                     NSString *name = [item getName];
                     NSString *typeName = [((OATopIndexFilter *)res.object) getName];
-                    UIImage *icon = [UIImage imageNamed:[((OATopIndexFilter *)res.object) getIconResource]];
+                    NSString *iconName = [((OATopIndexFilter *)res.object) getIconResource];
+                    OAColoredImage *icon = [[OAColoredImage alloc] initWithName:iconName color:[UIColor colorNamed:ACColorNameIconColorSelected]];
                     OASimpleTableViewCell *cell = [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tableView typeName:typeName icon:icon];
                     return cell;
                 }

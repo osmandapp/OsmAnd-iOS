@@ -1938,7 +1938,7 @@
 "gpxup_identifiable" = "Identifizierbar";
 "gpxup_public" = "Öffentlich";
 "shared_string_wifi_only" = "Nur bei WLAN";
-"gpx_upload_trackable_visibility_descr" = "„Verfolgbar“ bedeutet, dass der Teack nicht in öffentlichen Listen auftaucht, aber verarbeitete Trackpunkte mit Zeitstempeln (die nicht direkt mit Ihnen in Verbindung gebracht werden können) werden durch Downloads von der öffentlichen GPS-API angezeigt.";
+"gpx_upload_trackable_visibility_descr" = "„Verfolgbar“ bedeutet, dass der Track nicht in öffentlichen Listen auftaucht, aber verarbeitete Trackpunkte mit Zeitstempeln (die nicht direkt mit Ihnen in Verbindung gebracht werden können) werden durch Downloads von der öffentlichen GPS-API angezeigt.";
 "restart" = "Neustart";
 "app_restart_required" = "App-Neustart erforderlich, um einige Einstellungen anzuwenden.";
 "no_waypoints_found" = "Keine Wegpunkte gefunden";

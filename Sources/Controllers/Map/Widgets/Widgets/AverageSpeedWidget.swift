@@ -17,8 +17,6 @@ final class AverageSpeedWidget: OASimpleWidget {
     private static let UPDATE_INTERVAL_MILLIS = 1000
     private static let DASH = "—"
     
-    private let averageSpeedComputer = OAAverageSpeedComputer.sharedInstance()
-    
     private var measuredIntervalPref: OACommonLong
     private var skipStopsPref: OACommonBoolean
     private var customId: String?
@@ -38,6 +36,7 @@ final class AverageSpeedWidget: OASimpleWidget {
         configurePrefs(withId: customId, appMode: appMode, widgetParams: widgetParams)
         measuredIntervalPref = Self.registerMeasuredIntervalPref(customId, appMode: appMode, widgetParams: widgetParams)
         skipStopsPref = Self.registerSkipStopsPref(customId, appMode: appMode, widgetParams: widgetParams)
+        AverageSpeedComputerService.shared.addComputer(for: customId ?? "")
     }
     
     override init(frame: CGRect) {
@@ -68,7 +67,7 @@ final class AverageSpeedWidget: OASimpleWidget {
     
     func reset() {
         // Reset the average speed computer
-        averageSpeedComputer.reset()
+        AverageSpeedComputerService.shared.resetComputer(for: customId ?? "")
 
         // Update the widget to reflect the reset value
         updateAverageSpeed()
@@ -174,7 +173,7 @@ final class AverageSpeedWidget: OASimpleWidget {
     func updateAverageSpeed() {
         let measuredInterval = measuredIntervalPref.get()
         let skipLowSpeed = skipStopsPref.get()
-        let averageSpeed = averageSpeedComputer.getAverageSpeed(measuredInterval, skipLowSpeed: skipLowSpeed)
+        let averageSpeed = AverageSpeedComputerService.shared.getComputer(for: customId ?? "").getAverageSpeed(measuredInterval, skipLowSpeed: skipLowSpeed)
         if averageSpeed.isNaN {
             setText(Self.DASH, subtext: nil)
         } else {

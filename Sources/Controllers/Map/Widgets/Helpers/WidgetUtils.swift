@@ -42,6 +42,7 @@ final class WidgetUtils {
             let widgets: NSMutableOrderedSet = widgetRegistry.getWidgetsFor(panel)
             for widgetInfo in widgetsToDelete where widgets.contains(widgetInfo) {
                 widgets.remove(widgetInfo)
+                AverageSpeedComputerService.shared.removeComputer(for: widgetInfo.key)
                 widgetRegistry.enableDisableWidget(for: appMode,
                                                    widgetInfo: widgetInfo,
                                                    enabled: NSNumber(value: false),

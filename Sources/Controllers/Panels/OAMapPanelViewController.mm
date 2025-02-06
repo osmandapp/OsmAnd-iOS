@@ -1281,6 +1281,9 @@ typedef enum
 
 - (void) onMapGestureAction:(NSNotification *)notification
 {
+    if ([self isDashboardVisible])
+        [self closeDashboard];
+    
     [self.targetMenuView hideByMapGesture];
 }
 

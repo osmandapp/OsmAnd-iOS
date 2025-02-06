@@ -114,8 +114,8 @@ final class RenderedObjectHelper: NSObject {
             }
             pt = OAPOIHelper.sharedInstance().getPoiType(byKey: key + "_" + value)
             if pt == nil && key.hasPrefix("osmand_") {
-                let shortKey = key.replacingOccurrences(of: "osmand_", with: "")
-                pt = OAPOIHelper.sharedInstance().getPoiType(byKey: shortKey + "_" + value)
+                let newKey = key.replacingOccurrences(of: "osmand_", with: "")
+                pt = OAPOIHelper.sharedInstance().getPoiType(byKey: newKey + "_" + value)
             }
             if pt != nil {
                 break

@@ -14,8 +14,14 @@ final class AverageSpeedComputerService: NSObject {
     
     private var computersById: [String: OAAverageSpeedComputer] = [:]
     
-    func getComputer(for customId: String) -> OAAverageSpeedComputer? {
-        return computersById[customId]
+    func getComputer(for customId: String) -> OAAverageSpeedComputer {
+        if let computer = computersById[customId] {
+            return computer
+        } else {
+            let newComputer = OAAverageSpeedComputer()
+            computersById[customId] = newComputer
+            return newComputer
+        }
     }
     
     func addComputer(for customId: String) {

@@ -24,16 +24,12 @@
 #import "OARouteKey.h"
 
 @implementation OATargetPointViewCell
-{
-    BOOL _cachedIsLightTheme;
-}
 
 - (void)awakeFromNib
 {
     [super awakeFromNib];
     // Initialization code
     self.descriptionView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-    _cachedIsLightTheme = [ThemeManager shared].isLightTheme;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

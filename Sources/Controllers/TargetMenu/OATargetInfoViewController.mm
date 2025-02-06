@@ -262,7 +262,8 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
         for (OARenderedObject *polygon in polygons)
         {
             OAPOI *syntheticAmenity = [RenderedObjectHelper getSyntheticAmenityWithRenderedObject:polygon];
-            [names addObject:[[RenderedObjectHelper getFirstNonEmptyNameFor:syntheticAmenity withRenderedObject:polygon] capitalizedString]];
+            NSString *name = [OAUtilities capitalizeFirstLetter:[RenderedObjectHelper getFirstNonEmptyNameFor:syntheticAmenity withRenderedObject:polygon]];
+            [names addObject:name];
         }
         NSString *rowSummary = [self getMenuObjectsNamesByComma:names];
         

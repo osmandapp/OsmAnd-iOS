@@ -131,7 +131,7 @@ final class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
         lastUpdatedTime = currentTime
 
         let interval = widgetState.averageSpeedIntervalPref.get()
-        let averageSpeed = AverageSpeedComputerService.shared.getComputer(for: widgetState.customId ?? "").getAverageSpeed(interval, skipLowSpeed: false)
+        let averageSpeed = AverageSpeedComputerService.shared.getComputer(for: (widgetState.customId ?? self.widgetType?.id) ?? "").getAverageSpeed(interval, skipLowSpeed: false)
         
         if averageSpeed.isNaN || averageSpeed == 0 {
             setText(Self.DASH, subtext: nil)

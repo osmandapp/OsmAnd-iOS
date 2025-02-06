@@ -67,7 +67,7 @@ final class AverageSpeedWidget: OASimpleWidget {
     
     func reset() {
         // Reset the average speed computer
-        AverageSpeedComputerService.shared.resetComputer(for: customId ?? "")
+        AverageSpeedComputerService.shared.resetComputer(for: (customId ?? self.widgetType?.id) ?? "")
 
         // Update the widget to reflect the reset value
         updateAverageSpeed()
@@ -173,7 +173,7 @@ final class AverageSpeedWidget: OASimpleWidget {
     func updateAverageSpeed() {
         let measuredInterval = measuredIntervalPref.get()
         let skipLowSpeed = skipStopsPref.get()
-        let averageSpeed = AverageSpeedComputerService.shared.getComputer(for: customId ?? "").getAverageSpeed(measuredInterval, skipLowSpeed: skipLowSpeed)
+        let averageSpeed = AverageSpeedComputerService.shared.getComputer(for: (customId ?? self.widgetType?.id) ?? "").getAverageSpeed(measuredInterval, skipLowSpeed: skipLowSpeed)
         if averageSpeed.isNaN {
             setText(Self.DASH, subtext: nil)
         } else {

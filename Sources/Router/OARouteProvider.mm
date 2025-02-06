@@ -309,7 +309,6 @@
         _useIntermediatePointsRTE = params.useIntermediatePointsRTE;
         _selectedSegment = OAAppSettings.sharedManager.gpxRouteSegment.get;
         _approximationParams = params.approximationParams;
-        [[OARoutingHelper sharedInstance] setGpxParams:self];
     }
     return self;
 }

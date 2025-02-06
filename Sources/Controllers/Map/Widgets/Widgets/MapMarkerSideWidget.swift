@@ -38,7 +38,7 @@ final class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
         self.markerClickBehaviourPref = widgetState.markerClickBehaviourPref
         self.cachedNightMode = isNightMode()
         self.cachedMode = SideMarkerMode.markerModeByName(markerModePref.get())
-        AverageSpeedComputerService.shared.addComputer(for: widgetState.customId ?? "")
+        AverageSpeedComputerService.shared.addComputer(for: (widgetState.customId ?? self.widgetType?.id) ?? "")
         
         setText(nil, subtext: nil)
         

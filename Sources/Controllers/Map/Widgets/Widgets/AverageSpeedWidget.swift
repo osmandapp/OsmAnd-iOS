@@ -36,7 +36,7 @@ final class AverageSpeedWidget: OASimpleWidget {
         configurePrefs(withId: customId, appMode: appMode, widgetParams: widgetParams)
         measuredIntervalPref = Self.registerMeasuredIntervalPref(customId, appMode: appMode, widgetParams: widgetParams)
         skipStopsPref = Self.registerSkipStopsPref(customId, appMode: appMode, widgetParams: widgetParams)
-        AverageSpeedComputerService.shared.addComputer(for: customId ?? "")
+        AverageSpeedComputerService.shared.addComputer(for: (customId ?? self.widgetType?.id) ?? "")
     }
     
     override init(frame: CGRect) {

@@ -36,7 +36,7 @@ final class AverageSpeedWidget: OASimpleWidget {
         configurePrefs(withId: customId, appMode: appMode, widgetParams: widgetParams)
         measuredIntervalPref = Self.registerMeasuredIntervalPref(customId, appMode: appMode, widgetParams: widgetParams)
         skipStopsPref = Self.registerSkipStopsPref(customId, appMode: appMode, widgetParams: widgetParams)
-        if let computerID = customId ?? self.widgetType?.id {
+        if let computerID = speedComputerId() {
             AverageSpeedComputerService.shared.addComputer(for: computerID)
         }
     }
@@ -69,7 +69,7 @@ final class AverageSpeedWidget: OASimpleWidget {
     
     func reset() {
         // Reset the average speed computer
-        if let computerID = customId ?? self.widgetType?.id {
+        if let computerID = speedComputerId() {
             AverageSpeedComputerService.shared.resetComputer(for: computerID)
         }
 
@@ -156,6 +156,10 @@ final class AverageSpeedWidget: OASimpleWidget {
         rows.append(valuesRow)
         return rows
     }
+    
+    private func speedComputerId() -> String? {
+        customId ?? widgetType?.id
+    }
 
     static func getIntervalTitle(_ intervalValue: Int) -> String {
         availableIntervals[intervalValue] ?? "-"
@@ -178,7 +182,7 @@ final class AverageSpeedWidget: OASimpleWidget {
         let measuredInterval = measuredIntervalPref.get()
         let skipLowSpeed = skipStopsPref.get()
         var averageSpeed: Float?
-        if let computerID = customId ?? self.widgetType?.id, let computer = AverageSpeedComputerService.shared.getComputer(for: computerID) {
+        if let computerID = speedComputerId(), let computer = AverageSpeedComputerService.shared.getComputer(for: computerID) {
             averageSpeed = computer.getAverageSpeed(measuredInterval, skipLowSpeed: skipLowSpeed)
         }
         

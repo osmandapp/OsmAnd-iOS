@@ -38,7 +38,7 @@ final class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
         self.markerClickBehaviourPref = widgetState.markerClickBehaviourPref
         self.cachedNightMode = isNightMode()
         self.cachedMode = SideMarkerMode.markerModeByName(markerModePref.get())
-        if let computerID = widgetState.customId ?? self.widgetType?.id {
+        if let computerID = speedComputerId() {
             AverageSpeedComputerService.shared.addComputer(for: computerID)
         }
         
@@ -73,6 +73,10 @@ final class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
     
     private func showMarkerOnMap() {
         MarkerWidgetsHelper.showMarkerOnMap(widgetState.isFirstMarker() ? 0 : 1)
+    }
+    
+    private func speedComputerId() -> String? {
+        widgetState.customId ?? widgetType?.id
     }
     
     override func getWidgetState() -> OAWidgetState {
@@ -134,7 +138,7 @@ final class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
 
         let interval = widgetState.averageSpeedIntervalPref.get()
         var averageSpeed: Float?
-        if let computerID = widgetState.customId ?? self.widgetType?.id, let computer = AverageSpeedComputerService.shared.getComputer(for: computerID) {
+        if let computerID = speedComputerId(), let computer = AverageSpeedComputerService.shared.getComputer(for: computerID) {
             averageSpeed = computer.getAverageSpeed(interval, skipLowSpeed: false)
         }
         

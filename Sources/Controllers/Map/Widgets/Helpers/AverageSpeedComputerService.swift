@@ -12,30 +12,30 @@ import UIKit
 final class AverageSpeedComputerService: NSObject {
     static let shared = AverageSpeedComputerService()
     
-    private var computersById: [String: OAAverageSpeedComputer] = [:]
+    private var computers: [String: OAAverageSpeedComputer] = [:]
     
     func getComputer(for id: String) -> OAAverageSpeedComputer? {
-        computersById[id]
+        computers[id]
     }
     
     func addComputer(for id: String) {
-        if !id.isEmpty && computersById[id] == nil {
-            computersById[id] = OAAverageSpeedComputer()
+        if !id.isEmpty && computers[id] == nil {
+            computers[id] = OAAverageSpeedComputer()
         }
     }
     
     func removeComputer(for id: String) {
-        computersById.removeValue(forKey: id)
+        computers.removeValue(forKey: id)
     }
     
     func updateLocation(_ location: CLLocation) {
-        for comp in computersById.values {
+        for comp in computers.values {
             comp.update(location)
         }
     }
     
     func resetComputer(for id: String) {
-        guard let computer = computersById[id] else { return }
+        guard let computer = computers[id] else { return }
         computer.reset()
     }
 }

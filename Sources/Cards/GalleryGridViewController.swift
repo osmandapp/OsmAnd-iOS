@@ -9,15 +9,16 @@
 import Kingfisher
 
 final class GalleryGridViewController: OABaseNavbarViewController {
-    
     var cards: [AbstractCard] = []
     var titleString: String = ""
+    lazy var downloadMetadataProvider = DownloadMetadataProvider()
     
     private var collectionView: UICollectionView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureCollectionView()
+        downloadMetadataProvider.cards = cards
     }
     
     override func getTitle() -> String {
@@ -112,11 +113,16 @@ extension GalleryGridViewController: UICollectionViewDelegate {
     
     private func contextMenuInteraction(with card: AbstractCard) -> UIContextMenuConfiguration? {
         let actionProvider: UIContextMenuActionProvider = { [weak self] _ in
-            let detailsAction = UIAction(title: localizedString("shared_string_details"), image: UIImage.icCustomInfoOutlined) { _ in
-                guard let self else { return }
-                GalaryContextMenuProvider.openDetailsController(card: card, rootController: self)
+            var firsrSectionItems = [UIAction]()
+            if card is WikiImageCard {
+                let detailsAction = UIAction(title: localizedString("shared_string_details"), image: UIImage.icCustomInfoOutlined) { _ in
+                    guard let self else { return }
+                    GalaryContextMenuProvider.openDetailsController(card: card, rootController: self)
+                }
+                detailsAction.accessibilityLabel = localizedString("shared_string_details")
+                firsrSectionItems.append(detailsAction)
             }
-            detailsAction.accessibilityLabel = localizedString("shared_string_details")
+  
             let openInBrowserAction = UIAction(title: localizedString("open_in_browser"), image: UIImage.icCustomExternalLink) { _ in
                 if let item = card as? WikiImageCard {
                     item.opneURL(OARootViewController.instance().mapPanel)
@@ -126,12 +132,15 @@ extension GalleryGridViewController: UICollectionViewDelegate {
                 }
             }
             openInBrowserAction.accessibilityLabel = localizedString("open_in_browser")
-            let firsrSection = UIMenu(title: "", options: .displayInline, children: [detailsAction, openInBrowserAction ])
+            
+            firsrSectionItems.append(openInBrowserAction)
+            
+            let firsrSection = UIMenu(title: "", options: .displayInline, children: firsrSectionItems)
             let downloadAction = UIAction(title: localizedString("shared_string_download"), image: UIImage.icCustomDownload) { _ in
                 guard let self else { return }
                 guard let item = card as? ImageCard,
                       !item.imageUrl.isEmpty else { return }
-                GalaryContextMenuProvider.downloadImageAndSaveToDocumentsDownload(urlString: item.imageUrl, view: self.view)
+                GalaryContextMenuProvider.downloadImage(urlString: item.imageUrl, view: self.view)
             }
             downloadAction.accessibilityLabel = localizedString("shared_string_download")
             let secondSection = UIMenu(title: "", options: .displayInline, children: [downloadAction])
@@ -211,4 +220,10 @@ final private class TitleHeaderView: UICollectionReusableView {
     func configure(with text: String) {
         titleLabel.text = text
     }
+}
+
+struct WikiImageInfo: Codable {
+    var title: String
+    var pageId: Int
+    var data: String?
 }

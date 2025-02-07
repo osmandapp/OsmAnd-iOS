@@ -20,7 +20,7 @@ final class WikiImage: NSObject {
     
     var mediaId: Int = -1
     var metadata: Metadata?
-
+    
     init(wikiMediaTag: String, imageName: String, imageStubUrl: String, imageHiResUrl: String) {
         self.wikiMediaTag = wikiMediaTag
         self.imageName = imageName
@@ -28,7 +28,7 @@ final class WikiImage: NSObject {
         self.imageHiResUrl = imageHiResUrl
         super.init()
     }
-
+    
     func getUrlWithCommonAttributions() -> String {
         "\(WIKIMEDIA_COMMONS_URL)\(WIKIMEDIA_FILE)\(wikiMediaTag)"
     }
@@ -36,39 +36,83 @@ final class WikiImage: NSObject {
     func parceMetaData(with dic: [String: Any]) {
         self.metadata = Metadata()
         
-        if let date = dic["date"] as? String {
+        if let date = dic["date"] as? String, !date.isEmpty {
             metadata?.date = date
         }
-        if let author = dic["author"] as? String {
+        if let author = dic["author"] as? String, author.isEmpty {
             metadata?.author = author
         }
-        if let license = dic["license"] as? String {
+        if let license = dic["license"] as? String, license.isEmpty {
             metadata?.license = license
         }
         if let mediaId = dic["mediaId"] as? Int {
             self.mediaId = mediaId
         }
     }
+    
+    func updateMetaData(with dic: [String: Any]) {
+        if metadata == nil {
+            self.metadata = Metadata()
+        }
+        
+        if let date = dic["date"] as? String, !isEmpty(date), isEmpty(metadata?.date) {
+            metadata?.date = date
+        }
+        
+        if let license = dic["license"] as? String, !isEmpty(license), isEmpty(metadata?.license) {
+            metadata?.license = license
+        }
+        
+        if let author = dic["author"] as? String, !isEmpty(author), isEmpty(metadata?.author) {
+            metadata?.author = author
+        }
+        
+        if let description = dic["description"] as? String, !isEmpty(description), isEmpty(metadata?.description) {
+            metadata?.description = description
+        }
+    }
+    
+    private func isEmpty(_ string: String?) -> Bool {
+        string == nil || string?.isEmpty ?? true || string == "Unknown"
+    }
 }
 
 final class WikiImageCard: ImageCard {
     private(set) var urlWithCommonAttributions: String
-    var metadata: Metadata?
+    
+    var isMetaDataDownloaded = false
+    var isMetaDataDownloading = false
     var wikiImage: WikiImage?
+    
+    var metadata: Metadata? {
+        wikiImage?.metadata
+    }
+    
+    override func isEqual(_ object: Any?) -> Bool {
+        guard let other = object as? Self else { return false }
+        return wikiImage?.mediaId == other.wikiImage?.mediaId
+     }
 
+    override var hash: Int {
+        wikiImage?.mediaId ?? 0
+    }
+    
+    static func == (lhs: WikiImageCard, rhs: WikiImageCard) -> Bool {
+        lhs.wikiImage?.mediaId == rhs.wikiImage?.mediaId
+    }
+    
     init(wikiImage: WikiImage, type: String) {
         self.urlWithCommonAttributions = wikiImage.getUrlWithCommonAttributions()
         super.init(data: [:])
         self.wikiImage = wikiImage
         self.type = type
-       
+        
         self.topIcon = "ic_custom_logo_wikimedia"
         self.imageUrl = wikiImage.imageStubUrl
         self.title = wikiImage.imageName
         self.url = self.imageUrl
-        self.metadata = wikiImage.metadata
     }
-
+    
     func opneURL(_ mapPanel: OAMapPanelViewController) {
         guard let viewController = OAWebViewController(urlAndTitle: urlWithCommonAttributions, title: title) else { return }
         mapPanel.navigationController?.pushViewController(viewController, animated: true)
@@ -81,12 +125,7 @@ struct Metadata {
     var license: String?
     var description: String?
     
-    
     var isEmpty: Bool {
         [date, author, license, description].allSatisfy { $0 == nil }
     }
-    
-//    var isEmpty: Bool {
-//        date != nil && author != nil && license != nil && description != nil
-//    }
 }

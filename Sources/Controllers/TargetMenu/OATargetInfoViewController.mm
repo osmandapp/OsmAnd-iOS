@@ -726,12 +726,10 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
 {
     if (_otherCardsReady && _wikiCardsReady)
     {
-        NSLog(@"mapillaryCards Before: %lu", cards.count);
         if (cards.count == 0)
             [cards addObject:[[NoImagesCard alloc] init]];
         else if (cards.count > 1)
-            [self removeDuplicatesFromCards:cards];
-        NSLog(@"mapillaryCards After: %lu", cards.count);
+            [self reorderCards:cards];
         // After forming the list of cards, fill the collection
         if (nearbyImagesRowInfo)
         {
@@ -750,39 +748,33 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
     }
 }
 
-- (void)removeDuplicatesFromCards:(NSMutableArray<AbstractCard *> *)cards
-{
+- (void)reorderCards:(NSMutableArray<AbstractCard *> *)cards {
     NSMutableArray *openPlaceCards = [NSMutableArray new];
     NSMutableArray *wikimediaCards = [NSMutableArray new];
     NSMutableArray *mapilaryCards = [NSMutableArray new];
     MapillaryContributeCard *mapilaryContributeCard = nil;
-    
-    for (AbstractCard *card in cards)
-    {
+
+    for (AbstractCard *card in cards) {
         if ([card isKindOfClass:WikiImageCard.class])
             [wikimediaCards addObject:card];
-        if ([card isKindOfClass:MapillaryImageCard.class])
+        else if ([card isKindOfClass:MapillaryImageCard.class])
             [mapilaryCards addObject:card];
         else if ([card isKindOfClass:MapillaryContributeCard.class])
             mapilaryContributeCard = (MapillaryContributeCard *)card;
         else if ([card isKindOfClass:UrlImageCard.class])
             [openPlaceCards addObject:card];
     }
-    if (wikimediaCards.count > 0)
-    {
-        NSArray *sortedWikimediaCards = [wikimediaCards sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
-            NSString *first = [(WikiImageCard *)a imageHiresUrl];
-            NSString *second = [(WikiImageCard *)b imageHiresUrl];
-            return [first compare:second];
-        }];
-        wikimediaCards = [sortedWikimediaCards copy];
-    }
-    [cards removeAllObjects];
-    [cards addObjectsFromArray:openPlaceCards];
-    [cards addObjectsFromArray:wikimediaCards];
-    [cards addObjectsFromArray:mapilaryCards];
+
+    NSMutableArray *orderedCards = [NSMutableArray array];
+    [orderedCards addObjectsFromArray:openPlaceCards];
+    [orderedCards addObjectsFromArray:wikimediaCards];
+    [orderedCards addObjectsFromArray:mapilaryCards];
+    
     if (mapilaryContributeCard)
-        [cards addObject:mapilaryContributeCard];
+        [orderedCards addObject:mapilaryContributeCard];
+
+    NSOrderedSet *uniqueOrderedSet = [NSOrderedSet orderedSetWithArray:orderedCards];
+    [cards setArray:uniqueOrderedSet.array];
 }
 
 - (void)addNearbyImagesIfNeeded

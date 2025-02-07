@@ -62,6 +62,7 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
         NSString *wikidataId = @"";
         NSString *url = @"";
         NSArray<NSString *> *keys = poi.values.allKeys;
+        
         if ([keys containsObject:WIKIMEDIA_COMMONS_TAG])
         {
             NSString *wikimediaCommons = poi.values[WIKIMEDIA_COMMONS_TAG];
@@ -165,7 +166,6 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
                 if (!error && jsonDict)
                 {
                     try {
-                        // jsonDict[@"features"] ?:
                         NSArray<NSString *> *images = jsonDict[@"features-v2"];
                         for (NSDictionary<NSString *, NSString *> *dic in images)
                         {

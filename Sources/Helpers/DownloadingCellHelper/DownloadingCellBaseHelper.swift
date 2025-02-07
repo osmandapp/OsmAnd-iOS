@@ -232,7 +232,12 @@ class DownloadingCellBaseHelper: NSObject {
         } else if rightIconStyle == .showDoneIconAfterDownloading && isFinished(resourceId) {
             return "ic_custom_done"
         }
-        return self is DownloadingCellMultipleResourceHelper ? "ic_custom_multi_download" : "ic_custom_download"
+        
+        return getDefaultRightIconName(resourceId)
+    }
+    
+    func getDefaultRightIconName(_ resourceId: String) -> String {
+        "ic_custom_download"
     }
     
     func getRightIconColor() -> UIColor {

@@ -93,6 +93,7 @@ final class DownloadingCellMultipleResourceHelper: DownloadingCellResourceHelper
             return super.getDefaultRightIconName(resourceId)
         }
         
+        // Normalize resource IDs by replacing "srtmf" with "srtm" to treat meter and feet variants as identical.
         let setItems = Set(items.map { $0.resourceId().replacingOccurrences(of: "srtmf", with: "srtm") })
         return setItems.count > 1 ? "ic_custom_multi_download" : super.getDefaultRightIconName(resourceId)
     }

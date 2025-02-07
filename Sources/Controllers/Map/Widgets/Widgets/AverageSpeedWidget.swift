@@ -69,7 +69,9 @@ final class AverageSpeedWidget: OASimpleWidget {
     
     func reset() {
         // Reset the average speed computer
-        AverageSpeedComputerService.shared.resetComputer(for: (customId ?? self.widgetType?.id) ?? "")
+        if let computerID = customId ?? self.widgetType?.id {
+            AverageSpeedComputerService.shared.resetComputer(for: computerID)
+        }
 
         // Update the widget to reflect the reset value
         updateAverageSpeed()

@@ -167,16 +167,6 @@ static long BIGGEST_MEASURED_INTERVAL;
     return DEFAULT_INTERVAL_MILLIS;
 }
 
-+ (instancetype) sharedInstance
-{
-    static dispatch_once_t once;
-    static OAAverageSpeedComputer* sharedInstance;
-    dispatch_once(&once, ^{
-        sharedInstance = [[self alloc] init];
-    });
-    return sharedInstance;
-}
-
 - (instancetype)init
 {
     self = [super init];
@@ -193,30 +183,12 @@ static long BIGGEST_MEASURED_INTERVAL;
 {
     if (location != nil) {
         long time = [[NSDate date] timeIntervalSince1970] * 1000;
-        BOOL save = [self isEnabled] && ![_locationServices isInLocationSimulation];
+        BOOL save = ![_locationServices isInLocationSimulation];
         if (save)
         {
             [self saveLocation:location time:time];
         }
     }
-}
-
-- (BOOL)isEnabled
-{
-    OAMapWidgetRegistry *widgetRegistry = [OAMapWidgetRegistry sharedInstance];
-    OAApplicationMode *appMode = _settings.applicationMode.get;
-    NSArray<OAMapWidgetInfo *> *widgetInfos = [widgetRegistry getAllWidgets];
-
-    for (OAMapWidgetInfo *widgetInfo in widgetInfos)
-    {
-        OABaseWidgetView *widget = widgetInfo.widget;
-        BOOL usesAverageSpeed = [widget isKindOfClass:[OAAverageSpeedWidget class]] || [widget isKindOfClass:[OAMapMarkerSideWidget class]];
-        if (usesAverageSpeed && [widgetInfo isEnabledForAppMode:appMode] && [OAWidgetsAvailabilityHelper isWidgetAvailableWithWidgetId:widgetInfo.key appMode:appMode]) {
-            return YES;
-        }
-    }
-
-    return NO;
 }
 
 - (void)saveLocation:(CLLocation *)location time:(long)time

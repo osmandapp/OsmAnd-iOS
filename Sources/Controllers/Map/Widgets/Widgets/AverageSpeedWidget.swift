@@ -17,8 +17,6 @@ final class AverageSpeedWidget: OASimpleWidget {
     private static let UPDATE_INTERVAL_MILLIS = 1000
     private static let DASH = "—"
     
-    private let averageSpeedComputer = OAAverageSpeedComputer.sharedInstance()
-    
     private var measuredIntervalPref: OACommonLong
     private var skipStopsPref: OACommonBoolean
     private var customId: String?
@@ -38,6 +36,9 @@ final class AverageSpeedWidget: OASimpleWidget {
         configurePrefs(withId: customId, appMode: appMode, widgetParams: widgetParams)
         measuredIntervalPref = Self.registerMeasuredIntervalPref(customId, appMode: appMode, widgetParams: widgetParams)
         skipStopsPref = Self.registerSkipStopsPref(customId, appMode: appMode, widgetParams: widgetParams)
+        if let computerID = customId ?? self.widgetType?.id {
+            AverageSpeedComputerService.shared.addComputer(for: computerID)
+        }
     }
     
     override init(frame: CGRect) {
@@ -68,7 +69,9 @@ final class AverageSpeedWidget: OASimpleWidget {
     
     func reset() {
         // Reset the average speed computer
-        averageSpeedComputer.reset()
+        if let computerID = customId ?? self.widgetType?.id {
+            AverageSpeedComputerService.shared.resetComputer(for: computerID)
+        }
 
         // Update the widget to reflect the reset value
         updateAverageSpeed()
@@ -174,12 +177,16 @@ final class AverageSpeedWidget: OASimpleWidget {
     func updateAverageSpeed() {
         let measuredInterval = measuredIntervalPref.get()
         let skipLowSpeed = skipStopsPref.get()
-        let averageSpeed = averageSpeedComputer.getAverageSpeed(measuredInterval, skipLowSpeed: skipLowSpeed)
-        if averageSpeed.isNaN {
-            setText(Self.DASH, subtext: nil)
-        } else {
-            let formattedAverageSpeed = OAOsmAndFormatter.getFormattedSpeed(averageSpeed).components(separatedBy: " ")
+        var averageSpeed: Float?
+        if let computerID = customId ?? self.widgetType?.id, let computer = AverageSpeedComputerService.shared.getComputer(for: computerID) {
+            averageSpeed = computer.getAverageSpeed(measuredInterval, skipLowSpeed: skipLowSpeed)
+        }
+        
+        if let speed = averageSpeed, !speed.isNaN {
+            let formattedAverageSpeed = OAOsmAndFormatter.getFormattedSpeed(speed).components(separatedBy: " ")
             setText(formattedAverageSpeed.first, subtext: formattedAverageSpeed.count > 1 ? formattedAverageSpeed.last : nil)
+        } else {
+            setText(Self.DASH, subtext: nil)
         }
     }
     

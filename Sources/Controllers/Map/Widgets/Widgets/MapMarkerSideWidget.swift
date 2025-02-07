@@ -38,6 +38,9 @@ final class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
         self.markerClickBehaviourPref = widgetState.markerClickBehaviourPref
         self.cachedNightMode = isNightMode()
         self.cachedMode = SideMarkerMode.markerModeByName(markerModePref.get())
+        if let computerID = widgetState.customId ?? self.widgetType?.id {
+            AverageSpeedComputerService.shared.addComputer(for: computerID)
+        }
         
         setText(nil, subtext: nil)
         
@@ -128,18 +131,19 @@ final class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
     private func updateArrivalTime(distance: Int, currentTime: TimeInterval) {
         cachedMeters = distance
         lastUpdatedTime = currentTime
-        
-        let averageSpeedComputer = OAAverageSpeedComputer.sharedInstance()
+
         let interval = widgetState.averageSpeedIntervalPref.get()
-        let averageSpeed = averageSpeedComputer.getAverageSpeed(interval, skipLowSpeed: false)
-        
-        if averageSpeed.isNaN || averageSpeed == 0 {
-            setText(Self.DASH, subtext: nil)
-            return
+        var averageSpeed: Float?
+        if let computerID = widgetState.customId ?? self.widgetType?.id, let computer = AverageSpeedComputerService.shared.getComputer(for: computerID) {
+            averageSpeed = computer.getAverageSpeed(interval, skipLowSpeed: false)
         }
         
-        let estimatedLeftSeconds = Int(Double(distance) / Double(averageSpeed))
-        updateArrivalTime(estimatedLeftSeconds)
+        if let speed = averageSpeed, !speed.isNaN, speed != 0 {
+            let estimatedLeftSeconds = Int(Double(distance) / Double(speed))
+            updateArrivalTime(estimatedLeftSeconds)
+        } else {
+            setText(Self.DASH, subtext: nil)
+        }
     }
 
     private func updateArrivalTime(_ leftSeconds: Int) -> Bool {

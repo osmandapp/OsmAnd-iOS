@@ -262,7 +262,8 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
         for (OARenderedObject *polygon in polygons)
         {
             OAPOI *syntheticAmenity = [RenderedObjectHelper getSyntheticAmenityWithRenderedObject:polygon];
-            [names addObject:[[RenderedObjectHelper getFirstNonEmptyNameFor:syntheticAmenity withRenderedObject:polygon] capitalizedString]];
+            NSString *name = [OAUtilities capitalizeFirstLetter:[RenderedObjectHelper getFirstNonEmptyNameFor:syntheticAmenity withRenderedObject:polygon]];
+            [names addObject:name];
         }
         NSString *rowSummary = [self getMenuObjectsNamesByComma:names];
         
@@ -309,12 +310,16 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
         }
         else
         {
-            key = syntheticAmenity.type.nameLocalized;
-            value = [RenderedObjectHelper getFirstNonEmptyNameFor:syntheticAmenity withRenderedObject:nil];
+            key = translatedType.length > 0 ? translatedType : syntheticAmenity.type.nameLocalized;
+            value = [RenderedObjectHelper getFirstNonEmptyNameFor:syntheticAmenity withRenderedObject:renderedObject];
             if (value.length == 0)
             {
                 value = key;
-                key = @"";
+                key = OALocalizedString(@"shared_string_location");
+            }
+            if ([[key lowercaseString] isEqualToString:[value lowercaseString]])
+            {
+                key = OALocalizedString(@"shared_string_location");
             }
         }
         

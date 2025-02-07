@@ -13,6 +13,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OATableViewCustomHeaderView.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kButtonsDividerTag 150
 
@@ -168,7 +169,7 @@
                 else
                     icon = [UIImage templateImageNamed:item[@"icon"]];
                 cell.leftIconView.image = icon;
-                cell.leftIconView.tintColor = isOn ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_tint_gray);
+                cell.leftIconView.tintColor = isOn ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled];
             }
             [cell.switchView setOn:isOn];
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];

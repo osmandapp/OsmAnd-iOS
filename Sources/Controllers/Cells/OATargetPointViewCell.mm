@@ -58,14 +58,17 @@
     }
     else
     {
+        UIImage *image;
         if ([_targetPoint.targetObj isKindOfClass:OAFavoriteItem.class])
-            _iconView.image = [((OAFavoriteItem *)_targetPoint.targetObj) getCompositeIcon];
+            image = [((OAFavoriteItem *)_targetPoint.targetObj) getCompositeIcon];
         else if ([_targetPoint.targetObj isKindOfClass:OATransportStop.class])
-            _iconView.image = ((OATransportStop *)_targetPoint.targetObj).poi.icon;
+            image = ((OATransportStop *)_targetPoint.targetObj).poi.icon;
         else
-            _iconView.image = _targetPoint.icon;
+            image = _targetPoint.icon;
         
-        if ([_targetPoint.targetObj isKindOfClass:OARenderedObject.class])
+        _iconView.image = image;
+        
+        if ([_targetPoint.targetObj isKindOfClass:OAMapObject.class])
             _iconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
         
         NSString *t;

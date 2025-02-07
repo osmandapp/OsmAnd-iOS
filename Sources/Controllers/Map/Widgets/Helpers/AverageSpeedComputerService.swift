@@ -14,24 +14,18 @@ final class AverageSpeedComputerService: NSObject {
     
     private var computersById: [String: OAAverageSpeedComputer] = [:]
     
-    func getComputer(for customId: String) -> OAAverageSpeedComputer {
-        if let computer = computersById[customId] {
-            return computer
-        } else {
-            let newComputer = OAAverageSpeedComputer()
-            computersById[customId] = newComputer
-            return newComputer
+    func getComputer(for id: String) -> OAAverageSpeedComputer? {
+        computersById[id]
+    }
+    
+    func addComputer(for id: String) {
+        if !id.isEmpty && computersById[id] == nil {
+            computersById[id] = OAAverageSpeedComputer()
         }
     }
     
-    func addComputer(for customId: String) {
-        if computersById[customId] == nil {
-            computersById[customId] = OAAverageSpeedComputer()
-        }
-    }
-    
-    func removeComputer(for customId: String) {
-        computersById.removeValue(forKey: customId)
+    func removeComputer(for id: String) {
+        computersById.removeValue(forKey: id)
     }
     
     func updateLocation(_ location: CLLocation) {
@@ -40,8 +34,8 @@ final class AverageSpeedComputerService: NSObject {
         }
     }
     
-    func resetComputer(for customId: String) {
-        guard let computer = computersById[customId] else { return }
+    func resetComputer(for id: String) {
+        guard let computer = computersById[id] else { return }
         computer.reset()
     }
 }

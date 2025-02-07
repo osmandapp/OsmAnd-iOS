@@ -36,7 +36,9 @@ final class AverageSpeedWidget: OASimpleWidget {
         configurePrefs(withId: customId, appMode: appMode, widgetParams: widgetParams)
         measuredIntervalPref = Self.registerMeasuredIntervalPref(customId, appMode: appMode, widgetParams: widgetParams)
         skipStopsPref = Self.registerSkipStopsPref(customId, appMode: appMode, widgetParams: widgetParams)
-        AverageSpeedComputerService.shared.addComputer(for: (customId ?? self.widgetType?.id) ?? "")
+        if let computerID = customId ?? self.widgetType?.id {
+            AverageSpeedComputerService.shared.addComputer(for: computerID)
+        }
     }
     
     override init(frame: CGRect) {
@@ -173,12 +175,16 @@ final class AverageSpeedWidget: OASimpleWidget {
     func updateAverageSpeed() {
         let measuredInterval = measuredIntervalPref.get()
         let skipLowSpeed = skipStopsPref.get()
-        let averageSpeed = AverageSpeedComputerService.shared.getComputer(for: (customId ?? self.widgetType?.id) ?? "").getAverageSpeed(measuredInterval, skipLowSpeed: skipLowSpeed)
-        if averageSpeed.isNaN {
-            setText(Self.DASH, subtext: nil)
-        } else {
-            let formattedAverageSpeed = OAOsmAndFormatter.getFormattedSpeed(averageSpeed).components(separatedBy: " ")
+        var averageSpeed: Float?
+        if let computerID = customId ?? self.widgetType?.id, let computer = AverageSpeedComputerService.shared.getComputer(for: computerID) {
+            averageSpeed = computer.getAverageSpeed(measuredInterval, skipLowSpeed: skipLowSpeed)
+        }
+        
+        if let speed = averageSpeed, !speed.isNaN {
+            let formattedAverageSpeed = OAOsmAndFormatter.getFormattedSpeed(speed).components(separatedBy: " ")
             setText(formattedAverageSpeed.first, subtext: formattedAverageSpeed.count > 1 ? formattedAverageSpeed.last : nil)
+        } else {
+            setText(Self.DASH, subtext: nil)
         }
     }
     

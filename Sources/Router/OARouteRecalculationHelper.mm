@@ -379,13 +379,10 @@
     {
         if ([res isCalculated])
         {
-            if (!_params.inSnapToRoadMode && !_params.inPublicTransportMode)
-                [_routingHelper setRoute:res];
-
             if (_params.resultListener)
                 [_params.resultListener onRouteCalculated:res segment:_params.walkingRouteSegment start:_params.start end:_params.end];
-
-            [_routingHelper setRoute:res];
+            else
+                [_routingHelper setRoute:res];
         }
         else
         {
@@ -395,7 +392,7 @@
     }
     if ([res isCalculated])
     {
-        if (!_routingHelper.isPublicTransportMode && !_params.inSnapToRoadMode)
+        if (!_params.resultListener && !_routingHelper.isPublicTransportMode && !_params.inSnapToRoadMode)
             [_recalcHelper setNewRoute:prev res:res start:_params.start];
     }
     else if (onlineSourceWithoutInternet)

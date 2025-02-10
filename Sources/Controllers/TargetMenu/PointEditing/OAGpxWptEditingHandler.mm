@@ -263,7 +263,7 @@
 
 - (void)setGroup:(NSString *)groupName color:(UIColor *)color save:(BOOL)save
 {
-    _gpxWpt.point.category = groupName;
+    _gpxWpt.point.category = groupName.length > 0 ? groupName : nil;
     OASInt *colorToSave = [[OASInt alloc] initWithInt:[color toARGBNumber]];
     [_gpxWpt.point setColorColor:colorToSave];
     _gpxWpt.color = color;
@@ -300,14 +300,14 @@
 
 - (void)savePoint:(OAPointEditingData *)data newPoint:(BOOL)newPoint
 {
-    [_gpxWpt.point setName:data.name];
-    [_gpxWpt.point setDesc:data.descr];
+    [_gpxWpt.point setName:data.name.length > 0 ? data.name : nil];
+    [_gpxWpt.point setDesc:data.descr.length > 0 ? data.descr : nil];
     [self setGroup:data.category color:data.color save:NO];
     [_gpxWpt.point setIconNameIconName:data.icon];
     [_gpxWpt.point setBackgroundTypeBackType:data.backgroundIcon];
     
     auto extension = _gpxWpt.point.getExtensionsToWrite;
-    extension[ADDRESS_EXTENSION_KEY] = data.address;
+    extension[ADDRESS_EXTENSION_KEY] = data.address.length > 0 ? data.address : nil;
     _gpxWpt.point.extensions = extension;
     
     _gpxWpt.docPath = _gpxFileName;

@@ -217,7 +217,11 @@ final class CardsViewController: UIView {
 extension CardsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let card = dataSource.itemIdentifier(for: indexPath) else { return }
-        card.onCardPressed(OARootViewController.instance().mapPanel)
+        if card is WikiImageCard {
+            
+        } else {
+            card.onCardPressed(OARootViewController.instance().mapPanel)
+        }
     }
 }
 

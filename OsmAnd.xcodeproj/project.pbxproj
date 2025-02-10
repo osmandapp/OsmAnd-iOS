@@ -3135,6 +3135,7 @@
 		FA77E7A72AE16E90001BABE2 /* OACarPlayMapDashboardViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA77E7A62AE16E90001BABE2 /* OACarPlayMapDashboardViewController.mm */; };
 		FA7DCF552AF10ABF0045D136 /* BluetoothDisableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7DCF542AF10ABF0045D136 /* BluetoothDisableView.swift */; };
 		FA7DCF572AF11A7D0045D136 /* BluetoothDisableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA7DCF562AF11A7D0045D136 /* BluetoothDisableView.xib */; };
+		FA7EBDD12D59F22200121977 /* GalleryPhotoViewerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7EBDD02D59F1D000121977 /* GalleryPhotoViewerViewController.swift */; };
 		FA83EAA62BF6538B00DBF321 /* SpeedometerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA83EAA42BF6538B00DBF321 /* SpeedometerView.xib */; };
 		FA83EAA72BF6538B00DBF321 /* SpeedometerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA83EAA52BF6538B00DBF321 /* SpeedometerView.swift */; };
 		FA8516F02D42946D00B321C6 /* GpxDataItemHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8516EF2D42946D00B321C6 /* GpxDataItemHandler.swift */; };
@@ -3189,6 +3190,7 @@
 		FAC5D4312BFC7F5200E9E658 /* SpeedLimitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC5D4302BFC7F5200E9E658 /* SpeedLimitView.swift */; };
 		FACB02AA2D54C52000EBE87F /* ImageCache+Extenion.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACB02A92D54C52000EBE87F /* ImageCache+Extenion.swift */; };
 		FACB02AC2D54F71C00EBE87F /* DownloadMetadataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACB02AB2D54F71C00EBE87F /* DownloadMetadataProvider.swift */; };
+		FACB02B52D562C4200EBE87F /* ExpandableTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACB02B42D562C4100EBE87F /* ExpandableTextView.swift */; };
 		FACE409F2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = FACE409D2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm */; };
 		FAD8489A2CAD6F950018AF92 /* WptPtExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD848992CAD6F950018AF92 /* WptPtExtension.swift */; };
 		FAD848A02CAE9FDD0018AF92 /* GpxFileExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD8489F2CAE9FDD0018AF92 /* GpxFileExtension.swift */; };
@@ -7675,6 +7677,7 @@
 		FA77E7A62AE16E90001BABE2 /* OACarPlayMapDashboardViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OACarPlayMapDashboardViewController.mm; sourceTree = "<group>"; };
 		FA7DCF542AF10ABF0045D136 /* BluetoothDisableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothDisableView.swift; sourceTree = "<group>"; };
 		FA7DCF562AF11A7D0045D136 /* BluetoothDisableView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BluetoothDisableView.xib; sourceTree = "<group>"; };
+		FA7EBDD02D59F1D000121977 /* GalleryPhotoViewerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryPhotoViewerViewController.swift; sourceTree = "<group>"; };
 		FA83EAA42BF6538B00DBF321 /* SpeedometerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SpeedometerView.xib; sourceTree = "<group>"; };
 		FA83EAA52BF6538B00DBF321 /* SpeedometerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeedometerView.swift; sourceTree = "<group>"; };
 		FA8516EF2D42946D00B321C6 /* GpxDataItemHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GpxDataItemHandler.swift; sourceTree = "<group>"; };
@@ -7728,6 +7731,7 @@
 		FAC5D4302BFC7F5200E9E658 /* SpeedLimitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedLimitView.swift; sourceTree = "<group>"; };
 		FACB02A92D54C52000EBE87F /* ImageCache+Extenion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageCache+Extenion.swift"; sourceTree = "<group>"; };
 		FACB02AB2D54F71C00EBE87F /* DownloadMetadataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadMetadataProvider.swift; sourceTree = "<group>"; };
+		FACB02B42D562C4100EBE87F /* ExpandableTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableTextView.swift; sourceTree = "<group>"; };
 		FACE409D2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAExternalSensorsPlugin.mm; sourceTree = "<group>"; };
 		FACE409E2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAExternalSensorsPlugin.h; sourceTree = "<group>"; };
 		FAD848992CAD6F950018AF92 /* WptPtExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WptPtExtension.swift; sourceTree = "<group>"; };
@@ -10709,6 +10713,7 @@
 		DA5A79A726C563A000F274C7 /* Cards */ = {
 			isa = PBXGroup;
 			children = (
+				FA7EBDD02D59F1D000121977 /* GalleryPhotoViewerViewController.swift */,
 				FACB02AB2D54F71C00EBE87F /* DownloadMetadataProvider.swift */,
 				FA92170F2D525D600074E958 /* GalaryContextMenuProvider.swift */,
 				FA92170D2D5254420074E958 /* GalleryGridDatailsViewController.swift */,
@@ -13594,6 +13599,7 @@
 		FA069C522B9AF6090007E4DE /* Controls */ = {
 			isa = PBXGroup;
 			children = (
+				FACB02B42D562C4100EBE87F /* ExpandableTextView.swift */,
 				FA069C532B9AF61B0007E4DE /* OutlineLabel.swift */,
 				FA069C682B9F13160007E4DE /* ShadowPathView.swift */,
 			);
@@ -16717,6 +16723,7 @@
 				DA5A832626C563A800F274C7 /* OALineChartCell.m in Sources */,
 				DA5A842F26C563A800F274C7 /* OATargetTurnViewController.m in Sources */,
 				FAA6504F2ADD42C50020DCEA /* SearchDeviceTableViewCell.swift in Sources */,
+				FA7EBDD12D59F22200121977 /* GalleryPhotoViewerViewController.swift in Sources */,
 				DA5A856926C563A900F274C7 /* OARouteProvider.mm in Sources */,
 				FA186E482BFCF15A007EE77D /* SpeedLimitWrapper.mm in Sources */,
 				DA5A848F26C563A900F274C7 /* OABaseTableViewController.m in Sources */,
@@ -17491,6 +17498,7 @@
 				CA4EDDEA04A2683B2A8447AA /* OAManageStorageViewController.mm in Sources */,
 				46BCD1922C2DCA0F008749EC /* ColorPalette.swift in Sources */,
 				CA4EDD1F67ADE2175D901873 /* OAManageTypeViewController.mm in Sources */,
+				FACB02B52D562C4200EBE87F /* ExpandableTextView.swift in Sources */,
 				FA740D3A2A7C006900BD12DC /* OAAppDelegate.mm in Sources */,
 				CA4ED17832F287267D3F813A /* OAStorageStateValuesCell.m in Sources */,
 				CA4ED87EDFA076F9F7F63A4C /* OABenefitsOsmContributorsViewController.m in Sources */,

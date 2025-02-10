@@ -13,6 +13,7 @@ final class GalleryGridDatailsViewController: OABaseNavbarViewController {
     
     override func registerCells() {
         addCell(OAValueTableViewCell.reuseIdentifier)
+        tableView.register(ExpandableTextViewTableCell.self, forCellReuseIdentifier: ExpandableTextViewTableCell.reuseIdentifier)
     }
     
     override func getTitle() -> String {
@@ -23,10 +24,22 @@ final class GalleryGridDatailsViewController: OABaseNavbarViewController {
         localizedString("shared_string_close")
     }
     
+    override func hideFirstHeader() -> Bool {
+        true
+    }
+    
     // MARK: Table data
     
     override func generateData() {
         let section = tableData.createNewSection()
+        
+        if let description = metadata?.description {
+            let descriptionRow = section.createNewRow()
+            descriptionRow.key = "descriptionrKey"
+            descriptionRow.cellType = ExpandableTextViewTableCell.reuseIdentifier
+            descriptionRow.title = localizedString("shared_string_author")
+            descriptionRow.descr = description
+        }
         
         if let date = metadata?.date {
             var formattedDate = WikiAlgorithms.formatWikiDate(date)
@@ -80,16 +93,25 @@ final class GalleryGridDatailsViewController: OABaseNavbarViewController {
             cell.descriptionVisibility(false)
             cell.leftIconView.isHidden = true
             cell.titleLabel.text = item.title
+            cell.titleLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
             cell.valueLabel.text = item.descr
             if item.obj(forKey: "sourceLinkKey") != nil {
                 cell.valueLabel.textColor = .textColorActive
             } else {
                 cell.valueLabel.textColor = .textColorSecondary
             }
+            cell.valueLabel.font = cell.titleLabel.font
             cell.accessibilityLabel = item.title
             cell.accessibilityValue = item.descr
             return cell
         }
+        
+        if item.cellType == ExpandableTextViewTableCell.reuseIdentifier {
+            let cell = tableView.dequeueReusableCell(withIdentifier: ExpandableTextViewTableCell.reuseIdentifier, for: indexPath) as! ExpandableTextViewTableCell
+            cell.data = item.descr
+            return cell
+        }
+        
         return nil
     }
     
@@ -104,5 +126,87 @@ final class GalleryGridDatailsViewController: OABaseNavbarViewController {
     
     private func getSourceTypeName(card: ImageCard) -> String {
         card is WikiImageCard ? localizedString("wikimedia") : ""
+    }
+}
+
+extension ExpandableTextViewTableCell: ExpandableTextViewDelegate {
+    
+    func didExpandTextView(_ textView: ExpandableTextView) {
+        updateCell()
+    }
+
+    func didCollapseTextView(_ textView: ExpandableTextView) {
+        updateCell()
+    }
+
+    func expandableTextViewUpdateHeight(_ textView: ExpandableTextView) {
+        updateCell()
+    }
+}
+
+final class ExpandableTextViewTableCell: UITableViewCell {
+    
+    var data: String? {
+        didSet {
+            notesTextView.text = data
+        }
+    }
+    
+    private lazy var notesTextView: ExpandableTextView = {
+        let v = ExpandableTextView()
+        v.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        v.textColor = .textColorPrimary
+        v.backgroundColor = .clear
+        v.moreText = localizedString("show_more")
+        v.lessText = localizedString("shared_string_show_less")
+        v.delegateExppanable = self
+        v.numberOfLines = 2
+        v.textReplacementType = .character
+        v.linkPosition = .space
+        v.isEditable = false
+        v.dataDetectorTypes = [.phoneNumber, .link]
+        v.tintColor = .textColorActive
+        return v
+    }()
+
+    required override init(style: UITableViewCell.CellStyle,
+                           reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupView()
+        contentView.backgroundColor = .groupBg
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupView() {
+        notesTextView.removeFromSuperview()
+        contentView.addSubview(notesTextView)
+        notesTextView.translatesAutoresizingMaskIntoConstraints = false
+        notesTextView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10).isActive = true
+        notesTextView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10).isActive = true
+        notesTextView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16).isActive = true
+        notesTextView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16).isActive = true
+    }
+
+    private func updateCell() {
+        guard let tableView else { return }
+        
+        UIView.performWithoutAnimation {
+            tableView.beginUpdates()
+            tableView.endUpdates()
+        }
+    }
+}
+
+private extension UITableViewCell {
+    /// Search up the view hierarchy of the table view cell to find the containing table view
+    var tableView: UITableView? {
+        var table: UIView? = superview
+        while !(table is UITableView) && table != nil {
+            table = table?.superview
+        }
+        return table as? UITableView
     }
 }

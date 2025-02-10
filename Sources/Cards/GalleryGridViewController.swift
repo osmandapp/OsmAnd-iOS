@@ -12,8 +12,9 @@ final class GalleryGridViewController: OABaseNavbarViewController {
     var cards: [AbstractCard] = []
     var titleString: String = ""
     lazy var downloadMetadataProvider = DownloadMetadataProvider()
-    
+    // swiftlint:disable all
     private var collectionView: UICollectionView!
+    // swiftlint:enable all
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,7 +75,9 @@ final class GalleryGridViewController: OABaseNavbarViewController {
 }
 
 // MARK: - UICollectionViewDataSource
+
 extension GalleryGridViewController: UICollectionViewDataSource {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         cards.count
     }
@@ -103,7 +106,17 @@ extension GalleryGridViewController: UICollectionViewDataSource {
 }
 
 // MARK: - UICollectionViewDelegate
+
 extension GalleryGridViewController: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let card = cards[indexPath.row] as? WikiImageCard else { return }
+        
+        let controller = GalleryPhotoViewerViewController()
+        controller.cards = cards.compactMap { $0 as? WikiImageCard }
+        controller.selectedCard = card
+        navigationController?.pushViewController(controller, animated: true)
+    }
     
     func collectionView(_ collectionView: UICollectionView,
                         contextMenuConfigurationForItemAt indexPath: IndexPath,
@@ -151,6 +164,7 @@ extension GalleryGridViewController: UICollectionViewDelegate {
 }
 
 // MARK: - GalleryCell
+
 final private class GalleryCell: UICollectionViewCell {
     
     private let imageView = UIImageView()
@@ -184,7 +198,6 @@ final private class GalleryCell: UICollectionViewCell {
         imageView.kf.indicatorType = .activity
         imageView.kf.setImage(
             with: url,
-            placeholder: nil,
             options: [
                 .processor(DownsamplingImageProcessor(size: imageView.bounds.size)),
                 .scaleFactor(UIScreen.main.scale),

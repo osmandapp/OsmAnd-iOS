@@ -1835,6 +1835,7 @@
 "mapillary_menu_title_tile_cache" = "Tile cache";
 "shared_string_reload" = "Reload";
 "show_more" = "Show more";
+"shared_string_show_less" = "Show less";
 "mapil_reload_cache" = "Reload tiles to see the newest data";
 "filter_current_poiButton" = "Filter";
 "mapil_filter_user_descr" = "Filter images by user";

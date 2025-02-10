@@ -336,7 +336,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     _mapObservable = [[OAObservable alloc] init];
     _framePreparedObservable = [[OAObservable alloc] init];
     _mapSourceUpdatedObservable = [[OAObservable alloc] init];
-    
+    _gpxTracksRefreshedObservable = [[OAObservable alloc] init];
+
     _stateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                withHandler:@selector(onMapRendererStateChanged:withKey:)];
     _settingsObserver = [[OAAutoObserverProxy alloc] initWith:self
@@ -1655,6 +1656,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
 @synthesize azimuthObservable = _azimuthObservable;
 @synthesize mapSourceUpdatedObservable = _mapSourceUpdatedObservable;
+
+@synthesize gpxTracksRefreshedObservable = _gpxTracksRefreshedObservable;
 
 - (void) onMapRendererStateChanged:(id)observer withKey:(id)key
 {
@@ -3721,6 +3724,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         }
     }
     [_mapLayers.gpxMapLayer refreshGpxTracks:gpxFilesDic reset:YES];
+    
+    [_gpxTracksRefreshedObservable notifyEvent];
 }
 
 - (void)refreshGpxTracks

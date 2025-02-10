@@ -114,6 +114,7 @@
 #import "OsmAndSharedWrapper.h"
 #import "OARenderedObject.h"
 #import "OARenderedObject+cpp.h"
+#import "OASelectedGPXHelper.h"
 
 #include <OsmAndCore/NetworkRouteContext.h>
 #include <OsmAndCore/CachingRoadLocator.h>
@@ -2237,9 +2238,15 @@ typedef enum
         {
             OASGpxFile *gpxFile;
             if (trackItem.isShowCurrentTrack)
+            {
                 gpxFile = [[OASavingTrackHelper sharedInstance] currentTrack];
+            }
             else
-                gpxFile = [OASGpxUtilities.shared loadGpxFileFile:trackItem.dataItem.file];
+            {
+                gpxFile = [OASelectedGPXHelper.instance getGpxFileFor:trackItem.path];
+                if (!gpxFile)
+                    gpxFile = [OASGpxUtilities.shared loadGpxFileFile:trackItem.dataItem.file];
+            }
 
             [self displayGpxOnMap:gpxFile];
         }
@@ -3211,7 +3218,7 @@ typedef enum
 }
 
 - (void)openNewTargetViewFromTracksListWithRouteDetailsGraph:(OASTrackItem *)trackItem
-                                                     state:(OATrackMenuViewControllerState *)state;
+                                                       state:(OATrackMenuViewControllerState *)state;
 {
     OASGpxFile *gpxFile;
     if (trackItem.isShowCurrentTrack)
@@ -3220,8 +3227,12 @@ typedef enum
     }
     else
     {
-        OASKFile *file = [[OASKFile alloc] initWithFilePath:trackItem.dataItem.file.absolutePath];
-        gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
+        gpxFile = [OASelectedGPXHelper.instance getGpxFileFor:trackItem.path];
+        if (!gpxFile)
+        {
+            OASKFile *file = [[OASKFile alloc] initWithFilePath:trackItem.dataItem.file.absolutePath];
+            gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
+        }
     }
     
     if (gpxFile)
@@ -3238,7 +3249,8 @@ typedef enum
                                         trackItem:trackItem
                                          analysis:analysis
                                           segment:segment
-                                 menuControlState:state];
+                                 menuControlState:state
+                                          isRoute:NO];
     }
 }
 

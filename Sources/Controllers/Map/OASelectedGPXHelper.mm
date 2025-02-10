@@ -58,7 +58,8 @@
     return self;
 }
 
-- (NSDictionary<NSString *, OASGpxFile *> *)activeGpx {
+- (NSDictionary<NSString *, OASGpxFile *> *)activeGpx
+{
     return [_activeGpx copy];
 }
 
@@ -66,15 +67,18 @@
     [_activeGpx removeObjectForKey:path];
 }
 
-- (void)addGpxFile:(OASGpxFile *)file for:(NSString *)path {
+- (void)addGpxFile:(OASGpxFile *)file for:(NSString *)path
+{
     _activeGpx[path] = file;
 }
 
-- (nullable OASGpxFile *)getGpxFileFor:(NSString *)path {
+- (nullable OASGpxFile *)getGpxFileFor:(NSString *)path
+{
     return _activeGpx[path];
 }
 
-- (BOOL)containsGpxFileWith:(NSString *)path {
+- (BOOL)containsGpxFileWith:(NSString *)path
+{
     return (_activeGpx[path] != nil);
 }
 

@@ -29,6 +29,7 @@
 #import "OARouteStatisticsModeCell.h"
 #import "OAStatisticsSelectionBottomSheetViewController.h"
 #import "OAGPXDatabase.h"
+#import "OASelectedGPXHelper.h"
 #import "GeneratedAssetSymbols.h"
 #import <DGCharts/DGCharts-Swift.h>
 
@@ -54,10 +55,13 @@
     CGFloat _cachedYViewPort;
     OAMapRendererView *_mapView;
     OATrackMenuViewControllerState *_trackMenuControlState;
+    
+    OAAutoObserverProxy *_gpxTracksRefreshedObserver;
+    BOOL _tempGpx;
 }
 
 - (instancetype)initWithGpxData:(NSDictionary *)data
-          trackMenuControlState:(OATargetMenuViewControllerState *)trackMenuControlState
+          trackMenuControlState:(OATrackMenuViewControllerState *)trackMenuControlState
 {
     self = [super initWithGpxData:data];
     if (self)
@@ -65,9 +69,18 @@
         if (data)
         {
             _trackMenuControlState = trackMenuControlState;
+            _gpxTracksRefreshedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                    withHandler:@selector(gpxTracksRefreshedHandler)
+                                                                     andObserve:[OARootViewController instance].mapPanel.mapViewController.gpxTracksRefreshedObservable];
         }
     }
     return self;
+}
+
+- (void)gpxTracksRefreshedHandler
+{
+    if (!self.dismissed)
+        [self refreshChart];
 }
 
 - (NSArray *) getMainGraphSectionData
@@ -183,6 +196,13 @@
 {
     [super viewDidLoad];
     
+    BOOL gpxVisible = [OASelectedGPXHelper.instance containsGpxFileWith:self.trackItem.path];
+    if (!gpxVisible)
+    {
+        [[OARootViewController instance].mapPanel.mapViewController showTempGpxTrackFromGpxFile:self.gpx];
+        _tempGpx = YES;
+    }
+
     [self setupRouteInfo];
     
     [self generateData];
@@ -194,6 +214,15 @@
     _tableView.rowHeight = UITableViewAutomaticDimension;
     _tableView.estimatedRowHeight = 125.;
 
+    if (gpxVisible)
+    {
+        [self refreshChart];
+        [self updateRouteStatisticsGraph];
+    }
+}
+
+- (void)refreshChart
+{
     if (self.analysis && self.segment)
     {
         [self.trackChartHelper updateTrackChartPointsWithInvalidate:YES];
@@ -204,7 +233,6 @@
                                        analysis:self.analysis
                                         segment:self.segment];
     }
-    [self updateRouteStatisticsGraph];
 }
 
 - (BOOL)isLandscapeIPadAware
@@ -297,6 +325,16 @@
 
 - (void)onMenuShown
 {
+    if (!_trackMenuControlState.openedFromTrackMenu)
+        [super onMenuShown];
+}
+
+- (void)onMenuDismissed
+{
+    [super onMenuDismissed];
+    
+    if (_tempGpx)
+        [[OARootViewController instance].mapPanel.mapViewController hideTempGpxTrack];
 }
 
 - (ETopToolbarType) topToolbarType

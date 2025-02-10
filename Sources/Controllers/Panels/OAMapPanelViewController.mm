@@ -757,6 +757,7 @@ typedef enum
 {
     [self targetHideMenu:.2 backButtonClicked:NO onComplete:^{
         [_hudViewController updateDependentButtonsVisibility];
+        [self targetHideContextPinMarker];
     }];
 }
 

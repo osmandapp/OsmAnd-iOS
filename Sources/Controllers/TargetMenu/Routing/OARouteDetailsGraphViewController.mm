@@ -196,7 +196,7 @@
 {
     [super viewDidLoad];
     
-    BOOL gpxVisible = [OASelectedGPXHelper.instance containsGpxFileWith:self.trackItem.path];
+    BOOL gpxVisible = self.trackItem ? [OASelectedGPXHelper.instance containsGpxFileWith:self.trackItem.path] : YES;
     if (!gpxVisible)
     {
         [[OARootViewController instance].mapPanel.mapViewController showTempGpxTrackFromGpxFile:self.gpx];
@@ -325,7 +325,7 @@
 
 - (void)onMenuShown
 {
-    if (!_trackMenuControlState.openedFromTrackMenu)
+    if (_trackMenuControlState && !_trackMenuControlState.openedFromTrackMenu)
         [super onMenuShown];
 }
 

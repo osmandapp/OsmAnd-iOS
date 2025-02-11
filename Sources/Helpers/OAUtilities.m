@@ -911,16 +911,23 @@ static NSInteger const kMap3DModeButtonTag = -990;
         shadowView.hidden = !show;
 }
 
-- (UIImage *) toUIImage
-{
-    UIGraphicsBeginImageContextWithOptions(self.bounds.size, self.opaque, 0.0);
-    [self.layer renderInContext:UIGraphicsGetCurrentContext()];
-
-    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
-
-    UIGraphicsEndImageContext();
-
-    return img;
+- (UIImage *)toUIImage {
+    // Ensure the view has a valid layout
+    [self layoutIfNeeded];
+    
+    // Check for valid bounds
+    CGRect bounds = self.bounds;
+    if (CGRectIsEmpty(bounds) || CGRectIsInfinite(bounds)) {
+        NSLog(@"Invalid view bounds: %@", NSStringFromCGRect(bounds));
+        return nil;
+    }
+    
+    // Use the modern image renderer API
+    UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:bounds.size];
+    
+    return [renderer imageWithActions:^(UIGraphicsImageRendererContext * _Nonnull context) {
+        [self.layer renderInContext:context.CGContext];
+    }];
 }
 
 @end

@@ -305,7 +305,10 @@
             
         case OATargetRouteDetailsGraph:
         {
-            if ([activeViewControllerState isKindOfClass:OATrackMenuViewControllerState.class])
+            if (!activeViewControllerState)
+                controller = [[OARouteDetailsGraphViewController alloc] initWithGpxData:targetPoint.targetObj
+                                                                  trackMenuControlState:nil];
+            else if ([activeViewControllerState isKindOfClass:OATrackMenuViewControllerState.class])
                 controller = [[OARouteDetailsGraphViewController alloc] initWithGpxData:targetPoint.targetObj
                                                                   trackMenuControlState:(OATrackMenuViewControllerState *)activeViewControllerState];
 

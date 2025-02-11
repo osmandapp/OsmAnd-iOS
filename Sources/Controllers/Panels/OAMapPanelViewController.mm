@@ -3389,8 +3389,13 @@ typedef enum
     
     targetPoint.title = _formattedTargetName;
     targetPoint.toolbarNeeded = NO;
+    
+    OASTrkSegment *segment = [gpx getGeneralSegment];
+    if (!segment)
+        segment = [TrackChartHelper getTrackSegment:analysis gpxItem:gpx];
+    
     if (gpx && analysis)
-        targetPoint.targetObj = @{@"gpx" : gpx, @"analysis" : analysis};
+        targetPoint.targetObj = @{@"gpx" : gpx, @"analysis" : analysis, @"segment" : segment};
     else
         targetPoint.targetObj = nil;
     

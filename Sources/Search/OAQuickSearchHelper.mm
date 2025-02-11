@@ -39,16 +39,16 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
 
-static const int SEARCH_FAVORITE_API_PRIORITY = 50;
-static const int SEARCH_FAVORITE_API_CATEGORY_PRIORITY = 50;
-static const int SEARCH_FAVORITE_OBJECT_PRIORITY = 50;
-static const int SEARCH_FAVORITE_CATEGORY_PRIORITY = 51;
-static const int SEARCH_WPT_API_PRIORITY = 50;
-static const int SEARCH_WPT_OBJECT_PRIORITY = 52;
-static const int SEARCH_HISTORY_API_PRIORITY = 50;
-static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
-static const int SEARCH_TRACK_API_PRIORITY = 50;
-static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
+static const int SEARCH_FAVORITE_API_PRIORITY = 150;
+static const int SEARCH_FAVORITE_API_CATEGORY_PRIORITY = 150;
+static const int SEARCH_FAVORITE_OBJECT_PRIORITY = 150;
+static const int SEARCH_FAVORITE_CATEGORY_PRIORITY = 151;
+static const int SEARCH_WPT_API_PRIORITY = 150;
+static const int SEARCH_WPT_OBJECT_PRIORITY = 152;
+static const int SEARCH_HISTORY_API_PRIORITY = 150;
+static const int SEARCH_HISTORY_OBJECT_PRIORITY = 154;
+static const int SEARCH_TRACK_API_PRIORITY = 150;
+static const int SEARCH_TRACK_OBJECT_PRIORITY = 153;
 
 
 @implementation OASearchFavoritesAPI
@@ -167,7 +167,7 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
     if (![p isNoSelectedType] || ![p isUnknownSearchWordPresent])
         return -1;
     
-    return SEARCH_TRACK_OBJECT_PRIORITY;
+    return SEARCH_TRACK_API_PRIORITY;
 }
 
 @end

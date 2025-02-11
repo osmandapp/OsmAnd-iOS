@@ -24,6 +24,13 @@
 
 @implementation UIColor (nsColorNative)
 
+- (OsmAnd::FColorRGB) toFColorRGB
+{
+    CGFloat red, green, blue, alpha;
+    [self getRed:&red green:&green blue:&blue alpha:&alpha];
+    return OsmAnd::ColorRGB(red * 255, green * 255, blue * 255);
+}
+
 - (OsmAnd::FColorARGB) toFColorARGB
 {
     CGFloat red, green, blue, alpha;

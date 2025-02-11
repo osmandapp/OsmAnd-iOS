@@ -738,6 +738,8 @@
                     UIImage *icon = [((OAPOIBaseType *)res.object) icon];
                     
                     OASimpleTableViewCell *cell = [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tableView typeName:typeName icon:icon];
+                    cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
+                    
                     return cell;
                 }
                 else if ([res.object isKindOfClass:[OATopIndexFilter class]])

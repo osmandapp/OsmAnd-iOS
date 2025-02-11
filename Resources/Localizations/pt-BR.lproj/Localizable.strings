@@ -3465,3 +3465,12 @@
 "obd_plugin_name" = "Métricas de veículos";
 "cloud_sync_progress" = "A sincronizar…%@";
 "rendering_attr_showClimbingRoutes_description" = "Mostrar rotas de escalada";
+"OsmAnd Maps" = "OsmAnd Maps";
+"poi" = "POI";
+"day_short" = "D";
+"altitude" = "Altitude";
+"help_article_navigation_auto_car_name" = "Android Auto";
+"help_article_navigation_car_play_name" = "CarPlay";
+"help_article_navigation_routing_brouter_name" = "BRouter";
+"help_article_plugins_openplacereviews_name" = "OpenPlaceReviews";
+"help_article_troubleshooting_android_auto_name" = "Android Auto";

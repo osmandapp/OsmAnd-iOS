@@ -16,6 +16,7 @@
 #import "OASizes.h"
 #import "OAColors.h"
 #import "Localization.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OAPoiTypeSelectionViewController () <UISearchBarDelegate>
 
@@ -166,8 +167,8 @@
         OAPOIBaseType *item = _isFiltered ? (OAPOIBaseType *)_filteredData[indexPath.row] : (OAPOIBaseType *)_data[indexPath.row];
         cell.titleLabel.text = item.nameLocalized;
         UIImage *icon = [item.icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        [cell.leftIconView setTintColor:[UIColor colorNamed:ACColorNameIconColorSelected]];
         [cell.leftIconView setImage:icon];
-        [cell.leftIconView setTintColor:UIColorFromRGB(color_poi_orange)];
         if ((_screenType == CATEGORY_SCREEN && [item isEqual:_poiData.getPoiCategory]) || [item isEqual:_poiData.getCurrentPoiType])
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
         else

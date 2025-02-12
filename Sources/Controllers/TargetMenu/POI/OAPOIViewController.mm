@@ -596,6 +596,9 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                     textPrefix = translatedKey;
                 else
                     textPrefix = [OAUtilities capitalizeFirstLetter:convertedKey];
+                
+                if (!pt && !pType && !poiType)
+                    isText = YES;
             }
         }
 

@@ -47,7 +47,7 @@
 "switch_start_finish" = "Invertir puntos de partida y destino";
 "clear_all_intermediates" = "Limpiar todos los puntos intermedios";
 "shared_string_options" = "Opciones";
-"new_destination_point_dialog" = "Ya se ha definido un destino:";
+"new_destination_point_dialog" = "Ya se definió un destino:";
 "replace_destination_point" = "Reemplazar destino";
 "shared_string_current" = "Actual";
 "make_as_start_point" = "Añadir como punto de partida";
@@ -273,7 +273,7 @@
 "recalculate_route" = "Recalcular ruta";
 "recalculate_wrong_dir" = "Recalcular la ruta en caso de dirección inversa";
 "recalculate_route_distance_promo" = "La ruta será recalculada si la distancia a la ubicación actual es mayor que el valor elegido.";
-"select_distance_route_will_recalc" = "Elige la distancia después de la cual la ruta será recalculada.";
+"select_distance_route_will_recalc" = "Elige la distancia después de la cual la ruta se recalculará.";
 "speed_limit_tolerance_descr" = "Margen de tolerancia sobre el límite de velocidad, en el cual recibirás un aviso de voz.";
 "only_manually" = "Sólo manualmente";
 "instructions_repeat" = "Pulsa el widget «Próximo giro» para repetir las indicaciones";
@@ -390,8 +390,8 @@
 "si_nm_h" = "Millas náuticas por hora (nudos)";
 "shared_string_tones" = "toneladas";
 "nothing_found" = "Nada encontrado";
-"nothing_found_descr" = "Cambiar la búsqueda o aumentar su radio.";
-"select_street" = "Elegir la calle";
+"nothing_found_descr" = "Cambia la búsqueda o aumenta su radio.";
+"select_street" = "Elige la calle";
 "shared_string_in_name" = "en %@";
 "select_city" = "Elegir la ciudad o pueblo";
 "type_city_town" = "Escribe la ciudad, pueblo o localidad";
@@ -528,7 +528,7 @@
 "add_group" = "Añadir un grupo";
 "add_favorite" = "Añadir favorito";
 "name_and_descr" = "Nombre y descripción";
-"select_group" = "Elegir grupo";
+"select_group" = "Elige el grupo";
 "shared_string_icon" = "Ícono";
 "shared_string_shape" = "Forma";
 "fav_point_dublicate" = "Favorito especificado con nombre duplicado";
@@ -1491,7 +1491,7 @@
 "osmand_parking_plugin_description" = "Registra dónde estacionó el vehículo y crea un recordatorio sobre la expiración del mismo. Para colocar el marcador, elige un lugar en el mapa, luego en «Acciones» pulsa «Añadir estacionamiento».";
 "plugin_ski_name" = "Vista invernal";
 "product_desc_skimap" = "Mapa actualizado de las pistas de esquí con remontes y pendientes";
-"plugin_ski_descr" = "Diseñado para navegar en áreas deportivas de invierno. Vea las pistas de esquí, los remontes, etc. con líneas coloreadas que indican el nivel de complejidad. Para usarlo: \n1. Activa este complemento\n2. Pulsa en «Configurar mapa»\n3. Elige el estilo de mapa «Invierno y esquí».";
+"plugin_ski_descr" = "Diseñado para navegar en áreas deportivas de invierno. Ve las pistas de esquí, los remontes, etc. con líneas coloreadas que indican el nivel de complejidad. Para usarlo: \n1. Activa este complemento\n2. Pulsa en «Configurar mapa»\n3. Elige el estilo de mapa «Invierno y esquí».";
 "record_plugin_name" = "Grabación de viaje";
 "product_desc_track_recording" = "Graba y guarda tus viajes como trazas GPX";
 "record_plugin_description" = "Registra tus viajes o entrenamientos y analiza los datos de velocidad, ascensos y descensos acumulados, el perfil de elevación, etc. Las trazas grabadas pueden archivarse, compartirse, editarse y post-procesarse. \n \nSigue leyendo en %@.";
@@ -1590,7 +1590,7 @@
 "public_transport_ped_route_title" = "La ruta a pie es de aproximadamente %@ y podría ser más rápida que en transporte público";
 "calc_pedestrian_route" = "Calcular ruta a pie";
 "public_transport_warning_title" = "La navegación en transporte público se encuentra actualmente en fase de pruebas beta, se esperan errores e imprecisiones.";
-"public_transport_warning_descr_blog" = "Lea más sobre el cálculo de las rutas de OsmAnd en nuestro blog.";
+"public_transport_warning_descr_blog" = "Lee más sobre el cálculo de las rutas de OsmAnd en nuestro blog.";
 "public_transport_empty_warning_title" = "Por desgracia, OsmAnd no puede encontrar una ruta con esos ajustes.";
 "public_transport_try_change_settings" = "Intenta cambiar los ajustes.";
 "shared_string_walk" = "Caminar";
@@ -1618,7 +1618,7 @@
 "gpx_trip_groups" = "Grupos de trazas";
 "gpx_group_select" = "Grupo elegido";
 "shared_string_show_all" = "Mostrar todo";
-"poi_filter_parking" = "Estacionamientos";
+"poi_filter_parking" = "Estacionamiento";
 "parked_at" = "estacionado a las";
 "context_menu_item_directions_from" = "Ir desde";
 "search_nearby" = "Buscar cerca";
@@ -1784,8 +1784,8 @@
 "osm_live_payment_renews_annually" = "Renovar anualmente";
 "osm_live_payment_header" = "Frecuencia de pago:";
 "osm_live_payment_contribute_descr" = "Las donaciones ayudan a financiar la cartografía de OSM.";
-"purchase_dialog_title" = "Elegir el plan";
-"purchase_dialog_travel_description" = "Comprar uno de los siguientes elementos para recibir la característica de la guía turística sin conexión:";
+"purchase_dialog_title" = "Elige el plan";
+"purchase_dialog_travel_description" = "Compra uno de los siguientes elementos para recibir la característica de la guía turística sin conexión:";
 "free_version_message" = "Existen %@ mapas para descargar o actualizar.";
 "get_osmand_live" = "Obtén «OsmAnd Live» para desbloquear todas las características: Actualizaciones diarias de mapas con descargas ilimitadas, todos los complementos gratuitos y de pago, artículos de Wikipedia, Wikiviajes y mucho más.";
 "osm_live_subscription" = "Suscripción de OsmAnd Live";
@@ -1951,7 +1951,7 @@
 "rendering_value_black_name" = "Negro";
 "routeInfo_winter_ice_road_name" = "Caminos de invierno y hielo";
 "rendering_attr_hideBuildings_name" = "Edificios";
-"routing_attr_max_num_changes_description" = "Especifica el número máximo de transbordos";
+"routing_attr_max_num_changes_description" = "Indica el número máximo de transbordos";
 "rendering_attr_winter_road_name" = "Camino de invierno";
 "rendering_attr_tramTrainRoutes_name" = "Rutas de tranvía y tren";
 "rendering_attr_smoothness_intermediate_name" = "Intermedio";
@@ -2113,7 +2113,7 @@
 "height_limit_description" = "Proporciona la altura del vehículo, pueden aplicarse algunas restricciones de ruta para vehículos altos.";
 "lenght_limit_description" = "Proporciona la longitud del vehículo, se pueden aplicar algunas restricciones de rutas para vehículos largos.";
 "width_limit_description" = "Proporciona el ancho del vehículo, pueden aplicarse algunas restricciones de ruta para vehículos anchos.";
-"vessel_height_limit_description" = "Define la altura de la embarcación para evitar puentes bajos. Tener en cuenta que si el puente es móvil, usaremos su altura en estado abierto.";
+"vessel_height_limit_description" = "Define la altura de la embarcación para evitar puentes bajos. Ten en cuenta que si el puente es móvil, usaremos su altura en estado abierto.";
 "vessel_width_limit_description" = "Define el ancho de la embarcación para evitar puentes estrechos";
 "default_speed_dialog_msg" = "Estima el tiempo de llegada para los tipos de caminos desconocidos, y limita la velocidad para todos los caminos (puede afectar a la ruta)";
 
@@ -2272,7 +2272,7 @@
 "osmand_cloud_create_account_descr" = "Ingresa tu correo electrónico, se enviará un código de verificación \ny todos los datos se vincularán a él.";
 "verification" = "Verificación";
 "verification_code_missing" = "No he recibido el código de verificación";
-"verification_code_missing_description" = "Puede tardar 10 minutos. Usa el botón inferior si no se encuentra en la carpeta de spam.";
+"verification_code_missing_description" = "Puede tardar 10 minutos. Usa el botón inferior si no lo encuentras en la carpeta de spam.";
 "local_backup_descr" = "Crea una copia de seguridad o restaura los datos de un archivo local.";
 "backup_into_file" = "Crear copia de seguridad local";
 "cloud_no_online_backup_descr" = "Define una copia de seguridad automática para no tener que preocuparte por la pérdida de datos.";
@@ -2283,7 +2283,7 @@
 "cloud_conflicts" = "Conflictos";
 "backup_error_size_is_exceeded" = "Tamaño máximo de OsmAnd Cloud excedido (%@)";
 "backup_error_user_is_already_registered" = "Esta dirección de correo electrónico se usa en otra cuenta";
-"backup_error_user_is_not_registered" = "Ningún usuario se ha registrado con ese correo electrónico";
+"backup_error_user_is_not_registered" = "Ningún usuario se registró con ese correo electrónico";
 "backup_error_subscription_was_expired" = "Suscripción vencida";
 "rendering_attr_showFunicularRoutes_name" = "Rutas funiculares";
 "backup_error_token_is_not_valid" = "Hay un problema con el ID del dispositivo o la clave proporcionada";
@@ -2452,7 +2452,7 @@
 "loading_purchase_information" = "Cargando datos de compra";
 "open_street_map_login_mode_simple" = "Debes iniciar sesión para subir los cambios.";
 "benefits_for_contributors_secondary_descr" = "Accede a OpenStreetMap para comprobar si tienes derecho a actualizaciones mensuales y horarias ilimitadas de los mapas.";
-"enough_contributions_descr" = "¡Felicitaciones, has hecho suficientes contribuciones a OpenStreetMap y ahora disfrutas de actualizaciones ilimitadas de los mapas de OsmAnd!";
+"enough_contributions_descr" = "¡Felicitaciones, hiciste suficientes contribuciones a OpenStreetMap y ahora disfrutas de actualizaciones ilimitadas de los mapas de OsmAnd!";
 "last_two_month_total" = "Total del último bimestre";
 "auth_failed" = "Fallo de autorización";
 "cloud_confirm_delete_type" = "¿Borrar «%@» de OsmAnd Cloud?";
@@ -2467,7 +2467,7 @@
 "other_countries" = "Otros países";
 "weather_generates_new_forecast_description" = "OsmAnd genera un nuevo pronóstico cada 6 horas. Cuanto más cerca de la fecha actual, más preciso será.";
 "update_parameters" = "Actualizar parámetros";
-"offline_edition_descr" = "Si activas la edición sin conexión, los cambios se guardarán localmente primero y se cargarán a pedido. de lo contrario, los cambios se cargarán de inmediato.";
+"offline_edition_descr" = "Si activas la edición sin conexión, los cambios se guardarán localmente primero y se cargarán a pedido; de lo contrario, los cambios se cargarán de inmediato.";
 "sign_in_with_open_street_map" = "Ingresar con OpenStreetMap";
 "use_login_and_password" = "Usar nombre de usuario y contraseña";
 "not_enough_contributions_descr" = "Necesitas un mínimo de %@ cambios en el último bimestre %@ para obtener acceso a actualizaciones ilimitadas de mapas por hora.";
@@ -2815,7 +2815,7 @@
 "coordinates_widget_current_location_desc" = "Muestra las coordenadas geográficas de la ubicación geográfica actual";
 "av_notes_photo_widget_desc" = "Pulsa el widget para fotografiar.";
 "av_notes_video_widget_desc" = "Pulsa el widget para grabar un video.";
-"av_notes_audio_widget_desc" = "Pulsa el widget para grabar notas de audio.";
+"av_notes_audio_widget_desc" = "Pulsa el widget para grabar una nota de audio.";
 "trip_recording_downhill_widget_desc" = "Muestra la suma de todos los descensos del viaje actual registrado.";
 "trip_recording_uphill_widget_desc" = "Muestra la suma de todos los ascensos del viaje actualmente registrado.";
 "trip_recording_distance_widget_desc" = "Muestra la distancia del viaje registrado actual.";

@@ -42,7 +42,7 @@
 
 // Track recording settings
 "save_global_track_interval" = "பொது பதிவு இடைவெளி";
-"save_track_interval" = "வழிசெலுத்தலின் போது உள்நுழைவு இடைவெளி \n";
+"save_track_interval" = "வழிசெலுத்தலின்போது பதிவு இடைவெளி";
 "map_widget_magnetic_bearing" = "காந்த தாங்கி";
 "map_widget_bearing" = "உறவினர் தாங்கி";
 "shared_string_near" = "அருகில்";
@@ -77,7 +77,7 @@
 
 // Route info
 "shared_string_never" = "ஒருபோதும்";
-"confirm_every_run" = "எப்போதும் கேள் \n";
+"confirm_every_run" = "எப்போதும் கேள்";
 "general_settings_2" = "பொது அமைப்புகள்";
 "auto_zoom_none" = "ஆட்டோ பெரிதாக்கவில்லை";
 "auto_zoom_close" = "மூடுவதற்கு";
@@ -439,7 +439,7 @@
 "moving_time" = "இயக்கத்தில் நேரம்";
 "shared_string_show_all" = "அனைத்தையும் காட்டு";
 "parked_at" = "நிறுத்தப்பட்ட இடம்";
-"context_menu_item_directions_from" = "\"திசைகள் இருந்து \"";
+"context_menu_item_directions_from" = "திசைகள் இதிலிருந்து";
 "move_marker_bottom_sheet_title" = "மார்க்கர் நிலையை மாற்ற வரைபடத்தை நகர்த்தவும்";
 "plugins_menu_group" = "செருகுநிரல்கள்";
 "shared_string_restore" = "மீட்டெடு";
@@ -535,7 +535,7 @@
 "rendering_attr_showSurfaceGrade_name" = "சாலை தரம் காட்டு";
 "routing_attr_avoid_stairs_description" = "படிக்கட்டுகளைத் தவிர்க்கிறது";
 "rendering_attr_horseRoutes_name" = "குதிரை வழிகள்";
-"rendering_attr_shareTaxiRoutes_name" = "\"டாக்ஸி பாதைகளில் பகிர் \"";
+"rendering_attr_shareTaxiRoutes_name" = "டாக்ஸி பாதைகளில் பகிர்";
 "rendering_attr_surfaceIntegrity_name" = "சாலை மேற்பரப்பு ஒருமைப்பாடு";
 "rendering_attr_coloredBuildings_name" = "வண்ண வகை குறியீடு கட்டிடங்கள்";
 "rendering_attr_showRoadMaps_description" = "சாலைகள் மட்டுமே வரைபடங்களைக் காண்பிக்கும்போது தேர்வுசெய்க:";
@@ -612,13 +612,13 @@
 "m" = "மீ";
 
 
-"rendering_attr_noAdminboundaries_description" = "பிராந்திய எல்லைகளை காட்சிப்படுத்த (நிர்வாகம் அளவு 5-9). \n";
+"rendering_attr_noAdminboundaries_description" = "பிராந்திய எல்லைகளைக் காட்சிப்படுத்த (நிர்வாகம் அளவு 5-9).";
 
 
 
 
 
-"routing_attr_avoid_toll_description" = "கட்டண சாலைகள் தவிர்க்கவும் \n";
+"routing_attr_avoid_toll_description" = "கட்டண சாலைகள் தவிர்";
 "km" = "கி.மீ.";
 
 
@@ -2620,7 +2620,7 @@
 "traffic_warning_pedestrian" = "பாதசாரி குறுக்குவழி";
 "accessibility_announce" = "அறிவிக்கவும்";
 "si_nm_mt" = "கடல் மைல்கள்/மீட்டர்";
-"si_nm_h" = "ஒரு மணி நேரத்திற்கு கடல் மைல்கள் (முடிச்சுகள்)";
+"si_nm_h" = "மணி நேரத்திற்கு கடல் மைல்கள் (முடிச்சுகள்)";
 "select_postcode" = "அஞ்சல் குறியீடு தேடல்";
 "shared_string_done" = "முடிந்தது";
 "shared_string_time_moving" = "நேரம் நகரும்";

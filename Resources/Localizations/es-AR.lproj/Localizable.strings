@@ -1951,7 +1951,7 @@
 "rendering_value_black_name" = "Negro";
 "routeInfo_winter_ice_road_name" = "Caminos de invierno y hielo";
 "rendering_attr_hideBuildings_name" = "Edificios";
-"routing_attr_max_num_changes_description" = "Especificá el número máximo de transbordos";
+"routing_attr_max_num_changes_description" = "Indicá el número máximo de transbordos";
 "rendering_attr_winter_road_name" = "Camino de invierno";
 "rendering_attr_tramTrainRoutes_name" = "Rutas de tranvía y tren";
 "rendering_attr_smoothness_intermediate_name" = "Intermedio";

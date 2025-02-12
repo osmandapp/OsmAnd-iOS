@@ -17,7 +17,7 @@
 "keep_and_add_destination_point" = "அடுத்தடுத்த இலக்காக சேர்க்கவும்";
 "subsequent_dest_description" = "இலக்கை நகர்த்தி அதை உருவாக்கவும்";
 "first_intermediate_dest_description" = "ஆரம்ப நிறுத்தத்தை சேர்க்கிறது";
-"last_intermediate_dest_description" = "இடைநிலை நிறுத்தத்தை சேர்க்கிறது \n";
+"last_intermediate_dest_description" = "இடைநிலை நிறுத்தத்தைச் சேர்க்கிறது";
 "shared_string_search" = "தேடல்";
 "search_radius_proximity" = "நேரத்திற்குள்";
 "day_off_label" = "தொலைவில் உள்ள";
@@ -71,7 +71,7 @@
 // Dirrection appearance
 "shared_string_one" = "ஒன்று";
 "shared_string_two" = "இரண்டு";
-"show_direction" = "\"இடைத்தூரம்   அறிகுறி\"";
+"show_direction" = "இடைத்தூரம் அறிகுறி";
 "active_markers" = "செயலில் உள்ள குறிப்பான்கள்";
 "appearance_on_the_map" = "வரைபடத்தில் தோன்றுவது";
 
@@ -448,18 +448,18 @@
 "yesterday" = "நேற்று";
 "first_usage_greeting" = "இணைய இணைப்பு இல்லாமல் திசைகளைப் பெறவும் புதிய இடங்களை கண்டறியவும்";
 "get_started" = "தொடங்குக";
-"first_usage_wizard_desc" = "OsmAnd உங்கள் இருப்பிடத்தை நிர்ணயித்து, அந்தப் பிராந்தியத்திற்கு ஏற்ற வரைபடங்களை பரிந்துரைக்கவும். \n";
+"first_usage_wizard_desc" = "OsmAnd உங்கள் இருப்பிடத்தை நிர்ணயித்து, அந்தப் பிராந்தியத்திற்கு ஏற்ற வரைபடங்களைப் பரிந்துரைக்கவும்.";
 "location_not_found" = "இடம் காணப்படவில்லை";
 "search_my_location" = "என் நிலையை கண்டுபிடி";
 "no_inet_connection" = "இணைய இணைப்பு இல்லை";
-"no_inet_connection_desc_map" = "வரைபடங்கள் பதிவிறக்க வேண்டும். \n";
+"no_inet_connection_desc_map" = "வரைபடங்கள் பதிவிறக்க வேண்டும்.";
 "search_location" = "இடம் தேடுகிறது …";
 "search_map" = "வரைபடங்களை தேடுகிறது …";
 "search_another_country" = "மற்றொரு பகுதியைத் தேர்ந்தெடுக்கவும்";
 "skip_map_downloading" = "வரைபடங்களைப் பதிவிறக்குக";
 "search_categories" = "வகைகள்";
 "how_to_open_wiki_title" = "எப்படி விக்கிபீடியா கட்டுரைகளை திறக்க வேண்டும்\?";
-"online_webpage_warning" = "\"பக்கம் நிகழ்நிலையில்  மட்டுமே கிடைக்கும். வலை உலாவியில் திறக்கவா\?\"";
+"online_webpage_warning" = "பக்கம் நிகழ்நிலையில் மட்டுமே கிடைக்கும். வலை உலாவியில் திறக்கவா?";
 "custom_search" = "தனிப்பயன் தேடல்";
 "poi_filter_custom_filter" = "விருப்ப வடிப்பான்";
 "poi_filter_closest_poi" = "அருகில் உள்ள POI கள்";
@@ -508,7 +508,7 @@
 "wikipedia_offline" = "விக்கிப்பீடியா இணையாநிலை";
 "contour_lines_hillshade_maps" = "விளிம்பு கோடுகள்&மலைநிழல் வரைபடங்கள்";
 "monthly_map_updates" = "மாதாந்திர வரைபட புதுப்பிப்புகள்";
-"daily_map_updates" = "வரைபட புதுப்பிப்புகள்:1 எல்லா \nமணிநேரமும் 2";
+"daily_map_updates" = "மணிநேர வரைபட புதுப்பிப்புகள்";
 "donation_to_osm" = "OSM சமூகத்திற்கு நன்கொடை";
 "purchase_unlim_title" = "வாங்க -%@";
 "in_app_purchase" = "செயலியுள் வாங்குதல்";
@@ -573,7 +573,7 @@
 // instruction:
 //https://github.com/osmandapp/OsmAnd-Issues/blob/master/Adding%20release%20information%20to%20IOS.md
 "altitude" = "உயரம்";
-"osm_live_subscriptions" = "சந்தாக்கள் \n";
+"osm_live_subscriptions" = "சந்தாக்கள்";
 "osm_live_banner_desc" = "வரம்பற்ற வரைபட பதிவிறக்கங்களைப் பெறுங்கள், வாராந்திர, நாள்தோறும் அல்லது மணிநேர புதுப்பிப்புகளைச் சேர்ப்பது.";
 "toast_empty_name_error" = "பெயரிடப்படாத இடம்";
 "shared_string_delete_all" = "அனைத்தையும் நீக்கு";
@@ -599,7 +599,7 @@
 
 
 
-"rendering_attr_contourColorScheme_name" = "விளிம்பு கோடுகள் வண்ணங்கள் \n";
+"rendering_attr_contourColorScheme_name" = "விளிம்புக் கோடுகள் வண்ணங்கள் திட்டம்";
 
 
 
@@ -660,14 +660,14 @@
 "lang_sr-Latn" = "செர்பியன் (லத்தின்)";
 "wiki_article_search_text" = "குறிப்பிட்ட விக்கிபீடியா கட்டுரை தேடப்பட்டு வருகிறது";
 "route_info" = "வழி தகவல்";
-"angular_measeurement_descr" = "என்ன அசிம்மை அளவிடப்படுகிறது என்பதை மாற்றுக";
+"angular_measeurement_descr" = "என்ன அசிமுத்தை அளவிடப்படுகிறது என்பதை மாற்றுக.";
 "map_settings_topography" = "சமநிலைக்கோடுகள்";
 "visibility" = "தன்மை";
 "shared_string_result" = "முடிவு";
 "shared_string_markers" = "குறிப்பான்";
 "last_seven_days" = "கடந்த 7 நாட்கள்";
 "shared_string_wikivoyage" = "விக்கிவோயாஜ்";
-"travel_card_download_descr" = "\"இணையத்துடன் ஒரு இணைப்பு இல்லாமல் உலகெங்கிலும் உள்ள இடங்களைப் பற்றிய கட்டுரைகளைப் பார்வையிட   Wikivoyage  பயண வழிகாட்டிகளைப் பதிவிறக்கவும்.\"";
+"travel_card_download_descr" = "இணையத்துடன் ஒரு இணைப்பு இல்லாமல் உலகெங்கிலும் உள்ள இடங்களைப் பற்றிய கட்டுரைகளைப் பார்வையிட விக்கிபயணம் பயண வழிகாட்டிகளைப் பதிவிறக்கவும்.";
 "map_widget_gps_info" = "GPS தகவல்";
 "shared_string_contents" = "தகவல்கள்";
 "shared_string_deleted" = "அழிக்கப்பட்டது";
@@ -722,7 +722,7 @@
 "shared_string_continue" = "தொடரவும்";
 "nm" = "என்.எம்.ஐ.";
 "min_mile" = "n/m";
-"min_km" = "என்/கி.மீ.";
+"min_km" = "நிமையம்/கிமீ";
 "m_s" = "எம்/கள்";
 "si_kmh" = "ஒரு மணி நேரத்திற்கு கிலோமீட்டர்";
 "si_mph" = "ஒரு மணி நேரத்திற்கு மைல்கள்";
@@ -2389,7 +2389,7 @@
 "direction_lines" = "திசை கோடுகள்";
 "osm_live_routing_descr" = "வழிசெலுத்தலுக்கு OSMAND நேரடி புதுப்பிப்புகளைப் பயன்படுத்தவும்";
 "nothing_found" = "எதுவும் கிடைக்கவில்லை";
-"type_city_town" = "நகரம்/நகரம்/இருப்பிடம் என தட்டச்சு செய்க";
+"type_city_town" = "மாநகரம்/நகரம்/இருப்பிடத்தை தட்டச்சு செய்க";
 "shared_string_max_height" = "அதிகபட்சம். உயரம்";
 "shared_string_rearrange" = "மறுசீரமைக்கவும்";
 "reverse_route" = "தலைகீழ் பாதை";

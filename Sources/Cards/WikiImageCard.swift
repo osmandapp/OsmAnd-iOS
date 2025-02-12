@@ -111,6 +111,7 @@ final class WikiImageCard: ImageCard {
         self.imageUrl = wikiImage.imageStubUrl
         self.title = wikiImage.imageName
         self.url = self.imageUrl
+        self.imageHiresUrl = wikiImage.imageHiResUrl
     }
     
     func opneURL(_ mapPanel: OAMapPanelViewController) {
@@ -124,6 +125,10 @@ struct Metadata {
     var author: String?
     var license: String?
     var description: String?
+    
+    var formatedDate: String {
+        WikiAlgorithms.formatWikiDate(date)
+    }
     
     var isEmpty: Bool {
         [date, author, license, description].allSatisfy { $0 == nil }

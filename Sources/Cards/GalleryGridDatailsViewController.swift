@@ -8,7 +8,9 @@
 
 final class GalleryGridDatailsViewController: OABaseNavbarViewController {
     var titleString: String = ""
+    // swiftlint:disable all
     var card: ImageCard!
+    // swiftlint:enable all
     var metadata: Metadata?
     
     override func registerCells() {
@@ -41,17 +43,13 @@ final class GalleryGridDatailsViewController: OABaseNavbarViewController {
             descriptionRow.descr = description
         }
         
-        if let date = metadata?.date {
-            var formattedDate = WikiAlgorithms.formatWikiDate(date)
-            if formattedDate.isEmpty {
-                formattedDate = date
-            }
-            if !formattedDate.isEmpty {
+        if let formatedDate = metadata?.formatedDate {
+            if !formatedDate.isEmpty {
                 let dateRow = section.createNewRow()
                 dateRow.key = "dateKey"
                 dateRow.cellType = OAValueTableViewCell.reuseIdentifier
                 dateRow.title = localizedString("shared_string_date")
-                dateRow.descr = formattedDate
+                dateRow.descr = formatedDate
             }
         }
         if let author = metadata?.author, !author.isEmpty {

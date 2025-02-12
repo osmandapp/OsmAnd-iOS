@@ -10,6 +10,9 @@ import UIKit
 
 @objcMembers
 class ImageCard: AbstractCard {
+    
+    private static let GALLERY_FULL_SIZE_WIDTH = "1280"
+
     var type: String
     var latitude: Double
     var longitude: Double
@@ -61,6 +64,13 @@ class ImageCard: AbstractCard {
         !imageHiresUrl.isEmpty ? imageHiresUrl : imageUrl
     }
     
+    func getGalleryFullSizeUrl() -> String? {
+        guard !imageHiresUrl.isEmpty else {
+            return nil
+        }
+        return imageHiresUrl + "?width=" + Self.GALLERY_FULL_SIZE_WIDTH
+    }
+
     override func onCardPressed(_ mapPanel: OAMapPanelViewController) {
         debugPrint("open gallery")
 //        guard let viewController = OAWebViewController(urlAndTitle: urlWithCommonAttributions, title: title) else { return }

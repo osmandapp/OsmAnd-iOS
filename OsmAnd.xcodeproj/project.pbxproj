@@ -3136,6 +3136,10 @@
 		FA7DCF552AF10ABF0045D136 /* BluetoothDisableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7DCF542AF10ABF0045D136 /* BluetoothDisableView.swift */; };
 		FA7DCF572AF11A7D0045D136 /* BluetoothDisableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA7DCF562AF11A7D0045D136 /* BluetoothDisableView.xib */; };
 		FA7EBDD12D59F22200121977 /* GalleryPhotoViewerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7EBDD02D59F1D000121977 /* GalleryPhotoViewerViewController.swift */; };
+		FA7EBDD32D5A16F900121977 /* ContentMetadataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7EBDD22D5A16F900121977 /* ContentMetadataView.swift */; };
+		FA7EBDD52D5A274800121977 /* WikiImageFullSizeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7EBDD42D5A274800121977 /* WikiImageFullSizeCell.swift */; };
+		FA7EBDDA2D5B7D5600121977 /* CarouselSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7EBDD92D5B7D5600121977 /* CarouselSection.swift */; };
+		FA7EBDDC2D5B8A6800121977 /* GalleryPhotoViewerViewControllerV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7EBDDB2D5B8A6000121977 /* GalleryPhotoViewerViewControllerV2.swift */; };
 		FA83EAA62BF6538B00DBF321 /* SpeedometerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA83EAA42BF6538B00DBF321 /* SpeedometerView.xib */; };
 		FA83EAA72BF6538B00DBF321 /* SpeedometerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA83EAA52BF6538B00DBF321 /* SpeedometerView.swift */; };
 		FA8516F02D42946D00B321C6 /* GpxDataItemHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8516EF2D42946D00B321C6 /* GpxDataItemHandler.swift */; };
@@ -7678,6 +7682,10 @@
 		FA7DCF542AF10ABF0045D136 /* BluetoothDisableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothDisableView.swift; sourceTree = "<group>"; };
 		FA7DCF562AF11A7D0045D136 /* BluetoothDisableView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BluetoothDisableView.xib; sourceTree = "<group>"; };
 		FA7EBDD02D59F1D000121977 /* GalleryPhotoViewerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryPhotoViewerViewController.swift; sourceTree = "<group>"; };
+		FA7EBDD22D5A16F900121977 /* ContentMetadataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentMetadataView.swift; sourceTree = "<group>"; };
+		FA7EBDD42D5A274800121977 /* WikiImageFullSizeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikiImageFullSizeCell.swift; sourceTree = "<group>"; };
+		FA7EBDD92D5B7D5600121977 /* CarouselSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselSection.swift; sourceTree = "<group>"; };
+		FA7EBDDB2D5B8A6000121977 /* GalleryPhotoViewerViewControllerV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryPhotoViewerViewControllerV2.swift; sourceTree = "<group>"; };
 		FA83EAA42BF6538B00DBF321 /* SpeedometerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SpeedometerView.xib; sourceTree = "<group>"; };
 		FA83EAA52BF6538B00DBF321 /* SpeedometerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeedometerView.swift; sourceTree = "<group>"; };
 		FA8516EF2D42946D00B321C6 /* GpxDataItemHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GpxDataItemHandler.swift; sourceTree = "<group>"; };
@@ -10713,6 +10721,9 @@
 		DA5A79A726C563A000F274C7 /* Cards */ = {
 			isa = PBXGroup;
 			children = (
+				FA7EBDDB2D5B8A6000121977 /* GalleryPhotoViewerViewControllerV2.swift */,
+				FA7EBDD42D5A274800121977 /* WikiImageFullSizeCell.swift */,
+				FA7EBDD22D5A16F900121977 /* ContentMetadataView.swift */,
 				FA7EBDD02D59F1D000121977 /* GalleryPhotoViewerViewController.swift */,
 				FACB02AB2D54F71C00EBE87F /* DownloadMetadataProvider.swift */,
 				FA92170F2D525D600074E958 /* GalaryContextMenuProvider.swift */,
@@ -13599,6 +13610,7 @@
 		FA069C522B9AF6090007E4DE /* Controls */ = {
 			isa = PBXGroup;
 			children = (
+				FA7EBDD92D5B7D5600121977 /* CarouselSection.swift */,
 				FACB02B42D562C4100EBE87F /* ExpandableTextView.swift */,
 				FA069C532B9AF61B0007E4DE /* OutlineLabel.swift */,
 				FA069C682B9F13160007E4DE /* ShadowPathView.swift */,
@@ -16329,6 +16341,7 @@
 				DA5A84E826C563A900F274C7 /* OAWaypointsViewController.mm in Sources */,
 				46E9AD9C28DC8F4C00CC55F9 /* OAValueTableViewCell.m in Sources */,
 				DA5A83FE26C563A800F274C7 /* OAQuickSearchListItem.mm in Sources */,
+				FA7EBDDC2D5B8A6800121977 /* GalleryPhotoViewerViewControllerV2.swift in Sources */,
 				FAC166232B21BEF900D63755 /* DescriptorValue.swift in Sources */,
 				DA5A818E26C563A700F274C7 /* OANewAction.m in Sources */,
 				DA5A814626C563A700F274C7 /* OAOpenStreetMapRemoteUtil.mm in Sources */,
@@ -16850,6 +16863,7 @@
 				46FB65BA2A8BBC2000A21850 /* CoordinatesMapCenterWidget.swift in Sources */,
 				32BC95732CC021CE00FEEAB8 /* UIFont+Extension.swift in Sources */,
 				DA5A845526C563A900F274C7 /* OAOsmEditsLayer.mm in Sources */,
+				FA7EBDD52D5A274800121977 /* WikiImageFullSizeCell.swift in Sources */,
 				DA5A815526C563A700F274C7 /* OACarPlayActiveViewController.m in Sources */,
 				FA359EED2ADFC6910001C11D /* WheelDeviceSettings.swift in Sources */,
 				FA00B8802B4EB66800582CD1 /* WidgetSizeStyle.swift in Sources */,
@@ -17126,6 +17140,7 @@
 				DA5A81DB26C563A700F274C7 /* OACity.mm in Sources */,
 				4641A4652B98B4A5000D8B32 /* GlideTargetWidget.swift in Sources */,
 				DA5A84B726C563A900F274C7 /* OATrackSegmentsViewController.mm in Sources */,
+				FA7EBDDA2D5B7D5600121977 /* CarouselSection.swift in Sources */,
 				DAABE4E32A13752000569F71 /* OAAverageSpeedComputer.m in Sources */,
 				05CC79562BB98B0B00BAC638 /* OAOnlinePlugin.mm in Sources */,
 				DA5A852726C563A900F274C7 /* OAOverlayUnderlayView.m in Sources */,
@@ -17366,6 +17381,7 @@
 				DA5A815726C563A700F274C7 /* OANauticalMapsPlugin.m in Sources */,
 				05CC79592BB99EC700BAC638 /* OAPluginsHelper.mm in Sources */,
 				DA5A83FB26C563A800F274C7 /* OAPOIFilterViewController.mm in Sources */,
+				FA7EBDD32D5A16F900121977 /* ContentMetadataView.swift in Sources */,
 				32CCE2992AD81AFE00AAADFA /* SearchTravelCell.swift in Sources */,
 				C56FAB5129B226C60096192F /* OACameraDistanceWidget.mm in Sources */,
 				DA5A846226C563A900F274C7 /* OAFavoritesLayer.mm in Sources */,

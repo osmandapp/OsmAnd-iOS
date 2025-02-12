@@ -28,10 +28,24 @@
 {
     CGFloat red, green, blue, alpha;
     [self getRed:&red green:&green blue:&blue alpha:&alpha];
-    return OsmAnd::ColorRGB(red * 255, green * 255, blue * 255);
+    return OsmAnd::FColorRGB(red, green, blue);
 }
 
 - (OsmAnd::FColorARGB) toFColorARGB
+{
+    CGFloat red, green, blue, alpha;
+    [self getRed:&red green:&green blue:&blue alpha:&alpha];
+    return OsmAnd::FColorARGB(alpha, red, green, blue);
+}
+
+- (OsmAnd::ColorRGB) toColorRGB
+{
+    CGFloat red, green, blue, alpha;
+    [self getRed:&red green:&green blue:&blue alpha:&alpha];
+    return OsmAnd::ColorRGB(red * 255, green * 255, blue * 255);
+}
+
+- (OsmAnd::ColorARGB) toColorARGB
 {
     CGFloat red, green, blue, alpha;
     [self getRed:&red green:&green blue:&blue alpha:&alpha];

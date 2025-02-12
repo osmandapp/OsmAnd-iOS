@@ -57,7 +57,6 @@
     OATransportRoutingHelper *_transportHelper;
 
     std::shared_ptr<OsmAnd::VectorLinesCollection> _collection;
-    
     std::shared_ptr<OsmAnd::MapMarkersCollection> _transportRouteMarkers;
     
     sk_sp<SkImage> _transportTransferIcon;
@@ -68,6 +67,8 @@
     OAAutoObserverProxy *_updateGpxTracksOnMapObserver;
     
     NSDictionary<NSString *, NSNumber *> *_routeAttributes;
+    NSDictionary<NSString *, NSNumber *> *_walkAttributes;
+    NSDictionary<NSString *, NSNumber *> *_walkPTAttributes;
     NSCache<NSString *, NSNumber *> *_сoloringTypeAvailabilityCache;
 
     BOOL _initDone;
@@ -132,6 +133,8 @@
     _transportShieldIcon = [OANativeUtilities skImageFromPngResource:@"map_public_transport_stop_shield"];
     
     _routeAttributes = nil;
+    _walkAttributes = nil;
+    _walkPTAttributes = nil;
     _сoloringTypeAvailabilityCache = [[NSCache alloc] init];
     
     _initDone = YES;
@@ -174,6 +177,8 @@
     _transportRouteMarkers->setPriority(_linesPriority);
 
     _routeAttributes = nil;
+    _walkAttributes = nil;
+    _walkPTAttributes = nil;
     _route = nil;
 }
 
@@ -306,7 +311,7 @@
                 OsmAnd::VectorLineBuilder builder;
                 builder.setBaseOrder(baseOrder--)
                 .setIsHidden(way->nodes.size() == 0)
-                .setLineId(1)
+                .setLineId(_collection->getLinesCount())
                 .setLineWidth(50.)
                 .setPoints(points)
                 .setFillColor(colorARGB);
@@ -325,6 +330,7 @@
 - (void) drawRouteSegment:(const QVector<OsmAnd::PointI> &)points 
             addToExisting:(BOOL)addToExisting
                   refresh:(BOOL)refresh
+                     walk:(BOOL)walk
                      sync:(BOOL)sync
 {
     [self drawRouteSegment:points
@@ -332,6 +338,7 @@
                    refresh:refresh
                     colors:{}
         colorizationScheme:COLORIZATION_NONE
+                      walk:walk
                       sync:sync
     ];
 }
@@ -341,6 +348,7 @@
                   refresh:(BOOL)refresh
                    colors:(const QList<OsmAnd::FColorARGB> &)colors
        colorizationScheme:(int)colorizationScheme
+                     walk:(BOOL)walk
                      sync:(BOOL)sync
 {
     void (^drawRouteSegment)(void) = ^{
@@ -361,8 +369,8 @@
             OsmAnd::VectorLineBuilder builder;
             builder.setBaseOrder(baseOrder--)
                    .setIsHidden(points.size() < 2)
-                   .setLineId(1)
-                   .setLineWidth(_lineWidth)
+                   .setLineId(lines.size())
+                   .setLineWidth(walk ? 0.0 : _lineWidth)
                    .setPoints(points);
 
             // Add outline for colorized lines
@@ -376,29 +384,43 @@
                     ? UIColorFromARGB(_routeLineColor)
                     : UIColorFromRGB(_routeLineColor);
 
-            OsmAnd::ColorARGB lineColor = [color toFColorARGB];
+            OsmAnd::ColorARGB lineColor = walk ? OsmAnd::ColorARGB(0) : [color toColorARGB];
 
-            NSNumber *colorVal = [self getParamFromAttr:@"color"];
-            BOOL hasStyleColor = (colorVal && colorVal.intValue != -1 && colorVal.intValue == _routeLineColor)
-                    || _routeLineColor == kDefaultRouteLineDayColor
-                    || _routeLineColor == kDefaultRouteLineNightColor;
-
-            auto iconBitmap = [self bitmapForColor:hasStyleColor ? UIColor.whiteColor : color
-                        fileName:@"map_direction_arrow"];
-            if (iconBitmap)
+            if (walk)
             {
-                builder.setPathIcon(OsmAnd::SingleSkImage(iconBitmap))
-                       .setPathIconStep(iconBitmap->height() * kPathIconStepCoef)
-                       .setShouldShowArrows(true);
+                OsmAnd::ColorARGB bitmapColor = OsmAnd::ColorARGB([self getWalkDefaultColor]);
+                auto walkIconBitmap = [self walkBitmapWithColor:bitmapColor lineWidth:_lineWidth];
+                if (walkIconBitmap)
+                {
+                    builder.setPathIcon(OsmAnd::SingleSkImage(walkIconBitmap))
+                        .setPathIconStep(walkIconBitmap->height() * 1.2)
+                        .setShouldShowArrows(true);
+                }
             }
-            auto specialIconBitmap = [self specialBitmapWithColor:lineColor];
-            if (specialIconBitmap)
+            else
             {
-                builder.setSpecialPathIcon(OsmAnd::SingleSkImage(specialIconBitmap))
-                       .setSpecialPathIconStep(specialIconBitmap->height() * kPathIconStepCoef)
-                       .setShouldShowArrows(true);
+                NSNumber *colorVal = [self getParamFromAttr:@"color"];
+                BOOL hasStyleColor = (colorVal && colorVal.intValue != -1 && colorVal.intValue == _routeLineColor)
+                || _routeLineColor == kDefaultRouteLineDayColor
+                || _routeLineColor == kDefaultRouteLineNightColor;
+                
+                auto iconBitmap = [self bitmapForColor:hasStyleColor ? UIColor.whiteColor : color
+                                              fileName:@"map_direction_arrow"];
+                if (iconBitmap)
+                {
+                    builder.setPathIcon(OsmAnd::SingleSkImage(iconBitmap))
+                        .setPathIconStep(iconBitmap->height() * kPathIconStepCoef)
+                        .setShouldShowArrows(true);
+                }
+                auto specialIconBitmap = [self specialBitmapWithColor:lineColor];
+                if (specialIconBitmap)
+                {
+                    builder.setSpecialPathIcon(OsmAnd::SingleSkImage(specialIconBitmap))
+                        .setSpecialPathIconStep(specialIconBitmap->height() * kPathIconStepCoef)
+                        .setShouldShowArrows(true);
+                }
             }
-
+            
             builder.setFillColor(lineColor)
                    .setScreenScale(UIScreen.mainScreen.scale);
 
@@ -469,6 +491,22 @@
             : isNight
                     ? forTurnArrows ? kDefaultTurnArrowsNightColor : kDefaultRouteLineNightColor
                     : forTurnArrows ? kDefaultTurnArrowsDayColor : kDefaultRouteLineDayColor;
+}
+
+- (NSInteger)getWalkDefaultColor
+{
+    BOOL isNight = [OAAppSettings sharedManager].nightMode;
+    NSNumber *colorVal = _walkAttributes[@"color"];
+    BOOL hasStyleColor = colorVal && colorVal.intValue != -1;
+    return hasStyleColor ? colorVal.intValue : kDefaultWalkingRouteLineColor;
+}
+
+- (NSInteger)getWalkPTDefaultColor
+{
+    BOOL isNight = [OAAppSettings sharedManager].nightMode;
+    NSNumber *colorVal = _walkPTAttributes[@"color"];
+    BOOL hasStyleColor = colorVal && colorVal.intValue != -1;
+    return hasStyleColor ? colorVal.intValue : kDefaultWalkingRouteLineColor;
 }
 
 - (OAPreviewRouteLineInfo *)getPreviewRouteLineInfo
@@ -852,6 +890,11 @@
     if (!_routeAttributes)
         return;
 
+    if (!_walkAttributes)
+        _walkAttributes = [self.mapViewController getLineRenderingAttributes:@"straightWalkingRouteLine"];
+    if (!_walkPTAttributes)
+        _walkPTAttributes = [self.mapViewController getLineRenderingAttributes:@"walkingRouteLine"];
+
     BOOL isNight = [OAAppSettings sharedManager].nightMode;
     OARouteCalculationResult *route = [_routingHelper getRoute];
     if ([_routingHelper isPublicTransportMode])
@@ -892,6 +935,7 @@
             [self addWalkRoute:prev s2:nullptr start:p end:end sync:sync];
             
             [self.mapView addKeyedSymbolsProvider:_collection];
+            [self setVectorLineProvider:_collection sync:sync];
             [self.mapView addKeyedSymbolsProvider:_transportRouteMarkers];
         }
     }
@@ -1021,6 +1065,7 @@
                 [self drawRouteSegment:points
                          addToExisting:NO
                                refresh:routeUpdated
+                                  walk:NO
                                   sync:sync];
             }
             else
@@ -1040,6 +1085,7 @@
                                refresh:routeUpdated
                                 colors:segmentColors
                     colorizationScheme:_colorizationScheme
+                                  walk:NO
                                   sync:sync];
                 segmentColors.clear();
             }
@@ -1092,6 +1138,7 @@
         [self drawRouteSegment:points
                  addToExisting:YES
                        refresh:NO
+                          walk:YES
                           sync:sync];
     }
 }

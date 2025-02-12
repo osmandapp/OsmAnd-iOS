@@ -3262,7 +3262,7 @@
 "rendering_value_sector5_name" = "பிரிவு 5";
 "routing_attr_hazmat_category_usa_2_name" = "வாயுக்கள்";
 "routing_attr_hazmat_category_usa_4_name" = "எரியக்கூடிய திடப்பொருள்கள்";
-"rendering_attr_lightDetail_description" = "இயல்புநிலை: சீமார்க் பெயர் (ஒளி எழுத்து. குழு.";
+"rendering_attr_lightDetail_description" = "இயல்புநிலை: சீமார்க் பெயர் (ஒளி எழுத்து. குழு.காலம்), 1 முதல் 3 அல்லது பிரிவு 1,2,3,4,5 ஒளி எழுத்துபற்றிய கூடுதல் தகவல்களைத் தேர்ந்தெடு";
 "rendering_value_sector4_name" = "பிரிவு 4";
 "required_maps_list" = "பயன்படுத்தப்படும் வரைபடங்கள்: %@";
 "visualization_3d_visualized_by" = "காட்சிப்படுத்தப்பட்டது";

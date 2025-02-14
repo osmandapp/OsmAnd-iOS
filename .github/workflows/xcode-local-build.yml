@@ -145,11 +145,11 @@ jobs:
             -exportPath . 
             -allowProvisioningUpdates 
             -exportArchive' 
-    - name: Upload maps archive
-      uses: actions/upload-artifact@v4
-      with:
-        name: OsmAndMaps-${{ github.event.inputs.releaseversion }}.${{ github.event.inputs.buildversion }}.ipa
-        path: 'OsmAnd Maps.ipa'
+    # - name: Upload maps archive
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: OsmAndMaps-${{ github.event.inputs.releaseversion }}.${{ github.event.inputs.buildversion }}.ipa
+    #     path: 'OsmAnd Maps.ipa'
     - name: Publish TestFlight
       env:
         LANG: "en_US.UTF-8"

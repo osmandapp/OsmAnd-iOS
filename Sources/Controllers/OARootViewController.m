@@ -888,6 +888,7 @@ typedef enum : NSUInteger {
         [UIKeyCommand keyCommandWithInput:@"=" modifierFlags:UIKeyModifierCommand action:@selector(zoomIn)],
         [UIKeyCommand keyCommandWithInput:@"0" modifierFlags:UIKeyModifierCommand action:@selector(recenterMap)],
         [UIKeyCommand keyCommandWithInput:@"c" modifierFlags:0 action:@selector(recenterMap)],
+        [UIKeyCommand keyCommandWithInput:@"l" modifierFlags:0 action:@selector(recenterMap)],
         [UIKeyCommand keyCommandWithInput:@"d" modifierFlags:0 action:@selector(changeMapOrienation)],
         [UIKeyCommand keyCommandWithInput:@"n" modifierFlags:0 action:@selector(showRouteInfo)],
         [UIKeyCommand keyCommandWithInput:@"o" modifierFlags:0 action:@selector(changeAppModeToPrev)],

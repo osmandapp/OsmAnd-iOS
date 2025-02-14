@@ -9,7 +9,7 @@
 import Foundation
 
 @objcMembers
-final class IconCollectionHandler: OABaseCollectionHandler, OAIconCollectionDelegate {
+class IconCollectionHandler: OABaseCollectionHandler, OAIconCollectionDelegate {
     
     var iconImagesData = [[UIImage]]()
     var roundedSquareCells = false
@@ -20,6 +20,7 @@ final class IconCollectionHandler: OABaseCollectionHandler, OAIconCollectionDele
     var strokeCornerRadius: Double = -1
     
     weak var hostVC: OASuperViewController?
+    weak var hostCell: OAIconsPaletteCell?
     
     private var selectedIndexPath: IndexPath?
     private var defaultIndexPath: IndexPath?
@@ -85,7 +86,11 @@ final class IconCollectionHandler: OABaseCollectionHandler, OAIconCollectionDele
             cell.iconImageView.image = iconImagesData[indexPath.section][indexPath.row]
         } else if !iconNamesData.isEmpty && !iconNamesData[indexPath.section].isEmpty {
             let iconName = iconNamesData[indexPath.section][indexPath.row]
-            cell.iconImageView.image = UIImage.templateImageNamed(iconName)
+            if let icon = UIImage.templateImageNamed(iconName) {
+                cell.iconImageView.image = icon
+            } else {
+                cell.iconImageView.image = OAUtilities.getMxIcon(iconName)
+            }
         }
         if indexPath == selectedIndexPath {
             cell.iconImageView.tintColor = selectedIconColor
@@ -100,8 +105,8 @@ final class IconCollectionHandler: OABaseCollectionHandler, OAIconCollectionDele
             cell.iconView.layer.cornerRadius = innerViewCornerRadius
             cell.backView.layer.cornerRadius = strokeCornerRadius
         } else {
-            cell.iconView.layer.cornerRadius = cell.iconView.frame.size.height / 2;
-            cell.backView.layer.cornerRadius = cell.backView.frame.size.height / 2;
+            cell.iconView.layer.cornerRadius = cell.iconView.frame.size.height / 2
+            cell.backView.layer.cornerRadius = cell.backView.frame.size.height / 2
         }
         return cell
     }
@@ -134,10 +139,14 @@ final class IconCollectionHandler: OABaseCollectionHandler, OAIconCollectionDele
         return iconNamesData[0][0]
     }
     
+    func buildTopButtonContextMenu() -> UIMenu? {
+        nil
+    }
+    
     // MARK: - OAIconCollectionDelegate
     
     func selectIconName(_ iconName: String) {
-        guard let selectedIndex = iconNamesData[0].index(of: iconName) else { return }
+        guard let selectedIndex = iconNamesData[0].firstIndex(of: iconName) else { return }
         let selectedIndexPath = IndexPath(row: selectedIndex, section: 0)
         setSelectedIndexPath(selectedIndexPath)
         getCollectionView()?.reloadData()

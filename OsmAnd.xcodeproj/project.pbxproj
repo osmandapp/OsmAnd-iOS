@@ -268,6 +268,7 @@
 		32210DB3298929B0005D16CB /* ic_custom_upload_to_openstreetmap_outlined@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32210DAF298929B0005D16CB /* ic_custom_upload_to_openstreetmap_outlined@2x.png */; };
 		32210DB4298929B0005D16CB /* ic_custom_map_pin_outlined@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32210DB0298929B0005D16CB /* ic_custom_map_pin_outlined@3x.png */; };
 		32210DB729893C17005D16CB /* OAOsmUploadGPXViewConroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 32210DB629893C17005D16CB /* OAOsmUploadGPXViewConroller.m */; };
+		322122152D5F6F3200A3AC9A /* activities.json in Resources */ = {isa = PBXBuildFile; fileRef = 322122142D5F6F3200A3AC9A /* activities.json */; };
 		3226C1A72D3E66FF008F9905 /* RenderedObjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3226C1A62D3E66DB008F9905 /* RenderedObjectViewController.swift */; };
 		322AF8FC2A0CDA7D00D2FF37 /* OAPluginDetailsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 322AF8FB2A0CD68500D2FF37 /* OAPluginDetailsViewController.xib */; };
 		322B53922C78DBF8006B48B0 /* IconCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 322B53912C78DBF8006B48B0 /* IconCollectionHandler.swift */; };
@@ -481,6 +482,8 @@
 		32EAF9FF2AE15A3C00646807 /* AFNetworkReachabilityManagerWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 32EAF9FE2AE15A3C00646807 /* AFNetworkReachabilityManagerWrapper.m */; };
 		32EAFA012AE17F3100646807 /* TravelGuidesSettingsDownloadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32EAFA002AE17F3100646807 /* TravelGuidesSettingsDownloadViewController.swift */; };
 		32EB3DF12AC325780018D9B8 /* OATravelLocalDataDbHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32EB3DF02AC325780018D9B8 /* OATravelLocalDataDbHelper.mm */; };
+		32F3A6AA2D5E1967008AE4CA /* PoiIconCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F3A6A92D5E1958008AE4CA /* PoiIconCollectionHandler.swift */; };
+		32F3A6AC2D5E1A43008AE4CA /* IconsCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F3A6AB2D5E1A41008AE4CA /* IconsCategory.swift */; };
 		32F6225D29A7AE080069EE04 /* OAAmenityExtendedNameFilter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 320EADAB29A77AAB002F9883 /* OAAmenityExtendedNameFilter.mm */; };
 		32FE7AA72B65138800F82728 /* OAGPXImportUIHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32FE7AA62B65138800F82728 /* OAGPXImportUIHelper.mm */; };
 		32FEF47F2D071FD7005E8B55 /* OAMapObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32FEF47E2D071FD5005E8B55 /* OAMapObject.mm */; };
@@ -3572,6 +3575,7 @@
 		32210DB0298929B0005D16CB /* ic_custom_map_pin_outlined@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_map_pin_outlined@3x.png"; path = "Resources/Icons/ic_custom_map_pin_outlined@3x.png"; sourceTree = "<group>"; };
 		32210DB529893C05005D16CB /* OAOsmUploadGPXViewConroller.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmUploadGPXViewConroller.h; sourceTree = "<group>"; };
 		32210DB629893C17005D16CB /* OAOsmUploadGPXViewConroller.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOsmUploadGPXViewConroller.m; sourceTree = "<group>"; };
+		322122142D5F6F3200A3AC9A /* activities.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = activities.json; path = ../resources/poi/activities.json; sourceTree = SOURCE_ROOT; };
 		3226C1A62D3E66DB008F9905 /* RenderedObjectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderedObjectViewController.swift; sourceTree = "<group>"; };
 		3226C1A82D3E67D5008F9905 /* OARenderedObject+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OARenderedObject+cpp.h"; sourceTree = "<group>"; };
 		322AF8FB2A0CD68500D2FF37 /* OAPluginDetailsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAPluginDetailsViewController.xib; sourceTree = "<group>"; };
@@ -3870,6 +3874,8 @@
 		32EB3DEF2AC3256B0018D9B8 /* OATravelLocalDataDbHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATravelLocalDataDbHelper.h; sourceTree = "<group>"; };
 		32EB3DF02AC325780018D9B8 /* OATravelLocalDataDbHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATravelLocalDataDbHelper.mm; sourceTree = "<group>"; };
 		32ECBEAD2657AD7F005D33BD /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Localizable.strings; sourceTree = "<group>"; };
+		32F3A6A92D5E1958008AE4CA /* PoiIconCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoiIconCollectionHandler.swift; sourceTree = "<group>"; };
+		32F3A6AB2D5E1A41008AE4CA /* IconsCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconsCategory.swift; sourceTree = "<group>"; };
 		32FE7AA52B65136D00F82728 /* OAGPXImportUIHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGPXImportUIHelper.h; sourceTree = "<group>"; };
 		32FE7AA62B65138800F82728 /* OAGPXImportUIHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXImportUIHelper.mm; sourceTree = "<group>"; };
 		32FEF47C2D071ED7005E8B55 /* OAPOIHelper+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OAPOIHelper+cpp.h"; sourceTree = "<group>"; };
@@ -9449,6 +9455,8 @@
 				461A3F0929F6E68F008EE079 /* OAColorCollectionHandler.m */,
 				322B53912C78DBF8006B48B0 /* IconCollectionHandler.swift */,
 				4656BD2D2C482D0500B69928 /* PaletteCollectionHandler.swift */,
+				32F3A6A92D5E1958008AE4CA /* PoiIconCollectionHandler.swift */,
+				32F3A6AB2D5E1A41008AE4CA /* IconsCategory.swift */,
 			);
 			path = Handlers;
 			sourceTree = "<group>";
@@ -9892,6 +9900,7 @@
 				05898FAC2B4DACBD00E64B58 /* map-icons-svg */,
 				05898FAE2B4DACD900E64B58 /* map-shaders-svg */,
 				3219704A25FA0C6100C3FED6 /* poi_categories.json */,
+				322122142D5F6F3200A3AC9A /* activities.json */,
 				84630FC81A8E1947005B39F2 /* styles */,
 				BB2726FC19CB38D7007C5613 /* fonts */,
 				BB2726FD19CB38D7007C5613 /* stubs */,
@@ -15191,6 +15200,7 @@
 				DA1BC13C233F9B01004DAF78 /* ic_custom_marker@3x.png in Resources */,
 				46C2FD8328B38EF600771E6E /* ic_custom_user_profile@2x.png in Resources */,
 				46C2FD8728B38EF600771E6E /* ic_custom_storage@2x.png in Resources */,
+				322122152D5F6F3200A3AC9A /* activities.json in Resources */,
 				8410D068207F48200049DEB2 /* ic_tree_list_dark@3x.png in Resources */,
 				46C2FD8428B38EF600771E6E /* ic_custom_user_profile@3x.png in Resources */,
 				8A6CBCB821CE25F0004033C7 /* img_logo_38dp_contour_lines@2x.png in Resources */,
@@ -16723,6 +16733,7 @@
 				FAC5D4192BFB562000E9E658 /* SpeedometerSpeedView.swift in Sources */,
 				464BF4A72C050189000D6908 /* CompassVisibility.swift in Sources */,
 				DA5A815B26C563A700F274C7 /* OACustomPlugin.mm in Sources */,
+				32F3A6AA2D5E1967008AE4CA /* PoiIconCollectionHandler.swift in Sources */,
 				DA5A855426C563A900F274C7 /* OAGPXAppearanceCollection.mm in Sources */,
 				DA5A83A426C563A800F274C7 /* OAPoiTypeSelectionViewController.mm in Sources */,
 				DA5A819F26C563A700F274C7 /* OADownloadMapProgressViewController.mm in Sources */,
@@ -17462,6 +17473,7 @@
 				CA4ED4F6BF41371BA62511BA /* OADeleteOldFilesCommand.mm in Sources */,
 				CA4ED5DCCC5120883E58A623 /* OABaseBackupTypesViewController.mm in Sources */,
 				CA4ED127365B6FCBDC4E739E /* OABackupTypesViewController.mm in Sources */,
+				32F3A6AC2D5E1A43008AE4CA /* IconsCategory.swift in Sources */,
 				CA4EDDEA04A2683B2A8447AA /* OAManageStorageViewController.mm in Sources */,
 				46BCD1922C2DCA0F008749EC /* ColorPalette.swift in Sources */,
 				CA4EDD1F67ADE2175D901873 /* OAManageTypeViewController.mm in Sources */,

@@ -172,7 +172,7 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
                             if (dic[@"image"])
                             {
                                 WikiImage *wikiImage = [self getOsmandApiWikiImage:dic[@"image"]];
-                                [wikiImage parceMetaDataWith:dic];
+                                [wikiImage parseMetaDataWith:dic];
                                 if (wikiImage)
                                 {
                                     WikiImageCard *card = [[WikiImageCard alloc] initWithWikiImage:wikiImage type:@"wikimedia-photo"];

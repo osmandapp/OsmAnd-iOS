@@ -97,8 +97,8 @@ final class MetadataStackView: UIStackView {
         if let description = metadata?.description, !description.isEmpty {
             addArrangedSubview(createLabel(with: description))
         }
-        if let formatedDate = metadata?.formatedDate, !formatedDate.isEmpty {
-            addArrangedSubview(createLabel(with: localizedString("shared_string_date") + ": " + formatedDate))
+        if let formattedDate = metadata?.formattedDate, !formattedDate.isEmpty {
+            addArrangedSubview(createLabel(with: localizedString("shared_string_date") + ": " + formattedDate))
         }
         if let author = metadata?.author, !author.isEmpty {
             addArrangedSubview(createLabel(with: localizedString("shared_string_author") + ": " + author))
@@ -113,7 +113,6 @@ final class MetadataStackView: UIStackView {
         label.textColor = .white
         label.font = UIFont.preferredFont(forTextStyle: .subheadline)
         label.numberOfLines = 1
-        //label.lineBreakMode = .byWordWrapping
         label.text = text
         return label
     }

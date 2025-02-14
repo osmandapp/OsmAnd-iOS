@@ -111,11 +111,15 @@ extension GalleryGridViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let card = cards[indexPath.row] as? WikiImageCard else { return }
+        let wikiCards = cards.compactMap { $0 as? WikiImageCard }
+        guard let initialIndex = wikiCards.firstIndex(where: { $0 === card }) else { return }
+        let imageDataSource = SimpleImageDatasource(imageItems: wikiCards.compactMap { ImageItem.card($0) })
+        let imageCarouselController = ImageCarouselViewController(imageDataSource: imageDataSource, initialIndex: initialIndex)
         
-        let controller = GalleryPhotoViewerViewController()
-        controller.cards = cards.compactMap { $0 as? WikiImageCard }
-        controller.selectedCard = card
-        navigationController?.pushViewController(controller, animated: true)
+        let navController = UINavigationController(rootViewController: imageCarouselController)
+        navController.modalPresentationStyle = .custom
+        navController.modalPresentationCapturesStatusBarAppearance = true
+        OARootViewController.instance().mapPanel?.navigationController?.present(navController, animated: true)
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -126,38 +130,38 @@ extension GalleryGridViewController: UICollectionViewDelegate {
     
     private func contextMenuInteraction(with card: AbstractCard) -> UIContextMenuConfiguration? {
         let actionProvider: UIContextMenuActionProvider = { [weak self] _ in
-            var firsrSectionItems = [UIAction]()
+            var firstSectionItems = [UIAction]()
             if card is WikiImageCard {
                 let detailsAction = UIAction(title: localizedString("shared_string_details"), image: UIImage.icCustomInfoOutlined) { _ in
                     guard let self else { return }
-                    GalaryContextMenuProvider.openDetailsController(card: card, rootController: self)
+                    GalleryContextMenuProvider.openDetailsController(card: card, rootController: self)
                 }
                 detailsAction.accessibilityLabel = localizedString("shared_string_details")
-                firsrSectionItems.append(detailsAction)
+                firstSectionItems.append(detailsAction)
             }
   
             let openInBrowserAction = UIAction(title: localizedString("open_in_browser"), image: UIImage.icCustomExternalLink) { _ in
                 if let item = card as? WikiImageCard {
-                    item.opneURL(OARootViewController.instance().mapPanel)
+                    item.openURL(OARootViewController.instance().mapPanel)
                 } else {
                     guard let item = card as? ImageCard else { return }
-                    GalaryContextMenuProvider.openURLIfValid(urlString: item.imageUrl)
+                    GalleryContextMenuProvider.openURLIfValid(urlString: item.imageUrl)
                 }
             }
             openInBrowserAction.accessibilityLabel = localizedString("open_in_browser")
             
-            firsrSectionItems.append(openInBrowserAction)
+            firstSectionItems.append(openInBrowserAction)
             
-            let firsrSection = UIMenu(title: "", options: .displayInline, children: firsrSectionItems)
+            let firstSection = UIMenu(title: "", options: .displayInline, children: firstSectionItems)
             let downloadAction = UIAction(title: localizedString("shared_string_download"), image: UIImage.icCustomDownload) { _ in
                 guard let self else { return }
                 guard let item = card as? ImageCard,
                       !item.imageUrl.isEmpty else { return }
-                GalaryContextMenuProvider.downloadImage(urlString: item.imageUrl, view: self.view)
+                GalleryContextMenuProvider.downloadImage(urlString: item.imageUrl, view: self.view)
             }
             downloadAction.accessibilityLabel = localizedString("shared_string_download")
             let secondSection = UIMenu(title: "", options: .displayInline, children: [downloadAction])
-            return UIMenu(title: "", image: nil, children: [firsrSection, secondSection])
+            return UIMenu(title: "", image: nil, children: [firstSection, secondSection])
         }
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: actionProvider)
     }

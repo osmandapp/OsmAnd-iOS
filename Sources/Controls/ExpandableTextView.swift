@@ -81,7 +81,7 @@ open class ExpandableTextView: UITextView, UITextViewDelegate {
     typealias LineIndexTuple = (line: CTLine, index: Int)
 
     /// The delegate of ExpandableTextView
-    weak open var delegateExppanable: ExpandableTextViewDelegate?
+    weak open var delegateExpandable: ExpandableTextViewDelegate?
 
     /// Set 'true' if the label should be collapsed or 'false' for expanded.
     @IBInspectable open var collapsed: Bool = true {
@@ -113,7 +113,7 @@ open class ExpandableTextView: UITextView, UITextViewDelegate {
 
     open var lessText: String? = "Less" {
         didSet {
-            if let lessText = lessText, !lessText.isEmpty {
+            if let lessText, !lessText.isEmpty {
                 let string = NSMutableAttributedString(string: lessText)
                 expandedAttributedLink = string
             } else {
@@ -219,7 +219,7 @@ open class ExpandableTextView: UITextView, UITextViewDelegate {
                     self.attributedText = NSAttributedString(string: text)
                     let newSize = self.sizeThatFits(CGSize(width: size.width, height: CGFloat.greatestFiniteMagnitude))
                     if abs(size.height - newSize.height) > 1 {
-                        self.delegateExppanable?.expandableTextViewUpdateHeight(self)
+                        self.delegateExpandable?.expandableTextViewUpdateHeight(self)
                     }
                 }
             } else {
@@ -248,9 +248,9 @@ open class ExpandableTextView: UITextView, UITextViewDelegate {
         // update the text based on the textview width
         updateText()
         if self.collapsed {
-            delegateExppanable?.didCollapseTextView(self)
+            delegateExpandable?.didCollapseTextView(self)
         } else {
-            delegateExppanable?.didExpandTextView(self)
+            delegateExpandable?.didExpandTextView(self)
         }
     }
     open private(set) var expandedText: NSAttributedString?
@@ -275,14 +275,14 @@ open class ExpandableTextView: UITextView, UITextViewDelegate {
         case .invokeDefaultAction:
             if URL.scheme == "etv" {
                 if URL.absoluteString == "etv://less" {
-                    delegateExppanable?.willCollapseTextView(self)
+                    delegateExpandable?.willCollapseTextView(self)
                     collapsed = true
-                    delegateExppanable?.didCollapseTextView(self)
+                    delegateExpandable?.didCollapseTextView(self)
                     return false
                 } else if URL.absoluteString == "etv://more" {
-                    delegateExppanable?.willExpandTextView(self)
+                    delegateExpandable?.willExpandTextView(self)
                     collapsed = false
-                    delegateExppanable?.didExpandTextView(self)
+                    delegateExpandable?.didExpandTextView(self)
                     return false
                 }
             }
@@ -291,7 +291,7 @@ open class ExpandableTextView: UITextView, UITextViewDelegate {
             return false
         @unknown default: fatalError()
         }
-        return delegateExppanable?.expandableTextView(self, shouldInteractWith: URL, in: characterRange, interaction: interaction) ?? true
+        return delegateExpandable?.expandableTextView(self, shouldInteractWith: URL, in: characterRange, interaction: interaction) ?? true
     }
 
     open override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {

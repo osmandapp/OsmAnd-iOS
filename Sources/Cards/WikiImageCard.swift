@@ -20,6 +20,7 @@ final class WikiImage: NSObject {
     
     var mediaId: Int = -1
     var metadata: Metadata?
+    var onMetadataUpdated: (() -> Void)?
     
     init(wikiMediaTag: String, imageName: String, imageStubUrl: String, imageHiResUrl: String) {
         self.wikiMediaTag = wikiMediaTag
@@ -33,7 +34,7 @@ final class WikiImage: NSObject {
         "\(WIKIMEDIA_COMMONS_URL)\(WIKIMEDIA_FILE)\(wikiMediaTag)"
     }
     
-    func parceMetaData(with dic: [String: Any]) {
+    func parseMetaData(with dic: [String: Any]) {
         self.metadata = Metadata()
         
         if let date = dic["date"] as? String, !date.isEmpty {
@@ -54,21 +55,30 @@ final class WikiImage: NSObject {
         if metadata == nil {
             self.metadata = Metadata()
         }
-        
+        var isUpdated = false
         if let date = dic["date"] as? String, !isEmpty(date), isEmpty(metadata?.date) {
             metadata?.date = date
+            isUpdated = true
         }
         
         if let license = dic["license"] as? String, !isEmpty(license), isEmpty(metadata?.license) {
             metadata?.license = license
+            isUpdated = true
         }
         
         if let author = dic["author"] as? String, !isEmpty(author), isEmpty(metadata?.author) {
             metadata?.author = author
+            isUpdated = true
         }
         
         if let description = dic["description"] as? String, !isEmpty(description), isEmpty(metadata?.description) {
             metadata?.description = description
+            isUpdated = true
+        }
+        if isUpdated {
+            DispatchQueue.main.async { [weak self] in
+                self?.onMetadataUpdated?()
+            }
         }
     }
     
@@ -84,17 +94,23 @@ final class WikiImageCard: ImageCard {
     var isMetaDataDownloading = false
     var wikiImage: WikiImage?
     
+    var onMetadataUpdated: (() -> Void)? {
+        didSet {
+            wikiImage?.onMetadataUpdated = onMetadataUpdated
+        }
+    }
+    
     var metadata: Metadata? {
         wikiImage?.metadata
+    }
+    
+    override var hash: Int {
+        wikiImage?.mediaId ?? 0
     }
     
     override func isEqual(_ object: Any?) -> Bool {
         guard let other = object as? Self else { return false }
         return wikiImage?.mediaId == other.wikiImage?.mediaId
-     }
-
-    override var hash: Int {
-        wikiImage?.mediaId ?? 0
     }
     
     static func == (lhs: WikiImageCard, rhs: WikiImageCard) -> Bool {
@@ -114,7 +130,7 @@ final class WikiImageCard: ImageCard {
         self.imageHiresUrl = wikiImage.imageHiResUrl
     }
     
-    func opneURL(_ mapPanel: OAMapPanelViewController) {
+    func openURL(_ mapPanel: OAMapPanelViewController) {
         guard let viewController = OAWebViewController(urlAndTitle: urlWithCommonAttributions, title: title) else { return }
         mapPanel.navigationController?.pushViewController(viewController, animated: true)
     }
@@ -126,7 +142,7 @@ struct Metadata {
     var license: String?
     var description: String?
     
-    var formatedDate: String {
+    var formattedDate: String {
         WikiAlgorithms.formatWikiDate(date)
     }
     

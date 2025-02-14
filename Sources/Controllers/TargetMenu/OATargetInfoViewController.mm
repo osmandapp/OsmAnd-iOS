@@ -728,9 +728,10 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
 {
     if (_otherCardsReady && _wikiCardsReady)
     {
-        if (cards.count == 0)
-            [cards addObject:[[NoImagesCard alloc] init]];
-        else if (cards.count > 1)
+//        if (cards.count == 0)
+//            [cards addObject:[[NoImagesCard alloc] init]];
+//        else
+        if (cards.count > 1)
             [self reorderCards:cards];
         // After forming the list of cards, fill the collection
         if (nearbyImagesRowInfo)
@@ -812,7 +813,7 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
                                                             isPhoneNumber:NO isUrl:NO];
 
         CollapsableCardsView *cardView = [CollapsableCardsView new];
-        cardView.contentType = CollapsableCardsTypeMapilary;
+        cardView.contentType = CollapsableCardsTypeMapillary;
         cardView.delegate = self;
         mapillaryCardsRowInfo.collapsable = YES;
         mapillaryCardsRowInfo.collapsed = [OAAppSettings sharedManager].mapillaryPhotosRowCollapsed.get;
@@ -1195,6 +1196,9 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
 
 - (void)onRecalculateHeight {
     [self.tableView reloadData];
+    [self calculateContentHeight];
+    if (self.delegate)
+        [self.delegate contentHeightChanged:0];
 }
 
 - (void)startLoadingImages

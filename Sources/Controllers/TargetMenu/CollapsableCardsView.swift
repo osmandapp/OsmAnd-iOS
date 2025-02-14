@@ -12,7 +12,7 @@ protocol CollapsableCardViewDelegate: AnyObject {
 }
 
 @objc enum CollapsableCardsType: Int {
-     case onlinePhoto, mapilary
+     case onlinePhoto, mapillary
  }
 
 @objcMembers
@@ -38,7 +38,7 @@ final class CollapsableCardsView: OACollapsableView {
             switch contentType {
             case .onlinePhoto:
                 OAAppSettings.sharedManager().onlinePhotosRowCollapsed.set(collapsed)
-            case .mapilary:
+            case .mapillary:
                 OAAppSettings.sharedManager().mapillaryPhotosRowCollapsed.set(collapsed)
             }
         }
@@ -70,24 +70,24 @@ final class CollapsableCardsView: OACollapsableView {
 
         cardsViewController.didChangeHeightAction = { [weak self, weak cardsViewController] section, height in
             guard let self, let cardsViewController else { return }
-            var newHeiht = height
+            var newHeight = height
             switch section {
             case .bigPhoto, .smallPhoto, .mapillaryBanner:
                 switch contentType {
                 case .onlinePhoto where сardsFilter.hasOnlyOnlinePhotosContent:
-                    newHeiht += bottomContentHeight
-                case .mapilary where сardsFilter.hasOnlyMapillaryPhotosContent:
-                    newHeiht += bottomContentHeight
+                    newHeight += bottomContentHeight
+                case .mapillary where сardsFilter.hasOnlyMapillaryPhotosContent:
+                    newHeight += bottomContentHeight
                 default: break
                 }
             default: break
             }
             
-            if heightConstraint?.constant != CGFloat(newHeiht) {
-                heightConstraint?.constant = CGFloat(newHeiht)
+            if heightConstraint?.constant != CGFloat(newHeight) {
+                heightConstraint?.constant = CGFloat(newHeight)
                 if let superview = cardsViewController.superview {
                    var frame = superview.frame
-                    frame.size.height = CGFloat(newHeiht)
+                    frame.size.height = CGFloat(newHeight)
                     superview.frame = frame
                     delegate?.onRecalculateHeight()
                 }
@@ -122,7 +122,7 @@ final class CollapsableCardsView: OACollapsableView {
         
         switch contentType {
         case .onlinePhoto where сardsFilter.hasOnlyOnlinePhotosContent:
-            setupButtomButton(title: localizedString("shared_string_view_all")) { [weak self, weak сardsFilter] _ in
+            setupBottomButton(title: localizedString("shared_string_view_all")) { [weak self, weak сardsFilter] _ in
                 guard let self,
                       let сardsFilter,
                       let navigationController = OARootViewController.instance()?.navigationController else { return }
@@ -132,15 +132,15 @@ final class CollapsableCardsView: OACollapsableView {
                 controller.titleString = title
                 navigationController.pushViewController(controller, animated: true)
             }
-        case .mapilary where сardsFilter.hasOnlyMapillaryPhotosContent:
-            setupButtomButton(title: localizedString("shared_string_explore")) { _ in
+        case .mapillary where сardsFilter.hasOnlyMapillaryPhotosContent:
+            setupBottomButton(title: localizedString("shared_string_explore")) { _ in
                 OAMapillaryPlugin.installOrOpenMapillary()
             }
         default: break
         }
     }
     
-    private func setupButtomButton(title: String, action: @escaping (UIAction) -> Void) {
+    private func setupBottomButton(title: String, action: @escaping (UIAction) -> Void) {
         bottomButton = UIButton(type: .system, primaryAction: UIAction(title: title, handler: action))
         if let button = bottomButton {
             addButtonIfNeeded(button: button)

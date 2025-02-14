@@ -6,10 +6,10 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-@objcMembers
-final class NoImagesCard: AbstractCard {
-    
-    override class func getCellNibId() -> String {
-        NoImagesCell.reuseIdentifier
-    }
-}
+//@objcMembers
+//final class NoImagesCard: AbstractCard {
+//    
+//    override class func getCellNibId() -> String {
+//        NoImagesCell.reuseIdentifier
+//    }
+//}

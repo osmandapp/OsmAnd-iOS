@@ -37,7 +37,7 @@
 "route_stops_before" = "%@ peatust varem";
 "transport_Routes" = "Teekonnad";
 "transport_nearby_routes_within" = "Lähedalolevad teekonnad";
-"transport_nearby_routes" = "Ulatus";
+"transport_nearby_routes" = "Ümbruses";
 "cancel_navigation" = "Lõpeta navigeerimine";
 "start_navigation" = "Alusta navigeerimist";
 "intermediate_items_sort_by_distance" = "Sorteeri ukselt-uksele";
@@ -58,7 +58,7 @@
 "shared_string_search" = "Otsi";
 "search_radius" = "Otsingu raadius";
 "shared_string_target_points" = "Sihtkohad";
-"search_radius_proximity" = "Ulatus";
+"search_radius_proximity" = "Ümbruses";
 "poi" = "HP";
 "day_off_label" = "suletud";
 "open_from" = "Avatud alates";

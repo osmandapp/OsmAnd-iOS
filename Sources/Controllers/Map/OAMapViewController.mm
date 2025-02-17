@@ -3836,7 +3836,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 {
     [_mapLayers.myPositionLayer updateLocation:newLocation heading:newHeading];
     if (!OARoutingHelper.sharedInstance.isPublicTransportMode)
-        [_mapLayers.routeMapLayer refreshRoute];
+        [_mapLayers.routeMapLayer refreshRoute:NO];
 }
 
 #pragma mark - OARouteInformationListener

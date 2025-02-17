@@ -120,6 +120,9 @@
 {
     QWriteLocker scopedLocker(&_lock);
 
+    if (_vectorLinesArrowsProvider)
+        [self.mapView removeKeyedSymbolsProvider:_vectorLinesArrowsProvider];
+
     _vectorLinesCollection = collection;
     _vectorLinesArrowsProvider = _vectorLinesCollection->getVectorLineArrowsProvider();
     if (sync)

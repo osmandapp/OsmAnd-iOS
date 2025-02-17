@@ -133,7 +133,7 @@
     [_trackingUtils switchToRoutePlanningMode];
     [[OARootViewController instance].mapPanel refreshMap];
     if (showDialog)
-        [[OARootViewController instance].mapPanel showRouteInfo];
+        [[OARootViewController instance].mapPanel showRouteInfo:NO];
 
     if ([targets hasTooLongDistanceToNavigate])
         [_app showToastMessage:OALocalizedString(@"route_is_too_long_v2")];

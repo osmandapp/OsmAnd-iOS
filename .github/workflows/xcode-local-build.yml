@@ -128,11 +128,11 @@ jobs:
       env:
         LANG: "en_US.UTF-8"
       run: 'zip -r OsmAndMaps.xcarchive.zip OsmAndMaps.xcarchive'
-    # - name: Upload maps archive zip
-    #   uses: actions/upload-artifact@v4
-    #   with:
-    #      name: OsmAndMaps-${{ github.event.inputs.releaseversion }}.${{ github.event.inputs.buildversion }}.xcarchive.zip
-    #      path: OsmAndMaps.xcarchive.zip
+    - name: Upload maps archive zip
+      uses: actions/upload-artifact@v4
+      with:
+         name: OsmAndMaps-${{ github.event.inputs.releaseversion }}.${{ github.event.inputs.buildversion }}.xcarchive.zip
+         path: OsmAndMaps.xcarchive.zip
     # - name: Download iOS archive
     #   run: 'wget "https://builder.osmand.net/binaries/ios/OsmAndMaps.xcarchive.zip" -O OsmAndMaps.xcarchive.zip'
     # - name: Unzip iOS archive

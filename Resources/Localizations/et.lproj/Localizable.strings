@@ -3043,3 +3043,5 @@
 "detailed_track_guidance_description" = "OsmAnd võrdleb sinu rada lähimate teede ja tänavatega ning selle põhjal juhatab sammhaaval teed.";
 "download_tab_conflicts" = "Lahendamata";
 "cloud_sync_progress" = "Sünkroniseerimisel… %@";
+"revolutions_per_minute_unit" = "p/min";
+"power_watts_unit" = "vatti";

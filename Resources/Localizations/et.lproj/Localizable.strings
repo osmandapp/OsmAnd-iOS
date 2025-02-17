@@ -3038,3 +3038,8 @@
 "auto_25_chars_route_tr" = "Pööra paremale";
 "auto_25_chars_route_tu_kr" = "Pööra tagasi ja hoia paremale";
 "ask_every_time" = "Küsi iga kord";
+"battery_widget_level_privacy_ios_desc" = "iOSi privaatsusreeglite tõttu saab vidin näidata aku laetust vaid 5-protsendiste sammudega, näiteks 35%, 60%, või 85%";
+"detailed_track_guidance" = "Üksikasjalik rajapõhine teekonna juhatamine";
+"detailed_track_guidance_description" = "OsmAnd võrdleb sinu rada lähimate teede ja tänavatega ning selle põhjal juhatab sammhaaval teed.";
+"download_tab_conflicts" = "Lahendamata";
+"cloud_sync_progress" = "Sünkroniseerimisel… %@";

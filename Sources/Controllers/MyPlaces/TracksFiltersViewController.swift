@@ -49,6 +49,8 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
     
     private var baseFilters: TracksSearchFilter
     private var baseFiltersResult: FilterResults
+    private var smartFolder: SmartFolder?
+    private var smartFolderHelper: SmartFolderHelper?
     
     private lazy var filterMappings: [String: (type: TrackFilterType, isModal: Bool)] = [
         Self.lengthFilterRowKey: (.length, false),
@@ -77,9 +79,10 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
         Self.temperatureAverageFilterRowKey: (.averageSensorTemperature, false)
     ]
     
-    init(baseFilters: TracksSearchFilter, baseFiltersResult: FilterResults) {
+    init(baseFilters: TracksSearchFilter, baseFiltersResult: FilterResults, smartFolder: SmartFolder?) {
         self.baseFilters = baseFilters
         self.baseFiltersResult = baseFiltersResult
+        self.smartFolder = smartFolder
         super.init()
     }
     
@@ -99,6 +102,7 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onOutsideCellsTapped))
         tapGesture.cancelsTouchesInView = false
         tableView.addGestureRecognizer(tapGesture)
+        smartFolderHelper = SmartFolderHelper.shared
         baseFilters.addFiltersChangedListener(self)
     }
     
@@ -108,6 +112,10 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
     
     override func getLeftNavbarButtonTitle() -> String? {
         localizedString("shared_string_close")
+    }
+    
+    override func getRightNavbarButtons() -> [UIBarButtonItem] {
+        return [createRightNavbarButton(localizedString("shared_string_save"), iconName: nil, action: #selector(onRightNavbarButtonPressed), menu: nil)]
     }
     
     override func getBottomAxisMode() -> NSLayoutConstraint.Axis {
@@ -286,10 +294,39 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
     }
     
     override func onLeftNavbarButtonPressed() {
-        if baseFilters.getAppliedFiltersCount() > 0 {
-            showResetFiltersAlert()
-        } else {
+        if self.smartFolder != nil {
             super.onLeftNavbarButtonPressed()
+        } else {
+            if baseFilters.getAppliedFiltersCount() > 0 {
+                showResetFiltersAlert()
+            } else {
+                super.onLeftNavbarButtonPressed()
+            }
+        }
+    }
+    
+    override func onRightNavbarButtonPressed() {
+        if smartFolder != nil {
+            super.onLeftNavbarButtonPressed()
+        } else {
+            let alert = UIAlertController(title: localizedString("save_as_smart_folder"), message: localizedString("access_hint_enter_name"), preferredStyle: .alert)
+            alert.addTextField { textField in textField.placeholder = localizedString("new_smart_folder") }
+            alert.addAction(UIAlertAction(title: localizedString("shared_string_save"), style: .default) { [weak self] _ in
+                guard let self else { return }
+                if let folderName = alert.textFields?.first?.text {
+                    if folderName.isEmpty {
+                        OAUtilities.showToast(localizedString("empty_name"), details: nil, duration: 4, verticalOffset: 120, in: self.view)
+                    } else if smartFolderHelper?.isSmartFolderPresent(name: folderName) == true {
+                        OAUtilities.showToast(localizedString("smart_folder_name_present"), details: nil, duration: 4, verticalOffset: 120, in: self.view)
+                    } else {
+                        smartFolderHelper?.saveNewSmartFolder(name: folderName, filters: NSMutableArray(array: baseFilters.getCurrentFilters()))
+                        self.dismiss(animated: true)
+                    }
+                }
+            })
+            
+            alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
+            present(alert, animated: true)
         }
     }
     
@@ -405,6 +442,9 @@ extension TracksFiltersViewController: UITextFieldDelegate {
 extension TracksFiltersViewController: FilterChangedListener {
     func onFilterChanged() {
         DispatchQueue.main.async {
+            if self.smartFolder != nil {
+                self.baseFiltersResult = self.baseFilters.performFiltering()
+            }
             self.generateData()
             self.tableView.reloadData()
             self.updateBottomButtons()

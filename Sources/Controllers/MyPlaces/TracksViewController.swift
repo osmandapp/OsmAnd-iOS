@@ -239,7 +239,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         tableData.clearAllData()
         let section = tableData.createNewSection()
         if isSearchActive || isSelectionModeInSearch || isEditFilterActive {
-            if let allTracks = baseFiltersResult?.values {
+            if let allTracks = baseFiltersResult?.values ?? (isSmartFolder ? smartFolder?.getTrackItems() : nil) {
                 if allTracks.isEmpty {
                     let emptyFilterBannerRow = section.createNewRow()
                     emptyFilterBannerRow.cellType = OALargeImageTitleDescrTableViewCell.reuseIdentifier
@@ -250,7 +250,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                     emptyFilterBannerRow.iconTintColor = UIColor.iconColorSecondary
                 } else {
                     let gpxItems = allTracks.compactMap { $0.dataItem }
-                    let sortedTracks = TracksSortModeHelper.sortTracksWithMode(gpxItems, mode: sortModeForSearch)
+                    let sortedTracks = TracksSortModeHelper.sortTracksWithMode(gpxItems, mode: isEditFilterActive ? sortMode : sortModeForSearch)
                     sortedTracks.forEach { createRowFor(track: $0, section: section) }
                 }
             }
@@ -670,11 +670,15 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     @objc private func filterButtonTapped() {
-        guard let baseFilters, let baseFiltersResult else { return }
         if isEditFilterActive {
-            baseFilters.addFiltersChangedListener(self)
+            baseFilters = TracksSearchFilter(trackItems: Array(smartFolderHelper.getAllAvailableTrackItems()).compactMap { $0 as? TrackItem }, initialFilters: smartFolder.filters ?? [])
+            TracksSearchFilter.setRootFolder(rootFolder)
+            baseFilters?.addFiltersChangedListener(self)
+            baseFiltersResult = baseFilters?.performFiltering()
+            isFiltersInitialized = true
         }
-
+        
+        guard let baseFilters, let baseFiltersResult else { return }
         let navigationController = UINavigationController(rootViewController: TracksFiltersViewController(baseFilters: baseFilters, baseFiltersResult: baseFiltersResult, smartFolder: isEditFilterActive ? smartFolder : nil))
         navigationController.modalPresentationStyle = .custom
         present(navigationController, animated: true, completion: nil)
@@ -814,11 +818,6 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     @objc private func onNavbarEditFilterSmartFolderButtonClicked() {
-        baseFilters = TracksSearchFilter(trackItems: Array(smartFolderHelper.getAllAvailableTrackItems()).compactMap { $0 as? TrackItem }, initialFilters: smartFolder.filters ?? [])
-        TracksSearchFilter.setRootFolder(rootFolder)
-        baseFiltersResult = baseFilters?.performFiltering()
-        baseFiltersResult?.values = smartFolder.getTrackItems()
-        isFiltersInitialized = true
         isEditFilterActive = true
         setupNavbar()
         updateNavigationBarTitle()
@@ -871,9 +870,16 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         alert.addAction(UIAlertAction(title: localizedString("shared_string_add"), style: .default) { [weak self] _ in
             guard let self else { return }
             if let folderName = alert.textFields?.first?.text {
-                smartFolderHelper.saveNewSmartFolder(name: folderName, filters: nil)
-                updateData()
-                showTracksViewControllerForSmartFolder(withName: folderName)
+                if folderName.isEmpty {
+                    OAUtilities.showToast(localizedString("empty_name"), details: nil, duration: 4, verticalOffset: 120, in: self.view)
+                } else if smartFolderHelper.isSmartFolderPresent(name: folderName) {
+                    OAUtilities.showToast(localizedString("smart_folder_name_present"), details: nil, duration: 4, verticalOffset: 120, in: self.view)
+                } else {
+                    smartFolderHelper.saveNewSmartFolder(name: folderName, filters: nil)
+                    updateData()
+                    shouldReload = true
+                    showTracksViewControllerForSmartFolder(withName: folderName)
+                }
             }
         })
         alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
@@ -1015,8 +1021,6 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             let alertController = UIAlertController(title: localizedString("unsaved_changes"), message: localizedString("unsaved_changes_will_be_lost_discard"), preferredStyle: .alert)
             let cancelAction = UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel, handler: nil)
             let resetAction = UIAlertAction(title: localizedString("shared_string_discard"), style: .destructive) { _ in
-                self.baseFilters?.resetCurrentFilters()
-                self.baseFiltersResult = self.baseFilters?.performFiltering()
                 self.exitEditFilterMode()
             }
             alertController.addAction(cancelAction)
@@ -1099,9 +1103,10 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     @objc private func onResetToolbarButtonClicked() {
-        baseFilters?.addFiltersChangedListener(self)
-        baseFilters?.resetCurrentFilters()
-        baseFiltersResult = baseFilters?.performFiltering()
+        baseFilters = nil
+        baseFiltersResult = nil
+        isFiltersInitialized = false
+        updateData()
     }
 
     // MARK: - Folders Actions
@@ -1731,6 +1736,9 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func exitEditFilterMode() {
+        baseFilters = nil
+        baseFiltersResult = nil
+        isFiltersInitialized = false
         isEditFilterActive = false
         setupNavbar()
         updateNavigationBarTitle()
@@ -2201,6 +2209,8 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         } else {
             isSearchActive = false
             isNameFiltered = false
+            baseFilters = nil
+            baseFiltersResult = nil
             isFiltersInitialized = false
         }
         
@@ -2216,6 +2226,8 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         isSearchActive = false
         isNameFiltered = false
+        baseFilters = nil
+        baseFiltersResult = nil
         isFiltersInitialized = false
         tabBarController?.navigationController?.setToolbarHidden(true, animated: true)
         navigationController?.setToolbarHidden(true, animated: true)
@@ -2304,7 +2316,9 @@ extension TracksViewController {
                 self.sortMode = getTracksSortMode()
             }
             updateSortButtonAndMenu()
-            self.setupNavBarMenuButton()
+            if !self.isEditFilterActive {
+                self.setupNavBarMenuButton()
+            }
             self.updateData()
             if isSortingSubfolders {
                 let sortingFolderName = self.currentFolder.getDirName(includingSubdirs: false)

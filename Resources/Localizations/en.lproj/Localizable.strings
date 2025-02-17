@@ -1581,6 +1581,7 @@
 "no_matched_tracks_descr" = "Your filter criteria didn't match any of your tracks";
 "empty_smart_folder_title" = "No matching track";
 "empty_smart_folder_descr" = "All matching tracks will automatically appear here.";
+"smart_folder_name_present" = "Such smart folder already present";
 "select_segment" = "Select segment";
 "track_multiple_segments_select" = "%@ has more than one segment. Please select a part of the track you want to use for navigation.";
 "segments_count" = "Segment %d";

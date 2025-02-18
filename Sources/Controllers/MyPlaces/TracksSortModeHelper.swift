@@ -9,6 +9,12 @@
 import UIKit
 import OsmAndShared
 
+protocol SortableFolder {
+    func lastModified() -> Int64
+    func getDirName(includingSubdirs: Bool) -> String
+    func getFolderAnalysis() -> TrackFolderAnalysis
+}
+
 @objc enum TracksSortMode: Int, CaseIterable {
     case nearest
     case lastModified
@@ -73,7 +79,7 @@ import OsmAndShared
         mode.title
     }
     
-    static func sortFoldersWithMode(_ folders: [TrackFolder], mode: TracksSortMode) -> [TrackFolder] {
+    static func sortFoldersWithMode(_ folders: [SortableFolder], mode: TracksSortMode) -> [SortableFolder] {
         switch mode {
         case .nearest:
             return folders
@@ -124,7 +130,6 @@ import OsmAndShared
     }
     
     static func descriptionForFolder(folder: TrackFolder, currentFolderPath: String) -> String {
-        let folderName = folder.getDirName(includingSubdirs: false)
         let tracksCount = folder.totalTracksCount
         let basicDescription = String(format: localizedString("folder_tracks_count"), tracksCount)
         let lastModifiedString = TracksSortModeHelper.dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(folder.lastModified() / 1000)))
@@ -236,3 +241,6 @@ import OsmAndShared
         return NSAttributedString(attachment: attachment)
     }
 }
+
+extension TrackFolder: SortableFolder { }
+extension SmartFolder: SortableFolder { }

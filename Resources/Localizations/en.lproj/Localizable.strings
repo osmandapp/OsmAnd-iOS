@@ -1574,6 +1574,14 @@
 "select_folder" = "Select folder";
 "select_folder_descr" = "Select folder or add new one";
 "add_folder" = "Add folder";
+"add_smart_folder" = "Add smart folder";
+"save_as_smart_folder" = "Save as smart folder";
+"new_smart_folder" = "New smart folder";
+"no_matched_tracks" = "No matched tracks";
+"no_matched_tracks_descr" = "Your filter criteria didn't match any of your tracks";
+"empty_smart_folder_title" = "No matching track";
+"empty_smart_folder_descr" = "All matching tracks will automatically appear here.";
+"smart_folder_name_present" = "Such smart folder already present";
 "select_segment" = "Select segment";
 "track_multiple_segments_select" = "%@ has more than one segment. Please select a part of the track you want to use for navigation.";
 "segments_count" = "Segment %d";

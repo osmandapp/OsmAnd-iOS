@@ -639,6 +639,7 @@ updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))upd
                 return;
             }
             
+            [OASSmartFolderHelper.shared onTrackRenamedSrcTrackFile:[[OASKFile alloc] initWithFilePath:oldPath] destTrackFile:[[OASKFile alloc] initWithFilePath:newPath]];
             OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:newPath];
             if (gpx)
             {

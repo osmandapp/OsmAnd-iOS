@@ -18,6 +18,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     private let SPECIAL_KEY = "special"
     private let SYMBOLS_KEY = "symbols"
     private let ACTIVITIES_KEY = "activities"
+    private let SAMPLE_ICON_KEY = "ic_sample"
     
     override init() {
         super.init()
@@ -65,7 +66,9 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     private func initActivitiesCategory() {
         var iconKeys = [String]()
         for activity in RouteActivityHelper().getActivities() {
-            iconKeys.append(activity.iconName)
+            if !iconKeys.contains(activity.iconName) && activity.iconName != SAMPLE_ICON_KEY {
+                iconKeys.append(activity.iconName)
+            }
         }
         if !iconKeys.isEmpty {
             let translatedName = localizedString("shared_string_activity")

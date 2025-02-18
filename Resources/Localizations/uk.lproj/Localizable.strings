@@ -3625,3 +3625,7 @@
 "add_smart_folder" = "Додати розумну папку";
 "new_smart_folder" = "Нова розумна папка";
 "no_matched_tracks" = "Немає відповідних композицій";
+"empty_smart_folder_descr" = "Усі відповідні композиції автоматично з’являться тут.";
+"smart_folder_name_present" = "Така розумна папка вже є";
+"empty_smart_folder_title" = "Немає відповідного треку";
+"no_matched_tracks_descr" = "Ваші критерії фільтрації не відповідають жодному з ваших треків";

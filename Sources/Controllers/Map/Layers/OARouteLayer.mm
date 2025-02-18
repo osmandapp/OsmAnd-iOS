@@ -1166,8 +1166,15 @@ struct DrawPathData
                 [self.mapViewController runWithRenderSync:^{ [self resetLayer]; }];
             }
         }
-        else
+        else if (!pointsData.points.isEmpty())
         {
+            if (!firstWalkingPointsData.points.isEmpty())
+            {
+                int lineId = [self drawRouteSegment:firstWalkingPointsData.points walk:YES sync:sync];
+                firstWalkingPointsData.lineId = lineId;
+                pathsData.push_back(firstWalkingPointsData);
+            }
+            
             int segStartIndex = _colors.count() - pointsData.points.count();
             QList<OsmAnd::FColorARGB> segmentColors;
             if (pointsData.points.size() > 1 && !_colors.isEmpty() && segStartIndex < _colors.size() && segStartIndex + pointsData.points.size() - 1 < _colors.size())
@@ -1184,6 +1191,13 @@ struct DrawPathData
                 pathsData.push_back(pointsData);
                 
                 segmentColors.clear();
+            }
+            
+            if (!lastWalkingPointsData.points.isEmpty())
+            {
+                int lineId = [self drawRouteSegment:lastWalkingPointsData.points walk:YES sync:sync];
+                lastWalkingPointsData.lineId = lineId;
+                pathsData.push_back(lastWalkingPointsData);
             }
         }
 

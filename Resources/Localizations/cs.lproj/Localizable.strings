@@ -3604,3 +3604,5 @@
 "no_matched_tracks_descr" = "Vaše kritéria filtru neodpovídala žádné z vašich stop";
 "empty_smart_folder_title" = "Žádná odpovídající stopa";
 "add_smart_folder" = "Přidat chytrou složku";
+"empty_smart_folder_descr" = "Zde se automaticky zobrazí všechny odpovídající stopy.";
+"smart_folder_name_present" = "Taková chytrá složka již existuje";

@@ -3617,3 +3617,11 @@
 "auto_25_chars_route_tshr" = "Drej skarpt til højre";
 "auto_25_chars_route_kl" = "Hold til venstre";
 "auto_25_chars_route_tu_kr" = "Foretag U-vending og hold til højre";
+"empty_smart_folder_descr" = "Alle matchende spor vises automatisk her.";
+"save_as_smart_folder" = "Gem som smart-mappe";
+"empty_smart_folder_title" = "Ingen matchende spor";
+"add_smart_folder" = "Tilføj smart-mappe";
+"new_smart_folder" = "Ny smart-mappe";
+"no_matched_tracks" = "Ingen matchende spor";
+"no_matched_tracks_descr" = "Dine filterkriterier matchede ikke nogen af dine spor";
+"smart_folder_name_present" = "Sådan en smart-mappe findes allerede";

@@ -23,6 +23,10 @@
 #import "OACollatorStringMatcher.h"
 #import "OAMapUtils.h"
 #import "OAResultMatcher.h"
+#import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
+#import "OAMapRendererView.h"
 #import "Localization.h"
 #import "OANativeUtilities.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -64,6 +68,8 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
     NSArray<OAPOIType *> *_textPoiAdditionals;
     NSDictionary<NSString *, NSString *> *_poiAdditionalCategoryIcons;
     NSMapTable<NSString *, NSString *> *_deprecatedTags;
+    
+    OsmAnd::PointI _myLocation;
 
     BOOL _isInit;
 }
@@ -89,6 +95,7 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
         [self updateReferences];
         [self updatePhrases];
         [self sortPoiCategories];
+        [self updateMyLocation];
         _isInit = YES;
     }
     return self;
@@ -97,6 +104,20 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
 - (BOOL) isInit
 {
     return _isInit;
+}
+
+- (void) updateMyLocation
+{
+    CLLocation* lastKnownLocation = [OsmAndApp instance].locationServices.lastKnownLocation;
+    if (lastKnownLocation)
+    {
+        _myLocation = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lastKnownLocation.coordinate.latitude, lastKnownLocation.coordinate.longitude));
+    }
+    else
+    {
+        OAMapRendererView *mapView = (OAMapRendererView *) [OARootViewController instance].mapPanel.mapViewController.view;
+        _myLocation = mapView.target31;
+    }
 }
 
 - (void)readPOI
@@ -745,6 +766,8 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
     else
         _radius = kSearchRadiusKm[*radiusIndex] * kRadiusKmToMetersKoef;
     
+    [self updateMyLocation];
+    
     const auto& obfsCollection = _app.resourcesManager->obfsCollection;
     
     std::shared_ptr<const OsmAnd::IQueryController> ctrl;
@@ -789,7 +812,7 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
         
         while (true)
         {
-            searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(_radius, self.myLocation);
+            searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(_radius, _myLocation);
             
             const auto search = std::shared_ptr<const OsmAnd::AmenitiesInAreaSearch>(new OsmAnd::AmenitiesInAreaSearch(obfsCollection));
             search->performSearch(*searchCriteria,
@@ -827,6 +850,8 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
         _radius = 0.0;
     else
         _radius = kSearchRadiusKm[*radiusIndex] * kRadiusKmToMetersKoef;
+    
+    [self updateMyLocation];
     
     if (filter && ![filter isEmpty])
     {
@@ -867,7 +892,7 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
         
         while (true)
         {
-            searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(_radius, self.myLocation);
+            searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(_radius, _myLocation);
             
             const auto search = std::shared_ptr<const OsmAnd::AmenitiesInAreaSearch>(new OsmAnd::AmenitiesInAreaSearch(obfsCollection));
             search->performSearch(*searchCriteria,
@@ -1135,6 +1160,8 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
 {
     _isSearchDone = NO;
     _breakSearch = NO;
+    
+    [self updateMyLocation];
 
     const auto& obfsCollection = _app.resourcesManager->obfsCollection;
     
@@ -1180,7 +1207,7 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
                                             const auto &am = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
 
                                             OAPOI *poi = [OAPOIHelper parsePOI:resultEntry withValues:YES withContent:YES];
-                                            poi.distanceMeters = OsmAnd::Utilities::squareDistance31(self.myLocation, am->position31);
+                                            poi.distanceMeters = OsmAnd::Utilities::squareDistance31(_myLocation, am->position31);
                                             
                                             if (publish)
                                             {
@@ -1625,7 +1652,7 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
     if (poi)
     {
         const auto amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
-        poi.distanceMeters = OsmAnd::Utilities::squareDistance31(self.myLocation, amenity->position31);
+        poi.distanceMeters = OsmAnd::Utilities::squareDistance31(_myLocation, amenity->position31);
         
         _limitCounter--;
         
@@ -1639,7 +1666,7 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
     if (poi)
     {
         const auto amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
-        poi.distanceMeters = OsmAnd::Utilities::squareDistance31(self.myLocation, amenity->position31);
+        poi.distanceMeters = OsmAnd::Utilities::squareDistance31(_myLocation, amenity->position31);
         
         _limitCounter--;
         

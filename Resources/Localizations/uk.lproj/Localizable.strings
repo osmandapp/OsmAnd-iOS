@@ -3621,3 +3621,7 @@
 "auto_25_chars_route_tshl" = "Різко поверніть ліворуч";
 "auto_25_chars_route_tsll" = "Поверніть трохи вліво";
 "auto_25_chars_route_tl_kl" = "Поверніть ліворуч і тримайтеся ліворуч";
+"save_as_smart_folder" = "Зберегти як розумну папку";
+"add_smart_folder" = "Додати розумну папку";
+"new_smart_folder" = "Нова розумна папка";
+"no_matched_tracks" = "Немає відповідних композицій";

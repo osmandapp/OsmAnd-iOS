@@ -1361,6 +1361,7 @@
 		C573544F2AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C573544D2AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.mm */; };
 		C57354502AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C573544E2AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.xib */; };
 		C5735AF62AFE9CB500638715 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C5735AF42AFE9CB500638715 /* InfoPlist.strings */; };
+		C575798C2D64A0A30016957D /* TracksChangeAppearanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C575798B2D64A0A30016957D /* TracksChangeAppearanceViewController.swift */; };
 		C57E26F32D3D663F00A8A3D5 /* AttachRoadsBannerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57E26F12D3D663F00A8A3D5 /* AttachRoadsBannerCell.swift */; };
 		C57E26F42D3D663F00A8A3D5 /* AttachRoadsBannerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C57E26F22D3D663F00A8A3D5 /* AttachRoadsBannerCell.xib */; };
 		C5879A49299FB96300F53249 /* uk_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = C5879A48299FB96300F53249 /* uk_tts.js */; };
@@ -4991,6 +4992,7 @@
 		C5735B452AFE9D8700638715 /* uz-Cyrl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uz-Cyrl"; path = "Resources/Localizations/uz-Cyrl.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		C5735B462AFE9D8800638715 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = Resources/Localizations/vi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C5735B472AFE9D8900638715 /* cy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cy; path = Resources/Localizations/cy.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		C575798B2D64A0A30016957D /* TracksChangeAppearanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksChangeAppearanceViewController.swift; sourceTree = "<group>"; };
 		C57E26F12D3D663F00A8A3D5 /* AttachRoadsBannerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachRoadsBannerCell.swift; sourceTree = "<group>"; };
 		C57E26F22D3D663F00A8A3D5 /* AttachRoadsBannerCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AttachRoadsBannerCell.xib; sourceTree = "<group>"; };
 		C5879A48299FB96300F53249 /* uk_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = uk_tts.js; path = ../resources/voice/uk/uk_tts.js; sourceTree = "<group>"; };
@@ -11973,6 +11975,7 @@
 				C50E32832CA57DDB00EEC41F /* TracksFilterDetailsViewController.swift */,
 				C5A887E32CAD7B8E00DA2979 /* TracksSearchFilter.swift */,
 				C57245D82CDF3B70004F1F19 /* TracksSortModeHelper.swift */,
+				C575798B2D64A0A30016957D /* TracksChangeAppearanceViewController.swift */,
 			);
 			path = MyPlaces;
 			sourceTree = "<group>";
@@ -17140,6 +17143,7 @@
 				DA5A845026C563A900F274C7 /* OAPOILayer.mm in Sources */,
 				DA2EC47B29FBB90A00ECEB37 /* WidgetType.swift in Sources */,
 				4631377929AE6D8A000B0258 /* OACarPlayHistoryListController.mm in Sources */,
+				C575798C2D64A0A30016957D /* TracksChangeAppearanceViewController.swift in Sources */,
 				DA5A834026C563A800F274C7 /* OAFolderCardCollectionViewCell.m in Sources */,
 				DA5A849226C563A900F274C7 /* OAMeasurementEditingContext.mm in Sources */,
 				DA5A856226C563A900F274C7 /* OAWaypointHelper.mm in Sources */,

@@ -3619,3 +3619,6 @@
 "auto_25_chars_route_roundabout_kr" = "Изађите на %d излазу и држите десно";
 "auto_25_chars_route_kl" = "Настави лево";
 "auto_25_chars_route_tshr" = "Скрени оштро десно";
+"new_smart_folder" = "Нови паметан фолдер";
+"save_as_smart_folder" = "Сачувај као паметан фолдер";
+"add_smart_folder" = "Додај паметан фолдер";

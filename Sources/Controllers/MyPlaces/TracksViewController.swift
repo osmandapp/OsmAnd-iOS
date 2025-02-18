@@ -2209,8 +2209,6 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         } else {
             isSearchActive = false
             isNameFiltered = false
-            baseFilters = nil
-            baseFiltersResult = nil
             isFiltersInitialized = false
         }
         

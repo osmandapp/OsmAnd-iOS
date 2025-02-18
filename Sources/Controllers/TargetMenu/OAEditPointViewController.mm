@@ -480,7 +480,7 @@
     _poiIconCollectionHandler.hostVC = self;
     _poiIconCollectionHandler.customTitle = OALocalizedString(@"profile_icon");
     _poiIconCollectionHandler.regularIconColor = [UIColor colorNamed:ACColorNameIconColorDefault];
-        _poiIconCollectionHandler.selectedIconColor = UIColor.redColor;
+    _poiIconCollectionHandler.selectedIconColor = [_selectedColorItem getColor];
     [_poiIconCollectionHandler setItemSizeWithSize:48];
     [_poiIconCollectionHandler setIconSizeWithSize:30];
         NSInteger selectedIconIndex2 = 0;
@@ -729,6 +729,7 @@
             cell.topLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
         }
         cell.hostVC = self;
+        _poiIconCollectionHandler.selectedIconColor = [_selectedColorItem getColor];
         [_poiIconCollectionHandler setCollectionView:cell.collectionView];
         [cell setCollectionHandler:_poiIconCollectionHandler];
         [_poiIconCollectionHandler updateTopButtonName];

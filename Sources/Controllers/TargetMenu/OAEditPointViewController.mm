@@ -1359,9 +1359,19 @@
 
 - (void)onCollectionItemSelected:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
 {
-    _isNewColorSelected = YES;
-    _needToScrollToSelectedColor = YES;
-    _selectedColorItem = [_colorCollectionHandler getData][indexPath.section][indexPath.row];
+    if (collectionView == [_poiIconCollectionHandler getCollectionView])
+    {
+        NSString *iconName = [_poiIconCollectionHandler getSelectedItem];
+        if (iconName)
+            _selectedIconName = iconName;
+    }
+    else if (collectionView == [_colorCollectionHandler getCollectionView])
+    {
+        _isNewColorSelected = YES;
+        _needToScrollToSelectedColor = YES;
+        _selectedColorItem = [_colorCollectionHandler getData][indexPath.section][indexPath.row];
+    }
+    
     _wasChanged = YES;
     [self applyLocalization];
     [self generateData];

@@ -3598,3 +3598,9 @@
 "auto_25_chars_route_tl_kl" = "Zahněte vlevo a držte se vlevo";
 "auto_25_chars_route_roundabout_kr" = "Vyjeďte %d výjezdem a držte se vpravo";
 "auto_25_chars_route_tu_kr" = "Otočte se a držte se vpravo";
+"save_as_smart_folder" = "Uložit jako chytrou složku";
+"new_smart_folder" = "Nová chytrá složka";
+"no_matched_tracks" = "Žádné shodné stopy";
+"no_matched_tracks_descr" = "Vaše kritéria filtru neodpovídala žádné z vašich stop";
+"empty_smart_folder_title" = "Žádná odpovídající stopa";
+"add_smart_folder" = "Přidat chytrou složku";

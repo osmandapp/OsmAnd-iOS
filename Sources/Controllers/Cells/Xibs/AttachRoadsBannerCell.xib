@@ -20,12 +20,12 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nJE-Cm-rxU" userLabel="Content Container">
                         <rect key="frame" x="14" y="4" width="365" height="120"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hdr-qR-uSf">
-                                <rect key="frame" x="20" y="0.0" width="345" height="84"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hdr-qR-uSf">
+                                <rect key="frame" x="20" y="0.0" width="325" height="84"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="84" id="MzR-Ab-ibA"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                 <color key="textColor" name="textColorPrimary"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -53,7 +53,7 @@
                             <constraint firstItem="fIu-LW-wzj" firstAttribute="top" secondItem="FnC-WM-WP2" secondAttribute="bottom" id="Ax3-d5-R52"/>
                             <constraint firstItem="FnC-WM-WP2" firstAttribute="top" secondItem="Hdr-qR-uSf" secondAttribute="bottom" id="CoG-vx-sqT"/>
                             <constraint firstAttribute="bottom" secondItem="fIu-LW-wzj" secondAttribute="bottom" priority="999" id="FaO-8E-1Gq"/>
-                            <constraint firstAttribute="trailing" secondItem="Hdr-qR-uSf" secondAttribute="trailing" id="Gq4-hl-FFl"/>
+                            <constraint firstAttribute="trailing" secondItem="Hdr-qR-uSf" secondAttribute="trailing" constant="20" symbolic="YES" id="Gq4-hl-FFl"/>
                             <constraint firstItem="Hdr-qR-uSf" firstAttribute="top" secondItem="nJE-Cm-rxU" secondAttribute="top" id="UHS-Ls-vWK"/>
                             <constraint firstItem="Hdr-qR-uSf" firstAttribute="leading" secondItem="nJE-Cm-rxU" secondAttribute="leading" constant="20" symbolic="YES" id="bGo-YU-dfJ"/>
                             <constraint firstAttribute="trailing" secondItem="FnC-WM-WP2" secondAttribute="trailing" id="cfj-nb-v7c"/>

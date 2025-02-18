@@ -3622,3 +3622,8 @@
 "new_smart_folder" = "Нови паметан фолдер";
 "save_as_smart_folder" = "Сачувај као паметан фолдер";
 "add_smart_folder" = "Додај паметан фолдер";
+"empty_smart_folder_title" = "Нема подударајуће стазе";
+"empty_smart_folder_descr" = "Све одговарајуће стазе ће се аутоматски појавити овде.";
+"no_matched_tracks_descr" = "Ваш критеријум филтера се не подудара ни са једном од ваших стаза";
+"smart_folder_name_present" = "Такав паметан фолдер је већ присутан";
+"no_matched_tracks" = "Нема подударних стаза";

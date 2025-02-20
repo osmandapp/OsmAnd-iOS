@@ -1630,7 +1630,7 @@
 "lang_el" = "Gresk";
 "lang_bs" = "Bosnisk";
 "route_points" = "Rutepunkter";
-"routeInfo_roadClass_description" = "Fargelegging av ruten eller rutelinje i henhold til veiklassifisering.";
+"routeInfo_roadClass_description" = "Fargelegg ruten eller sporlinjen etter veiklassifisering.";
 "lang_ast" = "Asturiansk";
 "backup_error_token_is_not_valid_or_expired" = "Ugyldig eller utløpt symbol";
 "route_line_use_map_style_width" = "Bruk standardbredde for kartstil (%@).";
@@ -2708,3 +2708,11 @@
 "avg_sensor_speed" = "Sensorhastighet, gjennomsnitt";
 "target_elevation" = "Målhøyde";
 "info_button" = "Info";
+"lock_screen_description" = "Aktiverer eller deaktiverer berøringsskjermfunksjonalitet for å forhindre utilsiktede trykk";
+"daynight_mode_app_theme_summary" = "Kartets visning tilpasses appens overordnede tema - dagmodus for et lyst tema og nattmodus for et mørkt tema";
+"battery_saving_mode" = "Strømsparingsmodus";
+"quick_action_first_intermediate" = "Første mellomliggende";
+"daynight_mode_day_summary" = "Viser alltid kartet i et lyst tema, ideelt for synlighet på dagtid.";
+"daynight_mode_night_summary" = "Viser alltid kartet i et mørkt tema, egnet for nattlige forhold eller forhold med lite lys.";
+"daynight_mode_sunrise_sunset_summary" = "Bytter automatisk mellom dag- og natt-temaer basert på lokale soloppgangs- og solnedgangstider.";
+"screen_is_locked_by_action_button" = "Berøringsskjermen er låst. Trykk på knappen for å låse opp.";

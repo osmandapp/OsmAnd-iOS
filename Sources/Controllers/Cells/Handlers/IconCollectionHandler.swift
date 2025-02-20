@@ -9,7 +9,7 @@
 import Foundation
 
 @objcMembers
-class IconCollectionHandler: OABaseCollectionHandler, IconsCollectionViewControllerDelegate {
+class IconCollectionHandler: OABaseCollectionHandler {
     
     var iconImagesData = [[UIImage]]()
     var roundedSquareCells = false
@@ -44,7 +44,7 @@ class IconCollectionHandler: OABaseCollectionHandler, IconsCollectionViewControl
         iconSize = size
     }
     
-    func getIconSize() -> CGFloat{
+    func getIconSize() -> CGFloat {
         iconSize ?? 30
     }
     
@@ -65,7 +65,13 @@ class IconCollectionHandler: OABaseCollectionHandler, IconsCollectionViewControl
     }
     
     override func generateData(_ data: [[Any]]) {
-       iconNamesData = data.compactMap { $0 as? [String] }
+        if let iconNames = data as? [[String]] {
+            iconNamesData = iconNames
+        }
+    }
+    
+    override func sectionsCount() -> Int {
+        iconNamesData.count
     }
     
     override func itemsCount(_ section: Int) -> Int {
@@ -89,7 +95,7 @@ class IconCollectionHandler: OABaseCollectionHandler, IconsCollectionViewControl
             if let icon = UIImage.templateImageNamed(iconName) {
                 cell.iconImageView.image = icon
             } else {
-                cell.iconImageView.image = OAUtilities.getMxIcon(iconName)
+                cell.iconImageView.image = OAUtilities.getMxIcon(iconName.lowercased())
             }
         }
         if indexPath == selectedIndexPath {
@@ -111,13 +117,9 @@ class IconCollectionHandler: OABaseCollectionHandler, IconsCollectionViewControl
         return cell
     }
     
-    override func sectionsCount() -> Int {
-        iconNamesData.count
-    }
-    
     func openAllIconsScreen() {
         guard let hostVC else { return }
-        var vc = ItemsCollectionViewController(collectionType: iconImagesData.isEmpty ? .iconItems : .bigIconItems, items: iconNamesData[0], selectedItem: getSelectedItem())
+        let vc = ItemsCollectionViewController(collectionType: iconImagesData.isEmpty ? .iconItems : .bigIconItems, items: iconNamesData[0], selectedItem: getSelectedItem())
         if !iconImagesData.isEmpty {
             vc.iconImages = iconImagesData[0]
         }
@@ -142,8 +144,9 @@ class IconCollectionHandler: OABaseCollectionHandler, IconsCollectionViewControl
     func buildTopButtonContextMenu() -> UIMenu? {
         nil
     }
-    
-    // MARK: - IconsCollectionViewControllerDelegate
+}
+
+extension IconCollectionHandler: IconsCollectionViewControllerDelegate {
     
     func selectIconName(_ iconName: String) {
         guard let selectedIndex = iconNamesData[0].firstIndex(of: iconName) else { return }

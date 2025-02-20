@@ -83,7 +83,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
                     poiTypeList.sort { $0.nameLocalized < $1.nameLocalized }
                     var iconKeys = [String]()
                     for poiType in poiTypeList {
-                        if let iconName = poiType.iconName() {
+                        if let iconName = poiType.iconName(), !iconKeys.contains(iconName), iconName != SAMPLE_ICON_KEY {
                             iconKeys.append(iconName)
                         }
                     }
@@ -154,6 +154,20 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
                 hostCell?.topButton.setTitle(category.translatedName, for: .normal)
             }
         }
+    }
+    
+    override func openAllIconsScreen() {
+        guard let hostVC else { return }
+        let vc = ItemsCollectionViewController(collectionType: .poiIconCategories, items: categories, selectedItem: getSelectedItem())
+        vc.customTitle = customTitle
+        vc.iconsDelegate = self
+        if let selectedIconColor {
+            vc.selectedIconColor = selectedIconColor
+        }
+        if let regularIconColor {
+            vc.regularIconColor = regularIconColor
+        }
+        hostVC.showModalViewController(vc)
     }
 }
 

@@ -14,6 +14,7 @@ import UIKit
     case terrainPaletteItems
     case iconItems
     case bigIconItems
+    case poiIconCategories
 }
 
 @objc protocol ColorCollectionViewControllerDelegate: AnyObject {
@@ -56,9 +57,14 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     
     private var iconItems: [String] = []
     var iconImages: [UIImage] = []
+    var iconCategoties: [IconsCategory] = []
     private var selectedIconItem: String?
     
     private var colorCollectionHandler: OAColorCollectionHandler?
+    
+    private let iconNamesKey = "iconNamesKey"
+    private let sectionNamesKey = "sectionNamesKey"
+    private let headerKey = "headerKey"
     
     init(collectionType: ColorCollectionType, items: Any, selectedItem: Any) {
         
@@ -84,6 +90,11 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         case .iconItems, .bigIconItems:
             if let icons = items as? [String] {
                 self.iconItems = icons
+                self.selectedIconItem = selectedItem as? String
+            }
+        case .poiIconCategories:
+            if let categories = items as? [IconsCategory] {
+                self.iconCategoties = categories
                 self.selectedIconItem = selectedItem as? String
             }
         }
@@ -114,7 +125,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     
     override func registerCells() {
         switch collectionType {
-        case .colorItems, .iconItems, .bigIconItems:
+        case .colorItems, .iconItems, .bigIconItems, .poiIconCategories:
             tableView.register(UINib(nibName: OACollectionSingleLineTableViewCell.reuseIdentifier, bundle: nil),
                                forCellReuseIdentifier: OACollectionSingleLineTableViewCell.reuseIdentifier)
         case .colorizationPaletteItems, .terrainPaletteItems:
@@ -148,7 +159,14 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     // MARK: - Base UI
     
     override func getTitle() -> String {
-        localizedString("shared_string_all_colors")
+        switch collectionType {
+        case .colorItems, .colorizationPaletteItems, .terrainPaletteItems:
+            return localizedString("shared_string_all_colors")
+        case .iconItems, .bigIconItems:
+            return localizedString("shared_string_all_icons")
+        case .poiIconCategories:
+            return localizedString("select_icon_profile_dialog_title")
+        }
     }
     
     override func getLeftNavbarButtonTitle() -> String {
@@ -180,11 +198,22 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     override func generateData() {
         data = OATableDataModel()
         if collectionType == .colorItems || collectionType == .iconItems || collectionType == .bigIconItems {
-            let colorsSection = data.createNewSection()
-            colorsSection.addRow(from: [
-                kCellTypeKey: OACollectionSingleLineTableViewCell.reuseIdentifier
+            let section = data.createNewSection()
+            section.addRow(from: [
+                kCellTypeKey: OACollectionSingleLineTableViewCell.reuseIdentifier,
+                sectionNamesKey: [],
+                iconNamesKey: iconItems
             ])
-            colorCollectionIndexPath = IndexPath(row: Int(colorsSection.rowCount()) - 1, section: Int(data.sectionCount()) - 1)
+            colorCollectionIndexPath = IndexPath(row: Int(section.rowCount()) - 1, section: Int(data.sectionCount()) - 1)
+        } else if collectionType == .poiIconCategories {
+            for category in iconCategoties {
+                let section = data.createNewSection()
+                section.addRow(from: [
+                    kCellTypeKey: OACollectionSingleLineTableViewCell.reuseIdentifier,
+                    headerKey: category.translatedName,
+                    iconNamesKey: category.iconKeys
+                ])
+            }
         } else {
             let palettesSection = data.createNewSection()
             paletteItems?.asArray().forEach { paletteColor in
@@ -193,6 +222,13 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                 }
             }
         }
+    }
+    
+    override func getTitleForHeader(_ section: Int) -> String {
+        if let header = data.sectionData(for: UInt(section)).getRow(0).obj(forKey: headerKey) as? String {
+            return header
+        }
+        return ""
     }
     
     private func generateRowData(for paletteColor: PaletteColor) -> OATableRowData {
@@ -239,15 +275,17 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         Int(data.rowCount(UInt(section)))
     }
     
-    override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
+    override func getRow(_ indexPath: IndexPath!) -> UITableViewCell {
         let item = data.item(for: indexPath)
         
         if item.cellType == OACollectionSingleLineTableViewCell.reuseIdentifier {
             if let cell = tableView.dequeueReusableCell(withIdentifier: OACollectionSingleLineTableViewCell.reuseIdentifier, for: indexPath) as? OACollectionSingleLineTableViewCell {
                 if collectionType == .colorItems {
                     setupColorCollectionCell(cell)
-                } else if collectionType == .iconItems || collectionType == .bigIconItems {
-                    setupIconCollectionCell(cell)
+                } else if collectionType == .iconItems || collectionType == .bigIconItems || collectionType == .poiIconCategories {
+                    if let iconNames = item.obj(forKey: iconNamesKey) as? [String] {
+                        setupIconCollectionCell(cell, iconNames: iconNames)
+                    }
                 }
                 cell.rightActionButtonVisibility(false)
                 cell.anchorContent(.centerStyle)
@@ -303,15 +341,15 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         }
     }
     
-    private func setupIconCollectionCell(_ cell: OACollectionSingleLineTableViewCell) {
-        if let iconHandler = IconCollectionHandler(data: [iconItems], collectionView: cell.collectionView) {
+    private func setupIconCollectionCell(_ cell: OACollectionSingleLineTableViewCell, iconNames: [String]) {
+        if let iconHandler = IconCollectionHandler(data: [iconNames], collectionView: cell.collectionView) {
             iconHandler.delegate = self
             iconHandler.hostVC = self
             iconHandler.selectedIconColor = selectedIconColor
             iconHandler.regularIconColor = regularIconColor
             iconHandler.setScrollDirection(.vertical)
             
-            if let selectedIconItem, let selectedIndex = iconItems.firstIndex(of: selectedIconItem) {
+            if let selectedIconItem, let selectedIndex = iconNames.firstIndex(of: selectedIconItem) {
                 iconHandler.setSelectedIndexPath(IndexPath(row: selectedIndex, section: 0))
             }
             

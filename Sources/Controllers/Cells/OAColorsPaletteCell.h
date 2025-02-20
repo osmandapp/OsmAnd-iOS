@@ -8,7 +8,6 @@
 
 #import "OACollectionSingleLineTableViewCell.h"
 #import "OASuperViewController.h"
-#import "OAColorCollectionViewController.h"
 
 @interface OAColorsPaletteCell : OACollectionSingleLineTableViewCell <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 

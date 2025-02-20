@@ -7,7 +7,6 @@
 //
 
 #import "OACollectionSingleLineTableViewCell.h"
-#import "OAColorCollectionViewController.h"
 
 @class OASuperViewController;
 

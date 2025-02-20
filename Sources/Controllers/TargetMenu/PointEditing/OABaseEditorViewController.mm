@@ -8,7 +8,6 @@
 
 #import "OABaseEditorViewController.h"
 #import "OAColorsPaletteCell.h"
-#import "OAColorCollectionViewController.h"
 #import "OATextInputFloatingCell.h"
 #import "OAPoiTableViewCell.h"
 #import "OAShapesTableViewCell.h"

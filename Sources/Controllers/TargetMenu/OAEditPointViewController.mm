@@ -41,7 +41,6 @@
 #import "OAGPXAppearanceCollection.h"
 #import "OAColorsPaletteCell.h"
 #import "OAColorCollectionHandler.h"
-#import "OAColorCollectionViewController.h"
 #import "OATargetMenuViewController.h"
 #import "MaterialTextFields.h"
 #import "OAIconsPaletteCell.h"

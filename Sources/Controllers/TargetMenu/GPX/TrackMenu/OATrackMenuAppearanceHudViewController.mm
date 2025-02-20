@@ -8,7 +8,6 @@
 
 #import "OATrackMenuAppearanceHudViewController.h"
 #import "OATrackColoringTypeViewController.h"
-#import "OAColorCollectionViewController.h"
 #import "OATableViewCustomFooterView.h"
 #import "OAFoldersCollectionView.h"
 #import "OASlider.h"
@@ -93,7 +92,7 @@ static const NSInteger kColorsSection = 1;
 
 @end
 
-@interface OATrackMenuAppearanceHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UIColorPickerViewControllerDelegate, OATrackColoringTypeDelegate, OAColorsCollectionCellDelegate, OAColorCollectionDelegate, OACollectionTableViewCellDelegate>
+@interface OATrackMenuAppearanceHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UIColorPickerViewControllerDelegate, OATrackColoringTypeDelegate, OAColorsCollectionCellDelegate, ColorCollectionViewControllerDelegate, OACollectionTableViewCellDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIImageView *titleIconView;
@@ -2340,20 +2339,14 @@ static const NSInteger kColorsSection = 1;
     }
     else if ([tableData.key isEqualToString:@"allColors"])
     {
-        OAColorCollectionViewController *colorCollectionViewController = nil;
+        ItemsCollectionViewController *colorCollectionViewController = nil;
         if ([self isSelectedTypeSolid])
         {
-            colorCollectionViewController =
-                [[OAColorCollectionViewController alloc] initWithCollectionType:EOAColorCollectionTypeColorItems
-                                                                          items:[_appearanceCollection getAvailableColorsSortingByKey]
-                                                                   selectedItem:_selectedColorItem];
+            colorCollectionViewController = [[ItemsCollectionViewController alloc] initWithCollectionType:ColorCollectionTypeColorItems items:[_appearanceCollection getAvailableColorsSortingByKey] selectedItem:_selectedColorItem];
         }
         else if ([self isSelectedTypeGradient])
         {
-            colorCollectionViewController =
-                [[OAColorCollectionViewController alloc] initWithCollectionType:EOAColorCollectionTypeColorizationPaletteItems
-                                                                          items:_gradientColorsCollection
-                                                                   selectedItem:_selectedPaletteColorItem];
+            colorCollectionViewController = [[ItemsCollectionViewController alloc] initWithCollectionType:ColorCollectionTypeColorizationPaletteItems items:_gradientColorsCollection selectedItem:_selectedPaletteColorItem];
         }
 
         if (colorCollectionViewController)
@@ -2672,7 +2665,7 @@ static const NSInteger kColorsSection = 1;
         [self openColorPickerWithColor:_selectedColorItem];
 }
 
-#pragma mark - OAColorCollectionDelegate
+#pragma mark - ColorCollectionViewControllerDelegate
 
 - (void)selectColorItem:(OAColorItem *)colorItem
 {

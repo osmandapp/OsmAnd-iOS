@@ -18,8 +18,7 @@
 #import "GeneratedAssetSymbols.h"
 
 #define kWhiteColor 0x44FFFFFF
-
-@interface OAColorCollectionHandler () <OACollectionCellDelegate, OAColorPickerViewControllerDelegate, UIColorPickerViewControllerDelegate>
+@interface OAColorCollectionHandler () <ColorCollectionViewControllerDelegate, OACollectionCellDelegate, OAColorPickerViewControllerDelegate, UIColorPickerViewControllerDelegate>
 
 @property(nonatomic) NSIndexPath *selectedIndexPath;
 
@@ -306,8 +305,8 @@
 {
     if (_hostVC)
     {
-        OAColorCollectionViewController *colorCollectionViewController =
-        [[OAColorCollectionViewController alloc] initWithCollectionType:EOAColorCollectionTypeColorItems items:_data[0] selectedItem:[self getSelectedItem]];
+        ItemsCollectionViewController *colorCollectionViewController =
+        [[ItemsCollectionViewController alloc] initWithCollectionType:ColorCollectionTypeColorItems items:_data[0] selectedItem:[self getSelectedItem]];
         colorCollectionViewController.delegate = self;
         colorCollectionViewController.hostColorHandler = self;
         [_hostVC showModalViewController:colorCollectionViewController];

@@ -72,6 +72,8 @@
 #import "OAPOIFiltersHelper.h"
 #import "OARendererRegistry.h"
 #import "OAMapObject.h"
+#import "OAColorCollectionHandler.h"
+#import "OAConcurrentCollections.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"
@@ -155,7 +157,6 @@
 #import "OABenefitsOsmContributorsViewController.h"
 #import "OAOsmEditingSettingsViewController.h"
 #import "OAHistoryViewController.h"
-#import "OAColorCollectionViewController.h"
 #import "OAQuickActionSelectionBottomSheetViewController.h"
 #import "OAFloatingButtonsHudViewController.h"
 #import "OAPOIViewController.h"
@@ -188,6 +189,7 @@
 #import "OADeviceScreenTableViewCell.h"
 #import "OATitleSliderRoundCell.h"
 #import "OAIconsPaletteCell.h"
+#import "OACollectionSingleLineTableViewCell.h"
 
 // Views
 #import "OASegmentedSlider.h"

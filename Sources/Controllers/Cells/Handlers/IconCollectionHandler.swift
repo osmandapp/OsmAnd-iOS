@@ -9,7 +9,7 @@
 import Foundation
 
 @objcMembers
-class IconCollectionHandler: OABaseCollectionHandler, OAIconCollectionDelegate {
+class IconCollectionHandler: OABaseCollectionHandler, IconsCollectionViewControllerDelegate {
     
     var iconImagesData = [[UIImage]]()
     var roundedSquareCells = false
@@ -117,9 +117,9 @@ class IconCollectionHandler: OABaseCollectionHandler, OAIconCollectionDelegate {
     
     func openAllIconsScreen() {
         guard let hostVC else { return }
-        var vc = OAColorCollectionViewController(collectionType: iconImagesData.isEmpty ? EOAColorCollectionTypeIconItems : EOAColorCollectionTypeBigIconItems, items: iconNamesData[0], selectedItem: getSelectedItem())
-        if (!iconImagesData.isEmpty) {
-            vc.setImages(iconImagesData[0])
+        var vc = ItemsCollectionViewController(collectionType: iconImagesData.isEmpty ? .iconItems : .bigIconItems, items: iconNamesData[0], selectedItem: getSelectedItem())
+        if !iconImagesData.isEmpty {
+            vc.iconImages = iconImagesData[0]
         }
         vc.customTitle = customTitle
         vc.iconsDelegate = self
@@ -143,7 +143,7 @@ class IconCollectionHandler: OABaseCollectionHandler, OAIconCollectionDelegate {
         nil
     }
     
-    // MARK: - OAIconCollectionDelegate
+    // MARK: - IconsCollectionViewControllerDelegate
     
     func selectIconName(_ iconName: String) {
         guard let selectedIndex = iconNamesData[0].firstIndex(of: iconName) else { return }

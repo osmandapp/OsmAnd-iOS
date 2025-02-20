@@ -23,7 +23,6 @@
 #import "OAColorsPaletteCell.h"
 #import "OAColorCollectionHandler.h"
 #import "OAGPXAppearanceCollection.h"
-#import "OAColorCollectionViewController.h"
 #import "OAIconsPaletteCell.h"
 #import "GeneratedAssetSymbols.h"
 

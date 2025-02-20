@@ -213,6 +213,7 @@
 		15CD7EAF25B1C1B900BCB36A /* ic_small_waypoints@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 15CD7EAC25B1C1B800BCB36A /* ic_small_waypoints@2x.png */; };
 		2C8E8A562D5104E600746A69 /* OAArabicNormalizer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C8E8A552D5104E600746A69 /* OAArabicNormalizer.mm */; };
 		320076142BFC775100CDDDAF /* SpeedLimitWarningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320076132BFC775100CDDDAF /* SpeedLimitWarningViewController.swift */; };
+		3202C5932D6647CB0094AC8B /* ItemsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3202C5922D6647C90094AC8B /* ItemsCollectionViewController.swift */; };
 		320427D62BF4D5250085DCA1 /* SpeedometerWidgetSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320427D52BF4D5250085DCA1 /* SpeedometerWidgetSettingsViewController.swift */; };
 		32048FC52A25E70200AA4B71 /* BaseOAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32048FC42A25E70200AA4B71 /* BaseOAuthHelper.swift */; };
 		32048FC72A26084000AA4B71 /* OsmOAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32048FC62A26084000AA4B71 /* OsmOAuthHelper.swift */; };
@@ -690,7 +691,6 @@
 		468C798D2B7F76A000DA64D0 /* SendCodeCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468C798C2B7F76A000DA64D0 /* SendCodeCommand.swift */; };
 		468CD3832C809E3400CC3436 /* ElevationChartCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468CD3822C809E3400CC3436 /* ElevationChartCell.swift */; };
 		468CD3852C80A06500CC3436 /* ElevationChartCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 468CD3842C80A06500CC3436 /* ElevationChartCell.xib */; };
-		468CE3F129F82EA700F3C3E5 /* OAColorCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 468CE3F029F82E9400F3C3E5 /* OAColorCollectionViewController.m */; };
 		468D9C6C2C00FE0600ED368A /* MapButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468D9C6B2C00FE0600ED368A /* MapButtonState.swift */; };
 		468D9C6E2C01030400ED368A /* QuickActionButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468D9C6D2C01030400ED368A /* QuickActionButtonState.swift */; };
 		46903D6929B5F734004459F1 /* OABaseWebViewContoller.m in Sources */ = {isa = PBXBuildFile; fileRef = 46903D6829B5F734004459F1 /* OABaseWebViewContoller.m */; };
@@ -3482,6 +3482,7 @@
 		2C8E8A542D5104E600746A69 /* OAArabicNormalizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAArabicNormalizer.h; sourceTree = "<group>"; };
 		2C8E8A552D5104E600746A69 /* OAArabicNormalizer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAArabicNormalizer.mm; sourceTree = "<group>"; };
 		320076132BFC775100CDDDAF /* SpeedLimitWarningViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedLimitWarningViewController.swift; sourceTree = "<group>"; };
+		3202C5922D6647C90094AC8B /* ItemsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemsCollectionViewController.swift; sourceTree = "<group>"; };
 		320427D52BF4D5250085DCA1 /* SpeedometerWidgetSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedometerWidgetSettingsViewController.swift; sourceTree = "<group>"; };
 		32048FC42A25E70200AA4B71 /* BaseOAuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseOAuthHelper.swift; sourceTree = "<group>"; };
 		32048FC62A26084000AA4B71 /* OsmOAuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsmOAuthHelper.swift; sourceTree = "<group>"; };
@@ -4106,8 +4107,6 @@
 		468C798C2B7F76A000DA64D0 /* SendCodeCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendCodeCommand.swift; sourceTree = "<group>"; };
 		468CD3822C809E3400CC3436 /* ElevationChartCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElevationChartCell.swift; sourceTree = "<group>"; };
 		468CD3842C80A06500CC3436 /* ElevationChartCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ElevationChartCell.xib; sourceTree = "<group>"; };
-		468CE3EF29F82E6300F3C3E5 /* OAColorCollectionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAColorCollectionViewController.h; sourceTree = "<group>"; };
-		468CE3F029F82E9400F3C3E5 /* OAColorCollectionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAColorCollectionViewController.m; sourceTree = "<group>"; };
 		468D9C6B2C00FE0600ED368A /* MapButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapButtonState.swift; sourceTree = "<group>"; };
 		468D9C6D2C01030400ED368A /* QuickActionButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickActionButtonState.swift; sourceTree = "<group>"; };
 		46903D6729B5F715004459F1 /* OABaseWebViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABaseWebViewController.h; sourceTree = "<group>"; };
@@ -7949,6 +7948,14 @@
 			path = cells;
 			sourceTree = "<group>";
 		};
+		32A05A3E2D663C1C003AB529 /* ItemsCollections */ = {
+			isa = PBXGroup;
+			children = (
+				3202C5922D6647C90094AC8B /* ItemsCollectionViewController.swift */,
+			);
+			path = ItemsCollections;
+			sourceTree = "<group>";
+		};
 		32A0CDF52C29B07B00FDD8E0 /* Model3dHelper */ = {
 			isa = PBXGroup;
 			children = (
@@ -9466,8 +9473,6 @@
 			children = (
 				461A3EFE29F6A5C3008EE079 /* OATrackColoringTypeViewController.h */,
 				461A3EFF29F6A5DF008EE079 /* OATrackColoringTypeViewController.m */,
-				468CE3EF29F82E6300F3C3E5 /* OAColorCollectionViewController.h */,
-				468CE3F029F82E9400F3C3E5 /* OAColorCollectionViewController.m */,
 			);
 			path = Appearance;
 			sourceTree = "<group>";
@@ -11189,17 +11194,18 @@
 		DA5A7ADE26C563A100F274C7 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				DAABE4E92A16481D00569F71 /* ConfigureScreen */,
 				46624E6F2993B20100F425AE /* Base */,
-				B247453027E35B1D00C18C3F /* Cloud */,
 				DA5A7F9526C563A500F274C7 /* BottomSheet */,
 				DA5A7BAA26C563A100F274C7 /* Cells */,
 				DA5A7AE326C563A100F274C7 /* ChoosePlan */,
+				B247453027E35B1D00C18C3F /* Cloud */,
+				DAABE4E92A16481D00569F71 /* ConfigureScreen */,
 				DA5A7FED26C563A500F274C7 /* DashboardOnMap */,
 				DA5A7D6526C563A300F274C7 /* Destinations */,
 				DA5A7EC026C563A400F274C7 /* Extensions */,
 				DA5A802B26C563A500F274C7 /* Help */,
 				DA5A7F9126C563A500F274C7 /* History */,
+				32A05A3E2D663C1C003AB529 /* ItemsCollections */,
 				DA5A7ADF26C563A100F274C7 /* LaunchScreen */,
 				DA5A7EC426C563A400F274C7 /* Map */,
 				DA5A7DC226C563A300F274C7 /* MyPlaces */,
@@ -17062,7 +17068,6 @@
 				DA5A84A226C563A900F274C7 /* OAMovePointCommand.mm in Sources */,
 				DA5A854026C563A900F274C7 /* SunriseSunset.m in Sources */,
 				DA5A832326C563A800F274C7 /* OATitleSliderTableViewCell.m in Sources */,
-				468CE3F129F82EA700F3C3E5 /* OAColorCollectionViewController.m in Sources */,
 				DA5A83C726C563A800F274C7 /* OATargetMenuViewController.mm in Sources */,
 				DA5A81BF26C563A700F274C7 /* OAPOIType.m in Sources */,
 				32FF4C352C1A18ED00246B36 /* DownloadingCellCloudHelper.swift in Sources */,
@@ -17374,6 +17379,7 @@
 				46BF38DC2CA44C090056D2C2 /* TerrainColorSchemeAction.swift in Sources */,
 				DA5A845A26C563A900F274C7 /* OAGPXRecLayer.mm in Sources */,
 				DA5A837826C563A800F274C7 /* OARouteSettingsBaseViewController.mm in Sources */,
+				3202C5932D6647CB0094AC8B /* ItemsCollectionViewController.swift in Sources */,
 				DA5A847226C563A900F274C7 /* OATurnResource.m in Sources */,
 				DA5A826026C563A700F274C7 /* OAImageCardCell.mm in Sources */,
 				DA5A850326C563A900F274C7 /* OARouteInfoLegendItemView.m in Sources */,

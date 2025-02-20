@@ -109,15 +109,10 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
 - (void) updateMyLocation
 {
     CLLocation* lastKnownLocation = [OsmAndApp instance].locationServices.lastKnownLocation;
-    if (lastKnownLocation)
-    {
-        _myLocation = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lastKnownLocation.coordinate.latitude, lastKnownLocation.coordinate.longitude));
-    }
-    else
-    {
-        OAMapRendererView *mapView = (OAMapRendererView *) [OARootViewController instance].mapPanel.mapViewController.view;
-        _myLocation = mapView.target31;
-    }
+    auto mapTarget31 = [OsmAndApp instance].data.mapLastViewedState.target31;
+    _myLocation = lastKnownLocation
+        ? OsmAnd::PointI(get31TileNumberX(lastKnownLocation.coordinate.longitude), get31TileNumberY(lastKnownLocation.coordinate.latitude))
+        : OsmAnd::PointI(mapTarget31.x, mapTarget31.y);
 }
 
 - (void)readPOI

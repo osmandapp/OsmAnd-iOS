@@ -140,7 +140,6 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         rootFolder = folder
         currentFolder = getTrackFolderByPath(currentFolderPath) ?? rootFolder
         onRefreshEnd()
-        updateNavigationBarTitle()
         updateSearchResultsWithFilteredTracks()
         updateData()
     }
@@ -159,6 +158,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupNavbar()
+        updateNavigationBarTitle()
         tableView.tableHeaderView = setupHeaderView()
         filterButton.isHidden = true
         if shouldReload {
@@ -467,7 +467,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func updateNavigationBarTitle() {
-        var title: String = currentFolder.getDirName(includingSubdirs: false)
+        var title: String = currentFolder?.getDirName(includingSubdirs: false) ?? localizedString("menu_my_trips")
         if tableView.isEditing {
             let totalSelectedTracks = selectedTracks.count
             let totalSelectedFolders = selectedFolders.count

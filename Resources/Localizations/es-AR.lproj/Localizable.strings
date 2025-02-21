@@ -3627,3 +3627,11 @@
 "auto_25_chars_route_roundabout_kr" = "Tomá la salida %d y seguí por la derecha";
 "auto_25_chars_route_tr" = "Girá a la derecha";
 "auto_25_chars_route_kr" = "Seguí por la derecha";
+"add_smart_folder" = "Agregar carpeta inteligente";
+"save_as_smart_folder" = "Guardar como carpeta inteligente";
+"new_smart_folder" = "Nueva carpeta inteligente";
+"no_matched_tracks" = "Sin trazas que coincidan";
+"no_matched_tracks_descr" = "Los criterios de filtro no coincidieron con ninguna de tus trazas";
+"empty_smart_folder_title" = "Sin trazas que coincidan";
+"empty_smart_folder_descr" = "Todas las trazas que coincidan, aparecerán automáticamente aquí.";
+"smart_folder_name_present" = "Esta carpeta inteligente, ya se encuentra presente";

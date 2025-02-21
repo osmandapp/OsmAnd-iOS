@@ -10,6 +10,8 @@
 #import "OASizes.h"
 #import "UITableViewCell+getTableView.h"
 
+static const NSInteger spacing = 9;
+
 @interface OACollectionSingleLineTableViewCell () <UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIStackView *contentOutsideStackViewVertical;
@@ -78,6 +80,8 @@
             UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
             layout.scrollDirection = scrollDirection;
             layout.itemSize = [_collectionHandler getItemSize];
+            layout.minimumLineSpacing = spacing;
+            layout.minimumInteritemSpacing = spacing;
             [self.collectionView setCollectionViewLayout:layout animated:!_disableAnimationsOnStart];
 
             NSIndexPath *selectedIndexPath = [_collectionHandler getSelectedIndexPath];
@@ -168,10 +172,10 @@
         if (_useMultyLines)
         {
             CGFloat width = self.collectionView.frame.size.width;
-            int rowsPerLine = width / (itemSize.width + self.collectionStackView.spacing);
+            int rowsPerLine = width / (itemSize.width + spacing);
             int rowsCount = ceil((double)[_collectionHandler itemsCount:0] / (double)rowsPerLine);
             if (rowsCount > 1)
-                height = rowsCount * (height + self.collectionStackView.spacing);
+                height = rowsCount * (height + spacing);
         }
     }
     return height;

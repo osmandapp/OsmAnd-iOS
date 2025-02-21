@@ -2409,6 +2409,14 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
                 BOOL useDepthContours = [iapHelper.nautical isActive] && ([OAIAPHelper isPaidVersion] || [OAIAPHelper isDepthContoursPurchased]);
                 for (OAMapStyleParameter *param in params)
                 {
+                    if ([param.name isEqualToString:ELEVATION_UNITS_ATTR])
+                    {
+                        BOOL useFeet = settings.metricSystem.get == MILES_AND_FEET;
+                        newSettings[QString::fromNSString(ELEVATION_UNITS_ATTR)] = useFeet
+                            ? QString::fromNSString(ELEVATION_UNITS_FEET_VALUE)
+                            : QString::fromNSString(ELEVATION_UNITS_METERS_VALUE);
+                        continue;
+                    }
                     if ([param.name isEqualToString:CONTOUR_LINES] && !useContours)
                     {
                         newSettings[QString::fromNSString(param.name)] = QStringLiteral("disabled");

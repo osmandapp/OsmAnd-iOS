@@ -45,6 +45,10 @@ static NSString * const CONTOUR_DENSITY_ATTR = @"contourDensity";
 static NSString * const CONTOUR_WIDTH_ATTR = @"contourWidth";
 static NSString * const CONTOUR_COLOR_SCHEME_ATTR = @"contourColorScheme";
 
+static NSString * const ELEVATION_UNITS_ATTR = @"eleUnits";
+static NSString * const ELEVATION_UNITS_FEET_VALUE = @"feet";
+static NSString * const ELEVATION_UNITS_METERS_VALUE = @"meters";
+
 static NSString * const NAUTICAL_DEPTH_CONTOURS = @"depthContours";
 static NSString * const NAUTICAL_DEPTH_CONTOUR_WIDTH_ATTR = @"depthContourWidth";
 static NSString * const NAUTICAL_DEPTH_CONTOUR_COLOR_SCHEME_ATTR = @"depthContourColorScheme";

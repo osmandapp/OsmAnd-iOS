@@ -697,6 +697,8 @@
     else if ([name isEqualToString:@"NAUTICAL_MILES_AND_FEET"])
         [_settings.metricSystem set:NAUTICAL_MILES_AND_FEET mode:self.appMode];
     [_settings.metricSystemChangedManually set:YES mode:self.appMode];
+
+    [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
 }
 
 - (void) selectSpeedSystem:(NSString *)name

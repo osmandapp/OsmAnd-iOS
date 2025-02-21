@@ -74,6 +74,7 @@
 #import "OAMapObject.h"
 #import "OAColorCollectionHandler.h"
 #import "OAConcurrentCollections.h"
+#import "OASvgHelper.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"

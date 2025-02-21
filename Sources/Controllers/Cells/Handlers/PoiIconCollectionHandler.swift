@@ -66,7 +66,9 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     private func initActivitiesCategory() {
         var iconKeys = [String]()
         for activity in RouteActivityHelper().getActivities() {
-            if !iconKeys.contains(activity.iconName) && activity.iconName != SAMPLE_ICON_KEY {
+            if !iconKeys.contains(activity.iconName) &&
+                activity.iconName != SAMPLE_ICON_KEY &&
+                OASvgHelper.hasMxMapImageNamed(activity.iconName) {
                 iconKeys.append(activity.iconName)
             }
         }
@@ -83,7 +85,10 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
                     poiTypeList.sort { $0.nameLocalized < $1.nameLocalized }
                     var iconKeys = [String]()
                     for poiType in poiTypeList {
-                        if let iconName = poiType.iconName(), !iconKeys.contains(iconName), iconName != SAMPLE_ICON_KEY {
+                        if let iconName = poiType.iconName(),
+                            !iconKeys.contains(iconName),
+                            iconName != SAMPLE_ICON_KEY,
+                            OASvgHelper.hasMxMapImageNamed(iconName) {
                             iconKeys.append(iconName)
                         }
                     }

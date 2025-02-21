@@ -24,7 +24,6 @@ final class StartNewTripSegmentAction: BaseMonitoringAction {
     }
     
     override func execute() {
-        guard let plugin = getPlugin() else { return }
         if isRecordingTrack() {
             OASavingTrackHelper.sharedInstance().startNewSegment()
         }

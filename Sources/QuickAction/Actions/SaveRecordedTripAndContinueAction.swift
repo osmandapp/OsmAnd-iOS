@@ -24,7 +24,6 @@ final class SaveRecordedTripAndContinueAction: BaseMonitoringAction {
     }
     
     override func execute() {
-        guard let plugin = getPlugin() else { return }
         if !isRecordingTrack() {
         } else if !hasDataToSave() {
         } else {

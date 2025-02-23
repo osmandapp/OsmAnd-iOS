@@ -2454,3 +2454,4 @@
 "res_url_warning" = "Το URL δεν μπορεί να είναι άδειο";
 "osm_pass" = "Κωδικός πρόσβασης OpenStreetMap";
 "temperature_show" = "Εμφάνιση θερμοκρασίας";
+"time_limited" = "Περιορισμένου χρόνου";

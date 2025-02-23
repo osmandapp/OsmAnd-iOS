@@ -175,19 +175,19 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 153;
 
 @implementation OASearchWptAPI
 {
-    NSMutableArray<OASGpxFile *> *_geoDocList;
+    NSArray<OASGpxFile *> *_geoDocList;
     NSArray *_paths;
 }
 
 - (void)setWptData:(NSArray<OASGpxFile *> *)geoDocList paths:(NSArray *)paths
 {
-    [_geoDocList addObjectsFromArray:geoDocList];
-    _paths = [NSArray arrayWithArray:paths];
+    _geoDocList = geoDocList;
+    _paths = paths;
 }
 
 - (void) resetWptData
 {
-    [_geoDocList removeAllObjects];
+    _geoDocList = nil;
     _paths = nil;
 }
 

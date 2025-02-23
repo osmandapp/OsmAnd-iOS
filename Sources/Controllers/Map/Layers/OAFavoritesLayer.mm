@@ -117,8 +117,9 @@
         if (_hiddenPointPos31 != OsmAnd::PointI())
             hiddenPoints.append(_hiddenPointPos31);
 
-        _favoritesMapProvider.reset(new OAFavoritesMapLayerProvider([OAFavoritesHelper getFavoritesCollection]->getFavoriteLocations(),
-                                                                    self.pointsOrder, hiddenPoints, self.showCaptions, self.captionStyle, self.captionTopSpace, rasterTileSize, _textScaleFactor));
+        _favoritesMapProvider.reset(new OAFavoritesMapLayerProvider(
+            [OAFavoritesHelper getFavoritesCollection]->getVisibleFavoriteLocations(),
+            self.pointsOrder, hiddenPoints, self.showCaptions, self.captionStyle, self.captionTopSpace, rasterTileSize, _textScaleFactor));
         [self.mapView addTiledSymbolsProvider:_favoritesMapProvider];
     }];
 }

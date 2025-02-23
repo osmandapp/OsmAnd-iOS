@@ -476,9 +476,8 @@ static NSOperationQueue *_favQueue;
             [_favoriteGroups removeObject:group];
         }
         for (OAFavoriteItem *point in group.points)
-        {
             [point setCategory:newName];
-        }
+
         if (existing)
             [renamedGroup.points addObjectsFromArray:group.points];
     }
@@ -492,12 +491,9 @@ static NSOperationQueue *_favQueue;
     saveImmediately:(BOOL)saveImmediately
 {
     if (updatePoints)
-    {
         for (OAFavoriteItem *point in group.points)
-        {
             [point setIcon:iconName];
-        }
-    }
+
     group.iconName = iconName;
     if (saveImmediately)
         [self saveCurrentPointsIntoFile];
@@ -509,12 +505,9 @@ static NSOperationQueue *_favQueue;
     saveImmediately:(BOOL)saveImmediately
 {
     if (updatePoints)
-    {
         for (OAFavoriteItem *point in group.points)
-        {
             [point setColor:color];
-        }
-    }
+
     group.color = color;
     if (saveImmediately)
         [self saveCurrentPointsIntoFile];
@@ -526,13 +519,22 @@ static NSOperationQueue *_favQueue;
     saveImmediately:(BOOL)saveImmediately
 {
     if (updatePoints)
-    {
         for (OAFavoriteItem *point in group.points)
-        {
             [point setBackgroundIcon:backgroundIconName];
-        }
-    }
+
     group.backgroundType = backgroundIconName;
+    if (saveImmediately)
+        [self saveCurrentPointsIntoFile];
+}
+
++ (void)updateGroup:(OAFavoriteGroup *)group
+            visible:(BOOL)visible
+    saveImmediately:(BOOL)saveImmediately
+{
+    for (OAFavoriteItem *point in group.points)
+        [point setVisible:visible];
+
+    group.isVisible = visible;
     if (saveImmediately)
         [self saveCurrentPointsIntoFile];
 }

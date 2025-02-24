@@ -121,7 +121,7 @@
 "speed_limit_exceed" = "Ανοχή ορίου ταχύτητας";
 "week" = "Εβδομάδα";
 "auto_split_recording_title" = "Αυτόματος διαχωρισμός καταγραφών μετά από κενό";
-"wikipedia_offline" = "Βικιπαίδεια χωρίς διαδίκτυο";
+"wikipedia_offline" = "Βικιπαίδεια χωρίς σύνδεση";
 "update_now" = "Ενημέρωση τώρα";
 "use_osm_live_routing" = "Πλοήγηση OsmAnd Live";
 "phone" = "Τηλέφωνο";
@@ -1073,7 +1073,7 @@
 "shared_string_buy_for" = "για";
 "osmand_live_donation_header" = "Ρυθμίσεις δωρεάς";
 "osmand_live_wifi_only" = "Ενημέρωση μόνο μέσω WiFi";
-"update_frequency" = "Ενημέρωση συχνότητας";
+"update_frequency" = "Συχνότητα ενημέρωσης";
 "osmand_live_server_date" = "Τελευταία ενημέρωση διακομιστή: %@";
 "osmand_live_reports" = "Αναφορές";
 "sort_by" = "Ταξινόμηση κατά";
@@ -1100,7 +1100,7 @@
 "select_group" = "Επιλογή ομάδας";
 "shared_string_square" = "Τετράγωνο";
 "coordinates" = "Συντεταγμένες";
-"plan_route_open_existing_track" = "Ανοίξτε υφιστάμενο ίχνος";
+"plan_route_open_existing_track" = "Άνοιγμα υφιστάμενου ίχνους";
 "join_segments" = "Συνένωση τμημάτων";
 "shared_string_others" = "Άλλα";
 "fav_point_dublicate" = "Ορίστηκε διπλογραφή ονόματος Αγαπημένου";

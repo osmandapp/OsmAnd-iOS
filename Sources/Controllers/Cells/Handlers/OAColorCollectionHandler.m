@@ -111,7 +111,7 @@
         [collectionView reloadItemsAtIndexPaths:@[prevSelectedIndexPath, weakSelf.selectedIndexPath]];
         if (weakSelf.delegate)
         {
-            [weakSelf.delegate onCollectionItemSelected:weakSelf.selectedIndexPath collectionView:collectionView];
+            [weakSelf.delegate onCollectionItemSelected:weakSelf.selectedIndexPath selectedItem:nil collectionView:collectionView];
         }
         
         [weakSelf scrollToIndexPathIfNeeded:weakSelf.selectedIndexPath];
@@ -146,7 +146,7 @@
     if (self.delegate)
     {
         if (indexPath == _selectedIndexPath)
-            [self.delegate onCollectionItemSelected:indexPath collectionView:collectionView];
+            [self.delegate onCollectionItemSelected:indexPath selectedItem:nil collectionView:collectionView];
         else
             [self.delegate reloadCollectionData];
     }
@@ -188,7 +188,7 @@
             weakSelf.selectedIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
             [collectionView reloadItemsAtIndexPaths:@[weakSelf.selectedIndexPath]];
             if (weakSelf.delegate)
-                [weakSelf.delegate onCollectionItemSelected:weakSelf.selectedIndexPath collectionView:collectionView];
+                [weakSelf.delegate onCollectionItemSelected:weakSelf.selectedIndexPath selectedItem:nil collectionView:collectionView];
 
             [weakSelf scrollToIndexPathIfNeeded:weakSelf.selectedIndexPath];
         }
@@ -356,7 +356,7 @@
 
 - (void)onCollectionItemSelected:(NSIndexPath *)indexPath {
     if (self.delegate)
-        [self.delegate onCollectionItemSelected:indexPath collectionView:[self getCollectionView]];
+        [self.delegate onCollectionItemSelected:indexPath selectedItem:nil collectionView:[self getCollectionView]];
 }
 
 - (void)selectColorItem:(OAColorItem *)colorItem
@@ -369,7 +369,7 @@
     
     if (self.delegate)
     {
-        [self.delegate onCollectionItemSelected:selectedIndex collectionView:[self getCollectionView]];
+        [self.delegate onCollectionItemSelected:selectedIndex selectedItem:nil collectionView:[self getCollectionView]];
     }
 }
 

@@ -35,6 +35,31 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
         sortCategories()
     }
     
+    func setIconName(_ iconName: String) {
+        for i in 0 ..< categories.count {
+            let category = categories[i]
+            for j in 0 ..< category.iconKeys.count {
+                if iconName == category.iconKeys[j] ||
+                    "mx_" + iconName == category.iconKeys[j] {
+                    setSelectedIndexPath(IndexPath(row: j, section: 0))
+                    selectCategory(category.key)
+                    return
+                }
+            }
+        }
+    }
+    
+    override func getSelectedItem() -> Any {
+        for category in categories {
+            if category.key == selectedCatagoryKey {
+                if let indexPath = getSelectedIndexPath() {
+                    return category.iconKeys[indexPath.row]
+                }
+            }
+        }
+        return ""
+    }
+    
     func categoryNames() -> [String] {
         categories.map { $0.key }
     }

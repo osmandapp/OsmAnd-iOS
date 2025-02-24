@@ -482,8 +482,7 @@
     _poiIconCollectionHandler.selectedIconColor = [_selectedColorItem getColor];
     [_poiIconCollectionHandler setItemSizeWithSize:48];
     [_poiIconCollectionHandler setIconSizeWithSize:30];
-        NSInteger selectedIconIndex2 = 0;
-    [_poiIconCollectionHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:selectedIconIndex2 inSection:0]];
+    [_poiIconCollectionHandler setIconName:_selectedIconName];
 }
 
 - (void)generateData
@@ -1356,7 +1355,7 @@
 
 #pragma mark - OACollectionCellDelegate
 
-- (void)onCollectionItemSelected:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
+- (void)onCollectionItemSelected:(NSIndexPath *)indexPath selectedItem:(id)selectedItem collectionView:(UICollectionView *)collectionView
 {
     if (collectionView == [_poiIconCollectionHandler getCollectionView])
     {

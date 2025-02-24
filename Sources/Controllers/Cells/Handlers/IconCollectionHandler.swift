@@ -134,7 +134,7 @@ class IconCollectionHandler: OABaseCollectionHandler {
         hostVC.showModalViewController(vc)
     }
     
-    func getSelectedItem() -> Any {
+    override func getSelectedItem() -> Any {
         if let selectedIndexPath, !iconNamesData.isEmpty, !iconNamesData[selectedIndexPath.section].isEmpty {
             return iconNamesData[selectedIndexPath.section][selectedIndexPath.row]
         }

@@ -24,11 +24,9 @@ final class SaveRecordedTripAndContinueAction: BaseMonitoringAction {
     }
     
     override func execute() {
-        if !isRecordingTrack() {
-        } else if !hasDataToSave() {
-        } else {
-            let gpxFile = OASavingTrackHelper.sharedInstance().currentTrack
-            OASavingTrackHelper.sharedInstance().saveCurrentTrack(gpxFile?.path)
+        guard let plugin = getPlugin() else { return }
+        if isRecordingTrack() {
+            plugin.saveTrack(false)
         }
     }
 }

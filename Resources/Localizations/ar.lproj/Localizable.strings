@@ -1076,7 +1076,7 @@
 "quick_action_replace_destination" = "تبديل الوجهة";
 "add_destination" = "إضافة وجهة";
 "quick_action_add_first_intermediate" = "إضافة وجهة وسطى";
-"quick_action_auto_zoom" = "التكبير التلقائي";
+"quick_action_auto_zoom" = "التكبير التلقائي للخريطة";
 "quick_action_resume_pause_navigation" = "إيقاف/مواصلة الملاحة";
 "quick_action_start_stop_navigation" = "بدء/إنهاء الملاحة";
 "toggle_day_night" = "نمط ليلي/نهاري";
@@ -3554,3 +3554,5 @@
 "obd_plugin_name" = "مقاييس المركبات";
 "add_widget_above" = "إضافة ويدجت أعلى";
 "cloud_sync_progress" = "مزامنه... %@";
+"rendering_attr_showClimbingRoutes_description" = "عرض مسارات التسلق";
+"rendering_attr_showClimbingRoutes_name" = "مسارات التسلق";

@@ -6,68 +6,43 @@ protocol ImageDataSource: AnyObject {
 }
 
 final class ImageCarouselViewController: UIPageViewController {
+    // swiftlint:disable all
     private(set) var contentMetadataView: ContentMetadataView!
-    private(set) lazy var navItem = UINavigationItem()
+    // swiftlint:enable all
     
     private let imageDatasource: ImageDataSource?
-    private var wikiImageCards: [WikiImageCard]?
     
     private var initialIndex = 0
     private var currentIndex = 0
+    private let gradientLayer = CAGradientLayer()
+    private let metadataContainerView = UIView()
     
-    private lazy var downloadMetadataProvider = DownloadMetadataProvider()
+    private lazy var downloadImageMetadataService = DownloadImageMetadataService.shared
     
-    private(set) lazy var navBar: UINavigationBar = {
-        let _navBar = UINavigationBar(frame: .zero)
+    // MARK: - init
+    init(imageDataSource: ImageDataSource?,
+         initialIndex: Int = 0) {
+        self.initialIndex = initialIndex
+        self.currentIndex = initialIndex
+        self.imageDatasource = imageDataSource
         
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithDefaultBackground()
-        appearance.backgroundColor = .viewBg
-        
-        let blurAppearance = UINavigationBarAppearance()
-        appearance.shadowImage = nil
-        appearance.shadowColor = nil
-        blurAppearance.shadowColor = nil
-        
-        _navBar.standardAppearance = blurAppearance
-        _navBar.scrollEdgeAppearance = appearance
-        
-        _navBar.titleTextAttributes = [
-            .foregroundColor: UIColor.textColorPrimary,
-            .font: UIFont.preferredFont(forTextStyle: .subheadline)
-        ]
-        _navBar.tintColor = .iconColorActive
-        
-      //  UINavigationBar.appearance().standardAppearance = appearance
-        return _navBar
-    }()
-    
-    init(
-        imageDataSource: ImageDataSource?,
-        initialIndex: Int = 0) {
-            
-            self.initialIndex = initialIndex
-            self.currentIndex = initialIndex
-            self.imageDatasource = imageDataSource
-            
-            super.init(
-                transitionStyle: .scroll,
-                navigationOrientation: .horizontal,
-                options: [UIPageViewController.OptionsKey.interPageSpacing: 20])
-            delegate = self
-            
-            modalPresentationStyle = .custom
-            modalPresentationCapturesStatusBarAppearance = true
-        }
+        super.init(transitionStyle: .scroll,
+                   navigationOrientation: .horizontal,
+                   options: [UIPageViewController.OptionsKey.interPageSpacing: 20])
+        delegate = self
+    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
-        addNavBar()
+        
+        configureNavigationBar()
+        updateTitle(with: initialIndex)
         configureContentMetadataView()
         downloadMetadataIfNeeded()
         prefetchAdjacentItems()
@@ -75,76 +50,127 @@ final class ImageCarouselViewController: UIPageViewController {
         dataSource = self
         
         if let imageDatasource {
-            let initialVC: ImageViewerController = .init(
-                index: initialIndex,
-                imageItem: imageDatasource.imageItem(at: initialIndex))
+            let initialVC: ImageViewerController = .init(index: initialIndex,
+                                                         imageItem: imageDatasource.imageItem(at: initialIndex))
             setViewControllers([initialVC], direction: .forward, animated: true)
         }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navBar.alpha = 1.0
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(didDownloadMetadata(notification:)),
+                                               name: .didDownloadMetadata,
+                                               object: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        gradientLayer.frame = metadataContainerView.bounds
+    }
+    
+    deinit {
+        ImageCache.galleryHighResolutionDiskCache.clearMemoryCache()
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        .darkContent
-//        traitCollection.userInterfaceStyle == .dark
-//        ? .lightContent
-//        : .darkContent;
+        traitCollection.userInterfaceStyle == .dark
+        ? .lightContent
+        : .darkContent
     }
     
+    // MARK: - Private func
     private func configureContentMetadataView() {
+        metadataContainerView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(metadataContainerView)
+        NSLayoutConstraint.activate([
+            metadataContainerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            metadataContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            metadataContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            metadataContainerView.heightAnchor.constraint(equalToConstant: 112)
+        ])
+        
         contentMetadataView = ContentMetadataView()
         contentMetadataView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(contentMetadataView)
+        metadataContainerView.addSubview(contentMetadataView)
+        contentMetadataView.bindFrameToSuperview()
+        configureMetadataGradientLayer()
         
-        NSLayoutConstraint.activate([
-            contentMetadataView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            contentMetadataView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            contentMetadataView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            contentMetadataView.heightAnchor.constraint(equalToConstant: 112)
-        ])
         updateMetaData(with: initialIndex)
     }
     
-    private func addNavBar() {
-        let closeBarButton = createNavbarButton(title: localizedString("shared_string_close"), icon: nil, color: .iconColorActive, action: #selector(onCloseBarButtonActon), target: self, menu: nil)
+    private func configureMetadataGradientLayer() {
+        gradientLayer.colors = [
+            UIColor.clear.cgColor,
+            UIColor.black.cgColor
+        ]
         
-        navItem.leftBarButtonItem = closeBarButton
-        navItem.leftBarButtonItem?.tintColor = .white
+        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0)
+        gradientLayer.endPoint = CGPoint(x: 0.5, y: 1)
         
-        var menuItems: [UIAction] {
-            return [
-                UIAction(title: "Standard item", image: UIImage(systemName: "sun.max"), handler: { (_) in
-                }),
-                UIAction(title: "Disabled item", image: UIImage(systemName: "moon"), attributes: .disabled, handler: { (_) in
-                }),
-                UIAction(title: "Delete..", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { (_) in
-                })
-            ]
+        metadataContainerView.layer.insertSublayer(gradientLayer, at: 0)
+    }
+    
+    private func configureNavigationBar() {
+        navigationController?.setDefaultNavigationBarAppearance()
+        
+        let closeBarButton = createNavbarButton(title: localizedString("shared_string_close"),
+                                                icon: nil,
+                                                color: .iconColorActive,
+                                                action: #selector(onCloseBarButtonActon),
+                                                target: self,
+                                                menu: nil)
+        
+        navigationItem.leftBarButtonItem = closeBarButton
+        
+        var firstSectionItems = [UIAction]()
+        let detailsAction = UIAction(title: localizedString("shared_string_details"), image: UIImage.icCustomInfoOutlined) { [weak self] _ in
+            guard let self,
+                  let card = getCardForIndex(currentIndex),
+                  let parent else { return }
+            GalleryContextMenuProvider.openDetailsController(card: card, rootController: parent)
         }
+        detailsAction.accessibilityLabel = localizedString("shared_string_details")
+        firstSectionItems.append(detailsAction)
         
-        var demoMenu: UIMenu {
-            return UIMenu(title: "My menu", image: nil, identifier: nil, options: [], children: menuItems)
+        let openInBrowserAction = UIAction(title: localizedString("open_in_browser"), image: UIImage.icCustomExternalLink) { [weak self] _ in
+            guard let self, let card = getCardForIndex(currentIndex) else { return }
+            
+            guard let viewController = OAWebViewController(urlAndTitle: card.urlWithCommonAttributions, title: card.title) else { return }
+            let navigationController = UINavigationController(rootViewController: viewController)
+            navigationController.modalPresentationStyle = .fullScreen
+            
+            parent?.present(navigationController, animated: true, completion: nil)
         }
+        openInBrowserAction.accessibilityLabel = localizedString("open_in_browser")
+        
+        firstSectionItems.append(openInBrowserAction)
+        
+        let firstSection = UIMenu(title: "", options: .displayInline, children: firstSectionItems)
+        let downloadAction = UIAction(title: localizedString("shared_string_download"), image: UIImage.icCustomDownload) { [weak self] _ in
+            guard let self, let card = getCardForIndex(currentIndex), !card.imageUrl.isEmpty  else { return }
+            GalleryContextMenuProvider.downloadImage(urlString: card.imageUrl, view: view)
+        }
+        downloadAction.accessibilityLabel = localizedString("shared_string_download")
+        let secondSection = UIMenu(title: "", options: .displayInline, children: [downloadAction])
+        let menu = UIMenu(title: "", image: nil, children: [firstSection, secondSection])
         
         let sharedBarButton = createNavbarButton(title: nil, icon: .icCustomExportOutlined, color: .iconColorActive, action: #selector(onSharedBarButtonActon(_:)), target: self, menu: nil)
         
-        let detailsBarButton = createNavbarButton(title: nil, icon: .icNavbarOverflowMenuOutlined, color: .iconColorActive, action: nil, target: nil, menu: demoMenu)
+        let detailsBarButton = createNavbarButton(title: nil, icon: .icNavbarOverflowMenuOutlined, color: .iconColorActive, action: nil, target: nil, menu: menu)
         
-        navItem.rightBarButtonItems = [detailsBarButton, sharedBarButton]
-        
-        navBar.alpha = 0.0
-        navBar.items = [navItem]
-        navBar.insert(to: view)
-        
-        updateTitle(with: initialIndex)
+        navigationItem.rightBarButtonItems = [detailsBarButton, sharedBarButton]
     }
     
     private func updateTitle(with pageIndex: Int) {
         guard let card = getCardForIndex(pageIndex) else { return }
-        navBar.topItem?.title = card.title
+        navigationItem.title = card.title
     }
     
     private func updateMetaData(with pageIndex: Int) {
@@ -164,22 +190,15 @@ final class ImageCarouselViewController: UIPageViewController {
     
     private func downloadMetadataIfNeeded() {
         guard let datasource = imageDatasource as? SimpleImageDatasource else { return }
-        
-        wikiImageCards = datasource.imageItems.compactMap { [weak self] item in
+        let wikiImageCards = datasource.imageItems.compactMap { item in
             if case .card(let card) = item {
-                card.onMetadataUpdated = { [weak self, weak card] in
-                    guard let self else { return }
-                    guard let obj = getCardForIndex(currentIndex) else { return }
-                    if obj === card {
-                        updateMetaData(with: currentIndex)
-                    }
-                }
                 return card
             }
             return nil
         }
-        if let wikiImageCards, !wikiImageCards.isEmpty {
-            downloadMetadataProvider.cards = wikiImageCards
+        if !wikiImageCards.isEmpty {
+            downloadImageMetadataService.cards = wikiImageCards
+            prefetchMetadata()
         }
     }
     
@@ -193,8 +212,8 @@ final class ImageCarouselViewController: UIPageViewController {
     private func prefetchAdjacentItems() {
         guard let imageDatasource else { return }
         
-        let previousIndex = currentIndex == 0 ? imageDatasource.count() - 1 : currentIndex - 1
-        let nextIndex = currentIndex == imageDatasource.count() - 1 ? 0 : currentIndex + 1
+        let previousIndex = (currentIndex - 1 + imageDatasource.count()) % imageDatasource.count()
+        let nextIndex = (currentIndex + 1) % imageDatasource.count()
         
         let urls = [previousIndex, nextIndex].compactMap { index -> URL? in
             guard index >= 0 && index < imageDatasource.count() else { return nil }
@@ -205,12 +224,57 @@ final class ImageCarouselViewController: UIPageViewController {
             return url
         }
         
-        prefetcher(with: urls)
+        prefetchImages(with: urls)
     }
     
-    private func prefetcher(with urls: [URL]) {
+    private func prefetchMetadata() {
+        guard let imageDatasource else { return }
+        // Get 2 previous and 2 next indices relative to the current index
+        let indicesForPrefetch = [
+            (currentIndex - 2 + imageDatasource.count()) % imageDatasource.count(),
+            (currentIndex - 1 + imageDatasource.count()) % imageDatasource.count(),
+            currentIndex,
+            (currentIndex + 1) % imageDatasource.count(),
+            (currentIndex + 2) % imageDatasource.count()
+        ]
+
+        let cardsForPrefetch = indicesForPrefetch.compactMap { index -> WikiImageCard? in
+            guard index >= 0 && index < imageDatasource.count() else { return nil }
+            guard let card = getCardForIndex(index),
+                  let metadata = card.metadata else { return nil }
+            
+            let isMetadataMissing = [
+                metadata.date,
+                metadata.author,
+                metadata.license
+            ].contains { downloadImageMetadataService.isEmpty($0) }
+            
+            guard isMetadataMissing && !card.isMetaDataDownloaded && !card.isMetaDataDownloading else { return nil }
+            return card
+        }
+        
+        if !cardsForPrefetch.isEmpty {
+            Task { [weak self] in
+                guard let self else { return }
+                await downloadImageMetadataService.downloadMetadata(for: cardsForPrefetch)
+            }
+        } else {
+            debugPrint("No cards to prefetch metadata")
+        }
+    }
+
+    private func prefetchImages(with urls: [URL]) {
         guard !urls.isEmpty else { return }
-        ImagePrefetcher(urls: urls, options: [ .targetCache(.galleryHighResolutionDiskCache)]).start()
+        ImagePrefetcher(urls: urls, options: [.targetCache(.galleryHighResolutionDiskCache)]).start()
+    }
+    
+    @objc private func didDownloadMetadata(notification: Notification) {
+        guard let cards = notification.userInfo?["cards"] as? [WikiImageCard] else { return }
+        guard let obj = getCardForIndex(currentIndex) else { return }
+    
+        if cards.contains(where: { $0 === obj }) {
+            updateMetaData(with: currentIndex)
+        }
     }
     
     @objc private func onCloseBarButtonActon(_ sender: UIBarButtonItem) {
@@ -218,63 +282,59 @@ final class ImageCarouselViewController: UIPageViewController {
     }
     
     @objc private func onSharedBarButtonActon(_ sender: UIBarButtonItem) {
-        guard let obj = getCardForIndex(currentIndex),
-        let url = URL(string: obj.urlWithCommonAttributions) else { return }
+        guard let obj = getCardForIndex(currentIndex) else { return }
+        guard let encodedURLString = obj.urlWithCommonAttributions.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+              let url = URL(string: encodedURLString) else {
+            NSLog("Error: Encoding failed or invalid URL: \( obj.urlWithCommonAttributions)")
+            return
+        }
         
         showActivity([url], sourceView: view, barButtonItem: sender)
-    }
-    
-    deinit {
-        ImageCache.galleryHighResolutionDiskCache.clearMemoryCache()
     }
 }
 
 extension ImageCarouselViewController: UIPageViewControllerDataSource {
     
-    public func pageViewController(
-        _ pageViewController: UIPageViewController,
-        viewControllerBefore viewController: UIViewController) -> UIViewController? {
-            
-            guard let vc = viewController as? ImageViewerController, let imageDatasource = imageDatasource else {
-                return nil
-            }
-            
-            var newIndex = vc.index - 1
-            if newIndex < 0 {
-                newIndex = imageDatasource.count() - 1
-            }
-            
-            return ImageViewerController(
-                index: newIndex,
-                imageItem: imageDatasource.imageItem(at: newIndex))
+    public func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+        
+        guard let vc = viewController as? ImageViewerController, let imageDatasource = imageDatasource else {
+            return nil
         }
+        
+        var newIndex = vc.index - 1
+        if newIndex < 0 {
+            newIndex = imageDatasource.count() - 1
+        }
+        
+        return ImageViewerController(
+            index: newIndex,
+            imageItem: imageDatasource.imageItem(at: newIndex))
+    }
     
-    public func pageViewController(
-        _ pageViewController: UIPageViewController,
-        viewControllerAfter viewController: UIViewController) -> UIViewController? {
-            
-            guard let vc = viewController as? ImageViewerController, let imageDatasource = imageDatasource else {
-                return nil
-            }
-            
-            var newIndex = vc.index + 1
-            if newIndex >= imageDatasource.count() {
-                newIndex = 0
-            }
-            
-            return ImageViewerController(
-                index: newIndex,
-                imageItem: imageDatasource.imageItem(at: newIndex))
+    public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+        
+        guard let vc = viewController as? ImageViewerController, let imageDatasource else {
+            return nil
         }
+        
+        var newIndex = vc.index + 1
+        if newIndex >= imageDatasource.count() {
+            newIndex = 0
+        }
+        
+        return ImageViewerController(
+            index: newIndex,
+            imageItem: imageDatasource.imageItem(at: newIndex))
+    }
 }
 
 extension ImageCarouselViewController: UIPageViewControllerDelegate {
     
-    public func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         if completed,
            let vc = viewControllers?.first as? ImageViewerController {
-            debugPrint("Current page: \(vc.index)")
             currentIndex = vc.index
+            debugPrint("Current page: \(currentIndex)")
             updatePage(index: currentIndex)
         }
     }
@@ -283,7 +343,11 @@ extension ImageCarouselViewController: UIPageViewControllerDelegate {
         updateTitle(with: index)
         updateMetaData(with: index)
         prefetchAdjacentItems()
+        prefetchMetadata()
     }
+}
+
+extension ImageCarouselViewController {
     
     private func createNavbarButton(title: String?, icon: UIImage?, color: UIColor, action: Selector?, target: AnyObject?, menu: UIMenu?) -> UIBarButtonItem {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 44, height: 30))

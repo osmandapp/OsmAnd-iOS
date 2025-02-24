@@ -3995,7 +3995,7 @@
 "shared_string_source" = "Source";
 "shared_string_items" = "Items";
 "download_failed" = "Download Failed";
-"download_successful" = "Download Successful";
+"download_successful" = "Image downloaded to Documents/Download.";
 
 "auto_25_chars_route_kl" = "Keep left";
 "auto_25_chars_route_kr" = "Keep right";

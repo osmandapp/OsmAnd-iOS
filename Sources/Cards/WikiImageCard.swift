@@ -72,7 +72,7 @@ final class WikiImage: NSObject {
         }
         
         if let description = dic["description"] as? String, !isEmpty(description), isEmpty(metadata?.description) {
-            metadata?.description = description
+            metadata?.description = description.replacingOccurrences(of: "\n", with: "")
             isUpdated = true
         }
         if isUpdated {

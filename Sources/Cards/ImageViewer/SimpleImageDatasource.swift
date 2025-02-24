@@ -2,7 +2,7 @@ enum ImageItem {
     case card(WikiImageCard)
 }
 
-class SimpleImageDatasource: ImageDataSource {
+final class SimpleImageDatasource: ImageDataSource {
     
     private(set) var imageItems: [ImageItem]
     

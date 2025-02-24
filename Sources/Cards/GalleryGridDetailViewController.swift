@@ -13,6 +13,33 @@ final class GalleryGridDetailViewController: OABaseNavbarViewController {
     // swiftlint:enable all
     var metadata: Metadata?
     
+    // MARK: - Life Cycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        downloadMetadataIfNeeded()
+    }
+    
+    private func downloadMetadataIfNeeded() {
+        Task {
+            if let wikiImageCard = card as? WikiImageCard {
+                await DownloadImageMetadataService.shared.downloadMetadata(for: [wikiImageCard])
+            }
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(didDownloadMetadata(notification:)),
+                                               name: .didDownloadMetadata,
+                                               object: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     override func registerCells() {
         addCell(OAValueTableViewCell.reuseIdentifier)
         tableView.register(ExpandableTextViewTableCell.self, forCellReuseIdentifier: ExpandableTextViewTableCell.reuseIdentifier)
@@ -31,13 +58,13 @@ final class GalleryGridDetailViewController: OABaseNavbarViewController {
     }
     
     // MARK: Table data
-    
     override func generateData() {
+        tableData.clearAllData()
         let section = tableData.createNewSection()
         
-        if let description = metadata?.description {
+        if let description = metadata?.description, !description.isEmpty {
             let descriptionRow = section.createNewRow()
-            descriptionRow.key = "descriptionrKey"
+            descriptionRow.key = "descriptionKey"
             descriptionRow.cellType = ExpandableTextViewTableCell.reuseIdentifier
             descriptionRow.title = localizedString("shared_string_author")
             descriptionRow.descr = description
@@ -131,8 +158,20 @@ final class GalleryGridDetailViewController: OABaseNavbarViewController {
     private func getSourceTypeName(card: ImageCard) -> String {
         card is WikiImageCard ? localizedString("wikimedia") : ""
     }
+    
+    @objc private func didDownloadMetadata(notification: Notification) {
+        guard let cards = notification.userInfo?["cards"] as? [WikiImageCard] else { return }
+        
+        if let result = cards.first(where: { $0 === card }) {
+            card = result
+            metadata = result.metadata
+            generateData()
+            tableView.reloadData()
+        }
+    }
 }
 
+// MARK: - ExpandableTextViewDelegate
 extension ExpandableTextViewTableCell: ExpandableTextViewDelegate {
     
     func didExpandTextView(_ textView: ExpandableTextView) {

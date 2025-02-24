@@ -13,6 +13,7 @@ extension ImageCache {
         let cache = ImageCache(name: "galleryHighResolutionDiskCache")
         // Disable memory caching
         cache.memoryStorage.config.totalCostLimit = 0
+        cache.memoryStorage.config.countLimit = 0
         // Set disk cache size limit 1 Gb
         cache.diskStorage.config.sizeLimit = 1024 * 1024 * 1024
         return cache

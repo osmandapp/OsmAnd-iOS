@@ -17,15 +17,18 @@ final class CardsViewController: UIView {
     }
     
     var contentType: CollapsableCardsType = .onlinePhoto
+    var didChangeHeightAction: ((Section, Float) -> Void)?
+    // swiftlint:disable all
     var сardsFilter: CardsFilter! {
         didSet {
             applySnapshot()
         }
     }
-    var didChangeHeightAction: ((Section, Float) -> Void)?
     
     private var dataSource: DataSource!
     private var collectionView: UICollectionView!
+    // swiftlint:enable all
+    private var imageDataSource: SimpleImageDatasource?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -79,7 +82,7 @@ final class CardsViewController: UIView {
     private func registerCels() {
         [
             ImageCard.getCellNibId(),
-            NoImagesCard.getCellNibId(),
+            NoImagesCell.reuseIdentifier,
             NoInternetCard.getCellNibId(),
             MapillaryContributeCard.getCellNibId()
         ].forEach { collectionView.register(UINib(nibName: $0, bundle: nil), forCellWithReuseIdentifier: $0) }
@@ -141,9 +144,9 @@ final class CardsViewController: UIView {
                     snapshot.appendItems([EmptyStateCard()])
                     section = .noPhotos
                 }
-            case .mapilary:
+            case .mapillary:
                 let mapillaryCards = сardsFilter.mapillaryImageCards
-                print("mapillaryCards: \(mapillaryCards.count)")
+                debugPrint("mapillaryCards: \(mapillaryCards.count)")
                 if !mapillaryCards.isEmpty {
                     collectionView.isScrollEnabled = true
                     snapshot.appendSections([.bigPhoto])
@@ -204,7 +207,7 @@ final class CardsViewController: UIView {
                 guard let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: NoImagesCell.reuseIdentifier,
                     for: indexPath) as? NoImagesCell else { fatalError("Cannot create new cell NoImagesCell") }
-                cell.showAddPhotosButton(contentType == .mapilary)
+                cell.showAddPhotosButton(contentType == .mapillary)
                 return cell
             }
         }
@@ -217,16 +220,20 @@ final class CardsViewController: UIView {
 extension CardsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let card = dataSource.itemIdentifier(for: indexPath) else { return }
-        let controller = ViewControllerV1()
-        OARootViewController.instance().mapPanel?.navigationController?.pushViewController(controller, animated: true)
-//        if let item = card as? WikiImageCard {
-//            let controller = GalleryPhotoViewerViewController()
-//            controller.cards = сardsFilter.onlinePhotosSection.compactMap { $0 as? WikiImageCard }
-//            controller.selectedCard = item
-//            OARootViewController.instance().mapPanel?.navigationController?.pushViewController(controller, animated: true)
-//        } else {
-//            card.onCardPressed(OARootViewController.instance().mapPanel)
-//        }
+        
+        if card is WikiImageCard {
+            let wikiCards = dataSource.snapshot().itemIdentifiers.compactMap { $0 as? WikiImageCard }
+            guard let initialIndex = wikiCards.firstIndex(where: { $0 === card }) else { return }
+            let imageDataSource = SimpleImageDatasource(imageItems: wikiCards.compactMap { ImageItem.card($0) })
+            let imageCarouselController = ImageCarouselViewController(imageDataSource: imageDataSource, initialIndex: initialIndex)
+            
+            let navController = UINavigationController(rootViewController: imageCarouselController)
+            navController.modalPresentationStyle = .custom
+            navController.modalPresentationCapturesStatusBarAppearance = true
+            OARootViewController.instance().mapPanel?.navigationController?.present(navController, animated: true)
+        } else {
+            card.onCardPressed(OARootViewController.instance().mapPanel)
+        }
     }
 }
 

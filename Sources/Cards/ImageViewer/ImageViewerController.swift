@@ -2,6 +2,9 @@ import Kingfisher
 
 final class ImageViewerController: UIViewController {
     var index: Int = 0
+    
+    private let animationDuration: TimeInterval = 0.25
+    
     private var imageView: UIImageView = UIImageView(frame: .zero)
     
     private var lastLocation: CGPoint = .zero
@@ -16,13 +19,8 @@ final class ImageViewerController: UIViewController {
     private var bottom: NSLayoutConstraint!
     // swiftlint:enable all
     
-    private var navBar: UINavigationBar? {
-        guard let _parent = parent as? ImageCarouselViewController else { return nil }
-        return _parent.navBar
-    }
-    
     private var metadataView: UIView? {
-        guard let _parent = parent as? ImageCarouselViewController else { return nil}
+        guard let _parent = parent as? ImageCarouselViewController else { return nil }
         return _parent.contentMetadataView
     }
     
@@ -76,7 +74,7 @@ final class ImageViewerController: UIViewController {
         super.viewWillLayoutSubviews()
         layout()
     }
-    
+
     private func configureImageView() {
         switch imageItem {
         case .card(let item):
@@ -88,11 +86,14 @@ final class ImageViewerController: UIViewController {
             imageView.kf.setImage(
                 with: url,
                 options: [
-                    .targetCache(.galleryHighResolutionDiskCache)
+                    .targetCache(.galleryHighResolutionDiskCache),
+                    .requestModifier(RequestModifier())
                 ]) { [weak self] result in
                     switch result {
                     case .success:
-                        self?.layout()
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                            self?.layout()
+                        }
                     case .failure(let error):
                         debugPrint("download failed: url: \(url) | \(error.localizedDescription)")
                     }
@@ -103,13 +104,13 @@ final class ImageViewerController: UIViewController {
     }
     
     private func layout() {
+        guard !isAnimating else { return }
         updateConstraintsForSize(view.bounds.size)
         updateMinMaxZoomScaleForSize(view.bounds.size)
     }
     
     // MARK: Add Gesture Recognizers
     private func addGestureRecognizers() {
-        
         let panGesture = UIPanGestureRecognizer(
             target: self, action: #selector(didPan(_:)))
         panGesture.cancelsTouchesInView = false
@@ -141,7 +142,7 @@ final class ImageViewerController: UIViewController {
         guard isAnimating == false,
               scrollView.zoomScale == scrollView.minimumZoomScale else { return }
         
-        let container: UIView! = imageView
+        let container: UIView = imageView
         if gestureRecognizer.state == .began {
             lastLocation = container.center
         }
@@ -171,17 +172,24 @@ final class ImageViewerController: UIViewController {
     }
     
     @objc private func didSingleTap(_ recognizer: UITapGestureRecognizer) {
-        let currentNavAlpha = self.navBar?.alpha ?? 0.0
-        UIView.animate(withDuration: 0.235) {
-            let alpha = currentNavAlpha > 0.5 ? 0.0 : 1.0
-            self.navBar?.alpha = alpha
-            self.metadataView?.alpha = alpha
+        guard !isAnimating else { return }
+        guard let _parent = parent as? ImageCarouselViewController else { return }
+        let isHidden = _parent.navigationController?.navigationBar.isHidden ?? false
+        
+        self.isAnimating = true
+        CATransaction.begin()
+        CATransaction.setCompletionBlock({
+            self.isAnimating = false
+        })
+        _parent.navigationController?.setNavigationBarHidden(!isHidden, animated: true)
+        CATransaction.commit()
+        UIView.animate(withDuration: animationDuration) {
+            self.metadataView?.alpha = isHidden ? 1 : 0
         }
     }
     
-    @objc private func didDoubleTap(_ recognizer:UITapGestureRecognizer) {
-        let pointInView = recognizer.location(in: imageView)
-        zoomInOrOut(at: pointInView)
+    @objc private func didDoubleTap(_ recognizer: UITapGestureRecognizer) {
+        zoomInOrOut(at: recognizer.location(in: imageView))
     }
 }
 
@@ -213,6 +221,7 @@ extension ImageViewerController {
             (size.height + 1.0) / targetSize.height)
         
         scrollView.minimumZoomScale = minScale
+        //  NOTE: Xcode warning
         if minScale == 0 {
             scrollView.zoomScale = 0.0001
         } else {
@@ -223,7 +232,7 @@ extension ImageViewerController {
         scrollView.maximumZoomScale = maxZoomScale * 1.1
     }
     
-    func zoomInOrOut(at point:CGPoint) {
+    func zoomInOrOut(at point: CGPoint) {
         let newZoomScale = scrollView.zoomScale == scrollView.minimumZoomScale
         ? maxZoomScale : scrollView.minimumZoomScale
         let size = scrollView.bounds.size
@@ -252,13 +261,11 @@ extension ImageViewerController {
     
     private func executeCancelAnimation() {
         self.isAnimating = true
-        UIView.animate(
-            withDuration: 0.237,
-            animations: {
-                self.imageView.center = self.view.center
-            }) { [weak self] _ in
-                self?.isAnimating = false
-            }
+        UIView.animate(withDuration: animationDuration, animations: {
+            self.imageView.center = self.view.center
+        }, completion: { _ in
+            self.isAnimating = false
+        })
     }
 }
 
@@ -271,5 +278,14 @@ extension ImageViewerController: UIScrollViewDelegate {
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         updateConstraintsForSize(view.bounds.size)
+    }
+}
+
+private struct RequestModifier: AsyncImageDownloadRequestModifier {
+    var onDownloadTaskStarted: (@Sendable (Kingfisher.DownloadTask?) -> Void)?
+    func modified(for request: URLRequest) -> URLRequest? {
+        var r = request
+        r.timeoutInterval = 30
+        return r
     }
 }

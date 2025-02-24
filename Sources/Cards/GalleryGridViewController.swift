@@ -11,7 +11,7 @@ import Kingfisher
 final class GalleryGridViewController: OABaseNavbarViewController {
     var cards: [AbstractCard] = []
     var titleString: String = ""
-    lazy var downloadMetadataProvider = DownloadMetadataProvider()
+    lazy var downloadImageMetadataService = DownloadImageMetadataService.shared
     // swiftlint:disable all
     private var collectionView: UICollectionView!
     // swiftlint:enable all
@@ -19,7 +19,10 @@ final class GalleryGridViewController: OABaseNavbarViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureCollectionView()
-        downloadMetadataProvider.cards = cards
+        downloadImageMetadataService.cards = cards.compactMap { $0 as? WikiImageCard }
+        Task {
+            await downloadImageMetadataService.downloadMetadataForAllCards()
+        }
     }
     
     override func getTitle() -> String {
@@ -103,6 +106,11 @@ extension GalleryGridViewController: UICollectionViewDataSource {
         default: assert(false, "Invalid element type")
         }
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        guard let cell = cell as? GalleryCell else { return }
+        cell.cancelDownloadTask()
+    }
 }
 
 // MARK: - UICollectionViewDelegate
@@ -142,7 +150,9 @@ extension GalleryGridViewController: UICollectionViewDelegate {
   
             let openInBrowserAction = UIAction(title: localizedString("open_in_browser"), image: UIImage.icCustomExternalLink) { _ in
                 if let item = card as? WikiImageCard {
-                    item.openURL(OARootViewController.instance().mapPanel)
+                    GalleryContextMenuProvider.openURLIfValid(urlString: item.urlWithCommonAttributions)
+                    
+                //item.openURL(OARootViewController.instance().mapPanel)
                 } else {
                     guard let item = card as? ImageCard else { return }
                     GalleryContextMenuProvider.openURLIfValid(urlString: item.imageUrl)
@@ -207,6 +217,10 @@ final private class GalleryCell: UICollectionViewCell {
                 .scaleFactor(UIScreen.main.scale),
                 .cacheOriginalImage
             ])
+    }
+    
+    func cancelDownloadTask() {
+        imageView.kf.cancelDownloadTask()
     }
 }
 

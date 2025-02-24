@@ -3125,8 +3125,6 @@
 		FA6439E92B04D81B00331006 /* Data+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6439E82B04D81B00331006 /* Data+Extension.swift */; };
 		FA6439EB2B051A5300331006 /* MeasurementFormatter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6439EA2B051A5300331006 /* MeasurementFormatter+Extension.swift */; };
 		FA66F1522D5CD40600A4FF9E /* SimpleImageDatasource.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA66F14D2D5CD40600A4FF9E /* SimpleImageDatasource.swift */; };
-		FA66F1562D5CD40600A4FF9E /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA66F1502D5CD40600A4FF9E /* UIView+Extensions.swift */; };
-		FA66F1572D5CD40600A4FF9E /* UINavigationBar+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA66F14F2D5CD40600A4FF9E /* UINavigationBar+Extensions.swift */; };
 		FA66F1592D5CD40600A4FF9E /* ImageCarouselViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA66F1482D5CD40600A4FF9E /* ImageCarouselViewController.swift */; };
 		FA66F15A2D5CD40600A4FF9E /* ImageViewerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA66F14B2D5CD40600A4FF9E /* ImageViewerController.swift */; };
 		FA6797EF2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA6797EE2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.mm */; };
@@ -3195,7 +3193,7 @@
 		FAC5D4192BFB562000E9E658 /* SpeedometerSpeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC5D4182BFB562000E9E658 /* SpeedometerSpeedView.swift */; };
 		FAC5D4312BFC7F5200E9E658 /* SpeedLimitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC5D4302BFC7F5200E9E658 /* SpeedLimitView.swift */; };
 		FACB02AA2D54C52000EBE87F /* ImageCache+Extenion.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACB02A92D54C52000EBE87F /* ImageCache+Extenion.swift */; };
-		FACB02AC2D54F71C00EBE87F /* DownloadMetadataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACB02AB2D54F71C00EBE87F /* DownloadMetadataProvider.swift */; };
+		FACB02AC2D54F71C00EBE87F /* DownloadImageMetadataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACB02AB2D54F71C00EBE87F /* DownloadImageMetadataService.swift */; };
 		FACB02B52D562C4200EBE87F /* ExpandableTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACB02B42D562C4100EBE87F /* ExpandableTextView.swift */; };
 		FACE409F2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = FACE409D2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm */; };
 		FAD8489A2CAD6F950018AF92 /* WptPtExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD848992CAD6F950018AF92 /* WptPtExtension.swift */; };
@@ -7674,8 +7672,6 @@
 		FA66F1482D5CD40600A4FF9E /* ImageCarouselViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCarouselViewController.swift; sourceTree = "<group>"; };
 		FA66F14B2D5CD40600A4FF9E /* ImageViewerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewerController.swift; sourceTree = "<group>"; };
 		FA66F14D2D5CD40600A4FF9E /* SimpleImageDatasource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleImageDatasource.swift; sourceTree = "<group>"; };
-		FA66F14F2D5CD40600A4FF9E /* UINavigationBar+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationBar+Extensions.swift"; sourceTree = "<group>"; };
-		FA66F1502D5CD40600A4FF9E /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
 		FA6797ED2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWeatherAutoUpdateSettingsViewController.h; sourceTree = "<group>"; };
 		FA6797EE2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWeatherAutoUpdateSettingsViewController.mm; sourceTree = "<group>"; };
 		FA7341092BBAE44A00CBF7EC /* LeftIconRightStackTitleDescriptionButtonView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LeftIconRightStackTitleDescriptionButtonView.xib; sourceTree = "<group>"; };
@@ -7742,7 +7738,7 @@
 		FAC5D4182BFB562000E9E658 /* SpeedometerSpeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedometerSpeedView.swift; sourceTree = "<group>"; };
 		FAC5D4302BFC7F5200E9E658 /* SpeedLimitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedLimitView.swift; sourceTree = "<group>"; };
 		FACB02A92D54C52000EBE87F /* ImageCache+Extenion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageCache+Extenion.swift"; sourceTree = "<group>"; };
-		FACB02AB2D54F71C00EBE87F /* DownloadMetadataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadMetadataProvider.swift; sourceTree = "<group>"; };
+		FACB02AB2D54F71C00EBE87F /* DownloadImageMetadataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadImageMetadataService.swift; sourceTree = "<group>"; };
 		FACB02B42D562C4100EBE87F /* ExpandableTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableTextView.swift; sourceTree = "<group>"; };
 		FACE409D2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAExternalSensorsPlugin.mm; sourceTree = "<group>"; };
 		FACE409E2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAExternalSensorsPlugin.h; sourceTree = "<group>"; };
@@ -10728,7 +10724,7 @@
 				FA66F1512D5CD40600A4FF9E /* ImageViewer */,
 				FA7EBDD42D5A274800121977 /* WikiImageFullSizeCell.swift */,
 				FA7EBDD22D5A16F900121977 /* ContentMetadataView.swift */,
-				FACB02AB2D54F71C00EBE87F /* DownloadMetadataProvider.swift */,
+				FACB02AB2D54F71C00EBE87F /* DownloadImageMetadataService.swift */,
 				FA92170F2D525D600074E958 /* GalleryContextMenuProvider.swift */,
 				FA92170D2D5254420074E958 /* GalleryGridDetailViewController.swift */,
 				FA52B0722D4D237D0001B693 /* CardsFilter.swift */,
@@ -13767,8 +13763,6 @@
 				FA66F1482D5CD40600A4FF9E /* ImageCarouselViewController.swift */,
 				FA66F14B2D5CD40600A4FF9E /* ImageViewerController.swift */,
 				FA66F14D2D5CD40600A4FF9E /* SimpleImageDatasource.swift */,
-				FA66F14F2D5CD40600A4FF9E /* UINavigationBar+Extensions.swift */,
-				FA66F1502D5CD40600A4FF9E /* UIView+Extensions.swift */,
 			);
 			path = ImageViewer;
 			sourceTree = "<group>";
@@ -16210,7 +16204,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "count=0\nfor file_path in $(git ls-files -om --exclude-from=.gitignore | grep \".swift$\"); do\n  # Set environment variables with file names in order to feed SwiftLint, as documented at the following link\n  # 👉 https://github.com/realm/SwiftLint#command-line\n    export SCRIPT_INPUT_FILE_$count=$file_path\n    # Count the number of modified Swift files in the index and the working tree, excluding those ignored by git\n    count=$((count + 1))\ndone\nfor file_path in $(git diff --cached --name-only | grep \".swift$\"); do\n    export SCRIPT_INPUT_FILE_$count=$file_path\n    count=$((count + 1))\ndone\n    export SCRIPT_INPUT_FILE_COUNT=$count\n    # Run SwiftLint only over the files mentioned above, if any\nif [ $SCRIPT_INPUT_FILE_COUNT -ne 0 ]; then\n  \"${PODS_ROOT}/SwiftLint/swiftlint\" lint --use-script-input-files\nfi\n\n\n";
+			shellScript = "# Check if SwiftLint is installed\nif ! command -v \"${PODS_ROOT}/SwiftLint/swiftlint\" &>/dev/null; then\n  echo \"SwiftLint is not installed. Skipping linting.\"\n  exit 0\nfi\n\ncount=0\n\n# Get modified or added .swift files using git status\nmodified_files=$(git status --porcelain | grep -E '^\\s*(M|A)\\s' | awk '{print $2}' | grep \".swift$\")\n\n# Process only modified or added files\nfor file_path in $modified_files; do\n  export SCRIPT_INPUT_FILE_$count=$file_path\n  count=$((count + 1))\ndone\n\n# Set the total number of files to lint\nexport SCRIPT_INPUT_FILE_COUNT=$count\n\n# If there are any files to lint, run SwiftLint\nif [ $SCRIPT_INPUT_FILE_COUNT -ne 0 ]; then\n  # Run linting for modified and added files\n  \"${PODS_ROOT}/SwiftLint/swiftlint\" lint --use-script-input-files\nelse\n  echo \"No modified files to lint.\"\nfi\n";
 		};
 		FAFD24032D3684370023C91F /* Link Qt Script (arm_device || arm_simulator) */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -16250,7 +16244,7 @@
 				46D38A9929C39545000AAE0C /* OARoutingDataObject.m in Sources */,
 				DA5A83E526C563A800F274C7 /* OAEditDescriptionViewController.m in Sources */,
 				DA5A853F26C563A900F274C7 /* OASuggestedDownloadsItem.m in Sources */,
-				FACB02AC2D54F71C00EBE87F /* DownloadMetadataProvider.swift in Sources */,
+				FACB02AC2D54F71C00EBE87F /* DownloadImageMetadataService.swift in Sources */,
 				DA5A834626C563A800F274C7 /* OADateTimePickerTableViewCell.m in Sources */,
 				DA5A834726C563A800F274C7 /* OASegmentedControlCell.m in Sources */,
 				DA5A825126C563A700F274C7 /* OARouteParametersViewController.mm in Sources */,
@@ -16487,8 +16481,6 @@
 				DA5A838C26C563A800F274C7 /* OAOnlineTilesSettingsViewController.mm in Sources */,
 				DA5A83A726C563A800F274C7 /* OAOpeningHoursSelectionViewController.mm in Sources */,
 				FA66F1522D5CD40600A4FF9E /* SimpleImageDatasource.swift in Sources */,
-				FA66F1562D5CD40600A4FF9E /* UIView+Extensions.swift in Sources */,
-				FA66F1572D5CD40600A4FF9E /* UINavigationBar+Extensions.swift in Sources */,
 				FA66F1592D5CD40600A4FF9E /* ImageCarouselViewController.swift in Sources */,
 				FA66F15A2D5CD40600A4FF9E /* ImageViewerController.swift in Sources */,
 				DA5A843A26C563A800F274C7 /* OAChangePositionViewController.mm in Sources */,

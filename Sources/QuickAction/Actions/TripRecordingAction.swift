@@ -28,7 +28,7 @@ final class TripRecordingAction: BaseMonitoringAction {
         if hasDataToSave() {
             plugin.pauseOrResumeRecording()
         } else {
-            plugin.askShowTripRecordingDialog()
+            plugin.showTripRecordingDialog()
         }
     }
     

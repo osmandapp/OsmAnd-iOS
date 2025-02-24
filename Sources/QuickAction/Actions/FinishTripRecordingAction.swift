@@ -25,10 +25,8 @@ final class FinishTripRecordingAction: BaseMonitoringAction {
     
     override func execute() {
         guard let plugin = getPlugin() else { return }
-        if !isRecordingTrack() {
-        } else if !hasDataToSave() {
-        } else {
-            plugin.finishRecording()
+        if isRecordingTrack() && hasDataToSave() {
+            plugin.disable()
         }
     }
 }

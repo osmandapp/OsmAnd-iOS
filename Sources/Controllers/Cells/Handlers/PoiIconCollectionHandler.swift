@@ -11,8 +11,9 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     
     var categories = [IconsCategory]()
     var selectedCatagoryKey = ""
-    private var lastUsedIcons = [String]()
+    var lastUsedIcons = [String]()
     
+    private let LAST_USED_ICONS_LIMIT = 12
     private let POI_CATEGORIES_FILE = "poi_categories.json"
     private let LAST_USED_KEY = "last_used_icons"
     private let SPECIAL_KEY = "special"
@@ -47,6 +48,9 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
                 }
             }
         }
+        addIconToLastUsed(iconName)
+        setSelectedIndexPath(IndexPath(row: 0, section: 0))
+        selectCategory(LAST_USED_KEY)
     }
     
     override func getSelectedItem() -> Any {
@@ -184,6 +188,17 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
                 hostCell?.topButton.setTitle(category.translatedName, for: .normal)
             }
         }
+    }
+    
+    func addIconToLastUsed(_ iconKey: String) {
+        if let index = lastUsedIcons.firstIndex(of: iconKey) {
+            lastUsedIcons.remove(at: index)
+        }
+        lastUsedIcons.insert(iconKey, at: 0)
+        if lastUsedIcons.count > LAST_USED_ICONS_LIMIT {
+            lastUsedIcons = Array(lastUsedIcons[0..<LAST_USED_ICONS_LIMIT])
+        }
+        OAAppSettings.sharedManager().lastUsedFavIcons.set(lastUsedIcons)
     }
     
     override func openAllIconsScreen() {

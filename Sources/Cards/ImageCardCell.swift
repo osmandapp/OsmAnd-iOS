@@ -18,7 +18,14 @@ final class ImageCardCell: UICollectionViewCell {
     
     var isBigPhoto = false
     
+    // swiftlint:disable all
     private var item: ImageCard!
+    // swiftlint:enable all
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imageView.image = nil
+    }
     
     func configure(item: ImageCard, showLogo: Bool) {
         self.item = item
@@ -41,15 +48,46 @@ final class ImageCardCell: UICollectionViewCell {
               let url = URL(string: item.imageUrl) else { return }
         
         let height = isBigPhoto ? 156 : 72
-        
         imageView.kf.indicatorType = .activity
         imageView.kf.setImage(
             with: url,
-            placeholder: nil,
+            placeholder: ImageCardPlaceholder(),
             options: [
                 .processor(DownsamplingImageProcessor(size: .init(width: height, height: height))),
                 .scaleFactor(UIScreen.main.scale),
                 .cacheOriginalImage
             ])
+    }
+}
+
+final class ImageCardPlaceholder: Placeholder {
+    private var placeholderImageView: UIImageView?
+    private var width: CGFloat
+    private var height: CGFloat
+    
+    init(width: CGFloat = 40.0, height: CGFloat = 30.0) {
+        self.width = width
+        self.height = height
+    }
+
+    func add(to imageView: KFCrossPlatformImageView) {
+        placeholderImageView?.removeFromSuperview()
+        let imageViewPlaceholder = UIImageView()
+        imageViewPlaceholder.image = .icCustomLink
+        imageViewPlaceholder.contentMode = .scaleAspectFill
+        imageViewPlaceholder.tintColor = .iconColorDefault
+        imageViewPlaceholder.translatesAutoresizingMaskIntoConstraints = false
+        imageView.addSubview(imageViewPlaceholder)
+        NSLayoutConstraint.activate([
+            imageViewPlaceholder.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
+            imageViewPlaceholder.centerYAnchor.constraint(equalTo: imageView.centerYAnchor),
+            imageViewPlaceholder.heightAnchor.constraint(equalToConstant: height),
+            imageViewPlaceholder.widthAnchor.constraint(equalToConstant: width)
+        ])
+        placeholderImageView = imageViewPlaceholder
+    }
+    
+    func remove(from imageView: KFCrossPlatformImageView) {
+        placeholderImageView?.removeFromSuperview()
     }
 }

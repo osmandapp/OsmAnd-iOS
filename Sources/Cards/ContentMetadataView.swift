@@ -73,10 +73,10 @@ final class MetadataStackView: UIStackView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.axis = .vertical
-        self.alignment = .leading
-        self.distribution = .fill
-        self.translatesAutoresizingMaskIntoConstraints = false
+        axis = .vertical
+        alignment = .leading
+        distribution = .fill
+        translatesAutoresizingMaskIntoConstraints = false
     }
     
     required init(coder: NSCoder) {

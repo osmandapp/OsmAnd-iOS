@@ -3101,6 +3101,7 @@
 		FA4C57032D48E92F00438A5C /* NoInternetCardCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4C57022D48E92F00438A5C /* NoInternetCardCell.xib */; };
 		FA4C57052D491EB900438A5C /* CardsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4C57042D491EB900438A5C /* CardsViewController.swift */; };
 		FA4D7F572B03D366003208D7 /* BLEWheelSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4D7F562B03D366003208D7 /* BLEWheelSettingsViewController.swift */; };
+		FA5060B92D6DF807007638C8 /* TouchesPassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5060B82D6DF807007638C8 /* TouchesPassView.swift */; };
 		FA52B0732D4D237D0001B693 /* CardsFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA52B0722D4D237D0001B693 /* CardsFilter.swift */; };
 		FA5A21A22A9C7DE100319695 /* CALayer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5A21A12A9C7DE100319695 /* CALayer+Extension.swift */; };
 		FA5A21A82A9E17DB00319695 /* UIPageViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */; };
@@ -3140,7 +3141,6 @@
 		FA7DCF552AF10ABF0045D136 /* BluetoothDisableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7DCF542AF10ABF0045D136 /* BluetoothDisableView.swift */; };
 		FA7DCF572AF11A7D0045D136 /* BluetoothDisableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA7DCF562AF11A7D0045D136 /* BluetoothDisableView.xib */; };
 		FA7EBDD32D5A16F900121977 /* ContentMetadataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7EBDD22D5A16F900121977 /* ContentMetadataView.swift */; };
-		FA7EBDD52D5A274800121977 /* WikiImageFullSizeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7EBDD42D5A274800121977 /* WikiImageFullSizeCell.swift */; };
 		FA83EAA62BF6538B00DBF321 /* SpeedometerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA83EAA42BF6538B00DBF321 /* SpeedometerView.xib */; };
 		FA83EAA72BF6538B00DBF321 /* SpeedometerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA83EAA52BF6538B00DBF321 /* SpeedometerView.swift */; };
 		FA8516F02D42946D00B321C6 /* GpxDataItemHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8516EF2D42946D00B321C6 /* GpxDataItemHandler.swift */; };
@@ -7645,6 +7645,7 @@
 		FA4C57022D48E92F00438A5C /* NoInternetCardCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NoInternetCardCell.xib; sourceTree = "<group>"; };
 		FA4C57042D491EB900438A5C /* CardsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsViewController.swift; sourceTree = "<group>"; };
 		FA4D7F562B03D366003208D7 /* BLEWheelSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEWheelSettingsViewController.swift; sourceTree = "<group>"; };
+		FA5060B82D6DF807007638C8 /* TouchesPassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchesPassView.swift; sourceTree = "<group>"; };
 		FA52B0722D4D237D0001B693 /* CardsFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsFilter.swift; sourceTree = "<group>"; };
 		FA5A21A12A9C7DE100319695 /* CALayer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+Extension.swift"; sourceTree = "<group>"; };
 		FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIPageViewController+Extension.swift"; sourceTree = "<group>"; };
@@ -7687,7 +7688,6 @@
 		FA7DCF542AF10ABF0045D136 /* BluetoothDisableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothDisableView.swift; sourceTree = "<group>"; };
 		FA7DCF562AF11A7D0045D136 /* BluetoothDisableView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BluetoothDisableView.xib; sourceTree = "<group>"; };
 		FA7EBDD22D5A16F900121977 /* ContentMetadataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentMetadataView.swift; sourceTree = "<group>"; };
-		FA7EBDD42D5A274800121977 /* WikiImageFullSizeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikiImageFullSizeCell.swift; sourceTree = "<group>"; };
 		FA83EAA42BF6538B00DBF321 /* SpeedometerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SpeedometerView.xib; sourceTree = "<group>"; };
 		FA83EAA52BF6538B00DBF321 /* SpeedometerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeedometerView.swift; sourceTree = "<group>"; };
 		FA8516EF2D42946D00B321C6 /* GpxDataItemHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GpxDataItemHandler.swift; sourceTree = "<group>"; };
@@ -10725,7 +10725,6 @@
 			isa = PBXGroup;
 			children = (
 				FA66F1512D5CD40600A4FF9E /* ImageViewer */,
-				FA7EBDD42D5A274800121977 /* WikiImageFullSizeCell.swift */,
 				FA7EBDD22D5A16F900121977 /* ContentMetadataView.swift */,
 				FACB02AB2D54F71C00EBE87F /* DownloadImageMetadataService.swift */,
 				FA92170F2D525D600074E958 /* GalleryContextMenuProvider.swift */,
@@ -13612,6 +13611,7 @@
 		FA069C522B9AF6090007E4DE /* Controls */ = {
 			isa = PBXGroup;
 			children = (
+				FA5060B82D6DF807007638C8 /* TouchesPassView.swift */,
 				FACB02B42D562C4100EBE87F /* ExpandableTextView.swift */,
 				FA069C532B9AF61B0007E4DE /* OutlineLabel.swift */,
 				FA069C682B9F13160007E4DE /* ShadowPathView.swift */,
@@ -16876,7 +16876,6 @@
 				46FB65BA2A8BBC2000A21850 /* CoordinatesMapCenterWidget.swift in Sources */,
 				32BC95732CC021CE00FEEAB8 /* UIFont+Extension.swift in Sources */,
 				DA5A845526C563A900F274C7 /* OAOsmEditsLayer.mm in Sources */,
-				FA7EBDD52D5A274800121977 /* WikiImageFullSizeCell.swift in Sources */,
 				DA5A815526C563A700F274C7 /* OACarPlayActiveViewController.m in Sources */,
 				FA359EED2ADFC6910001C11D /* WheelDeviceSettings.swift in Sources */,
 				FA00B8802B4EB66800582CD1 /* WidgetSizeStyle.swift in Sources */,
@@ -16971,6 +16970,7 @@
 				C573544F2AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.mm in Sources */,
 				DA5A84FB26C563A900F274C7 /* OADownloadProgressView.m in Sources */,
 				3216E9532BA097BD0087D0EF /* StringExtensions.swift in Sources */,
+				FA5060B92D6DF807007638C8 /* TouchesPassView.swift in Sources */,
 				DA5A823426C563A700F274C7 /* OAImportCompleteViewController.mm in Sources */,
 				327DF98A2C2494C800B5069C /* RouteParameterHazmatUsa.swift in Sources */,
 				FA4D7F572B03D366003208D7 /* BLEWheelSettingsViewController.swift in Sources */,

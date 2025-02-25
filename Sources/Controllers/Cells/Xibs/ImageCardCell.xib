@@ -29,7 +29,7 @@
                     </imageView>
                 </subviews>
             </view>
-            <color key="backgroundColor" name="groupBg"/>
+            <color key="backgroundColor" name="viewBg"/>
             <constraints>
                 <constraint firstItem="OKS-FL-Rwe" firstAttribute="top" secondItem="j5u-2X-hOB" secondAttribute="top" constant="10" id="2u4-9c-hs2"/>
                 <constraint firstItem="pHC-aF-H9Q" firstAttribute="top" secondItem="j5u-2X-hOB" secondAttribute="top" id="EhV-6s-lj4"/>
@@ -48,8 +48,8 @@
     </objects>
     <resources>
         <image name="ic_custom_mapillary_color_logo.png" width="30" height="30"/>
-        <namedColor name="groupBg">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <namedColor name="viewBg">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

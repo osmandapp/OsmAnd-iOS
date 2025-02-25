@@ -70,12 +70,6 @@ class ImageCard: AbstractCard {
         }
         return imageHiresUrl + "?width=" + Self.GALLERY_FULL_SIZE_WIDTH
     }
-
-    override func onCardPressed(_ mapPanel: OAMapPanelViewController) {
-        debugPrint("open gallery")
-//        guard let viewController = OAWebViewController(urlAndTitle: urlWithCommonAttributions, title: title) else { return }
-//        mapPanel.navigationController?.pushViewController(viewController, animated: true)
-    }
     
     // Static method to get the cell Nib identifier
     override class func getCellNibId() -> String {

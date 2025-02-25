@@ -80,12 +80,19 @@ final class ImageViewerController: UIViewController {
         case .card(let item):
             guard let fullSizeUrlString = item.getGalleryFullSizeUrl(),
                   let url = URL(string: fullSizeUrlString) else {
+                debugPrint("Invalid full size URL string")
                 return
             }
+            guard let lowResolutionURL = URL(string: item.imageUrl) else {
+                debugPrint("Invalid low resolution image URL")
+                return
+            }
+
             imageView.kf.indicatorType = .activity
             imageView.kf.setImage(
                 with: url,
                 options: [
+                    .lowDataMode(.network(lowResolutionURL)),
                     .targetCache(.galleryHighResolutionDiskCache),
                     .requestModifier(RequestModifier())
                 ]) { [weak self] result in

@@ -12,7 +12,7 @@ final class ImageCarouselViewController: UIPageViewController {
     
     private let imageDatasource: ImageDataSource?
     private let gradientLayer = CAGradientLayer()
-    private let metadataContainerView = UIView()
+    private let metadataContainerView = TouchesPassView()
     
     private var initialIndex = 0
     private var currentIndex = 0
@@ -336,7 +336,6 @@ extension ImageCarouselViewController: UIPageViewControllerDelegate {
         if completed,
            let vc = viewControllers?.first as? ImageViewerController {
             currentIndex = vc.index
-            debugPrint("Current page: \(currentIndex)")
             updatePage(index: currentIndex)
         }
     }
@@ -361,11 +360,11 @@ extension ImageCarouselViewController {
         button.setTitleColor(color, for: .normal)
         button.setTitleColor(color.withAlphaComponent(0.3), for: .highlighted)
         
-        if let title = title {
+        if let title {
             button.setTitle(title, for: .normal)
         }
         
-        if let icon = icon {
+        if let icon {
             button.setImage(icon, for: .normal)
         }
         

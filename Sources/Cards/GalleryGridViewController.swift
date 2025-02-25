@@ -190,6 +190,7 @@ final private class GalleryCell: UICollectionViewCell {
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.backgroundColor = .viewBg
         
         contentView.addSubview(imageView)
         
@@ -205,6 +206,11 @@ final private class GalleryCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imageView.image = nil
+    }
+    
     func configure(with card: AbstractCard) {
         guard let item = card as? ImageCard else { return }
         guard !item.imageUrl.isEmpty,
@@ -213,6 +219,7 @@ final private class GalleryCell: UICollectionViewCell {
         imageView.kf.indicatorType = .activity
         imageView.kf.setImage(
             with: url,
+            placeholder: ImageCardPlaceholder(),
             options: [
                 .processor(DownsamplingImageProcessor(size: imageView.bounds.size)),
                 .scaleFactor(UIScreen.main.scale),

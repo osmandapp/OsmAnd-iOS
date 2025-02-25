@@ -63,7 +63,6 @@
     return nil;
 }
 
-
 - (void) processWholeHTML:(NSString *)html downloadMode:(OADownloadMode *)downloadMode onlyNow:(BOOL)onlyNow onComplete:(void (^)(NSString *htmlWithImages))onComplete
 {
     NSArray<NSString *> *imageLinks = [self extractImagesLinksFromHtml:html];

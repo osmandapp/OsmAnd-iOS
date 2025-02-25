@@ -10,7 +10,7 @@ import Foundation
 
 @objc(OAWikiAlgorithms)
 @objcMembers
-class WikiAlgorithms : NSObject {
+class WikiAlgorithms: NSObject {
     static let wikipedia = "wikipedia"
     static let wikipediaDomain = ".wikipedia.org/"
     static let wikiLink = wikipediaDomain + "wiki/"
@@ -50,8 +50,12 @@ class WikiAlgorithms : NSObject {
             if value.contains(":") {
                 // If value contains a sign ":" it means that "lang_code" is also present in value.
                 let valueParts: [Substring] = value.split(separator: ":")
-                langCode = String(valueParts[0])
-                title = String(valueParts[1])
+                if !valueParts.isEmpty {
+                    langCode = String(valueParts[0])
+                    if valueParts.count > 1 {
+                        title = String(valueParts[1])
+                    }
+                }
             } else {
                 title = value
             }

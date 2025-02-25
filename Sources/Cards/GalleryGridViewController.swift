@@ -138,10 +138,10 @@ extension GalleryGridViewController: UICollectionViewDelegate {
     
     private func contextMenuInteraction(with card: AbstractCard) -> UIContextMenuConfiguration? {
         let actionProvider: UIContextMenuActionProvider = { [weak self] _ in
+            guard let self else { return nil }
             var firstSectionItems = [UIAction]()
             if card is WikiImageCard {
                 let detailsAction = UIAction(title: localizedString("shared_string_details"), image: UIImage.icCustomInfoOutlined) { _ in
-                    guard let self else { return }
                     GalleryContextMenuProvider.openDetailsController(card: card, rootController: self)
                 }
                 detailsAction.accessibilityLabel = localizedString("shared_string_details")
@@ -150,9 +150,11 @@ extension GalleryGridViewController: UICollectionViewDelegate {
   
             let openInBrowserAction = UIAction(title: localizedString("open_in_browser"), image: UIImage.icCustomExternalLink) { _ in
                 if let item = card as? WikiImageCard {
-                    GalleryContextMenuProvider.openURLIfValid(urlString: item.urlWithCommonAttributions)
-                    
-                //item.openURL(OARootViewController.instance().mapPanel)
+                    guard let url = URL(string: item.urlWithCommonAttributions) else { return }
+                    let viewController = OAWikiWebViewController(url: url, title: self.titleString)
+                    let navigationController = UINavigationController(rootViewController: viewController)
+                    navigationController.modalPresentationStyle = .fullScreen
+                    self.present(navigationController, animated: true)
                 } else {
                     guard let item = card as? ImageCard else { return }
                     GalleryContextMenuProvider.openURLIfValid(urlString: item.imageUrl)
@@ -164,7 +166,6 @@ extension GalleryGridViewController: UICollectionViewDelegate {
             
             let firstSection = UIMenu(title: "", options: .displayInline, children: firstSectionItems)
             let downloadAction = UIAction(title: localizedString("shared_string_download"), image: UIImage.icCustomDownload) { _ in
-                guard let self else { return }
                 guard let item = card as? ImageCard,
                       !item.imageUrl.isEmpty else { return }
                 GalleryContextMenuProvider.downloadImage(urlString: item.imageUrl, view: self.view)

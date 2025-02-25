@@ -17,9 +17,10 @@ protocol CollapsableCardViewDelegate: AnyObject {
 
 @objcMembers
 final class CollapsableCardsView: OACollapsableView {
-    weak var delegate: CollapsableCardViewDelegate?
     
     var title: String = ""
+    
+    weak var delegate: CollapsableCardViewDelegate?
     
     var contentType: CollapsableCardsType = .onlinePhoto {
         didSet {

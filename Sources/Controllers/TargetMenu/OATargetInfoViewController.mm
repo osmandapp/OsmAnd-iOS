@@ -728,9 +728,6 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
 {
     if (_otherCardsReady && _wikiCardsReady)
     {
-//        if (cards.count == 0)
-//            [cards addObject:[[NoImagesCard alloc] init]];
-//        else
         if (cards.count > 1)
             [self reorderCards:cards];
         // After forming the list of cards, fill the collection

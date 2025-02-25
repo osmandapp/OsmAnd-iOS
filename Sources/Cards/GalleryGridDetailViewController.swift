@@ -19,14 +19,6 @@ final class GalleryGridDetailViewController: OABaseNavbarViewController {
         downloadMetadataIfNeeded()
     }
     
-    private func downloadMetadataIfNeeded() {
-        Task {
-            if let wikiImageCard = card as? WikiImageCard {
-                await DownloadImageMetadataService.shared.downloadMetadata(for: [wikiImageCard])
-            }
-        }
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         NotificationCenter.default.addObserver(self,
@@ -57,7 +49,7 @@ final class GalleryGridDetailViewController: OABaseNavbarViewController {
         true
     }
     
-    // MARK: Table data
+    // MARK: - Table data
     override func generateData() {
         tableData.clearAllData()
         let section = tableData.createNewSection()
@@ -143,7 +135,8 @@ final class GalleryGridDetailViewController: OABaseNavbarViewController {
     override func onRowSelected(_ indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
         if let link = item.obj(forKey: "sourceLinkKey") as? String {
-            guard let viewController = OAWebViewController(urlAndTitle: link, title: titleString) else { return }
+            guard let url = URL(string: link) else { return }
+            let viewController = OAWikiWebViewController(url: url, title: titleString)
             viewController.modalPresentationStyle = .fullScreen
             if presentingViewController != nil {
                 let navigationController = UINavigationController(rootViewController: viewController)
@@ -151,6 +144,14 @@ final class GalleryGridDetailViewController: OABaseNavbarViewController {
                 present(navigationController, animated: true)
             } else {
                 OARootViewController.instance()?.mapPanel.navigationController?.pushViewController(viewController, animated: true)
+            }
+        }
+    }
+    
+    private func downloadMetadataIfNeeded() {
+        Task {
+            if let wikiImageCard = card as? WikiImageCard {
+                await DownloadImageMetadataService.shared.downloadMetadata(for: [wikiImageCard])
             }
         }
     }

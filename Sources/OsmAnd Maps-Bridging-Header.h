@@ -72,6 +72,7 @@
 #import "OAPOIFiltersHelper.h"
 #import "OARendererRegistry.h"
 #import "OAMapObject.h"
+#import "OAWikiWebViewController.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"

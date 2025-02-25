@@ -129,11 +129,6 @@ final class WikiImageCard: ImageCard {
         self.url = self.imageUrl
         self.imageHiresUrl = wikiImage.imageHiResUrl
     }
-    
-    func openURL(_ mapPanel: OAMapPanelViewController) {
-        guard let viewController = OAWebViewController(urlAndTitle: urlWithCommonAttributions, title: title) else { return }
-        mapPanel.navigationController?.pushViewController(viewController, animated: true)
-    }
 }
 
 struct Metadata {

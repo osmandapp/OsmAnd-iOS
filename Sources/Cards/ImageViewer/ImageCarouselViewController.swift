@@ -5,21 +5,27 @@ protocol ImageDataSource: AnyObject {
     func imageItem(at index: Int) -> ImageItem
 }
 
-final class ImageCarouselViewController: UIPageViewController {
+final class ImageCarouselViewController: UIPageViewController {    
     // swiftlint:disable all
     private(set) var contentMetadataView: ContentMetadataView!
     // swiftlint:enable all
     
     private let imageDatasource: ImageDataSource?
-    
-    private var initialIndex = 0
-    private var currentIndex = 0
     private let gradientLayer = CAGradientLayer()
     private let metadataContainerView = UIView()
     
+    private var initialIndex = 0
+    private var currentIndex = 0
+    
     private lazy var downloadImageMetadataService = DownloadImageMetadataService.shared
     
-    // MARK: - init
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        traitCollection.userInterfaceStyle == .dark
+        ? .lightContent
+        : .darkContent
+    }
+    
+    // MARK: - Init
     init(imageDataSource: ImageDataSource?,
          initialIndex: Int = 0) {
         self.initialIndex = initialIndex
@@ -37,6 +43,7 @@ final class ImageCarouselViewController: UIPageViewController {
     }
     
     // MARK: - Life Cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
@@ -77,12 +84,6 @@ final class ImageCarouselViewController: UIPageViewController {
     
     deinit {
         ImageCache.galleryHighResolutionDiskCache.clearMemoryCache()
-    }
-    
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        traitCollection.userInterfaceStyle == .dark
-        ? .lightContent
-        : .darkContent
     }
     
     // MARK: - Private func
@@ -141,8 +142,9 @@ final class ImageCarouselViewController: UIPageViewController {
         
         let openInBrowserAction = UIAction(title: localizedString("open_in_browser"), image: UIImage.icCustomExternalLink) { [weak self] _ in
             guard let self, let card = getCardForIndex(currentIndex) else { return }
+            guard let url = URL(string: card.urlWithCommonAttributions) else { return }
             
-            guard let viewController = OAWebViewController(urlAndTitle: card.urlWithCommonAttributions, title: card.title) else { return }
+            let viewController = OAWikiWebViewController(url: url, title: navigationItem.title ?? "")
             let navigationController = UINavigationController(rootViewController: viewController)
             navigationController.modalPresentationStyle = .fullScreen
             

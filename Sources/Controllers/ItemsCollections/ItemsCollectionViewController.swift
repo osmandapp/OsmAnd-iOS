@@ -30,6 +30,10 @@ import UIKit
     func selectIconName(_ iconName: String)
 }
 
+@objc protocol PoiIconsCollectionViewControllerDelegate: AnyObject {
+    func scrollToCategoty(_ categoryName: String)
+}
+
 @objcMembers
 final class ItemsCollectionViewController: OABaseNavbarViewController {
     
@@ -181,6 +185,13 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                                             action: #selector(onRightNavbarButtonPressed))
             addButton.accessibilityLabel = localizedString("shared_string_add_color")
             return [addButton]
+        } else if collectionType == .poiIconCategories {
+            if let poiIconsDelegate = iconsDelegate as? PoiIconCollectionHandler,
+                let menu = poiIconsDelegate.buildTopButtonContextMenu() {
+                if let categoriesButton = createRightNavbarButton(nil, iconName: "ic_navbar_list", action: nil, menu: menu) {
+                    return [categoriesButton]
+                }
+            }
         }
         return []
     }
@@ -577,6 +588,7 @@ extension ItemsCollectionViewController: OACollectionCellDelegate {
                     poiIconsDelegate.setIconName(iconName)
                     poiIconsDelegate.selectIconName(iconName)
                 }
+                poiIconsDelegate.allIconsVCDelegate = nil
             }
             dismiss(animated: true)
         } else {
@@ -688,12 +700,19 @@ extension ItemsCollectionViewController: UIColorPickerViewControllerDelegate {
     }
 }
 
-// MARK: - OAColorPickerViewControllerDelegate
-
 extension ItemsCollectionViewController: OAColorPickerViewControllerDelegate {
     
     func onColorPickerDisappear(_ colorPicker: OAColorPickerViewController) {
         isStartedNewColorAdding = false
         editColorIndexPath = nil
+    }
+}
+
+extension ItemsCollectionViewController: PoiIconsCollectionViewControllerDelegate {
+    
+    func scrollToCategoty(_ categoryName: String) {
+        if let categoryIndex = iconCategoties.firstIndex(where: { $0.key == categoryName }) {
+            tableView.scrollToRow(at: IndexPath(row: 0, section: categoryIndex), at: .top, animated: true)
+        }
     }
 }

@@ -10,8 +10,10 @@
 final class PoiIconCollectionHandler: IconCollectionHandler {
     
     var categories = [IconsCategory]()
+    var categoriesByName = [String: IconsCategory]()
     var selectedCatagoryKey = ""
     var lastUsedIcons = [String]()
+    weak var allIconsVCDelegate: PoiIconsCollectionViewControllerDelegate?
     
     private let LAST_USED_ICONS_LIMIT = 12
     private let POI_CATEGORIES_FILE = "poi_categories.json"
@@ -34,6 +36,10 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
         initActivitiesCategory()
         initPoiCategories()
         sortCategories()
+        
+        for category in categories {
+            categoriesByName[category.key] = category
+        }
     }
     
     func setIconName(_ iconName: String) {
@@ -54,12 +60,9 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     }
     
     override func getSelectedItem() -> Any {
-        for category in categories {
-            if category.key == selectedCatagoryKey {
-                if let indexPath = getSelectedIndexPath() {
-                    return category.iconKeys[indexPath.row]
-                }
-            }
+        if let category = categoriesByName[selectedCatagoryKey],
+           let indexPath = getSelectedIndexPath() {
+           return category.iconKeys[indexPath.row]
         }
         return ""
     }
@@ -71,13 +74,11 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     func selectCategory(_ categoryKey: String) {
         selectedCatagoryKey = categoryKey
         
-        for category in categories {
-            if category.key == categoryKey {
-                generateData([category.iconKeys])
-                hostCell?.topButton.setTitle(category.translatedName, for: .normal)
-                getCollectionView()?.reloadData()
-                return
-            }
+        if let category = categoriesByName[categoryKey] {
+            generateData([category.iconKeys])
+            hostCell?.topButton.setTitle(category.translatedName, for: .normal)
+            getCollectionView()?.reloadData()
+            return
         }
     }
     
@@ -175,18 +176,29 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
                 let separator = UIMenu(title: "", image: nil, identifier: nil, options: .displayInline, children: [])
                 menuElements.append(separator)
             }
-            menuElements.append(UIAction(title: category.translatedName, image: nil, identifier: nil, handler: { _ in self.selectCategory(category.key) }))
+            menuElements.append(UIAction(title: category.translatedName, image: nil, identifier: nil, handler: { _ in
+                self.onMenuItemSelected(name:category.key)
+            }))
             previosCategory = category
         }
   
         return UIMenu(title: "", children: menuElements)
     }
     
-    func updateTopButtonName() {
-        for category in categories {
-            if category.key == selectedCatagoryKey {
-                hostCell?.topButton.setTitle(category.translatedName, for: .normal)
+    func onMenuItemSelected(name: String) {
+        if let allIconsVCDelegate {
+            allIconsVCDelegate.scrollToCategoty(name)
+        } else {
+            if let category = categoriesByName[name] {
+                selectCategory(name)
+                selectIconName(category.iconKeys[0])
             }
+        }
+    }
+    
+    func updateTopButtonName() {
+        if let category = categoriesByName[selectedCatagoryKey] {
+            hostCell?.topButton.setTitle(category.translatedName, for: .normal)
         }
     }
     
@@ -206,6 +218,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
         let vc = ItemsCollectionViewController(collectionType: .poiIconCategories, items: categories, selectedItem: getSelectedItem())
         vc.customTitle = customTitle
         vc.iconsDelegate = self
+        allIconsVCDelegate = vc
         if let selectedIconColor {
             vc.selectedIconColor = selectedIconColor
         }

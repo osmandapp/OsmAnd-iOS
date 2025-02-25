@@ -80,7 +80,7 @@
 
 + (BOOL) isTopVisible:(EOAObjectType)objecType
 {
-    return objecType == POI_TYPE || objecType == FAVORITE || objecType == FAVORITE_GROUP || objecType == WPT || objecType == LOCATION || objecType == PARTIAL_LOCATION;
+    return objecType == POI_TYPE || objecType == FAVORITE || objecType == FAVORITE_GROUP || objecType == WPT || objecType == GPX_TRACK || objecType == LOCATION || objecType == PARTIAL_LOCATION;
 }
 
 + (NSString *) toString:(EOAObjectType)objecType

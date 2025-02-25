@@ -665,7 +665,7 @@
     if (location)
     {
         [OASavingTrackHelper.sharedInstance updateLocation:location heading:_lastHeading];
-        [OAAverageSpeedComputer.sharedInstance updateLocation:location];
+        [AverageSpeedComputerService.shared updateLocation:location];
         [[OAAverageGlideComputer shared] updateLocation:location];
         //OsmandPlugin.updateLocationPlugins(location);
     }

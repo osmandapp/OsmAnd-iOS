@@ -23,6 +23,8 @@
 @property (nonatomic) OASGpxTrackAnalysis *analysis;
 @property (nonatomic) OASTrkSegment *segment;
 
+@property (nonatomic, readonly) BOOL dismissed;
+
 - (instancetype) initWithGpxData:(NSDictionary *)data;
 
 + (NSAttributedString *) getFormattedElevationString:(OASGpxTrackAnalysis *)analysis;

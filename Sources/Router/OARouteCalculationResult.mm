@@ -26,7 +26,7 @@
 
 #define distanceClosestToIntermediate 3000.0
 #define distanceThresholdToIntermediate 25
-#define distanceThresholdToIntroduceFirstAndLastPoints 50
+#define distanceThresholdToIntroduceFirstAndLastPoints 15
 
 @implementation OANextDirectionInfo
 
@@ -267,6 +267,31 @@
 - (int) getNextIntermediate
 {
     return _nextIntermediate;
+}
+
+- (int)getCurrentRouteForLocation:(CLLocation *)location
+{
+    int currentRoute = _currentRoute;
+    if (currentRoute == 0)
+        return 0;
+    
+    CLLocation *previousRouteLocation = _locations[currentRoute - 1];
+    CLLocation *currentRouteLocation = _locations[currentRoute];
+    
+    while (currentRoute > 1)
+    {
+        double projCoeff = [OAMapUtils getProjectionCoeff:location
+                                             fromLocation:previousRouteLocation
+                                               toLocation:currentRouteLocation];
+        if (projCoeff != 0)
+            break;
+        
+        currentRoute--;
+        previousRouteLocation = _locations[currentRoute - 1];
+        currentRouteLocation = _locations[currentRoute];
+    }
+    
+    return currentRoute;
 }
 
 - (CLLocation *) getLocationFromRouteDirection:(OARouteDirectionInfo *)i
@@ -623,7 +648,7 @@
 
 - (NSArray<CLLocation *> *) getImmutableAllLocations
 {
-    return [NSArray arrayWithArray:_locations];
+    return _locations;
 }
 
 - (NSArray<OASimulatedLocation *> *)getImmutableSimulatedLocations
@@ -711,7 +736,7 @@
  * PREPARATION
  * Check points for duplicates (it is very bad for routing) - cloudmade could return it
  */
-+ (void) checkForDuplicatePoints:(NSMutableArray<CLLocation *> *)locations directions:(NSMutableArray<OARouteDirectionInfo *> *)directions
+- (void) checkForDuplicatePoints:(NSMutableArray<CLLocation *> *)locations directions:(NSMutableArray<OARouteDirectionInfo *> *)directions
 {
     for (int i = 0; i < (int) locations.count - 1;)
     {
@@ -1011,12 +1036,17 @@
  * If beginning is too far from start point, then introduce GO Ahead
  * @param end
  */
-+ (void) introduceFirstPointAndLastPoint:(NSMutableArray<CLLocation *> *)locations directions:(NSMutableArray<OARouteDirectionInfo *> *)directions segs:(std::vector<std::shared_ptr<RouteSegmentResult>>&)segs start:(CLLocation *)start end:(CLLocation *)end
+- (void) introduceFirstPointAndLastPoint:(NSMutableArray<CLLocation *> *)locations directions:(NSMutableArray<OARouteDirectionInfo *> *)directions segs:(std::vector<std::shared_ptr<RouteSegmentResult>>&)segs start:(CLLocation *)start end:(CLLocation *)end
 {
-    BOOL firstPointIntroduced = [self.class introduceFirstPoint:locations directions:directions segments:segs start:start];
-    BOOL lastPointIntroduced = [self.class introduceLastPoint:locations directions:directions segments:segs end:end];
-    if (firstPointIntroduced || lastPointIntroduced)
-        [self.class checkForDuplicatePoints:locations directions:directions];
+    _firstIntroducedPoint = [self introduceFirstPoint:locations directions:directions segments:segs start:start];
+    _lastIntroducedPoint = [self introduceLastPoint:locations directions:directions segments:segs end:end];
+    if (_firstIntroducedPoint || _lastIntroducedPoint)
+        [self checkForDuplicatePoints:locations directions:directions];
+    
+    if (_firstIntroducedPoint)
+        _firstIntroducedPoint = locations[0];
+    if (_lastIntroducedPoint)
+        _lastIntroducedPoint = locations[locations.count - 1];
     
     OARouteDirectionInfo *lastDirInf = directions.count > 0 ? directions[directions.count - 1] : nil;
     if ((!lastDirInf || lastDirInf.routePointOffset < locations.count - 1) && locations.count - 1 > 0)
@@ -1058,7 +1088,7 @@
     }
 }
 
-+ (BOOL) introduceFirstPoint:(NSMutableArray<CLLocation *> *)locations directions:(NSMutableArray<OARouteDirectionInfo *> *)directions segments:(std::vector<std::shared_ptr<RouteSegmentResult>>&)segs start:(CLLocation *)start
+- (CLLocation *) introduceFirstPoint:(NSMutableArray<CLLocation *> *)locations directions:(NSMutableArray<OARouteDirectionInfo *> *)directions segments:(std::vector<std::shared_ptr<RouteSegmentResult>>&)segs start:(CLLocation *)start
 {
     if (locations.count > 0 && [locations[0] distanceFromLocation:start] > distanceThresholdToIntroduceFirstAndLastPoints)
     {
@@ -1084,12 +1114,12 @@
             // info.setDescriptionRoute(ctx.getString( R.string.route_head));//; //$NON-NLS-1$
             [directions insertObject:info atIndex:0];
         }
-        return YES;
+        return start;
     }
-    return NO;
+    return nil;
 }
 
-+ (double) getFirstValidAltitude:(NSMutableArray<CLLocation *> *)locations
+- (double) getFirstValidAltitude:(NSMutableArray<CLLocation *> *)locations
 {
     for (CLLocation *location in locations)
     {
@@ -1099,7 +1129,7 @@
     return NAN;
 }
 
-+ (BOOL) introduceLastPoint:(NSMutableArray<CLLocation *> *)locations directions:(NSMutableArray<OARouteDirectionInfo *> *)directions segments:(std::vector<std::shared_ptr<RouteSegmentResult>>&)segs end:(CLLocation *)end
+- (CLLocation *) introduceLastPoint:(NSMutableArray<CLLocation *> *)locations directions:(NSMutableArray<OARouteDirectionInfo *> *)directions segments:(std::vector<std::shared_ptr<RouteSegmentResult>>&)segs end:(CLLocation *)end
 {
     if (locations.count > 0)
     {
@@ -1142,10 +1172,10 @@
             {
                 segs.push_back(segs[segs.size() - 1]);
             }
-            return YES;
+            return endLocation;
         }
     }
-    return NO;
+    return nil;
 }
 
 /**
@@ -1546,7 +1576,7 @@
         NSMutableArray<CLLocation *> *locations = [NSMutableArray arrayWithArray:list];
         NSMutableArray<OARouteDirectionInfo *> *localDirections = [NSMutableArray arrayWithArray:directions];
         if (locations.count > 0)
-            [self.class checkForDuplicatePoints:locations directions:localDirections];
+            [self checkForDuplicatePoints:locations directions:localDirections];
         
         if (waypoints)
         {
@@ -1558,7 +1588,7 @@
             [self.class addMissingTurnsToRoute:locations originalDirections:localDirections mode:params.mode leftSide:params.leftSide useLocationTime:(params.gpxRoute && params.gpxRoute.calculatedRouteTimeSpeed)];
             // if there is no closest points to start - add it
             std::vector<std::shared_ptr<RouteSegmentResult>> segs;
-            [self.class introduceFirstPointAndLastPoint:locations directions:localDirections segs:segs start:params.start end:params.end];
+            [self introduceFirstPointAndLastPoint:locations directions:localDirections segs:segs start:params.start end:params.end];
         }
         _appMode = params.mode;
         _locations = locations;
@@ -1597,7 +1627,7 @@
         NSMutableArray<OAAlarmInfo *> *alarms = [NSMutableArray array];
         std::vector<std::shared_ptr<RouteSegmentResult>> segments = [self.class convertVectorResult:computeDirections locations:locations list:list alarms:alarms];
         if (calculateFirstAndLastPoint)
-            [self.class introduceFirstPointAndLastPoint:locations directions:computeDirections segs:segments start:start end:end];
+            [self introduceFirstPointAndLastPoint:locations directions:computeDirections segs:segments start:start end:end];
         
         _locations = locations;
         _segments = segments;

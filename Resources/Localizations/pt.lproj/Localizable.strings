@@ -3005,7 +3005,7 @@
 "map_widget_ant_bicycle_cadence_desc" = "Mostra a velocidade a que o utilizador está a pedalar";
 "saved_articles" = "Artigos favoritos";
 "popular_destinations" = "Destinos populares";
-"ant_plus_pair_bluetooth_prompt" = "Pode emparelhar sensores Bluetooth LE (baixa energia) e ANT+ com o OsmAnd.";
+"ant_plus_pair_bluetooth_prompt" = "Pode emparelhar sensores Bluetooth LE e ANT+ com o OsmAnd.";
 "help_article_widgets_markers_name" = "Widgets de marcadores";
 "external_sensors_not_found" = "Sensores não encontrados";
 "help_article_purchases_giveaway_name" = "Oferta";
@@ -3225,7 +3225,7 @@
 "recorded_track" = "Trilho gravado";
 "shared_string_error" = "Erro";
 "verify_account_deletion_descr" = "Temos de verificar a sua conta antes de a eliminar. \n \nPor favor, introduza o endereço de e-mail com que se registou. Ser-lhe-á enviada uma palavra-passe única para o passo seguinte.";
-"osmand_cloud_deletion_secondary_devices_warning" = "Os dispositivos secundários serão desconectados do OsmAnd Cloud e perderão o acesso às funcionalidades pagas.";
+"osmand_cloud_deletion_secondary_devices_warning" = "Será terminada a sessão do OsmAnd Cloud nos dispositivos secundários nos quais perderá o acesso às funcionalidades pagas.";
 "osmand_cloud_deleting_account_descr" = "Em poucos instantes, todos os seus dados e conta serão eliminados do OsmAnd Cloud. \n \nTodos os dados no dispositivo permanecerão intactos.";
 
 
@@ -3602,3 +3602,20 @@
 "shared_string_menu" = "Menu";
 "km_h" = "km/h";
 "reddit" = "Reddit";
+"auto_25_chars_route_kl" = "Mantenha-se à esquerda";
+"auto_25_chars_route_kr" = "Mantenha-se à direita";
+"auto_25_chars_route_tr" = "Vire à direita";
+"auto_25_chars_route_tshr" = "Vire acentuadamente à direita";
+"auto_25_chars_route_tslr" = "Vire ligeiramente à direita";
+"auto_25_chars_route_tl" = "Vire à esquerda";
+"auto_25_chars_route_tshl" = "Vire acentuadamente à esquerda";
+"auto_25_chars_route_tsll" = "Vire ligeiramente à esquerda";
+"auto_25_chars_route_tu" = "Faça inversão de marcha";
+"auto_25_chars_route_tr_kl" = "Vire à direita e mantenha-se à esquerda";
+"auto_25_chars_route_tr_kr" = "Vire à direita e mantenha-se à direita";
+"auto_25_chars_route_tu_kl" = "Faça inversão de marcha e mantenha-se à esquerda";
+"auto_25_chars_route_tu_kr" = "Faça inversão de marcha e mantenha-se à direita";
+"auto_25_chars_route_roundabout_kl" = "Saia na saída %d e mantenha-se à esquerda";
+"auto_25_chars_route_roundabout_kr" = "Saia na saída %d e mantenha-se à direita";
+"auto_25_chars_route_tl_kl" = "Vire à esquerda e mantenha-se à esquerda";
+"auto_25_chars_route_tl_kr" = "Vire à esquerda e mantenha-se à direita";

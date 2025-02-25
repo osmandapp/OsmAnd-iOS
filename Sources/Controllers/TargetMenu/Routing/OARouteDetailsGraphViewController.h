@@ -14,7 +14,7 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 - (instancetype)initWithGpxData:(NSDictionary *)data
-          trackMenuControlState:(OATargetMenuViewControllerState *)trackMenuControlState;
+          trackMenuControlState:(OATrackMenuViewControllerState *)trackMenuControlState;
 
 - (void)onTypesSelected:(NSArray<NSNumber *> *)types;
 

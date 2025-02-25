@@ -31,7 +31,10 @@
 
 @interface UIColor (nsColorNative)
 
+- (OsmAnd::FColorRGB) toFColorRGB;
 - (OsmAnd::FColorARGB) toFColorARGB;
+- (OsmAnd::ColorRGB) toColorRGB;
+- (OsmAnd::ColorARGB) toColorARGB;
 
 @end
 

@@ -58,14 +58,17 @@
     }
     else
     {
+        UIImage *image;
         if ([_targetPoint.targetObj isKindOfClass:OAFavoriteItem.class])
-            _iconView.image = [((OAFavoriteItem *)_targetPoint.targetObj) getCompositeIcon];
+            image = [((OAFavoriteItem *)_targetPoint.targetObj) getCompositeIcon];
         else if ([_targetPoint.targetObj isKindOfClass:OATransportStop.class])
-            _iconView.image = ((OATransportStop *)_targetPoint.targetObj).poi.icon;
+            image = ((OATransportStop *)_targetPoint.targetObj).poi.icon;
         else
-            _iconView.image = _targetPoint.icon;
+            image = _targetPoint.icon;
         
-        if ([_targetPoint.targetObj isKindOfClass:OARenderedObject.class])
+        _iconView.image = image;
+        
+        if ([_targetPoint.targetObj isKindOfClass:OAMapObject.class])
             _iconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
         
         NSString *t;
@@ -115,7 +118,10 @@
         NSString *typeStr = _targetPoint.ctrlTypeStr;
         if (_targetPoint.titleAddress.length > 0 && ![_targetPoint.title hasPrefix:_targetPoint.titleAddress])
         {
-            typeStr = [NSString stringWithFormat:@"%@: %@", typeStr, _targetPoint.titleAddress];
+            if (typeStr.length > 0)
+                typeStr = [NSString stringWithFormat:@"%@: %@", typeStr, _targetPoint.titleAddress];
+            else
+                typeStr = _targetPoint.titleAddress;
         }
         descriptionStr = typeStr;
     }

@@ -209,7 +209,7 @@ static NSInteger const kMap3DModeButtonTag = -990;
 {
     UIImage *img = [OASvgHelper mapImageNamed:name];
     if (img)
-        img = [OAUtilities imageWithTintColor:[UIColor colorNamed:ACColorNameIconColorSelected] image:img];
+        img = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 
     return img;
 }
@@ -218,7 +218,7 @@ static NSInteger const kMap3DModeButtonTag = -990;
 {
     UIImage *img = [OASvgHelper mapImageNamed:name scale:scale];
     if (img)
-        img = [OAUtilities imageWithTintColor:[UIColor colorNamed:ACColorNameIconColorSelected] image:img];
+        img = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 
     return img;
 }
@@ -228,7 +228,7 @@ static NSInteger const kMap3DModeButtonTag = -990;
     CGFloat scale = [[UIScreen mainScreen] scale];
     UIImage *img = [OASvgHelper mapImageFromSvgResource:name width:width * scale height:height * scale];
     if (img)
-        img = [OAUtilities imageWithTintColor:[UIColor colorNamed:ACColorNameIconColorSelected] image:img];
+        img = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 
     return img;
 }
@@ -911,16 +911,23 @@ static NSInteger const kMap3DModeButtonTag = -990;
         shadowView.hidden = !show;
 }
 
-- (UIImage *) toUIImage
-{
-    UIGraphicsBeginImageContextWithOptions(self.bounds.size, self.opaque, 0.0);
-    [self.layer renderInContext:UIGraphicsGetCurrentContext()];
-
-    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
-
-    UIGraphicsEndImageContext();
-
-    return img;
+- (UIImage *)toUIImage {
+    // Ensure the view has a valid layout
+    [self layoutIfNeeded];
+    
+    // Check for valid bounds
+    CGRect bounds = self.bounds;
+    if (CGRectIsEmpty(bounds) || CGRectIsInfinite(bounds)) {
+        NSLog(@"Invalid view bounds: %@", NSStringFromCGRect(bounds));
+        return nil;
+    }
+    
+    // Use the modern image renderer API
+    UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:bounds.size];
+    
+    return [renderer imageWithActions:^(UIGraphicsImageRendererContext * _Nonnull context) {
+        [self.layer renderInContext:context.CGContext];
+    }];
 }
 
 @end

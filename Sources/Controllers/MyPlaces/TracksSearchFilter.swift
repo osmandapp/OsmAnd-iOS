@@ -24,10 +24,17 @@ final class TracksSearchFilter: FilterChangedListener {
     private var filteredTrackItems: [TrackItem] = []
     private var filterSpecificSearchResults: [TrackFilterType: [TrackItem]] = [:]
     private var currentFolder: TrackFolder?
+    private var initialSelectedFilters: [BaseTrackFilter]?
     
     init(trackItems: [TrackItem], currentFolder: TrackFolder?) {
         self.trackItems = trackItems
         self.currentFolder = currentFolder
+        initFilters()
+    }
+    
+    init(trackItems: [TrackItem], initialFilters: [BaseTrackFilter]) {
+        self.trackItems = trackItems
+        self.initialSelectedFilters = initialFilters
         initFilters()
     }
     
@@ -68,6 +75,9 @@ final class TracksSearchFilter: FilterChangedListener {
                         }
                     default:
                         break
+                    }
+                    if let initialFilters = self.initialSelectedFilters {
+                        self.fillFilters(with: initialFilters)
                     }
                 }
             }
@@ -207,6 +217,14 @@ final class TracksSearchFilter: FilterChangedListener {
     func initSelectedFilters(_ selectedFilters: [BaseTrackFilter]?) {
         guard let selectedFilters else { return }
         initFilters()
+        for filter in getCurrentFilters() {
+            for selectedFilter in selectedFilters where filter.trackFilterType == selectedFilter.trackFilterType {
+                filter.doInitWithValue(value: selectedFilter)
+            }
+        }
+    }
+    
+    private func fillFilters(with selectedFilters: [BaseTrackFilter]) {
         for filter in getCurrentFilters() {
             for selectedFilter in selectedFilters where filter.trackFilterType == selectedFilter.trackFilterType {
                 filter.doInitWithValue(value: selectedFilter)

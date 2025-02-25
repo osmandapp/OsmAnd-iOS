@@ -114,6 +114,7 @@
 #import "OsmAndSharedWrapper.h"
 #import "OARenderedObject.h"
 #import "OARenderedObject+cpp.h"
+#import "OASelectedGPXHelper.h"
 
 #include <OsmAndCore/NetworkRouteContext.h>
 #include <OsmAndCore/CachingRoadLocator.h>
@@ -756,6 +757,7 @@ typedef enum
 {
     [self targetHideMenu:.2 backButtonClicked:NO onComplete:^{
         [_hudViewController updateDependentButtonsVisibility];
+        [self targetHideContextPinMarker];
     }];
 }
 
@@ -1281,6 +1283,9 @@ typedef enum
 
 - (void) onMapGestureAction:(NSNotification *)notification
 {
+    if ([self isDashboardVisible])
+        [self closeDashboard];
+    
     [self.targetMenuView hideByMapGesture];
 }
 
@@ -2234,9 +2239,15 @@ typedef enum
         {
             OASGpxFile *gpxFile;
             if (trackItem.isShowCurrentTrack)
+            {
                 gpxFile = [[OASavingTrackHelper sharedInstance] currentTrack];
+            }
             else
-                gpxFile = [OASGpxUtilities.shared loadGpxFileFile:trackItem.dataItem.file];
+            {
+                gpxFile = [OASelectedGPXHelper.instance getGpxFileFor:trackItem.path];
+                if (!gpxFile)
+                    gpxFile = [OASGpxUtilities.shared loadGpxFileFile:trackItem.dataItem.file];
+            }
 
             [self displayGpxOnMap:gpxFile];
         }
@@ -3208,7 +3219,7 @@ typedef enum
 }
 
 - (void)openNewTargetViewFromTracksListWithRouteDetailsGraph:(OASTrackItem *)trackItem
-                                                     state:(OATrackMenuViewControllerState *)state;
+                                                       state:(OATrackMenuViewControllerState *)state;
 {
     OASGpxFile *gpxFile;
     if (trackItem.isShowCurrentTrack)
@@ -3217,8 +3228,12 @@ typedef enum
     }
     else
     {
-        OASKFile *file = [[OASKFile alloc] initWithFilePath:trackItem.dataItem.file.absolutePath];
-        gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
+        gpxFile = [OASelectedGPXHelper.instance getGpxFileFor:trackItem.path];
+        if (!gpxFile)
+        {
+            OASKFile *file = [[OASKFile alloc] initWithFilePath:trackItem.dataItem.file.absolutePath];
+            gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
+        }
     }
     
     if (gpxFile)
@@ -3235,7 +3250,8 @@ typedef enum
                                         trackItem:trackItem
                                          analysis:analysis
                                           segment:segment
-                                 menuControlState:state];
+                                 menuControlState:state
+                                          isRoute:NO];
     }
 }
 
@@ -3373,8 +3389,13 @@ typedef enum
     
     targetPoint.title = _formattedTargetName;
     targetPoint.toolbarNeeded = NO;
+    
+    OASTrkSegment *segment = [gpx getGeneralSegment];
+    if (!segment)
+        segment = [TrackChartHelper getTrackSegment:analysis gpxItem:gpx];
+    
     if (gpx && analysis)
-        targetPoint.targetObj = @{@"gpx" : gpx, @"analysis" : analysis};
+        targetPoint.targetObj = @{@"gpx" : gpx, @"analysis" : analysis, @"segment" : segment};
     else
         targetPoint.targetObj = nil;
     

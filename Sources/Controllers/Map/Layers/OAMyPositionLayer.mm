@@ -134,8 +134,6 @@ typedef enum {
     bool withCircle = false;
     
     OAApplicationMode *currentMode = [OAAppSettings sharedManager].applicationMode.get;
-    OALocationIcon *locIcon = [currentMode getLocationIcon];
-    OALocationIcon *navIcon = [currentMode getNavigationIcon];
     float sectorDirection = 0.0f;
     float sectorRadius = 0.0f;
     
@@ -151,14 +149,14 @@ typedef enum {
             
             if (_mode == OAMarkerColletionModeDay)
             {
-                circleColor = _courseMarkerDay->accuracyCircleBaseColor;
+                circleColor = [[[currentMode getProfileColor] light] toFColorRGB];
                 circleLocation31 = _courseMarkerDay->getPosition();
                 circleRadius = _courseMarkerDay->getAccuracyCircleRadius();
                 withCircle = true;
             }
             else if (_mode == OAMarkerColletionModeNight)
             {
-                circleColor = _courseMarkerNight->accuracyCircleBaseColor;
+                circleColor = [[[currentMode getProfileColor] dark] toFColorRGB];
                 circleLocation31 = _courseMarkerNight->getPosition();
                 circleRadius = _courseMarkerNight->getAccuracyCircleRadius();
                 withCircle = true;
@@ -177,7 +175,7 @@ typedef enum {
             
             if (_mode == OAMarkerColletionModeDay)
             {
-                circleColor = _locationMarkerDay->accuracyCircleBaseColor;
+                circleColor = [[[currentMode getProfileColor] light] toFColorRGB];
                 circleLocation31 = _locationMarkerDay->getPosition();
                 circleRadius = _locationMarkerDay->getAccuracyCircleRadius();
                 withCircle = true;
@@ -187,7 +185,7 @@ typedef enum {
             }
             else if (_mode == OAMarkerColletionModeNight)
             {
-                circleColor = _locationMarkerNight->accuracyCircleBaseColor;
+                circleColor = [[[currentMode getProfileColor] dark] toFColorRGB];
                 circleLocation31 = _locationMarkerNight->getPosition();
                 circleRadius = _locationMarkerNight->getAccuracyCircleRadius();
                 withCircle = true;
@@ -206,13 +204,16 @@ typedef enum {
             break;
         }
     }
-    if (withCircle) {
+    if (withCircle)
+    {
         [_mapView setMyLocationCircleColor:(circleColor.withAlpha(0.2f))];
         [_mapView setMyLocationCirclePosition:(circleLocation31)];
         [OARootViewController.instance.mapPanel.mapViewController.mapLayers.myPositionLayer setMyLocationCircleRadius:(circleRadius)];
         [_mapView setMyLocationSectorDirection:(sectorDirection)];
         [_mapView setMyLocationSectorRadius:(sectorRadius)];
-    } else {
+    }
+    else
+    {
         [OARootViewController.instance.mapPanel.mapViewController.mapLayers.myPositionLayer setMyLocationCircleRadius:(0.0f)];
         [_mapView setMyLocationSectorRadius:(0.0f)];
     }
@@ -767,11 +768,8 @@ typedef enum {
     BOOL showHeading = [self shouldShowHeading];
     BOOL showBearing = [self shouldShowBearing:newLocation];
     
-    double bearing = [self getPointCourse];
-    if (bearing >= 0)
-        bearing -= 90;
-    else
-        bearing = newHeading;
+    double pointCourse = [self getPointCourse];
+    double bearing = (isnan(pointCourse) ? newHeading : pointCourse) - 90;
     
     [c setCurrentMarkerState:showBearing ? EOAMarkerStateMove : EOAMarkerStateStay showHeading:showHeading];
     [c updateLocation:newTarget31 animationDuration:animationDuration horizontalAccuracy:newLocation.horizontalAccuracy bearing:bearing heading:newHeading visible:visible];
@@ -868,19 +866,13 @@ typedef enum {
 
 - (double) getPointCourse
 {
-    double result = 0.0;
+    double result = NAN;
     CLLocation *location = nil;
     if (OARoutingHelper.sharedInstance.isFollowingMode && OAAppSettings.sharedManager.snapToRoad.get)
     {
         OARouteLayer *routeLayer = self.mapViewController.mapLayers.routeMapLayer;
         location = routeLayer.lastProj;
         if (location)
-            result = routeLayer.lastCourse;
-    }
-    if (!location)
-    {
-        location = self.app.locationServices.lastKnownLocation;
-        if (location && location.course >= 0)
             result = location.course;
     }
     return result;

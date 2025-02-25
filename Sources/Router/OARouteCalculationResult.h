@@ -44,6 +44,8 @@ struct RouteSegmentResult;
 @property (nonatomic, readonly) NSString *errorMessage;
 @property (nonatomic, readonly) float routingTime;
 @property (nonatomic, readonly) int currentRoute;
+@property (nonatomic, readonly) CLLocation *firstIntroducedPoint;
+@property (nonatomic, readonly) CLLocation *lastIntroducedPoint;
 
 @property (nonatomic, readonly) double routeRecalcDistance;
 @property (nonatomic, readonly) double routeVisibleAngle;
@@ -87,6 +89,7 @@ struct RouteSegmentResult;
 - (void) updateCurrentRoute:(int)currentRoute;
 - (void) passIntermediatePoint;
 - (int) getNextIntermediate;
+- (int)getCurrentRouteForLocation:(CLLocation *)location;
 - (CLLocation *) getLocationFromRouteDirection:(OARouteDirectionInfo *)i;
 - (OANextDirectionInfo *) getNextRouteDirectionInfo:(OANextDirectionInfo *)info fromLoc:(CLLocation *)fromLoc toSpeak:(BOOL)toSpeak;
 - (OANextDirectionInfo *) getNextRouteDirectionInfoAfter:(OANextDirectionInfo *)prev next:(OANextDirectionInfo *)next toSpeak:(BOOL)toSpeak;

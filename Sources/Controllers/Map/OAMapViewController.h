@@ -71,6 +71,7 @@ static const int BOTTOM_CONSTANT = 1;
 @property (readonly) OAObservable *elevationAngleObservable;
 @property (readonly) OAObservable *mapObservable;
 @property (readonly) OAObservable *mapSourceUpdatedObservable;
+@property (readonly) OAObservable *gpxTracksRefreshedObservable;
 
 @property (nonatomic, nullable) OASWptPt *foundWpt;
 @property (nonatomic, nullable) NSArray *foundWptGroups;

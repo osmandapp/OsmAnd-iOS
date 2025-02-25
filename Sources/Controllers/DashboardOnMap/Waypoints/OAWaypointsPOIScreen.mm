@@ -19,6 +19,7 @@
 #import "OAMapPanelViewController.h"
 #import "OALocationPointWrapper.h"
 #import "OASimpleTableViewCell.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OAWaypointsPOIScreen
 {
@@ -226,6 +227,7 @@
                 img = [OAUtilities getMxIcon:@"user_defined"];
             
             [cell.leftIconView setImage:img];
+            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
         }
     }
     

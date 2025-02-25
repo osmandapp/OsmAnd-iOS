@@ -212,6 +212,8 @@
 #define kDefaultTurnArrowsDayColor 0xffffde5b
 #define kDefaultTurnArrowsNightColor 0xff41a6d9
 
+#define kDefaultWalkingRouteLineColor 0xff407ef5
+
 #define color_purple_border 0x106c19ff
 
 #define color_poi_orange 0xE5FF8800

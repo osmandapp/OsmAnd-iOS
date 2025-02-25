@@ -2181,7 +2181,7 @@
 "rendering_attr_showFitnessTrails_description" = "Muestra los circuitos aeróbicos";
 "available_groups" = "Grupos disponibles";
 "default_color_descr" = "Este color será usado para todos los nuevos favoritos añadidos al grupo.";
-"select_segment" = "Marca un segmento";
+"select_segment" = "Seleccionar segmento";
 "fav_add_new_group" = "Añadir un grupo";
 "select_group_descr" = "Elige un grupo o añade uno nuevo";
 "gpx_selection_segment_title" = "Segmento";
@@ -3489,3 +3489,11 @@
 "rendering_attr_showClimbingRoutes_description" = "Mostrar vías de escalada";
 "reset_average_speed" = "Restablecer velocidad media";
 "cloud_sync_progress" = "Sincronizando...%@";
+"add_smart_folder" = "Añadir carpeta inteligente";
+"save_as_smart_folder" = "Guardar como carpeta inteligente";
+"new_smart_folder" = "Nueva carpeta inteligente";
+"no_matched_tracks" = "No hay trazas coincidentes";
+"no_matched_tracks_descr" = "Los criterios de filtro no coinciden con ninguna de tus trazas";
+"empty_smart_folder_title" = "No hay traza coincidente";
+"empty_smart_folder_descr" = "Todas las trazas coincidentes aparecerán automáticamente aquí.";
+"smart_folder_name_present" = "La carpeta inteligente ya existe";

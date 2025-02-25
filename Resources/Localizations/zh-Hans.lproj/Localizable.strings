@@ -359,7 +359,7 @@
 "driving_region_canada" = "加拿大";
 "driving_region_europe_asia" = "欧洲、亚洲、拉丁美洲和类似地区";
 "driving_region_australia" = "澳洲";
-"left_side_navigation" = "左侧行驶";
+"left_side_navigation" = "靠左行驶";
 "search_nearby" = "在附近搜索";
 "cancel_navigation" = "停止导航";
 "shared_string_search" = "搜索";
@@ -2050,7 +2050,7 @@
 "announce_when_exceeded" = "超出时播报";
 "next_turn_widget_desc" = "小部件会向您展示有关下个转弯的行进方向图示和距离信息。";
 "external_device_forget_sensor" = "遗忘传感器";
-"help_article_navigation_guidance_name" = "指引";
+"help_article_navigation_guidance_name" = "导航指引";
 "shared_string_switch_mode" = "切换模式";
 "app_mode_moped" = "轻型摩托车";
 "external_sensors_not_found" = "未找到传感器";
@@ -2510,7 +2510,7 @@
 "user_palette" = "用户调色板";
 "shared_string_favorite" = "我的收藏";
 "quick_action_directions_from" = "起始点";
-"rendering_value_pale_name" = "灰暗";
+"rendering_value_pale_name" = "苍白";
 "shared_string_set" = "设置";
 "shared_string_replace" = "替换";
 "quick_action_destination" = "目的地";
@@ -2558,7 +2558,6 @@
 "shared_string_author" = "作者";
 "shared_string_license" = "许可协议";
 "shared_string_link" = "链接";
-
 "rendering_attr_showDirtbikeTrails_description" = "显示越野摩托车路径";
 "rendering_attr_showDirtbikeTrails_name" = "越野摩托车路径";
 "delete_widget" = "删除小工具吗？";
@@ -2612,3 +2611,7 @@
 "navigation_position_icon_summary" = "在导航或移动时显示的图标。";
 "max_sensor_bycicle_power" = "自行车最大功率";
 "cloud_sync_progress" = "同步……%@";
+"routing_attr_avoid_cobblestone_name" = "避免鹅卵石";
+"routing_attr_avoid_cobblestone_description" = "避免鹅卵石";
+"tomorrow" = "明天";
+"required_maps" = "需要的地图";

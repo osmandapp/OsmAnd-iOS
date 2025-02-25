@@ -63,6 +63,8 @@
 
 - (void)onMenuDismissed
 {
+    _dismissed = YES;
+    
     [_routingHelper removeListener:self];
     [_layer hideCurrentStatisticsLocation];
 }

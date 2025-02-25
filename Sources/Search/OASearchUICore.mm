@@ -404,6 +404,12 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
 
 - (BOOL) sameSearchResult:(OASearchResult *)r1 r2:(OASearchResult *)r2
 {
+    BOOL isSameType = r1.objectType == r2.objectType;
+    if (isSameType)
+    {
+        if (r1.objectType == GPX_TRACK)
+            return [r1.localeName isEqualToString:r2.localeName];
+    }
     if (r1.location && r2.location && ![OAObjectType isTopVisible:r1.objectType] && ![OAObjectType isTopVisible:r2.objectType])
     {
         if (r1.objectType == r2.objectType && r1.objectType == STREET)

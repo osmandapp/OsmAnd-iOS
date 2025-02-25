@@ -35,6 +35,7 @@ struct RouteSegmentResult;
 
 - (sk_sp<SkImage>) bitmapForColor:(UIColor *)color fileName:(NSString *)fileName;
 - (sk_sp<SkImage>) specialBitmapWithColor:(OsmAnd::ColorARGB)color;
+- (sk_sp<SkImage>) walkBitmapWithColor:(OsmAnd::ColorARGB)color lineWidth:(CGFloat)lineWidth;
 
 - (void)calculateSegmentsColor:(QList<OsmAnd::FColorARGB> &)colors
                       attrName:(NSString *)attrName

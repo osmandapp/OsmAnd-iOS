@@ -73,8 +73,8 @@ static const NSInteger _exportButtonIndex = 1;
 
 @interface OAFavoriteListViewController () <OAMultiselectableHeaderDelegate, OAEditorDelegate, OAEditGroupViewControllerDelegate, OAEditColorViewControllerDelegate, UIDocumentPickerDelegate, UISearchResultsUpdating, UISearchBarDelegate>
 
-@property (strong, nonatomic) NSArray*  menuItems;
-@property (strong, nonatomic) NSMutableArray*  sortedFavoriteItems;
+@property (strong, nonatomic) NSArray *menuItems;
+@property (strong, nonatomic) NSMutableArray *sortedFavoriteItems;
 @property NSUInteger sortingType;
 
 @end
@@ -105,6 +105,10 @@ static const NSInteger _exportButtonIndex = 1;
     BOOL _isSearchActive;
     BOOL _isFiltered;
     OAGPXAppearanceCollection *_appearanceCollection;
+    BOOL _contextMenuVisible;
+    
+    UIFont *_originalGroupFont;
+    UIFont *_italicGroupFont;
 }
 
 static UIViewController *parentController;
@@ -337,7 +341,7 @@ static UIViewController *parentController;
             [_isFiltered ? _filteredItems : self.sortedFavoriteItems setArray:sortedArray];
         }
 
-        if (_decelerating)
+        if (_decelerating || _contextMenuVisible)
             return;
 
         [self refreshVisibleRows];
@@ -474,14 +478,19 @@ static UIViewController *parentController;
     NSMutableArray *headerViews = [NSMutableArray array];
     NSMutableArray *tableData = [NSMutableArray array];
 
-    NSArray *favorites = [NSMutableArray arrayWithArray:[OAFavoritesHelper getFavoriteGroups]];
-    for (OAFavoriteGroup *group in favorites)
+    NSArray<OAFavoriteGroup *> *favoriteGroups = [OAFavoritesHelper getFavoriteGroups];
+    for (OAFavoriteGroup *group in favoriteGroups)
     {
         FavoriteTableGroup* itemData = [[FavoriteTableGroup alloc] init];
         itemData.favoriteGroup = group;
 
         // Sort items
         NSArray *sortedArrayItems = [itemData.favoriteGroup.points sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2) {
+            BOOL obj1Visible = obj1.isVisible;
+            BOOL obj2Visible = obj2.isVisible;
+            if (obj1Visible != obj2Visible)
+                return obj1Visible ? NSOrderedAscending : NSOrderedDescending;
+            
             return [[[obj1 getDisplayName] lowercaseString] compare:[[obj2 getDisplayName] lowercaseString]];
         }];
         [itemData.favoriteGroup.points setArray:sortedArrayItems];
@@ -490,6 +499,14 @@ static UIViewController *parentController;
             [self.sortedFavoriteItems addObject:item];
         [allGroups addObject:itemData];
     }
+    [allGroups sortUsingComparator:^NSComparisonResult(FavoriteTableGroup * _Nonnull obj1, FavoriteTableGroup * _Nonnull obj2) {
+        BOOL group1Visible = [obj1.favoriteGroup isVisible];
+        BOOL group2Visible = [obj2.favoriteGroup isVisible];
+        return group1Visible == group2Visible
+            ? NSOrderedSame
+            : group1Visible ? NSOrderedAscending : NSOrderedDescending;
+    }];
+    
     if (!_isSearchActive)
     {
         NSArray *sortedArray = [self.sortedFavoriteItems sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2) {
@@ -1056,6 +1073,28 @@ static UIViewController *parentController;
     {
         NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
 
+        FavoriteTableGroup *groupData = item[@"group"];
+        NSString *showHideCaption = groupData.favoriteGroup.isVisible
+            ? OALocalizedString(@"shared_string_hide_from_map")
+            : OALocalizedString(@"shared_string_show_on_map");
+        NSString *showHideImage = groupData.favoriteGroup.isVisible
+            ? @"ic_custom_hide_outlined" : @"ic_custom_show_outlined";
+        UIAction *showHideAction = [UIAction actionWithTitle:showHideCaption
+                                                       image:[UIImage imageNamed:showHideImage]
+                                                  identifier:nil
+                                                     handler:^(__kindof UIAction * _Nonnull action) {
+            FavoriteTableGroup *groupData = item[@"group"];
+            [OAFavoritesHelper updateGroup:groupData.favoriteGroup visible:!groupData.favoriteGroup.isVisible saveImmediately:YES];
+            [self generateData];
+        }];
+        showHideAction.accessibilityLabel = showHideCaption;
+        [menuElements addObject:[UIMenu menuWithTitle:@""
+                                           image:nil
+                                      identifier:nil
+                                         options:UIMenuOptionsDisplayInline
+                                        children:@[showHideAction]]];
+
+        
         UIAction *appearanceAction = [UIAction actionWithTitle:OALocalizedString(@"change_appearance")
                                                          image:[UIImage systemImageNamed:@"paintpalette"]
                                                     identifier:nil
@@ -1134,6 +1173,17 @@ static UIViewController *parentController;
     }
 
     return nil;
+}
+
+- (UITargetedPreview *)tableView:(UITableView *)tableView previewForHighlightingContextMenuWithConfiguration:(UIContextMenuConfiguration *)configuration
+{
+    _contextMenuVisible = YES;
+    return nil;
+}
+
+- (void)tableView:(UITableView *)tableView willEndContextMenuInteractionWithConfiguration:(UIContextMenuConfiguration *)configuration animator:(id<UIContextMenuInteractionAnimating>)animator
+{
+    _contextMenuVisible = NO;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -1216,14 +1266,30 @@ static UIViewController *parentController;
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointHeaderTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OAPointHeaderTableViewCell *)[nib objectAtIndex:0];
-        cell.folderIcon.image = [UIImage templateImageNamed:@"ic_custom_folder"];
+        _originalGroupFont = cell.groupTitle.font;
+        UIFontDescriptor * italicDescriptor = [cell.groupTitle.font.fontDescriptor fontDescriptorWithSymbolicTraits:UIFontDescriptorTraitItalic];
+        _italicGroupFont = [UIFont fontWithDescriptor:italicDescriptor size:0];
         [cell.valueLabel setHidden:YES];
     }
     if (cell)
     {
         OAFavoriteGroup* group = groupData.favoriteGroup;
         [cell.groupTitle setText:[OAFavoriteGroup getDisplayName:group.name]];
-        cell.folderIcon.tintColor = groupData.favoriteGroup.color;
+        BOOL visible = group.isVisible;
+        if (visible)
+        {
+            cell.groupTitle.font = _originalGroupFont;
+            cell.groupTitle.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.folderIcon.image = [UIImage templateImageNamed:@"ic_custom_folder"];
+            cell.folderIcon.tintColor = groupData.favoriteGroup.color;
+        }
+        else
+        {
+            cell.groupTitle.font = _italicGroupFont;
+            cell.groupTitle.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            cell.folderIcon.image = [UIImage templateImageNamed:@"ic_custom_folder_hidden_outlined"];
+            cell.folderIcon.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
+        }
 
         cell.openCloseGroupButton.tag = indexPath.section << 10 | indexPath.row;
         [cell.openCloseGroupButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];

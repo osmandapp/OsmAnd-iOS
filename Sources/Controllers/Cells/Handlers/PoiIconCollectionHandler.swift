@@ -141,7 +141,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
         }
     }
     
-    private func readCategoriesFromAssets(_ categoriesKeys: [String]){
+    private func readCategoriesFromAssets(_ categoriesKeys: [String]) {
         if let json = parsePoiCategoriesJson() {
             for categoryKey in categoriesKeys {
                 if let iconsKeys = json.categories[categoryKey], !iconsKeys.icons.isEmpty {
@@ -198,7 +198,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     
     func updateTopButtonName() {
         if let category = categoriesByName[selectedCatagoryKey] {
-            hostCell?.topButton.setTitle(category.translatedName, for: .normal)
+            hostCell?.topButton.setTitle(category.translatedName + " 􀆏", for: .normal)
         }
     }
     

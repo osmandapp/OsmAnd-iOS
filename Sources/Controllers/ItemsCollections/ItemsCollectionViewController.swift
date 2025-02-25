@@ -59,6 +59,10 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     private var editColorIndexPath: IndexPath?
     private var isStartedNewColorAdding = false
     
+    private var searchController: UISearchController?
+    private var isSearchActive = false
+    private var isSearchFilteringActive = false
+    
     private var iconItems: [String] = []
     var iconImages: [UIImage] = []
     var iconCategoties: [IconsCategory] = []
@@ -157,6 +161,25 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                     tableView.scrollToRow(at: selectedIndexPath, at: .middle, animated: true)
                 }
             }
+        } else if collectionType == .poiIconCategories {
+            searchController = UISearchController(searchResultsController: nil)
+            //searchController?.searchBar.delegate = self
+            searchController?.obscuresBackgroundDuringPresentation = false
+            navigationItem.searchController = searchController
+            navigationItem.hidesSearchBarWhenScrolling = false
+            setupSearchControllerWithFilter(false)
+            tableView.keyboardDismissMode = .onDrag
+            //isInited = true
+        }
+    }
+    
+    private func setupSearchControllerWithFilter(_ isFiltered: Bool) {
+        searchController?.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("shared_string_search"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.textColorSecondary])
+        if isFiltered {
+            searchController?.searchBar.searchTextField.leftView?.tintColor = UIColor.textColorPrimary
+        } else {
+            searchController?.searchBar.searchTextField.leftView?.tintColor = UIColor.textColorSecondary
+            searchController?.searchBar.searchTextField.tintColor = UIColor.textColorSecondary
         }
     }
     

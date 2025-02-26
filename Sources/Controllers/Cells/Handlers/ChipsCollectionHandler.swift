@@ -11,6 +11,9 @@ import Foundation
 @objcMembers
 class ChipsCollectionHandler: OABaseCollectionHandler {
     
+    static let folderCellHeight = 30.0
+    static let folderCellSidePadding = 10.0
+    
     var titles = [String]()
     var iconNames = [String]()
     private var selectedIndexPath = IndexPath()
@@ -34,8 +37,15 @@ class ChipsCollectionHandler: OABaseCollectionHandler {
     }
     
     override func getItemSize() -> CGSize {
-        CGSize(width: 0, height: 30) // 0 = automatic
-//        CGSize(width: 10, height: 30)
+        CGSize(width: 0, height: Self.folderCellHeight) // 0 = automatic
+    }
+    
+    override func calculateItemSize(for indexPath: IndexPath!) -> CGSize {
+        let title = titles[indexPath.row]
+        let attributes = [NSAttributedString.Key.font: UIFont.scaledSystemFont(ofSize: 15.0)]
+        let labelSize = title.size(withAttributes: attributes)
+        let width = labelSize.width + 2 * Self.folderCellSidePadding
+        return CGSize(width: width, height: Self.folderCellHeight)
     }
     
     override func sectionsCount() -> Int {

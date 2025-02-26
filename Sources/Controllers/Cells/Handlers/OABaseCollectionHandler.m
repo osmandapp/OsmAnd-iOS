@@ -40,6 +40,11 @@
     return CGSizeMake(48., 48.);
 }
 
+- (CGSize)calculateItemSizeForIndexPath:(NSIndexPath *)indexPath
+{
+    return [self getItemSize];
+}
+
 - (UICollectionView *)getCollectionView
 {
     return _collectionView;

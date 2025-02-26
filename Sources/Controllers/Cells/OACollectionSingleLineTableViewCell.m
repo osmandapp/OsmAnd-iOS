@@ -9,6 +9,7 @@
 #import "OACollectionSingleLineTableViewCell.h"
 #import "OASizes.h"
 #import "UITableViewCell+getTableView.h"
+#import "OsmAnd_Maps-Swift.h"
 
 static const NSInteger spacing = 9;
 
@@ -191,6 +192,11 @@ static const NSInteger spacing = 9;
 - (BOOL) needUpdateHeight
 {
     return [self calculateContentHeight] != self.collectionViewHeight.constant;
+}
+
+- (CGSize) collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [_collectionHandler calculateItemSizeForIndexPath:indexPath];
 }
 
 - (UIContextMenuConfiguration *)collectionView:(UICollectionView *)collectionView

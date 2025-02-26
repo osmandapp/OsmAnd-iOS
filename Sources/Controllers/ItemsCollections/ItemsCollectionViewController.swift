@@ -483,7 +483,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let item = data.item(for: indexPath)
         if let chipsTitles = item.obj(forKey: chipsTitlesKey) as? [String] {
-            return 30
+            return ChipsCollectionHandler.folderCellHeight
         }
         return UITableView.automaticDimension
     }
@@ -491,7 +491,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         let item = data.item(for: indexPath)
         if let chipsTitles = item.obj(forKey: chipsTitlesKey) as? [String] {
-            return 30
+            return ChipsCollectionHandler.folderCellHeight
         }
         if let iconsHandler = iconsDelegate as? IconCollectionHandler {
             return iconsHandler.getItemSize().height
@@ -807,16 +807,19 @@ extension ItemsCollectionViewController: OAColorPickerViewControllerDelegate {
 
 extension ItemsCollectionViewController: PoiIconsCollectionViewControllerDelegate {
     
-    // from top menu
     func scrollToCategory(categoryKey: String) {
         // called from poi categoties from top menu
         if let categoryIndex = iconCategoties.firstIndex(where: { $0.key == categoryKey }) {
             if let poiIconsDelegate = iconsDelegate as? PoiIconCollectionHandler {
                 poiIconsDelegate.selectedCatagoryKey = categoryKey
                 generateData()
-                tableView.reloadSections(IndexSet(integer: 0), with: .none)
+
+                tableView.performBatchUpdates {
+                    tableView.reloadSections(IndexSet(integer: 0), with: .none)
+                } completion: { _ in
+                    self.tableView.scrollToRow(at: IndexPath(row: 0, section: categoryIndex), at: .top, animated: true)
+                }
             }
-            tableView.scrollToRow(at: IndexPath(row: 0, section: categoryIndex), at: .top, animated: true)
         }
     }
     
@@ -826,7 +829,6 @@ extension ItemsCollectionViewController: PoiIconsCollectionViewControllerDelegat
             if let poiIconsDelegate = iconsDelegate as? PoiIconCollectionHandler {
                 poiIconsDelegate.selectedCatagoryKey = iconCategoties[categoryIndex].key
                 generateData()
-//                tableView.reloadSections(IndexSet(integer: 0), with: .none)
             }
             tableView.scrollToRow(at: IndexPath(row: 0, section: categoryIndex), at: .top, animated: true)
         }

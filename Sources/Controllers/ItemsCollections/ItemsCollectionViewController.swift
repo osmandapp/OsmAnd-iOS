@@ -817,7 +817,8 @@ extension ItemsCollectionViewController: PoiIconsCollectionViewControllerDelegat
                 tableView.performBatchUpdates {
                     tableView.reloadSections(IndexSet(integer: 0), with: .none)
                 } completion: { _ in
-                    self.tableView.scrollToRow(at: IndexPath(row: 0, section: categoryIndex + 1), at: .top, animated: false)
+                    self.tableView.scrollToRow(at: IndexPath(row: 0, section: categoryIndex + 1), at: .top, animated: true)
+                    self.tableView.layoutIfNeeded()
                 }
             }
         }
@@ -830,7 +831,8 @@ extension ItemsCollectionViewController: PoiIconsCollectionViewControllerDelegat
                 poiIconsDelegate.selectedCatagoryKey = iconCategoties[categoryIndex].key
                 generateData()
             }
-            tableView.scrollToRow(at: IndexPath(row: 0, section: categoryIndex + 1), at: .top, animated: false)
+            self.tableView.scrollToRow(at: IndexPath(row: 0, section: categoryIndex + 1), at: .top, animated: true)
+            self.tableView.layoutIfNeeded()
         }
     }
 }

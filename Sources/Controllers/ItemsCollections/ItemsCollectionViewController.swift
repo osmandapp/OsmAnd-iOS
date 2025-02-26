@@ -336,6 +336,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                         setupIconCollectionCell(cell, iconNames: iconNames, poiCategoryKey: poiCategory)
                     }
                 }
+                
                 cell.rightActionButtonVisibility(false)
                 cell.collectionView.reloadData()
                 cell.layoutIfNeeded()
@@ -670,20 +671,19 @@ extension ItemsCollectionViewController: OACollectionCellDelegate {
 
         } else if collectionType == .poiIconCategories {
             
-            if indexPath.section == 0 {
-                if let selectedChipName = selectedItem as? String {
-                    scrollToCategory(categoryName: selectedChipName)
-                }
-            } else {
-                if let poiIconsDelegate = iconsDelegate as? PoiIconCollectionHandler {
-                    poiIconsDelegate.setSelectedIndexPath(indexPath)
-                    if let iconName = selectedItem as? String {
-                        selectedIconItem = iconName
-                        poiIconsDelegate.setIconName(iconName)
-                        poiIconsDelegate.selectIconName(iconName)
+            let chipsTitles = iconCategoties.map { $0.translatedName }
+            if let selectedName = selectedItem as? String {
+                
+                if chipsTitles.contains(selectedName) {
+                    scrollToCategory(categoryName: selectedName)
+                } else {
+                    if let poiIconsDelegate = iconsDelegate as? PoiIconCollectionHandler {
+                        selectedIconItem = selectedName
+                        poiIconsDelegate.setIconName(selectedName)
+                        poiIconsDelegate.selectIconName(selectedName)
+                        poiIconsDelegate.allIconsVCDelegate = nil
+                        dismiss(animated: true)
                     }
-                    poiIconsDelegate.allIconsVCDelegate = nil
-                    dismiss(animated: true)
                 }
             }
             
@@ -817,7 +817,7 @@ extension ItemsCollectionViewController: PoiIconsCollectionViewControllerDelegat
                 tableView.performBatchUpdates {
                     tableView.reloadSections(IndexSet(integer: 0), with: .none)
                 } completion: { _ in
-                    self.tableView.scrollToRow(at: IndexPath(row: 0, section: categoryIndex), at: .top, animated: true)
+                    self.tableView.scrollToRow(at: IndexPath(row: 0, section: categoryIndex + 1), at: .top, animated: false)
                 }
             }
         }
@@ -830,7 +830,7 @@ extension ItemsCollectionViewController: PoiIconsCollectionViewControllerDelegat
                 poiIconsDelegate.selectedCatagoryKey = iconCategoties[categoryIndex].key
                 generateData()
             }
-            tableView.scrollToRow(at: IndexPath(row: 0, section: categoryIndex), at: .top, animated: true)
+            tableView.scrollToRow(at: IndexPath(row: 0, section: categoryIndex + 1), at: .top, animated: false)
         }
     }
 }

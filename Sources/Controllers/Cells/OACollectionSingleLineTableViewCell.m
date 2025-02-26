@@ -78,6 +78,7 @@ static const NSInteger spacing = 9;
         UICollectionViewScrollDirection scrollDirection = [_collectionHandler getScrollDirection];
         BOOL isHorizontal = scrollDirection == UICollectionViewScrollDirectionHorizontal;
         dispatch_async(dispatch_get_main_queue(), ^{
+            
             UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
             layout.scrollDirection = scrollDirection;
             CGSize itemSize = [_collectionHandler getItemSize];

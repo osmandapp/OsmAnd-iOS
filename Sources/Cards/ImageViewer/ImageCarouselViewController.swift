@@ -299,7 +299,7 @@ extension ImageCarouselViewController: UIPageViewControllerDataSource {
     
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         
-        guard let vc = viewController as? ImageViewerController, let imageDatasource = imageDatasource else {
+        guard let vc = viewController as? ImageViewerController, let imageDatasource else {
             return nil
         }
         

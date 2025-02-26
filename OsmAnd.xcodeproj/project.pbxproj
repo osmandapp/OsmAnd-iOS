@@ -3113,7 +3113,6 @@
 		FA64086B2D3E6EA5005FD12D /* CollapsableCardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA64086A2D3E6EA5005FD12D /* CollapsableCardsView.swift */; };
 		FA64086D2D3E6FAF005FD12D /* AbstractCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA64086C2D3E6FAF005FD12D /* AbstractCards.swift */; };
 		FA64086F2D3E7D88005FD12D /* ImageCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA64086E2D3E7D88005FD12D /* ImageCard.swift */; };
-		FA6408712D3E7EB9005FD12D /* NoImagesCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6408702D3E7EB9005FD12D /* NoImagesCard.swift */; };
 		FA6408732D3E7FD1005FD12D /* UrlImageCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6408722D3E7FD1005FD12D /* UrlImageCard.swift */; };
 		FA6408752D3E8047005FD12D /* WikiImageCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6408742D3E8047005FD12D /* WikiImageCard.swift */; };
 		FA6408772D3E8295005FD12D /* NoImagesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6408762D3E8295005FD12D /* NoImagesCell.swift */; };
@@ -7658,7 +7657,6 @@
 		FA64086A2D3E6EA5005FD12D /* CollapsableCardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollapsableCardsView.swift; sourceTree = "<group>"; };
 		FA64086C2D3E6FAF005FD12D /* AbstractCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbstractCards.swift; sourceTree = "<group>"; };
 		FA64086E2D3E7D88005FD12D /* ImageCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCard.swift; sourceTree = "<group>"; };
-		FA6408702D3E7EB9005FD12D /* NoImagesCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoImagesCard.swift; sourceTree = "<group>"; };
 		FA6408722D3E7FD1005FD12D /* UrlImageCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlImageCard.swift; sourceTree = "<group>"; };
 		FA6408742D3E8047005FD12D /* WikiImageCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikiImageCard.swift; sourceTree = "<group>"; };
 		FA6408762D3E8295005FD12D /* NoImagesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoImagesCell.swift; sourceTree = "<group>"; };
@@ -10739,7 +10737,6 @@
 				FA6408742D3E8047005FD12D /* WikiImageCard.swift */,
 				FA6408722D3E7FD1005FD12D /* UrlImageCard.swift */,
 				FA64086C2D3E6FAF005FD12D /* AbstractCards.swift */,
-				FA6408702D3E7EB9005FD12D /* NoImagesCard.swift */,
 				FA64086E2D3E7D88005FD12D /* ImageCard.swift */,
 				FA4C57022D48E92F00438A5C /* NoInternetCardCell.xib */,
 				FA9217062D50C9640074E958 /* GalleryGridViewController.swift */,
@@ -17142,7 +17139,6 @@
 				46D5E41A2D31A3F000428227 /* BackupUtils.swift in Sources */,
 				DA5A839A26C563A800F274C7 /* OALocalResourceInfoCell.m in Sources */,
 				DA5A823926C563A700F274C7 /* OAOsmAccountSettingsViewController.m in Sources */,
-				FA6408712D3E7EB9005FD12D /* NoImagesCard.swift in Sources */,
 				DA5A815C26C563A700F274C7 /* OAPlugin.mm in Sources */,
 				DA5A812426C563A700F274C7 /* OATransportStopRoute.mm in Sources */,
 				DA05A6A3285B3DCE00D0AFAB /* OABackupExporter.m in Sources */,

@@ -286,11 +286,7 @@
 
 - (NSString *)getLeftNavbarButtonTitle
 {
-    if ([self isModal]) {
-        return OALocalizedString(@"shared_string_close");
-    } else {
-        return nil;
-    }
+    return [self isModal] ? OALocalizedString(@"shared_string_close") : nil;
 }
 
 -(void)createLanguagesNavbarButton

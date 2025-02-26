@@ -1,5 +1,5 @@
 //
-//  OAee.h
+//  OAMapillaryImageCardWrapper.h
 //  OsmAnd Maps
 //
 //  Created by Oleksandr Panchenko on 20.01.2025.

@@ -113,10 +113,6 @@ final class WikiImageCard: ImageCard {
         return wikiImage?.mediaId == other.wikiImage?.mediaId
     }
     
-    static func == (lhs: WikiImageCard, rhs: WikiImageCard) -> Bool {
-        lhs.wikiImage?.mediaId == rhs.wikiImage?.mediaId
-    }
-    
     init(wikiImage: WikiImage, type: String) {
         self.urlWithCommonAttributions = wikiImage.getUrlWithCommonAttributions()
         super.init(data: [:])

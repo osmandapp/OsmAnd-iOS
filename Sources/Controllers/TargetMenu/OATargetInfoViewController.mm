@@ -625,13 +625,18 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
 
     if ([TYPE_MAPILLARY_PHOTO isEqualToString:type] && isMaplillaryEnabled)
     {
-        if (onComplete)
-            onComplete([[MapillaryImageCard alloc] initWithData:feature]);
-//        [OAMapillaryOsmTagHelper downloadImageByKey:feature[@"key"]
-//                                   onDataDownloaded:^(NSDictionary *result) {
-//            if (result && onComplete)
-//                onComplete([[MapillaryImageCard alloc] initWithData:result]);
-//        }];
+        if ([feature[@"imageUrl"] length] == 0 || [feature[@"imageHiresUrl"] length] == 0) {
+            [OAMapillaryOsmTagHelper downloadImageByKey:feature[@"key"]
+                                       onDataDownloaded:^(NSDictionary *result) {
+                if (result && onComplete)
+                    onComplete([[MapillaryImageCard alloc] initWithData:result]);
+            }];
+        }
+        else
+        {
+            if (onComplete)
+                onComplete([[MapillaryImageCard alloc] initWithData:feature]);
+        }
     }
     else if ([TYPE_MAPILLARY_CONTRIBUTE isEqualToString:type] && isMaplillaryEnabled)
     {

@@ -146,7 +146,6 @@ final class CardsViewController: UIView {
                 }
             case .mapillary:
                 let mapillaryCards = сardsFilter.mapillaryImageCards
-                debugPrint("mapillaryCards: \(mapillaryCards.count)")
                 if !mapillaryCards.isEmpty {
                     collectionView.isScrollEnabled = true
                     snapshot.appendSections([.bigPhoto])

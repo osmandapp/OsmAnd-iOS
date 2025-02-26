@@ -10,7 +10,7 @@
 final class PoiIconCollectionHandler: IconCollectionHandler {
     
     var categories = [IconsCategory]()
-    var categoriesByName = [String: IconsCategory]()
+    var categoriesByKeyname = [String: IconsCategory]()
     var selectedCatagoryKey = ""
     var lastUsedIcons = [String]()
     weak var allIconsVCDelegate: PoiIconsCollectionViewControllerDelegate?
@@ -38,7 +38,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
         sortCategories()
         
         for category in categories {
-            categoriesByName[category.key] = category
+            categoriesByKeyname[category.key] = category
         }
     }
     
@@ -60,7 +60,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     }
     
     override func getSelectedItem() -> Any {
-        if let category = categoriesByName[selectedCatagoryKey],
+        if let category = categoriesByKeyname[selectedCatagoryKey],
            let indexPath = getSelectedIndexPath() {
            return category.iconKeys[indexPath.row]
         }
@@ -74,7 +74,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     func selectCategory(_ categoryKey: String) {
         selectedCatagoryKey = categoryKey
         
-        if let category = categoriesByName[categoryKey] {
+        if let category = categoriesByKeyname[categoryKey] {
             generateData([category.iconKeys])
             hostCell?.topButton.setTitle(category.translatedName, for: .normal)
             getCollectionView()?.reloadData()
@@ -177,7 +177,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
                 menuElements.append(separator)
             }
             menuElements.append(UIAction(title: category.translatedName, image: nil, identifier: nil, handler: { _ in
-                self.onMenuItemSelected(name:category.key)
+                self.onMenuItemSelected(name: category.key)
             }))
             previosCategory = category
         }
@@ -187,9 +187,9 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     
     func onMenuItemSelected(name: String) {
         if let allIconsVCDelegate {
-            allIconsVCDelegate.scrollToCategoty(name)
+            allIconsVCDelegate.scrollToCategory(categoryKey: name)
         } else {
-            if let category = categoriesByName[name] {
+            if let category = categoriesByKeyname[name] {
                 selectCategory(name)
                 selectIconName(category.iconKeys[0])
             }
@@ -197,7 +197,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     }
     
     func updateTopButtonName() {
-        if let category = categoriesByName[selectedCatagoryKey] {
+        if let category = categoriesByKeyname[selectedCatagoryKey] {
             hostCell?.topButton.setTitle(category.translatedName + " 􀆏", for: .normal)
         }
     }

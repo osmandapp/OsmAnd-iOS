@@ -427,6 +427,7 @@
 		32AB486B2C9C84B3005EF1D4 /* DownloadingListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32AB486A2C9C84B3005EF1D4 /* DownloadingListViewController.swift */; };
 		32ABB64E2AEBC02D00491E99 /* OAWebImagesCacheHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32ABB64D2AEBC02D00491E99 /* OAWebImagesCacheHelper.mm */; };
 		32ABB6502AEC01C000491E99 /* ImageToStringConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32ABB64F2AEC01C000491E99 /* ImageToStringConverter.swift */; };
+		32AC14832D6DF0B7009BE64E /* ChipsCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32AC14822D6DF0AB009BE64E /* ChipsCollectionHandler.swift */; };
 		32AD5D5A2A2F111600A51B60 /* OsmAccessTokenModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32AD5D592A2F111600A51B60 /* OsmAccessTokenModel.swift */; };
 		32AD5D5C2A2F11A200A51B60 /* OsmUserDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32AD5D5B2A2F11A200A51B60 /* OsmUserDataModel.swift */; };
 		32ADB42B25D2EC2900F5C634 /* ic_dialog_move@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32ADB42825D2EC2700F5C634 /* ic_dialog_move@3x.png */; };
@@ -3803,6 +3804,7 @@
 		32ABB64C2AEBC02100491E99 /* OAWebImagesCacheHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAWebImagesCacheHelper.h; sourceTree = "<group>"; };
 		32ABB64D2AEBC02D00491E99 /* OAWebImagesCacheHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWebImagesCacheHelper.mm; sourceTree = "<group>"; };
 		32ABB64F2AEC01C000491E99 /* ImageToStringConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageToStringConverter.swift; sourceTree = "<group>"; };
+		32AC14822D6DF0AB009BE64E /* ChipsCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChipsCollectionHandler.swift; sourceTree = "<group>"; };
 		32AD5D592A2F111600A51B60 /* OsmAccessTokenModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsmAccessTokenModel.swift; sourceTree = "<group>"; };
 		32AD5D5B2A2F11A200A51B60 /* OsmUserDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsmUserDataModel.swift; sourceTree = "<group>"; };
 		32ADB42825D2EC2700F5C634 /* ic_dialog_move@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_dialog_move@3x.png"; path = "Resources/Icons/ic_dialog_move@3x.png"; sourceTree = "<group>"; };
@@ -9460,6 +9462,7 @@
 				461A3F0C29F6E859008EE079 /* OABaseCollectionHandler.m */,
 				461A3F0829F6E560008EE079 /* OAColorCollectionHandler.h */,
 				461A3F0929F6E68F008EE079 /* OAColorCollectionHandler.m */,
+				32AC14822D6DF0AB009BE64E /* ChipsCollectionHandler.swift */,
 				322B53912C78DBF8006B48B0 /* IconCollectionHandler.swift */,
 				4656BD2D2C482D0500B69928 /* PaletteCollectionHandler.swift */,
 				32F3A6A92D5E1958008AE4CA /* PoiIconCollectionHandler.swift */,
@@ -17381,6 +17384,7 @@
 				DA5A837826C563A800F274C7 /* OARouteSettingsBaseViewController.mm in Sources */,
 				3202C5932D6647CB0094AC8B /* ItemsCollectionViewController.swift in Sources */,
 				DA5A847226C563A900F274C7 /* OATurnResource.m in Sources */,
+				32AC14832D6DF0B7009BE64E /* ChipsCollectionHandler.swift in Sources */,
 				DA5A826026C563A700F274C7 /* OAImageCardCell.mm in Sources */,
 				DA5A850326C563A900F274C7 /* OARouteInfoLegendItemView.m in Sources */,
 				DA5A82EB26C563A800F274C7 /* OAPublicTransportRouteCell.mm in Sources */,

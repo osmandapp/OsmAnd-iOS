@@ -79,9 +79,16 @@ static const NSInteger spacing = 9;
         dispatch_async(dispatch_get_main_queue(), ^{
             UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
             layout.scrollDirection = scrollDirection;
-            layout.itemSize = [_collectionHandler getItemSize];
+            CGSize itemSize = [_collectionHandler getItemSize];
+            if (itemSize.width == 0) {
+                layout.estimatedItemSize = CGSizeMake(50, itemSize.height);
+                layout.itemSize = UICollectionViewFlowLayoutAutomaticSize;
+            } else {
+                layout.itemSize = itemSize;
+            }
             layout.minimumLineSpacing = spacing;
             layout.minimumInteritemSpacing = spacing;
+            
             [self.collectionView setCollectionViewLayout:layout animated:!_disableAnimationsOnStart];
 
             NSIndexPath *selectedIndexPath = [_collectionHandler getSelectedIndexPath];

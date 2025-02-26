@@ -31,7 +31,8 @@ import UIKit
 }
 
 @objc protocol PoiIconsCollectionViewControllerDelegate: AnyObject {
-    func scrollToCategoty(_ categoryName: String)
+    func scrollToCategory(categoryKey: String)
+    func scrollToCategory(categoryName: String)
 }
 
 @objcMembers
@@ -73,6 +74,8 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     private let iconNamesKey = "iconNamesKey"
     private let poiCategoryNameKey = "poiCategoryNameKey"
     private let headerKey = "headerKey"
+    private let chipsTitlesKey = "chipsTitlesKey"
+    private let chipsSelectedIndexKey = "chipsSelectedIndexKey"
     
     init(collectionType: ColorCollectionType, items: Any, selectedItem: Any) {
         
@@ -239,6 +242,20 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             ])
             colorCollectionIndexPath = IndexPath(row: Int(section.rowCount()) - 1, section: Int(data.sectionCount()) - 1)
         } else if collectionType == .poiIconCategories {
+            
+            var selectedChipsIndex = 0
+            if let poiIconsDelegate = iconsDelegate as? PoiIconCollectionHandler {
+                selectedChipsIndex = iconCategoties.firstIndex(where: { $0.key == poiIconsDelegate.selectedCatagoryKey }) ?? 0
+            }
+            
+            let chipsSection = data.createNewSection()
+            let chipsTitles = iconCategoties.map { $0.translatedName }
+            chipsSection.addRow(from: [
+                kCellTypeKey: OACollectionSingleLineTableViewCell.reuseIdentifier,
+                chipsTitlesKey: chipsTitles,
+                chipsSelectedIndexKey: selectedChipsIndex
+            ])
+            
             for category in iconCategoties {
                 let section = data.createNewSection()
                 section.addRow(from: [
@@ -301,14 +318,6 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         return paletteColorRow
     }
     
-    override func sectionsCount() -> Int {
-        Int(data.sectionCount())
-    }
-    
-    override func rowsCount(_ section: Int) -> Int {
-        Int(data.rowCount(UInt(section)))
-    }
-    
     override func getRow(_ indexPath: IndexPath) -> UITableViewCell {
         let item = data.item(for: indexPath)
         
@@ -316,16 +325,18 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             if let cell = tableView.dequeueReusableCell(withIdentifier: OACollectionSingleLineTableViewCell.reuseIdentifier, for: indexPath) as? OACollectionSingleLineTableViewCell {
                 if collectionType == .colorItems {
                     setupColorCollectionCell(cell)
+                    
                 } else if collectionType == .iconItems || collectionType == .bigIconItems || collectionType == .poiIconCategories {
-                    if let iconNames = item.obj(forKey: iconNamesKey) as? [String] {
+                    
+                    if let chipsTitles = item.obj(forKey: chipsTitlesKey) as? [String],
+                       let selectedIndex = item.obj(forKey: chipsSelectedIndexKey) as? Int {
+                        setupChipsCollectionCell(cell, chipsTitles: chipsTitles, selectedIndex: selectedIndex)
+                    } else if let iconNames = item.obj(forKey: iconNamesKey) as? [String] {
                         let poiCategory = item.obj(forKey: poiCategoryNameKey) as? String
                         setupIconCollectionCell(cell, iconNames: iconNames, poiCategoryKey: poiCategory)
                     }
                 }
                 cell.rightActionButtonVisibility(false)
-                cell.anchorContent(.centerStyle)
-                cell.collectionView.isScrollEnabled = false
-                cell.useMultyLines = true
                 cell.collectionView.reloadData()
                 cell.layoutIfNeeded()
                 return cell
@@ -372,7 +383,11 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             if let selectedColorItem, let selectedIndex = colorItems.firstIndex(of: selectedColorItem) {
                 colorCollectionHandler.setSelectedIndexPath(IndexPath(row: selectedIndex, section: 0))
             }
+            cell.backgroundColor = UIColor.systemBackground
             cell.setCollectionHandler(colorCollectionHandler)
+            cell.collectionView.isScrollEnabled = false
+            cell.useMultyLines = true
+            cell.anchorContent(.centerStyle)
         }
     }
     
@@ -424,6 +439,26 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                 cell.disableAnimationsOnStart = true
             }
         }
+        cell.backgroundColor = UIColor.systemBackground
+        cell.collectionView.isScrollEnabled = false
+        cell.useMultyLines = true
+        cell.anchorContent(.centerStyle)
+    }
+    
+    private func setupChipsCollectionCell(_ cell: OACollectionSingleLineTableViewCell, chipsTitles: [String], selectedIndex: Int) {
+        let handler = ChipsCollectionHandler()
+        handler.delegate = self
+        handler.setCollectionView(cell.collectionView)
+        handler.setScrollDirection(.horizontal)
+        cell.setCollectionHandler(handler)
+        cell.disableAnimationsOnStart = true
+        cell.collectionView.isScrollEnabled = true
+        cell.useMultyLines = false
+        cell.backgroundColor = UIColor.clear
+        cell.configureTopOffset(0)
+        cell.configureBottomOffset(0)
+        handler.titles = chipsTitles
+        handler.setSelectedIndexPath(IndexPath(row: selectedIndex, section: 0))
     }
     
     override func onRowSelected(_ indexPath: IndexPath) {
@@ -435,6 +470,35 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             }
             dismiss(animated: true)
         }
+    }
+    
+    override func sectionsCount() -> Int {
+        Int(data.sectionCount())
+    }
+    
+    override func rowsCount(_ section: Int) -> Int {
+        Int(data.rowCount(UInt(section)))
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let item = data.item(for: indexPath)
+        if let chipsTitles = item.obj(forKey: chipsTitlesKey) as? [String] {
+            return 30
+        }
+        return UITableView.automaticDimension
+    }
+    
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        let item = data.item(for: indexPath)
+        if let chipsTitles = item.obj(forKey: chipsTitlesKey) as? [String] {
+            return 30
+        }
+        if let iconsHandler = iconsDelegate as? IconCollectionHandler {
+            return iconsHandler.getItemSize().height
+        } else if let colorCollectionHandler {
+            return colorCollectionHandler.getItemSize().height
+        }
+        return UITableView.automaticDimension
     }
     
     // MARK: - Additions
@@ -603,18 +667,28 @@ extension ItemsCollectionViewController: OACollectionCellDelegate {
                 iconsDelegate?.selectIconName(selectedIconItem)
             }
             dismiss(animated: true)
+
         } else if collectionType == .poiIconCategories {
-            if let poiIconsDelegate = iconsDelegate as? PoiIconCollectionHandler {
-                poiIconsDelegate.setSelectedIndexPath(indexPath)
-                if let iconName = selectedItem as? String {
-                    selectedIconItem = iconName
-                    poiIconsDelegate.setIconName(iconName)
-                    poiIconsDelegate.selectIconName(iconName)
+            
+            if indexPath.section == 0 {
+                if let selectedChipName = selectedItem as? String {
+                    scrollToCategory(categoryName: selectedChipName)
                 }
-                poiIconsDelegate.allIconsVCDelegate = nil
+            } else {
+                if let poiIconsDelegate = iconsDelegate as? PoiIconCollectionHandler {
+                    poiIconsDelegate.setSelectedIndexPath(indexPath)
+                    if let iconName = selectedItem as? String {
+                        selectedIconItem = iconName
+                        poiIconsDelegate.setIconName(iconName)
+                        poiIconsDelegate.selectIconName(iconName)
+                    }
+                    poiIconsDelegate.allIconsVCDelegate = nil
+                    dismiss(animated: true)
+                }
             }
-            dismiss(animated: true)
+            
         } else {
+            
             selectedColorItem = colorCollectionHandler?.getSelectedItem()
             if let selectedColorItem {
                 delegate?.selectColorItem(selectedColorItem)
@@ -733,8 +807,27 @@ extension ItemsCollectionViewController: OAColorPickerViewControllerDelegate {
 
 extension ItemsCollectionViewController: PoiIconsCollectionViewControllerDelegate {
     
-    func scrollToCategoty(_ categoryName: String) {
-        if let categoryIndex = iconCategoties.firstIndex(where: { $0.key == categoryName }) {
+    // from top menu
+    func scrollToCategory(categoryKey: String) {
+        // called from poi categoties from top menu
+        if let categoryIndex = iconCategoties.firstIndex(where: { $0.key == categoryKey }) {
+            if let poiIconsDelegate = iconsDelegate as? PoiIconCollectionHandler {
+                poiIconsDelegate.selectedCatagoryKey = categoryKey
+                generateData()
+                tableView.reloadSections(IndexSet(integer: 0), with: .none)
+            }
+            tableView.scrollToRow(at: IndexPath(row: 0, section: categoryIndex), at: .top, animated: true)
+        }
+    }
+    
+    func scrollToCategory(categoryName: String) {
+        // called from poi categoties chips row
+        if let categoryIndex = iconCategoties.firstIndex(where: { $0.translatedName == categoryName }) {
+            if let poiIconsDelegate = iconsDelegate as? PoiIconCollectionHandler {
+                poiIconsDelegate.selectedCatagoryKey = iconCategoties[categoryIndex].key
+                generateData()
+//                tableView.reloadSections(IndexSet(integer: 0), with: .none)
+            }
             tableView.scrollToRow(at: IndexPath(row: 0, section: categoryIndex), at: .top, animated: true)
         }
     }

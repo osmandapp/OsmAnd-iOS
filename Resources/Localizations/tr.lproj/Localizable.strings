@@ -3327,3 +3327,16 @@
 "help_article_map_tracks_name" = "Yollar";
 "help_article_map_routes_name" = "Rotalar";
 "driving_region_india" = "Hindistan";
+"auto_25_chars_route_tslr" = "Sağa hafif viraj";
+"auto_25_chars_route_tl" = "Sola dönüş";
+"auto_25_chars_route_tu" = "U dönüşü yapın";
+"location_radius" = "Konum yarıçapı";
+"view_angle" = "Görüntüleme açısı";
+"location_radius_description" = "Mevcut konum doğruluğunuzu belirten dairesel alanı gösterir";
+"navigation_position" = "Navigasyon pozisyonu";
+"resting_navigation_position" = "Dinlenme & navigasyon pozisyonu";
+"auto_25_chars_route_tshr" = "Sağa keskin viraj";
+"auto_25_chars_route_tshl" = "Sola keskin viraj";
+"auto_25_chars_route_tsll" = "Sola hafif viraj";
+"rendering_value_pale_name" = "Soluk";
+"resting_position" = "Dinlenme pozisyonu";

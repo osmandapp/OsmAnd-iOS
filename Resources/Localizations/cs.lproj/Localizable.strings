@@ -3606,3 +3606,7 @@
 "add_smart_folder" = "Přidat chytrou složku";
 "empty_smart_folder_descr" = "Zde se automaticky zobrazí všechny odpovídající stopy.";
 "smart_folder_name_present" = "Taková chytrá složka již existuje";
+"new_trip_segment" = "Nový segment výletu";
+"shared_string_pause" = "Pozastavit";
+"quick_action_verb_start_pause" = "Spustit / Pozastavit";
+"quick_action_save_recorded_trip_and_continue" = "Zaznamenaný výlet a pokračovat";

@@ -200,11 +200,11 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             addButton.accessibilityLabel = localizedString("shared_string_add_color")
             return [addButton]
         } else if collectionType == .poiIconCategories {
-            if let poiIconsDelegate = iconsDelegate as? PoiIconCollectionHandler,
-                let menu = poiIconsDelegate.buildTopButtonContextMenu() {
-                if let categoriesButton = createRightNavbarButton(nil, iconName: "ic_navbar_list", action: nil, menu: menu) {
-                    return [categoriesButton]
-                }
+            if  !inSearchMode,
+                let poiIconsDelegate = iconsDelegate as? PoiIconCollectionHandler,
+                let menu = poiIconsDelegate.buildTopButtonContextMenu(),
+                let categoriesButton = createRightNavbarButton(nil, iconName: "ic_navbar_list", action: nil, menu: menu) {
+                return [categoriesButton]
             }
         }
         return []
@@ -710,9 +710,8 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         lastSearchResults.removeAll()
 
         if text.length <= 1 {
-            self.view.removeSpinner()
-            self.generateData()
-            self.tableView.reloadData()
+            view.removeSpinner()
+            reloadData()
             return
         }
         
@@ -735,7 +734,8 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                 for result in resultCollection.getCurrentSearchResults() {
                     guard let poiObject = result.object  else { return true }
                     
-                    if let poiType = poiObject as? OAPOIType {
+                    if let poiType = poiObject as? OAPOIType,
+                       !poiType.isAdditional() {
                         results.append(poiType)
                     }
                 }
@@ -744,8 +744,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                 
                 DispatchQueue.main.async {
                     self.view.removeSpinner()
-                    self.generateData()
-                    self.tableView.reloadData()
+                    self.reloadData()
                 }
             }
             
@@ -756,6 +755,12 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         
         searchUICore.search(text, delayedExecution: true, matcher: matcher)
     }
+    
+    private func reloadData() {
+        generateData()
+        tableView.reloadData()
+        setupNavbarButtons()
+    }
 }
 
 extension ItemsCollectionViewController: UISearchBarDelegate {
@@ -764,8 +769,7 @@ extension ItemsCollectionViewController: UISearchBarDelegate {
         setupSearchControllerWithFilter(true)
         inSearchMode = true
         lastSearchResults.removeAll()
-        generateData()
-        tableView.reloadData()
+        reloadData()
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -773,8 +777,7 @@ extension ItemsCollectionViewController: UISearchBarDelegate {
         inSearchMode = false
         searchCancelled = true
         lastSearchResults.removeAll()
-        generateData()
-        tableView.reloadData()
+        reloadData()
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {

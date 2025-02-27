@@ -1941,7 +1941,7 @@
 "rendering_attr_showFitnessTrails_description" = "Mostra i percorsi fitness";
 "simulation_real_mode_title" = "Simulazione realistica";
 "copy_to_map_favorites" = "Copia nei preferiti";
-"purchases_feature_desc_terrain" = "Linee di contorno del terreno, ombreggiatura in scala di grigi e indicazione della pendenza in scala di colori, per mostrare picchi e pianure.";
+"purchases_feature_desc_terrain" = "Linee isoipse, ombreggiatura dei rilievi in scala di grigi e indicazione della pendenza in scala di colori, per mostrare picchi e pianure.";
 "osmand_development_plugin_description" = "Fornisce funzionalità per testare ed eseguire il debug di OsmAnd: simula percorsi di navigazione, monitora il rendering dello schermo, controlla le prestazioni, ecc. Questo plugin non è richiesto per il normale utilizzo dell\'applicazione.";
 "complete_purchase" = "Completa l\'acquisto";
 "purchases_feature_desc_hourly_map_updates" = "Ottieni accesso ad aggiornamenti delle mappa più frequenti. Aggiornamenti orari, giornalieri o settimanali. Gli aggiornamenti sono incrementali, solo per le aree con cambiamenti.";
@@ -3156,7 +3156,7 @@
 "shared_string_mode" = "Modalità";
 "osmand_cloud_deleted_account_descr" = "L\'account e tutti i dati sono stati eliminati da OsmAnd Cloud.";
 "help_article_plugins_custom_name" = "Pacchetto personalizzato";
-"shared_string_move" = "Muovi";
+"shared_string_move" = "Sposta";
 "shared_string_deleting" = "Elimina";
 "shared_string_deleting_complete" = "Eliminazione completata";
 "not_recorded" = "Non registrato";

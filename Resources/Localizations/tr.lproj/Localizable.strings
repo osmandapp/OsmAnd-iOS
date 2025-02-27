@@ -3351,3 +3351,11 @@
 "quick_action_destination" = "Varış noktası";
 "quick_action_verb_turn_on_off" = "Aç / Kapat";
 "quick_action_verb_pause_resume" = "Duraklat / Devam ettir";
+"resting_position_icon" = "Dinlenme pozisyonu simgesi";
+"navigation_position_icon_summary" = "Gezinirken ya da hareket ederken simge görünür.";
+"weather_source_GFS_title" = "GFS";
+"profile_icon" = "Profil simgesi";
+"navigation_position_icon" = "Navigasyon pozisyonu simgesi";
+"resting_position_icon_summary" = "Hareketsizken simge görünür.";
+"daynight_mode_app_theme_summary" = "Haritanın görünümü uygulama temasına uyum sağlar — gündüz modunda açık tema, gece modunda koyu tema";
+"weather_source_ecmwf_title" = "ECMWF";

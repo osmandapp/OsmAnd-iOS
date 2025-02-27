@@ -494,6 +494,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                 poiIconsDelegate.selectIconName(searchIconName)
                 poiIconsDelegate.allIconsVCDelegate = nil
             }
+            searchController?.dismiss(animated: true)
             dismiss(animated: true)
         }
     }

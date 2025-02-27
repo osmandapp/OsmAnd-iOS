@@ -3625,3 +3625,7 @@
 "no_matched_tracks" = "Ingen matchende spor";
 "no_matched_tracks_descr" = "Dine filterkriterier matchede ikke nogen af dine spor";
 "smart_folder_name_present" = "Sådan en smart-mappe findes allerede";
+"shared_string_pause" = "Pause";
+"quick_action_verb_start_pause" = "Start / Pause";
+"new_trip_segment" = "Nyt tursegment";
+"quick_action_save_recorded_trip_and_continue" = "Optaget tur og fortsæt";

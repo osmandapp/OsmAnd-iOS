@@ -1698,3 +1698,14 @@
 "add_to_a_track" = "Thêm vào một cung đường";
 "route_between_points" = "Tuyến đường giữa các điểm";
 "gpx_split_interval_descr" = "Chọn khoảng thời gian mà các dấu mốc với khoảng cách hoặc thời gian trên cung đường sẽ được hiển thị.";
+"add_online_source" = "Thêm nguồn trực tuyến";
+"quick_action_showhide_mapillary_descr" = "Một công tắc để hiện hoặc ẩn lớp phủ Mapillary trên bản đồ.";
+"routing_attr_length_description" = "Chỉ rõ chiều dài phương tiện được phép lưu thông trên đường.";
+"routing_attr_length_name" = "Chiều dài";
+"shared_string_tones" = "tấn";
+"clear_tiles_warning" = "Áp dụng những thay đổi này sẽ xoá dữ liệu đã lưu vào bộ nhớ đệm cho nguồn của mảng này";
+"shared_string_meters" = "mét";
+"vessel_height_limit_description" = "Đặt chiều cao của tàu để tránh những cây cầu thấp. Nhớ rằng, nếu cây cầu có thể chuyển động, chúng tôi sẽ dùng chiều cao của nó ở trạng thái mở.";
+"shared_string_uninstall" = "Gỡ cài đặt";
+"speed_cameras_alert" = "Việc cảnh báo camera tốc độ ở một số quốc gia bị cấm bởi luật pháp.";
+"vessel_width_limit_description" = "Đặt chiều rộng của tàu để tránh những cây cầu hẹp";

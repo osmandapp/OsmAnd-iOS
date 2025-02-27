@@ -1685,3 +1685,12 @@
 "simplified_track_description" = "Chỉ có tuyến đường sẽ được lưu lại, các điểm dừng sẽ bị xóa.";
 "nearest_point" = "Điểm gần nhất";
 "follow_track" = "Đi theo cung đường";
+"plan_route_open_existing_track" = "Mở cung đường đã có sẵn";
+"threshold_distance" = "Khoảng cách ngưỡng";
+"next_segment" = "Phân đoạn tiếp theo";
+"gpx_split_interval_none_descr" = "Chọn cách chia tách mong muốn: bởi thời gian hoặc bởi khoảng cách.";
+"save_as_new_track" = "Lưu dưới dạng cung đường mới";
+"whole_track" = "Toàn bộ cung đường";
+"plan_route_create_new_route" = "Tạo tuyến đường mới";
+"route_between_points_add_track_desc" = "Chọn một tệp cung đường để thêm đoạn mới vào.";
+"reverse_route" = "Đảo ngược tuyến đường";

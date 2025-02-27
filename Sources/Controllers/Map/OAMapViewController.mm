@@ -1479,18 +1479,12 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
     // Get base zoom delta
     float zoomDelta = [self currentZoomInDelta];
-
-    // Put tap location to center of screen
-    CGPoint centerPoint = [self getTouchPoint:recognizer touchIndex:0];
-    OsmAnd::PointI centerLocation;
-    [_mapView convert:centerPoint toLocation:&centerLocation];
-
-    OsmAnd::PointI destLocation(_mapView.target31.x / 2.0 + centerLocation.x / 2.0, _mapView.target31.y / 2.0 + centerLocation.y / 2.0);
     
-    _mapView.mapAnimator->animateTargetTo(destLocation,
-                                      kQuickAnimationTime,
-                                      OsmAnd::MapAnimator::TimingFunction::Victor_ReverseExponentialZoomIn,
-                                      kUserInteractionAnimationKey);
+    // X/Y axis animation
+    const CGPoint touchPoint = [self getTouchPoint:recognizer touchIndex:0];
+    const OATouchLocation *touchLocation = [self acquireMapTouchLocation:touchPoint];
+    const OsmAnd::PointI touchLocation31 = [OANativeUtilities convertFromPoint31:touchLocation.touchLocation31];
+    [_mapView setMapTarget:OsmAnd::PointI((int)touchPoint.x, (int)touchPoint.y) location31:touchLocation31];
     
     // Increate zoom by 1
     zoomDelta += 1.0f;

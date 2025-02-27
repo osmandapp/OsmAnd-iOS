@@ -3506,7 +3506,7 @@
 "save_as_smart_folder" = "Salva come cartella intelligente";
 "new_smart_folder" = "Nuova cartella intelligente";
 "no_matched_tracks" = "Nessuna traccia corrispondente";
-"no_matched_tracks_descr" = "I tuoi criteri di filtro non corrispondono a nessuna delle tue tracce";
+"no_matched_tracks_descr" = "I criteri del filtro non corrispondono a nessuna delle tue tracce";
 "empty_smart_folder_title" = "Nessuna traccia corrispondente";
 "smart_folder_name_present" = "Tale cartella intelligente è già presente";
 "km_h" = "km/h";

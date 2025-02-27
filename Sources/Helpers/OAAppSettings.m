@@ -5205,6 +5205,7 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
     _mapSettingTrackRecording = mapSettingTrackRecording;
     [[NSUserDefaults standardUserDefaults] setBool:_mapSettingTrackRecording forKey:mapSettingTrackRecordingKey];
     [[[OsmAndApp instance] trackStartStopRecObservable] notifyEvent];
+    [[OAMapButtonsHelper sharedInstance].quickActionButtonsChangedObservable notifyEvent];
 }
 
 - (NSSet<NSString *> *) getEnabledPlugins

@@ -108,7 +108,7 @@
         [self updateInfo];
         
         self.onClickFunction = ^(id sender) {
-            [pluginWeak showTripRecordingDialog:true];
+            [pluginWeak showTripRecordingDialog];
         };
     }
     return self;

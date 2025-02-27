@@ -750,6 +750,7 @@
 "in_grace_period" = "In grace period";
 "on_hold" = "On hold";
 "shared_string_paused" = "Paused";
+"shared_string_pause" = "Pause";
 
 "unsaved_changes" = "Unsaved changes";
 "unsaved_changes_will_be_lost_discard" = "Any unsaved changes will be lost. Discard changes?";
@@ -1996,6 +1997,9 @@
 "quick_action_verb_turn_on_off" = "Turn On / Off";
 "quick_action_verb_pause_resume" = "Pause / Resume";
 "quick_action_verb_start_stop" = "Start / Stop";
+"quick_action_verb_start_pause" = "Start / Pause";
+"new_trip_segment" = "New trip segment";
+"quick_action_save_recorded_trip_and_continue" = "Recorded Trip & Continue";
 "map_source" = "Map source";
 "download_srtm_maps" = "Contour lines";
 "voices" = "Voice prompts";

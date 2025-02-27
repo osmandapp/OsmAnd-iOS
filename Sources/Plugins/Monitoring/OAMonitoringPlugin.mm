@@ -142,7 +142,7 @@
     
 }
 
-- (void) showTripRecordingDialog:(BOOL)showTrackSelection
+- (void) showTripRecordingDialog
 {
     BOOL recOn = _settings.mapSettingTrackRecording;
     if (recOn)
@@ -326,6 +326,24 @@
     }
 }
 
+- (NSArray<QuickActionType *> *)getQuickActionTypes
+{
+    return @[TripRecordingAction.getQuickActionType, StartNewTripSegmentAction.getQuickActionType, SaveRecordedTripAndContinueAction.getQuickActionType, FinishTripRecordingAction.getQuickActionType];
+}
+
+- (void) pauseOrResumeRecording
+{
+    if ([self isRecordingTrack])
+    {
+        _settings.mapSettingTrackRecording = NO;
+    }
+    else
+    {
+        [_savingTrackHelper startNewSegment];
+        _settings.mapSettingTrackRecording = YES;
+    }
+}
+
 - (NSString *) getName
 {
     return OALocalizedString(@"record_plugin_name");
@@ -339,6 +357,16 @@
 - (BOOL) isLiveMonitoringEnabled
 {
     return [_liveMonitoringHelper isLiveMonitoringEnabled];
+}
+
+- (BOOL) isRecordingTrack
+{
+    return _settings.mapSettingTrackRecording;
+}
+
+- (BOOL) hasDataToSave
+{
+    return [_savingTrackHelper hasDataToSave];
 }
 
 @end

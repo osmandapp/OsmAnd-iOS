@@ -60,10 +60,6 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     private var editColorIndexPath: IndexPath?
     private var isStartedNewColorAdding = false
     
-    private var searchController: UISearchController?
-    private var isSearchActive = false
-    private var isSearchFilteringActive = false
-    
     private var iconItems: [String] = []
     var iconImages: [UIImage] = []
     var iconCategoties: [IconsCategory] = []
@@ -71,11 +67,18 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     
     private var colorCollectionHandler: OAColorCollectionHandler?
     
+    private var searchController: UISearchController?
+    private var lastSearchResults = [OAPOIType]()
+    private var inSearchMode = false
+    private var searchCancelled = false
+    
     private let iconNamesKey = "iconNamesKey"
     private let poiCategoryNameKey = "poiCategoryNameKey"
     private let headerKey = "headerKey"
     private let chipsTitlesKey = "chipsTitlesKey"
     private let chipsSelectedIndexKey = "chipsSelectedIndexKey"
+    
+    private let poiTypeNoIconValue = "ic_action_categories_search"
     
     init(collectionType: ColorCollectionType, items: Any, selectedItem: Any) {
         
@@ -139,6 +142,8 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         case .colorItems, .iconItems, .bigIconItems, .poiIconCategories:
             tableView.register(UINib(nibName: OACollectionSingleLineTableViewCell.reuseIdentifier, bundle: nil),
                                forCellReuseIdentifier: OACollectionSingleLineTableViewCell.reuseIdentifier)
+            tableView.register(UINib(nibName: OASimpleTableViewCell.reuseIdentifier, bundle: nil),
+                               forCellReuseIdentifier: OASimpleTableViewCell.reuseIdentifier)
         case .colorizationPaletteItems, .terrainPaletteItems:
             tableView.register(UINib(nibName: OATwoIconsButtonTableViewCell.reuseIdentifier, bundle: nil),
                                forCellReuseIdentifier: OATwoIconsButtonTableViewCell.reuseIdentifier)
@@ -165,24 +170,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                 }
             }
         } else if collectionType == .poiIconCategories {
-            searchController = UISearchController(searchResultsController: nil)
-            //searchController?.searchBar.delegate = self
-            searchController?.obscuresBackgroundDuringPresentation = false
-            navigationItem.searchController = searchController
-            navigationItem.hidesSearchBarWhenScrolling = false
-            setupSearchControllerWithFilter(false)
-            tableView.keyboardDismissMode = .onDrag
-            //isInited = true
-        }
-    }
-    
-    private func setupSearchControllerWithFilter(_ isFiltered: Bool) {
-        searchController?.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("shared_string_search"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.textColorSecondary])
-        if isFiltered {
-            searchController?.searchBar.searchTextField.leftView?.tintColor = UIColor.textColorPrimary
-        } else {
-            searchController?.searchBar.searchTextField.leftView?.tintColor = UIColor.textColorSecondary
-            searchController?.searchBar.searchTextField.tintColor = UIColor.textColorSecondary
+            setupSearch()
         }
     }
     
@@ -241,30 +229,47 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                 iconNamesKey: iconItems
             ])
             colorCollectionIndexPath = IndexPath(row: Int(section.rowCount()) - 1, section: Int(data.sectionCount()) - 1)
+            
         } else if collectionType == .poiIconCategories {
             
-            var selectedChipsIndex = 0
-            if let poiIconsDelegate = iconsDelegate as? PoiIconCollectionHandler {
-                selectedChipsIndex = iconCategoties.firstIndex(where: { $0.key == poiIconsDelegate.selectedCatagoryKey }) ?? 0
-            }
-            
-            let chipsSection = data.createNewSection()
-            let chipsTitles = iconCategoties.map { $0.translatedName }
-            chipsSection.addRow(from: [
-                kCellTypeKey: OACollectionSingleLineTableViewCell.reuseIdentifier,
-                chipsTitlesKey: chipsTitles,
-                chipsSelectedIndexKey: selectedChipsIndex
-            ])
-            
-            for category in iconCategoties {
+            if inSearchMode {
                 let section = data.createNewSection()
-                section.addRow(from: [
+                for poiType in lastSearchResults {
+                    let iconName = poiType.iconName().lowercased()
+                    if !iconName.hasSuffix(poiTypeNoIconValue) && OASvgHelper.hasMxMapImageNamed(iconName) {
+                        section.addRow(from: [
+                            kCellTypeKey: OASimpleTableViewCell.reuseIdentifier,
+                            kCellTitle: poiType.nameLocalized,
+                            kCellDescrKey: poiType.category.nameLocalized,
+                            kCellIconNameKey: iconName
+                        ])
+                    }
+                }
+            } else {
+                var selectedChipsIndex = 0
+                if let poiIconsDelegate = iconsDelegate as? PoiIconCollectionHandler {
+                    selectedChipsIndex = iconCategoties.firstIndex(where: { $0.key == poiIconsDelegate.selectedCatagoryKey }) ?? 0
+                }
+                
+                let chipsSection = data.createNewSection()
+                let chipsTitles = iconCategoties.map { $0.translatedName }
+                chipsSection.addRow(from: [
                     kCellTypeKey: OACollectionSingleLineTableViewCell.reuseIdentifier,
-                    headerKey: category.translatedName,
-                    poiCategoryNameKey: category.key,
-                    iconNamesKey: category.iconKeys
+                    chipsTitlesKey: chipsTitles,
+                    chipsSelectedIndexKey: selectedChipsIndex
                 ])
+                
+                for category in iconCategoties {
+                    let section = data.createNewSection()
+                    section.addRow(from: [
+                        kCellTypeKey: OACollectionSingleLineTableViewCell.reuseIdentifier,
+                        headerKey: category.translatedName,
+                        poiCategoryNameKey: category.key,
+                        iconNamesKey: category.iconKeys
+                    ])
+                }
             }
+            
         } else {
             let palettesSection = data.createNewSection()
             paletteItems?.asArray().forEach { paletteColor in
@@ -366,6 +371,16 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                     return cell
                 }
             }
+        } else if item.cellType == OASimpleTableViewCell.reuseIdentifier {
+            if let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier, for: indexPath) as? OASimpleTableViewCell {
+                cell.titleLabel.textColor = UIColor.textColorPrimary
+                cell.descriptionLabel.textColor = UIColor.textColorSecondary
+                cell.titleLabel.text = item.title
+                cell.descriptionLabel.text = item.descr
+                cell.leftIconView.tintColor = UIColor.iconColorSelected
+                cell.leftIconView.image = OAUtilities.getMxIcon(item.iconName)
+                return cell
+            }
         }
         
         return UITableViewCell()
@@ -463,11 +478,21 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     }
     
     override func onRowSelected(_ indexPath: IndexPath) {
+        super.onRowSelected(indexPath)
         let item = data.item(for: indexPath)
         if item.key == "paletteColor" {
             if let palette = item.obj(forKey: "palette") as? PaletteColor {
                 selectedPaletteItem = palette
                 delegate?.selectPaletteItem(palette)
+            }
+            dismiss(animated: true)
+        } else if collectionType == .poiIconCategories && inSearchMode {
+            if let searchIconName = item.iconName,
+                let poiIconsDelegate = iconsDelegate as? PoiIconCollectionHandler {
+                selectedIconItem = searchIconName
+                poiIconsDelegate.setIconName(searchIconName)
+                poiIconsDelegate.selectIconName(searchIconName)
+                poiIconsDelegate.allIconsVCDelegate = nil
             }
             dismiss(animated: true)
         }
@@ -656,6 +681,103 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                 self?.tableView.reloadData()
             }
         }
+    }
+    
+    // MARK: - Search
+    
+    private func setupSearch() {
+        searchController = UISearchController(searchResultsController: nil)
+        searchController?.searchBar.delegate = self
+        searchController?.obscuresBackgroundDuringPresentation = false
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+        tableView.keyboardDismissMode = .onDrag
+        setupSearchControllerWithFilter(false)
+    }
+    
+    private func setupSearchControllerWithFilter(_ isFiltered: Bool) {
+        searchController?.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("shared_string_search"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.textColorSecondary])
+        if isFiltered {
+            searchController?.searchBar.searchTextField.leftView?.tintColor = UIColor.textColorPrimary
+        } else {
+            searchController?.searchBar.searchTextField.leftView?.tintColor = UIColor.textColorSecondary
+            searchController?.searchBar.searchTextField.tintColor = UIColor.textColorSecondary
+        }
+    }
+    
+    private func searchIcons(_ text: String) {
+        lastSearchResults.removeAll()
+
+        if text.length <= 1 {
+            self.view.removeSpinner()
+            self.generateData()
+            self.tableView.reloadData()
+            return
+        }
+        
+        guard let helper = OAQuickSearchHelper.instance(),
+              let searchUICore = helper.getCore(),
+              var settings = searchUICore.getSearchSettings() else { return}
+       
+        searchCancelled = false
+        settings = settings.setSearch([OAObjectType.withType(EOAObjectType.POI_TYPE)])
+        searchUICore.update(settings)
+        view.addSpinner(inCenterOfCurrentView: true)
+        
+        let matcher = OAResultMatcher<OASearchResult> { res in
+            guard let searchResult = res?.pointee else { return true }
+            
+            if searchResult.objectType == .SEARCH_FINISHED {
+                guard let resultCollection = searchUICore.getCurrentSearchResult() else { return true }
+                var results = [OAPOIType]()
+                
+                for result in resultCollection.getCurrentSearchResults() {
+                    guard let poiObject = result.object  else { return true }
+                    
+                    if let poiType = poiObject as? OAPOIType {
+                        results.append(poiType)
+                    }
+                }
+                
+                self.lastSearchResults.append(contentsOf: results)
+                
+                DispatchQueue.main.async {
+                    self.view.removeSpinner()
+                    self.generateData()
+                    self.tableView.reloadData()
+                }
+            }
+            
+            return true
+        } cancelledFunc: {
+            return self.searchCancelled
+        }
+        
+        searchUICore.search(text, delayedExecution: true, matcher: matcher)
+    }
+}
+
+extension ItemsCollectionViewController: UISearchBarDelegate {
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        setupSearchControllerWithFilter(true)
+        inSearchMode = true
+        lastSearchResults.removeAll()
+        generateData()
+        tableView.reloadData()
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        setupSearchControllerWithFilter(false)
+        inSearchMode = false
+        searchCancelled = true
+        lastSearchResults.removeAll()
+        generateData()
+        tableView.reloadData()
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        searchIcons(searchText.trimWhitespaces())
     }
 }
     

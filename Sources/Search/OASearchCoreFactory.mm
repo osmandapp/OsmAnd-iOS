@@ -11,6 +11,7 @@
 #import "OASearchCoreFactory.h"
 #import "OASearchPhrase.h"
 #import "OASearchResult.h"
+#import "OASearchResult+cpp.h"
 #import "OASearchWord.h"
 #import "OASearchSettings.h"
 #import "OASearchResultMatcher.h"
@@ -214,11 +215,11 @@
     
     OASearchResult *newParentSearchResult = nil;
     if (res.parentSearchResult == nil && resultMatcher.getParentSearchResult == nil &&
-        res.objectType == STREET && [res.object isKindOfClass:OAStreet.class] && ((OAStreet *) res.object).city != nil) {
+        res.objectType == EOAObjectTypeSTREET && [res.object isKindOfClass:OAStreet.class] && ((OAStreet *) res.object).city != nil) {
         OACity *ct = ((OAStreet *) res.object).city;
         OASearchResult *cityResult = [[OASearchResult alloc] initWithPhrase:phrase];
         cityResult.object = ct;
-        cityResult.objectType = CITY;
+        cityResult.objectType = EOAObjectTypeCITY;
         cityResult.localeName = [ct getName:phrase.getSettings.getLang transliterate:phrase.getSettings.isTransliterate];
         cityResult.otherNames = [NSMutableArray arrayWithArray:ct.localizedNames.allValues];
         cityResult.location = [[CLLocation alloc] initWithLatitude:ct.latitude longitude:ct.longitude];
@@ -311,12 +312,12 @@
 
 - (instancetype) initWithCityApi:(OASearchStreetByCityAPI *)cityApi streetsApi:(OASearchBuildingAndIntersectionsByStreetAPI *)streetsApi
 {
-    self = [super initWithSearchTypes:@[[OAObjectType withType:CITY],
-                                        [OAObjectType withType:VILLAGE],
-                                        [OAObjectType withType:POSTCODE],
-                                        [OAObjectType withType:STREET],
-                                        [OAObjectType withType:HOUSE],
-                                        [OAObjectType withType:STREET_INTERSECTION]]];
+    self = [super initWithSearchTypes:@[[OAObjectType withType:EOAObjectTypeCITY],
+                                        [OAObjectType withType:EOAObjectTypeVILLAGE],
+                                        [OAObjectType withType:EOAObjectTypePOSTCODE],
+                                        [OAObjectType withType:EOAObjectTypeSTREET],
+                                        [OAObjectType withType:EOAObjectTypeHOUSE],
+                                        [OAObjectType withType:EOAObjectTypeSTREET_INTERSECTION]]];
     if (self)
     {
         DEFAULT_ADDRESS_BBOX_RADIUS = 100 * 1000;
@@ -336,7 +337,7 @@
     if (![p isNoSelectedType] && [p getRadiusLevel] == 1)
         return -1;
 
-    if ([p isLastWord:POI] || [p isLastWord:POI_TYPE])
+    if ([p isLastWord:EOAObjectTypePOI] || [p isLastWord:EOAObjectTypePOI_TYPE])
         return -1;
     
     if ([p isNoSelectedType])
@@ -408,7 +409,7 @@
             }
         }
     }
-    if ([phrase isNoSelectedType] && bbox && ([phrase isUnknownSearchWordPresent] || [phrase isEmptyQueryAllowed]) && [phrase isSearchTypeAllowed:CITY])
+    if ([phrase isNoSelectedType] && bbox && ([phrase isUnknownSearchWordPresent] || [phrase isEmptyQueryAllowed]) && [phrase isSearchTypeAllowed:EOAObjectTypeCITY])
     {
         OANameStringMatcher *nm = [phrase getMainUnknownNameStringMatcher];
         _resArray.clear();
@@ -446,7 +447,7 @@
                 res.location = [[CLLocation alloc] initWithLatitude:loc.latitude longitude:loc.longitude];
                 res.priority = SEARCH_ADDRESS_BY_NAME_PRIORITY;
                 res.priorityDistance = 0.1;
-                res.objectType = CITY;
+                res.objectType = EOAObjectTypeCITY;
                 if ([phrase isEmptyQueryAllowed] && [phrase isEmpty])
                 {
                     [resultMatcher publish:res];
@@ -465,7 +466,7 @@
 
 - (void) searchPoiInCity:(OASearchPhrase *)nphrase res:(OASearchResult *)res resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
-    if (nphrase != nil && res.objectType == CITY)
+    if (nphrase != nil && res.objectType == EOAObjectTypeCITY)
     {
         OASearchAmenityByNameAPI *poiApi = [[OASearchAmenityByNameAPI alloc] init];
         OASearchPhrase *newPhrase = [nphrase generateNewPhrase:nphrase fileId:res.resourceId];
@@ -476,7 +477,7 @@
 
 - (void) searchByName:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
-    if ([phrase getRadiusLevel] > 1 || [phrase getUnknownWordToSearch].length > 3 || [phrase hasMoreThanOneUnknownSearchWord] || [phrase isSearchTypeAllowed:POSTCODE exclusive:YES])
+    if ([phrase getRadiusLevel] > 1 || [phrase getUnknownWordToSearch].length > 3 || [phrase hasMoreThanOneUnknownSearchWord] || [phrase isSearchTypeAllowed:EOAObjectTypePOSTCODE exclusive:YES])
     {
         NSString *wordToSearch = [phrase getUnknownWordToSearch];
         if ([OAArabicNormalizer isSpecialArabic:wordToSearch]) {
@@ -566,7 +567,7 @@
                                       {
                                           // remove limitation by location
                                           if (//(locSpecified && ![streetBbox contains:x top:y right:x bottom:y]) ||
-                                              ![phrase isSearchTypeAllowed:STREET])
+                                              ![phrase isSearchTypeAllowed:EOAObjectTypeSTREET])
                                               return NO;
                                           
                                           if (address->nativeName.startsWith("<"))
@@ -574,7 +575,7 @@
                                           
                                           const auto& street = std::dynamic_pointer_cast<const OsmAnd::Street>(address);
                                           sr.object = [[OAStreet alloc] initWithStreet:street];
-                                          sr.objectType = STREET;
+                                          sr.objectType = EOAObjectTypeSTREET;
                                           sr.localeRelatedObjectName = street->streetGroup->getName(lang, transliterate).toNSString();
                                           sr.relatedObject = [[OACity alloc] initWithCity:street->streetGroup];
                                       }
@@ -587,23 +588,23 @@
                                               if ([phrase isNoSelectedType])
                                                   return NO; // ignore city/town
                                               
-                                              if ((locSpecified && ![cityBbox contains:x top:y right:x bottom:y]) || ![phrase isSearchTypeAllowed:CITY])
+                                              if ((locSpecified && ![cityBbox contains:x top:y right:x bottom:y]) || ![phrase isSearchTypeAllowed:EOAObjectTypeCITY])
                                                   return NO;
                                               
-                                              sr.objectType = CITY;
+                                              sr.objectType = EOAObjectTypeCITY;
                                               sr.priorityDistance = 0.1;
                                           }
                                           else if (city->type == OsmAnd::ObfAddressStreetGroupType::Postcode)
                                           {
-                                              if ((locSpecified && ![postcodeBbox contains:x top:y right:x bottom:y]) || ![phrase isSearchTypeAllowed:POSTCODE])
+                                              if ((locSpecified && ![postcodeBbox contains:x top:y right:x bottom:y]) || ![phrase isSearchTypeAllowed:EOAObjectTypePOSTCODE])
                                                   return NO;
                                               
-                                              sr.objectType = POSTCODE;
+                                              sr.objectType = EOAObjectTypePOSTCODE;
                                               sr.priorityDistance = 0.0;
                                           }
                                           else
                                           {
-                                              if ((locSpecified && ![villagesBbox contains:x top:y right:x bottom:y]) || ![phrase isSearchTypeAllowed:VILLAGE])
+                                              if ((locSpecified && ![villagesBbox contains:x top:y right:x bottom:y]) || ![phrase isSearchTypeAllowed:EOAObjectTypeVILLAGE])
                                                   return NO;
                                               
                                               std::shared_ptr<const OsmAnd::StreetGroup> c;
@@ -632,7 +633,7 @@
                                                   sr.relatedObject = [[OACity alloc] initWithCity:c];
                                                   sr.distRelatedObjectName = minDist;
                                               }
-                                              sr.objectType = VILLAGE;
+                                              sr.objectType = EOAObjectTypeVILLAGE;
                                           }
                                       }
                                       else
@@ -650,7 +651,7 @@
                 if ([resultMatcher isCancelled])
                     break;
                 
-                if (res.objectType == STREET)
+                if (res.objectType == EOAObjectTypeSTREET)
                     [self subSearchApiOrPublish:phrase resultMatcher:resultMatcher res:res api:_streetsApi];
                 else
                 {
@@ -684,7 +685,7 @@
 
 - (instancetype) init
 {
-    self = [super initWithSearchTypes:@[[OAObjectType withType:POI]]];
+    self = [super initWithSearchTypes:@[[OAObjectType withType:EOAObjectTypePOI]]];
     if (self)
     {
         LIMIT = 10000;
@@ -822,7 +823,7 @@
                                   sr.priority = SEARCH_AMENITY_BY_NAME_PRIORITY;
                                   [phrase countUnknownWordsMatchMainResult:sr];
                                   
-                                  sr.objectType = POI;
+                                  sr.objectType = EOAObjectTypePOI;
                                   [resultMatcher publish:sr];
                                   [ids addObject:poiID];
                                   return false;
@@ -838,10 +839,10 @@
 
 - (int) getSearchPriority:(OASearchPhrase *)p
 {
-    if ([p hasObjectType:POI] || ![p isUnknownSearchWordPresent])
+    if ([p hasObjectType:EOAObjectTypePOI] || ![p isUnknownSearchWordPresent])
         return -1;
     
-    if ([p hasObjectType:POI_TYPE])
+    if ([p hasObjectType:EOAObjectTypePOI_TYPE])
         return -1;
     
     if ([p getUnknownWordToSearch].length >= FIRST_WORD_MIN_LENGTH || [p isFirstUnknownSearchWordComplete])
@@ -911,7 +912,7 @@
 
 - (instancetype) init
 {
-    self = [super initWithSearchTypes:@[[OAObjectType withType:POI_TYPE]]];
+    self = [super initWithSearchTypes:@[[OAObjectType withType:EOAObjectTypePOI_TYPE]]];
     if (self)
     {
         _types = [OAPOIHelper sharedInstance];
@@ -1192,7 +1193,7 @@
                               stdFilterId:(NSString *)stdFilterId searchResult:(OASearchResult *)res
 {
     res.priorityDistance = 0;
-    res.objectType = POI_TYPE;
+    res.objectType = EOAObjectTypePOI_TYPE;
     res.firstUnknownWordMatches = YES;
     if (showTopFiltersOnly)
     {
@@ -1230,7 +1231,7 @@
 
 - (int) getSearchPriority:(OASearchPhrase *)p
 {
-    if ([p hasObjectType:POI] || [p hasObjectType:POI_TYPE])
+    if ([p hasObjectType:EOAObjectTypePOI] || [p hasObjectType:EOAObjectTypePOI_TYPE])
         return -1;
     
     if (![p isNoSelectedType] && ![p isUnknownSearchWordPresent])
@@ -1391,7 +1392,7 @@
 
 - (instancetype) initWithTypesAPI:(OASearchAmenityTypesAPI *)typesAPI
 {
-    self = [super initWithSearchTypes:@[[OAObjectType withType:POI]]];
+    self = [super initWithSearchTypes:@[[OAObjectType withType:EOAObjectTypePOI]]];
     if (self)
     {
         BBOX_RADIUS = 10000;
@@ -1553,7 +1554,7 @@
     NSString *nameFilter = nil;
     int countExtraWords = 0;
     NSMutableOrderedSet<NSString *> *poiAdditionals = [NSMutableOrderedSet new];
-    if ([phrase isLastWord:POI_TYPE])
+    if ([phrase isLastWord:EOAObjectTypePOI_TYPE])
     {
         NSObject *obj = phrase.getLastSelectedWord.result.object;
         if ([obj isKindOfClass:OAPOIBaseType.class])
@@ -1699,7 +1700,7 @@
         res.location = [OASearchCoreFactory getLocation:_currentAmenity->position31];
         res.priority = SEARCH_AMENITY_BY_TYPE_PRIORITY;
         res.priorityDistance = 1;
-        res.objectType = POI;
+        res.objectType = EOAObjectTypePOI;
         res.amenity = qMove(_currentAmenity);
         
         [resultMatcher publish:res];
@@ -1747,7 +1748,7 @@
 
 - (int) getSearchPriority:(OASearchPhrase *)p
 {
-    if (([p isLastWord:POI_TYPE] && [p getLastTokenLocation]) || [p isNoSelectedType])
+    if (([p isLastWord:EOAObjectTypePOI_TYPE] && [p getLastTokenLocation]) || [p isNoSelectedType])
         return SEARCH_AMENITY_BY_TYPE_PRIORITY;
     
     return -1;
@@ -1767,8 +1768,8 @@
 
 - (instancetype) init
 {
-    self = [super initWithSearchTypes:@[[OAObjectType withType:HOUSE],
-                                        [OAObjectType withType:STREET_INTERSECTION]]];
+    self = [super initWithSearchTypes:@[[OAObjectType withType:EOAObjectTypeHOUSE],
+                                        [OAObjectType withType:EOAObjectTypeSTREET_INTERSECTION]]];
     if (self)
     {
     }
@@ -1789,7 +1790,7 @@
     
     std::shared_ptr<const OsmAnd::Street> s;
     int priority = SEARCH_BUILDING_BY_STREET_PRIORITY;
-    if ([phrase isLastWord:STREET])
+    if ([phrase isLastWord:EOAObjectTypeSTREET])
         s = ((OAStreet *)phrase.getLastSelectedWord.result.object).street;
     
     std::shared_ptr<const OsmAnd::IQueryController> ctrl;
@@ -1865,7 +1866,7 @@
             
             OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
             bool interpolation = b->belongsToInterpolation(lw);
-            if ((![buildingMatch matches:b->nativeName.toNSString()] && !interpolation) || ![phrase isSearchTypeAllowed:HOUSE])
+            if ((![buildingMatch matches:b->nativeName.toNSString()] && !interpolation) || ![phrase isSearchTypeAllowed:EOAObjectTypeHOUSE])
                 continue;
             if (interpolation)
             {
@@ -1885,7 +1886,7 @@
             res.firstUnknownWordMatches = [startMatch matches:res.localeName];
             res.relatedObject = [[OAStreet alloc] initWithStreet:s];
             res.localeRelatedObjectName = s->getName(lang, transliterate).toNSString();
-            res.objectType = HOUSE;
+            res.objectType = EOAObjectTypeHOUSE;
             res.preferredZoom = PREFERRED_BUILDING_ZOOM;
             
             [resultMatcher publish:res];
@@ -1901,7 +1902,7 @@
                 
                 const auto& street = streetInter->street;
                 OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
-                if ((![streetMatch matches:street->nativeName.toNSString()] && ![streetMatch matchesMap:[OASearchCoreFactory getAllNames:street->localizedNames nativeName:street->nativeName]]) || ![phrase isSearchTypeAllowed:STREET_INTERSECTION])
+                if ((![streetMatch matches:street->nativeName.toNSString()] && ![streetMatch matchesMap:[OASearchCoreFactory getAllNames:street->localizedNames nativeName:street->nativeName]]) || ![phrase isSearchTypeAllowed:EOAObjectTypeSTREET_INTERSECTION])
                     continue;
                 
                 res.otherNames = [OASearchCoreFactory getAllNames:street->localizedNames nativeName:street->nativeName];
@@ -1912,7 +1913,7 @@
                 res.priority = priority + 1;
                 res.localeRelatedObjectName = s->getName(lang, transliterate).toNSString();
                 res.priorityDistance = 0;
-                res.objectType = STREET_INTERSECTION;
+                res.objectType = EOAObjectTypeSTREET_INTERSECTION;
                 res.location = [OASearchCoreFactory getLocation:street->position31];
                 res.preferredZoom = PREFERRED_STREET_INTERSECTION_ZOOM;
                 [phrase countUnknownWordsMatchMainResult:res];
@@ -1928,7 +1929,7 @@
     if ([OASearchCoreFactory isLastWordCityGroup:p])
         return SEARCH_BUILDING_BY_CITY_PRIORITY;
     
-    if (![p isLastWord:STREET])
+    if (![p isLastWord:EOAObjectTypeSTREET])
         return -1;
     
     return SEARCH_BUILDING_BY_STREET_PRIORITY;
@@ -1949,9 +1950,9 @@
 
 - (instancetype) initWithAPI:(OASearchBuildingAndIntersectionsByStreetAPI *)streetsAPI
 {
-    self = [super initWithSearchTypes:@[[OAObjectType withType:HOUSE],
-                                        [OAObjectType withType:STREET],
-                                        [OAObjectType withType:STREET_INTERSECTION]]];
+    self = [super initWithSearchTypes:@[[OAObjectType withType:EOAObjectTypeHOUSE],
+                                        [OAObjectType withType:EOAObjectTypeSTREET],
+                                        [OAObjectType withType:EOAObjectTypeSTREET_INTERSECTION]]];
     if (self)
     {
         DEFAULT_ADDRESS_BBOX_RADIUS = 100 * 1000;
@@ -2017,7 +2018,7 @@
             res.location = [OASearchCoreFactory getLocation:object->position31];
             res.priority = SEARCH_STREET_BY_CITY_PRIORITY;
             //res.priorityDistance = 1;
-            res.objectType = STREET;
+            res.objectType = EOAObjectTypeSTREET;
             [self subSearchApiOrPublish:phrase resultMatcher:resultMatcher res:res api:_streetsAPI publish:pub];
             if (limit++ > LIMIT)
                 break;
@@ -2053,8 +2054,8 @@
 
 - (instancetype) initWithAPI:(OASearchAmenityByNameAPI *) amenitiesAPI
 {
-    self = [super initWithSearchTypes:@[[OAObjectType withType:LOCATION],
-                                        [OAObjectType withType:PARTIAL_LOCATION]]];
+    self = [super initWithSearchTypes:@[[OAObjectType withType:EOAObjectTypeLOCATION],
+                                        [OAObjectType withType:EOAObjectTypePARTIAL_LOCATION]]];
     if (self)
     {
         _amenitiesAPI = amenitiesAPI;
@@ -2156,13 +2157,13 @@
     }
     if (l)
     {
-        if ([phrase isSearchTypeAllowed:LOCATION])
+        if ([phrase isSearchTypeAllowed:EOAObjectTypeLOCATION])
         {
             OASearchResult *sp = [[OASearchResult alloc] initWithPhrase:phrase];
             sp.priority = SEARCH_LOCATION_PRIORITY;
             sp.object = sp.location = l;
             sp.localeName = [NSString stringWithFormat:@"%.5f, %.5f", (float) sp.location.coordinate.latitude, (float) sp.location.coordinate.longitude];
-            sp.objectType = LOCATION;
+            sp.objectType = EOAObjectTypeLOCATION;
             sp.wordsSpan = lw;
             [resultMatcher publish:sp];
         }
@@ -2170,7 +2171,7 @@
     else if ([phrase isNoSelectedType])
     {
         CLLocation *ll = [self parsePartialLocation:lw];
-        if (ll && [phrase isSearchTypeAllowed:PARTIAL_LOCATION])
+        if (ll && [phrase isSearchTypeAllowed:EOAObjectTypePARTIAL_LOCATION])
         {
             OASearchResult *sp = [[OASearchResult alloc] initWithPhrase:phrase];
             sp.priority = SEARCH_LOCATION_PRIORITY;
@@ -2182,7 +2183,7 @@
             formatter.maximumFractionDigits = 2;
             formatter.decimalSeparator = @".";
             sp.localeName = [NSString stringWithFormat:@"%@, <input>", [formatter stringFromNumber:@((float) sp.location.coordinate.latitude)]];
-            sp.objectType = PARTIAL_LOCATION;
+            sp.objectType = EOAObjectTypePARTIAL_LOCATION;
             [resultMatcher publish:sp];
         }
     }
@@ -2242,9 +2243,9 @@
 
         OAPOI *poi1;
         OAPOI *poi2;
-        if (sr1.objectType == POI)
+        if (sr1.objectType == EOAObjectTypePOI)
             poi1 = (OAPOI *)sr1.object;
-        if (sr2.objectType == POI)
+        if (sr2.objectType == EOAObjectTypePOI)
             poi2 = (OAPOI *)sr2.object;
 
         if (poi1 && poi2)
@@ -2405,7 +2406,7 @@ static BOOL DISPLAY_DEFAULT_POI_TYPES = NO;
 
 + (BOOL) isLastWordCityGroup:(OASearchPhrase *)p
 {
-    return [p isLastWord:CITY] || [p isLastWord:POSTCODE] || [p isLastWord:VILLAGE];
+    return [p isLastWord:EOAObjectTypeCITY] || [p isLastWord:EOAObjectTypePOSTCODE] || [p isLastWord:EOAObjectTypeVILLAGE];
 }
 
 @end

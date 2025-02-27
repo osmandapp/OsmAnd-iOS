@@ -170,11 +170,11 @@
 
 + (NSString *) getName:(OAOsmPoint *)point
 {
-    if ([point getGroup] == POI)
+    if ([point getGroup] == EOAGroupPOI)
     {
         return [((OAOpenStreetMapPoint *)point) getName];
     }
-    else if ([point getGroup] == BUG)
+    else if ([point getGroup] == EOAGroupBUG)
     {
         return [((OAOsmNotePoint *)point) getText];
     }
@@ -187,12 +187,12 @@
 + (NSString *) getCategory:(OAOsmPoint *)point
 {
     NSString *category = @"";
-    if (point.getGroup == POI)
+    if (point.getGroup == EOAGroupPOI)
     {
         OAEditPOIData *data = [[OAEditPOIData alloc] initWithEntity:((OAOpenStreetMapPoint *) point).getEntity];
         category = data.getLocalizedTypeString;
     }
-    else if (point.getGroup == BUG)
+    else if (point.getGroup == EOAGroupBUG)
         category = OALocalizedString(@"osn_bug_name");
     
     return category;

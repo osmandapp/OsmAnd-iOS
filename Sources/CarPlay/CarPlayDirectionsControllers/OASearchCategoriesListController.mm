@@ -15,6 +15,7 @@
 #import "OAPOICategory.h"
 #import "OAQuickSearchTableController.h"
 #import "OACarPlayCategoryResultListController.h"
+#import "OASearchResult.h"
 #import "Localization.h"
 
 #import <CarPlay/CarPlay.h>

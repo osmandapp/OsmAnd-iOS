@@ -9,6 +9,7 @@
 //  git revision aea6f3ff8842b91fda4b471e24015e4142c52d13
 
 #import "OASearchResult.h"
+#import "OASearchResult+cpp.h"
 #import "OASearchPhrase.h"
 
 #import "OAStreet.h"
@@ -69,7 +70,7 @@
     {
         // search phrase matches poi type, then we lower all POI matches and don't check allWordsMatched
     }
-    else if (_objectType == POI_TYPE)
+    else if (_objectType == EOAObjectTypePOI_TYPE)
     {
         
     }
@@ -105,7 +106,7 @@
         if (completeMatchRes.allWordsEqual)
         {
             BOOL closeDistance = [OAMapUtils getDistance:([_requiredSearchPhrase getLastTokenLocation]).coordinate second:_location.coordinate] <= NEAREST_METERS_LIMIT;
-            if (_objectType == CITY || _objectType == VILLAGE || closeDistance)
+            if (_objectType == EOAObjectTypeCITY || _objectType == EOAObjectTypeVILLAGE || closeDistance)
                 res = [OAObjectType getTypeWeight:_objectType] * MAX_TYPES_BASE_10 + MAX_PHRASE_WEIGHT_TOTAL / 2;
         }
         return res;

@@ -75,6 +75,12 @@
 #import "OAColorCollectionHandler.h"
 #import "OAConcurrentCollections.h"
 #import "OASvgHelper.h"
+#import "OAQuickSearchHelper.h"
+#import "OASearchUICore.h"
+#import "OASearchSettings.h"
+#import "OAObjectType.h"
+#import "OAResultMatcher.h"
+#import "OASearchResult.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"

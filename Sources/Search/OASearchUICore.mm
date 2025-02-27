@@ -13,6 +13,7 @@
 #import "OASearchPhrase.h"
 #import "OASearchWord.h"
 #import "OASearchSettings.h"
+#import "OASearchResult+cpp.h"
 #import "OAAtomicInteger.h"
 #import "OASearchCoreAPI.h"
 #import "OAPOIHelper.h"
@@ -407,12 +408,12 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
     BOOL isSameType = r1.objectType == r2.objectType;
     if (isSameType)
     {
-        if (r1.objectType == GPX_TRACK)
+        if (r1.objectType == EOAObjectTypeGPX_TRACK)
             return [r1.localeName isEqualToString:r2.localeName];
     }
     if (r1.location && r2.location && ![OAObjectType isTopVisible:r1.objectType] && ![OAObjectType isTopVisible:r2.objectType])
     {
-        if (r1.objectType == r2.objectType && r1.objectType == STREET)
+        if (r1.objectType == r2.objectType && r1.objectType == EOAObjectTypeSTREET)
         {
             OAStreet *st1 = (OAStreet *) r1.object;
             OAStreet *st2 = (OAStreet *) r2.object;
@@ -420,11 +421,11 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
             return fabs(st1.latitude - st2.latitude) < 0.00001 && fabs(st1.longitude - st2.longitude) < 0.00001;
         }
         std::shared_ptr<const OsmAnd::Amenity> a1;
-        if (r1.objectType == POI)
+        if (r1.objectType == EOAObjectTypePOI)
             a1 = r1.amenity;
 
         std::shared_ptr<const OsmAnd::Amenity> a2;
-        if (r2.objectType == POI)
+        if (r2.objectType == EOAObjectTypePOI)
             a2 = r2.amenity;
 
         if ([r1.localeName isEqualToString:r2.localeName])

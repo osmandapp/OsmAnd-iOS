@@ -76,7 +76,7 @@
     if (_matcher)
     {
         OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
-        sr.objectType = SEARCH_STARTED;
+        sr.objectType = EOAObjectTypeSEARCH_STARTED;
         [_matcher publish:sr];
     }
 }
@@ -86,7 +86,7 @@
     if (_matcher)
     {
         OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
-        sr.objectType = FILTER_FINISHED;
+        sr.objectType = EOAObjectTypeFILTER_FINISHED;
         [_matcher publish:sr];
     }
 }
@@ -96,7 +96,7 @@
     if (_matcher)
     {
         OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
-        sr.objectType = SEARCH_FINISHED;
+        sr.objectType = EOAObjectTypeSEARCH_FINISHED;
         [_matcher publish:sr];
     }
 }
@@ -106,7 +106,7 @@
     if (_matcher)
     {
         OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
-        sr.objectType = SEARCH_API_FINISHED;
+        sr.objectType = EOAObjectTypeSEARCH_API_FINISHED;
         sr.object = api;
         sr.parentSearchResult = _parentSearchResult;
         [_matcher publish:sr];
@@ -118,7 +118,7 @@
     if (_matcher)
     {
         OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
-        sr.objectType = SEARCH_API_REGION_FINISHED;
+        sr.objectType = EOAObjectTypeSEARCH_API_REGION_FINISHED;
         sr.object = api;
         sr.parentSearchResult = _parentSearchResult;
         sr.resourceId = resourceId;

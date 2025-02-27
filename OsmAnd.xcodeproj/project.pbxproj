@@ -3685,6 +3685,7 @@
 		3241BC852B611D0500101894 /* OATwoButtonsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OATwoButtonsTableViewCell.xib; sourceTree = "<group>"; };
 		3242A46D26CB0F05001CA174 /* OACollapsableNearestPoiTypeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACollapsableNearestPoiTypeView.h; sourceTree = "<group>"; };
 		3242A46E26CB0F1C001CA174 /* OACollapsableNearestPoiTypeView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACollapsableNearestPoiTypeView.mm; sourceTree = "<group>"; };
+		3242F89F2D7096BC00509191 /* OASearchResult+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OASearchResult+cpp.h"; sourceTree = "<group>"; };
 		3245D96B2AF014BE000AA660 /* TravelGuidesSettingsCacheViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelGuidesSettingsCacheViewController.swift; sourceTree = "<group>"; };
 		32464B7D2A6FCC6700DA6980 /* TravelExploreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelExploreViewController.swift; sourceTree = "<group>"; };
 		32464B7F2A7012C300DA6980 /* OAResourcesUISwiftHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAResourcesUISwiftHelper.h; sourceTree = "<group>"; };
@@ -10953,6 +10954,7 @@
 				DA5A7A3626C563A000F274C7 /* OASearchPhrase.h */,
 				DA5A7A4026C563A000F274C7 /* OASearchPhrase.mm */,
 				DA5A7A3726C563A000F274C7 /* OASearchResult.h */,
+				3242F89F2D7096BC00509191 /* OASearchResult+cpp.h */,
 				DA5A7A3326C563A000F274C7 /* OASearchResult.mm */,
 				DA5A7A3E26C563A000F274C7 /* OASearchResultMatcher.h */,
 				DA5A7A4326C563A000F274C7 /* OASearchResultMatcher.mm */,

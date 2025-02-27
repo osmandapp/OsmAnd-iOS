@@ -73,7 +73,7 @@
 }
 
 - (EOAGroup)getGroup { 
-    return POI;
+    return EOAGroupPOI;
 }
 
 - (long long)getId { 

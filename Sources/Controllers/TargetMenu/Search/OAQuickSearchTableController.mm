@@ -13,6 +13,7 @@
 #import "OAQuickSearchHeaderListItem.h"
 #import "OAQuickSearchEmptyResultListItem.h"
 #import "OASearchResult.h"
+#import "OASearchResult+cpp.h"
 #import "OASearchPhrase.h"
 #import "OASearchSettings.h"
 #import "OAMapLayers.h"
@@ -249,7 +250,7 @@
         
         switch (searchResult.objectType)
         {
-            case POI:
+            case EOAObjectTypePOI:
             {
                 OAPOI *poi = (OAPOI *)searchResult.object;
                 if (searchType == OAQuickSearchType::REGULAR)
@@ -264,7 +265,7 @@
                 }
                 break;
             }
-            case RECENT_OBJ:
+            case EOAObjectTypeRECENT_OBJ:
             {
                 OAHistoryItem *item = (OAHistoryItem *) searchResult.object;
                 if (searchType == OAQuickSearchType::REGULAR)
@@ -281,7 +282,7 @@
                 }
                 break;
             }
-            case FAVORITE:
+            case EOAObjectTypeFAVORITE:
             {
                 auto favorite = std::const_pointer_cast<OsmAnd::IFavoriteLocation>(searchResult.favorite);
                 OAFavoriteItem *fav = [[OAFavoriteItem alloc] initWithFavorite:favorite];
@@ -298,9 +299,9 @@
                 }
                 break;
             }
-            case CITY:
-            case STREET:
-            case VILLAGE:
+            case EOAObjectTypeCITY:
+            case EOAObjectTypeSTREET:
+            case EOAObjectTypeVILLAGE:
             {
                 OAAddress *address = (OAAddress *)searchResult.object;
                 if (searchType == OAQuickSearchType::REGULAR)
@@ -315,7 +316,7 @@
                 }
                 break;
             }
-            case HOUSE:
+            case EOAObjectTypeHOUSE:
             {
                 OABuilding *building = (OABuilding *)searchResult.object;
                 NSString *typeNameHouse;
@@ -349,7 +350,7 @@
                 }
                 break;
             }
-            case STREET_INTERSECTION:
+            case EOAObjectTypeSTREET_INTERSECTION:
             {
                 OAStreetIntersection *streetIntersection = (OAStreetIntersection *)searchResult.object;
                 NSString *typeNameIntersection = [OAQuickSearchListItem getTypeName:searchResult];
@@ -368,7 +369,7 @@
                 }
                 break;
             }
-            case LOCATION:
+            case EOAObjectTypeLOCATION:
             {
                 if (searchResult.location)
                 {
@@ -385,7 +386,7 @@
                 }
                 break;
             }
-            case WPT:
+            case EOAObjectTypeWPT:
             {
                 if (searchResult.wpt)
                 {
@@ -430,7 +431,7 @@
     }
     else
     {
-        if (searchResult.objectType == GPX_TRACK)
+        if (searchResult.objectType == EOAObjectTypeGPX_TRACK)
         {
             OASGpxDataItem *dataItem = (OASGpxDataItem *)searchResult.relatedObject;
             if (dataItem)
@@ -509,7 +510,7 @@
     NSInteger count = 0;
     for (OAQuickSearchListItem *res in dataArray)
     {
-        if (res.getSearchResult.objectType == POI_TYPE)
+        if (res.getSearchResult.objectType == EOAObjectTypePOI_TYPE)
             count++;
     }
     return count;
@@ -557,8 +558,8 @@
     {
         switch (res.objectType)
         {
-            case LOCATION:
-            case GPX_TRACK:
+            case EOAObjectTypeLOCATION:
+            case EOAObjectTypeGPX_TRACK:
             {
                 OASGpxDataItem *dataItem = (OASGpxDataItem *)res.relatedObject;
                 if (dataItem)
@@ -600,7 +601,7 @@
                     return cell;
                 }
             }
-            case PARTIAL_LOCATION:
+            case EOAObjectTypePARTIAL_LOCATION:
             {
                 OAPointDescCell* cell = [self getPointDescCell];
                 if (cell)
@@ -615,7 +616,7 @@
                 }
                 return cell;
             }
-            case FAVORITE:
+            case EOAObjectTypeFAVORITE:
             {
                 OAPointDescCell* cell = [self getPointDescCell];
                 if (cell)
@@ -632,7 +633,7 @@
                 }
                 return cell;
             }
-            case WPT:
+            case EOAObjectTypeWPT:
             {
                 OAPointDescCell* cell = [self getPointDescCell];
                 if (cell)
@@ -649,12 +650,12 @@
                 }
                 return cell;
             }
-            case CITY:
-            case VILLAGE:
-            case POSTCODE:
-            case STREET:
-            case HOUSE:
-            case STREET_INTERSECTION:
+            case EOAObjectTypeCITY:
+            case EOAObjectTypeVILLAGE:
+            case EOAObjectTypePOSTCODE:
+            case EOAObjectTypeSTREET:
+            case EOAObjectTypeHOUSE:
+            case EOAObjectTypeSTREET_INTERSECTION:
             {
                 OAPointDescCell* cell = [self getPointDescCell];
                 if (cell)
@@ -670,7 +671,7 @@
                 }
                 return cell;
             }
-            case POI:
+            case EOAObjectTypePOI:
             {
                 OAPointDescCell* cell = [self getPointDescCell];
                 if (cell)
@@ -695,7 +696,7 @@
                 }
                 return cell;
             }
-            case RECENT_OBJ:
+            case EOAObjectTypeRECENT_OBJ:
             {
                 OAPointDescCell* cell = [self getPointDescCell];
                 if (cell)
@@ -711,7 +712,7 @@
                 }
                 return cell;
             }
-            case POI_TYPE:
+            case EOAObjectTypePOI_TYPE:
             {
                 BOOL isLast = [dataArray indexOfObject:item] == [self getPoiFiltersCount:dataArray] - 1;
                 if ([res.object isKindOfClass:[OACustomSearchPoiFilter class]])
@@ -957,24 +958,24 @@
             {
                 OASearchResult *sr = [item getSearchResult];
                 
-                if (sr.objectType == POI
-                    || sr.objectType == LOCATION
-                    || sr.objectType == HOUSE
-                    || sr.objectType == FAVORITE
-                    || sr.objectType == RECENT_OBJ
-                    || sr.objectType == WPT
-                    || sr.objectType == GPX_TRACK
-                    || sr.objectType == STREET_INTERSECTION)
+                if (sr.objectType == EOAObjectTypePOI
+                    || sr.objectType == EOAObjectTypeLOCATION
+                    || sr.objectType == EOAObjectTypeHOUSE
+                    || sr.objectType == EOAObjectTypeFAVORITE
+                    || sr.objectType == EOAObjectTypeRECENT_OBJ
+                    || sr.objectType == EOAObjectTypeWPT
+                    || sr.objectType == EOAObjectTypeGPX_TRACK
+                    || sr.objectType == EOAObjectTypeSTREET_INTERSECTION)
                 {
                     [self showOnMap:sr searchType:self.searchType delegate:self.delegate];
                 }
-                else if (sr.objectType == PARTIAL_LOCATION)
+                else if (sr.objectType == EOAObjectTypePARTIAL_LOCATION)
                 {
                     // nothing
                 }
                 else
                 {
-                    if (sr.objectType == CITY || sr.objectType == VILLAGE || sr.objectType == STREET)
+                    if (sr.objectType == EOAObjectTypeCITY || sr.objectType == EOAObjectTypeVILLAGE || sr.objectType == EOAObjectTypeSTREET)
                         _showResult = YES;
                     [self.delegate didSelectResult:[item getSearchResult]];
                 }

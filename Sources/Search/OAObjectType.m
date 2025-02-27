@@ -30,42 +30,42 @@
 {
     switch (objecType)
     {
-        case CITY:
-        case VILLAGE:
-        case POSTCODE:
-        case STREET:
-        case HOUSE:
-        case STREET_INTERSECTION:
+        case EOAObjectTypeCITY:
+        case EOAObjectTypeVILLAGE:
+        case EOAObjectTypePOSTCODE:
+        case EOAObjectTypeSTREET:
+        case EOAObjectTypeHOUSE:
+        case EOAObjectTypeSTREET_INTERSECTION:
             return YES;
             
-        case POI_TYPE:
+        case EOAObjectTypePOI_TYPE:
             return NO;
             
-        case POI:
+        case EOAObjectTypePOI:
             return YES;
             
-        case LOCATION:
+        case EOAObjectTypeLOCATION:
             return YES;
             
-        case PARTIAL_LOCATION:
+        case EOAObjectTypePARTIAL_LOCATION:
             return NO;
             
-        case FAVORITE:
-        case WPT:
-        case RECENT_OBJ:
+        case EOAObjectTypeFAVORITE:
+        case EOAObjectTypeWPT:
+        case EOAObjectTypeRECENT_OBJ:
             return YES;
-        case FAVORITE_GROUP:
+        case EOAObjectTypeFAVORITE_GROUP:
             return NO;
             
-        case REGION:
+        case EOAObjectTypeREGION:
             return YES;
 
-        case SEARCH_STARTED:
-        case SEARCH_FINISHED:
-        case FILTER_FINISHED:
-        case SEARCH_API_FINISHED:
-        case SEARCH_API_REGION_FINISHED:
-        case UNKNOWN_NAME_FILTER:
+        case EOAObjectTypeSEARCH_STARTED:
+        case EOAObjectTypeSEARCH_FINISHED:
+        case EOAObjectTypeFILTER_FINISHED:
+        case EOAObjectTypeSEARCH_API_FINISHED:
+        case EOAObjectTypeSEARCH_API_REGION_FINISHED:
+        case EOAObjectTypeUNKNOWN_NAME_FILTER:
             return NO;
             
         default:
@@ -75,61 +75,61 @@
 
 + (BOOL) isAddress:(EOAObjectType)objecType
 {
-    return objecType == CITY || objecType == VILLAGE || objecType == POSTCODE || objecType == STREET || objecType == HOUSE || objecType == STREET_INTERSECTION;
+    return objecType == EOAObjectTypeCITY || objecType == EOAObjectTypeVILLAGE || objecType == EOAObjectTypePOSTCODE || objecType == EOAObjectTypeSTREET || objecType == EOAObjectTypeHOUSE || objecType == EOAObjectTypeSTREET_INTERSECTION;
 }
 
 + (BOOL) isTopVisible:(EOAObjectType)objecType
 {
-    return objecType == POI_TYPE || objecType == FAVORITE || objecType == FAVORITE_GROUP || objecType == WPT || objecType == GPX_TRACK || objecType == LOCATION || objecType == PARTIAL_LOCATION;
+    return objecType == EOAObjectTypePOI_TYPE || objecType == EOAObjectTypeFAVORITE || objecType == EOAObjectTypeFAVORITE_GROUP || objecType == EOAObjectTypeWPT || objecType == EOAObjectTypeGPX_TRACK || objecType == EOAObjectTypeLOCATION || objecType == EOAObjectTypePARTIAL_LOCATION;
 }
 
 + (NSString *) toString:(EOAObjectType)objecType
 {
     switch (objecType)
     {
-        case CITY:
+        case EOAObjectTypeCITY:
             return @"CITY";
-        case VILLAGE:
+        case EOAObjectTypeVILLAGE:
             return @"VILLAGE";
-        case POSTCODE:
+        case EOAObjectTypePOSTCODE:
             return @"POSTCODE";
-        case STREET:
+        case EOAObjectTypeSTREET:
             return @"STREET";
-        case HOUSE:
+        case EOAObjectTypeHOUSE:
             return @"HOUSE";
-        case STREET_INTERSECTION:
+        case EOAObjectTypeSTREET_INTERSECTION:
             return @"STREET_INTERSECTION";
-        case POI_TYPE:
+        case EOAObjectTypePOI_TYPE:
             return @"POI_TYPE";
-        case POI:
+        case EOAObjectTypePOI:
             return @"POI";
-        case LOCATION:
+        case EOAObjectTypeLOCATION:
             return @"LOCATION";
-        case PARTIAL_LOCATION:
+        case EOAObjectTypePARTIAL_LOCATION:
             return @"PARTIAL_LOCATION";
-        case FAVORITE:
+        case EOAObjectTypeFAVORITE:
             return @"FAVORITE";
-        case FAVORITE_GROUP:
+        case EOAObjectTypeFAVORITE_GROUP:
             return @"FAVORITE_GROUP";
-        case WPT:
+        case EOAObjectTypeWPT:
             return @"WPT";
-        case RECENT_OBJ:
+        case EOAObjectTypeRECENT_OBJ:
             return @"RECENT_OBJ";
-        case REGION:
+        case EOAObjectTypeREGION:
             return @"REGION";
-        case SEARCH_STARTED:
+        case EOAObjectTypeSEARCH_STARTED:
             return @"SEARCH_STARTED";
-        case SEARCH_FINISHED:
+        case EOAObjectTypeSEARCH_FINISHED:
             return @"SEARCH_FINISHED";
-        case FILTER_FINISHED:
+        case EOAObjectTypeFILTER_FINISHED:
             return @"FILTER_FINISHED";
-        case SEARCH_API_FINISHED:
+        case EOAObjectTypeSEARCH_API_FINISHED:
             return @"SEARCH_API_FINISHED";
-        case SEARCH_API_REGION_FINISHED:
+        case EOAObjectTypeSEARCH_API_REGION_FINISHED:
             return @"SEARCH_API_REGION_FINISHED";
-        case UNKNOWN_NAME_FILTER:
+        case EOAObjectTypeUNKNOWN_NAME_FILTER:
             return @"UNKNOWN_NAME_FILTER";
-        case GPX_TRACK:
+        case EOAObjectTypeGPX_TRACK:
             return @"GPX_TRACK";
             
         default:
@@ -139,9 +139,9 @@
 
 + (OAObjectType *) getExclusiveSearchType:(EOAObjectType)objectType
 {
-    if (objectType == FAVORITE_GROUP)
+    if (objectType == EOAObjectTypeFAVORITE_GROUP)
     {
-        return [OAObjectType withType:FAVORITE];
+        return [OAObjectType withType:EOAObjectTypeFAVORITE];
     }
     return nil;
 }
@@ -150,16 +150,16 @@
 {
     switch (objectType)
     {
-        case HOUSE:
-        case STREET_INTERSECTION:
+        case EOAObjectTypeHOUSE:
+        case EOAObjectTypeSTREET_INTERSECTION:
             return 4.0;
-        case STREET:
+        case EOAObjectTypeSTREET:
             return 3.0;
-        case CITY:
-        case VILLAGE:
-        case POSTCODE:
+        case EOAObjectTypeCITY:
+        case EOAObjectTypeVILLAGE:
+        case EOAObjectTypePOSTCODE:
             return 2.0;
-        case POI:
+        case EOAObjectTypePOI:
             return 1.0;
         default:
             return 1.0;
@@ -169,49 +169,49 @@
 + (OAObjectType *)valueOf:(NSString *)type
 {
     if ([type isEqualToString:@"CITY"])
-        return [OAObjectType withType:CITY];
+        return [OAObjectType withType:EOAObjectTypeCITY];
     if ([type isEqualToString:@"VILLAGE"])
-        return [OAObjectType withType:VILLAGE];
+        return [OAObjectType withType:EOAObjectTypeVILLAGE];
     if ([type isEqualToString:@"POSTCODE"])
-        return [OAObjectType withType:POSTCODE];
+        return [OAObjectType withType:EOAObjectTypePOSTCODE];
     if ([type isEqualToString:@"STREET"])
-        return [OAObjectType withType:STREET];
+        return [OAObjectType withType:EOAObjectTypeSTREET];
     if ([type isEqualToString:@"HOUSE"])
-        return [OAObjectType withType:HOUSE];
+        return [OAObjectType withType:EOAObjectTypeHOUSE];
     if ([type isEqualToString:@"STREET_INTERSECTION"])
-        return [OAObjectType withType:STREET_INTERSECTION];
+        return [OAObjectType withType:EOAObjectTypeSTREET_INTERSECTION];
     if ([type isEqualToString:@"POI_TYPE"])
-        return [OAObjectType withType:POI_TYPE];
+        return [OAObjectType withType:EOAObjectTypePOI_TYPE];
     if ([type isEqualToString:@"POI"])
-        return [OAObjectType withType:POI];
+        return [OAObjectType withType:EOAObjectTypePOI];
     if ([type isEqualToString:@"LOCATION"])
-        return [OAObjectType withType:LOCATION];
+        return [OAObjectType withType:EOAObjectTypeLOCATION];
     if ([type isEqualToString:@"PARTIAL_LOCATION"])
-        return [OAObjectType withType:PARTIAL_LOCATION];
+        return [OAObjectType withType:EOAObjectTypePARTIAL_LOCATION];
     if ([type isEqualToString:@"FAVORITE"])
-        return [OAObjectType withType:FAVORITE];
+        return [OAObjectType withType:EOAObjectTypeFAVORITE];
     if ([type isEqualToString:@"FAVORITE_GROUP"])
-        return [OAObjectType withType:FAVORITE_GROUP];
+        return [OAObjectType withType:EOAObjectTypeFAVORITE_GROUP];
     if ([type isEqualToString:@"WPT"])
-        return [OAObjectType withType:WPT];
+        return [OAObjectType withType:EOAObjectTypeWPT];
     if ([type isEqualToString:@"RECENT_OBJ"])
-        return [OAObjectType withType:RECENT_OBJ];
+        return [OAObjectType withType:EOAObjectTypeRECENT_OBJ];
     if ([type isEqualToString:@"REGION"])
-        return [OAObjectType withType:REGION];
+        return [OAObjectType withType:EOAObjectTypeREGION];
     if ([type isEqualToString:@"SEARCH_STARTED"])
-        return [OAObjectType withType:SEARCH_STARTED];
+        return [OAObjectType withType:EOAObjectTypeSEARCH_STARTED];
     if ([type isEqualToString:@"SEARCH_FINISHED"])
-        return [OAObjectType withType:SEARCH_FINISHED];
+        return [OAObjectType withType:EOAObjectTypeSEARCH_FINISHED];
     if ([type isEqualToString:@"FILTER_FINISHED"])
-        return [OAObjectType withType:FILTER_FINISHED];
+        return [OAObjectType withType:EOAObjectTypeFILTER_FINISHED];
     if ([type isEqualToString:@"SEARCH_API_FINISHED"])
-        return [OAObjectType withType:SEARCH_API_FINISHED];
+        return [OAObjectType withType:EOAObjectTypeSEARCH_API_FINISHED];
     if ([type isEqualToString:@"SEARCH_API_REGION_FINISHED"])
-        return [OAObjectType withType:SEARCH_API_REGION_FINISHED];
+        return [OAObjectType withType:EOAObjectTypeSEARCH_API_REGION_FINISHED];
     if ([type isEqualToString:@"UNKNOWN_NAME_FILTER"])
-        return [OAObjectType withType:UNKNOWN_NAME_FILTER];
+        return [OAObjectType withType:EOAObjectTypeUNKNOWN_NAME_FILTER];
     
-    return [OAObjectType withType:CITY];
+    return [OAObjectType withType:EOAObjectTypeCITY];
 }
 
 @end

@@ -3305,3 +3305,5 @@
 "discard_filter_changes_prompt" = "Tüm süzgeçler sıfırlansın mı?";
 "max_sensor_temperature" = "Sıcaklık, en yüksek";
 "cloud_sync_progress" = "Eşzamanla…%@";
+"rendering_attr_showClimbingRoutes_description" = "Tırmanma rotalarını göster";
+"rendering_attr_showClimbingRoutes_name" = "Tırmanma rotaları";

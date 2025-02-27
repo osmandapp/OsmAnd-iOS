@@ -853,7 +853,7 @@
 "quick_action_start_stop_navigation" = "Navigasyonu başlat/durdur";
 "shared_string_clear" = "Temizle";
 "contact_info" = "İletişim Bilgileri";
-"quick_action_map_style" = "Harita tarzını değiştir";
+"quick_action_map_style" = "Harita stili";
 "shared_string_world" = "Dünya";
 "map_magnifier" = "Harita büyüteci";
 "no_underlay" = "Altlık yok";
@@ -1833,7 +1833,7 @@
 "profile_type_osmand_string" = "OsmAnd profili";
 "arrived_at_destination" = "Hedefinize ulaştınız.";
 "shared_string_add_profile" = "Profil ekle";
-"quick_action_remove_next_destination" = "Sonraki varış noktasını sil";
+"quick_action_remove_next_destination" = "Sonraki varılacak nokta";
 "quick_action_showhide_mapillary_title" = "Mapillary'i göster/gizle";
 "plan_route_open_existing_track" = "Var olan yolu aç";
 "key_hint_recenter_map" = "Haritayı Yeniden Ortala";
@@ -3340,3 +3340,14 @@
 "auto_25_chars_route_tsll" = "Sola hafif viraj";
 "rendering_value_pale_name" = "Soluk";
 "resting_position" = "Dinlenme pozisyonu";
+"shared_string_set" = "Ayarla";
+"shared_string_replace" = "";
+"shared_string_all_icons" = "Bütün simgeler";
+"quick_action_parking_place" = "Park yeri";
+"quick_action_verb_show_hide" = "Göster / Gizle";
+"quick_action_verb_start_stop" = "Başlat / Durdur";
+"quick_action_terrain_color_scheme" = "Yüzey renk düzeni";
+"quick_action_directions_from" = "Başlangıç noktası";
+"quick_action_destination" = "Varış noktası";
+"quick_action_verb_turn_on_off" = "Aç / Kapat";
+"quick_action_verb_pause_resume" = "Duraklat / Devam ettir";

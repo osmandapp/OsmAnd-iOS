@@ -547,22 +547,26 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                 menuActions.append(contentsOf: [selectActionWithDivider, addFolderActionWithDivider, importActionWithDivider, sortSubfoldersActionWithDivider])
             }
         } else {
-            let showOnMapAction = UIAction(title: localizedString("shared_string_show_on_map"), image: UIImage.icCustomMapPinOutlined) { [weak self] _ in
+            let showOnMapAction = UIAction(title: localizedString("shared_string_show_on_map"), image: .icCustomMapPinOutlined) { [weak self] _ in
                 self?.onNavbarShowOnMapButtonClicked()
             }
-            let exportAction = UIAction(title: localizedString("shared_string_export"), image: UIImage.icCustomExportOutlined) { [weak self] _ in
+            let exportAction = UIAction(title: localizedString("shared_string_export"), image: .icCustomExportOutlined) { [weak self] _ in
                 self?.onNavbarExportButtonClicked()
             }
-            let uploadToOsmAction = UIAction(title: localizedString("upload_to_osm_short"), image: UIImage.icCustomUploadToOpenstreetmapOutlined) { [weak self] _ in
+            let uploadToOsmAction = UIAction(title: localizedString("upload_to_osm_short"), image: .icCustomUploadToOpenstreetmapOutlined) { [weak self] _ in
                 self?.onNavbarUploadToOsmButtonClicked()
             }
-            let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: UIImage.icCustomTrashOutlined, attributes: .destructive) { [weak self] _ in
+            let moveAction = UIAction(title: localizedString("shared_string_move"), image: .icCustomFolderMoveOutlined) { [weak self] _ in
+                self?.onNavbarMoveButtonClicked()
+            }
+            let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: .icCustomTrashOutlined, attributes: .destructive) { [weak self] _ in
                 self?.onNavbarDeleteButtonClicked()
             }
             
             let mapTrackOptionsActions = UIMenu(title: "", options: .displayInline, children: [showOnMapAction, exportAction, uploadToOsmAction])
+            let moveItemsActions = UIMenu(title: "", options: .displayInline, children: [moveAction])
             let deleteItemsActions = UIMenu(title: "", options: .displayInline, children: [deleteAction])
-            menuActions.append(contentsOf: [mapTrackOptionsActions, deleteItemsActions])
+            menuActions.append(contentsOf: [mapTrackOptionsActions, moveItemsActions, deleteItemsActions])
         }
         
         let menu = UIMenu(title: "", image: nil, children: menuActions)
@@ -960,6 +964,21 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         }
     }
     
+    @objc private func onNavbarMoveButtonClicked() {
+        guard !selectedTracks.isEmpty || !selectedFolders.isEmpty else { return }
+        let validFolders = selectedFolders.filter { smartFolderHelper.getSmartFolder(name: $0) == nil }
+        let fullFolderPaths = validFolders.map { folderName -> String in
+            var trimmedPath = currentFolderPath.hasPrefix("/") ? String(currentFolderPath.dropFirst()) : currentFolderPath
+            trimmedPath = trimmedPath.appendingPathComponent(folderName)
+            return trimmedPath
+        }
+        
+        if let viewController = OASelectTrackFolderViewController(selectedFolderName: currentFolderPath, excludedSubfolderPaths: fullFolderPaths) {
+            viewController.delegate = self
+            present(UINavigationController(rootViewController: viewController), animated: true)
+        }
+    }
+    
     @objc private func onNavbarDeleteButtonClicked() {
         if hasSelectedItems() {
             let tracksInSelectedFolders = selectedFolders.reduce(0) { (result, folderName) -> Int in
@@ -1156,7 +1175,6 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         trimmedPath = trimmedPath.appendingPathComponent(destinationFolderName)
         selectedFolderPath = trimmedPath
         let selectedFolderName = trimmedPath.deletingLastPathComponent()
-        // hide from this screen moving folder and all it's subfolders, to deny move folder inside itself
         if let vc = OASelectTrackFolderViewController(selectedFolderName: selectedFolderName, excludedSubfolderPath: trimmedPath) {
             vc.delegate = self
             let navController = UINavigationController(rootViewController: vc)
@@ -1602,17 +1620,19 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         }
     }
     
-    private func moveFile(selectedFolderName: String) {
-        guard let selectedTrack else { return }
-        let trackItem = TrackItem(file: selectedTrack.file)
-        trackItem.dataItem = selectedTrack
-        
-        gpxHelper.copyGPX(toNewFolder: selectedFolderName,
+    private func performMove(toFolder destinationFolder: String, tracks: [GpxDataItem]? = nil, folders: [String]? = nil) {
+        tracks?.forEach { moveTrack($0, toFolder: destinationFolder) }
+        folders?.forEach { moveFolder($0, toFolder: destinationFolder) }
+    }
+    
+    private func moveTrack(_ track: GpxDataItem, toFolder folderName: String) {
+        let trackItem = TrackItem(file: track.file)
+        trackItem.dataItem = track
+        gpxHelper.copyGPX(toNewFolder: folderName,
                           renameToNewName: nil,
                           deleteOriginalFile: true,
                           openTrack: false,
                           trackItem: trackItem)
-        updateAllFoldersVCData(forceLoad: true)
     }
     
     private func renameVisibleTracks(oldPath: String, newPath: String) {
@@ -1627,12 +1647,13 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         settings.mapSettingVisibleGpx.set(visibleGpx)
     }
     
-    private func moveFolder(folderPathForOpenedContextMenu: String, selectedFolderName: String) {
-        let sourceFolderPath = getAbsolutePath(folderPathForOpenedContextMenu)
-        let destinationShortFolderPath = (selectedFolderName == localizedString("shared_string_gpx_tracks") ? "" : selectedFolderName).appendingPathComponent(sourceFolderPath.lastPathComponent())
+    private func moveFolder(_ folderName: String, toFolder destinationFolderName: String) {
+        let sourceFolderPath = getAbsolutePath(folderName)
+        let destinationShortFolderPath = (destinationFolderName == localizedString("shared_string_gpx_tracks") ? "" : destinationFolderName)
+            .appendingPathComponent(sourceFolderPath.lastPathComponent())
         let destinationFolderPath = getAbsolutePath(destinationShortFolderPath)
         
-        guard let trackFolder = getTrackFolderByPath(folderPathForOpenedContextMenu) else { return }
+        guard let trackFolder = getTrackFolderByPath(folderName) else { return }
         
         let src: KFile = KFile(filePath: sourceFolderPath)
         let dest: KFile = KFile(filePath: destinationFolderPath)
@@ -1654,8 +1675,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             }
         }
     
-        renameSortModeKey(from: folderPathForOpenedContextMenu, to: destinationShortFolderPath)
-        updateAllFoldersVCData(forceLoad: true)
+        renameSortModeKey(from: folderName, to: destinationShortFolderPath)
     }
     
     private func renameSortModeKey(from oldBasePath: String, to newBasePath: String) {
@@ -2128,15 +2148,22 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     // MARK: - OASelectTrackFolderDelegate
     
     func onFolderSelected(_ selectedFolderName: String?) {
-        if let selectedFolderName {
-            if selectedTrack != nil {
-                moveFile(selectedFolderName: selectedFolderName)
-            } else if let selectedFolderPath {
-                moveFolder(folderPathForOpenedContextMenu: selectedFolderPath, selectedFolderName: selectedFolderName)
+        guard let selectedFolderName else { return }
+        let validFolders = selectedFolders.filter { smartFolderHelper.getSmartFolder(name: $0) == nil }
+        if !selectedTracks.isEmpty || !validFolders.isEmpty {
+            let fullRelativeFolders = validFolders.map { folderName -> String in
+                var trimmedPath = currentFolderPath.hasPrefix("/") ? String(currentFolderPath.dropFirst()) : currentFolderPath
+                trimmedPath = trimmedPath.appendingPathComponent(folderName)
+                return trimmedPath
             }
+            performMove(toFolder: selectedFolderName, tracks: selectedTracks, folders: fullRelativeFolders)
+        } else if let track = selectedTrack {
+            performMove(toFolder: selectedFolderName, tracks: [track], folders: nil)
+        } else if let folderPath = selectedFolderPath {
+            performMove(toFolder: selectedFolderName, tracks: nil, folders: [folderPath])
         }
-        selectedTrack = nil
-        selectedFolderPath = nil
+        
+        updateAllFoldersVCData(forceLoad: true)
     }
     
     func onFolderAdded(_ addedFolderName: String) {
@@ -2154,6 +2181,9 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     func onFolderSelectCancelled() {
         selectedFolderPath = nil
         selectedTrack = nil
+        if tableView.isEditing {
+            onNavbarCancelButtonClicked()
+        }
     }
     
     // MARK: - FilterChangedListener

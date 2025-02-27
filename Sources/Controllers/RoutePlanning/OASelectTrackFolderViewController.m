@@ -31,6 +31,7 @@
     NSArray<NSArray<NSDictionary *> *> *_data;
     NSString *_selectedFolderName;
     NSString *_excludedSubfolderPath;
+    NSArray<NSString *> *_excludedSubfolderPaths;
     OASTrackFolderLoaderTask *_folderLoaderTask;
 }
 
@@ -66,6 +67,17 @@
     {
         _selectedFolderName = selectedFolderName;
         _excludedSubfolderPath = excludedSubfolderPath;
+    }
+    return self;
+}
+
+- (instancetype)initWithSelectedFolderName:(NSString *)selectedFolderName excludedSubfolderPaths:(NSArray<NSString *> *)excludedSubfolderPaths
+{
+    self = [super init];
+    if (self)
+    {
+        _selectedFolderName = selectedFolderName;
+        _excludedSubfolderPaths = excludedSubfolderPaths;
     }
     return self;
 }
@@ -123,6 +135,22 @@
     {
         if (_excludedSubfolderPath && [folderName hasPrefix:_excludedSubfolderPath])
             continue;
+        
+        if (_excludedSubfolderPaths && _excludedSubfolderPaths.count > 0)
+        {
+            BOOL skip = NO;
+            for (NSString *excludedPath in _excludedSubfolderPaths)
+            {
+                NSString *slashPath = [excludedPath stringByAppendingString:@"/"];
+                if ([folderName isEqualToString:excludedPath] || [folderName hasPrefix:slashPath])
+                {
+                    skip = YES;
+                    break;
+                }
+            }
+            if (skip)
+                continue;
+        }
         
         NSArray<OASTrackItem *> *folderItems = folders[folderName].getTrackItems;
         int tracksCount = folderItems ? (int) folderItems.count : 0;

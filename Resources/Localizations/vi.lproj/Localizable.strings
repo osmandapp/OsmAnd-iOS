@@ -1679,3 +1679,9 @@
 "announcement_time_prepare_long" = "Chuẩn bị lâu dài";
 "contributions_may_calculate_with_delay" = "Việc tính toán các đóng góp có thể mất vài giờ.";
 "enough_contributions_descr" = "Chúc mừng, bạn đã cung cấp đủ đóng góp cho OpenStreetMap và bây giờ có thể tận hưởng các bản cập nhật bản đồ OsmAnd không giới hạn!";
+"attach_to_the_roads" = "Gắn với các con đường";
+"start_of_the_track" = "Điểm bắt đầu của cung đường";
+"simplified_track" = "Cung đường đơn giản hoá";
+"simplified_track_description" = "Chỉ có tuyến đường sẽ được lưu lại, các điểm dừng sẽ bị xóa.";
+"nearest_point" = "Điểm gần nhất";
+"follow_track" = "Đi theo cung đường";

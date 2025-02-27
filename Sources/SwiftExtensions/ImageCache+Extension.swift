@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  ImageCache+Extension.swift
 //  OsmAnd
 //
 //  Created by Oleksandr Panchenko on 06.02.2025.

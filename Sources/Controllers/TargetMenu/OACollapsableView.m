@@ -12,7 +12,6 @@
 
 - (void) adjustHeightForWidth:(CGFloat)width
 {
-    
 }
 
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated

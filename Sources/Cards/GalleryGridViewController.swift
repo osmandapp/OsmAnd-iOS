@@ -148,7 +148,7 @@ extension GalleryGridViewController: UICollectionViewDelegate {
                 firstSectionItems.append(detailsAction)
             }
   
-            let openInBrowserAction = UIAction(title: localizedString("open_in_browser"), image: UIImage.icCustomExternalLink) { _ in
+            let openInBrowserAction = UIAction(title: localizedString("open_in_browser"), image: .icCustomExternalLink) { _ in
                 if let item = card as? WikiImageCard {
                     guard let url = URL(string: item.urlWithCommonAttributions) else { return }
                     let viewController = OAWikiWebViewController(url: url, title: self.titleString)

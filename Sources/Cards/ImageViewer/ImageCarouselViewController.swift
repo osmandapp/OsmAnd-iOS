@@ -140,7 +140,7 @@ final class ImageCarouselViewController: UIPageViewController {
         detailsAction.accessibilityLabel = localizedString("shared_string_details")
         firstSectionItems.append(detailsAction)
         
-        let openInBrowserAction = UIAction(title: localizedString("open_in_browser"), image: UIImage.icCustomExternalLink) { [weak self] _ in
+        let openInBrowserAction = UIAction(title: localizedString("open_in_browser"), image: .icCustomExternalLink) { [weak self] _ in
             guard let self, let card = getCardForIndex(currentIndex) else { return }
             guard let url = URL(string: card.urlWithCommonAttributions) else { return }
             

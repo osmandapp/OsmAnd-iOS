@@ -3307,3 +3307,7 @@
 "cloud_sync_progress" = "Eşzamanla…%@";
 "rendering_attr_showClimbingRoutes_description" = "Tırmanma rotalarını göster";
 "rendering_attr_showClimbingRoutes_name" = "Tırmanma rotaları";
+"shared_string_interface" = "Arayüz";
+"rendering_attr_showDirtbikeTrails_name" = "Arazi motoru yolları";
+"rendering_attr_showDirtbikeTrails_description" = "Arazi motoru yollarını göster";
+"obd_plugin_name" = "Araç Ölçümleri";

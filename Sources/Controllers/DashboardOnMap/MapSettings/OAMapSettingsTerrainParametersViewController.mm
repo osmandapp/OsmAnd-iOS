@@ -19,7 +19,6 @@
 #import "OASimpleTableViewCell.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
-#import "OAColorCollectionViewController.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAMapLayers.h"
 #import "OAAppData.h"
@@ -34,7 +33,7 @@ static const NSInteger kMaxZoomPickerRow = 2;
 static const NSInteger kElevationMinMeters = 0;
 static const NSInteger kElevationMaxMeters = 2000;
 
-@interface OAMapSettingsTerrainParametersViewController () <UITableViewDelegate, UITableViewDataSource, OACustomPickerTableViewCellDelegate, OACollectionCellDelegate, OAColorCollectionDelegate>
+@interface OAMapSettingsTerrainParametersViewController () <UITableViewDelegate, UITableViewDataSource, OACustomPickerTableViewCellDelegate, OACollectionCellDelegate, ColorCollectionViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *backButtonContainerView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
@@ -1068,10 +1067,7 @@ static const NSInteger kElevationMaxMeters = 2000;
     }
     else if ([item.key isEqualToString:@"allColors"])
     {
-        OAColorCollectionViewController *colorCollectionViewController =
-            [[OAColorCollectionViewController alloc] initWithCollectionType:EOAColorCollectionTypeTerrainPaletteItems
-                                                                      items:_gradientColorsCollection
-                                                               selectedItem:_currentPaletteColorItem];
+        ItemsCollectionViewController *colorCollectionViewController = [[ItemsCollectionViewController alloc] initWithCollectionType:ColorCollectionTypeTerrainPaletteItems items:_gradientColorsCollection selectedItem:_currentPaletteColorItem];
         colorCollectionViewController.delegate = self;
         [self.navigationController pushViewController:colorCollectionViewController animated:YES];
     }
@@ -1136,7 +1132,7 @@ static const NSInteger kElevationMaxMeters = 2000;
 
 #pragma mark - OACollectionCellDelegate
 
-- (void)onCollectionItemSelected:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
+- (void)onCollectionItemSelected:(NSIndexPath *)indexPath selectedItem:(id)selectedItem collectionView:(UICollectionView *)collectionView
 {
     _currentPaletteColorItem = [_sortedPaletteColorItems objectAtIndexSync:indexPath.row];;
     _isValueChange = _basePaletteColorItem != _currentPaletteColorItem;
@@ -1150,11 +1146,11 @@ static const NSInteger kElevationMaxMeters = 2000;
         [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
 }
 
-#pragma mark - OAColorCollectionDelegate
+#pragma mark - ColorCollectionViewControllerDelegate
 
 - (void)selectPaletteItem:(PaletteColor *)paletteItem
 {
-    [self onCollectionItemSelected:[NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:paletteItem] inSection:0] collectionView:nil];
+    [self onCollectionItemSelected:[NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:paletteItem] inSection:0] selectedItem:nil collectionView:nil];
 }
 
 @end

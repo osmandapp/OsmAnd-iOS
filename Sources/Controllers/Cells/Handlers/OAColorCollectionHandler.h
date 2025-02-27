@@ -8,7 +8,6 @@
 
 #import "OABaseCollectionHandler.h"
 #import "OASuperViewController.h"
-#import "OAColorCollectionViewController.h"
 
 @class OAColorItem, OACollectionSingleLineTableViewCell;
 
@@ -20,7 +19,7 @@
 
 @end
 
-@interface OAColorCollectionHandler : OABaseCollectionHandler <OAColorCollectionDelegate, OAColorsCollectionCellDelegate>
+@interface OAColorCollectionHandler : OABaseCollectionHandler <OAColorsCollectionCellDelegate>
 
 @property (nonatomic, weak) id<OACollectionCellDelegate> delegate;
 @property (weak, nonatomic) OASuperViewController *hostVC;
@@ -28,7 +27,7 @@
 @property (weak, nonatomic) UIView *hostVCOpenColorPickerButton;
 
 @property (nonatomic) BOOL isOpenedFromAllColorsScreen;
-@property (weak, nonatomic) OAColorCollectionHandler *hostColorHandler;
+@property (weak, nonatomic) OAColorCollectionHandler *hostColorHandler NS_SWIFT_NAME(hostColorHandler);
 
 
 - (void)addColor:(NSIndexPath *)indexPath newItem:(OAColorItem *)newItem;

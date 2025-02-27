@@ -12,34 +12,34 @@
 
 typedef NS_ENUM(NSInteger, EOAObjectType)
 {
-    UNDEFINED = -1,
-    CITY = 0,
-    VILLAGE,
-    POSTCODE,
-    STREET,
-    HOUSE,
-    STREET_INTERSECTION,
+    EOAObjectTypeUNDEFINED = -1,
+    EOAObjectTypeCITY = 0,
+    EOAObjectTypeVILLAGE,
+    EOAObjectTypePOSTCODE,
+    EOAObjectTypeSTREET,
+    EOAObjectTypeHOUSE,
+    EOAObjectTypeSTREET_INTERSECTION,
     // POI
-    POI_TYPE,
-    POI,
+    EOAObjectTypePOI_TYPE,
+    EOAObjectTypePOI,
     // LOCATION
-    LOCATION,
-    PARTIAL_LOCATION,
+    EOAObjectTypeLOCATION,
+    EOAObjectTypePARTIAL_LOCATION,
     // UI OBJECTS
-    FAVORITE,
-    FAVORITE_GROUP,
-    WPT,
-    RECENT_OBJ,
-    GPX_TRACK,
+    EOAObjectTypeFAVORITE,
+    EOAObjectTypeFAVORITE_GROUP,
+    EOAObjectTypeWPT,
+    EOAObjectTypeRECENT_OBJ,
+    EOAObjectTypeGPX_TRACK,
 
-    REGION,
+    EOAObjectTypeREGION,
     
-    SEARCH_STARTED,
-    SEARCH_FINISHED,
-    FILTER_FINISHED,
-    SEARCH_API_FINISHED,
-    SEARCH_API_REGION_FINISHED,
-    UNKNOWN_NAME_FILTER
+    EOAObjectTypeSEARCH_STARTED,
+    EOAObjectTypeSEARCH_FINISHED,
+    EOAObjectTypeFILTER_FINISHED,
+    EOAObjectTypeSEARCH_API_FINISHED,
+    EOAObjectTypeSEARCH_API_REGION_FINISHED,
+    EOAObjectTypeUNKNOWN_NAME_FILTER
 };
 
 @interface OAObjectType : NSObject

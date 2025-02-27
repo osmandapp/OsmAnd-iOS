@@ -8,7 +8,6 @@
 
 #import "OABaseEditorViewController.h"
 #import "OAColorsPaletteCell.h"
-#import "OAColorCollectionViewController.h"
 #import "OATextInputFloatingCell.h"
 #import "OAPoiTableViewCell.h"
 #import "OAShapesTableViewCell.h"
@@ -652,7 +651,7 @@
 
 #pragma mark - OACollectionCellDelegate
 
-- (void)onCollectionItemSelected:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
+- (void)onCollectionItemSelected:(NSIndexPath *)indexPath selectedItem:(id)selectedItem collectionView:(UICollectionView *)collectionView
 {
     _selectedColorItem = [_colorCollectionHandler getData][indexPath.section][indexPath.row];
     self.editColor = [_selectedColorItem getColor];

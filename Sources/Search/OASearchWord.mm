@@ -25,7 +25,7 @@
 
 - (EOAObjectType) getType
 {
-    return !self.result ? UNKNOWN_NAME_FILTER : self.result.objectType;
+    return !self.result ? EOAObjectTypeUNKNOWN_NAME_FILTER : self.result.objectType;
 }
 
 - (void) syncWordWithResult

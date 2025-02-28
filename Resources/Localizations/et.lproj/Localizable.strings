@@ -3055,3 +3055,9 @@
 "shared_string_minute_lowercase" = "min";
 "shared_string_sensors" = "Andurid";
 "avg_sensor_heartrate" = "Südame keskmine löögisagedus";
+"cloud_layer" = "Pilvede andmekiht";
+"precipitation_layer" = "Sademete andmekiht";
+"temperature_layer" = "Temperatuuri andmekiht";
+"pressure_layer" = "Õhurõhu andmekiht";
+"wind_layer" = "Tuule andmekiht";
+"quick_action_save_recorded_trip_and_continue" = "Salvesta lõik ja jätka";

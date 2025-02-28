@@ -3625,3 +3625,7 @@
 "empty_smart_folder_descr" = "Sve odgovarajuće staze će se automatski pojaviti ovde.";
 "smart_folder_name_present" = "Takav pametan folder već je prisutan";
 "no_matched_tracks_descr" = "Vaš kriterijum filtera se ne podudara ni sa jednom od vaših staza";
+"quick_action_verb_start_pause" = "Pokreni / Pauziraj";
+"shared_string_pause" = "Pauza";
+"new_trip_segment" = "Novi segment putovanja";
+"quick_action_save_recorded_trip_and_continue" = "Snimi putovanje i nastavi";

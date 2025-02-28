@@ -3635,3 +3635,7 @@
 "empty_smart_folder_title" = "Sin trazas que coincidan";
 "empty_smart_folder_descr" = "Todas las trazas que coincidan, aparecerán automáticamente aquí.";
 "smart_folder_name_present" = "Esta carpeta inteligente, ya se encuentra presente";
+"quick_action_save_recorded_trip_and_continue" = "Grabación de viaje y continuar";
+"shared_string_pause" = "Pausar";
+"quick_action_verb_start_pause" = "Iniciar / Pausar";
+"new_trip_segment" = "Nuevo segmento del viaje";

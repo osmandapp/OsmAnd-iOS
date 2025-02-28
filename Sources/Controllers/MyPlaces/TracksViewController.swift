@@ -1003,7 +1003,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                         self.settings.hideGpx([track.gpxFilePath])
                     }
                     self.gpxDB.removeGpxItem(track, withLocalRemove: true)
-                    smartFolderHelper.onGpxFileDeleted(gpxFile: KFile(filePath: track.gpxFilePath))
+                    smartFolderHelper.onGpxFileDeleted(gpxFile: track.file)
                 }
                 
                 updateAllFoldersVCData(forceLoad: true)
@@ -1389,7 +1389,10 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                     settings.hideGpx([trackItem.gpxFilePath])
                 }
                 gpxDB.removeGpxItem(dataItem, withLocalRemove: true)
-                smartFolderHelper.onGpxFileDeleted(gpxFile: KFile(filePath: trackItem.gpxFilePath))
+                if let file = trackItem.getFile() {
+                    smartFolderHelper.onGpxFileDeleted(gpxFile: file)
+                }
+
                 updateAllFoldersVCData(forceLoad: true)
             }
         })
@@ -1526,6 +1529,10 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     
     private func updateRenamedGpx(src: KFile, dest: KFile) {
         GpxDbHelper.shared.rename(currentFile: src, newFile: dest)
+        smartFolderHelper.onGpxFileDeleted(gpxFile: src)
+        let trackItem = TrackItem(file: dest)
+        trackItem.dataItem = OAGPXDatabase.sharedDb().getGPXItem(dest.path())
+        smartFolderHelper.addTrackItemToSmartFolder(item: trackItem)
         /*
          GpxSelectionHelper gpxSelectionHelper = app.getSelectedGpxHelper();
              SelectedGpxFile selectedGpxFile = gpxSelectionHelper.getSelectedFileByPath(src.getAbsolutePath());
@@ -1601,6 +1608,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                 if !tracksItems.isEmpty {
                     tracksItems.forEach({
                         gpxDB.removeGpxItem($0, withLocalRemove: false)
+                        smartFolderHelper.onGpxFileDeleted(gpxFile: $0.file)
                         let gpxFilePath = $0.gpxFilePath
                         let isVisible = settings.mapSettingVisibleGpx.contains(gpxFilePath)
                         if isVisible {

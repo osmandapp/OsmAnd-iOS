@@ -3627,3 +3627,7 @@
 "no_matched_tracks_descr" = "Ваш критеријум филтера се не подудара ни са једном од ваших стаза";
 "smart_folder_name_present" = "Такав паметан фолдер је већ присутан";
 "no_matched_tracks" = "Нема подударних стаза";
+"shared_string_pause" = "Пауза";
+"quick_action_verb_start_pause" = "Покрени / Паузирај";
+"new_trip_segment" = "Нови део путовања";
+"quick_action_save_recorded_trip_and_continue" = "Сними путовање и настави";

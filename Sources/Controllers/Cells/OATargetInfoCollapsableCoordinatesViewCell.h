@@ -8,8 +8,6 @@
 
 #import "OATargetInfoCollapsableViewCell.h"
 
-@class OACollapsableView;
-
 @interface OATargetInfoCollapsableCoordinatesViewCell : OATargetInfoCollapsableViewCell
 
 -(void) setupCellWithLat:(double)lat lon:(double)lon;

@@ -7,7 +7,6 @@
 //
 
 #import "OATargetMenuViewController.h"
-#import "OACollapsableView.h"
 #import "OARowInfo.h"
 
 #define kCollapseDetailsRowType @"kCollapseDetailsRowType"

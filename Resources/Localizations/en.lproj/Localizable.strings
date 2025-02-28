@@ -1844,6 +1844,7 @@
 "mapillary_menu_title_tile_cache" = "Tile cache";
 "shared_string_reload" = "Reload";
 "show_more" = "Show more";
+"shared_string_show_less" = "Show less";
 "mapil_reload_cache" = "Reload tiles to see the newest data";
 "filter_current_poiButton" = "Filter";
 "mapil_filter_user_descr" = "Filter images by user";
@@ -3994,6 +3995,20 @@
 "rendering_attr_showClimbingRoutes_description" = "Show climbing routes";
 "rendering_attr_showClimbingRoutes_name" = "Climbing routes";
 
+"shared_string_view_all" = "View all";
+"no_internet_descr" = "Please check your connection and try again.";
+"no_photos_available" = "No photos available";
+"no_photos_available_descr" = "No user photos have been added to this location yet";
+"mapillary_action_descr" = "Share your street-level view via Mapillary.";
+"online_photos" = "Online photos";
+"street_level_imagery" = "Street-level imagery";
+"wikimedia" = "Wikimedia";
+"open_in_browser" = "Open in browser";
+"shared_string_source" = "Source";
+"shared_string_items" = "Items";
+"download_failed" = "Download Failed";
+"download_successful" = "Image downloaded to Documents/Download.";
+
 "auto_25_chars_route_kl" = "Keep left";
 "auto_25_chars_route_kr" = "Keep right";
 "auto_25_chars_route_tr" = "Turn right";
@@ -4011,3 +4026,5 @@
 "auto_25_chars_route_tu_kr" = "Make U-turn and keep right";
 "auto_25_chars_route_roundabout_kl" = "Take the %d exit and keep left";
 "auto_25_chars_route_roundabout_kr" = "Take the %d exit and keep right";
+
+"shared_string_date" = "Date";

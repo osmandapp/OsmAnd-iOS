@@ -31,6 +31,9 @@
 
 @interface OAWikiWebViewController () <SFSafariViewControllerDelegate, OAWikiLanguagesWebDelegate>
 
+@property (nonatomic, strong) NSURL *externalURL;
+@property (nonatomic, copy) NSString *externalURLTitle;
+
 @end
 
 @implementation OAWikiWebViewController
@@ -72,6 +75,20 @@
         _currentLocale = [NSLocale localeWithLocaleIdentifier:locale];
         _contentLocale = [locale isEqualToString:@"en"] ? @"" : locale;
         [self postInit];
+    }
+    return self;
+}
+
+- (instancetype)initWithURL:(NSURL *)url title:(NSString *)title
+{
+    self = [super init];
+    if (self) {
+        _externalURL = url;
+        _externalURLTitle = title;
+        _isFirstLaunch = YES;
+        _currentLocale = nil;
+        _contentLocale = nil;
+        [self commonInit];
     }
     return self;
 }
@@ -165,6 +182,11 @@
 
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler
 {
+    if (_externalURL)
+    {
+        decisionHandler(WKNavigationActionPolicyAllow);
+        return;
+    }
     NSString *newUrl = [OAWikiArticleHelper normalizeFileUrl:[navigationAction.request.URL.absoluteString stringByRemovingPercentEncoding]];
     NSString *currentUrl = [OAWikiArticleHelper normalizeFileUrl:[webView.URL.absoluteString stringByRemovingPercentEncoding]];
     NSInteger wikiUrlEndDndex = [currentUrl indexOf:@"#"];
@@ -231,8 +253,12 @@
 
 - (void)viewDidLoad
 {
-    [self createLanguagesNavbarButton];
-    [self createImagesNavbarButton];
+    if (!_externalURL)
+    {
+        [self createLanguagesNavbarButton];
+        [self createImagesNavbarButton];
+    }
+
     [super viewDidLoad];
 }
 
@@ -247,12 +273,20 @@
 
 - (NSString *)getTitle
 {
+    if (_externalURLTitle)
+        return _externalURLTitle;
+    
     return _poi.localizedNames[_contentLocale] ? _poi.localizedNames[_contentLocale] : OALocalizedString(@"download_wikipedia_maps");
 }
 
 - (NSString *)getContentLocale
 {
     return _contentLocale;
+}
+
+- (NSString *)getLeftNavbarButtonTitle
+{
+    return [self isModal] ? OALocalizedString(@"shared_string_close") : nil;
 }
 
 -(void)createLanguagesNavbarButton
@@ -334,7 +368,7 @@
 
 - (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
 {
-    return @[_imagesBarButtonItem, _languageBarButtonItem];
+    return _externalURL ? @[] : @[_imagesBarButtonItem, _languageBarButtonItem];
 }
 
 - (EOABaseNavbarStyle)getNavbarStyle
@@ -375,15 +409,23 @@
 
 - (NSURL *)getUrl
 {
-    NSString *locale = _contentLocale.length == 0 ? @"en" : _contentLocale;
-    NSString *wikipediaTitle = [self getWikipediaTitleURL];
-    NSString *wikiUrl = [OAWikiAlgorithms getWikiUrlWithText:[NSString stringWithFormat:@"%@:%@", locale, wikipediaTitle]];
-    return [NSURL URLWithString:wikiUrl];
+    if (_externalURL) {
+        return _externalURL;
+    } else {
+        NSString *locale = _contentLocale.length == 0 ? @"en" : _contentLocale;
+        NSString *wikipediaTitle = [self getWikipediaTitleURL];
+        NSString *wikiUrl = [OAWikiAlgorithms getWikiUrlWithText:[NSString stringWithFormat:@"%@:%@", locale, wikipediaTitle]];
+        return [NSURL URLWithString:wikiUrl];
+    }
 }
+
 
 - (NSString *)getContent
 {
-    return _content;
+   if (_externalURL)
+       return nil;
+   else
+       return _content;
 }
 
 - (OADownloadMode *)getImagesDownloadMode
@@ -595,6 +637,18 @@
 - (void)updateWikiData
 {
     [self updateWikiData:_contentLocale];
+}
+
+- (void)loadWebView
+{
+  if (_externalURL)
+  {
+    [self.webView loadRequest:[NSURLRequest requestWithURL:_externalURL]];
+    self.webView.hidden = NO;
+  } else
+  {
+    [super loadWebView];
+  }
 }
 
 - (void)updateWikiData:(NSString *)locale

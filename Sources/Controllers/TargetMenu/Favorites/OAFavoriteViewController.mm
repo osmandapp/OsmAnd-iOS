@@ -15,7 +15,6 @@
 #import "OANativeUtilities.h"
 #import "OAFavoritesHelper.h"
 #import "OAUtilities.h"
-#import "OACollapsableView.h"
 #import "OACollapsableWaypointsView.h"
 #import "OAPOI.h"
 #import "OAPOIViewController.h"

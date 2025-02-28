@@ -162,10 +162,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         tableView.tableHeaderView = setupHeaderView()
         filterButton.isHidden = true
         if shouldReload {
-            if let hostVCDelegate {
-                hostVCDelegate.updateHostVCWith(rootFolder: rootFolder, visibleTracksFolder: visibleTracksFolder)
-            }
-            reloadTracks(forceLoad: true)
+            updateAllFoldersVCData(forceLoad: true)
             shouldReload = false
         }
     }
@@ -222,6 +219,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func updateAllFoldersVCData(forceLoad: Bool = false) {
+        (smartFolderHelper.getSmartFolders() as? [SmartFolder])?.forEach { smartFolderHelper.refreshSmartFolder(smartFolder: $0) }
         reloadTracks(forceLoad: forceLoad)
 
         if let hostVCDelegate {
@@ -819,6 +817,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     
     private func onNavbarRefreshSmartFolderButtonClicked() {
         smartFolderHelper.refreshSmartFolder(smartFolder: smartFolder)
+        reloadTracks(forceLoad: true)
     }
     
     @objc private func onNavbarEditFilterSmartFolderButtonClicked() {
@@ -880,7 +879,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                     OAUtilities.showToast(localizedString("smart_folder_name_present"), details: nil, duration: 4, verticalOffset: 120, in: self.view)
                 } else {
                     smartFolderHelper.saveNewSmartFolder(name: folderName, filters: nil)
-                    updateData()
+                    updateAllFoldersVCData(forceLoad: true)
                     shouldReload = true
                     showTracksViewControllerForSmartFolder(withName: folderName)
                 }
@@ -1764,7 +1763,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         updateNavigationBarTitle()
         setupSearchController()
         updateFilterButtonVisibility(filterIsActive: false)
-        updateData()
+        updateAllFoldersVCData(forceLoad: true)
         setupTableFooter()
         tabBarController?.navigationController?.setToolbarHidden(true, animated: true)
         navigationController?.setToolbarHidden(true, animated: true)

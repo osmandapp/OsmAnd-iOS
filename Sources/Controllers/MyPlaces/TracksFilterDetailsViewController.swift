@@ -767,17 +767,15 @@ extension TracksFilterDetailsViewController: UITextFieldDelegate {
         }
 
         if let newValue = Int(newText), !newText.isEmpty {
-            if textField.tag == .min && newValue < Int(currentValueTo) {
+            if textField.tag == .min && newValue <= Int(currentValueTo) {
                 currentValueFrom = Float(newValue)
-            } else if textField.tag == .max && newValue > Int(currentValueFrom) {
+            } else if textField.tag == .max && newValue >= Int(currentValueFrom) {
                 currentValueTo = Float(newValue)
-            } else {
-                return true
             }
             
             if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? OARangeSliderFilterTableViewCell {
-                cell.rangeSlider.selectedMinimum = currentValueFrom
-                cell.rangeSlider.selectedMaximum = currentValueTo
+                cell.rangeSlider.selectedMinimum = currentValueFrom > rangeSliderMaxValue ? rangeSliderMaxValue : currentValueFrom
+                cell.rangeSlider.selectedMaximum = currentValueTo < rangeSliderMinValue ? rangeSliderMinValue : currentValueTo
             }
         }
         

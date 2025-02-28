@@ -1306,7 +1306,7 @@
 "rendering_attr_piste_difficulty_intermediate_name" = "Orta";
 "routing_attr_driving_style_balance_name" = "Dengeli";
 "rendering_attr_hideAccess_name" = "Erişim kısıtlamaları";
-"rendering_attr_alpineHiking_description" = "SACölçeğine göre yolları görselleştir.";
+"rendering_attr_alpineHiking_description" = "Rota tiplerinin zorluk sınıflandırması.";
 "routing_attr_piste_type_downhill_name" = "Alp ve yokuş aşağı kayak";
 "routing_attr_allow_skating_only_description" = "Klasik yollar olmadan serbest tarz veya sadece paten için düzenlenmiş rotalar.";
 "rendering_attr_showAccess_name" = "Erişim ve geçiş ücreti kısıtlamalarını göster";
@@ -2664,7 +2664,7 @@
 "copy_build_version" = "Derleme sürümünü kopyala";
 "most_viewed" = "En çok görüntülenen";
 "telegram_chats" = "Telegram sohbetleri";
-"rendering_attr_alpineHiking_name" = "Zorluk sınıflandırması";
+"rendering_attr_alpineHiking_name" = "Yürüyüş yolu zorluk derecesi";
 "shared_string_keywords" = "Anahtar sözcükler";
 "help_article_navigation_guidance_map_during_navigation_name" = "Navigasyon sırasında harita ekranı";
 "help_article_navigation_guidance_voice_navigation_name" = "Sesli komutlar / Bildirimler";
@@ -3386,3 +3386,16 @@
 "help_article_plan_route_name" = "Rota planla";
 "help_article_plan_route_coordinate_input_name" = "Koordinat girişi";
 "average_glide_time_interval_desc" = "Süzülme ortalaması için zaman aralığı belirtin.";
+"dangerous_goods_description" = "Bazı yollarda ve tünellerde tehlikeli materyal taşınması yasaktır.";
+"external_device_details_information" = "Bilgi";
+"screen_is_unlocked" = "Dokunmatik ekran aktif edildi.";
+"quick_action_verb_start_pause" = "Başlat / Duraklat";
+"reset_average_speed" = "Ortalama hızı sıfırla";
+"screen_is_locked_by_action_button" = "Dokunmatik ekran devre dışı bırakıldı. Aktif etmek için açma tuşuna dokunun.";
+"speak_route_recalculation" = "Yolu yeniden hesaplayınca bildir";
+"beats_per_minute_short" = "nabız";
+"help_article_personal_color_palette_schemes_name" = "Renk Şeması";
+"show_all_tracks" = "Bütün yolları göster";
+"speak_route_deviation" = "Yoldan sapınca uyar";
+"battery_saving_mode" = "Pil tasarrufu modu";
+"lock_screen_description" = "Yanlışlıkla dokunmaları önlemek için dokunmatik ekranı açıp kapatır";

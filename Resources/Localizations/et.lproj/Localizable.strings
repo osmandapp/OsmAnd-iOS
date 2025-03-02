@@ -600,7 +600,7 @@
 "res_uninst_unmanaged_q" = "Oled kustutamas %@. See ei pärine kataloogist, seega palun kontrolli, et sul on vajadusel tagavarakoopia olemas.";
 "shared_string_details" = "Üksikasjad";
 "shared_string_type" = "Liik";
-"res_unknown" = "Tundmatu";
+"res_unknown" = "Teadmata";
 "shared_string_size" = "Suurus";
 "created_on" = "Loodud";
 "res_update_all" = "Uuenda kõik";

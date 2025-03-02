@@ -1011,8 +1011,8 @@
 "open_map_settings" = "Ava kaardi seaded";
 "plugin_popup_ski_title" = "Lülita sisse suusakaardi stiil";
 "plugin_popup_ski_desc" = "<b>Suusakaart</b> stiili sisse lülitamiseks, palun mine <b>Kaardi seaded</b> > <b>Kaardi liik</b>";
-"plugin_popup_wiki_title" = "Laadi alla Wikipedia andmeid";
-"plugin_popup_wiki_desc" = "Vikipeedia lisa kasutamise alustamiseks, palun laadi esmalt alla Vikipeedia andmed piirkonna kohta";
+"plugin_popup_wiki_title" = "Laadi alla Vikipeedia andmeid";
+"plugin_popup_wiki_desc" = "Vikipeedia lisamooduli kasutamise alustamiseks, palun laadi esmalt alla Vikipeedia andmed piirkonna kohta";
 "plugin_popup_wiki_ask" = "Vikipeedia andmete allalaadimiseks on vajalik lülitada sisse lisa: <b>Vikipeedia</b>";
 "plugin_popup_srtm_title" = "Laadi alla kõrgusjooned";
 "plugin_popup_srtm_desc" = "Topograafia funktsioonaalsuse kasutamise alustamiseks laadi kõigepealt alla piirkonna kõrgusjooned";
@@ -2165,7 +2165,7 @@
 "selected_tracks_count" = "Rajad - %d";
 "delete_tracks_bottom_sheet_title" = "Kustutada rajad?";
 "parked_at" = "pargitud";
-"plugin_popup_weather_title" = "Lülita ilm sisse";
+"plugin_popup_weather_title" = "Lülita ilma lisamoodul sisse";
 "plugin_popup_weather_ask" = "Palun luba ilma pistikprogramm";
 "product_desc_weather" = "Järgmise 7 päeva tunnipõhine ilmaennustus kaardil";
 "measurement_units" = "Mõõtühikud";
@@ -3116,7 +3116,7 @@
 "mile" = "mi";
 "cubic_m" = "m³";
 "kg" = "kg";
-"int_min" = "min";
+"int_min" = "min.";
 "units_sec_short" = "sek";
 "weather_pressure_enable_descr" = "Lülita sisse kaardil õhurõhu andmekihi kuvamiseks.";
 "weather_cloud_enable_descr" = "Lülita sisse kaardil pilvede andmekihi kuvamiseks.";
@@ -3153,3 +3153,9 @@
 "quick_action_screen_header" = "Ekraan %ld";
 "m_s" = "m/s";
 "int_hour" = "t";
+"speak_route_deviation" = "Teata kõrvalekaldest teekonnal";
+"plugin_popup_nautical_ask" = "Palun lülita sisse merenduse lisamoodul";
+"learn_more_about_sensors_link" = "Lisateave andurite kohta.";
+"ble_search_again" = "Otsi uuesti";
+"ant_plus_nothing_found_text" = "Andureid ei õnnestu leida";
+"ant_plus_bluetooth_off" = "Bluetooth on väljalülitatud";

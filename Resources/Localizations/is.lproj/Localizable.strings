@@ -3615,3 +3615,5 @@
 "no_matched_tracks_descr" = "Skilyrði síunnar samsvöruðu engum ferlanna þinna";
 "shared_string_pause" = "Bið";
 "quick_action_verb_start_pause" = "Hefja / Setja í bið";
+"new_trip_segment" = "Nýr leiðarbútur";
+"quick_action_save_recorded_trip_and_continue" = "Skráð ferð og halda áfram";

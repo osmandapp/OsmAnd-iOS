@@ -1760,7 +1760,7 @@
 "city_type_town" = "Gradsko naselje";
 "city_type_city" = "Grad";
 "city_type_district" = "Distrikt";
-"city_type_neighbourhood" = "Sused";
+"city_type_neighbourhood" = "Kvart";
 "postcode" = "Poštanski broj";
 "show_something_on_map" = "Prikazati na mapi %@";
 "search_POI_level_btn" = "Nađi još";

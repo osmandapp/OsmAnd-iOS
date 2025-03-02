@@ -3611,3 +3611,7 @@
 "no_matched_tracks" = "Engir samsvarandi ferlar";
 "empty_smart_folder_title" = "Enginn samsvarandi ferill";
 "smart_folder_name_present" = "Slík snjallmappa er þegar til staðar";
+"empty_smart_folder_descr" = "Allir samsvarandi ferlar munu birtast hér.";
+"no_matched_tracks_descr" = "Skilyrði síunnar samsvöruðu engum ferlanna þinna";
+"shared_string_pause" = "Bið";
+"quick_action_verb_start_pause" = "Hefja / Setja í bið";

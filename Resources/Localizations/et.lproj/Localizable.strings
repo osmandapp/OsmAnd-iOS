@@ -682,8 +682,8 @@
 "osm_edit_show_on_map" = "Kuva muudatus kaardil";
 "osm_edit_show_on_map_descr" = "Ava kaart keskkohaga selles punktis";
 "shared_string_without_name" = "Ilma nimeta";
-"local_openstreetmap_uploading" = "Üles laadimine…";
-"osm_upload_complete" = "Üleslaadimine lõpetatud";
+"local_openstreetmap_uploading" = "Üleslaadimine…";
+"osm_upload_complete" = "Üleslaadimine on lõpetatud";
 "osm_tag_too_long_message" = "Sildi %@ väärtuse maksimaalne pikkus on 255 tähemärki. \nJätkamiseks palun muuda see lühemaks.";
 "save_poi_without_poi_type_message" = "Salvesta POI ilma liigita\?";
 "save_poi_too_many_uppercase" = "Nimi sisaldab liiga palju suurtähti. Jätkata\?";
@@ -755,9 +755,9 @@
 "quick_action_auto_zoom" = "Automaatne kaardi suurendamine";
 "auto_zoom_on" = "Automaatne suurendamine sees";
 "auto_zoom_off" = "Automaatne suurendamine väljas";
-"quick_action_resume_pause_navigation" = "Peata/jätka navigeerimist";
-"resume_nav" = "Jätka navigeerimist";
-"quick_action_start_stop_navigation" = "Käivita/lõpeta navigeerimine";
+"quick_action_resume_pause_navigation" = "Peata/jätka tee juhatamine";
+"resume_nav" = "Jätka tee juhatamine";
+"quick_action_start_stop_navigation" = "Käivita/lõpeta tee juhatamine";
 "toggle_day_night" = "Vaheta päeva-/öörežiim";
 "quick_action_switch_night_mode" = "Öörežiim";
 "quick_action_switch_day_mode" = "Päevarežiim";
@@ -880,7 +880,7 @@
 "loc_access_denied_desc" = "Juurdepääs asukohateenusele on keelatud";
 // Colors
 "col_gray" = "Hall";
-"shared_string_color_magenta" = "Fuksiinpunane";
+"shared_string_color_magenta" = "Fuksiapunane";
 // GPX colors
 // World Regions
 "index_name_antarctica" = "Antarktis";
@@ -1875,7 +1875,7 @@
 "select_track_to_follow" = "Vali järgimiseks teekond";
 
 // Coordinate widget
-"coordinates_widget_current_location" = "Koordinaatide vidin";
+"coordinates_widget_current_location" = "Koordinaadid:praegune asukoht";
 "searching_gps" = "GPSi otsimine";
 "new_plugin_added" = "Uus laiendus lisatud";
 "add_custom_category" = "Lisa oma kategooria";
@@ -3108,3 +3108,48 @@
 "download_images_settings_header" = "OsmAndis leiduvates allalaaditud Vikipeedia failides pole pilte. Küll aga saad sa neid artikli lugemise ajal alla laadida.";
 "popular_articles_not_found_descr" = "Praeguse kaardi keskpunkti lähedusest ei leidu ühtegi artiklit. Palun kasuta selleks otsingut.";
 "calendar_new_event_title" = "Uus sündmus";
+"coordinates_widget_map_center" = "Koordinaadid:kaardi keskpaik";
+"twitter" = "Twitter";
+"nautical_depth_points" = "Merenduse samakõrguspunktid";
+"weather_temp_enable_descr" = "Lülita sisse kaardil temperatuuri andmekihi kuvamiseks.";
+"weather_precip_enable_descr" = "Lülita sisse kaardil sademete andmekihi kuvamiseks.";
+"mile" = "mi";
+"cubic_m" = "m³";
+"kg" = "kg";
+"int_min" = "min";
+"units_sec_short" = "sek";
+"weather_pressure_enable_descr" = "Lülita sisse kaardil õhurõhu andmekihi kuvamiseks.";
+"weather_cloud_enable_descr" = "Lülita sisse kaardil pilvede andmekihi kuvamiseks.";
+"quick_action_enter_message" = "Sisesta vaade";
+"km_h" = "km/t";
+"depth_contour_lines" = "Sügavuse samakõrgusjooned";
+"pressure_show" = "Näita õhurõhku";
+"travel_guides_beta" = "Reisijuhid (beeta)";
+"weather_wind_enable_descr" = "Lülita sisse kaardil tuule andmekihi kuvamiseks.";
+"weather_wind_animation_enable_descr" = "Lülita sisse kaardil tuuleanimatsiooni andmekihi kuvamiseks.";
+"yard" = "jrd";
+"temperature_show" = "Näita temperatuuri";
+"pressure_hide" = "Peida õhurõhk";
+"quick_action_template_name" = "Malli nimi";
+"quick_action_dialog" = "Vaade";
+"facebook" = "Facebook";
+"import_title" = "Andmete import";
+"mile_per_hour" = "mi/t";
+"shared_string_discard_changes" = "Loobu muudatusest";
+"confirm_history_item_delete" = "Kas oled kindel, et soovid kustutada (%ld) ajalookirje(t)?";
+"km" = "km";
+"m" = "m";
+"toggle_temperature" = "Näita/peida - temperatuuri andmekiht";
+"reddit" = "Reddit";
+"whats_here" = "Mis siin on";
+"toggle_pressure" = "Näita/peida - õhurõhu andmekiht";
+"temperature_hide" = "Peida temperatuur";
+"toggle_wind" = "Näita/peida - tuule andmekiht";
+"toggle_cloud" = "Näita/peida - pilvede andmekiht";
+"pause_nav" = "Peata tee juhatamine";
+"other_options" = "Muud valikud";
+"weather_contours_enable_descr" = "Lülita sisse kaardil samajoonte andmekihi kuvamiseks.";
+"toggle_precipitation" = "Näita/peida - sademete andmekiht";
+"quick_action_screen_header" = "Ekraan %ld";
+"m_s" = "m/s";
+"int_hour" = "t";

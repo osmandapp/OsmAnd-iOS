@@ -3159,3 +3159,4 @@
 "ble_search_again" = "Otsi uuesti";
 "ant_plus_nothing_found_text" = "Andureid ei õnnestu leida";
 "ant_plus_bluetooth_off" = "Bluetooth on väljalülitatud";
+"weather_forecast_is_outdated" = "Ilmaennustus on aegunud.";

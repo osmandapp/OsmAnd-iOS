@@ -3160,3 +3160,13 @@
 "ant_plus_nothing_found_text" = "Andureid ei õnnestu leida";
 "ant_plus_bluetooth_off" = "Bluetooth on väljalülitatud";
 "weather_forecast_is_outdated" = "Ilmaennustus on aegunud.";
+"mtb_imba_full" = "Rahvusvaheline Mägirattasõidu Liit";
+"map_widget_sunset_desc" = "Näitab järgmise päikeseloojangu kellaaega või aega päikeseloojanguni.";
+"map_widget_sunrise_desc" = "Näitab järgmise päikesetõusu kellaaega või aega päikesetõusuni.";
+"weather_offline_forecast" = "Puhverdatud ilmaennustus";
+"mtb_segment_classification" = "Segmendi klassifikatsioon";
+"rendering_attr_weatherWindSpeedContours_name" = "Tuulekiiruse samajooned";
+"rendering_attr_weatherPrecipitationContours_name" = "Sademete samajooned";
+"map_widget_group_sunrise_sunset_desc" = "Need vidinad näitavad järgmise päikesetõusu ja -loojangu teavet.";
+"rendering_attr_showMtbScale_name" = "Näita MTB raskusastet";
+"rendering_attr_showMtbScale_description" = "Näita radu vastavalt nende MTB raskusastmele.";

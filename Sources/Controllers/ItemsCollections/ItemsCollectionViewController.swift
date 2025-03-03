@@ -420,6 +420,9 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             poiIconHandler.roundedSquareCells = false
             poiIconHandler.innerViewCornerRadius = -1
             if let poiCategoryKey {
+                if poiCategoryKey == poiIconHandler.PROFILE_ICONS_KEY {
+                    poiIconHandler.addProfileIconsCategory()
+                }
                 poiIconHandler.selectCategory(poiCategoryKey)
             }
             if let selectedIconItem, let selectedIndex = iconNames.firstIndex(of: selectedIconItem) {

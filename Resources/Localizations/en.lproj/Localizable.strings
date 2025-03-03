@@ -913,6 +913,7 @@
 "shared_string_colors" = "Colors";
 
 "profile_icon" = "Profile icon";
+"profile_icons" = "Profile icon";
 "restart" = "Restart";
 
 "offline_maps" = "Offline Maps";

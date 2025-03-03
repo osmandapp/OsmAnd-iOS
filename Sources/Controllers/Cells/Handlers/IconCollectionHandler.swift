@@ -92,11 +92,14 @@ class IconCollectionHandler: OABaseCollectionHandler {
             cell.iconImageView.image = iconImagesData[indexPath.section][indexPath.row]
         } else if !iconNamesData.isEmpty && !iconNamesData[indexPath.section].isEmpty {
             let iconName = iconNamesData[indexPath.section][indexPath.row]
-            if let icon = UIImage.templateImageNamed(iconName) {
-                cell.iconImageView.image = icon
-            } else {
-                cell.iconImageView.image = OAUtilities.getMxIcon(iconName.lowercased())
+            var icon = UIImage.templateImageNamed(iconName)
+            if icon == nil {
+                icon = OAUtilities.getMxIcon(iconName.lowercased())
             }
+            if icon == nil {
+                icon = OAUtilities.getMxIcon("mx_" + iconName.lowercased())
+            }
+            cell.iconImageView.image = icon
         }
         if indexPath == selectedIndexPath {
             cell.iconImageView.tintColor = selectedIconColor

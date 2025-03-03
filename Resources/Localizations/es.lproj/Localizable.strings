@@ -1796,7 +1796,7 @@
 "gpx_export_failed" = "No se pudo guardar la ruta creada";
 "gpx_already_exsists" = "Ya existe un archivo con ese nombre";
 "global_settings_descr" = "Afecta a toda la aplicación.";
-"follow_track" = "Seguir traza";
+"follow_track" = "Navegar traza";
 "export_profile_descr" = "Puedes exportar todos los ajustes del perfil, copiar todos los ajustes de otro perfil o restablecer todos los ajustes del perfil al estado predefinido.";
 "err_profile_import" = "Error al leer los datos del elemento: %@";
 "enable_hillshade" = "Permite ver los datos del terreno desde el mapa de las colinas o pendientes.";
@@ -1907,7 +1907,7 @@
 "reading_file" = "Leyendo archivo";
 "add_folder" = "Añadir carpeta";
 "plan_route_folder" = "Carpeta";
-"ios_release_4_0" = "• ¡Nuevo! Se ha añadido la opción para elegir un icono, color y forma propia en «Añadir favorito»\n• Se ha añadido el nuevo widget de coordenadas con las coordenadas de la ubicación actual\n• Se ha añadido la posibilidad de importar complementos personalizados definidos por el usuario\n• Se ha ampliado significativamente la funcionalidad de importar/exportar\n• La función «Distancia al pulsar» se ha movido de la regla radial a una opción separada\n• Se ha corregido el bloqueo de la aplicación CarPlay cuando se apaga la pantalla del iPhone\n• Se han trasladado al menú principal los complementos desde «Mapas y Recursos»\n• Se ha añadido el idioma finlandés\n• Se ha corregido la interfaz de usuario en orientación horizontal para la función «Planificar ruta»\n• Se ha añadido soporte para los archivos personalizados de navegación y visualización\n• Se ha corregido el rendimiento de la línea de dirección de los marcadores\n• Se ha solucionado un problema con la importación de archivos GPX con extensiones en mayúsculas\n• Se ha corregido un problema con el menú «Seguir traza».\n• Se ha corregido la importación de archivos OBF\n";
+"ios_release_4_0" = "• ¡Nuevo! Se ha añadido la opción para elegir un icono, color y forma propia en «Añadir favorito»\n• Se ha añadido el nuevo widget de coordenadas con las coordenadas de la ubicación actual\n• Se ha añadido la posibilidad de importar complementos personalizados definidos por el usuario\n• Se ha ampliado significativamente la funcionalidad de importar/exportar\n• La función «Distancia al pulsar» se ha movido de la regla radial a una opción separada\n• Se ha corregido el bloqueo de la aplicación CarPlay cuando se apaga la pantalla del iPhone\n• Se han trasladado al menú principal los complementos desde «Mapas y Recursos»\n• Se ha añadido el idioma finlandés\n• Se ha corregido la interfaz de usuario en orientación horizontal para la función «Planificar ruta»\n• Se ha añadido soporte para los archivos personalizados de navegación y visualización\n• Se ha corregido el rendimiento de la línea de dirección de los marcadores\n• Se ha solucionado un problema con la importación de archivos GPX con extensiones en mayúsculas\n• Se ha corregido un problema con el menú «Navegar traza».\n• Se ha corregido la importación de archivos OBF\n";
 "tracks_empty" = "La lista de trazas está vacía";
 "map_markers_empty" = "No tiene marcadores de mapa activos";
 "wiki_menu_download_descr" = "Se necesitan mapas adicionales para ver los puntos de interés de Wikipedia en el mapa.";

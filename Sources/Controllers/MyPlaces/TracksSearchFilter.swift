@@ -38,7 +38,7 @@ final class TracksSearchFilter: FilterChangedListener {
         initFilters()
     }
     
-    private func initFilters() {
+    private func initFilters(completion: (() -> Void)? = nil) {
         recreateFilters()
         
         DispatchQueue.global(qos: .utility).async {
@@ -83,7 +83,11 @@ final class TracksSearchFilter: FilterChangedListener {
             }
             
             DispatchQueue.main.async {
-                self.onFilterChanged()
+                if let completion {
+                    completion()
+                } else {
+                    self.onFilterChanged()
+                }
             }
         }
     }
@@ -194,8 +198,8 @@ final class TracksSearchFilter: FilterChangedListener {
         }
     }
     
-    func resetCurrentFilters() {
-        initFilters()
+    func resetCurrentFilters(completion: (() -> Void)? = nil) {
+        initFilters(completion: completion)
     }
     
     func getFilterByType(_ type: TrackFilterType) -> BaseTrackFilter? {

@@ -530,6 +530,7 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
     {
         if (trackItem.dataItem)
         {
+            [OASSmartFolderHelper.shared onGpxFileDeletedGpxFile:trackItem.getFile];
             NSString *newStoringFullPath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:newStoringPath];
             OASKFile *newFile = [[OASKFile alloc] initWithFilePath:newStoringFullPath];
             BOOL result = [trackItem.dataItem.file renameToToFile:newFile];
@@ -543,6 +544,7 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
                     {
                         trackItem = [[OASTrackItem alloc] initWithFile:newFile];
                         trackItem.dataItem = gpx;
+                        [OASSmartFolderHelper.shared addTrackItemToSmartFolderItem:trackItem];
                         if (updatedTrackItemСallback)
                         {
                             updatedTrackItemСallback(trackItem);
@@ -638,13 +640,14 @@ updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))upd
                 NSLog(@"[ERROR] -> OAGPXUIHelper -> renameCurrentFileResult is fail");
                 return;
             }
-            
-            [OASSmartFolderHelper.shared onTrackRenamedSrcTrackFile:[[OASKFile alloc] initWithFilePath:oldPath] destTrackFile:[[OASKFile alloc] initWithFilePath:newPath]];
+
             OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:newPath];
             if (gpx)
             {
                 OASTrackItem *trackItem = [[OASTrackItem alloc] initWithFile:newFile];
                 trackItem.dataItem = gpx;
+                [OASSmartFolderHelper.shared onGpxFileDeletedGpxFile:[[OASKFile alloc] initWithFilePath:oldPath]];
+                [OASSmartFolderHelper.shared addTrackItemToSmartFolderItem:trackItem];
                 if (updatedTrackItemСallback)
                 {
                     updatedTrackItemСallback(trackItem);

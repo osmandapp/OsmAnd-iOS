@@ -13,7 +13,10 @@
 
 @interface OASearchResult(cpp)
 
-@property (nonatomic, assign) std::shared_ptr<const OsmAnd::Amenity> amenity;
-@property (nonatomic, assign) std::shared_ptr<const OsmAnd::IFavoriteLocation> favorite;
+- (std::shared_ptr<const OsmAnd::Amenity>) amenity;
+- (void) setAmenity:(std::shared_ptr<const OsmAnd::Amenity>)amenity;
+
+- (std::shared_ptr<const OsmAnd::IFavoriteLocation>) favorite;
+- (void) setFavorite:(std::shared_ptr<const OsmAnd::IFavoriteLocation>)favorite;
 
 @end

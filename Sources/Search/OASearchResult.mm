@@ -38,6 +38,8 @@
 @implementation OASearchResult
 {
     double _unknownPhraseMatchWeight;
+    std::shared_ptr<const OsmAnd::Amenity> _amenity;
+    std::shared_ptr<const OsmAnd::IFavoriteLocation> _favorite;
 }
 
 - (instancetype) initWithPhrase:(OASearchPhrase *)sp
@@ -267,6 +269,25 @@
     OASearchResult *prev = _parentSearchResult;
     _parentSearchResult = parentSearchResult;
     return prev;
+}
+
+- (std::shared_ptr<const OsmAnd::Amenity>) amenity
+{
+    return _amenity;
+}
+
+- (void) setAmenity:(std::shared_ptr<const OsmAnd::Amenity>)amenity
+{
+    _amenity = amenity;
+}
+
+- (std::shared_ptr<const OsmAnd::IFavoriteLocation>) favorite
+{
+    return _favorite;
+}
+- (void) setFavorite:(std::shared_ptr<const OsmAnd::IFavoriteLocation>)favorite
+{
+    _favorite = favorite;
 }
 
 - (NSString *) toString

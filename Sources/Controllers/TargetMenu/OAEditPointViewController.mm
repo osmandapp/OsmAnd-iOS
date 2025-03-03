@@ -239,8 +239,8 @@
 
     [self setupGroups];
     [self setupColors];
-    [self setupIcons];
     [self setupIconHandler];
+    [self setupIcons];
 }
 
 - (void)registerNotifications
@@ -404,6 +404,7 @@
         _selectedIconName = selectedGroup.iconName;
     else if (!_selectedIconName || _selectedIconName.length == 0)
         _selectedIconName = DEFAULT_ICON_NAME_KEY;
+    [_poiIconCollectionHandler setIconName:_selectedIconName];
     
     _backgroundIconNames = [OAFavoritesHelper getFlatBackgroundIconNamesList];
     _backgroundContourIconNames = [OAFavoritesHelper getFlatBackgroundContourIconNamesList];
@@ -429,7 +430,6 @@
     _poiIconCollectionHandler.selectedIconColor = [_selectedColorItem getColor];
     [_poiIconCollectionHandler setItemSizeWithSize:48];
     [_poiIconCollectionHandler setIconSizeWithSize:30];
-    [_poiIconCollectionHandler setIconName:_selectedIconName];
 }
 
 - (void)generateData

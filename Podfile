@@ -21,6 +21,7 @@ def defaultPods
     pod 'MCBinaryHeap', '~> 0.1'
     pod 'TTRangeSlider', '~> 1.0.6'
     pod 'SwiftLint', '~> 0.52.4'
+    pod 'Kingfisher', '~> 8.0'
 end
 
 target 'OsmAnd Maps' do
@@ -32,7 +33,7 @@ post_install do |installer|
         target.build_configurations.each do |configuration|
             configuration.build_settings['ARCHS'] = '$(ARCHS_STANDARD)'
             configuration.build_settings['ONLY_ACTIVE_ARCH'] = 'NO'
-            configuration.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
+            configuration.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
         end
     end
 end

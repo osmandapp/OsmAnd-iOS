@@ -10,9 +10,14 @@
 
 @class OAPOI;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface OAWikiWebViewController : OABaseWebViewController
 
 - (instancetype)initWithPoi:(OAPOI *)poi;
 - (instancetype)initWithPoi:(OAPOI *)poi locale:(NSString *)locale;
+- (instancetype)initWithURL:(NSURL *)url title:(NSString *)title;
 
 @end
+
+NS_ASSUME_NONNULL_END

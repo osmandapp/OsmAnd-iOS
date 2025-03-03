@@ -10,7 +10,7 @@ import Foundation
 
 @objc(OAWikiAlgorithms)
 @objcMembers
-class WikiAlgorithms : NSObject {
+class WikiAlgorithms: NSObject {
     static let wikipedia = "wikipedia"
     static let wikipediaDomain = ".wikipedia.org/"
     static let wikiLink = wikipediaDomain + "wiki/"
@@ -50,8 +50,12 @@ class WikiAlgorithms : NSObject {
             if value.contains(":") {
                 // If value contains a sign ":" it means that "lang_code" is also present in value.
                 let valueParts: [Substring] = value.split(separator: ":")
-                langCode = String(valueParts[0])
-                title = String(valueParts[1])
+                if !valueParts.isEmpty {
+                    langCode = String(valueParts[0])
+                    if valueParts.count > 1 {
+                        title = String(valueParts[1])
+                    }
+                }
             } else {
                 title = value
             }
@@ -66,5 +70,20 @@ class WikiAlgorithms : NSObject {
 
     static func isUrl(_ value: String) -> Bool {
         return value.lowercased().hasPrefix("http://") || value.lowercased().hasPrefix("https://")
+    }
+
+    static func formatWikiDate(_ date: String?) -> String {
+        guard let date, !date.isEmpty else {
+            return ""
+        }
+
+        let cleanDate = date.hasPrefix("+") ? String(date.dropFirst()) : date
+        let isoFormatter = ISO8601DateFormatter()
+        
+        if let dateTime = isoFormatter.date(from: cleanDate) {
+            return DateFormatter.dateStyleMedium.string(from: dateTime)
+        }
+        
+        return date
     }
 }

@@ -7,7 +7,6 @@
 //
 
 #import "OATargetInfoCollapsableCoordinatesViewCell.h"
-#import "OACollapsableView.h"
 #import "OACollapsableCoordinatesView.h"
 #import "OAPointDescription.h"
 

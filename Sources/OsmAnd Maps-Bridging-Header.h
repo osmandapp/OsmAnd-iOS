@@ -72,6 +72,7 @@
 #import "OAPOIFiltersHelper.h"
 #import "OARendererRegistry.h"
 #import "OAMapObject.h"
+#import "OAWikiWebViewController.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"
@@ -188,10 +189,12 @@
 #import "OADeviceScreenTableViewCell.h"
 #import "OATitleSliderRoundCell.h"
 
+
 // Views
 #import "OASegmentedSlider.h"
 #import "OATurnDrawable.h"
 #import "OAHudButton.h"
+#import "OACollapsableView.h"
 
 // Apple
 #import <SafariServices/SafariServices.h>
@@ -242,3 +245,4 @@
 #import "OAShowHidePrecipitationAction.h"
 #import "OAMapStyleAction.h"
 #import "OAUnsupportedAction.h"
+#import "OAMapillaryImageCardWrapper.h"

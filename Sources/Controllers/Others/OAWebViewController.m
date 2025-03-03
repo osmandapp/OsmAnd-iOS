@@ -60,7 +60,7 @@
 
 - (NSString *)getTitle
 {
-    return _title ? _title : OALocalizedString(@"help_quiz");
+    return _title ? : OALocalizedString(@"help_quiz");
 }
 
 - (EOABaseNavbarColorScheme)getNavbarColorScheme

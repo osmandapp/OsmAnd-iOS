@@ -2174,9 +2174,9 @@
 "weather_pressure_inches_of_mercury" = "tolli Hg";
 "weather_wind_unit_m_s" = "meetrit/sekundis";
 "weather_wind_kilimeters_per_hour" = "Kilomeetrit tunnis";
-"weather_wind_knots" = "sõlme";
-"weather_precip_milimeters" = "millimeetrit";
-"weather_precip_inches" = "tolli";
+"weather_wind_knots" = "Sõlme";
+"weather_precip_milimeters" = "Millimeetrit";
+"weather_precip_inches" = "Tolli";
 "weather_cloud_data_description" = "Ilmaandmed laaditakse alla vaadeldava ala kohta iga kord.";
 "obf_import_already_exists_short" = "Selle nimega fail on juba olemas.";
 "shared_string_hide_all" = "Peida kõik";
@@ -3170,3 +3170,5 @@
 "map_widget_group_sunrise_sunset_desc" = "Need vidinad näitavad järgmise päikesetõusu ja -loojangu teavet.";
 "rendering_attr_showMtbScale_name" = "Näita MTB raskusastet";
 "rendering_attr_showMtbScale_description" = "Näita radu vastavalt nende MTB raskusastmele.";
+"rendering_attr_depthContourWidth_name" = "Joone laius";
+"rendering_attr_depthContourColorScheme_name" = "Joonte värvid";

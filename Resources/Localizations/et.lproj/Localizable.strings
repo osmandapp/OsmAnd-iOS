@@ -1875,7 +1875,7 @@
 "select_track_to_follow" = "Vali järgimiseks teekond";
 
 // Coordinate widget
-"coordinates_widget_current_location" = "Koordinaadid:praegune asukoht";
+"coordinates_widget_current_location" = "Koordinaadid: praegune asukoht";
 "searching_gps" = "GPSi otsimine";
 "new_plugin_added" = "Uus laiendus lisatud";
 "add_custom_category" = "Lisa oma kategooria";
@@ -2170,8 +2170,8 @@
 "product_desc_weather" = "Järgmise 7 päeva tunnipõhine ilmaennustus kaardil";
 "measurement_units" = "Mõõtühikud";
 "weather_pressure_hectopascals" = "hektopaskalit";
-"weather_pressure_millimeters_of_mercury" = "mm/Hg";
-"weather_pressure_inches_of_mercury" = "tolli Hg";
+"weather_pressure_millimeters_of_mercury" = "torri";
+"weather_pressure_inches_of_mercury" = "tolli elavhõbeda sammast";
 "weather_wind_unit_m_s" = "meetrit/sekundis";
 "weather_wind_kilimeters_per_hour" = "Kilomeetrit tunnis";
 "weather_wind_knots" = "Sõlme";
@@ -2185,7 +2185,7 @@
 "route_preferred_terrain_less_hilly" = "Lühemad, vähem mägised marsruudid.";
 "route_preferred_terrain_hilly" = "Mägise reljeefiga marsruudid.";
 "any_poi" = "Mistahes";
-"weather_temperature_celsius" = "C";
+"weather_temperature_celsius" = "Celsius";
 "altitude" = "Kõrgus";
 "save_heading" = "Koos suunaga";
 "route_preferred_terrain_flat" = "Tasase reljeefiprofiiliga marsruudid. Teepikkus võib kasvada.";
@@ -2196,7 +2196,7 @@
 "context_menu_edit_descr" = "Muuda kirjeldust";
 "add_description" = "Lisa kirjeldus";
 "weather_plugin_description" = "Ilma pistikprogramm pakub\n- 5 kihti... 24h tunnipõhine prognoos ja 7 päeva prognoos iga 3 tunni järel\n- asukohapõhised vidinad\n- temperatuuri / rõhu isojooned\n\nIlmaennustuse allikas on Global Forecast System (GFS, %@).";
-"weather_temperature_fahrenheit" = "F";
+"weather_temperature_fahrenheit" = "Fahrenheit";
 "select_tracks" = "Vali rajad";
 "map_settings_weather_wind" = "Tuul";
 "turn_arrows" = "Pöörangute nooled";
@@ -2438,7 +2438,7 @@
 "activity_type_water_name" = "Vesi";
 "search_history" = "Otsinguajalugu";
 "switch_profile" = "Vaheta profiili";
-"coordinates_format" = "Koordinaatide formaat";
+"coordinates_format" = "Koordinaatide vorming";
 "weather_update_disabled" = "Keelatud";
 "subscribe_email_error" = "Viga";
 "shared_string_deleted" = "Kustutatud";
@@ -3108,7 +3108,7 @@
 "download_images_settings_header" = "OsmAndis leiduvates allalaaditud Vikipeedia failides pole pilte. Küll aga saad sa neid artikli lugemise ajal alla laadida.";
 "popular_articles_not_found_descr" = "Praeguse kaardi keskpunkti lähedusest ei leidu ühtegi artiklit. Palun kasuta selleks otsingut.";
 "calendar_new_event_title" = "Uus sündmus";
-"coordinates_widget_map_center" = "Koordinaadid:kaardi keskpaik";
+"coordinates_widget_map_center" = "Koordinaadid: kaardi keskpaik";
 "twitter" = "Twitter";
 "nautical_depth_points" = "Merenduse samakõrguspunktid";
 "weather_temp_enable_descr" = "Lülita sisse kaardil temperatuuri andmekihi kuvamiseks.";
@@ -3172,3 +3172,10 @@
 "rendering_attr_showMtbScale_description" = "Näita radu vastavalt nende MTB raskusastmele.";
 "rendering_attr_depthContourWidth_name" = "Joone laius";
 "rendering_attr_depthContourColorScheme_name" = "Joonte värvid";
+"hide_map_center" = "Peida koordinaadid: kaardi keskpaik";
+"coordinates_widget_current_location_desc" = "Näitab praeguse asukoha geograafilisi koordinaate";
+"coordinates_widget_map_center_desc" = "Näitab kaardivaate keskpunkti geograafilisi koordinaate";
+"toggle_map_center" = "Kuva/peida koordinaadid: kaardi keskpaik";
+"show_map_center" = "Näita koordinaate: kaardi keskpaik";
+"external_sensors_plugin_name" = "Välised andurid";
+"show_borders_of_downloaded_maps" = "Näita allalaaditud kaartide piirjooni";

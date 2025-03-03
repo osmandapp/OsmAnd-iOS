@@ -9,8 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "OASearchCoreFactory.h"
 
-#include <OsmAndCore.h>
-
 @class OASearchUICore, OASearchResultCollection, OASearchResult, QuadRect;
 @class OASGpxFile;
 

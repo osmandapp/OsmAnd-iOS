@@ -8,6 +8,7 @@
 
 #import "OAQuickSearchListItem.h"
 #import "OASearchResult.h"
+#import "OASearchResult+cpp.h"
 #import "OASearchPhrase.h"
 #import "OASearchSettings.h"
 #import "Localization.h"
@@ -70,7 +71,7 @@
 {
     switch (searchResult.objectType)
     {
-        case STREET:
+        case EOAObjectTypeSTREET:
         {
             if ([searchResult.localeName hasSuffix:@")"])
             {
@@ -80,19 +81,19 @@
             }
             break;
         }
-        case STREET_INTERSECTION:
+        case EOAObjectTypeSTREET_INTERSECTION:
         {
             if (searchResult.localeRelatedObjectName.length > 0)
                 return [NSString stringWithFormat:@"%@ - %@", searchResult.localeName, searchResult.localeRelatedObjectName];
             
             break;
         }
-        case RECENT_OBJ:
+        case EOAObjectTypeRECENT_OBJ:
         {
             OAHistoryItem *historyItem = (OAHistoryItem *) searchResult.object;
             return historyItem.name.length > 0 ? historyItem.name : historyItem.typeName;
         }
-        case LOCATION:
+        case EOAObjectTypeLOCATION:
         {
             CLLocation *location = searchResult.location;
             return [OAPointDescription getLocationNamePlain:location.coordinate.latitude lon:location.coordinate.longitude];
@@ -114,21 +115,21 @@
 {
     switch (searchResult.objectType)
     {
-        case LOCATION:
-        case PARTIAL_LOCATION:
+        case EOAObjectTypeLOCATION:
+        case EOAObjectTypePARTIAL_LOCATION:
         {
             return @"ic_action_world_globe";
         }
-        case CITY:
-        case VILLAGE:
-        case POSTCODE:
-        case STREET:
-        case HOUSE:
-        case STREET_INTERSECTION:
+        case EOAObjectTypeCITY:
+        case EOAObjectTypeVILLAGE:
+        case EOAObjectTypePOSTCODE:
+        case EOAObjectTypeSTREET:
+        case EOAObjectTypeHOUSE:
+        case EOAObjectTypeSTREET_INTERSECTION:
         {
             return [((OAAddress *)searchResult.object) iconName];
         }
-        case POI_TYPE:
+        case EOAObjectTypePOI_TYPE:
         {
             if ([searchResult.object isKindOfClass:OAPOIBaseType.class])
             {
@@ -149,7 +150,7 @@
                 return iconName && iconName.length > 0 ? iconName : @"ic_custom_search";
             }
         }
-        case POI:
+        case EOAObjectTypePOI:
         {
             OAPOI *amenity = (OAPOI *) searchResult.object;
             NSString *iconName = [amenity iconName];
@@ -157,25 +158,25 @@
                 iconName = [@"mx_" stringByAppendingString:@"craft_default"];
             return iconName;
         }
-        case GPX_TRACK:
+        case EOAObjectTypeGPX_TRACK:
         {
             return @"ic_custom_trip";
         }
-        case FAVORITE:
+        case EOAObjectTypeFAVORITE:
         {
             auto favorite = std::const_pointer_cast<OsmAnd::IFavoriteLocation>(searchResult.favorite);
             OAFavoriteItem *favItem = [[OAFavoriteItem alloc] initWithFavorite:favorite];
             return [favItem getIcon];
         }
-        case FAVORITE_GROUP:
+        case EOAObjectTypeFAVORITE_GROUP:
         {
             return @"ic_custom_favorites";
         }
-        case REGION:
+        case EOAObjectTypeREGION:
         {
             return @"ic_world_globe_dark";
         }
-        case RECENT_OBJ:
+        case EOAObjectTypeRECENT_OBJ:
         {
             OAHistoryItem *entry = (OAHistoryItem *) searchResult.object;
             if (entry.iconName && entry.iconName.length > 0)
@@ -196,7 +197,7 @@
                 return @"ic_custom_marker";
             }
         }
-        case WPT:
+        case EOAObjectTypeWPT:
         {
             OASWptPt *wpt = (OASWptPt *) searchResult.object;
             return [wpt getIconName];
@@ -233,16 +234,16 @@
 {
     switch (searchResult.objectType)
     {
-        case CITY:
+        case EOAObjectTypeCITY:
         {
             OACity *city = (OACity *)searchResult.object;
             return [OACity getLocalizedTypeStr:city.subType];
         }
-        case POSTCODE:
+        case EOAObjectTypePOSTCODE:
         {
             return OALocalizedString(@"postcode");
         }
-        case VILLAGE:
+        case EOAObjectTypeVILLAGE:
         {
             OACity *city = (OACity *)searchResult.object;
             if (searchResult.localeRelatedObjectName.length > 0)
@@ -261,7 +262,7 @@
                 return [OACity getLocalizedTypeStr:city.subType];
             }
         }
-        case STREET:
+        case EOAObjectTypeSTREET:
         {
             NSMutableString *streetBuilder = [NSMutableString string];
             if ([searchResult.localeName hasSuffix:@")"])
@@ -279,7 +280,7 @@
             }
             return [NSString stringWithString:streetBuilder];
         }
-        case HOUSE:
+        case EOAObjectTypeHOUSE:
         {
             if (searchResult.relatedObject)
             {
@@ -291,7 +292,7 @@
             }
             return @"";
         }
-        case STREET_INTERSECTION:
+        case EOAObjectTypeSTREET_INTERSECTION:
         {
             OAStreet *street = (OAStreet *)searchResult.object;
             if (street.city)
@@ -299,7 +300,7 @@
 
             return @"";
         }
-        case POI_TYPE:
+        case EOAObjectTypePOI_TYPE:
         {
             NSString *res = @"";
             if ([searchResult.object isKindOfClass:[OAPOIBaseType class]])
@@ -335,7 +336,7 @@
             }
             return res;
         }
-        case POI:
+        case EOAObjectTypePOI:
         {
             OAPOI *poi = (OAPOI *) searchResult.object;
             NSString * subType = [poi getSubTypeStr];
@@ -346,7 +347,7 @@
             }
             return [[self.class getName:searchResult] isEqualToString:subType] ? @"" : subType;
         }
-        case LOCATION:
+        case EOAObjectTypeLOCATION:
         {
             CLLocation *location = (CLLocation *) searchResult.object;
             if (!searchResult.localeRelatedObjectName)
@@ -356,27 +357,27 @@
             }
             return searchResult.localeRelatedObjectName;
         }
-        case FAVORITE:
+        case EOAObjectTypeFAVORITE:
         {
             const auto& fav = searchResult.favorite;
             return [OAFavoriteGroup getDisplayName: fav->getGroup().toNSString()];
         }
-        case REGION:
+        case EOAObjectTypeREGION:
         {
             //BinaryMapIndexReader binaryMapIndexReader = (BinaryMapIndexReader) searchResult.object;
             //System.out.println(binaryMapIndexReader.getFile().getAbsolutePath() + " " + binaryMapIndexReader.getCountryName());
             break;
         }
-        case RECENT_OBJ:
+        case EOAObjectTypeRECENT_OBJ:
         {
             OAHistoryItem *item = (OAHistoryItem *) searchResult.object;
             return item.typeName && item.name ? item.typeName : OALocalizedString(@"shared_string_history");
         }
-        case WPT:
+        case EOAObjectTypeWPT:
         {
             return searchResult.localeRelatedObjectName;
         }
-        case GPX_TRACK:
+        case EOAObjectTypeGPX_TRACK:
         {
             OASGpxDataItem *dataItem = (OASGpxDataItem *)searchResult.relatedObject;
             if (dataItem)
@@ -385,7 +386,7 @@
             }
             return @"";
         }
-        case UNKNOWN_NAME_FILTER:
+        case EOAObjectTypeUNKNOWN_NAME_FILTER:
         {
             break;
         }

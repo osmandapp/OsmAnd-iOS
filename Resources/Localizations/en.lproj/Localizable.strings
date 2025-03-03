@@ -914,6 +914,7 @@
 "shared_string_colors" = "Colors";
 
 "profile_icon" = "Profile icon";
+"profile_icons" = "Profile icon";
 "restart" = "Restart";
 
 "offline_maps" = "Offline Maps";
@@ -1209,6 +1210,7 @@
 "sett_deg_min" = "Degrees and minutes";
 "sett_arr" = "Map arrows";
 "shared_string_location" = "Location";
+"shared_string_activity" = "Activity";
 "sett_arr_map" = "Map center";
 "short_location_on_map" = "Lat %@\nLon %@";
 "navigate_point_format_D" = "DDD.DDDDD";

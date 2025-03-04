@@ -331,8 +331,14 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
     }
     
     override func onTopButtonPressed() {
-        baseFilters.resetCurrentFilters()
-        baseFiltersResult = baseFilters.performFiltering()
+        baseFilters.removeFiltersChangedListener(self)
+        baseFilters.resetCurrentFilters { [weak self] in
+            guard let self else { return }
+            self.baseFiltersResult = self.baseFilters.performFiltering()
+            self.baseFilters.onFilterChanged()
+            self.onFilterChanged()
+            self.baseFilters.addFiltersChangedListener(self)
+        }
     }
     
     override func onBottomButtonPressed() {

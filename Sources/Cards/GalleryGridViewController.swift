@@ -103,7 +103,8 @@ extension GalleryGridViewController: UICollectionViewDataSource {
             let text = "\(cards.count)" + " " + localizedString("shared_string_items")
             typedHeaderView.configure(with: text)
             return typedHeaderView
-        default: assert(false, "Invalid element type")
+        default:
+            return UICollectionReusableView()
         }
     }
     
@@ -141,7 +142,7 @@ extension GalleryGridViewController: UICollectionViewDelegate {
             guard let self else { return nil }
             var firstSectionItems = [UIAction]()
             if card is WikiImageCard {
-                let detailsAction = UIAction(title: localizedString("shared_string_details"), image: UIImage.icCustomInfoOutlined) { _ in
+                let detailsAction = UIAction(title: localizedString("shared_string_details"), image: .icCustomInfoOutlined) { _ in
                     GalleryContextMenuProvider.openDetailsController(card: card, rootController: self)
                 }
                 detailsAction.accessibilityLabel = localizedString("shared_string_details")

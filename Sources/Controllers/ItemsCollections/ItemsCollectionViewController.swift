@@ -38,6 +38,14 @@ import UIKit
 @objcMembers
 final class ItemsCollectionViewController: OABaseNavbarViewController {
     
+    private let iconNamesKey = "iconNamesKey"
+    private let poiCategoryNameKey = "poiCategoryNameKey"
+    private let headerKey = "headerKey"
+    private let chipsTitlesKey = "chipsTitlesKey"
+    private let chipsSelectedIndexKey = "chipsSelectedIndexKey"
+    
+    private let poiTypeNoIconValue = "ic_action_categories_search"
+    
     weak var delegate: ColorCollectionViewControllerDelegate?
     weak var iconsDelegate: IconsCollectionViewControllerDelegate?
     weak var hostColorHandler: OAColorCollectionHandler?
@@ -46,39 +54,31 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     var selectedIconColor: UIColor?
     var regularIconColor: UIColor?
     
-    private var collectionType: ColorCollectionType
-    private var colorsCollection: GradientColorsCollection?
-    private var selectedPaletteItem: PaletteColor?
-    private var paletteItems: OAConcurrentArray<PaletteColor>?
+    var iconImages = [UIImage]()
+    var iconCategoties = [IconsCategory]()
+    private var iconItems = [String]()
+    private var selectedIconItem: String?
     
     private var settings: OAAppSettings
     private var data: OATableDataModel
-    
-    private var colorCollectionIndexPath: IndexPath?
-    private var colorItems: [ColorItem] = []
-    private var selectedColorItem: ColorItem?
-    private var editColorIndexPath: IndexPath?
-    private var isStartedNewColorAdding = false
-    
-    private var iconItems: [String] = []
-    var iconImages: [UIImage] = []
-    var iconCategoties: [IconsCategory] = []
-    private var selectedIconItem: String?
-    
-    private var colorCollectionHandler: OAColorCollectionHandler?
     
     private var searchController: UISearchController?
     private var lastSearchResults = [OAPOIType]()
     private var inSearchMode = false
     private var searchCancelled = false
     
-    private let iconNamesKey = "iconNamesKey"
-    private let poiCategoryNameKey = "poiCategoryNameKey"
-    private let headerKey = "headerKey"
-    private let chipsTitlesKey = "chipsTitlesKey"
-    private let chipsSelectedIndexKey = "chipsSelectedIndexKey"
+    private var collectionType: ColorCollectionType
+    private var colorsCollection: GradientColorsCollection?
+    private var selectedPaletteItem: PaletteColor?
+    private var paletteItems: OAConcurrentArray<PaletteColor>?
+    private var colorCollectionIndexPath: IndexPath?
+    private var colorItems = [ColorItem]()
+    private var selectedColorItem: ColorItem?
+    private var editColorIndexPath: IndexPath?
+    private var isStartedNewColorAdding = false
     
-    private let poiTypeNoIconValue = "ic_action_categories_search"
+    private var colorCollectionHandler: OAColorCollectionHandler?
+    
     
     init(collectionType: ColorCollectionType, items: Any, selectedItem: Any) {
         
@@ -156,7 +156,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         super.viewDidLoad()
         
         tableView.separatorStyle = (collectionType == .colorizationPaletteItems || collectionType == .terrainPaletteItems) ? .singleLine : .none
-        tableView.backgroundColor = collectionType == .colorItems ? UIColor.groupBg : UIColor.viewBg
+        tableView.backgroundColor = collectionType == .colorItems ? .groupBg : .viewBg
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -373,11 +373,11 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             }
         } else if item.cellType == OASimpleTableViewCell.reuseIdentifier {
             if let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier, for: indexPath) as? OASimpleTableViewCell {
-                cell.titleLabel.textColor = UIColor.textColorPrimary
-                cell.descriptionLabel.textColor = UIColor.textColorSecondary
+                cell.titleLabel.textColor = .textColorPrimary
+                cell.descriptionLabel.textColor = .textColorSecondary
                 cell.titleLabel.text = item.title
                 cell.descriptionLabel.text = item.descr
-                cell.leftIconView.tintColor = UIColor.iconColorSelected
+                cell.leftIconView.tintColor = .iconColorSelected
                 cell.leftIconView.image = OAUtilities.getMxIcon(item.iconName)
                 return cell
             }
@@ -399,7 +399,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             if let selectedColorItem, let selectedIndex = colorItems.firstIndex(of: selectedColorItem) {
                 colorCollectionHandler.setSelectedIndexPath(IndexPath(row: selectedIndex, section: 0))
             }
-            cell.backgroundColor = UIColor.systemBackground
+            cell.backgroundColor = .systemBackground
             cell.setCollectionHandler(colorCollectionHandler)
             cell.collectionView.isScrollEnabled = false
             cell.useMultyLines = true
@@ -420,9 +420,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             poiIconHandler.roundedSquareCells = false
             poiIconHandler.innerViewCornerRadius = -1
             if let poiCategoryKey {
-                if poiCategoryKey == poiIconHandler.PROFILE_ICONS_KEY {
-                    poiIconHandler.addProfileIconsCategory()
-                }
+                poiIconHandler.addProfileIconsCategoryIfNeeded(categoryKey: poiCategoryKey)
                 poiIconHandler.selectCategory(poiCategoryKey)
             }
             if let selectedIconItem, let selectedIndex = iconNames.firstIndex(of: selectedIconItem) {
@@ -458,7 +456,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                 cell.disableAnimationsOnStart = true
             }
         }
-        cell.backgroundColor = UIColor.systemBackground
+        cell.backgroundColor = .systemBackground
         cell.collectionView.isScrollEnabled = false
         cell.useMultyLines = true
         cell.anchorContent(.centerStyle)
@@ -473,7 +471,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         cell.disableAnimationsOnStart = true
         cell.collectionView.isScrollEnabled = true
         cell.useMultyLines = false
-        cell.backgroundColor = UIColor.clear
+        cell.backgroundColor = .clear
         cell.configureTopOffset(0)
         cell.configureBottomOffset(0)
         handler.titles = chipsTitles
@@ -545,7 +543,8 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     
     private func createPaletteMenu(for indexPath: IndexPath) -> UIMenu {
         let duplicateAction = UIAction(title: localizedString("shared_string_duplicate"), image: UIImage(systemName: "doc.on.doc")) { [weak self] _ in
-            self?.duplicateItem(fromContextMenu: indexPath)
+            guard let self else { return }
+            self.duplicateItem(fromContextMenu: indexPath)
         }
         
         let item = data.item(for: indexPath)
@@ -559,7 +558,8 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             
             if !isDefault {
                 let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] _ in
-                    self?.deleteItem(fromContextMenu: indexPath)
+                    guard let self else { return }
+                    self.deleteItem(fromContextMenu: indexPath)
                 }
                 
                 let deleteMenu = UIMenu(options: .displayInline, children: [deleteAction])
@@ -604,13 +604,14 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         
         data.removeItems(at: indexPathsToDelete)
         tableView.performBatchUpdates { [weak self] in
-            self?.tableView.deleteRows(at: indexPathsToDelete, with: .automatic)
+            guard let self else { return }
+            self.tableView.deleteRows(at: indexPathsToDelete, with: .automatic)
         } completion: { [weak self] _ in
-            guard let weakself = self else { return }
+            guard let self else { return }
             
             if removeCurrent {
                 var newCurrentSelected: PaletteColor?
-                if let colorsCollection = weakself.colorsCollection {
+                if let colorsCollection = self.colorsCollection {
                     
                     if colorsCollection.isTerrainType() {
                         let terrainType = TerrainMode.TerrainTypeWrapper.valueOf(typeName: currentGradientPaletteColor.typeName)
@@ -622,13 +623,13 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                     }
                 }
                 
-                weakself.selectedPaletteItem = newCurrentSelected
+                self.selectedPaletteItem = newCurrentSelected
                 if let newCurrentSelected = newCurrentSelected,
-                   let currentIndex = weakself.paletteItems?.index(ofObjectSync: newCurrentSelected) {
-                    weakself.tableView.reloadRows(at: [IndexPath(row: Int(currentIndex), section: 0)], with: .automatic)
+                   let currentIndex = self.paletteItems?.index(ofObjectSync: newCurrentSelected) {
+                    self.tableView.reloadRows(at: [IndexPath(row: Int(currentIndex), section: 0)], with: .automatic)
                 }
             }
-            weakself.tableView.reloadData()
+            self.tableView.reloadData()
         }
     }
     
@@ -655,9 +656,11 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         
         if !indexPathsToInsert.isEmpty {
             tableView.performBatchUpdates { [weak self] in
-                self?.tableView.insertRows(at: indexPathsToInsert, with: .automatic)
+                guard let self else { return }
+                self.tableView.insertRows(at: indexPathsToInsert, with: .automatic)
             } completion: { [weak self] _ in
-                self?.tableView.reloadData()
+                guard let self else { return }
+                self.tableView.reloadData()
             }
         }
     }
@@ -680,9 +683,11 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         
         if !indexPathsToUpdate.isEmpty {
             tableView.performBatchUpdates { [weak self] in
-                self?.tableView.reloadRows(at: indexPathsToUpdate, with: .automatic)
+                guard let self else { return }
+                self.tableView.reloadRows(at: indexPathsToUpdate, with: .automatic)
             } completion: { [weak self] _ in
-                self?.tableView.reloadData()
+                guard let self else { return }
+                self.tableView.reloadData()
             }
         }
     }
@@ -700,12 +705,14 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     }
     
     private func setupSearchControllerWithFilter(_ isFiltered: Bool) {
-        searchController?.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("shared_string_search"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.textColorSecondary])
+        guard let searchTextField = searchController?.searchBar.searchTextField else { return }
+        
+        searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("shared_string_search"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.textColorSecondary])
         if isFiltered {
-            searchController?.searchBar.searchTextField.leftView?.tintColor = UIColor.textColorPrimary
+            searchTextField.leftView?.tintColor = UIColor.textColorPrimary
         } else {
-            searchController?.searchBar.searchTextField.leftView?.tintColor = UIColor.textColorSecondary
-            searchController?.searchBar.searchTextField.tintColor = UIColor.textColorSecondary
+            searchTextField.leftView?.tintColor = UIColor.textColorSecondary
+            searchTextField.tintColor = UIColor.textColorSecondary
         }
     }
     
@@ -727,8 +734,8 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         searchUICore.update(settings)
         view.addSpinner(inCenterOfCurrentView: true)
         
-        let matcher = OAResultMatcher<OASearchResult> { res in
-            guard let searchResult = res?.pointee else { return true }
+        let matcher = OAResultMatcher<OASearchResult> { [weak self] res in
+            guard let self, let searchResult = res?.pointee else { return true }
             
             if searchResult.objectType == .SEARCH_FINISHED {
                 guard let resultCollection = searchUICore.getCurrentSearchResult() else { return true }
@@ -752,7 +759,8 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             }
             
             return true
-        } cancelledFunc: {
+        } cancelledFunc: { [weak self] in
+            guard let self else { return false }
             return self.searchCancelled
         }
         
@@ -826,9 +834,8 @@ extension ItemsCollectionViewController: OACollectionCellDelegate {
     }
     
     func reloadCollectionData() {
-        if let colorCollectionIndexPath = colorCollectionIndexPath {
-            tableView.reloadRows(at: [colorCollectionIndexPath], with: .none)
-        }
+        guard let colorCollectionIndexPath else { return }
+        tableView.reloadRows(at: [colorCollectionIndexPath], with: .none)
     }
 }
     
@@ -900,7 +907,7 @@ extension ItemsCollectionViewController: OAColorsCollectionCellDelegate {
 extension ItemsCollectionViewController: UIColorPickerViewControllerDelegate {
     
     func colorPickerViewController(_ viewController: UIColorPickerViewController, didSelect color: UIColor, continuously: Bool) {
-        guard let delegate = delegate, let colorCollectionIndexPath = colorCollectionIndexPath else { return }
+        guard let delegate = delegate, let colorCollectionIndexPath else { return }
         
         if isStartedNewColorAdding {
             isStartedNewColorAdding = false
@@ -916,8 +923,8 @@ extension ItemsCollectionViewController: UIColorPickerViewControllerDelegate {
             if editingColor.getHexColor() != viewController.selectedColor.toHexARGBString() {
                 
                 delegate.changeColorItem(editingColor, withColor: viewController.selectedColor)
-                if let editPath = editColorIndexPath {
-                    colorCollectionHandler?.replaceOldColor(editPath)
+                if let editColorIndexPath {
+                    colorCollectionHandler?.replaceOldColor(editColorIndexPath)
                 } else {
                     colorCollectionHandler?.replaceOldColor(IndexPath(row: 0, section: 0))
                 }
@@ -944,7 +951,8 @@ extension ItemsCollectionViewController: PoiIconsCollectionViewControllerDelegat
                 generateData()
 
                 tableView.performBatchUpdates {
-                    tableView.reloadSections(IndexSet(integer: 0), with: .none)
+                    // reload chips row
+                    tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
                 } completion: { _ in
                     self.tableView.scrollToRow(at: IndexPath(row: 0, section: categoryIndex + 1), at: .top, animated: true)
                     self.tableView.layoutIfNeeded()

@@ -10,7 +10,7 @@
 final class PoiIconCollectionHandler: IconCollectionHandler {
     
     var categories = [IconsCategory]()
-    var categoriesByKeyname = [String: IconsCategory]()
+    var categoriesByKeyName = [String: IconsCategory]()
     var selectedCatagoryKey = ""
     var lastUsedIcons = [String]()
     var profileIcons = [String]()
@@ -22,7 +22,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     private let SPECIAL_KEY = "special"
     private let SYMBOLS_KEY = "symbols"
     private let ACTIVITIES_KEY = "activities"
-    let PROFILE_ICONS_KEY = "profile_icons"
+    private let PROFILE_ICONS_KEY = "profile_icons"
     private let SAMPLE_ICON_KEY = "ic_sample"
     
     override init() {
@@ -40,7 +40,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
         sortCategories()
         
         for category in categories {
-            categoriesByKeyname[category.key] = category
+            categoriesByKeyName[category.key] = category
         }
     }
     
@@ -64,7 +64,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     }
     
     override func getSelectedItem() -> Any {
-        if let category = categoriesByKeyname[selectedCatagoryKey],
+        if let category = categoriesByKeyName[selectedCatagoryKey],
            let indexPath = getSelectedIndexPath() {
            return category.iconKeys[indexPath.row]
         }
@@ -80,7 +80,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
         
         selectedCatagoryKey = categoryKey
         
-        if let category = categoriesByKeyname[categoryKey] {
+        if let category = categoriesByKeyName[categoryKey] {
             generateData([category.iconKeys])
             hostCell?.topButton.setTitle(category.translatedName, for: .normal)
             getCollectionView()?.reloadData()
@@ -102,9 +102,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     private func initActivitiesCategory() {
         var iconKeys = [String]()
         for activity in RouteActivityHelper().getActivities() {
-            if !iconKeys.contains(activity.iconName) &&
-                activity.iconName != SAMPLE_ICON_KEY &&
-                OASvgHelper.hasMxMapImageNamed(activity.iconName) {
+            if shouldAppend(iconName: activity.iconName, toIconsList: iconKeys) {
                 iconKeys.append(activity.iconName)
             }
         }
@@ -122,9 +120,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
                     var iconKeys = [String]()
                     for poiType in poiTypeList {
                         if let iconName = poiType.iconName(),
-                            !iconKeys.contains(iconName),
-                            iconName != SAMPLE_ICON_KEY,
-                            OASvgHelper.hasMxMapImageNamed(iconName) {
+                           shouldAppend(iconName: iconName, toIconsList: iconKeys) {
                             iconKeys.append(iconName)
                         }
                     }
@@ -133,6 +129,16 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
                     }
                 }
             }
+        }
+    }
+    
+    private func shouldAppend(iconName: String, toIconsList iconsList: [String]) -> Bool {
+        !iconsList.contains(iconName) && iconName != SAMPLE_ICON_KEY && OASvgHelper.hasMxMapImageNamed(iconName)
+    }
+    
+    func addProfileIconsCategoryIfNeeded(categoryKey: String) {
+        if categoryKey == PROFILE_ICONS_KEY {
+            addProfileIconsCategory()
         }
     }
     
@@ -187,7 +193,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
 
         let profileIconsCategory = IconsCategory(key: PROFILE_ICONS_KEY, translatedName: localizedString("profile_icons"), iconKeys: profileIcons, isTopCategory: true)
         categories.append(profileIconsCategory)
-        categoriesByKeyname[PROFILE_ICONS_KEY] = profileIconsCategory
+        categoriesByKeyName[PROFILE_ICONS_KEY] = profileIconsCategory
         sortCategories()
     }
     
@@ -252,7 +258,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
         if let allIconsVCDelegate {
             allIconsVCDelegate.scrollToCategory(categoryKey: name)
         } else {
-            if let category = categoriesByKeyname[name] {
+            if let category = categoriesByKeyName[name] {
                 selectCategory(name)
                 selectIconName(category.iconKeys[0])
             }
@@ -260,7 +266,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     }
     
     func updateTopButtonName() {
-        if let category = categoriesByKeyname[selectedCatagoryKey] {
+        if let category = categoriesByKeyName[selectedCatagoryKey] {
             hostCell?.topButton.setTitle(category.translatedName + " 􀆏", for: .normal)
         }
     }

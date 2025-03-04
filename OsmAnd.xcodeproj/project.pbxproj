@@ -17454,7 +17454,6 @@
 				3202C5932D6647CB0094AC8B /* ItemsCollectionViewController.swift in Sources */,
 				DA5A847226C563A900F274C7 /* OATurnResource.m in Sources */,
 				32AC14832D6DF0B7009BE64E /* ChipsCollectionHandler.swift in Sources */,
-				DA5A826026C563A700F274C7 /* OAImageCardCell.mm in Sources */,
 				DA5A850326C563A900F274C7 /* OARouteInfoLegendItemView.m in Sources */,
 				DA5A82EB26C563A800F274C7 /* OAPublicTransportRouteCell.mm in Sources */,
 				C54D7F8829BF357700E14746 /* OASunriseSunsetWidgetState.m in Sources */,

@@ -16,7 +16,6 @@
 #import "OAPOIUIFilter.h"
 #import "OAPOIBaseType.h"
 #import "OAPOIHelper.h"
-#import "OASearchResult.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 

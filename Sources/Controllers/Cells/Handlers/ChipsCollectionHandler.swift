@@ -9,7 +9,7 @@
 import Foundation
 
 @objcMembers
-class ChipsCollectionHandler: OABaseCollectionHandler {
+final class ChipsCollectionHandler: OABaseCollectionHandler {
     
     static let folderCellHeight = 30.0
     static let folderCellSidePadding = 10.0
@@ -64,7 +64,7 @@ class ChipsCollectionHandler: OABaseCollectionHandler {
         
             cell.layer.cornerRadius = 9
             cell.titleLabel.text = titles[index]
-            cell.imageView.tintColor = UIColor.iconColorActive
+            cell.imageView.tintColor = .iconColorActive
             
             if iconNames.count > index && !iconNames[index].isEmpty {
                 cell.showImage(true)
@@ -76,20 +76,16 @@ class ChipsCollectionHandler: OABaseCollectionHandler {
             
             if index == selectedIndexPath.row {
                 cell.layer.backgroundColor = UIColor.buttonBgColorTap.cgColor
-                cell.titleLabel.textColor = UIColor.buttonTextColorPrimary
-                cell.imageView.tintColor = UIColor.buttonTextColorPrimary
+                cell.titleLabel.textColor = .buttonTextColorPrimary
+                cell.imageView.tintColor = .buttonTextColorPrimary
             } else {
                 cell.layer.backgroundColor = UIColor.buttonBgColorTertiary.cgColor
-                cell.titleLabel.textColor = UIColor.buttonTextColorSecondary
-                cell.imageView.tintColor = UIColor.buttonTextColorSecondary
+                cell.titleLabel.textColor = .buttonTextColorSecondary
+                cell.imageView.tintColor = .buttonTextColorSecondary
             }
             
             if cell.isDirectionRTL() {
                 cell.contentView.transform = CGAffineTransform(scaleX: -1, y: 1)
-            }
-
-            if cell.needsUpdateConstraints() {
-                cell.setNeedsUpdateConstraints()
             }
 
             return cell

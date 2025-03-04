@@ -37,6 +37,23 @@ jobs:
     #  run: ls /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/
     # - name: Install gpg
     #   run: brew install gnupg
+    
+    ### Clean previous build's archive files
+    - name: Remove OsmAndMaps.xcarchive directory
+      run: |
+        rm -rf OsmAndMaps.xcarchive
+      continue-on-error: true # In case the directory doesn't exist
+
+    - name: Remove OsmAndMaps.xcarchive.zip file
+      run: |
+        rm -f OsmAndMaps.xcarchive.zip
+      continue-on-error: true # In case the file doesn't exist
+
+    - name: Remove OsmAnd Maps.ipa file
+      run: |
+        rm -f "OsmAnd Maps.ipa"
+      continue-on-error: true # In case the file doesn't exist
+    
     ### Checks-out repository under $GITHUB_WORKSPACE, so job can access it
     - name: Checkout ios
       uses: actions/checkout@v4
@@ -44,7 +61,7 @@ jobs:
         ref: refs/heads/master
         repository: osmandapp/OsmAnd-iOS
         path: ios
-        clean: false
+        clean: true
     - name: Checkout android
       uses: actions/checkout@v4
       with:

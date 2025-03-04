@@ -3639,3 +3639,17 @@
 "shared_string_pause" = "Pausar";
 "quick_action_verb_start_pause" = "Iniciar / Pausar";
 "new_trip_segment" = "Nuevo segmento del viaje";
+"no_photos_available_descr" = "Aún no se añadieron fotos de usuarios a esta ubicación";
+"shared_string_source" = "Origen";
+"shared_string_date" = "Fecha";
+"no_internet_descr" = "Comprobá tu conexión e intentá de nuevo.";
+"shared_string_view_all" = "Ver todo";
+"no_photos_available" = "Sin fotos disponibles";
+"open_in_browser" = "Abrir en el navegador";
+"online_photos" = "Fotos en línea";
+"shared_string_show_less" = "Mostrar menos";
+"mapillary_action_descr" = "Compartí tus imágenes a nivel de calle a través de Mapillary.";
+"wikimedia" = "Wikimedia";
+"shared_string_items" = "Elementos";
+"download_failed" = "Descarga fallida";
+"download_successful" = "Imagen descargada en «Documentos/Descargas».";

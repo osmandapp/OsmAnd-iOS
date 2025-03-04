@@ -2601,7 +2601,7 @@
 "not_recorded" = "Nem lett rögzítve";
 "mapillary_widget_descr" = "Gyors Mapillary közreműködést tesz lehetővé.";
 "bottom_widgets_panel" = "Alsó panel";
-"map_widget_target_distance" = "Távolság a kamerától az úticélig";
+"map_widget_target_distance" = "Szemmagasság";
 "help_article_navigation_routing_car_based_routing_name" = "Útvonaltervezés autóhoz (teherautó, motorkerékpár)";
 "ant_plus_pair_new_sensor" = "Új érzékelő párosítása";
 "help_article_widgets_markers_name" = "Jelölő modulok";

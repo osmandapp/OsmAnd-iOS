@@ -243,6 +243,7 @@ static NSString * const mapperLiveUpdatesExpireTimeKey = @"mapper_live_updates_e
 
 static NSString * const showMapillaryKey = @"show_mapillary";
 static NSString * const onlinePhotosRowCollapsedKey = @"onlinePhotosRowCollapsed";
+static NSString * const mapillaryPhotosRowCollapsedKey = @"mapillaryPhotosRowCollapsed";
 static NSString * const mapillaryFirstDialogShownKey = @"mapillaryFirstDialogShown";
 static NSString * const useMapillaryFilterKey = @"useMapillaryFilter";
 static NSString * const mapillaryFilterUserKeyKey = @"mapillaryFilterUserKey";
@@ -433,6 +434,9 @@ static NSString * const lastProfileSettingsModifiedTimeKey = @"lastProfileSettin
 static NSString * const lastUUIDChangeTimestampKey = @"lastUUIDChangeTimestamp";
 
 static NSString * const kShowHeightmapsKey = @"showHeightmaps";
+
+static NSString * const kContextGallerySpanGridCountKey = @"contextGallerySpanGridCount";
+static NSString * const kContextGallerySpanGridCountLandscapeKey = @"contextGallerySpanGridCountLandscape";
 
 // Widgets
 static NSString * const leftWidgetPanelOrderKey = @"left_widget_panel_order";
@@ -4236,6 +4240,12 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
 
         _positionPlacementOnMap = [OACommonInteger withKey:positionPlacementOnMapKey defValue:EOAPositionPlacementAuto];
         [_profilePreferences setObject:_positionPlacementOnMap forKey:@"position_placement_on_map"];
+        
+        _contextGallerySpanGridCount = [[OACommonInteger withKey:kContextGallerySpanGridCountKey defValue:3] makeProfile];
+        [_profilePreferences setObject:_contextGallerySpanGridCount forKey:@"context_gallery_span_grid_count"];
+        
+        _contextGallerySpanGridCountLandscape = [[OACommonInteger withKey:kContextGallerySpanGridCountLandscapeKey defValue:7] makeProfile];
+        [_profilePreferences setObject:_contextGallerySpanGridCountLandscape forKey:@"context_gallery_span_grid_count_landscape"];
 
         _rotateMap = [OACommonInteger withKey:rotateMapKey defValue:ROTATE_MAP_MANUAL];
         [_rotateMap setModeDefaultValue:@(ROTATE_MAP_BEARING) mode:[OAApplicationMode CAR]];
@@ -4499,7 +4509,11 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
 
         _showMapillary = [[[OACommonBoolean withKey:showMapillaryKey defValue:YES] makeGlobal] makeShared];
         _mapillaryFirstDialogShown = [[OACommonBoolean withKey:mapillaryFirstDialogShownKey defValue:NO] makeGlobal];
+        
         _onlinePhotosRowCollapsed = [[[OACommonBoolean withKey:onlinePhotosRowCollapsedKey defValue:YES] makeGlobal] makeShared];
+        
+        _mapillaryPhotosRowCollapsed = [[[OACommonBoolean withKey:mapillaryPhotosRowCollapsedKey defValue:YES] makeGlobal] makeShared];
+        
         _useMapillaryFilter = [[[OACommonBoolean withKey:useMapillaryFilterKey defValue:NO] makeGlobal] makeShared];
         _mapillaryFilterUserKey = [[[OACommonString withKey:mapillaryFilterUserKeyKey defValue:@""] makeGlobal] makeShared];
         _mapillaryFilterUserName = [[[OACommonString withKey:mapillaryFilterUserNameKey defValue:@""] makeGlobal] makeShared];
@@ -4509,7 +4523,9 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
 
         [_globalPreferences setObject:_showMapillary forKey:@"show_mapillary"];
         [_globalPreferences setObject:_mapillaryFirstDialogShown forKey:@"mapillary_first_dialog_shown"];
-        [_globalPreferences setObject:_onlinePhotosRowCollapsed forKey:@"mapillary_menu_collapsed"];
+        [_globalPreferences setObject:_onlinePhotosRowCollapsed forKey:@"online_photos_menu_collapsed"];
+        [_globalPreferences setObject:_mapillaryPhotosRowCollapsed forKey:@"mapillary_menu_collapsed"];
+        
         [_globalPreferences setObject:_useMapillaryFilter forKey:@"use_mapillary_filters"];
         [_globalPreferences setObject:_mapillaryFilterUserKey forKey:@"mapillary_filter_user_key"];
         [_globalPreferences setObject:_mapillaryFilterUserName forKey:@"mapillary_filter_username"];

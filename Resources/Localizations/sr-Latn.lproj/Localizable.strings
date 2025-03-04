@@ -3629,3 +3629,7 @@
 "shared_string_pause" = "Pauza";
 "new_trip_segment" = "Novi segment putovanja";
 "quick_action_save_recorded_trip_and_continue" = "Snimi putovanje i nastavi";
+"shared_string_show_less" = "Prikaži manje";
+"shared_string_view_all" = "Pogledaj sve";
+"no_internet_descr" = "Proverite internet i pokušajte ponovo.";
+"no_photos_available" = "Nema dostupnih fotografija";

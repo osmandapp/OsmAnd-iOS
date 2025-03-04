@@ -30,6 +30,7 @@
 #import "OANativeUtilities.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
+#import "OACollapsableLabelView.h"
 #import "OARenderedObject.h"
 
 #include <OsmAndCore/Utilities.h>
@@ -596,6 +597,9 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                     textPrefix = translatedKey;
                 else
                     textPrefix = [OAUtilities capitalizeFirstLetter:convertedKey];
+                
+                if (!pt && !pType && !poiType)
+                    isText = YES;
             }
         }
 

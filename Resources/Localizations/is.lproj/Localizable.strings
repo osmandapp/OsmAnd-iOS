@@ -3605,3 +3605,15 @@
 "auto_25_chars_route_roundabout_kl" = "Beygðu útaf við %d afrein og haltu þig til vinstri";
 "auto_25_chars_route_roundabout_kr" = "Beygðu útaf við %d afrein og haltu þig til hægri";
 "detailed_track_guidance" = "Nákvæm leiðsögn eftir ferli";
+"add_smart_folder" = "Bæta við snjallmöppu";
+"save_as_smart_folder" = "Vista sem snjallmöppu";
+"new_smart_folder" = "Ný snjallmappa";
+"no_matched_tracks" = "Engir samsvarandi ferlar";
+"empty_smart_folder_title" = "Enginn samsvarandi ferill";
+"smart_folder_name_present" = "Slík snjallmappa er þegar til staðar";
+"empty_smart_folder_descr" = "Allir samsvarandi ferlar munu birtast hér.";
+"no_matched_tracks_descr" = "Skilyrði síunnar samsvöruðu engum ferlanna þinna";
+"shared_string_pause" = "Bið";
+"quick_action_verb_start_pause" = "Hefja / Setja í bið";
+"new_trip_segment" = "Nýr leiðarbútur";
+"quick_action_save_recorded_trip_and_continue" = "Skráð ferð og halda áfram";

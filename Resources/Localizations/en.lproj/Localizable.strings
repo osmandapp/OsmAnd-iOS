@@ -750,6 +750,7 @@
 "in_grace_period" = "In grace period";
 "on_hold" = "On hold";
 "shared_string_paused" = "Paused";
+"shared_string_pause" = "Pause";
 
 "unsaved_changes" = "Unsaved changes";
 "unsaved_changes_will_be_lost_discard" = "Any unsaved changes will be lost. Discard changes?";
@@ -1575,6 +1576,14 @@
 "select_folder" = "Select folder";
 "select_folder_descr" = "Select folder or add new one";
 "add_folder" = "Add folder";
+"add_smart_folder" = "Add smart folder";
+"save_as_smart_folder" = "Save as smart folder";
+"new_smart_folder" = "New smart folder";
+"no_matched_tracks" = "No matched tracks";
+"no_matched_tracks_descr" = "Your filter criteria didn't match any of your tracks";
+"empty_smart_folder_title" = "No matching track";
+"empty_smart_folder_descr" = "All matching tracks will automatically appear here.";
+"smart_folder_name_present" = "Such smart folder already present";
 "select_segment" = "Select segment";
 "track_multiple_segments_select" = "%@ has more than one segment. Please select a part of the track you want to use for navigation.";
 "segments_count" = "Segment %d";
@@ -1836,6 +1845,7 @@
 "mapillary_menu_title_tile_cache" = "Tile cache";
 "shared_string_reload" = "Reload";
 "show_more" = "Show more";
+"shared_string_show_less" = "Show less";
 "mapil_reload_cache" = "Reload tiles to see the newest data";
 "filter_current_poiButton" = "Filter";
 "mapil_filter_user_descr" = "Filter images by user";
@@ -1989,6 +1999,9 @@
 "quick_action_verb_turn_on_off" = "Turn On / Off";
 "quick_action_verb_pause_resume" = "Pause / Resume";
 "quick_action_verb_start_stop" = "Start / Stop";
+"quick_action_verb_start_pause" = "Start / Pause";
+"new_trip_segment" = "New trip segment";
+"quick_action_save_recorded_trip_and_continue" = "Recorded Trip & Continue";
 "map_source" = "Map source";
 "download_srtm_maps" = "Contour lines";
 "voices" = "Voice prompts";
@@ -3983,6 +3996,20 @@
 "rendering_attr_showClimbingRoutes_description" = "Show climbing routes";
 "rendering_attr_showClimbingRoutes_name" = "Climbing routes";
 
+"shared_string_view_all" = "View all";
+"no_internet_descr" = "Please check your connection and try again.";
+"no_photos_available" = "No photos available";
+"no_photos_available_descr" = "No user photos have been added to this location yet";
+"mapillary_action_descr" = "Share your street-level view via Mapillary.";
+"online_photos" = "Online photos";
+"street_level_imagery" = "Street-level imagery";
+"wikimedia" = "Wikimedia";
+"open_in_browser" = "Open in browser";
+"shared_string_source" = "Source";
+"shared_string_items" = "Items";
+"download_failed" = "Download Failed";
+"download_successful" = "Image downloaded to Documents/Download.";
+
 "auto_25_chars_route_kl" = "Keep left";
 "auto_25_chars_route_kr" = "Keep right";
 "auto_25_chars_route_tr" = "Turn right";
@@ -4000,3 +4027,5 @@
 "auto_25_chars_route_tu_kr" = "Make U-turn and keep right";
 "auto_25_chars_route_roundabout_kl" = "Take the %d exit and keep left";
 "auto_25_chars_route_roundabout_kr" = "Take the %d exit and keep right";
+
+"shared_string_date" = "Date";

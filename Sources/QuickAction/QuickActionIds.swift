@@ -81,5 +81,9 @@ enum QuickActionIds: Int {
     case openSearchViewAction = 70
     case showHideDrawerAction = 71
     case navigatePreviousScreenAction = 72
+    case tripRecordingAction = 73
+    case startNewTripSegmentAction = 74
+    case saveRecordedTripAndContinueAction = 75
+    case finishTripRecordingAction = 76
     case lockScreenAction = 77
 }

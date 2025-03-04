@@ -218,7 +218,7 @@
 "previous_route" = "Forrige rute";
 "shared_string_select_on_map" = "Velg på kart";
 "shared_string_my_location" = "Min posisjon";
-"route_descr_select_destination" = "Velg reisemål";
+"route_descr_select_destination" = "Angi reisemål";
 "swap_points" = "Bytt start og mål";
 "route_to" = "Til:";
 "route_from" = "Fra:";
@@ -514,7 +514,7 @@
 "favorite_home_category" = "Hjem";
 "work_button" = "Arbeid";
 "quick_action_add_first_intermediate" = "Legg til første mellomliggende punkt";
-"quick_action_auto_zoom" = "Auto-zoom på/av";
+"quick_action_auto_zoom" = "Auto-zoom kart";
 "quick_action_resume_pause_navigation" = "Navigering: sett på pause/gjenoppta";
 "resume_nav" = "Fortsett navigering";
 "pause_nav" = "Midlertidig stopp navigering";
@@ -671,7 +671,7 @@
 "search_map" = "Kartsøking…";
 "search_another_country" = "Velg en annen region";
 "skip_map_downloading" = "Hopp over nedlasting av kart";
-"wiki_around" = "Nærliggende Wikipiedia-artikler";
+"wiki_around" = "Wikipedia-artikler i nærheten";
 "search_categories" = "Kategorier";
 "custom_search" = "Egendefinert søk";
 "poi_filter_custom_filter" = "Egendefinert filter";
@@ -809,7 +809,7 @@
 "routing_attr_avoid_stairs_name" = "Ingen trapper";
 "rendering_attr_horseRoutes_name" = "Hesteruter";
 "routing_attr_freeride_policy_name" = "Utenfor løypenett";
-"routing_attr_avoid_sett_description" = "Unngår kuppelstein og brostein";
+"routing_attr_avoid_sett_description" = "Unngår brostein";
 "rendering_value_disabled_name" = "Deaktivert";
 "routing_attr_avoid_tram_description" = "Unngår trikk";
 "routing_attr_avoid_motorway_description" = "Unngår motorveier";
@@ -1042,7 +1042,7 @@
 "rendering_attr_smoothness_good_name" = "God";
 "routing_attr_avoid_unpaved_name" = "Ingen veier uten fast dekke";
 "rendering_value_translucent_red_name" = "Gjennomskinnelig rød";
-"routing_attr_avoid_sett_name" = "Ingen kuppelstein eller brostein";
+"routing_attr_avoid_sett_name" = "Ingen brostein";
 "rendering_value_boldOutline_name" = "Tykke omriss";
 "rendering_attr_currentTrackWidth_description" = "GPX-bredde";
 "rendering_attr_buildings15zoom_name" = "Bygninger på zoom 15";
@@ -1630,7 +1630,7 @@
 "lang_el" = "Gresk";
 "lang_bs" = "Bosnisk";
 "route_points" = "Rutepunkter";
-"routeInfo_roadClass_description" = "Fargelegging av ruten eller rutelinje i henhold til veiklassifisering.";
+"routeInfo_roadClass_description" = "Fargelegg ruten eller sporlinjen etter veiklassifisering.";
 "lang_ast" = "Asturiansk";
 "backup_error_token_is_not_valid_or_expired" = "Ugyldig eller utløpt symbol";
 "route_line_use_map_style_width" = "Bruk standardbredde for kartstil (%@).";
@@ -1927,7 +1927,7 @@
 "routing_attr_motor_type_petrol_name" = "Bensin";
 "osmand_cloud_create_account_descr" = "Skriv inn e-postadresse for forsendelse av bekreftelseskode, \nsom all din data vil bli lenket til.";
 "rendering_attr_OSMMapperAssistantNote_name" = "Notis-etiketter";
-"rendering_attr_showWaterwayTunnels_description" = "Ikke skjul vannveistunneler";
+"rendering_attr_showWaterwayTunnels_description" = "Øk synlighet for vannveitunneler";
 "rendering_attr_showTrainRoutes_name" = "Togruter";
 "routing_attr_prefer_tactile_paving_description" = "Foretrekk taktile ledelinjer";
 "rendering_attr_OSMMapperAssistantFixme_name" = "Fiksmeg-etiketter";
@@ -1989,7 +1989,7 @@
 "routing_attr_goods_restrictions_description" = "Ta hensyn til adgangstillatelser for lette varebiler (varer)";
 "rendering_attr_horse_scale_impossible_name" = "Umulig";
 "rendering_attr_OSMMapperAssistantFixme_description" = "Vis fiksmeg-etiketter";
-"rendering_attr_showWaterwayTunnels_name" = "Vannveistunneler";
+"rendering_attr_showWaterwayTunnels_name" = "Øk synlighet for vannveitunneler";
 "mgrs_format_descr" = "OsmAnd bruker MGRS, som ligner på formatet UTM NATO.";
 "auth_failed" = "Identitetsbekreftelse mislyktes";
 "only_selected_segment_recalc" = "Kun det valgte segmentet blir beregnet på nytt med den valgte profilen.";
@@ -2708,3 +2708,11 @@
 "avg_sensor_speed" = "Sensorhastighet, gjennomsnitt";
 "target_elevation" = "Målhøyde";
 "info_button" = "Info";
+"lock_screen_description" = "Aktiverer eller deaktiverer berøringsskjermfunksjonalitet for å forhindre utilsiktede trykk";
+"daynight_mode_app_theme_summary" = "Kartets visning tilpasses appens overordnede tema - dagmodus for et lyst tema og nattmodus for et mørkt tema";
+"battery_saving_mode" = "Strømsparingsmodus";
+"quick_action_first_intermediate" = "Første mellomliggende";
+"daynight_mode_day_summary" = "Viser alltid kartet i et lyst tema, ideelt for synlighet på dagtid.";
+"daynight_mode_night_summary" = "Viser alltid kartet i et mørkt tema, egnet for nattlige forhold eller forhold med lite lys.";
+"daynight_mode_sunrise_sunset_summary" = "Bytter automatisk mellom dag- og natt-temaer basert på lokale soloppgangs- og solnedgangstider.";
+"screen_is_locked_by_action_button" = "Berøringsskjermen er låst. Trykk på knappen for å låse opp.";

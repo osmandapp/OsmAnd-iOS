@@ -28,11 +28,28 @@ import UIKit
 }
 
 extension UIViewController {
+    func showMediumSheetViewController(viewController: UIViewController, isLargeAvailable: Bool) {
+        let navigationController = UINavigationController(rootViewController: viewController)
+        navigationController.modalPresentationStyle = .pageSheet
+        
+        if let sheet = navigationController.sheetPresentationController {
+            sheet.detents = isLargeAvailable
+            ? [.medium(), .large()]
+            : [.medium()]
+            sheet.prefersGrabberVisible = isLargeAvailable
+            sheet.preferredCornerRadius = 20
+        }
+        
+        present(navigationController, animated: true, completion: nil)
+    }
+}
+
+extension UIViewController {
     @objc func showActivity(_ items: [Any],
                             sourceView: UIView,
                             barButtonItem: UIBarButtonItem?,
                             completionWithItemsHandler: (() -> Void)? = nil) {
-        self.showActivity(items, applicationActivities: nil, excludedActivityTypes: nil, sourceView: sourceView, sourceRect: CGRect(), barButtonItem: barButtonItem, permittedArrowDirections: .any, completionWithItemsHandler: completionWithItemsHandler)
+        showActivity(items, applicationActivities: nil, excludedActivityTypes: nil, sourceView: sourceView, sourceRect: CGRect(), barButtonItem: barButtonItem, permittedArrowDirections: .any, completionWithItemsHandler: completionWithItemsHandler)
     }
     
     @objc func showActivity(_ items: [Any],
@@ -87,18 +104,18 @@ extension UINavigationController {
     @objc func pushViewController(_ viewController: UIViewController,
                                   animated: Bool,
                                   completion: (() -> Void)?) {
-      CATransaction.begin()
-      CATransaction.setCompletionBlock(completion)
-      pushViewController(viewController, animated: animated)
-      CATransaction.commit()
+        CATransaction.begin()
+        CATransaction.setCompletionBlock(completion)
+        pushViewController(viewController, animated: animated)
+        CATransaction.commit()
     }
-
+    
     @objc func saveCurrentStateForScrollableHud() -> [UIViewController] {
         var newCurrentHistory = viewControllers
         guard !viewControllers.isEmpty else {
             return newCurrentHistory
         }
-
+        
         var newHistory = [UIViewController]()
         var rootViewControllerIndex = 0
         for i in 0...newCurrentHistory.count - 1 {
@@ -112,16 +129,16 @@ extension UINavigationController {
         newHistory.append(newCurrentHistory[rootViewControllerIndex])
         newCurrentHistory.insert(newCurrentHistory.remove(at: rootViewControllerIndex), at: 0)
         setViewControllers(newHistory, animated: true)
-
+        
         // Example:
         // Show track context menu above the map.
         // [MyPlacesTabBar, Folder1, Folder2, RootVC, TrackContectMenu]
         return newCurrentHistory
     }
-
+    
     @objc func restoreForceHidingScrollableHud() {
         guard !viewControllers.isEmpty else { return }
-
+        
         var newHistory = [UIViewController]()
         for i in 0...viewControllers.count - 1 {
             let vc = viewControllers[i]
@@ -134,9 +151,32 @@ extension UINavigationController {
     }
 }
 
+extension UINavigationController {
+    
+    func setDefaultNavigationBarAppearance() {
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .viewBg
+        
+        appearance.titleTextAttributes = [
+            .foregroundColor: UIColor.textColorPrimary,
+            .font: UIFont.preferredFont(forTextStyle: .subheadline)
+        ]
+        
+        let blurAppearance = UINavigationBarAppearance()
+        blurAppearance.shadowColor = nil
+        blurAppearance.shadowImage = nil
+        
+        navigationBar.standardAppearance = blurAppearance
+        navigationBar.scrollEdgeAppearance = appearance
+        
+        navigationBar.tintColor = .iconColorActive
+    }
+}
+
 extension UIViewController {
     @objc func canPresentAlertController(_ alert: UIAlertController,
-                                      completion: @escaping (Bool) -> Void) {
+                                         completion: @escaping (Bool) -> Void) {
         DispatchQueue.main.async { [weak self] in
             guard let self,
                   UIApplication.shared.applicationState != .background else {

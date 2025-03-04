@@ -40,6 +40,7 @@
     EOABackupSyncOperationType _operation;
     BOOL _cancelled;
     BOOL _singleOperation;
+    BOOL _startSyncPending;
 }
 
 - (instancetype)initWithKey:(NSString *)key operation:(EOABackupSyncOperationType)operation
@@ -50,6 +51,7 @@
         _key = key;
         _operation = operation;
         _singleOperation = operation != EOABackupSyncOperationSync;
+        _startSyncPending = YES;
         _importProgress = 0;
         _exportProgress = 0;
         _maxProgress = 0;
@@ -72,6 +74,13 @@
 
 - (void)startSync
 {
+    @synchronized (self) {
+        if (!_startSyncPending)
+            return;
+
+        _startSyncPending = NO;
+    }
+
     OAPrepareBackupResult *backup = _backupHelper.backup;
     OABackupInfo *info = backup.backupInfo;
     
@@ -182,7 +191,6 @@
 - (void)onBackupPrepared:(nonnull OAPrepareBackupResult *)backupResult
 {
     [self startSync];
-    [NSNotificationCenter.defaultCenter postNotificationName:kBackupSyncStartedNotification object:nil];
 }
 
 - (void)onBackupPreparing

@@ -70,6 +70,10 @@
        updatePoints:(BOOL)updatePoints
     saveImmediately:(BOOL)saveImmediately;
 
++ (void)updateGroup:(OAFavoriteGroup *)group
+            visible:(BOOL)visible
+    saveImmediately:(BOOL)saveImmediately;
+
 + (NSMutableArray<OAFavoriteGroup *> *) getFavoriteGroups;
 
 + (void) addFavoriteGroup:(NSString *)name

@@ -27,5 +27,6 @@
 - (instancetype) initWithGPX:(OASTrackItem *)gpx;
 - (instancetype) initWithSelectedFolderName:(NSString *)selectedFolderName;
 - (instancetype) initWithSelectedFolderName:(NSString *)selectedFolderName excludedSubfolderPath:(NSString *)excludedSubfolderPath;
+- (instancetype) initWithSelectedFolderName:(NSString *)selectedFolderName excludedSubfolderPaths:(NSArray<NSString *> *)excludedSubfolderPaths;
 
 @end

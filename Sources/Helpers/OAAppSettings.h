@@ -982,6 +982,9 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @property (nonatomic) OACommonStringList *poiFiltersOrder;
 @property (nonatomic) OACommonStringList *inactivePoiFilters;
 
+@property (nonatomic) OACommonInteger *contextGallerySpanGridCount;
+@property (nonatomic) OACommonInteger *contextGallerySpanGridCountLandscape;
+
 // Widgets
 
 @property (nonatomic) OACommonListOfStringList *leftWidgetPanelOrder;
@@ -1011,6 +1014,7 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 // Mapillary
 @property (nonatomic) OACommonBoolean *showMapillary;
 @property (nonatomic) OACommonBoolean *onlinePhotosRowCollapsed;
+@property (nonatomic) OACommonBoolean *mapillaryPhotosRowCollapsed;
 @property (nonatomic) OACommonBoolean *mapillaryFirstDialogShown;
 
 @property (nonatomic) OACommonBoolean *useMapillaryFilter;

@@ -781,7 +781,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
     [fp setColor:UIColorFromARGB([pt getColor])];
     NSString *hiddenExt = [pt getExtensionsToRead][EXTENSION_HIDDEN];
-    [fp setVisible:hiddenExt ? [hiddenExt isEqualToString:@"true"] : YES];
+    [fp setVisible:hiddenExt ? ![hiddenExt isEqualToString:@"true"] : YES];
 
     [fp setAddress:[pt getAddress]];
     [fp setIcon:[pt getIconName]];

@@ -2888,7 +2888,7 @@
 "apply_only_to_new_points" = "Appliquer seulement aux nouveaux points";
 "external_sensors_source_of_data" = "Source des données";
 "external_device_status_connecting" = "Connexion";
-"apply_to_existing" = "Appliquer à tous les points";
+"apply_to_existing" = "Appliquer à tous les points existants";
 "map_widget_ant_bicycle_speed" = "Vitesse du vélo";
 "travel_guides_search_placeholder" = "Rechercher par pays, ville ou région";
 "ant_plus_searching_text" = "Recherche de capteurs en cours";

@@ -1760,7 +1760,7 @@
 "city_type_town" = "Gradsko naselje";
 "city_type_city" = "Grad";
 "city_type_district" = "Distrikt";
-"city_type_neighbourhood" = "Sused";
+"city_type_neighbourhood" = "Kvart";
 "postcode" = "Poštanski broj";
 "show_something_on_map" = "Prikazati na mapi %@";
 "search_POI_level_btn" = "Nađi još";
@@ -3617,3 +3617,15 @@
 "auto_25_chars_route_tshl" = "Skreni oštro levo";
 "auto_25_chars_route_roundabout_kl" = "Izađi na %d izlaz i drži levo";
 "auto_25_chars_route_kr" = "Drži desno";
+"add_smart_folder" = "Dodaj pametni folder";
+"save_as_smart_folder" = "Snimi kao pametan folder";
+"new_smart_folder" = "Novi pametan folder";
+"no_matched_tracks" = "Nema podudarnih staza";
+"empty_smart_folder_title" = "Nema odgovarajuće staze";
+"empty_smart_folder_descr" = "Sve odgovarajuće staze će se automatski pojaviti ovde.";
+"smart_folder_name_present" = "Takav pametan folder već je prisutan";
+"no_matched_tracks_descr" = "Vaš kriterijum filtera se ne podudara ni sa jednom od vaših staza";
+"quick_action_verb_start_pause" = "Pokreni / Pauziraj";
+"shared_string_pause" = "Pauza";
+"new_trip_segment" = "Novi segment putovanja";
+"quick_action_save_recorded_trip_and_continue" = "Snimi putovanje i nastavi";

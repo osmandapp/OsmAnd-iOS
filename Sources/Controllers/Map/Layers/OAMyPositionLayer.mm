@@ -768,11 +768,8 @@ typedef enum {
     BOOL showHeading = [self shouldShowHeading];
     BOOL showBearing = [self shouldShowBearing:newLocation];
     
-    double bearing = [self getPointCourse];
-    if (bearing >= 0)
-        bearing -= 90;
-    else
-        bearing = newHeading;
+    double pointCourse = [self getPointCourse];
+    double bearing = (isnan(pointCourse) ? newHeading : pointCourse) - 90;
     
     [c setCurrentMarkerState:showBearing ? EOAMarkerStateMove : EOAMarkerStateStay showHeading:showHeading];
     [c updateLocation:newTarget31 animationDuration:animationDuration horizontalAccuracy:newLocation.horizontalAccuracy bearing:bearing heading:newHeading visible:visible];
@@ -869,19 +866,13 @@ typedef enum {
 
 - (double) getPointCourse
 {
-    double result = 0.0;
+    double result = NAN;
     CLLocation *location = nil;
     if (OARoutingHelper.sharedInstance.isFollowingMode && OAAppSettings.sharedManager.snapToRoad.get)
     {
         OARouteLayer *routeLayer = self.mapViewController.mapLayers.routeMapLayer;
         location = routeLayer.lastProj;
         if (location)
-            result = routeLayer.lastCourse;
-    }
-    if (!location)
-    {
-        location = self.app.locationServices.lastKnownLocation;
-        if (location && location.course >= 0)
             result = location.course;
     }
     return result;

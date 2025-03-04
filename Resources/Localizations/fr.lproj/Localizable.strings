@@ -1985,7 +1985,7 @@
 "track_show_start_finish_icons" = "Afficher les icônes de départ et d\'arrivée";
 "reset_to_original" = "Restaurer l\'original";
 "gpx_split_interval_none_descr" = "Sélectionnez l\'option de fractionnement souhaitée : par temps ou par distance.";
-"activity" = "Activité";
+"shared_string_activity" = "Activité";
 "icon_group_nautical" = "Nautisme";
 "ios_release_4_1" = "- Interaction entièrement repensée des traces GPX : un nouveau menu avec des graphiques, des statistiques, la possibilité de changer l'apparence, la coloration en fonction de la vitesse, de l’altitude et de la pente, ainsi que la sélection des pistes sur la carte- Nouvel écran pour la recherche par coordonnées dans différents formats\n- Amélioration de la recherche de coordonnées au format OLC\n- Nouveau menu convivial pour le choix de la langues des articles de Wikipédia sur la carte\n- Ajout de la possibilité de télécharger facilement les cartes de toutes les régions du pays en quelques clics.\n- Ajout de courbes de niveau en pieds (Vous devez télécharger des fichiers supplémentaires)\n- Ajout de la possibilité de télécharger des cartes en sélectionnant la région ou le pays souhaité sur la carte, ainsi que l'ajout d'une boîte de dialogue avec la suggestion de télécharger une carte manquante d'une région affichée\n- Nouvelle apparence des boutons de contrôle de la carte et possibilité de modifier le zoom de la carte par un double tapotement ou un glissement.\n- Les paramètres de visibilité des routes ont été déplacés plus haut dans l'écran \"Configurer la carte\" et sont réorganisés pour une meilleure flexibilité.\n";
 "delete_waypoints" = "Supprimer les points de passage";

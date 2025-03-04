@@ -880,7 +880,7 @@
 "change_color" = "Keisti spalvą";
 "shared_string_gpx_points" = "Taškai";
 "shared_string_overview" = "Apžvalga";
-"activity" = "Veikla";
+"shared_string_activity" = "Veikla";
 "local_indexes_cat_backup" = "Deaktyvuota";
 "shared_string_show_all" = "RODYTI VISKĄ";
 "poi_filter_parking" = "Parkingas";

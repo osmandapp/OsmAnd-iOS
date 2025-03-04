@@ -1601,7 +1601,7 @@
 "map_coords" = "Мапа: Шир %.5f Дуж %.5f";
 "shared_string_gpx_points" = "Тачке";
 "shared_string_overview" = "Сажетак";
-"activity" = "Активност";
+"shared_string_activity" = "Активност";
 "gpx_cancel_route_q" = "Желите ли да откажете ову руту?";
 "local_indexes_cat_backup" = "Искључено";
 "gpx_trip_groups" = "Групе путања";

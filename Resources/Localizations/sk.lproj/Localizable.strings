@@ -2486,7 +2486,7 @@
 "map_widget_target_distance" = "Vzdialenosť kamery od cieľa";
 "generate_hillshade_from_3d_maps" = "Generovať rastrové mapy tieňovaných svahov z 3D máp";
 "current_time_widget_desc" = "Zobrazuje aktuálny čas podľa vášho zariadenia.";
-"activity" = "Aktivita";
+"shared_string_activity" = "Aktivita";
 "action_cannot_be_undone" = "Táto akcia sa nedá odvolať.";
 "settings_app_theme" = "Téma aplikácie";
 "network" = "Sieť";

@@ -2468,7 +2468,7 @@
 "map_widget_trip_recording_duration" = "Durada";
 "map_widget_ant_bicycle_dist" = "Distància en bicicleta";
 "map_widget_sunrise_sunset_time_left" = "Temps restant";
-"activity" = "Activitat";
+"shared_string_activity" = "Activitat";
 "external_device_details_battery" = "Bateria";
 "map_widget_next_sunset" = "Propera posta de sol";
 "map_widget_ant_bicycle_power_desc" = "Mostra la potència de sortida del ciclista, que s\'usa per a moure la bicicleta endavant";

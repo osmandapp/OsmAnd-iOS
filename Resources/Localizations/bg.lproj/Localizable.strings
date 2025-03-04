@@ -925,7 +925,7 @@
 "rename_track" = "Преименуване на трасе";
 "shared_string_gpx_points" = "Точки";
 "shared_string_overview" = "Преглед";
-"activity" = "Дейност";
+"shared_string_activity" = "Дейност";
 "local_indexes_cat_backup" = "Изключено";
 "shared_string_show_all" = "Показване на всички";
 "poi_filter_parking" = "Паркинг";

@@ -2818,7 +2818,7 @@
 "map_markers_bar" = "Pasek znaczników mapy";
 "longest_duration_first" = "Najpierw najdłuższy czas trwania";
 "map_widget_ant_bicycle_power" = "Moc roweru";
-"activity" = "Aktywność";
+"shared_string_activity" = "Aktywność";
 "coordinates_widget_desc" = "Pokazuje współrzędne geograficzne bieżącej geolokalizacji.";
 "external_device_status_connected" = "Połączony";
 "help_article_navigation_guidance_voice_navigation_name" = "Komunikaty głosowe / Powiadomienia";

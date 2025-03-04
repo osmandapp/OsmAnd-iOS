@@ -1623,7 +1623,7 @@
 "map_coords" = "Mapa: Šir %.5f Duž %.5f";
 "shared_string_gpx_points" = "Tačke";
 "shared_string_overview" = "Sažetak";
-"activity" = "Aktivnost";
+"shared_string_activity" = "Aktivnost";
 "gpx_cancel_route_q" = "Želite li da otkažete ovu rutu?";
 "local_indexes_cat_backup" = "Deaktivirano";
 "gpx_trip_groups" = "Grupe putanja";

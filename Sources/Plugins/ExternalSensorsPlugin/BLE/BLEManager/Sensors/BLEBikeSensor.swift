@@ -127,7 +127,7 @@ extension BLEBikeSensor {
         var widgetFields: [SensorWidgetDataField]? {
             [SensorWidgetDataField(fieldType: .bicycleCadence,
                                    nameId: localizedString("external_device_characteristic_cadence"),
-                                   unitNameId: "",
+                                   unitNameId: localizedString("revolutions_per_minute_unit"),
                                    numberValue: nil,
                                    stringValue: String(cadence))]
         }

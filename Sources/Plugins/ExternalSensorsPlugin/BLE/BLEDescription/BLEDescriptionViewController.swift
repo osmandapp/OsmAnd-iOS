@@ -65,7 +65,7 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
         tableData.clearAllData()
         if DeviceHelper.shared.isPairedDevice(id: device.id) {
             // Information
-            if let sensor = device.sensors.first(where: { $0 is BLEBatterySensor }) as? BLEBatterySensor {
+            if let sensor = device.sensors.compactMap({ $0 as? BLEBatterySensor }).first {
                 let infoSection = tableData.createNewSection()
                 infoSection.headerText = localizedString("external_device_details_information").uppercased()
                 infoSection.key = "information"

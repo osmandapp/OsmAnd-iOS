@@ -817,7 +817,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     OASearchUICore *searchUICore = [[OAQuickSearchHelper instance] getCore];
     OASearchPhrase *phrase = [searchUICore getPhrase];
     OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
-    sr.objectType = EOAObjectTypeLOCATION;
+    sr.objectType = EOAObjectTypeLocation;
     sr.location = location;
     sr.preferredZoom = PREFERRED_DEFAULT_ZOOM;
     sr.object = _searchLocation;

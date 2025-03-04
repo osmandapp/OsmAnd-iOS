@@ -478,11 +478,11 @@
         [self.tableView setEditing:YES];
         self.tableView.allowsMultipleSelectionDuringEditing = YES;
         self.tableView.tableHeaderView = nil;
-        OASearchSettings *searchSettings = [[_core getSearchSettings] setSearchTypes:@[[OAObjectType withType:EOAObjectTypePOI_TYPE]]];
+        OASearchSettings *searchSettings = [[_core getSearchSettings] setSearchTypes:@[[OAObjectType withType:EOAObjectTypePoiType]]];
         [_core updateSettings:searchSettings];
         [_core search:searchBar.text delayedExecution:YES matcher:[[OAResultMatcher<OASearchResult *> alloc] initWithPublishFunc:^BOOL(OASearchResult *__autoreleasing *object) {
             OASearchResult *obj = *object;
-            if (obj.objectType == EOAObjectTypeSEARCH_FINISHED)
+            if (obj.objectType == EOAObjectTypeSearchFinished)
             {
                 OASearchResultCollection *currentSearchResult = [_core getCurrentSearchResult];
                 NSMutableArray<OAPOIType *> *results = [NSMutableArray new];

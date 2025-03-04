@@ -100,7 +100,7 @@
                 _searchResult.object = custom;
                 _searchResult.priority = SEARCH_AMENITY_TYPE_PRIORITY;
                 _searchResult.priorityDistance = 0;
-                _searchResult.objectType = EOAObjectTypePOI_TYPE;
+                _searchResult.objectType = EOAObjectTypePoiType;
             }
         }
     }
@@ -160,7 +160,7 @@
     {
         switch (res.objectType)
         {
-            case EOAObjectTypePOI:
+            case EOAObjectTypePoi:
             {
                 OAPOI *poi = (OAPOI *)res.object;
                 CPListItem *listItem = [[CPListItem alloc] initWithText:item.getName

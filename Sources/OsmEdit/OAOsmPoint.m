@@ -79,7 +79,7 @@
 }
 
 - (EOAGroup)getGroup {
-    return EOAGroupUNDETERMINED;
+    return EOAGroupUndetermined;
 }
 
 - (NSString *)getLocalizedAction

@@ -269,7 +269,7 @@
     targetPoint.values = point.getTags;
     targetPoint.icon = [self getUIImageForPoint:point];
     
-    targetPoint.type = point.getGroup == EOAGroupPOI ? OATargetOsmEdit : OATargetOsmNote;
+    targetPoint.type = point.getGroup == EOAGroupPoi ? OATargetOsmEdit : OATargetOsmNote;
     
     targetPoint.targetObj = point;
     
@@ -279,7 +279,7 @@
 
 -(UIImage *)getUIImageForPoint:(OAOsmPoint *)point
 {
-    if (point.getGroup == EOAGroupPOI)
+    if (point.getGroup == EOAGroupPoi)
     {
         OAOpenStreetMapPoint *osmP = (OAOpenStreetMapPoint *) point;
         NSString *poiTranslation = [osmP.getEntity getTagFromString:POI_TYPE_TAG];

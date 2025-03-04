@@ -54,7 +54,7 @@
         
         for (OAOsmPoint *p in _osmPoints)
         {
-            if (p.getGroup == EOAGroupPOI)
+            if (p.getGroup == EOAGroupPoi)
             {
                 _closeChangeset = YES;
                 break;

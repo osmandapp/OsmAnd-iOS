@@ -408,12 +408,12 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
     BOOL isSameType = r1.objectType == r2.objectType;
     if (isSameType)
     {
-        if (r1.objectType == EOAObjectTypeGPX_TRACK)
+        if (r1.objectType == EOAObjectTypeGpxTrack)
             return [r1.localeName isEqualToString:r2.localeName];
     }
     if (r1.location && r2.location && ![OAObjectType isTopVisible:r1.objectType] && ![OAObjectType isTopVisible:r2.objectType])
     {
-        if (r1.objectType == r2.objectType && r1.objectType == EOAObjectTypeSTREET)
+        if (r1.objectType == r2.objectType && r1.objectType == EOAObjectTypeStreet)
         {
             OAStreet *st1 = (OAStreet *) r1.object;
             OAStreet *st2 = (OAStreet *) r2.object;
@@ -421,11 +421,11 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
             return fabs(st1.latitude - st2.latitude) < 0.00001 && fabs(st1.longitude - st2.longitude) < 0.00001;
         }
         std::shared_ptr<const OsmAnd::Amenity> a1;
-        if (r1.objectType == EOAObjectTypePOI)
+        if (r1.objectType == EOAObjectTypePoi)
             a1 = r1.amenity;
 
         std::shared_ptr<const OsmAnd::Amenity> a2;
-        if (r2.objectType == EOAObjectTypePOI)
+        if (r2.objectType == EOAObjectTypePoi)
             a2 = r2.amenity;
 
         if ([r1.localeName isEqualToString:r2.localeName])

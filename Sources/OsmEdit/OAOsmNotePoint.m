@@ -26,7 +26,7 @@
 
 - (EOAGroup)getGroup
 {
-    return EOAGroupBUG;
+    return EOAGroupBug;
 }
 
 -(NSString *)getAuthor

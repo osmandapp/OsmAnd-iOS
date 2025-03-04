@@ -131,7 +131,7 @@
     
     NSInteger index = indexNum.integerValue;
     OAQuickSearchListItem *searchItem = _searchItems[index];
-    if (searchItem.getSearchResult.objectType == EOAObjectTypeSTREET && completionHandler) {
+    if (searchItem.getSearchResult.objectType == EOAObjectTypeStreet && completionHandler) {
         // OAStreet *str = (OAStreet *)searchItem.getSearchResult.object;
         [self onStreetSelected:searchItem.getSearchResult completionHandler:completionHandler];
     } else {
@@ -156,7 +156,7 @@
         NSArray<OASearchResult *> *searchResultItems = [res getCurrentSearchResults];
         OASearchWord* lastWord = res.phrase.getLastSelectedWord;
         NSInteger inc = 1;
-        if (lastWord.getType == EOAObjectTypeSTREET)
+        if (lastWord.getType == EOAObjectTypeStreet)
         {
             inc = searchResultItems.count / maximumItemCount;
         }
@@ -241,7 +241,7 @@
             return NO;
 
         OASearchResult *obj = *object;
-        if (obj.objectType == EOAObjectTypeSEARCH_STARTED)
+        if (obj.objectType == EOAObjectTypeSearchStarted)
             _cancelPrev = NO;
 
         if (_cancelPrev)
@@ -253,18 +253,18 @@
 
         switch (obj.objectType)
         {
-            case EOAObjectTypeFILTER_FINISHED:
+            case EOAObjectTypeFilterFinished:
             {
                 [strongSelf updateSearchResult:[_searchUICore getCurrentSearchResult] completionHandler:completionHandler];
                 break;
             }
-            case EOAObjectTypeSEARCH_FINISHED:
+            case EOAObjectTypeSearchFinished:
             {
                 _searching = NO;
                 [strongSelf updateSearchResult:[_searchHelper getResultCollection] completionHandler:completionHandler];
                 break;
             }
-            case EOAObjectTypeSEARCH_API_FINISHED:
+            case EOAObjectTypeSearchApiFinished:
             {
                 OASearchCoreAPI *searchApi = (OASearchCoreAPI *) obj.object;
                 OASearchPhrase *phrase = obj.requiredSearchPhrase;
@@ -294,7 +294,7 @@
                 }
                 break;
             }
-            case EOAObjectTypeSEARCH_API_REGION_FINISHED:
+            case EOAObjectTypeSearchApiRegionFinished:
             {
                 regionResultApi = (OASearchCoreAPI *) obj.object;
                 OASearchPhrase *regionPhrase = obj.requiredSearchPhrase;
@@ -317,9 +317,9 @@
                 }
                 break;
             }
-            case EOAObjectTypeSEARCH_STARTED:
-            case EOAObjectTypePARTIAL_LOCATION:
-            case EOAObjectTypePOI_TYPE:
+            case EOAObjectTypeSearchStarted:
+            case EOAObjectTypePartialLocation:
+            case EOAObjectTypePoiType:
             {
                 // do not show
                 break;

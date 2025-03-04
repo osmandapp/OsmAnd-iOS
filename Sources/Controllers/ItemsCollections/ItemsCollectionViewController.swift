@@ -730,14 +730,14 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
               var settings = searchUICore.getSearchSettings() else { return}
        
         searchCancelled = false
-        settings = settings.setSearch([OAObjectType.withType(EOAObjectType.POI_TYPE)])
+        settings = settings.setSearch([OAObjectType.withType(EOAObjectType.poiType)])
         searchUICore.update(settings)
         view.addSpinner(inCenterOfCurrentView: true)
         
         let matcher = OAResultMatcher<OASearchResult> { [weak self] res in
             guard let self, let searchResult = res?.pointee else { return true }
             
-            if searchResult.objectType == .SEARCH_FINISHED {
+            if searchResult.objectType == .searchFinished {
                 guard let resultCollection = searchUICore.getCurrentSearchResult() else { return true }
                 var results = [OAPOIType]()
                 

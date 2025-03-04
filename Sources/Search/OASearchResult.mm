@@ -72,7 +72,7 @@
     {
         // search phrase matches poi type, then we lower all POI matches and don't check allWordsMatched
     }
-    else if (_objectType == EOAObjectTypePOI_TYPE)
+    else if (_objectType == EOAObjectTypePoiType)
     {
         
     }
@@ -108,7 +108,7 @@
         if (completeMatchRes.allWordsEqual)
         {
             BOOL closeDistance = [OAMapUtils getDistance:([_requiredSearchPhrase getLastTokenLocation]).coordinate second:_location.coordinate] <= NEAREST_METERS_LIMIT;
-            if (_objectType == EOAObjectTypeCITY || _objectType == EOAObjectTypeVILLAGE || closeDistance)
+            if (_objectType == EOAObjectTypeCity || _objectType == EOAObjectTypeVillage || closeDistance)
                 res = [OAObjectType getTypeWeight:_objectType] * MAX_TYPES_BASE_10 + MAX_PHRASE_WEIGHT_TOTAL / 2;
         }
         return res;

@@ -11,7 +11,7 @@
 
 @protocol OACollectionCellDelegate <NSObject>
 
-- (void)onCollectionItemSelected:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView;
+- (void)onCollectionItemSelected:(NSIndexPath *)indexPath selectedItem:(id)selectedItem collectionView:(UICollectionView *)collectionView;
 - (void)reloadCollectionData;
 
 @end
@@ -22,6 +22,7 @@
 
 - (NSString *)getCellIdentifier;
 - (CGSize)getItemSize;
+- (CGSize)calculateItemSizeForIndexPath:(NSIndexPath *)indexPath;
 - (UICollectionView *)getCollectionView;
 - (void)setCollectionView:(UICollectionView *)collectionView;
 - (UICollectionViewScrollDirection)getScrollDirection;
@@ -31,6 +32,7 @@
 - (NSIndexPath *)getSelectedIndexPath;
 - (NSIndexPath *)getDefaultIndexPath;
 - (void)setSelectedIndexPath:(NSIndexPath *)selectedIndexPath;
+- (id)getSelectedItem;
 - (void)generateData:(NSArray<NSArray *> *)data;
 - (void)insertItem:(id)newItem atIndexPath:(NSIndexPath *)indexPath;
 - (void)replaceItem:(id)newItem atIndexPath:(NSIndexPath *)indexPath;

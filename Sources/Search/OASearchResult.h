@@ -12,9 +12,6 @@
 #import <CoreLocation/CoreLocation.h>
 #import "OAObjectType.h"
 
-#include <OsmAndCore/Data/Amenity.h>
-#include <OsmAndCore/IFavoriteLocation.h>
-
 // MAX_TYPES_BASE_10 should be > ObjectType.getTypeWeight(objectType) = 5
 #define MAX_TYPES_BASE_10 10
 // MAX_PHRASE_WEIGHT_TOTAL should be  > getSumPhraseMatchWeight
@@ -40,8 +37,6 @@
 @property (nonatomic) BOOL firstUnknownWordMatches;
 
 @property (nonatomic) NSObject *object;
-@property (nonatomic, assign) std::shared_ptr<const OsmAnd::Amenity> amenity;
-@property (nonatomic, assign) std::shared_ptr<const OsmAnd::IFavoriteLocation> favorite;
 @property (nonatomic, assign) OASWptPt *wpt;
 
 @property (nonatomic) EOAObjectType objectType;

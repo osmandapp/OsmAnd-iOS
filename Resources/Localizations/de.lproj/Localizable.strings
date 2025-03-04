@@ -2016,7 +2016,7 @@
 "analyze_on_map" = "Auf der Karte auswerten";
 "shared_string_overview" = "Übersicht";
 "edit_track" = "Track editieren";
-"activity" = "Aktivität";
+"shared_string_activity" = "Aktivität";
 "icon_group_nautical" = "Nautisch";
 "delete_group_confirm_short" = "Gruppe löschen?";
 "delete_group_confirm" = "Sind Sie sicher, dass Sie die Gruppe \"%@\" löschen wollen?";

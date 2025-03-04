@@ -1612,7 +1612,7 @@
 "map_coords" = "Mapa: Lat %.5f Lon %.5f";
 "shared_string_gpx_points" = "Puntos";
 "shared_string_overview" = "Resumen";
-"activity" = "Actividad";
+"shared_string_activity" = "Actividad";
 "gpx_cancel_route_q" = "¿Cancelar esta ruta?";
 "local_indexes_cat_backup" = "Desactivado";
 "gpx_trip_groups" = "Grupos de trazas";

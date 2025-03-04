@@ -16,9 +16,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSInteger, EOAGroup)
 {
-    UNDETERMINED = -1,
-    BUG = 0,
-    POI
+    EOAGroupUndetermined = -1,
+    EOAGroupBug = 0,
+    EOAGroupPoi
 };
 
 typedef NS_ENUM(NSInteger, EOAAction)

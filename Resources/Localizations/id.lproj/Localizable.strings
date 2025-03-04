@@ -1060,7 +1060,7 @@
 "rename_track" = "Namai ulang trek";
 "shared_string_gpx_points" = "Titik";
 "shared_string_overview" = "Ikhtisar";
-"activity" = "Aktivitas";
+"shared_string_activity" = "Aktivitas";
 "local_indexes_cat_backup" = "Dinonaktifkan";
 "shared_string_show_all" = "Tampilkan semua";
 "poi_filter_parking" = "Parkir";

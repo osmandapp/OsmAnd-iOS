@@ -106,7 +106,7 @@
 //inapps
 "public_transport_try_change_settings" = "सेटिंग्स को बदलने का प्रयास करें।";
 "shared_string_walk" = "टहल लो";
-"activity" = "गतिविधि";
+"shared_string_activity" = "गतिविधि";
 "routing_attr_avoid_subway_description" = "सबवे और हल्के रेल परिवहन से बचें";
 "rendering_attr_tracktype_grade5_name" = "मुलायम";
 "routing_attr_avoid_share_taxi_description" = "शेयर टैक्सी से बचें";

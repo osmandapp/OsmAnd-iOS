@@ -2179,7 +2179,7 @@
 "route_line_color_elevation_description" = "Lína leiðar verður lituð í samræmi við hæðarsnið leiðarinnar.";
 "grey_color_undefined" = "Grár litur er notaður fyrir hluta án gagna.";
 "white_color_undefined" = "Hvítur litur er notaður fyrir hluta án gagna.";
-"activity" = "Athöfn";
+"shared_string_activity" = "Athöfn";
 "lang_de_casual" = "Þýska (dagleg)";
 "route_points" = "Leiðarpunktar";
 "delete_group_confirm_short" = "Eyða hópi?";

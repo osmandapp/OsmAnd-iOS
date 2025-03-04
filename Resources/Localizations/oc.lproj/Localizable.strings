@@ -2178,7 +2178,7 @@
 "tomorrow" = "Deman";
 "product_desc_mapillary" = "La vista se fa au nivèu de carriera per agachar l'environa";
 "shared_string_gpx_points" = "Ponchs";
-"activity" = "Activitat";
+"shared_string_activity" = "Activitat";
 "plugin_popup_weather_title" = "Activar la Metèo";
 "context_menu_item_edit_waypoint" = "Editar lei ponchs d\'etapa GPX";
 "quick_action_dir_from_descr" = "Crosatz aquesta opcion per començar la navigacion partent dau ponch centrau de l'ecran actuau.";

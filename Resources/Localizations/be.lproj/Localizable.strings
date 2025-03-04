@@ -2099,7 +2099,7 @@
 "map_settings_weather_temp" = "Тэмпература";
 "map_settings_weather_pressure" = "Ціск";
 "app_restart_required" = "Для ўжывання некаторых налад патрабуецца перазапуск праграмы.";
-"activity" = "Актыўнасць";
+"shared_string_activity" = "Актыўнасць";
 "weather_wind_knots" = "Вузлы";
 "weather_precip_inches" = "Цалі";
 "weather_precip_milimeters" = "Міліметры";

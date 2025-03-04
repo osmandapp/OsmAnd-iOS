@@ -2478,7 +2478,7 @@
 "shared_string_class" = "分级";
 "display_position_automatic_descr" = "取决于地图方向：底部表示移动方向，中间表示所有其他方向。";
 "empty_name" = "空名称";
-"activity" = "活动";
+"shared_string_activity" = "活动";
 "add_button" = "新增按钮";
 "avoid_pt_types" = "避免特定交通类型……";
 "trash_is_empty_banner_desc" = "从 OsmAnd Cloud 中删除的文件将在 %@ 天后在此处可用。";

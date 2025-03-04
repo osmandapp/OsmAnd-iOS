@@ -2142,7 +2142,7 @@
 "backup_complete" = "Backup completo";
 "duration_ago" = "%@ fa";
 "by_transport_type" = "In %@";
-"activity" = "Attività";
+"shared_string_activity" = "Attività";
 "weather_precip_milimeters" = "Millimetri";
 "visible_categories" = "Categorie visibili";
 "hidden_categories" = "Categorie nascoste";

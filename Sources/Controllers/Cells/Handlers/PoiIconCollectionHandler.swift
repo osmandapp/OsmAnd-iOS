@@ -266,8 +266,17 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     }
     
     func updateTopButtonName() {
-        if let category = categoriesByKeyName[selectedCatagoryKey] {
-            hostCell?.topButton.setTitle(category.translatedName + " 􀆏", for: .normal)
+        let config = UIImage.SymbolConfiguration(pointSize: 16, weight: .bold)
+        if let category = categoriesByKeyName[selectedCatagoryKey],
+           var iconImage = UIImage(systemName: "chevron.up.chevron.down", withConfiguration: config) {
+            iconImage = iconImage.withRenderingMode(.alwaysTemplate)
+            let attachment = NSTextAttachment()
+            attachment.image = iconImage
+            let imageString = NSAttributedString(attachment: attachment)
+            
+            let attributedString = NSMutableAttributedString(string: category.translatedName + " ")
+            attributedString.append(imageString)
+            hostCell?.topButton.setAttributedTitle(attributedString, for: .normal)
         }
     }
     

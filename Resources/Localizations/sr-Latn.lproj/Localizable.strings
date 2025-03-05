@@ -3639,7 +3639,7 @@
 "shared_string_date" = "Datum";
 "no_photos_available_descr" = "Za ovu lokaciju još nisu dodate fotografije korisnika";
 "open_in_browser" = "Otvori u internet pretraživaču";
-"shared_string_source" = "Poreklo";
+"shared_string_source" = "Izvor";
 "shared_string_items" = "Stavke";
 "download_successful" = "Slika preuzeta u Dokumenti/Preuzimanje.";
 "download_failed" = "Preuzimanje nije uspelo";

@@ -3631,3 +3631,17 @@
 "quick_action_verb_start_pause" = "Покрени / Паузирај";
 "new_trip_segment" = "Нови део путовања";
 "quick_action_save_recorded_trip_and_continue" = "Сними путовање и настави";
+"no_internet_descr" = "Проверите интернет и покушајте поново.";
+"open_in_browser" = "Отворити у интернет претраживачу";
+"shared_string_items" = "Ставке";
+"download_successful" = "Слика преузета у Documents/Download.";
+"download_failed" = "Преузимање није успело";
+"shared_string_source" = "Извор";
+"online_photos" = "Фотографије са интернета";
+"shared_string_show_less" = "Приказати мање";
+"shared_string_view_all" = "Погледај све";
+"no_photos_available" = "Нема доступних фотографија";
+"no_photos_available_descr" = "На овој локацији још увек нису додане фотографије корисника";
+"mapillary_action_descr" = "Поделите свој поглед на нивоу улице преко Мапилариј-а.";
+"wikimedia" = "Викимедија";
+"shared_string_date" = "Датум";

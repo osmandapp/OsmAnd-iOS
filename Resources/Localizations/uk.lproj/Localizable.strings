@@ -3633,3 +3633,17 @@
 "new_trip_segment" = "Новий сегмент подорожі";
 "quick_action_verb_start_pause" = "Пуск / Пауза";
 "shared_string_pause" = "Пауза";
+"no_photos_available" = "Фотографії відсутні";
+"wikimedia" = "Wikimedia";
+"shared_string_items" = "Предмети";
+"download_failed" = "Помилка завантаження";
+"download_successful" = "Зображення завантажено в Документи/Завантажити.";
+"shared_string_view_all" = "Переглянути всі";
+"shared_string_date" = "Дата";
+"online_photos" = "Онлайн фотографії";
+"shared_string_show_less" = "Показувати менше";
+"mapillary_action_descr" = "Поділіться своїм виглядом на рівні вулиці через Mapillary.";
+"open_in_browser" = "Відкрити в браузері";
+"shared_string_source" = "Джерело";
+"no_internet_descr" = "Перевірте підключення та повторіть спробу.";
+"no_photos_available_descr" = "До цього місця ще не додано жодної фотографії користувача";

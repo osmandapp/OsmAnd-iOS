@@ -193,12 +193,10 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     
     override func getRightNavbarButtons() -> [UIBarButtonItem] {
         if collectionType == .colorItems {
-            let addButton = UIBarButtonItem(image: UIImage(named: "ic_custom_add"),
-                                            style: .plain,
-                                            target: self,
-                                            action: #selector(onRightNavbarButtonPressed))
-            addButton.accessibilityLabel = localizedString("shared_string_add_color")
-            return [addButton]
+            if let addButton = createRightNavbarButton(nil, iconName: "ic_custom_add", action: #selector(onRightNavbarButtonPressed), menu: nil) {
+                addButton.accessibilityLabel = localizedString("shared_string_add_color")
+                return [addButton]
+            }
         } else if collectionType == .poiIconCategories {
             if  !inSearchMode,
                 let poiIconsDelegate = iconsDelegate as? PoiIconCollectionHandler,
@@ -629,7 +627,6 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                     self.tableView.reloadRows(at: [IndexPath(row: Int(currentIndex), section: 0)], with: .automatic)
                 }
             }
-            self.tableView.reloadData()
         }
     }
     
@@ -658,9 +655,6 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             tableView.performBatchUpdates { [weak self] in
                 guard let self else { return }
                 self.tableView.insertRows(at: indexPathsToInsert, with: .automatic)
-            } completion: { [weak self] _ in
-                guard let self else { return }
-                self.tableView.reloadData()
             }
         }
     }
@@ -685,9 +679,6 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             tableView.performBatchUpdates { [weak self] in
                 guard let self else { return }
                 self.tableView.reloadRows(at: indexPathsToUpdate, with: .automatic)
-            } completion: { [weak self] _ in
-                guard let self else { return }
-                self.tableView.reloadData()
             }
         }
     }
@@ -804,7 +795,6 @@ extension ItemsCollectionViewController: OACollectionCellDelegate {
             if let selectedIconItem {
                 iconsDelegate?.selectIconName(selectedIconItem)
             }
-            dismiss(animated: true)
 
         } else if collectionType == .poiIconCategories {
             
@@ -819,7 +809,6 @@ extension ItemsCollectionViewController: OACollectionCellDelegate {
                         poiIconsDelegate.setIconName(selectedName)
                         poiIconsDelegate.selectIconName(selectedName)
                         poiIconsDelegate.allIconsVCDelegate = nil
-                        dismiss(animated: true)
                     }
                 }
             }
@@ -831,6 +820,7 @@ extension ItemsCollectionViewController: OACollectionCellDelegate {
                 delegate?.selectColorItem(selectedColorItem)
             }
         }
+        dismiss(animated: true)
     }
     
     func reloadCollectionData() {
@@ -930,6 +920,7 @@ extension ItemsCollectionViewController: UIColorPickerViewControllerDelegate {
                 }
             }
         }
+        tableView.reloadData()
     }
 }
 

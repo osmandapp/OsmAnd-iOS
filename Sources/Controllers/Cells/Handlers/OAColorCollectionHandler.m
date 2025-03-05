@@ -187,9 +187,6 @@
         {
             weakSelf.selectedIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
             [collectionView reloadItemsAtIndexPaths:@[weakSelf.selectedIndexPath]];
-            if (weakSelf.delegate)
-                [weakSelf.delegate onCollectionItemSelected:weakSelf.selectedIndexPath selectedItem:nil collectionView:collectionView];
-
             [weakSelf scrollToIndexPathIfNeeded:weakSelf.selectedIndexPath];
         }
         else if (indexPath.row < weakSelf.selectedIndexPath.row)

@@ -3610,3 +3610,10 @@
 "shared_string_pause" = "Pozastavit";
 "quick_action_verb_start_pause" = "Spustit / Pozastavit";
 "quick_action_save_recorded_trip_and_continue" = "Zaznamenaný výlet a pokračovat";
+"no_photos_available_descr" = "K této lokalitě zatím nebyly přidány žádné uživatelské fotky";
+"mapillary_action_descr" = "Sdílejte své fotky z úrovně ulice přes Mapillary.";
+"online_photos" = "Online fotky";
+"shared_string_show_less" = "Zobrazit méně";
+"no_photos_available" = "Nejsou dostupné žádné fotky";
+"no_internet_descr" = "Zkontrolujte své připojení a zkuste to znovu.";
+"shared_string_view_all" = "Zobrazit vše";

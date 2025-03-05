@@ -3618,3 +3618,9 @@
 "no_internet_descr" = "Zkontrolujte své připojení a zkuste to znovu.";
 "shared_string_view_all" = "Zobrazit vše";
 "wikimedia" = "Wikimedia";
+"open_in_browser" = "Otevřít v prohlížeči";
+"download_failed" = "Stahování selhalo";
+"shared_string_date" = "Datum";
+"shared_string_source" = "Zdroj";
+"shared_string_items" = "Položky";
+"download_successful" = "Obrázek stažen do složky Dokumenty/Stažené.";

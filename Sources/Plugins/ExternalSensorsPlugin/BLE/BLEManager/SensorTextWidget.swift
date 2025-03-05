@@ -162,19 +162,21 @@ final class SensorTextWidget: OASimpleWidget {
     
     private func getPossibleValues(mode: EOAExternalSensorVisualizationMode) -> [OATableRowData] {
         var rows = [OATableRowData]()
-        let titles = ["sensor_data", "map_widget_battery"]
         
-        for i in [0, 1] {
+        guard let plugin, let widgetType else {
+            return rows
+        }
+
+        for (index, titleKey) in ["sensor_data", "map_widget_battery"].enumerated() {
             let row = OATableRowData()
             row.cellType = OASimpleTableViewCell.getIdentifier()
-            row.setObj(i, forKey: "value")
-            row.title = localizedString(titles[i])
-            if let plugin, let widgetType {
-                row.iconName = i == 0
-                    ? widgetType.disabledIconName
-                    : plugin.batteryOutlinedIconName(for: widgetType)
-            }
-            row.iconTintColor = i == mode.rawValue ? .iconColorActive : .iconColorDisabled
+            row.setObj(index, forKey: "value")
+            row.title = localizedString(titleKey)
+            row.iconName = index == 0
+                ? widgetType.disabledIconName
+                : plugin.batteryOutlinedIconName(for: widgetType)
+            
+            row.iconTintColor = index == mode.rawValue ? .iconColorActive : .iconColorDisabled
             rows.append(row)
         }
 

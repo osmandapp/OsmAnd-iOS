@@ -9,18 +9,7 @@
 import Foundation
 import UIKit
 
-//private var uiimageNameKey: UInt8 = 0
-
 extension UIImage {
-    
-//    var imageName: String? {
-//        get {
-//            return objc_getAssociatedObject(self, &uiimageNameKey) as? String
-//        }
-//        set {
-//            objc_setAssociatedObject(self, &uiimageNameKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-//        }
-//    }
 
     func rotate(radians: CGFloat) -> UIImage {
         let rotatedSize = CGRect(origin: .zero, size: size)

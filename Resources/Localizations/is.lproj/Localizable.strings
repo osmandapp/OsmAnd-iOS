@@ -3617,3 +3617,17 @@
 "quick_action_verb_start_pause" = "Hefja / Setja í bið";
 "new_trip_segment" = "Nýr leiðarbútur";
 "quick_action_save_recorded_trip_and_continue" = "Skráð ferð og halda áfram";
+"shared_string_show_less" = "Sýna minna";
+"no_photos_available_descr" = "Engum notendamyndum hefur ennþá verið bætt við þessa staðsetningu";
+"wikimedia" = "Wikimedia";
+"open_in_browser" = "Opna í vafra";
+"shared_string_source" = "Uppruni";
+"download_successful" = "Mynd var sótt og sett í Skjöl/Sóttar skrár.";
+"shared_string_date" = "Dagsetning";
+"download_failed" = "Niðurhal mistókst";
+"no_photos_available" = "Engar ljósmyndir tiltækar";
+"shared_string_view_all" = "Skoða allt";
+"no_internet_descr" = "Athugaðu nettenginguna þína og reyndu aftur.";
+"mapillary_action_descr" = "Deildu þínum eigin götumyndum í gegnum Mapillary.";
+"online_photos" = "Ljósmyndir á netinu";
+"shared_string_items" = "Atriði";

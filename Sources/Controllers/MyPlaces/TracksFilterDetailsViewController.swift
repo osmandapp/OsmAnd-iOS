@@ -774,8 +774,8 @@ extension TracksFilterDetailsViewController: UITextFieldDelegate {
             }
             
             if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? OARangeSliderFilterTableViewCell {
-                cell.rangeSlider.selectedMinimum = currentValueFrom > rangeSliderMaxValue ? rangeSliderMaxValue : currentValueFrom
-                cell.rangeSlider.selectedMaximum = currentValueTo < rangeSliderMinValue ? rangeSliderMinValue : currentValueTo
+                cell.rangeSlider.selectedMinimum = max(min(currentValueFrom, rangeSliderMaxValue), rangeSliderMinValue)
+                cell.rangeSlider.selectedMaximum = max(min(currentValueTo, rangeSliderMaxValue), currentValueFrom)
             }
         }
         

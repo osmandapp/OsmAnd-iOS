@@ -106,6 +106,11 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
         baseFilters.addFiltersChangedListener(self)
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        baseFilters.removeFiltersChangedListener(self)
+    }
+    
     override func getTitle() -> String? {
         localizedString("filter_current_poiButton")
     }

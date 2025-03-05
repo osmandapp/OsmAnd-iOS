@@ -234,6 +234,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     float _startZoom;
 
     BOOL _targetChanged;
+    BOOL _zoomInTargetChanged;
     OsmAnd::PointI _targetPixel;
     OsmAnd::PointI _carPlayScreenPoint;
     NSMutableArray<OATouchLocation *> *_moveTouchLocations;
@@ -1011,9 +1012,10 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
 - (void) restorePreviousTarget
 {
-    if ([self isTargetChanged] && [self isLastMultiGesture])
+    if ([self isTargetChanged] && ([self isLastMultiGesture] || _zoomInTargetChanged))
     {
         _targetChanged = NO;
+        _zoomInTargetChanged = NO;
 
         // Restore previous target screen position after map gesture
         [_mapView resetMapTargetPixelCoordinates:_targetPixel];
@@ -1480,6 +1482,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     // Get base zoom delta
     float zoomDelta = [self currentZoomInDelta];
     
+    _zoomInTargetChanged = YES;
+    [self storeTargetPosition:recognizer];
+    
     // X/Y axis animation
     const CGPoint touchPoint = [self getTouchPoint:recognizer touchIndex:0];
     const OATouchLocation *touchLocation = [self acquireMapTouchLocation:touchPoint];
@@ -1834,6 +1839,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 {
     if (!self.mapViewLoaded)
         return;
+    
+    [self restorePreviousTarget];
 
     OAZoom *zoom = [[OAZoom alloc] initWitZoom:_mapView.zoom minZoom:_mapView.minZoom maxZoom:_mapView.maxZoom];
     int previousZoom = [zoom getBaseZoom];

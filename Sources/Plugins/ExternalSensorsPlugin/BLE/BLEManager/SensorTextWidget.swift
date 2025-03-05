@@ -220,7 +220,7 @@ final class SensorTextWidget: OASimpleWidget {
         switch mode {
         case .sensorData: break
         case .batteryLevel:
-            contentTitle += "," + localizedString("external_device_details_battery")
+            contentTitle += ", " + localizedString("external_device_details_battery")
             if let plugin {
                 iconName = plugin.batteryIconName(for: widgetType)
             }

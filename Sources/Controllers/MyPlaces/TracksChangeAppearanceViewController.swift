@@ -238,6 +238,51 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         }
     }
     
+    private func updateData(withSeparatorInset selected: Bool) {
+        generateData()
+        tableView.reloadData()
+        if let firstCell = tableView.cellForRow(at: IndexPath(row: 0, section: 2)) as? OAButtonTableViewCell {
+            if selected {
+                firstCell.setCustomLeftSeparatorInset(true)
+                firstCell.separatorInset = UIEdgeInsets(top: 0, left: CGFLOAT_MAX, bottom: 0, right: 0)
+            } else {
+                firstCell.setCustomLeftSeparatorInset(false)
+            }
+        }
+    }
+    
+    private func handleWidthSelection(index: Int) {
+        guard let widths = appearanceCollection?.getAvailableWidth() else { return }
+        guard index >= 0 && index < widths.count else { return }
+        let trackWidth = widths[index]
+        selectedWidth = trackWidth
+        let widthString = trackWidth.isCustom() ? trackWidth.customValue : trackWidth.key
+        data.setParameter(.width, value: widthString)
+        isWidthSelected = true
+        isCustomWidthSelected = trackWidth.isCustom()
+        selectedWidthIndex = index
+        updateData(withSeparatorInset: true)
+    }
+    
+    @objc private func sliderChanged(sender: UISlider) {
+        guard let tableData = tableData else { return }
+        let indexPath = IndexPath(row: sender.tag & 0x3FF, section: sender.tag >> 10)
+        let item = tableData.item(for: indexPath)
+        guard let cell = tableView.cellForRow(at: indexPath) as? OASegmentSliderTableViewCell else { return }
+        let selectedIndex = Int(cell.sliderView.selectedMark)
+        guard let customWidthValues = item.obj(forKey: Self.widthArrayValue) as? [String], selectedIndex >= 0, selectedIndex < customWidthValues.count else { return }
+        let selectedValue = customWidthValues[selectedIndex]
+        if let w = selectedWidth, w.isCustom() {
+            w.customValue = selectedValue
+        }
+        
+        data.setParameter(.width, value: selectedValue)
+        generateData()
+        tableView.reloadRows(at: [indexPath], with: .none)
+    }
+}
+
+extension TracksChangeAppearanceViewController {
     private func createArrowsMenu() -> UIMenu {
         let paramValue: Bool? = data.getParameter(for: .showArrows)
         let isReset = data.shouldResetParameter(.showArrows)
@@ -435,49 +480,6 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
     
     private func inlineMenu(withActions actions: [UIAction]) -> UIMenu {
         UIMenu(title: "", options: .displayInline, children: actions)
-    }
-    
-    private func updateData(withSeparatorInset selected: Bool) {
-        generateData()
-        tableView.reloadData()
-        if let firstCell = tableView.cellForRow(at: IndexPath(row: 0, section: 2)) as? OAButtonTableViewCell {
-            if selected {
-                firstCell.setCustomLeftSeparatorInset(true)
-                firstCell.separatorInset = UIEdgeInsets(top: 0, left: CGFLOAT_MAX, bottom: 0, right: 0)
-            } else {
-                firstCell.setCustomLeftSeparatorInset(false)
-            }
-        }
-    }
-    
-    private func handleWidthSelection(index: Int) {
-        guard let widths = appearanceCollection?.getAvailableWidth() else { return }
-        guard index >= 0 && index < widths.count else { return }
-        let trackWidth = widths[index]
-        selectedWidth = trackWidth
-        let widthString = trackWidth.isCustom() ? trackWidth.customValue : trackWidth.key
-        data.setParameter(.width, value: widthString)
-        isWidthSelected = true
-        isCustomWidthSelected = trackWidth.isCustom()
-        selectedWidthIndex = index
-        updateData(withSeparatorInset: true)
-    }
-    
-    @objc private func sliderChanged(sender: UISlider) {
-        guard let tableData = tableData else { return }
-        let indexPath = IndexPath(row: sender.tag & 0x3FF, section: sender.tag >> 10)
-        let item = tableData.item(for: indexPath)
-        guard let cell = tableView.cellForRow(at: indexPath) as? OASegmentSliderTableViewCell else { return }
-        let selectedIndex = Int(cell.sliderView.selectedMark)
-        guard let customWidthValues = item.obj(forKey: Self.widthArrayValue) as? [String], selectedIndex >= 0, selectedIndex < customWidthValues.count else { return }
-        let selectedValue = customWidthValues[selectedIndex]
-        if let w = selectedWidth, w.isCustom() {
-            w.customValue = selectedValue
-        }
-        
-        data.setParameter(.width, value: selectedValue)
-        generateData()
-        tableView.reloadRows(at: [indexPath], with: .none)
     }
 }
 
